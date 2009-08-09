@@ -1,3 +1,8 @@
+2009-08-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* malloctest/init.c: Adjust allocation in test so it passes now that
+	heap overhead constant has been increased.
+
 2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bspcmdline01/init.c: Do not violate visibility.

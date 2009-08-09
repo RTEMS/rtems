@@ -162,7 +162,7 @@ void test_heap_cases_1()
   puts( "Heap Initialized" );
   p1 = _Heap_Allocate( &TestHeap, 500 );
   rtems_test_assert( p1 != NULL );
-  p2 = _Heap_Allocate( &TestHeap, 500 );
+  p2 = _Heap_Allocate( &TestHeap, 496 );
   rtems_test_assert( p2 != NULL );
   rsc = _Heap_Resize_block( &TestHeap, p1, 256, &u1, &u2 );
   rtems_test_assert( rsc == HEAP_RESIZE_SUCCESSFUL );
