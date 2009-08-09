@@ -117,15 +117,15 @@ struct Heap_Block_struct {
 
 /**
  *  Offset of user data pointer from the block pointer. Equal to the
- *  offsetof(Heap_Block.next).
+ *  offset of(Heap_Block.next).
  */
 #define HEAP_BLOCK_USER_OFFSET (sizeof(uint32_t) * 2)
 
 /**
- *  Num bytes of overhead in used block. Equal to the sizeof(Heap_Block.size).
+ *  This is the number of bytes of overhead in a used block.
+ *  Equal to the sizeof(Heap_Block.previous and next).
  */
-#define HEAP_BLOCK_USED_OVERHEAD \
-  (HEAP_BLOCK_USER_OFFSET - HEAP_BLOCK_HEADER_OFFSET)
+#define HEAP_BLOCK_USED_OVERHEAD (sizeof(uint32_t) * 2)
 
 /** Size of the permanent dummy last block. */
 #define HEAP_OVERHEAD HEAP_BLOCK_USER_OFFSET

@@ -1,3 +1,11 @@
+2009-08-09	Xi Yang <hiyangxi@gmail.com>
+
+	* libcsupport/Makefile.am, posix/Makefile.am, rtems/Makefile.am,
+	sapi/Makefile.am, score/Makefile.am,
+	score/include/rtems/score/heap.h: HEAP_BLOCK_USED_OVERHEAD was under
+	by one uint32_t. This showed up in the unlimited and heapwalk tests
+	on ARM targets.
+
 2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/objectextendinformation.c: Minor rework to eliminate

@@ -113,6 +113,8 @@ libcsupport_a_SOURCES = src/gxx_wrappers.c src/getchark.c src/printk.c \
     $(BSD_LIBC_C_FILES) $(BASE_FS_C_FILES) $(MALLOC_C_FILES) \
     $(ERROR_C_FILES) $(ASSOCIATION_C_FILES)
 
+libcsupport_a_SOURCES += src/end_profile.c
+
 if UNIX
 libcsupport_a_SOURCES += src/unixlibc.c src/unixlibc_io.c src/hosterr.c
 else
