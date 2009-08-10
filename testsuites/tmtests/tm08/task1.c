@@ -225,11 +225,11 @@ rtems_task test_task(
 
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+      (void) rtems_clock_get_tod( &time );
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_clock_get",
+    "rtems_clock_get_tod",
     end_time,
     OPERATION_COUNT,
     overhead,
