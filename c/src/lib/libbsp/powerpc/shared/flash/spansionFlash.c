@@ -393,7 +393,7 @@ rtems_interval p,i;
 	unlk(b, addr);
 	fl_wr32_cmd(b, addr, 0, SECT_ERASE_DATA);
 
-	rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &p );
+	p = rtems_clock_get_ticks_per_second();
 	p *= ERASE_TIMEOUT;
 
 	for ( i=p; i; i-- ) {

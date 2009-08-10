@@ -1,3 +1,8 @@
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/flash/spansionFlash.c: Convert calls to legacy routine
+	rtems_clock_get( RTEMS_CLOCK_GET_xxx, ..) to rtems_clock_get_xxx().
+
 2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/startup/bspgetworkarea.c: Switch from ssize_t to uintptr_t for
