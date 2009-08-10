@@ -52,14 +52,14 @@ rtems_task Task_1(
   status = rtems_task_suspend( Task_id[ 3 ] );
   directive_failed( status, "rtems_task_suspend of TA3" );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &start_time );
-  directive_failed( status, "rtems_clock_get_tod" );
+  status = rtems_clock_get_seconds_since_epoch( &start_time );
+  directive_failed( status, "rtems_clock_get_seconds_since_epoch" );
 
   puts( "TA1 - killing time" );
 
   for ( ; ; ) {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &end_time );
-    directive_failed( status, "rtems_clock_get_tod" );
+    status = rtems_clock_get_seconds_since_epoch( &end_time );
+    directive_failed( status, "rtems_clock_get_seconds_since_epoch" );
 
     if ( end_time > (start_time + 2) )
       break;

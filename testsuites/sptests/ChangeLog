@@ -1,5 +1,11 @@
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp04/task1.c, sp09/screen02.c, sp09/screen04.c, sp09/sp09.scn,
+	sp38/init.c: Convert calls to legacy routine rtems_clock_get(
+	RTEMS_CLOCK_GET_xxx, ..) to rtems_clock_get_xxx().
+
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp01/sp01.scn, sp01/task1.c, sp03/task1.c, sp03/task2.c,
 	sp04/task1.c, sp04/tswitch.c, sp09/screen02.c, sp09/screen13.c,
 	sp09/screen14.c, sp09/sp09.scn, sp11/sp11.scn, sp11/task1.c,

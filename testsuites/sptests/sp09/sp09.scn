@@ -22,10 +22,10 @@ TA1 - rtems_task_start - RTEMS_INVALID_ID
 TA1 - rtems_task_start - RTEMS_INCORRECT_STATE
 TA1 - rtems_task_suspend - RTEMS_INVALID_ID
 <pause - screen 2>
-TA1 - rtems_clock_get_tod - TOD - RTEMS_NOT_DEFINED
-TA1 - rtems_clock_get_tod - SECONDS SINCE EPOCH - RTEMS_NOT_DEFINED
-TA1 - rtems_clock_get_tod - TIME VALUE - RTEMS_NOT_DEFINED
-TA1 - rtems_clock_get_tod - RTEMS_INVALID_NUMBER
+TA1 - rtems_clock_get_tod - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_get_second_since_epoch - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_get_tod_timeval - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_get - RTEMS_INVALID_NUMBER
 TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED
 TA1 - rtems_timer_fire_when - RTEMS_NOT_DEFINED
 TA1 - rtems_clock_set - 08:30:45   02/05/1987 - RTEMS_INVALID_CLOCK

@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -84,8 +84,8 @@ void Screen4()
   directive_failed( status, "rtems_clock_set" );
   puts( " - RTEMS_SUCCESSFUL" );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TIME_VALUE, &tv );
-  directive_failed( status, "clock_get time value OK" );
+  status = rtems_clock_get_tod_timeval( &tv );
+  directive_failed( status, "clock_get_tod_timeval OK" );
 
   seconds = tv.tv_sec; 
   printf( "TA1 - current time - %s\n", ctime(&seconds) );
