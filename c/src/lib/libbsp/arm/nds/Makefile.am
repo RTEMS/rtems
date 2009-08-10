@@ -32,7 +32,7 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 include_ndsdir = $(includedir)/nds
-include_nds_HEADERS = fb/fb.h touchscreen/touchscreen.h sound/sound.h
+include_nds_HEADERS = touchscreen/touchscreen.h sound/sound.h
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \

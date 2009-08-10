@@ -22,7 +22,9 @@
 #include <nds.h>
 
 #include <rtems/fb.h>
-#include <nds/fb.h>
+
+extern int get_palette( struct fb_cmap * );
+extern int set_palette( struct fb_cmap * );
 
 /*
  * screen information for the driver (fb0).
@@ -66,7 +68,7 @@ static struct fb_fix_screeninfo fb_fix_info2 = {
  */
 
 rtems_device_driver
-fbds_initialize (rtems_device_major_number major,
+frame_buffer_initialize (rtems_device_major_number major,
                  rtems_device_minor_number minor, void *arg)
 {
   rtems_status_code status;
@@ -92,7 +94,7 @@ fbds_initialize (rtems_device_major_number major,
  */
 
 rtems_device_driver
-fbds_open (rtems_device_major_number major,
+frame_buffer_open (rtems_device_major_number major,
            rtems_device_minor_number minor, void *arg)
 {
    printk ("[#] entering graphic mode on fb%d\n", minor);
@@ -113,13 +115,13 @@ fbds_open (rtems_device_major_number major,
  */
 
 rtems_device_driver
-fbds_close (rtems_device_major_number major,
+frame_buffer_close (rtems_device_major_number major,
             rtems_device_minor_number minor, void *arg)
 {
   printk ("[#] leaving graphic mode on fb%d\n", minor);
   if (!minor) {
       memset ((void *)fb_fix_info.smem_start, 0, fb_fix_info.smem_len);
-  } 
+  }
   else {
       memset ((void *)fb_fix_info2.smem_start, 0, fb_fix_info2.smem_len);
       /* back to console */
@@ -135,7 +137,7 @@ fbds_close (rtems_device_major_number major,
  */
 
 rtems_device_driver
-fbds_read (rtems_device_major_number major,
+frame_buffer_read (rtems_device_major_number major,
            rtems_device_minor_number minor, void *arg)
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) arg;
@@ -149,7 +151,7 @@ fbds_read (rtems_device_major_number major,
  */
 
 rtems_device_driver
-fbds_write (rtems_device_major_number major,
+frame_buffer_write (rtems_device_major_number major,
             rtems_device_minor_number minor, void *arg)
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) arg;
@@ -163,7 +165,7 @@ fbds_write (rtems_device_major_number major,
  */
 
 rtems_device_driver
-fbds_control (rtems_device_major_number major,
+frame_buffer_control (rtems_device_major_number major,
               rtems_device_minor_number minor, void *arg)
 {
   rtems_libio_ioctl_args_t *args = arg;
@@ -180,10 +182,10 @@ fbds_control (rtems_device_major_number major,
     args->ioctl_return = 0;
     break;
   case FBIOGETCMAP:
-    args->ioctl_return = get_palette( args->buffer );    
+    args->ioctl_return = get_palette( (struct fb_cmap *) args->buffer );
     break;
   case FBIOPUTCMAP:
-    args->ioctl_return = set_palette( args->buffer );     
+    args->ioctl_return = set_palette( (struct fb_cmap *) args->buffer );
     break;
 
     /* no break on purpose */

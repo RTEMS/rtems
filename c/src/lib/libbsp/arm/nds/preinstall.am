@@ -70,10 +70,6 @@ $(PROJECT_INCLUDE)/nds/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/nds/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/nds/$(dirstamp)
 
-$(PROJECT_INCLUDE)/nds/fb.h: fb/fb.h $(PROJECT_INCLUDE)/nds/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nds/fb.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/nds/fb.h
-
 $(PROJECT_INCLUDE)/nds/touchscreen.h: touchscreen/touchscreen.h $(PROJECT_INCLUDE)/nds/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nds/touchscreen.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nds/touchscreen.h
