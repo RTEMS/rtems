@@ -65,9 +65,9 @@ void check_a_tod(
   assert( !status );
 
   do {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &new_tod );
+    status = rtems_clock_get_tod( &new_tod );
     assert( !status );
-    print_time( "rtems_clock_get          ", &new_tod, "\n" );
+    print_time( "rtems_clock_get_tod          ", &new_tod, "\n" );
 
     /* now do the posix time gets */
     result = gettimeofday( &tv, 0 );

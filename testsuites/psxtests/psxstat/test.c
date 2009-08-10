@@ -716,9 +716,9 @@ void Show_Time()
   rtems_time_of_day time;
   rtems_status_code status;
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  status = rtems_clock_get_tod( &time );
   printf("--->Current Time: ");
-  print_time( " - rtems_clock_get - ", &time, "\n" );
+  print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 }
 
 /*
