@@ -13,20 +13,25 @@
 
 void bsp_reset(void)
 {
-  rtems_interrupt_level level;
+#if ON_SKYEYE == 1
+  #define SKYEYE_MAGIC_ADDRESS (*(volatile unsigned int *)(0xb0000000))
 
-  rtems_interrupt_disable(level);
+  SKYEYE_MAGIC_ADDRESS = 0xff;
+#else
+    rtems_interrupt_level level;
 
-#ifdef __thumb__
-  int tmp;
-  asm volatile (" .code 16            \n" \
-                "ldr %[tmp], =_start  \n" \
-                "bx  %[tmp]           \n" \
-                "nop                  \n" \
-                : [tmp]"=&r" (tmp) );
-#else                   
-  asm volatile ("b _start");
-#endif   
+    rtems_interrupt_disable(level);
 
+  #ifdef __thumb__
+    int tmp;
+    asm volatile (" .code 16            \n" \
+                  "ldr %[tmp], =_start  \n" \
+                  "bx  %[tmp]           \n" \
+                  "nop                  \n" \
+                  : [tmp]"=&r" (tmp) );
+  #else                   
+    asm volatile ("b _start");
+  #endif   
   while(1);
+#endif
 }
