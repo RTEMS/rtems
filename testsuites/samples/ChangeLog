@@ -1,3 +1,7 @@
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* fileio/system.h: Switch to unified work area.
+
 2009-06-11	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* cdtest/system.h: modified the number of max semaphores - test was
