@@ -1,5 +1,10 @@
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxsignal01/init.c: Convert calls to legacy routine rtems_clock_get(
+	RTEMS_CLOCK_GET_xxx, ..) to rtems_clock_get_xxx().
+
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psxstat/test.c, psxtime/test.c: Convert calls to legacy routine
 	rtems_clock_get( RTEMS_CLOCK_GET_TOD, ..) to rtems_clock_get_tod(..).
 

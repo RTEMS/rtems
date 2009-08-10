@@ -198,7 +198,7 @@ void *POSIX_Init(
   /* now schedule another one to fire but do not sleep */
 
   puts( "Init: send SIGUSR1 to process from a TSR (spin)" );
-  rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start );
+  start = rtems_clock_get_ticks_since_boot();
   Signal_count = 0;
   Signal_occurred = 0;
   status = rtems_timer_fire_after(
@@ -208,7 +208,7 @@ void *POSIX_Init(
     NULL 
   );
   do {
-    rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &end );
+    end = rtems_clock_get_ticks_since_boot();
   } while ( !Signal_occurred && ((end - start) <= 800));
 
   if ( !Signal_occurred ) {
