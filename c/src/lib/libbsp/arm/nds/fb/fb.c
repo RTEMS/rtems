@@ -22,6 +22,7 @@
 #include <nds.h>
 
 #include <rtems/fb.h>
+#include <nds/fb.h>
 
 /*
  * screen information for the driver (fb0).

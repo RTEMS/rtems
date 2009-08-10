@@ -1,3 +1,8 @@
+2009-08-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, preinstall.am, fb/fb.c: Install nds specific .h files
+	into nds subdirectory.
+
 2009-08-03	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* fb/fb.c: changed the references to mw_fb.h into fb.h

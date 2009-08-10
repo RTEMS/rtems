@@ -65,22 +65,22 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
-$(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
-	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+$(PROJECT_INCLUDE)/nds/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/nds
+	@: > $(PROJECT_INCLUDE)/nds/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/nds/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/fb.h: fb/fb.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fb.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fb.h
+$(PROJECT_INCLUDE)/nds/fb.h: fb/fb.h $(PROJECT_INCLUDE)/nds/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nds/fb.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/nds/fb.h
 
-$(PROJECT_INCLUDE)/rtems/touchscreen.h: touchscreen/touchscreen.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/touchscreen.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/touchscreen.h
+$(PROJECT_INCLUDE)/nds/touchscreen.h: touchscreen/touchscreen.h $(PROJECT_INCLUDE)/nds/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nds/touchscreen.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/nds/touchscreen.h
 
-$(PROJECT_INCLUDE)/rtems/sound.h: sound/sound.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sound.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sound.h
+$(PROJECT_INCLUDE)/nds/sound.h: sound/sound.h $(PROJECT_INCLUDE)/nds/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nds/sound.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/nds/sound.h
 
 $(PROJECT_INCLUDE)/irq.h: irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
