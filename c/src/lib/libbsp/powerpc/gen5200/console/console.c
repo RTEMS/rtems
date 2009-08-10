@@ -764,7 +764,6 @@ rtems_device_driver console_open(
     rtems_termios_set_initial_baud( ttyp[minor], GEN5200_CONSOLE_BAUD );
 
   return sc;
-
 }
 
 
