@@ -3291,8 +3291,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    /* update stats 1 times/second if things aren't incrementing fast
     * enough to trigger stats interrupts
     */
-   rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &sc->stats_update_ticks );
-
+   sc->stats_update_ticks = rtems_clock_get_ticks_per_second();
 
    /*
    ** Get this unit's rx/tx event

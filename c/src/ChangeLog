@@ -1,3 +1,8 @@
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/network/elnk.c: Convert calls to legacy routine
+	rtems_clock_get( RTEMS_CLOCK_GET_xxx, ..) to rtems_clock_get_xxx().
+
 2009-08-03	Roger Dahlkvist <ruppe@kth.se>
 
 	* libchip/shmdr/shm_driver.h: nios2 was not accounted for.
