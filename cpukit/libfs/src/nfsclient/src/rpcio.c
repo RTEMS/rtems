@@ -941,8 +941,7 @@ struct sockwakeup	wkup;
 			s = ioctl(ourSock, FIONBIO, (char*)&noblock);
 			assert( s == 0 );
 			/* assume nobody tampers with the clock !! */
-			status = rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSec);
-			assert( status == RTEMS_SUCCESSFUL );
+			ticksPerSec = rtems_clock_get_ticks_per_second();
 			MU_CREAT( &hlock );
 			MU_CREAT( &llock );
 
@@ -1155,8 +1154,7 @@ unsigned long			max_period = RPCIOD_RETX_CAP_S * ticksPerSec;
 rtems_status_code	status;
 
 
-	status = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then );
-	assert( status == RTEMS_SUCCESSFUL );
+        then = rtems_clock_get_ticks_since_boot();
 
 	for (next_retrans = epoch;;) {
 
@@ -1199,8 +1197,7 @@ rtems_status_code	status;
 			}
 		}
 
-		status = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &unow );
-		assert( status == RTEMS_SUCCESSFUL );
+        	unow = rtems_clock_get_ticks_since_boot();
 
 		/* measure everything relative to then to protect against
 		 * rollover

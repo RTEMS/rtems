@@ -41,7 +41,7 @@ clock_t _times(
    *  This call does not depend on TOD being initialized and can't fail.
    */
 
-  (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &ticks );
+  ticks = rtems_clock_get_ticks_since_boot();
 
   /*
    *  RTEMS technically has no notion of system versus user time

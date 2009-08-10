@@ -329,7 +329,7 @@ char	          *buf=0;
 	}
 
 	/* Timed main loop */
-	rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then);
+        then = rtems_clock_get_ticks_since_boot();
 
 	if ( nrd ) {
 		off = 0;
@@ -348,9 +348,9 @@ char	          *buf=0;
 		} 
 	}
 
-	rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+        now = rtems_clock_get_ticks_since_boot();
 	now = (now-then)*1000;
-	rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &tickspsec);
+	ticksspec = rtems_clock_get_ticks_per_second();
 	now /= tickspsec; /* time in ms */
 
 cleanup:

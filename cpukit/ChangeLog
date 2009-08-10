@@ -1,3 +1,9 @@
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/__times.c, libfs/src/nfsclient/src/nfsTest.c,
+	libfs/src/nfsclient/src/rpcio.c: Convert calls to legacy routine
+	rtems_clock_get( RTEMS_CLOCK_GET_xxx, ..) to rtems_clock_get_xxx().
+
 2009-08-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/heapresizeblock.c: Remove printk's that were accidentally
