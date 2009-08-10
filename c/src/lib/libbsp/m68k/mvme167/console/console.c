@@ -229,12 +229,12 @@ rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
   unsigned long i = 20000;  /* In case clock is off */
   rtems_interval ticks_per_second, start_ticks, end_ticks, current_ticks;
 
-  rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );
-  rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks );
+  ticks_per_second = rtems_clock_get_ticks_per_second();
+  stack_ticks = rtems_clock_get_ticks_since_boot();
   end_ticks = start_ticks + delay;
 
   do {
-    rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &current_ticks);
+    current_ticks = rtems_clock_get_ticks_since_boot();
   } while ( --i && (current_ticks <= end_ticks) );
 
   CD2401_RECORD_DELAY_INFO(( start_ticks, end_ticks, current_ticks, i ));
