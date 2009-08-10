@@ -27,18 +27,19 @@ void Screen2()
 
 /* errors before clock is set */
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  status = rtems_clock_get_tod( &time );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
-     "TA1 - rtems_clock_get - RTEMS_NOT_DEFINED -- DID BSP SET THE TIME OF DAY?"
+     "TA1 - rtems_clock_get_tod - RTEMS_NOT_DEFINED -- "
+         "DID BSP SET THE TIME OF DAY?"
     );
   } else {
     fatal_directive_status(
       status,
       RTEMS_NOT_DEFINED,
-      "rtems_clock_get before clock is set #1"
+      "rtems_clock_get_tod before clock is set #1"
     );
-    puts( "TA1 - rtems_clock_get - TOD - RTEMS_NOT_DEFINED" );
+    puts( "TA1 - rtems_clock_get_tod - TOD - RTEMS_NOT_DEFINED" );
   }
 
   status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &interval );
@@ -81,7 +82,8 @@ void Screen2()
   status = rtems_task_wake_when( &time );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
-"TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED -- DID BSP SET THE TIME OF DAY?"
+     "TA1 - rtems_clock_get - RTEMS_NOT_DEFINED -- "
+         "DID BSP SET THE TIME OF DAY?"
     );
   } else {
     fatal_directive_status(
@@ -215,7 +217,7 @@ void Screen2()
   );
   puts( " - RTEMS_INVALID_CLOCK" );
 
-  rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  rtems_clock_get_tod( &time );
   print_time( "TA1 - current time - ", &time, "\n" );
 
   time.month = 1;

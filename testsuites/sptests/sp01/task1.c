@@ -40,8 +40,8 @@ rtems_task Task_1_through_3(
   ticks = TOD_MILLISECONDS_TO_TICKS( task_number( tid ) * 5 * 1000 );
 
   while( FOREVER ) {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     if ( time.second >= 35 ) {
       puts( "*** END OF TEST 1 ***" );
@@ -49,7 +49,7 @@ rtems_task Task_1_through_3(
     }
 
     put_name( Task_name[ task_number( tid ) ], FALSE );
-    print_time( " - rtems_clock_get - ", &time, "\n" );
+    print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
     status = rtems_task_wake_after( ticks );
     directive_failed( status, "rtems_task_wake_after" );

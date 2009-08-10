@@ -53,13 +53,13 @@ rtems_task Task_1(
   directive_failed( status, "rtems_task_suspend of TA3" );
 
   status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &start_time );
-  directive_failed( status, "rtems_clock_get" );
+  directive_failed( status, "rtems_clock_get_tod" );
 
   puts( "TA1 - killing time" );
 
   for ( ; ; ) {
     status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &end_time );
-    directive_failed( status, "rtems_clock_get" );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     if ( end_time > (start_time + 2) )
       break;
@@ -84,14 +84,14 @@ rtems_task Task_1(
       );
       directive_failed( status, "rtems_task_mode" );
 
-      status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-      directive_failed( status, "rtems_clock_get" );
+      status = rtems_clock_get_tod( &time );
+      directive_failed( status, "rtems_clock_get_tod" );
 
       old_seconds = time.second;
 
       for ( seconds = 0 ; seconds < 6 ; ) {
-        status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-        directive_failed( status, "rtems_clock_get" );
+        status = rtems_clock_get_tod( &time );
+        directive_failed( status, "rtems_clock_get_tod" );
 
         if ( time.second != old_seconds ) {
           old_seconds = time.second;

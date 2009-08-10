@@ -26,26 +26,26 @@ Timer 1 scheduled for 3050 ticks since boot
 Timer Server scheduled for 3050 ticks since boot
 TA1 - rtems_timer_cancel - timer 1
 TA1 - rtems_timer_cancel - timer 2
-TA1 - rtems_clock_get - 09:00:02   12/31/1988
+TA1 - rtems_clock_get_tod - 09:00:02   12/31/1988
 TA1 - rtems_timer_server_fire_after - timer 1 in 3 seconds
 TA1 - rtems_task_suspend( RTEMS_SELF )
-TA1 - rtems_clock_get - 09:00:05   12/31/1988
+TA1 - rtems_clock_get_tod - 09:00:05   12/31/1988
 TA1 - rtems_timer_server_fire_after - timer 1 in 3 seconds
 TA1 - rtems_task_wake_after - 1 second
-TA1 - rtems_clock_get - 09:00:06   12/31/1988
+TA1 - rtems_clock_get_tod - 09:00:06   12/31/1988
 TA1 - rtems_timer_reset - timer 1
 TA1 - rtems_task_suspend( RTEMS_SELF )
-TA1 - rtems_clock_get - 09:00:09   12/31/1988
+TA1 - rtems_clock_get_tod - 09:00:09   12/31/1988
 <pause>
 TA1 - rtems_timer_server_fire_after - timer 1 in 3 seconds
 TA1 - rtems_timer_cancel - timer 1
-TA1 - rtems_clock_get - 09:00:07   12/31/1988
+TA1 - rtems_clock_get_tod - 09:00:07   12/31/1988
 TA1 - rtems_timer_server_fire_when - timer 1 in 3 seconds
 TA1 - rtems_task_suspend( RTEMS_SELF )
-TA1 - rtems_clock_get - 09:00:10   12/31/1988
+TA1 - rtems_clock_get_tod - 09:00:10   12/31/1988
 TA1 - rtems_timer_server_fire_when - timer 1 in 3 seconds
 TA1 - rtems_task_wake_after - 1 second
-TA1 - rtems_clock_get - 09:00:11   12/31/1988
+TA1 - rtems_clock_get_tod - 09:00:11   12/31/1988
 TA1 - rtems_timer_cancel - timer 1
 TA1 - rtems_task_wake_after - YIELD (only task at priority)
 TA1 - timer_deleting - timer 1

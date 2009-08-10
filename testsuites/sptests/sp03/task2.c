@@ -31,8 +31,8 @@ rtems_task Task_2(
     status = rtems_task_wake_after( 1*TICKS_PER_SECOND );
     directive_failed( status, "rtems_task_wake_after" );
 
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     if ( time.second >= 17 ) {
       puts( "*** END OF TEST 3 *** " );

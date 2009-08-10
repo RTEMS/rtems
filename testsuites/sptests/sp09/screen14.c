@@ -141,9 +141,9 @@ void Screen14()
     " - RTEMS_INVALID_CLOCK\n"
   );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_get" );
-  print_time( "TA1 - rtems_clock_get       - ", &time, "\n" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
+  print_time( "TA1 - rtems_clock_get_tod       - ", &time, "\n" );
 
   build_time( &time, 2, 5, 1990, 8, 30, 45, 0 );
   status = rtems_timer_fire_when( Timer_id[ 1 ], &time, Delayed_routine, NULL );
@@ -266,12 +266,13 @@ void Screen14()
     " - RTEMS_INVALID_CLOCK\n"
   );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_get" );
-  print_time( "TA1 - rtems_clock_get       - ", &time, "\n" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
+  print_time( "TA1 - rtems_clock_get_tod       - ", &time, "\n" );
 
   build_time( &time, 2, 5, 1990, 8, 30, 45, 0 );
-  status = rtems_timer_server_fire_when( Timer_id[ 1 ], &time, Delayed_routine, NULL );
+  status = rtems_timer_server_fire_when(
+    Timer_id[ 1 ], &time, Delayed_routine, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_CLOCK,

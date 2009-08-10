@@ -93,11 +93,11 @@ rtems_task Task_2(
   );
   directive_failed( status, "rtems_event_receive" );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_get" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
 
   printf( "TA2 - RTEMS_EVENT_10 received - eventout => %08x\n", eventout );
-  print_time( "TA2 - rtems_clock_get - ", &time, "\n" );
+  print_time( "TA2 - rtems_clock_get_tod - ", &time, "\n" );
 
   puts( "TA2 - rtems_event_receive - RTEMS_PENDING_EVENTS" );
   status = rtems_event_receive(

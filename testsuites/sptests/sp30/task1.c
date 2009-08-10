@@ -40,8 +40,8 @@ rtems_task Task_1_through_3(
     );
     directive_failed( status, "rtems_timer_server_fire_after failed" );
 
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get failed" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod failed" );
 
     if ( time.second >= 35 ) {
       puts( "*** END OF TEST 30 ***" );
@@ -49,7 +49,7 @@ rtems_task Task_1_through_3(
     }
 
     put_name( Task_name[ task_number( tid ) - 1 ], FALSE );
-    print_time( " - rtems_clock_get - ", &time, "\n" );
+    print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
     status = rtems_task_suspend( RTEMS_SELF );
     directive_failed( status, "rtems_task_suspend" );

@@ -1,3 +1,15 @@
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp01/sp01.scn, sp01/task1.c, sp03/task1.c, sp03/task2.c,
+	sp04/task1.c, sp04/tswitch.c, sp09/screen02.c, sp09/screen13.c,
+	sp09/screen14.c, sp09/sp09.scn, sp11/sp11.scn, sp11/task1.c,
+	sp11/task2.c, sp19/fptask.c, sp19/sp19.scn, sp19/task1.c,
+	sp22/prtime.c, sp22/sp22.scn, sp22/task1.c, sp24/sp24.scn,
+	sp24/task1.c, sp30/task1.c, sp31/prtime.c, sp31/sp31.scn,
+	sp31/task1.c, spwatchdog/prtime.c, spwatchdog/spwatchdog.scn,
+	spwatchdog/task1.c: Convert calls to legacy routine rtems_clock_get(
+	RTEMS_CLOCK_GET_TOD, ..) to rtems_clock_get_tod(..).
+
 2009-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp28/init.c, sp28/sp28.scn: Update screen. Add a few missing error

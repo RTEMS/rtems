@@ -42,11 +42,11 @@ rtems_task Task_1(
   printf( " - integer base = (0x%x)\n", INTEGER_factors[ task_index ] );
 
   while( FOREVER ) {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     put_name( Task_name[ task_number( tid ) ], FALSE );
-    print_time( " - rtems_clock_get - ", &time, "\n" );
+    print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
     INTEGER_CHECK( INTEGER_factors[ task_index ] );
 

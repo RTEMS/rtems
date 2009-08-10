@@ -36,8 +36,8 @@ rtems_task Task_1(
   print_time( " sets clock: ", &time, "\n" );
 
   while( FOREVER ) {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     put_name( Task_name[ 1 ], FALSE );
     print_time( " going to sleep:  ", &time, "\n" );

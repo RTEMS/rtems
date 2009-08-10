@@ -71,16 +71,16 @@ void Screen13()
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
   status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
 
   build_time( &time, 12, 31, 1999, 23, 59, 59, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
   status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
 
@@ -89,25 +89,25 @@ void Screen13()
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
   status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
 
   build_time( &time, 12, 31, 2099, 23, 59, 59, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
   status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
 
   build_time( &time, 12, 31, 1991, 23, 59, 59, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
   status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
 }

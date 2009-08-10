@@ -68,9 +68,9 @@ rtems_task Task_1(
   status = rtems_event_send( Task_id[ 2 ], RTEMS_EVENT_19 );
   directive_failed( status, "rtems_event_send" );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_get" );
-  print_time( "TA1 - rtems_clock_get - ", &time, "\n" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
+  print_time( "TA1 - rtems_clock_get_tod - ", &time, "\n" );
 
 rtems_test_pause();
 
@@ -93,9 +93,9 @@ rtems_test_pause();
   directive_failed( status, "rtems_event_receive of 18" );
   printf( "TA1 - RTEMS_EVENT_18 received - eventout => %08x\n", eventout );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "TA1 rtems_clock_get" );
-  print_time( "TA1 - rtems_clock_get - ", &time, "\n" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "TA1 rtems_clock_get_tod" );
+  print_time( "TA1 - rtems_clock_get_tod - ", &time, "\n" );
 
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_3 to self" );
   status = rtems_event_send( RTEMS_SELF, RTEMS_EVENT_3 );
@@ -204,8 +204,8 @@ rtems_test_pause();
     );
     directive_failed( status, "rtems_event_receive" );
 
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     printf( "TA1 - RTEMS_EVENT_1 received - eventout => %08x - ", eventout );
     print_time( "at ", &time, "\n" );

@@ -23,9 +23,9 @@ void Print_time( void )
   rtems_time_of_day time;
   rtems_status_code status;
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_get" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
 
   put_name( Task_name[ 1 ], FALSE );
-  print_time( "- rtems_clock_get - ", &time, "\n" );
+  print_time( "- rtems_clock_get_tod - ", &time, "\n" );
 }

@@ -229,8 +229,8 @@ rtems_task Task_1(
 
   Print_time();
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_get" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
 
   time.second += 3;
 
@@ -246,8 +246,8 @@ rtems_task Task_1(
 
 /* when which is canceled */
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_get" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
 
   time.second += 3;
 

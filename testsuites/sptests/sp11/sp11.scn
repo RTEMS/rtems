@@ -15,19 +15,19 @@ TA2 - rtems_event_send - sending RTEMS_EVENT_10 to self after 4 seconds
 TA2 - rtems_event_receive - waiting forever on RTEMS_EVENT_10
 TA1 - RTEMS_EVENT_14 received - eventout => 00004000
 TA1 - rtems_event_send - send RTEMS_EVENT_19 to TA2
-TA1 - rtems_clock_get - 08:15:00   02/12/1988
+TA1 - rtems_clock_get_tod - 08:15:00   02/12/1988
 <pause>
 TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds
 TA1 - rtems_event_receive - waiting forever on RTEMS_EVENT_18
 TA2 - RTEMS_EVENT_10 received - eventout => 00000400
-TA2 - rtems_clock_get - 08:15:05   02/12/1988
+TA2 - rtems_clock_get_tod - 08:15:05   02/12/1988
 TA2 - rtems_event_receive - RTEMS_PENDING_EVENTS
 TA2 - eventout => 00080000
 TA2 - rtems_event_receive - RTEMS_EVENT_19 - RTEMS_NO_WAIT
 TA2 - RTEMS_EVENT_19 received - eventout => 00080000
 TA2 - rtems_task_delete - deletes self
 TA1 - RTEMS_EVENT_18 received - eventout => 00040000
-TA1 - rtems_clock_get - 08:15:05   02/12/1988
+TA1 - rtems_clock_get_tod - 08:15:05   02/12/1988
 TA1 - rtems_event_send - send RTEMS_EVENT_3 to self
 TA1 - rtems_event_receive - RTEMS_EVENT_3 or RTEMS_EVENT_22 - NO_WAIT and ANY
 TA1 - RTEMS_EVENT_3 received - eventout => 00000008

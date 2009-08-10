@@ -56,8 +56,8 @@ rtems_task FP_task(
 
   while( FOREVER ) {
 
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     if ( time.second >= 16 ) {
 
@@ -77,7 +77,7 @@ rtems_task FP_task(
     if (previous_seconds != time.second)
     {
       put_name( Task_name[ task_index ], FALSE );
-      print_time( " - rtems_clock_get - ", &time, "\n" );
+      print_time( " - rtems_clock_get_tod - ", &time, "\n" );
       previous_seconds = time.second;
     }
 
