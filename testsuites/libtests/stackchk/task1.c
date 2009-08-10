@@ -27,15 +27,15 @@ rtems_task Task_1_through_3(
   directive_failed( status, "rtems_task_ident" );
 
   while( FOREVER ) {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     if ( time.second >= 15 && tid == Task_id[ 1 ] ) {
        blow_stack();
     }
 
     put_name( Task_name[ task_number( tid ) ], FALSE );
-    print_time( " - rtems_clock_get - ", &time, "\n" );
+    print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
     status = rtems_task_wake_after( task_number( tid ) * 5 * TICKS_PER_SECOND );
     directive_failed( status, "rtems_task_wake_after" );

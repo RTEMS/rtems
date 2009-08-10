@@ -47,9 +47,9 @@ rtems_extension Task_switch(
     case 3:
       Run_count[ index ] += 1;
 
-      status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+      status = rtems_clock_get_tod( &time );
       fatal_directive_status_with_level( status, RTEMS_SUCCESSFUL,
-                                         "rtems_clock_get", 1 );
+                                         "rtems_clock_get_tod", 1 );
 
       if (taskSwitchLogIndex <
           (sizeof taskSwitchLog / sizeof taskSwitchLog[0])) {

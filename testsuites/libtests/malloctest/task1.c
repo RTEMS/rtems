@@ -42,11 +42,11 @@ rtems_task Task_1_through_5(
         rtems_test_exit(0);
     }
 
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     put_name( Task_name[ task_number( tid ) ], FALSE );
-    print_time( " - rtems_clock_get - ", &time, "\n" );
+    print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
     mem_amt = ((int)((float)rand()*1000.0/(float)RAND_MAX));
     while (!(mem_ptr = malloc ( mem_amt))) {

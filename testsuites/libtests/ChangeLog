@@ -1,3 +1,9 @@
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpuuse/task1.c, cpuuse/tswitch.c, malloctest/task1.c,
+	stackchk/task1.c: Convert calls to legacy routine rtems_clock_get(
+	RTEMS_CLOCK_GET_TOD, ..) to rtems_clock_get_tod(..).
+
 2009-08-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloctest/init.c: Adjust allocation in test so it passes now that
