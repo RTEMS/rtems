@@ -31,13 +31,13 @@ rtems_task Test_task(
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
   task_index = task_number( tid );
   for ( ; ; ) {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+    status = rtems_clock_get_tod( &time );
     if ( time.second >= 35 ) {
       puts( "*** END OF CLOCK TICK TEST ***" );
       rtems_test_exit( 0 );
     }
     put_name( Task_name[ task_index ], FALSE );
-    print_time( " - rtems_clock_get - ", &time, "\n" );
+    print_time( " - rtems_clock_get_tod - ", &time, "\n" );
     status = rtems_task_wake_after( task_index * 5 * get_ticks_per_second() );
   }
 }

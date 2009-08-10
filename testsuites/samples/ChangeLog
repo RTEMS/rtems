@@ -1,5 +1,10 @@
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* ticker/tasks.c: Convert calls to legacy routine rtems_clock_get(
+	RTEMS_CLOCK_GET_TOD, ..) to rtems_clock_get_tod(..).
+
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* fileio/system.h: Switch to unified work area.
 
 2009-06-11	Roxana Leontie <roxana.leontie@gmail.com>
