@@ -92,6 +92,7 @@ sp62/Makefile
 sp63/Makefile
 sp64/Makefile
 spchain/Makefile
+spclockget/Makefile
 spfatal01/Makefile
 spfatal02/Makefile
 spfatal03/Makefile

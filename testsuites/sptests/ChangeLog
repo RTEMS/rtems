@@ -1,3 +1,10 @@
+2009-08-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add new test to exercise legacy
+	rtems_clock_get().
+	* spclockget/.cvsignore, spclockget/Makefile.am, spclockget/init.c,
+	spclockget/spclockget.doc, spclockget/spclockget.scn: New files.
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp04/task1.c, sp09/screen02.c, sp09/screen04.c, sp09/sp09.scn,
