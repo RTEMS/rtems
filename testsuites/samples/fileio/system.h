@@ -106,8 +106,7 @@ rtems_task Init(
 
 static inline uint32_t   get_ticks_per_second( void )
 {
-  rtems_interval ticks_per_second;
-  (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );  return ticks_per_second;
+  return rtems_clock_get_ticks_per_second();
 }
 
 
