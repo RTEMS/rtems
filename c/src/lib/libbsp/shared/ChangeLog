@@ -1,3 +1,8 @@
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console.c: Fix tabs and allow the BSP to override the default baud
+	rate.
+
 2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* src/irq-generic.c: Priority inheritance on simple binary semaphores

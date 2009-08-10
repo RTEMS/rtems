@@ -82,26 +82,34 @@ rtems_device_driver console_open(
   status = rtems_termios_open ( major, minor, arg, &Callbacks );
   Console_Port_Data[minor].termios_data = args->iop->data1;
 
-  /* Get tty pointeur from the Console_Port_Data */
+  /* Get tty pointur from the Console_Port_Data */
   current_tty = Console_Port_Data[minor].termios_data;
 
   if ( (current_tty->refcount == 1) ) {
-  /*
-   * If it's the first open, modified, if need, the port parameters
-   */
-	if (minor!=Console_Port_Minor) {
-		/*
-		 * If this is not the console we do not want ECHO and
-		 * so forth
-		 */
-		IoctlArgs.iop=args->iop;
-		IoctlArgs.command=RTEMS_IO_GET_ATTRIBUTES;
-		IoctlArgs.buffer=&Termios;
-		rtems_termios_ioctl(&IoctlArgs);
-		Termios.c_lflag=ICANON;
-		IoctlArgs.command=RTEMS_IO_SET_ATTRIBUTES;
-		rtems_termios_ioctl(&IoctlArgs);
-	}
+
+    /*
+     *  If this BSP has a preferred default rate, then use that.
+     */
+    #if defined(BSP_DEFAULT_BAUD_RATE)
+      rtems_termios_set_initial_baud( current_tty, BSP_DEFAULT_BAUD_RATE );
+    #endif
+
+    /*
+     * If it's the first open, modified, if need, the port parameters
+     */
+    if (minor!=Console_Port_Minor) {
+      /*
+       * If this is not the console we do not want ECHO and
+       * so forth
+       */
+      IoctlArgs.iop=args->iop;
+      IoctlArgs.command=RTEMS_IO_GET_ATTRIBUTES;
+      IoctlArgs.buffer=&Termios;
+      rtems_termios_ioctl(&IoctlArgs);
+      Termios.c_lflag=ICANON;
+      IoctlArgs.command=RTEMS_IO_SET_ATTRIBUTES;
+      rtems_termios_ioctl(&IoctlArgs);
+    }
   }
 
   if ( (args->iop->flags&LIBIO_FLAGS_READ) &&
