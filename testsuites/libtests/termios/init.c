@@ -640,7 +640,7 @@ void do_raw_input( int vmin, int vtime )
 
   printf( "Raw input test with VMIN=%d  VTIME=%d\n", vmin, vtime );
 
-  rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond );
+  ticksPerSecond = rtems_clock_get_ticks_per_second();
   if ( tcgetattr( fileno ( stdin ), &old ) < 0 ) {
     perror( "do_raw_input(): tcgetattr() failed" );
     return;
@@ -656,7 +656,7 @@ void do_raw_input( int vmin, int vtime )
   }
 
   do {
-    rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then );
+    then = rtems_clock_get_ticks_since_boot();
     count = 0;
     for(;;) {
       nread = read( fileno( stdin ), cbuf, sizeof cbuf );
@@ -668,7 +668,7 @@ void do_raw_input( int vmin, int vtime )
       if( nread != 0 )
         break;
     }
-    rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now );
+    now = rtems_clock_get_ticks_since_boot();
     msec = (now - then) * 1000 / ticksPerSecond;
     printf( "Count:%-10lu  Interval:%3u.%3.3d  Char:",
           count, msec / 1000, msec % 1000 );
