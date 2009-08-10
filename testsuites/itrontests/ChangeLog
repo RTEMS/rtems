@@ -1,3 +1,8 @@
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* itrontask01/task1.c: Convert calls to legacy routine rtems_clock_get(
+	RTEMS_CLOCK_GET_TOD, ..) to rtems_clock_get_tod(..).
+
 2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* itronhello/Makefile.am, itronmbf01/Makefile.am,

@@ -36,8 +36,8 @@ void Task_2_through_4()
   sprintf(name, "TA%d", tid_index);
 
   while( FOREVER ) {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    status = rtems_clock_get_tod( &time );
+    directive_failed( status, "rtems_clock_get_tod" );
 
     if ( time.second >= 35 ) {
       puts( "*** END OF ITRON TASK TEST 1 ***" );
@@ -45,7 +45,7 @@ void Task_2_through_4()
     }
 
     printf(name);
-    print_time( " - rtems_clock_get - ", &time, "\n" );
+    print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
     status = rtems_task_wake_after( tid_index * 5 * TICKS_PER_SECOND );
     directive_failed( status, "rtems_task_wake_after" );
