@@ -1,3 +1,8 @@
+2009-08-10	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* fb/fb.c: different structures defined in rtems/fb.h that were used in
+	here so changes were needed
+
 2009-08-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am, fb/fb.c: Install nds specific .h files
