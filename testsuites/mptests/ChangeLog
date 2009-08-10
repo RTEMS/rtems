@@ -1,3 +1,9 @@
+2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mp01/task1.c, mp01/node1/mp01-node1.scn, mp01/node2/mp01-node2.scn:
+	Convert calls to legacy routine rtems_clock_get( RTEMS_CLOCK_GET_TOD,
+	..) to rtems_clock_get_tod(..).
+
 2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mp01/node1/Makefile.am, mp01/node2/Makefile.am,

@@ -36,19 +36,19 @@ rtems_task Test_task(
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident" );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_get" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
 
   put_name( Task_name[ task_number( tid ) ], FALSE );
-  print_time( " - rtems_clock_get - ", &time, "\n" );
+  print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
   status = rtems_task_wake_after( task_number( tid ) * 1 * TICKS_PER_SECOND );
   directive_failed( status, "rtems_task_wake_after" );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_get" );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
   put_name( Task_name[ task_number( tid ) ], FALSE );
-  print_time( " - rtems_clock_get - ", &time, "\n" );
+  print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
   if ( task_number(tid) == 1 ) {          /* TASK 1 */
     put_name( Task_name[ 1 ], FALSE );

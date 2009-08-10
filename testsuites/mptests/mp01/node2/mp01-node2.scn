@@ -2,14 +2,14 @@
 Creating task 1 (Global)
 Creating task 2 (Global)
 Creating task 3 (Local)
-SA1 - rtems_clock_get - 09:00:00   12/31/1988
-SA2 - rtems_clock_get - 09:00:00   12/31/1988
-SA3 - rtems_clock_get - 09:00:00   12/31/1988
-SA1 - rtems_clock_get - 09:00:05   12/31/1988
+SA1 - rtems_clock_get_tod - 09:00:00   12/31/1988
+SA2 - rtems_clock_get_tod - 09:00:00   12/31/1988
+SA3 - rtems_clock_get_tod - 09:00:00   12/31/1988
+SA1 - rtems_clock_get_tod - 09:00:05   12/31/1988
 SA1 - deleting self
-SA2 - rtems_clock_get - 09:00:10   12/31/1988
+SA2 - rtems_clock_get_tod - 09:00:10   12/31/1988
 SA2 - waiting to be deleted by SA3
-SA3 - rtems_clock_get - 09:00:15   12/31/1988
+SA3 - rtems_clock_get_tod - 09:00:15   12/31/1988
 SA3 - getting TID of SA2
 SA3 - deleting SA2
 *** END OF TEST 1 ***
