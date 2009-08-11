@@ -11,8 +11,8 @@
 
 #include "tmacros.h"
 
-uint32_t Area1[50];
-uint32_t Area2[50];
+uint32_t Area1[50] CPU_STRUCTURE_ALIGNMENT;
+uint32_t Area2[50] CPU_STRUCTURE_ALIGNMENT;
 
 rtems_task Init(
   rtems_task_argument ignored

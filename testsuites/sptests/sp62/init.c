@@ -12,7 +12,7 @@
 #include <tmacros.h>
 
 rtems_id      Region;
-uint32_t      Region_Memory[256];
+uint32_t      Region_Memory[256] CPU_STRUCTURE_ALIGNMENT;
 volatile bool case_hit;
 
 #define    FIRST_ALLOC 980

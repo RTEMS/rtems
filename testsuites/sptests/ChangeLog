@@ -1,3 +1,12 @@
+2009-08-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac, sp62/init.c, sp64/init.c: Add new test and
+	adjust existing for alignment. New test ensures coverage begin and
+	end marker methods are exercised so they do not get considered
+	unexecuted.
+	* spcoverage/.cvsignore, spcoverage/Makefile.am, spcoverage/init.c,
+	spcoverage/spcoverage.doc, spcoverage/spcoverage.scn: New files.
+
 2009-08-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: Add new test to exercise legacy

@@ -23,7 +23,6 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 sp01/Makefile
@@ -93,6 +92,7 @@ sp63/Makefile
 sp64/Makefile
 spchain/Makefile
 spclockget/Makefile
+spcoverage/Makefile
 spfatal01/Makefile
 spfatal02/Makefile
 spfatal03/Makefile
