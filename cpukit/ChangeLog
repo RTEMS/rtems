@@ -1,3 +1,7 @@
+2009-08-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/include/rtems/debug.h: Fix typo.
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/__times.c, libfs/src/nfsclient/src/nfsTest.c,
