@@ -1,3 +1,8 @@
+2009-08-11	Josh Switnicki <josh.switnicki@utoronto.ca>
+
+	* cpu.c, cpu_asm.S, rtems/score/cpu.h: Fix bug in
+	_CPU_Context_Initialize.
+
 2009-08-05	Josh Switnicki <josh.switnicki@utoronto.ca>
 
 	* Makefile.am: added AVR specific Header files to score/cpu/avr/avr.

@@ -208,11 +208,21 @@ SYM(_CPU_Context_restore_fp):
 
 	PUBLIC(_CPU_Context_switch)
 SYM(_CPU_Context_switch):
-	mov	r26, r24 	/* r26,r27 is X or current context */
+	mov	r26, r24 	/*r26,r27 is X*/
 	mov	r27, r25
-	mov	r24, r22        /* r24,r25 is heir context */
+	mov	r24, r22
  	mov	r25, r23
 	/*save registers*/
+#if 1
+/*if this section is removed there is a problem.*/
+/*debug section start*/ 
+	pop	r22
+	pop	r23
+	push	r22
+	push	r23
+/*debug section end*/
+#endif
+
 	push	r2
 	push	r3
 	push	r4
@@ -229,36 +239,42 @@ SYM(_CPU_Context_switch):
 	push	r15
 	push	r16
 	push	r17
+
 	push	r28
 	push	r29
+
 	/*load sreg*/
-	lds 	r23,0x5F  /*load sreg*/
+	lds 	r23,0x5f  /*load sreg*/
 	/*disable interrupts*/
 	cli
 	/*load stack pointer*/
-	lds	r22,0x5D /*spl*/
-	lds 	r21,0x5E /*sph*/
-	/*save sp to context struct*/
+	lds	r22,0x5d /*spl*/
+	lds 	r21,0x5e /*sph*/
+	/*save sreg and sp to context struct*/
+
 	/*save low then high byte --- verify this delete when verified*/
 	st	X+, r22
 	st	X+, r21
-	/*save sreg and sp to context struct*/
 	st 	X, r23
-
 
 	PUBLIC(_CPU_Context_restore)
 
 SYM(_CPU_Context_restore):
 	mov	r26,r24         /* R26/27 are X */
 	mov	r27,r25
+
 	/*restore stack pointer*/
 	ld	r25, X+
 	ld	r24, X+	
-	sts	0x5E, r24 /*sph*/
-	sts 	0x5D, r25 /*spl*/
+	sts	0x5E,r24  /*sph*/
+	sts 	0x5D ,r25 /*spl*/
 	/*restore registers from stack*/
+
+
 	pop	r29
 	pop	r28
+
+
 	pop	r17
 	pop	r16
 	pop	r15
@@ -275,41 +291,92 @@ SYM(_CPU_Context_restore):
 	pop	r4
 	pop	r3
 	pop	r2
-	/*restore status register*/
-	ld	r23, X
-	sts	0x5f,r23 /*sreg*/	
+
+	/*restore sreg*/
+	ld	r25, X
+	sts	0x5f,r25 /*sreg*/
+	pop	r30
+	pop	r31
+	IJMP
 	ret
 
 
 
-/*
- *  _CPU_Context_restore
+/*PAGE
  *
- *  This routine is generally used only to restart self in an
- *  efficient manner.  It may simply be a label in _CPU_Context_switch.
+ *  _CPU_Context_Initialize
  *
- *  NOTE: May be unnecessary to reload some registers.
+ *  This kernel routine initializes the basic non-FP context area associated
+ *  with each thread.
  *
- *  NO_CPU Specific Information:
+ *  Input parameters:
+ *    the_context  - pointer to the context area
+ *    stack_base   - address of memory for the SPARC
+ *    size         - size in bytes of the stack area
+ *    new_level    - interrupt level for this context area
+ *    entry_point  - the starting execution point for this this context
+ *    is_fp        - TRUE if this context is associated with an FP thread
  *
- *  XXX document implementation including references if appropriate
- 
+ *	the_context is in r25,r24
+ *	entry point is in r13,r12
+ *	stack base is in r23, r22
+ *	size is in r21, r20, r19,r18
+ *	newleve is in r14,r15, r16, 17
+ *
+ *
+ *  Output parameters: NONE
+ */
 
-void _CPU_Context_restore(
-  Context_Control *new_context
-)
-{
-  printk( "AVR _CPU_Context_restore\n" );
-}
-*/
-/*
-	PUBLIC(_CPU_Context_restore)
+	PUBLIC(_CPU_Context_Initialize)
+SYM(_CPU_Context_Initialize):
+	//save caller saved regs
+	PUSH	R10
+	PUSH 	R11
+	PUSH	R12
+	PUSH 	R13
+	PUSH 	R14
+	PUSH 	R15
+	PUSH 	R16
+	PUSH	R17
+	PUSH	R28
+	PUSH	R29
+	//calculate new stack pointer 
+	ADD	R22, R18
+	ADC	R23, R19
+	MOV	R26, R22
+	MOV	R27, R23
+	//Initialize stack with entry point
+	ST	-X, R13
+	ST	-X, R12
+	//store new stack pointer in context control
+	SBIW	R26, 0X13	/*subtract 33 to account for registers*/
+	MOV	R28, R24
+	MOV	R29, R25
+	STD	Y+1, R27	//save stack pointer high to context control
+	ST	Y, R26		//save stack pointer low to context control
+	//set interrupt level in new context
+	LDI	R18, 0		//set sreg in new context to zero
+	STD	Y+2, R18 	//interrupts not enabled		
+	MOV	R18, R14
+	CPI	R18, 0
+	BRNE	NEW_LEVEL_ZERO
+	LDI	R18, 0X80	//set sreg in new context to 0x80
+	STD	Y+2, R18	//interupts enabled
+NEW_LEVEL_ZERO:
+	//restore caller saved regs
+	POP	R29
+	POP	R28
+	POP	R17
+	POP	R16
+	POP	R15
+	POP	R14
+	POP	R13
+	POP	R12
+	POP	R11
+	POP	R10
+	RET
+	
 
-SYM(_CPU_Context_restore):
-	//call printk("AVR _CPU_Context_restore\n")
-	ret
-
-*/
 
 /*  void __ISR_Handler()
  *

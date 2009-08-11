@@ -762,7 +762,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  */
 
 #define _CPU_Context_Restart_self( _the_context ) \
-   _CPU_Context_restore( (_the_context) );
+   _CPU_Context_restore( _the_context );
 
 /*
  *  The purpose of this macro is to allow the initial pointer into
