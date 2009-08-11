@@ -1,5 +1,10 @@
 2009-08-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* spintrcritical01/init.c, spintrcritical06/init.c: Use 1 millisecond
+	per tick.
+
+2009-08-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac, sp62/init.c, sp64/init.c: Add new test and
 	adjust existing for alignment. New test ensures coverage begin and
 	end marker methods are exercised so they do not get considered
