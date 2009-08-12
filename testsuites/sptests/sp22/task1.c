@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -42,7 +42,7 @@ rtems_task Task_1(
   puts( "TA1 - rtems_timer_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_fire_after(
     tmid,
-    3 * TICKS_PER_SECOND,
+    3 * rtems_clock_get_ticks_per_second(),
     Delayed_resume,
     NULL
   );
@@ -59,14 +59,14 @@ rtems_task Task_1(
   puts( "TA1 - rtems_timer_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_fire_after(
     tmid,
-    3 * TICKS_PER_SECOND,
+    3 * rtems_clock_get_ticks_per_second(),
     Delayed_resume,
     NULL
   );
   directive_failed( status, "rtems_timer_fire_after" );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   Print_time();
@@ -99,7 +99,7 @@ rtems_task Task_1(
   puts( "TA1 - rtems_timer_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_fire_after(
     tmid,
-    3 * TICKS_PER_SECOND,
+    3 * rtems_clock_get_ticks_per_second(),
     Delayed_resume,
     NULL
   );
@@ -140,7 +140,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_fire_when" );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   Print_time();

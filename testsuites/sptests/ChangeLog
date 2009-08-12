@@ -1,5 +1,20 @@
 2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp02/task1.c, sp02/task2.c, sp02/task3.c, sp03/task2.c, sp05/task1.c,
+	sp05/task2.c, sp05/task3.c, sp06/task1.c, sp06/task2.c,
+	sp09/screen02.c, sp09/screen04.c, sp09/screen06.c, sp09/screen07.c,
+	sp09/screen10.c, sp09/screen12.c, sp09/screen13.c, sp09/screen14.c,
+	sp11/task1.c, sp11/task2.c, sp12/pridrv.c, sp12/pritask.c,
+	sp12/task1.c, sp13/task1.c, sp13/task2.c, sp14/task1.c, sp16/task1.c,
+	sp16/task4.c, sp19/fptask.c, sp19/task1.c, sp22/task1.c,
+	sp24/task1.c, sp26/task1.c, sp29/init.c, sp30/task1.c, sp31/task1.c,
+	sp33/init.c, sp45/init.c, sp46/init.c, sp50/init.c,
+	spintrcritical06/init.c, spwatchdog/task1.c: Eliminate test routines
+	TICKS_PER_SECOND and get_ticks_per_second() in favor of new
+	rtems_clock_get_ticks_per_second().
+
+2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp65/init.c: Add semi-colon to end of rtems_semaphore_create call.
 	Change attributes to priority ceiling. Use directive_failed, not
 	assert. Configure a semaphore not a region.

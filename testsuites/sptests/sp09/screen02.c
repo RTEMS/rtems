@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -170,7 +170,10 @@ void Screen2()
   );
   puts( " - RTEMS_INVALID_CLOCK" );
 
-  build_time( &time, 2, 5, 1988, 8, 30, 45, TICKS_PER_SECOND + 1 );
+  build_time(
+    &time, 2, 5, 1988, 8, 30, 45,
+    rtems_clock_get_ticks_per_second() + 1
+  );
   print_time( "TA1 - rtems_clock_set - ", &time, "" );
   status = rtems_clock_set( &time );
   fatal_directive_status(
@@ -188,7 +191,11 @@ void Screen2()
 
 /* rtems_task_wake_when */
 
-  build_time( &time, 2, 5, 1988, 8, 30, 48, TICKS_PER_SECOND + 1 );
+  build_time(
+    &time,
+    2, 5, 1988, 8, 30, 48,
+    rtems_clock_get_ticks_per_second() + 1
+  );
   time.second += 3;
   puts( "TA1 - rtems_task_wake_when - TICKINVALID - sleep about 3 seconds" );
 

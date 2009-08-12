@@ -8,7 +8,7 @@
  *  If the times are skewed from these values, then the calendar time
  *  does not correspond correctly with the number of ticks.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +34,7 @@ rtems_task Task_1_through_3(
   while ( FOREVER )  {
     status = rtems_timer_fire_after(
       Timer_id[ argument ],
-      task_number( tid ) * 5 * TICKS_PER_SECOND,
+      task_number( tid ) * 5 * rtems_clock_get_ticks_per_second(),
       Resume_task,
       NULL
     );

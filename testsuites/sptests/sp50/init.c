@@ -23,7 +23,7 @@ rtems_timer_service_routine Timer_Routine( rtems_id id, void *ignored )
 
   sc = rtems_timer_server_fire_after(
     id,
-    get_ticks_per_second(),
+    rtems_clock_get_ticks_per_second(),
     Timer_Routine,
     NULL
   );

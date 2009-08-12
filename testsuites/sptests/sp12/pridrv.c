@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -73,7 +73,7 @@ void Priority_test_driver(
       );
       directive_failed( status, "rtems_task_start loop" );
 
-      status = rtems_task_wake_after( TICKS_PER_SECOND );
+      status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
       directive_failed( status, "rtems_task_wake_after loop" );
 
       if ( priority_base == PRIORITY_INHERIT_BASE_PRIORITY ) {
@@ -100,7 +100,7 @@ void Priority_test_driver(
     }
   }
 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after after loop" );
 
   if ( priority_base == 0 ) {
@@ -115,13 +115,12 @@ void Priority_test_driver(
     status = rtems_task_resume( Priority_task_id[ 5 ] );
     directive_failed( status, "rtems_task_resume" );
 
-    status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after so PRI5 can run" );
 
     status = rtems_task_delete( Priority_task_id[ 5 ] );
     directive_failed( status, "rtems_task_delete of PRI5" );
-  }
-  else {
+  } else {
     for ( index = 1 ; index <= 5 ; index++ ) {
       status = rtems_task_delete( Priority_task_id[ index ] );
       directive_failed( status, "rtems_task_delete loop" );

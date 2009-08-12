@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -98,7 +98,7 @@ rtems_test_pause();
     Region_id[ 1 ],
     3072,
     RTEMS_DEFAULT_OPTIONS,
-    10 * TICKS_PER_SECOND,
+    10 * rtems_clock_get_ticks_per_second(),
     &segment_address_4
   );
   directive_failed( status, "rtems_region_get_segment" );
@@ -151,7 +151,7 @@ rtems_test_pause();
   directive_failed( status, "rtems_task_start of TA5" );
 
   puts( "TA1 - rtems_task_wake_after - yield processor" );
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts_nocr(
@@ -163,7 +163,7 @@ rtems_test_pause();
   new_line;
 
   puts( "TA1 - rtems_task_wake_after - yield processor" );
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts_nocr( "TA1 - rtems_region_get_segment - wait 10 seconds for 3K " );
@@ -172,7 +172,7 @@ rtems_test_pause();
     Region_id[ 1 ],
     3072,
     RTEMS_DEFAULT_OPTIONS,
-    10 * TICKS_PER_SECOND,
+    10 * rtems_clock_get_ticks_per_second(),
     &segment_address_4
   );
   directive_failed( status, "rtems_region_get_segment" );
@@ -181,7 +181,7 @@ rtems_test_pause();
   new_line;
 
   puts( "TA1 - rtems_task_wake_after - yield processor" );
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "TA1 - rtems_task_delete - delete TA4" );

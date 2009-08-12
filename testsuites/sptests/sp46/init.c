@@ -93,7 +93,7 @@ rtems_task Init(
 
   rtems_cpu_usage_reset();
 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   /*

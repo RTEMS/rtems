@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,7 +51,7 @@ rtems_task Task_1(
     INTEGER_CHECK( INTEGER_factors[ task_index ] );
 
     status = rtems_task_wake_after(
-      ( task_number( tid ) ) * 5 * TICKS_PER_SECOND
+      ( task_number( tid ) ) * 5 * rtems_clock_get_ticks_per_second()
     );
     directive_failed( status, "rtems_task_wake_after" );
   }

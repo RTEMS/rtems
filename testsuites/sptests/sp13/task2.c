@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -110,7 +110,7 @@ rtems_task Task_2(
     buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
-    10 * TICKS_PER_SECOND
+    10 * rtems_clock_get_ticks_per_second()
   );
   directive_failed( status, "rtems_message_queue_receive" );
   puts_nocr( "TA2 - buffer received: " );

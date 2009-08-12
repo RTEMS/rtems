@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -95,7 +95,7 @@ void Screen14()
 
   status = rtems_timer_fire_after(
     rtems_build_id( 1, 1, 1, 256 ),
-    5 * TICKS_PER_SECOND,
+    5 * rtems_clock_get_ticks_per_second(),
     Delayed_routine,
     NULL
   );
@@ -220,7 +220,7 @@ void Screen14()
 
   status = rtems_timer_server_fire_after(
     rtems_build_id( 1, 1, 1, 256 ),
-    5 * TICKS_PER_SECOND,
+    5 * rtems_clock_get_ticks_per_second(),
     Delayed_routine,
     NULL
   );

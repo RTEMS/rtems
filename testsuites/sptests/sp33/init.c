@@ -168,7 +168,7 @@ rtems_task Init(
   }
 
   puts( "Delay to let Waiters block" ); 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 
   /* Release tasks which were waiting */
@@ -182,7 +182,7 @@ rtems_task Init(
   }
 
   puts( "Delay to let Waiters print a message" ); 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 
   /*  Create some tasks to wait for the barrier */
@@ -205,7 +205,7 @@ rtems_task Init(
   }
 
   puts( "Delay to let Waiters block" ); 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 
   puts( "Delete barrier" );
@@ -213,7 +213,7 @@ rtems_task Init(
   directive_failed(status, "rtems_barrier_delete");
 
   puts( "Delay to let Waiters print a message" ); 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 
   /* Create barrier with automatic release */
@@ -243,7 +243,7 @@ rtems_task Init(
   }
 
   puts( "Delay to let task wait on barrier" ); 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 
   /* the end */

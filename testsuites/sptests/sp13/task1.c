@@ -80,7 +80,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
-  status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 5*rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   Fill_buffer( "BUFFER 3 TO Q 1", buffer );
@@ -89,7 +89,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
-  status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 5*rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
 rtems_test_pause();
@@ -106,7 +106,7 @@ rtems_test_pause();
     buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
-    10 * TICKS_PER_SECOND
+    10 * rtems_clock_get_ticks_per_second()
   );
   directive_failed( status, "rtems_message_queue_receive" );
   puts_nocr( "TA1 - buffer received: " );
@@ -123,7 +123,7 @@ rtems_test_pause();
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
-  status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 5*rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
 rtems_test_pause();
@@ -337,7 +337,7 @@ rtems_test_pause();
                                            big_receive_buffer,
                                            &size,
                                            RTEMS_DEFAULT_OPTIONS,
-                                           1 * TICKS_PER_SECOND);
+                                           1 * rtems_clock_get_ticks_per_second());
       directive_failed(status, "rtems_message_queue_receive exact size");
       if (size != queue_size)
       {

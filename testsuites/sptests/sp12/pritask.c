@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,7 +32,7 @@ rtems_task Priority_task(
   its_priority = Task_priority[ its_index ];
 
   if ( its_priority < 3 )
-    timeout = 5 * TICKS_PER_SECOND;
+    timeout = 5 * rtems_clock_get_ticks_per_second();
   else
     timeout = RTEMS_NO_TIMEOUT;
 

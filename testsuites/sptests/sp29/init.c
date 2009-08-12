@@ -81,7 +81,7 @@ rtems_task Init (rtems_task_argument ignored)
 	puts( "*** SP29 - SIMPLE SEMAPHORE TEST ***" );
 	puts( "This test only prints on errors." );
 
-	sc = rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond);
+        ticksPerSecond = rtems_clock_get_ticks_per_second();
 	if (sc != RTEMS_SUCCESSFUL) {
 		printf ("Can't get ticks per second: %s\n", rtems_status_text (sc));
 		exit (1);

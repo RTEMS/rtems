@@ -40,7 +40,7 @@ rtems_timer_service_routine Malloc_From_TSR(
   free( (void *) TSR_malloc_ptr );
 
   puts( "TSR: delaying with rtems_task_wake_after" );
-  status = rtems_task_wake_after( TICKS_PER_SECOND / 2 );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() / 2 );
   directive_failed( status, "rtems_task_wake_after" );
 }
 
@@ -85,14 +85,14 @@ rtems_task Init(
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 1 seconds" );
   status = rtems_timer_server_fire_after(
     Timer_id[ 1 ],
-    1 * TICKS_PER_SECOND,
+    1 * rtems_clock_get_ticks_per_second(),
     Malloc_From_TSR,
     NULL
   );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   puts( "TA1 - rtems_task_wake_after - 2 second" );
-  status = rtems_task_wake_after( 2 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   if ( TSR_fired == 2 &&

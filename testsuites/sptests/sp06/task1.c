@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -41,18 +41,18 @@ rtems_task Task_1(
     status = rtems_task_restart( Task_id[ 3 ], Restart_argument );
     directive_failed( status, "rtems_task_restart of TA3" );
 
-    status = rtems_task_wake_after( 2 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
   }
 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "TA1 - rtems_task_restart - restarting TA2" );
   status = rtems_task_restart( Task_id[ 2 ], Restart_argument );
   directive_failed( status, "rtems_task_restart TA2" );
 
-  status = rtems_task_wake_after( 1*TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "TA1 - rtems_task_restart - restarting self" );

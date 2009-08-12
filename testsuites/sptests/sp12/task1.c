@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -62,7 +62,7 @@ rtems_task Task_1(
   puts( "TA1 - got SM1" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
-  status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
 rtems_test_pause();
@@ -77,7 +77,7 @@ rtems_test_pause();
   status = rtems_semaphore_obtain(
     Semaphore_id[ 1 ],
     RTEMS_DEFAULT_OPTIONS,
-    10 * TICKS_PER_SECOND
+    10 * rtems_clock_get_ticks_per_second()
   );
   directive_failed( status, "rtems_semaphore_obtain of SM1" );
   puts( "TA1 - got SM1" );
@@ -87,7 +87,7 @@ rtems_test_pause();
   directive_failed( status, "rtems_semaphore_release of SM2" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
-  status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
 rtems_test_pause();
@@ -123,7 +123,7 @@ rtems_test_pause();
   directive_failed( status, "rtems_task_start of TA5" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
-  status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "TA1 - rtems_task_delete - delete TA4" );
@@ -135,7 +135,7 @@ rtems_test_pause();
   directive_failed( status, "rtems_semaphore_release on SM1" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
-  status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "TA1 - rtems_semaphore_delete - delete SM1" );

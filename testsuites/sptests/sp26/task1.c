@@ -111,7 +111,7 @@ startTask (rtems_id tid, rtems_task_entry entry_point)
 void
 task1 (void)
 {
-  rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond);
+  ticksPerSecond = rtems_clock_get_ticks_per_second();
   createTask ('1', &taskId1);
   createTask ('2', &taskId2);
   startTask (taskId1, subTask1);

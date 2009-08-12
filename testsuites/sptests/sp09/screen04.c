@@ -56,7 +56,7 @@ void Screen4()
   status = rtems_event_receive(
     RTEMS_EVENT_16,
     RTEMS_DEFAULT_OPTIONS,
-    3 * TICKS_PER_SECOND,
+    3 * rtems_clock_get_ticks_per_second(),
     &event_out
   );
   fatal_directive_status(
@@ -75,7 +75,7 @@ void Screen4()
   puts( "TA1 - rtems_event_send - RTEMS_INVALID_ID" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 1 second - RTEMS_SUCCESSFUL" );
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   build_time( &time, 2, 5, 1988, 8, 30, 45, 0 );

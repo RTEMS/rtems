@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -58,7 +58,7 @@ rtems_task Task_1(
   status = rtems_event_receive(
     RTEMS_EVENT_14,
     RTEMS_DEFAULT_OPTIONS,
-    10 * TICKS_PER_SECOND,
+    10 * rtems_clock_get_ticks_per_second(),
     &eventout
   );
   directive_failed( status, "rtems_event_receive" );
@@ -77,7 +77,7 @@ rtems_test_pause();
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds");
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
-    5 * TICKS_PER_SECOND,
+    5 * rtems_clock_get_ticks_per_second(),
     TA1_send_18_to_self_5_seconds,
     NULL
   );
@@ -136,7 +136,7 @@ rtems_test_pause();
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds");
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
-    5 * TICKS_PER_SECOND,
+    5 * rtems_clock_get_ticks_per_second(),
     TA1_send_18_to_self_5_seconds,
     NULL
   );
@@ -149,7 +149,7 @@ rtems_test_pause();
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_8 to self after 60 seconds");
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
-    60 * TICKS_PER_SECOND,
+    60 * rtems_clock_get_ticks_per_second(),
     TA1_send_8_to_self_60_seconds,
     NULL
   );
@@ -158,7 +158,7 @@ rtems_test_pause();
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_9 to self after 60 seconds");
   status = rtems_timer_fire_after(
     Timer_id[ 2 ],
-    60 * TICKS_PER_SECOND,
+    60 * rtems_clock_get_ticks_per_second(),
     TA1_send_9_to_self_60_seconds,
     NULL
   );
@@ -169,7 +169,7 @@ rtems_test_pause();
   );
   status = rtems_timer_fire_after(
     Timer_id[ 3 ],
-    60 * TICKS_PER_SECOND,
+    60 * rtems_clock_get_ticks_per_second(),
     TA1_send_10_to_self,
     NULL
   );
@@ -188,7 +188,7 @@ rtems_test_pause();
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_1 every second" );
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
-    TICKS_PER_SECOND,
+    rtems_clock_get_ticks_per_second(),
     TA1_send_1_to_self_every_second,
     NULL
   );

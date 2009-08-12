@@ -90,7 +90,7 @@ rtems_task FP_task(
      */
     if (time.second >= 4)
     {
-      status = rtems_task_wake_after( TICKS_PER_SECOND );
+      status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
       directive_failed( status, "rtems_task_wake_after" );
     }
   }

@@ -63,17 +63,17 @@ rtems_task Task_1(
 
   puts( "TA1 - rtems_timer_server_fire_after - 1 second" );
   status = rtems_timer_server_fire_after(
-    tmid, TICKS_PER_SECOND, Should_not_fire_TSR, NULL );
+    tmid, rtems_clock_get_ticks_per_second(), Should_not_fire_TSR, NULL );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   puts( "TA1 - rtems_task_wake_after - 1/2 second" );
-  status = rtems_task_wake_after( TICKS_PER_SECOND / 2 );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() / 2 );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   directive_failed( status, "rtems_timer_server_fire_after" );
   puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 1/2 second" );
   status = rtems_timer_server_fire_after(
-    tmid2, TICKS_PER_SECOND / 2, Should_not_fire_TSR, NULL );
+    tmid2, rtems_clock_get_ticks_per_second() / 2, Should_not_fire_TSR, NULL );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   if ( TSR_fired ) {
@@ -93,12 +93,12 @@ rtems_task Task_1(
 /* now check that rescheduling an active timer works OK. */
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 30 seconds" );
   status = rtems_timer_server_fire_after(
-    tmid, 30 * TICKS_PER_SECOND, Delayed_resume, NULL );
+    tmid, 30 * rtems_clock_get_ticks_per_second(), Delayed_resume, NULL );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 60 seconds" );
   status = rtems_timer_server_fire_after(
-    tmid2, 60 * TICKS_PER_SECOND, Delayed_resume, NULL );
+    tmid2, 60 * rtems_clock_get_ticks_per_second(), Delayed_resume, NULL );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   status = rtems_timer_get_information( tmid, &info );
@@ -108,12 +108,12 @@ rtems_task Task_1(
     _Timer_Server->Timer.initial + _Timer_Server->Timer.start_time );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_timer_wake_after" );
 
   puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 60 seconds" );
   status = rtems_timer_server_fire_after(
-    tmid2, 60 * TICKS_PER_SECOND, Delayed_resume, NULL );
+    tmid2, 60 * rtems_clock_get_ticks_per_second(), Delayed_resume, NULL );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   status = rtems_timer_get_information( tmid, &info );
@@ -126,12 +126,12 @@ rtems_task Task_1(
     (_Timer_Server->Timer.initial + _Timer_Server->Timer.start_time) );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_timer_wake_after" );
 
   puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 60 seconds" );
   status = rtems_timer_server_fire_after(
-    tmid2, 60 * TICKS_PER_SECOND, Delayed_resume, NULL );
+    tmid2, 60 * rtems_clock_get_ticks_per_second(), Delayed_resume, NULL );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   status = rtems_timer_get_information( tmid, &info );
@@ -158,7 +158,7 @@ rtems_task Task_1(
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_server_fire_after(
     tmid,
-    3 * TICKS_PER_SECOND,
+    3 * rtems_clock_get_ticks_per_second(),
     Delayed_resume,
     NULL
   );
@@ -175,14 +175,14 @@ rtems_task Task_1(
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_server_fire_after(
     tmid,
-    3 * TICKS_PER_SECOND,
+    3 * rtems_clock_get_ticks_per_second(),
     Delayed_resume,
     NULL
   );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   Print_time();
@@ -215,7 +215,7 @@ rtems_task Task_1(
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_server_fire_after(
     tmid,
-    3 * TICKS_PER_SECOND,
+    3 * rtems_clock_get_ticks_per_second(),
     Delayed_resume,
     NULL
   );
@@ -256,7 +256,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_server_fire_when" );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   Print_time();
