@@ -1,3 +1,12 @@
+2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mp01/task1.c, mp02/task1.c, mp03/task1.c, mp05/task1.c, mp06/task1.c,
+	mp07/task1.c, mp08/task1.c, mp09/recvmsg.c, mp09/sendmsg.c,
+	mp09/task1.c, mp10/init.c, mp12/init.c, mp13/init.c, mp13/task1.c,
+	mp13/task2.c, mp14/evtask1.c, mp14/init.c: Eliminate test routines
+	TICKS_PER_SECOND and get_ticks_per_second() in favor of new
+	rtems_clock_get_ticks_per_second().
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mp01/task1.c, mp01/node1/mp01-node1.scn, mp01/node2/mp01-node2.scn:

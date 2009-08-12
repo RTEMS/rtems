@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -48,7 +48,7 @@ void Test_Task_Support(
 
       fatal_directive_status(status, RTEMS_UNSATISFIED, "rtems_event_receive");
 
-      status = rtems_task_wake_after( 2 * TICKS_PER_SECOND );
+      status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
       directive_failed( status, "rtems_task_wake_after" );
 
       put_name( Task_name[ node ], FALSE );

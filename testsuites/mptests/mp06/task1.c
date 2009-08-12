@@ -9,7 +9,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -115,7 +115,7 @@ rtems_task Test_task(
 
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
-    5 * TICKS_PER_SECOND,
+    5 * rtems_clock_get_ticks_per_second(),
     Stop_Test_TSR,
     NULL
   );
@@ -139,7 +139,7 @@ rtems_task Test_task(
       status = rtems_event_receive(
         event_for_this_iteration,
         RTEMS_DEFAULT_OPTIONS,
-        1 * TICKS_PER_SECOND,
+        1 * rtems_clock_get_ticks_per_second(),
         &event_out
       );
       if ( rtems_are_statuses_equal( status, RTEMS_TIMEOUT ) ) {
@@ -169,7 +169,7 @@ rtems_task Test_task(
     status = rtems_event_receive(
       RTEMS_EVENT_16,
       RTEMS_DEFAULT_OPTIONS,
-      1 * TICKS_PER_SECOND,
+      1 * rtems_clock_get_ticks_per_second(),
       &event_out
     );
     fatal_directive_status( status, RTEMS_TIMEOUT, "rtems_event_receive" );

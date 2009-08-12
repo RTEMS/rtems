@@ -16,7 +16,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,7 +51,7 @@ rtems_task Init(
   puts( "Got to initialization task" );
 
   if ( Multiprocessing_configuration.node == 2 )  {
-    status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 
     puts( "Getting ID of remote Partition (Global)" );
@@ -84,7 +84,7 @@ rtems_task Init(
     status = rtems_partition_return_buffer( Partition_id[ 1 ], bufaddr );
     directive_failed( status, "rtems_partition_return_buffer" );
 
-    status = rtems_task_wake_after( 2 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
   }
   else {
@@ -100,7 +100,7 @@ rtems_task Init(
     directive_failed( status, "rtems_partition_create" );
 
     puts( "Sleeping for two seconds" );
-    status = rtems_task_wake_after( 2 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 
     puts( "Deleting Partition (Global)" );

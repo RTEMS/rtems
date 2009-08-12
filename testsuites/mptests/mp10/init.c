@@ -17,7 +17,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -70,7 +70,7 @@ rtems_task Init(
     );
     directive_failed( status, "rtems_semaphore_create" );
 
-    status = rtems_task_wake_after( 10 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( 10 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 
   } else {

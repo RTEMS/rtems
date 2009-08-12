@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,7 +31,7 @@ void Send_messages()
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "Delaying for a second" );
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts_nocr( "rtems_message_queue_urgent: " );
@@ -40,7 +40,7 @@ void Send_messages()
   directive_failed( status, "rtems_message_queue_urgent" );
 
   puts( "Delaying for a second" );
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts_nocr( "rtems_message_queue_broadcast: " );
@@ -54,6 +54,6 @@ void Send_messages()
   directive_failed( status, "rtems_message_queue_broadcast" );
 
   puts( "Delaying for a second" );
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 }

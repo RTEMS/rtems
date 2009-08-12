@@ -13,7 +13,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -42,7 +42,7 @@ rtems_task Test_task(
   put_name( Task_name[ task_number( tid ) ], FALSE );
   print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
-  status = rtems_task_wake_after( task_number( tid ) * 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( task_number( tid ) * 1 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   status = rtems_clock_get_tod( &time );

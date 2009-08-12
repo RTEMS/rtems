@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -56,7 +56,7 @@ rtems_task Init(
 
   status = rtems_timer_fire_after(
     timer_id,
-    MAX_LONG_TEST_DURATION * TICKS_PER_SECOND,
+    MAX_LONG_TEST_DURATION * rtems_clock_get_ticks_per_second(),
     Stop_Test_TSR,
     NULL
   );

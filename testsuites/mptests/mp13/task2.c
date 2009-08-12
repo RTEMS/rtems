@@ -9,7 +9,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,14 +39,14 @@ rtems_task Test_task2(
   directive_failed( status, "rtems_semaphore_ident" );
 
   if ( Multiprocessing_configuration.node == 1 ) {
-    status = rtems_task_wake_after( TICKS_PER_SECOND );
+    status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 
     puts( "Releasing semaphore ..." );
     status = rtems_semaphore_release( Semaphore_id[ 1 ] );
     directive_failed( status, "rtems_semaphore_release" );
 
-    status = rtems_task_wake_after( TICKS_PER_SECOND / 2 );
+    status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() / 2 );
     directive_failed( status, "rtems_task_wake_after" );
 
     puts( "Getting semaphore ..." );
@@ -68,7 +68,7 @@ rtems_task Test_task2(
   }
 
 /*
-  status = rtems_task_wake_after( TICKS_PER_SECOND / 2 );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() / 2 );
   directive_failed( status, "rtems_task_wake_after" );
 */
 
@@ -84,14 +84,14 @@ rtems_task Test_task2(
   status = rtems_semaphore_release( Semaphore_id[ 1 ] );
   directive_failed( status, "rtems_semaphore_release" );
 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "Getting semaphore ..." );
   status = rtems_semaphore_obtain(
     Semaphore_id[ 1 ],
     RTEMS_DEFAULT_OPTIONS,
-    2 * TICKS_PER_SECOND
+    2 * rtems_clock_get_ticks_per_second()
   );
   fatal_directive_status(
     status,

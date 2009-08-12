@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +34,7 @@ rtems_task Test_task(
   size_t            size;
   char              receive_buffer[16];
 
-  status = rtems_task_wake_after( TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "Getting QID of message queue" );
@@ -95,7 +95,7 @@ rtems_task Test_task(
     Send_messages();
 
     puts( "Delaying for 5 seconds" );
-    status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
+    status = rtems_task_wake_after( 5*rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 
     puts( "Deleting Message queue" );
