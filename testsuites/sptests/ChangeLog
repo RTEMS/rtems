@@ -1,3 +1,9 @@
+2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp65/init.c: Add semi-colon to end of rtems_semaphore_create call.
+	Change attributes to priority ceiling. Use directive_failed, not
+	assert. Configure a semaphore not a region.
+
 2009-08-12	Santosh G Vattam <vattam.santosh@gmail.com>
 
 	* ChangeLog, Makefile.am, configure.ac: Add new test for some core
