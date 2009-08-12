@@ -5,7 +5,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-project_lib_LIBRARIES = libcsupport.a
 noinst_LIBRARIES = libcsupport.a
 libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
 

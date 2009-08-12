@@ -8,29 +8,15 @@ endif
 PREINSTALL_DIRS =
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
-all-local: $(TMPINSTALL_FILES)
-
-TMPINSTALL_FILES =
-CLEANFILES = $(TMPINSTALL_FILES)
-
 all-am: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
-CLEANFILES += $(PREINSTALL_FILES)
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
+CLEANFILES = $(PREINSTALL_FILES)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-$(PROJECT_LIB)/librtems.a: librtems.a $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtems.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/librtems.a
 
 $(PROJECT_INCLUDE)/rtems.h: include/rtems.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems.h
