@@ -1,5 +1,10 @@
 2009-08-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/Makefile.am: Obsolete coverage file.
+	* libcsupport/src/end_profile.c: Removed.
+
+2009-08-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/Makefile.am, libcsupport/preinstall.am,
 	posix/Makefile.am, posix/preinstall.am, rtems/Makefile.am,
 	rtems/preinstall.am, score/Makefile.am, score/preinstall.am: Revert
