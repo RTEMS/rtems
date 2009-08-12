@@ -1,5 +1,12 @@
 2009-08-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/src/malloc_boundary.c: This is currently non-funcitonal.
+	Do not build it when doing coverage until it works again.
+	* sapi/include/confdefs.h: Address linking errors when building for
+	configuration.
+
+2009-08-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/Makefile.am: Obsolete coverage file.
 	* libcsupport/src/end_profile.c: Removed.
 

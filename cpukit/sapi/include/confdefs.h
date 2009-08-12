@@ -99,8 +99,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 
-#ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-  #define CONFIGURE_HAS_OWN_MOUNT_TABLE
+/*
+ *  When building for coverage, we always need a mount table
+ */
+#if !defined(RTEMS_COVERAGE)
+  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    #define CONFIGURE_HAS_OWN_MOUNT_TABLE
+  #endif
 #endif
 
 /**
@@ -171,7 +176,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
   #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    extern uint32_t rtems_device_table_size;
+    #if defined(RTEMS_COVERAGE)
+      uint32_t rtems_device_table_size = 0;
+    #endif
     #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #elif defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
     #ifndef CONFIGURE_MAXIMUM_DEVICES
@@ -179,7 +186,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #endif
     #include <rtems/devfs.h>
     uint32_t rtems_device_table_size = CONFIGURE_MAXIMUM_DEVICES;
-    #define CONFIGURE_MEMORY_FOR_DEVFS _Configure_Object_RAM(CONFIGURE_MAXIMUM_DEVICES, sizeof (rtems_device_name_t))
+    #define CONFIGURE_MEMORY_FOR_DEVFS \
+      _Configure_Object_RAM(CONFIGURE_MAXIMUM_DEVICES, \
+         sizeof (rtems_device_name_t))
+  #elif defined(RTEMS_COVERAGE)
+    uint32_t rtems_device_table_size = 0;
+    #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #else
     #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #endif
@@ -207,8 +219,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifdef CONFIGURE_INIT
   /**
    *  This disables the inclusion of pipe support in the full IMFS.
+   *
+   *  NOTE: When building for coverage, we need this variable all the time.
    */
-  #if !defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+  #if !defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM) || \
+       defined(RTEMS_COVERAGE)
     #if defined(CONFIGURE_PIPES_ENABLED)
       bool rtems_pipe_configured = true;
     #else

@@ -38,7 +38,10 @@
 
 #include <stdio.h>
 
+/* only supported on newlib targets */
 #ifdef RTEMS_NEWLIB
+/* not completely implemented so not included in coverage analysis */
+#ifndef RTEMS_COVERAGE
 
 #define SENTINELSIZE    12
 #define SENTINEL       "\xD1\xAC\xB2\xF1" "BITE ME"
@@ -191,4 +194,4 @@ void checkMallocArena(void)
 }
 
 #endif
-
+#endif
