@@ -3,7 +3,7 @@
  *  This include file contains macros which are useful in the RTEMS
  *  test suites.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -237,15 +237,6 @@ extern "C" {
   ( rtems_object_id_get_index( tid ) - \
       rtems_configuration_get_rtems_api_configuration()-> \
         number_of_initialization_tasks )
-
-static inline uint32_t   get_ticks_per_second( void )
-{
-  rtems_interval ticks_per_second;
-  (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );
-  return ticks_per_second;
-}
-
-#define TICKS_PER_SECOND get_ticks_per_second()
 
 #define rtems_test_assert(__exp) \
   if (!(__exp)) { \

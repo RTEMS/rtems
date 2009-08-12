@@ -1,3 +1,9 @@
+2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* support/include/tmacros.h: Eliminate test routines TICKS_PER_SECOND
+	and get_ticks_per_second() in favor of new
+	rtems_clock_get_ticks_per_second().
+
 2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* support/src/test_support.c: Tinker with longest valid name.
