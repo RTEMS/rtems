@@ -1,3 +1,16 @@
+2009-08-12	Santosh G Vattam <vattam.santosh@gmail.com>
+
+	* ChangeLog, Makefile.am, configure.ac: Add new test for some core
+	mutex cases.
+	* sp65/.cvsignore, sp65/Makefile.am, sp65/init.c, sp65/sp65.doc,
+	sp65/sp65.scn: New files.
+
+2009-08-12	Santosh G Vattam <vattam.santosh@gmail.com>
+
+	* Makefile.am, configure.ac: Add new test for some core mutex cases.
+	* sp65/.cvsignore, sp65/Makefile.am, sp65/init.c, sp65/sp65.doc,
+	sp65/sp65.scn: New files.
+
 2009-08-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spintrcritical01/init.c, spintrcritical06/init.c: Use 1 millisecond
