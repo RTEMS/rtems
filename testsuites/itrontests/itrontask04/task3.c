@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -43,7 +43,7 @@ void Task_3()
      */
 
     puts( "TA3 - rtems_task_wake_after - sleep 1 second" );
-    status = rtems_task_wake_after( TICKS_PER_SECOND );
+    status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after in TA3" );
   }
 

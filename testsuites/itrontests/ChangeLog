@@ -1,3 +1,10 @@
+2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* itrontask01/task1.c, itrontask02/dormant.c, itrontask03/task1.c,
+	itrontask03/task2.c, itrontask03/task3.c, itrontask04/task3.c:
+	Eliminate test routines TICKS_PER_SECOND and get_ticks_per_second()
+	in favor of new rtems_clock_get_ticks_per_second().
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* itrontask01/task1.c: Convert calls to legacy routine rtems_clock_get(
