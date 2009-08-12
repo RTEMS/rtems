@@ -1,3 +1,8 @@
+2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* src/irq-legacy.c: Spacing, tabs, and proper format for license
+	notice.
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* console.c: Fix tabs and allow the BSP to override the default baud
