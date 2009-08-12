@@ -3,7 +3,7 @@
  *  This include file contains information that is included in every
  *  function in the test set.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -87,15 +87,6 @@ extern rtems_name Task_name[ 4 ];       /* array of task names */
     if ( (_crlf) ) \
       putchar( '\n' ); \
   } while (0)
-
-/*
- *  static inline routine to make obtaining ticks per second easier.
- */
-
-static inline uint32_t   get_ticks_per_second( void )
-{
-  return rtems_clock_get_ticks_per_second();
-}
 
 /*
  *  This allows us to view the "Test_task" instantiations as a set

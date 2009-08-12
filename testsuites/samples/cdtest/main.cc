@@ -152,7 +152,7 @@ cdtest(void)
     printf("IO Stream not tested\n");
 #endif
     bar = blech;
-    rtems_task_wake_after( 5 * get_ticks_per_second() );
+    rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
 }
 
 //
@@ -211,7 +211,7 @@ rtems_task main_task(
       printf( "Caught another exception.\n" );
     }
     printf( "Exceptions are working properly.\n" );
-    rtems_task_wake_after( 5 * get_ticks_per_second() );
+    rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
     printf( "Global Dtors should be called after this line....\n" );
     exit(0);
 }

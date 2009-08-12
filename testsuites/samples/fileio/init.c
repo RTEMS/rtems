@@ -296,7 +296,7 @@ void fileio_list_file(void)
     printf("\n ******** End of file reached, flen = %d\n",flen);
     close(fd);
 
-    rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_sec);
+    ticks_per_sec = rtems_clock_get_ticks_per_second();
     printf("time elapsed for read:  %g seconds\n",
 	   ((double)curr_tick-start_tick)/ticks_per_sec);
   }
@@ -361,7 +361,7 @@ void fileio_write_file(void)
   /*
    * get number of ticks per second
    */
-  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_sec);
+  ticks_per_sec = rtems_clock_get_ticks_per_second();
 
   /*
    * get path to file to write
@@ -520,7 +520,7 @@ void fileio_read_file(void)
   /*
    * get number of ticks per second
    */
-  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_sec);
+  ticks_per_sec = rtems_clock_get_ticks_per_second();
 
   /*
    * get path to file to read

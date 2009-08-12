@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,6 +38,7 @@ rtems_task Test_task(
     }
     put_name( Task_name[ task_index ], FALSE );
     print_time( " - rtems_clock_get_tod - ", &time, "\n" );
-    status = rtems_task_wake_after( task_index * 5 * get_ticks_per_second() );
+    status = rtems_task_wake_after(
+      task_index * 5 * rtems_clock_get_ticks_per_second() );
   }
 }

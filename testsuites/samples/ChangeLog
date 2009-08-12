@@ -1,3 +1,10 @@
+2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cdtest/main.cc, fileio/init.c, fileio/system.h, pppd/pppdapp.c,
+	ticker/system.h, ticker/tasks.c: Eliminate test routines
+	TICKS_PER_SECOND and get_ticks_per_second() in favor of new
+	rtems_clock_get_ticks_per_second().
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/system.h, ticker/system.h, ticker/ticker.scn: Convert calls to
