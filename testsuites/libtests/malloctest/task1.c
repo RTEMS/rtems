@@ -3,7 +3,7 @@
  *  This set of three tasks do some simple task switching for about
  *  15 seconds and then call a routine to "blow the stack".
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,7 +57,8 @@ rtems_task Task_1_through_5(
     memset( mem_ptr, mem_amt, mem_amt );
     malloc_report_statistics();
     malloc_walk(1,FALSE);
-    status = rtems_task_wake_after( task_number( tid ) * 1 * TICKS_PER_SECOND/4 );
+    status = rtems_task_wake_after(
+      task_number( tid ) * 1 * rtems_clock_get_ticks_per_second()/4 );
     for (i=0; i < mem_amt; i++)
     {
        if ( mem_ptr[i] != (mem_amt & 0xff))
