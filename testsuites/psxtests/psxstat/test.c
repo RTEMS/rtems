@@ -2,7 +2,7 @@
  *  This test exercises stat() via fstat() and generates as many of the
  *  path evaluation cases as possible.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,7 +27,7 @@
 #include <pmacros.h>
 
 #define MAXSYMLINK 5   /* There needs to be a better way of getting this. */
-#define TIMEOUT_VALUE  ( 5 * TICKS_PER_SECOND )
+#define TIMEOUT_VALUE  ( 5 * rtems_clock_get_ticks_per_second() )
 
 
 /*

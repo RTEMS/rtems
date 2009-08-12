@@ -1,3 +1,9 @@
+2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxfile01/test.c, psxstat/test.c, psxtime/test.c: Eliminate test
+	routines TICKS_PER_SECOND and get_ticks_per_second() in favor of new
+	rtems_clock_get_ticks_per_second().
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxsignal01/init.c: Convert calls to legacy routine rtems_clock_get(

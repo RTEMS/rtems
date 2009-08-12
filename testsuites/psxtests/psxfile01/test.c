@@ -10,7 +10,7 @@
  *    /dev
  *    /dev/XXX   [where XXX includes at least console]
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -433,7 +433,7 @@ int main(
   ctime2 = buf.st_ctime;
 
 
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   rewind( file );
   while ( fgets(buffer, 128, file) )
     printf( "%s", buffer );
@@ -459,7 +459,7 @@ int main(
    *  Now truncate a file
    */
 
-  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   puts( "truncate /tmp/j to length of 40" );
   status = truncate( "/tmp/j", 40 );
   assert( !status );

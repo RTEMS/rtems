@@ -84,7 +84,7 @@ void check_a_tod(
     a_tm = gmtime( &a_time_t );
     printf( "gmtime:       %s\n",  asctime( a_tm ) );
 
-    status = rtems_task_wake_after( 5 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
 
     i++;
 
