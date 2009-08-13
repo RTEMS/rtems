@@ -130,6 +130,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <termios.h>
+#include <rtems/termiostypes.h>
 #include <bsp.h>                /* Must be before libio.h */
 #include <rtems/libio.h>
 
@@ -230,7 +231,7 @@ rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
   rtems_interval ticks_per_second, start_ticks, end_ticks, current_ticks;
 
   ticks_per_second = rtems_clock_get_ticks_per_second();
-  stack_ticks = rtems_clock_get_ticks_since_boot();
+  start_ticks = rtems_clock_get_ticks_since_boot();
   end_ticks = start_ticks + delay;
 
   do {

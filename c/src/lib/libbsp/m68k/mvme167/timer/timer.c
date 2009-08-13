@@ -48,7 +48,7 @@ uint32_t            Ttimer_val;
  */
 bool benchmark_timer_find_average_overhead;
 
-rtems_isr timerisr(void);
+rtems_isr_entry timerisr(void);
 
 /*
  *  This routine initializes the Tick Timer 1 on the MVME167 board.

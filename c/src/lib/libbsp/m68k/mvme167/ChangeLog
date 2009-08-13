@@ -1,3 +1,7 @@
+2009-08-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/console.c, timer/timer.c: Fix warnings and typos.
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* console/console.c: Convert calls to legacy routine rtems_clock_get(
