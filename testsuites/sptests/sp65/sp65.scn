@@ -1,0 +1,8 @@
+*** TEST 65 ***
+Creating semaphore
+Calling rtems_semaphore_obtain
+Calling rtems_task_create
+Calling rtems_task_start
+Init Task_1: Obtaining semaphore
+Calling semaphore release
+*** END OF TEST 65 ***

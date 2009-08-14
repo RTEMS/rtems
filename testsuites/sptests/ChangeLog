@@ -1,3 +1,10 @@
+2009-08-13	Santosh G Vattam <vattam.santosh@gmail.com>
+
+	* sp65/init.c, sp65/sp65.doc, sp65/sp65.scn: Add new test case to
+	verify that obtaining a priority ceiling mutex when the calling
+	task's priority is the same as the priority ceiling is handled
+	correctly.
+
 2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp02/task1.c, sp02/task2.c, sp02/task3.c, sp03/task2.c, sp05/task1.c,

@@ -15,10 +15,10 @@ test set name:  sp65
 
 directives:
 
-  rtems_region_create
-  really _Objects_Extend_information when unlimited extension fails 
+  rtems_semaphore_create
+  rtems_semaphore_obtain
 
 concepts:
 
-+ Ensure that being unable to allocate memory when extending an object class
-  works as expected.
++ Verify that obtaining a priority ceiling mutex when the calling task's
+  priority is the same as the priority ceiling is handled correctly.
