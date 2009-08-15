@@ -124,6 +124,15 @@ void test_termios_baud2index(void)
     "\n"
     "Test termios_baud2index..."
   );
+  puts( "termios_baud_to_index(-2) - NOT OK" );
+  i = termios_baud_to_index( -2 );
+  assert ( i == -1 );
+
+  puts( "termios_baud_to_index(572) - NOT OK" );
+  i = termios_baud_to_index( -2 );
+  assert ( i == -1 );
+
+  if ( i != -1 )
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
     printf( "termios_baud_to_index(B%d) - OK\n", baud_table[i].baud );
     index = termios_baud_to_index( baud_table[i].constant );
@@ -146,6 +155,14 @@ void test_termios_baud2number(void)
     "\n"
     "Test termios_baud2number..."
   );
+  puts( "termios_baud_to_number(-2) - NOT OK" );
+  i = termios_baud_to_number( -2 );
+  assert ( i == -1 );
+
+  puts( "termios_baud_to_number(572) - NOT OK" );
+  i = termios_baud_to_number( -2 );
+  assert ( i == -1 );
+
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
     printf( "termios_baud_to_number(B%d) - OK\n", baud_table[i].baud );
     number = termios_baud_to_number( baud_table[i].constant );
@@ -172,6 +189,14 @@ void test_termios_number_to_baud(void)
     "\n"
     "Test termios_number_to_baud..."
   );
+  puts( "termios_number_to_baud(-2) - NOT OK" );
+  i = termios_number_to_baud( -2 );
+  assert ( i == -1 );
+
+  puts( "termios_number_to_baud(572) - NOT OK" );
+  i = termios_number_to_baud( -2 );
+  assert ( i == -1 );
+
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
     printf( "termios_number_to_baud(B%d) - OK\n", baud_table[i].baud );
     termios_baud = termios_number_to_baud( baud_table[i].baud );

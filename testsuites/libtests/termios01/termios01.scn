@@ -1,0 +1,200 @@
+*** TEST TERMIOS 01 ***
+
+Test termios_baud2index...
+termios_baud_to_index(-2) - NOT OK
+termios_baud_to_index(572) - NOT OK
+
+Test termios_baud2number...
+termios_baud_to_number(-2) - NOT OK
+termios_baud_to_number(572) - NOT OK
+termios_baud_to_number(B0) - OK
+termios_baud_to_number(B50) - OK
+termios_baud_to_number(B75) - OK
+termios_baud_to_number(B110) - OK
+termios_baud_to_number(B134) - OK
+termios_baud_to_number(B150) - OK
+termios_baud_to_number(B200) - OK
+termios_baud_to_number(B300) - OK
+termios_baud_to_number(B600) - OK
+termios_baud_to_number(B1200) - OK
+termios_baud_to_number(B1800) - OK
+termios_baud_to_number(B2400) - OK
+termios_baud_to_number(B4800) - OK
+termios_baud_to_number(B9600) - OK
+termios_baud_to_number(B19200) - OK
+termios_baud_to_number(B38400) - OK
+termios_baud_to_number(B57600) - OK
+termios_baud_to_number(B115200) - OK
+termios_baud_to_number(B230400) - OK
+termios_baud_to_number(B460800) - OK
+
+Test termios_number_to_baud...
+termios_number_to_baud(-2) - NOT OK
+termios_number_to_baud(572) - NOT OK
+termios_number_to_baud(B0) - OK
+termios_number_to_baud(B50) - OK
+termios_number_to_baud(B75) - OK
+termios_number_to_baud(B110) - OK
+termios_number_to_baud(B134) - OK
+termios_number_to_baud(B150) - OK
+termios_number_to_baud(B200) - OK
+termios_number_to_baud(B300) - OK
+termios_number_to_baud(B600) - OK
+termios_number_to_baud(B1200) - OK
+termios_number_to_baud(B1800) - OK
+termios_number_to_baud(B2400) - OK
+termios_number_to_baud(B4800) - OK
+termios_number_to_baud(B9600) - OK
+termios_number_to_baud(B19200) - OK
+termios_number_to_baud(B38400) - OK
+termios_number_to_baud(B57600) - OK
+termios_number_to_baud(B115200) - OK
+termios_number_to_baud(B230400) - OK
+termios_number_to_baud(B460800) - OK
+
+Init - rtems_io_register_driver - Termios Test Driver - OK
+Termios_test_driver - rtems_io_register /dev/test - OK
+Init - Major slot returned = 2
+Init - open - /dev/test - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Test termios setting device baud rate...
+tcsetattr(TCSANOW, B0) - OK
+set_attributes - B0 8-NONE-1
+tcsetattr(TCSADRAIN, B0) - OK
+set_attributes - B0 8-NONE-1
+tcsetattr(TCSANOW, B50) - OK
+set_attributes - B50 8-NONE-1
+tcsetattr(TCSADRAIN, B50) - OK
+set_attributes - B50 8-NONE-1
+tcsetattr(TCSANOW, B75) - OK
+set_attributes - B75 8-NONE-1
+tcsetattr(TCSADRAIN, B75) - OK
+set_attributes - B75 8-NONE-1
+tcsetattr(TCSANOW, B110) - OK
+set_attributes - B110 8-NONE-1
+tcsetattr(TCSADRAIN, B110) - OK
+set_attributes - B110 8-NONE-1
+tcsetattr(TCSANOW, B134) - OK
+set_attributes - B134 8-NONE-1
+tcsetattr(TCSADRAIN, B134) - OK
+set_attributes - B134 8-NONE-1
+tcsetattr(TCSANOW, B150) - OK
+set_attributes - B150 8-NONE-1
+tcsetattr(TCSADRAIN, B150) - OK
+set_attributes - B150 8-NONE-1
+tcsetattr(TCSANOW, B200) - OK
+set_attributes - B200 8-NONE-1
+tcsetattr(TCSADRAIN, B200) - OK
+set_attributes - B200 8-NONE-1
+tcsetattr(TCSANOW, B300) - OK
+set_attributes - B300 8-NONE-1
+tcsetattr(TCSADRAIN, B300) - OK
+set_attributes - B300 8-NONE-1
+tcsetattr(TCSANOW, B600) - OK
+set_attributes - B600 8-NONE-1
+tcsetattr(TCSADRAIN, B600) - OK
+set_attributes - B600 8-NONE-1
+tcsetattr(TCSANOW, B1200) - OK
+set_attributes - B1200 8-NONE-1
+tcsetattr(TCSADRAIN, B1200) - OK
+set_attributes - B1200 8-NONE-1
+tcsetattr(TCSANOW, B1800) - OK
+set_attributes - B1800 8-NONE-1
+tcsetattr(TCSADRAIN, B1800) - OK
+set_attributes - B1800 8-NONE-1
+tcsetattr(TCSANOW, B2400) - OK
+set_attributes - B2400 8-NONE-1
+tcsetattr(TCSADRAIN, B2400) - OK
+set_attributes - B2400 8-NONE-1
+tcsetattr(TCSANOW, B4800) - OK
+set_attributes - B4800 8-NONE-1
+tcsetattr(TCSADRAIN, B4800) - OK
+set_attributes - B4800 8-NONE-1
+tcsetattr(TCSANOW, B9600) - OK
+set_attributes - B9600 8-NONE-1
+tcsetattr(TCSADRAIN, B9600) - OK
+set_attributes - B9600 8-NONE-1
+tcsetattr(TCSANOW, B19200) - OK
+set_attributes - B19200 8-NONE-1
+tcsetattr(TCSADRAIN, B19200) - OK
+set_attributes - B19200 8-NONE-1
+tcsetattr(TCSANOW, B38400) - OK
+set_attributes - B38400 8-NONE-1
+tcsetattr(TCSADRAIN, B38400) - OK
+set_attributes - B38400 8-NONE-1
+tcsetattr(TCSANOW, B57600) - OK
+set_attributes - B57600 8-NONE-1
+tcsetattr(TCSADRAIN, B57600) - OK
+set_attributes - B57600 8-NONE-1
+tcsetattr(TCSANOW, B115200) - OK
+set_attributes - B115200 8-NONE-1
+tcsetattr(TCSADRAIN, B115200) - OK
+set_attributes - B115200 8-NONE-1
+tcsetattr(TCSANOW, B230400) - OK
+set_attributes - B230400 8-NONE-1
+tcsetattr(TCSADRAIN, B230400) - OK
+set_attributes - B230400 8-NONE-1
+tcsetattr(TCSANOW, B460800) - OK
+set_attributes - B460800 8-NONE-1
+tcsetattr(TCSADRAIN, B460800) - OK
+set_attributes - B460800 8-NONE-1
+Init - close - /dev/test - OK
+
+Init - open - /dev/test - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+
+Test termios setting device character size ...
+tcsetattr(TCSANOW, CS5) - OK
+set_attributes - B38400 5-NONE-1
+tcsetattr(TCSADRAIN, CS5) - OK
+set_attributes - B38400 5-NONE-1
+tcsetattr(TCSANOW, CS6) - OK
+set_attributes - B38400 6-NONE-1
+tcsetattr(TCSADRAIN, CS6) - OK
+set_attributes - B38400 6-NONE-1
+tcsetattr(TCSANOW, CS7) - OK
+set_attributes - B38400 7-NONE-1
+tcsetattr(TCSADRAIN, CS7) - OK
+set_attributes - B38400 7-NONE-1
+tcsetattr(TCSANOW, CS8) - OK
+set_attributes - B38400 8-NONE-1
+tcsetattr(TCSADRAIN, CS8) - OK
+set_attributes - B38400 8-NONE-1
+Init - close - /dev/test - OK
+
+Init - open - /dev/test - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+
+Test termios setting device parity ...
+tcsetattr(TCSANOW, none) - OK
+set_attributes - B38400 8-NONE-1
+tcsetattr(TCSADRAIN, none) - OK
+set_attributes - B38400 8-NONE-1
+tcsetattr(TCSANOW, even) - OK
+set_attributes - B38400 8-ODD-1
+tcsetattr(TCSADRAIN, even) - OK
+set_attributes - B38400 8-ODD-1
+tcsetattr(TCSANOW, odd) - OK
+set_attributes - B38400 8-EVEN-1
+tcsetattr(TCSADRAIN, odd) - OK
+set_attributes - B38400 8-EVEN-1
+Init - close - /dev/test - OK
+
+Init - open - /dev/test - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+
+Test termios setting device character size ...
+tcsetattr(TCSANOW, 1 bit) - OK
+set_attributes - B38400 8-NONE-1
+tcsetattr(TCSADRAIN, 1 bits) - OK
+set_attributes - B38400 8-NONE-1
+tcsetattr(TCSANOW, 2 bits) - OK
+set_attributes - B38400 8-NONE-2
+tcsetattr(TCSADRAIN, 2 bits) - OK
+set_attributes - B38400 8-NONE-2
+Init - close - /dev/test - OK
+*** END OF TEST TERMIOS 01 ***

@@ -1,5 +1,10 @@
 2009-08-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* termios01/init.c, termios01/termios01.scn: Add a few error paths to
+	complete coverage of termios_XXX_to_YYY() methods.
+
+2009-08-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add new test to exercise tcgetattr and
 	tcsetattr. Does a variety of baud, parity, stop bits, and bits per
 	character with the assistance of a special test driver which prints
