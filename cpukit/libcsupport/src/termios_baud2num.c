@@ -22,7 +22,7 @@ int termios_baud_to_number(
     case B50:       baud =     50;  break;
     case B75:       baud =     75;  break;
     case B110:      baud =    110;  break;
-    case B134:      baud =    135;  break;
+    case B134:      baud =    134;  break;
     case B150:      baud =    150;  break;
     case B200:      baud =    200;  break;
     case B300:      baud =    300;  break;

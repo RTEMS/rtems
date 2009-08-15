@@ -1,3 +1,7 @@
+2009-08-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/termios_baud2num.c: B134 should return 134 not 135.
+
 2009-08-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/malloc_boundary.c: This is currently non-funcitonal.
