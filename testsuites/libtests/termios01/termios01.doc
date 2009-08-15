@@ -1,0 +1,30 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  termios01
+
+directives:
+
+  open
+  close
+  tcgetattr
+  tcsetattr
+  rtems_termios_initialize
+  rtems_termios_open
+  rtems_termios_close
+  rtems_termios_set_initial_baud
+
+concepts:
+
++ Exercise termios ioctl for all baud, character size, parity and
+  bits per character options.

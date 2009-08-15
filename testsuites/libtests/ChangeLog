@@ -1,3 +1,13 @@
+2009-08-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add new test to exercise tcgetattr and
+	tcsetattr. Does a variety of baud, parity, stop bits, and bits per
+	character with the assistance of a special test driver which prints
+	the requests.
+	* termios01/.cvsignore, termios01/Makefile.am, termios01/init.c,
+	termios01/termios01.doc, termios01/termios01.scn,
+	termios01/termios_testdriver.c, termios01/termios_testdriver.h: New files.
+
 2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloctest/task1.c, stackchk/task1.c: Eliminate test routines
