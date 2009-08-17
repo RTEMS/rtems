@@ -1,3 +1,8 @@
+2009-08-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/src/clockget.c: Restructure to ease coverage analysis of
+	deprecated routine.
+
 2009-08-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libi2c/libi2c.c: Fix warnings.
