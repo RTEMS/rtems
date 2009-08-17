@@ -46,6 +46,8 @@ extern "C" {
 
 #include <bspopts.h>
 
+#define BSP_SMALL_MEMORY 1
+
 #if 0
 #include <rtems/devnull.h>
 #define BSP_CONSOLE_DEVNAME "/dev/null"

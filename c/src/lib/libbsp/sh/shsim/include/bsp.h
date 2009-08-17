@@ -34,6 +34,8 @@ extern "C" {
 
 #include <bspopts.h>
 
+#define BSP_SMALL_MEMORY 1
+
 /*
  * FIXME: One of these would be enough.
  */
