@@ -640,6 +640,8 @@ static inline void bd_wrbuf(TSEC_BD *bd, uint32_t addr)
 
 /* Driver 'private' data */
 
+#define NUM_MC_HASHES		256
+
 struct tsec_private {
 	FEC_Enet_Base	base;            /* Controller base address                  */
 	FEC_Enet_Base	phy_base;        /* Phy base address (not necessarily identical
@@ -684,6 +686,7 @@ struct tsec_private {
 		unsigned	odrops;
 		unsigned	repack;
 	}               stats;
+	uint16_t		mc_refcnt[NUM_MC_HASHES];
 };
 
 #define NEXT_TXI(mp, i)	(((i)+1) < (mp)->tx_ring_size ? (i)+1 : 0 )
@@ -1402,9 +1405,10 @@ rtems_interrupt_level l;
 }
 
 static uint8_t
-hash_accept(struct tsec_private *mp, uint32_t tble, const uint8_t *enaddr)
+hash_prog(struct tsec_private *mp, uint32_t tble, const uint8_t *enaddr, int accept)
 {
-uint8_t s;
+uint8_t  s;
+uint32_t reg, bit;
 
 	s = ether_crc32_le(enaddr, ETHER_ADDR_LEN);
 
@@ -1413,7 +1417,16 @@ uint8_t s;
     s = ((s&0x33) << 2) | ((s&0xcc) >> 2);
     s = ((s&0x55) << 1) | ((s&0xaa) >> 1);
 
-	fec_wr( mp->base, tble + (s >> (5-2)), (1 << (31 - (s & 31))) );
+	reg = tble + ((s >> (5-2)) & ~3);
+	bit = 1 << (31 - (s & 31));
+
+	if ( accept ) {
+		if ( 0 == mp->mc_refcnt[s]++ )
+			fec_set( mp->base, reg, bit );
+	} else {
+		if ( mp->mc_refcnt[s] > 0 && 0 == --mp->mc_refcnt[s] )
+			fec_clr( mp->base, reg, bit );
+	}
 }
 
 void
@@ -1423,6 +1436,8 @@ int i;
 	for ( i=0; i<8*4; i+=4 ) {
 		fec_wr( mp->base, TSEC_GADDR0 + i, 0 );
 	}
+	for ( i=0; i<NUM_MC_HASHES; i++ )
+		mp->mc_refcnt[i] = 0;
 }
 
 void
@@ -1432,10 +1447,12 @@ int i;
 	for ( i=0; i<8*4; i+=4 ) {
 		fec_wr( mp->base, TSEC_GADDR0 + i, 0xffffffff );
 	}
+	for ( i=0; i<NUM_MC_HASHES; i++ )
+		mp->mc_refcnt[i]++;
 }
 
-void
-BSP_tsec_mcast_filter_accept_add(struct tsec_private *mp, uint8_t *enaddr)
+static void
+mcast_filter_prog(struct tsec_private *mp, uint8_t *enaddr, int accept)
 {
 static const uint8_t bcst={0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	if ( ! (enaddr[0] & 0x01) ) {
@@ -1446,7 +1463,19 @@ static const uint8_t bcst={0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 		/* broadcast; ignore */
 		return;
 	}
-	hash_accept(mp, TSEC_GADDR0, enaddr);
+	hash_prog(mp, TSEC_GADDR0, enaddr, accept);
+}
+
+void
+BSP_tsec_mcast_filter_accept_add(struct tsec_private *mp, uint8_t *enaddr)
+{
+	mcast_filter_prog(mp, enaddr, 1 /* accept */);
+}
+
+void
+BSP_tsec_mcast_filter_accept_del(struct tsec_private *mp, uint8_t *enaddr)
+{
+	mcast_filter_prog(mp, enaddr, 0 /* delete */);
 }
 
 void
