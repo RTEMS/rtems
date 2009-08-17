@@ -651,6 +651,24 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( status == EINVAL );
 
+  /* mutexinit.c: Initialising recursive mutex */
+
+  puts( "Init: Recursive Mutex" );
+
+  status = pthread_mutex_destroy( &Mutex2_id );
+  if( status )
+    printf( "status mutex destroy:%d\n", status );
+  
+  status = pthread_mutexattr_init( &attr );
+  if( status )
+    printf( "status mutexattr:%d\n", status );
+
+  attr.recursive=true;
+  status = pthread_mutex_init( &Mutex2_id, &attr );
+  if ( status )
+    printf( "status recursive mutex :%d\n", status );
+  assert( !status );
+  
   puts( "*** END OF POSIX TEST 5 ***" );
   rtems_test_exit( 0 );
 

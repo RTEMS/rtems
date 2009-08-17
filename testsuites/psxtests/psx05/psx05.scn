@@ -114,4 +114,5 @@ Task 3: exit
 Init: pthread_mutex_getprioceiling- ceiling = 200
 Init: pthread_setschedparam - set Init priority to highest
 Init: pthread_mutex_lock - EINVAL (priority ceiling violation)
+Init: Recursive Mutex
 *** END OF POSIX TEST 5 ***
