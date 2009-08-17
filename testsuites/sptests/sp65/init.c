@@ -78,7 +78,6 @@ rtems_task Task_1(
 
   puts( "Init Task_1: Obtaining semaphore" );
   status_in_task = rtems_semaphore_obtain( *Mutex_id, RTEMS_DEFAULT_OPTIONS, 0 );
-  printf( "status_in_task:%d\n", status_in_task );
   directive_failed( status_in_task, "Task_1 rtems_semaphore_obtain" );
   return;
 }

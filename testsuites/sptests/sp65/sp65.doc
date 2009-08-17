@@ -22,3 +22,7 @@ concepts:
 
 + Verify that obtaining a priority ceiling mutex when the calling task's
   priority is the same as the priority ceiling is handled correctly.
+
++ Verify the priority ceiling mutex getting released which results in a thread
+  being unblocked and the unblocked thread's priority being elevated.
+
