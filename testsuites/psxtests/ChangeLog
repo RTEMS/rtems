@@ -1,7 +1,7 @@
 2009-08-17	Santosh G Vattam <vattam.santosh@gmail.com>
 
-	* configure.ac, psx05/init.c, psx05/psx05.scn: Add test case for
-	initializing a recursize mutex.
+	* psx05/init.c, psx05/psx05.scn: Add test case for initializing
+	a recursize mutex.
 
 2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
