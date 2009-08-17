@@ -1,3 +1,11 @@
+2009-08-17	Till Straumann <strauman@slac.stanford.edu>
+
+	* network/tsec.c, network/if_tsec_pub.h:
+	Fixed bugs in multicast support; added reference-count
+	for hash-table entries which allows for the implementation
+	of a 'deletion' routine.
+	NOTE: mcast support largely untested.
+
 2009-06-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* irq/irq_init.c: silenced compiler warning.

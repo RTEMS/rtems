@@ -182,34 +182,50 @@ BSP_tsec_init_hw(struct tsec_private *mp, int promisc, unsigned char *enaddr);
  * Clear multicast hash filter. No multicast frames are accepted
  * after executing this routine (unless the hardware was initialized
  * in 'promiscuous' mode).
+ *
+ * Reset reference count for all hash-table entries
+ * to zero (see BSP_tsec_mcast_filter_accept_del()).
  */
 void
 BSP_tsec_mcast_filter_clear(struct tsec_private *mp);
 
 /*
  * Program multicast filter to accept all multicast frames.
+ *
+ * Increment reference count for all hash-table entries
+ * by one (see BSP_tsec_mcast_filter_accept_del()).
  */
 void
 BSP_tsec_mcast_filter_accept_all(struct tsec_private *mp);
 
 /*
- * Add a MAC address to the multicast filter.
+ * Add a MAC address to the multicast filter and increment
+ * the reference count for the matching hash-table entry
+ * (see BSP_tsec_mcast_filter_accept_del()).
+ * 
  * Existing entries are not changed but note that
  * the filter is imperfect, i.e., multiple MAC addresses
  * may alias to a single filter entry. Hence software
  * filtering must still be performed.
  *
- * NOTE: Deletion of an address is not possible. This is
- *       usually accomplished by a higher-level driver
- *       maintaining a list/database of multicast addresses
- *       and going through a sequence:
- *
- *         BSP_tsec_mcast_filter_clear()
- *         forall mcast addresses do
- *            BSP_tsec_mcast_filter_accept_add()
  */
 void
 BSP_tsec_mcast_filter_accept_add(struct tsec_private *mp, unsigned char *enaddr);
+
+/*
+ * Remove a MAC address from the (imperfec) multicast
+ * filter.
+ * Note that the driver maintains an internal reference
+ * counter for each multicast hash. The hash-table
+ * entry is only cleared when the reference count
+ * reaches zero ('del' has been called the same
+ * amount of times as 'add' for an address (or
+ * any alias) that matches a given table entry.
+ * BSP_tsec_mcast_filter_clear() resets all reference
+ * counters to zero.
+ */
+void
+BSP_tsec_mcast_filter_accept_del(struct tsec_private *mp, unsigned char *enaddr);
 
 /*
  * Dump statistics to FILE 'f'. If NULL, stdout is used.
