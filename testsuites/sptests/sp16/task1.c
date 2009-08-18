@@ -231,7 +231,7 @@ rtems_test_pause();
     RTEMS_UNSATISFIED,
     "rtems_task_get_segment with no memory left"
   );
-  puts( "TA1 - rtems_task_get_note - RTEMS_UNSATISFIED" );
+  puts( "TA1 - rtems_task_get_segment - RTEMS_UNSATISFIED" );
 
   puts( "TA1 - rtems_region_extend - extend region 4 by 4K" );
   status = rtems_region_extend(

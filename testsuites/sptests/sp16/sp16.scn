@@ -48,7 +48,7 @@ TA1 - rtems_region_delete - delete region 1
 TA1 - rtems_region_get_segment - get 3K segment from region 4
 TA1 - got segment from region 4 - 0x00000060
 TA1 - rtems_region_get_segment - attempt to get 3K segment from region 4
-TA1 - rtems_task_get_note - RTEMS_UNSATISFIED
+TA1 - rtems_task_get_segment - RTEMS_UNSATISFIED
 TA1 - rtems_region_extend - extend region 4 by 4K
 TA1 - rtems_region_get_segment - attempt to get 3K segment from region 4
 TA1 - got 3K segment from region 4 - 0x00000ce0
