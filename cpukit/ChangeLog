@@ -1,3 +1,7 @@
+2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/src/timerreset.c: Rework to ease analysis.
+
 2009-08-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* aclocal/check-networking.m4: Disable BSD TCP/IP for small memory
