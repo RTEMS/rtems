@@ -241,7 +241,6 @@ void *_Heap_Allocate_aligned(
     }
   }
 
-exit_point:
   if (stats->max_search < search_count)
     stats->max_search = search_count;
 

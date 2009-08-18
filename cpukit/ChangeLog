@@ -1,3 +1,7 @@
+2009-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/heapallocatealigned.c: Remove unused label.
+
 2009-08-18	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* score/src/heapallocatealigned.c: Change break to continue to fix
