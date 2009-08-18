@@ -31,6 +31,10 @@ void test_case_one(void)
   heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
   printf( "Init - Heap size=%d\n", heap_size );
 
+  puts( "Init - _Heap_Allocate - too large size (overflow)- not OK");
+  ptr1 = _Heap_Allocate( &Heap, 0xffffffff );
+  assert( !ptr1 );
+
   puts( "Init - _Heap_Allocate_aligned - OK");
   ptr1 = _Heap_Allocate_aligned( &Heap, 64, 32 );
   assert( ptr1 );

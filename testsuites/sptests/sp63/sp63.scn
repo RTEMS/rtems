@@ -1,11 +1,13 @@
 *** TEST 63 ***
 Init - _Heap_Initialize (for test one) - OK
-Init - Heap size=1012
+Init - Heap size=1000
+Init - _Heap_Allocate - too large size (overflow)- not OK
 Init - _Heap_Allocate_aligned - OK
 Init - _Heap_Resize_block - OK
 
 Init - _Heap_Initialize (for test two) - OK
-Init - Heap size=1012
+Init - Heap size=1000
 Init - _Heap_Allocate_aligned - OK
 Init - _Heap_Resize_block - OK
+Init - _Heap_Allocate_aligned - request impossible - not OK
 *** END OF TEST 63 ***

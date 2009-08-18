@@ -1,5 +1,10 @@
 2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp63/init.c, sp63/sp63.scn: Add case for math on size requested
+	overflowing on _Heap_Allocate_aligned.
+
+2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* spobjgetnext/init.c, spobjgetnext/spobjgetnext.scn: Add error cases
 	for various null parameters.
 
