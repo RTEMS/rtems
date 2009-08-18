@@ -168,8 +168,14 @@ void *POSIX_Init(
   tv.tv_sec = 0;
   tv.tv_nsec = 0;
 
-  puts( "Init: nanosleep - yield" );
+  puts( "Init: nanosleep - yield with remaining" );
   status = nanosleep ( &tv, &tr );
+  rtems_test_assert( !status );
+  rtems_test_assert( !tr.tv_sec );
+  rtems_test_assert( !tr.tv_nsec );
+
+  puts( "Init: nanosleep - yield with NULL time remaining" );
+  status = nanosleep ( &tv, NULL );
   rtems_test_assert( !status );
   rtems_test_assert( !tr.tv_sec );
   rtems_test_assert( !tr.tv_nsec );
