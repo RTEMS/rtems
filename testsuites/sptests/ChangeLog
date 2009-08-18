@@ -1,5 +1,10 @@
 2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* spobjgetnext/init.c, spobjgetnext/spobjgetnext.scn: Add error cases
+	for various null parameters.
+
+2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp16/sp16.scn, sp16/task1.c: Fix typo.
 
 2009-08-17	Santosh G Vattam <vattam.santosh@gmail.com>

@@ -1,0 +1,7 @@
+*** TEST OBJECT GET NEXT ***
+Init - _Objects_Get_next - NULL object information
+Init - _Objects_Get_next - NULL location
+Init - _Objects_Get_next - NULL id
+1 RTEMS Task
+1 RTEMS Task
+*** END OF TEST OBJECT GET NEXT ***
