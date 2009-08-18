@@ -37,6 +37,16 @@ rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER4,
  */
 #define CLOCK_VECTOR 0
 
+/**
+ *  Return the nanoseconds since last tick
+ */
+uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
+{
+  return 0;
+}
+
+#define Clock_driver_nanoseconds_since_last_tick \
+  clock_driver_get_nanoseconds_since_last_tick
 
 /**
  * When we get the clock interrupt
@@ -73,7 +83,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER4,
 #define Clock_driver_support_initialize_hardware() \
   do { \
         uint32_t cr; \
-        uint32_t freq,m,p,s; \
+        uint32_t freq; \
         /* set MUX for Timer4 to 1/16 */ \
         cr=rTCFG1 & 0xFFF0FFFF; \
         rTCFG1=(cr | (3<<16)); \

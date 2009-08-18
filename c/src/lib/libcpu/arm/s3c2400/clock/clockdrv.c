@@ -32,12 +32,22 @@ rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER4,
                                          3,     /* unused for ARM cpus */
                                          0 };   /* unused for ARM cpus */
 
-/* If you follow the code, this is never used, so any value 
+/* If you follow the code, this is never used, so any value
  * should work
  */
 #define CLOCK_VECTOR 0
 
-    
+/**
+ *  Return the nanoseconds since last tick
+ */
+uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
+{
+  return 0;
+}
+
+#define Clock_driver_nanoseconds_since_last_tick \
+  clock_driver_get_nanoseconds_since_last_tick
+
 /**
  * When we get the clock interrupt
  *    - clear the interrupt bit?
@@ -65,9 +75,9 @@ rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER4,
  *   - enable it
  *   - clear any pending interrupts
  *
- * Since you may want the clock always running, you can 
+ * Since you may want the clock always running, you can
  * enable interrupts here. If you do so, the clock_isr_on(),
- * clock_isr_off(), and clock_isr_is_on() functions can be 
+ * clock_isr_off(), and clock_isr_is_on() functions can be
  * NOPs.
  */
 #define Clock_driver_support_initialize_hardware() \
@@ -90,7 +100,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER4,
     } while (0)
 
 /**
- * Do whatever you need to shut the clock down and remove the 
+ * Do whatever you need to shut the clock down and remove the
  * interrupt handler. Since this normally only gets called on
  * RTEMS shutdown, you may not need to do anything other than
  * remove the ISR.

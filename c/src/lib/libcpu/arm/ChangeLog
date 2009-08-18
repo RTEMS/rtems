@@ -1,3 +1,8 @@
+2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* s3c2400/clock/clockdrv.c, s3c24xx/clock/clockdrv.c: Add stubs for
+	nanoseconds since tick handler.
+
 2009-08-06	Xi Yang <hiyangxi@gmail.com>
 
 	* pxa255/clock/clock.c: Adjust clock for Skyeye. Joel added empty
