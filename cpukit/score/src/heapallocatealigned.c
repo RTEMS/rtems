@@ -214,27 +214,28 @@ void *_Heap_Allocate_aligned(
             _Heap_Align_up_uptr(&aligned_user_addr, alignment);
             if (aligned_user_addr - user_addr >= page_size) {
               /* No, we can't use the block */
-              goto exit_point;
+              continue;
+            }
           }
         }
-      }
 
-      /* The block is indeed acceptable: calculate the size of the block
-         to be allocated and perform allocation. */
-      uint32_t const alloc_size =
-          block_end - user_addr + HEAP_BLOCK_USER_OFFSET;
+        /* The block is indeed acceptable: calculate the size of the block
+           to be allocated and perform allocation. */
+        uint32_t const alloc_size =
+            block_end - user_addr + HEAP_BLOCK_USER_OFFSET;
 
-      _HAssert(_Heap_Is_aligned_ptr((void*)aligned_user_addr, alignment));
+        _HAssert(_Heap_Is_aligned_ptr((void*)aligned_user_addr, alignment));
 
-      the_block = block_allocate(the_heap, the_block, alloc_size);
+        the_block = block_allocate(the_heap, the_block, alloc_size);
 
-      stats->searches += search_count + 1;
-      stats->allocs += 1;
+        stats->searches += search_count + 1;
+        stats->allocs += 1;
 
-      check_result(the_heap, the_block, user_addr,
+        check_result(the_heap, the_block, user_addr,
         aligned_user_addr, size);
 
         user_ptr = (void*)aligned_user_addr;
+
         break;
       }
     }
