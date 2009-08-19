@@ -4,17 +4,17 @@
 	for adjusting time (adjtime()) where the time is adjusted by enough
 	microseconds that it crosses a second boundary.
 
-2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+2009-08-19	Santosh G Vattam <vattam.santosh@gmail.com>
 
 	* psx07/init.c, psx07/psx07.scn, psx07/system.h, psx07/task.c: Update
-	test to reflect not allowing poriority changes when mutex is locked.
+	test to catch more sporadic server cases.
 
 2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psx01/init.c, psx01/psx01.scn: Add test case for nanosleep with NULL
 	remaining pointer.
 
-2009-08-17	Santosh G Vattam <vattam.santosh@gmail.com>
+2009-08-17	
 
 	* psx05/init.c, psx05/psx05.scn: Add test case for initializing
 	a recursize mutex.
