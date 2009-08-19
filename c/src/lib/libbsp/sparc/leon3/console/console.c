@@ -117,7 +117,6 @@ rtems_device_driver console_initialize(
   rtems_status_code status;
   int i, uart0;
   char console_name[16];
-  extern rtems_configuration_table Configuration;
 
   rtems_termios_initialize();
 

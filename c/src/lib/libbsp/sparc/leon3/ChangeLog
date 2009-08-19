@@ -1,5 +1,9 @@
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* console/console.c: Fix warning.
+
+2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* startup/ithread.S: Removed. Now bspidle.S.
 
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
