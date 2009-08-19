@@ -74,94 +74,17 @@ rtems_task Task_1(
   status = rtems_timer_reset( tmid );
   directive_failed( status, "rtems_timer_reset" );
 
+  puts( "TA1 - _Watchdog_Report_chain - with name"  );
+  _Watchdog_Report_chain( "_Watchdog_Ticks_chain", & _Watchdog_Ticks_chain );
 
+  puts( "TA1 - _Watchdog_Report_chain - no name"  );
+  _Watchdog_Report_chain( NULL, & _Watchdog_Ticks_chain);
 
+  puts( "TA1 - _Watchdog_Report - with name"  );
+  _Watchdog_Report("first", (Watchdog_Control *)(_Watchdog_Ticks_chain.first));
 
-#if 0
-  puts( "TA1 - rtems_task_suspend( RTEMS_SELF )" );
-  status = rtems_task_suspend( RTEMS_SELF );
-  directive_failed( status, "rtems_task_suspend" );
-
-  Print_time();
-
-  rtems_test_pause();
-
-  /*
-   *  Reset the time since we do not know how long the user waited
-   *  before pressing <cr> at the pause.  This insures that the
-   *  actual output matches the screen.
-   */
-
-  build_time( &time, 12, 31, 1988, 9, 0, 7, 0 );
-
-  status = rtems_clock_set( &time );
-  directive_failed( status, "rtems_clock_set" );
-
-/* after which is canceled */
-
-  puts( "TA1 - rtems_timer_fire_after - timer 1 in 3 seconds" );
-  status = rtems_timer_fire_after(
-    tmid,
-    3 * rtems_clock_get_ticks_per_second(),
-    Delayed_resume,
-    NULL
-  );
-  directive_failed( status, "rtems_timer_fire_after" );
-
-  puts( "TA1 - rtems_timer_cancel - timer 1" );
-  status = rtems_timer_cancel( tmid );
-  directive_failed( status, "rtems_timer_cancel" );
-
-/* when which is allowed to fire */
-
-  Print_time();
-
-  status = rtems_clock_get_tod( &time );
-  directive_failed( status, "rtems_clock_get_tod" );
-
-  time.second += 3;
-
-  puts( "TA1 - rtems_timer_fire_when - timer 1 in 3 seconds" );
-  status = rtems_timer_fire_when( tmid, &time, Delayed_resume, NULL );
-  directive_failed( status, "rtems_timer_fire_when" );
-
-  puts( "TA1 - rtems_task_suspend( RTEMS_SELF )" );
-  status = rtems_task_suspend( RTEMS_SELF );
-  directive_failed( status, "rtems_task_suspend" );
-
-  Print_time();
-
-/* when which is canceled */
-
-  status = rtems_clock_get_tod( &time );
-  directive_failed( status, "rtems_clock_get_tod" );
-
-  time.second += 3;
-
-  puts( "TA1 - rtems_timer_fire_when - timer 1 in 3 seconds" );
-  status = rtems_timer_fire_when( tmid, &time, Delayed_resume, NULL );
-  directive_failed( status, "rtems_timer_fire_when" );
-
-  puts( "TA1 - rtems_task_wake_after - 1 second" );
-  status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
-  directive_failed( status, "rtems_task_wake_after" );
-
-  Print_time();
-
-  puts( "TA1 - rtems_timer_cancel - timer 1" );
-  status = rtems_timer_cancel( tmid );
-  directive_failed( status, "rtems_timer_cancel" );
-
-/* delete */
-  puts( "TA1 - rtems_task_wake_after - YIELD (only task at priority)" );
-  status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
-  directive_failed( status, "rtems_task_wake_after" );
-#endif
-
-  _Watchdog_Report_chain(
-   "_Watchdog_Ticks_chain",
-    & _Watchdog_Ticks_chain
-  );
+  puts( "TA1 - _Watchdog_Report - no name"  );
+  _Watchdog_Report( NULL, (Watchdog_Control *)(_Watchdog_Ticks_chain.first) );
 
   puts( "TA1 - timer_deleting - timer 1" );
   status = rtems_timer_delete( tmid );

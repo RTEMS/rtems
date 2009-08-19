@@ -1,3 +1,9 @@
+2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* spwatchdog/spwatchdog.scn, spwatchdog/task1.c: Add test for
+	_Watchdog_Report() when name is not NULL. This case was covered at
+	-Os on erc32 but at -O2 we had more code.
+
 2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp63/init.c, sp63/sp63.scn: Add case for math on size requested
