@@ -31,3 +31,36 @@ void *Task_1(
 
   return NULL; /* just so the compiler thinks we returned something */
 }
+
+void *Task_2(
+  void *argument
+)
+{
+  int i = 0;
+  time_t now, start;
+
+  /*
+   *  Change our priority so we are running at a logically higher
+   *  priority than our "ss_high_priority".  This should result in
+   *  our replenishment period not touching our priority.
+   */
+
+  /*
+   *  Consume time so the cpu budget callout will run.  
+   *
+   *  DO NOT BLOCK!!!
+   */
+  start = time(&start);
+  while( i <= 10 ) {
+    do {
+      now = time(&now);
+    } while (start == now);
+    start = time(&start);
+    
+    printf( "Time elapsed Task_2: %2d (seconds)\n", i++ );
+  }
+
+  puts( "Task_2 - exitting" );
+  pthread_exit( NULL );
+  return NULL;
+}

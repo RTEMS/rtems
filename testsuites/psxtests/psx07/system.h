@@ -25,6 +25,11 @@ void *Task_1(
   void *argument
 );
 
+void *Task_2(
+  void *argument
+);
+
+
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
@@ -45,7 +50,7 @@ void *Task_1(
 #endif
 
 TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t        Task_id, Task2_id;
 
 #undef TEST_EXTERN
 

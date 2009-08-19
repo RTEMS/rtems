@@ -555,6 +555,40 @@ void *POSIX_Init(
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
   fatal_directive_check_status_only( status, EINVAL, "invalid priority" );
 
+  /*
+   *  Create a sporadic thread that doesn't need it's priority
+   *  boosted
+   */
+  empty_line();
+
+  puts( "Init - pthread_attr_init - SUCCESSFUL" );
+  status = pthread_attr_init( &attr );
+  posix_service_failed( status, "pthread_attr_init" );
+
+  puts( "Init - pthread_attr_setinheritsched - EXPLICIT - SUCCESSFUL" );
+  status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
+  assert( !status );
+
+  schedparam.ss_replenish_period.tv_sec = 3;
+  schedparam.ss_replenish_period.tv_nsec = 3;
+  schedparam.ss_initial_budget.tv_sec = 1;
+  schedparam.ss_initial_budget.tv_nsec = 1;
+  schedparam.sched_priority = sched_get_priority_max( SCHED_FIFO );
+  schedparam.ss_low_priority = sched_get_priority_max( SCHED_FIFO ) - 6;
+
+  puts( "Init - pthread_attr_setschedpolicy - SUCCESSFUL" );
+  status = pthread_attr_setschedpolicy( &attr, SCHED_SPORADIC );
+  posix_service_failed( status, "pthread_attr_setschedparam");
+  puts( "Init - pthread_attr_setschedparam - SUCCESSFUL" );
+  status = pthread_attr_setschedparam( &attr, &schedparam );
+  posix_service_failed( status, "pthread_attr_setschedparam");
+
+  status = pthread_create( &Task2_id, &attr, Task_2, NULL );
+  assert( !status );
+
+  status = pthread_join( Task2_id, NULL );
+  posix_service_failed( status, " pthread_join");
+
   puts( "*** END OF POSIX TEST 7 ***" );
   rtems_test_exit( 0 );
 

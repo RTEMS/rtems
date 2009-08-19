@@ -1,3 +1,8 @@
+2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* psx07/init.c, psx07/psx07.scn, psx07/system.h, psx07/task.c: Update
+	test to reflect not allowing poriority changes when mutex is locked.
+
 2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psx01/init.c, psx01/psx01.scn: Add test case for nanosleep with NULL
