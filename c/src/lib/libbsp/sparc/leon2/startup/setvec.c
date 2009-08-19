@@ -59,13 +59,3 @@ rtems_isr_entry set_vector(                   /* returns old vector */
 
   return previous_isr;
 }
-
-/* LEON specific power-down function */
-
-void _CPU_Thread_Idle_body( void )
-{
-  while (1) {
-    LEON_REG.Power_Down = LEON_REG.Power_Down;   /* make sure on load follows store to power-down reg */
-  }
-}
-

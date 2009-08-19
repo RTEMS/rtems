@@ -58,7 +58,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     ../../sparc/shared/bspgetworkarea.c ../../sparc/shared/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
-    startup/spurious.c
+    startup/spurious.c startup/bspidle.c
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # console

@@ -37,23 +37,26 @@ extern "C" {
 #define LEON2 1
   
 /*
- *  confdefs.h overrides for this BSP:
- *   - two termios serial ports
- *   - Interrupt stack space is not minimum if defined.
+ *  BSP provides its own Idle thread body
  */
-
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
+void *bsp_idle_thread( uintptr_t ignored );
+#define BSP_IDLE_TASK_BODY bsp_idle_thread
 
 /*
  * Network driver configuration
  */
-
 struct rtems_bsdnet_ifconfig;
-extern int rtems_leon_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *config);
-extern int rtems_smc91111_driver_attach_leon2(struct rtems_bsdnet_ifconfig *config);
+extern int rtems_leon_open_eth_driver_attach(
+  struct rtems_bsdnet_ifconfig *config
+);
+extern int rtems_smc91111_driver_attach_leon2(
+  struct rtems_bsdnet_ifconfig *config
+);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"open_eth1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH	 rtems_leon_open_eth_driver_attach
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 rtems_smc91111_driver_attach_leon2
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH \
+          rtems_leon_open_eth_driver_attach
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 \
+          rtems_smc91111_driver_attach_leon2
 
 /*
  *  The synchronous trap is an arbitrarily chosen software trap.
@@ -63,12 +66,11 @@ extern int rtems_smc91111_driver_attach_leon2(struct rtems_bsdnet_ifconfig *conf
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */
-
 extern void Clock_delay(uint32_t microseconds);
 
 #define delay( microseconds ) Clock_delay(microseconds)
-extern int   CPU_SPARC_HAS_SNOOPING;
 
+extern int   CPU_SPARC_HAS_SNOOPING;
 
 /* Constants */
 
