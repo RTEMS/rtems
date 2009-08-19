@@ -59,6 +59,3 @@ rtems_isr_entry set_vector(                   /* returns old vector */
 
   return previous_isr;
 }
-
-
-

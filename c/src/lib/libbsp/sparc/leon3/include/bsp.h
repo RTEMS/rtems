@@ -37,17 +37,14 @@ extern "C" {
 #define LEON3 1
 
 /*
- *  confdefs.h overrides for this BSP:
- *   - two termios serial ports
- *   - Interrupt stack space is not minimum if defined.
+ *  BSP provides its own Idle thread body
  */
-
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
+void *bsp_idle_thread( uintptr_t ignored );
+#define BSP_IDLE_TASK_BODY bsp_idle_thread
 
 /*
  * Network driver configuration
  */
-
 struct rtems_bsdnet_ifconfig;
 extern int rtems_leon_open_eth_driver_attach(
   struct rtems_bsdnet_ifconfig *config,

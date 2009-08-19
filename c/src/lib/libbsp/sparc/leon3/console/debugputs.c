@@ -23,21 +23,24 @@
 #include <assert.h>
 
 /*
+ * Number of uarts on AMBA bus
+ */
+extern int uarts;
+
+/*
  *  console_outbyte_polled
  *
  *  This routine transmits a character using polling.
  */
-
 void console_outbyte_polled(
-  int  port,
+  int           port,
   unsigned char ch
 )
 {
-  if ((port >= 0) && (port <= CONFIGURE_NUMBER_OF_TERMIOS_PORTS))
-  {
-    while ( (LEON3_Console_Uart[LEON3_Cpu_Index+port]->status &
-                      LEON_REG_UART_STATUS_THE) == 0 );
-    LEON3_Console_Uart[LEON3_Cpu_Index+port]->data = (unsigned int) ch;
+  if ((port >= 0) && (port < uarts)) {
+    int u = LEON3_Cpu_Index+port;
+    while ( (LEON3_Console_Uart[u]->status & LEON_REG_UART_STATUS_THE) == 0 );
+    LEON3_Console_Uart[u]->data = (unsigned int) ch;
   }
 }
 
@@ -46,32 +49,23 @@ void console_outbyte_polled(
  *
  *  This routine polls for a character.
  */
-
 int console_inbyte_nonblocking( int port )
 {
+  if ((port >= 0) && (port < uarts)) {
+    int u = LEON3_Cpu_Index+port;
+    if (LEON3_Console_Uart[u]->status & LEON_REG_UART_STATUS_ERR)
+      LEON3_Console_Uart[u]->status = ~LEON_REG_UART_STATUS_ERR;
 
-  if ((port >=0) && (port < CONFIGURE_NUMBER_OF_TERMIOS_PORTS)) 
-  {
-
-      if (LEON3_Console_Uart[LEON3_Cpu_Index+port]->status & LEON_REG_UART_STATUS_ERR) {
-        LEON3_Console_Uart[LEON3_Cpu_Index+port]->status = ~LEON_REG_UART_STATUS_ERR;
-      }
-
-      if ((LEON3_Console_Uart[LEON3_Cpu_Index+port]->status & LEON_REG_UART_STATUS_DR) == 0)
-         return -1;
-      return (int) LEON3_Console_Uart[LEON3_Cpu_Index+port]->data;
+    if ((LEON3_Console_Uart[u]->status & LEON_REG_UART_STATUS_DR) == 0)
+      return -1;
+    return (int) LEON3_Console_Uart[u]->data;
+  } else {
+    assert( 0 );
   }
-
-  else
-  {
-      assert( 0 );
-  }
-
   return -1;
 }
 
 /* putchar/getchar for printk */
-
 static void bsp_out_char(char c)
 {
   console_outbyte_polled(0, c);
@@ -85,12 +79,12 @@ static void bsp_out_char(char c)
 
 BSP_output_char_function_type BSP_output_char = bsp_out_char;
 
-static char bsp_in_char(void)
+static int bsp_in_char(void)
 {
   int tmp;
 
   while ((tmp = console_inbyte_nonblocking(0)) < 0);
-  return (char) tmp;
+  return tmp;
 }
 
 BSP_polling_getchar_function_type BSP_poll_char = bsp_in_char;

@@ -1,3 +1,11 @@
+2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, console/console.c, console/debugputs.c, include/bsp.h,
+	startup/setvec.c: Split idle method into its own file. Properly note
+	to confdefs.h that this BSP has its own idle thread. Also address use
+	of maximum termios constant in debug IO.
+	* startup/bspidle.S: New file.
+
 2009-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Rename BSP_BOOTCARD_OPTIONS to

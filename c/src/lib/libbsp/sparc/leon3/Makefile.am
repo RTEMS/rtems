@@ -40,11 +40,9 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bootcard.c startup/bspstart.c \
     ../../sparc/shared/bspgetworkarea.c ../../shared/sbrk.c startup/setvec.c \
-    startup/spurious.c startup/ithread.S
-
+    startup/spurious.c startup/bspidle.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
-
 # amba
 include_HEADERS += include/amba.h
 include_HEADERS += ../../sparc/shared/include/ambapp.h
@@ -55,7 +53,6 @@ libbsp_a_SOURCES += console/console.c
 libbsp_a_SOURCES += console/debugputs.c
 # clock
 libbsp_a_SOURCES += clock/ckinit.c ../../../shared/clockdrv_shell.h
-
 # PCI
 include_HEADERS += ../../sparc/shared/include/pci.h
 libbsp_a_SOURCES += pci/pci.c ../../sparc/shared/pci/pcifinddevice.c

@@ -95,11 +95,12 @@ int scan_uarts(void) {
   amba_apb_device apbuarts[LEON3_APBUARTS];
 
   if (isinit == 0) {
-    i = 0; uarts = 0;
+    i = 0;
+    uarts = 0;
     
     uarts = amba_find_apbslvs(
       &amba_conf, VENDOR_GAISLER, GAISLER_APBUART, apbuarts, LEON3_APBUARTS);
-    for(i=0; i<uarts; i++){
+    for(i=0; i<uarts; i++) {
       LEON3_Console_Uart[i] = (volatile LEON3_UART_Regs_Map *)apbuarts[i].start;
     }
     isinit = 1;
