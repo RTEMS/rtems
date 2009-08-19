@@ -98,6 +98,8 @@ void test_adjtime(void)
   struct timeval     delta;
   struct timeval     olddelta;
   rtems_time_of_day *the_tod;
+  rtems_time_of_day  tod;
+  rtems_interval     ticks;
   
   the_tod = &Dates[0];
 
@@ -143,6 +145,26 @@ void test_adjtime(void)
   sc = adjtime( &delta, &olddelta );
   assert( sc == 0 );
 
+  /*
+   * spin until over 1/2 of the way to the 
+   */
+  ticks = rtems_clock_get_ticks_per_second();
+  assert( ticks );
+  ticks /= 2;
+  do {
+    status = rtems_clock_get_tod( &tod );
+    assert( !status );
+  } while ( tod.ticks <= ticks );
+
+  puts( "adjtime - delta of almost one second forward which bumps second" );
+  delta.tv_sec = 0;
+  delta.tv_usec = 1000000 - 1;
+  sc = adjtime( &delta, &olddelta );
+  assert( sc == 0 );
+
+  status = rtems_clock_get_tod( &tod );
+  assert( !status );
+  print_time( "rtems_clock_get_tod          ", &tod, "\n" );
 }
 
 /*

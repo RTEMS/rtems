@@ -1,5 +1,5 @@
 /*
- *  Simple test program -- simplified version of sample test hello.
+ *  Simple RTEMS startup to call main
  *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

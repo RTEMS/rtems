@@ -1,297 +1,304 @@
-
-
 *** POSIX TIME OF DAY TEST ***
 rtems_clock_set          12:45:00   01/01/1988
-rtems_clock_get          12:45:00   01/01/1988
-gettimeofday: Fri Jan   1 12:45:00 1988
-time:         Fri Jan   1 12:45:00 1988
-localtime:    Fri Jan   1 12:45:00 1988
-gmtime:       Fri Jan   1 12:45:00 1988
+adjtime - NULL delta - EINVAL
+adjtime - delta out of range - EINVAL
+adjtime - delta too small - do nothing
+adjtime - delta too small - do nothing, olddelta=NULL
+adjtime - delta of one second forward
+adjtime - delta of almost two seconds forward
+adjtime - delta of almost one second forward which bumps second
+rtems_clock_get_tod          12:45:04   01/01/1988
+rtems_clock_set          12:45:00   01/01/1988
+rtems_clock_get_tod          12:45:00   01/01/1988
+gettimeofday: Fri Jan  1 12:45:00 1988
+time:         Fri Jan  1 12:45:00 1988
+localtime:    Fri Jan  1 12:45:00 1988
+gmtime:       Fri Jan  1 12:45:00 1988
 
-rtems_clock_get          12:45:05   01/01/1988
-gettimeofday: Fri Jan   1 12:45:05 1988
-time:         Fri Jan   1 12:45:05 1988
-localtime:    Fri Jan   1 12:45:05 1988
-gmtime:       Fri Jan   1 12:45:05 1988
+rtems_clock_get_tod          12:45:05   01/01/1988
+gettimeofday: Fri Jan  1 12:45:05 1988
+time:         Fri Jan  1 12:45:05 1988
+localtime:    Fri Jan  1 12:45:05 1988
+gmtime:       Fri Jan  1 12:45:05 1988
 
-rtems_clock_get          12:45:10   01/01/1988
-gettimeofday: Fri Jan   1 12:45:10 1988
-time:         Fri Jan   1 12:45:10 1988
-localtime:    Fri Jan   1 12:45:10 1988
-gmtime:       Fri Jan   1 12:45:10 1988
+rtems_clock_get_tod          12:45:10   01/01/1988
+gettimeofday: Fri Jan  1 12:45:10 1988
+time:         Fri Jan  1 12:45:10 1988
+localtime:    Fri Jan  1 12:45:10 1988
+gmtime:       Fri Jan  1 12:45:10 1988
 
-rtems_clock_get          12:45:15   01/01/1988
-gettimeofday: Fri Jan   1 12:45:15 1988
-time:         Fri Jan   1 12:45:15 1988
-localtime:    Fri Jan   1 12:45:15 1988
-gmtime:       Fri Jan   1 12:45:15 1988
+rtems_clock_get_tod          12:45:15   01/01/1988
+gettimeofday: Fri Jan  1 12:45:15 1988
+time:         Fri Jan  1 12:45:15 1988
+localtime:    Fri Jan  1 12:45:15 1988
+gmtime:       Fri Jan  1 12:45:15 1988
 
-rtems_clock_get          12:45:20   01/01/1988
-gettimeofday: Fri Jan   1 12:45:20 1988
-time:         Fri Jan   1 12:45:20 1988
-localtime:    Fri Jan   1 12:45:20 1988
-gmtime:       Fri Jan   1 12:45:20 1988
+rtems_clock_get_tod          12:45:20   01/01/1988
+gettimeofday: Fri Jan  1 12:45:20 1988
+time:         Fri Jan  1 12:45:20 1988
+localtime:    Fri Jan  1 12:45:20 1988
+gmtime:       Fri Jan  1 12:45:20 1988
 
-rtems_clock_get          12:45:25   01/01/1988
-gettimeofday: Fri Jan   1 12:45:25 1988
-time:         Fri Jan   1 12:45:25 1988
-localtime:    Fri Jan   1 12:45:25 1988
-gmtime:       Fri Jan   1 12:45:25 1988
+rtems_clock_get_tod          12:45:25   01/01/1988
+gettimeofday: Fri Jan  1 12:45:25 1988
+time:         Fri Jan  1 12:45:25 1988
+localtime:    Fri Jan  1 12:45:25 1988
+gmtime:       Fri Jan  1 12:45:25 1988
 
 rtems_clock_set          09:00:00   12/31/1988
-rtems_clock_get          09:00:00   12/31/1988
+rtems_clock_get_tod          09:00:00   12/31/1988
 gettimeofday: Sat Dec 31 09:00:00 1988
 time:         Sat Dec 31 09:00:00 1988
 localtime:    Sat Dec 31 09:00:00 1988
 gmtime:       Sat Dec 31 09:00:00 1988
 
-rtems_clock_get          09:00:05   12/31/1988
+rtems_clock_get_tod          09:00:05   12/31/1988
 gettimeofday: Sat Dec 31 09:00:05 1988
 time:         Sat Dec 31 09:00:05 1988
 localtime:    Sat Dec 31 09:00:05 1988
 gmtime:       Sat Dec 31 09:00:05 1988
 
-rtems_clock_get          09:00:10   12/31/1988
+rtems_clock_get_tod          09:00:10   12/31/1988
 gettimeofday: Sat Dec 31 09:00:10 1988
 time:         Sat Dec 31 09:00:10 1988
 localtime:    Sat Dec 31 09:00:10 1988
 gmtime:       Sat Dec 31 09:00:10 1988
 
-rtems_clock_get          09:00:15   12/31/1988
+rtems_clock_get_tod          09:00:15   12/31/1988
 gettimeofday: Sat Dec 31 09:00:15 1988
 time:         Sat Dec 31 09:00:15 1988
 localtime:    Sat Dec 31 09:00:15 1988
 gmtime:       Sat Dec 31 09:00:15 1988
 
-rtems_clock_get          09:00:20   12/31/1988
+rtems_clock_get_tod          09:00:20   12/31/1988
 gettimeofday: Sat Dec 31 09:00:20 1988
 time:         Sat Dec 31 09:00:20 1988
 localtime:    Sat Dec 31 09:00:20 1988
 gmtime:       Sat Dec 31 09:00:20 1988
 
-rtems_clock_get          09:00:25   12/31/1988
+rtems_clock_get_tod          09:00:25   12/31/1988
 gettimeofday: Sat Dec 31 09:00:25 1988
 time:         Sat Dec 31 09:00:25 1988
 localtime:    Sat Dec 31 09:00:25 1988
 gmtime:       Sat Dec 31 09:00:25 1988
 
 rtems_clock_set          23:55:59   12/31/1999
-rtems_clock_get          23:55:59   12/31/1999
+rtems_clock_get_tod          23:55:59   12/31/1999
 gettimeofday: Fri Dec 31 23:55:59 1999
 time:         Fri Dec 31 23:55:59 1999
 localtime:    Fri Dec 31 23:55:59 1999
 gmtime:       Fri Dec 31 23:55:59 1999
 
-rtems_clock_get          23:56:04   12/31/1999
+rtems_clock_get_tod          23:56:04   12/31/1999
 gettimeofday: Fri Dec 31 23:56:04 1999
 time:         Fri Dec 31 23:56:04 1999
 localtime:    Fri Dec 31 23:56:04 1999
 gmtime:       Fri Dec 31 23:56:04 1999
 
-rtems_clock_get          23:56:09   12/31/1999
+rtems_clock_get_tod          23:56:09   12/31/1999
 gettimeofday: Fri Dec 31 23:56:09 1999
 time:         Fri Dec 31 23:56:09 1999
 localtime:    Fri Dec 31 23:56:09 1999
 gmtime:       Fri Dec 31 23:56:09 1999
 
-rtems_clock_get          23:56:14   12/31/1999
+rtems_clock_get_tod          23:56:14   12/31/1999
 gettimeofday: Fri Dec 31 23:56:14 1999
 time:         Fri Dec 31 23:56:14 1999
 localtime:    Fri Dec 31 23:56:14 1999
 gmtime:       Fri Dec 31 23:56:14 1999
 
-rtems_clock_get          23:56:19   12/31/1999
+rtems_clock_get_tod          23:56:19   12/31/1999
 gettimeofday: Fri Dec 31 23:56:19 1999
 time:         Fri Dec 31 23:56:19 1999
 localtime:    Fri Dec 31 23:56:19 1999
 gmtime:       Fri Dec 31 23:56:19 1999
 
-rtems_clock_get          23:56:24   12/31/1999
+rtems_clock_get_tod          23:56:24   12/31/1999
 gettimeofday: Fri Dec 31 23:56:24 1999
 time:         Fri Dec 31 23:56:24 1999
 localtime:    Fri Dec 31 23:56:24 1999
 gmtime:       Fri Dec 31 23:56:24 1999
 
 rtems_clock_set          00:01:30   06/30/1999
-rtems_clock_get          00:01:30   06/30/1999
+rtems_clock_get_tod          00:01:30   06/30/1999
 gettimeofday: Wed Jun 30 00:01:30 1999
 time:         Wed Jun 30 00:01:30 1999
 localtime:    Wed Jun 30 00:01:30 1999
 gmtime:       Wed Jun 30 00:01:30 1999
 
-rtems_clock_get          00:01:35   06/30/1999
+rtems_clock_get_tod          00:01:35   06/30/1999
 gettimeofday: Wed Jun 30 00:01:35 1999
 time:         Wed Jun 30 00:01:35 1999
 localtime:    Wed Jun 30 00:01:35 1999
 gmtime:       Wed Jun 30 00:01:35 1999
 
-rtems_clock_get          00:01:40   06/30/1999
+rtems_clock_get_tod          00:01:40   06/30/1999
 gettimeofday: Wed Jun 30 00:01:40 1999
 time:         Wed Jun 30 00:01:40 1999
 localtime:    Wed Jun 30 00:01:40 1999
 gmtime:       Wed Jun 30 00:01:40 1999
 
-rtems_clock_get          00:01:45   06/30/1999
+rtems_clock_get_tod          00:01:45   06/30/1999
 gettimeofday: Wed Jun 30 00:01:45 1999
 time:         Wed Jun 30 00:01:45 1999
 localtime:    Wed Jun 30 00:01:45 1999
 gmtime:       Wed Jun 30 00:01:45 1999
 
-rtems_clock_get          00:01:50   06/30/1999
+rtems_clock_get_tod          00:01:50   06/30/1999
 gettimeofday: Wed Jun 30 00:01:50 1999
 time:         Wed Jun 30 00:01:50 1999
 localtime:    Wed Jun 30 00:01:50 1999
 gmtime:       Wed Jun 30 00:01:50 1999
 
-rtems_clock_get          00:01:55   06/30/1999
+rtems_clock_get_tod          00:01:55   06/30/1999
 gettimeofday: Wed Jun 30 00:01:55 1999
 time:         Wed Jun 30 00:01:55 1999
 localtime:    Wed Jun 30 00:01:55 1999
 gmtime:       Wed Jun 30 00:01:55 1999
 
 rtems_clock_set          00:15:59   01/01/2000
-rtems_clock_get          00:15:59   01/01/2000
-gettimeofday: Sat Jan   1 00:15:59 2000
-time:         Sat Jan   1 00:15:59 2000
-localtime:    Sat Jan   1 00:15:59 2000
-gmtime:       Sat Jan   1 00:15:59 2000
+rtems_clock_get_tod          00:15:59   01/01/2000
+gettimeofday: Sat Jan  1 00:15:59 2000
+time:         Sat Jan  1 00:15:59 2000
+localtime:    Sat Jan  1 00:15:59 2000
+gmtime:       Sat Jan  1 00:15:59 2000
 
-rtems_clock_get          00:16:04   01/01/2000
-gettimeofday: Sat Jan   1 00:16:04 2000
-time:         Sat Jan   1 00:16:04 2000
-localtime:    Sat Jan   1 00:16:04 2000
-gmtime:       Sat Jan   1 00:16:04 2000
+rtems_clock_get_tod          00:16:04   01/01/2000
+gettimeofday: Sat Jan  1 00:16:04 2000
+time:         Sat Jan  1 00:16:04 2000
+localtime:    Sat Jan  1 00:16:04 2000
+gmtime:       Sat Jan  1 00:16:04 2000
 
-rtems_clock_get          00:16:09   01/01/2000
-gettimeofday: Sat Jan   1 00:16:09 2000
-time:         Sat Jan   1 00:16:09 2000
-localtime:    Sat Jan   1 00:16:09 2000
-gmtime:       Sat Jan   1 00:16:09 2000
+rtems_clock_get_tod          00:16:09   01/01/2000
+gettimeofday: Sat Jan  1 00:16:09 2000
+time:         Sat Jan  1 00:16:09 2000
+localtime:    Sat Jan  1 00:16:09 2000
+gmtime:       Sat Jan  1 00:16:09 2000
 
-rtems_clock_get          00:16:14   01/01/2000
-gettimeofday: Sat Jan   1 00:16:14 2000
-time:         Sat Jan   1 00:16:14 2000
-localtime:    Sat Jan   1 00:16:14 2000
-gmtime:       Sat Jan   1 00:16:14 2000
+rtems_clock_get_tod          00:16:14   01/01/2000
+gettimeofday: Sat Jan  1 00:16:14 2000
+time:         Sat Jan  1 00:16:14 2000
+localtime:    Sat Jan  1 00:16:14 2000
+gmtime:       Sat Jan  1 00:16:14 2000
 
-rtems_clock_get          00:16:19   01/01/2000
-gettimeofday: Sat Jan   1 00:16:19 2000
-time:         Sat Jan   1 00:16:19 2000
-localtime:    Sat Jan   1 00:16:19 2000
-gmtime:       Sat Jan   1 00:16:19 2000
+rtems_clock_get_tod          00:16:19   01/01/2000
+gettimeofday: Sat Jan  1 00:16:19 2000
+time:         Sat Jan  1 00:16:19 2000
+localtime:    Sat Jan  1 00:16:19 2000
+gmtime:       Sat Jan  1 00:16:19 2000
 
-rtems_clock_get          00:16:24   01/01/2000
-gettimeofday: Sat Jan   1 00:16:24 2000
-time:         Sat Jan   1 00:16:24 2000
-localtime:    Sat Jan   1 00:16:24 2000
-gmtime:       Sat Jan   1 00:16:24 2000
+rtems_clock_get_tod          00:16:24   01/01/2000
+gettimeofday: Sat Jan  1 00:16:24 2000
+time:         Sat Jan  1 00:16:24 2000
+localtime:    Sat Jan  1 00:16:24 2000
+gmtime:       Sat Jan  1 00:16:24 2000
 
 rtems_clock_set          05:10:59   02/02/2005
-rtems_clock_get          05:10:59   02/02/2005
+rtems_clock_get_tod          05:10:59   02/02/2005
 gettimeofday: Wed Feb  2 05:10:59 2005
 time:         Wed Feb  2 05:10:59 2005
 localtime:    Wed Feb  2 05:10:59 2005
 gmtime:       Wed Feb  2 05:10:59 2005
 
-rtems_clock_get          05:11:04   02/02/2005
+rtems_clock_get_tod          05:11:04   02/02/2005
 gettimeofday: Wed Feb  2 05:11:04 2005
 time:         Wed Feb  2 05:11:04 2005
 localtime:    Wed Feb  2 05:11:04 2005
 gmtime:       Wed Feb  2 05:11:04 2005
 
-rtems_clock_get          05:11:09   02/02/2005
+rtems_clock_get_tod          05:11:09   02/02/2005
 gettimeofday: Wed Feb  2 05:11:09 2005
 time:         Wed Feb  2 05:11:09 2005
 localtime:    Wed Feb  2 05:11:09 2005
 gmtime:       Wed Feb  2 05:11:09 2005
 
-rtems_clock_get          05:11:14   02/02/2005
+rtems_clock_get_tod          05:11:14   02/02/2005
 gettimeofday: Wed Feb  2 05:11:14 2005
 time:         Wed Feb  2 05:11:14 2005
 localtime:    Wed Feb  2 05:11:14 2005
 gmtime:       Wed Feb  2 05:11:14 2005
 
-rtems_clock_get          05:11:19   02/02/2005
+rtems_clock_get_tod          05:11:19   02/02/2005
 gettimeofday: Wed Feb  2 05:11:19 2005
 time:         Wed Feb  2 05:11:19 2005
 localtime:    Wed Feb  2 05:11:19 2005
 gmtime:       Wed Feb  2 05:11:19 2005
 
-rtems_clock_get          05:11:24   02/02/2005
+rtems_clock_get_tod          05:11:24   02/02/2005
 gettimeofday: Wed Feb  2 05:11:24 2005
 time:         Wed Feb  2 05:11:24 2005
 localtime:    Wed Feb  2 05:11:24 2005
 gmtime:       Wed Feb  2 05:11:24 2005
 
 rtems_clock_set          10:05:59   03/03/2010
-rtems_clock_get          10:05:59   03/03/2010
+rtems_clock_get_tod          10:05:59   03/03/2010
 gettimeofday: Wed Mar  3 10:05:59 2010
 time:         Wed Mar  3 10:05:59 2010
 localtime:    Wed Mar  3 10:05:59 2010
 gmtime:       Wed Mar  3 10:05:59 2010
 
-rtems_clock_get          10:06:04   03/03/2010
+rtems_clock_get_tod          10:06:04   03/03/2010
 gettimeofday: Wed Mar  3 10:06:04 2010
 time:         Wed Mar  3 10:06:04 2010
 localtime:    Wed Mar  3 10:06:04 2010
 gmtime:       Wed Mar  3 10:06:04 2010
 
-rtems_clock_get          10:06:09   03/03/2010
+rtems_clock_get_tod          10:06:09   03/03/2010
 gettimeofday: Wed Mar  3 10:06:09 2010
 time:         Wed Mar  3 10:06:09 2010
 localtime:    Wed Mar  3 10:06:09 2010
 gmtime:       Wed Mar  3 10:06:09 2010
 
-rtems_clock_get          10:06:14   03/03/2010
+rtems_clock_get_tod          10:06:14   03/03/2010
 gettimeofday: Wed Mar  3 10:06:14 2010
 time:         Wed Mar  3 10:06:14 2010
 localtime:    Wed Mar  3 10:06:14 2010
 gmtime:       Wed Mar  3 10:06:14 2010
 
-rtems_clock_get          10:06:19   03/03/2010
+rtems_clock_get_tod          10:06:19   03/03/2010
 gettimeofday: Wed Mar  3 10:06:19 2010
 time:         Wed Mar  3 10:06:19 2010
 localtime:    Wed Mar  3 10:06:19 2010
 gmtime:       Wed Mar  3 10:06:19 2010
 
-rtems_clock_get          10:06:24   03/03/2010
+rtems_clock_get_tod          10:06:24   03/03/2010
 gettimeofday: Wed Mar  3 10:06:24 2010
 time:         Wed Mar  3 10:06:24 2010
 localtime:    Wed Mar  3 10:06:24 2010
 gmtime:       Wed Mar  3 10:06:24 2010
 
 rtems_clock_set          15:00:59   04/04/2020
-rtems_clock_get          15:00:59   04/04/2020
+rtems_clock_get_tod          15:00:59   04/04/2020
 gettimeofday: Sat Apr  4 15:00:59 2020
 time:         Sat Apr  4 15:00:59 2020
 localtime:    Sat Apr  4 15:00:59 2020
 gmtime:       Sat Apr  4 15:00:59 2020
 
-rtems_clock_get          15:01:04   04/04/2020
+rtems_clock_get_tod          15:01:04   04/04/2020
 gettimeofday: Sat Apr  4 15:01:04 2020
 time:         Sat Apr  4 15:01:04 2020
 localtime:    Sat Apr  4 15:01:04 2020
 gmtime:       Sat Apr  4 15:01:04 2020
 
-rtems_clock_get          15:01:09   04/04/2020
+rtems_clock_get_tod          15:01:09   04/04/2020
 gettimeofday: Sat Apr  4 15:01:09 2020
 time:         Sat Apr  4 15:01:09 2020
 localtime:    Sat Apr  4 15:01:09 2020
 gmtime:       Sat Apr  4 15:01:09 2020
 
-rtems_clock_get          15:01:14   04/04/2020
+rtems_clock_get_tod          15:01:14   04/04/2020
 gettimeofday: Sat Apr  4 15:01:14 2020
 time:         Sat Apr  4 15:01:14 2020
 localtime:    Sat Apr  4 15:01:14 2020
 gmtime:       Sat Apr  4 15:01:14 2020
 
-rtems_clock_get          15:01:19   04/04/2020
+rtems_clock_get_tod          15:01:19   04/04/2020
 gettimeofday: Sat Apr  4 15:01:19 2020
 time:         Sat Apr  4 15:01:19 2020
 localtime:    Sat Apr  4 15:01:19 2020
 gmtime:       Sat Apr  4 15:01:19 2020
 
-rtems_clock_get          15:01:24   04/04/2020
+rtems_clock_get_tod          15:01:24   04/04/2020
 gettimeofday: Sat Apr  4 15:01:24 2020
 time:         Sat Apr  4 15:01:24 2020
 localtime:    Sat Apr  4 15:01:24 2020
