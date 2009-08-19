@@ -361,7 +361,8 @@ void _CPU_Install_interrupt_stack( void );
 
 void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
 
-void _CPU_Context_restore( Context_Control *new_context );
+void _CPU_Context_restore( Context_Control *new_context )
+       RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 void _CPU_Context_save_fp( Context_Control_fp **fp_context_ptr );
 
