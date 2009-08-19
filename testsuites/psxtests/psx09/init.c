@@ -52,6 +52,8 @@ void *POSIX_Init(
   struct sched_param   schedparam;
   char                 buffer[ 80 ];
   pthread_mutexattr_t  attr;
+  time_t               start;
+  time_t               now;
 
   puts( "\n\n*** POSIX TEST 9 ***" );
 
@@ -111,7 +113,6 @@ void *POSIX_Init(
 
   empty_line();
 
-
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
   assert( !status );
 
@@ -135,10 +136,7 @@ void *POSIX_Init(
   status = pthread_mutexattr_init( &attr );
   assert( !status );
 
-  status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_PROTECT );
-  assert( !status );
-
-  status = pthread_mutexattr_setprioceiling( &attr, MEDIUM_PRIORITY );
+  status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_INHERIT );
   assert( !status );
 
   puts( "Init: Creating a mutex" );
@@ -154,24 +152,32 @@ void *POSIX_Init(
   sprintf( buffer, " - new priority = %d", priority );
   print_current_time( "Init: ", buffer );
 
-  /* go into a loop consuming CPU time to watch our priority lower */
+  /* go into a loop consuming CPU time to watch our priority NOT lower */
+
+  start = time( &start );
+
+  puts( "Init: pthread_mutex_lock acquire the lock" );
+  status = pthread_mutex_lock( &Mutex_id );
+  if ( status )
+    printf( "status = %d %s\n", status, strerror(status) );
+  assert( !status );
 
   for ( ; ; ) {
     status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
     assert( !status );
 
-    if ( schedparam.sched_priority != LOW_PRIORITY )
-      continue;
+    if ( schedparam.sched_priority == LOW_PRIORITY ) {
+      puts( "ERROR - Init's priority lowered while holding mutex" );
+      rtems_test_exit(0);
+    }
+
+    now = time( &now );
+    if ( now - start > 3 ) 
+      break;
 
     priority = schedparam.sched_priority;
     sprintf( buffer, " - new priority = %d", priority );
     print_current_time( "Init: ", buffer );
-
-    puts( "Init: pthread_mutex_lock acquire the lock" );
-    status = pthread_mutex_lock( &Mutex_id );
-    if ( status )
-      printf( "status = %d\n", status );
-    assert( !status );
 
     status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
     assert( !status );
@@ -182,20 +188,6 @@ void *POSIX_Init(
 
     break;
   }
-
-  /* now spin waiting for our budget to be replenished */
-
-  for ( ; ; ) {
-    status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-    assert( !status );
-
-    if ( schedparam.sched_priority == HIGH_PRIORITY )
-      break;
-  }
-
-  priority = schedparam.sched_priority;
-  sprintf( buffer, " - new priority = %d", priority );
-  print_current_time( "Init: ", buffer );
 
   /* with this unlock we should be able to go to low priority */
 

@@ -1,5 +1,12 @@
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* psx09/init.c, psx09/psx09.scn: Correct test following decision of
+	when not to change ssporadic scheduler so it does not touch a task's
+	priority when it is holding a mutex or its priority would be impacted
+	adversely.
+
+2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* psxtime/main.c, psxtime/psxtime.scn, psxtime/test.c: Add test case
 	for adjusting time (adjtime()) where the time is adjusted by enough
 	microseconds that it crosses a second boundary.
