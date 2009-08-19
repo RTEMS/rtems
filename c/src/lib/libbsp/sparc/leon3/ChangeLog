@@ -1,5 +1,9 @@
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* startup/ithread.S: Removed. Now bspidle.S.
+
+2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, console/console.c, console/debugputs.c, include/bsp.h,
 	startup/setvec.c: Split idle method into its own file. Properly note
 	to confdefs.h that this BSP has its own idle thread. Also address use
