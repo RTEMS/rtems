@@ -1,5 +1,12 @@
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sapi/include/confdefs.h, score/Makefile.am,
+	score/include/rtems/score/thread.h: Only instantiate
+	_Thread_Idle_body() if it is going ot be used.
+	* score/src/threadidlebody.c: Removed.
+
+2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/pthread.c: Address sporadic server edge cases. Do not
 	change priority if thread is holding a priority ceiling or
 	inheritance mutex. Do not change it if it looks like the thread has

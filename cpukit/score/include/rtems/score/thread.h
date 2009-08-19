@@ -775,6 +775,8 @@ bool _Thread_Evaluate_mode( void );
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 /**
  *  This routine is the body of the system idle thread.
+ *
+ *  NOTE: This routine is actually instantiated by confdefs.h when needed.
  */
 void *_Thread_Idle_body(
   uintptr_t  ignored

@@ -148,15 +148,14 @@ libscore_a_SOURCES += src/pheapallocatealigned.c src/pheapallocate.c \
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadclearstate.c src/threadclose.c src/threadcreateidle.c \
     src/threaddelayended.c src/threaddispatch.c src/threadevaluatemode.c \
-    src/threadget.c src/threadhandler.c src/threadidlebody.c \
-    src/threadinitialize.c src/threadloadenv.c src/threadready.c \
-    src/threadresettimeslice.c src/threadreset.c src/threadrestart.c \
-    src/threadresume.c src/threadsetpriority.c src/threadsetstate.c \
-    src/threadsettransient.c src/threadstackallocate.c \
-    src/threadstackfree.c src/threadstart.c src/threadstartmultitasking.c \
-    src/threadsuspend.c src/threadtickletimeslice.c \
-    src/threadyieldprocessor.c src/iterateoverthreads.c \
-    src/threadblockingoperationcancel.c
+    src/threadget.c src/threadhandler.c src/threadinitialize.c \
+    src/threadloadenv.c src/threadready.c src/threadresettimeslice.c \
+    src/threadreset.c src/threadrestart.c src/threadresume.c \
+    src/threadsetpriority.c src/threadsetstate.c src/threadsettransient.c \
+    src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
+    src/threadstartmultitasking.c src/threadsuspend.c \
+    src/threadtickletimeslice.c src/threadyieldprocessor.c \
+    src/iterateoverthreads.c src/threadblockingoperationcancel.c
 
 ## THREAD_C_FILES only used by ITRON API
 if LIBITRON

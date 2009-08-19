@@ -323,6 +323,14 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #elif (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
     #define CONFIGURE_IDLE_TASK_BODY _CPU_Thread_Idle_body
   #else
+    /* only instantiate and compile if used */
+    #ifdef CONFIGURE_INIT
+      void *_Thread_Idle_body(uintptr_t ignored)
+      {
+        for( ; ; ) ;
+        return 0;   /* to avoid warning */
+      }
+    #endif
     #define CONFIGURE_IDLE_TASK_BODY _Thread_Idle_body
   #endif
 #endif
