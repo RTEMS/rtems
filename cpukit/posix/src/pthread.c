@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,15 +33,12 @@
 #include <rtems/posix/time.h>
 #include <rtems/score/timespec.h>
 
-/*PAGE
- *
+/*
  *  The default pthreads attributes structure.
  *
  *  NOTE: Be careful .. if the default attribute set changes,
  *        _POSIX_Threads_Initialize_user_threads will need to be examined.
- *
  */
-
 const pthread_attr_t _POSIX_Threads_Default_attributes = {
   true,                       /* is_initialized */
   NULL,                       /* stackaddr */
@@ -59,11 +56,9 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
   1                           /* cputime_clock_allowed */
 };
 
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Sporadic_budget_TSR
  */
-
 void _POSIX_Threads_Sporadic_budget_TSR(
   Objects_Id      id __attribute__((unused)),
   void           *argument
@@ -86,9 +81,24 @@ void _POSIX_Threads_Sporadic_budget_TSR(
   new_priority = _POSIX_Priority_To_core( api->ss_high_priority );
   the_thread->real_priority = new_priority;
 
-  if ( the_thread->resource_count == 0 ||
-       the_thread->current_priority > new_priority )
-    _Thread_Change_priority( the_thread, new_priority, true );
+  /*
+   *  If holding a resource, then do not change it.
+   */
+  #if 0
+    printk( "TSR %d %d %d\n", the_thread->resource_count,
+        the_thread->current_priority, new_priority );
+  #endif
+  if ( the_thread->resource_count == 0 ) {
+    /*
+     *  If this would make them less important, then do not change it.
+     */
+    if ( the_thread->current_priority > new_priority ) {
+      _Thread_Change_priority( the_thread, new_priority, true );
+      #if 0
+        printk( "raise priority\n" );
+      #endif
+    }
+  }
 
   /* ticks is guaranteed to be at least one */
   ticks = _Timespec_To_ticks( &api->schedparam.ss_replenish_period );
@@ -96,11 +106,9 @@ void _POSIX_Threads_Sporadic_budget_TSR(
   _Watchdog_Insert_ticks( &api->Sporadic_timer, ticks );
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Sporadic_budget_callout
  */
-
 void _POSIX_Threads_Sporadic_budget_callout(
   Thread_Control *the_thread
 )
@@ -114,23 +122,37 @@ void _POSIX_Threads_Sporadic_budget_callout(
    *  This will prevent the thread from consuming its entire "budget"
    *  while at low priority.
    */
-
-
   the_thread->cpu_time_budget = 0xFFFFFFFF; /* XXX should be based on MAX_U32 */
 
   new_priority = _POSIX_Priority_To_core( api->schedparam.ss_low_priority );
   the_thread->real_priority = new_priority;
 
- if ( the_thread->resource_count == 0 ||
-      the_thread->current_priority > new_priority )
-    _Thread_Change_priority( the_thread, new_priority, true );
+  /*
+   *  If holding a resource, then do not change it.
+   */
+  #if 0
+    printk( "callout %d %d %d\n", the_thread->resource_count,
+	the_thread->current_priority, new_priority );
+  #endif
+  if ( the_thread->resource_count == 0 ) {
+    /*
+     *  Make sure we are actually lowering it. If they have lowered it
+     *  to logically lower than ss_low_priority, then we do not want to
+     *  change it.
+     */
+    if ( the_thread->current_priority < new_priority ) {
+      _Thread_Change_priority( the_thread, new_priority, true );
+      #if 0
+        printk( "lower priority\n" );
+      #endif
+    }
+  }
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Create_extension
  *
- *  XXX
+ *  This method is invoked for each thread created.
  */
 
 bool _POSIX_Threads_Create_extension(
@@ -175,7 +197,7 @@ bool _POSIX_Threads_Create_extension(
   api->signals_pending = 0;
   if ( _Objects_Get_API( created->Object.id ) == OBJECTS_POSIX_API
        #if defined(RTEMS_DEBUG)
-	 && _Objects_Get_class( created->Object.id ) == 1
+         && _Objects_Get_class( created->Object.id ) == 1
        #endif
   ) {
     executing_api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
@@ -201,11 +223,11 @@ bool _POSIX_Threads_Create_extension(
   return true;
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Delete_extension
+ *
+ *  This method is invoked for each thread deleted.
  */
-
 User_extensions_routine _POSIX_Threads_Delete_extension(
   Thread_Control *executing __attribute__((unused)),
   Thread_Control *deleted
@@ -244,10 +266,10 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
 }
 
 /*
- *
  *  _POSIX_Threads_Exitted_extension
+ *
+ *  This method is invoked each time a thread exits.
  */
-
 User_extensions_routine _POSIX_Threads_Exitted_extension(
   Thread_Control *executing
 )
@@ -260,29 +282,21 @@ User_extensions_routine _POSIX_Threads_Exitted_extension(
     pthread_exit( executing->Wait.return_argument );
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Initialize_user_threads
  *
  *  This routine creates and starts all configured user
  *  initialzation threads.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
  */
-
 void _POSIX_Threads_Initialize_user_threads( void )
 {
   if ( _POSIX_Threads_Initialize_user_threads_p )
     (*_POSIX_Threads_Initialize_user_threads_p)();
 }
 
-/*PAGE
- *
+/*
  *  API Extension control structures
  */
-
 API_extensions_Control _POSIX_Threads_API_extensions = {
   { NULL, NULL },
   #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
@@ -306,28 +320,13 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
   }
 };
 
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Manager_initialization
  *
  *  This routine initializes all threads manager related data structures.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
  */
-
 void _POSIX_Threads_Manager_initialization(void)
 {
-  /*
-   *  There may not be any POSIX initialization threads configured.
-   */
-
-#if 0
-  if ( user_threads == NULL || number_of_initialization_threads == 0 )
-    _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, true, EINVAL );
-#endif
-
   _Objects_Initialize_information(
     &_POSIX_Threads_Information, /* object information table */
     OBJECTS_POSIX_API,           /* object API */
@@ -348,15 +347,12 @@ void _POSIX_Threads_Manager_initialization(void)
   /*
    *  Add all the extensions for this API
    */
-
   _User_extensions_Add_API_set( &_POSIX_Threads_User_extensions );
 
   _API_extensions_Add( &_POSIX_Threads_API_extensions );
-
 
   /*
    *  If we supported MP, then here we would ...
    *       Register the MP Process Packet routine.
    */
-
 }

@@ -1,3 +1,11 @@
+2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/src/pthread.c: Address sporadic server edge cases. Do not
+	change priority if thread is holding a priority ceiling or
+	inheritance mutex. Do not change it if it looks like the thread has
+	manually changed its priority. Style cleanup on file with new
+	comments added.
+
 2009-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/heapallocatealigned.c: Remove unused label.
