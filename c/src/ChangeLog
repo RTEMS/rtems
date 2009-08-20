@@ -1,3 +1,8 @@
+2009-08-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* aclocal/check-networking.m4: Disable TCP/IP on targets without enough
+	physical address to support BSD TCP/IP stack.
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/network/elnk.c: Convert calls to legacy routine
