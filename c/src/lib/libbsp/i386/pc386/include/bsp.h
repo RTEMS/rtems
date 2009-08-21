@@ -54,18 +54,11 @@ extern "C" {
 #include <libcpu/cpu.h>
 #include <rtems/bspIo.h>
 
-/*
- *  confdefs.h overrides for this BSP:
- *   - number of termios serial ports
- *   - Interrupt stack space is not minimum if defined.
- */
-
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
 
 /*
  * Network driver configuration
  */
-
 struct rtems_bsdnet_ifconfig;
 
 extern int rtems_ne_driver_attach(struct rtems_bsdnet_ifconfig *, int);

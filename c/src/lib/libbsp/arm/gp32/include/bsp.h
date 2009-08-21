@@ -57,9 +57,6 @@ void gp32_setPalette( unsigned char pos, uint16_t color);
 #define Tchr	0x2 	/* 3 clk */
 
 
-/* How many serial ports? */
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
-
 /*
  *  This BSP provides its own IDLE task to override the RTEMS one.
  *  So we prototype it and define the constant confdefs.h expects

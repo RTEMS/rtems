@@ -30,8 +30,6 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
-
 /** Define operation count for Tests */
 #define OPERATION_COUNT 10
 

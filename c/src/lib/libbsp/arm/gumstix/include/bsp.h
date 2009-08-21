@@ -33,9 +33,6 @@ extern "C" {
 console_tbl *BSP_get_uart_from_minor(int minor);
 static inline int32_t BSP_get_baud(void) {return 115200;}
 
-/* How many serial ports? */
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
-
 /* How big should the interrupt stack be? */
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 

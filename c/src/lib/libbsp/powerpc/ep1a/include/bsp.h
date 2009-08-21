@@ -20,15 +20,6 @@
 #include <rtems/clockdrv.h>
 #include <bsp/vectors.h>
 
-
-/*
- *  confdefs.h overrides for this BSP:
- *   - termios serial ports (defaults to 1)
- *   - Interrupt stack space is not minimum if defined.
- */
-
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-
 /* fundamental addresses for BSP (CHRPxxx and PREPxxx are from libcpu/io.h) */
 #define	_IO_BASE	        CHRP_ISA_IO_BASE 
 #define _ISA_MEM_BASE           CHRP_ISA_MEM_BASE

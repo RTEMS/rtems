@@ -112,11 +112,8 @@ DiscoveryChipVersion BSP_getDiscoveryChipVersion();
 
 /*
  *  confdefs.h overrides for this BSP:
- *   - termios serial ports (defaults to 1)
  *   - Interrupt stack space is not minimum if defined.
  */
-
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 #define BSP_INTERRUPT_STACK_SIZE  (16 * 1024) /* <skf> 2/09 wants it to be adjustable by BSP */
 
 #define CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK   /* <skf> 4/09 see shared/startup/sbrk.c and rtems/confdefs.h */

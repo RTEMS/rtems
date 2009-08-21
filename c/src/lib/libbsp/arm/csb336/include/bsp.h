@@ -31,9 +31,6 @@ extern "C" {
 #define BSP_OSC_FREQ  16000000    /* 16 MHz oscillator */
 #define BSP_XTAL_FREQ 32768       /* 32.768 KHz crystal */
 
-/* How many serial ports? */
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-
 int get_perclk1_freq(void);
 
 /*

@@ -28,18 +28,6 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <bsp/vectors.h>
 
-/*
- *  confdefs.h overrides for this BSP:
- *   - termios serial ports (defaults to 1)
- *   - Interrupt stack space is not minimum if defined.
- */
-
-#if (HAS_PMC_PSC8)
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS (4 + 4)
-#else
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS (4)
-#endif
-
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
 #define ALIGN_REGS 0x0140

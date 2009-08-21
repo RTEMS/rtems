@@ -132,14 +132,6 @@ extern "C" {
 
 #include "i2c.h"
 
-/*
- *  confdefs.h overrides for this BSP:
- *   - termios serial ports (defaults to 1)
- *   - Interrupt stack space is not minimum if defined.
- */
-
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-
 /* System frequency */
 #define BSP_SYSTEM_FREQUENCY ((unsigned int)&_SYS_CLOCK_FREQUENCY)
 extern char _SYS_CLOCK_FREQUENCY; /* Don't use this variable directly!!! */

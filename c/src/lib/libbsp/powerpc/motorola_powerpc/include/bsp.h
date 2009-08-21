@@ -22,16 +22,8 @@
 
 /*
  *  confdefs.h overrides for this BSP:
- *   - termios serial ports (defaults to 1)
- *   - Interrupt stack space is not minimum if defined.
  */
-
-#if !defined(mvme2100)
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-#endif
-
 #define CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-
 
 /*
  * diagram illustrating the role of the configuration

@@ -66,13 +66,6 @@ extern "C" {
 #define FIFOLENGTH 0x100
 
 /*
- *  confdefs.h overrides for this BSP:
- *   - number of termios serial ports (defaults to 1)
- */
-
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-
-/*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */

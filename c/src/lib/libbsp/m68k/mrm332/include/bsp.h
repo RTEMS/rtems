@@ -2,7 +2,7 @@
  *
  *  This include file contains all mrm board IO definitions.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,14 +32,7 @@ extern "C" {
 
 #define BSP_SMALL_MEMORY 1
 
-/*
- *  confdefs.h overrides for this BSP:
- *   - number of termios serial ports (defaults to 1)
- *   - Interrupt stack space is not minimum if defined.
- */
-
 #define CONSOLE_SCI
-/* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
 
 /*
  *  Simple spin delay in microsecond units for device drivers.

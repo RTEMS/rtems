@@ -6,7 +6,7 @@
  *
  * derived from helas403/include/bsp.h:
  *  Id: bsp.h,v 1.4 2001/06/18 17:01:48 joel Exp
- *  Author:	Thomas Doerfler <td@imd.m.isar.de>
+ *  Author:  Thomas Doerfler <td@imd.m.isar.de>
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  COPYRIGHT (c) 1998 by IMD
@@ -14,7 +14,7 @@
  *  Changes from IMD are covered by the original distributions terms.
  *  This file has been derived from the papyrus BSP.
  *
- *  Author:	Andrew Bray <andy@i-cubed.co.uk>
+ *  Author:  Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -55,45 +55,43 @@ extern "C" {
 
 #ifdef ASM
 
-	/* Definition of where to store registers in alignment handler */
-	#define ALIGN_REGS 0x0140
+
+  /* Definition of where to store registers in alignment handler */
+  #define ALIGN_REGS 0x0140
 
 #else
 
-	#include <rtems.h>
-	#include <rtems/console.h>
-	#include <rtems/clockdrv.h>
-	#include <libcpu/io.h>
-	#include <rtems/console.h>
-	#include <rtems/iosupp.h>
-	#include <bsp/irq.h>
-	#include <bsp/vectors.h>
+  #include <rtems.h>
+  #include <rtems/console.h>
+  #include <rtems/clockdrv.h>
+  #include <libcpu/io.h>
+  #include <rtems/console.h>
+  #include <rtems/iosupp.h>
+  #include <bsp/irq.h>
+  #include <bsp/vectors.h>
 
-	/* Network Defines */
-	#define RTEMS_BSP_NETWORK_DRIVER_NAME     "eth0"
-	
-	struct rtems_bsdnet_ifconfig;
-	int rtems_emac_driver_attach(struct rtems_bsdnet_ifconfig* config, int attaching);
-	#define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_emac_driver_attach
+  /* Network Defines */
+  #define RTEMS_BSP_NETWORK_DRIVER_NAME     "eth0"
+  
+  struct rtems_bsdnet_ifconfig;
+  int rtems_emac_driver_attach(struct rtems_bsdnet_ifconfig* config, int attaching);
+  #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_emac_driver_attach
 
-	/* Definitions for the shared console/UART driver */
-	#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
+  #define BSP_UART_IOBASE_COM1  0xEF600200    /* PPC405EX */
+  #define BSP_UART_IOBASE_COM2  0xEF600300
 
-	#define BSP_UART_IOBASE_COM1	0xEF600200		/* PPC405EX */
-	#define BSP_UART_IOBASE_COM2	0xEF600300
+  #define BSP_CONSOLE_PORT    BSP_UART_COM1    /* console */
 
-	#define BSP_CONSOLE_PORT		BSP_UART_COM1		/* console */
+  #define BSP_UART_BAUD_BASE    (11059200 / 16)    /* Kilauea ext clock, max speed */
 
-	#define BSP_UART_BAUD_BASE		(11059200 / 16)		/* Kilauea ext clock, max speed */
+  /* functions */
 
-	/* functions */
-
-	rtems_isr_entry set_vector(                    /* returns old vector */
-	  rtems_isr_entry     handler,                  /* isr routine        */
-	  rtems_vector_number vector,                   /* vector number      */
-	  int                 type                      /* RTEMS or RAW intr  */
-	);
-	
+  rtems_isr_entry set_vector(                    /* returns old vector */
+    rtems_isr_entry     handler,                  /* isr routine        */
+    rtems_vector_number vector,                   /* vector number      */
+    int                 type                      /* RTEMS or RAW intr  */
+  );
+  
 #endif /* ASM */
 
 #ifdef __cplusplus
