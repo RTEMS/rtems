@@ -1,3 +1,11 @@
+2009-08-21	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* Makefile.am, preinstall.am, libmisc/Makefile.am: Changed the name of
+	mw-fb directory into fb.  Relocated files.
+	* libmisc/fb/fb.h, libmisc/fb/mw_uid.c, libmisc/fb/mw_uid.h: New files.
+	* libmisc/mw-fb/fb.h, libmisc/mw-fb/mw_uid.c, libmisc/mw-fb/mw_uid.h:
+	Removed.
+
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h, score/Makefile.am,

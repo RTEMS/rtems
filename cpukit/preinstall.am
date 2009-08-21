@@ -238,11 +238,11 @@ $(PROJECT_INCLUDE)/rtems/monitor.h: libmisc/monitor/monitor.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/monitor.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/monitor.h
 
-$(PROJECT_INCLUDE)/rtems/fb.h: libmisc/mw-fb/fb.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/fb.h: libmisc/fb/fb.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fb.h
 
-$(PROJECT_INCLUDE)/rtems/mw_uid.h: libmisc/mw-fb/mw_uid.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/mw_uid.h: libmisc/fb/mw_uid.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mw_uid.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mw_uid.h
 
