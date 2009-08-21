@@ -2,8 +2,8 @@
  * Copyright (c) 2000 - Rosimildo da Silva ( rdasilva@connecttel.com )
  *
  * MODULE DESCRIPTION:
- * This module implements the micro FB driver for "Bare VGA". It uses the
- * routines for "bare hardware" that comes with MicroWindows.
+ * This module implements FB driver for "Bare VGA". It uses the
+ * routines for "bare hardware" found in vgainit.c.
  *
  *  $Id$
  *
@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <sys/types.h>
+#include <pthread.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -20,12 +21,12 @@
 
 #include <rtems/fb.h>
 
-/* these routines are defined in the microwindows code. This
-   driver is here more as an example of how to implement and
-   use the micro FB interface
-*/
+/* these routines are defined in vgainit.c.*/
 extern void ega_hwinit( void );
 extern void ega_hwterm( void );
+
+/* mutex attribure */
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* screen information for the VGA driver */
 static struct fb_var_screeninfo fb_var =
@@ -44,6 +45,7 @@ static struct fb_fix_screeninfo fb_fix =
   .line_length         = 80                            /* chars per line    */
 };
 
+
 static uint16_t red16[] = {
    0x0000, 0x0000, 0x0000, 0x0000, 0xaaaa, 0xaaaa, 0xaaaa, 0xaaaa,
    0x5555, 0x5555, 0x5555, 0x5555, 0xffff, 0xffff, 0xffff, 0xffff
@@ -57,6 +59,12 @@ static uint16_t blue16[] = {
    0x5555, 0xffff, 0x5555, 0xffff, 0x5555, 0xffff, 0x5555, 0xffff
 };
 
+/* Functionality to support multiple VGA frame buffers can be added easily,
+ * but is not supported at this moment because there is no need for two or
+ * more "classic" VGA adapters.  Multiple frame buffer drivers may be
+ * implemented and If we had implement it they would be named as "/dev/fb0",
+ * "/dev/fb1", "/dev/fb2" and so on.
+ */
 /*
  * fbvga device driver INITIALIZE entry point.
  */
@@ -75,10 +83,10 @@ rtems_device_driver frame_buffer_initialize(
    */
   status = rtems_io_register_name ("/dev/fb0", major, 0);
   if (status != RTEMS_SUCCESSFUL) {
-    printk("Error registering FBVGA device!\n");
+    printk("Error registering /dev/fb0 FBVGA framebuffer device!\n");
     rtems_fatal_error_occurred( status );
   }
-
+ 
   return RTEMS_SUCCESSFUL;
 }
 
@@ -91,10 +99,17 @@ rtems_device_driver frame_buffer_open(
   void                      *arg
 )
 {
-  ega_hwinit();
-  printk( "FBVGA open called.\n" );
-
-  return RTEMS_SUCCESSFUL;
+  if (pthread_mutex_trylock(&mutex)== 0){
+      /* restore previous state.  for VGA this means return to text mode.
+       * leave out if graphics hardware has been initialized in
+       * frame_buffer_initialize() 
+       */
+      ega_hwinit();
+      printk( "FBVGA open called.\n" );     
+      return RTEMS_SUCCESSFUL;
+  }
+  
+  return RTEMS_UNSATISFIED;
 }
 
 /*
@@ -106,15 +121,20 @@ rtems_device_driver frame_buffer_close(
   void                      *arg
 )
 {
-  ega_hwterm();
-  printk( "FBVGA close called.\n" );
+  if (pthread_mutex_unlock(&mutex) == 0){
+    /* restore previous state.  for VGA this means return to text mode.
+     * leave out if graphics hardware has been initialized in
+     * frame_buffer_initialize() */
+    ega_hwterm();
+    printk( "FBVGA close called.\n" );
+    return RTEMS_SUCCESSFUL;
+  }
 
-  return RTEMS_SUCCESSFUL;
+  return RTEMS_UNSATISFIED;
 }
 
 /*
  * fbvga device driver READ entry point.
- * Read characters from the PS/2 mouse.
  */
 rtems_device_driver frame_buffer_read(
   rtems_device_major_number  major,
@@ -122,18 +142,31 @@ rtems_device_driver frame_buffer_read(
   void                      *arg
 )
 {
+  /*printk( "FBVGA read called.\n" );*/
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-
-  printk( "FBVGA read called.\n" );
-
-  rw_args->bytes_moved = 0;
-
-  return RTEMS_SUCCESSFUL;
+  if ( (rw_args->offset >= fb_fix.smem_len) || (rw_args->count < 0) ){
+     return RTEMS_UNSATISFIED;
+  }
+  else
+  {
+	/*partial reading*/ 
+        if ( (rw_args->offset + rw_args->count) > fb_fix.smem_len ){
+	   rw_args->count = fb_fix.smem_len - rw_args->offset; 
+	   memcpy(rw_args->buffer, (const void *) (rw_args->offset + fb_fix.smem_start), rw_args->count);
+	   rw_args->bytes_moved = rw_args->count;
+	   return RTEMS_SUCCESSFUL;
+	}
+	/*best reading case*/
+	else{
+	   memcpy(rw_args->buffer, (const void *) (rw_args->offset + fb_fix.smem_start), rw_args->count);
+           rw_args->bytes_moved = rw_args->count;
+           return RTEMS_SUCCESSFUL;
+	}
+   }      
 }
 
 /*
  * frame_buffer device driver WRITE entry point.
- * Write characters to the PS/2 mouse.
  */
 rtems_device_driver frame_buffer_write(
   rtems_device_major_number  major,
@@ -141,11 +174,27 @@ rtems_device_driver frame_buffer_write(
   void                      *arg
 )
 {
+  /*printk( "FBVGA write called.\n" );*/
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-
-  printk( "FBVGA write called.\n" );
-  rw_args->bytes_moved = 0;
-  return RTEMS_SUCCESSFUL;
+  if ( (rw_args->offset >= fb_fix.smem_len) || (rw_args->count < 0) ){
+     return RTEMS_UNSATISFIED;
+  }
+  else
+  {
+	/*partial writing*/
+        if ( (rw_args->offset + rw_args->count) > fb_fix.smem_len ){
+	   rw_args->count = fb_fix.smem_len - rw_args->offset; 
+	   memcpy( (void *) (rw_args->offset + fb_fix.smem_start), rw_args->buffer, rw_args->count);
+	   rw_args->bytes_moved = rw_args->count;
+	   return RTEMS_SUCCESSFUL;
+	}
+	/* best writing case*/
+	else{
+	   memcpy( (void *) (rw_args->offset + fb_fix.smem_start), rw_args->buffer, rw_args->count);
+           rw_args->bytes_moved = rw_args->count;
+	   return RTEMS_SUCCESSFUL;
+	}
+   }         
 }
 
 static int get_fix_screen_info( struct fb_fix_screeninfo *info )
@@ -156,7 +205,7 @@ static int get_fix_screen_info( struct fb_fix_screeninfo *info )
 
 static int get_var_screen_info( struct fb_var_screeninfo *info )
 {
-  *info = fb_var;
+  *info =  fb_var;
   return 0;
 }
 
@@ -206,19 +255,20 @@ rtems_device_driver frame_buffer_control(
 
   switch( args->command ) {
     case FBIOGET_FSCREENINFO:
-      args->ioctl_return =  get_fix_screen_info( args->buffer );
+      args->ioctl_return =  get_fix_screen_info( ( struct fb_fix_screeninfo * ) args->buffer );
       break;
     case FBIOGET_VSCREENINFO:
-      args->ioctl_return =  get_var_screen_info( args->buffer );
+      args->ioctl_return =  get_var_screen_info( ( struct fb_var_screeninfo * ) args->buffer );
       break;
     case FBIOPUT_VSCREENINFO:
       /* not implemented yet*/
-      break;
+      args->ioctl_return = -1;
+      return RTEMS_UNSATISFIED;
     case FBIOGETCMAP:
-      args->ioctl_return =  get_palette( args->buffer );
+      args->ioctl_return =  get_palette( ( struct fb_cmap * ) args->buffer );
       break;
     case FBIOPUTCMAP:
-      args->ioctl_return =  set_palette( args->buffer );
+      args->ioctl_return =  set_palette( ( struct fb_cmap * ) args->buffer );
       break;
 
     default:
