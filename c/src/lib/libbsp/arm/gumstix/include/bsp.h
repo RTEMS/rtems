@@ -22,6 +22,7 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libchip/serial.h>
 
+
 /* What is the input clock freq in hertz */
 #define BSP_MAIN_FREQ 3686400      /* 3.6864 MHz */
 #define BSP_SLCK_FREQ   32768      /* 32.768 KHz */
@@ -41,6 +42,24 @@ static inline int32_t BSP_get_baud(void) {return 115200;}
 extern rtems_configuration_table Configuration;
 
 #define ST_PIMR_PIV	33	/* 33 ticks of the 32.768Khz clock ~= 1msec */
+
+#define outport_byte(port,val) *((unsigned char volatile*)(port)) = (val)
+#define inport_byte(port,val) (val) = *((unsigned char volatile*)(port))
+#define outport_word(port,val) *((unsigned short volatile*)(port)) = (val)
+#define inport_word(port,val) (val) = *((unsigned short volatile*)(port))
+
+struct rtems_bsdnet_ifconfig;
+extern int rtems_ne_driver_attach(struct rtems_bsdnet_ifconfig *, int);
+#define BSP_NE2000_NETWORK_DRIVER_NAME      "ne1"
+#define BSP_NE2000_NETWORK_DRIVER_ATTACH    rtems_ne_driver_attach
+
+#ifndef RTEMS_BSP_NETWORK_DRIVER_NAME
+#define RTEMS_BSP_NETWORK_DRIVER_NAME   BSP_NE2000_NETWORK_DRIVER_NAME
+#endif
+
+#ifndef RTEMS_BSP_NETWORK_DRIVER_ATTACH
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH BSP_NE2000_NETWORK_DRIVER_ATTACH
+#endif
 
 #ifdef __cplusplus
 }

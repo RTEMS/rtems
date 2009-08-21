@@ -40,6 +40,17 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
 libbsp_a_SOURCES += console/uarts.c ../../shared/console.c
 #abort
 libbsp_a_SOURCES += ../shared/abort/abort.c
+#framebuffer
+if ON_SKYEYE
+libbsp_a_SOURCES += fb/fb.c
+if HAS_NETWORKING
+rtl8019_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+noinst_PROGRAMS += rtl8019.rel
+rtl8019_rel_SOURCES = rtl8019/rtl8019.c rtl8019/wd80x3.h
+rtl8019_rel_CPPFLAGS = $(AM_CPPFLAGS) $(rtl8019_CPPFLAGS)
+rtl8019_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+endif
   
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
@@ -47,6 +58,10 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/ffuart.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/pmc.rel
+
+if HAS_NETWORKING
+libbsp_a_LIBADD += rtl8019.rel
+endif
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

@@ -21,6 +21,7 @@ RTEMS_BSPOPTS_HELP([ON_SKYEYE],
  simulator.  Speed up the clock ticks while the idle task is running so
  time spent in the idle task is minimized.  This significantly reduces
  the wall time required to execute the RTEMS test suites.])
+AM_CONDITIONAL(ON_SKYEYE,test "$ON_SKYEYE" = "1")
 
 RTEMS_CHECK_NETWORKING 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")

@@ -12,7 +12,7 @@
 
 mmu_sect_map_t mem_map[] = {
 /*  <phys addr>  <virt addr> <size> <flags> */
-  {0x40000000, 0x40000000,  20,   MMU_CACHE_NONE},  /*Map I/O*/
+  {0x40000000, 0x40000000,  1216,   MMU_CACHE_NONE},  /*Map I/O*/
   {0xA0000000, 0x00000000,   1,   MMU_CACHE_NONE},  /*sram*/
   {0xA0000000, 0xA0000000,  64,   MMU_CACHE_WBACK}, /* SDRAM */    
   {0x00000000, 0x00000000,   0,   0}                /* The end */
