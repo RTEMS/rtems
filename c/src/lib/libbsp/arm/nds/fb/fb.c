@@ -23,8 +23,6 @@
 
 #include <rtems/fb.h>
 
-extern int get_palette( struct fb_cmap * );
-extern int set_palette( struct fb_cmap * );
 
 /*
  * screen information for the driver (fb0).
@@ -182,10 +180,10 @@ frame_buffer_control (rtems_device_major_number major,
     args->ioctl_return = 0;
     break;
   case FBIOGETCMAP:
-    args->ioctl_return = get_palette( (struct fb_cmap *) args->buffer );
+    args->ioctl_return = 0;     /* XXX */
     break;
   case FBIOPUTCMAP:
-    args->ioctl_return = set_palette( (struct fb_cmap *) args->buffer );
+    args->ioctl_return = 0;     /* XXX */
     break;
 
     /* no break on purpose */

@@ -1,3 +1,8 @@
+2009-08-21	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* nds/fb/fb.c: took off get_screen_info() and set_screen_info() extern
+	references
+
 2009-08-10	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* fb/fb.c: function calls renamed; defined references to the extern
