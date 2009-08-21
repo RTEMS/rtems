@@ -31,7 +31,7 @@ void test2()
   uint32_t      task;
   uint32_t      block;
   uint32_t      task_count = 0;
-  rtems_id            removed_ids[TASK_ALLOCATION_SIZE * 2];
+  rtems_id      removed_ids[TASK_ALLOCATION_SIZE * 2];
 
   char               c1 = 'a';
   char               c2 = 'a';
