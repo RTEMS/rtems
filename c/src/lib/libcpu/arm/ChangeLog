@@ -1,3 +1,9 @@
+2009-08-22	Xi Yang <hiyangxi@gmail.com>
+
+	* pxa255/include/pxa255.h: Add constants for LCD, Network, and Timer.
+	* pxa255/irq/bsp_irq_init.c, pxa255/irq/irq.c,
+	pxa255/irq/irq.h: Change to dummy_handler().
+
 2009-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* s3c2400/clock/clockdrv.c, s3c24xx/clock/clockdrv.c: Add stubs for

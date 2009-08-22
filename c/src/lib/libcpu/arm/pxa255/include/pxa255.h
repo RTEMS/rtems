@@ -27,6 +27,7 @@ typedef unsigned int word_t;
 #define XSCALE_IRQ_OS_TIMER     26
 #define XSCALE_IRQ_PMU          12
 #define XSCALE_IRQ_STUART       20
+#define XSCALE_IRQ_NETWORK      16
 
 #define PMU_IRQ             12
 #define CCNT_IRQ_ENABLE     1UL << 6
@@ -106,4 +107,24 @@ typedef unsigned int word_t;
 #define PMC_PMNC_CCD (0x01 << 3)
 #define PMC_PMNC_PCD (0x01 << 4)
 
+/*LCD*/
+#define LCCR0  (*(volatile word_t *)(0x44000000))
+#define LCCR1  (*(volatile word_t *)(0x44000004))
+#define LCCR2  (*(volatile word_t *)(0x44000008))
+#define LCCR3  (*(volatile word_t *)(0x4400000C))
+
+#define FDADR0  (*(volatile word_t *)(0x44000200))
+#define FSADR0  (*(volatile word_t *)(0x44000204))
+#define FIDR0   (*(volatile word_t *)(0x44000208))
+#define LDCMD0  (*(volatile word_t *)(0x4400020C))
+
+#define FDADR1  (*(volatile word_t *)(0x44000210))
+#define FSADR1  (*(volatile word_t *)(0x44000214))
+#define FIDR1   (*(volatile word_t *)(0x44000218))
+#define LDCMD1  (*(volatile word_t *)(0x4400021C))
+
+#define LCCR0_ENB       0x00000001
+#define LCCR1_PPL       0x000003FF
+#define LCCR2_LPP       0x000003FF
+#define LCCR3_BPP       0x07000000
 #endif

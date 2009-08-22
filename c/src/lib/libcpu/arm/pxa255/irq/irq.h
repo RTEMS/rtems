@@ -27,6 +27,7 @@ extern "C" {
 
 extern void default_int_handler();
 extern void (*IRQ_table[PRIMARY_IRQS])(uint32_t vector);
+extern void dummy_handler(uint32_t vector);
 
 
 

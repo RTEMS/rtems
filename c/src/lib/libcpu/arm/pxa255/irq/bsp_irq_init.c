@@ -13,7 +13,10 @@
 #include <bsp.h>
 #include <pxa255.h>
 
-extern void default_int_handler(void);
+void dummy_handler(uint32_t vector)
+{
+  printk("I am dummy handler\n");
+}
 
 void (*IRQ_table[PRIMARY_IRQS])(uint32_t vector);
 
@@ -27,7 +30,7 @@ void BSP_rtems_irq_mngt_init(void)
 
   /* Initialize the vector table contents with default handler */
   for (i=0; i<PRIMARY_IRQS; i++) {
-    IRQ_table[i] = default_int_handler;
+    IRQ_table[i] = dummy_handler;
   }
 
   /* disable all interrupts */

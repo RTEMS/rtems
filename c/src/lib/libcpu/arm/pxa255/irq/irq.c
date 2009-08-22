@@ -43,7 +43,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * interrupt number .  We 
      * convert it to a long word offset to get source's vector register 
      */
-        if (IRQ_table[irq->name]!= default_int_handler) {
+        if (IRQ_table[irq->name] != dummy_handler) {
         return 0;
 	}
     
@@ -87,7 +87,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Check if the handler is actually connected. If not, issue an error.
      */
-    if (IRQ_table[irq->name]!= irq->hdl) {
+    if (IRQ_table[irq->name] != irq->hdl) {
       return 0;
     }
     _CPU_ISR_Disable(level);
@@ -107,7 +107,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * restore the default irq value
      */
-    IRQ_table[irq->name] = default_int_handler;
+    IRQ_table[irq->name] = dummy_handler;
     
     _CPU_ISR_Enable(level);
 
