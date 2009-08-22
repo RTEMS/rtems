@@ -1,3 +1,8 @@
+2009-08-22	Xi Yang <hiyangxi@gmail.com>
+
+	* fb/fb.c: Register correct device name.
+	* startup/bspstart.c: Fix warnings.
+
 2009-08-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h: Eliminate BSPs defining NUMBER_OF_TERMIOS_PORTS.

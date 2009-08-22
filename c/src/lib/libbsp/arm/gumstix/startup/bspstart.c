@@ -14,7 +14,8 @@
 #include <pxa255.h>
 
 /* Function prototypes */
-extern void rtems_irq_mngt_init(void);
+void rtems_exception_init_mngt(void);
+void  rtems_irq_mngt_init(void);
 
 /*
  *
