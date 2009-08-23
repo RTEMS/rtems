@@ -1,3 +1,8 @@
+2009-08-22	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* bsp_howto/framebuffer.t: documented the improvements made to
+	read/write
+
 2009-08-21	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* bsp_howto/framebuffer.t: Updated the frame buffer documentation.

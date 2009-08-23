@@ -150,9 +150,7 @@ rtems_device_driver frame_buffer_close(
 
 The @code{frame_buffer_read()} is invoked from a @code{read()} operation
 on the frame buffer device.
-Read functions should allow normal and partial reading at the end of frame buffer memory,
-returning RTEMS_UNSATISFIED if trying to read beyond the frame buffer
-memory or a negative number of bytes.  
+Read functions should allow normal and partial reading at the end of frame buffer memory.  
 This method returns RTEMS_SUCCESSFUL when the device is successfully read from:
 
 @example
@@ -163,27 +161,10 @@ rtems_device_driver frame_buffer_read(
   void                      *arg
 )
 @{
-  /*printk( "FBVGA read called.\n" );*/
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  if ( (rw_args->offset >= fb_fix.smem_len) || (rw_args->count < 0) )@{
-     return RTEMS_UNSATISFIED;
-  @}
-  else
-  @{
-	/*partial reading*/ 
-        if ( (rw_args->offset + rw_args->count) > fb_fix.smem_len )@{
-	   rw_args->count = fb_fix.smem_len - rw_args->offset; 
-	   memcpy(rw_args->buffer, (const void *) (rw_args->offset + fb_fix.smem_start), rw_args->count);
-	   rw_args->bytes_moved = rw_args->count;
-	   return RTEMS_SUCCESSFUL;
-	@}
-	/*best reading case*/
-	else@{
-	   memcpy(rw_args->buffer, (const void *) (rw_args->offset + fb_fix.smem_start), rw_args->count);
-           rw_args->bytes_moved = rw_args->count;
-           return RTEMS_SUCCESSFUL;
-	@}
-   @}      
+  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
+  memcpy(rw_args->buffer, (const void *) (fb_fix.smem_start + rw_args->offset), rw_args->bytes_moved);
+  return RTEMS_SUCCESSFUL;   
 @}
 @end group
 @end example
@@ -206,27 +187,10 @@ rtems_device_driver frame_buffer_write(
   void                      *arg
 )
 @{
-  /*printk( "FBVGA write called.\n" );*/
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  if ( (rw_args->offset >= fb_fix.smem_len) || (rw_args->count < 0) )@{
-     return RTEMS_UNSATISFIED;
-  @}
-  else
-  @{
-	/*partial writing*/
-        if ( (rw_args->offset + rw_args->count) > fb_fix.smem_len )@{
-	   rw_args->count = fb_fix.smem_len - rw_args->offset; 
-	   memcpy( (void *) (rw_args->offset + fb_fix.smem_start), rw_args->buffer, rw_args->count);
-	   rw_args->bytes_moved = rw_args->count;
-	   return RTEMS_SUCCESSFUL;
-	@}
-	/* best writing case*/
-	else@{
-	   memcpy( (void *) (rw_args->offset + fb_fix.smem_start), rw_args->buffer, rw_args->count);
-           rw_args->bytes_moved = rw_args->count;
-	   return RTEMS_SUCCESSFUL;
-	@}
-   @}         
+  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
+  memcpy( (void *) (fb_fix.smem_start + rw_args->offset), rw_args->buffer, rw_args->bytes_moved);
+  return RTEMS_SUCCESSFUL;          
 @}
 @end group
 @end example
