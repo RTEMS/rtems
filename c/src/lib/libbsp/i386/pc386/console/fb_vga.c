@@ -142,27 +142,10 @@ rtems_device_driver frame_buffer_read(
   void                      *arg
 )
 {
-  /*printk( "FBVGA read called.\n" );*/
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  if ( (rw_args->offset >= fb_fix.smem_len) || (rw_args->count < 0) ){
-     return RTEMS_UNSATISFIED;
-  }
-  else
-  {
-	/*partial reading*/ 
-        if ( (rw_args->offset + rw_args->count) > fb_fix.smem_len ){
-	   rw_args->count = fb_fix.smem_len - rw_args->offset; 
-	   memcpy(rw_args->buffer, (const void *) (rw_args->offset + fb_fix.smem_start), rw_args->count);
-	   rw_args->bytes_moved = rw_args->count;
-	   return RTEMS_SUCCESSFUL;
-	}
-	/*best reading case*/
-	else{
-	   memcpy(rw_args->buffer, (const void *) (rw_args->offset + fb_fix.smem_start), rw_args->count);
-           rw_args->bytes_moved = rw_args->count;
-           return RTEMS_SUCCESSFUL;
-	}
-   }      
+  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
+  memcpy(rw_args->buffer, (const void *) (fb_fix.smem_start + rw_args->offset), rw_args->bytes_moved);
+  return RTEMS_SUCCESSFUL;    
 }
 
 /*
@@ -174,27 +157,10 @@ rtems_device_driver frame_buffer_write(
   void                      *arg
 )
 {
-  /*printk( "FBVGA write called.\n" );*/
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  if ( (rw_args->offset >= fb_fix.smem_len) || (rw_args->count < 0) ){
-     return RTEMS_UNSATISFIED;
-  }
-  else
-  {
-	/*partial writing*/
-        if ( (rw_args->offset + rw_args->count) > fb_fix.smem_len ){
-	   rw_args->count = fb_fix.smem_len - rw_args->offset; 
-	   memcpy( (void *) (rw_args->offset + fb_fix.smem_start), rw_args->buffer, rw_args->count);
-	   rw_args->bytes_moved = rw_args->count;
-	   return RTEMS_SUCCESSFUL;
-	}
-	/* best writing case*/
-	else{
-	   memcpy( (void *) (rw_args->offset + fb_fix.smem_start), rw_args->buffer, rw_args->count);
-           rw_args->bytes_moved = rw_args->count;
-	   return RTEMS_SUCCESSFUL;
-	}
-   }         
+  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
+  memcpy( (void *) (fb_fix.smem_start + rw_args->offset), rw_args->buffer, rw_args->bytes_moved);
+  return RTEMS_SUCCESSFUL;       
 }
 
 static int get_fix_screen_info( struct fb_fix_screeninfo *info )

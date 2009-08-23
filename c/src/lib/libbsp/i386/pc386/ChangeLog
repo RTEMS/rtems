@@ -1,3 +1,7 @@
+2009-08-22	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* console/fb_vga.c: improved read/write
+
 2009-08-21	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* pc386/console/fb_vga.c: added read/write functionality; added thread
