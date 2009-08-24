@@ -1,3 +1,7 @@
+2009-08-24      Christian Mauderer <christian.mauderer@embedded-brains.de>
+
+	* rtems.adb: Use rtems_debug_is_enabled().
+
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems.adb: Use public API not _TOD_Microseconds_per_tick.

@@ -2154,7 +2154,7 @@ package body RTEMS is
       function Debug_Is_Enabled_Base (
          Level : RTEMS.Debug_Set
       )  return RTEMS.Boolean;
-      pragma Import (C, Debug_Is_Enabled_Base, "_Debug_Is_enabled");
+      pragma Import (C, Debug_Is_Enabled_Base, "rtems_debug_is_enabled");
    begin
 
       return Debug_Is_Enabled_Base (Level);
