@@ -196,14 +196,14 @@ void bsp_start(void)
 
 /*
  *
- *  _Thread_Idle_body
+ *  bsp_idle_thread
  *
  *  Replaces the one in c/src/exec/score/src/threadidlebody.c
  *  The MSR[POW] bit is set to put the CPU into the low power mode
  *  defined in HID0.  HID0 is set during starup in start.S.
  *
  */
-void *_Thread_Idle_body( uintptr_t ignored )
+void *bsp_idle_thread( uintptr_t ignored )
 {
   for(;;) {
     asm volatile(
