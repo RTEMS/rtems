@@ -116,6 +116,14 @@ extern "C" {
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
 
+#if ( CPU_HARDWARE_FP == TRUE ) && !defined( __mcoldfire__ )
+  #if defined( __mc68060__ )
+    #define M68K_FP_STATE_SIZE 16
+  #else
+    #define M68K_FP_STATE_SIZE 216
+  #endif
+#endif
+
 #ifndef ASM
 
 /* structures */
@@ -252,12 +260,6 @@ typedef struct {
      *  FP context save area for the M68881/M68882 and 68060 numeric coprocessors.
      */
 
-    #if defined( __mc68060__ )
-      #define M68K_FP_STATE_SIZE 16
-    #else
-      #define M68K_FP_STATE_SIZE 216
-    #endif
-
     typedef struct {
       /*
        * M68K_FP_STATE_SIZE bytes for FSAVE/FRESTORE
@@ -282,7 +284,7 @@ typedef struct {
          *(--(_fp_context)) = 0; \
          *(_fp_area) = (void *)(_fp_context); \
        }
-    #endif
+  #endif
 #endif
 
 /*
