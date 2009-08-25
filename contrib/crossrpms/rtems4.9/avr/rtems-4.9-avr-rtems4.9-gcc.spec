@@ -60,7 +60,7 @@ Summary:      	avr-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	22%{?dist}
+Release:      	23%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -100,7 +100,7 @@ BuildRequires:	rtems-4.9-avr-rtems4.9-binutils
 
 Requires:	rtems-4.9-gcc-common
 Requires:	rtems-4.9-avr-rtems4.9-binutils
-Requires:	rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-22%{?dist}
+Requires:	rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-23%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -113,7 +113,7 @@ Requires:	rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-22%{?dist}
 
 %if "%{gcc_version}" == "4.3.2"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gcc-core-4.3.2-rtems4.9-20081214.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gcc-core-4.3.2-rtems4.9-20090825.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
@@ -426,7 +426,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.9-avr-rtems4.9-binutils
-# Requires:       rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-22%{?dist}
+# Requires:       rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-23%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -543,7 +543,7 @@ Summary:      	C Library (newlib) for avr-rtems4.9
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        22%{?dist}
+Release:        23%{?dist}
 
 Requires:	rtems-4.9-newlib-common
 
@@ -563,7 +563,7 @@ Newlib C Library for avr-rtems4.9.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        22%{?dist}
+Release:        23%{?dist}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
