@@ -127,7 +127,6 @@ SECTIONS
     *(.shdata)
     *(.rodata*)
     *(.rodata1)
-    *.(eh_frame)
     *(.descriptors)
     *(rom_ver)
     _erodata = .;

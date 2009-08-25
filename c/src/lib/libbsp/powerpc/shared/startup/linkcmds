@@ -106,7 +106,7 @@ _SDA2_BASE_ = __SDATA2_START__ + 0x8000;
                          */
                      . += 1;
                     } >CODE
-  .eh_frame	  : { *.(eh_frame)		} >CODE
+  .eh_frame	  : { *(.eh_frame)		} >CODE
 
   /* NOTE: if the BSP uses page tables, the correctness of
    *       '_etext' (and __DATA_START__) is CRUCIAL - otherwise,

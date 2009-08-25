@@ -1,3 +1,9 @@
+2009-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* ep1a/startup/linkcmds, mbx8xx/startup/linkcmds,
+	score603e/startup/linkcmds, shared/startup/linkcmds,
+	ss555/startup/linkcmds: Fix typos in .eh_frame sections.
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/flash/spansionFlash.c: Convert calls to legacy routine
