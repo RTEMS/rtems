@@ -22,33 +22,40 @@ int devFS_evaluate_path(
   rtems_filesystem_location_info_t  *pathloc
 )
 {
-    int                   i;
-    rtems_device_name_t  *device_name_table;
+  int                   i;
+  rtems_device_name_t  *device_name_table;
 
-    /* see if 'flags' is valid */
-    if ( !rtems_libio_is_valid_perms( flags ) ) {
-        assert( 0 );
-        rtems_set_errno_and_return_minus_one( EIO );
-    }
+  /* see if 'flags' is valid */
+  if ( !rtems_libio_is_valid_perms( flags ) ) {
+     assert( 0 );
+     rtems_set_errno_and_return_minus_one( EIO );
+  }
 
-    /* get the device name table */
-    device_name_table = (rtems_device_name_t *)pathloc->node_access;
-    if (!device_name_table)
-        rtems_set_errno_and_return_minus_one( EFAULT );
+  /* get the device name table */
+  device_name_table = (rtems_device_name_t *)pathloc->node_access;
+  if (!device_name_table)
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
-    for (i = 0; i < rtems_device_table_size; i++){
-        if ((device_name_table[i].device_name) && 
-		(strncmp(pathname, device_name_table[i].device_name, pathnamelen) == 0)){
-            /* find the device, set proper values */
-            pathloc->node_access = (void *)&device_name_table[i];
-            pathloc->handlers = &devFS_file_handlers;
-            pathloc->ops = &devFS_ops;
-            pathloc->mt_entry = rtems_filesystem_root.mt_entry;
-            return 0;
-        }
-    }
-    /* no such file or directory */
-    rtems_set_errno_and_return_minus_one( ENOENT );
+  for (i = 0; i < rtems_device_table_size; i++) {
+    if (!device_name_table[i].device_name)
+      continue;
+
+    if (strncmp(pathname, device_name_table[i].device_name, pathnamelen) != 0)
+      continue;
+
+    if (device_name_table[i].device_name[pathnamelen] != '\0')
+      continue;
+
+    /* find the device, set proper values */
+    pathloc->node_access = (void *)&device_name_table[i];
+    pathloc->handlers = &devFS_file_handlers;
+    pathloc->ops = &devFS_ops;
+    pathloc->mt_entry = rtems_filesystem_root.mt_entry;
+    return 0;
+  }
+
+  /* no such file or directory */
+  rtems_set_errno_and_return_minus_one( ENOENT );
 }
 
 

@@ -1,3 +1,9 @@
+2009-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libfs/src/devfs/devfs_eval.c: Fix bug where use of strncmp() resulted
+	in a partial match being considered a full name match. On ERC32,
+	looking for /dev/console would match /dev/console_b first.
+
 2009-08-21	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* Makefile.am, preinstall.am, libmisc/Makefile.am: Changed the name of
