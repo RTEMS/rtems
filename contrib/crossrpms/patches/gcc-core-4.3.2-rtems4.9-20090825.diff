@@ -1,0 +1,139 @@
+diff -Naur gcc-4.3.2.orig/configure gcc-4.3.2/configure
+--- gcc-4.3.2.orig/configure	2008-02-02 04:29:30.000000000 +0100
++++ gcc-4.3.2/configure	2009-08-25 07:05:20.000000000 +0200
+@@ -2185,6 +2185,7 @@
+     noconfigdirs="$noconfigdirs target-newlib target-libiberty target-libgloss ${libgcj} target-libmudflap"
+     ;;
+   *-*-rtems*)
++    skipdirs="$skipdirs target-libiberty"
+     noconfigdirs="$noconfigdirs target-libgloss ${libgcj}"
+     ;;
+     # The tpf target doesn't support gdb yet.
+@@ -5829,7 +5830,7 @@
+        # to it.  This is right: we don't want to search that directory
+        # for binaries, but we want the header files in there, so add
+        # them explicitly.
+-       FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -isystem $$r/$(HOST_SUBDIR)/gcc/include'
++       FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -isystem $$r/$(HOST_SUBDIR)/gcc/include -isystem $$r/$(HOST_SUBDIR)/gcc/include-fixed'
+ 
+        # Someone might think of using the pre-installed headers on
+        # Canadian crosses, in case the installed compiler is not fully
+diff -Naur gcc-4.3.2.orig/configure.ac gcc-4.3.2/configure.ac
+--- gcc-4.3.2.orig/configure.ac	2008-02-02 04:29:30.000000000 +0100
++++ gcc-4.3.2/configure.ac	2009-08-25 07:05:20.000000000 +0200
+@@ -462,6 +462,7 @@
+     noconfigdirs="$noconfigdirs target-newlib target-libiberty target-libgloss ${libgcj} target-libmudflap"
+     ;;
+   *-*-rtems*)
++    skipdirs="$skipdirs target-libiberty"
+     noconfigdirs="$noconfigdirs target-libgloss ${libgcj}"
+     ;;
+     # The tpf target doesn't support gdb yet.
+@@ -2340,7 +2341,7 @@
+        # to it.  This is right: we don't want to search that directory
+        # for binaries, but we want the header files in there, so add
+        # them explicitly.
+-       FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -isystem $$r/$(HOST_SUBDIR)/gcc/include'
++       FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -isystem $$r/$(HOST_SUBDIR)/gcc/include -isystem $$r/$(HOST_SUBDIR)/gcc/include-fixed'
+ 
+        # Someone might think of using the pre-installed headers on
+        # Canadian crosses, in case the installed compiler is not fully
+diff -Naur gcc-4.3.2.orig/gcc/config/arm/rtems-elf.h gcc-4.3.2/gcc/config/arm/rtems-elf.h
+--- gcc-4.3.2.orig/gcc/config/arm/rtems-elf.h	2008-02-06 08:33:26.000000000 +0100
++++ gcc-4.3.2/gcc/config/arm/rtems-elf.h	2009-08-25 07:05:20.000000000 +0200
+@@ -43,4 +43,3 @@
+  *  with how this used to be defined.
+  */
+ #undef LINK_GCC_C_SEQUENCE_SPEC
+-#define LINK_GCC_C_SEQUENCE_SPEC "%G %L"
+diff -Naur gcc-4.3.2.orig/gcc/config/avr/t-rtems gcc-4.3.2/gcc/config/avr/t-rtems
+--- gcc-4.3.2.orig/gcc/config/avr/t-rtems	2004-11-23 04:44:03.000000000 +0100
++++ gcc-4.3.2/gcc/config/avr/t-rtems	2009-08-25 07:05:35.000000000 +0200
+@@ -1,3 +1,4 @@
+ # Multilibs for avr RTEMS targets.
+ 
+-# ATM, this is just a stub
++# RTEMS uses _exit from newlib
++LIB1ASMFUNCS := $(filter-out _exit,$(LIB1ASMFUNCS))
+diff -Naur gcc-4.3.2.orig/gcc/config/m68k/t-rtems gcc-4.3.2/gcc/config/m68k/t-rtems
+--- gcc-4.3.2.orig/gcc/config/m68k/t-rtems	2008-02-16 06:52:54.000000000 +0100
++++ gcc-4.3.2/gcc/config/m68k/t-rtems	2009-08-25 07:05:20.000000000 +0200
+@@ -4,5 +4,6 @@
+ 		     || MLIB == "5206" \
+ 		     || MLIB == "5208" \
+ 		     || MLIB == "5307" \
++		     || MLIB == "5329" \
+ 		     || MLIB == "5407" \
+ 		     || MLIB == "5475")
+diff -Naur gcc-4.3.2.orig/gcc/config/mips/elf.h gcc-4.3.2/gcc/config/mips/elf.h
+--- gcc-4.3.2.orig/gcc/config/mips/elf.h	2007-08-02 12:49:31.000000000 +0200
++++ gcc-4.3.2/gcc/config/mips/elf.h	2009-08-25 07:05:20.000000000 +0200
+@@ -48,6 +48,4 @@
+ #undef  ENDFILE_SPEC
+ #define ENDFILE_SPEC "crtend%O%s crtn%O%s"
+ 
+-#define NO_IMPLICIT_EXTERN_C 1
+-
+ #define HANDLE_PRAGMA_PACK_PUSH_POP 1
+diff -Naur gcc-4.3.2.orig/gcc/config/rs6000/rtems.h gcc-4.3.2/gcc/config/rs6000/rtems.h
+--- gcc-4.3.2.orig/gcc/config/rs6000/rtems.h	2007-08-02 12:49:31.000000000 +0200
++++ gcc-4.3.2/gcc/config/rs6000/rtems.h	2009-08-25 07:05:20.000000000 +0200
+@@ -49,8 +49,18 @@
+ %{mcpu=604:  %{!Dppc*: %{!Dmpc*: -Dmpc604}  } } \
+ %{mcpu=750:  %{!Dppc*: %{!Dmpc*: -Dmpc750}  } } \
+ %{mcpu=821:  %{!Dppc*: %{!Dmpc*: -Dmpc821}  } } \
+-%{mcpu=860:  %{!Dppc*: %{!Dmpc*: -Dmpc860}  } }" 
++%{mcpu=860:  %{!Dppc*: %{!Dmpc*: -Dmpc860}  } } \
++%{mcpu=8540: %{!Dppc*: %{!Dmpc*: -Dppc8540}  } }" 
+ 
+ #undef  SUBSUBTARGET_EXTRA_SPECS
+ #define SUBSUBTARGET_EXTRA_SPECS \
+   { "cpp_os_rtems",		CPP_OS_RTEMS_SPEC }
++
++#undef SUBSUBTARGET_OVERRIDE_OPTIONS
++#define SUBSUBTARGET_OVERRIDE_OPTIONS		\
++  do {						\
++    if (TARGET_E500)				\
++      {						\
++	rs6000_float_gprs = 1;			\
++      }						\
++  } while(0)
+diff -Naur gcc-4.3.2.orig/gcc/config/rs6000/t-rtems gcc-4.3.2/gcc/config/rs6000/t-rtems
+--- gcc-4.3.2.orig/gcc/config/rs6000/t-rtems	2005-05-27 09:54:06.000000000 +0200
++++ gcc-4.3.2/gcc/config/rs6000/t-rtems	2009-08-25 07:05:20.000000000 +0200
+@@ -1,17 +1,15 @@
+ # Multilibs for powerpc RTEMS targets.
+ 
+ MULTILIB_OPTIONS	= \
+-mcpu=403/mcpu=505/mcpu=601/mcpu=603e/mcpu=604/mcpu=860/mcpu=7400 \
++mcpu=403/mcpu=505/mcpu=601/mcpu=603e/mcpu=604/mcpu=860/mcpu=7400/mcpu=8540 \
+ Dmpc8260 \
+ msoft-float
+ 
+ MULTILIB_DIRNAMES	= \
+-m403 m505 m601 m603e m604 m860 m7400 \
++m403 m505 m601 m603e m604 m860 m7400 m8540 \
+ mpc8260 \
+ nof
+ 
+-MULTILIB_EXTRA_OPTS	= mrelocatable-lib mno-eabi mstrict-align
+-
+ # MULTILIB_MATCHES	= ${MULTILIB_MATCHES_FLOAT}
+ MULTILIB_MATCHES	=
+ MULTILIB_MATCHES  	+= ${MULTILIB_MATCHES_ENDIAN}
+@@ -31,6 +29,10 @@
+ # Map 750 to .
+ MULTILIB_MATCHES	+= mcpu?750=
+ 
++# Map e500, 8548 to 8540
++MULTILIB_MATCHES	+= mcpu?8540=mcpu?e500
++MULTILIB_MATCHES	+= mcpu?8540=mcpu?8548
++
+ # Soft-float only, default implies msoft-float
+ # NOTE: Must match with MULTILIB_MATCHES_FLOAT and MULTILIB_MATCHES
+ MULTILIB_SOFTFLOAT_ONLY = \
+@@ -64,3 +66,4 @@
+ MULTILIB_EXCEPTIONS += *mcpu=750/Dmpc*
+ MULTILIB_EXCEPTIONS += *mcpu=860/Dmpc*
+ MULTILIB_EXCEPTIONS += *mcpu=7400/Dmpc*
++MULTILIB_EXCEPTIONS += *mcpu=8540/Dmpc*
