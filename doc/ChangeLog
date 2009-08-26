@@ -1,3 +1,7 @@
+2009-08-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* user/conf.t: Change stack allocator signature.
+
 2009-08-22	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* bsp_howto/framebuffer.t: documented the improvements made to

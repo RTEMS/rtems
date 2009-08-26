@@ -928,7 +928,7 @@ typedef struct @{
   void                          (*idle_task)( void );
   uint32_t                        idle_task_stack_size;
   uint32_t                        interrupt_stack_size;
-  void *                        (*stack_allocate_hook)( uint32_t );
+  void *                        (*stack_allocate_hook)( size_t );
   void                          (*stack_free_hook)( void * );
   bool                            do_zero_of_workspace;
   uint32_t                        maximum_drivers;
