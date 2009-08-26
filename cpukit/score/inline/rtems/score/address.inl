@@ -41,7 +41,7 @@
  */
 #include <rtems/bspIo.h>
 RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
-  void       *base,
+  const void *base,
   intptr_t    offset
 )
 {
@@ -61,7 +61,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
  */
 
 RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
-  void       *base,
+  const void *base,
   intptr_t    offset
 )
 {
@@ -82,11 +82,11 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
  *         dependent on an addresses being thirty two bits.
  */
 RTEMS_INLINE_ROUTINE int32_t _Addresses_Subtract (
-  void *left,
-  void *right
+  const void *left,
+  const void *right
 )
 {
-  return ((char *) left - (char *) right);
+  return (int32_t) ((const char *) left - (const char *) right);
 }
 
 /** @brief Is Address Aligned
@@ -101,7 +101,7 @@ RTEMS_INLINE_ROUTINE int32_t _Addresses_Subtract (
  *          false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned (
-  void *address
+  const void *address
 )
 {
 #if (CPU_ALIGNMENT == 0)
@@ -127,9 +127,9 @@ RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned (
  *  memory range specified and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Addresses_Is_in_range (
-  void *address,
-  void *base,
-  void *limit
+  const void *address,
+  const void *base,
+  const void *limit
 )
 {
   return (address >= base && address <= limit);
