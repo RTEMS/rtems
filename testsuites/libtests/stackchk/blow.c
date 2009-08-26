@@ -30,7 +30,7 @@ b();
 
  area = (unsigned char *)_Thread_Executing->Start.Initial_stack.area;
 
- low  = (volatile uint32_t   *) (area + HEAP_OVERHEAD);
+ low  = (volatile uint32_t   *) (area + HEAP_LAST_BLOCK_OVERHEAD);
  high = (volatile uint32_t   *)
             (area + _Thread_Executing->Start.Initial_stack.size - 16);
 

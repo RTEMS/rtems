@@ -23,10 +23,10 @@
 #include <rtems/dumpbuf.h>
 
 #define TEST_HEAP_SIZE 1024
-uint32_t TestHeapMemory[TEST_HEAP_SIZE];
+unsigned TestHeapMemory[TEST_HEAP_SIZE];
 Heap_Control TestHeap;
 
-void test_heap_init(void)
+static void test_heap_init(void)
 {
   memset( TestHeapMemory, '\0', sizeof(TestHeapMemory) );
   _Heap_Initialize( &TestHeap, TestHeapMemory, sizeof(TestHeapMemory), 0 );
@@ -34,7 +34,7 @@ void test_heap_init(void)
 
 void test_heap_walk_body( int source, bool do_dump );
 
-void test_heap_walk( int source )
+static void test_heap_walk( int source )
 {
   test_heap_walk_body( source, true );
   test_heap_walk_body( source, false );
@@ -42,7 +42,7 @@ void test_heap_walk( int source )
 
 void test_heap_walk_body( int source, bool do_dump )
 {
-  int i, j, original;
+  unsigned i, j, original;
 
   _Heap_Walk( &TestHeap, source, do_dump );
 
@@ -55,7 +55,7 @@ void test_heap_walk_body( int source, bool do_dump )
       continue;
 
     /* mark it free -- may or may not have already been */
-    TestHeapMemory[i] &= ~0x01;
+    TestHeapMemory[i] &= ~0x01U;
     _Heap_Walk( &TestHeap, source, do_dump );
 
     /* mark it used -- may or may not have already been */
@@ -64,7 +64,7 @@ void test_heap_walk_body( int source, bool do_dump )
 
     /* try values of 2-7 in the last three bits -- push alignment issues */
     for (j=2 ; j<=7 ; j++) {
-      TestHeapMemory[i] = (TestHeapMemory[i] & ~0x7) | j;
+      TestHeapMemory[i] = (TestHeapMemory[i] & ~0x7U) | j;
       _Heap_Walk( &TestHeap, source, do_dump );
     }
 
@@ -81,14 +81,14 @@ void test_heap_walk_body( int source, bool do_dump )
   }
 }
 
-void test_walk_freshly_initialized(void)
+static void test_walk_freshly_initialized(void)
 {
   puts( "Walk freshly initialized heap" );
   test_heap_init();
   test_heap_walk(1);
 }
 
-void test_negative_source_value(void)
+static void test_negative_source_value(void)
 {
   /*
    * Passing a negative value for source so that
@@ -99,7 +99,7 @@ void test_negative_source_value(void)
   test_heap_walk( -1 );
 }
 
-void test_prev_block_flag_check(void)
+static void test_prev_block_flag_check(void)
 {
   /* Calling heapwalk without initialising the heap.
    * Covers line 80 and 85 on heapwalk.
@@ -109,7 +109,7 @@ void test_prev_block_flag_check(void)
   test_heap_walk( 1 );
 }
 
-void test_not_aligned(void)
+static void test_not_aligned(void)
 {
   /*
    * Hack to get to the error case where the blocks are
@@ -123,7 +123,7 @@ void test_not_aligned(void)
   test_heap_walk( -1 );
 }
 
-void test_first_block_not_aligned(void)
+static void test_first_block_not_aligned(void)
 {
   /*
    * Hack to get to the error case where the blocks are
@@ -133,11 +133,11 @@ void test_first_block_not_aligned(void)
    */
   puts( "Testing case of blocks not on page size" );
   test_heap_init();
-  _Heap_Head(&TestHeap)->next = (void *)1;
+  _Heap_Free_list_head(&TestHeap)->next = (void *)1;
   test_heap_walk( -1 );
 }
 
-void test_not_in_free_list(void)
+static void test_not_in_free_list(void)
 {
   void *p1, *p2, *p3;
 

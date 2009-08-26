@@ -1,3 +1,7 @@
+2009-08-19	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* heapwalk/init.c, stackchk/blow.c: Update for heap API changes.
+
 2009-08-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* termios01/init.c, termios01/termios01.scn: Add a few error paths to
