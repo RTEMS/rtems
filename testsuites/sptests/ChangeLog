@@ -1,3 +1,8 @@
+2009-08-25	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* sp59/init.c, sp59/sp59.scn: Added status code assignment. Fixed typos.
+	* sp63/init.c: Check return value of _Heap_Initialize().
+
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spwatchdog/spwatchdog.scn, spwatchdog/task1.c: Add test for

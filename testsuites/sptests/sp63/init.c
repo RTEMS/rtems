@@ -30,6 +30,7 @@ void test_case_one(void)
   puts( "Init - _Heap_Initialize (for test one) - OK" );
   heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
   printf( "Init - Heap size=%d\n", heap_size );
+  assert( heap_size );
 
   puts( "Init - _Heap_Allocate - too large size (overflow)- not OK");
   ptr1 = _Heap_Allocate( &Heap, 0xffffffff );
@@ -59,6 +60,7 @@ void test_case_two(void)
   puts( "\nInit - _Heap_Initialize (for test two) - OK" );
   heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
   printf( "Init - Heap size=%d\n", heap_size );
+  assert( heap_size );
 
   puts( "Init - _Heap_Allocate_aligned - OK");
   ptr1 = _Heap_Allocate_aligned( &Heap, 64, 4 );
@@ -97,9 +99,11 @@ void test_case_three(void)
         for ( alloc=4 ; alloc < sizeof(Memory)/2  ; alloc+=4 ) {
           heap_size =
             _Heap_Initialize( &Heap, &Memory[sz], sizeof(Memory)/2, 1 << pg );
-          do {
-            ptr1 = _Heap_Allocate_aligned( &Heap, alloc, 1 <<al );
-          } while ( ptr1 );
+          if ( heap_size != 0 ) {
+            do {
+              ptr1 = _Heap_Allocate_aligned( &Heap, alloc, 1 <<al );
+            } while ( ptr1 );
+          }
         }
       }
    }
