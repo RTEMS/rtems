@@ -1,3 +1,7 @@
+2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/devfs/devfs.h: Fix spelling error.
+
 2009-08-26	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* sapi/include/rtems/config.h: Changed stack allocator signature to

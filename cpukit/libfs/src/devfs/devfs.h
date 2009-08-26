@@ -20,7 +20,7 @@ extern "C" {
 
 typedef struct 
 {
-  /** This member pointes to device name which is a null-terminated string */
+  /** This member points to device name which is a null-terminated string */
   char                     *device_name;
   /** This member is the name length of a device */
   uint32_t                  device_name_length;
