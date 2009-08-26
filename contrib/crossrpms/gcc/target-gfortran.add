@@ -30,5 +30,7 @@ GCC fortran compiler for @tool_target@.
 %dir %{gccexec}/@tool_target@
 %dir %{gccexec}/@tool_target@/%{gcc_version}
 %{gccexec}/@tool_target@/%{gcc_version}/f951%{_exeext}
+
+%{gcclib}/@tool_target@/%{gcc_version}/finclude
 %endif
 
