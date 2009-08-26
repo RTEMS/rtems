@@ -10,7 +10,7 @@
 %if %build_g77
   languages="$languages,g77"
 %endif
-%if %build_f95
+%if %build_fortran
   languages="$languages,f95"
 %endif
 %if %build_gcj
