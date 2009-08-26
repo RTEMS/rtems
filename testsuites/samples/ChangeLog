@@ -1,3 +1,8 @@
+2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* hello/Makefile.am, hello/init.c: Simplify.
+	* hello/system.h: Removed.
+
 2009-08-21	Xi Yang <hiyangxi@gmail.com>
 
 	* unlimited/test2.c: Fix spacing.

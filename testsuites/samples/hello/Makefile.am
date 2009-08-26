@@ -5,7 +5,7 @@
 MANAGERS = io semaphore
 
 rtems_tests_PROGRAMS = hello
-hello_SOURCES = init.c system.h
+hello_SOURCES = init.c
 
 dist_rtems_tests_DATA = hello.scn
 dist_rtems_tests_DATA += hello.doc
