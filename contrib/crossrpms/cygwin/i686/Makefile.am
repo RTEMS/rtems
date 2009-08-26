@@ -20,7 +20,7 @@ EXPAT_VERS = 1.95.8-2
 EXPAT_RPMREL = @VERSION@%{?dist}
 include ../expat.am
 
-READLINE_VERS = 5.2.12-10
+READLINE_VERS = 5.2.14-12
 READLINE_RPMREL = @VERSION@%{?dist}
 include ../readline.am
 

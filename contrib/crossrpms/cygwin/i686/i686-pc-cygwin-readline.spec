@@ -30,8 +30,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define readline_version 5.2.12-10
-%define readline_rpmvers %{expand:%(echo 5.2.12-10 | tr - _)} 
+%define readline_version 5.2.14-12
+%define readline_rpmvers %{expand:%(echo 5.2.14-12 | tr - _)} 
 
 Name:         i686-pc-cygwin-readline
 Release:      0.20090506.1%{?dist}
