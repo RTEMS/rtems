@@ -1,3 +1,8 @@
+2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock/clock.c, include/bsp.h: Rename BSP specific idle thread to
+	bsp_idle_thread.
+
 2009-07-30  Eric Norum <norume@aps.anl.gov>
 
 	* include/bsp.h, network/network.c, startup/bspstart.c:  Try enabling
