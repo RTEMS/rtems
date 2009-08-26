@@ -1,5 +1,6 @@
 2009-08-25	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
+	* sp29/init.c: Fixed return value evaluation.
 	* sp59/init.c, sp59/sp59.scn: Added status code assignment. Fixed typos.
 	* sp63/init.c: Check return value of _Heap_Initialize().
 

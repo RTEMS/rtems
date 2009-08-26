@@ -82,8 +82,8 @@ rtems_task Init (rtems_task_argument ignored)
 	puts( "This test only prints on errors." );
 
         ticksPerSecond = rtems_clock_get_ticks_per_second();
-	if (sc != RTEMS_SUCCESSFUL) {
-		printf ("Can't get ticks per second: %s\n", rtems_status_text (sc));
+	if (ticksPerSecond <= 0) {
+		printf ("Invalid ticks per second: %lu\n", (unsigned long) ticksPerSecond);
 		exit (1);
 	}
 	sc = rtems_semaphore_create (rtems_build_name ('S', 'M', 'r', 'c'),
