@@ -105,10 +105,6 @@ $(PROJECT_INCLUDE)/bsp/dma.h: include/dma.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/dma.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/dma.h
 
-$(PROJECT_INCLUDE)/bsp/idle.h: include/idle.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/idle.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/idle.h
-
 $(PROJECT_INCLUDE)/bsp/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h

@@ -1,3 +1,10 @@
+2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am, include/bsp.h: Rename BSP specific idle
+	thread to bsp_idle_thread.
+	* misc/bspidle.c: New file.
+	* include/idle.h, misc/idle.c: Removed.
+
 2009-08-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/linkcmds, startup/linkcmds.lpc2478,

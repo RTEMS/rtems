@@ -48,6 +48,13 @@ int lpc24xx_eth_attach_detach(
 
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "eth0"
 
+/*
+ *  BSP specific idle thread
+ */
+void *bsp_idle_thread( uint32_t ignored);
+
+#define BSP_IDLE_TASK_BODY bsp_idle_thread
+
 #endif /* ASM */
 
 #ifdef __cplusplus

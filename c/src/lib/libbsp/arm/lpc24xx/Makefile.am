@@ -40,7 +40,6 @@ include_bsp_HEADERS += include/lpc24xx.h
 include_bsp_HEADERS += include/system-clocks.h
 include_bsp_HEADERS += include/ssp.h
 include_bsp_HEADERS += include/dma.h
-include_bsp_HEADERS += include/idle.h
 include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/io.h
 
@@ -110,7 +109,7 @@ libbsp_a_SOURCES += ../../shared/timerstub.c
 # Misc
 libbsp_a_SOURCES += misc/system-clocks.c \
 	misc/dma.c \
-	misc/idle.c \
+	misc/bspidle.c \
 	misc/io.c
 
 # SSP
