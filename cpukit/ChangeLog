@@ -1,3 +1,8 @@
+2009-08-26	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* sapi/include/rtems/config.h: Changed stack allocator signature to
+	match the one of _Workspace_Allocate().
+
 2009-08-24	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* libmisc/stackchk/check.c, rtems/src/regionreturnsegment.c,

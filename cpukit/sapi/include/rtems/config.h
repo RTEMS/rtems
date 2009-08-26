@@ -145,7 +145,7 @@ typedef struct {
   /** The BSP may want to provide it's own stack allocation routines.
    *  In this case, the BSP will provide this stack allocation hook.
    */
-  void *                       (*stack_allocate_hook)( uint32_t );
+  void *                       (*stack_allocate_hook)( size_t );
 
   /** The BSP may want to provide it's own stack free routines.
    *  In this case, the BSP will provide this stack free hook.
