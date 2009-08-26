@@ -193,28 +193,3 @@ void bsp_start( void)
   printk("Exit from bspstart\n");
 #endif
 }
-
-/**
- * @brief Idle thread body.
- *
- * Replaces the one in c/src/exec/score/src/threadidlebody.c
- * The MSR[POW] bit is set to put the CPU into the low power mode
- * defined in HID0.  HID0 is set during starup in start.S.
- */
-void *_Thread_Idle_body( uintptr_t ignored )
-{
-
-  while (1) {
-    asm volatile (
-		  "mfmsr 3;"
-		  "oris 3, 3, 4;"
-		  "sync;"
-		  "mtmsr 3;"
-		  "isync;"
-		  "ori 3, 3, 0;"
-		  "ori 3, 3, 0"
-		  );
-  }
-
-  return NULL;
-}

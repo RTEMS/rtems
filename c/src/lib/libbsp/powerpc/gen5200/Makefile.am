@@ -116,6 +116,7 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/bspclean.c \
 	startup/bspreset.c \
 	../../shared/bspgetworkarea.c \
+	startup/bspidle.c \
 	startup/bspstart.c \
 	startup/cpuinit.c  \
 	startup/uboot_support.c

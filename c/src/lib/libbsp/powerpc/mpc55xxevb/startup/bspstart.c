@@ -255,23 +255,3 @@ void bsp_start(void)
 	rtems_cache_enable_data();
 #endif
 }
-
-/**
- * @brief Idle thread body.
- */
-void *_Thread_Idle_body( uintptr_t ignored )
-{
-
-	while (1) {
-		asm volatile(
-			"mfmsr 3;"
-			"oris 3,3,4;"
-			"sync;"
-			"mtmsr 3;"
-			"isync;"
-			"ori 3,3,0;"
-			"ori 3,3,0"
-		);
-	}
-	return 0;
-}

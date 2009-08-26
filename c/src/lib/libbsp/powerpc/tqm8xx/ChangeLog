@@ -1,3 +1,9 @@
+2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, startup/bspstart.c: Rename BSP specific idle thread to
+	bsp_idle_thread and split into its own file.
+	* startup/bspidle.c: New file.
+
 2009-08-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* console/console.c: Disable call to rtems_interrupt_catch until it is
