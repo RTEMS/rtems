@@ -72,7 +72,7 @@ rtems_status_code rtems_region_return_segment(
         _Region_Debug_Walk( the_region, 3 );
 
 #ifdef RTEMS_REGION_FREE_SHRED_PATTERN
-        if ( !_Heap_Size_of_user_area( &the_region->Memory, segment, &size ) )
+        if ( !_Heap_Size_of_alloc_area( &the_region->Memory, segment, &size ) )
           return_status = RTEMS_INVALID_ADDRESS;
         else {
           memset( segment, (RTEMS_REGION_FREE_SHRED_PATTERN & 0xFF), size );

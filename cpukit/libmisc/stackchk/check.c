@@ -92,7 +92,7 @@ static inline bool Stack_check_Frame_pointer_in_range(
 
 #else
   #define Stack_check_Get_pattern_area( _the_stack ) \
-    ((Stack_check_Control *) ((char *)(_the_stack)->area + HEAP_OVERHEAD))
+    ((Stack_check_Control *) ((char *)(_the_stack)->area + HEAP_LAST_BLOCK_OVERHEAD))
 
   #define Stack_check_Calculate_used( _low, _size, _high_water) \
       ( ((char *)(_low) + (_size)) - (char *)(_high_water) )

@@ -64,7 +64,7 @@ rtems_status_code rtems_region_get_segment_size(
     switch ( location ) {
 
       case OBJECTS_LOCAL:
-        if ( !_Heap_Size_of_user_area( &the_region->Memory, segment, size ) )
+        if ( !_Heap_Size_of_alloc_area( &the_region->Memory, segment, size ) )
           return_status = RTEMS_INVALID_ADDRESS;
         else
           return_status = RTEMS_SUCCESSFUL;

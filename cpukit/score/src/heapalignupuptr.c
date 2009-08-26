@@ -1,3 +1,4 @@
+#if 0
 /*
  *  Heap Handler
  *
@@ -23,18 +24,17 @@
  * path explosion where it is used.  This makes full test coverage more
  * difficult.
  */
-void _Heap_Align_up_uptr (
-  _H_uptr_t *value,
-  uint32_t  alignment
+uintptr_t _Heap_Align_up(
+  uintptr_t value,
+  uintptr_t alignment
 )
 {
-  _H_uptr_t remainder;
-  _H_uptr_t v = *value;
+  uintptr_t remainder = value % alignment;
 
-  remainder = v % alignment;
-
-  if ( remainder )
-    *value = v - remainder + alignment;
+  if ( remainder != 0 ) {
+    return value - remainder + alignment;
+  } else {
+    return value;
+  }
 }
-
-
+#endif

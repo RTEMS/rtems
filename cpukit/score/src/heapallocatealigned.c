@@ -25,19 +25,19 @@ static void
 check_result(
   Heap_Control *the_heap,
   Heap_Block   *the_block,
-  _H_uptr_t     user_addr,
-  _H_uptr_t     aligned_user_addr,
-  intptr_t      size
+  uintptr_t     user_addr,
+  uintptr_t     aligned_user_addr,
+  uintptr_t      size
 )
 {
-  _H_uptr_t const user_area = _H_p2u(_Heap_User_area(the_block));
-  _H_uptr_t const block_end = _H_p2u(the_block)
-    + _Heap_Block_size(the_block) + HEAP_BLOCK_HEADER_OFFSET;
-  _H_uptr_t const user_end = aligned_user_addr + size;
-  _H_uptr_t const heap_start = _H_p2u(the_heap->start) + HEAP_OVERHEAD;
-  _H_uptr_t const heap_end = _H_p2u(the_heap->final)
-    + HEAP_BLOCK_HEADER_OFFSET;
-  uint32_t const page_size = the_heap->page_size;
+  uintptr_t const user_area = _Heap_Alloc_area_of_block(the_block);
+  uintptr_t const block_end = the_block
+    + _Heap_Block_size(the_block) + HEAP_BLOCK_SIZE_OFFSET;
+  uintptr_t const user_end = aligned_user_addr + size;
+  uintptr_t const heap_start = (uintptr_t) the_heap->start + HEAP_LAST_BLOCK_OVERHEAD;
+  uintptr_t const heap_end = (uintptr_t) the_heap->final
+    + HEAP_BLOCK_SIZE_OFFSET;
+  uintptr_t const page_size = the_heap->page_size;
 
   _HAssert(user_addr == user_area);
   _HAssert(aligned_user_addr - user_area < page_size);
@@ -74,12 +74,12 @@ static
 Heap_Block *block_allocate(
   Heap_Control  *the_heap,
   Heap_Block    *the_block,
-  intptr_t       alloc_size
+  uintptr_t       alloc_size
 )
 {
   Heap_Statistics *const stats = &the_heap->stats;
-  uint32_t const block_size = _Heap_Block_size(the_block);
-  uint32_t const the_rest = block_size - alloc_size;
+  uintptr_t const block_size = _Heap_Block_size(the_block);
+  uintptr_t const the_rest = block_size - alloc_size;
 
   _HAssert(_Heap_Is_aligned(block_size, the_heap->page_size));
   _HAssert(_Heap_Is_aligned(alloc_size, the_heap->page_size));
@@ -89,20 +89,20 @@ Heap_Block *block_allocate(
   if (the_rest >= the_heap->min_block_size) {
     /* Split the block so that lower part is still free, and upper part
        becomes used. */
-    the_block->size = the_rest | HEAP_PREV_USED;
+    the_block->size_and_flag = the_rest | HEAP_PREV_BLOCK_USED;
     the_block = _Heap_Block_at(the_block, the_rest);
     the_block->prev_size = the_rest;
-    the_block->size = alloc_size;
+    the_block->size_and_flag = alloc_size;
   } else {
     /* Don't split the block as remainder is either zero or too small to be
        used as a separate free block. Change 'alloc_size' to the size of the
        block and remove the block from the list of free blocks. */
-    _Heap_Block_remove(the_block);
+    _Heap_Block_remove_from_free_list(the_block);
     alloc_size = block_size;
     stats->free_blocks -= 1;
   }
   /* Mark the block as used (in the next block). */
-  _Heap_Block_at(the_block, alloc_size)->size |= HEAP_PREV_USED;
+  _Heap_Block_at(the_block, alloc_size)->size_and_flag |= HEAP_PREV_BLOCK_USED;
   /* Update statistics */
   stats->free_size -= alloc_size;
   if (stats->min_free_size > stats->free_size)
@@ -132,21 +132,21 @@ Heap_Block *block_allocate(
 
 void *_Heap_Allocate_aligned(
   Heap_Control *the_heap,
-  intptr_t      size,
-  uint32_t      alignment
+  uintptr_t      size,
+  uintptr_t      alignment
 )
 {
-  uint32_t search_count;
+  uintptr_t search_count;
   Heap_Block *the_block;
 
   void *user_ptr = NULL;
-  uint32_t  const page_size = the_heap->page_size;
+  uintptr_t  const page_size = the_heap->page_size;
   Heap_Statistics *const stats = &the_heap->stats;
-  Heap_Block *const tail = _Heap_Tail(the_heap);
+  Heap_Block *const tail = _Heap_Free_list_tail(the_heap);
 
-  uint32_t const end_to_user_offs = size - HEAP_BLOCK_HEADER_OFFSET;
+  uintptr_t const end_to_user_offs = size - HEAP_BLOCK_SIZE_OFFSET;
 
-  uint32_t const the_size =
+  uintptr_t const the_size =
     _Heap_Calc_block_size(size, page_size, the_heap->min_block_size);
 
   if (the_size == 0)
@@ -157,35 +157,34 @@ void *_Heap_Allocate_aligned(
 
   /* Find large enough free block that satisfies the alignment requirements. */
 
-  for (the_block = _Heap_First(the_heap), search_count = 0;
+  for (the_block = _Heap_First_free_block(the_heap), search_count = 0;
       the_block != tail;
       the_block = the_block->next, ++search_count)
   {
-    uint32_t const block_size = _Heap_Block_size(the_block);
+    uintptr_t const block_size = _Heap_Block_size(the_block);
 
     /* As we always coalesce free blocks, prev block must have been used. */
     _HAssert(_Heap_Is_prev_used(the_block));
 
     if (block_size >= the_size) { /* the_block is large enough. */
 
-      _H_uptr_t user_addr;
-      _H_uptr_t aligned_user_addr;
-      _H_uptr_t const user_area = _H_p2u(_Heap_User_area(the_block));
+      uintptr_t user_addr;
+      uintptr_t aligned_user_addr;
+      uintptr_t const user_area = _Heap_Alloc_area_of_block(the_block);
 
       /* Calculate 'aligned_user_addr' that will become the user pointer we
          return. It should be at least 'end_to_user_offs' bytes less than the
          the 'block_end' and should be aligned on 'alignment' boundary.
          Calculations are from the 'block_end' as we are going to split free
          block so that the upper part of the block becomes used block. */
-      _H_uptr_t const block_end = _H_p2u(the_block) + block_size;
-      aligned_user_addr = block_end - end_to_user_offs;
-      _Heap_Align_down_uptr(&aligned_user_addr, alignment);
+      uintptr_t const block_end = (uintptr_t) the_block + block_size;
+      aligned_user_addr =
+        _Heap_Align_down(block_end - end_to_user_offs, alignment);
 
       /* 'user_addr' is the 'aligned_user_addr' further aligned down to the
          'page_size' boundary. We need it as blocks' user areas should begin
          only at 'page_size' aligned addresses */
-      user_addr = aligned_user_addr;
-      _Heap_Align_down_uptr(&user_addr, page_size);
+      user_addr = _Heap_Align_down(aligned_user_addr, page_size);
 
       /* Make sure 'user_addr' calculated didn't run out of 'the_block'. */
       if (user_addr >= user_area) {
@@ -210,8 +209,7 @@ void *_Heap_Allocate_aligned(
             /* The user pointer will be too far from 'user_addr'. See if we
                can make 'aligned_user_addr' to be close enough to the
                'user_addr'. */
-            aligned_user_addr = user_addr;
-            _Heap_Align_up_uptr(&aligned_user_addr, alignment);
+            aligned_user_addr = _Heap_Align_up(user_addr, alignment);
             if (aligned_user_addr - user_addr >= page_size) {
               /* No, we can't use the block */
               continue;
@@ -221,10 +219,10 @@ void *_Heap_Allocate_aligned(
 
         /* The block is indeed acceptable: calculate the size of the block
            to be allocated and perform allocation. */
-        uint32_t const alloc_size =
-            block_end - user_addr + HEAP_BLOCK_USER_OFFSET;
+        uintptr_t const alloc_size =
+            block_end - user_addr + HEAP_BLOCK_ALLOC_AREA_OFFSET;
 
-        _HAssert(_Heap_Is_aligned_ptr((void*)aligned_user_addr, alignment));
+        _HAssert(_Heap_Is_aligned(aligned_user_addr, alignment));
 
         the_block = block_allocate(the_heap, the_block, alloc_size);
 

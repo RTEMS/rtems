@@ -1,3 +1,16 @@
+2009-08-24	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* libmisc/stackchk/check.c, rtems/src/regionreturnsegment.c,
+	rtems/src/regiongetsegmentsize.c, src/heapalignupuptr.c,
+	src/heapallocatealigned.c, src/heapallocate.c, src/heap.c,
+	src/heapextend.c, src/heapfree.c, src/heapgetfreeinfo.c,
+	src/heapgetinfo.c, src/heapresizeblock.c, src/heapsizeofuserarea.c,
+	src/heapwalk.c, src/pheapgetblocksize.c, inline/rtems/score/heap.inl,
+	include/rtems/score/heap.h: Overall cleanup.  Changed all types for
+	addresses, sizes, offsets and alignments to uintptr_t.  Reformatted.
+	Added variables for clarity.  Renamed various objects.  Enabled
+	_HAssert() for all instances.  More changes follow.
+
 2009-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/src/devfs/devfs_eval.c: Fix bug where use of strncmp() resulted

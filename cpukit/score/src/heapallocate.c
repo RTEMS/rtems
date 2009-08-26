@@ -19,63 +19,48 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
 
-/*PAGE
- *
- *  _Heap_Allocate
- *
- *  This kernel routine allocates the requested size of memory
- *  from the specified heap.
- *
- *  Input parameters:
- *    the_heap  - pointer to heap header.
- *    size      - size in bytes of the memory block to allocate.
- *
- *  Output parameters:
- *    returns - starting address of memory block allocated
- */
-
-void *_Heap_Allocate(
-  Heap_Control        *the_heap,
-  intptr_t             size
-)
+void *_Heap_Allocate( Heap_Control *heap, uintptr_t size )
 {
-  uint32_t  the_size;
-  uint32_t  search_count;
-  Heap_Block *the_block;
-  void       *ptr = NULL;
-  Heap_Statistics *const stats = &the_heap->stats;
-  Heap_Block *const tail = _Heap_Tail(the_heap);
+  Heap_Statistics *const stats = &heap->stats;
+  Heap_Block * const tail = _Heap_Free_list_tail( heap );
+  Heap_Block *block = _Heap_First_free_block( heap );
+  uint32_t search_count = 0;
+  void *alloc_area_begin_ptr = NULL;
 
-  the_size =
-    _Heap_Calc_block_size(size, the_heap->page_size, the_heap->min_block_size);
-  if(the_size == 0)
+  size = _Heap_Calc_block_size( size, heap->page_size, heap->min_block_size );
+  if( size == 0 ) {
     return NULL;
-
-  /* Find large enough free block. */
-  for(the_block = _Heap_First(the_heap), search_count = 0;
-      the_block != tail;
-      the_block = the_block->next, ++search_count)
-  {
-    /* As we always coalesce free blocks, prev block must have been used. */
-    _HAssert(_Heap_Is_prev_used(the_block));
-
-    /* Don't bother to mask out the HEAP_PREV_USED bit as it won't change the
-       result of the comparison. */
-    if(the_block->size >= the_size) {
-      (void)_Heap_Block_allocate(the_heap, the_block, the_size );
-
-      ptr = _Heap_User_area(the_block);
-
-      stats->allocs += 1;
-      stats->searches += search_count + 1;
-
-      _HAssert(_Heap_Is_aligned_ptr(ptr, the_heap->page_size));
-      break;
-    }
   }
 
-  if(stats->max_search < search_count)
-    stats->max_search = search_count;
+  /*
+   * Find large enough free block.
+   *
+   * Do not bother to mask out the HEAP_PREV_BLOCK_USED bit as it will not
+   * change the result of the size comparison.
+   */
+  while (block != tail && block->size_and_flag < size) {
+    _HAssert( _Heap_Is_prev_used( block ));
 
-  return ptr;
+    block = block->next;
+    ++search_count;
+  }
+
+  if (block != tail) {
+    _Heap_Block_allocate( heap, block, size );
+
+    alloc_area_begin_ptr = (void *) _Heap_Alloc_area_of_block( block );
+
+    _HAssert( _Heap_Is_aligned( (uintptr_t) alloc_area_begin_ptr, heap->page_size ));
+
+    /* Statistics */
+    ++stats->allocs;
+    stats->searches += search_count;
+  }
+
+  /* Statistics */
+  if (stats->max_search < search_count) {
+    stats->max_search = search_count;
+  }
+
+  return alloc_area_begin_ptr;
 }

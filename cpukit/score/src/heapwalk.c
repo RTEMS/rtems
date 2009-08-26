@@ -60,11 +60,14 @@ bool _Heap_Walk(
 {
   Heap_Block *the_block = the_heap->start;
   Heap_Block *const end = the_heap->final;
-  Heap_Block *const tail = _Heap_Tail(the_heap);
+  Heap_Block *const tail = _Heap_Free_list_tail(the_heap);
   int error = 0;
   int passes = 0;
 
+  /* FIXME: Why is this disabled? */
   do_dump = false;
+
+  /* FIXME: Why is this disabled? */
   /*
    * We don't want to allow walking the heap until we have
    * transferred control to the user task so we watch the
@@ -76,13 +79,14 @@ bool _Heap_Walk(
     return true;
 */
 
+  /* FIXME: Reason for this? */
   if (source < 0)
-    source = the_heap->stats.instance;
+    source = (int) the_heap->stats.instance;
 
-  if (do_dump == true)
+  if (do_dump)
     printk("\nPASS: %d start %p final %p first %p last %p begin %p end %p\n",
       source, the_block, end,
-      _Heap_First(the_heap), _Heap_Last(the_heap),
+      _Heap_First_free_block(the_heap), _Heap_Last_free_block(the_heap),
       the_heap->begin, the_heap->end);
 
   /*
@@ -90,7 +94,7 @@ bool _Heap_Walk(
    */
 
   if (!_Heap_Is_prev_used(the_block)) {
-    printk("PASS: %d !HEAP_PREV_USED flag of 1st block isn't set\n", source);
+    printk("PASS: %d !HEAP_PREV_BLOCK_USED flag of 1st block isn't set\n", source);
     error = 1;
   }
 
@@ -136,7 +140,7 @@ bool _Heap_Walk(
       }
 
       { /* Check if 'the_block' is in the free block list */
-        Heap_Block* block = _Heap_First(the_heap);
+        Heap_Block* block = _Heap_First_free_block(the_heap);
         if (!_Addresses_Is_aligned(block) ) {
           printk(
             "PASS: %d first free block %p is not aligned\n", source, block);
@@ -150,7 +154,7 @@ bool _Heap_Walk(
             error = 1;
             break;
           }
-          if (!_Heap_Is_block_in(the_heap, block)) {
+          if (!_Heap_Is_block_in_heap(the_heap, block)) {
             printk("PASS: %d a free block %p is not in heap\n", source, block);
             error = 1;
             break;

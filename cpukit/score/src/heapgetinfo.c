@@ -41,7 +41,7 @@ Heap_Get_information_status _Heap_Get_information(
   Heap_Block *the_block = the_heap->start;
   Heap_Block *const end = the_heap->final;
 
-  _HAssert(the_block->prev_size == HEAP_PREV_USED);
+  _HAssert(the_block->prev_size == the_heap->page_size);
   _HAssert(_Heap_Is_prev_used(the_block));
 
   the_info->Free.number  = 0;
@@ -74,7 +74,7 @@ Heap_Get_information_status _Heap_Get_information(
    *  "used" as client never allocated it. Make 'Used.total' contain this
    *  blocks' overhead though.
    */
-  the_info->Used.total += HEAP_OVERHEAD;
+  the_info->Used.total += HEAP_LAST_BLOCK_OVERHEAD;
 
   return HEAP_GET_INFORMATION_SUCCESSFUL;
 }

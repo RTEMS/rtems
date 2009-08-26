@@ -19,69 +19,51 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
 
-/*PAGE
- *
- *  _Heap_Free
- *
- *  This kernel routine returns the memory designated by the
- *  given heap and given starting address to the memory pool.
- *
- *  Input parameters:
- *    the_heap         - pointer to heap header
- *    starting_address - starting address of the memory block to free.
- *
- *  Output parameters:
- *    true  - if starting_address is valid heap address
- *    false - if starting_address is invalid heap address
- */
-
-bool _Heap_Free(
-  Heap_Control        *the_heap,
-  void                *starting_address
-)
+bool _Heap_Free( Heap_Control *heap, void *alloc_area_begin_ptr )
 {
-  Heap_Block      *the_block;
-  Heap_Block      *next_block;
-  uint32_t         the_size;
-  uint32_t         next_size;
-  Heap_Statistics *const stats = &the_heap->stats;
-  bool             next_is_free;
+  Heap_Statistics *const stats = &heap->stats;
+  uintptr_t alloc_area_begin = (uintptr_t) alloc_area_begin_ptr;
+  Heap_Block *block =
+    _Heap_Block_of_alloc_area( alloc_area_begin, heap->page_size );
+  Heap_Block *next_block = NULL;
+  uintptr_t block_size = 0;
+  uintptr_t next_block_size = 0;
+  bool next_is_free = false;
 
-  if ( !_Addresses_Is_in_range(
-       starting_address, (void *)the_heap->start, (void *)the_heap->final ) ) {
-    _HAssert(starting_address != NULL);
-    return( false );
+  if (
+    !_Addresses_Is_in_range( alloc_area_begin_ptr, heap->start, heap->final)
+  ) {
+    _HAssert( alloc_area_begin_ptr != NULL );
+    return false;
   }
 
-  _Heap_Start_of_block( the_heap, starting_address, &the_block );
-
-  if ( !_Heap_Is_block_in( the_heap, the_block ) ) {
+  if ( !_Heap_Is_block_in_heap( heap, block ) ) {
     _HAssert( false );
-    return( false );
+    return false;
   }
 
-  the_size = _Heap_Block_size( the_block );
-  next_block = _Heap_Block_at( the_block, the_size );
+  block_size = _Heap_Block_size( block );
+  next_block = _Heap_Block_at( block, block_size );
 
-  if ( !_Heap_Is_block_in( the_heap, next_block ) ) {
+  if ( !_Heap_Is_block_in_heap( heap, next_block ) ) {
     _HAssert( false );
-    return( false );
+    return false;
   }
 
   if ( !_Heap_Is_prev_used( next_block ) ) {
     _HAssert( false );
-    return( false );
+    return false;
   }
 
-  next_size = _Heap_Block_size( next_block );
-  next_is_free = next_block < the_heap->final &&
-    !_Heap_Is_prev_used(_Heap_Block_at(next_block, next_size));
+  next_block_size = _Heap_Block_size( next_block );
+  next_is_free = next_block != heap->final
+    && !_Heap_Is_prev_used( _Heap_Block_at( next_block, next_block_size ));
 
-  if ( !_Heap_Is_prev_used( the_block ) ) {
-    uint32_t const prev_size = the_block->prev_size;
-    Heap_Block *const prev_block = _Heap_Block_at( the_block, -prev_size );
+  if ( !_Heap_Is_prev_used( block ) ) {
+    uintptr_t const prev_size = block->prev_size;
+    Heap_Block * const prev_block = _Heap_Block_at( block, -prev_size );
 
-    if ( !_Heap_Is_block_in( the_heap, prev_block ) ) {
+    if ( !_Heap_Is_block_in_heap( heap, prev_block ) ) {
       _HAssert( false );
       return( false );
     }
@@ -94,44 +76,44 @@ bool _Heap_Free(
     }
 
     if ( next_is_free ) {       /* coalesce both */
-      uint32_t const size = the_size + prev_size + next_size;
-      _Heap_Block_remove( next_block );
+      uintptr_t const size = block_size + prev_size + next_block_size;
+      _Heap_Block_remove_from_free_list( next_block );
       stats->free_blocks -= 1;
-      prev_block->size = size | HEAP_PREV_USED;
+      prev_block->size_and_flag = size | HEAP_PREV_BLOCK_USED;
       next_block = _Heap_Block_at( prev_block, size );
       _HAssert(!_Heap_Is_prev_used( next_block));
       next_block->prev_size = size;
-    }
-    else {                      /* coalesce prev */
-      uint32_t const size = the_size + prev_size;
-      prev_block->size = size | HEAP_PREV_USED;
-      next_block->size &= ~HEAP_PREV_USED;
+    } else {                      /* coalesce prev */
+      uintptr_t const size = block_size + prev_size;
+      prev_block->size_and_flag = size | HEAP_PREV_BLOCK_USED;
+      next_block->size_and_flag &= ~HEAP_PREV_BLOCK_USED;
       next_block->prev_size = size;
     }
-  }
-  else if ( next_is_free ) {    /* coalesce next */
-    uint32_t const size = the_size + next_size;
-    _Heap_Block_replace( next_block, the_block );
-    the_block->size = size | HEAP_PREV_USED;
-    next_block  = _Heap_Block_at( the_block, size );
+  } else if ( next_is_free ) {    /* coalesce next */
+    uintptr_t const size = block_size + next_block_size;
+    _Heap_Block_replace_in_free_list( next_block, block );
+    block->size_and_flag = size | HEAP_PREV_BLOCK_USED;
+    next_block  = _Heap_Block_at( block, size );
     next_block->prev_size = size;
-  }
-  else {                        /* no coalesce */
-    /* Add 'the_block' to the head of the free blocks list as it tends to
+  } else {                        /* no coalesce */
+    /* Add 'block' to the head of the free blocks list as it tends to
        produce less fragmentation than adding to the tail. */
-    _Heap_Block_insert_after( _Heap_Head( the_heap), the_block );
-    the_block->size = the_size | HEAP_PREV_USED;
-    next_block->size &= ~HEAP_PREV_USED;
-    next_block->prev_size = the_size;
+    _Heap_Block_insert_after( _Heap_Free_list_head( heap), block );
+    block->size_and_flag = block_size | HEAP_PREV_BLOCK_USED;
+    next_block->size_and_flag &= ~HEAP_PREV_BLOCK_USED;
+    next_block->prev_size = block_size;
 
-    stats->free_blocks += 1;
-    if ( stats->max_free_blocks < stats->free_blocks )
+    /* Statistics */
+    ++stats->free_blocks;
+    if ( stats->max_free_blocks < stats->free_blocks ) {
       stats->max_free_blocks = stats->free_blocks;
+    }
   }
 
-  stats->used_blocks -= 1;
-  stats->free_size += the_size;
-  stats->frees += 1;
+  /* Statistics */
+  --stats->used_blocks;
+  ++stats->frees;
+  stats->free_size += block_size;
 
   return( true );
 }

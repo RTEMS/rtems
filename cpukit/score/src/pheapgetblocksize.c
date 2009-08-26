@@ -25,7 +25,7 @@ bool _Protected_heap_Get_block_size(
   bool    status;
 
   _RTEMS_Lock_allocator();
-    status = _Heap_Size_of_user_area( the_heap, starting_address, size );
+    status = _Heap_Size_of_alloc_area( the_heap, starting_address, size );
   _RTEMS_Unlock_allocator();
   return status;
 }
