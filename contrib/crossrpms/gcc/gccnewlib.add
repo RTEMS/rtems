@@ -120,13 +120,8 @@ BuildRequires:	gcc-gnat
 BuildRequires:	@rpmprefix@@tool_target@-newlib < %{newlib_version}-@NEWLIB_RPMREL@
 %endif
 
-%if "%{gcc_version}" >= "3.4"
 %define gcclib %{_libdir}/gcc
 %define gccexec %{_libexecdir}/gcc
-%else
-%define gcclib %{_libdir}/gcc-lib
-%define gccexec %{_libdir}/gcc-lib
-%endif
 
 @SOURCES@
 
