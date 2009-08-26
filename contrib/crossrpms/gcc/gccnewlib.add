@@ -121,7 +121,6 @@ BuildRequires:	@rpmprefix@@tool_target@-newlib < %{newlib_version}-@NEWLIB_RPMRE
 %endif
 
 %define gcclib %{_libdir}/gcc
-%define gccexec %{_libexecdir}/gcc
 
 @SOURCES@
 
