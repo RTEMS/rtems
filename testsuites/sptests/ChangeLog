@@ -1,3 +1,8 @@
+2009-08-26	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* spstkalloc/init.c: Changed allocator signature. Functions are now
+	static.
+
 2009-08-25	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* sp29/init.c: Fixed return value evaluation.

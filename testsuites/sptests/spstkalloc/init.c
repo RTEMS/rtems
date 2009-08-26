@@ -21,14 +21,14 @@ int            stackToAlloc = 0;
 StackMemory_t  Stacks[3];
 void          *StackDeallocated = NULL;
 
-void *StackAllocator(uint32_t size)
+static void *StackAllocator(size_t size)
 {
   if (stackToAlloc < MAXIMUM_STACKS)
     return &Stacks[stackToAlloc++];
   return NULL;
 }
 
-void StackDeallocator(void *stack)
+static void StackDeallocator(void *stack)
 {
   StackDeallocated = stack;
 }
