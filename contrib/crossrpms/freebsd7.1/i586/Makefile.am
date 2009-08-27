@@ -5,7 +5,7 @@ TARGET = i586-pc-freebsd7.1
 include $(top_srcdir)/mkspec.am
 
 FREEBSD_VERS = 7.1
-FREEBSD_RPMREL = 0.20090827.1
+FREEBSD_RPMREL = 0.20090827.2
 EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
 include ../libs.am
