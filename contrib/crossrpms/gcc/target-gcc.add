@@ -21,10 +21,8 @@ GNU cc compiler for @tool_target@.
 %sysdir %{_mandir}
 %sysdir %{_mandir}/man1
 %{_mandir}/man1/@tool_target@-gcc.1*
-%if "%{gcc_version}" >= "3.4"
 %{_mandir}/man1/@tool_target@-cpp.1*
 %{_mandir}/man1/@tool_target@-gcov.1*
-%endif
 
 %sysdir %{_bindir}
 %{_bindir}/@tool_target@-cpp%{_exeext}
