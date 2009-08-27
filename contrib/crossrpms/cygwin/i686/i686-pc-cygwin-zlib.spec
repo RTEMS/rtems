@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define zlib_version 1.2.3-2
-%define zlib_rpmvers %{expand:%(echo 1.2.3-2 | tr - _)} 
+%define zlib_version 1.2.3-3
+%define zlib_rpmvers %{expand:%(echo 1.2.3-3 | tr - _)} 
 
 Name:         i686-pc-cygwin-zlib
-Release:      0.20090506.1%{?dist}
+Release:      0.20090827.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -45,7 +45,11 @@ Version:      	%zlib_rpmvers
 Summary:      	Cygwin zlib Libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/zlib/zlib-%{zlib_version}.tar.bz2
+Source1:	ftp://cygwin.com/pub/cygwin/release/zlib/zlib-devel/zlib-devel-%{zlib_version}.tar.bz2
+Source2:	ftp://cygwin.com/pub/cygwin/release/zlib/zlib0/zlib0-%{zlib_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
+%{?_without_sources:NoSource:	1}
+%{?_without_sources:NoSource:	2}
 
 %description
 Cygwin zlib libraries.
@@ -59,6 +63,8 @@ Cygwin zlib libraries.
   # Setup sys-root (Usable for gcc >= 3.4)
   mkdir -p i686-pc-cygwin/sys-root
   ( cd i686-pc-cygwin/sys-root ; %{__tar} xvjf %{SOURCE0})
+  ( cd i686-pc-cygwin/sys-root ; %{__tar} xvjf %{SOURCE1})
+  ( cd i686-pc-cygwin/sys-root ; %{__tar} xvjf %{SOURCE2})
 
 %install
   rm -rf $RPM_BUILD_ROOT
@@ -91,7 +97,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{zlib_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{zlib_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{zlib_rpmvers}/find-provides
@@ -99,7 +105,7 @@ chmod +x %{_builddir}/%{name}-%{zlib_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{zlib_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{zlib_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{zlib_rpmvers}/find-requires

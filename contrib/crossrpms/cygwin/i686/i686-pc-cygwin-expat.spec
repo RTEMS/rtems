@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define expat_version 1.95.8-2
-%define expat_rpmvers %{expand:%(echo 1.95.8-2 | tr - _)} 
+%define expat_version 2.0.1-1
+%define expat_rpmvers %{expand:%(echo 2.0.1-1 | tr - _)} 
 
 Name:         i686-pc-cygwin-expat
-Release:      0.20090506.1%{?dist}
+Release:      0.20090827.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -45,7 +45,7 @@ Version:      	%expat_rpmvers
 Summary:      	Cygwin expat Libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/expat/expat-%{expat_version}.tar.bz2
-Source1:	ftp://cygwin.com/pub/cygwin/release/expat/libexpat0/libexpat0-%{expat_version}.tar.bz2
+Source1:	ftp://cygwin.com/pub/cygwin/release/expat/libexpat1/libexpat1-%{expat_version}.tar.bz2
 
 Provides:       i686-pc-cygwin-expat-devel = %{version}-%{release}
 
@@ -93,7 +93,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{expat_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{expat_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{expat_rpmvers}/find-provides
@@ -101,7 +101,7 @@ chmod +x %{_builddir}/%{name}-%{expat_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{expat_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{expat_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{expat_rpmvers}/find-requires

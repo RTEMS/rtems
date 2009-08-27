@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define w32api_version 3.12-1
-%define w32api_rpmvers %{expand:%(echo 3.12-1 | tr - _)} 
+%define w32api_version 3.13-1
+%define w32api_rpmvers %{expand:%(echo 3.13-1 | tr - _)} 
 
 Name:         i686-pc-cygwin-w32api
-Release:      0.20090506.1%{?dist}
+Release:      0.20090827.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -93,7 +93,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{w32api_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{w32api_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{w32api_rpmvers}/find-provides
@@ -101,7 +101,7 @@ chmod +x %{_builddir}/%{name}-%{w32api_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{w32api_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{w32api_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{w32api_rpmvers}/find-requires

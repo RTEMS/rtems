@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define ncurses_version 5.5-3
-%define ncurses_rpmvers %{expand:%(echo 5.5-3 | tr - _)} 
+%define ncurses_version 5.7-5
+%define ncurses_rpmvers %{expand:%(echo 5.7-5 | tr - _)} 
 
 Name:         i686-pc-cygwin-ncurses
-Release:      0.20090506.1%{?dist}
+Release:      0.20090827.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -45,7 +45,7 @@ Version:      	%ncurses_rpmvers
 Summary:      	Cygwin ncurses Libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/ncurses/ncurses-%{ncurses_version}.tar.bz2
-Source1:	ftp://cygwin.com/pub/cygwin/release/ncurses/libncurses8/libncurses8-%{ncurses_version}.tar.bz2
+Source1:	ftp://cygwin.com/pub/cygwin/release/ncurses/libncurses9/libncurses9-%{ncurses_version}.tar.bz2
 Source2:	ftp://cygwin.com/pub/cygwin/release/ncurses/libncurses-devel/libncurses-devel-%{ncurses_version}.tar.bz2
 
 BuildRequires:  i686-pc-cygwin-terminfo
@@ -105,7 +105,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{ncurses_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{ncurses_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{ncurses_rpmvers}/find-provides
@@ -113,7 +113,7 @@ chmod +x %{_builddir}/%{name}-%{ncurses_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{ncurses_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{ncurses_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{ncurses_rpmvers}/find-requires

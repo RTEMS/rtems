@@ -41,7 +41,7 @@ Summary:      	i686-pc-cygwin gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20090506.1%{?dist}
+Release:      	0.20090827.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -80,10 +80,11 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 
 %if %{defined _mpfr_minvers}
 # FIXME: This is an ugly cludge
-%{?fc9:%global mpfr_provided 2.3.1}
 %{?fc10:%global mpfr_provided 2.3.2}
 %{?fc11:%global mpfr_provided 2.4.1}
 %{?suse10_3:%global mpfr_provided 2.2.1}
+%{?suse11_0:%global mpfr_provided 2.3.1}
+%{?suse11_1:%global mpfr_provided 2.3.2}
 %{?cygwin:%global mpfr_provided 2.4.1}
 %{?mingw32:%global mpfr_provided %{nil}}
 
@@ -121,13 +122,7 @@ Requires:	i686-pc-cygwin-sys-root
 Requires:	i686-pc-cygwin-w32api
 
 
-%if "%{gcc_version}" >= "3.4"
-%define gcclib %{_libdir}/gcc
-%define gccexec %{_libexecdir}/gcc
-%else
-%define gcclib %{_libdir}/gcc-lib
-%define gccexec %{_libdir}/gcc-lib
-%endif
+%define _gcclibdir %{_prefix}/lib
 
 Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:	0}
@@ -197,7 +192,7 @@ cd ..
     --bindir=%{_bindir} \
     --exec_prefix=%{_exec_prefix} \
     --includedir=%{_includedir} \
-    --libdir=%{_libdir} \
+    --libdir=%{_gcclibdir} \
     --libexecdir=%{_libexecdir} \
     --mandir=%{_mandir} \
     --infodir=%{_infodir} \
@@ -238,12 +233,19 @@ cd ..
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
     mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
-      $RPM_BUILD_ROOT%{gcclib}/i686-pc-cygwin/%{gcc_version}/include/
+      $RPM_BUILD_ROOT%{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include/
   fi
 %endif
 
   # host library
+%if "%{gcc_version}" >= "4.2.0"
+  # libiberty doesn't honor --libdir, but always installs to a 
+  # magically guessed _libdir
   rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
+%else
+  # libiberty installs to --libdir=...
+  rm -f ${RPM_BUILD_ROOT}%{_gcclibdir}/libiberty.a
+%endif
 
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/i686-pc-cygwin-c++filt%{_exeext}
@@ -255,18 +257,13 @@ cd ..
 # Conflict with a native GCC's man pages
   rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
 
-
-%if "%{gcc_version}" >= "3.4"
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/i686-pc-cygwin-i686-pc-cygwin-gcjh%{_exeext}
-%endif
 
-%if "%{gcc_version}" >= "3.3"
   # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/%{gcc_version}/install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gccexec}/i686-pc-cygwin/%{gcc_version}/install-tools
-%endif
+  rm -rf ${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/install-tools
 
   # Bug in gcc > 4.1.0: Installs an unused, empty directory
   if test -d ${RPM_BUILD_ROOT}%{_prefix}/i686-pc-cygwin/include/bits; then
@@ -279,10 +276,10 @@ cd ..
 
   rm -f dirs ;
   echo "%defattr(-,root,root,-)" >> dirs
-  echo "%dir %{gcclib}" >> dirs
-  echo "%dir %{gcclib}/i686-pc-cygwin" >> dirs
+  echo "%dir %{_gcclibdir}/gcc" >> dirs
+  echo "%dir %{_gcclibdir}/gcc/i686-pc-cygwin" >> dirs
 
-  TGTDIR="%{gcclib}/i686-pc-cygwin/%{gcc_version}"
+  TGTDIR="%{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -294,13 +291,12 @@ cd ..
 
   # Collect files to go into different packages
   cp dirs build/files.gcc
-  cp dirs build/files.g77
   cp dirs build/files.gfortran
   cp dirs build/files.objc
   cp dirs build/files.gcj
   cp dirs build/files.g++
 
-  TGTDIR="%{gcclib}/i686-pc-cygwin/%{gcc_version}"
+  TGTDIR="%{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
@@ -315,6 +311,7 @@ cd ..
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
+    *finclude/*);;
     *adainclude*);;
     *adalib*);;
     *gnat1);;
@@ -362,7 +359,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
@@ -370,7 +367,7 @@ chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-cygwin/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-cygwin/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-cygwin/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
@@ -423,37 +420,33 @@ GNU cc compiler for i686-pc-cygwin.
 %files -n i686-pc-cygwin-gcc -f build/files.gcc
 %defattr(-,root,root)
 %{_mandir}/man1/i686-pc-cygwin-gcc.1*
-%if "%{gcc_version}" >= "3.4"
 %{_mandir}/man1/i686-pc-cygwin-cpp.1*
 %{_mandir}/man1/i686-pc-cygwin-gcov.1*
-%endif
 
 %{_bindir}/i686-pc-cygwin-cpp%{_exeext}
 %{_bindir}/i686-pc-cygwin-gcc%{_exeext}
-%if "%{gcc_version}" >= "3.3"
 %{_bindir}/i686-pc-cygwin-gcc-%{gcc_version}%{_exeext}
-%endif
 %{_bindir}/i686-pc-cygwin-gcov%{_exeext}
 %{_bindir}/i686-pc-cygwin-gccbug
 
-%dir %{gcclib}/i686-pc-cygwin/%{gcc_version}/include
+%dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
 %if "i686-pc-cygwin" != "bfin-rtems4.10"
 %if "i686-pc-cygwin" != "avr-rtems4.10"
-%dir %{gcclib}/i686-pc-cygwin/%{gcc_version}/include/ssp
+%dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include/ssp
 %endif
 %endif
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
-%dir %{gcclib}/i686-pc-cygwin/%{gcc_version}/include-fixed
+%dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include-fixed
 %endif
 
-%dir %{gccexec}
-%dir %{gccexec}/i686-pc-cygwin
-%dir %{gccexec}/i686-pc-cygwin/%{gcc_version}
-%{gccexec}/i686-pc-cygwin/%{gcc_version}/cc1%{_exeext}
-%{gccexec}/i686-pc-cygwin/%{gcc_version}/collect2%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/i686-pc-cygwin
+%dir %{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}
+%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/cc1%{_exeext}
+%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
 # i686-pc-cygwin-gcc-c++
@@ -482,13 +475,13 @@ GCC c++ compiler for i686-pc-cygwin.
 %{_bindir}/i686-pc-cygwin-c++%{_exeext}
 %{_bindir}/i686-pc-cygwin-g++%{_exeext}
 
-%dir %{gccexec}
-%dir %{gccexec}/i686-pc-cygwin
-%dir %{gccexec}/i686-pc-cygwin/%{gcc_version}
-%{gccexec}/i686-pc-cygwin/%{gcc_version}/cc1plus%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/i686-pc-cygwin
+%dir %{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}
+%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/cc1plus%{_exeext}
 
-%dir %{gcclib}/i686-pc-cygwin/%{gcc_version}/include
-%{gcclib}/i686-pc-cygwin/%{gcc_version}/include/c++
+%dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include
+%{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include/c++
 
 
 
