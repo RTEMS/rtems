@@ -8,7 +8,7 @@
  *
  *		MPC750 
  *		Risc Microporcessor User's Manual
- *		Mtorola REF : MPC750UM/AD 8/97
+ *		Motorola REF : MPC750UM/AD 8/97
  *
  * Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.
