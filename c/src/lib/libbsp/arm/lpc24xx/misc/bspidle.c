@@ -21,10 +21,10 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <bsp/idle.h>
+#include <bsp.h>
 #include <bsp/lpc24xx.h>
 
-Thread bsp_idle_thread( uint32_t ignored)
+void *bsp_idle_thread(uint32_t ignored)
 {
   while (true) {
     /*

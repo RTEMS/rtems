@@ -1,3 +1,7 @@
+2009-08-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* misc/bspidle.c: Include bsp.h and fix prototype.
+
 2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, preinstall.am, include/bsp.h: Rename BSP specific idle
