@@ -31,9 +31,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.3.3
-%define gcc_version 4.3.3
-%define gcc_rpmvers %{expand:%(echo "4.3.3" | tr - _ )}
+%define gcc_pkgvers 4.3.4
+%define gcc_version 4.3.4
+%define gcc_rpmvers %{expand:%(echo "4.3.4" | tr - _ )}
 
 
 Name:         	i586-pc-freebsd7.1-gcc
@@ -41,7 +41,7 @@ Summary:      	i586-pc-freebsd7.1 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20090506.1%{?dist}
+Release:      	0.20090827.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -83,10 +83,11 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 
 %if %{defined _mpfr_minvers}
 # FIXME: This is an ugly cludge
-%{?fc9:%global mpfr_provided 2.3.1}
 %{?fc10:%global mpfr_provided 2.3.2}
 %{?fc11:%global mpfr_provided 2.4.1}
 %{?suse10_3:%global mpfr_provided 2.2.1}
+%{?suse11_0:%global mpfr_provided 2.3.1}
+%{?suse11_1:%global mpfr_provided 2.3.2}
 %{?cygwin:%global mpfr_provided 2.4.1}
 %{?mingw32:%global mpfr_provided %{nil}}
 
@@ -123,13 +124,7 @@ Requires:	i586-pc-freebsd7.1-binutils
 Requires:	i586-pc-freebsd7.1-sys-root
 
 
-%if "%{gcc_version}" >= "3.4"
-%define gcclib %{_libdir}/gcc
-%define gccexec %{_libexecdir}/gcc
-%else
-%define gcclib %{_libdir}/gcc-lib
-%define gccexec %{_libdir}/gcc-lib
-%endif
+%define _gcclibdir %{_prefix}/lib
 
 Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:	0}
@@ -187,7 +182,7 @@ Cross gcc for i586-pc-freebsd7.1.
 
   languages="c"
   languages="$languages,c++"
-  languages="$languages,f95"
+  languages="$languages,fortran"
   languages="$languages,objc"
 %if "%{_build}" != "%{_host}"
   CFLAGS_FOR_BUILD="-g -O2 -Wall" \
@@ -201,7 +196,7 @@ Cross gcc for i586-pc-freebsd7.1.
     --bindir=%{_bindir} \
     --exec_prefix=%{_exec_prefix} \
     --includedir=%{_includedir} \
-    --libdir=%{_libdir} \
+    --libdir=%{_gcclibdir} \
     --libexecdir=%{_libexecdir} \
     --mandir=%{_mandir} \
     --infodir=%{_infodir} \
@@ -241,12 +236,19 @@ Cross gcc for i586-pc-freebsd7.1.
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
     mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
-      $RPM_BUILD_ROOT%{gcclib}/i586-pc-freebsd7.1/%{gcc_version}/include/
+      $RPM_BUILD_ROOT%{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include/
   fi
 %endif
 
   # host library
+%if "%{gcc_version}" >= "4.2.0"
+  # libiberty doesn't honor --libdir, but always installs to a 
+  # magically guessed _libdir
   rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
+%else
+  # libiberty installs to --libdir=...
+  rm -f ${RPM_BUILD_ROOT}%{_gcclibdir}/libiberty.a
+%endif
 
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/i586-pc-freebsd7.1-c++filt%{_exeext}
@@ -258,20 +260,13 @@ Cross gcc for i586-pc-freebsd7.1.
 # Conflict with a native GCC's man pages
   rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
 
-#  # Bug in gcc-4.0.0pre
-#  mv $RPM_BUILD_ROOT%{_bindir}/gfortran $RPM_BUILD_ROOT%{_bindir}/i586-pc-freebsd7.1-gfortran
-
-%if "%{gcc_version}" >= "3.4"
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/i586-pc-freebsd7.1-i586-pc-freebsd7.1-gcjh%{_exeext}
-%endif
 
-%if "%{gcc_version}" >= "3.3"
   # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gcclib}/i586-pc-freebsd7.1/%{gcc_version}/install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gccexec}/i586-pc-freebsd7.1/%{gcc_version}/install-tools
-%endif
+  rm -rf ${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/install-tools
 
   # Bug in gcc > 4.1.0: Installs an unused, empty directory
   if test -d ${RPM_BUILD_ROOT}%{_prefix}/i586-pc-freebsd7.1/include/bits; then
@@ -284,10 +279,10 @@ Cross gcc for i586-pc-freebsd7.1.
 
   rm -f dirs ;
   echo "%defattr(-,root,root,-)" >> dirs
-  echo "%dir %{gcclib}" >> dirs
-  echo "%dir %{gcclib}/i586-pc-freebsd7.1" >> dirs
+  echo "%dir %{_gcclibdir}/gcc" >> dirs
+  echo "%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1" >> dirs
 
-  TGTDIR="%{gcclib}/i586-pc-freebsd7.1/%{gcc_version}"
+  TGTDIR="%{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -299,13 +294,12 @@ Cross gcc for i586-pc-freebsd7.1.
 
   # Collect files to go into different packages
   cp dirs build/files.gcc
-  cp dirs build/files.g77
   cp dirs build/files.gfortran
   cp dirs build/files.objc
   cp dirs build/files.gcj
   cp dirs build/files.g++
 
-  TGTDIR="%{gcclib}/i586-pc-freebsd7.1/%{gcc_version}"
+  TGTDIR="%{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
@@ -320,6 +314,7 @@ Cross gcc for i586-pc-freebsd7.1.
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
+    *finclude/*);;
     *adainclude*);;
     *adalib*);;
     *gnat1);;
@@ -367,7 +362,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i586-pc-freebsd7.1/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i586-pc-freebsd7.1/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i586-pc-freebsd7.1/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
@@ -375,7 +370,7 @@ chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i586-pc-freebsd7.1/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i586-pc-freebsd7.1/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i586-pc-freebsd7.1/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
@@ -427,37 +422,33 @@ GNU cc compiler for i586-pc-freebsd7.1.
 %files -n i586-pc-freebsd7.1-gcc -f build/files.gcc
 %defattr(-,root,root)
 %{_mandir}/man1/i586-pc-freebsd7.1-gcc.1*
-%if "%{gcc_version}" >= "3.4"
 %{_mandir}/man1/i586-pc-freebsd7.1-cpp.1*
 %{_mandir}/man1/i586-pc-freebsd7.1-gcov.1*
-%endif
 
 %{_bindir}/i586-pc-freebsd7.1-cpp%{_exeext}
 %{_bindir}/i586-pc-freebsd7.1-gcc%{_exeext}
-%if "%{gcc_version}" >= "3.3"
 %{_bindir}/i586-pc-freebsd7.1-gcc-%{gcc_version}%{_exeext}
-%endif
 %{_bindir}/i586-pc-freebsd7.1-gcov%{_exeext}
 %{_bindir}/i586-pc-freebsd7.1-gccbug
 
-%dir %{gcclib}/i586-pc-freebsd7.1/%{gcc_version}/include
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
 %if "i586-pc-freebsd7.1" != "bfin-rtems4.10"
 %if "i586-pc-freebsd7.1" != "avr-rtems4.10"
-%dir %{gcclib}/i586-pc-freebsd7.1/%{gcc_version}/include/ssp
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include/ssp
 %endif
 %endif
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
-%dir %{gcclib}/i586-pc-freebsd7.1/%{gcc_version}/include-fixed
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include-fixed
 %endif
 
-%dir %{gccexec}
-%dir %{gccexec}/i586-pc-freebsd7.1
-%dir %{gccexec}/i586-pc-freebsd7.1/%{gcc_version}
-%{gccexec}/i586-pc-freebsd7.1/%{gcc_version}/cc1%{_exeext}
-%{gccexec}/i586-pc-freebsd7.1/%{gcc_version}/collect2%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
+%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/cc1%{_exeext}
+%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
 # i586-pc-freebsd7.1-gcc-c++
@@ -486,13 +477,13 @@ GCC c++ compiler for i586-pc-freebsd7.1.
 %{_bindir}/i586-pc-freebsd7.1-c++%{_exeext}
 %{_bindir}/i586-pc-freebsd7.1-g++%{_exeext}
 
-%dir %{gccexec}
-%dir %{gccexec}/i586-pc-freebsd7.1
-%dir %{gccexec}/i586-pc-freebsd7.1/%{gcc_version}
-%{gccexec}/i586-pc-freebsd7.1/%{gcc_version}/cc1plus%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
+%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/cc1plus%{_exeext}
 
-%dir %{gcclib}/i586-pc-freebsd7.1/%{gcc_version}/include
-%{gcclib}/i586-pc-freebsd7.1/%{gcc_version}/include/c++
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include
+%{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include/c++
 
 # ==============================================================
 # i586-pc-freebsd7.1-gcc-gfortran
@@ -518,10 +509,14 @@ GCC fortran compiler for i586-pc-freebsd7.1.
 
 %{_mandir}/man1/i586-pc-freebsd7.1-gfortran.1*
 
-%dir %{gccexec}
-%dir %{gccexec}/i586-pc-freebsd7.1
-%dir %{gccexec}/i586-pc-freebsd7.1/%{gcc_version}
-%{gccexec}/i586-pc-freebsd7.1/%{gcc_version}/f951%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
+%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/f951%{_exeext}
+
+%if "%{gcc_version}" >= "4.2.0"
+%{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/finclude
+%endif
 
 # ==============================================================
 # i586-pc-freebsd7.1-gcc-objc
@@ -542,10 +537,10 @@ GCC objc compiler for i586-pc-freebsd7.1.
 %files -n i586-pc-freebsd7.1-gcc-objc -f build/files.objc
 %defattr(-,root,root)
 
-%dir %{gccexec}
-%dir %{gccexec}/i586-pc-freebsd7.1
-%dir %{gccexec}/i586-pc-freebsd7.1/%{gcc_version}
-%{gccexec}/i586-pc-freebsd7.1/%{gcc_version}/cc1obj%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
+%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/cc1obj%{_exeext}
 
-%{gcclib}/i586-pc-freebsd7.1/%{gcc_version}/include/objc
+%{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include/objc
 
