@@ -24,11 +24,12 @@
 %endif
 
   # host library
-%if "%{gcc_version}" >= "4.3.0"
-  # libiberty doesn't honor --libdir, but always installs to _libdir
+%if "%{gcc_version}" >= "4.2.0"
+  # libiberty doesn't honor --libdir, but always installs to a 
+  # magically guessed _libdir
   rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
 %else
-  # libiberty install to --libdir=...
+  # libiberty installs to --libdir=...
   rm -f ${RPM_BUILD_ROOT}%{_gcclibdir}/libiberty.a
 %endif
 
