@@ -15,7 +15,7 @@ RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-RTEMS_BSPOPTS_SET([ON_SKYEYE],[*],[])
+RTEMS_BSPOPTS_SET([ON_SKYEYE],[*],[0])
 RTEMS_BSPOPTS_HELP([ON_SKYEYE],
 [If defined, enable options which optimize executingon the Skyeye 
  simulator.  Speed up the clock ticks while the idle task is running so

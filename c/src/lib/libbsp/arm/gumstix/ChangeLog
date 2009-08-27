@@ -1,3 +1,7 @@
+2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac: Add default value.
+
 2009-08-22	Xi Yang <hiyangxi@gmail.com>
 
 	* fb/fb.c: Register correct device name.
