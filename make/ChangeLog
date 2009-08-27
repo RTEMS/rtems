@@ -1,3 +1,7 @@
+2009-08-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/leon2.cfg, custom/leon3.cfg: Fix typo.
+
 2009-06-04	Xi Yang <hiyangxi@gmail.com>
 
 	* Makefile.am: New Gumstix BSP.
