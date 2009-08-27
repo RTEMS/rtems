@@ -37,7 +37,7 @@
 %define __debug_install_post %{nil}
 
 Name:		i586-pc-freebsd6.4
-Release:	0.20090506.1%{?dist}
+Release:	0.20090827.1%{?dist}
 License:	FreeBSD
 Group:		Development/Tools
 
@@ -149,7 +149,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{freebsd_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i586-pc-freebsd6.4/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i586-pc-freebsd6.4/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i586-pc-freebsd6.4/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{freebsd_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{freebsd_rpmvers}/find-provides
@@ -157,7 +157,7 @@ chmod +x %{_builddir}/%{name}-%{freebsd_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{freebsd_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i586-pc-freebsd6.4/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i586-pc-freebsd6.4/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i586-pc-freebsd6.4/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{freebsd_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{freebsd_rpmvers}/find-requires
