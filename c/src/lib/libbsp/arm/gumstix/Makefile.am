@@ -59,8 +59,10 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/pmc.rel
 
+if ON_SKYEYE
 if HAS_NETWORKING
 libbsp_a_LIBADD += rtl8019.rel
+endif
 endif
 
 include $(srcdir)/preinstall.am

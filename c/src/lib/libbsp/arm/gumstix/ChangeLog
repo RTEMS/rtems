@@ -1,3 +1,8 @@
+2009-08-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: If not on Skyeye, do not include the rtl8019 driver
+	in libbsp.
+
 2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Add default value.
