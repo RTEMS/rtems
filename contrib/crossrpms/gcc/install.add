@@ -86,7 +86,7 @@
   echo "%defattr(-,root,root,-)" >> dirs
 %if "%{_prefix}" != "/usr"
   echo "%dir %{_prefix}" >> dirs
-  echo "%dir %{_libdir}" >> dirs
+  echo "%dir %{_gcclibdir}" >> dirs
   echo "%dir %{_libexecdir}" >> dirs
 %endif
   echo "%dir %{_gcclibdir}/gcc" >> dirs
