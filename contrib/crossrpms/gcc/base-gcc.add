@@ -27,11 +27,6 @@ GCC files that are shared by all targets.
 %endif
 
 %sysdir %{_mandir}
-%if "%{gcc_version}" < "3.4"
-%sysdir %{_mandir}/man1
-%{_mandir}/man1/cpp.1*
-%{_mandir}/man1/gcov.1*
-%endif
 %sysdir %{_mandir}/man7
 %{_mandir}/man7/fsf-funding.7*
 %{_mandir}/man7/gfdl.7*

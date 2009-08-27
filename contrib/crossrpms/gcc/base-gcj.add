@@ -31,7 +31,6 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 %{_infodir}/fastjar.info*
 
 %if "%{gcc_version}" < "4.0"
-%if "%{gcc_version}" >= "3.3"
 %sysdir %{_mandir}
 %sysdir %{_mandir}/man1
 %{_mandir}/man1/gcjh.1*
@@ -43,7 +42,6 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 %{_mandir}/man1/rmiregistry.1*
 %{_mandir}/man1/jar.1*
 %{_mandir}/man1/grepjar.1*
-%endif
 %endif
 
 %post -n @rpmprefix@gcc-gcj-common
