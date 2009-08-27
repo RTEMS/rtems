@@ -13,7 +13,7 @@ Version:      	%expat_rpmvers
 Summary:      	Cygwin expat Libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/expat/expat-%{expat_version}.tar.bz2
-Source1:	ftp://cygwin.com/pub/cygwin/release/expat/libexpat0/libexpat0-%{expat_version}.tar.bz2
+Source1:	ftp://cygwin.com/pub/cygwin/release/expat/libexpat1/libexpat1-%{expat_version}.tar.bz2
 
 Provides:       @rpmprefix@@tool_target@-expat-devel = %{version}-%{release}
 
