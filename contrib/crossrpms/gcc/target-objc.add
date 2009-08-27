@@ -23,6 +23,6 @@ GCC objc compiler for @tool_target@.
 %dir %{_libexecdir}/gcc/@tool_target@/%{gcc_version}
 %{_libexecdir}/gcc/@tool_target@/%{gcc_version}/cc1obj%{_exeext}
 
-%{gcclib}/@tool_target@/%{gcc_version}/include/objc
+%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include/objc
 %endif
 

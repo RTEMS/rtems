@@ -19,12 +19,12 @@
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
     mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
-      $RPM_BUILD_ROOT%{gcclib}/@tool_target@/%{gcc_version}/include/
+      $RPM_BUILD_ROOT%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include/
   fi
 %endif
 
   # host library
-  rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
+  rm -f  ${RPM_BUILD_ROOT}%{_gcclibdir}/libiberty.a
 
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-c++filt%{_exeext}
@@ -51,17 +51,13 @@
 #  mv $RPM_BUILD_ROOT%{_bindir}/gfortran $RPM_BUILD_ROOT%{_bindir}/@tool_target@-gfortran
 %endif
 
-%if "%{gcc_version}" >= "3.4"
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-@tool_target@-gcjh%{_exeext}
-%endif
 
-%if "%{gcc_version}" >= "3.3"
   # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gcclib}/@tool_target@/%{gcc_version}/install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/install-tools
   rm -rf ${RPM_BUILD_ROOT}%{_libexecdir}/gcc/@tool_target@/%{gcc_version}/install-tools
-%endif
 
   # Bug in gcc > 4.1.0: Installs an unused, empty directory
   if test -d ${RPM_BUILD_ROOT}%{_prefix}/@tool_target@/include/bits; then
@@ -91,10 +87,10 @@
   echo "%dir %{_libdir}" >> dirs
   echo "%dir %{_libexecdir}" >> dirs
 %endif
-  echo "%dir %{gcclib}" >> dirs
-  echo "%dir %{gcclib}/@tool_target@" >> dirs
+  echo "%dir %{_gcclibdir}/gcc" >> dirs
+  echo "%dir %{_gcclibdir}/gcc/@tool_target@" >> dirs
 
-  TGTDIR="%{gcclib}/@tool_target@/%{gcc_version}"
+  TGTDIR="%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -111,7 +107,7 @@
   cp dirs build/files.gcj
   cp dirs build/files.g++
 
-  TGTDIR="%{gcclib}/@tool_target@/%{gcc_version}"
+  TGTDIR="%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
