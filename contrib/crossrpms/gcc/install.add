@@ -24,7 +24,13 @@
 %endif
 
   # host library
-  rm -f  ${RPM_BUILD_ROOT}%{_gcclibdir}/libiberty.a
+%if "%{gcc_version}" >= "4.3.0"
+  # libiberty doesn't honor --libdir, but always installs to _libdir
+  rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
+%else
+  # libiberty install to --libdir=...
+  rm -f ${RPM_BUILD_ROOT}%{_gcclibdir}/libiberty.a
+%endif
 
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-c++filt%{_exeext}

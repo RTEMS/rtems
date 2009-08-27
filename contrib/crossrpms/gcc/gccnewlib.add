@@ -120,7 +120,7 @@ BuildRequires:	gcc-gnat
 BuildRequires:	@rpmprefix@@tool_target@-newlib < %{newlib_version}-@NEWLIB_RPMREL@
 %endif
 
-%define gcclib %{_libdir}/gcc
+%define _gcclibdir %{_prefix}/lib
 
 @SOURCES@
 
