@@ -5,7 +5,7 @@
 %define __debug_install_post %{nil}
 
 Name:		@rpmprefix@@tool_target@
-Release:	@FREEBSD_RPMREL@%{?dist}
+Release:	@FREEBSD_RPMREL@
 License:	FreeBSD
 Group:		Development/Tools
 
