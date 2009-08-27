@@ -58,7 +58,7 @@ Summary:      	bfin-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	4%{?dist}
+Release:      	6%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -100,6 +100,8 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 %{?fc10:%global mpfr_provided 2.3.2}
 %{?fc11:%global mpfr_provided 2.4.1}
 %{?suse10_3:%global mpfr_provided 2.2.1}
+%{?suse11_0:%global mpfr_provided 2.3.1}
+%{?suse11_1:%global mpfr_provided 2.3.2}
 %{?cygwin:%global mpfr_provided 2.4.1}
 %{?mingw32:%global mpfr_provided %{nil}}
 
@@ -133,30 +135,17 @@ BuildRequires:	rtems-4.10-bfin-rtems4.10-binutils
 
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-bfin-rtems4.10-binutils
-Requires:	rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-44%{?dist}
+Requires:	rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-46%{?dist}
 
 
-%if "%{gcc_version}" >= "3.4"
-%define gcclib %{_libdir}/gcc
-%define gccexec %{_libexecdir}/gcc
-%else
-%define gcclib %{_libdir}/gcc-lib
-%define gccexec %{_libdir}/gcc-lib
-%endif
+%define _gcclibdir %{_prefix}/lib
 
-%if "%{gcc_version}" == "4.4.0"
-Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtems4.10-20090421.diff
-%endif
 %if "%{gcc_version}" == "4.4.1"
 Source0:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtems4.10-20090722.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtems4.10-20090820.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
-%if "%{gcc_version}" == "4.4.0" 
-Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
-%endif
 %if "%{gcc_version}" == "4.4.1" 
 Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
@@ -236,7 +225,7 @@ cd ..
     --bindir=%{_bindir} \
     --exec_prefix=%{_exec_prefix} \
     --includedir=%{_includedir} \
-    --libdir=%{_libdir} \
+    --libdir=%{_gcclibdir} \
     --libexecdir=%{_libexecdir} \
     --mandir=%{_mandir} \
     --infodir=%{_infodir} \
@@ -282,12 +271,19 @@ cd ..
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
     mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
-      $RPM_BUILD_ROOT%{gcclib}/bfin-rtems4.10/%{gcc_version}/include/
+      $RPM_BUILD_ROOT%{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include/
   fi
 %endif
 
   # host library
+%if "%{gcc_version}" >= "4.2.0"
+  # libiberty doesn't honor --libdir, but always installs to a 
+  # magically guessed _libdir
   rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
+%else
+  # libiberty installs to --libdir=...
+  rm -f ${RPM_BUILD_ROOT}%{_gcclibdir}/libiberty.a
+%endif
 
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/bfin-rtems4.10-c++filt%{_exeext}
@@ -297,18 +293,13 @@ cd ..
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
 
-
-%if "%{gcc_version}" >= "3.4"
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/bfin-rtems4.10-bfin-rtems4.10-gcjh%{_exeext}
-%endif
 
-%if "%{gcc_version}" >= "3.3"
   # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gcclib}/bfin-rtems4.10/%{gcc_version}/install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gccexec}/bfin-rtems4.10/%{gcc_version}/install-tools
-%endif
+  rm -rf ${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}/install-tools
 
   # Bug in gcc > 4.1.0: Installs an unused, empty directory
   if test -d ${RPM_BUILD_ROOT}%{_prefix}/bfin-rtems4.10/include/bits; then
@@ -333,13 +324,11 @@ cd ..
   echo "%defattr(-,root,root,-)" >> dirs
   echo "%dir %{_prefix}" >> dirs
   echo "%dir %{_libdir}" >> dirs
-%if "%{gcc_version}" >= "3.4"
   echo "%dir %{_libexecdir}" >> dirs
-%endif
-  echo "%dir %{gcclib}" >> dirs
-  echo "%dir %{gcclib}/bfin-rtems4.10" >> dirs
+  echo "%dir %{_gcclibdir}/gcc" >> dirs
+  echo "%dir %{_gcclibdir}/gcc/bfin-rtems4.10" >> dirs
 
-  TGTDIR="%{gcclib}/bfin-rtems4.10/%{gcc_version}"
+  TGTDIR="%{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -351,13 +340,12 @@ cd ..
 
   # Collect files to go into different packages
   cp dirs build/files.gcc
-  cp dirs build/files.g77
   cp dirs build/files.gfortran
   cp dirs build/files.objc
   cp dirs build/files.gcj
   cp dirs build/files.g++
 
-  TGTDIR="%{gcclib}/bfin-rtems4.10/%{gcc_version}"
+  TGTDIR="%{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
@@ -372,6 +360,7 @@ cd ..
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
+    *finclude/*);;
     *adainclude*);;
     *adalib*);;
     *gnat1);;
@@ -426,7 +415,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/bfin-rtems4.10/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/bfin-rtems4.10/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/bfin-rtems4.10/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
@@ -434,7 +423,7 @@ chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/bfin-rtems4.10/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/bfin-rtems4.10/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/bfin-rtems4.10/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
@@ -474,7 +463,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-bfin-rtems4.10-binutils
-# Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-44%{?dist}
+# Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-46%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -489,38 +478,34 @@ GNU cc compiler for bfin-rtems4.10.
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/bfin-rtems4.10-gcc.1*
-%if "%{gcc_version}" >= "3.4"
 %{_mandir}/man1/bfin-rtems4.10-cpp.1*
 %{_mandir}/man1/bfin-rtems4.10-gcov.1*
-%endif
 
 %dir %{_bindir}
 %{_bindir}/bfin-rtems4.10-cpp%{_exeext}
 %{_bindir}/bfin-rtems4.10-gcc%{_exeext}
-%if "%{gcc_version}" >= "3.3"
 %{_bindir}/bfin-rtems4.10-gcc-%{gcc_version}%{_exeext}
-%endif
 %{_bindir}/bfin-rtems4.10-gcov%{_exeext}
 %{_bindir}/bfin-rtems4.10-gccbug
 
-%dir %{gcclib}/bfin-rtems4.10/%{gcc_version}/include
+%dir %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
 %if "bfin-rtems4.10" != "bfin-rtems4.10"
 %if "bfin-rtems4.10" != "avr-rtems4.10"
-%dir %{gcclib}/bfin-rtems4.10/%{gcc_version}/include/ssp
+%dir %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include/ssp
 %endif
 %endif
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
-%dir %{gcclib}/bfin-rtems4.10/%{gcc_version}/include-fixed
+%dir %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include-fixed
 %endif
 
-%dir %{gccexec}
-%dir %{gccexec}/bfin-rtems4.10
-%dir %{gccexec}/bfin-rtems4.10/%{gcc_version}
-%{gccexec}/bfin-rtems4.10/%{gcc_version}/cc1%{_exeext}
-%{gccexec}/bfin-rtems4.10/%{gcc_version}/collect2%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/bfin-rtems4.10
+%dir %{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}
+%{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}/cc1%{_exeext}
+%{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
 # rtems-4.10-gcc-common
@@ -545,16 +530,9 @@ GCC files that are shared by all targets.
 %{_infodir}/cppinternals.info*
 %{_infodir}/gcc.info*
 %{_infodir}/gccint.info*
-%if "%{gcc_version}" >= "3.4"
 %{_infodir}/gccinstall.info*
-%endif
 
 %dir %{_mandir}
-%if "%{gcc_version}" < "3.4"
-%dir %{_mandir}/man1
-%{_mandir}/man1/cpp.1*
-%{_mandir}/man1/gcov.1*
-%endif
 %dir %{_mandir}/man7
 %{_mandir}/man7/fsf-funding.7*
 %{_mandir}/man7/gfdl.7*
@@ -565,9 +543,7 @@ GCC files that are shared by all targets.
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
-%if "%{gcc_version}" >= "3.4"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
-%endif
 
 %preun -n rtems-4.10-gcc-common
 if [ $1 -eq 0 ]; then
@@ -575,9 +551,7 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
-%if "%{gcc_version}" >= "3.4"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
-%endif
 fi
 
 # ==============================================================
@@ -608,13 +582,13 @@ GCC c++ compiler for bfin-rtems4.10.
 %{_bindir}/bfin-rtems4.10-c++%{_exeext}
 %{_bindir}/bfin-rtems4.10-g++%{_exeext}
 
-%dir %{gccexec}
-%dir %{gccexec}/bfin-rtems4.10
-%dir %{gccexec}/bfin-rtems4.10/%{gcc_version}
-%{gccexec}/bfin-rtems4.10/%{gcc_version}/cc1plus%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/bfin-rtems4.10
+%dir %{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}
+%{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}/cc1plus%{_exeext}
 
-%dir %{gcclib}/bfin-rtems4.10/%{gcc_version}/include
-%{gcclib}/bfin-rtems4.10/%{gcc_version}/include/c++
+%dir %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include
+%{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include/c++
 
 
 
@@ -626,7 +600,7 @@ Summary:      	C Library (newlib) for bfin-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        44%{?dist}
+Release:        46%{?dist}
 
 Requires:	rtems-4.10-newlib-common
 
@@ -646,7 +620,7 @@ Newlib C Library for bfin-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        44%{?dist}
+Release:        46%{?dist}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
