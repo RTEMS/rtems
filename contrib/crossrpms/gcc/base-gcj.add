@@ -19,12 +19,6 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 
 %files -n @rpmprefix@gcc-gcj-common
 %defattr(-,root,root)
-%if "%{gcc_version}" <= "3.4"
-%sysdir %{_bindir}
-%{_bindir}/jar%{_exeext}
-%{_bindir}/grepjar%{_exeext}
-%endif
-
 %sysdir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/gcj.info*
