@@ -1,3 +1,7 @@
+2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/config.c: Spacing.
+
 2009-08-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h: Eliminate BSPs defining NUMBER_OF_TERMIOS_PORTS.

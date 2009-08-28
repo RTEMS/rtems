@@ -16,11 +16,11 @@
 #include <bsp.h>
 #include <libcpu/io.h>
 #include "m68360.h"
+
 /*
  *  Based on BSP configuration information decide whether to do polling IO
  *  or interrupt driven IO.
  */
-
 #define NS16550_FUNCTIONS &ns16550_fns_polled
 #define MC68360_SCC_FUNCTIONS &mc68360_scc_fns
 
