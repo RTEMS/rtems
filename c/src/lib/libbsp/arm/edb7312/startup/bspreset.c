@@ -14,6 +14,8 @@
 void bsp_reset(void)
 {
 #if ON_SKYEYE == 1
+  #define SKYEYE_MAGIC_ADDRESS (*(volatile unsigned int *)(0xb0000000))
+
   SKYEYE_MAGIC_ADDRESS = 0xff;
 #else
   asm volatile ("b _start");

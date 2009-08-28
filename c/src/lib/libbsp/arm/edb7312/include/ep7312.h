@@ -153,7 +153,4 @@
 /* INTR3 (Interrupt 3) mask/status register bits */
 #define EP7312_INTR2_DAIINT  0x00000001
 
-/*Write to SKYEYE_MAGIC_ADDRESS to make SKYEYE  exit*/
-
-#define SKYEYE_MAGIC_ADDRESS (*(volatile unsigned int *)(0xb0000000))
 #endif /* __EP7312_H__ */
