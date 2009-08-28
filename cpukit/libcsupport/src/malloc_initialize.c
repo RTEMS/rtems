@@ -111,7 +111,6 @@ void RTEMS_Malloc_Initialize(
     );
     if ( !status )
       rtems_fatal_error_occurred( status );
-
   }
 
   MSBUMP( space_available, _Protected_heap_Get_size(RTEMS_Malloc_Heap) );

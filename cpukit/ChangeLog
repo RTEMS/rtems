@@ -1,3 +1,9 @@
+2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/src/malloc_initialize.c, sapi/src/exinit.c,
+	score/src/threadstartmultitasking.c: Fix spacing.
+	* libmisc/stackchk/check.c: Move variable into compiler specific conditional.
+
 2009-08-26	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* score/inline/rtems/score/address.inl: Added const qualifier

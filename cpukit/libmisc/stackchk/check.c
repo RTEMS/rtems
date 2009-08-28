@@ -60,9 +60,9 @@ static inline bool Stack_check_Frame_pointer_in_range(
   Stack_Control *the_stack
 )
 {
-  void *sp = __builtin_frame_address(0);
-
   #if defined(__GNUC__)
+    void *sp = __builtin_frame_address(0);
+
     if ( sp < the_stack->area ) {
       return false;
     }

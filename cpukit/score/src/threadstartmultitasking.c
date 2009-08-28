@@ -78,8 +78,6 @@ void _Thread_Start_multitasking( void )
     *       Ignore the CPU_USE_DEFERRED_FP_SWITCH because we must always
     *       switch in the first thread if it is FP.
     */
-
-
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
    /*
     *  don't need to worry about saving BSP's floating point state

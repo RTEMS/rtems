@@ -104,7 +104,6 @@ void rtems_initialize_data_structures(void)
    *  Do this as early as possible to ensure no debugging output
    *  is even attempted to be printed.
    */
-
   _Debug_Manager_initialization();
 
   _API_extensions_Initialization();
@@ -164,7 +163,6 @@ void rtems_initialize_data_structures(void)
    *  At this point all API extensions are in place.  After the call to
    *  _Thread_Create_idle() _Thread_Executing and _Thread_Heir will be set.
    */
-
   _Thread_Create_idle();
 
   /*
@@ -211,7 +209,6 @@ void rtems_initialize_device_drivers(void)
    *
    *  The API extensions are supposed to create user initialization tasks.
    */
-
   _API_extensions_Run_postdriver();
 }
 
