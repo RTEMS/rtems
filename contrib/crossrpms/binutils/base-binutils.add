@@ -5,6 +5,8 @@
 %package -n @rpmprefix@binutils-common
 Summary:      Base package for RTEMS binutils
 Group: Development/Tools
+%{?_with_noarch_subpackages:BuildArch: noarch}
+
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
