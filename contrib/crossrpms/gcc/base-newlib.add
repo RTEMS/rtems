@@ -8,7 +8,7 @@ Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
 Release:        @NEWLIB_RPMREL@
-${_with_noarch_subpackages:BuildArch: noarch}
+%{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
