@@ -8,6 +8,7 @@ Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
 Release:        @NEWLIB_RPMREL@
+%{?_with_noarch_subpackages:BuildArch: noarch}
 
 %if %build_infos
 Requires:	@rpmprefix@newlib-common

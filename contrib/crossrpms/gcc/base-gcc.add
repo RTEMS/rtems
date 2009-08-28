@@ -6,6 +6,7 @@
 Summary:	Base package for rtems gcc and newlib C Library
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
 License:	GPL
 
 Requires(post): 	/sbin/install-info
