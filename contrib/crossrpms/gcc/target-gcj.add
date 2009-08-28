@@ -2,24 +2,23 @@
 # ==============================================================
 # @rpmprefix@@tool_target@-gcj
 # ==============================================================
-%package -n @rpmprefix@@tool_target@-gcj
+%package -n @rpmprefix@@tool_target@-gcc-gcj
 Summary:        Java support (gcj) for @tool_target@-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
-Provides:	@rpmprefix@@tool_target@-gcc-gcj = %{gcc_rpmvers}-%{release}
 
 %if %build_infos
 Requires:       @rpmprefix@gcc-gcj-common
 %endif
 Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}-%{release}
 
-%description -n @rpmprefix@@tool_target@-gcj
+%description -n @rpmprefix@@tool_target@-gcc-gcj
 RTEMS is an open source operating system for embedded systems.
 
 This is the gcc/java compiler for @tool_target@
 
-%files -n @rpmprefix@@tool_target@-gcj -f build/files.gcj
+%files -n @rpmprefix@@tool_target@-gcc-gcj -f build/files.gcj
 %defattr(-,root,root)
 %{_bindir}/@tool_target@-gcj%{_exeext}
 %{_bindir}/@tool_target@-jcf-dump%{_exeext}

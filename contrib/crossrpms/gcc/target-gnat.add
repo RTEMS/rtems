@@ -7,7 +7,6 @@ Summary:        Ada support for for @tool_target@-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
-Provides:	@rpmprefix@@tool_target@-gcc-gnat = %{gcc_rpmvers}-%{release}
 
 %if %_build_infos
 Requires:       @rpmprefix@gcc-gnat-common
