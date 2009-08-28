@@ -15,7 +15,6 @@ GCC objc compiler for @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-gcc-objc -f build/files.objc
 %defattr(-,root,root)
-
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/@tool_target@
 %dir %{_libexecdir}/gcc/@tool_target@/%{gcc_version}
