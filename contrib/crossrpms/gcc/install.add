@@ -124,6 +124,7 @@
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
+    *include-fixed/*);;
     *finclude/*);;
     *adainclude*);;
     *adalib*);;
