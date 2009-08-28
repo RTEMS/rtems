@@ -98,7 +98,6 @@ void bsp_start( void )
   /*
    *  The simulator likes the exception table to be at 0xfff00000.
    */
-
   bsp_exceptions_in_RAM = FALSE;
 
   /*
