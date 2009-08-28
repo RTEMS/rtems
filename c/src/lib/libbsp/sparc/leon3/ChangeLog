@@ -1,3 +1,7 @@
+2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* configure.ac: Fix typo.
+
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/console.c: Fix warning.
