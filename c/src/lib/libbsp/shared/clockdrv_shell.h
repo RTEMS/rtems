@@ -19,42 +19,31 @@
 #error "clockdrv_shell.c: fast idle and N ISRs per tick is not supported"
 #endif
 
-
 /*
  * This method is rarely used so default it.
  */
 #ifndef Clock_driver_support_find_timer
-#define Clock_driver_support_find_timer()
+  #define Clock_driver_support_find_timer()
 #endif
 
 /*
  *  ISRs until next clock tick
  */
-
 #ifdef CLOCK_DRIVER_ISRS_PER_TICK
-volatile uint32_t         Clock_driver_isrs;
+  volatile uint32_t  Clock_driver_isrs;
 #endif
 
 /*
  *  Clock ticks since initialization
  */
-
 volatile uint32_t         Clock_driver_ticks;
 
 /*
  *  ISR formerly installed.
  */
-
 rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
-
-/*
- *  Major and minor number.
- */
-
-rtems_device_major_number rtems_clock_major = UINT32_MAX;
-rtems_device_minor_number rtems_clock_minor;
 
 /*
  *  Clock_isr
@@ -67,9 +56,7 @@ rtems_device_minor_number rtems_clock_minor;
  *  Output parameters:  NONE
  *
  *  Return values:      NONE
- *
  */
-
 rtems_isr Clock_isr(
   rtems_vector_number vector
 )
@@ -77,48 +64,41 @@ rtems_isr Clock_isr(
   /*
    *  Accurate count of ISRs
    */
-
   Clock_driver_ticks += 1;
 
-#ifdef CLOCK_DRIVER_USE_FAST_IDLE
-  do {
-    rtems_clock_tick();
-  } while ( _Thread_Executing == _Thread_Idle &&
-          _Thread_Heir == _Thread_Executing);
+  #ifdef CLOCK_DRIVER_USE_FAST_IDLE
+    do {
+      rtems_clock_tick();
+    } while ( _Thread_Executing == _Thread_Idle &&
+            _Thread_Heir == _Thread_Executing);
 
-  Clock_driver_support_at_tick();
-  return;
+    Clock_driver_support_at_tick();
+    return;
+  #else
+    /*
+     *  Do the hardware specific per-tick action.
+     *
+     *  The counter/timer may or may not be set to automatically reload.
+     */
+    Clock_driver_support_at_tick();
 
-#else
+    #ifdef CLOCK_DRIVER_ISRS_PER_TICK
+      /*
+       *  The driver is multiple ISRs per clock tick.
+       */
+      if ( !Clock_driver_isrs ) {
+        rtems_clock_tick();
 
-  /*
-   *  Do the hardware specific per-tick action.
-   *
-   *  The counter/timer may or may not be set to automatically reload.
-   */
-
-  Clock_driver_support_at_tick();
-
-#ifdef CLOCK_DRIVER_ISRS_PER_TICK
-  /*
-   *  The driver is multiple ISRs per clock tick.
-   */
-
-  if ( !Clock_driver_isrs ) {
-
-    rtems_clock_tick();
-
-    Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
-  }
-  Clock_driver_isrs--;
-#else
-
-  /*
-   *  The driver is one ISR per clock tick.
-   */
-  rtems_clock_tick();
-#endif
-#endif
+        Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
+      }
+      Clock_driver_isrs--;
+    #else
+      /*
+       *  The driver is one ISR per clock tick.
+       */
+      rtems_clock_tick();
+    #endif
+  #endif
 }
 
 /*
@@ -211,19 +191,11 @@ rtems_device_driver Clock_initialize(
   Install_clock( Clock_isr );
 
   /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
-
-  /*
    *  If we are counting ISRs per tick, then initialize the counter.
    */
-
-#ifdef CLOCK_DRIVER_ISRS_PER_TICK
-  Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
-#endif
+  #ifdef CLOCK_DRIVER_ISRS_PER_TICK
+    Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
+  #endif
 
   return RTEMS_SUCCESSFUL;
 }

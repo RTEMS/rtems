@@ -30,6 +30,5 @@ void bsp_libc_init(
     /*
      * Set up for the libc handling.
      */
-
     libc_init();
 }

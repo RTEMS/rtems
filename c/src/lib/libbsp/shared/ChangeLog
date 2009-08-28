@@ -1,3 +1,8 @@
+2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bootcard.c, bsplibc.c, clockdrv_shell.h, console-polled.c: Fix
+	formatting.
+
 2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* src/irq-legacy.c: Spacing, tabs, and proper format for license

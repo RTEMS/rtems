@@ -88,7 +88,8 @@ static rtems_status_code bootcard_bsp_libc_helper(
      * For the default heap size use the free space from the end of the
      * work space up to the end of the work area as heap.
      */
-    heap_size_default = work_area_size - rtems_configuration_get_work_space_size();
+    heap_size_default = work_area_size -
+        rtems_configuration_get_work_space_size();
 
     /* Keep it as a multiple of 16 bytes */
     heap_size_default &= ~((intptr_t) 0xf);

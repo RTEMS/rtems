@@ -35,11 +35,10 @@ void console_initialize_hardware(void);
  *  Console Termios Support Entry Points
  *
  */
-
 int console_write_support (
-  int minor,
+  int         minor,
   const char *bufarg,
-  int len
+  int         len
 )
 {
   int nwrite = 0;
@@ -65,18 +64,19 @@ rtems_device_driver console_initialize(
 {
   rtems_status_code status;
 
+  /*
+   *  Ensure Termios is initialized
+   */
   rtems_termios_initialize();
 
   /*
    *  Make sure the hardware is initialized.
    */
-
   console_initialize_hardware();
 
   /*
    *  Register Device Names
    */
-
   status = rtems_io_register_name( "/dev/console", major, 0 );
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
@@ -106,7 +106,7 @@ rtems_device_driver console_open(
   if ( minor > 1 )
     return RTEMS_INVALID_NUMBER;
 
-  sc = rtems_termios_open (major, minor, arg, &pollCallbacks );
+  sc = rtems_termios_open( major, minor, arg, &pollCallbacks );
 
   return RTEMS_SUCCESSFUL;
 }
@@ -117,7 +117,7 @@ rtems_device_driver console_close(
   void                    * arg
 )
 {
-  return rtems_termios_close (arg);
+  return rtems_termios_close( arg );
 }
 
 rtems_device_driver console_read(
@@ -126,7 +126,7 @@ rtems_device_driver console_read(
   void                    * arg
 )
 {
-  return rtems_termios_read (arg);
+  return rtems_termios_read( arg );
 }
 
 rtems_device_driver console_write(
@@ -135,7 +135,7 @@ rtems_device_driver console_write(
   void                    * arg
 )
 {
-  return rtems_termios_write (arg);
+  return rtems_termios_write( arg );
 }
 
 rtems_device_driver console_control(
@@ -144,5 +144,5 @@ rtems_device_driver console_control(
   void                    * arg
 )
 {
-  return rtems_termios_ioctl (arg);
+  return rtems_termios_ioctl( arg );
 }
