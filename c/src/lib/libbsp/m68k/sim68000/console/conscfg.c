@@ -12,6 +12,7 @@
  */
 
 #include <bsp.h>
+#include <bspopts.h>
 
 #include <libchip/serial.h>
 #include <libchip/mc68681.h>
@@ -37,26 +38,26 @@
 #define MC68681_FUNCTIONS &mc68681_fns_polled
 #endif
 
-console_tbl	Console_Port_Tbl[] = {
-	{
-		"/dev/com0",			/* sDeviceName */
-                SERIAL_MC68681,                 /* deviceType */
-		MC68681_FUNCTIONS,		/* pDeviceFns */
-		NULL,				/* deviceProbe */
-		NULL,				/* pDeviceFlow */
-		16,				/* ulMargin */
-		8,				/* ulHysteresis */
-		(void *)9600,	/* baud rate */	/* pDeviceParams */
-		MC68681_BASE_ADDRESS,		/* ulCtrlPort1 */
-		MC68681_BASE_ADDRESS,		/* ulCtrlPort2 */
-		MC68681_DATA_ADDRESS,		/* ulDataPort */
-		mc68681_get_register_2,         /* getRegister */
-		mc68681_set_register_2,		/* setRegister */
-		NULL, /* unused */		/* getData */
-		NULL, /* unused */		/* setData */
-                (uint32_t)mc68681_baud_rate_table,	/* ulClock */
-		MC68681_VECTOR			/* ulIntVector */
-	}
+console_tbl  Console_Port_Tbl[] = {
+  {
+    "/dev/com0",                        /* sDeviceName */
+    SERIAL_MC68681,                     /* deviceType */
+    MC68681_FUNCTIONS,                  /* pDeviceFns */
+    NULL,                               /* deviceProbe */
+    NULL,                               /* pDeviceFlow */
+    16,                                 /* ulMargin */
+    8,                                  /* ulHysteresis */
+    (void *)9600,                       /* pDeviceParams */
+    MC68681_BASE_ADDRESS,               /* ulCtrlPort1 */
+    MC68681_BASE_ADDRESS,               /* ulCtrlPort2 */
+    MC68681_DATA_ADDRESS,               /* ulDataPort */
+    mc68681_get_register_2,             /* getRegister */
+    mc68681_set_register_2,             /* setRegister */
+    NULL, /* unused */                  /* getData */
+    NULL, /* unused */                  /* setData */
+    (uint32_t)mc68681_baud_rate_table,  /* ulClock */
+    MC68681_VECTOR                      /* ulIntVector */
+  }
 };
 
 /*
