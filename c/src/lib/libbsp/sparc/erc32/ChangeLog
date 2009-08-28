@@ -1,3 +1,7 @@
+2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/console.c: Spacing.
+
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, include/bsp.h, startup/setvec.c: Split idle method into

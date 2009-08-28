@@ -309,12 +309,14 @@ rtems_device_driver console_initialize(
 {
   rtems_status_code status;
 
+  /*
+   *  Ensure Termios is initialized
+   */
   rtems_termios_initialize();
 
   /*
    *  Register Device Names
    */
-
   status = rtems_io_register_name( "/dev/console", major, 0 );
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
@@ -326,10 +328,9 @@ rtems_device_driver console_initialize(
   /*
    *  Initialize Hardware
    */
-
-#if (CONSOLE_USE_INTERRUPTS)
-  console_initialize_interrupts();
-#endif
+  #if (CONSOLE_USE_INTERRUPTS)
+    console_initialize_interrupts();
+  #endif
 
   return RTEMS_SUCCESSFUL;
 }
