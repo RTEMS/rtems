@@ -1,3 +1,7 @@
+2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Fix spacing.
+
 2009-08-26	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* spstkalloc/init.c: Changed allocator signature. Functions are now
