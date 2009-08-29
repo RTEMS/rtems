@@ -12,14 +12,14 @@ BINUTILS_SUBPACKAGES += $(top_srcdir)/common/clean.add
 BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/target-binutils.add
 BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/base-binutils.add
 
-$(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am $(srcdir)/binutils-sources.add
+$(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am $(srcdir)/binutils-sources.add $(srcdir)/../binutils.am
 	cat $(BINUTILS_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r $(srcdir)/binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  | $(MKSPEC0) \
 	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
 	  -e "s/[@]BINUTILS_PKGVERS[@]/$(BINUTILS_PKGVERS)/g" \
-	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
+	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)%{?dist}/g" \
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 

@@ -7,7 +7,7 @@ MPFR_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
 MPFR_SUBPACKAGES += $(top_srcdir)/common/clean.add
 MPFR_SUBPACKAGES += $(srcdir)/target-mpfr.add
 
-$(TARGET)-mpfr.spec.in: $(MPFR_SUBPACKAGES) Makefile.am
+$(TARGET)-mpfr.spec.in: $(MPFR_SUBPACKAGES) Makefile.am $(srcdir)/../mpfr.am
 	cat $(MPFR_SUBPACKAGES) | sed \
 	  -e "s/[@]MPFR_VERS[@]/$(MPFR_VERS)/g" \
 	  -e "s/[@]MPFR_RPMREL[@]/$(MPFR_RPMREL)/g" \
