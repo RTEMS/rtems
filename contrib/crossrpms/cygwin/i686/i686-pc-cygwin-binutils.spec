@@ -38,7 +38,7 @@ Name:		i686-pc-cygwin-binutils
 Summary:	Binutils for target i686-pc-cygwin
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20090827.0%{?dist}
+Release:	0.20090829.1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -167,6 +167,7 @@ GNU binutils targetting i686-pc-cygwin.
 
 %files -n i686-pc-cygwin-binutils
 %defattr(-,root,root)
+
 %{_mandir}/man1/i686-pc-cygwin-*.1*
 
 %{_bindir}/i686-pc-cygwin-*
