@@ -53,7 +53,7 @@ Name:		rtems-4.10-lm32-rtems4.10-binutils
 Summary:	Binutils for target lm32-rtems4.10
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -188,6 +188,8 @@ GNU binutils targetting lm32-rtems4.10.
 %files -n rtems-4.10-lm32-rtems4.10-binutils
 %defattr(-,root,root)
 %dir %{_prefix}
+%dir %{_datarootdir}
+
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/lm32-rtems4.10-*.1*

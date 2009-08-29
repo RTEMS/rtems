@@ -53,7 +53,7 @@ Name:		rtems-4.10-sh-rtems4.10-binutils
 Summary:	Binutils for target sh-rtems4.10
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -205,6 +205,8 @@ GNU binutils targetting sh-rtems4.10.
 %files -n rtems-4.10-sh-rtems4.10-binutils
 %defattr(-,root,root)
 %dir %{_prefix}
+%dir %{_datarootdir}
+
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/sh-rtems4.10-*.1*
@@ -224,6 +226,8 @@ GNU binutils targetting sh-rtems4.10.
 %package -n rtems-4.10-binutils-common
 Summary:      Base package for RTEMS binutils
 Group: Development/Tools
+%{?_with_noarch_subpackages:BuildArch: noarch}
+
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
@@ -239,9 +243,7 @@ This is the base for binutils regardless of target CPU.
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/binutils.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/ld.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
-%if "%{binutils_version}" > "2.17"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
-%endif
 
 %preun -n rtems-4.10-binutils-common
 if [ $1 -eq 0 ]; then
@@ -250,9 +252,7 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/binutils.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/ld.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
-%if "%{binutils_version}" > "2.17"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
-%endif
 fi
 
 %files -n rtems-4.10-binutils-common
@@ -265,9 +265,7 @@ fi
 %{_infodir}/binutils.info*
 %{_infodir}/ld.info*
 %{_infodir}/standards.info*
-%if "%{binutils_version}" > "2.17"
 %{_infodir}/gprof.info*
-%endif
 
 %dir %{_prefix}/share
 %dir %{_prefix}/share/locale
