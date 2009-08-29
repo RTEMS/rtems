@@ -48,13 +48,13 @@ include ../mpfr.am
 # Check bfd/configure for the real version number
 BINUTILS_VERS = 2.18.50
 BINUTILS_PKGVERS = 20080624-2
-BINUTILS_RPMREL = 0.20090827.0%{?dist}
+BINUTILS_RPMREL = 0.20090829.1
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
 GCC_VERS = 3.4.4
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20090827.0%{?dist}
+GCC_RPMREL = 0.20090829.0
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx
 GCC_OPTS += --disable-infos
