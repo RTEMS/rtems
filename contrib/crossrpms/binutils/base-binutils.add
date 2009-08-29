@@ -22,9 +22,7 @@ This is the base for binutils regardless of target CPU.
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/binutils.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/ld.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
-%if "%{binutils_version}" > "2.17"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
-%endif
 
 %preun -n @rpmprefix@binutils-common
 if [ $1 -eq 0 ]; then
@@ -33,9 +31,7 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/binutils.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/ld.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
-%if "%{binutils_version}" > "2.17"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
-%endif
 fi
 
 %files -n @rpmprefix@binutils-common
@@ -48,9 +44,7 @@ fi
 %{_infodir}/binutils.info*
 %{_infodir}/ld.info*
 %{_infodir}/standards.info*
-%if "%{binutils_version}" > "2.17"
 %{_infodir}/gprof.info*
-%endif
 
 %sysdir %{_prefix}/share
 %sysdir %{_prefix}/share/locale
