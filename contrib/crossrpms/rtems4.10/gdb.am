@@ -12,7 +12,7 @@ GDB_SUBPACKAGES += $(top_srcdir)/common/clean.add
 GDB_SUBPACKAGES += $(top_srcdir)/gdb/target-gdb.add
 GDB_SUBPACKAGES += $(top_srcdir)/gdb/base-gdb.add
 
-$(TARGET)-gdb.spec.in: $(GDB_SUBPACKAGES) Makefile.am $(srcdir)/gdb-sources.add
+$(TARGET)-gdb.spec.in: $(GDB_SUBPACKAGES) Makefile.am $(srcdir)/gdb-sources.add $(srcdir)/../gdb.am
 	cat $(GDB_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r $(srcdir)/gdb-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \

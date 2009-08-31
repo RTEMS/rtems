@@ -12,7 +12,7 @@ BINUTILS_SUBPACKAGES += $(top_srcdir)/common/clean.add
 BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/target-binutils.add
 BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/base-binutils.add
 
-$(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am $(srcdir)/binutils-sources.add
+$(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am $(srcdir)/binutils-sources.add $(srcdir)/../binutils.am
 	cat $(BINUTILS_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r $(srcdir)/binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
