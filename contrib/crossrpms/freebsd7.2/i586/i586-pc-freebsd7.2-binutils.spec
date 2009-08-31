@@ -38,7 +38,7 @@ Name:		i586-pc-freebsd7.2-binutils
 Summary:	Binutils for target i586-pc-freebsd7.2
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20090831.1%{?dist}
+Release:	0.20090831.2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
