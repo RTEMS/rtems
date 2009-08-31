@@ -18,6 +18,7 @@ BINUTILS_OPTS +=
 
 GCC_VERS = 4.3.4
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20090830.0
+GCC_RPMREL = 0.20090831.0
 include ../gcc.am
-GCC_OPTS += --languages=cxx
+# C only
+# GCC_OPTS += --languages=cxx
