@@ -107,6 +107,7 @@ Requires:	@rpmprefix@gcc-common
 Requires:	@rpmprefix@@tool_target@-binutils
 Requires:	@rpmprefix@@tool_target@-sys-root
 Requires:	@rpmprefix@@tool_target@-w32api-sys-root
+Requires:	@rpmprefix@@tool_target@-gcc-libgcc = %{gcc_rpmvers}-%{release}
 %if %build_newlib
 Requires:	@rpmprefix@@tool_target@-newlib = %{newlib_version}-@NEWLIB_RPMREL@
 %endif
