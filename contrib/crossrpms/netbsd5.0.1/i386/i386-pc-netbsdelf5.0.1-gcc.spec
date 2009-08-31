@@ -41,7 +41,7 @@ Summary:      	i386-pc-netbsdelf5.0.1 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20090831.0
+Release:      	0.20090831.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
