@@ -58,7 +58,7 @@ Summary:      	m32c-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	7%{?dist}
+Release:      	8%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -135,7 +135,7 @@ BuildRequires:	rtems-4.10-m32c-rtems4.10-binutils
 
 Requires:	rtems-4.10-m32c-rtems4.10-binutils
 Requires:	rtems-4.10-m32c-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-47%{?dist}
+Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-48%{?dist}
 
 
 %define _gcclibdir %{_prefix}/lib
@@ -452,7 +452,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-m32c-rtems4.10-binutils
-# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-47%{?dist}
+# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-48%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -470,7 +470,7 @@ Summary:        libgcc for m32c-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-47%{?dist}
+Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-48%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-m32c-rtems4.10-gcc-libgcc
@@ -534,7 +534,7 @@ Summary:      	C Library (newlib) for m32c-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        47%{?dist}
+Release:        48%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 
