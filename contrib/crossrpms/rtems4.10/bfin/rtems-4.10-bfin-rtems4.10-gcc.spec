@@ -58,7 +58,7 @@ Summary:      	bfin-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	7%{?dist}
+Release:      	8%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -135,7 +135,8 @@ BuildRequires:	rtems-4.10-bfin-rtems4.10-binutils
 
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-bfin-rtems4.10-binutils
-Requires:	rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-47%{?dist}
+Requires:	rtems-4.10-bfin-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
+Requires:	rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-48%{?dist}
 
 
 %define _gcclibdir %{_prefix}/lib
@@ -307,11 +308,11 @@ cd ..
   fi
 
   # Collect multilib subdirectories
-  f=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
+  multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
   echo "%defattr(-,root,root,-)" > build/files.newlib
   TGTDIR="%{_exec_prefix}/bfin-rtems4.10/lib"
-  for i in $f; do
+  for i in $multilibs; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> build/files.newlib
       ;;
@@ -323,13 +324,8 @@ cd ..
   rm -f dirs ;
   echo "%defattr(-,root,root,-)" >> dirs
   echo "%dir %{_prefix}" >> dirs
-  echo "%dir %{_gcclibdir}" >> dirs
-  echo "%dir %{_libexecdir}" >> dirs
-  echo "%dir %{_gcclibdir}/gcc" >> dirs
-  echo "%dir %{_gcclibdir}/gcc/bfin-rtems4.10" >> dirs
-
   TGTDIR="%{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}"
-  for i in $f; do
+  for i in $multilibs; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
       ;;
@@ -360,6 +356,7 @@ cd ..
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
+    *include-fixed/*);;
     *finclude/*);;
     *adainclude*);;
     *adalib*);;
@@ -463,7 +460,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-bfin-rtems4.10-binutils
-# Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-47%{?dist}
+# Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-48%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -473,8 +470,25 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 %description -n rtems-4.10-bfin-rtems4.10-gcc
 GNU cc compiler for bfin-rtems4.10.
 
-%files -n rtems-4.10-bfin-rtems4.10-gcc -f build/files.gcc
+# ==============================================================
+# rtems-4.10-bfin-rtems4.10-gcc-libgcc
+# ==============================================================
+%package -n rtems-4.10-bfin-rtems4.10-gcc-libgcc
+Summary:        libgcc for bfin-rtems4.10-gcc
+Group:          Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-48%{?dist}
+License:	GPL
+
+%description -n rtems-4.10-bfin-rtems4.10-gcc-libgcc
+libgcc bfin-rtems4.10-gcc.
+
+
+%files -n rtems-4.10-bfin-rtems4.10-gcc
 %defattr(-,root,root)
+%dir %{_prefix}
+
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/bfin-rtems4.10-gcc.1*
@@ -488,7 +502,23 @@ GNU cc compiler for bfin-rtems4.10.
 %{_bindir}/bfin-rtems4.10-gcov%{_exeext}
 %{_bindir}/bfin-rtems4.10-gccbug
 
+%dir %{_libexecdir}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/bfin-rtems4.10
+%dir %{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}
+%{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}/cc1%{_exeext}
+%{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}/collect2%{_exeext}
+
+
+%files -n rtems-4.10-bfin-rtems4.10-gcc-libgcc -f build/files.gcc
+%defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_gcclibdir}
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/bfin-rtems4.10
+%dir %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}
 %dir %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include
+
 %if "%{gcc_version}" > "4.0.3"
 %if "bfin-rtems4.10" != "bfin-rtems4.10"
 %if "bfin-rtems4.10" != "avr-rtems4.10"
@@ -498,14 +528,8 @@ GNU cc compiler for bfin-rtems4.10.
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
-%dir %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include-fixed
+%{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include-fixed
 %endif
-
-%dir %{_libexecdir}/gcc
-%dir %{_libexecdir}/gcc/bfin-rtems4.10
-%dir %{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}
-%{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}/cc1%{_exeext}
-%{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
 # rtems-4.10-gcc-common
@@ -514,6 +538,7 @@ GNU cc compiler for bfin-rtems4.10.
 Summary:	Base package for rtems gcc and newlib C Library
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
 License:	GPL
 
 Requires(post): 	/sbin/install-info
@@ -562,12 +587,11 @@ Summary:	GCC c++ compiler for bfin-rtems4.10
 Group:		Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
+Requires:       rtems-4.10-bfin-rtems4.10-gcc-libstdc++ = %{gcc_rpmvers}-%{release}
 
 %if "%{_build}" != "%{_host}"
 BuildRequires:  rtems-4.10-bfin-rtems4.10-gcc-c++ = %{gcc_rpmvers}
 %endif
-Provides:	rtems-4.10-bfin-rtems4.10-c++ = %{gcc_rpmvers}-%{release}
-Obsoletes:	rtems-4.10-bfin-rtems4.10-c++ < %{gcc_rpmvers}-%{release}
 
 Requires:       rtems-4.10-gcc-common
 Requires:       rtems-4.10-bfin-rtems4.10-gcc = %{gcc_rpmvers}-%{release}
@@ -575,18 +599,44 @@ Requires:       rtems-4.10-bfin-rtems4.10-gcc = %{gcc_rpmvers}-%{release}
 %description -n rtems-4.10-bfin-rtems4.10-gcc-c++
 GCC c++ compiler for bfin-rtems4.10.
 
-%files -n rtems-4.10-bfin-rtems4.10-gcc-c++ -f build/files.g++
+
+%package -n rtems-4.10-bfin-rtems4.10-gcc-libstdc++
+Summary:	libstdc++ for bfin-rtems4.10
+Group:		Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	GPL
+
+%description -n rtems-4.10-bfin-rtems4.10-gcc-libstdc++
+%{_summary}
+
+
+%files -n rtems-4.10-bfin-rtems4.10-gcc-c++
 %defattr(-,root,root)
+%dir %{_prefix}
+
+%dir %{_mandir}
+%dir %{_mandir}/man1
 %{_mandir}/man1/bfin-rtems4.10-g++.1*
 
+%dir %{_bindir}
 %{_bindir}/bfin-rtems4.10-c++%{_exeext}
 %{_bindir}/bfin-rtems4.10-g++%{_exeext}
 
+%dir %{_libexecdir}
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/bfin-rtems4.10
 %dir %{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}
 %{_libexecdir}/gcc/bfin-rtems4.10/%{gcc_version}/cc1plus%{_exeext}
 
+
+%files -n rtems-4.10-bfin-rtems4.10-gcc-libstdc++ -f build/files.g++
+%defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_gcclibdir}
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/bfin-rtems4.10
+%dir %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}
 %dir %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include
 %{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}/include/c++
 
@@ -600,7 +650,8 @@ Summary:      	C Library (newlib) for bfin-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        47%{?dist}
+Release:        48%{?dist}
+%{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
 
@@ -610,6 +661,7 @@ Newlib C Library for bfin-rtems4.10.
 %files -n rtems-4.10-bfin-rtems4.10-newlib -f build/files.newlib
 %defattr(-,root,root)
 %dir %{_prefix}
+%dir %{_exec_prefix}
 %dir %{_exec_prefix}/bfin-rtems4.10
 %{_exec_prefix}/bfin-rtems4.10/include
 
@@ -620,7 +672,8 @@ Newlib C Library for bfin-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        47%{?dist}
+Release:        48%{?dist}
+%{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
