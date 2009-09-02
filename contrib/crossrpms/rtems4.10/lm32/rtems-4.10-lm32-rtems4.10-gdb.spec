@@ -45,14 +45,14 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.8.50.20090629
-%define gdb_rpmvers %{expand:%(echo 6.8.50.20090629 | tr - _)} 
+%define gdb_version 6.8.50.20090902
+%define gdb_rpmvers %{expand:%(echo 6.8.50.20090902 | tr - _)} 
 
 Name:		rtems-4.10-lm32-rtems4.10-gdb
 Summary:	Gdb for target lm32-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	3%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -106,17 +106,17 @@ BuildRequires:  %{_host_rpmprefix}termcap-devel
 BuildRequires:  %{_host_rpmprefix}readline-devel
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
+# Required for building the infos
+BuildRequires:	/sbin/install-info
+BuildRequires:	texinfo >= 4.2
 
+
+Requires:	rtems-4.10-gdb-common
 
 # A copy of a gdb development snapshot having been retrieved from
 # ftp://sources.redhat.com/pub/gdb/snapshots/current/gdb-%{gdb_version}.tar.bz2
 Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
-
-# rtems-4.10 patches
-# + lm32-sim/gdb http://sourceware.org/ml/gdb-patches/2008-12/msg00373.html
-# + misc small fixes to lm32-sim/gdb
-# + avr simulator
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8.50.20090629-rtems4.10-20090629.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090902.diff
 
 %description
 GDB for target lm32-rtems4.10
@@ -162,6 +162,7 @@ rm -f gdb-%{gdb_version}/readline/configure
     --mandir=%{_mandir} --infodir=%{_infodir}
 
   make %{?_smp_mflags} all
+  make info
   cd ..
 
 %install
@@ -171,8 +172,13 @@ rm -f gdb-%{gdb_version}/readline/configure
   cd build
   make DESTDIR=$RPM_BUILD_ROOT install
 
-# Conflict with a native gdb's infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
+
+# These come from other packages
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/bfd*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/configure*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/standards*
 
 # We don't ship host files
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
@@ -237,4 +243,45 @@ GNU gdb targetting lm32-rtems4.10.
 
 %dir %{_bindir}
 %{_bindir}/lm32-rtems4.10-*
+
+# ==============================================================
+# rtems-4.10-gdb-common
+# ==============================================================
+%package -n rtems-4.10-gdb-common
+Summary:      Base package for RTEMS gdbs
+Group: Development/Tools
+Requires(post):		/sbin/install-info
+Requires(preun):	/sbin/install-info
+%{?_with_noarch_subpackages:BuildArch: noarch}
+
+%description -n rtems-4.10-gdb-common
+
+GDB files shared by all targets.
+
+%post -n rtems-4.10-gdb-common
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdb.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
+
+%preun -n rtems-4.10-gdb-common
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdb.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
+fi
+
+%files -n rtems-4.10-gdb-common
+%defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/gdb.info*
+
+%{_infodir}/gdbint.info*
+%{_infodir}/stabs.info*
+%{_infodir}/annotate.info*
 
