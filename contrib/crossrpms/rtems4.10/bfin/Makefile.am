@@ -21,9 +21,9 @@ GCC_OPTS += --languages=cxx
 
 GDB_VERS = 6.5
 GDB_PKGVERS = $(GDB_VERS)
-GDB_RPMREL = 7
+GDB_RPMREL = 8
 include ../gdb.am
-GDB_OPTS +=
+GDB_OPTS += --disable-infos
 
 CPUKIT_VERS = 4.9.99.0
 CPUKIT_PKGVERS = $(CPUKIT_VERS)-20090206-2
