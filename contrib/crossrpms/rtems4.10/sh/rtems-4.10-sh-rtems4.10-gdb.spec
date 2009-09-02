@@ -52,7 +52,7 @@ Name:		rtems-4.10-sh-rtems4.10-gdb
 Summary:	Gdb for target sh-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	11%{?dist}
+Release:	12%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -232,6 +232,9 @@ GNU gdb targetting sh-rtems4.10.
 
 %files -n rtems-4.10-sh-rtems4.10-gdb
 %defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/sh-rtems4.10-*.1*
@@ -247,6 +250,7 @@ Summary:      Base package for RTEMS gdbs
 Group: Development/Tools
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
+%{?_with_noarch_subpackages:BuildArch: noarch}
 
 %description -n rtems-4.10-gdb-common
 
@@ -268,6 +272,9 @@ fi
 
 %files -n rtems-4.10-gdb-common
 %defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/gdb.info*

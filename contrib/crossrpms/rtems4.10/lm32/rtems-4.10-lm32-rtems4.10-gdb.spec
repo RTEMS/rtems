@@ -52,7 +52,7 @@ Name:		rtems-4.10-lm32-rtems4.10-gdb
 Summary:	Gdb for target lm32-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -228,6 +228,9 @@ GNU gdb targetting lm32-rtems4.10.
 
 %files -n rtems-4.10-lm32-rtems4.10-gdb
 %defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/lm32-rtems4.10-*.1*
