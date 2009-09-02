@@ -19,6 +19,9 @@ newlib files that are shared by all targets.
 
 %files -n @rpmprefix@newlib-common
 %defattr(-,root,root)
+%sysdir %{_prefix}
+%sysdir %{_prefix}/share
+
 %sysdir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/libc.info*
