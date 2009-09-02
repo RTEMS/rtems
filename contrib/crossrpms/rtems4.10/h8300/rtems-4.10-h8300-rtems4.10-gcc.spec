@@ -58,7 +58,7 @@ Summary:      	h8300-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	8%{?dist}
+Release:      	9%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -136,7 +136,7 @@ BuildRequires:	rtems-4.10-h8300-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-h8300-rtems4.10-binutils
 Requires:	rtems-4.10-h8300-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-48%{?dist}
+Requires:	rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-49%{?dist}
 
 
 %define _gcclibdir %{_prefix}/lib
@@ -460,7 +460,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-h8300-rtems4.10-binutils
-# Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-48%{?dist}
+# Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-49%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -478,7 +478,7 @@ Summary:        libgcc for h8300-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-48%{?dist}
+Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-49%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-h8300-rtems4.10-gcc-libgcc
@@ -549,6 +549,9 @@ GCC files that are shared by all targets.
 
 %files -n rtems-4.10-gcc-common
 %defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/cpp.info*
@@ -650,7 +653,7 @@ Summary:      	C Library (newlib) for h8300-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        48%{?dist}
+Release:        49%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -672,7 +675,7 @@ Newlib C Library for h8300-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        48%{?dist}
+Release:        49%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
@@ -684,6 +687,9 @@ newlib files that are shared by all targets.
 
 %files -n rtems-4.10-newlib-common
 %defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/libc.info*
