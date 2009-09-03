@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.8
-%define gdb_rpmvers %{expand:%(echo 6.8 | tr - _)} 
+%define gdb_version 6.8.50.20090902
+%define gdb_rpmvers %{expand:%(echo 6.8.50.20090902 | tr - _)} 
 
 Name:		rtems-4.10-mips-rtems4.10-gdb
 Summary:	Gdb for target mips-rtems4.10
@@ -113,8 +113,10 @@ BuildRequires:	texinfo >= 4.2
 
 Requires:	rtems-4.10-gdb-common
 
-Source0: ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8-rtems4.10-20090312.diff
+# A copy of a gdb development snapshot having been retrieved from
+# ftp://sources.redhat.com/pub/gdb/snapshots/current/gdb-%{gdb_version}.tar.bz2
+Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090902.diff
 
 %description
 GDB for target mips-rtems4.10
