@@ -52,7 +52,7 @@ Name:		rtems-4.10-arm-rtems4.10-gdb
 Summary:	Gdb for target arm-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	12%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
