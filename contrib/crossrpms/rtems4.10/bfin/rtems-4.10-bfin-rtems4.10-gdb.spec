@@ -52,7 +52,7 @@ Name:		rtems-4.10-bfin-rtems4.10-gdb
 Summary:	Gdb for target bfin-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	8%{?dist}
+Release:	9%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
