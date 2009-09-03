@@ -17,7 +17,7 @@ NCURSES_RPMREL = 0.20090827.0%{?dist}
 include ../ncurses.am
 
 EXPAT_VERS = 2.0.1-1
-EXPAT_RPMREL = 0.20090827.0%{?dist}
+EXPAT_RPMREL = 0.20090903.0%{?dist}
 include ../expat.am
 
 READLINE_VERS = 5.2.14-12

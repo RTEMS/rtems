@@ -34,7 +34,7 @@
 %define expat_rpmvers %{expand:%(echo 2.0.1-1 | tr - _)} 
 
 Name:         i686-pc-cygwin-expat
-Release:      0.20090827.0%{?dist}
+Release:      0.20090903.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -46,6 +46,7 @@ Summary:      	Cygwin expat Libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/expat/expat-%{expat_version}.tar.bz2
 Source1:	ftp://cygwin.com/pub/cygwin/release/expat/libexpat1/libexpat1-%{expat_version}.tar.bz2
+Source2:	ftp://cygwin.com/pub/cygwin/release/expat/libexpat1-devel/libexpat1-devel-%{expat_version}.tar.bz2
 
 Provides:       i686-pc-cygwin-expat-devel = %{version}-%{release}
 
@@ -60,8 +61,9 @@ Cygwin expat libraries.
 
   # Setup sys-root (Usable for gcc >= 3.4)
   mkdir -p i686-pc-cygwin/sys-root
-  ( cd i686-pc-cygwin/sys-root ; %{__tar} xvjf %{SOURCE0})
-  ( cd i686-pc-cygwin/sys-root ; %{__tar} xvjf %{SOURCE1})
+  (cd i686-pc-cygwin/sys-root ; %{__tar} xvjf %{SOURCE0})
+  (cd i686-pc-cygwin/sys-root ; %{__tar} xvjf %{SOURCE1})
+  (cd i686-pc-cygwin/sys-root ; %{__tar} xvjf %{SOURCE2})
 
 %install
   rm -rf $RPM_BUILD_ROOT
