@@ -24,7 +24,9 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define CONFIGURE_INIT_TASK_TABLE_SIZE \
   sizeof(CONFIGURE_INIT_TASK_TABLE) / sizeof(rtems_initialization_tasks_table)
 
-#define FATAL_ERROR_DESCRIPTION          "Classic API call rtems_fatal_error_occurred"
+#define FATAL_ERROR_TEST_NAME            "4"
+#define FATAL_ERROR_DESCRIPTION \
+        "Classic API call rtems_fatal_error_occurred"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_RTEMS_API
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
 #define FATAL_ERROR_EXPECTED_ERROR       0xdead

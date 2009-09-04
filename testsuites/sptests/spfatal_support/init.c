@@ -28,6 +28,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  printk( "\n\n\n*** TEST FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
   force_error();
   printk( "Fatal error (%s) NOT hit\n", FATAL_ERROR_DESCRIPTION );
   rtems_test_exit(0);

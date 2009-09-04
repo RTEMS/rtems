@@ -1,5 +1,3 @@
 *** TEST FATAL 10 ***
-asserting with non-NULL strings...
-
-assertion "force" failed: file "../../../../../../../rtems/c/src/../../testsuites/sptests/spfatal10/init.c", line 24, function: Init
-program stopped with signal 2.
+assertion "forced" failed: file "../../../../../../../rtems/c/src/../../testsuites/sptests/spfatal10/testcase.h", line 20, function: Init
+Fatal error (asserting with non-NULL strings...) hit

@@ -31,6 +31,7 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define CONFIGURE_INIT_TASK_TABLE_SIZE \
   sizeof(CONFIGURE_INIT_TASK_TABLE) / sizeof(rtems_initialization_tasks_table)
 
+#define FATAL_ERROR_TEST_NAME            "9"
 #define FATAL_ERROR_DESCRIPTION          "Core invalid workspace address"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE 
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE

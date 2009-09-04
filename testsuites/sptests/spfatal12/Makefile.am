@@ -5,7 +5,8 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = spfatal12
-spfatal12_SOURCES = init.c
+spfatal12_SOURCES = ../spfatal_support/init.c ../spfatal_support/system.h \
+    testcase.h
 
 dist_rtems_tests_DATA = spfatal12.scn
 dist_rtems_tests_DATA += spfatal12.doc

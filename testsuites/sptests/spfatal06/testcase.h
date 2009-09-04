@@ -31,14 +31,16 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define CONFIGURE_INIT_TASK_TABLE_SIZE \
   sizeof(CONFIGURE_INIT_TASK_TABLE) / sizeof(rtems_initialization_tasks_table)
 
-#define FATAL_ERROR_DESCRIPTION          "Core initialize with invalid stack hook"
+#define FATAL_ERROR_TEST_NAME            "6"
+#define FATAL_ERROR_DESCRIPTION \
+        "Core initialize with invalid stack hook"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_BAD_STACK_HOOK
 
-void *New_stack_allocate_hook(uint32_t unused);
+void *New_stack_allocate_hook(size_t unused);
 
-void *New_stack_allocate_hook(uint32_t unused)
+void *New_stack_allocate_hook(size_t unused)
 {
 }
 
@@ -47,7 +49,7 @@ void force_error()
   if (Configuration.stack_free_hook != NULL)
     Configuration.stack_allocate_hook = NULL;
   else
-    Configuration.stack_allocate_hook = &New_stack_allocate_hook;
+    Configuration.stack_allocate_hook = New_stack_allocate_hook;
 
   rtems_initialize_data_structures();
   /* we will not run this far */

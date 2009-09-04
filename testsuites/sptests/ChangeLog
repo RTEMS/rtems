@@ -1,5 +1,25 @@
 2009-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* spfatal01/spfatal01.scn, spfatal01/testcase.h,
+	spfatal02/spfatal02.scn, spfatal02/testcase.h,
+	spfatal03/spfatal03.scn, spfatal03/testcase.h,
+	spfatal04/spfatal04.scn, spfatal04/testcase.h,
+	spfatal05/spfatal05.scn, spfatal05/testcase.h,
+	spfatal06/spfatal06.scn, spfatal06/testcase.h,
+	spfatal07/spfatal07.scn, spfatal07/testcase.h,
+	spfatal08/spfatal08.scn, spfatal08/testcase.h,
+	spfatal09/spfatal09.scn, spfatal09/testcase.h, spfatal10/Makefile.am,
+	spfatal10/spfatal10.scn, spfatal11/Makefile.am,
+	spfatal11/spfatal11.scn, spfatal12/Makefile.am,
+	spfatal12/spfatal12.scn, spfatal_support/init.c: Make all fatal error
+	tests use testcase.h and spfatal_support framework. Print test name
+	herald in all cases.
+	* spfatal10/testcase.h, spfatal11/testcase.h, spfatal12/testcase.h:
+	New files.
+	* spfatal10/init.c, spfatal11/init.c, spfatal12/init.c: Removed.
+
+2009-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* spfatal07/testcase.h: Indicate test is not applicable on some
 	architectures.
 

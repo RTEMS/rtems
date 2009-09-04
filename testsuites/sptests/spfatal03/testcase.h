@@ -15,6 +15,7 @@
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 10
 
+#define FATAL_ERROR_TEST_NAME            "3"
 #define FATAL_ERROR_DESCRIPTION          "Core Mutex obtain in critical section"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
