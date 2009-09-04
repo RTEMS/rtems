@@ -35,7 +35,7 @@ void rtems_shutdown_executive(
    uint32_t   result
 )
 {
-  if ( _System_state_Current != SYSTEM_STATE_SHUTDOWN ) {
+  if ( !_System_state_Is_shutdown( _System_state_Get() ) ) {
     _System_state_Set( SYSTEM_STATE_SHUTDOWN );
     _Thread_Stop_multitasking();
   }

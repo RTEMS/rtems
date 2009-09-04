@@ -1,3 +1,11 @@
+2009-09-04	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* rtems/src/taskmode.c, sapi/src/exshutdown.c,
+	score/include/rtems/score/sysstate.h,
+	score/inline/rtems/score/sysstate.inl: Added
+	_System_state_Is_shutdown().  Removed direct uses of
+	_System_state_Current.  Documentation.
+
 2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/malloc_initialize.c, sapi/src/exinit.c,

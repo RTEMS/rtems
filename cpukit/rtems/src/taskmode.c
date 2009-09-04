@@ -122,7 +122,7 @@ rtems_status_code rtems_task_mode(
     }
   }
 
-  if ( _System_state_Is_up(_System_state_Current) )
+  if ( _System_state_Is_up( _System_state_Get() ) )
     if ( _Thread_Evaluate_mode() || needs_asr_dispatching )
       _Thread_Dispatch();
 
