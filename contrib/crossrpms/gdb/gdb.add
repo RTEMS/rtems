@@ -62,9 +62,9 @@ BuildRequires:  %{_host_rpmprefix}ncurses-devel
 %if "%{gdb_version}" >= "6.8.50"
 %if "%{_build}" != "%{_host}"
 # Can't build python Cdn-X
-%bcond_without python
-%else
 %bcond_with python
+%else
+%bcond_without python
 %endif
 %endif
 %{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
