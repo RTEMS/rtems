@@ -106,6 +106,16 @@ BuildRequires:  %{_host_rpmprefix}termcap-devel
 BuildRequires:  %{_host_rpmprefix}readline-devel
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
+%if "%{gdb_version}" >= "6.8.50"
+%if "%{_build}" != "%{_host}"
+# Can't build python Cdn-X
+%bcond_with python
+%else
+%bcond_without python
+%endif
+%endif
+%{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
+
 
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
@@ -149,7 +159,11 @@ rm -f gdb-%{gdb_version}/readline/configure
     --with-expat \
 %endif
 %if "%{gdb_version}" >= "6.8.50"
+%if %{with python}
+    --with-python \
+%else
     --without-python \
+%endif
 %endif
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \

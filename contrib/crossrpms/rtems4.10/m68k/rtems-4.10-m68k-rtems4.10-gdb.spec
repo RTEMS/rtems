@@ -52,7 +52,7 @@ Name:		rtems-4.10-m68k-rtems4.10-gdb
 Summary:	Gdb for target m68k-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -106,6 +106,16 @@ BuildRequires:  %{_host_rpmprefix}termcap-devel
 BuildRequires:  %{_host_rpmprefix}readline-devel
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
+%if "%{gdb_version}" >= "6.8.50"
+%if "%{_build}" != "%{_host}"
+# Can't build python Cdn-X
+%bcond_with python
+%else
+%bcond_without python
+%endif
+%endif
+%{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
+
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
@@ -155,7 +165,11 @@ rm -f gdb-%{gdb_version}/readline/configure
     --with-expat \
 %endif
 %if "%{gdb_version}" >= "6.8.50"
+%if %{with python}
+    --with-python \
+%else
     --without-python \
+%endif
 %endif
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
