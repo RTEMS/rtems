@@ -23,7 +23,11 @@
     --with-expat \
 %endif
 %if "%{gdb_version}" >= "6.8.50"
+%if %{with python}
+    --with-python \
+%else
     --without-python \
+%endif
 %endif
     --with-sysroot=%{_prefix}/@tool_target@/sys-root \
     --prefix=%{_prefix} --bindir=%{_bindir} \
