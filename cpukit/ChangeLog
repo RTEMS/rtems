@@ -1,3 +1,10 @@
+2009-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/issetugid.c: New (relocated from libnetworking).
+	* libnetworking/rtems/issetugid.c: Remove.
+	* libnetworking/Makefile.am: Reflect changes above.
+	* libcsupport/Makefile.am: Reflect changes above.
+
 2009-09-06	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* libcsupport/src/free.c, libmisc/stackchk/check.c,

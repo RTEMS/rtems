@@ -105,7 +105,7 @@ LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
     src/newlibc_reent.c src/newlibc_init.c src/newlibc_exit.c src/no_posix.c \
     src/no_libc.c src/utsname.c
 
-BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c
+BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c src/issetugid.c
 
 libcsupport_a_SOURCES = src/gxx_wrappers.c src/getchark.c src/printk.c \
     src/printk_plugin.c src/putk.c src/vprintk.c \
