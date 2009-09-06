@@ -58,7 +58,7 @@ Summary:      	bfin-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	9%{?dist}
+Release:      	10%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -136,7 +136,7 @@ BuildRequires:	rtems-4.10-bfin-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-bfin-rtems4.10-binutils
 Requires:	rtems-4.10-bfin-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-49%{?dist}
+Requires:	rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-50%{?dist}
 
 
 %define _gcclibdir %{_prefix}/lib
@@ -154,7 +154,7 @@ Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgve
 
 %if "%{newlib_version}" == "1.17.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.17.0-rtems4.10-20090727.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.17.0-rtems4.10-20090906.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -323,7 +323,6 @@ cd ..
 
   rm -f dirs ;
   echo "%defattr(-,root,root,-)" >> dirs
-  echo "%dir %{_prefix}" >> dirs
   TGTDIR="%{_gcclibdir}/gcc/bfin-rtems4.10/%{gcc_version}"
   for i in $multilibs; do
     case $i in
@@ -460,7 +459,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-bfin-rtems4.10-binutils
-# Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-49%{?dist}
+# Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-50%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -478,7 +477,7 @@ Summary:        libgcc for bfin-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-49%{?dist}
+Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-50%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-bfin-rtems4.10-gcc-libgcc
@@ -653,7 +652,7 @@ Summary:      	C Library (newlib) for bfin-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        49%{?dist}
+Release:        50%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -675,7 +674,7 @@ Newlib C Library for bfin-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        49%{?dist}
+Release:        50%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
