@@ -1,8 +1,9 @@
-/** 
+/**
  * @file
  *
- * @brief Static inline implementations of the inlined routines from the heap
- * handler.
+ * @ingroup ScoreHeap
+ *
+ * @brief Heap Handler API.
  */
 
 /*
@@ -26,7 +27,7 @@
 #include <rtems/score/address.h>
 
 /**
- * @addtogroup ScoreHeap 
+ * @addtogroup ScoreHeap
  *
  * @{
  */
@@ -41,17 +42,17 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_tail( Heap_Control *heap )
   return &heap->free_list;
 }
 
-RTEMS_INLINE_ROUTINE Heap_Block *_Heap_First_free_block( Heap_Control *heap )
+RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_first( Heap_Control *heap )
 {
   return _Heap_Free_list_head(heap)->next;
 }
 
-RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Last_free_block( Heap_Control *heap )
+RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_last( Heap_Control *heap )
 {
   return _Heap_Free_list_tail(heap)->prev;
 }
 
-RTEMS_INLINE_ROUTINE void _Heap_Block_remove_from_free_list( Heap_Block *block )
+RTEMS_INLINE_ROUTINE void _Heap_Free_list_remove( Heap_Block *block )
 {
   Heap_Block *next = block->next;
   Heap_Block *prev = block->prev;
@@ -60,7 +61,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Block_remove_from_free_list( Heap_Block *block )
   next->prev = prev;
 }
 
-RTEMS_INLINE_ROUTINE void _Heap_Block_replace_in_free_list(
+RTEMS_INLINE_ROUTINE void _Heap_Free_list_replace(
   Heap_Block *old_block,
   Heap_Block *new_block
 )
@@ -75,16 +76,16 @@ RTEMS_INLINE_ROUTINE void _Heap_Block_replace_in_free_list(
   prev->next = new_block;
 }
 
-RTEMS_INLINE_ROUTINE void _Heap_Block_insert_after(
-  Heap_Block *prev_block,
+RTEMS_INLINE_ROUTINE void _Heap_Free_list_insert_after(
+  Heap_Block *block_before,
   Heap_Block *new_block
 )
 {
-  Heap_Block *next = prev_block->next;
+  Heap_Block *next = block_before->next;
 
   new_block->next = next;
-  new_block->prev = prev_block;
-  prev_block->next = new_block;
+  new_block->prev = block_before;
+  block_before->next = new_block;
   next->prev = new_block;
 }
 
@@ -122,60 +123,64 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_down(
  * @brief Returns the block which is @a offset away from @a block.
  */
 RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_at(
-  const Heap_Block *block,
+  Heap_Block *block,
   uintptr_t offset
 )
 {
   return (Heap_Block *) ((uintptr_t) block + offset);
 }
 
-/**
- * @brief Returns the begin of the allocatable area of @a block.
- */
 RTEMS_INLINE_ROUTINE uintptr_t _Heap_Alloc_area_of_block(
-  Heap_Block *block
+  const Heap_Block *block
 )
 {
-  return (uintptr_t) block + HEAP_BLOCK_ALLOC_AREA_OFFSET;
+  return (uintptr_t) block + HEAP_BLOCK_HEADER_SIZE;
 }
 
-/**
- * @brief Returns the block associated with the allocatable area starting at
- * @a alloc_area_begin inside a heap with a page size of @a page_size.
- */
 RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_of_alloc_area(
-  uintptr_t alloc_area_begin,
+  uintptr_t alloc_begin,
   uintptr_t page_size
 )
 {
-  return (Heap_Block *) (_Heap_Align_down( alloc_area_begin, page_size )
-    - HEAP_BLOCK_ALLOC_AREA_OFFSET);
+  return (Heap_Block *) (_Heap_Align_down( alloc_begin, page_size )
+    - HEAP_BLOCK_HEADER_SIZE);
 }
 
-RTEMS_INLINE_ROUTINE bool _Heap_Is_prev_used( Heap_Block *block )
+RTEMS_INLINE_ROUTINE bool _Heap_Is_prev_used( const Heap_Block *block )
 {
   return block->size_and_flag & HEAP_PREV_BLOCK_USED;
 }
 
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Block_size( Heap_Block *block )
+RTEMS_INLINE_ROUTINE uintptr_t _Heap_Block_size( const Heap_Block *block )
 {
   return block->size_and_flag & ~HEAP_PREV_BLOCK_USED;
 }
 
 RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in_heap(
-  Heap_Control *heap,
-  Heap_Block *block
+  const Heap_Control *heap,
+  const Heap_Block *block
 )
 {
-  return _Addresses_Is_in_range( block, heap->start, heap->final );
+  return (uintptr_t) block >= (uintptr_t) heap->first_block
+    && (uintptr_t) block <= (uintptr_t) heap->last_block;
 }
 
 /**
- * @brief Returns the maximum size of the heap.
+ * @brief Returns the heap area size.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Get_size( Heap_Control *heap )
+RTEMS_INLINE_ROUTINE uintptr_t _Heap_Get_size( const Heap_Control *heap )
 {
-  return (uintptr_t) heap->end - (uintptr_t) heap->begin;
+  return heap->area_end - heap->area_begin;
+}
+
+RTEMS_INLINE_ROUTINE uintptr_t _Heap_Max( uintptr_t a, uintptr_t b )
+{
+  return a > b ? a : b;
+}
+
+RTEMS_INLINE_ROUTINE uintptr_t _Heap_Min( uintptr_t a, uintptr_t b )
+{
+  return a < b ? a : b;
 }
 
 /** @} */

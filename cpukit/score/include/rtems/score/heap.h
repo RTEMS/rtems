@@ -1,7 +1,9 @@
 /**
  * @file
  *
- * Heap Handler API.
+ * @ingroup ScoreHeap
+ *
+ * @brief Heap Handler API.
  */
 
 /*
@@ -25,7 +27,9 @@ extern "C" {
 /**
  * @defgroup ScoreHeap Heap Handler
  *
- * The Heap Handler provides a heap.
+ * @ingroup Score
+ *
+ * @brief The Heap Handler provides a heap.
  *
  * A heap is a doubly linked list of variable size blocks which are allocated
  * using the first fit method.  Garbage collection is performed each time a
@@ -33,17 +37,22 @@ extern "C" {
  * information for both allocated and free blocks is contained in the heap
  * area.  A heap control structure contains control information for the heap.
  *
- * FIXME: The alignment routines could be made faster should we require only
- * powers of two to be supported both for 'page_size' and for 'alignment'
- * arguments. However, both workspace and malloc heaps are initialized with
- * CPU_HEAP_ALIGNMENT as 'page_size', and while all the BSPs seem to use
+ * The alignment routines could be made faster should we require only powers of
+ * two to be supported both for page size, alignment and boundary arguments.
+ * However, both workspace and malloc heaps are initialized with
+ * CPU_HEAP_ALIGNMENT as page size, and while all the BSPs seem to use
  * CPU_ALIGNMENT (that is power of two) as CPU_HEAP_ALIGNMENT, for whatever
  * reason CPU_HEAP_ALIGNMENT is only required to be multiple of CPU_ALIGNMENT
  * and explicitly not required to be a power of two.
  *
  * There are two kinds of blocks.  One sort describes a free block from which
- * we can allocate memory.  The other blocks are used and contain allocated
- * memory.  The free blocks are accessible via a list of free blocks.
+ * we can allocate memory.  The other blocks are used and provide an allocated
+ * memory area.  The free blocks are accessible via a list of free blocks.
+ *
+ * Blocks or areas cover a continuous set of memory addresses. They have a
+ * begin and end address.  The end address is not part of the set.  The size of
+ * a block or area equals the distance between the begin and end address in
+ * units of bytes.
  *
  * Free blocks look like:
  * <table>
@@ -83,7 +92,10 @@ extern "C" {
  * <table>
  *   <tr><th>Label</th><th colspan=2>Content</th></tr>
  *   <tr><td>heap->begin</td><td colspan=2>heap area begin address</td></tr>
- *   <tr><td>first_block->prev_size</td><td colspan=2>arbitrary value</td></tr>
+ *   <tr>
+ *     <td>first_block->prev_size</td>
+ *     <td colspan=2>page size (the value is arbitrary)</td>
+ *   </tr>
  *   <tr>
  *     <td>first_block->size</td>
  *     <td colspan=2>size available for allocation
@@ -100,13 +112,30 @@ extern "C" {
  *   </tr>
  *   <tr>
  *     <td>second_block->size</td>
- *     <td colspan=2>arbitrary size | @c HEAP_PREV_BLOCK_FREE</td>
+ *     <td colspan=2>page size (the value is arbitrary)</td>
  *   </tr>
  *   <tr><td>heap->end</td><td colspan=2>heap area end address</td></tr>
  * </table>
  *
  * @{
  */
+
+/**
+ * @brief See also @ref Heap_Block.size_and_flag.
+ */
+#define HEAP_PREV_BLOCK_USED ((uintptr_t) 1)
+
+/**
+ * @brief Offset from the block begin up to the block size field
+ * (@ref Heap_Block.size_and_flag).
+ */
+#define HEAP_BLOCK_SIZE_OFFSET sizeof(uintptr_t)
+
+/**
+ * @brief The block header consists of the two size fields
+ * (@ref Heap_Block.prev_size and @ref Heap_Block.size_and_flag).
+ */
+#define HEAP_BLOCK_HEADER_SIZE (sizeof(uintptr_t) * 2)
 
 /**
  * @brief Description for free or used blocks.
@@ -119,6 +148,11 @@ typedef struct Heap_Block {
    * This field is only valid if the previous block is free.  This case is
    * indicated by a cleared @c HEAP_PREV_BLOCK_USED flag in the
    * @a size_and_flag field of the current block.
+   *
+   * In a used block only the @a size_and_flag field needs to be valid.  The
+   * @a prev_size field of the current block is maintained by the previous
+   * block.  The current block can use the @a prev_size field in the next block
+   * for allocation.
    */
   uintptr_t prev_size;
 
@@ -157,86 +191,119 @@ typedef struct Heap_Block {
   struct Heap_Block *prev;
 } Heap_Block;
 
-#define HEAP_PREV_BLOCK_USED ((uintptr_t) 1)
-
-#define HEAP_PREV_BLOCK_FREE ((uintptr_t) 0)
-
 /**
- * @brief Offset from the block begin up to the block size field.
- */
-#define HEAP_BLOCK_SIZE_OFFSET (sizeof(uintptr_t))
-
-/**
- * @brief Offset from the block begin up to the allocated area begin.
- */
-#define HEAP_BLOCK_ALLOC_AREA_OFFSET (sizeof(uintptr_t) * 2)
-
-#define HEAP_BLOCK_USED_OVERHEAD (sizeof(uintptr_t) * 2)
-
-#define HEAP_LAST_BLOCK_OVERHEAD HEAP_BLOCK_ALLOC_AREA_OFFSET
-
-/**
- *  Run-time heap statistics.
+ * @brief Run-time heap statistics.
  *
- *  @note (double)searches/allocs gives mean number of searches per alloc while
- *        max_search gives maximum number of searches ever performed on a
- *        single call to alloc.
- *
- *  @note the statistics is always gathered. I believe the imposed overhead is
- *        rather small. Feel free to make it compile-time option if you think
- *        the overhead is too high for your application.
+ * The value @a searches / @a allocs gives the mean number of searches per
+ * allocation, while @a max_search gives maximum number of searches ever
+ * performed on a single allocation call.
  */
 typedef struct {
-  /** instance number of this heap */
+  /**
+   * @brief Instance number of this heap.
+   */
   uint32_t instance;
-  /** the size of the memory for heap */
+
+  /**
+   * @brief The size of the memory for heap.
+   */
   uintptr_t size;
-  /** current free size */
+
+  /**
+   * @brief Current free size.
+   */
   uintptr_t free_size;
-  /** minimum free size ever */
+
+  /**
+   * @brief Minimum free size ever.
+   */
   uintptr_t min_free_size;
-  /** current number of free blocks */
+
+  /**
+   * @brief Current number of free blocks.
+   */
   uint32_t free_blocks;
-  /** maximum number of free blocks ever */
+
+  /**
+   * @brief Maximum number of free blocks ever.
+   */
   uint32_t max_free_blocks;
-  /** current number of used blocks */
+
+  /**
+   * @brief Current number of used blocks.
+   */
   uint32_t used_blocks;
-  /** maximum number of blocks searched ever */
+
+  /**
+   * @brief Maximum number of blocks searched ever.
+   */
   uint32_t max_search;
-  /** total number of successful calls to alloc */
+
+  /**
+   * @brief Total number of successful calls to alloc.
+   */
   uint32_t allocs;
-  /** total number of searches ever */
+
+  /**
+   * @brief Total number of searches ever.
+   */
   uint32_t searches;
-  /** total number of suceessful calls to free */
+
+  /**
+   * @brief Total number of suceessful calls to free.
+   */
   uint32_t frees;
-  /** total number of successful resizes */
+
+  /**
+   * @brief Total number of successful resizes.
+   */
   uint32_t resizes;
 } Heap_Statistics;
 
 /**
- *  Control block used to manage each heap.
+ * @brief Control block used to manage a heap.
  */
 typedef struct {
-  /** head and tail of circular list of free blocks */
   Heap_Block free_list;
-  /** allocation unit and alignment */
   uintptr_t page_size;
-  /** minimum block size aligned on page_size */
   uintptr_t min_block_size;
-  /** first address of memory for the heap */
-  uintptr_t begin;
-  /** first address past end of memory for the heap */
-  uintptr_t end;
-  /** first valid block address in the heap */
-  Heap_Block *start;
-  /** last valid block address in the heap */
-  Heap_Block *final;
-  /** run-time statistics */
+  uintptr_t area_begin;
+  uintptr_t area_end;
+  Heap_Block *first_block;
+  Heap_Block *last_block;
   Heap_Statistics stats;
 } Heap_Control;
 
 /**
- *  Status codes for _Heap_Extend
+ * @brief Information about blocks.
+ */
+typedef struct {
+  /**
+   * @brief Number of blocks of this type.
+   */
+  uint32_t number;
+
+  /**
+   * @brief Largest block of this type.
+   */
+  uint32_t largest;
+
+  /**
+   * @brief Total size of the blocks of this type.
+   */
+  uint32_t total;
+} Heap_Information;
+
+/**
+ * @brief Information block returned by _Heap_Get_information().
+ */
+typedef struct {
+  Heap_Information Free;
+  Heap_Information Used;
+} Heap_Information_block;
+
+/**
+ * @brief See _Heap_Extend().
  */
 typedef enum {
   HEAP_EXTEND_SUCCESSFUL,
@@ -245,7 +312,7 @@ typedef enum {
 } Heap_Extend_status;
 
 /**
- *  Status codes for _Heap_Resize_block
+ * @brief See _Heap_Resize_block().
  */
 typedef enum {
   HEAP_RESIZE_SUCCESSFUL,
@@ -254,40 +321,8 @@ typedef enum {
 } Heap_Resize_status;
 
 /**
- *  Status codes for _Heap_Get_information
- */
-typedef enum {
-  HEAP_GET_INFORMATION_SUCCESSFUL = 0,
-  HEAP_GET_INFORMATION_BLOCK_ERROR
-} Heap_Get_information_status;
-
-/**
- *  Information block returned by the Heap routines used to
- *  obtain heap information.  This information is returned about
- *  either free or used blocks.
- */
-typedef struct {
-  /** Number of blocks of this type. */
-  uint32_t number;
-  /** Largest blocks of this type. */
-  uint32_t largest;
-  /** Total size of the blocks of this type. */
-  uint32_t total;
-} Heap_Information;
-
-/**
- *  Information block returned by _Heap_Get_information
- */
-typedef struct {
-  /** This field is information on the used blocks in the heap. */
-  Heap_Information Free;
-  /** This field is information on the used blocks in the heap. */
-  Heap_Information Used;
-} Heap_Information_block;
-
-/**
- * Initializes the @a heap control block to manage the area starting at
- * @a area_begin of @a area_size bytes.
+ * @brief Initializes the heap control block @a heap to manage the area
+ * starting at @a area_begin of size @a area_size bytes.
  *
  * Blocks of memory are allocated from the heap in multiples of @a page_size
  * byte units.  If the @a page_size is equal to zero or is not multiple of
@@ -303,16 +338,13 @@ uintptr_t _Heap_Initialize(
 );
 
 /**
- *  This routine grows @a heap memory area using the size bytes which
- *  begin at @a starting_address.
+ * @brief Extends the memory area of the heap @a heap using the memory area
+ * starting at @a area_begin of size @a area_size bytes.
  *
- *  @param[in] heap is the heap to operate upon
- *  @param[in] starting_address is the starting address of the memory
- *         to add to the heap
- *  @param[in] size is the size in bytes of the memory area to add
- *  @param[in] amount_extended points to a user area to return the
- *  @return a status indicating success or the reason for failure
- *  @return *size filled in with the amount of memory added to the heap
+ * The extended space available for allocation will be returned in
+ * @a amount_extended.
+ *
+ * The memory area must start at the end of the currently used memory area.
  */
 Heap_Extend_status _Heap_Extend(
   Heap_Control *heap,
@@ -322,139 +354,115 @@ Heap_Extend_status _Heap_Extend(
 );
 
 /**
- *  This function attempts to allocate a block of @a size bytes from
- *  @a heap.  If insufficient memory is free in @a heap to allocate
- *  a block of the requested size, then NULL is returned.
+ * @brief Allocates a memory area of size @a size bytes.
  *
- *  @param[in] heap is the heap to operate upon
- *  @param[in] size is the amount of memory to allocate in bytes
- *  @return NULL if unsuccessful and a pointer to the block if successful
- */
-void *_Heap_Allocate( Heap_Control *heap, uintptr_t size );
-
-/**
- *  This function attempts to allocate a memory block of @a size bytes from
- *  @a heap so that the start of the user memory is aligned on the
- *  @a alignment boundary. If @a alignment is 0, it is set to CPU_ALIGNMENT.
- *  Any other value of @a alignment is taken "as is", i.e., even odd
- *  alignments are possible.
- *  Returns pointer to the start of the memory block if success, NULL if
- *  failure.
+ * If the alignment parameter @a alignment is not equal to zero, the allocated
+ * memory area will begin at an address aligned by this value.
  *
- *  @param[in] heap is the heap to operate upon
- *  @param[in] size is the amount of memory to allocate in bytes
- *  @param[in] alignment the required alignment
- *  @return NULL if unsuccessful and a pointer to the block if successful
+ * If the boundary parameter @a boundary is not equal to zero, the allocated
+ * memory area will fulfill a boundary constraint.  The boudnary value
+ * specifies the set of addresses which are aligned by the boundary value.  The
+ * interior of the allocated memory area will not contain an element of this
+ * set.  The begin or end address of the area may be a member of the set.
+ *
+ * A size value of zero will return a unique address which may be freed with
+ * _Heap_Free().
+ *
+ * Returns a pointer to the begin of the allocated memory area, or @c NULL if
+ * no memory is available or the parameters are inconsistent.
  */
-void *_Heap_Allocate_aligned(
+void *_Heap_Allocate_aligned_with_boundary(
   Heap_Control *heap,
   uintptr_t size,
-  uintptr_t alignment
+  uintptr_t alignment,
+  uintptr_t boundary
+);
+
+#define _Heap_Allocate_aligned( heap, size, alignment ) \
+  _Heap_Allocate_aligned_with_boundary( heap, size, alignment, 0 )
+
+#define _Heap_Allocate( heap, size ) \
+  _Heap_Allocate_aligned_with_boundary( heap, size, 0, 0 )
+
+/**
+ * @brief Frees the allocated memory area starting at @a addr in the heap
+ * @a heap.
+ *
+ * Inappropriate values for @a addr may corrupt the heap.
+ *
+ * Returns @c true in case of success, and @c false otherwise.
+ */
+bool _Heap_Free( Heap_Control *heap, void *addr );
+
+/**
+ * @brief Walks the heap @a heap to verify its integrity.
+ *
+ * If @a dump is @c true, then diagnostic messages will be printed to standard
+ * output.  In this case @a source is used to mark the output lines.
+ *
+ * Returns @c true if no errors occured, and @c false if the heap is corrupt.
+ */
+bool _Heap_Walk(
+  Heap_Control *heap,
+  int source,
+  bool dump
 );
 
 /**
- *  This function sets @a size to the size of the block of allocatable area
- *  which begins at @a starting_address. The size returned in @a *size could
- *  be greater than the size requested for allocation.
- *  Returns true if the @a starting_address is in the heap, and false
- *  otherwise.
+ * @brief Returns information about used and free blocks for the heap @a heap
+ * in @a info.
+ */
+void _Heap_Get_information(
+  Heap_Control *heap,
+  Heap_Information_block *info
+);
+
+/**
+ * @brief Returns information about free blocks for the heap @a heap in
+ * @a info.
+ */
+void _Heap_Get_free_information(
+  Heap_Control *heap,
+  Heap_Information *info
+);
+
+/**
+ * @brief Returns the size of the allocatable memory area starting at @a addr
+ * in @a size.
  *
- *  @param[in] heap is the heap to operate upon
- *  @param[in] starting_address is the starting address of the user block
- *         to obtain the size of
- *  @param[in] size points to a user area to return the size in
- *  @return true if successfully able to determine the size, false otherwise
- *  @return *size filled in with the size of the user area for this block
+ * The size value may be greater than the initially requested size in
+ * _Heap_Allocate_aligned_with_boundary().
+ *
+ * Inappropriate values for @a addr will not corrupt the heap, but may yield
+ * invalid size values.
+ *
+ * Returns @a true if successful, and @c false otherwise.
  */
 bool _Heap_Size_of_alloc_area(
   Heap_Control *heap,
-  void *area_begin,
+  void *addr,
   uintptr_t *size
 );
 
 /**
- *  This function tries to resize in place the block that is pointed to by the
- *  @a starting_address to the new @a size.
+ * @brief Resizes the block of the allocated memory area starting at @a addr.
  *
- *  @param[in] heap is the heap to operate upon
- *  @param[in] starting_address is the starting address of the user block
- *         to be resized
- *  @param[in] size is the new size
- *  @param[in] old_mem_size points to a user area to return the size of the
- *         user memory area of the block before resizing.
- *  @param[in] avail_mem_size points to a user area to return the size of
- *         the user memory area of the free block that has been enlarged or
- *         created due to resizing, 0 if none.
- *  @return HEAP_RESIZE_SUCCESSFUL if successfully able to resize the block,
- *          HEAP_RESIZE_UNSATISFIED if the block can't be resized in place,
- *          HEAP_RESIZE_FATAL_ERROR if failure
- *  @return *old_mem_size filled in with the size of the user memory area of
- *          the block before resizing.
- *  @return *avail_mem_size filled in with the size of the user memory area
- *          of the free block that has been enlarged or created due to
- *          resizing, 0 if none.
+ * The new memory area will have a size of at least @a size bytes.  A resize
+ * may be impossible and depends on the current heap usage.
+ *
+ * The size available for allocation in the current block before the resize
+ * will be returned in @a old_size.  The size available for allocation in
+ * the resized block will be returned in @a new_size.  If the resize was not
+ * successful, then a value of zero will be returned in @a new_size.
+ *
+ * Inappropriate values for @a addr may corrupt the heap.
  */
 Heap_Resize_status _Heap_Resize_block(
   Heap_Control *heap,
-  void         *starting_address,
-  uintptr_t      size,
-  uintptr_t     *old_mem_size,
-  uintptr_t     *avail_mem_size
-);
-
-/**
- *  This routine returns the block of memory which begins
- *  at @a alloc_area_begin to @a heap.  Any coalescing which is
- *  possible with the freeing of this routine is performed.
- *
- *  @param[in] heap is the heap to operate upon
- *  @param[in] start_address is the starting address of the user block
- *         to free
- *  @return true if successfully freed, false otherwise
- */
-bool _Heap_Free( Heap_Control *heap, void *alloc_area_begin );
-
-/**
- *  This routine walks the heap to verify its integrity.
- *
- *  @param[in] heap is the heap to operate upon
- *  @param[in] source is a user specified integer which may be used to
- *         indicate where in the application this was invoked from
- *  @param[in] do_dump is set to true if errors should be printed
- *  @return true if the test passed fine, false otherwise.
- */
-bool _Heap_Walk(
-  Heap_Control *heap,
-  int           source,
-  bool          do_dump
-);
-
-/**
- *  This routine walks the heap and tots up the free and allocated
- *  sizes.
- *
- *  @param[in] heap pointer to heap header
- *  @param[in] the_info pointer to a status information area
- *  @return *the_info is filled with status information
- *  @return 0=success, otherwise heap is corrupt.
- */
-Heap_Get_information_status _Heap_Get_information(
-  Heap_Control            *heap,
-  Heap_Information_block  *the_info
-);
-
-/**
- *  This heap routine returns information about the free blocks
- *  in the specified heap.
- *
- *  @param[in] heap pointer to heap header.
- *  @param[in] info pointer to the free block information.
- *
- *  @return free block information filled in.
- */
-void _Heap_Get_free_information(
-  Heap_Control        *heap,
-  Heap_Information    *info
+  void *addr,
+  uintptr_t size,
+  uintptr_t *old_size,
+  uintptr_t *new_size
 );
 
 #if !defined(__RTEMS_APPLICATION__)
@@ -462,36 +470,20 @@ void _Heap_Get_free_information(
 #include <rtems/score/heap.inl>
 
 /**
- * @brief Returns the minimal block size for a block which may contain an area
- * of size @a alloc_size for allocation, or zero in case of an overflow.
+ * @brief Allocates the memory area starting at @a alloc_begin of size
+ * @a alloc_size bytes in the block @a block.
  *
- * Uses the heap values @a page_size and @a min_block_size.
+ * The block may be split up into multiple blocks.
+ *
+ * Inappropriate values for @a alloc_begin or @a alloc_size may corrupt the
+ * heap.
+ *
+ * Returns the block containing the allocated memory area.
  */
-uintptr_t _Heap_Calc_block_size(
-  uintptr_t alloc_size,
-  uintptr_t page_size,
-  uintptr_t min_block_size
-);
-
-/**
- *  This method allocates a block of size @a alloc_size from @a the_block
- *  belonging to @a heap. Split @a the_block if possible, otherwise
- *  allocate it entirely.  When split, make the lower part used, and leave
- *  the upper part free.
- *
- *  This is an internal routines used by _Heap_Allocate() and
- *  _Heap_Allocate_aligned().  Refer to 'heap.c' for details.
- *
- *  @param[in] heap is the heap to operate upon
- *  @param[in] the_block is the block to allocates the requested size from
- *  @param[in] alloc_size is the requested number of bytes to take out of 
- *         the block
- *
- *  @return This methods returns the size of the allocated block.
- */
-uintptr_t _Heap_Block_allocate(
+Heap_Block *_Heap_Block_allocate(
   Heap_Control *heap,
   Heap_Block *block,
+  uintptr_t alloc_begin,
   uintptr_t alloc_size
 );
 

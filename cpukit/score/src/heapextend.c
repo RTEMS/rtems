@@ -1,6 +1,12 @@
-/*
- *  Heap Handler
+/**
+ * @file
  *
+ * @ingroup ScoreHeap
+ *
+ * @brief Heap Handler implementation.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,11 +34,11 @@ Heap_Extend_status _Heap_Extend(
 {
   Heap_Statistics *const stats = &heap->stats;
   uintptr_t const area_begin = (uintptr_t) area_begin_ptr;
-  uintptr_t const heap_area_begin = heap->begin;
-  uintptr_t const heap_area_end = heap->end;
+  uintptr_t const heap_area_begin = heap->area_begin;
+  uintptr_t const heap_area_end = heap->area_end;
   uintptr_t const new_heap_area_end = heap_area_end + area_size;
   uintptr_t extend_size = 0;
-  Heap_Block *const old_final = heap->final;
+  Heap_Block *const old_final = heap->last_block;
   Heap_Block *new_final = NULL;
 
   /*
@@ -60,10 +66,10 @@ Heap_Extend_status _Heap_Extend(
    *  block and free it.
    */
 
-  heap->end = new_heap_area_end;
+  heap->area_end = new_heap_area_end;
 
   extend_size = new_heap_area_end
-    - (uintptr_t) old_final - HEAP_LAST_BLOCK_OVERHEAD;
+    - (uintptr_t) old_final - HEAP_BLOCK_HEADER_SIZE;
   extend_size = _Heap_Align_down( extend_size, heap->page_size );
 
   *amount_extended = extend_size;
@@ -74,7 +80,7 @@ Heap_Extend_status _Heap_Extend(
     new_final = _Heap_Block_at( old_final, extend_size );
     new_final->size_and_flag = heap->page_size | HEAP_PREV_BLOCK_USED;
 
-    heap->final = new_final;
+    heap->last_block = new_final;
 
     stats->size += area_size;
     ++stats->used_blocks;

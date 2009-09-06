@@ -1,8 +1,16 @@
-/*
- *  Heap Handler
+/**
+ * @file
  *
+ * @ingroup ScoreHeap
+ *
+ * @brief Heap Handler implementation.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
+ *
+ *  Copyright (c) 2009 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -17,6 +25,10 @@
 
 #include <rtems/system.h>
 #include <rtems/score/heap.h>
+
+#if CPU_ALIGNMENT == 0 || CPU_ALIGNMENT % 4 != 0
+  #error "invalid CPU_ALIGNMENT value"
+#endif
 
 static uint32_t instance = 0;
 
@@ -113,16 +125,19 @@ static uint32_t instance = 0;
 
 uintptr_t _Heap_Initialize(
   Heap_Control *heap,
-  void *area_begin,
-  uintptr_t area_size,
+  void *heap_area_begin_ptr,
+  uintptr_t heap_area_size,
   uintptr_t page_size
 )
 {
-  Heap_Statistics * const stats = &heap->stats;
-  uintptr_t heap_area_begin = (uintptr_t) area_begin;
-  uintptr_t heap_area_end = heap_area_begin + area_size;
-  uintptr_t alloc_area_begin = heap_area_begin + HEAP_BLOCK_ALLOC_AREA_OFFSET;
+  Heap_Statistics *const stats = &heap->stats;
+  uintptr_t const heap_area_begin = (uintptr_t) heap_area_begin_ptr;
+  uintptr_t const heap_area_end = heap_area_begin + heap_area_size;
+  uintptr_t alloc_area_begin = heap_area_begin + HEAP_BLOCK_HEADER_SIZE;
   uintptr_t alloc_area_size = 0;
+  uintptr_t first_block_begin = 0;
+  uintptr_t first_block_size = 0;
+  uintptr_t min_block_size = 0;
   uintptr_t overhead = 0;
   Heap_Block *first_block = NULL;
   Heap_Block *second_block = NULL;
@@ -132,47 +147,50 @@ uintptr_t _Heap_Initialize(
   } else {
     page_size = _Heap_Align_up( page_size, CPU_ALIGNMENT );
   }
-
-  heap->min_block_size = _Heap_Align_up( sizeof( Heap_Block ), page_size );
+  min_block_size = _Heap_Align_up( sizeof( Heap_Block ), page_size );
 
   alloc_area_begin = _Heap_Align_up( alloc_area_begin, page_size );
-  overhead = HEAP_LAST_BLOCK_OVERHEAD
-    + (alloc_area_begin - HEAP_BLOCK_ALLOC_AREA_OFFSET - heap_area_begin);
-  alloc_area_size = _Heap_Align_down ( area_size - overhead, page_size );
+  first_block_begin = alloc_area_begin - HEAP_BLOCK_HEADER_SIZE;
+  overhead = HEAP_BLOCK_HEADER_SIZE + (first_block_begin - heap_area_begin);
+  first_block_size = heap_area_size - overhead;
+  first_block_size = _Heap_Align_down ( first_block_size, page_size );
+  alloc_area_size = first_block_size - HEAP_BLOCK_HEADER_SIZE;
 
   if (
     heap_area_end < heap_area_begin
-      || area_size < overhead
-      || alloc_area_size == 0
+      || heap_area_size <= overhead
+      || first_block_size < min_block_size
   ) {
     /* Invalid area or area too small */
     return 0;
   }
 
-  heap->page_size = page_size;
-  heap->begin = heap_area_begin;
-  heap->end = heap_area_end;
-
   /* First block */
-  first_block = _Heap_Block_of_alloc_area( alloc_area_begin, page_size );
+  first_block = (Heap_Block *) first_block_begin;
   first_block->prev_size = page_size;
-  first_block->size_and_flag = alloc_area_size | HEAP_PREV_BLOCK_USED;
+  first_block->size_and_flag = first_block_size | HEAP_PREV_BLOCK_USED;
   first_block->next = _Heap_Free_list_tail( heap );
   first_block->prev = _Heap_Free_list_head( heap );
-  _Heap_Free_list_head( heap )->next = first_block;
-  _Heap_Free_list_tail( heap )->prev = first_block;
-  heap->start = first_block;
 
   /* Second and last block */
-  second_block = _Heap_Block_at( first_block, alloc_area_size );
-  second_block->prev_size = alloc_area_size;
-  second_block->size_and_flag = page_size | HEAP_PREV_BLOCK_FREE;
-  heap->final = second_block;
+  second_block = _Heap_Block_at( first_block, first_block_size );
+  second_block->prev_size = first_block_size;
+  second_block->size_and_flag = page_size;
+
+  /* Heap control */
+  heap->page_size = page_size;
+  heap->min_block_size = min_block_size;
+  heap->area_begin = heap_area_begin;
+  heap->area_end = heap_area_end;
+  heap->first_block = first_block;
+  heap->last_block = second_block;
+  _Heap_Free_list_head( heap )->next = first_block;
+  _Heap_Free_list_tail( heap )->prev = first_block;
 
   /* Statistics */
-  stats->size = area_size;
-  stats->free_size = alloc_area_size;
-  stats->min_free_size = alloc_area_size;
+  stats->size = heap_area_size;
+  stats->free_size = first_block_size;
+  stats->min_free_size = first_block_size;
   stats->free_blocks = 1;
   stats->max_free_blocks = 1;
   stats->used_blocks = 0;
@@ -183,9 +201,9 @@ uintptr_t _Heap_Initialize(
   stats->resizes = 0;
   stats->instance = instance++;
 
-  _HAssert( _Heap_Is_aligned( CPU_ALIGNMENT, 4 ));
-  _HAssert( _Heap_Is_aligned( heap->page_size, CPU_ALIGNMENT ));
-  _HAssert( _Heap_Is_aligned( heap->min_block_size, page_size ));
+  _HAssert( _Heap_Is_aligned( CPU_ALIGNMENT, 4 ) );
+  _HAssert( _Heap_Is_aligned( heap->page_size, CPU_ALIGNMENT ) );
+  _HAssert( _Heap_Is_aligned( heap->min_block_size, page_size ) );
   _HAssert(
     _Heap_Is_aligned( _Heap_Alloc_area_of_block( first_block ), page_size )
   );
@@ -193,72 +211,142 @@ uintptr_t _Heap_Initialize(
     _Heap_Is_aligned( _Heap_Alloc_area_of_block( second_block ), page_size )
   );
 
+  if ( !_Heap_Walk( heap, 0, false ) ) {
+    _Heap_Walk( heap, 0, true );
+  }
+
   return alloc_area_size;
 }
 
-uintptr_t _Heap_Calc_block_size(
-  uintptr_t alloc_size,
-  uintptr_t page_size,
-  uintptr_t min_block_size)
-{
-  uintptr_t block_size =
-    _Heap_Align_up( alloc_size + HEAP_BLOCK_USED_OVERHEAD, page_size );
-
-  if (block_size < min_block_size) {
-    block_size = min_block_size;
-  }
-
-  if (block_size > alloc_size) {
-    return block_size;
-  } else {
-    /* Integer overflow occured */
-    return 0;
-  }
-}
-
-uintptr_t _Heap_Block_allocate(
+static Heap_Block *_Heap_Block_split(
   Heap_Control *heap,
   Heap_Block *block,
   uintptr_t alloc_size
 )
 {
-  Heap_Statistics * const stats = &heap->stats;
+  uintptr_t const page_size = heap->page_size;
+  uintptr_t const min_block_size = heap->min_block_size;
+  uintptr_t const min_alloc_size = min_block_size - HEAP_BLOCK_HEADER_SIZE;
+
   uintptr_t const block_size = _Heap_Block_size( block );
-  uintptr_t const unused_size = block_size - alloc_size;
-  Heap_Block *next_block = _Heap_Block_at( block, block_size );
 
-  _HAssert( _Heap_Is_aligned( block_size, heap->page_size ));
-  _HAssert( _Heap_Is_aligned( alloc_size, heap->page_size ));
-  _HAssert( alloc_size <= block_size );
-  _HAssert( _Heap_Is_prev_used( block ));
+  uintptr_t const used_size =
+    _Heap_Max( alloc_size, min_alloc_size ) + HEAP_BLOCK_HEADER_SIZE;
+  uintptr_t const used_block_size = _Heap_Align_up( used_size, page_size );
 
-  if (unused_size >= heap->min_block_size) {
-    /*
-     * Split the block so that the upper part is still free, and the lower part
-     * becomes used.  This is slightly less optimal than leaving the lower part
-     * free as it requires replacing block in the free blocks list, but it
-     * makes it possible to reuse this code in the _Heap_Resize_block().
-     */
-    Heap_Block *new_block = _Heap_Block_at( block, alloc_size );
-    block->size_and_flag = alloc_size | HEAP_PREV_BLOCK_USED;
-    new_block->size_and_flag = unused_size | HEAP_PREV_BLOCK_USED;
-    next_block->prev_size = unused_size;
-    _Heap_Block_replace_in_free_list( block, new_block );
+  uintptr_t const free_size = block_size + HEAP_BLOCK_SIZE_OFFSET - used_size;
+  uintptr_t const free_size_limit = min_block_size + HEAP_BLOCK_SIZE_OFFSET;
+
+  Heap_Block *const next_block = _Heap_Block_at( block, block_size );
+
+  _HAssert( used_size <= block_size + HEAP_BLOCK_SIZE_OFFSET );
+  _HAssert( used_size + free_size == block_size + HEAP_BLOCK_SIZE_OFFSET );
+
+  if ( free_size >= free_size_limit ) {
+    uintptr_t const free_block_size = block_size - used_block_size;
+    Heap_Block *const free_block = _Heap_Block_at( block, used_block_size );
+
+    _HAssert( used_block_size + free_block_size == block_size );
+
+    block->size_and_flag = used_block_size
+      | (block->size_and_flag & HEAP_PREV_BLOCK_USED);
+    free_block->size_and_flag = free_block_size | HEAP_PREV_BLOCK_USED;
+    next_block->prev_size = free_block_size;
+
+    return free_block;
   } else {
     next_block->size_and_flag |= HEAP_PREV_BLOCK_USED;
-    alloc_size = block_size;
-    _Heap_Block_remove_from_free_list( block );
+
+    return NULL;
+  }
+}
+
+static Heap_Block *_Heap_Block_allocate_from_begin(
+  Heap_Control *heap,
+  Heap_Block *block,
+  uintptr_t alloc_size
+)
+{
+  Heap_Block *const free_block = _Heap_Block_split( heap, block, alloc_size );
+
+  if ( free_block != NULL ) {
+    _Heap_Free_list_replace( block, free_block );
+  } else {
+    Heap_Statistics *const stats = &heap->stats;
+
+    _Heap_Free_list_remove( block );
 
     /* Statistics */
     --stats->free_blocks;
   }
 
+  return block;
+}
+
+static Heap_Block *_Heap_Block_allocate_from_end(
+  Heap_Control *heap,
+  Heap_Block *block,
+  uintptr_t alloc_begin,
+  uintptr_t alloc_size
+)
+{
+  uintptr_t const block_begin = (uintptr_t) block;
+  uintptr_t block_size = _Heap_Block_size( block );
+  uintptr_t block_end = block_begin + block_size;
+
+  Heap_Block *const new_block =
+    _Heap_Block_of_alloc_area( alloc_begin, heap->page_size );
+  uintptr_t const new_block_begin = (uintptr_t) new_block;
+  uintptr_t const new_block_size = block_end - new_block_begin;
+
+  Heap_Block *free_block = NULL;
+
+  block_end = new_block_begin;
+  block_size = block_end - block_begin;
+
+  _HAssert( block_size >= heap->min_block_size );
+  _HAssert( new_block_size >= heap->min_block_size );
+
+  block->size_and_flag = block_size | HEAP_PREV_BLOCK_USED;
+  new_block->prev_size = block_size;
+  new_block->size_and_flag = new_block_size;
+
+  free_block = _Heap_Block_split( heap, new_block, alloc_size );
+  if ( free_block != NULL ) {
+    _Heap_Free_list_insert_after( block, free_block );
+  }
+
+  return new_block;
+}
+
+Heap_Block *_Heap_Block_allocate(
+  Heap_Control *heap,
+  Heap_Block *block,
+  uintptr_t alloc_begin,
+  uintptr_t alloc_size
+)
+{
+  Heap_Statistics *const stats = &heap->stats;
+  uintptr_t const alloc_area_begin = _Heap_Alloc_area_of_block( block );
+  uintptr_t const alloc_area_offset = alloc_begin - alloc_area_begin;
+
+  _HAssert( _Heap_Is_prev_used( block ) );
+  _HAssert( alloc_area_begin <= alloc_begin );
+
+  if ( alloc_area_offset < heap->page_size ) {
+    alloc_size += alloc_area_offset;
+
+    block = _Heap_Block_allocate_from_begin( heap, block, alloc_size );
+  } else {
+    block = _Heap_Block_allocate_from_end( heap, block, alloc_begin, alloc_size );
+  }
+
   /* Statistics */
   ++stats->used_blocks;
-  stats->free_size -= alloc_size;
-  if(stats->min_free_size > stats->free_size) {
+  stats->free_size -= _Heap_Block_size( block );
+  if ( stats->min_free_size > stats->free_size ) {
     stats->min_free_size = stats->free_size;
   }
 
-  return alloc_size;
+  return block;
 }

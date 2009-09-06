@@ -47,7 +47,7 @@
 
 rtems_status_code rtems_region_get_segment(
   Objects_Id         id,
-  intptr_t           size,
+  uintptr_t          size,
   rtems_option       option_set,
   rtems_interval     timeout,
   void              **segment

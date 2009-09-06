@@ -30,6 +30,12 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup Score SuperCore
+ *
+ * @brief Provides services for all APIs.
+ */
+
+/**
  *  The following type defines the control block used to manage
  *  object names.
  */

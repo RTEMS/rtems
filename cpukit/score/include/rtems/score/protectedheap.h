@@ -1,9 +1,12 @@
 /**
- *  @file  rtems/score/protectedheap.h
+ * @file
  *
- *  This include file contains the information pertaining to the 
- *  Protected Heap Handler.
+ * @ingroup ScoreProtHeap
  *
+ * @brief Protected Heap Handler API.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,210 +23,125 @@
 #include <rtems/score/heap.h>
 #include <rtems/score/apimutex.h>
 
-/**
- *  @defgroup ScoreProtHeap Protected Heap Handler
- *
- *  This handler encapsulates functionality which provides the foundation
- *  Protected Heap services.
- *
- *  It is a simple wrapper for the help with the addition of the
- *  allocation mutex being used for protection.
- */
-/**@{*/
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- *  This routine initializes @a the_heap record to manage the
- *  contiguous heap of @a size bytes which starts at @a starting_address.
- *  Blocks of memory are allocated from the heap in multiples of
- *  @a page_size byte units. If @a page_size is 0 or is not multiple of
- *  CPU_ALIGNMENT, it's aligned up to the nearest CPU_ALIGNMENT boundary.
+ * @defgroup ScoreProtHeap Protected Heap Handler
  *
- *  @param[in] the_heap is the heap to operate upon
- *  @param[in] starting_address is the starting address of the memory for
- *         the heap
- *  @param[in] size is the size in bytes of the memory area for the heap
- *  @param[in] page_size is the size in bytes of the allocation unit
+ * @ingroup ScoreHeap
  *
- *  @return This method returns the maximum memory available.  If
- *          unsuccessful, 0 will be returned.
+ * @brief Provides protected heap services.
+ *
+ * The @ref ScoreAllocatorMutex is used to protect the heap accesses.
+ *
+ * @{
  */
-static inline uint32_t _Protected_heap_Initialize(
-  Heap_Control *the_heap,
-  void         *starting_address,
-  intptr_t      size,
-  uint32_t      page_size
+
+/**
+ * @brief See _Heap_Initialize().
+ */
+RTEMS_INLINE_ROUTINE uintptr_t _Protected_heap_Initialize(
+  Heap_Control *heap,
+  void *area_begin,
+  uintptr_t area_size,
+  uintptr_t page_size
 )
 {
-  return _Heap_Initialize( the_heap, starting_address, size, page_size );
+  return _Heap_Initialize( heap, area_begin, area_size, page_size );
 }
 
 /**
- *  This routine grows @a the_heap memory area using the size bytes which
- *  begin at @a starting_address.
+ * @brief See _Heap_Extend().
  *
- *  @param[in] the_heap is the heap to operate upon
- *  @param[in] starting_address is the starting address of the memory
- *         to add to the heap
- *  @param[in] size is the size in bytes of the memory area to add
- *  @return a status indicating success or the reason for failure
+ * Returns @a true in case of success, and @a false otherwise.
  */
 bool _Protected_heap_Extend(
-  Heap_Control *the_heap,
-  void         *starting_address,
-  intptr_t      size
+  Heap_Control *heap,
+  void *area_begin,
+  uintptr_t area_size
 );
 
 /**
- *  This function attempts to allocate a block of @a size bytes from
- *  @a the_heap.  If insufficient memory is free in @a the_heap to allocate
- *  a block of the requested size, then NULL is returned.
- *
- *  @param[in] the_heap is the heap to operate upon
- *  @param[in] size is the amount of memory to allocate in bytes
- *  @return NULL if unsuccessful and a pointer to the block if successful
+ * @brief See _Heap_Allocate_aligned_with_boundary().
  */
 void *_Protected_heap_Allocate(
-  Heap_Control *the_heap,
-  intptr_t      size
+  Heap_Control *heap,
+  uintptr_t size
 );
 
 /**
- *  This function attempts to allocate a memory block of @a size bytes from
- *  @a the_heap so that the start of the user memory is aligned on the
- *  @a alignment boundary. If @a alignment is 0, it is set to CPU_ALIGNMENT.
- *  Any other value of @a alignment is taken "as is", i.e., even odd
- *  alignments are possible.
- *  Returns pointer to the start of the memory block if success, NULL if
- *  failure.
- *
- *  @param[in] the_heap is the heap to operate upon
- *  @param[in] size is the amount of memory to allocate in bytes
- *  @param[in] alignment the required alignment
- *  @return NULL if unsuccessful and a pointer to the block if successful
+ * @brief See _Heap_Allocate_aligned_with_boundary().
  */
 void *_Protected_heap_Allocate_aligned(
-  Heap_Control *the_heap,
-  intptr_t      size,
-  uint32_t      alignment
+  Heap_Control *heap,
+  uintptr_t size,
+  uintptr_t alignment
 );
 
 /**
- *  This function sets @a *size to the size of the block of user memory
- *  which begins at @a starting_address. The size returned in @a *size could
- *  be greater than the size requested for allocation.
- *  Returns true if the @a starting_address is in the heap, and false
- *  otherwise.
- *
- *  @param[in] the_heap is the heap to operate upon
- *  @param[in] starting_address is the starting address of the user block
- *         to obtain the size of
- *  @param[in] size points to a user area to return the size in
- *  @return true if successfully able to determine the size, false otherwise
- *  @return *size filled in with the size of the user area for this block
+ * @brief See _Heap_Size_of_alloc_area().
  */
 bool _Protected_heap_Get_block_size(
-  Heap_Control        *the_heap,
-  void                *starting_address,
-  intptr_t            *size
+  Heap_Control *heap,
+  void *addr,
+  uintptr_t *size
 );
 
 /**
- *  This function tries to resize in place the block that is pointed to by the
- *  @a starting_address to the new @a size.
+ * @brief See _Heap_Resize_block().
  *
- *  @param[in] the_heap is the heap to operate upon
- *  @param[in] starting_address is the starting address of the user block
- *         to be resized
- *  @param[in] size is the new size
- *
- *  @return true if successfully able to resize the block.
- *          false if the block can't be resized in place.
+ * Returns @a true in case of success, and @a false otherwise.
  */
 bool _Protected_heap_Resize_block(
-  Heap_Control *the_heap,
-  void         *starting_address,
-  intptr_t      size
+  Heap_Control *heap,
+  void *addr,
+  uintptr_t size
 );
 
 /**
- *  This routine returns the block of memory which begins
- *  at @a starting_address to @a the_heap.  Any coalescing which is
- *  possible with the freeing of this routine is performed.
+ * @brief See _Heap_Free().
  *
- *  @param[in] the_heap is the heap to operate upon
- *  @param[in] start_address is the starting address of the user block
- *         to free
- *  @return true if successfully freed, false otherwise
+ * Returns @a true in case of success, and @a false otherwise.
  */
-bool _Protected_heap_Free(
-  Heap_Control *the_heap,
-  void         *start_address
-);
+bool _Protected_heap_Free( Heap_Control *heap, void *addr );
 
 /**
- *  This routine walks the heap to verify its integrity.
- *
- *  @param[in] the_heap is the heap to operate upon
- *  @param[in] source is a user specified integer which may be used to
- *         indicate where in the application this was invoked from
- *  @param[in] do_dump is set to true if errors should be printed
- *  @return true if the test passed fine, false otherwise.
+ * @brief See _Heap_Walk().
  */
-bool _Protected_heap_Walk(
-  Heap_Control *the_heap,
-  int           source,
-  bool          do_dump
-);
+bool _Protected_heap_Walk( Heap_Control *heap, int source, bool dump );
 
 /**
- *  This routine walks the heap and tots up the free and allocated
- *  sizes.
+ * @brief See _Heap_Get_information().
  *
- *  @param[in] the_heap pointer to heap header
- *  @param[in] the_info pointer to a status information area
- *
- *  @return true if successfully able to return information
+ * Returns @a true in case of success, and @a false otherwise.
  */
 bool _Protected_heap_Get_information(
-  Heap_Control            *the_heap,
-  Heap_Information_block  *the_info
+  Heap_Control *heap,
+  Heap_Information_block *info
 );
 
 /**
- *  This heap routine returns information about the free blocks
- *  in the specified heap.
+ * @brief See _Heap_Get_free_information().
  *
- *  @param[in] the_heap pointer to heap header.
- *  @param[in] info pointer to the free block information.
- *
- *  @return free block information filled in.
+ * Returns @a true in case of success, and @a false otherwise.
  */
 bool _Protected_heap_Get_free_information(
-  Heap_Control        *the_heap,
-  Heap_Information    *info
+  Heap_Control *heap,
+  Heap_Information *info
 );
 
 /**
- *  This function returns the maximum size of the protected heap.
- *
- *  @param[in] the_heap points to the heap being operated upon
- *
- *  @return This method returns the total amount of memory
- *          allocated to the heap.
+ * @brief See _Heap_Get_size().
  */
-uint32_t _Protected_heap_Get_size(
-  Heap_Control        *the_heap
-);
+uintptr_t _Protected_heap_Get_size( Heap_Control *heap );
+
+/** @} */
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

@@ -1,6 +1,12 @@
-/*
- *  Heap Handler
+/**
+ * @file
  *
+ * @ingroup ScoreHeap
+ *
+ * @brief Heap Handler implementation.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,21 +25,6 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
 
-/*PAGE
- *
- *  _Heap_Get_free_information
- *
- *  This heap routine returns information about the free blocks
- *  in the specified heap.
- *
- *  Input parameters:
- *    the_heap  - pointer to heap header.
- *    info      - pointer to the free block information.
- *
- *  Output parameters:
- *    returns - free block information filled in.
- */
-
 void _Heap_Get_free_information(
   Heap_Control        *the_heap,
   Heap_Information    *info
@@ -46,7 +37,7 @@ void _Heap_Get_free_information(
   info->largest = 0;
   info->total = 0;
 
-  for(the_block = _Heap_First_free_block(the_heap);
+  for(the_block = _Heap_Free_list_first(the_heap);
       the_block != tail;
       the_block = the_block->next)
   {

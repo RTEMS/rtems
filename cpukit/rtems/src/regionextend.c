@@ -45,10 +45,10 @@
 rtems_status_code rtems_region_extend(
   Objects_Id          id,
   void               *starting_address,
-  intptr_t            length
+  uintptr_t           length
 )
 {
-  intptr_t            amount_extended;
+  uintptr_t           amount_extended;
   Heap_Extend_status  heap_status;
   Objects_Locations   location;
   rtems_status_code   return_status;

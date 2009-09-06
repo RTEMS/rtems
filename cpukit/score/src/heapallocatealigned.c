@@ -1,3 +1,4 @@
+#if 0
 /*
  *  Heap Handler
  *
@@ -31,10 +32,10 @@ check_result(
 )
 {
   uintptr_t const user_area = _Heap_Alloc_area_of_block(the_block);
-  uintptr_t const block_end = the_block
+  uintptr_t const block_end = (uintptr_t) the_block
     + _Heap_Block_size(the_block) + HEAP_BLOCK_SIZE_OFFSET;
   uintptr_t const user_end = aligned_user_addr + size;
-  uintptr_t const heap_start = (uintptr_t) the_heap->start + HEAP_LAST_BLOCK_OVERHEAD;
+  uintptr_t const heap_start = (uintptr_t) the_heap->start + HEAP_BLOCK_HEADER_SIZE;
   uintptr_t const heap_end = (uintptr_t) the_heap->final
     + HEAP_BLOCK_SIZE_OFFSET;
   uintptr_t const page_size = the_heap->page_size;
@@ -97,7 +98,7 @@ Heap_Block *block_allocate(
     /* Don't split the block as remainder is either zero or too small to be
        used as a separate free block. Change 'alloc_size' to the size of the
        block and remove the block from the list of free blocks. */
-    _Heap_Block_remove_from_free_list(the_block);
+    _Heap_Free_list_remove(the_block);
     alloc_size = block_size;
     stats->free_blocks -= 1;
   }
@@ -157,7 +158,7 @@ void *_Heap_Allocate_aligned(
 
   /* Find large enough free block that satisfies the alignment requirements. */
 
-  for (the_block = _Heap_First_free_block(the_heap), search_count = 0;
+  for (the_block = _Heap_Free_list_first(the_heap), search_count = 0;
       the_block != tail;
       the_block = the_block->next, ++search_count)
   {
@@ -220,7 +221,7 @@ void *_Heap_Allocate_aligned(
         /* The block is indeed acceptable: calculate the size of the block
            to be allocated and perform allocation. */
         uintptr_t const alloc_size =
-            block_end - user_addr + HEAP_BLOCK_ALLOC_AREA_OFFSET;
+            block_end - user_addr + HEAP_BLOCK_HEADER_SIZE;
 
         _HAssert(_Heap_Is_aligned(aligned_user_addr, alignment));
 
@@ -244,3 +245,4 @@ void *_Heap_Allocate_aligned(
 
   return user_ptr;
 }
+#endif

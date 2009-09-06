@@ -1,6 +1,12 @@
-/*
- *  Heap Handler
+/**
+ * @file
  *
+ * @ingroup ScoreHeap
+ *
+ * @brief Heap Handler implementation.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,26 +25,18 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
 
-bool _Heap_Free( Heap_Control *heap, void *alloc_area_begin_ptr )
+bool _Heap_Free( Heap_Control *heap, void *alloc_begin_ptr )
 {
   Heap_Statistics *const stats = &heap->stats;
-  uintptr_t alloc_area_begin = (uintptr_t) alloc_area_begin_ptr;
+  uintptr_t alloc_begin = (uintptr_t) alloc_begin_ptr;
   Heap_Block *block =
-    _Heap_Block_of_alloc_area( alloc_area_begin, heap->page_size );
+    _Heap_Block_of_alloc_area( alloc_begin, heap->page_size );
   Heap_Block *next_block = NULL;
   uintptr_t block_size = 0;
   uintptr_t next_block_size = 0;
   bool next_is_free = false;
 
-  if (
-    !_Addresses_Is_in_range( alloc_area_begin_ptr, heap->start, heap->final)
-  ) {
-    _HAssert( alloc_area_begin_ptr != NULL );
-    return false;
-  }
-
   if ( !_Heap_Is_block_in_heap( heap, block ) ) {
-    _HAssert( false );
     return false;
   }
 
@@ -56,7 +54,7 @@ bool _Heap_Free( Heap_Control *heap, void *alloc_area_begin_ptr )
   }
 
   next_block_size = _Heap_Block_size( next_block );
-  next_is_free = next_block != heap->final
+  next_is_free = next_block != heap->last_block
     && !_Heap_Is_prev_used( _Heap_Block_at( next_block, next_block_size ));
 
   if ( !_Heap_Is_prev_used( block ) ) {
@@ -77,7 +75,7 @@ bool _Heap_Free( Heap_Control *heap, void *alloc_area_begin_ptr )
 
     if ( next_is_free ) {       /* coalesce both */
       uintptr_t const size = block_size + prev_size + next_block_size;
-      _Heap_Block_remove_from_free_list( next_block );
+      _Heap_Free_list_remove( next_block );
       stats->free_blocks -= 1;
       prev_block->size_and_flag = size | HEAP_PREV_BLOCK_USED;
       next_block = _Heap_Block_at( prev_block, size );
@@ -91,14 +89,14 @@ bool _Heap_Free( Heap_Control *heap, void *alloc_area_begin_ptr )
     }
   } else if ( next_is_free ) {    /* coalesce next */
     uintptr_t const size = block_size + next_block_size;
-    _Heap_Block_replace_in_free_list( next_block, block );
+    _Heap_Free_list_replace( next_block, block );
     block->size_and_flag = size | HEAP_PREV_BLOCK_USED;
     next_block  = _Heap_Block_at( block, size );
     next_block->prev_size = size;
   } else {                        /* no coalesce */
     /* Add 'block' to the head of the free blocks list as it tends to
        produce less fragmentation than adding to the tail. */
-    _Heap_Block_insert_after( _Heap_Free_list_head( heap), block );
+    _Heap_Free_list_insert_after( _Heap_Free_list_head( heap), block );
     block->size_and_flag = block_size | HEAP_PREV_BLOCK_USED;
     next_block->size_and_flag &= ~HEAP_PREV_BLOCK_USED;
     next_block->prev_size = block_size;

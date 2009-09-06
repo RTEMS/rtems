@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup ScoreProtHeap
+ *
+ * @brief Protected Heap Handler implementation.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,11 +27,11 @@
 bool _Protected_heap_Extend(
   Heap_Control *the_heap,
   void         *starting_address,
-  intptr_t      size
+  uintptr_t     size
 )
 {
   Heap_Extend_status status;
-  intptr_t           amount_extended;
+  uintptr_t           amount_extended;
 
   _RTEMS_Lock_allocator();
     status = _Heap_Extend(the_heap, starting_address, size, &amount_extended);

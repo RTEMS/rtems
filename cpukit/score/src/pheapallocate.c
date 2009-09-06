@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup ScoreProtHeap
+ *
+ * @brief Protected Heap Handler implementation.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,7 +26,7 @@
 
 void *_Protected_heap_Allocate(
   Heap_Control *the_heap,
-  intptr_t      size
+  uintptr_t     size
 )
 {
   void *p;

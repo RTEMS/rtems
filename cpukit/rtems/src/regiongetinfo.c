@@ -60,11 +60,8 @@ rtems_status_code rtems_region_get_information(
     switch ( location ) {
 
       case OBJECTS_LOCAL:
-        if ( _Heap_Get_information( &the_region->Memory, the_info ) !=
-             HEAP_GET_INFORMATION_SUCCESSFUL )
-          return_status = RTEMS_INVALID_ADDRESS;
-        else
-          return_status = RTEMS_SUCCESSFUL;
+        _Heap_Get_information( &the_region->Memory, the_info );
+        return_status = RTEMS_SUCCESSFUL;
         break;
 
 #if defined(RTEMS_MULTIPROCESSING)

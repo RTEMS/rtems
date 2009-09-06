@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup ScoreProtHeap
+ *
+ * @brief Protected Heap Handler implementation.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,10 +27,10 @@
 bool _Protected_heap_Get_block_size(
   Heap_Control        *the_heap,
   void                *starting_address,
-  intptr_t            *size
+  uintptr_t           *size
 )
 {
-  bool    status;
+  bool status;
 
   _RTEMS_Lock_allocator();
     status = _Heap_Size_of_alloc_area( the_heap, starting_address, size );

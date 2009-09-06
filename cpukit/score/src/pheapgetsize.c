@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup ScoreProtHeap
+ *
+ * @brief Protected Heap Handler implementation.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -16,7 +24,7 @@
 #include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
-uint32_t _Protected_heap_Get_size(
+uintptr_t _Protected_heap_Get_size(
   Heap_Control *the_heap
 )
 {
