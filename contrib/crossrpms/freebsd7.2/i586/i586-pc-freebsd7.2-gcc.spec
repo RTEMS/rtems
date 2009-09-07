@@ -283,8 +283,7 @@ Cross gcc for i586-pc-freebsd7.2.
   TGTDIR="%{_gcclibdir}/gcc/i586-pc-freebsd7.2/%{gcc_version}"
   for i in $multilibs; do
     case $i in
-    \.) echo "%dir ${TGTDIR}" >> dirs
-      ;;
+    \.) ;; # ignore, handled elsewhere
     *)  echo "%dir ${TGTDIR}/$i" >> dirs
       ;;
     esac
