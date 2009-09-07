@@ -41,7 +41,7 @@ Summary:      	i586-pc-freebsd7.2 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20090831.1%{?dist}
+Release:      	0.20090907.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
