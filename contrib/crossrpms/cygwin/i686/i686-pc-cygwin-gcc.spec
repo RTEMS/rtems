@@ -41,7 +41,7 @@ Summary:      	i686-pc-cygwin gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20090827.0%{?dist}
+Release:      	0.20090907.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -120,6 +120,7 @@ BuildRequires:	i686-pc-cygwin-sys-root
 Requires:	i686-pc-cygwin-binutils
 Requires:	i686-pc-cygwin-sys-root
 Requires:	i686-pc-cygwin-w32api
+Requires:	i686-pc-cygwin-gcc-libgcc = %{gcc_rpmvers}-%{release}
 
 
 %define _gcclibdir %{_prefix}/lib
@@ -271,19 +272,15 @@ cd ..
   fi
 
   # Collect multilib subdirectories
-  f=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
+  multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
 
   rm -f dirs ;
   echo "%defattr(-,root,root,-)" >> dirs
-  echo "%dir %{_gcclibdir}/gcc" >> dirs
-  echo "%dir %{_gcclibdir}/gcc/i686-pc-cygwin" >> dirs
-
   TGTDIR="%{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}"
-  for i in $f; do
+  for i in $multilibs; do
     case $i in
-    \.) echo "%dir ${TGTDIR}" >> dirs
-      ;;
+    \.) ;; # ignore, handled elsewhere
     *)  echo "%dir ${TGTDIR}/$i" >> dirs
       ;;
     esac
@@ -311,6 +308,7 @@ cd ..
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
+    *include-fixed/*);;
     *finclude/*);;
     *adainclude*);;
     *adalib*);;
@@ -407,7 +405,6 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       i686-pc-cygwin-binutils
-# Requires:       i686-pc-cygwin-newlib = %{newlib_version}-@NEWLIB_RPMREL@
 # License:	GPL
 
 # %if %build_infos
@@ -417,8 +414,23 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 %description -n i686-pc-cygwin-gcc
 GNU cc compiler for i686-pc-cygwin.
 
-%files -n i686-pc-cygwin-gcc -f build/files.gcc
+# ==============================================================
+# i686-pc-cygwin-gcc-libgcc
+# ==============================================================
+%package -n i686-pc-cygwin-gcc-libgcc
+Summary:        libgcc for i686-pc-cygwin-gcc
+Group:          Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	GPL
+
+%description -n i686-pc-cygwin-gcc-libgcc
+libgcc i686-pc-cygwin-gcc.
+
+
+%files -n i686-pc-cygwin-gcc
 %defattr(-,root,root)
+
 %{_mandir}/man1/i686-pc-cygwin-gcc.1*
 %{_mandir}/man1/i686-pc-cygwin-cpp.1*
 %{_mandir}/man1/i686-pc-cygwin-gcov.1*
@@ -429,7 +441,20 @@ GNU cc compiler for i686-pc-cygwin.
 %{_bindir}/i686-pc-cygwin-gcov%{_exeext}
 %{_bindir}/i686-pc-cygwin-gccbug
 
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/i686-pc-cygwin
+%dir %{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}
+%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/cc1%{_exeext}
+%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/collect2%{_exeext}
+
+
+%files -n i686-pc-cygwin-gcc-libgcc -f build/files.gcc
+%defattr(-,root,root)
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/i686-pc-cygwin
+%dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}
 %dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include
+
 %if "%{gcc_version}" > "4.0.3"
 %if "i686-pc-cygwin" != "bfin-rtems4.10"
 %if "i686-pc-cygwin" != "avr-rtems4.10"
@@ -439,14 +464,8 @@ GNU cc compiler for i686-pc-cygwin.
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
-%dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include-fixed
+%{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include-fixed
 %endif
-
-%dir %{_libexecdir}/gcc
-%dir %{_libexecdir}/gcc/i686-pc-cygwin
-%dir %{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}
-%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/cc1%{_exeext}
-%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
 # i686-pc-cygwin-gcc-c++
@@ -456,20 +475,32 @@ Summary:	GCC c++ compiler for i686-pc-cygwin
 Group:		Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
+Requires:       i686-pc-cygwin-gcc-libstdc++ = %{gcc_rpmvers}-%{release}
 
 %if "%{_build}" != "%{_host}"
 BuildRequires:  i686-pc-cygwin-gcc-c++ = %{gcc_rpmvers}
 %endif
-Provides:	i686-pc-cygwin-c++ = %{gcc_rpmvers}-%{release}
-Obsoletes:	i686-pc-cygwin-c++ < %{gcc_rpmvers}-%{release}
 
 Requires:       i686-pc-cygwin-gcc = %{gcc_rpmvers}-%{release}
 
 %description -n i686-pc-cygwin-gcc-c++
 GCC c++ compiler for i686-pc-cygwin.
 
-%files -n i686-pc-cygwin-gcc-c++ -f build/files.g++
+
+%package -n i686-pc-cygwin-gcc-libstdc++
+Summary:	libstdc++ for i686-pc-cygwin
+Group:		Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	GPL
+
+%description -n i686-pc-cygwin-gcc-libstdc++
+%{_summary}
+
+
+%files -n i686-pc-cygwin-gcc-c++
 %defattr(-,root,root)
+
 %{_mandir}/man1/i686-pc-cygwin-g++.1*
 
 %{_bindir}/i686-pc-cygwin-c++%{_exeext}
@@ -480,6 +511,12 @@ GCC c++ compiler for i686-pc-cygwin.
 %dir %{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}
 %{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/cc1plus%{_exeext}
 
+
+%files -n i686-pc-cygwin-gcc-libstdc++ -f build/files.g++
+%defattr(-,root,root)
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/i686-pc-cygwin
+%dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}
 %dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include
 %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include/c++
 
