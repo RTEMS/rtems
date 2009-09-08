@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.8.50.20090907
-%define gdb_rpmvers %{expand:%(echo 6.8.50.20090907 | tr - _)} 
+%define gdb_version 6.8.50.20090908
+%define gdb_rpmvers %{expand:%(echo 6.8.50.20090908 | tr - _)} 
 
 Name:		rtems-4.10-mipstx39-rtems4.10-gdb
 Summary:	Gdb for target mipstx39-rtems4.10
