@@ -1,3 +1,7 @@
+2009-09-07	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* spintrcritical_support/intrcritical.c: Fixed timing rountines.
+
 2009-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spfatal01/spfatal01.scn, spfatal01/testcase.h,
