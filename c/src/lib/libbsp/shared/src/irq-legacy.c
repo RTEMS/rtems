@@ -3,25 +3,26 @@
  *
  * @ingroup bsp_interrupt
  *
- * @brief Source file for generic BSP interrupt support legacy code.
+ * @brief Generic BSP interrupt support legacy implementation.
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
+ * Copyright (c) 2008, 2009
+ * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
  * Germany
- * rtems@embedded-brains.de
+ * <rtems@embedded-brains.de>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #include <stdbool.h>
 #include <stdlib.h>
+
+#define BSP_SHARED_HANDLER_SUPPORT
 
 #include <rtems/irq.h>
 
@@ -84,7 +85,7 @@ int BSP_get_current_rtems_irq_handler(rtems_irq_connect_data *cd)
 int BSP_install_rtems_irq_handler(const rtems_irq_connect_data *cd)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  bsp_interrupt_legacy_entry *e = malloc(sizeof( bsp_interrupt_legacy_entry));
+  bsp_interrupt_legacy_entry *e = malloc(sizeof(bsp_interrupt_legacy_entry));
 
   if (e == NULL) {
     return 0;
@@ -95,8 +96,7 @@ int BSP_install_rtems_irq_handler(const rtems_irq_connect_data *cd)
 
   sc = rtems_interrupt_handler_install(
     cd->name,
-    "Unique interrupt handler "
-        "(installed with obsolete BSP_install_rtems_irq_handler())",
+    "LEGACY INSTALLED",
     RTEMS_INTERRUPT_UNIQUE,
     bsp_interrupt_legacy_dispatch,
     e
@@ -119,7 +119,7 @@ int BSP_install_rtems_irq_handler(const rtems_irq_connect_data *cd)
 int BSP_install_rtems_shared_irq_handler(const rtems_irq_connect_data *cd)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  bsp_interrupt_legacy_entry *e = malloc(sizeof( bsp_interrupt_legacy_entry));
+  bsp_interrupt_legacy_entry *e = malloc(sizeof(bsp_interrupt_legacy_entry));
 
   if (e == NULL) {
     return 0;
@@ -130,8 +130,7 @@ int BSP_install_rtems_shared_irq_handler(const rtems_irq_connect_data *cd)
 
   sc = rtems_interrupt_handler_install(
     cd->name,
-    "Shared interrupt handler "
-        "(installed with obsolete BSP_install_rtems_shared_irq_handler())",
+    "LEGACY INSTALLED",
     RTEMS_INTERRUPT_SHARED,
     bsp_interrupt_legacy_dispatch,
     e

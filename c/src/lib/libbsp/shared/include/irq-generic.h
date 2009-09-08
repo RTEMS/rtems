@@ -3,21 +3,22 @@
  *
  * @ingroup bsp_interrupt
  *
- * @brief Header file for generic BSP interrupt support.
+ * @brief Generic BSP interrupt support API.
  */
 
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette. 
  *
- * Copyright (c) 2008
- * Embedded Brains GmbH
+ * Copyright (c) 2008, 2009
+ * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
  * Germany
- * rtems@embedded-brains.de
+ * <rtems@embedded-brains.de>
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef LIBBSP_SHARED_IRQ_GENERIC_H
@@ -33,29 +34,30 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#if !defined( BSP_INTERRUPT_VECTOR_MIN) || !defined( BSP_INTERRUPT_VECTOR_MAX) || (BSP_INTERRUPT_VECTOR_MAX + 1) < BSP_INTERRUPT_VECTOR_MIN
-#error Invalid BSP_INTERRUPT_VECTOR_MIN or BSP_INTERRUPT_VECTOR_MAX.
-#endif /* !defined( BSP_INTERRUPT_VECTOR_MIN) ... */
+#if !defined(BSP_INTERRUPT_VECTOR_MIN) || !defined(BSP_INTERRUPT_VECTOR_MAX) || (BSP_INTERRUPT_VECTOR_MAX + 1) < BSP_INTERRUPT_VECTOR_MIN
+  #error "invalid BSP_INTERRUPT_VECTOR_MIN or BSP_INTERRUPT_VECTOR_MAX"
+#endif
 
-#if defined( BSP_INTERRUPT_USE_INDEX_TABLE) && !defined( BSP_INTERRUPT_HANDLER_TABLE_SIZE)
-#error If you define BSP_INTERRUPT_USE_INDEX_TABLE, you have to define BSP_INTERRUPT_HANDLER_TABLE_SIZE etc. as well.
-#endif /* defined( BSP_INTERRUPT_USE_INDEX_TABLE) ... */
+#if defined(BSP_INTERRUPT_USE_INDEX_TABLE) && !defined(BSP_INTERRUPT_HANDLER_TABLE_SIZE)
+  #error "if you define BSP_INTERRUPT_USE_INDEX_TABLE, you have to define BSP_INTERRUPT_HANDLER_TABLE_SIZE etc. as well"
+#endif
 
-#if defined( BSP_INTERRUPT_NO_HEAP_USAGE) && !defined( BSP_INTERRUPT_USE_INDEX_TABLE)
-#error If you define BSP_INTERRUPT_NO_HEAP_USAGE, you have to define BSP_INTERRUPT_USE_INDEX_TABLE etc. as well.
-#endif /* defined( BSP_INTERRUPT_NO_HEAP_USAGE) ... */
+#if defined(BSP_INTERRUPT_NO_HEAP_USAGE) && !defined(BSP_INTERRUPT_USE_INDEX_TABLE)
+  #error "if you define BSP_INTERRUPT_NO_HEAP_USAGE, you have to define BSP_INTERRUPT_USE_INDEX_TABLE etc. as well"
+#endif
 
-#define BSP_INTERRUPT_VECTOR_NUMBER (BSP_INTERRUPT_VECTOR_MAX - BSP_INTERRUPT_VECTOR_MIN + 1)
+#define BSP_INTERRUPT_VECTOR_NUMBER \
+  (BSP_INTERRUPT_VECTOR_MAX - BSP_INTERRUPT_VECTOR_MIN + 1)
 
 #ifndef BSP_INTERRUPT_HANDLER_TABLE_SIZE
-#define BSP_INTERRUPT_HANDLER_TABLE_SIZE BSP_INTERRUPT_VECTOR_NUMBER
-#endif /* BSP_INTERRUPT_HANDLER_TABLE_SIZE */
+  #define BSP_INTERRUPT_HANDLER_TABLE_SIZE BSP_INTERRUPT_VECTOR_NUMBER
+#endif
 
 struct bsp_interrupt_handler_entry {
-	rtems_interrupt_handler handler;
-	void *arg;
-	const char *info;
-	struct bsp_interrupt_handler_entry *next;
+  rtems_interrupt_handler handler;
+  void *arg;
+  const char *info;
+  struct bsp_interrupt_handler_entry *next;
 };
 
 typedef struct bsp_interrupt_handler_entry bsp_interrupt_handler_entry;
@@ -63,16 +65,18 @@ typedef struct bsp_interrupt_handler_entry bsp_interrupt_handler_entry;
 extern bsp_interrupt_handler_entry bsp_interrupt_handler_table [];
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
-extern bsp_interrupt_handler_index_type bsp_interrupt_handler_index_table [];
-#endif /* BSP_INTERRUPT_USE_INDEX_TABLE */
+  extern bsp_interrupt_handler_index_type bsp_interrupt_handler_index_table [];
+#endif
 
-static inline rtems_vector_number bsp_interrupt_handler_index( rtems_vector_number vector)
+static inline rtems_vector_number bsp_interrupt_handler_index(
+  rtems_vector_number vector
+)
 {
-#ifdef BSP_INTERRUPT_USE_INDEX_TABLE
-	return bsp_interrupt_handler_index_table [vector - BSP_INTERRUPT_VECTOR_MIN];
-#else /* BSP_INTERRUPT_USE_INDEX_TABLE */
-	return vector - BSP_INTERRUPT_VECTOR_MIN;
-#endif /* BSP_INTERRUPT_USE_INDEX_TABLE */
+  #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
+    return bsp_interrupt_handler_index_table [vector - BSP_INTERRUPT_VECTOR_MIN];
+  #else
+    return vector - BSP_INTERRUPT_VECTOR_MIN;
+  #endif
 }
 
 /**
@@ -129,10 +133,10 @@ static inline rtems_vector_number bsp_interrupt_handler_index( rtems_vector_numb
 /**
  * @brief Returns true if the interrupt vector with number @a vector is valid.
  */
-static inline bool bsp_interrupt_is_valid_vector( rtems_vector_number vector)
+static inline bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
 {
-	return (rtems_vector_number) BSP_INTERRUPT_VECTOR_MIN <= vector
-		&& vector <= (rtems_vector_number) BSP_INTERRUPT_VECTOR_MAX;
+  return (rtems_vector_number) BSP_INTERRUPT_VECTOR_MIN <= vector
+    && vector <= (rtems_vector_number) BSP_INTERRUPT_VECTOR_MAX;
 }
 
 /**
@@ -144,7 +148,7 @@ static inline bool bsp_interrupt_is_valid_vector( rtems_vector_number vector)
  *
  * @note This function must cope with arbitrary vector numbers @a vector.
  */
-void bsp_interrupt_handler_default( rtems_vector_number vector);
+void bsp_interrupt_handler_default(rtems_vector_number vector);
 
 /**
  * @brief Initialize BSP interrupt support.
@@ -154,7 +158,7 @@ void bsp_interrupt_handler_default( rtems_vector_number vector);
  * function will be called after all internals are initialized.  Initialization
  * is complete if everything was successful.
  */
-rtems_status_code bsp_interrupt_initialize( void);
+rtems_status_code bsp_interrupt_initialize(void);
 
 /**
  * @brief BSP specific initialization.
@@ -171,7 +175,7 @@ rtems_status_code bsp_interrupt_initialize( void);
  *
  * @return On success RTEMS_SUCCESSFUL shall be returned.
  */
-rtems_status_code bsp_interrupt_facility_initialize( void);
+rtems_status_code bsp_interrupt_facility_initialize(void);
 
 /**
  * @brief Enables the interrupt vector with number @a vector.
@@ -187,7 +191,7 @@ rtems_status_code bsp_interrupt_facility_initialize( void);
  *
  * @return On success RTEMS_SUCCESSFUL shall be returned.
  */
-rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector);
+rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector);
 
 /**
  * @brief Disables the interrupt vector with number @a vector.
@@ -203,7 +207,7 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector);
  *
  * @return On success RTEMS_SUCCESSFUL shall be returned.
  */
-rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector);
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector);
 
 /**
  * @brief Sequencially calls all interrupt handlers for the vector number @a
@@ -215,18 +219,19 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector);
  * You can call this function within every context which can be disabled via
  * rtems_interrupt_disable().
  */
-static inline void bsp_interrupt_handler_dispatch( rtems_vector_number vector)
+static inline void bsp_interrupt_handler_dispatch(rtems_vector_number vector)
 {
-	if (bsp_interrupt_is_valid_vector( vector)) {
-		bsp_interrupt_handler_entry *e = &bsp_interrupt_handler_table [bsp_interrupt_handler_index( vector)];
+  if (bsp_interrupt_is_valid_vector(vector)) {
+    bsp_interrupt_handler_entry *e =
+      &bsp_interrupt_handler_table [bsp_interrupt_handler_index(vector)];
 
-		do {
-			e->handler( vector, e->arg);
-			e = e->next;
-		} while (e != NULL);
-	} else {
-		bsp_interrupt_handler_default( vector);
-	}
+    do {
+      (*e->handler)(vector, e->arg);
+      e = e->next;
+    } while (e != NULL);
+  } else {
+    bsp_interrupt_handler_default(vector);
+  }
 }
 
 /** @} */

@@ -30,21 +30,21 @@ static Heap_Control bsp_stack_heap = {
   .page_size = BSP_STACK_MAGIC
 };
 
-void bsp_stack_initialize(void *start, intptr_t size)
+void bsp_stack_initialize(void *begin, uintptr_t size)
 {
-  bsp_stack_heap.begin = start;
-  bsp_stack_heap.end = (void *) size;
+  bsp_stack_heap.area_begin = (uintptr_t) begin;
+  bsp_stack_heap.area_end = size;
 }
 
-void *bsp_stack_allocate(uint32_t size)
+void *bsp_stack_allocate(size_t size)
 {
   void *stack = NULL;
 
   if (bsp_stack_heap.page_size == BSP_STACK_MAGIC) {
-    uint32_t rv = _Heap_Initialize(
+    uintptr_t rv = _Heap_Initialize(
       &bsp_stack_heap,
-      bsp_stack_heap.begin,
-      (intptr_t) bsp_stack_heap.end,
+      (void *) bsp_stack_heap.area_begin,
+      bsp_stack_heap.area_end,
       CPU_STACK_ALIGNMENT
     );
     if (rv == 0) {
@@ -52,7 +52,7 @@ void *bsp_stack_allocate(uint32_t size)
     }
   }
 
-  stack = _Heap_Allocate(&bsp_stack_heap, (intptr_t) size);
+  stack = _Heap_Allocate(&bsp_stack_heap, size);
 
   if (stack == NULL) {
     stack = _Workspace_Allocate(size);

@@ -1,3 +1,12 @@
+2009-09-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/irq-config.h, include/irq-generic.h, include/irq-info.h,
+	src/irq-generic.c, src/irq-info.c, src/irq-legacy.c, src/irq-shell.c:
+	Format, cleanup and documentation.
+	* src/irq-server.c: New file.
+	* include/bootcard.h, include/stackalloc.h, src/stackalloc.c,
+	bsplibc.c: Update for heap API changes. Documentation.
+
 2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bootcard.c, bsplibc.c, clockdrv_shell.h, console-polled.c: Fix

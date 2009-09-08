@@ -12,12 +12,12 @@
 #include <bsp/bootcard.h>
 
 void bsp_libc_init(
-  void   *heap_start,
-  size_t  heap_size,
-  size_t  sbrk_amount
+  void *heap_begin,
+  uintptr_t heap_size,
+  size_t sbrk_amount
 )
 {
-    RTEMS_Malloc_Initialize( heap_start, heap_size, sbrk_amount );
+    RTEMS_Malloc_Initialize( heap_begin, heap_size, sbrk_amount );
 
     /*
      *  Init the RTEMS libio facility to provide UNIX-like system
