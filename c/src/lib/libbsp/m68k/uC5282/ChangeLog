@@ -1,3 +1,9 @@
+2009-09-09	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart.c: Added dummy implementation of firmware
+	syscalls for use with QEMU. Dummy handler is installed if no
+	pre-existing firmware handler is found.
+
 2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* clock/clock.c, include/bsp.h: Rename BSP specific idle thread to

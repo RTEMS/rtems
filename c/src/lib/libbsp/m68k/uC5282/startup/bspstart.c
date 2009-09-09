@@ -184,6 +184,8 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
 #endif
 }
 
+extern void bsp_fake_syscall();
+
 /*
  * The Arcturus boot ROM prints exception information improperly
  * so use this default exception handler instead.  This one also
@@ -262,6 +264,13 @@ void bsp_start( void )
                       MCF5XXX_ACR_SM_IGNORE                 |
                       MCF5XXX_ACR_BWE;
   m68k_set_acr0(mcf5282_acr0_mode);
+
+  /*
+   * Qemu has no trap handler; install our fake syscall
+   * implementation if there is no existing handler.
+   */
+  if ( 0 == *((void (**)(int))((32+2) * 4)) )
+    *((void (**)(int))((32+2) * 4)) = bsp_fake_syscall;
 
   /*
    * Enable the cache
@@ -393,6 +402,37 @@ syscall_1(int, setbenv, const char *, a)
 syscall_2(int, program, bsp_mnode_t *, chain, int, flags)
 syscall_3(int, flash_erase_range, volatile unsigned short *, flashptr, int, start, int, end);
 syscall_3(int, flash_write_range, volatile unsigned short *, flashptr, bsp_mnode_t *, chain, int, offset);
+
+/* Provide a dummy-implementation of these syscalls
+ * for qemu (which lacks the firmware).
+ */
+
+#define __STR(x)    #x
+#define __STRSTR(x) __STR(x)
+#define ERRVAL      __STRSTR(EACCES)
+
+/* reset-control register */
+#define RCR "__IPSBAR + 0x110000"
+
+asm(
+    "bsp_fake_syscall:         \n"
+    "   cmpl  #0,  %d0         \n" /* sysreset    */
+    "   bne   1f               \n"
+    "   moveb #0x80, %d0       \n"
+    "   moveb %d0, "RCR"       \n" /* reset-controller */
+        /* should never get here - but we'd return -EACCESS if we do */
+    "1:                        \n"
+    "   cmpl  #12, %d0         \n" /* gethwaddr   */
+    "   beq   2f               \n"
+    "   cmpl  #14, %d0         \n" /* getbenv     */
+    "   beq   2f               \n"
+    "   movel #-"ERRVAL", %d0  \n" /* return -EACCESS */
+    "   rte                    \n"
+    "2:                        \n"
+    "   movel #0,  %d0         \n" /* return NULL */
+    "   rte                    \n"
+);
+
 
 /*
  * 'Extended BSP' routines
