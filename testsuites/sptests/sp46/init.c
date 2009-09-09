@@ -36,9 +36,9 @@ rtems_task Periodic_Task(
     directive_failed(status, "rate_monotonic_period");
     partial_loop = 0;
   
-    start = rtems_clock_get_ticks_since_boot();
+    start = _Watchdog_Ticks_since_boot;
     end   = start + 5;
-    while ( end <= rtems_clock_get_ticks_since_boot() )
+    while ( end <= _Watchdog_Ticks_since_boot )
       ;
 
     partial_loop = 1;
@@ -57,7 +57,7 @@ rtems_task Init(
   rtems_status_code  status;
   rtems_id           task_id;
 
-  puts( "\n\n*** TEST 45 ***" );
+  puts( "\n\n*** TEST 46 ***" );
 
   /*
    * Initialize Tasks

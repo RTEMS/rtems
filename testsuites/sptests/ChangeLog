@@ -1,3 +1,8 @@
+2009-09-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp46/init.c: Make compile on 4.8 branch.
+	* sp46/sp46.scn: New file.
+
 2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1388/cpukit
