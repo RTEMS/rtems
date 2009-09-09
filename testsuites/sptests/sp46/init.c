@@ -57,7 +57,7 @@ rtems_task Init(
   rtems_status_code  status;
   rtems_id           task_id;
 
-  puts( "\n\n*** TEST 45 ***" );
+  puts( "\n\n*** TEST 46 ***" );
 
   /*
    * Initialize Tasks
