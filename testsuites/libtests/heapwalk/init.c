@@ -117,14 +117,9 @@ static void test_check_control(void)
   TestHeap.min_block_size = TEST_DEFAULT_PAGESIZE / 2;
   test_call_heap_walk( false );
 
-  /*
-   * Set the page size to a value, other than the first block alloc area.  Set
-   * even the min_block_size to that value to avoid it being not alligned.
-   */
-  puts( "\tlet the alloc area of the first block be not page-aligned" );
+  puts( "\tset allocation area of the first block to be non page-aligned" );
   test_heap_init_custom();
-  TestHeap.page_size = (uintptr_t) TestHeap.first_block + CPU_ALIGNMENT;
-  TestHeap.min_block_size = TestHeap.page_size;
+  TestHeap.first_block = (Heap_Block *) ((char *) TestHeap.first_block + CPU_ALIGNMENT);
   test_call_heap_walk( false );
 
   puts( "\tclear the previous used flag of the first block" );
@@ -248,6 +243,14 @@ static void test_main_loop(void)
   p2 = test_allocate_block();
   block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size  );
   block->size_and_flag = ( 3 * _Heap_Block_size( block ) / 2 ) | HEAP_PREV_BLOCK_USED;
+  test_call_heap_walk( false );
+
+  puts( "\tcreate a block with invalid successor" );
+  test_heap_init_default();
+  test_allocate_block();
+  p1 = test_allocate_block();
+  block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size  );
+  block->size_and_flag = (0 - TestHeap.page_size) | HEAP_PREV_BLOCK_USED;
   test_call_heap_walk( false );
 
   puts( "\tmake a block with a size, so that it includes the next block" );

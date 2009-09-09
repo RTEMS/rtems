@@ -4,7 +4,7 @@ testing the _Heap_Walk_check_control() function
         test what happens if page size = 0
         set page size to a not CPU-aligned value
         set minimal block size to a not page aligned value
-        let the alloc area of the first block be not page-aligned
+        set allocation area of the first block to be non page-aligned
         clear the previous used flag of the first block
         set the previous block size of the first block to an invalid value
         set invalid next block for last block
@@ -21,6 +21,7 @@ Test the main loop
         create a block with a not page aligned size
         create a block with a size smaller than the min_block_size
         make a block with a size, so that the block reaches into the next block
+        create a block with invalid successor
         make a block with a size, so that it includes the next block
 test the _Heap_Walk_check_free_block() function
         set a previous size for the next block which is not equal to the size of the actual block
@@ -29,8 +30,8 @@ test the _Heap_Walk_check_free_block() function
 test the output-function for the _Heap_Walk()
 therefore use the (already tested) case with a page size of 0
 PASS[0]: page size 0, min block size 16
-        area begin 0x????????, area end 0x????????
-        first block 0x????????, last block 0x????????
-        first free 0x????????, last free 0x????????
+	area begin 0x0202C4BC, area end 0x0202D4BC
+	first block 0x0202C4C0, last block 0x0202D4B0
+	first free 0x0202C4C0, last free 0x0202C4C0
 FAIL[0]: page size is zero
 *** END OF HEAP WALK TEST ***

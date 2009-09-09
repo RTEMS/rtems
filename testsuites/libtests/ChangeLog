@@ -1,3 +1,8 @@
+2009-09-09	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* heapwalk/heapwalk.scn, heapwalk/init.c: Add missing _Heap_Walk test
+	cases to get back to 100% object coverage.
+
 2009-09-09      Christian Mauderer <christian.mauderer@embedded-brains.de>
 
 	* heapwalk/init.c, heapwalk/heapwalk.scn, malloctest/init.c,
