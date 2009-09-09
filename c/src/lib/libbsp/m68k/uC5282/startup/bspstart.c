@@ -188,6 +188,8 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
 void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);         /* m68k version */
 
+extern void bsp_fake_syscall();
+
 /*
  * The Arcturus boot ROM prints exception information improperly
  * so use this default exception handler instead.  This one also
@@ -259,6 +261,13 @@ void bsp_start( void )
     for (i = 2 ; i < 256 ; i++)
         if (i != (32+2)) /* Catch all but bootrom system calls */
             *((void (**)(int))(i * 4)) = handler;
+
+	/*
+	 * Qemu has no trap handler; install our fake syscall
+	 * implementation if there is no existing handler.
+	 */
+	if ( 0 == *((void (**)(int))((32+2) * 4)) )
+		*((void (**)(int))((32+2) * 4)) = bsp_fake_syscall;
 
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
@@ -418,6 +427,37 @@ syscall_1(int, setbenv, const char *, a)
 syscall_2(int, program, bsp_mnode_t *, chain, int, flags)
 syscall_3(int, flash_erase_range, volatile unsigned short *, flashptr, int, start, int, end);
 syscall_3(int, flash_write_range, volatile unsigned short *, flashptr, bsp_mnode_t *, chain, int, offset);
+
+/* Provide a dummy-implementation of these syscalls
+ * for qemu (which lacks the firmware).
+ */
+
+#define __STR(x)    #x
+#define __STRSTR(x) __STR(x)
+#define ERRVAL      __STRSTR(EACCES)
+
+/* reset-control register */
+#define RCR "__IPSBAR + 0x110000"
+
+asm(
+    "bsp_fake_syscall:         \n"
+    "   cmpl  #0,  %d0         \n" /* sysreset    */
+    "   bne   1f               \n"
+    "   moveb #0x80, %d0       \n"
+    "   moveb %d0, "RCR"       \n" /* reset-controller */
+        /* should never get here - but we'd return -EACCESS if we do */
+    "1:                        \n"
+    "   cmpl  #12, %d0         \n" /* gethwaddr   */
+    "   beq   2f               \n"
+    "   cmpl  #14, %d0         \n" /* getbenv     */
+    "   beq   2f               \n"
+    "   movel #-"ERRVAL", %d0  \n" /* return -EACCESS */
+    "   rte                    \n"
+    "2:                        \n"
+    "   movel #0,  %d0         \n" /* return NULL */
+    "   rte                    \n"
+);
+
 
 /*
  * 'Extended BSP' routines
