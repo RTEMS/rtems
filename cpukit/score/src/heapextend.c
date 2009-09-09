@@ -38,8 +38,7 @@ Heap_Extend_status _Heap_Extend(
   uintptr_t const heap_area_end = heap->area_end;
   uintptr_t const new_heap_area_end = heap_area_end + area_size;
   uintptr_t extend_size = 0;
-  Heap_Block *const old_final = heap->last_block;
-  Heap_Block *new_final = NULL;
+  Heap_Block *const last_block = heap->last_block;
 
   /*
    *  There are five possibilities for the location of starting
@@ -69,24 +68,28 @@ Heap_Extend_status _Heap_Extend(
   heap->area_end = new_heap_area_end;
 
   extend_size = new_heap_area_end
-    - (uintptr_t) old_final - HEAP_BLOCK_HEADER_SIZE;
+    - (uintptr_t) last_block - HEAP_BLOCK_HEADER_SIZE;
   extend_size = _Heap_Align_down( extend_size, heap->page_size );
 
   *amount_extended = extend_size;
 
   if( extend_size >= heap->min_block_size ) {
-    old_final->size_and_flag = extend_size
-      | (old_final->size_and_flag & HEAP_PREV_BLOCK_USED);
-    new_final = _Heap_Block_at( old_final, extend_size );
-    new_final->size_and_flag = heap->page_size | HEAP_PREV_BLOCK_USED;
+    Heap_Block *const new_last_block = _Heap_Block_at( last_block, extend_size );
 
-    heap->last_block = new_final;
+    _Heap_Block_set_size( last_block, extend_size );
 
-    stats->size += area_size;
+    new_last_block->size_and_flag =
+      ((uintptr_t) heap->first_block - (uintptr_t) new_last_block)
+        | HEAP_PREV_BLOCK_USED;
+
+    heap->last_block = new_last_block;
+
+    /* Statistics */
+    stats->size += extend_size;
     ++stats->used_blocks;
     --stats->frees; /* Do not count subsequent call as actual free() */
 
-    _Heap_Free( heap, (void *) _Heap_Alloc_area_of_block( old_final ));
+    _Heap_Free( heap, (void *) _Heap_Alloc_area_of_block( last_block ));
   }
 
   return HEAP_EXTEND_SUCCESSFUL;

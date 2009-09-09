@@ -48,7 +48,6 @@
 
     uintptr_t const alloc_area_begin = _Heap_Alloc_area_of_block( block );
     uintptr_t const alloc_area_offset = alloc_begin - alloc_area_begin;
-    uintptr_t const alloc_area_size = alloc_area_offset + alloc_size;
 
     _HAssert( block_size >= min_block_size );
     _HAssert( block_begin < block_end );
@@ -206,6 +205,9 @@ void *_Heap_Allocate_aligned_with_boundary(
   }
 
   if ( alloc_begin != 0 ) {
+    /* Statistics */
+    stats->searches += search_count;
+
     block = _Heap_Block_allocate( heap, block, alloc_begin, alloc_size );
 
     _Heap_Check_allocation(
@@ -216,9 +218,6 @@ void *_Heap_Allocate_aligned_with_boundary(
       alignment,
       boundary
     );
-
-    /* Statistics */
-    stats->searches += search_count;
   }
 
   /* Statistics */

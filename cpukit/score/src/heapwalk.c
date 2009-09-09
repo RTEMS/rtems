@@ -51,16 +51,13 @@ static bool _Heap_Walk_check_free_list(
   Heap_Control *heap
 )
 {
+  uintptr_t const page_size = heap->page_size;
   const Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
   const Heap_Block *const first_free_block = _Heap_Free_list_first( heap );
+  const Heap_Block *prev_block = free_list_tail;
   const Heap_Block *free_block = first_free_block;
-  uintptr_t const page_size = heap->page_size;
-  uintptr_t const loop_limit =
-    ((uintptr_t) heap->last_block - (uintptr_t) heap->first_block)
-      / heap->min_block_size;
-  uintptr_t loop_counter = 0;
 
-  while ( free_block != free_list_tail && loop_counter < loop_limit ) {
+  while ( free_block != free_list_tail ) {
     if ( !_Heap_Is_block_in_heap( heap, free_block ) ) {
       _Heap_Walk_printk(
         source,
@@ -87,20 +84,33 @@ static bool _Heap_Walk_check_free_list(
       return false;
     }
 
-    ++loop_counter;
+    if ( _Heap_Is_used( free_block ) ) {
+      _Heap_Walk_printk(
+        source,
+        dump,
+        true,
+        "free block 0x%08x: is used\n",
+        free_block
+      );
 
+      return false;
+    }
+
+    if ( free_block->prev != prev_block ) {
+      _Heap_Walk_printk(
+        source,
+        dump,
+        true,
+        "free block 0x%08x: invalid previous block 0x%08x\n",
+        free_block,
+        free_block->prev
+      );
+
+      return false;
+    }
+
+    prev_block = free_block;
     free_block = free_block->next;
-  }
-
-  if ( loop_counter >= loop_limit ) {
-    _Heap_Walk_printk(
-      source,
-      dump,
-      true,
-      "free list contains a loop\n"
-    );
-
-    return false;
   }
 
   return true;
@@ -132,8 +142,6 @@ static bool _Heap_Walk_check_control(
 {
   uintptr_t const page_size = heap->page_size;
   uintptr_t const min_block_size = heap->min_block_size;
-  Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
-  Heap_Block *const free_list_head = _Heap_Free_list_head( heap );
   Heap_Block *const first_free_block = _Heap_Free_list_first( heap );
   Heap_Block *const last_free_block = _Heap_Free_list_last( heap );
   Heap_Block *const first_block = heap->first_block;
@@ -184,58 +192,14 @@ static bool _Heap_Walk_check_control(
   }
 
   if (
-    first_free_block != free_list_head
-      && !_Addresses_Is_aligned( first_free_block )
-  ) {
-    _Heap_Walk_printk(
-      source,
-      dump,
-      true,
-      "first free block: 0x%08x not CPU aligned\n",
-      first_free_block
-    );
-
-    return false;
-  }
-
-  if (
-    last_free_block != free_list_tail
-      && !_Addresses_Is_aligned( last_free_block )
-  ) {
-    _Heap_Walk_printk(
-      source,
-      dump,
-      true,
-      "last free block: 0x%08x not CPU aligned\n",
-      last_free_block
-    );
-    
-    return false;
-  }
-
-  if (
     !_Heap_Is_aligned( _Heap_Alloc_area_of_block( first_block ), page_size )
   ) {
     _Heap_Walk_printk(
       source,
       dump,
       true,
-      "first block: 0x%08x not page aligned\n",
+      "first block 0x%08x: alloc area not page aligned\n",
       first_block
-    );
-
-    return false;
-  }
-
-  if (
-    !_Heap_Is_aligned( _Heap_Alloc_area_of_block( last_block ), page_size )
-  ) {
-    _Heap_Walk_printk(
-      source,
-      dump,
-      true,
-      "last block: 0x%08x not page aligned\n",
-      last_block
     );
 
     return false;
@@ -248,6 +212,8 @@ static bool _Heap_Walk_check_control(
       true,
       "first block: HEAP_PREV_BLOCK_USED is cleared\n"
     );
+
+    return false;
   }
 
   if ( first_block->prev_size != page_size ) {
@@ -259,9 +225,95 @@ static bool _Heap_Walk_check_control(
       first_block->prev_size,
       page_size
     );
+
+    return false;
+  }
+
+  if ( _Heap_Is_free( last_block ) ) {
+    _Heap_Walk_printk(
+      source,
+      dump,
+      true,
+      "last block: is free\n"
+    );
+
+    return false;
   }
 
   return _Heap_Walk_check_free_list( source, dump, heap );
+}
+
+static bool _Heap_Walk_check_free_block(
+  int source,
+  bool dump,
+  Heap_Control *heap,
+  Heap_Block *block
+)
+{
+  Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
+  Heap_Block *const free_list_head = _Heap_Free_list_head( heap );
+  Heap_Block *const first_free_block = _Heap_Free_list_first( heap );
+  Heap_Block *const last_free_block = _Heap_Free_list_last( heap );
+  bool const prev_used = _Heap_Is_prev_used( block );
+  uintptr_t const block_size = _Heap_Block_size( block );
+  Heap_Block *const next_block = _Heap_Block_at( block, block_size );
+
+  _Heap_Walk_printk(
+    source,
+    dump,
+    false,
+    "block 0x%08x: prev 0x%08x%s, next 0x%08x%s\n",
+    block,
+    block->prev,
+    block->prev == first_free_block ?
+      " (= first)"
+        : (block->prev == free_list_head ? " (= head)" : ""),
+    block->next,
+    block->next == last_free_block ?
+      " (= last)"
+        : (block->next == free_list_tail ? " (= tail)" : "")
+  );
+
+  if ( block_size != next_block->prev_size ) {
+    _Heap_Walk_printk(
+      source,
+      dump,
+      true,
+      "block 0x%08x: size %u != size %u (in next block 0x%08x)\n",
+      block,
+      block_size,
+      next_block->prev_size,
+      next_block
+    );
+
+    return false;
+  }
+
+  if ( !prev_used ) {
+    _Heap_Walk_printk(
+      source,
+      dump,
+      true,
+      "block 0x%08x: two consecutive blocks are free\n",
+      block
+    );
+
+    return false;
+  }
+
+  if ( !_Heap_Walk_is_in_free_list( heap, block ) ) {
+    _Heap_Walk_printk(
+      source,
+      dump,
+      true,
+      "block 0x%08x: free block not in free list\n",
+      block
+    );
+
+    return false;
+  }
+
+  return true;
 }
 
 bool _Heap_Walk(
@@ -272,13 +324,8 @@ bool _Heap_Walk(
 {
   uintptr_t const page_size = heap->page_size;
   uintptr_t const min_block_size = heap->min_block_size;
-  Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
-  Heap_Block *const free_list_head = _Heap_Free_list_head( heap );
-  Heap_Block *const first_free_block = _Heap_Free_list_first( heap );
-  Heap_Block *const last_free_block = _Heap_Free_list_last( heap );
   Heap_Block *const last_block = heap->last_block;
   Heap_Block *block = heap->first_block;
-  bool error = false;
 
   if ( !_System_state_Is_up( _System_state_Get() ) ) {
     return true;
@@ -288,7 +335,7 @@ bool _Heap_Walk(
     return false;
   }
 
-  while ( block != last_block && _Addresses_Is_aligned( block ) ) {
+  while ( block != last_block ) {
     uintptr_t const block_begin = (uintptr_t) block;
     uintptr_t const block_size = _Heap_Block_size( block );
     bool const prev_used = _Heap_Is_prev_used( block );
@@ -299,7 +346,7 @@ bool _Heap_Walk(
       _Heap_Walk_printk(
         source,
         dump,
-        error,
+        false,
         "block 0x%08x: size %u\n",
         block,
         block_size
@@ -308,7 +355,7 @@ bool _Heap_Walk(
       _Heap_Walk_printk(
         source,
         dump,
-        error,
+        false,
         "block 0x%08x: size %u, prev_size %u\n",
         block,
         block_size,
@@ -316,158 +363,67 @@ bool _Heap_Walk(
       );
     }
 
-    if (
-      !_Heap_Is_aligned( block_begin + HEAP_BLOCK_HEADER_SIZE, page_size )
-    ) {
-      error = true;
+    if ( !_Heap_Is_block_in_heap( heap, next_block ) ) {
       _Heap_Walk_printk(
         source,
         dump,
-        error,
-        "block 0x%08x: not page (%u) aligned\n",
+        true,
+        "block 0x%08x: next block 0x%08x not in heap\n",
         block,
-        page_size
+        next_block
       );
-      break;
+      
+      return false;
     }
 
     if ( !_Heap_Is_aligned( block_size, page_size ) ) {
-      error = true;
       _Heap_Walk_printk(
         source,
         dump,
-        error,
-        "block 0x%08x: block size %u not page (%u) aligned\n",
+        true,
+        "block 0x%08x: block size %u not page aligned\n",
         block,
-        block_size,
-        page_size
+        block_size
       );
-      break;
+      
+      return false;
     }
 
     if ( block_size < min_block_size ) {
-      error = true;
       _Heap_Walk_printk(
         source,
         dump,
-        error,
+        true,
         "block 0x%08x: size %u < min block size %u\n",
         block,
         block_size,
         min_block_size
       );
-      break;
+      
+      return false;
     }
 
     if ( next_block_begin <= block_begin ) {
-      error = true;
       _Heap_Walk_printk(
         source,
         dump,
-        error,
+        true,
         "block 0x%08x: next block 0x%08x is not a successor\n",
         block,
         next_block
       );
-      break;
+      
+      return false;
     }
    
     if ( !_Heap_Is_prev_used( next_block ) ) {
-      _Heap_Walk_printk(
-        source,
-        dump,
-        error,
-        "block 0x%08x: prev 0x%08x%s, next 0x%08x%s\n",
-        block,
-        block->prev,
-        block->prev == first_free_block ?
-          " (= first)"
-            : (block->prev == free_list_head ? " (= head)" : ""),
-        block->next,
-        block->next == last_free_block ?
-          " (= last)"
-            : (block->next == free_list_tail ? " (= tail)" : "")
-      );
-
-      if ( block_size != next_block->prev_size ) {
-        error = true;
-        _Heap_Walk_printk(
-          source,
-          dump,
-          error,
-          "block 0x%08x: size %u != size %u (in next block 0x%08x)\n",
-          block,
-          block_size,
-          next_block->prev_size,
-          next_block
-        );
-      }
-
-      if ( !prev_used ) {
-        error = true;
-        _Heap_Walk_printk(
-          source,
-          dump,
-          error,
-          "block 0x%08x: two consecutive blocks are free\n",
-          block
-        );
-      }
-
-      if ( !_Heap_Walk_is_in_free_list( heap, block ) ) {
-        error = true;
-        _Heap_Walk_printk(
-          source,
-          dump,
-          error,
-          "block 0x%08x: free block not in free list\n",
-          block
-        );
+      if ( !_Heap_Walk_check_free_block( source, dump, heap, block ) ) {
+        return false;
       }
     }
 
     block = next_block;
   }
 
-  if ( !_Addresses_Is_aligned( block ) ) {
-    error = true;
-    _Heap_Walk_printk(
-      source,
-      dump,
-      error,
-      "block 0x%08x: not CPU aligned\n",
-      block
-    );
-
-    return false;
-  }
-
-  if ( block == last_block ) {
-    uintptr_t const block_size = _Heap_Block_size( block );
-
-    if ( block_size != page_size ) {
-      error = true;
-      _Heap_Walk_printk(
-        source,
-        dump,
-        error,
-        "last block 0x%08x: size %u != page size %u\n",
-        block,
-        block_size,
-        page_size
-      );
-    }
-  } else {
-    error = true;
-    _Heap_Walk_printk(
-      source,
-      dump,
-      error,
-      "last block 0x%08x != last block 0x%08x\n",
-      block,
-      last_block
-    );
-  }
-
-  return !error;
+  return true;
 }

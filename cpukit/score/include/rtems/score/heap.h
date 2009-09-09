@@ -91,7 +91,7 @@ extern "C" {
  * The heap area after initialization contains two blocks and looks like:
  * <table>
  *   <tr><th>Label</th><th colspan=2>Content</th></tr>
- *   <tr><td>heap->begin</td><td colspan=2>heap area begin address</td></tr>
+ *   <tr><td>heap->area_begin</td><td colspan=2>heap area begin address</td></tr>
  *   <tr>
  *     <td>first_block->prev_size</td>
  *     <td colspan=2>page size (the value is arbitrary)</td>
@@ -108,14 +108,18 @@ extern "C" {
  *   <tr><td>first_block->prev</td><td>_Heap_Free_list_head(heap)</td></tr>
  *   <tr><td>...</td></tr>
  *   <tr>
- *     <td>second_block->prev_size</td><td colspan=2>size of first block</td>
+ *     <td>last_block->prev_size</td><td colspan=2>size of first block</td>
  *   </tr>
  *   <tr>
- *     <td>second_block->size</td>
- *     <td colspan=2>page size (the value is arbitrary)</td>
+ *     <td>last_block->size</td>
+ *     <td colspan=2>first block begin address - last block begin address</td>
  *   </tr>
- *   <tr><td>heap->end</td><td colspan=2>heap area end address</td></tr>
+ *   <tr><td>heap->area_end</td><td colspan=2>heap area end address</td></tr>
  * </table>
+ * The next block of the last block is the first block.  Since the first
+ * block indicates that the previous block is used, this ensures that the
+ * last block appears as used for the _Heap_Is_used() and _Heap_Is_free()
+ * functions.
  *
  * @{
  */
@@ -205,17 +209,23 @@ typedef struct {
   uint32_t instance;
 
   /**
-   * @brief The size of the memory for heap.
+   * @brief Size of the allocatable area in bytes.
+   *
+   * This value is an integral multiple of the page size.
    */
   uintptr_t size;
 
   /**
-   * @brief Current free size.
+   * @brief Current free size in bytes.
+   *
+   * This value is an integral multiple of the page size.
    */
   uintptr_t free_size;
 
   /**
-   * @brief Minimum free size ever.
+   * @brief Minimum free size ever in bytes.
+   *
+   * This value is an integral multiple of the page size.
    */
   uintptr_t min_free_size;
 
@@ -240,7 +250,7 @@ typedef struct {
   uint32_t max_search;
 
   /**
-   * @brief Total number of successful calls to alloc.
+   * @brief Total number of successful allocations.
    */
   uint32_t allocs;
 
@@ -354,7 +364,7 @@ Heap_Extend_status _Heap_Extend(
 );
 
 /**
- * @brief Allocates a memory area of size @a size bytes.
+ * @brief Allocates a memory area of size @a size bytes from the heap @a heap.
  *
  * If the alignment parameter @a alignment is not equal to zero, the allocated
  * memory area will begin at an address aligned by this value.
@@ -378,11 +388,26 @@ void *_Heap_Allocate_aligned_with_boundary(
   uintptr_t boundary
 );
 
-#define _Heap_Allocate_aligned( heap, size, alignment ) \
-  _Heap_Allocate_aligned_with_boundary( heap, size, alignment, 0 )
+/**
+ * @brief See _Heap_Allocate_aligned_with_boundary() with boundary equals zero.
+ */
+RTEMS_INLINE_ROUTINE void *_Heap_Allocate_aligned(
+  Heap_Control *heap,
+  uintptr_t size,
+  uintptr_t alignment
+)
+{
+  return _Heap_Allocate_aligned_with_boundary( heap, size, alignment, 0 );
+}
 
-#define _Heap_Allocate( heap, size ) \
-  _Heap_Allocate_aligned_with_boundary( heap, size, 0, 0 )
+/**
+ * @brief See _Heap_Allocate_aligned_with_boundary() with alignment and
+ * boundary equals zero.
+ */
+RTEMS_INLINE_ROUTINE void *_Heap_Allocate( Heap_Control *heap, uintptr_t size )
+{
+  return _Heap_Allocate_aligned_with_boundary( heap, size, 0, 0 );
+}
 
 /**
  * @brief Frees the allocated memory area starting at @a addr in the heap
@@ -473,7 +498,11 @@ Heap_Resize_status _Heap_Resize_block(
  * @brief Allocates the memory area starting at @a alloc_begin of size
  * @a alloc_size bytes in the block @a block.
  *
- * The block may be split up into multiple blocks.
+ * The block may be split up into multiple blocks.  The previous and next block
+ * may be used or free.  Free block parts which form a vaild new block will be
+ * inserted into the free list or merged with an adjacent free block.  If the
+ * block is used, they will be inserted after the free list head.  If the block
+ * is free, they will be inserted after the previous block in the free list.
  *
  * Inappropriate values for @a alloc_begin or @a alloc_size may corrupt the
  * heap.

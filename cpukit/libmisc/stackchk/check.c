@@ -91,8 +91,15 @@ static inline bool Stack_check_Frame_pointer_in_range(
     ((_the_stack)->area)
 
 #else
+  /*
+   * We need this magic offset because during a task delete the task stack will
+   * be freed before we enter the task switch extension which checks the stack.
+   * The task stack free operation will write the next and previous pointers
+   * for the free list into this area.
+   */
   #define Stack_check_Get_pattern_area( _the_stack ) \
-    ((Stack_check_Control *) ((char *)(_the_stack)->area + HEAP_BLOCK_HEADER_SIZE))
+    ((Stack_check_Control *) ((char *)(_the_stack)->area \
+      + sizeof(Heap_Block) - HEAP_BLOCK_HEADER_SIZE))
 
   #define Stack_check_Calculate_used( _low, _size, _high_water) \
       ( ((char *)(_low) + (_size)) - (char *)(_high_water) )

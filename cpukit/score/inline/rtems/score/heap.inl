@@ -123,11 +123,18 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_down(
  * @brief Returns the block which is @a offset away from @a block.
  */
 RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_at(
-  Heap_Block *block,
+  const Heap_Block *block,
   uintptr_t offset
 )
 {
   return (Heap_Block *) ((uintptr_t) block + offset);
+}
+
+RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Prev_block(
+  const Heap_Block *block
+)
+{
+  return (Heap_Block *) ((uintptr_t) block - block->prev_size);
 }
 
 RTEMS_INLINE_ROUTINE uintptr_t _Heap_Alloc_area_of_block(
@@ -146,14 +153,41 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_of_alloc_area(
     - HEAP_BLOCK_HEADER_SIZE);
 }
 
+RTEMS_INLINE_ROUTINE uintptr_t _Heap_Block_size( const Heap_Block *block )
+{
+  return block->size_and_flag & ~HEAP_PREV_BLOCK_USED;
+}
+
+RTEMS_INLINE_ROUTINE void _Heap_Block_set_size(
+  Heap_Block *block,
+  uintptr_t size
+)
+{
+  uintptr_t flag = block->size_and_flag & HEAP_PREV_BLOCK_USED;
+
+  block->size_and_flag = size | flag;
+}
+
 RTEMS_INLINE_ROUTINE bool _Heap_Is_prev_used( const Heap_Block *block )
 {
   return block->size_and_flag & HEAP_PREV_BLOCK_USED;
 }
 
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Block_size( const Heap_Block *block )
+RTEMS_INLINE_ROUTINE bool _Heap_Is_used(
+  const Heap_Block *block
+)
 {
-  return block->size_and_flag & ~HEAP_PREV_BLOCK_USED;
+  const Heap_Block *const next_block =
+    _Heap_Block_at( block, _Heap_Block_size( block ) );
+
+  return _Heap_Is_prev_used( next_block );
+}
+
+RTEMS_INLINE_ROUTINE bool _Heap_Is_free(
+  const Heap_Block *block
+)
+{
+  return !_Heap_Is_used( block );
 }
 
 RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in_heap(
@@ -166,11 +200,13 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in_heap(
 }
 
 /**
- * @brief Returns the heap area size.
+ * @brief Returns the size of the allocatable area in bytes.
+ *
+ * This value is an integral multiple of the page size.
  */
 RTEMS_INLINE_ROUTINE uintptr_t _Heap_Get_size( const Heap_Control *heap )
 {
-  return heap->area_end - heap->area_begin;
+  return heap->stats.size;
 }
 
 RTEMS_INLINE_ROUTINE uintptr_t _Heap_Max( uintptr_t a, uintptr_t b )
