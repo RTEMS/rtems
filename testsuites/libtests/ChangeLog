@@ -1,3 +1,9 @@
+2009-09-09      Christian Mauderer <christian.mauderer@embedded-brains.de>
+
+	* heapwalk/init.c, heapwalk/heapwalk.scn, malloctest/init.c,
+	malloctest/malloctest.scn: New test cases.
+	* stackchk/blow.c, stackchk/stackchk.scn: Update for heap API changes.
+
 2009-09-03      Christian Mauderer <christian.mauderer@embedded-brains.de>
 
 	* malloctest/init.c: New test cases. Update for heap API changes.

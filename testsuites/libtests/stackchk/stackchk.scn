@@ -1,12 +1,15 @@
 *** TEST STACK CHECKER ***
-TA1  - rtems_clock_get - 09:00:00   12/31/1988
-TA2  - rtems_clock_get - 09:00:00   12/31/1988
-TA3  - rtems_clock_get - 09:00:00   12/31/1988
-TA1  - rtems_clock_get - 09:00:05   12/31/1988
-TA1  - rtems_clock_get - 09:00:10   12/31/1988
-TA2  - rtems_clock_get - 09:00:10   12/31/1988
-TA1  - rtems_clock_get - 09:00:15   12/31/1988
----> error indication similar to:
-BLOWN STACK!!! Offending task(0x23EE7A0): id=0x0A010002; name=0x54413120
-  stack covers range 0x23F1BD0 - 0x23F4BDF (12304 bytes)
-  Damaged pattern begins at 0x023F1BD8 and is 16 bytes long
+TA1  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA2  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA3  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA1  - rtems_clock_get_tod - 09:00:05   12/31/1988
+TA1  - rtems_clock_get_tod - 09:00:10   12/31/1988
+TA2  - rtems_clock_get_tod - 09:00:10   12/31/1988
+TA1  - rtems_clock_get_tod - 09:00:15   12/31/1988
+BLOWN STACK!!!
+task control block: 0x????????
+task ID: 0x0A010002
+task name: 0x????????
+task name string: TA1
+task stack area (????? Bytes): 0x???????? .. 0x????????
+damaged pattern area (16 Bytes): 0x???????? .. 0x????????

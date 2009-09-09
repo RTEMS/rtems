@@ -14,6 +14,8 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2009 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -108,13 +110,13 @@ static void test_realloc(void)
   p4 = realloc( test_realloc, 32 );
 }
 
-#define TEST_HEAP_SIZE 1024
+#define TEST_HEAP_SIZE 2048
 
 uint8_t TestHeapMemory[TEST_HEAP_SIZE];
 
 Heap_Control TestHeap;
 
-static void test_heap_default_init()
+static void test_heap_default_init(void)
 {
   memset( &TestHeapMemory, 0x7f, TEST_HEAP_SIZE );
   _Heap_Initialize( &TestHeap, TestHeapMemory, TEST_HEAP_SIZE, 0 );
@@ -125,7 +127,7 @@ static void test_free( void *addr )
   rtems_test_assert( _Heap_Free( &TestHeap, addr ) );
 }
 
-static void test_heap_cases_1()
+static void test_heap_cases_1(void)
 {
   void     *p1, *p2, *p3, *p4;
   intptr_t  u1, u2;
@@ -169,7 +171,7 @@ static void test_heap_cases_1()
    */
   test_heap_default_init(); 
   puts( "Heap Initialized" );
-  p1 = _Heap_Allocate( &TestHeap, 500 );
+  p1 = _Heap_Allocate( &TestHeap, 400 );
   rtems_test_assert( p1 != NULL );
   p2 = _Heap_Allocate( &TestHeap, 496 );
   rtems_test_assert( p2 != NULL );
@@ -357,7 +359,46 @@ static uintptr_t test_page_size(void)
   return TestHeap.page_size;
 }
 
-static void test_heap_cases_2()
+static void test_heap_do_initialize(
+  uintptr_t area_size,
+  uintptr_t page_size,
+  uintptr_t success_expected
+)
+{
+  uintptr_t rv =
+    _Heap_Initialize( &TestHeap, TestHeapMemory, area_size, page_size );
+
+  if ( success_expected ) {
+    rtems_test_assert( rv > 0 && _Heap_Walk( &TestHeap, 0, false ) );
+  } else {
+    rtems_test_assert( rv == 0 );
+  }
+}
+
+static void test_heap_initialize(void)
+{
+  uintptr_t rv = 0;
+
+  puts( "run tests for _Heap_Initialize()" );
+
+  test_heap_do_initialize( TEST_HEAP_SIZE, 0, true );
+
+  test_heap_do_initialize( TEST_HEAP_SIZE, TEST_DEFAULT_PAGE_SIZE, true );
+
+  test_heap_do_initialize( 0, 0, false );
+
+  test_heap_do_initialize( (uintptr_t) -1, 0, false );
+
+  test_heap_do_initialize( TEST_HEAP_SIZE, (uintptr_t) -1, false );
+
+  test_heap_do_initialize(
+    TEST_HEAP_SIZE,
+    (uintptr_t) (-2 * CPU_ALIGNMENT),
+    false
+  );
+}
+
+static void test_heap_allocate(void)
 {
   void *p1 = NULL;
   void *p2 = NULL;
@@ -540,60 +581,350 @@ static void test_heap_cases_2()
   p1 = test_init_and_alloc( alloc_size, alignment, boundary, NULL );
 }
 
-static void test_block_alloc( uintptr_t alloc_begin, uintptr_t alloc_size )
+static void *test_create_used_block( void )
 {
+  uintptr_t const alloc_size = 3 * TEST_DEFAULT_PAGE_SIZE;
+  uintptr_t const alignment = 0;
+  uintptr_t const boundary = 0;
+
+  return test_alloc_simple( alloc_size, alignment, boundary );
+}
+
+static void test_block_alloc(
+  int free_variant,
+  int alloc_variant,
+  uintptr_t alloc_begin,
+  uintptr_t alloc_size 
+)
+{
+  void *p1 = NULL;
+  void *p2 = NULL;
+  void *p3 = NULL;
+ 
+  uintptr_t size_fresh_heap = 0;
+  uintptr_t pages_per_default_block = 0;
+  uint32_t exp_free_pages = 0;
+  uint32_t exp_free_blocks = 0;
+  uint32_t exp_used_blocks = 0;
+
   test_heap_init( TEST_DEFAULT_PAGE_SIZE );
+  
+  size_fresh_heap = _Heap_Get_size( &TestHeap );
+  exp_free_pages = size_fresh_heap / TestHeap.page_size;
+
+  p1 = test_create_used_block();
+  p2 = test_create_used_block();
+  p3 = test_create_used_block();
+  
+  pages_per_default_block = _Heap_Block_size( 
+    _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size ) 
+  ) / TestHeap.page_size;
+
+  if (free_variant == 1) {
+    test_free( p1 );
+  } else if (free_variant == 2) {
+    test_free( p3 );
+  } else if (free_variant == 3) {
+    test_free( p2 );
+    test_free( p3 );
+  }
 
   _Heap_Block_allocate(
     &TestHeap,
-    TestHeap.first_block,
+    _Heap_Block_of_alloc_area( (uintptr_t) p2, test_page_size()),
     alloc_begin,
     alloc_size
   );
 
   test_check_alloc_simple( (void *) alloc_begin, alloc_size, 0, 0 );
+  
+  /* check statistics */
+  switch( free_variant ) {
+    case 1:
+      exp_free_pages = exp_free_pages - 2 * pages_per_default_block;
+      exp_used_blocks = 2;
+      
+      switch( alloc_variant ) {
+	case 1:
+	  /* allocate block full space */
+	  exp_free_blocks = 2;
+	  break;
+	case 2:
+	  /* allocate block in the middle */
+	  exp_free_pages = exp_free_pages + pages_per_default_block - 1;
+	  exp_free_blocks = 3;
+	  break;
+	case 3:
+	  /* allocate block at the end */
+	  exp_free_pages = exp_free_pages + pages_per_default_block - 2;
+	  exp_free_blocks = 2;
+	  break;
+	default:
+	  /* allocate block at the beginning */
+	  exp_free_pages = exp_free_pages + pages_per_default_block - 1;
+	  exp_free_blocks = 3;
+	  break;
+      }
+      break;
+    case 2:
+      exp_free_pages = exp_free_pages - 2 * pages_per_default_block;
+      exp_used_blocks = 2;
+      
+      switch( alloc_variant ) {
+	case 1:
+	  /* allocate block full space */
+	  exp_free_blocks = 1;
+	  break;
+	case 2:
+	  /* allocate block in the middle */
+	  exp_free_pages = exp_free_pages + pages_per_default_block - 1;
+	  exp_free_blocks = 2;
+	  break;
+	case 3:
+	  /* allocate block at the end */
+	  exp_free_pages = exp_free_pages + pages_per_default_block - 1;
+	  exp_free_blocks = 2;
+	  break;
+	default:
+	  /* allocate block at the beginning */
+	  exp_free_pages = exp_free_pages + pages_per_default_block - 1;
+	  exp_free_blocks = 1;
+	  break;
+      }
+      break;
+    case 3:
+      exp_free_pages = exp_free_pages - pages_per_default_block;
+      exp_used_blocks = 2;
+      
+      switch( alloc_variant ) {
+	case 1:
+	  /* allocate block full space */
+	  exp_free_pages = exp_free_pages - pages_per_default_block;
+	  exp_free_blocks = 1;
+	  break;
+	case 2:
+	  /* allocate block in the middle */
+	  exp_free_pages = exp_free_pages - 1;
+	  exp_free_blocks = 2;
+	  break;
+	case 3:
+	  /* allocate block at the end */
+	  exp_free_pages = exp_free_pages - 2;
+	  exp_free_blocks = 2;
+	  break;
+	default:
+	  /* allocate block at the beginning */
+	  exp_free_pages = exp_free_pages - 1;
+	  exp_free_blocks = 1;
+	  break;
+      }
+      break;
+    default:
+      exp_free_pages = exp_free_pages - 3 * pages_per_default_block;
+      exp_used_blocks = 3;
+      
+      switch( alloc_variant ) {
+	case 1:
+	  /* allocate block full space */
+	  exp_free_blocks = 1;
+	  break;
+	case 2:
+	  /* allocate block in the middle */
+	  exp_free_blocks = 3;
+	  exp_free_pages = exp_free_pages + pages_per_default_block - 1;
+	  break;
+	case 3:
+	  /* allocate block at the end */
+	  exp_free_blocks = 2;
+	  exp_free_pages = exp_free_pages + pages_per_default_block - 1;
+	  break;
+	default:
+	  /* allocate block at the beginning */
+	  exp_free_blocks = 2;
+	  exp_free_pages = exp_free_pages + pages_per_default_block - 1;
+      }
+  }
+
+  rtems_test_assert( TestHeap.stats.free_size == exp_free_pages * TestHeap.page_size );
+  rtems_test_assert( TestHeap.stats.free_blocks == exp_free_blocks );
+  rtems_test_assert( TestHeap.stats.used_blocks == exp_used_blocks );
 }
 
-static void test_heap_cases_block_allocate()
+static void test_heap_do_block_allocate( int variant, void *p2 )
 {
+  Heap_Block *const block =
+    _Heap_Block_of_alloc_area( (uintptr_t) p2, test_page_size());
+  uintptr_t const alloc_box_begin = _Heap_Alloc_area_of_block( block );
+  uintptr_t const alloc_box_size = _Heap_Block_size( block );
+  uintptr_t const alloc_box_end = alloc_box_begin + alloc_box_size;
   uintptr_t alloc_begin = 0;
   uintptr_t alloc_size = 0;
-  uintptr_t alloc_box_begin = 0;
-  uintptr_t alloc_box_end = 0;
-  uintptr_t alloc_box_size = 0;
-
-  test_heap_init( TEST_DEFAULT_PAGE_SIZE );
-
-  alloc_box_begin = _Heap_Alloc_area_of_block( TestHeap.first_block );
-  alloc_box_size = _Heap_Block_size( TestHeap.first_block );
-  alloc_box_end = alloc_box_begin + alloc_box_size;
-
-  puts( "run tests for _Heap_Block_allocate()" );
 
   puts( "\tallocate block at the beginning");
   alloc_begin = alloc_box_begin;
   alloc_size = 0;
-  test_block_alloc( alloc_begin, alloc_size );
+  test_block_alloc( variant, 0, alloc_begin, alloc_size );
   
   puts( "\tallocate block full space");
   alloc_begin = alloc_box_begin;
   alloc_size = alloc_box_size + HEAP_BLOCK_SIZE_OFFSET
     - HEAP_BLOCK_HEADER_SIZE;
-  test_block_alloc( alloc_begin, alloc_size );
+  test_block_alloc( variant, 1, alloc_begin, alloc_size );
 
   puts( "\tallocate block in the middle");
   alloc_begin = alloc_box_begin + TEST_DEFAULT_PAGE_SIZE;
   alloc_size = 0;
-  test_block_alloc( alloc_begin, alloc_size );
+  test_block_alloc( variant, 2, alloc_begin, alloc_size );
   
   puts( "\tallocate block at the end");
   alloc_begin = alloc_box_end - TEST_DEFAULT_PAGE_SIZE;
   alloc_size = TEST_DEFAULT_PAGE_SIZE + HEAP_BLOCK_SIZE_OFFSET
     - HEAP_BLOCK_HEADER_SIZE;
-  test_block_alloc( alloc_begin, alloc_size );
+  test_block_alloc( variant, 3, alloc_begin, alloc_size );
 }
 
-static void test_heap_extend()
+static void test_heap_block_allocate( void )
+{
+  void *p2 = NULL;
+
+  puts( "run tests for _Heap_Block_allocate()" );
+
+  test_heap_init( TEST_DEFAULT_PAGE_SIZE );
+
+  test_create_used_block();
+  p2 = test_create_used_block();
+
+  test_heap_do_block_allocate( 0, p2 );
+  test_heap_do_block_allocate( 1, p2 );
+  test_heap_do_block_allocate( 2, p2 );
+  test_heap_do_block_allocate( 3, p2 );
+}
+
+static void *test_alloc_one_page()
+{
+  void *alloc_begin_ptr = _Heap_Allocate_aligned_with_boundary(
+    &TestHeap,
+    1,
+    0,
+    0
+  );
+
+  test_check_alloc_simple(
+    alloc_begin_ptr,
+    1,
+    0,
+    0
+  );
+
+  rtems_test_assert( alloc_begin_ptr != NULL );
+
+  return alloc_begin_ptr;
+}
+
+static void *test_alloc_two_pages()
+{
+  void *alloc_begin_ptr = _Heap_Allocate_aligned_with_boundary(
+    &TestHeap,
+    3 * TestHeap.page_size / 2,
+    0,
+    0
+  );
+
+  test_check_alloc_simple(
+    alloc_begin_ptr,
+    3 * TestHeap.page_size / 2,
+    0,
+    0
+  );
+
+  rtems_test_assert( alloc_begin_ptr != NULL );
+
+  return alloc_begin_ptr;
+}
+
+static void test_simple_resize_block(
+  void *alloc_pointer,
+  uintptr_t new_alloc_size,
+  Heap_Resize_status expected_status
+)
+{
+  uintptr_t old_size = 0;
+  uintptr_t new_size = 0;
+ 
+  Heap_Resize_status status = _Heap_Resize_block(
+    &TestHeap,
+    alloc_pointer,
+    new_alloc_size,
+    &old_size,
+    &new_size
+  );
+
+  rtems_test_assert( status == expected_status );
+}
+
+static void test_heap_resize_block()
+{
+  void *p1, *p2, *p3;
+  uintptr_t new_alloc_size = 0;
+  uintptr_t old_size = 0;
+  uintptr_t new_size = 0;
+  Heap_Block *block = NULL;
+
+  puts( "run tests for _Heap_Resize_Block()" );
+
+  puts( "\tgive a block outside the heap to the function" );
+  test_heap_init( TEST_DEFAULT_PAGE_SIZE );
+  p1 = TestHeap.first_block - TEST_DEFAULT_PAGE_SIZE;
+  new_alloc_size = 1;
+  test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_FATAL_ERROR );
+
+  puts( "\tincrease size");
+
+  puts( "\t\tlet the next block be used alredy and try to get a size bigger than the actual block" );
+  test_heap_init( TEST_DEFAULT_PAGE_SIZE );
+  p1 = test_alloc_one_page();
+  p2 = test_alloc_one_page();
+  new_alloc_size = 3 * TEST_DEFAULT_PAGE_SIZE / 2;
+  test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_UNSATISFIED );
+
+  puts( "\t\tnext block not used and try to set the new allocation size between the page-alignments" );
+  test_heap_init( TEST_DEFAULT_PAGE_SIZE );
+  p1 = test_alloc_one_page();
+  new_alloc_size = 3 * TEST_DEFAULT_PAGE_SIZE / 2;
+  test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_SUCCESSFUL );
+
+  puts( "\t\tlet the block after the next be used and try to allocate more then one pagesize more" );
+  test_heap_init( TEST_DEFAULT_PAGE_SIZE );
+  p1 = test_alloc_one_page();
+  p2 = test_alloc_one_page();
+  p3 = test_alloc_one_page();
+  _Heap_Free( &TestHeap, p2 );
+  new_alloc_size = 5 * TEST_DEFAULT_PAGE_SIZE / 2;
+  test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_UNSATISFIED );
+
+  puts( "\ttry to resize to the same size" );
+  test_heap_init( TEST_DEFAULT_PAGE_SIZE );
+  p1 = test_alloc_one_page();
+  block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size );
+  new_alloc_size = _Heap_Block_size( block );
+  test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_SUCCESSFUL );
+
+  puts( "\tdecrease size");
+  
+  puts( "\t\tdecrease a block with two pages to one page" );
+  test_heap_init( TEST_DEFAULT_PAGE_SIZE );
+  p1 = test_alloc_two_pages();
+  new_alloc_size = 1;
+  test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_SUCCESSFUL );
+
+  puts( "\t\tresize the block to the size 0" );
+  test_heap_init( TEST_DEFAULT_PAGE_SIZE );
+  p1 = test_alloc_one_page();
+  new_alloc_size = 0;
+  test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_SUCCESSFUL );
+}
+
+static void test_heap_extend(void)
 {
   void     *p1, *p2, *p3, *p4;
   uint32_t  u1, u2;
@@ -675,25 +1006,6 @@ static void test_protected_heap_info(void)
   rtems_test_assert( rc == false );
 }
 
-static void test_heap_resize(void)
-{
-  Heap_Resize_status  rc;
-  void               *p1;
-  intptr_t            oldsize;
-  intptr_t            avail;
-
-  puts( "Initialize Test Heap" );
-  test_heap_default_init();
-  
-  puts( "Allocate most of heap" );
-  p1 = _Heap_Allocate( &TestHeap, TEST_HEAP_SIZE - 32 );
-  rtems_test_assert( p1 != NULL );
-
-  puts( "Resize (shrink) the area to 8 bytes to ensure remainder gets freed" );
-  rc = _Heap_Resize_block( &TestHeap, p1, 8, &oldsize, &avail );
-  rtems_test_assert( rc == HEAP_RESIZE_SUCCESSFUL );
-}
-
 /*
  *  A simple test of posix_memalign
  */
@@ -756,14 +1068,15 @@ rtems_task Init(
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
-  test_heap_cases_2();
-  test_heap_cases_block_allocate();
+  test_heap_initialize();
+  test_heap_block_allocate();
+  test_heap_allocate();
+  test_heap_resize_block();
   test_realloc();
   test_heap_cases_1();
   test_heap_extend();
   test_heap_info();
   test_protected_heap_info();
-  test_heap_resize();
 
   test_posix_memalign();
 

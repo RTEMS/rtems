@@ -1,6 +1,36 @@
 *** HEAP WALK TEST ***
-Calling Heap Walk without initialising
-PASS: 1 !HEAP_PREV_USED flag of 1st block isn't set
+start with a system state != SYSTEM_STATE_UP
+testing the _Heap_Walk_check_control() function
+        test what happens if page size = 0
+        set page size to a not CPU-aligned value
+        set minimal block size to a not page aligned value
+        let the alloc area of the first block be not page-aligned
+        clear the previous used flag of the first block
+        set the previous block size of the first block to an invalid value
+        set invalid next block for last block
+testing the _Heap_Walk_check_free_list() function
+        no free blocks
+        create a loop in the free list
+        put a block outside the heap to the free list
+        put a block on the free list, which is not page-aligned
+        put a used block on the free list
 Walk freshly initialized heap
-Passing negative value for source
+Test the main loop
+        set the blocksize so, that the next block is outside the heap
+        walk a heap with blocks with different states of the previous-used flag
+        create a block with a not page aligned size
+        create a block with a size smaller than the min_block_size
+        make a block with a size, so that the block reaches into the next block
+        make a block with a size, so that it includes the next block
+test the _Heap_Walk_check_free_block() function
+        set a previous size for the next block which is not equal to the size of the actual block
+        clear the previous_used flag of the first free block after an used block
+        take a free block out of the free list
+test the output-function for the _Heap_Walk()
+therefore use the (already tested) case with a page size of 0
+PASS[0]: page size 0, min block size 16
+        area begin 0x????????, area end 0x????????
+        first block 0x????????, last block 0x????????
+        first free 0x????????, last free 0x????????
+FAIL[0]: page size is zero
 *** END OF HEAP WALK TEST ***

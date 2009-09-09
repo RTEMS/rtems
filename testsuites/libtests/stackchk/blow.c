@@ -30,7 +30,8 @@ b();
 
  area = (unsigned char *)_Thread_Executing->Start.Initial_stack.area;
 
- low  = (volatile uint32_t   *) (area + HEAP_BLOCK_HEADER_SIZE);
+ /* Look in the stack checker implementation for this magic offset */
+ low  = (volatile uint32_t   *) (area + sizeof(Heap_Block) - HEAP_BLOCK_HEADER_SIZE);
  high = (volatile uint32_t   *)
             (area + _Thread_Executing->Start.Initial_stack.size - 16);
 
