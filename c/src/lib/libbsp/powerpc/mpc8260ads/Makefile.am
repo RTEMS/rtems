@@ -43,7 +43,7 @@ include_bsp_HEADERS += vectors/vectors.h
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
-    startup/bspidle.c startup/bspstart.c ../../shared/bootcard.c \
+    ../shared/startup/bspidle.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/cpuinit.c \
     ../../shared/bspgetworkarea.c ../../shared/bsppretaskinghook.c
 
