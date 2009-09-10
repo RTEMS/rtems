@@ -1,3 +1,8 @@
+2009-09-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/misc/m68kidle.c: added "cc" clobber to inline
+	asm; STOP instruction modifies CCR!
+
 2009-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/cache/cache_.h: Added cache defines for '__mcfv4e__'.
