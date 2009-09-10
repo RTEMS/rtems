@@ -1,6 +1,11 @@
 2009-09-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1435/bsps
+	* startup/bspidle.c: Removed.
+
+2009-09-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1435/bsps
 	* Makefile.am: Use shared implementation of bsp_idle_thread().
 
 2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
