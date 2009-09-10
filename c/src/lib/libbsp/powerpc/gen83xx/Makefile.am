@@ -52,7 +52,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c \
 	../../shared/gnatinstallhandler.c \
 	../shared/src/tictac.c \
 	startup/cpuinit.c \
-	startup/bspidle.c \
+	../shared/startup/bspidle.c \
 	startup/bspstart.c \
 	../../shared/bspclean.c \
 	startup/bspreset.c \

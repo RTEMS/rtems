@@ -58,9 +58,10 @@ libbsp_a_SOURCES += timer/timer.c
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
-    ../../shared/bsppretaskinghook.c startup/bspidle.c startup/bspstart.c \
-    startup/bspgetworkarea.c ../../shared/bootcard.c startup/mmutlbtab.c \
-    startup/cpuinit.c ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
+    ../../shared/bsppretaskinghook.c ../shared/startup/bspidle.c \
+    startup/bspstart.c startup/bspgetworkarea.c ../../shared/bootcard.c \
+    startup/mmutlbtab.c startup/cpuinit.c ../../shared/sbrk.c \
+    ../../shared/gnatinstallhandler.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__

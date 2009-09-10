@@ -45,7 +45,7 @@ include_bsp_HEADERS = include/mpc55xxevb.h \
 # startup
 libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bootcard.c ../shared/src/tictac.c ../../shared/bspclean.c \
-    startup/bspidle.c startup/bspstart.c startup/bspgetworkarea.c \
+    ../shared/startup/bspidle.c startup/bspstart.c startup/bspgetworkarea.c \
     ../../shared/bsppretaskinghook.c
 
 # clock
