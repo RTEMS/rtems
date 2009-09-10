@@ -1,3 +1,8 @@
+2009-09-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1435/bsps
+	* shared/startup/bspidle.c: New file.
+
 2009-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* ep1a/startup/linkcmds, mbx8xx/startup/linkcmds,
