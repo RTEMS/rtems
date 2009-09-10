@@ -38,6 +38,6 @@ void *_CPU_Thread_Idle_body( uint32_t ignored )
   }
 #else
   for( ; ; )
-    asm volatile( "stop #0x3000" );  /* supervisor mode, all interrupts on */
+    asm volatile( "stop #0x3000":::"cc" );  /* supervisor mode, all interrupts on */
 #endif
 }

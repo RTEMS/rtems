@@ -1,3 +1,8 @@
+2009-09-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/misc/m68kidle.c: added "cc" clobber to inline
+	asm; STOP instruction modifies CCR!
+
 2009-02-11	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1369/bsps
