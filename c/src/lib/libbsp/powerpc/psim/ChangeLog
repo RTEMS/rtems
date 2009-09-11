@@ -1,5 +1,10 @@
 2009-09-11	Till Straumann <strauman@slac.stanford.edu>
 
+	* network/gdb-6.8-psim-hw_ethtap.diff: Added gdb patch
+	which implements the NIC hardware emulation.
+
+2009-09-11	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am, bsp.h, network/if_sim.c, network/README:
 	added driver for NIC emulation.
 
