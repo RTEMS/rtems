@@ -58,7 +58,7 @@ Summary:      	m32c-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	12%{?dist}
+Release:      	13%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -135,7 +135,7 @@ BuildRequires:	rtems-4.10-m32c-rtems4.10-binutils
 
 Requires:	rtems-4.10-m32c-rtems4.10-binutils
 Requires:	rtems-4.10-m32c-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-52%{?dist}
+Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-53%{?dist}
 
 
 %define _gcclibdir %{_prefix}/lib
@@ -148,7 +148,7 @@ Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtem
 
 %if "%{newlib_version}" == "1.17.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.17.0-rtems4.10-20090909.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.17.0-rtems4.10-20090910.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -450,7 +450,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-m32c-rtems4.10-binutils
-# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-52%{?dist}
+# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-53%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -468,7 +468,7 @@ Summary:        libgcc for m32c-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-52%{?dist}
+Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-53%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-m32c-rtems4.10-gcc-libgcc
@@ -532,7 +532,7 @@ Summary:      	C Library (newlib) for m32c-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        52%{?dist}
+Release:        53%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 
