@@ -67,6 +67,14 @@ extern uint32_t   BSP_mem_size;
 #define Processor_Synchronize() \
   asm(" eieio ")
 
+struct rtems_bsdnet_ifconfig;
+
+int
+rtems_ifsim_attach(struct rtems_bsdnet_ifconfig *ifcfg, int attaching);
+
+#define RTEMS_BSP_NETWORK_DRIVER_NAME   "ifsim1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_ifsim_attach
+
 #endif /* ASM */
 
 #define BSP_HAS_NO_VME

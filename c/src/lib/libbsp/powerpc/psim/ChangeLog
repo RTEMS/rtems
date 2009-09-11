@@ -1,5 +1,10 @@
 2009-09-11	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am, bsp.h, network/if_sim.c, network/README:
+	added driver for NIC emulation.
+
+2009-09-11	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am, preinstall.am, irq/no_pic.c (REMOVED),
 	irq/irq.h, irq/irq_init.c:
 	use openpic from 'shared' area instead of no_pic.
