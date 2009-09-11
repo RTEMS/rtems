@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <psim.h>
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 #include <rtems/powerpc/powerpc.h>
@@ -50,8 +51,7 @@ uint32_t   bsp_clicks_per_usec;
 /*
  * Memory on this board.
  */
-extern char RamSize[];
-uint32_t BSP_mem_size;
+uint32_t BSP_mem_size = (uint32_t)RamSize;
 
 /*
  * Time base divisior (how many tick for 1 second).
@@ -126,8 +126,8 @@ void bsp_start( void )
    * Setup BATs and enable MMU
    */
   /* Memory */
-  setdbat(0, 0x0<<24, 0x0<<24, 1<<24, _PAGE_RW);
-  setibat(0, 0x0<<24, 0x0<<24, 1<<24,        0);
+  setdbat(0, 0x0<<24, 0x0<<24, 2<<24, _PAGE_RW);
+  setibat(0, 0x0<<24, 0x0<<24, 2<<24,        0);
   /* PCI    */
   setdbat(1, 0x8<<24, 0x8<<24, 1<<24,  IO_PAGE);
   setdbat(2, 0xc<<24, 0xc<<24, 1<<24,  IO_PAGE);

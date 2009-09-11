@@ -1,3 +1,29 @@
+2009-09-11	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, preinstall.am, irq/no_pic.c (REMOVED),
+	irq/irq.h, irq/irq_init.c:
+	use openpic from 'shared' area instead of no_pic.
+	* inlude/psim.h:
+	use openpic from 'shared' area instead of no_pic.
+	Added 'extern' declaration for (linker-script defined) RamBase
+	and RamSize symbols. Let CPP macros expand to these symbols
+	instead of static constants.
+	Added register definitions for OpenPIC in the register area.
+	Added register definitions for ethernet controller in the register
+	area.
+	* startup/linkcmds: Increased RamSize to 16M. Increased 'RAM'
+	memory region to 32M (there is really no disadvantage in making
+	this large). Added comment explaining the inter-relation between
+	RamSize, the size of the memory region, the device-tree property
+	"oea-memory-size" and the DBAT setting.
+	* tools/psim-shared: Try to determine RamSize from executable
+	and set 'oea-memory-size' accordingly. May be overridden if 'RAM_SIZE'
+	envvar is set.
+	Added openpic to device-tree.
+	Added ethernet controller to device-tree (commented because a PSIM
+	patch is currently required to use this device).
+	* startup/bspstart: Increase DBAT0 mapping to size of 32M.
+
 2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Spacing.

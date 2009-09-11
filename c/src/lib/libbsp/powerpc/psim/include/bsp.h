@@ -69,6 +69,8 @@ extern uint32_t   BSP_mem_size;
 
 #endif /* ASM */
 
+#define BSP_HAS_NO_VME
+
 #ifdef __cplusplus
 }
 #endif

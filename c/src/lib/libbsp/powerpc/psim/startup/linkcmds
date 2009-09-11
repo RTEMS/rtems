@@ -17,11 +17,21 @@ ENTRY(_start)
 PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 10000);
 
 RamBase = DEFINED(RamBase) ? RamBase : 0x0;
-RamSize = DEFINED(RamSize) ? RamSize : 8M;
+/*
+ * make sure device tree (property /openprom/options/oea-memory-size)
+ * provides at least 'RamSize'.
+ * Also, the BATs must at map at least 'RamSize' (currently, they
+ * map 32M -- see startup/bspstart.c).
+ * Furthermore, the RAM region must be large enough (there is no
+ * disadvantage in making that one very large as long as it doesn't
+ * overlap another memory area).
+ *
+ */
+RamSize = DEFINED(RamSize) ? RamSize : 16M;
 
 MEMORY
   {
-        RAM       : ORIGIN = 0, LENGTH = 8M
+        RAM       : ORIGIN = 0, LENGTH = 32M
 	PSIM_REGS : ORIGIN = 0x0c000000, LENGTH = 16M
         VECTORS   : ORIGIN = 0xFFF00000, LENGTH = 0x20000
   }

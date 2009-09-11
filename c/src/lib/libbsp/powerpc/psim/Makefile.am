@@ -50,8 +50,8 @@ libbsp_a_SOURCES += ../../shared/console-polled.c
 libbsp_a_SOURCES += console/console-io.c console/consupp.S
 
 # irq
-include_bsp_HEADERS = irq/irq.h
-libbsp_a_SOURCES += irq/irq_init.c irq/no_pic.c
+include_bsp_HEADERS = irq/irq.h ../shared/openpic/openpic.h
+libbsp_a_SOURCES += irq/irq_init.c ../shared/irq/openpic_i8259_irq.c ../shared/openpic/openpic.c
 
 EXTRA_DIST = vectors/README
 # vectors

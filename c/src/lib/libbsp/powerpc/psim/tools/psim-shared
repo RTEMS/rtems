@@ -37,6 +37,13 @@ gen_device_tree()
     fi
   fi
 
+  if [ X${RAM_SIZE} = X ] ; then
+    if [ X${NM} = X ] ; then
+      NM=${rtemsTarget}-nm
+    fi
+    RAM_SIZE=`$NM ${1} | awk '/\<RamSize\>/{print "0x"$1}'`
+  fi
+
 cat <<EOF
 #
 #  Device Tree for PSIM
@@ -45,7 +52,8 @@ cat <<EOF
 #
 /#address-cells 1
 /openprom/init/register/pvr 0xfffe0000
-/openprom/options/oea-memory-size 8388608
+# This must be >= than linkcmds defined RamSize!
+/openprom/options/oea-memory-size $RAM_SIZE
 ##### EEPROM @ 0x0c000000 for 512K
 /eeprom@0x0c000000/reg 0x0c000000 0x80000
 /eeprom@0x0c000000/nr-sectors 8
@@ -60,6 +68,41 @@ cat <<EOF
 ##### NVRAM/RTC RTC   Portion is 0x0c100000 for 12
 /nvram@0x0c080000/reg 0x0c080000 524300
 /nvram@0x0c080000/timezone -3600
+
+##### OPENPIC @ 0x0c130000 - 0x0c170000 (512K)
+/opic@0x0c130000/reg              0x0c130000 0 0x0c130000 0x40000
+/opic@0x0c130000/interrupt-ranges 0 0 0 16
+/opic@0x0c130000/device_type      open-pic
+# interupt out -> CPU's interrupt pin
+/opic@0x0c130000 > intr0 int /cpus/cpu@0
+
+##### ETHTAP @ 0x0c100020 for 0x40
+##
+## NOTE 'ethtap' currently (200902) requires psim to
+##      be patched -- also, it is only supported on
+##      a linux host.
+##      the 'ethtap' device transfers data from/to the
+##      simulated network interface to/from a 'ethertap'
+##      interface on the linux host (consult tun/tap
+##      device documentation).
+##      A very useful tool is 'tunctl' which allows for
+##      configuring user-accessible, persistent 'tap'
+##      devices so that psim may be executed w/o special
+##      (root) privileges.
+#
+#/ethtap@0x0c100020/reg           0x0c100020 0x40
+## route interrupt to open-pic
+#/ethtap@0x0c100020               > 0 irq0 /opic@0x0c130000
+## 'tun' device on host
+#/ethtap@0x0c100020/tun-device    "/dev/net/tun"
+## name of 'tap' device to use
+#/ethtap@0x0c100020/tap-ifname    "tap0"
+## ethernet address of simulated IF
+#/ethtap@0x0c100020/hw-address    "00:00:00:22:11:00"
+## generate CRC and append to received packet before
+## handing over to the simulation. This is mostly for
+## debugging the rtems device driver. If unsure, leave 'false'.
+#/ethtap@0x0c100020/enable-crc    false
 EOF
 
   if [ ${enable_sysv_devices} = yes ] ; then

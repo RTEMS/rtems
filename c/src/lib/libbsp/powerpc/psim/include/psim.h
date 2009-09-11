@@ -11,8 +11,16 @@
 /*
  * RAM Information
  */
-#define PSIM_RAM_BASE (void *)0x00000000
-#define PSIM_RAM_SIZE 8388608
+
+extern char RamBase[];
+extern char RamSize[];
+
+/*
+ * RamBase/RamSize is defined by the linker script;
+ * CPP symbols are AFAIK unused and deprecated.
+ */
+#define PSIM_RAM_SIZE ((unsigned long)RamSize)
+#define PSIM_RAM_BASE ((void*)RamBase)
 
 /*
  * NVRAM/RTC Structure and Information
@@ -58,11 +66,20 @@ typedef struct {
   /* 0x0c100010 - 0x0c10001b - System V IPC Semaphore */
   psim_sysv_sem_t Semaphore;
 
-  /* 0x0c10001C - 0x0c10FFFF - NVRAM/RTC */
-  uint8_t gap2[65508];
+  /* 0x0c10001c - 0x0c10001f - NVRAM/RTC */
+  uint8_t gap2[4];
+
+  /* 0x0c100020 - 0x0c10005F - Ethernet */
+  volatile uint8_t Ethtap[ 64 ];
+
+  /* 0x0c100060 - 0x0c10FFFF - NVRAM/RTC */
+  uint8_t gap3[65440];
 
   /* 0x0c110000 - 0x0c12FFFF - System V IPC Shared Memory */
   uint8_t SharedMemory[ 128 * 1024 ];
+
+  /* 0x0c130000 - 0x0c170000 - OpenPIC IRQ Controller */
+  volatile uint8_t OpenPIC[ 256 * 1024 ];
 
 } psim_registers_t;
 

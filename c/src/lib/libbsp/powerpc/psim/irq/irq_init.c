@@ -19,8 +19,10 @@
 #include <libcpu/spr.h>
 #include <bsp/irq.h>
 #include <bsp.h>
+#include <psim.h>
 #include <libcpu/raw_exception.h>
 #include <rtems/bspIo.h>
+#include <bsp/openpic.h>
 
 static rtems_irq_connect_data      rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings   initial_config;
@@ -48,6 +50,8 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   /*
    * First initialize the Interrupt management hardware
    */
+  OpenPIC = (void*)PSIM.OpenPIC;
+  openpic_init(1,0,0,16,0,0);
 
   /*
    * Initialize Rtems management interrupt table
@@ -67,6 +71,10 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   initial_config.irqHdlTbl    = rtemsIrq;
   initial_config.irqBase      = BSP_LOWEST_OFFSET;
   initial_config.irqPrioTbl   = irqPrioTable;
+
+  for (i = BSP_PCI_IRQ_LOWEST_OFFSET; i< BSP_PCI_IRQ_NUMBER; i++ ) {
+  	irqPrioTable[i] = 8;
+  }
 
   if (!BSP_rtems_irq_mngt_set(&initial_config)) {
     /*
