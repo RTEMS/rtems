@@ -1,5 +1,12 @@
 2009-09-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/include/rtems/score/thread.h, score/src/threadhandler.c,
+	score/src/threadinitialize.c, score/src/threadtickletimeslice.c:
+	Disable thread protocol and scheduling capabilities not exercised
+	when POSIX or ITRON API is disabled.
+
+2009-09-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/include/rtems/score/object.h,
 	score/inline/rtems/score/object.inl,
 	score/src/objectgetnameasstring.c, score/src/objectidtoname.c,

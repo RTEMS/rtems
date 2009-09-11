@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,6 +26,15 @@
  *  threads.  This includes the creation, deletion, and scheduling of threads.
  */
 /**@{*/
+
+#if defined(RTEMS_POSIX_API) || defined(RTEMS_ITRON_API)
+  #define RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE
+#endif
+
+#if defined(RTEMS_POSIX_API)
+  #define RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT
+#endif
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -139,8 +148,12 @@ typedef Thread ( *Thread_Entry_both_numeric_first )( Thread_Entry_numeric_type, 
 typedef enum {
   THREAD_CPU_BUDGET_ALGORITHM_NONE,
   THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE,
-  THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE,
-  THREAD_CPU_BUDGET_ALGORITHM_CALLOUT
+  #if defined(RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE)
+    THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE,
+  #endif
+  #if defined(RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT)
+    THREAD_CPU_BUDGET_ALGORITHM_CALLOUT
+  #endif
 }  Thread_CPU_budget_algorithms;
 
 /** This type defines the Thread Control Block structure.

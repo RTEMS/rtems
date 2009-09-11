@@ -166,11 +166,15 @@ bool _Thread_Initialize(
     case THREAD_CPU_BUDGET_ALGORITHM_NONE:
     case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:
       break;
-    case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
-      the_thread->cpu_time_budget = _Thread_Ticks_per_timeslice;
-      break;
-    case THREAD_CPU_BUDGET_ALGORITHM_CALLOUT:
-      break;
+    #if defined(RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE)
+      case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
+        the_thread->cpu_time_budget = _Thread_Ticks_per_timeslice;
+        break;
+    #endif
+    #if defined(RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT)
+      case THREAD_CPU_BUDGET_ALGORITHM_CALLOUT:
+	break;
+    #endif
   }
 
   the_thread->Start.isr_level         = isr_level;
