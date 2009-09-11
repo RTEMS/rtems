@@ -22,15 +22,19 @@ void _Objects_Namespace_remove(
   Objects_Control      *the_object
 )
 {
-  /*
-   *  If this is a string format name, then free the memory.
-   */
-  if ( information->is_string && the_object->name.name_p )
-     _Workspace_Free( (void *)the_object->name.name_p );
+  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
+    /*
+     *  If this is a string format name, then free the memory.
+     */
+    if ( information->is_string && the_object->name.name_p )
+       _Workspace_Free( (void *)the_object->name.name_p );
+  #endif
 
   /*
    * Clear out either format.
    */
-  the_object->name.name_p   = NULL;
+  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
+    the_object->name.name_p   = NULL;
+  #endif
   the_object->name.name_u32 = 0;
 }

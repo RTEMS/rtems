@@ -16,6 +16,7 @@
 #include "config.h"
 #endif
 
+#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
 #include <string.h>
 
 #include <rtems/system.h>
@@ -86,3 +87,4 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
 
   return OBJECTS_INVALID_NAME;
 }
+#endif

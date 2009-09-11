@@ -65,9 +65,12 @@ char *_Objects_Get_name_as_string(
 
     case OBJECTS_LOCAL:
 
-      if ( information->is_string ) {
-        s = the_object->name.name_p;
-      } else {
+      #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
+        if ( information->is_string ) {
+          s = the_object->name.name_p;
+        } else
+      #endif
+      {
         uint32_t  u32_name = (uint32_t) the_object->name.name_u32;
 
         lname[ 0 ] = (u32_name >> 24) & 0xff;

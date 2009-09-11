@@ -336,8 +336,10 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
     the_object
   );
 
-  /* ASSERT: information->is_string */ 
-  the_object->name.name_p = name;
+  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
+    /* ASSERT: information->is_string */ 
+    the_object->name.name_p = name;
+  #endif
 }
 
 #endif

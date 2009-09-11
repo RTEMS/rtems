@@ -108,7 +108,7 @@ void _Thread_Handler_initialization(void)
 #endif
     sizeof( Thread_Control ),
                                 /* size of this object's control block */
-    true,                       /* true if names for this object are strings */
+    false,                      /* true if names for this object are strings */
     8                           /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,

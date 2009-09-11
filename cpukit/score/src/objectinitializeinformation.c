@@ -71,7 +71,9 @@ void _Objects_Initialize_information(
 
   information->the_api            = the_api;
   information->the_class          = the_class;
+#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
   information->is_string          = is_string;
+#endif
 
   information->local_table        = 0;
   information->inactive_per_block = 0;

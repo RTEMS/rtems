@@ -39,6 +39,7 @@ bool _Objects_Set_name(
   s      = name;
   length = strnlen( name, information->name_length ) + 1;
 
+#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
   if ( information->is_string ) {
     char *d;
 
@@ -53,7 +54,9 @@ bool _Objects_Set_name(
 
     strncpy( d, name, length );
     the_object->name.name_p = d;
-  } else {
+  } else
+#endif
+  {
     the_object->name.name_u32 =  _Objects_Build_name(
       ((0<length) ? s[ 0 ] : ' '),
       ((1<length) ? s[ 1 ] : ' '),

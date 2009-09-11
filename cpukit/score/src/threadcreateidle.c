@@ -40,7 +40,7 @@ void _Thread_Create_idle( void )
 {
   Objects_Name name;
 
-  name.name_p = "IDLE";
+  name.name_u32 = _Objects_Build_name( 'I', 'D', 'L', 'E' );
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all

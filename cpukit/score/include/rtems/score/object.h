@@ -25,6 +25,10 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 
+#if defined(RTEMS_POSIX_API)
+  #define RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,8 +44,10 @@ extern "C" {
  *  object names.
  */
 typedef union {
-  /** This is a pointer to a string name. */
-  const char *name_p;
+  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
+    /** This is a pointer to a string name. */
+    const char *name_p;
+  #endif
   /** This is the actual 32-bit "raw" integer name. */
   uint32_t    name_u32;
 } Objects_Name;
@@ -355,16 +361,18 @@ typedef struct {
   uint32_t         *inactive_per_block;
   /** This is a table to the chain of inactive object memory blocks. */
   void            **object_blocks;
-  /** This is true if names are strings. */
-  bool              is_string;
+  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
+    /** This is true if names are strings. */
+    bool              is_string;
+  #endif
   /** This is the maximum length of names. */
   uint16_t          name_length;
   /** This is this object class' method called when extracting a thread. */
   Objects_Thread_queue_Extract_callout extract;
-#if defined(RTEMS_MULTIPROCESSING)
-  /** This is this object class' pointer to the global name table */
-  Chain_Control    *global_table;
-#endif
+  #if defined(RTEMS_MULTIPROCESSING)
+    /** This is this object class' pointer to the global name table */
+    Chain_Control    *global_table;
+  #endif
 }   Objects_Information;
 
 /**
@@ -609,6 +617,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   Objects_Id          *id
 );
 
+#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
 /**
  *  This method converts an object name to an Id.  It performs a look up
  *  using the object information block for this object class.
@@ -627,6 +636,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
   const char          *name,
   Objects_Id          *id
 );
+#endif
 
 /**
  *  This function implements the common portion of the object Id

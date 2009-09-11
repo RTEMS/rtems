@@ -1,5 +1,16 @@
 2009-09-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/include/rtems/score/object.h,
+	score/inline/rtems/score/object.inl,
+	score/src/objectgetnameasstring.c, score/src/objectidtoname.c,
+	score/src/objectinitializeinformation.c,
+	score/src/objectnamespaceremove.c, score/src/objectnametoidstring.c,
+	score/src/objectsetname.c, score/src/thread.c,
+	score/src/threadcreateidle.c: Disable object string name support when
+	POSIX is not enabled.
+
+2009-09-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libmisc/capture/capture.c: Use public API to obtain object name.
 
 2009-09-09	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
