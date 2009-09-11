@@ -68,7 +68,6 @@ void _CORE_message_queue_Seize(
   ISR_Level                          level;
   CORE_message_queue_Buffer_control *the_message;
   Thread_Control                    *executing;
-  Thread_Control                    *the_thread;
 
   executing = _Thread_Executing;
   executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
@@ -79,43 +78,61 @@ void _CORE_message_queue_Seize(
     _ISR_Enable( level );
 
     *size_p = the_message->Contents.size;
-    _Thread_Executing->Wait.count = the_message->priority;
+    #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+      _Thread_Executing->Wait.count = the_message->priority;
+    #endif
     _CORE_message_queue_Copy_buffer(the_message->Contents.buffer,buffer,*size_p);
 
-    /*
-     *  There could be a thread waiting to send a message.  If there
-     *  is not, then we can go ahead and free the buffer.
-     *
-     *  NOTE: If we note that the queue was not full before this receive,
-     *  then we can avoid this dequeue.
-     */
-
-    the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
-    if ( !the_thread ) {
+    #if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
+      /*
+       *  There is not an API with blocking sends enabled.  So return immediately.
+       */
       _CORE_message_queue_Free_message_buffer( the_message_queue, the_message );
       return;
+    #else
+    {
+      Thread_Control   *the_thread;
+
+      /*
+       *  There could be a thread waiting to send a message.  If there
+       *  is not, then we can go ahead and free the buffer.
+       *
+       *  NOTE: If we note that the queue was not full before this receive,
+       *  then we can avoid this dequeue.
+       */
+      the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
+      if ( !the_thread ) {
+        _CORE_message_queue_Free_message_buffer( the_message_queue, the_message );
+        return;
+      }
+
+      /*
+       *  There was a thread waiting to send a message.  This code
+       *  puts the messages in the message queue on behalf of the
+       *  waiting task.
+       */
+      #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+        the_message->priority  = the_thread->Wait.count;
+      #endif
+      the_message->Contents.size = (size_t) the_thread->Wait.option;
+      _CORE_message_queue_Copy_buffer(
+        the_thread->Wait.return_argument_second.immutable_object,
+        the_message->Contents.buffer,
+        the_message->Contents.size
+      );
+
+      _CORE_message_queue_Insert_message(
+         the_message_queue,
+         the_message,
+         #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+           the_message->priority,
+         #else
+           0
+         #endif
+      );
+      return;
     }
-
-    /*
-     *  There was a thread waiting to send a message.  This code
-     *  puts the messages in the message queue on behalf of the
-     *  waiting task.
-     */
-
-    the_message->priority  = the_thread->Wait.count;
-    the_message->Contents.size = (size_t) the_thread->Wait.option;
-    _CORE_message_queue_Copy_buffer(
-      the_thread->Wait.return_argument_second.immutable_object,
-      the_message->Contents.buffer,
-      the_message->Contents.size
-    );
-
-    _CORE_message_queue_Insert_message(
-       the_message_queue,
-       the_message,
-       the_message->priority
-    );
-    return;
+    #endif
   }
 
   if ( !wait ) {

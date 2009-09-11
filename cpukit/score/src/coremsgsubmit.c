@@ -7,7 +7,7 @@
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -69,7 +69,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   Watchdog_Interval                          timeout
 )
 {
-  ISR_Level                            level;
   CORE_message_queue_Buffer_control   *the_message;
   Thread_Control                      *the_thread;
 
@@ -80,7 +79,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   /*
    *  Is there a thread currently waiting on this message queue?
    */
-
   if ( the_message_queue->number_of_pending_messages == 0 ) {
     the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
     if ( the_thread ) {
@@ -104,7 +102,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
    *  No one waiting on the message queue at this time, so attempt to
    *  queue the message up for a future receive.
    */
-
   if ( the_message_queue->number_of_pending_messages <
        the_message_queue->maximum_pending_messages ) {
 
@@ -126,7 +123,9 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       size
     );
     the_message->Contents.size = size;
-    the_message->priority  = submit_type;
+    #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+      the_message->priority  = submit_type;
+    #endif
 
     _CORE_message_queue_Insert_message(
        the_message_queue,
@@ -136,46 +135,48 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   }
 
-  /*
-   *  No message buffers were available so we may need to return an
-   *  overflow error or block the sender until the message is placed
-   *  on the queue.
-   */
-
-  if ( !wait ) {
+  #if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
     return CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
-  }
+  #else
+    /*
+     *  No message buffers were available so we may need to return an
+     *  overflow error or block the sender until the message is placed
+     *  on the queue.
+     */
+    if ( !wait ) {
+      return CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
+    }
 
-  /*
-   *  Do NOT block on a send if the caller is in an ISR.  It is
-   *  deadly to block in an ISR.
-   */
+    /*
+     *  Do NOT block on a send if the caller is in an ISR.  It is
+     *  deadly to block in an ISR.
+     */
+    if ( _ISR_Is_in_progress() ) {
+      return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
+    }
 
-  if ( _ISR_Is_in_progress() ) {
-    return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
-  }
+    /*
+     *  WARNING!! executing should NOT be used prior to this point.
+     *  Thus the unusual choice to open a new scope and declare
+     *  it as a variable.  Doing this emphasizes how dangerous it
+     *  would be to use this variable prior to here.
+     */
+    {
+      Thread_Control  *executing = _Thread_Executing;
+      ISR_Level        level;
 
-  /*
-   *  WARNING!! executing should NOT be used prior to this point.
-   *  Thus the unusual choice to open a new scope and declare
-   *  it as a variable.  Doing this emphasizes how dangerous it
-   *  would be to use this variable prior to here.
-   */
+      _ISR_Disable( level );
+      _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
+      executing->Wait.queue = &the_message_queue->Wait_queue;
+      executing->Wait.id = id;
+      executing->Wait.return_argument_second.immutable_object = buffer;
+      executing->Wait.option = (uint32_t) size;
+      executing->Wait.count = submit_type;
+      _ISR_Enable( level );
 
-  {
-    Thread_Control  *executing = _Thread_Executing;
+      _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
+    }
 
-    _ISR_Disable( level );
-    _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
-    executing->Wait.queue = &the_message_queue->Wait_queue;
-    executing->Wait.id = id;
-    executing->Wait.return_argument_second.immutable_object = buffer;
-    executing->Wait.option = (uint32_t) size;
-    executing->Wait.count = submit_type;
-    _ISR_Enable( level );
-
-    _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
-  }
-
-  return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT;
+    return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT;
+  #endif
 }

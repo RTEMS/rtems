@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,6 +32,18 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
+
+#if defined(RTEMS_POSIX_API)
+  #define RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY
+#endif
+
+#if defined(RTEMS_POSIX_API)
+  #define RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION
+#endif
+
+#if defined(RTEMS_POSIX_API)
+  #define RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -73,8 +85,10 @@ typedef struct {
 typedef struct {
   /** This element allows this structure to be placed on chains. */
   Chain_Node                 Node;
-  /** This field is the priority of this message. */
-  int                        priority;
+  #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+    /** This field is the priority of this message. */
+    int                        priority;
+  #endif
   /** This field points to the contents of the message. */
   CORE_message_queue_Buffer  Contents;
 }   CORE_message_queue_Buffer_control;
@@ -86,9 +100,9 @@ typedef struct {
  *  for a message queue.
  */
 typedef enum {
-  /** This value indicates that pending messages are in FIFO order. */
+  /** This value indicates that blocking tasks are in FIFO order. */
   CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO,
-  /** This value indicates that pending messages are in priority order. */
+  /** This value indicates that blocking tasks are in priority order. */
   CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY
 }   CORE_message_queue_Disciplines;
 
@@ -167,14 +181,16 @@ typedef struct {
   CORE_message_queue_Disciplines  discipline;
 }   CORE_message_queue_Attributes;
 
-/**
- *  @brief Message Queue Notification Callback Prototype
- *
- *  The following defines the type for a Notification handler.  A notification
- *  handler is invoked when the message queue makes a 0->1 transition on
- *  pending messages.
- */
-typedef void (*CORE_message_queue_Notify_Handler)( void * );
+#if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
+  /**
+   *  @brief Message Queue Notification Callback Prototype
+   *
+   *  The following defines the type for a Notification handler.  A
+   *  notification handler is invoked when the message queue makes a
+   *  0->1 transition on pending messages.
+   */
+  typedef void (*CORE_message_queue_Notify_Handler)( void * );
+#endif
 
 /**
  *  @brief Core Message Queue Control Structure
@@ -211,12 +227,14 @@ typedef struct {
    *  as part of destroying it.
    */
   CORE_message_queue_Buffer         *message_buffers;
-  /** This is the routine invoked when the message queue transitions 
-   *  from zero (0) messages pending to one (1) message pending.
-   */
-  CORE_message_queue_Notify_Handler  notify_handler;
-  /** This field is the argument passed to the @ref notify_argument. */
-  void                              *notify_argument;
+  #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
+    /** This is the routine invoked when the message queue transitions 
+     *  from zero (0) messages pending to one (1) message pending.
+     */
+    CORE_message_queue_Notify_Handler  notify_handler;
+    /** This field is the argument passed to the @ref notify_argument. */
+    void                              *notify_argument;
+  #endif
   /** This chain is the set of inactive messages.  A message is inactive
    *  when it does not contain a pending message.
    */

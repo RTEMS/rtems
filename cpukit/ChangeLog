@@ -1,5 +1,14 @@
 2009-09-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/include/rtems/score/coremsg.h,
+	score/inline/rtems/score/coremsg.inl, score/src/coremsg.c,
+	score/src/coremsginsert.c, score/src/coremsgseize.c,
+	score/src/coremsgsubmit.c, score/src/objectnametoidstring.c: Disable
+	the Core Message Queue features of notification, priority messages,
+	and blocking sends when no API requires them.
+
+2009-09-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/include/rtems/score/thread.h, score/src/threadhandler.c,
 	score/src/threadinitialize.c, score/src/threadtickletimeslice.c:
 	Disable thread protocol and scheduling capabilities not exercised

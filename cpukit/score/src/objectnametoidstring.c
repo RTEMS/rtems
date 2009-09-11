@@ -16,7 +16,6 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
 #include <string.h>
 
 #include <rtems/system.h>
@@ -31,6 +30,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
+#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
 /*PAGE
  *
  *  _Objects_Name_to_id_string
