@@ -1,3 +1,9 @@
+2009-09-11	Till Straumann <strauman@slac.stanford.edu>
+
+	* irq/openpic_i8259_irq.c: Do not include <bsp/VMEConfig.h>
+	if the bsp.h defines HAVE_NO_VME so that BSPs w/o VME do not
+	have to create a dummy VMEConfig.h header.
+
 2009-09-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1435/bsps

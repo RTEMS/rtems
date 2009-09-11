@@ -17,7 +17,9 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/irq_supp.h>
+#ifndef BSP_HAS_NO_VME
 #include <bsp/VMEConfig.h>
+#endif
 #include <bsp/openpic.h>
 #include <libcpu/raw_exception.h>
 #include <libcpu/io.h>
