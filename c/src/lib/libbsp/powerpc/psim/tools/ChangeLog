@@ -1,3 +1,19 @@
+2009-09-11	Till Straumann <Till.Straumann@TU-Berlin.de>
+
+	* psim-top.in, psim-bottom: Added support for options
+	-d (print device tree and exit), -h (usage info) and
+	-n (enable NIC support).
+
+	* psim-gdb-bottom: Added support for options -s (force sysv IPC),
+	-h (usage info) and -n (enable NIC support).
+	Allow user to override GDB variable from environment.
+
+	* psim-shared: cat NIC properties into device file if the
+	user had specified '-n'.
+
+	* runtest-top.in: removed unsupported options -o, -d from
+	usage info.
+
 2009-04-14	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* psim-gdb-bottom: Adapt name of assert function for breakpoint

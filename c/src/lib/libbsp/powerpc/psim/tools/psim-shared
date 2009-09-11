@@ -44,7 +44,7 @@ gen_device_tree()
     RAM_SIZE=`$NM ${1} | awk '/\<RamSize\>/{print "0x"$1}'`
   fi
 
-cat <<EOF
+  cat <<EOF
 #
 #  Device Tree for PSIM
 #
@@ -75,35 +75,40 @@ cat <<EOF
 /opic@0x0c130000/device_type      open-pic
 # interupt out -> CPU's interrupt pin
 /opic@0x0c130000 > intr0 int /cpus/cpu@0
-
-##### ETHTAP @ 0x0c100020 for 0x40
-##
-## NOTE 'ethtap' currently (200902) requires psim to
-##      be patched -- also, it is only supported on
-##      a linux host.
-##      the 'ethtap' device transfers data from/to the
-##      simulated network interface to/from a 'ethertap'
-##      interface on the linux host (consult tun/tap
-##      device documentation).
-##      A very useful tool is 'tunctl' which allows for
-##      configuring user-accessible, persistent 'tap'
-##      devices so that psim may be executed w/o special
-##      (root) privileges.
-#
-#/ethtap@0x0c100020/reg           0x0c100020 0x40
-## route interrupt to open-pic
-#/ethtap@0x0c100020               > 0 irq0 /opic@0x0c130000
-## 'tun' device on host
-#/ethtap@0x0c100020/tun-device    "/dev/net/tun"
-## name of 'tap' device to use
-#/ethtap@0x0c100020/tap-ifname    "tap0"
-## ethernet address of simulated IF
-#/ethtap@0x0c100020/hw-address    "00:00:00:22:11:00"
-## generate CRC and append to received packet before
-## handing over to the simulation. This is mostly for
-## debugging the rtems device driver. If unsure, leave 'false'.
-#/ethtap@0x0c100020/enable-crc    false
 EOF
+
+  if [ X${enable_if_sim} = Xyes ] ; then
+    cat <<EOF
+
+#### ETHTAP @ 0x0c100020 for 0x40
+#
+# NOTE 'ethtap' currently (200902) requires psim to
+#      be patched -- also, it is only supported on
+#      a linux host.
+#      the 'ethtap' device transfers data from/to the
+#      simulated network interface to/from a 'ethertap'
+#      interface on the linux host (consult tun/tap
+#      device documentation).
+#      A very useful tool is 'tunctl' which allows for
+#      configuring user-accessible, persistent 'tap'
+#      devices so that psim may be executed w/o special
+#      (root) privileges.
+
+/ethtap@0x0c100020/reg           0x0c100020 0x40
+# route interrupt to open-pic
+/ethtap@0x0c100020               > 0 irq0 /opic@0x0c130000
+# 'tun' device on host
+/ethtap@0x0c100020/tun-device    "/dev/net/tun"
+# name of 'tap' device to use
+/ethtap@0x0c100020/tap-ifname    "tap0"
+# ethernet address of simulated IF
+/ethtap@0x0c100020/hw-address    "00:00:00:22:11:00"
+# generate CRC and append to received packet before
+# handing over to the simulation. This is mostly for
+# debugging the rtems device driver. If unsure, leave 'false'.
+/ethtap@0x0c100020/enable-crc    false
+EOF
+  fi
 
   if [ ${enable_sysv_devices} = yes ] ; then
     echo "##### System V IPC (Semaphore) 0x0c100010 for 12"

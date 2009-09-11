@@ -23,10 +23,8 @@ fi
 
 USAGE=\
 "usage: $progname [ -opts ] test [ test ... ]
-        -o options  -- specify options to be passed to simulator
-	-v	    -- verbose
-        -d          -- generate device tree file (as 'test'.device) and exit
-        -l logdir   -- specify log directory (default is 'logdir')
+	-v          -- verbose
+	-l logdir   -- specify log directory (default is 'logdir')
 
   Specify test as 'test' or 'test.exe'.
   All multiprocessing tests *must* be specified simply as 'mp01', etc.

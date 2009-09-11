@@ -20,9 +20,12 @@ progname=${0##*/}        # fast basename hack for ksh, bash
 
 USAGE=\
 "usage: $progname [ -opts ] test [ test ... ]
-	-v	   -- verbose
-	-s	   -- force System V IPC support on (default=auto)
-        -l limit   -- specify time limit (default is 'no limit')
+	-v         -- verbose
+	-h         -- this message
+	-s         -- force System V IPC support on (default=auto)
+	-l limit   -- specify time limit (default is 'no limit')
+	-d         -- generate device tree as 'test'.device and exit
+	-n         -- enable NIC support ***REQUIRES PATCHED PSIM***
 "
 
 #   log an error to stderr

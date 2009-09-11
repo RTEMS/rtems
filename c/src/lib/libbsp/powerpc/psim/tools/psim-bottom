@@ -7,15 +7,20 @@
 verbose=""
 limit="0"
 use_sysv_ipc="auto"
+device_tree_only=""
+enable_if_sim=""
 
 ## TODO: may want command line ability to turn on some psim tracing
-while getopts vsl: OPT
+while getopts vhsdnl: OPT
 do
     case "$OPT" in
 	v) verbose="yes";;
-        l) limit="$OPTARG";;
-        s) use_sysv_ipc="yes";;
-        *) fatal;;
+	h) echo "$USAGE"; exit 0;;
+	l) limit="$OPTARG";;
+	s) use_sysv_ipc="yes";;
+	d) device_tree_only="yes";;
+	n) enable_if_sim="yes";;
+	*) fatal;;
     esac
 done
 shiftcount=`expr $OPTIND - 1`
@@ -25,6 +30,11 @@ args=$*
 
 if [ $# -eq 0 ] ; then
   fatal
+fi
+
+if [ X${device_tree_only} = Xyes ] ; then
+	gen_device_tree ${1} > "`basename ${1} .exe`".device
+	exit $?
 fi
 
 if [ X${RUN} = X ] ; then
