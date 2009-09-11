@@ -1,3 +1,8 @@
+2009-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/cpu.h: Make heap alignment 4 which is greater than
+	CPU_ALIGNMENT but minimum for heap.
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Change prototype of IDLE thread to
