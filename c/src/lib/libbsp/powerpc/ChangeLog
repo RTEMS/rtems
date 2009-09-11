@@ -1,6 +1,11 @@
 2009-09-11	Till Straumann <strauman@slac.stanford.edu>
 
-	* irq/openpic_i8259_irq.c: Do not include <bsp/VMEConfig.h>
+	* shared/openpic/openpic.c: include the more generic <rtems/pci.h>
+	rather than <bsp/pci.h>.
+
+2009-09-11	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/irq/openpic_i8259_irq.c: Do not include <bsp/VMEConfig.h>
 	if the bsp.h defines HAVE_NO_VME so that BSPs w/o VME do not
 	have to create a dummy VMEConfig.h header.
 

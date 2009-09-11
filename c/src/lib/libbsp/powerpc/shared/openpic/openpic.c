@@ -23,7 +23,7 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 #include <bsp/openpic.h>
-#include <bsp/pci.h>
+#include <rtems/pci.h>
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>
 #include <rtems/bspIo.h>
