@@ -125,7 +125,7 @@ void _CORE_message_queue_Seize(
          the_message_queue,
          the_message,
          #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-           the_message->priority,
+           the_message->priority
          #else
            0
          #endif

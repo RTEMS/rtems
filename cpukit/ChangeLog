@@ -1,3 +1,7 @@
+2009-09-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/coremsgseize.c: Fix typo.
+
 2009-09-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/include/rtems/score/coremsg.h,
