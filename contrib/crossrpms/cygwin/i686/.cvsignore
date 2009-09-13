@@ -1,4 +1,3 @@
 Makefile
 Makefile.in
-rtems*.spec
 *.spec.in
