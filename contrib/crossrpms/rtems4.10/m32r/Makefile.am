@@ -4,9 +4,9 @@ TARGET = m32r-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 
-BINUTILS_VERS = 2.19.1
+BINUTILS_VERS = 2.19.90
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 4
+BINUTILS_RPMREL = 1
 include ../binutils.am
 BINUTILS_OPTS +=
 
