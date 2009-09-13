@@ -38,6 +38,10 @@ extern "C" {
 #include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
 
+#if defined(RTEMS_POSIX_API) || defined(RTEMS_ITRON_API)
+  #define RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY
+#endif
+
 /**
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on semaphores.
@@ -135,25 +139,27 @@ void _CORE_semaphore_Initialize(
   uint32_t                      initial_value
 );
 
-/**
- *  This routine attempts to receive a unit from @a the_semaphore.
- *  If a unit is available or if the wait flag is false, then the routine
- *  returns.  Otherwise, the calling task is blocked until a unit becomes
- *  available.
- *
- *  @param[in] the_semaphore is the semaphore to seize
- *  @param[in] id is the Id of the API level Semaphore object associated
- *         with this instance of a SuperCore Semaphore
- *  @param[in] wait indicates if the caller is willing to block
- *  @param[in] timeout is the number of ticks the calling thread is willing
- *         to wait if @a wait is true.
- */
-void _CORE_semaphore_Seize(
-  CORE_semaphore_Control  *the_semaphore,
-  Objects_Id               id,
-  bool                     wait,
-  Watchdog_Interval        timeout
-);
+#if defined(RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY)
+  /**
+   *  This routine attempts to receive a unit from @a the_semaphore.
+   *  If a unit is available or if the wait flag is false, then the routine
+   *  returns.  Otherwise, the calling task is blocked until a unit becomes
+   *  available.
+   *
+   *  @param[in] the_semaphore is the semaphore to seize
+   *  @param[in] id is the Id of the API level Semaphore object associated
+   *         with this instance of a SuperCore Semaphore
+   *  @param[in] wait indicates if the caller is willing to block
+   *  @param[in] timeout is the number of ticks the calling thread is willing
+   *         to wait if @a wait is true.
+   */
+  void _CORE_semaphore_Seize(
+    CORE_semaphore_Control  *the_semaphore,
+    Objects_Id               id,
+    bool                     wait,
+    Watchdog_Interval        timeout
+  );
+#endif
 
 /**
  *  This routine frees a unit to the semaphore.  If a task was blocked waiting

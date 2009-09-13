@@ -28,10 +28,8 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-/*PAGE
- *
- *  _CORE_semaphore_Seize
- *
+#if defined(RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY)
+/*
  *  This routine attempts to allocate a core semaphore to the calling thread.
  *
  *  Input parameters:
@@ -87,3 +85,4 @@ void _CORE_semaphore_Seize(
   _ISR_Enable( level );
   _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
 }
+#endif
