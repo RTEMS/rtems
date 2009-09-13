@@ -135,6 +135,12 @@ extern rtems_api_configuration_table Configuration_RTEMS_API;
 #define rtems_configuration_get_notepads_enabled() \
         rtems_configuration_get_rtems_api_configuration()->notepads_enabled
 
+/**
+ *  This macro returns the number of Classic API semaphores configured.
+ */
+#define rtems_configuration_get_maximum_semaphores() \
+        rtems_configuration_get_rtems_api_configuration()->maximum_semaphores
+
 #ifdef __cplusplus
 }
 #endif

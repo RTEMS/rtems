@@ -1,5 +1,10 @@
 2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/include/rtems/rtems/config.h: Add
+	rtems_configuration_get_maximum_semaphores().
+
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/Makefile.am, posix/src/clockgetres.c: Add clockgetres.c to set
 	of clock and delayt methods built when POSIX threads are disabled.
 	Ensure it builds when POSIX is disabled.
