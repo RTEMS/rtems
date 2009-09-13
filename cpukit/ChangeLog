@@ -1,5 +1,9 @@
 2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/include/rtems/score/tod.h: Fix typo.
+
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/include/rtems/rtems/config.h: Add
 	rtems_configuration_get_maximum_semaphores().
 

@@ -233,7 +233,7 @@ uint32_t TOD_TICKS_PER_SECOND_method(void);
 
 /** @brief Method to return number of ticks in a second
  *
- *  This method exists to hide the fact that TOD_TICKS_PER_SECOND can no
+ *  This method exists to hide the fact that TOD_TICKS_PER_SECOND can not
  *  be implemented as a macro in a .h file due to visibility issues.
  *  The Configuration Table is not available to SuperCore .h files but
  *  is available to their .c files.
