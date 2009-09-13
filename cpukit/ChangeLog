@@ -280,7 +280,7 @@
 
 2009-08-06      Christian Mauderer <christian.mauderer@embedded-brains.de>
 
-        * rtems/include/rtems/rtems/types.h: Improve documentation.
+	* rtems/include/rtems/rtems/types.h: Improve documentation.
 
 2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
