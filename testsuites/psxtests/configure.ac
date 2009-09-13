@@ -24,6 +24,9 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 
+RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
+AM_CONDITIONAL(HAS_POSIX,test x"${rtems_cv_RTEMS_POSIX_API}" = x"yes")
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 psx01/Makefile
@@ -46,6 +49,7 @@ psxbarrier01/Makefile
 psxcancel/Makefile
 psxchroot01/Makefile
 psxcleanup/Makefile
+psxclock/Makefile
 psxcond01/Makefile
 psxenosys/Makefile
 psxfatal01/Makefile

@@ -1,3 +1,13 @@
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, psx01/init.c, psx01/psx01.scn: Add new
+	test to exercise clock and delay services enabled when POSIX threads
+	are disabled. This is split from psx01. POSIX test suite now enabled
+	when POSIX threads are disabled so only enable tests which are
+	appropriate.
+	* psxclock/.cvsignore, psxclock/Makefile.am, psxclock/init.c,
+	psxclock/psxclock.doc, psxclock/psxclock.scn: New files.
+
 2009-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psx09/init.c, psx09/psx09.scn: Correct test following decision of

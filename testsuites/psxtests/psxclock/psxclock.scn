@@ -1,0 +1,31 @@
+*** POSIX CLOCK TEST ***
+Init: clock_gettime - EINVAL (NULL timespec)
+Init: clock_gettime - EINVAL (invalid clockid)
+Init: clock_settime - EINVAL (invalid clockid)
+Thu Jan  1 00:00:01 1970
+Init: clock_settime - before 1988 EINVAL
+Init: clock_getres - EINVAL (invalid clockid)
+Init: clock_getres - EINVAL (NULL resolution)
+Init: clock_getres - SUCCESSFUL
+Init: resolution = sec (0), nsec (10000000)
+
+Fri May 24 11:05:00 1996
+Init: clock_settime - SUCCESSFUL
+Fri May 24 11:05:00 1996
+Fri May 24 11:05:00 1996
+Time since boot: (3, 10131000)
+Fri May 24 11:05:03 1996
+Fri May 24 11:05:03 1996
+Init: seconds remaining (0)
+
+Init: nanosleep - EINVAL (NULL time)
+Init: nanosleep - EINVAL (too many nanoseconds)
+Init: nanosleep - negative seconds small delay 
+Init: nanosleep - yield with remaining
+Init: nanosleep - yield with NULL time remaining
+Init: nanosleep - 1.05 seconds
+Fri May 24 11:05:06 1996
+Init: sec (0), nsec (0) remaining
+Init: usleep - 1.35 seconds
+Fri May 24 11:05:07 1996
+*** END OF POSIX CLOCK TEST ***
