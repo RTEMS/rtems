@@ -18,7 +18,8 @@ libposix_a_SOURCES =
 # Some POSIX functions that are nice to always have
 ## 20 Nov 2008: Now using these from newlib's posix directory
 libposix_a_SOURCES += src/sleep.c src/usleep.c 
-libposix_a_SOURCES += src/nanosleep.c src/clockgettime.c src/clocksettime.c
+libposix_a_SOURCES += src/nanosleep.c src/clockgettime.c src/clocksettime.c \
+    src/clockgetres.c
 
 if HAS_PTHREADS
 # include
@@ -154,8 +155,7 @@ libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \
 
 ## TIME_C_FILES
 libposix_a_SOURCES += src/adjtime.c src/posixtimespecabsolutetimeout.c \
-    src/clockgetcpuclockid.c src/clockgetenableattr.c src/clockgetres.c \
-    src/clocksetenableattr.c 
+    src/clockgetcpuclockid.c src/clockgetenableattr.c src/clocksetenableattr.c 
 
 ## TIMER_C_FILES
 libposix_a_SOURCES += src/ptimer.c src/timercreate.c src/timerdelete.c \

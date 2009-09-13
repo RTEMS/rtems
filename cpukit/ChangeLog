@@ -1,3 +1,9 @@
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/Makefile.am, posix/src/clockgetres.c: Add clockgetres.c to set
+	of clock and delayt methods built when POSIX threads are disabled.
+	Ensure it builds when POSIX is disabled.
+
 2009-09-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/coremsgbroadcast.c: Fix typo.
