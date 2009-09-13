@@ -1,3 +1,9 @@
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac: Some POSIX tests exercise functionality which is
+	enabled when the POSIX threading is disabled. So build this suite all
+	the time and let the psxtests select the specific tests to build.
+
 2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* support/include/tmacros.h: Eliminate test routines TICKS_PER_SECOND
