@@ -41,23 +41,22 @@ void _Thread_Stack_Free(
   Thread_Control *the_thread
 )
 {
+  #if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
     /*
      *  If the API provided the stack space, then don't free it.
      */
-
     if ( !the_thread->Start.core_allocated_stack )
       return;
+  #endif
 
-    /*
-     * Call ONLY the CPU table stack free hook, or the
-     * the RTEMS workspace free.  This is so the free
-     * routine properly matches the allocation of the stack.
-     */
+  /*
+   * Call ONLY the CPU table stack free hook, or the
+   * the RTEMS workspace free.  This is so the free
+   * routine properly matches the allocation of the stack.
+   */
 
-    if ( Configuration.stack_free_hook )
-      (*Configuration.stack_free_hook)(
-        the_thread->Start.Initial_stack.area
-      );
-    else
-        _Workspace_Free( the_thread->Start.Initial_stack.area );
+  if ( Configuration.stack_free_hook )
+    (*Configuration.stack_free_hook)( the_thread->Start.Initial_stack.area );
+  else
+    _Workspace_Free( the_thread->Start.Initial_stack.area );
 }

@@ -87,18 +87,26 @@ bool _Thread_Initialize(
   /*
    *  Allocate and Initialize the stack for this thread.
    */
-  if ( !stack_area ) {
+  #if !defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
     actual_stack_size = _Thread_Stack_Allocate( the_thread, stack_size );
     if ( !actual_stack_size || actual_stack_size < stack_size )
       return false;                     /* stack allocation failed */
 
     stack = the_thread->Start.stack;
-    the_thread->Start.core_allocated_stack = true;
-  } else {
-    stack = stack_area;
-    actual_stack_size = stack_size;
-    the_thread->Start.core_allocated_stack = false;
-  }
+  #else
+    if ( !stack_area ) {
+      actual_stack_size = _Thread_Stack_Allocate( the_thread, stack_size );
+      if ( !actual_stack_size || actual_stack_size < stack_size )
+        return false;                     /* stack allocation failed */
+
+      stack = the_thread->Start.stack;
+      the_thread->Start.core_allocated_stack = true;
+    } else {
+      stack = stack_area;
+      actual_stack_size = stack_size;
+      the_thread->Start.core_allocated_stack = false;
+    }
+  #endif
 
   _Stack_Initialize(
      &the_thread->Start.Initial_stack,

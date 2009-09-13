@@ -1,5 +1,11 @@
 2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/include/rtems/score/thread.h, score/src/threadinitialize.c,
+	score/src/threadstackfree.c: Disable capability for API to let user
+	provide thread stack when no API configured includes this capability.
+
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/include/rtems/score/coresem.h, score/src/coresemseize.c:
 	Disable body of _CORE_semaphore_Seize() if it is not used because all
 	APIs using it are disabled.

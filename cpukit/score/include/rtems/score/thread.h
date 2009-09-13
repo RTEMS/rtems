@@ -35,6 +35,9 @@
   #define RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT
 #endif
 
+#if defined(RTEMS_POSIX_API)
+  #define RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -218,14 +221,16 @@ typedef struct {
   uint32_t                             isr_level;
   /** This field is the initial priority. */
   Priority_Control                     initial_priority;
-  /** This field indicates whether the SuperCore allocated the stack. */
-  bool                                 core_allocated_stack;
+  #if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
+    /** This field indicates whether the SuperCore allocated the stack. */
+    bool                                 core_allocated_stack;
+  #endif
   /** This field is the stack information. */
   Stack_Control                        Initial_stack;
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-  /** This field is the initial FP context area address. */
-  Context_Control_fp                  *fp_context;
-#endif
+  #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+    /** This field is the initial FP context area address. */
+    Context_Control_fp                  *fp_context;
+  #endif
   /** This field is the initial stack area address. */
   void                                *stack;
 } Thread_Start_information;
