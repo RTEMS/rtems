@@ -93,7 +93,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
    */
   number_broadcasted = 0;
   while ((the_thread =
-          _Thread_queue_Dequeue(&the_message_queue->Wait_queue) != NULL)) {
+          _Thread_queue_Dequeue(&the_message_queue->Wait_queue))) {
     waitp = &the_thread->Wait;
     number_broadcasted += 1;
 

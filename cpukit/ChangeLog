@@ -1,3 +1,7 @@
+2009-09-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/coremsgbroadcast.c: Fix typo.
+
 2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/coremsgsubmit.c: Remove extra #else.
