@@ -1,5 +1,9 @@
 2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/coremsgsubmit.c: Remove extra #else.
+
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/inline/rtems/score/coremsg.inl, score/src/coremsg.c,
 	score/src/coremsgbroadcast.c, score/src/coremsginsert.c,
 	score/src/coremsgseize.c, score/src/coremsgsubmit.c: Add wrappers for

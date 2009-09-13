@@ -63,7 +63,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   #else
     CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support  __attribute__((unused)),
-  #else
   #endif
   CORE_message_queue_Submit_types            submit_type,
   bool                                       wait,
