@@ -59,11 +59,12 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
-#if defined(RTEMS_MULTIPROCESSING)
-  CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
-#else
-  CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support __attribute__((unused)),
-#endif
+  #if defined(RTEMS_MULTIPROCESSING)
+    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
+  #else
+    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support  __attribute__((unused)),
+  #else
+  #endif
   CORE_message_queue_Submit_types            submit_type,
   bool                                       wait,
   Watchdog_Interval                          timeout
@@ -90,10 +91,10 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       *(size_t *) the_thread->Wait.return_argument = size;
       the_thread->Wait.count = submit_type;
 
-#if defined(RTEMS_MULTIPROCESSING)
-      if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-        (*api_message_queue_mp_support) ( the_thread, id );
-#endif
+      #if defined(RTEMS_MULTIPROCESSING)
+        if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+          (*api_message_queue_mp_support) ( the_thread, id );
+      #endif
       return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
     }
   }
@@ -123,9 +124,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       size
     );
     the_message->Contents.size = size;
-    #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-      the_message->priority  = submit_type;
-    #endif
+    _CORE_message_queue_Set_message_priority( the_message, submit_type );
 
     _CORE_message_queue_Insert_message(
        the_message_queue,

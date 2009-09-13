@@ -1,3 +1,12 @@
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/inline/rtems/score/coremsg.inl, score/src/coremsg.c,
+	score/src/coremsgbroadcast.c, score/src/coremsginsert.c,
+	score/src/coremsgseize.c, score/src/coremsgsubmit.c: Add wrappers for
+	accessing message priority. Since these are empty when priority-based
+	message queues are disabled, this eliminates some of the
+	conditionals.
+
 2009-09-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/coremsgseize.c: Fix typo.

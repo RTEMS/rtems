@@ -7,7 +7,7 @@
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,8 +30,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
+/*
  *  _CORE_message_queue_Initialize
  *
  *  This routine initializes a newly created message queue based on the
@@ -62,19 +61,16 @@ bool _CORE_message_queue_Initialize(
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
   the_message_queue->number_of_pending_messages = 0;
   the_message_queue->maximum_message_size       = maximum_message_size;
-  #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
-    _CORE_message_queue_Set_notify( the_message_queue, NULL, NULL );
-  #endif
+  _CORE_message_queue_Set_notify( the_message_queue, NULL, NULL );
  
   /*
    *  Round size up to multiple of a pointer for chain init and 
    *  check for overflow on adding overhead to each message.
    */
- 
   allocated_message_size = maximum_message_size;
   if (allocated_message_size & (sizeof(uint32_t) - 1)) {
-      allocated_message_size += sizeof(uint32_t);
-      allocated_message_size &= ~(sizeof(uint32_t) - 1);
+    allocated_message_size += sizeof(uint32_t);
+    allocated_message_size &= ~(sizeof(uint32_t) - 1);
   }
    
   if (allocated_message_size < maximum_message_size)

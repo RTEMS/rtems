@@ -119,11 +119,42 @@ _CORE_message_queue_Allocate_message_buffer (
  *  message buffer chain.
  */
 RTEMS_INLINE_ROUTINE void _CORE_message_queue_Free_message_buffer (
-    CORE_message_queue_Control        *the_message_queue,
-    CORE_message_queue_Buffer_control *the_message
+  CORE_message_queue_Control        *the_message_queue,
+  CORE_message_queue_Buffer_control *the_message
 )
 {
   _Chain_Append( &the_message_queue->Inactive_messages, &the_message->Node );
+}
+
+/**
+ *  This function returns the priority of @a the_message.
+ *
+ *  NOTE: It encapsulates the optional behavior that message priority is
+ *        disabled if no API requires it.
+ */
+RTEMS_INLINE_ROUTINE int _CORE_message_queue_Get_message_priority (
+  CORE_message_queue_Buffer_control *the_message
+)
+{
+  #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+    return the_message->priority;
+  #else
+    return 0;
+  #endif
+}
+
+/**
+ *  This function sets the priority of @a the_message.
+ *
+ *  NOTE: It encapsulates the optional behavior that message priority is
+ *        disabled if no API requires it.
+ */
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_message_priority (
+  CORE_message_queue_Buffer_control *the_message,
+  int                                priority  
+)
+{
+  the_message->priority = priority;
 }
 
 /**
@@ -202,22 +233,23 @@ RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_null (
   {
     return (the_message_queue->notify_handler != NULL);
   }
- 
-  /**
-   *  This routine initializes the notification information for
-   *  @a the_message_queue.
-   */
- 
-  RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_notify (
-    CORE_message_queue_Control        *the_message_queue,
-    CORE_message_queue_Notify_Handler  the_handler,
-    void                              *the_argument
-  )
-  {
-    the_message_queue->notify_handler  = the_handler;
-    the_message_queue->notify_argument = the_argument;
-  }
 #endif
+ 
+/**
+ *  This routine initializes the notification information for
+ *  @a the_message_queue.
+ */
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_notify (
+  CORE_message_queue_Control        *the_message_queue,
+  CORE_message_queue_Notify_Handler  the_handler,
+  void                              *the_argument
+)
+{
+#if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
+  the_message_queue->notify_handler  = the_handler;
+  the_message_queue->notify_argument = the_argument;
+#endif
+}
 
 /**@}*/
 

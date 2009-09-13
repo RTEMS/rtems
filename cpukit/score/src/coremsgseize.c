@@ -78,16 +78,20 @@ void _CORE_message_queue_Seize(
     _ISR_Enable( level );
 
     *size_p = the_message->Contents.size;
-    #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-      _Thread_Executing->Wait.count = the_message->priority;
-    #endif
-    _CORE_message_queue_Copy_buffer(the_message->Contents.buffer,buffer,*size_p);
+    _Thread_Executing->Wait.count = 
+      _CORE_message_queue_Get_message_priority( the_message );
+    _CORE_message_queue_Copy_buffer(
+      the_message->Contents.buffer,
+      buffer,
+      *size_p
+    );
 
     #if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
       /*
-       *  There is not an API with blocking sends enabled.  So return immediately.
+       *  There is not an API with blocking sends enabled. 
+       *  So return immediately.
        */
-      _CORE_message_queue_Free_message_buffer( the_message_queue, the_message );
+      _CORE_message_queue_Free_message_buffer(the_message_queue, the_message);
       return;
     #else
     {
@@ -102,7 +106,10 @@ void _CORE_message_queue_Seize(
        */
       the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
       if ( !the_thread ) {
-        _CORE_message_queue_Free_message_buffer( the_message_queue, the_message );
+        _CORE_message_queue_Free_message_buffer(
+          the_message_queue,
+          the_message
+        );
         return;
       }
 
@@ -111,9 +118,10 @@ void _CORE_message_queue_Seize(
        *  puts the messages in the message queue on behalf of the
        *  waiting task.
        */
-      #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-        the_message->priority  = the_thread->Wait.count;
-      #endif
+      _CORE_message_queue_Set_message_priority(
+        the_message, 
+        the_thread->Wait.count
+      );
       the_message->Contents.size = (size_t) the_thread->Wait.option;
       _CORE_message_queue_Copy_buffer(
         the_thread->Wait.return_argument_second.immutable_object,
@@ -124,11 +132,7 @@ void _CORE_message_queue_Seize(
       _CORE_message_queue_Insert_message(
          the_message_queue,
          the_message,
-         #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-           the_message->priority
-         #else
-           0
-         #endif
+         _CORE_message_queue_Get_message_priority( the_message )
       );
       return;
     }

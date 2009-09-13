@@ -65,9 +65,7 @@ void _CORE_message_queue_Insert_message(
     #define SET_NOTIFY()
   #endif
 
-  #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-    the_message->priority = submit_type;
-  #endif
+  _CORE_message_queue_Set_message_priority( the_message, submit_type );
 
   #if !defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
     _ISR_Disable( level );
@@ -95,14 +93,19 @@ void _CORE_message_queue_Insert_message(
       CORE_message_queue_Buffer_control *this_message;
       Chain_Node                        *the_node;
       Chain_Control                     *the_header;
+      int                                the_priority;
 
+      the_priority = _CORE_message_queue_Get_message_priority(the_message);
       the_header = &the_message_queue->Pending_messages;
       the_node = the_header->first;
       while ( !_Chain_Is_tail( the_header, the_node ) ) {
+        int this_priority;
 
         this_message = (CORE_message_queue_Buffer_control *) the_node;
 
-        if ( this_message->priority <= the_message->priority ) {
+        this_priority = _CORE_message_queue_Get_message_priority(this_message);
+
+        if ( this_priority <= the_priority ) {
           the_node = the_node->next;
           continue;
         }
