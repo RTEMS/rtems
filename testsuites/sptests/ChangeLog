@@ -1,3 +1,8 @@
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp43/Makefile.am, sp43/init.c, sp43/sp43.scn, sp43/system.h: Add test
+	for Id which is in range for the object class but not allocated yet.
+
 2009-09-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp46/init.c, sp46/sp46.scn: Fix numbering.
