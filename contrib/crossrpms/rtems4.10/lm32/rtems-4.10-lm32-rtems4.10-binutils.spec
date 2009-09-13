@@ -45,15 +45,15 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.19.51
-%define binutils_version 2.19.51-20090721
-%define binutils_rpmvers %{expand:%(echo "2.19.51-20090721" | tr - _ )}
+%define binutils_pkgvers 2.19.90
+%define binutils_version 2.19.90
+%define binutils_rpmvers %{expand:%(echo "2.19.90" | tr - _ )}
 
 Name:		rtems-4.10-lm32-rtems4.10-binutils
 Summary:	Binutils for target lm32-rtems4.10
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	2%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -64,15 +64,17 @@ BuildRequires:	%{_host_rpmprefix}gcc
 # Bug in bfd: Doesn't build without texinfo installed
 BuildRequires:	texinfo >= 4.2
 %else
-%if "lm32-rtems4.10" == "i686-pc-cygwin"
+# Required for building the infos
+BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
-%endif
 %endif
 BuildRequires:	flex
 BuildRequires:	bison
 
-# ftp://sources.redhat.com/pub/binutils/snapshots/binutils-2.19.51.tar.bz2
-Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.19.51-20090721.tar.bz2
+Requires:	rtems-4.10-binutils-common
+
+Source0: ftp://sourceware.org/pub/binutils/snapshots/binutils-%{binutils_pkgvers}.tar.bz2
+# Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-%{binutils_pkgvers}-rtems4.10-20090911.diff
 
 %description
 Cross binutils for target lm32-rtems4.10
@@ -109,6 +111,7 @@ cd ..
     --mandir=%{_mandir} --infodir=%{_infodir}
 
   make %{?_smp_mflags} all
+  make info
   cd ..
 
 %install
@@ -118,9 +121,23 @@ cd ..
   cd build
   make DESTDIR=$RPM_BUILD_ROOT install
 
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    infodir=$RPM_BUILD_ROOT%{_infodir} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    exec_prefix=$RPM_BUILD_ROOT%{_exec_prefix} \
+    install-info
 
-# Conflict with a native binutils' infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
+# Dropped in FSF-binutils-2.9.5, but Cygwin still ships it.
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/configure.info*
+
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
+
+# binutils does not install share/locale, however it uses it
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}/share/locale
 
 # We don't ship host files
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
@@ -203,4 +220,53 @@ GNU binutils targetting lm32-rtems4.10.
 
 %dir %{_exec_prefix}/lm32-rtems4.10/lib
 %{_exec_prefix}/lm32-rtems4.10/lib/ldscripts
+# ==============================================================
+# rtems-4.10-binutils-common
+# ==============================================================
+%package -n rtems-4.10-binutils-common
+Summary:      Base package for RTEMS binutils
+Group: Development/Tools
+%{?_with_noarch_subpackages:BuildArch: noarch}
+
+Requires(post):		/sbin/install-info
+Requires(preun):	/sbin/install-info
+
+%description -n rtems-4.10-binutils-common
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the base for binutils regardless of target CPU.
+
+%post -n rtems-4.10-binutils-common
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/as.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/bfd.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/binutils.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/ld.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
+
+%preun -n rtems-4.10-binutils-common
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/as.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/bfd.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/binutils.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/ld.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
+fi
+
+%files -n rtems-4.10-binutils-common
+%defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/as.info*
+%{_infodir}/bfd.info*
+%{_infodir}/binutils.info*
+%{_infodir}/ld.info*
+%{_infodir}/standards.info*
+%{_infodir}/gprof.info*
+
+%dir %{_prefix}/share
+%dir %{_prefix}/share/locale
 
