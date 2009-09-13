@@ -154,7 +154,9 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_message_priority (
   int                                priority  
 )
 {
-  the_message->priority = priority;
+  #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+    the_message->priority = priority;
+  #endif
 }
 
 /**
@@ -234,22 +236,26 @@ RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_null (
     return (the_message_queue->notify_handler != NULL);
   }
 #endif
- 
+
 /**
  *  This routine initializes the notification information for
  *  @a the_message_queue.
  */
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_notify (
-  CORE_message_queue_Control        *the_message_queue,
-  CORE_message_queue_Notify_Handler  the_handler,
-  void                              *the_argument
-)
-{
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
-  the_message_queue->notify_handler  = the_handler;
-  the_message_queue->notify_argument = the_argument;
+  RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_notify (
+    CORE_message_queue_Control        *the_message_queue,
+    CORE_message_queue_Notify_Handler  the_handler,
+    void                              *the_argument
+  )
+  {
+    the_message_queue->notify_handler  = the_handler;
+    the_message_queue->notify_argument = the_argument;
+  }
+#else
+  /* turn it into nothing if not enabled */
+  #define _CORE_message_queue_Set_notify( \
+           the_message_queue, the_handler, the_argument )
 #endif
-}
 
 /**@}*/
 

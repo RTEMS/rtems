@@ -1,3 +1,8 @@
+2009-09-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/inline/rtems/score/coremsg.inl: Fix compilation issue when
+	notifications are not enabled.
+
 2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/include/rtems/score/thread.h, score/src/threadinitialize.c,
