@@ -16,6 +16,7 @@ AC_MSG_CHECKING([for available BSPs])
         -e "s,/bsp_specs$,,"`
     case $bsp_family in
         # Now account for BSPs with build variants
+          csb337)            bsps="csb337 csb637";;
           c4xsim)            bsps="c4xsim c3xsim";;
           gen68360)          bsps="gen68360 gen68360_040 pgh360";;
           tqm8xx)            bsps="pghplus tqm8xx_stk8xx";;
