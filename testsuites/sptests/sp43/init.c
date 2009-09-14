@@ -449,14 +449,16 @@ rtems_task Init(
    *  needs this. This is a "good" Id in that is it in range, but bad in
    *  that it has not been allocated so the local_table pointer is NULL.
    */
-  puts( "rtems_semaphore_release - good but uncreated ID - INVALID_ID - OK" );
-  sc = rtems_semaphore_release(
+  puts( "rtems_semaphore_obtain - good but uncreated ID - INVALID_ID - OK" );
+  sc = rtems_semaphore_obtain(
     rtems_build_id(
       OBJECTS_CLASSIC_API,
       OBJECTS_RTEMS_SEMAPHORES,
       1,
       rtems_configuration_get_maximum_semaphores()
-    )
+    ),
+    RTEMS_DEFAULT_OPTIONS,
+    0
   );
   fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_semaphore_obtain" );
 

@@ -1,5 +1,10 @@
 2009-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp43/init.c, sp43/sp43.scn: Minor correction to test case so it hits
+	the intended code.
+
+2009-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* configure.ac: Revert accidentally committed lines.
 
 2009-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
