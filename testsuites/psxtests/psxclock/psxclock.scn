@@ -21,6 +21,7 @@ Init: seconds remaining (0)
 Init: nanosleep - EINVAL (NULL time)
 Init: nanosleep - EINVAL (too many nanoseconds)
 Init: nanosleep - negative seconds small delay 
+Init: nanosleep - delay so small results in one tick
 Init: nanosleep - yield with remaining
 Init: nanosleep - yield with NULL time remaining
 Init: nanosleep - 1.05 seconds

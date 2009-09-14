@@ -155,6 +155,15 @@ rtems_task Init(
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
+  /* this is actually a small delay */
+  tv.tv_sec = 0;
+  tv.tv_nsec = 1;
+  puts( "Init: nanosleep - delay so small results in one tick" );
+  sc = nanosleep ( &tv, &tr );
+  rtems_test_assert( !sc );
+  rtems_test_assert( !tr.tv_sec );
+  rtems_test_assert( !tr.tv_nsec );
+
   /* use nanosleep to yield */
 
   tv.tv_sec = 0;
@@ -200,7 +209,7 @@ rtems_task Init(
   rtems_test_assert( !sc );
   printf( ctime( &tv.tv_sec ) );
 
-  puts( "" );
+  empty_line();
   puts( "clock_gettime - CLOCK_THREAD_CPUTIME -- ENOSYS" );
   #if defined(_POSIX_THREAD_CPUTIME)
     {
