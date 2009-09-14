@@ -25,7 +25,7 @@ void malloc_report_statistics_with_plugin(
 )
 {
   rtems_malloc_statistics_t *s;
-  uint32_t                   allocated;
+  uintmax_t allocated;
 
   s = &rtems_malloc_statistics;
 
@@ -48,9 +48,10 @@ void malloc_report_statistics_with_plugin(
   );
   (*print)(
     context,
-    "  Call counts:   malloc:%"PRIu32"   free:%"PRIu32
+    "  Call counts:   malloc:%"PRIu32"   memalign:%"PRIu32"   free:%"PRIu32
        "   realloc:%"PRIu32"   calloc:%"PRIu32"\n",
     s->malloc_calls,
+    s->memalign_calls,
     s->free_calls,
     s->realloc_calls,
     s->calloc_calls

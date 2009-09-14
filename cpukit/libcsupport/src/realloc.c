@@ -25,9 +25,9 @@ void *realloc(
   size_t size
 )
 {
-  intptr_t old_size;
+  uintptr_t old_size;
   char    *new_area;
-  intptr_t resize;
+  uintptr_t resize;
 
   MSBUMP(realloc_calls, 1);
 
@@ -88,7 +88,7 @@ void *realloc(
 
   new_area = malloc( size );
 
-  MSBUMP(malloc_calls, -1);   /* subtract off the malloc */
+  MSBUMP(malloc_calls, (uint32_t) -1);   /* subtract off the malloc */
 
   if ( !new_area ) {
     return (void *) 0;

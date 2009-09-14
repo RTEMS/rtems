@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 
-void rtems_malloc_statistics_initialize( void )
+static void rtems_malloc_statistics_initialize( void )
 {
   /*
    * Zero all the statistics
@@ -31,12 +31,12 @@ void rtems_malloc_statistics_initialize( void )
   (void) memset(&rtems_malloc_statistics, 0, sizeof(rtems_malloc_statistics));
 }
 
-void rtems_malloc_statistics_at_malloc(
+static void rtems_malloc_statistics_at_malloc(
   void *pointer
 )
 {
-  intptr_t  actual_size = 0;
-  uint32_t  current_depth;
+  uintptr_t actual_size = 0;
+  uint32_t current_depth;
   rtems_malloc_statistics_t *s = &rtems_malloc_statistics;
 
   if ( !pointer )
@@ -46,7 +46,7 @@ void rtems_malloc_statistics_at_malloc(
 
   MSBUMP(lifetime_allocated, actual_size);
 
-  current_depth = s->lifetime_allocated - s->lifetime_freed;
+  current_depth = (uint32_t) (s->lifetime_allocated - s->lifetime_freed);
   if (current_depth > s->max_depth)
       s->max_depth = current_depth;
 }
@@ -55,11 +55,11 @@ void rtems_malloc_statistics_at_malloc(
  *  If the pointer is not in the heap, then we won't be able to get its
  *  size and thus we skip updating the statistics.
  */
-void rtems_malloc_statistics_at_free(
+static void rtems_malloc_statistics_at_free(
   void *pointer
 )
 {
-  intptr_t size;
+  uintptr_t size;
 
   if (_Protected_heap_Get_block_size(RTEMS_Malloc_Heap, pointer, &size) ) {
     MSBUMP(lifetime_freed, size);

@@ -1,7 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Malloc initialization implementation.
+ */
+
 /*
- *  RTEMS Malloc Family Implementation --Initialization
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,9 +27,9 @@
 /* FIXME: Dummy function */
 #ifndef RTEMS_NEWLIB
 void RTEMS_Malloc_Initialize(
-  void   *start,
-  size_t  length,
-  size_t  sbrk_amount
+  void *heap_begin,
+  uintptr_t heap_size,
+  size_t sbrk_amount
 )
 {
 }
@@ -35,43 +38,43 @@ rtems_malloc_statistics_t rtems_malloc_statistics;
 extern bool rtems_unified_work_area;
 
 void RTEMS_Malloc_Initialize(
-  void   *start,
-  size_t  length,
-  size_t  sbrk_amount
+  void *heap_begin,
+  uintptr_t heap_size,
+  size_t sbrk_amount
 )
 {
-  uint32_t      status;
-  void         *starting_address;
-
   #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
     /*
      *  If configured, initialize the boundary support
      */
-    if (rtems_malloc_boundary_helpers)
+    if ( rtems_malloc_boundary_helpers != NULL ) {
       (*rtems_malloc_boundary_helpers->initialize)();
+    }
   #endif
 
   /*
    *  If configured, initialize the statistics support
    */
-  if ( rtems_malloc_statistics_helpers )
+  if ( rtems_malloc_statistics_helpers != NULL ) {
     (*rtems_malloc_statistics_helpers->initialize)();
+  }
 
   /*
    *  Initialize the garbage collection list to start with nothing on it.
    */
   malloc_deferred_frees_initialize();
 
-  starting_address = start;
-
   /*
    *  Initialize the optional sbrk support for extending the heap
    */
-  if (rtems_malloc_sbrk_helpers) {
-    starting_address = (*rtems_malloc_sbrk_helpers->initialize)(
-      start,
+  if ( rtems_malloc_sbrk_helpers != NULL ) {
+    void *new_heap_begin = (*rtems_malloc_sbrk_helpers->initialize)(
+      heap_begin,
       sbrk_amount
     );
+
+    heap_size -= (uintptr_t) new_heap_begin - (uintptr_t) heap_begin;
+    heap_begin = new_heap_begin;
   }
 
   /*
@@ -92,9 +95,12 @@ void RTEMS_Malloc_Initialize(
    *  left over from another process.  This would be a security violation.
    */
 
-  if ( !rtems_unified_work_area &&
-       rtems_configuration_get_do_zero_of_workspace() )
-     memset( starting_address, 0, length );
+  if (
+    !rtems_unified_work_area
+      && rtems_configuration_get_do_zero_of_workspace()
+  ) {
+     memset( heap_begin, 0, heap_size );
+  }
 
   /*
    *  Unfortunately we cannot use assert if this fails because if this
@@ -103,14 +109,15 @@ void RTEMS_Malloc_Initialize(
    */
 
   if ( !rtems_unified_work_area ) {
-    status = _Protected_heap_Initialize( 
+    uintptr_t status = _Protected_heap_Initialize( 
       RTEMS_Malloc_Heap,
-      starting_address,
-      length,
+      heap_begin,
+      heap_size,
       CPU_HEAP_ALIGNMENT
     );
-    if ( !status )
-      rtems_fatal_error_occurred( status );
+    if ( status == 0 ) {
+      rtems_fatal_error_occurred( RTEMS_NO_MEMORY );
+    }
   }
 
   MSBUMP( space_available, _Protected_heap_Get_size(RTEMS_Malloc_Heap) );
@@ -118,9 +125,9 @@ void RTEMS_Malloc_Initialize(
   #if defined(RTEMS_HEAP_DEBUG)
     if ( _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false ) ) {
       printk( "Malloc heap not initialized correctly\n" );
-      rtems_print_buffer( start, 32 );
+      rtems_print_buffer( heap_begin, 32 );
       printk( "\n" );
-      rtems_print_buffer( (start + length) - 48, 48 );
+      rtems_print_buffer( (heap_begin + heap_size) - 48, 48 );
       rtems_fatal_error_occurred( RTEMS_NO_MEMORY );
     }
   #endif

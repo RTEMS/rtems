@@ -25,7 +25,7 @@ void *calloc(
 )
 {
   register char *cptr;
-  int            length;
+  size_t length;
 
   MSBUMP(calloc_calls, 1);
 
@@ -34,7 +34,7 @@ void *calloc(
   if ( cptr )
     memset( cptr, '\0', length );
 
-  MSBUMP(malloc_calls, -1);   /* subtract off the malloc */
+  MSBUMP(malloc_calls, (uint32_t) -1);   /* subtract off the malloc */
 
   return cptr;
 }

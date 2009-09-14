@@ -165,8 +165,12 @@ extern "C" {
  * RETURNS:
  *      N/A
  */
-void
-rtems_ide_part_table_free(rtems_disk_desc_t *disk_desc);
+/**
+ * @deprecated Use the @ref rtems_bdpart "block device partition module" instead.
+ */
+void rtems_ide_part_table_free(
+  rtems_disk_desc_t *disk_desc
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
 
 /*
@@ -181,8 +185,13 @@ rtems_ide_part_table_free(rtems_disk_desc_t *disk_desc);
  * RETURNS:
  *      RTEMS_SUCCESSFUL if success, or -1 and corresponding errno else
  */
-rtems_status_code
-rtems_ide_part_table_get(const char *dev_name, rtems_disk_desc_t *disk_desc);
+/**
+ * @deprecated Use the @ref rtems_bdpart "block device partition module" instead.
+ */
+rtems_status_code rtems_ide_part_table_get(
+  const char *dev_name,
+  rtems_disk_desc_t *disk_desc
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
 
 /*
@@ -195,8 +204,12 @@ rtems_ide_part_table_get(const char *dev_name, rtems_disk_desc_t *disk_desc);
  * RETURNS:
  *      RTEMS_SUCCESSFUL if success, or -1 and corresponding errno else
  */
-rtems_status_code
-rtems_ide_part_table_initialize(char *dev_name);
+/**
+ * @deprecated Use the @ref rtems_bdpart "block device partition module" instead.
+ */
+rtems_status_code rtems_ide_part_table_initialize(
+  char *dev_name
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
 #ifdef __cplusplus
 }

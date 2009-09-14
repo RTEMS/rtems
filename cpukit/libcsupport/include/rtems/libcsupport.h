@@ -29,9 +29,9 @@ extern "C" {
 #include <sys/types.h>
 
 void RTEMS_Malloc_Initialize(
-  void   *start,
-  size_t  length,
-  size_t  sbrk_amount
+  void *heap_begin,
+  uintptr_t heap_size,
+  size_t sbrk_amount
 );
 
 extern void malloc_dump(void);

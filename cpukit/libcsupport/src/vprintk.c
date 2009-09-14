@@ -25,11 +25,11 @@
 #include <rtems/bspIo.h>
 
 static void printNum(
-  long unsigned int num,
-  int               base,
-  int               sign,
-  int               maxwidth,
-  int               lead
+  long num,
+  int base,
+  int sign,
+  int maxwidth,
+  int lead
 );
 
 /*
@@ -46,7 +46,7 @@ void vprintk(
   va_list     ap
 )
 {
-  char     c, *str;
+  char     c;
   int      lflag, base, sign, width, lead, minus;
 
   for (; *fmt != '\0'; fmt++) {
@@ -80,14 +80,19 @@ void vprintk(
       c = *++fmt;
     }
     if ( c == 'c' ) {
-      BSP_output_char(va_arg(ap, int));
+      char chr = (char) va_arg(ap, int);
+      BSP_output_char(chr);
       continue;
     }
     if ( c == 's' ) {
       int i, len;
-      char *s;
+      char *s, *str;
 
       str = va_arg(ap, char *);
+
+      if ( str == NULL ) {
+        str = "";
+      }
 
       /* calculate length of string */
       for ( len=0, s=str ; *s ; len++, s++ )
@@ -133,7 +138,7 @@ void vprintk(
     }
 
     printNum(
-      lflag ? va_arg(ap, long int) : (long int)va_arg(ap, int),
+      lflag ? va_arg(ap, long) : (long) va_arg(ap, int),
       base,
       sign,
       width,
@@ -149,16 +154,16 @@ void vprintk(
  *    base - base used to print the number.
  */
 static void printNum(
-  long unsigned int num,
-  int               base,
-  int               sign,
-  int               maxwidth,
-  int               lead
+  long num,
+  int base,
+  int sign,
+  int maxwidth,
+  int lead
 )
 {
-  long unsigned int n;
-  int               count;
-  char              toPrint[20];
+  long n;
+  int count;
+  char toPrint[20];
 
   if ( (sign == 1) && ((long)num <  0) ) {
     BSP_output_char('-');
@@ -168,13 +173,13 @@ static void printNum(
 
   count = 0;
   while ((n = num / base) > 0) {
-    toPrint[count++] = (num - (n*base));
+    toPrint[count++] = (char) (num - (n*base));
     num = n;
   }
-  toPrint[count++] = num;
+  toPrint[count++] = (char) num;
 
   for (n=maxwidth ; n > count; n-- )
-    BSP_output_char(lead);
+    BSP_output_char((char) lead);
 
   for (n = 0; n < count; n++) {
     BSP_output_char("0123456789ABCDEF"[(int)(toPrint[count-(n+1)])]);

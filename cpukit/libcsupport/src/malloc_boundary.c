@@ -57,18 +57,18 @@ struct mallocNode {
 
 struct mallocNode mallocNodeHead;
 
-void rtems_malloc_boundary_initialize(void)
+static void rtems_malloc_boundary_initialize(void)
 {
   mallocNodeHead.back = &mallocNodeHead;
   mallocNodeHead.forw = &mallocNodeHead;
 }
 
-uint32_t rtems_malloc_boundary_overhead(void)
+static uint32_t rtems_malloc_boundary_overhead(void)
 {
   return sizeof(struct mallocNode) + SENTINELSIZE;
 }
 
-void rtems_malloc_boundary_at_malloc(
+static void rtems_malloc_boundary_at_malloc(
   void     *pointer,
   size_t    size
 )
@@ -99,9 +99,9 @@ void rtems_malloc_boundary_at_malloc(
   _RTEMS_Unlock_allocator();
 }
 
-void reportMallocError(const char *msg, struct mallocNode *mp);
+static void reportMallocError(const char *msg, struct mallocNode *mp);
 
-void rtems_malloc_boundary_at_free(
+static void rtems_malloc_boundary_at_free(
   void     *pointer
 )
 {
@@ -127,7 +127,7 @@ void rtems_malloc_boundary_at_free(
   _RTEMS_Unlock_allocator();
 }
 
-void rtems_malloc_boundary_at_realloc(
+static void rtems_malloc_boundary_at_realloc(
   void     *pointer,
   size_t    size
 )
@@ -149,7 +149,7 @@ rtems_malloc_boundary_functions_t rtems_malloc_boundary_functions_table = {
 rtems_malloc_boundary_functions_t *rtems_malloc_boundary_helpers = NULL;
 /*   &rtems_malloc_boundary_functions_table; */
 
-void reportMallocError(const char *msg, struct mallocNode *mp)
+static void reportMallocError(const char *msg, struct mallocNode *mp)
 {
     unsigned char *sp = (unsigned char *)mp->memory + mp->size;
     int i, ind = 0;
@@ -178,7 +178,7 @@ void reportMallocError(const char *msg, struct mallocNode *mp)
     printk("\n\n%s\n\n", cbuf);
 }
 
-void checkMallocArena(void)
+static void checkMallocArena(void)
 {
   struct mallocNode *mp;
 

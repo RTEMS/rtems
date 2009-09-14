@@ -33,19 +33,9 @@
  */
 void _Workspace_Handler_initialization(void)
 {
-  uint32_t    memory_available;
-  void       *starting_address;
-  size_t      size;
-
-  starting_address = Configuration.work_space_start;
-  size             = Configuration.work_space_size;
-
-  if ( !starting_address || !_Addresses_Is_aligned( starting_address ) )
-    _Internal_error_Occurred(
-      INTERNAL_ERROR_CORE,
-      true,
-      INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS
-    );
+  uintptr_t memory_available = 0;
+  void *starting_address = Configuration.work_space_start;
+  uintptr_t size = Configuration.work_space_size;
 
   if ( Configuration.do_zero_of_workspace )
    memset( starting_address, 0, size );

@@ -1,3 +1,39 @@
+2009-09-14	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* score/src/wkspace.c: Removed work space area consistency checks.
+	* libblock/include/rtems/ide_part_table.h: Functions are now
+	deprecated.
+	* libcsupport/include/rtems/libcsupport.h, libcsupport/src/calloc.c,
+	libcsupport/src/malloc_boundary.c,
+	libcsupport/src/malloc_initialize.c,
+	libcsupport/src/malloc_report_statistics_plugin.c,
+	libcsupport/src/malloc_statistics_helpers.c,
+	libcsupport/src/malloc_walk.c, libcsupport/src/realloc.c,
+	rtems/inline/rtems/rtems/region.inl: Update for heap API changes.
+
+2009-09-14      Christian Mauderer <christian.mauderer@embedded-brains.de>
+
+	* libcsupport/src/vprintk.c: Fixed warnings. Print nothing in case the
+	pointer to the string is NULL.
+
+2009-09-14	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* score/src/wkspace.c: Removed work space area consistency checks.
+	* libblock/include/rtems/ide_part_table.h: Functions are now
+	deprecated.
+	* libcsupport/include/rtems/libcsupport.h, libcsupport/src/calloc.c,
+	libcsupport/src/malloc_boundary.c,
+	libcsupport/src/malloc_initialize.c,
+	libcsupport/src/malloc_report_statistics_plugin.c,
+	libcsupport/src/malloc_statistics_helpers.c,
+	libcsupport/src/malloc_walk.c, libcsupport/src/realloc.c,
+	rtems/inline/rtems/rtems/region.inl: Update for heap API changes.
+
+2009-09-14      Christian Mauderer <christian.mauderer@embedded-brains.de>
+
+	* libcsupport/src/vprintk.c: Fixed warnings. Print nothing in case the
+	pointer to the string is NULL.
+
 2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/nanosleep.c: Disable EINTR case when POSIX is disabled
