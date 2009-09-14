@@ -262,7 +262,7 @@ static rtems_monitor_command_entry_t capture_cmds[] =
 
 void setup_tasks_to_watch ()
 {
-  int cmd;
+  size_t cmd;
   for (cmd = 0;
        cmd < sizeof (capture_cmds) / sizeof (rtems_monitor_command_entry_t);
        cmd++)

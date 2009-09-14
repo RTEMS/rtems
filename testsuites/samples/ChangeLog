@@ -1,3 +1,7 @@
+2009-09-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* capture/test1.c: Use size_t for sizes.
+
 2009-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* hello/Makefile.am, hello/init.c: Simplify.
