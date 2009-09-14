@@ -1,5 +1,9 @@
 2009-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* configure.ac: Revert accidentally committed lines.
+
+2009-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac, sp65/init.c: Add new test to exercise very
 	simple priority ceiling case that was previously only tested via the
 	POSIX API.
