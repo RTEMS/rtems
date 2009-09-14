@@ -93,11 +93,15 @@ int nanosleep(
     _Timespec_From_ticks( ticks, rmtp );
 
     /*
-     *  If there is time remaining, then we were interrupted by a signal.
+     *  Only when POSIX is enabled, can a sleep be interrupted.
      */
-
-    if ( ticks )
-      rtems_set_errno_and_return_minus_one( EINTR );
+    #if defined(RTEMS_POSIX_API)
+        /*
+         *  If there is time remaining, then we were interrupted by a signal.
+         */
+        if ( ticks )
+          rtems_set_errno_and_return_minus_one( EINTR );
+    #endif
   }
 
   return 0;

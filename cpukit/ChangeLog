@@ -1,3 +1,8 @@
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/nanosleep.c: Disable EINTR case when POSIX is disabled
+	because it cannot happen.
+
 2009-09-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/inline/rtems/score/coremsg.inl: Fix compilation issue when
