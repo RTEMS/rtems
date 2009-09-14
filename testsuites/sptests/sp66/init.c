@@ -11,14 +11,6 @@
 
 #include <tmacros.h>
 
-#if defined(INHERIT_CEILING)
-  #define TEST_NAME                "66"
-  #define TASK_PRIORITY            2
-#else
-  #define TEST_NAME                "65"
-  #define TASK_PRIORITY            1
-#endif
-
 rtems_task Task_1(
   rtems_task_argument arg
 );
@@ -30,7 +22,7 @@ rtems_task Init(
   int                  status, ceiling, old_ceiling;
   rtems_id             Mutex_id, Task_id;
   
-  puts( "\n\n*** TEST " TEST_NAME " ***" );
+  puts( "\n\n*** TEST 66 ***" );
 
   /*
    *  Create binary semaphore (a.k.a. Mutex) with Priority Ceiling
@@ -53,7 +45,7 @@ rtems_task Init(
   
   puts( "Calling rtems_task_create" );
   status = rtems_task_create( rtems_build_name( 'T', 'A', 'S', '1' ), 
-    TASK_PRIORITY,
+    2,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -71,8 +63,7 @@ rtems_task Init(
   status = rtems_semaphore_release( Mutex_id );
   directive_failed( status, "rtems_semaphore_release" );
   
-
-  puts( "*** END OF TEST 65 ***" );
+  puts( "*** END OF TEST 66 ***" );
 
   rtems_test_exit(0);
 }
@@ -97,7 +88,7 @@ rtems_task Task_1(
 
 #define CONFIGURE_MAXIMUM_TASKS         2
 #define CONFIGURE_MAXIMUM_SEMAPHORES    1
-#define CONFIGURE_INIT_TASK_PRIORITY    TASK_PRIORITY
+#define CONFIGURE_INIT_TASK_PRIORITY    2
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

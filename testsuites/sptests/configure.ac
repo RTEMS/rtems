@@ -23,6 +23,9 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
+RTEMS_ENABLE_COVERAGE
+AM_CONDITIONAL([HAS_COVERAGE],[test $RTEMS_HAS_COVERAGE = "yes"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 sp01/Makefile
@@ -91,6 +94,7 @@ sp62/Makefile
 sp63/Makefile
 sp64/Makefile
 sp65/Makefile
+sp66/Makefile
 spchain/Makefile
 spclockget/Makefile
 spcoverage/Makefile
