@@ -1,5 +1,11 @@
 2009-09-14	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
+	* score/src/heapalignupuptr.c, score/src/heapallocatealigned.c:
+	Removed files.
+	* score/Makefile.am: Update.
+
+2009-09-14	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
 	* score/src/wkspace.c: Removed work space area consistency checks.
 	* libblock/include/rtems/ide_part_table.h: Functions are now
 	deprecated.
