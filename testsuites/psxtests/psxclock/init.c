@@ -13,13 +13,23 @@
 #include <time.h>
 #include <errno.h>
 
+void check_enosys(int status);
+
+void check_enosys(int status)
+{
+  if ( (status == -1) && (errno == ENOSYS) ) 
+    return;
+  puts( "ERROR -- did not return ENOSYS as expected" );
+  rtems_test_exit(0);
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
 {
   struct timespec tv;
   struct timespec tr;
-  int             status;
+  int             sc;
   int             priority;
   pthread_t       thread_id;
   time_t          seconds;
@@ -35,18 +45,18 @@ rtems_task Init(
   /* error cases in clock_gettime and clock_settime */
 
   puts( "Init: clock_gettime - EINVAL (NULL timespec)" );
-  status = clock_gettime( CLOCK_REALTIME, NULL );
-  rtems_test_assert( status == -1 );
+  sc = clock_gettime( CLOCK_REALTIME, NULL );
+  rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_gettime - EINVAL (invalid clockid)" );
-  status = clock_gettime( (clockid_t)-1, &tv );
-  rtems_test_assert( status == -1 );
+  sc = clock_gettime( (clockid_t)-1, &tv );
+  rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_settime - EINVAL (invalid clockid)" );
-  status = clock_settime( (clockid_t)-1, &tv );
-  rtems_test_assert( status == -1 );
+  sc = clock_settime( (clockid_t)-1, &tv );
+  rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* way back near the dawn of time :D */
@@ -54,26 +64,26 @@ rtems_task Init(
   tv.tv_nsec = 0;
   printf( ctime( &tv.tv_sec ) );
   puts( "Init: clock_settime - before 1988 EINVAL" );
-  status = clock_settime( CLOCK_REALTIME, &tv );
-  rtems_test_assert( status == -1 );
+  sc = clock_settime( CLOCK_REALTIME, &tv );
+  rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* exercise clock_getres */
 
   puts( "Init: clock_getres - EINVAL (invalid clockid)" );
-  status = clock_getres( (clockid_t) -1, &tv );
-  rtems_test_assert( status == -1 );
+  sc = clock_getres( (clockid_t) -1, &tv );
+  rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_getres - EINVAL (NULL resolution)" );
-  status = clock_getres( CLOCK_REALTIME, NULL );
-  rtems_test_assert( status == -1 );
+  sc = clock_getres( CLOCK_REALTIME, NULL );
+  rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_getres - SUCCESSFUL" );
-  status = clock_getres( CLOCK_REALTIME, &tv );
+  sc = clock_getres( CLOCK_REALTIME, &tv );
   printf( "Init: resolution = sec (%ld), nsec (%ld)\n", tv.tv_sec, tv.tv_nsec );
-  rtems_test_assert( !status );
+  rtems_test_assert( !sc );
 
   /* set the time of day, and print our buffer in multiple ways */
 
@@ -88,8 +98,8 @@ rtems_task Init(
 
   printf( asctime( &tm ) );
   puts( "Init: clock_settime - SUCCESSFUL" );
-  status = clock_settime( CLOCK_REALTIME, &tv );
-  rtems_test_assert( !status );
+  sc = clock_settime( CLOCK_REALTIME, &tv );
+  rtems_test_assert( !sc );
 
   printf( asctime( &tm ) );
   printf( ctime( &tv.tv_sec ) );
@@ -100,12 +110,12 @@ rtems_task Init(
   rtems_test_assert( !remaining );
   
   /* print new times to make sure it has changed and we can get the realtime */
-  status = clock_gettime( CLOCK_PROCESS_CPUTIME, &tv );
-  rtems_test_assert( !status );
+  sc = clock_gettime( CLOCK_PROCESS_CPUTIME, &tv );
+  rtems_test_assert( !sc );
   printf("Time since boot: (%d, %d)\n", tv.tv_sec,tv.tv_nsec );
 
-  status = clock_gettime( CLOCK_REALTIME, &tv );
-  rtems_test_assert( !status );
+  sc = clock_gettime( CLOCK_REALTIME, &tv );
+  rtems_test_assert( !sc );
 
   printf( ctime( &tv.tv_sec ) );
 
@@ -126,23 +136,23 @@ rtems_task Init(
 
   empty_line();
   puts( "Init: nanosleep - EINVAL (NULL time)" );
-  status = nanosleep ( NULL, &tr );
-  rtems_test_assert( status == -1 );
+  sc = nanosleep ( NULL, &tr );
+  rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   tv.tv_sec = 0;
   tv.tv_nsec = TOD_NANOSECONDS_PER_SECOND * 2;
   puts( "Init: nanosleep - EINVAL (too many nanoseconds)" );
-  status = nanosleep ( &tv, &tr );
-  rtems_test_assert( status == -1 );
+  sc = nanosleep ( &tv, &tr );
+  rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* this is actually a small delay or yield */
   tv.tv_sec = -1;
   tv.tv_nsec = 0;
   puts( "Init: nanosleep - negative seconds small delay " );
-  status = nanosleep ( &tv, &tr );
-  rtems_test_assert( status == -1 );
+  sc = nanosleep ( &tv, &tr );
+  rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* use nanosleep to yield */
@@ -151,14 +161,14 @@ rtems_task Init(
   tv.tv_nsec = 0;
 
   puts( "Init: nanosleep - yield with remaining" );
-  status = nanosleep ( &tv, &tr );
-  rtems_test_assert( !status );
+  sc = nanosleep ( &tv, &tr );
+  rtems_test_assert( !sc );
   rtems_test_assert( !tr.tv_sec );
   rtems_test_assert( !tr.tv_nsec );
 
   puts( "Init: nanosleep - yield with NULL time remaining" );
-  status = nanosleep ( &tv, NULL );
-  rtems_test_assert( !status );
+  sc = nanosleep ( &tv, NULL );
+  rtems_test_assert( !sc );
   rtems_test_assert( !tr.tv_sec );
   rtems_test_assert( !tr.tv_nsec );
 
@@ -168,12 +178,12 @@ rtems_task Init(
   tv.tv_nsec = 500000;
 
   puts( "Init: nanosleep - 1.05 seconds" );
-  status = nanosleep ( &tv, &tr );
-  rtems_test_assert( !status );
+  sc = nanosleep ( &tv, &tr );
+  rtems_test_assert( !sc );
 
   /* print the current real time again */
-  status = clock_gettime( CLOCK_REALTIME, &tv );
-  rtems_test_assert( !status );
+  sc = clock_gettime( CLOCK_REALTIME, &tv );
+  rtems_test_assert( !sc );
   printf( ctime( &tv.tv_sec ) );
 
   /* check the time remaining */
@@ -186,9 +196,37 @@ rtems_task Init(
   rtems_test_assert( useconds < 1350000 );
   
   /* print the current real time again */
-  status = clock_gettime( CLOCK_REALTIME, &tv );
-  rtems_test_assert( !status );
+  sc = clock_gettime( CLOCK_REALTIME, &tv );
+  rtems_test_assert( !sc );
   printf( ctime( &tv.tv_sec ) );
+
+  puts( "" );
+  puts( "clock_gettime - CLOCK_THREAD_CPUTIME -- ENOSYS" );
+  #if defined(_POSIX_THREAD_CPUTIME)
+    {
+      struct timespec tp;
+      sc = clock_gettime( CLOCK_THREAD_CPUTIME, &tp );
+      check_enosys( sc );
+    }
+  #endif
+
+  puts( "clock_settime - CLOCK_PROCESS_CPUTIME -- ENOSYS" );
+  #if defined(_POSIX_CPUTIME)
+    {
+      struct timespec tp;
+      sc = clock_settime( CLOCK_PROCESS_CPUTIME, &tp );
+      check_enosys( sc );
+    }
+  #endif
+
+  puts( "clock_settime - CLOCK_THREAD_CPUTIME -- ENOSYS" );
+  #if defined(_POSIX_THREAD_CPUTIME)
+    {
+      struct timespec tp;
+      sc = clock_settime( CLOCK_THREAD_CPUTIME, &tp );
+      check_enosys( sc );
+    }
+  #endif
 
   puts( "*** END OF POSIX CLOCK TEST ***" );
   rtems_test_exit(0);

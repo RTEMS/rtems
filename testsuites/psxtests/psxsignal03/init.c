@@ -9,17 +9,37 @@
  *  $Id$
  */
 
-#if defined(USE_USER_SIGNALS)
+#if defined(USE_USER_SIGNALS_PROCESS)
   #define TEST_NAME                "03"
-  #define TEST_STRING              "User Signals"
+  #define TEST_STRING              "User Signals to Process"
   #define SIGNAL_ONE               SIGUSR1
   #define SIGNAL_TWO               SIGUSR2
+  #define SEND_SIGNAL(_sig)        kill( getpid(), _sig )
+  #define TO_PROCESS
 
-#elif defined(USE_REAL_TIME_SIGNALS)
+#elif defined(USE_REAL_TIME_SIGNALS_PROCESS)
   #define TEST_NAME                "04"
-  #define TEST_STRING              "Real-Time Signals"
+  #define TEST_STRING              "Real-Time Signals to Process"
   #define SIGNAL_ONE               SIGRTMIN
   #define SIGNAL_TWO               SIGRTMAX
+  #define SEND_SIGNAL(_sig)        kill( getpid(), _sig )
+  #define TO_PROCESS
+
+#elif defined(USE_USER_SIGNALS_THREAD)
+  #define TEST_NAME                "05"
+  #define TEST_STRING              "User Signals to Thread"
+  #define SIGNAL_ONE               SIGUSR1
+  #define SIGNAL_TWO               SIGUSR2
+  #define SEND_SIGNAL(_sig)        pthread_kill( id, _sig )
+  #define TO_THREAD
+
+#elif defined(USE_REAL_TIME_SIGNALS_THREAD)
+  #define TEST_NAME                "05"
+  #define TEST_STRING              "Real-Time Signals to Thread"
+  #define SIGNAL_ONE               SIGRTMIN
+  #define SIGNAL_TWO               SIGRTMAX
+  #define SEND_SIGNAL(_sig)        pthread_kill( id, _sig )
+  #define TO_THREAD
 
 #else
   #error "Test Mode not defined"
@@ -154,18 +174,20 @@ void *POSIX_Init(
 
   printf( "Init - sending %s - deliver to one thread\n",
           signal_name(SIGNAL_TWO));
-  sc =  kill( getpid(), SIGNAL_TWO );
+  sc =  SEND_SIGNAL( SIGNAL_TWO );
   assert( !sc );
 
   printf( "Init - sending %s - deliver to other thread\n",
           signal_name(SIGNAL_TWO));
-  sc =  kill( getpid(), SIGNAL_TWO );
+  sc =  SEND_SIGNAL( SIGNAL_TWO );
   assert( !sc );
 
-  printf( "Init - sending %s - expect EAGAIN\n", signal_name(SIGNAL_TWO) );
-  sc =  kill( getpid(), SIGNAL_TWO );
-  assert( sc == -1 );
-  assert( errno == EAGAIN );
+  #if defined(TO_PROCESS)
+    printf( "Init - sending %s - expect EAGAIN\n", signal_name(SIGNAL_TWO) );
+    sc =  SEND_SIGNAL( SIGNAL_TWO );
+    assert( sc == -1 );
+    assert( errno == EAGAIN );
+  #endif
 
   puts( "Init - sleep - let thread report if it unblocked - OK" );
   usleep(500000);

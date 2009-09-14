@@ -82,33 +82,6 @@ void *POSIX_Init(
   sc = clock_setenable_attr( 0, 0 );
   check_enosys( sc );
 
-  puts( "clock_gettime - CLOCK_THREAD_CPUTIME -- ENOSYS" );
-  #if defined(_POSIX_THREAD_CPUTIME)
-    {
-      struct timespec tp;
-      sc = clock_gettime( CLOCK_THREAD_CPUTIME, &tp );
-      check_enosys( sc );
-    }
-  #endif
-
-  puts( "clock_settime - CLOCK_PROCESS_CPUTIME -- ENOSYS" );
-  #if defined(_POSIX_CPUTIME)
-    {
-      struct timespec tp;
-      sc = clock_settime( CLOCK_PROCESS_CPUTIME, &tp );
-      check_enosys( sc );
-    }
-  #endif
-
-  puts( "clock_settime - CLOCK_THREAD_CPUTIME -- ENOSYS" );
-  #if defined(_POSIX_THREAD_CPUTIME)
-    {
-      struct timespec tp;
-      sc = clock_settime( CLOCK_THREAD_CPUTIME, &tp );
-      check_enosys( sc );
-    }
-  #endif
-
   puts( "devctl -- ENOSYS" );
   sc = devctl( 0, NULL, 0, NULL );
   check_enosys( sc );

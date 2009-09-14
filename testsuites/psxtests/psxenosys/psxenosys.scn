@@ -10,9 +10,6 @@ aio_fsync -- ENOSYS
 clock_getcpuclockid -- ENOSYS
 clock_getenable_attr -- ENOSYS
 clock_setenable_attr -- ENOSYS
-clock_gettime - CLOCK_THREAD_CPUTIME -- ENOSYS
-clock_settime - CLOCK_PROCESS_CPUTIME -- ENOSYS
-clock_settime - CLOCK_THREAD_CPUTIME -- ENOSYS
 devctl -- ENOSYS
 execl -- ENOSYS
 execle -- ENOSYS

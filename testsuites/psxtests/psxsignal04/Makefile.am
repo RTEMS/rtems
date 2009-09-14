@@ -18,7 +18,7 @@ psxsignal04_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
-AM_CPPFLAGS += -DUSE_REAL_TIME_SIGNALS
+AM_CPPFLAGS += -DUSE_REAL_TIME_SIGNALS_PROCESS
 
 LINK_OBJS = $(psxsignal04_OBJECTS) $(psxsignal04_LDADD)
 LINK_LIBS = $(psxsignal04_LDLIBS)

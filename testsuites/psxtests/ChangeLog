@@ -1,5 +1,12 @@
 2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxclock/init.c, psxclock/psxclock.scn, psxenosys/init.c,
+	psxenosys/psxenosys.scn, psxsignal03/Makefile.am, psxsignal03/init.c,
+	psxsignal04/Makefile.am: Move test cases which needed to be executed
+	when POSIX is disabled to psxclock so they will be.
+
+2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, psx01/init.c, psx01/psx01.scn: Add new
 	test to exercise clock and delay services enabled when POSIX threads
 	are disabled. This is split from psx01. POSIX test suite now enabled
