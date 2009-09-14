@@ -38,9 +38,9 @@ may be based on either an architectural specification or on maintaining
 compatibility with a popular processor.  Recent microprocessor families
 such as the SPARC or PowerPC are based on an architectural specification
 which is independent or any particular CPU model or implementation.
-Older families such as the M68xxx and the iX86 evolved as the manufacturer
-strived to produce higher performance processor models which maintained
-binary compatibility with older models.
+Older families such as the Motorola 68000 and the Intel x86 evolved as the
+manufacturer strived to produce higher performance processor models which
+maintained binary compatibility with older models.
 
 RTEMS takes advantage of the similarity of the various models within a
 CPU family.  Although the models do vary in significant ways, the high

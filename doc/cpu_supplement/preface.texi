@@ -33,7 +33,7 @@ which occur when a CPU core implementation is combined with
 a set of peripherals to form a system on chip.  For example,
 there are many ARM CPU models from numerous semiconductor
 vendors and a wide variety of peripherals.  But at the
-ISA level, they share a common compaability.
+ISA level, they share a common compatibility.
 
 RTEMS depends upon this core similarity across the CPU models
 and leverages that to minimize the source code that is specific

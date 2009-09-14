@@ -1,3 +1,15 @@
+2009-09-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpu_supplement/arm.t: Update.
+	* cpu_supplement/preface.texi: Typo.
+	* cpu_supplement/general.t: Expanded abbreviation.
+
+2009-09-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpu_supplement/arm.t: Update.
+	* cpu_supplement/preface.texi: Typo.
+	* cpu_supplement/general.t: Expanded abbreviation.
+
 2009-08-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* user/conf.t: Change stack allocator signature.
