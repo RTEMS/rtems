@@ -1,3 +1,12 @@
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1441/cpukit
+	* libcsupport/src/tcgetprgrp.c: Remove.
+	* libcsupport/src/tcgetpgrp.c: New (Renamed from 
+	  libcsupport/src/tcgetprgrp.c).
+	* libcsupport/Makefile.am: Add libcsupport/src/tcgetpgrp.c.
+	  Remove libcsupport/src/tcgetprgrp.c.
+
 2009-06-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/rtems/assoc.h,
