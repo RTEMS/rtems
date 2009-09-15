@@ -15,18 +15,12 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE_TCGETPGRP)
 
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <termios.h>
-/* #include <sys/ioctl.h> */
+#include <unistd.h>
 
-#include <rtems/libio.h>
-
-pid_t tcgetprgrp(int fd)
+pid_t tcgetpgrp(int fd __attribute__((unused)))
 {
   return getpid();
 }
