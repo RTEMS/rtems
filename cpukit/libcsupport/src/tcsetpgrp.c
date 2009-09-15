@@ -26,7 +26,9 @@
 
 #include <rtems/libio.h>
 
-int tcsetprgrp(int fd, pid_t pid)
+int tcsetprgrp(
+  int fd __attribute__((unused)),
+  pid_t pid __attribute__((unused)) )
 {
   return 0;
 }

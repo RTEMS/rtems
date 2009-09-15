@@ -26,7 +26,9 @@
 
 #include <rtems/libio.h>
 
-int tcsendbreak ( int fd, int duration )
+int tcsendbreak (
+  int fd __attribute__((unused)),
+  int duration __attribute__((unused)) )
 {
   return 0;
 }

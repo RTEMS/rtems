@@ -17,7 +17,7 @@
 #include <rtems/bspIo.h>
 
 int printk_plugin( 
-  void *ignored,
+  void *ignored __attribute__((unused)),
   const char *format,
   ...
 )

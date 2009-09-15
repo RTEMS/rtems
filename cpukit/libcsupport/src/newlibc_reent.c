@@ -53,7 +53,7 @@ extern struct _reent * const _global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
  *  -- ptorre 9/30/03
  */
 bool newlib_create_hook(
-  rtems_tcb *current_task,
+  rtems_tcb *current_task __attribute__((unused)),
   rtems_tcb *creating_task
 )
 {

@@ -128,8 +128,8 @@ static void rtems_malloc_boundary_at_free(
 }
 
 static void rtems_malloc_boundary_at_realloc(
-  void     *pointer,
-  size_t    size
+  void     *pointer __attribute__((unused)),
+  size_t    size __attribute__((unused))
 )
 {
   /* this needs to be implemented */

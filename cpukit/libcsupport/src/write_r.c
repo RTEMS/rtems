@@ -29,7 +29,7 @@
 #include <reent.h>
 
 _ssize_t _write_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   int            fd,
   const void    *buf,
   size_t         nbytes

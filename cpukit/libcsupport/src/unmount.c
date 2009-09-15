@@ -64,9 +64,9 @@ bool rtems_filesystem_nodes_equal(
  */
 
 bool file_systems_below_this_mountpoint(
-  const char                            *path,
+  const char                            *path __attribute__((unused)),
   rtems_filesystem_location_info_t      *fs_root_loc,
-  rtems_filesystem_mount_table_entry_t  *fs_to_unmount
+  rtems_filesystem_mount_table_entry_t  *fs_to_unmount __attribute__((unused))
 )
 {
   rtems_chain_node                     *the_node;

@@ -177,7 +177,7 @@ int fcntl(
 #include <reent.h>
 
 int _fcntl_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   int fd,
   int cmd,
   int arg

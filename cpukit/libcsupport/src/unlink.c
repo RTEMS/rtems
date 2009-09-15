@@ -100,7 +100,7 @@ int unlink(
 #include <reent.h>
 
 int _unlink_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   const char    *path
 )
 {

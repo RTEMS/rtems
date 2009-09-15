@@ -26,7 +26,9 @@
 
 #include <rtems/libio.h>
 
-int tcflow (int fd, int action)
+int tcflow (
+  int fd __attribute__((unused)), 
+  int action __attribute__((unused)))
 {
   return 0;
 }

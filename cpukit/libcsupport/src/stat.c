@@ -95,7 +95,7 @@ int _STAT_NAME(
 #include <reent.h>
 
 int _STAT_R_NAME(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   const char    *path,
   struct stat   *buf
 )

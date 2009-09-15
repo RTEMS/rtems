@@ -26,7 +26,9 @@
 
 #include <rtems/libio.h>
 
-int tcflush (int fd, int queue)
+int tcflush (
+  int fd __attribute__((unused)),
+  int queue __attribute__((unused)) )
 {
   return 0;
 }
