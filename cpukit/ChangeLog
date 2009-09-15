@@ -1,5 +1,10 @@
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/libio_init.c: Reflect rtems_libio_number_iops
+	being uint32_t.
+
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/libio_init.c: Remove extern uint32_t
 	rtems_libio_number_iops.
 
