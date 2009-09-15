@@ -37,7 +37,6 @@
  *  File descriptor Table Information
  */
 
-extern uint32_t    rtems_libio_number_iops;
 rtems_id           rtems_libio_semaphore;
 rtems_libio_t     *rtems_libio_iops;
 rtems_libio_t     *rtems_libio_iop_freelist;
