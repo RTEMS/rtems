@@ -220,7 +220,7 @@ int rtems_libio_is_open_files_in_fs(
 {
   rtems_libio_t     *iop;
   int                result = 0;
-  int                i;
+  uint32_t           i;
 
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
@@ -264,7 +264,7 @@ int rtems_libio_is_file_open(
 {
   rtems_libio_t     *iop;
   int                result=0;
-  int                i;
+  uint32_t           i;
 
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
