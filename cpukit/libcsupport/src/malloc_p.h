@@ -25,15 +25,6 @@
 #include <inttypes.h>
 #include <rtems/chain.h>
 
-#ifndef HAVE_UINTMAX_T
-  /* Fall back to unsigned long if uintmax_t is not available */
-  #define unsigned long uintmax_t
-
-  #ifndef PRIuMAX
-    #define PRIuMAX		"lu"
-  #endif
-#endif
-
 /*
  * Basic management data
  */
