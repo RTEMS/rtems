@@ -1,5 +1,20 @@
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/__brk.c, libcsupport/src/__gettod.c,
+	libcsupport/src/__sbrk.c, libcsupport/src/__times.c,
+	libcsupport/src/_calloc_r.c, libcsupport/src/_free_r.c,
+	libcsupport/src/_malloc_r.c, libcsupport/src/_realloc_r.c
+	libcsupport/src/_rename_r.c, libcsupport/src/assocnamebad.c
+	libcsupport/src/close.c, libcsupport/src/envlock.c
+	libcsupport/src/fstat.c, libcsupport/src/getgroups.c
+	libcsupport/src/getpid.c, libcsupport/src/isatty_r.c
+	libcsupport/src/link.c, libcsupport/src/lseek.c
+	libcsupport/src/open.c, libcsupport/src/read.c
+	libcsupport/src/setpgid.c: Add __attribute__((unused)) to function
+	arguments.
+
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1441/cpukit
 	* libcsupport/src/tcgetprgrp.c: Remove.
 	* libcsupport/src/tcgetpgrp.c: New (Renamed from 
