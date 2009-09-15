@@ -34,4 +34,6 @@ echo "#endif /* __BSP_OPTIONS_H */"                   >>$tmp/config.h
   RTEMS_PROJECT_ROOT
 
   RTEMS_CHECK_MULTIPROCESSING
+
+  RTEMS_BSP_BOOTCARD_OPTIONS
 ])
