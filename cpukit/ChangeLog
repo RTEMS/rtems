@@ -1,5 +1,10 @@
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/libio_init.c: Remove extern uint32_t
+	rtems_libio_number_iops.
+
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/fcntl.c, libcsupport/src/malloc_boundary.c,
 	libcsupport/src/newlibc_reent.c, libcsupport/src/printk_plugin.c,
 	libcsupport/src/stat.c, libcsupport/src/tcflow.c,
