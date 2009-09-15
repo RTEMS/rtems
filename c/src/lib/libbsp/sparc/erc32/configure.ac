@@ -45,7 +45,6 @@ RTEMS_BSPOPTS_HELP([ENABLE_SIS_QUIRKS],
  initialization not used on real ERC32 hardware.])
 
 RTEMS_BSP_CLEANUP_OPTIONS(0,0)
-RTEMS_BSP_BOOTCARD_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

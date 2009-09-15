@@ -1,4 +1,8 @@
-2009-08-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
+
+ 2009-08-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* misc/bspidle.c: Include bsp.h and fix prototype.
 

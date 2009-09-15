@@ -1,4 +1,8 @@
-2009-09-11	Till Straumann <strauman@slac.stanford.edu>
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
+
+ 2009-09-11	Till Straumann <strauman@slac.stanford.edu>
 
 	* network/gdb-6.8-psim-hw_ethtap.diff: Added gdb patch
 	which implements the NIC hardware emulation.

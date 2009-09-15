@@ -25,7 +25,6 @@ then exit.  In this case, the program returns control to the simulator command l
 before the program has even queued the output to the uart.  Thus sis has no chance
 of getting the data out.])
 
-RTEMS_BSP_BOOTCARD_OPTIONS
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
 # Explicitly list all Makefiles here

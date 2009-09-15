@@ -1,4 +1,8 @@
-2009-09-09	Till Straumann <strauman@slac.stanford.edu>
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
+
+ 2009-09-09	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c: Added dummy implementation of firmware
 	syscalls for use with QEMU. Dummy handler is installed if no

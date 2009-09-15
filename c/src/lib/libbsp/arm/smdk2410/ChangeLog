@@ -1,4 +1,8 @@
-2009-08-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
+
+ 2009-08-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add Skyeye reset device.
 	* startup/bspreset.c: New file.

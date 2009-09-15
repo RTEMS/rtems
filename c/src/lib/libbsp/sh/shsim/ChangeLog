@@ -1,4 +1,8 @@
-2009-08-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
+
+ 2009-08-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h: Mark as a small memory BSP.
 

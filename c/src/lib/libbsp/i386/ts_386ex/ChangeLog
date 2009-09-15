@@ -1,4 +1,8 @@
-2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
+
+ 2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/setvec.c: Removed.
 

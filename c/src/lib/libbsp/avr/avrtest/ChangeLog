@@ -1,4 +1,8 @@
-2009-07-23	Josh Switnicki <josh.switnicki@utoronto.ca>
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
+
+ 2009-07-23	Josh Switnicki <josh.switnicki@utoronto.ca>
 
 	* README: Included information about simulavrxx
 

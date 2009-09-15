@@ -41,7 +41,6 @@ RTEMS_BSPOPTS_SET([mpc8240],[*],[])
 RTEMS_BSPOPTS_HELP([mpc8240],
 [Defined for boards with MPC8240 -- undefined for others])
 
-RTEMS_BSP_BOOTCARD_OPTIONS
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
 # Explicitly list all Makefiles here

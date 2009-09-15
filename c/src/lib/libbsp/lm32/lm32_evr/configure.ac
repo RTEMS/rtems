@@ -28,7 +28,6 @@ RTEMS_BSPOPTS_HELP([ON_SIMULATOR],
  to execute the RTEMS test suites.  It also enables a special exit and
  alternate printk support.])
 
-RTEMS_BSP_BOOTCARD_OPTIONS
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
 # Explicitly list all Makefiles here

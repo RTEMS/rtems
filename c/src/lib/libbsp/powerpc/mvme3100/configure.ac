@@ -35,7 +35,6 @@ RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
  of PowerPC 603e revisions and emulator versions.
  The BSP actually contains the call that enables this.])
 
-RTEMS_BSP_BOOTCARD_OPTIONS
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
 # Explicitly list all Makefiles here

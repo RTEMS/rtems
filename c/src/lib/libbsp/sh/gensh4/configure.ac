@@ -32,7 +32,6 @@ AC_DEFINE_UNQUOTED(
   [$START_HW_INIT],
   [Whether to call early_hw_init from start.S])
 
-RTEMS_BSP_BOOTCARD_OPTIONS
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
 # Explicitly list all Makefiles here

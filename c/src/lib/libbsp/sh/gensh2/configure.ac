@@ -31,7 +31,6 @@ RTEMS_BSPOPTS_SET([STANDALONE_EVB],[*],[])
 RTEMS_BSPOPTS_HELP([STANDALONE_EVB],
 [If defined, compiles code to jump-start from FLASH, without a monitor])
 
-RTEMS_BSP_BOOTCARD_OPTIONS
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
 # Explicitly list all Makefiles here

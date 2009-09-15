@@ -28,7 +28,6 @@ RTEMS_BSPOPTS_SET([M5484FIREENGINE],[m5484FireEngine],[1])
 RTEMS_BSPOPTS_HELP([M5484FIREENGINE],
 [If defined, use custom settings for the m5484FireEngine BSP.])
 
-RTEMS_BSP_BOOTCARD_OPTIONS
 RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
 
 # Explicitly list all Makefiles here

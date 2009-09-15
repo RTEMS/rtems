@@ -34,7 +34,6 @@ RTEMS_BSPOPTS_HELP([ENABLE_UMON_CONSOLE],
 [If defined, enable use of the MicroMonitor console device.])
 AM_CONDITIONAL(ENABLE_LCD,test "$ENABLE_UMON_CONSOLE" = "1")
 
-RTEMS_BSP_BOOTCARD_OPTIONS
 RTEMS_BSP_CLEANUP_OPTIONS(1, 1)
 
 # Explicitly list all Makefiles here

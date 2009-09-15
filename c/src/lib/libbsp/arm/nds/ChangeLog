@@ -1,4 +1,8 @@
-2009-08-21	Roxana Leontie <roxana.leontie@gmail.com>
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
+
+ 2009-08-21	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* nds/fb/fb.c: took off get_screen_info() and set_screen_info() extern
 	references
