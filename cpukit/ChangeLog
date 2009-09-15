@@ -1,5 +1,10 @@
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/utils-cp.c: Include <utime.h> instead of
+	<sys/utime.h> for better POSIX compilance.
+
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/malloc_p.h: Rely upon uintmax_t and PRIuMAX being
 	provided.
 
