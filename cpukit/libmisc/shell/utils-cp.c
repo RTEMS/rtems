@@ -50,7 +50,7 @@ __RCSID("$NetBSD: utils.c,v 1.29 2005/10/15 18:22:18 christos Exp $");
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <sys/utime.h>
+#include <utime.h>
 
 #include <err.h>
 #include <errno.h>
