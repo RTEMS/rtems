@@ -1,3 +1,7 @@
+2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/getpwent.c: Ansify.
+
 2009-09-14	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* score/src/heapalignupuptr.c, score/src/heapallocatealigned.c:

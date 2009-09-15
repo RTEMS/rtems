@@ -259,7 +259,7 @@ struct passwd *getpwuid(
   return p;
 }
 
-struct passwd *getpwent()
+struct passwd *getpwent(void)
 {
   if (passwd_fp == NULL)
     return NULL;
@@ -418,7 +418,7 @@ struct group *getgrgid(
   return p;
 }
 
-struct group *getgrent()
+struct group *getgrent(void)
 {
   if (group_fp == NULL)
     return NULL;
