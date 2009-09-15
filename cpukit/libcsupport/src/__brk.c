@@ -23,7 +23,7 @@
 #include <errno.h>
 
 int __brk(
-  const void *endds
+  const void *endds __attribute__((unused))
 )
 {
   errno = EINVAL;

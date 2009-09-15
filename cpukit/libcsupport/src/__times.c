@@ -107,7 +107,7 @@ clock_t times(
 #include <reent.h>
 
 clock_t _times_r(
-   struct _reent *ptr,
+   struct _reent *ptr __attribute__((unused)),
    struct tms  *ptms
 )
 {

@@ -23,7 +23,7 @@
 #include <errno.h>
 
 void * __sbrk(
-  int incr
+  int incr __attribute__((unused))
 )
 {
   errno = EINVAL;

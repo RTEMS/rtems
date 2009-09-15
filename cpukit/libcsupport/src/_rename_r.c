@@ -28,7 +28,7 @@
 #include <sys/stat.h>
 
 int _rename_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   const char    *old,
   const char    *new
 )

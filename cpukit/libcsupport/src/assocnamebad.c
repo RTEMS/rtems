@@ -22,7 +22,11 @@
 
 const char *
 rtems_assoc_name_bad(
+#ifdef RTEMS_DEBUG
     uint32_t   bad_value
+#else
+    uint32_t   bad_value __attribute((unused))
+#endif
 )
 {
 #ifdef RTEMS_DEBUG

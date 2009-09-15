@@ -21,8 +21,8 @@
  */
 
 int getgroups(
-  int    gidsetsize,
-  gid_t  grouplist[]
+  int    gidsetsize __attribute__((unused)),
+  gid_t  grouplist[] __attribute__((unused))
 )
 {
   return 0;  /* no supplemental group ids */

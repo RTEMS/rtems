@@ -49,7 +49,7 @@ int close(
 #include <reent.h>
 
 int _close_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   int            fd
 )
 {

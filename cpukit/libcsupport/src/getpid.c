@@ -36,7 +36,7 @@ pid_t getpid( void )
 #include <reent.h>
 
 pid_t _getpid_r(
-  struct _reent *ptr
+  struct _reent *ptr __attribute__((unused))
 )
 {
   return getpid();

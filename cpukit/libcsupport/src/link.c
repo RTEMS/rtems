@@ -95,7 +95,7 @@ int link(
 #include <reent.h>
 
 int _link_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   const char    *existing,
   const char    *new
 )

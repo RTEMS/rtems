@@ -21,8 +21,8 @@
  */
 
 int setpgid(
-  pid_t  pid,
-  pid_t  pgid
+  pid_t  pid __attribute__((unused)),
+  pid_t  pgid __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

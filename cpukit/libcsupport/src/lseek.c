@@ -90,7 +90,7 @@ off_t lseek(
 #include <reent.h>
 
 off_t _lseek_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   int            fd,
   off_t          offset,
   int            whence

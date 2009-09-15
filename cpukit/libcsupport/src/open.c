@@ -213,7 +213,7 @@ done:
 #include <reent.h>
 
 int _open_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   const char    *buf,
   int            flags,
   int            mode

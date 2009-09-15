@@ -60,7 +60,7 @@ ssize_t read(
 #include <reent.h>
 
 ssize_t _read_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   int            fd,
   void          *buf,
   size_t         nbytes

@@ -70,7 +70,7 @@ int fstat(
 #include <reent.h>
 
 int _fstat_r(
-  struct _reent *ptr,
+  struct _reent *ptr __attribute__((unused)),
   int            fd,
   struct stat   *buf
 )

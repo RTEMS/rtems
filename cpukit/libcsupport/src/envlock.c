@@ -95,13 +95,13 @@ __env_unlock(struct _reent *r)
 #include <rtems/libio_.h>
 
 void
-__env_lock(struct _reent *r)
+__env_lock(struct _reent *r __attribute__((unused)))
 {
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 }
 
 void
-__env_unlock(struct _reent *r)
+__env_unlock(struct _reent *r __attribute__((unused)))
 {
   rtems_semaphore_release( rtems_libio_semaphore );
 }
