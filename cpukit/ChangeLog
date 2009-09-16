@@ -1,3 +1,8 @@
+2009-09-16	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/userextaddapiset.c: Disable code that is only used when
+	ITRON or POSIX is enabled.
+
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/shell/utils-cp.c: Include <utime.h> instead of
