@@ -1,3 +1,10 @@
+2009-09-15	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1344/bsps:
+	* clock/ckinit.c: Fix more bugs (applied PR1344/attachment 702):
+	TSC handler was used when 8254 was requested and vice versa.
+	Also, nanosecond handler was never installed to RTEMS clock.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.
