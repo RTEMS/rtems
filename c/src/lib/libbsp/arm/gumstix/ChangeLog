@@ -1,3 +1,8 @@
+2009-09-16	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* configure.ac, fb/fb.c, include/bsp.h: updates made for porting to
+	Nano-X and make testing easyer
+
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.

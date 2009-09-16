@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <sys/types.h>
+#include <pthread.h>
 
 #include <pxa255.h>
 #include <bsp.h>
@@ -21,12 +22,14 @@
 #include <rtems/framebuffer.h>
 #include <rtems.h>
 
-#define SCREEN_WIDTH 480
-#define SCREEN_HEIGHT 272
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
 #define BPP 16
 #define LCD_DMA_POINTER (0xa0000000 + 62*(1<<20) + 0x1000)
 #define LCD_BUFFER_SIZE (SCREEN_WIDTH*SCREEN_HEIGHT*2)
 
+/* mutex attribure */
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static struct fb_var_screeninfo fb_var =
   {
@@ -41,8 +44,21 @@ static struct fb_fix_screeninfo fb_fix =
     .smem_len = LCD_BUFFER_SIZE, 
     .type = FB_TYPE_PACKED_PIXELS, 
     .visual = FB_VISUAL_TRUECOLOR,
-    .line_length = 80
+    .line_length = SCREEN_WIDTH * (BPP/8)
   };
+
+static uint16_t red16[] = {
+   0x0000, 0x0000, 0x0000, 0x0000, 0xaaaa, 0xaaaa, 0xaaaa, 0xaaaa,
+   0x5555, 0x5555, 0x5555, 0x5555, 0xffff, 0xffff, 0xffff, 0xffff
+};
+static uint16_t green16[] = {
+   0x0000, 0x0000, 0xaaaa, 0xaaaa, 0x0000, 0x0000, 0x5555, 0xaaaa,
+   0x5555, 0x5555, 0xffff, 0xffff, 0x5555, 0x5555, 0xffff, 0xffff
+};
+static uint16_t blue16[] = {
+   0x0000, 0xaaaa, 0x0000, 0xaaaa, 0x0000, 0xaaaa, 0x0000, 0xaaaa,
+   0x5555, 0xffff, 0x5555, 0xffff, 0x5555, 0xffff, 0x5555, 0xffff
+};
 
 static void enable_fbskyeye(void)
 {
@@ -100,10 +116,17 @@ frame_buffer_open( rtems_device_major_number major,
 	       rtems_device_minor_number minor,
 	       void                      *arg)
 {
-  /*  rtems_status_code status; */
-  printk( "FBSKYEYE open called.\n" );
-  enable_fbskyeye();
-  return RTEMS_SUCCESSFUL;
+  if (pthread_mutex_trylock(&mutex)== 0){
+      /* restore previous state.  for VGA this means return to text mode.
+       * leave out if graphics hardware has been initialized in
+       * frame_buffer_initialize() 
+       */ 
+     printk( "FBSKYEYE open called.\n" );
+     enable_fbskyeye();
+     return RTEMS_SUCCESSFUL;
+  }
+
+  return RTEMS_UNSATISFIED;
 }
 
 
@@ -112,9 +135,16 @@ frame_buffer_close(rtems_device_major_number major,
 	       rtems_device_minor_number minor,
 	       void                      *arg)
 {
-  printk( "fbskyeye close called.\n" );
-  disable_fbskyeye();
-  return RTEMS_SUCCESSFUL;
+  if (pthread_mutex_unlock(&mutex) == 0){
+    /* restore previous state.  for VGA this means return to text mode.
+     * leave out if graphics hardware has been initialized in
+     * frame_buffer_initialize() */
+    printk( "fbskyeye close called.\n" );
+    disable_fbskyeye();
+    return RTEMS_SUCCESSFUL;
+  }
+
+  return RTEMS_UNSATISFIED;
 }
 
 rtems_device_driver
@@ -123,8 +153,8 @@ frame_buffer_read( rtems_device_major_number major,
 	       void                      *arg)
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  printk( "FBSKYEYE read called.\n" );
-  rw_args->bytes_moved = 0;
+  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
+  memcpy(rw_args->buffer, (const void *) (fb_fix.smem_start + rw_args->offset), rw_args->bytes_moved);
   return RTEMS_SUCCESSFUL;
 }
 
@@ -134,9 +164,39 @@ frame_buffer_write( rtems_device_major_number major,
 		void                    * arg)
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  printk( "FBSKYEY write called.\n" );
-  rw_args->bytes_moved = 0;
-  return RTEMS_SUCCESSFUL;
+  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
+  memcpy( (void *) (fb_fix.smem_start + rw_args->offset), rw_args->buffer, rw_args->bytes_moved);
+  return RTEMS_SUCCESSFUL; 
+}
+
+static int get_palette( struct fb_cmap *cmap )
+{
+  uint32_t i;
+
+  if ( cmap->start + cmap->len >= 16 )
+    return 1;
+
+  for( i = 0; i < cmap->len; i++ ) {
+    cmap->red[ cmap->start + i ]   = red16[ cmap->start + i ];
+    cmap->green[ cmap->start + i ] = green16[ cmap->start + i ];
+    cmap->blue[ cmap->start + i ]  = blue16[ cmap->start + i ];
+  }
+  return 0;
+}
+
+static int set_palette( struct fb_cmap *cmap )
+{
+  uint32_t i;
+
+  if ( cmap->start + cmap->len >= 16 )
+    return 1;
+
+  for( i = 0; i < cmap->len; i++ ) {
+    red16[ cmap->start + i ] = cmap->red[ cmap->start + i ];
+    green16[ cmap->start + i ] = cmap->green[ cmap->start + i ];
+    blue16[ cmap->start + i ] = cmap->blue[ cmap->start + i ];
+  }
+  return 0;
 }
 
 
@@ -151,19 +211,20 @@ frame_buffer_control( rtems_device_major_number major,
   switch( args->command )
     {
     case FBIOGET_FSCREENINFO:
-      args->ioctl_return =  get_fix_screen_info( args->buffer );
+      args->ioctl_return =  get_fix_screen_info( ( struct fb_fix_screeninfo * ) args->buffer );
       break;
     case FBIOGET_VSCREENINFO:
-      args->ioctl_return =  get_var_screen_info( args->buffer );
+      args->ioctl_return =  get_var_screen_info( ( struct fb_var_screeninfo * ) args->buffer );
       break;
     case FBIOPUT_VSCREENINFO:
       /* not implemented yet*/
-      break;
+      args->ioctl_return = -1;
+      return RTEMS_UNSATISFIED;
     case FBIOGETCMAP:
-      args->ioctl_return =  0;
+      args->ioctl_return =  get_palette( ( struct fb_cmap * ) args->buffer );
       break;
     case FBIOPUTCMAP:
-      args->ioctl_return =  0;
+      args->ioctl_return =  set_palette( ( struct fb_cmap * ) args->buffer );
       break;
     default:
       args->ioctl_return = 0;

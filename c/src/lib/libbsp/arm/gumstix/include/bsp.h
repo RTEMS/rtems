@@ -22,6 +22,7 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libchip/serial.h>
 
+#define BSP_HAS_FRAME_BUFFER 1
 
 /* What is the input clock freq in hertz */
 #define BSP_MAIN_FREQ 3686400      /* 3.6864 MHz */
