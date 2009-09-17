@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.8.50.20090908
-%define gdb_rpmvers %{expand:%(echo 6.8.50.20090908 | tr - _)} 
+%define gdb_version 6.8.91
+%define gdb_rpmvers %{expand:%(echo 6.8.91 | tr - _)} 
 
 Name:		rtems-4.10-mipstx39-rtems4.10-gdb
 Summary:	Gdb for target mipstx39-rtems4.10
@@ -126,7 +126,7 @@ Requires:	rtems-4.10-gdb-common
 # A copy of a gdb development snapshot having been retrieved from
 # ftp://sources.redhat.com/pub/gdb/snapshots/current/gdb-%{gdb_version}.tar.bz2
 Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090908.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090917.diff
 
 %description
 GDB for target mipstx39-rtems4.10
