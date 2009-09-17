@@ -19,7 +19,7 @@ NEWLIB_RPMREL = `expr 40 + $(GCC_RPMREL)`
 include ../gcc.am
 GCC_OPTS += --languages=cxx
 
-GDB_VERS = 6.8.50.20090908
+GDB_VERS = 6.8.91
 GDB_PKGVERS = $(GDB_VERS)
 GDB_RPMREL = 1
 include ../gdb.am
