@@ -52,7 +52,7 @@ Name:		rtems-4.10-m68k-rtems4.10-gdb
 Summary:	Gdb for target m68k-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -102,8 +102,15 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 %if "%{_build}" != "%{_host}"
 BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
+%bcond_with system_readline
 %endif
-BuildRequires:  %{_host_rpmprefix}readline-devel
+
+%if 0%{?fedora} >= 12
+%bcond_with system_readline
+%else
+%bcond_without system_readline
+%endif
+%{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
 %if "%{gdb_version}" >= "6.8.50"
@@ -124,9 +131,9 @@ BuildRequires:	texinfo >= 4.2
 Requires:	rtems-4.10-gdb-common
 
 # A copy of a gdb development snapshot having been retrieved from
-# ftp://sources.redhat.com/pub/gdb/snapshots/current/gdb-%{gdb_version}.tar.bz2
+# ftp://sourceware.org/pub/gdb/snapshots/branch/gdb-%{gdb_version}.tar.bz2
 Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090917.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090918.diff
 
 %description
 GDB for target m68k-rtems4.10
@@ -138,10 +145,8 @@ cd gdb-%{gdb_version}
 %{?PATCH0:%patch0 -p1}
 cd ..
 
-%if "%{gdb_version}" >= "6.7"
 # Force using a system-provided libreadline
-rm -f gdb-%{gdb_version}/readline/configure
-%endif
+%{?with_system_readline:rm -f gdb-%{gdb_version}/readline/configure}
 %build
   export PATH="%{_bindir}:${PATH}"
   mkdir -p build
@@ -158,9 +163,7 @@ rm -f gdb-%{gdb_version}/readline/configure
     --disable-win32-registry \
     --disable-werror \
     %{build_sim} \
-%if "%{gdb_version}" >= "6.7"
-    --with-system-readline \
-%endif
+    %{?with_system_readline:--with-system-readline} \
 %if "%{gdb_version}" >= "6.6"
     --with-expat \
 %endif
