@@ -170,11 +170,11 @@ static char lpc24xx_eth_transmit_buffer [LPC24XX_ETH_TRANSMIT_DATA_SIZE];
     | ETH_TX_CTRL_LAST)
 
 #ifdef DEBUG
-  #define LPC24XX_ETH_PRINTF( ...) printf( __VA_ARGS__)
-  #define LPC24XX_ETH_PRINTK( ...) printk( __VA_ARGS__)
+  #define LPC24XX_ETH_PRINTF(...) printf(__VA_ARGS__)
+  #define LPC24XX_ETH_PRINTK(...) printk(__VA_ARGS__)
 #else
-  #define LPC24XX_ETH_PRINTF( ...)
-  #define LPC24XX_ETH_PRINTK( ...)
+  #define LPC24XX_ETH_PRINTF(...)
+  #define LPC24XX_ETH_PRINTK(...)
 #endif
 
 typedef enum {
@@ -231,7 +231,7 @@ static inline uint32_t lpc24xx_eth_increment(
   }
 }
 
-static void lpc24xx_eth_reset_filter( void)
+static void lpc24xx_eth_reset_filter(void)
 {
   MAC_RXFILTERCTRL = 0;
   MAC_RXFILTERWOLCLR = 0xcf;
@@ -239,7 +239,7 @@ static void lpc24xx_eth_reset_filter( void)
   MAC_HASHFILTERH = 0;
 }
 
-static void lpc24xx_eth_enable_promiscous_mode( bool enable)
+static void lpc24xx_eth_enable_promiscous_mode(bool enable)
 {
   if (enable) {
     MAC_RXFILTERCTRL = ETH_RX_FIL_CTRL_ACCEPT_PERFECT
@@ -267,98 +267,98 @@ static void lpc24xx_eth_interrupt_handler(
   uint32_t is = MAC_INTSTATUS & im;
 
   /* Check receive interrupts */
-  if (IS_FLAG_SET( is, ETH_INT_RX_OVERRUN)) {
+  if (IS_FLAG_SET(is, ETH_INT_RX_OVERRUN)) {
     re = LPC24XX_ETH_EVENT_INITIALIZE;
     ++e->receive_fatal_errors;
-  } else if (IS_ANY_FLAG_SET( is, LPC24XX_ETH_INTERRUPT_RECEIVE)) {
+  } else if (IS_ANY_FLAG_SET(is, LPC24XX_ETH_INTERRUPT_RECEIVE)) {
     re = LPC24XX_ETH_EVENT_INTERRUPT;
-    ie = SET_FLAGS( ie, LPC24XX_ETH_INTERRUPT_RECEIVE);
+    ie = SET_FLAGS(ie, LPC24XX_ETH_INTERRUPT_RECEIVE);
   }
 
   /* Send events to receive task */
   if (re != 0) {
     ++e->receive_interrupts;
-    (void) rtems_event_send( e->receive_task, re);
+    (void) rtems_event_send(e->receive_task, re);
   }
 
   /* Check transmit interrupts */
-  if (IS_FLAG_SET( is, ETH_INT_TX_UNDERRUN)) {
+  if (IS_FLAG_SET(is, ETH_INT_TX_UNDERRUN)) {
     te = LPC24XX_ETH_EVENT_INITIALIZE;
     ++e->transmit_fatal_errors;
-  } else if (IS_ANY_FLAG_SET( is, LPC24XX_ETH_INTERRUPT_TRANSMIT)) {
+  } else if (IS_ANY_FLAG_SET(is, LPC24XX_ETH_INTERRUPT_TRANSMIT)) {
     te = LPC24XX_ETH_EVENT_INTERRUPT;
-    ie = SET_FLAGS( ie, LPC24XX_ETH_INTERRUPT_TRANSMIT);
+    ie = SET_FLAGS(ie, LPC24XX_ETH_INTERRUPT_TRANSMIT);
   }
 
   /* Send events to transmit task */
   if (te != 0) {
     ++e->transmit_interrupts;
-    (void) rtems_event_send( e->transmit_task, te);
+    (void) rtems_event_send(e->transmit_task, te);
   }
 
-  LPC24XX_ETH_PRINTK( "interrupt: rx = 0x%08x, tx = 0x%08x\n", re, te);
+  LPC24XX_ETH_PRINTK("interrupt: rx = 0x%08x, tx = 0x%08x\n", re, te);
 
   /* Update interrupt mask */
-  MAC_INTENABLE = CLEAR_FLAGS( im, ie);
+  MAC_INTENABLE = CLEAR_FLAGS(im, ie);
 
   /* Clear interrupts */
   MAC_INTCLEAR = is;
 }
 
-static void lpc24xx_eth_enable_receive_interrupts( void)
+static void lpc24xx_eth_enable_receive_interrupts(void)
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_disable( level);
-  MAC_INTENABLE = SET_FLAGS( MAC_INTENABLE, LPC24XX_ETH_INTERRUPT_RECEIVE);
-  rtems_interrupt_enable( level);
+  rtems_interrupt_disable(level);
+  MAC_INTENABLE = SET_FLAGS(MAC_INTENABLE, LPC24XX_ETH_INTERRUPT_RECEIVE);
+  rtems_interrupt_enable(level);
 }
 
-static void lpc24xx_eth_disable_receive_interrupts( void)
+static void lpc24xx_eth_disable_receive_interrupts(void)
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_disable( level);
-  MAC_INTENABLE = CLEAR_FLAGS( MAC_INTENABLE, LPC24XX_ETH_INTERRUPT_RECEIVE);
-  rtems_interrupt_enable( level);
+  rtems_interrupt_disable(level);
+  MAC_INTENABLE = CLEAR_FLAGS(MAC_INTENABLE, LPC24XX_ETH_INTERRUPT_RECEIVE);
+  rtems_interrupt_enable(level);
 }
 
-static void lpc24xx_eth_enable_transmit_interrupts( void)
+static void lpc24xx_eth_enable_transmit_interrupts(void)
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_disable( level);
-  MAC_INTENABLE = SET_FLAGS( MAC_INTENABLE, LPC24XX_ETH_INTERRUPT_TRANSMIT);
-  rtems_interrupt_enable( level);
+  rtems_interrupt_disable(level);
+  MAC_INTENABLE = SET_FLAGS(MAC_INTENABLE, LPC24XX_ETH_INTERRUPT_TRANSMIT);
+  rtems_interrupt_enable(level);
 }
 
-static void lpc24xx_eth_disable_transmit_interrupts( void)
+static void lpc24xx_eth_disable_transmit_interrupts(void)
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_disable( level);
-  MAC_INTENABLE = CLEAR_FLAGS( MAC_INTENABLE, LPC24XX_ETH_INTERRUPT_TRANSMIT);
-  rtems_interrupt_enable( level);
+  rtems_interrupt_disable(level);
+  MAC_INTENABLE = CLEAR_FLAGS(MAC_INTENABLE, LPC24XX_ETH_INTERRUPT_TRANSMIT);
+  rtems_interrupt_enable(level);
 }
 
-static struct mbuf *lpc24xx_eth_new_mbuf( struct ifnet *ifp, bool wait)
+static struct mbuf *lpc24xx_eth_new_mbuf(struct ifnet *ifp, bool wait)
 {
   struct mbuf *m = NULL;
   int mw = wait ? M_WAIT : M_DONTWAIT;
 
-  MGETHDR( m, mw, MT_DATA);
+  MGETHDR(m, mw, MT_DATA);
   if (m != NULL) {
-    MCLGET( m, mw);
-    if (IS_FLAG_SET( m->m_flags, M_EXT)) {
+    MCLGET(m, mw);
+    if (IS_FLAG_SET(m->m_flags, M_EXT)) {
       /* Set receive interface */
       m->m_pkthdr.rcvif = ifp;
 
       /* Adjust by two bytes for proper IP header alignment */
-      m->m_data = mtod( m, char *) + 2;
+      m->m_data = mtod(m, char *) + 2;
 
       return m;
     } else {
-      m_free( m);
+      m_free(m);
     }
   }
 
@@ -374,13 +374,13 @@ static bool lpc24xx_eth_add_new_mbuf(
 )
 {
   /* New mbuf */
-  struct mbuf *m = lpc24xx_eth_new_mbuf( ifp, wait);
+  struct mbuf *m = lpc24xx_eth_new_mbuf(ifp, wait);
 
   /* Check mbuf */
   if (m != NULL) {
     /* Add mbuf to queue */
-    desc [i].start = mtod( m, uint32_t);
-    desc [i].control = SET_ETH_RX_CTRL_SIZE( 0, MCLBYTES - 1)
+    desc [i].start = mtod(m, uint32_t);
+    desc [i].control = SET_ETH_RX_CTRL_SIZE(0, MCLBYTES - 1)
       | ETH_RX_CTRL_INTERRUPT;
 
     /* Add mbuf to table */
@@ -392,7 +392,7 @@ static bool lpc24xx_eth_add_new_mbuf(
   }
 }
 
-static void lpc24xx_eth_receive_task( void *arg)
+static void lpc24xx_eth_receive_task(void *arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_event_set events = 0;
@@ -411,7 +411,7 @@ static void lpc24xx_eth_receive_task( void *arg)
   uint32_t consume_index = 0;
   uint32_t receive_index = 0;
 
-  LPC24XX_ETH_PRINTF( "%s\n", __func__);
+  LPC24XX_ETH_PRINTF("%s\n", __func__);
 
   /* Main event loop */
   while (true) {
@@ -424,25 +424,25 @@ static void lpc24xx_eth_receive_task( void *arg)
       RTEMS_NO_TIMEOUT,
       &events
     );
-    RTEMS_CLEANUP_SC( sc, cleanup, "wait for events");
+    RTEMS_CLEANUP_SC(sc, cleanup, "wait for events");
 
-    LPC24XX_ETH_PRINTF( "rx: wake up: 0x%08" PRIx32 "\n", events);
+    LPC24XX_ETH_PRINTF("rx: wake up: 0x%08" PRIx32 "\n", events);
 
     /* Initialize receiver? */
-    if (IS_FLAG_SET( events, LPC24XX_ETH_EVENT_INITIALIZE)) {
+    if (IS_FLAG_SET(events, LPC24XX_ETH_EVENT_INITIALIZE)) {
       /* Disable receive interrupts */
       lpc24xx_eth_disable_receive_interrupts();
 
       /* Disable receiver */
-      MAC_COMMAND = CLEAR_FLAG( MAC_COMMAND, ETH_CMD_RX_ENABLE);
+      MAC_COMMAND = CLEAR_FLAG(MAC_COMMAND, ETH_CMD_RX_ENABLE);
 
       /* Wait for inactive status */
-      while (IS_FLAG_SET( MAC_STATUS, ETH_STAT_RX_ACTIVE)) {
+      while (IS_FLAG_SET(MAC_STATUS, ETH_STAT_RX_ACTIVE)) {
         /* Wait */
       }
 
       /* Reset */
-      MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_RX_RESET);
+      MAC_COMMAND = SET_FLAG(MAC_COMMAND, ETH_CMD_RX_RESET);
 
       /* Clear receive interrupts */
       MAC_INTCLEAR = LPC24XX_ETH_INTERRUPT_RECEIVE;
@@ -462,7 +462,7 @@ static void lpc24xx_eth_receive_task( void *arg)
       /* Fill receive queue */
       for (produce_index = consume_index; produce_index <= index_max; ++produce_index) {
         if (
-          !lpc24xx_eth_add_new_mbuf( ifp, desc, mbuf_table, produce_index, false)
+          !lpc24xx_eth_add_new_mbuf(ifp, desc, mbuf_table, produce_index, false)
         ) {
           break;
         }
@@ -478,7 +478,7 @@ static void lpc24xx_eth_receive_task( void *arg)
         /* Reduce the queue size */
         index_max = produce_index - 1;
 
-        RTEMS_SYSLOG_ERROR( "not enough mbufs to fill receive queue");
+        RTEMS_SYSLOG_ERROR("not enough mbufs to fill receive queue");
       }
 
       /* Receive descriptor table */
@@ -492,7 +492,7 @@ static void lpc24xx_eth_receive_task( void *arg)
       receive_index = consume_index;
 
       /* Enable receiver */
-      MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_RX_ENABLE);
+      MAC_COMMAND = SET_FLAG(MAC_COMMAND, ETH_CMD_RX_ENABLE);
 
       /* Enable receive interrupts */
       lpc24xx_eth_enable_receive_interrupts();
@@ -517,58 +517,58 @@ static void lpc24xx_eth_receive_task( void *arg)
         mbuf_table [receive_index] = NULL;
 
         if (
-          IS_FLAG_SET( stat, ETH_RX_STAT_LAST_FLAG)
-            && ARE_FLAGS_CLEARED( stat, LPC24XX_ETH_RX_STAT_ERRORS)
+          IS_FLAG_SET(stat, ETH_RX_STAT_LAST_FLAG)
+            && ARE_FLAGS_CLEARED(stat, LPC24XX_ETH_RX_STAT_ERRORS)
         ) {
           /* Ethernet header */
-          struct ether_header *eh = mtod( m, struct ether_header *);
+          struct ether_header *eh = mtod(m, struct ether_header *);
 
           /* Discard Ethernet header and CRC */
-          int sz = (int) GET_ETH_RX_STAT_RXSIZE( stat) + 1
+          int sz = (int) GET_ETH_RX_STAT_RXSIZE(stat) + 1
             - ETHER_HDR_LEN - ETHER_CRC_LEN;
 
           /* Update mbuf */
           m->m_len = sz;
           m->m_pkthdr.len = sz;
-          m->m_data = mtod( m, char *) + ETHER_HDR_LEN;
+          m->m_data = mtod(m, char *) + ETHER_HDR_LEN;
 
-          LPC24XX_ETH_PRINTF( "rx: %02" PRIu32 ": %u\n", receive_index, sz);
+          LPC24XX_ETH_PRINTF("rx: %02" PRIu32 ": %u\n", receive_index, sz);
 
           /* Hand over */
-          ether_input( ifp, eh, m);
+          ether_input(ifp, eh, m);
 
           /* Increment received frames counter */
           ++e->received_frames;
         } else {
           /* Release mbuf */
-          m_free( m);
+          m_free(m);
 
           /* Update error counters */
-          if (IS_FLAG_SET( stat, ETH_RX_STAT_OVERRUN)) {
+          if (IS_FLAG_SET(stat, ETH_RX_STAT_OVERRUN)) {
             ++e->receive_overrun_errors;
           }
-          if (IS_FLAG_CLEARED( stat, ETH_RX_STAT_LAST_FLAG)) {
+          if (IS_FLAG_CLEARED(stat, ETH_RX_STAT_LAST_FLAG)) {
             ++e->receive_fragment_errors;
           }
-          if (IS_FLAG_SET( stat, ETH_RX_STAT_CRC_ERROR)) {
+          if (IS_FLAG_SET(stat, ETH_RX_STAT_CRC_ERROR)) {
             ++e->receive_crc_errors;
           }
-          if (IS_FLAG_SET( stat, ETH_RX_STAT_SYMBOL_ERROR)) {
+          if (IS_FLAG_SET(stat, ETH_RX_STAT_SYMBOL_ERROR)) {
             ++e->receive_symbol_errors;
           }
-          if (IS_FLAG_SET( stat, ETH_RX_STAT_LENGTH_ERROR)) {
+          if (IS_FLAG_SET(stat, ETH_RX_STAT_LENGTH_ERROR)) {
             ++e->receive_length_errors;
           }
-          if (IS_FLAG_SET( stat, ETH_RX_STAT_ALIGNMENT_ERROR)) {
+          if (IS_FLAG_SET(stat, ETH_RX_STAT_ALIGNMENT_ERROR)) {
             ++e->receive_alignment_errors;
           }
-          if (IS_FLAG_SET( stat, ETH_RX_STAT_NO_DESCRIPTOR)) {
+          if (IS_FLAG_SET(stat, ETH_RX_STAT_NO_DESCRIPTOR)) {
             ++e->receive_no_descriptor_errors;
           }
         }
 
         /* Increment receive index */
-        receive_index = lpc24xx_eth_increment( receive_index, index_max);
+        receive_index = lpc24xx_eth_increment(receive_index, index_max);
       } else {
         /* Nothing to do, enable receive interrupts */
         lpc24xx_eth_enable_receive_interrupts();
@@ -578,7 +578,7 @@ static void lpc24xx_eth_receive_task( void *arg)
 
     /* Wait for mbuf? */
     wait_for_mbuf =
-      lpc24xx_eth_increment( produce_index, index_max) == consume_index;
+      lpc24xx_eth_increment(produce_index, index_max) == consume_index;
 
     /* Fill queue with new mbufs */
     while (consume_index != produce_index) {
@@ -595,7 +595,7 @@ static void lpc24xx_eth_receive_task( void *arg)
       wait_for_mbuf = false;
 
       /* Increment consume index */
-      consume_index = lpc24xx_eth_increment( consume_index, index_max);
+      consume_index = lpc24xx_eth_increment(consume_index, index_max);
 
       /* Update consume indices */
       MAC_RXCONSUMEINDEX = consume_index;
@@ -611,7 +611,7 @@ cleanup:
   rtems_bsdnet_semaphore_release();
 
   /* Terminate self */
-  (void) rtems_task_delete( RTEMS_SELF);
+  (void) rtems_task_delete(RTEMS_SELF);
 }
 
 static struct mbuf *lpc24xx_eth_next_fragment(
@@ -626,7 +626,7 @@ static struct mbuf *lpc24xx_eth_next_fragment(
   while (true) {
     if (m == NULL) {
       /* Dequeue first fragment of the next frame */
-      IF_DEQUEUE( &ifp->if_snd, m);
+      IF_DEQUEUE(&ifp->if_snd, m);
 
       /* Empty queue? */
       if (m == NULL) {
@@ -642,29 +642,29 @@ static struct mbuf *lpc24xx_eth_next_fragment(
       break;
     } else {
       /* Discard empty fragments */
-      m = m_free( m);
+      m = m_free(m);
     }
   }
 
   /* Set fragment size */
-  *ctrl = SET_ETH_TX_CTRL_SIZE( 0, size - 1);
+  *ctrl = SET_ETH_TX_CTRL_SIZE(0, size - 1);
 
   /* Discard empty successive fragments */
   n = m->m_next;
   while (n != NULL && n->m_len <= 0) {
-    n = m_free( n);
+    n = m_free(n);
   }
   m->m_next = n;
 
   /* Is our fragment the last in the frame? */
   if (n == NULL) {
-    *ctrl = SET_FLAGS( *ctrl, LPC24XX_ETH_LAST_FRAGMENT_FLAGS);
+    *ctrl = SET_FLAGS(*ctrl, LPC24XX_ETH_LAST_FRAGMENT_FLAGS);
   }
 
   return m;
 }
 
-static void lpc24xx_eth_transmit_task( void *arg)
+static void lpc24xx_eth_transmit_task(void *arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_event_set events = 0;
@@ -685,7 +685,7 @@ static void lpc24xx_eth_transmit_task( void *arg)
   uint32_t frame_length = 0;
   char *frame_buffer = NULL;
 
-  LPC24XX_ETH_PRINTF( "%s\n", __func__);
+  LPC24XX_ETH_PRINTF("%s\n", __func__);
 
   /* Initialize descriptor table */
   for (produce_index = 0; produce_index <= index_max; ++produce_index) {
@@ -704,25 +704,25 @@ static void lpc24xx_eth_transmit_task( void *arg)
       RTEMS_NO_TIMEOUT,
       &events
     );
-    RTEMS_CLEANUP_SC( sc, cleanup, "wait for events");
+    RTEMS_CLEANUP_SC(sc, cleanup, "wait for events");
 
-    LPC24XX_ETH_PRINTF( "tx: wake up: 0x%08" PRIx32 "\n", events);
+    LPC24XX_ETH_PRINTF("tx: wake up: 0x%08" PRIx32 "\n", events);
 
     /* Initialize transmitter? */
-    if (IS_FLAG_SET( events, LPC24XX_ETH_EVENT_INITIALIZE)) {
+    if (IS_FLAG_SET(events, LPC24XX_ETH_EVENT_INITIALIZE)) {
       /* Disable transmit interrupts */
       lpc24xx_eth_disable_transmit_interrupts();
 
       /* Disable transmitter */
-      MAC_COMMAND = CLEAR_FLAG( MAC_COMMAND, ETH_CMD_TX_ENABLE);
+      MAC_COMMAND = CLEAR_FLAG(MAC_COMMAND, ETH_CMD_TX_ENABLE);
 
       /* Wait for inactive status */
-      while (IS_FLAG_SET( MAC_STATUS, ETH_STAT_TX_ACTIVE)) {
+      while (IS_FLAG_SET(MAC_STATUS, ETH_STAT_TX_ACTIVE)) {
         /* Wait */
       }
 
       /* Reset */
-      MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_TX_RESET);
+      MAC_COMMAND = SET_FLAG(MAC_COMMAND, ETH_CMD_TX_RESET);
 
       /* Clear transmit interrupts */
       MAC_INTCLEAR = LPC24XX_ETH_INTERRUPT_TRANSMIT;
@@ -740,7 +740,7 @@ static void lpc24xx_eth_transmit_task( void *arg)
       frame_buffer = (char *) desc [produce_index].start;
 
       /* Enable transmitter */
-      MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_TX_ENABLE);
+      MAC_COMMAND = SET_FLAG(MAC_COMMAND, ETH_CMD_TX_ENABLE);
     }
 
     /* Free consumed fragments */
@@ -764,34 +764,34 @@ static void lpc24xx_eth_transmit_task( void *arg)
 
         /* Update error counters */
         if (
-          IS_ANY_FLAG_SET( s, ETH_TX_STAT_ERROR | ETH_TX_STAT_NO_DESCRIPTOR)
+          IS_ANY_FLAG_SET(s, ETH_TX_STAT_ERROR | ETH_TX_STAT_NO_DESCRIPTOR)
         ) {
-          if (IS_FLAG_SET( s, ETH_TX_STAT_UNDERRUN)) {
+          if (IS_FLAG_SET(s, ETH_TX_STAT_UNDERRUN)) {
             ++e->transmit_underrun_errors;
           }
-          if (IS_FLAG_SET( s, ETH_TX_STAT_LATE_COLLISION)) {
+          if (IS_FLAG_SET(s, ETH_TX_STAT_LATE_COLLISION)) {
             ++e->transmit_late_collision_errors;
           }
-          if (IS_FLAG_SET( s, ETH_TX_STAT_EXCESSIVE_COLLISION)) {
+          if (IS_FLAG_SET(s, ETH_TX_STAT_EXCESSIVE_COLLISION)) {
             ++e->transmit_excessive_collision_errors;
           }
-          if (IS_FLAG_SET( s, ETH_TX_STAT_EXCESSIVE_DEFER)) {
+          if (IS_FLAG_SET(s, ETH_TX_STAT_EXCESSIVE_DEFER)) {
             ++e->transmit_excessive_defer_errors;
           }
-          if (IS_FLAG_SET( s, ETH_TX_STAT_NO_DESCRIPTOR)) {
+          if (IS_FLAG_SET(s, ETH_TX_STAT_NO_DESCRIPTOR)) {
             ++e->transmit_no_descriptor_errors;
           }
         }
 
         /* Next consume index */
-        c = lpc24xx_eth_increment( c, index_max);
+        c = lpc24xx_eth_increment(c, index_max);
       }
     }
 
     /* Transmit new fragments */
     while (true) {
       /* Compute next produce index */
-      uint32_t p = lpc24xx_eth_increment( produce_index, index_max);
+      uint32_t p = lpc24xx_eth_increment(produce_index, index_max);
 
       /* Queue full? */
       if (p == consume_index) {
@@ -800,24 +800,24 @@ static void lpc24xx_eth_transmit_task( void *arg)
       }
 
       /* Get next fragment and control value */
-      m = lpc24xx_eth_next_fragment( ifp, m, &ctrl);
+      m = lpc24xx_eth_next_fragment(ifp, m, &ctrl);
 
       /* New fragment? */
       if (m != NULL) {
         size_t fragment_length = (size_t) m->m_len;
-        void *fragment_start = mtod( m, void *);
+        void *fragment_start = mtod(m, void *);
         uint32_t new_frame_length = frame_length + fragment_length;
 
         /* Check buffer size */
         if (new_frame_length > LPC24XX_ETH_TRANSMIT_BUFFER_SIZE) {
-          LPC24XX_ETH_PRINTF( "tx: overflow\n");
+          LPC24XX_ETH_PRINTF("tx: overflow\n");
 
           /* Discard overflow data */
           new_frame_length = LPC24XX_ETH_TRANSMIT_BUFFER_SIZE;
           fragment_length = new_frame_length - frame_length;
 
           /* Finalize frame */
-          ctrl = SET_FLAGS( ctrl, LPC24XX_ETH_LAST_FRAGMENT_FLAGS);
+          ctrl = SET_FLAGS(ctrl, LPC24XX_ETH_LAST_FRAGMENT_FLAGS);
 
           /* Update error counter */
           ++e->transmit_overflow_errors;
@@ -826,19 +826,19 @@ static void lpc24xx_eth_transmit_task( void *arg)
         LPC24XX_ETH_PRINTF(
           "tx: copy: %" PRIu32 "%s%s\n",
           fragment_length,
-          IS_FLAG_SET( m->m_flags, M_EXT) ? ", E" : "",
-          IS_FLAG_SET( m->m_flags, M_PKTHDR) ? ", H" : ""
+          IS_FLAG_SET(m->m_flags, M_EXT) ? ", E" : "",
+          IS_FLAG_SET(m->m_flags, M_PKTHDR) ? ", H" : ""
         );
 
         /* Copy fragment to buffer in Ethernet RAM */
-        memcpy( frame_buffer, fragment_start, fragment_length);
+        memcpy(frame_buffer, fragment_start, fragment_length);
 
-        if (IS_FLAG_SET( ctrl, ETH_TX_CTRL_LAST)) {
+        if (IS_FLAG_SET(ctrl, ETH_TX_CTRL_LAST)) {
           /* Finalize descriptor */
           desc [produce_index].control =
-            SET_ETH_TX_CTRL_SIZE( ctrl, new_frame_length - 1);
+            SET_ETH_TX_CTRL_SIZE(ctrl, new_frame_length - 1);
 
-          LPC24XX_ETH_PRINTF( "tx: %02" PRIu32 ": %" PRIu32 "\n", produce_index, new_frame_length);
+          LPC24XX_ETH_PRINTF("tx: %02" PRIu32 ": %" PRIu32 "\n", produce_index, new_frame_length);
 
           /* Next produce index */
           produce_index = p;
@@ -861,7 +861,7 @@ static void lpc24xx_eth_transmit_task( void *arg)
         }
 
         /* Free mbuf and get next */
-        m = m_free( m);
+        m = m_free(m);
       } else {
         /* Nothing to transmit */
         break;
@@ -871,7 +871,7 @@ static void lpc24xx_eth_transmit_task( void *arg)
     /* No more fragments? */
     if (m == NULL) {
       /* Interface is now inactive */
-      ifp->if_flags = CLEAR_FLAG( ifp->if_flags, IFF_OACTIVE);
+      ifp->if_flags = CLEAR_FLAG(ifp->if_flags, IFF_OACTIVE);
     } else {
       /* Enable transmit interrupts */
       lpc24xx_eth_enable_transmit_interrupts();
@@ -887,79 +887,68 @@ cleanup:
   rtems_bsdnet_semaphore_release();
 
   /* Terminate self */
-  (void) rtems_task_delete( RTEMS_SELF);
+  (void) rtems_task_delete(RTEMS_SELF);
 }
 
-static void lpc24xx_eth_interface_init( void *arg)
+static void lpc24xx_eth_interface_init(void *arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   lpc24xx_eth_driver_entry *e = (lpc24xx_eth_driver_entry *) arg;
   struct ifnet *ifp = &e->arpcom.ac_if;
 
-  LPC24XX_ETH_PRINTF( "%s\n", __func__);
+  LPC24XX_ETH_PRINTF("%s\n", __func__);
 
   if (e->state == LPC24XX_ETH_INITIALIZED) {
-    #ifndef LPC24XX_HAS_UBOOT
-      /* Enable module power */
-      lpc24xx_module_enable(
-        LPC24XX_MODULE_ETHERNET,
-        0,
-        LPC24XX_MODULE_PCLK_DEFAULT
-      );
+    /* Enable module power */
+    lpc24xx_module_enable(
+      LPC24XX_MODULE_ETHERNET,
+      0,
+      LPC24XX_MODULE_PCLK_DEFAULT
+    );
 
-      /* Module IO configuration */
-      #ifdef LPC24XX_ETHERNET_RMII
-      	lpc24xx_io_config( LPC24XX_MODULE_ETHERNET, 0, 0);
-      #else
-      	lpc24xx_io_config( LPC24XX_MODULE_ETHERNET, 0, 1);
-      #endif
+    /* Module IO configuration */
+    #ifdef LPC24XX_ETHERNET_RMII
+    	lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 0, 0);
+    #else
+    	lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 0, 1);
+    #endif
 
-      /* Soft reset */
+    /* Soft reset */
 
-      /* Do soft reset */
-      MAC_COMMAND = 0x38;
-      MAC_MAC1 = 0xcf00;
+    /* Do soft reset */
+    MAC_COMMAND = 0x38;
+    MAC_MAC1 = 0xcf00;
 
-      /* Initialize PHY */
-      /* TODO */
+    /* Initialize PHY */
+    /* TODO */
 
-      /* Reinitialize registers */
-      MAC_MAC2 = 0x31;
-      MAC_IPGT = 0x15;
-      MAC_IPGR = 0x12;
-      MAC_CLRT = 0x370f;
-      MAC_MAXF = 0x0600;
-      MAC_SUPP = 0x0100;
-      MAC_TEST = 0;
-      #ifdef LPC24XX_ETHERNET_RMII
-        MAC_COMMAND = 0x0400;
-      #else
-        MAC_COMMAND = 0x0600;
-      #endif
-      MAC_INTENABLE = 0;
-      MAC_INTCLEAR = 0x30ff;
-      MAC_POWERDOWN = 0;
+    /* Reinitialize registers */
+    MAC_MAC2 = 0x31;
+    MAC_IPGT = 0x15;
+    MAC_IPGR = 0x12;
+    MAC_CLRT = 0x370f;
+    MAC_MAXF = 0x0600;
+    MAC_SUPP = 0x0100;
+    MAC_TEST = 0;
+    #ifdef LPC24XX_ETHERNET_RMII
+      MAC_COMMAND = 0x0400;
+    #else
+      MAC_COMMAND = 0x0600;
+    #endif
+    MAC_INTENABLE = 0;
+    MAC_INTCLEAR = 0x30ff;
+    MAC_POWERDOWN = 0;
 
-      /* MAC address */
-      MAC_SA0 = ((uint32_t) e->arpcom.ac_enaddr [5] << 8)
-        | (uint32_t) e->arpcom.ac_enaddr [4];
-      MAC_SA1 = ((uint32_t) e->arpcom.ac_enaddr [3] << 8)
-        | (uint32_t) e->arpcom.ac_enaddr [2];
-      MAC_SA2 = ((uint32_t) e->arpcom.ac_enaddr [1] << 8)
-        | (uint32_t) e->arpcom.ac_enaddr [0];
+    /* MAC address */
+    MAC_SA0 = ((uint32_t) e->arpcom.ac_enaddr [5] << 8)
+      | (uint32_t) e->arpcom.ac_enaddr [4];
+    MAC_SA1 = ((uint32_t) e->arpcom.ac_enaddr [3] << 8)
+      | (uint32_t) e->arpcom.ac_enaddr [2];
+    MAC_SA2 = ((uint32_t) e->arpcom.ac_enaddr [1] << 8)
+      | (uint32_t) e->arpcom.ac_enaddr [0];
 
-      /* Enable receiver */
-      MAC_MAC1 = 0x03;
-    #else /* LPC24XX_HAS_UBOOT */
-      /* Reset receiver and transmitter */
-      MAC_COMMAND = SET_FLAGS(
-        MAC_COMMAND,
-        ETH_CMD_RX_RESET | ETH_CMD_TX_RESET | ETH_CMD_REG_RESET
-      );
-
-      /* MAC configuration */
-      MAC_MAC1 = 0x3;
-    #endif /* LPC24XX_HAS_UBOOT */
+    /* Enable receiver */
+    MAC_MAC1 = 0x03;
 
     /* Start receive task */
     if (e->receive_task == RTEMS_ID_NONE) {
@@ -969,8 +958,8 @@ static void lpc24xx_eth_interface_init( void *arg)
         lpc24xx_eth_receive_task,
         e
       );
-      sc = rtems_event_send( e->receive_task, LPC24XX_ETH_EVENT_INITIALIZE);
-      RTEMS_SYSLOG_ERROR_SC( sc, "send receive initialize event");
+      sc = rtems_event_send(e->receive_task, LPC24XX_ETH_EVENT_INITIALIZE);
+      RTEMS_SYSLOG_ERROR_SC(sc, "send receive initialize event");
     }
 
     /* Start transmit task */
@@ -981,8 +970,8 @@ static void lpc24xx_eth_interface_init( void *arg)
         lpc24xx_eth_transmit_task,
         e
       );
-      sc = rtems_event_send( e->transmit_task, LPC24XX_ETH_EVENT_INITIALIZE);
-      RTEMS_SYSLOG_ERROR_SC( sc, "send transmit initialize event");
+      sc = rtems_event_send(e->transmit_task, LPC24XX_ETH_EVENT_INITIALIZE);
+      RTEMS_SYSLOG_ERROR_SC(sc, "send transmit initialize event");
     }
 
     /* Change state */
@@ -999,43 +988,43 @@ static void lpc24xx_eth_interface_init( void *arg)
 
     /* Enable promiscous mode */
     lpc24xx_eth_enable_promiscous_mode(
-      IS_FLAG_SET( ifp->if_flags, IFF_PROMISC)
+      IS_FLAG_SET(ifp->if_flags, IFF_PROMISC)
     );
 
     /* Start watchdog timer */
     ifp->if_timer = 1;
 
     /* Set interface to running state */
-    ifp->if_flags = SET_FLAG( ifp->if_flags, IFF_RUNNING);
+    ifp->if_flags = SET_FLAG(ifp->if_flags, IFF_RUNNING);
 
     /* Change state */
     e->state = LPC24XX_ETH_RUNNING;
   }
 }
 
-static void lpc24xx_eth_interface_stats( const lpc24xx_eth_driver_entry *e)
+static void lpc24xx_eth_interface_stats(const lpc24xx_eth_driver_entry *e)
 {
   rtems_bsdnet_semaphore_release();
 
-  printf( "received frames:                     %u\n", e->received_frames);
-  printf( "receive interrupts:                  %u\n", e->receive_interrupts);
-  printf( "transmitted frames:                  %u\n", e->transmitted_frames);
-  printf( "transmit interrupts:                 %u\n", e->transmit_interrupts);
-  printf( "receive overrun errors:              %u\n", e->receive_overrun_errors);
-  printf( "receive fragment errors:             %u\n", e->receive_fragment_errors);
-  printf( "receive CRC errors:                  %u\n", e->receive_crc_errors);
-  printf( "receive symbol errors:               %u\n", e->receive_symbol_errors);
-  printf( "receive length errors:               %u\n", e->receive_length_errors);
-  printf( "receive alignment errors:            %u\n", e->receive_alignment_errors);
-  printf( "receive no descriptor errors:        %u\n", e->receive_no_descriptor_errors);
-  printf( "receive fatal errors:                %u\n", e->receive_fatal_errors);
-  printf( "transmit underrun errors:            %u\n", e->transmit_underrun_errors);
-  printf( "transmit late collision errors:      %u\n", e->transmit_late_collision_errors);
-  printf( "transmit excessive collision errors: %u\n", e->transmit_excessive_collision_errors);
-  printf( "transmit excessive defer errors:     %u\n", e->transmit_excessive_defer_errors);
-  printf( "transmit no descriptor errors:       %u\n", e->transmit_no_descriptor_errors);
-  printf( "transmit overflow errors:            %u\n", e->transmit_overflow_errors);
-  printf( "transmit fatal errors:               %u\n", e->transmit_fatal_errors);
+  printf("received frames:                     %u\n", e->received_frames);
+  printf("receive interrupts:                  %u\n", e->receive_interrupts);
+  printf("transmitted frames:                  %u\n", e->transmitted_frames);
+  printf("transmit interrupts:                 %u\n", e->transmit_interrupts);
+  printf("receive overrun errors:              %u\n", e->receive_overrun_errors);
+  printf("receive fragment errors:             %u\n", e->receive_fragment_errors);
+  printf("receive CRC errors:                  %u\n", e->receive_crc_errors);
+  printf("receive symbol errors:               %u\n", e->receive_symbol_errors);
+  printf("receive length errors:               %u\n", e->receive_length_errors);
+  printf("receive alignment errors:            %u\n", e->receive_alignment_errors);
+  printf("receive no descriptor errors:        %u\n", e->receive_no_descriptor_errors);
+  printf("receive fatal errors:                %u\n", e->receive_fatal_errors);
+  printf("transmit underrun errors:            %u\n", e->transmit_underrun_errors);
+  printf("transmit late collision errors:      %u\n", e->transmit_late_collision_errors);
+  printf("transmit excessive collision errors: %u\n", e->transmit_excessive_collision_errors);
+  printf("transmit excessive defer errors:     %u\n", e->transmit_excessive_defer_errors);
+  printf("transmit no descriptor errors:       %u\n", e->transmit_no_descriptor_errors);
+  printf("transmit overflow errors:            %u\n", e->transmit_overflow_errors);
+  printf("transmit fatal errors:               %u\n", e->transmit_fatal_errors);
 
   rtems_bsdnet_semaphore_obtain();
 }
@@ -1049,28 +1038,28 @@ static int lpc24xx_eth_interface_ioctl(
   lpc24xx_eth_driver_entry *e = (lpc24xx_eth_driver_entry *) ifp->if_softc;
   int rv = 0;
 
-  LPC24XX_ETH_PRINTF( "%s\n", __func__);
+  LPC24XX_ETH_PRINTF("%s\n", __func__);
 
   switch (command)  {
     case SIOCGIFMEDIA:
     case SIOCSIFMEDIA:
-      rtems_mii_ioctl( &e->mdio_info, e, (int) command, (int *) data);
+      rtems_mii_ioctl(&e->mdio_info, e, (int) command, (int *) data);
       break;
     case SIOCGIFADDR:
     case SIOCSIFADDR:
-      ether_ioctl( ifp, command, data);
+      ether_ioctl(ifp, command, data);
       break;
     case SIOCSIFFLAGS:
       if (ifp->if_flags & IFF_RUNNING) {
         /* TODO: off */
       }
       if (ifp->if_flags & IFF_UP) {
-        ifp->if_flags = SET_FLAG( ifp->if_flags, IFF_RUNNING);
+        ifp->if_flags = SET_FLAG(ifp->if_flags, IFF_RUNNING);
         /* TODO: init */
       }
       break;
     case SIO_RTEMS_SHOW_STATS:
-      lpc24xx_eth_interface_stats( e);
+      lpc24xx_eth_interface_stats(e);
       break;
     default:
       rv = EINVAL;
@@ -1080,46 +1069,46 @@ static int lpc24xx_eth_interface_ioctl(
   return rv;
 }
 
-static void lpc24xx_eth_interface_start( struct ifnet *ifp)
+static void lpc24xx_eth_interface_start(struct ifnet *ifp)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   lpc24xx_eth_driver_entry *e = (lpc24xx_eth_driver_entry *) ifp->if_softc;
 
-  ifp->if_flags = SET_FLAG( ifp->if_flags, IFF_OACTIVE);
+  ifp->if_flags = SET_FLAG(ifp->if_flags, IFF_OACTIVE);
 
-  sc = rtems_event_send( e->transmit_task, LPC24XX_ETH_EVENT_START);
-  RTEMS_SYSLOG_ERROR_SC( sc, "send transmit start event");
+  sc = rtems_event_send(e->transmit_task, LPC24XX_ETH_EVENT_START);
+  RTEMS_SYSLOG_ERROR_SC(sc, "send transmit start event");
 }
 
-static void lpc24xx_eth_interface_watchdog( struct ifnet *ifp)
+static void lpc24xx_eth_interface_watchdog(struct ifnet *ifp)
 {
   lpc24xx_eth_driver_entry *e = (lpc24xx_eth_driver_entry *) ifp->if_softc;
 
-  LPC24XX_ETH_PRINTF( "%s\n", __func__);
+  LPC24XX_ETH_PRINTF("%s\n", __func__);
 }
 
-static int lpc24xx_eth_attach( struct rtems_bsdnet_ifconfig *config)
+static int lpc24xx_eth_attach(struct rtems_bsdnet_ifconfig *config)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   lpc24xx_eth_driver_entry *e = &lpc24xx_eth_driver_data;
   struct ifnet *ifp = &e->arpcom.ac_if;
   char *unit_name = NULL;
-  int unit_number = rtems_bsdnet_parse_driver_name( config, &unit_name);
+  int unit_number = rtems_bsdnet_parse_driver_name(config, &unit_name);
   uint32_t reg = 0;
 
   /* Check parameter */
   if (unit_number < 0) {
-    RTEMS_SYSLOG_ERROR( "parse error for interface name\n");
+    RTEMS_SYSLOG_ERROR("parse error for interface name\n");
     return 0;
   }
   if (unit_number != 0) {
-    RTEMS_DO_CLEANUP( cleanup, "unexpected unit number");
+    RTEMS_DO_CLEANUP(cleanup, "unexpected unit number");
   }
   if (config->hardware_address == NULL) {
-    RTEMS_DO_CLEANUP( cleanup, "MAC address missing");
+    RTEMS_DO_CLEANUP(cleanup, "MAC address missing");
   }
   if (e->state != LPC24XX_ETH_NOT_INITIALIZED) {
-    RTEMS_DO_CLEANUP( cleanup, "already attached");
+    RTEMS_DO_CLEANUP(cleanup, "already attached");
   }
 
   /* Interrupt number */
@@ -1157,13 +1146,13 @@ static int lpc24xx_eth_attach( struct rtems_bsdnet_ifconfig *config)
     lpc24xx_eth_interrupt_handler,
     e
   );
-  RTEMS_CLEANUP_SC( sc, cleanup, "install interrupt handler");
+  RTEMS_CLEANUP_SC(sc, cleanup, "install interrupt handler");
 
   /* Copy MAC address */
-  memcpy( e->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
+  memcpy(e->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
 
   /* Clear Ethernet RAM */
-  memset( (void *) LPC24XX_ETH_RAM_START, 0, (size_t) LPC24XX_ETH_RAM_SIZE);
+  memset((void *) LPC24XX_ETH_RAM_START, 0, (size_t) LPC24XX_ETH_RAM_SIZE);
 
   /* Set interface data */
   ifp->if_softc = e;
@@ -1183,15 +1172,28 @@ static int lpc24xx_eth_attach( struct rtems_bsdnet_ifconfig *config)
   e->state = LPC24XX_ETH_INITIALIZED;
 
   /* Attach the interface */
-  if_attach( ifp);
-  ether_ifattach( ifp);
+  if_attach(ifp);
+  ether_ifattach(ifp);
 
   return 1;
 
 cleanup:
 
   /* FIXME: Type */
-  free( unit_name, (int) 0xdeadbeef);
+  free(unit_name, (int) 0xdeadbeef);
+
+  return 0;
+}
+
+static int lpc24xx_eth_detach(struct rtems_bsdnet_ifconfig *config)
+{
+  /* FIXME: Detach the interface from the upper layers? */
+
+  /* Module soft reset */
+  MAC_COMMAND = 0x38;
+  MAC_MAC1 = 0xcf00;
+
+  /* FIXME: More cleanup */
 
   return 0;
 }
@@ -1204,9 +1206,8 @@ int lpc24xx_eth_attach_detach(
   /* FIXME: Return value */
 
   if (attaching) {
-    return lpc24xx_eth_attach( config);
+    return lpc24xx_eth_attach(config);
   } else {
-    /* TODO */
-    return 0;
+    return lpc24xx_eth_detach(config);
   }
 }

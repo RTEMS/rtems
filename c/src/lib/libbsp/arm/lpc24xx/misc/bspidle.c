@@ -24,7 +24,7 @@
 #include <bsp.h>
 #include <bsp/lpc24xx.h>
 
-void *bsp_idle_thread(uint32_t ignored)
+void *bsp_idle_thread(uintptr_t ignored)
 {
   while (true) {
     /*

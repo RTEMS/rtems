@@ -44,7 +44,7 @@ unsigned lpc24xx_irq_priority( rtems_vector_number vector)
   if (lpc24xx_irq_is_valid( vector)) {
     return VICVectPriorityBase [vector];
   } else {
-    return LPC24XX_IRQ_PRIORITY_VALUE_MIN - 1;
+    return LPC24XX_IRQ_PRIORITY_VALUE_MIN - 1U;
   }
 }
 

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup lpc24xx_regs
  *
  * @brief Register definitions.
  */
@@ -24,6 +24,16 @@
 #include <stdint.h>
 
 #include <bsp/utility.h>
+
+/**
+ * @defgroup lpc24xx_regs Register Definitions
+ *
+ * @ingroup lpc24xx
+ *
+ * @brief Register definitions.
+ *
+ * @{
+ */
 
 /* Vectored Interrupt Controller (VIC) */
 #define VIC_BASE_ADDR	0xFFFFF000
@@ -458,6 +468,7 @@ Reset, and Code Security/Debugging */
 #define EMC_DYN_RASCAS3  (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x184))
 
 /* static RAM access registers */
+#define EMC_STA_BASE_0    ((uint32_t *) (EMC_BASE_ADDR + 0x200))
 #define EMC_STA_CFG0      (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x200))
 #define EMC_STA_WAITWEN0  (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x204))
 #define EMC_STA_WAITOEN0  (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x208))
@@ -466,6 +477,7 @@ Reset, and Code Security/Debugging */
 #define EMC_STA_WAITWR0   (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x214))
 #define EMC_STA_WAITTURN0 (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x218))
 
+#define EMC_STA_BASE_1    ((uint32_t *) (EMC_BASE_ADDR + 0x220))
 #define EMC_STA_CFG1      (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x220))
 #define EMC_STA_WAITWEN1  (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x224))
 #define EMC_STA_WAITOEN1  (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x228))
@@ -474,6 +486,7 @@ Reset, and Code Security/Debugging */
 #define EMC_STA_WAITWR1   (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x234))
 #define EMC_STA_WAITTURN1 (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x238))
 
+#define EMC_STA_BASE_2    ((uint32_t *) (EMC_BASE_ADDR + 0x240))
 #define EMC_STA_CFG2      (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x240))
 #define EMC_STA_WAITWEN2  (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x244))
 #define EMC_STA_WAITOEN2  (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x248))
@@ -482,6 +495,7 @@ Reset, and Code Security/Debugging */
 #define EMC_STA_WAITWR2   (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x254))
 #define EMC_STA_WAITTURN2 (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x258))
 
+#define EMC_STA_BASE_3    ((uint32_t *) (EMC_BASE_ADDR + 0x260))
 #define EMC_STA_CFG3      (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x260))
 #define EMC_STA_WAITWEN3  (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x264))
 #define EMC_STA_WAITOEN3  (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x268))
@@ -1646,6 +1660,10 @@ typedef struct {
   uint32_t dest;
   uint32_t lli;
   uint32_t ctrl;
+} lpc24xx_dma_descriptor;
+
+typedef struct {
+  lpc24xx_dma_descriptor desc;
   uint32_t cfg;
 } lpc24xx_dma_channel;
 
@@ -2087,6 +2105,16 @@ typedef struct {
 
 #define EMC_DYN_CTRL_CMD_NOP 0x00000180U
 
+typedef struct {
+  uint32_t cfg;
+  uint32_t waitwen;
+  uint32_t waitoen;
+  uint32_t waitrd;
+  uint32_t waitpage;
+  uint32_t waitwr;
+  uint32_t waitrun;
+} lpc24xx_emc_static;
+
 /* I2C */
 
 typedef struct {
@@ -2120,10 +2148,12 @@ typedef struct {
   uint32_t clr;
 } lpc24xx_fio;
 
-static volatile uint32_t * const LPC24XX_PINSEL = &PINSEL0;
+#define LPC24XX_PINSEL ((volatile uint32_t *) &PINSEL0)
 
-static volatile uint32_t * const LPC24XX_PINMODE = &PINMODE0;
+#define LPC24XX_PINMODE ((volatile uint32_t *) &PINMODE0)
 
-static volatile lpc24xx_fio * const LPC24XX_FIO = (volatile lpc24xx_fio *) FIO_BASE_ADDR;
+#define LPC24XX_FIO ((volatile lpc24xx_fio *) FIO_BASE_ADDR)
+
+/** @} */
 
 #endif /* LIBBSP_ARM_LPC24XX_LPC24XX_H */

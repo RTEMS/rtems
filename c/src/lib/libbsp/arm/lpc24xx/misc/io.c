@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup lpc24xx_io
  *
- * Input and output module.
+ * @brief Input and output module.
  */
 
 /*
@@ -20,10 +20,11 @@
  */
 
 #include <bsp/io.h>
+#include <bsp/system-clocks.h>
 
-#define LPC24XX_IO_SELECT( index) (index >> 4U)
+#define LPC24XX_IO_SELECT(pin) (pin >> 4U)
 
-#define LPC24XX_IO_SELECT_SHIFT( index) ((index & 0xfU) << 1U)
+#define LPC24XX_IO_SELECT_SHIFT(pin) ((pin & 0xfU) << 1U)
 
 #define LPC24XX_IO_SELECT_MASK 0x3U
 
@@ -35,136 +36,78 @@
 
 #define LPC24XX_IO_ALTERNATE_2 0x3U
 
-#define LPC24XX_IO_HEADER_FLAG 0x80U
-
-#define LPC24XX_IO_ENTRY( b, e, f) \
-  { .function = f, .begin = b, .end = e }
-
-#define LPC24XX_IO_HEADER( module, index, config) \
-  { .function = config | LPC24XX_IO_HEADER_FLAG, .begin = module, .end = index }
-
-typedef struct  __attribute__ ((__packed__)) {
-  unsigned char function;
-  unsigned char begin;
-  unsigned char end;
-} lpc24xx_io_entry;
-
-typedef void (*lpc24xx_io_iterate_routine)( unsigned /* index */, unsigned /* function */);
-
-static const lpc24xx_io_entry lpc24xx_io_config_table [] = {
-  /* EMC */
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_EMC, 0, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 2, 16), LPC24XX_IO_INDEX_BY_PORT( 2, 22), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 2, 24), LPC24XX_IO_INDEX_BY_PORT( 2, 26), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 2, 26), LPC24XX_IO_INDEX_BY_PORT( 2, 30), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 3, 0), LPC24XX_IO_INDEX_BY_PORT( 3, 16), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 4, 0), LPC24XX_IO_INDEX_BY_PORT( 4, 28), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 4, 30), LPC24XX_IO_INDEX_BY_PORT( 5, 0), LPC24XX_IO_ALTERNATE_0),
-
-  /* UART */
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 0, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 2), LPC24XX_IO_INDEX_BY_PORT( 0, 4), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 1, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 15), LPC24XX_IO_INDEX_BY_PORT( 0, 17), LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 1, 1),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 2, 0), LPC24XX_IO_INDEX_BY_PORT( 2, 2), LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 1, 2),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 3, 16), LPC24XX_IO_INDEX_BY_PORT( 3, 18), LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 2, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 10), LPC24XX_IO_INDEX_BY_PORT( 0, 12), LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 2, 1),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 2, 8), LPC24XX_IO_INDEX_BY_PORT( 2, 10), LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 2, 2),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 4, 22), LPC24XX_IO_INDEX_BY_PORT( 4, 24), LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 3, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 0), LPC24XX_IO_INDEX_BY_PORT( 0, 2), LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 3, 1),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 25), LPC24XX_IO_INDEX_BY_PORT( 0, 27), LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_UART, 3, 2),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 4, 28), LPC24XX_IO_INDEX_BY_PORT( 4, 30), LPC24XX_IO_ALTERNATE_2),
-
-  /* Ethernet */
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_ETHERNET, 0, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 1, 0), LPC24XX_IO_INDEX_BY_PORT( 1, 18), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_ETHERNET, 0, 1),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 1, 0), LPC24XX_IO_INDEX_BY_PORT( 1, 2), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 1, 4), LPC24XX_IO_INDEX_BY_PORT( 1, 5), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 1, 8), LPC24XX_IO_INDEX_BY_PORT( 1, 11), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 1, 14), LPC24XX_IO_INDEX_BY_PORT( 1, 18), LPC24XX_IO_ALTERNATE_0),
-
-  /* ADC */
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_ADC, 0, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 12), LPC24XX_IO_INDEX_BY_PORT( 0, 14), LPC24XX_IO_ALTERNATE_2),
-
-  /* I2C */
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_I2C, 0, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 27), LPC24XX_IO_INDEX_BY_PORT( 0, 29), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_I2C, 1, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 0), LPC24XX_IO_INDEX_BY_PORT( 0, 2), LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_I2C, 1, 1),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 19), LPC24XX_IO_INDEX_BY_PORT( 0, 21), LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_I2C, 1, 2),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 2, 14), LPC24XX_IO_INDEX_BY_PORT( 2, 16), LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_I2C, 2, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 10), LPC24XX_IO_INDEX_BY_PORT( 0, 12), LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_I2C, 2, 1),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 2, 30), LPC24XX_IO_INDEX_BY_PORT( 3, 0), LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_I2C, 2, 2),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 4, 20), LPC24XX_IO_INDEX_BY_PORT( 4, 22), LPC24XX_IO_ALTERNATE_1),
-
-  /* USB */
-  LPC24XX_IO_HEADER( LPC24XX_MODULE_USB, 0, 0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 0, 29), LPC24XX_IO_INDEX_BY_PORT( 0, 31), LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY( LPC24XX_IO_INDEX_BY_PORT( 1, 19), LPC24XX_IO_INDEX_BY_PORT( 1, 20), LPC24XX_IO_ALTERNATE_1),
-};
-
-static size_t lpc24xx_io_get_entry_index( lpc24xx_module module, unsigned index, unsigned config)
-{
-  size_t i = 0;
-
-  config |= LPC24XX_IO_HEADER_FLAG;
-
-  for (i = 0; i < sizeof( lpc24xx_io_config_table); ++i) {
-    const lpc24xx_io_entry *e = lpc24xx_io_config_table + i;
-
-    if (e->function == config && e->begin == module && e->end == index) {
-      return i + 1;
-    }
+#define LPC24XX_IO_ENTRY(mod, idx, cfg, begin_port, begin_index, last_port, last_index, function) \
+  { \
+    .module = mod, \
+    .index = idx, \
+    .config = cfg, \
+    .pin_begin = LPC24XX_IO_INDEX_BY_PORT(begin_port, begin_index), \
+    .pin_last = LPC24XX_IO_INDEX_BY_PORT(last_port, last_index), \
+    .pin_function = function \
   }
 
-  return (size_t) -1;
-}
+typedef struct {
+  unsigned module : 5;
+  unsigned index : 4;
+  unsigned config : 4;
+  unsigned pin_begin : 8;
+  unsigned pin_last : 8;
+  unsigned pin_function : 3;
+} lpc24xx_io_entry;
 
-static void lpc24xx_io_do_config( unsigned index, unsigned function)
-{
-  rtems_interrupt_level level;
-  unsigned select = LPC24XX_IO_SELECT( index);
-  unsigned shift = LPC24XX_IO_SELECT_SHIFT( index);
+typedef void (*lpc24xx_io_iterate_routine)(unsigned /* pin */, unsigned /* function */);
 
-  rtems_interrupt_disable( level);
+static const lpc24xx_io_entry lpc24xx_io_config_table [] = {
+  /* UART */
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 0, 0, 0, 2, 0, 3, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 1, 0, 0, 15, 0, 16, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 1, 1, 2, 0, 2, 1, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 1, 2, 3, 16, 3, 17, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 2, 0, 0, 10, 0, 11, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 2, 1, 2, 8, 2, 9, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 2, 2, 4, 22, 4, 23, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 3, 0, 0, 0, 0, 1, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 3, 1, 0, 25, 0, 26, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 3, 2, 4, 28, 4, 29, LPC24XX_IO_ALTERNATE_2),
 
-  LPC24XX_PINSEL [select] =
-    (LPC24XX_PINSEL [select] & ~(LPC24XX_IO_SELECT_MASK << shift))
-      | ((function & LPC24XX_IO_SELECT_MASK) << shift);
+  /* Ethernet */
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 0, 1, 0, 1, 17, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 1, 1, 0, 1, 1, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 1, 1, 4, 1, 4, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 1, 1, 8, 1, 10, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 1, 1, 14, 1, 17, LPC24XX_IO_ALTERNATE_0),
 
-  rtems_interrupt_flash( level);
+  /* ADC */
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ADC, 0, 0, 0, 12, 0, 13, LPC24XX_IO_ALTERNATE_2),
 
-  LPC24XX_PINMODE [select] &= ~(LPC24XX_IO_SELECT_MASK << shift);
+  /* I2C */
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 0, 0, 0, 27, 0, 28, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 1, 0, 0, 0, 0, 1, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 1, 1, 0, 19, 0, 20, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 1, 2, 2, 14, 2, 15, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 2, 0, 0, 10, 0, 11, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 2, 1, 2, 30, 2, 31, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 2, 2, 4, 20, 4, 21, LPC24XX_IO_ALTERNATE_1),
 
-  rtems_interrupt_enable( level);
-}
+  /* SSP */
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 0, 0, 15, 0, 18, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 1, 1, 20, 0, 21, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 1, 1, 23, 0, 24, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 2, 2, 22, 2, 23, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 2, 2, 26, 2, 27, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 0, 0, 6, 0, 9, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 1, 0, 12, 0, 13, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 1, 0, 14, 0, 14, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 1, 1, 31, 1, 31, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 2, 4, 20, 4, 23, LPC24XX_IO_ALTERNATE_2),
 
-static void lpc24xx_io_do_release( unsigned index, unsigned function)
-{
-  rtems_interrupt_level level;
-  unsigned select = LPC24XX_IO_SELECT( index);
-  unsigned shift = LPC24XX_IO_SELECT_SHIFT( index);
+  /* USB */
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_USB, 0, 0, 0, 29, 0, 30, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_USB, 0, 0, 1, 19, 1, 19, LPC24XX_IO_ALTERNATE_1),
 
-  rtems_interrupt_disable( level);
-  LPC24XX_PINSEL [select] =
-    (LPC24XX_PINSEL [select] & ~(LPC24XX_IO_SELECT_MASK << shift));
-  rtems_interrupt_enable( level);
-}
+  /* Terminate */
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_COUNT, 0, 0, 0, 0, 0, 0, 0),
+};
 
 static rtems_status_code lpc24xx_io_iterate(
   lpc24xx_module module,
@@ -173,31 +116,58 @@ static rtems_status_code lpc24xx_io_iterate(
   lpc24xx_io_iterate_routine routine
 )
 {
-  size_t i = lpc24xx_io_get_entry_index( module, index, config);
+  rtems_status_code sc = RTEMS_INVALID_ID;
+  const lpc24xx_io_entry *e = &lpc24xx_io_config_table [0];
 
-  if (i != (size_t) -1) {
-    const lpc24xx_io_entry * const table_end = lpc24xx_io_config_table
-      + sizeof( lpc24xx_io_config_table) / sizeof( lpc24xx_io_config_table [0]);
-    const lpc24xx_io_entry *e = lpc24xx_io_config_table + i;
+  while (e->module != LPC24XX_MODULE_COUNT) {
+    if (e->module == module && e->index == index && e->config == config) {
+      unsigned pin = e->pin_begin;
+      unsigned last = e->pin_last;
+      unsigned function = e->pin_function;
 
-    while (e != table_end && (e->function & LPC24XX_IO_HEADER_FLAG) == 0) {
-      unsigned j = e->begin;
-      unsigned end = e->end;
-      unsigned function = e->function;
+      while (pin <= last) {
+        (*routine)(pin, function);
 
-      while (j < end) {
-        routine( j, function);
-
-        ++j;
+        ++pin;
       }
 
-      ++e;
+      sc = RTEMS_SUCCESSFUL;
     }
-  } else {
-    return RTEMS_INVALID_ID;
+    ++e;
   }
 
-  return RTEMS_SUCCESSFUL;
+  return sc;
+}
+
+static void lpc24xx_io_do_config(unsigned pin, unsigned function)
+{
+  rtems_interrupt_level level;
+  unsigned select = LPC24XX_IO_SELECT(pin);
+  unsigned shift = LPC24XX_IO_SELECT_SHIFT(pin);
+
+  rtems_interrupt_disable(level);
+
+  LPC24XX_PINSEL [select] =
+    (LPC24XX_PINSEL [select] & ~(LPC24XX_IO_SELECT_MASK << shift))
+      | ((function & LPC24XX_IO_SELECT_MASK) << shift);
+
+  rtems_interrupt_flash(level);
+
+  LPC24XX_PINMODE [select] &= ~(LPC24XX_IO_SELECT_MASK << shift);
+
+  rtems_interrupt_enable(level);
+}
+
+static void lpc24xx_io_do_release(unsigned pin, unsigned function)
+{
+  rtems_interrupt_level level;
+  unsigned select = LPC24XX_IO_SELECT(pin);
+  unsigned shift = LPC24XX_IO_SELECT_SHIFT(pin);
+
+  rtems_interrupt_disable(level);
+  LPC24XX_PINSEL [select] =
+    (LPC24XX_PINSEL [select] & ~(LPC24XX_IO_SELECT_MASK << shift));
+  rtems_interrupt_enable(level);
 }
 
 rtems_status_code lpc24xx_io_config(
@@ -206,7 +176,7 @@ rtems_status_code lpc24xx_io_config(
   unsigned config
 )
 {
-  return lpc24xx_io_iterate( module, index, config, lpc24xx_io_do_config);
+  return lpc24xx_io_iterate(module, index, config, lpc24xx_io_do_config);
 }
 
 rtems_status_code lpc24xx_io_release(
@@ -215,20 +185,20 @@ rtems_status_code lpc24xx_io_release(
   unsigned config
 )
 {
-  return lpc24xx_io_iterate( module, index, config, lpc24xx_io_do_release);
+  return lpc24xx_io_iterate(module, index, config, lpc24xx_io_do_release);
 }
 
 rtems_status_code lpc24xx_gpio_config(
-  unsigned index,
+  unsigned pin,
   lpc24xx_gpio_settings settings
 )
 {
-  if (index <= LPC24XX_IO_INDEX_MAX) {
+  if (pin <= LPC24XX_IO_INDEX_MAX) {
     rtems_interrupt_level level;
-    unsigned port = LPC24XX_IO_PORT( index);
-    unsigned bit = LPC24XX_IO_PORT_BIT( index);
-    unsigned select = LPC24XX_IO_SELECT( index);
-    unsigned shift = LPC24XX_IO_SELECT_SHIFT( index);
+    unsigned port = LPC24XX_IO_PORT(pin);
+    unsigned bit = LPC24XX_IO_PORT_BIT(pin);
+    unsigned select = LPC24XX_IO_SELECT(pin);
+    unsigned shift = LPC24XX_IO_SELECT_SHIFT(pin);
     unsigned resistor = settings & LPC24XX_GPIO_RESISTOR_MASK;
     unsigned output = (settings & LPC24XX_GPIO_OUTPUT) != 0 ? 1U : 0U;
 
@@ -248,20 +218,20 @@ rtems_status_code lpc24xx_gpio_config(
         return RTEMS_INVALID_NUMBER;
     }
 
-    rtems_interrupt_disable( level);
+    rtems_interrupt_disable(level);
 
     /* Resistor */
     LPC24XX_PINMODE [select] =
       (LPC24XX_PINMODE [select] & ~(LPC24XX_IO_SELECT_MASK << shift))
         | ((resistor & LPC24XX_IO_SELECT_MASK) << shift); 
 
-    rtems_interrupt_flash( level);
+    rtems_interrupt_flash(level);
 
     /* Input or output */
     LPC24XX_FIO [port].dir =
       (LPC24XX_FIO [port].dir & ~(1U << bit)) | (output << bit);
 
-    rtems_interrupt_enable( level);
+    rtems_interrupt_enable(level);
   } else {
     return RTEMS_INVALID_ID;
   }
@@ -445,12 +415,12 @@ static rtems_status_code lpc24xx_module_do_enable(
   if (enable) {
     rtems_interrupt_level level;
 
-    rtems_interrupt_disable( level);
+    rtems_interrupt_disable(level);
     PCONP |= 1U << power_bit;
-    rtems_interrupt_enable( level);
+    rtems_interrupt_enable(level);
 
     if (module != LPC24XX_MODULE_USB) {
-      rtems_interrupt_disable( level);
+      rtems_interrupt_disable(level);
       if (clock_shift < 32U) {
         PCLKSEL0 = (PCLKSEL0 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
             | (clock << clock_shift);
@@ -459,7 +429,7 @@ static rtems_status_code lpc24xx_module_do_enable(
         PCLKSEL1 = (PCLKSEL1 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
             | (clock << clock_shift);
       }
-      rtems_interrupt_enable( level);
+      rtems_interrupt_enable(level);
     } else {
       unsigned pllclk = lpc24xx_pllclk();
       unsigned usbsel = pllclk / 48000000U - 1U;
@@ -473,9 +443,9 @@ static rtems_status_code lpc24xx_module_do_enable(
   } else {
     rtems_interrupt_level level;
 
-    rtems_interrupt_disable( level);
+    rtems_interrupt_disable(level);
     PCONP &= ~(1U << power_bit);
-    rtems_interrupt_enable( level);
+    rtems_interrupt_enable(level);
   }
 
   return RTEMS_SUCCESSFUL;
@@ -487,7 +457,7 @@ rtems_status_code lpc24xx_module_enable(
   lpc24xx_module_clock clock
 )
 {
-  return lpc24xx_module_do_enable( module, index, clock, true);
+  return lpc24xx_module_do_enable(module, index, clock, true);
 }
 
 rtems_status_code lpc24xx_module_disable(
@@ -495,5 +465,5 @@ rtems_status_code lpc24xx_module_disable(
   unsigned index
 )
 {
-  return lpc24xx_module_do_enable( module, index, 0U, false);
+  return lpc24xx_module_do_enable(module, index, 0U, false);
 }

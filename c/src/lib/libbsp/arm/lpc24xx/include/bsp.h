@@ -3,7 +3,7 @@
  *
  * @ingroup lpc24xx
  *
- * @brief Global BSP variables and functions.
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -35,25 +35,59 @@ extern "C" {
 
 #ifndef ASM
 
-/* Network driver configuration */
-
 struct rtems_bsdnet_ifconfig;
 
+/**
+ * @defgroup lpc24xx LPC24XX Support
+ *
+ * @ingroup bsp_kit
+ *
+ * @brief LPC24XX support package.
+ *
+ * @{
+ */
+
+/**
+ * @brief Network driver attach and detach function.
+ */
 int lpc24xx_eth_attach_detach(
   struct rtems_bsdnet_ifconfig *config,
   int attaching
 );
 
+/**
+ * @brief Standard network driver attach and detach function.
+ */
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	lpc24xx_eth_attach_detach
 
+/**
+ * @brief Standard network driver name.
+ */
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "eth0"
 
-/*
- *  BSP specific idle thread
+/**
+ * @brief Optimized idle task.
+ *
+ * This idle task sets the power mode to idle.  This causes the processor clock
+ * to be stopped, while on-chip peripherals remain active.  Any enabled
+ * interrupt from a peripheral or an external interrupt source will cause the
+ * processor to resume execution.
+ *
+ * To enable the idle task use the following in the system configuration:
+ *
+ * @code
+ * #include <bsp.h>
+ * 
+ * #define CONFIGURE_INIT
+ *
+ * #define CONFIGURE_IDLE_TASK_BODY lpc24xx_idle
+ *
+ * #include <confdefs.h>
+ * @endcode
  */
-void *bsp_idle_thread( uint32_t ignored);
+void *lpc24xx_idle(uintptr_t ignored);
 
-#define BSP_IDLE_TASK_BODY bsp_idle_thread
+/** @} */
 
 #endif /* ASM */
 

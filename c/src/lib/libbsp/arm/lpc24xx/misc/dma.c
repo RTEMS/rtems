@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup lpc24xx_dma
  *
- * @brief DMA support.
+ * @brief Direct memory access (DMA) support.
  */
 
 /*
@@ -12,10 +12,11 @@
  * Obere Lagerstr. 30
  * D-82178 Puchheim
  * Germany
- * rtems@embedded-brains.de
+ * <rtems@embedded-brains.de>
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #include <rtems/endian.h>
@@ -29,9 +30,6 @@
  */
 static bool lpc24xx_dma_channel_occupation [GPDMA_CH_NUMBER];
 
-/**
- * @brief Initializes the general purpose DMA.
- */
 void lpc24xx_dma_initialize(void)
 {
   rtems_interrupt_level level;
@@ -57,13 +55,6 @@ void lpc24xx_dma_initialize(void)
   GPDMA_SYNC = 0;
 }
 
-/**
- * @brief Tries to obtain the channel @a channel.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INVALID_ID Invalid channel number.
- * @retval RTEMS_RESOURCE_IN_USE Channel already occupied.
- */
 rtems_status_code lpc24xx_dma_channel_obtain(unsigned channel)
 {
   if (channel < GPDMA_CH_NUMBER) {
@@ -81,14 +72,6 @@ rtems_status_code lpc24xx_dma_channel_obtain(unsigned channel)
   }
 }
 
-/**
- * @brief Releases the channel @a channel.
- *
- * You must have obtained this channel with lpc24xx_dma_channel_obtain()
- * previously.
- *
- * If the channel number @a channel is out of range nothing will happen.
- */
 void lpc24xx_dma_channel_release(unsigned channel)
 {
   if (channel < GPDMA_CH_NUMBER) {
@@ -96,29 +79,23 @@ void lpc24xx_dma_channel_release(unsigned channel)
   }
 }
 
-/**
- * @brief Disables the channel @a channel.
- *
- * If @a force is false the channel will be halted and disabled when the
- * channel is inactive.
- *
- * If the channel number @a channel is out of range the behaviour is undefined.
- */
 void lpc24xx_dma_channel_disable(unsigned channel, bool force)
 {
-  volatile lpc24xx_dma_channel *ch = GPDMA_CH_BASE_ADDR(channel);
-  uint32_t cfg = ch->cfg;
-
-  if (!force) {
-    /* Halt */
-    ch->cfg = SET_FLAG(cfg, GPDMA_CH_CFG_HALT);
-
-    /* Wait for inactive */
-    do {
-      cfg = ch->cfg;
-    } while (IS_FLAG_SET(cfg, GPDMA_CH_CFG_ACTIVE));
+  if (channel < GPDMA_CH_NUMBER) {
+    volatile lpc24xx_dma_channel *ch = GPDMA_CH_BASE_ADDR(channel);
+    uint32_t cfg = ch->cfg;
+ 
+    if (!force) {
+      /* Halt */
+      ch->cfg = SET_FLAG(cfg, GPDMA_CH_CFG_HALT);
+ 
+      /* Wait for inactive */
+      do {
+        cfg = ch->cfg;
+      } while (IS_FLAG_SET(cfg, GPDMA_CH_CFG_ACTIVE));
+    }
+ 
+    /* Disable */
+    ch->cfg = CLEAR_FLAG(cfg, GPDMA_CH_CFG_EN);
   }
-
-  /* Disable */
-  ch->cfg = CLEAR_FLAG(cfg, GPDMA_CH_CFG_EN);
 }

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup lpc24xx_clocks
  *
  * @brief System clocks.
  */
@@ -36,45 +36,44 @@
   #error "unknown RTC oscillator frequency"
 #endif
 
-/**
- * @brief Delay for @a us micro seconds.
- *
- * @note Uses Timer 1.
- */
-void lpc24xx_micro_seconds_delay( unsigned us)
+void lpc24xx_timer_initialize(void)
 {
-  /* Stop and reset timer */
-  T1TCR = 0x02;
+  /* Reset timer */
+  T1TCR = TCR_RST;
+
+  /* Set timer mode */
+  T1CTCR = 0;
 
   /* Set prescaler to zero */
-  T1PR = 0x00;
-  
-  /* Set match value */
-  T1MR0 = (uint32_t) ((uint64_t) 4000000 * (uint64_t) us / (uint64_t) lpc24xx_cclk()) + 1;
+  T1PR = 0;
 
   /* Reset all interrupt flags */
   T1IR = 0xff;
 
-  /* Stop timer on match */
-  T1MCR = 0x04;
+  /* Do not stop on a match */
+  T1MCR = 0;
+
+  /* No captures */
+  T1CCR = 0;
 
   /* Start timer */
-  T1TCR = 0x01;
-  
-  /* Wait until delay time has elapsed */
-  while ((T1TCR & 0x01) != 0) {
-    /* Wait */
-  }
+  T1TCR = TCR_EN;
 }
 
-/**
- * @brief Returns the PLL output clock frequency in [Hz].
- *
- * Returns zero in case of an unexpected PLL input frequency.
- */
-unsigned lpc24xx_pllclk( void)
+void lpc24xx_micro_seconds_delay(unsigned us)
 {
-  unsigned clksrc = GET_CLKSRCSEL_CLKSRC( CLKSRCSEL);
+  unsigned start = lpc24xx_timer();
+  unsigned end = start + us * (lpc24xx_cclk() / 1000000);
+  unsigned now = 0;
+
+  do {
+    now = lpc24xx_timer();
+  } while (now < end);
+}
+
+unsigned lpc24xx_pllclk(void)
+{
+  unsigned clksrc = GET_CLKSRCSEL_CLKSRC(CLKSRCSEL);
   unsigned pllinclk = 0;
   unsigned pllclk = 0;
 
@@ -94,10 +93,10 @@ unsigned lpc24xx_pllclk( void)
   }
 
   /* Get PLL output frequency */
-  if (IS_FLAG_SET( PLLSTAT, PLLSTAT_PLLC)) {
+  if (IS_FLAG_SET(PLLSTAT, PLLSTAT_PLLC)) {
     uint32_t pllcfg = PLLCFG;
-    unsigned n = GET_PLLCFG_NSEL( pllcfg) + 1;
-    unsigned m = GET_PLLCFG_MSEL( pllcfg) + 1;
+    unsigned n = GET_PLLCFG_NSEL(pllcfg) + 1;
+    unsigned m = GET_PLLCFG_MSEL(pllcfg) + 1;
 
     pllclk = (pllinclk / n) * 2 * m;
   } else {
@@ -107,81 +106,13 @@ unsigned lpc24xx_pllclk( void)
   return pllclk;
 }
 
-/**
- * @brief Returns the CPU clock frequency in [Hz].
- *
- * Returns zero in case of an unexpected PLL input frequency.
- */
-unsigned lpc24xx_cclk( void)
+unsigned lpc24xx_cclk(void)
 {
   /* Get PLL output frequency */
   unsigned pllclk = lpc24xx_pllclk();
 
   /* Get CPU frequency */
-  unsigned cclk = pllclk / (GET_CCLKCFG_CCLKSEL( CCLKCFG) + 1);
+  unsigned cclk = pllclk / (GET_CCLKCFG_CCLKSEL(CCLKCFG) + 1);
 
   return cclk;
-}
-
-static void lpc24xx_pll_config( uint32_t val)
-{
-  PLLCON = val;
-  PLLFEED = 0xaa;
-  PLLFEED = 0x55;
-}
-
-/**
- * @brief Sets the Phase Locked Loop (PLL).
- *
- * @param clksrc Selects the clock source for the PLL.
- *
- * @param nsel Selects PLL pre-divider value (sometimes named psel).
- *
- * @param msel Selects PLL multiplier value.
- *
- * @param cclksel Selects the divide value for creating the CPU clock (CCLK)
- * from the PLL output.
- *
- * @note All parameter values are the actual register field values.
- */
-void lpc24xx_set_pll( unsigned clksrc, unsigned nsel, unsigned msel, unsigned cclksel)
-{
-  bool pll_enabled = IS_FLAG_SET( PLLSTAT, PLLSTAT_PLLE);
-
-  /* Disconnect PLL if necessary */
-  if (IS_FLAG_SET( PLLSTAT, PLLSTAT_PLLC)) {
-    if (pll_enabled) {
-      lpc24xx_pll_config( PLLCON_PLLE);
-    } else {
-      lpc24xx_pll_config( 0);
-    }
-  }
-
-  /* Set CPU clock divider to a reasonable save value */
-  CCLKCFG = 0;
-
-  /* Disable PLL if necessary */
-  if (pll_enabled) {
-    lpc24xx_pll_config( 0);
-  }
-
-  /* Select clock source */
-  CLKSRCSEL = SET_CLKSRCSEL_CLKSRC( 0, clksrc);
-
-  /* Set PLL Configuration Register */
-  PLLCFG = SET_PLLCFG_NSEL( 0, nsel) | SET_PLLCFG_MSEL( 0, msel);
-
-  /* Enable PLL */
-  lpc24xx_pll_config( PLLCON_PLLE);
-
-  /* Wait for lock */
-  while (IS_FLAG_CLEARED( PLLSTAT, PLLSTAT_PLOCK)) {
-    /* Wait */
-  }
-
-  /* Set CPU clock divider and ensure that we have an odd value */
-  CCLKCFG = SET_CCLKCFG_CCLKSEL( 0, cclksel | 1);
-
-  /* Connect PLL */
-  lpc24xx_pll_config( PLLCON_PLLE | PLLCON_PLLC);
 }

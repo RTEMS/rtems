@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup lpc24xx_libi2c
  *
- * LibI2C bus driver for the I2C modules.
+ * @brief LibI2C bus driver for the I2C modules.
  */
 
 /*
@@ -28,11 +28,23 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @defgroup lpc24xx_libi2c LPC24XX Bus Drivers
+ *
+ * @ingroup libi2c
+ *
+ * @brief LibI2C bus drivers for LPC24XX.
+ *
+ * @{
+ */
+
 extern rtems_libi2c_bus_t * const lpc24xx_i2c_0;
 
 extern rtems_libi2c_bus_t * const lpc24xx_i2c_1;
 
 extern rtems_libi2c_bus_t * const lpc24xx_i2c_2;
+
+/** @} */
 
 #ifdef __cplusplus
 }

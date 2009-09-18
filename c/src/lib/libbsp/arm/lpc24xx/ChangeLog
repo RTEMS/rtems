@@ -1,3 +1,12 @@
+2009-09-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspstarthooks.c, misc/dma-copy.c, misc/timer.c: New files.
+	* Makefile.am, configure.ac, i2c/i2c.c, include/bsp.h, include/dma.h,
+	include/i2c.h, include/io.h, include/irq.h, include/lpc24xx.h,
+	include/ssp.h, include/system-clocks.h, irq/irq.c, misc/bspidle.c,
+	misc/dma.c, misc/io.c, misc/system-clocks.c, network/network.c,
+	ssp/ssp.c, startup/bspstart.c: Changes throughout.
+
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.

@@ -90,6 +90,7 @@ libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
 	../../shared/src/irq-legacy.c \
 	../../shared/src/irq-info.c \
 	../../shared/src/irq-shell.c \
+	../../shared/src/irq-server.c \
 	irq/irq.c
 
 # Console
@@ -103,20 +104,27 @@ libbsp_a_SOURCES += clock/clock-config.c \
 # RTC
 libbsp_a_SOURCES += ../../shared/tod.c \
 	rtc/rtc-config.c
-# Timer
-libbsp_a_SOURCES += ../../shared/timerstub.c
 
 # Misc
 libbsp_a_SOURCES += misc/system-clocks.c \
 	misc/dma.c \
+	misc/dma-copy.c \
 	misc/bspidle.c \
-	misc/io.c
+	misc/io.c \
+	misc/timer.c
 
 # SSP
 libbsp_a_SOURCES += ssp/ssp.c
 
 # I2C
 libbsp_a_SOURCES += i2c/i2c.c
+
+# Start hooks (FIXME: This is brittle.)
+libbsp_a_SOURCES += startup/bspstarthooks.c
+bspstarthooks.o: startup/bspstarthooks.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS:-mthumb=) \
+	-MT bspstarthooks.o -MD -MP -MF $(DEPDIR)/bspstarthooks.Tpo -c -o bspstarthooks.o \
+	`test -f 'startup/bspstarthooks.c' || echo '$(srcdir)/'`startup/bspstarthooks.c
 
 ###############################################################################
 #                  Network                                                    #

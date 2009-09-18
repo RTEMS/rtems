@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup lpc24xx_io
  *
- * Input and output module.
+ * @brief Input and output module.
  */
 
 /*
@@ -29,6 +29,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup lpc24xx_io IO Support and Configuration
+ *
+ * @ingroup lpc24xx
+ *
+ * @brief Input and output module.
+ *
+ * @{
+ */
 
 #define LPC24XX_IO_PORT_COUNT 5U
 
@@ -64,7 +74,7 @@ typedef enum {
   LPC24XX_MODULE_UART,
   LPC24XX_MODULE_USB,
   LPC24XX_MODULE_WDT,
-  LPC24XX_MODULE_NUMBER
+  LPC24XX_MODULE_COUNT
 } lpc24xx_module;
 
 typedef enum {
@@ -158,6 +168,8 @@ static inline bool lpc24xx_gpio_get( unsigned index)
     return false;
   }
 }
+
+/** @} */
 
 #ifdef __cplusplus
 }

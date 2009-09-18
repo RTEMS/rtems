@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup lpc24xx_libi2c
  *
- * LibI2C bus driver for the I2C modules.
+ * @brief LibI2C bus driver for the I2C modules.
  */
 
 /*
