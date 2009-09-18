@@ -1,3 +1,7 @@
+2009-09-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* preinstall.am: Regenerate.
+
 2009-09-16	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* configure.ac: Resolve confusion with Ralf's patch.

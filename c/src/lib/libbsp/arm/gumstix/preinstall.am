@@ -67,3 +67,5 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
 if ON_SKYEYE
 endif
+if ON_SKYEYE
+endif
