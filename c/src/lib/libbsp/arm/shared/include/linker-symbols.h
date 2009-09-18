@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup bsp_linker
+ *
  * @brief Symbols defined in linker command base file.
  */
 
@@ -20,19 +22,21 @@
 #ifndef LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H
 #define LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H
 
+/**
+ * @defgroup bsp_linker Linker Support
+ *
+ * @ingroup bsp_kit
+ *
+ * @brief Linker support.
+ *
+ * @{
+ */
+
 #ifndef ASM
   #define LINKER_SYMBOL(sym) extern char sym [];
 #else
   #define LINKER_SYMBOL(sym) .extern sym
 #endif
-
-LINKER_SYMBOL(bsp_region_text_begin)
-LINKER_SYMBOL(bsp_region_text_end)
-LINKER_SYMBOL(bsp_region_text_size)
-
-LINKER_SYMBOL(bsp_region_data_begin)
-LINKER_SYMBOL(bsp_region_data_end)
-LINKER_SYMBOL(bsp_region_data_size)
 
 LINKER_SYMBOL(bsp_stack_irq_begin)
 LINKER_SYMBOL(bsp_stack_irq_end)
@@ -93,5 +97,7 @@ LINKER_SYMBOL(bsp_section_work_size)
 LINKER_SYMBOL(bsp_section_stack_begin)
 LINKER_SYMBOL(bsp_section_stack_end)
 LINKER_SYMBOL(bsp_section_stack_size)
+
+/** @} */
 
 #endif /* LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H */

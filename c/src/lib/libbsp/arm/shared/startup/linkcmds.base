@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup bsp_linker
+ *
  * @brief Linker command base file.
  */
 
@@ -29,14 +31,6 @@ ENTRY (start)
 bsp_section_align = 32;
 
 bsp_stack_align = 4;
-
-bsp_region_text_begin = ORIGIN (REGION_TEXT);
-bsp_region_text_size = LENGTH (REGION_TEXT);
-bsp_region_text_end = bsp_region_text_begin + bsp_region_text_size;
-
-bsp_region_data_begin = ORIGIN (REGION_DATA);
-bsp_region_data_size = LENGTH (REGION_DATA);
-bsp_region_data_end = bsp_region_data_begin + bsp_region_data_size;
 
 /*
  * BSP: Symbols that may be defined externally
@@ -137,11 +131,6 @@ SECTIONS {
 		 * BSP: Begin of text section
 		 */
 		bsp_section_text_begin = .;
-
-		/*
-		 * BSP: System startup entry
-		 */
-		KEEP (*(.bsp_start))
 
 		/*
 		 * BSP: Moved into .text from .init
@@ -290,7 +279,7 @@ SECTIONS {
 	.fast : {
 		bsp_section_fast_begin = .;
 
-		*(.fast)
+		*(.bsp_fast)
 
 		. = ALIGN (bsp_section_align);
 
