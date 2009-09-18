@@ -27,28 +27,10 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu_asm.h>
 
-/*
- *  function declaration macro (start body in ARM mode)
- */
-#ifdef __thumb__
-  #define FUNC_START_ARM(_name_)              \
-    .code   16                              ;\
-    .thumb_func                             ;\
-    .globl _name_                           ;\
-_name_:                                         ;\
-     bx      pc                              ;\
-     .code   32                              ;\
-_name_ ## _ARM:
-#else
-  #define FUNC_START_ARM(_name_) \
-     .globl _name_; \
-_name_: 
-#endif
-
         .text
 
 /* FIXME:       _Exception_Handler_Undef_Swi is untested */
-FUNC_START_ARM(_Exception_Handler_Undef_Swi)
+DEFINE_FUNCTION_ARM(_Exception_Handler_Undef_Swi)
 /* FIXME: This should use load and store multiple instructions */
 	sub     r13,r13,#SIZE_REGS
 	str     r4,  [r13, #REG_R4]
@@ -84,7 +66,7 @@ _go_back_1:
 	movs	pc,r14			/* return  */ 
 	
 /* FIXME:       _Exception_Handler_Abort is untested */
-FUNC_START_ARM(_Exception_Handler_Abort)
+DEFINE_FUNCTION_ARM(_Exception_Handler_Abort)
 /* FIXME: This should use load and store multiple instructions */
 	sub     r13,r13,#SIZE_REGS
 	str     r4,  [r13, #REG_R4]
@@ -127,7 +109,7 @@ _go_back_2:
 #define ABORT_REGS_OFFS 32-REG_R4
 #define ABORT_SIZE_REGS SIZE_REGS+ABORT_REGS_OFFS
 	
-FUNC_START_ARM(_exc_data_abort)
+DEFINE_FUNCTION_ARM(_exc_data_abort)
 	sub	sp, sp, #ABORT_SIZE_REGS	/* reserve register frame */
 	stmia	sp, {r0-r11}
 	add	sp, sp, #ABORT_REGS_OFFS	/* the Context_Control structure starts by CPSR, R4, ... */

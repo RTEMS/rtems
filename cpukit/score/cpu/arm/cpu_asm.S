@@ -22,24 +22,6 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu_asm.h>
 
-/*
- *  function declaration macro (start body in ARM mode)
- */
-#ifdef __thumb__
-  #define FUNC_START_ARM(_name_)              \
-    .code   16                              ;\
-    .thumb_func                             ;\
-    .globl _name_                           ;\
-_name_:                                         ;\
-     bx      pc                              ;\
-     .code   32                              ;\
-_name_ ## _ARM:
-#else
-  #define FUNC_START_ARM(_name_) \
-     .globl _name_; \
-_name_: 
-#endif
-
         .text
 
 /*
@@ -58,7 +40,7 @@ _name_:
  *        
  */
  
-FUNC_START_ARM(_CPU_Context_switch)
+DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 /* Start saving context */
 	mrs	r2, cpsr
 	stmia	r0,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
@@ -81,6 +63,6 @@ _restore:
  *  It must match _CPU_Context_switch()
  *
  */
-FUNC_START_ARM(_CPU_Context_restore)
+DEFINE_FUNCTION_ARM(_CPU_Context_restore)
         mov     r1, r0
         b       _restore

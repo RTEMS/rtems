@@ -132,4 +132,13 @@
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
 
+#ifdef __thumb__
+  #define DEFINE_FUNCTION_ARM(name) \
+    .thumb_func ; .globl name ; name: ; bx pc ; \
+    .arm ; .globl name ## _arm ; name ## _arm:
+#else
+  #define DEFINE_FUNCTION_ARM(name) \
+    .globl name ; name: ; .globl name ## _arm ; name ## _arm:
 #endif
+
+#endif /* _RTEMS_ASM_H */
