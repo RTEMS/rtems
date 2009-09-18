@@ -1,3 +1,7 @@
+2009-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* pxa255/ffuart/ffuart.c: Add BSP_poll_char.
+
 2009-08-22	Xi Yang <hiyangxi@gmail.com>
 
 	* pxa255/include/pxa255.h: Add constants for LCD, Network, and Timer.

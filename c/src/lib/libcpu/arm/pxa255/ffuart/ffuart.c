@@ -221,4 +221,9 @@ static void _BSP_put_char( char c ) {
     ffuart_write_polled(0, c);
 }
 
+static int _BSP_poll_char(void) {
+  return ffuart_poll_read(0);
+}
+
 BSP_output_char_function_type BSP_output_char = _BSP_put_char;
+BSP_polling_getchar_function_type BSP_poll_char = _BSP_poll_char;
