@@ -5,6 +5,7 @@ sysconf - _SC_CLK_TCK=100
 sysconf - _SC_OPEN_MAX=3
 sysconf - _SC_GETPW_R_SIZE_MAX=1024
 sysconf - _SC_PAGESIZE=4096
+getpagesize = 4096
 sysconf - bad parameter = -1 errno=Invalid argument
 sysconf - (SPARC only) _SC_STACK_PROT=4096
 *** END OF POSIX TEST SYSCONF ***

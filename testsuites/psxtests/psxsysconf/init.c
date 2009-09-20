@@ -53,6 +53,11 @@ void *POSIX_Init(
   if ( sc == -1 )
    rtems_test_exit(0);
 
+  sc = getpagesize();
+  printf( "getpagesize = %d\n", sc );
+  if ( sc == -1 )
+   rtems_test_exit(0);
+
   sc = sysconf( 0x12345678 );
   printf( "sysconf - bad parameter = %d errno=%s\n", sc, strerror(errno) );
   if ( (sc != -1) || (errno != EINVAL) )

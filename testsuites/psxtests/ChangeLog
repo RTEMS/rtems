@@ -1,3 +1,8 @@
+2009-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxsysconf/init.c, psxsysconf/psxsysconf.scn: Add test for
+	getpagesize().
+
 2009-09-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxclock/init.c, psxclock/psxclock.scn, psxenosys/init.c,
