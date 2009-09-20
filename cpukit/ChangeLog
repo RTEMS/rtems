@@ -1,3 +1,8 @@
+2009-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/Makefile.am: Add getpagesize(). Now required by GNU Ada.
+	* posix/src/getpagesize.c: New file.
+
 2009-09-16	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/userextaddapiset.c: Disable code that is only used when

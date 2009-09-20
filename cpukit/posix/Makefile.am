@@ -173,7 +173,7 @@ EXTRA_DIST += src/README.mqueue
 libposix_a_SOURCES += src/sched_getparam.c src/sched_getprioritymax.c \
     src/sched_getprioritymin.c src/sched_getscheduler.c \
     src/sched_rr_get_interval.c src/sched_setparam.c \
-    src/sched_setscheduler.c src/sched_yield.c src/sysconf.c
+    src/sched_setscheduler.c src/sched_yield.c src/sysconf.c src/getpagesize.c
 endif
 endif
 
