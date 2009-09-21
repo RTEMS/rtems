@@ -147,10 +147,18 @@ rtems_task Init(
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  /* this is actually a small delay or yield */
+  /* this is an error */
   tv.tv_sec = -1;
   tv.tv_nsec = 0;
-  puts( "Init: nanosleep - negative seconds small delay " );
+  puts( "Init: nanosleep - negative seconds - EINVAL" );
+  sc = nanosleep ( &tv, &tr );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* this is also an error */
+  tv.tv_sec = 0;
+  tv.tv_nsec = -1;
+  puts( "Init: nanosleep - negative nanoseconds - EINVAL" );
   sc = nanosleep ( &tv, &tr );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );

@@ -1,3 +1,8 @@
+2009-09-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxclock/init.c, psxclock/psxclock.scn: Add test case for negative
+	nanoseconds.
+
 2009-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxsysconf/init.c, psxsysconf/psxsysconf.scn: Add test for
