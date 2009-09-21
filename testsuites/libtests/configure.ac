@@ -43,6 +43,7 @@ putenvtest/Makefile
 rtems++/Makefile
 rtmonuse/Makefile
 stackchk/Makefile
+stackchk01/Makefile
 termios/Makefile
 termios01/Makefile
 tztest/Makefile

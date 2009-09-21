@@ -1,3 +1,10 @@
+2009-09-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add initial test for
+	rtems_stack_checker_is_blown.
+	* stackchk01/.cvsignore, stackchk01/Makefile.am, stackchk01/init.c,
+	stackchk01/stackchk01.doc, stackchk01/stackchk01.scn: New files.
+
 2009-09-09	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* heapwalk/heapwalk.scn, heapwalk/init.c: Add missing _Heap_Walk test
