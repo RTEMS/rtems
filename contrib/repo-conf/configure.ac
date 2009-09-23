@@ -31,7 +31,7 @@ centos-5* | redhat-el5* | fedora-7* | fedora-8* | fedora-9* )
   yum_verdir="5"
   apt_verdir="5"
   ;;
-suse-* )
+suse-*)
   os_name="openSUSE"
   os_subdir="suse"
   os_vers=`echo $osname| sed -e 's,^.*-,,'`

@@ -9,3 +9,4 @@ Makefile.in
 missing
 *.spec
 *.tar.bz2
+*.tar.xz
