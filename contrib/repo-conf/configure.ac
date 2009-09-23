@@ -17,21 +17,21 @@ AC_ARG_ENABLE(osname,AS_HELP_STRING(
 [osname="fedora-11"])
 
 case $osname in
-fedora-10 | fedora-11 )
+fedora-10* | fedora-11* | fedora-12* )
   os_name="Fedora"
   os_subdir="fedora"
   os_vers=`echo $osname| sed -e 's,^.*-,,'`
   yum_verdir="\$\$releasever"
   apt_verdir="\$\$(VERSION)"
   ;;
-centos-5 | redhat-el5 | fedora-7 | fedora-8 | fedora-9 )
+centos-5* | redhat-el5* | fedora-7* | fedora-8* | fedora-9* )
   os_name="CentOS"
   os_subdir="centos"
   os_vers=`echo $osname| sed -e 's,^.*-,,'`
   yum_verdir="5"
   apt_verdir="5"
   ;;
-suse-10.3 | suse-11.0 | suse-11.1 )
+suse-* )
   os_name="openSUSE"
   os_subdir="suse"
   os_vers=`echo $osname| sed -e 's,^.*-,,'`
