@@ -9,7 +9,7 @@ RTEMS_VERSIONING
 AC_CONFIG_SRCDIR([gpg])
 AC_CONFIG_AUX_DIR([.])
 AC_SUBST([RTEMS_API],[_RTEMS_API])
-AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip 1.10])
+AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip dist-xz 1.10])
 
 AC_ARG_ENABLE(osname,AS_HELP_STRING(
 [--enable-osname=<dir> ... os name]),
