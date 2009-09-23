@@ -21,6 +21,6 @@ GCC_OPTS +=
 
 GDB_VERS = 6.8
 GDB_PKGVERS = $(GDB_VERS)
-GDB_RPMREL = 9
+GDB_RPMREL = 10
 include ../gdb.am
 GDB_OPTS +=
