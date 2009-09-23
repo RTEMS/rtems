@@ -52,7 +52,7 @@ Name:		rtems-4.9-mips-rtems4.9-gdb
 Summary:	Gdb for target mips-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	8%{?dist}
+Release:	9%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -102,9 +102,26 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 %if "%{_build}" != "%{_host}"
 BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
+%bcond_with system_readline
+%else
+%if 0%{?fedora} >= 12
+%bcond_with system_readline
+%else
+%bcond_without system_readline
 %endif
-BuildRequires:  %{_host_rpmprefix}readline-devel
+%endif
+%{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
+
+%if "%{gdb_version}" >= "6.8.50"
+%if "%{_build}" != "%{_host}"
+# Can't build python Cdn-X
+%bcond_with python
+%else
+%bcond_without python
+%endif
+%endif
+%{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
 
 # Required for building the infos
 BuildRequires:	/sbin/install-info
@@ -129,10 +146,8 @@ cd gdb-%{gdb_version}
 %{?PATCH0:%patch0 -p1}
 cd ..
 
-%if "%{gdb_version}" >= "6.7"
 # Force using a system-provided libreadline
-rm -f gdb-%{gdb_version}/readline/configure
-%endif
+%{?with_system_readline:rm -f gdb-%{gdb_version}/readline/configure}
 %build
   export PATH="%{_bindir}:${PATH}"
   mkdir -p build
@@ -149,14 +164,16 @@ rm -f gdb-%{gdb_version}/readline/configure
     --disable-win32-registry \
     --disable-werror \
     %{build_sim} \
-%if "%{gdb_version}" >= "6.7"
-    --with-system-readline \
-%endif
+    %{?with_system_readline:--with-system-readline} \
 %if "%{gdb_version}" >= "6.6"
     --with-expat \
 %endif
 %if "%{gdb_version}" >= "6.8.50"
+%if %{with python}
+    --with-python \
+%else
     --without-python \
+%endif
 %endif
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
@@ -235,6 +252,9 @@ GNU gdb targetting mips-rtems4.9.
 
 %files -n rtems-4.9-mips-rtems4.9-gdb
 %defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/mips-rtems4.9-*.1*
@@ -250,6 +270,7 @@ Summary:      Base package for RTEMS gdbs
 Group: Development/Tools
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
+%{?_with_noarch_subpackages:BuildArch: noarch}
 
 %description -n rtems-4.9-gdb-common
 
@@ -271,6 +292,9 @@ fi
 
 %files -n rtems-4.9-gdb-common
 %defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/gdb.info*
