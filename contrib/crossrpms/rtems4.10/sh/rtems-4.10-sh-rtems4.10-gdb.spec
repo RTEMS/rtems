@@ -52,7 +52,7 @@ Name:		rtems-4.10-sh-rtems4.10-gdb
 Summary:	Gdb for target sh-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -103,12 +103,12 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
 %bcond_with system_readline
-%endif
-
+%else
 %if 0%{?fedora} >= 12
 %bcond_with system_readline
 %else
 %bcond_without system_readline
+%endif
 %endif
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
