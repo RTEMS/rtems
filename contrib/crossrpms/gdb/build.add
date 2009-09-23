@@ -16,14 +16,16 @@
     --disable-win32-registry \
     --disable-werror \
     %{build_sim} \
-%if "%{gdb_version}" >= "6.7"
-    --with-system-readline \
-%endif
+    %{?with_system_readline:--with-system-readline} \
 %if "%{gdb_version}" >= "6.6"
     --with-expat \
 %endif
 %if "%{gdb_version}" >= "6.8.50"
+%if %{with python}
+    --with-python \
+%else
     --without-python \
+%endif
 %endif
     --with-sysroot=%{_prefix}/@tool_target@/sys-root \
     --prefix=%{_prefix} --bindir=%{_bindir} \

@@ -55,9 +55,26 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 %if "%{_build}" != "%{_host}"
 BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
+%bcond_with system_readline
+%else
+%if 0%{?fedora} >= 12
+%bcond_with system_readline
+%else
+%bcond_without system_readline
 %endif
-BuildRequires:  %{_host_rpmprefix}readline-devel
+%endif
+%{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
+
+%if "%{gdb_version}" >= "6.8.50"
+%if "%{_build}" != "%{_host}"
+# Can't build python Cdn-X
+%bcond_with python
+%else
+%bcond_without python
+%endif
+%endif
+%{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
 
 %if %build_infos
 # Required for building the infos
