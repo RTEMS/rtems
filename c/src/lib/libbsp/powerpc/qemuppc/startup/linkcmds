@@ -1,0 +1,166 @@
+OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
+              "elf32-powerpc")
+OUTPUT_ARCH(powerpc:common)
+ENTRY(_start)
+MEMORY
+  {
+        RAM       : ORIGIN = 0, LENGTH = 4M
+        ROM       : ORIGIN = 0xFFFC0000, LENGTH = 0x40000
+        VECTORS   : ORIGIN = 0xFFF00000, LENGTH = 0x20000
+        RESET     : ORIGIN = 0xFFFFFFFC, LENGTH = 0x4
+  }
+
+RamBase = DEFINED(RamBase) ? RamBase : 0x0;
+RamSize = DEFINED(RamSize) ? RamSize : 4M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0;
+
+SECTIONS
+{
+  /* Read-only sections, merged into text segment: */
+  . = 0xfffc0000;
+/*
+  .entry_point_section :
+  {
+  } =0
+*/
+
+  .text           :
+  {
+    *(.entry_point_section)
+    *(.text .text.* .gnu.linkonce.t.*)
+    *(.eh_frame_hdr*)
+    *(.eh_frame*)
+
+    /*
+     * Special FreeBSD sysctl sections.
+     */
+    . = ALIGN (16);
+    __start_set_sysctl_set = .;
+    *(set_sysctl_*);
+    __stop_set_sysctl_set = ABSOLUTE(.);
+    *(set_domain_*);
+    *(set_pseudo_*);
+
+    /* .gnu.warning sections are handled specially by elf32.em.  */
+    *(.gnu.warning)
+    __text_end = .;
+  } >ROM =0
+  .init           :
+  {
+    KEEP (*(.init))
+  } >ROM =0
+  .fini           :
+  {
+    _fini = .;
+    KEEP (*(.fini))
+  } >ROM =0
+
+  /* Put .ctors and .dtors next to the .got2 section, so that the pointers
+     get relocated with -mrelocatable. Also put in the .fixup pointers.
+     The current compiler no longer needs this, but keep it around for 2.7.2  */
+   PROVIDE (__GOT2_START__ = .);
+   PROVIDE (_GOT2_START_ = .);
+  .got2		  :  { *(.got2) 	} >ROM =0
+  PROVIDE (__GOT2_END__ = .);
+  PROVIDE (_GOT2_END_ = .);
+
+  PROVIDE (__CTOR_LIST__ = .);
+  .ctors	  : { *(.ctors) 	} >ROM =0
+  PROVIDE (__CTOR_END__ = .);
+
+  PROVIDE (__DTOR_LIST__ = .);
+  .dtors	  : { *(.dtors) 	} >ROM =0
+  PROVIDE (__DTOR_END__ = .);
+  .jcr            : { KEEP (*(.jcr))	} > ROM =0
+
+  .rodata :
+  {
+    *(.rodata .rodata.* .gnu.linkonce.r.*)
+    *(.rodata1)
+    . = ALIGN(4);
+    __rodata_end = .;
+  } >ROM =0
+
+  . = 0x1000;
+  __sdata2_load = __rodata_end;
+  .sdata2 : AT (__sdata2_load)
+  {
+    __sdata2_start = .;
+    PROVIDE (_SDA2_BASE_ = 32768);
+    *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+    . = ALIGN(4);
+    __sdata2_end = .;
+  } >RAM
+  .sbss2 :
+  {
+    __sbss2_start = .;
+    *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+    . = ALIGN(4);
+    __sbss2_end = .;
+  } >RAM
+  __data_load = __sdata2_load + SIZEOF (.sdata2);
+  .data : AT(__data_load)
+  {
+    __data_start = .;
+    *(.data .data.* .gnu.linkonce.d.*)
+    KEEP (*(.gnu.linkonce.d.*personality*))
+    SORT(CONSTRUCTORS)
+    *(.data1)
+    PROVIDE (_SDA_BASE_ = 32768);
+    *(.sdata .sdata.* .gnu.linkonce.s.*)
+    . = ALIGN(4);
+    __data_end = .;
+  } >RAM
+  PROVIDE (__EXCEPT_START__ = .);
+  .gcc_except_table   : { *(.gcc_except_table*) } >RAM
+  PROVIDE (__EXCEPT_END__ = .);
+  .sbss :
+  {
+    __sbss_start = .;
+    *(.dynsbss)
+    *(.sbss .sbss.* .gnu.linkonce.sb.*)
+    *(.scommon)
+    __sbss_end = .;
+  } >RAM
+  .bss  :
+  {
+   __bss_start = .;
+   *(.dynbss)
+   *(.bss .bss.* .gnu.linkonce.b.*)
+   *(COMMON)
+   . = ALIGN(4);
+   __bss_end = .;
+
+   /* Allocate the main stack area.  Make sure it starts 16bytes aligned
+      to accommodate any possible program expectation.  */
+   _stack = ALIGN(16) + 0x1000;
+   _end = _stack;
+  } >RAM
+
+   WorkAreaBase = .;
+   . = RamBase + RamSize;
+
+  .reset :
+  {
+   KEEP(*(.reset))
+  } >RESET
+
+  /* DWARF 1.1 and DWARF 2 */
+  .debug_aranges  0 : { *(.debug_aranges) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  /* DWARF 2 */
+  .debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
+  .debug_abbrev   0 : { *(.debug_abbrev) }
+  .debug_line     0 : { *(.debug_line) }
+  .debug_frame    0 : { *(.debug_frame) }
+  .debug_str      0 : { *(.debug_str) }
+  .debug_loc      0 : { *(.debug_loc) }
+  .debug_macinfo  0 : { *(.debug_macinfo) }
+  /* SGI/MIPS DWARF 2 extensions */
+  .debug_weaknames 0 : { *(.debug_weaknames) }
+  .debug_funcnames 0 : { *(.debug_funcnames) }
+  .debug_typenames 0 : { *(.debug_typenames) }
+  .debug_varnames  0 : { *(.debug_varnames) }
+  /DISCARD/ : { *(.note.GNU-stack) }
+}
+
