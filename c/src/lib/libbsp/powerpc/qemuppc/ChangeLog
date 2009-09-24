@@ -1,5 +1,9 @@
 2009-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* irq/irq.h: New file.
+
+2009-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
 	preinstall.am, console/console-io.c, include/.cvsignore,
 	include/bsp.h, start/start.S, startup/bsppanic.c, startup/cmain.c,
