@@ -113,6 +113,7 @@ EXTRA_DIST += custom/pm520_cr825.cfg
 EXTRA_DIST += custom/pm520_ze30.cfg
 EXTRA_DIST += custom/posix.cfg
 EXTRA_DIST += custom/psim.cfg
+EXTRA_DIST += custom/qemuppc.cfg
 EXTRA_DIST += custom/rbtx4925.cfg
 EXTRA_DIST += custom/rbtx4938.cfg
 EXTRA_DIST += custom/rtl22xx.cfg

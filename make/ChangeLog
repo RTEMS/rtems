@@ -1,3 +1,8 @@
+2009-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Add qemuppc.cfg.
+	* custom/qemuppc.cfg: New file.
+
 2009-09-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* custom/gen83xx.cfg: Remove -funit-at-a-time.
