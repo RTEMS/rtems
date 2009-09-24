@@ -1,5 +1,10 @@
 2009-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/hexdump-odsyntax.c: Fix failure on SH2e where there is
+	only single precision float.
+
+2009-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/getpagesize.c, posix/Makefile.am: Eliminate one copy
 	of getpagesize() and make it return an int.
 	* posix/src/getpagesize.c: Removed.
