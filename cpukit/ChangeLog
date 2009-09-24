@@ -1,3 +1,9 @@
+2009-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/getpagesize.c, posix/Makefile.am: Eliminate one copy
+	of getpagesize() and make it return an int.
+	* posix/src/getpagesize.c: Removed.
+
 2009-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/Makefile.am: Add getpagesize(). Now required by GNU Ada.
