@@ -24,6 +24,7 @@
 #define _RTEMS_SCORE_THREAD_INL
 
 #include <rtems/score/sysstate.h>
+#include <rtems/score/context.h>
 
 /**
  *  @addtogroup ScoreThread 
@@ -44,7 +45,22 @@ RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
   if ( _System_state_Is_up(_System_state_Get ()) )
     context_p = &_Thread_Executing->Registers;
 
-  _Context_Switch( context_p, &_Thread_BSP_context );
+  /*
+   *  This may look a bit of an odd but _Context_Restart_self is just
+   *  a very careful restore of a specific context which ensures that
+   *  if we were running within the same context, it would work.
+   *
+   *  And we will not return to this thread, so there is no point of
+   *  saving the context.
+   */
+  _Context_Restart_self( &_Thread_BSP_context );
+
+  /***************************************************************
+   ***************************************************************
+   *   SYSTEM SHUTS DOWN!!!  WE DO NOT RETURN TO THIS POINT!!!   *
+   ***************************************************************
+   ***************************************************************
+   */
 }
 
 /**
