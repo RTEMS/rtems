@@ -1,3 +1,8 @@
+2009-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/include/io.h, shared/include/mmu.h: Change extern inline to
+	static inline.
+
 2009-08-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mpc6xx/mmu/bat.c, mpc6xx/mmu/bat.h: Fix spelling.

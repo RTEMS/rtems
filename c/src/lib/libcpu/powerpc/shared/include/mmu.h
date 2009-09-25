@@ -165,7 +165,7 @@ typedef struct _MMU_context {
 #define HASH_TABLE_MASK_4M	0x03F   
 
 /* invalidate a TLB entry */
-extern inline void _tlbie(unsigned long va)
+static inline void _tlbie(unsigned long va)
 {
 	asm volatile ("tlbie %0" : : "r"(va));
 }
