@@ -1,3 +1,8 @@
+2009-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/score/cpu.h: Add no return atrribute to _CPU_Context_restore()
+	since it is used for restarting self.
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Change prototype of IDLE thread to
