@@ -1,3 +1,8 @@
+2009-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp14/asr.c, sp14/sp14.doc, sp14/task1.c, sp14/task2.c: Adjust test to
+	run when IO speed varies.
+
 2009-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp43/init.c, sp43/sp43.scn: Minor correction to test case so it hits
