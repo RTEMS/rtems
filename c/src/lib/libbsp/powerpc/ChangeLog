@@ -1,5 +1,9 @@
 2009-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* acinclude.m4: Add qemuppc.
+
+2009-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* shared/bootloader/bootldr.h: Change extern inline to static inline.
 
 2009-09-11	Till Straumann <strauman@slac.stanford.edu>
