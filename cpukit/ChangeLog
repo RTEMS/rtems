@@ -1,3 +1,8 @@
+2009-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/include/rtems/posix/threadsup.h: Add no return atrribute to
+	_POSIX_Thread_Exit().
+
 2009-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/hexdump-odsyntax.c: Fix failure on SH2e where there is

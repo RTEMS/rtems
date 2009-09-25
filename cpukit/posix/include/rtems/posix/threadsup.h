@@ -81,7 +81,7 @@ typedef struct {
 void _POSIX_Thread_Exit(
   Thread_Control *the_thread,
   void           *value_ptr
-);
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #endif
 /* end of include file */
