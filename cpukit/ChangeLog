@@ -1,5 +1,9 @@
 2009-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/Makefile.am: Re-add file accidentally deleted by Sebastian.
+
+2009-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/inline/rtems/score/thread.inl: Restore the BSP context -- do
 	not save the current. This routine is also marked as not returning
 	which saves the exit path code.
