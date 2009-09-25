@@ -26,7 +26,7 @@
 #include <rtems/system.h>
 #include <rtems/score/heap.h>
 
-#if CPU_ALIGNMENT == 0 || CPU_ALIGNMENT % 4 != 0
+#if CPU_ALIGNMENT == 0 || CPU_ALIGNMENT % 2 != 0
   #error "invalid CPU_ALIGNMENT value"
 #endif
 
@@ -213,7 +213,6 @@ uintptr_t _Heap_Initialize(
   stats->resizes = 0;
   stats->instance = instance++;
 
-  _HAssert( _Heap_Is_aligned( CPU_ALIGNMENT, 4 ) );
   _HAssert( _Heap_Is_aligned( heap->page_size, CPU_ALIGNMENT ) );
   _HAssert( _Heap_Is_aligned( heap->min_block_size, page_size ) );
   _HAssert(

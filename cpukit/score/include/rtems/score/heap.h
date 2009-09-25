@@ -38,12 +38,10 @@ extern "C" {
  * area.  A heap control structure contains control information for the heap.
  *
  * The alignment routines could be made faster should we require only powers of
- * two to be supported both for page size, alignment and boundary arguments.
- * However, both workspace and malloc heaps are initialized with
- * CPU_HEAP_ALIGNMENT as page size, and while all the BSPs seem to use
- * CPU_ALIGNMENT (that is power of two) as CPU_HEAP_ALIGNMENT, for whatever
- * reason CPU_HEAP_ALIGNMENT is only required to be multiple of CPU_ALIGNMENT
- * and explicitly not required to be a power of two.
+ * two to be supported for page size, alignment and boundary arguments.  The
+ * minimum alignment requirement for pages is currently CPU_ALIGNMENT and this
+ * value is only required to be multiple of two and explicitly not required to
+ * be a power of two.
  *
  * There are two kinds of blocks.  One sort describes a free block from which
  * we can allocate memory.  The other blocks are used and provide an allocated
@@ -167,9 +165,9 @@ typedef struct Heap_Block {
    * If the flag @c HEAP_PREV_BLOCK_USED is set, then the previous block is
    * used, otherwise the previous block is free.  A used previous block may
    * claim the @a prev_size field for allocation.  This trick allows to
-   * decrease the overhead in the used blocks by the size of the
-   * @a prev_size field.  As sizes are always multiples of four, the two least
-   * significant bits are always zero. We use one of them to store the flag.
+   * decrease the overhead in the used blocks by the size of the @a prev_size
+   * field.  As sizes are required to be multiples of two, the least
+   * significant bits would be always zero. We use this bit to store the flag.
    *
    * This field is always valid.
    */
