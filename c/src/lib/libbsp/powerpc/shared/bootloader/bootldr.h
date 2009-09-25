@@ -77,78 +77,78 @@ typedef struct _boot_data {
 
 register boot_data *bd __asm__("r13");
 
-extern inline int
+static inline int
 pcibios_read_config_byte(u_char bus, u_char dev_fn,
 			 u_char where, uint8_t *val) {
 	return bd->pci_functions->read_config_byte(bus, dev_fn, where, val);
 }
 
-extern inline int
+static inline int
 pcibios_read_config_word(u_char bus, u_char dev_fn,
 			 u_char where, uint16_t *val) {
 	return bd->pci_functions->read_config_word(bus, dev_fn, where, val);
 }
 
-extern inline int
+static inline int
 pcibios_read_config_dword(u_char bus, u_char dev_fn,
 			 u_char where, uint32_t *val) {
 	return bd->pci_functions->read_config_dword(bus, dev_fn, where, val);
 }
 
-extern inline int
+static inline int
 pcibios_write_config_byte(u_char bus, u_char dev_fn,
 			 u_char where, uint8_t val) {
 	return bd->pci_functions->write_config_byte(bus, dev_fn, where, val);
 }
 
-extern inline int
+static inline int
 pcibios_write_config_word(u_char bus, u_char dev_fn,
 			 u_char where, uint16_t val) {
 	return bd->pci_functions->write_config_word(bus, dev_fn, where, val);
 }
 
-extern inline int
+static inline int
 pcibios_write_config_dword(u_char bus, u_char dev_fn,
 			 u_char where, uint32_t val) {
 	return bd->pci_functions->write_config_dword(bus, dev_fn, where, val);
 }
 
-extern inline int
+static inline int
 pci_bootloader_read_config_byte(struct pci_dev *dev, u_char where, uint8_t *val) {
 	return bd->pci_functions->read_config_byte(dev->bus->number,
 						   dev->devfn,
 						   where, val);
 }
 
-extern inline int
+static inline int
 pci_bootloader_read_config_word(struct pci_dev *dev, u_char where, uint16_t *val) {
 	return bd->pci_functions->read_config_word(dev->bus->number,
 						   dev->devfn,
 						   where, val);
 }
 
-extern inline int
+static inline int
 pci_bootloader_read_config_dword(struct pci_dev *dev, u_char where, uint32_t *val) {
 	return bd->pci_functions->read_config_dword(dev->bus->number,
 						    dev->devfn,
 						    where, val);
 }
 
-extern inline int
+static inline int
 pci_bootloader_write_config_byte(struct pci_dev *dev, u_char where, uint8_t val) {
 	return bd->pci_functions->write_config_byte(dev->bus->number,
 						    dev->devfn,
 						    where, val);
 }
 
-extern inline int
+static inline int
 pci_bootloader_write_config_word(struct pci_dev *dev, u_char where, uint16_t val) {
 	return bd->pci_functions->write_config_word(dev->bus->number,
 						    dev->devfn,
 						    where, val);
 }
 
-extern inline int
+static inline int
 pci_bootloader_write_config_dword(struct pci_dev *dev, u_char where, uint32_t val) {
 	return bd->pci_functions->write_config_dword(dev->bus->number,
 						     dev->devfn,
