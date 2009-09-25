@@ -1,3 +1,7 @@
+2009-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/include/pci.h: Change extern inline to static inline.
+
 2009-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/start.S: Fix comment.
