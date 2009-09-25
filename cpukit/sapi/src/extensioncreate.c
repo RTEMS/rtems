@@ -1,6 +1,12 @@
-/*
- *  Extension Manager -- rtems_extension_create
+/**
+ * @file
  *
+ * @ingroup ClassicUserExtensions
+ *
+ * @brief User Extensions Implementation.
+ */
+ 
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,27 +27,10 @@
 #include <rtems/score/thread.h>
 #include <rtems/extension.h>
 
-/*PAGE
- *
- *  rtems_extension_create
- *
- *  This directive creates a extension and performs some initialization.
- *
- *  Input parameters:
- *    name            - extension name
- *    extension_table - pointer to extension set information
- *    id              - pointer to extension id
- *
- *  Output parameters:
- *    id                - extension id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
-
 rtems_status_code rtems_extension_create(
   rtems_name              name,
   rtems_extensions_table *extension_table,
-  Objects_Id             *id
+  rtems_id               *id
 )
 {
   Extension_Control *the_extension;
@@ -61,7 +50,7 @@ rtems_status_code rtems_extension_create(
     return RTEMS_TOO_MANY;
   }
 
-  _User_extensions_Add_set( &the_extension->Extension, extension_table );
+  _User_extensions_Add_set_with_table( &the_extension->Extension, extension_table );
 
   _Objects_Open(
     &_Extension_Information,

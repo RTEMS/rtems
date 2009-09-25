@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup ScoreUserExt
+ *
+ * @brief User Extension Handler implementation.
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,12 +23,6 @@
 
 #include <rtems/system.h>
 #include <rtems/score/userext.h>
-
-/*PAGE
- *
- *  _User_extensions_Thread_begin
- *
- */
 
 void _User_extensions_Thread_begin (
   Thread_Control *executing
@@ -40,11 +42,6 @@ void _User_extensions_Thread_begin (
   }
 }
 
-/*PAGE
- *
- *  _User_extensions_Thread_exitted
- */
-
 void _User_extensions_Thread_exitted (
   Thread_Control *executing
 )
@@ -62,11 +59,6 @@ void _User_extensions_Thread_exitted (
       (*the_extension->Callouts.thread_exitted)( executing );
   }
 }
-
-/*PAGE
- *
- *  _User_extensions_Fatal
- */
 
 void _User_extensions_Fatal (
   Internal_errors_Source  the_source,

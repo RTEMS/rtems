@@ -1,9 +1,9 @@
-/** 
- *  @file  rtems/score/userext.h
+/**
+ * @file
  *
- *  This include file contains all information about user extensions.  This
- *  Handler provides mechanisms which can be used to initialize and manipulate
- *  all user extensions.
+ * @ingroup ScoreUserExt
+ *
+ * @brief User Extension Handler API.
  */
 
 /*
@@ -20,14 +20,6 @@
 #ifndef _RTEMS_SCORE_USEREXT_H
 #define _RTEMS_SCORE_USEREXT_H
 
-/**
- *  @defgroup ScoreUserExt User Extension Handler
- *
- *  This handler encapsulates functionality related to the management of
- *  the user extensions to the SuperCore that are available to the user.
- */
-/**@{*/
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,310 +28,288 @@ extern "C" {
 #include <rtems/score/chain.h>
 #include <rtems/score/thread.h>
 
-/*@}*/
+typedef void User_extensions_routine RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
-/** @defgroup ScoreUserExtStruct User Extension Handler Structures
+/**
+ * @defgroup ScoreUserExt User Extension Handler
  *
- *  The following records defines the User Extension Table.
- *  This table defines the application dependent routines which
- *  are invoked at critical points in the life of each thread and
- *  the system as a whole.
+ * @ingroup Score
+ *
+ * @brief The User Extension Handler provides invocation of application
+ * dependent routines at critical points in the life of each thread and the
+ * system as a whole.
+ *
+ * @{
  */
-/*@{*/
 
 /**
- *  This type indicates the return type of a user extension method.
+ * @brief Task create extension.
+ *
+ * It corresponds to _Thread_Initialize() (used by the rtems_task_create()
+ * directive).  The first parameter points to the currently executing thread
+ * which created the new thread.  The second parameter points to the created
+ * thread.
+ *
+ * It is invoked after the new thread has been completely initialized, but
+ * before it is placed on a ready chain.
+ *
+ * Thread dispatching may be disabled.  It can be assumed that the executing
+ * thread locked the allocator mutex.  They only exception is the creation of
+ * the idle thread.  In this case the allocator mutex is not locked.
+ *
+ * The user extension is expected to return @c true if it successfully
+ * executed, and @c false otherwise. A thread create user extension will
+ * frequently attempt to allocate resources. If this allocation fails, then the
+ * extension should return @c false and the entire task create operation will
+ * fail.
  */
-typedef void User_extensions_routine;
+typedef bool ( *User_extensions_thread_create_extension )(
+  Thread_Control *,
+  Thread_Control *
+);
 
 /**
- *  This type defines the prototype of a thread creation extension handler.
- *  The handler is passed the thread executing and the thread being created.
+ * @brief Task delete extension.
+ *
+ * It corresponds to _Thread_Close() (used by the rtems_task_delete()
+ * directive).  The first parameter points to the currently executing thread
+ * which deleted the thread.  The second parameter points to the deleted
+ * thread.
+ *
+ * It is invoked before all resources of the thread are deleted.
+ *
+ * Thread dispatching is enabled.  The executing thread locked the allocator
+ * mutex.
  */
-typedef bool    ( *User_extensions_thread_create_extension )(
-                 Thread_Control *,
-                 Thread_Control *
-             );
+typedef void( *User_extensions_thread_delete_extension )(
+  Thread_Control *,
+  Thread_Control *
+);
 
 /**
- *  This type defines the prototype of a thread deletion extension handler.
- *  The handler is passed the thread executing and the thread being deleted.
+ * @brief Task start extension.
+ *
+ * It corresponds to _Thread_Start() (used by the rtems_task_start()
+ * directive).  The first parameter points to the currently executing thread
+ * which started the thread.  The second parameter points to the started
+ * thread.
+ *
+ * It is invoked after the environment of the thread has been loaded and the
+ * thread has been made ready.
+ *
+ * Thread dispatching is disabled.  The executing thread is not the holder of
+ * the allocator mutex.
  */
-typedef User_extensions_routine ( *User_extensions_thread_delete_extension )(
-                 Thread_Control *,
-                 Thread_Control *
-             );
+typedef void( *User_extensions_thread_start_extension )(
+  Thread_Control *,
+  Thread_Control *
+);
 
 /**
- *  This type defines the prototype of thread starting extension handler.
- *  The handler is passed the thread executing and the thread being started.
+ * @brief Task restart extension.
+ *
+ * It corresponds to _Thread_Restart() (used by the rtems_task_restart()
+ * directive).  The first parameter points to the currently executing thread
+ * which restarted the thread.  The second parameter points to the restarted
+ * thread.
+ *
+ * It is invoked after the environment of the thread has been loaded and the
+ * thread has been made ready.
+ *
+ * Thread dispatching is disabled.  The executing thread is not the holder of
+ * the allocator mutex.
  */
-typedef User_extensions_routine ( *User_extensions_thread_start_extension )(
-                 Thread_Control *,
-                 Thread_Control *
-             );
+typedef void( *User_extensions_thread_restart_extension )(
+  Thread_Control *,
+  Thread_Control *
+);
 
 /**
- *  This type defines the prototype of a thread restarting extension handler.
- *  The handler is passed the thread executing and the thread being restarted.
+ * @brief Task switch extension.
+ *
+ * It corresponds to _Thread_Dispatch().  The first parameter points to the
+ * currently executing thread.  The second parameter points to the heir thread.
+ *
+ * It is invoked before the context switch from the executing to the heir
+ * thread.
+ *
+ * Thread dispatching is disabled.  The state of the allocator mutex is
+ * arbitrary.
+ *
+ * The context switches initiated through _Thread_Start_multitasking() and
+ * _Thread_Stop_multitasking() are not covered by this extension.  The
+ * executing thread may run with a minimal setup, for example with a freed task
+ * stack. 
  */
-typedef User_extensions_routine ( *User_extensions_thread_restart_extension )(
-                 Thread_Control *,
-                 Thread_Control *
-             );
+typedef void( *User_extensions_thread_switch_extension )(
+  Thread_Control *,
+  Thread_Control *
+);
 
 /**
- *  This type defines the prototype of thread context switch extension handler.
- *  The handler is passed the thread currently executing and the thread being 
- *  switched to.
+ * @brief Task begin extension.
+ *
+ * It corresponds to _Thread_Handler().  The first parameter points to the
+ * currently executing thread which begins now execution.
+ *
+ * Thread dispatching is disabled.  The executing thread is not the holder of
+ * the allocator mutex.
  */
-typedef User_extensions_routine ( *User_extensions_thread_switch_extension )(
-                 Thread_Control *,
-                 Thread_Control *
-             );
+typedef void( *User_extensions_thread_begin_extension )(
+  Thread_Control *
+);
 
 /**
- *  This type defines the prototype of a post context switch extension handler.
- *  The handler is passed the thread thread being switched to.
+ * @brief Task exitted extension.
+ *
+ * It corresponds to _Thread_Handler().  The first parameter points to the
+ * currently executing thread which exitted before.
+ *
+ * Thread dispatching is disabled.  The state of the allocator mutex is
+ * arbitrary.
  */
-typedef User_extensions_routine (*User_extensions_thread_post_switch_extension)(
-                 Thread_Control *
-             );
+typedef void( *User_extensions_thread_exitted_extension )(
+  Thread_Control *
+);
 
 /**
- *  This type defines the prototype of a thread beginning to execute
- *  extension handler.  The handler is passed the thread executing.  This
- *  extension is executed in the context of the beginning thread.
+ * @brief Task fatal error extension.
+ *
+ * It corresponds to _Internal_error_Occurred() (used by the
+ * rtems_fatal_error_occurred() directive).  The first parameter contains the
+ * internal error source.  The second parameter indicates if it was an internal
+ * error.  The third parameter contains the error code.
+ *
+ * This extension should not call any RTEMS directives.
  */
-typedef User_extensions_routine ( *User_extensions_thread_begin_extension )(
-                 Thread_Control *
-             );
+typedef void( *User_extensions_fatal_extension )(
+  Internal_errors_Source,
+  bool,
+  uint32_t
+);
 
 /**
- *  This type defines the prototype of a thread exiting extension handler.
- *  The handler is passed the thread exiting.
- */
-typedef User_extensions_routine ( *User_extensions_thread_exitted_extension )(
-                 Thread_Control *
-             );
-
-/**
- *  This type defines the prototype of the fatal error extension handler.
- *  The handler is passed an indicator of the source of the fatal error,
- *  whether it is internal to RTEMS and an error code.
- */
-typedef User_extensions_routine ( *User_extensions_fatal_extension )(
-                 Internal_errors_Source  /* the_source  */,
-                 bool                    /* is_internal */,
-                 uint32_t                /* the_error   */
-             );
-
-/**
- *  This type defines a set of user extensions.
+ * @brief User extension table.
  */
 typedef struct {
-  /** This field is the thread creation handler. */
-  User_extensions_thread_create_extension       thread_create;
-  /** This field is the thread starting handler. */
-  User_extensions_thread_start_extension        thread_start;
-  /** This field is the thread restarting handler. */
-  User_extensions_thread_restart_extension      thread_restart;
-  /** This field is the thread deleting handler */
-  User_extensions_thread_delete_extension       thread_delete;
-  /** This field is thread context switch handler. */
-  User_extensions_thread_switch_extension       thread_switch;
-  /** This field is the thread beginning handler. */
-  User_extensions_thread_begin_extension        thread_begin;
-  /** This field is thread exiting handler. */
-  User_extensions_thread_exitted_extension      thread_exitted;
-  /** This field is the fatal error extension. */
-  User_extensions_fatal_extension               fatal;
+  User_extensions_thread_create_extension  thread_create;
+  User_extensions_thread_start_extension   thread_start;
+  User_extensions_thread_restart_extension thread_restart;
+  User_extensions_thread_delete_extension  thread_delete;
+  User_extensions_thread_switch_extension  thread_switch;
+  User_extensions_thread_begin_extension   thread_begin;
+  User_extensions_thread_exitted_extension thread_exitted;
+  User_extensions_fatal_extension          fatal;
 }   User_extensions_Table;
 
 /**
- *  This is used to manage the list of switch handlers.  They are managed
- *  separately from other extensions for performance reasons.
+ * @brief Manages the switch callouts.
+ *
+ * They are managed separately from other extensions for performance reasons.
  */
 typedef struct {
-  /** This field is a Chain Node structure and allows this to be placed on
-   *  chains for set management.
-   */
   Chain_Node                              Node;
-  /** This field is the thread switch extension. */
   User_extensions_thread_switch_extension thread_switch;
 }   User_extensions_Switch_control;
 
 /**
- *  This is used to manage each user extension set.
- *  The switch control is part of the extensions control even
- *  if not used due to the extension not having a switch
- *  handler.
+ * @brief Manages each user extension set.
+ *
+ * The switch control is part of the extensions control even if not used due to
+ * the extension not having a switch handler.
  */
 typedef struct {
-  /** This field is a Chain Node structure and allows this to be placed on
-   *  chains for set management.
-   */
   Chain_Node                     Node;
-  /** This field is the thread switch user extension. */
   User_extensions_Switch_control Switch;
-  /** This field is the rest of this user extension's entry points.  */
   User_extensions_Table          Callouts;
 }   User_extensions_Control;
 
 /**
- *  This is used to manage the list of active extensions.
+ * @brief List of active extensions.
  */
 SCORE_EXTERN Chain_Control _User_extensions_List;
 
 /**
- *  This is used to manage a chain of user extension task
- *  switch nodes.
+ * @brief List of active task switch extensions.
  */
 SCORE_EXTERN Chain_Control _User_extensions_Switches_list;
 
-/*@}*/
-/** @addtogroup ScoreUserExt */
-
-/*@{*/
-
-/** @brief User extensions Handler Initialization
+/**
+ * @name Extension Maintainance
  *
- *  This routine performs the initialization necessary for this handler.
+ * @{
  */
-void _User_extensions_Handler_initialization(void);
 
-/** @brief User extensions Add to API extension set
- *
- *  This routine is used to add an API extension set to the active list.
- *
- *  @param[in] the_extension is the extension set to add
- */
-void _User_extensions_Add_API_set (
-  User_extensions_Control *the_extension
+void _User_extensions_Handler_initialization( void );
+
+void _User_extensions_Add_set(
+  User_extensions_Control *extension
 );
 
-/** @brief User extensions Add extension set
- *
- *  This routine is used to add a user extension set to the active list.
- *
- *  @param[in] the_extension is the extension set to add
- *  @param[in] extension_table is the user's extension set
- */
-void _User_extensions_Add_set (
-  User_extensions_Control *the_extension,
+RTEMS_INLINE_ROUTINE void _User_extensions_Add_set_with_table(
+  User_extensions_Control *extension,
   User_extensions_Table   *extension_table
+)
+{
+  extension->Callouts = *extension_table;
+
+  _User_extensions_Add_set( extension );
+}
+
+void _User_extensions_Remove_set(
+  User_extensions_Control *extension
 );
+
+/** @} */
 
 /**
- *  This routine is used to remove a user extension set from the active list.
+ * @name Extension Callout Dispatcher
+ *
+ * @{
  */
-void _User_extensions_Remove_set (
-  User_extensions_Control  *the_extension
+
+bool _User_extensions_Thread_create(
+  Thread_Control *created
 );
 
-/** @brief  User extensions Thread create
- *
- *  This routine is used to invoke the user extension for
- *  the thread creation operate.
- *
- *  @param[in] the_thread is the thread being created.
- *
- *  @return This method returns true if the user extension executed
- *          successfully.
- */
-bool _User_extensions_Thread_create (
-  Thread_Control *the_thread
+void _User_extensions_Thread_delete(
+  Thread_Control *deleted
 );
 
-/** @brief  User extensions Thread delete
- *
- *  This routine is used to invoke the user extension for
- *  the thread deletion operation.
- *
- *  @param[in] the_thread is the thread being deleted.
- */
-void _User_extensions_Thread_delete (
-  Thread_Control *the_thread
+void _User_extensions_Thread_start(
+  Thread_Control *started
 );
 
-/** @brief  User extensions Thread start
- *
- *  This routine is used to invoke the user extension for
- *  the thread start operation.
- *
- *  @param[in] the_thread is the thread being started.
- */
-void _User_extensions_Thread_start (
-  Thread_Control *the_thread
+void _User_extensions_Thread_restart(
+  Thread_Control *restarted
 );
 
-/** @brief  User extensions Thread restart
- *
- *  This routine is used to invoke the user extension for
- *  the thread restart operation.
- *
- *  @param[in] the_thread is the thread being restarted.
- */
-void _User_extensions_Thread_restart (
-  Thread_Control *the_thread
-);
-
-/** @brief  User extensions Thread begin
- *
- *  This routine is used to invoke the user extension which
- *  is invoked when a thread begins.
- *
- *  @param[in] executing is the thread beginning to execute.
- */
-void _User_extensions_Thread_begin (
+void _User_extensions_Thread_begin(
   Thread_Control *executing
 );
 
-
-/** @brief  User extensions Thread switch
- *
- *  This routine is used to invoke the user extension which
- *  is invoked when a context switch occurs.
- *
- *  @param[in] executing is the thread currently executing.
- *  @param[in] heir is the thread which will execute.
- */
-void _User_extensions_Thread_switch (
+void _User_extensions_Thread_switch(
   Thread_Control *executing,
   Thread_Control *heir
 );
 
-/** @brief  User extensions Thread exitted
- *
- *  This routine is used to invoke the user extension which
- *  is invoked when a thread exits.
- *
- *  @param[in] executing is the thread voluntarily exiting.
- */
-void _User_extensions_Thread_exitted (
+void _User_extensions_Thread_exitted(
   Thread_Control *executing
 );
 
-/** @brief  User extensions Fatal
- *
- *  This routine is used to invoke the user extension invoked
- *  when a fatal error occurs.
- *
- *  @param[in] the_source is the source of the fatal error.
- *  @param[in] is_internal is true if the error originated inside RTEMS.
- *  @param[in] the_error is an indication of the actual error.
- */
-void _User_extensions_Fatal (
-  Internal_errors_Source  the_source,
-  bool                    is_internal,
-  uint32_t                the_error
+void _User_extensions_Fatal(
+  Internal_errors_Source source,
+  bool                   is_internal,
+  uint32_t               error
 );
+
+/** @} */
+
+/** @} */
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

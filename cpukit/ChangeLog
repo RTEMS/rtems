@@ -1,5 +1,23 @@
 2009-09-25	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
+	* sapi/include/rtems/extension.h, sapi/src/extensiondelete.c,
+	sapi/src/extensionident.c, sapi/src/extensioncreate.c,
+	sapi/inline/rtems/extension.inl, score/include/rtems/score/userext.h,
+	score/src/userextthreaddelete.c, score/src/userext.c,
+	score/src/userextthreadcreate.c, score/src/userextremoveset.c,
+	score/src/userextthreadbegin.c, score/src/userextaddset.c,
+	score/src/userextthreadstart.c, score/src/userextthreadswitch.c,
+	score/src/userextthreadrestart.c: Documentation. The types
+	User_extensions_routine and rtems_extension are now deprecated.
+	Removed unused types User_extensions_thread_post_switch_extension and
+	rtems_task_post_switch_extension. Renamed _User_extensions_Add_API_set()
+	in _User_extensions_Add_set(). Renamed _User_extensions_Add_set() in
+	_User_extensions_Add_set_with_table().
+	* score/src/userextaddapiset.c: Removed file.
+	* score/Makefile.am: Update.
+
+2009-09-25	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
 	* score/src/heap.c, score/include/rtems/score/heap.h: Reduced alignment
 	requirement for CPU_ALIGNMENT from four to two.
 

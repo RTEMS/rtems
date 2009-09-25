@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup ScoreUserExt
+ *
+ * @brief User Extension Handler implementation.
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
@@ -18,10 +26,6 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 #include <string.h>
-
-/**
- *  This routine performs the initialization necessary for this handler.
- */
 
 void _User_extensions_Handler_initialization(void)
 {
@@ -49,7 +53,7 @@ void _User_extensions_Handler_initialization(void)
     );
   
     for ( i = 0 ; i < number_of_extensions ; i++ ) {
-      _User_extensions_Add_set (extension, &initial_extensions[i]);
+      _User_extensions_Add_set_with_table (extension, &initial_extensions[i]);
       extension++;
     }
   }

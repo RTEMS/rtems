@@ -196,7 +196,7 @@ libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
     src/watchdogtickle.c src/watchdogreport.c src/watchdogreportchain.c
 
 ## USEREXT_C_FILES
-libscore_a_SOURCES += src/userextaddapiset.c src/userextaddset.c \
+libscore_a_SOURCES += src/userextaddset.c \
     src/userext.c src/userextremoveset.c src/userextthreadbegin.c \
     src/userextthreadcreate.c src/userextthreaddelete.c \
     src/userextthreadrestart.c src/userextthreadstart.c \

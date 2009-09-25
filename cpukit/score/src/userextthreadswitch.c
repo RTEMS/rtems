@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup ScoreUserExt
+ *
+ * @brief User Extension Handler implementation.
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -16,10 +24,6 @@
 #include <rtems/system.h>
 #include <rtems/score/userext.h>
 
-/**
- *  This routine is used to invoke the user extension which
- *  is invoked when a context switch occurs.
- */
 void _User_extensions_Thread_switch (
   Thread_Control *executing,
   Thread_Control *heir

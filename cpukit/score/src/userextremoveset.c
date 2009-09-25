@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup ScoreUserExt
+ *
+ * @brief User Extension Handler implementation.
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,10 +23,6 @@
 
 #include <rtems/system.h>
 #include <rtems/score/userext.h>
-
-/**
- *  This routine is used to remove a user extension set from the active list.
- */
 
 void _User_extensions_Remove_set (
   User_extensions_Control  *the_extension
