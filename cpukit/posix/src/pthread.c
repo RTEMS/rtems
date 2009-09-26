@@ -228,7 +228,7 @@ bool _POSIX_Threads_Create_extension(
  *
  *  This method is invoked for each thread deleted.
  */
-User_extensions_routine _POSIX_Threads_Delete_extension(
+void _POSIX_Threads_Delete_extension(
   Thread_Control *executing __attribute__((unused)),
   Thread_Control *deleted
 )
@@ -270,7 +270,7 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
  *
  *  This method is invoked each time a thread exits.
  */
-User_extensions_routine _POSIX_Threads_Exitted_extension(
+void _POSIX_Threads_Exitted_extension(
   Thread_Control *executing
 )
 {

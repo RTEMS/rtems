@@ -7,7 +7,7 @@
   All rights reserved Objective Design Systems Pty Ltd, 2002
   Chris Johns (ccj@acm.org)
 
-  COPYRIGHT (c) 1989-2008.
+  COPYRIGHT (c) 1989-2009.
   On-Line Applications Research Corporation (OAR).
 
   The license and distribution terms for this file may be
@@ -687,7 +687,7 @@ rtems_capture_create_task (rtems_tcb* current_task,
  * This function is called when a task is started.
  *
  */
-static rtems_extension
+static void
 rtems_capture_start_task (rtems_tcb* current_task,
                           rtems_tcb* started_task)
 {
@@ -729,7 +729,7 @@ rtems_capture_start_task (rtems_tcb* current_task,
  * This function is called when a task is restarted.
  *
  */
-static rtems_extension
+static void
 rtems_capture_restart_task (rtems_tcb* current_task,
                             rtems_tcb* restarted_task)
 {
@@ -772,7 +772,7 @@ rtems_capture_restart_task (rtems_tcb* current_task,
  * This function is called when a task is deleted.
  *
  */
-static rtems_extension
+static void
 rtems_capture_delete_task (rtems_tcb* current_task,
                            rtems_tcb* deleted_task)
 {
@@ -822,7 +822,7 @@ rtems_capture_delete_task (rtems_tcb* current_task,
  * This function is called when a task is begun.
  *
  */
-static rtems_extension
+static void
 rtems_capture_begin_task (rtems_tcb* begin_task)
 {
   /*
@@ -854,7 +854,7 @@ rtems_capture_begin_task (rtems_tcb* begin_task)
  * returned rather than was deleted.
  *
  */
-static rtems_extension
+static void
 rtems_capture_exitted_task (rtems_tcb* exitted_task)
 {
   /*
@@ -887,7 +887,7 @@ rtems_capture_exitted_task (rtems_tcb* exitted_task)
  * This function is called when a context is switched.
  *
  */
-static rtems_extension
+static void
 rtems_capture_switch_task (rtems_tcb* current_task,
                            rtems_tcb* heir_task)
 {

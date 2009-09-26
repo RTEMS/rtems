@@ -1,5 +1,11 @@
 2009-09-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/capture/capture.c, posix/src/pthread.c, rtems/src/tasks.c,
+	score/include/rtems/score/userext.h: Eliminate use of deprecated
+	rtems_extension. Re-add prototype for _User_extensions_Add_API_set.
+
+2009-09-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/include/rtems/libcsupport.h,
 	libcsupport/src/newlibc_reent.c: Eliminate use of deprecated
 	rtems_extension.

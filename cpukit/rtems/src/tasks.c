@@ -1,7 +1,7 @@
 /*
  *  RTEMS Task Manager -- Initialize Manager
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -88,7 +88,7 @@ bool _RTEMS_tasks_Create_extension(
  *  first time.
  */
 
-User_extensions_routine _RTEMS_tasks_Start_extension(
+void _RTEMS_tasks_Start_extension(
   Thread_Control *executing,
   Thread_Control *started
 )
@@ -107,7 +107,7 @@ User_extensions_routine _RTEMS_tasks_Start_extension(
  *  This extension routine is invoked when a task is deleted.
  */
 
-User_extensions_routine _RTEMS_tasks_Delete_extension(
+void _RTEMS_tasks_Delete_extension(
   Thread_Control *executing,
   Thread_Control *deleted
 )

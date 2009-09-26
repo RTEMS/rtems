@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -244,6 +244,16 @@ void _User_extensions_Handler_initialization( void );
 
 void _User_extensions_Add_set(
   User_extensions_Control *extension
+);
+
+/** @brief User extensions Add to API extension set
+ *
+ *  This routine is used to add an API extension set to the active list.
+ *
+ *  @param[in] the_extension is the extension set to add
+ */
+void _User_extensions_Add_API_set (
+  User_extensions_Control *the_extension
 );
 
 RTEMS_INLINE_ROUTINE void _User_extensions_Add_set_with_table(
