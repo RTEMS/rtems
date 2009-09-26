@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,7 +20,7 @@
 
 #include "system.h"
 
-rtems_extension Task_start_extension(
+void Task_start_extension(
   rtems_tcb *unused,
   rtems_tcb *started_task
 )

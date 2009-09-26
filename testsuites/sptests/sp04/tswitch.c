@@ -30,7 +30,7 @@ struct taskSwitchLog taskSwitchLog[1000];
 unsigned int taskSwitchLogIndex;
 volatile int testsFinished;
 
-rtems_extension Task_switch(
+void Task_switch(
   rtems_tcb *unused,
   rtems_tcb *heir
 )

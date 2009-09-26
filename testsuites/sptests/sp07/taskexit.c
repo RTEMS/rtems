@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,7 +18,7 @@
 
 #include "system.h"
 
-rtems_extension Task_exit_extension(
+void Task_exit_extension(
   rtems_tcb *running_task
 )
 {

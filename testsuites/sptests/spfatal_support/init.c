@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -118,7 +118,7 @@ void Put_Source( uint32_t source )
 }
 
 
-rtems_extension Fatal_extension(
+void Fatal_extension(
   uint32_t   source,
   bool       is_internal,
   uint32_t   error

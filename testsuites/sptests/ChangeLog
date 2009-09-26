@@ -1,3 +1,9 @@
+2009-09-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp04/tswitch.c, sp07/system.h, sp07/taskexit.c, sp07/tdelete.c,
+	sp07/tstart.c, spfatal_support/init.c, spfatal_support/system.h:
+	Eliminate use of deprecated rtems_extension.
+
 2009-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp14/asr.c, sp14/sp14.doc, sp14/task1.c, sp14/task2.c: Adjust test to

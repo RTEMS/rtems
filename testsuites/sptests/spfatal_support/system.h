@@ -26,7 +26,7 @@ rtems_task Init(
   rtems_task_argument argument
 );
 
-rtems_extension Fatal_extension(
+void Fatal_extension(
   uint32_t   source,
   bool       is_internal,
   uint32_t   error
