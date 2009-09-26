@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,7 +30,7 @@ struct taskSwitchLog taskSwitchLog[1000];
 int taskSwitchLogIndex;
 volatile int testsFinished;;
 
-rtems_extension Task_switch(
+void Task_switch(
   rtems_tcb *unused,
   rtems_tcb *heir
 )
