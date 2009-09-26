@@ -52,7 +52,7 @@ Name:		rtems-4.10-mips-rtems4.10-gdb
 Summary:	Gdb for target mips-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -104,11 +104,7 @@ BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
 %bcond_with system_readline
 %else
-%if 0%{?fedora} >= 12
-%bcond_with system_readline
-%else
 %bcond_without system_readline
-%endif
 %endif
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
@@ -133,7 +129,7 @@ Requires:	rtems-4.10-gdb-common
 # A copy of a gdb development snapshot having been retrieved from
 # ftp://sourceware.org/pub/gdb/snapshots/branch/gdb-%{gdb_version}.tar.bz2
 Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090918.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090926.diff
 
 %description
 GDB for target mips-rtems4.10
