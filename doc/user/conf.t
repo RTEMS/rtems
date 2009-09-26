@@ -1663,33 +1663,33 @@ in the User Extensions Table is defined in the following C structure:
 
 @example
 typedef void           rtems_extension;
-typedef rtems_extension (*rtems_task_create_extension)(
+typedef void (*rtems_task_create_extension)(
    Thread_Control * /* executing */,
    Thread_Control * /* created */
 );
-typedef rtems_extension (*rtems_task_delete_extension)(
+typedef void (*rtems_task_delete_extension)(
    Thread_Control * /* executing */,
    Thread_Control * /* deleted */
 );
-typedef rtems_extension (*rtems_task_start_extension)(
+typedef void (*rtems_task_start_extension)(
    Thread_Control * /* executing */,
    Thread_Control * /* started */
 );
-typedef rtems_extension (*rtems_task_restart_extension)(
+typedef void (*rtems_task_restart_extension)(
    Thread_Control * /* executing */,
    Thread_Control * /* restarted */
 );
-typedef rtems_extension (*rtems_task_switch_extension)(
+typedef void (*rtems_task_switch_extension)(
    Thread_Control * /* executing */,
    Thread_Control * /* heir */
 );
-typedef rtems_extension (*rtems_task_begin_extension)(
+typedef void (*rtems_task_begin_extension)(
    Thread_Control * /* beginning */
 );
-typedef rtems_extension (*rtems_task_exitted_extension)(
+typedef void (*rtems_task_exitted_extension)(
    Thread_Control * /* exiting */
 );
-typedef rtems_extension (*rtems_fatal_extension)(
+typedef void (*rtems_fatal_extension)(
    Internal_errors_Source /* the_source */,
    bool                   /* is_internal */,
    uint32_t               /* the_error */

@@ -254,7 +254,7 @@ following:
 @findex rtems_task_start_extension
 @ifset is-C
 @example
-rtems_extension user_task_start(
+void user_task_start(
   rtems_tcb *current_task,
   rtems_tcb *started_task
 );
@@ -288,7 +288,7 @@ following:
 @findex rtems_task_restart_extension
 @ifset is-C
 @example
-rtems_extension user_task_restart(
+void user_task_restart(
   rtems_tcb *current_task,
   rtems_tcb *restarted_task
 );
@@ -323,7 +323,7 @@ following:
 @findex rtems_task_delete_extension
 @ifset is-C
 @example
-rtems_extension user_task_delete(
+void user_task_delete(
   rtems_tcb *current_task,
   rtems_tcb *deleted_task
 );
@@ -360,7 +360,7 @@ following:
 @findex rtems_task_switch_extension
 @ifset is-C
 @example
-rtems_extension user_task_switch(
+void user_task_switch(
   rtems_tcb *current_task,
   rtems_tcb *heir_task
 );
@@ -394,7 +394,7 @@ This user extension have a prototype similar to the following:
 @findex rtems_task_begin_extension
 @ifset is-C
 @example
-rtems_extension user_task_begin(
+void user_task_begin(
   rtems_tcb *current_task
 );
 @end example
@@ -426,7 +426,7 @@ prototype similar to the following:
 @findex rtems_task_exitted_extension
 @ifset is-C
 @example
-rtems_extension user_task_exitted(
+void user_task_exitted(
   rtems_tcb *current_task
 );
 @end example
@@ -463,7 +463,7 @@ This extension should have a prototype similar to the following:
 @findex rtems_fatal_extension
 @ifset is-C
 @example
-rtems_extension user_fatal_error(
+void user_fatal_error(
   Internal_errors_Source  the_source,
   bool                    is_internal,
   uint32_t                the_error
