@@ -51,13 +51,13 @@ bool newlib_create_hook(
 );
 
 #if defined(RTEMS_UNIX) && !defined(hpux)
-  rtems_extension newlib_begin_hook(rtems_tcb *current_task);
+  void newlib_begin_hook(rtems_tcb *current_task);
   #define __RTEMS_NEWLIB_BEGIN newlib_begin_hook
 #else
   #define __RTEMS_NEWLIB_BEGIN 0
 #endif
 
-rtems_extension newlib_delete_hook(
+void newlib_delete_hook(
   rtems_tcb *current_task,
   rtems_tcb *deleted_task
 );

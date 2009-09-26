@@ -94,7 +94,7 @@ bool newlib_create_hook(
  */
 
 #ifdef NEED_SETVBUF
-rtems_extension newlib_begin_hook(rtems_tcb *current_task)
+void newlib_begin_hook(rtems_tcb *current_task)
 {
   setvbuf( stdout, NULL, _IOLBF, BUFSIZ );
 }
@@ -127,7 +127,7 @@ int newlib_free_buffers(
   return 0;
 }
 
-rtems_extension newlib_delete_hook(
+void newlib_delete_hook(
   rtems_tcb *current_task,
   rtems_tcb *deleted_task
 )

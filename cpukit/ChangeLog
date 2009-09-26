@@ -1,3 +1,9 @@
+2009-09-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/include/rtems/libcsupport.h,
+	libcsupport/src/newlibc_reent.c: Eliminate use of deprecated
+	rtems_extension.
+
 2009-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/Makefile.am: Re-add file accidentally deleted by Sebastian.
