@@ -1,3 +1,8 @@
+2009-09-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxfatal_support/init.c, psxfatal_support/system.h: Eliminate use of
+	deprecated rtems_extension.
+
 2009-09-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxclock/init.c, psxclock/psxclock.scn: Add test case for negative
