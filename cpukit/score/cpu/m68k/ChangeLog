@@ -1,3 +1,8 @@
+2009-09-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/cpu.h: Define CPU_STRUCTURE_ALIGNMENT to be on a 4 byte
+	boundary.
+
 2009-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/cpu.h: Define M68K_FP_STATE_SIZE also if used in
