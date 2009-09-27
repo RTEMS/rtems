@@ -12,7 +12,7 @@
 #include <tmacros.h>
 
 #define ALLOC_SIZE 400
-uint8_t Region_Memory[512];
+uint8_t Region_Memory[512] CPU_STRUCTURE_ALIGNMENT;
 rtems_id Region;
 
 rtems_task Blocking_task(
