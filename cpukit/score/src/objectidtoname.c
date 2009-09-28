@@ -20,8 +20,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  _Objects_Id_to_name
  *
  *  DESCRIPTION:
@@ -34,8 +33,6 @@
  *  name - pointer to location in which to store name
  *
  */
-
-
 Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Id      id,
   Objects_Name   *name
@@ -48,8 +45,9 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Control     *the_object = (Objects_Control *) 0;
   Objects_Locations    ignored_location;
 
-  if ( !name )
-    return OBJECTS_INVALID_NAME;
+  /*
+   *  Caller is trusted for name != NULL.
+   */
 
   tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
 
