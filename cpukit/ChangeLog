@@ -1,3 +1,7 @@
+2009-09-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/rtems/pci.h: Revert extern inline patch.
+
 2009-09-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/capture/capture.c, posix/src/pthread.c, rtems/src/tasks.c,
