@@ -58,7 +58,7 @@
 #include <rtems/rtems/types.h>
 #include <rtems/score/cpu.h>
 
-#include <sys/queue.h>
+/* #include <sys/queue.h> */
 
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -1019,7 +1019,7 @@ static int i82544EI_init_hw(struct wm_softc *sc)
 
 #if 0
   /* Use MOTLoad default
-  /*
+   *
    * Set up flow-control parameters.
    */
   CSR_WRITE(sc,WMREG_FCAL, FCAL_CONST);/* same as MOTLOAD 0x00c28001 */

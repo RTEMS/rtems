@@ -42,7 +42,7 @@
 
 #include <rtems/rtems/types.h>
 
-#include <sys/queue.h>
+/* #include <sys/queue.h> */
 
 #include <sys/ioctl.h>
 #include <sys/socket.h>

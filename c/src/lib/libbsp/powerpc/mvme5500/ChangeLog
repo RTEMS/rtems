@@ -1,3 +1,8 @@
+2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* network/if_100MHz/GT64260eth.c, network/if_1GHz/if_wm.c: Do not
+	include <sys/queue.h>. It conflicts with one from network stack.
+
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
