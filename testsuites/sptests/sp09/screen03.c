@@ -24,6 +24,7 @@ void Screen3()
   rtems_status_code status;
   bool              skipUnsatisfied;
 
+  /* task create bad name */
   task_name = 1;
   status = rtems_task_create(
     0,
@@ -39,6 +40,22 @@ void Screen3()
     "rtems_task_create with illegal name"
   );
   puts( "TA1 - rtems_task_create - RTEMS_INVALID_NAME" );
+
+  /* null ID */
+  status = rtems_task_create(
+    Task_name[ 1 ],
+    4,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_task_create with NULL ID param"
+  );
+  puts( "TA1 - rtems_task_create - RTEMS_INVALID_ADDRESS" );
 
   /*
    * If the bsp provides its own stack allocator, then

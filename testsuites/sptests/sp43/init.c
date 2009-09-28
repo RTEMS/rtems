@@ -201,6 +201,14 @@ rtems_task Init(
    * rtems_object_set_name - errors
    */
 
+  puts( "rtems_object_set_name - INVALID_ADDRESS" );
+  sc = rtems_object_set_name( tmpId, NULL );
+  fatal_directive_status(
+    sc,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_object_set_name INVALID_ADDRESS"
+  );
+
   puts( "rtems_object_set_name - INVALID_ID (bad API)" );
   tmpId = rtems_build_id( 0xff, OBJECTS_RTEMS_TASKS, 1, 1 ),
   sc = rtems_object_set_name( tmpId, newName );

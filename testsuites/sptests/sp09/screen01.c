@@ -34,6 +34,16 @@ void Screen1()
   );
   puts( "TA1 - rtems_task_delete - RTEMS_INVALID_ID" );
 
+  /* NULL return */
+  status = rtems_task_get_note( RTEMS_SELF, RTEMS_NOTEPAD_FIRST, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_task_get_note with NULL param"
+  );
+  puts( "TA1 - rtems_task_get_note - RTEMS_INVALID_ADDRESS" );
+
+  /* note too high */
   status = rtems_task_get_note( RTEMS_SELF, 100, &notepad_value );
   fatal_directive_status(
     status,
@@ -42,6 +52,7 @@ void Screen1()
   );
   puts( "TA1 - rtems_task_get_note - RTEMS_INVALID_NUMBER" );
 
+  /* bad Id */
   status = rtems_task_get_note( 100, RTEMS_NOTEPAD_LAST, &notepad_value );
   fatal_directive_status(
     status,
@@ -50,6 +61,7 @@ void Screen1()
   );
   puts( "TA1 - rtems_task_get_note - RTEMS_INVALID_ID" );
 
+  /* unused Id so invalid now */
   status = rtems_task_get_note(
     _RTEMS_tasks_Information.maximum_id,
     RTEMS_NOTEPAD_LAST,
@@ -90,7 +102,9 @@ void Screen1()
     RTEMS_NOTEPAD_LAST,
     &notepad_value
   );
-  fatal_directive_status( status, RTEMS_INVALID_ID,
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
     "rtems_task_get_note with no tasks in API"
   );
 
@@ -103,6 +117,16 @@ void Screen1()
     "rtems_object_get_classic_name with no tasks in API"
   );
 
+  /* NULL param */
+  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_task_ident NULL param"
+  );
+  puts( "TA1 - rtems_task_ident - RTEMS_INVALID_ADDRESS" );
+
+  /* OK */
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &self_id );
   directive_failed( status, "rtems_task_ident of self" );
   if ( self_id != Task_id[ 1 ] ) {
@@ -170,6 +194,16 @@ void Screen1()
   );
   puts( "TA1 - rtems_task_resume - RTEMS_INCORRECT_STATE" );
 
+  /* NULL param */
+  status = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_task_set_priority with NULL param"
+  );
+  puts( "TA1 - rtems_task_set_priority - RTEMS_INVALID_ADDRESS" );
+
+  /* bad priority */
   status = rtems_task_set_priority( RTEMS_SELF, 512, &previous_priority );
   fatal_directive_status(
     status,
@@ -178,6 +212,7 @@ void Screen1()
   );
   puts( "TA1 - rtems_task_set_priority - RTEMS_INVALID_PRIORITY" );
 
+  /* bad Id */
   status = rtems_task_set_priority( 100, 8, &previous_priority );
   fatal_directive_status(
     status,
@@ -214,7 +249,8 @@ void Screen1()
   );
   puts( "TA1 - rtems_task_start - RTEMS_INVALID_ID" );
 
-  status = rtems_task_start( 0, Task_1, 0 );
+  /* already started */
+  status = rtems_task_start( RTEMS_SELF, Task_1, 0 );
   fatal_directive_status(
     status,
     RTEMS_INCORRECT_STATE,
@@ -222,6 +258,7 @@ void Screen1()
   );
   puts( "TA1 - rtems_task_start - RTEMS_INCORRECT_STATE" );
 
+  /* bad Id */
   status = rtems_task_suspend( 100 );
   fatal_directive_status(
     status,
@@ -229,4 +266,13 @@ void Screen1()
     "rtems_task_suspend with illegal id"
   );
   puts( "TA1 - rtems_task_suspend - RTEMS_INVALID_ID" );
+
+  /* NULL param */
+  status = rtems_task_mode( RTEMS_SELF, 0, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_task_mode with NULL param"
+  );
+  puts( "TA1 - rtems_task_mode - RTEMS_INVALID_ADDRESS" );
 }

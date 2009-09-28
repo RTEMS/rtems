@@ -25,6 +25,16 @@ void Screen14()
   rtems_timer_information timer_info;
   bool                    skipUnsatisfied;
 
+  /* NULL Id */
+  status = rtems_timer_create( Timer_name[ 1 ], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_timer_create NULL param"
+  );
+  puts( "TA1 - rtems_timer_create - RTEMS_INVALID_ADDRESS" );
+
+  /* bad name */
   status = rtems_timer_create( 0, &Junk_id );
   fatal_directive_status(
     status,
@@ -33,6 +43,7 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_create - RTEMS_INVALID_NAME" );
 
+  /* OK */
   status = rtems_timer_create( Timer_name[ 1 ], &Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_create" );
   puts( "TA1 - rtems_timer_create - 1 - RTEMS_SUCCESSFUL" );
@@ -93,6 +104,7 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_reset - RTEMS_NOT_DEFINED" );
 
+  /* bad id */
   status = rtems_timer_fire_after(
     rtems_build_id( 1, 1, 1, 256 ),
     5 * rtems_clock_get_ticks_per_second(),
@@ -106,6 +118,7 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_fire_after - RTEMS_INVALID_ID" );
 
+  /* bad id */
   build_time( &time, 12, 31, 1994, 9, 0, 0, 0 );
   status = rtems_timer_fire_when( 
     rtems_build_id( 1, 1, 1, 256 ),
@@ -120,6 +133,16 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_fire_when - RTEMS_INVALID_ID" );
 
+  /* NULL routine */
+  status = rtems_timer_fire_after( Timer_id[ 1 ], 1, NULL, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_timer_fire_after with NULL handler"
+  );
+  puts( "TA1 - rtems_timer_fire_after - RTEMS_INVALID_ADDRESS" );
+
+  /* 0 ticks */
   status = rtems_timer_fire_after( Timer_id[ 1 ], 0, Delayed_routine, NULL );
   fatal_directive_status(
     status,
@@ -128,6 +151,16 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_fire_after - RTEMS_INVALID_NUMBER" );
 
+  /* NULL routine */
+  status = rtems_timer_fire_when( Timer_id[ 1 ], &time, NULL, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_timer_fire_when with NULL handler"
+  );
+  puts( "TA1 - rtems_timer_fire_when - RTEMS_INVALID_ADDRESS" );
+  
+  /* invalid time -- before RTEMS epoch */ 
   build_time( &time, 2, 5, 1987, 8, 30, 45, 0 );
   status = rtems_timer_fire_when( Timer_id[ 1 ], &time, Delayed_routine, NULL );
   fatal_directive_status(
@@ -158,6 +191,16 @@ void Screen14()
     " - before RTEMS_INVALID_CLOCK\n"
   );
 
+  /* null param */
+  status = rtems_timer_get_information( Timer_id[ 1 ], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_timer_get_information with NULL param"
+  );
+  puts( "TA1 - rtems_timer_get_information - RTEMS_INVALID_ADDRESS" );
+
+  /* invalid id */
   status = rtems_timer_get_information( 100, &timer_info );
   fatal_directive_status(
     status,
@@ -168,6 +211,7 @@ void Screen14()
 
 /* timer server interface routines */
 
+  /* incorrect state */
   status = rtems_timer_server_fire_after( 0, 5, NULL, NULL );
   fatal_directive_status(
     status,
@@ -176,6 +220,7 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INCORRECT_STATE" );
 
+  /* incorrect state */
   status = rtems_timer_server_fire_when( 0, &time, NULL, NULL );
   fatal_directive_status(
     status,
@@ -184,8 +229,8 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_server_fire_when - RTEMS_INCORRECT_STATE" );
 
-  status =
-    rtems_timer_initiate_server( 0, 0, 0 );
+  /* invalid priority */
+  status = rtems_timer_initiate_server( 0, 0, 0 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_PRIORITY,
@@ -218,6 +263,16 @@ void Screen14()
   directive_failed( status, "rtems_timer_initiate_server" );
   puts( "TA1 - rtems_timer_initiate_server - SUCCESSFUL" );
 
+  /* NULL routine */
+  status = rtems_timer_server_fire_after( Timer_id[ 1 ], 1, NULL, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_timer_server_fire_after NULL routine"
+  );
+  puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ADDRESS" );
+
+  /* bad Id */
   status = rtems_timer_server_fire_after(
     rtems_build_id( 1, 1, 1, 256 ),
     5 * rtems_clock_get_ticks_per_second(),
@@ -231,6 +286,7 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ID" );
 
+  /* bad id */
   build_time( &time, 12, 31, 1994, 9, 0, 0, 0 );
   status = rtems_timer_server_fire_when(
     rtems_build_id( 1, 1, 1, 256 ),
@@ -245,7 +301,18 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_server_fire_when - RTEMS_INVALID_ID" );
 
-  status = rtems_timer_server_fire_after( Timer_id[ 1 ], 0, Delayed_routine, NULL );
+  /* NULL routine */
+  status = rtems_timer_server_fire_after( Timer_id[ 1 ], 1, NULL, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_timer_server_fire_after NULL routine"
+  );
+  puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ADDRESS" );
+
+  /* 0 ticks */
+  status = rtems_timer_server_fire_after(
+    Timer_id[ 1 ], 0, Delayed_routine, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
@@ -253,8 +320,10 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_NUMBER" );
 
+  /* illegal time */
   build_time( &time, 2, 5, 1987, 8, 30, 45, 0 );
-  status = rtems_timer_server_fire_when( Timer_id[ 1 ], &time, Delayed_routine, NULL );
+  status = rtems_timer_server_fire_when(
+    Timer_id[ 1 ], &time, Delayed_routine, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_CLOCK,
@@ -270,6 +339,16 @@ void Screen14()
   directive_failed( status, "rtems_clock_get_tod" );
   print_time( "TA1 - rtems_clock_get_tod       - ", &time, "\n" );
 
+  /* when NULL routine */
+  status = rtems_timer_server_fire_when( Timer_id[ 1 ], &time, NULL, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_timer_server_fire_when NULL routine"
+  );
+  puts( "TA1 - rtems_timer_server_fire_when - RTEMS_INVALID_ADDRESS" );
+
+  /* before current time */
   build_time( &time, 2, 5, 1990, 8, 30, 45, 0 );
   status = rtems_timer_server_fire_when(
     Timer_id[ 1 ], &time, Delayed_routine, NULL );
@@ -283,4 +362,5 @@ void Screen14()
     &time,
     " - before RTEMS_INVALID_CLOCK\n"
   );
+
 }

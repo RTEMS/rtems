@@ -1,4 +1,5 @@
 *** START OF TEST 28 ***
+task variable add - NULL pointer - RTEMS_INVALID_ADDRESS
 task variable get - bad Id - RTEMS_INVALID_ID
 task variable get - NULL pointer - RTEMS_INVALID_ADDRESS
 task variable get - bad result - RTEMS_INVALID_ADDRESS

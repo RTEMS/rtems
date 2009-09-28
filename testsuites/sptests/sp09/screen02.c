@@ -139,6 +139,16 @@ void Screen2()
   );
   puts( "TA1 - rtems_clock_get - RTEMS_INVALID_NUMBER" );
 
+  /* wake when NULL param */
+  status = rtems_task_wake_when( NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_NOT_DEFINED,
+    "rtems_task_wake_when NULL param"
+  );
+  puts( "TA1 - rtems_task_wake_when - RTEMS_INVALID_ADDRESS" );
+
+  /* wake when before set */
   status = rtems_task_wake_when( &time );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
@@ -154,6 +164,7 @@ void Screen2()
     puts( "TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED" );
   }
 
+  /* before time set */
   status = rtems_timer_fire_when( 0, &time, Delayed_routine, NULL );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
@@ -257,6 +268,16 @@ void Screen2()
   time.second += 3;
   puts( "TA1 - rtems_task_wake_when - TICKINVALID - sleep about 3 seconds" );
 
+  /* NULL time */
+  status = rtems_task_wake_when( NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_task_wake_when with NULL"
+  );
+  puts( "TA1 - rtems_task_wake_when - RTEMS_INVALID_ADDRESS" );
+
+  /* invalid ticks */
   status = rtems_task_wake_when( &time );
   directive_failed(
     status,

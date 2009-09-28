@@ -22,6 +22,7 @@ void Screen5()
 {
   rtems_status_code status;
 
+  /* invalid name */
   status = rtems_semaphore_create(
     0,
     1,
@@ -36,6 +37,22 @@ void Screen5()
   );
   puts( "TA1 - rtems_semaphore_create - RTEMS_INVALID_NAME" );
 
+  /* NULL Id parameter */
+  status = rtems_semaphore_create(
+    Semaphore_name[ 1 ],
+    1,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    RTEMS_NO_PRIORITY,
+    NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_semaphore_create with NULL param"
+  );
+  puts( "TA1 - rtems_semaphore_create - RTEMS_INVALID_ADDRESS" );
+
+  /* OK */
   status = rtems_semaphore_create(
     Semaphore_name[ 1 ],
     1,
