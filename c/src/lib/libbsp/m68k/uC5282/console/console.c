@@ -790,3 +790,6 @@ void DEBUG_OUTNUM(int i)
     for (n = 28 ; n >= 0 ; n -= 4)
         DEBUG_OUTCHAR(map[(i >> n) & 0xF]);
 }
+
+BSP_polling_getchar_function_type       BSP_poll_char = NULL;
+
