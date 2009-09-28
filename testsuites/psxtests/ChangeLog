@@ -1,3 +1,10 @@
+2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add new test for calling pthread_cancel()
+	from an ISR.
+	* psxcancel01/.cvsignore, psxcancel01/Makefile.am, psxcancel01/init.c,
+	psxcancel01/psxcancel01.doc, psxcancel01/psxcancel01.scn: New files.
+
 2009-09-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxfatal_support/init.c, psxfatal_support/system.h: Eliminate use of

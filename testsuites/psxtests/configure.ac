@@ -47,6 +47,7 @@ psxautoinit01/Makefile
 psxautoinit02/Makefile
 psxbarrier01/Makefile
 psxcancel/Makefile
+psxcancel01/Makefile
 psxchroot01/Makefile
 psxcleanup/Makefile
 psxclock/Makefile
