@@ -191,6 +191,16 @@ void Screen11()
   );
   puts( "TA1 - rtems_partition_delete - local RTEMS_INVALID_ID" );
 
+  /* get bad address */
+  status = rtems_partition_get_buffer( 100, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_partition_get_buffer with NULL param"
+  );
+  puts( "TA1 - rtems_partition_get_buffer - RTEMS_INVALID_ADDRESS" );
+
+  /* get bad Id */
   status = rtems_partition_get_buffer( 100, &buffer_address_1 );
   fatal_directive_status(
     status,
@@ -215,6 +225,23 @@ void Screen11()
   );
   puts( "TA1 - rtems_partition_return_buffer - RTEMS_INVALID_ID" );
 
+  /* create bad area */
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    NULL,
+    128,
+    64,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_partition_return_buffer with NULL area"
+  );
+  puts( "TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS" );
+
+  /* create OK */
   status = rtems_partition_create(
     Partition_name[ 1 ],
     Partition_good_area,

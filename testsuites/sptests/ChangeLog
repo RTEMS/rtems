@@ -1,5 +1,11 @@
 2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp09/screen02.c, sp09/screen04.c, sp09/screen07.c, sp09/screen09.c,
+	sp09/screen10.c, sp09/screen11.c, sp09/screen12.c, sp09/sp09.scn: Add
+	some error cases uncovered by uC5282 coverage runs.
+
+2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp33/init.c, sp33/sp33.scn: Add some barrier error cases uncovered by
 	uC5282 coverage runs.
 

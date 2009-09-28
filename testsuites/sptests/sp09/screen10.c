@@ -26,6 +26,15 @@ void Screen10()
   /*
    * Check create error cases.
    */
+  status = rtems_rate_monotonic_create( Period_name[ 1 ], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_rate_monotonic_create with NULL param"
+  );
+
+  puts( "TA1 - rtems_rate_monotonic_create - RTEMS_INVALID_ADDRESS" );
+
   status = rtems_rate_monotonic_create( 0, &Junk_id );
   fatal_directive_status(
     status,
@@ -114,8 +123,27 @@ void Screen10()
   );
 
   /*
+   * Check get_statistics error cases.
+   */
+  status = rtems_rate_monotonic_get_statistics( Period_id[ 1 ], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_rate_monotonic_get_statistics with NULL param"
+  );
+  puts( "TA1 - rtems_rate_monotonic_get_statistics - RTEMS_INVALID_ADDRESS" );
+
+  /*
    * Check get_status error cases.
    */
+  status = rtems_rate_monotonic_get_status( Period_id[ 1 ], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_rate_monotonic_get_status with NULL param"
+  );
+  puts( "TA1 - rtems_rate_monotonic_get_status - RTEMS_INVALID_ADDRESS" );
+
   status = rtems_rate_monotonic_get_status( 100, &period_status );
   fatal_directive_status(
     status,

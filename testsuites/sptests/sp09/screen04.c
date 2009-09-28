@@ -30,6 +30,19 @@ void Screen4()
     RTEMS_EVENT_16,
     RTEMS_NO_WAIT,
     RTEMS_NO_TIMEOUT,
+    NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_event_receive NULL param"
+  );
+  puts( "TA1 - rtems_event_receive - NULL param - RTEMS_INVALID_ADDRESS" );
+
+  status = rtems_event_receive(
+    RTEMS_EVENT_16,
+    RTEMS_NO_WAIT,
+    RTEMS_NO_TIMEOUT,
     &event_out
   );
   fatal_directive_status(

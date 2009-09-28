@@ -165,7 +165,19 @@ void Screen9()
     RTEMS_INVALID_ID,
     "rtems_port_external_to_internal with illegal id"
   );
-  puts( "TA1 - rtems_port_external_to_internal - RTEMS_INVALID_ID" );
+
+  status = rtems_port_external_to_internal(
+    100,
+    Internal_port_area,
+    NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_port_external_to_internal with NULL param"
+  );
+  puts( "TA1 - rtems_port_external_to_internal - RTEMS_INVALID_ADDRESS" );
+
   status = rtems_port_internal_to_external(
     100,
     Internal_port_area,
@@ -177,4 +189,16 @@ void Screen9()
     "rtems_port_internal_to_external with illegal id"
   );
   puts( "TA1 - rtems_port_internal_to_external - RTEMS_INVALID_ID" );
+
+  status = rtems_port_internal_to_external(
+    100,
+    Internal_port_area,
+    NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_port_internal_to_external with NULL param"
+  );
+  puts( "TA1 - rtems_port_external_to_internal - RTEMS_INVALID_ADDRESS" );
 }

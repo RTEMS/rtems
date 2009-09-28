@@ -25,6 +25,14 @@ void Screen2()
   struct timeval    tv;
   rtems_status_code status;
 
+  puts( "TA1 - rtems_clock_get_tod - RTEMS_INVALID_ADDRESS" );
+  status = rtems_clock_get_tod( NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_clock_get_tod NULL param"
+  );
+
 /* errors before clock is set */
 
   status = rtems_clock_get_tod( &time );
@@ -42,6 +50,14 @@ void Screen2()
     puts( "TA1 - rtems_clock_get_tod - RTEMS_NOT_DEFINED" );
   }
 
+  puts( "TA1 - rtems_clock_get_seconds_since_epoch - RTEMS_INVALID_ADDRESS" );
+  status = rtems_clock_get_seconds_since_epoch( NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_clock_get_seconds_since_epoch NULL param"
+  );
+
   status = rtems_clock_get_seconds_since_epoch( &interval );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
@@ -57,6 +73,22 @@ void Screen2()
     puts( "TA1 - rtems_clock_get_seconds_since_epoch - RTEMS_NOT_DEFINED" );
   }
 
+  puts( "TA1 - rtems_clock_get_uptime - RTEMS_INVALID_ADDRESS" );
+  status = rtems_clock_get_uptime( NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_clock_get_uptime NULL param"
+  );
+
+  puts( "TA1 - rtems_clock_get_tod_timeval - RTEMS_INVALID_ADDRESS" );
+  status = rtems_clock_get_tod_timeval( NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_clock_get_tod_timeval NULL param"
+  );
+
   status = rtems_clock_get_tod_timeval( &tv );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
@@ -71,6 +103,32 @@ void Screen2()
     );
     puts( "TA1 - rtems_clock_get_tod_timeval - RTEMS_NOT_DEFINED" );
   }
+
+  puts( "TA1 - rtems_clock_set_nanoseconds_extension - RTEMS_INVALID_ADDRESS" );
+  status = rtems_clock_set_nanoseconds_extension( NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_clock_set_nanoseconds_extension NULL param"
+  );
+
+  /* NULL parameter */
+  status = rtems_clock_set( NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_clock_get sull pointer"
+  );
+  puts( "TA1 - rtems_clock_set - RTEMS_INVALID_ADDRESS" );
+
+  /* NULL parameter */
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_clock_get null pointer"
+  );
+  puts( "TA1 - rtems_clock_get - RTEMS_INVALID_ADDRESS" );
 
   /* arbitrary bad value for switch */
   status = rtems_clock_get( 0x100, &tv );

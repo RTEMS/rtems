@@ -127,6 +127,20 @@ void Screen12()
   directive_failed( status, "rtems_region_create" );
   puts( "TA1 - rtems_region_create - RTEMS_SUCCESSFUL" );
 
+  /* extend NULL address */
+  status = rtems_region_extend(
+    Region_id[ 1 ],
+    NULL,
+    REGION_LENGTH - 1
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_extend with NULL"
+  );
+  puts( "TA1 - rtems_region_extend - NULL address - RTEMS_INVALID_ADDRESS" );
+
+  /* extend within heap */
   status = rtems_region_extend(
     Region_id[ 1 ],
     &Region_good_area[ REGION_START_OFFSET ],
@@ -212,6 +226,7 @@ void Screen12()
   );
   puts( "TA1 - rtems_region_get_free_information - unknown RTEMS_INVALID_ID" );
 
+  /* get segment illegal id */
   status = rtems_region_get_segment(
     100,
     0x40,
@@ -226,6 +241,37 @@ void Screen12()
   );
   puts( "TA1 - rtems_region_get_segment - RTEMS_INVALID_ID" );
 
+  /* get_segment with NULL param */
+  status = rtems_region_get_segment(
+     Region_id[ 1 ],
+     2,
+     RTEMS_DEFAULT_OPTIONS,
+     RTEMS_NO_TIMEOUT,
+     NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_get_segment with NULL param"
+  );
+  puts( "TA1 - rtems_region_get_segment - RTEMS_INVALID_ADDRESS" );
+
+  /* get_segment with illegal 0 size */
+  status = rtems_region_get_segment(
+     Region_id[ 1 ],
+     0,
+     RTEMS_DEFAULT_OPTIONS,
+     RTEMS_NO_TIMEOUT,
+     &segment_address_1
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_SIZE,
+    "rtems_region_get_segment with 0 size"
+  );
+  puts( "TA1 - rtems_region_get_segment - 0 size - RTEMS_INVALID_SIZE" );
+
+  /* get_segment with illegal big size */
   status = rtems_region_get_segment(
      Region_id[ 1 ],
      sizeof( Region_good_area ) * 2,
@@ -236,9 +282,9 @@ void Screen12()
   fatal_directive_status(
     status,
     RTEMS_INVALID_SIZE,
-    "rtems_region_get_segment with illegal size"
+    "rtems_region_get_segment with big size"
   );
-  puts( "TA1 - rtems_region_get_segment - RTEMS_INVALID_SIZE" );
+  puts( "TA1 - rtems_region_get_segment - too big - RTEMS_INVALID_SIZE" );
 
   status = rtems_region_get_segment(
      Region_id[ 1 ],

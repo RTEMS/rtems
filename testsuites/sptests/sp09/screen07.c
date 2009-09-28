@@ -35,6 +35,52 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_broadcast - RTEMS_INVALID_ID" );
 
+  /* null ID parameter */
+  status = rtems_message_queue_create(
+    Queue_name[ 1 ],
+    3,
+    MESSAGE_SIZE,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_message_queue_create with null param"
+  );
+  puts( "TA1 - rtems_message_queue_create - NULL Id - RTEMS_INVALID_ADDRESS" );
+
+  /* count == 0 */
+  status = rtems_message_queue_create(
+    Queue_name[ 1 ],
+    0,
+    MESSAGE_SIZE,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_message_queue_create with 0 count"
+  );
+  puts( "TA1 - rtems_message_queue_create - count = 0 - RTEMS_INVALID_NUMBER" );
+
+  /* max size == 0 */
+  status = rtems_message_queue_create(
+    Queue_name[ 1 ],
+    3,
+    0,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_SIZE,
+    "rtems_message_queue_create with 0 msg size"
+  );
+  puts( "TA1 - rtems_message_queue_create - size = 0 - RTEMS_INVALID_SIZE" );
+
+  /* bad name parameter */
   status = rtems_message_queue_create(
     0,
     3,
@@ -133,6 +179,16 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_ident - RTEMS_INVALID_NAME" );
 
+  /* number pending - bad Id */
+  status = rtems_message_queue_get_number_pending( Queue_id[ 1 ], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_message_queue_get_number_pending with NULL param"
+  );
+  puts("TA1 - rtems_message_queue_get_number_pending - RTEMS_INVALID_ADDRESS");
+
+  /* number pending - bad Id */
   status = rtems_message_queue_get_number_pending( 100, &count );
   fatal_directive_status(
     status,
@@ -141,6 +197,16 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_get_number_pending - RTEMS_INVALID_ID" );
 
+  /* flush null param */
+  status = rtems_message_queue_flush( Queue_id[ 1 ], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_message_queue_flush with NULL param"
+  );
+  puts( "TA1 - rtems_message_queue_flush - RTEMS_INVALID_ADDRESS" );
+
+  /* flush invalid id */
   status = rtems_message_queue_flush( 100, &count );
   fatal_directive_status(
     status,
@@ -223,6 +289,18 @@ void Screen7()
     "TA1 - rtems_message_queue_receive - Q 1 - woke up with RTEMS_TIMEOUT"
   );
 
+  /* send NULL message*/
+  status = rtems_message_queue_send( Queue_id[ 1 ], NULL, MESSAGE_SIZE );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_message_queue_send with NULL buffer"
+  );
+  puts(
+    "TA1 - rtems_message_queue_send - NULL buffer - RTEMS_INVALID_ADDRESS"
+  );
+
+  /* send bad id */
   status = rtems_message_queue_send( 100, buffer, MESSAGE_SIZE );
   fatal_directive_status(
     status,
@@ -247,6 +325,18 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_TOO_MANY" );
 
+  /* urgent NULL message*/
+  status = rtems_message_queue_urgent( Queue_id[ 1 ], NULL, MESSAGE_SIZE );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_message_queue_urgent with NULL buffer"
+  );
+  puts(
+    "TA1 - rtems_message_queue_urgent - NULL buffer - RTEMS_INVALID_ADDRESS"
+  );
+
+  /* urgent bad Id */
   status = rtems_message_queue_urgent( 100, buffer, MESSAGE_SIZE );
   fatal_directive_status(
     status,
