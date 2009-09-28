@@ -1,3 +1,8 @@
+2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp33/init.c, sp33/sp33.scn: Add some barrier error cases uncovered by
+	uC5282 coverage runs.
+
 2009-09-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp59/init.c, spintrcritical15/init.c, spintrcritical16/init.c:

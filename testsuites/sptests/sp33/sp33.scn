@@ -1,12 +1,15 @@
 *** TEST 33 ***
-Delete barrier with bad id
-Release barrier with bad id
-Wait on barrier with bad id
+rtems_barrier_delete - bad id - INVALID_ID
+rtems_barrier_release - bad id - INVALID_ID
+rtems_barrier_wait - bad id - INVALID_ID
 Create barrier with automatic release and 0 max waiters
-Create barrier
-Create too many barriers
+rtems_barrier_create - bad name - INVALID_NAME
+rtems_barrier_create - NULL barrier ID - INVALID_ADDRESS
+rtems_barrier_create - OK
+rtems_barrier_create - too many
 Check barrier ident
 Wait on barrier w/timeout and TIMEOUT
+rtems_barrier_release - NULL return count - INVALID_ADDRESS
 
 *** Testing manual release of barrier ***
 Delay to let Waiters block
@@ -27,13 +30,13 @@ Waiter 0 waiting on barrier
 Waiter 1 waiting on barrier
 Waiter 2 waiting on barrier
 Waiter 3 waiting on barrier
-Delete barrier
+rtems_barrier_delete - OK
 Delay to let Waiters print a message
 Waiter 0 back from barrier
 Waiter 1 back from barrier
 Waiter 2 back from barrier
 Waiter 3 back from barrier
-Create barrier
+rtems_barrier_create - OK
 
 *** Testing automatic release of barrier ***
 Delay to let task wait on barrier
