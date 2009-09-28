@@ -1,3 +1,11 @@
+2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/src/regiondelete.c, rtems/src/regiongetfreeinfo.c,
+	rtems/src/regiongetinfo.c, rtems/src/regiongetsegment.c,
+	rtems/src/regiongetsegmentsize.c, rtems/src/regionresizesegment.c,
+	rtems/src/regionreturnsegment.c: Do not initialize return status to
+	RTEMS_INTERNAL_ERROR.
+
 2009-09-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/rtems/pci.h: Revert extern inline patch.

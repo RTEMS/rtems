@@ -55,7 +55,7 @@ rtems_status_code rtems_region_get_segment(
 {
   Thread_Control          *executing;
   Objects_Locations        location;
-  rtems_status_code        return_status = RTEMS_INTERNAL_ERROR;
+  rtems_status_code        return_status;
   register Region_Control *the_region;
   void                    *the_segment;
 

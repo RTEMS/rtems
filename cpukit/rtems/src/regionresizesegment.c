@@ -53,7 +53,7 @@ rtems_status_code rtems_region_resize_segment(
   uintptr_t                avail_size;
   Objects_Locations        location;
   uintptr_t                osize;
-  rtems_status_code        return_status = RTEMS_INTERNAL_ERROR;
+  rtems_status_code        return_status;
   Heap_Resize_status       status;
   register Region_Control *the_region;
 
