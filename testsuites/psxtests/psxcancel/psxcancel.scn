@@ -3,6 +3,7 @@ Init - pthread_setcancelstate - NULL oldstate - EINVAL
 Init - pthread_setcancelstate - bad state - EINVAL
 Init - pthread_setcanceltype - NULL oldtype - EINVAL
 Init - pthread_setcanceltype - bad type - EINVAL
+Init - pthread_cancel - bad ID - EINVAL
 countTaskDeferred: elapsed time (second):  0
 countTaskDeferred: elapsed time (second):  1
 countTaskDeferred: elapsed time (second):  2

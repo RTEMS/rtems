@@ -1,4 +1,8 @@
 *** POSIX TEST CANCEL 01 ***
 Init: schedule pthread_cancel from a TSR
 pthread_cancel - from ISR returns EPROTO - OK
+Init: schedule pthread_setcancelstate from a TSR
+pthread_setcancelstate - from ISR returns EPROTO - OK
+Init: schedule pthread_setcanceltype from a TSR
+pthread_setcanceltype - from ISR returns EPROTO - OK
 *** END OF POSIX TEST CANCEL 01 ***

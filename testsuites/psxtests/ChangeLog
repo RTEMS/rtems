@@ -1,5 +1,11 @@
 2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* psxcancel/init.c, psxcancel/psxcancel.scn, psxcancel01/init.c,
+	psxcancel01/psxcancel01.scn: Add missing pthread cancellation test
+	cases.
+
+2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add new test for calling pthread_cancel()
 	from an ISR.
 	* psxcancel01/.cvsignore, psxcancel01/Makefile.am, psxcancel01/init.c,
