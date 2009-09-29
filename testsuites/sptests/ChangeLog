@@ -1,5 +1,12 @@
 2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add new test to exercise when notepads are
+	not configured.
+	* spnotepad01/.cvsignore, spnotepad01/Makefile.am, spnotepad01/init.c,
+	spnotepad01/spnotepad01.doc, spnotepad01/spnotepad01.scn: New files.
+
+2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp09/screen01.c, sp09/screen02.c, sp09/screen03.c, sp09/screen05.c,
 	sp09/screen09.c, sp09/screen14.c, sp09/sp09.scn, sp28/init.c,
 	sp28/sp28.scn, sp43/init.c: Add more error cases uncovered by uC5282
