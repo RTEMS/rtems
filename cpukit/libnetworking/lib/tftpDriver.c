@@ -1,6 +1,4 @@
 /*
- * vim: set expandtab tabstop=4 shiftwidth=4 ai :
- * 
  * Trivial File Transfer Protocol (RFC 1350)
  *
  * Transfer file to/from remote host
