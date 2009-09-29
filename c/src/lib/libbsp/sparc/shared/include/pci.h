@@ -1105,7 +1105,7 @@ typedef struct  {
 			       unsigned char, unsigned short);
 	int (*write_config_dword)(unsigned char, unsigned char,  unsigned char,
 			       unsigned char, unsigned int);
-}pci_config_access_functions;
+} pci_config_access_functions;
 
 typedef struct {
   volatile unsigned char*	pci_config_addr;
@@ -1154,8 +1154,8 @@ pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char func
 /*
  * Return the number of PCI busses in the system
  */
-extern unsigned char BusCountPCI();
-extern int init_pci();
+extern unsigned char BusCountPCI(void);
+extern int init_pci(void);
 
 extern int dma_to_pci(unsigned int addr, unsigned int paddr, unsigned int len);
 extern int dma_from_pci(unsigned int addr, unsigned int paddr, unsigned int len);
