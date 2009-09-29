@@ -1,5 +1,6 @@
 2009-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/src/heapwalk.c(Heap_Walk_printer): Add missing return type.
 	* libnetworking/lib/tftpDriver.c (rtems_tftp_eval_path):
 	Add missing parameter pathlen.
 	* libmisc/shell/hexdump-conv.c: Use %lc instead of %C.
