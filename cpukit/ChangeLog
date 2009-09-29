@@ -1,3 +1,7 @@
+2009-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/shell/hexdump-conv.c: Use %lc instead of %C.
+
 2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/regiondelete.c, rtems/src/regiongetfreeinfo.c,
