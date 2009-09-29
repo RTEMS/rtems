@@ -486,6 +486,7 @@ fixPath (char *path)
 
 static int rtems_tftp_eval_path(  
   const char                        *pathname,     /* IN     */
+  int                                pathnamelen,  /* IN     */		
   int                                flags,        /* IN     */
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 )
