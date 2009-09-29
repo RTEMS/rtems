@@ -28,7 +28,7 @@
 #include <rtems/score/interr.h>
 #include <rtems/bspIo.h>
 
-typedef int (*Heap_Walk_printer)(int, bool, const char*, ...);
+typedef void (*Heap_Walk_printer)(int, bool, const char*, ...);
 
 static void _Heap_Walk_print_nothing(
   int source,
