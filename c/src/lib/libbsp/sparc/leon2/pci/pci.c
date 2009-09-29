@@ -589,7 +589,7 @@ done:
 /*
  * This routine determines the maximum bus number in the system
  */
-int init_pci()
+int init_pci(void)
 {
     unsigned char ucSlotNumber, ucFnNumber, ucNumFuncs;
     unsigned char ucHeader;
@@ -668,7 +668,7 @@ int init_pci()
 /*
  * Return the number of PCI busses in the system
  */
-unsigned char BusCountPCI()
+unsigned char BusCountPCI(void)
 {
     return(ucMaxPCIBus+1);
 }

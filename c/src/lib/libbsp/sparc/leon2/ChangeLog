@@ -1,3 +1,7 @@
+2009-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* pci/pci.c: Add prototypes for BusCountPCI(void), init_pci(void).
+
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
