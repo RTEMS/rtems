@@ -140,7 +140,7 @@ retry:
 			pad = 3 - width;
 			if (pad < 0)
 				pad = 0;
-			(void)printf("%*s%C", pad, "", wc);
+			(void)printf("%*s%lc", pad, "", wc);
 			pr->mbleft = clen - 1;
 		}
 	} else {
