@@ -47,7 +47,7 @@ rtems_status_code rtems_region_delete(
 )
 {
   Objects_Locations        location;
-  rtems_status_code        return_status;
+  rtems_status_code        return_status = RTEMS_SUCCESSFUL;
   register Region_Control *the_region;
 
   _RTEMS_Lock_allocator();
@@ -62,7 +62,6 @@ rtems_status_code rtems_region_delete(
         else {
           _Objects_Close( &_Region_Information, &the_region->Object );
           _Region_Free( the_region );
-          return_status = RTEMS_SUCCESSFUL;
         }
         break;
 

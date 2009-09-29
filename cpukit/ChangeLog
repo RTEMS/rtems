@@ -1,5 +1,12 @@
 2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* rtems/src/regiondelete.c, rtems/src/regiongetfreeinfo.c,
+	rtems/src/regiongetinfo.c, rtems/src/regiongetsegment.c,
+	rtems/src/regiongetsegmentsize.c, rtems/src/regionresizesegment.c,
+	rtems/src/regionreturnsegment.c: Remove warnings.
+
+2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/src/objectidtoname.c: Remove error which cannot be reached
 	since API that calls this checks the error first.
 	* score/src/objectsetname.c: Adjust handling of length.

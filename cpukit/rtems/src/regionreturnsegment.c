@@ -55,7 +55,7 @@ rtems_status_code rtems_region_return_segment(
 )
 {
   Objects_Locations        location;
-  rtems_status_code        return_status;
+  rtems_status_code        return_status = RTEMS_SUCCESSFUL;
 #ifdef RTEMS_REGION_FREE_SHRED_PATTERN
   uint32_t                 size;
 #endif

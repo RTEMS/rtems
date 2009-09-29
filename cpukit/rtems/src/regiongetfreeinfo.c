@@ -50,7 +50,7 @@ rtems_status_code rtems_region_get_free_information(
 )
 {
   Objects_Locations        location;
-  rtems_status_code        return_status;
+  rtems_status_code        return_status = RTEMS_SUCCESSFUL;
   register Region_Control *the_region;
 
   if ( !the_info )

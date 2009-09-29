@@ -49,7 +49,7 @@ rtems_status_code rtems_region_get_segment_size(
 )
 {
   Objects_Locations        location;
-  rtems_status_code        return_status;
+  rtems_status_code        return_status = RTEMS_SUCCESSFUL;
   register Region_Control *the_region;
 
   if ( !segment )
@@ -66,8 +66,6 @@ rtems_status_code rtems_region_get_segment_size(
       case OBJECTS_LOCAL:
         if ( !_Heap_Size_of_alloc_area( &the_region->Memory, segment, size ) )
           return_status = RTEMS_INVALID_ADDRESS;
-        else
-          return_status = RTEMS_SUCCESSFUL;
         break;
 
 #if defined(RTEMS_MULTIPROCESSING)

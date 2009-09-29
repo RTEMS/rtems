@@ -55,7 +55,7 @@ rtems_status_code rtems_region_get_segment(
 {
   Thread_Control          *executing;
   Objects_Locations        location;
-  rtems_status_code        return_status;
+  rtems_status_code        return_status = RTEMS_SUCCESSFUL;
   register Region_Control *the_region;
   void                    *the_segment;
 
@@ -87,7 +87,6 @@ rtems_status_code rtems_region_get_segment(
           if ( the_segment ) {
             the_region->number_of_used_blocks += 1;
             *segment = the_segment;
-            return_status = RTEMS_SUCCESSFUL;
           }
 
           else if ( _Options_Is_no_wait( option_set ) ) {
