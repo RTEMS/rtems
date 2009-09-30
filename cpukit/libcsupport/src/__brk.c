@@ -17,8 +17,7 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
-#if !defined(RTEMS_UNIX)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE___BRK)
 
 #include <errno.h>
 
