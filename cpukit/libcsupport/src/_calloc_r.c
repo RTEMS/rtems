@@ -15,7 +15,7 @@
 #include "config.h"
 #endif
 
-#ifdef RTEMS_NEWLIB
+#if defined(RTEMS_NEWLIB) && !defined(HAVE__CALLOC_R)
 #include <sys/reent.h>
 #include <stdlib.h>
 

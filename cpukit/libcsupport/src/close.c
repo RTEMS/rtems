@@ -44,7 +44,7 @@ int close(
  *  This is the Newlib dependent reentrant version of close().
  */
 
-#if defined(RTEMS_NEWLIB)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE__CLOSE_R)
 
 #include <reent.h>
 
