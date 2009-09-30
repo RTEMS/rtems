@@ -14,12 +14,12 @@
 
 int  rtems_termios_set_initial_baud(
   struct rtems_termios_tty *ttyp,
-  int                       baud
+  int32_t                   baud
 )
 {
   int cflags_baud;
 
-  cflags_baud = termios_number_to_baud(baud);
+  cflags_baud = rtems_termios_number_to_baud(baud);
   if ( cflags_baud == -1 )
     return -1;
 
