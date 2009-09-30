@@ -17,7 +17,7 @@
 #include <rtems/bspIo.h>
 #include <rtems.h>
 
-
+#if defined(RTEMS_NEWLIB) && !defined(HAVE___ASSERT_FUNC)
 /*
  * Newlib 1.16.0 added this method.  Together these provide an 
  * RTEMS safe, low memory implementation.
@@ -38,8 +38,9 @@ void __assert_func(
   );
   rtems_fatal_error_occurred(0);
 }
+#endif
 
-#ifndef HAVE___ASSERT
+#if defined(RTEMS_NEWLIB) && !defined(HAVE___ASSERT)
 void __assert(
   const char *file,
   int         line,
