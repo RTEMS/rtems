@@ -10,9 +10,10 @@
  */
 
 #include <sys/termios.h>
+#include <rtems/termiostypes.h>
 
-int termios_number_to_baud(
-  int baud
+int rtems_termios_number_to_baud(
+  int32_t baud
 )
 {
   int termios_baud;
