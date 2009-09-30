@@ -17,22 +17,15 @@
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 
+#if defined(RTEMS_NEWLIB)
+#include <sys/time.h>
+#include <errno.h>
 #include <rtems.h>
 
-#if !defined(RTEMS_UNIX)
-#ifdef RTEMS_NEWLIB
-#include <sys/reent.h>
-#endif
-
-#include <sys/time.h>
-#include <time.h>
-
-#include <errno.h>
-
+#if defined(RTEMS_NEWLIB) && !defined(HAVE_GETTIMEOFDAY)
 /*
  *  NOTE:  The solaris gettimeofday does not have a second parameter.
  */
-
 int gettimeofday(
   struct timeval  *tp,
   void * __tz __attribute__((unused))
@@ -59,13 +52,15 @@ int gettimeofday(
 
   return 0;
 }
+#endif
 
-#if defined(RTEMS_NEWLIB)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE__GETTIMEOFDAY_R)
+
+#include <sys/reent.h>
 
 /*
  *  "Reentrant" version
  */
-
 int _gettimeofday_r(
   struct _reent   *ignored_reentrancy_stuff __attribute__((unused)),
   struct timeval  *tp,
@@ -74,7 +69,9 @@ int _gettimeofday_r(
 {
   return gettimeofday( tp, tzp );
 }
+#endif
 
+#if defined(RTEMS_NEWLIB) && !defined(HAVE__GETTIMEOFDAY)
 /*
  *  "System call" version
  */
@@ -86,7 +83,6 @@ int _gettimeofday(
 {
   return gettimeofday( tp, tzp );
 }
+#endif
 
 #endif /* defined(RTEMS_NEWLIB) */
-
-#endif
