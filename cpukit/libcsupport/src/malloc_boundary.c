@@ -75,7 +75,8 @@ static void rtems_malloc_boundary_at_malloc(
 {
   void *return_this;
   struct mallocNode *mp = (struct mallocNode *)pointer;
-  int *fp, *nfp, i;
+  int *fp, *nfp;
+  int i;
 
   _RTEMS_Lock_allocator();
     mp->memory = mp + 1;
@@ -85,7 +86,7 @@ static void rtems_malloc_boundary_at_malloc(
     for (i = 0 ; i < CALLCHAINSIZE ; i++) {
       mp->callChain[i] = fp[1];
       nfp = (int *)(fp[0]);
-      if((nfp <= fp) || (nfp > (int *)(1 << 24)))
+      if((nfp <= fp) || (nfp > (int *)((intptr_t)1 << 24)))
        break;
       fp = nfp;
     }
@@ -178,6 +179,7 @@ static void reportMallocError(const char *msg, struct mallocNode *mp)
     printk("\n\n%s\n\n", cbuf);
 }
 
+#if UNUSED
 static void checkMallocArena(void)
 {
   struct mallocNode *mp;
@@ -192,6 +194,7 @@ static void checkMallocArena(void)
     }
   _RTEMS_Unlock_allocator();
 }
+#endif
 
 #endif
 #endif
