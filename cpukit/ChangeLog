@@ -1,5 +1,7 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/_free_r.c, libcsupport/src/_malloc_r.c:
+	Rework autoconf defines.
 	* libcsupport/src/malloc_boundary.c: Comment out checkMallocArena
 	(unused).
 	* libcsupport/src/__assert.c: Rework autoconf defines.
