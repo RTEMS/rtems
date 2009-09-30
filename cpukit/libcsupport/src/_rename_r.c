@@ -15,17 +15,12 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
-#include <reent.h>
-
-#include <rtems.h>
-#include <rtems/libio.h>
-#include <errno.h>
-
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
-
+#if defined(RTEMS_NEWLIB) && !defined(HAVE__RENAME_R)
+#include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
+
+#include <reent.h>
 
 int _rename_r(
   struct _reent *ptr __attribute__((unused)),
@@ -44,3 +39,4 @@ int _rename_r(
     return s;
   return S_ISDIR(sb.st_mode) ? rmdir( old ) : unlink( old );
 }
+#endif
