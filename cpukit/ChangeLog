@@ -1,5 +1,7 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/open.c, libcsupport/src/close.c:
+	Rework autoconf defines.
 	* libcsupport/src/tcflow.c: Remove unused includes.
 	* libcsupport/src/__sbrk.c: Eliminate RTEMS_UNIX.
 	* libcsupport/src/_free_r.c, libcsupport/src/_malloc_r.c:
