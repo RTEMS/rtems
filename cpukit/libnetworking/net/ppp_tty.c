@@ -242,7 +242,7 @@ pppopen(struct rtems_termios_tty *tty)
     /* initialize values */
     sc->sc_if.if_flags |= IFF_RUNNING;
     sc->sc_if.if_baudrate =
-	termios_baud_to_number(tty->termios.c_cflag & CBAUD);
+	rtems_termios_baud_to_number(tty->termios.c_cflag & CBAUD);
 
     tty->t_sc = (void *)sc;
 

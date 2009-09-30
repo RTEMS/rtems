@@ -1,5 +1,10 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/ppp_tty.c: Reflect termios_baud_to_number having
+	been renamed to rtems_termios_baud_to_number.
+
+2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/termios_setinitialbaud.c: 
 	Include rtems/termiostypes.h.
 	Rename termios_set_initial_baud into rtems_termios_set_initial_baud.
