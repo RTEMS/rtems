@@ -1,5 +1,9 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/malloc_p.h: Remove #include <inttypes.h>.
+
+2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/net/ppp_tty.c: Reflect termios_baud_to_number having
 	been renamed to rtems_termios_baud_to_number.
 
