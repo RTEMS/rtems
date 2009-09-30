@@ -20,6 +20,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -179,12 +180,17 @@ extern int   rtems_termios_nlinesw;
 #define PPPDISC   5    /* PPP discipline */
 #define MAXLDISC  8
 
+/* baudrate xxx integer type */
+typedef int32_t rtems_termios_baud_t;
+
 /* convert xxx integer to equivalent Bxxx constant */
-int  termios_number_to_baud(int baud);
+int  rtems_termios_number_to_baud(rtems_termios_baud_t baud);
+
 /* convert Bxxx constant to xxx integer */
-int  termios_baud_to_number(int termios_baud);
+rtems_termios_baud_t rtems_termios_baud_to_number(int termios_baud);
+
 /* convert Bxxx constant to index */
-int  termios_baud_to_index(int termios_baud);
+int  rtems_termios_baud_to_index(rtems_termios_baud_t termios_baud);
 
 /*
  *  This method is used by a driver to tell termios its
@@ -194,7 +200,7 @@ int  termios_baud_to_index(int termios_baud);
  */
 int  rtems_termios_set_initial_baud(
   struct rtems_termios_tty *ttyp,
-  int                       baud
+  rtems_termios_baud_t      baud
 );
 
 #ifdef __cplusplus

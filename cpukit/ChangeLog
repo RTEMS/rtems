@@ -1,3 +1,11 @@
+2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/rtems/termiostypes.h: Include stdlib.h.
+	Add rtems_termios_baud_t.
+	Rename termios_number_to_baud into rtems_termios_number_to_baud,
+	termios_baud_to_number into rtems_termios_baud_to_number,
+	termios_baud_to_index into rtems_termios_baud_to_index.
+
 2009-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/lib/tftpDriver.c: Remove vim: meta-tags.
