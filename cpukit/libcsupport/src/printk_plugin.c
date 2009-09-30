@@ -32,4 +32,3 @@ int printk_plugin(
   
   return 0;
 }
-
