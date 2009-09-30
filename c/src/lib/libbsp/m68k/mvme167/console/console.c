@@ -826,8 +826,8 @@ int cd2401_setAttributes(
   /* Determine what the line parameters should be */
 
   /* baud rates */
-  out_baud = termios_baud_to_number(t->c_cflag & CBAUD);
-  in_baud  = termios_baud_to_number(t->c_cflag & CBAUD);
+  out_baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
+  in_baud  = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
 
   /* Number of bits per char */
   csize = 0x07; /* to avoid a warning */

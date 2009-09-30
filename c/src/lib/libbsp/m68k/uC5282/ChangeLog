@@ -1,3 +1,8 @@
+2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c: Reflect termios_baud_to_number having been
+	renamed to rtems_termios_baud_to_number.
+
 2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/console.c: Add pointer to method used by getchark().
@@ -6,7 +11,7 @@
 
 	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
 
- 2009-09-09	Till Straumann <strauman@slac.stanford.edu>
+2009-09-09	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c: Added dummy implementation of firmware
 	syscalls for use with QEMU. Dummy handler is installed if no
