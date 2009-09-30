@@ -65,7 +65,7 @@ int fstat(
  *  This is the Newlib dependent reentrant version of fstat().
  */
 
-#if defined(RTEMS_NEWLIB)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE_FSTAT_R)
 
 #include <reent.h>
 

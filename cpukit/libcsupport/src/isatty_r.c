@@ -19,7 +19,7 @@
  *  This is the Newlib dependent reentrant version of isatty().
  */
 
-#if defined(RTEMS_NEWLIB)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE__ISATTY_R)
 
 #include <reent.h>
 #include <sys/stat.h>

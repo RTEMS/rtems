@@ -8,8 +8,10 @@
 #include "config.h"
 #endif
 
+#if defined(RTEMS_NEWLIB) && !defined(HAVE_ISSETUGID)
 int
 issetugid (void)
 {
 	return 0;
 }
+#endif

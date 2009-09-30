@@ -31,7 +31,7 @@ pid_t getpid( void )
  *  This is the Newlib dependent reentrant version of getpid().
  */
 
-#if defined(RTEMS_NEWLIB)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE__GETPID_R)
 
 #include <reent.h>
 

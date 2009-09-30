@@ -15,7 +15,7 @@
 #include "config.h"
 #endif
 
-#ifdef RTEMS_NEWLIB
+#if defined(RTEMS_NEWLIB) && !defined(HAVE_CALLOC)
 #include "malloc_p.h"
 #include <stdlib.h>
 

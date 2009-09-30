@@ -55,7 +55,7 @@ ssize_t read(
  *  This is the Newlib dependent reentrant version of read().
  */
 
-#if defined(RTEMS_NEWLIB)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE__READ_R)
 
 #include <reent.h>
 

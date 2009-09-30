@@ -85,7 +85,7 @@ off_t lseek(
  *  This is the Newlib dependent reentrant version of lseek().
  */
 
-#if defined(RTEMS_NEWLIB)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE__LSEEK_R)
 
 #include <reent.h>
 

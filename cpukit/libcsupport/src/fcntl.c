@@ -172,7 +172,7 @@ int fcntl(
  *  This is the Newlib dependent reentrant version of fcntl().
  */
 
-#if defined(RTEMS_NEWLIB)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE_FCNTL_R)
 
 #include <reent.h>
 
