@@ -1,3 +1,10 @@
+2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/serial/sersupp.h: Remove termios_baud_to_index,
+	termios_baud_to_number (duplicate prototypes).
+	Add C++-guards.
+	Include rtems/termiostypes.h.
+
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/bsp-configure.m4: Add RTEMS_BSP_BOOTCARD_OPTIONS.
