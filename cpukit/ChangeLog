@@ -1,5 +1,6 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/getgroups.c: Remove unused includes.
 	* libcsupport/src/setpgid.c: Remove unused includes.
 	* libcsupport/src/malloc_p.h: Remove #include <inttypes.h>.
 
