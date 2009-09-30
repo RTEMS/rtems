@@ -6,14 +6,8 @@
 #include "config.h"
 #endif
 
-#include <limits.h>
-#include <errno.h>
-#include <string.h>
 #include <sys/types.h>
-
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/seterr.h>
+#include <unistd.h>
 
 /*PAGE
  *
