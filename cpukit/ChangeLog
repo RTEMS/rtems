@@ -1,5 +1,8 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/termios_baud2num.c: 
+	Include rtems/termiostypes.h.
+	Rename termios_baud_to_number into rtems_termios_baud_to_number.
 	* libcsupport/src/termios_baud2index.c: 
 	Include rtems/termiostypes.h.
 	Rename termios_baud_to_index into rtems_termios_baud_to_index.
