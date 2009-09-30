@@ -1,5 +1,13 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/fstat.c, libcsupport/src/fcntl.c,
+	libcsupport/src/calloc.c, libcsupport/src/isatty_r.c,
+	libcsupport/src/issetugid.c, libcsupport/src/lseek.c,
+	libcsupport/src/read.c, libcsupport/src/getpid.c:
+	Rework autoconf defines.
+
+2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/_rename_r.c: Rework autoconf defines.
 	Remove unused includes.
 	* libcsupport/src/__gettod.c: Rework autoconf defines.
