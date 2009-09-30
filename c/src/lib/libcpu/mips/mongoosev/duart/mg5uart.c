@@ -762,7 +762,7 @@ MG5UART_STATIC int mg5uart_baud_rate(
   if (!baud_requested)
     baud_requested = B9600;              /* default to 9600 baud */
 
-  baud_requested = termios_baud_to_number( baud_requested );
+  baud_requested = rtems_termios_baud_to_number( baud_requested );
 
   clock = (uint32_t) Console_Port_Tbl[minor].ulClock;
   if (!clock)
