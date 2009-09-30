@@ -685,7 +685,7 @@ int   SciSetAttributes(
         baud_requested = B19200;                 /* default to 19200 baud */
     }
 
-    sci_rate = termios_baud_to_number( baud_requested );
+    sci_rate = rtems_termios_baud_to_number( baud_requested );
 
     /* parity error detection */
 
