@@ -22,7 +22,6 @@
 #endif
 
 #include <stdint.h>
-#include <inttypes.h>
 #include <rtems/chain.h>
 
 /*
