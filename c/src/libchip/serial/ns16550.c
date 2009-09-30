@@ -180,7 +180,7 @@ NS16550_STATIC int ns16550_open(
   }
 
   /* Set initial baud */
-  rtems_termios_set_initial_baud( tty, (int) c->pDeviceParams);
+  rtems_termios_set_initial_baud( tty, (int32_t) c->pDeviceParams);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -397,7 +397,7 @@ NS16550_STATIC int ns16550_set_attributes(
 
   ulBaudDivisor = NS16550_Baud(
     (uint32_t) Console_Port_Tbl[minor].ulClock,
-    termios_baud_to_number(baud_requested)
+    rtems_termios_baud_to_number(baud_requested)
   );
 
   ucLineControl = 0;
@@ -474,7 +474,6 @@ NS16550_STATIC void ns16550_process( int minor)
   ns16550_context *ctx = d->pDeviceContext;
   uint32_t port = c->ulCtrlPort1;
   getRegister_f get = c->getRegister;
-  setRegister_f set = c->setRegister;
   int i = 0;
   char buf [SP_FIFO_SIZE];
 

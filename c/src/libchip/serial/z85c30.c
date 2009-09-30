@@ -452,7 +452,7 @@ Z85C30_STATIC int z85c30_set_attributes(
 
   ulBaudDivisor = Z85C30_Baud(
     (uint32_t) Console_Port_Tbl[minor].ulClock,
-    (uint32_t) termios_baud_to_number( baud_requested )
+    (uint32_t) rtems_termios_baud_to_number( baud_requested )
   );
 
   wr3 = SCC_WR3_RX_EN;

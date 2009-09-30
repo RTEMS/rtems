@@ -1,5 +1,11 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/serial/z85c30.c, libchip/serial/ns16550.c,
+	libchip/serial/mc68681.c: Reflect termios_baud_to_number having been
+	renamed to rtems_termios_baud_to_number.
+
+2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libchip/serial/sersupp.h: Remove termios_baud_to_index,
 	termios_baud_to_number (duplicate prototypes).
 	Add C++-guards.
