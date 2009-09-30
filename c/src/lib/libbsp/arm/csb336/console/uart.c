@@ -312,7 +312,7 @@ static int imx_uart_set_attrs(int minor, const struct termios *t)
 {
     int baud;
 
-    baud = termios_baud_to_number(t->c_cflag & CBAUD);
+    baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
     imx_uart_set_baud(minor, baud);
 
     return 0;
