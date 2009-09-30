@@ -1,5 +1,7 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/_calloc_r.c, libcsupport/src/_realloc_r.c:
+	Rework autoconf defines.
 	* libcsupport/src/open.c, libcsupport/src/close.c:
 	Rework autoconf defines.
 	* libcsupport/src/tcflow.c: Remove unused includes.
