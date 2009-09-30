@@ -15,16 +15,9 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
 #if defined(RTEMS_NEWLIB)
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
 #include <termios.h>
-/* #include <sys/ioctl.h> */
-
-#include <rtems/libio.h>
+#include <unistd.h>
 
 int tcflow (
   int fd __attribute__((unused)), 
