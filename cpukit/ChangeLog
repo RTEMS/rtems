@@ -1,5 +1,7 @@
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/malloc_boundary.c: Comment out checkMallocArena
+	(unused).
 	* libcsupport/src/__assert.c: Rework autoconf defines.
 	* libcsupport/src/__brk.c: Eliminate RTEMS_UNIX.
 	Remove unused includes.
