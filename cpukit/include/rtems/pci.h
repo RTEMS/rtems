@@ -1227,7 +1227,7 @@ pci_find_device(
 /*
  * Return the number of PCI busses in the system
  */
-extern unsigned char pci_bus_count();
+extern unsigned char pci_bus_count(void);
 
 #ifdef __cplusplus
 }
