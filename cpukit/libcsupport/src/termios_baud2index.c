@@ -10,9 +10,10 @@
  */
 
 #include <sys/termios.h>
+#include <rtems/termiostypes.h>
 
-int termios_baud_to_index(
-  int termios_baud
+int rtems_termios_baud_to_index(
+  rtems_termios_baud_t termios_baud
 )
 {
   int baud_index;
