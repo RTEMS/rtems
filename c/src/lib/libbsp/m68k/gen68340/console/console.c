@@ -31,6 +31,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <rtems/termiostypes.h>
 
 #define CONSOLE_VECTOR 121
 #define CONSOLE_IRQ_LEVEL 3
@@ -245,7 +246,7 @@ int dbug_char_present( int minor )
   Description: Init the UART
  *****************************************************/
 static void
-dbugInitialise ()
+dbugInitialise (void)
 {
      t_baud_speed_table uart_config;		/* configuration of UARTS */
 
