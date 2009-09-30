@@ -43,6 +43,7 @@
 #include <termios.h>
 #include <uart.h>
 #include <libcpu/cpuModel.h>
+#include <rtems/termiostypes.h>
 
 /*
  * Possible value for console input/output :
