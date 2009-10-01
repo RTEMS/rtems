@@ -50,6 +50,9 @@ extern "C" {
 #elif defined(__ARM_ARCH_5TE__)
 #  define CPU_MODEL_NAME  "ARMv5TE"
 
+#elif defined(__ARM_ARCH_6J__)
+#  define CPU_MODEL_NAME  "ARMv6J"
+
 #else
 #  error "Unsupported CPU Model"
 
