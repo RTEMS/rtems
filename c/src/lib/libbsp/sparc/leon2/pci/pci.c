@@ -105,8 +105,8 @@ struct pci_res {
  *  AT697 pci controller to be able access all slots
  */
  
-int
-pci_read_config_dword(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned int *val) {
+static int
+BSP_pci_read_config_dword(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned int *val) {
 
     volatile unsigned int data;
 
@@ -136,8 +136,8 @@ pci_read_config_dword(unsigned char bus, unsigned char slot, unsigned char funct
 }
 
 
-int 
-pci_read_config_word(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned short *val) {
+static int 
+BSP_pci_read_config_word(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned short *val) {
     unsigned int v;
 
     if (offset & 1) return PCIBIOS_BAD_REGISTER_NUMBER;
@@ -149,8 +149,8 @@ pci_read_config_word(unsigned char bus, unsigned char slot, unsigned char functi
 }
 
 
-int 
-pci_read_config_byte(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned char *val) {
+static int 
+BSP_pci_read_config_byte(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned char *val) {
     unsigned int v;
 
     pci_read_config_dword(bus, slot, function, offset&~3, &v);
@@ -161,8 +161,8 @@ pci_read_config_byte(unsigned char bus, unsigned char slot, unsigned char functi
 }
 
 
-int
-pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned int val) {
+static int
+BSP_pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned int val) {
 
     if (offset & 3) return PCIBIOS_BAD_REGISTER_NUMBER;
 
@@ -187,8 +187,8 @@ pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char func
 }
 
 
-int 
-pci_write_config_word(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned short val) {
+static int 
+BSP_pci_write_config_word(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned short val) {
     unsigned int v;
 
     if (offset & 1) return PCIBIOS_BAD_REGISTER_NUMBER;
@@ -201,8 +201,8 @@ pci_write_config_word(unsigned char bus, unsigned char slot, unsigned char funct
 }
 
 
-int 
-pci_write_config_byte(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned char val) {
+static int 
+BSP_pci_write_config_byte(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned char val) {
     unsigned int v;
 
     pci_read_config_dword(bus, slot, function, offset&~3, &v);
@@ -215,12 +215,12 @@ pci_write_config_byte(unsigned char bus, unsigned char slot, unsigned char funct
 
 
 const pci_config_access_functions pci_access_functions = {
-    pci_read_config_byte,
-    pci_read_config_word,
-    pci_read_config_dword,
-    pci_write_config_byte,
-    pci_write_config_word,
-    pci_write_config_dword
+    BSP_pci_read_config_byte,
+    BSP_pci_read_config_word,
+    BSP_pci_read_config_dword,
+    BSP_pci_write_config_byte,
+    BSP_pci_write_config_word,
+    BSP_pci_write_config_dword
 };
 
 pci_config BSP_pci_configuration = { (volatile unsigned char*)PCI_CONFIG_ADDR,
