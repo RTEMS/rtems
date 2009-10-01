@@ -64,7 +64,7 @@ int termios_test_driver_set_attributes(
 
   baud_requested = t->c_cflag & CBAUD;
 
-  number = termios_baud_to_number( baud_requested );
+  number = rtems_termios_baud_to_number( baud_requested );
 
   /*
    *  Parity

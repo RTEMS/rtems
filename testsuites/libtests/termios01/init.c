@@ -28,7 +28,7 @@ rtems_driver_address_table test_driver = TERMIOS_TEST_DRIVER_TABLE_ENTRY;
  */
 typedef struct {
   int constant;
-  int baud;
+  rtems_termios_baud_t baud;
 } termios_baud_test_r;
 
 /*
@@ -125,17 +125,17 @@ void test_termios_baud2index(void)
     "Test termios_baud2index..."
   );
   puts( "termios_baud_to_index(-2) - NOT OK" );
-  i = termios_baud_to_index( -2 );
+  i = rtems_termios_baud_to_index( -2 );
   assert ( i == -1 );
 
   puts( "termios_baud_to_index(572) - NOT OK" );
-  i = termios_baud_to_index( -2 );
+  i = rtems_termios_baud_to_index( -2 );
   assert ( i == -1 );
 
   if ( i != -1 )
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
     printf( "termios_baud_to_index(B%d) - OK\n", baud_table[i].baud );
-    index = termios_baud_to_index( baud_table[i].constant );
+    index = rtems_termios_baud_to_index( baud_table[i].constant );
     if ( index != i ) {
       printf( "ERROR - returned %d should be %d\n", index, i );
       rtems_test_exit(0);
@@ -156,16 +156,16 @@ void test_termios_baud2number(void)
     "Test termios_baud2number..."
   );
   puts( "termios_baud_to_number(-2) - NOT OK" );
-  i = termios_baud_to_number( -2 );
+  i = rtems_termios_baud_to_number( -2 );
   assert ( i == -1 );
 
   puts( "termios_baud_to_number(572) - NOT OK" );
-  i = termios_baud_to_number( -2 );
+  i = rtems_termios_baud_to_number( -2 );
   assert ( i == -1 );
 
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
     printf( "termios_baud_to_number(B%d) - OK\n", baud_table[i].baud );
-    number = termios_baud_to_number( baud_table[i].constant );
+    number = rtems_termios_baud_to_number( baud_table[i].constant );
     if ( number != baud_table[i].baud ) {
       printf(
         "ERROR - returned %d should be %d\n",
@@ -190,16 +190,16 @@ void test_termios_number_to_baud(void)
     "Test termios_number_to_baud..."
   );
   puts( "termios_number_to_baud(-2) - NOT OK" );
-  i = termios_number_to_baud( -2 );
+  i = rtems_termios_number_to_baud( -2 );
   assert ( i == -1 );
 
   puts( "termios_number_to_baud(572) - NOT OK" );
-  i = termios_number_to_baud( -2 );
+  i = rtems_termios_number_to_baud( -2 );
   assert ( i == -1 );
 
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
     printf( "termios_number_to_baud(B%d) - OK\n", baud_table[i].baud );
-    termios_baud = termios_number_to_baud( baud_table[i].baud );
+    termios_baud = rtems_termios_number_to_baud( baud_table[i].baud );
     if ( termios_baud != baud_table[i].constant ) {
       printf(
         "ERROR - returned %d should be %d\n",
@@ -343,7 +343,7 @@ void test_termios_set_stop_bits(
 {
   int             sc;
   int             i;
-  int             number;
+  rtems_termios_baud_t number;
   struct termios  attr;
 
   puts(
