@@ -1,3 +1,9 @@
+2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Add new BSP variants for ARM simulator in GDB.
+	* custom/arm1136jfs.cfg, custom/arm1136js.cfg, custom/arm7tdmi.cfg,
+	custom/arm920.cfg, custom/armcortexa9.cfg: New files.
+
 2009-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Add qemuppc.cfg.

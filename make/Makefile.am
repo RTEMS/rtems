@@ -20,6 +20,11 @@ rtems_make_customdir = $(rtems_makedir)/custom
 
 dist_rtems_make_custom_DATA = custom/default.cfg
 
+EXTRA_DIST += custom/arm1136jfs.cfg
+EXTRA_DIST += custom/arm1136js.cfg
+EXTRA_DIST += custom/arm7tdmi.cfg
+EXTRA_DIST += custom/arm920.cfg
+EXTRA_DIST += custom/armcortexa9.cfg
 EXTRA_DIST += custom/av5282.cfg
 EXTRA_DIST += custom/avrtest.cfg
 EXTRA_DIST += custom/bare.cfg
