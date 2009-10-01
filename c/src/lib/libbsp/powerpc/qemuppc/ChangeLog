@@ -1,3 +1,7 @@
+2009-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: BSP does not have much memory. Limited to BIOS space.
+
 2009-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* irq/irq.h: New file.
