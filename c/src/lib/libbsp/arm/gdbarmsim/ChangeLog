@@ -1,0 +1,9 @@
+2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* .cvsignore, ChangeLog, Makefile.am, bsp_specs, configure.ac,
+	preinstall.am, console/.cvsignore, console/console-io.c,
+	include/.cvsignore, include/bsp.h, include/irq.h, include/swi.h,
+	start/.cvsignore, start/start.S, startup/.cvsignore,
+	startup/bspreset.c, startup/bspstart.c, startup/linkcmds,
+	startup/syscalls.c: New files.
+
