@@ -1,3 +1,8 @@
+2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* acinclude.m4: Add BSP for GDB ARM simulator so we can easily
+	experiment with and debug different ARM architectural variations.
+
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/comm/console.c: Reflect termios_baud_to_number having been
