@@ -1127,7 +1127,7 @@ typedef struct  {
 #define PCIB_ERR_DEVNOTFOUND   (-5)  /* Device not found */
 #define PCIB_ERR_BADREG        (-6)  /* Bad register number */
 
-extern int pci_initialize();
+extern int pci_initialize(void);
 
 typedef struct {
   volatile unsigned char*            pci_config_addr;

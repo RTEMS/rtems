@@ -1,3 +1,7 @@
+2009-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/rtems/pci.h: Add another missing prototype.
+
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/rtems/pci.h: Add missing prototype.
