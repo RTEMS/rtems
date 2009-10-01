@@ -538,7 +538,7 @@ pcib_convert_err(int err)
 }
 
 static int
-indirect_pci_read_config_byte(
+BSP_pci_read_config_byte(
   unsigned char bus,
   unsigned char slot,
   unsigned char fun,
@@ -554,7 +554,7 @@ indirect_pci_read_config_byte(
 }
 
 static int
-indirect_pci_read_config_word(
+BSP_pci_read_config_word(
   unsigned char bus,
   unsigned char slot,
   unsigned char fun,
@@ -570,7 +570,7 @@ indirect_pci_read_config_word(
 }
 
 static int
-indirect_pci_read_config_dword(
+BSP_pci_read_config_dword(
   unsigned char bus,
   unsigned char slot,
   unsigned char fun,
@@ -586,7 +586,7 @@ indirect_pci_read_config_dword(
 }
 
 static int
-indirect_pci_write_config_byte(
+BSP_pci_write_config_byte(
   unsigned char bus,
   unsigned char slot,
   unsigned char fun,
@@ -602,7 +602,7 @@ indirect_pci_write_config_byte(
 }
 
 static int
-indirect_pci_write_config_word(
+BSP_pci_write_config_word(
   unsigned char bus,
   unsigned char slot,
   unsigned char fun,
@@ -618,7 +618,7 @@ indirect_pci_write_config_word(
 }
 
 static int
-indirect_pci_write_config_dword(
+BSP_pci_write_config_dword(
   unsigned char bus,
   unsigned char slot,
   unsigned char fun,
@@ -634,12 +634,12 @@ indirect_pci_write_config_dword(
 }
 
 const pci_config_access_functions pci_indirect_functions = {
-  indirect_pci_read_config_byte,
-  indirect_pci_read_config_word,
-  indirect_pci_read_config_dword,
-  indirect_pci_write_config_byte,
-  indirect_pci_write_config_word,
-  indirect_pci_write_config_dword
+  BSP_pci_read_config_byte,
+  BSP_pci_read_config_word,
+  BSP_pci_read_config_dword,
+  BSP_pci_write_config_byte,
+  BSP_pci_write_config_word,
+  BSP_pci_write_config_dword
 };
 
 pci_config BSP_pci_configuration = {

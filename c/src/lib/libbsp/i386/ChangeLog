@@ -1,3 +1,8 @@
+2009-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1445/BSPs
+	* shared/pci/pcibios.c: Rename indirect_pci_* into BSP_pci_*.
+
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/comm/tty_drv.c: Reflect termios_baud_to_number having been
