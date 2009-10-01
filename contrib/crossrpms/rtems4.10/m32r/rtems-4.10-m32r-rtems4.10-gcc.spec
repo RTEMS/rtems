@@ -58,7 +58,7 @@ Summary:      	m32r-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	17%{?dist}
+Release:      	18%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -133,9 +133,10 @@ BuildRequires:	flex bison
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	rtems-4.10-m32r-rtems4.10-binutils
 
+Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-m32r-rtems4.10-binutils
 Requires:	rtems-4.10-m32r-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-57%{?dist}
+Requires:	rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-58%{?dist}
 
 
 %define _gcclibdir %{_prefix}/lib
@@ -243,6 +244,7 @@ cd ..
 %endif
 
   make %{?_smp_mflags} all
+  make info
   cd ..
 
 %install
@@ -280,11 +282,9 @@ cd ..
   rm -f $RPM_BUILD_ROOT%{_bindir}/m32r-rtems4.10-c++filt%{_exeext}
 
 
-# Conflict with a native GCC's infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
-
-# Conflict with a native GCC's man pages
-  rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
+  # We don't ship info/dir
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
 
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/m32r-rtems4.10-m32r-rtems4.10-gcjh%{_exeext}
@@ -450,7 +450,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-m32r-rtems4.10-binutils
-# Requires:       rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-57%{?dist}
+# Requires:       rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-58%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -468,7 +468,7 @@ Summary:        libgcc for m32r-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-57%{?dist}
+Requires:       rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-58%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-m32r-rtems4.10-gcc-libgcc
@@ -521,6 +521,57 @@ libgcc m32r-rtems4.10-gcc.
 %{_gcclibdir}/gcc/m32r-rtems4.10/%{gcc_version}/include-fixed
 %endif
 
+# ==============================================================
+# rtems-4.10-gcc-common
+# ==============================================================
+%package -n rtems-4.10-gcc-common
+Summary:	Base package for rtems gcc and newlib C Library
+Group:          Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	GPL
+
+Requires(post): 	/sbin/install-info
+Requires(preun):	/sbin/install-info
+
+%description -n rtems-4.10-gcc-common
+GCC files that are shared by all targets.
+
+%files -n rtems-4.10-gcc-common
+%defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/cpp.info*
+%{_infodir}/cppinternals.info*
+%{_infodir}/gcc.info*
+%{_infodir}/gccint.info*
+%{_infodir}/gccinstall.info*
+
+%dir %{_mandir}
+%dir %{_mandir}/man7
+%{_mandir}/man7/fsf-funding.7*
+%{_mandir}/man7/gfdl.7*
+%{_mandir}/man7/gpl.7*
+
+%post -n rtems-4.10-gcc-common
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cpp.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
+
+%preun -n rtems-4.10-gcc-common
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cpp.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
+fi
+
 
 
 
@@ -532,9 +583,10 @@ Summary:      	C Library (newlib) for m32r-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        57%{?dist}
+Release:        58%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
+Requires:	rtems-4.10-newlib-common
 
 %description -n rtems-4.10-m32r-rtems4.10-newlib
 Newlib C Library for m32r-rtems4.10.
@@ -544,4 +596,41 @@ Newlib C Library for m32r-rtems4.10.
 %dir %{_exec_prefix}
 %dir %{_exec_prefix}/m32r-rtems4.10
 %{_exec_prefix}/m32r-rtems4.10/include
+
+# ==============================================================
+# rtems-4.10-newlib-common
+# ==============================================================
+%package -n rtems-4.10-newlib-common
+Summary:	Base package for RTEMS newlib C Library
+Group:          Development/Tools
+Version:        %{newlib_version}
+Release:        58%{?dist}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	Distributable
+
+Requires(post): 	/sbin/install-info
+Requires(preun):	/sbin/install-info
+
+%description -n rtems-4.10-newlib-common
+newlib files that are shared by all targets.
+
+%files -n rtems-4.10-newlib-common
+%defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/libc.info*
+%{_infodir}/libm.info*
+
+%post -n rtems-4.10-newlib-common
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libc.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libm.info.gz || :
+
+%preun -n rtems-4.10-newlib-common
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libc.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libm.info.gz || :
+fi
 

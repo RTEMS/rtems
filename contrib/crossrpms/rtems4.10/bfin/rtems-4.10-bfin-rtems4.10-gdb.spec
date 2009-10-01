@@ -104,11 +104,7 @@ BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
 %bcond_with system_readline
 %else
-%if 0%{?fedora} >= 12
-%bcond_with system_readline
-%else
 %bcond_without system_readline
-%endif
 %endif
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
