@@ -1,3 +1,8 @@
+2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* aclocal/bsp-alias.m4: Add BSP for GDB ARM simulator so we can easily
+	experiment with and debug different ARM architectural variations.
+
 2009-09-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/check-bsps.m4: Add csb337 bsp family.

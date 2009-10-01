@@ -9,6 +9,11 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
   case $1 in
     bare*)        $2=bare             ;; # EXP: bare-aliases
 
+    arm7tdmi)     $2=gdbarmsim        ;; # arm simulator in gdb
+    arm920)       $2=gdbarmsim        ;; # arm simulator in gdb
+    arm1136jfs)   $2=gdbarmsim        ;; # arm simulator in gdb
+    arm1136js)    $2=gdbarmsim        ;; # arm simulator in gdb
+    armcortexa9)  $2=gdbarmsim        ;; # arm simulator in gdb
     c3xsim)       $2=c4xsim           ;; # TI C3x Simulator in gdb
     csb637)       $2=csb337           ;; # Cogent CSB637
     gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
