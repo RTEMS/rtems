@@ -46,6 +46,7 @@ stackchk/Makefile
 stackchk01/Makefile
 termios/Makefile
 termios01/Makefile
+termios02/Makefile
 tztest/Makefile
 ])
 AC_OUTPUT

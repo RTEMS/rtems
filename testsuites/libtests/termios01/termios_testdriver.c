@@ -35,7 +35,7 @@ int termios_test_driver_write_support (int minor, const char *buf, int len)
   int nwrite = 0;
 
   while (nwrite < len) {
-#if (CONSOLE_USE_INTERRUPTS)
+#if (TERMIOS_TEST_DRIVER_USE_INTERRUPTS)
     termios_test_driver_outbyte_interrupt( minor, *buf++ );
 #else
     termios_test_driver_outbyte_polled( minor, *buf++ );

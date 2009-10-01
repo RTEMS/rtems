@@ -1,0 +1,6 @@
+*** TERMIOS 02 TEST ***
+tcdrain(12) - EBADF
+tcdrain(stdin) - OK
+tcdrain(stdout) - OK
+tcdrain(stderr) - OK
+*** END OF TERMIOS 02 TEST ***

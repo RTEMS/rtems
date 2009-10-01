@@ -1,3 +1,12 @@
+2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, termios01/termios_testdriver.c: Do not use
+	CONSOLE_USE_INTERRUPTS. That is in use by BSPs and we should not use
+	it.
+	* termios02/.cvsignore, termios02/Makefile.am, termios02/init.c,
+	termios02/termios02.doc, termios02/termios02.scn: New files.
+	termios02 is a test for tcdrain().
+
 2009-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* termios01/init.c, termios01/termios_testdriver.c:
