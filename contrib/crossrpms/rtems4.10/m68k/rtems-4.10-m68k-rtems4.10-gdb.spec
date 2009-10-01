@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 
-%define gdb_rpmvers %{expand:%(echo  | tr - _)} 
+%define gdb_version 6.8.92
+%define gdb_rpmvers %{expand:%(echo 6.8.92 | tr - _)} 
 
 Name:		rtems-4.10-m68k-rtems4.10-gdb
 Summary:	Gdb for target m68k-rtems4.10
