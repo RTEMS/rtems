@@ -32,19 +32,7 @@
 #include <stdio.h>
 #endif
 
-/*
- * FIXME: make this better...
- * find out, which exception model is used
- * assume, that all i386 BSPs use new exception handling
- * assume, that some PPC BSPs use new exception handling
- * assume, that all other BSPs use old exception handling
- */
-#if defined(_OLD_EXCEPTIONS) || (!defined(__i386__) && !defined(__PPC__))
-
-#define ATA_USE_OLD_EXCEPTIONS
-#endif
-
-#if !defined(ATA_USE_OLD_EXCEPTIONS)
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS != TRUE)
 #include <bsp/irq.h>
 #define ATA_IRQ_CHAIN_MAX_CNT 4 /* support up to 4 ATA devices */
 typedef struct {
@@ -152,7 +140,7 @@ static bool ata_initialized = false;
 static rtems_id ata_task_id;
 static rtems_id ata_queue_id;
 
-#if defined (ATA_USE_OLD_EXCEPTIONS)
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 /* Mapping of interrupt vectors to devices */
 static rtems_chain_control ata_int_vec[ATA_MAX_RTEMS_INT_VEC_NUMBER + 1];
 #endif
@@ -672,7 +660,7 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
  * RETURNS:
  *     NONE
  */
-#if defined(ATA_USE_OLD_EXCEPTIONS)
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 rtems_isr
 ata_interrupt_handler(rtems_vector_number vec)
 {
@@ -1097,7 +1085,7 @@ rtems_ata_initialize(rtems_device_major_number major,
     dev_t              device;
     ata_int_st_t      *int_st;
 
-#if defined(ATA_USE_OLD_EXCEPTIONS)
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
     rtems_isr_entry    old_isr;
 #else
     int ata_irq_chain_use;
@@ -1182,7 +1170,7 @@ rtems_ata_initialize(rtems_device_major_number major,
     for (i = 0; i < (2 * IDE_CTRL_MAX_MINOR_NUMBER); i++)
         ata_devs[i].device = ATA_UNDEFINED_VALUE;
 
-#if defined(ATA_USE_OLD_EXCEPTIONS)
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
     /* prepare ATA driver for handling  interrupt driven devices */
     for (i = 0; i < ATA_MAX_RTEMS_INT_VEC_NUMBER; i++)
         rtems_chain_initialize_empty(&ata_int_vec[i]);
@@ -1228,7 +1216,7 @@ rtems_ata_initialize(rtems_device_major_number major,
             }
 
             int_st->ctrl_minor = ctrl_minor;
-#if defined(ATA_USE_OLD_EXCEPTIONS)
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
             status = rtems_interrupt_catch(
                          ata_interrupt_handler,
                          IDE_Controller_Table[ctrl_minor].int_vec,
@@ -1280,7 +1268,7 @@ rtems_ata_initialize(rtems_device_major_number major,
                 rtems_disk_io_done();
                 return status;
             }
-#if defined(ATA_USE_OLD_EXCEPTIONS)
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
             rtems_chain_append(
                 &ata_int_vec[IDE_Controller_Table[ctrl_minor].int_vec],
                 &int_st->link);

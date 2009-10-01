@@ -1,3 +1,8 @@
+2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/ide/ata.c: Use simple vectored CPU macro to select interrupt
+	model.
+
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/serial/z85c30.c, libchip/serial/ns16550.c,
