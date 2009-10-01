@@ -1,5 +1,9 @@
 2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/score/arm.h: Recognize ARMv7A.
+
+2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/score/arm.h: Recognize ARMv6J as needed by arm1136 variants.
 
 2009-09-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
