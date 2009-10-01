@@ -1,3 +1,8 @@
+2009-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* termios01/init.c, termios01/termios_testdriver.c:
+	Reflect changes to termios.
+
 2009-09-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpuuse/tswitch.c: Eliminate use of deprecated rtems_extension.
