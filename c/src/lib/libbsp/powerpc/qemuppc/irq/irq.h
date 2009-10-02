@@ -36,6 +36,7 @@
  * PCI IRQ handlers related definitions
  * CAUTION : BSP_PCI_IRQ_LOWEST_OFFSET should be equal to OPENPIC_VEC_SOURCE
  */
+/* FIXME: do we need PCI interrrupts here ? */
 #define BSP_PCI_IRQ_NUMBER		(16)
 #define BSP_PCI_IRQ_LOWEST_OFFSET	(0)
 #define BSP_PCI_IRQ_MAX_OFFSET		(BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER - 1)

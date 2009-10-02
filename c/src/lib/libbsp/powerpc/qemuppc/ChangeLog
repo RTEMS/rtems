@@ -1,3 +1,12 @@
+2009-10-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+	* Makefile.am, irq/irq_config.h, irq/irq_init.c, irq/irq.h:
+	add basic IRQ support (for decrementer)
+
+	* start/start.S, startup/cmain.c, startup/linkcmds: add support
+	for sdata* sections
+
+	* startup/bsppanic.c: some cleanup
+
 2009-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: BSP does not have much memory. Limited to BIOS space.

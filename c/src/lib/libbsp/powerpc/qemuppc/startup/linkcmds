@@ -14,6 +14,8 @@ RamBase = DEFINED(RamBase) ? RamBase : 0x0;
 RamSize = DEFINED(RamSize) ? RamSize : 4M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0;
 
+bsp_section_align = 32;
+
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */
@@ -43,6 +45,7 @@ SECTIONS
 
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
+    . = ALIGN (bsp_section_align);
     __text_end = .;
   } >ROM =0
   .init           :
@@ -77,7 +80,7 @@ SECTIONS
   {
     *(.rodata .rodata.* .gnu.linkonce.r.*)
     *(.rodata1)
-    . = ALIGN(4);
+    . = ALIGN (bsp_section_align);
     __rodata_end = .;
   } >ROM =0
 
@@ -88,14 +91,14 @@ SECTIONS
     __sdata2_start = .;
     PROVIDE (_SDA2_BASE_ = 32768);
     *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
-    . = ALIGN(4);
+    . = ALIGN (bsp_section_align);
     __sdata2_end = .;
   } >RAM
   .sbss2 :
   {
     __sbss2_start = .;
     *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
-    . = ALIGN(4);
+    . = ALIGN (bsp_section_align);
     __sbss2_end = .;
   } >RAM
   __data_load = __sdata2_load + SIZEOF (.sdata2);
@@ -106,20 +109,38 @@ SECTIONS
     KEEP (*(.gnu.linkonce.d.*personality*))
     SORT(CONSTRUCTORS)
     *(.data1)
-    PROVIDE (_SDA_BASE_ = 32768);
-    *(.sdata .sdata.* .gnu.linkonce.s.*)
-    . = ALIGN(4);
+    . = ALIGN (bsp_section_align);
     __data_end = .;
   } >RAM
+  __sdata_load = __data_load + SIZEOF (.data);
+  .sdata : AT(__sdata_load) {
+    __sdata_start = .;
+    PROVIDE (_SDA_BASE_ = 32768);
+    *(.sdata .sdata.* .gnu.linkonce.s.*)
+
+    . = ALIGN (bsp_section_align);
+
+    _edata = .;
+    __sdata_end = .;
+    PROVIDE (edata = .);
+
+    /*
+     * BSP: End of data section
+     */
+    bsp_section_data_end = .;
+  } > RAM
+
   PROVIDE (__EXCEPT_START__ = .);
   .gcc_except_table   : { *(.gcc_except_table*) } >RAM
   PROVIDE (__EXCEPT_END__ = .);
+
   .sbss :
   {
     __sbss_start = .;
     *(.dynsbss)
     *(.sbss .sbss.* .gnu.linkonce.sb.*)
     *(.scommon)
+    . = ALIGN (bsp_section_align);
     __sbss_end = .;
   } >RAM
   .bss  :
@@ -128,7 +149,7 @@ SECTIONS
    *(.dynbss)
    *(.bss .bss.* .gnu.linkonce.b.*)
    *(COMMON)
-   . = ALIGN(4);
+    . = ALIGN (bsp_section_align);
    __bss_end = .;
 
    /* Allocate the main stack area.  Make sure it starts 16bytes aligned
@@ -136,6 +157,13 @@ SECTIONS
    _stack = ALIGN(16) + 0x1000;
    _end = _stack;
   } >RAM
+
+  /*
+   * BSP: Interrupt stack
+   */
+  bsp_interrupt_stack_start = _end;
+  bsp_interrupt_stack_end = bsp_interrupt_stack_start + 32k;
+  bsp_interrupt_stack_size = bsp_interrupt_stack_end - bsp_interrupt_stack_start;
 
    WorkAreaBase = .;
    . = RamBase + RamSize;
