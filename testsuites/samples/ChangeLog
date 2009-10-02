@@ -1,3 +1,8 @@
+2009-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* hello/init.c: Remove call to devFS_Show() which had accidentally
+	gotten committed.
+
 2009-09-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* capture/test1.c: Use size_t for sizes.

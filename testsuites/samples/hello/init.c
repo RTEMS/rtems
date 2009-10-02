@@ -29,7 +29,6 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-devFS_Show();
   printf( "\n\n*** HELLO WORLD TEST ***\n" );
   printf( "Hello World\n" );
   printf( "*** END OF HELLO WORLD TEST ***\n" );
