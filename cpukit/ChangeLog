@@ -1,3 +1,8 @@
+2009-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/monitor/mon-prmisc.c: Fix warning if
+	defined(RTEMS_USE_16_BIT_OBJECT).
+
 2009-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1445/bsps

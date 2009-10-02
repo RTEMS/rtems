@@ -85,7 +85,11 @@ rtems_monitor_dump_assoc_bitfield(
 int
 rtems_monitor_dump_id(rtems_id id)
 {
+#if defined(RTEMS_USE_16_BIT_OBJECT)
+    return fprintf(stdout,"%08" PRIx16, id);
+#else
     return fprintf(stdout,"%08" PRIx32, id);
+#endif
 }
 
 int
