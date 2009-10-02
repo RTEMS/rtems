@@ -1,5 +1,7 @@
 2009-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/monitor/mon-driver.c: Fix warning if
+	defined(RTEMS_USE_16_BIT_OBJECT).
 	* libmisc/monitor/mon-prmisc.c: Fix warning if
 	defined(RTEMS_USE_16_BIT_OBJECT).
 

@@ -111,8 +111,11 @@ rtems_monitor_driver_dump(
 {
     uint32_t            length = 0;
 
+#if defined(RTEMS_USE_16_BIT_OBJECT)
+    length += fprintf(stdout,"  %" PRId16 "", monitor_driver->id);
+#else
     length += fprintf(stdout,"  %" PRId32 "", monitor_driver->id);
-
+#endif
     length += rtems_monitor_pad(13, length);
     length += fprintf(stdout,"init: ");
     length += rtems_monitor_symbol_dump(&monitor_driver->initialization, verbose);
