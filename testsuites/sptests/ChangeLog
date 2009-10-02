@@ -1,3 +1,8 @@
+2009-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp54/init.c: Use rtems_build_id to make building Objects_Id
+	RTEMS_USE_16_BIT_OBJECT clean.
+
 2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: Add new test to exercise when notepads are

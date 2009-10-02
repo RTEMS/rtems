@@ -28,7 +28,7 @@ rtems_task Init(
   puts( "\n\n*** TEST 54 ***" );
 
   puts( "Init - use valid id of API class with no objects" );
-  status = rtems_task_set_priority( 0xa010001, RTEMS_CURRENT_PRIORITY, &pri );
+  status = rtems_task_set_priority( rtems_build_id(0x2,0x1,0x01,0x0001) /* 0xa010001 */, RTEMS_CURRENT_PRIORITY, &pri );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -36,7 +36,7 @@ rtems_task Init(
   );
 
   puts( "Init - lookup name within API class with no objects" );
-  status = rtems_task_ident( 0x123456, RTEMS_SEARCH_ALL_NODES, &id );
+  status = rtems_task_ident( rtems_build_id( 0, 0, 0x12, 0x3456) /* 0x123456 */, RTEMS_SEARCH_ALL_NODES, &id );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NAME,
