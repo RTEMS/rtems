@@ -1,3 +1,7 @@
+2009-10-03	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+	* startup/bspstart.c:
+	add missing file
+
 2009-10-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 	* Makefile.am, irq/irq_config.h, irq/irq_init.c, irq/irq.h:
 	add basic IRQ support (for decrementer)
