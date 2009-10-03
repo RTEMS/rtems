@@ -1,3 +1,8 @@
+2009-10-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/openpic/openpic.c: Make openpic_writefield
+	static inline (Get rid of GCC warning).
+
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/console/console.c: Reflect termios_baud_to_number having been

@@ -122,7 +122,7 @@ static inline unsigned int openpic_readfield(volatile unsigned int *addr, unsign
     return val & mask;
 }
 
-inline void openpic_writefield(volatile unsigned int *addr, unsigned int mask,
+static inline void openpic_writefield(volatile unsigned int *addr, unsigned int mask,
 				      unsigned int field)
 {
     unsigned int val = openpic_read(addr);
