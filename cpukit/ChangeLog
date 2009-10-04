@@ -1,5 +1,13 @@
 2009-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/src/ratemonreportstatistics.c: owner field is always set so
+	safe to use.  Reformat.
+	* rtems/src/regionresizesegment.c: Always evaluate the blocked queue
+	if the resize succeeded.
+	* rtems/src/tasksetnote.c: Spacing.
+
+2009-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/include/rtems/posix/psignal.h: Add extern for ualarm timer.
 	* posix/src/alarm.c, posix/src/ualarm.c: Change from switch to if since
 	many enumerated values have no action.

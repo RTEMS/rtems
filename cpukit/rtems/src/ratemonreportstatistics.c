@@ -54,12 +54,12 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
     return;
 
   (*print)( context, "Period information by period\n" );
-#if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-  (*print)( context, "--- CPU times are in seconds ---\n" );
-#endif
-#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
-  (*print)( context, "--- Wall times are in seconds ---\n" );
-#endif
+  #if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+    (*print)( context, "--- CPU times are in seconds ---\n" );
+  #endif
+  #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
+    (*print)( context, "--- Wall times are in seconds ---\n" );
+  #endif
 /*
 Layout by columns -- in memory of Hollerith :)
 
@@ -118,16 +118,11 @@ ididididid NNNN ccccc mmmmmm X
         continue;
     #endif
 
-    name[ 0 ] = '\0';
-
-    if ( the_status.owner ) {
-      rtems_object_get_name( the_status.owner, sizeof(name), name );
-    }
+    rtems_object_get_name( the_status.owner, sizeof(name), name );
 
     /*
      *  Print part of report line that is not dependent on granularity 
      */
-
     (*print)( context,
       "0x%08" PRIx32 " %4s %5" PRId32 " %6" PRId32 " ",
       id, name,
@@ -137,7 +132,6 @@ ididididid NNNN ccccc mmmmmm X
     /*
      *  If the count is zero, don't print statistics
      */
-
     if (the_stats.count == 0) {
       (*print)( context, "\n" );
       continue;
@@ -180,7 +174,7 @@ ididididid NNNN ccccc mmmmmm X
     }
 
     /*
-     *  print Wall time part of statistics
+     *  print wall time part of statistics
      */
     {
     #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
