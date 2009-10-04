@@ -18,7 +18,8 @@ TASK_START - TA2  - started
 TASK_START - TA3  - started
 TASK_START - TA4  - started
 TASK_RESTART - TA3  - restarted
-INIT - rtems_task_set_note - set my RTEMS_NOTEPAD_4 to TA1's priority: 04
+INIT - rtems_task_set_note - set my (id) RTEMS_NOTEPAD_4 to TA1's priority: 04
+INIT - rtems_task_set_note - set my (SELF) RTEMS_NOTEPAD_4 to TA1's priority: 04
 INIT - rtems_task_set_note - set TA1's RTEMS_NOTEPAD_8 to TA1's priority: 04
 INIT - rtems_task_set_note - set TA2's RTEMS_NOTEPAD_8 to TA2's priority: 04
 <pause>

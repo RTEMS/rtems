@@ -8,4 +8,5 @@ Blocker - rtems_region_get_segment - OK
 Init - sleep 1 second for Blocker to run again - OK
 Blocker - Got memory after resize
 Init - successfully resized and unblocked a task
+Init - resized to all of available memory
 *** END OF TEST 62 ***

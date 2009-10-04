@@ -50,6 +50,7 @@ rtems_task Init(
   rtems_status_code  sc;
   void              *segment_address_1;
   intptr_t           old_size;
+  size_t             size;
 
   puts( "\n\n*** TEST 62 ***" );
   
@@ -104,10 +105,34 @@ rtems_task Init(
 
   if ( case_hit ) {
     puts( "Init - successfully resized and unblocked a task" );
-    puts( "*** END OF TEST 62 ***" );
-  } else
+  } else {
     puts( "Init - failed to resize and unblock a task" );
+    rtems_test_exit(0);
+  }
 
+  /*
+   *  Now resize and take all of memory so there is no need to
+   *  process any blocked tasks waiting for memory.
+   */
+
+  size = sizeof(Region_Memory);
+  while (1) {
+    sc = rtems_region_resize_segment(
+      Region, segment_address_1, size, &old_size);
+    if ( sc == RTEMS_UNSATISFIED ) {
+      size --;
+      if ( size )
+        continue;
+    }
+    directive_failed( sc, "rtems_region_resize_segment" );
+    if ( sc == RTEMS_SUCCESSFUL )
+      break;
+
+  }
+  if ( sc == RTEMS_SUCCESSFUL && size != 0 )
+    puts( "Init - resized to all of available memory" );
+
+  puts( "*** END OF TEST 62 ***" );
   rtems_test_exit(0);
 }
 

@@ -119,7 +119,7 @@ void test_errors(void)
    *  task variable add error status codes
    */
   puts( "task variable add - NULL pointer - RTEMS_INVALID_ADDRESS" );
-  sc = rtems_task_variable_get(RTEMS_SELF, NULL, NULL );
+  sc = rtems_task_variable_add(RTEMS_SELF, NULL, NULL );
   fatal_directive_status( sc, RTEMS_INVALID_ADDRESS, "add NULL pointer" );
 
   /*

@@ -144,7 +144,7 @@ rtems_task Init(
     assert( info.Free.number  == start.Free.number  );
   #endif
 
-  puts( "*** END OF TEST 63 ***" );
+  puts( "*** END OF TEST 64 ***" );
   rtems_test_exit(0);
 }
 

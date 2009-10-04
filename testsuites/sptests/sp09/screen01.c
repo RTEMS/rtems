@@ -2,10 +2,6 @@
  *
  *  This routine generates error screen 1 for test 9.
  *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -26,6 +22,16 @@ void Screen1()
   rtems_task_priority previous_priority;
   rtems_status_code   status;
 
+  /* bad Id */
+  status = rtems_task_is_suspended( 100 );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_task_set_priority with illegal id"
+  );
+  puts( "TA1 - rtems_task_is_suspended - RTEMS_INVALID_ID" );
+
+  /* bad Id */
   status = rtems_task_delete( 100 );
   fatal_directive_status(
     status,

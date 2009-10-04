@@ -1,16 +1,4 @@
-/*  Init
- *
- *  This routine is the initialization task for this test program.
- *  It is a user initialization task and has the responsibility for creating
- *  and starting the tasks that make up the test.  If the time of day
- *  clock is required for the test, it should also be set to a known
- *  value by this function.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -171,9 +159,14 @@ rtems_task Init(
 
   buffered_io_flush();
 
+  status = rtems_task_set_note( rtems_task_self(), RTEMS_NOTEPAD_4, 32 );
+  directive_failed( status, "task_set_node of Self id" );
+  printf( "INIT - rtems_task_set_note - set my (id) RTEMS_NOTEPAD_4 " );
+  puts  ( "to TA1's priority: 04" );
+
   status = rtems_task_set_note( RTEMS_SELF, RTEMS_NOTEPAD_4, 32 );
-  directive_failed( status, "task_set_node of Self" );
-  printf( "INIT - rtems_task_set_note - set my RTEMS_NOTEPAD_4 " );
+  directive_failed( status, "task_set_node of Self 0" );
+  printf( "INIT - rtems_task_set_note - set my (SELF) RTEMS_NOTEPAD_4 " );
   puts  ( "to TA1's priority: 04" );
 
   status = rtems_task_set_note( Task_id[ 1 ], RTEMS_NOTEPAD_8, 4 );

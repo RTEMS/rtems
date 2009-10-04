@@ -1,6 +1,8 @@
 *** TEST 9 ***
-INIT - rtems_task_create - RTEMS_INVALID_PRIORITY
+INIT - rtems_task_create - priority of 0 - RTEMS_INVALID_PRIORITY
+INIT - rtems_task_create - priority too high - RTEMS_INVALID_PRIORITY
 INIT - rtems_task_restart - RTEMS_INCORRECT_STATE
+TA1 - rtems_task_is_suspended - RTEMS_INVALID_ID
 TA1 - rtems_task_delete - RTEMS_INVALID_ID
 TA1 - rtems_task_get_note - RTEMS_INVALID_ADDRESS
 TA1 - rtems_task_get_note - RTEMS_INVALID_NUMBER

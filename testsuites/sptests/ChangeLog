@@ -1,3 +1,10 @@
+2009-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp07/init.c, sp07/sp07.scn, sp09/init.c, sp09/screen01.c,
+	sp09/sp09.scn, sp28/init.c, sp62/init.c, sp62/sp62.scn, sp64/init.c,
+	sp64/sp64.scn: Add more test cases highlighted on SPARC at -O2, x86
+	at -Os and m68k at -Os. Fix typos.
+
 2009-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp54/init.c: Use rtems_build_id to make building Objects_Id
