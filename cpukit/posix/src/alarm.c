@@ -56,23 +56,18 @@ unsigned int alarm(
   if ( !the_timer->routine ) {
     _Watchdog_Initialize( the_timer, _POSIX_signals_Alarm_TSR, 0, NULL );
   } else {
-    switch ( _Watchdog_Remove( the_timer ) ) {
-      case WATCHDOG_INACTIVE:
-      case WATCHDOG_BEING_INSERTED:
-        break;
+    Watchdog_States state;
 
-      case WATCHDOG_ACTIVE:
-      case WATCHDOG_REMOVE_IT:
-        /*
-         *  The stop_time and start_time fields are snapshots of ticks since
-         *  boot.  Since alarm() is dealing in seconds, we must account for
-         *  this.
-         */
+    state = _Watchdog_Remove( the_timer );
+    if ( (state == WATCHDOG_ACTIVE) || (state == WATCHDOG_REMOVE_IT) ) {
+      /*
+       *  The stop_time and start_time fields are snapshots of ticks since
+       *  boot.  Since alarm() is dealing in seconds, we must account for
+       *  this.
+       */
 
-        remaining = the_timer->initial -
-         ((the_timer->stop_time - the_timer->start_time) /
-	   TOD_TICKS_PER_SECOND);
-        break;
+      remaining = the_timer->initial -
+        ((the_timer->stop_time - the_timer->start_time) / TOD_TICKS_PER_SECOND);
     }
   }
 

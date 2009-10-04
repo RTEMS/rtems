@@ -1,3 +1,10 @@
+2009-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/include/rtems/posix/psignal.h: Add extern for ualarm timer.
+	* posix/src/alarm.c, posix/src/ualarm.c: Change from switch to if since
+	many enumerated values have no action.
+	* posix/src/psignal.c: Initialize ualarm and alarm timers.
+
 2009-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/monitor/mon-driver.c: Fix warning if

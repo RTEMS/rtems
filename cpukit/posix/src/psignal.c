@@ -214,4 +214,10 @@ void _POSIX_signals_Manager_Initialization(void)
   } else {
     _Chain_Initialize_empty( &_POSIX_signals_Inactive_siginfo );
   }
+
+  /*
+   *  Initialize the Alarm Timer
+   */
+  _Watchdog_Initialize( &_POSIX_signals_Alarm_timer, NULL, 0, NULL );
+  _Watchdog_Initialize( &_POSIX_signals_Ualarm_timer, NULL, 0, NULL );
 }

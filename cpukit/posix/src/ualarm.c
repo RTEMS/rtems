@@ -66,27 +66,23 @@ useconds_t ualarm(
   if ( !the_timer->routine ) {
     _Watchdog_Initialize( the_timer, _POSIX_signals_Ualarm_TSR, 0, NULL );
   } else {
-    switch ( _Watchdog_Remove( the_timer ) ) {
-      case WATCHDOG_INACTIVE:
-      case WATCHDOG_BEING_INSERTED:
-        break;
+    Watchdog_States state;
 
-      case WATCHDOG_ACTIVE:
-      case WATCHDOG_REMOVE_IT:
-        /*
-         *  The stop_time and start_time fields are snapshots of ticks since
-         *  boot.  Since alarm() is dealing in seconds, we must account for
-         *  this.
-         */
+    state = _Watchdog_Remove( the_timer );
+    if ( (state == WATCHDOG_ACTIVE) || (state == WATCHDOG_REMOVE_IT) ) {
+      /*
+       *  The stop_time and start_time fields are snapshots of ticks since
+       *  boot.  Since alarm() is dealing in seconds, we must account for
+       *  this.
+       */
 
-        ticks = the_timer->initial;
-        ticks -= (the_timer->stop_time - the_timer->start_time);
-        /* remaining is now in ticks */
+      ticks = the_timer->initial;
+      ticks -= (the_timer->stop_time - the_timer->start_time);
+      /* remaining is now in ticks */
 
-        _Timespec_From_ticks( ticks, &tp );
-        remaining  = tp.tv_sec * TOD_MICROSECONDS_PER_SECOND;
-        remaining += tp.tv_nsec / 1000;
-        break;
+      _Timespec_From_ticks( ticks, &tp );
+      remaining  = tp.tv_sec * TOD_MICROSECONDS_PER_SECOND;
+      remaining += tp.tv_nsec / 1000;
     }
   }
 
