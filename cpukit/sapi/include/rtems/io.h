@@ -1,19 +1,9 @@
 /**
- * @file rtems/io.h
+ * @file
  *
- *  This include file contains all the constants and structures associated
- *  with the Input/Output Manager.  This manager provides a well defined
- *  mechanism for accessing device drivers and a structured methodology for
- *  organizing device drivers.
+ * @ingroup ClassicIO
  *
- *  Directives provided are:
- *
- *     + initialize a device driver
- *     + open a device driver
- *     + close a device driver
- *     + read from a device driver
- *     + write to a device driver
- *     + special device services
+ * @brief Classic Input/Output Manager API.
  */
  
 /*
@@ -40,136 +30,105 @@
 extern "C" {
 #endif
 
-/*
+/**
+ * @defgroup ClassicIO Input/Output
  *
- *  The following defines the types for:
+ * @ingroup ClassicRTEMS
  *
- *    + major and minor numbers
- *    + the return type of a device driver entry
- *    + a pointer to a device driver entry
- *    + an entry in the the Device Driver Address Table.  Each entry in this
- *      table corresponds to an application provided device driver and
- *      defines the entry points for that device driver.
+ * @{
  */
 
-typedef uint32_t   rtems_device_major_number;
-typedef uint32_t   rtems_device_minor_number;
+typedef uint32_t rtems_device_major_number;
+
+typedef uint32_t rtems_device_minor_number;
 
 typedef rtems_status_code rtems_device_driver;
 
-typedef rtems_device_driver ( *rtems_device_driver_entry )(
-                 rtems_device_major_number,
-                 rtems_device_minor_number,
-                 void *
-             );
+typedef rtems_device_driver (*rtems_device_driver_entry)(
+  rtems_device_major_number,
+  rtems_device_minor_number,
+  void *
+);
 
 typedef struct {
-  rtems_device_driver_entry initialization_entry; /* initialization procedure */
-  rtems_device_driver_entry open_entry;        /* open request procedure */
-  rtems_device_driver_entry close_entry;       /* close request procedure */
-  rtems_device_driver_entry read_entry;        /* read request procedure */
-  rtems_device_driver_entry write_entry;       /* write request procedure */
-  rtems_device_driver_entry control_entry;     /* special functions procedure */
-}   rtems_driver_address_table;
+  rtems_device_driver_entry initialization_entry;
+  rtems_device_driver_entry open_entry;
+  rtems_device_driver_entry close_entry;
+  rtems_device_driver_entry read_entry;
+  rtems_device_driver_entry write_entry;
+  rtems_device_driver_entry control_entry;
+} rtems_driver_address_table;
 
-/*
- * Table for the io device names
+/**
+ * @name Device Driver Maintainance
+ *
+ * @{
  */
 
-typedef struct {
-    char                     *device_name;
-    size_t                    device_name_length;
-    rtems_device_major_number major;
-    rtems_device_minor_number minor;
-} rtems_driver_name_t;
-
-/*
- *  This is the table of device names.
+/**
+ * @brief Returns @c RTEMS_IO_ERROR.
+ *
+ * @retval RTEMS_IO_ERROR Only this one.
  */
+rtems_status_code rtems_io_driver_io_error(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+);
 
-/*
- *  The following declare the data required to manage the Driver
- *  Address Table and Device Name Table.
+/**
+ * @brief Registers and initializes the device with the device driver table
+ * @a driver_table and major number @a major.
+ *
+ * If the major number equals zero a major number will be obtained.  The major
+ * number of the registered driver will be returned in @a registered_major.
+ *
+ * After a successful registration rtems_io_initialize() will be called to
+ * initialize the device.
+ *
+ * @retval RTEMS_SUCCESSFUL Device successfully registered and initialized.
+ * @retval RTEMS_INVALID_ADDRESS Pointer to driver table or to registered
+ * major number are invalid.  Device driver table is empty.
+ * @retval RTEMS_INVALID_NUMBER Invalid major number.
+ * @retval RTEMS_TOO_MANY No major number available.
+ * @retval RTEMS_RESOURCE_IN_USE Major number in use.
+ * @retval * Status code depends on rtems_io_initialize().
  */
-
-SAPI_IO_EXTERN uint32_t                    _IO_Number_of_drivers;
-SAPI_IO_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
-
-/*
- *  _IO_Manager_initialization
- *
- *  DESCRIPTION:
- *
- *  This routine performs the initialization necessary for this manager.
- */
-
-void _IO_Manager_initialization(void);
-
-/*
- *  rtems_io_register_driver
- *
- *  DESCRIPTION:
- *
- *  Register a driver into the device driver table.
- *
- */
-
 rtems_status_code rtems_io_register_driver(
-    rtems_device_major_number   major,
-    const rtems_driver_address_table *driver_table,
-    rtems_device_major_number  *registered_major
+  rtems_device_major_number major,
+  const rtems_driver_address_table *driver_table,
+  rtems_device_major_number *registered_major
 );
 
-/*
- *  rtems_io_unregister_driver
+/**
+ * @brief Unregisters the device driver with number @a major.
  *
- *  DESCRIPTION:
- *
- *  Unregister a driver from the device driver table.
- *
+ * @retval RTEMS_SUCCESSFUL Device driver successfully unregistered.
+ * @retval RTEMS_UNSATISFIED Invalid major number.
  */
-
 rtems_status_code rtems_io_unregister_driver(
-    rtems_device_major_number major
+  rtems_device_major_number major
 );
 
-/*
- *  rtems_io_register_name
+/**
+ * @brief Registers the name @a device_name in the file system for the device
+ * with number tuple @a major and @a minor.
  *
- *  DESCRIPTION:
- *
- *  Associate a name with a driver.
- *
+ * @retval RTEMS_SUCCESSFUL Name successfully registered.
+ * @retval RTEMS_TOO_MANY Name already in use or other errors.
  */
-
 rtems_status_code rtems_io_register_name(
-    const char                *device_name,
-    rtems_device_major_number  major,
-    rtems_device_minor_number  minor
+  const char *device_name,
+  rtems_device_major_number major,
+  rtems_device_minor_number minor
 );
 
+/** @} */
 
-/*
- *  rtems_io_lookup_name
+/**
+ * @name Device Driver Invocation
  *
- *  DESCRIPTION:
- *
- *  Find what driver "owns" this name
- */
-
-rtems_status_code rtems_io_lookup_name(
-    const char           *name,
-    rtems_driver_name_t  *device_info
-);
-
-
-/*
- *  rtems_io_initialize
- *
- *  DESCRIPTION:
- *
- *  This routine implements the rtems_io_initialize directive.  It is invoked
- *  to initialize a device driver or an individual device.
+ * @{
  */
 
 rtems_status_code rtems_io_initialize(
@@ -178,29 +137,11 @@ rtems_status_code rtems_io_initialize(
   void                      *argument
 );
 
-/*
- *  rtems_io_open
- *
- *  DESCRIPTION:
- *
- *  This routine implements the rtems_io_open directive.  It is invoked
- *  to open a device.
- */
-
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
   void                      *argument
 );
-
-/*
- *  rtems_io_close
- *
- *  DESCRIPTION:
- *
- *  This routine implements the rtems_io_close directive.  It is invoked
- *  to close a device.
- */
 
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
@@ -208,29 +149,11 @@ rtems_status_code rtems_io_close(
   void                      *argument
 );
 
-/*
- *  rtems_io_read
- *
- *  DESCRIPTION:
- *
- *  This routine implements the rtems_io_read directive.  It is invoked
- *  to read from a device.
- */
-
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
   void                      *argument
 );
-
-/*
- *  rtems_io_write
- *
- *  DESCRIPTION:
- *
- *  This routine implements the rtems_io_write directive.  It is invoked
- *  to write to a device.
- */
 
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
@@ -238,29 +161,36 @@ rtems_status_code rtems_io_write(
   void                      *argument
 );
 
-/*
- *  rtems_io_control
- *
- *  DESCRIPTION:
- *
- *  This routine implements the rtems_io_control directive.  It is invoked
- *  to perform a device specific operation on a device.
- */
-
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
   void                      *argument
 );
 
-/*
- *  _IO_Initialize_all_drivers
- *
- *  DESCRIPTION:
- *
- *  This routine initializes all of the device drivers configured
- *  in the Device Driver Address Table.
+/** @} */
+
+/** @} */
+
+typedef struct {
+    char                     *device_name;
+    size_t                    device_name_length;
+    rtems_device_major_number major;
+    rtems_device_minor_number minor;
+} rtems_driver_name_t;
+
+/**
+ * @deprecated Use stat() instead.
  */
+rtems_status_code rtems_io_lookup_name(
+    const char           *name,
+    rtems_driver_name_t  *device_info
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+
+SAPI_IO_EXTERN uint32_t _IO_Number_of_drivers;
+
+SAPI_IO_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
+
+void _IO_Manager_initialization( void );
 
 void _IO_Initialize_all_drivers( void );
 

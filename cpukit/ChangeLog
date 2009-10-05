@@ -1,3 +1,10 @@
+2009-10-04	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* sapi/include/rtems/io.h, sapi/src/ioregisterdriver.c: Documenation.
+	rtems_io_lookup_name() is now deprecated.  Added
+	rtems_io_driver_io_error().  rtems_io_register_driver() is now
+	thread-safe.
+
 2009-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/src/ratemonreportstatistics.c: owner field is always set so

@@ -1,8 +1,16 @@
-/*
- *  Input/Output Manager - Dynamically Register Device Driver
+/**
+ * @file
  *
+ * @ingroup ClassicIO
+ *
+ * @brief Classic Input/Output Manager implementation.
+ */
+ 
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
+ *
+ *  Copyright (c) 2009 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -17,76 +25,119 @@
 
 #include <rtems/system.h>
 #include <rtems/io.h>
+#include <rtems/rtems/intr.h>
 
-/*
- *  rtems_io_register_driver
- *
- *  Register a driver into the device driver table.
- *
- *  Input Paramters:
- *    major            - device major number (0 means allocate
- *                       a number)
- *    driver_table     - driver callout function table
- *    registered_major - the major number which is registered
- *
- *  Output Parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
-
-rtems_status_code rtems_io_register_driver(
-  rtems_device_major_number         major,
-  const rtems_driver_address_table *driver_table,
-  rtems_device_major_number        *registered_major
+rtems_status_code rtems_io_driver_io_error(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
 )
 {
+  return RTEMS_IO_ERROR;
+}
 
-  /*
-   *  Validate the pointer data and contents passed in
-   */
-  if ( !driver_table )
+static inline bool rtems_io_is_empty_table(
+  const rtems_driver_address_table *table
+)
+{
+  return table->initialization_entry == NULL && table->open_entry == NULL;
+}
+
+static inline void rtems_io_occupy_table(
+  rtems_driver_address_table *table
+)
+{
+  table->open_entry = rtems_io_driver_io_error;
+}
+
+static rtems_status_code rtems_io_obtain_major_number(
+  rtems_device_major_number *major
+)
+{
+  rtems_device_major_number n = _IO_Number_of_drivers;
+  rtems_device_major_number m = 0;
+  
+  if ( major == NULL ) {
     return RTEMS_INVALID_ADDRESS;
-
-  if ( !registered_major )
-    return RTEMS_INVALID_ADDRESS;
-
-  if ( !driver_table->initialization_entry && !driver_table->open_entry )
-    return RTEMS_INVALID_ADDRESS;
-
-  *registered_major = 0;
-
-  /*
-   *  The requested major number is higher than what is configured.
-   */
-  if ( major >= _IO_Number_of_drivers )
-    return RTEMS_INVALID_NUMBER;
-
-  /*
-   * Test for initialise/open being present to indicate the driver slot is
-   * in use.
-   */
-
-  if ( major == 0 ) {
-    bool found = false;
-    for ( major = _IO_Number_of_drivers - 1 ; major ; major-- ) {
-      if ( !_IO_Driver_address_table[major].initialization_entry &&
-           !_IO_Driver_address_table[major].open_entry ) {
-        found = true;
-        break;
-      }
-    }
-
-    if ( !found )
-      return RTEMS_TOO_MANY;
   }
 
-  if ( _IO_Driver_address_table[major].initialization_entry ||
-       _IO_Driver_address_table[major].open_entry )
-    return RTEMS_RESOURCE_IN_USE;
+  for ( m = 0; m < n; ++m ) {
+    rtems_driver_address_table *const table = _IO_Driver_address_table + m;
+    rtems_interrupt_level level;
 
+    rtems_interrupt_disable( level );
+    if ( rtems_io_is_empty_table( table ) ) {
+      rtems_io_occupy_table( table );
+      rtems_interrupt_enable( level );
 
-  _IO_Driver_address_table[major] = *driver_table;
-  *registered_major               = major;
+      break;
+    }
+    rtems_interrupt_enable( level );
+  }
+
+  /* Assigns invalid value in case of failure */
+  *major = m;
+
+  if ( m != n ) {
+    return RTEMS_SUCCESSFUL;
+  } else {
+    return RTEMS_TOO_MANY;
+  }
+}
+
+rtems_status_code rtems_io_register_driver(
+  rtems_device_major_number major,
+  const rtems_driver_address_table *driver_table,
+  rtems_device_major_number *registered_major
+)
+{
+  rtems_device_major_number major_limit = _IO_Number_of_drivers;
+
+  if ( registered_major == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  /* Set it to an invalid value */
+  *registered_major = major_limit;
+
+  if ( driver_table == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  if ( rtems_io_is_empty_table( driver_table ) ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  if ( major >= major_limit ) {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  if ( major == 0 ) {
+    rtems_status_code sc = rtems_io_obtain_major_number( registered_major );
+
+    if ( sc == RTEMS_SUCCESSFUL ) {
+      major = *registered_major;
+    } else {
+      return RTEMS_TOO_MANY;
+    }
+  } else {
+    rtems_driver_address_table *const table = _IO_Driver_address_table + major;
+    rtems_interrupt_level level;
+
+    rtems_interrupt_disable( level );
+    if ( rtems_io_is_empty_table( table ) ) {
+      rtems_io_occupy_table( table );
+      rtems_interrupt_enable( level );
+    } else {
+      rtems_interrupt_enable( level );
+
+      return RTEMS_RESOURCE_IN_USE;
+    }
+
+    *registered_major = major;
+  }
+
+  _IO_Driver_address_table [major] = *driver_table;
 
   return rtems_io_initialize( major, 0, NULL );
 }
