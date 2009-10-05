@@ -35,8 +35,6 @@ rtems_task Init(
   for (resets=0 ; resets< 2 ;) {
     if ( interrupt_critical_section_test_support_delay() )
       resets++;
- 
-    interrupt_critical_section_test_support_delay();
 
     sc = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 1, &out );
     fatal_directive_status( sc, RTEMS_TIMEOUT, "event_receive timeout" );

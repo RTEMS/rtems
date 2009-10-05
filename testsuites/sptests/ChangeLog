@@ -1,3 +1,10 @@
+2009-10-04	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* sptests/spintrcritical09/init.c, sptests/spintrcritical10/init.c,
+	sptests/spintrcritical11/init.c: Fixed potentially infinite loops.
+	* sp20/system.h: Increased micro seconds per tick in order to be more
+	independent of the console output speed.
+
 2009-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp07/init.c, sp07/sp07.scn, sp09/init.c, sp09/screen01.c,

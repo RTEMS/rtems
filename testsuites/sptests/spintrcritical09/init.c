@@ -72,8 +72,6 @@ rtems_task Init(
   for (resets=0 ; resets< 2 ;) {
     if ( interrupt_critical_section_test_support_delay() )
       resets++;
- 
-    interrupt_critical_section_test_support_delay();
 
     (void) rtems_semaphore_obtain( Semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
   }

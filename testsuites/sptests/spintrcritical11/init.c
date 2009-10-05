@@ -60,8 +60,6 @@ rtems_task Init(
   for (resets=0 ; resets< 2 ;) {
     if ( interrupt_critical_section_test_support_delay() )
       resets++;
- 
-    interrupt_critical_section_test_support_delay();
 
     (void) rtems_event_receive( EVENTS_TO_RECEIVE, RTEMS_EVENT_ANY, 1, &out );
   }
