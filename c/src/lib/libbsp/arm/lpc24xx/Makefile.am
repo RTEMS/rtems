@@ -56,9 +56,11 @@ libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds.base \
-	startup/linkcmds.lpc2478 \
-	startup/linkcmds.lpc2478_ncs \
-	startup/linkcmds.lpc2478_ncs_ram
+	startup/linkcmds \
+	startup/linkcmds.lpc24xx_ea \
+	startup/linkcmds.lpc24xx_ncs_rom_int \
+	startup/linkcmds.lpc24xx_ncs_rom_ext \
+	startup/linkcmds.lpc24xx_ncs_ram
 
 ###############################################################################
 #                  LibBSP                                                     #

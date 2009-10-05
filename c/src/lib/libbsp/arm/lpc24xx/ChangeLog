@@ -1,3 +1,13 @@
+2009-10-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/linkcmds.lpc2478, startup/linkcmds.lpc2478_ncs,
+	startup/linkcmds.lpc2478_ncs_ram: Removed files.
+	* startup/linkcmds.lpc24xx_ea, startup/linkcmds.lpc24xx_ncs_ram,
+	startup/linkcmds.lpc24xx_ncs_rom_ext,
+	startup/linkcmds.lpc24xx_ncs_rom_int: New files.
+	* Makefile.am, README, configure.ac, preinstall.am, misc/io.c,
+	startup/linkcmds: Changes throughout.
+
 2009-09-21	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* startup/bspstarthooks.c, misc/dma-copy.c, misc/timer.c: Add

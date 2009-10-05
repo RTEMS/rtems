@@ -2,8 +2,6 @@
 #  $Id$
 #
 
-Note: A Binutils version with REGION_ALIAS feature is required to link the BSP.
-
 Development Board: QVGA Base Board from Embedded Artists
 
 http://www.embeddedartists.com/products/uclinux/oem_lpc2478.php
@@ -13,7 +11,7 @@ Drivers:
 	o Console
 	o Clock
 	o RTC
-	o SSP (SPI mode): This driver is in active development.  Use with care.
+	o SSP (SPI mode)
 	o Network
 	o I2C
 
@@ -41,7 +39,7 @@ Howto setup QVGA Base Board?
 Application Board: NCS (Nurse Control Station)
 
 	Board:      NextGenNCS
-	Processor:  NXP LPC2478
+	Processor:  NXP LPC2478 or LPC2470
 	SDRAM:      8MByte, 16 bit wide
 	Ext. Flash: 1MByte, 16 bit wide
 	Console:    UART, 115200 Baud

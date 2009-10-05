@@ -1,0 +1,56 @@
+/**
+ * @file
+ *
+ * @ingroup lpc24xx_linker_ncs_ram
+ *
+ * @brief Memory map.
+ */
+
+/**
+ * @defgroup lpc24xx_linker_ncs_ram NCS Application Memory Map
+ *
+ * @ingroup bsp_linker
+ *
+ * @brief NCS application memory map.
+ *
+ * <table>
+ *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
+ *   <tr><td>RAM_INT</td><td>0x40000000</td><td>64k</td></tr>
+ *   <tr><td>RAM_EXT</td><td>0xa0000000</td><td>8M</td></tr>
+ * </table>
+ *
+ * <table>
+ *   <tr><th>Section Name</th><th>Section Runtime Region</th><th>Section Load Region</th></tr>
+ *   <tr><td>.start</td><td>RAM_EXT</td><td>RAM_EXT</td></tr>
+ *   <tr><td>.vector</td><td>RAM_INT</td><td></td></tr>
+ *   <tr><td>.text</td><td>RAM_EXT</td><td>RAM_EXT</td></tr>
+ *   <tr><td>.rodata</td><td>RAM_EXT</td><td>RAM_EXT</td></tr>
+ *   <tr><td>.data</td><td>RAM_EXT</td><td>RAM_EXT</td></tr>
+ *   <tr><td>.fast</td><td>RAM_INT</td><td>RAM_EXT</td></tr>
+ *   <tr><td>.bss</td><td>RAM_EXT</td><td></td></tr>
+ *   <tr><td>.work</td><td>RAM_EXT</td><td></td></tr>
+ *   <tr><td>.stack</td><td>RAM_INT</td><td></td></tr>
+ * </table>
+ */
+
+MEMORY {
+        RAM_INT (AIW) : ORIGIN = 0x40000000, LENGTH = 64k
+        RAM_EXT (AIW) : ORIGIN = 0xa0000000, LENGTH = 8M
+        NIRVANA : ORIGIN = 0, LENGTH = 0
+}
+
+REGION_ALIAS ("REGION_START", RAM_EXT);
+REGION_ALIAS ("REGION_VECTOR", RAM_INT);
+REGION_ALIAS ("REGION_TEXT", RAM_EXT);
+REGION_ALIAS ("REGION_TEXT_LOAD", RAM_EXT);
+REGION_ALIAS ("REGION_RODATA", RAM_EXT);
+REGION_ALIAS ("REGION_RODATA_LOAD", RAM_EXT);
+REGION_ALIAS ("REGION_DATA", RAM_EXT);
+REGION_ALIAS ("REGION_DATA_LOAD", RAM_EXT);
+REGION_ALIAS ("REGION_FAST", RAM_INT);
+REGION_ALIAS ("REGION_FAST_LOAD", RAM_EXT);
+REGION_ALIAS ("REGION_BSS", RAM_EXT);
+REGION_ALIAS ("REGION_WORK", RAM_EXT);
+REGION_ALIAS ("REGION_STACK", RAM_INT);
+
+INCLUDE linkcmds.base
