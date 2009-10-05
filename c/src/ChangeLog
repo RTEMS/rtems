@@ -1,3 +1,8 @@
+2009-10-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/ide/ata.c: Revert previous change. Not all ARM BSPs use a
+	shared irq.h yet and this breaks a significant number of them.
+
 2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/ide/ata.c: Use simple vectored CPU macro to select interrupt
