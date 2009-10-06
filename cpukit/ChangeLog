@@ -1,3 +1,9 @@
+2009-10-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/src/ioregisterdriver.c: Reowork so this is a context switch
+	disable critical section not interrupt disable critical section.
+	Hopefully eliminated dead code which showed up in coverage runs.
+
 2009-10-04	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* sapi/include/rtems/io.h, sapi/src/ioregisterdriver.c: Documenation.

@@ -26,28 +26,13 @@
 #include <rtems/system.h>
 #include <rtems/io.h>
 #include <rtems/rtems/intr.h>
-
-rtems_status_code rtems_io_driver_io_error(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *arg
-)
-{
-  return RTEMS_IO_ERROR;
-}
+#include <rtems/score/thread.h>
 
 static inline bool rtems_io_is_empty_table(
   const rtems_driver_address_table *table
 )
 {
   return table->initialization_entry == NULL && table->open_entry == NULL;
-}
-
-static inline void rtems_io_occupy_table(
-  rtems_driver_address_table *table
-)
-{
-  table->open_entry = rtems_io_driver_io_error;
 }
 
 static rtems_status_code rtems_io_obtain_major_number(
@@ -57,80 +42,62 @@ static rtems_status_code rtems_io_obtain_major_number(
   rtems_device_major_number n = _IO_Number_of_drivers;
   rtems_device_major_number m = 0;
   
-  if ( major == NULL ) {
-    return RTEMS_INVALID_ADDRESS;
-  }
+  /* major is error checked by caller */
 
   for ( m = 0; m < n; ++m ) {
     rtems_driver_address_table *const table = _IO_Driver_address_table + m;
-    rtems_interrupt_level level;
 
-    rtems_interrupt_disable( level );
-    if ( rtems_io_is_empty_table( table ) ) {
-      rtems_io_occupy_table( table );
-      rtems_interrupt_enable( level );
-
+    if ( rtems_io_is_empty_table( table ) )
       break;
-    }
-    rtems_interrupt_enable( level );
   }
 
   /* Assigns invalid value in case of failure */
   *major = m;
 
-  if ( m != n ) {
+  if ( m != n )
     return RTEMS_SUCCESSFUL;
-  } else {
-    return RTEMS_TOO_MANY;
-  }
+
+  return RTEMS_TOO_MANY;
 }
 
 rtems_status_code rtems_io_register_driver(
-  rtems_device_major_number major,
+  rtems_device_major_number         major,
   const rtems_driver_address_table *driver_table,
-  rtems_device_major_number *registered_major
+  rtems_device_major_number        *registered_major
 )
 {
   rtems_device_major_number major_limit = _IO_Number_of_drivers;
 
-  if ( registered_major == NULL ) {
+  if ( registered_major == NULL )
     return RTEMS_INVALID_ADDRESS;
-  }
 
   /* Set it to an invalid value */
   *registered_major = major_limit;
 
-  if ( driver_table == NULL ) {
+  if ( driver_table == NULL )
     return RTEMS_INVALID_ADDRESS;
-  }
 
-  if ( rtems_io_is_empty_table( driver_table ) ) {
+  if ( rtems_io_is_empty_table( driver_table ) )
     return RTEMS_INVALID_ADDRESS;
-  }
 
-  if ( major >= major_limit ) {
+  if ( major >= major_limit )
     return RTEMS_INVALID_NUMBER;
-  }
+
+  _Thread_Disable_dispatch();
 
   if ( major == 0 ) {
     rtems_status_code sc = rtems_io_obtain_major_number( registered_major );
 
-    if ( sc == RTEMS_SUCCESSFUL ) {
-      major = *registered_major;
-    } else {
-      return RTEMS_TOO_MANY;
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      _Thread_Enable_dispatch();
+      return sc;
     }
+    major = *registered_major;
   } else {
     rtems_driver_address_table *const table = _IO_Driver_address_table + major;
-    rtems_interrupt_level level;
 
-    rtems_interrupt_disable( level );
-    if ( rtems_io_is_empty_table( table ) ) {
-      rtems_io_occupy_table( table );
-      rtems_interrupt_enable( level );
-    } else {
-      rtems_interrupt_enable( level );
-
+    if ( !rtems_io_is_empty_table( table ) ) {
+      _Thread_Enable_dispatch();
       return RTEMS_RESOURCE_IN_USE;
     }
 
@@ -138,6 +105,8 @@ rtems_status_code rtems_io_register_driver(
   }
 
   _IO_Driver_address_table [major] = *driver_table;
+
+  _Thread_Enable_dispatch();
 
   return rtems_io_initialize( major, 0, NULL );
 }
