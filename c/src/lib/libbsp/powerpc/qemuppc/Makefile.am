@@ -38,11 +38,10 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/gnatinstallhandler.c \
     startup/cmain.c startup/bspstart.c startup/bsppanic.c
 # pclock
-clock_SOURCES = ../../shared/clock_driver_simidle.c
+# clock_SOURCES = ../../shared/clock_driver_simidle.c
+clock_SOURCES = ../shared/clock/clock.c
 # console
 console_SOURCES = ../../shared/console-polled.c console/console-io.c
-#timer
-timer_SOURCES = ../../shared/timerstub.c
 
 # irq
 include_bsp_HEADERS = irq/irq.h \

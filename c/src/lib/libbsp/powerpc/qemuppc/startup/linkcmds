@@ -84,7 +84,11 @@ SECTIONS
     __rodata_end = .;
   } >ROM =0
 
-  . = 0x1000;
+  .vectors :
+  {
+    . = . + 0x2000; /* skip vector area */
+  } >RAM
+
   __sdata2_load = __rodata_end;
   .sdata2 : AT (__sdata2_load)
   {
@@ -165,7 +169,8 @@ SECTIONS
   bsp_interrupt_stack_end = bsp_interrupt_stack_start + 32k;
   bsp_interrupt_stack_size = bsp_interrupt_stack_end - bsp_interrupt_stack_start;
 
-   WorkAreaBase = .;
+  bsp_work_area_start = bsp_interrupt_stack_end;
+  WorkAreaBase = bsp_work_area_start;
    . = RamBase + RamSize;
 
   .reset :

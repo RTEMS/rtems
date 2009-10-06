@@ -28,9 +28,18 @@ extern "C" {
 
 #define BSP_SMALL_MEMORY 1
 
+/*
+ *  Convert decrementer value to tenths of microseconds (used by shared timer
+ *  driver).
+ */
+#define BSP_Convert_decrementer( _value ) \
+  ((int) (((_value) * 10) / bsp_clicks_per_usec))
+
+#if 0
 /* support for simulated clock tick */
 Thread clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
+#endif
 
 #ifdef __cplusplus
 }

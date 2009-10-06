@@ -49,11 +49,6 @@ extern char bsp_interrupt_stack_end[];
 extern char bsp_interrupt_stack_size[];
 uint32_t BSP_mem_size = (uint32_t)RamSize;
 
-/*
- * Time base divisior (how many tick for 1 second).
- */
-unsigned int BSP_time_base_divisor;
-
 /* Default decrementer exception handler */
 static int default_decrementer_exception_handler( BSP_Exception_frame *frame, unsigned number)
 {
@@ -74,7 +69,6 @@ void bsp_start( void )
   uint32_t intrStackSize;
   int rv = 0;
   rtems_status_code sc;
-
   /*
    * Note we can not get CPU identification dynamically, so
    * force current_ppc_cpu.
@@ -83,10 +77,11 @@ void bsp_start( void )
 
   /*
    *  initialize the device driver parameters
+   * assume we are running with 20MHz bus 
+   * this should speed up some tests :-)
    */
-  /* BSP_bus_frequency        = (unsigned int)&PSIM_INSTRUCTIONS_PER_MICROSECOND; */
-  /* bsp_clicks_per_usec      = BSP_bus_frequency; */
-  /* BSP_time_base_divisor    = 1; */
+  BSP_bus_frequency        = 20;
+  bsp_clicks_per_usec      = BSP_bus_frequency;
 
   /*
    * Initialize the interrupt related settings.
