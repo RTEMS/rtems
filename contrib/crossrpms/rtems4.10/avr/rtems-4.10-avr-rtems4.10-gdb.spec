@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.8.92
-%define gdb_rpmvers %{expand:%(echo 6.8.92 | tr - _)} 
+%define gdb_version 7.0
+%define gdb_rpmvers %{expand:%(echo 7.0 | tr - _)} 
 
 Name:		rtems-4.10-avr-rtems4.10-gdb
 Summary:	Gdb for target avr-rtems4.10
@@ -126,10 +126,8 @@ BuildRequires:	texinfo >= 4.2
 
 Requires:	rtems-4.10-gdb-common
 
-# A copy of a gdb development snapshot having been retrieved from
-# ftp://sourceware.org/pub/gdb/snapshots/branch/gdb-%{gdb_version}.tar.bz2
-Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20091001.diff
+Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-%{gdb_version}.tar.bz2
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20091007.diff
 
 %description
 GDB for target avr-rtems4.10
@@ -198,6 +196,20 @@ cd ..
 
 # host library, installed to a bogus directory
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libavr-rtems4.10-sim.a
+
+%if "%{gdb_version}" >= "7.0"
+# Bug in gdb-7.0, bogusly installs linux-only files
+  somethinguseful=0
+  for f in ${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls/*.xml; do
+    case $f in
+    *linux.xml) rm -f $f;;
+    *.xml) somethinguseful=1;;
+    esac
+  done
+  if test $somethinguseful -eq 0; then
+    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls"
+  fi
+%endif
 
   cd ..
 
