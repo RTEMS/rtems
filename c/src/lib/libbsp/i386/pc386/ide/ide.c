@@ -29,51 +29,125 @@
 #include <libchip/ide_ctrl_cfg.h>
 #include <libchip/ide_ctrl_io.h>
 
+#define ATA_SECTOR_SIZE (512)
+
+/*
+ * Use during initialisation.
+ */
+extern void Wait_X_ms(unsigned int msecs);
+
 bool pc386_ide_show;
+uint32_t pc386_ide_timeout;
 
-/* #define DEBUG_OUT */
+#define PC386_IDE_DEBUG_OUT 0
 
-static bool pc386_ide_status_busy (uint32_t port,
-                                   uint32_t timeout,
-                                   uint8_t* status_val)
+#if PC386_IDE_DEBUG_OUT
+bool pc386_ide_trace;
+#define pc386_ide_printk if (pc386_ide_trace) printk
+#endif
+
+#define PC386_IDE_PROBE_TIMEOUT    (500)
+#define PC386_IDE_PRESTART_TIMEOUT (1000)
+#define PC386_IDE_TASKING_TIMEOUT  (2000)
+
+/*
+ * Prestart sleep using a calibrated timing loop.
+ */
+static void pc386_ide_prestart_sleep (void)
 {
+  Wait_X_ms (10);
+}
+
+/*
+ * Once tasking has started we use a task sleep.
+ */
+static void pc386_ide_tasking_sleep (void)
+{
+  rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (10000) ?
+                         TOD_MICROSECONDS_TO_TICKS (10000) : 1);
+}
+
+typedef void (*pc386_ide_sleeper)(void);
+
+static void pc386_ide_sleep (pc386_ide_sleeper sleeper)
+{
+  sleeper ();
+}
+
+static void wait(volatile uint32_t loops)
+{
+  while (loops)
+    loops--;
+}
+
+static bool pc386_ide_status_busy (uint32_t          port,
+                                   volatile uint32_t timeout,
+                                   uint8_t*          status_val,
+                                   pc386_ide_sleeper sleeper)
+{
+  volatile uint8_t status;
+  int              polls;
+  
   do
   {
-    inport_byte (port + IDE_REGISTER_STATUS, *status_val);
-    if ((*status_val & IDE_REGISTER_STATUS_BSY) == 0)
-      return true;
+    polls = 500;
+    while (polls)
+    {
+      inport_byte (port + IDE_REGISTER_STATUS, status);
+      if ((status & IDE_REGISTER_STATUS_BSY) == 0)
+      {
+        *status_val = status;
+        return true;
+      }
+      polls--;
+    }
 
     if (timeout)
     {
       timeout--;
-      rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (1000));
+      pc386_ide_sleep (sleeper);
     }
   }
   while (timeout);
 
+  *status_val = status;
   return false;
 }
 
-static bool pc386_ide_status_data_ready (uint32_t port,
-                                         uint32_t timeout,
-                                         uint8_t* status_val)
+static bool pc386_ide_status_data_ready (uint32_t          port,
+                                         volatile uint32_t timeout,
+                                         uint8_t*          status_val,
+                                         pc386_ide_sleeper sleeper)
 {
+  volatile uint8_t status;
+  int              polls;
+  
   do
   {
-    inport_byte (port + IDE_REGISTER_STATUS, *status_val);
+    polls = 1000;
+    while (polls)
+    {
+      inport_byte (port + IDE_REGISTER_STATUS, status);
     
-    if (((*status_val & IDE_REGISTER_STATUS_BSY) == 0) &&
-        (*status_val & IDE_REGISTER_STATUS_DRQ))
-      return true;
+      if (((status & IDE_REGISTER_STATUS_BSY) == 0) &&
+          (status & IDE_REGISTER_STATUS_DRQ))
+      {
+        *status_val = status;
+        return true;
+      }
+
+      polls--;
+    }
 
     if (timeout)
     {
       timeout--;
-      rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (1000));
+      pc386_ide_sleep (sleeper);
     }
   }
   while (timeout);
 
+  *status_val = status;
   return false;
 }
 
@@ -101,12 +175,6 @@ bool pc386_ide_probe
   bool ide_card_plugged = true; /* assume: we have a disk here */
 
   return ide_card_plugged;
-}
-
-static void wait(volatile uint32_t loops)
-{
-  while (loops)
-    loops--;
 }
 
 /*=========================================================================*\
@@ -151,9 +219,14 @@ void pc386_ide_initialize
     uint8_t     cyllsb;
     uint8_t     cylmsb;
     const char* label = dev ? " slave" : "master";
+    int         max_multiple_sectors = 0;
+    int         cur_multiple_sectors = 0;
+    uint32_t    cylinders = 0;
+    uint32_t    heads = 0;
+    uint32_t    sectors = 0;
     char        model_number[41];
     char*       p = &model_number[0];
-
+    
     memset(model_number, 0, sizeof(model_number));
 
     outport_byte(port+IDE_REGISTER_DEVICE_HEAD,
@@ -165,7 +238,8 @@ void pc386_ide_initialize
 
     outport_byte(port+IDE_REGISTER_COMMAND, 0x00);
     
-    if (!pc386_ide_status_busy (port, 6000, &status))
+    if (!pc386_ide_status_busy (port, PC386_IDE_PROBE_TIMEOUT,
+                                &status, pc386_ide_prestart_sleep))
       continue;
     
     inport_byte(port+IDE_REGISTER_STATUS,        status);
@@ -181,39 +255,26 @@ void pc386_ide_initialize
       printk("IDE%d:%s: cylinder-high=%02x\n", minor, label, cylmsb);
     }
 
-#if 0
-    /*
-     * Filter based on the cylinder values and the status.
-     * Taken from grub's ata.c.
-     */
-    if (cyllsb != 0x14 || cylmsb != 0xeb)
-      if (status == 0 || (cyllsb != 0 && cylmsb != 0 &&
-                          cyllsb != 0xc3 && cylmsb != 0x3c))
-      {
-        if (pc386_ide_show)
-          printk("IDE%d:%s: bad device\n", minor, label);
-      }
-#endif
-    
     outport_byte(port+IDE_REGISTER_COMMAND, 0xec);
 
-    if (!pc386_ide_status_busy (port, 6000, &status))
+    if (!pc386_ide_status_busy (port, PC386_IDE_PRESTART_TIMEOUT,
+                                &status, pc386_ide_prestart_sleep))
     {
       if (pc386_ide_show)
         printk("IDE%d:%s: device busy: %02x\n", minor, label, status);
       continue;
     }
-    
+
     byte = 0;
     while (byte < 512)
     {
       uint16_t word;
       bool     data_ready;
 
-      if (pc386_ide_show && ((byte % 16) == 0))
-        printk("\n %04x : ", byte);
-      
-      data_ready = pc386_ide_status_data_ready (port, 100, &status);
+      data_ready = pc386_ide_status_data_ready (port,
+                                                250,
+                                                &status,
+                                                pc386_ide_prestart_sleep);
 
       if (status & IDE_REGISTER_STATUS_ERR)
       {
@@ -234,11 +295,21 @@ void pc386_ide_initialize
       if (!data_ready)
         break;
       
+      if (pc386_ide_show && ((byte % 16) == 0))
+        printk("\n %04x : ", byte);
+      
       inport_word(port+IDE_REGISTER_DATA, word);
 
       if (pc386_ide_show)
         printk ("%04x ", word);
 
+      if (byte == 2)
+        cylinders = word;
+      if (byte == 6)
+        heads = word;
+      if (byte == 12)
+        sectors = word;
+      
       if (byte >= 54 && byte < (54 + 40))
       {
         *p = word >> 8;
@@ -246,7 +317,19 @@ void pc386_ide_initialize
         *p = word;
         p++;
       }
-        
+
+      if (byte == 94)
+        max_multiple_sectors = word & 0xff;
+      
+      if (byte == (47 * 2))
+        max_multiple_sectors = word & 0xff;
+      
+      if (byte == (59 * 2))
+      {
+        if (word & (1 << 8))
+          cur_multiple_sectors = word & 0xff;
+      }
+      
       byte += 2;
     }
     
@@ -254,8 +337,78 @@ void pc386_ide_initialize
       printk("\nbytes read = %d\n", byte);
 
     if (p != &model_number[0])
-      printk("IDE%d:%s: %s\n", minor, label, model_number);
+    {
+      uint32_t size;
+      uint32_t left;
+      uint32_t right;
+      char     units;
+      
+      size = ((((uint64_t) cylinders) * heads) * sectors * 512) / 1024;
+
+      if (size > (1024 * 1024))
+      {
+        size = (size * 10) / (1000 * 1000);
+        units = 'G';
+      }
+      else if (size > 1024)
+      {
+        size = (size * 10) / 1000;
+        units = 'M';
+      }
+      else
+      {
+        size = size * 10;
+        units = 'K';
+      }
+
+      left = size / 10;
+      right = size % 10;
+      
+      p--;
+      while (*p == ' ')
+      {
+        *p = '\0';
+        p--;
+      }
+
+      printk("IDE%d:%s:%s, %u.%u%c (%u/%u/%u), max blk size:%d\n",
+             minor, label, model_number, left, right, units,
+             heads, cylinders, sectors, max_multiple_sectors * 512);
+    }
+
+#if IDE_CLEAR_MULTI_SECTOR_COUNT
+    if (max_multiple_sectors)
+    {
+      outport_byte(port+IDE_REGISTER_SECTOR_COUNT, 0);
+      outport_byte(port+IDE_REGISTER_COMMAND, 0xc6);
+
+      if (!pc386_ide_status_busy (port, PC386_IDE_PRESTART_TIMEOUT,
+                                  &status, pc386_ide_prestart_sleep))
+      {
+        if (pc386_ide_show)
+          printk("IDE%d:%s: device busy: %02x\n", minor, label, status);
+        continue;
+      }
+
+      inport_byte(port+IDE_REGISTER_STATUS, status);
+      if (status & IDE_REGISTER_STATUS_ERR)
+      {
+        inport_byte(port+IDE_REGISTER_ERROR, error);
+        if (error & IDE_REGISTER_ERROR_ABRT)
+          printk("IDE%d:%s: disable multiple failed\n", minor, label);
+        else
+          printk("IDE%d:%s: unknown error on disable multiple: %02x\n",
+                 minor, label, error);
+      }
+    }
+#endif
+    
+    outport_byte(port+IDE_REGISTER_DEVICE_CONTROL,
+                 IDE_REGISTER_DEVICE_CONTROL_nIEN);
+    wait(10000);
   }
+
+  pc386_ide_timeout = PC386_IDE_TASKING_TIMEOUT;
   
   /*
    * FIXME: enable interrupts, if needed
@@ -294,8 +447,8 @@ void pc386_ide_read_reg
     inport_byte(port+reg, bval1);
     *value = bval1;
   }
-#ifdef DEBUG_OUT
-  printk("pc386_ide_read_reg (0x%x)=0x%x\r\n",reg,*value & 0xff);
+#if PC386_IDE_DEBUG_OUT
+  pc386_ide_printk("pc386_ide_read_reg (0x%x)=0x%x\r\n",reg,*value & 0xff);
 #endif
 }
 
@@ -321,8 +474,8 @@ void pc386_ide_write_reg
 {
   uint32_t    port = IDE_Controller_Table[minor].port1;
 
-#ifdef DEBUG_OUT
-  printk("pc386_ide_write_reg(0x%x,0x%x)\r\n",reg,value & 0xff);
+#if PC386_IDE_DEBUG_OUT
+  pc386_ide_printk("pc386_ide_write_reg(0x%x,0x%x)\r\n",reg,value & 0xff);
 #endif
   if (reg == IDE_REGISTER_DATA_WORD) {
     outport_word(port+reg,value);
@@ -343,8 +496,8 @@ void pc386_ide_read_block
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- int minor,
- uint16_t                block_size,
+ int                     minor,
+ uint32_t                block_size,
  rtems_blkdev_sg_buffer *bufs,
  uint32_t               *cbuf,
  uint32_t               *pos
@@ -354,47 +507,59 @@ void pc386_ide_read_block
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  uint32_t    port = IDE_Controller_Table[minor].port1;
-  uint16_t    cnt = 0;
-  uint32_t    llength = bufs[(*cbuf)].length;
-  uint8_t     status_val;
-  uint16_t   *lbuf = (uint16_t*)
-    ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
-#ifdef DEBUG_OUT
+  uint32_t port = IDE_Controller_Table[minor].port1;
+  uint32_t cnt = 0;
+#if PC386_IDE_DEBUG_OUT
   int i32 = 0;
+  pc386_ide_printk("pc386_ide_read_block(bs=%u,bn=%u,bl=%u,cb=%d,p=%d)\n",
+                   block_size, bufs[(*cbuf)].block, llength, *cbuf, *pos);
 #endif
+
   while (cnt < block_size)
   {
-    if (!pc386_ide_status_data_ready (port, 100, &status_val))
+    uint16_t *lbuf;
+    uint8_t  status_val;
+    int      b;
+    
+    if (!pc386_ide_status_data_ready (port, pc386_ide_timeout,
+                                      &status_val, pc386_ide_tasking_sleep))
     {
-      printk ("pc386_ide_read_block: status=%02x, cnt=%d bs=%d\n", status_val, cnt, block_size);
+      printk ("pc386_ide_read_block: block=%u cbuf=%u status=%02x, cnt=%d bs=%d\n",
+              bufs[*cbuf].block, *cbuf, status_val, cnt, block_size);
       /* FIXME: add an error here. */
       return;
     }
     
     if (status_val & IDE_REGISTER_STATUS_ERR)
-      printk("pc386_ide_read_block: error: %02x\n", status_val);
-    
-    inport_word(port+IDE_REGISTER_DATA,*lbuf);
-
-#ifdef DEBUG_OUT
-    printk("%04x ",*lbuf);
-    i32++;
-    if (i32 >= 16)
     {
-      printk("\n");
-      i32 = 0;
+      inport_byte(port+IDE_REGISTER_ERROR, status_val);
+      printk("pc386_ide_read_block: error: %02x\n", status_val);
+      return;
     }
+
+    lbuf = (uint16_t*)((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
+  
+    for (b = 0; b < (ATA_SECTOR_SIZE / 2); b++)
+    {
+      inport_word(port+IDE_REGISTER_DATA,*lbuf);
+
+#if PC386_IDE_DEBUG_OUT
+      pc386_ide_printk("%04x ",*lbuf);
+      i32++;
+      if (i32 >= 16)
+      {
+        pc386_ide_printk("\n");
+        i32 = 0;
+      }
 #endif
-    
-    lbuf++;
-    cnt    += sizeof(*lbuf);
-    (*pos) += sizeof(*lbuf);
-    if ((*pos) == llength) {
+      lbuf++;
+    }
+    cnt    += ATA_SECTOR_SIZE;
+    (*pos) += ATA_SECTOR_SIZE;
+    if ((*pos) == bufs[(*cbuf)].length) {
       (*pos) = 0;
       (*cbuf)++;
       lbuf = bufs[(*cbuf)].buffer;
-      llength = bufs[(*cbuf)].length;
     }
   }
 }
@@ -411,7 +576,7 @@ void pc386_ide_write_block
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int minor,
- uint16_t                block_size,
+ uint32_t                block_size,
  rtems_blkdev_sg_buffer *bufs,
  uint32_t               *cbuf,
  uint32_t               *pos
@@ -421,41 +586,58 @@ void pc386_ide_write_block
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  uint32_t    port = IDE_Controller_Table[minor].port1;
-  uint16_t    cnt = 0;
-  uint32_t    llength = bufs[(*cbuf)].length;
-  uint8_t     status_val;
-  uint16_t   *lbuf = (uint16_t*)
-    ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
-  
-#ifdef DEBUG_OUT
-  printk("pc386_ide_write_block()\n");
+  uint32_t port = IDE_Controller_Table[minor].port1;
+  uint32_t cnt = 0;
+#if PC386_IDE_DEBUG_OUT
+  int i32 = 0;
+  pc386_ide_printk("pc386_ide_write_block(bs=%u,bn=%u,bl=%u,cb=%d,p=%d)\n",
+                   block_size, bufs[(*cbuf)].block, llength, *cbuf, *pos);
 #endif
 
   while (cnt < block_size)
   {
-    if (!pc386_ide_status_data_ready (port, 100, &status_val))
+    uint16_t *lbuf;
+    uint8_t  status_val;
+    int      b;
+    
+    if (!pc386_ide_status_data_ready (port, pc386_ide_timeout,
+                                      &status_val, pc386_ide_tasking_sleep))
     {
-      printk ("pc386_ide_write_block: status=%02x, cnt=%d bs=%d\n", status_val, cnt, block_size);
+      printk ("pc386_ide_write_block: block=%u status=%02x, cnt=%d bs=%d\n",
+              bufs[*cbuf].block, status_val, cnt, block_size);
       /* FIXME: add an error here. */
       return;
     }
     
     if (status_val & IDE_REGISTER_STATUS_ERR)
-      printk("pc386_ide_write_block: error: %02x\n", status_val);
+    {
+      inport_byte(port+IDE_REGISTER_ERROR, status_val);
+      printk ("pc386_ide_write_block: error: %02x\n", status_val);
+      return;
+    }
     
-#ifdef DEBUG_OUT
-    printk("0x%x ",*lbuf);
+    lbuf = (uint16_t*)(((uint8_t*)bufs[*cbuf].buffer) + (*pos));
+  
+    for (b = 0; b < (ATA_SECTOR_SIZE / 2); b++)
+    {
+#if PC386_IDE_DEBUG_OUT
+      pc386_ide_printk("%04x ",*lbuf);
+      i32++;
+      if (i32 >= 16)
+      {
+        pc386_ide_printk("\n");
+        i32 = 0;
+      }
 #endif
-    outport_word(port+IDE_REGISTER_DATA,*lbuf);
-    lbuf++;
-    cnt    += sizeof(*lbuf);
-    (*pos) += sizeof(*lbuf);
-    if ((*pos) == llength) {
+      outport_word(port+IDE_REGISTER_DATA,*lbuf);
+      lbuf++;
+    }
+    cnt    += ATA_SECTOR_SIZE;
+    (*pos) += ATA_SECTOR_SIZE;
+    if ((*pos) == bufs[(*cbuf)].length) {
       (*pos) = 0;
       (*cbuf)++;
       lbuf = bufs[(*cbuf)].buffer;
-      llength = bufs[(*cbuf)].length;
     }
   }
 }

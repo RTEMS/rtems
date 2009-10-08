@@ -1,3 +1,11 @@
+2009-10-08	Chris Johns <chrisj@rtems.org>
+
+	* ide/ide.c: Fixed more IDE driver bugs. The driver can transfer
+	64K in a single write on my test PC and qemu with this driver. The
+	driver only checks the data ready bit at the start of each 512
+	block being transfered. This has speed the transfer loop up. Fixed
+	the timing so the BSP timer is used until RTEMS has started.
+
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c, console/serial_mouse.c: Reflect
