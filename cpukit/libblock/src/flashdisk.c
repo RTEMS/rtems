@@ -2053,26 +2053,22 @@ static int
 rtems_fdisk_read (rtems_flashdisk* fd, rtems_blkdev_request* req)
 {
   rtems_blkdev_sg_buffer* sg = req->bufs;
-  uint32_t                b;
+  uint32_t                buf;
   int                     ret = 0;
 
-  for (b = 0; b < req->bufnum; b++, sg++)
+  for (buf = 0; (ret == 0) && (buf < req->bufnum); buf++, sg++)
   {
-    uint32_t length = sg->length;
-  
-    if (sg->length != fd->block_size)
+    uint8_t* data;
+    uint32_t fb;
+    uint32_t b;
+    fb = sg->length / fd->block_size;
+    data = sg->buffer;
+    for (b = 0; b < fb; b++, data += fd->block_size)
     {
-      rtems_fdisk_error ("fdisk-read: length is not the block size: "\
-                         "bd:%d fd:%d", sg->length, fd->block_size);
-
-      if (length > fd->block_size)
-        length = fd->block_size;
+      ret = rtems_fdisk_read_block (fd, sg->block + b, data);
+      if (ret)
+        break;
     }
-
-    ret = rtems_fdisk_read_block (fd, sg->block, sg->buffer);
-
-    if (ret)
-      break;
   }
 
   req->req_done (req->done_arg,
@@ -2093,21 +2089,22 @@ static int
 rtems_fdisk_write (rtems_flashdisk* fd, rtems_blkdev_request* req)
 {
   rtems_blkdev_sg_buffer* sg = req->bufs;
-  uint32_t                b;
+  uint32_t                buf;
   int                     ret = 0;
 
-  for (b = 0; b < req->bufnum; b++, sg++)
+  for (buf = 0; (ret == 0) && (buf < req->bufnum); buf++, sg++)
   {
-    if (sg->length != fd->block_size)
+    uint8_t* data;
+    uint32_t fb;
+    uint32_t b;
+    fb = sg->length / fd->block_size;
+    data = sg->buffer;
+    for (b = 0; b < fb; b++, data += fd->block_size)
     {
-      rtems_fdisk_error ("fdisk-write: length is not the block size: " \
-                         "bd:%d fd:%d", sg->length, fd->block_size);
+      ret = rtems_fdisk_write_block (fd, sg->block + b, data);
+      if (ret)
+        break;
     }
-
-    ret = rtems_fdisk_write_block (fd, sg->block, sg->buffer);
-
-    if (ret)
-      break;
   }
 
   req->req_done (req->done_arg,
@@ -2357,6 +2354,7 @@ rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
     errno = EIO;
   else
   {
+    errno = 0;
     switch (req)
     {
       case RTEMS_BLKIO_REQUEST:
@@ -2410,7 +2408,7 @@ rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
         break;
 
       default:
-        return rtems_blkdev_ioctl (dev, req, argp);
+        rtems_blkdev_ioctl (dev, req, argp);
         break;
     }
 

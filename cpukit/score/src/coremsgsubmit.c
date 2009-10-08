@@ -88,7 +88,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
         size
       );
       *(size_t *) the_thread->Wait.return_argument = size;
-      the_thread->Wait.count = submit_type;
+      the_thread->Wait.count = (uint32_t) submit_type;
 
       #if defined(RTEMS_MULTIPROCESSING)
         if ( !_Objects_Is_local_id( the_thread->Object.id ) )

@@ -50,6 +50,8 @@ extern rtems_shell_cmd_t rtems_shell_CAT_Command;
 extern rtems_shell_cmd_t rtems_shell_MSDOSFMT_Command;
 extern rtems_shell_cmd_t rtems_shell_MV_Command;
 extern rtems_shell_cmd_t rtems_shell_RM_Command;
+extern rtems_shell_cmd_t rtems_shell_LN_Command;
+extern rtems_shell_cmd_t rtems_shell_MKNOD_Command;
 extern rtems_shell_cmd_t rtems_shell_UMASK_Command;
 extern rtems_shell_cmd_t rtems_shell_MOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_UNMOUNT_Command;
@@ -285,6 +287,16 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_RM)) || \
         defined(CONFIGURE_SHELL_COMMAND_RM)
       &rtems_shell_RM_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_LN)) || \
+        defined(CONFIGURE_SHELL_COMMAND_LN)
+      &rtems_shell_LN_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_MKNOD)) || \
+        defined(CONFIGURE_SHELL_COMMAND_MKNOD)
+      &rtems_shell_MKNOD_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_UMASK)) || \

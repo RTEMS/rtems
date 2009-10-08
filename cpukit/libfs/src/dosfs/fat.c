@@ -264,6 +264,24 @@ _fat_block_write(
     return cmpltd;
 }
 
+/* _fat_block_release --
+ *     This function works around the hack that hold a bdbuf and does
+ *     not release it.
+ *
+ * PARAMETERS:
+ *     mt_entry - mount table entry
+ *
+ * RETURNS:
+ *     0 on success, or -1 if error occured and errno set appropriately
+ */
+int
+_fat_block_release(
+    rtems_filesystem_mount_table_entry_t *mt_entry)
+{
+    fat_fs_info_t *fs_info = mt_entry->fs_info;
+    return fat_buf_release(fs_info);
+}
+    
 /* fat_cluster_read --
  *     wrapper for reading a whole cluster at once
  *
@@ -504,6 +522,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
             if (FAT_GET_FSINFO_LEAD_SIGNATURE(fs_info_sector) != 
                 FAT_FSINFO_LEAD_SIGNATURE_VALUE)
             {
+                _fat_block_release(mt_entry);
                 rtems_disk_release(vol->dd);
                 rtems_set_errno_and_return_minus_one( EINVAL );
             }
@@ -513,6 +532,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
                                       FAT_USEFUL_INFO_SIZE, fs_info_sector);
                 if ( ret < 0 )
                 {
+                    _fat_block_release(mt_entry);
                     rtems_disk_release(vol->dd);
                     return -1;
                 }    
@@ -523,6 +543,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
                                                     0xFFFFFFFF);
                 if ( rc != RC_OK )
                 {
+                    _fat_block_release(mt_entry);
                     rtems_disk_release(vol->dd);
                     return rc;
                 }
@@ -537,6 +558,9 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         vol->free_cls = 0xFFFFFFFF;
         vol->next_cl = 0xFFFFFFFF;
     }
+
+    _fat_block_release(mt_entry);
+
     vol->afat_loc = vol->fat_loc + vol->fat_length * vol->afat;
 
     /* set up collection of fat-files fd */

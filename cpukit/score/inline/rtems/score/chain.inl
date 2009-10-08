@@ -32,6 +32,36 @@
  *  @{
  */
 
+/** @brief Set off chain
+ *
+ *  This function sets the next and previous fields of the @a node to NULL
+ *  indicating the @a node is not part of a chain.
+ *
+ *  @param[in] node the node set to off chain.
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Set_off_chain(
+  Chain_Node *node
+)
+{
+  node->next = node->previous = NULL;
+}
+
+/** @brief Is the Node off Chain
+ *
+ *  This function returns true if the @a node is not on a chain. A @a node is
+ *  off chain if the next and previous fields are set to NULL.
+ *
+ *  @param[in] node is the node off chain.
+ *
+ *  @return This function returns true if the @a node is off chain.
+ */
+RTEMS_INLINE_ROUTINE bool _Chain_Is_node_off_chain(
+  const Chain_Node *node
+)
+{
+  return (node->next == NULL) && (node->previous == NULL);
+}
+
 /** @brief Are Two Nodes Equal
  *
  *  This function returns true if @a left and @a right are equal,

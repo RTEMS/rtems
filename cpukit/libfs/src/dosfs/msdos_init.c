@@ -38,6 +38,7 @@ const rtems_filesystem_operations_table  msdos_ops = {
     NULL,                 /* msdos_utime */
     NULL,
     NULL,
+    NULL,
     NULL
 };
 

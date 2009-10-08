@@ -69,9 +69,6 @@ __RCSID("$NetBSD: utils.c,v 1.29 2005/10/15 18:22:18 christos Exp $");
 
 #define cp_pct(x, y)    ((y == 0) ? 0 : (int)(100.0 * (x) / (y)))
 
-/* original was MAXBSIZE which results in 64K on the stack */
-#define MAX_READ 1024
-
 int
 set_utimes(const char *file, struct stat *fs)
 {
@@ -90,7 +87,9 @@ set_utimes(const char *file, struct stat *fs)
 int
 copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *entp, int dne)
 {
-	static char buf[MAX_READ];
+#define MAX_READ max_read
+  int max_read;
+	char* buf;
 	struct stat *fs;
 	ssize_t wcount;
 	size_t wresid;
@@ -101,12 +100,23 @@ copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *en
 	char *p;
 #endif
 
+	fs = entp->fts_statp;
+
+  max_read = fs->st_blksize;
+  if (max_read < (8 * 1024))
+    max_read = 8 * 1024;
+  buf = malloc (max_read);
+  if (!buf)
+  {
+		warn("no memory");
+    return (1);
+  }
+
 	if ((from_fd = open(entp->fts_path, O_RDONLY, 0)) == -1) {
 		warn("%s", entp->fts_path);
+    (void)free(buf);
 		return (1);
 	}
-
-	fs = entp->fts_statp;
 
 	/*
 	 * If the file exists and we're interactive, verify with the user.
@@ -122,6 +132,7 @@ copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *en
 			if (vflag)
 				printf("%s not overwritten\n", to.p_path);
 			(void)close(from_fd);
+      (void)free(buf);
 			return (0);
 		} else if (iflag) {
 			(void)fprintf(stderr, "overwrite %s? %s", 
@@ -131,6 +142,7 @@ copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *en
 				ch = getchar();
 			if (checkch != 'y' && checkch != 'Y') {
 				(void)close(from_fd);
+        (void)free(buf);
 				(void)fprintf(stderr, "not overwritten\n");
 				return (1);
 			}
@@ -157,6 +169,7 @@ copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *en
 	if (to_fd == -1) {
 		warn("%s", to.p_path);
 		(void)close(from_fd);
+    (void)free(buf);
 		return (1);
 	}
 
@@ -261,6 +274,7 @@ copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *en
 			rval = 1;
 		}
 	}
+  (void)free(buf);
 	return (rval);
 }
 

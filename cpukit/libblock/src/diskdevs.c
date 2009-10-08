@@ -314,7 +314,7 @@ rtems_status_code rtems_disk_create_log(
   dd->uses = 0;
   dd->start = start;
   dd->size = size;
-  dd->block_size = pdd->block_size;
+  dd->block_size = dd->media_block_size = pdd->block_size;
   dd->ioctl = pdd->ioctl;
 
   rc = rtems_io_register_name(name, major, minor);

@@ -190,6 +190,7 @@ typedef struct rtems_bdbuf_buffer
   } avl;
 
   dev_t             dev;        /**< device number */
+
   rtems_blkdev_bnum block;      /**< block number on the device */
 
   unsigned char*    buffer;     /**< Pointer to the buffer memory area */
@@ -204,6 +205,9 @@ typedef struct rtems_bdbuf_buffer
                                   * part of. */
   volatile uint32_t  hold_timer; /**< Timer to indicate how long a buffer
                                   * has been held in the cache modified. */
+
+  int   references;              /**< Allow reference counting by owner. */
+  void* user;                    /**< User data. */
 } rtems_bdbuf_buffer;
 
 /**

@@ -464,6 +464,9 @@ _fat_block_write(rtems_filesystem_mount_table_entry_t *mt_entry,
                  uint32_t                              count,
                  const void                           *buff);
 
+int
+_fat_block_release(rtems_filesystem_mount_table_entry_t *mt_entry);
+
 ssize_t
 fat_cluster_read(rtems_filesystem_mount_table_entry_t *mt_entry,
                   uint32_t                             cln,

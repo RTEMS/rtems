@@ -42,10 +42,10 @@
 #include <rtems/bspIo.h>
 RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
   const void *base,
-  intptr_t    offset
+  uintptr_t   offset
 )
 {
-  return (void *)((intptr_t)base + offset);
+  return (void *)((uintptr_t)base + offset);
 }
 
 /** @brief Subtract Offset from Offset
@@ -62,10 +62,10 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
 
 RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
   const void *base,
-  intptr_t    offset
+  uintptr_t   offset
 )
 {
-  return (void *)((intptr_t)base - offset);
+  return (void *)((uintptr_t)base - offset);
 }
 
 /** @brief Subtract Two Offsets

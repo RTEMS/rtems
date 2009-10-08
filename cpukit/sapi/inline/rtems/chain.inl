@@ -74,6 +74,38 @@ RTEMS_INLINE_ROUTINE void rtems_chain_initialize_empty(
 }
 
 /**
+ *  @brief Set off chain
+ *
+ *  This function sets the next and previous fields of the @a node to NULL
+ *  indicating the @a node is not part of a chain.
+ *
+ *  @param[in] node the node set to off chain.
+ */
+RTEMS_INLINE_ROUTINE void rtems_chain_set_off_chain(
+  rtems_chain_node *node
+)
+{
+  _Chain_Set_off_chain( node );
+}
+
+/**
+ *  @brief Is the Node off Chain
+ *
+ *  This function returns true if the @a node is not on a chain. A @a node is
+ *  off chain if the next and previous fields are set to NULL.
+ *
+ *  @param[in] node is the node off chain.
+ *
+ *  @return This function returns true if the @a node is off chain.
+ */
+RTEMS_INLINE_ROUTINE bool rtems_chain_is_node_off_chain(
+  const rtems_chain_node *node
+)
+{
+  return _Chain_Is_node_off_chain( node );
+}
+
+/**
  *  @brief Is the Chain Node Pointer NULL
  *
  *  This function returns true if the_node is NULL and false otherwise.
@@ -169,6 +201,22 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_next(
 )
 {
   return _Chain_Next( the_node );
+}
+
+/**
+ *  @brief Return pointer the previous node from this node
+ *
+ *  This function returns a pointer to the previous node on this chain.
+ *
+ *  @param[in] the_node is the node to be operated upon.
+ *
+ *  @return This method returns the previous node on the chain.
+ */
+RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_previous(
+  rtems_chain_node *the_node
+)
+{
+  return _Chain_Previous( the_node );
 }
 
 /**

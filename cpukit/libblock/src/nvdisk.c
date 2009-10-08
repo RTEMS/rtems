@@ -573,38 +573,26 @@ static int
 rtems_nvdisk_read (rtems_nvdisk* nvd, rtems_blkdev_request* req)
 {
   rtems_blkdev_sg_buffer* sg = req->bufs;
-  uint32_t                b;
-  int32_t                 remains;
+  uint32_t                bufs;
   int                     ret = 0;
 
 #if RTEMS_NVDISK_TRACE
   rtems_nvdisk_info (nvd, "read: blocks=%d", req->bufnum);
 #endif
 
-  remains = req->bufnum * nvd->block_size;
-  
-  for (b = 0; b < req->bufnum; b++, sg++)
+  for (bufs = 0; (ret == 0) && (bufs < req->bufnum); bufs++, sg++)
   {
-    uint32_t length = sg->length;
-
-    if (remains <= 0)
-      rtems_nvdisk_error ("nvdisk-read: remains size <= 0");
-      
-    if (sg->length != nvd->block_size)
+    uint8_t* data;
+    uint32_t nvb;
+    uint32_t b;
+    nvb = sg->length / nvd->block_size;
+    data = sg->buffer;
+    for (b = 0; b < nvb; b++, data += nvd->block_size)
     {
-      rtems_nvdisk_error ("nvdisk-read: length is not the block size: "\
-                         "bd:%d nvd:%d", sg->length, nvd->block_size);
-
-      if (length > nvd->block_size)
-        length = nvd->block_size;
+      ret = rtems_nvdisk_read_block (nvd, sg->block + b, data);
+      if (ret)
+        break;
     }
-
-    ret = rtems_nvdisk_read_block (nvd, sg->block, sg->buffer);
-
-    if (ret)
-      break;
-
-    remains -= length;
   }
 
   req->req_done (req->done_arg,
@@ -625,25 +613,26 @@ static int
 rtems_nvdisk_write (rtems_nvdisk* nvd, rtems_blkdev_request* req)
 {
   rtems_blkdev_sg_buffer* sg = req->bufs;
-  uint32_t                b;
+  uint32_t                bufs;
   int                     ret = 0;
 
 #if RTEMS_NVDISK_TRACE
   rtems_nvdisk_info (nvd, "write: blocks=%d", req->bufnum);
 #endif
 
-  for (b = 0; b < req->bufnum; b++, sg++)
+  for (bufs = 0; (ret == 0) && (bufs < req->bufnum); bufs++, sg++)
   {
-    if (sg->length != nvd->block_size)
+    uint8_t* data;
+    uint32_t nvb;
+    uint32_t b;
+    nvb = sg->length / nvd->block_size;
+    data = sg->buffer;
+    for (b = 0; b < nvb; b++, data += nvd->block_size)
     {
-      rtems_nvdisk_error ("nvdisk-write: length is not the block size: " \
-                         "bd:%d nvd:%d", sg->length, nvd->block_size);
+      ret = rtems_nvdisk_write_block (nvd, sg->block + b, data);
+      if (ret)
+        break;
     }
-
-    ret = rtems_nvdisk_write_block (nvd, sg->block, sg->buffer);
-
-    if (ret)
-      break;
   }
 
   req->req_done (req->done_arg,
@@ -716,6 +705,7 @@ rtems_nvdisk_ioctl (dev_t dev, uint32_t req, void* argp)
     errno = EIO;
   else
   {
+    errno = 0;
     switch (req)
     {
       case RTEMS_BLKIO_REQUEST:
@@ -744,7 +734,7 @@ rtems_nvdisk_ioctl (dev_t dev, uint32_t req, void* argp)
         break;
         
       default:
-        return rtems_blkdev_ioctl (dev, req, argp);
+        rtems_blkdev_ioctl (dev, req, argp);
         break;
     }
 

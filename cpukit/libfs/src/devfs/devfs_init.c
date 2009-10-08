@@ -33,6 +33,7 @@ rtems_filesystem_operations_table devFS_ops =
     NULL,
     NULL,
     NULL,
+    NULL,
     NULL
 };
 

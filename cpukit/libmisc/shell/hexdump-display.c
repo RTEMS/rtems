@@ -365,8 +365,9 @@ next(rtems_shell_hexdump_globals* globals, char **argv)
           errno = ENOMEM;
           err(exit_jump, 1, "file name allocation");
         }
+        memset (hdstdin, 0, sizeof(FILE));
       }
-			if (!(hdstdin = fopen(*_argv, "r"))) {
+			if (!(hdstdin = freopen(*_argv, "r", hdstdin))) {
 				warn("%s", *_argv);
 				exitval = 1;
 				++_argv;
@@ -399,22 +400,23 @@ doskip(rtems_shell_hexdump_globals* globals, const char *fname, int statok)
 	if (statok) {
 		if (fstat(fileno(hdstdin), &sb))
 			err(exit_jump, 1, "%s", fname);
-		if (S_ISREG(sb.st_mode) && skip >= sb.st_size) {
+    /* can seek block devices on RTEMS */
+		if (0 && S_ISREG(sb.st_mode) && skip >= sb.st_size) {
 			address += sb.st_size;
 			skip -= sb.st_size;
 			return;
 		}
-	}
-	if (S_ISREG(sb.st_mode)) {
-		if (fseeko(hdstdin, skip, SEEK_SET))
-			err(exit_jump, 1, "%s", fname);
-		address += skip;
-		skip = 0;
-	} else {
-		for (cnt = 0; cnt < skip; ++cnt)
-			if (getchar() == EOF)
-				break;
-		address += cnt;
-		skip -= cnt;
+		if (1 || S_ISREG(sb.st_mode)) {
+			if (fseeko(hdstdin, skip, SEEK_SET))
+				err(exit_jump, 1, "%s", fname);
+			address += skip;
+			skip = 0;
+		} else {
+			for (cnt = 0; cnt < skip; ++cnt)
+				if (getchar() == EOF)
+					break;
+			address += cnt;
+			skip -= cnt;
+		}
 	}
 }

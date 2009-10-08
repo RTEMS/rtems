@@ -263,6 +263,7 @@ rtems_blkdev_ioctl(dev_t dev, uint32_t req, void *argp)
 {
     rtems_disk_device *dd;
     size_t            *arg_size = argp;
+    int                rc = 0;
 
     dd = rtems_disk_obtain(dev);
     if (dd == NULL)
@@ -291,11 +292,11 @@ rtems_blkdev_ioctl(dev_t dev, uint32_t req, void *argp)
 
         default:
             errno = EINVAL;
-            return -1;
+            rc = -1;
             break;
     }
     
     rtems_disk_release(dd);
 
-    return 0;
+    return rc;
 }

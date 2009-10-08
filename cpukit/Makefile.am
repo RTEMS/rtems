@@ -55,8 +55,9 @@ include_HEADERS += libnetworking/memory.h
 
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h \
     libcsupport/include/sys/filio.h libcsupport/include/sys/ioctl.h \
-    libcsupport/include/sys/sockio.h libcsupport/include/sys/ttycom.h \
-    libcsupport/include/sys/termios.h libcsupport/include/sys/utsname.h
+    libcsupport/include/sys/statvfs.h libcsupport/include/sys/sockio.h \
+    libcsupport/include/sys/ttycom.h libcsupport/include/sys/termios.h \
+    libcsupport/include/sys/utsname.h
 
 include_sys_HEADERS += libnetworking/sys/uio.h
 include_sys_HEADERS += include/sys/priority.h

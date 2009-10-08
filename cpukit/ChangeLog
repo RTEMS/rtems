@@ -1,3 +1,50 @@
+2009-10-08	Chris Johns <chrisj@rtems.org>
+
+	* Makefile.am, preinstall.am: Added statvfs.h.
+	* libcsupport/Makefile.am: Add statvfs.c.
+	* libcsupport/include/sys/statvfs.h, libcsupport/src/statvfs.c:
+	New.
+	* libcsupport/include/rtems/libio.h: Add a file system handler for
+	the statvfs call.
+	* libfs/src/devfs/devfs_init.c, libfs/src/dosfs/msdos_init.c,
+	libfs/src/imfs/imfs_init.c, libfs/src/nfsclient/src/nfs.c: Set the
+	statvfs handler to NULL.
+	* include/rtems/fs.h: Add a second node access field for the RFS
+	file system to hold a directory offset while the existing field
+	holds the inode number. This save a rescan of the directory when
+	working with directories.
+	* libblock/include/rtems/bdbuf.h: Added references and user fields
+	to the buffer descriptor.
+	* libblock/src/bdbuf.c: Added dynamic buffer support for different
+	block sizes. Fixed a number of bugs.
+	* libblock/src/blkdev.c: Release the disk device on an error.
+	* libblock/src/diskdevs.c: Set the block size to the media block
+	size during initialisation of the disk device.
+	* libblock/src/flashdisk.c, libblock/src/nvdisk.c,
+	libblock/src/ramdisk.c: Updated the drivers to handle variable
+	block sizes.
+	* libfs/src/dosfs/fat.c, libfs/src/dosfs/fat.h: Release any
+	buffers when an error occurs. The FAT buffer layer hangs onto a
+	single buffer while mounted. This should be fixed.
+	* sapi/inline/rtems/chain.inl: Added rtems_chain_set_off_chain,
+	rtems_chain_is_node_off_chain, and rtems_chain_previous.
+	* score/inline/rtems/score/chain.inl: Added _Chain_Set_off_chain,
+	and _Chain_Is_node_off_chain.
+	* libmisc/shell/main_ln.c, libmisc/shell/main_mknod.c,
+	libmisc/shell/mknod-pack_dev.c, libmisc/shell/mknod-pack_dev.h:
+	New shell commands.
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Added ln and
+	mknod commands.
+	* libmisc/shell/hexdump-display.c: Fixed the reopen bug which
+	showed up as a free with a bad pointer.
+	* libmisc/shell/main_mount.c: List the user adding file system
+	when listing the available file systems to mount.
+	* libmisc/shell/utils-cp.c: Remove the fixed static copy buffer
+	and use a large dynamic buffer.
+	* score/inline/rtems/score/address.inl, score/src/coremsgsubmit.c,
+	score/src/objectallocate.c, score/src/objectfree.c: Remove
+	warnings.
+
 2009-10-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/src/ioregisterdriver.c: Reowork so this is a context switch

@@ -2456,6 +2456,7 @@ struct _rtems_filesystem_operations_table nfs_fs_ops = {
 		nfs_eval_link,		/* OPTIONAL; may be NULL */
 		nfs_symlink,		/* OPTIONAL; may be NULL */
 		nfs_readlink,		/* OPTIONAL; may be NULL */
+		NULL				/* OPTIONAL; may be NULL */
 };
 
 /*****************************************

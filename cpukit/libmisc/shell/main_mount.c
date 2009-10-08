@@ -128,6 +128,14 @@ int rtems_shell_main_mount(
         for (a = rtems_shell_Mount_filesystems; *a; a++)
           if (*a)
             fprintf (stderr, "%s ", (*a)->name);
+        if (!rtems_chain_is_empty(&filesystems)) {
+          rtems_chain_node* node = filesystems.first;
+          while (!rtems_chain_is_tail (&filesystems, node)) {
+            rtems_shell_filesystems_t* f = (rtems_shell_filesystems_t*)node;
+            fprintf (stderr, "%s ", f->name);
+            node = node->next;
+          }
+        }
         fprintf (stderr, "\n");
         return 1;
       } else {

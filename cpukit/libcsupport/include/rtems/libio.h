@@ -28,6 +28,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
+#include <sys/statvfs.h>
 
 /*
  *  Define data types which must be constructed using forward references.
@@ -250,6 +251,11 @@ typedef int (*rtems_filesystem_readlink_t)(
  size_t                            bufsize
 );
 
+typedef int (*rtems_filesystem_statvfs_t)(
+ rtems_filesystem_location_info_t  *loc,     /* IN  */
+ struct statvfs                    *buf      /* OUT */
+);
+
 /*
  * operations table that must be defined for every file system.
  */
@@ -274,6 +280,7 @@ struct _rtems_filesystem_operations_table {
     rtems_filesystem_evaluate_link_t eval_link_h;
     rtems_filesystem_symlink_t       symlink_h;
     rtems_filesystem_readlink_t      readlink_h;
+    rtems_filesystem_statvfs_t       statvfs_h;
 };
 
 #if 0

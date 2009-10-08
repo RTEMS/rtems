@@ -41,7 +41,7 @@
 
 /* Internal RAM disk descriptor */
 struct ramdisk {
-  uint32_t block_size; /* RAM disk block size */
+  uint32_t block_size; /* RAM disk block size, the media size */
   rtems_blkdev_bnum block_num; /* Number of blocks on this RAM disk */
   void *area; /* RAM disk memory area */
   bool initialized; /* RAM disk is initialized */
@@ -94,28 +94,23 @@ rtems_ramdisk_printf (struct ramdisk *rd, const char *format, ...)
 static int
 ramdisk_read(struct ramdisk *rd, rtems_blkdev_request *req)
 {
-    char *from;
+    uint8_t *from = rd->area;
     uint32_t   i;
     rtems_blkdev_sg_buffer *sg;
-    uint32_t   remains;
 
 #if RTEMS_RAMDISK_TRACE
-    rtems_ramdisk_printf (rd, "ramdisk read: start=%d, blocks=%d remains=%d",
-                          req->bufs[0].block, req->bufnum,
-                          rd->block_size * req->count);
+    rtems_ramdisk_printf (rd, "ramdisk read: start=%d, blocks=%d",
+                          req->bufs[0].block, req->bufnum);
 #endif
 
-    remains = rd->block_size * req->bufnum;
-    sg = req->bufs;
-    for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
+    for (i = 0, sg = req->bufs; i < req->bufnum; i++, sg++)
     {
-        uint32_t count = sg->length;
-        from = ((char *)rd->area + (sg->block * rd->block_size));
-        if (count > remains)
-            count = remains;
-        memcpy(sg->buffer, from, count);
-        remains -= count;
-        from += count;
+#if RTEMS_RAMDISK_TRACE
+        rtems_ramdisk_printf (rd, "ramdisk read: buf=%d block=%d length=%d off=%d addr=%p",
+                              i, sg->block, sg->length, sg->block * rd->block_size,
+                              from + (sg->block * rd->block_size));
+#endif
+        memcpy(sg->buffer, from + (sg->block * rd->block_size), sg->length);
     }
     req->req_done(req->done_arg, RTEMS_SUCCESSFUL, 0);
     return 0;
@@ -135,27 +130,22 @@ ramdisk_read(struct ramdisk *rd, rtems_blkdev_request *req)
 static int
 ramdisk_write(struct ramdisk *rd, rtems_blkdev_request *req)
 {
-    char *to;
+    uint8_t *to = rd->area;
     uint32_t   i;
     rtems_blkdev_sg_buffer *sg;
-    uint32_t   remains;
 
 #if RTEMS_RAMDISK_TRACE
-    rtems_ramdisk_printf (rd, "ramdisk write: start=%d, blocks=%d remains=%d",
-                          req->bufs[0].block, req->bufnum,
-                          rd->block_size * req->bufnum);
+    rtems_ramdisk_printf (rd, "ramdisk write: start=%d, blocks=%d",
+                          req->bufs[0].block, req->bufnum);
 #endif
-    remains = rd->block_size * req->bufnum;
-    sg = req->bufs;
-    for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
+    for (i = 0, sg = req->bufs; i < req->bufnum; i++, sg++)
     {
-        uint32_t count = sg->length;
-        to = ((char *)rd->area + (sg->block * rd->block_size));
-        if (count > remains)
-            count = remains;
-        memcpy(to, sg->buffer, count);
-        remains -= count;
-        to += count;
+#if RTEMS_RAMDISK_TRACE
+        rtems_ramdisk_printf (rd, "ramdisk write: buf=%d block=%d length=%d off=%d addr=%p",
+                              i, sg->block, sg->length, sg->block * rd->block_size,
+                              to + (sg->block * rd->block_size));
+#endif
+        memcpy(to + (sg->block * rd->block_size), sg->buffer, sg->length);
     }
     req->req_done(req->done_arg, RTEMS_SUCCESSFUL, 0);
     return 0;

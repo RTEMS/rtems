@@ -46,6 +46,7 @@ typedef struct _rtems_filesystem_operations_table
 struct rtems_filesystem_location_info_tt
 {
    void                                    *node_access;
+   void                                    *node_access_2;
    const rtems_filesystem_file_handlers_r  *handlers;
    const rtems_filesystem_operations_table *ops;
    rtems_filesystem_mount_table_entry_t    *mt_entry;
