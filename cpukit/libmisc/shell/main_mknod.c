@@ -52,7 +52,7 @@ __RCSID("$NetBSD: mknod.c,v 1.39 2009/02/13 01:37:23 lukem Exp $");
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/param.h>
-#if !HAVE_NBTOOL_CONFIG_H
+#if !HAVE_NBTOOL_CONFIG_H && defined(KERN_DRIVERS)
 #include <sys/sysctl.h>
 #endif
 
