@@ -277,9 +277,9 @@ extern uint8 __IPSBAR[];
 #define MCF5282_SCM_MPR_MPR(x)				(((x)&0x0F))
 
 #define MCF5282_SCM_PACR_LOCK1				(0x80)
-#define MCF5282_SCM_PACR_ACCESSCTRL1		(((x)&0x07)<<4)
+#define MCF5282_SCM_PACR_ACCESSCTRL1(x)		(((x)&0x07)<<4)
 #define MCF5282_SCM_PACR_LOCK0				(0x08)
-#define MCF5282_SCM_PACR_ACCESSCTRL0		(((x)&0x07))
+#define MCF5282_SCM_PACR_ACCESSCTRL0(x)		(((x)&0x07))
 #define MCF5282_SCM_PACR_RW_NA				(0x0)
 #define MCF5282_SCM_PACR_R_NA				(0x1)
 #define MCF5282_SCM_PACR_R_R				(0x2)
@@ -288,7 +288,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_SCM_PACR_NA_NA				(0x7)
 
 #define MCF5282_SCM_GPACR_LOCK				(0x80)
-#define MCF5282_SCM_GPACR_ACCESSCTRL		(((x)&0x0F))
+#define MCF5282_SCM_GPACR_ACCESSCTRL(x)		(((x)&0x0F))
 #define MCF5282_SCM_GPACR_ACCESSCTRL_RW_NA		(0x0)
 #define MCF5282_SCM_GPACR_ACCESSCTRL_R_NA		(0x1)
 #define MCF5282_SCM_GPACR_ACCESSCTRL_R_R		(0x2)
@@ -396,9 +396,9 @@ extern uint8 __IPSBAR[];
 #define MCF5282_CS6_CSMR	(*(vuint32 *)(&__IPSBAR[0x00CC]))
 #define MCF5282_CS6_CSCR	(*(vuint16 *)(&__IPSBAR[0x00D2]))
 
-#define MCF5282_CS_CSAR(x)	(*(vuint16 *)(&__IPSBAR[0x0080+(x*0x0C)]))
-#define MCF5282_CS_CSMR(x)	(*(vuint32 *)(&__IPSBAR[0x0084+(x*0x0C)]))
-#define MCF5282_CS_CSCR(x)	(*(vuint16 *)(&__IPSBAR[0x008A+(x*0x0C)]))
+#define MCF5282_CS_CSAR(x)	(*(vuint16 *)(&__IPSBAR[0x0080+((x)*0x0C)]))
+#define MCF5282_CS_CSMR(x)	(*(vuint32 *)(&__IPSBAR[0x0084+((x)*0x0C)]))
+#define MCF5282_CS_CSCR(x)	(*(vuint16 *)(&__IPSBAR[0x008A+((x)*0x0C)]))
 
 /* Bit level definitions and macros */
 #define MCF5282_CS_CSAR_BA(a)				(uint16)(((a)&0xFFFF0000)>>16)
@@ -471,11 +471,11 @@ extern uint8 __IPSBAR[];
 #define MCF5282_DMA3_BCR		(*(vuint32  *)(&__IPSBAR[0x01CC]))
 #define MCF5282_DMA3_DSR		(*(vuint8   *)(&__IPSBAR[0x01D0]))
 
-#define MCF5282_DMA_SAR(x)		(*(vuint32  *)(&__IPSBAR[0x0100+(x*0x40)]))		
-#define MCF5282_DMA_DAR(x)		(*(vuint32  *)(&__IPSBAR[0x0104+(x*0x40)]))		
-#define MCF5282_DMA_DCR(x)		(*(vuint32  *)(&__IPSBAR[0x0108+(x*0x40)]))		
-#define MCF5282_DMA_BCR(x)		(*(vuint32  *)(&__IPSBAR[0x010C+(x*0x40)]))		
-#define MCF5282_DMA_DSR(x)		(*(vuint8   *)(&__IPSBAR[0x0110+(x*0x40)]))		
+#define MCF5282_DMA_SAR(x)		(*(vuint32  *)(&__IPSBAR[0x0100+((x)*0x40)]))		
+#define MCF5282_DMA_DAR(x)		(*(vuint32  *)(&__IPSBAR[0x0104+((x)*0x40)]))		
+#define MCF5282_DMA_DCR(x)		(*(vuint32  *)(&__IPSBAR[0x0108+((x)*0x40)]))		
+#define MCF5282_DMA_BCR(x)		(*(vuint32  *)(&__IPSBAR[0x010C+((x)*0x40)]))		
+#define MCF5282_DMA_DSR(x)		(*(vuint8   *)(&__IPSBAR[0x0110+((x)*0x40)]))		
 
 /* Bit level definitions and macros */
 #define MCF5282_DMA_DCR_INT					(0x80000000)
@@ -564,21 +564,21 @@ extern uint8 __IPSBAR[];
 #define MCF5282_UART2_UOP1		(*(vuint8  *)(&__IPSBAR[0x02B8]))
 #define MCF5282_UART2_UOP0		(*(vuint8  *)(&__IPSBAR[0x02BC]))
 
-#define MCF5282_UART_UMR(x)		(*(vuint8  *)(&__IPSBAR[0x0200+(x*0x40)]))
-#define MCF5282_UART_USR(x)		(*(vuint8  *)(&__IPSBAR[0x0204+(x*0x40)]))
-#define MCF5282_UART_UCSR(x)	(*(vuint8  *)(&__IPSBAR[0x0204+(x*0x40)]))
-#define MCF5282_UART_UCR(x)		(*(vuint8  *)(&__IPSBAR[0x0208+(x*0x40)]))
-#define MCF5282_UART_URB(x)		(*(vuint8  *)(&__IPSBAR[0x20C+(x*0x40)]))
-#define MCF5282_UART_UTB(x)		(*(vuint8  *)(&__IPSBAR[0x020C+(x*0x40)]))
-#define MCF5282_UART_UIPCR(x)	(*(vuint8  *)(&__IPSBAR[0x0210+(x*0x40)]))
-#define MCF5282_UART_UACR(x)	(*(vuint8  *)(&__IPSBAR[0x0210+(x*0x40)]))
-#define MCF5282_UART_UISR(x)	(*(vuint8  *)(&__IPSBAR[0x0214+(x*0x40)]))
-#define MCF5282_UART_UIMR(x)	(*(vuint8  *)(&__IPSBAR[0x0214+(x*0x40)]))
-#define MCF5282_UART_UBG1(x)	(*(vuint8  *)(&__IPSBAR[0x0218+(x*0x40)]))
-#define MCF5282_UART_UBG2(x)	(*(vuint8  *)(&__IPSBAR[0x021C+(x*0x40)]))
-#define MCF5282_UART_UIP(x)		(*(vuint8  *)(&__IPSBAR[0x0234+(x*0x40)]))
-#define MCF5282_UART_UOP1(x)	(*(vuint8  *)(&__IPSBAR[0x0238+(x*0x40)]))
-#define MCF5282_UART_UOP0(x)	(*(vuint8  *)(&__IPSBAR[0x023C+(x*0x40)]))
+#define MCF5282_UART_UMR(x)		(*(vuint8  *)(&__IPSBAR[0x0200+((x)*0x40)]))
+#define MCF5282_UART_USR(x)		(*(vuint8  *)(&__IPSBAR[0x0204+((x)*0x40)]))
+#define MCF5282_UART_UCSR(x)	(*(vuint8  *)(&__IPSBAR[0x0204+((x)*0x40)]))
+#define MCF5282_UART_UCR(x)		(*(vuint8  *)(&__IPSBAR[0x0208+((x)*0x40)]))
+#define MCF5282_UART_URB(x)		(*(vuint8  *)(&__IPSBAR[0x020C+((x)*0x40)]))
+#define MCF5282_UART_UTB(x)		(*(vuint8  *)(&__IPSBAR[0x020C+((x)*0x40)]))
+#define MCF5282_UART_UIPCR(x)	(*(vuint8  *)(&__IPSBAR[0x0210+((x)*0x40)]))
+#define MCF5282_UART_UACR(x)	(*(vuint8  *)(&__IPSBAR[0x0210+((x)*0x40)]))
+#define MCF5282_UART_UISR(x)	(*(vuint8  *)(&__IPSBAR[0x0214+((x)*0x40)]))
+#define MCF5282_UART_UIMR(x)	(*(vuint8  *)(&__IPSBAR[0x0214+((x)*0x40)]))
+#define MCF5282_UART_UBG1(x)	(*(vuint8  *)(&__IPSBAR[0x0218+((x)*0x40)]))
+#define MCF5282_UART_UBG2(x)	(*(vuint8  *)(&__IPSBAR[0x021C+((x)*0x40)]))
+#define MCF5282_UART_UIP(x)		(*(vuint8  *)(&__IPSBAR[0x0234+((x)*0x40)]))
+#define MCF5282_UART_UOP1(x)	(*(vuint8  *)(&__IPSBAR[0x0238+((x)*0x40)]))
+#define MCF5282_UART_UOP0(x)	(*(vuint8  *)(&__IPSBAR[0x023C+((x)*0x40)]))
 
 /* Bit level definitions and macros */
 #define MCF5282_UART_UMR1_RXRTS				(0x80)
@@ -754,7 +754,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_QSPI_QCR_BITSE				(0x4000)
 #define MCF5282_QSPI_QCR_DT					(0x2000)
 #define MCF5282_QSPI_QCR_DSCK				(0x1000)
-#define MCF5282_QSPI_QCR_CS					(((x)&0x000F)<<8)
+#define MCF5282_QSPI_QCR_CS(x)				(((x)&0x000F)<<8)
 
 /*********************************************************************
 *
@@ -791,12 +791,12 @@ extern uint8 __IPSBAR[];
 #define MCF5282_TIMER3_DTCR		(*(vuint32 *)(&__IPSBAR[0x04C8]))
 #define MCF5282_TIMER3_DTCN		(*(vuint32 *)(&__IPSBAR[0x04CC]))
 
-#define MCF5282_TIMER_DTMR(x)	(*(vuint16 *)(&__IPSBAR[0x0400+(x*0x40)]))
-#define MCF5282_TIMER_DTXMR(x)	(*(vuint8  *)(&__IPSBAR[0x0402+(x*0x40)])) 
-#define MCF5282_TIMER_DTER(x)	(*(vuint8  *)(&__IPSBAR[0x0403+(x*0x40)]))
-#define MCF5282_TIMER_DTRR(x)	(*(vuint32 *)(&__IPSBAR[0x0404+(x*0x40)]))
-#define MCF5282_TIMER_DTCR(x)	(*(vuint32 *)(&__IPSBAR[0x0408+(x*0x40)]))
-#define MCF5282_TIMER_DTCN(x)	(*(vuint32 *)(&__IPSBAR[0x040C+(x*0x40)]))
+#define MCF5282_TIMER_DTMR(x)	(*(vuint16 *)(&__IPSBAR[0x0400+((x)*0x40)]))
+#define MCF5282_TIMER_DTXMR(x)	(*(vuint8  *)(&__IPSBAR[0x0402+((x)*0x40)])) 
+#define MCF5282_TIMER_DTER(x)	(*(vuint8  *)(&__IPSBAR[0x0403+((x)*0x40)]))
+#define MCF5282_TIMER_DTRR(x)	(*(vuint32 *)(&__IPSBAR[0x0404+((x)*0x40)]))
+#define MCF5282_TIMER_DTCR(x)	(*(vuint32 *)(&__IPSBAR[0x0408+((x)*0x40)]))
+#define MCF5282_TIMER_DTCN(x)	(*(vuint32 *)(&__IPSBAR[0x040C+((x)*0x40)]))
 
 /* Bit level definitions and macros */
 #define MCF5282_TIMER_DTMR_PS(a)			(((a)&0x00FF)<<8)
@@ -1487,7 +1487,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_GPIO_PORTx2					(0x04)
 #define MCF5282_GPIO_PORTx1					(0x02)
 #define MCF5282_GPIO_PORTx0					(0x01)
-#define MCF5282_GPIO_PORTx(x)				(0x01<<x)
+#define MCF5282_GPIO_PORTx(x)				(0x01<<(x))
 
 #define MCF5282_GPIO_DDRx7					(0x80)
 #define MCF5282_GPIO_DDRx6					(0x40)
@@ -1497,7 +1497,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_GPIO_DDRx2					(0x04)
 #define MCF5282_GPIO_DDRx1					(0x02)
 #define MCF5282_GPIO_DDRx0					(0x01)
-#define MCF5282_GPIO_DDRx(x)				(0x01<<x)
+#define MCF5282_GPIO_DDRx(x)				(0x01<<(x))
 
 #define MCF5282_GPIO_PORTxP7				(0x80)
 #define MCF5282_GPIO_PORTxP6				(0x40)
@@ -1507,7 +1507,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_GPIO_PORTxP2				(0x04)
 #define MCF5282_GPIO_PORTxP1				(0x02)
 #define MCF5282_GPIO_PORTxP0				(0x01)
-#define MCF5282_GPIO_PORTxP(x)				(0x01<<x)
+#define MCF5282_GPIO_PORTxP(x)				(0x01<<(x))
 
 #define MCF5282_GPIO_SETx7					(0x80)
 #define MCF5282_GPIO_SETx6					(0x40)
@@ -1517,7 +1517,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_GPIO_SETx2					(0x04)
 #define MCF5282_GPIO_SETx1					(0x02)
 #define MCF5282_GPIO_SETx0					(0x01)
-#define MCF5282_GPIO_SETx(x)				(0x01<<x)
+#define MCF5282_GPIO_SETx(x)				(0x01<<(x))
 
 #define MCF5282_GPIO_CLRx7					(0x80)
 #define MCF5282_GPIO_CLRx6					(0x40)
@@ -1527,7 +1527,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_GPIO_CLRx2					(0x04)
 #define MCF5282_GPIO_CLRx1					(0x02)
 #define MCF5282_GPIO_CLRx0					(0x01)
-#define MCF5282_GPIO_CLRx(x)				(0x01<<x)
+#define MCF5282_GPIO_CLRx(x)				(0x01<<(x))
 
 #define MCF5282_GPIO_PBCDPAR_PBPA			(0x80)
 #define MCF5282_GPIO_PBCDPAR_PCDPA			(0x40)
@@ -1553,7 +1553,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_GPIO_PJPAR_PJPA2			(0x04)
 #define MCF5282_GPIO_PJPAR_PJPA1			(0x02)
 #define MCF5282_GPIO_PJPAR_PJPA0			(0x01)
-#define MCF5282_GPIO_PJPAR_PJPA(x)			(0x01<<x)
+#define MCF5282_GPIO_PJPAR_PJPA(x)			(0x01<<(x))
 
 #define MCF5282_GPIO_PSDPAR_PSDPA			(0x80)
 
@@ -1574,7 +1574,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_GPIO_PQSPAR_PQSPA2			(0x04)
 #define MCF5282_GPIO_PQSPAR_PQSPA1			(0x02)
 #define MCF5282_GPIO_PQSPAR_PQSPA0			(0x01)
-#define MCF5282_GPIO_PQSPAR_PQSPA(x)		(0x01<<x)
+#define MCF5282_GPIO_PQSPAR_PQSPA(x)		(0x01<<(x))
 
 #define MCF5282_GPIO_PTCPAR_PTCPA3(x)		(((x)&0x3)<<6)
 #define MCF5282_GPIO_PTCPAR_PTCPA2(x)		(((x)&0x3)<<4)
@@ -1736,7 +1736,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_EPORT_EPDDR_EPDD3			(0x08)
 #define MCF5282_EPORT_EPDDR_EPDD2			(0x04)
 #define MCF5282_EPORT_EPDDR_EPDD1			(0x02)
-#define MCF5282_EPORT_EPDDR_EPDD(x)			(0x01<<x)
+#define MCF5282_EPORT_EPDDR_EPDD(x)			(0x01<<(x))
 
 #define MCF5282_EPORT_EPIER_EPIE7			(0x80)
 #define MCF5282_EPORT_EPIER_EPIE6			(0x40)
@@ -1745,7 +1745,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_EPORT_EPIER_EPIE3			(0x08)
 #define MCF5282_EPORT_EPIER_EPIE2			(0x04)
 #define MCF5282_EPORT_EPIER_EPIE1			(0x02)
-#define MCF5282_EPORT_EPIER_EPIE(x)			(0x01<<x)
+#define MCF5282_EPORT_EPIER_EPIE(x)			(0x01<<(x))
 
 #define MCF5282_EPORT_EPDR_EPD7				(0x80)
 #define MCF5282_EPORT_EPDR_EPD6				(0x40)
@@ -1754,7 +1754,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_EPORT_EPDR_EPD3				(0x08)
 #define MCF5282_EPORT_EPDR_EPD2				(0x04)
 #define MCF5282_EPORT_EPDR_EPD1				(0x02)
-#define MCF5282_EPORT_EPDR_EPD(x)			(0x01<<x)
+#define MCF5282_EPORT_EPDR_EPD(x)			(0x01<<(x))
 
 #define MCF5282_EPORT_EPPDR_EPPD7			(0x80)
 #define MCF5282_EPORT_EPPDR_EPPD6			(0x40)
@@ -1763,7 +1763,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_EPORT_EPPDR_EPPD3			(0x08)
 #define MCF5282_EPORT_EPPDR_EPPD2			(0x04)
 #define MCF5282_EPORT_EPPDR_EPPD1			(0x02)
-#define MCF5282_EPORT_EPPDR_EPPD(x)			(0x01<<x)
+#define MCF5282_EPORT_EPPDR_EPPD(x)			(0x01<<(x))
 
 #define MCF5282_EPORT_EPFR_EPF7				(0x80)
 #define MCF5282_EPORT_EPFR_EPF6				(0x40)
@@ -1772,7 +1772,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_EPORT_EPFR_EPF3				(0x08)
 #define MCF5282_EPORT_EPFR_EPF2				(0x04)
 #define MCF5282_EPORT_EPFR_EPF1				(0x02)
-#define MCF5282_EPORT_EPFR_EPF(x)			(0x01<<x)
+#define MCF5282_EPORT_EPFR_EPF(x)			(0x01<<(x))
 
 /*********************************************************************
 *
@@ -1818,9 +1818,9 @@ extern uint8 __IPSBAR[];
 #define MCF5282_PIT3_PMR		(*(vuint16 *)(&__IPSBAR[0x180002]))
 #define MCF5282_PIT3_PCNTR		(*(vuint16 *)(&__IPSBAR[0x180004]))
 
-#define MCF5282_PIT_PCSR(x)		(*(vuint16 *)(&__IPSBAR[0x150000+(0x1000*x)]))
-#define MCF5282_PIT_PMR(x)		(*(vuint16 *)(&__IPSBAR[0x150002+(0x1000*x)]))
-#define MCF5282_PIT_PCNTR(x)	(*(vuint16 *)(&__IPSBAR[0x150004+(0x1000*x)]))
+#define MCF5282_PIT_PCSR(x)		(*(vuint16 *)(&__IPSBAR[0x150000+(0x1000*(x))]))
+#define MCF5282_PIT_PMR(x)		(*(vuint16 *)(&__IPSBAR[0x150002+(0x1000*(x))]))
+#define MCF5282_PIT_PCNTR(x)	(*(vuint16 *)(&__IPSBAR[0x150004+(0x1000*(x))]))
 
 /* Bit level definitions and macros */
 #define MCF5282_PIT_PCSR_PRE(x)				(((x)&0x000F)<<8)
@@ -1849,10 +1849,10 @@ extern uint8 __IPSBAR[];
 #define MCF5282_QADC_QACR2		(*(vuint16 *)(&__IPSBAR[0x19000E]))
 #define MCF5282_QADC_QASR0		(*(vuint16 *)(&__IPSBAR[0x190010]))
 #define MCF5282_QADC_QASR1		(*(vuint16 *)(&__IPSBAR[0x190012]))
-#define MCF5282_QADC_CCW(x)		(*(vuint16 *)(&__IPSBAR[0x190200+(x*2)]))
-#define MCF5282_QADC_RJURR(x)	(*(vuint16 *)(&__IPSBAR[0x190280+(x*2)]))
-#define MCF5282_QADC_LJSRR(x)	(*(vuint16 *)(&__IPSBAR[0x190300+(x*2)]))
-#define MCF5282_QADC_LJURR(x)	(*(vuint16 *)(&__IPSBAR[0x190380+(x*2)]))
+#define MCF5282_QADC_CCW(x)		(*(vuint16 *)(&__IPSBAR[0x190200+((x)*2)]))
+#define MCF5282_QADC_RJURR(x)	(*(vuint16 *)(&__IPSBAR[0x190280+((x)*2)]))
+#define MCF5282_QADC_LJSRR(x)	(*(vuint16 *)(&__IPSBAR[0x190300+((x)*2)]))
+#define MCF5282_QADC_LJURR(x)	(*(vuint16 *)(&__IPSBAR[0x190380+((x)*2)]))
 
 /* Bit level definitions and macros */
 #define MCF5282_QADC_QADCMCR_QSTOP			(0x8000)
@@ -2250,24 +2250,24 @@ extern uint8 __IPSBAR[];
 #define MCF5282_FLEXCAN_MBUF15_BYTE6	(*(vuint8  *)(&__IPSBAR[0x1C017C]))
 #define MCF5282_FLEXCAN_MBUF15_BYTE7	(*(vuint8  *)(&__IPSBAR[0x1C017D]))
 
-#define MCF5282_FLEXCAN_MBUF0_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0086+x)]))
-#define MCF5282_FLEXCAN_MBUF1_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0096+x)]))
-#define MCF5282_FLEXCAN_MBUF2_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00A6+x)]))
-#define MCF5282_FLEXCAN_MBUF3_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00B6+x)]))
-#define MCF5282_FLEXCAN_MBUF4_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00C6+x)]))
-#define MCF5282_FLEXCAN_MBUF5_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00D6+x)]))
-#define MCF5282_FLEXCAN_MBUF6_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00E6+x)]))
-#define MCF5282_FLEXCAN_MBUF7_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00F6+x)]))
-#define MCF5282_FLEXCAN_MBUF8_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0106+x)]))
-#define MCF5282_FLEXCAN_MBUF9_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0116+x)]))
-#define MCF5282_FLEXCAN_MBUF10_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0126+x)]))
-#define MCF5282_FLEXCAN_MBUF11_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0136+x)]))
-#define MCF5282_FLEXCAN_MBUF12_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0146+x)]))
-#define MCF5282_FLEXCAN_MBUF13_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0156+x)]))
-#define MCF5282_FLEXCAN_MBUF14_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0166+x)]))
-#define MCF5282_FLEXCAN_MBUF15_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0176+x)]))
+#define MCF5282_FLEXCAN_MBUF0_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0086+(x))]))
+#define MCF5282_FLEXCAN_MBUF1_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0096+(x))]))
+#define MCF5282_FLEXCAN_MBUF2_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00A6+(x))]))
+#define MCF5282_FLEXCAN_MBUF3_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00B6+(x))]))
+#define MCF5282_FLEXCAN_MBUF4_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00C6+(x))]))
+#define MCF5282_FLEXCAN_MBUF5_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00D6+(x))]))
+#define MCF5282_FLEXCAN_MBUF6_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00E6+(x))]))
+#define MCF5282_FLEXCAN_MBUF7_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C00F6+(x))]))
+#define MCF5282_FLEXCAN_MBUF8_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0106+(x))]))
+#define MCF5282_FLEXCAN_MBUF9_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0116+(x))]))
+#define MCF5282_FLEXCAN_MBUF10_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0126+(x))]))
+#define MCF5282_FLEXCAN_MBUF11_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0136+(x))]))
+#define MCF5282_FLEXCAN_MBUF12_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0146+(x))]))
+#define MCF5282_FLEXCAN_MBUF13_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0156+(x))]))
+#define MCF5282_FLEXCAN_MBUF14_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0166+(x))]))
+#define MCF5282_FLEXCAN_MBUF15_BYTE(x)	(*(vuint8  *)(&__IPSBAR[(0x1C0176+(x))]))
 
-#define MCF5282_FLEXCAN_MBUF_BYTE(x,y)	(*(vuint8  *)(&__IPSBAR[((0x1C0086+(0x10*x)+y)]))
+#define MCF5282_FLEXCAN_MBUF_BYTE(x,y)	(*(vuint8  *)(&__IPSBAR[((0x1C0086+(0x10*(x))+(y))]))
 
 /* Bit level definitions and macros */
 #define MCF5282_FLEXCAN_CANMCR_STOP			(0x8000)

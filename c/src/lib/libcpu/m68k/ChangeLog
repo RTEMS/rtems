@@ -1,3 +1,8 @@
+2009-10-08	Thomas Doefler <thomas.doerfler@embedded-brains.de>
+
+	* mcf5282/include/mcf5282.h: add missing (x) params to four
+	macros, added paranthesis around usage of x in some macros	
+
 2009-09-10	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1438/bsps
