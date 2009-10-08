@@ -1,3 +1,17 @@
+2009-10-08	Chris Johns <chrisj@rtems.org>
+
+	* libchip/ide/ata.c, c/src/libchip/ide/ata_internal.h: Remove the
+	multiblock support from the ATA driver. Multiblock at the disk
+	level should not be a global policy as a disk may have more than
+	one partition with different block sizes. An IDE driver could
+	decide to use the feature with DMA but this a driver specific
+	design choice. Fixed bugs relating to variable block sizes and
+	large block transfer.
+	* c/src/libchip/ide/ide_controller.c,
+	c/src/libchip/ide/ide_ctrl_cfg.h, c/src/libchip/ide/ide_ctrl_io.h:
+	Changed the block size to 32bits so blocks of 64K or bigger can be
+	transfered in a single driver call.
+
 2009-10-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/ide/ata.c: Revert previous change. Not all ARM BSPs use a

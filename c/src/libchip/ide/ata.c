@@ -26,10 +26,13 @@
 #include <libchip/ide_ctrl_cfg.h>
 #include "ata_internal.h"
 #include <libchip/ata.h>
-/* #define DEBUG */
 
-#ifdef DEBUG
+#define ATA_DEBUG 0
+
+#if ATA_DEBUG
 #include <stdio.h>
+bool ata_trace;
+#define ata_printf if (ata_trace) printf
 #endif
 
 /*
@@ -237,45 +240,23 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
     {
         if (req->req == RTEMS_BLKDEV_REQ_READ)
         {
-#ifdef DEBUG
-            printf("ata_io_data_request: type: READ: %d, %d\n",
-                   req->bufs[0].block, req->bufnum);
-#endif            
             areq->type = ATA_COMMAND_TYPE_PIO_IN;
-
-            /*
-             * choose command to issue: if the number of blocks to be
-             * exchanged is greater then 1 and for ATA command READ MULTIPLE
-             * data block consists of more then 1 sector choose READ MULTIPLE
-             * otherwise READ SECTORS
-             */
-            areq->regs.regs[IDE_REGISTER_COMMAND] =
-                ((ATA_DEV_INFO(ctrl_minor, dev).max_multiple) &&
-                 (req->bufnum > 1) &&
-                 (ATA_DEV_INFO(ctrl_minor, dev).current_multiple > 1)) ?
-                 ATA_COMMAND_READ_MULTIPLE :
-                 ATA_COMMAND_READ_SECTORS;
+            areq->regs.regs[IDE_REGISTER_COMMAND] = ATA_COMMAND_READ_SECTORS;
+#if ATA_DEBUG
+            ata_printf("ata_io_data_request: type: READ: %lu, %lu cmd:%02x\n",
+                       req->bufs[0].block, req->bufnum,
+                       areq->regs.regs[IDE_REGISTER_COMMAND]);
+#endif            
         }
         else
         {
-#ifdef DEBUG
-            printf("ata_io_data_request: type: WRITE: %d, %d\n",
-                   req->bufs[0].block, req->bufnum);
-#endif            
             areq->type = ATA_COMMAND_TYPE_PIO_OUT;
-
-            /*
-             * choose command to issue: if the number of blocks to be
-             * exchanged is greater then 1 and for ATA command WRITE MULTIPLE
-             * data block consists of more then 1 sector choose WRITE MULTIPLE
-             * otherwise WRITE SECTORS
-             */
-            areq->regs.regs[IDE_REGISTER_COMMAND] =
-              ((ATA_DEV_INFO(ctrl_minor, dev).max_multiple) &&
-               (req->bufnum > 1) &&
-               (ATA_DEV_INFO(ctrl_minor, dev).current_multiple > 1)) ?
-               ATA_COMMAND_WRITE_MULTIPLE :
-               ATA_COMMAND_WRITE_SECTORS;
+            areq->regs.regs[IDE_REGISTER_COMMAND] = ATA_COMMAND_WRITE_SECTORS;
+#if ATA_DEBUG
+            ata_printf("ata_io_data_request: type: WRITE: %lu, %lu cmd:%02x\n",
+                       req->bufs[0].block, req->bufnum,
+                       areq->regs.regs[IDE_REGISTER_COMMAND]);
+#endif            
         }
     }
 
@@ -288,6 +269,7 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
         areq->regs.regs[IDE_REGISTER_LBA0] = (uint8_t)start;
         areq->regs.regs[IDE_REGISTER_LBA1] = (uint8_t)(start >> 8);
         areq->regs.regs[IDE_REGISTER_LBA2] = (uint8_t)(start >> 16);
+        /* Set as the head register write above */
         areq->regs.regs[IDE_REGISTER_LBA3] |= (uint8_t) (start >> 24);
         areq->regs.regs[IDE_REGISTER_LBA3] |= IDE_REGISTER_LBA3_L;
     }
@@ -311,8 +293,12 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
                                                 ~IDE_REGISTER_DEVICE_HEAD_L;
     }
 
-    /* fill sector count register */
-    areq->regs.regs[IDE_REGISTER_SECTOR_COUNT] = areq->breq->bufnum;
+    /*
+     * Fill sector count register. We have a number of buffers (bufnum) which
+     * can be of a specific length (bufs[0].length / ATA_SECTOR_SIZE).
+     */
+    areq->regs.regs[IDE_REGISTER_SECTOR_COUNT] =
+      areq->breq->bufnum * (areq->breq->bufs[0].length / ATA_SECTOR_SIZE);
 
     /* add request to the queue of awaiting requests to the controller */
     ata_add_to_controller_queue(ctrl_minor, areq);
@@ -423,10 +409,7 @@ ata_non_data_request(dev_t device, int cmd, void *argp)
         switch(cmd)
         {
             case ATAIO_SET_MULTIPLE_MODE:
-                ATA_DEV_INFO(ctrl_minor, dev).current_multiple =
-                                                           *(uint8_t*)argp;
-                break;
-
+              /* invalid operation now */
             default:
                 rc = RTEMS_INVALID_NUMBER;
                 break;
@@ -463,9 +446,6 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
     ata_queue_msg_t  msg;
     uint8_t          i, dev;
     uint16_t         val;
-    uint16_t         data_bs; /* the number of 512-bytes sectors in one
-                               * data block
-                               */
     ISR_Level        level;
     
     /* if no requests to controller then do nothing */
@@ -480,10 +460,6 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
     /* get ATA device identifier (0 or 1) */
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
            IDE_REGISTER_DEVICE_HEAD_DEV;
-
-    /* get data block size */
-    data_bs = ATA_DEV_INFO(ctrl_minor, dev).current_multiple ?
-              ATA_DEV_INFO(ctrl_minor, dev).current_multiple : 1;
 
     /* execute device select protocol */
     ide_controller_write_register(ctrl_minor, IDE_REGISTER_DEVICE_HEAD,
@@ -502,8 +478,8 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
             ide_controller_write_register(ctrl_minor, i, areq->regs.regs[i]);
     }
 
-#ifdef DEBUG
-    printf("ata_process_request: type: %d\n", areq->type);
+#if ATA_DEBUG
+    ata_printf("ata_process_request: type: %d\n", areq->type);
 #endif
     
     /* continue to execute ATA protocols depending on type of request */
@@ -516,12 +492,16 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
 
         if (byte & IDE_REGISTER_STATUS_DRQ)
         {
-            ide_controller_write_data_block(
-                ctrl_minor,
-                MIN(data_bs, areq->cnt) * ATA_SECTOR_SIZE,
-                areq->breq->bufs, &areq->cbuf,
-                &areq->pos);
-            areq->cnt -= MIN(data_bs, areq->cnt);
+            if (areq->cnt)
+            {
+              int ccbuf = areq->cbuf;
+              ide_controller_write_data_block(ctrl_minor,
+                                              areq->breq->bufs[0].length * areq->cnt,
+                                              areq->breq->bufs, &areq->cbuf,
+                                              &areq->pos);
+              ccbuf = areq->cbuf - ccbuf;
+              areq->cnt -= ccbuf;
+            }
         }
         else
         {
@@ -570,8 +550,8 @@ ata_request_done(ata_req_t *areq, rtems_device_minor_number ctrl_minor,
 {
     assert(areq);
 
-#ifdef DEBUG
-    printf("ata_request_done: entry\n");
+#if ATA_DEBUG
+    ata_printf("ata_request_done: entry\n");
 #endif
     
     ATA_EXEC_CALLBACK(areq, status, error);
@@ -586,8 +566,8 @@ ata_request_done(ata_req_t *areq, rtems_device_minor_number ctrl_minor,
     
     free(areq);
     
-#ifdef DEBUG
-    printf("ata_request_done: exit\n");
+#if ATA_DEBUG
+    ata_printf("ata_request_done: exit\n");
 #endif
 }
 
@@ -608,8 +588,8 @@ ata_non_data_request_done(ata_req_t *areq,
                           rtems_device_minor_number ctrl_minor,
                           rtems_status_code status, int error)
 {
-#ifdef DEBUG
-    printf("ata_non_data_request_done: entry\n");
+#if ATA_DEBUG
+    ata_printf("ata_non_data_request_done: entry\n");
 #endif
     
     areq->status = status;
@@ -642,7 +622,7 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
 
         ata_queue_msg_t msg;
 
-#ifdef DEBUG_DOES_NOT_WORK_WITH_QEMU
+#if ATA_DEBUG_DOES_NOT_WORK_WITH_QEMU
 	uint16_t      val;
         /*
          * read IDE_REGISTER_ALTERNATE_STATUS instead IDE_REGISTER_STATUS
@@ -785,22 +765,23 @@ static rtems_irq_connect_data ata_irq_data =
 static inline void
 ata_pio_in_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 {
-    uint16_t        bs, val;
+    uint16_t        val;
     uint8_t         dev;
-    uint32_t        min_val;
     ata_queue_msg_t msg;
 
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
            IDE_REGISTER_DEVICE_HEAD_DEV;
 
-    bs = ATA_DEV_INFO(ctrl_minor, dev).current_multiple ?
-         ATA_DEV_INFO(ctrl_minor, dev).current_multiple : 1;
-    min_val = MIN(bs, areq->cnt);
-
-    ide_controller_read_data_block(ctrl_minor, min_val * ATA_SECTOR_SIZE,
-                                   areq->breq->bufs, &areq->cbuf, &areq->pos);
-
-    areq->cnt -= min_val;
+    if (areq->cnt)
+    {
+      int ccbuf = areq->cbuf;
+      ide_controller_read_data_block(ctrl_minor,
+                                     areq->breq->bufs[0].length * areq->cnt,
+                                     areq->breq->bufs, &areq->cbuf, &areq->pos);
+      ccbuf = areq->cbuf - ccbuf;
+      areq->cnt -= ccbuf;
+    }
+    
     if (areq->cnt == 0)
     {
         ata_request_done(areq, ctrl_minor, RTEMS_SUCCESSFUL, RTEMS_SUCCESSFUL);
@@ -828,22 +809,16 @@ ata_pio_in_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 static inline void
 ata_pio_out_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 {
-    uint16_t        bs, val;
+    uint16_t        val;
     uint8_t         dev;
-    uint32_t        min_val;
     ata_queue_msg_t msg;
 
-#ifdef DEBUG
-    printf("ata_pio_out_protocol:\n");
+#if ATA_DEBUG
+    ata_printf("ata_pio_out_protocol:\n");
 #endif
     
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
            IDE_REGISTER_DEVICE_HEAD_DEV;
-
-    bs = ATA_DEV_INFO(ctrl_minor, dev).current_multiple ?
-         ATA_DEV_INFO(ctrl_minor, dev).current_multiple : 1;
-
-    min_val = MIN(bs, areq->cnt);
 
     if (areq->cnt == 0)
     {
@@ -851,10 +826,16 @@ ata_pio_out_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
     }
     else
     {
-        ide_controller_write_data_block(ctrl_minor, min_val * ATA_SECTOR_SIZE,
-                                        areq->breq->bufs, &areq->cbuf,
-                                        &areq->pos);
-        areq->cnt -= min_val;
+        if (areq->cnt)
+        {
+          int ccbuf = areq->cbuf;
+          ide_controller_write_data_block(ctrl_minor,
+                                          areq->breq->bufs[0].length * areq->cnt,
+                                          areq->breq->bufs, &areq->cbuf,
+                                          &areq->pos);
+          ccbuf = areq->cbuf - ccbuf;
+          areq->cnt -= ccbuf;
+        }
         if (IDE_Controller_Table[ctrl_minor].int_driven == false)
         {
             do {
@@ -956,14 +937,21 @@ ata_queue_task(rtems_task_argument arg)
                     ide_controller_read_register(ctrl_minor,
                                                  IDE_REGISTER_ERROR,
                                                  &val);
-                    if (areq->type == ATA_COMMAND_TYPE_NON_DATA)
-                        ata_non_data_request_done(areq, ctrl_minor,
-                                                  RTEMS_UNSATISFIED,
-                                                  RTEMS_IO_ERROR);
-                    else
-                        ata_request_done(areq, ctrl_minor, RTEMS_UNSATISFIED,
-                                         RTEMS_IO_ERROR);
-                    break;
+                    if (val & (IDE_REGISTER_ERROR_UNC |
+                               IDE_REGISTER_ERROR_ICRC |
+                               IDE_REGISTER_ERROR_IDNF |
+                               IDE_REGISTER_ERROR_NM |
+                               IDE_REGISTER_ERROR_MED))
+                    {
+                        if (areq->type == ATA_COMMAND_TYPE_NON_DATA)
+                            ata_non_data_request_done(areq, ctrl_minor,
+                                                      RTEMS_UNSATISFIED,
+                                                      RTEMS_IO_ERROR);
+                        else
+                            ata_request_done(areq, ctrl_minor, RTEMS_UNSATISFIED,
+                                             RTEMS_IO_ERROR);
+                        break;
+                    }
                 }
 
                 switch(areq->type)
@@ -986,8 +974,8 @@ ata_queue_task(rtems_task_argument arg)
                         break;
 
                     default:
-#ifdef DEBUG
-                        printf("ata_queue_task: non-supported command type\n");
+#if ATA_DEBUG
+                        ata_printf("ata_queue_task: non-supported command type\n");
 #endif
                         ata_request_done(areq, ctrl_minor,
                                          RTEMS_UNSATISFIED,
@@ -997,8 +985,8 @@ ata_queue_task(rtems_task_argument arg)
                 break;
 
             default:
-#ifdef DEBUG
-                printf("ata_queue_task: internal error\n");
+#if ATA_DEBUG
+                ata_printf("ata_queue_task: internal error\n");
                 rtems_task_delete (RTEMS_SELF);
 #endif
                 rtems_fatal_error_occurred(RTEMS_INTERNAL_ERROR);
@@ -1023,7 +1011,8 @@ ata_ioctl(dev_t device, int cmd, void *argp)
 {
     rtems_status_code         status;
     rtems_device_minor_number rel_minor;
-
+    uint8_t                   block_count;
+    
     rel_minor = (rtems_filesystem_dev_minor_t(device)) /
                 ATA_MINOR_NUM_RESERVED_PER_ATA_DEVICE;
 
@@ -1051,10 +1040,9 @@ ata_ioctl(dev_t device, int cmd, void *argp)
             *((uint32_t*) argp)  = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
             status = RTEMS_SUCCESSFUL;
             break;
-
+            
         default:
-            errno = EINVAL;
-            return -1;
+            return rtems_blkdev_ioctl (device, cmd, argp);
             break;
     }
 
@@ -1418,16 +1406,10 @@ rtems_ata_initialize(rtems_device_major_number major,
             ATA_DEV_INFO(ctrl_minor, dev).sectors =
                 CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_CURR_LOG_SECS]);
             ATA_DEV_INFO(ctrl_minor, dev).lba_sectors =
-                (CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS0]) << 16) +
-                 CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS1]);
+                (CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS1]) << 16) +
+                 CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS0]);
             ATA_DEV_INFO(ctrl_minor, dev).lba_avaible =
                 (CF_LE_W(buffer[ATA_IDENT_WORD_CAPABILITIES]) >> 9) & 0x1;
-            ATA_DEV_INFO(ctrl_minor, dev).max_multiple =
-                (uint8_t) (CF_LE_W(buffer[ATA_IDENT_WORD_RW_MULT]));
-            ATA_DEV_INFO(ctrl_minor, dev).current_multiple =
-                (CF_LE_W(buffer[ATA_IDENT_WORD_MULT_SECS]) & 0x100) ?
-                (uint8_t)(CF_LE_W(buffer[ATA_IDENT_WORD_MULT_SECS])) :
-                 0;
 
             if ((CF_LE_W(buffer[ATA_IDENT_WORD_FIELD_VALIDITY]) &
                  ATA_IDENT_BIT_VALID) == 0) {
@@ -1469,7 +1451,6 @@ rtems_ata_initialize(rtems_device_major_number major,
                          major,
                          (ata_devs_number *
                           ATA_MINOR_NUM_RESERVED_PER_ATA_DEVICE));
-
             status = rtems_disk_create_phys(device, ATA_SECTOR_SIZE,
                 ATA_DEV_INFO(ctrl_minor, dev).lba_avaible ?
                 ATA_DEV_INFO(ctrl_minor, dev).lba_sectors :
@@ -1515,17 +1496,12 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
     uint16_t           byte;/* emphasize that only 8 low bits is meaningful */
     uint8_t            i, dev;
     uint16_t           val, val1;
-    uint16_t           data_bs; /* the number of 512 bytes sectors into one
-                                 * data block
-                                 */
     volatile unsigned  retries;
+    
     assert(areq);
 
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
            IDE_REGISTER_DEVICE_HEAD_DEV;
-
-    data_bs = ATA_DEV_INFO(ctrl_minor, dev).current_multiple ?
-              ATA_DEV_INFO(ctrl_minor, dev).current_multiple : 1;
 
     ide_controller_write_register(ctrl_minor, IDE_REGISTER_DEVICE_HEAD,
                                   areq->regs.regs[IDE_REGISTER_DEVICE_HEAD]);
@@ -1576,13 +1552,16 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
     switch(areq->type)
     {
         case ATA_COMMAND_TYPE_PIO_IN:
-            ide_controller_read_data_block(
-                ctrl_minor,
-                MIN(data_bs, areq->cnt) * ATA_SECTOR_SIZE,
-                areq->breq->bufs, &areq->cbuf,
-                &areq->pos);
-
-            areq->cnt -= MIN(data_bs, areq->cnt);
+            if (areq->cnt)
+            {
+              int ccbuf = areq->cbuf;
+              ide_controller_read_data_block(ctrl_minor,
+                                             areq->breq->bufs[0].length * areq->cnt,
+                                             areq->breq->bufs, &areq->cbuf,
+                                             &areq->pos);
+              ccbuf = areq->cbuf - ccbuf;
+              areq->cnt -= ccbuf;
+            }
             if (areq->cnt == 0)
             {
                 areq->breq->status = RTEMS_SUCCESSFUL;
@@ -1603,8 +1582,8 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
             break;
 
         default:
-#ifdef DEBUG
-            printf("ata_queue_task: non-supported command type\n");
+#if ATA_DEBUG
+            ata_printf("ata_queue_task: non-supported command type\n");
 #endif
             areq->breq->status = RTEMS_UNSATISFIED;
             areq->breq->error = RTEMS_NOT_IMPLEMENTED;

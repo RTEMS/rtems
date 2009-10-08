@@ -74,18 +74,21 @@ extern "C" {
 #define IDE_REGISTER_LBA3_DEV            0x10
 #define IDE_REGISTER_LBA3_LBA            0x0f
 
-#define IDE_REGISTER_ERROR_ICRC          0x80  /* Interface CRC error on */
-                                               /* UDMA data transfer */
-#define IDE_REGISTER_ERROR_UNC           0x40  /* Uncorrectable data error */
-#define IDE_REGISTER_ERROR_WP            0x40  /* Write protect */
-#define IDE_REGISTER_ERROR_MC            0x20  /* Media changed */
-#define IDE_REGISTER_ERROR_IDNF          0x10  /* Sector ID not found */
-#define IDE_REGISTER_ERROR_MCR           0x08  /* Media change requested */
-#define IDE_REGISTER_ERROR_ABRT          0x04  /* Aborted command */
-#define IDE_REGISTER_ERROR_NM            0x02  /* No media */
-#define IDE_REGISTER_ERROR_AMNF          0x01  /* Address mark not found */
-                                               /* --obsolette in ATA-4 */
-#define IDE_REGISTER_ERROR_MED           0x01  /* Media error is detected */
+#define IDE_REGISTER_ERROR_ICRC          (1 << 7) /* Interface CRC error on */
+                                                  /* UDMA data transfer */
+#define IDE_REGISTER_ERROR_UNC           (1 << 6) /* Uncorrectable data error */
+#if CCJ_COULD_NOT_FIND_THIS_ERROR
+#define IDE_REGISTER_ERROR_WP            (1 << 6) /* Write protect */
+#endif
+#define IDE_REGISTER_ERROR_MC            (1 << 5) /* Media changed */
+#define IDE_REGISTER_ERROR_IDNF          (1 << 4) /* Sector ID not found */
+#define IDE_REGISTER_ERROR_MCR           (1 << 3) /* Media change requested */
+                                                  /* obsolette */
+#define IDE_REGISTER_ERROR_ABRT          (1 << 2) /* Aborted command */
+#define IDE_REGISTER_ERROR_NM            (1 << 1) /* No media, End of Media. */
+#define IDE_REGISTER_ERROR_AMNF          (1 << 0) /* Address mark not found */
+                                                  /* --obsolette in ATA-4 */
+#define IDE_REGISTER_ERROR_MED           (1 << 0) /* Media error is detected */
 
 /*
  * ide_controller_read_data_block --
@@ -103,7 +106,7 @@ extern "C" {
  */
 void
 ide_controller_read_data_block(rtems_device_minor_number  minor,
-                               uint16_t                   block_size,
+                               uint32_t                   block_size,
                                rtems_blkdev_sg_buffer    *bufs,
                                uint32_t                  *cbuf,
                                uint32_t                  *pos);
@@ -124,7 +127,7 @@ ide_controller_read_data_block(rtems_device_minor_number  minor,
  */
 void
 ide_controller_write_data_block(rtems_device_minor_number  minor,
-                                uint16_t                   block_size,
+                                uint32_t                   block_size,
                                 rtems_blkdev_sg_buffer    *bufs,
                                 uint32_t                  *cbuf,
                                 uint32_t                  *pos);

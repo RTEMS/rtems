@@ -285,9 +285,6 @@ typedef struct ata_dev_s {
 
     uint8_t     lba_avaible;  /* 0 - CHS mode, 1 - LBA mode */
 
-    uint8_t     max_multiple; /* 0 if READ/WRITE MULTIPLE is unsupported */
-    uint8_t     current_multiple;
-
     uint16_t  modes_available; /* OR of values for this modes */
     uint16_t  mode_active;
 } ata_dev_t;

@@ -73,10 +73,10 @@ typedef struct ide_ctrl_fns_s {
      * The function allows to escape overhead for read/write register
      * functions calls
      */
-    void  (*ctrl_read_block)(int minor, uint16_t   block_size,
+    void  (*ctrl_read_block)(int minor, uint32_t   block_size,
                              rtems_blkdev_sg_buffer *bufs, uint32_t   *cbuf,
                              uint32_t   *pos);
-    void  (*ctrl_write_block)(int minor, uint16_t   block_size,
+    void  (*ctrl_write_block)(int minor, uint32_t   block_size,
                               rtems_blkdev_sg_buffer *bufs, uint32_t   *cbuf,
                               uint32_t   *pos);
 
