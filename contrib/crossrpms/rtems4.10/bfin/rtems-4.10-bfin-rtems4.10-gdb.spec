@@ -52,7 +52,7 @@ Name:		rtems-4.10-bfin-rtems4.10-gdb
 Summary:	Gdb for target bfin-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	10%{?dist}
+Release:	11%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -186,6 +186,20 @@ cd ..
 
 # host library, installed to a bogus directory
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libbfin-rtems4.10-sim.a
+
+%if "%{gdb_version}" >= "7.0"
+# Bug in gdb-7.0, bogusly installs linux-only files
+  somethinguseful=0
+  for f in ${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls/*.xml; do
+    case $f in
+    *linux.xml) rm -f $f;;
+    *.xml) somethinguseful=1;;
+    esac
+  done
+  if test $somethinguseful -eq 0; then
+    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls"
+  fi
+%endif
 
   cd ..
 
