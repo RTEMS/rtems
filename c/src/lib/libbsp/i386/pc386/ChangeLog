@@ -1,3 +1,7 @@
+2009-10-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am: Added interrupt server.
+
 2009-10-08	Chris Johns <chrisj@rtems.org>
 
 	* ide/ide.c: Fixed more IDE driver bugs. The driver can transfer

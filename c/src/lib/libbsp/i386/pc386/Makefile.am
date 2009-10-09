@@ -100,7 +100,8 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/src/irq-generic.c \
     ../../shared/src/irq-legacy.c \
     ../../shared/src/irq-info.c \
-    ../../shared/src/irq-shell.c
+    ../../shared/src/irq-shell.c \
+    ../../shared/src/irq-server.c
 
 # timer
 libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
