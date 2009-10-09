@@ -2377,8 +2377,15 @@ LoopbackTstArgs		a;
 	CHECK_DFLT_BASE(base);
 
 	/* arg check */
-	if ( level < 1 || level > 7 || vector > 255 )
+	if ( level < 1 || level > 7 || vector > 255 ) {
+		fprintf(stderr,"Invalid level or vector argument\n");
 		return -1;
+	}
+
+	if ( (vector & 1) ) {
+		fprintf(stderr,"Software interrupts can only use even-numbered vectors, sorry.\n");
+		return -1;
+	}
 
 	if ( UNIV_REV(base) < 2 && vector != 0 ) {
 		fprintf(stderr,

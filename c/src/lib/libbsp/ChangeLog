@@ -1,3 +1,10 @@
+2009-10-09	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/vmeUniverse/vmeUniverse.c: print message and
+	let vmeUniverseIntLoopbackTst() fail if odd-numbered
+	vector is used (cannot program the chip to reply with
+	such a vector).
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* Makefile.am: Add bspinit.c, a common Init task that manages
