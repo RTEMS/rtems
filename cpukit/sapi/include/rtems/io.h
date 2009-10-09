@@ -92,6 +92,7 @@ rtems_status_code rtems_io_driver_io_error(
  * @retval RTEMS_INVALID_NUMBER Invalid major number.
  * @retval RTEMS_TOO_MANY No major number available.
  * @retval RTEMS_RESOURCE_IN_USE Major number in use.
+ * @retval RTEMS_CALLED_FROM_ISR Called from interrupt context.
  * @retval * Status code depends on rtems_io_initialize().
  */
 rtems_status_code rtems_io_register_driver(
@@ -105,6 +106,7 @@ rtems_status_code rtems_io_register_driver(
  *
  * @retval RTEMS_SUCCESSFUL Device driver successfully unregistered.
  * @retval RTEMS_UNSATISFIED Invalid major number.
+ * @retval RTEMS_CALLED_FROM_ISR Called from interrupt context.
  */
 rtems_status_code rtems_io_unregister_driver(
   rtems_device_major_number major

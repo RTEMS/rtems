@@ -68,6 +68,9 @@ rtems_status_code rtems_io_register_driver(
 {
   rtems_device_major_number major_limit = _IO_Number_of_drivers;
 
+  if ( rtems_interrupt_is_in_progress() )
+    return RTEMS_CALLED_FROM_ISR;
+
   if ( registered_major == NULL )
     return RTEMS_INVALID_ADDRESS;
 

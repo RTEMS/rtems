@@ -1,3 +1,11 @@
+2009-10-09	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* cpukit/sapi/include/rtems/io.h: Documentation.
+	* cpukit/sapi/src/ioregisterdriver.c: Call from interrupt context is
+	an error.
+	* cpukit/sapi/src/iounregisterdriver.c: Disable preemption during
+	critical section.
+
 2009-10-09	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/main_mknod.c: Fixed build problem with networking
