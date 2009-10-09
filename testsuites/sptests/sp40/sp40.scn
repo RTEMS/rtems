@@ -2,6 +2,15 @@
 Init - rtems_io_register_driver - init == NULL, open != NULL OK
 Init - Major slot returned = 2
 Init - rtems_io_register_driver - init == NULL, open != NULL OK
-Init - Major slot returned = 0
+Init - Major slot returned = 3
 Init - rtems_io_register_driver - used slot
+Init - rtems_io_unregister_driver - used slot
+Init - rtems_io_register_driver - free slot
+Init - rtems_io_register_driver - called from interrupt context
+Init - rtems_io_register_driver - invalid registered major pointer
+Init - rtems_io_register_driver - invalid driver table pointer
+Init - rtems_io_register_driver - invalid empty driver table
+Init - rtems_io_register_driver - invalid major
+Init - rtems_io_unregister_driver - called from interrupt context
+Init - rtems_io_unregister_driver - invalid major number
 *** END OF TEST 40 ***

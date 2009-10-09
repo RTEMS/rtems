@@ -16,6 +16,7 @@ test set name:  sp40
 directives:
 
   rtems_io_register_driver
+  rtems_io_unregister_driver
 
 concepts:
 
@@ -23,3 +24,5 @@ concepts:
   when inserting into a slot that is already in use.
 
 + Focus on case where initialization entry is NULL and open entry is NOT NULL.
+
++ Provoke error conditions.

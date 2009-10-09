@@ -1,7 +1,11 @@
+2009-10-09	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* sp40/init.c, sp40/sp40.doc, sp40/sp40.scn: New test cases.
+
 2009-10-04	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
-	* sptests/spintrcritical09/init.c, sptests/spintrcritical10/init.c,
-	sptests/spintrcritical11/init.c: Fixed potentially infinite loops.
+	* spintrcritical09/init.c, spintrcritical10/init.c,
+	spintrcritical11/init.c: Fixed potentially infinite loops.
 	* sp20/system.h: Increased micro seconds per tick in order to be more
 	independent of the console output speed.
 
