@@ -1,3 +1,7 @@
+2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/bspgetworkarea.c: Add debug prints of memory information.
+
 2009-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/include/pci.h: Add prototypes for BusCountPCI(void),
