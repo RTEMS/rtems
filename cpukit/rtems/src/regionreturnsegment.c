@@ -55,7 +55,7 @@ rtems_status_code rtems_region_return_segment(
 )
 {
   Objects_Locations        location;
-  rtems_status_code        return_status = RTEMS_SUCCESSFUL;
+  rtems_status_code        return_status;
 #ifdef RTEMS_REGION_FREE_SHRED_PATTERN
   uint32_t                 size;
 #endif
@@ -83,7 +83,6 @@ rtems_status_code rtems_region_return_segment(
 
           if ( !status )
             return_status = RTEMS_INVALID_ADDRESS;
-
           else {
             the_region->number_of_used_blocks -= 1;
 
@@ -102,6 +101,7 @@ rtems_status_code rtems_region_return_segment(
 #endif
 
       case OBJECTS_ERROR:
+      default:
         return_status = RTEMS_INVALID_ID;
         break;
     }

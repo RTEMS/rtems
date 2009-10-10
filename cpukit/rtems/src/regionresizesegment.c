@@ -53,7 +53,7 @@ rtems_status_code rtems_region_resize_segment(
   uintptr_t                avail_size;
   Objects_Locations        location;
   uintptr_t                osize;
-  rtems_status_code        return_status = RTEMS_SUCCESSFUL;
+  rtems_status_code        return_status;
   Heap_Resize_status       status;
   register Region_Control *the_region;
 
@@ -85,10 +85,12 @@ rtems_status_code rtems_region_resize_segment(
         else
           _RTEMS_Unlock_allocator();
 
-        return
-          (status == HEAP_RESIZE_SUCCESSFUL) ?  RTEMS_SUCCESSFUL :
-          (status == HEAP_RESIZE_UNSATISFIED) ? RTEMS_UNSATISFIED :
-          RTEMS_INVALID_ADDRESS;
+
+        if (status == HEAP_RESIZE_SUCCESSFUL)
+          return RTEMS_SUCCESSFUL;
+        if (status == HEAP_RESIZE_UNSATISFIED)
+          return RTEMS_UNSATISFIED;
+        return RTEMS_INVALID_ADDRESS;
         break;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -97,6 +99,7 @@ rtems_status_code rtems_region_resize_segment(
 #endif
 
       case OBJECTS_ERROR:
+      default:
         return_status = RTEMS_INVALID_ID;
         break;
     }

@@ -53,11 +53,11 @@ rtems_status_code rtems_region_get_segment(
   void              **segment
 )
 {
-  Thread_Control          *executing;
-  Objects_Locations        location;
-  rtems_status_code        return_status = RTEMS_SUCCESSFUL;
-  register Region_Control *the_region;
-  void                    *the_segment;
+  Thread_Control     *executing;
+  Objects_Locations   location;
+  rtems_status_code   return_status;
+  Region_Control     *the_region;
+  void               *the_segment;
 
   if ( !segment )
     return RTEMS_INVALID_ADDRESS;
@@ -87,13 +87,10 @@ rtems_status_code rtems_region_get_segment(
           if ( the_segment ) {
             the_region->number_of_used_blocks += 1;
             *segment = the_segment;
-          }
-
-          else if ( _Options_Is_no_wait( option_set ) ) {
+            return_status = RTEMS_SUCCESSFUL;
+          } else if ( _Options_Is_no_wait( option_set ) ) {
             return_status = RTEMS_UNSATISFIED;
-          }
-
-          else {
+          } else {
             /*
              *  Switch from using the memory allocation mutex to using a
              *  dispatching disabled critical section.  We have to do this
@@ -124,6 +121,7 @@ rtems_status_code rtems_region_get_segment(
 #endif
 
       case OBJECTS_ERROR:
+      default:
         return_status = RTEMS_INVALID_ID;
         break;
     }

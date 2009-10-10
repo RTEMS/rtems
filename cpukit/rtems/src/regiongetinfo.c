@@ -48,7 +48,7 @@ rtems_status_code rtems_region_get_information(
 )
 {
   Objects_Locations        location;
-  rtems_status_code        return_status = RTEMS_SUCCESSFUL;
+  rtems_status_code        return_status;
   register Region_Control *the_region;
 
   if ( !the_info )
@@ -61,6 +61,7 @@ rtems_status_code rtems_region_get_information(
 
       case OBJECTS_LOCAL:
         _Heap_Get_information( &the_region->Memory, the_info );
+        return_status = RTEMS_SUCCESSFUL;
         break;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -69,6 +70,7 @@ rtems_status_code rtems_region_get_information(
 #endif
 
       case OBJECTS_ERROR:
+      default:
         return_status = RTEMS_INVALID_ID;
         break;
     }
