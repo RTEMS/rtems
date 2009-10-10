@@ -1,3 +1,11 @@
+2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add new test to exercise when the ticks
+	since boot wraps around 0 and the timer server must deal with that
+	condition.
+	* sp67/.cvsignore, sp67/Makefile.am, sp67/init.c, sp67/sp67.doc,
+	sp67/sp67.scn: New files.
+
 2009-10-09	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* sp40/init.c, sp40/sp40.doc, sp40/sp40.scn: New test cases.

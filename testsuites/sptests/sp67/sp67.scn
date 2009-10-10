@@ -1,0 +1,8 @@
+*** TEST 67 ***
+Init - create timer 1
+Init - create timer 2
+Init - Initiate the timer server
+hit snapshot=10 ticks=-91
+hit snapshot=20 ticks=-181
+Server Timer 1 fired after wrapping ticks since boot-- OK
+*** END OF TEST 67 ***
