@@ -24,18 +24,15 @@ void _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch(
 )
 {
   POSIX_API_Control *thread_support;
-  bool               cancel;
 
-  cancel         = false;
   thread_support = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
        thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS &&
-       thread_support->cancelation_requested )
-    cancel = true;
-  
-  _Thread_Enable_dispatch();
-  
-  if ( cancel )
+       thread_support->cancelation_requested ) {
+    _Thread_Unnest_dispatch();
     _POSIX_Thread_Exit( the_thread, PTHREAD_CANCELED );
+  } else
+    _Thread_Enable_dispatch();
+  
 }

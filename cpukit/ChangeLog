@@ -1,5 +1,12 @@
 2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/include/rtems/posix/threadsup.h, posix/src/cancel.c,
+	posix/src/canceleval.c: Make psxcancel run again.
+	_POSIX_Thread_Exit() can be called on running thread or another
+	thread when it is cancelled.
+
+2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/src/mqueuetimedreceive.c, posix/src/mqueuetimedsend.c,
 	posix/src/mutextimedlock.c, posix/src/prwlocktimedrdlock.c,
 	posix/src/prwlocktimedwrlock.c, posix/src/semtimedwait.c: Switch from

@@ -52,6 +52,7 @@ int pthread_cancel(
 
       thread_support->cancelation_requested = 1;
 
+      /* This enables dispatch implicitly */
       _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch( the_thread );
       return 0;
 
