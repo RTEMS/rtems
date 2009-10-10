@@ -1,41 +1,51 @@
 *** POSIX Timers Test 01 ***
 task A: timer_settime - value=0:0 interval=0:0
-Executing task B with count = 10 Fri Jan  1 00:00:02 1988
+Executing task B with count = 10 Fri Jan  1 00:00:01 1988
 Executing task A with count = 20 Fri Jan  1 00:00:02 1988
 Executing task A with count = 19 Fri Jan  1 00:00:03 1988
-Executing task B with count =  9 Fri Jan  1 00:00:04 1988
+Executing task B with count =  9 Fri Jan  1 00:00:03 1988
 Executing task A with count = 18 Fri Jan  1 00:00:04 1988
 Executing task A with count = 17 Fri Jan  1 00:00:05 1988
-Executing task B with count =  8 Fri Jan  1 00:00:06 1988
+Executing task B with count =  8 Fri Jan  1 00:00:05 1988
 Executing task C with count =  6 Fri Jan  1 00:00:06 1988
 Executing task A with count = 16 Fri Jan  1 00:00:06 1988
 Executing task A with count = 15 Fri Jan  1 00:00:07 1988
-Executing task B with count =  7 Fri Jan  1 00:00:08 1988
+Executing task B with count =  7 Fri Jan  1 00:00:07 1988
 Executing task A with count = 14 Fri Jan  1 00:00:08 1988
 Executing task C with count =  5 Fri Jan  1 00:00:09 1988
 Executing task A with count = 13 Fri Jan  1 00:00:09 1988
-Executing task B with count =  6 Fri Jan  1 00:00:10 1988
+Executing task B with count =  6 Fri Jan  1 00:00:09 1988
 Executing task A with count = 12 Fri Jan  1 00:00:10 1988
 Executing task A with count = 11 Fri Jan  1 00:00:11 1988
-Executing task B with count =  5 Fri Jan  1 00:00:12 1988
+Executing task B with count =  5 Fri Jan  1 00:00:11 1988
 Executing task C with count =  4 Fri Jan  1 00:00:12 1988
 Executing task A with count = 10 Fri Jan  1 00:00:12 1988
 Executing task A with count =  9 Fri Jan  1 00:00:13 1988
-Executing task B with count =  4 Fri Jan  1 00:00:14 1988
+Executing task B with count =  4 Fri Jan  1 00:00:13 1988
 Executing task A with count =  8 Fri Jan  1 00:00:14 1988
 Executing task C with count =  3 Fri Jan  1 00:00:15 1988
 Executing task A with count =  7 Fri Jan  1 00:00:15 1988
-Executing task B with count =  3 Fri Jan  1 00:00:16 1988
+Executing task B with count =  3 Fri Jan  1 00:00:15 1988
 Executing task A with count =  6 Fri Jan  1 00:00:16 1988
 Executing task A with count =  5 Fri Jan  1 00:00:17 1988
-Executing task B with count =  2 Fri Jan  1 00:00:18 1988
+Executing task B with count =  2 Fri Jan  1 00:00:17 1988
 Executing task C with count =  2 Fri Jan  1 00:00:18 1988
 Executing task A with count =  4 Fri Jan  1 00:00:18 1988
 Executing task A with count =  3 Fri Jan  1 00:00:19 1988
-Executing task B with count =  1 Fri Jan  1 00:00:20 1988
+Executing task B with count =  1 Fri Jan  1 00:00:19 1988
 Executing task A with count =  2 Fri Jan  1 00:00:20 1988
 Executing task C with count =  1 Fri Jan  1 00:00:21 1988
 Executing task A with count =  1 Fri Jan  1 00:00:21 1988
 task C: timer_getoverrun - overruns=0
 task C: timer_gettime - 2:0 remaining from 3:0
+starting C again with 0.5 second periodicity
+Executing task C with count =  6 Fri Jan  1 00:00:25 1988
+Executing task C with count =  5 Fri Jan  1 00:00:26 1988
+Executing task C with count =  4 Fri Jan  1 00:00:26 1988
+Executing task C with count =  3 Fri Jan  1 00:00:27 1988
+Executing task C with count =  2 Fri Jan  1 00:00:27 1988
+Executing task C with count =  1 Fri Jan  1 00:00:28 1988
+task C: timer_getoverrun - overruns=0
+task C: timer_gettime - 0:500000000 remaining from 0:500000000
+Executing task C with count =  0 Fri Jan  1 00:00:29 1988
 *** END OF POSIX Timers Test 01 ***

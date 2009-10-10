@@ -63,11 +63,13 @@ void StopTimer(
   struct   itimerspec *timerdata
 )
 {
-   struct   itimerspec prev;
-
+   /*
+    *  We do not care about the old value.  And this is a path
+    *  that needs to be exercised anyway.
+    */
    timerdata->it_value.tv_sec  = 0;
    timerdata->it_value.tv_nsec  = 0;
-   if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,timerdata,&prev) == -1) {
+   if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,timerdata,NULL) == -1) {
      perror ("Error in timer setting\n");
      pthread_exit ((void *) -1);
    }

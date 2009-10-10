@@ -1,3 +1,10 @@
+2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxtimer01/psxtimer.c: Modify so it passes in a NULL to
+	timer_settime() for previous value. We are not using the
+	value in this particular case and this path must be exercised.
+	* psxtimer01/psxtimer01.scn: Update so it matches output on sis.
+
 2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psxcancel/init.c, psxcancel/psxcancel.scn, psxcancel01/init.c,
