@@ -1,5 +1,13 @@
 2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/src/mqueuetimedreceive.c, posix/src/mqueuetimedsend.c,
+	posix/src/mutextimedlock.c, posix/src/prwlocktimedrdlock.c,
+	posix/src/prwlocktimedwrlock.c, posix/src/semtimedwait.c: Switch from
+	switch to if's because only one value needed to be tested. This
+	shrinks the code and makes it easier to do coverage analysis on.
+
+2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/inline/rtems/score/object.inl: _Objects_Get_local_object() is
 	only called from places where the index is known to be valid.
 	_Objects_Set_local_object() already assumed this. Eliminates

@@ -43,7 +43,7 @@ int pthread_rwlock_timedrdlock(
   POSIX_RWLock_Control                        *the_rwlock;
   Objects_Locations                            location;
   Watchdog_Interval                            ticks;
-  bool                                         do_wait;
+  bool                                         do_wait = true;
   POSIX_Absolute_timeout_conversion_results_t  status;
   
   if ( !rwlock )
@@ -57,19 +57,14 @@ int pthread_rwlock_timedrdlock(
    *  is valid or not.  If it isn't correct and in the future,
    *  then we do a polling operation and convert the UNSATISFIED
    *  status into the appropriate error.
+   *
+   *  If the status is POSIX_ABSOLUTE_TIMEOUT_INVALID, 
+   *  POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST, or POSIX_ABSOLUTE_TIMEOUT_IS_NOW,
+   *  then we should not wait.
    */
   status = _POSIX_Absolute_timeout_to_ticks( abstime, &ticks );
-  switch (status) {
-    case POSIX_ABSOLUTE_TIMEOUT_INVALID:
-    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-    case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-      do_wait = false;
-      break;
-    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
-    default:  /* only to silence warnings */
-      do_wait = true;
-      break;
-  }
+  if ( status != POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE )
+    do_wait = false;
 
   the_rwlock = _POSIX_RWLock_Get( rwlock, &location );
   switch ( location ) {

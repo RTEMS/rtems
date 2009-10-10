@@ -52,18 +52,14 @@ int sem_timedwait(
    *  is valid or not.  If it isn't correct and in the future,
    *  then we do a polling operation and convert the UNSATISFIED
    *  status into the appropriate error.
+   *
+   *  If the status is POSIX_ABSOLUTE_TIMEOUT_INVALID, 
+   *  POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST, or POSIX_ABSOLUTE_TIMEOUT_IS_NOW,
+   *  then we should not wait.
    */
   status = _POSIX_Absolute_timeout_to_ticks( abstime, &ticks );
-  switch ( status ) {
-    case POSIX_ABSOLUTE_TIMEOUT_INVALID:
-    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-    case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-      do_wait = false;
-      break;
-    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
-      do_wait = true;
-      break;
-  }
+  if ( status != POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE )
+    do_wait = false;
 
   lock_status = _POSIX_Semaphore_Wait_support( sem, do_wait, ticks );
 
