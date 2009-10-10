@@ -1,5 +1,12 @@
 2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/inline/rtems/score/object.inl: _Objects_Get_local_object() is
+	only called from places where the index is known to be valid.
+	_Objects_Set_local_object() already assumed this. Eliminates
+	unreachable code.
+
+2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/src/timerserver.c: Indentation.
 
 2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>

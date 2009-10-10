@@ -198,15 +198,22 @@ RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
  *  @param[in] index is the index of the object the caller wants to access
  *
  *  @return This method returns a pointer to a local object or NULL if the
- *          index is invalid.
+ *          index is invalid and RTEMS_DEBUG is enabled.
  */
 RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
   Objects_Information *information,
   uint16_t             index
 )
 {
-  if ( index > information->maximum )
-    return NULL;
+  /*
+   *  This routine is ONLY to be called from places in the code
+   *  where the Id is known to be good.  Therefore, this should NOT
+   *  occur in normal situations.
+   */ 
+  #if defined(RTEMS_DEBUG)
+    if ( index > information->maximum )
+      return NULL;
+  #endif
   return information->local_table[ index ];
 }
 
