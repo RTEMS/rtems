@@ -159,9 +159,9 @@ static void _Timer_Server_process_ticks_chain(
 
   snapshot = _Watchdog_Ticks_since_boot;
   if ( snapshot >= _Timer_Server_ticks_last_time )
-     ticks = snapshot - _Timer_Server_ticks_last_time;
+    ticks = snapshot - _Timer_Server_ticks_last_time;
   else
-     ticks = (0xFFFFFFFF - _Timer_Server_ticks_last_time) + snapshot;
+    ticks = (0xFFFFFFFF - _Timer_Server_ticks_last_time) + snapshot;
 
   _Timer_Server_ticks_last_time = snapshot;
   _Watchdog_Adjust_to_chain( &_Timer_Ticks_chain, ticks, to_fire );

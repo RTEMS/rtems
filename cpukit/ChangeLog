@@ -1,5 +1,9 @@
 2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/src/timerserver.c: Indentation.
+
+2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/src/regiondelete.c, rtems/src/regionextend.c,
 	rtems/src/regiongetfreeinfo.c, rtems/src/regiongetinfo.c,
 	rtems/src/regiongetsegment.c, rtems/src/regionresizesegment.c,
