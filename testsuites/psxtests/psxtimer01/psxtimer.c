@@ -63,16 +63,23 @@ void StopTimer(
   struct   itimerspec *timerdata
 )
 {
-   /*
-    *  We do not care about the old value.  And this is a path
-    *  that needs to be exercised anyway.
-    */
-   timerdata->it_value.tv_sec  = 0;
-   timerdata->it_value.tv_nsec  = 0;
-   if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,timerdata,NULL) == -1) {
-     perror ("Error in timer setting\n");
-     pthread_exit ((void *) -1);
-   }
+  static int         firstTime = 1;
+  struct itimerspec *pOld;
+  struct itimerspec  odata;
+
+  /*
+   *  We do not care about the old value.  But we need to exercise
+   *  getting and not getting the return value back.
+   */
+  pOld = (firstTime == 1) ? NULL : &odata;
+  firstTime = 0;
+
+  timerdata->it_value.tv_sec  = 0;
+  timerdata->it_value.tv_nsec  = 0;
+  if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,timerdata,NULL) == -1) {
+    perror ("Error in timer setting\n");
+    rtems_test_exit(0);
+  }
 }
  
 /* task A  */
@@ -97,7 +104,7 @@ void * task_a (void *arg)
    event.sigev_signo = my_sig;
    if (timer_create (CLOCK_REALTIME, &event, &timer_id) == -1) {
       perror ("Error in timer creation\n");
-      pthread_exit ((void *) -1);
+      rtems_test_exit(0);
     }
 
    /* block the timer signal */
@@ -111,7 +118,7 @@ void * task_a (void *arg)
    timerdata.it_value.tv_sec *= 2;
    if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,&timerdata,&timergetdata) == -1) {
      perror ("Error in timer setting\n");
-     pthread_exit ((void *) -1);
+     rtems_test_exit(0);
    }
    printf(
     "task A: timer_settime - value=%d:%d interval=%d:%d\n",
@@ -127,7 +134,7 @@ void * task_a (void *arg)
      }
      if (timer_gettime(timer_id, &timerdata) == -1) {
        perror ("Error in timer_gettime\n");
-       pthread_exit ((void *) -1);
+       rtems_test_exit(0);
      }
      if (! _Timespec_Equal_to( &timerdata.it_value, &my_period )){
        perror ("Error in Task A timer_gettime\n");
@@ -165,7 +172,7 @@ void * task_b (void *arg)
    event.sigev_signo = my_sig;
    if (timer_create (CLOCK_REALTIME, &event, &timer_id) == -1) {
       perror ("Error in timer creation\n");
-      pthread_exit ((void *) -1);
+      rtems_test_exit(0);
     }
 
    /* block the timer signal */
@@ -180,22 +187,23 @@ void * task_b (void *arg)
    _Timespec_Add_to( &timerdata.it_value, &my_period );
    if (timer_settime(timer_id,TIMER_ABSTIME,&timerdata,NULL) == -1) {
      perror ("Error in timer setting\n");
-     pthread_exit ((void *) -1);
+     rtems_test_exit(0);
    }     
 
    /* periodic activity */
    while(1) {
      if (sigwait(&set,&received_sig) == -1) {
        perror ("Error in sigwait\n");
-       pthread_exit ((void *) -1);
+       rtems_test_exit(0);
      }
  
      if (timer_gettime(timer_id, &timerdata) == -1) {
        perror ("Error in timer_gettime\n");
-       pthread_exit ((void *) -1);
+       rtems_test_exit(0);
      }
-     if (! _Timespec_Equal_to( &timerdata.it_value, &my_period) ){
+     if ( !_Timespec_Equal_to( &timerdata.it_value, &my_period) ){
        perror ("Error in Task B timer_gettime\n");
+       rtems_test_exit(0);
      }
 
      pthread_mutex_lock (&data.mutex);
@@ -237,7 +245,7 @@ void * task_c (void *arg)
    event.sigev_signo = my_sig;
    if (timer_create (CLOCK_REALTIME, &event, &timer_id) == -1) {
       perror ("Error in timer creation\n");
-      pthread_exit ((void *) -1);
+      rtems_test_exit(0);
     }
 
    /* block the timer signal */
@@ -251,18 +259,18 @@ void * task_c (void *arg)
    timerdata.it_value.tv_sec *= 2;
    if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,&timerdata,NULL) == -1) {
      perror ("Error in timer setting\n");
-     pthread_exit ((void *) -1);
+     rtems_test_exit(0);
    }
 
    /* periodic activity */
    for (count=0 ; ; count++) {
       if (sigwait(&set,&received_sig) == -1) {
        perror ("Error in sigwait\n");
-       pthread_exit ((void *) -1);
+       rtems_test_exit(0);
      }
      if (timer_gettime(timer_id, &timerdata) == -1) {
        perror ("Error in timer_gettime\n");
-       pthread_exit ((void *) -1);
+       rtems_test_exit(0);
      }
      if (! _Timespec_Equal_to( &timerdata.it_value, &my_period) ){
        perror ("Error in Task C timer_gettime\n");
@@ -284,7 +292,7 @@ void * task_c (void *arg)
       
        if (timer_gettime(timer_id, &timergetdata) == -1) {
 	 perror ("Error in timer setting\n");
-	 pthread_exit ((void *) -1);
+         rtems_test_exit(0);
        }
        printf(
          "task C: timer_gettime - %d:%d remaining from %d:%d\n",

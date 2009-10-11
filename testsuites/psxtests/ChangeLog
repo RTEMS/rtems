@@ -1,3 +1,8 @@
+2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxtimer01/psxtimer.c: Make sure we have null and not-null as return
+	parameter to timer_settime().
+
 2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxtimer01/psxtimer.c: Modify so it passes in a NULL to
