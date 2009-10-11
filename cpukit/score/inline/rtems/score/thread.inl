@@ -220,7 +220,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
  *  processor will be transferred to the heir thread.
  */
 
-#if ( (CPU_INLINE_ENABLE_DISPATCH == FALSE) || \
+#if ( (defined(CPU_INLINE_ENABLE_DISPATCH) && \
+       (CPU_INLINE_ENABLE_DISPATCH == FALSE)) || \
       (__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__ == 1) )
 void _Thread_Enable_dispatch( void );
 #else
