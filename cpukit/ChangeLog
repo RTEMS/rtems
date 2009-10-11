@@ -1,5 +1,10 @@
 2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/src/alarm.c: If 0 seconds do not insert timer.
+	* rtems/src/regionextend.c: Eliminate warning.  Use default else.
+
+2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/inline/rtems/score/thread.inl, score/src/threaddispatch.c:
 	Correct conditionals so _Thread_Enable_dispatch() is always inlined
 	when intended.

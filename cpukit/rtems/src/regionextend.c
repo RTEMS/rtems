@@ -77,7 +77,7 @@ rtems_status_code rtems_region_extend(
           return_status = RTEMS_SUCCESSFUL;
         } else if ( heap_status == HEAP_EXTEND_ERROR ) {
           return_status = RTEMS_INVALID_ADDRESS;
-        } else if ( heap_status ==  HEAP_EXTEND_NOT_IMPLEMENTED ) {
+        } else /* if ( heap_status ==  HEAP_EXTEND_NOT_IMPLEMENTED ) */ {
           return_status = RTEMS_NOT_IMPLEMENTED;
         }
         break;

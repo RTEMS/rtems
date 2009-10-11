@@ -71,7 +71,8 @@ unsigned int alarm(
     }
   }
 
-  _Watchdog_Insert_seconds( the_timer, seconds );
+  if ( seconds )
+    _Watchdog_Insert_seconds( the_timer, seconds );
 
   return remaining;
 }
