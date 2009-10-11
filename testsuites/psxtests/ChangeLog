@@ -1,3 +1,7 @@
+2009-10-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* psxtimer01/psxtimer.c: Actually pass the pointer we initialized.
+
 2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxtimer01/psxtimer.c: Make sure we have null and not-null as return

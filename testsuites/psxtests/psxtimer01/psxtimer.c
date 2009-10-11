@@ -76,7 +76,7 @@ void StopTimer(
 
   timerdata->it_value.tv_sec  = 0;
   timerdata->it_value.tv_nsec  = 0;
-  if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,timerdata,NULL) == -1) {
+  if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,timerdata,pOld) == -1) {
     perror ("Error in timer setting\n");
     rtems_test_exit(0);
   }
