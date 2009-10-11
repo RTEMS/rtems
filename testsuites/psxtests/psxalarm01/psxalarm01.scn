@@ -1,0 +1,9 @@
+*** POSIX ALARM TEST 01 ***
+Init: Unblock SIGALRM
+Init: Firing alarm in 1 second
+Init: 0 seconds left on previous alarm
+Init: Wait for alarm
+Signal: 14 caught by 0xb010001 (1)
+Init: Cancel alarm
+Init: 0 seconds left on previous alarm
+*** END OF POSIX ALARM TEST 01***

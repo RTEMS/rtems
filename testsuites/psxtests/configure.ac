@@ -43,6 +43,7 @@ psx11/Makefile
 psx12/Makefile
 psx13/Makefile
 psx14/Makefile
+psxalarm01/Makefile
 psxautoinit01/Makefile
 psxautoinit02/Makefile
 psxbarrier01/Makefile

@@ -1,5 +1,12 @@
 2009-10-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add new test to ensure that canceling an
+	alarm works as defined.
+	* psxalarm01/.cvsignore, psxalarm01/Makefile.am, psxalarm01/init.c,
+	psxalarm01/psxalarm01.doc, psxalarm01/psxalarm01.scn: New files.
+
+2009-10-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* psxtimer01/psxtimer.c: Actually pass the pointer we initialized.
 
 2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
