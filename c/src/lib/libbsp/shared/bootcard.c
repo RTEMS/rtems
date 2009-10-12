@@ -1,20 +1,26 @@
+/**
+ * @file
+ *
+ * @ingroup bsp_bootcard
+ *
+ * @brief Standard system startup.
+ */
+
 /*
  *  This is the C entry point for ALL RTEMS BSPs.  It is invoked
  *  from the assembly language initialization file usually called
  *  start.S.  It provides the framework for the BSP initialization
  *  sequence.  The basic flow of initialization is:
  *
- *  + start.S: basic CPU setup (stack, zero BSS) 
+ *  + start.S: basic CPU setup (stack, zero BSS)
  *    + boot_card
- *      + if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
- *        - obtain information on BSP memory and allocate RTEMS Workspace
  *      + bspstart.c: bsp_start - more advanced initialization
+ *      + obtain information on BSP memory and allocate RTEMS Workspace
  *      + rtems_initialize_data_structures
- *      + if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
- *        - Allocate memory to C Program Heap
- *        - initialize C Library and C Program Heap
+ *      + allocate memory to C Program Heap
+ *      + initialize C Library and C Program Heap
  *      + bsp_pretasking_hook
- *      + if defined(RTEMS_DEBUG)
+ *      + if defined( RTEMS_DEBUG )
  *        - rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
  *      + rtems_initialize_before_drivers
  *      + bsp_predriver_hook
@@ -64,50 +70,27 @@ extern bool rtems_unified_work_area;
  *  when the BSP lets the framework handle RAM allocation between
  *  the RTEMS Workspace and C Program Heap.
  */
-static rtems_status_code bootcard_bsp_libc_helper(
-  void    *work_area_start,
-  intptr_t work_area_size,
-  void    *heap_start,
-  intptr_t heap_size
+static void bootcard_bsp_libc_helper(
+  void      *work_area_start,
+  uintptr_t  work_area_size,
+  void      *heap_start,
+  uintptr_t  heap_size
 )
 {
-  intptr_t heap_size_default = 0;
-
-  if ( !rtems_unified_work_area && 
+  if ( !rtems_unified_work_area &&
        heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
-    /* Place the heap immediately following the work area */
-    heap_start = work_area_start + rtems_configuration_get_work_space_size();
+    uintptr_t work_space_size = rtems_configuration_get_work_space_size();
 
-    /* Ensure proper alignement */
-    if ((uintptr_t) heap_start & (CPU_ALIGNMENT - 1)) {
-      heap_start = (void *) (((uintptr_t) heap_start + CPU_ALIGNMENT)
-	& ~(CPU_ALIGNMENT - 1));
-    }
+    heap_start = (char *) work_area_start + work_space_size;
 
-    /*
-     * For the default heap size use the free space from the end of the
-     * work space up to the end of the work area as heap.
-     */
-    heap_size_default = work_area_size -
-        rtems_configuration_get_work_space_size();
-
-    /* Keep it as a multiple of 16 bytes */
-    heap_size_default &= ~((intptr_t) 0xf);
-
-    /* Use default heap size if requested */
     if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
+      uintptr_t heap_size_default = work_area_size - work_space_size;
+
       heap_size = heap_size_default;
-    }
-	      
-    /* Check heap size */
-    if (heap_size > heap_size_default) {
-      return RTEMS_INVALID_SIZE;
     }
   }
 
   bsp_libc_init(heap_start, heap_size, 0);
-
-  return RTEMS_SUCCESSFUL;
 }
 
 /*
@@ -121,7 +104,6 @@ int boot_card(
 )
 {
   rtems_interrupt_level  bsp_isr_level;
-  rtems_status_code      sc = RTEMS_SUCCESSFUL;
   void                  *work_area_start = NULL;
   uintptr_t              work_area_size = 0;
   void                  *heap_start = NULL;
@@ -154,11 +136,11 @@ int boot_card(
   bsp_get_work_area(&work_area_start, &work_area_size,
                     &heap_start, &heap_size);
 
-  if ( (uint32_t) work_area_size <= (uint32_t) Configuration.work_space_size ) {
+  if ( work_area_size <= Configuration.work_space_size ) {
     printk(
-      "bootcard: Work space too big for work area! (0x%08lx > 0x%08lx)\n",
-      (uint32_t)Configuration.work_space_size,
-      (uint32_t)work_area_size
+      "bootcard: work space too big for work area: %p > %p\n",
+      (void *) Configuration.work_space_size,
+      (void *) work_area_size
     );
     bsp_cleanup();
     return -1;
@@ -168,7 +150,7 @@ int boot_card(
     Configuration.work_space_start = work_area_start;
     Configuration.work_space_size  = work_area_size;
   } else {
-    Configuration.work_space_start = (char *) work_area_start;
+    Configuration.work_space_start = work_area_start;
   }
 
   #if (BSP_DIRTY_MEMORY == 1)
@@ -184,17 +166,12 @@ int boot_card(
    *  Initialize the C library for those BSPs using the shared
    *  framework.
    */
-  sc = bootcard_bsp_libc_helper(
+  bootcard_bsp_libc_helper(
     work_area_start,
     work_area_size,
     heap_start,
     heap_size
   );
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    printk( "bootcard: Cannot initialize C library!\n");
-    bsp_cleanup();
-    return -1;
-  }
 
   /*
    *  All BSP to do any required initialization now that RTEMS
@@ -207,7 +184,7 @@ int boot_card(
   bsp_pretasking_hook();
 
   /*
-   *  If debug is enabled, then enable all dynamic RTEMS debug 
+   *  If debug is enabled, then enable all dynamic RTEMS debug
    *  capabilities.
    *
    *  NOTE: Most debug features are conditionally compiled in
@@ -226,7 +203,7 @@ int boot_card(
   /*
    *  Execute BSP specific pre-driver hook. Drivers haven't gotten
    *  to initialize yet so this is a good chance to initialize
-   *  buses, spurious interrupt handlers, etc.. 
+   *  buses, spurious interrupt handlers, etc..
    *
    *  NOTE: Many BSPs do not require this handler and use the
    *        shared stub.

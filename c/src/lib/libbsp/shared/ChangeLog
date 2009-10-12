@@ -1,3 +1,7 @@
+2009-10-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bootcard: Update for heap API changes.
+
 2009-09-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/irq-config.h, include/irq-generic.h, include/irq-info.h,
