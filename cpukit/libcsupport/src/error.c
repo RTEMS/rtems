@@ -102,7 +102,7 @@ rtems_status_text(
 
 
 static int rtems_verror(
-    uint32_t     error_flag,
+    rtems_error_code_t error_flag,
     const char   *printf_format,
     va_list      arglist
 )
@@ -175,7 +175,7 @@ static int rtems_verror(
  */
 
 int rtems_error(
-    int   error_flag,
+    rtems_error_code_t error_flag,
     const char *printf_format,
     ...
   )
