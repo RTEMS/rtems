@@ -19,6 +19,11 @@
 #ifndef _RTEMS_SCORE_INTERR_H
 #define _RTEMS_SCORE_INTERR_H
 
+#include <stdbool.h>
+#include <stdint.h>
+
+#include <rtems/system.h>
+
 /**
  *  @defgroup ScoreIntErr Internal Error Handler
  *
@@ -68,6 +73,8 @@ typedef enum {
   INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE
 } Internal_errors_Core_list;
 
+typedef uint32_t Internal_errors_t;
+
 /**
  *  This type holds the fatal error information.
  */
@@ -77,7 +84,7 @@ typedef struct {
   /** This indicates if the error is internal of external. */
   bool                    is_internal;
   /** This is the error code. */
-  uint32_t                the_error;
+  Internal_errors_t       the_error;
 } Internal_errors_Information;
 
 /**
@@ -93,7 +100,7 @@ SCORE_EXTERN Internal_errors_Information _Internal_errors_What_happened;
 void _Internal_error_Occurred(
   Internal_errors_Source  the_source,
   bool                    is_internal,
-  uint32_t                the_error
+  Internal_errors_t       the_error
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #ifdef __cplusplus
