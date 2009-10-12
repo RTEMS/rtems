@@ -36,6 +36,7 @@ Init: pthread_mutex_init - EINVAL (bad priority ceiling)
 Init: Resetting mutex attributes
 Init: pthread_mutex_init - ENOSYS (process wide scope)
 Init: pthread_mutex_init - EINVAL (invalid scope)
+Init: pthread_mutex_init - EINVAL (invalid type)
 Init: Resetting mutex attributes
 Init: Changing mutex attributes
 Init: mutex protocol is (1) -- PTHREAD_PRIO_INHERIT

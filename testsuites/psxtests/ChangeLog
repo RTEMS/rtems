@@ -1,5 +1,9 @@
 2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psx05/init.c, psx05/psx05.scn: Add test for bad mutex type.
+
+2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psxcleanup/system.h: Fix typo.
 	* Makefile.am, configure.ac: Add new test for exercising pushing
 	and popping a clean up handler without actually executing it.

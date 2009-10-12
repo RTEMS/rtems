@@ -295,6 +295,15 @@ void *POSIX_Init(
   status = pthread_mutex_init( &Mutex_id, &attr );
   assert( status == EINVAL );
 
+  /* bad kind */
+  status = pthread_mutexattr_init( &attr );
+  assert( !status );
+
+  puts( "Init: pthread_mutex_init - EINVAL (invalid type)" );
+  attr.type = -1;
+  status = pthread_mutex_init( &Mutex_id, &attr );
+  assert( status == EINVAL );
+
   /* now set up for a success pthread_mutex_init */
 
   puts( "Init: Resetting mutex attributes" );
