@@ -20,13 +20,13 @@
 #ifndef _RTEMS_SCORE_USEREXT_H
 #define _RTEMS_SCORE_USEREXT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/score/interr.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/thread.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef void User_extensions_routine RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
@@ -185,7 +185,7 @@ typedef void( *User_extensions_thread_exitted_extension )(
 typedef void( *User_extensions_fatal_extension )(
   Internal_errors_Source,
   bool,
-  uint32_t
+  Internal_errors_t
 );
 
 /**
@@ -310,7 +310,7 @@ void _User_extensions_Thread_exitted(
 void _User_extensions_Fatal(
   Internal_errors_Source source,
   bool                   is_internal,
-  uint32_t               error
+  Internal_errors_t      error
 );
 
 /** @} */
