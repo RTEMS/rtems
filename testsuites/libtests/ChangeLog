@@ -1,3 +1,7 @@
+2009-10-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpuuse/init.c, cpuuse/system.h: Use minimum stack size.
+
 2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, termios01/termios_testdriver.c: Do not use

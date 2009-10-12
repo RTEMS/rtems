@@ -64,7 +64,7 @@ rtems_task Init(
   status = rtems_task_create(
      Task_name[ 1 ],
      1,
-     RTEMS_MINIMUM_STACK_SIZE * 2,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_TIMESLICE,
      RTEMS_FLOATING_POINT,
      &Task_id[ 1 ]
@@ -74,7 +74,7 @@ rtems_task Init(
   status = rtems_task_create(
      Task_name[ 2 ],
      1,
-     RTEMS_MINIMUM_STACK_SIZE * 2,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_TIMESLICE,
      RTEMS_FLOATING_POINT,
      &Task_id[ 2 ]
@@ -84,7 +84,7 @@ rtems_task Init(
   status = rtems_task_create(
      Task_name[ 3 ],
      1,
-     RTEMS_MINIMUM_STACK_SIZE * 2,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_TIMESLICE,
      RTEMS_FLOATING_POINT,
      &Task_id[ 3 ]
