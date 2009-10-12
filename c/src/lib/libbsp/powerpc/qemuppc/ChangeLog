@@ -1,3 +1,7 @@
+2009-10-12	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+	* linkcmds:
+	increase size of ROM to 4 Meg
+
 2009-10-06	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 	* Makefile.am:
 	do not use shared/timerstub

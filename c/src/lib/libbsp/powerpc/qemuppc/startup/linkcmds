@@ -5,7 +5,7 @@ ENTRY(_start)
 MEMORY
   {
         RAM       : ORIGIN = 0, LENGTH = 4M
-        ROM       : ORIGIN = 0xFFFC0000, LENGTH = 0x40000
+        ROM       : ORIGIN = 0xFFC00000, LENGTH = 4M
         VECTORS   : ORIGIN = 0xFFF00000, LENGTH = 0x20000
         RESET     : ORIGIN = 0xFFFFFFFC, LENGTH = 0x4
   }
