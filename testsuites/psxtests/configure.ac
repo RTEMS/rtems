@@ -51,6 +51,7 @@ psxcancel/Makefile
 psxcancel01/Makefile
 psxchroot01/Makefile
 psxcleanup/Makefile
+psxcleanup01/Makefile
 psxclock/Makefile
 psxcond01/Makefile
 psxenosys/Makefile

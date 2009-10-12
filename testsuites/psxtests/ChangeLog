@@ -1,3 +1,12 @@
+2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxcleanup/system.h: Fix typo.
+	* Makefile.am, configure.ac: Add new test for exercising pushing
+	and popping a clean up handler without actually executing it.
+	* psxcleanup01/.cvsignore, psxcleanup01/Makefile.am,
+	psxcleanup01/init.c, psxcleanup01/psxcleanup01.doc,
+	psxcleanup01/psxcleanup01.scn: New files.
+
 2009-10-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: Add new test to ensure that canceling an

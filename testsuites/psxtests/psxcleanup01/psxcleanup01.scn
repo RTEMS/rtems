@@ -1,0 +1,4 @@
+*** POSIX CLEANUP TEST 01 ***
+Init - pthread_cleanup_push - a routine we will not execute
+Init - pthread_cleanup_pop - do not execute
+*** END OF POSIX CLEANUP TEST 01 ***
