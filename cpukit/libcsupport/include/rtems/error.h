@@ -11,15 +11,19 @@
 #ifndef _RTEMS_RTEMS_ERROR_H
 #define _RTEMS_RTEMS_ERROR_H
 
+#include <rtems/score/interr.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef Internal_errors_t rtems_error_code_t;
 
 /*
  * rtems_error() and rtems_panic() support
  */
 
-#define RTEMS_ERROR_ERRNO  (1<<((sizeof(int) * 8) - 2)) /* hi bit; use 'errno' */
+#define RTEMS_ERROR_ERRNO  (1<<((sizeof(rtems_error_code_t) * CHAR_BIT) - 2)) /* hi bit; use 'errno' */
 #define RTEMS_ERROR_PANIC  (RTEMS_ERROR_ERRNO / 2)       /* err fatal; no return */
 #define RTEMS_ERROR_ABORT  (RTEMS_ERROR_ERRNO / 4)       /* err is fatal; panic */
 
@@ -27,7 +31,7 @@ extern "C" {
                              RTEMS_ERROR_PANIC) /* all */
 
 const char *rtems_status_text(rtems_status_code);
-int   rtems_error(int error_code, const char *printf_format, ...);
+int   rtems_error(rtems_error_code_t error_code, const char *printf_format, ...);
 #ifdef __GNUC__
 void  rtems_panic(const char *printf_format, ...);
 /*
