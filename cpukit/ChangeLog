@@ -1,3 +1,10 @@
+2009-10-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/score/interr.h: Introduce Internal_errors_t.
+	* score/src/interr.c, score/include/rtems/score/userext.h,
+	score/src/userextthreadbegin.c: Reflect having introduced
+	Internal_errors_t.
+
 2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/alarm.c: If 0 seconds do not insert timer.
