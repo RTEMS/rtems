@@ -1,3 +1,6 @@
+/*
+ *  $Id$
+ */
 
 static void
 __outb(int port, unsigned char v)
@@ -46,9 +49,9 @@ void cmain (void)
   __bzero (__sbss2_start  , __sbss2_end - __sbss2_start);
   __bzero (__sbss_start   , __sbss_end  - __sbss_start);
   __bzero (__bss_start    , __bss_end   - __bss_start);
-  printk( "start of BSP\n");
+  /* printk( "start of BSP\n"); */
   boot_card(0);
-  printk( "end of BSP\n");
+  /* printk( "end of BSP\n"); */
   __outb (0x92, 0x01);
   while (1)
     ;

@@ -1,3 +1,8 @@
+2009-10-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* include/bsp.h: BSP has plenty of memory.
+	* startup/cmain.c: Comment out prints.
+
 2009-10-12	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 	* linkcmds:
 	increase size of ROM to 4 Meg

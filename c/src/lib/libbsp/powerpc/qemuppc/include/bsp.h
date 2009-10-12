@@ -26,8 +26,6 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
-#define BSP_SMALL_MEMORY 1
-
 /*
  *  Convert decrementer value to tenths of microseconds (used by shared timer
  *  driver).
