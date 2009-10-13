@@ -2335,14 +2335,15 @@ rtems_fdisk_print_status (rtems_flashdisk* fd)
 /**
  * Flash disk IOCTL handler.
  *
- * @param dev Device number (major, minor number).
+ * @param dd Disk device.
  * @param req IOCTL request code.
  * @param argp IOCTL argument.
  * @retval The IOCTL return value
  */
 static int
-rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
+rtems_fdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
 {
+  dev_t                     dev = rtems_disk_physical_device_number (dd);
   rtems_device_minor_number minor = rtems_filesystem_dev_minor_t (dev);
   rtems_blkdev_request*     r = argp;
   rtems_status_code         sc;
@@ -2408,7 +2409,7 @@ rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
         break;
 
       default:
-        rtems_blkdev_ioctl (dev, req, argp);
+        rtems_blkdev_ioctl (dd, req, argp);
         break;
     }
 
@@ -2479,7 +2480,7 @@ rtems_fdisk_initialize (rtems_device_major_number major,
   
     sc = rtems_disk_create_phys(dev, c->block_size,
                                 blocks - fd->unavail_blocks,
-                                rtems_fdisk_ioctl, name);
+                                rtems_fdisk_ioctl, NULL, name);
     if (sc != RTEMS_SUCCESSFUL)
     {
       rtems_fdisk_error ("disk create phy failed");

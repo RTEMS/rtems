@@ -5,6 +5,16 @@
 	score/src/userextthreadbegin.c: Reflect having introduced
 	Internal_errors_t.
 
+2009-10-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/diskdevs.h: Added driver data pointer to IO
+	control function.  The IO control handler takes now the disk device as
+	first parameter instead of the physical device number.
+	* cpukit/libblock/include/rtems/blkdev.h, libblock/src/bdbuf.c,
+	libblock/src/blkdev.c, libblock/src/diskdevs.c, libblock/src/nvdisk.c,
+	libblock/src/flashdisk.c, libblock/src/ramdisk.c: Update for block
+	device API change.
+
 2009-10-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/alarm.c: If 0 seconds do not insert timer.

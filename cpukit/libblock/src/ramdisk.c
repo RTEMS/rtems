@@ -163,24 +163,14 @@ ramdisk_write(struct ramdisk *rd, rtems_blkdev_request *req)
  *     IOCTL return value
  */
 static int
-ramdisk_ioctl(dev_t dev, uint32_t req, void *argp)
+ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
     switch (req)
     {
         case RTEMS_BLKIO_REQUEST:
         {
-            rtems_device_minor_number minor;
             rtems_blkdev_request *r = argp;
-            struct ramdisk *rd;
-
-            minor = rtems_filesystem_dev_minor_t(dev);
-            if ((minor >= nramdisks) || !ramdisk[minor].initialized)
-            {
-                errno = ENODEV;
-                return -1;
-            }
-
-            rd = ramdisk + minor;
+            struct ramdisk *rd = rtems_disk_driver_data(dd);
 
             switch (r->req)
             {
@@ -198,7 +188,7 @@ ramdisk_ioctl(dev_t dev, uint32_t req, void *argp)
         }
   
         default:
-            return rtems_blkdev_ioctl (dev, req, argp);
+            return rtems_blkdev_ioctl (dd, req, argp);
             break;
     }
 
@@ -266,7 +256,7 @@ ramdisk_initialize(
             r->area = c->location;
         }
         rc = rtems_disk_create_phys(dev, c->block_size, c->block_num,
-                                    ramdisk_ioctl, name);
+                                    ramdisk_ioctl, r, name);
         if (rc != RTEMS_SUCCESSFUL)
         {
             if (r->malloced)

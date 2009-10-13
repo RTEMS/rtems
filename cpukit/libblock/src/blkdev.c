@@ -237,20 +237,19 @@ rtems_blkdev_generic_ioctl(
 
         case RTEMS_BLKIO_SYNCDEV:
             rc = rtems_bdbuf_syncdev(dd->dev);
-            args->ioctl_return = (rc == RTEMS_SUCCESSFUL ? 0 : -1);
+            args->ioctl_return = (uint32_t) (rc == RTEMS_SUCCESSFUL ? 0 : -1);
             break;
 
         case RTEMS_BLKIO_REQUEST:
         {
             rtems_blkdev_request *req = args->buffer;
-            args->ioctl_return = dd->ioctl(dd->phys_dev->dev, args->command,
-                                           req);
+	    args->ioctl_return = (uint32_t) dd->ioctl(dd, args->command, req);
             break;
         }
 
         default:
-            args->ioctl_return = dd->ioctl(dd->phys_dev->dev, args->command,
-                                           args->buffer);
+	    args->ioctl_return = (uint32_t) dd->ioctl(dd, args->command,
+			                              args->buffer);
             break;
     }
     rtems_disk_release(dd);
@@ -259,18 +258,10 @@ rtems_blkdev_generic_ioctl(
 }
 
 int
-rtems_blkdev_ioctl(dev_t dev, uint32_t req, void *argp)
+rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
-    rtems_disk_device *dd;
     size_t            *arg_size = argp;
     int                rc = 0;
-
-    dd = rtems_disk_obtain(dev);
-    if (dd == NULL)
-    {
-        errno = ENODEV;
-        return -1;
-    }
     
     switch (req)
     {
@@ -295,8 +286,6 @@ rtems_blkdev_ioctl(dev_t dev, uint32_t req, void *argp)
             rc = -1;
             break;
     }
-    
-    rtems_disk_release(dd);
 
     return rc;
 }

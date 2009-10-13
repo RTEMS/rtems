@@ -17,6 +17,7 @@
 #define _RTEMS_BLKDEV_H
 
 #include <rtems.h>
+#include <rtems/diskdevs.h>
 #include <sys/ioctl.h>
 
 #ifdef __cplusplus
@@ -38,11 +39,6 @@ extern "C" {
  *
  * @{
  */
-
-/**
- * Block device block index type.
- */
-typedef uint32_t rtems_blkdev_bnum;
 
 /**
  * Block device request type.
@@ -250,7 +246,7 @@ rtems_blkdev_generic_ioctl(
  * Use this in all block devices to handle the common set of ioctl requests.
  */
 int
-rtems_blkdev_ioctl(dev_t dev, uint32_t req, void *argp);
+rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
 
 /** @} */
 

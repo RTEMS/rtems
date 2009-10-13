@@ -223,6 +223,7 @@ rtems_status_code rtems_disk_create_phys(
   uint32_t block_size,
   rtems_blkdev_bnum disk_size,
   rtems_block_device_ioctl handler,
+  void *driver_data,
   const char *name
 )
 {
@@ -252,12 +253,11 @@ rtems_status_code rtems_disk_create_phys(
     dd->size = disk_size;
     dd->block_size = dd->media_block_size = block_size;
     dd->ioctl = handler;
+    dd->driver_data = driver_data;
 
     rc = rtems_io_register_name(name, major, minor);
 
-    if (handler (dd->phys_dev->dev,
-                 RTEMS_BLKDEV_CAPABILITIES,
-                 &dd->capabilities) < 0)
+    if (handler (dd, RTEMS_BLKDEV_CAPABILITIES, &dd->capabilities) < 0)
       dd->capabilities = 0;
     
     diskdevs_protected = false;
@@ -316,6 +316,7 @@ rtems_status_code rtems_disk_create_log(
   dd->size = size;
   dd->block_size = dd->media_block_size = pdd->block_size;
   dd->ioctl = pdd->ioctl;
+  dd->driver_data = pdd->driver_data;
 
   rc = rtems_io_register_name(name, major, minor);
 

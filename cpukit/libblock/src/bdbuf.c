@@ -1975,7 +1975,7 @@ rtems_bdbuf_read (dev_t                device,
     req->status = RTEMS_RESOURCE_IN_USE;
     req->error = 0;
   
-    result = dd->ioctl (dd->phys_dev->dev, RTEMS_BLKIO_REQUEST, req);
+    result = dd->ioctl (dd, RTEMS_BLKIO_REQUEST, req);
 
     /*
      * Inspection of the DOS FS code shows the result from this function is
@@ -2401,9 +2401,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
            * Perform the transfer. No cache locks, no preemption, only the disk
            * device is being held.
            */
-          result = dd->phys_dev->ioctl (dd->phys_dev->dev,
-                                        RTEMS_BLKIO_REQUEST, transfer->write_req);
-
+          result = dd->ioctl (dd, RTEMS_BLKIO_REQUEST, transfer->write_req); 
           if (result < 0)
           {
             rtems_bdbuf_lock_cache ();
