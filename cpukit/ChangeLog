@@ -1,5 +1,8 @@
 2009-10-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/include/rtems/bdbuf.h: Use size_t for swapout_workers.
+	* libblock/src/bdpart.c: Add __attribute__((unused)) to suppress
+	warnings.
 	* libblock/src/bdbuf.c: Fix broken printf formats.
 	Use size_t for sizes.
 
