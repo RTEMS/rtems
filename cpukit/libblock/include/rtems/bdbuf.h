@@ -242,7 +242,7 @@ typedef struct rtems_bdbuf_config {
   uint32_t            swapout_period;          /**< Period swapout checks buf
                                                 * timers. */
   uint32_t            swap_block_hold;         /**< Period a buffer is held. */
-  uint32_t            swapout_workers;         /**< The number of worker
+  size_t              swapout_workers;         /**< The number of worker
                                                 * threads for the swapout
                                                 * task. */
   rtems_task_priority swapout_worker_priority; /**< Priority of the swap out
