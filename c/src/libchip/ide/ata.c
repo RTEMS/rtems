@@ -1006,12 +1006,12 @@ ata_queue_task(rtems_task_argument arg)
  * RETURNS:
  *     depend on 'cmd'
  */
-int
-ata_ioctl(dev_t device, int cmd, void *argp)
+static int
+ata_ioctl(rtems_disk_device *dd, uint32_t cmd, void *argp)
 {
+    dev_t                     device = rtems_disk_physical_device_number(dd);
     rtems_status_code         status;
     rtems_device_minor_number rel_minor;
-    uint8_t                   block_count;
     
     rel_minor = (rtems_filesystem_dev_minor_t(device)) /
                 ATA_MINOR_NUM_RESERVED_PER_ATA_DEVICE;
@@ -1042,7 +1042,7 @@ ata_ioctl(dev_t device, int cmd, void *argp)
             break;
             
         default:
-            return rtems_blkdev_ioctl (device, cmd, argp);
+            return rtems_blkdev_ioctl (dd, cmd, argp);
             break;
     }
 
@@ -1457,7 +1457,7 @@ rtems_ata_initialize(rtems_device_major_number major,
                 (ATA_DEV_INFO(ctrl_minor, dev).heads *
                  ATA_DEV_INFO(ctrl_minor, dev).cylinders *
                  ATA_DEV_INFO(ctrl_minor, dev).sectors),
-                (rtems_block_device_ioctl) ata_ioctl, name);
+                ata_ioctl, NULL, name);
             if (status != RTEMS_SUCCESSFUL)
             {
                 ata_devs[ata_devs_number].device = ATA_UNDEFINED_VALUE;

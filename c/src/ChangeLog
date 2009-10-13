@@ -1,3 +1,8 @@
+2009-10-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/i2c/spi-sd-card.c, libchip/ide/ata.c: Update for block
+	device API change.
+
 2009-10-08	Chris Johns <chrisj@rtems.org>
 
 	* libchip/ide/ata.c, c/src/libchip/ide/ata_internal.h: Remove the

@@ -24,6 +24,7 @@
 #include <rtems/libi2c.h>
 #include <rtems/libio.h>
 #include <rtems/diskdevs.h>
+#include <rtems/blkdev.h>
 
 #include <libchip/spi-sd-card.h>
 
@@ -1117,11 +1118,11 @@ sd_card_disk_block_write_cleanup:
 	return rv;
 }
 
-static int sd_card_disk_ioctl( dev_t dev, uint32_t req, void *arg)
+static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
 {
 	RTEMS_DEBUG_PRINT( "dev = %u, req = %u, arg = 0x08%x\n", dev, req, arg);
 	if (req == RTEMS_BLKIO_REQUEST) {
-		rtems_device_minor_number minor = rtems_filesystem_dev_minor_t( dev);
+		rtems_device_minor_number minor = rtems_disk_physical_minor_number( dd);
 		sd_card_driver_entry *e = &sd_card_driver_table [minor];
 		rtems_blkdev_request *r = (rtems_blkdev_request *) arg;
 		switch (r->req) {
@@ -1159,7 +1160,7 @@ static rtems_status_code sd_card_disk_init( rtems_device_major_number major, rte
 		RTEMS_CHECK_SC( sc, "Initialize SD Card");
 
 		/* Create disk device */
-		sc = rtems_disk_create_phys( dev, (int) e->block_size, (int) e->block_number, sd_card_disk_ioctl, e->device_name);
+		sc = rtems_disk_create_phys( dev, e->block_size, e->block_number, sd_card_disk_ioctl, NULL, e->device_name);
 		RTEMS_CHECK_SC( sc, "Create disk device");
 	}
 
