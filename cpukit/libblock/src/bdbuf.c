@@ -1148,7 +1148,7 @@ rtems_bdbuf_init (void)
   rtems_bdbuf_group*  group;
   rtems_bdbuf_buffer* bd;
   uint8_t*            buffer;
-  int                 b;
+  size_t              b;
   int                 cache_aligment;
   rtems_status_code   sc;
 
@@ -2790,7 +2790,7 @@ static void
 rtems_bdbuf_swapout_workers_open (void)
 {
   rtems_status_code sc;
-  int               w;
+  size_t            w;
   
   rtems_bdbuf_lock_cache ();
   
