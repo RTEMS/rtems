@@ -31,6 +31,8 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
+
 #include <rtems.h>
 #include <rtems/error.h>
 #include <rtems/malloc.h>
@@ -1042,11 +1044,11 @@ static void
 rtems_bdbuf_group_realloc (rtems_bdbuf_group* group, size_t new_bds_per_group)
 {
   rtems_bdbuf_buffer* bd;
-  int                 b;
+  size_t              b;
   size_t              bufs_per_bd;
 
   if (rtems_bdbuf_tracer)
-    printf ("bdbuf:realloc: %lu: %ld -> %ld\n",
+    printf ("bdbuf:realloc: %tu: %zd -> %zd\n",
             group - bdbuf_cache.groups, group->bds_per_group,
             new_bds_per_group);
   
@@ -1103,7 +1105,7 @@ rtems_bdbuf_get_next_bd (size_t               bds_per_group,
     rtems_bdbuf_buffer* bd = (rtems_bdbuf_buffer*) node;
 
     if (rtems_bdbuf_tracer)
-      printf ("bdbuf:next-bd: %lu (%ld:%ld) %ld -> %ld\n",
+      printf ("bdbuf:next-bd: %tu (%td:%" PRId32 ") %zd -> %zd\n",
               bd - bdbuf_cache.bds,
               bd->group - bdbuf_cache.groups, bd->group->users,
               bd->group->bds_per_group, bds_per_group);

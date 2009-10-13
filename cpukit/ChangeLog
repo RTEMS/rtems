@@ -1,3 +1,8 @@
+2009-10-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libblock/src/bdbuf.c: Fix broken printf formats.
+	Use size_t for sizes.
+
 2009-10-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/score/interr.h: Introduce Internal_errors_t.
