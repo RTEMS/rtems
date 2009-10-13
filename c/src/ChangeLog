@@ -1,3 +1,8 @@
+2009-10-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/serial/ns16550.c: Enable interrupts during open to avoid
+	NULL pointer access in interrupt handler.
+
 2009-10-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/i2c/spi-sd-card.c, libchip/ide/ata.c: Update for block

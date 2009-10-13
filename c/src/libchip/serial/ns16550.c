@@ -173,6 +173,9 @@ NS16550_STATIC int ns16550_open(
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
   struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
   console_tbl *c = &Console_Port_Tbl [minor];
+  console_data *d = &Console_Port_Data [minor];
+
+  d->termios_data = tty;
 
   /* Assert DTR */
   if (c->pDeviceFlow != &ns16550_flow_DTRCTS) {
@@ -181,6 +184,10 @@ NS16550_STATIC int ns16550_open(
 
   /* Set initial baud */
   rtems_termios_set_initial_baud( tty, (int32_t) c->pDeviceParams);
+
+  if (c->pDeviceFns->deviceOutputUsesInterrupts) {
+    ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
+  }
 
   return RTEMS_SUCCESSFUL;
 }
@@ -201,6 +208,8 @@ NS16550_STATIC int ns16550_close(
   if(Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_DTRCTS) {
     ns16550_negate_DTR(minor);
   }
+
+  ns16550_enable_interrupts(minor, NS16550_DISABLE_ALL_INTR);
 
   return(RTEMS_SUCCESSFUL);
 }
@@ -648,8 +657,6 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
       }
     }
   #endif
-  
-  ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
 }
 
 /*
