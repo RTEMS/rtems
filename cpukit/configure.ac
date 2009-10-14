@@ -356,7 +356,6 @@ score/cpu/nios2/Makefile
 score/cpu/powerpc/Makefile
 score/cpu/sh/Makefile
 score/cpu/sparc/Makefile
-score/cpu/unix/Makefile
 score/cpu/no_cpu/Makefile
 posix/Makefile
 itron/Makefile
