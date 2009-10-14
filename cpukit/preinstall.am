@@ -172,7 +172,6 @@ $(PROJECT_INCLUDE)/rtems/dosfs.h: libfs/src/dosfs/dosfs.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dosfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dosfs.h
 endif
-if !UNIX
 $(PROJECT_INCLUDE)/rtems/bdbuf.h: libblock/include/rtems/bdbuf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bdbuf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bdbuf.h
@@ -208,7 +207,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ide_part_table.h
 $(PROJECT_INCLUDE)/rtems/bdpart.h: libblock/include/rtems/bdpart.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bdpart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bdpart.h
-endif
+
 if LIBNETWORKING
 $(PROJECT_INCLUDE)/rtems/ftpd.h: ftpd/ftpd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ftpd.h
