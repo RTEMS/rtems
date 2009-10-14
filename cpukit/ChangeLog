@@ -1,5 +1,12 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/unixlibc.c, libcsupport/src/unixlibc_io.c,
+	libcsupport/src/hosterr.c: Remove (unused).
+	* libcsupport/Makefile.am: Remove libcsupport/src/unixlibc.c,
+	libcsupport/src/unixlibc_io.c, libcsupport/src/hosterr.c.
+
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/sysv-ipc.m4: Remove (unused).
 	* configure.ac: Remove RTEMS_UNIX, RTEMS_UNIXLIB.
 
