@@ -1,28 +1,15 @@
-/* spmonotonic -- sanity check the rate monotonic manager
+/*
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
  *
- * license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at
- * http://www.rtems.com/license/LICENSE .
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  * $Id$
  */
 
-#define CONFIGURE_INIT
 #include <tmacros.h>  /* includes bsp.h, stdio, etc... */
-
-/* prototype */
-rtems_task Init (rtems_task_argument ignored);
-
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_MAXIMUM_TASKS        1
-#define CONFIGURE_MAXIMUM_PERIODS      1
-
-#define CONFIGURE_INIT
-
-#include <rtems/confdefs.h>
 
 rtems_task Init(
     rtems_task_argument ignored
@@ -44,27 +31,18 @@ rtems_task Init(
   directive_failed(status, "rate_monotonic_create");
 
   /* start period with initial value */
-  status = rtems_rate_monotonic_period(
-      period_id,
-      wantintervals[0]
-  );
-  directive_failed(status, "rate_monotonic_period");
+  status = rtems_rate_monotonic_period( period_id, wantintervals[0] );
+  directive_failed(status, "rate_monotonic_period #1");
 
   /* get our first timestamp */
-  status = rtems_clock_get(
-      RTEMS_CLOCK_GET_TICKS_SINCE_BOOT,
-      &timestamps[0]
-  );
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &timestamps[0] );
   directive_failed(status, "clock_get");
 
   /* loop through and gather more timestamps */
   for (loopy = 1; loopy < 5; loopy++) {
 
-    status = rtems_rate_monotonic_period(
-        period_id,
-        wantintervals[loopy]
-    );
-    directive_failed(status, "rate_monotonic_period");
+    status = rtems_rate_monotonic_period( period_id, wantintervals[loopy] );
+    directive_failed(status, "rate_monotonic_period #2");
 
     status = rtems_clock_get(
         RTEMS_CLOCK_GET_TICKS_SINCE_BOOT,
@@ -74,11 +52,8 @@ rtems_task Init(
   }
 
   /* block one last time */
-  status = rtems_rate_monotonic_period(
-      period_id,
-      1
-  );
-  directive_failed(status, "rate_monotonic_period");
+  status = rtems_rate_monotonic_period( period_id, 1 );
+  directive_failed(status, "rate_monotonic_period #3");
 
   /* get one last timestamp */
   status = rtems_clock_get(
@@ -108,3 +83,17 @@ rtems_task Init(
   puts("*** END OF TEST 32 ***");
   rtems_test_exit(0);
 }
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_MAXIMUM_TASKS        1
+#define CONFIGURE_MAXIMUM_PERIODS      1
+
+#define CONFIGURE_MICROSECONDS_PER_TICK 100000
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+
