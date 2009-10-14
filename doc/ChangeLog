@@ -1,3 +1,8 @@
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* HELP.html, bsp_howto/support.t, relnotes/status.texi,
+	started_ada/buildada.t: Remove references to posix/Unix port.
+
 2009-09-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/conf.t, user/userext.t: Eliminate use of deprecated

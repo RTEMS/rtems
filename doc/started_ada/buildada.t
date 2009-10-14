@@ -487,16 +487,14 @@ is the directory under tools that contails @value{RTEMSUNTAR}.
 
 @item ENABLE_RTEMS_POSIX
 is set to "yes" if you want to enable the RTEMS POSIX API support.
-At this time, this feature is not supported by the UNIX ports of RTEMS
-and is forced to "no" for those targets.  This corresponds to the
+This corresponds to the 
 @code{configure} option @code{--enable-posix}.
 
 This must be enabled to support the GNAT/RTEMS run-time.
 
 @item ENABLE_RTEMS_ITRON
 is set to "yes" if you want to enable the RTEMS ITRON API support.
-At this time, this feature is not supported by the UNIX ports of RTEMS
-and is forced to "no" for those targets.  This corresponds to the
+This corresponds to the
 @code{configure} option @code{--enable-itron}.
 
 @item ENABLE_RTEMS_MP

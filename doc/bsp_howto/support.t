@@ -94,9 +94,6 @@ on the BSP.  Examples of this include:
 VMEbus into target memory if the host is a VMEbus board in the same
 chasis.
 
-@item @code{unix/posix} includes scripts to run the tests automatically 
-on this BSP.
-
 @end itemize
 
 @section bsp.h Include File

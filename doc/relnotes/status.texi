@@ -104,18 +104,6 @@ following processors and target boards:
 @item P4000 with R4600 or R4650
 @end itemize
 
-@item AMD 29K
-@itemize -
-@item Portsw
-@end itemize
-
-@item UNIX
-@itemize -
-@item Hewlett Packard HPUX (PA-RISC)
-@item Sun Solaris 2.x (SPARC)
-@item Linux (i386)
-@end itemize
-
 @end itemize
 
 Support for the Cygnus NEWLIB Standard C Library is
