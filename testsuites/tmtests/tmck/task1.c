@@ -156,12 +156,7 @@ void check_read_timer()
        *  consider valid for our testing purposes.
        */
       printf( "TOO LONG (%d) at index %d!!!\n", end_time, index );
-#if defined(unix)
-      index--;
-      continue;
-#else
       rtems_test_exit( 1 );
-#endif
     }
     else
       Distribution[ end_time ]++;

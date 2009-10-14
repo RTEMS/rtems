@@ -1,3 +1,7 @@
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tmck/task1.c: Remove support for "unix".
+
 2009-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tm08/task1.c: Convert calls to legacy routine rtems_clock_get(
