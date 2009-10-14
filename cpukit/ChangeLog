@@ -1,5 +1,6 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/newlibc_reent.c: Eliminate RTEMS_UNIX.
 	* libcsupport/src/newlibc_exit.c: Eliminate RTEMS_UNIX.
 	* libcsupport/src/base_fs.c: Eliminate RTEMS_UNIX.
 	* libcsupport/src/stat.c: Eliminate RTEMS_UNIX.

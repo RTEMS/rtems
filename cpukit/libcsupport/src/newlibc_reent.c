@@ -36,10 +36,6 @@
  *        Not sure if this is a problem with hpux, newlib, or something else.
  */
 
-#if defined(RTEMS_UNIX) && !defined(hpux)
-#define NEED_SETVBUF
-#endif
-
 #include <stdio.h>
 
 int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
