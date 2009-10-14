@@ -162,16 +162,6 @@ RTEMS_CPUOPT([RTEMS_NETWORKING],
   [1],
   [if networking is enabled])
 
-RTEMS_CPUOPT([RTEMS_UNIX],
-  [test x"$RTEMS_CPU" = xunix],
-  [1],
-  [to indicate RTEMS unix])
-
-RTEMS_CPUOPT([RTEMS_UNIXLIB],
-  [test x"${enable_unixlib}" = xyes],
-  [1],
-  [to indicate RTEMS using RTEMS's unixlib])
-
 RTEMS_CPUOPT([RTEMS_USES_TAR_H],
   [test x"${RTEMS_USES_TAR_H}" = x"yes"],
   [1],
