@@ -40,12 +40,9 @@ libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/devfs/devfs.h
 
 # POSIX FIFO/pipe
-if ! UNIX
 libimfs_a_SOURCES += src/pipe/fifo.c src/pipe/pipe.c src/pipe/pipe.h
-endif
 
 # dosfs
-
 if LIBDOSFS
 noinst_LIBRARIES += libdosfs.a
 
