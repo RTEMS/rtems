@@ -1,3 +1,9 @@
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Rework make/custom/* handling.
+	* aclocal/check-custom-bsp.m4: Change *.cfg handling.
+	* Makefile.am: Remove make/custom/default.cfg-rule.
+
 2009-10-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/serial/ns16550.c: Enable interrupts during open to avoid
