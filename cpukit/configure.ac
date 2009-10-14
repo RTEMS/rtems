@@ -38,12 +38,6 @@ AC_PROG_RANLIB
 
 RTEMS_CHECK_NEWLIB
 
-# HACK: We should use a feature-based configuration.
-AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
-# HACK: silently accept --enable-unixlib
-  test -n "${enable_unixlib}" || enable_unixlib="yes"
-])
-
 # BSD-isms, used throughout the sources
 # Not really used by this configure script
 # FIXME: They should be eliminated if possible.
