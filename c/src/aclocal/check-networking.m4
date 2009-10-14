@@ -12,9 +12,6 @@ AC_CACHE_CHECK([whether BSP supports networking],
     avr*|m32c*)       # do not have address space to hold BSD TCP/IP stack
       rtems_cv_HAS_NETWORKING="no"
       ;;
-    unix*)
-      rtems_cv_HAS_NETWORKING="no"
-      ;;
     *)
       if test "${RTEMS_HAS_NETWORKING}" = "yes"; then
         rtems_cv_HAS_NETWORKING="yes";

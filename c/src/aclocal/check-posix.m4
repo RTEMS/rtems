@@ -9,9 +9,6 @@ AC_CACHE_CHECK([whether CPU supports libposix],
   rtems_cv_HAS_POSIX_API,
   [dnl
     case "$RTEMS_CPU" in
-    unix*)
-      rtems_cv_HAS_POSIX_API="no"
-      ;;
     *)
       if test "${RTEMS_HAS_POSIX_API}" = "yes"; then
         rtems_cv_HAS_POSIX_API="yes";
