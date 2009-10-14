@@ -1,9 +1,0 @@
-#
-#  $Id$
-#
-
-This directory contains the SHM driver support files for 
-System V/POSIX derived UNIX flavors.
-
-WARNING: The interrupt support in this directory currently will
-         only work in a homogeneous system.
