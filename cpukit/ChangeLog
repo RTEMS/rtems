@@ -1,5 +1,6 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove UNIX AM_CONDITIONAL.
 	* libfs/Makefile.am: Unconditionally build src/pipe/fifo.c
 	src/pipe/pipe.c src/pipe/pipe.h.
 	* libblock/Makefile.am: Unconditionally build libblock.

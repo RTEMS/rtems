@@ -261,7 +261,6 @@ AC_CHECK_FUNCS(strlcpy strlcat)
 
 # ... far too many conditionals ...
 AM_CONDITIONAL(LIBRPC,[test x"$rtems_cv_HAS_NETWORKING" = x"yes"])
-AM_CONDITIONAL(UNIX,[test x"${RTEMS_CPU}" = x"unix"])
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 
 AM_CONDITIONAL(HAS_MP,test x"$enable_multiprocessing" = x"yes" )
