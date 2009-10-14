@@ -35,7 +35,6 @@
 
 void rtems_filesystem_initialize( void )
 {
-#if !defined(RTEMS_UNIX)
   int                                   status;
   rtems_filesystem_mount_table_entry_t *entry;
   const rtems_filesystem_mount_table_t *mt;
@@ -120,6 +119,4 @@ void rtems_filesystem_initialize( void )
    *  before device drivers are initialized.  So we return via a base
    *  filesystem image and nothing auto-mounted at this point.
    */
-
-#endif
 }

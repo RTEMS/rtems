@@ -1,5 +1,6 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/base_fs.c: Eliminate RTEMS_UNIX.
 	* libcsupport/src/stat.c: Eliminate RTEMS_UNIX.
 	* libmisc/monitor/mon-editor.c: Eliminate RTEMS_UNIX.
 	* libcsupport/include/rtems/libcsupport.h: Remove RTEMS_UNIX, hpux.
