@@ -13,20 +13,8 @@ AC_DEFUN([RTEMS_CANONICAL_TARGET_CPU],
 AC_CANONICAL_TARGET
 AC_MSG_CHECKING(rtems target cpu)
 case "${target}" in
-  i[[34567]]86-*linux*)		# unix "simulator" port
-	RTEMS_CPU=unix
-	;;
-  i[[34567]]86-*freebsd*) 	# unix "simulator" port
-	RTEMS_CPU=unix
-	;;
-  i[[34567]]86-pc-cygwin*) 	# Cygwin is just enough unix like :)
-	RTEMS_CPU=unix
-	;;
   no_cpu-*rtems*)
         RTEMS_CPU=no_cpu
-	;;
-  sparc-sun-solaris*)           # unix "simulator" port
-	RTEMS_CPU=unix
 	;;
   *) 
 	RTEMS_CPU=`echo $target | sed 's%^\([[^-]]*\)-\(.*\)$%\1%'`
