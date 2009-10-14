@@ -1,3 +1,8 @@
+2009-10-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/canonical-target-name.m4:
+	Remove posix/unix simulator.
+
 2009-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psxtests/psxclock/init.c, psxtests/psxclock/psxclock.scn: Add test
