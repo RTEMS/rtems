@@ -24,9 +24,9 @@
 
 void test1()
 {
-  bool              auto_extend;
-  rtems_status_code result;
-  uint32_t          task_count = 0;
+  bool                 auto_extend;
+  rtems_status_code    result;
+  uint32_t             task_count = 0;
   Objects_Information *the_information;
 
   char              c1 = 'a';
