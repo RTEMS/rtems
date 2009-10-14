@@ -54,7 +54,7 @@ irq_SOURCES = irq/irq_init.c \
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES) $(irq_SOURCES)
+    $(irq_SOURCES)
 
 #    ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel
 include_bsp_HEADERS +=  ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h	\
