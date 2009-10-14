@@ -20,13 +20,12 @@
 #ifndef _RTEMS_RTEMS_LIBCSUPPORT_H
 #define _RTEMS_RTEMS_LIBCSUPPORT_H
 
+#include <sys/types.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <stdint.h>
-
-#include <sys/types.h>
 
 void RTEMS_Malloc_Initialize(
   void *heap_begin,
@@ -50,12 +49,7 @@ bool newlib_create_hook(
   rtems_tcb *creating_task
 );
 
-#if defined(RTEMS_UNIX) && !defined(hpux)
-  void newlib_begin_hook(rtems_tcb *current_task);
-  #define __RTEMS_NEWLIB_BEGIN newlib_begin_hook
-#else
-  #define __RTEMS_NEWLIB_BEGIN 0
-#endif
+#define __RTEMS_NEWLIB_BEGIN 0
 
 void newlib_delete_hook(
   rtems_tcb *current_task,
