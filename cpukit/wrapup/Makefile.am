@@ -30,9 +30,7 @@ TMP_LIBS += ../itron/libitron.a
 endif
 
 TMP_LIBS += ../libcsupport/libcsupport.a
-if !UNIX
 TMP_LIBS += ../libblock/libblock.a
-endif
 if LIBDOSFS
 TMP_LIBS += ../libfs/libdosfs.a
 endif
