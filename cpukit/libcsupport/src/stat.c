@@ -31,8 +31,6 @@
 
 #include <rtems.h>
 
-#if !defined(RTEMS_UNIX)
-
 #include <rtems/libio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -82,7 +80,6 @@ int _STAT_NAME(
 
   return status;
 }
-#endif
 
 /*
  *  _stat_r, _lstat_r
