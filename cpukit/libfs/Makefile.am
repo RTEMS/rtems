@@ -18,9 +18,6 @@ noinst_LIBRARIES = libimfs.a
 
 libimfs_a_SOURCES =
 
-if UNIX
-libimfs_a_SOURCES += src/imfs/imfs_unixstub.c src/devfs/devfs_unixstub.c
-else
 libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_creat.c src/imfs/imfs_directory.c src/imfs/imfs_eval.c \
     src/imfs/imfs_free.c src/imfs/imfs_fsunmount.c src/imfs/imfs_gtkn.c \
@@ -41,7 +38,6 @@ libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/devfs/devopen.c src/devfs/devread.c src/devfs/devwrite.c \
     src/devfs/devclose.c src/devfs/devioctl.c src/devfs/devstat.c \
     src/devfs/devfs.h
-endif
 
 # POSIX FIFO/pipe
 if ! UNIX
