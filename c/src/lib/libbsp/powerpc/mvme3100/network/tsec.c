@@ -1219,7 +1219,7 @@ int i;
 static int
 mac_set_duplex(struct tsec_private *mp)
 {
-int media = 0;
+int media = IFM_MAKEWORD(0, 0, 0, 0);
 
 	if ( 0 == BSP_tsec_media_ioctl(mp, SIOCGIFMEDIA, &media)) {
 		if ( IFM_LINK_OK & media ) {
@@ -2329,15 +2329,17 @@ unsigned long	l,o;
 static void consume_rx_mbuf(void *buf, void *arg, int len)
 {
 struct ifnet *ifp = arg;
+struct mbuf    *m = buf;
+
 	if ( len <= 0 ) {
 		ifp->if_iqdrops++;
 		if ( len < 0 ) {
 			ifp->if_ierrors++;
 		}
-		/* caller recycles mbuf */
+		if ( m )
+			m_freem(m);
 	} else {
 		struct ether_header *eh;
-		struct mbuf			*m = buf;
 
 			eh			= (struct ether_header *)(mtod(m, unsigned long) + ETH_RX_OFFSET);
 			m->m_len	= m->m_pkthdr.len = len - sizeof(struct ether_header) - ETH_RX_OFFSET - ETH_CRC_LEN;
@@ -2391,7 +2393,19 @@ tsec_init(void *arg)
 {
 struct tsec_softc	*sc  = arg;
 struct ifnet		*ifp = &sc->arpcom.ac_if;
+int                 media;
+
 	BSP_tsec_init_hw(&sc->pvt, ifp->if_flags & IFF_PROMISC, sc->arpcom.ac_enaddr);
+
+	/* Determine initial link status and block sender if there is no link */
+	media = IFM_MAKEWORD(0, 0, 0, 0);
+	if ( 0 == BSP_tsec_media_ioctl(&sc->pvt, SIOCGIFMEDIA, &media) ) {
+		if ( (IFM_LINK_OK & media) ) {
+			ifp->if_flags &= ~IFF_OACTIVE;
+		} else {
+			ifp->if_flags |=  IFF_OACTIVE;
+		}
+	}
 
 	tsec_update_mcast(ifp);
 	ifp->if_flags |= IFF_RUNNING;

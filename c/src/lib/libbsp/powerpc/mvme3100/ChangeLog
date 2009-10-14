@@ -1,3 +1,12 @@
+2009-10-13	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1451/bsps
+	* network/tsec.c: Fix mbuf leak when watchdog expires. The
+	re-initialization algorithm failed to release mbuf chains
+	held in the TX ring.
+	Also, during initialization the initial link status is determined
+	and IFF_OACTIVE set if no active link was detected.
+
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
