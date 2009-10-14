@@ -182,11 +182,6 @@ RTEMS_CPUOPT([RTEMS_VERSION],
   ["]_RTEMS_VERSION["],
   [RTEMS version string])
 
-RTEMS_CPUOPT([SIZEOF_CPU_CONTEXT],
-  [test x"$RTEMS_CPU" = x"unix"],
-  [$ac_cv_sizeof_CPU_CONTEXT],
-  [The size of a 'CPU_CONTEXT', as computed by sizeof])
-
 RTEMS_CPUOPT([__RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__],
   [test x"${USE_TICKS_FOR_CPU_USAGE_STATISTICS}" = x"1"],
   [1],
