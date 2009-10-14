@@ -1,5 +1,11 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/canonical-target-name.m4, aclocal/check-networking.m4,
+	aclocal/check-posix.m4, aclocal/enable-posix.m4,
+	aclocal/rtems-cpu-subdirs.m4: Remove posix/unix.
+
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Rework make/custom/* handling.
 	* aclocal/check-custom-bsp.m4: Change *.cfg handling.
 	* Makefile.am: Remove make/custom/default.cfg-rule.
