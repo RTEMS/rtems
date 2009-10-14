@@ -1,6 +1,9 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* configure.ac: Remove unix subdir.
+	* configure.ac: Remove some unix-specific checks.
+	Remove unix-CPU_CONTEXT size checking.
+	Remove enable-unixlib.
+	Remove unix subdir.
 	* aclocal/canonical-target-name.m4, aclocal/check-networking.m4,
 	aclocal/check-posix.m4, aclocal/enable-posix.m4:
 	Remove unix/posix.
