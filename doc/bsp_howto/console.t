@@ -52,7 +52,7 @@ Having RTEMS support for Termios is beneficial because:
 
 @item from the user's side because it provides standard primitive operations
 to access the terminal and change configuration settings.  These operations
-are the same under Unix and Rtems. 
+are the same under UNIX and RTEMS. 
 
 @item from the BSP developer's side because it frees the
 developer from dealing with buffer states and mutual exclusions on them. 

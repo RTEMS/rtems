@@ -1,5 +1,9 @@
 2009-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* bsp_howto/console.t: Capitalization.
+
+2009-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* user/preface.texi: Remove UNIX and update port list.
 
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
