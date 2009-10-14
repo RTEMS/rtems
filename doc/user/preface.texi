@@ -153,6 +153,7 @@ It has been ported to the following processor families:
 @itemize @bullet
 @item Altera NIOS II
 @item Analog Devices Blackfin
+@item Atmel AVR
 @item ARM
 @item Freescale (formerly Motorola) MC68xxx 
 @item Freescale (formerly Motorola) MC683xx
@@ -163,9 +164,10 @@ It has been ported to the following processor families:
 @item PowerPC
 @item Renesas (formerly Hitachi) SuperH
 @item Renesas (formerly Hitachi) H8/300
+@item Renesas M32C
+@item Renesas M32R
 @item SPARC
 @item Texas Instruments C3x/C4x
-@item UNIX
 @end itemize
 
 Support for other processor families, including RISC, CISC, and DSP, is
