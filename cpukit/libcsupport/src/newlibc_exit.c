@@ -119,7 +119,7 @@ void libc_wrapup(void)
 
 #include <unistd.h>
 
-#if !defined(RTEMS_UNIX)
+/* FIXME: These defines are a blatant hack */
   #define EXIT_SYMBOL _exit
 
   #if defined(__AVR__)
@@ -134,9 +134,6 @@ void libc_wrapup(void)
  
     extern void FINI_SYMBOL( void );
   #endif
-#else
-  #define EXIT_SYMBOL exit
-#endif
 
 void EXIT_SYMBOL(int status)
 {
