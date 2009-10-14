@@ -1,5 +1,6 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/sysv-ipc.m4: Remove (unused).
 	* configure.ac: Remove RTEMS_UNIX, RTEMS_UNIXLIB.
 
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
