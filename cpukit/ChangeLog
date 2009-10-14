@@ -1,3 +1,7 @@
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/cpu/Makefile.am: Remove unix subdir.
+
 2009-10-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libblock/include/rtems/bdbuf.h: Use size_t for swapout_workers.
