@@ -126,23 +126,6 @@ AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
 [RTEMS_USES_TAR_H=yes],
 [RTEMS_USES_TAR_H=$ac_cv_header_tar_h])
 
-AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
-## FIXME: This check is doubtful
-AS_IF([test "$HAS_MP" = "yes"],
-  [RTEMS_CHECK_SYSV_UNIX])
-
-## The code fragment below had been used in tools/cpu/unix/gensize.c.
-AC_CHECK_SIZEOF([CPU_CONTEXT],[],[
-#include <stdio.h>
-#include <setjmp.h>
-
-typedef struct {
-  jmp_buf     regs;
-  int         isr_level;
-} CPU_CONTEXT;
-])
-])
-
 rtems_major=`echo _RTEMS_VERSION | sed "s/\..*//"`
 rtems_minor=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/\..*//"`
 rtems_revision=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/[[0-9]][[0-9]]*\.//;s/\..*//"`
