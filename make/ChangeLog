@@ -1,3 +1,9 @@
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* custom/Cygwin-posix.cfg, custom/FreeBSD-posix.cfg,
+	custom/Linux-posix.cfg, custom/Solaris-posix.cfg, custom/posix.cfg:
+	Remove.
+
 2009-10-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* custom/lpc2478.cfg, custom/lpc2478_ncs.cfg,
