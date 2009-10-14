@@ -147,7 +147,7 @@ void check_read_timer()
   for ( index = 1 ; index <= MAXIMUM_DISTRIBUTION ; index++ )
     Distribution[ index ] = 0;
 
-  for ( index = 1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1 ; index <= OPERATION_COUNT ; ) {
     benchmark_timer_initialize();
     end_time = benchmark_timer_read();
     if ( end_time > MAXIMUM_DISTRIBUTION ) {
@@ -156,10 +156,10 @@ void check_read_timer()
        *  consider valid for our testing purposes.
        */
       printf( "TOO LONG (%d) at index %d!!!\n", end_time, index );
-      rtems_test_exit( 1 );
+      continue;
     }
-    else
-      Distribution[ end_time ]++;
+    Distribution[ end_time ]++;
+    index++;
   }
 
   printf( "Units may not be in microseconds for this test!!!\n" );
