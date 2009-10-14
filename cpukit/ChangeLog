@@ -1,3 +1,7 @@
+2009-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/threadhandler.c: Remove comment mentioning unix port.
+
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* wrapup/Makefile.am: Remove UNIX.

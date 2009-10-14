@@ -71,9 +71,6 @@
  *  interrupts may already be at there proper level.  Either way,
  *  setting the initial isr level properly here is safe.
  *
- *  Currently this is only really needed for the posix port,
- *  ref: _Context_Switch in unix/cpu.c
- *
  *  Input parameters:   NONE
  *
  *  Output parameters:  NONE
