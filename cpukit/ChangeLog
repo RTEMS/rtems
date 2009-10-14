@@ -1,5 +1,6 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/monitor/mon-editor.c: Eliminate RTEMS_UNIX.
 	* libcsupport/include/rtems/libcsupport.h: Remove RTEMS_UNIX, hpux.
 	Fix extern "C" {}.
 	* libfs/src/imfs/ioman.c: Remove RTEMS_UNIX, __linux__.

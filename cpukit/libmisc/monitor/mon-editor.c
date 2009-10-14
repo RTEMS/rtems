@@ -65,23 +65,20 @@
 #define RTEMS_COMMAND_BUFFER_SIZE (75)
 
 static char monitor_prompt[32];
-#ifndef RTEMS_UNIX
 static char buffer[RTEMS_COMMAND_BUFFER_SIZE];
 static int  pos;
 static int  logged_in;
-#endif
+
 /*
  * History data.
  */
 
 #define RTEMS_COMMAND_HISTORIES (20)
 
-#ifndef RTEMS_UNIX
 static char history_buffer[RTEMS_COMMAND_HISTORIES][RTEMS_COMMAND_BUFFER_SIZE];
 static int  history_pos[RTEMS_COMMAND_HISTORIES];
 static int  history;
 static int  history_next;
-#endif
 
 /*
  * Translation tables. Not sure if this is the best way to
@@ -97,7 +94,6 @@ struct translation_table
   unsigned int             key;
 };
 
-#ifndef RTEMS_UNIX
 static const struct translation_table trans_two[] =
 {
   { '~', 0, KEYS_INS },
@@ -154,7 +150,6 @@ static const struct translation_table trans_tab[] =
   { 'O', trans_tab_O,   0 },    /* O are the fuction keys */
   { 0,   0,             0 }
 };
-#endif
 
 /*
  * Perform a basic translation for some ANSI/VT100 key codes.
@@ -163,7 +158,6 @@ static const struct translation_table trans_tab[] =
  * line editor below so considiered not worth the effort.
  */
 
-#ifndef RTEMS_UNIX
 static unsigned int
 rtems_monitor_getchar (void)
 {
@@ -218,9 +212,7 @@ rtems_monitor_getchar (void)
     }
   }
 }
-#endif
 
-#ifndef RTEMS_UNIX
 /*
  * The line editor with history.
  */
@@ -453,7 +445,6 @@ rtems_monitor_line_editor (
     }
   }
 }
-#endif
 
 /*
  * make_argv(cp): token-count
@@ -513,15 +504,7 @@ rtems_monitor_command_read(char *command,
     sprintf (monitor_prompt, "%" PRId32 "-%s", rtems_monitor_node,
              (env_prompt == NULL) ? MONITOR_PROMPT : env_prompt);
 
-#if defined(RTEMS_UNIX)
-  /* RTEMS on unix gets so many interrupt system calls this is hosed */
-  fprintf(stdout,"%s> ", monitor_prompt);
-  fflush (stdout);
-  while (gets(command) == (char *) 0)
-    ;
-#else
   rtems_monitor_line_editor (command);
-#endif
 
   return rtems_monitor_make_argv (command, argc, argv);
 }
