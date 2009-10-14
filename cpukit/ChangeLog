@@ -1,5 +1,6 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/Makefile.am: Unconditionall build libblock.
 	* Makefile.am: Unconditional build libblock.
 	* libfs/src/imfs/imfs_unixstub.c, libfs/src/devfs/devfs_unixstub.c:
 	Remove (unused).
