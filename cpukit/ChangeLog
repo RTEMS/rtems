@@ -1,5 +1,11 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/canonical-target-name.m4, aclocal/check-networking.m4,
+	aclocal/check-posix.m4, aclocal/enable-posix.m4:
+	Remove unix/posix.
+
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/cpu/Makefile.am: Remove unix subdir.
 
 2009-10-13	Ralf Corsépius <ralf.corsepius@rtems.org>
