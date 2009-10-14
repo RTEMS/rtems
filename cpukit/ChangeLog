@@ -1,3 +1,7 @@
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/imfs/ioman.c: Remove RTEMS_UNIX, __linux__.
+
 2009-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/threadhandler.c: Remove comment mentioning unix port.

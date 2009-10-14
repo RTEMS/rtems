@@ -29,10 +29,6 @@
 #include <rtems/seterr.h>
 #include "imfs.h"
 
-#if defined(__linux__)
-#define S_IFCHR __S_IFCHR
-#endif
-
 /*
  *  rtems_io_register_name
  *
@@ -45,7 +41,6 @@ rtems_status_code rtems_io_register_name(
   rtems_device_minor_number  minor
 )
 {
-#if !defined(RTEMS_UNIX)
   int    status;
   dev_t  dev;
 
@@ -56,7 +51,6 @@ rtems_status_code rtems_io_register_name(
   if ( status )
     return RTEMS_TOO_MANY;
 
-#endif
   return RTEMS_SUCCESSFUL;
 }
 
@@ -74,7 +68,6 @@ rtems_status_code rtems_io_lookup_name(
   rtems_driver_name_t  *device_info
 )
 {
-#if !defined(RTEMS_UNIX)
   IMFS_jnode_t                      *the_jnode;
   rtems_filesystem_location_info_t   loc;
   int                                result;
@@ -102,6 +95,5 @@ rtems_status_code rtems_io_lookup_name(
 
   rtems_filesystem_freenode( &loc );
 
-#endif
   return RTEMS_SUCCESSFUL;
 }
