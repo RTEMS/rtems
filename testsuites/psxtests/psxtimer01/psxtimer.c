@@ -201,10 +201,22 @@ void * task_b (void *arg)
        perror ("Error in timer_gettime\n");
        rtems_test_exit(0);
      }
+
+#if 0
+     /*
+      *  It is not an error if they are not equal.  A clock tick could occur
+      *  and thus they are close but not equal.  Can we test for this?
+      */
      if ( !_Timespec_Equal_to( &timerdata.it_value, &my_period) ){
-       perror ("Error in Task B timer_gettime\n");
+       printf( "NOT EQUAL %d:%d != %d:%d\n", 
+          timerdata.it_value.tv_sec,
+          timerdata.it_value.tv_nsec,
+          my_period.tv_sec,
+          my_period.tv_nsec
+       );
        rtems_test_exit(0);
      }
+#endif
 
      pthread_mutex_lock (&data.mutex);
      clock = time(NULL);
