@@ -1,5 +1,12 @@
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/imfs/imfs_unixstub.c, libfs/src/devfs/devfs_unixstub.c:
+	Remove (unused).
+	* libfs/Makefile.am: Remove libfs/src/imfs/imfs_unixstub.c,
+	libfs/src/devfs/devfs_unixstub.c.
+
+2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/unixlibc.c, libcsupport/src/unixlibc_io.c,
 	libcsupport/src/hosterr.c: Remove (unused).
 	* libcsupport/Makefile.am: Remove libcsupport/src/unixlibc.c,
