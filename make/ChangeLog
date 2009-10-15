@@ -1,5 +1,20 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/ep1a.cfg, custom/gen5200.cfg, custom/gen83xx.cfg,
+	custom/haleakala.cfg, custom/mbx821_001.cfg, 
+	custom/mbx821_002.cfg, custom/mbx821_002b.cfg,
+	custom/mbx860_001b.cfg, custom/mbx860_002.cfg,
+	custom/mbx860_005b.cfg, custom/mbx860_1b.cfg,
+	custom/mbx8xx.cfg, custom/mcp750.cfg, custom/mpc5566evb.cfg,
+	custom/mpc55xx.cfg, custom/mpc8260ads.cfg, custom/mtx603e.cfg,
+	custom/mvme2100.cfg, custom/mvme2307.cfg, custom/mvme3100.cfg,
+	custom/mvme5500.cfg, custom/psim.cfg, custom/qemuppc.cfg,
+	custom/score603e.cfg, custom/ss555.cfg, custom/tqm8xx.cfg,
+	custom/tqm8xx_stk8xx.cfg, custom/virtex.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/nios2_iss.cfg:
 	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
 
