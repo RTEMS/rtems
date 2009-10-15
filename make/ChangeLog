@@ -1,3 +1,10 @@
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* custom/gensh1.cfg, custom/gensh2.cfg, custom/gensh4.cfg,
+	custom/simsh1.cfg, custom/simsh2.cfg, custom/simsh2e.cfg,
+	custom/simsh4.cfg: 
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
 2009-10-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* custom/Cygwin-posix.cfg, custom/FreeBSD-posix.cfg,
