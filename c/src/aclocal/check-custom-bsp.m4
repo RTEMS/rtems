@@ -1,7 +1,9 @@
 dnl $Id$
 
 AC_DEFUN([_RTEMS_CHECK_CUSTOM_BSP],[
-  for i in "${srcdir}/${RTEMS_TOPdir}/bspkit/${RTEMS_CPU}"/*/cfg/$1.cfg \
+  $2=
+  for i in \
+    "${srcdir}/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}"/*/make/custom/$1.cfg \
     "${srcdir}/${RTEMS_TOPdir}/make/custom/"$1.cfg;
   do
     AC_MSG_CHECKING([for $i])

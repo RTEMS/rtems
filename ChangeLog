@@ -1,3 +1,8 @@
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/check-custom-bsp.m4: Let _RTEMS_CHECK_CUSTOM_BSP look for
+	*.cfg into c/src/lib/libbsp/<cpu>/<bsp_family>/make/custom.
+
 2009-10-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/canonical-target-name.m4, aclocal/enable-posix.m4:
