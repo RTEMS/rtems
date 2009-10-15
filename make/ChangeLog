@@ -1,5 +1,18 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/av5282.cfg, custom/csb360.cfg, custom/gen68302.cfg,
+	custom/gen68340.cfg, custom/gen68360_040.cfg, custom/gen68360.cfg,
+	custom/pgh360.cfg, custom/genmcf548x.cfg,
+	custom/m5484FireEngine.cfg, custom/idp.cfg, custom/mcf5206elite.cfg,
+	custom/mcf52235.cfg, custom/mcf5235.cfg, custom/mcf5329.cfg,
+	custom/mrm332.cfg, custom/mvme136.cfg, custom/mvme147.cfg, 
+	custom/mvme147s.cfg, custom/mvme162.cfg, custom/mvme162lx.cfg,
+	custom/mvme167.cfg, custom/ods68302.cfg, custom/sim68000.cfg,
+	custom/simcpu32.cfg, custom/uC5282.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/csb336.cfg, custom/csb337.cfg, custom/csb637.cfg,
 	custom/edb7312.cfg, custom/gba.cfg, custom/arm1136jfs.cfg,
 	custom/arm1136js.cfg, custom/arm7tdmi.cfg, custom/arm920.cfg,
