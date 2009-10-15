@@ -1,5 +1,10 @@
 2009-10-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sapi/include/confdefs.h: Correct type of rtems_malloc_dirty_helper so
+	usable.
+
+2009-10-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/include/rtems/malloc.h: Correct type of
 	rtems_malloc_dirty_helper so usable.
 

@@ -360,7 +360,7 @@ extern rtems_configuration_table        Configuration;
    *  allocated.  This is helpful for finding unitialized data structure
    *  problems. 
    */
-  rtems_malloc_dirtier_t *rtems_malloc_dirty_helper =
+  rtems_malloc_dirtier_t rtems_malloc_dirty_helper =
     #if defined(CONFIGURE_MALLOC_DIRTY)
       rtems_malloc_dirty_memory;
     #else
