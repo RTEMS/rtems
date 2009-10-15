@@ -1,3 +1,11 @@
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/arm1136jfs.cfg: New (relocated from /make/custom).
+	* make/custom/arm1136js.cfg: New (relocated from /make/custom).
+	* make/custom/arm7tdmi.cfg: New (relocated from /make/custom).
+	* make/custom/arm920.cfg: New (relocated from /make/custom).
+	* make/custom/armcortexa9.cfg: New (relocated from /make/custom).
+
 2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* .cvsignore, ChangeLog, Makefile.am, bsp_specs, configure.ac,
