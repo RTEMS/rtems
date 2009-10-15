@@ -1,5 +1,18 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/csb336.cfg, custom/csb337.cfg, custom/csb637.cfg,
+	custom/edb7312.cfg, custom/gba.cfg, custom/arm1136jfs.cfg,
+	custom/arm1136js.cfg, custom/arm7tdmi.cfg, custom/arm920.cfg,
+	custom/armcortexa9.cfg, custom/gp32.cfg, custom/gumstix.cfg,
+	custom/lpc24xx.cfg, custom/lpc24xx_ea.cfg,
+	custom/lpc24xx_ncs_ram.cfg, custom/lpc24xx_ncs_rom_ext.cfg,
+	custom/lpc24xx_ncs_rom_int.cfg, custom/nds.cfg,
+	custom/rtl22xx.cfg, custom/rtl22xx_t.cfg,
+	custom/smdk2410.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/csb350.cfg, custom/genmongoosev.cfg,
 	custom/hurricane.cfg, custom/jmr3904.cfg, custom/rbtx4925.cfg
 	custom/rbtx4938.cfg:
