@@ -1,5 +1,10 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/h8sim.cfg, custom/h8sxsim.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/c3xsim.cfg, custom/c4xsim.cfg:
 	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
 
