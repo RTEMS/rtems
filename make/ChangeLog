@@ -1,5 +1,10 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/pghplus.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/ep1a.cfg, custom/gen5200.cfg, custom/gen83xx.cfg,
 	custom/haleakala.cfg, custom/mbx821_001.cfg, 
 	custom/mbx821_002.cfg, custom/mbx821_002b.cfg,
