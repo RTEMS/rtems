@@ -1,3 +1,9 @@
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/gen68360_040.cfg: New (relocated from /make/custom).
+	* make/custom/gen68360.cfg: New (relocated from /make/custom).
+	* make/custom/pgh360.cfg: New (relocated from /make/custom).
+
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c: Include <rtems/termiostypes.h>.
