@@ -1,5 +1,11 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/leon3.cfg, custom/leon2.cfg, custom/sis.cfg,
+	custom/erc32.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/avrtest.cfg:
 	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
 
