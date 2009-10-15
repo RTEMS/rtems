@@ -1,3 +1,10 @@
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/mcp750.cfg: New (relocated from /make/custom).
+	* make/custom/mtx603e.cfg: New (relocated from /make/custom).
+	* make/custom/mvme2100.cfg: New (relocated from /make/custom).
+	* make/custom/mvme2307.cfg: New (relocated from /make/custom).
+
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
