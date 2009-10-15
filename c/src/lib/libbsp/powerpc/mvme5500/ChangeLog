@@ -1,3 +1,7 @@
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/mvme5500.cfg: New (relocated from /make/custom).
+
 2009-09-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* network/if_100MHz/GT64260eth.c, network/if_1GHz/if_wm.c: Do not
