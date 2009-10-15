@@ -1,5 +1,11 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/hsc_cm01.cfg, custom/mpc8313erdb.cfg,
+	custom/mpc8349eamds.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/bf537Stamp.cfg, custom/eZKit533.cfg:
 	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
 
