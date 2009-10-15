@@ -101,4 +101,20 @@ PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf548x/$(dirstamp)
 $(PROJECT_INCLUDE)/mcf548x/mcf548x.h: mcf548x/include/mcf548x.h $(PROJECT_INCLUDE)/mcf548x/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf548x/mcf548x.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf548x/mcf548x.h
+
+$(PROJECT_INCLUDE)/mcf548x/MCD_progCheck.h: mcf548x/mcdma/MCD_progCheck.h $(PROJECT_INCLUDE)/mcf548x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf548x/MCD_progCheck.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf548x/MCD_progCheck.h
+
+$(PROJECT_INCLUDE)/mcf548x/MCD_dma.h: mcf548x/mcdma/MCD_dma.h $(PROJECT_INCLUDE)/mcf548x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf548x/MCD_dma.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf548x/MCD_dma.h
+
+$(PROJECT_INCLUDE)/mcf548x/MCD_tasksInit.h: mcf548x/mcdma/MCD_tasksInit.h $(PROJECT_INCLUDE)/mcf548x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf548x/MCD_tasksInit.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf548x/MCD_tasksInit.h
+
+$(PROJECT_INCLUDE)/mcf548x/mcdma_glue.h: mcf548x/mcdma/mcdma_glue.h $(PROJECT_INCLUDE)/mcf548x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf548x/mcdma_glue.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf548x/mcdma_glue.h
 endif

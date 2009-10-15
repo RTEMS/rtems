@@ -1,3 +1,11 @@
+2009-10-15	Thomas Doefler <thomas.doerfler@embedded-brains.de>
+
+	* Makefile.am, mcf548x/mcdma/MCD_dma.h, mcf548x/mcdma/MCD_dmaApi.c,
+	* mcf548x/mcdma/MCD_progCheck.h, mcf548x/mcdma/MCD_tasks.c,
+	* mcf548x/mcdma/MCD_tasksInit.c, mcf548x/mcdma/MCD_tasksInit.h,
+	* mcf548x/mcdma/ReleaseNotes.txt, mcf548x/mcdma/mcdma_glue.c,
+	* mcf548x/mcdma/mcdma_glue.h: add MC_DMA support
+
 2009-10-08	Thomas Doefler <thomas.doerfler@embedded-brains.de>
 
 	* mcf5282/include/mcf5282.h: add missing (x) params to four
