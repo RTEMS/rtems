@@ -1,5 +1,10 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/lm32_evr.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/icecube.cfg, custom/pm520_cr825.cfg, pm520_ze30.cfg:
 	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
 
