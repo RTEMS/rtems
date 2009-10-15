@@ -1,5 +1,12 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/csb350.cfg, custom/genmongoosev.cfg,
+	custom/hurricane.cfg, custom/jmr3904.cfg, custom/rbtx4925.cfg
+	custom/rbtx4938.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/m32csim.cfg:
 	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
 
