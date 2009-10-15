@@ -51,6 +51,7 @@
 
 #include <bsp.h>
 #include <mcf548x/mcf548x.h>
+#include <rtems/rtems_mii_ioctl.h>
 #include <errno.h>
 
 /* freescale-api-specifics... */
@@ -64,6 +65,7 @@
  */
 #define NIFACES 2
 
+#define FEC_WATCHDOG_TIMEOUT 5 /* check media every 5 seconds */
 /*
  * buffer descriptor handling 
  */
@@ -106,7 +108,7 @@ extern char _SysSramBase[];
 #define SRAM_DMA_BASE(base) ((void *)SRAM_RXBD_BASE(base,NIFACES+1))
 
 
-#define ETH_DEBUG
+#undef ETH_DEBUG
 
 /*
  * Default number of buffer descriptors set aside for this driver.
@@ -216,6 +218,14 @@ struct mcf548x_enet_struct {
   rtems_id                rxDaemonTid;
   rtems_id                txDaemonTid;
   
+  /*
+   * MDIO/Phy info
+   */
+  struct rtems_mdio_info mdio_info;
+  int phy_default;
+  int phy_chan;    /* which fec channel services this phy access? */
+  int media_state; /* (last detected) state of media */
+
   unsigned long           rxInterrupts;
   unsigned long           rxNotLast;
   unsigned long           rxGiant;
@@ -408,15 +418,20 @@ static void mcf548x_eth_addr_filter_set(struct mcf548x_enet_struct *sc)  {
  *				18-wire ethernet tranceiver (PHY). Please see your PHY
  *				documentation for the register map.
  *
- * Returns:		32-bit register value
+ * Returns:		0 if ok
  *
  * Notes:
  *
  */
-int mcf548x_eth_mii_read(struct mcf548x_enet_struct *sc, unsigned char phyAddr, unsigned char regAddr, unsigned short * retVal)
-  {
+int mcf548x_eth_mii_read(
+ int phyAddr,                          /* PHY number to access or -1       */
+ void *uarg,                           /* unit argument                    */
+ unsigned regAddr,                     /* register address                 */
+ uint32_t *retVal)                     /* ptr to read buffer               */
+{
+  struct mcf548x_enet_struct *sc = uarg;
   int timeout = 0xffff;
-  int chan = sc->chan;
+  int chan = sc->phy_chan;
 
  /*
   * reading from any PHY's register is done by properly
@@ -433,16 +448,15 @@ int mcf548x_eth_mii_read(struct mcf548x_enet_struct *sc, unsigned char phyAddr, 
   */
   while ((timeout--) && (!(MCF548X_FEC_EIR(chan) & MCF548X_FEC_EIR_MII)));
 
-  if(timeout == 0)
-    {
+  if(timeout == 0) {
 
 #ifdef ETH_DEBUG
-    printf ("Read MDIO failed..." "\r\n");
+    iprintf ("Read MDIO failed..." "\r\n");
 #endif
 
-	return false;
+    return 1;
 
-	}
+  }
 
  /*
   * clear mii interrupt bit
@@ -454,9 +468,9 @@ int mcf548x_eth_mii_read(struct mcf548x_enet_struct *sc, unsigned char phyAddr, 
   */
   *retVal = (unsigned short)  MCF548X_FEC_MMFR(chan);
 
-  return true;
+  return 0;
 
-  }
+}
 
 /*
  * Function:	mcf548x_eth_mii_write
@@ -470,10 +484,15 @@ int mcf548x_eth_mii_read(struct mcf548x_enet_struct *sc, unsigned char phyAddr, 
  * Notes:
  *
  */
-static int mcf548x_eth_mii_write(struct mcf548x_enet_struct *sc, unsigned char phyAddr, unsigned char regAddr, unsigned short data)
-  {
-  int chan     = sc->chan;
-  int timeout = 0xffff;
+static int mcf548x_eth_mii_write(
+ int phyAddr,                          /* PHY number to access or -1       */
+ void *uarg,                           /* unit argument                    */
+ unsigned regAddr,                     /* register address                 */
+ uint32_t data)                        /* write data                       */
+{
+  struct mcf548x_enet_struct *sc = uarg;
+  int chan     = sc->phy_chan;
+  int timeout  = 0xffff;
 
   MCF548X_FEC_MMFR(chan) = (MCF548X_FEC_MMFR_ST_01    | 
 			    MCF548X_FEC_MMFR_OP_WRITE | 
@@ -491,10 +510,10 @@ static int mcf548x_eth_mii_write(struct mcf548x_enet_struct *sc, unsigned char p
     {
 
 #ifdef ETH_DEBUG
-    printf ("Write MDIO failed..." "\r\n");
+    iprintf ("Write MDIO failed..." "\r\n");
 #endif
 
-    return false;
+    return 1;
 
     }
 
@@ -503,7 +522,7 @@ static int mcf548x_eth_mii_write(struct mcf548x_enet_struct *sc, unsigned char p
   */
   MCF548X_FEC_EIR(chan) = MCF548X_FEC_EIR_MII;
 
-  return true;
+  return 0;
 
   }
 
@@ -569,22 +588,29 @@ void mcf548x_fec_off(struct mcf548x_enet_struct *sc)
   
 
 #if defined(ETH_DEBUG)
-  unsigned short phyStatus, i;
-  unsigned char  phyAddr = 0;
+  uint32_t phyStatus;
+  int i;
 
   for(i = 0; i < 9; i++)
     {
 
-    mcf548x_eth_mii_read(sc, phyAddr, i, &phyStatus);
-    printf ("Mii reg %d: 0x%04x" "\r\n", i, phyStatus);
+    mcf548x_eth_mii_read(sc->phy_default, sc, i, &phyStatus);
+    iprintf ("Mii reg %d: 0x%04lx" "\r\n", i, phyStatus);
 
     }
 
   for(i = 16; i < 21; i++)
     {
 
-    mcf548x_eth_mii_read(sc, phyAddr, i, &phyStatus);
-    printf ("Mii reg %d: 0x%04x" "\r\n", i, phyStatus);
+    mcf548x_eth_mii_read(sc->phy_default, sc, i, &phyStatus);
+    iprintf ("Mii reg %d: 0x%04lx" "\r\n", i, phyStatus);
+
+    }
+  for(i = 0; i < 32; i++)
+    {
+
+    mcf548x_eth_mii_read(i, sc, 0, &phyStatus);
+    iprintf ("Mii Phy=%d, reg 0: 0x%04lx" "\r\n", i, phyStatus);
 
     }
 #endif	/* ETH_DEBUG */
@@ -746,39 +772,6 @@ static void mcf548x_fec_retire_tbd(struct mcf548x_enet_struct *sc,
   }
 }
 
-#if 0
- /*
-  * Function:	     mcf548x_fec_tx_bd_requeue
-  *
-  * Description:	put buffers back to interface output queue
-  *
-  * Returns:		void
-  *
-  * Notes:
-  *
-  */
-static void mcf548x_fec_tx_bd_requeue(struct mcf548x_enet_struct *sc)
-{
-  /*
-   * Clear already transmitted BDs first. Will not work calling same
-   * from fecExceptionHandler(TFINT).
-   */
-  
-  while (sc->txBdActiveCount > 0) {
-    if (sc->txMbuf[sc->txBdHead] != NULL) {
-      /*
-       * NOTE: txMbuf can be NULL, if mbuf has been split into different BDs
-       */
-      IF_PREPEND(&(sc->arpcom.ac_if.if_snd),sc->txMbuf[sc->txBdHead]);
-      sc->txMbuf[sc->txBdHead] = NULL;
-    }
-    sc->txBdActiveCount--;
-    if(--sc->txBdHead < 0) {
-      sc->txBdHead = sc->txBdCount-1;
-    }    
-  }
-}
-#endif
 
 static void mcf548x_fec_sendpacket(struct ifnet *ifp,struct mbuf *m) {
   struct mcf548x_enet_struct *sc = ifp->if_softc;
@@ -1164,122 +1157,6 @@ static void mcf548x_fec_initialize_hardware(struct mcf548x_enet_struct *sc)
   MCF548X_FEC_CTCWR(chan) = MCF548X_FEC_CTCWR_TFCW | MCF548X_FEC_CTCWR_CRC;
   }
 
- /*
-  * Initialize PHY(LXT971A):
-  *
-  *   Generally, on power up, the LXT971A reads its configuration
-  *   pins to check for forced operation, If not cofigured for
-  *   forced operation, it uses auto-negotiation/parallel detection
-  *   to automatically determine line operating conditions.
-  *   If the PHY device on the other side of the link supports
-  *   auto-negotiation, the LXT971A auto-negotiates with it
-  *   using Fast Link Pulse(FLP) Bursts. If the PHY partner does not
-  *   support auto-negotiation, the LXT971A automatically detects
-  *   the presence of either link pulses(10Mbps PHY) or Idle
-  *   symbols(100Mbps) and sets its operating conditions accordingly.
-  *
-  *   When auto-negotiation is controlled by software, the following
-  *   steps are recommended.
-  *
-  * Note:
-  *   The physical address is dependent on hardware configuration.
-  *
-  * Returns:		void
-  *
-  * Notes:
-  *
-  */
-static void mcf548x_fec_initialize_phy(struct mcf548x_enet_struct *sc)
-  {
-  int            timeout;
-  unsigned short phyAddr = 0;
-  int chan = sc->chan;
-
- /*
-  * Reset PHY, then delay 300ns
-  */
-  mcf548x_eth_mii_write(sc, phyAddr, 0x0, 0x8000);
-
-  rtems_task_wake_after(2);
-
- /* MII100 */
-
- /*
-  * Set the auto-negotiation advertisement register bits
-  */
-  mcf548x_eth_mii_write(sc, phyAddr, 0x4, 0x01e1);
-
- /*
-  * Set MDIO bit 0.12 = 1(&& bit 0.9=1?) to enable auto-negotiation
-  */
-  mcf548x_eth_mii_write(sc, phyAddr, 0x0, 0x1200);
-
- /*
-  * Wait for AN completion
-  */
-  timeout = 0x100;
-#if 0
-  do
-    {
-
-    rtems_task_wake_after(2);
-
-    if((timeout--) == 0)
-      {
-
-#if defined(ETH_DEBUG)
-    printf ("MCF548XFEC PHY auto neg failed." "\r\n");
-#endif
-
-      }
-
-    if(mcf548x_eth_mii_read(sc, phyAddr, 0x1, &phyStatus) != true)
-      {
-
-#if defined(ETH_DEBUG)
-      printf ("MCF548XFEC PHY auto neg failed: 0x%04x." "\r\n", phyStatus);
-#endif
-
-	  return;
-
-	  }
-
-    } while((phyStatus & 0x0020) != 0x0020);
-
-#endif
-#if ETH_PROMISCOUS_MODE 
-  MCF548X_FEC_RCR(chan) |= MCF548X_FEC_RCR_PROM;   /* set to promiscous mode */
-#endif
-
-#if ETH_LOOP_MODE
-  MCF548X_FEC_RCR(chan) |= MCF548X_FEC_RCR_LOOP;   /* set to loopback mode */
-#endif
-
-#if defined(ETH_DEBUG)
-  int i;
-  unsigned short phyStatus;
- /*
-  * Print PHY registers after initialization.
-  */
-  for(i = 0; i < 9; i++)
-    {
-
-	mcf548x_eth_mii_read(sc, phyAddr, i, &phyStatus);
-	printf ("Mii reg %d: 0x%04x" "\r\n", i, phyStatus);
-
-	}
-
-  for(i = 16; i < 21; i++)
-    {
-
-    mcf548x_eth_mii_read(sc, phyAddr, i, &phyStatus);
-    printf ("Mii reg %d: 0x%04x" "\r\n", i, phyStatus);
-
-    }
-#endif	/* ETH_DEBUG */
-
-  }
-
 
 /*
  * Send packet (caller provides header).
@@ -1312,11 +1189,7 @@ static void mcf548x_fec_startDMA(struct mcf548x_enet_struct *sc)
 	 0,             /* the amount to increment the source address per transfer */
 	 (void *)&MCF548X_FEC_FECRFDR(chan), /* the address to move data to */
 	 0,             /* the amount to increment the destination address per transfer */
-#if 0
-	 4, /* the number of bytes to transfer independent of the transfer size */
-#else
 	 ETHER_MAX_LEN, /* the number of bytes to transfer independent of the transfer size */
-#endif
          0,             /* the number bytes in of each data movement (1, 2, or 4) */
 	 MCF548X_FEC_RX_INITIATOR(chan), /* what device initiates the DMA */
 	 2,  /* priority of the DMA */
@@ -1340,11 +1213,7 @@ static void mcf548x_fec_startDMA(struct mcf548x_enet_struct *sc)
 	 0,             /* the amount to increment the source address per transfer */
 	 (void *)&MCF548X_FEC_FECTFDR(chan), /* the address to move data to */
 	 0,             /* the amount to increment the destination address per transfer */
-#if 0
-	 4, /* the number of bytes to transfer independent of the transfer size */
-#else
 	 ETHER_MAX_LEN, /* the number of bytes to transfer independent of the transfer size */
-#endif
          0,             /* the number bytes in of each data movement (1, 2, or 4) */
 	 MCF548X_FEC_TX_INITIATOR(chan), /* what device initiates the DMA */
 	 1,  /* priority of the DMA */
@@ -1433,10 +1302,6 @@ static void mcf548x_fec_init(void *arg)
        * reset and Set up mcf548x FEC hardware
        */
       mcf548x_fec_initialize_hardware(sc);
-      /*
-       * Set up the phy
-       */
-      mcf548x_fec_initialize_phy(sc);
 
       /*
        * Start driver tasks
@@ -1473,6 +1338,10 @@ static void mcf548x_fec_init(void *arg)
   else
     MCF548X_FEC_RCR(chan) &= ~MCF548X_FEC_RCR_PROM;
 
+  /*
+   * init timer so the "watchdog function gets called periodically
+   */
+  ifp->if_timer    = 1;
   /*
    * Tell the world that we're running.
    */
@@ -1543,11 +1412,7 @@ static void mcf548x_fec_restart(struct mcf548x_enet_struct *sc)
    * recycle pending tx buffers
    * FIXME: try to extract pending Tx buffers
    */
-#if 0
-  mcf548x_fec_tx_bd_requeue(sc);
-#else
   mcf548x_fec_retire_tbd(sc,true);
-#endif
 #endif
   /*
    * re-initialize the FEC hardware
@@ -1607,6 +1472,11 @@ static int mcf548x_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_
 
   switch(command)
     {
+
+    case SIOCGIFMEDIA:
+    case SIOCSIFMEDIA:
+      rtems_mii_ioctl (&(sc->mdio_info),sc,command,(void *)data);
+      break;
 
     case SIOCGIFADDR:
     case SIOCSIFADDR:
@@ -1683,6 +1553,84 @@ static int mcf548x_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_
 
   }
 
+
+/*
+ * init the PHY and adapt FEC settings
+ */
+int mcf548x_fec_mode_adapt(struct ifnet *ifp)
+{
+  int result = 0;
+  struct mcf548x_enet_struct *sc = ifp->if_softc;
+  int media = IFM_MAKEWORD( 0, 0, 0, sc->phy_default);
+  int chan = sc->chan;
+
+  /*
+   * fetch media status
+   */
+  result = mcf548x_fec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
+  if (result != 0) {
+    return result;
+  }
+  /*
+   * status is unchanged? then do nothing
+   */
+  if (media == sc->media_state) {
+    return 0;
+  }
+  /*
+   * otherwise: for the first call, try to negotiate mode
+   */
+  if (sc->media_state == 0) {
+    /*
+     * set media status: set auto negotiation -> start auto-negotiation
+     */
+    media = IFM_MAKEWORD(0,IFM_AUTO,0,sc->phy_default);
+    result = mcf548x_fec_ioctl(ifp,SIOCSIFMEDIA,(caddr_t)&media);
+    if (result != 0) {
+      return result;
+    }
+    /*
+     * wait for auto-negotiation to terminate
+     */
+    do {
+      media = IFM_MAKEWORD(0,0,0,sc->phy_default);
+      result = mcf548x_fec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
+      if (result != 0) {
+	return result;
+      }
+    } while (IFM_NONE == IFM_SUBTYPE(media));
+  }
+
+  /*
+   * now set HW according to media results:
+   */
+
+  /*
+   * if we are half duplex then switch to half duplex
+   */
+  if (0 == (IFM_FDX & IFM_OPTIONS(media))) {
+    MCF548X_FEC_TCR(chan) &= ~MCF548X_FEC_TCR_FDEN;
+  }
+  else {
+    MCF548X_FEC_TCR(chan) |=  MCF548X_FEC_TCR_FDEN;
+  }    
+  /*
+   * store current media state for future compares
+   */
+  sc->media_state = media;
+
+  return 0;
+}
+
+/*
+ * periodically poll the PHY. if mode has changed,
+ * then adjust the FEC settings
+ */
+static void mcf548x_fec_watchdog( struct ifnet *ifp)
+{
+  mcf548x_fec_mode_adapt(ifp);
+  ifp->if_timer    = FEC_WATCHDOG_TIMEOUT; 
+}
 
 /*
  * Attach the MCF548X fec driver to the system
@@ -1828,6 +1776,20 @@ int rtems_mcf548x_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
 
   sc->acceptBroadcast = !config->ignore_broadcast;
 
+  /*
+   * setup info about mdio interface
+   */
+  sc->mdio_info.mdio_r   = mcf548x_eth_mii_read;
+  sc->mdio_info.mdio_w   = mcf548x_eth_mii_write;
+  sc->mdio_info.has_gmii = 0; /* we do not support gigabit IF */
+
+  /*
+   * XXX: Although most hardware builders will assign the PHY addresses
+   * like this, this should be more configurable
+   */
+  sc->phy_default = unitNumber-1;
+  sc->phy_chan    = 0; /* assume all MII accesses are via FEC0 */
+
  /*
   * Set up network interface values
   */
@@ -1839,6 +1801,7 @@ int rtems_mcf548x_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
   ifp->if_ioctl   = mcf548x_fec_ioctl;
   ifp->if_start   = mcf548x_fec_tx_start;
   ifp->if_output  = ether_output;
+  ifp->if_watchdog =  mcf548x_fec_watchdog; /* XXX: timer is set in "init" */
   ifp->if_flags   = IFF_BROADCAST | IFF_MULTICAST;
   /*ifp->if_flags   = IFF_BROADCAST | IFF_SIMPLEX;*/
 

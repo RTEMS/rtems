@@ -1,7 +1,12 @@
 2009-10-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
+	* network/network.c: add PHY control support
+
+2009-10-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
 	* Makefile.am, include/bsp.h, network/network.c: add network support
-	* console/console.c, clock/clock.c, startup/init548x.c: 
+	* console/console.c, clock/clock.c, startup/init548x.c,
+	* README: 
 	various corrections
 
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
