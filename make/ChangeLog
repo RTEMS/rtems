@@ -1,5 +1,12 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/i386ex.cfg, custom/pc486.cfg, custom/ts_386ex.cfg,
+	custom/pc386.cfg, custom/pc586.cfg, custom/pc386dx.cfg,
+	custom/pc686.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/gensh1.cfg, custom/gensh2.cfg, custom/gensh4.cfg,
 	custom/simsh1.cfg, custom/simsh2.cfg, custom/simsh2e.cfg,
 	custom/simsh4.cfg: 
