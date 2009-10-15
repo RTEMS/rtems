@@ -1,5 +1,8 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* make/custom/hsc_cm01.cfg, make/custom/mpc8313erdb.cfg
+	make/custom/mpc8349eamds.cfg:
+	New (relocated from /make/custom).
 	* make/custom/gen83xx.cfg: New (relocated from /make/custom).
 
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
