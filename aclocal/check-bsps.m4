@@ -12,37 +12,23 @@ AC_MSG_CHECKING([for available BSPs])
   $1=
   for bsp_spec in `ls "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU"/*/bsp_specs 2>/dev/null`; do
     bsp_family=`echo "$bsp_spec" | sed \
-        -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/,," \
-        -e "s,/bsp_specs$,,"`
-    case $bsp_family in
-        # Now account for BSPs with build variants
-          csb337)            bsps="csb337 csb637";;
-          c4xsim)            bsps="c4xsim c3xsim";;
-          gen68360)          bsps="gen68360 gen68360_040 pgh360";;
-          tqm8xx)            bsps="pghplus tqm8xx_stk8xx";;
-          genmcf548x)        bsps="m5484FireEngine";;
-          p4000)             bsps="p4600 p4650";;
-          mvme162)           bsps="mvme162 mvme162lx";;
-          mbx8xx)            bsps="mbx821_001 mbx860_001b"
-                             bsps="$bsps mbx821_002 mbx821_002b"
-                             bsps="$bsps mbx860_002"
-                             bsps="$bsps mbx860_005b"
-                             ;;
-          gen5200)           bsps="pm520_cr825 pm520_ze30 brs5l icecube";;
-          h8sim)             bsps="h8sim h8sxsim";;
-          mpc55xxevb)        bsps="mpc5566evb";;
-          gen83xx)           bsps="mpc8349eamds hsc_cm01 mpc8313erdb";;
-	  motorola_powerpc)  bsps="mvme2307 mcp750 mtx603e mvme2100";;
-	  pc386)             bsps="pc386 pc386dx pc486 pc586 pc686";;
-          erc32)             bsps="erc32 sis";;
-          rtl22xx)           bsps="rtl22xx rtl22xx_t";;
-          lpc24xx)           bsps="lpc24xx_ea lpc24xx_ncs_rom_int lpc24xx_ncs_rom_ext lpc24xx_ncs_ram";;
-	  sim68000)          bsps="sim68000 simcpu32";;
-	  shsim)             bsps="simsh1 simsh2 simsh4";;
-	  m32cbsp)           bsps="m32csim";;
-	  *) 		     bsps="$bsp_family";;
-    esac;
-    $1="[$]$1 $bsps"
+      -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/,," \
+      -e "s,/bsp_specs$,,"`
+    for bsp_cfgs in `ls "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/$bsp_family/make/custom/"*.cfg 2>/dev/null`; do
+      bsp_cfg=`echo "$bsp_cfgs" | sed \
+        -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/$bsp_family/make/custom/,," \
+        -e "s,\.cfg$,,"`
+      case $bsp_cfg in
+      # blacklisted bsps
+      tqm8xx);; # powerpc
+      genmcf548x);; # m68k
+      mbx8xx);; # powerpc
+      gen5200);; # powerpc
+      gen83xx);; # powerpc
+      lpc24xx);; # arm
+      *) $1="[$]$1 $bsp_cfg";;
+      esac
+    done
   done
   AS_IF([test -z "[$]$1"],
     [AC_MSG_RESULT([none])],
