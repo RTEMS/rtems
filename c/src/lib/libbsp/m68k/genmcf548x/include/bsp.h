@@ -91,10 +91,6 @@ m68k_isr_entry set_vector(
  * Interrupt assignments
  *  Highest-priority listed first
  */
-#define FEC_IRQ_LEVEL       4
-#define FEC_IRQ_RX_PRIORITY 7
-#define FEC_IRQ_TX_PRIORITY 6
-
 #define SLT0_IRQ_LEVEL      4
 #define SLT0_IRQ_PRIORITY   0
 
@@ -106,6 +102,19 @@ m68k_isr_entry set_vector(
 #define PSC2_IRQ_PRIORITY   5
 #define PSC3_IRQ_LEVEL      3
 #define PSC3_IRQ_PRIORITY   4
+
+#define FEC_IRQ_LEVEL       2
+#define FEC_IRQ_PRIORITY    3
+
+/*
+ * Network driver configuration
+ */
+struct rtems_bsdnet_ifconfig;
+extern int rtems_mcf548x_fec_driver_attach_detach(struct rtems_bsdnet_ifconfig *config,int attaching);
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_mcf548x_fec_driver_attach_detach
+
+#define RTEMS_BSP_NETWORK_DRIVER_NAME	"fec1"
+#define RTEMS_BSP_NETWORK_DRIVER_NAME2	"fec2"
 
 #ifdef __cplusplus
 }

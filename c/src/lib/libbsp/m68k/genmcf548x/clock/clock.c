@@ -87,18 +87,17 @@
  * We need to have 1 interrupt every 10,000 microseconds
  * XLB clock 100 MHz / MCF548X_SLT_SLTCNT0 = XLB clock/100
  */
-#define Clock_driver_support_initialize_hardware()                                             \
-    do {                                                                                       \
-        int level;                                                                             \
-        MCF548X_INTC_ICR54 =   MCF548X_INTC_ICRn_IL(SLT0_IRQ_LEVEL) |                          \
-                           MCF548X_INTC_ICRn_IP(SLT0_IRQ_PRIORITY);                            \
-        rtems_interrupt_disable( level );                                                      \
-        MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK54 |                                  \
-                           MCF548X_INTC_IMRL_MASKALL);                                         \
-        rtems_interrupt_enable( level );                                                       \
-        MCF548X_SLT_SLTCNT0 = get_CPU_clock_speed()/100;                                   \
-		MCF548X_SLT_SCR0 |= (MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN | MCF548X_SLT_SCR_IEN); \
-    } while (0)
+#define Clock_driver_support_initialize_hardware()			\
+  do {									\
+    int level;								\
+    MCF548X_INTC_ICR54 =   MCF548X_INTC_ICRn_IL(SLT0_IRQ_LEVEL) |	\
+      MCF548X_INTC_ICRn_IP(SLT0_IRQ_PRIORITY);				\
+    rtems_interrupt_disable( level );					\
+    MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK54);		\
+    rtems_interrupt_enable( level );					\
+    MCF548X_SLT_SLTCNT0 = get_CPU_clock_speed()/100;			\
+    MCF548X_SLT_SCR0 |= (MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN | MCF548X_SLT_SCR_IEN); \
+  } while (0)
 
 #include "../../../shared/clockdrv_shell.h"
 

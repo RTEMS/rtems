@@ -53,7 +53,9 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
+                  ../../../libcpu/@RTEMS_CPU@/shared/misc.rel  \
+                  ../../../libcpu/@RTEMS_CPU@/mcf548x/mcdma.rel
+
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
