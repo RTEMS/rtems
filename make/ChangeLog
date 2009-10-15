@@ -1,5 +1,9 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Reflect custom/*.cfg having moved.
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/av5282.cfg, custom/csb360.cfg, custom/gen68302.cfg,
 	custom/gen68340.cfg, custom/gen68360_040.cfg, custom/gen68360.cfg,
 	custom/pgh360.cfg, custom/genmcf548x.cfg,
