@@ -1,3 +1,7 @@
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/gumstix.cfg: New (relocated from /make/custom).
+
 2009-09-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* preinstall.am: Regenerate.
