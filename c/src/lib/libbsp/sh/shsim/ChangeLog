@@ -1,3 +1,10 @@
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/simsh1.cfg: New (relocated from /make/custom).
+	* make/custom/simsh2.cfg: New (relocated from /make/custom).
+	* make/custom/simsh2e.cfg: New (relocated from /make/custom).
+	* make/custom/simsh4.cfg: New (relocated from /make/custom).
+
 2009-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_BSP_BOOTCARD_OPTIONS.
