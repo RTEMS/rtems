@@ -1,5 +1,9 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* make/custom/brs5l.cfg: New (relocated from /make/custom).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* make/custom/gen5200.cfg: New (relocated from /make/custom).
 
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
