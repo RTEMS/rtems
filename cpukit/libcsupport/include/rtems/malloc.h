@@ -84,7 +84,7 @@ extern rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers;
  * Malloc Plugin to Dirty Memory at Allocation Time
  */
 typedef void (*rtems_malloc_dirtier_t)(void *, size_t);
-extern rtems_malloc_dirtier_t *rtems_malloc_dirty_helper;
+extern rtems_malloc_dirtier_t rtems_malloc_dirty_helper;
 
 /** @brief Dirty memory function
  *  
