@@ -1,3 +1,7 @@
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/leon3.cfg: New (relocated from /make/custom).
+
 2009-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1445/BSPs
