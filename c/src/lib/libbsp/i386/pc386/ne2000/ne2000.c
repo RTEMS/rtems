@@ -33,6 +33,7 @@
 #include <wd80x3.h>
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <errno.h>
 
@@ -1189,15 +1190,31 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
   if (config->irno != 0)
     sc->irno = config->irno;
   else {
-    /* We use 5 as the default IRQ.  */
-    sc->irno = 5;
+    const char* opt;
+    opt = bsp_cmdline_arg ("--ne2k-irq=");
+    if (opt) {
+      opt += sizeof ("--ne2k-irq=") - 1;
+      sc->irno = strtoul (opt, 0, 0);
+    }
+    if (sc->irno == 0) {
+      /* We use 5 as the default IRQ.  */
+      sc->irno = 5;
+    }
   }
 
   if (config->port != 0)
     sc->port = config->port;
   else {
-    /* We use 0x300 as the default IO port number.  */
-    sc->port = 0x300;
+    const char* opt;
+    opt = bsp_cmdline_arg ("--ne2k-port=");
+    if (opt) {
+      opt += sizeof ("--ne2k-port=") - 1;
+      sc->port = strtoul (opt, 0, 0);
+    }
+    if (config->port != 0) {
+      /* We use 0x300 as the default IO port number.  */
+      sc->port = 0x300;
+    }
   }
 
   sc->accept_broadcasts = ! config->ignore_broadcast;

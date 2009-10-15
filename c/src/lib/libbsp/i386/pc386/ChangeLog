@@ -1,3 +1,13 @@
+2009-10-15	Chris Johns <chrisj@rtems.org>
+
+	* ne2000/ne2000.c: Add --ne2k-irq and --ne2k-port boot command
+	line configure options.
+
+	* ide/ide.c: Fix a bug which left 4 words in the buffer of the
+	disk. Some devices do not follow the standard and terminate the
+	command which a new command occurs and/or low data ready when data
+	is still to be read.
+	
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/pc386.cfg: New (relocated from /make/custom).

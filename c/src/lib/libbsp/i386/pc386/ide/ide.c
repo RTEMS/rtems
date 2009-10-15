@@ -183,17 +183,17 @@ bool pc386_ide_probe
 void pc386_ide_initialize
 (
 /*-------------------------------------------------------------------------*\
-| Purpose:                                                                  |
-|  initialize IDE access                                                    |
-+---------------------------------------------------------------------------+
-| Input Parameters:                                                         |
-\*-------------------------------------------------------------------------*/
- int  minor                              /* controller minor number       */
+  | Purpose:                                                                  |
+  |  initialize IDE access                                                    |
+  +---------------------------------------------------------------------------+
+  | Input Parameters:                                                         |
+  \*-------------------------------------------------------------------------*/
+  int  minor                              /* controller minor number       */
  )
 /*-------------------------------------------------------------------------*\
-| Return Value:                                                             |
-|    <none>                                                                 |
-\*=========================================================================*/
+  | Return Value:                                                             |
+  |    <none>                                                                 |
+  \*=========================================================================*/
 {
   uint32_t port = IDE_Controller_Table[minor].port1;
   uint8_t  dev = 0;
@@ -213,6 +213,7 @@ void pc386_ide_initialize
 
   for (dev = 0; dev < 2; dev++)
   {
+    uint16_t    capabilities = 0;
     uint32_t    byte;
     uint8_t     status;
     uint8_t     error;
@@ -224,16 +225,18 @@ void pc386_ide_initialize
     uint32_t    cylinders = 0;
     uint32_t    heads = 0;
     uint32_t    sectors = 0;
+    uint32_t    lba_sectors = 0;
     char        model_number[41];
     char*       p = &model_number[0];
+    bool        data_ready;
     
     memset(model_number, 0, sizeof(model_number));
 
     outport_byte(port+IDE_REGISTER_DEVICE_HEAD,
                  (dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS) | 0xE0);
     /*
-    outport_byte(port+IDE_REGISTER_SECTOR_NUMBER,
-                 (dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS) | IDE_REGISTER_LBA3_L);
+      outport_byte(port+IDE_REGISTER_SECTOR_NUMBER,
+      (dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS) | IDE_REGISTER_LBA3_L);
     */
 
     outport_byte(port+IDE_REGISTER_COMMAND, 0x00);
@@ -265,35 +268,37 @@ void pc386_ide_initialize
       continue;
     }
 
-    byte = 0;
-    while (byte < 512)
-    {
-      uint16_t word;
-      bool     data_ready;
+    data_ready = pc386_ide_status_data_ready (port,
+                                              250,
+                                              &status,
+                                              pc386_ide_prestart_sleep);
 
+    if (status & IDE_REGISTER_STATUS_ERR)
+    {
+      inport_byte(port+IDE_REGISTER_ERROR, error);
+      if (error != 4)
+      {
+        if (pc386_ide_show)
+          printk("IDE%d:%s: error=%04x\n", minor, label, error);
+        continue;
+      }
+      /*
+       * The device is an ATAPI device.
+       */
+      outport_byte(port+IDE_REGISTER_COMMAND, 0xa1);
       data_ready = pc386_ide_status_data_ready (port,
                                                 250,
                                                 &status,
                                                 pc386_ide_prestart_sleep);
+    }
 
-      if (status & IDE_REGISTER_STATUS_ERR)
-      {
-        inport_byte(port+IDE_REGISTER_ERROR, error);
-        if (error != 4)
-        {
-          if (pc386_ide_show)
-            printk("IDE%d:%s: error=%04x\n", minor, label, error);
-          break;
-        }
-        /*
-         * The device is an ATAPI device.
-         */
-        outport_byte(port+IDE_REGISTER_COMMAND, 0xa1);
-        continue;
-      }
-
-      if (!data_ready)
-        break;
+    if (!data_ready)
+      continue;
+    
+    byte = 0;
+    while (byte < 512)
+    {
+      uint16_t word;
       
       if (pc386_ide_show && ((byte % 16) == 0))
         printk("\n %04x : ", byte);
@@ -318,17 +323,22 @@ void pc386_ide_initialize
         p++;
       }
 
-      if (byte == 94)
-        max_multiple_sectors = word & 0xff;
-      
       if (byte == (47 * 2))
         max_multiple_sectors = word & 0xff;
+      
+      if (byte == (49 * 2))
+        capabilities = word;
       
       if (byte == (59 * 2))
       {
         if (word & (1 << 8))
           cur_multiple_sectors = word & 0xff;
       }
+
+      if (byte == (60 * 2))
+        lba_sectors = word;
+      if (byte == (61 * 2))
+        lba_sectors |= word << 16;
       
       byte += 2;
     }
@@ -342,9 +352,14 @@ void pc386_ide_initialize
       uint32_t left;
       uint32_t right;
       char     units;
-      
-      size = ((((uint64_t) cylinders) * heads) * sectors * 512) / 1024;
 
+      if (capabilities & (1 << 9))
+        size = lba_sectors;
+      else
+        size = cylinders * heads * sectors;
+
+      size /= 2;
+      
       if (size > (1024 * 1024))
       {
         size = (size * 10) / (1000 * 1000);
@@ -375,7 +390,7 @@ void pc386_ide_initialize
              minor, label, model_number, left, right, units,
              heads, cylinders, sectors, max_multiple_sectors * 512);
     }
-
+    
 #if IDE_CLEAR_MULTI_SECTOR_COUNT
     if (max_multiple_sectors)
     {
