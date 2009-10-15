@@ -1,5 +1,11 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* make/custom/icecube.cfg, make/custom/pm520_cr825.cfg,
+	make/custom/pm520_ze30.cfg:
+	New (relocated from /make/custom).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* make/custom/brs5l.cfg: New (relocated from /make/custom).
 
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
