@@ -1,5 +1,10 @@
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/no_bsp.cfg:
+	Remove (Moved to c/src/lib/libbsp/<cpu>/<bsp>).
+
+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Reflect custom/*.cfg having moved.
 
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
