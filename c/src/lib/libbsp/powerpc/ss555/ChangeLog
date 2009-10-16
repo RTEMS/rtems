@@ -1,3 +1,7 @@
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/ss555.cfg: Remove -D$(RTEMS_BSP_FAMILY) (unused).
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/ss555.cfg: New (relocated from /make/custom).
