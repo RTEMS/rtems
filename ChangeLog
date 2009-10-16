@@ -1,3 +1,8 @@
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/bsp-alias.m4: Pickup bsps from
+	c/src/lib/libbsp/<cpu>/<bsp_family>/make/custom*.cfg.
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/check-bsps.m4: Pickup bsps from

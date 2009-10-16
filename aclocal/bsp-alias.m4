@@ -9,51 +9,14 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
   case $1 in
     bare*)        $2=bare             ;; # EXP: bare-aliases
 
-    arm7tdmi)     $2=gdbarmsim        ;; # arm simulator in gdb
-    arm920)       $2=gdbarmsim        ;; # arm simulator in gdb
-    arm1136jfs)   $2=gdbarmsim        ;; # arm simulator in gdb
-    arm1136js)    $2=gdbarmsim        ;; # arm simulator in gdb
-    armcortexa9)  $2=gdbarmsim        ;; # arm simulator in gdb
-    c3xsim)       $2=c4xsim           ;; # TI C3x Simulator in gdb
-    csb637)       $2=csb337           ;; # Cogent CSB637
-    gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
-    h8sxsim)      $2=h8sim            ;; # h8sim built for h8sx
-    pghplus)      $2=tqm8xx           ;; # powerpc - mpc8xx custom board
-    tqm8xx_stk8xx) $2=tqm8xx          ;; # powerpc - tqm8xx on starter kit
-    pgh360)       $2=gen68360         ;; # m68k - 68360 custom board
-    m5484FireEngine) $2=genmcf548x    ;; # m68k - mcf548x eva board
-    mbx8*)        $2=mbx8xx           ;; # MBX821/MBX860 board
-    mcp750)       $2=motorola_powerpc ;; # Motorola PPC board variant
-    mtx603e)      $2=motorola_powerpc ;; # Motorola PPC board variant
-    mvme162lx)    $2=mvme162          ;; # m68k - mvme162 board variant
-    mvme2100)     $2=motorola_powerpc ;; # Motorola PPC board variant
-    mvme2307)     $2=motorola_powerpc ;; # Motorola PPC board variant
-    m32csim)      $2=m32cbsp          ;; # M32C on gdb simulator
-    p4600)        $2=p4000            ;; # mips - p4000 board w/IDT 4600
-    p4650)        $2=p4000            ;; # mips - p4000 board w/IDT 4650
-    pc386dx)      $2=pc386            ;; # i386 - PC w/o FPU
-    pc486)        $2=pc386            ;; # i386 - PC with i486DX
-    pc586)        $2=pc386            ;; # i386 - PC with Pentium
-    pc686)        $2=pc386            ;; # i386 - PC with PentiumPro
-    brs5l*)       $2=gen5200          ;; # MPC5200 based board
-    pm520*)       $2=gen5200          ;; # MPC5200 based board
-    icecube)      $2=gen5200          ;; # MPC5200 based board - LITE5200B
-    mpc55??evb)   $2=mpc55xxevb       ;; # MPC5566EVB based board
-    mpc8349eamds) $2=gen83xx          ;; # MPC8349 based board
-    hsc_cm01)     $2=gen83xx          ;; # MPC8349 based board
-    mpc8313erdb)  $2=gen83xx          ;; # MPC83XX based board
-    rtl22xx_t)    $2=rtl22xx          ;; # rtl22xx bsp in thumb mode
-    lpc24xx_ea)   $2=lpc24xx          ;; # LPC2478 (QVGA Base Board from Embedded Artists)
-    lpc24xx_ncs_rom_int) $2=lpc24xx   ;; # LPC24XX (NCS)
-    lpc24xx_ncs_rom_ext) $2=lpc24xx   ;; # LPC24XX (NCS)
-    lpc24xx_ncs_ram) $2=lpc24xx       ;; # LPC24XX (NCS)
-    simcpu32)     $2=sim68000         ;; # BSVC CPU32 variant
-    simsh1)       $2=shsim            ;; # SH1 simulator in GDB
-    simsh2)       $2=shsim            ;; # SH2 simulator in GDB
-    simsh2e)       $2=shsim           ;; # SH2e simulator in GDB
-    simsh4)       $2=shsim            ;; # SH4 simulator in GDB
-    sis)          $2=erc32            ;; # erc32 SIS simulator
-    *)            $2=$1;;
+    *)
+      for bsp_cfgs in `ls "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/*/make/custom/$1.cfg" 2>/dev/null`; do
+        $2=`echo "$bsp_cfgs" | sed \
+          -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/,," \
+          -e "s,/make/custom/.*\.cfg$,,"`
+        break
+      done
+      ;;
   esac]
 )
 
