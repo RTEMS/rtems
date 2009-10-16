@@ -158,7 +158,7 @@ void bsp_pretasking_hook(void)
   rsPMCQ1Init();
 }
 
-void zero_bss()
+void zero_bss(void)
 {
   /* prevent these from being accessed in the short data areas */
   extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
@@ -179,7 +179,7 @@ void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_op
 
 unsigned int EUMBBAR;
 
-unsigned int get_eumbbar() {
+unsigned int get_eumbbar(void) {
   register int a, e;
 
   asm volatile( "lis %0,0xfec0; ori  %0,%0,0x0000": "=r" (a) );
