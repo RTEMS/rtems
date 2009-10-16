@@ -1,5 +1,9 @@
 2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* startup/bspstart.c: Remove nested externs.
+
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* startup/bspstart.c: Remove __RTEMS_APPLICATION__
 
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>

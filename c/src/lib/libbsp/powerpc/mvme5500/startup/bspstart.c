@@ -65,6 +65,9 @@ extern void BSP_pgtbl_activate(Triv121PgTbl);
 extern int I2Cread_eeprom(unsigned char I2cBusAddr, uint32_t devA2A1A0, uint32_t AddrBytes, unsigned char *pBuff, uint32_t numBytes);
 extern void BSP_vme_config(void);
 
+extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
+extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
+
 uint32_t bsp_clicks_per_usec;
 
 SPR_RW(SPRG1)
@@ -127,10 +130,6 @@ void _BSP_Fatal_error(unsigned int v)
  
 void zero_bss()
 {
-  /* prevent these from being accessed in the short data areas */
-  extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
-  extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
-
   memset(
     __SBSS_START__,
     0,
