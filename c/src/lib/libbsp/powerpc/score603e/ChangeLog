@@ -1,3 +1,10 @@
+2009-10-16	Jennifer Averett <jennifer@OARcorp.com>
+
+	* configure.ac: Default to having PSC8 mezzanine so code builds
+	all the time.
+	* startup/bspstart.c: Calibrated clock using an VMEBus controlled
+	discrete pulsed at a 20ms rate.
+
 2009-05-05	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* Makefile.am, README, configure.ac, preinstall.am, PCI_bus/PCI.c,
@@ -9,7 +16,8 @@
 	startup/bspstart.c, timer/timer.c, tod/tod.c: Updated and tested with
 	the latest powerpc isr source
 	* irq/no_pic.c: New file.
-	* irq/irq.c, startup/genpvec.c, startup/setvec.c, startup/vmeintr.c: Removed.
+	* irq/irq.c, startup/genpvec.c, startup/setvec.c, startup/vmeintr.c:
+	Removed.
 
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
