@@ -1,3 +1,10 @@
+2009-10-17	Chris Johns <chrisj@rtems.org>
+
+	* shared/irq/idt.c: Check is the irq handlers are present before
+	calling.
+	* shared/comm/i386-stub-glue.c: Revert the change of 2009-05-06 as
+	the handlers need to be present. Fixed the warnings.
+
 2009-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1445/BSPs

@@ -20,6 +20,17 @@ int  getDebugChar(void);       /* read and return a single char */
 /* assign an exception handler */
 void exceptionHandler(int, void (*handler)(void));
 
+static void
+nop(const rtems_raw_irq_connect_data* notused)
+{
+}
+
+static int
+isOn(const rtems_raw_irq_connect_data* notused)
+{
+  return 1;
+}
+
 void BSP_loop(int uart);
 
 /* Current uart used by gdb stub */
@@ -36,7 +47,8 @@ i386_stub_glue_init(int uart)
 
   uart_current = uart;
 
-  BSP_uart_init(uart, 38400, CHR_8_BITS, 0, 0, 0);
+  /* BSP_uart_init(uart, 38400, CHR_8_BITS, 0, 0, 0);*/
+  BSP_uart_init(uart, 115200, CHR_8_BITS, 0, 0, 0);
 }
 
 void BSP_uart_on(const rtems_raw_irq_connect_data* used)
@@ -152,9 +164,9 @@ void exceptionHandler(int vector, void (*handler)(void))
       rtems_fatal_error_occurred(1);
     }
 
-  excep_raw_irq_data.on = NULL;
-  excep_raw_irq_data.off = NULL;
-  excep_raw_irq_data.isOn = NULL;
+  excep_raw_irq_data.on = nop;
+  excep_raw_irq_data.off = nop;
+  excep_raw_irq_data.isOn = isOn;
   excep_raw_irq_data.hdl = handler;
 
   if (!i386_set_idt_entry (&excep_raw_irq_data)) {
