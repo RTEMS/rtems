@@ -15,14 +15,11 @@ AC_MSG_CHECKING(rtems target cpu)
 case "${host}" in
   no_cpu-*rtems*)
         RTEMS_CPU=no_cpu
-	RTEMS_HOST=$host_os
 	;;
   *) 
 	RTEMS_CPU=`echo $host | sed 's%^\([[^-]]*\)-\(.*\)$%\1%'`
-	RTEMS_HOST=$host_os
 	;;
 esac
 AC_SUBST(RTEMS_CPU)
-AC_SUBST(RTEMS_HOST)
 AC_MSG_RESULT($RTEMS_CPU)
 ])
