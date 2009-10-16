@@ -380,8 +380,9 @@ setbat (int typ, int bat_index, unsigned long virt, unsigned long phys,
       init_done = 1;
     }
   }
-
-  if (size >= (1 << 17) && (err = check_overlap (typ, virt, size)) >= 0) {
+  
+  err = check_overlap (typ, virt, size);
+  if ((size >= (1 << 17)) && (err >= 0) && (err != bat_index)) {
     rtems_interrupt_enable (level);
     printk ("BATs must not overlap; area 0x%08x..0x%08x hits %cBAT %i\n",
             virt, virt + size, (TYP_I == typ ? 'I' : 'D'), err);

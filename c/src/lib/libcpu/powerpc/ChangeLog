@@ -1,5 +1,10 @@
 2009-10-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
+	* mpc6xx/mmu/bat.c: Resolved bug: It is not an overlap if the batindex
+	being set is the batindex of the overlap.
+
+2009-10-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
 	* shared/include/io.h: Backport change from extern inline to static
 	inline from head to avoid multiple definitions.
 
