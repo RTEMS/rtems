@@ -1,3 +1,7 @@
+2009-10-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* startup/bspstart.c: Add bsp_clicks_per_usec.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.
