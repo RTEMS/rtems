@@ -1,5 +1,14 @@
 2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* wrapup/Makefile.am: Remove AM_CONDITIONAL HAS_LIBBSP.
+	* configure.ac: Remove AM_CONDITIONAL HAS_LIBBSP.
+
+2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove special case lib/libbsp/bare (Abandoned).
+
+2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Remove RTEMS_HOST (unused).
 	* configure.ac: Remove RTEMS_HOST (unused).
 	* aclocal/canonical-target-name.m4: Remove RTEMS_HOST (unused).
