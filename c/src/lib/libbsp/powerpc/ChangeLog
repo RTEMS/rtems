@@ -1,5 +1,9 @@
 2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shared/startup/zerobss.c: Remove nested externs.
+
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* shared/motorola/motorola.c, shared/vme/vme_universe.c:
 	Add missing prototypes.
 
