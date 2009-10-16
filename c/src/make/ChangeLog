@@ -1,5 +1,9 @@
 2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove BARE_CPU_MODEL, BARE_CPU_CFLAGS.
+
+2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/enable-bare.m4: Remove (Abandoned).
 	* bsp.cfg.in: Remove BARE_CPU_MODEL, BARE_CPU_CFLAGS.
 	* configure.ac: Remove RTEMS_ENABLE_BARE.
