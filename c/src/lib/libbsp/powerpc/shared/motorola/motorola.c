@@ -345,7 +345,7 @@ prep_t checkPrepBoardType(RESIDUAL *res)
   return PREP_type;
 }
 
-motorolaBoard getMotorolaBoard()
+motorolaBoard getMotorolaBoard(void)
 {
 /*
  *  At least the MVME2100 does not have the CPU Type and Base Type Registers,

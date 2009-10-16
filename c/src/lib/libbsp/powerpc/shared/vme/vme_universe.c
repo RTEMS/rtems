@@ -373,7 +373,7 @@ unsigned short	rval;
 #define VME_CLEAR_BRIDGE_ERRORS tsi_clear_errors
 #endif
 
-int BSP_VMEInit()
+int BSP_VMEInit(void)
 {
 #if defined(_VME_DRIVER_UNIVERSE)
   if ( 0 == vmeUniverseInit() ) {
@@ -407,7 +407,7 @@ int BSP_VMEInit()
   return 0;
 }
 
-int BSP_VMEIrqMgrInstall()
+int BSP_VMEIrqMgrInstall(void)
 {
 int err;
 #ifndef BSP_VME_INSTALL_IRQ_MGR

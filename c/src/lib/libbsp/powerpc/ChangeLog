@@ -1,3 +1,8 @@
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/motorola/motorola.c, shared/vme/vme_universe.c:
+	Add missing prototypes.
+
 2009-10-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/openpic/openpic.c: Make openpic_writefield
