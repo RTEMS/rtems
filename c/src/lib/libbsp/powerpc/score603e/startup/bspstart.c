@@ -42,8 +42,10 @@ unsigned int BSP_processor_frequency;
 
 /*
  * Time base divisior (how many tick for 1 second).
+ * Note: Calibrated with an application using a 20ms timer and
+ * a scope.
  */
-unsigned int BSP_time_base_divisor = 4000;
+unsigned int BSP_time_base_divisor = 3960;
 
 /*
  *  Driver configuration parameters

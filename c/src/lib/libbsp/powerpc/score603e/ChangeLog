@@ -1,3 +1,10 @@
+2009-10-16	Jennifer Averett <jennifer@OARcorp.com>
+
+	* configure.ac: Default to having PSC8 mezzanine so code builds
+	all the time.
+	* startup/bspstart.c: Calibrated clock using an VMEBus controlled
+	discrete pulsed at a 20ms rate.
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/score603e.cfg: New (relocated from /make/custom).
