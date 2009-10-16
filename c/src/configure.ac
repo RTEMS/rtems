@@ -56,7 +56,6 @@ EOF
     f=`grep "^include.*make/custom" ${cfg_file} \
     | sed \
       -e 's%^.*custom\/%%' \
-      -e s%\$\(RTEMS_HOST\)%${RTEMS_HOST}% \
       -e 's%default\.cfg%%' \
       -e 's%\.cfg$%%'`;
   else break; fi;
@@ -68,7 +67,6 @@ done
 AC_MSG_NOTICE([creating make/${RTEMS_BSP}.cache])
 ${MAKE-make} -f ${srcdir}/make/bsp.mak \
 RTEMS_BSP=${RTEMS_BSP} \
-RTEMS_HOST=${RTEMS_HOST} \
 RTEMS_ROOT=. make/${RTEMS_BSP}.cache
 
 # Read back the cache

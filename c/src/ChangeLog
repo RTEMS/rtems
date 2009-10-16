@@ -1,5 +1,6 @@
 2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove RTEMS_HOST (unused).
 	* aclocal/canonical-target-name.m4: Remove RTEMS_HOST (unused).
 
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
