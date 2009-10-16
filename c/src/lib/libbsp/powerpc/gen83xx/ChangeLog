@@ -1,3 +1,7 @@
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/gen83xx.cfg: Remove -W -Wno-unused.
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/hsc_cm01.cfg, make/custom/mpc8313erdb.cfg
