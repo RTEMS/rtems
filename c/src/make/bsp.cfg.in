@@ -29,7 +29,3 @@ HAS_CPLUSPLUS = @HAS_CPLUSPLUS@
 ## Does this BSP support RTEMS's networking ?
 ##
 HAS_NETWORKING = @HAS_NETWORKING@
-
-## Only used for the bare bsp
-BARE_CPU_MODEL = @BARE_CPU_MODEL@
-BARE_CPU_CFLAGS = @BARE_CPU_CFLAGS@
