@@ -1,3 +1,7 @@
+2009-10-16	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* README.configure: added COBRA5475 reference
+
 2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/bsp-alias.m4: Pickup bsps from
@@ -17,6 +21,11 @@
 
 	* aclocal/canonical-target-name.m4, aclocal/enable-posix.m4:
 	Remove posix/unix simulator.
+
+2009-10-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Renamed LPC24XX BSP
+	variants.
 
 2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 

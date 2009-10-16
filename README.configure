@@ -189,7 +189,7 @@ m32r		: m32rsim
 m68k		: av5282 csb360 gen68302 gen68360 gen68360_040 
 		genmcf548x idp mcf5206elite mcf52235 mcf5235 mcf5239
 		m5484FireEngine mrm332 mvme136 mvme147s mvme162 mvme162lx
-		mvme167 ods68302 pgh360 sim68000 simcpu32 uC5282 
+		mvme167 ods68302 pgh360 sim68000 simcpu32 uC5282 COBRA5475 
 
 no_cpu          : no_bsp  (porting example)
 
