@@ -51,7 +51,7 @@
  * Acts as a barrier to ensure all previous I/O accesses have
  * completed before any further ones are issued.
  */
-extern inline void eieio(void)
+static inline void eieio(void)
 {
 	__asm__ __volatile__ ("eieio");
 }
@@ -67,7 +67,7 @@ extern inline void eieio(void)
 /*
  * 8, 16 and 32 bit, big and little endian I/O operations, with barrier.
  */
-extern inline int in_8(volatile unsigned char *addr)
+static inline int in_8(volatile unsigned char *addr)
 {
 	int ret;
 
@@ -75,12 +75,12 @@ extern inline int in_8(volatile unsigned char *addr)
 	return ret;
 }
 
-extern inline void out_8(volatile unsigned char *addr, int val)
+static inline void out_8(volatile unsigned char *addr, int val)
 {
 	__asm__ __volatile__("stb%U0%X0 %1,%0; eieio" : "=m" (*addr) : "r" (val));
 }
 
-extern inline int in_le16(volatile unsigned short *addr)
+static inline int in_le16(volatile unsigned short *addr)
 {
 	int ret;
 
@@ -89,7 +89,7 @@ extern inline int in_le16(volatile unsigned short *addr)
 	return ret;
 }
 
-extern inline int in_be16(volatile unsigned short *addr)
+static inline int in_be16(volatile unsigned short *addr)
 {
 	int ret;
 
@@ -97,18 +97,18 @@ extern inline int in_be16(volatile unsigned short *addr)
 	return ret;
 }
 
-extern inline void out_le16(volatile unsigned short *addr, int val)
+static inline void out_le16(volatile unsigned short *addr, int val)
 {
 	__asm__ __volatile__("sthbrx %1,0,%2; eieio" : "=m" (*addr) :
 			      "r" (val), "r" (addr));
 }
 
-extern inline void out_be16(volatile unsigned short *addr, int val)
+static inline void out_be16(volatile unsigned short *addr, int val)
 {
 	__asm__ __volatile__("sth%U0%X0 %1,%0; eieio" : "=m" (*addr) : "r" (val));
 }
 
-extern inline unsigned in_le32(volatile unsigned *addr)
+static inline unsigned in_le32(volatile unsigned *addr)
 {
 	unsigned ret;
 
@@ -117,7 +117,7 @@ extern inline unsigned in_le32(volatile unsigned *addr)
 	return ret;
 }
 
-extern inline unsigned in_be32(volatile unsigned *addr)
+static inline unsigned in_be32(volatile unsigned *addr)
 {
 	unsigned ret;
 
@@ -125,13 +125,13 @@ extern inline unsigned in_be32(volatile unsigned *addr)
 	return ret;
 }
 
-extern inline void out_le32(volatile unsigned *addr, int val)
+static inline void out_le32(volatile unsigned *addr, int val)
 {
 	__asm__ __volatile__("stwbrx %1,0,%2; eieio" : "=m" (*addr) :
 			     "r" (val), "r" (addr));
 }
 
-extern inline void out_be32(volatile unsigned *addr, int val)
+static inline void out_be32(volatile unsigned *addr, int val)
 {
 	__asm__ __volatile__("stw%U0%X0 %1,%0; eieio" : "=m" (*addr) : "r" (val));
 }

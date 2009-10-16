@@ -1,3 +1,8 @@
+2009-10-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* shared/include/io.h: Backport change from extern inline to static
+	inline from head to avoid multiple definitions.
+
 2009-05-05	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* new-exceptions/bspsupport/irq_supp.h: Split routine to allow bsps
