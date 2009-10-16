@@ -20,6 +20,4 @@ rtems_make_customdir = $(rtems_makedir)/custom
 
 dist_rtems_make_custom_DATA = custom/default.cfg
 
-EXTRA_DIST += custom/bare.cfg
-
 include $(top_srcdir)/automake/host.am
