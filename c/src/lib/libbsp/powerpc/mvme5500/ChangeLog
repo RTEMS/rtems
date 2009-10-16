@@ -1,3 +1,7 @@
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/bspstart.c: Remove __RTEMS_APPLICATION__
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/mvme5500.cfg: New (relocated from /make/custom).

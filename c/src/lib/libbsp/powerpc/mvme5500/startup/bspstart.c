@@ -44,10 +44,6 @@
 #include <rtems/bspIo.h>
 #include <rtems/sptables.h>
 
-#ifdef __RTEMS_APPLICATION__
-#undef __RTEMS_APPLICATION__
-#endif
-
 /*
 #define SHOW_MORE_INIT_SETTINGS
 #define SHOW_LCR1_REGISTER
