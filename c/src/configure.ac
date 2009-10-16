@@ -131,14 +131,8 @@ fi
 AC_SUBST(libcpu_cpu_subdir)
 
 # Is there code where there should be for this BSP?
-# The bare bsp is a special case as it is not under the RTEMS_CPU path
-if test "$RTEMS_BSP_FAMILY" = bare ; then
-  AC_CONFIG_SUBDIRS([lib/libbsp/bare])
-  AC_SUBST(libbsp_cpu_subdir,bare)
-else
-  RTEMS_CPU_SUBDIRS([lib/libbsp])
-  AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
-fi
+RTEMS_CPU_SUBDIRS([lib/libbsp])
+AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
 
 BSP_SUBDIRS="$BSP_SUBDIRS lib"
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
