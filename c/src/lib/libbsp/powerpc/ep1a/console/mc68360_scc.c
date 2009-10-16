@@ -1,7 +1,7 @@
 /*  This file contains the termios TTY driver for the
  *  Motorola MC68360 SCC ports.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,7 +25,7 @@
 #include <rtems/bspIo.h>
 #include <string.h>
 
-#if 0
+#if 0 
 #define DEBUG_360
 #endif
 
@@ -77,10 +77,10 @@ void scc_write8(
   uint8_t           value
 )
 {
+  *address = value;
 #ifdef DEBUG_360
   printk( "WR8 %s 0x%08x 0x%02x\n", name, address, value );
 #endif
-  *address = value;
 }
 
 
@@ -108,10 +108,10 @@ void scc_write16(
   uint16_t           value
 )
 {
+  *address = value;
 #ifdef DEBUG_360
   printk( "WR16 %s 0x%08x 0x%04x\n", name, address, value );
 #endif
-  *address = value;
 }
 
 
@@ -139,10 +139,11 @@ void scc_write32(
   uint32_t           value
 )
 {
+  *address = value;
+  Processor_Synchronize();
 #ifdef DEBUG_360
   printk( "WR32 %s 0x%08x 0x%08x\n", name, address, value );
 #endif
-  *address = value;
 }
 
 void mc68360_sccShow_Regs(int minor){
@@ -155,9 +156,9 @@ void mc68360_sccShow_Regs(int minor){
 }
 
 #define TX_BUFFER_ADDRESS( _ptr ) \
-  ((char *)ptr->txBuf - (char *)ptr->chip->board_data->baseaddr)
+  ((uint8_t *)ptr->txBuf - (uint8_t *)ptr->chip->board_data->baseaddr)
 #define RX_BUFFER_ADDRESS( _ptr ) \
-  ((char *)ptr->rxBuf - (char *)ptr->chip->board_data->baseaddr)
+  ((uint8_t *)ptr->rxBuf - (uint8_t *)ptr->chip->board_data->baseaddr)
 
 
 /**************************************************************************
@@ -239,8 +240,9 @@ mc68360_sccBRGC(int baud, int m360_clock_rate)
  *    none                                                                *
  *                                                                        *
  **************************************************************************/
-void mc68360_sccInterruptHandler( M68360_t chip )
+void mc68360_sccInterruptHandler( void *ptr)
 {
+  M68360_t           chip   = ptr;
   volatile m360_t    *m360;
   int                port;
   uint16_t           status;
@@ -250,8 +252,8 @@ void mc68360_sccInterruptHandler( M68360_t chip )
   int                clear_isr;
 
 
-#ifdef DEBUG_360
-  printk("mc68360_sccInterruptHandler\n");
+#ifdef DEBUG_360 
+  printk("mc68360_sccInterruptHandler with 0x%x \n", ptr);
 #endif
   for (port=0; port<4; port++) {
 
@@ -275,8 +277,8 @@ void mc68360_sccInterruptHandler( M68360_t chip )
         while ((status & M360_BD_EMPTY) == 0)
         {
            length= scc_read16("sccRxBd->length",&chip->port[port].sccRxBd->length);
-if (length > 1)
-  EP1A_READ_LENGTH_GREATER_THAN_1 = length;
+           if (length > 1)
+             EP1A_READ_LENGTH_GREATER_THAN_1 = length;
 
            for (i=0;i<length;i++) {
              data= chip->port[port].rxBuf[i];
@@ -302,21 +304,19 @@ if (length > 1)
         if ((status & M360_BD_EMPTY) == 0)
         {
            scc_write16("sccTxBd->status",&chip->port[port].sccTxBd->status,0);
-#if 1
            rtems_termios_dequeue_characters(
              Console_Port_Data[chip->port[port].minor].termios_data, 
-             chip->port[port].sccTxBd->length);
-#else
-           mc68360_scc_write_support_int(chip->port[port].minor,"*****", 5); 
-#endif
+             chip->port[port].sccTxBd->length
+           );
         }
       }
 
       /*
        * Clear SCC interrupt-in-service bit.
        */
-      if ( clear_isr )
+      if ( clear_isr ) {
         scc_write32( "cisr", &m360->cisr, (0x80000000 >> chip->port[port].channel) );
+      }
   }
 }
 
@@ -339,9 +339,8 @@ int mc68360_scc_open(
   uint32_t               data;
 
 #ifdef DEBUG_360
-  printk("mc68360_scc_open %d\n", minor);
+  printk("mc68360_scc_open %s (%d)\n", Console_Port_Tbl[minor].sDeviceName, minor);
 #endif
-
 
   ptr   = Console_Port_Tbl[minor].pDeviceParams;
   m360  = ptr->chip->m360;
@@ -368,8 +367,8 @@ int mc68360_scc_open(
 
 uint32_t mc68360_scc_calculate_pbdat( M68360_t chip )
 {
-  uint32_t               i;
-  uint32_t               pbdat_data;
+  int                    i;
+  uint32_t               pbdat_data = 0x03;
   int                    minor;
   uint32_t               type422data[4] = {
     0x00440,  0x00880,  0x10100,  0x20200
@@ -378,12 +377,14 @@ uint32_t mc68360_scc_calculate_pbdat( M68360_t chip )
   pbdat_data = 0x3;
   for (i=0; i<4; i++) {
     minor = chip->port[i].minor;
-    if mc68360_scc_Is_422( minor ) 
+    if mc68360_scc_Is_422( minor ){
       pbdat_data |= type422data[i];
+    }
   }
 
   return pbdat_data;
 }
+
 
 /*
  *  mc68360_scc_initialize_interrupts
@@ -400,7 +401,7 @@ void mc68360_scc_initialize_interrupts(int minor)
   uint32_t               buffers_start;
   uint32_t               tmp_u32;
 
-#ifdef DEBUG_360
+#ifdef DEBUG_360 
   printk("mc68360_scc_initialize_interrupts: minor %d\n", minor );
   printk("Console_Port_Tbl[minor].pDeviceParams 0x%08x\n",
     Console_Port_Tbl[minor].pDeviceParams );
@@ -409,7 +410,7 @@ void mc68360_scc_initialize_interrupts(int minor)
   ptr   = Console_Port_Tbl[minor].pDeviceParams;
   m360  = ptr->chip->m360;
   
-#ifdef DEBUG_360
+#ifdef DEBUG_360 
   printk("m360 0x%08x baseaddr 0x%08x\n",
      m360, ptr->chip->board_data->baseaddr);
 #endif
@@ -464,6 +465,7 @@ void mc68360_scc_initialize_interrupts(int minor)
   /*
    * XXX
    */
+
   scc_write16( "papar", &m360->papar, 0xffff );
   scc_write16( "padir", &m360->padir, 0x5500 ); /* From Memo    */
   scc_write16( "paodr", &m360->paodr, 0x0000 );
@@ -664,6 +666,11 @@ int mc68360_scc_write_support_int(
   rtems_interrupt_level  Irql;
   M68360_serial_ports_t  ptr;
 
+#ifdef DEBUG_360
+  printk("mc68360_scc_write_support_int: char 0x%x length %d\n",
+       (unsigned int)*buf, len );
+#endif
+
 #if 1
   mc68360_length_array[ mc68360_length_count ] = len;
   mc68360_length_count++;
@@ -682,17 +689,12 @@ int mc68360_scc_write_support_int(
     return 0;
 
   /*
-   *
-   */
-#ifdef DEBUG_360
-  printk("mc68360_scc_write_support_int: char 0x%x length %d\n",
-       (unsigned int)*buf, len );
-#endif
-  /*
    *  We must copy the data from the global memory space to MC68360 space
    */
-
   rtems_interrupt_disable(Irql);
+#ifdef DEBUG_360
+  printk("mc68360_scc_write_support_int: disable irq 0x%x\n", Irql );
+#endif
 
   scc_write16( "sccTxBd->status", &ptr->sccTxBd->status, 0 );
   memcpy((void *) ptr->txBuf, buf, len);
@@ -702,6 +704,9 @@ int mc68360_scc_write_support_int(
   scc_write16( "sccTxBd->status", &ptr->sccTxBd->status, 
                (M360_BD_READY | M360_BD_WRAP | M360_BD_INTERRUPT) );
 
+#ifdef DEBUG_360
+  printk("mc68360_scc_write_support_int: enable irq 0x%x\n", Irql );
+#endif
   rtems_interrupt_enable(Irql);
 
   return len;
@@ -897,12 +902,14 @@ int mc68360_scc_create_chip( PPMCQ1BoardData BoardData, uint8_t int_vector )
    * XXX - Note Does this need to be moved up to if a QUICC is fitted
    *       section?
    */
-  if ((chip = malloc(sizeof(struct _m68360_per_chip))) == NULL)
+
+  if ((chip = calloc( 1, sizeof(struct _m68360_per_chip))) == NULL)
   {
     printk("Error Unable to allocate memory for _m68360_per_chip\n");
     return RTEMS_IO_ERROR;
+  } else {
+    printk("Allocate memory for _m68360_per_chip at 0x%x\n", chip );
   }
-
   chip->next                    = M68360_chips;
   chip->m360                    = (void *)BoardData->baseaddr;
   chip->m360_interrupt          = int_vector;
@@ -945,7 +952,6 @@ int mc68360_scc_create_chip( PPMCQ1BoardData BoardData, uint8_t int_vector )
     /*
      * Allocate buffer descriptors.
      */
-
     chip->port[i-1].sccRxBd = M360AllocateBufferDescriptors(chip, 1);
     chip->port[i-1].sccTxBd = M360AllocateBufferDescriptors(chip, 1);
   }
@@ -957,7 +963,6 @@ int mc68360_scc_create_chip( PPMCQ1BoardData BoardData, uint8_t int_vector )
     &mc68360_sccInterruptHandler,
     chip 
   );
-
   return RTEMS_SUCCESSFUL;
 }
 

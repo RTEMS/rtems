@@ -152,7 +152,9 @@ SECTIONS
    *(COMMON)
    PROVIDE (__bss_end = .);
   }
-  . =  ALIGN(8) + 0x8000;
+  . =  ALIGN(0x100);
+  PROVIDE (__stackLow = .);
+  . += 0x8000;
   PROVIDE (__stack = .);
   _end = . ;
   __rtems_end = . ;

@@ -1,7 +1,7 @@
 /*
  *  This file contains the TTY driver table for the EP1A
  * 
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,7 +21,12 @@
  *  or interrupt driven IO.
  */
 
+#if 1 
 #define NS16550_FUNCTIONS &ns16550_fns_polled
+#else
+#define NS16550_FUNCTIONS &ns16550_fns
+#endif
+
 #define MC68360_SCC_FUNCTIONS &mc68360_scc_fns
 
 /*
@@ -122,6 +127,7 @@ console_tbl	Console_Port_Tbl[] = {
                 7372800,                        /* ulClock */
                 0                               /* ulIntVector */
         },
+
         /*
          * Up to 12 serial ports are provided by MC68360 SCC ports.
          *     EP1A may have one MC68360 providing 4 ports (A,B,C,D).
@@ -429,5 +435,10 @@ static bool config_68360_scc_base_probe_11( int minor ) {
                                                                                                                  
 static bool config_68360_scc_base_probe_12( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 15, 4);
+}
+
+
+void Force_mc8360_interrupt( int d ) {
+  mc68360_sccInterruptHandler( M68360_chips->next );
 }
 

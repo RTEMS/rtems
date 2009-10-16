@@ -57,9 +57,9 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
-$(PROJECT_INCLUDE)/bsp/uart.h: ../../powerpc/shared/console/uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
+$(PROJECT_INCLUDE)/bsp/pci.h: ../../powerpc/shared/pci/pci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pci.h
 
 $(PROJECT_INCLUDE)/bsp/motorola.h: ../../powerpc/shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
@@ -81,15 +81,7 @@ $(PROJECT_INCLUDE)/bsp/rsPMCQ1.h: console/rsPMCQ1.h $(PROJECT_INCLUDE)/bsp/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/rsPMCQ1.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/rsPMCQ1.h
 
-$(PROJECT_INCLUDE)/bsp/openpic.h: ../../powerpc/shared/openpic/openpic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/openpic.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/openpic.h
-
-$(PROJECT_INCLUDE)/bsp/pci.h: ../../powerpc/shared/pci/pci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pci.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pci.h
-
-$(PROJECT_INCLUDE)/bsp/irq.h: ../../powerpc/shared/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/irq.h: irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
@@ -104,6 +96,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 $(PROJECT_INCLUDE)/bsp/irq_supp.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_supp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_supp.h
+
+$(PROJECT_INCLUDE)/bsp/openpic.h: ../../powerpc/shared/openpic/openpic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/openpic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/openpic.h
 
 $(PROJECT_INCLUDE)/bsp/vmeUniverse.h: ../../shared/vmeUniverse/vmeUniverse.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverse.h

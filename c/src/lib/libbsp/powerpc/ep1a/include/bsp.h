@@ -1,6 +1,6 @@
 /*
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -12,6 +12,9 @@
 
 #ifndef _BSP_H
 #define _BSP_H
+
+
+#define BSP_ZERO_WORKSPACE_AUTOMATICALLY TRUE
 
 #include <bspopts.h>
 

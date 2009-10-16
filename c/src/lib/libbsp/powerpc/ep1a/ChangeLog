@@ -1,3 +1,16 @@
+2009-10-16	Jennifer Averett <jennifer@OARcorp.com>
+
+	* Makefile.am, configure.ac, preinstall.am, console/alloc360.c,
+	console/config.c, console/console.c, console/m68360.h,
+	console/mc68360_scc.c, console/rsPMCQ1.c, console/rsPMCQ1.h,
+	include/bsp.h, irq/irq_init.c, irq/openpic_xxx_irq.c, start/start.S,
+	startup/bspstart.c, startup/linkcmds, vme/VMEConfig.h: 
+        Updated and tested against RTEMS 4.9. Updated README file to latest
+        source status. Modified to use the shared irq source code. Turned off
+	debugging, cleaned up warnings, removed unused code. Tested with two
+	PMCQ1 serial cards. Tested MC68360 serial ports and VME using
+	external tests.
+	* README, irq/irq.h, vme/vmeconfig.c: New files.
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.

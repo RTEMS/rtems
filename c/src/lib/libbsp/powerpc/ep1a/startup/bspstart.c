@@ -4,7 +4,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,7 +14,7 @@
  *  $Id$
  */
 
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
+#define SHOW_MORE_INIT_SETTINGS
 
 #include <string.h>
 
@@ -33,6 +33,7 @@
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
 #include <rtems/powerpc/powerpc.h>
+#include <bsp/ppc_exc_bspsupp.h>
 
 extern unsigned long __rtems_end[];
 extern void L1_caches_enables(void);
@@ -94,6 +95,13 @@ extern int   RAM_END;
 unsigned int BSP_mem_size = (unsigned int)&RAM_END;
 
 /*
+ * Where the heap starts; is used by bsp_pretasking_hook;
+ */
+unsigned int BSP_heap_start;
+uint32_t BSP_intrStackStart;
+uint32_t BSP_intrStackSize;
+
+/*
  * PCI Bus Frequency
  */
 unsigned int BSP_bus_frequency; 
@@ -105,13 +113,15 @@ unsigned int BSP_processor_frequency;
 
 /*
  * Time base divisior (how many tick for 1 second).
+ * Calibrated by outputing a 20 ms pulse.
  */
-unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
+unsigned int BSP_time_base_divisor = 1320;  
 
 /*
  * system init stack 
  */
-#define INIT_STACK_SIZE 0x1000
+#define INIT_STACK_SIZE 0x2000
+#define INTR_STACK_SIZE rtems_configuration_get_interrupt_stack_size()
 
 void BSP_panic(char *s)
 {
@@ -170,6 +180,38 @@ void BSP_FLASH_set_page(
  
 void bsp_libc_init( void *, uint32_t, int );
 
+
+void ShowMemoryLayout(){
+  extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
+  extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
+  extern unsigned long __bss_start[];
+  extern unsigned long __bss_end[];
+  extern unsigned long __stack[];
+  extern unsigned long __stackLow[];
+  extern uint32_t end;
+  /* extern uint32_t BSP_intrStackStart; */
+  /* extern uint32_t BSP_intrStackSize; */
+  /* Configuration.work_space_start     */
+  /* rtems_configuration_get_work_space_size() */
+  printk(" bss start: 0x%x\n", __bss_start);
+  printk(" bss end: 0x%x\n",  __bss_end);
+  printk(" rtems end: 0x%x\n",  __rtems_end);
+  printk(" stack    : 0x%x\n",  __stack);
+  printk(" stack Low: 0x%x\n",  __stackLow);
+  printk(" end      : 0x%x\n",  &end);
+  printk(" Intr Stack: 0x%x\n", BSP_intrStackStart);
+  printk(" Intr Stack Size: 0x%x\n", BSP_intrStackSize);
+  printk(" Heap start: %x\n", BSP_heap_start);
+
+  printk(" workspace start: 0x%x\n", Configuration.work_space_start);
+  printk(" workspace size: 0x%x\n", rtems_configuration_get_work_space_size() );
+
+}
+
+
+
+
+
 /*
  *  Function:   bsp_pretasking_hook
  *  Created:    95/03/10
@@ -186,28 +228,30 @@ void bsp_libc_init( void *, uint32_t, int );
  
 void bsp_pretasking_hook(void)
 {
-  uint32_t        heap_start;    
+  uint32_t        heap_start = BSP_heap_start;    
   uint32_t        heap_size;
   uint32_t        heap_sbrk_spared;
-
   extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
-  
-  heap_start = ((uint32_t) __rtems_end) +
-    INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size();
-  if (heap_start & (CPU_ALIGNMENT-1))
-    heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+  extern uint32_t end;
 
-  heap_size = (BSP_mem_size - heap_start) - rtems_configuration_get_work_space_size();
+  heap_start = (BSP_heap_start + CPU_ALIGNMENT - 1) & ~(CPU_ALIGNMENT-1);
+  heap_size = (uint32_t) &RAM_END;
+  heap_size = heap_size - heap_start - Configuration.work_space_size;
+  heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
 
-  heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
+#if 0  /*XXXXXXX */
+    heap_size = Configuration.work_space_start - (void *)&end;
+    heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
+#endif
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk(" HEAP start %x  size %x (%x bytes spared for sbrk)\n", 
-    heap_start, heap_size, heap_sbrk_spared);
+  printk(" HEAP start 0x%x  size %x \n", 
+    heap_start, heap_size, 0 );
 #endif    
 
-  bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
+  bsp_libc_init((void *)heap_start, heap_size, 0);
   rsPMCQ1Init();
+  ShowMemoryLayout();
 }
 
 void zero_bss()
@@ -232,21 +276,8 @@ void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_op
 unsigned int EUMBBAR;
 
 unsigned int get_eumbbar() {
-  register int a, e;
-
-  asm volatile( "lis %0,0xfec0; ori  %0,%0,0x0000": "=r" (a) );
-  asm volatile("sync");
-                                                                
-  asm volatile("lis %0,0x8000; ori %0,%0,0x0078": "=r"(e) ); 
-  asm volatile("stwbrx  %0,0x0,%1": "=r"(e): "r"(a));  
-  asm volatile("sync");
-
-  asm volatile("lis %0,0xfee0; ori %0,%0,0x0000": "=r" (a) ); 
-  asm volatile("sync");
-                                                         
-  asm volatile("lwbrx %0,0x0,%1": "=r" (e): "r" (a));
-  asm volatile("isync");
-  return e;
+  out_le32( (uint32_t*)0xfec00000, 0x80000078 );
+  return in_le32( (uint32_t*)0xfee00000 );
 }
 
 void Read_ep1a_config_registers( ppc_cpu_id_t myCpu ) {
@@ -317,6 +348,7 @@ void Read_ep1a_config_registers( ppc_cpu_id_t myCpu ) {
       BSP_bus_frequency       =  33000000;
       break;
   }
+  printk("Processor Frequency %d  Bus Frequency: %d\n", BSP_processor_frequency, BSP_bus_frequency );
 }
 
 /*
@@ -328,8 +360,6 @@ void Read_ep1a_config_registers( ppc_cpu_id_t myCpu ) {
 void bsp_start( void )
 {
   unsigned char *stack;
-  uint32_t intrStackStart;
-  uint32_t intrStackSize;
   unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
@@ -346,15 +376,22 @@ void bsp_start( void )
   EUMBBAR = get_eumbbar(); 
   printk("EUMBBAR 0x%08x\n", EUMBBAR );
 
+  /*
+   * Init MMU block address translation to enable hardware
+   * access
+   */
+  setdbat(1, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
+  setdbat(2, 0x80000000, 0x80000000, 0x10000000, IO_PAGE);
+  setdbat(3, 0x90000000, 0x90000000, 0x10000000, IO_PAGE);
+ShowBATS();
+
   /* 
    * Note this sets BSP_processor_frequency based upon register settings.
    * It must be done prior to setting up hooks.
    */
   Read_ep1a_config_registers( myCpu );
-
   bsp_clicks_per_usec = BSP_processor_frequency/(BSP_time_base_divisor * 1000);
 
-ShowBATS();
 #if 0   /* XXX - Add back in cache enable when we get this up and running!! */
   /*
    * enables L1 Cache. Note that the L1_caches_enables() codes checks for
@@ -364,40 +401,34 @@ ShowBATS();
 #endif
 
   /*
-   * the initial stack  has aready been set to this value in start.S
-   * so there is no need to set it in r1 again... It is just for info
-   * so that It can be printed without accessing R1.
-   */
-  stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
-
- /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  *((uint32_t *)stack) = 0;
-
-  /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
-  intrStackSize = rtems_configuration_get_interrupt_stack_size();
+  BSP_intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
+  BSP_intrStackSize = rtems_configuration_get_interrupt_stack_size();
+  BSP_heap_start = BSP_intrStackStart + BSP_intrStackSize;
+  printk("Interrupt Stack Start: 0x%x Size: 0x%x  Heap Start: 0x%x\n",
+    BSP_intrStackStart, BSP_intrStackSize, BSP_heap_start
+  );
+
+  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
+  *((uint32_t *)BSP_intrStackStart) = 0;
 
   /*
    * Initialize default raw exception hanlders.
    */
-  ppc_exc_initialize(
-    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-    intrStackStart,
-    intrStackSize
-  );
-
-  /*
-   * Init MMU block address translation to enable hardware
-   * access
-   */
-  setdbat(1, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
-  setdbat(3, 0x90000000, 0x90000000, 0x10000000, IO_PAGE);
-
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Going to start PCI buses scanning and initialization\n");
+  printk("bsp_start: Initialize Exceptions\n");
+#endif  
+  ppc_exc_cache_wb_check = 0; 
+  ppc_exc_initialize(
+    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+    BSP_intrStackStart,
+    BSP_intrStackSize
+  );
+
+#ifdef SHOW_MORE_INIT_SETTINGS
+  printk("bsp_start: Going to start PCI buses scanning and initialization\n");
 #endif  
   pci_initialize();
 
@@ -405,7 +436,7 @@ ShowBATS();
   printk("Number of PCI buses found is : %d\n", pci_bus_count());
 #endif
 #ifdef TEST_RAW_EXCEPTION_CODE  
-  printk("Testing exception handling Part 1\n");
+  printk("bsp_start: Testing exception handling Part 1\n");
 
   /*
    * Cause a software exception
@@ -415,28 +446,45 @@ ShowBATS();
   /*
    * Check we can still catch exceptions and returned coorectly.
    */
-  printk("Testing exception handling Part 2\n");
+  printk("bsp_start: Testing exception handling Part 2\n");
   __asm__ __volatile ("sc");
 #endif  
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("rtems_configuration_get_work_space_size() = %x\n", 
+  printk("bsp_start: rtems_configuration_get_work_space_size() = %x\n", 
      rtems_configuration_get_work_space_size());
 #endif  
   work_space_start = 
-    (unsigned char *)BSP_mem_size - rtems_configuration_get_work_space_size();
-
+    (unsigned char *)&RAM_END - rtems_configuration_get_work_space_size();
   if ( work_space_start <= ((unsigned char *)__rtems_end) + 
         INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size()) {
     printk( "bspstart: Not enough RAM!!!\n" );
     bsp_cleanup();
   }
-
   Configuration.work_space_start = work_space_start;
+#ifdef SHOW_MORE_INIT_SETTINGS
+  printk("bsp_start: workspace_start = 0x%x\n", 
+     work_space_start);
+#endif  
+
+  #if ( PPC_USE_DATA_CACHE )
+    #if DEBUG
+      printk("bsp_start: cache_enable\n");
+    #endif
+    instruction_cache_enable ();
+    data_cache_enable ();
+    #if DEBUG
+      printk("bsp_start: END PPC_USE_DATA_CACHE\n");
+    #endif
+  #endif
+
 
   /*
    * Initalize RTEMS IRQ system
    */
+#ifdef  SHOW_MORE_INIT_SETTINGS
+    printk("bspstart: Call BSP_rtems_irq_mng_init\n");
+#endif
   BSP_rtems_irq_mng_init(0);
   
   /* Activate the page table mappings only after
@@ -445,7 +493,7 @@ ShowBATS();
    */           
   if (pt) {
 #ifdef  SHOW_MORE_INIT_SETTINGS
-    printk("Page table setup finished; will activate it NOW...\n");
+    printk("bspstart: Page table setup finished; will activate it NOW...\n");
 #endif
     BSP_pgtbl_activate(pt);
   }
@@ -455,7 +503,7 @@ ShowBATS();
    * and IRQ subsystems...
    */
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Going to initialize VME bridge\n");
+  printk("bspstart: Going to initialize VME bridge\n");
 #endif
   /* VME initialization is in a separate file so apps which don't use
    * VME or want a different configuration may link against a customized

@@ -16,7 +16,7 @@
  *      eric@skatter.usask.ca                      
  *                                            
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -935,9 +935,9 @@ typedef struct m360_ {
 } m360_t;
 
 struct bdregions_t {
-  char            *base;
-  unsigned int    size;
-  unsigned int    used;
+  uint8_t     *base;
+  uint32_t    size;
+  uint32_t    used;
 };
 
 #define M68360_RX_BUF_SIZE        1
@@ -976,6 +976,8 @@ void M360SetupMemory( M68360_t ptr );
 void *M360AllocateBufferDescriptors (M68360_t ptr, int count);
 void M360ExecuteRISC( volatile m360_t *m360, uint16_t command);
 int mc68360_scc_create_chip( PPMCQ1BoardData BoardData, uint8_t int_vector );
+
+void mc68360_sccInterruptHandler( void *ptr);
 
 #if 0
 extern volatile m360_t *m360;

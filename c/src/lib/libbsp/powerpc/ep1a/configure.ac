@@ -15,6 +15,21 @@ RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
+RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[1])
+RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
+[whether using console interrupts])
+
+RTEMS_BSPOPTS_SET([INITIALIZE_COM_PORTS],[*],[0])
+RTEMS_BSPOPTS_HELP([INITIALIZE_COM_PORTS],
+[FIXME: Missing explanation])
+
+RTEMS_BSPOPTS_SET([PPC_USE_SPRG],[*],[0])
+RTEMS_BSPOPTS_HELP([PPC_USE_SPRG],
+[If defined, then the PowerPC specific code in RTEMS will use some
+of the special purpose registers to slightly optimize interrupt
+response time.  The use of these registers can conflict with
+other tools like debuggers.])
+
 RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[0])
 RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
 [If defined, then the PowerPC specific code in RTEMS will use
@@ -24,14 +39,10 @@ RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
  of PowerPC 603e revisions and emulator versions.
  The BSP actually contains the call that enables this.])
 
-RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[*],[0])
-RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
-[If defined, the instruction cache will be enabled after address translation
- is turned on.])
-
-RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[0])
-RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
-[whether using console interrupts])
+RTEMS_BSPOPTS_SET([PPC_VECTOR_FILE_BASE],[*],[0x0100])
+RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
+[This defines the base address of the exception table.
+ NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
 
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")

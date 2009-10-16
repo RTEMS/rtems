@@ -77,7 +77,8 @@
  * at _VME_DRAM_OFFSET
  */
 #undef  _VME_DRAM_OFFSET
-#define _VME_DRAM_OFFSET                0xc0000000  
+/* #define _VME_DRAM_OFFSET                0xc0000000   */
+
 #define _VME_DRAM_32_OFFSET1		0x20000000
 #define _VME_DRAM_32_OFFSET2            0x20b00000
 #define _VME_DRAM_24_OFFSET1            0x00000000

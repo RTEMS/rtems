@@ -34,23 +34,40 @@ void M360SetupMemory( M68360_t ptr ){
 
 #if DEBUG_PRINT
 printk("m360->mcr:0x%08x  Q1_360_SIM_MCR:0x%08x\n", 
-       (unsigned int)&(m360->mcr), ((unsigned int)m360+Q1_360_SIM_MCR));
+       (uint32_t)&(m360->mcr), ((uint32_t)m360+Q1_360_SIM_MCR));
 #endif
-  ptr->bdregions[0].base = (char *)&m360->dpram1[0];
+  ptr->bdregions[0].base = (uint8_t *)&m360->dpram1[0];
   ptr->bdregions[0].size = sizeof m360->dpram1;
   ptr->bdregions[0].used = 0;
+#if DEBUG_PRINT
+printk("%d) base 0x%x size %d used %d\n", 0,
+       (uint32_t)ptr->bdregions[0].base, ptr->bdregions[0].size, ptr->bdregions[0].used );
+#endif
 
-  ptr->bdregions[1].base = (char *)&m360->dpram3[0];
+  ptr->bdregions[1].base = (uint8_t *)&m360->dpram3[0];
   ptr->bdregions[1].size = sizeof m360->dpram3;
   ptr->bdregions[1].used = 0;
+#if DEBUG_PRINT
+printk("%d) base 0x%x size %d used %d\n", 1,
+       (uint32_t)ptr->bdregions[1].base, ptr->bdregions[1].size, ptr->bdregions[1].used );
+#endif
 
-  ptr->bdregions[2].base = (char *)&m360->dpram0[0];
+  ptr->bdregions[2].base = (uint8_t *)&m360->dpram0[0];
   ptr->bdregions[2].size = sizeof m360->dpram0;
   ptr->bdregions[2].used = 0;
+#if DEBUG_PRINT
+printk("%d) base 0x%x size %d used %d\n", 2,
+       (uint32_t)ptr->bdregions[2].base, ptr->bdregions[2].size, ptr->bdregions[2].used );
+#endif
 
-  ptr->bdregions[3].base = (char *)&m360->dpram2[0];
+  ptr->bdregions[3].base = (uint8_t *)&m360->dpram2[0];
   ptr->bdregions[3].size = sizeof m360->dpram2;
   ptr->bdregions[3].used = 0;
+#if DEBUG_PRINT
+printk("%d) base 0x%x size %d used %d\n", 3,
+       (uint32_t)ptr->bdregions[3].base, ptr->bdregions[3].size, ptr->bdregions[3].used );
+#endif
+
 }
 
 
@@ -60,11 +77,11 @@ printk("m360->mcr:0x%08x  Q1_360_SIM_MCR:0x%08x\n",
 void *
 M360AllocateBufferDescriptors (M68360_t ptr, int count)
 {
-  unsigned int i;
+  uint32_t     i;
   ISR_Level    level;
   void         *bdp  = NULL;
-  unsigned int want  = count * sizeof(m360BufferDescriptor_t);
-  int          have;
+  uint32_t      want  = count * sizeof(m360BufferDescriptor_t);
+  uint32_t      have;
 
   /*
    * Running with interrupts disabled is usually considered bad
@@ -81,15 +98,27 @@ M360AllocateBufferDescriptors (M68360_t ptr, int count)
      * less dual-port RAM.
      */
     if (ptr->bdregions[i].used == 0) {
-      volatile unsigned char *cp = ptr->bdregions[i].base;
+      volatile uint8_t *cp = ptr->bdregions[i].base;
+      uint8_t data;
+
       *cp = 0xAA;
-      if (*cp != 0xAA) {
+      data = *cp;
+      if (data != 0xAA) {
         ptr->bdregions[i].used = ptr->bdregions[i].size;
+#if DEBUG_PRINT
+printk("%d) base 0x%x used %d expected 0xAA read 0x%x\n",i, 
+       (uint32_t)ptr->bdregions[i].base, ptr->bdregions[0].used, data );
+#endif
         continue;
       }
       *cp = 0x55;
-      if (*cp != 0x55) {
+      data = *cp;
+      if (data != 0x55) {
         ptr->bdregions[i].used = ptr->bdregions[i].size;
+#if DEBUG_PRINT
+printk("%d) base 0x%x used %d expected 0x55 read 0x%x\n",i, 
+       (uint32_t)ptr->bdregions[i].base, ptr->bdregions[0].used, data );
+#endif
         continue;
       }
       *cp = 0x0;

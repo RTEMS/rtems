@@ -1,0 +1,46 @@
+#
+#  $Id$
+#
+
+BSP NAME:           ep1a
+BOARD:              RADSTONE EP1A
+BUS:                N/A
+CPU FAMILY:         ppc
+CPU:                PowerPC 8245
+COPROCESSORS:       N/A
+MODE:               32 bit mode
+
+DEBUG MONITOR:      see note.
+
+PERIPHERALS
+===========
+TIMERS:             PPC internal Timebase register
+  RESOLUTION:         
+SERIAL PORTS:       1 onboard QUIC, optional 2 mezannes with QUIC chips
+REAL-TIME CLOCK:    xxx
+DMA:                none
+VIDEO:              none
+SCSI:               none
+NETWORKING:         none
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       PPC internal
+IOSUPP DRIVER:      N/A
+SHMSUPP:            N/A
+TIMER DRIVER:       PPC internal
+TTY DRIVER:         PPC internal
+
+STDIO
+=====
+PORT:               Console port 0
+ELECTRICAL:         na
+BAUD:               9600
+BITS PER CHARACTER: 8
+PARITY:             n
+STOP BITS:          1
+
+Notes
+=====
+This bsp has been tested with an custom ep1a, which had two 
+PMCQ1 Daughter cards attached.
