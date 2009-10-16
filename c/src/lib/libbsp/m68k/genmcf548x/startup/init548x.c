@@ -46,6 +46,7 @@
 #include <rtems.h>
 #include <bsp.h>
 
+#if defined(HAS_LOW_LEVEL_INIT)
 #define SYSTEM_PERIOD			10  	/* system bus period in ns */
 
 /* SDRAM Timing Parameters */
@@ -55,6 +56,7 @@
 #define SDRAM_TRP		    	20		/* in ns */
 #define SDRAM_TRFC		    	75		/* in ns */
 #define SDRAM_TREFI		    	7800	/* in ns */
+#endif /* defined(HAS_LOW_LEVEL_INIT) */
 
 extern uint8_t _DataRom[];
 extern uint8_t _DataRam[];
@@ -78,8 +80,7 @@ void mcf548x_init(void)
     uint32_t n;
     uint8_t *dp, *sp;
 
-    /* set XLB arbiter timeouts */
-#ifdef M5484FIREENGINE
+#if defined(HAS_LOW_LEVEL_INIT)
     /* set XLB arbiter timeouts */
     MCF548X_XLB_ADRTO = 0x00000100;
     MCF548X_XLB_DATTO = 0x00000100;
@@ -87,8 +88,10 @@ void mcf548x_init(void)
 #endif
 
     gpio_init();
+#if defined(HAS_LOW_LEVEL_INIT)
     fbcs_init();
     sdramc_init();
+#endif /* defined(HAS_LOW_LEVEL_INIT) */
 
     /* Copy the vector table to RAM */
     if (_VectorRam != InterruptVectorTable)
@@ -122,6 +125,7 @@ void mcf548x_init(void)
 
 }
 /********************************************************************/
+#if defined(HAS_LOW_LEVEL_INIT)
 void
 fbcs_init (void)
 {
@@ -184,8 +188,10 @@ if(!(MCF548X_FBCS_CSMR1 & MCF548X_FBCS_CSMR_V))
 
 #endif
 }
+#endif defined(HAS_LOW_LEVEL_INIT)
 
 /********************************************************************/
+#if defined(HAS_LOW_LEVEL_INIT)
 void
 sdramc_init (void)
 {
@@ -287,6 +293,7 @@ sdramc_init (void)
     }
 
 }
+#endif /* defined(HAS_LOW_LEVEL_INIT) */
 
 /********************************************************************/
 void

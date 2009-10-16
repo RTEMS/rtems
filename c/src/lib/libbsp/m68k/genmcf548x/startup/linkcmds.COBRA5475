@@ -1,10 +1,10 @@
 /*===============================================================*\
 | Project: RTEMS generic mcf548x BSP                              |
 +-----------------------------------------------------------------+
-| File: linkcmd                                                   |
+| File: linkcmds.COBRA5475                                        |
 +-----------------------------------------------------------------+
 | The file contains the linker directives for the generic MCF548x |
-| BSP to be used with an m5484FireEngine EVB to load and execute  |
+| BSP to be used with an COBRA5475 board to load and execute      |
 | code in the RAM.                                                |
 +-----------------------------------------------------------------+
 |                    Copyright (c) 2007                           |
@@ -42,26 +42,25 @@
 |   date                      history                        ID   |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | 12.11.07                    1.0                            ras  |
+| 15.10.09                    1.1, adapted to COBRA5475      doe  |
 |                                                                 |
 \*===============================================================*/
 
 /* 
  * Location and size of on-chip devices
  */
-_SdramBase      = DEFINED(_SdramBase)      ? _SdramBase   : 0x00000000;
-_SdramSize      = DEFINED(_SdramSize)      ? _SdramSize   : (64 * 1024*1024);
+_SdramBase      = DEFINED(_SdramBase)      ? _SdramBase   : 0xf0000000;
+_SdramSize      = DEFINED(_SdramSize)      ? _SdramSize   : (128 * 1024*1024);
 _SysSramBase    = DEFINED(_SysSramBase)    ? _SysSramBase : __MBAR + 0x00010000;
 _SysSramSize    = DEFINED(_SysSramSize)    ? _SysSramSize : (32 * 1024);
 _McdapiBase     = DEFINED(_McdapiBase)     ? _McdapiBase  : _SysSramBase;                 
 _McdapiSize     = DEFINED(_McdapiSize)     ? _McdapiSize  : (12 * 1024);                  
-_CoreSramBase0  = DEFINED(_CoreSramBase0)  ? _CoreSramBase0 : 0x20000000;
-_CoreSramBase1  = DEFINED(_CoreSramBase1)  ? _CoreSramBase1 : 0x20001000;
+_CoreSramBase0  = DEFINED(_CoreSramBase0)  ? _CoreSramBase0 : 0xFF000000;
+_CoreSramBase1  = DEFINED(_CoreSramBase1)  ? _CoreSramBase1 : 0xFF001000;
 _CoreSramSize0  = DEFINED(_CoreSramSize0)  ? _CoreSramSize0 : (4 * 1024);
 _CoreSramSize1  = DEFINED(_CoreSramSize1)  ? _CoreSramSize1 : (4 * 1024);
-_BootFlashBase  = DEFINED(_BootFlashBase)  ? _BootFlashBase : 0xFF800000;
-_BootFlashSize  = DEFINED(_BootFlashSize)  ? _BootFlashSize : (2 * 1024*1024);
-_CodeFlashBase  = DEFINED(_CodeFlashBase)  ? _CodeFlashBase : 0xE0000000;
-_CodeFlashSize  = DEFINED(_CodeFlashSize)  ? _CodeFlashSize : (16 * 1024*1024);
+_BootFlashBase  = DEFINED(_BootFlashBase)  ? _BootFlashBase : 0xFC000000;
+_BootFlashSize  = DEFINED(_BootFlashSize)  ? _BootFlashSize : (32 * 1024*1024);
 
 _VectorRam      = DEFINED(_VectorRam)      ? _VectorRam : _SdramBase;
 _DataRam        = DEFINED(_DataRam)        ? _DataRam   : _data_dest_start;
@@ -79,14 +78,13 @@ RamSize        = DEFINED(_SdramSize)      ? _SdramSize : _SdramSize;
 HeapSize       = DEFINED(HeapSize)       ? HeapSize   : 0x0;
 _VBR            = DEFINED(_VBR)            ? _VBR       : RamBase;
 
-__MBAR          = DEFINED(__MBAR)          ? __MBAR     : 0x10000000;
+__MBAR          = DEFINED(__MBAR)          ? __MBAR     : 0xFE000000;
 
 ENTRY(start)
 MEMORY
 {
-    sdram      : ORIGIN = 0x400     , LENGTH = 64M - 0x400
-    code_flash : ORIGIN = 0xE0000000, LENGTH = 16M
-    boot_flash : ORIGIN = 0xFF800000, LENGTH = 2M
+    sdram      : ORIGIN = 0xF0040000, LENGTH = 128M - 256K
+    boot_flash : ORIGIN = 0xFC000000, LENGTH = 32M
 }
 
 SECTIONS

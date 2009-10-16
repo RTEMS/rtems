@@ -45,7 +45,12 @@
 
 
 Description: Generic mcf548x BSP
-============
+
+The genmcf548x supports several boards based on the Freescale MCF547x/8x
+ColdFire microcontrollers
+
+Supported Hardware: mcf5484FireEngine
+=============================
 CPU:         MCF548x, 200MHz
 XLB:         100 MHz, which is the main clock for all onchip peripherals
 RAM:         64M (m5484FireEngine)
@@ -53,9 +58,18 @@ Boot-Flash:  2M (m5484FireEngine)
 Code-Flash:  16M (m5484FireEngine)
 Core-SRAM:   8K
 Core-SysRAM: 32K
+Boot-Monitor:None
 
+Supported Hardware: COBRA5475
+=============================
+CPU:         MCF5475, 266MHz
+XLB:         132 MHz, which is the main clock for all onchip peripherals
+RAM:         128M 
+Boot-Flash:  32M 
+Core-SRAM:   8K
+Core-SysRAM: 32K
+Boot-Monitor:DBug
 
-The genmcf548x supports the Fresscale m5484FireEngine EVB.
 
 ACKNOWLEDGEMENTS:
 =================
@@ -74,9 +88,9 @@ and the work of
 BSP INFO:
 =========
 BSP NAME:           genmcf548x
-BOARD:              m5484FireEngine (freescale), 
+BOARD:              various MCF547x/8x based boards
 CPU FAMILY:         ColdFire 548x
-CPU:                MCF5484
+CPU:                MCF5475/MCF5484
 FPU:                MCF548x FPU, context switch supported by RTEMS multitasking
 EMAC:               MCF548x EMAC context switch supported by RTEMS multitasking (handeld together with FPU context)
 
@@ -85,7 +99,7 @@ PERIPHERALS
 TIMERS:             2 slice timers, 4 general purpose timers  (SLT0 is used for RTEMS clock, SLT1 is used for diagnostic pupose)
 RESOLUTION:         System tick 10 millieconds (via SLT0) 
 SERIAL PORTS:       Internal PSC 0-3
-NETWORKING:         Internal 10/100MHz FEC (not supported yet)
+NETWORKING:         Internal 10/100MHz FEC on two channels
 
 DRIVER INFORMATION
 ==================
@@ -104,9 +118,9 @@ STOP BITS:          1
 MODES:              Interrupt driven (polled mode alternatively)
 
 
-      Memory map as set up by BSP initialization
+----------------------------------------------------------------------
 
-m5484FireEngine:
+      Memory map of m5484FireEngine as set up by BSP initialization:
 
           +--------------------------------------------------+
 0000 0000 |    64 MByte SDRAM (external)                     | 03FF FFFF
@@ -148,6 +162,41 @@ FF80 0000 | External 8 MByte Flash memory                    | FF9F FFFF
           |                                                  | FFFF FFFF
           +--------------------------------------------------+
 
+
+----------------------------------------------------------------------
+
+      Memory map for COBRA5475 as set up by DBug:
+
+          +--------------------------------------------------+
+F000 0000 |   128 MByte SDRAM (external)                     |
+          .                                                  .
+          .   (first 256KByte reserved for DBug)             .
+          .                                                  . F03F FFFF
+F040 0000 |                                                  |
+          .                                                  .
+          .                                                  .
+          .                                                  .
+          |                                                  | F7FF FFFF
+          +--------------------------------------------------+
+FC00 0000 |    32M code flash (external)                     |
+          .                                                  .
+	  .                                                  .
+          .                                                  .
+          |                                                  | FDFF FFFF 
+          +--------------------------------------------------+          
+FE00 0000 |    internal per. registers via MBAR              |
+          .                                                  .
+          .                                                  .
+          .                                                  .
+          |                                                  | FE03 FFFF 
+          +--------------------------------------------------+
+FF00 0000 |    8K core SRAM (internal)                       |
+          .                                                  .
+          .                                                  .
+          .                                                  .
+          |                                                  | FF00 1FFF 
+          +--------------------------------------------------+
+
 ============================================================================
 
       Interrupt map
@@ -167,7 +216,7 @@ FF80 0000 | External 8 MByte Flash memory                    | FF9F FFFF
 +-----+--------+--------+--------+--------+--------+--------+--------+--------+
 |  3  | PSC 0  | PSC 1  | PSC 2  | PSC 3  |        |        |        |        |
 +-----+--------+--------+--------+--------+--------+--------+--------+--------+
-|  2  |        |        |        |        |        |        |        |        |
+|  2  |        |        |        |        | FEC0/1 | MCDMA  |        |        |
 +-----+--------+--------+--------+--------+--------+--------+--------+--------+
 |  1  |        |        |        |        |        |        |        |        |
 +-----+--------+--------+--------+--------+--------+--------+--------+--------+

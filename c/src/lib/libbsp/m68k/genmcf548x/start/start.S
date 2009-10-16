@@ -58,7 +58,6 @@
 .extern mcf548x_init 
 .extern boot_card
 .extern _SpInit
-.extern _InitPc
 
 /*===============================================================*\
 | Global symbols                                                  |
@@ -77,7 +76,7 @@
 PUBLIC (InterruptVectorTable)
 SYM(InterruptVectorTable):
 INITSP:		.long	_SpInit		        /* Initial SP		  */
-INITPC:		.long	_InitPc			/* Initial PC		  */
+INITPC:		.long	start			/* Initial PC		  */
 vector002:	.long	asm_default_interrupt	/* Access Error		  */
 vector003:	.long	asm_default_interrupt	/* Address Error	  */
 vector004:	.long	asm_default_interrupt	/* Illegal Instruction	  */

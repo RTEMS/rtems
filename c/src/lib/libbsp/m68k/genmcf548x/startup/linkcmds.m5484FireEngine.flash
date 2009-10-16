@@ -70,7 +70,6 @@ _DataEnd       = DEFINED(_DataEnd)        ? _DataEnd       : _data_dest_end;
 _BssStart      = DEFINED(_BssStart)       ? _BssStart      : _clear_start;
 _BssEnd        = DEFINED(_BssEnd)         ? _BssEnd        : _clear_end;
 _SpInit        = DEFINED(_SpInit)         ? _SpInit        : _EndInitStackSpace;
-_InitPc        = DEFINED(_InitPc)         ? _InitPc        : _SdramBase + 0x400;
 _InitStackSize = DEFINED(StackSize)       ? StackSize      : 0x2000;  /* 8 kB   */
 _TopRamReserved= DEFINED(_TopRamReserved) ? _TopRamReserved : 0;
 

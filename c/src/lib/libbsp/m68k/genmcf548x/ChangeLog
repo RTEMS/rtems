@@ -1,3 +1,12 @@
+2009-10-16	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, README, configure.ac,
+	* console/console.c, start/start.S startup/init548x.c,
+	* startup/linkcmds, startup/linkcmds.m5484FireEngine.flash,
+	* make/custom/COBRA5475.cfg, startup/linkcmds.COBRA5475:
+
+	Added support for COBRA5475 board
+
 2009-10-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* network/network.c: add PHY control support

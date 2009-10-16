@@ -111,7 +111,7 @@ struct IntUartInfoStruct IntUartInfo[MAX_UART_INFO];
 
 static int GetBaud( int baudHandle )
 {
-	int baud = 9600;
+	int baud = BSP_CONSOLE_BAUD;
 	switch(baudHandle)
 	{
 		case B0:
@@ -291,7 +291,7 @@ static int
 IntUartSetAttributes(int minor, const struct termios *t)
 {
 /* set default index values */
-	int                         baud     = (int)9600;
+	int                         baud     = (int)BSP_CONSOLE_BAUD;
 	int                         databits = (int)MCF548X_PSC_MR_BC_8;
 	int                         parity   = (int)MCF548X_PSC_MR_PM_NONE;
 	int                         stopbits = (int)MCF548X_PSC_MR_SB_STOP_BITS_1;
