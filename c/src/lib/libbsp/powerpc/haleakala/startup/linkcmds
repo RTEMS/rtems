@@ -210,8 +210,7 @@ SECTIONS
       . = ALIGN (4);
 	  PROVIDE(__SBSS_START__ = .);
 	  sbss.start = .;
-      *(.sbss*)
-      *(.gnu.linkonce.sb.*);
+      *(.sbss .sbss.* *.gnu.linkonce.sb.*);
 	  sbss.end = .;
     } > RAM
     PROVIDE(__SBSS_END__ = .);
