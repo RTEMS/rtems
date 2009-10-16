@@ -1,3 +1,7 @@
+2009-10-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* smc/smc.c: Update for block device API change.
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/gp32.cfg: New (relocated from /make/custom).

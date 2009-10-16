@@ -589,7 +589,7 @@ smc_read(rtems_blkdev_request *req)
  *     IOCTL return value
  */
 static int
-smc_ioctl(dev_t dev, uint32_t req, void *argp)
+smc_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
     switch (req)
     {
@@ -646,7 +646,7 @@ smc_initialize(
 
     dev = rtems_filesystem_make_dev_t(major, 0);
     rc = rtems_disk_create_phys(dev, 512, block_num,
-                                    smc_ioctl, SMC_DEVICE_NAME);
+                                    smc_ioctl, NULL, SMC_DEVICE_NAME);
 
     return RTEMS_SUCCESSFUL;
 }
