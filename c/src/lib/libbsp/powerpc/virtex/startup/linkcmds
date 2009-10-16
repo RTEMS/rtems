@@ -214,9 +214,11 @@ SECTIONS
 	} > RAM
 	_edata = .;
 	.sbss : {
+	PROVIDE (__sbss_start = .); PROVIDE (___sbss_start = .);
         *(.dynsbss)
     	*(.sbss .sbss.* .gnu.linkonce.sb.*)
-	    *(.scommon)
+	*(.scommon)
+	PROVIDE (__sbss_end = .); PROVIDE (___sbss_end = .);
 	} > RAM
 	.bss : {
 		*(.dynbss)

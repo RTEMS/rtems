@@ -1,3 +1,7 @@
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/linkcmds: Add __sbss_start, __sbss_end etc.
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/virtex.cfg: New (relocated from /make/custom).
