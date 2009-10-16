@@ -6,19 +6,13 @@ dnl _RTEMS_BSP_ALIAS(BSP_ALIAS,RTEMS_BSP_FAMILY)
 dnl Internal subroutine to RTEMS_BSP_ALIAS
 AC_DEFUN([_RTEMS_BSP_ALIAS],
 [# account for "aliased" bsps which share source code
-  case $1 in
-    bare*)        $2=bare             ;; # EXP: bare-aliases
-
-    *)
       for bsp_cfgs in `ls "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/*/make/custom/$1.cfg" 2>/dev/null`; do
         $2=`echo "$bsp_cfgs" | sed \
           -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/,," \
           -e "s,/make/custom/.*\.cfg$,,"`
         break
       done
-      ;;
-  esac]
-)
+])
 
 dnl RTEMS_BSP_ALIAS(BSP_ALIAS,RTEMS_BSP_FAMILY)
 dnl convert a bsp alias $1 into its bsp directory RTEMS_BSP_FAMILY

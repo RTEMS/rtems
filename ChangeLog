@@ -1,3 +1,7 @@
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/bsp-alias.m4: Remove bare BSP (Abandoned).
+
 2009-10-16	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* README.configure: added COBRA5475 reference
