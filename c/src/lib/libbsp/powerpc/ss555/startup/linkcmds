@@ -198,25 +198,24 @@ SECTIONS
     data.end = .;
   }
   data.size = data.end - data.start;
-	
+
+  bss.start = .;
+  .sbss          :
+  {
+    PROVIDE (__sbss_start = .); PROVIDE (___sbss_start = .);
+    *(.dynsbss)
+    *(.sbss .sbss.* .gnu.linkonce.sb.*)
+    *(.scommon)
+    PROVIDE (__sbss_end = .); PROVIDE (___sbss_end = .);
+  }
   .bss :
   {
-    bss.start = .;
-	
-    PROVIDE (__SBSS2_START__ = .);
-    *(.sbss2)
-    PROVIDE (__SBSS2_END__ = .);
-	
-    PROVIDE (__SBSS_START__ = .);
-    *(.sbss*)
-    PROVIDE (__SBSS_END__ = .);
-
+    *(.dynbss)	
     *(.bss .bss* .gnu.linkonce.b*)
     *(COMMON)
-
     . = ALIGN(4);
-    bss.end = .;
   }
+  bss.end = .;
   bss.size = bss.end - bss.start;
 
   PROVIDE(_end = bss.end);
