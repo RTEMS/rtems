@@ -3,7 +3,7 @@
  *
  * @ingroup rtems_ramdisk
  *
- * RAM disk block device.
+ * @brief RAM disk block device API.
  */
 
 /*
@@ -33,44 +33,52 @@ extern "C" {
  */
 
 /**
- * RAM disk configuration table entry.
+ * @name Static Configuration
+ *
+ * @{
+ */
+
+/**
+ * @brief RAM disk configuration table entry.
  */
 typedef struct rtems_ramdisk_config {
   /**
-   * RAM disk block size (must be a power of two).
+   * @brief RAM disk block size.
    */
   uint32_t block_size;
 
   /**
-   * Number of blocks on this RAM disk.
+   * @brief Number of blocks on this RAM disk.
    */
   rtems_blkdev_bnum block_num;
 
   /**
-   * RAM disk location or @c NULL if RAM disk memory should be allocated
+   * @brief RAM disk location or @c NULL if RAM disk memory should be allocated
    * dynamically.
    */
   void *location;
 } rtems_ramdisk_config;
 
 /**
- * External reference to the RAM disk configuration table describing each RAM
- * disk in the system.
+ * @brief External reference to the RAM disk configuration table describing
+ * each RAM disk in the system.
  *
  * The configuration table is provided by the application.
  */
 extern rtems_ramdisk_config rtems_ramdisk_configuration [];
 
 /**
- * External reference the size of the RAM disk configuration table
- * @ref rtems_ramdisk_configuration.
+ * @brief External reference the size of the RAM disk configuration table @ref
+ * rtems_ramdisk_configuration.
  *
  * The configuration table size is provided by the application.
  */
 extern size_t rtems_ramdisk_configuration_size;
 
+int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
+
 /**
- * RAM disk driver initialization entry point.
+ * @brief RAM disk driver initialization entry point.
  */
 rtems_device_driver ramdisk_initialize(
  rtems_device_major_number major,
@@ -86,6 +94,120 @@ rtems_device_driver ramdisk_initialize(
     .initialization_entry = ramdisk_initialize, \
     RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES \
   }
+
+#define RAMDISK_DEVICE_BASE_NAME "/dev/rd"
+
+/** @} */
+
+/**
+ * @name Runtime Configuration
+ *
+ * @{
+ */
+
+/**
+ * @brief RAM disk descriptor.
+ */
+typedef struct ramdisk {
+  /**
+   * @brief RAM disk block size, the media size.
+   */
+  uint32_t block_size;
+
+  /**
+   * @brief Number of blocks on this RAM disk.
+   */
+  rtems_blkdev_bnum block_num;
+
+  /**
+   * @brief RAM disk memory area.
+   */
+  void *area;
+
+  /**
+   * @brief RAM disk is initialized.
+   */
+  bool initialized;
+
+  /**
+   * @brief Indicates if memory is allocated by malloc() for this RAM disk.
+   */
+  bool malloced;
+
+  /**
+   * @brief Trace enable.
+   */
+  bool trace;
+} ramdisk;
+
+extern const rtems_driver_address_table ramdisk_ops;
+
+/**
+ * @brief Allocates and initializes a RAM disk descriptor.
+ *
+ * The block size will be @a block_size.  The block count will be @a
+ * block_count.  The disk storage area begins at @a area_begin.  If @a
+ * area_begin is @c NULL, the memory will be allocated and zeroed.  Sets the
+ * trace enable to @a trace.
+ *
+ * @return Pointer to allocated and initialized ramdisk structure, or @c NULL
+ * if no memory is available.
+ *
+ * @code
+ * rtems_status_code create_ramdisk(
+ *   const char *disk_name_path,
+ *   uint32_t block_size,
+ *   rtems_blkdev_bnum block_count
+ * )
+ * {
+ *   rtems_status_code sc = RTEMS_SUCCESSFUL;
+ *   rtems_device_major_number major = 0;
+ *   ramdisk *rd = NULL;
+ *   dev_t dev = 0;
+ * 
+ *   sc = rtems_io_register_driver(0, &ramdisk_ops, &major);
+ *   if (sc != RTEMS_SUCCESSFUL) {
+ *     return RTEMS_UNSATISFIED;
+ *   }
+ * 
+ *   rd = ramdisk_allocate(NULL, block_size, block_count, false);
+ *   if (rd == NULL) {
+ *     rtems_io_unregister_driver(major);
+ * 
+ *     return RTEMS_UNSATISFIED;
+ *   }
+ * 
+ *   dev = rtems_filesystem_make_dev_t(major, 0);
+ * 
+ *   sc = rtems_disk_create_phys(
+ *     dev,
+ *     block_size,
+ *     block_count,
+ *     ramdisk_ioctl,
+ *     rd,
+ *     disk_name_path
+ *   );
+ *   if (sc != RTEMS_SUCCESSFUL) {
+ *     ramdisk_free(rd);
+ *     rtems_io_unregister_driver(major);
+ * 
+ *     return RTEMS_UNSATISFIED;
+ *   }
+ * 
+ *   return RTEMS_SUCCESSFUL;
+ * }
+ * @endcode
+ */
+ramdisk *ramdisk_allocate(
+  void *area_begin,
+  uint32_t block_size,
+  rtems_blkdev_bnum block_count,
+  bool trace
+);
+
+void ramdisk_free(ramdisk *rd);
+
+/** @} */
 
 /** @} */
 

@@ -7,7 +7,11 @@ include $(top_srcdir)/automake/compile.am
 
 noinst_LIBRARIES = libblock.a
 libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/flashdisk.c \
-    src/ramdisk.c src/ide_part_table.c src/nvdisk.c \
+    src/ramdisk-driver.c \
+    src/ramdisk-init.c \
+    src/ramdisk-config.c \
+    src/ide_part_table.c \
+    src/nvdisk.c \
     src/nvdisk-sram.c \
     src/bdpart.c \
     include/rtems/bdbuf.h include/rtems/blkdev.h \
