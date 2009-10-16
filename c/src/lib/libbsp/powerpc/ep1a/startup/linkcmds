@@ -139,7 +139,7 @@ SECTIONS
   .sbss      :
   {
     PROVIDE (__sbss_start = .);
-    *(.sbss*)
+    *(.sbss* .sbss.* .gnu.linkonce.sb.*)
     *(.scommon)
     PROVIDE (__sbss_end = .);
   }
