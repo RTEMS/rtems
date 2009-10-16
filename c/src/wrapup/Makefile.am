@@ -12,9 +12,7 @@ CLEANFILES = o-optimize/librtemsbsp.a
 
 SRCS = ../support/libsupport.a
 
-if HAS_LIBBSP
 SRCS += ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp.a
-endif
 
 # FIXME: ATM, there is no libcpu.a, anymore.
 # SRCS += $(wildcard $(PROJECT_LIB)/libcpu.a)

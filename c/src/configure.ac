@@ -208,10 +208,6 @@ AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
 # FIXME: We should use a feature based check, here
 AM_CONDITIONAL([LIBCHIP],[test "$RTEMS_BSP_FAMILY" != "posix"])
 
-# The bare bsp doesn't have libbsp.a
-# FIXME: We should use a feature based check, here
-AM_CONDITIONAL([HAS_LIBBSP],[test "$RTEMS_BSP_FAMILY" != "bare"])
-
 AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
 
 AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
