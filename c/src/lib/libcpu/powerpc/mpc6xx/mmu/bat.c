@@ -8,7 +8,7 @@
  *
  *		MPC750 
  *		Risc Microporcessor User's Manual
- *		Motorola REF : MPC750UM/AD 8/97
+ *		Mtorola REF : MPC750UM/AD 8/97
  *
  * Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.
@@ -160,7 +160,7 @@ bat_addrs_put (ubat * bat, int typ, int idx)
  * cache.
  */
 static void
-bat_addrs_init (void)
+bat_addrs_init ()
 {
   ubat bat;
 
@@ -204,7 +204,7 @@ bat_addrs_init (void)
 }
 
 static void
-do_dssall (void)
+do_dssall ()
 {
   /* Before changing BATs, 'dssall' must be issued.
    * We check MSR for MSR_VE and issue a 'dssall' if
@@ -227,7 +227,7 @@ do_dssall (void)
 
 /* Clear I/D bats 4..7 ONLY ON 7455 etc.  */
 static void
-clear_hi_bats (void)
+clear_hi_bats ()
 {
   do_dssall ();
   CLRBAT (DBAT4);
@@ -380,8 +380,9 @@ setbat (int typ, int bat_index, unsigned long virt, unsigned long phys,
       init_done = 1;
     }
   }
-
-  if (size >= (1 << 17) && (err = check_overlap (typ, virt, size)) >= 0) {
+  
+  err = check_overlap (typ, virt, size);
+  if ((size >= (1 << 17)) && (err >= 0) && (err != bat_index)) {
     rtems_interrupt_enable (level);
     printk ("BATs must not overlap; area 0x%08x..0x%08x hits %cBAT %i\n",
             virt, virt + size, (TYP_I == typ ? 'I' : 'D'), err);
