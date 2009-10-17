@@ -1,3 +1,7 @@
+2009-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/check-custom-bsp.m4: Fix up AC_REQUIRES.
+
 2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/canonical-target-name.m4: Remove RTEMS_HOST (unused).
