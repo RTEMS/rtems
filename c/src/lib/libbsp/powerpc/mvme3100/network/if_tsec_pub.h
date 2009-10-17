@@ -49,6 +49,7 @@
 
 #include <rtems.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,6 +67,9 @@ struct tsec_private;
  * raw ethernet packet communication...
  */
 
+#define TSEC_TXIRQ ( (1<<(31-9)) | (1<<(31-11))                )
+#define TSEC_RXIRQ ( (1<<(31-0)) | (1<<(31- 3)) | (1<<(31-24)) )
+#define TSEC_LKIRQ (  1<<(31- 4)                               )
 /*
  * Setup an interface.
  * Allocates resources for descriptor rings and sets up the driver software structure.
@@ -137,15 +141,37 @@ struct tsec_private *
 BSP_tsec_setup(
 	int		 unit,
 	rtems_id driver_tid,
-	void (*cleanup_txbuf)(void *user_buf, void *cleanup_txbuf_arg, int error_on_tx_occurred), 
-	void *cleanup_txbuf_arg,
-	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
-	void (*consume_rxbuf)(void *user_buf, void *consume_rxbuf_arg, int len),
-	void *consume_rxbuf_arg,
-	int		rx_ring_size,
-	int		tx_ring_size,
-	int		irq_mask
+	void     (*cleanup_txbuf)(void *user_buf, void *cleanup_txbuf_arg, int error_on_tx_occurred), 
+	void *   cleanup_txbuf_arg,
+	void *   (*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
+	void     (*consume_rxbuf)(void *user_buf, void *consume_rxbuf_arg, int len),
+	void *   consume_rxbuf_arg,
+	int		 rx_ring_size,
+	int		 tx_ring_size,
+	int		 irq_mask
 );
+
+/*
+ * Alternate 'setup' routine allowing the user to install an ISR rather
+ * than a task ID.
+ * All parameters (other than 'isr' / 'isr_arg') and the return value
+ * are identical to the BSP_tsec_setup() entry point.
+ */
+struct tsec_private *
+BSP_tsec_setup_1(
+	int		 unit,
+	void     (*isr)(void *isr_arg),
+	void *   isr_arg,
+	void     (*cleanup_txbuf)(void *user_buf, void *cleanup_txbuf_arg, int error_on_tx_occurred), 
+	void *   cleanup_txbuf_arg,
+	void *   (*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
+	void     (*consume_rxbuf)(void *user_buf, void *consume_rxbuf_arg, int len),
+	void *   consume_rxbuf_arg,
+	int		 rx_ring_size,
+	int		 tx_ring_size,
+	int		 irq_mask
+);
+
 
 /*
  * Descriptor scavenger; cleanup the TX ring, passing all buffers
@@ -335,6 +361,12 @@ BSP_tsec_media_ioctl(struct tsec_private *mp, int cmd, int *parg);
  *       irq_pending variable may be compromised.
  */
 
+/* Note: the BSP_tsec_enable/disable/ack_irqs() entry points
+ *       are deprecated.
+ *       The newer API where the user passes a mask allows
+ *       for more selective control.
+ */
+
 /* Enable interrupts at device */
 void
 BSP_tsec_enable_irqs(struct tsec_private *mp);
@@ -349,6 +381,41 @@ BSP_tsec_disable_irqs(struct tsec_private *mp);
  */
 uint32_t
 BSP_tsec_ack_irqs(struct tsec_private *mp);
+
+/* Enable interrupts included in 'mask' (leaving
+ * already enabled interrupts on). If the mask includes
+ * bits that were not passed to the 'setup' routine then
+ * the behavior is undefined.
+ */
+void
+BSP_tsec_enable_irq_mask(struct tsec_private *mp, uint32_t irq_mask);
+
+/* Disable interrupts included in 'mask' (leaving
+ * other ones that are currently enabled on). If the mask
+ * includes bits that were not passed to the 'setup' routine
+ * then the behavior is undefined.
+
+ * RETURNS: Bitmask of interrupts that were enabled upon entry
+ *          into this routine. This can be used to restore the previous
+ *          state.
+ */
+uint32_t
+BSP_tsec_disable_irq_mask(struct tsec_private *mp, uint32_t irq_mask);
+
+/* Acknowledge and clear selected interrupts.
+ *
+ * RETURNS: All pending interrupts.
+ * 
+ * NOTE:    Only pending interrupts contained in 'mask'
+ *          are cleared. Others are left pending.
+ *
+ *          This routine can be used to check for pending
+ *          interrupts (pass mask ==  0) or to clear all
+ *          interrupts (pass mask == -1).
+ */
+uint32_t
+BSP_tsec_ack_irq_mask(struct tsec_private *mp, uint32_t mask);
+
 
 /* Retrieve the driver daemon TID that was passed to
  * BSP_tsec_setup().

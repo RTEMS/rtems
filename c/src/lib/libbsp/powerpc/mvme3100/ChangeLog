@@ -1,3 +1,10 @@
+2009-10-17	Till Straumann <strauman@slac.stanford.edu>
+
+	*network/if_tsec_pub.h, network/tsec.c: Enhanced low-level
+	API allowing the user to selectively enable/disable/acknowledge
+	interrupts and to install their own ISR (rather than having
+	the driver posting an event to a single task).
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/mvme3100.cfg: New (relocated from /make/custom).
