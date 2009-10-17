@@ -1,3 +1,11 @@
+2009-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/gen83xx.inc: New (Renamed from gen83xx.cfg).
+	* make/custom/gen83xx.cfg: Removed.
+	* make/custom/hsc_cm01.cfg, make/custom/mpc8313erdb.cfg,
+	make/custom/mpc8349eamds.cfg:
+	Include make/custom/gen83xx.inc.
+
 2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/gen83xx.cfg: Remove -W -Wno-unused.
