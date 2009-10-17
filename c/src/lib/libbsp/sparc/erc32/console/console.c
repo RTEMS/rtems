@@ -3,7 +3,7 @@
  *
  *  This driver uses the termios pseudo driver.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -170,7 +170,7 @@ rtems_isr console_isr_b(
  *  Return values:     NONE
  */
 
-void console_exit()
+void console_exit(void)
 {
   uint32_t         port;
   uint32_t         ch;
