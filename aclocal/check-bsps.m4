@@ -18,16 +18,7 @@ AC_MSG_CHECKING([for available BSPs])
       bsp_cfg=`echo "$bsp_cfgs" | sed \
         -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/$bsp_family/make/custom/,," \
         -e "s,\.cfg$,,"`
-      case $bsp_cfg in
-      # blacklisted bsps
-      tqm8xx);; # powerpc
-      genmcf548x);; # m68k
-      mbx8xx);; # powerpc
-      gen5200);; # powerpc
-      gen83xx);; # powerpc
-      lpc24xx);; # arm
-      *) $1="[$]$1 $bsp_cfg";;
-      esac
+      $1="[$]$1 $bsp_cfg"
     done
   done
   AS_IF([test -z "[$]$1"],
