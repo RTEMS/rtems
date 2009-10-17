@@ -58,6 +58,8 @@ uint32_t BSP_mem_size = (uint32_t)RamSize;
  */
 unsigned int BSP_time_base_divisor;
 
+extern unsigned long __rtems_end[];
+
 void BSP_panic(char *s)
 {
   printk("%s PANIC %s\n",_RTEMS_version, s);
@@ -75,10 +77,8 @@ void _BSP_Fatal_error(unsigned int v)
  *
  *  This routine does the bulk of the system initialization.
  */
-
 void bsp_start( void )
 {
-  extern unsigned long __rtems_end[];
   uint32_t intrStackStart;
   uint32_t intrStackSize;
 
@@ -105,8 +105,6 @@ void bsp_start( void )
    */
   intrStackStart = (uint32_t) __rtems_end;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
-
-  BSP_mem_size = RamSize;
 
   /*
    * Initialize default raw exception handlers.

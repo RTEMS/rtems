@@ -17,11 +17,6 @@
  *  $Id$
  */
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/io.h>
@@ -110,9 +105,8 @@ _start:
 	stwu	sp,-56(sp)		/* push another stack frame */
 	bl  FUNC_NAME(__eabi)
 
-	li	r3, 0			/* command line */
-
 	/* Let her rip */
+	li	r3, 0			/* command line */
 	bl	FUNC_NAME(boot_card)
 
 	li  10,99			/* 0x63 */
