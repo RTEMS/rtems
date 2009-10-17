@@ -1,3 +1,13 @@
+2009-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/mbx8xx.inc: New (Renamed from mbx8xx.cfg).
+	* make/custom/mbx8xx.cfg: Removed.
+	* make/custom/mbx821_001.cfg, make/custom/mbx821_002b.cfg,
+	make/custom/mbx821_002.cfg, make/custom/mbx860_001b.cfg,
+	make/custom/mbx860_002.cfg, make/custom/mbx860_005b.cfg,
+	make/custom/mbx860_1b.cfg:
+	Include make/custom/mbx8xx.inc.
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/mbx821_001.cfg: New (relocated from /make/custom).
