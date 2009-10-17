@@ -1,3 +1,7 @@
+2009-10-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Fix warnings.
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/jmr3904.cfg: New (relocated from /make/custom).

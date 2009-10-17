@@ -4,7 +4,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,16 +17,15 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
+extern void mips_install_isr_entries(void);
+
 /*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
  */
-
 void bsp_start( void )
 {
-  extern void mips_install_isr_entries(void);
-
   mips_set_sr( 0xff00 );  /* all interrupts unmasked but globally off */
                           /* depend on the IRC to take care of things */
   mips_install_isr_entries();
@@ -42,7 +41,6 @@ void clear_cache( void *address, size_t n )
 /* Structure filled in by get_mem_info.  Only the size field is
  * actually used (to clear bss), so the others aren't even filled in.
  */
-
 struct s_mem
 {
   unsigned int size;
@@ -50,9 +48,9 @@ struct s_mem
   unsigned int dcsize;
 };
 
-void
-get_mem_info (mem)
-     struct s_mem *mem;
+void get_mem_info(
+  struct s_mem *mem
+)
 {
   mem->size = 0x1000000;        /* XXX figure out something here */
 }
