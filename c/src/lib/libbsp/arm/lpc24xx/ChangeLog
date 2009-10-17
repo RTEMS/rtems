@@ -1,3 +1,12 @@
+2009-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/lpc24xx.inc: New (Renamed from lpc24xx.cfg).
+	* make/custom/lpc24xx.cfg: Removed.
+	* make/custom/lpc24xx_ea.cfg, lpc24xx_ncs_ram.cfg,
+	make/custom/lpc24xx_ncs_rom_ext.cfg,
+	make/custom/lpc24xx_ncs_rom_int.cfg:
+	Include make/custom/lpc24xx.inc.
+
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/lpc24xx.cfg: New (relocated from /make/custom).
