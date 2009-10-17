@@ -45,9 +45,9 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.19.92
-%define binutils_version 2.19.92
-%define binutils_rpmvers %{expand:%(echo "2.19.92" | tr - _ )}
+%define binutils_pkgvers 2.20
+%define binutils_version 2.20
+%define binutils_rpmvers %{expand:%(echo "2.20" | tr - _ )}
 
 Name:		rtems-4.10-bfin-rtems4.10-binutils
 Summary:	Binutils for target bfin-rtems4.10
@@ -73,7 +73,7 @@ BuildRequires:	bison
 
 Requires:	rtems-4.10-binutils-common
 
-Source0: ftp://sourceware.org/pub/binutils/snapshots/binutils-%{binutils_pkgvers}.tar.bz2
+Source0: ftp://ftp.gnu.org/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
 # Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-%{binutils_pkgvers}-rtems4.10-20090911.diff
 
 %description
