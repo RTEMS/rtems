@@ -1,3 +1,9 @@
+2009-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/check-custom-bsp.m4:
+	Remove "${srcdir}/${RTEMS_TOPdir}/make/custom/$1".
+	* aclocal/check-bsps.m4: Remove "blacklist".
+
 2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/bsp-alias.m4: Remove bare BSP (Abandoned).
