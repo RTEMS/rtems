@@ -42,22 +42,21 @@ EOF
 # Collect and copy the BSP's make/custom/*.cfg files from the toplevel make 
 # directory into the build tree's <bsp>/make/custom subdirectories
 CUSTOM_CFG_FILES=
-f="${RTEMS_BSP}"
+f="${RTEMS_BSP}.cfg"
 while test -n "$f"; do
   cfg_file=
   _RTEMS_CHECK_CUSTOM_BSP([$f],cfg_file)
   if test -n "${cfg_file}"; then
-    cp ${cfg_file} make/custom/$f.cfg
+    cp ${cfg_file} make/custom/$f
 cat << EOF >> ${DEPDIR}/cfg.P
-make/custom/$f.cfg: ${cfg_file} make/custom/default.cfg
-	cp ${cfg_file} make/custom/$f.cfg
+make/custom/$f: ${cfg_file} make/custom/default.cfg
+	cp ${cfg_file} make/custom/$f
 EOF
-    CUSTOM_CFG_FILES="$CUSTOM_CFG_FILES make/custom/$f.cfg"
+    CUSTOM_CFG_FILES="$CUSTOM_CFG_FILES make/custom/$f"
     f=`grep "^include.*make/custom" ${cfg_file} \
     | sed \
       -e 's%^.*custom\/%%' \
-      -e 's%default\.cfg%%' \
-      -e 's%\.cfg$%%'`;
+      -e 's%default\.cfg%%'`;
   else break; fi;
 done
 #${MAKE-make} -f ${DEPDIR}/cfg.P \
