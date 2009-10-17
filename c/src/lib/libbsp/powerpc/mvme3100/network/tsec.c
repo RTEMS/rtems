@@ -1190,7 +1190,7 @@ struct ifnet         *ifp;
 		sc = rtems_semaphore_create(
 				rtems_build_name('t','s','e','X'),
 				1,
-				RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY | RTEMS_DEFAULT_ATTRIBUTES,
+				RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY | RTEMS_DEFAULT_ATTRIBUTES,
 				0,
 				&new_mtx);
 		if ( RTEMS_SUCCESSFUL != sc ) {

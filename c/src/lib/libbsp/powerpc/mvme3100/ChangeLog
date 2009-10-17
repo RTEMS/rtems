@@ -1,6 +1,12 @@
 2009-10-17	Till Straumann <strauman@slac.stanford.edu>
 
-	*network/if_tsec_pub.h, network/tsec.c: Enhanced low-level
+	* network/tsec.c: rtems 4.10 no longer allows simple binary
+	semaphores to have priority inheritance attribute; use ordinary
+	binary semaphore instead.
+
+2009-10-17	Till Straumann <strauman@slac.stanford.edu>
+
+	* network/if_tsec_pub.h, network/tsec.c: Enhanced low-level
 	API allowing the user to selectively enable/disable/acknowledge
 	interrupts and to install their own ISR (rather than having
 	the driver posting an event to a single task).
