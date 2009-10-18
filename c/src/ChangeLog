@@ -1,3 +1,8 @@
+2009-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Pick up make/custom/*.
+	* aclocal/check-custom-bsp.m4: Adapt to changes to configure.ac.
+
 2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* wrapup/Makefile.am: Remove AM_CONDITIONAL HAS_LIBBSP.
