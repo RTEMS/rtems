@@ -1,3 +1,7 @@
+2009-10-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/startup/linkcmds: Add __SBSS_END__ and __SBSS2_END__.
+
 2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/startup/zerobss.c: Remove nested externs.

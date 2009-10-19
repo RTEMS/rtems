@@ -105,6 +105,7 @@ _SDA2_BASE_ = __SDATA2_START__ + 0x8000;
                          * which may be important if run-time loading is used
                          */
                      . += 1;
+                     PROVIDE (__SBSS2_END__ = .);
                     } >CODE
   .eh_frame	  : { *(.eh_frame)		} >CODE
 
@@ -211,6 +212,7 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
      * which may be important if run-time loading is used
      */
     . += 1;
+    PROVIDE (__SBSS_END__ = .);
     PROVIDE (__sbss_end = .);
   } > CODE
   .plt   : { *(.plt) }	> CODE
