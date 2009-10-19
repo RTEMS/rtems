@@ -1,3 +1,7 @@
+2009-10-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* block01/.cvsignore: New file.
+
 2009-10-19	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* block01/init.c, block01/block01.scn, block01/Makefile.am: New files.
