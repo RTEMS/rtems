@@ -118,7 +118,7 @@ rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
 
     /* link status */
     if (BMSR_LINK & bmsr)
-      options |= IFM_LINK_OK;
+      options |= IFM_LINK_OK | IFM_ACTIVE | IFM_AVALID;
 
     /* do we have autonegotiation disabled ? */
     if (!(BMCR_AUTOEN & bmcr)) {

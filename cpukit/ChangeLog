@@ -1,3 +1,10 @@
+2009-10-20	Chris Johns <chrisj@rtems.org>
+
+	* libnetworking/rtems/rtems_mii_ioctl_kern.c: Added IFM_ACTIVE and
+	IFM_AVALID to the status for a link up. These are the supported
+	but in the BSD stack. Before IFM_LINK_OK was set and this is a
+	spare bit.
+
 2009-10-16     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/src/ramdisk.c: Removed file. 
