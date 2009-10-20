@@ -1,3 +1,7 @@
+2009-10-20	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Don't add -ansi -fasm to CFLAGS.
+
 2009-10-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psxtimer01/psxtimer.c: It is not necessarily an error for the time
