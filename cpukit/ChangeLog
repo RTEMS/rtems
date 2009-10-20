@@ -1,9 +1,26 @@
+2009-10-20     Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/ramdisk.h: Documentation.
+	* libblock/src/ramdisk-driver.c: Compile trace support conditionally.
+
 2009-10-20	Chris Johns <chrisj@rtems.org>
 
 	* libnetworking/rtems/rtems_mii_ioctl_kern.c: Added IFM_ACTIVE and
 	IFM_AVALID to the status for a link up. These are the supported
 	but in the BSD stack. Before IFM_LINK_OK was set and this is a
 	spare bit.
+
+2009-10-19     Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/diskdevs.h: Documentation.  Added field to
+	rtems_disk_device.
+	* libblock/include/rtems/blkdev.h: New request code
+	RTEMS_BLKIO_DELETED.
+	* libblock/src/diskdevs.c: Major rewrite.  Changed the way disks are
+	deleted.  Disks will be now deleted if they are not in use or upon
+	last release.  The IO control handler will be invoked if a physical
+	disk is deleted with the RTEMS_BLKIO_DELETED request code.  Logical
+	disks increase now the usage count of the associated physical disk.
 
 2009-10-16     Sebastian Huber <sebastian.huber@embedded-brains.de>
 

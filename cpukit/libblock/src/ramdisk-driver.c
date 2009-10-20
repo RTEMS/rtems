@@ -13,27 +13,36 @@
  * @(#) $Id$
  */
 
-#include <stdio.h>
+/* FIXME: How to set this define? */
+#if !defined(RTEMS_RAMDISK_TRACE)
+    #define RTEMS_RAMDISK_TRACE 0
+#endif
+
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include <inttypes.h>
+
+#if RTEMS_RAMDISK_TRACE
+    #include <stdio.h>
+#endif
 
 #include <rtems.h>
 #include <rtems/ramdisk.h>
 
-static void
-rtems_ramdisk_printf (const ramdisk *rd, const char *format, ...)
-{
-  if (rd->trace)
-  {
-    va_list args;
-    va_start (args, format);
-    printf ("ramdisk:");
-    vprintf (format, args);
-    printf ("\n");
-  }
-}
+#if RTEMS_RAMDISK_TRACE
+    static void
+    rtems_ramdisk_printf (const ramdisk *rd, const char *format, ...)
+    {
+        if (rd->trace)
+        {
+            va_list args;
+            va_start (args, format);
+            printf ("ramdisk:");
+            vprintf (format, args);
+            printf ("\n");
+        }
+    }
+#endif
 
 static int
 ramdisk_read(struct ramdisk *rd, rtems_blkdev_request *req)
@@ -42,14 +51,18 @@ ramdisk_read(struct ramdisk *rd, rtems_blkdev_request *req)
     uint32_t   i;
     rtems_blkdev_sg_buffer *sg;
 
+#if RTEMS_RAMDISK_TRACE
     rtems_ramdisk_printf (rd, "ramdisk read: start=%d, blocks=%d",
                           req->bufs[0].block, req->bufnum);
+#endif
 
     for (i = 0, sg = req->bufs; i < req->bufnum; i++, sg++)
     {
+#if RTEMS_RAMDISK_TRACE
         rtems_ramdisk_printf (rd, "ramdisk read: buf=%d block=%d length=%d off=%d addr=%p",
                               i, sg->block, sg->length, sg->block * rd->block_size,
                               from + (sg->block * rd->block_size));
+#endif
         memcpy(sg->buffer, from + (sg->block * rd->block_size), sg->length);
     }
     req->req_done(req->done_arg, RTEMS_SUCCESSFUL, 0);
@@ -63,13 +76,17 @@ ramdisk_write(struct ramdisk *rd, rtems_blkdev_request *req)
     uint32_t   i;
     rtems_blkdev_sg_buffer *sg;
 
+#if RTEMS_RAMDISK_TRACE
     rtems_ramdisk_printf (rd, "ramdisk write: start=%d, blocks=%d",
                           req->bufs[0].block, req->bufnum);
+#endif
     for (i = 0, sg = req->bufs; i < req->bufnum; i++, sg++)
     {
+#if RTEMS_RAMDISK_TRACE
         rtems_ramdisk_printf (rd, "ramdisk write: buf=%d block=%d length=%d off=%d addr=%p",
                               i, sg->block, sg->length, sg->block * rd->block_size,
                               to + (sg->block * rd->block_size));
+#endif
         memcpy(to + (sg->block * rd->block_size), sg->buffer, sg->length);
     }
     req->req_done(req->done_arg, RTEMS_SUCCESSFUL, 0);

@@ -3,7 +3,7 @@
  *
  * @ingroup rtems_disk
  *
- * Block device disk management.
+ * @brief Block device disk management API.
  */
  
 /*
@@ -89,7 +89,7 @@ struct rtems_disk_device {
   /**
    * @brief Usage counter.
    *
-   * Devices cannot be removed if they are in use.
+   * Devices cannot be deleted if they are in use.
    */
   unsigned uses;
 
@@ -129,6 +129,12 @@ struct rtems_disk_device {
    * @brief Private data for the disk driver.
    */
   void *driver_data;
+
+  /**
+   * @brief Indicates that this disk should be deleted as soon as the last user
+   * releases this disk.
+   */
+  bool deleted;
 };
 
 /**
@@ -203,19 +209,27 @@ static inline uint32_t rtems_disk_media_block_size(const rtems_disk_device *dd)
 /**
  * @brief Creates a physical disk with device identifier @a dev.
  *
- * The block size @a block_size must be a power of two.  The disk size @a
- * disk_size is the number of blocks provided by this disk.  The block index
- * starts with zero.  The associated disk device driver will be invoked via the
- * IO control handler @a handler.  A device node will be registered in the file
- * system with absolute path @a name.  This function is usually invoked from a
+ * The block size @a block_size must be positive.  The disk will have
+ * @a block_count blocks.  The block index starts with zero.  The associated disk
+ * device driver will be invoked via the IO control handler @a handler.  A
+ * device node will be registered in the file system with absolute path @a
+ * name, if @a name is not @c NULL.  This function is usually invoked from a
  * block device driver during initialization when a physical device is detected
  * in the system.  The device driver provides an IO control handler to allow
  * block device operations.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_NOT_CONFIGURED Cannot lock disk device operation mutex.
+ * @retval RTEMS_INVALID_ADDRESS IO control handler is @c NULL.
+ * @retval RTEMS_INVALID_NUMBER Block size is zero.
+ * @retval RTEMS_NO_MEMORY Not enough memory.
+ * @retval RTEMS_RESOURCE_IN_USE Disk device descriptor is already in use.
+ * @retval RTEMS_UNSATISFIED Cannot create device node.
  */
 rtems_status_code rtems_disk_create_phys(
   dev_t dev,
   uint32_t block_size,
-  rtems_blkdev_bnum disk_size,
+  rtems_blkdev_bnum block_count,
   rtems_block_device_ioctl handler,
   void *driver_data,
   const char *name
@@ -226,27 +240,44 @@ rtems_status_code rtems_disk_create_phys(
  *
  * A logical disk manages a subset of consecutive blocks contained in the
  * physical disk with identifier @a phys.  The start block index of the logical
- * disk device is @a start.  The block number of the logcal disk will be @a
- * size.  The blocks must be within the range of blocks managed by the
- * associated physical disk device.  A device node will be registered in the
- * file system with absolute path @a name.  The block size and IO control
- * handler are inherited by the physical disk.
+ * disk device is @a begin_block.  The block count of the logcal disk will be
+ * @a block_count.  The blocks must be within the range of blocks managed by
+ * the associated physical disk device.  A device node will be registered in
+ * the file system with absolute path @a name, if @a name is not @c NULL.  The
+ * block size and IO control handler are inherited by the physical disk.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_NOT_CONFIGURED Cannot lock disk device operation mutex.
+ * @retval RTEMS_INVALID_ID Specified physical disk identifier does not
+ * correspond to a physical disk.
+ * @retval RTEMS_INVALID_NUMBER Begin block or block count are out of range.
+ * @retval RTEMS_NO_MEMORY Not enough memory.
+ * @retval RTEMS_RESOURCE_IN_USE Disk device descriptor for logical disk
+ * identifier is already in use.
+ * @retval RTEMS_UNSATISFIED Cannot create device node.
  */
 rtems_status_code rtems_disk_create_log(
   dev_t dev,
   dev_t phys,
-  rtems_blkdev_bnum start,
-  rtems_blkdev_bnum size,
+  rtems_blkdev_bnum begin_block,
+  rtems_blkdev_bnum block_count,
   const char *name
 );
 
 /**
  * @brief Deletes a physical or logical disk device with identifier @a dev.
  *
- * Disk devices may be deleted if there usage counter (and the usage counters
- * of all contained logical disks devices) equals zero.  When a physical disk
- * device is deleted, all logical disk devices will deleted too.  The
- * corresponding device nodes will be removed from the file system.
+ * Marks the disk device as deleted.  When a physical disk device is deleted,
+ * all corresponding logical disk devices will marked as deleted too.  Disks
+ * that are marked as deleted and have a usage counter of zero will be deleted.
+ * The corresponding device nodes will be removed from the file system.  In
+ * case of a physical disk deletion the IO control handler will be invoked with
+ * a RTEMS_BLKIO_DELETED request.  Disks that are still in use will be deleted
+ * upon release.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_NOT_CONFIGURED Cannot lock disk device operation mutex.
+ * @retval RTEMS_INVALID_ID No disk for specified device identifier.
  */
 rtems_status_code rtems_disk_delete(dev_t dev);
 
@@ -254,15 +285,19 @@ rtems_status_code rtems_disk_delete(dev_t dev);
  * @brief Returns the disk device descriptor for the device identifier @a dev.
  *
  * Increments usage counter by one.  You should release the disk device
- * descriptor with rtems_disk_release().  Returns @c NULL if no corresponding
+ * descriptor with rtems_disk_release().
+ *
+ * @return Pointer to the disk device descriptor or @c NULL if no corresponding
  * disk exists.
  */
 rtems_disk_device *rtems_disk_obtain(dev_t dev);
 
 /**
- * @brief Releases the disk device description @a dd.
+ * @brief Releases the disk device descriptor @a dd.
  *
  * Decrements usage counter by one.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
  */
 rtems_status_code rtems_disk_release(rtems_disk_device *dd);
 
@@ -273,6 +308,32 @@ rtems_status_code rtems_disk_release(rtems_disk_device *dd);
  *
  * @{
  */
+
+/**
+ * @brief Initializes the disk device management.
+ *
+ * This functions returns successful if the disk device management is already
+ * initialized.  There is no protection against concurrent access.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful initialization.
+ * @retval RTEMS_NO_MEMORY Not enough memory or no semaphore available.
+ * @retval RTEMS_UNSATISFIED Block device buffer initialization failed.
+ */
+rtems_status_code rtems_disk_io_initialize(void);
+
+/**
+ * @brief Releases all resources allocated for disk device management.
+ *
+ * There is no protection against concurrent access.  If parts of the system
+ * are still in use the behaviour is undefined.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ */
+rtems_status_code rtems_disk_io_done(void);
+
+/** @} */
+
+/** @} */
 
 /**
  * @brief Disk device iterator.
@@ -290,23 +351,6 @@ rtems_status_code rtems_disk_release(rtems_disk_device *dd);
  * @endcode
  */
 rtems_disk_device *rtems_disk_next(dev_t dev);
-
-/**
- * @brief Initializes the disk device management.
- *
- * This functions returns successful if the disk device management is already
- * initialized.  There is no protection against concurrent access.
- */
-rtems_status_code rtems_disk_io_initialize(void);
-
-/**
- * @brief Releases all resources allocated for disk device management.
- */
-rtems_status_code rtems_disk_io_done(void);
-
-/** @} */
-
-/** @} */
 
 #ifdef __cplusplus
 }

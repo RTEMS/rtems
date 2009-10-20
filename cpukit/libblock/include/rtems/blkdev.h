@@ -162,6 +162,7 @@ typedef struct rtems_blkdev_request {
 #define RTEMS_BLKIO_SETBLKSIZE      _IO('B', 4)
 #define RTEMS_BLKIO_GETSIZE         _IO('B', 5)
 #define RTEMS_BLKIO_SYNCDEV         _IO('B', 6)
+#define RTEMS_BLKIO_DELETED         _IO('B', 7)
 
 /** @} */
 

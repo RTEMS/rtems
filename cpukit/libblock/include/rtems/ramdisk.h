@@ -75,8 +75,6 @@ extern rtems_ramdisk_config rtems_ramdisk_configuration [];
  */
 extern size_t rtems_ramdisk_configuration_size;
 
-int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
-
 /**
  * @brief RAM disk driver initialization entry point.
  */
@@ -142,6 +140,8 @@ typedef struct ramdisk {
 
 extern const rtems_driver_address_table ramdisk_ops;
 
+int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
+
 /**
  * @brief Allocates and initializes a RAM disk descriptor.
  *
@@ -153,7 +153,13 @@ extern const rtems_driver_address_table ramdisk_ops;
  * @return Pointer to allocated and initialized ramdisk structure, or @c NULL
  * if no memory is available.
  *
+ * @note
+ * Runtime configuration example:
  * @code
+ * #include <rtems.h>
+ * #include <rtems/libio.h>
+ * #include <rtems/ramdisk.h>
+ *
  * rtems_status_code create_ramdisk(
  *   const char *disk_name_path,
  *   uint32_t block_size,
