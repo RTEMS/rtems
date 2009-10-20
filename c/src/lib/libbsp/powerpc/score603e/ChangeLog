@@ -1,3 +1,7 @@
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Don't add -ansi -fasm to CFLAGS.
+
 2009-10-16	Jennifer Averett <jennifer@OARcorp.com>
 
 	* configure.ac: Default to having PSC8 mezzanine so code builds
