@@ -104,7 +104,7 @@ void _BSP_Fatal_error(unsigned int v)
  *  Use the shared implementations of the following routines
  */
 
-void save_boot_params(
+char * save_boot_params(
   RESIDUAL *r3,
   void     *r4,
   void     *r5,
@@ -115,6 +115,7 @@ void save_boot_params(
   residualCopy = *r3;
   strncpy(loaderParam, additional_boot_options, MAX_LOADER_ADD_PARM);
   loaderParam[MAX_LOADER_ADD_PARM - 1] ='\0';
+  return loaderParam;
 }
 
 #if defined(mvme2100)
