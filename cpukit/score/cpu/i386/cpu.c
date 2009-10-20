@@ -85,6 +85,11 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
   return NULL;
 }
 
+struct Frame_ {
+	struct Frame_  *up;
+	uintptr_t		pc;
+};
+
 void _defaultExcHandler (CPU_Exception_frame *ctx)
 {
   unsigned int faultAddr = 0;
@@ -119,12 +124,24 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
     _CPU_Fatal_halt(faultAddr);
   }
   else {
+  	struct Frame_ *fp = (struct Frame_*)ctx->ebp;
+	int           i;
+
+	printk("Call Stack Trace of EIP:\n");
+	if ( fp ) {
+		for ( i=1; fp->up; fp=fp->up, i++ ) {
+			printk("0x%08x ",fp->pc);
+			if ( ! (i&3) )
+				printk("\n");
+		}
+	}
+	printk("\n");
     /*
      * OK I could probably use a simplified version but at least this
      * should work.
      */
-    printk(" ************ FAULTY THREAD WILL BE DELETED **************\n");
-    rtems_task_delete(_Thread_Executing->Object.id);
+    printk(" ************ FAULTY THREAD WILL BE SUSPENDED **************\n");
+    rtems_task_suspend(_Thread_Executing->Object.id);
   }
 }
 

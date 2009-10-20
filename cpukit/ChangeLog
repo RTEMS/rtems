@@ -1,5 +1,10 @@
 2009-10-20	Till Straumann <strauman@slac.stanford.edu>
 
+	* score/cpu/i386/cpu.c, score/cpu/i386/cpu.h: let the default
+	exception handler print a stack trace.
+
+2009-10-20	Till Straumann <strauman@slac.stanford.edu>
+
 	PR1424/networking
 	* libnetworking/net/rtsock.c: (merged from BSD) copy information
 	out to user buffer.
