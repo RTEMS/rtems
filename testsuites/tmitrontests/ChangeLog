@@ -1,3 +1,7 @@
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Don't add -ansi -fasm to CFLAGS.
+
 2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* tmitronsem01/Makefile.am: Makefile.am: Eliminate _exe_/.exe.

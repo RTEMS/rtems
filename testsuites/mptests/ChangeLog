@@ -1,3 +1,7 @@
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Don't add -ansi -fasm to CFLAGS.
+
 2009-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mp01/task1.c, mp02/task1.c, mp03/task1.c, mp05/task1.c, mp06/task1.c,

@@ -1,3 +1,7 @@
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Don't add -ansi -fasm to CFLAGS.
+
 2009-10-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp32/init.c: Lengthen the clock tick and move configuration to the
