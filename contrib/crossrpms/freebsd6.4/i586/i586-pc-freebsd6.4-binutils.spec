@@ -30,15 +30,15 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.19
-%define binutils_version 2.19
-%define binutils_rpmvers %{expand:%(echo "2.19" | tr - _ )}
+%define binutils_pkgvers 2.20
+%define binutils_version 2.20
+%define binutils_rpmvers %{expand:%(echo "2.20" | tr - _ )}
 
 Name:		i586-pc-freebsd6.4-binutils
 Summary:	Binutils for target i586-pc-freebsd6.4
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20090827.1%{?dist}
+Release:	0.20091020.1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -57,7 +57,6 @@ BuildRequires:	flex
 BuildRequires:	bison
 
 Source0: http://ftp.gnu.org/gnu/binutils/binutils-2.19.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.19-rtems4.10-20081023.diff
 
 %description
 Cross binutils for target i586-pc-freebsd6.4
@@ -164,6 +163,7 @@ GNU binutils targetting i586-pc-freebsd6.4.
 
 %files -n i586-pc-freebsd6.4-binutils
 %defattr(-,root,root)
+
 %{_mandir}/man1/i586-pc-freebsd6.4-*.1*
 
 %{_bindir}/i586-pc-freebsd6.4-*
