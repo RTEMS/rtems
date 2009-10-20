@@ -1,3 +1,7 @@
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Don't add -ansi -fasm to CFLAGS.
+
 2009-10-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* smc/smc.c: Update for block device API change.
