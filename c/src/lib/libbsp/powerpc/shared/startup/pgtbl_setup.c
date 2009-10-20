@@ -64,7 +64,12 @@
  */ 
 
 Triv121PgTbl
-BSP_pgtbl_setup(unsigned long) __attribute__ (( weak, alias("__BSP_default_pgtbl_setup") ));
+BSP_pgtbl_setup(unsigned int *) __attribute__ (( weak, alias("__BSP_default_pgtbl_setup") ));
+
+/* get those from the linker script.
+ * NOTE THAT THE CORRECTNESS OF THE LINKER SCRIPT IS CRUCIAL
+ */
+extern unsigned long __DATA_START__[], _etext[];
 
 Triv121PgTbl
 __BSP_default_pgtbl_setup(unsigned int *pmemsize)
@@ -88,11 +93,6 @@ unsigned		ldPtSize,tmp;
    * ON THIS LAYOUT! (the size, however may be changed)
    */
   if ( (pt = triv121PgTblInit(*pmemsize - (1<<ldPtSize), ldPtSize)) ) {
-	/* get those from the linker script.
-	 * NOTE THAT THE CORRECTNESS OF THE LINKER SCRIPT IS CRUCIAL
-	 */
-	extern unsigned long __DATA_START__[], _etext[];
-
 	/* map text and RO data read-only */
 	tmp = triv121PgTblMap(
 						pt,

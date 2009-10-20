@@ -1,4 +1,10 @@
 2009-10-20	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/startup/pgtbl_setup.c: Fixed compiler warnings
+	(added prototypes to function declarations etc.)
+
+2009-10-20	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/start/start.S, shared/startup/bspstart.c:
 	let 'save_boot_params()' return a pointer to the commandline
 	saved by the BSP and pass this pointer on to 'boot_card()'.
