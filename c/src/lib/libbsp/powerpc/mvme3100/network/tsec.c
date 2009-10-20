@@ -1065,7 +1065,7 @@ static struct tsec_private *
 tsec_setup_internal(
 	int		 unit,
 	rtems_id driver_tid,
-	void     (*isr)(void *, uint32_t),
+	void     (*isr)(void *),
 	void *   isr_arg,
 	void     (*cleanup_txbuf)(void *user_buf, void *cleanup_txbuf_arg, int error_on_tx_occurred), 
 	void *   cleanup_txbuf_arg,
@@ -1337,11 +1337,10 @@ int media = IFM_MAKEWORD(0, 0, 0, 0);
 void
 BSP_tsec_init_hw(struct tsec_private *mp, int promisc, unsigned char *enaddr)
 {
-FEC_Enet_Base         b = mp->base;
-unsigned              i;
-uint32_t              v;
-int                   sz;
-rtems_interrupt_level l;
+FEC_Enet_Base b = mp->base;
+unsigned      i;
+uint32_t      v;
+int           sz;
 
 	BSP_tsec_stop_hw(mp);
 
@@ -1489,7 +1488,7 @@ rtems_interrupt_level l;
 	BSP_tsec_enable_irq_mask( mp, mp->irq_mask );
 }
 
-static uint8_t
+static void
 hash_prog(struct tsec_private *mp, uint32_t tble, const uint8_t *enaddr, int accept)
 {
 uint8_t  s;
@@ -1539,7 +1538,7 @@ int i;
 static void
 mcast_filter_prog(struct tsec_private *mp, uint8_t *enaddr, int accept)
 {
-static const uint8_t bcst={0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+static const uint8_t bcst[6]={0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	if ( ! (enaddr[0] & 0x01) ) {
 		/* not a multicast address; ignore */
 		return;

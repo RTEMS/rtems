@@ -1,3 +1,7 @@
+2009-10-20	Till Straumann <strauman@slac.stanford.edu>
+
+	* network/tsec.c: fixed compiler warnings.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
