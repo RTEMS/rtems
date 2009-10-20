@@ -1,3 +1,9 @@
+2009-10-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR1424/networking
+	* libnetworking/net/rtsock.c: (merged from BSD) copy information
+	out to user buffer.
+
 2009-10-20     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/include/rtems/ramdisk.h: Documentation.

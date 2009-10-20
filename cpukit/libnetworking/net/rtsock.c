@@ -670,7 +670,7 @@ sysctl_dumpentry(struct radix_node *rn, void *vw)
 		rtm->rtm_index = rt->rt_ifp->if_index;
 		rtm->rtm_errno = rtm->rtm_pid = rtm->rtm_seq = 0;
 		rtm->rtm_addrs = info.rti_addrs;
-		error = 0;
+		error = SYSCTL_OUT(w->w_req, (caddr_t)rtm, size);
 		return (error);
 	}
 	return (error);
