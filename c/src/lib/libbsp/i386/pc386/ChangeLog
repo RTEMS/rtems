@@ -1,3 +1,7 @@
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Don't add -ansi -fasm to CFLAGS.
+
 2009-10-15	Chris Johns <chrisj@rtems.org>
 
 	* ne2000/ne2000.c: Add --ne2k-irq and --ne2k-port boot command
