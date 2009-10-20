@@ -1,3 +1,8 @@
+2009-10-20	Till Straumann <strauman@slac.stanford.edu>
+	* shared/start/start.S, shared/startup/bspstart.c:
+	let 'save_boot_params()' return a pointer to the commandline
+	saved by the BSP and pass this pointer on to 'boot_card()'.
+
 2009-10-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/startup/linkcmds: Add __SBSS_END__ and __SBSS2_END__.
