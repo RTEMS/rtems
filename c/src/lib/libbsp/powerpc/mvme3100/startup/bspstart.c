@@ -130,11 +130,12 @@ char *rtems_progname;
  *  Use the shared implementations of the following routines
  */
 
-void save_boot_params(void* r3, void *r4, void* r5, char *additional_boot_options)
+char * save_boot_params(void* r3, void *r4, void* r5, char *additional_boot_options)
 {
 
   strncpy(cmdline_buf, additional_boot_options, CMDLINE_BUF_SIZE);
   cmdline_buf[CMDLINE_BUF_SIZE - 1] ='\0';
+  return cmdline_buf;
 }
 
 #define CS_CONFIG_CS_EN (1<<31)

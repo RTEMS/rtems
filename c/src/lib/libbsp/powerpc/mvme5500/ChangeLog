@@ -1,3 +1,9 @@
+2009-10-20	Till Straumann <strauman@slac.stanford.edu>
+
+	* start/start.S, startup/bspstart.c:
+	let 'save_boot_params()' return a pointer to the commandline
+	saved by the BSP and pass this pointer on to 'boot_card()'.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.

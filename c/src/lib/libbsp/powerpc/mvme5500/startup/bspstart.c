@@ -182,7 +182,7 @@ void zero_bss()
 /* this routine is called early at shared/start/start.S 
  * and must be safe with a not properly aligned stack
  */
-void
+char *
 save_boot_params(
   void *r3,
   void *r4,
@@ -200,6 +200,7 @@ save_boot_params(
 
   memmove(cmdline_buf, cmdline_start, i);
   cmdline_buf[i]=0;
+  return cmdline_buf;
 }
 
 /*
