@@ -1,3 +1,12 @@
+2009-10-20	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart.c:
+	let 'save_boot_params()' return a pointer to the commandline
+	saved by the BSP which is NULL in this case. This pointer could
+	be passed on to 'boot_card()' as it is done by other BSPs.
+	This 'start/start.S' file however, passes a NULL pointer
+	directly to boot_card() (w/o ever calling save_boot_params()).
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.

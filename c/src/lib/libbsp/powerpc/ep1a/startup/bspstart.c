@@ -168,13 +168,15 @@ void zero_bss(void)
   memset(__bss_start, 0, ((unsigned) __rtems_end) - ((unsigned)__bss_start));
 }
 
-void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
+char * save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
 {
 #if 0  
   residualCopy = *r3;
   strncpy(loaderParam, additional_boot_options, MAX_LOADER_ADD_PARM);
   loaderParam[MAX_LOADER_ADD_PARM - 1] ='\0';
+  return loaderParam;
 #endif
+  return 0;
 }
 
 unsigned int EUMBBAR;
