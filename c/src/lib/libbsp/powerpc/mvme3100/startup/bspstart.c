@@ -48,7 +48,9 @@
 #endif
 
 extern unsigned long __rtems_end[];
-extern void	     BSP_vme_config(void);
+extern void	         BSP_vme_config(void);
+extern void          BSP_pciConfigDump_early( void );
+extern unsigned      ppc_exc_lock_std, ppc_exc_gpr3_std;
 
 /*
  * Copy Additional boot param passed by boot loader
@@ -156,7 +158,7 @@ _ccsr_wr32(uint32_t off, uint32_t val)
 
 
 STATIC uint32_t
-BSP_get_mem_size()
+BSP_get_mem_size( void )
 {
 int i;
 uint32_t	cs_bnds, cs_config;
@@ -174,7 +176,7 @@ uint32_t	v;
 }
 
 STATIC void
-BSP_calc_freqs()
+BSP_calc_freqs( void )
 {
 uint32_t	porpllsr   = _ccsr_rd32( 0xe0000 );
 unsigned	plat_ratio = (porpllsr >> (31-30)) & 0x1f;
@@ -365,7 +367,6 @@ VpdBufRec          vpdData [] = {
 #ifdef SHOW_MORE_INIT_SETTINGS
 	printk("Number of PCI buses found is : %d\n", pci_bus_count());
 	{
-		void BSP_pciConfigDump_early();
 		BSP_pciConfigDump_early();
 	}
 #endif
@@ -413,7 +414,6 @@ VpdBufRec          vpdData [] = {
 	}
 
 	if (0) {
-		extern unsigned ppc_exc_lock_std, ppc_exc_gpr3_std;
 		unsigned x;
 		asm volatile("mfivpr %0":"=r"(x));
 		printk("IVPR: 0x%08x\n",x);
