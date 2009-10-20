@@ -1,3 +1,7 @@
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/rtc.c: Add initializer (Silence warning).
+
 2009-05-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* clock/rtc.c, clock/tod.h: Update for new RTC driver interface.

@@ -97,7 +97,7 @@ void getRealTime(
 )
 {
   uint32_t days, rtc_reg;
-  rtems_time_of_day tod_temp;
+  rtems_time_of_day tod_temp = { 0, 0, 0 };
   int n, Leap_year;
   
   rtc_reg = *((uint32_t volatile *)RTC_STAT); 
