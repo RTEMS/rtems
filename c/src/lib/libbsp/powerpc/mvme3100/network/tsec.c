@@ -1454,7 +1454,7 @@ int i;
 static void
 mcast_filter_prog(struct tsec_private *mp, uint8_t *enaddr, int accept)
 {
-static const uint8_t bcst={0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+static const uint8_t bcst[6]={0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	if ( ! (enaddr[0] & 0x01) ) {
 		/* not a multicast address; ignore */
 		return;

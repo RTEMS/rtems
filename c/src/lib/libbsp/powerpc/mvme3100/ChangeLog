@@ -1,3 +1,8 @@
+2009-10-20	Till Straumann <strauman@slac.stanford.edu>
+
+	* network/tsec.c: Bugfix. Broadcast address was declared
+	uint8_t instead of uint8_t [8].
+
 2009-10-13	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1451/bsps
