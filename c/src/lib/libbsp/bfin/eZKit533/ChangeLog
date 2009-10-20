@@ -1,5 +1,9 @@
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* startup/bspstart.c: Add missing prototype.
+
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
 
 2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>

@@ -179,12 +179,12 @@ uint8_t getLED (void)
   return *((uint8_t*)FlashA_PortB_Data);
 }
 
-void initCPLB()
+void initCPLB(void)
 {
   int i = 0;
   unsigned int *addr;
   unsigned int *data;
-        
+
   addr = (unsigned int *)0xffe00100;
   data = (unsigned int *)0xffe00200;
 
