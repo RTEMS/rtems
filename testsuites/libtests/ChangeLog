@@ -1,3 +1,7 @@
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Don't add -fasm to CFLAGS.
+
 2009-10-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* block01/.cvsignore: New file.
