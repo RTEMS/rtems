@@ -1,3 +1,7 @@
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/bsp-alias.m4: Fix quoting bug.
+
 2009-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/check-custom-bsp.m4:
