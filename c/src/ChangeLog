@@ -1,3 +1,10 @@
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove -std=c99 -fasm.
+	Remove AM_CONDITIONAL LIBCHIP.
+	* libchip/Makefile.am, wrapup/Makefile.am:
+	Remove AM_CONDITIONAL LIBCHIP.
+
 2009-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Pick up make/custom/*.
