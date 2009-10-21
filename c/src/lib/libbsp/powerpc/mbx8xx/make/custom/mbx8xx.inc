@@ -12,9 +12,6 @@ include $(RTEMS_ROOT)/make/custom/default.cfg
 RTEMS_CPU=powerpc
 RTEMS_CPU_MODEL=mpc$(8XX_CPU_TYPE)
 
-# This is the actual bsp directory used during the build process.
-RTEMS_BSP_FAMILY=mbx8xx
-
 #  This section makes the target dependent options file.
 #
 #  Note that RTEMS_BSP matches the RTEMS_MBX_MODEL. Its value must be
