@@ -31,9 +31,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.3.4
-%define gcc_version 4.3.4
-%define gcc_rpmvers %{expand:%(echo "4.3.4" | tr - _ )}
+%define gcc_pkgvers 4.4.2
+%define gcc_version 4.4.2
+%define gcc_rpmvers %{expand:%(echo "4.4.2" | tr - _ )}
 
 
 Name:         	i586-pc-freebsd7.1-gcc
@@ -41,7 +41,7 @@ Summary:      	i586-pc-freebsd7.1 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20090827.1%{?dist}
+Release:      	0.20091021.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -122,6 +122,7 @@ BuildRequires:	i586-pc-freebsd7.1-sys-root
 
 Requires:	i586-pc-freebsd7.1-binutils
 Requires:	i586-pc-freebsd7.1-sys-root
+Requires:	i586-pc-freebsd7.1-gcc-libgcc = %{gcc_rpmvers}-%{release}
 
 
 %define _gcclibdir %{_prefix}/lib
@@ -274,19 +275,15 @@ Cross gcc for i586-pc-freebsd7.1.
   fi
 
   # Collect multilib subdirectories
-  f=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
+  multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
 
   rm -f dirs ;
   echo "%defattr(-,root,root,-)" >> dirs
-  echo "%dir %{_gcclibdir}/gcc" >> dirs
-  echo "%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1" >> dirs
-
   TGTDIR="%{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}"
-  for i in $f; do
+  for i in $multilibs; do
     case $i in
-    \.) echo "%dir ${TGTDIR}" >> dirs
-      ;;
+    \.) ;; # ignore, handled elsewhere
     *)  echo "%dir ${TGTDIR}/$i" >> dirs
       ;;
     esac
@@ -314,6 +311,7 @@ Cross gcc for i586-pc-freebsd7.1.
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
+    *include-fixed/*);;
     *finclude/*);;
     *adainclude*);;
     *adalib*);;
@@ -419,8 +417,23 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 %description -n i586-pc-freebsd7.1-gcc
 GNU cc compiler for i586-pc-freebsd7.1.
 
-%files -n i586-pc-freebsd7.1-gcc -f build/files.gcc
+# ==============================================================
+# i586-pc-freebsd7.1-gcc-libgcc
+# ==============================================================
+%package -n i586-pc-freebsd7.1-gcc-libgcc
+Summary:        libgcc for i586-pc-freebsd7.1-gcc
+Group:          Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	GPL
+
+%description -n i586-pc-freebsd7.1-gcc-libgcc
+libgcc i586-pc-freebsd7.1-gcc.
+
+
+%files -n i586-pc-freebsd7.1-gcc
 %defattr(-,root,root)
+
 %{_mandir}/man1/i586-pc-freebsd7.1-gcc.1*
 %{_mandir}/man1/i586-pc-freebsd7.1-cpp.1*
 %{_mandir}/man1/i586-pc-freebsd7.1-gcov.1*
@@ -431,7 +444,20 @@ GNU cc compiler for i586-pc-freebsd7.1.
 %{_bindir}/i586-pc-freebsd7.1-gcov%{_exeext}
 %{_bindir}/i586-pc-freebsd7.1-gccbug
 
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1
+%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
+%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/cc1%{_exeext}
+%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/collect2%{_exeext}
+
+
+%files -n i586-pc-freebsd7.1-gcc-libgcc -f build/files.gcc
+%defattr(-,root,root)
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
 %dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include
+
 %if "%{gcc_version}" > "4.0.3"
 %if "i586-pc-freebsd7.1" != "bfin-rtems4.10"
 %if "i586-pc-freebsd7.1" != "avr-rtems4.10"
@@ -441,14 +467,8 @@ GNU cc compiler for i586-pc-freebsd7.1.
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
-%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include-fixed
+%{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include-fixed
 %endif
-
-%dir %{_libexecdir}/gcc
-%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1
-%dir %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
-%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/cc1%{_exeext}
-%{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
 # i586-pc-freebsd7.1-gcc-c++
@@ -458,20 +478,32 @@ Summary:	GCC c++ compiler for i586-pc-freebsd7.1
 Group:		Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
+Requires:       i586-pc-freebsd7.1-gcc-libstdc++ = %{gcc_rpmvers}-%{release}
 
 %if "%{_build}" != "%{_host}"
 BuildRequires:  i586-pc-freebsd7.1-gcc-c++ = %{gcc_rpmvers}
 %endif
-Provides:	i586-pc-freebsd7.1-c++ = %{gcc_rpmvers}-%{release}
-Obsoletes:	i586-pc-freebsd7.1-c++ < %{gcc_rpmvers}-%{release}
 
 Requires:       i586-pc-freebsd7.1-gcc = %{gcc_rpmvers}-%{release}
 
 %description -n i586-pc-freebsd7.1-gcc-c++
 GCC c++ compiler for i586-pc-freebsd7.1.
 
-%files -n i586-pc-freebsd7.1-gcc-c++ -f build/files.g++
+
+%package -n i586-pc-freebsd7.1-gcc-libstdc++
+Summary:	libstdc++ for i586-pc-freebsd7.1
+Group:		Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	GPL
+
+%description -n i586-pc-freebsd7.1-gcc-libstdc++
+%{_summary}
+
+
+%files -n i586-pc-freebsd7.1-gcc-c++
 %defattr(-,root,root)
+
 %{_mandir}/man1/i586-pc-freebsd7.1-g++.1*
 
 %{_bindir}/i586-pc-freebsd7.1-c++%{_exeext}
@@ -482,6 +514,12 @@ GCC c++ compiler for i586-pc-freebsd7.1.
 %dir %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
 %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/cc1plus%{_exeext}
 
+
+%files -n i586-pc-freebsd7.1-gcc-libstdc++ -f build/files.g++
+%defattr(-,root,root)
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
 %dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include
 %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include/c++
 
@@ -494,16 +532,13 @@ Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
 
-Provides:	i586-pc-freebsd7.1-gfortran = %{gcc_rpmvers}-%{release}
-Obsoletes:	i586-pc-freebsd7.1-gfortran < %{gcc_rpmvers}-%{release}
-
 Requires:       i586-pc-freebsd7.1-gcc = %{gcc_rpmvers}-%{release}
-Obsoletes:      i586-pc-freebsd7.1-g77 < %{gcc_rpmvers}-%{release}
+Requires:       i586-pc-freebsd7.1-gcc-libgfortran = %{gcc_rpmvers}-%{release}
 
 %description -n i586-pc-freebsd7.1-gcc-gfortran
 GCC fortran compiler for i586-pc-freebsd7.1.
 
-%files -n i586-pc-freebsd7.1-gcc-gfortran -f build/files.gfortran
+%files -n i586-pc-freebsd7.1-gcc-gfortran
 %defattr(-,root,root)
 %{_bindir}/i586-pc-freebsd7.1-gfortran%{_exeext}
 
@@ -514,6 +549,24 @@ GCC fortran compiler for i586-pc-freebsd7.1.
 %dir %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
 %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/f951%{_exeext}
 
+# ==============================================================
+# i586-pc-freebsd7.1-gcc-libgfortran
+# ==============================================================
+%package -n i586-pc-freebsd7.1-gcc-libgfortran
+Summary:	Fortran 95 support libraries for i586-pc-freebsd7.1-gcc
+Group:          Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	GPL
+
+%description -n i586-pc-freebsd7.1-gcc-libgfortran
+%{_summary}
+
+%files -n i586-pc-freebsd7.1-gcc-libgfortran -f build/files.gfortran
+%defattr(-,root,root)
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
 %if "%{gcc_version}" >= "4.2.0"
 %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/finclude
 %endif
@@ -526,21 +579,38 @@ Summary:        Objective C support for i586-pc-freebsd7.1-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
-Provides:	i586-pc-freebsd7.1-objc = %{gcc_rpmvers}-%{release}
-Obsoletes:	i586-pc-freebsd7.1-objc < %{gcc_rpmvers}-%{release}
 
 Requires:       i586-pc-freebsd7.1-gcc = %{gcc_rpmvers}-%{release}
+Requires:       i586-pc-freebsd7.1-gcc-libobjc = %{gcc_rpmvers}-%{release}
 
 %description -n i586-pc-freebsd7.1-gcc-objc
 GCC objc compiler for i586-pc-freebsd7.1.
 
-%files -n i586-pc-freebsd7.1-gcc-objc -f build/files.objc
+%files -n i586-pc-freebsd7.1-gcc-objc
 %defattr(-,root,root)
-
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/i586-pc-freebsd7.1
 %dir %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
 %{_libexecdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/cc1obj%{_exeext}
 
+# ==============================================================
+# i586-pc-freebsd7.1-gcc-libobjc
+# ==============================================================
+%package -n i586-pc-freebsd7.1-gcc-libobjc
+Summary:        Objective C support for i586-pc-freebsd7.1-gcc
+Group:          Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	GPL
+
+%description -n i586-pc-freebsd7.1-gcc-libobjc
+Support libraries for GCC's objc compiler for i586-pc-freebsd7.1.
+
+%files -n i586-pc-freebsd7.1-gcc-libobjc -f build/files.objc
+%defattr(-,root,root)
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}
+%dir %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include
 %{_gcclibdir}/gcc/i586-pc-freebsd7.1/%{gcc_version}/include/objc
 

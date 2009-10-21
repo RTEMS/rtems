@@ -31,9 +31,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.4.1
-%define gcc_version 4.4.1
-%define gcc_rpmvers %{expand:%(echo "4.4.1" | tr - _ )}
+%define gcc_pkgvers 4.4.2
+%define gcc_version 4.4.2
+%define gcc_rpmvers %{expand:%(echo "4.4.2" | tr - _ )}
 
 
 Name:         	i586-pc-freebsd7.2-gcc
