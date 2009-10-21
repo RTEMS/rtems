@@ -1,5 +1,9 @@
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove cfg_dir.
+
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove -std=c99 -fasm.
 	Remove AM_CONDITIONAL LIBCHIP.
 	* libchip/Makefile.am, wrapup/Makefile.am:
