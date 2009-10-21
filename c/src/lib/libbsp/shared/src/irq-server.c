@@ -45,7 +45,7 @@ static rtems_status_code bsp_interrupt_server_is_initialized(void)
   }
 }
 
-static void bsp_interrupt_server_trigger(rtems_vector_number vector, void *arg)
+static void bsp_interrupt_server_trigger(void *arg)
 {
   bsp_interrupt_server_entry *e = arg;
   rtems_interrupt_level level;
@@ -80,7 +80,7 @@ static void bsp_interrupt_server_task(rtems_task_argument arg)
     bsp_interrupt_server_list_head = e->next;
     rtems_interrupt_enable(level);
 
-    (*e->handler)(e->vector, e->arg);
+    (*e->handler)(e->arg);
 
     bsp_interrupt_vector_enable(e->vector);
   }
@@ -127,6 +127,10 @@ rtems_status_code rtems_interrupt_server_handler_install(
   sc = bsp_interrupt_server_is_initialized();
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
+  }
+
+  if (server != RTEMS_ID_NONE) {
+    return RTEMS_NOT_IMPLEMENTED;
   }
 
   if (RTEMS_INTERRUPT_IS_SHARED(options)) {
@@ -177,6 +181,10 @@ rtems_status_code rtems_interrupt_server_handler_remove(
     return sc;
   }
 
+  if (server != RTEMS_ID_NONE) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+
   /* Query corresponding interrupt server entry */
   sc = rtems_interrupt_handler_iterate(
     vector,
@@ -215,6 +223,10 @@ rtems_status_code rtems_interrupt_server_initialize(
   rtems_id sema_id = RTEMS_ID_NONE;
   rtems_id task_id = RTEMS_ID_NONE;
   rtems_interrupt_level level;
+
+  if (server != NULL) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
 
   sc = rtems_semaphore_create(
     rtems_build_name('I', 'R', 'Q', 'S'),
