@@ -202,8 +202,6 @@ AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 
 AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
 
-AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
-
 AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
   && test x"$rtems_cv_HAS_POSIX_API" = x"yes"])
 
