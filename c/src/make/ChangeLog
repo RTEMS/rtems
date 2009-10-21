@@ -1,14 +1,18 @@
-2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp.mak: Remove RTEMS_BSP_FAMILY.
+
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove BARE_CPU_MODEL, BARE_CPU_CFLAGS.
 
-2009-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+2009-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/enable-bare.m4: Remove (Abandoned).
 	* bsp.cfg.in: Remove BARE_CPU_MODEL, BARE_CPU_CFLAGS.
 	* configure.ac: Remove RTEMS_ENABLE_BARE.
 
-2009-07-23	Ralf Corsepius <ralf.corsepius@rtems.org>
+2009-07-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/enable-itron.m4: Default to not building itron.
 
