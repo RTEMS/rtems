@@ -1,3 +1,11 @@
+2009-10-21	Till Straumann <strauman@slac.stanford.edu>
+
+	* sapi/include/rtems/config.h: Fixed typos (wrong case) in macro
+	expansion for
+		rtems_configuration_get_device_driver_table()
+	and
+		rtems_configuration_get_user_extension_table()
+
 2009-10-21     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/rtems/irq-extension.h: Removed vector argument from
