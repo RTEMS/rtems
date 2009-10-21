@@ -22,5 +22,3 @@ $(PROJECT_LIB)/librtemsbsp.a: o-optimize/librtemsbsp.a $(PROJECT_LIB)/$(dirstamp
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemsbsp.a
 TMPINSTALL_FILES += $(PROJECT_LIB)/librtemsbsp.a
 
-if LIBCHIP
-endif

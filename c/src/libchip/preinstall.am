@@ -28,23 +28,19 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/libchip
 	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-endif
-if LIBCHIP
+
 $(PROJECT_INCLUDE)/libchip/disp_hcms29xx.h: display/disp_hcms29xx.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/disp_hcms29xx.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/disp_hcms29xx.h
-endif
-if LIBCHIP
+
 $(PROJECT_INCLUDE)/libchip/am29lv160.h: flash/am29lv160.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/am29lv160.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/am29lv160.h
-endif
-if LIBCHIP
+
 $(PROJECT_INCLUDE)/libchip/ata.h: ide/ata.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ata.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ata.h
@@ -60,8 +56,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ide_ctrl.h
 $(PROJECT_INCLUDE)/libchip/ide_ctrl_io.h: ide/ide_ctrl_io.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ide_ctrl_io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ide_ctrl_io.h
-endif
-if LIBCHIP
+
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/libchip/cs8900.h: network/cs8900.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/cs8900.h
@@ -99,8 +94,6 @@ $(PROJECT_INCLUDE)/libchip/smc91111exp.h: network/smc91111exp.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/smc91111exp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/smc91111exp.h
 endif
-endif
-if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/rtc.h: rtc/rtc.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/rtc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/rtc.h
@@ -120,8 +113,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mc146818a.h
 $(PROJECT_INCLUDE)/libchip/ds1375-rtc.h: rtc/ds1375-rtc.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ds1375-rtc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ds1375-rtc.h
-endif
-if LIBCHIP
+
 $(PROJECT_INCLUDE)/libchip/i2c-ds1621.h: i2c/i2c-ds1621.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/i2c-ds1621.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/i2c-ds1621.h
@@ -145,8 +137,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/spi-fram-fm25l256.h
 $(PROJECT_INCLUDE)/libchip/spi-sd-card.h: i2c/spi-sd-card.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/spi-sd-card.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/spi-sd-card.h
-endif
-if LIBCHIP
+
 $(PROJECT_INCLUDE)/libchip/mc68681.h: serial/mc68681.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/mc68681.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mc68681.h
@@ -166,7 +157,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/serial.h
 $(PROJECT_INCLUDE)/libchip/sersupp.h: serial/sersupp.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/sersupp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/sersupp.h
-endif
+
 if HAS_MP
 $(PROJECT_INCLUDE)/shm_driver.h: shmdr/shm_driver.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/shm_driver.h
