@@ -77,7 +77,7 @@ test -n "${RTEMS_CPU_MODEL}" && \
   ac_configure_args="$ac_configure_args 'RTEMS_CPU_MODEL=${RTEMS_CPU_MODEL}'"
 
 AC_CACHE_CHECK([for RTEMS_BSP_FAMILY],[ac_cv_env_RTEMS_BSP_FAMILY],
-[. ./make/${RTEMS_BSP}.cache])
+[RTEMS_BSP_ALIAS([${RTEMS_BSP}],[ac_cv_env_RTEMS_BSP_FAMILY])])
 RTEMS_BSP_FAMILY=$ac_cv_env_RTEMS_BSP_FAMILY
 AC_SUBST(RTEMS_BSP_FAMILY)
 test -n "${RTEMS_BSP_FAMILY}" && \

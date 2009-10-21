@@ -1,5 +1,10 @@
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/bsp-alias.m4: New.
+	* configure.ac: Apply RTEMS_BSP_ALIAS for RTEMS_BSP_FAMILY.
+
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/env-rtemsbsp.m4: Remove AM_CONDITIONAL MULTILIB.
 
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
