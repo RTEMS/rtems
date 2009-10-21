@@ -169,6 +169,8 @@ n:
 #define RPA	982
 #define SDR1	25	/* MMU hash base register */
 #define DAR	19	/* Data Address Register */
+#define DEAR_BOOKE 61
+#define DEAR_405 981
 #define SPR0	272	/* Supervisor Private Registers */
 #define SPRG0   272
 #define SPR1	273

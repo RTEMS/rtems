@@ -1,3 +1,12 @@
+2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Added defines DEAR_BOOKE and DEAR_405.
+	* rtems/score/cpu.h: Changed fpscr field to an integer type in
+	Context_Control_fp.  Fixed warnings in PPC_Set_timebase_register().
+	Changed _CPU_Context_Initialize_fp() to initialize all fields and
+	avoid floating-point instructions.
+	* rtems/score/powerpc.h: Removed PPC_INIT_FPSCR define.
+
 2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Added Freescale Book E Implementation

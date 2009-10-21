@@ -17,8 +17,10 @@
 #define _RTEMS_SCORE_CPU_H
 
 #include <rtems/score/powerpc.h>              /* pick up machine definitions */
+
 #ifndef ASM
-#include <rtems/score/types.h>
+  #include <string.h> /* for memset() */
+  #include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
@@ -224,6 +226,7 @@
  */
 
 #ifndef ASM
+
 typedef struct {
     uint32_t   gpr1;	/* Stack pointer for all */
     uint32_t   gpr2;	/* Reserved SVR4, section ptr EABI + */
@@ -263,15 +266,13 @@ typedef struct {
      */
 #if (PPC_HAS_DOUBLE == 1)
     double	f[32];
-    double	fpscr;
+    uint64_t	fpscr;
 #else
     float	f[32];
-    float	fpscr;
+    uint32_t	fpscr;
 #endif
 } Context_Control_fp;
-#endif /* ASM */
 
-#ifndef ASM
 typedef struct CPU_Interrupt_frame {
     uint32_t   stacklink;	/* Ensure this is a real frame (also reg1 save) */
     uint32_t   calleeLr;	/* link register used by callees: SVR4/EABI */
@@ -302,6 +303,7 @@ typedef struct CPU_Interrupt_frame {
     uint32_t   msr;
     uint32_t   pad[3];
 } CPU_Interrupt_frame;
+
 #endif /* ASM */
 
 #include <rtems/new-exceptions/cpu.h>
@@ -499,8 +501,8 @@ static inline  void PPC_Set_timebase_register (uint64_t tbr)
   uint32_t tbr_low;
   uint32_t tbr_high;
 
-  tbr_low = (tbr & 0xffffffff) ;
-  tbr_high = (tbr >> 32) & 0xffffffff;
+  tbr_low = (uint32_t) tbr;
+  tbr_high = (uint32_t) (tbr >> 32);
   asm volatile( "mtspr 284, %0" : : "r" (tbr_low));
   asm volatile( "mtspr 285, %0" : : "r" (tbr_high));
   
@@ -578,9 +580,7 @@ void _CPU_Context_Initialize(
  */
 
 #define _CPU_Context_Initialize_fp( _destination ) \
-  { \
-    (*(_destination))->fpscr = PPC_INIT_FPSCR; \
-  }
+  memset( *(_destination), 0, sizeof( **(_destination) ) )
 
 /* end of Context handler macros */
 #endif /* ASM */

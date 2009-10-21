@@ -142,12 +142,6 @@ extern "C" {
 #endif
 
 /*
- *  Initial value for the FPSCR register
- */
-
-#define PPC_INIT_FPSCR		0x000000f8
-
-/*
  *  Assemblers.
  *  PPC_ASM MUST be defined as one of these.
  *
