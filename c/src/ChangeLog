@@ -1,5 +1,9 @@
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/env-rtemsbsp.m4: Remove AM_CONDITIONAL MULTILIB.
+
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove AM_CONDITIONAL MULTILIB.
 	* Makefile.am: Remove BARE_CPU_MODEL.
 

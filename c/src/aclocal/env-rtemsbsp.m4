@@ -27,8 +27,6 @@ RTEMS_BSP="$rtems_cv_RTEMS_BSP"
 AC_MSG_RESULT(${RTEMS_BSP})
 AC_SUBST(RTEMS_BSP)
 
-AM_CONDITIONAL([MULTILIB],[false])
-
 includedir="\${exec_prefix}/${RTEMS_BSP}/lib/include"
 libdir="\${exec_prefix}/${RTEMS_BSP}/lib"
 
