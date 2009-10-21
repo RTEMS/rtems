@@ -95,7 +95,7 @@ CFLAGS="${CFLAGS-${CPU_CFLAGS} ${CFLAGS_OPTIMIZE_V}}"
 AS_IF([test x"${CFLAGS}" != x" "],[
   ac_configure_args="$ac_configure_args 'CFLAGS=${CFLAGS}'"])
 
-RTEMS_PROG_CC_FOR_TARGET([-std=c99 -fasm])
+RTEMS_PROG_CC_FOR_TARGET
 AM_PROG_CC_C_O
 RTEMS_PROG_CCAS
 RTEMS_CANONICALIZE_TOOLS
@@ -202,10 +202,6 @@ AS_IF([test "$host_cpu" = sparc],[
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 
 AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
-
-# The posix bsp doesn't support libchip
-# FIXME: We should use a feature based check, here
-AM_CONDITIONAL([LIBCHIP],[test "$RTEMS_BSP_FAMILY" != "posix"])
 
 AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
 
