@@ -1,3 +1,10 @@
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/simsh1.cfg: Remove RTEMS_BSP_FAMILY.
+	* make/custom/simsh2.cfg: Remove RTEMS_BSP_FAMILY.
+	* make/custom/simsh2e.cfg: Remove RTEMS_BSP_FAMILY.
+	* make/custom/simsh4.cfg: Remove RTEMS_BSP_FAMILY.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
