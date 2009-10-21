@@ -1,3 +1,11 @@
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/arm1136jfs.cfg: Remove RTEMS_BSP_FAMILY.
+	* make/custom/arm1136js.cfg: Remove RTEMS_BSP_FAMILY.
+	* make/custom/arm7tdmi.cfg: Remove RTEMS_BSP_FAMILY.
+	* make/custom/arm920.cfg: Remove RTEMS_BSP_FAMILY.
+	* make/custom/armcortexa9.cfg: Remove RTEMS_BSP_FAMILY.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
