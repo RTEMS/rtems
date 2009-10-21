@@ -1,3 +1,7 @@
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/genmcf548x.inc: Remove RTEMS_BSP_FAMILY.
+
 2009-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/genmcf548x.inc: New (Renamed from genmcf548x.cfg).
