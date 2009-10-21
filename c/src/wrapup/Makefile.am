@@ -17,7 +17,6 @@ SRCS += ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp.a
 # FIXME: ATM, there is no libcpu.a, anymore.
 # SRCS += $(wildcard $(PROJECT_LIB)/libcpu.a)
 
-if LIBCHIP
 SRCS += ../libchip/libflash.a
 SRCS += ../libchip/librtcio.a
 SRCS += ../libchip/libserialio.a
@@ -26,7 +25,6 @@ if HAS_NETWORKING
 SRCS += ../libchip/libnetchip.a
 endif
 SRCS += ../libchip/libi2cio.a
-endif
 
 if HAS_MP
 SRCS += ../libchip/shmdr.rel

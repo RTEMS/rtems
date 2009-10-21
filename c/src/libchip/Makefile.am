@@ -4,45 +4,36 @@
 
 include $(top_srcdir)/automake/compile.am
 
-if LIBCHIP
 include_libchipdir = $(includedir)/libchip
 include_libchip_HEADERS =
-endif
 
 EXTRA_DIST =
 noinst_LIBRARIES =
 noinst_PROGRAMS =
 
 # display
-if LIBCHIP
 include_libchip_HEADERS += display/disp_hcms29xx.h
 
 noinst_LIBRARIES += libdisplay.a
 libdisplay_a_SOURCES = display/disp_hcms29xx.c display/font_hcms29xx.c
 libdisplay_a_CPPFLAGS = $(AM_CPPFLAGS)
-endif
 
 # flash
-if LIBCHIP
 include_libchip_HEADERS += flash/am29lv160.h
 
 noinst_LIBRARIES += libflash.a
 libflash_a_SOURCES = flash/am29lv160.c
 libflash_a_CPPFLAGS = $(AM_CPPFLAGS)
-endif
 
 # ide
-if LIBCHIP
 include_libchip_HEADERS += ide/ata.h ide/ide_ctrl_cfg.h ide/ide_ctrl.h \
     ide/ide_ctrl_io.h
 
 noinst_LIBRARIES += libide.a
 libide_a_SOURCES = ide/ata.c ide/ide_controller.c ide/ata_internal.h
 libide_a_CPPFLAGS = $(AM_CPPFLAGS)
-endif
 
 # network
-if LIBCHIP
 if HAS_NETWORKING
 noinst_LIBRARIES += libnetchip.a
 libnetchip_a_CPPFLAGS = $(AM_CPPFLAGS)
@@ -58,14 +49,12 @@ libnetchip_a_SOURCES += network/greth.c
 include_libchip_HEADERS += network/smc91111.h network/smc91111exp.h
 libnetchip_a_SOURCES += network/smc91111.c network/smc91111config.h
 endif
-endif
 
 EXTRA_DIST += network/README network/README.cs8900 network/README.dec21140 \
     network/README.i82586 network/README.open_eth network/README.sonic \
     network/cs8900.c.bsp network/README.tulipclone
 
 # rtc
-if LIBCHIP
 include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h \
     rtc/mc146818a.h rtc/ds1375-rtc.h
 
@@ -75,14 +64,11 @@ librtcio_a_SOURCES = rtc/rtcprobe.c rtc/icm7170.c rtc/icm7170_reg.c \
     rtc/icm7170_reg2.c rtc/icm7170_reg4.c rtc/icm7170_reg8.c rtc/m48t08.c \
     rtc/m48t08_reg.c rtc/m48t08_reg2.c rtc/m48t08_reg4.c rtc/m48t08_reg8.c \
     rtc/mc146818a.c rtc/mc146818a_ioreg.c rtc/ds1375.c
-endif
 
 EXTRA_DIST += rtc/README.ds1643 rtc/README.icm7170 rtc/README.m48t08 \
     rtc/README.m48t18 rtc/STATUS
 
 # i2c
-if LIBCHIP
-
 include_libchip_HEADERS += i2c/i2c-ds1621.h \
 	i2c/i2c-2b-eeprom.h \
 	i2c/spi-memdrv.h \
@@ -105,10 +91,7 @@ libi2cio_a_SOURCES = i2c/i2c-ds1621.h \
 	i2c/spi-fram-fm25l256.c \
 	i2c/spi-sd-card.c
 
-endif
-
 # serial
-if LIBCHIP
 include_libchip_HEADERS += serial/mc68681.h serial/ns16550.h serial/z85c30.h \
     serial/serial.h serial/sersupp.h
 
@@ -119,7 +102,6 @@ libserialio_a_SOURCES = serial/mc68681.c serial/mc68681_baud.c \
     serial/mc68681_reg8.c serial/ns16550.c serial/z85c30.c \
     serial/z85c30_reg.c serial/serprobe.c serial/mc68681_p.h \
     serial/ns16550_p.h serial/z85c30_p.h
-endif
 
 EXTRA_DIST += serial/README.mc68681 serial/README.ns16550 \
     serial/README.xr88681 serial/README.z85c30 serial/STATUS
