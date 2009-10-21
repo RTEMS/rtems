@@ -1,5 +1,10 @@
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove AM_CONDITIONAL MULTILIB.
+	* Makefile.am: Remove BARE_CPU_MODEL.
+
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove cfg_dir.
 
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
