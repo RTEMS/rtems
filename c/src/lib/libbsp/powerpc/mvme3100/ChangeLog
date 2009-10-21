@@ -1,3 +1,7 @@
+2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/mvme3100.cfg: Remove RTEMS_BSP_FAMILY.
+
 2009-10-20	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c, startup/misc.c:
