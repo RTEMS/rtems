@@ -56,7 +56,7 @@ BuildRequires:	texinfo >= 4.2
 BuildRequires:	flex
 BuildRequires:	bison
 
-Source0: http://ftp.gnu.org/gnu/binutils/binutils-2.19.tar.bz2
+Source0: http://ftp.gnu.org/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
 
 %description
 Cross binutils for target i586-pc-freebsd6.4
