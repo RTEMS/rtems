@@ -24,11 +24,6 @@
 #include <bsp.h>
 #include <mpc8xx.h>
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-	
 .extern boot_card
 
 .section ".entry"  
@@ -147,7 +142,7 @@ start_code_in_ram:
 	
 /* clear arguments and do further init. in C (common for RAM/ROM startup) */
 
-        /* Clear argc, argv and envp */
+        /* Clear cmdline */
         xor r3, r3, r3
 
         bl      SYM (boot_card)  /* Call the first C routine */

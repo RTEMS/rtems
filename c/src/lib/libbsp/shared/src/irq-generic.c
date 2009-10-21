@@ -39,8 +39,10 @@ static uint8_t bsp_interrupt_handler_unique_table
 
 static rtems_id bsp_interrupt_mutex = RTEMS_ID_NONE;
 
-static void bsp_interrupt_handler_empty(rtems_vector_number vector, void *arg)
+static void bsp_interrupt_handler_empty(void *arg)
 {
+  rtems_vector_number vector = (rtems_vector_number) arg;
+
   bsp_interrupt_handler_default(vector);
 }
 
@@ -219,6 +221,7 @@ rtems_status_code bsp_interrupt_initialize(void)
   /* Initialize handler table */
   for (i = 0; i < BSP_INTERRUPT_HANDLER_TABLE_SIZE; ++i) {
     bsp_interrupt_handler_table [i].handler = bsp_interrupt_handler_empty;
+    bsp_interrupt_handler_table [i].arg = (void *) i;
   }
 
   sc = bsp_interrupt_facility_initialize();

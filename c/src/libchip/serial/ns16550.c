@@ -577,14 +577,7 @@ NS16550_STATIC void ns16550_enable_interrupts(
   (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, mask);
 }
 
-#ifdef BSP_FEATURE_IRQ_EXTENSION
-  NS16550_STATIC void ns16550_isr(rtems_vector_number vector, void *arg)
-  {
-    int minor = (int) arg;
-
-    ns16550_process( minor);
-  }
-#elif defined BSP_FEATURE_IRQ_LEGACY
+#if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
   NS16550_STATIC rtems_isr ns16550_isr(void *arg)
   {
     int minor = (int) arg;

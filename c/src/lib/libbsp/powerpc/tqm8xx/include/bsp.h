@@ -132,18 +132,9 @@ extern int rtems_scc_enet_driver_attach (struct rtems_bsdnet_ifconfig *config,
 #undef RTEMS_BSP_HAS_IDE_DRIVER
 
 /*
- * our bus frequency
+ * our (internal) bus frequency
  */
-extern unsigned int BSP_bus_frequency;
-
-/* functions */
-
-rtems_isr_entry set_vector(                    /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
-);
-
+extern uint32_t BSP_bus_frequency;
 
 #ifdef __cplusplus
 }

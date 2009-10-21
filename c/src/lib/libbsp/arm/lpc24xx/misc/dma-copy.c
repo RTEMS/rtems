@@ -27,7 +27,7 @@ static rtems_id lpc24xx_dma_sema_table [GPDMA_CH_NUMBER];
 
 static bool lpc24xx_dma_status_table [GPDMA_CH_NUMBER];
 
-static void lpc24xx_dma_copy_handler(rtems_vector_number vector, void *arg)
+static void lpc24xx_dma_copy_handler(void *arg)
 {
   /* Get interrupt status */
   uint32_t tc = GPDMA_INT_TCSTAT;

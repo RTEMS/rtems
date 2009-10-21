@@ -1,3 +1,8 @@
+2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* mpc55xx/edma/edma.c, mpc55xx/esci/esci.c: Update for interrupt
+	handler type change.
+
 2009-10-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* mpc6xx/mmu/bat.c: Resolved bug: It is not an overlap if the batindex

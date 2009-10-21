@@ -123,7 +123,7 @@ volatile int ClockInitialized = 0;
 /*
  *  ISR Handlers
  */
-void mpc5200_gpt_clock_isr(rtems_vector_number vector, void *handle)
+void mpc5200_gpt_clock_isr(void *handle)
 {
   uint32_t status;
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)handle;

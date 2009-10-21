@@ -22,8 +22,7 @@ extern void clockOff (void*);
 extern int clockIsOn(void*);
 extern void Clock_isr(void*);
 
-void BSP_clock_hdl(rtems_vector_number vecnum, 
-		   void * arg)
+void BSP_clock_hdl(void * arg)
 {
   Clock_isr(arg);
 }

@@ -1,3 +1,8 @@
+2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/irq-generic.h, src/irq-generic.c, src/irq-legacy.c: Update
+	for interrupt handler type change.
+
 2009-10-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* bootcard: Update for heap API changes.

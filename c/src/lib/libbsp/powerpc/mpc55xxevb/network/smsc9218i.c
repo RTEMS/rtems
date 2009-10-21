@@ -403,10 +403,7 @@ static void smsc9218i_register_dump(volatile smsc9218i_registers *regs)
   printf("phy: physcsr: 0x%08" PRIx32 "\n", smsc9218i_phy_read(regs, SMSC9218I_PHY_PHYSCSR));
 }
 
-static void smsc9218i_interrupt_handler(
-  rtems_vector_number vector,
-  void *arg
-)
+static void smsc9218i_interrupt_handler(void *arg)
 {
   smsc9218i_driver_entry *e = (smsc9218i_driver_entry *) arg;
   volatile smsc9218i_registers *const regs = smsc9218i;

@@ -1,3 +1,8 @@
+2009-10-21     Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/rtems/irq-extension.h: Removed vector argument from
+	rtems_interrupt_handler type.
+
 2009-10-20	Till Straumann <strauman@slac.stanford.edu>
 
 	* score/cpu/i386/cpu.c, score/cpu/i386/cpu.h: let the default

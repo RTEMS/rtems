@@ -47,7 +47,7 @@ static uint64_t mpc55xx_edma_channel_occupation = 0;
 
 static rtems_chain_control mpc55xx_edma_channel_chain;
 
-static void mpc55xx_edma_interrupt_handler( rtems_vector_number vector, void *arg)
+static void mpc55xx_edma_interrupt_handler( void *arg)
 {
 	mpc55xx_edma_channel_entry *e = (mpc55xx_edma_channel_entry *) arg;
 
@@ -63,7 +63,7 @@ static void mpc55xx_edma_interrupt_handler( rtems_vector_number vector, void *ar
 	e->done( e, 0);
 }
 
-static void mpc55xx_edma_interrupt_error_handler( rtems_vector_number vector, void *arg)
+static void mpc55xx_edma_interrupt_error_handler( void *arg)
 {
 	rtems_chain_control *chain = &mpc55xx_edma_channel_chain;
 	rtems_chain_node *node = chain->first;

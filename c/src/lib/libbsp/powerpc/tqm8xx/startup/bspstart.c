@@ -21,13 +21,13 @@
  */
 
 #include <rtems.h>
-
+#include <stdlib.h>
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
-/* #include <bsp/irq-generic.h>
-   #include <bsp/ppc_exc_bspsupp.h> */
+#include <bsp/irq-generic.h>
+#include <bsp/ppc_exc_bspsupp.h>
 
 #ifdef BSP_HAS_TQMMON
 /*
@@ -36,11 +36,10 @@
 #endif /* BSP_HAS_TQMMON */
 
 /* Configuration parameters for console driver, ... */
-unsigned int BSP_bus_frequency;
+uint32_t BSP_bus_frequency;
 
 /* Configuration parameters for clock driver, ... */
 uint32_t bsp_clicks_per_usec; /* for PIT driver: OSCCLK */
-uint32_t bsp_clock_speed    ; /* needed for PIT driver  */
 /* for timer: */
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
@@ -94,7 +93,7 @@ const char *bsp_tqm_get_cib_string( const char *cib_id)
   /*
    * search for pattern in info block (CIB)
    */
-  fnd_str = strstr(TQM_CONF_INFO_BLOCK_ADDR,srch_pattern);
+  fnd_str = strstr((const char *)TQM_CONF_INFO_BLOCK_ADDR,srch_pattern);
 
   if (fnd_str == NULL) {
     return NULL;
@@ -111,7 +110,7 @@ rtems_status_code  bsp_tqm_get_cib_uint32( const char *cib_id,
 					   uint32_t   *result)
 {
   const char *item_ptr;
-  const char *end_ptr;
+  char *end_ptr;
   item_ptr = bsp_tqm_get_cib_string(cib_id);
   if (item_ptr == NULL) {
     return RTEMS_INVALID_ID;
@@ -174,7 +173,6 @@ void bsp_start( void)
   bsp_clicks_per_usec = 0; /* force to zero to control 
 			    * PIT clock driver from EXTCLK
 			    */
-  bsp_clock_speed     = BSP_bus_frequency;
   bsp_timer_least_valid = 3; 
   bsp_timer_average_overhead = 3;
 

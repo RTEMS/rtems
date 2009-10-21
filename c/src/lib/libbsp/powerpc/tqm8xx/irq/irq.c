@@ -98,15 +98,15 @@ static int BSP_irq_handle_at_cpm(void)
 {
   int32_t  cpvecnum;
   uint32_t msr;
-  rtems_interrupt_level level;
 
   /* Get vector number: write IACK=1, then read vectir */
   m8xx.civr = 1;
   cpvecnum  = (m8xx.civr >> 11) + BSP_CPM_IRQ_LOWEST_OFFSET;
   
   /*
-   * Check the vector number, mask lower priority interrupts, enable
-   * exceptions and dispatch the handler.
+   * Check the vector number,
+   * enable exceptions and dispatch the handler.
+   * NOTE: lower-prio interrupts are automatically masked in CPIC
    */
   if (BSP_IS_CPM_IRQ(cpvecnum)) {      
     /* Enable all interrupts */
@@ -115,15 +115,16 @@ static int BSP_irq_handle_at_cpm(void)
     bsp_interrupt_handler_dispatch(cpvecnum);
     /* Restore machine state */
     ppc_external_exceptions_disable(msr);
-    /*
-     * clear "in-service" bit
-     */
-    m8xx.cisr = 1 << (cpvecnum - BSP_CPM_IRQ_LOWEST_OFFSET);
   }
   else {
     /* not valid vector */
     bsp_interrupt_handler_default(cpvecnum);
   }
+  /*
+   * clear "in-service" bit
+   */
+  m8xx.cisr = 1 << (cpvecnum - BSP_CPM_IRQ_LOWEST_OFFSET);
+
   return 0;
 }
 
@@ -131,7 +132,6 @@ static int BSP_irq_handle_at_siu( unsigned excNum)
 {
   int32_t  sivecnum;
   uint32_t msr;
-  rtems_interrupt_level level;
   bool  is_cpm_irq;
   uint32_t simask_save;
   /*

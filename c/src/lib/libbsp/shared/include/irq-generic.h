@@ -226,7 +226,7 @@ static inline void bsp_interrupt_handler_dispatch(rtems_vector_number vector)
       &bsp_interrupt_handler_table [bsp_interrupt_handler_index(vector)];
 
     do {
-      (*e->handler)(vector, e->arg);
+      (*e->handler)(e->arg);
       e = e->next;
     } while (e != NULL);
   } else {

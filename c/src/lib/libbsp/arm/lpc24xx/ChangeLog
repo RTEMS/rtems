@@ -1,3 +1,8 @@
+2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* i2c/i2c.c, misc/dma-copy.c, network/network.c, ssp/ssp.c: Update for
+	interrupt handler type change.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/lpc24xx.inc: Remove RTEMS_BSP_FAMILY.

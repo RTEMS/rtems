@@ -678,14 +678,37 @@ void fileio_menu (void)
 int menu_tid;
 
 /*
+ * RTEMS File Menu Task
+ */
+rtems_task
+fileio_task (rtems_task_argument ignored)
+{
+  fileio_menu();
+}
+
+/*
  * RTEMS Startup Task
  */
 rtems_task
 Init (rtems_task_argument ignored)
 {
+  rtems_name Task_name;
+  rtems_id   Task_id;
+  rtems_status_code status;
+
   puts( "\n\n*** FILE I/O SAMPLE AND TEST ***" );
 
-  fileio_menu();
+  Task_name = rtems_build_name('F','M','N','U');
+
+  status = rtems_task_create(
+    Task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2, 
+    RTEMS_DEFAULT_MODES ,
+    RTEMS_FLOATING_POINT | RTEMS_DEFAULT_ATTRIBUTES, &Task_id
+  );
+
+  status = rtems_task_start( Task_id, fileio_task, 1 );
+
+  status = rtems_task_delete( RTEMS_SELF );
 }
 
 #if defined(USE_SHELL)

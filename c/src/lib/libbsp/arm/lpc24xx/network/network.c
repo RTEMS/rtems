@@ -252,10 +252,7 @@ static void lpc24xx_eth_enable_promiscous_mode(bool enable)
   }
 }
 
-static void lpc24xx_eth_interrupt_handler(
-  rtems_vector_number vector,
-  void *arg
-)
+static void lpc24xx_eth_interrupt_handler(void *arg)
 {
   lpc24xx_eth_driver_entry *e = (lpc24xx_eth_driver_entry *) arg;
   rtems_event_set re = 0;

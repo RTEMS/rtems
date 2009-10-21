@@ -410,7 +410,7 @@ static int mpc55xx_esci_termios_set_attributes( int minor, const struct termios 
 /**
  * @brief Interrupt handler.
  */
-static void mpc55xx_esci_termios_interrupt_handler( rtems_vector_number vector, void *arg)
+static void mpc55xx_esci_termios_interrupt_handler( void *arg)
 {
 	mpc55xx_esci_driver_entry *e = (mpc55xx_esci_driver_entry *) arg;
 	volatile union ESCI_SR_tag *status = &e->regs->SR;

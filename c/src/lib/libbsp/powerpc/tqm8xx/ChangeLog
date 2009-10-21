@@ -1,3 +1,7 @@
+2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* clock/p_clock.c: Update for interrupt handler type change.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/tqm8xx.inc: Remove RTEMS_BSP_FAMILY.

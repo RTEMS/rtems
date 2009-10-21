@@ -637,7 +637,7 @@ static inline void test_mpc55xx_intc_worker( void *data)
 	printk( "(%i): Done\n", i);
 }
 
-static void test_mpc55xx_intc_handler( rtems_vector_number vector, void *data)
+static void test_mpc55xx_intc_handler( void *data)
 {
 	test_mpc55xx_intc_worker( data);
 }

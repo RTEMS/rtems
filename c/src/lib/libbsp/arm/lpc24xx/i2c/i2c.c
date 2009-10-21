@@ -44,7 +44,7 @@ typedef struct {
   uint8_t * volatile end;
 } lpc24xx_i2c_bus_entry;
 
-static void lpc24xx_i2c_handler( rtems_vector_number vector, void *arg)
+static void lpc24xx_i2c_handler( void *arg)
 {
   lpc24xx_i2c_bus_entry *e = arg;
   volatile lpc24xx_i2c *regs = e->regs;

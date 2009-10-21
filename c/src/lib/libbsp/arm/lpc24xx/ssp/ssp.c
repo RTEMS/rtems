@@ -80,7 +80,7 @@ static inline bool lpc24xx_ssp_is_busy(const lpc24xx_ssp_bus_entry *bus)
     && lpc24xx_ssp_dma_data.status != LPC24XX_SSP_DMA_AVAILABLE;
 }
 
-static void lpc24xx_ssp_handler(rtems_vector_number vector, void *arg)
+static void lpc24xx_ssp_handler(void *arg)
 {
   lpc24xx_ssp_bus_entry *e = (lpc24xx_ssp_bus_entry *) arg;
   volatile lpc24xx_ssp *regs = e->regs;
@@ -96,7 +96,7 @@ static void lpc24xx_ssp_handler(rtems_vector_number vector, void *arg)
   regs->icr = icr;
 }
 
-static void lpc24xx_ssp_dma_handler(rtems_vector_number vector, void *arg)
+static void lpc24xx_ssp_dma_handler(void *arg)
 {
   lpc24xx_ssp_dma_entry *e = (lpc24xx_ssp_dma_entry *) arg;
   lpc24xx_ssp_dma_status status = e->status;

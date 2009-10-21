@@ -54,31 +54,20 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <mpc8xx.h>
+#include <rtems/irq.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <termios.h>
 #include <unistd.h>
 #include <rtems/termiostypes.h>
 #include <rtems/bspIo.h>
 
-/*
- * Declare clock speed -- may be overwritten by downloader or debugger
- */
-int m8xx_clock_rate	= 0;
 
 /*
  * Interrupt-driven input buffer
  */
 #define RXBUFSIZE	256
 
-#define M8xx_IVEC_SRC_MASK (0x1f)
-#define M8xx_IVEC_SRC_SCC1  (0x1E)
-#define M8xx_IVEC_SRC_SCC2  (0x1D)
-#define M8xx_IVEC_SRC_SCC3  (0x1C)
-#define M8xx_IVEC_SRC_SCC4  (0x1B)
-#define M8xx_IVEC_SRC_SMC1  (0x04)
-#define M8xx_IVEC_SRC_SMC2  (0x03)
-
-#define M8xx_IREG_MASK(src) (1UL << src)
 #define M8xx_SICR_BRG1 (0)
 #define M8xx_SICR_BRG2 (1)
 #define M8xx_SICR_BRG3 (2)
@@ -132,9 +121,8 @@ typedef struct m8xx_console_chan_desc_s {
     volatile m8xxSMCRegisters_t *smcr;
   } regs;
   int ivec_src;
-  uint32_t ireg_mask;
-  int        cr_chan_code;
-  int        brg_used;
+  int cr_chan_code;
+  int brg_used;
 } m8xx_console_chan_desc_t;
 
 m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
@@ -142,48 +130,42 @@ m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
   {TRUE,
    {(m8xxSCCparms_t *)&(m8xx.scc1p),NULL},
    {&(m8xx.scc1),NULL},
-   M8xx_IVEC_SRC_SCC1,
-   M8xx_IREG_MASK(M8xx_IVEC_SRC_SCC1),
+   BSP_CPM_IRQ_SCC1,
    M8xx_CR_CHAN_SCC1,
    -1},
   /* SCC2 */
   {TRUE,
    {&(m8xx.scc2p),NULL},
    {&(m8xx.scc2),NULL},
-   M8xx_IVEC_SRC_SCC2,
-   M8xx_IREG_MASK(M8xx_IVEC_SRC_SCC2),
+   BSP_CPM_IRQ_SCC2,
    M8xx_CR_CHAN_SCC2,
    -1},
   /* SCC3 */
   {TRUE,
    {&(m8xx.scc3p),NULL},
    {&(m8xx.scc3),NULL},
-   M8xx_IVEC_SRC_SCC3,
-   M8xx_IREG_MASK(M8xx_IVEC_SRC_SCC3),
+   BSP_CPM_IRQ_SCC3,
    M8xx_CR_CHAN_SCC3,
    -1},
   /* SCC4 */
   {TRUE,
    {&(m8xx.scc4p),NULL},
    {&(m8xx.scc4),NULL},
-   M8xx_IVEC_SRC_SCC4,
-   M8xx_IREG_MASK(M8xx_IVEC_SRC_SCC4),
+   BSP_CPM_IRQ_SCC4,
    M8xx_CR_CHAN_SCC4,
    -1},
   /* SMC1 */
   {FALSE,
    {NULL,&(m8xx.smc1p)},
    {NULL,&(m8xx.smc1)},
-   M8xx_IVEC_SRC_SMC1,
-   M8xx_IREG_MASK(M8xx_IVEC_SRC_SMC1),
+   BSP_CPM_IRQ_SMC1,
    M8xx_CR_CHAN_SMC1,
    -1},
   /* SMC2 */
   {FALSE,
    {NULL,&(m8xx.smc2p)},
    {NULL,&(m8xx.smc2)},
-   M8xx_IVEC_SRC_SMC2,
-   M8xx_IREG_MASK(M8xx_IVEC_SRC_SMC2),
+   BSP_CPM_IRQ_SMC2_OR_PIP,
    M8xx_CR_CHAN_SMC2,
    -1}};
 
@@ -249,7 +231,7 @@ sccBRGval (int baud)
   int divisor;
   int div16 = 0;
 
-  divisor = ((m8xx_clock_rate / 16) + (baud / 2)) / baud;
+  divisor = ((BSP_bus_frequency / 16) + (baud / 2)) / baud;
   if (divisor > 4096) {
     div16 = 1;
     divisor = (divisor + 8) / 16;
@@ -283,6 +265,7 @@ static void sccBRGinit(void)
 #endif
 }
 
+#if CONS_USE_EXT_CLK
 /*
  * input clock frq for CPM clock inputs
  */
@@ -295,6 +278,7 @@ static uint32_t clkin_frq[2][4] = {
   {1843000,0,0,0}
 #endif
 };
+#endif
 
 /*
  * allocate, set and connect baud rate generators
@@ -310,7 +294,7 @@ static int sccBRGalloc(int chan,int baud)
   int old_brg;
   int new_brg = -1;
   int brg_idx;
-#if 0 /* we do not support external clocked console */
+#if CONS_USE_EXT_CLK
   int clk_group;
   int clk_sel;
 #endif
@@ -319,7 +303,7 @@ static int sccBRGalloc(int chan,int baud)
   /* compute brg register contents needed */
   reg_val = sccBRGval(baud);
 
-#if 0 /* we do not support external clocked console */
+#if CONS_EXT_CLK
   /* search for clock input with this frq */
   clk_group = ((chan == CONS_CHN_SCC3) ||
 	       (chan == CONS_CHN_SCC4) ||
@@ -438,32 +422,9 @@ sccSetAttributes (int minor, const struct termios *t)
  * Interrupt handler 
  */
 static rtems_isr
-sccInterruptHandler (rtems_vector_number v)
+sccInterruptHandler (void *arg)
 {
-  int chan = 0;
-  /*
-   * calculate channel from vector
-   */
-  switch(v & M8xx_IVEC_SRC_MASK) {
-  case M8xx_IVEC_SRC_SCC1:
-    chan = CONS_CHN_SCC1;
-    break;
-  case M8xx_IVEC_SRC_SCC2:
-    chan = CONS_CHN_SCC2;
-    break;
-  case M8xx_IVEC_SRC_SCC3:
-    chan = CONS_CHN_SCC3;
-    break;
-  case M8xx_IVEC_SRC_SCC4:
-    chan = CONS_CHN_SCC4;
-    break;
-  case M8xx_IVEC_SRC_SMC1:
-    chan = CONS_CHN_SMC1;
-    break;
-  case M8xx_IVEC_SRC_SMC2:
-    chan = CONS_CHN_SMC2;
-    break;
-  }
+  int chan = (int)arg;
 
   /*
    * Buffer received?
@@ -533,8 +494,24 @@ sccInterruptHandler (rtems_vector_number v)
       }
     }
   }
+}
 
-  m8xx.cisr = m8xx_console_chan_desc[chan].ireg_mask;/* Clear interrupt-in-service bit */
+static void
+mpc8xx_console_irq_on(const rtems_irq_connect_data *irq)
+{
+    CHN_MASK_SET(irq->name,3);	/* Enable TX and RX interrupts */
+}
+
+static void
+mpc8xx_console_irq_off(const rtems_irq_connect_data *irq)
+{
+    CHN_MASK_SET(irq->name,0);	/* Disable TX and RX interrupts */
+}
+
+static int
+mpc8xx_console_irq_isOn(const rtems_irq_connect_data *irq)
+{
+  return (0 != CHN_MASK_GET(irq->name)); /* Check TX and RX interrupts */
 }
 
 static void
@@ -730,19 +707,18 @@ sccInitialize (int chan)
   }
 
   if (m8xx_scc_mode[chan] != TERMIOS_POLLED) {
-    rtems_isr_entry old_handler;
-    rtems_status_code sc;
     
-#if 0
-    sc = rtems_interrupt_catch (sccInterruptHandler,
-				m8xx_console_chan_desc[chan].ivec_src 
-				| (m8xx.cicr & 0xE0),
-				&old_handler);
-#endif
-    #warning "Redo interrupt installation"
-    printk( "Redo interrupt installation" );
-    CHN_MASK_SET(chan,3);	/* Enable TX and RX interrupts */
-    m8xx.cimr |= m8xx_console_chan_desc[chan].ireg_mask;  /* Enable interrupts */
+    rtems_irq_connect_data irq_conn_data = {
+      m8xx_console_chan_desc[chan].ivec_src,
+      sccInterruptHandler,         /* rtems_irq_hdl           */
+      (rtems_irq_hdl_param)chan,   /* (rtems_irq_hdl_param)   */
+      mpc8xx_console_irq_on,       /* (rtems_irq_enable)      */
+      mpc8xx_console_irq_off,      /* (rtems_irq_disable)     */
+      mpc8xx_console_irq_isOn      /* (rtems_irq_is_enabled)  */
+    };
+    if (!BSP_install_rtems_irq_handler (&irq_conn_data)) {
+      rtems_panic("console: cannot install IRQ handler");
+    }
   }
 }
 
@@ -899,13 +875,6 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
   int chan,entry,ttynum;
   char tty_name[] = "/dev/tty00";
 
-  /*
-   * init base clock for BRGs
-   * (if not already set by debugger etc)
-   */
-  if (m8xx_clock_rate == 0) {
-    m8xx_clock_rate = BSP_bus_frequency;
-  }
   /*
    * Set up TERMIOS
    */

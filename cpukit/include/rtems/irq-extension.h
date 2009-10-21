@@ -68,7 +68,7 @@ extern "C" {
 /**
  * @brief Interrupt handler routine type.
  */
-typedef void (*rtems_interrupt_handler)(rtems_vector_number, void *);
+typedef void (*rtems_interrupt_handler)(void *);
 
 /**
  * @brief Installs the interrupt handler routine @a handler for the interrupt

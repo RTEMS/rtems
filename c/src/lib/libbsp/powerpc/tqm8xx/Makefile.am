@@ -23,6 +23,7 @@ include_HEADERS += include/coverhd.h
 include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
     include/irq.h include/irq-config.h \
     ../../shared/include/irq-generic.h\
+    spi/spi.h\
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
@@ -53,6 +54,8 @@ libbsp_a_SOURCES += clock/p_clock.c
 
 # console
 libbsp_a_SOURCES += console/console.c
+# spi
+libbsp_a_SOURCES += spi/spi.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
 # startup
