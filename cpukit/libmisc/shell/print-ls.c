@@ -68,6 +68,10 @@ __RCSID("$NetBSD: print.c,v 1.40 2004/11/17 17:00:00 mycroft Exp $");
 
 #include "extern-ls.h"
 
+#define DAYSPERNYEAR ((time_t)365)
+#define SECSPERDAY   ((time_t)60 * (time_t)60 * (time_t)24)
+
+
 #if RTEMS_REMOVED
 extern int termwidth;
 #endif
