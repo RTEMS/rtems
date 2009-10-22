@@ -1,3 +1,11 @@
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/i2c/spi-flash-m25p40.c, libchip/i2c/spi-fram-fm25l256.c:
+	Use hex-constants to avoid implicit int-casts.
+	* libchip/i2c/spi-memdrv.c:
+	Use hex-constants to avoid implicit int-casts.
+	Use rtems_off64_t offsets to avoid loosing precision.
+
 2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/serial/ns16550.c: Update for interrupt handler type change.
