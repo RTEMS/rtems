@@ -18,10 +18,8 @@ SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
     psxintrcritical01 psxstack01
 endif
 
-if HAS_POSIX
 ## File IO tests
 SUBDIRS += psxfile01 psxreaddir psxstat psxmount psx13 psxchroot01 
-endif
 
 ## Until sys/uio.h is moved to libcsupport, we have to have networking
 ## enabled to support readv and writev.  Hopefully this is a temporary
