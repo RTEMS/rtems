@@ -64,7 +64,7 @@ time_t uuid_time(const uuid_t uu, struct timeval *ret_tv)
 
 	uuid_unpack(uu, &uuid);
 
-	high = uuid.time_mid | ((uuid.time_hi_and_version & 0xFFF) << 16);
+	high = uuid.time_mid | ((uint32_t)(uuid.time_hi_and_version & 0xFFF) << 16);
 	clock_reg = uuid.time_low | ((uint64_t) high << 32);
 
 	clock_reg -= (((uint64_t) 0x01B21DD2) << 32) + 0x13814000;
