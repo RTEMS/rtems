@@ -33,8 +33,8 @@ static spi_memdrv_t spi_flash_m25p40_rw_drv_t = {
   erase_before_program: true,
   empty_state:          0xff,
   page_size:            256, /* programming page size in byte */
-  sector_size:          64*1024, /* erase sector size in byte */
-  mem_size:             512*1024 /* total capacity in byte    */
+  sector_size:          0x10000 /* 64*1024 */, /* erase sector size in byte */
+  mem_size:             0x80000 /* 512*1024 */ /* total capacity in byte    */
   }
 };
 
@@ -51,8 +51,8 @@ static spi_memdrv_t spi_flash_m25p40_ro_drv_t = {
   erase_before_program: true,
   empty_state:          0xff,
   page_size:            256, /* programming page size in byte */
-  sector_size:          64*1024, /* erase sector size in byte */
-  mem_size:             512*1024 /* total capacity in byte    */
+  sector_size:          0x10000 /* 64*1024 */, /* erase sector size in byte */
+  mem_size:             0x80000 /* 512*1024 */ /* total capacity in byte    */
   }
 };
 
