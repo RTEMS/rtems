@@ -1,3 +1,9 @@
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/clock.c: Add missing prototypes.
+	Remove argument from clockOff().
+	* tod/pcf8563.c: Add missing const.
+
 2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* clock/clock.c: Update for interrupt handler type change.
