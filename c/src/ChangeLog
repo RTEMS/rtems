@@ -1,5 +1,9 @@
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/ide/ata.h: Move extern "C".
+
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libchip/i2c/spi-flash-m25p40.c, libchip/i2c/spi-fram-fm25l256.c:
 	Use hex-constants to avoid implicit int-casts.
 	* libchip/i2c/spi-memdrv.c:
