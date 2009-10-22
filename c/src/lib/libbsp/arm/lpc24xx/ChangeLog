@@ -1,3 +1,8 @@
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/clock-config.c, misc/dma.c, network/network.c,
+	rtc/rtc-config.c, ssp/ssp.c: Remove unused vars.
+
 2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* i2c/i2c.c, misc/dma-copy.c, network/network.c, ssp/ssp.c: Update for
