@@ -95,7 +95,7 @@ typedef struct rtems_fdisk_segment_desc
 /**
  * Return the number of kilo-bytes.
  */
-#define RTEMS_FDISK_KBYTES(_k) ((_k) * 1024)
+#define RTEMS_FDISK_KBYTES(_k) (UINT32_C(1024) * (_k))
 
 /**
  * Forward declaration of the device descriptor.

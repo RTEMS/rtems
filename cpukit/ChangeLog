@@ -1,5 +1,10 @@
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/include/rtems/flashdisk.h: Use UINT32_C consts to 
+	avoid implicit int-cast overflows in RTEMS_FDISK_KBYTES.
+
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/rtems/error.h: Use ordinal constants for
 	RTEMS_ERROR_ERRNO, RTEMS_ERROR_PANIC, RTEMS_ERROR_ABORT to avoid
 	implicit constant conversion overflows on 16bit-int targets.
