@@ -1,5 +1,11 @@
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/rtems/error.h: Use ordinal constants for
+	RTEMS_ERROR_ERRNO, RTEMS_ERROR_PANIC, RTEMS_ERROR_ABORT to avoid
+	implicit constant conversion overflows on 16bit-int targets.
+
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/uuid/uuid_time.c: Add cast to uint32_t to allow 16bit
 	shift on 16bit-int targets.
 	* libmisc/uuid/gen_uuid.c: Add HAVE_CONFIG_H guard.

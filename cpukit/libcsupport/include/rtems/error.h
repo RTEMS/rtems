@@ -23,9 +23,16 @@ typedef Internal_errors_t rtems_error_code_t;
  * rtems_error() and rtems_panic() support
  */
 
+#if 0
+/* not 16bit-int host clean */
 #define RTEMS_ERROR_ERRNO  (1<<((sizeof(rtems_error_code_t) * CHAR_BIT) - 2)) /* hi bit; use 'errno' */
 #define RTEMS_ERROR_PANIC  (RTEMS_ERROR_ERRNO / 2)       /* err fatal; no return */
 #define RTEMS_ERROR_ABORT  (RTEMS_ERROR_ERRNO / 4)       /* err is fatal; panic */
+#else
+#define RTEMS_ERROR_ERRNO  (0x40000000) /* hi bit; use 'errno' */
+#define RTEMS_ERROR_PANIC  (0x20000000) /* err fatal; no return */
+#define RTEMS_ERROR_ABORT  (0x10000000) /* err is fatal; panic */
+#endif
 
 #define RTEMS_ERROR_MASK  (RTEMS_ERROR_ERRNO | RTEMS_ERROR_ABORT | \
                              RTEMS_ERROR_PANIC) /* all */
