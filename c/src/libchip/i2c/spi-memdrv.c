@@ -126,7 +126,7 @@ rtems_status_code spi_memdrv_write
 {
   rtems_status_code          rc = RTEMS_SUCCESSFUL;
   rtems_libio_rw_args_t *rwargs = arg;
-  unsigned                  off = rwargs->offset;
+  rtems_off64_t             off = rwargs->offset;
   int                       cnt = rwargs->count;
   unsigned char            *buf = (unsigned char *)rwargs->buffer;
   int                bytes_sent = 0;
@@ -236,7 +236,7 @@ rtems_status_code spi_memdrv_write
      */
     if (rc == RTEMS_SUCCESSFUL) {
       cmdbuf[0] = SPI_MEM_CMD_PP;
-      if (mem_param_ptr->mem_size > 256*256) {
+      if (mem_param_ptr->mem_size > 0x10000 /* 256*256 */) {
 	cmdbuf[1] = (off >> 16) & 0xff;
 	cmdbuf[2] = (off >>  8) & 0xff;
 	cmdbuf[3] = (off >>  0) & 0xff;
@@ -312,7 +312,7 @@ rtems_status_code spi_memdrv_read
 {
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   rtems_libio_rw_args_t *rwargs = arg;
-  unsigned                  off = rwargs->offset;
+  rtems_off64_t             off = rwargs->offset;
   int                       cnt = rwargs->count;
   unsigned char            *buf = (unsigned char *)rwargs->buffer;
   unsigned char         cmdbuf[4];
@@ -389,7 +389,7 @@ rtems_status_code spi_memdrv_read
      */
     if (rc == RTEMS_SUCCESSFUL) {
       cmdbuf[0] = SPI_MEM_CMD_READ;
-      if (mem_param_ptr->mem_size > 256*256) {
+      if (mem_param_ptr->mem_size > 0x10000 /* 256*256 */) {
 	cmdbuf[1] = (off >> 16) & 0xff;
 	cmdbuf[2] = (off >>  8) & 0xff;
 	cmdbuf[3] = (off >>  0) & 0xff;
