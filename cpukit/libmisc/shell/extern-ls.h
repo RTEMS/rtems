@@ -189,7 +189,4 @@ void     usage(rtems_shell_ls_globals* globals);
 
 void strmode(mode_t mode, char *p);
 
-#define DAYSPERNYEAR 365
-#define SECSPERDAY   (60 * 60 * 24)
-
 #endif /* !_EXTERN_H_ */
