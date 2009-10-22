@@ -32,7 +32,9 @@
  * %End-Header%
  */
 
+#if HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 /*
  * Force inclusion of SVID stuff since we need it if we're compiling in
@@ -46,6 +48,7 @@
 #define UUID MYUUID
 #endif
 #include <stdio.h>
+#include <limits.h> /* for CHAR_BIT */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -153,7 +156,7 @@ static int get_random_fd(void)
 				fcntl(fd, F_SETFD, i | FD_CLOEXEC);
 		}
 #endif
-		srand((getpid() << 16) ^ getuid() ^ tv.tv_sec ^ tv.tv_usec);
+		srand((getpid() << ((sizeof(pid_t)*CHAR_BIT)>>1)) ^ getuid() ^ tv.tv_sec ^ tv.tv_usec);
 #ifdef DO_JRAND_MIX
 		jrand_seed[0] = getpid() ^ (tv.tv_sec & 0xFFFF);
 		jrand_seed[1] = getppid() ^ (tv.tv_usec & 0xFFFF);
