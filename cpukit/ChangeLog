@@ -1,5 +1,10 @@
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/dd-args.c: Use uint_least32_t instead of u_int,
+	force 32bit constants to make code functional on 16bit-int targets.
+
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove -fasm.
 
 2009-10-21	Till Straumann <strauman@slac.stanford.edu>
