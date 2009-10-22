@@ -52,7 +52,6 @@ static void lpc24xx_clock_handler_install( void)
 
 static void lpc24xx_clock_initialize( void)
 {
-  rtems_interrupt_level level;
   uint64_t interval = ((uint64_t) lpc24xx_cclk()
     * (uint64_t) rtems_configuration_get_microseconds_per_tick()) / 1000000;
 

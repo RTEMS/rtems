@@ -468,7 +468,6 @@ static int lpc24xx_ssp_read_write_async(
   void *arg
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_interrupt_level level;
   lpc24xx_ssp_bus_entry *e = (lpc24xx_ssp_bus_entry *) bus;
   volatile lpc24xx_ssp *ssp = e->regs;

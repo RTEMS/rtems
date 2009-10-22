@@ -27,8 +27,6 @@
 
 static void lpc24xx_rtc_initialize( int minor)
 {
-  rtems_interrupt_level level;
-
   /* Enable module power */
   lpc24xx_module_enable( LPC24XX_MODULE_RTC, 0, LPC24XX_MODULE_PCLK_DEFAULT);
 

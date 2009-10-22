@@ -1079,8 +1079,6 @@ static void lpc24xx_eth_interface_start(struct ifnet *ifp)
 
 static void lpc24xx_eth_interface_watchdog(struct ifnet *ifp)
 {
-  lpc24xx_eth_driver_entry *e = (lpc24xx_eth_driver_entry *) ifp->if_softc;
-
   LPC24XX_ETH_PRINTF("%s\n", __func__);
 }
 
@@ -1091,7 +1089,6 @@ static int lpc24xx_eth_attach(struct rtems_bsdnet_ifconfig *config)
   struct ifnet *ifp = &e->arpcom.ac_if;
   char *unit_name = NULL;
   int unit_number = rtems_bsdnet_parse_driver_name(config, &unit_name);
-  uint32_t reg = 0;
 
   /* Check parameter */
   if (unit_number < 0) {
