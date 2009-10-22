@@ -1,5 +1,12 @@
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/extern-ls.h: Remove DAYSPERNYEAR, SECSPERDAY.
+	* libmisc/shell/print-ls.c: Add DAYSPERNYEAR, SECSPERDAY.
+	Add casts to time_t on constants in DAYSPERNYEAR, SECSPERDAY for
+	16bit-int targets.
+
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/dd-args.c: Use uint_least32_t instead of u_int,
 	force 32bit constants to make code functional on 16bit-int targets.
 
