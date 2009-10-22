@@ -74,7 +74,7 @@ static off_t	get_off_t(rtems_shell_dd_globals* globals, const char *);
 static const struct arg {
 	const char *name;
 	void (*f)(rtems_shell_dd_globals* globals, char *);
-	u_int set, noset;
+	uint_least32_t set, noset;
 } args[] = {
 	{ "bs",		f_bs,		C_BS,	 C_BS|C_IBS|C_OBS|C_OSYNC },
 	{ "cbs",	f_cbs,		C_CBS,	 C_CBS },
@@ -298,7 +298,7 @@ f_skip(rtems_shell_dd_globals* globals, char *arg)
 
 static const struct conv {
 	const char *name;
-	u_int set, noset;
+	uint_least32_t set, noset;
 	const u_char *ctab_;
 } clist[] = {
 	{ "ascii",	C_ASCII,	C_EBCDIC,	e2a_POSIX },
@@ -380,19 +380,19 @@ get_num(rtems_shell_dd_globals* globals, const char *val)
 	switch (*expr) {
 	case 'B':
 	case 'b':
-		mult = 512;
+		mult = UINT32_C(512);
 		break;
 	case 'K':
 	case 'k':
-		mult = 1 << 10;
+		mult = UINT32_C(1) << 10;
 		break;
 	case 'M':
 	case 'm':
-		mult = 1 << 20;
+		mult = UINT32_C(1) << 20;
 		break;
 	case 'G':
 	case 'g':
-		mult = 1 << 30;
+		mult = UINT32_C(1) << 30;
 		break;
 	case 'W':
 	case 'w':
@@ -454,19 +454,19 @@ get_off_t(rtems_shell_dd_globals* globals, const char *val)
 	switch (*expr) {
 	case 'B':
 	case 'b':
-		mult = 512;
+		mult = UINT32_C(512);
 		break;
 	case 'K':
 	case 'k':
-		mult = 1 << 10;
+		mult = UINT32_C(1) << 10;
 		break;
 	case 'M':
 	case 'm':
-		mult = 1 << 20;
+		mult = UINT32_C(1) << 20;
 		break;
 	case 'G':
 	case 'g':
-		mult = 1 << 30;
+		mult = UINT32_C(1) << 30;
 		break;
 	case 'W':
 	case 'w':
