@@ -1,5 +1,10 @@
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* new-exceptions/bspsupport/vectors_init.c: Remove duplicate
+	defines DEAR_BOOKE, DEAR_405.
+
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* mpc6xx/mmu/bat.c: Add missing prototypes.
 
 2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
