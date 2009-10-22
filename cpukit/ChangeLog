@@ -1,5 +1,9 @@
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/cpu/Makefile.am: Update DIST_SUBDIRS.
+
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libblock/include/rtems/flashdisk.h: Use UINT32_C consts to 
 	avoid implicit int-cast overflows in RTEMS_FDISK_KBYTES.
 

@@ -4,9 +4,23 @@
 
 SUBDIRS = @RTEMS_CPU@
 
-DIST_SUBDIRS = arm bfin h8300 i386 lm32 m68k m32c m32r mips nios2 no_cpu \
-    powerpc sh sparc
+DIST_SUBDIRS =
+DIST_SUBDIRS += arm
 DIST_SUBDIRS += avr
+DIST_SUBDIRS += bfin
+DIST_SUBDIRS += c4x
+DIST_SUBDIRS += h8300
+DIST_SUBDIRS += i386
+DIST_SUBDIRS += lm32
+DIST_SUBDIRS += m32c
+DIST_SUBDIRS += m32r
+DIST_SUBDIRS += m68k
+DIST_SUBDIRS += mips
+DIST_SUBDIRS += nios2
+DIST_SUBDIRS += no_cpu
+DIST_SUBDIRS += powerpc
+DIST_SUBDIRS += sh
+DIST_SUBDIRS += sparc
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
