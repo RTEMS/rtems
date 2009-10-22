@@ -1,3 +1,7 @@
+2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove -fasm.
+
 2009-10-21	Till Straumann <strauman@slac.stanford.edu>
 
 	* sapi/include/rtems/config.h: Fixed typos (wrong case) in macro
