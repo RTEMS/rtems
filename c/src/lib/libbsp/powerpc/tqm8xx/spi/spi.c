@@ -31,7 +31,7 @@
 #define M8xx_PB_SPI_CLK_MSK        (1<<(31-30))
 
 #undef DEBUG
-static m8xx_spi_softc_t *m8xx_spi_softc_ptr;
+
 /*
  * this is a dummy receive buffer for sequences, 
  * where only send data are available
