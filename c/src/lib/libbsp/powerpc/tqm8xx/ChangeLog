@@ -1,3 +1,8 @@
+2009-10-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c: Include <rtems/error.h>.
+	* spi/spi.c: Remove m8xx_spi_softc_ptr (Unused).
+
 2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am: Update for exception support changes.
