@@ -18,4 +18,5 @@ AM_CFLAGS =
 AM_CXXFLAGS =
 
 clean-local:
-	$(RM) *.num *.nxe *.elf *.srec* *.bin *.bt
+	$(RM) *.num *.nxe *.elf *.srec* *.bin *.bt *.ralf
+
