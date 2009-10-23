@@ -1,3 +1,9 @@
+2009-10-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/prog-cc.m4: Remove RTEMS_CFLAGS.
+	Rework CFLAGS setup.
+	* automake/compile.am: Remove RTEMS_CFLAGS.
+
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/cpu/Makefile.am: Update DIST_SUBDIRS.
