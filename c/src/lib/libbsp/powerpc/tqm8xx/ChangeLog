@@ -12,7 +12,8 @@
 
 2009-10-21  Thomas Doerfler  <Thomas.Doerfler@imd-systems.de>
 
-	* ChangeLog, Makefile.am, console/console.c, include/bsp.h, irq/irq.c, preinstall.am, startup/bspstart.c, startup/start.S:
+	* ChangeLog, Makefile.am, console/console.c, include/bsp.h,
+	irq/irq.c, preinstall.am, startup/bspstart.c, startup/start.S:
 	various maintenance changes
 	* spi/spi.c, spi/spi.h: added missing driver
 
