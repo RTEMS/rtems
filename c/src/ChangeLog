@@ -1,3 +1,9 @@
+2009-10-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Rework CFLAGS setup.
+	* aclocal/prog-cc.m4: Remove RTEMS_CFLAGS.
+	* automake/compile.am: Remove RTEMS_CFLAGS.
+
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/ide/ata.h: Move extern "C".
