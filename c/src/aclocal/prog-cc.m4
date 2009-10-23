@@ -35,14 +35,6 @@ GCCSPECS="-B\$(PROJECT_ROOT)/lib/ -B\$(PROJECT_ROOT)/$RTEMS_BSP/lib/"
 GCCSPECS="${GCCSPECS} -specs bsp_specs -qrtems"])
 AC_SUBST(GCCSPECS)
 
-AS_IF([test "$GCC" = yes],[
-RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
-# FIXME: This should be removed in production releases
-RTEMS_CFLAGS="$RTEMS_CFLAGS -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs"
-m4_if([$1],,[],[RTEMS_CFLAGS="$RTEMS_CFLAGS $1"])
-])
-AC_SUBST(RTEMS_CFLAGS)
-
 AS_IF([test x"$rtems_cv_gcc_isystem" = xyes],[
   RTEMS_CPPFLAGS="-isystem \$(PROJECT_INCLUDE)"],[
   RTEMS_CPPFLAGS="-I\$(PROJECT_INCLUDE)"
