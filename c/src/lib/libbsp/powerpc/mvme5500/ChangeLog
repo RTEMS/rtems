@@ -1,3 +1,10 @@
+2009-10-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* irq/BSP_irq.c, network/if_100MHz/GT64260eth.c,
+	network/if_1GHz/if_wm.c, network/if_1GHz/pci_map.c,
+	startup/bspstart.c: Add missing prototypes.
+	Adjust bogus types. Remove unused vars.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/mvme5500.cfg: Remove RTEMS_BSP_FAMILY.

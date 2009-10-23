@@ -77,6 +77,9 @@
 #include <bsp/pci.h>
 #include <bsp/pcireg.h>
 #include <bsp/if_wmreg.h>
+
+extern int pci_mem_find(int b, int d, int f, int reg, unsigned *basep,unsigned *sizep);
+
 #define	WMREG_RADV	0x282c	/* Receive Interrupt Absolute Delay Timer */
 
 #define	ETHERTYPE_FLOWCONTROL	0x8808	/* 802.3x flow control packet */
@@ -236,7 +239,6 @@ static void wm_set_filter(struct wm_softc *sc);
 static void i82544EI_rx(struct wm_softc *sc);
 static void i82544EI_isr(rtems_irq_hdl_param handle);
 static void i82544EI_sendpacket(struct wm_softc *sc, struct mbuf *m);
-extern int  pci_mem_find(), pci_io_find(), pci_get_capability();
 
 static void i82544EI_irq_on(const rtems_irq_connect_data *irq)
 {
@@ -1142,11 +1144,11 @@ static int i82544EI_init_hw(struct wm_softc *sc)
   return(0);
 }
 
-void BSP_rdTIDV()
+void BSP_rdTIDV(void)
 {
   printf("Reg TIDV: 0x%x\n", in_le32((volatile unsigned *) (BSP_1GHz_membase+WMREG_TIDV)));
 }
-void BSP_rdRDTR()
+void BSP_rdRDTR(void)
 {
   printf("Reg RDTR: 0x%x\n", in_le32((volatile unsigned *) (BSP_1GHz_membase+WMREG_RDTR)));
 }
@@ -1600,7 +1602,7 @@ static void i82544EI_error(struct wm_softc *sc)
   if ((++sc->if_err_ptr1)==IF_ERR_BUFSZE) sc->if_err_ptr1=0; /* Till Straumann */
 }
 
-void i82544EI_printStats()
+void i82544EI_printStats(void)
 {
   i82544EI_stats(root_i82544EI_dev);
 }

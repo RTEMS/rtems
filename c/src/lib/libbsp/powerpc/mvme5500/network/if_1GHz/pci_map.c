@@ -24,6 +24,10 @@
 #include <bsp/pci.h>
 #include <bsp/pcireg.h>
 
+extern int pci_get_capability(int b, int d, int f, int capid,int *offset,uint32_t *value);
+extern int pci_mem_find(int b, int d, int f, int reg, unsigned *basep,unsigned *sizep);
+extern int pci_io_find(int b, int d, int f, int reg,unsigned *basep,unsigned *sizep);
+
 int pci_io_find(int b, int d, int f, int reg,unsigned *basep,unsigned *sizep)
 {
   uint32_t address, mask;

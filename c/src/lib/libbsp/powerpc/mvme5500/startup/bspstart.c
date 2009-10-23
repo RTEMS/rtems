@@ -55,6 +55,9 @@
 /* there is no public Workspace_Free() variant :-( */
 #include <rtems/score/wkspace.h>
 
+extern uint32_t probeMemoryEnd(void); /* from shared/startup/probeMemoryEnd.c */
+
+
 BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
 
 extern void _return_to_ppcbug(void);
@@ -64,6 +67,8 @@ extern Triv121PgTbl BSP_pgtbl_setup(unsigned long);
 extern void BSP_pgtbl_activate(Triv121PgTbl);
 extern int I2Cread_eeprom(unsigned char I2cBusAddr, uint32_t devA2A1A0, uint32_t AddrBytes, unsigned char *pBuff, uint32_t numBytes);
 extern void BSP_vme_config(void);
+
+extern unsigned char ReadConfVPD_buff(int offset);
 
 extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
 extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
@@ -128,7 +133,7 @@ void _BSP_Fatal_error(unsigned int v)
   __asm__ __volatile ("sc"); 
 }
  
-void zero_bss()
+void zero_bss(void)
 {
   memset(
     __SBSS_START__,
@@ -214,8 +219,6 @@ void bsp_start( void )
 #ifdef CONF_VPD
   int i;
 #endif
-  unsigned char *stack;
-  unsigned long   *r1sp;
 #ifdef SHOW_LCR1_REGISTER
   unsigned l1cr;
 #endif
