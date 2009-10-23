@@ -66,16 +66,18 @@ libbsp_a_SOURCES += ../shared/clock/clock.c
 include_bsp_HEADERS = include/irq.h \
 	include/irq-config.h \
 	../../shared/include/irq-generic.h \
+	../../shared/include/irq-info.h \
 	include/hwreg_vals.h \
 	../shared/include/u-boot.h \
 	../shared/include/tictac.h
 
 # irq
-libbsp_a_SOURCES += include/irq.h \
-	include/irq-config.h \
-	irq/irq.c \
+libbsp_a_SOURCES += irq/irq.c \
 	../../shared/src/irq-generic.c \
-	../../shared/src/irq-legacy.c
+	../../shared/src/irq-legacy.c \
+	../../shared/src/irq-info.c \
+	../../shared/src/irq-shell.c \
+	../../shared/src/irq-server.c
 
 # console
 libbsp_a_SOURCES += console/console.c console/ns16550cfg.c 
@@ -95,7 +97,6 @@ endif
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 	../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-	../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
 	../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \

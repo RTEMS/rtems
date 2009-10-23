@@ -25,12 +25,12 @@
 #include <rtems.h>
 
 #include <libcpu/powerpc-utility.h>
+#include <bsp/vectors.h>
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
-#include <bsp/ppc_exc_bspsupp.h>
 
 #define RTEMS_STATUS_CHECKS_USE_PRINTK
 
@@ -188,6 +188,7 @@ static void mpc55xx_ebi_init()
  */
 void bsp_start(void)
 {
+	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	ppc_cpu_id_t myCpu;
 	ppc_cpu_revision_t myCpuRevision;
 
@@ -224,16 +225,21 @@ void bsp_start(void)
 	
 	/* Initialize exceptions */
 	RTEMS_DEBUG_PRINT( "Initialize exceptions ...\n");
-	ppc_exc_initialize(
-          PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-          interrupt_stack_start,
-          interrupt_stack_size
-        );
-	DEBUG_DONE();
+	sc = ppc_exc_initialize(
+		PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+		interrupt_stack_start,
+		interrupt_stack_size
+	);
+	if (sc != RTEMS_SUCCESSFUL) {
+		BSP_panic( "Cannot initialize exceptions");
+	} else {
+		DEBUG_DONE();
+	}
 
 	/* Initialize interrupts */
 	RTEMS_DEBUG_PRINT( "Initialize interrupts ...\n");
-	if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
+	sc = bsp_interrupt_initialize();
+	if (sc != RTEMS_SUCCESSFUL) {
 		BSP_panic( "Cannot initialize interrupts");
 	} else {
 		DEBUG_DONE();

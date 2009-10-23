@@ -51,9 +51,7 @@
 #include <bsp.h>
 
 #ifdef BSP_PPC403_CLOCK_HOOK_EXCEPTION
-#include <libcpu/raw_exception.h>
 #include <bsp/vectors.h>
-#include <bsp/ppc_exc_bspsupp.h>
 #define PPC_HAS_CLASSIC_EXCEPTIONS FALSE
 #else
 #if !defined(ppc405)

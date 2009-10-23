@@ -13,7 +13,7 @@
 #include <libcpu/spr.h>
 #include <bsp/irq.h>
 #include <bsp.h>
-#include <libcpu/raw_exception.h>
+#include <bsp/vectors.h>
 #include <rtems/bspIo.h>
 #include <rtems/powerpc/powerpc.h>
 

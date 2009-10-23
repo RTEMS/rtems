@@ -22,10 +22,8 @@ noinst_PROGRAMS =
 include_HEADERS += include/coverhd.h
 include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
     include/irq.h include/irq-config.h \
-    ../../shared/include/irq-generic.h\
-    spi/spi.h\
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
+    ../../shared/include/irq-generic.h \
+    spi/spi.h
 
 EXTRA_DIST = times-tqm866
 
@@ -78,7 +76,6 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \

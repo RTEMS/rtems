@@ -1,3 +1,10 @@
+2009-10-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am, preinstall.am: Update for exception support changes.
+	* irq/BSP_irq.c, irq/irq_init.c, vectors/exceptionhandler.c: Changed
+	exception header file includes.
+	* startup/bspstart.c: Update for ppc_exc_initialize() changes.
+
 2009-10-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* irq/BSP_irq.c, network/if_100MHz/GT64260eth.c,

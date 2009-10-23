@@ -40,7 +40,8 @@ RTEMS_CPU_MODEL=mpc$(8XX_CPU_TYPE)
 #  This contains the compiler options necessary to select the CPU model
 #  and (hopefully) optimize for it.
 #
-CPU_CFLAGS = -mcpu=$(8XX_CPU_TYPE) -Dmpc$(8XX_CPU_TYPE) -D$(RTEMS_MBX_MODEL)
+CPU_CFLAGS = -mcpu=$(8XX_CPU_TYPE) -Dmpc$(8XX_CPU_TYPE) -D$(RTEMS_MBX_MODEL) \
+	-meabi -msdata -fno-common
 
 # optimize flag: typically -O2
 CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions

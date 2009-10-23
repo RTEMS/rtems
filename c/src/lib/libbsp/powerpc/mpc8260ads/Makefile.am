@@ -35,21 +35,25 @@ libbsp_a_SOURCES += clock/p_clock.c
 # console
 libbsp_a_SOURCES += console/console.c
 
-include_bsp_HEADERS = irq/irq.h
-# irq
-libbsp_a_SOURCES += irq/irq.c irq/irq_init.c irq/irq.h irq/irq_asm.S
+include_bsp_HEADERS = irq/irq.h \
+	include/irq-config.h \
+	../../shared/include/irq-generic.h \
+	../../shared/include/irq-info.h
 
-include_bsp_HEADERS += vectors/vectors.h
+# irq
+libbsp_a_SOURCES += irq/irq.c \
+	../../shared/src/irq-generic.c \
+	../../shared/src/irq-legacy.c \
+	../../shared/src/irq-info.c \
+	../../shared/src/irq-shell.c \
+	../../shared/src/irq-server.c
+
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
     ../shared/startup/bspidle.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/cpuinit.c \
     ../../shared/bspgetworkarea.c ../../shared/bsppretaskinghook.c
-
-# vectors
-libbsp_a_SOURCES += vectors/vectors_init.c vectors/vectors.h \
-    vectors/vectors.S
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -63,12 +67,12 @@ endif
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/cpm.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/mmu.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8260/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel
+    ../../../libcpu/@RTEMS_CPU@/mpc8260/timer.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif

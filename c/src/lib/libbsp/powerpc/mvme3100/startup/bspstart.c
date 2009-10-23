@@ -225,9 +225,10 @@ SPR_RW(HID1)
 
 void bsp_start( void )
 {
+rtems_status_code   sc;
 unsigned char       *stack;
-uint32_t            intrStackStart;
-uint32_t            intrStackSize;
+uintptr_t           intrStackStart;
+uintptr_t           intrStackSize;
 char                *chpt;
 ppc_cpu_id_t        myCpu;
 ppc_cpu_revision_t  myCpuRevision;
@@ -271,17 +272,20 @@ VpdBufRec          vpdData [] = {
 	/*
 	 * Initialize the interrupt related settings.
 	 */
-	intrStackStart = (uint32_t) __rtems_end;
+	intrStackStart = (uintptr_t) __rtems_end;
 	intrStackSize = rtems_configuration_get_interrupt_stack_size();
 
 	/*
 	 * Initialize default raw exception handlers.
 	 */
-	ppc_exc_initialize(
+	sc = ppc_exc_initialize(
 		PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
 		intrStackStart,
 		intrStackSize
 	);
+	if (sc != RTEMS_SUCCESSFUL) {
+		BSP_panic("cannot initialize exceptions");
+	}
 
 	printk("CPU 0x%x - rev 0x%x\n", myCpu, myCpuRevision);
 

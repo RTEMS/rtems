@@ -27,7 +27,7 @@
 #include <bsp/openpic.h>
 #include <bsp/irq.h>
 #include <bsp.h>
-#include <libcpu/raw_exception.h>
+#include <bsp/vectors.h>
 #include <bsp/motorola.h>
 #include <rtems/bspIo.h>
 

@@ -16,7 +16,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/irq_supp.h>
-#include <libcpu/raw_exception.h>
+#include <bsp/vectors.h>
 
 static rtems_irq_connect_data *rtems_hdl_tbl;
 static rtems_irq_connect_data  dflt_entry;
@@ -25,7 +25,7 @@ static rtems_irq_connect_data  dflt_entry;
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
 int C_dispatch_irq_handler(
-  struct _BSP_Exception_frame *frame,
+  BSP_Exception_frame *frame,
   unsigned int excNum
 )
 {

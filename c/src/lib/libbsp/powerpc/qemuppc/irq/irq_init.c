@@ -20,12 +20,10 @@
 #include <rtems.h>
 
 #include <libcpu/powerpc-utility.h>
-#include <libcpu/raw_exception.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
-#include <bsp/ppc_exc_bspsupp.h>
 
 int qemuppc_exception_handler( BSP_Exception_frame *frame, unsigned exception_number)
 {
@@ -55,6 +53,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 		return RTEMS_IO_ERROR;
 	}
 
+	return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_handler_default( rtems_vector_number vector)

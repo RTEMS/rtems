@@ -117,6 +117,7 @@ extern void ppc_exc_min_prolog_async_tmpl_bookE_crit(void);
 extern void ppc_exc_min_prolog_sync_tmpl_bookE_crit(void);
 extern void ppc_exc_min_prolog_sync_tmpl_e500_mchk(void);
 extern void ppc_exc_min_prolog_async_tmpl_e500_mchk(void);
+extern void ppc_exc_min_prolog_tmpl_naked(void);
 
 /* Special prologue for handling register shadowing on 603-style CPUs */
 extern void ppc_exc_tgpr_clr_prolog(void);

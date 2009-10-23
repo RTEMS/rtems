@@ -1,3 +1,29 @@
+2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* new-exceptions/bspsupport/ppc-code-copy.c,
+	new-exceptions/bspsupport/ppc_exc_address.c,
+	new-exceptions/bspsupport/ppc_exc_categories.c,
+	new-exceptions/bspsupport/ppc_exc_global_handler.c,
+	new-exceptions/bspsupport/ppc_exc_initialize.c,
+	new-exceptions/bspsupport/ppc_exc_naked.S,
+	new-exceptions/bspsupport/ppc_exc_prologue.c: New files.
+	* new-exceptions/bspsupport/irq.c,
+	new-exceptions/bspsupport/irq_supp.h,
+	new-exceptions/bspsupport/ppc_exc_asm_macros.h: Changed exception
+	header file includes.  Fixes for type changes.
+	* new-exceptions/bspsupport/vectors.h: Reformatted.  Documentation.
+	Removed parts that belong to the raw exception API.  Added
+	declarations from files "new-exceptions/raw_exception.h" and
+	"bspsupport/ppc_exc_bspsupp.h".
+	* new-exceptions/bspsupport/ppc_exc_hdl.c: Reformatted.  Removed parts
+	that belong to the raw exception API.
+	* new-exceptions/bspsupport/ppc_exc_bspsupp.h: Added prologue template.
+	* new-exceptions/bspsupport/ppc_exc.S: Fixed
+	ppc_exc_tgpr_clr_prolog_size.
+	* shared/include/powerpc-utility.h: Reformatted.  Include more files
+	for ASM.
+	* shared/include/cpuIdent.h: Added ppc_cpu_current() and ppc_cpu_is().
+
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* new-exceptions/bspsupport/vectors_init.c: Remove duplicate

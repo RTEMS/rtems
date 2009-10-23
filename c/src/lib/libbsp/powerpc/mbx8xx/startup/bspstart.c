@@ -18,8 +18,6 @@
  *  $Id$
  */
 
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
-
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>
@@ -28,8 +26,6 @@
 #include <rtems/powerpc/powerpc.h>
 
 SPR_RW(SPRG1)
-
-extern unsigned long intrStackPtr;
 
 /*
  *  Driver configuration parameters
@@ -44,6 +40,9 @@ uint32_t   bsp_serial_rate;
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
+
+extern char IntrStack_start [];
+extern char intrStack [];
 
 void BSP_panic(char *s)
 {
@@ -83,9 +82,9 @@ void _BSP_Fatal_error(unsigned int v)
  */
 void bsp_start(void)
 {
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
-  register unsigned char* intrStack;
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
@@ -112,17 +111,22 @@ void bsp_start(void)
   rtems_cache_enable_data();
 #endif
 #endif
-  /*
-   * Initialize some SPRG registers related to irq handling
-   */
 
-  intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
-  _write_SPRG1((unsigned int)intrStack);
+  /* Initialize exception handler */
+  sc = ppc_exc_initialize(
+    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+    (uintptr_t) IntrStack_start,
+    (uintptr_t) intrStack - (uintptr_t) IntrStack_start
+  );
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    BSP_panic( "cannot initialize exceptions" );
+  }
 
-  /*
-   * Install our own set of exception vectors
-   */
-  initialize_exceptions();
+  /* Initalize interrupt support */
+  sc = bsp_interrupt_initialize();
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    BSP_panic( "cannot initialize interrupts" );
+  }
 
   /*
    *  initialize the device driver parameters
@@ -165,10 +169,7 @@ void bsp_start(void)
   m8xx.scc2p.rbase=0;
   m8xx.scc2p.tbase=0;
   m8xx_cp_execute_cmd( M8xx_CR_OP_STOP_TX | M8xx_CR_CHAN_SCC2 );
-  /*
-   * Initalize RTEMS IRQ system
-   */
-  BSP_rtems_irq_mng_init(0);
+
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
 #endif

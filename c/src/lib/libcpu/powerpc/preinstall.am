@@ -49,10 +49,15 @@ $(PROJECT_INCLUDE)/libcpu/powerpc-utility.h: shared/include/powerpc-utility.h $(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/powerpc-utility.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/powerpc-utility.h
 
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+
 if !mpc5xx
-$(PROJECT_INCLUDE)/libcpu/raw_exception.h: new-exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+$(PROJECT_INCLUDE)/bsp/vectors.h: new-exceptions/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 endif
 if shared
 $(PROJECT_INCLUDE)/libcpu/io.h: shared/include/io.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
@@ -210,19 +215,6 @@ $(PROJECT_INCLUDE)/mpc8260/mmu.h: mpc8260/include/mmu.h $(PROJECT_INCLUDE)/mpc82
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/mmu.h
 endif
 if mpc83xx
-$(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
-	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-
-$(PROJECT_INCLUDE)/bsp/vectors.h: new-exceptions/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
-
-$(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h: new-exceptions/bspsupport/ppc_exc_bspsupp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
-
 $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc83xx
 	@: > $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
@@ -249,23 +241,6 @@ $(PROJECT_INCLUDE)/mpc83xx/gtm.h: mpc83xx/include/gtm.h $(PROJECT_INCLUDE)/mpc83
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/gtm.h
 endif
 if mpc55xx
-$(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
-	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-
-$(PROJECT_INCLUDE)/bsp/vectors.h: new-exceptions/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
-
-$(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h: new-exceptions/bspsupport/ppc_exc_bspsupp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
-
-$(PROJECT_INCLUDE)/bsp/irq.h: mpc55xx/include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
-
 $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc55xx
 	@: > $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
@@ -302,4 +277,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/esci.h
 $(PROJECT_INCLUDE)/mpc55xx/watchdog.h: mpc55xx/include/watchdog.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/watchdog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/watchdog.h
+
+$(PROJECT_INCLUDE)/bsp/irq.h: mpc55xx/include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif

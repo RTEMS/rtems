@@ -12,10 +12,7 @@
  * reintroduce such statements.
  */
 
-#include <libcpu/powerpc-utility.h>
-#include <libcpu/raw_exception.h>
-
-#include "vectors.h"
+#include <bsp/vectors.h>
 
 #define LT(cr) ((cr)*4+0)
 #define GT(cr) ((cr)*4+1)

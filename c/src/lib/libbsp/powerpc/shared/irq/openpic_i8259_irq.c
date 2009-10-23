@@ -21,7 +21,6 @@
 #include <bsp/VMEConfig.h>
 #endif
 #include <bsp/openpic.h>
-#include <libcpu/raw_exception.h>
 #include <libcpu/io.h>
 #include <bsp/vectors.h>
 #include <stdlib.h>

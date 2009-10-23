@@ -18,7 +18,7 @@
 #include <libcpu/spr.h>
 #include <bsp/irq.h>
 #include <bsp.h>
-#include <libcpu/raw_exception.h>  /* ASM_EXT_VECTOR, ASM_DEC_VECTOR ... */
+#include <bsp/vectors.h>  /* ASM_EXT_VECTOR, ASM_DEC_VECTOR ... */
 /*#define  TRACE_IRQ_INIT*/
 
 /*

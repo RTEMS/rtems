@@ -139,7 +139,7 @@ extern "C" {
 	#define BSP_UART_COM1_IRQ		BSP_UIC_UART0 /* Required by shared/console/uart.c */
 	#define BSP_UART_COM2_IRQ		BSP_UIC_UART1
 
-	/* Define processor IRQ numbers; IRQs that are handled by the raw_exception vectors */
+	/* Define processor IRQ numbers; IRQs that are handled by the exception vectors */
 
 	#define BSP_PIT				BSP_PROCESSOR_IRQ_LOWEST_OFFSET	/* Required by ppc403/clock.c */
 	#define	BSP_FIT				BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 1

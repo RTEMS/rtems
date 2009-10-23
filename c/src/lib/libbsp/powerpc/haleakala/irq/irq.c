@@ -14,7 +14,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/irq_supp.h>
-#include <libcpu/raw_exception.h>
+#include <bsp/vectors.h>
 #include <libcpu/powerpc-utility.h>
 
 
@@ -166,7 +166,7 @@ BSP_setup_the_pic(rtems_irq_global_settings* config)
  */
  
 int 
-C_dispatch_irq_handler( struct _BSP_Exception_frame* frame, unsigned int excNum )
+C_dispatch_irq_handler( BSP_Exception_frame* frame, unsigned int excNum )
 {
 	if (excNum == ASM_EXT_VECTOR) {
 		uint32_t active[kUICWords];

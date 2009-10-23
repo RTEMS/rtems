@@ -20,7 +20,7 @@
 #include <bsp/irq.h>
 #include <bsp.h>
 #include <psim.h>
-#include <libcpu/raw_exception.h>
+#include <bsp/vectors.h>
 #include <rtems/bspIo.h>
 #include <bsp/openpic.h>
 

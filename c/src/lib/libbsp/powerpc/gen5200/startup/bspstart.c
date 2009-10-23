@@ -94,17 +94,15 @@
 /*                                                                     */
 /***********************************************************************/
 
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
-
 #include <rtems.h>
+
 #include <libcpu/powerpc-utility.h>
-#include <libcpu/raw_exception.h>
 
 #include <bsp.h>
+#include <bsp/vectors.h>
 #include <bsp/bootcard.h>
-#include <bsp/ppc_exc_bspsupp.h>
-
 #include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 
 #if defined(HAS_UBOOT)
 /* will be overwritten from startup code */
@@ -132,6 +130,7 @@ void _BSP_Fatal_error(unsigned int v)
 
 void bsp_start(void)
 {
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
 
@@ -170,15 +169,19 @@ void bsp_start(void)
 
   /* Initialize exception handler */
   ppc_exc_cache_wb_check = 0;
-  ppc_exc_initialize(
+  sc = ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-    (uint32_t) bsp_interrupt_stack_start,
-    (uint32_t) bsp_interrupt_stack_size
+    (uintptr_t) bsp_interrupt_stack_start,
+    (uintptr_t) bsp_interrupt_stack_size
   );
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic("cannot initialize exceptions");
+  }
 
   /* Initalize interrupt support */
-  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-    BSP_panic( "Cannot intitialize interrupt support\n");
+  sc = bsp_interrupt_initialize();
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic("cannot intitialize interrupts");
   }
 
   /*

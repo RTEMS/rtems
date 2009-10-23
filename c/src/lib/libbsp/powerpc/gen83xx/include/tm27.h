@@ -24,9 +24,7 @@
 #define TMTESTS_TM27_H
 
 #include <libcpu/powerpc-utility.h>
-#include <libcpu/raw_exception.h>
-
-#include <bsp/ppc_exc_bspsupp.h>
+#include <bsp/vectors.h>
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 

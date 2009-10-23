@@ -23,9 +23,7 @@
 #include <rtems/clockdrv.h>
 
 #include <libcpu/powerpc-utility.h>
-#include <libcpu/raw_exception.h>
-
-#include <bsp/ppc_exc_bspsupp.h>
+#include <bsp/vectors.h>
 
 #define RTEMS_STATUS_CHECKS_USE_PRINTK
 

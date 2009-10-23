@@ -53,10 +53,6 @@ include_bsp_HEADERS += irq/irq.h
 # irq
 libbsp_a_SOURCES += irq/irq_init.c
 
-include_bsp_HEADERS +=  \
-  ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
-  ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
-
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 network_CPPFLAGS += -D__BSD_VISIBLE
@@ -68,8 +64,8 @@ endif
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel \

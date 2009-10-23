@@ -20,12 +20,11 @@
 
 #include <mpc55xx/regs.h>
 
-#include <libcpu/raw_exception.h>
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp/irq.h>
+#include <bsp/vectors.h>
 #include <bsp/irq-generic.h>
-#include <bsp/ppc_exc_bspsupp.h>
 
 #define RTEMS_STATUS_CHECKS_USE_PRINTK
 

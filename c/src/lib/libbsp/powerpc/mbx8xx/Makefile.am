@@ -21,7 +21,10 @@ noinst_PROGRAMS =
 
 include_HEADERS += include/coverhd.h
 include_bsp_HEADERS = include/mbx.h include/commproc.h include/8xx_immap.h \
-    irq/irq.h vectors/vectors.h
+	irq/irq.h \
+	include/irq-config.h \
+	../../shared/include/irq-generic.h \
+	../../shared/include/irq-info.h
 
 EXTRA_DIST = times-mbx821 times-mbx860
 
@@ -35,12 +38,14 @@ libbsp_a_SOURCES += clock/p_clock.c
 # console
 libbsp_a_SOURCES += console/console.c
 # irq
-libbsp_a_SOURCES += irq/irq.c irq/irq_asm.S irq/irq_init.c
+libbsp_a_SOURCES += irq/irq.c \
+	../../shared/src/irq-generic.c \
+	../../shared/src/irq-legacy.c \
+	../../shared/src/irq-info.c \
+	../../shared/src/irq-shell.c \
+	../../shared/src/irq-server.c
 # ide
 libbsp_a_SOURCES += ide/idecfg.c ide/pcmcia_ide.c
-# vectors
-libbsp_a_SOURCES += vectors/vectors.h vectors/vectors_init.c \
-    vectors/vectors.S
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
@@ -61,7 +66,7 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \

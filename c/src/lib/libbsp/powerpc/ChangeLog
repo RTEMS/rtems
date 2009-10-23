@@ -1,3 +1,9 @@
+2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/clock/clock.c, shared/irq/irq_init.c,
+	shared/irq/openpic_i8259_irq.c: Changed exception header file
+	includes.
+
 2009-10-20	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/startup/pgtbl_setup.c: Fixed compiler warnings

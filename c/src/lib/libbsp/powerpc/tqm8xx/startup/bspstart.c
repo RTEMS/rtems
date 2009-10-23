@@ -20,14 +20,16 @@
  * $Id$
  */
 
-#include <rtems.h>
 #include <stdlib.h>
+
+#include <rtems.h>
+
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
+#include <bsp/vectors.h>
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
-#include <bsp/ppc_exc_bspsupp.h>
 
 #ifdef BSP_HAS_TQMMON
 /*
@@ -124,11 +126,12 @@ rtems_status_code  bsp_tqm_get_cib_uint32( const char *cib_id,
 
 void bsp_start( void)
 {
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
 
-  uint32_t interrupt_stack_start = (uint32_t) bsp_interrupt_stack_start;
-  uint32_t interrupt_stack_size = (uint32_t) bsp_interrupt_stack_size;
+  uintptr_t interrupt_stack_start = (uintptr_t) bsp_interrupt_stack_start;
+  uintptr_t interrupt_stack_size = (uintptr_t) bsp_interrupt_stack_size;
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
@@ -177,14 +180,19 @@ void bsp_start( void)
   bsp_timer_average_overhead = 3;
 
   /* Initialize exception handler */
-  ppc_exc_initialize(PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-		     interrupt_stack_start,
-		     interrupt_stack_size
-		     );
+  sc = ppc_exc_initialize(
+    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+    interrupt_stack_start,
+    interrupt_stack_size
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic("cannot initialize exceptions");
+  }
 
   /* Initalize interrupt support */
-  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-    BSP_panic("Cannot intitialize interrupt support\n");
+  sc = bsp_interrupt_initialize();
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic("cannot intitialize interrupts");
   }
 
 #ifdef SHOW_MORE_INIT_SETTINGS

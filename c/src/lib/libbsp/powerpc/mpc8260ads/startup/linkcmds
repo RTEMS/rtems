@@ -208,29 +208,39 @@ SECTIONS
     .fixup	  : { *(.fixup) 	} >ram
     PROVIDE (_FIXUP_END_ = .);
     PROVIDE (__FIXUP_END__ = .);
+  
+    .sdata : {
+      PROVIDE (_SDA_BASE_ = 32768);
+      *(.sdata .sdata.* .gnu.linkonce.s.*)
+    } > ram
+ 
+    .sbss : {
+      __bss_start = .;
+ 
+      PROVIDE (__sbss_start = .); PROVIDE (___sbss_start = .);
+      *(.scommon)
+      *(.dynsbss)
+      *(.sbss .sbss.* .gnu.linkonce.sb.*)
+      PROVIDE (__sbss_end = .); PROVIDE (___sbss_end = .);
+    } > ram
+ 
+    .sdata2 : {
+      PROVIDE (_SDA2_BASE_ = 32768);
+ 
+      *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+    } > ram =0
+ 
+    .sbss2 : {
+      *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+    } > ram =0
 
-    PROVIDE (__SDATA2_START__ = .);
-    .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >ram
-    .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >ram
-    PROVIDE (__SBSS2_END__ = .);
-
-    .sbss2   	  : { *(.sbss2) 	} >ram
-    PROVIDE (__SBSS2_END__ = .);
-
-    __SBSS_START__ = .;
     .bss :
     {
       bss.start = .;
       *(.bss .bss* .gnu.linkonce.b*)
-      *(.sbss*) *(COMMON)
       . = ALIGN(4);
       bss.end = .;
     } > ram
-    __SBSS_END__ = .;
-
-
-
-
 
     /* R/W Data */
     .data ( . ) :

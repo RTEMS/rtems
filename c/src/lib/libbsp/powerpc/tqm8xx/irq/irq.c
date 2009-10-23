@@ -26,12 +26,10 @@
 #include <mpc8xx.h>
 
 #include <libcpu/powerpc-utility.h>
-#include <libcpu/raw_exception.h>
+#include <bsp/vectors.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <bsp/vectors.h>
-#include <bsp/ppc_exc_bspsupp.h>
 #include <bsp/irq-generic.h>
 /*
  * functions to enable/disable a source at the SIU/CPM irq controller

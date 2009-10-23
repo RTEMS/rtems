@@ -16,7 +16,6 @@
 #include <bsp/irq.h>
 #include <bsp/VME.h>
 #include <rtems/score/apiext.h>  /* for post ISR signal processing */
-#include <libcpu/raw_exception.h>
 #include <libcpu/io.h>
 #include <bsp/vectors.h>
 #include <stdlib.h>

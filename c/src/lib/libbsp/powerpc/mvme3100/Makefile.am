@@ -97,8 +97,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
 
 include_bsp_HEADERS += \
-  ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
-  ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
   ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 
 include_bsp_HEADERS += vme/VMEConfig.h \
@@ -142,12 +140,12 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel
 

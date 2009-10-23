@@ -2,6 +2,8 @@
  *
  *  This file contains the implementation of the function described in irq.h
  *
+ *  Copyright (c) 2009 embedded brains GmbH.
+ *
  *  Copyright (C) 1998, 1999 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
@@ -14,25 +16,13 @@
 #include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/apiext.h>
-#include <libcpu/raw_exception.h>
+#include <bsp/irq-generic.h>
 #include <bsp/vectors.h>
 #include <bsp/8xx_immap.h>
 #include <bsp/mbx.h>
 #include <bsp/commproc.h>
 
-/*
- * default handler connected on each irq after bsp initialization
- */
-static rtems_irq_connect_data	default_rtems_entry;
-
-/*
- * location used to store initial tables used for interrupt
- * management.
- */
-static rtems_irq_global_settings* 	internal_config;
-static rtems_irq_connect_data*		rtems_hdl_tbl;
+volatile unsigned int ppc_cached_irq_mask;
 
 /*
  * Check if symbolic IRQ name is an SIU IRQ
@@ -40,8 +30,8 @@ static rtems_irq_connect_data*		rtems_hdl_tbl;
 static inline int is_siu_irq(const rtems_irq_number irqLine)
 {
   return (((int) irqLine <= BSP_SIU_IRQ_MAX_OFFSET) &
-	  ((int) irqLine >= BSP_SIU_IRQ_LOWEST_OFFSET)
-	 );
+    ((int) irqLine >= BSP_SIU_IRQ_LOWEST_OFFSET)
+   );
 }
 
 /*
@@ -50,18 +40,8 @@ static inline int is_siu_irq(const rtems_irq_number irqLine)
 static inline int is_cpm_irq(const rtems_irq_number irqLine)
 {
   return (((int) irqLine <= BSP_CPM_IRQ_MAX_OFFSET) &
-	  ((int) irqLine >= BSP_CPM_IRQ_LOWEST_OFFSET)
-	 );
-}
-
-/*
- * Check if symbolic IRQ name is a Processor IRQ
- */
-static inline int is_processor_irq(const rtems_irq_number irqLine)
-{
-  return (((int) irqLine <= BSP_PROCESSOR_IRQ_MAX_OFFSET) &
-	  ((int) irqLine >= BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
-	 );
+    ((int) irqLine >= BSP_CPM_IRQ_LOWEST_OFFSET)
+   );
 }
 
 /*
@@ -84,36 +64,6 @@ const static unsigned int SIU_IvectMask[BSP_SIU_IRQ_NUMBER] =
      /* IRQ6      ILVL6       IRQ7        ILVL7  */
      0xFFF00000, 0xFFF80000, 0xFFFC0000, 0xFFFE0000
 };
-
-/*
- * ------------------------ RTEMS Irq helper functions ----------------
- */
-
-/*
- * Caution : this function assumes the variable "internal_config"
- * is already set and that the tables it contains are still valid
- * and accessible.
- */
-static void compute_SIU_IvectMask_from_prio (void)
-{
-  /*
-   * In theory this is feasible. No time to code it yet. See i386/shared/irq.c
-   * for an example based on 8259 controller mask. The actual masks defined
-   * correspond to the priorities defined for the SIU in irq_init.c.
-   */
-}
-
-/*
- * This function check that the value given for the irq line
- * is valid.
- */
-
-static int isValidInterrupt(int irq)
-{
-  if ( (irq < BSP_LOWEST_OFFSET) || (irq > BSP_MAX_OFFSET) || (irq == BSP_CPM_INTERRUPT) )
-    return 0;
-  return 1;
-}
 
 int BSP_irq_enable_at_cpm(const rtems_irq_number irqLine)
 {
@@ -180,7 +130,7 @@ int BSP_irq_disable_at_siu(const rtems_irq_number irqLine)
   return 0;
 }
 
-int BSP_irq_enabled_at_siu     	(const rtems_irq_number irqLine)
+int BSP_irq_enabled_at_siu       (const rtems_irq_number irqLine)
 {
   int siu_irq_index;
 
@@ -191,210 +141,6 @@ int BSP_irq_enabled_at_siu     	(const rtems_irq_number irqLine)
   return ppc_cached_irq_mask & (1 << (31-siu_irq_index));
 }
 
-/*
- * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
- */
-
-int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
-{
-    rtems_interrupt_level       level;
-
-    if (!isValidInterrupt(irq->name)) {
-      return 0;
-    }
-    /*
-     * Check if default handler is actually connected. If not issue an error.
-     * You must first get the current handler via i386_get_current_idt_entry
-     * and then disconnect it using i386_delete_idt_entry.
-     * RATIONALE : to always have the same transition by forcing the user
-     * to get the previous handler before accepting to disconnect.
-     */
-    if (rtems_hdl_tbl[irq->name].hdl != default_rtems_entry.hdl) {
-      return 0;
-    }
-
-    rtems_interrupt_disable(level);
-
-    /*
-     * store the data provided by user
-     */
-    rtems_hdl_tbl[irq->name] = *irq;
-
-    if (is_cpm_irq(irq->name)) {
-      /*
-       * Enable interrupt at PIC level
-       */
-      BSP_irq_enable_at_cpm (irq->name);
-    }
-
-    if (is_siu_irq(irq->name)) {
-      /*
-       * Enable interrupt at SIU level
-       */
-      BSP_irq_enable_at_siu (irq->name);
-    }
-
-    if (is_processor_irq(irq->name)) {
-      /*
-       * Should Enable exception at processor level but not needed.  Will restore
-       * EE flags at the end of the routine anyway.
-       */
-    }
-    /*
-     * Enable interrupt on device
-     */
-	if (irq->on)
-    	irq->on(irq);
-
-    rtems_interrupt_enable(level);
-
-    return 1;
-}
-
-int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
-{
-     if (!isValidInterrupt(irq->name)) {
-      return 0;
-     }
-     *irq = rtems_hdl_tbl[irq->name];
-     return 1;
-}
-
-int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
-{
-    rtems_interrupt_level       level;
-
-    if (!isValidInterrupt(irq->name)) {
-      return 0;
-    }
-    /*
-     * Check if default handler is actually connected. If not issue an error.
-     * You must first get the current handler via i386_get_current_idt_entry
-     * and then disconnect it using i386_delete_idt_entry.
-     * RATIONALE : to always have the same transition by forcing the user
-     * to get the previous handler before accepting to disconnect.
-     */
-    if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
-      return 0;
-    }
-    rtems_interrupt_disable(level);
-
-    if (is_cpm_irq(irq->name)) {
-      /*
-       * disable interrupt at PIC level
-       */
-      BSP_irq_disable_at_cpm (irq->name);
-    }
-    if (is_siu_irq(irq->name)) {
-      /*
-       * disable interrupt at OPENPIC level
-       */
-      BSP_irq_disable_at_siu (irq->name);
-    }
-    if (is_processor_irq(irq->name)) {
-      /*
-       * disable exception at processor level
-       */
-    }
-
-    /*
-     * Disable interrupt on device
-     */
-	if (irq->off)
-    	irq->off(irq);
-
-    /*
-     * restore the default irq value
-     */
-    rtems_hdl_tbl[irq->name] = default_rtems_entry;
-
-    rtems_interrupt_enable(level);
-
-    return 1;
-}
-
-/*
- * ------------------------ RTEMS Global Irq Handler Mngt Routines ----------------
- */
-
-int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
-{
-    int                    i;
-    rtems_interrupt_level  level;
-
-    /*
-     * Store various code accelerators
-     */
-    internal_config 		= config;
-    default_rtems_entry 	= config->defaultEntry;
-    rtems_hdl_tbl 		= config->irqHdlTbl;
-
-    rtems_interrupt_disable(level);
-    /*
-     * start with CPM IRQ
-     */
-    for (i=BSP_CPM_IRQ_LOWEST_OFFSET; i < BSP_CPM_IRQ_LOWEST_OFFSET + BSP_CPM_IRQ_NUMBER ; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	BSP_irq_enable_at_cpm (i);
-	if (rtems_hdl_tbl[i].on)
-		rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	if (rtems_hdl_tbl[i].off)
-		rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	BSP_irq_disable_at_cpm (i);
-      }
-    }
-
-    /*
-     * continue with PCI IRQ
-     */
-    /*
-     * set up internal tables used by rtems interrupt prologue
-     */
-    compute_SIU_IvectMask_from_prio ();
-
-    for (i=BSP_SIU_IRQ_LOWEST_OFFSET; i < BSP_SIU_IRQ_LOWEST_OFFSET + BSP_SIU_IRQ_NUMBER ; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	BSP_irq_enable_at_siu (i);
-	if (rtems_hdl_tbl[i].on)
-		rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	if (rtems_hdl_tbl[i].off)
-		rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	BSP_irq_disable_at_siu (i);
-       }
-    }
-    /*
-     * Must enable CPM interrupt on SIU. CPM on SIU Interrupt level has already been
-     * set up in BSP_CPM_irq_init.
-     */
-    ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_cicr |= CICR_IEN;
-    BSP_irq_enable_at_siu (BSP_CPM_INTERRUPT);
-    /*
-     * finish with Processor exceptions handled like IRQ
-     */
-    for (i=BSP_PROCESSOR_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	if (rtems_hdl_tbl[i].on)
-		rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	if (rtems_hdl_tbl[i].off)
-		rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-      }
-    }
-    rtems_interrupt_enable(level);
-    return 1;
-}
-
-int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
-{
-    *config = internal_config;
-    return 0;
-}
-
 #ifdef DISPATCH_HANDLER_STAT
 volatile unsigned int maxLoop = 0;
 #endif
@@ -402,11 +148,11 @@ volatile unsigned int maxLoop = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
   register unsigned cpmIntr;                  /* boolean */
-  register unsigned oldMask;		      /* old siu pic masks */
+  register unsigned oldMask;          /* old siu pic masks */
   register unsigned msr;
   register unsigned new_msr;
 #ifdef DISPATCH_HANDLER_STAT
@@ -420,7 +166,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
 
-    rtems_hdl_tbl[BSP_DECREMENTER].hdl(rtems_hdl_tbl[BSP_DECREMENTER].handle);
+    bsp_interrupt_handler_dispatch(BSP_DECREMENTER);
 
     _CPU_MSR_SET(msr);
     return 0;
@@ -482,7 +228,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
 
-    rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
+    bsp_interrupt_handler_dispatch(irq);
 
     _CPU_MSR_SET(msr);
 
@@ -505,21 +251,104 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   return 0;
 }
 
-void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
+void BSP_SIU_irq_init(void)
 {
   /*
-   * Process pending signals that have not already been
-   * processed by _Thread_Displatch. This happens quite
-   * unfrequently : the ISR must have posted an action
-   * to the current running thread.
+   * In theory we should initialize two registers at least :
+   * SIMASK, SIEL. SIMASK is reset at 0 value meaning no interrupt. But
+   * we should take care that a monitor may have restoreed to another value.
+   * If someone find a reasonnable value for SIEL, AND THE NEED TO CHANGE IT
+   * please feel free to add it here.
    */
-  if ( _Thread_Do_post_task_switch_extension ||
-       _Thread_Executing->do_post_task_switch_extension ) {
-    _Thread_Executing->do_post_task_switch_extension = false;
-    _API_extensions_Run_postswitch();
-  }
+  ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_simask = 0;
+  ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_sipend = 0xffff0000;
+  ppc_cached_irq_mask = 0;
+  ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_siel = ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_siel;
+}
+
+/*
+ * Initialize CPM interrupt management
+ */
+void
+BSP_CPM_irq_init(void)
+{
   /*
-   * I plan to process other thread related events here.
-   * This will include DEBUG session requested from keyboard...
+   * Initialize the CPM interrupt controller.
    */
+  ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_cicr =
+#ifdef mpc860
+    (CICR_SCD_SCC4 | CICR_SCC_SCC3 | CICR_SCB_SCC2 | CICR_SCA_SCC1) |
+#else
+    (CICR_SCB_SCC2 | CICR_SCA_SCC1) |
+#endif
+    ((BSP_CPM_INTERRUPT/2) << 13) | CICR_HP_MASK;
+  ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr = 0;
+
+  ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_cicr |= CICR_IEN;
+}
+
+rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
+{
+  if (is_cpm_irq(irqnum)) {
+    /*
+     * Enable interrupt at PIC level
+     */
+    BSP_irq_enable_at_cpm (irqnum);
+  }
+
+  if (is_siu_irq(irqnum)) {
+    /*
+     * Enable interrupt at SIU level
+     */
+    BSP_irq_enable_at_siu (irqnum);
+  }
+
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
+{
+  if (is_cpm_irq(irqnum)) {
+    /*
+     * disable interrupt at PIC level
+     */
+    BSP_irq_disable_at_cpm (irqnum);
+  }
+  if (is_siu_irq(irqnum)) {
+    /*
+     * disable interrupt at OPENPIC level
+     */
+    BSP_irq_disable_at_siu (irqnum);
+  }
+
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_facility_initialize()
+{
+  /* Install exception handler */
+  if (ppc_exc_set_handler( ASM_EXT_VECTOR, C_dispatch_irq_handler)) {
+    return RTEMS_IO_ERROR;
+  }
+  if (ppc_exc_set_handler( ASM_DEC_VECTOR, C_dispatch_irq_handler)) {
+    return RTEMS_IO_ERROR;
+  }
+
+  /* Initialize the interrupt controller */
+  BSP_SIU_irq_init();
+  BSP_CPM_irq_init();
+
+  /*
+   * Must enable CPM interrupt on SIU. CPM on SIU Interrupt level has already been
+   * set up in BSP_CPM_irq_init.
+   */
+  ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_cicr |= CICR_IEN;
+  BSP_irq_enable_at_siu (BSP_CPM_INTERRUPT);
+
+  return RTEMS_SUCCESSFUL;
+}
+
+void bsp_interrupt_handler_default( rtems_vector_number vector)
+{
+  printk( "Spurious interrupt: 0x%08x\n", vector);
 }

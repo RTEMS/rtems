@@ -1,3 +1,10 @@
+2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am, preinstall.am: Update for exception support changes.
+	* irq/irq.c: Changed exception header file includes.
+	* startup/bspstart.c: Changed exception header file includes.  Update
+	for ppc_exc_initialize() changes.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/virtex.cfg: Remove RTEMS_BSP_FAMILY.

@@ -64,6 +64,9 @@ ppc_exc_min_prolog_auto:
 	mflr	VECTOR_REGISTER
 	bla	wrap_auto
 
+	.global ppc_exc_tgpr_clr_prolog_size
+ppc_exc_tgpr_clr_prolog_size = . - ppc_exc_tgpr_clr_prolog
+
 /**
  * @brief Use vector offsets with 16 byte boundaries.
  *
@@ -75,9 +78,6 @@ ppc_exc_min_prolog_auto_packed:
 	stw	VECTOR_REGISTER, VECTOR_OFFSET(r1)
 	mflr	VECTOR_REGISTER
 	bla	wrap_auto_packed
-
-	.global ppc_exc_tgpr_clr_prolog_size
-ppc_exc_tgpr_clr_prolog_size = . - ppc_exc_tgpr_clr_prolog
 
 /*
  * Automatic vector, asynchronous exception; however,

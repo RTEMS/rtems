@@ -25,7 +25,7 @@
 #include <bsp/openpic.h>
 #include <bsp/irq.h>
 #include <bsp.h>
-#include <libcpu/raw_exception.h>
+#include <bsp/vectors.h>
 #include <rtems/bspIo.h>
 
 static void nop_func(void *unused)

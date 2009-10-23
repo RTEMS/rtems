@@ -18,7 +18,6 @@
 #include <bsp/irq_supp.h>
 #include <bsp/VMEConfig.h>
 #include <bsp/openpic.h>
-#include <libcpu/raw_exception.h>
 #include <libcpu/io.h>
 #include <bsp/vectors.h>
 #include <stdlib.h>

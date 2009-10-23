@@ -69,7 +69,6 @@
 #ifdef	DEBUG_EXC
 #include <bsp.h>
 #include <bsp/vectors.h>
-#include <libcpu/raw_exception.h>
 #endif
 #endif
 

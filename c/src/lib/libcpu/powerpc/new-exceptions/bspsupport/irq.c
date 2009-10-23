@@ -16,10 +16,7 @@
 #include <rtems.h>
 #include "irq_supp.h"
 #include <rtems/score/apiext.h>  /* for post ISR signal processing */
-#include <libcpu/raw_exception.h>
-#include <libcpu/cpuIdent.h>
-#include "vectors.h"
-#include "ppc_exc_bspsupp.h"
+#include <bsp/vectors.h>
 #include <stdlib.h>
 #include <rtems/bspIo.h> /* for printk */
 #include <libcpu/spr.h>

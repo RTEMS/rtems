@@ -16,19 +16,16 @@
 
 #include <string.h>
 #include <fcntl.h>
-#include <bsp.h>
-#include <bsp/irq.h>
-#include <bsp/bootcard.h>
-#include <rtems/bspIo.h>
-#include <rtems/powerpc/powerpc.h>
-#include <libcpu/powerpc-utility.h>
-#include <libcpu/raw_exception.h>
-#include <bsp/irq-generic.h>
-#include <bsp/ppc_exc_bspsupp.h>
 
-#include <libcpu/cpuIdent.h>
 #include <libcpu/bat.h>
 #include <libcpu/spr.h>
+#include <libcpu/powerpc-utility.h>
+
+#include <bsp.h>
+#include <bsp/irq.h>
+#include <bsp/vectors.h>
+#include <bsp/bootcard.h>
+#include <bsp/irq-generic.h>
 
 /*
  * CPU Bus Frequency
@@ -65,10 +62,10 @@ static int default_decrementer_exception_handler( BSP_Exception_frame *frame, un
 
 void bsp_start( void )
 {
-  uint32_t intrStackStart;
-  uint32_t intrStackSize;
-  int rv = 0;
-  rtems_status_code sc;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  uintptr_t intrStackStart;
+  uintptr_t intrStackSize;
+
   /*
    * Note we can not get CPU identification dynamically, so
    * force current_ppc_cpu.
@@ -86,30 +83,33 @@ void bsp_start( void )
   /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uint32_t) bsp_interrupt_stack_start;
-  intrStackSize =  (uint32_t) bsp_interrupt_stack_size;
+  intrStackStart = (uintptr_t) bsp_interrupt_stack_start;
+  intrStackSize =  (uintptr_t) bsp_interrupt_stack_size;
 
   BSP_mem_size = (uint32_t )RamSize;
 
   /*
    * Initialize default raw exception handlers.
    */
-  ppc_exc_initialize(
+  sc = ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     intrStackStart,
     intrStackSize
   );
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic("cannot initialize exceptions");
+  }
 
   /* Install default handler for the decrementer exception */
-  rv = ppc_exc_set_handler( ASM_DEC_VECTOR, default_decrementer_exception_handler);
-  if (rv < 0) {
-    BSP_panic( "Cannot install decrementer exception handler!\n");
+  sc = ppc_exc_set_handler( ASM_DEC_VECTOR, default_decrementer_exception_handler);
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic("cannot install decrementer exception handler");
   }
 
   /* Initalize interrupt support */
   sc = bsp_interrupt_initialize();
   if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic( "Cannot intitialize interrupt support\n");
+    BSP_panic("cannot intitialize interrupts");
   }
 
 #if 0

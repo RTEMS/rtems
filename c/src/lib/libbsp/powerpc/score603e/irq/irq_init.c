@@ -24,7 +24,7 @@
 #include <bsp/residual.h>
 #include <bsp/irq.h>
 #include <bsp.h>
-#include <libcpu/raw_exception.h>
+#include <bsp/vectors.h>
 #include <rtems/bspIo.h>
 
 #define SHOW_ISA_PCI_BRIDGE_SETTINGS 1

@@ -24,8 +24,9 @@
 #endif
 
 #include <rtems.h>
-#include <stdint.h>
 #include <rtems/irq.h>
+
+#include <bsp/vectors.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,8 +52,6 @@ extern int  BSP_disable_irq_at_pic(const rtems_irq_number irqLine);
  */
 extern int  BSP_setup_the_pic(rtems_irq_global_settings* config);
 
-struct _BSP_Exception_frame;
-
 /* IRQ dispatcher to be defined by the PIC driver; note that it MUST
  * implement shared interrupts.
  * Note also that the exception frame passed to this handler is not very
@@ -64,7 +63,7 @@ struct _BSP_Exception_frame;
  * uncaught exception.
  *******************************************************************
  */
-int C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int excNum);
+int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum);
 
 /*
  * Snippet to be used by PIC drivers and by bsp_irq_dispatch_list

@@ -35,8 +35,6 @@
  *  $Id$
  */
 
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
-
 #include <bsp.h>
 
 /*
@@ -55,8 +53,6 @@
 
 SPR_RW(SPRG1)
 
-extern unsigned long intrStackPtr;
-
 /*
  *  Driver configuration parameters
  */
@@ -74,7 +70,9 @@ bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 void  _BSP_GPLED1_on(void);
 void  _BSP_GPLED0_on(void);
 void  cpu_init(void);
-void  initialize_exceptions(void);
+
+extern char IntrStack_start [];
+extern char intrStack [];
 
 void BSP_panic(char *s)
 {
@@ -150,10 +148,10 @@ void _BSP_Uart2_disable()
 
 void bsp_start(void)
 {
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
   extern void *_WorkspaceBase;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
-  register unsigned char* intrStack;
 
   /* Set MPC8260ADS board LEDS and Uart enable lines */
   _BSP_GPLED0_off();
@@ -173,21 +171,24 @@ void bsp_start(void)
 /*
   mmu_init();
 */
-  /*
-   * Initialize some SPRG registers related to irq handling
-   */
 
-  intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
-  _write_SPRG1((unsigned int)intrStack);
+  /* Initialize exception handler */
+  /* FIXME: Interrupt stack begin and size */
+  sc = ppc_exc_initialize(
+    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+    (uintptr_t) IntrStack_start,
+    (uintptr_t) intrStack - (uintptr_t) IntrStack_start
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic("cannot intitialize exceptions");
+  }
 
-/*
-  printk( "About to call initialize_exceptions\n" );
-*/
-   /*
-    * Install our own set of exception vectors
-    */
+  /* Initalize interrupt support */
+  sc = bsp_interrupt_initialize();
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic("cannot intitialize interrupts");
+  }
 
-   initialize_exceptions();
 
 /*
   mmu_init();
@@ -226,11 +227,6 @@ void bsp_start(void)
 /*
   m8260.brgc1 = M8260_BRG_EN + (uint32_t)(((uint16_t)((40016384)/(32768)) - 1) << 1) + 0;
 */
-
-  /*
-   * Initalize RTEMS IRQ system
-   */
-  BSP_rtems_irq_mng_init(0);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");

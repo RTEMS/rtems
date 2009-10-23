@@ -277,8 +277,9 @@ void Read_ep1a_config_registers( ppc_cpu_id_t myCpu ) {
 
 void bsp_start( void )
 {
-  uint32_t intrStackStart;
-  uint32_t intrStackSize;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  uintptr_t intrStackStart;
+  uintptr_t intrStackSize;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   Triv121PgTbl	pt=0;   /*  R = e; */
@@ -315,17 +316,20 @@ ShowBATS();
   /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uint32_t) __rtems_end;
+  intrStackStart = (uintptr_t) __rtems_end;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
 
   /*
    * Initialize default raw exception hanlders.
    */
-  ppc_exc_initialize(
+  sc = ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     intrStackStart,
     intrStackSize
   );
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic("cannot initialize exceptions");
+  }
 
   /*
    * Init MMU block address translation to enable hardware
