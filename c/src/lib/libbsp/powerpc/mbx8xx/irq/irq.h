@@ -172,6 +172,8 @@ int BSP_irq_enabled_at_siu     	(const rtems_irq_number irqLine);
 
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 
+extern int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine);
+
 #ifdef __cplusplus
 }
 #endif

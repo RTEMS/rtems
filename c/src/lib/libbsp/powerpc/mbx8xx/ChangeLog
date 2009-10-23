@@ -1,3 +1,8 @@
+2009-10-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* irq/irq.h: Add BSP_irq_enabled_at_cpm.
+	* network/network.c: Remove local decl of BSP_irq_enabled_at_cpm.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/mbx8xx.inc: Remove RTEMS_BSP_FAMILY.

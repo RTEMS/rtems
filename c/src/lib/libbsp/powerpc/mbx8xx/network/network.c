@@ -139,7 +139,6 @@ static void  m8xx_scc1_ethernet_off(const rtems_irq_connect_data* ptr)
 
 static void  m8xx_scc1_ethernet_isOn(const rtems_irq_connect_data* ptr)
 {
-  int BSP_irq_enabled_at_cpm(const rtems_irq_number );
   BSP_irq_enabled_at_cpm (ptr->name);
 }
 
