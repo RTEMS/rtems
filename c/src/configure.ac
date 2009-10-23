@@ -91,14 +91,22 @@ AC_CACHE_CHECK([for CFLAGS_OPTIMIZE_V],[ac_cv_env_CFLAGS_OPTIMIZE_V],
 [. ./make/${RTEMS_BSP}.cache])
 CFLAGS_OPTIMIZE_V=$ac_cv_env_CFLAGS_OPTIMIZE_V
 
+# Was CFLAGS set?
+rtems_cv_CFLAGS_set="${CFLAGS+set}"
+
 CFLAGS="${CFLAGS-${CPU_CFLAGS} ${CFLAGS_OPTIMIZE_V}}"
-AS_IF([test x"${CFLAGS}" != x" "],[
-  ac_configure_args="$ac_configure_args 'CFLAGS=${CFLAGS}'"])
 
 RTEMS_PROG_CC_FOR_TARGET
 AM_PROG_CC_C_O
 RTEMS_PROG_CCAS
 RTEMS_CANONICALIZE_TOOLS
+
+# Append warning flags if CFLAGS wasn't set.
+AS_IF([test "$GCC" = yes && test "$rtems_cv_CFLAGS_set" != set],
+[CFLAGS="$CFLAGS -Wall -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs"])
+
+AS_IF([test -n "${CFLAGS}"],[
+ac_configure_args="$ac_configure_args 'CFLAGS=${CFLAGS}'"])
 
 RTEMS_CHECK_GCC_WEAK
 
