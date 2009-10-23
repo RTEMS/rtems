@@ -61,7 +61,7 @@
 #include <unistd.h>
 #include <rtems/termiostypes.h>
 #include <rtems/bspIo.h>
-
+#include <rtems/error.h>
 
 /*
  * Interrupt-driven input buffer
