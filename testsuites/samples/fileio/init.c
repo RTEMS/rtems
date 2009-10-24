@@ -109,14 +109,14 @@ void writeFile(
   int sc;
   sc = setuid(0);
   if ( sc ) {
-    printf( "setuid failed: %s:\n", name, strerror(errno) );
+    printf( "setuid failed: %s: %s\n", name, strerror(errno) );
   }
 
   rtems_shell_write_file( name, contents );
 
   sc = chmod ( name, mode );
   if ( sc ) {
-    printf( "chmod %s: %s:\n", name, strerror(errno) );
+    printf( "chmod %s: %s\n", name, strerror(errno) );
   }
 }
 
