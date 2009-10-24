@@ -23,6 +23,8 @@
 #include <sys/time.h>
 #include <rtems/score/timespec.h> /* _Timespec_Substract */
 
+#include "rprintf.h"
+
 char *my_ctime( time_t t )
 {
   static char b[32];
@@ -43,7 +45,7 @@ void subtract_em(
 }
 
 /* body below .. hoping it isn't inlined */
-void dummy_function_empty_body_to_force_call();
+extern void dummy_function_empty_body_to_force_call(void);
 
 rtems_task Init(
   rtems_task_argument argument
@@ -81,12 +83,12 @@ rtems_task Init(
 #endif
 
     subtract_em( &start, &stop, &diff );
-    printf( "Start: %s:%d\nStop : %s:%d",
+    printf( "Start: %s:%ld\nStop : %s:%ld",
       my_ctime(start.tv_sec), start.tv_nsec,
       my_ctime(stop.tv_sec), stop.tv_nsec
     );
 
-   printf( " --> %d:%d\n", diff.tv_sec, diff.tv_nsec );
+   printf( " --> %" PRItime_t ":%ld\n", diff.tv_sec, diff.tv_nsec );
   }
 
   /*
@@ -100,7 +102,7 @@ rtems_task Init(
     rtems_clock_get_uptime( &stop );
 
     subtract_em( &start, &stop, &diff );
-    printf( "%d:%d %d:%d --> %d:%d\n",
+    printf( "%" PRItime_t ":%ld %" PRItime_t ":%ld --> %" PRItime_t ":%ld\n",
       start.tv_sec, start.tv_nsec,
       stop.tv_sec, stop.tv_nsec,
       diff.tv_sec, diff.tv_nsec
@@ -121,7 +123,7 @@ rtems_task Init(
     rtems_clock_get_uptime( &stop );
 
     subtract_em( &start, &stop, &diff );
-    printf( "loop of %d %d:%d %d:%d --> %d:%d\n",
+    printf( "loop of %d %" PRItime_t ":%ld %" PRItime_t ":%ld --> %" PRItime_t ":%ld\n",
       max,
       start.tv_sec, start.tv_nsec,
       stop.tv_sec, stop.tv_nsec,
