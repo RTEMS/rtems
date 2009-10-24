@@ -27,7 +27,7 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  int                  status, ceiling, old_ceiling;
+  int                  status;
   rtems_id             Mutex_id, Task_id;
   
   puts( "\n\n*** TEST " TEST_NAME " ***" );

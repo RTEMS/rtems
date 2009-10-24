@@ -20,7 +20,6 @@ rtems_task Init(
   bool                    sb;
   Heap_Information_block  start;
   Heap_Information_block  info;
-  void                   *pointer;
   size_t                  stack_size;
 
   puts( "\n\n*** TEST 18 ***" );

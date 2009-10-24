@@ -43,7 +43,6 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  rtems_status_code     sc;
   rtems_event_set       out;
   int                   resets;
 

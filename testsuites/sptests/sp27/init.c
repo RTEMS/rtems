@@ -77,7 +77,6 @@ void starttask(
 void doTest()
 {
   rtems_status_code sc;
-  rtems_attribute   attr;
   int               pass, i;
 
   sc = rtems_semaphore_create(

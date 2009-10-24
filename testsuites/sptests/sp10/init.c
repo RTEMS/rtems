@@ -15,7 +15,6 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  rtems_status_code     sc;
   bool                  is_set;
 
   puts( "\n\n*** TEST 10 ***" );

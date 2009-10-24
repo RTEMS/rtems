@@ -17,10 +17,6 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  void                   *p1;
-  bool                    retbool;
-  Heap_Information_block  info;
-
   printk( "\n\n*** TEST PRINTK ***\n" );
 
   putk( "This is a test of putk\n" );

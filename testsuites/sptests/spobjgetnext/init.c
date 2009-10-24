@@ -60,7 +60,6 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_status_code     status;
   rtems_id              main_task;
   int                   count;
   Objects_Control      *o;

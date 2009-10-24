@@ -187,7 +187,9 @@ rtems_task Low_Exec(rtems_task_argument TaskArg)
 
 rtems_task LocalHwSim_Exec(rtems_task_argument TaskArg)
 {
+#if 0
   int ISRCount = 0;
+#endif
   printf("LocalHwSim_Exec begins...\n");
   
   while(1) {

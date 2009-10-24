@@ -78,9 +78,9 @@ void test_case_three(void)
 {
   uint32_t           heap_size;
   void              *ptr1;
-  intptr_t           old;
-  intptr_t           avail;
+#if 0
   Heap_Resize_status hc;
+#endif
   int pg, al, alloc, sz;
 
   puts( "Init - _Heap_Allocate_aligned - request impossible - not OK");

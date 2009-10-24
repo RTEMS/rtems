@@ -40,7 +40,6 @@ rtems_task Init(
   rtems_status_code status;
   rtems_id          timer1;
   rtems_id          timer2;
-  rtems_name        timer_name;
 
   puts( "\n\n*** TEST 67 ***" );
 
