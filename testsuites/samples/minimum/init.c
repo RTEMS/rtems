@@ -16,8 +16,6 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  rtems_mode mode;
-
   /* initialize application */
 
   /* Real application would call idle loop functionality */
