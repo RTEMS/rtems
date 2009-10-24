@@ -260,7 +260,7 @@ static rtems_monitor_command_entry_t capture_cmds[] =
   }
 };
 
-void setup_tasks_to_watch ()
+void setup_tasks_to_watch (void)
 {
   size_t cmd;
   for (cmd = 0;
