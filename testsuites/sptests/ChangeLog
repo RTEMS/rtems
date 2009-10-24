@@ -1,5 +1,10 @@
 2009-10-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp27/init.c, spsize/init.c: Fix prototypes.
+	* spwatchdog/task1.c: Remove unused vars.
+
+2009-10-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* sp10/init.c, sp18/init.c, sp27/init.c, sp35/priinv.c
 	sp63/init.c, sp65/init.c, sp67/init.c, spintrcritical11/init.c
 	spobjgetnext/init.c, spprintk/init.c:
