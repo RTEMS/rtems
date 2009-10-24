@@ -34,9 +34,7 @@ bool status_code_bad(
   rtems_status_code status_code
 );
 
-void test1();
-void test2();
-void test3();
+extern void setup_tasks_to_watch(void);
 
 /* configuration information */
 
