@@ -1,3 +1,18 @@
+2009-10-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* capture/init.c: Remove setup_tasks_to_watch.
+	* capture/system.h: Remove test*().
+	Add setup_tasks_to_watch().
+	* capture/test1.c: Fix prototype.
+	* fileio/init.c: Fix broken printfs.
+	* minimum/init.c: Remove unused var.
+	* nsecs/empty.c: Add missing prototype.
+	* nsecs/rprintf.h: New.
+	* nsecs/init.c: Printf fixes.
+	* unlimited/system.h: Add missing prototypes.
+	* unlimited/init.c, unlimited/test1.c, unlimited/test2.c,
+	unlimited/test3.c: Various warning fixes.
+
 2009-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* unlimited/test1.c: Spacing.
