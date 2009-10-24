@@ -17,10 +17,12 @@
  *  $Id$
  */
 
-#include "system.h"
-#include <rtems/score/object.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "system.h"
+#include <rtems/score/object.h>
 
 void test1()
 {
@@ -64,7 +66,7 @@ void test1()
     if (status_code_bad(result))
       break;
 
-    printf("number = %3i, id = %08x, starting, ", task_count, task_id[task_count]);
+    printf("number = %3" PRIi32 ", id = %08x, starting, ", task_count, task_id[task_count]);
 
     fflush(stdout);
     result = rtems_task_start(task_id[task_count],
@@ -88,7 +90,7 @@ void test1()
 
   if (task_count != (TASK_ALLOCATION_SIZE - 1)) {
     printf( " FAIL1 : the number of tasks does not equal the expected size -\n"
-            "           task created = %i, required number = %i\n",
+            "           task created = %" PRIi32 ", required number = %i\n",
             task_count, TASK_ALLOCATION_SIZE);
     exit( 1 );
   }

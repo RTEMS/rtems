@@ -20,9 +20,11 @@
  *  $Id$
  */
 
-#include "system.h"
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "system.h"
 
 void test2()
 {
@@ -63,7 +65,7 @@ void test2()
     if (status_code_bad(result))
       break;
 
-    printf("number = %3i, id = %08x, starting, ", task_count, task_id[task_count]);
+    printf("number = %3" PRIi32 ", id = %08x, starting, ", task_count, task_id[task_count]);
     fflush(stdout);
 
     result = rtems_task_start(task_id[task_count],
@@ -88,7 +90,7 @@ void test2()
 
   if (task_count != ((TASK_ALLOCATION_SIZE * 5) - TASK_INDEX_OFFSET)) {
     printf( " FAIL2 : not enough tasks created -\n"
-            "         task created = %i, required number = %i\n",
+            "         task created = %" PRIi32 ", required number = %i\n",
             task_count, (TASK_ALLOCATION_SIZE * 5) - TASK_INDEX_OFFSET);
     destory_all_tasks("TEST2");
     exit( 1 );
@@ -105,7 +107,7 @@ void test2()
       if (!task_id[remove_task])
       {
         printf( " FAIL2 : remove task has a 0 id -\n"
-                "         task number = %i\n",
+                "         task number = %" PRIi32 "\n",
                 remove_task);
         destory_all_tasks("TEST2");
         exit( 1 );
@@ -117,7 +119,7 @@ void test2()
 
       removed_ids[task++] = task_id[remove_task];
 
-      printf(" TEST2 : block %i remove, signal task %08x, ", block, task_id[remove_task]);
+      printf(" TEST2 : block %" PRIi32 " remove, signal task %08x, ", block, task_id[remove_task]);
       rtems_event_send(task_id[remove_task], 1);
       task_id[remove_task] = 0;
     }
@@ -157,13 +159,13 @@ void test2()
     if (status_code_bad(result))
     {
       printf( " FAIL2 : re-creating a task -\n"
-              "         task number = %i\n",
+              "         task number = %" PRIi32 "\n",
               id_slot);
       destory_all_tasks("TEST2");
       exit( 1 );
     }
 
-    printf("number = %3i, id = %08x, starting, ", task_count, task_id[id_slot]);
+    printf("number = %3" PRIi32 ", id = %08x, starting, ", task_count, task_id[id_slot]);
 
     result = rtems_task_start(task_id[id_slot],
                               test_task,
@@ -172,7 +174,7 @@ void test2()
     if (status_code_bad(result))
     {
       printf( " FAIL : re-starting a task -\n"
-              "        task number = %i\n",
+              "        task number = %" PRIi32 "\n",
               id_slot);
       destory_all_tasks("TEST2");
       exit( 1 );

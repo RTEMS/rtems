@@ -20,9 +20,10 @@
  *  $Id$
  */
 
-#include "system.h"
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "system.h"
 
 void test3()
 {
@@ -71,7 +72,7 @@ void test3()
     if (status_code_bad(result))
       break;
 
-    printf("number = %3i, id = %08x, starting, ", task_count, task_id[task_count]);
+    printf("number = %3" PRIi32 ", id = %08x, starting, ", task_count, task_id[task_count]);
     fflush(stdout);
 
     result = rtems_task_start(task_id[task_count],
@@ -98,7 +99,7 @@ void test3()
   if (task_count < (TASK_ALLOCATION_SIZE * 11))
   {
     printf( " FAIL3 : not enough tasks created -\n"
-            "         task created = %i, required number = %i\n",
+            "         task created = %" PRIi32 ", required number = %i\n",
             task_count, (TASK_ALLOCATION_SIZE * 11));
     exit( 1 );
   }
@@ -112,7 +113,7 @@ void test3()
       if (!task_id[remove_task])
       {
         printf( " FAIL3 : remove task has a 0 id -\n"
-                "         task number = %i\n",
+                "         task number = %" PRIi32 "\n",
                 remove_task);
         exit( 1 );
       }

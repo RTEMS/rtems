@@ -28,9 +28,6 @@
 
 rtems_id task_id[MAX_TASKS];
 
-void test1();
-void test2();
-
 rtems_task Init(
   rtems_task_argument ignored
 )
