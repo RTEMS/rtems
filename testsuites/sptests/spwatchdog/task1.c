@@ -24,7 +24,6 @@ rtems_task Task_1(
 )
 {
   rtems_id          tmid;
-  rtems_time_of_day time;
   rtems_status_code status;
 
 /* Get id */
