@@ -30,8 +30,6 @@
 #include <rtems/capture-cli.h>
 #include <rtems/monitor.h>
 
-void setup_tasks_to_watch ();
-
 volatile int can_proceed = 1;
 
 rtems_task Init(
