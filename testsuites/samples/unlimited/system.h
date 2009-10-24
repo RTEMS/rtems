@@ -34,9 +34,9 @@ bool status_code_bad(
   rtems_status_code status_code
 );
 
-void test1();
-void test2();
-void test3();
+extern void test1(void);
+extern void test2(void);
+extern void test3(void);
 
 /* configuration information */
 
