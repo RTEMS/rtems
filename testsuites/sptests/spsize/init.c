@@ -26,7 +26,6 @@
 
 /* #define HAVE_MENU */
 
-rtems_task Test_task();
 void size_rtems( int mode );
 
 rtems_task Init(

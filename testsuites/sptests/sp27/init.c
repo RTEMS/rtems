@@ -74,7 +74,7 @@ void starttask(
   directive_failed( sc, "task start" );
 }
 
-void doTest()
+void doTest(void)
 {
   rtems_status_code sc;
   int               pass, i;
