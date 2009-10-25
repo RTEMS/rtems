@@ -16,6 +16,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/heap.h>
 
+#include "test_support.h"
 
 void Key_destructor(
    void *key_data
