@@ -77,7 +77,6 @@ int main(
   pthread_rwlockattr_t attr;
   int                  status;
   int                  p;
-  pthread_t            thread_id;
   int                  i;
   struct timespec      abstime;
 

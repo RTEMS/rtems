@@ -85,8 +85,6 @@ void *Test_Thread(void *arg)
   int         sc;
   sigset_t    mask;
   sigset_t    wait_mask;
-  sigset_t    pending_set;
-  sigset_t    oset;
   siginfo_t   info;
 
   if ( blocked )
@@ -141,7 +139,6 @@ void *POSIX_Init(
   void *argument
 )
 {
-  int                 i;
   int                 sc;
   pthread_t           id;
   struct sigaction    act;

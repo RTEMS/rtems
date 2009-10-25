@@ -33,8 +33,6 @@ void Install_Signal_Handler(
 {
   int               sc;
   sigset_t          mask;
-  sigset_t          pending_set;
-  sigset_t          oset;
 
   sc = sigemptyset( &mask );
   assert( !sc );

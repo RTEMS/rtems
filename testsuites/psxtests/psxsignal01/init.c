@@ -84,10 +84,6 @@ void *POSIX_Init(
   int               status;
   struct sigaction  act;
   sigset_t          mask;
-  sigset_t          pending_set;
-  sigset_t          oset;
-  struct timespec   timeout;
-  siginfo_t         info;
   sighandler_t      oldHandler;
   sighandler_t      newHandler;
   rtems_interval start, end;

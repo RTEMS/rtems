@@ -64,10 +64,6 @@ void *POSIX_Init(
   int               sc;
   struct sigaction  act;
   sigset_t          mask;
-  sigset_t          pending_set;
-  sigset_t          oset;
-  struct timespec   timeout;
-  siginfo_t         info;
 
   puts( "\n\n*** POSIX ALARM TEST 01 ***" );
 

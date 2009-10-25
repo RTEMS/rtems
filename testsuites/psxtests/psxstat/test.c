@@ -325,7 +325,7 @@ void make_multiple_links(
 }
 
 
-void make_too_many_links()
+void make_too_many_links(void)
 {
   int    i;
   int    status;
@@ -379,7 +379,7 @@ void make_a_symlink(
   assert( !status );
 }
 
-void make_multiple_symlinks()
+void make_multiple_symlinks(void)
 {
  int  status;
 
@@ -467,7 +467,7 @@ void make_multiple_directories(
  */
 
 
-void Cause_faults()
+void Cause_faults(void)
 {
   int                                   fd;
   int                                   status;
@@ -711,7 +711,7 @@ void Cause_faults()
 
 }
 
-void Show_Time()
+void Show_Time(void)
 {
   rtems_time_of_day time;
   rtems_status_code status;

@@ -29,11 +29,6 @@ void *POSIX_Init(
 )
 {
   int                    status;
-  unsigned int           remaining;
-  uint32_t               *key_data;
-  Heap_Information_block info;
-  void                   *temp;
-  int                    i;
 
   puts( "\n\n*** POSIX KEY 01 TEST ***" );
 

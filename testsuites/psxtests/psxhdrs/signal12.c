@@ -18,7 +18,7 @@ void test( void );
 
 void test( void )
 {
-  void (*signal_function_pointer)();
+  void (*signal_function_pointer)(int);
   int  signal_number;
 
   signal_number = SIGALRM;

@@ -53,13 +53,6 @@ void *POSIX_Init(
   useconds_t        result;
   struct sigaction  act;
   sigset_t          mask;
-  sigset_t          pending_set;
-  sigset_t          oset;
-  struct timespec   timeout;
-  siginfo_t         info;
-  sighandler_t      oldHandler;
-  sighandler_t      newHandler;
-  rtems_interval start, end;
 
   puts( "\n\n*** POSIX TEST UALARM ***" );
 

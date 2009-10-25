@@ -30,8 +30,6 @@ rtems_task Init(
   struct timespec tv;
   struct timespec tr;
   int             sc;
-  int             priority;
-  pthread_t       thread_id;
   time_t          seconds;
   time_t          seconds1;
   unsigned int    remaining;

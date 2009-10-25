@@ -42,7 +42,6 @@ void *POSIX_Init(
 {
   struct mq_attr     attr;
   int                status;
-  int                msgBody;
   rtems_id           timer;
   rtems_status_code  rc;
 

@@ -30,7 +30,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       EFAULT
 
-void force_error()
+void force_error(void)
 {
   /* we will not run this far */
 }

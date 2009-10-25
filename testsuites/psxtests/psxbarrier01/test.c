@@ -52,13 +52,11 @@ int main(
 )
 #endif
 {
-  pthread_barrier_t     another_barrier;
   pthread_barrier_t     bad_barrier = 100;
   pthread_barrier_t     barrier;
   pthread_barrierattr_t attr;
   int                   status;
   int                   p;
-  pthread_t             thread_id;
   int                   i;
 
   puts( "\n\n*** POSIX BARRIER TEST 01 ***" );

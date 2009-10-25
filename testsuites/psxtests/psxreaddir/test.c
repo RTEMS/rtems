@@ -182,7 +182,7 @@ int compare_descending( const struct dirent **a, const struct dirent **b )
    return i;
 }
 
-void test_across_mount()
+void test_across_mount(void)
 {
   rtems_filesystem_mount_table_entry_t *mt_entry;
   int                                  status;

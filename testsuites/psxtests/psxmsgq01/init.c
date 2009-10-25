@@ -110,7 +110,7 @@ char *Build_Queue_Name( int i ) {
   return Queue_Name;
 }
 
-void open_test_queues()
+void open_test_queues(void)
 {
   struct mq_attr   attr;
   int              status;
@@ -146,7 +146,7 @@ void open_test_queues()
  * opened but closes the rest.
  */
 
-void validate_mq_open_error_codes()
+void validate_mq_open_error_codes(void)
 {
   int             i;
   mqd_t           n_mq2;
@@ -291,7 +291,7 @@ void validate_mq_open_error_codes()
   }
 }
 
-void validate_mq_unlink_error_codes()
+void validate_mq_unlink_error_codes(void)
 {
   int             status;
 
@@ -349,7 +349,7 @@ void validate_mq_unlink_error_codes()
   fatal_posix_service_status( errno, EINVAL, "mq_unlink errno value");
 }
 
-void validate_mq_close_error_codes()
+void validate_mq_close_error_codes(void)
 {
   int             status;
 
@@ -366,7 +366,7 @@ void validate_mq_close_error_codes()
 }
 
 
-void validate_mq_getattr_error_codes()
+void validate_mq_getattr_error_codes(void)
 {
   struct mq_attr  attr;
   int             status;
@@ -523,7 +523,7 @@ int empty_message_queues(
  * first queue.
  */
 
-int validate_mq_send_error_codes( )
+int validate_mq_send_error_codes(void)
 {
   int             status;
   int             i;
@@ -606,7 +606,7 @@ int validate_mq_send_error_codes( )
   return i-1;
 }
 
-void validate_mq_receive_error_codes( )
+void validate_mq_receive_error_codes(void)
 {
   int            status;
   char           message[100];
@@ -667,7 +667,7 @@ void validate_mq_receive_error_codes( )
    */
 }
 
-void verify_open_functionality()
+void verify_open_functionality(void)
 {
 #if 0
   mqd_t           n_mq;
@@ -687,7 +687,7 @@ void verify_open_functionality()
 #endif
 }
 
-void verify_unlink_functionality()
+void verify_unlink_functionality(void)
 {
   mqd_t           n_mq;
   int             status;
@@ -716,7 +716,7 @@ void verify_unlink_functionality()
   Test_q[ DEFAULT_RW ].mq = n_mq;
 }
 
-void verify_close_functionality()
+void verify_close_functionality(void)
 {
   int i;
   int status;
@@ -769,7 +769,7 @@ void verify_timed_send_queue(
     Test_q[que].count++;
 }
 
-void verify_timed_send()
+void verify_timed_send(void)
 {
   int              que;
 
@@ -819,7 +819,7 @@ void verify_timed_receive_queue(
 
 }
 
-void verify_timed_receive()
+void verify_timed_receive(void)
 {
   int  que;
 
@@ -834,7 +834,7 @@ void verify_timed_receive()
 }
 
 #if (0)
-void verify_set_attr()
+void verify_set_attr(void)
 {
   struct mq_attr save_attr[ NUMBER_OF_TEST_QUEUES ];
   struct mq_attr attr;
@@ -903,7 +903,7 @@ void wait_for_signal(
   }
 }
 
-void verify_notify()
+void verify_notify(void)
 {
   struct sigevent event;
   int             status;
@@ -988,7 +988,7 @@ void verify_notify()
 
 }
 
-void verify_with_threads()
+void verify_with_threads(void)
 {
   int               status;
   pthread_t         id;
@@ -1075,7 +1075,7 @@ void verify_with_threads()
 
 }
 
-void validate_mq_setattr()
+void validate_mq_setattr(void)
 {
   struct mq_attr  attr;
   struct mq_attr  save_attr[ NUMBER_OF_TEST_QUEUES ];
@@ -1163,11 +1163,11 @@ void verify_timedout_mq_timedreceive(
 
   fatal_int_service_status( status, -1, "mq_timedreceive status");
 
+/* FIXME: This is wrong. */
   printf( "Init: %ld sec %ld us\n", (long)tv3.tv_sec, (long)tv3.tv_usec );
-
 }
 
-void verify_mq_receive()
+void verify_mq_receive(void)
 {
   int  que;
 
@@ -1213,7 +1213,7 @@ void verify_timedout_mq_timedsend(
     Test_q[que].count++;
 }
 
-void verify_mq_send()
+void verify_mq_send(void)
 {
   int              que;
 
@@ -1307,7 +1307,7 @@ void *Task_3 (
    * close and unlink all queues.
    */
 
-  verify_close_functionality( "Task_3: " );
+  verify_close_functionality();
   puts( "Task_3: pthread_exit" );
   pthread_exit( NULL );
 

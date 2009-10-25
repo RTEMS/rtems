@@ -42,7 +42,6 @@ void *POSIX_Init(
 {
   pthread_t     thread;
   int           sc;
-  bool          sb;
 
   puts( "\n\n*** TEST KEY 03 ***" );
   

@@ -29,14 +29,8 @@ void *POSIX_Init(
   void *argument
 )
 {
-  int                    status;
-  unsigned int           remaining;
   struct mq_attr         attr;
-  int                    que;
-  Heap_Information_block info;
-  void                   *temp;
   mqd_t                  mq;
-  int                    i;
 
   puts( "\n\n*** POSIX MESSAGE QUEUE 02 TEST ***" );
 

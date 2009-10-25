@@ -46,7 +46,6 @@ void *POSIX_Init(
   void *argument
 )
 {
-  int                 i;
   int                 sc;
   pthread_t           id;
   pthread_attr_t      attr;

@@ -18,12 +18,10 @@ void *POSIX_Init(
   void *argument
 )
 {
-  struct timespec tv;
   struct timespec tr;
   int             status;
   int             priority;
   pthread_t       thread_id;
-  struct tm       tm;
   struct utsname  uts;
 
   puts( "\n\n*** POSIX TEST 1 ***" );
