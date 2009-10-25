@@ -1,3 +1,15 @@
+2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psx01/init.c, psxalarm01/init.c, psxbarrier01/test.c,
+	psxclock/init.c, psxfatal01/testcase.h, psxfatal02/testcase.h,
+	psxhdrs/signal12.c, psxkey01/init.c, psxkey03/init.c,
+	psxmsgq01/init.c, psxmsgq02/init.c, psxmsgq03/init.c,
+	psxreaddir/test.c, psxrwlock01/test.c, psxsignal01/init.c,
+	psxsignal02/init.c, psxsignal03/init.c, psxspin01/test.c, 
+	psxspin02/test.c, psxstack01/init.c, psxstat/test.c,
+	psxualarm/init.c: Remove unused vars.
+	Add missing prototypes.
+
 2009-10-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Build file IO related tests even with POSIX threading is
