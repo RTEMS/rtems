@@ -9,6 +9,8 @@
  *  $Id$
  */
 
+#include <sched.h>
+
 #define CONFIGURE_INIT
 #include "system.h"
 #include <errno.h>
