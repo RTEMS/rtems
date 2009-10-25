@@ -1,5 +1,6 @@
 2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psx11/init.c, psx09/init.c: Include <sched.h>.
 	* psx12/init.c: Include <sched.h>.
 	* psxenosys/init.c: Include <pthread.h>.
 	Conditionally add local prototype for pthread_atfork()
