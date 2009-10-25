@@ -1,5 +1,6 @@
 2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psx07/init.c: Include <sched.h>, <pthread.h>.
 	* psx05/init.c: Include <sched.h>.
 	* psx11/init.c, psx09/init.c: Include <sched.h>.
 	* psx12/init.c: Include <sched.h>.
