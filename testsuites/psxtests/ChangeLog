@@ -1,5 +1,8 @@
 2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psxtime/test.c: Include <sys/time.h>.
+	Conditionally add local prototype for adjtime()
+        if sys/time.h doesn't supply it.
 	* psx07/init.c: Include <sched.h>, <pthread.h>.
 	* psx05/init.c: Include <sched.h>.
 	* psx11/init.c, psx09/init.c: Include <sched.h>.
