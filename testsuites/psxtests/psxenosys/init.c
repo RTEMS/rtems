@@ -9,16 +9,26 @@
  *  $Id$
  */
 
+#include <sys/types.h>
+#include <sys/wait.h>
+#if HAVE_SYS_MMAN_H
+/* POSIX mandates mprotect in sys/mman.h, but newlib doesn't have this */
+#include <sys/mman.h>
+#endif
+
 #define CONFIGURE_INIT
 #include "system.h"
 #include "tmacros.h"
 
 #include <aio.h>
-#include <sys/types.h>
 #include <time.h>
 #include <devctl.h>
 #include <unistd.h>
 #include <sched.h>
+
+#if !HAVE_DECL_MPROTECT
+extern int mprotect(const void *addr, size_t len, int prot);
+#endif
 
 void check_enosys(int status);
 
