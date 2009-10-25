@@ -1,5 +1,12 @@
 2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Check for sys/mman.h.
+	Check for mprotect in sys/mman.h.
+	* psxenosys/init.c: Conditionally add local prototype for
+	mprotect() if sys/mman.h doesn't supply it.
+
+2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Check for pthread_rwlock_unlock in pthread.h.
 	* psxrwlock01/test.c: Conditionally add local prototype for
 	pthread_rwlock_unlock() if pthread.h doesn't supply it.
