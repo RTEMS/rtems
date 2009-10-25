@@ -22,6 +22,11 @@
 #include <string.h>
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <sys/time.h>
+
+#if !HAVE_DECL_ADJTIME
+extern int adjtime(const struct timeval *delta, struct timeval *olddelta);
+#endif
 
 void test_adjtime(void);
 void check_a_tod(
