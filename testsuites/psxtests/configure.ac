@@ -27,6 +27,9 @@ AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
 AM_CONDITIONAL(HAS_POSIX,test x"${rtems_cv_RTEMS_POSIX_API}" = x"yes")
 
+# FIXME: newlib should supply declaration of pthread_rwlock_unlock()
+AC_CHECK_DECLS([pthread_rwlock_unlock],[],[],[[#include <pthread.h>]])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 psx01/Makefile

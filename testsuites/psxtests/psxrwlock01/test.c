@@ -19,6 +19,11 @@
 /* #define __USE_XOPEN2K XXX already defined on GNU/Linux */
 #include <pthread.h>
 
+#if !HAVE_DECL_PTHREAD_RWLOCK_UNLOCK
+/* FIXME: Newlib should provide the decl. */
+extern int pthread_rwlock_unlock(pthread_rwlock_t *rwlock);
+#endif
+
 #define NUMBER_THREADS 2
 pthread_t ThreadIds[NUMBER_THREADS];
 pthread_rwlock_t RWLock;
