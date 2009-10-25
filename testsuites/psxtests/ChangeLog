@@ -1,5 +1,8 @@
 2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psxenosys/init.c: Include "pthread.h".
+	Conditionally add local prototype for pthread_atfork()
+	if pthread.h doesn't supply it.
 	* psxkey01/init.c: Include "test_support.h".
 
 2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
