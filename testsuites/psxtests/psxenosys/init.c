@@ -15,6 +15,7 @@
 /* POSIX mandates mprotect in sys/mman.h, but newlib doesn't have this */
 #include <sys/mman.h>
 #endif
+#include <pthread.h>
 
 #define CONFIGURE_INIT
 #include "system.h"
@@ -28,6 +29,9 @@
 
 #if !HAVE_DECL_MPROTECT
 extern int mprotect(const void *addr, size_t len, int prot);
+#endif
+#if !HAVE_DECL_PTHREAD_ATFORK
+extern int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(void));
 #endif
 
 void check_enosys(int status);
