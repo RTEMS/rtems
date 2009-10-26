@@ -14,6 +14,8 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 unlimited_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 LINK_OBJS = $(unlimited_OBJECTS) $(unlimited_LDADD)
