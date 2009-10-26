@@ -39,7 +39,7 @@ rtems_task Init(
   status = rtems_rate_monotonic_create( period, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );
   printf(
-    "INIT - rtems_rate_monotonic_create id = 0x%08x (stays inactive)\n",
+    "INIT - rtems_rate_monotonic_create id = 0x%08" PRIxrtems_id " (stays inactive)\n",
     rmid
   );
 

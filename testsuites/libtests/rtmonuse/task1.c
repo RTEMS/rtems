@@ -40,20 +40,20 @@ rtems_task Task_1_through_5(
   status = rtems_rate_monotonic_create( argument, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );
   put_name( Task_name[ argument ], FALSE );
-  printf( "- rtems_rate_monotonic_create id = 0x%08x\n", rmid );
+  printf( "- rtems_rate_monotonic_create id = 0x%08" PRIxrtems_id "\n", rmid );
 
   status = rtems_rate_monotonic_ident( argument, &test_rmid );
   directive_failed( status, "rtems_rate_monotonic_ident" );
   put_name( Task_name[ argument ], FALSE );
-  printf( "- rtems_rate_monotonic_ident id = 0x%08x\n", test_rmid );
+  printf( "- rtems_rate_monotonic_ident id = 0x%08" PRIxrtems_id "\n", test_rmid );
 
   if ( rmid != test_rmid ) {
-     printf( "RMID's DO NOT MATCH (0x%x and 0x%x)\n", rmid, test_rmid );
+     printf( "RMID's DO NOT MATCH (0x%" PRIxrtems_id " and 0x%" PRIxrtems_id ")\n", rmid, test_rmid );
      rtems_test_exit( 0 );
   }
 
   put_name( Task_name[ argument ], FALSE );
-  printf( "- (0x%08x) period %d\n", rmid, Periods[ argument ] );
+  printf( "- (0x%08" PRIxrtems_id ") period %d\n", rmid, Periods[ argument ] );
 
   status = rtems_task_wake_after( 2 );
   directive_failed( status, "rtems_task_wake_after" );
