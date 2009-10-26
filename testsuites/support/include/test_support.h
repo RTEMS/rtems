@@ -11,9 +11,9 @@
 extern "C" {
 #endif
 
-void Allocate_majority_of_workspace( int smallest );
-const char *Get_Too_Long_Name();
-const char *Get_Longest_Name();
+extern void Allocate_majority_of_workspace( int smallest );
+extern const char *Get_Too_Long_Name(void);
+extern const char *Get_Longest_Name(void);
 
 #ifdef __cplusplus
 };
