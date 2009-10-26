@@ -1,5 +1,7 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtmonuse/init.c, rtmonuse/task1.c:
+	Use PRIxrtems_id to print rtems_ids.
 	* malloctest/init.c: Use %zu instead of %d to print size_t's.
 
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
