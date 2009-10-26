@@ -42,15 +42,20 @@ extern "C" {
 #include <buffer_test_io.h>
 
 /*
+ * HACK: Blatant visibility violation
+ * Should include a public header instead 
+ */
+extern volatile uint32_t   _Thread_Dispatch_disable_level;
+
+/*
  *  Check that that the dispatch disable level is proper for the
  *  mode/state of the test.  Normally it should be 0 when in task space.
  */
 
 #define check_dispatch_disable_level( _expect ) \
   do { \
-    extern volatile uint32_t   _Thread_Dispatch_disable_level; \
     if ( (_expect) != -1 && _Thread_Dispatch_disable_level != (_expect) ) { \
-      printf( "\n_Thread_Dispatch_disable_level is (%d) not %d\n", \
+      printf( "\n_Thread_Dispatch_disable_level is (%" PRId32 ") not %d\n", \
               _Thread_Dispatch_disable_level, (_expect) ); \
       FLUSH_OUTPUT(); \
       rtems_test_exit( 1 ); \

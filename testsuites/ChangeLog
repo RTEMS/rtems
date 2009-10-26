@@ -1,5 +1,10 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* support/include/tmacros.h: Move _Thread_Dispatch_disable_level
+	outside of check_dispatch_disable_level.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* support/src/test_support.c: Add missing prototypes.
 	* support/include/tmacros.h: Include <inttypes.h>.
 	Move extern "C".
