@@ -31,8 +31,6 @@ rtems_task Init(
 )
 {
 #if !BSP_SMALL_MEMORY
-  uint32_t           index;
-  rtems_status_code  status;
   int                i;
   int                argc;
   char               *argv[MAX_ARGS];

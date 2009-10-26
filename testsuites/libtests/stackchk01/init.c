@@ -16,7 +16,6 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
   bool              blown;
 
   puts( "\n\n*** TEST STACK CHECKER 01 ***" );
