@@ -263,10 +263,15 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
 #define PRIxrtems_id PRIx32
 #endif
 
+/* c.f. cpukit/score/include/rtems/score/priority.h */
 #define PRIdPriority_Control PRId32
-
 /* rtems_task_priority is a typedef to Priority_Control */
 #define PRIdrtems_task_priority PRIdPriority_Control
+
+/* c.f. cpukit/score/include/rtems/score/watchdog.h */
+#define PRIdWatchdog_Interval PRIu32
+/* rtems_interval is a typedef to Watchdog_Interval */
+#define PRIdrtems_interval    PRIdWatchdog_Interval
 
 #ifdef __cplusplus
 }
