@@ -1,3 +1,7 @@
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp09/screen09.c: Eliminate unused var warning.
+
 2009-10-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp27/init.c, spsize/init.c: Fix prototypes.
