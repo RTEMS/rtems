@@ -1,5 +1,13 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp02/task1.c, sp12/task1.c, sp13/task1.c, sp14/task1.c, sp15/task1.c,
+	sp16/task1.c, sp20/task1.c, sp22/init.c, sp22/task1.c, sp23/task1.c,
+	sp25/task1.c, sp31/init.c, sp31/task1.c, sp34/changepri.c,
+	sp35/priinv.c, sp43/init.c, sp45/init.c, spwatchdog/init.c,
+	spwatchdog/task1.c: Use PRIxrtems_id to print rtems_ids.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* sp13/task1.c, sp48/init.c: Use %zu instead of %d to print size_t's.
 	* sp50/init.c, spclockget/init.c: Use PRItime_t to print time_t's.
 	* sp63/init.c: Fix _Heap_Resize_block args.
