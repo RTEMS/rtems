@@ -1,5 +1,9 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* malloctest/init.c: Use %zu instead of %d to print size_t's.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* malloctest/init.c: Fix _Heap_Resize_block args.
 
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
