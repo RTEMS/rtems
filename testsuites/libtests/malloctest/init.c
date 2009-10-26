@@ -1032,7 +1032,7 @@ static void test_posix_memalign(void)
   else if ( sizeof(int) == 2 )
     maximumShift = 15;
   else {
-    printf( "Unsupported int size == %d\n", sizeof(int) );
+    printf( "Unsupported int size == %zu\n", sizeof(int) );
     rtems_test_exit(0);
   }
   for ( i=2 ; i<maximumShift ; i++ ) {
