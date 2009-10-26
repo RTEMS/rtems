@@ -123,7 +123,7 @@ rtems_task Init(rtems_task_argument ignored)
       &Blockers[i]);                                     /* Assigned ID */
     directive_failed( status, "rtems_task_create (BLKn)" );
   
-    printf( "Blockers[%d] Id = 0x%08x\n", i, Blockers[i] );
+    printf( "Blockers[%d] Id = 0x%08" PRIxrtems_id "\n", i, Blockers[i] );
     status = rtems_task_start(
       Blockers[i],
       BlockingTasks,

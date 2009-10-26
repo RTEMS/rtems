@@ -31,7 +31,7 @@ rtems_task Task_1(
   rtems_status_code  status;
 
   status = rtems_region_ident( Region_name[ 1 ], &rnid );
-  printf( "TA1 - rtems_region_ident - rnid => %08x\n", rnid );
+  printf( "TA1 - rtems_region_ident - rnid => %08" PRIxrtems_id "\n", rnid );
   directive_failed( status, "rtems_region_ident of RN1" );
 
   puts(

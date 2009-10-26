@@ -31,7 +31,7 @@ rtems_task Task_1(
     RTEMS_SEARCH_ALL_NODES,
     &smid
   );
-  printf( "TA1 - rtems_semaphore_ident - smid => %08x\n", smid );
+  printf( "TA1 - rtems_semaphore_ident - smid => %08" PRIxrtems_id "\n", smid );
   directive_failed( status, "rtems_semaphore_ident of SM1" );
 
   puts( "TA1 - rtems_semaphore_obtain - wait forever on SM2" );

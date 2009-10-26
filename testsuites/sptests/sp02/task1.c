@@ -36,7 +36,7 @@ rtems_task Task_1(
   status = rtems_task_ident( Task_name[ 2 ], RTEMS_SEARCH_ALL_NODES, &tid2 );
   directive_failed( status, "rtems_task_ident of TA2" );
 
-  printf( "TA1 - rtems_task_ident - tid of TA2 (0x%.8x)\n", tid2 );
+  printf( "TA1 - rtems_task_ident - tid of TA2 (0x%.8" PRIxrtems_id ")\n", tid2 );
   status = rtems_object_get_classic_name( tid2, &tid2_name );
   directive_failed( status, "rtems_object_get_classic_name of TA2" );
 
@@ -46,7 +46,7 @@ rtems_task Task_1(
   status = rtems_task_ident( Task_name[ 3 ], RTEMS_SEARCH_ALL_NODES, &tid3 );
   directive_failed( status, "rtems_task_ident of TA3" );
 
-  printf( "TA1 - rtems_task_ident - tid of TA3 (0x%.8x)\n", tid3 );
+  printf( "TA1 - rtems_task_ident - tid of TA3 (0x%.8" PRIxrtems_id ")\n", tid3 );
 
   status = rtems_task_set_priority( tid3, 2, &previous_priority );
   directive_failed( status, "rtems_task_set_priority" );

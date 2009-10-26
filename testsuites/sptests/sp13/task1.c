@@ -66,7 +66,7 @@ rtems_task Task_1(
     RTEMS_SEARCH_ALL_NODES,
     &qid
   );
-  printf( "TA1 - rtems_message_queue_ident - qid => %08x\n", qid );
+  printf( "TA1 - rtems_message_queue_ident - qid => %08" PRIxrtems_id "\n", qid );
   directive_failed( status, "rtems_message_queue_ident" );
 
   Fill_buffer( "BUFFER 1 TO Q 1", buffer );

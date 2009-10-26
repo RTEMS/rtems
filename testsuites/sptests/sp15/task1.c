@@ -38,7 +38,7 @@ rtems_task Task_1(
     &ptid_1
   );
   directive_failed( status, "rtems_partition_ident of PT1" );
-  printf( "%08x\n", ptid_1 );
+  printf( "%08" PRIxrtems_id "\n", ptid_1 );
 
   puts_nocr( "TA1 - rtems_partition_ident - partition 2 id = " );
   status = rtems_partition_ident(
@@ -47,7 +47,7 @@ rtems_task Task_1(
     &ptid_2
   );
   directive_failed( status, "rtems_partition_ident of PT2" );
-  printf( "%08x\n", ptid_2 );
+  printf( "%08" PRIxrtems_id "\n", ptid_2 );
 
   puts_nocr(
     "TA1 - rtems_partition_get_buffer - buffer 1 from partition 1  - "

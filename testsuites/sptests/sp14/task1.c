@@ -96,7 +96,7 @@ rtems_test_pause();
     puts( "TA1 - timer routine got the correct arguments" );
   else
     printf(
-      "TA1 - timer got (0x%x, %p) instead of (0x%x, %p)!!!!\n",
+      "TA1 - timer got (0x%" PRIxrtems_id ", %p) instead of (0x%" PRIxrtems_id ", %p)!!!!\n",
       Timer_got_this_id,
       Timer_got_this_pointer,
       Timer_id[ 1 ],

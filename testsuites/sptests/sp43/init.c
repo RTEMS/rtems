@@ -46,8 +46,8 @@ void print_class_info(
 {
   printf(
     "%s API %s Information\n"
-    "    minimum id  : 0x%08x maximum id: 0x%08x\n"
-    "    maximum     :    %7d available : %d\n"
+    "    minimum id  : 0x%08" PRIxrtems_id " maximum id: 0x%08" PRIxrtems_id "\n"
+    "    maximum     :    %7" PRIu32 " available : %" PRIu32 "\n"
     "    auto_extend : %s\n",
     rtems_object_get_api_name(api),
     rtems_object_get_api_class_name(api, class),

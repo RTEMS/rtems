@@ -50,12 +50,12 @@ rtems_task Task_1(
   puts( "TA1 - rtems_timer_ident - identing timer 1" );
   status = rtems_timer_ident( Timer_name[ 1 ], &tmid );
   directive_failed( status, "rtems_timer_ident" );
-  printf( "TA1 - timer 1 has id (0x%x)\n", tmid );
+  printf( "TA1 - timer 1 has id (0x%" PRIxrtems_id ")\n", tmid );
 
   puts( "TA1 - rtems_timer_ident - identing timer 2" );
   status = rtems_timer_ident( Timer_name[ 2 ], &tmid2 );
   directive_failed( status, "rtems_timer_ident" );
-  printf( "TA1 - timer 2 has id (0x%x)\n", tmid2 );
+  printf( "TA1 - timer 2 has id (0x%" PRIxrtems_id ")\n", tmid2 );
 
 /* make sure insertion does not unintentionally fire a timer per PR147 */
 

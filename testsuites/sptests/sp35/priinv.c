@@ -377,7 +377,7 @@ rtems_task Init(rtems_task_argument ignored)
     &LocalHwSync_S);                                 /* *id */
   directive_failed( status, "rtems_semaphore_create (SYNC)" );
   
-  printf( "Sync Mutex Id = 0x%08x\n", LocalHwSync_S );
+  printf( "Sync Mutex Id = 0x%08" PRIxrtems_id "\n", LocalHwSync_S );
   
   /* Create resource semaphore for exclusive access to the local HW */
   status = rtems_semaphore_create(
@@ -391,7 +391,7 @@ rtems_task Init(rtems_task_argument ignored)
     &LocalHwAccess_R);                     /* *id              */
   directive_failed( status, "rtems_semaphore_create (RES1)" );
 
-  printf( "Local Mutex Id = 0x%08x\n", LocalHwAccess_R );
+  printf( "Local Mutex Id = 0x%08" PRIxrtems_id "\n", LocalHwAccess_R );
 
   /* Create resource semaphore for exclusive access to the remote HW */
   status = rtems_semaphore_create(
@@ -405,7 +405,7 @@ rtems_task Init(rtems_task_argument ignored)
     &RemoteHwAccess_R);                    /* *id              */
   directive_failed( status, "rtems_semaphore_create (RES2)" );
 
-  printf( "Remote Mutex Id = 0x%08x\n", RemoteHwAccess_R );
+  printf( "Remote Mutex Id = 0x%08" PRIxrtems_id "\n", RemoteHwAccess_R );
   
 #if defined(TEST_USE_ISR)
   /* Install ISR for HW/SW synchronization, use ta 0x85 which is synchronous */
@@ -429,7 +429,7 @@ rtems_task Init(rtems_task_argument ignored)
       &TaMedium[i]);                                     /* Assigned ID */
     directive_failed( status, "rtems_task_create (MEDn)" );
 
-    printf( "TaMedium[%d] Id = 0x%08x\n", i, TaMedium[i] );
+    printf( "TaMedium[%d] Id = 0x%08" PRIxrtems_id "\n", i, TaMedium[i] );
     status = rtems_task_start(
       TaMedium[i],
       Medium_Exec,
@@ -449,7 +449,7 @@ rtems_task Init(rtems_task_argument ignored)
     &TaHigh);                                          /* Assigned ID */
   directive_failed( status, "rtems_task_create (HIGH)" );
 
-  printf( "TaHigh Id = 0x%08x\n", TaHigh );
+  printf( "TaHigh Id = 0x%08" PRIxrtems_id "\n", TaHigh );
   status = rtems_task_start(TaHigh, High_Exec, 0);
   directive_failed( status, "rtems_task_start (HIGH)" );
 
@@ -464,7 +464,7 @@ rtems_task Init(rtems_task_argument ignored)
     &TaLow);                                           /* Assigned ID */
   directive_failed( status, "rtems_task_create (LOW)" );
 
-  printf( "TaLow Id = 0x%08x\n", TaLow );
+  printf( "TaLow Id = 0x%08" PRIxrtems_id "\n", TaLow );
   status = rtems_task_start(TaLow, Low_Exec, 0);
   directive_failed( status, "rtems_task_start (LOW)" );
 
@@ -479,7 +479,7 @@ rtems_task Init(rtems_task_argument ignored)
     &TaHwSim);                                         /* Assigned ID */
   directive_failed( status, "rtems_task_create (HWSM)" );
 
-  printf( "TaHwSim Id = 0x%08x\n", TaHwSim );
+  printf( "TaHwSim Id = 0x%08" PRIxrtems_id "\n", TaHwSim );
 
   status = rtems_task_start(TaHwSim, LocalHwSim_Exec, 0);
   directive_failed( status, "rtems_task_start (HWSM)" );

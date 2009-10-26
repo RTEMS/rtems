@@ -38,7 +38,7 @@ rtems_task Task_1(
 
   /* Obtain the region id */
   status = rtems_region_ident(Region_name[ 1 ], &region_id);
-  printf( "TA1 - rtems_region_ident - 0x%08x\n", region_id );
+  printf( "TA1 - rtems_region_ident - 0x%08" PRIxrtems_id "\n", region_id );
   directive_failed(status, "rtems_region_ident of RN01");
 
   /* Get a 64 byte segment from the region */
@@ -186,7 +186,7 @@ rtems_task Task_1(
   printf( "TA1 - got segment size of %d\n", segment_size );
 
   /* Get information about the region */
-  printf( "TA1 - rtems_region_get_information - 0x%08x\n", region_id );
+  printf( "TA1 - rtems_region_get_information - 0x%08" PRIxrtems_id "\n", region_id );
   status = rtems_region_get_information(region_id, &region_info);
   directive_failed(status, "rtems_region_get_information of RN01");
   printf(
@@ -195,7 +195,7 @@ rtems_task Task_1(
     region_info.Used.number
   );
 
-  printf( "TA1 - rtems_region_get_free_information - 0x%08x\n", region_id );
+  printf( "TA1 - rtems_region_get_free_information - 0x%08" PRIxrtems_id "\n", region_id );
   status = rtems_region_get_free_information(region_id, &region_info);
   directive_failed(status, "rtems_region_get_free_information of RN01");
   printf(
