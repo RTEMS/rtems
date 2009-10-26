@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <termios.h>
+#include <rtems/termiostypes.h>
 #include "termios_testdriver.h"
 
 int termios_test_driver_inbyte_nonblocking( int port )
