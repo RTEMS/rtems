@@ -40,7 +40,7 @@ rtems_task Task_1(
   );
   directive_failed( status, "rtems_task_set_priority" );
   printf(
-    "TA1 - rtems_task_set_priority - get initial priority of self: %02d\n",
+    "TA1 - rtems_task_set_priority - get initial priority of self: %02" PRIdrtems_task_priority "\n",
     the_priority
   );
 
@@ -48,7 +48,7 @@ rtems_task Task_1(
     status = rtems_task_get_note( my_id, RTEMS_NOTEPAD_8, &the_priority );
     directive_failed( status, "rtems_task_get_note" );
     printf(
-"TA1 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: %02d\n",
+"TA1 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: %02" PRIdrtems_task_priority "\n",
        the_priority
     );
 
@@ -68,13 +68,13 @@ rtems_task Task_1(
       directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
     }
 
-    printf( "TA1 - rtems_task_set_note - set TA2's RTEMS_NOTEPAD_8: %02d\n",
+    printf( "TA1 - rtems_task_set_note - set TA2's RTEMS_NOTEPAD_8: %02" PRIdrtems_task_priority "\n",
             the_priority
     );
     status = rtems_task_set_note( Task_id[ 2 ], RTEMS_NOTEPAD_8, the_priority );
     directive_failed( status, "rtems_task_set_note" );
 
-    printf( "TA1 - rtems_task_set_priority - set TA2's priority: %02d\n",
+    printf( "TA1 - rtems_task_set_priority - set TA2's priority: %02" PRIdrtems_task_priority "\n",
             the_priority
     );
     status = rtems_task_set_priority(
