@@ -55,10 +55,8 @@ int termios_test_driver_set_attributes(
   const struct termios *t
 )
 {
-  uint32_t               ulBaudDivisor;
   int                    baud_requested;
   int                    number;
-  rtems_interrupt_level  Irql;
   const char            *parity = "NONE";
   const char            *char_size = "5";
   const char            *stop = "NONE";

@@ -220,7 +220,6 @@ void test_termios_set_baud(
 {
   int             sc;
   int             i;
-  int             number;
   struct termios  attr;
 
   puts( "Test termios setting device baud rate..." );
@@ -259,7 +258,6 @@ void test_termios_set_charsize(
 {
   int             sc;
   int             i;
-  int             number;
   struct termios  attr;
 
   puts(
@@ -301,7 +299,6 @@ void test_termios_set_parity(
 {
   int             sc;
   int             i;
-  int             number;
   struct termios  attr;
 
   puts(
@@ -343,7 +340,6 @@ void test_termios_set_stop_bits(
 {
   int             sc;
   int             i;
-  rtems_termios_baud_t number;
   struct termios  attr;
 
   puts(

@@ -133,7 +133,7 @@ static void test_free( void *addr )
 
 static void test_heap_cases_1(void)
 {
-  void     *p1, *p2, *p3, *p4;
+  void     *p1, *p2, *p3;
   intptr_t  u1, u2;
   Heap_Resize_status rsc;
 
@@ -216,8 +216,9 @@ static void test_check_alloc(
 
     uintptr_t const alloc_area_begin = _Heap_Align_down( alloc_begin, page_size );
     uintptr_t const alloc_area_offset = alloc_begin - alloc_area_begin;
+#if UNUSED
     uintptr_t const alloc_area_size = alloc_area_offset + alloc_size;
-
+#endif
     Heap_Block *block = _Heap_Block_of_alloc_area( alloc_area_begin, page_size );
     uintptr_t const block_begin = (uintptr_t ) block;
     uintptr_t const block_size = _Heap_Block_size( block );
@@ -381,8 +382,6 @@ static void test_heap_do_initialize(
 
 static void test_heap_initialize(void)
 {
-  uintptr_t rv = 0;
-
   puts( "run tests for _Heap_Initialize()" );
 
   test_heap_do_initialize( TEST_HEAP_SIZE, 0, true );
@@ -870,8 +869,6 @@ static void test_heap_resize_block(void)
 {
   void *p1, *p2, *p3;
   uintptr_t new_alloc_size = 0;
-  uintptr_t old_size = 0;
-  uintptr_t new_size = 0;
   Heap_Block *block = NULL;
 
   puts( "run tests for _Heap_Resize_Block()" );
@@ -930,8 +927,6 @@ static void test_heap_resize_block(void)
 
 static void test_heap_extend(void)
 {
-  void     *p1, *p2, *p3, *p4;
-  uint32_t  u1, u2;
   bool      ret;
 
   /*
@@ -1015,7 +1010,7 @@ static void test_protected_heap_info(void)
  */
 static void test_posix_memalign(void)
 {
-  void *p1, *p2;
+  void *p1;
   int i;
   int sc;
   int maximumShift;
