@@ -1,5 +1,10 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp19/first.c, sp19/fptask.c, sp19/fptest.h, sp19/inttest.h,
+	sp19/task1.c: Add missing PRI*32's.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* sp34/changepri.c, sp35/priinv.c:
 	Use PRIdPriority_Control to print Priority_Control's.
 
