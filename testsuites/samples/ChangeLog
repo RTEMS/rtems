@@ -1,3 +1,9 @@
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* nsecs/rprintf.h: Remove (PRItime_t moved to tmacros.h).
+	* nsecs/Makefile.am: Add -I$(top_srcdir)/../support/include.
+	* nsecs/init.c: Include "tmacros.h" instead of "rprintf.h"
+
 2009-10-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* capture/init.c: Remove setup_tasks_to_watch.
