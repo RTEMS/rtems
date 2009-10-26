@@ -1,5 +1,6 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp20/task1.c: Misc. uint32_t fixes.
 	* sp47/init.c: Add PRIXModes_Control, PRIXrtems_mode.
 	Use PRIXrtems_mode to print rtems_mode's.
 	* sp08/system.h: Add PRIxModes_Control, PRIxrtems_mode.
