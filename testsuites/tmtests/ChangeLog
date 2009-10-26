@@ -1,3 +1,8 @@
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tm05/task1.c, tm18/task1.c, tmoverhd/empty.c,
+	tmoverhd/system.h: Add missing prototypes.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
