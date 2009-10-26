@@ -1,5 +1,8 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* base_sp/apptask.c, unlimited/init.c, unlimited/test1.c,
+	unlimited/test2.c, unlimited/test3.c:
+	Include "tmacros.h". Use PRIxrtems_id to print rtems_ids.
 	* unlimited/Makefile.am, base_sp/Makefile.am:
 	Add -I$(top_srcdir)/../support/include.
 
