@@ -1,5 +1,10 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* unlimited/Makefile.am, base_sp/Makefile.am:
+	Add -I$(top_srcdir)/../support/include.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* loopback/init.c : Add prototype for rtems_bsdnet_loopattach.
 	Remove evil type-cast.
 	* nsecs/rprintf.h: Remove (PRItime_t moved to tmacros.h).
