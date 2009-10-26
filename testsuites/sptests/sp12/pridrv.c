@@ -24,7 +24,7 @@
 #include "system.h"
 
 void Priority_test_driver(
-  uint32_t   priority_base
+  rtems_task_priority priority_base
 )
 {
   rtems_task_priority previous_priority;
@@ -83,7 +83,7 @@ void Priority_test_driver(
             priority_base + 4,
             &previous_priority
           );
-          printf( "PDRV - change priority of PRI5 from %d to %d\n",
+          printf( "PDRV - change priority of PRI5 from %" PRIdrtems_task_priority " to %" PRIdrtems_task_priority "\n",
              previous_priority,
              priority_base + 4
           );
@@ -95,7 +95,7 @@ void Priority_test_driver(
           &previous_priority
         );
         directive_failed( status, "PDRV rtems_task_set_priority CURRENT" );
-        printf( "PDRV - priority of PRI5 is %d\n", previous_priority );
+        printf( "PDRV - priority of PRI5 is %" PRIdrtems_task_priority "\n", previous_priority );
       }
     }
   }
