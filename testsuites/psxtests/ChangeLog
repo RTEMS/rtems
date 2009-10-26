@@ -1,5 +1,7 @@
 2009-10-26	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psxclock/init.c, psxtimer01/psxtimer.c:
+	Use PRItime_t to print time_t's.
 	* configure.ac: Add AC_CHECK_HEADERS sys/mman.h.
 	Add AC_CHECK_DECLS pthread_atfork, adjtime, mprotect.
 
