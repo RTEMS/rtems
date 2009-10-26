@@ -44,10 +44,11 @@ rtems_task Init(rtems_task_argument argument);
 /*
  * Network configuration
  */
-extern void rtems_bsdnet_loopattach();
+extern void rtems_bsdnet_loopattach(struct rtems_bsdnet_ifconfig *conf, int attaching);
+
 static struct rtems_bsdnet_ifconfig loopback_config = {
     "lo0",                          /* name */
-    (int (*)(struct rtems_bsdnet_ifconfig *, int))rtems_bsdnet_loopattach, /* attach function */
+    rtems_bsdnet_loopattach,        /* attach function */
     NULL,                           /* link to next interface */
     "127.0.0.1",                    /* IP address */
     "255.0.0.0",                    /* IP net mask */
