@@ -16,10 +16,7 @@
 #ifndef __TMACROS_h
 #define __TMACROS_h
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include <inttypes.h>
 #include <bsp.h>    /* includes <rtems.h> */
 
 #include <ctype.h>
@@ -28,6 +25,11 @@ extern "C" {
 #include <string.h>
 #include <assert.h>
 #include <rtems/error.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 #define FOREVER 1                  /* infinite loop */
 
@@ -209,7 +211,7 @@ extern "C" {
 #endif
 
 #define put_name( name, crlf ) \
-{ uint32_t   c0, c1, c2, c3; \
+{ int c0, c1, c2, c3; \
   c0 = (name >> 24) & 0xff; \
   c1 = (name >> 16) & 0xff; \
   c2 = (name >> 8) & 0xff; \
