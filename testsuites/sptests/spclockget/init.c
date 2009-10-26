@@ -45,7 +45,7 @@ rtems_task Init(
  
   sc = rtems_clock_get( RTEMS_CLOCK_GET_TIME_VALUE, &timev );
   directive_failed( sc, "rtems_clock_get -- Time Value" );
-  printf( "Init - rtems_clock_get - Time Value = %d\n", timev.tv_sec );
+  printf( "Init - rtems_clock_get - Time Value = %" PRItime_t "\n", timev.tv_sec );
  
   puts( "*** END OF TEST LEGACY RTEMS_CLOCK_GET ***" );
   rtems_test_exit(0);
