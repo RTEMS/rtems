@@ -1,5 +1,15 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp07/task1.c, sp07/task2.c, ssp12/pritask.c: 
+	Use PRIdrtems_task_priority to print rtems_task_priority's
+	* sp12/system.h:
+	Change Priority_Test_driver to use rtems_task_priority argument.
+	* sp12/pridrv.c: 
+	Change Priority_Test_driver to use rtems_task_priority argument.
+	Use PRIdrtems_task_priority to print rtems_task_priority's.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* sp02/task1.c, sp12/task1.c, sp13/task1.c, sp14/task1.c, sp15/task1.c,
 	sp16/task1.c, sp20/task1.c, sp22/init.c, sp22/task1.c, sp23/task1.c,
 	sp25/task1.c, sp31/init.c, sp31/task1.c, sp34/changepri.c,
