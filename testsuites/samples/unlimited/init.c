@@ -23,6 +23,7 @@
 #define CONFIGURE_INIT
 
 #include "system.h"
+#include "tmacros.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -87,7 +88,7 @@ void destory_all_tasks(
   for (task = 0; task < MAX_TASKS; task++)
     if (task_id[task])
     {
-      printf(" %s : signal task %08x to delete, ", who, task_id[task]);
+      printf(" %s : signal task %08" PRIxrtems_id " to delete, ", who, task_id[task]);
       fflush(stdout);
       rtems_event_send(task_id[task], 1);
       task_id[task] = 0;

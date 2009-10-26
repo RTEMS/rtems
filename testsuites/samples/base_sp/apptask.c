@@ -19,6 +19,8 @@
  */
 
 #include "system.h"
+#include "tmacros.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -32,7 +34,7 @@ rtems_task Application_task(
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
 
   printf( "Application task was invoked with argument (%d) "
-          "and has id of 0x%x\n", argument, tid );
+          "and has id of 0x%" PRIxrtems_id "\n", argument, tid );
 
   printf( "*** END OF SAMPLE SINGLE PROCESSOR APPLICATION ***\n" );
   exit( 0 );

@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 #include "system.h"
+#include "tmacros.h"
 #include <rtems/score/object.h>
 
 void test1()
@@ -66,7 +67,7 @@ void test1()
     if (status_code_bad(result))
       break;
 
-    printf("number = %3" PRIi32 ", id = %08x, starting, ", task_count, task_id[task_count]);
+    printf("number = %3" PRIi32 ", id = %08" PRIxrtems_id ", starting, ", task_count, task_id[task_count]);
 
     fflush(stdout);
     result = rtems_task_start(task_id[task_count],

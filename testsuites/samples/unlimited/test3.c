@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "system.h"
+#include "tmacros.h"
 
 void test3()
 {
@@ -72,7 +73,7 @@ void test3()
     if (status_code_bad(result))
       break;
 
-    printf("number = %3" PRIi32 ", id = %08x, starting, ", task_count, task_id[task_count]);
+    printf("number = %3" PRIi32 ", id = %08" PRIxrtems_id ", starting, ", task_count, task_id[task_count]);
     fflush(stdout);
 
     result = rtems_task_start(task_id[task_count],
@@ -118,7 +119,7 @@ void test3()
         exit( 1 );
       }
 
-      printf(" TEST3 : remove, signal task %08x, ", task_id[remove_task]);
+      printf(" TEST3 : remove, signal task %08" PRIxrtems_id ", ", task_id[remove_task]);
       rtems_event_send(task_id[remove_task], 1);
       task_id[remove_task] = 0;
     }
@@ -135,7 +136,7 @@ void test3()
   {
     if (task_id[remove_task])
     {
-      printf(" TEST3 : remove, signal task %08x, ", task_id[remove_task]);
+      printf(" TEST3 : remove, signal task %08" PRIxrtems_id ", ", task_id[remove_task]);
       rtems_event_send(task_id[remove_task], 1);
       task_id[remove_task] = 0;
     }
