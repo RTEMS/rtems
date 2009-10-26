@@ -134,7 +134,7 @@ static void test_free( void *addr )
 static void test_heap_cases_1(void)
 {
   void     *p1, *p2, *p3;
-  intptr_t  u1, u2;
+  uintptr_t  u1, u2;
   Heap_Resize_status rsc;
 
   /*

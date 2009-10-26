@@ -23,8 +23,8 @@ void test_case_one(void)
 {
   uint32_t           heap_size;
   void              *ptr1;
-  intptr_t           old;
-  intptr_t           avail;
+  uintptr_t          old;
+  uintptr_t          avail;
   Heap_Resize_status hc;
 
   puts( "Init - _Heap_Initialize (for test one) - OK" );
@@ -53,8 +53,8 @@ void test_case_two(void)
 {
   uint32_t           heap_size;
   void              *ptr1;
-  intptr_t           old;
-  intptr_t           avail;
+  uintptr_t          old;
+  uintptr_t          avail;
   Heap_Resize_status hc;
 
   puts( "\nInit - _Heap_Initialize (for test two) - OK" );
