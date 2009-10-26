@@ -61,11 +61,11 @@ static void *test_allocate_block(void)
 static void test_create_heap_with_gaps(void)
 {
   void *p1 = test_allocate_block();
-  void *p2 = test_allocate_block();
+  /* void *p2 = */ test_allocate_block();
   void *p3 = test_allocate_block();
-  void *p4 = test_allocate_block();
+  /* void *p4 = */ test_allocate_block();
   void *p5 = test_allocate_block();
-  void *p6 = test_allocate_block();
+  /* void *p6 = */ test_allocate_block();
   _Heap_Free( &TestHeap, p1 );
   _Heap_Free( &TestHeap, p3 );
   _Heap_Free( &TestHeap, p5 );
