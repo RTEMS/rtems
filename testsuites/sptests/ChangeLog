@@ -1,5 +1,10 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp20/task1.c, sp32/init.c, spclockget/init.c: Use
+	PRIdrtems_interval to print rtems_interval's.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* sp13/task1.c: Misc. uint32_t fixes.
 	* sp20/task1.c: Misc. uint32_t fixes.
 	* sp47/init.c: Add PRIXModes_Control, PRIXrtems_mode.
