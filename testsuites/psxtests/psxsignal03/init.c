@@ -120,7 +120,7 @@ void *Test_Thread(void *arg)
   /* wait for a signal */
   memset( &info, 0, sizeof(info) );
 
-  printf( "%s - Wait for %s unblocked\n", signal_name(SIGNAL_ONE) );
+  printf( "%s - Wait for %s unblocked\n", name, signal_name(SIGNAL_ONE) );
   sigwaitinfo( &wait_mask, &info );
   assert( !sc );
 
