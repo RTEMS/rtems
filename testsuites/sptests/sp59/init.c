@@ -51,7 +51,7 @@ rtems_task Init(
 
   priority = RTEMS_MAXIMUM_PRIORITY / 4;
   priority = (priority * 3) + (priority / 2);
-  printf( "Init - blocking task priority will be %d\n", priority );
+  printf( "Init - blocking task priority will be %" PRIdrtems_task_priority "\n", priority );
 
   puts( "Init - rtems_task_create - delay task - OK" );
   status = rtems_task_create(

@@ -76,7 +76,7 @@ rtems_task BlockingTasks(rtems_task_argument arg)
   status = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &opri);
   directive_failed( status, "rtems_task_set_priority" );
 
-  printf("semaphore_obtain -- BlockingTask %d @ pri=%d) blocks\n", arg, opri);
+  printf("semaphore_obtain -- BlockingTask %d @ pri=%" PRIdrtems_task_priority ") blocks\n", arg, opri);
   status = rtems_semaphore_obtain(Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   directive_failed( status, "rtems_semaphore_obtain" );
 
@@ -84,7 +84,7 @@ rtems_task BlockingTasks(rtems_task_argument arg)
   status = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &npri);
   directive_failed( status, "rtems_task_set_priority" );
 
-  printf("semaphore_obtain -- BlockingTask %d @ pri=%d) returns\n", arg, npri);
+  printf("semaphore_obtain -- BlockingTask %d @ pri=%" PRIdrtems_task_priority ") returns\n", arg, npri);
 
   (void) rtems_task_delete( RTEMS_SELF );
 }
