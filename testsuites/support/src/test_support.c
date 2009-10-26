@@ -22,7 +22,7 @@
 static char  Too_Long_Name[PATH_MAX + 2];
 static char  Longest_Name[PATH_MAX + 1];
 
-const char *Get_Too_Long_Name() 
+const char *Get_Too_Long_Name(void) 
 {
   int i;
 
@@ -32,7 +32,7 @@ const char *Get_Too_Long_Name()
   return Too_Long_Name;
 }
 
-const char *Get_Longest_Name()
+const char *Get_Longest_Name(void)
 {
   int i;
 

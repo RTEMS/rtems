@@ -1,5 +1,6 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* support/src/test_support.c: Add missing prototypes.
 	* support/include/tmacros.h: Include <inttypes.h>.
 	Move extern "C".
 	Let put_name use "int" instead "uint32_t" (Arg to putchar must be int).
