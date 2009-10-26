@@ -44,7 +44,7 @@
 #define FP_LOAD( _factor ) fp01 = 2;
 #define FP_CHECK( _factor ) \
    if ( fp01 != 2 ) \
-          printf("%d: single integer is wrong -- (%d != 2) \n", \
+          printf("%" PRIu32 ": single integer is wrong -- (%d != 2) \n", \
              task_index, fp01 );  \
 
 #else
@@ -125,7 +125,7 @@
 
 #define FP_CHECK_ONE( _v, _base, _factor ) \
       if ( FPNEQ( (_v), ((_base) + (_factor)) ) )  { \
-          printf("%d: " #_v " wrong -- (%g not %g)\n", \
+          printf("%" PRIu32 ": " #_v " wrong -- (%g not %g)\n", \
              task_index, (_v), (_base + _factor));  \
       }
 

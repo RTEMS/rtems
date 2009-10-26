@@ -39,7 +39,7 @@ rtems_task Task_1(
   INTEGER_LOAD( INTEGER_factors[ task_index ] );
 
   put_name( Task_name[ task_index ], FALSE );
-  printf( " - integer base = (0x%x)\n", INTEGER_factors[ task_index ] );
+  printf( " - integer base = (0x%" PRIx32 ")\n", INTEGER_factors[ task_index ] );
 
   while( FOREVER ) {
     status = rtems_clock_get_tod( &time );
