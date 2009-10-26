@@ -22,8 +22,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <rtems/score/timespec.h> /* _Timespec_Substract */
-
-#include "rprintf.h"
+#include "tmacros.h"
 
 char *my_ctime( time_t t )
 {
