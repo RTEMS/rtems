@@ -800,7 +800,7 @@ static void test_heap_block_allocate( void )
   test_heap_do_block_allocate( 3, p2 );
 }
 
-static void *test_alloc_one_page()
+static void *test_alloc_one_page(void)
 {
   void *alloc_begin_ptr = _Heap_Allocate_aligned_with_boundary(
     &TestHeap,
@@ -821,7 +821,7 @@ static void *test_alloc_one_page()
   return alloc_begin_ptr;
 }
 
-static void *test_alloc_two_pages()
+static void *test_alloc_two_pages(void)
 {
   void *alloc_begin_ptr = _Heap_Allocate_aligned_with_boundary(
     &TestHeap,
@@ -862,7 +862,7 @@ static void test_simple_resize_block(
   rtems_test_assert( status == expected_status );
 }
 
-static void test_heap_resize_block()
+static void test_heap_resize_block(void)
 {
   void *p1, *p2, *p3;
   uintptr_t new_alloc_size = 0;

@@ -15,7 +15,7 @@
 
 #include <rtems.h>
 
-void b() {}
+void b(void) {}
 
 void blow_stack( void )
 {

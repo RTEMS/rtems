@@ -58,7 +58,7 @@ static void *test_allocate_block(void)
   return _Heap_Allocate_aligned_with_boundary( &TestHeap, 1, 0, 0 );
 }
 
-static void test_create_heap_with_gaps()
+static void test_create_heap_with_gaps(void)
 {
   void *p1 = test_allocate_block();
   void *p2 = test_allocate_block();
@@ -71,7 +71,7 @@ static void test_create_heap_with_gaps()
   _Heap_Free( &TestHeap, p5 );
 }
 
-static void *test_fill_heap()
+static void *test_fill_heap(void)
 {
   void *p1 = NULL;
   void *p2 = NULL;

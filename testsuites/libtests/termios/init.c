@@ -482,7 +482,7 @@ unsigned long get_baud_rate( void )
 }
 
 
-unsigned long get_parity()
+unsigned long get_parity(void)
 {
   int parity;
 
@@ -510,7 +510,7 @@ unsigned long get_parity()
 }
 
 
-unsigned long get_stop_bits()
+unsigned long get_stop_bits(void)
 {
   int stop_bits;
 
@@ -535,7 +535,7 @@ unsigned long get_stop_bits()
 }
 
 
-unsigned long get_data_bits()
+unsigned long get_data_bits(void)
 {
   int data_bits;
 
