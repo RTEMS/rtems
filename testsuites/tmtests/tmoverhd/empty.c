@@ -12,10 +12,6 @@
 
 #include "system.h"
 
-rtems_task task_func(void);
-void null_func(void);
-rtems_status_code Empty_directive(void);
-
 rtems_timer_service_routine Timer_handler(
   rtems_id argument
 )

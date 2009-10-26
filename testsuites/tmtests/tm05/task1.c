@@ -27,7 +27,7 @@ rtems_task Low_task(
   rtems_task_argument argument
 );
 
-void test_init();
+extern void test_init(void);
 
 int operation_count = OPERATION_COUNT;
 
@@ -47,7 +47,7 @@ rtems_task Init(
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
 
-void test_init()
+void test_init(void)
 {
   rtems_status_code   status;
   rtems_task_entry    task_entry;

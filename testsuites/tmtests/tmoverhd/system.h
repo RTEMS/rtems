@@ -34,11 +34,11 @@ rtems_asr Asr_handler(
   rtems_signal_set signals
 );
 
-rtems_task task_func();
+extern rtems_task task_func(void);
 
-void null_func();
+extern void null_func(void);
 
-rtems_status_code Empty_directive();
+extern rtems_status_code Empty_directive();
 
 #include <timesys.h>
 

@@ -15,7 +15,7 @@
 uint32_t   taskcount;
 rtems_task_priority taskpri;
 
-void test_init(void);
+extern void test_init(void);
 
 rtems_task First_task(
   rtems_task_argument argument
@@ -29,8 +29,6 @@ rtems_task Last_task(
   rtems_task_argument argument
 );
 
-
-void test_init();
 
 rtems_task Init(
   rtems_task_argument argument
