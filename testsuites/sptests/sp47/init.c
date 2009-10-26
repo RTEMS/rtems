@@ -6,6 +6,9 @@
 
 #include <tmacros.h>
 
+#define PRIXModes_Control 	PRIX32
+#define PRIXrtems_mode		PRIXModes_Control
+
 rtems_task test_asr(rtems_task_argument unused);
 rtems_task Init(rtems_task_argument ignored);
 
@@ -18,7 +21,7 @@ rtems_task test_asr(rtems_task_argument unused)
   if ( (mode & RTEMS_NO_ASR) == 0 ) {
     puts( "ERROR - disable ASR not honored" );
     printf(
-      "mode = 0x%08X asr = %s\n", mode,
+      "mode = 0x%08" PRIXrtems_mode " asr = %s\n", mode,
       (mode & RTEMS_NO_ASR) ? "OFF" : "ON"
     );
   } else
