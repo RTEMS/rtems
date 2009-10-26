@@ -24,7 +24,7 @@ rtems_task Init(
 );
 
 void Priority_test_driver(
-  uint32_t   priority_base
+  rtems_task_priority priority_base
 );
 
 rtems_task Priority_task(
