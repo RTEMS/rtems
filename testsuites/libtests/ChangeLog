@@ -1,5 +1,7 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* malloctest/init.c: Add local prototype for malloc_walk,
+	malloc_info.
 	* malloctest/task1.c: Add local prototype for malloc_walk.
 	* monitor02/init.c: Remove unused vars.
 	* stackchk01/init.c: Remove unused vars.
