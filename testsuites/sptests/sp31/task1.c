@@ -102,9 +102,9 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   status = rtems_timer_get_information( tmid, &info );
-  printf( "Timer 1 scheduled for %d ticks since boot\n",
+  printf( "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
     info.start_time + info.initial );
-  printf( "Timer Server scheduled for %d ticks since boot\n",
+  printf( "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
     _Timer_Server->Timer.initial + _Timer_Server->Timer.start_time );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
@@ -118,9 +118,9 @@ rtems_task Task_1(
 
   status = rtems_timer_get_information( tmid, &info );
   directive_failed( status, "rtems_timer_get_information" );
-  printf( "Timer 1 scheduled for %d ticks since boot\n",
+  printf( "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
     info.start_time + info.initial );
-  printf( "Timer Server scheduled for %d ticks since boot\n",
+  printf( "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
     _Timer_Server->Timer.initial + _Timer_Server->Timer.start_time );
   assert(  (info.start_time + info.initial) ==
     (_Timer_Server->Timer.initial + _Timer_Server->Timer.start_time) );
@@ -136,9 +136,9 @@ rtems_task Task_1(
 
   status = rtems_timer_get_information( tmid, &info );
   directive_failed( status, "rtems_timer_get_information" );
-  printf( "Timer 1 scheduled for %d ticks since boot\n",
+  printf( "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
     info.start_time + info.initial );
-  printf( "Timer Server scheduled for %d ticks since boot\n",
+  printf( "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
     _Timer_Server->Timer.initial + _Timer_Server->Timer.start_time );
   assert(  (info.start_time + info.initial) ==
     (_Timer_Server->Timer.initial + _Timer_Server->Timer.start_time) );
