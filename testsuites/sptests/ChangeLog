@@ -1,5 +1,7 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp31/task1.c: Use PRIdWatchdog_Interval to print
+	Watchdog_Interval's.
 	* sp20/task1.c, sp32/init.c, spclockget/init.c: Use
 	PRIdrtems_interval to print rtems_interval's.
 
