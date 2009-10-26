@@ -143,7 +143,7 @@ rtems_task Task_1_through_6(
         {
           rtems_interval meas = time[index] - time[index-1];
           period = index*TA6_PERIOD_FACTOR;
-          printf("TA6 - Actual: %d  Expected: %d", meas, period);
+          printf("TA6 - Actual: %" PRIdrtems_interval " Expected: %" PRIdrtems_interval, meas, period);
           if (period == meas) printf(" - OK\n");
           else printf(" - FAILED\n");
         }

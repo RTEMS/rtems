@@ -73,7 +73,7 @@ rtems_task Init(
   /* tabulate and print results */
   for (loopy = 0; loopy < 5; loopy++) {
     printf(
-        "period %d: measured %d tick(s), wanted %d\n",
+        "period %d: measured %" PRIdrtems_interval " tick(s), wanted %" PRIdrtems_interval "\n",
         loopy, timestamps[loopy+1] - timestamps[loopy],
         wantintervals[loopy]
     );
