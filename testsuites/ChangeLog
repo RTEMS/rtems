@@ -1,5 +1,9 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* support/include/tmacros.h (print_time): Use PRIu32 instead of %d.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* support/include/test_support.h: Add missing prototypes.
 	* support/include/tmacros.h: Move _Thread_Dispatch_disable_level
 	outside of check_dispatch_disable_level.
