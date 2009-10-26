@@ -205,12 +205,12 @@ rtems_test_pause();
   puts( "TA1 - rtems_message_queue_get_number_pending - check Q 3" );
   status = rtems_message_queue_get_number_pending( Queue_id[ 3 ], &count );
   directive_failed( status, "rtems_message_queue_get_number_pending" );
-  printf( "TA1 - %d messages are pending on Q 3\n", count );
+  printf( "TA1 - %" PRIu32 " messages are pending on Q 3\n", count );
 
   puts( "TA1 - rtems_message_queue_flush - empty Q 3" );
   status = rtems_message_queue_flush( Queue_id[ 3 ], &count );
   directive_failed( status, "rtems_message_queue_flush" );
-  printf( "TA1 - %d messages were flushed from Q 3\n", count );
+  printf( "TA1 - %" PRIu32 " messages were flushed from Q 3\n", count );
 
   Fill_buffer( "BUFFER 1 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 3" );
@@ -231,12 +231,12 @@ rtems_test_pause();
     16,
     &count
   );
-  printf( "TA1 - number of tasks awakened = %d\n", count );
+  printf( "TA1 - number of tasks awakened = %" PRIu32 "\n", count );
 
   puts( "TA1 - rtems_message_queue_get_number_pending - check Q 3" );
   status = rtems_message_queue_get_number_pending( Queue_id[ 3 ], &count );
   directive_failed( status, "rtems_message_queue_get_number_pending" );
-  printf( "TA1 - %d messages are pending on Q 3\n", count );
+  printf( "TA1 - %" PRIu32 " messages are pending on Q 3\n", count );
 
   Fill_buffer( "BUFFER 3 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 3" );
@@ -245,7 +245,7 @@ rtems_test_pause();
 
   puts( "TA1 - rtems_message_queue_flush - Q 3" );
   status = rtems_message_queue_flush( Queue_id[ 3 ], &count );
-  printf( "TA1 - %d messages were flushed from Q 3\n", count );
+  printf( "TA1 - %" PRIu32 " messages were flushed from Q 3\n", count );
 
   puts( "TA1 - rtems_message_queue_send until all message buffers consumed" );
   while ( FOREVER ) {
@@ -257,7 +257,7 @@ rtems_test_pause();
   puts( "TA1 - all message buffers consumed" );
   puts( "TA1 - rtems_message_queue_flush - Q 3" );
   status = rtems_message_queue_flush( Queue_id[ 3 ], &count );
-  printf( "TA1 - %d messages were flushed from Q 3\n", count );
+  printf( "TA1 - %" PRIu32 " messages were flushed from Q 3\n", count );
 
 rtems_test_pause();
 
