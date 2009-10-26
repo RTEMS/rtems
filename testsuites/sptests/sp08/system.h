@@ -25,8 +25,11 @@ rtems_task Task_1(
   rtems_task_argument argument
 );
 
+#define PRIxModes_Control 	PRIx32
+#define PRIxrtems_mode		PRIxModes_Control
+
 #define put_mode( _comment, _output_mode ) \
-   printf( "%s %08x\n", _comment, _output_mode );
+   printf( "%s %08" PRIxrtems_mode "\n", _comment, _output_mode );
 
 /* configuration information */
 
