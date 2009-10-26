@@ -1,5 +1,6 @@
 2009-10-26	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psxsignal03/init.c: Add missing argument to printf.
 	* psxfile01/test.c: Use %zu instead of %d to print size_t's.
 	* psxclock/init.c, psxtimer01/psxtimer.c:
 	Use PRItime_t to print time_t's.
