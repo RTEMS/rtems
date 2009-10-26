@@ -1,5 +1,6 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* monitor02/init.c: Remove unused vars.
 	* stackchk01/init.c: Remove unused vars.
 	* heapwalk/init.c, malloctest/init.c, stackchk/blow.c,
 	termios/init.c: Add missing prototypes.
