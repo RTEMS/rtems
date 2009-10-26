@@ -33,6 +33,10 @@
 #include <errno.h>
 #include <rtems/score/protectedheap.h>
 
+/* HACK: Blatant visibility violations */
+extern int malloc_info(Heap_Information_block *the_info);
+extern void malloc_walk(size_t source, size_t printf_enabled);
+
 /*
  *  A simple test of realloc
  */
