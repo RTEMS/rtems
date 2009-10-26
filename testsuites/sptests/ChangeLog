@@ -1,5 +1,6 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp63/init.c: Fix _Heap_Resize_block args.
 	* sp09/screen09.c: Eliminate unused var warning.
 
 2009-10-24	Ralf Corsépius <ralf.corsepius@rtems.org>
