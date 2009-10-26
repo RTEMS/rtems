@@ -1,5 +1,10 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* malloctest/init.c, termios01/init.c,
+	termios01/termios_testdriver.c: Eliminate unused vars.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* heapwalk/init.c: Comment out unused vars.
 	* termios01/termios_testdriver.c: Include <rtems/termiostypes.h.
 	* malloctest/init.c: Add local prototype for malloc_walk,
