@@ -1,5 +1,9 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* malloctest/init.c: Fix _Heap_Resize_block args.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* malloctest/init.c, termios01/init.c,
 	termios01/termios_testdriver.c: Eliminate unused vars.
 
