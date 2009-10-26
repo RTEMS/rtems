@@ -53,7 +53,7 @@ rtems_task Task_1_through_5(
   }
 
   put_name( Task_name[ argument ], FALSE );
-  printf( "- (0x%08" PRIxrtems_id ") period %d\n", rmid, Periods[ argument ] );
+  printf( "- (0x%08" PRIxrtems_id ") period %" PRIu32 "\n", rmid, Periods[ argument ] );
 
   status = rtems_task_wake_after( 2 );
   directive_failed( status, "rtems_task_wake_after" );
@@ -88,7 +88,7 @@ rtems_task Task_1_through_5(
           if ( Temporary_count.count[ index ] != Iterations[ index ] ) {
             puts_nocr( "FAIL -- " );
             put_name ( Task_name[ index ], FALSE );
-            printf   ( " Actual=%d, Expected=%d\n",
+            printf   ( " Actual=%" PRIu32 ", Expected=%" PRIu32 "\n",
                        Temporary_count.count[ index ],
                        Iterations[ index ]
                      );
@@ -101,7 +101,7 @@ rtems_task Task_1_through_5(
 
         pass += 1;
 
-        printf( "TA5 - PERIODS CHECK OK (%d)\n", pass );
+        printf( "TA5 - PERIODS CHECK OK (%" PRIu32 ")\n", pass );
 
         FLUSH_OUTPUT();
 
