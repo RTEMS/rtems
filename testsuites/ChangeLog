@@ -1,5 +1,9 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* support/include/tmacros.h: Add PRItime_t.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* support/include/tmacros.h (print_time): Use PRIu32 instead of %d.
 
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>

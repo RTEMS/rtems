@@ -251,6 +251,12 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
     rtems_test_exit(0); \
   }
 
+/*
+ * HACK: PRItime_t: inttypes.h-style macro to print a time_t.
+ * The implementation below presumes time_t to be a "long".
+ */
+#define PRItime_t "ld"
+
 #ifdef __cplusplus
 }
 #endif
