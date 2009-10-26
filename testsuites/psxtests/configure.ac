@@ -27,8 +27,23 @@ AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
 AM_CONDITIONAL(HAS_POSIX,test x"${rtems_cv_RTEMS_POSIX_API}" = x"yes")
 
+# FIXME: IEEE Std 1003.1-2008 mandates sys/mman.h,
+# but newlib doesn't have sys/mman.h
+AC_CHECK_HEADERS([sys/mman.h])
+
 # FIXME: newlib should supply declaration of pthread_rwlock_unlock()
 AC_CHECK_DECLS([pthread_rwlock_unlock],[],[],[[#include <pthread.h>]])
+
+# FIXME: newlib should supply declaration of pthread_atfork()
+AC_CHECK_DECLS([pthread_atfork],[],[],[[#include <pthread.h>]])
+
+# FIXME: adjtime is a non-standardized BSD/Linux extension
+# RTEMS should not rely on adjtime
+AC_CHECK_DECLS([adjtime],[],[],[[#include <sys/time.h>]])
+
+# FIXME: IEEE Std 1003.1-2008 mandates mprotect in sys/mman.h,
+# RTEMS provides a stub, despite newlib doesn't have sys/mman.h
+AC_CHECK_DECLS([mprotect],[],[],[[#include <sys/mman.h>]])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
