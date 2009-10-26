@@ -1,5 +1,9 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp47/init.c: Add PRIXModes_Control, PRIXrtems_mode.
+	Use PRIXrtems_mode to print rtems_mode's.
+	* sp08/system.h: Add PRIxModes_Control, PRIxrtems_mode.
+	Use PRIxrtems_mode to print rtems_mode's.
 	* sp19/first.c, sp19/fptask.c, sp19/fptest.h, sp19/inttest.h,
 	sp19/task1.c: Add missing PRI*32's.
 
