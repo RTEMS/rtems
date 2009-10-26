@@ -394,7 +394,7 @@ int main(
     test_extend( "/tmp/joel", max_size - 1 );
     test_cat( "/tmp/joel", max_size / 2, 1024 );
   } else {
-    printf( "Skipping maximum file size test since max_size is %d bytes\n", max_size );
+    printf( "Skipping maximum file size test since max_size is %zu bytes\n", max_size );
     puts("That is likely to be bigger than the available RAM on many targets." );
   }
 

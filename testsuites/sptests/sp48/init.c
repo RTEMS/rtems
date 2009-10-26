@@ -27,7 +27,7 @@ rtems_task Init(rtems_task_argument ignored)
 
   puts( "\n\n*** TEST 48 ***" );
 
-  printf( "Largest C program heap block available: %d\n", malloc_free_space() );
+  printf( "Largest C program heap block available: %zu\n", malloc_free_space() );
   for (i=0 ; i<MAX ; i++ ) {
     sc = rtems_semaphore_create(
       rtems_build_name('s', 'e', 'm', ' '),
@@ -54,7 +54,7 @@ rtems_task Init(rtems_task_argument ignored)
     puts( "Created all semaphores allowed in this test" );
 
   printf( "%d semaphores created\n", i );
-  printf( "Largest C program heap block available: %d\n", malloc_free_space() );
+  printf( "Largest C program heap block available: %zu\n", malloc_free_space() );
 
   for ( i-- ; i ; i-- ) {
     sc = rtems_semaphore_delete( Semaphores[i] );
@@ -66,7 +66,7 @@ rtems_task Init(rtems_task_argument ignored)
   }
 
   printf( "%d semaphores successfully deleted\n", created );
-  printf( "Largest C program heap block available: %d\n", malloc_free_space() );
+  printf( "Largest C program heap block available: %zu\n", malloc_free_space() );
 
   puts( "*** END OF TEST 48 ***" );
   rtems_test_exit( 0 );

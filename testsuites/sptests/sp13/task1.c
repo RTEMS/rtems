@@ -291,7 +291,7 @@ rtems_test_pause();
           );
       if (status != RTEMS_SUCCESSFUL)
       {
-          printf("TA1 - msq que size: %d\n", queue_size);
+          printf("TA1 - msq que size: %zu\n", queue_size);
           directive_failed( status, "rtems_message_queue_create of Q1" );
       }
 

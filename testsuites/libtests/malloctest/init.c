@@ -52,7 +52,7 @@ static void test_realloc(void)
     p2 = realloc(p1, i);
     if (p2 != p1)
       printf( "realloc - failed grow in place: "
-              "%p != realloc(%p,%d)\n", p1, p2, i);
+              "%p != realloc(%p,%zu)\n", p1, p2, i);
     p1 = p2;
   }
   free(p1);
@@ -63,7 +63,7 @@ static void test_realloc(void)
     p2 = realloc(p1, i);
     if (p2 != p1)
       printf( "realloc - failed shrink in place: "
-              "%p != realloc(%p,%d)\n", p1, p2, i);
+              "%p != realloc(%p,%zu)\n", p1, p2, i);
     p1 = p2;
   }
   free(p1);
