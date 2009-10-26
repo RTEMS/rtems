@@ -1,5 +1,10 @@
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* support/include/tmacros.h: Add PRIdPriority_Control.
+	Change PRIdrtems_task_priority to using PRIdPriority_Control.
+
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* support/include/tmacros.h: Add PRIdrtems_task_priority.
 
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>

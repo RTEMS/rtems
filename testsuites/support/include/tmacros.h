@@ -263,7 +263,10 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
 #define PRIxrtems_id PRIx32
 #endif
 
-#define PRIdrtems_task_priority PRId32
+#define PRIdPriority_Control PRId32
+
+/* rtems_task_priority is a typedef to Priority_Control */
+#define PRIdrtems_task_priority PRIdPriority_Control
 
 #ifdef __cplusplus
 }
