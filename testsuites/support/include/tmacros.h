@@ -257,6 +257,12 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
  */
 #define PRItime_t "ld"
 
+#if defined(RTEMS_USE_16_BIT_OBJECT)
+#define PRIxrtems_id PRIx16
+#else
+#define PRIxrtems_id PRIx32
+#endif
+
 #ifdef __cplusplus
 }
 #endif
