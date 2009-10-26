@@ -18,6 +18,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+/* HACK: Blatant visibility violation */
+extern void malloc_walk(size_t source, size_t printf_enabled);
+
 #define NUM_PASSES 100
 
 rtems_task Task_1_through_5(
