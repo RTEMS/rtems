@@ -51,7 +51,7 @@ const char *CallerName(void)
   #else
     TempName.u = _Thread_Executing->Object.name.name_u32;
   #endif
-    sprintf( buffer, "%c%c%c%c -- %d",
+    sprintf( buffer, "%c%c%c%c -- %" PRIdPriority_Control,
       TempName.c[0], TempName.c[1], TempName.c[2], TempName.c[3],
       _Thread_Executing->current_priority
   );
