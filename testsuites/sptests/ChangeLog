@@ -1,5 +1,8 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp07/tcreate.c, sp07/tdelete.c, sp07/trestart.c, sp07/tstart.c:
+	Duplicate code from rtems_name_to_characters to convert rtems_name's
+	into char arrays.
 	* sp09/screen13.c: Comment out unused return status.
 	* sp63/init.c: Use PRIu32 to print uint32_t's.
 	* sp33/init.c: Use PRIu32 to print uint32_t's.
