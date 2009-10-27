@@ -1,5 +1,15 @@
 2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psx01/init.c, psx01/task.c, psx02/init.c, psx03/init.c,
+	psx04/init.c, psx05/init.c, psx06/init.c, psx07/init.c,
+	psx08/init.c, psx09/init.c, psx10/task.c, psx10/task2.c,
+	psx10/task3.c, psx11/init.c, psx12/init.c, psxalarm01/init.c,
+	psxbarrier01/test.c, psxkey01/init.c, psxkey01/task.c,
+	psxmsgq02/init.c, psxsignal01/init.c, psxualarm/init.c:
+	Use PRIxpthread_t to print pthread_t's.
+
+2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
 	* psxmsgq02/init.c:
 	Remove cast in call to fatal_posix_service_status_errno.
 	* psxenosys/init.c: 
