@@ -53,7 +53,7 @@ rtems_task Task_3(
     16,
     &count
   );
-  printf( "TA3 - number of tasks awakened = %02d\n", count );
+  printf( "TA3 - number of tasks awakened = %02" PRIu32 "\n", count );
   puts(
     "TA3 - rtems_message_queue_receive - receive from queue 3 - "
       "RTEMS_WAIT FOREVER"
