@@ -1,5 +1,9 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp09/screen13.c: Revert previous change.
+	Remove broken extraneous line seemingly having crept into in 
+	2009-08-10 patch.
+	* sp27/init.c: Remove extraneous argument to print.
 	* spsize/size.c: Use PRIu32 to print sys_req.
 	* sp37/init.c: Add missing argument to printf.
 	* sp44/init.c, sp35/priinv.c, sp33/init.c, sp28/init.c,
