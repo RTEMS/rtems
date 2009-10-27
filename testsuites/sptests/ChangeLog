@@ -1,5 +1,6 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* spsize/size.c: Use PRIu32 to print sys_req.
 	* sp37/init.c: Add missing argument to printf.
 	* sp44/init.c, sp35/priinv.c, sp33/init.c, sp28/init.c,
 	sp12/pritask.c, sp34/changepri.c:
