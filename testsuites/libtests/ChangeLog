@@ -1,3 +1,10 @@
+2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* termios01/init.c: Fix parity_table_Entry type.
+	Correct parity_table initialization.
+	Add PRIdrtems_termios_baud_t.
+	Use PRIdrtems_termios_baud_t to print rtems_termios_baud_t's.
+
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtmonuse/task1.c: Use PRIu32 to print uint32_t's.
