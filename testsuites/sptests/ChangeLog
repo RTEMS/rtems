@@ -1,5 +1,7 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp25/task1.c: segment_size is uintptr_t.
+	* spfatal06/testcase.h: Add missing return.
 	* sp07/tcreate.c, sp07/tdelete.c, sp07/trestart.c, sp07/tstart.c:
 	Duplicate code from rtems_name_to_characters to convert rtems_name's
 	into char arrays.
