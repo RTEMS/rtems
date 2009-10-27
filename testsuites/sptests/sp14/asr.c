@@ -20,13 +20,16 @@
 
 #include "system.h"
 
+/* rtems_signal_set is a typedef to uint32_t */
+#define PRIxrtems_signal_set PRIx32
+
 rtems_asr Process_asr(
   rtems_signal_set the_signal_set
 )
 {
   rtems_status_code status;
 
-  printf( "ASR - ENTRY - signal => %08x\n", the_signal_set );
+  printf( "ASR - ENTRY - signal => %08" PRIxrtems_signal_set "\n", the_signal_set );
   switch( the_signal_set ) {
     case RTEMS_SIGNAL_16:
     case RTEMS_SIGNAL_17:
@@ -43,6 +46,6 @@ rtems_asr Process_asr(
       Asr_fired = TRUE;
       break;
   }
-  printf( "ASR - EXIT  - signal => %08x\n", the_signal_set );
+  printf( "ASR - EXIT  - signal => %08" PRIxrtems_signal_set "\n", the_signal_set );
   FLUSH_OUTPUT();
 }
