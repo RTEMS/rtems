@@ -1,5 +1,11 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp44/init.c, sp35/priinv.c, sp33/init.c, sp28/init.c,
+	sp12/pritask.c, sp34/changepri.c:
+	Use PRIdrtems_task_argument to print rtems_task_argument's.
+
+2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* sp25/task1.c: segment_size is uintptr_t.
 	* spfatal06/testcase.h: Add missing return.
 	* sp07/tcreate.c, sp07/tdelete.c, sp07/trestart.c, sp07/tstart.c:
