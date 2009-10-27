@@ -19,6 +19,9 @@
 
 #include "system.h"
 
+/* rtems_device_major_number is a typedef to uint32_t */
+#define PRIurtems_device_major_number PRIu32
+
 #define STUB_DRIVER_MAJOR     0x2
 #define NO_DRIVER_MAJOR       0x3
 #define INVALID_DRIVER_MAJOR  \
@@ -163,7 +166,7 @@ rtems_task Task_1(
 
   status = rtems_io_register_driver( 0, &GoodDriver, &registered );
   if ( status == RTEMS_SUCCESSFUL )
-    printf( "registered major = %d\n", registered );
+    printf( "registered major = %" PRIurtems_device_major_number "\n", registered );
   fatal_directive_status(
     status,
     RTEMS_TOO_MANY,
