@@ -1,5 +1,6 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp62/init.c: segment sizes are uintptr_t's.
 	* sp25/task1.c: Use PRIuPTR to print segment_size's.
 	* sp21/task1.c: Add PRIurtems_device_major_number.
 	* sp11/task1.c, sp11/task2.c:
