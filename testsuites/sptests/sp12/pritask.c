@@ -47,7 +47,7 @@ rtems_task Priority_task(
   directive_failed( status, "rtems_semaphore_obtain of SM2" );
 
   if ( its_priority < PRIORITY_INHERIT_BASE_PRIORITY ) {
-    printf( "PRI%d - WHY AM I HERE? (pri=%" PRIdrtems_task_priority ")", its_index, its_priority );
+    printf( "PRI%" PRIdrtems_task_argument " - WHY AM I HERE? (pri=%" PRIdrtems_task_priority ")", its_index, its_priority );
     rtems_test_exit( 0 );
   }
 

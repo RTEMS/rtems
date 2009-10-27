@@ -50,7 +50,7 @@ subtask (rtems_task_argument arg)
     taskvar = (void *)((uintptr_t)taskvar + 1);
     rtems_task_wake_after (0);
     if ((uintptr_t)taskvar != localvar) {
-      printf ("Task:%d taskvar:%d localvar:%d\n",
+      printf ("Task:%" PRIdrtems_task_argument " taskvar:%" PRIuPTR " localvar:%" PRIuPTR "\n",
         arg, (uintptr_t)taskvar, localvar);
       rtems_task_suspend (RTEMS_SELF);
     }
@@ -60,7 +60,7 @@ subtask (rtems_task_argument arg)
   directive_failed( sc, "task variable delete" );
 
   if ((uintptr_t)taskvar == localvar) {
-    printf("Task:%d deleted taskvar:%d localvar:%d\n",
+    printf("Task:%" PRIdrtems_task_argument " deleted taskvar:%" PRIuPTR " localvar:%" PRIuPTR "\n",
       arg, (uintptr_t)taskvar, localvar);
     nRunning--;
     rtems_task_suspend (RTEMS_SELF);
@@ -73,7 +73,7 @@ subtask (rtems_task_argument arg)
     if (nRunning <= 1)
       break;
     if ((uintptr_t)taskvar == localvar) {
-      printf("Task:%d taskvar:%d localvar:%d\n",
+      printf("Task:%" PRIdrtems_task_argument " taskvar:%" PRIuPTR " localvar:%" PRIuPTR "\n",
         arg, (uintptr_t)taskvar, localvar);
       nRunning--;
       rtems_task_suspend(RTEMS_SELF);

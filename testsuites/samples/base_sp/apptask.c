@@ -33,7 +33,7 @@ rtems_task Application_task(
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
 
-  printf( "Application task was invoked with argument (%d) "
+  printf( "Application task was invoked with argument (%" PRIdrtems_task_argument ") "
           "and has id of 0x%" PRIxrtems_id "\n", argument, tid );
 
   printf( "*** END OF SAMPLE SINGLE PROCESSOR APPLICATION ***\n" );

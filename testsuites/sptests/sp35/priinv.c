@@ -123,7 +123,7 @@ volatile bool StartHw = false;
 
 rtems_task Medium_Exec(rtems_task_argument TaskArg)
 {
-  printf("Medium_Exec (%d) begins...\n", TaskArg);
+  printf("Medium_Exec (%" PRIdrtems_task_argument ") begins...\n", TaskArg);
 
   rtems_task_wake_after(50);
 
@@ -133,7 +133,7 @@ rtems_task Medium_Exec(rtems_task_argument TaskArg)
 
   /* JRS - task does not get here */
 
-  printf("Medium_Exec (%d) ends...\n", TaskArg);
+  printf("Medium_Exec (%" PRIdrtems_task_argument ") ends...\n", TaskArg);
   while(1) {
     rtems_task_wake_after(10000);
   }
@@ -141,7 +141,7 @@ rtems_task Medium_Exec(rtems_task_argument TaskArg)
 
 rtems_task High_Exec(rtems_task_argument TaskArg)
 {
-  printf("High_Exec (%d) begins...\n", TaskArg);
+  printf("High_Exec (%" PRIdrtems_task_argument ") begins...\n", TaskArg);
 
   /* Delay more than the Low-prio task so that Remote HW access resource is
    * taken before call to AccesRemoteHw.
@@ -154,7 +154,7 @@ rtems_task High_Exec(rtems_task_argument TaskArg)
 
   /* JRS - task does not get here */
 
-  printf("High_Exec (%d) ends...\n", TaskArg);
+  printf("High_Exec (%" PRIdrtems_task_argument ") ends...\n", TaskArg);
   while(1) {
     rtems_task_wake_after(10000);
   }
@@ -163,7 +163,7 @@ rtems_task High_Exec(rtems_task_argument TaskArg)
 
 rtems_task Low_Exec(rtems_task_argument TaskArg)
 {
-  printf("Low_Exec (%d) begins...\n", TaskArg);
+  printf("Low_Exec (%" PRIdrtems_task_argument ") begins...\n", TaskArg);
 
   /* Delay less than High-prio task so that we take the remote HW access
    * resource before it does it. However, delay longer than the mid-prio
@@ -178,7 +178,7 @@ rtems_task Low_Exec(rtems_task_argument TaskArg)
 
   /* JRS - task does not get here */
 
-  printf("Low_Exec (%d) ends...\n", TaskArg);
+  printf("Low_Exec (%" PRIdrtems_task_argument ") ends...\n", TaskArg);
   while(1) {
     rtems_task_wake_after(10000);
   }

@@ -66,11 +66,11 @@ rtems_task test_task(
 {
   rtems_event_set out;
 
-  printf( "task %i has started.\n",  my_number);
+  printf( "task %" PRIdrtems_task_argument " has started.\n",  my_number);
 
   rtems_event_receive(1, RTEMS_WAIT | RTEMS_EVENT_ANY, 0, &out);
 
-  printf( "task %i ending.\n",  my_number);
+  printf( "task %" PRIdrtems_task_argument " ending.\n",  my_number);
 
   rtems_task_delete(RTEMS_SELF);
 }
