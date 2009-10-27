@@ -103,7 +103,7 @@ void doTest(void)
     directive_failed( sc, "semaphore flush" );
   }
 
-  printf("Flushed all waiting tasks\n", NTASK );
+  printf("Flushed all waiting tasks\n" );
 }
 
 rtems_task Init(
