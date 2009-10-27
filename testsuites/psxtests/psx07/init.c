@@ -12,6 +12,18 @@
 #include <pthread.h>
 #include <sched.h>
 
+#if !HAVE_DECL_PTHREAD_ATTR_GETCPUTIME
+extern int pthread_attr_getcputime(
+  pthread_attr_t  *attr,
+  int             *clock_allowed);
+#endif
+
+#if !HAVE_DECL_PTHREAD_ATTR_SETCPUTIME
+extern int pthread_attr_setcputime(
+  pthread_attr_t  *attr,
+  int             clock_allowed);
+#endif
+
 #define CONFIGURE_INIT
 #include "system.h"
 #include <errno.h>
