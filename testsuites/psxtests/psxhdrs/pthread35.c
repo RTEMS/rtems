@@ -14,6 +14,12 @@
 
 #include <pthread.h>
 
+#if !HAVE_DECL_PTHREAD_ATTR_SETCPUTIME
+extern int pthread_attr_setcputime(
+  pthread_attr_t  *attr,
+  int             clock_allowed);
+#endif
+
 #ifndef _POSIX_THREAD_CPUTIME
 #error "rtems is supposed to have pthread_attr_setcputime"
 #endif
