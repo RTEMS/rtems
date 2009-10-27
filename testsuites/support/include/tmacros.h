@@ -282,6 +282,10 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
 /* rtems_event_set is a typedef to unit32_t */
 #define PRIxrtems_event_set	PRIx32
 
+/* HACK: newlib defines pthread_t as a typedef to __uint32_t */
+/* HACK: There is no portable way to print pthread_t's */
+#define PRIxpthread_t		PRIx32
+
 #ifdef __cplusplus
 }
 #endif
