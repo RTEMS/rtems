@@ -63,7 +63,7 @@ rtems_task Task_1(
   new_line;
   status = rtems_region_get_segment_size(region_id, address_1, &segment_size);
   directive_failed(status, "rtems_region_get_segment_size of segment 1");
-  printf( "TA1 - got segment size of %d\n", segment_size );
+  printf( "TA1 - got segment size of %" PRIuPTR "\n", segment_size );
 
   /* Get a 128 byte segment from the region */
   puts(
@@ -183,7 +183,7 @@ rtems_task Task_1(
   new_line;
   status = rtems_region_get_segment_size(region_id, address_8, &segment_size);
   directive_failed(status, "rtems_region_get_segment_size of segment 8");
-  printf( "TA1 - got segment size of %d\n", segment_size );
+  printf( "TA1 - got segment size of %" PRIu32 "\n", segment_size );
 
   /* Get information about the region */
   printf( "TA1 - rtems_region_get_information - 0x%08" PRIxrtems_id "\n", region_id );
