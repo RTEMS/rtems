@@ -1,5 +1,6 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp13/task3.c: Use PRIu32 to print "count".
 	* sp09/screen12.c: Segment sizes are uintptr_t's.
 	* sp09/screen11.c: Use size_t for "size".
 	* sp62/init.c: Segment sizes are uintptr_t's.
