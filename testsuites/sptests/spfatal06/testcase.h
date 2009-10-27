@@ -42,6 +42,7 @@ void *New_stack_allocate_hook(size_t unused);
 
 void *New_stack_allocate_hook(size_t unused)
 {
+  return NULL;
 }
 
 void force_error()
