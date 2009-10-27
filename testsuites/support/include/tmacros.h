@@ -273,6 +273,11 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
 /* rtems_interval is a typedef to Watchdog_Interval */
 #define PRIdrtems_interval    PRIdWatchdog_Interval
 
+/* c.f. cpukit/score/include/rtems/score/thread.h */
+#define PRIdThread_Entry_numeric_type PRIuPTR
+/* rtems_task_argument is a typedef to Thread_Entry_numeric_type */
+#define PRIdrtems_task_argument PRIdThread_Entry_numeric_type
+
 #ifdef __cplusplus
 }
 #endif
