@@ -135,6 +135,7 @@ extern CORE_semaphore_Control _MPCI_Semaphore;
     (STACK_MINIMUM_SIZE + sizeof(Thread_Control) + SYSTEM_IDLE_FP + \
      MP_SYSTEM_TASKS)
 
+/* FIXME: uint32_t doesn't seem right */
 uint32_t   sys_req;
 
 void size_rtems(
@@ -619,7 +620,7 @@ printf( " Extensions           - %03d * %03ld            =  %ld\n",
 printf( " Device Drivers       - %03d * %03ld            =  %ld\n",
           maximum_drvs, PER_DRV, (long) size_drvs );
 
-printf( " System Requirements  - %04d                 =  %d\n",
+printf( " System Requirements  - %04" PRIu32 "                 =  %"PRIu32 "\n",
           sys_req, sys_req );
 
 printf( " Floating Point Tasks - %03d * %03ld            =  %ld\n",
@@ -654,7 +655,7 @@ printf( " Ports                - maximum_ports * %ld\n",      PER_PORT );
 printf( " Periods              - maximum_periods * %ld\n",    PER_PORT );
 printf( " Extensions           - maximum_extensions * %ld\n", PER_EXTENSION );
 printf( " Device Drivers       - number_of_device_drivers * %ld\n", PER_DRV);
-printf( " System Requirements  - %d\n",                       sys_req );
+printf( " System Requirements  - %" PRIu32 "\n",              sys_req );
 printf( " Floating Point Tasks - FPMASK Tasks * %ld\n",       PER_FPTASK );
 printf( " User's Tasks' Stacks -\n" );
 printf( " Interrupt Stack      -\n" );
