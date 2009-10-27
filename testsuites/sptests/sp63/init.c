@@ -29,7 +29,7 @@ void test_case_one(void)
 
   puts( "Init - _Heap_Initialize (for test one) - OK" );
   heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
-  printf( "Init - Heap size=%d\n", heap_size );
+  printf( "Init - Heap size=%" PRIu32 "\n", heap_size );
   assert( heap_size );
 
   puts( "Init - _Heap_Allocate - too large size (overflow)- not OK");
@@ -59,7 +59,7 @@ void test_case_two(void)
 
   puts( "\nInit - _Heap_Initialize (for test two) - OK" );
   heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
-  printf( "Init - Heap size=%d\n", heap_size );
+  printf( "Init - Heap size=%" PRIu32 "\n", heap_size );
   assert( heap_size );
 
   puts( "Init - _Heap_Allocate_aligned - OK");

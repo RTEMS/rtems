@@ -155,7 +155,7 @@ void check_read_timer()
        *  Under UNIX a simple process swap takes longer than we
        *  consider valid for our testing purposes.
        */
-      printf( "TOO LONG (%d) at index %d!!!\n", end_time, index );
+      printf( "TOO LONG (%" PRIu32 ") at index %" PRIu32 "!!!\n", end_time, index );
       continue;
     }
     Distribution[ end_time ]++;

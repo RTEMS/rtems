@@ -170,7 +170,7 @@ rtems_task Init(
   status = rtems_barrier_release( Barrier, &released );
   directive_failed(status, "rtems_barrier_release");
   if ( released != 0 ) {
-    printf( "ERROR -- rtems_barrier_release -- released != 0, = %d", released);
+    printf( "ERROR -- rtems_barrier_release -- released != 0, = %" PRIu32, released);
     exit(0);
   }
 
@@ -202,7 +202,7 @@ rtems_task Init(
   status = rtems_barrier_release( Barrier, &released );
   directive_failed(status, "rtems_barrier_release");
   if ( released != (CONFIGURE_MAXIMUM_TASKS-1) ) {
-    printf( "ERROR -- rtems_barrier_release -- released != %d, = %d",
+    printf( "ERROR -- rtems_barrier_release -- released != %d, = %" PRIu32,
          (CONFIGURE_MAXIMUM_TASKS-1), released);
     exit(0);
   }
