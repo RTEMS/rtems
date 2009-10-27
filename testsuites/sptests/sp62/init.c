@@ -49,7 +49,7 @@ rtems_task Init(
   rtems_id           task_id;
   rtems_status_code  sc;
   void              *segment_address_1;
-  intptr_t           old_size;
+  uintptr_t          old_size;
   size_t             size;
 
   puts( "\n\n*** TEST 62 ***" );
