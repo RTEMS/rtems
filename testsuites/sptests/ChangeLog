@@ -1,5 +1,7 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp29/init.c: Include "tmacros.h".
+	Misc. changes related to rtems_intervals.
 	* sp14/asr.c: Add PRIxrtems_signal_set.
 	Use PRIxrtems_signal_set to print rtems_signal_set's.
 	* sp13/task3.c: Use PRIu32 to print "count".
