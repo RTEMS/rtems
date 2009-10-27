@@ -1,5 +1,7 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp11/task1.c, sp11/task2.c:
+	Use PRIxrtems_event_set to print rtems_event_set's.
 	* sp09/screen13.c: Revert previous change.
 	Remove broken extraneous line seemingly having crept into in 
 	2009-08-10 patch.
