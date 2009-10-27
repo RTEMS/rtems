@@ -105,10 +105,11 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
 
 #define fatal_posix_service_status_errno( _stat, _desired, _msg ) \
   if ( (_stat != -1) && (errno) != (_desired) ) { \
+    long statx = _stat; \
     check_dispatch_disable_level( 0 ); \
-    printf( "\n%s FAILED -- expected (%d - %s) got (%d %d - %s)\n", \
+    printf( "\n%s FAILED -- expected (%d - %s) got (%ld %d - %s)\n", \
 	    (_msg), _desired, strerror(_desired), \
-            _stat, errno, strerror(errno) ); \
+            statx, errno, strerror(errno) ); \
     FLUSH_OUTPUT(); \
     rtems_test_exit( _stat ); \
   }
@@ -277,6 +278,9 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
 #define PRIdThread_Entry_numeric_type PRIuPTR
 /* rtems_task_argument is a typedef to Thread_Entry_numeric_type */
 #define PRIdrtems_task_argument PRIdThread_Entry_numeric_type
+
+/* rtems_event_set is a typedef to unit32_t */
+#define PRIxrtems_event_set	PRIx32
 
 #ifdef __cplusplus
 }

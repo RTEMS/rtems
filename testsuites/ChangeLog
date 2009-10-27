@@ -1,5 +1,10 @@
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* support/include/tmacros.h: Add PRIxrtems_event_set.
+	(fatal_posix_service_status_errno) Add local "long" var "statx".
+
+2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* support/include/tmacros.h: Add PRIdThread_Entry_numeric_type.
 	Add PRIdrtems_task_argument.
 
