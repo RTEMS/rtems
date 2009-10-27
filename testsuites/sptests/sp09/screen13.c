@@ -88,7 +88,7 @@ void Screen13()
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
-  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
+  /* status = */ rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     5 * rtems_clock_get_ticks_per_second(),
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_set" );
