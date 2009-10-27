@@ -13,7 +13,7 @@
 #include "system.h"
 #include <errno.h>
 
-void Key_destructor( void *key_data );
+extern void Key_destructor( void *key_data );
 
 void Key_destructor(
  void *key_data
