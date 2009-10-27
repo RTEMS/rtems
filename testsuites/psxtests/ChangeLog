@@ -1,5 +1,7 @@
 2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psxmsgq02/init.c:
+	Remove cast in call to fatal_posix_service_status_errno.
 	* psxenosys/init.c: 
 	Add missing args in calls to execl, execlp, execle.
 	* psxhdrs/pthread36.c: Use HAVE_DECL_PTHREAD_ATTR_GETCPUTIME.
