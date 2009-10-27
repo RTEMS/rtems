@@ -1,3 +1,10 @@
+2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp09/screen13.c: Comment out unused return status.
+	* sp63/init.c: Use PRIu32 to print uint32_t's.
+	* sp33/init.c: Use PRIu32 to print uint32_t's.
+	* sp28/init.c: Use PRIu32 to print uint32_t's.
+
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp31/task1.c: Use PRIdWatchdog_Interval to print
