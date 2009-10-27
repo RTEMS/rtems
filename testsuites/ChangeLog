@@ -1,3 +1,8 @@
+2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* support/include/tmacros.h: Add PRIdThread_Entry_numeric_type.
+	Add PRIdrtems_task_argument.
+
 2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* support/include/tmacros.h: Add PRIdWatchdog_Interval.
