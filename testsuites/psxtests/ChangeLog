@@ -1,3 +1,10 @@
+2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psxtimer01/psxtimer.c: Use %ld to print *.tv_nsec.
+	* psxsysconf/init.c: Use %ld to print *.tv_nsec.
+	* psxclock/init.c: Use %ld to print *.tv_nsec.
+	* psx06/init.c, psx06/system.h: Misc. warning fixes.
+
 2009-10-26	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psxsignal03/init.c: Add missing argument to printf.
