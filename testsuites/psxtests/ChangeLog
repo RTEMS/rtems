@@ -1,5 +1,10 @@
 2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* configure.ac:
+	Add AC_CHECK_DECLS pthread_attr_getcputime, pthread_attr_setcputime.
+
+2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
 	* psxtimer01/psxtimer.c: Use %ld to print *.tv_nsec.
 	* psxsysconf/init.c: Use %ld to print *.tv_nsec.
 	* psxclock/init.c: Use %ld to print *.tv_nsec.
