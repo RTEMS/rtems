@@ -110,7 +110,7 @@ void check_isr_worked(
       printf( "isr_in_progress(%s) from ISR -- OK\n", s );
       break;
     case 2:
-      printf( "isr_in_progress(%s) from ISR -- returned bad value\n");
+      printf( "isr_in_progress(%s) from ISR -- returned bad value\n", s);
       rtems_test_exit(0);
       break;
   }
