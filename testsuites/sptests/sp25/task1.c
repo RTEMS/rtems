@@ -33,7 +33,7 @@ rtems_task Task_1(
   void                   *address_8;
   rtems_id                region_id;
   Heap_Information_block  region_info;
-  intptr_t                segment_size;
+  uintptr_t               segment_size;
   rtems_status_code       status;
 
   /* Obtain the region id */
@@ -190,7 +190,7 @@ rtems_task Task_1(
   status = rtems_region_get_information(region_id, &region_info);
   directive_failed(status, "rtems_region_get_information of RN01");
   printf(
-    "TA1 - got information - free = %d, used = %d\n",
+    "TA1 - got information - free = %" PRIu32 ", used = %" PRIu32 "\n",
     region_info.Free.number,
     region_info.Used.number
   );
@@ -199,7 +199,7 @@ rtems_task Task_1(
   status = rtems_region_get_free_information(region_id, &region_info);
   directive_failed(status, "rtems_region_get_free_information of RN01");
   printf(
-    "TA1 - got free information - free = %d, used = %d\n",
+    "TA1 - got free information - free = %" PRIu32 ", used = %" PRIu32 "\n",
     region_info.Free.number,
     region_info.Used.number
   );
