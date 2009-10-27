@@ -28,7 +28,7 @@ void *Task_1(
 /* wait for a condition variable signal from Init */
 
   Task_id = pthread_self();
-  printf( "Task_1: ID is 0x%08x\n", Task_id );
+  printf( "Task_1: ID is 0x%08" PRIxpthread_t "\n", Task_id );
 
   status = pthread_mutex_init( &Mutex_id, NULL );
   assert( !status );

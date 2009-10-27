@@ -29,9 +29,9 @@ void *BarrierThread(void *arg)
   pthread_t id = *(pthread_t *) arg;
   int       status;
 
-  printf( "pthread_barrier_wait( &Barrier ) for thread 0x%08x\n", id );
+  printf( "pthread_barrier_wait( &Barrier ) for thread 0x%08" PRIxpthread_t "\n", id );
   status = pthread_barrier_wait( &Barrier );
-  printf( "pthread_barrier_wait - 0x%08x released\n", id );
+  printf( "pthread_barrier_wait - 0x%08" PRIxpthread_t " released\n", id );
   assert( (status == 0) || (status == PTHREAD_BARRIER_SERIAL_THREAD) );
 
   return NULL;

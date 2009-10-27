@@ -48,7 +48,7 @@ void *Task_1_through_3(
   /* get id of this thread */
 
   Task_id = pthread_self();
-  printf( "Task_1: ID is 0x%08x\n", Task_id );
+  printf( "Task_1: ID is 0x%08" PRIxpthread_t "\n", Task_id );
 
   /* exercise pthread_equal */
 

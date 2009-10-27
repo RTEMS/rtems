@@ -29,7 +29,7 @@ void Signal_handler(
 {
   Signal_count++;
   printf(
-    "Signal: %d caught by 0x%x (%d)\n",
+    "Signal: %d caught by 0x%" PRIxpthread_t " (%d)\n",
     signo,
     pthread_self(),
     Signal_count
@@ -45,7 +45,7 @@ void Signal_info_handler(
 {
   Signal_count++;
   printf(
-    "Signal_info: %d caught by 0x%x (%d) si_signo= %d si_code= %d value= %d\n",
+    "Signal_info: %d caught by 0x%" PRIxpthread_t " (%d) si_signo= %d si_code= %d value= %d\n",
     signo,
     pthread_self(),
     Signal_count,

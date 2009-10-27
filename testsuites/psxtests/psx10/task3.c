@@ -26,7 +26,7 @@ void *Task_3(
   int  status;
 
   Task_id = pthread_self();
-  printf( "Task_3: ID is 0x%08x\n", Task_id );
+  printf( "Task_3: ID is 0x%08" PRIxpthread_t "\n", Task_id );
 
   status = pthread_mutex_lock( &Mutex_id );
   assert( !status );
