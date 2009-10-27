@@ -101,15 +101,15 @@ void *POSIX_Init(
   check_enosys( sc );
 
   puts( "execl -- ENOSYS" );
-  sc = execl( NULL, NULL );
+  sc = execl( NULL, NULL, (char*)0 );
   check_enosys( sc );
 
   puts( "execle -- ENOSYS" );
-  sc = execle( NULL, NULL );
+  sc = execle( NULL, NULL, (char*)0, NULL );
   check_enosys( sc );
 
   puts( "execlp -- ENOSYS" );
-  sc = execlp( NULL, NULL );
+  sc = execlp( NULL, NULL, (char*)0 );
   check_enosys( sc );
 
   puts( "execv -- ENOSYS" );
