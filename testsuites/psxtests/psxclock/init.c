@@ -110,7 +110,7 @@ rtems_task Init(
   /* print new times to make sure it has changed and we can get the realtime */
   sc = clock_gettime( CLOCK_PROCESS_CPUTIME, &tv );
   rtems_test_assert( !sc );
-  printf("Time since boot: (%" PRItime_t ", %d)\n", tv.tv_sec,tv.tv_nsec );
+  printf("Time since boot: (%" PRItime_t ", %ld)\n", tv.tv_sec,tv.tv_nsec );
 
   sc = clock_gettime( CLOCK_REALTIME, &tv );
   rtems_test_assert( !sc );
