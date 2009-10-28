@@ -1,3 +1,7 @@
+2009-10-27	Till Straumann <strauman@slac.stanford.edu>
+
+	* score/cpu/i386/rtems/asm.h: Added definition for cr4 register.
+
 2009-10-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Remove RTEMS_CFLAGS.
