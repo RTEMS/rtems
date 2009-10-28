@@ -139,6 +139,10 @@ int kbd_poll_read( int minor )
   return -1;
 }
 
+/* provide default that does nothing */
+extern void
+BSP_runtime_console_select(int *, int *) __attribute__((weak));
+
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.
 +--------------------------------------------------------------------------+
@@ -185,6 +189,9 @@ console_initialize(rtems_device_major_number major,
    * Set up TERMIOS
    */
   rtems_termios_initialize ();
+
+  if ( BSP_runtime_console_select )
+    BSP_runtime_console_select(&BSPPrintkPort, &BSPConsolePort);
 
 #ifdef RTEMS_RUNTIME_CONSOLE_SELECT
   /*

@@ -61,6 +61,14 @@ extern "C" {
  */
 struct rtems_bsdnet_ifconfig;
 
+/* app. may provide a routine (called _very_ early) to tell us
+ * which ports to use for printk / console. BSP provides a default
+ * implementation (weak alias) which does nothing (use BSP default
+ * ports).
+ */
+extern void
+BSP_runtime_console_select(int *pPrintkPort, int *pConsolePort);
+
 extern int rtems_ne_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 #define BSP_NE2000_NETWORK_DRIVER_NAME      "ne1"
 #define BSP_NE2000_NETWORK_DRIVER_ATTACH    rtems_ne_driver_attach

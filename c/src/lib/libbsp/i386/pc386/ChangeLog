@@ -1,3 +1,8 @@
+2009-12-27	Till Straumann <strauman@slac.stanford.edu>
+
+	* include/bsp.h, console/console.c: Provide weak-alias
+	hook so that the application may choose the console.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/pc386.cfg: Remove RTEMS_BSP_FAMILY.
