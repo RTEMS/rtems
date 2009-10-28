@@ -1,3 +1,10 @@
+2009-10-28  Till Straumann <strauman@slac.stanford.edu>
+
+	* cpuModel.S, cpuModel.h, displayCpu.c: Save/cache CPUID:ECX
+	(extended capabilities) in a new variable (x86_capability_x).
+	Added more known flag description strings (printCpuInfo())
+	and let 'printCpuInfo()' dump the extended feature flags, too. 
+
 2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* page.c: Fixed warnings.

@@ -177,11 +177,17 @@ void printCpuInfo(void)
   int i;
   static const char *x86_cap_flags[] = {
     "fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
-    "cx8", "apic", "10", "11", "mtrr", "pge", "mca", "cmov",
-    "16", "17", "18", "19", "20", "21", "22", "mmx",
-    "24", "25", "26", "27", "28", "29", "30", "31"
+    "cx8", "apic", "10", "sep", "mtrr", "pge", "mca", "cmov",
+    "pat", "pse36", "psn", "cflsh", "20", "ds", "acpi", "mmx",
+    "fxsr", "sse", "sse2", "ss", "htt", "tm", "30", "pbe"
   };
-        
+  static const char *x86_cap_x_flags[] = {
+    "sse3", "1", "2", "monitor", "ds-cpl", "vmx", "6", "est",
+    "tm2", "9", "cnxt-id", "11", "12", "cmpxchg16b", "14", "15",
+	"16",  "17", "18", "19", "20", "21", "22", "23"
+	"24",  "25", "26", "27", "28", "29", "30", "31"
+  };
+         
   printk("cpu\t\t\t: %c86\n", x86+'0'); 
   printk("model\t\t: %s\n",
 	 have_cpuid ? getmodel(x86, x86_model) : "unknown");
@@ -205,6 +211,12 @@ void printCpuInfo(void)
   for ( i = 0 ; i < 32 ; i++ ) {
     if ( x86_capability & (1 << i) ) {
       printk(" %s", x86_cap_flags[i]);
+    }
+  }
+  printk("\n");
+  for ( i = 0 ; i < 32 ; i++ ) {
+    if ( x86_capability_x & (1 << i) ) {
+      printk(" %s", x86_cap_x_flags[i]);
     }
   }
   printk("\n");

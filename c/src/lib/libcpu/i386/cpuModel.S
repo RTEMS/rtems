@@ -95,6 +95,7 @@ isnew:
 	 */
 	movl $1, eax		
 	cpuid			
+	movl ecx,SYM(x86_capability_x) /* store ecx feature flags */
 
 	movb al, cl		/* save reg for future use */
 	
@@ -234,6 +235,7 @@ BEGIN_DATA
 	PUBLIC(x86_model)
 	PUBLIC(x86_mask)
 	PUBLIC(x86_capability)
+	PUBLIC(x86_capability_x)
 	PUBLIC(x86_vendor_id)
 	PUBLIC(hard_math)
 
@@ -246,6 +248,8 @@ SYM(x86_model):
 SYM(x86_mask):	
 	.byte 0
 SYM(x86_capability):	
+	.long 0		
+SYM(x86_capability_x):	
 	.long 0		
 SYM(x86_vendor_id):	
 	.zero 13
