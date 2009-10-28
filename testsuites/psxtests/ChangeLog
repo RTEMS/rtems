@@ -1,3 +1,7 @@
+2009-10-28	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psxbarrier01/test.c: Include <tmacros.h>
+
 2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psx01/init.c, psx01/task.c, psx02/init.c, psx03/init.c,
