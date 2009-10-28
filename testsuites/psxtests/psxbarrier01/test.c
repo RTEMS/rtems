@@ -19,6 +19,8 @@
 /* #define __USE_XOPEN2K XXX already defined on GNU/Linux */
 #include <pthread.h>
 
+#include "tmacros.h"
+
 #define NUMBER_THREADS 2
 pthread_t ThreadIds[NUMBER_THREADS];
 pthread_barrier_t Barrier;
