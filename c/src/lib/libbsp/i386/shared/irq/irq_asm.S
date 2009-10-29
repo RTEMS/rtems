@@ -13,6 +13,11 @@
 
 #include <rtems/asm.h>
 #include <bsp/irq_asm.h>
+#include <rtems/score/cpu.h>
+
+#ifndef CPU_STACK_ALIGNMENT
+#error "Missing header? CPU_STACK_ALIGNMENT is not defined here"
+#endif
 
 	       BEGIN_CODE
 
@@ -95,26 +100,35 @@ SYM (_ISR_Handler):
 nested:
         incl      SYM (_ISR_Nest_level)     /* one nest level deeper */
         incl      SYM (_Thread_Dispatch_disable_level) /* disable multitasking */
+
+	/*
+     * Ensure CPU_STACK_ALIGNMENT for C-code.
+     *  esp = (esp - 4) & ~(CPU_STACK_ALIGNMENT - 1)
+	 * makes sure 'esp' is aligned AND there is enough space
+	 * for the vector argument on the stack!
+	 */
+	subl $4, esp
+
+	andl $ - CPU_STACK_ALIGNMENT, esp
 	/*
 	 * re-enable interrupts at processor level as the current
 	 * interrupt source is now masked via i8259
 	 */
 	sti
 
-        /*
+    /*
 	 *  ECX is preloaded with the vector number but it is a scratch register
 	 *  so we must save it again.
 	 */
 
-        pushl     ecx                       /* push vector number */
+	movl ecx, (esp)  /* store vector arg in stack */
 	call	  C_dispatch_isr
-        addl      $4, esp
 
 	/*
 	 * disable interrupts_again
 	 */
 	cli
-        popl       ecx                       /* ecx = vector number */
+
 	/*
 	 * restore stack
 	 */

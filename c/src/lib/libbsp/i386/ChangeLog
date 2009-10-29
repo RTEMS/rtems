@@ -1,3 +1,8 @@
+2009-10-28	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/irq/irq_asm.S: Make sure stack is aligned to
+	CPU_STACK_ALIGNMENT before invoking C-code.
+
 2009-10-17	Chris Johns <chrisj@rtems.org>
 
 	* shared/irq/idt.c: Check is the irq handlers are present before
