@@ -26,15 +26,9 @@ void diff_timespec(
   struct timespec *start,
   struct timespec *stop,
   struct timespec *result
-);
-
-void diff_timespec(
-  struct timespec *start,
-  struct timespec *stop,
-  struct timespec *result
 )
 {
-   int nsecs_per_sec = 1000000000;
+   const long nsecs_per_sec = 1000000000;
 
    result->tv_sec = stop->tv_sec - start->tv_sec;
    if ( stop->tv_nsec < start->tv_nsec ) {
