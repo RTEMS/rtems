@@ -16,6 +16,9 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+/* HACK: API visibilty violation */
+extern rtems_attribute rtems_interrupt_level_attribute(uint32_t level);
+
 /* prototypes */
 void test_interrupt_inline(void);
 void check_isr_in_progress_inline(void);
