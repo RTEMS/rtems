@@ -83,9 +83,13 @@ void check_isr_in_progress_inline(void)
 }
 
 #undef rtems_interrupt_disable
+extern rtems_interrupt_level rtems_interrupt_disable(void);
 #undef rtems_interrupt_enable
+extern void rtems_interrupt_enable(rtems_interrupt_level previous_level);
 #undef rtems_interrupt_flash
+extern void rtems_interrupt_flash(rtems_interrupt_level previous_level);
 #undef rtems_interrupt_is_in_progress
+extern bool rtems_interrupt_is_in_progress(void);
 
 rtems_timer_service_routine test_isr_in_progress(
   rtems_id  timer,
