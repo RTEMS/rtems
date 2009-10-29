@@ -1,4 +1,9 @@
-2009-12-27	Till Straumann <strauman@slac.stanford.edu>
+2009-10-28	Till Straumann <strauman@slac.stanford.edu>
+
+	* start/start.S: Make sure initial stack is aligned
+	to CPU_STACK_ALIGNMENT before calling C-code.
+
+2009-10-27	Till Straumann <strauman@slac.stanford.edu>
 
 	* include/bsp.h, console/console.c: Provide weak-alias
 	hook so that the application may choose the console.

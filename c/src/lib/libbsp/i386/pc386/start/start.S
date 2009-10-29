@@ -42,10 +42,15 @@
  */
 
 #include <rtems/asm.h>
+#include <rtems/score/cpu.h>
 
 /*----------------------------------------------------------------------------+
 | Size of heap and stack:
 +----------------------------------------------------------------------------*/
+
+#ifndef CPU_STACK_ALIGNMENT
+#error  "Missing header ? CPU_STACK_ALIGNMENT NOT DEFINED"
+#endif
 
 .set STACK_SIZE, 0x1000
 
@@ -164,7 +169,8 @@ SYM (_establish_stack):
 
 	movl	$_end, eax		# eax = end of bss/start of heap
 	addl	$STACK_SIZE, eax	# make room for stack
-	andl	$0xffffffc0, eax	# align it on 16 byte boundary
+	subl    $4,          eax    # reserve room for arg to 'boot_card'
+	andl	$ - CPU_STACK_ALIGNMENT, eax	# align SP on CPU_STACK_ALIGNMENT boundary
 	movl	eax, esp		# set stack pointer
 	movl	eax, ebp		# set base pointer
 
@@ -197,12 +203,17 @@ SYM (zero_bss):
 
 /*---------------------------------------------------------------------+
 | Transfer control to User's Board Support Package
+| Note: at the top we reserved space for the argument
+|       so that
+|          initial_esp = ( TOS - 4 ) & ~(CPU_STACK_ALIGNMENT-1)
+|       this ensures that
+|       1) esp is now aligned
+|       2) there is space for the cmdline pointer which we just
+|          may store at *(esp)
 +---------------------------------------------------------------------*/
 
-	movl	$SYM(_boot_multiboot_cmdline), eax
-	pushl	eax			# cmdline
+	movl	$SYM(_boot_multiboot_cmdline), (esp)
 	call	SYM (boot_card)
-	addl	$4, esp
 
 /*---------------------------------------------------------------------+
 | Clean up - we do not know anything about it, so we will
