@@ -1,5 +1,12 @@
 2009-10-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp43/init.c: Add local prototypes for
+	rtems_object_api_minimum_class, rtems_object_api_maximum_class,
+	rtems_build_id, rtems_build_name, rtems_object_id_api_maximum,
+	rtems_object_id_api_minimum, rtems_object_id_get_api,
+	rtems_object_id_get_class, rtems_object_id_get_index,
+	rtems_object_id_get_node.
+	Spray PRId32's into printf's for 16bit target complianance.
 	* sp37/init.c: Add local prototype for
 	rtems_interrupt_level_attribute.
 
