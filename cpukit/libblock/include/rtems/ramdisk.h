@@ -213,6 +213,25 @@ ramdisk *ramdisk_allocate(
 
 void ramdisk_free(ramdisk *rd);
 
+/**
+ * @brief Allocates, initializes and registers a RAM disk.
+ *
+ * The block size will be @a block_size.  The block count will be @a
+ * block_count.  The disk storage will be allocated.  Sets the trace enable to
+ * @a trace.  Registers a device node with disk name path @a disk.  The
+ * registered device number will be returned in @a dev.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_UNSATISFIED Something is wrong.
+ */
+rtems_status_code ramdisk_register(
+  uint32_t block_size,
+  rtems_blkdev_bnum block_count,
+  bool trace,
+  const char *disk,
+  dev_t *dev
+);
+
 /** @} */
 
 /** @} */

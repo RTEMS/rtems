@@ -1,3 +1,8 @@
+2009-10-28     Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/ramdisk.h, libblock/src/ramdisk-driver.c:
+	Aded ramdisk_register().
+
 2009-10-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Remove RTEMS_CFLAGS.
