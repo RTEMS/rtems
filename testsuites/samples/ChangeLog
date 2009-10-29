@@ -1,5 +1,7 @@
 2009-10-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* pppd/netconfig.h: Add UL suffix to long constants to avoid
+	implicit integer overflows on 16bit targets.
 	* fileio/init.c: Use %zd to print ssize_t.
 
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
