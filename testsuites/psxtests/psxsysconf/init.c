@@ -28,11 +28,17 @@ void *POSIX_Init(
   puts( "sysconf -- bad configuration parameter - negative" );
   sc = sysconf( -1 );
   fatal_posix_service_status_errno( sc, EINVAL, "bad conf name" );
-  
+
+#if UNUSED  
+/* FIXME: This test doesn't make sense. 
+ * On targets with sizeof(int) < sizeof(long), compilation will fail,
+ * On targets with sizeof(int) == sizeof(long) the call is valid.
+ */
   puts( "sysconf -- bad configuration parameter - too large" );
   sc = sysconf( LONG_MAX );
   fatal_posix_service_status_errno( sc, EINVAL, "bad conf name" );
-  
+#endif
+
   sc = sysconf( _SC_CLK_TCK );
   printf( "sysconf - _SC_CLK_TCK=%ld\n", sc );
   if ( sc == -1 )
@@ -58,7 +64,7 @@ void *POSIX_Init(
   if ( sc == -1 )
    rtems_test_exit(0);
 
-  sc = sysconf( 0x12345678 );
+  sc = sysconf( INT_MAX );
   printf( "sysconf - bad parameter = %ld errno=%s\n", sc, strerror(errno) );
   if ( (sc != -1) || (errno != EINVAL) )
    rtems_test_exit(0);
