@@ -1,5 +1,10 @@
 2009-10-29	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/irq/irq_asm.S: Beautification; ajusted margins and
+	spaces to make the whole thing more readable.
+
+2009-10-29	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq_asm.S, shared/irq/irq.c: removed
 	(fake) exception frame argument to _ThreadProcessSignalsFromIrq().
 	This has never been used and removing it simplifies the assembly
