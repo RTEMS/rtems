@@ -65,7 +65,7 @@ void *POSIX_Init(
   assert( status == EINVAL );
   puts( "Init: pthread_condattr_setpshared - EINVAL (attribute invalid)" );
 
-  status = pthread_condattr_setpshared( &attr, 0xFFFFFF );
+  status = pthread_condattr_setpshared( &attr, 0x7FFF );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
