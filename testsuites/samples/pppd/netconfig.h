@@ -23,8 +23,8 @@ struct rtems_bsdnet_config rtems_bsdnet_config = {
   &netdriver_config,
   NULL,
   30,                 /* Default network task priority */
-  (256*1024),         /* Default mbuf capacity */
-  (512*1024),         /* Default mbuf cluster capacity */
+  (256UL *1024UL),    /* Default mbuf capacity */
+  (512UL *1024UL),    /* Default mbuf cluster capacity */
   0,                  /* Host name */
   0,                  /* Domain name */
   0,                  /* Gateway */
