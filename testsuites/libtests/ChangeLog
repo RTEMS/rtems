@@ -1,3 +1,10 @@
+2009-10-29	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* block02/init.c, block02/block02.scn, block02/Makefile.am,
+	block03/init.c, block03/block03.scn, block03/Makefile.am,
+	block04/init.c, block04/block04.scn, block04/Makefile.am: New files.
+	* Makefile.am, configure.ac: Added block02, block03 and block04.
+
 2009-10-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* monitor02/init.c: Add local prototype for

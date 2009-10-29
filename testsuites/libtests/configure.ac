@@ -34,6 +34,9 @@ AM_CONDITIONAL(HAS_CXX,test "$rtems_cv_HAS_CPLUSPLUS" = "yes")
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 block01/Makefile
+block02/Makefile
+block03/Makefile
+block04/Makefile
 bspcmdline01/Makefile
 cpuuse/Makefile
 heapwalk/Makefile

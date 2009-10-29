@@ -1,0 +1,10 @@
+*** TEST BLOCK 3 ***
+H: try access: 0
+L: try access: 0
+I: sync done: 0
+H: access: 0
+H: release: 0
+H: release done: 0
+H: try access: 1
+L: access: 0
+*** END OF TEST BLOCK 3 ***
