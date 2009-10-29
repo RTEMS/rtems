@@ -174,7 +174,7 @@ static const char * getmodel(int x86, int model)
 
 void printCpuInfo(void)
 {
-  int i;
+  int i,j;
   static const char *x86_cap_flags[] = {
     "fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
     "cx8", "apic", "10", "sep", "mtrr", "pge", "mca", "cmov",
@@ -188,35 +188,42 @@ void printCpuInfo(void)
 	"24",  "25", "26", "27", "28", "29", "30", "31"
   };
          
-  printk("cpu\t\t\t: %c86\n", x86+'0'); 
-  printk("model\t\t: %s\n",
+  printk("cpu         : %c86\n", x86+'0'); 
+  printk("model       : %s\n",
 	 have_cpuid ? getmodel(x86, x86_model) : "unknown");
   if (x86_vendor_id [0] == '\0')
     strcpy(x86_vendor_id, "unknown");
-  printk("vendor_id\t: %s\n", x86_vendor_id);
+  printk("vendor_id   : %s\n", x86_vendor_id);
         
   if (x86_mask)
     if (strncmp(x86_vendor_id, "Cyrix", 5) != 0) {
-      printk("stepping\t: %d\n", x86_mask);
+      printk("stepping    : %d\n", x86_mask);
     }
     else { 			/* we have a Cyrix */
-      printk("stepping\t: %s\n", Cx86_type[Cx86_step]);
+      printk("stepping    : %s\n", Cx86_type[Cx86_step]);
     }
   else
-    printk("stepping\t: unknown\n");
+    printk("stepping    : unknown\n");
         
-  printk("fpu\t\t\t: %s\n", (hard_math ? "yes" : "no"));
-  printk("cpuid\t\t: %s\n", (have_cpuid ? "yes" : "no"));
-  printk("flags\t\t:");
-  for ( i = 0 ; i < 32 ; i++ ) {
+  printk("fpu         : %s\n", (hard_math ? "yes" : "no"));
+  printk("cpuid       : %s\n", (have_cpuid ? "yes" : "no"));
+  printk("flags       :");
+  for ( i = j = 0 ; i < 32 ; i++ ) {
     if ( x86_capability & (1 << i) ) {
+      if ( j && 0 == (j & 7) )
+		printk("\n             ");
       printk(" %s", x86_cap_flags[i]);
+      j++;
     }
   }
   printk("\n");
-  for ( i = 0 ; i < 32 ; i++ ) {
+  printk("flags (ext.):");
+  for ( i = j = 0 ; i < 32 ; i++ ) {
     if ( x86_capability_x & (1 << i) ) {
+      if ( j && 0 == (j & 7) )
+		printk("\n             ");
       printk(" %s", x86_cap_x_flags[i]);
+      j++;
     }
   }
   printk("\n");
