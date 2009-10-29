@@ -293,7 +293,7 @@ void fileio_list_file(void)
 
     rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &curr_tick);
 
-    printf("\n ******** End of file reached, flen = %d\n",flen);
+    printf("\n ******** End of file reached, flen = %zd\n",flen);
     close(fd);
 
     ticks_per_sec = rtems_clock_get_ticks_per_second();
