@@ -14,6 +14,11 @@
  */
 
 #include <rtems/asm.h>
+#include <rtems/score/cpu.h>
+
+#ifndef CPU_STACK_ALIGNMENT
+#error "Missing header? CPU_STACK_ALIGNMENT not defined"
+#endif
 
 /*
  * Format of i386 Register structure
@@ -110,13 +115,17 @@ SYM (_CPU_Context_restore_fp):
 
         PUBLIC (_Exception_Handler)
 SYM (_Exception_Handler):
-	pusha				   /* Push general purpose registers */
-	pushl	esp			   /* Push exception frame address */
-	movl	_currentExcHandler, eax	   /* Call function storead in _currentExcHandler */
+	pusha                  /* Push general purpose registers    */
+	movl    esp,  ebp      /* Save original SP                  */
+	subl    $4,   esp      /* Reserve space for argument        */
+                           /* Align stack (courtesy for C/gcc)  */
+	andl    $ - CPU_STACK_ALIGNMENT, esp
+	movl    ebp, (esp)     /* Store argument                    */
+	movl	_currentExcHandler, eax	   /* Call function stored in _currentExcHandler */
 	call	* eax
-	addl	$4, esp
-	popa				   /* restore general purpose registers */
-	addl	$8, esp			   /* skill vector number and faultCode */
+	movl    ebp,  esp      /* Restore original SP               */
+	popa                   /* Restore general purpose registers */
+	addl	$8, esp        /* Skill vector number and faultCode */
 	iret
 
 #define DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY(_vector) \

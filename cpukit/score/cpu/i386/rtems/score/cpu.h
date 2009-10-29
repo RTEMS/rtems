@@ -19,7 +19,9 @@
 #ifndef _RTEMS_SCORE_CPU_H
 #define _RTEMS_SCORE_CPU_H
 
+#ifndef ASM
 #include <string.h> /* for memcpy */
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -95,6 +97,8 @@ extern "C" {
 #define CPU_LITTLE_ENDIAN                        TRUE
 
 /* structures */
+
+#ifndef ASM
 
 /*
  *  Basic integer context for the i386 family.
@@ -197,6 +201,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
+#endif /* ASM */
+
 /* constants */
 
 /*
@@ -243,13 +249,18 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 /*
  *  On i386 thread stacks require no further alignment after allocation
- *  from the Workspace.
+ *  from the Workspace. However, since gcc maintains 16-byte alignment
+ *  we try to respect that. If you find an option to let gcc squeeze
+ *  the stack more tightly then setting CPU_STACK_ALIGNMENT to 16 still
+ *  doesn't waste much space since this only determines the *initial*
+ *  alignment.
  */
 
-#define CPU_STACK_ALIGNMENT             0
+#define CPU_STACK_ALIGNMENT             16
 
 /* macros */
 
+#ifndef ASM
 /*
  *  ISR handler macros
  *
@@ -277,6 +288,8 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 uint32_t   _CPU_ISR_Get_level( void );
 
+#endif /* ASM */
+
 /* end of ISR handler macros */
 
 /*
@@ -292,6 +305,37 @@ uint32_t   _CPU_ISR_Get_level( void );
 #define CPU_EFLAGS_INTERRUPTS_ON  0x00003202
 #define CPU_EFLAGS_INTERRUPTS_OFF 0x00003002
 
+#ifndef ASM
+
+/*
+ * Stack alignment note:
+ * 
+ * We want the stack to look to the '_entry_point' routine
+ * like an ordinary stack frame as if '_entry_point' was
+ * called from C-code.
+ * Note that '_entry_point' is jumped-to by the 'ret'
+ * instruction returning from _CPU_Context_switch() or
+ * _CPU_Context_restore() thus popping the _entry_point
+ * from the stack.
+ * However, _entry_point expects a frame to look like this:
+ *
+ *      args        [_Thread_Handler expects no args, however]
+ *      ------      (alignment boundary)
+ * SP-> return_addr return here when _entry_point returns which (never happens)
+ *
+ *   
+ * Hence we must initialize the stack as follows
+ *
+ *         [arg1          ]:  n/a
+ *         [arg0 (aligned)]:  n/a
+ *         [ret. addr     ]:  NULL
+ * SP->    [jump-target   ]:  _entry_point
+ *
+ * When Context_switch returns it pops the _entry_point from
+ * the stack which then finds a standard layout.
+ */
+
+
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                    _isr, _entry_point, _is_fp ) \
   do { \
@@ -300,8 +344,9 @@ uint32_t   _CPU_ISR_Get_level( void );
     if ( (_isr) ) (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_OFF; \
     else          (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_ON; \
     \
-    _stack = ((uint32_t)(_stack_base)) + (_size) - sizeof(proc_ptr*); \
-    \
+    _stack  = ((uint32_t)(_stack_base)) + (_size); \
+	_stack &= ~ (CPU_STACK_ALIGNMENT - 1); \
+    _stack -= 2*sizeof(proc_ptr*); /* see above for why we need to do this */ \
     *((proc_ptr *)(_stack)) = (_entry_point); \
     (_the_context)->ebp     = (void *) 0; \
     (_the_context)->esp     = (void *) _stack; \
@@ -335,6 +380,8 @@ uint32_t   _CPU_ISR_Get_level( void );
                     : "=r" ((_error)) : "0" ((_error)) \
     ); \
   }
+
+#endif /* ASM */
 
 /* end of Fatal Error manager macros */
 
@@ -380,6 +427,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 /* functions */
 
+#ifndef ASM
 /*
  *  _CPU_Initialize
  *
@@ -466,6 +514,8 @@ void _CPU_Context_save_fp(
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
+
+#endif /* ASM */
 
 #ifdef __cplusplus
 }
