@@ -1,5 +1,9 @@
 2009-10-29	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psxsysconf/init.c: 
+	Comment out sysconf(LONG_MAX) check (not useful).
+	Change sysconf(0x12345678) check into sysconf(INT_MAX) for better
+	16bit compliance.
 	* psx11/task.c: Use long for nsecs.
 	* psx10/init.c: Pass 0x7FFF instead of 0xFFFFFF as invalid pshared
 	attribute to pthread_condattr_setpshared for 16bit target compliance.
