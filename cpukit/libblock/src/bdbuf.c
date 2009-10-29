@@ -30,18 +30,20 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-
+#include <limits.h>
+#include <errno.h>
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
 #include <inttypes.h>
 
 #include <rtems.h>
 #include <rtems/error.h>
 #include <rtems/malloc.h>
-#include <limits.h>
-#include <errno.h>
-#include <assert.h>
-#include <stdio.h>
 
 #include "rtems/bdbuf.h"
+
+#define BDBUF_INVALID_DEV ((dev_t) -1)
 
 /*
  * Simpler label for this file.
@@ -76,6 +78,14 @@ typedef struct rtems_bdbuf_swapout_worker
 } rtems_bdbuf_swapout_worker;
 
 /**
+ * Buffer waiters synchronization.
+ */
+typedef struct rtems_bdbuf_waiters {
+  volatile unsigned count;
+  rtems_id sema;
+} rtems_bdbuf_waiters;
+
+/**
  * The BD buffer cache.
  */
 typedef struct rtems_bdbuf_cache
@@ -101,8 +111,9 @@ typedef struct rtems_bdbuf_cache
   rtems_id            sync_lock;         /**< Sync calls block writes. */
   volatile bool       sync_active;       /**< True if a sync is active. */
   volatile rtems_id   sync_requester;    /**< The sync requester. */
-  volatile dev_t      sync_device;       /**< The device to sync and -1 not a
-                                          * device sync. */
+  volatile dev_t      sync_device;       /**< The device to sync and
+                                          * BDBUF_INVALID_DEV not a device
+                                          * sync. */
 
   rtems_bdbuf_buffer* tree;              /**< Buffer descriptor lookup AVL tree
                                           * root. There is only one. */
@@ -112,15 +123,12 @@ typedef struct rtems_bdbuf_cache
   rtems_chain_control modified;          /**< Modified buffers list */
   rtems_chain_control sync;              /**< Buffers to sync list */
 
-  rtems_id            access;            /**< Obtain if waiting for a buffer in
-                                          * the ACCESS state. */
-  volatile uint32_t   access_waiters;    /**< Count of access blockers. */
-  rtems_id            transfer;          /**< Obtain if waiting for a buffer in
-                                          * the TRANSFER state. */
-  volatile uint32_t   transfer_waiters;  /**< Count of transfer blockers. */
-  rtems_id            waiting;           /**< Obtain if waiting for a buffer
-                                          * and the none are available. */
-  volatile uint32_t   wait_waiters;      /**< Count of waiting blockers. */
+  rtems_bdbuf_waiters access_waiters;    /**< Wait for a buffer in ACCESS
+                                          * state. */
+  rtems_bdbuf_waiters transfer_waiters;  /**< Wait for a buffer in TRANSFER
+                                          * state. */
+  rtems_bdbuf_waiters buffer_waiters;    /**< Wait for a buffer and no one is
+                                          * available. */
 
   size_t              group_count;       /**< The number of groups. */
   rtems_bdbuf_group*  groups;            /**< The groups. */
@@ -148,9 +156,9 @@ typedef struct rtems_bdbuf_cache
 #define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_UNLOCK   RTEMS_BLKDEV_FATAL_ERROR(12)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_LOCK    RTEMS_BLKDEV_FATAL_ERROR(13)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_UNLOCK  RTEMS_BLKDEV_FATAL_ERROR(14)
-#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_1  RTEMS_BLKDEV_FATAL_ERROR(15)
+#define RTEMS_BLKDEV_FATAL_BDBUF_PREEMPT_DIS   RTEMS_BLKDEV_FATAL_ERROR(15)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_2  RTEMS_BLKDEV_FATAL_ERROR(16)
-#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_3  RTEMS_BLKDEV_FATAL_ERROR(17)
+#define RTEMS_BLKDEV_FATAL_BDBUF_PREEMPT_RST   RTEMS_BLKDEV_FATAL_ERROR(17)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_TO RTEMS_BLKDEV_FATAL_ERROR(18)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAKE    RTEMS_BLKDEV_FATAL_ERROR(19)
 #define RTEMS_BLKDEV_FATAL_BDBUF_SO_WAKE       RTEMS_BLKDEV_FATAL_ERROR(20)
@@ -248,6 +256,7 @@ rtems_bdbuf_show_usage (void)
   uint32_t group;
   uint32_t total = 0;
   uint32_t val;
+
   for (group = 0; group < bdbuf_cache.group_count; group++)
     total += bdbuf_cache.groups[group].users;
   printf ("bdbuf:group users=%lu", total);
@@ -277,7 +286,8 @@ rtems_bdbuf_show_users (const char* where, rtems_bdbuf_buffer* bd)
 {
   const char* states[] =
     { "EM", "RA", "CH", "AC", "MD", "AM", "SY", "TR" };
-  printf ("bdbuf:users: %15s: [%ld (%s)] %ld:%ld = %lu %s\n",
+
+  printf ("bdbuf:users: %15s: [%" PRIu32 " (%s)] %td:%td = %" PRIu32 " %s\n",
           where,
           bd->block, states[bd->state],
           bd->group - bdbuf_cache.groups,
@@ -870,6 +880,29 @@ rtems_bdbuf_unlock_sync (void)
                       RTEMS_BLKDEV_FATAL_BDBUF_SYNC_UNLOCK);
 }
 
+static rtems_mode
+rtems_bdbuf_disable_preemption (void)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_mode prev_mode = 0;
+
+  sc = rtems_task_mode (RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &prev_mode);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_PREEMPT_DIS);
+
+  return prev_mode;
+}
+
+static void
+rtems_bdbuf_restore_preemption (rtems_mode prev_mode)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  sc = rtems_task_mode (prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_PREEMPT_RST);
+}
+
 /**
  * Wait until woken. Semaphores are used so a number of tasks can wait and can
  * be woken at once. Task events would require we maintain a list of tasks to
@@ -889,7 +922,7 @@ rtems_bdbuf_unlock_sync (void)
  * @param waiters The wait counter for this semaphore.
  */
 static void
-rtems_bdbuf_wait (rtems_id* sema, volatile uint32_t* waiters)
+rtems_bdbuf_wait (rtems_bdbuf_waiters* waiters)
 {
   rtems_status_code sc;
   rtems_mode        prev_mode;
@@ -897,7 +930,7 @@ rtems_bdbuf_wait (rtems_id* sema, volatile uint32_t* waiters)
   /*
    * Indicate we are waiting.
    */
-  *waiters += 1;
+  ++waiters->count;
 
   /*
    * Disable preemption then unlock the cache and block.  There is no POSIX
@@ -909,17 +942,14 @@ rtems_bdbuf_wait (rtems_id* sema, volatile uint32_t* waiters)
    * the flush and may block for ever or until another transaction flushes this
    * semaphore.
    */
-  sc = rtems_task_mode (RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &prev_mode);
-
-  if (sc != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_1);
+  prev_mode = rtems_bdbuf_disable_preemption ();
   
   /*
    * Unlock the cache, wait, and lock the cache when we return.
    */
   rtems_bdbuf_unlock_cache ();
 
-  sc = rtems_semaphore_obtain (*sema, RTEMS_WAIT, RTEMS_BDBUF_WAIT_TIMEOUT);
+  sc = rtems_semaphore_obtain (waiters->sema, RTEMS_WAIT, RTEMS_BDBUF_WAIT_TIMEOUT);
 
   if (sc == RTEMS_TIMEOUT)
     rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_TO);
@@ -929,30 +959,23 @@ rtems_bdbuf_wait (rtems_id* sema, volatile uint32_t* waiters)
   
   rtems_bdbuf_lock_cache ();
 
-  sc = rtems_task_mode (prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode);
-
-  if (sc != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_3);
+  rtems_bdbuf_restore_preemption (prev_mode);
   
-  *waiters -= 1;
+  --waiters->count;
 }
 
 /**
  * Wake a blocked resource. The resource has a counter that lets us know if
  * there are any waiters.
- *
- * @param sema The semaphore to release.
- * @param waiters The wait counter for this semaphore.
  */
 static void
-rtems_bdbuf_wake (rtems_id sema, volatile uint32_t* waiters)
+rtems_bdbuf_wake (const rtems_bdbuf_waiters *waiters)
 {
-  if (*waiters)
-  {
-    rtems_status_code sc;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-    sc = rtems_semaphore_flush (sema);
-  
+  if (waiters->count > 0)
+  {
+    sc = rtems_semaphore_flush (waiters->sema);
     if (sc != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAKE);
   }
@@ -1149,11 +1172,15 @@ rtems_bdbuf_init (void)
   rtems_bdbuf_buffer* bd;
   uint8_t*            buffer;
   size_t              b;
-  int                 cache_aligment;
+  size_t              cache_aligment;
   rtems_status_code   sc;
+  rtems_mode          prev_mode;
 
   if (rtems_bdbuf_tracer)
     printf ("bdbuf:init\n");
+
+  if (rtems_interrupt_is_in_progress())
+    return RTEMS_CALLED_FROM_ISR;
 
   /*
    * Check the configuration table values.
@@ -1166,10 +1193,16 @@ rtems_bdbuf_init (void)
    * completing threads doing this. You may get errors if the another thread
    * makes a call and we have not finished initialisation.
    */
+  prev_mode = rtems_bdbuf_disable_preemption ();
   if (bdbuf_cache.initialised)
-    return RTEMS_RESOURCE_IN_USE;
+  {
+    rtems_bdbuf_restore_preemption (prev_mode);
 
+    return RTEMS_RESOURCE_IN_USE;
+  }
+  memset(&bdbuf_cache, 0, sizeof(bdbuf_cache));
   bdbuf_cache.initialised = true;
+  rtems_bdbuf_restore_preemption (prev_mode);
   
   /*
    * For unspecified cache alignments we use the CPU alignment.
@@ -1178,23 +1211,13 @@ rtems_bdbuf_init (void)
   if (cache_aligment <= 0)
     cache_aligment = CPU_ALIGNMENT;
 
-  bdbuf_cache.sync_active    = false;
-  bdbuf_cache.sync_device    = -1;
-  bdbuf_cache.sync_requester = 0;
-  bdbuf_cache.tree           = NULL;
+  bdbuf_cache.sync_device = BDBUF_INVALID_DEV;
 
   rtems_chain_initialize_empty (&bdbuf_cache.swapout_workers);
   rtems_chain_initialize_empty (&bdbuf_cache.ready);
   rtems_chain_initialize_empty (&bdbuf_cache.lru);
   rtems_chain_initialize_empty (&bdbuf_cache.modified);
   rtems_chain_initialize_empty (&bdbuf_cache.sync);
-
-  bdbuf_cache.access           = 0;
-  bdbuf_cache.access_waiters   = 0;
-  bdbuf_cache.transfer         = 0;
-  bdbuf_cache.transfer_waiters = 0;
-  bdbuf_cache.waiting          = 0;
-  bdbuf_cache.wait_waiters     = 0;
 
   /*
    * Create the locks for the cache.
@@ -1203,10 +1226,7 @@ rtems_bdbuf_init (void)
                                1, RTEMS_BDBUF_CACHE_LOCK_ATTRIBS, 0,
                                &bdbuf_cache.lock);
   if (sc != RTEMS_SUCCESSFUL)
-  {
-    bdbuf_cache.initialised = false;
-    return sc;
-  }
+    goto error;
 
   rtems_bdbuf_lock_cache ();
   
@@ -1214,51 +1234,25 @@ rtems_bdbuf_init (void)
                                1, RTEMS_BDBUF_CACHE_LOCK_ATTRIBS, 0,
                                &bdbuf_cache.sync_lock);
   if (sc != RTEMS_SUCCESSFUL)
-  {
-    rtems_bdbuf_unlock_cache ();
-    rtems_semaphore_delete (bdbuf_cache.lock);
-    bdbuf_cache.initialised = false;
-    return sc;
-  }
+    goto error;
   
   sc = rtems_semaphore_create (rtems_build_name ('B', 'D', 'C', 'a'),
                                0, RTEMS_BDBUF_CACHE_WAITER_ATTRIBS, 0,
-                               &bdbuf_cache.access);
+                               &bdbuf_cache.access_waiters.sema);
   if (sc != RTEMS_SUCCESSFUL)
-  {
-    rtems_semaphore_delete (bdbuf_cache.sync_lock);
-    rtems_bdbuf_unlock_cache ();
-    rtems_semaphore_delete (bdbuf_cache.lock);
-    bdbuf_cache.initialised = false;
-    return sc;
-  }
+    goto error;
 
   sc = rtems_semaphore_create (rtems_build_name ('B', 'D', 'C', 't'),
                                0, RTEMS_BDBUF_CACHE_WAITER_ATTRIBS, 0,
-                               &bdbuf_cache.transfer);
+                               &bdbuf_cache.transfer_waiters.sema);
   if (sc != RTEMS_SUCCESSFUL)
-  {
-    rtems_semaphore_delete (bdbuf_cache.access);
-    rtems_semaphore_delete (bdbuf_cache.sync_lock);
-    rtems_bdbuf_unlock_cache ();
-    rtems_semaphore_delete (bdbuf_cache.lock);
-    bdbuf_cache.initialised = false;
-    return sc;
-  }
+    goto error;
 
   sc = rtems_semaphore_create (rtems_build_name ('B', 'D', 'C', 'w'),
                                0, RTEMS_BDBUF_CACHE_WAITER_ATTRIBS, 0,
-                               &bdbuf_cache.waiting);
+                               &bdbuf_cache.buffer_waiters.sema);
   if (sc != RTEMS_SUCCESSFUL)
-  {
-    rtems_semaphore_delete (bdbuf_cache.transfer);
-    rtems_semaphore_delete (bdbuf_cache.access);
-    rtems_semaphore_delete (bdbuf_cache.sync_lock);
-    rtems_bdbuf_unlock_cache ();
-    rtems_semaphore_delete (bdbuf_cache.lock);
-    bdbuf_cache.initialised = false;
-    return sc;
-  }
+    goto error;
   
   /*
    * Compute the various number of elements in the cache.
@@ -1276,15 +1270,7 @@ rtems_bdbuf_init (void)
   bdbuf_cache.bds = calloc (sizeof (rtems_bdbuf_buffer),
                             bdbuf_cache.buffer_min_count);
   if (!bdbuf_cache.bds)
-  {
-    rtems_semaphore_delete (bdbuf_cache.transfer);
-    rtems_semaphore_delete (bdbuf_cache.access);
-    rtems_semaphore_delete (bdbuf_cache.sync_lock);
-    rtems_bdbuf_unlock_cache ();
-    rtems_semaphore_delete (bdbuf_cache.lock);
-    bdbuf_cache.initialised = false;
-    return RTEMS_NO_MEMORY;
-  }
+    goto error;
 
   /*
    * Allocate the memory for the buffer descriptors.
@@ -1292,16 +1278,7 @@ rtems_bdbuf_init (void)
   bdbuf_cache.groups = calloc (sizeof (rtems_bdbuf_group),
                                bdbuf_cache.group_count);
   if (!bdbuf_cache.groups)
-  {
-    free (bdbuf_cache.bds);
-    rtems_semaphore_delete (bdbuf_cache.transfer);
-    rtems_semaphore_delete (bdbuf_cache.access);
-    rtems_semaphore_delete (bdbuf_cache.sync_lock);
-    rtems_bdbuf_unlock_cache ();
-    rtems_semaphore_delete (bdbuf_cache.lock);
-    bdbuf_cache.initialised = false;
-    return RTEMS_NO_MEMORY;
-  }
+    goto error;
   
   /*
    * Allocate memory for buffer memory. The buffer memory will be cache
@@ -1313,17 +1290,7 @@ rtems_bdbuf_init (void)
   if (rtems_memalign ((void **) &bdbuf_cache.buffers,
                       cache_aligment,
                       bdbuf_cache.buffer_min_count * bdbuf_config.buffer_min) != 0)
-  {
-    free (bdbuf_cache.groups);
-    free (bdbuf_cache.bds);
-    rtems_semaphore_delete (bdbuf_cache.transfer);
-    rtems_semaphore_delete (bdbuf_cache.access);
-    rtems_semaphore_delete (bdbuf_cache.sync_lock);
-    rtems_bdbuf_unlock_cache ();
-    rtems_semaphore_delete (bdbuf_cache.lock);
-    bdbuf_cache.initialised = false;
-    return RTEMS_NO_MEMORY;
-  }
+    goto error;
 
   /*
    * The cache is empty after opening so we need to add all the buffers to it
@@ -1334,7 +1301,7 @@ rtems_bdbuf_init (void)
        b < bdbuf_cache.buffer_min_count;
        b++, bd++, buffer += bdbuf_config.buffer_min)
   {
-    bd->dev        = -1;
+    bd->dev        = BDBUF_INVALID_DEV;
     bd->group      = group;
     bd->buffer     = buffer;
     bd->avl.left   = NULL;
@@ -1381,40 +1348,41 @@ rtems_bdbuf_init (void)
                           RTEMS_LOCAL | RTEMS_NO_FLOATING_POINT,
                           &bdbuf_cache.swapout);
   if (sc != RTEMS_SUCCESSFUL)
-  {
-    free (bdbuf_cache.buffers);
-    free (bdbuf_cache.groups);
-    free (bdbuf_cache.bds);
-    rtems_semaphore_delete (bdbuf_cache.transfer);
-    rtems_semaphore_delete (bdbuf_cache.access);
-    rtems_semaphore_delete (bdbuf_cache.sync_lock);
-    rtems_bdbuf_unlock_cache ();
-    rtems_semaphore_delete (bdbuf_cache.lock);
-    bdbuf_cache.initialised = false;
-    return sc;
-  }
+    goto error;
 
   sc = rtems_task_start (bdbuf_cache.swapout,
                          rtems_bdbuf_swapout_task,
                          (rtems_task_argument) &bdbuf_cache);
   if (sc != RTEMS_SUCCESSFUL)
-  {
-    rtems_task_delete (bdbuf_cache.swapout);
-    free (bdbuf_cache.buffers);
-    free (bdbuf_cache.groups);
-    free (bdbuf_cache.bds);
-    rtems_semaphore_delete (bdbuf_cache.transfer);
-    rtems_semaphore_delete (bdbuf_cache.access);
-    rtems_semaphore_delete (bdbuf_cache.sync_lock);
-    rtems_bdbuf_unlock_cache ();
-    rtems_semaphore_delete (bdbuf_cache.lock);
-    bdbuf_cache.initialised = false;
-    return sc;
-  }
+    goto error;
 
   rtems_bdbuf_unlock_cache ();
-  
+
   return RTEMS_SUCCESSFUL;
+
+error:
+
+  if (bdbuf_cache.swapout != 0)
+    rtems_task_delete (bdbuf_cache.swapout);
+
+  free (bdbuf_cache.buffers);
+  free (bdbuf_cache.groups);
+  free (bdbuf_cache.bds);
+
+  rtems_semaphore_delete (bdbuf_cache.buffer_waiters.sema);
+  rtems_semaphore_delete (bdbuf_cache.access_waiters.sema);
+  rtems_semaphore_delete (bdbuf_cache.transfer_waiters.sema);
+  rtems_semaphore_delete (bdbuf_cache.sync_lock);
+
+  if (bdbuf_cache.lock != 0)
+  {
+    rtems_bdbuf_unlock_cache ();
+    rtems_semaphore_delete (bdbuf_cache.lock);
+  }
+
+  bdbuf_cache.initialised = false;
+
+  return RTEMS_UNSATISFIED;
 }
 
 /**
@@ -1587,7 +1555,7 @@ rtems_bdbuf_get_buffer (rtems_disk_device* dd,
            * Wait for a buffer to be returned to the cache. The buffer will be
            * placed on the LRU list.
            */
-          rtems_bdbuf_wait (&bdbuf_cache.waiting, &bdbuf_cache.wait_waiters);
+          rtems_bdbuf_wait (&bdbuf_cache.buffer_waiters);
         }
       }
       else
@@ -1670,14 +1638,14 @@ rtems_bdbuf_get_buffer (rtems_disk_device* dd,
       case RTEMS_BDBUF_STATE_ACCESS:
       case RTEMS_BDBUF_STATE_ACCESS_MODIFIED:
         bd->waiters++;
-        rtems_bdbuf_wait (&bdbuf_cache.access, &bdbuf_cache.access_waiters);
+        rtems_bdbuf_wait (&bdbuf_cache.access_waiters);
         bd->waiters--;
         break;
 
       case RTEMS_BDBUF_STATE_SYNC:
       case RTEMS_BDBUF_STATE_TRANSFER:
         bd->waiters++;
-        rtems_bdbuf_wait (&bdbuf_cache.transfer, &bdbuf_cache.transfer_waiters);
+        rtems_bdbuf_wait (&bdbuf_cache.transfer_waiters);
         bd->waiters--;
         break;
 
@@ -1743,8 +1711,8 @@ rtems_bdbuf_get (dev_t                device,
    * Print the block index relative to the physical disk.
    */
   if (rtems_bdbuf_tracer)
-    printf ("bdbuf:get: %lu (%lu) (dev = %08x)\n",
-            media_block, block, (unsigned int) device);
+    printf ("bdbuf:get: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
+            media_block, block, (unsigned) device);
 
   bd = rtems_bdbuf_get_buffer (dd, bds_per_group, media_block, false);
 
@@ -1859,8 +1827,8 @@ rtems_bdbuf_read (dev_t                device,
    * number
    */
   if (rtems_bdbuf_tracer)
-    printf ("bdbuf:read: %lu (%lu) (dev = %08x)\n",
-            media_block + dd->start, block, (unsigned int) device);
+    printf ("bdbuf:read: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
+            media_block + dd->start, block, (unsigned) device);
 
   /*
    * Read the block plus the required number of blocks ahead. The number of
@@ -2034,9 +2002,9 @@ rtems_bdbuf_read (dev_t                device,
     }
 
     if (wake_transfer)
-      rtems_bdbuf_wake (bdbuf_cache.transfer, &bdbuf_cache.transfer_waiters);
+      rtems_bdbuf_wake (&bdbuf_cache.transfer_waiters);
     else
-      rtems_bdbuf_wake (bdbuf_cache.waiting, &bdbuf_cache.wait_waiters);
+      rtems_bdbuf_wake (&bdbuf_cache.buffer_waiters);
     
     bd = req->bufs[0].user;
 
@@ -2092,7 +2060,7 @@ rtems_bdbuf_release (rtems_bdbuf_buffer* bd)
   rtems_bdbuf_lock_cache ();
 
   if (rtems_bdbuf_tracer)
-    printf ("bdbuf:release: %lu\n", bd->block);
+    printf ("bdbuf:release: %" PRIu32 "\n", bd->block);
   
   if (bd->state == RTEMS_BDBUF_STATE_ACCESS_MODIFIED)
   {
@@ -2117,9 +2085,9 @@ rtems_bdbuf_release (rtems_bdbuf_buffer* bd)
    * waiters if this buffer is placed back onto the LRU queue.
    */
   if (bd->waiters)
-    rtems_bdbuf_wake (bdbuf_cache.access, &bdbuf_cache.access_waiters);
+    rtems_bdbuf_wake (&bdbuf_cache.access_waiters);
   else
-    rtems_bdbuf_wake (bdbuf_cache.waiting, &bdbuf_cache.wait_waiters);
+    rtems_bdbuf_wake (&bdbuf_cache.buffer_waiters);
   
   if (rtems_bdbuf_tracer)
     rtems_bdbuf_show_usage ();
@@ -2141,7 +2109,7 @@ rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd)
   rtems_bdbuf_lock_cache ();
 
   if (rtems_bdbuf_tracer)
-    printf ("bdbuf:release modified: %lu\n", bd->block);
+    printf ("bdbuf:release modified: %" PRIu32 "\n", bd->block);
 
   bd->hold_timer = rtems_bdbuf_configuration.swap_block_hold;
   
@@ -2151,7 +2119,7 @@ rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd)
   rtems_bdbuf_append_modified (bd);
 
   if (bd->waiters)
-    rtems_bdbuf_wake (bdbuf_cache.access, &bdbuf_cache.access_waiters);
+    rtems_bdbuf_wake (&bdbuf_cache.access_waiters);
   
   if (rtems_bdbuf_tracer)
     rtems_bdbuf_show_usage ();
@@ -2167,7 +2135,7 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
   bool available;
 
   if (rtems_bdbuf_tracer)
-    printf ("bdbuf:sync: %lu\n", bd->block);
+    printf ("bdbuf:sync: %" PRIu32 "\n", bd->block);
   
   if (!bdbuf_cache.initialised)
     return RTEMS_NOT_CONFIGURED;
@@ -2199,7 +2167,7 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
       case RTEMS_BDBUF_STATE_SYNC:
       case RTEMS_BDBUF_STATE_TRANSFER:
         bd->waiters++;
-        rtems_bdbuf_wait (&bdbuf_cache.transfer, &bdbuf_cache.transfer_waiters);
+        rtems_bdbuf_wait (&bdbuf_cache.transfer_waiters);
         bd->waiters--;
         break;
 
@@ -2221,7 +2189,7 @@ rtems_bdbuf_syncdev (dev_t dev)
   rtems_event_set     out;
 
   if (rtems_bdbuf_tracer)
-    printf ("bdbuf:syncdev: %08x\n", (unsigned int) dev);
+    printf ("bdbuf:syncdev: %08x\n", (unsigned) dev);
 
   if (!bdbuf_cache.initialised)
     return RTEMS_NOT_CONFIGURED;
@@ -2303,7 +2271,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
   rtems_disk_device* dd;
   
   if (rtems_bdbuf_tracer)
-    printf ("bdbuf:swapout transfer: %08x\n", (unsigned int) transfer->dev);
+    printf ("bdbuf:swapout transfer: %08x\n", (unsigned) transfer->dev);
 
   /*
    * If there are buffers to transfer to the media transfer them.
@@ -2357,7 +2325,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
          */
         
         if (rtems_bdbuf_tracer)
-          printf ("bdbuf:swapout write: bd:%lu, bufnum:%lu mode:%s\n",
+          printf ("bdbuf:swapout write: bd:%" PRIu32 ", bufnum:%" PRIu32 " mode:%s\n",
                   bd->block, transfer->write_req->bufnum,
                   dd->phys_dev->capabilities &
                   RTEMS_BLKDEV_CAP_MULTISECTOR_CONT ? "MULIT" : "SCAT");
@@ -2396,7 +2364,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
           uint32_t b;
 
           if (rtems_bdbuf_tracer)
-            printf ("bdbuf:swapout write: writing bufnum:%lu\n",
+            printf ("bdbuf:swapout write: writing bufnum:%" PRIu32 "\n",
                     transfer->write_req->bufnum);
 
           /*
@@ -2454,9 +2422,9 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
               rtems_chain_append (&bdbuf_cache.lru, &bd->link);
               
               if (bd->waiters)
-                rtems_bdbuf_wake (bdbuf_cache.transfer, &bdbuf_cache.transfer_waiters);
+                rtems_bdbuf_wake (&bdbuf_cache.transfer_waiters);
               else
-                rtems_bdbuf_wake (bdbuf_cache.waiting, &bdbuf_cache.wait_waiters);
+                rtems_bdbuf_wake (&bdbuf_cache.buffer_waiters);
             }
           }
 
@@ -2488,8 +2456,8 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
  * Process the modified list of buffers. There is a sync or modified list that
  * needs to be handled so we have a common function to do the work.
  *
- * @param dev The device to handle. If -1 no device is selected so select the
- *            device of the first buffer to be written to disk.
+ * @param dev The device to handle. If BDBUF_INVALID_DEV no device is selected
+ * so select the device of the first buffer to be written to disk.
  * @param chain The modified chain to process.
  * @param transfer The chain to append buffers to be written too.
  * @param sync_active If true this is a sync operation so expire all timers.
@@ -2542,11 +2510,11 @@ rtems_bdbuf_swapout_modified_processing (dev_t*               dev,
       }
 
       /*
-       * This assumes we can set dev_t to -1 which is just an
+       * This assumes we can set dev_t to BDBUF_INVALID_DEV which is just an
        * assumption. Cannot use the transfer list being empty the sync dev
        * calls sets the dev to use.
        */
-      if (*dev == (dev_t)-1)
+      if (*dev == BDBUF_INVALID_DEV)
         *dev = bd->dev;
 
       if (bd->dev == *dev)
@@ -2639,12 +2607,12 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
   }
   
   rtems_chain_initialize_empty (&transfer->bds);
-  transfer->dev = -1;
+  transfer->dev = BDBUF_INVALID_DEV;
   
   /*
    * When the sync is for a device limit the sync to that device. If the sync
    * is for a buffer handle process the devices in the order on the sync
-   * list. This means the dev is -1.
+   * list. This means the dev is BDBUF_INVALID_DEV.
    */
   if (bdbuf_cache.sync_active)
     transfer->dev = bdbuf_cache.sync_device;
@@ -2770,7 +2738,7 @@ rtems_bdbuf_swapout_worker_task (rtems_task_argument arg)
     rtems_bdbuf_lock_cache ();
 
     rtems_chain_initialize_empty (&worker->transfer.bds);
-    worker->transfer.dev = -1;
+    worker->transfer.dev = BDBUF_INVALID_DEV;
 
     rtems_chain_append (&bdbuf_cache.swapout_workers, &worker->link);
     
@@ -2807,7 +2775,7 @@ rtems_bdbuf_swapout_workers_open (void)
     worker->transfer.write_req = rtems_bdbuf_swapout_writereq_alloc ();
     
     rtems_chain_initialize_empty (&worker->transfer.bds);
-    worker->transfer.dev = -1;
+    worker->transfer.dev = BDBUF_INVALID_DEV;
 
     sc = rtems_task_create (rtems_build_name('B', 'D', 'o', 'a' + w),
                             (rtems_bdbuf_configuration.swapout_priority ?
@@ -2869,7 +2837,7 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
 
   transfer.write_req = rtems_bdbuf_swapout_writereq_alloc ();
   rtems_chain_initialize_empty (&transfer.bds);
-  transfer.dev = -1;
+  transfer.dev = BDBUF_INVALID_DEV;
 
   /*
    * Localise the period.
@@ -2941,4 +2909,3 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
 
   rtems_task_delete (RTEMS_SELF);
 }
-

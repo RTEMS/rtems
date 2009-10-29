@@ -349,7 +349,8 @@ rtems_status_code rtems_bdpart_read(
   /* Read MBR */
   sc = rtems_bdpart_read_record( disk, 0, &block);
   if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
+    esc = sc;
+    goto cleanup;
   }
 
   /* Read the first partition entry */
@@ -392,7 +393,8 @@ rtems_status_code rtems_bdpart_read(
     /* Read EBR */
     sc = rtems_bdpart_read_record( disk, ebr, &block);
     if (sc != RTEMS_SUCCESSFUL) {
-      return sc;
+      esc = sc;
+      goto cleanup;
     }
 
     /* Read first partition entry */

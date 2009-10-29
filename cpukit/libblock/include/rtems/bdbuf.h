@@ -31,7 +31,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-	
+
 /**
  * @defgroup rtems_libblock Block Device Library
  *
@@ -183,9 +183,9 @@ typedef struct rtems_bdbuf_buffer
 
   struct rtems_bdbuf_avl_node
   {
-    signed char                cache;  /**< Cache */
     struct rtems_bdbuf_buffer* left;   /**< Left Child */
     struct rtems_bdbuf_buffer* right;  /**< Right Child */
+    signed char                cache;  /**< Cache */
     signed char                bal;    /**< The balance of the sub-tree */
   } avl;
 

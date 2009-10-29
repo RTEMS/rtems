@@ -1,3 +1,13 @@
+2009-10-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/bdbuf.h: Reorderd AVL node fields to save
+	space.
+	* libblock/src/bdbuf.c: Fixed printf() formats. New structure for
+	waiters synchronization. Added BDBUF_INVALID_DEV define. New error
+	handling in rtems_bdbuf_init().
+	* libblock/src/bdpart.c, libblock/src/blkdev.c: Release disk in case
+	of an error.
+
 2009-10-28     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/include/rtems/ramdisk.h, libblock/src/ramdisk-driver.c:

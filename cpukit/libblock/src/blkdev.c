@@ -37,12 +37,13 @@ rtems_blkdev_generic_read(
     rtems_device_minor_number minor,
     void                    * arg)
 {
+    rtems_status_code rc = RTEMS_SUCCESSFUL;
     rtems_libio_rw_args_t *args = arg;
-    int block_size;
-    char         *buf;
-    unsigned int count;
-    unsigned int block;
-    unsigned int blkofs;
+    uint32_t block_size;
+    char *buf;
+    uint32_t count;
+    rtems_blkdev_bnum block;
+    uint32_t blkofs;
     dev_t dev;
     rtems_disk_device *dd;
 
@@ -57,18 +58,17 @@ rtems_blkdev_generic_read(
     count = args->count;
     args->bytes_moved = 0;
 
-    block = args->offset / block_size;
-    blkofs = args->offset % block_size;
+    block = (rtems_blkdev_bnum) (args->offset / block_size);
+    blkofs = (uint32_t) (args->offset % block_size);
 
     while (count > 0)
     {
         rtems_bdbuf_buffer *diskbuf;
         uint32_t            copy;
-        rtems_status_code   rc;
 
         rc = rtems_bdbuf_read(dev, block, &diskbuf);
         if (rc != RTEMS_SUCCESSFUL)
-            return rc;
+            break;
         copy = block_size - blkofs;
         if (copy > count)
             copy = count;
@@ -76,13 +76,16 @@ rtems_blkdev_generic_read(
         rc = rtems_bdbuf_release(diskbuf);
         args->bytes_moved += copy;
         if (rc != RTEMS_SUCCESSFUL)
-            return rc;
+            break;
         count -= copy;
         buf += copy;
         blkofs = 0;
         block++;
     }
-    return RTEMS_SUCCESSFUL;
+
+    rtems_disk_release(dd);
+
+    return rc;
 }
 
 /* rtems_blkdev_generic_write --
@@ -95,14 +98,14 @@ rtems_blkdev_generic_write(
     rtems_device_minor_number minor,
     void                    * arg)
 {
+    rtems_status_code rc = RTEMS_SUCCESSFUL;
     rtems_libio_rw_args_t *args = arg;
-    uint32_t      block_size;
-    char         *buf;
-    uint32_t      count;
-    uint32_t      block;
-    uint32_t      blkofs;
+    uint32_t block_size;
+    char *buf;
+    uint32_t count;
+    rtems_blkdev_bnum block;
+    uint32_t blkofs;
     dev_t dev;
-    rtems_status_code rc;
     rtems_disk_device *dd;
 
     dev = rtems_filesystem_make_dev_t(major, minor);
@@ -116,8 +119,8 @@ rtems_blkdev_generic_write(
     count = args->count;
     args->bytes_moved = 0;
 
-    block = args->offset / block_size;
-    blkofs = args->offset % block_size;
+    block = (rtems_blkdev_bnum) (args->offset / block_size);
+    blkofs = (uint32_t) (args->offset % block_size);
 
     while (count > 0)
     {
@@ -129,7 +132,7 @@ rtems_blkdev_generic_write(
         else
             rc = rtems_bdbuf_read(dev, block, &diskbuf);
         if (rc != RTEMS_SUCCESSFUL)
-            return rc;
+            break;
 
         copy = block_size - blkofs;
         if (copy > count)
@@ -139,14 +142,17 @@ rtems_blkdev_generic_write(
 
         rc = rtems_bdbuf_release_modified(diskbuf);
         if (rc != RTEMS_SUCCESSFUL)
-            return rc;
+            break;
 
         count -= copy;
         buf += copy;
         blkofs = 0;
         block++;
     }
-    return RTEMS_SUCCESSFUL;
+
+    rtems_disk_release(dd);
+
+    return rc;
 }
 
 /* blkdev_generic_open --
