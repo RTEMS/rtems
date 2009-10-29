@@ -155,12 +155,11 @@ extern cpuExcHandlerType _currentExcHandler;
 extern void rtems_exception_init_mngt(void);
 
 /*
- *  The following structure defines the set of information saved
- *  on the current stack by RTEMS upon receipt of each interrupt
- *  that will lead to re-enter the kernel to signal the thread.
+ * This port does not pass any frame info to the
+ * interrupt handler.
  */
 
-typedef CPU_Exception_frame CPU_Interrupt_frame;
+typedef void CPU_Interrupt_frame;
 
 typedef enum {
   I386_EXCEPTION_DIVIDE_BY_ZERO      = 0,

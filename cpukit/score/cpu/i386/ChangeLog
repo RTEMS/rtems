@@ -1,6 +1,12 @@
 2009-10-28	Till Straumann <strauman@slac.stanford.edu>
 
-	* score/cpu/i386/rtems/score/cpu.h:
+	* rtems/score/cpu.h: Replaced misleading typedef of
+	CPU_Interrupt_frame by 'void'. The i386 port does not
+	pass any frame info to the interrupt handlers.
+
+2009-10-28	Till Straumann <strauman@slac.stanford.edu>
+
+	* rtems/score/cpu.h:
 	Added #ifdef ASM constructs so that this header can be
 	included from assembly code.
 
@@ -12,12 +18,12 @@
 	Make sure _CPU_Context_Initialize() sets the thread stack
 	up so that it is aligned to CPU_CACHE_ALIGNMENT.
 
-	* score/cpu/i386/cpu_asm.S:
+	* cpu_asm.S:
 	Align stack to CPU_CACHE_ALIGNMENT before calling C-code.
 
 2009-10-27	Till Straumann <strauman@slac.stanford.edu>
 
-	* score/cpu/i386/rtems/asm.h: Added definition for cr4 register.
+	* rtems/asm.h: Added definition for cr4 register.
 
 2009-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
