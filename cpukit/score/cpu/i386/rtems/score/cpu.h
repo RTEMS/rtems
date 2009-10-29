@@ -287,6 +287,16 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 uint32_t   _CPU_ISR_Get_level( void );
 
+/*  Make sure interrupt stack has space for ISR 
+ *  'vector' arg at the top and that it is aligned
+ *  properly.
+ */
+
+#define _CPU_Interrupt_stack_setup( _lo, _hi )  \
+	do {                                        \
+		_hi = (void*)(((uintptr_t)(_hi) - 4) & ~ (CPU_STACK_ALIGNMENT - 1)); \
+	} while (0)
+
 #endif /* ASM */
 
 /* end of ISR handler macros */
