@@ -231,7 +231,7 @@ void C_dispatch_isr(int vector)
   bsp_interrupt_handler_dispatch(vector);
 }
 
-void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
+void _ThreadProcessSignalsFromIrq (void)
 {
   /*
    * Process pending signals that have not already been

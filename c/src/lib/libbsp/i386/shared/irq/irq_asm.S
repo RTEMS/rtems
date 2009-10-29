@@ -170,20 +170,9 @@ nested:
 	 * exceptions. This makes sense because Signal is a software
 	 * exception.
 	 */
-	popl	edx
-	popl	ecx
-	popl	eax
-
-	pushl	$0	# fake fault code
-	pushl	$0	# fake exception number
-
-	pusha
-	pushl	esp
 	call	_ThreadProcessSignalsFromIrq
-	addl	$4, esp
-	popa
-	addl	$8, esp
-	iret
+
+	jmp .exit
 
 .schedule:
 	/*
