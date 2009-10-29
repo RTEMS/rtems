@@ -64,6 +64,13 @@ void _ISR_Handler_initialization( void )
     Configuration.interrupt_stack_size
   );
 
+  /* Interrupt stack might have to be aligned and/or setup
+   * in a specific way.
+   */
+#if defined(_CPU_Interrupt_stack_setup)
+  _CPU_Interrupt_stack_setup(_CPU_Interrupt_stack_low, _CPU_Interrupt_stack_high);
+#endif
+
 #endif
 
 #if ( CPU_HAS_HARDWARE_INTERRUPT_STACK == TRUE )

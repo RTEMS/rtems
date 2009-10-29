@@ -1,3 +1,9 @@
+2009-10-29	Till Straumann <strauman@slac.stanford.edu>
+
+	* score/src/isr.c: Check if CPU defined _CPU_Interrupt_stack_setup()
+	macro hook for setting up the interrupt stack (alignment, reserving
+	space etc.) after the framework allocates it.
+
 2009-10-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/include/rtems/bdbuf.h: Reorderd AVL node fields to save
