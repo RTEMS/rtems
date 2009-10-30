@@ -3,7 +3,8 @@
  *
  *  This include file contains all the constants, structures, and
  *  prototypes associated with the Rate Monotonic Manager.  This manager
- *  provides facilities to implement tasks which execute in a periodic fashion.
+ *  provides facilities to implement threads which execute in a periodic
+ *  fashion.
  *
  *  Directives provided are:
  *
@@ -14,7 +15,7 @@
  *     - obtain status information on a period
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -405,15 +406,28 @@ rtems_status_code rtems_rate_monotonic_period(
  *  @brief _Rate_monotonic_Timeout
  *
  *  This routine is invoked when the period represented
- *  by ID expires.  If the task which owns this period is blocked
+ *  by ID expires.  If the thread which owns this period is blocked
  *  waiting for the period to expire, then it is readied and the
- *  period is restarted.  If the owning task is not waiting for the
+ *  period is restarted.  If the owning thread is not waiting for the
  *  period to expire, then the period is placed in the EXPIRED
  *  state and not restarted.
  */
 void _Rate_monotonic_Timeout(
   Objects_Id  id,
   void       *ignored
+);
+
+/**
+ *  @brief _Rate_monotonic_Initiate_statistics(
+ *
+ *  This routine is invoked when a period is initiated via an explicit
+ *  call to rtems_rate_monotonic_period for the period's first iteration
+ *  or from _Rate_monotonic_Timeout for period iterations 2-n.
+ *
+ *  @param[in] the_period points to the period being operated upon.
+ */
+void _Rate_monotonic_Initiate_statistics(
+  Rate_monotonic_Control *the_period
 );
 
 /**

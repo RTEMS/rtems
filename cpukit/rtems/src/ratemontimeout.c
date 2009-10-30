@@ -1,7 +1,7 @@
 /*
  *  Rate Monotonic Manager -- Period End Timeout Handler
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,7 +51,6 @@ void _Rate_monotonic_Timeout(
    *  When we get here, the Timer is already off the chain so we do not
    *  have to worry about that -- hence no _Watchdog_Remove().
    */
-
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
 
@@ -61,9 +60,13 @@ void _Rate_monotonic_Timeout(
             the_thread->Wait.id == the_period->Object.id ) {
         _Thread_Unblock( the_thread );
 
+        _Rate_monotonic_Initiate_statistics( the_period );
+
         _Watchdog_Insert_ticks( &the_period->Timer, the_period->next_length );
       } else if ( the_period->state == RATE_MONOTONIC_OWNER_IS_BLOCKING ) {
         the_period->state = RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING;
+
+        _Rate_monotonic_Initiate_statistics( the_period );
 
         _Watchdog_Insert_ticks( &the_period->Timer, the_period->next_length );
       } else
