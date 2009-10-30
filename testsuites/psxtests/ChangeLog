@@ -1,3 +1,9 @@
+2009-10-30	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psx14/init.c: Add local prototypes for 
+	rtems_object_api_minimum_class, rtems_object_api_maximum_class.
+	Reflect the prototypes having been missing to printf's.
+
 2009-10-29	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psxsysconf/init.c: 
