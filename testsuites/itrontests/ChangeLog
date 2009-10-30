@@ -1,3 +1,15 @@
+2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* itrontime01/init.c: Use "long"s for "time"s (16bit compliance).
+	* itrontask04/task3.c: Add missing prototypes.
+	* itrontask02/system.h, itrontask03/system.h, itrontask04/system.h:
+	Add missing prototypes.
+	* itrontask02/dormant.c: Add missing prototypes.
+	* itrontask01/task1.c: Add missing prototypes.
+	* itrontask01/system.h: Add missing prototypes.
+	* itronsem01/init.c: Use PRId32 to print INT's.
+	* itronmbf01/init.c: Add missing prototypes.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
