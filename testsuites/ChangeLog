@@ -1,3 +1,8 @@
+2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* support/include/tmacros.h: Add PRIxrtems_task_priority,
+	PRIxrtems_task_priority, PRIxrtems_signal_set.
+
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* support/include/tmacros.h: Add PRIxpthread_t.
