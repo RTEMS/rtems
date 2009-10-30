@@ -1,5 +1,6 @@
 2009-10-30	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psxstat/test.c: Remove #ifdef's.
 	* psxmount/test.c, psxreaddir/test.c: Remove __P (unused anachronism).
 	* psxfatal02/testcase.h: Fall back to INT_MAX as posix stack size in
 	if 12MB are too big for a target (16bit compliance).
