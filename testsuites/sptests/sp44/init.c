@@ -77,7 +77,7 @@ rtems_task TaskAB_entry(rtems_task_argument me)
 
   while(1) {
     if (turn == me) {
-      printf("Task #%" PRIdrtems_task_argument "'s turn. Now setting turn to %d\n", me, 1 - me);
+      printf("Task #%" PRIdrtems_task_argument "'s turn. Now setting turn to %" PRIdrtems_task_argument "\n", me, 1 - me);
       turn = 1 - me;
   
       if ( ++iterations == 10 ) {
