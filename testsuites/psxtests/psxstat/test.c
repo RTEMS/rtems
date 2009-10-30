@@ -206,11 +206,8 @@ void stat_a_file(
     printf(  "...st_atime   %s", ctime( &statbuf.st_atime ) );
     printf(  "...st_mtime   %s", ctime( &statbuf.st_mtime ) );
     printf(  "...st_ctime   %s", ctime( &statbuf.st_ctime ) );
-#if defined(__svr4__) && !defined(__PPC__) && !defined(__sun__)
-    printf(  "...st_blksize %x\n", statbuf.st_blksize );
-    printf(  "...st_blocks  %x\n", statbuf.st_blocks );
-#endif
-
+    printf(  "...st_blksize %lx\n", statbuf.st_blksize );
+    printf(  "...st_blocks  %lx\n", statbuf.st_blocks );
   }
 }
 
