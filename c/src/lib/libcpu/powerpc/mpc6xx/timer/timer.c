@@ -18,6 +18,8 @@
 #include <assert.h>
 #include <rtems.h>
 #include <bsp.h>
+#include <libcpu/powerpc-utility.h>
+
 
 uint64_t   Timer_driver_Start_time;
 

@@ -1,3 +1,8 @@
+2009-10-23  Thomas Doerfler  <Thomas.Doerfler@imd-systems.de>
+
+	* shared/include/powerpc-utility.h, mpc6xx/timer/timer.c:
+	moved timebase/decrementer access from cpukit to libcpu 
+
 2009-10-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* new-exceptions/e500_raw_exc_init.c, new-exceptions/raw_exception.c,

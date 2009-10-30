@@ -1,3 +1,8 @@
+2009-10-21  Thomas Doerfler  <Thomas.Doerfler@embedded-brains.de>
+
+	* score/cpu/powerpc/rtems/score/cpu.h: moved timebase/decrementer
+	        access from cpukit to libcpu
+
 2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Added defines DEAR_BOOKE and DEAR_405.

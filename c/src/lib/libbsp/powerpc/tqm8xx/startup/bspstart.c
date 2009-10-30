@@ -173,7 +173,7 @@ void bsp_start( void)
     BSP_panic("Cannot determine BUS frequency\n");
   }
 
-  bsp_clicks_per_usec = 0; /* force to zero to control 
+  bsp_clicks_per_usec = BSP_bus_frequency/16; /* force to zero to control 
 			    * PIT clock driver from EXTCLK
 			    */
   bsp_timer_least_valid = 3; 
