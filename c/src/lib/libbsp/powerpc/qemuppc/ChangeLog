@@ -1,3 +1,7 @@
+2009-10-29	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am: add cache.rel
+
 2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am: Update for exception support changes.
