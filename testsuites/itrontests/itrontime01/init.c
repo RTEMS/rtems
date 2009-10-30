@@ -33,11 +33,11 @@
 
 int time_sec_epoch( void ) {
 
-int s_time,t_time,r_time;
+long s_time,t_time,r_time;
 long m_sec;
 
 t_time = time(NULL);
-s_time = (1985-1970)*365*24*60*60;
+s_time = (1985L-1970L)*365L*24L*60L*60L;
 r_time = t_time - s_time;
 m_sec = r_time*1000;
 
