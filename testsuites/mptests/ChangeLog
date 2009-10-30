@@ -1,5 +1,10 @@
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* mp01/init.c, mp02/init.c, mp02/task1.c, mp03/init.c,
+	mp04/init.c, mp05/init.c, mp06/init.c, mp07/init.c,
+	mp08/init.c, mp09/init.c, mp09/task1.c, mp10/init.c,
+	mp11/init.c, mp12/init.c, mp13/init.c, mp14/init.c:
+	Use PRI*32 to print uint32_ts.
 	* mp04/task1.c: Include "tmacros.h".
 	Use PRIxrtems_task_priority to print rtems_task_prioritys.
 	Use PRI*32 to print uint32_ts.
