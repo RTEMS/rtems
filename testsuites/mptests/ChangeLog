@@ -1,3 +1,8 @@
+2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mp05/asr.c: Include "tmacros.h". 
+	Use PRIxrtems_signal_set to print rtems_signal_set's.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
