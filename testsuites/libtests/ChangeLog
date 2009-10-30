@@ -1,5 +1,6 @@
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* block01/init.c: Include <stdio.h>.
 	* termios/init.c: Eliminate TRUE/FALSE, use bool instead of int.
 	* block02/init.c: Remove unused var.
 
