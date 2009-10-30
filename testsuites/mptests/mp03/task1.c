@@ -57,7 +57,7 @@ void Test_Task_Support(
       status = rtems_task_suspend( remote_tid );
       directive_failed( status, "rtems_task_suspend" );
 
-      status = rtems_task_wake_after( 2 * TICKS_PER_SECOND );
+      status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
       directive_failed( status, "rtems_task_wake_after" );
 
       put_name( Task_name[ node ], FALSE );
@@ -86,7 +86,7 @@ void Test_Task_Support(
       put_name( Task_name[ remote_node ], FALSE );
       puts( " - have I been suspended???" );
 
-      status = rtems_task_wake_after( TICKS_PER_SECOND / 2 );
+      status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() / 2 );
       directive_failed( status, "rtems_task_wake_after" );
     }
 
@@ -126,7 +126,7 @@ rtems_task Test_task(
 
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
-    5 * TICKS_PER_SECOND,
+    5 * rtems_clock_get_ticks_per_second(),
     Delayed_send_event,
     NULL
   );
@@ -136,14 +136,14 @@ rtems_task Test_task(
 
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
-    5 * TICKS_PER_SECOND,
+    5 * rtems_clock_get_ticks_per_second(),
     Delayed_send_event,
     NULL
   );
   directive_failed( status, "rtems_timer_fire_after" );
 
   if ( Multiprocessing_configuration.node == 1 ) {
-    status = rtems_task_wake_after( 2 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
   }
 

@@ -61,7 +61,7 @@ rtems_task Test_task1(
     (long (*)[4])receive_buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
-    2 * TICKS_PER_SECOND
+    2 * rtems_clock_get_ticks_per_second()
   );
   fatal_directive_status(status, RTEMS_TIMEOUT, "rtems_message_queue_receive");
   puts( "rtems_message_queue_receive correctly returned RTEMS_TIMEOUT" );

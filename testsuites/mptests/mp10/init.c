@@ -121,7 +121,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_start" );
 
     puts( "Sleeping for 1 seconds ..." );
-    status = rtems_task_wake_after( TICKS_PER_SECOND );
+    status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 
     puts( "Deleting Test_task2" );

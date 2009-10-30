@@ -1,3 +1,9 @@
+2009-10-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mp03/task1.c, mp10/init.c, mp13/task1.c: Use
+	rtems_clock_get_ticks_per_second() instead of the obsoleted
+	TICKS_PER_SECOND.
+
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mp01/init.c, mp02/init.c, mp02/task1.c, mp03/init.c,
