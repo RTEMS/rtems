@@ -1,5 +1,13 @@
 2009-10-29	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/irq/irq_asm.S: Make sure stack is aligned to CPU_STACK_ALIGNMENT
+	for *all* C-routines (including _Thread_Dispatch() and
+	_ThreadProcessSignalsFromIrq()) not only C_dispatch_isr().
+
+	* shared/irq/irq.c: Added IRQ statistics counters.
+
+2009-10-29	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq_asm.S: Beautification; ajusted margins and
 	spaces to make the whole thing more readable.
 

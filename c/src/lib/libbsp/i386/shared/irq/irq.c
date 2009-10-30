@@ -21,6 +21,8 @@
 
 #include <stdlib.h>
 #include <rtems/score/apiext.h>
+#include <stdio.h>
+#include <inttypes.h>
 
 /*
  * pointer to the mask representing the additionnal irq vectors
@@ -31,6 +33,22 @@
  * 	     prologue.
  */
 rtems_i8259_masks 	irq_mask_or_tbl[BSP_IRQ_LINES_NUMBER];
+
+uint32_t            irq_count[BSP_IRQ_LINES_NUMBER] = {0};
+
+uint32_t
+BSP_irq_count_dump(FILE *f)
+{
+uint32_t tot = 0;
+int      i;
+	if ( !f )
+		f = stdout;
+	for ( i=0; i<BSP_IRQ_LINES_NUMBER; i++ ) {
+		tot += irq_count[i];
+		fprintf(f,"IRQ %2u: %9"PRIu32"\n", i, irq_count[i]);
+	}
+	return tot;
+}
 
 /*-------------------------------------------------------------------------+
 | Cache for 1st and 2nd PIC IRQ line's status (enabled or disabled) register.
@@ -228,6 +246,7 @@ void bsp_interrupt_handler_default(rtems_vector_number vector)
 
 void C_dispatch_isr(int vector)
 {
+  irq_count[vector]++;
   bsp_interrupt_handler_dispatch(vector);
 }
 

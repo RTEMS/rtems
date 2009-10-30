@@ -19,6 +19,13 @@
 #error "Missing header? CPU_STACK_ALIGNMENT is not defined here"
 #endif
 
+/* Stack frame we use for intermediate storage               */
+#define ARG_OFF	0
+#define MSK_OFF 4
+#define EBP_OFF 8        /* code restoring ebp/esp relies on */
+#define ESP_OFF 12       /* esp being on top of ebp!         */
+#define FRM_SIZ 16 
+
 	BEGIN_CODE
 
 SYM (_ISR_Handler):
@@ -51,11 +58,24 @@ SYM (_ISR_Handler):
 	 */
 
 	/*
-	 *  Now switch stacks if necessary
+	 * Establish an aligned stack frame
+	 *   original-sp
+	 *   saved-bp
+	 *   saved-irq-mask
+	 *   vector-arg-to-C_dispatch_isr   <- aligned SP
 	 */
+	movl      esp, eax
+	subl      $FRM_SIZ, esp
+	andl      $ - CPU_STACK_ALIGNMENT, esp
+	movl      eax, ESP_OFF(esp)
+	movl      ebp, EBP_OFF(esp)
 
+	/*
+	 * acknowledge the interrupt
+	 *
+	 */
 	movw      SYM (i8259s_cache), ax /* move current i8259 interrupt mask in ax */
-	pushl     eax                    /* push it on the stack */
+	movl      eax, MSK_OFF(esp)      /* save in stack frame */
 	/*
 	 * compute the new PIC mask:
 	 *
@@ -72,10 +92,6 @@ SYM (_ISR_Handler):
 	movb      ah, al
 	outb      $PIC_SLAVE_IMR_IO_PORT
 
-	/*
-	 * acknowledge the interrupt
-	 *
-	 */
 	movb      $PIC_EOI, al
 	cmpl      $7, ecx
 	jbe      .master
@@ -83,18 +99,20 @@ SYM (_ISR_Handler):
 .master:
 	outb      $PIC_MASTER_COMMAND_IO_PORT
 
+	/*
+	 *  Now switch stacks if necessary
+	 */
+
 .check_stack_switch:
-	pushl     ebp
 	movl      esp, ebp                  /* ebp = previous stack pointer */
 	cmpl      $0, SYM (_ISR_Nest_level) /* is this the outermost interrupt? */
 	jne       nested                    /* No, then continue */
 	movl      SYM (_CPU_Interrupt_stack_high), esp
 
 	/*
-	 *  We want to insure that the old stack pointer is on the
-	 *  stack we will be on at the end of the ISR when we restore it.
-	 *  By saving it on every interrupt, all we have to do is pop it
-	 *  near the end of every interrupt.
+	 *  We want to insure that the old stack pointer is in ebp
+	 *  By saving it on every interrupt, all we have to do is 
+	 *  movl ebp->esp near the end of every interrupt.
 	 */
 
 nested:
@@ -102,26 +120,19 @@ nested:
 	incl      SYM (_Thread_Dispatch_disable_level) /* disable multitasking */
 
 	/*
-     * Ensure CPU_STACK_ALIGNMENT for C-code.
-     *  esp = (esp - 4) & ~(CPU_STACK_ALIGNMENT - 1)
-	 * makes sure 'esp' is aligned AND there is enough space
-	 * for the vector argument on the stack!
-	 */
-	subl      $4, esp
-
-	andl      $ - CPU_STACK_ALIGNMENT, esp
-	/*
 	 * re-enable interrupts at processor level as the current
 	 * interrupt source is now masked via i8259
 	 */
 	sti
 
     /*
-	 *  ECX is preloaded with the vector number but it is a scratch register
-	 *  so we must save it again.
+	 *  ECX is preloaded with the vector number; store as arg
+	 *  on top of stack. Note that _CPU_Interrupt_stack_high
+	 *  was adjusted in _CPU_Interrupt_stack_setup() (score/rtems/cpu.h)
+	 *  to make sure there is space.
 	 */
 
-	movl      ecx, (esp)  /* store vector arg in stack */
+	movl      ecx, ARG_OFF(esp)  /* store vector arg in stack */
 	call      C_dispatch_isr
 
 	/*
@@ -130,15 +141,15 @@ nested:
 	cli
 
 	/*
-	 * restore stack
+	 * Restore stack. This moves back to the task stack
+	 * when all interrupts are unnested.
 	 */
 	movl      ebp, esp
-	popl      ebp
 
 	/*
 	 * restore the original i8259 masks
 	 */
-	popl      eax
+	movl      MSK_OFF(esp), eax
 	movw      ax, SYM (i8259s_cache)
 	outb	  $PIC_MASTER_IMR_IO_PORT
 	movb	  ah, al
@@ -186,6 +197,10 @@ nested:
 	 * eip, CS, Flags).
 	 */
 .exit:
+	/* restore ebp and original esp */
+	addl      $EBP_OFF, esp
+	popl      ebp
+	popl      esp
 	/*
 	 * BEGINNING OF DE-ESTABLISH SEGMENTS
 	 *
@@ -241,7 +256,10 @@ PUBLIC (raw_idt_notify)
 SYM (default_raw_idt_handler):
 	pusha
 	cld
-	call	raw_idt_notify
+	mov       esp, ebp
+	andl     $ - CPU_STACK_ALIGNMENT, esp
+	call	  raw_idt_notify
+	mov       ebp, esp
 	popa
 	iret
 
