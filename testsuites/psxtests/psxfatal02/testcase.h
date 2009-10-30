@@ -14,7 +14,11 @@
 #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE 0
 posix_initialization_threads_table POSIX_Initialization_threads[] = {
   { POSIX_Init,
+#if INT_MAX < (12 * 1024 * 1024)
+    INT_MAX
+#else
     12 * 1024 * 1024 /* too much stack */
+#endif
   }
 };
 
