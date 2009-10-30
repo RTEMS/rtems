@@ -19,9 +19,7 @@
  */
 
 #include "system.h"
-
-/* rtems_signal_set is a typedef to uint32_t */
-#define PRIxrtems_signal_set PRIx32
+#include "tmacros.h"
 
 rtems_asr Process_asr(
   rtems_signal_set the_signal_set
