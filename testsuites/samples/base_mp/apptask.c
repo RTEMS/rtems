@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "tmacros.h"
+
 rtems_task Application_task(
   rtems_task_argument node
 )
@@ -31,8 +33,8 @@ rtems_task Application_task(
   rtems_status_code status;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
-  printf( "This task was invoked with the node argument (%d)\n", node );
-  printf( "This task has the id of 0x%x\n",  tid );
+  printf( "This task was invoked with the node argument (%" PRIdrtems_task_argument ")\n", node );
+  printf( "This task has the id of 0x%" PRIxrtems_id "\n",  tid );
   printf( "*** END OF SAMPLE MULTIPROCESSOR APPLICATION ***\n" );
   exit( 0 );
 }
