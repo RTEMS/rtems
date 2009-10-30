@@ -266,8 +266,10 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
 
 /* c.f. cpukit/score/include/rtems/score/priority.h */
 #define PRIdPriority_Control PRId32
+#define PRIxPriority_Control PRIx32
 /* rtems_task_priority is a typedef to Priority_Control */
 #define PRIdrtems_task_priority PRIdPriority_Control
+#define PRIxrtems_task_priority PRIxPriority_Control
 
 /* c.f. cpukit/score/include/rtems/score/watchdog.h */
 #define PRIdWatchdog_Interval PRIu32
@@ -285,6 +287,9 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
 /* HACK: newlib defines pthread_t as a typedef to __uint32_t */
 /* HACK: There is no portable way to print pthread_t's */
 #define PRIxpthread_t		PRIx32
+
+/* rtems_signal_set is a typedef to uint32_t */
+#define PRIxrtems_signal_set PRIx32
 
 #ifdef __cplusplus
 }
