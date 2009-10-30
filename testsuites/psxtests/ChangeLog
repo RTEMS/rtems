@@ -1,5 +1,7 @@
 2009-10-30	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psxfatal02/testcase.h: Fall back to INT_MAX as posix stack size in
+	if 12MB are too big for a target (16bit compliance).
 	* psx04/init.c: Use INT_MAX instead of 0xffffffff in call to kill()
 	for 16bit compliance.
 	* psx14/init.c: Add local prototypes for 
