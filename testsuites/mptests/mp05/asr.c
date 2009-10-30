@@ -19,6 +19,7 @@
  */
 
 #include "system.h"
+#include "tmacros.h"
 
 rtems_asr Process_asr(
     rtems_signal_set signal
@@ -26,7 +27,7 @@ rtems_asr Process_asr(
 {
   if ( signal != expected_signal ) {
      printf(
-       "ERROR: I was expecting signal 0x%.8x got 0x%.8x\n",
+       "ERROR: I was expecting signal 0x%.8" PRIxrtems_signal_set " got 0x%.8" PRIxrtems_signal_set "\n",
        expected_signal,
        signal
      );
