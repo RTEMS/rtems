@@ -33,7 +33,7 @@ void test_case_one(void)
   assert( heap_size );
 
   puts( "Init - _Heap_Allocate - too large size (overflow)- not OK");
-  ptr1 = _Heap_Allocate( &Heap, 0xffffffff );
+  ptr1 = _Heap_Allocate( &Heap, UINTPTR_MAX );
   assert( !ptr1 );
 
   puts( "Init - _Heap_Allocate_aligned - OK");
