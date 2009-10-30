@@ -17,6 +17,7 @@ include $(top_srcdir)/../automake/leaf.am
 base_mp_node2_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -DNODE_NUMBER=2 -I.
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
 LINK_OBJS = $(base_mp_node2_OBJECTS) $(base_mp_node2_LDADD)
 LINK_LIBS = $(base_mp_node2_LDLIBS)
