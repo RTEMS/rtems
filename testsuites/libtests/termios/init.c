@@ -446,7 +446,7 @@ unsigned long get_baud_rate( void )
 {
   unsigned long baud_rate;
 
-  while( TRUE ) {
+  while( 1 ) {
     printf( "Enter the numerical value for the new baud rate.\n" );
     printf( "Choices are: 50, 75, 110, 134, 150, 200, 300, 600, 1200, 1800\n" );
     printf( "2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800\n" );
@@ -486,7 +486,7 @@ unsigned long get_parity(void)
 {
   int parity;
 
-  while( TRUE ) {
+  while( 1 ) {
     printf( "Enter the numerical value for the new parity\n" );
     printf( "Choices are: 0 for no parity, 1 for even parity, 2 for odd parity\n" );
     printf( "\nYour choice: " );
@@ -514,7 +514,7 @@ unsigned long get_stop_bits(void)
 {
   int stop_bits;
 
-  while( TRUE ) {
+  while( 1 ) {
     printf( "Enter the numerical value for the new number of stop bits\n" );
     printf( "Choices are: 1 or 2\n" );
     printf( "\nYour choice: " );
@@ -539,7 +539,7 @@ unsigned long get_data_bits(void)
 {
   int data_bits;
 
-  while( TRUE ) {
+  while( 1 ) {
     printf( "Enter the numerical value for the new number of data bits\n" );
     printf( "Choices are: 5, 6, 7 or 8\n" );
     printf( "\nYour choice: " );
@@ -599,7 +599,8 @@ void change_line_settings( struct termios *tp )
 
 void canonical_input( struct termios *tp )
 {
-  char c, first_time = TRUE;
+  char c;
+  bool first_time = true;
 
   printf( "\nTesting canonical input\n\n" );
 
@@ -617,7 +618,7 @@ void canonical_input( struct termios *tp )
   while ( ( c = getchar () ) != '\n') {
     if( first_time ) {
       printf( "\nYou typed:\n");
-      first_time = FALSE;
+      first_time = false;
     }
     printf( "%c", c );
   }
