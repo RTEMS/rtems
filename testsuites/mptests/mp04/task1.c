@@ -18,6 +18,7 @@
  */
 
 #include "system.h"
+#include "tmacros.h"
 
 extern rtems_multiprocessing_table Multiprocessing_configuration;
 
@@ -59,7 +60,7 @@ rtems_task Test_task(
 
   if ( previous_priority != remote_node ) {
     printf(
-      "Remote priority (0x%x) does not match remote node (0x%x)!!!\n",
+      "Remote priority (0x%" PRIxrtems_task_priority ") does not match remote node (0x%" PRIx32 ")!!!\n",
       previous_priority,
       remote_node
     );
