@@ -1,3 +1,7 @@
+2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/timesys.h: Use PRId32.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
