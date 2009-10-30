@@ -1,3 +1,7 @@
+2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp44/init.c: Another printf format fix.
+
 2009-10-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp37/init.c: Add local prototypes for
