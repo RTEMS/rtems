@@ -20,7 +20,7 @@
 
 #include "system.h"
 
-void Task_2_through_4()
+void Task_2_through_4(void)
 {
   ID                tid;
   int               tid_index;

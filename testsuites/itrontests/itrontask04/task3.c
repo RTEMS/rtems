@@ -20,7 +20,7 @@
 
 #include "system.h"
 
-void Task_3()
+void Task_3(void)
 {
   rtems_status_code status;
   int               i;

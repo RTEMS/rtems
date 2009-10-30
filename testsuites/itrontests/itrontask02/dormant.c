@@ -21,7 +21,7 @@
 #include <assert.h>
 #include "system.h"
 
-void Dormant_task()
+void Dormant_task(void)
 {
   puts( "DORMANT - ext_tsk - going to DORMANT state" );
   ext_tsk( );
@@ -31,7 +31,7 @@ void Dormant_task()
 }
 
 
-void Non_Dormant_task()
+void Non_Dormant_task(void)
 {
   ER       status;
 

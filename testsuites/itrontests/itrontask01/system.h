@@ -19,7 +19,7 @@
 /* functions */
 
 void ITRON_Init( void );
-void Task_2_through_4();
+void Task_2_through_4(void);
 
 /* configuration information */
 

@@ -40,13 +40,13 @@ do { \
 
 
 
-void TestCre();
-void TestDel();
-void TestPsnd();
-void TestRef();
-void TestTrcv();
-void TestRcv();
-void TestPrcv();
+void TestCre(void);
+void TestDel(void);
+void TestPsnd(void);
+void TestRef(void);
+void TestTrcv(void);
+void TestRcv(void);
+void TestPrcv(void);
 
 void ITRON_Init( void )
 {
@@ -65,7 +65,7 @@ void ITRON_Init( void )
     rtems_test_exit(0);
 }
 
-void TestCre()
+void TestCre(void)
 {
     ER      status;
     T_CMBF  pk_cmbf;
@@ -139,7 +139,7 @@ void TestCre()
     assert( status == E_OK );
 }
 
-void TestDel()
+void TestDel(void)
 {
     ER    status;
 
@@ -169,7 +169,7 @@ void TestDel()
     assert(status == E_OK);
 }
 
-void TestPsnd()
+void TestPsnd(void)
 {
     ER   status;
     char msg[100] = "This is test message 1";
@@ -212,7 +212,7 @@ void TestPsnd()
     assert( status == E_OK );
 }
 
-void TestRef()
+void TestRef(void)
 {
     ER       status;
     T_RMBF   pk_rmbf;
@@ -242,17 +242,17 @@ void TestRef()
     status = ref_mbf( &pk_rmbf, 1 );
     assert( status == E_OK );
 
-    printf( "Init - mbf 1 msgsz = %d\n", pk_rmbf.msgsz );
-    printf( "Init - mbf 1 frbufsz = %d\n", pk_rmbf.frbufsz );
+    printf( "Init - mbf 1 msgsz = %" PRId32 "\n", pk_rmbf.msgsz );
+    printf( "Init - mbf 1 frbufsz = %" PRId32 "\n", pk_rmbf.frbufsz );
     printf( "Init - mbf 1 waiting tasks = %d\n", pk_rmbf.wtsk );
     printf( "Init - mbf 1 sending tasks = %d\n", pk_rmbf.stsk);
 }
 
-void TestRcv()
+void TestRcv(void)
 {
     ER         status;
     char       buffer[200];
-    uint32_t   s;
+    INT        s;
 
     puts( "Init - rcv_mbf - bad id (less than -4) - E_OACV" );
     status = rcv_mbf(buffer, &s, -5);
@@ -281,15 +281,15 @@ void TestRcv()
     puts("Init - rcv_mbf -- OK");
     status = rcv_mbf(buffer, &s, 1);
     assert(status == E_OK);
-    printf("Message:[%s], length:%d\n", buffer, s);
+    printf("Message:[%s], length:%" PRId32 "\n", buffer, s);
 }
 
 
-void TestPrcv()
+void TestPrcv(void)
 {
     ER         status;
     char       buffer[200];
-    uint32_t   s;
+    INT        s;
 
     puts( "Init - prcv_mbf - bad id (less than -4) - E_OACV" );
     status = prcv_mbf(buffer, &s, -5);
@@ -321,11 +321,11 @@ void TestPrcv()
 }
 
 
-void TestTrcv()
+void TestTrcv(void)
 {
     ER        status;
     char      buffer[200];
-    uint32_t  s;
+    INT       s;
 
     puts( "Init - trcv_mbf - bad id (less than -4) - E_OACV" );
     status = trcv_mbf(buffer, &s, -5, 5000);

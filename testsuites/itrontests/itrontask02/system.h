@@ -19,8 +19,8 @@
 /* functions */
 
 void ITRON_Init( void );
-void Dormant_task();
-void Non_Dormant_task();
+void Dormant_task(void);
+void Non_Dormant_task(void);
 
 /* configuration information */
 

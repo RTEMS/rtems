@@ -18,11 +18,11 @@
 
 /* functions */
 
-void ITRON_Init( void );
-void Preempt_task();
-void Task_1();
-void Task_2();
-void Task_3();
+extern void ITRON_Init( void );
+extern void Preempt_task(void);
+extern void Task_1(void);
+extern void Task_2(void);
+extern void Task_3(void);
 
 /* configuration information */
 
