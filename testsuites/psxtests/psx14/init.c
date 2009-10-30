@@ -14,6 +14,10 @@
 #include <rtems.h>
 #include "tmacros.h"
 
+/* HACK: API visibility violation */
+extern uint32_t rtems_object_api_minimum_class(uint32_t api);
+extern unsigned int rtems_object_api_maximum_class(uint32_t api);
+
 void *POSIX_Init(
   void *argument
 )
@@ -44,7 +48,7 @@ void *POSIX_Init(
   printf( "rtems_object_get_name returned (%s) for init thread\n", ptr );
 
   /* exercise the POSIX path through some routines */
-  printf( "rtems_object_api_minimum_class(OBJECTS_POSIX_API) returned %d\n",
+  printf( "rtems_object_api_minimum_class(OBJECTS_POSIX_API) returned %" PRId32 "\n",
           rtems_object_api_minimum_class(OBJECTS_POSIX_API) );
   printf( "rtems_object_api_maximum_class(OBJECTS_POSIX_API) returned %d\n",
           rtems_object_api_maximum_class(OBJECTS_POSIX_API) );
