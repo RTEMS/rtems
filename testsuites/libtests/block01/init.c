@@ -19,6 +19,7 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <stdio.h>
 #include <assert.h>
 
 #include <rtems.h>
