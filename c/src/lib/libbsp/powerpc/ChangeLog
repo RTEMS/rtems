@@ -1,3 +1,11 @@
+2009-10-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/irq/irq_asm.S, shared/irq/README.deprecated,
+	shared/irq/irq.c, shared/vectors/vectors.h,
+	shared/vectors/vectors_init.c, shared/vectors/README.deprecated,
+	shared/vectors/vectors.S: Removed files.
+	* Makefile.am: Update for removed files.
+
 2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/clock/clock.c, shared/irq/irq_init.c,

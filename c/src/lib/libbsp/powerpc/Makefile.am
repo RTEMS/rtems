@@ -51,7 +51,7 @@ EXTRA_DIST += shared/residual/residual.c
 EXTRA_DIST += shared/openpic/openpic.c
 
 ## shared/irq
-EXTRA_DIST += shared/irq/i8259.c shared/irq/irq.c shared/irq/irq_init.c \
+EXTRA_DIST += shared/irq/i8259.c shared/irq/irq_init.c \
 	shared/irq/irq_asm.S shared/irq/openpic_i8259_irq.c
 
 ## shared/start
