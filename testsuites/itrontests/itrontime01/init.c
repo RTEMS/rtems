@@ -41,9 +41,9 @@ s_time = (1985L-1970L)*365L*24L*60L*60L;
 r_time = t_time - s_time;
 m_sec = r_time*1000;
 
-printf( "Time from 1970: %d\n", t_time );
-printf( "Time between 1970 and 1985: %d\n", s_time );
-printf( "Time from 1985: %d\n", r_time );
+printf( "Time from 1970: %ld\n", t_time );
+printf( "Time between 1970 and 1985: %ld\n", s_time );
+printf( "Time from 1985: %ld\n", r_time );
 printf("milliseconds: %ld\n",m_sec);
 
 return 0;
