@@ -560,7 +560,7 @@ void *POSIX_Init(
   assert( !status );
   puts( "Init: pthread_kill - SUCCESSFUL (signal = SIG_IGN)" );
 
-  status = kill( 0x7fffffff, SIGUSR1 );
+  status = kill( INT_MAX, SIGUSR1 );
   if ( status != -1 )
     printf( "status = %d\n", status );
   assert( errno == ESRCH );
