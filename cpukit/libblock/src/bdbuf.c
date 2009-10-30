@@ -1385,6 +1385,18 @@ error:
   return RTEMS_UNSATISFIED;
 }
 
+static inline void
+rtems_bdbuf_group_obtain (rtems_bdbuf_buffer *bd)
+{
+  ++bd->group->users;
+}
+
+static inline void
+rtems_bdbuf_group_release (rtems_bdbuf_buffer *bd)
+{
+  --bd->group->users;
+}
+
 /**
  * Get a buffer for this device and block. This function returns a buffer once
  * placed into the AVL tree. If no buffer is available and it is not a read
@@ -1432,6 +1444,8 @@ error:
  * found in the AVL tree the number of BDs in the group is check and if
  * different the buffer size for the block has changed. The buffer needs to be
  * invalidated.
+ *
+ * The returned buffer will be a user its group.
  *
  * @param dd The disk device. Has the configured block size.
  * @param bds_per_group The number of BDs in a group for this block.
@@ -1587,6 +1601,8 @@ rtems_bdbuf_get_buffer (rtems_disk_device* dd,
         if (rtems_bdbuf_avl_insert (&bdbuf_cache.tree, bd) != 0)
           rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_5);
 
+        rtems_bdbuf_group_obtain (bd);
+
         return bd;
       }
     }
@@ -1619,6 +1635,12 @@ rtems_bdbuf_get_buffer (rtems_disk_device* dd,
    */
   if (read_ahead)
     return NULL;
+
+  /*
+   * Before we wait for the buffer, we have to obtain its group.  This prevents
+   * a reallocation.
+   */
+  rtems_bdbuf_group_obtain (bd);
 
   /*
    * Loop waiting for the buffer to enter the cached state. If the buffer is in
@@ -1658,6 +1680,12 @@ rtems_bdbuf_get_buffer (rtems_disk_device* dd,
    * Buffer is linked to the LRU, modifed, or sync lists. Remove it from there.
    */
   rtems_chain_extract (&bd->link);
+
+  /*
+   * The modified list is no longer a user of the buffers group.
+   */
+  if (bd->state == RTEMS_BDBUF_STATE_MODIFIED)
+    rtems_bdbuf_group_release (bd);
 
   return bd;
 }
@@ -1717,21 +1745,16 @@ rtems_bdbuf_get (dev_t                device,
   bd = rtems_bdbuf_get_buffer (dd, bds_per_group, media_block, false);
 
   /*
-   * This could be considered a bug in the caller because you should not be
-   * getting an already modified buffer but user may have modified a byte in a
-   * block then decided to seek the start and write the whole block and the
-   * file system will have no record of this so just gets the block to fill.
+   * To get a modified buffer could be considered a bug in the caller because
+   * you should not be getting an already modified buffer but user may have
+   * modified a byte in a block then decided to seek the start and write the
+   * whole block and the file system will have no record of this so just gets
+   * the block to fill.
    */
-  if (bd->state == RTEMS_BDBUF_STATE_MODIFIED)
-    bd->state = RTEMS_BDBUF_STATE_ACCESS_MODIFIED;
-  else
-  {
+  if (bd->state != RTEMS_BDBUF_STATE_MODIFIED)
     bd->state = RTEMS_BDBUF_STATE_ACCESS;
-    /*
-     * Indicate a buffer in this group is being used.
-     */
-    bd->group->users++;
-  }
+  else
+    bd->state = RTEMS_BDBUF_STATE_ACCESS_MODIFIED;
   
   if (rtems_bdbuf_tracer)
   {
@@ -1781,6 +1804,7 @@ rtems_bdbuf_read (dev_t                device,
   size_t                bds_per_group;
   rtems_blkdev_bnum     media_block;
   rtems_blkdev_bnum     media_block_count;
+  bool                  read_ahead = false;
   
   if (!bdbuf_cache.initialised)
     return RTEMS_NOT_CONFIGURED;
@@ -1859,7 +1883,7 @@ rtems_bdbuf_read (dev_t                device,
      * caller.
      */
     bd = rtems_bdbuf_get_buffer (dd, bds_per_group, media_block + dd->start,
-                                 req->bufnum == 0 ? false : true);
+                                 read_ahead);
 
     /*
      * Read ahead buffer is in the cache or none available. Read what we
@@ -1873,15 +1897,15 @@ rtems_bdbuf_read (dev_t                device,
      */
     if ((bd->state == RTEMS_BDBUF_STATE_CACHED) ||
         (bd->state == RTEMS_BDBUF_STATE_MODIFIED))
+    {
+      if (read_ahead)
+        rtems_bdbuf_group_release (bd);
+
       break;
+    }
 
     bd->state = RTEMS_BDBUF_STATE_TRANSFER;
     bd->error = 0;
-
-    /*
-     * The buffer will be passed to the driver so this buffer has a user.
-     */
-    bd->group->users++;
 
     if (rtems_bdbuf_tracer)
       rtems_bdbuf_show_users ("reading", bd);
@@ -1905,6 +1929,11 @@ rtems_bdbuf_read (dev_t                device,
      * disk device's set block size.
      */
     media_block += media_block_count;
+
+    /*
+     * After the first buffer we have read ahead buffers.
+     */
+    read_ahead = true;
   }
 
   /*
@@ -1978,7 +2007,8 @@ rtems_bdbuf_read (dev_t                device,
       if (!bd->error)
         bd->error = req->error;
       bd->state = RTEMS_BDBUF_STATE_READ_AHEAD;
-      bd->group->users--;
+
+      rtems_bdbuf_group_release (bd);
 
       if (rtems_bdbuf_tracer)
         rtems_bdbuf_show_users ("read-ahead", bd);
@@ -2008,31 +2038,14 @@ rtems_bdbuf_read (dev_t                device,
     
     bd = req->bufs[0].user;
 
-    /*
-     * One less user for the BD we return. The loop above is only for the read
-     * head buffers. We do this here then increment again so the case of the
-     * buffer in the cache or modified and no read leaves the user counts at
-     * the correct level.
-     */
-    bd->group->users--;
-
     if (rtems_bdbuf_tracer)
       rtems_bdbuf_show_users ("read-done", bd);
   }
 
-  /*
-   * The data for this block is cached in the buffer.
-   */
-  if (bd->state == RTEMS_BDBUF_STATE_MODIFIED)
-    bd->state = RTEMS_BDBUF_STATE_ACCESS_MODIFIED;
-  else
-  {
-    /*
-     * The file system is a user of the buffer.
-     */
-    bd->group->users++;
+  if (bd->state != RTEMS_BDBUF_STATE_MODIFIED)
     bd->state = RTEMS_BDBUF_STATE_ACCESS;
-  }
+  else
+    bd->state = RTEMS_BDBUF_STATE_ACCESS_MODIFIED;
 
   if (rtems_bdbuf_tracer)
   {
@@ -2071,10 +2084,7 @@ rtems_bdbuf_release (rtems_bdbuf_buffer* bd)
     bd->state = RTEMS_BDBUF_STATE_CACHED;
     rtems_chain_append (&bdbuf_cache.lru, &bd->link);
 
-    /*
-     * One less user for the group of bds.
-     */
-    bd->group->users--;
+    rtems_bdbuf_group_release (bd);
   }
   
   if (rtems_bdbuf_tracer)
@@ -2411,10 +2421,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
               bd->state = RTEMS_BDBUF_STATE_CACHED;
               bd->error = 0;
 
-              /*
-               * The buffer is now not modified so lower the user count for the group.
-               */
-              bd->group->users--;
+              rtems_bdbuf_group_release (bd);
 
               if (rtems_bdbuf_tracer)
                 rtems_bdbuf_show_users ("write", bd);

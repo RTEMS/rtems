@@ -1,3 +1,8 @@
+2009-10-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/src/bdbuf.c: Fixed group usage counting.  See test
+	"libtests/block02".
+
 2009-10-30	Ralf Corsépius <ralf.corsepiu@rtems.org>
 
 	* aclocal/gcc-sanity.m4: New.
