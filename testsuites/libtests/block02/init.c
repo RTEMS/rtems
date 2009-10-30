@@ -80,7 +80,6 @@ static void task_low(rtems_task_argument arg)
 static void task_high(rtems_task_argument arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_task_priority new_priority = 0;
   rtems_bdbuf_buffer *bd = NULL;
 
   assert(!sync_done);
