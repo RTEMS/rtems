@@ -31,7 +31,7 @@ rtems_task Init(
   rtems_status_code status;
 
   printf(
-    "\n\n*** TEST 5 -- NODE %d ***\n",
+    "\n\n*** TEST 5 -- NODE %" PRIu32 " ***\n",
     Multiprocessing_configuration.node
   );
 

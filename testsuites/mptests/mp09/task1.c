@@ -64,7 +64,7 @@ rtems_task Test_task(
     puts( "Flushing remote empty queue" );
     status = rtems_message_queue_flush( Queue_id[ 1 ], &count );
     directive_failed( status, "rtems_message_queue_flush" );
-    printf( "%d messages were flushed on the remote queue\n", count );
+    printf( "%" PRIu32 " messages were flushed on the remote queue\n", count );
 
     puts( "Send messages to be flushed from remote queue" );
     status = rtems_message_queue_send( Queue_id[ 1 ], buffer1, 16 );
@@ -73,7 +73,7 @@ rtems_task Test_task(
     puts( "Flushing remote queue" );
     status = rtems_message_queue_flush( Queue_id[ 1 ], &count );
     directive_failed( status, "rtems_message_queue_flush" );
-    printf( "%d messages were flushed on the remote queue\n", count );
+    printf( "%" PRIu32 " messages were flushed on the remote queue\n", count );
 
     puts( "Waiting for message queue to be deleted" );
     status = rtems_message_queue_receive(

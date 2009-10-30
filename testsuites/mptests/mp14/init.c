@@ -42,7 +42,7 @@ rtems_task Init(
   rtems_task_priority previous_priority;
 
   printf(
-    "\n\n*** TEST 14 -- NODE %d ***\n",
+    "\n\n*** TEST 14 -- NODE %" PRId32 " ***\n",
     Multiprocessing_configuration.node
   );
 

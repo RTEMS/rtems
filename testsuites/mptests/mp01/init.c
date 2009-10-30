@@ -33,7 +33,7 @@ rtems_task Init(
   char              c;
 
   printf(
-    "\n\n*** TEST 1 -- NODE %d ***\n",
+    "\n\n*** TEST 1 -- NODE %" PRIu32 " ***\n",
     Multiprocessing_configuration.node
   );
 

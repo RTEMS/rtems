@@ -39,7 +39,7 @@ rtems_task Init(
   void              *bufaddr;
 
   printf(
-    "\n\n*** TEST 12 -- NODE %d ***\n",
+    "\n\n*** TEST 12 -- NODE %" PRId32 " ***\n",
     Multiprocessing_configuration.node
    );
 
