@@ -1,3 +1,7 @@
+2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* block02/init.c: Remove unused var.
+
 2009-10-29	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* block02/init.c, block02/block02.scn, block02/Makefile.am,
