@@ -1,5 +1,6 @@
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* termios/init.c: Eliminate TRUE/FALSE, use bool instead of int.
 	* block02/init.c: Remove unused var.
 
 2009-10-29	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
