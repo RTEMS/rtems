@@ -40,10 +40,6 @@ DIR *directory2;
 DIR *directory3;
 DIR *directory_not;
 
-#ifndef __P
-#define __P(args)()
-#endif
-
 char *dnames[] = {
 	"a",
 	"b",
