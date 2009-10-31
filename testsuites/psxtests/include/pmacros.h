@@ -39,9 +39,9 @@
 #define TM_JULY        6
 #define TM_AUGUST      7
 #define TM_SEPTEMBER   8
-#define TM_OCTOBER    10
-#define TM_NOVEMBER   11
-#define TM_DECEMBER   12
+#define TM_OCTOBER     9
+#define TM_NOVEMBER   10
+#define TM_DECEMBER   11
 
 #ifndef tm_build_time
 #define tm_build_time( TM, WEEKDAY, MON, DAY, YR, HR, MIN, SEC ) \
