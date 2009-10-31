@@ -1,3 +1,7 @@
+2009-10-31	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* include/pmacros.h: November is the 11th month.
+
 2009-10-30	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psxstat/test.c: Remove #ifdef's.
