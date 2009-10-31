@@ -40,7 +40,7 @@
 #define TM_AUGUST      7
 #define TM_SEPTEMBER   8
 #define TM_OCTOBER    10
-#define TM_NOVEMBER   12
+#define TM_NOVEMBER   11
 #define TM_DECEMBER   12
 
 #ifndef tm_build_time
