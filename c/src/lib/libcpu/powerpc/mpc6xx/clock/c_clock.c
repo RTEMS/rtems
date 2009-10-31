@@ -28,6 +28,7 @@
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
 #include <rtems/bspIo.h>                /* for printk() */
+#include <libcpu/powerpc-utility.h>
 
 #include <bspopts.h>   /* for CLOCK_DRIVER_USE_FAST_IDLE */
 
