@@ -358,8 +358,7 @@ int main(
 
   printf( "\nPerforming stat of directory /\n");
   status = stat( "/", &s );
-  printf("status for stat : %d, size of directory: %d\n\n",
-         status,(int)s.st_size);
+  printf("status for stat : %d, size of directory: %" PRIdoff_t "\n\n", status, s.st_size);
 
   puts( "\nOpen and print directory /" );
   directory = opendir("/");
