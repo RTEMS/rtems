@@ -12,7 +12,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-uint32_t   time_set, eventout;
+bool     time_set;
+uint32_t eventout;
 
 rtems_task High_tasks(
   rtems_task_argument argument
@@ -47,7 +48,7 @@ void test_init(void)
   rtems_event_set   event_out;
   rtems_status_code status;
 
-  time_set = FALSE;
+  time_set = false;
 
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
@@ -208,7 +209,7 @@ rtems_task High_tasks(
       &eventout
     );
   else {
-    time_set = 1;
+    time_set = true;
     benchmark_timer_initialize();            /* start blocking rtems_event_receive time */
     status = rtems_event_receive(
       RTEMS_EVENT_16,
