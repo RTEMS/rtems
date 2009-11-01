@@ -1,3 +1,7 @@
+2009-11-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* termios/init.c: Remove sh2 hacks.
+
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* block01/init.c: Include <stdio.h>.
