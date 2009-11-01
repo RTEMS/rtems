@@ -243,9 +243,7 @@ void print_c_cflag( struct termios * tp )
   printf( "c_cflag = 0x%08x\n", tp->c_cflag );
 
   baud = (tp->c_cflag & CBAUD) ;
-#if defined(__sh2__)
   if ( tp->c_cflag & CBAUDEX )
-#endif
   switch( baud ) {
     case B0:
       printf( "\tCBAUD =\tB0\n" );
@@ -310,12 +308,7 @@ void print_c_cflag( struct termios * tp )
     case B38400:
       printf( "\tCBAUD =\tB38400\n" );
       break;
-#if defined(__sh2__)
-    }
-    else
-    switch ( baud )
-    {
-#endif
+
     case B57600:
       printf( "\tCBAUD =\tB57600\n" );
       break;
