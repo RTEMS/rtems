@@ -253,9 +253,12 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
   }
 
 /*
- * HACK: PRItime_t: inttypes.h-style macro to print a time_t.
- * The implementation below presumes time_t to be a "long".
+ * Various inttypes.h-stype macros to assist printing
+ * certain system types on different targets.
  */
+ 
+/* HACK: Presume time_t to be a "long" */
+/* HACK: There is no portable way to print time_t's */
 #define PRItime_t "ld"
 
 #if defined(RTEMS_USE_16_BIT_OBJECT)
@@ -282,14 +285,28 @@ extern volatile uint32_t   _Thread_Dispatch_disable_level;
 #define PRIdrtems_task_argument PRIdThread_Entry_numeric_type
 
 /* rtems_event_set is a typedef to unit32_t */
-#define PRIxrtems_event_set	PRIx32
+#define PRIxrtems_event_set PRIx32
 
 /* HACK: newlib defines pthread_t as a typedef to __uint32_t */
 /* HACK: There is no portable way to print pthread_t's */
-#define PRIxpthread_t		PRIx32
+#define PRIxpthread_t PRIx32
 
 /* rtems_signal_set is a typedef to uint32_t */
 #define PRIxrtems_signal_set PRIx32
+
+/* newlib's ino_t is a typedef to "unsigned long" */
+#define PRIxino_t "lx"
+
+/* newlib's off_t is a typedef to "long" */
+#define PRIdoff_t "ld"
+
+/* IEEE Std 1003.1-2008 defines a type blksize_t,
+ * newlib currently doesn't have this type, but uses "long" */
+#define PRIxblksize_t "lx"
+
+/* IEEE Std 1003.1-2008 defines a type blkcnt_t,
+ * newlib currently doesn't have this type, but uses "long" */
+#define PRIxblkcnt_t "lx"
 
 #ifdef __cplusplus
 }
