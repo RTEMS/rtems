@@ -1,5 +1,6 @@
 2009-11-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* tm26/task1.c: Use true/false instead of TRUE/FALSE for "bool"s.
 	* tm15/task1.c: Make time_set a "bool".
 	Eliminate TRUE/FALSE.
 
