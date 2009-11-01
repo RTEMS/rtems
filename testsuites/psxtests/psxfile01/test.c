@@ -78,8 +78,7 @@ void dump_statbuf( struct stat *buf )
   rtems_filesystem_split_dev_t( buf->st_rdev, major2, minor2 );
 
   printf( "....st_dev     (0x%x:0x%x)\n", major1, minor1 );
-  printf( "....st_ino     %x  may vary by small amount\n",
-      (unsigned int) buf->st_ino );
+  printf( "....st_ino     %" PRIxino_t "  may vary by small amount\n", buf->st_ino );
   printf( "....mode  = %08o\n", (unsigned int) buf->st_mode );
   printf( "....nlink = %d\n", buf->st_nlink );
 
@@ -90,11 +89,8 @@ void dump_statbuf( struct stat *buf )
   printf( "....mtime = %s", ctime(&buf->st_mtime) );
   printf( "....ctime = %s", ctime(&buf->st_ctime) );
 
-#if defined(__svr4__) && !defined(__PPC__) && !defined(__sun__)
-  printf( "....st_blksize %x\n", buf.st_blksize );
-  printf( "....st_blocks  %x\n", buf.st_blocks );
-#endif
-
+  printf( "....st_blksize %" PRIxblksize_t "\n", buf->st_blksize );
+  printf( "....st_blocks  %" PRIxblkcnt_t "\n", buf->st_blocks );
 }
 
 void stat_a_file(
