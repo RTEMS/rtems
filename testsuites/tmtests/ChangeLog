@@ -1,3 +1,8 @@
+2009-11-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tm15/task1.c: Make time_set a "bool".
+	Eliminate TRUE/FALSE.
+
 2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* tmck/task1.c: Use PRIu32 to print uint32_t's.
