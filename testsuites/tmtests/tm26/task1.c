@@ -225,7 +225,7 @@ rtems_task High_task(
     _Thread_Set_state( _Thread_Executing, STATES_SUSPENDED );
   thread_set_state_time = benchmark_timer_read();
 
-  _Context_Switch_necessary = TRUE;
+  _Context_Switch_necessary = true;
 
   benchmark_timer_initialize();
     _Thread_Dispatch();           /* dispatches Middle_task */
@@ -246,7 +246,7 @@ rtems_task Middle_task(
 
   /* do not force context switch */
 
-  _Context_Switch_necessary = FALSE;
+  _Context_Switch_necessary = false;
 
   _Thread_Disable_dispatch();
 
@@ -283,7 +283,7 @@ rtems_task Low_task(
 
   /* do not force context switch */
 
-  _Context_Switch_necessary = FALSE;
+  _Context_Switch_necessary = false;
 
   _Thread_Disable_dispatch();
 
@@ -310,7 +310,7 @@ rtems_task Floating_point_task_1(
 
   /* do not force context switch */
 
-  _Context_Switch_necessary = FALSE;
+  _Context_Switch_necessary = false;
 
   _Thread_Disable_dispatch();
 
@@ -333,7 +333,7 @@ rtems_task Floating_point_task_1(
 
   /* do not force context switch */
 
-  _Context_Switch_necessary = FALSE;
+  _Context_Switch_necessary = false;
 
   _Thread_Disable_dispatch();
 
@@ -364,7 +364,7 @@ rtems_task Floating_point_task_2(
 
   /* do not force context switch */
 
-  _Context_Switch_necessary = FALSE;
+  _Context_Switch_necessary = false;
 
   _Thread_Disable_dispatch();
 
@@ -387,7 +387,7 @@ void complete_test( void )
   rtems_id          task_id;
 
   benchmark_timer_initialize();
-    _Thread_Resume( Middle_tcb, TRUE );
+    _Thread_Resume( Middle_tcb, true );
   thread_resume_time = benchmark_timer_read();
 
   _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
@@ -430,7 +430,7 @@ void complete_test( void )
    */
 
   _Thread_Heir = _Thread_Executing;
-  _Context_Switch_necessary = FALSE;
+  _Context_Switch_necessary = false;
   _Thread_Dispatch_disable_level = 0;
 
   /*
