@@ -1,5 +1,6 @@
 2009-01-01	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* psxstat/test.c: Apply PRI* macros to print struct stat fields.
 	* psxreaddir/test.c: Apply PRI* macros to print struct stat fields.
 	* psxfile01/test.c: Remove obsure #ifdef's.
 	Apply PRI* macros to print struct stat fields.
