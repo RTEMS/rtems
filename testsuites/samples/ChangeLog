@@ -1,3 +1,8 @@
+2009-11-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* loopback/init.c: Adjust return-type of rtems_bsdnet_loopattach to
+	int to match with rtems/rtems_bsdnet.h.
+
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* base_mp/apptask.c: Use PRIxrtems_id to print rtems_ids.
