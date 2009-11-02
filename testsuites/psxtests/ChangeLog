@@ -1,3 +1,8 @@
+2009-01-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psxsignal03/init.c: 
+	Print sigval.sival_ptr instead of "union sigval".
+
 2009-01-01	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psxstat/test.c: Apply PRI* macros to print struct stat fields.
