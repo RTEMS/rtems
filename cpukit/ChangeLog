@@ -1,3 +1,9 @@
+2009-11-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_conv.c,
+	libfs/src/dosfs/msdos_misc.c: Use uint16_t instead of 
+	"unsigned short" to circumvent warnings on 16bit targets.
+
 2009-11-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/src/bdbuf.c: Fixed buffer recycling.  See test
