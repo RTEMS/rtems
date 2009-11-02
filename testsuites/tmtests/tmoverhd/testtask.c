@@ -57,24 +57,24 @@ rtems_task Task_1(
 )
 {
   rtems_name                 name;
-  uint32_t                   index;
-  rtems_id                   id;
+  uint32_t                   index RTEMS_GCC_NOWARN_UNUSED;
+  rtems_id                   id RTEMS_GCC_NOWARN_UNUSED;
   rtems_task_priority        in_priority;
-  rtems_task_priority        out_priority;
+  rtems_task_priority        out_priority RTEMS_GCC_NOWARN_UNUSED;
   rtems_mode                 in_mode;
   rtems_mode                 mask;
-  rtems_mode                 out_mode;
+  rtems_mode                 out_mode RTEMS_GCC_NOWARN_UNUSED;
   uint32_t                   note;
-  rtems_time_of_day          time;
+  rtems_time_of_day          time RTEMS_GCC_NOWARN_UNUSED;
   rtems_interval             timeout;
   rtems_signal_set           signals;
-  void                      *address_1;
-  rtems_event_set            events;
-  long                       buffer[ 4 ];
-  uint32_t                   count;
+  void                      *address_1 RTEMS_GCC_NOWARN_UNUSED;
+  rtems_event_set            events RTEMS_GCC_NOWARN_UNUSED;
+  long                       buffer[ 4 ] RTEMS_GCC_NOWARN_UNUSED;
+  uint32_t                   count RTEMS_GCC_NOWARN_UNUSED;
   rtems_device_major_number  major;
   rtems_device_minor_number  minor;
-  uint32_t                   io_result;
+  uint32_t                   io_result RTEMS_GCC_NOWARN_UNUSED;
   uint32_t                   error;
   rtems_clock_get_options    options;
 
