@@ -1088,11 +1088,11 @@ rtems_bdbuf_group_realloc (rtems_bdbuf_group* group, size_t new_bds_per_group)
       case RTEMS_BDBUF_STATE_CACHED:
       case RTEMS_BDBUF_STATE_READ_AHEAD:
         if (rtems_bdbuf_avl_remove (&bdbuf_cache.tree, bd) != 0)
-          rtems_fatal_error_occurred ((bd->state << 16) |
+          rtems_fatal_error_occurred ((((uint32_t) bd->state) << 16) |
                                       RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_1);
         break;
       default:
-        rtems_fatal_error_occurred ((bd->state << 16) |
+        rtems_fatal_error_occurred ((((uint32_t) bd->state) << 16) |
                                     RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_8);
     }
     

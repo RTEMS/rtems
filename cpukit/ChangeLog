@@ -1,5 +1,10 @@
 2009-11-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/src/bdbuf.c: Cast bdbuf->state to int32_t
+	before shifting << 16 (Can not shift an enum by << 16 on 16bit).
+
+2009-11-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_conv.c,
 	libfs/src/dosfs/msdos_misc.c: Use uint16_t instead of 
 	"unsigned short" to circumvent warnings on 16bit targets.
