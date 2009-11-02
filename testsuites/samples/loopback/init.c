@@ -44,7 +44,7 @@ rtems_task Init(rtems_task_argument argument);
 /*
  * Network configuration
  */
-extern void rtems_bsdnet_loopattach(struct rtems_bsdnet_ifconfig *conf, int attaching);
+extern int rtems_bsdnet_loopattach(struct rtems_bsdnet_ifconfig *conf, int attaching);
 
 static struct rtems_bsdnet_ifconfig loopback_config = {
     "lo0",                          /* name */
