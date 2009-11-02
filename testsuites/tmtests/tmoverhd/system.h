@@ -38,7 +38,7 @@ extern rtems_task task_func(void);
 
 extern void null_func(void);
 
-extern rtems_status_code Empty_directive();
+extern rtems_status_code Empty_directive(void);
 
 #include <timesys.h>
 

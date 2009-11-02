@@ -1,3 +1,7 @@
+2009-11-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tmoverhd/system.h: Add prototype for Empty_directive();
+
 2009-11-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* tm26/task1.c: Use true/false instead of TRUE/FALSE for "bool"s.
