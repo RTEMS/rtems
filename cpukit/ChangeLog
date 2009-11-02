@@ -1,3 +1,13 @@
+2009-11-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/src/bdbuf.c: Fixed buffer recycling.  See test
+	"libtests/block03".
+
+2009-11-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/src/bdbuf.c: Wake-up access waiters after sync.  See test
+	"libtests/block04".
+
 2009-10-30	Glenn Humphrey <glenn.humphrey@oarcorp.com>
 
 	PR pr1462/cpukit

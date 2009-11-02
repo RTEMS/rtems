@@ -1134,24 +1134,30 @@ rtems_bdbuf_get_next_bd (size_t               bds_per_group,
               bd->group->bds_per_group, bds_per_group);
 
     /*
-     * If this bd is already part of a group that supports the same number of
-     * BDs per group return it. If the bd is part of another group check the
-     * number of users and if 0 we can take this group and resize it.
+     * If nobody waits for this BD, we may recycle it.
      */
-    if (bd->group->bds_per_group == bds_per_group)
-    {
-      rtems_chain_extract (node);
-      return bd;
-    }
-
-    if (bd->group->users == 0)
+    if (bd->waiters == 0)
     {
       /*
-       * We use the group to locate the start of the BDs for this group.
+       * If this bd is already part of a group that supports the same number of
+       * BDs per group return it. If the bd is part of another group check the
+       * number of users and if 0 we can take this group and resize it.
        */
-      rtems_bdbuf_group_realloc (bd->group, bds_per_group);
-      bd = (rtems_bdbuf_buffer*) rtems_chain_get (&bdbuf_cache.ready);
-      return bd;
+      if (bd->group->bds_per_group == bds_per_group)
+      {
+        rtems_chain_extract (node);
+        return bd;
+      }
+
+      if (bd->group->users == 0)
+      {
+        /*
+         * We use the group to locate the start of the BDs for this group.
+         */
+        rtems_bdbuf_group_realloc (bd->group, bds_per_group);
+        bd = (rtems_bdbuf_buffer*) rtems_chain_get (&bdbuf_cache.ready);
+        return bd;
+      }
     }
 
     node = rtems_chain_next (node);
@@ -2158,6 +2164,9 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
   bd->state = RTEMS_BDBUF_STATE_SYNC;
 
   rtems_chain_append (&bdbuf_cache.sync, &bd->link);
+
+  if (bd->waiters)
+    rtems_bdbuf_wake (&bdbuf_cache.access_waiters);
 
   rtems_bdbuf_wake_swapper ();
 
