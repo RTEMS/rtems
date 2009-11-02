@@ -58,8 +58,8 @@ static uint16_t lastdtime;
  * file timestamps. The passed in unix time is assumed to be in GMT.
  */
 void
-msdos_date_unix2dos(unsigned int t, unsigned short *ddp,
-                    unsigned short *dtp)
+msdos_date_unix2dos(unsigned int t, uint16_t *ddp,
+                    uint16_t *dtp)
 {
 	uint32_t days;
 	uint32_t inc;

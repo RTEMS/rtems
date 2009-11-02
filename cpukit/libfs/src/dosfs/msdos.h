@@ -403,8 +403,8 @@ msdos_name_type_t msdos_long_to_short(const char *lfn, int lfn_len,
 int msdos_filename_unix2dos(const char *un, int unlen, char *dn);
 
 void msdos_date_unix2dos(
-  unsigned int tsp, unsigned short *ddp,
-  unsigned short *dtp);
+  unsigned int tsp, uint16_t *ddp,
+  uint16_t *dtp);
 
 unsigned int msdos_date_dos2unix(unsigned int dd, unsigned int dt);
 

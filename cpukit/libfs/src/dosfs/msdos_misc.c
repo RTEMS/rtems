@@ -672,8 +672,8 @@ msdos_set_dir_wrt_time_and_date(
 {
     ssize_t          ret1 = 0, ret2 = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned short   time_val;
-    unsigned short   date;
+    uint16_t         time_val;
+    uint16_t         date;
     uint32_t         sec = 0;
     uint32_t         byte = 0;
 
