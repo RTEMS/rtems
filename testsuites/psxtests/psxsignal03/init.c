@@ -126,7 +126,11 @@ void *Test_Thread(void *arg)
 
   printf( "%s - siginfo.si_signo=%d\n", name, info.si_signo );
   printf( "%s - siginfo.si_code=%d\n", name, info.si_code );
-  printf( "%s - siginfo.si_value=0x%08x\n", name, info.si_value );
+  /* FIXME: Instead of casting to (uintptr_t) and using PRIxPTR, we
+   * likely should use %p. However, this would render this test's 
+   * behavior non-deterministic, because %p's behavior is 
+   * "implementation defined" */
+  printf( "%s - siginfo.si_value=0x%08" PRIxPTR "\n", name, (uintptr_t) info.si_value.sival_ptr );
 
   assert( info.si_signo == SIGNAL_TWO );
   assert( info.si_code == SI_USER );
