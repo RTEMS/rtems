@@ -1,5 +1,7 @@
 2009-11-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* tmoverhd/dumrtems.h: Rework undef/define cascade.
+	Add RTEMS_GCC_NOWARN_USED.
 	* tmoverhd/system.h: Add prototype for Empty_directive();
 
 2009-11-01	Ralf Corsépius <ralf.corsepius@rtems.org>

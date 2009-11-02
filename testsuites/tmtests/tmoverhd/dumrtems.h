@@ -91,164 +91,168 @@
 #undef rtems_timer_reset
 
 #define     rtems_signal_catch( asraddr, mode ) \
-           Empty_directive( asraddr, mode )
+           Empty_directive()
 #define     rtems_signal_send( tid, signal ) \
-           Empty_directive( tid, signal )
+           Empty_directive()
 
 #define     rtems_io_close( major, minor, argp, rval ) \
-           Empty_directive( major, minor, argp, rval )
+           Empty_directive()
 #define     rtems_io_control( major, minor, argp, rval ) \
-           Empty_directive( major, minor, argp, rval )
+           Empty_directive()
 #define     rtems_io_initialize( major, minor, argp, rval ) \
-           Empty_directive( major, minor, argp, rval )
+           Empty_directive()
 #define     rtems_io_open( major, minor, argp, rval ) \
-           Empty_directive( major, minor, argp, rval )
+           Empty_directive()
 #define     rtems_io_read( major, minor, argp, rval ) \
-           Empty_directive( major, minor, argp, rval )
+           Empty_directive()
 #define     rtems_io_write( major, minor, argp, rval ) \
-           Empty_directive( major, minor, argp, rval )
+           Empty_directive()
 
 #define     rtems_port_internal_to_external( dpid, internal, external ) \
-           Empty_directive( dpid, internal, external )
+           Empty_directive()
 #define     rtems_port_external_to_internal( dpid, external, internal ) \
-           Empty_directive( dpid, external, internal )
+           Empty_directive()
 #define     rtems_port_create( name, intaddr, extaddr, length, dpid ) \
-           Empty_directive( name, intaddr, extaddr, length, dpid )
+           Empty_directive()
 #define     rtems_port_delete( dpid ) \
-           Empty_directive( dpid )
+           Empty_directive()
 #define     rtems_port_ident( name, dpid ) \
-           Empty_directive( name, dpid )
+           Empty_directive()
 
 #define     rtems_event_receive( eventin, options, timeout, eventout ) \
-           Empty_directive( eventin, options, timeout, eventout )
+           Empty_directive()
 #define     rtems_event_send( tid, event ) \
-           Empty_directive( tid, event )
+           Empty_directive()
 
 #define     rtems_initialize_executive( conftbl, cputbl ) \
-           Empty_directive( conftbl, cputbl )
+           Empty_directive()
 #define     rtems_shutdown_executive( the_error ) \
-           Empty_directive( the_error )
+           Empty_directive()
 
 #define     rtems_interrupt_catch( israddr, vector, oldisr ) \
-           Empty_directive( israddr, vector, oldisr )
+           Empty_directive()
 
 #define     rtems_partition_create( name, paddr, length, bsize, attr, ptid ) \
-           Empty_directive( name, paddr, length, bsize, attr, ptid )
+           Empty_directive()
 #define     rtems_partition_delete( ptid ) \
-           Empty_directive( ptid )
+           Empty_directive()
 #define     rtems_partition_get_buffer( ptid, bufaddr ) \
-           Empty_directive( ptid, bufaddr )
+           Empty_directive()
 #define     rtems_partition_ident( name, node, ptid ) \
-           Empty_directive( name, node, ptid )
+           Empty_directive()
 #define     rtems_partition_return_buffer( ptid, bufaddr ) \
-           Empty_directive( ptid, bufaddr )
+           Empty_directive()
 
 #define     rtems_message_queue_broadcast( qid, buffer, count ) \
-           Empty_directive( qid, buffer, count )
+           Empty_directive()
 #define     rtems_message_queue_create( name, count, attr, qid ) \
-           Empty_directive( name, count, attr, qid )
+           Empty_directive()
 #define     rtems_message_queue_delete( qid ) \
-           Empty_directive( qid )
+           Empty_directive()
 #define     rtems_message_queue_flush( qid, count ) \
-           Empty_directive( qid, count )
+           Empty_directive()
 #define     rtems_message_queue_ident( name, node, qid ) \
-           Empty_directive( name, node, qid )
+           Empty_directive()
 #define     rtems_message_queue_receive( qid, buffer, options, timeout ) \
-           Empty_directive( qid, buffer, options, timeout )
+           Empty_directive()
 #define     rtems_message_queue_send( qid, buffer ) \
-           Empty_directive( qid, buffer )
+           Empty_directive()
 #define     rtems_message_queue_urgent( qid, buffer ) \
-           Empty_directive( qid, buffer )
+           Empty_directive()
 
 #define     rtems_region_create( name, paddr, length, pagesize, attr, rnid ) \
-           Empty_directive( name, paddr, length, pagesize, attr, rnid )
+           Empty_directive()
 #define     rtems_region_delete( rnid ) \
-           Empty_directive( rnid )
+           Empty_directive()
 #define     rtems_region_get_segment( rnid, size, options, timeout, segaddr ) \
-           Empty_directive( rnid, size, options, timeout, segaddr )
+           Empty_directive()
 #define     rtems_region_ident( name, rnid ) \
-           Empty_directive( name, rnid )
+           Empty_directive()
 #define     rtems_region_return_segment( rnid, segaddr ) \
-           Empty_directive( rnid, segaddr )
+           Empty_directive()
 
 #define     rtems_semaphore_create( name, count, attr, priceil, smid ) \
-           Empty_directive( name, count, attr, priceil, smid )
+           Empty_directive()
 #define     rtems_semaphore_delete( smid ) \
-           Empty_directive( smid )
+           Empty_directive()
 #define     rtems_semaphore_ident( name, node, smid ) \
-           Empty_directive( name, node, smid )
+           Empty_directive()
 #define     rtems_semaphore_obtain( smid, options, timeout ) \
-           Empty_directive( smid, options, timeout )
+           Empty_directive()
 #define     rtems_semaphore_release( smid ) \
-           Empty_directive( smid )
+           Empty_directive()
 
 #define     rtems_task_create( name, priority, stack_size, mode, attr, tid ) \
-           Empty_directive( name, priority, stack_size, mode, attr, tid )
+           Empty_directive()
 #define     rtems_task_delete( tid ) \
-           Empty_directive( tid )
+           Empty_directive()
 #define     rtems_task_get_note( tid, notepad, note ) \
-           Empty_directive( tid, notepad, note )
+           Empty_directive()
 #define     rtems_task_ident( name, node, tid ) \
-           Empty_directive( name, node, tid )
+           Empty_directive()
 #define     rtems_task_mode( mode, mask, pmode ) \
-           Empty_directive( mode, mask, pmode )
+           Empty_directive()
 #define     rtems_task_restart( tid, arg ) \
-           Empty_directive( tid, arg )
+           Empty_directive()
 #define     rtems_task_resume( tid ) \
-           Empty_directive( tid )
+           Empty_directive()
 #define     rtems_task_set_note( tid, notepad, note ) \
-           Empty_directive( tid, notepad, note )
+           Empty_directive()
 #define     rtems_task_set_priority( tid, priority, ppriority ) \
-           Empty_directive( tid, priority, ppriority )
+           Empty_directive()
 #define     rtems_task_start( tid, saddr, arg ) \
-           Empty_directive( tid, saddr, arg )
+           Empty_directive()
 #define     rtems_task_suspend( tid ) \
-           Empty_directive( tid )
+           Empty_directive()
 
 #define     rtems_clock_get( options, time ) \
-           Empty_directive( options, time )
+           Empty_directive()
 #define     rtems_clock_set( time ) \
-           Empty_directive( time )
+           Empty_directive()
 #define     rtems_clock_tick() \
            Empty_directive()
 #define     rtems_task_wake_after( ticks ) \
-           Empty_directive( ticks )
+           Empty_directive()
 #define     rtems_task_wake_when( time ) \
-           Empty_directive( time )
+           Empty_directive()
 
 #define     rtems_fatal_error_occurred( errcode ) \
-           Empty_directive( errcode )
+           Empty_directive()
 
 #define     rtems_rate_monotonic_create( name, id ) \
-           Empty_directive( name, id )
+           Empty_directive()
 #define     rtems_rate_monotonic_ident( name, id ) \
-           Empty_directive( name, id )
+           Empty_directive()
 #define     rtems_rate_monotonic_delete( id ) \
-           Empty_directive( id )
+           Empty_directive()
 #define     rtems_rate_monotonic_cancel( id ) \
-           Empty_directive( id )
+           Empty_directive()
 #define     rtems_rate_monotonic_period( id, period ) \
-           Empty_directive( id, period )
+           Empty_directive()
 
 #define     rtems_multiprocessing_announce() \
            Empty_directive()
 
 #define     rtems_timer_create( name, tmid ) \
-           Empty_directive( name, tmid )
+           Empty_directive()
 #define     rtems_timer_delete( tmid ) \
-           Empty_directive( tmid )
+           Empty_directive()
 #define     rtems_timer_cancel( tmid ) \
-           Empty_directive( tmid )
+           Empty_directive()
 #define     rtems_timer_ident( name, tmid ) \
-           Empty_directive( name, tmid )
+           Empty_directive()
 #define     rtems_timer_fire_after( tmid, ticks, routine, user_data ) \
-           Empty_directive( tmid, ticks, routine, user_data )
+           Empty_directive()
 #define     rtems_timer_fire_when( tmid, time, routine, user_data ) \
-           Empty_directive( tmid, time, routine, user_data )
+           Empty_directive()
 #define     rtems_timer_reset( tmid ) \
-           Empty_directive( tmid )
+           Empty_directive()
 
-rtems_status_code Empty_directive();
+#if defined(__GNUC__)
+#define RTEMS_GCC_NOWARN_UNUSED	__attribute__((unused))
+#else
+#define RTEMS_GCC_NOWARN_UNUSED
+#endif
 
 #endif
 /* end of include file */
