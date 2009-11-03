@@ -78,12 +78,12 @@ void benchmark_timer_initialize(void)
   Timer_starting = get_itimer();
 }
 
+extern uint32_t bsp_timer_least_valid;
+extern uint32_t bsp_timer_average_overhead;
 int benchmark_timer_read(void)
 {
   uint32_t   clicks;
   uint32_t   total;
-  extern uint32_t bsp_timer_least_valid;
-  extern uint32_t bsp_timer_average_overhead;
 
   clicks = get_itimer();
 

@@ -19,11 +19,6 @@
 /* $Id$ */   
 
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-	
 #include <libcpu/powerpc-utility.h> 
 #include <rtems/powerpc/cache.h>
 #include <bsp.h>

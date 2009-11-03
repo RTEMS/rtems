@@ -33,11 +33,6 @@
 
 #include <rtems/asm.h>
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-	
 /*
  *  The initial stack is set to run BELOW the code base address.
  *  (between the vectors and text sections)

@@ -392,7 +392,7 @@ int BSP_VMEInit(void)
 	vmeTsi148Reset();
 #ifdef VME_CLEAR_BRIDGE_ERRORS
 	{
-	extern unsigned short (*_BSP_clear_vmebridge_errors)();
+	extern unsigned short (*_BSP_clear_vmebridge_errors)(void);
 
 	  _BSP_clear_vmebridge_errors = VME_CLEAR_BRIDGE_ERRORS;
 

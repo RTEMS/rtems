@@ -89,56 +89,56 @@ void _BSP_Fatal_error(unsigned int v)
   __asm__ __volatile ("sc");
 }
 
-void _BSP_GPLED0_on()
+void _BSP_GPLED0_on(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr0 &=  ~GP0_LED;		/* Turn on GP0 LED */
 }
 
-void _BSP_GPLED0_off()
+void _BSP_GPLED0_off(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr0 |=  GP0_LED;		/* Turn off GP0 LED */
 }
 
-void _BSP_GPLED1_on()
+void _BSP_GPLED1_on(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr0 &=  ~GP1_LED;		/* Turn on GP1 LED */
 }
 
-void _BSP_GPLED1_off()
+void _BSP_GPLED1_off(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr0 |=  GP1_LED;		/* Turn off GP1 LED */
 }
 
-void _BSP_Uart1_enable()
+void _BSP_Uart1_enable(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr1 &= ~UART1_E;		/* Enable Uart1 */
 }
 
-void _BSP_Uart1_disable()
+void _BSP_Uart1_disable(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr1 |=  UART1_E;		/* Disable Uart1 */
 }
 
-void _BSP_Uart2_enable()
+void _BSP_Uart2_enable(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr1 &= ~UART2_E;		/* Enable Uart2 */
 }
 
-void _BSP_Uart2_disable()
+void _BSP_Uart2_disable(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
@@ -149,7 +149,6 @@ void _BSP_Uart2_disable()
 void bsp_start(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  extern void *_WorkspaceBase;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
 

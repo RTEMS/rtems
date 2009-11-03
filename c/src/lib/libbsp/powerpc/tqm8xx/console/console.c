@@ -66,7 +66,7 @@
 /*
  * Interrupt-driven input buffer
  */
-#define RXBUFSIZE	256
+#define RXBUFSIZE	16
 
 #define M8xx_SICR_BRG1 (0)
 #define M8xx_SICR_BRG2 (1)
@@ -662,7 +662,7 @@ sccInitialize (int chan)
       sccFrstRxBd[chan][i].status |= M8xx_BD_WRAP;
     }
     sccFrstRxBd[chan][i].length = 0;
-    sccFrstRxBd[chan][i].buffer = rxBuf[chan][i];
+    sccFrstRxBd[chan][i].buffer = (*rxBuf[chan])[i];
   }
   /*
    * Setup the Transmit Buffer Descriptor
@@ -728,32 +728,44 @@ sccInitialize (int chan)
 static int
 sccPollRead (int minor)
 {
-  unsigned char c;
+  int c = -1;
   int chan = minor;
 
-  if ((sccCurrRxBd[chan]->status & M8xx_BD_EMPTY) != 0) {
-    return -1;
+  while(1) {
+    if ((sccCurrRxBd[chan]->status & M8xx_BD_EMPTY) != 0) {
+      return -1;
+    }
+    
+    if (0 == (sccCurrRxBd[chan]->status & (M8xx_BD_OVERRUN 
+					   | M8xx_BD_PARITY_ERROR 
+					   | M8xx_BD_FRAMING_ERROR
+					   | M8xx_BD_BREAK
+					   | M8xx_BD_IDLE))) {
+      /* character received and no error detected */
+      rtems_cache_invalidate_multiple_data_lines((void *)sccCurrRxBd[chan]->buffer,
+						 sccCurrRxBd[chan]->length);
+      c = (unsigned)*((char *)sccCurrRxBd[chan]->buffer);
+      /*
+       * clear status
+       */
+    }
+    sccCurrRxBd[chan]->status = 
+      (sccCurrRxBd[chan]->status 
+       & (M8xx_BD_WRAP | M8xx_BD_INTERRUPT))
+      | M8xx_BD_EMPTY;
+    /*
+     * advance to next BD
+     */
+    if ((sccCurrRxBd[chan]->status & M8xx_BD_WRAP) != 0) {
+      sccCurrRxBd[chan] = sccFrstRxBd[chan];
+    }
+    else {
+      sccCurrRxBd[chan]++;
+    }
+    if (c >= 0) {
+      return c;
+    }
   }
-  rtems_cache_invalidate_multiple_data_lines((void *)sccCurrRxBd[chan]->buffer,
-					     sccCurrRxBd[chan]->length);
-  c = *((char *)sccCurrRxBd[chan]->buffer);
-  /*
-   * clear status
-   */
-  sccCurrRxBd[chan]->status = 
-    (sccCurrRxBd[chan]->status 
-     & (M8xx_BD_WRAP | M8xx_BD_INTERRUPT))
-    | M8xx_BD_EMPTY;
-  /*
-   * advance to next BD
-   */
-  if ((sccCurrRxBd[chan]->status & M8xx_BD_WRAP) != 0) {
-    sccCurrRxBd[chan] = sccFrstRxBd[chan];
-  }
-  else {
-    sccCurrRxBd[chan]++;
-  }
-  return c;
 }
 
 

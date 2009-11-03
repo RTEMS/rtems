@@ -94,35 +94,6 @@ static int ppc_clock_exception_handler( BSP_Exception_frame *frame, unsigned num
 	return 0;
 }
 
-static int ppc_clock_exception_handler_classic( BSP_Exception_frame *frame, unsigned number)
-{
-	uint32_t reg1;
-	uint32_t reg2;
-	uint32_t msr;
-
-	/* Set new decrementer value */
-	asm volatile(
-		"lwz %1, ppc_clock_decrementer_value@sdarel(13);"
-		"mfdec %0;"
-		"add %0, %0, %1;"
-		"mtdec %0"
-		: "=r" (reg1), "=r" (reg2)
-	);
-
-	/* Increment clock ticks */
-	Clock_driver_ticks += 1;
-
-	/* Enable external exceptions */
-	msr = ppc_external_exceptions_enable();
-
-	/* Call clock ticker  */
-	ppc_clock_tick();
-
-	/* Restore machine state */
-	ppc_external_exceptions_disable( msr);
-
-	return 0;
-}
 
 static int ppc_clock_exception_handler_booke( BSP_Exception_frame *frame, unsigned number)
 {

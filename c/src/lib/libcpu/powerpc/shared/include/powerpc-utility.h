@@ -26,10 +26,10 @@
  * @defgroup powerpc_shared Shared PowerPC Code
  */
 
-#ifndef LIBCPU_POWERPC_UTILITY_H
-#define LIBCPU_POWERPC_UTILITY_H
+#ifndef __LIBCPU_POWERPC_UTILITY_H
+#define __LIBCPU_POWERPC_UTILITY_H
 
-#ifndef ASM
+#if !defined(ASM)
   #include <rtems.h>
 #endif
 
@@ -37,7 +37,11 @@
 #include <rtems/powerpc/registers.h>
 #include <rtems/powerpc/powerpc.h>
 
-#ifndef ASM
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if !defined(ASM)
 
 #include <rtems/bspIo.h>
 #include <rtems/system.h>
@@ -242,7 +246,6 @@ static inline void ppc_external_exceptions_disable(uint32_t msr)
   RTEMS_COMPILER_MEMORY_BARRIER();
 }
 
-#ifndef ASM
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
@@ -291,9 +294,6 @@ extern     uint32_t bsp_clicks_per_usec;
     while (now - start < (_cycles)); \
   } while (0)
 
-#endif /* ASM */
-
-#ifndef ASM
 /*
  *  Routines to access the decrementer register
  */
@@ -306,9 +306,6 @@ extern     uint32_t bsp_clicks_per_usec;
 #define PPC_Get_decrementer( _clicks ) \
     asm volatile( "mfdec  %0" : "=r" (_clicks) )
 
-#endif /* ASM */
-
-#ifndef ASM
 /*
  *  Routines to access the time base register
  */
@@ -350,7 +347,6 @@ static inline  void PPC_Set_timebase_register (uint64_t tbr)
   asm volatile( "mtspr 285, %0" : : "r" (tbr_high));
   
 }
-#endif /* ASM */
 
 static inline uint32_t ppc_decrementer_register(void)
 {
@@ -581,8 +577,9 @@ static inline void ppc_set_time_base_64(uint64_t val)
 
 void ppc_code_copy(void *dest, const void *src, size_t n);
 
-#else /* ASM */
+#endif /* ifndef ASM */
 
+#if defined(ASM)
 #include <rtems/asm.h>
 
 .macro LA reg, addr
@@ -656,4 +653,8 @@ void ppc_code_copy(void *dest, const void *src, size_t n);
 
 #endif /* ASM */
 
-#endif /* LIBCPU_POWERPC_UTILITY_H */
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __LIBCPU_POWERPC_UTILITY_H */

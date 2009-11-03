@@ -1,3 +1,9 @@
+2009-11-03	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* start/start.S: checked and removed boot_card warning
+	* irq/irq.c: adapted exception handler parameters
+	* startup/bspstart.c: removed non-prototype warnings
+
 2009-10-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* vectors/vectors.h, vectors/vectors_init.c, vectors/vectors.S,

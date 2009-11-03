@@ -19,6 +19,10 @@
 #ifndef _LIBCPU_BYTEORDER_H
 #define _LIBCPU_BYTEORDER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef __GNUC__
 
 extern __inline__ unsigned ld_le16(volatile uint16_t *addr)
@@ -48,5 +52,9 @@ extern __inline__ void st_le32(volatile uint32_t *addr, unsigned val)
 }
 
 #endif /* __GNUC__ */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _LIBCPU_BYTEORDER_H */

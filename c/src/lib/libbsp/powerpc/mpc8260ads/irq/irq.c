@@ -213,7 +213,7 @@ volatile unsigned int maxLoop = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned excNum)
 {
   register unsigned int irq;
 #if 0

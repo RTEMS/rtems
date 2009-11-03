@@ -324,12 +324,6 @@ mpc8260_console_generic_rel_SOURCES = mpc8260/console-generic/console-generic.c 
 mpc8260_console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8260_console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-# mpc8260/clock
-noinst_PROGRAMS += mpc8260/clock.rel
-mpc8260_clock_rel_SOURCES = mpc8260/clock/clock.c
-mpc8260_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8260_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 # mpc8260/cpm
 include_mpc8260_HEADERS += mpc8260/include/cpm.h
 

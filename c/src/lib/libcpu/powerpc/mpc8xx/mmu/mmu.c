@@ -50,8 +50,11 @@ void mmu_init( void )
    * Initialize IMMU & DMMU Control Registers (MI_CTR & MD_CTR)
    * 	GPM [0]			0b0 = PowerPC mode
    *	PPM [1]			0b0 = Page resolution of protection
-   *	CIDEF [2]		0b0/0b1 = Default cache-inhibit attribute = 
-   *							NO for IMMU, YES for DMMU!
+   *	CIDEF [2]		0b0/0b0 = Default cache-inhibit attribute = 
+   *							NO for IMMU, NO for DMMU
+   *                            NOTE: it is vital that data caching is ON, when
+   *                            DMMU is off, otherwise valid/dirty values in 
+   *                            cache would be ignored during exception entry
    *	reserved/WTDEF [3]	0b0 = Default write-through attribute = not
    *	RSV4x [4]		0b0 = 4 entries not reserved
    *	reserved/TWAM [5]	0b0/0b1 = 4-Kbyte page hardware assist
@@ -67,7 +70,7 @@ void mmu_init( void )
    */
   reg1 = M8xx_MI_CTR_ITLB_INDX(31);
   _mtspr( M8xx_MI_CTR, reg1 );
-  reg1 = M8xx_MD_CTR_CIDEF | M8xx_MD_CTR_TWAM | M8xx_MD_CTR_DTLB_INDX(31);
+  reg1 = M8xx_MD_CTR_TWAM | M8xx_MD_CTR_DTLB_INDX(31);
   _mtspr( M8xx_MD_CTR, reg1 );
   _isync;
   

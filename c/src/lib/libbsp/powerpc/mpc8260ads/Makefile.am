@@ -30,8 +30,9 @@ dist_project_lib_DATA += startup/linkcmds
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
-# pclock
-libbsp_a_SOURCES += clock/p_clock.c
+# clock
+libbsp_a_SOURCES += ../shared/clock/clock.c
+
 # console
 libbsp_a_SOURCES += console/console.c
 
@@ -68,7 +69,6 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8260/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/cpm.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/mmu.rel \

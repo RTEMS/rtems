@@ -129,7 +129,7 @@ rtems_e500_prtlb(rtems_e500_tlb_idx key, int quiet, FILE *f);
  *          (other than disabling them).
  */
 int
-rtems_e500_initlb();
+rtems_e500_initlb(void);
 
 /*
  * Write TLB1 entry (can also be used to disable an entry).

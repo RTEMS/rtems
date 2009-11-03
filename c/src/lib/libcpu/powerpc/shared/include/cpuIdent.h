@@ -18,6 +18,10 @@
 
 #include <stdbool.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef ASM
 typedef enum
 {
@@ -129,5 +133,9 @@ static inline bool ppc_cpu_is(ppc_cpu_id_t cpu)
 }
 
 #endif /* ASM */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,4 +1,28 @@
-2009-10-23  Thomas Doerfler  <Thomas.Doerfler@imd-systems.de>
+2009-11-03  Thomas Doerfler  <Thomas.Doerfler@imd-systems.de>
+
+	* shared/include/powerpc-utility.h, shared/include/byteorder.h,
+	shared/include/cpuIdent.h: 
+	add c++ declaration brackets
+	* Makefile.am, mpc8260/clock: removed mpc8260 specific clock
+	driver
+	* e500/mmu/e500_mmu.h, e500/mmu/mmu.c,: removed "non-prototype"
+	warning
+	* mpc8260/timer/timer.c: moved extern declarations outside
+	function body
+	* mpc8xx/mmu/mmu.c: enable data cache when MMU is off to avoid
+	cache confusion during exception entry
+
+2009-11-02  Thomas Doerfler  <Thomas.Doerfler@imd-systems.de>
+
+	* mpc8xx/mmu/mmu.c:
+	enable data chache, when MMU is disabled
+
+2009-10-30  Thomas Doerfler  <Thomas.Doerfler@imd-systems.de>
+
+	* mpc6xx/clock/c_clock.c:
+	moved timebase/decrementer access from cpukit to libcpu 
+
+2009-10-29  Thomas Doerfler  <Thomas.Doerfler@imd-systems.de>
 
 	* shared/include/powerpc-utility.h, mpc6xx/timer/timer.c:
 	moved timebase/decrementer access from cpukit to libcpu 
