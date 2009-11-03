@@ -1,3 +1,7 @@
+2009-11-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/bspstart.c: Add missing prototype.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/uC5282.cfg: Remove RTEMS_BSP_FAMILY.
