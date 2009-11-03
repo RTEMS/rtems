@@ -90,7 +90,7 @@ extern uint32_t __rtems_end[];
 #define __DO_ALIGN(a, s)	(((uint32_t)(a) + (s)-1) & ~((s)-1))
 #define __ALIGN(a)	__DO_ALIGN(a, (1<<LD_MEM_PROBE_STEP))
 
-void __here_s_the_real_end();
+extern void __here_s_the_real_end(void);
 
 #define SWITCH_MSR(msr)		\
 	do {					\
@@ -168,7 +168,7 @@ register uint32_t v, x;
 }
 
 uint32_t
-probeMemoryEnd()
+probeMemoryEnd(void)
 {
 register volatile uint32_t *probe;
 register          uint32_t scratch;
@@ -226,4 +226,4 @@ register          uint32_t flags;
 	return (uint32_t) probe;
 }
 
-void __here_s_the_real_end() {}
+void __here_s_the_real_end(void) {}
