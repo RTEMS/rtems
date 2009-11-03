@@ -38,7 +38,6 @@ static void disable_interrupts(void);
 static void disable_watchdog_timer(void);
 static void disable_cache(void);
 extern void init_clock_config(void) __attribute__ ((section(".ram_code")));
-static void init_vbr(void);
 static void init_cache(void);
 static void init_crossbar(void);
 extern void init_chip_selects(void) __attribute__ ((section(".ram_code")));
