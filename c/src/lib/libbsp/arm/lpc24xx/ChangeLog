@@ -1,3 +1,14 @@
+2009-11-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add RTEMS_BSP_LINKCMDS.
+	* make/custom/lpc24xx.inc: Remove LDFLAGS.
+	* make/custom/lpc24xx_ea.cfg: Remove LPC24XX_LINKCMDS.
+	* make/custom/lpc24xx_ncs_ram.cfg: Remove LPC24XX_LINKCMDS.
+	* make/custom/lpc24xx_ncs_rom_ext.cfg: Remove LPC24XX_LINKCMDS.
+	* make/custom/lpc24xx_ncs_rom_int.cfg: Remove LPC24XX_LINKCMDS.
+	* startup/linkcmds: Remove.
+	* Makefile.am: Rework linkcmds handling.
+
 2009-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* clock/clock-config.c, misc/dma.c, network/network.c,

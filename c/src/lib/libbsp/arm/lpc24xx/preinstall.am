@@ -121,27 +121,11 @@ $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 
+$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+
 $(PROJECT_LIB)/linkcmds.base: ../shared/startup/linkcmds.base $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.base
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.base
-
-$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
-
-$(PROJECT_LIB)/linkcmds.lpc24xx_ea: startup/linkcmds.lpc24xx_ea $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.lpc24xx_ea
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.lpc24xx_ea
-
-$(PROJECT_LIB)/linkcmds.lpc24xx_ncs_rom_int: startup/linkcmds.lpc24xx_ncs_rom_int $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.lpc24xx_ncs_rom_int
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.lpc24xx_ncs_rom_int
-
-$(PROJECT_LIB)/linkcmds.lpc24xx_ncs_rom_ext: startup/linkcmds.lpc24xx_ncs_rom_ext $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.lpc24xx_ncs_rom_ext
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.lpc24xx_ncs_rom_ext
-
-$(PROJECT_LIB)/linkcmds.lpc24xx_ncs_ram: startup/linkcmds.lpc24xx_ncs_ram $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.lpc24xx_ncs_ram
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.lpc24xx_ncs_ram
 
