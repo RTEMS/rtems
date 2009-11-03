@@ -25,6 +25,7 @@
 #include <string.h>
 #include <assert.h>
 #include <rtems/error.h>
+#include <rtems/score/thread.h> /*  _Thread_Dispatch_disable_level */
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,12 +41,6 @@ extern "C" {
 #endif
 
 #include <buffer_test_io.h>
-
-/*
- * HACK: Blatant visibility violation
- * Should include a public header instead 
- */
-extern volatile uint32_t   _Thread_Dispatch_disable_level;
 
 /*
  *  Check that that the dispatch disable level is proper for the
