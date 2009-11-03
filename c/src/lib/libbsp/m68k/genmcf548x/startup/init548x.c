@@ -188,7 +188,7 @@ if(!(MCF548X_FBCS_CSMR1 & MCF548X_FBCS_CSMR_V))
 
 #endif
 }
-#endif defined(HAS_LOW_LEVEL_INIT)
+#endif /* defined(HAS_LOW_LEVEL_INIT) */
 
 /********************************************************************/
 #if defined(HAS_LOW_LEVEL_INIT)

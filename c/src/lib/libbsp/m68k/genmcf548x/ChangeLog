@@ -1,5 +1,9 @@
 2009-11-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* startup/init548x.c: Comment out junk from end of #endif.
+
+2009-11-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Add RTEMS_BSP_LINKCMDS.
 	* make/custom/m5484FireEngine.cfg: Remove RTEMS_LINKCMDS.
 	* make/custom/COBRA5475.cfg: Remove RTEMS_LINKCMDS.
