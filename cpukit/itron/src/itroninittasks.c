@@ -51,12 +51,12 @@ void _ITRON_Task_Initialize_user_tasks_body( void )
     );
 
     if ( return_value != E_OK )
-      _Internal_error_Occurred( INTERNAL_ERROR_ITRON_API, TRUE, return_value );
+      _Internal_error_Occurred( INTERNAL_ERROR_ITRON_API, true, return_value );
 
     return_value = sta_tsk( user_tasks[ index ].id, 0 );
 
     if ( return_value != E_OK )
-      _Internal_error_Occurred( INTERNAL_ERROR_ITRON_API, TRUE, return_value );
+      _Internal_error_Occurred( INTERNAL_ERROR_ITRON_API, true, return_value );
 
   }
 }

@@ -60,7 +60,7 @@ ER snd_msg(
         the_mailbox->Object.id,
         NULL,          /* multiprocessing not supported */
         message_priority,
-        FALSE,     /* do not allow sender to block */
+        false,     /* do not allow sender to block */
         0          /* no timeout */
      );
      break;

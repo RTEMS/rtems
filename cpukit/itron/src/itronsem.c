@@ -40,11 +40,11 @@ void _ITRON_Semaphore_Manager_initialization(void)
     Configuration_ITRON_API.maximum_semaphores,
                                      /* maximum objects of this class */
     sizeof(ITRON_Semaphore_Control), /* size of this object's control block */
-    FALSE,                       /* TRUE if names for this object are strings */
+    false,                       /* true if names for this object are strings */
     ITRON_MAXIMUM_NAME_LENGTH    /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                       /* TRUE if this is a global object class */
+    false,                       /* true if this is a global object class */
     NULL                         /* Proxy extraction support callout */
 #endif
   );

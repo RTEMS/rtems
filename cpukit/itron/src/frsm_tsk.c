@@ -53,7 +53,7 @@ ER frsm_tsk(
       if ( ! _States_Is_suspended(the_thread->current_state) )
         _ITRON_return_errorno( E_OK );
 
-      _Thread_Resume( the_thread, TRUE );
+      _Thread_Resume( the_thread, true );
       break;
   }
 
