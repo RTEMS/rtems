@@ -1,3 +1,13 @@
+2009-11-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add RTEMS_BSP_LINKCMDS.
+	* make/custom/m5484FireEngine.cfg: Remove RTEMS_LINKCMDS.
+	* make/custom/COBRA5475.cfg: Remove RTEMS_LINKCMDS.
+	* make/custom/genmcf548x.inc: Remove LDFLAGS.
+	* startup/linkcmds: Remove (Renamed into linkcmds).
+	* startup/linkcmds.m5484FireEngine: New (Renamed from linkcmds).
+	* Makefile.am: Rework linkcmds handling.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/genmcf548x.inc: Remove RTEMS_BSP_FAMILY.

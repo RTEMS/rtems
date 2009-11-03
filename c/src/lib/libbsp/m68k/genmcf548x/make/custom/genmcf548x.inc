@@ -14,8 +14,6 @@ CPU_CFLAGS = -mcfv4e -Wa,-memac
 # optimize flag: typically -O2
 CFLAGS_OPTIMIZE_V = -O2 -g -fomit-frame-pointer 
 
-LDFLAGS = -qnolinkcmds -Wl,-T$(RTEMS_LINKCMDS)
-
 define bsp-post-link
 	$(OBJCOPY) -O binary --strip-all $(basename $@).exe \
 	    $(basename $@)$(DOWNEXT)
