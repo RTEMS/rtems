@@ -234,6 +234,7 @@ static void fixPath(char *path)
 
 static int rtems_tfs_eval_path(
   const char                        *pathname,
+  int                                pathnamelen,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc
 )
