@@ -1,3 +1,15 @@
+2009-11-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/linkcmds, startup/linkcmds.pm520: Remove.
+	* startup/linkcmds.pm520_ze30, startup/linkcmds.pm520_cr825:
+	New (Copy of former startup/linkcmds.pm520).
+	* Makefile.am: Rework linkcmds handling.
+	* configure.ac: Add RTEMS_BSP_LINKCMDS.
+	* make/custom/brs5l.cfg, make/custom/icecube.cfg,
+	make/custom/pm520_cr825.cfg, make/custom/pm520_ze30.cfg:
+	Remove RTEMS_LINKCMDS.
+	* make/custom/gen5200.inc: Remove LDFLAGS.
+
 2009-11-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* start/start.S: call to boot_card checked, removed warning 

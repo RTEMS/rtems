@@ -31,11 +31,12 @@ project_lib_DATA = start.$(OBJEXT)
 libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds \
-    startup/linkcmds.base \
-    startup/linkcmds.brs5l \
-    startup/linkcmds.icecube \
-    startup/linkcmds.pm520
+dist_project_lib_DATA += startup/linkcmds.base
+project_lib_DATA += startup/linkcmds
+EXTRA_DIST = startup/linkcmds.brs5l
+EXTRA_DIST += startup/linkcmds.icecube
+EXTRA_DIST += startup/linkcmds.pm520_cr825
+EXTRA_DIST += startup/linkcmds.pm520_ze30
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
