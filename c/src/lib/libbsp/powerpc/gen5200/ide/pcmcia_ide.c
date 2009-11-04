@@ -446,7 +446,7 @@ void mpc5200_pcmciaide_dma_blockop(bool is_write,
 #endif /* IDE_USE_DMA */
 
 
-void mpc5200_pcmciaide_read_block(int minor, uint16_t block_size, rtems_blkdev_sg_buffer *bufs,
+void mpc5200_pcmciaide_read_block(int minor, uint32_t block_size, rtems_blkdev_sg_buffer *bufs,
                                   uint32_t *cbuf, uint32_t *pos)
 {
 
@@ -536,7 +536,7 @@ void mpc5200_pcmciaide_read_block(int minor, uint16_t block_size, rtems_blkdev_s
   }
 }
 
-void mpc5200_pcmciaide_write_block(int minor, uint16_t block_size,
+void mpc5200_pcmciaide_write_block(int minor, uint32_t block_size,
                                    rtems_blkdev_sg_buffer *bufs, uint32_t *cbuf,
                                    uint32_t *pos)
 

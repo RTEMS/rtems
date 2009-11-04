@@ -1,5 +1,11 @@
 2009-11-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* ide/pcmcia_ide.c (mpc5200_pcmciaide_write_block,
+	mpc5200_pcmciaide_read_block): Change "block_size" parameter to
+	uint32_t to match with ide_ctrl_fns_t.
+
+2009-11-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* startup/linkcmds, startup/linkcmds.pm520: Remove.
 	* startup/linkcmds.pm520_ze30, startup/linkcmds.pm520_cr825:
 	New (Copy of former startup/linkcmds.pm520).
