@@ -29,7 +29,11 @@ static uint32_t         Clock_initial_isr_value;
 
 volatile uint32_t         Clock_driver_ticks;
 
-void Clock_exit( void );
+extern void Clock_exit( void );
+
+/* External Prototypes */
+extern void init_rtc(void);                /* defined in 'rtc.c' */
+extern long rtc_read(rtems_time_of_day *); /* defined in 'rtc.c' */
 
 /*
  * These are set by clock driver during its init
@@ -42,7 +46,7 @@ rtems_device_major_number rtems_clock_minor = 0;
  *  This is the ISR handler.
  */
 
-void Clock_isr(void)
+void Clock_isr(rtems_irq_hdl_param unused)
 {
   /* enable_tracing(); */
   Clock_driver_ticks += 1;
@@ -95,9 +99,6 @@ rtems_device_driver Clock_initialize(
   {
     rtems_time_of_day now;
 
-    /* External Prototypes */
-    extern void init_rtc(void);                /* defined in 'rtc.c' */
-    extern long rtc_read(rtems_time_of_day *); /* defined in 'rtc.c' */
 
 #ifdef BSP_DEBUG
     printk("Loading clock from on-board real-time clock.\n");
@@ -145,7 +146,7 @@ rtems_device_driver Clock_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-void Clock_exit()
+void Clock_exit(void)
 {
   ClockOff(&clockIrqData);
   BSP_remove_rtems_irq_handler (&clockIrqData);

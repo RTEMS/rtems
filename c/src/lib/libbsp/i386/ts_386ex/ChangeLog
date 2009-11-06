@@ -1,3 +1,9 @@
+2009-11-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/ckinit.c: Remove nested externs.
+	Add missing prototypes.
+	Fix Clock_isr prototype.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/ts_386ex.cfg: Remove RTEMS_BSP_FAMILY.
