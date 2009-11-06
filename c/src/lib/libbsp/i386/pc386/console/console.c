@@ -149,7 +149,7 @@ BSP_runtime_console_select(int *, int *) __attribute__((weak));
  * device.
  */
 void
-BSP_console_select()
+BSP_console_select(void)
 {
   const char* mode;
 

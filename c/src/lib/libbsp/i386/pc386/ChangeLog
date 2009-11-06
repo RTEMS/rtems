@@ -1,5 +1,9 @@
 2009-11-05	Till Straumann <strauman@slac.stanford.edu>
 
+	* console/console.c: Fixed compiler warning.
+
+2009-11-05	Till Straumann <strauman@slac.stanford.edu>
+
 	* start/start.S, console/console.c: Separated code
 	that switched console and printk port based on info
 	gathered from the commandline and/or a BSP provided
