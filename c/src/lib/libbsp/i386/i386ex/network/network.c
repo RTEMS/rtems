@@ -1302,7 +1302,7 @@ uti596_resetDaemon (void *arg)
 				      RTEMS_NO_TIMEOUT, &events);
 
 	  rtems_clock_get(RTEMS_CLOCK_GET_TOD, &tm_struct);
-	  printf("reset daemon: Resetting NIC @ %d:%d:%d \n",
+	  printf("reset daemon: Resetting NIC @ %" PRIu32 ":%" PRIu32 ":%" PRIu32 " \n",
 		 tm_struct.hour, tm_struct.minute, tm_struct.second);
 
 	  sc->stats.nic_reset_count++;
