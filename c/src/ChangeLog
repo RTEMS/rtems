@@ -1,5 +1,6 @@
 2009-11-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/network/elnk.c: Use PRI*32 to print u_int32_t's.
 	* libchip/network/if_dc.c: Fix type mismatch.
 
 2009-11-03	Ralf Corsépius <ralf.corsepius@rtems.org>

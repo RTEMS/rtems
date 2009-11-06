@@ -2955,7 +2955,7 @@ elnk_stats (struct elnk_softc *sc)
           sc->xl_stats.miistatus,
           sc->xl_stats.miicmd);
 
-   printf("         internalcfg:%08x            macctl:%04x      dmactl:%08x\n",
+   printf("         internalcfg:%08" PRIx32 "            macctl:%04x      dmactl:%08" PRIx32 "\n",
           sc->xl_stats.internalconfig,
           sc->xl_stats.mac_control,
           sc->xl_stats.dmactl);
@@ -2983,7 +2983,7 @@ elnk_stats (struct elnk_softc *sc)
          }
       }
 
-      printf("          interrupts:%-9d       txcmp_ints:%-5d  avg_chain_len:%-4d\n",
+      printf("          interrupts:%-9" PRIu32 "       txcmp_ints:%-5" PRIu32 "  avg_chain_len:%-4d\n",
              sc->xl_stats.device_interrupts,
              sc->xl_stats.txcomplete_ints,
              numLengths ? (totalLengths / numLengths) : -1 );
@@ -3005,11 +3005,11 @@ elnk_stats (struct elnk_softc *sc)
           sc->xl_stats.xl_tx_deferred,
           sc->xl_stats.xl_badssd);
 
-   printf("        rx_frames_ok:%-9d     tx_frames_ok:%-9d\n",
+   printf("        rx_frames_ok:%-9" PRIu32 "     tx_frames_ok:%-9" PRIu32 "\n",
           sc->xl_stats.xl_rx_frames_ok,
           sc->xl_stats.xl_tx_frames_ok);
 
-   printf("         rx_bytes_ok:%-9d      tx_bytes_ok:%-9d\n",
+   printf("         rx_bytes_ok:%-9" PRIu32 "      tx_bytes_ok:%-9" PRIu32 "\n",
           sc->xl_stats.xl_rx_bytes_ok,
           sc->xl_stats.xl_tx_bytes_ok );
 }
