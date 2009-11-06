@@ -3333,8 +3333,8 @@ static void dc_start(ifp)
 	struct ifnet		*ifp;
 {
 	struct dc_softc		*sc;
-	struct mbuf			*m_head = NULL;
-	unsigned int		idx;
+	struct mbuf		*m_head = NULL;
+	u_int32_t		idx;
 
 	sc = ifp->if_softc;
 #if 0
