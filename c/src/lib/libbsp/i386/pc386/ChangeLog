@@ -1,3 +1,12 @@
+2009-11-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* start/start.S, console/console.c: Separated code
+	that switched console and printk port based on info
+	gathered from the commandline and/or a BSP provided
+	routine into new BSP_console_select() which is called
+	from 'start.S' so that early messages make it to the
+	redirected printk port.
+
 2009-10-28	Till Straumann <strauman@slac.stanford.edu>
 
 	* start/start.S: Make sure initial stack is aligned

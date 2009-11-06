@@ -68,6 +68,7 @@ BEGIN_CODE
 	EXTERN (_IBMPC_initVideo)
 	EXTERN (debugPollingGetChar)
 	EXTERN (checkCPUtypeSetCr0)
+	EXTERN (BSP_console_select)
 
 /*
  * In case this crashes on your machine and this is not due
@@ -200,6 +201,11 @@ SYM (zero_bss):
 | Check CPU type. Enable Cache and init coprocessor if needed.
 +---------------------------------------------------------------------*/
 	call checkCPUtypeSetCr0
+
+/*---------------------------------------------------------------------+
+| Redirect printk (and console) port if desired
++---------------------------------------------------------------------*/
+	call SYM(BSP_console_select)
 
 /*---------------------------------------------------------------------+
 | Transfer control to User's Board Support Package

@@ -143,22 +143,19 @@ int kbd_poll_read( int minor )
 extern void
 BSP_runtime_console_select(int *, int *) __attribute__((weak));
 
-/*-------------------------------------------------------------------------+
-| Console device driver INITIALIZE entry point.
-+--------------------------------------------------------------------------+
-| Initilizes the I/O console (keyboard + VGA display) driver.
-+--------------------------------------------------------------------------*/
-rtems_device_driver
-console_initialize(rtems_device_major_number major,
-                   rtems_device_minor_number minor,
-                   void                      *arg)
+/* provide routine to select console; this
+ * is called very early so that early boot
+ * messages also make it to the redirected
+ * device.
+ */
+void
+BSP_console_select()
 {
-  rtems_status_code status;
   const char* mode;
-  
+
   /*
    * Check the command line for the type of mode
-   * the consol is.
+   * the console is.
    */
   mode = bsp_cmdline_arg ("--console=");
 
@@ -181,14 +178,6 @@ console_initialize(rtems_device_major_number major,
       BSPPrintkPort  = BSP_UART_COM2;
     }
   }
-  
-  /* Initialize the KBD interface */
-  kbd_init();
-
-  /*
-   * Set up TERMIOS
-   */
-  rtems_termios_initialize ();
 
   if ( BSP_runtime_console_select )
     BSP_runtime_console_select(&BSPPrintkPort, &BSPConsolePort);
@@ -205,6 +194,49 @@ console_initialize(rtems_device_major_number major,
     BSPPrintkPort  = BSP_UART_COM1;
   }
 #endif
+
+  if(BSPPrintkPort == BSP_UART_COM1)
+    {
+      printk("Warning : This will be the last message on console\n");
+
+      /*
+       * FIXME: cast below defeats the very idea of having
+       * function pointer types defined
+       */
+      BSP_output_char = (BSP_output_char_function_type)
+                          BSP_output_char_via_serial;
+      BSP_poll_char   = (BSP_polling_getchar_function_type)
+                          BSP_poll_char_via_serial;
+    }
+  else if(BSPPrintkPort != BSP_CONSOLE_PORT_CONSOLE)
+    {
+      printk("illegal assignement of printk channel");
+      /* just skip; at this early stage we don't want
+       * to call rtems_fatal_error_occurred().
+       */
+    }
+}
+
+/*-------------------------------------------------------------------------+
+| Console device driver INITIALIZE entry point.
++--------------------------------------------------------------------------+
+| Initilizes the I/O console (keyboard + VGA display) driver.
++--------------------------------------------------------------------------*/
+rtems_device_driver
+console_initialize(rtems_device_major_number major,
+                   rtems_device_minor_number minor,
+                   void                      *arg)
+{
+  rtems_status_code status;
+  
+ 
+  /* Initialize the KBD interface */
+  kbd_init();
+
+  /*
+   * Set up TERMIOS
+   */
+  rtems_termios_initialize ();
 
   /*
    *  The video was initialized in the start.s code and does not need
@@ -275,27 +307,14 @@ console_initialize(rtems_device_major_number major,
 	{
 	  printk("Initialized console on port COM2 9600-8-N-1\n\n");
 	}
+  }
 
-      if(BSPPrintkPort == BSP_UART_COM1)
-        {
-          printk("Warning : This will be the last message on console\n");
-
-          /*
-           * FIXME: cast below defeats the very idea of having
-           * function pointer types defined
-           */
-          BSP_output_char = (BSP_output_char_function_type)
-                              BSP_output_char_via_serial;
-          BSP_poll_char   = (BSP_polling_getchar_function_type)
-                              BSP_poll_char_via_serial;
-        }
-      else if(BSPPrintkPort != BSP_CONSOLE_PORT_CONSOLE)
-        {
-           printk("illegal assignement of printk channel");
-         rtems_fatal_error_occurred (status);
-        }
-
+  if(BSPPrintkPort != BSP_CONSOLE_PORT_CONSOLE && BSPPrintkPort != BSP_UART_COM1)
+    {
+      printk("illegal assignement of printk channel");
+      rtems_fatal_error_occurred (status);
     }
+
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
 
