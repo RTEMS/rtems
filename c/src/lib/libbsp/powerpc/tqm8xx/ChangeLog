@@ -1,3 +1,9 @@
+2009-11-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add RTEMS_BSP_LINKCMDS.
+	* Makefile.am: Rework linkcmds handling.
+	* make/custom/tqm8xx.inc: Remove RTEMS_LINKCMDS, LDFLAGS.
+
 2009-11-03	Thomas Doerfler  <Thomas.Doerfler@embedded-brains.de>
 
 	* startup/bspstart.c, console/console.c: various fixes

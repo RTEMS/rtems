@@ -14,9 +14,6 @@ CPU_CFLAGS = -mcpu=860 -Dmpc860 \
 # optimize flag: typically -O2
 CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions
 
-RTEMS_LINKCMDS=linkcmds.tqm8xx
-LDFLAGS += -qnolinkcmds -T $(RTEMS_LINKCMDS)
-
 define bsp-post-link
 	cp $(basename $@).exe $(basename $@)$(DOWNEXT) 
 	$(STRIP) $(basename $@)$(DOWNEXT)

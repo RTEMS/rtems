@@ -34,8 +34,9 @@ project_lib_DATA = start.$(OBJEXT)
 libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds.base \
-    startup/linkcmds.tqm8xx
+project_lib_DATA += startup/linkcmds
+dist_project_lib_DATA += startup/linkcmds.base
+EXTRA_DIST += startup/linkcmds.tqm8xx
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
