@@ -47,7 +47,7 @@ rtems_device_major_number rtems_clock_minor = 0;
  *  This is the ISR handler.
  */
 
-void Clock_isr(void)
+void Clock_isr(rtems_irq_hdl_param unused)
 {
   /* enable_tracing(); */
   Clock_driver_ticks += 1;
