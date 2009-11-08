@@ -1,3 +1,9 @@
+2009-11-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/capture/capture.h (RTEMS_CAPTURE_CONTROL_FROM_MASK): 
+	Use UINT32_C(1) to avoid overflow in implict typecast on 16bit
+	targets.
+
 2009-11-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* itron/src/chg_pri.c, itron/src/cre_tsk.c,

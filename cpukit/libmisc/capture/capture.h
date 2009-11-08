@@ -88,7 +88,7 @@ typedef struct rtems_capture_control_s
  * The from_valid mask.
  */
 #define RTEMS_CAPTURE_CONTROL_FROM_MASK(_s) \
- (1 << (RTEMS_CAPTURE_TRIGGER_TASKS - ((_s) + 1)))
+ (UINT32_C(1) << (RTEMS_CAPTURE_TRIGGER_TASKS - ((_s) + 1)))
 
 /**
  * Control flags.
