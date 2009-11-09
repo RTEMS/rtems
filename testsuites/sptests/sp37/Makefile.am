@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = sp37
 sp37_SOURCES = init.c system.h
 
 dist_rtems_tests_DATA = sp37.scn
+dist_rtems_tests_DATA += sp37.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

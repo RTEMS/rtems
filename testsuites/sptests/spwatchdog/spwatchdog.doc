@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spwatchdog
+
+directives:
+
+  SCORE _Watchdog_Report
+  SCORE _Watchdog_Report_chain
+  various timer, delay, and clock services
+
+concepts:
+
++ Ensure that the SCORE Watchdog routines operate properly.
+
++ Ensure that the SCORE Watchdog reporting routines operate properly.

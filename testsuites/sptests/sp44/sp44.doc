@@ -1,0 +1,23 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp44
+
+directives:
+
+  rtems_task_mode
+
+concepts:
+
++ PR1212 - Verifies that timeslicing is not blocked if the task mode
+  is changed to timeslicing in the middle of its executing.

@@ -1,0 +1,34 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp37
+
+directives:
+
+  rtems_clock_tick
+  rtems_interrupt_disable (inline/body)
+  rtems_interrupt_enable (inline/body)
+  rtems_interrupt_flash (inline/body)
+  RTEMS_INTERRUPT_LEVEL
+  rtems_interrupt_level_attribute
+
+concepts:
+
++ Ensure that rtems_clock_tick operates properly when invoked from a task
+  rather than an ISR.
+
++ Ensure that the interrupt disable, enable, and flash directives operate
+  as expected.
+
++ Ensure that the methods accessing the interrupt level attribute operate
+  as expected.

@@ -1,0 +1,24 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spobjgetnext
+
+directives:
+
+  SCORE _Objects_Get_next
+
+concepts:
+
++ Ensure that _Objects_Get_next handles error conditions properly.
+
++ Ensure the _Objects_Get_next behaves as expected.

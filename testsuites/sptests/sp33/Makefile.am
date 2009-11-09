@@ -9,6 +9,7 @@ sp33_SOURCES = init.c
 
 scndir = $(rtems_testsdir)
 dist_scn_DATA = sp33.scn
+dist_scn_DATA += sp33.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

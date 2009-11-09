@@ -1,0 +1,32 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp33
+
+directives:
+
+  status = rtems_barrier_wait
+  status = rtems_barrier_delete
+  status = rtems_barrier_ident
+  status = rtems_barrier_wait
+  status = rtems_barrier_release
+
+concepts:
+
++ Ensure that all barrier directives detect and properly handle 
+  parameter error conditions.
+
++ Ensure that manually released barriers operate as defined.
+
++ Ensure that automatically released barriers operate as defined.
+

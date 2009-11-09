@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = sp44
 sp44_SOURCES = init.c
 
 dist_rtems_tests_DATA = sp44.scn
+dist_rtems_tests_DATA += sp44.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

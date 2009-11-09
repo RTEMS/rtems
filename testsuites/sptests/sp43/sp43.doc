@@ -1,0 +1,54 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp43
+
+directives:
+
+  rtems_build_id
+  rtems_build_name
+  rtems_get_version_string
+  rtems_object_get_api_name
+  rtems_object_get_classic_name
+  rtems_object_get_class_information
+  rtems_object_get_name
+  rtems_object_api_minimum_class
+  rtems_object_api_maximum_class
+  rtems_object_id_api_maximum
+  rtems_object_id_api_minimum
+  rtems_object_id_get_api
+  rtems_object_id_get_class
+  rtems_object_id_get_index
+  rtems_object_id_get_node
+  rtems_object_set_name
+  rtems_object_id_api_minimum
+  rtems_object_id_api_maximum
+  SCORE _Thread_Get
+  SCORE _Thread_Get
+  SCORE _Objects_Get
+
+
+concepts:
+
++ Ensure that the various object id and name services operate as expected.
+
++ Ensure that the various object id and name services detect and report
+  all errors.
+
++ Ensure that attempting to use a thread id from an API that is not installed
+  is detected and treated as an error.
+
++ Ensure that attempting to use an object id that is in the valid range but
+  does not reflect an object that has been created is detected and treated
+  as an error.
+

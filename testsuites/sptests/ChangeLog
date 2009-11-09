@@ -1,3 +1,23 @@
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp32/Makefile.am, sp33/Makefile.am, sp37/Makefile.am,
+	sp38/Makefile.am, sp39/Makefile.am, sp43/Makefile.am,
+	sp44/Makefile.am, spfatal01/Makefile.am, spfatal02/Makefile.am,
+	spfatal03/Makefile.am, spfatal04/Makefile.am, spfatal05/Makefile.am,
+	spfatal06/Makefile.am, spfatal07/Makefile.am, spfatal08/Makefile.am,
+	spfatal09/Makefile.am, spobjgetnext/Makefile.am,
+	spprintk/Makefile.am, spsize/Makefile.am, spwatchdog/Makefile.am,
+	spwkspace/Makefile.am: Add documentation files for multiple tests.
+	* sp32/sp32.doc, sp33/sp33.doc, sp37/sp37.doc, sp38/sp38.doc,
+	sp39/sp39.doc, sp43/sp43.doc, sp44/sp44.doc, spfatal01/spfatal01.doc,
+	spfatal02/spfatal02.doc, spfatal03/spfatal03.doc,
+	spfatal04/spfatal04.doc, spfatal05/spfatal05.doc,
+	spfatal06/spfatal06.doc, spfatal07/spfatal07.doc,
+	spfatal08/spfatal08.doc, spfatal09/spfatal09.doc,
+	spobjgetnext/spobjgetnext.doc, spprintk/spprintk.doc,
+	spsize/spsize.doc, spwatchdog/spwatchdog.doc,
+	spwkspace/spwkspace.doc: New files.
+
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp14/asr.c: Remove PRIxrtems_signal_set (moved to tmacros.h).

@@ -1,0 +1,23 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spfatal05
+
+directives:
+
+  None specifically
+
+concepts:
+
++ Ensure that the error condition when a Classic API task returns from
+  its task body is properly treated as a fatal error.

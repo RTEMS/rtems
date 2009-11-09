@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = sp38
 sp38_SOURCES = init.c system.h
 
 dist_rtems_tests_DATA = sp38.scn
+dist_rtems_tests_DATA += sp38.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

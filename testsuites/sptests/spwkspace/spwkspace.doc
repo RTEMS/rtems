@@ -1,0 +1,34 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spwkspace
+
+directives:
+
+  rtems_workspace_get_information
+  rtems_workspace_allocate
+  rtems_workspace_free
+
+concepts:
+
++ Ensure that the application can obtain information on the RTEMS workspace.
+
++ Ensure that the application can allocate memory from the workspace.
+
++ Ensure that error conditions in the workspace allocate memory directive
+  are properly handled.
+
++ Ensure that error conditions in the workspace free memory directive
+  are properly handled.
+
++ Ensure that the application can free memory back to the workspace.

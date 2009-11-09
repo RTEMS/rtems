@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = spprintk
 spprintk_SOURCES = init.c
 
 dist_rtems_tests_DATA = spprintk.scn
+dist_rtems_tests_DATA += spprintk.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

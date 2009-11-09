@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = spobjgetnext
 spobjgetnext_SOURCES = init.c system.h
 
 dist_rtems_tests_DATA = spobjgetnext.scn
+dist_rtems_tests_DATA += spobjgetnext.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

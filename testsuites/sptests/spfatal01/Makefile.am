@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = spfatal01
 spfatal01_SOURCES = ../spfatal_support/init.c ../spfatal_support/system.h testcase.h
 
 dist_rtems_tests_DATA = spfatal01.scn
+dist_rtems_tests_DATA += spfatal01.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
