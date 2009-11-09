@@ -1,10 +1,5 @@
 ; h8/300 and h8/300h start up file.
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-	
 #ifdef __H8300__
 
 	.text
@@ -19,6 +14,7 @@ _start:
 	cmp	r1,r0
 	blo	.loop
         ;       call __main
+	mov.w	#0,r0		; pass in NULL
 	jsr	@_boot_card
 	mov.w	#0,r0		; indicate reason to exit
 	sleep
