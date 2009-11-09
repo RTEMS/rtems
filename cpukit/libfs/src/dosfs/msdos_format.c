@@ -490,7 +490,8 @@ static int msdos_format_determine_fmt_params
         fmt_params->sectors_per_cluster = 2; 
       }
       else {
-        uint32_t gigs = (total_size + (1024 * 1024 * 1024)) / (1024 * 1024 * 1024);
+        #define ONE_GB (1024L * 1024L * 1024L)
+        uint32_t gigs = (total_size + ONE_GB) / ONE_GB;
         int b;
         fmt_params->fattype = FAT_FAT32;
         /* scale with the size of disk... */

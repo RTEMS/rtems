@@ -1,5 +1,10 @@
 2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libfs/src/dosfs/msdos_format.c: Rework to avoid overflow on 16-bit
+	targets.
+
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/open_dev_console.c: Use constant numbers to avoid
 	overflow when shifting on 16-bit targets.
 
