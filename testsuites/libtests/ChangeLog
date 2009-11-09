@@ -1,3 +1,10 @@
+2009-11-09	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* block05/init.c, block05/block05.scn, block05/Makefile.am,
+	block06/init.c, block06/block06.scn, block06/Makefile.am,
+	block07/init.c, block07/block07.scn, block07/Makefile.am: New files.
+	* Makefile.am, configure.ac: Added block05, block06 and block07.
+
 2009-11-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* termios/init.c: Remove sh2 hacks.

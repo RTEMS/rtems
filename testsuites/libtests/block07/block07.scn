@@ -1,0 +1,13 @@
+*** TEST BLOCK 7 ***
+I: try access: 0
+I: access: 0
+L: try access: 0
+H: try access: 0
+I: release: 0
+I: release done: 0
+L: access: 0
+L: release: 0
+H: access: 0
+H: release: 0
+H: release done: 0
+*** END OF TEST BLOCK 7 ***
