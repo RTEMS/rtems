@@ -1,3 +1,8 @@
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxenosys/Makefile.am: Add documentation file.
+	* psxenosys/psxenosys.doc: New file.
+
 2009-01-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psxsignal03/init.c: 

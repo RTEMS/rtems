@@ -1,0 +1,54 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxenosys
+
+directives:
+
+  aio_read
+  aio_write
+  lio_listio
+  aio_error
+  aio_return
+  aio_cancel
+  aio_suspend
+  aio_fsync
+  clock_getcpuclockid
+  clock_getenable_attr
+  clock_setenable_attr
+  devctl
+  execl
+  execle
+  execlp
+  execv
+  execve
+  execvp
+  fork
+  pthread_atfork
+  pthread_getcpuclockid
+  sched_setparam
+  sched_getparam
+  sched_setscheduler
+  sched_getscheduler
+  wait
+  waitpid
+  mprotect
+  vfork
+
+concepts:
+
++ Ensure that various routines which RTEMS provides but returns -1 and sets
+  errno as ENOSYS behave as expected.
+
++ Ensure that the stub implementations of mprotect() and vfork() operate
+  as expected.

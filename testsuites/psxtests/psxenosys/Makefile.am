@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = psxenosys
 psxenosys_SOURCES = init.c system.h ../include/pmacros.h
 
 dist_rtems_tests_DATA = psxenosys.scn
+dist_rtems_tests_DATA += psxenosys.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
