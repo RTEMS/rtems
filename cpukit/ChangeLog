@@ -1,3 +1,10 @@
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/thread.h: Revert accidentally committed
+	change. It is possible that _Thread_Dispatch_disable_level can be an
+	8-bit variable but this impacts assembly and must be carefully
+	considered.
+
 2009-11-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/capture/capture.h (RTEMS_CAPTURE_CONTROL_FROM_MASK): 

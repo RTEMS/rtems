@@ -460,17 +460,13 @@ SCORE_EXTERN Context_Control _Thread_BSP_context;
  *  counter which is used to prevent context switches at inopportune
  *  moments.
  */
-#if defined(__AVR__)
-SCORE_EXTERN volatile uint8_t   _Thread_Dispatch_disable_level;
-#else
 SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
-#endif
 
 /**
  *  If this is non-zero, then the post-task switch extension
  *  is run regardless of the state of the per thread flag.
  */
-SCORE_EXTERN bool   _Thread_Do_post_task_switch_extension;
+SCORE_EXTERN uint32_t   _Thread_Do_post_task_switch_extension;
 
 /**
  *  The following holds how many user extensions are in the system.  This
