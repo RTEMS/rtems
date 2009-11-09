@@ -1,5 +1,9 @@
 2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* spprintk/spprintk.scn: Add end of line at end of file.
+
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp32/Makefile.am, sp33/Makefile.am, sp37/Makefile.am,
 	sp38/Makefile.am, sp39/Makefile.am, sp43/Makefile.am,
 	sp44/Makefile.am, spfatal01/Makefile.am, spfatal02/Makefile.am,
