@@ -92,11 +92,10 @@ extern "C" {
  */
 
 #define posix_service_failed( _dirstat, _failmsg )  \
- fatal_posix_service_status( _dirstat, RTEMS_SUCCESSFUL, _failmsg )
+ fatal_posix_service_status( _dirstat, 0, _failmsg )
 
 #define posix_service_failed_with_level( _dirstat, _failmsg, _level )  \
- fatal_posix_service_status_with_level( \
-      _dirstat, RTEMS_SUCCESSFUL, _failmsg, _level )
+ fatal_posix_service_status_with_level( _dirstat, 0, _failmsg, _level )
 
 #define fatal_posix_service_status_errno( _stat, _desired, _msg ) \
   if ( (_stat != -1) && (errno) != (_desired) ) { \
@@ -111,6 +110,15 @@ extern "C" {
 
 #define fatal_posix_service_status( _stat, _desired, _msg ) \
   fatal_posix_service_status_with_level( _stat, _desired, _msg, 0 )
+
+#define fatal_posix_service_pointer_minus_one( _ptr, _msg ) \
+  if ( (_ptr != (void *)-1) ) { \
+    check_dispatch_disable_level( 0 ); \
+    printf( "\n%s FAILED -- expected (-1) got (%p - %d/%s)\n", \
+	    (_msg), _ptr, errno, strerror(errno) ); \
+    FLUSH_OUTPUT(); \
+    rtems_test_exit( -1 ); \
+  }
 
 #define fatal_posix_service_status_with_level( _stat, _desired, _msg, _level ) \
   do { \

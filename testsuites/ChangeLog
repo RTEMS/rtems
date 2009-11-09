@@ -1,3 +1,9 @@
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* support/include/tmacros.h: Add service to check status returned by
+	POSIX methods which return a pointer which is -1 on error. This
+	eliminated some casts.
+
 2009-01-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* support/include/tmacros.h: Include rtems/score/thread.h.
