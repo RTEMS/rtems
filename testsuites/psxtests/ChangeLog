@@ -1,5 +1,11 @@
 2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxmsgq01/init.c, psxsem01/init.c: Add service to check status
+	returned by POSIX methods which return a pointer which is -1 on
+	error. This eliminated some casts.
+
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psxenosys/Makefile.am: Add documentation file.
 	* psxenosys/psxenosys.doc: New file.
 
