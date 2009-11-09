@@ -28,14 +28,14 @@ c_user_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 TXT_FILES = rtemsarc.txt rtemspie.txt states.txt
 
 PNG_FILES = rtemsarc.png rtemspie.png states.png ObjectId-32Bits.png \
-    ObjectId-16Bits.png
+    ObjectId-16Bits.png semaphore_attributes.png
 
 EPS_IMAGES = rtemspie.eps states.eps ObjectId-32Bits.eps \
-    ObjectId-32Bits.eps
+    ObjectId-32Bits.eps semaphore_attributes.eps
 $(PROJECT).dvi: $(EPS_IMAGES)
 
 PDF_IMAGES = rtemspie.pdf states.pdf ObjectId-16Bits.pdf \
-    ObjectId-32Bits.pdf
+    ObjectId-32Bits.pdf semaphore_attributes.pdf
 CLEANFILES += $(PDF_IMAGES)
 
 if USE_HTML

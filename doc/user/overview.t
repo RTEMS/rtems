@@ -141,6 +141,9 @@ project dependent application code and the target hardware.
 Most hardware dependencies for real-time applications can be
 localized to the low level device drivers.
 
+@float Figure,fig:RTEMS-App-Arch
+@caption{RTEMS Application Architecture}
+
 @ifset use-ascii
 @example
 @group
@@ -214,6 +217,7 @@ localized to the low level device drivers.
 <IMG SRC="rtemsarc.png" WIDTH=500 HEIGHT=300 ALT="RTEMS Application Architecture">
 @end html
 @end ifset
+@end float
 
 The RTEMS I/O interface manager provides an efficient tool for incorporating
 these hardware dependencies into the system while simultaneously
@@ -236,6 +240,9 @@ Together these components provide a powerful run time
 environment that promotes the development of efficient real-time
 application systems.  The following figure illustrates this organization:
 
+@float Figure,fig:rtems-layers
+@caption{RTEMS Layered Architecture}
+
 @ifset use-ascii
 @example
 @group
@@ -251,28 +258,18 @@ application systems.  The following figure illustrates this organization:
 @end ifset
 
 @ifset use-tex
-@c for now use the ascii version
-@c @example
-@c @group
-@c            +-----------------------------------------------+
-@c            |          RTEMS Executive Interface            |
-@c            +-----------------------------------------------+
-@c            |                 RTEMS Core                    |
-@c            +-----------------------------------------------+
-@c            |              CPU Dependent Code               |
-@c            +-----------------------------------------------+
-@c @end group
-@c @end example
-@image{rtemspie,4in,3in}
+@center{@image{rtemspie,4in,3in, RTEMS Layered Architecture}}
 @tex
 @end tex
 @end ifset
 
 @ifset use-html
 @html
-<IMG SRC="rtemspie.png" WIDTH=500 HEIGHT=300 ALT="RTEMS Architecture">
+<IMG SRC="rtemspie.png" WIDTH=500 HEIGHT=300 ALT="RTEMS Layered Architecture">
 @end html
 @end ifset
+@end float
+
 Subsequent chapters present a detailed description of the capabilities
 provided by each of the following RTEMS managers:
 

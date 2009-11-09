@@ -136,6 +136,9 @@ object class, node, and index.  The data type @code{@value{DIRPREFIX}id}
 is used to store object IDs.
 
 
+@float Figure,fig:Object-Id-32
+@caption{Thirty-Two Bit Object Id}
+
 @ifset use-ascii
 @example
 @group
@@ -151,15 +154,16 @@ is used to store object IDs.
 
 @ifset use-tex
 @sp1
-@center{@image{ObjectId-32Bits,,2in}}
+@center{@image{ObjectId-32Bits,,2in,Thirty-Two Bit Object Id}}
 @end ifset
 
 @ifset use-html
 @html
 <P ALIGN="center"><IMG SRC="ObjectId-32Bits.png"
-     WIDTH=550 HEIGHT=400 ALT="32 Bit Object Id"></P>
+     WIDTH=550 HEIGHT=400 ALT="Thirty-Two Bit Object Id"></P>
 @end html
 @end ifset
+@end float
 
 The most significant five bits are the object class.  The next
 three bits indicate the API to which the object class belongs.
@@ -175,6 +179,9 @@ number of objects configured for this object type.
 The sixteen bit format for an object ID is composed of three parts: API,
 object class, and index.  The data type @code{@value{DIRPREFIX}id}
 is used to store object IDs.
+
+@float Figure,fig:Object-Id-16
+@caption{Sixteen Bit Object Id}
 
 
 @ifset use-ascii
@@ -192,7 +199,7 @@ is used to store object IDs.
 
 @ifset use-tex
 @sp1
-@center{@image{ObjectId-16Bits,,2in}}
+@center{@image{ObjectId-16Bits,,2in,Sixteen Bit Object Id}}
 @end ifset
 
 @ifset use-html
@@ -201,6 +208,7 @@ is used to store object IDs.
      WIDTH=550 HEIGHT=400 ALT="16 Bit Object Id"></P>
 @end html
 @end ifset
+@end float
 
 The sixteen-bit format is designed to be as similar as possible to the
 thrity-two bit format.  The differences are limited to the eliminatation

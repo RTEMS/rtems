@@ -1,3 +1,13 @@
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ada_user/Makefile.am, ada_user/ada_user.texi, user/Makefile.am,
+	user/c_user.texi, user/concepts.t, user/overview.t,
+	user/preface.texi, user/schedule.t, user/sem.t: Add table of figures.
+	Add text and graphic of tree illustrating valid combinations of
+	semaphore attributes.
+	* user/semaphore_attributes.eps, user/semaphore_attributes.png:
+	New files.
+
 2009-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bsp_howto/console.t: Capitalization.

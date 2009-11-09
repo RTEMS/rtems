@@ -79,6 +79,10 @@
 
 @contents
 
+@node List of Figures, Preface, Top, Top
+@unnumbered List of Figures
+@listoffloats Figure
+
 @include user/preface.texi
 @include user/overview.texi
 @include user/concepts.texi
@@ -112,12 +116,13 @@
 @include example.texi
 @include user/glossary.texi
 @ifinfo
-@node Top, Preface, (dir), (dir)
+@node Top, List of Figures, (dir), (dir)
 @top ada_user
 
 This is the online version of the RTEMS Ada User's Guide.
 
 @menu
+* List of Figures::
 * Preface::
 * Overview::
 * Key Concepts::

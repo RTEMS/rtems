@@ -7,7 +7,7 @@
 @c
 
 @ifinfo
-@node Preface, Overview, Top, Top
+@node Preface, Overview, List of Figures, Top
 @end ifinfo
 @unnumbered Preface
 

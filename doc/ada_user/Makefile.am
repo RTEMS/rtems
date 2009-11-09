@@ -38,10 +38,12 @@ ObjectId-32Bits.eps: $(top_srcdir)/user/ObjectId-32Bits.eps
 	$(LN_S) $<
 rtemspie.eps: $(top_srcdir)/user/rtemspie.eps
 	$(LN_S) $<
+semaphore_attributes.eps: $(top_srcdir)/user/semaphore_attributes.eps
+	$(LN_S) $<
 states.eps: $(top_srcdir)/user/states.eps
 	$(LN_S) $<
-CLEANFILES += rtemspie.eps states.eps rtemsarc.png rtemspie.png states.png \
-    ObjectId-32Bits.png
+CLEANFILES += rtrtemspie.eps states.eps rtemsarc.png rtemspie.png states.png \
+    ObjectId-32Bits.png semaphore_attributes.png
 
 ObjectId-16Bits.png: $(top_srcdir)/user/ObjectId-16Bits.png
 	$(LN_S) $<
@@ -51,6 +53,8 @@ rtemsarc.png: $(top_srcdir)/user/rtemsarc.png
 	$(LN_S) $<
 rtemspie.png: $(top_srcdir)/user/rtemspie.png
 	$(LN_S) $<
+semaphore_attributes.png: $(top_srcdir)/user/semaphore_attributes.png
+	$(LN_S) $<
 states.png: $(top_srcdir)/user/states.png
 	$(LN_S) $<
 
@@ -59,11 +63,11 @@ ada_user_TEXINFOS = $(FILES) $(COMMON_FILES)
 
 if USE_HTML
 html_project_DATA += rtemsarc.png rtemspie.png states.png \
-    ObjectId-16Bits.png ObjectId-32Bits.png
+    ObjectId-16Bits.png ObjectId-32Bits.png semaphore_attributes.png
 endif
 
 $(PROJECT).dvi: rtemspie.eps states.eps ObjectId-16Bits.eps \
-    ObjectId-32Bits.eps
+    ObjectId-32Bits.eps semaphore_attributes.eps
 PDF_IMAGES = rtemspie.pdf states.pdf
 
 CLEANFILES += ada_user.info ada_user.info-? ada_user.info-??

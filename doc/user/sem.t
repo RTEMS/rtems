@@ -232,6 +232,35 @@ default for all created tasks.  If a similar semaphore were to be known
 globally, then the attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}PRIORITY}.
 
+Some combinatinos of these attributes are invalid.  For example, priority
+ordered blocking discipline must be applied to a binary semaphore in order
+to use either the priority inheritance or priority ceiling functionality.
+The following tree figure illustrates the valid combinations.
+
+@float Figure,fig:semaphore-attributes
+@caption{Valid Semaphore Attributes Combinations}
+
+@ifset use-ascii
+@example
+@group
+Not available in ASCII representation
+@end group
+@end example
+@end ifset
+
+@ifset use-tex
+@example
+@image{semaphore_attributes,5in,3.5in}
+@end example
+@end ifset
+
+@ifset use-html
+@html
+<IMG SRC="semaphore_attributes.png" WIDTH=550 HEIGHT=400 ALT="Valid Semaphore Attribute Combinations">
+@end html
+@end ifset
+@end float
+
 @subsection Building a SEMAPHORE_OBTAIN Option Set
 
 In general, an option is built by a bitwise OR of the
@@ -468,9 +497,9 @@ inheritance (default)
 @item @code{@value{RPREFIX}NO_PRIORITY_CEILING} - do not use priority
 ceiling (default)
 
-@item @code{@value{RPREFIX}LOCAL} - local task (default)
+@item @code{@value{RPREFIX}LOCAL} - local semaphore (default)
 
-@item @code{@value{RPREFIX}GLOBAL} - global task
+@item @code{@value{RPREFIX}GLOBAL} - global semaphore
 @end itemize
 
 Semaphores should not be made global unless remote
@@ -480,9 +509,11 @@ semaphore.  When a global semaphore is created, the semaphore's
 name and id must be transmitted to every node in the system for
 insertion in the local copy of the global object table.
 
-The total number of global objects, including
-semaphores, is limited by the maximum_global_objects field in
-the Configuration Table.
+Note that some combinations of attributes are not valid.  See the
+earlier discussion on this.
+
+The total number of global objects, including semaphores, is limited by
+the maximum_global_objects field in the Configuration Table.
 
 @c
 @c
