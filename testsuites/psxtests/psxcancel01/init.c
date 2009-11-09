@@ -65,6 +65,7 @@ void doit(
   status = rtems_timer_fire_after( timer_id, 10, TSR, NULL );
   assert( !status );
 
+  start = rtems_clock_get_ticks_since_boot();
   do {
     end = rtems_clock_get_ticks_since_boot();
   } while ( !TSR_occurred && ((end - start) <= 800));
