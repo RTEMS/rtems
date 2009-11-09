@@ -130,7 +130,6 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
 )
 {
   Thread_Control   *executing;
-  ISR_Level         level = *level_p;
 
   /* disabled when you get here */
 
@@ -154,8 +153,8 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
     }
 
     if ( !_CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
-        _ISR_Enable( level );
-        return 0;
+      _ISR_Enable( *level_p );
+      return 0;
     } /* else must be CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING
        *
        * we possibly bump the priority of the current holder -- which
@@ -168,13 +167,13 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
       ceiling = the_mutex->Attributes.priority_ceiling;
       current = executing->current_priority;
       if ( current == ceiling ) {
-        _ISR_Enable( level );
+        _ISR_Enable( *level_p );
         return 0;
       }
 
       if ( current > ceiling ) {
         _Thread_Disable_dispatch();
-        _ISR_Enable( level );
+        _ISR_Enable( *level_p );
         _Thread_Change_priority(
           the_mutex->holder,
           the_mutex->Attributes.priority_ceiling,
@@ -188,7 +187,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
         the_mutex->lock       = CORE_MUTEX_UNLOCKED;
         the_mutex->nest_count = 0;     /* undo locking above */
         executing->resource_count--;   /* undo locking above */
-        _ISR_Enable( level );
+        _ISR_Enable( *level_p );
         return 0;
       }
     }
@@ -204,11 +203,11 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
     switch ( the_mutex->Attributes.lock_nesting_behavior ) {
       case CORE_MUTEX_NESTING_ACQUIRES:
         the_mutex->nest_count++;
-        _ISR_Enable( level );
+        _ISR_Enable( *level_p );
         return 0;
       case CORE_MUTEX_NESTING_IS_ERROR:
         executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
-        _ISR_Enable( level );
+        _ISR_Enable( *level_p );
         return 0;
       case CORE_MUTEX_NESTING_BLOCKS:
         break;

@@ -1,5 +1,12 @@
 2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/inline/rtems/score/coremutex.inl,
+	score/inline/rtems/score/coresem.inl: Eliminate use of local
+	variable. This local variable causes unused variable warnings
+	on some ports.
+
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/include/rtems/score/thread.h: Revert accidentally committed
 	change. It is possible that _Thread_Dispatch_disable_level can be an
 	8-bit variable but this impacts assembly and must be carefully
