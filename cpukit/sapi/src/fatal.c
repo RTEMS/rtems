@@ -1,7 +1,7 @@
 /*
  *  Fatal Error Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,8 +19,7 @@
 #include <rtems/fatal.h>
 #include <rtems/score/interr.h>
 
-/*PAGE
- *
+/*
  *  rtems_fatal_error_occurred
  *
  *  This directive will invoke the internal fatal error handler.

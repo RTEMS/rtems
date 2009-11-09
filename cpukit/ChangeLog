@@ -1,5 +1,9 @@
 2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/src/fatal.c: Formatting.
+
+2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/inline/rtems/score/coremutex.inl,
 	score/inline/rtems/score/coresem.inl: Eliminate use of local
 	variable. This local variable causes unused variable warnings
