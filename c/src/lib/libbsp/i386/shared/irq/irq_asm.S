@@ -24,7 +24,12 @@
 #define MSK_OFF 4
 #define EBP_OFF 8        /* code restoring ebp/esp relies on */
 #define ESP_OFF 12       /* esp being on top of ebp!         */
+#ifdef __SSE__
+#define FRM_SIZ (16+512)
+#define SSE_OFF 16
+#else
 #define FRM_SIZ 16 
+#endif
 
 	BEGIN_CODE
 
@@ -69,6 +74,27 @@ SYM (_ISR_Handler):
 	andl      $ - CPU_STACK_ALIGNMENT, esp
 	movl      eax, ESP_OFF(esp)
 	movl      ebp, EBP_OFF(esp)
+
+#ifdef __SSE__
+	/* NOTE: SSE only is supported if the BSP enables fxsave/fxrstor
+	 * to save/restore SSE context! This is so far only implemented
+	 * for pc386!.
+	 */
+
+	/* We save SSE here (on the task stack) because we possibly
+	 * call other C-code (besides the ISR, namely _Thread_Dispatch()
+	 * or _ThreadProcessSignalsFromIrq()).
+	 */
+    /*  don't wait here; a possible exception condition will eventually be
+     *  detected when the task resumes control and executes a FP instruction
+	fwait
+     */
+	fxsave SSE_OFF(esp)
+	fninit                          /* clean-slate FPU                */
+	movl   $0x1f80, ARG_OFF(esp)	/* use ARG_OFF as scratch space   */
+	ldmxcsr ARG_OFF(esp)            /* clean-slate MXCSR              */
+#endif
+
 
 	/*
 	 * acknowledge the interrupt
@@ -197,6 +223,12 @@ nested:
 	 * eip, CS, Flags).
 	 */
 .exit:
+
+#ifdef __SSE__
+	fwait
+	fxrstor   SSE_OFF(esp)
+#endif
+
 	/* restore ebp and original esp */
 	addl      $EBP_OFF, esp
 	popl      ebp

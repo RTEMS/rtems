@@ -69,6 +69,13 @@ BEGIN_CODE
 	EXTERN (debugPollingGetChar)
 	EXTERN (checkCPUtypeSetCr0)
 	EXTERN (BSP_console_select)
+	EXTERN (printk)
+#ifdef __SSE__
+	EXTERN (x86_capability)
+#ifdef __SSE3__
+	EXTERN (x86_capability_x)
+#endif
+#endif
 
 /*
  * In case this crashes on your machine and this is not due
@@ -142,7 +149,7 @@ speakl:	jmp	speakl             # and SPIN!!!
 	/*
 	 * try printk and a getchar in polling mode ASAP
 	 */
-	pushl	$welcome_msg
+	movl	$welcome_msg, 0(esp)
 	call	printk
 	addl	$4, esp
 
@@ -207,6 +214,44 @@ SYM (zero_bss):
 +---------------------------------------------------------------------*/
 	call SYM(BSP_console_select)
 
+#ifdef __SSE__
+/*--------------------------------------------------------------------+
+ | Enable SSE; we really only care about fxsave/fxrstor and leave
+ | The only feature *we* (as an OS) use is fxsave/fxrstor.
+ | But as a courtesy we make sure we don't execute on hardware
+ | that doesn't support features possibly used by the compiler.
++---------------------------------------------------------------------*/
+	movl	SYM (x86_capability), eax
+	testl   $0x01000000, eax
+	jne     1f
+	movl    $SYM (no_fxsave_msg), 0(esp)
+	jmp     SYM(_sse_panic)
+1:
+	testl   $0x02000000, eax
+	jne     1f
+	movl    $SYM (no_sse_msg), 0(esp)
+	jmp     SYM(_sse_panic)
+1:	
+#ifdef __SSE2__
+	testl   $0x04000000, eax
+	jne     1f
+	movl    $SYM (no_sse2_msg), 0(esp)
+	jmp     SYM(_sse_panic)
+1:
+#endif
+#ifdef __SSE3__
+	movl	SYM (x86_capability_x), eax
+	testl   $1, eax
+	jne     1f
+	movl    $SYM (no_sse3_msg), 0(esp)
+	jmp     SYM(_sse_panic)
+1:
+#endif
+	mov     cr4, eax		# OK to enable now
+	or      $0x600, eax
+	mov     eax, cr4
+#endif
+
 /*---------------------------------------------------------------------+
 | Transfer control to User's Board Support Package
 | Note: at the top we reserved space for the argument
@@ -227,6 +272,13 @@ SYM (zero_bss):
 +---------------------------------------------------------------------*/
 
 	jmp	SYM (_return_to_monitor)
+
+#ifdef __SSE__
+SYM(_sse_panic):
+	call SYM(printk)
+1:	hlt
+	jmp 1b
+#endif
 
 END_CODE
 
@@ -268,6 +320,21 @@ SYM (hex_msg) :
 SYM (made_it_msg) :
 	.string "made it to %d\n"
 
+#endif
+
+#ifdef __SSE__
+SYM (no_fxsave_msg) :
+	.string "PANIC: compiled for SSE but CPU seems to have no FXSAVE/FXRSTOR support (which I need)\n"
+SYM (no_sse_msg) :
+	.string "PANIC: compiled for SSE but your CPU seems to have no SSE support\n"
+#ifdef __SSE2__
+SYM (no_sse2_msg) :
+	.string "PANIC: compiled for SSE2 but your CPU seems to have no SSE2 support\n"
+#endif
+#ifdef __SSE3__
+SYM (no_sse3_msg) :
+	.string "PANIC: compiled for SSE3 but your CPU seems to have no SSE3 support\n"
+#endif
 #endif
 
 END_DATA

@@ -1,3 +1,8 @@
+2009-11-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* pc386/make/custom/pc586-sse.cfg, pc386/start/start.S,
+	shared/irq/irq_asm.S: Added experimental SSE support.
+
 2009-10-29	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/irq/irq_asm.S: Make sure stack is aligned to CPU_STACK_ALIGNMENT
