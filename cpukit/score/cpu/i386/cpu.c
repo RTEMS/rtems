@@ -56,9 +56,36 @@ void _CPU_Initialize(void)
 
     fp_context = &_CPU_Null_fp_context;
 
+#ifdef __SSE__
+	asm volatile( "fstcw %0":"=m"(fp_context->fpucw) );
+#else
     asm volatile( "fsave (%0)" : "=r" (fp_context)
                                : "0"  (fp_context)
                 );
+#endif
+  }
+#endif
+
+#ifdef __SSE__
+
+  asm volatile("stmxcsr %0":"=m"(fp_context->mxcsr));
+
+  /* The BSP must enable the SSE extensions (early).
+   * If any SSE instruction was already attempted
+   * then that crashed the system.
+   * As a courtesy, we double-check here but it
+   * may be too late (which is also why we don't
+   * enable SSE here).
+   */ 
+  {
+  uint32_t cr4;
+    __asm__ __volatile__("mov %%cr4, %0":"=r"(cr4));
+    if ( 0x600 != (cr4 & 0x600) ) {
+      printk("PANIC: RTEMS was compiled for SSE but BSP did not enable it (CR4: 0x%08x)\n", cr4);
+      while ( 1 ) {
+        __asm__ __volatile__("hlt");
+	  }
+	}
   }
 #endif
 }
@@ -165,6 +192,9 @@ extern void rtems_exception_prologue_14(void);
 extern void rtems_exception_prologue_16(void);
 extern void rtems_exception_prologue_17(void);
 extern void rtems_exception_prologue_18(void);
+#ifdef __SSE__
+extern void rtems_exception_prologue_19(void);
+#endif
 
 static rtems_raw_irq_hdl tbl[] = {
 	 rtems_exception_prologue_0,
@@ -186,6 +216,9 @@ static rtems_raw_irq_hdl tbl[] = {
 	 rtems_exception_prologue_16,
 	 rtems_exception_prologue_17,
 	 rtems_exception_prologue_18,
+#ifdef __SSE__
+	 rtems_exception_prologue_19,
+#endif
 };
 
 void rtems_exception_init_mngt(void)

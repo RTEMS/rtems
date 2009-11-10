@@ -97,6 +97,7 @@ SYM (_CPU_Context_restore):
 
 .set FPCONTEXT_ARG,   4                    /* FP context argument */
 
+#ifndef __SSE__
         .p2align  1
         PUBLIC (_CPU_Context_save_fp)
 SYM (_CPU_Context_save_fp):
@@ -112,18 +113,44 @@ SYM (_CPU_Context_restore_fp):
         movl      (eax),eax                /* eax = FP context area */
         frstor    (eax)                    /* restore FP context */
         ret
+#endif
+
+#ifdef __SSE__
+#define SSE_OFF  16
+#endif
 
         PUBLIC (_Exception_Handler)
 SYM (_Exception_Handler):
 	pusha                  /* Push general purpose registers    */
+	pushl   $0             /* Null pointer to SSE area          */
 	movl    esp,  ebp      /* Save original SP                  */
+#ifndef __SSE__
 	subl    $4,   esp      /* Reserve space for argument        */
                            /* Align stack (courtesy for C/gcc)  */
 	andl    $ - CPU_STACK_ALIGNMENT, esp
+#else
+	subl    $512, esp      /* Space for SSE area                */
+                           /* Align stack (courtesy for C/gcc)  */
+	andl    $ - CPU_STACK_ALIGNMENT, esp
+/* Doing fwait here will re-throw an already pending FP exception!
+	fwait
+ */
+	fxsave  0(esp)
+	fninit                 /* Clean-slate FPU                   */
+	movl    $0x1f80, 0(ebp)
+	ldmxcsr 0(ebp)         /* Clean-slate MXCSR                 */
+	movl    esp, 0(ebp)    /* Store pointer to SSE area         */
+	subl    $SSE_OFF, esp  /* Aligned space for argument        */
+#endif
 	movl    ebp, (esp)     /* Store argument                    */
 	movl	_currentExcHandler, eax	   /* Call function stored in _currentExcHandler */
 	call	* eax
+#ifdef __SSE__
+	fwait
+	fxrstor 16(esp)
+#endif
 	movl    ebp,  esp      /* Restore original SP               */
+	addl    $4,   esp      /* Skill pointer to SSE area         */
 	popa                   /* Restore general purpose registers */
 	addl	$8, esp        /* Skill vector number and faultCode */
 	iret
@@ -215,6 +242,13 @@ DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (17)
  * Machine Check
  */
 DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (18)
+
+#ifdef __SSE__
+/*
+ * SIMD FP Exception
+ */
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (19)
+#endif
 
 
 /*

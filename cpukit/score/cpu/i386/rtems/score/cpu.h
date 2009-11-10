@@ -61,6 +61,15 @@ extern "C" {
  *  for the i386, others have it built in (i486DX, Pentium).
  */
 
+#ifdef __SSE__
+#define CPU_HARDWARE_FP                  TRUE
+#define CPU_SOFTWARE_FP                  FALSE
+
+#define CPU_ALL_TASKS_ARE_FP             TRUE
+#define CPU_IDLE_TASK_IS_FP              TRUE
+#define CPU_USE_DEFERRED_FP_SWITCH       FALSE
+#else /* __SSE__ */
+
 #if ( I386_HAS_FPU == 1 )
 #define CPU_HARDWARE_FP     TRUE    /* i387 for i386 */
 #else
@@ -71,6 +80,7 @@ extern "C" {
 #define CPU_ALL_TASKS_ARE_FP             FALSE
 #define CPU_IDLE_TASK_IS_FP              FALSE
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#endif /* __SSE__ */
 
 #define CPU_STACK_GROWS_UP               FALSE
 #define CPU_STRUCTURE_ALIGNMENT
@@ -119,11 +129,37 @@ typedef struct {
 /*
  *  FP context save area for the i387 numeric coprocessors.
  */
+#ifdef __SSE__
+/* All FPU and SSE registers are volatile; hence, as long
+ * as we are within normally executing C code (including
+ * a task switch) there is no need for saving/restoring
+ * any of those registers.
+ * We must save/restore the full FPU/SSE context across
+ * interrupts and exceptions, however:
+ *   -  after ISR execution a _Thread_Dispatch() may happen
+ *      and it is therefore necessary to save the FPU/SSE
+ *      registers to be restored when control is returned
+ *      to the interrupted task.
+ *   -  gcc may implicitly use FPU/SSE instructions in
+ *      an ISR.
+ *
+ * Even though there is no explicit mentioning of the FPU
+ * control word in the SYSV ABI (i386) being non-volatile
+ * we maintain MXCSR and the FPU control-word for each task.
+ */
+typedef struct {
+	uint32_t  mxcsr;
+	uint16_t  fpucw;
+} Context_Control_fp;
+
+#else
 
 typedef struct {
   uint8_t     fp_save_area[108];    /* context size area for I80387 */
                                     /*  28 bytes for environment    */
 } Context_Control_fp;
+
+#endif
 
 
 /*
@@ -132,9 +168,20 @@ typedef struct {
  *
  * idtIndex is either the interrupt number or the trap/exception number.
  * faultCode is the code pushed by the processor on some exceptions.
+ *
+ * Since the first registers are directly pushed by the CPU they
+ * may not respect 16-byte stack alignment, which is, however,
+ * mandatory for the SSE register area.
+ * Therefore, these registers are stored at an aligned address
+ * and a pointer is stored in the CPU_Exception_frame.
+ * If the executive was compiled without SSE support then
+ * this pointer is NULL.
  */
 
+struct Context_Control_sse;
+
 typedef struct {
+  struct Context_Control_sse *fp_ctxt;
   uint32_t    edi;
   uint32_t    esi;
   uint32_t    ebp;
@@ -149,6 +196,32 @@ typedef struct {
   uint32_t    cs;
   uint32_t    eflags;
 } CPU_Exception_frame;
+
+#ifdef __SSE__
+typedef struct Context_Control_sse {
+  uint16_t  fcw;
+  uint16_t  fsw;
+  uint8_t   ftw;
+  uint8_t   res_1;
+  uint16_t  fop;
+  uint32_t  fpu_ip;
+  uint16_t  cs;
+  uint16_t  res_2;
+  uint32_t  fpu_dp;
+  uint16_t  ds;
+  uint16_t  res_3;
+  uint32_t  mxcsr;
+  uint32_t  mxcsr_mask;
+  struct {
+  	uint8_t fpreg[10];
+  	uint8_t res_4[ 6];
+  } fp_mmregs[8];
+  uint8_t   xmmregs[8][16];
+  uint8_t   res_5[224];
+} Context_Control_sse
+__attribute__((aligned(16)))
+;
+#endif
 
 typedef void (*cpuExcHandlerType) (CPU_Exception_frame*);
 extern cpuExcHandlerType _currentExcHandler;
@@ -510,19 +583,61 @@ void _CPU_Context_restore(
  *  This routine saves the floating point context passed to it.
  */
 
+#ifdef __SSE__
+#define _CPU_Context_save_fp(fp_context_pp) \
+  do {                                      \
+    __asm__ __volatile__(                   \
+      "fstcw %0"                            \
+      :"=m"((*(fp_context_pp))->fpucw)      \
+    );                                      \
+	__asm__ __volatile__(                   \
+      "stmxcsr %0"                          \
+      :"=m"((*(fp_context_pp))->mxcsr)      \
+    );                                      \
+  } while (0)
+#else
 void _CPU_Context_save_fp(
   Context_Control_fp **fp_context_ptr
 );
+#endif
 
 /*
  *  _CPU_Context_restore_fp
  *
  *  This routine restores the floating point context passed to it.
  */
-
+#ifdef __SSE__
+#define _CPU_Context_restore_fp(fp_context_pp) \
+  do {                                         \
+    __asm__ __volatile__(                      \
+      "fldcw %0"                               \
+      ::"m"((*(fp_context_pp))->fpucw)         \
+      :"fpcr"                                  \
+    );                                         \
+    __builtin_ia32_ldmxcsr(_Thread_Executing->fp_context->mxcsr);  \
+  } while (0)
+#else
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
+#endif
+
+#ifdef __SSE__
+#define _CPU_Context_Initialization_at_thread_begin() \
+  do {                                                \
+    __asm__ __volatile__(                             \
+      "finit"                                         \
+      :                                               \
+      :                                               \
+      :"st","st(1)","st(2)","st(3)",                  \
+       "st(4)","st(5)","st(6)","st(7)",               \
+       "fpsr","fpcr"                                  \
+    );                                                \
+	if ( _Thread_Executing->fp_context ) {            \
+	  _CPU_Context_restore_fp(&_Thread_Executing->fp_context); \
+   }                                                  \
+  } while (0)
+#endif
 
 #endif /* ASM */
 
