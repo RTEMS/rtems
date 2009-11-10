@@ -1,5 +1,11 @@
 2009-11-10	Jennifer Averett <jennifer.averett@OARcorp.com>
 
+	PR 1468/cpukit
+	* score/src/timespecdividebyinteger.c: Rework statement to ensure
+	64-bit multiplication is used.
+
+2009-11-10	Jennifer Averett <jennifer.averett@OARcorp.com>
+
 	PR 1462/cpukit
 	* rtems/include/rtems/rtems/ratemon.h, rtems/src/ratemonperiod.c: Fine
 	tune previous patch after analysis in application.
