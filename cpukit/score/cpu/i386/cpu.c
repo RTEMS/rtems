@@ -170,6 +170,7 @@ static rtems_raw_irq_hdl tbl[] = {
 	 rtems_exception_prologue_12,
 	 rtems_exception_prologue_13,
 	 rtems_exception_prologue_14,
+     0,
 	 rtems_exception_prologue_16,
 	 rtems_exception_prologue_17,
 	 rtems_exception_prologue_18,

@@ -1,3 +1,9 @@
+2009-11-09	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1469/cpukit
+	* cpu.c: Add dummy entry for (non-existing) exception #15.
+	Otherwise all slots for vectors >= 16 are one element off.
+
 2008-09-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Do not define boolean, single_precision,
