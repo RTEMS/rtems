@@ -90,9 +90,6 @@ void _Rate_monotonic_Update_statistics(
   rtems_rate_monotonic_period_statistics *stats;
   rtems_thread_cpu_usage_t                executed;
   rtems_rate_monotonic_period_time_t      since_last_period;
-  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    rtems_rate_monotonic_period_time_t    period_start;
-  #endif
   #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
       defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
     struct timespec  uptime;
@@ -112,7 +109,6 @@ void _Rate_monotonic_Update_statistics(
   /*
    *  Update the counts.
    */
-
   stats = &the_period->Statistics;
   stats->count++;
 
@@ -122,14 +118,14 @@ void _Rate_monotonic_Update_statistics(
   /*
    *  Grab basic information for time statistics.
    */
-
   #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    period_start               = the_period->time_at_period;
-    _Timespec_Subtract( &period_start, &uptime, &since_last_period );
-    the_period->time_at_period = uptime;
+    _Timespec_Subtract(
+     &the_period->time_at_period,
+     &uptime,
+     &since_last_period
+   );
   #else
     since_last_period = _Watchdog_Ticks_since_boot - the_period->time_at_period;
-    the_period->time_at_period = _Watchdog_Ticks_since_boot;
   #endif
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
@@ -155,6 +151,10 @@ void _Rate_monotonic_Update_statistics(
       );
     }
   #else
+      /* partial period, cpu usage info reset while executing.  Throw away */
+      if (the_period->owner->cpu_time_used <
+          the_period->owner_executed_at_period)
+        return;
       executed = the_period->owner->cpu_time_used -
         the_period->owner_executed_at_period;
   #endif
@@ -186,6 +186,11 @@ void _Rate_monotonic_Update_statistics(
    */
 
   #ifndef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+
+    /* Sanity check wall time */
+    if ( since_last_period < executed)
+      since_last_period = executed;
+
     stats->total_wall_time += since_last_period;
 
     if ( since_last_period < stats->min_wall_time )
@@ -329,7 +334,7 @@ rtems_status_code rtems_rate_monotonic_period(
           /*
            *  Update statistics from the concluding period
            */
-          _Rate_monotonic_Update_statistics( the_period );
+          _Rate_monotonic_Initiate_statistics( the_period );
 
           _ISR_Enable( level );
 
