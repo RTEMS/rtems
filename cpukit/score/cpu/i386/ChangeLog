@@ -1,3 +1,9 @@
+2009-11-09	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1469/cpukit
+	* cpu.c: Add dummy entry for (non-existing) exception #15.
+	Otherwise all slots for vectors >= 16 are one element off.
+
 2009-10-29	Till Straumann <strauman@slac.stanford.edu>
 
 	* rtems/score/cpu.h: Define _CPU_Interrupt_stack_setup() macro
