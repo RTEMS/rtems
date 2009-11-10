@@ -446,7 +446,11 @@ void _Rate_monotonic_Initiate_statistics(
         ); \
      } while (0)
 #else
-  #define _Rate_monotonic_Reset_wall_time_statistics( _the_period )
+  #define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
+     do { \
+        /* set the minimum to a large value */ \
+        (_the_period)->Statistics.min_wall_time = 0xffffffff; \
+     } while (0)
 #endif
 
 /**
@@ -465,7 +469,11 @@ void _Rate_monotonic_Initiate_statistics(
         ); \
      } while (0)
 #else
-  #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period )
+  #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
+     do { \
+        /* set the minimum to a large value */ \
+        (_the_period)->Statistics.min_cpu_time = 0xffffffff; \
+     } while (0)
 #endif
 
 /**

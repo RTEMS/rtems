@@ -1,3 +1,9 @@
+2009-11-10	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1462/cpukit
+	* rtems/include/rtems/rtems/ratemon.h, rtems/src/ratemonperiod.c: Fine
+	tune previous patch after analysis in application.
+
 2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libfs/src/dosfs/msdos_format.c: Rework to avoid overflow on 16-bit
