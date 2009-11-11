@@ -106,11 +106,17 @@ enter_C_code:
 	 * stack = &__rtems_end + 4096
 	 */
 	addis	r9,r0, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@ha
-        addi	r9,r9, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@l
-	mr	r1, r9
+	addi	r9,r9, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@l
+	/*
+	 * align initial stack
+	 * (we hope that the bootloader stack was 16-byte aligned
+	 * or we haven't used altivec yet...)
+	 */
+	li   r0, (CPU_STACK_ALIGNMENT-1)
+	andc r1, r9, r0
 	/*
 	 * We are now in a environment that is totally independent from 
-         * bootloader setup.
+	 * bootloader setup.
 	 */
     /* pass result of 'save_boot_params' to 'boot_card' in R3 */
 	bl	boot_card
