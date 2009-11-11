@@ -1,3 +1,8 @@
+2009-11-11	Till Straumann <strauman@slac.stanford.edu>
+
+	* start/start.S: Ensure that initial stack is aligned to
+	CPU_STACK_ALIGNMENT.
+
 2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am: Update for exception support changes.
