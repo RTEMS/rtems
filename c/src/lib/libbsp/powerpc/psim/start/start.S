@@ -100,9 +100,12 @@ _start:
 .Lnostack:
 	/* set up initial stack frame */
 	addi	sp,sp,-4		/* make sure we don't overwrite debug mem */
+	/* align */
+	li  r3, CPU_STACK_ALIGNMENT-1
+	andc	sp, sp, r3
 	lis	r0,0
 	stw	r0,0(sp)		/* clear back chain */
-	stwu	sp,-56(sp)		/* push another stack frame */
+	stwu	sp,-CPU_STACK_ALIGNMENT(sp)		/* push another stack frame */
 	bl  FUNC_NAME(__eabi)
 
 	/* Let her rip */
