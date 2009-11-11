@@ -1,3 +1,9 @@
+2009-11-11	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1471/cpukit
+	* libmisc/cpuuse/cpuusagereport.c: Rework statement to ensure 64-bit
+	multiplication is used to avoid overflow with intermediate value.
+
 2009-11-10	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1468/cpukit

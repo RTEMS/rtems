@@ -141,8 +141,17 @@ void rtems_cpu_usage_report_with_plugin(
             ival, fval
           );
         #else
-          ival = (total_units) ?
-                   the_thread->cpu_time_used * 10000 / total_units : 0;
+          if (total_units) {
+            uint64_t ival_64;
+
+            ival_64 = the_thread->cpu_time_used;
+            ival_64 *= 10000;
+            ival = ival_64 / total_units;
+
+          } else {
+            ival = 0;
+          }
+
           fval = ival % 100;
           ival /= 100;
           (*print)( context,
