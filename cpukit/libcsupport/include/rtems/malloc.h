@@ -149,6 +149,28 @@ int rtems_memalign(
   size_t   size
 );
 
+/**
+ * @brief Allocates a memory area of size @a size bytes from the heap.
+ *
+ * If the alignment parameter @a alignment is not equal to zero, the allocated
+ * memory area will begin at an address aligned by this value.
+ *
+ * If the boundary parameter @a boundary is not equal to zero, the allocated
+ * memory area will fulfill a boundary constraint.  The boundary value
+ * specifies the set of addresses which are aligned by the boundary value.  The
+ * interior of the allocated memory area will not contain an element of this
+ * set.  The begin or end address of the area may be a member of the set.
+ *
+ * A size value of zero will return a unique address which may be freed with
+ * free().
+ *
+ * The memory allocated by this function can be released with a call to free().
+ *
+ * @return A pointer to the begin of the allocated memory area, or @c NULL if
+ * no memory is available or the parameters are inconsistent.
+ */
+void *rtems_malloc(size_t size, uintptr_t alignment, uintptr_t boundary);
+
 #ifdef __cplusplus
 }
 #endif

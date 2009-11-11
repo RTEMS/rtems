@@ -1,3 +1,8 @@
+2009-11-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/Makefile.am, libcsupport/include/rtems/malloc.h,
+	libcsupport/src/rtems_malloc.c: New function rtems_malloc().
+
 2009-11-11	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1471/cpukit
