@@ -52,7 +52,7 @@ Name:		rtems-4.9-i386-rtems4.9-gdb
 Summary:	Gdb for target i386-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	10%{?dist}
+Release:	11%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -104,11 +104,7 @@ BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
 %bcond_with system_readline
 %else
-%if 0%{?fedora} >= 12
-%bcond_with system_readline
-%else
 %bcond_without system_readline
-%endif
 %endif
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
@@ -133,7 +129,7 @@ Requires:	rtems-4.9-gdb-common
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
 %if "%{gdb_version}" == "6.8"
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gdb-6.8-rtems4.9-20090923.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gdb-6.8-rtems4.9-20091111.diff
 %endif
 
 %description

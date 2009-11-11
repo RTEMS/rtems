@@ -52,7 +52,7 @@ Name:		rtems-4.9-bfin-rtems4.9-gdb
 Summary:	Gdb for target bfin-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	8%{?dist}
+Release:	9%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -104,11 +104,7 @@ BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
 %bcond_with system_readline
 %else
-%if 0%{?fedora} >= 12
-%bcond_with system_readline
-%else
 %bcond_without system_readline
-%endif
 %endif
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
