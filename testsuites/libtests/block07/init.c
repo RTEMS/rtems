@@ -36,11 +36,13 @@
 
 #define PRIORITY_HIGH 2
 
-#define PRIORITY_LOW 3
+#define PRIORITY_MID 3
 
-#define PRIORITY_SWAPOUT 4
+#define PRIORITY_LOW 4
 
-#define PRIORITY_IDLE 5
+#define PRIORITY_SWAPOUT 5
+
+#define PRIORITY_IDLE 6
 
 #define BLOCK_SIZE_A 1
 
@@ -51,6 +53,8 @@
 static dev_t dev;
 
 static rtems_id task_id_low;
+
+static rtems_id task_id_mid;
 
 static rtems_id task_id_high;
 
@@ -90,6 +94,32 @@ static void task_low(rtems_task_argument arg)
 
   printk("L: release done: 0\n");
 
+  printk("*** END OF TEST BLOCK 7 ***\n");
+
+  exit(0);
+}
+
+static void task_mid(rtems_task_argument arg)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_bdbuf_buffer *bd = NULL;
+
+  printk("M: try access: 0\n");
+
+  sc = rtems_bdbuf_get(dev, 0, &bd);
+  ASSERT_SC(sc);
+
+  printk("M: access: 0\n");
+
+  assert(bd->group->bds_per_group == 1);
+
+  printk("M: release: 0\n");
+
+  sc = rtems_bdbuf_release(bd);
+  ASSERT_SC(sc);
+
+  printk("M: release done: 0\n");
+
   rtems_task_delete(RTEMS_SELF);
 }
 
@@ -116,9 +146,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: release done: 0\n");
 
-  printk("*** END OF TEST BLOCK 7 ***\n");
-
-  exit(0);
+  rtems_task_delete(RTEMS_SELF);
 }
 
 static rtems_task Init(rtems_task_argument argument)
@@ -149,6 +177,19 @@ static rtems_task Init(rtems_task_argument argument)
   ASSERT_SC(sc);
 
   sc = rtems_task_create(
+    rtems_build_name(' ', 'M', 'I', 'D'),
+    PRIORITY_MID,
+    0,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &task_id_mid
+  );
+  ASSERT_SC(sc);
+
+  sc = rtems_task_start(task_id_mid, task_mid, 0);
+  ASSERT_SC(sc);
+
+  sc = rtems_task_create(
     rtems_build_name('H', 'I', 'G', 'H'),
     PRIORITY_HIGH,
     0,
@@ -159,6 +200,9 @@ static rtems_task Init(rtems_task_argument argument)
   ASSERT_SC(sc);
 
   sc = rtems_task_start(task_id_high, task_high, 0);
+  ASSERT_SC(sc);
+
+  sc = rtems_task_suspend(task_id_mid);
   ASSERT_SC(sc);
 
   sc = rtems_task_suspend(task_id_high);
@@ -183,6 +227,9 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_task_resume(task_id_high);
   ASSERT_SC(sc);
 
+  sc = rtems_task_resume(task_id_mid);
+  ASSERT_SC(sc);
+
   sc = rtems_task_set_priority(RTEMS_SELF, PRIORITY_INIT, &cur_prio);
   ASSERT_SC(sc);
 
@@ -205,7 +252,7 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
-#define CONFIGURE_MAXIMUM_TASKS 5
+#define CONFIGURE_MAXIMUM_TASKS 6
 #define CONFIGURE_MAXIMUM_DRIVERS 2
 #define CONFIGURE_MAXIMUM_SEMAPHORES 5
 

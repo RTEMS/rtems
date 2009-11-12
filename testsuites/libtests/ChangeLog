@@ -1,3 +1,7 @@
+2009-11-10	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* block07/init.c: New test case.
+
 2009-11-09	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* block05/init.c, block05/block05.scn, block05/Makefile.am,
