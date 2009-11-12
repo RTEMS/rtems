@@ -1405,9 +1405,10 @@ rtems_ata_initialize(rtems_device_major_number major,
                 CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_CURR_LOG_HEADS]);
             ATA_DEV_INFO(ctrl_minor, dev).sectors =
                 CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_CURR_LOG_SECS]);
-            ATA_DEV_INFO(ctrl_minor, dev).lba_sectors =
-                (CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS1]) << 16) +
-                 CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS0]);
+            ATA_DEV_INFO(ctrl_minor, dev).lba_sectors = 
+                CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS1]);
+            ATA_DEV_INFO(ctrl_minor, dev).lba_sectors <<= 16;
+            ATA_DEV_INFO(ctrl_minor, dev).lba_sectors += CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS0]);
             ATA_DEV_INFO(ctrl_minor, dev).lba_avaible =
                 (CF_LE_W(buffer[ATA_IDENT_WORD_CAPABILITIES]) >> 9) & 0x1;
 
