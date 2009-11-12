@@ -148,6 +148,7 @@ void *POSIX_Init(
   struct sigaction    act;
   bool                trueArg = true;
   bool                falseArg = false;
+  struct timespec     delay_request;
 
   puts( "\n\n*** POSIX TEST SIGNAL " TEST_NAME " ***" );
   puts( "Init - Variation is: " TEST_STRING );
@@ -168,10 +169,14 @@ void *POSIX_Init(
   assert( !sc );
 
   puts( "Init - sleep - let threads settle - OK" );
-  usleep(500000);
+  delay_request.tv_sec = 0;
+  delay_request.tv_nsec = 5 * 100000000;
+  sc = nanosleep( &delay_request, NULL );
+  assert( !sc );
 
   puts( "Init - sleep - SignalBlocked thread settle - OK" );
-  usleep(500000);
+  sc = nanosleep( &delay_request, NULL );
+  assert( !sc );
 
   printf( "Init - sending %s - deliver to one thread\n",
           signal_name(SIGNAL_TWO));

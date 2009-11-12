@@ -34,7 +34,7 @@ rtems_task Init(
   time_t          seconds1;
   unsigned int    remaining;
   struct tm       tm;
-  useconds_t      useconds;
+  struct timespec delay_request;
 
   puts( "\n\n*** POSIX CLOCK TEST ***" );
 
@@ -206,9 +206,11 @@ rtems_task Init(
   printf( "Init: sec (%ld), nsec (%ld) remaining\n", tr.tv_sec, tr.tv_nsec );
   rtems_test_assert( !tr.tv_sec && !tr.tv_nsec );
 
-  puts( "Init: usleep - 1.35 seconds" );
-  useconds = usleep ( 1350000 );
-  rtems_test_assert( useconds < 1350000 );
+  puts( "Init: nanosleep - 1.35 seconds" );
+  delay_request.tv_sec = 1;
+  delay_request.tv_nsec = 35000000;
+  sc = nanosleep( &delay_request, NULL );
+  assert( !sc );
   
   /* print the current real time again */
   sc = clock_gettime( CLOCK_REALTIME, &tv );

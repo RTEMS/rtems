@@ -1,3 +1,14 @@
+2009-11-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1466/tests
+	* Makefile.am, configure.ac, psxclock/init.c, psxclock/psxclock.doc,
+	psxclock/psxclock.scn, psxkey03/init.c, psxsignal02/init.c,
+	psxsignal03/init.c, psxstack01/init.c: Remove usleep() from tests.
+	Add test specifically to test it since it is deprecated as of
+	POSIX.1-2008.
+	* psxusleep/.cvsignore, psxusleep/Makefile.am, psxusleep/init.c,
+	psxusleep/psxusleep.doc, psxusleep/psxusleep.scn: New files.
+
 2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxcancel01/init.c: Initialize start time.

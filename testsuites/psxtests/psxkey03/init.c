@@ -40,8 +40,9 @@ void *POSIX_Init(
   void *ignored
 )
 {
-  pthread_t     thread;
-  int           sc;
+  pthread_t        thread;
+  int              sc;
+  struct timespec  delay_request;
 
   puts( "\n\n*** TEST KEY 03 ***" );
   
@@ -57,7 +58,10 @@ void *POSIX_Init(
   assert( !sc );
 
   puts( "Init - sleep - let thread run - OK" );
-  usleep(500000);
+  delay_request.tv_sec = 0;
+  delay_request.tv_nsec = 5 * 100000000;
+  sc = nanosleep( &delay_request, NULL );
+  assert( !sc );
 
   puts( "Init - pthread_key_delete - OK" );
   sc = pthread_key_delete( Key );
@@ -76,7 +80,8 @@ void *POSIX_Init(
   assert( !sc );
 
   puts( "Init - sleep - let thread run - OK" );
-  usleep(500000);
+  sc = nanosleep( &delay_request, NULL );
+  assert( !sc );
 
   puts( "Init - verify destructor did NOT ran" );
   assert( destructor_ran == false );

@@ -1,0 +1,7 @@
+*** POSIX USLEEP TEST ***
+Fri May 24 11:05:00 1996
+Init: clock_settime - SUCCESSFUL
+Fri May 24 11:05:00 1996
+Fri May 24 11:05:00 1996
+Fri May 24 11:05:03 1996
+*** END OF POSIX USLEEP TEST ***

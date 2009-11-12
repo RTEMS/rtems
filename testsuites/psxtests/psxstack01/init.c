@@ -49,6 +49,7 @@ void *POSIX_Init(
   int                 sc;
   pthread_t           id;
   pthread_attr_t      attr;
+  struct timespec     delay_request;
 
   puts( "\n\n*** POSIX STACK ATTRIBUTE TEST 01 ***" );
 
@@ -72,7 +73,10 @@ void *POSIX_Init(
   assert( !sc );
 
   puts( "Init - let other thread run" );
-  usleep( 500000 );
+  delay_request.tv_sec = 0;
+  delay_request.tv_nsec = 5 * 100000000;
+  sc = nanosleep( &delay_request, NULL );
+  assert( !sc );
 
   puts( "*** END OF POSIX STACK ATTRIBUTE TEST 01 ***" );
   rtems_test_exit(0);

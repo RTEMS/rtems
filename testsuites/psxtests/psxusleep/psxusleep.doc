@@ -11,17 +11,14 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  psxclock
+test set name:  psxusleep
 
 directives:
-  clock_settime
-  clock_gettime
-  nanosleep
-  sleep
+  usleep
 
 concepts:
 
-+ This is a non-POSIX threads test which uses POSIX services which
-  are available when RTEMS is configured with --disable-posix.
++ This test exercises the usleep() method.
 
-+ Ensures that the above listed services have 100% object coverage.
+NOTE: usleep() has been deprecated by Open Group.  This is why usleep is not
+      used in any other test and why this test exists.

@@ -115,5 +115,6 @@ psxtime/Makefile
 psxtimer01/Makefile
 psxtimer02/Makefile
 psxualarm/Makefile
+psxusleep/Makefile
 ])
 AC_OUTPUT

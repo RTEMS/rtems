@@ -125,6 +125,7 @@ void *POSIX_Init(
   struct sched_param  param;
   Test_t             *test;
   struct sigaction    act;
+  struct timespec     delay_request;
 
   puts( "\n\n*** POSIX TEST SIGNAL 02 ***" );
 
@@ -161,7 +162,10 @@ void *POSIX_Init(
     assert( !sc );
 
     puts( "Init - sleep - let thread settle - OK" );
-    usleep(500000);
+    delay_request.tv_sec = 0;
+    delay_request.tv_nsec = 50000000;
+    sc = nanosleep( &delay_request, NULL );
+    assert( !sc );
   }
 
   puts( "Init - sending SIGUSR1" );
