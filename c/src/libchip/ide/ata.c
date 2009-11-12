@@ -320,7 +320,7 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
  *     error occured
  */
 static rtems_status_code
-ata_non_data_request(dev_t device, int cmd, void *argp)
+ata_non_data_request(dev_t device, uint32_t cmd, void *argp)
 {
     rtems_status_code          rc;
     ata_req_t                 *areq;       /* ATA request */

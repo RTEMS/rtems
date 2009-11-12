@@ -1,3 +1,8 @@
+2009-11-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/ide/ata.c (ata_non_data_request): Change arg from int to 
+	uint32_t (16bit ints are too small).
+
 2009-11-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/elnk.c: Use PRI*32 to print u_int32_t's.
