@@ -1,3 +1,9 @@
+2009-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/blkdev.h, libblock/src/blkdev.c: Changed set
+	and get IO controls to use the buffer argument for data exchange.
+
+
 2009-11-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/Makefile.am, libcsupport/include/rtems/malloc.h,

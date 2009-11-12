@@ -226,19 +226,23 @@ rtems_blkdev_generic_ioctl(
     switch (args->command)
     {
         case RTEMS_BLKIO_GETMEDIABLKSIZE:
-            args->ioctl_return = dd->media_block_size;
+            *((uint32_t *) args->buffer) = dd->media_block_size;
+            args->ioctl_return = 0;
             break;
 
         case RTEMS_BLKIO_GETBLKSIZE:
-            args->ioctl_return = dd->block_size;
+            *((uint32_t *) args->buffer) = dd->block_size;
+            args->ioctl_return = 0;
             break;
 
         case RTEMS_BLKIO_SETBLKSIZE:
-            dd->block_size = *((size_t*) args->buffer);
+            dd->block_size = *((uint32_t *) args->buffer);
+            args->ioctl_return = 0;
             break;
 
         case RTEMS_BLKIO_GETSIZE:
-            args->ioctl_return = dd->size;
+            *((rtems_blkdev_bnum *) args->buffer) = dd->size;
+            args->ioctl_return = 0;
             break;
 
         case RTEMS_BLKIO_SYNCDEV:
