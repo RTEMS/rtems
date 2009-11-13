@@ -1,8 +1,11 @@
+2009-11-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* telnetd/telnetd.c (telnetd_dflt_spawn): Adjust prototype. 
+
 2009-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/include/rtems/blkdev.h, libblock/src/blkdev.c: Changed set
 	and get IO controls to use the buffer argument for data exchange.
-
 
 2009-11-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 

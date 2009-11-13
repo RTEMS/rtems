@@ -81,7 +81,7 @@ typedef union uni_sa {
 
 static int sockpeername(int sock, char *buf, int bufsz);
 
-void *telnetd_dflt_spawn(
+rtems_id telnetd_dflt_spawn(
   const char *name,
   unsigned priority,
   unsigned stackSize,
@@ -92,7 +92,7 @@ void *telnetd_dflt_spawn(
 /***********************************************************/
 static rtems_id telnetd_task_id = RTEMS_ID_NONE;
 
-void *(*telnetd_spawn_task)(
+rtems_id (*telnetd_spawn_task)(
   const char *,
   unsigned,
   unsigned,
@@ -260,7 +260,7 @@ rtems_task_telnetd(void *task_argument)
       arg->arg = rtems_telnetd_config.arg;
       strncpy(arg->peername, peername, sizeof(arg->peername));
 
-      telnetd_task_id = (rtems_id) telnetd_spawn_task(
+      telnetd_task_id = telnetd_spawn_task(
         devname,
         rtems_telnetd_config.priority,
         rtems_telnetd_config.stack_size,
@@ -327,11 +327,11 @@ rtems_status_code rtems_telnetd_initialize( void)
 
   /* Check stack size */
   if (rtems_telnetd_config.stack_size <= 0) {
-    rtems_telnetd_config.stack_size = 32 * 1024;
+    rtems_telnetd_config.stack_size = (size_t)32 * 1024;
   }
 
   /* Spawn task */
-  telnetd_task_id = (rtems_id) telnetd_spawn_task(
+  telnetd_task_id = telnetd_spawn_task(
     "TNTD",
     rtems_telnetd_config.priority,
     RTEMS_MINIMUM_STACK_SIZE,
@@ -452,7 +452,7 @@ wrap_delete(rtems_task_argument arg)
   rtems_task_delete(RTEMS_SELF);
 }
 
-void *
+rtems_id
 telnetd_dflt_spawn(const char *name, unsigned int priority, unsigned int stackSize, void (*fn)(void *), void* fnarg)
 {
   rtems_status_code        sc;
@@ -464,7 +464,7 @@ telnetd_dflt_spawn(const char *name, unsigned int priority, unsigned int stackSi
 
   if ( !pwa ) {
     perror("Telnetd: no memory\n");
-    return (void *) RTEMS_ID_NONE;
+    return RTEMS_ID_NONE;
   }
 
   pwa->t = fn;
@@ -483,9 +483,9 @@ telnetd_dflt_spawn(const char *name, unsigned int priority, unsigned int stackSi
       (rtems_task_argument)pwa))) {
         free(pwa);
         rtems_error(sc,"Telnetd: spawning task failed");
-        return (void *) RTEMS_ID_NONE;
+        return RTEMS_ID_NONE;
   }
-  return (void *) task_id;
+  return task_id;
 }
 
 /* convenience routines for CEXP (retrieve stdio descriptors
