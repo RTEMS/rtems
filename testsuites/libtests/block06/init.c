@@ -1759,7 +1759,7 @@ static bdbuf_test_ident bdbuf_tests[] =
  * Test the BD Buffering code.
  */
 static void
-bdbuf_tester ()
+bdbuf_tester (void)
 {
   rtems_device_major_number major;
   bdbuf_task_control        tasks[BDBUF_TEST_TASKS];

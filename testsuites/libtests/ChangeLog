@@ -1,3 +1,7 @@
+2009-11-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* block06/init.c: Add missing prototype.
+
 2009-11-10	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* block07/init.c: New test case.
