@@ -1,5 +1,10 @@
 2009-11-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/capture/capture-cli.c: Cast pointer to intptr_t to
+	print it (Casting to int32_t is wrong).
+
+2009-11-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* telnetd/telnetd.c (telnetd_dflt_spawn): Adjust prototype. 
 
 2009-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>

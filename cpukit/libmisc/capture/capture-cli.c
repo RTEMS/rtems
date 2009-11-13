@@ -1363,9 +1363,9 @@ rtems_capture_cli_trace_records (int                          argc,
     while (count--)
     {
       if (csv)
-        fprintf (stdout, "%08" PRIx32 ",%03" PRIu32
+        fprintf (stdout, "%08" PRIxPTR ",%03" PRIu32
                    ",%03" PRIu32 ",%04" PRIx32 ",%" PRId32 ",%" PRId32 "\n",
-                (uint32_t) rec->task,
+                (uintptr_t) rec->task,
                 (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
                 (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
                 (rec->events >> RTEMS_CAPTURE_EVENT_START),
