@@ -1,5 +1,9 @@
 2009-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems++/Task1.cc: Eliminate more warnings.
+
+2009-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems++/Task1.cc, rtems++/Task2.cc: Spray PRI* macros to eliminate
 	several dozens of warnings.
 

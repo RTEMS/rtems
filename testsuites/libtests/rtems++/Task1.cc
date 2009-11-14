@@ -33,8 +33,15 @@
 
 /* c.f. cpukit/rtems/include/rtems/rtems/modes.h */
 #define PRIXModes_Control PRIX32
+#define PRIiModes_Control PRIi32
 /* rtems_mode is a typedef to Modes_Control */
 #define PRIXrtems_mode PRIXModes_Control
+#define PRIirtems_mode PRIiModes_Control
+
+/* c.f. cpukit/score/include/rtems/score/isr.h */
+#define PRIiISR_Level PRIi32
+/* rtems_interrupt_level is a typedef to ISR_Level */
+#define PRIirtems_interrupt_level PRIiISR_Level
 
 void Task1::body(rtems_task_argument argument)
 {
@@ -415,7 +422,7 @@ void Task1::screen3(void)
 
   printf("%s - get current interrupt level - ", self.name_string());
   task_mode.get_interrupt_level(current_level);
-  printf("%s, level is %i\n", task_mode.last_status_string(), current_level);
+  printf("%s, level is %" PRIirtems_interrupt_level "\n", task_mode.last_status_string(), current_level);
 
   printf("%s - set interrupt level to 102 - ", self.name_string());
   task_mode.set_interrupt_level(102);
@@ -423,7 +430,7 @@ void Task1::screen3(void)
   
   printf("%s - set interrupt level to original level - ", self.name_string());
   task_mode.set_interrupt_level(current_level, level);
-  printf("%s, level was %i\n", task_mode.last_status_string(), level);
+  printf("%s, level was %" PRIirtems_interrupt_level "\n", task_mode.last_status_string(), level);
 
   printf("%s - set mode to original mode - ", self.name_string());
   task_mode.set_mode(current_mode,
@@ -672,7 +679,7 @@ void Task1::print_mode(rtems_mode mode, rtems_mode mask)
     printf("RTEMS_%sASR ",
            task_mode.asr_set(mode) ? "" : "NO_");
   if (mask & RTEMS_INTERRUPT_MASK)
-    printf("INTMASK=%i",
+    printf("INTMASK=%" PRIirtems_mode,
            mode & RTEMS_INTERRUPT_MASK);
 }
 
