@@ -1,3 +1,8 @@
+2009-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems++/Task1.cc, rtems++/Task2.cc: Spray PRI* macros to eliminate
+	several dozens of warnings.
+
 2009-11-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* block06/init.c: Add missing prototype.
