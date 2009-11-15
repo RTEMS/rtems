@@ -1,3 +1,12 @@
+2009-11-15	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart.c: use normal get_ppc_cpu_type()
+	for determining PPC flavor. This causes the appropriate
+	'feature' bits to be set and should work as long 
+	as the PVR is set to 0xfffe0000 in the device tree.
+
+	* startup/linkcmds: increased RAM_SIZE to 32M.
+
 2009-11-11	Till Straumann <strauman@slac.stanford.edu>
 
 	* start/start.S: Ensure that initial stack is aligned to

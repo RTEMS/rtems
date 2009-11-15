@@ -214,7 +214,7 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
   _edata  =  .;
   PROVIDE (edata = .);
 
-  PROVIDE (RAM_END = 8M);
+  PROVIDE (RAM_END = 32M);
   .sbss      :
   {
     PROVIDE (__sbss_start = .);

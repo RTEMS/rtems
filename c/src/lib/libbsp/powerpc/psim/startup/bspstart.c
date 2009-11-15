@@ -84,10 +84,12 @@ void bsp_start( void )
   uintptr_t intrStackSize;
 
   /*
-   * Note we can not get CPU identification dynamically, so
-   * force current_ppc_cpu.
+   * Note we can not get CPU identification dynamically.
+   * PVR has to be set to PPC_PSIM (0xfffe) from the device
+   * file.
    */
-  current_ppc_cpu = PPC_PSIM;
+
+  get_ppc_cpu_type();
 
   /*
    *  initialize the device driver parameters
@@ -136,4 +138,5 @@ void bsp_start( void )
 
   _write_MSR(_read_MSR() | MSR_DR | MSR_IR);
   asm volatile("sync; isync");
+
 }
