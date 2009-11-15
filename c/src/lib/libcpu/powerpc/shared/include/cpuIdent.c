@@ -123,6 +123,16 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_7457:
 		current_ppc_features.has_8_bats			= 1;
     case PPC_7400:
+	/* NOTE: PSIM PVR doesn't tell us anything (its
+     *       contents are not set based on what model
+	 *       the uses chooses but has to be programmed via
+	 *       the device file with the special value 0xfffe
+	 *       telling us that we have a 'psim cpu').
+	 *
+	 *       I'm not sure pagetables work if the user chooses
+	 *       e.g., the 603 model...
+	 */
+	case PPC_PSIM:
 		current_ppc_features.has_altivec		= 1;
 	case PPC_604:
 	case PPC_604e:
