@@ -561,12 +561,12 @@ void Task1::screen6(void)
     }
     else
     {
-      printf("%s - message u2 received incorrectly, message='%s', size=%i\n",
+      printf("%s - message u2 received incorrectly, message='%s', size=%zu\n",
              name_string(), in, size);
     }
   }
   else
-    printf("%s - message u2 size incorrect, size=%i\n", name_string(), size);
+    printf("%s - message u2 size incorrect, size=%zu\n", name_string(), size);
 
   printf("%s - receive u1 on mq_2 ...\n", name_string()); fflush(stdout);
   mq_2.receive(in, size, 5000000);
@@ -581,12 +581,12 @@ void Task1::screen6(void)
     }
     else
     {
-      printf("%s - message u1 received incorrectly, message='%s', size=%i\n",
+      printf("%s - message u1 received incorrectly, message='%s', size=%zu\n",
              name_string(), in, size);
     }
   }
   else
-    printf("%s - message u1 size incorrect, size=%i\n", name_string(), size);
+    printf("%s - message u1 size incorrect, size=%zu\n", name_string(), size);
 
   wake_after(3000000);
   
@@ -618,7 +618,7 @@ void Task1::screen6(void)
     }
   }
   else
-    printf("%s - message b1 size incorrect, size=%i\n", name_string(), size);
+    printf("%s - message b1 size incorrect, size=%zu\n", name_string(), size);
 
   printf("%s - receive message b1 on mq_2 from %s...\n",
          name_string(), task_3_1.name_string()); fflush(stdout);
@@ -634,12 +634,12 @@ void Task1::screen6(void)
     }
     else
     {
-      printf("%s - message b1 received incorrectly, message='%s', size=%i\n",
+      printf("%s - message b1 received incorrectly, message='%s', size=%zu\n",
              name_string(), in, size);
     }
   }
   else
-    printf("%s - message b1 size incorrect, size=%i\n", name_string(), size);
+    printf("%s - message b1 size incorrect, size=%zu\n", name_string(), size);
 
   // wait for task 3_1, and 3_2 to complete their timeout tests, will
   // start these after getting the broadcast message

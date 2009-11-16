@@ -1,3 +1,7 @@
+2009-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems++/Task1.cc: Use %zu instead of %i to print size_t's.
+
 2009-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems++/Task1.cc: Eliminate more warnings.
