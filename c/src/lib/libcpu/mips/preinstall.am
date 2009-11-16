@@ -22,6 +22,10 @@ $(PROJECT_INCLUDE)/libcpu/cache.h: ../shared/include/cache.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
 
+$(PROJECT_INCLUDE)/libcpu/isr_entries.h: shared/interrupts/isr_entries.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/isr_entries.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/isr_entries.h
+
 if mongoosev
 $(PROJECT_INCLUDE)/libcpu/mongoose-v.h: mongoosev/include/mongoose-v.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mongoose-v.h
