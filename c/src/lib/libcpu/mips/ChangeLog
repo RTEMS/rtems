@@ -1,5 +1,6 @@
 2009-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Add shared/interrupts/isr_entries.h.
 	* shared/interrupts/isr_entries.h: New.
 	* shared/interrupts/installisrentries.c: Remove nested externs.
 

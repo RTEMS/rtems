@@ -42,9 +42,10 @@ endif
 noinst_PROGRAMS += shared/interrupts.rel
 shared_interrupts_rel_SOURCES = shared/interrupts/installisrentries.c \
     shared/interrupts/vectorexceptions.c shared/interrupts/interruptmask.c \
-    shared/interrupts/isr_entries.S
+    shared/interrupts/isr_entries.S shared/interrupts/isr_entries.h
 shared_interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) $(interrupts_CPPFLAGS)
 shared_interrupts_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+include_libcpu_HEADERS += shared/interrupts/isr_entries.h
 
 EXTRA_DIST += mongoosev/README
 EXTRA_DIST += mongoosev/duart/README.mguart
