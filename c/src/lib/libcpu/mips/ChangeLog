@@ -1,3 +1,7 @@
+2009-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/interrupts/installisrentries.c: Remove nested externs.
+
 2009-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mongoosev/duart/mg5uart.c: Reflect termios_baud_to_number having
