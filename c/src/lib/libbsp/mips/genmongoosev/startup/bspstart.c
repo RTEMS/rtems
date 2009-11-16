@@ -87,9 +87,6 @@ void bsp_start( void )
 
 void clear_cache( void )
 {
-   extern void promCopyIcacheFlush(void);       /* from start.S */
-   extern void promCopyDcacheFlush(void);
-
    promCopyIcacheFlush();
    promCopyDcacheFlush();
 }

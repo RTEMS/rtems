@@ -1,5 +1,12 @@
 2009-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* startup/bspstart.c: Remove local prototypes of promCopyDcacheFlush, 
+	promCopyIcacheFlush.
+	* include/bsp.h: Add prototypes of promCopyDcacheFlush and
+	promCopyIcacheFlush.
+
+2009-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* startup/bspstart.c: Remove nested externs.
 	#include <libcpu/isr_entries.h.
 
