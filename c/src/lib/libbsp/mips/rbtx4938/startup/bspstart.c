@@ -15,6 +15,7 @@
  */
 
 #include <bsp.h>
+#include <libcpu/isr_entries.h>
 
 /*
  *  bsp_start
@@ -23,7 +24,5 @@
  */
 void bsp_start( void )
 {
-  extern void mips_install_isr_entries(void);
-
   mips_install_isr_entries();  /* Install generic MIPS exception handler */
 }

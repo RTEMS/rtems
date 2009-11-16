@@ -15,9 +15,8 @@
  */
 
 #include <bsp.h>
+#include <libcpu/isr_entries.h>
 #include <bsp/bootcard.h>
-
-extern void mips_install_isr_entries(void);
 
 /*
  *  bsp_start

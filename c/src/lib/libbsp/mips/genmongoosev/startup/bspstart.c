@@ -22,9 +22,9 @@
 
 #include <bsp.h>
 #include <libcpu/mongoose-v.h>
+#include <libcpu/isr_entries.h>
 
 extern void _sys_exit(int);
-extern void mips_install_isr_entries(void);
 extern void mips_gdb_stub_install(void);
 
 /*
