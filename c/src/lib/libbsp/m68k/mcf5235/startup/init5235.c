@@ -29,7 +29,7 @@ void Init5235 (void)
 {
     extern void CopyDataClearBSSAndStart (void);
     int x;
-    int temp = 0;
+    volatile int temp = 0;
     int *address_of_MCF5235_BSP_START_FROM_FLASH;
     
     /*Setup the GPIO Registers */

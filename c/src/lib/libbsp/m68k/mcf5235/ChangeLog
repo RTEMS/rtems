@@ -1,3 +1,8 @@
+2009-11-16	Alan Cudmore <alan.p.cudmore@nasa.gov>
+
+	* startup/init5235.c: Add volatile to prevent newer gcc versions from
+	optimizing away.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/mcf5235.cfg: Remove RTEMS_BSP_FAMILY.
