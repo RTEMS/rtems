@@ -1,3 +1,11 @@
+2009-11-17	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/ppc_exc_categories.c:
+	PSIM *must*not* hook SYS vector which is used e.g.,
+	for firmware I/O.
+
+	Added entries for AltiVec on PSIM.
+	
 2009-11-15	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/include/cpuIdent.c: Set 604 features + altivec if

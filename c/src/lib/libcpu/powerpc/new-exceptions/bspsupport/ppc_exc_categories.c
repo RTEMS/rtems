@@ -30,7 +30,7 @@
 
 #include <bsp/vectors.h>
 
-#define PPC_BASIC_VECS \
+#define PPC_BASIC_VECS_WO_SYS \
   [ASM_RESET_VECTOR] = PPC_EXC_CLASSIC, \
   [ASM_MACH_VECTOR] = PPC_EXC_CLASSIC, \
   [ASM_PROT_VECTOR] = PPC_EXC_CLASSIC, \
@@ -40,8 +40,11 @@
   [ASM_PROG_VECTOR] = PPC_EXC_CLASSIC, \
   [ASM_FLOAT_VECTOR] = PPC_EXC_CLASSIC, \
   [ASM_DEC_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC, \
-  [ASM_SYS_VECTOR] = PPC_EXC_CLASSIC, \
   [ASM_TRACE_VECTOR] = PPC_EXC_CLASSIC
+
+#define PPC_BASIC_VECS \
+	PPC_BASIC_VECS_WO_SYS, \
+	[ASM_SYS_VECTOR] = PPC_EXC_CLASSIC
 
 static const ppc_exc_categories ppc_405_category_table = {
   [ASM_BOOKE_CRIT_VECTOR] = PPC_EXC_405_CRITICAL | PPC_EXC_ASYNC,
@@ -221,13 +224,15 @@ static const ppc_exc_categories e500_category_table = {
 };
 
 static const ppc_exc_categories psim_category_table = {
-  PPC_BASIC_VECS,
+  PPC_BASIC_VECS_WO_SYS,
 
   [ASM_60X_SYSMGMT_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
   [ASM_60X_IMISS_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_60X_DLMISS_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_60X_DSMISS_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_60X_ADDR_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_60X_VEC_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_60X_VEC_ASSIST_VECTOR] = PPC_EXC_CLASSIC,
 };
 
 const ppc_exc_categories *ppc_exc_categories_for_cpu(ppc_cpu_id_t cpu)
