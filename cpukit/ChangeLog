@@ -1,5 +1,6 @@
 2009-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* mghttpd/Makefile.am: New.
 	* mghttpd/mongoose.c, mghttpd/mongoose.h, mghttpd/mongoose.1:
 	Import from svn http://mongoose.googlecode.com/svn/trunk (r477).
 
