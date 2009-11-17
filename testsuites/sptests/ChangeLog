@@ -1,3 +1,7 @@
+2009-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* spsize/Makefile.am: Fix broken install rule.
+
 2009-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spprintk/spprintk.scn: Add end of line at end of file.
