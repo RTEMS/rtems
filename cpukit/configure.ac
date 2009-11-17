@@ -316,6 +316,7 @@ ftpd/Makefile
 telnetd/Makefile
 pppd/Makefile
 shttpd/Makefile
+mghttpd/Makefile
 wrapup/Makefile])
 
 AC_CONFIG_COMMANDS([preinstall-stamp],

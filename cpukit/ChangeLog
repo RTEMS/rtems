@@ -1,5 +1,6 @@
 2009-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add mghttpd/Makefile.
 	* mghttpd/mongoose.c: Various 16bit fixes.
 	Add HAVE_CONFIG_H.
 	Add HAVE_SYS_MMAN_H HAVE_DLFCN_H.
