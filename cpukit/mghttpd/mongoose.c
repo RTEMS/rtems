@@ -161,7 +161,9 @@ typedef struct DIR {
 #include <sys/wait.h>
 #include <sys/socket.h>
 #include <sys/select.h>
+#if HAVE_SYS_MMAN_H
 #include <sys/mman.h>
+#endif
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
@@ -171,7 +173,9 @@ typedef struct DIR {
 #include <pwd.h>
 #include <unistd.h>
 #include <dirent.h>
+#if HAVE_DLFCN_H
 #include <dlfcn.h>
+#endif
 #include <pthread.h>
 #define	SSL_LIB			"libssl.so"
 #define	CRYPTO_LIB		"libcrypto.so"
