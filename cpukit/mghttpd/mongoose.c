@@ -1708,7 +1708,7 @@ mg_open_listening_port(struct mg_context *ctx, const char *str, struct usa *usa)
 	if (sscanf(str, "%d.%d.%d.%d:%d", &a, &b, &c, &d, &port) == 5) {
 		/* IP address to bind to is specified */
 		usa->u.sin.sin_addr.s_addr =
-		    htonl((a << 24) | (b << 16) | (c << 8) | d);
+		    htonl(((uint32_t)a << 24) | ((uint32_t)b << 16) | ((uint32_t)c << 8) | (uint32_t)d);
 	} else if (sscanf(str, "%d", &port) == 1) {
 		/* Only port number is specified. Bind to all addresses */
 		usa->u.sin.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -2091,14 +2091,14 @@ MD5Transform(uint32_t buf[4], uint32_t const in[16])
  * of bytes.
  */
 static void
-MD5Update(MD5_CTX *ctx, unsigned char const *buf, unsigned len)
+MD5Update(MD5_CTX *ctx, unsigned char const *buf, uint32_t len)
 {
 	uint32_t t;
 
 	/* Update bitcount */
 
 	t = ctx->bits[0];
-	if ((ctx->bits[0] = t + ((uint32_t) len << 3)) < t)
+	if ((ctx->bits[0] = t + (len << 3)) < t)
 		ctx->bits[1]++;		/* Carry from low to high */
 	ctx->bits[1] += len >> 29;
 
@@ -2214,7 +2214,7 @@ mg_md5(char *buf, ...)
 
 	va_start(ap, buf);
 	while ((p = va_arg(ap, const char *)) != NULL)
-		MD5Update(&ctx, (unsigned char *) p, (int) strlen(p));
+		MD5Update(&ctx, (unsigned char *) p, strlen(p));
 	va_end(ap);
 
 	MD5Final(hash, &ctx);
@@ -2567,10 +2567,10 @@ print_dir_entry(struct de *de)
 		if (de->st.size < 1024)
 			(void) mg_snprintf(de->conn, size, sizeof(size),
 			    "%lu", (unsigned long) de->st.size);
-		else if (de->st.size < 1024 * 1024)
+		else if (de->st.size < 0x100000 /* 1024 * 1024 */)
 			(void) mg_snprintf(de->conn, size, sizeof(size),
 			    "%.1fk", (double) de->st.size / 1024.0);
-		else if (de->st.size < 1024 * 1024 * 1024)
+		else if (de->st.size < 0x40000000 /* 1024 * 1024 * 1024 */)
 			(void) mg_snprintf(de->conn, size, sizeof(size),
 			    "%.1fM", (double) de->st.size / 1048576);
 		else
@@ -3863,7 +3863,7 @@ check_acl(struct mg_context *ctx, const char *list, const struct usa *usa)
 			return (-1);
 		}
 
-		acl_subnet = (a << 24) | (b << 16) | (c << 8) | d;
+		acl_subnet = ((uint32_t)a << 24) | ((uint32_t)b << 16) | ((uint32_t)c << 8) | (uint32_t)d;
 		acl_mask = mask ? 0xffffffffU << (32 - mask) : 0;
 
 		if (acl_subnet == (ntohl(remote_ip) & acl_mask))
