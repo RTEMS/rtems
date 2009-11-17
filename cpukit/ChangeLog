@@ -1,3 +1,8 @@
+2009-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mghttpd/mongoose.c, mghttpd/mongoose.h, mghttpd/mongoose.1:
+	Import from svn http://mongoose.googlecode.com/svn/trunk (r477).
+
 2009-11-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/capture/capture-cli.c: Cast pointer to intptr_t to
