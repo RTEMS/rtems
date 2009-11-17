@@ -1,5 +1,12 @@
 2009-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* mghttpd/mongoose.c: Various 16bit fixes.
+	Add HAVE_CONFIG_H.
+	Add HAVE_SYS_MMAN_H HAVE_DLFCN_H.
+	Convert to unix encoding.
+
+2009-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* mghttpd/Makefile.am: New.
 	* mghttpd/mongoose.c, mghttpd/mongoose.h, mghttpd/mongoose.1:
 	Import from svn http://mongoose.googlecode.com/svn/trunk (r477).
