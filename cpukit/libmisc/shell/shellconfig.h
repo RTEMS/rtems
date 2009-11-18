@@ -23,6 +23,9 @@ extern rtems_shell_cmd_t rtems_shell_HELP_Command;
 extern rtems_shell_cmd_t rtems_shell_ALIAS_Command;
 extern rtems_shell_cmd_t rtems_shell_TIME_Command;
 extern rtems_shell_cmd_t rtems_shell_LOGOFF_Command;
+extern rtems_shell_cmd_t rtems_shell_SETENV_Command;
+extern rtems_shell_cmd_t rtems_shell_GETENV_Command;
+extern rtems_shell_cmd_t rtems_shell_UNSETENV_Command;
 
 extern rtems_shell_cmd_t rtems_shell_MDUMP_Command;
 extern rtems_shell_cmd_t rtems_shell_WDUMP_Command;
@@ -194,6 +197,21 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_LOGOFF)) || \
         defined(CONFIGURE_SHELL_COMMAND_LOGOFF)
       &rtems_shell_LOGOFF_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_SETENV)) || \
+        defined(CONFIGURE_SHELL_COMMAND_SETENV)
+      &rtems_shell_SETENV_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_GETENV)) || \
+        defined(CONFIGURE_SHELL_COMMAND_GETENV)
+      &rtems_shell_GETENV_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_CRLENV)) || \
+        defined(CONFIGURE_SHELL_COMMAND_UNSETENV)
+      &rtems_shell_UNSETENV_Command,
     #endif
 
     /*

@@ -1,3 +1,11 @@
+2009-11-18	Chris Johns <chrisj@rtems.org>
+
+	* libmisc/shell/main_getenv.c, libmisc/shell/main_setenv.c,
+	libmisc/shell/main_unsetenv.c: New. The shell can now play with
+	environment variables.
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Add setenv,
+	getenv, and unsetenv to the shell.
+
 2009-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add mghttpd/Makefile.
