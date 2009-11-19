@@ -1,5 +1,10 @@
 2009-11-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/hexdump-odsyntax.c: Remove special casing
+	the h8300, avr, sh2e.
+
+2009-11-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/malloc_boundary.c: Avoid implicit type cast
 	(https://www.rtems.org/bugzilla/show_bug.cgi?id=1472#c1).
 

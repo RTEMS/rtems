@@ -349,21 +349,15 @@ odformatfp(rtems_shell_hexdump_globals* globals, char fchar __unused, const char
 			fmt = (const char *)end;
 		}
 	}
-	switch (isize) {
-	case sizeof(float):
+	if (isize == sizeof(float) ) {
 		digits = FLT_DIG;
-		break;
-#if !defined(__AVR__) && !defined(__h8300__) && !defined(__SH2E__)
-	case sizeof(double):
+        } else if (isize == sizeof(double)) {
 		digits = DBL_DIG;
-		break;
-#endif
-	default:
-		if (isize == sizeof(long double))
-			digits = LDBL_DIG;
-		else
-			errx(exit_jump, 1, "unsupported floating point size %lu",
-			    (u_long)isize);
+        } else if (isize == sizeof(long double)) {
+		digits = LDBL_DIG;
+        } else {
+	        errx(exit_jump, 1, "unsupported floating point size %zu",
+		        isize);
 	}
 
 	asprintf(&hdfmt, "%lu/%lu \" %%%d.%de \" \"\\n\"",
