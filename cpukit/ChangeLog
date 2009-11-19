@@ -1,5 +1,10 @@
 2009-11-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-networking.m4: Do NOT disable networking for the
+	avr and the m32c.
+
+2009-11-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/hexdump-odsyntax.c: Remove special casing
 	the h8300, avr, sh2e.
 

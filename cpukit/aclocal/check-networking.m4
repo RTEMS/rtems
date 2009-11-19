@@ -9,9 +9,6 @@ AC_CACHE_CHECK([whether CPU supports networking],
   rtems_cv_HAS_NETWORKING,
   [dnl
     case "$RTEMS_CPU" in
-    avr*|m32c*)       # do not have address space to hold BSD TCP/IP stack
-      rtems_cv_HAS_NETWORKING="no"
-      ;;
     *)
       AS_IF([test "${RTEMS_HAS_NETWORKING}" = "yes"],[
 # suppress libnetworking if one these types is not available
