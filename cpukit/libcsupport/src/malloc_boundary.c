@@ -86,7 +86,7 @@ static void rtems_malloc_boundary_at_malloc(
     for (i = 0 ; i < CALLCHAINSIZE ; i++) {
       mp->callChain[i] = fp[1];
       nfp = (int *)(fp[0]);
-      if((nfp <= fp) || (nfp > (int *)((intptr_t)1 << 24)))
+      if((nfp <= fp) || (nfp > (int *)(INT32_C(0x1000000) /* 1 << 24 */)))
        break;
       fp = nfp;
     }

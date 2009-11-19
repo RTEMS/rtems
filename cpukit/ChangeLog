@@ -1,3 +1,8 @@
+2009-11-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/malloc_boundary.c: Avoid implicit type cast
+	(https://www.rtems.org/bugzilla/show_bug.cgi?id=1472#c1).
+
 2009-11-18	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/main_getenv.c, libmisc/shell/main_setenv.c,
