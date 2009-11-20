@@ -98,6 +98,13 @@ typedef struct rtems_blkdev_sg_buffer {
 /**
  * The block device request structure is used to read or write a number of
  * blocks from or to the device.
+ *
+ * TODO: The use of these req blocks is not a great design. The req is a
+ *       struct with a single 'bufs' declared in the req struct and the
+ *       others are added in the outer level struct. This relies on the
+ *       structs joining as a single array and that assumes the compiler
+ *       packs the structs. Why not just place on a list ? The BD has a
+ *       node that can be used.
  */
 typedef struct rtems_blkdev_request {
   /**

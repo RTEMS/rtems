@@ -13,7 +13,9 @@
  * Copyright (C) 2008,2009 Chris Johns <chrisj@rtems.org>
  *    Rewritten to remove score mutex access. Fixes many performance
  *    issues.
-      Change to support demand driven variable buffer sizes.
+ *    Change to support demand driven variable buffer sizes.
+ *
+ * Copyright (c) 2009 embedded brains GmbH.
  *
  * @(#) bdbuf.h,v 1.9 2005/02/02 00:06:18 joel Exp
  */
@@ -44,125 +46,162 @@ extern "C" {
  * @ingroup rtems_libblock
  *
  * The Block Device Buffer Management implements a cache between the disk
- * devices and file systems. The code provides read ahead and write queuing to
- * the drivers and fast cache look up using an AVL tree.
+ * devices and file systems.  The code provides read ahead and write queuing to
+ * the drivers and fast cache look-up using an AVL tree.
  *
  * The block size used by a file system can be set at runtime and must be a
- * multiple of the disk device block size. The disk device's physical block
- * size is called the media block size. The file system can set the block size
- * it uses to a larger multiple of the media block size. The driver must be
+ * multiple of the disk device block size.  The disk device's physical block
+ * size is called the media block size.  The file system can set the block size
+ * it uses to a larger multiple of the media block size.  The driver must be
  * able to handle buffers sizes larger than one media block.
  *
  * The user configures the amount of memory to be used as buffers in the cache,
- * and the minimum and maximum buffer size. The cache will allocate additional
- * memory for the buffer descriptors and groups. There are enough buffer
+ * and the minimum and maximum buffer size.  The cache will allocate additional
+ * memory for the buffer descriptors and groups.  There are enough buffer
  * descriptors allocated so all the buffer memory can be used as minimum sized
  * buffers.
  *
- * The cache is a single pool of buffers. The buffer memory is divided into
+ * The cache is a single pool of buffers.  The buffer memory is divided into
  * groups where the size of buffer memory allocated to a group is the maximum
- * buffer size. A group's memory can be divided down into small buffer sizes
- * that are a multiple of 2 of the minimum buffer size. A group is the minumum
- * allocation unit for buffers of a specific size. If a buffer of maximum size
- * is request the group will have a single buffer. If a buffer of minium size
+ * buffer size.  A group's memory can be divided down into small buffer sizes
+ * that are a multiple of 2 of the minimum buffer size.  A group is the minimum
+ * allocation unit for buffers of a specific size.  If a buffer of maximum size
+ * is request the group will have a single buffer.  If a buffer of minimum size
  * is requested the group is divided into minimum sized buffers and the
- * remaining buffers are held ready for use. A group keeps track of which
+ * remaining buffers are held ready for use.  A group keeps track of which
  * buffers are with a file system or driver and groups who have buffer in use
- * cannot be realloced. Groups with no buffers in use can be taken and
- * realloced to a new size. This is how buffers of different sizes move around
+ * cannot be realloced.  Groups with no buffers in use can be taken and
+ * realloced to a new size.  This is how buffers of different sizes move around
  * the cache.
 
- * The buffers are held in various lists in the cache. All buffers follow this
+ * The buffers are held in various lists in the cache.  All buffers follow this
  * state machine:
  *                                  
  * @dot
- * digraph g {
- *   ready [label="Ready\nRead Ahead"];
- *   transfer [label="Transfer"];
- *   accessed [label="Accessed\nAccessed Modified"];
- *   modified [label="Modified\nSynchronized"];
- *   cached [label="Cached"];
- *   ready -> transfer [label="Read\nRead Ahead"];
- *   transfer -> ready [label="Read Ahead Complete"];
- *   ready -> accessed [label="Get"];
- *   transfer -> accessed [label="Read or Write\nComplete"];
- *   transfer -> cached [label="Read or Write\nComplete"];
- *   accessed -> cached [label="Release"];
- *   cached -> accessed [label="Get"];
- *   modified -> accessed [label="Get"];
- *   accessed -> modified [label="Modified"];
- *   accessed -> transfer [label="Swap"];
+ * digraph state {
+ *   e [label="EMPTY",style="filled",fillcolor="aquamarine"];
+ *   f [label="FRESH",style="filled",fillcolor="seagreen"];
+ *   c [label="CACHED",style="filled",fillcolor="chartreuse"];
+ *   a [label="ACCESS",style="filled",fillcolor="royalblue"];
+ *   am [label="ACCESS MODIFIED",style="filled",fillcolor="royalblue"];
+ *   t [label="TRANSFER",style="filled",fillcolor="red"];
+ *   s [label="SYNC",style="filled",fillcolor="red"];
+ *   m [label="MODIFIED",style="filled",fillcolor="gold"];
+ *   i [label="INITIAL"];
+ *   
+ *   legend_transfer [label="Transfer Wake-Up",fontcolor="red",shape="none"];
+ *   legend_access [label="Access Wake-Up",fontcolor="royalblue",shape="none"];
+ *   
+ *   i -> e [label="Init"];
+ *   e -> f [label="Buffer Recycle"];
+ *   f -> a [label="Get"];
+ *   f -> t [label="Read\nRead Ahead"];
+ *   c -> e [label="Reallocate\nBlock Size Changed"];
+ *   c -> a [label="Get\nRead"];
+ *   c -> f [label="Buffer Recycle"];
+ *   t -> c [label="Write Transfer Done\nRead Transfer Done\nRead Ahead Transfer Done",color="red",fontcolor="red"];
+ *   m -> t [label="Swapout"];
+ *   m -> s [label="Block Size Changed"];
+ *   m -> am [label="Get\nRead"];
+ *   a -> m [label="Release Modified",color="royalblue",fontcolor="royalblue"];
+ *   a -> s [label="Sync",color="royalblue",fontcolor="royalblue"];
+ *   a -> c [label="Release",color="royalblue",fontcolor="royalblue"];
+ *   am -> m [label="Release\nRelease Modified",color="royalblue",fontcolor="royalblue"];
+ *   am -> s [label="Sync",color="royalblue",fontcolor="royalblue"];
+ *   s -> t [label="Swapout"];
  * }
  * @enddot
  *         
- * Empty buffers are added to the ready list and removed from this queue when a
- * caller requests a buffer. This is referred to as getting a buffer in the
- * code and the event get in the state diagram. The buffer is assigned to a
- * block and inserted to the AVL based on the block/device key. If the block is
- * to be read by the user and not in the cache (ready) it is transfered from
- * the disk into memory. If no ready buffers exist the buffer is taken from the
- * LRU list. If no buffers are on the LRU list the modified list is check. If
- * no buffers are on the modified list the request blocks. If buffers are on
- * the modified list the buffers hold timer is expired and the swap out task
- * woken.
+ * Empty or cached buffers are added to the LRU list and removed from this
+ * queue when a caller requests a buffer.  This is referred to as getting a
+ * buffer in the code and the event get in the state diagram.  The buffer is
+ * assigned to a block and inserted to the AVL based on the block/device key.
+ * If the block is to be read by the user and not in the cache it is transfered
+ * from the disk into memory.  If no buffers are on the LRU list the modified
+ * list is checked.  If buffers are on the modified the swap out task will be
+ * woken.  The request blocks until a buffer is available for recycle.  
  *
- * A block being accessed is given to the file system layer and not accessable
- * to another requester until released back to the cache. The same goes to a
- * buffer in the transfer state. The transfer state means being read or
- * written. If the file system has modifed the block and releases it as
+ * A block being accessed is given to the file system layer and not accessible
+ * to another requester until released back to the cache.  The same goes to a
+ * buffer in the transfer state.  The transfer state means being read or
+ * written.  If the file system has modifed the block and releases it as
  * modified it placed on the cache's modified list and a hold timer
- * initialised. The buffer is held for the hold time before being written to
- * disk. Buffers are held for a configurable period of time on the modified
+ * initialised.  The buffer is held for the hold time before being written to
+ * disk.  Buffers are held for a configurable period of time on the modified
  * list as a write sets the state to transfer and this locks the buffer out
- * from the file system until the write completes. Buffers are often accessed
+ * from the file system until the write completes.  Buffers are often accessed
  * and modified in a series of small updates so if sent to the disk when
  * released as modified the user would have to block waiting until it had been
- * written. This would be a performance problem.
+ * written.  This would be a performance problem.
  *
- * The code performs mulitple block reads and writes. Multiple block reads or
- * read ahead increases performance with hardware that supports it. It also
- * helps with a large cache as the disk head movement is reduced. It how-ever
+ * The code performs multiple block reads and writes.  Multiple block reads or
+ * read ahead increases performance with hardware that supports it.  It also
+ * helps with a large cache as the disk head movement is reduced.  It however
  * is a speculative operation so excessive use can remove valuable and needed
- * blocks from the cache. The get call knows if a read is a for the file system
- * or if it is a read ahead get. If the get is for a read ahead block and the
- * block is already in the cache or no ready buffers are available the read
- * ahead is stopped. The transfer occurs with the blocks so far. If a buffer is
- * in the read ahead state and release it is placed on the ready list rather
- * than the LRU list. This means these buffers are used before buffers used by
- * the file system.
+ * blocks from the cache.
  *
  * The cache has the following lists of buffers:
- *  - @c ready: Empty buffers created when the pool is initialised.
- *  - @c modified: Buffers waiting to be written to disk.
- *  - @c sync: Buffers to be synced to disk.
- *  - @c lru: Accessed buffers released in least recently used order.
+ *  - LRU: Accessed or transfered buffers released in least recently used
+ *  order.  Empty buffers will be placed to the front.
+ *  - Modified: Buffers waiting to be written to disk.
+ *  - Sync: Buffers to be synchronized with the disk.
  *
- * The cache scans the ready list then the LRU list for a suitable buffer in
- * this order. A suitable buffer is one that matches the same allocation size
- * as the device the buffer is for. The a buffer's group has no buffers in use
- * with the file system or driver the group is reallocated. This means the
- * buffers in the group are invalidated, resized and placed on the ready queue.
- * There is a performance issue with this design. The reallocation of a group
- * may forced recently accessed buffers out of the cache when they should
- * not. The design should be change to have groups on a LRU list if they have
- * no buffers in use.
+ * A cache look-up will be performed to find a suitable buffer.  A suitable
+ * buffer is one that matches the same allocation size as the device the buffer
+ * is for.  The a buffer's group has no buffers in use with the file system or
+ * driver the group is reallocated.  This means the buffers in the group are
+ * invalidated, resized and placed on the LRU queue.  There is a performance
+ * issue with this design.  The reallocation of a group may forced recently
+ * accessed buffers out of the cache when they should not.  The design should be
+ * change to have groups on a LRU list if they have no buffers in use.
  *
  * @{
  */
 
 /**
- * State of a buffer in the cache.
+ * State of a buffer of the cache.
  */
 typedef enum
 {
-  RTEMS_BDBUF_STATE_EMPTY = 0,            /**< Not in use. */
-  RTEMS_BDBUF_STATE_READ_AHEAD = 1,       /**< Holds read ahead data only */
-  RTEMS_BDBUF_STATE_CACHED = 2,           /**< In the cache and available */
-  RTEMS_BDBUF_STATE_ACCESS = 3,           /**< The user has the buffer */
-  RTEMS_BDBUF_STATE_MODIFIED = 4,         /**< In the cache but modified */
-  RTEMS_BDBUF_STATE_ACCESS_MODIFIED = 5,  /**< With the user but modified */
-  RTEMS_BDBUF_STATE_SYNC = 6,             /**< Requested to be sync'ed */
-  RTEMS_BDBUF_STATE_TRANSFER = 7          /**< Being transferred to or from disk */
+  /**
+   * Not in the cache.  Not in a list.  Not in use.
+   */
+  RTEMS_BDBUF_STATE_EMPTY = 0,
+
+  /**
+   * In the cache.  Not in a list.  In use by a get or read request.
+   */
+  RTEMS_BDBUF_STATE_FRESH,
+
+  /**
+   * In the cache.  In the LRU list.  Not in use.
+   */
+  RTEMS_BDBUF_STATE_CACHED,          /**< In the cache and available */
+
+  /**
+   * In the cache.  Not in a list.  In use by an upper layer.
+   */
+  RTEMS_BDBUF_STATE_ACCESS,
+
+  /**
+   * In the cache.  Not in a list.  In use by an upper layer.
+   */
+  RTEMS_BDBUF_STATE_ACCESS_MODIFIED,
+
+  /**
+   * In the cache.  In the modified list.  Not in use.
+   */
+  RTEMS_BDBUF_STATE_MODIFIED,
+
+  /**
+   * In the cache.  In the sync list.  Not in use.
+   */
+  RTEMS_BDBUF_STATE_SYNC,
+
+  /**
+   * In the cache.  Not in a list.  In use by the block device driver.
+   */
+  RTEMS_BDBUF_STATE_TRANSFER
 } rtems_bdbuf_buf_state;
 
 /**
@@ -266,7 +305,7 @@ extern const rtems_bdbuf_config rtems_bdbuf_configuration;
  * The max_read_ahead_blocks value is altered if there are fewer buffers
  * than this defined max. This stops thrashing in the cache.
  */
-#define RTEMS_BDBUF_MAX_READ_AHEAD_BLOCKS_DEFAULT    32
+#define RTEMS_BDBUF_MAX_READ_AHEAD_BLOCKS_DEFAULT    0
 
 /**
  * Default maximum number of blocks to write at once.

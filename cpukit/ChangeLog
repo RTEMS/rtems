@@ -1,3 +1,8 @@
+2009-11-18	Thomas Doefler <Thomas.Doerfler@embedded-brains.de>
+
+	* libblock/include/rtems/blkdev.h, libblock/include/bdbuf.h,
+	libblock/src/bdbuf.c: various changes
+
 2009-11-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/check-networking.m4: Do NOT disable networking for the
