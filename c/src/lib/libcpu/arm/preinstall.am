@@ -70,6 +70,10 @@ $(PROJECT_INCLUDE)/bits.h: at91rm9200/include/bits.h $(PROJECT_INCLUDE)/$(dirsta
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bits.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bits.h
 
+$(PROJECT_INCLUDE)/at91rm9200_usart.h: at91rm9200/include/at91rm9200_usart.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_usart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_usart.h
+
 $(PROJECT_INCLUDE)/irq.h: at91rm9200/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h

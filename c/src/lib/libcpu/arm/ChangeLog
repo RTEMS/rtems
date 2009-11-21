@@ -1,3 +1,10 @@
+2009-11-21	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* Makefile.am, preinstall.am, at91rm9200/include/at91rm9200.h: Add
+	initial support for USART on at91rm9200.
+	* at91rm9200/include/at91rm9200_usart.h, at91rm9200/usart/usart.c:
+	New files.
+
 2009-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* pxa255/ffuart/ffuart.c: Add BSP_poll_char.

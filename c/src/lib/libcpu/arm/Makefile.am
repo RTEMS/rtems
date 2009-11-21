@@ -26,7 +26,7 @@ endif
 if pxa255
 include_HEADERS = pxa255/include/pxa255.h pxa255/include/ffuart.h
 
-##pxa255/clock
+## pxa255/clock
 noinst_PROGRAMS += pxa255/clock.rel
 pxa255_clock_rel_SOURCES = pxa255/clock/clock.c
 pxa255_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
@@ -63,7 +63,8 @@ endif
 if at91rm9200
 include_HEADERS = at91rm9200/include/at91rm9200.h at91rm9200/include/at91rm9200_dbgu.h \
     at91rm9200/include/at91rm9200_emac.h at91rm9200/include/at91rm9200_gpio.h \
-    at91rm9200/include/at91rm9200_mem.h at91rm9200/include/at91rm9200_pmc.h at91rm9200/include/bits.h
+    at91rm9200/include/at91rm9200_mem.h at91rm9200/include/at91rm9200_pmc.h \
+    at91rm9200/include/bits.h at91rm9200/include/at91rm9200_usart.h 
 
 ## at91rm9200/clock
 noinst_PROGRAMS += at91rm9200/clock.rel
@@ -76,6 +77,12 @@ noinst_PROGRAMS += at91rm9200/dbgu.rel
 at91rm9200_dbgu_rel_SOURCES = at91rm9200/dbgu/dbgu.c
 at91rm9200_dbgu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 at91rm9200_dbgu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## at91rm9200/usart
+noinst_PROGRAMS += at91rm9200/usart.rel
+at91rm9200_usart_rel_SOURCES = at91rm9200/usart/usart.c
+at91rm9200_usart_rel_CPPFLAGS = $(AM_CPPFLAGS)
+at91rm9200_usart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## at91rm9200/timer
 noinst_PROGRAMS += at91rm9200/timer.rel
