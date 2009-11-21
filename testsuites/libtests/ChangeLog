@@ -1,3 +1,10 @@
+2009-11-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* block02/.cvsignore, block03/.cvsignore, block04/.cvsignore,
+	block05/.cvsignore, block06/.cvsignore, block07/.cvsignore: New files.
+	* block02/Makefile.in, block03/Makefile.in, block04/Makefile.in,
+	block05/Makefile.in, block06/Makefile.in, block07/Makefile.in: Removed.
+
 2009-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems++/Task3.cc: Use %zu instead of %i to print size_t's.
