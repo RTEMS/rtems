@@ -1,3 +1,9 @@
+2009-11-21	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* Makefile.am, configure.ac, console/uarts.c: Add initial support for
+	Kit637 version of CSB637.
+	* README.kit637_v6, make/custom/kit637_v6.cfg: New files.
+
 2009-11-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add RTEMS_BSP_LINKCMDS.

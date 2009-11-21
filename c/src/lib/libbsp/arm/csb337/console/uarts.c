@@ -1,5 +1,5 @@
 /*
- *  Console driver for CSB337
+ *  Console driver for for KIT637_V6 (CSB637)
  *
  *  This driver uses the shared console driver in 
  *  ...../libbsp/shared/console.c
@@ -7,14 +7,18 @@
  *  Copyright (c) 2003 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com> 
  *
+ * Modified by Fernando Nicodemos <fgnicodemos@terra.com.br>
+ * from NCB - Sistemas Embarcados Ltda. (Brazil)
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  FrameBuffer Console Device Support added By Joel Sherrill, 2009.
+ *  Modified and FrameBuffer Console Device Support added by 
+ *  Joel Sherrill, 2009.
  *
  *  $Id$
- */
+*/
 
 #include <bsp.h>
 #include <rtems/libio.h>
@@ -30,21 +34,52 @@
 /* rtems console uses the following minor number */
 rtems_device_minor_number  Console_Port_Minor = 0;
 extern console_fns dbgu_fns;
+
 #if ENABLE_LCD
   extern console_fns fbcons_fns;
-  #define LCD_DEVICE     1
+  #define LCD_DEV 1
 #else
-  #define LCD_DEVICE     0
+  #define LCD_DEV 0
 #endif
 
-#if ENABLE_UMON_CONSOLE
+#if (ENABLE_UMON && ENABLE_UMON_CONSOLE)
   extern console_fns umoncons_fns;
-  #define UMON_CONSOLE_DEVICE 1
+  #define UMON_CONS_DEV 1
 #else
-  #define UMON_CONSOLE_DEVICE 0
+  #define UMON_CONS_DEV 0 
 #endif
 
-#define NUM_DEVS   (1 + LCD_DEVICE + UMON_CONSOLE_DEVICE)
+#if ENABLE_USART0 || ENABLE_USART1 || ENABLE_USART2 || ENABLE_USART3
+  extern console_fns usart_polling_fns;
+#endif
+
+#if ENABLE_USART0 
+  #define USART0_DEV 1
+#else
+  #define USART0_DEV 0 
+#endif
+
+#if ENABLE_USART1 
+  #define USART1_DEV 1
+#else
+  #define USART1_DEV 0 
+#endif
+
+#if ENABLE_USART2
+  #define USART2_DEV 1
+#else
+  #define USART2_DEV 0 
+#endif
+
+#if ENABLE_USART3
+  #define USART3_DEV 1
+#else
+  #define USART3_DEV 0 
+#endif
+
+#define NUM_DEVS \
+  (1 + LCD_DEV + UMON_CONS_DEV + \
+  USART0_DEV + USART1_DEV + USART2_DEV + USART3_DEV)
 
 /* These are used by code in console.c */
 unsigned long Console_Port_Count = NUM_DEVS;
@@ -100,7 +135,7 @@ console_tbl Console_Port_Tbl[] = {
     0                  /* ulIntVector - NOT USED */
   },
 #endif
-#if ENABLE_UMON_CONSOLE
+#if ENABLE_UMON
   {
     "/dev/umon",       /* sDeviceName */
     SERIAL_CUSTOM,     /* deviceType */
@@ -119,10 +154,93 @@ console_tbl Console_Port_Tbl[] = {
     NULL,              /* setData - NOT USED */
     0,                 /* ulClock - NOT USED */
     0                  /* ulIntVector - NOT USED */
+  },
+#endif
+#if ENABLE_USART0
+  {
+    "/dev/com1",       /* sDeviceName */
+    SERIAL_CUSTOM,     /* deviceType */
+    &usart_polling_fns,/* pDeviceFns */
+    NULL,              /* deviceProbe */
+    NULL,              /* pDeviceFlow */
+    0,                 /* ulMargin - NOT USED */
+    0,                 /* ulHysteresis - NOT USED */
+    NULL,              /* pDeviceParams */
+    USART0_BASE,       /* ulCtrlPort1  - Pointer to USART 0 regs */
+    0,                 /* ulCtrlPort2  - NOT USED */
+    0,                 /* ulDataPort  - NOT USED */
+    NULL,              /* getRegister - NOT USED */
+    NULL,              /* setRegister - NOT USED */
+    NULL,              /* getData - NOT USED */
+    NULL,              /* setData - NOT USED */
+    0,                 /* ulClock - NOT USED */
+    0                  /* ulIntVector - NOT USED */
+  },
+#endif
+#if ENABLE_USART1
+  {
+    "/dev/com2",       /* sDeviceName */
+    SERIAL_CUSTOM,     /* deviceType */
+    &usart_polling_fns,/* pDeviceFns */
+    NULL,              /* deviceProbe */
+    NULL,              /* pDeviceFlow */
+    0,                 /* ulMargin - NOT USED */
+    0,                 /* ulHysteresis - NOT USED */
+    NULL,              /* pDeviceParams */
+    USART1_BASE,       /* ulCtrlPort1  - Pointer to USART 1 regs */
+    0,                 /* ulCtrlPort2  - NOT USED */
+    0,                 /* ulDataPort  - NOT USED */
+    NULL,              /* getRegister - NOT USED */
+    NULL,              /* setRegister - NOT USED */
+    NULL,              /* getData - NOT USED */
+    NULL,              /* setData - NOT USED */
+    0,                 /* ulClock - NOT USED */
+    0                  /* ulIntVector - NOT USED */
+  },
+#endif
+#if ENABLE_USART2
+  {
+    "/dev/com3",       /* sDeviceName */
+    SERIAL_CUSTOM,     /* deviceType */
+    &usart_polling_fns,/* pDeviceFns */
+    NULL,              /* deviceProbe */
+    NULL,              /* pDeviceFlow */
+    0,                 /* ulMargin - NOT USED */
+    0,                 /* ulHysteresis - NOT USED */
+    NULL,              /* pDeviceParams */
+    USART2_BASE,       /* ulCtrlPort1  - Pointer to USART 2 regs */
+    0,                 /* ulCtrlPort2  - NOT USED */
+    0,                 /* ulDataPort  - NOT USED */
+    NULL,              /* getRegister - NOT USED */
+    NULL,              /* setRegister - NOT USED */
+    NULL,              /* getData - NOT USED */
+    NULL,              /* setData - NOT USED */
+    0,                 /* ulClock - NOT USED */
+    0                  /* ulIntVector - NOT USED */
+  },
+#endif
+#if ENABLE_USART3
+  {
+    "/dev/com4",       /* sDeviceName */
+    SERIAL_CUSTOM,     /* deviceType */
+    &usart_polling_fns,/* pDeviceFns */
+    NULL,              /* deviceProbe */
+    NULL,              /* pDeviceFlow */
+    0,                 /* ulMargin - NOT USED */
+    0,                 /* ulHysteresis - NOT USED */
+    NULL,              /* pDeviceParams */
+    USART3_BASE,       /* ulCtrlPort1  - Pointer to USART 3 regs */
+    0,                 /* ulCtrlPort2  - NOT USED */
+    0,                 /* ulDataPort  - NOT USED */
+    NULL,              /* getRegister - NOT USED */
+    NULL,              /* setRegister - NOT USED */
+    NULL,              /* getData - NOT USED */
+    NULL,              /* setData - NOT USED */
+    0,                 /* ulClock - NOT USED */
+    0                  /* ulIntVector - NOT USED */
   }
 #endif
 };
-
 
 console_tbl *BSP_get_uart_from_minor(int minor)
 {

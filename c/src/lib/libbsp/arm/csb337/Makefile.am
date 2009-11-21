@@ -12,8 +12,11 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += ../../shared/include/tm27.h
+if ENABLE_LCD
 include_HEADERS += include/sed1356.h
+endif
 
+if ENABLE_UMON
 include_umondir = $(includedir)/umon
 include_umon_HEADERS  = ../../shared/umon/cli.h
 include_umon_HEADERS += ../../shared/umon/monlib.h
@@ -21,6 +24,7 @@ include_umon_HEADERS += ../../shared/umon/tfs.h
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS  = ../../shared/umon/umon.h
+endif
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
@@ -35,18 +39,20 @@ nodist_include_HEADERS += console/font8x16.h
 endif
 
 noinst_LIBRARIES = libbspstart.a
+
 libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
 EXTRA_DIST = startup/linkcmds.csb337
 EXTRA_DIST += startup/linkcmds.csb637
+EXTRA_DIST += README
+EXTRA_DIST += README.kit637_v6
 
 noinst_LIBRARIES += libbsp.a
-libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
+libbsp_a_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppretaskinghook.c startup/bspstart.c \
     ../../shared/bspclean.c startup/bspreset.c \
@@ -60,9 +66,14 @@ endif
 # abort
 libbsp_a_SOURCES += ../shared/abort/abort.c
 # umon
+if ENABLE_UMON
 libbsp_a_SOURCES += ../../shared/umon/umonrtemsglue.c  \
     ../../shared/umon/monlib.c ../../shared/umon/tfsDriver.c \
     ../../shared/umon/umoncons.c startup/umonsupp.c
+endif
+if ENABLE_UMON_CONSOLE
+libbsp_a_SOURCES += ../../shared/umon/umoncons.c
+endif
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -75,6 +86,7 @@ endif
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/dbgu.rel \
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/usart.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/pmc.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel
