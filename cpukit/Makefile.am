@@ -25,6 +25,7 @@ SUBDIRS += ftpd
 SUBDIRS += telnetd
 SUBDIRS += pppd
 SUBDIRS += shttpd
+SUBDIRS += mghttpd
 
 noinst_DATA = preinstall-stamp
 preinstall-stamp:

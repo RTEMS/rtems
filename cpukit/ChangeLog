@@ -1,3 +1,7 @@
+2009-11-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add mghttpd.
+
 2009-11-18	Thomas Doefler <Thomas.Doerfler@embedded-brains.de>
 
 	* libblock/include/rtems/blkdev.h, libblock/include/bdbuf.h,
