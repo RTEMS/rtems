@@ -1,7 +1,7 @@
 /*
  *  Clock Tick Device Driver Shell
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,12 +36,7 @@
 /*
  *  Clock ticks since initialization
  */
-volatile uint32_t         Clock_driver_ticks;
-
-/*
- *  ISR formerly installed.
- */
-rtems_isr_entry  Old_ticker;
+volatile uint32_t    Clock_driver_ticks;
 
 void Clock_exit( void );
 
@@ -102,50 +97,6 @@ rtems_isr Clock_isr(
 }
 
 /*
- *  Install_clock
- *
- *  This routine actually performs the hardware initialization for the clock.
- *
- *  Input parameters:
- *    clock_isr - clock interrupt service routine entry point
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- *
- */
-
-static void Install_clock(
-  rtems_isr_entry clock_isr
-)
-{
-  Clock_driver_ticks = 0;
-
-  /*
-   *  Find timer -- some BSPs search buses for hardware timer
-   */
-  Clock_driver_support_find_timer();
-
-  /*
-   *  Install vector
-   */
-  Clock_driver_support_install_isr( clock_isr, Old_ticker );
-
-  #if defined(Clock_driver_nanoseconds_since_last_tick)
-    rtems_clock_set_nanoseconds_extension(
-      Clock_driver_nanoseconds_since_last_tick
-    );
-  #endif
-
-  /*
-   *  Now initialize the hardware that is the source of the tick ISR.
-   */
-  Clock_driver_support_initialize_hardware();
-
-  atexit( Clock_exit );
-}
-
-/*
  *  Clock_exit
  *
  *  This routine allows the clock driver to exit by masking the interrupt and
@@ -188,7 +139,32 @@ rtems_device_driver Clock_initialize(
   void *pargp
 )
 {
-  Install_clock( Clock_isr );
+  rtems_isr_entry  Old_ticker;
+
+  Clock_driver_ticks = 0;
+
+  /*
+   *  Find timer -- some BSPs search buses for hardware timer
+   */
+  Clock_driver_support_find_timer();
+
+  /*
+   *  Install vector
+   */
+  Clock_driver_support_install_isr( Clock_isr, Old_ticker );
+
+  #if defined(Clock_driver_nanoseconds_since_last_tick)
+    rtems_clock_set_nanoseconds_extension(
+      Clock_driver_nanoseconds_since_last_tick
+    );
+  #endif
+
+  /*
+   *  Now initialize the hardware that is the source of the tick ISR.
+   */
+  Clock_driver_support_initialize_hardware();
+
+  atexit( Clock_exit );
 
   /*
    *  If we are counting ISRs per tick, then initialize the counter.

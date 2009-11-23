@@ -1,3 +1,7 @@
+2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* clockdrv_shell.h: Clean up.
+
 2009-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/irq-generic.h, src/irq-generic.c, src/irq-legacy.c,
