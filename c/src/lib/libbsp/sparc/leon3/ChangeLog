@@ -1,3 +1,9 @@
+2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, startup/bspstart.c:
+	Use ../../sparc/shared/bsppretaskinghook.c.
+	* console/console.c: Remove sis comment.
+
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* amba/amba.c: Re-add tmp.

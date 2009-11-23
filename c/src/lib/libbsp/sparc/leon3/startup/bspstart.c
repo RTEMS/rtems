@@ -47,18 +47,6 @@ static inline int set_snooping(void)
 }
 
 /*
- *  bsp_pretasking_hook
- *
- *  BSP pretasking hook.  Called just before drivers are initialized.
- *  Used to setup libc and install any BSP extensions     .
- */
-
-void bsp_pretasking_hook(void)
-{
-  bsp_spurious_initialize();
-}
-
-/*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
