@@ -30,7 +30,7 @@ rtems_assoc_t rtems_objects_api_assoc[] = {
 };
 
 const char *rtems_object_get_api_name(
-  uint32_t api
+  int api
 )
 {
   const rtems_assoc_t *api_assoc;

@@ -20,7 +20,7 @@
 #include <rtems/rtems/types.h>
 
 #undef rtems_object_id_api_maximum
-uint32_t rtems_object_id_api_maximum(void)
+int rtems_object_id_api_maximum(void)
 {
   return OBJECTS_ITRON_API;
 }

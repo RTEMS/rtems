@@ -249,14 +249,31 @@ rtems_status_code rtems_object_set_name(
  *  specified @a api.  Each API supports a different number
  *  of object classes.
  *
- *  @param[in] api is the API to obtain the maximum class of
+ *  @param[in] api is the API to obtain the minimum class of
  *
  *  @return This method returns the least valid value for
  *          class number for the specified @a api.
  */
-uint32_t rtems_object_id_api_minimum_class(
-  uint32_t api
+int rtems_object_api_minimum_class(
+  int api
 );
+
+/**
+ *  @brief Get Highest Valid Class Value
+ *
+ *  This method returns the highest valid value Class for the 
+ *  specified @a api.  Each API supports a different number
+ *  of object classes.
+ *
+ *  @param[in] api is the API to obtain the maximum class of
+ *
+ *  @return This method returns the greatet valid value for
+ *          class number for the specified @a api.
+ */
+int rtems_object_api_maximum_class(
+  int api
+);
+
 
 /**
  *  @brief Get Highest Valid Class Value
@@ -271,7 +288,7 @@ uint32_t rtems_object_id_api_minimum_class(
  *          class number for the specified @a api.
  */
 int rtems_object_id_api_maximum_class(
-  uint32_t api
+  int api
 );
 
 /**
@@ -287,7 +304,7 @@ int rtems_object_id_api_maximum_class(
  *          the string "BAD API"
  */
 const char *rtems_object_get_api_name(
-  uint32_t api
+  int api
 );
 
 /**
@@ -304,8 +321,8 @@ const char *rtems_object_get_api_name(
  *          the string "BAD CLASS"
  */
 const char *rtems_object_get_api_class_name(
-  uint32_t the_api, 
-  uint32_t the_class
+  int the_api, 
+  int the_class
 );
 
 /**
@@ -324,8 +341,8 @@ const char *rtems_object_get_api_class_name(
  *
  */
 rtems_status_code rtems_object_get_class_information(
-  uint32_t                            the_api,
-  uint32_t                            the_class,
+  int                                 the_api,
+  int                                 the_class,
   rtems_object_api_class_information *info
 );
 

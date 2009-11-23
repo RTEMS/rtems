@@ -20,7 +20,7 @@
 #include <rtems/rtems/types.h>
 
 #undef rtems_object_id_api_minimum
-uint32_t rtems_object_id_api_minimum(void)
+int rtems_object_id_api_minimum(void)
 {
   return OBJECTS_INTERNAL_API;
 }

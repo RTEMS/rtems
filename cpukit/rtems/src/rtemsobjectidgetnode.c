@@ -20,7 +20,7 @@
 #include <rtems/rtems/types.h>
 
 #undef rtems_object_id_get_node
-uint32_t rtems_object_id_get_node(
+int rtems_object_id_get_node(
   rtems_id id
 )
 {

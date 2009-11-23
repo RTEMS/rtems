@@ -21,14 +21,14 @@
 #include <rtems/rtems/object.h>
 
 rtems_status_code rtems_object_get_class_information(
-  uint32_t                            the_api,
-  uint32_t                            the_class,
+  int                                 the_api,
+  int                                 the_class,
   rtems_object_api_class_information *info
 )
 {
   Objects_Information *obj_info;
-  uint32_t             unallocated;
-  uint32_t             i;
+  int                  unallocated;
+  int                  i;
 
   /*
    * Validate parameters and look up information structure.

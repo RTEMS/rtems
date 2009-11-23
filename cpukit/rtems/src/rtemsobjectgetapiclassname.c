@@ -70,8 +70,8 @@ rtems_assoc_t rtems_object_api_itron_assoc[] = {
 #endif
 
 const char *rtems_object_get_api_class_name(
-  uint32_t the_api, 
-  uint32_t the_class
+  int the_api, 
+  int the_class
 )
 {
   const rtems_assoc_t *api_assoc;

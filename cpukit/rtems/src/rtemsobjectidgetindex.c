@@ -20,7 +20,7 @@
 #include <rtems/rtems/types.h>
 
 #undef rtems_object_id_get_index
-uint32_t rtems_object_id_get_index(
+int rtems_object_id_get_index(
   rtems_id id
 )
 {

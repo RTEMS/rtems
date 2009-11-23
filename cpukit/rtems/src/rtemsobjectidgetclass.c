@@ -20,7 +20,7 @@
 #include <rtems/rtems/types.h>
 
 #undef rtems_object_id_get_class
-uint32_t rtems_object_id_get_class(
+int rtems_object_id_get_class(
   rtems_id id
 )
 {

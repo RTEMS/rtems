@@ -1,5 +1,20 @@
 2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1460/cpukit
+	* rtems/include/rtems/rtems/object.h,
+	rtems/src/rtemsobjectapimaximumclass.c,
+	rtems/src/rtemsobjectgetapiclassname.c,
+	rtems/src/rtemsobjectgetapiname.c,
+	rtems/src/rtemsobjectgetclassinfo.c,
+	rtems/src/rtemsobjectidapimaximum.c,
+	rtems/src/rtemsobjectidapiminimum.c, rtems/src/rtemsobjectidgetapi.c,
+	rtems/src/rtemsobjectidgetclass.c, rtems/src/rtemsobjectidgetindex.c,
+	rtems/src/rtemsobjectidgetnode.c: Change return type on methods
+	accessing portions of RTEMS Ids to int. This allows -1 to be return
+	on error.
+
+2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* mghttpd/mongoose.c: crypto_sw table is not used when SSL is disabled.
 	RTEMS does not have flockfile/funlockfile.
 

@@ -19,8 +19,8 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/types.h>
 
-unsigned int rtems_object_api_maximum_class(
-  uint32_t api
+int rtems_object_api_maximum_class(
+  int api
 )
 {
   return _Objects_API_maximum_class(api);
