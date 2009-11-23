@@ -1,3 +1,7 @@
+2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libchip/network/smc91111.c: Formatting.
+
 2009-11-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/ide/ata.c (rtems_ata_initialize): Avoid implicit cast to uint16_t.
