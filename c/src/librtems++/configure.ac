@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.60)
+AC_PREREQ(2.64)
 AC_INIT([rtems-c-src-librtems++],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla],[rtems-c-src-librtems++])
 AC_CONFIG_SRCDIR([include/rtems++])
 RTEMS_TOP(../../..)
@@ -22,6 +22,11 @@ RTEMS_PROG_CXX_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
 AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
+
+AC_LANG_PUSH(C++)
+AC_CHECK_HEADER([cstring],[],[AC_MSG_ERROR([Required header cstring not found])])
+AC_CHECK_HEADER([cstdlib],[],[AC_MSG_ERROR([Required header cstdlib not found])])
+AC_LANG_POP
 
 RTEMS_PROJECT_ROOT
 RTEMS_AMPOLISH3

@@ -1,3 +1,7 @@
+2009-11-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for cstdlib, cstring.
+
 2009-08-06	Chris Johns <chrisj@rtems.org>
 
 	* src/rtemsInterrupt.cc: Fixed the code to compile on targets with
