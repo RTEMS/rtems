@@ -36,7 +36,7 @@ static bool initialised = false;
    rtemsInterrupt
 */
 
-#include <stdlib.h> /* for malloc */
+#include <cstdlib>
 
 rtemsInterrupt::rtemsInterrupt()
   : vector(0),
