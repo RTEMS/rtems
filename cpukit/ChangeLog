@@ -1,3 +1,8 @@
+2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/login_prompt.c: Properly process EOF and do not depend
+	on ungetc() to propagate the status back.
+
 2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/inline/rtems/score/thread.inl: Eliminate unused variable and

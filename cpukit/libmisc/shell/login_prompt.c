@@ -78,7 +78,7 @@ static int rtems_shell_discard( int c, FILE *stream)
   return c;
 }
 
-static void rtems_shell_get_text(
+static bool rtems_shell_get_text(
   FILE *in,
   FILE *out,
   char *line,
@@ -93,7 +93,7 @@ static void rtems_shell_get_text(
   size_t i = 0;
 
   if (size < 1) {
-    return;
+    return false;
   }
 
   tcdrain( fd_in);
@@ -106,23 +106,12 @@ static void rtems_shell_get_text(
 
     switch (c) {
       case EOF:
-        /* Here comes an ugly hack: The Termios driver's read() handler returns
-         * 0 to the C library's fgets() if it times out.  fgets() interprets
-         * this (correctly) as EOF, a condition we want to undo since it's not
-         * really true since we really have a read error (Termios bug?).
-         *
-         * As a workaround we push something back and read it again.  This
-         * should simply reset the EOF condition.
-         */
-        if (ungetc( '?', in) == '?') {
-          fgetc( in);
-        }
-        break;
+        return false;
       case '\n':
       case '\r':
         put( '\n', out);
         line [i] = '\0';
-        return;
+        return true;
       case  127:
       case '\b':
         if (i > 0) {
@@ -181,12 +170,14 @@ bool rtems_shell_login_prompt(
 
     fprintf( out, "%s login: ", device);
     fflush( out);
-    rtems_shell_get_text( in, out, user, sizeof( user));
+    if ( !rtems_shell_get_text( in, out, user, sizeof( user)) )
+      break;
 
     fflush( in);
     fprintf( out, "Password: ");
     fflush( out);
-    rtems_shell_get_text( in, NULL, passphrase, sizeof( passphrase));
+    if ( !rtems_shell_get_text( in, NULL, passphrase, sizeof( passphrase)) )
+      break;
     fputc( '\n', out);
 
     result = check( user, passphrase);
