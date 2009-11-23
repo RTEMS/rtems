@@ -1211,7 +1211,7 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       opt += sizeof ("--ne2k-port=") - 1;
       sc->port = strtoul (opt, 0, 0);
     }
-    if (config->port != 0) {
+    if (config->port == 0) {
       /* We use 0x300 as the default IO port number.  */
       sc->port = 0x300;
     }
