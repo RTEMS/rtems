@@ -1,5 +1,11 @@
 2009-11-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* src/rtemsInterrupt.cc: #include <cstdlib>.
+	* src/rtemsMessageQueue.cc, src/rtemsSemaphore.cc, 
+	src/rtemsTask.cc, src/rtemsTimer.cc: #include <cstring>.
+
+2009-11-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Check for cstdlib, cstring.
 
 2009-08-06	Chris Johns <chrisj@rtems.org>
