@@ -1,3 +1,9 @@
+2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/bsppretaskinghook.c: New file.  Was really common.  
+	* shared/bspstart.c: Removed.  Was really leon2 specific.
+
+
 2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/bspgetworkarea.c: Add debug prints of memory information.
