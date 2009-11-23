@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define srcvers	2.64
-%define rpmvers %{expand:%(echo "2.64" | tr - _ )}
+%define srcvers	2.65
+%define rpmvers %{expand:%(echo "2.65" | tr - _ )}
 
 %define name			rtems-4.10-autoconf
 
