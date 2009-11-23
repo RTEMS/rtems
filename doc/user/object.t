@@ -148,7 +148,7 @@ its constituent parts and "pretty-printed."
 @example
 void prettyPrintObjectId(rtems_id id)
 @{
-  uint32_t tmpAPI, tmpClass;
+  int tmpAPI, tmpClass;
 
   tmpAPI   = rtems_object_id_get_api(id),
   tmpClass = rtems_object_id_get_class(id),
@@ -380,7 +380,7 @@ from the RTEMS Workspace to make a copy of the string
 @ifset is-C
 @findex rtems_object_id_get_api
 @example
-uint32_t rtems_object_id_get_api(
+int rtems_object_id_get_api(
   rtems_id id
 );
 @end example
@@ -422,7 +422,7 @@ This directive does NOT validate the @code{id} provided.
 @ifset is-C
 @findex rtems_object_id_get_class
 @example
-uint32_t rtems_object_id_get_class(
+int rtems_object_id_get_class(
   rtems_id id
 );
 @end example
@@ -464,7 +464,7 @@ This directive does NOT validate the @code{id} provided.
 @ifset is-C
 @findex rtems_object_id_get_node
 @example
-uint32_t rtems_object_id_get_node(
+int rtems_object_id_get_node(
   rtems_id id
 );
 @end example
@@ -506,7 +506,7 @@ This directive does NOT validate the @code{id} provided.
 @ifset is-C
 @findex rtems_object_id_get_index
 @example
-uint32_t rtems_object_id_get_index(
+int rtems_object_id_get_index(
   rtems_id id
 );
 @end example
@@ -549,10 +549,10 @@ This directive does NOT validate the @code{id} provided.
 @findex rtems_build_id
 @example
 rtems_id rtems_build_id(
-  uint32_t the_api,
-  uint32_t the_class,
-  uint32_t the_node,
-  uint32_t the_index
+  int the_api,
+  int the_class,
+  int the_node,
+  int the_index
 );
 @end example
 @end ifset
@@ -598,7 +598,7 @@ or the Object id returned.
 @ifset is-C
 @findex rtems_object_id_api_minimum
 @example
-uint32_t rtems_object_id_api_minimum(void);
+int rtems_object_id_api_minimum(void);
 @end example
 @end ifset
 
@@ -634,7 +634,7 @@ This directive is strictly local and does not impact task scheduling.
 @ifset is-C
 @findex rtems_object_id_api_maximum
 @example
-uint32_t rtems_object_id_api_maximum(void);
+int rtems_object_id_api_maximum(void);
 @end example
 @end ifset
 
@@ -670,8 +670,8 @@ This directive is strictly local and does not impact task scheduling.
 @ifset is-C
 @findex rtems_object_api_minimum_class
 @example
-uint32_t rtems_object_api_minimum_class(
-  uint32_t api
+int rtems_object_api_minimum_class(
+  int api
 );
 @end example
 @end ifset
@@ -714,8 +714,8 @@ This directive is strictly local and does not impact task scheduling.
 @ifset is-C
 @findex rtems_object_api_maximum_class
 @example
-uint32_t rtems_object_api_maximum_class(
-  uint32_t api
+int rtems_object_api_maximum_class(
+  int api
 );
 @end example
 @end ifset
@@ -760,7 +760,7 @@ This directive is strictly local and does not impact task scheduling.
 @findex rtems_object_get_api_name
 @example
 const char *rtems_object_get_api_name(
-  uint32_t api
+  int api
 );
 @end example
 @end ifset
@@ -806,8 +806,8 @@ or free it.
 @findex rtems_object_get_api_class_name
 @example
 const char *rtems_object_get_api_class_name(
-  uint32_t the_api,
-  uint32_t the_class
+  int the_api,
+  int the_class
 );
 @end example
 @end ifset
@@ -857,8 +857,8 @@ or free it.
 @findex rtems_object_get_class_information
 @example
 rtems_status_code rtems_object_get_class_information(
-  uint32_t                            the_api,
-  uint32_t                            the_class,
+  int                                 the_api,
+  int                                 the_class,
   rtems_object_api_class_information *info
 );
 @end example
@@ -894,9 +894,9 @@ follows:
 typedef struct @{
   rtems_id  minimum_id;
   rtems_id  maximum_id;
-  uint32_t  maximum;
+  int       maximum;
   bool      auto_extend;
-  uint32_t  unallocated;
+  int       unallocated;
 @} rtems_object_api_class_information;
 @end example
 @end ifset
