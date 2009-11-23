@@ -1,5 +1,12 @@
 2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/shell.c: Always duplicate the environment passed to us
+	because we will delete it when the shell exits. If we do not
+	duplicate it, we could end up freeing memory which was not allocated
+	from the heap or double freeing it.
+
+2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/login_prompt.c: Properly process EOF and do not depend
 	on ungetc() to propagate the status back.
 

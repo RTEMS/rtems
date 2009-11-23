@@ -62,16 +62,20 @@ rtems_shell_env_t *rtems_current_shell_env = &rtems_global_shell_env;
  *  Initialize the shell user/process environment information
  */
 rtems_shell_env_t *rtems_shell_init_env(
-  rtems_shell_env_t *shell_env
+  rtems_shell_env_t *shell_env_p
 )
 {
-  if ( !shell_env ) {
-    shell_env = malloc(sizeof(rtems_shell_env_t));
-    if ( !shell_env )
-      return NULL;
+  rtems_shell_env_t *shell_env;
+
+  shell_env = malloc(sizeof(rtems_shell_env_t));
+  if ( !shell_env )
+    return NULL;
+  if ( !shell_env_p ) {
     *shell_env = rtems_global_shell_env;
-    shell_env->taskname = NULL;
+  } else {
+    *shell_env = *shell_env_p;
   }
+  shell_env->taskname = NULL;
 
   return shell_env;
 }
