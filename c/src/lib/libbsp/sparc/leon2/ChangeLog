@@ -1,3 +1,9 @@
+2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: sparc/shared/bspstart.c was really leon2 specific. So
+	move it here.
+	* startup/bspstart.c: New file.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/leon2.cfg: Remove RTEMS_BSP_FAMILY.
