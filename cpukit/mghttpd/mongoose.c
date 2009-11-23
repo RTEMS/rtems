@@ -168,6 +168,10 @@ typedef struct DIR {
 #if HAVE_SYS_MMAN_H
 #include <sys/mman.h>
 #endif
+#if defined(__rtems__)
+#define	flockfile(x)		(void) 0
+#define	funlockfile(x)		(void) 0
+#endif
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
@@ -307,6 +311,7 @@ static struct ssl_func	ssl_sw[] = {
 	{NULL,				NULL}
 };
 
+#if !defined(NO_SSL)
 /*
  * Similar array as ssl_sw. These functions are located in different lib.
  */
@@ -316,6 +321,7 @@ static struct ssl_func	crypto_sw[] = {
 	{"CRYPTO_set_id_callback",	NULL},
 	{NULL,				NULL}
 };
+#endif
 
 /*
  * Month names

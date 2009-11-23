@@ -1,3 +1,8 @@
+2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mghttpd/mongoose.c: crypto_sw table is not used when SSL is disabled.
+	RTEMS does not have flockfile/funlockfile.
+
 2009-11-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add mghttpd.
