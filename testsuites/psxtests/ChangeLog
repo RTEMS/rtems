@@ -1,3 +1,9 @@
+2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1460/cpukit
+	* psx14/init.c: Change return type on methods accessing portions of
+	RTEMS Ids to int. This allows -1 to be return on error.
+
 2009-11-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1466/tests
