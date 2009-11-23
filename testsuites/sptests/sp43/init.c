@@ -15,31 +15,27 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-/* HACK: API violation */
-extern uint32_t rtems_object_api_minimum_class(uint32_t api);
-extern unsigned int rtems_object_api_maximum_class(uint32_t api);
-
 /* These functions have both macro and function incarnations */
 #undef rtems_build_id
-extern rtems_id rtems_build_id(uint32_t api,uint32_t class,uint32_t node,uint32_t index);
+extern rtems_id rtems_build_id(int api,int class,int node,int index);
 #undef rtems_build_name
 extern rtems_name rtems_build_name(char C1,char C2,char C3,char C4);
 #undef rtems_object_id_api_maximum
-extern uint32_t rtems_object_id_api_maximum(void);
+extern int rtems_object_id_api_maximum(void);
 #undef rtems_object_id_api_minimum
-extern uint32_t rtems_object_id_api_minimum(void);
+extern int rtems_object_id_api_minimum(void);
 #undef rtems_object_id_get_api
-extern uint32_t rtems_object_id_get_api(rtems_id id);
+extern int rtems_object_id_get_api(rtems_id id);
 #undef rtems_object_id_get_class
-extern uint32_t rtems_object_id_get_class(rtems_id id);
+extern int rtems_object_id_get_class(rtems_id id);
 #undef rtems_object_id_get_index
-extern uint32_t rtems_object_id_get_index(rtems_id id);
+extern int rtems_object_id_get_index(rtems_id id);
 #undef rtems_object_id_get_node
-extern uint32_t rtems_object_id_get_node(rtems_id id);
+extern int rtems_object_id_get_node(rtems_id id);
 
 void print_class_info(
-  uint32_t                            api,
-  uint32_t                            class,
+  int                                 api,
+  int                                 class,
   rtems_object_api_class_information *info
 );
 
@@ -53,8 +49,8 @@ rtems_id         main_task;
 rtems_name       main_name;
 
 void print_class_info(
-  uint32_t                            api,
-  uint32_t                            class,
+  int                                 api,
+  int                                 class,
   rtems_object_api_class_information *info
 )
 {
@@ -123,7 +119,7 @@ rtems_task Init(
   char                               *ptr;
   const char                          newName[5] = "New1";
   char                                tmpNameString[5];
-  uint32_t                            part;
+  int                                 part;
   rtems_object_api_class_information  info;
 
   puts( "\n\n*** TEST 43 ***" );
@@ -298,36 +294,36 @@ rtems_task Init(
    */
   rtems_test_pause();
 
-  printf( "rtems_object_id_api_minimum returned %" PRId32 "\n",
+  printf( "rtems_object_id_api_minimum returned %d\n",
           rtems_object_id_api_minimum() );
-  printf( "rtems_object_id_api_maximum returned %" PRId32 "\n",
+  printf( "rtems_object_id_api_maximum returned %d\n",
           rtems_object_id_api_maximum() );
 
-  printf( "rtems_object_api_minimum_class(0) returned %" PRId32 "\n",
+  printf( "rtems_object_api_minimum_class(0) returned %d\n",
           rtems_object_api_minimum_class(0) );
   printf( "rtems_object_api_maximum_class(0) returned %d\n",
           rtems_object_api_maximum_class(0) );
 
-  printf( "rtems_object_api_minimum_class(0) returned %" PRId32 "\n",
+  printf( "rtems_object_api_minimum_class(0) returned %d\n",
           rtems_object_api_minimum_class(0) );
   printf( "rtems_object_api_maximum_class(0) returned %d\n",
           rtems_object_api_maximum_class(0) );
-  printf( "rtems_object_api_minimum_class(255) returned %" PRId32 "\n",
+  printf( "rtems_object_api_minimum_class(255) returned %d\n",
           rtems_object_api_minimum_class(255) );
   printf( "rtems_object_api_maximum_class(255) returned %d\n",
           rtems_object_api_maximum_class(255) );
 
-  printf( "rtems_object_api_minimum_class(OBJECTS_INTERNAL_API) returned %" PRId32 "\n",
+  printf( "rtems_object_api_minimum_class(OBJECTS_INTERNAL_API) returned %d\n",
           rtems_object_api_minimum_class(OBJECTS_INTERNAL_API) );
   printf( "rtems_object_api_maximum_class(OBJECTS_INTERNAL_API) returned %d\n",
           rtems_object_api_maximum_class(OBJECTS_INTERNAL_API) );
 
-  printf( "rtems_object_api_minimum_class(OBJECTS_CLASSIC_API) returned %" PRId32 "\n",
+  printf( "rtems_object_api_minimum_class(OBJECTS_CLASSIC_API) returned %d\n",
           rtems_object_api_minimum_class(OBJECTS_CLASSIC_API) );
   printf( "rtems_object_api_maximum_class(OBJECTS_CLASSIC_API) returned %d\n",
           rtems_object_api_maximum_class(OBJECTS_CLASSIC_API) );
 
-  printf( "rtems_object_api_minimum_class(OBJECTS_ITRON_API) returned %" PRId32 "\n",
+  printf( "rtems_object_api_minimum_class(OBJECTS_ITRON_API) returned %d\n",
           rtems_object_api_minimum_class(OBJECTS_ITRON_API) );
   printf( "rtems_object_api_maximum_class(OBJECTS_ITRON_API) returned %d\n",
           rtems_object_api_maximum_class(OBJECTS_ITRON_API) );

@@ -1,3 +1,9 @@
+2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1460/cpukit
+	* sp43/init.c: Change return type on methods accessing portions of
+	RTEMS Ids to int. This allows -1 to be return on error.
+
 2009-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* spsize/Makefile.am: Fix broken install rule.
