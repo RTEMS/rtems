@@ -1,5 +1,7 @@
 2009-11-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shared/tsmac/tsmac.c: Remove unused vars.
+	Let rtems_tsmac_driver_attach return 1.
 	* shared/console/console.c: Use int as return type of
 	BSP_uart_polled_read.
 
