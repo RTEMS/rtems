@@ -20,10 +20,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
 #include <bspopts.h>
 
@@ -33,6 +29,10 @@ extern "C" {
 
 #if defined(RTEMS_NETWORKING)
 #include <rtems/rtems_bsdnet.h>
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 #define BSP_DIRTY_MEMORY 1
