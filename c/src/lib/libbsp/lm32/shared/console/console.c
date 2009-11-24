@@ -21,7 +21,7 @@
 #include <rtems/libio.h>
 
 void BSP_uart_polled_write(char ch);
-char BSP_uart_polled_read( void );
+int BSP_uart_polled_read( void );
 char BSP_uart_is_character_ready(char *ch);
 
 /*  console_initialize
@@ -87,13 +87,13 @@ bool is_character_ready(
  *    character read from SOURCE
  */
 
-char inbyte( void )
+int inbyte( void )
 {
   /*
    *  If polling, wait until a character is available.
    */
 
-  return (char) BSP_uart_polled_read();
+  return BSP_uart_polled_read();
 }
 
 /*  outbyte

@@ -1,3 +1,8 @@
+2009-11-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/console/console.c: Use int as return type of
+	BSP_uart_polled_read.
+
 2009-05-27	Michael Walle <michael@walle.cc>
 
 	* shared/start/start.S: Export crt0 symbol because the debug.S uses
