@@ -1,3 +1,8 @@
+2009-11-25	Michael Walle <michael@walle.cc>
+
+	* shared/gdbstub/lm32-stub.c: Fix wrong computation of negative branch
+	targets (thanks to Manfred Scheible <mscheible@husware.de>.
+
 2009-11-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/tsmac/tsmac.c: Remove unused vars.

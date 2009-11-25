@@ -740,7 +740,7 @@ void handle_exception(void)
         {
           branch_step = 1;
           branch_target = registers[LM32_REG_PC]
-              + ((signed)(insn & 0x3ffffff) << 2);
+              + (((signed)insn << 6) >> 4);
         }   
         else if (   (opcode == 0x44000000)
                  || (opcode == 0x48000000) 
@@ -752,7 +752,7 @@ void handle_exception(void)
         {
           branch_step = 1;
           branch_target = registers[LM32_REG_PC] +
-              + ((signed)(insn & 0x0000ffff) << 2);
+              + (((signed)insn << 16) >> 14);
         }
         else if (   (opcode == 0xd8000000)
                  || (opcode == 0xc0000000) 
