@@ -14,7 +14,7 @@ Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgve
 %{?_without_sources:NoSource:	1}
 
 %endif
-%if %build_f95
+%if %build_fortran
 Source2:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-fortran-%{gcc_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:	2}
 
