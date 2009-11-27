@@ -9,7 +9,7 @@
 %{?PATCH1:%patch1 -p0}
 %endif
 
-%if %build_f95
+%if %build_fortran
 %setup -q -T -D -n %{name}-%{version} -a2
 %{?PATCH2:%patch2 -p0}
 %endif

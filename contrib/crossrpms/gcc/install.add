@@ -46,7 +46,7 @@
   rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
 %endif
 
-%if %build_f95
+%if %build_fortran
 #  # Bug in gcc-4.0.0pre
 #  mv $RPM_BUILD_ROOT%{_bindir}/gfortran $RPM_BUILD_ROOT%{_bindir}/@tool_target@-gfortran
 %endif
