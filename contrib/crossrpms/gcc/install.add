@@ -108,7 +108,6 @@
 
   # Collect files to go into different packages
   cp dirs build/files.gcc
-  cp dirs build/files.g77
   cp dirs build/files.gfortran
   cp dirs build/files.objc
   cp dirs build/files.gcj
