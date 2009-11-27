@@ -60,7 +60,7 @@ Summary:      	avr-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	23%{?dist}
+Release:      	24%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -100,7 +100,7 @@ BuildRequires:	rtems-4.9-avr-rtems4.9-binutils
 
 Requires:	rtems-4.9-gcc-common
 Requires:	rtems-4.9-avr-rtems4.9-binutils
-Requires:	rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-23%{?dist}
+Requires:	rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-24%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -155,14 +155,7 @@ cd ..
   ln -s ../mpfr-%{mpfr_version} gcc-%{gcc_pkgvers}/mpfr
 %endif
 
-%if "%{gcc_version}" < "4.1.0"
-  sed -e 's/\(version_string.* = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}\/newlib-%{newlib_version}-%release)/' \
-  gcc-%{gcc_pkgvers}/gcc/version.c > gcc-%{gcc_pkgvers}/gcc/version.c~
-%else
-  sed -e 's/^#define VERSUFFIX.*$/#define VERSUFFIX \" (RTEMS gcc-%{gcc_version}\/newlib-%{newlib_version}-%{release})\"/' \
-    gcc-%{gcc_pkgvers}/gcc/version.c > gcc-%{gcc_pkgvers}/gcc/version.c~
-%endif
-  mv gcc-%{gcc_pkgvers}/gcc/version.c~ gcc-%{gcc_pkgvers}/gcc/version.c
+echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -303,7 +296,6 @@ cd ..
 
   # Collect files to go into different packages
   cp dirs build/files.gcc
-  cp dirs build/files.g77
   cp dirs build/files.gfortran
   cp dirs build/files.objc
   cp dirs build/files.gcj
@@ -426,7 +418,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.9-avr-rtems4.9-binutils
-# Requires:       rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-23%{?dist}
+# Requires:       rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-24%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -543,7 +535,7 @@ Summary:      	C Library (newlib) for avr-rtems4.9
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        23%{?dist}
+Release:        24%{?dist}
 
 Requires:	rtems-4.9-newlib-common
 
@@ -563,7 +555,7 @@ Newlib C Library for avr-rtems4.9.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        23%{?dist}
+Release:        24%{?dist}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
