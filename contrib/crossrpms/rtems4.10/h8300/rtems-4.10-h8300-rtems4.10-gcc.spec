@@ -58,7 +58,7 @@ Summary:      	h8300-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	6%{?dist}
+Release:      	7%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -99,9 +99,10 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 # FIXME: This is an ugly cludge
 %{?fc10:%global mpfr_provided 2.3.2}
 %{?fc11:%global mpfr_provided 2.4.1}
-%{?suse10_3:%global mpfr_provided 2.2.1}
+%{?fc12:%global mpfr_provided 2.4.1}
 %{?suse11_0:%global mpfr_provided 2.3.1}
 %{?suse11_1:%global mpfr_provided 2.3.2}
+%{?suse11_2:%global mpfr_provided 2.4.1}
 %{?cygwin:%global mpfr_provided 2.4.1}
 %{?mingw32:%global mpfr_provided %{nil}}
 
@@ -136,7 +137,7 @@ BuildRequires:	rtems-4.10-h8300-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-h8300-rtems4.10-binutils
 Requires:	rtems-4.10-h8300-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-64%{?dist}
+Requires:	rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-65%{?dist}
 
 
 %define _gcclibdir %{_prefix}/lib
@@ -192,14 +193,7 @@ cd ..
   ln -s ../mpfr-%{mpfr_version} gcc-%{gcc_pkgvers}/mpfr
 %endif
 
-%if "%{gcc_version}" < "4.1.0"
-  sed -e 's/\(version_string.* = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}\/newlib-%{newlib_version}-%release)/' \
-  gcc-%{gcc_pkgvers}/gcc/version.c > gcc-%{gcc_pkgvers}/gcc/version.c~
-%else
-  sed -e 's/^#define VERSUFFIX.*$/#define VERSUFFIX \" (RTEMS gcc-%{gcc_version}\/newlib-%{newlib_version}-%{release})\"/' \
-    gcc-%{gcc_pkgvers}/gcc/version.c > gcc-%{gcc_pkgvers}/gcc/version.c~
-%endif
-  mv gcc-%{gcc_pkgvers}/gcc/version.c~ gcc-%{gcc_pkgvers}/gcc/version.c
+echo "RTEMS gcc-%{gcc_version}-7%{?dist}\/newlib-%{newlib_version}-65%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -458,7 +452,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-h8300-rtems4.10-binutils
-# Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-64%{?dist}
+# Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-65%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -476,7 +470,7 @@ Summary:        libgcc for h8300-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-64%{?dist}
+Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-65%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-h8300-rtems4.10-gcc-libgcc
@@ -651,7 +645,7 @@ Summary:      	C Library (newlib) for h8300-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        64%{?dist}
+Release:        65%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -672,7 +666,7 @@ Newlib C Library for h8300-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        64%{?dist}
+Release:        65%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
