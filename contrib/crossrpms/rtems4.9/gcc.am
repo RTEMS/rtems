@@ -19,12 +19,14 @@ GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-objc.add
 GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-newlib.add
 GCC_SUBPACKAGES += $(top_srcdir)/gcc/base-newlib.add
 
-$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add $(srcdir)/../gcc-prep.add
-	cat $(GCC_SUBPACKAGES) | sed \
+$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add $(srcdir)/../gcc-prep.add $(srcdir)/../gcc.am
+	cat $(GCC_SUBPACKAGES) \
+	  | sed \
 	  -e "/[@]SOURCES[@]/r $(srcdir)/gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e "/[@]PREP[@]/r $(srcdir)/../gcc-prep.add" \
 	  -e "/[@]PREP[@]/d" \
+	  | sed \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_PKGVERS[@]/$(GCC_PKGVERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)%{?dist}/g" \
