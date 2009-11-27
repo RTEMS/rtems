@@ -90,8 +90,7 @@ my @npatterns = (
   "(%build_objc)",
   "(%build_gcj)",
   "(%build_libgcj)",
-  "(%build_f95)",
-  "(%build_g77)",
+  "(%build_fortran)",
   "(%build_newlib)",
   "(%build_infos)"
 );
@@ -106,8 +105,7 @@ push @ppatterns, "(%build_cxx "    . ( ($langs{cxx}) ? "==" : "!=" ) . " 0)";
 push @ppatterns, "(%build_objc "   . ( ($langs{objc}) ? "==" : "!=" ) . " 0)";
 push @ppatterns, "(%build_gcj "    . ( ($langs{gcj}) ? "==" : "!=" ) . " 0)";
 push @ppatterns, "(%build_libgcj " . ( ($langs{libgcj}) ? "==" : "!=" ) . " 0)";
-push @ppatterns, "(%build_f95 "    . ( ($langs{f95}) ? "==" : "!=" ) . " 0)";
-push @ppatterns, "(%build_g77 "    . ( ($langs{g77}) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_fortran "    . ( ($langs{fortran}) ? "==" : "!=" ) . " 0)";
 
 push @ppatterns, "(%build_newlib " . ( ($newlib) ? "==" : "!=" ) . " 0)";
 push @ppatterns, "(%build_infos " . ( ($infos) ? "==" : "!=" ) . " 0)";
