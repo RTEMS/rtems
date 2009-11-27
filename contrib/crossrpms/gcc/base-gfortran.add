@@ -1,5 +1,5 @@
 %if %build_infos
-%if %build_gfortran
+%if %build_fortran
 # ==============================================================
 # @rpmprefix@gcc-gfortran-common
 # ==============================================================

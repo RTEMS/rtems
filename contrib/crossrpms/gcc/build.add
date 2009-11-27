@@ -7,7 +7,7 @@
 %if %build_cxx
   languages="$languages,c++"
 %endif
-%if %build_gfortran
+%if %build_fortran
   languages="$languages,fortran"
 %endif
 %if %build_gcj
