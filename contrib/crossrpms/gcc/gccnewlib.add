@@ -61,9 +61,10 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 # FIXME: This is an ugly cludge
 %{?fc10:%global mpfr_provided 2.3.2}
 %{?fc11:%global mpfr_provided 2.4.1}
-%{?suse10_3:%global mpfr_provided 2.2.1}
+%{?fc12:%global mpfr_provided 2.4.1}
 %{?suse11_0:%global mpfr_provided 2.3.1}
 %{?suse11_1:%global mpfr_provided 2.3.2}
+%{?suse11_2:%global mpfr_provided 2.4.1}
 %{?cygwin:%global mpfr_provided 2.4.1}
 %{?mingw32:%global mpfr_provided %{nil}}
 
