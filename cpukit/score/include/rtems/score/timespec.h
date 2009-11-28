@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/timespec.h
  *
  *  This include file contains helpers for manipulating timespecs.
@@ -89,7 +89,7 @@ extern "C" {
  *
  *  @param[in] time is the timespec instance to validate.
  *
- *  @return This method returns true if @a time is valid and 
+ *  @return This method returns true if @a time is valid and
  *          false otherwise.
  */
 bool _Timespec_Is_valid(
@@ -103,7 +103,7 @@ bool _Timespec_Is_valid(
  *  @param[in] lhs is the left hand side timespec
  *  @param[in] rhs is the right hand side timespec
  *
- *  @return This method returns true if @a lhs is less than the @a rhs and 
+ *  @return This method returns true if @a lhs is less than the @a rhs and
  *          false otherwise.
  */
 bool _Timespec_Less_than(
@@ -118,7 +118,7 @@ bool _Timespec_Less_than(
  *  @param[in] lhs is the left hand side timespec
  *  @param[in] rhs is the right hand side timespec
  *
- *  @return This method returns true if @a lhs is greater than the @a rhs and 
+ *  @return This method returns true if @a lhs is greater than the @a rhs and
  *          false otherwise.
  */
 bool _Timespec_Greater_than(
@@ -133,7 +133,7 @@ bool _Timespec_Greater_than(
  *  @param[in] lhs is the left hand side timespec
  *  @param[in] rhs is the right hand side timespec
  *
- *  @return This method returns true if @a lhs is equal to  @a rhs and 
+ *  @return This method returns true if @a lhs is equal to  @a rhs and
  *          false otherwise.
  */
 #define _Timespec_Equal_to( lhs, rhs ) \
@@ -147,7 +147,7 @@ bool _Timespec_Greater_than(
  *  to the first.
  *
  *  @param[in] time is the base time to be added to
- *  @param[in] add is the timespec to add to the first argument 
+ *  @param[in] add is the timespec to add to the first argument
  *
  *  @return This method returns the number of seconds @a time increased by.
  */
@@ -202,7 +202,7 @@ void _Timespec_Subtract(
 /** @brief Divide Timespec By Integer
  *
  *  This routine divides a timespec by an integer value.  The expected
- *  use is to assist in benchmark calculations where you typically 
+ *  use is to assist in benchmark calculations where you typically
  *  divide a duration by a number of iterations.
  *
  *  @param[in] time is the total
@@ -219,7 +219,7 @@ void _Timespec_Divide_by_integer(
 
 /** @brief Divide Timespec
  *
- *  This routine divides a timespec by another timespec.  The 
+ *  This routine divides a timespec by another timespec.  The
  *  intended use is for calculating percentages to three decimal points.
  *
  *  @param[in] lhs is the left hand number

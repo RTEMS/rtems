@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/threadmp.h
  *
  *  This include file contains the specification for all routines
@@ -22,7 +22,7 @@
 /**
  *  @defgroup ScoreThreadMP Thread Handler Multiprocessing Support
  *
- *  This handler encapsulates functionality which is related to managing 
+ *  This handler encapsulates functionality which is related to managing
  *  threads in a multiprocessor system configuration.  This handler must
  *  manage proxies which represent remote threads blocking on local
  *  operations.

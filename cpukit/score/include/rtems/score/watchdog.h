@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/watchdog.h
  *
  *  This include file contains all the constants and structures associated
@@ -58,7 +58,7 @@ typedef uint32_t   Watchdog_Interval;
 typedef uint32_t (*Watchdog_Nanoseconds_since_last_tick_routine)(void);
 
 /** @brief Watchdog Service Routine Return Type
- * 
+ *
  *  This type defines the return type from a Watchdog Service Routine.
  */
 typedef void Watchdog_Service_routine;
@@ -197,7 +197,7 @@ void _Watchdog_Handler_initialization( void );
  *
  *  This routine removes @a the_watchdog from the watchdog chain on which
  *  it resides and returns the state @a the_watchdog timer was in.
- *  
+ *
  *  @param[in] the_watchdog will be removed
  *  @return the state in which @a the_watchdog was in when removed
  */
@@ -242,7 +242,7 @@ void _Watchdog_Adjust_to_chain(
 /** @brief Watchdog Insert
  *
  *  This routine inserts @a the_watchdog into the @a header watchdog chain
- *  for a time of @a units.  
+ *  for a time of @a units.
  *
  *  @param[in] header is @a the_watchdog list to insert @a the_watchdog on
  *  @param[in] the_watchdog is the watchdog to insert

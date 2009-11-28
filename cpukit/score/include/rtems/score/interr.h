@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/interr.h
  *
  *  This include file contains constants and prototypes related

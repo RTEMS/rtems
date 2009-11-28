@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/tqdata.h
  *
  *  This include file contains all the constants and structures

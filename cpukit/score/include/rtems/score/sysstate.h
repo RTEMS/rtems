@@ -1,4 +1,4 @@
-/** 
+/**
  * @file
  *
  * @ingroup ScoreSysState
@@ -50,7 +50,7 @@ typedef enum {
   SYSTEM_STATE_BEFORE_MULTITASKING,
 
   /**
-   * @brief The system is attempting to initiate multitasking. 
+   * @brief The system is attempting to initiate multitasking.
    */
   SYSTEM_STATE_BEGIN_MULTITASKING,
 

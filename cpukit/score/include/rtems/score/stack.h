@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/stack.h
  *
  *  This include file contains all information about the thread

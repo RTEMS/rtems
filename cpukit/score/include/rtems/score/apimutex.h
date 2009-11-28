@@ -1,4 +1,4 @@
-/** 
+/**
  * @file
  *
  * @ingroup ScoreAPIMutex

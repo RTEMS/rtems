@@ -146,7 +146,7 @@ Chain_Node *_Chain_Get(
  *  @brief Insert a node on a chain
  *
  *  This routine inserts @a the_node on a chain immediately following
- *  @a after_node.  
+ *  @a after_node.
  *
  *  @note It disables interrupts to ensure the atomicity
  *  of the extract operation.

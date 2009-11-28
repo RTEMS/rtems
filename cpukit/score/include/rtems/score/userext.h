@@ -139,7 +139,7 @@ typedef void( *User_extensions_thread_restart_extension )(
  * The context switches initiated through _Thread_Start_multitasking() and
  * _Thread_Stop_multitasking() are not covered by this extension.  The
  * executing thread may run with a minimal setup, for example with a freed task
- * stack. 
+ * stack.
  */
 typedef void( *User_extensions_thread_switch_extension )(
   Thread_Control *,

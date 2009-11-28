@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/mpci.h
  *
  *  This include file contains all the constants and structures associated
@@ -23,7 +23,7 @@
  *  @defgroup ScoreMPCI MPCI Handler
  *
  *  The MPCI Handler encapsulates functionality which is related to the
- *  generation, receipt, and processing of remote operations in a 
+ *  generation, receipt, and processing of remote operations in a
  *  multiprocessor system.  This handler contains the message passing
  *  support for making remote service calls as well as the server thread
  *  which processes requests from remote nodes.
@@ -67,7 +67,7 @@ typedef MPCI_Entry ( *MPCI_initialization_entry )( void );
 
 /**
  *  This type defines the prototype for the get packet entry point
- *  in an Multiprocessor Communications Interface.  The single 
+ *  in an Multiprocessor Communications Interface.  The single
  *  parameter will point to the packet allocated.
  */
 typedef MPCI_Entry ( *MPCI_get_packet_entry )(
@@ -76,7 +76,7 @@ typedef MPCI_Entry ( *MPCI_get_packet_entry )(
 
 /**
  *  This type defines the prototype for the return packet entry point
- *  in an Multiprocessor Communications Interface.  The single 
+ *  in an Multiprocessor Communications Interface.  The single
  *  parameter will point to a packet previously allocated by the
  *  get packet MPCI entry.
  */
@@ -86,7 +86,7 @@ typedef MPCI_Entry ( *MPCI_return_packet_entry )(
 
 /**
  *  This type defines the prototype for send get packet entry point
- *  in an Multiprocessor Communications Interface.  The single 
+ *  in an Multiprocessor Communications Interface.  The single
  *  parameter will point to a packet previously allocated by the
  *  get packet entry point that has been filled in by the caller.
  */
@@ -97,7 +97,7 @@ typedef MPCI_Entry ( *MPCI_send_entry )(
 
 /**
  *  This type defines the prototype for the receive packet entry point
- *  in an Multiprocessor Communications Interface.  The single 
+ *  in an Multiprocessor Communications Interface.  The single
  *  parameter will point to a packet allocated and filled in by the
  *  receive packet handler.  The caller will block until a packet is
  *  received.
@@ -118,7 +118,7 @@ typedef struct {
   /** This fields contains the timeout for MPCI operations in ticks. */
   uint32_t                   default_timeout;
   /** This field contains the maximum size of a packet supported by this
-   *  MPCI layer.  This size places a limit on the size of a message 
+   *  MPCI layer.  This size places a limit on the size of a message
    *  which can be transmitted over this interface.
    **/
   size_t                     maximum_packet_size;
@@ -161,7 +161,7 @@ typedef struct {
    *  on all nodes.
    */
   uint32_t                         maximum_nodes;
-  /** This field is the maximum number of concurrently existent 
+  /** This field is the maximum number of concurrently existent
    *  globally offered objects.
    */
   uint32_t                         maximum_global_objects;
@@ -221,7 +221,7 @@ void _MPCI_Initialization ( void );
  *
  *  @param[in] the_class is the class indicator for packets which will
  *             be processed by @a the_packet_processor method.
- *  @param[in] the_packet_processor is a pointer to a method which is 
+ *  @param[in] the_packet_processor is a pointer to a method which is
  *             invoked when packets with @a the_class are received.
  */
 void _MPCI_Register_packet_processor(
@@ -309,7 +309,7 @@ MP_packet_Prefix  *_MPCI_Receive_packet ( void );
  *  @param[in] the_packet is the response packet to be processed.
  *
  *  @return This method returns a pointer to the thread which was if unblocked
- *          or NULL if the waiting thread no longer exists. 
+ *          or NULL if the waiting thread no longer exists.
  */
 Thread_Control *_MPCI_Process_response (
   MP_packet_Prefix *the_packet

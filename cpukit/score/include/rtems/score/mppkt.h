@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/mppkt.h
  *
  *  This package is the specification for the Packet Handler.

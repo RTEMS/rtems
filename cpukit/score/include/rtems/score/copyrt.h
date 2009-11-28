@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/copyrt.h
  *
  *  This include file contains the copyright notice for RTEMS

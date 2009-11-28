@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/context.h
  *
  *  This include file contains all information about each thread's context.
@@ -57,7 +57,7 @@ SCORE_EXTERN volatile bool _Context_Switch_necessary;
  *  thread's initial state.
  *
  *  @param[in] _the_context will be initialized
- *  @param[in] _stack is the lowest physical address of the thread's 
+ *  @param[in] _stack is the lowest physical address of the thread's
  *         context
  *  @param[in] _size is the size in octets of the thread's context
  *  @param[in] _isr is the ISR enable level for this thread

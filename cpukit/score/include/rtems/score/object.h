@@ -552,7 +552,7 @@ void _Objects_Free(
 
 /**
  *  This macro is used to build a thirty-two bit style name from
- *  four characters.  The most significant byte will be the 
+ *  four characters.  The most significant byte will be the
  *  character @a _C1.
  *
  *  @param[in] _C1 is the first character of the name
@@ -605,7 +605,7 @@ typedef enum {
  *  @param[in] node is the set of nodes to search.
  *  @param[in] id will contain the Id if the search is successful.
  *
- *  @return This method returns one of the values from the 
+ *  @return This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
  *          successful or failure.  On success @a id will contain the Id of
  *          the requested object.
@@ -626,7 +626,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
  *  @param[in] name is the name of the object to find.
  *  @param[in] id will contain the Id if the search is successful.
  *
- *  @return This method returns one of the values from the 
+ *  @return This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
  *          successful or failure.  On success @a id will contain the Id of
  *          the requested object.
@@ -646,7 +646,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
  *  @param[in] id is the Id of the object whose name we are locating.
  *  @param[in] name will contain the name of the object, if found.
  *
- *  @return This method returns one of the values from the 
+ *  @return This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
  *          successful or failure.  On success @a name will contain the name of
  *          the requested object.
@@ -672,7 +672,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
  *  @param[in] id is the Id of the object whose name we are locating.
  *  @param[in] location will contain an indication of success or failure.
  *
- *  @return This method returns one of the values from the 
+ *  @return This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
  *          successful or failure.  On success @a id will contain the Id of
  *          the requested object.
@@ -703,7 +703,7 @@ Objects_Control *_Objects_Get (
  *  @param[in] location will contain an indication of success or failure.
  *  @param[in] level is the interrupt level being turned.
  *
- *  @return This method returns one of the values from the 
+ *  @return This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
  *          successful or failure.  On success @a name will contain the name of
  *          the requested object.
@@ -732,7 +732,7 @@ Objects_Control *_Objects_Get_isr_disable(
  *
  *  @return This method returns a pointer to the object associated with ID.
  *
- *  @return This method returns one of the values from the 
+ *  @return This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
  *          successful or failure.  On success @a id will contain the id of
  *          the requested object.
@@ -762,7 +762,7 @@ Objects_Control *_Objects_Get_by_index (
  *  @param[in] id is the Id of the object whose name we are locating.
  *  @param[in] location will contain an indication of success or failure.
  *
- *  @return This method returns one of the values from the 
+ *  @return This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
  *          successful or failure.  On success @a id will contain the Id of
  *          the requested object.
@@ -786,7 +786,7 @@ Objects_Control *_Objects_Get_no_protection(
  *  @param[in] location_p will contain an indication of success or failure.
  *  @param[in] next_id_p is the Id of the next object we will look at.
  *
- *  @return This method returns the pointer to the object located or 
+ *  @return This method returns the pointer to the object located or
  *          NULL on error.
  */
 Objects_Control *_Objects_Get_next(

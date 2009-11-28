@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/bitfield.h
  *
  *  This include file contains all bit field manipulation routines.
@@ -37,7 +37,7 @@ extern "C" {
  *  This table is used by the generic bitfield routines to perform
  *  a highly optimized bit scan without the use of special CPU
  *  instructions.
- */ 
+ */
 #ifndef SCORE_INIT
 extern const unsigned char __log2table[256];
 #else

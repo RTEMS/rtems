@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/threadq.h
  *
  *  This include file contains all the constants and structures associated
@@ -81,7 +81,7 @@ Thread_Control *_Thread_queue_Dequeue(
     _the_thread_queue, \
     _timeout, \
     _Thread_queue_Timeout )
-  
+
 
 /** @brief  Thread queue Enqueue
  *
@@ -192,7 +192,7 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
 void _Thread_queue_Extract_priority_helper(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
-  bool                  requeuing 
+  bool                  requeuing
 );
 
 /**
@@ -273,7 +273,7 @@ void _Thread_queue_Timeout (
 /**
  * @brief Process Thread Queue Timeout
  *
- * This is a shared helper routine which makes it easier to have multiple 
+ * This is a shared helper routine which makes it easier to have multiple
  * object class specific timeout routines.
  *
  * @param[in] the_thread is the thread to extract

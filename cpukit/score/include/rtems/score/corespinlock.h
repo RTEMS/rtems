@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/corespinlock.h
  *
  *  This include file contains all the constants and structures associated
@@ -50,11 +50,11 @@ typedef enum {
    */
   CORE_SPINLOCK_NOT_HOLDER,
   /** This status indicates that a thread reached the limit of time it
-   *  was willing to wait on the spin lock. 
+   *  was willing to wait on the spin lock.
    */
   CORE_SPINLOCK_TIMEOUT,
   /** This status indicates that a thread is currently waiting for this
-   *  spin lock. 
+   *  spin lock.
    */
   CORE_SPINLOCK_IS_BUSY,
   /** This status indicates that the spinlock is currently locked and thus
@@ -92,7 +92,7 @@ typedef struct {
  */
 typedef struct {
   /** XXX may not be needed */
-  CORE_spinlock_Attributes  Attributes; 
+  CORE_spinlock_Attributes  Attributes;
 
   /** This field is the lock.
    */

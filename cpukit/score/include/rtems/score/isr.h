@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/isr.h
  *
  *  This include file contains all the constants and structures associated
@@ -199,7 +199,7 @@ void _ISR_Dispatch( void );
  *  Invokes the thread dispatcher or signal extension if necessary.
  *
  *  It should be called at the end of interrupt processing.  The interrupt nest
- *  level must be zero before calling this routine. 
+ *  level must be zero before calling this routine.
  *
  *  This is a high level replacement of _ISR_Dispatch().  It must be invoked
  *  within an environment such that a call to _Thread_Dispatch() is allowed.

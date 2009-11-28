@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/wkspace.h
  *
  *  This include file contains information related to the
@@ -37,7 +37,7 @@ extern "C" {
 
 /** @brief Executive Workspace Control
  *
- *  The is the heap control structure that used to manage the 
+ *  The is the heap control structure that used to manage the
  *  RTEMS Executive Workspace.
  */
 SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */

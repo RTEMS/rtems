@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/timestamp.h
  *
  *  This include file contains helpers for manipulating timestamps.
@@ -48,7 +48,7 @@ extern "C" {
  *  NOTE: Eventually each port should select what it should use!!!
  *
  *  These control which implementation of SuperCore Timestamp is used.
- *  
+ *
  *  if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
  *     struct timespec is used
  *  else if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64)
@@ -63,26 +63,26 @@ extern "C" {
  *  Performance of int64_t versus struct timespec
  *  =============================================
  *
- *  On PowerPC/psim, inlined int64_t saves ~50 instructions on each 
+ *  On PowerPC/psim, inlined int64_t saves ~50 instructions on each
  *    _Thread_Dispatch operation which results in a context switch.
  *    This works out to be about 10% faster dispatches and 7.5% faster
  *    blocking semaphore obtains.  The following numbers are in instructions
  *    and from tm02 and tm26.
  *
- *                         timespec  int64  inlined int64 
+ *                         timespec  int64  inlined int64
  *    dispatch:              446      446      400
  *    blocking sem obtain:   627      626      581
  *
  *  On SPARC/sis, inlined int64_t shows the same percentage gains.
  *    The following numbers are in microseconds and from tm02 and tm26.
  *
- *                         timespec  int64  inlined int64 
+ *                         timespec  int64  inlined int64
  *    dispatch:               59       61       53
  *    blocking sem obtain:    98      100       92
  *
  *  Inlining appears to have a tendency to increase the size of
  *    some executables.
- *  Not inlining reduces the execution improvement but does not seem to 
+ *  Not inlining reduces the execution improvement but does not seem to
  *    be an improvement on the PowerPC and SPARC. The struct timespec
  *    and the executables with int64 not inlined are about the same size.
  *
@@ -168,7 +168,7 @@ extern "C" {
  *
  *  @param[in] _time points to the timestamp instance to validate.
  *
- *  @return This method returns true if @a time is valid and 
+ *  @return This method returns true if @a time is valid and
  *          false otherwise.
  */
 #if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
@@ -186,7 +186,7 @@ extern "C" {
  *  @param[in] _lhs points to the left hand side timestamp
  *  @param[in] _rhs points to the right hand side timestamp
  *
- *  @return This method returns true if @a _lhs is less than the @a _rhs and 
+ *  @return This method returns true if @a _lhs is less than the @a _rhs and
  *          false otherwise.
  */
 #if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
@@ -204,7 +204,7 @@ extern "C" {
  *  @param[in] _lhs points to the left hand side timestamp
  *  @param[in] _rhs points to the right hand side timestamp
  *
- *  @return This method returns true if @a _lhs is greater than the @a _rhs and 
+ *  @return This method returns true if @a _lhs is greater than the @a _rhs and
  *          false otherwise.
  */
 #if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
@@ -222,7 +222,7 @@ extern "C" {
  *  @param[in] _lhs points to the left hand side timestamp
  *  @param[in] _rhs points to the right hand side timestamp
  *
- *  @return This method returns true if @a _lhs is equal to  @a _rhs and 
+ *  @return This method returns true if @a _lhs is equal to  @a _rhs and
  *          false otherwise.
  */
 #if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
@@ -239,7 +239,7 @@ extern "C" {
  *  to the first.
  *
  *  @param[in] _time points to the base time to be added to
- *  @param[in] _add points to the timestamp to add to the first argument 
+ *  @param[in] _add points to the timestamp to add to the first argument
  *
  *  @return This method returns the number of seconds @a time increased by.
  */
@@ -255,7 +255,7 @@ extern "C" {
  *
  *  This routine adds two timestamps.  The second argument is added
  *  to the first.
- *  
+ *
  *  @node This routine places a special requirement on the addition
  *        operation.  It must return the number of units that the
  *        seconds field changed as the result of the addition.  Since this
@@ -263,7 +263,7 @@ extern "C" {
  *        it is generally safe to assume that only one second changed.
  *
  *  @param[in] _time points to the base time to be added to
- *  @param[in] _add points to the timestamp to add to the first argument 
+ *  @param[in] _add points to the timestamp to add to the first argument
  *
  *  @return This method returns the number of seconds @a time increased by.
  */
@@ -331,7 +331,7 @@ extern "C" {
 /** @brief Divide Timestamp By Integer
  *
  *  This routine divides a timestamp by an integer value.  The expected
- *  use is to assist in benchmark calculations where you typically 
+ *  use is to assist in benchmark calculations where you typically
  *  divide a duration by a number of iterations.
  *
  *  @param[in] _time points to the total
@@ -350,7 +350,7 @@ extern "C" {
 
 /** @brief Divide Timestamp
  *
- *  This routine divides a timestamp by another timestamp.  The 
+ *  This routine divides a timestamp by another timestamp.  The
  *  intended use is for calculating percentages to three decimal points.
  *
  *  @param[in] _lhs points to the left hand number
@@ -410,7 +410,7 @@ extern "C" {
 #if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
   /* in this case we know they are the same type so use simple assignment */
   #define _Timestamp_To_timespec( _timestamp, _timespec  ) \
-          *(_timespec) = *(_timestamp) 
+          *(_timespec) = *(_timestamp)
 #else
   #define _Timestamp_To_timespec( _timestamp, _timespec  ) \
 	  _Timestamp64_To_timespec( _timestamp, _timespec  )

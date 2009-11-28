@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/thread.h
  *
  *  This include file contains all constants and structures associated
@@ -92,7 +92,7 @@ typedef void *Thread;
 
 /**
  *  @brief Type of the numeric argument of a thread entry function with at
- *  least one numeric argument. 
+ *  least one numeric argument.
  *
  *  This numeric argument type designates an unsigned integer type with the
  *  property that any valid pointer to void can be converted to this type and
@@ -274,13 +274,13 @@ typedef struct {
   /** This field contains any options in effect on this blocking operation. */
   uint32_t              option;
   /** This field will contain the return status from a blocking operation.
-   * 
+   *
    *  @note The following assumes that all API return codes can be
    *        treated as an uint32_t.
    */
   uint32_t              return_code;
 
-  /** This field is the chain header for the second through Nth tasks 
+  /** This field is the chain header for the second through Nth tasks
    *  of the same priority blocked waiting on the same object.
    */
   Chain_Control         Block2n;
@@ -377,7 +377,7 @@ struct Thread_Control_struct {
   /** This field is true if the thread is offered globally */
   bool                                  is_global;
 #endif
-  /** This field is is true if the post task context switch should be 
+  /** This field is is true if the post task context switch should be
    *  executed for this thread at the next context switch.
    */
   bool                                  do_post_task_switch_extension;

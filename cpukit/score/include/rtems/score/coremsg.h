@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/score/coremsg.h
  *
  *  This include file contains all the constants and structures associated
@@ -106,7 +106,7 @@ typedef enum {
   CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY
 }   CORE_message_queue_Disciplines;
 
-/** 
+/**
  *  @brief Message Priority for Appending
  *
  *  This is the priority constant used when appending messages onto
@@ -114,7 +114,7 @@ typedef enum {
  */
 #define  CORE_MESSAGE_QUEUE_SEND_REQUEST   INT_MAX
 
-/** 
+/**
  *  @brief Message Priority for Prepending
  *
  *  This is the priority constant used when prepending messages onto
@@ -228,7 +228,7 @@ typedef struct {
    */
   CORE_message_queue_Buffer         *message_buffers;
   #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
-    /** This is the routine invoked when the message queue transitions 
+    /** This is the routine invoked when the message queue transitions
      *  from zero (0) messages pending to one (1) message pending.
      */
     CORE_message_queue_Notify_Handler  notify_handler;
@@ -255,7 +255,7 @@ typedef struct {
  *         may be sent to this message queue instance
  *
  *  @return true if the message queue can be initialized.  In general,
- *         false will only be returned if memory for the pending 
+ *         false will only be returned if memory for the pending
  *         messages cannot be allocated.
  */
 bool _CORE_message_queue_Initialize(
@@ -337,7 +337,7 @@ uint32_t   _CORE_message_queue_Flush_support(
  *  @param[in] size is the size of the message being broadcast
  *  @param[in] id is the RTEMS object Id associated with this message queue.
  *         It is used when unblocking a remote thread.
- *  @param[in] api_message_queue_mp_support is the routine to invoke if 
+ *  @param[in] api_message_queue_mp_support is the routine to invoke if
  *         a thread that is unblocked is actually a remote thread.
  *  @param[out] count points to the variable that will contain the
  *         number of tasks that are sent this message
@@ -368,7 +368,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
  *  @param[in] size is the size of the message being send
  *  @param[in] id is the RTEMS object Id associated with this message queue.
  *         It is used when unblocking a remote thread.
- *  @param[in] api_message_queue_mp_support is the routine to invoke if 
+ *  @param[in] api_message_queue_mp_support is the routine to invoke if
  *         a thread that is unblocked is actually a remote thread.
  *  @param[in] submit_type determines whether the message is prepended,
  *         appended, or enqueued in priority order.
@@ -408,7 +408,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  *         if the message queue is empty.
  *  @param[in] timeout is the maximum number of clock ticks that the calling
  *         thread is willing to block if the message queue is empty.
- * 
+ *
  *  @return indication of the successful completion or reason for failure
  *  @note Returns message priority via return are in TCB.
  */

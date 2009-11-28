@@ -1,8 +1,8 @@
-/** 
+/**
  *  @file  rtems/score/threadsync.h
  *
  *  This include file contains all constants and structures associated
- *  with synchronizing a thread blocking operation with potential 
+ *  with synchronizing a thread blocking operation with potential
  *  actions in an ISR.
  */
 
