@@ -91,7 +91,7 @@ FIXED_MEMORY_POOL_C_FILES = src/fmempool.c src/cre_mpf.c src/del_mpf.c \
 
 TIME_C_FILES = src/itrontime.c src/set_tim.c src/get_tim.c src/dly_tsk.c \
     src/def_cyc.c src/act_cyc.c src/ref_cyc.c src/def_alm.c src/ref_alm.c \
-    src/ret_tmr.c 
+    src/ret_tmr.c
 
 CONFIGURATION_C_FILES = src/sysmgmt.c src/get_ver.c src/ref_sys.c \
     src/ref_cfg.c src/def_svc.c src/def_exc.c

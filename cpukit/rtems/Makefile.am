@@ -61,7 +61,7 @@ librtems_a_SOURCES = src/rtemsbuildid.c src/rtemsbuildname.c \
     src/rtemsobjectgetapiname.c src/rtemsobjectgetapiclassname.c \
     src/rtemsobjectgetclassinfo.c src/rtemsobjectgetclassicname.c
 
-## TASK_C_FILES 
+## TASK_C_FILES
 librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
     src/taskgetnote.c src/taskident.c src/taskinitusers.c \
     src/taskissuspended.c src/taskmode.c src/taskrestart.c src/taskresume.c \
@@ -70,14 +70,14 @@ librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
     src/taskvariableadd.c src/taskvariabledelete.c src/taskvariableget.c \
     src/taskvariable_invoke_dtor.c src/taskdata.c
 
-## RATEMON_C_FILES 
+## RATEMON_C_FILES
 librtems_a_SOURCES += src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
     src/ratemondelete.c src/ratemongetstatus.c src/ratemongetstatistics.c \
     src/ratemonresetstatistics.c src/ratemonresetall.c \
     src/ratemonreportstatistics.c src/ratemonident.c \
     src/ratemonperiod.c src/ratemontimeout.c src/ratemondata.c
 
-## INTR_C_FILES 
+## INTR_C_FILES
 librtems_a_SOURCES += src/intrbody.c src/intrcatch.c
 
 ## BARRIER_C_FILES

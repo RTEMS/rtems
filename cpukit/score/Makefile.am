@@ -158,7 +158,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
 
 ## THREAD_C_FILES only used by ITRON API
 if LIBITRON
-libscore_a_SOURCES += src/threadrotatequeue.c 
+libscore_a_SOURCES += src/threadrotatequeue.c
 endif
 
 ## THREADQ_C_FILES
