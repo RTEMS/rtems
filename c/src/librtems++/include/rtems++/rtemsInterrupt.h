@@ -66,10 +66,10 @@ protected:
   // called after the interrupt is caught and it goes off
   virtual void handler() = 0;
 
-  // chain to the previous handler, 
+  // chain to the previous handler,
   inline void chain() const;
 
-private:   
+private:
   const rtemsInterrupt& operator=(const rtemsInterrupt& );
   rtemsInterrupt(const rtemsInterrupt& );
 

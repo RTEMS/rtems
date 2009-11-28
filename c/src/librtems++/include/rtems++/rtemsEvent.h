@@ -40,7 +40,7 @@ public:
   enum Condition { any = RTEMS_EVENT_ANY,
                    all = RTEMS_EVENT_ALL};
 
-  // only the first 4 characters of the name are taken  
+  // only the first 4 characters of the name are taken
 
   // connect to a task
   rtemsEvent(const char* name, uint32_t node = RTEMS_SEARCH_ALL_NODES);
@@ -49,7 +49,7 @@ public:
   rtemsEvent(const rtemsEvent& event);
   rtemsEvent();
 
-  virtual ~rtemsEvent();    
+  virtual ~rtemsEvent();
 
   // connect to an existing task object, will not be the owner
   const rtemsEvent& operator=(const rtemsEvent& event);
@@ -74,7 +74,7 @@ public:
   const rtems_id task_id_is() const { return id; }
   const rtems_name task_name_is() const { return name; }
 
-private:   
+private:
   // task name
   rtems_name name;
 

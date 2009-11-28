@@ -93,7 +93,7 @@ public:
   virtual const rtems_status_code destroy();
 
   // connect to an existing semaphore object, will not be the owner
-  const rtemsSemaphore& operator=(const rtemsSemaphore& semaphore);  
+  const rtemsSemaphore& operator=(const rtemsSemaphore& semaphore);
   virtual const rtems_status_code connect(const char *name, uint32_t node);
 
   // obtain the semaphore, timeout is in micro-seconds
@@ -139,7 +139,7 @@ const rtems_status_code rtemsSemaphore::obtain(const bool wait,
 }
 
 const rtems_status_code rtemsSemaphore::release(void)
-{  
+{
   return set_status_code(rtems_semaphore_release(id));
 }
 

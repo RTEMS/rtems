@@ -71,7 +71,7 @@ public:
   enum Scope { local = RTEMS_LOCAL,
                global = RTEMS_GLOBAL };
 
-  // only the first 4 characters of the name are taken  
+  // only the first 4 characters of the name are taken
 
   // creates a task
   rtemsTask(const char* name,

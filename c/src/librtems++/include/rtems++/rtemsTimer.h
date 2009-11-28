@@ -130,7 +130,7 @@ const rtems_status_code rtemsTimer::cancel()
 }
 
 const rtems_status_code rtemsTimer::reset()
-{ 
+{
   return set_status_code(rtems_timer_reset(id));
 }
 

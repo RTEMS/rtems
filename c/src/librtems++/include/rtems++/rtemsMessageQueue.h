@@ -55,7 +55,7 @@ public:
   enum Scope { local = RTEMS_LOCAL,
                global = RTEMS_GLOBAL };
 
-  // only the first 4 characters of the name are taken  
+  // only the first 4 characters of the name are taken
 
   // creates a message queue
   rtemsMessageQueue(const char* name,
@@ -83,7 +83,7 @@ public:
   virtual const rtems_status_code destroy();
 
   // connect to an existing message queue object, will not be the owner
-  const rtemsMessageQueue& operator=(const rtemsMessageQueue& message_queue);  
+  const rtemsMessageQueue& operator=(const rtemsMessageQueue& message_queue);
   virtual const rtems_status_code connect(const char *name,
                                           const uint32_t node = RTEMS_SEARCH_ALL_NODES);
 
