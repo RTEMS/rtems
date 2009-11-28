@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -15,7 +15,7 @@ RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-RTEMS_CHECK_NETWORKING 
+RTEMS_CHECK_NETWORKING
 
 ## RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 

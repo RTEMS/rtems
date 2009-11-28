@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -47,7 +47,7 @@ RTEMS_BSPOPTS_HELP([MPC8349],
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
-# Explicitly list all Makefiles here 
+# Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)

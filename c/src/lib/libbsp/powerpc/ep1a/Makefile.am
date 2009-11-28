@@ -67,7 +67,7 @@ libbsp_a_SOURCES += pci/no_host_bridge.c ../../powerpc/shared/pci/pci.c \
 include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 # irq
-libbsp_a_SOURCES += irq/irq_init.c irq/openpic_xxx_irq.c ../../powerpc/shared/irq/i8259.c 
+libbsp_a_SOURCES += irq/irq_init.c irq/openpic_xxx_irq.c ../../powerpc/shared/irq/i8259.c
 
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     vme/VMEConfig.h \

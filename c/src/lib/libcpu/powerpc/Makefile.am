@@ -109,8 +109,8 @@ endif
 ppc403_console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-include_HEADERS = 
-shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c 
+include_HEADERS =
+shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c
 shared_cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shared_cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## configure.ac,v 1.9.2.2 2003/03/06 10:42:42 ralf Exp
 
 AC_PREREQ(2.60)

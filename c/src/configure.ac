@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -39,7 +39,7 @@ make/custom/default.cfg: \$(srcdir)/make/custom/default.cfg.in
 	cp \$(srcdir)/make/custom/default.cfg.in make/custom/default.cfg
 EOF
 
-# Collect and copy the BSP's make/custom/*.cfg files from the toplevel make 
+# Collect and copy the BSP's make/custom/*.cfg files from the toplevel make
 # directory into the build tree's <bsp>/make/custom subdirectories
 CUSTOM_CFG_FILES=
 f="${RTEMS_BSP}.cfg"
@@ -222,7 +222,7 @@ AC_CONFIG_FILES([Makefile],
  MAKE=${MAKE}])
 
 AC_CONFIG_FILES([
-support/Makefile 
+support/Makefile
 
 libchip/Makefile
 

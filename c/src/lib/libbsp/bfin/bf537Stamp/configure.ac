@@ -1,7 +1,7 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
-## 
+##
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-lib-libbsp-bfin-bf537Stamp],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])

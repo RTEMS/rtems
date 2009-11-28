@@ -8,7 +8,7 @@ AC_CONFIG_SRCDIR([runtest])
 RTEMS_TOP(../../../../../../..)
 
 # HACK: so we use the default native flags and do not inherit cross cflags
-# HACK: I really hope we get a better solution soon. --joel 
+# HACK: I really hope we get a better solution soon. --joel
 CFLAGS=
 AC_PROG_CC
 AC_PROG_CXX

@@ -64,7 +64,7 @@ if at91rm9200
 include_HEADERS = at91rm9200/include/at91rm9200.h at91rm9200/include/at91rm9200_dbgu.h \
     at91rm9200/include/at91rm9200_emac.h at91rm9200/include/at91rm9200_gpio.h \
     at91rm9200/include/at91rm9200_mem.h at91rm9200/include/at91rm9200_pmc.h \
-    at91rm9200/include/bits.h at91rm9200/include/at91rm9200_usart.h 
+    at91rm9200/include/bits.h at91rm9200/include/at91rm9200_usart.h
 
 ## at91rm9200/clock
 noinst_PROGRAMS += at91rm9200/clock.rel
@@ -190,7 +190,7 @@ include_HEADERS = lpc22xx/include/lpc22xx.h
 
 ## lpc22xx/clock
 noinst_PROGRAMS += lpc22xx/clock.rel
-lpc22xx_clock_rel_SOURCES = lpc22xx/clock/clockdrv.c 
+lpc22xx_clock_rel_SOURCES = lpc22xx/clock/clockdrv.c
 lpc22xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 lpc22xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -21,7 +21,7 @@ RTEMS_BSPOPTS_HELP([CPU_CLOCK_RATE_HZ],[cpu clock rate in HZ])
 
 RTEMS_BSPOPTS_SET([START_HW_INIT],[*],[])
 RTEMS_BSPOPTS_HELP([START_HW_INIT],
-[If defined, selects whether 'early_hw_init()' is called from 'start.S'; 
+[If defined, selects whether 'early_hw_init()' is called from 'start.S';
  'bsp_hw_init()' is always called from 'bspstart.c'])
 
 ## Used in scitab/Makefile.am

@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -32,8 +32,8 @@ RTEMS_BSPOPTS_HELP([UARTS_USE_TERMIOS],
 
 RTEMS_BSPOPTS_SET([CONSOLE_MINOR],[*],[SCC2_MINOR])
 RTEMS_BSPOPTS_HELP([CONSOLE_MINOR],
-[(BSP--console driver) Must be defined to be one of SMC1_MINOR, 
- SMC2_MINOR, SCC2_MINOR, SCC3_MINOR, or SCC4_MINOR. 
+[(BSP--console driver) Must be defined to be one of SMC1_MINOR,
+ SMC2_MINOR, SCC2_MINOR, SCC3_MINOR, or SCC4_MINOR.
  Determines which device will be registered as /dev/console.])
 
 RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[*],[0])
@@ -56,7 +56,7 @@ RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
  Must be defined to be one of SMC1_MINOR, SMC2_MINOR, SCC2_MINOR,
  SCC3_MINOR, or SCC4_MINOR. Determines which device is used for output
  by printk(). If the port that printk() uses is also used for other
- I/O (e.g. if  PRINTK_MINOR == \$CONSOLE_MINOR), then both ports should 
+ I/O (e.g. if  PRINTK_MINOR == \$CONSOLE_MINOR), then both ports should
  use the same type of I/O, otherwise the drivers will likely conflict with
  each other.])
 
@@ -69,7 +69,7 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
-# Explicitly list a Makefile here 
+# Explicitly list a Makefile here
 AC_CONFIG_FILES([Makefile])
 
 RTEMS_PPC_EXCEPTIONS

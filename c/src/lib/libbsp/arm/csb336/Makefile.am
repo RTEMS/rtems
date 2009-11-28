@@ -36,7 +36,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bspreset.c startup/memmap.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 # console
-libbsp_a_SOURCES += console/uart.c 
+libbsp_a_SOURCES += console/uart.c
 # abort
 libbsp_a_SOURCES += ../shared/abort/abort.c
 

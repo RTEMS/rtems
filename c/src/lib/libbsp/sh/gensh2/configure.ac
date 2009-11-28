@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -15,7 +15,7 @@ RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-## bsp-specific options 
+## bsp-specific options
 RTEMS_BSPOPTS_SET([CPU_CLOCK_RATE_HZ],[*],[29491200])
 RTEMS_BSPOPTS_HELP([CPU_CLOCK_RATE_HZ],[cpu clock rate in HZ])
 
@@ -24,7 +24,7 @@ AC_SUBST(CPU_CLOCK_RATE_HZ)
 
 RTEMS_BSPOPTS_SET([START_HW_INIT],[*],[])
 RTEMS_BSPOPTS_HELP([START_HW_INIT],
-[If defined, selects whether 'early_hw_init()' is called from 'start.S'; 
+[If defined, selects whether 'early_hw_init()' is called from 'start.S';
  'bsp_hw_init()' is always called from 'bspstart.c'])
 
 RTEMS_BSPOPTS_SET([STANDALONE_EVB],[*],[])

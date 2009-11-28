@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## configure.ac,v 1.5 2003/03/11 09:39:07 ralf Exp
 
 AC_PREREQ(2.60)
@@ -17,13 +17,13 @@ RTEMS_PROG_CCAS
 
 RTEMS_BSPOPTS_SET([ON_SKYEYE],[*],[0])
 RTEMS_BSPOPTS_HELP([ON_SKYEYE],
-[If defined, enable options which optimize executingon the Skyeye 
+[If defined, enable options which optimize executingon the Skyeye
  simulator.  Speed up the clock ticks while the idle task is running so
  time spent in the idle task is minimized.  This significantly reduces
  the wall time required to execute the RTEMS test suites.])
 AM_CONDITIONAL(ON_SKYEYE,test "$ON_SKYEYE" = "1")
 
-RTEMS_CHECK_NETWORKING 
+RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 RTEMS_BSP_CLEANUP_OPTIONS(1, 1)

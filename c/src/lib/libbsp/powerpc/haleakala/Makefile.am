@@ -10,7 +10,7 @@ include_bspdir = $(includedir)/bsp
 
 dist_project_lib_DATA = bsp_specs
 
-include_HEADERS = include/bsp.h 
+include_HEADERS = include/bsp.h
 include_HEADERS += ../../shared/include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
@@ -57,7 +57,7 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel 
+    ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel
 
 EXTRA_DIST = times
 

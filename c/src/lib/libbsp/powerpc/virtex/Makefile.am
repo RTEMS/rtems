@@ -10,7 +10,7 @@ include_bspdir = $(includedir)/bsp
 
 dist_project_lib_DATA = bsp_specs
 
-include_HEADERS = include/bsp.h 
+include_HEADERS = include/bsp.h
 include_HEADERS += ../../shared/include/tm27.h
 include_HEADERS += include/xparameters_dflt.h
 if HAS_NETWORKING

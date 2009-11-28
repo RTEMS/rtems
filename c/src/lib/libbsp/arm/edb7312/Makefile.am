@@ -62,7 +62,7 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 # libcpu libraries could go here
-libbsp_a_LIBADD = 
+libbsp_a_LIBADD =
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif

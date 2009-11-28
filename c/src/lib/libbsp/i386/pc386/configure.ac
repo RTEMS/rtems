@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -26,18 +26,18 @@ RTEMS_BSPOPTS_HELP([USE_COM1_AS_CONSOLE],
 
 RTEMS_BSPOPTS_SET([IDE_USE_PRIMARY_INTERFACE],[*],[1])
 RTEMS_BSPOPTS_HELP([IDE_USE_PRIMARY_INTERFACE],
-[Determines, whether RTEMS will try to use the primary IDE interface. 
+[Determines, whether RTEMS will try to use the primary IDE interface.
  Disable it, if:
- - you have no primary IDE interface 
- - or you have no disk attached to this interface  
+ - you have no primary IDE interface
+ - or you have no disk attached to this interface
  - or you do not want to access disks attached to this interface])
 
 RTEMS_BSPOPTS_SET([IDE_USE_SECONDARY_INTERFACE],[*],[0])
 RTEMS_BSPOPTS_HELP([IDE_USE_SECONDARY_INTERFACE],
-[Determines, whether RTEMS will try to use the secondary IDE interface. 
+[Determines, whether RTEMS will try to use the secondary IDE interface.
  Enable it, if:
- - you have a secondary IDE interface 
- - and you have at least one disk attached to this interface  
+ - you have a secondary IDE interface
+ - and you have at least one disk attached to this interface
  - and you do want to access disks attached to this interface])
 
 RTEMS_BSPOPTS_SET([BSP_VIDEO_80x50],[*],[0])

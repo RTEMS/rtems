@@ -69,7 +69,7 @@ include_bsp_HEADERS += \
 
 # vectors
 libbsp_a_SOURCES += vectors/exceptionhandler.c \
-    ../../powerpc/shared/start/vectors_entry.S	
+    ../../powerpc/shared/start/vectors_entry.S
 
 include_bsp_HEADERS += GT64260/bspMvme5500.h GT64260/gtreg.h \
     GT64260/GT64260TWSI.h GT64260/VPD.h

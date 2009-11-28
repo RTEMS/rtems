@@ -40,7 +40,7 @@ include_bsp_HEADERS = ../../powerpc/shared/pci/pci.h \
 	PCI_bus/PCI.h \
 	../../powerpc/shared/residual/residual.h \
 	../../powerpc/shared/residual/pnp.h \
-	../../powerpc/shared/console/consoleIo.h 
+	../../powerpc/shared/console/consoleIo.h
 
 pci_SOURCES = PCI_bus/flash.c ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/pcifinddevice.c  PCI_bus/PCI.c  PCI_bus/universe.c
@@ -49,9 +49,9 @@ include_bsp_HEADERS += irq/irq.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 
 irq_SOURCES =  irq/no_pic.c irq/irq_init.c \
-    irq/FPGA.c 
+    irq/FPGA.c
 
-vectors_SOURCES = 
+vectors_SOURCES =
 
 EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S
@@ -65,7 +65,7 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(pclock_SOURCES) $(console_SOURCES) $(irq_SOURCES) \
-    $(pci_SOURCES) $(vectors_SOURCES) $(startup_SOURCES) 
+    $(pci_SOURCES) $(vectors_SOURCES) $(startup_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

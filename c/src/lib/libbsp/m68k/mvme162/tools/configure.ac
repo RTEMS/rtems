@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -22,7 +22,7 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h sys/vme.h)
 AC_FUNC_MMAP
 
-AM_CONDITIONAL(SLOAD_BUILDABLE, 
+AM_CONDITIONAL(SLOAD_BUILDABLE,
 test "$ac_cv_header_sys_vme_h" = "yes" \
 -a  "$ac_cv_header_unistd_h" = "yes" \
 -a "$ac_cv_header_stdc" = "yes" )

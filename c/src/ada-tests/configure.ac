@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.59)
@@ -12,7 +12,7 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define foreign 1.9])
 AM_MAINTAINER_MODE
 
-AC_CHECK_PROGS([M4],[gm4 m4]) 
+AC_CHECK_PROGS([M4],[gm4 m4])
 RTEMS_PROG_GNAT
 RTEMS_CANONICALIZE_TOOLS
 

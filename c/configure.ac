@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -37,7 +37,7 @@ for _rtems_bsp in : $rtems_bsp; do test "x$_rtems_bsp" = x: && continue
     # retrieve bsp_family
     RTEMS_BSP_ALIAS([$_rtems_bsp],[rtems_bsp_family])
 
-    # Is there a configure script for the BSP?    
+    # Is there a configure script for the BSP?
     AS_IF([test -r "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/$rtems_bsp_family/configure"],
       [RTEMS_BSP_LIST="$RTEMS_BSP_LIST $_rtems_bsp"])
   ])

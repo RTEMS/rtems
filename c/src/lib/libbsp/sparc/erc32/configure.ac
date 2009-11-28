@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ(2.60)
@@ -25,7 +25,7 @@ RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[0])
 RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
 [The erc32 console driver can operate in either polled or interrupt mode.
-Under the simulator (especially when FAST_UART is defined), polled seems to operate 
+Under the simulator (especially when FAST_UART is defined), polled seems to operate
 better.  It is common for a task to print a line (like the end of test message) and
 then exit.  In this case, the program returns control to the simulator command line
 before the program has even queued the output to the uart.  Thus sis has no chance
@@ -40,7 +40,7 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
 RTEMS_BSPOPTS_SET([ENABLE_SIS_QUIRKS],[sis],[1])
 RTEMS_BSPOPTS_SET([ENABLE_SIS_QUIRKS],[*],[0])
 RTEMS_BSPOPTS_HELP([ENABLE_SIS_QUIRKS],
-[If defined, then the SIS simulator specific code in the 
+[If defined, then the SIS simulator specific code in the
  BSP will be enabled.  In particular, SIS requires special
  initialization not used on real ERC32 hardware.])
 

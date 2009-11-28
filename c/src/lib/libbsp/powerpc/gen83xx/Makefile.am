@@ -10,7 +10,7 @@ include_bspdir = $(includedir)/bsp
 
 dist_project_lib_DATA = bsp_specs
 
-include_HEADERS = include/bsp.h 
+include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
@@ -80,15 +80,15 @@ libbsp_a_SOURCES += irq/irq.c \
 	../../shared/src/irq-server.c
 
 # console
-libbsp_a_SOURCES += console/console.c console/ns16550cfg.c 
+libbsp_a_SOURCES += console/console.c console/ns16550cfg.c
 # bsp_i2c
-libbsp_a_SOURCES += i2c/i2c_init.c 
+libbsp_a_SOURCES += i2c/i2c_init.c
 # bsp_spi
-libbsp_a_SOURCES += spi/spi_init.c 
+libbsp_a_SOURCES += spi/spi_init.c
 
 if HAS_NETWORKING
 noinst_PROGRAMS += network.rel
-network_rel_SOURCES   = network/network.c 
+network_rel_SOURCES   = network/network.c
 network_rel_CPPFLAGS  = $(AM_CPPFLAGS)
 network_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
