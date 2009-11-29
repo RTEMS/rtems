@@ -5,9 +5,9 @@
  *  This CPU has a number of on-board peripherals and
  *  was developed by the European Space Agency to target space applications.
  *
- *  NOTE:  Other than where absolutely required, this version currently 
- *         supports only the peripherals and bits used by the basic board 
- *         support package. This includes at least significant pieces of 
+ *  NOTE:  Other than where absolutely required, this version currently
+ *         supports only the peripherals and bits used by the basic board
+ *         support package. This includes at least significant pieces of
  *         the following items:
  *
  *           + UART Channels A and B
@@ -23,20 +23,20 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to LEON implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
  */
- 
+
 #ifndef _INCLUDE_LEON_h
 #define _INCLUDE_LEON_h
 
 #include <rtems/score/sparc.h>
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -44,7 +44,7 @@ extern "C" {
 /*
  *  Interrupt Sources
  *
- *  The interrupt source numbers directly map to the trap type and to 
+ *  The interrupt source numbers directly map to the trap type and to
  *  the bits used in the Interrupt Clear, Interrupt Force, Interrupt Mask,
  *  and the Interrupt Pending Registers.
  */
@@ -72,7 +72,7 @@ extern "C" {
  *
  *  Source: Table 8 - Interrupt Trap Type and Default Priority Assignments
  *
- *  NOTE: The priority level for each source corresponds to the least 
+ *  NOTE: The priority level for each source corresponds to the least
  *        significant nibble of the trap type.
  */
 
@@ -85,12 +85,12 @@ extern "C" {
     (_trap) <= LEON_TRAP_TYPE( LEON_INTERRUPT_EMPTY6 ) )
 
 /*
- *  Structure for LEON memory mapped registers.  
+ *  Structure for LEON memory mapped registers.
  *
  *  Source: Section 6.1 - On-chip registers
  *
- *  NOTE:  There is only one of these structures per CPU, its base address 
- *         is 0x80000000, and the variable LEON_REG is placed there by the 
+ *  NOTE:  There is only one of these structures per CPU, its base address
+ *         is 0x80000000, and the variable LEON_REG is placed there by the
  *         linkcmds file.
  */
 
@@ -107,7 +107,7 @@ typedef struct {
 	volatile unsigned int Leon_Configuration;
 	volatile unsigned int dummy2;
 	volatile unsigned int dummy3;
-	volatile unsigned int dummy4;	
+	volatile unsigned int dummy4;
 	volatile unsigned int dummy5;
 	volatile unsigned int dummy6;
 	volatile unsigned int dummy7;
@@ -213,7 +213,7 @@ typedef struct {
 
 #define LEON_MEMORY_CONFIGURATION_RAM_SIZE_MASK  0x00001E00
 
- 
+
 /*
  *  The following defines the bits in the Timer Control Register.
  */
@@ -230,8 +230,8 @@ typedef struct {
  *
  */
 
-#define LEON_REG_UART_CONTROL_RTD  0x000000FF /* RX/TX data */ 
- 
+#define LEON_REG_UART_CONTROL_RTD  0x000000FF /* RX/TX data */
+
 /*
  *  The following defines the bits in the LEON UART Status Registers.
  */
@@ -246,7 +246,7 @@ typedef struct {
 #define LEON_REG_UART_STATUS_FE   0x00000040 /* RX Framing Error */
 #define LEON_REG_UART_STATUS_ERR  0x00000078 /* Error Mask */
 
- 
+
 /*
  *  The following defines the bits in the LEON UART Status Registers.
  */
@@ -270,7 +270,7 @@ typedef struct {
  */
 
 extern LEON_Register_Map LEON_REG;
- 
+
 /*
  *  Macros to manipulate the Interrupt Clear, Interrupt Force, Interrupt Mask,
  *  and the Interrupt Pending Registers.
@@ -290,13 +290,13 @@ extern LEON_Register_Map LEON_REG;
   do { \
     LEON_REG.Interrupt_Force = (1 << (_source)); \
   } while (0)
- 
+
 #define LEON_Is_interrupt_pending( _source ) \
   (LEON_REG.Interrupt_Pending & (1 << (_source)))
- 
+
 #define LEON_Is_interrupt_masked( _source ) \
   (LEON_REG.Interrupt_Masked & (1 << (_source)))
- 
+
 #define LEON_Mask_interrupt( _source ) \
   do { \
     uint32_t _level; \
@@ -305,7 +305,7 @@ extern LEON_Register_Map LEON_REG;
       LEON_REG.Interrupt_Mask &= ~(1 << (_source)); \
     sparc_enable_interrupts( _level ); \
   } while (0)
- 
+
 #define LEON_Unmask_interrupt( _source ) \
   do { \
     uint32_t _level; \
@@ -326,7 +326,7 @@ extern LEON_Register_Map LEON_REG;
     sparc_enable_interrupts( _level ); \
     (_previous) &= _mask; \
   } while (0)
- 
+
 #define LEON_Restore_interrupt( _source, _previous ) \
   do { \
     uint32_t _level; \
@@ -350,7 +350,7 @@ extern LEON_Register_Map LEON_REG;
  *          0 = stop counter at zero
  *
  *    D2 - Counter Load
- *          1 = load counter with preset value 
+ *          1 = load counter with preset value
  *          0 = no function
  *
  */
@@ -374,6 +374,6 @@ extern LEON_Register_Map LEON_REG;
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif /* !_INCLUDE_LEON_h */
 

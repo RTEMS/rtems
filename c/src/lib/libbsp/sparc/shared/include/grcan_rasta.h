@@ -8,8 +8,8 @@
 extern "C" {
 #endif
 
-/* Registers the GRCAN for RASTA 
- * 
+/* Registers the GRCAN for RASTA
+ *
  * rambase is address of the first GRCAN core has it's TX buffer, followed by
  * it's RX buffer
  */

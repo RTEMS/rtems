@@ -10,10 +10,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to LEON implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
@@ -26,7 +26,7 @@
   #define LEON3_TIMER_INDEX \
       ((rtems_configuration_get_user_multiprocessing_table()) ? \
         (rtems_configuration_get_user_multiprocessing_table()->node) - 1 : 1)
-#else 
+#else
   #define LEON3_TIMER_INDEX 0
 #endif
 
@@ -63,12 +63,12 @@ int benchmark_timer_read(void)
 
   if (LEON3_Timer_Regs) {
     total = LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].value;
-    
+
     total = 0xffffff - total;
-    
+
     if ( benchmark_timer_find_average_overhead == true )
       return total;          /* in one microsecond units */
-    
+
     if ( total < LEAST_VALID )
       return 0;            /* below timer resolution */
 

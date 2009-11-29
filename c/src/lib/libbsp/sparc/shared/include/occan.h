@@ -24,7 +24,7 @@ extern "C" {
 typedef struct {
 	char extended; /* 1= Extended Frame (29-bit id), 0= STD Frame (11-bit id) */
 	char rtr; /* RTR - Remote Transmission Request */
-	char sshot; /* single shot */	
+	char sshot; /* single shot */
 	unsigned char len;
 	unsigned char data[8];
 	unsigned int id;
@@ -34,50 +34,50 @@ typedef struct {
 	/* tx/rx stats */
 	unsigned int rx_msgs;
 	unsigned int tx_msgs;
-	
+
 	/* Error Interrupt counters */
 	unsigned int err_warn;
 	unsigned int err_dovr;
 	unsigned int err_errp;
 	unsigned int err_arb;
 	unsigned int err_bus;
-	
+
 	/**** BUS ERRORS (err_arb) ****/
-	
+
 	/* ALC 4-0 */
 	unsigned int err_arb_bitnum[32]; /* At what bit arbitration is lost */
-	
+
 	/******************************/
-	
+
 	/**** BUS ERRORS (err_bus) ****/
-	
+
 	/* ECC 7-6 */
 	unsigned int err_bus_bit; /* Bit error */
 	unsigned int err_bus_form; /* Form Error */
 	unsigned int err_bus_stuff; /* Stuff Error */
 	unsigned int err_bus_other; /* Other Error */
-	
+
 	/* ECC 5 */
 	unsigned int err_bus_rx; /* Errors during Reception */
 	unsigned int err_bus_tx; /* Errors during Transmission */
-	
+
 	/* ECC 4:0 */
 	unsigned int err_bus_segs[32]; /* Segment (Where in frame error occured)
 	                                * See OCCAN_SEG_* defines for indexes
 	                                */
-	
+
 	/******************************/
-	
-	
+
+
 	/* total number of interrupts */
 	unsigned int ints;
-	
+
 	/* software monitoring hw errors */
 	unsigned int tx_buf_error;
-  
+
   /* Software fifo overrun */
   unsigned int rx_sw_dovr;
-  
+
 } occan_stats;
 
 /* indexes into occan_stats.err_bus_segs[index] */

@@ -29,9 +29,9 @@ unsigned int grspwpci_memarea_address;
 #define GRSPW_DEVNAME_NO(devstr,no) ((devstr)[13]='0'+(no))
 
 /* Any non-static function will begin with */
-#define GRSPW_PREFIX(name) grspwpci##name 
+#define GRSPW_PREFIX(name) grspwpci##name
 
-/* do nothing, assume that the interrupt handler is called 
+/* do nothing, assume that the interrupt handler is called
  * setup externally calling b1553_interrupt_handler.
  */
 #define GRSPW_REG_INT(handler,irq,arg) \
@@ -40,7 +40,7 @@ unsigned int grspwpci_memarea_address;
 
 void (*grspw_pci_int_reg)(void *handler, int irq, void *arg) = 0;
 
- 
+
 #ifdef GRSPW_ADR_TO
 /* Translate an address within the Memory Region (memarea) into an Hardware
  * device address. This address is put into hardware registers or descriptors
@@ -79,13 +79,13 @@ int grspwpci_interrupt_handler(int irq, void *arg);
  */
 
 int grspw_pci_register(
- amba_confarea_type *bus, 
+ amba_confarea_type *bus,
  unsigned int memarea,
  unsigned int hw_address
  )
 {
 	/* Setup configuration */
-	
+
 	/* if zero the malloc will be used */
 	grspwpci_memarea_address = memarea;
 
@@ -94,14 +94,14 @@ int grspw_pci_register(
 #ifdef GRSPW_ADR_FROM
 	grspwpci_cpu_address = memarea & 0xf0000000;
 #endif
-	
+
 	/* Register the driver */
 	return GRSPW_PREFIX(_register)(bus);
 }
 
-/* Call this from PCI interrupt handler 
+/* Call this from PCI interrupt handler
  * irq = the irq number of the HW device local to that IRQMP controller
- * 
+ *
  */
 int grspwpci_interrupt_handler(int irq, void *arg){
 	grspw_interrupt( (GRSPW_DEV *)arg );

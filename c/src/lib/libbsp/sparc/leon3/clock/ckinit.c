@@ -36,7 +36,7 @@
     (rtems_configuration_get_user_multiprocessing_table() ? LEON3_Cpu_Index : 0)
 #else
   #define LEON3_CLOCK_INDEX 0
-#endif 
+#endif
 
 
 volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs = 0;

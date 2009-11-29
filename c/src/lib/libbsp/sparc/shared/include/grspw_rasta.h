@@ -21,7 +21,7 @@ extern "C" {
 
 /* Register GRSPW Driver
  * bus = &amba_conf for LEON3
- * 
+ *
  * Memory setup:
  * ram_base = 128k aligned pointer to memory (as the CPU sees it)
  */

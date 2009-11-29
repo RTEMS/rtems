@@ -106,8 +106,8 @@ static rtems_status_code gr_i2cmst_send_start(rtems_libi2c_bus_t *bushdl)
   gr_i2cmst_prv_t *prv_ptr = &(((gr_i2cmst_desc_t *)(bushdl))->prv);
 #if defined(DEBUG)
   printk("gr_i2cmst_send_start called...");
-#endif 
-  
+#endif
+
   /* The OC I2C core does not work with stand alone START events,
      instead the event is buffered */
   prv_ptr->sendstart = GRI2C_CMD_STA;
@@ -123,7 +123,7 @@ static rtems_status_code gr_i2cmst_send_stop(rtems_libi2c_bus_t *bushdl)
   gr_i2cmst_prv_t *prv_ptr = &(((gr_i2cmst_desc_t *)(bushdl))->prv);
 #if defined(DEBUG)
   printk("gr_i2cmst_send_stop called...");
-#endif 
+#endif
 
   prv_ptr->reg_ptr->cmdsts = GRI2C_CMD_STO;
 
@@ -140,14 +140,14 @@ static rtems_status_code gr_i2cmst_send_addr(rtems_libi2c_bus_t *bushdl,
   uint8_t addr_byte;
   rtems_status_code rc;
 #if defined(DEBUG)
-  printk("gr_i2cmst_send_addr called, addr = 0x%x, rw = %d...", 
+  printk("gr_i2cmst_send_addr called, addr = 0x%x, rw = %d...",
 	 addr, rw);
 #endif
 
   /*  Check if long address is needed */
   if (addr > 0x7f) {
     addr_byte = ((addr >> 7) & 0x06) | (rw ? 1 : 0);
-    
+
     prv_ptr->reg_ptr->tdrd = addr_byte;
     prv_ptr->reg_ptr->cmdsts = GRI2C_CMD_WR | prv_ptr->sendstart;
     prv_ptr->sendstart = 0;
@@ -189,7 +189,7 @@ static rtems_status_code gr_i2cmst_send_addr(rtems_libi2c_bus_t *bushdl,
 }
 
 
-static int gr_i2cmst_read_bytes(rtems_libi2c_bus_t *bushdl, 
+static int gr_i2cmst_read_bytes(rtems_libi2c_bus_t *bushdl,
 				unsigned char *bytes, int nbytes)
 {
   gr_i2cmst_prv_t *prv_ptr = &(((gr_i2cmst_desc_t *)(bushdl))->prv);
@@ -207,7 +207,7 @@ static int gr_i2cmst_read_bytes(rtems_libi2c_bus_t *bushdl,
 				  prv_ptr->sendstart);
       expected_sts = GRI2C_STS_RXACK;
     } else {
-      prv_ptr->reg_ptr->cmdsts = GRI2C_CMD_RD | prv_ptr->sendstart;      
+      prv_ptr->reg_ptr->cmdsts = GRI2C_CMD_RD | prv_ptr->sendstart;
     }
     prv_ptr->sendstart = 0;
     /* Wait until end of transfer */
@@ -227,7 +227,7 @@ static int gr_i2cmst_read_bytes(rtems_libi2c_bus_t *bushdl,
   return buf - bytes;
 }
 
-static int gr_i2cmst_write_bytes(rtems_libi2c_bus_t *bushdl, 
+static int gr_i2cmst_write_bytes(rtems_libi2c_bus_t *bushdl,
 				unsigned char *bytes, int nbytes)
 {
   gr_i2cmst_prv_t *prv_ptr = &(((gr_i2cmst_desc_t *)(bushdl))->prv);
@@ -235,19 +235,19 @@ static int gr_i2cmst_write_bytes(rtems_libi2c_bus_t *bushdl,
   rtems_status_code rc;
 #if defined(DEBUG)
   printk("gr_i2cmst_write_bytes called, nbytes = %d...", nbytes);
-#endif   
+#endif
 
   while (nbytes-- > 0) {
 #if defined(DEBUG)
   printk("writing byte 0x%02X...", *buf);
-#endif   
+#endif
     prv_ptr->reg_ptr->tdrd = *buf++;
     prv_ptr->reg_ptr->cmdsts = GRI2C_CMD_WR | prv_ptr->sendstart;
     prv_ptr->sendstart = 0;
 
     /* Wait for transfer to complete  */
     rc = gr_i2cmst_wait(prv_ptr, GRI2C_STATUS_IDLE);
-    
+
     if (rc != RTEMS_SUCCESSFUL) {
 #if defined(DEBUG)
   printk("exited with error\n");
@@ -275,13 +275,13 @@ static rtems_libi2c_bus_ops_t gr_i2cmst_ops = {
 static gr_i2cmst_desc_t gr_i2cmst_desc = {
   { /* rtems_libi2c_bus_t */
     ops     : &gr_i2cmst_ops,
-    size    : sizeof(gr_i2cmst_ops), 
+    size    : sizeof(gr_i2cmst_ops),
   },
   { /* gr_i2cmst_prv_t, private data */
     reg_ptr : NULL,
     sysfreq : 40000,
   }
-  
+
 };
 
 /* Scans for I2CMST core and initalizes i2c library */
@@ -294,13 +294,13 @@ rtems_status_code leon_register_i2c(amba_confarea_type *abus)
   int rc;
   int device_found = 0;
   amba_apb_device apbi2cmst;
-  
+
   /* Scan AMBA bus for I2CMST core */
   device_found = amba_find_apbslv(abus, VENDOR_GAISLER, GAISLER_I2CMST,
 				  &apbi2cmst);
 
   if (device_found == 1) {
-    
+
     /* Initialize i2c library */
     rc = rtems_libi2c_initialize();
     if (rc < 0) {
@@ -311,21 +311,21 @@ rtems_status_code leon_register_i2c(amba_confarea_type *abus)
     }
 
     gr_i2cmst_desc.prv.reg_ptr = (gr_i2cmst_regs_t *)apbi2cmst.start;
-    
+
     /* Detect system frequency, same as in apbuart_initialize */
 #ifndef SYS_FREQ_kHZ
 #if defined(LEON3)
-	/* LEON3: find timer address via AMBA Plug&Play info */	
+	/* LEON3: find timer address via AMBA Plug&Play info */
 	{
 	  amba_apb_device gptimer;
 	  LEON3_Timer_Regs_Map *tregs;
-	  
+
 	  if (amba_find_apbslv(abus,VENDOR_GAISLER,
 			       GAISLER_GPTIMER,&gptimer) == 1 ) {
 	    tregs = (LEON3_Timer_Regs_Map *)gptimer.start;
 	    gr_i2cmst_desc.prv.sysfreq = (tregs->scaler_reload+1)*1000;
 	  } else {
-	    gr_i2cmst_desc.prv.sysfreq = 40000; /* Default to 40MHz */  
+	    gr_i2cmst_desc.prv.sysfreq = 40000; /* Default to 40MHz */
 	  }
 	}
 #elif defined(LEON2)
@@ -350,7 +350,7 @@ rtems_status_code leon_register_i2c(amba_confarea_type *abus)
       return -rc;
     }
   }
-  
+
 #if defined(DEBUG)
   printk("exited\n");
 #endif

@@ -26,7 +26,7 @@
 
 /*
  *  Should we use a polled or interrupt drived console?
- *  
+ *
  *  NOTE: This is defined in the custom/leon.cfg file.
  */
 
@@ -44,7 +44,7 @@ void console_outbyte_polled(
 /* body is in debugputs.c */
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */
@@ -86,7 +86,7 @@ int scan_uarts(void) {
   if (isinit == 0) {
     i = 0;
     uarts = 0;
-    
+
     uarts = amba_find_apbslvs(
       &amba_conf, VENDOR_GAISLER, GAISLER_APBUART, apbuarts, LEON3_APBUARTS);
     for(i=0; i<uarts; i++) {
@@ -113,16 +113,16 @@ rtems_device_driver console_initialize(
   scan_uarts();
 
   /* default to zero and override if multiprocessing */
-  uart0 = 0;  
+  uart0 = 0;
   #if defined(RTEMS_MULTIPROCESSING)
     if (rtems_configuration_get_user_multiprocessing_table() != NULL)
       uart0 =  LEON3_Cpu_Index;
   #endif
 
   /*  Register Device Names */
-  
-  if (uarts && (uart0 < uarts)) 
-  {  
+
+  if (uarts && (uart0 < uarts))
+  {
     status = rtems_io_register_name( "/dev/console", major, 0 );
     if (status != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred(status);
@@ -139,7 +139,7 @@ rtems_device_driver console_initialize(
   /*
    *  Initialize Hardware if ONLY CPU or first CPU in MP system
    */
-  
+
   #if defined(RTEMS_MULTIPROCESSING)
     if (rtems_configuration_get_user_multiprocessing_table()->node == 1)
   #endif
@@ -148,7 +148,7 @@ rtems_device_driver console_initialize(
     {
       LEON3_Console_Uart[i]->ctrl |=
         LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
-      LEON3_Console_Uart[i]->status = 0;  
+      LEON3_Console_Uart[i]->status = 0;
     }
   }
 
@@ -178,13 +178,13 @@ rtems_device_driver console_open(
   assert( minor <= LEON3_APBUARTS );
   if ( minor > LEON3_APBUARTS )
     return RTEMS_INVALID_NUMBER;
- 
+
   sc = rtems_termios_open (major, minor, arg, &pollCallbacks);
 
 
   return RTEMS_SUCCESSFUL;
 }
- 
+
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -193,7 +193,7 @@ rtems_device_driver console_close(
 {
   return rtems_termios_close (arg);
 }
- 
+
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -202,7 +202,7 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -211,7 +211,7 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

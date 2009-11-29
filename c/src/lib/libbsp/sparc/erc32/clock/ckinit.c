@@ -52,7 +52,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 
   clicks = ERC32_MEC.Real_Time_Clock_Counter;
 
-  return (uint32_t) 
+  return (uint32_t)
     (rtems_configuration_get_microseconds_per_tick() - clicks) * 1000;
 }
 

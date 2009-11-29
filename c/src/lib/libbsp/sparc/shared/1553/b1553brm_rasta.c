@@ -21,7 +21,7 @@ unsigned int brmrasta_memarea_address;
 /* We have custom address tranlation for HW addresses */
 #define B1553BRM_ADR_TO
 
-/* No custom MEMAREA=>CPU used since BRM Core work with offsets 
+/* No custom MEMAREA=>CPU used since BRM Core work with offsets
  * in it's descriptors.
  */
 #undef B1553BRM_ADR_FROM
@@ -33,7 +33,7 @@ unsigned int brmrasta_memarea_address;
 /* Any non-static function will begin with */
 #define B1553BRM_PREFIX(name) b1553brmrasta##name
 
-/* do nothing, assume that the interrupt handler is called 
+/* do nothing, assume that the interrupt handler is called
  * setup externally calling b1553_interrupt_handler.
  */
 #define B1553BRM_REG_INT(handler,irq,arg) \
@@ -82,16 +82,16 @@ static void b1553brmrasta_interrupt_handler(int irq, void *arg);
  */
 
 int b1553brm_rasta_register(
- amba_confarea_type *bus, 
- unsigned int clksel, 
- unsigned int clkdiv, 
+ amba_confarea_type *bus,
+ unsigned int clksel,
+ unsigned int clkdiv,
  unsigned int brm_freq,
  unsigned int memarea,
  unsigned int hw_address
  )
 {
 	/* Setup configuration */
-	
+
 	/* if zero the malloc will be used */
 	brmrasta_memarea_address = memarea;
 
@@ -100,14 +100,14 @@ int b1553brm_rasta_register(
 #ifdef B1553BRM_ADR_FROM
 	brmrasta_cpu_address = memarea & 0xf0000000;
 #endif
-	
+
 	/* Register the driver */
 	return B1553BRM_PREFIX(_register)(bus,clksel,clkdiv,brm_freq);
 }
 
-/* Call this from RASTA interrupt handler 
+/* Call this from RASTA interrupt handler
  * irq = the irq number of the HW device local to that IRQMP controller
- * 
+ *
  */
 static void b1553brmrasta_interrupt_handler(int irq, void *arg){
 	brm_interrupt(arg);

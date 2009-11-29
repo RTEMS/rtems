@@ -15,7 +15,7 @@
  *
  *  $Id$
  */
- 
+
 #ifndef _INCLUDE_LEON_h
 #define _INCLUDE_LEON_h
 
@@ -34,7 +34,7 @@ extern "C" {
  *
  *  Source: Table 8 - Interrupt Trap Type and Default Priority Assignments
  *
- *  NOTE: The priority level for each source corresponds to the least 
+ *  NOTE: The priority level for each source corresponds to the least
  *        significant nibble of the trap type.
  */
 
@@ -45,14 +45,14 @@ extern "C" {
 #define LEON_INT_TRAP( _trap ) \
   ( (_trap) >= 0x11 && \
     (_trap) <= 0x1F )
-    
+
 /*
- *  Structure for LEON memory mapped registers.  
+ *  Structure for LEON memory mapped registers.
  *
  *  Source: Section 6.1 - On-chip registers
  *
- *  NOTE:  There is only one of these structures per CPU, its base address 
- *         is 0x80000000, and the variable LEON_REG is placed there by the 
+ *  NOTE:  There is only one of these structures per CPU, its base address
+ *         is 0x80000000, and the variable LEON_REG is placed there by the
  *         linkcmds file.
  */
 
@@ -73,7 +73,7 @@ extern "C" {
 	volatile unsigned int Leon_Configuration;
 	volatile unsigned int dummy2;
 	volatile unsigned int dummy3;
-	volatile unsigned int dummy4;	
+	volatile unsigned int dummy4;
 	volatile unsigned int dummy5;
 	volatile unsigned int dummy6;
 	volatile unsigned int dummy7;
@@ -146,7 +146,7 @@ typedef struct {
 /* Leon uses dynamic register mapping using amba configuration records */
 /* LEON_Register_Map is obsolete */
 /* extern LEON_Register_Map LEON_REG; */
- 
+
 #endif
 
 /*
@@ -161,7 +161,7 @@ typedef struct {
 
 #define LEON_MEMORY_CONFIGURATION_RAM_SIZE_MASK  0x00001E00
 
- 
+
 /*
  *  The following defines the bits in the Timer Control Register.
  */
@@ -178,8 +178,8 @@ typedef struct {
  *
  */
 
-#define LEON_REG_UART_CONTROL_RTD  0x000000FF /* RX/TX data */ 
- 
+#define LEON_REG_UART_CONTROL_RTD  0x000000FF /* RX/TX data */
+
 /*
  *  The following defines the bits in the LEON UART Status Registers.
  */
@@ -193,7 +193,7 @@ typedef struct {
 #define LEON_REG_UART_STATUS_FE   0x00000040 /* RX Framing Error */
 #define LEON_REG_UART_STATUS_ERR  0x00000078 /* Error Mask */
 
- 
+
 /*
  *  The following defines the bits in the LEON UART Status Registers.
  */
@@ -243,16 +243,16 @@ extern int LEON3_Cpu_Index;
   do { \
     LEON3_IrqCtrl_Regs->iforce = (1 << (_source)); \
   } while (0)
- 
+
 #define LEON_Is_interrupt_pending( _source ) \
   (LEON3_IrqCtrl_Regs.ipend & (1 << (_source)))
- 
+
 #define LEON_Is_interrupt_masked( _source ) \
   do {\
      (LEON3_IrqCtrl_Regs.mask[LEON3_Cpu_Index] & (1 << (_source))); \
    } while (0)
 
- 
+
 #define LEON_Mask_interrupt( _source ) \
   do { \
     uint32_t _level; \
@@ -260,7 +260,7 @@ extern int LEON3_Cpu_Index;
      LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]  &= ~(1 << (_source)); \
     sparc_enable_interrupts( _level ); \
   } while (0)
- 
+
 #define LEON_Unmask_interrupt( _source ) \
   do { \
     uint32_t _level; \
@@ -279,7 +279,7 @@ extern int LEON3_Cpu_Index;
     sparc_enable_interrupts( _level ); \
     (_previous) &= _mask; \
   } while (0)
- 
+
 #define LEON_Restore_interrupt( _source, _previous ) \
   do { \
     uint32_t _level; \
@@ -303,7 +303,7 @@ extern int LEON3_Cpu_Index;
  *          0 = stop counter at zero
  *
  *    D2 - Counter Load
- *          1 = load counter with preset value 
+ *          1 = load counter with preset value
  *          0 = no function
  *
  */

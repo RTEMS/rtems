@@ -1,5 +1,5 @@
 /*
- *  Macros used for grcan controller 
+ *  Macros used for grcan controller
  *
  *  COPYRIGHT (c) 2007.
  *  Gaisler Research
@@ -41,7 +41,7 @@ struct grcan_regs {
     volatile unsigned int tx0ctrl;       /* 0x200 */
     volatile unsigned int tx0addr;       /* 0x204 */
     volatile unsigned int tx0size;       /* 0x208 */
-    volatile unsigned int tx0wr;         /* 0x20C */  
+    volatile unsigned int tx0wr;         /* 0x20C */
     volatile unsigned int tx0rd;         /* 0x210 */
     volatile unsigned int tx0irq;        /* 0x214 */
 
@@ -50,9 +50,9 @@ struct grcan_regs {
     volatile unsigned int rx0ctrl;       /* 0x300 */
     volatile unsigned int rx0addr;       /* 0x304 */
     volatile unsigned int rx0size;       /* 0x308 */
-    volatile unsigned int rx0wr;         /* 0x30C */  
+    volatile unsigned int rx0wr;         /* 0x30C */
     volatile unsigned int rx0rd;         /* 0x310 */
-    volatile unsigned int rx0irq;        /* 0x314 */ 
+    volatile unsigned int rx0irq;        /* 0x314 */
     volatile unsigned int rx0mask;       /* 0x318 */
     volatile unsigned int rx0code;       /* 0x31C */
 };
@@ -76,7 +76,7 @@ struct grcan_timing {
 };
 
 struct grcan_selection {
-	int selection;	
+	int selection;
 	int enable0;
 	int enable1;
 };

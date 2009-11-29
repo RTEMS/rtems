@@ -1,5 +1,5 @@
 /*
- *  Macros used for Spacewire bus 
+ *  Macros used for Spacewire bus
  *
  *  COPYRIGHT (c) 2007.
  *  Gaisler Research
@@ -65,26 +65,26 @@ typedef struct {
    unsigned int linkstart;
 
    unsigned int check_rmap_err; /* check incoming packets for rmap errors */
-   unsigned int rm_prot_id; /* remove protocol id from incoming packets */ 
+   unsigned int rm_prot_id; /* remove protocol id from incoming packets */
    unsigned int tx_blocking; /* use blocking tx */
    unsigned int tx_block_on_full; /* block when all tx_buffers are used */
    unsigned int rx_blocking; /* block when no data is available */
    unsigned int disable_err; /* disable link automatically when link error is detected */
-   unsigned int link_err_irq; /* generate an interrupt when link error occurs */ 
+   unsigned int link_err_irq; /* generate an interrupt when link error occurs */
    rtems_id event_id; /* task id that should receive link err irq event */
-   
+
    unsigned int is_rmap;
    unsigned int is_rxunaligned;
    unsigned int is_rmapcrc;
-   
+
    unsigned int nodemask;
 } spw_config;
 
 #define SPACEWIRE_IOCTRL_SET_NODEADDR        1
 #define SPACEWIRE_IOCTRL_SET_RXBLOCK         2
-#define SPACEWIRE_IOCTRL_SET_DESTKEY         4 
+#define SPACEWIRE_IOCTRL_SET_DESTKEY         4
 #define SPACEWIRE_IOCTRL_SET_CLKDIV          5
-#define SPACEWIRE_IOCTRL_SET_TIMER           6 
+#define SPACEWIRE_IOCTRL_SET_TIMER           6
 #define SPACEWIRE_IOCTRL_SET_DISCONNECT      7
 #define SPACEWIRE_IOCTRL_SET_PROMISCUOUS     8
 #define SPACEWIRE_IOCTRL_SET_RMAPEN          9
@@ -114,7 +114,7 @@ typedef struct {
 int grspw_register(amba_confarea_type *bus);
 
 
-#if 0 
+#if 0
 struct grspw_buf;
 
 struct grspw_buf {
@@ -124,7 +124,7 @@ struct grspw_buf {
 	unsigned int dlen;          /* data length of '*data' */
 	unsigned int max_dlen;      /* allocated length of '*data' */
 	void *data;                 /* pointer to beginning of cargo data */
-  
+
 	/* Only used when transmitting */
 	unsigned int hlen;          /* length of header '*header' */
 	unsigned int max_hlen;      /* allocated length of '*header' */

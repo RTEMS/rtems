@@ -8,7 +8,7 @@
 /* Any non-static function will begin with */
 #define APBUART_PREFIX(name) apbuartpci##name
 
-/* do nothing, assume that the interrupt handler is called 
+/* do nothing, assume that the interrupt handler is called
  * setup externally calling apbuartpci_interrupt_handler.
  */
 #define APBUART_REG_INT(handler,irq,arg) \
@@ -27,15 +27,15 @@ void apbuartpci_interrupt_handler(int irq, void *arg);
 int apbuart_pci_register(amba_confarea_type *bus)
 {
 	/* Setup configuration */
-	
+
 	/* Register the driver */
 	return APBUART_PREFIX(_register)(bus);
 }
 
 
-/* Call this from PCI interrupt handler 
+/* Call this from PCI interrupt handler
  * irq = the irq number of the HW device local to that IRQMP controller
- * 
+ *
  */
 void apbuartpci_interrupt_handler(int irq, void *arg){
 	apbuart_interrupt(arg);

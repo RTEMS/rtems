@@ -19,25 +19,25 @@
 extern "C" {
 #endif
 
-/* Register BRM driver 
+/* Register BRM driver
  * See (struct brm_reg).w_ctrl for clksel and clkdiv.
  * See Enhanced register (the least signinficant 2 bits) in BRM Core for brm_freq
  * bus = &amba_conf for LEON3. (LEON2 not yet supported for this driver)
- * 
+ *
  * Memory setup:
  * memarea = 128k aligned pointer to memory (if zero malloc will be used) (as the CPU sees it)
  * hw_address = address that HW must use to access memarea. (used in the translation process)
  */
 
 int b1553brm_pci_register(
- amba_confarea_type *bus, 
- unsigned int clksel, 
- unsigned int clkdiv, 
+ amba_confarea_type *bus,
+ unsigned int clksel,
+ unsigned int clkdiv,
  unsigned int brm_freq,
  unsigned int memarea,
  unsigned int hw_address
  );
- 
+
 
 /* This function must be called on BRM interrupt. Called from the
  * PCI interrupt handler. irq = AMBA IRQ MASK assigned to the BRM device,

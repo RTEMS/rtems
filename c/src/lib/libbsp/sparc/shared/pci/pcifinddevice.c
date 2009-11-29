@@ -28,7 +28,7 @@ BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
 		hd = (hd & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
 
 		for (fun=0; fun<hd; fun++) {
-			/* 
+			/*
 			 * The last devfn id/slot is special; must skip it
 			 */
 			if (PCI_MAX_DEVICES-1==dev && PCI_MAX_FUNCTIONS-1 == fun)

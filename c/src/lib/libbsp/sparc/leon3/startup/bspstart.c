@@ -24,21 +24,21 @@
 
 /*
  * Tells us if data cache snooping is available
- */ 
+ */
 int CPU_SPARC_HAS_SNOOPING;
 
 /*
  * set_snooping
- * 
+ *
  * Read the data cache configuration register to determine if
  * bus snooping is available. This is needed for some drivers so
- * that they can select the most efficient copy routines.  
+ * that they can select the most efficient copy routines.
  *
  */
 
-static inline int set_snooping(void) 
+static inline int set_snooping(void)
 {
-  int tmp;        
+  int tmp;
   asm(" lda [%1] 2, %0 "
       : "=r"(tmp)
       : "r"(0xC)

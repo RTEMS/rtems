@@ -80,9 +80,9 @@ extern "C" {
 #define OPENCORES_PCIBR  0x4
 #define OPENCORES_ETHMAC 0x5
 
-/* 
+/*
  *
- * Macros for manipulating Configuration registers  
+ * Macros for manipulating Configuration registers
  *
  */
 #define amba_get_confword(tab, index, word) (*((tab).addr[(index)]+(word)))
@@ -114,7 +114,7 @@ extern "C" {
 #define AMBA_TYPE_AHBIO_ADDR(addr,base_ioarea) ((unsigned int)(base_ioarea) | ((addr) >> 12))
 
 /*
- *  Types and structure used for AMBA Plug & Play bus scanning 
+ *  Types and structure used for AMBA Plug & Play bus scanning
  *
  */
 typedef struct amba_device_table {
@@ -164,7 +164,7 @@ typedef struct {
  * \param amba_conf AMBA P&P device info is placed here.
  * \param ioarea address of AMBA Plug&Play information,
  *             on LEON3 systems default is 0xfff00000
- * \param mmaps Memory mmap specific to this amba bus, 
+ * \param mmaps Memory mmap specific to this amba bus,
  *              if NULL no translation will be made (default).
  *              A array of maps, ending with a entry with size=0.
  */

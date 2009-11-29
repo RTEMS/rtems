@@ -21,7 +21,7 @@ extern "C" {
 
 /* Register GRSPW Driver
  * bus = &amba_conf for LEON3
- * 
+ *
  * Memory setup:
  * memarea = 128k aligned pointer to memory (if zero malloc will be used) (as the CPU sees it)
  * hw_address = address that HW must use to access memarea. (used in the translation process)

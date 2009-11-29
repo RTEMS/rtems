@@ -87,7 +87,7 @@ void Shm_Get_configuration(
   extern rtems_configuration_table Configuration;
   int i;
   unsigned int tmp;
-  
+
   BSP_shm_cfgtbl.base         = 0x40000000;
   BSP_shm_cfgtbl.length       = 0x00001000;
   BSP_shm_cfgtbl.format       = SHM_BIG;
@@ -108,7 +108,7 @@ void Shm_Get_configuration(
   BSP_shm_cfgtbl.poll_intr    = INTR_MODE;
   BSP_shm_cfgtbl.Intr.address =
      (vol_u32) &(LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index]);
-  BSP_shm_cfgtbl.Intr.value   = 1 << LEON3_MP_IRQ ; 
+  BSP_shm_cfgtbl.Intr.value   = 1 << LEON3_MP_IRQ ;
   BSP_shm_cfgtbl.Intr.length  = 4;
 
   if (LEON3_Cpu_Index == 0) {
@@ -116,7 +116,7 @@ void Shm_Get_configuration(
     for (i = 1;
          i < (Configuration.User_multiprocessing_table)->maximum_nodes+1; i++)
       tmp |= (1 << i);
-    LEON3_IrqCtrl_Regs->mpstat = tmp; 
+    LEON3_IrqCtrl_Regs->mpstat = tmp;
   }
 
   *shmcfg = &BSP_shm_cfgtbl;

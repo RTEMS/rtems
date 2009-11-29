@@ -6,28 +6,28 @@
 
 /*#define USE_AT697_RAM              1      */
 
-/* memarea_to_hw(x) 
+/* memarea_to_hw(x)
  *
  * x: address in AT697 address space
- * 
+ *
  * returns the address in the RASTA address space that can be used to access x with dma.
- * 
+ *
 */
 #ifdef USE_AT697_RAM
 static inline unsigned int memarea_to_hw(unsigned int addr) {
-    return ((addr & 0x0fffffff) | RASTA_PCI_BASE);   
+    return ((addr & 0x0fffffff) | RASTA_PCI_BASE);
 }
 #else
 static inline unsigned int memarea_to_hw(unsigned int addr) {
-    return ((addr & 0x0fffffff) | RASTA_LOCAL_SRAM);        
+    return ((addr & 0x0fffffff) | RASTA_LOCAL_SRAM);
 }
 #endif
 
 #define MEMAREA_TO_HW(x) memarea_to_hw(x)
 
 #define IRQ_CLEAR_PENDING(irqno)
-#define IRQ_UNMASK(irqno) 
-#define IRQ_MASK(irqno) 
+#define IRQ_UNMASK(irqno)
+#define IRQ_MASK(irqno)
 
 #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
 #define IRQ_GLOBAL_DISABLE(level) rtems_interrupt_disable(level)
@@ -65,8 +65,8 @@ void (*grcan_rasta_int_reg)(void *handler, int irq, void *arg) = 0;
 #define STATIC_RX_BUF_ADDR(core) \
   ((unsigned int *) \
 	(grcan_rasta_rambase+(core)*(STATIC_TX_BUF_SIZE+STATIC_RX_BUF_SIZE)+STATIC_RX_BUF_SIZE))
-  
-  
+
+
 #define GRCAN_DEVNAME "/dev/grcan0"
 #define GRCAN_DEVNAME_NO(devstr,no) ((devstr)[10]='0'+(no))
 

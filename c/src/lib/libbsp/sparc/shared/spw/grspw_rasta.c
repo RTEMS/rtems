@@ -4,12 +4,12 @@
 #undef GRSPW_MAXDEVS
 #undef DEBUG_SPACEWIRE_ONOFF
 /*#define DEBUG_SPACEWIRE_ONOFF*/
-/* 
+/*
  * If USE_AT697_RAM is defined the RAM on the AT697 board will be used for DMA buffers (but rx message queue is always in AT697 ram).
  * USE_AT697_DMA specifies whether the messages will be fetched using DMA or PIO.
  *
  * RASTA_PCI_BASE is the base address of the GRPCI AHB slave
- * 
+ *
   */
 
 #define USE_AT697_RAM              1
@@ -44,9 +44,9 @@
 #define GRSPW_DEVNAME_NO(devstr,no) ((devstr)[15]='0'+(no))
 
 /* Any non-static function will begin with */
-#define GRSPW_PREFIX(name) grspwrasta##name 
+#define GRSPW_PREFIX(name) grspwrasta##name
 
-/* do nothing, assume that the interrupt handler is called 
+/* do nothing, assume that the interrupt handler is called
  * setup externally calling grspw_interrupt_handler.
  */
 #define GRSPW_REG_INT(handler,irq,arg) \
@@ -54,7 +54,7 @@
     grspw_rasta_int_reg(handler,irq,arg);
 
 #define GRSPW_DONT_BYPASS_CACHE
- 
+
 #ifdef GRSPW_ADR_TO
 /* Translate a address within the Memory Region (memarea) into an Hardware
  * device address. This address is put into hardware registers or descriptors
@@ -86,12 +86,12 @@ unsigned int grspw_rasta_memarea_address;
  */
 
 int grspw_rasta_register(
- amba_confarea_type *bus, 
+ amba_confarea_type *bus,
  unsigned int ram_base
  )
 {
 	/* Setup configuration */
-	
+
 	/* if zero the malloc will be used */
 	grspw_rasta_memarea_address = ram_base + GRSPW_RASTA_MEM_OFF;
 
@@ -124,30 +124,30 @@ void GRSPW_PREFIX(_interrupt_handler)(int irq, void *pDev)
 
 #ifdef GRSPW_STATIC_MEM
 /*
- *  --------------------------------------- <-   
+ *  --------------------------------------- <-
  *  | Core1: BD TABLE 1 and 2             |
  *  | Core2: BD TABLE 1 and 2             |
  *  | Core3: BD TABLE 1 and 2             |
- *  |-------------------------------------| 
- *  | Core1: rx data buf + rx header buf  | 
+ *  |-------------------------------------|
+ *  | Core1: rx data buf + rx header buf  |
  *  | Core2: rx data buf + rx header buf  |
  *  | Core3: rx data buf + rx header buf  |
  *  ---------------------------------------
  */
 static int grspw_rasta_calc_memoffs(int maxcores, int corenum, unsigned int *mem_base, unsigned int *mem_end, unsigned int *bdtable_base)
-{	
+{
 	if ( maxcores > 3 )
 		return -1;
-	
+
 	if ( bdtable_base )
 		*bdtable_base = grspw_rasta_memarea_address + corenum*2*SPACEWIRE_BDTABLE_SIZE;
-	
+
 	if ( mem_base )
 		*mem_base = grspw_rasta_memarea_address + coremax*2*SPACEWIRE_BDTABLE_SIZE + corenum*BUFMEM_PER_LINK;
-	
+
 	if ( mem_end )
 		*mem_end = grspw_rasta_memarea_address + coremax*2*SPACEWIRE_BDTABLE_SIZE + (corenum+1)*BUFMEM_PER_LINK;
-	
+
 	return 0;
 }
 #endif

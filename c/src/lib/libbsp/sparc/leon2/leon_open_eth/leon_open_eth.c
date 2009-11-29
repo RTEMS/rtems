@@ -28,8 +28,8 @@
 #define OPEN_ETH_VECTOR 0x1C
 
 open_eth_configuration_t leon_open_eth_configuration = {
-  OPEN_ETH_BASE_ADDRESS,        /* base address */ 
-  OPEN_ETH_VECTOR,              /* vector number */ 
+  OPEN_ETH_BASE_ADDRESS,        /* base address */
+  OPEN_ETH_VECTOR,              /* vector number */
   TDA_COUNT,                 /* number of transmit descriptors */
   RDA_COUNT,                 /* number of receive descriptors */
   0                   /* 100 MHz operation */

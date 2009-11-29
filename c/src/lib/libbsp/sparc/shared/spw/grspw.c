@@ -9,7 +9,7 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  * Changes:
- * 
+ *
  * 2007-09-27, Daniel Hellstrom <daniel@gaisler.com>
  *  Added basic support for GRSPW2 core.
  *
@@ -23,23 +23,23 @@
  *  Typical LEON3 register: grspw_register(&amba_conf);
  *
  * 2007-05-28, Daniel Hellstrom <daniel@gaisler.com>
- *  Changed errno return values, compatible with RASTA 
+ *  Changed errno return values, compatible with RASTA
  *  Spacewire driver
  *
  * 2007-05-25, Daniel Hellstrom <daniel@gaisler.com>
- *  Changed name from /dev/spacewire,/dev/spacewire_b... 
+ *  Changed name from /dev/spacewire,/dev/spacewire_b...
  *  to /dev/grspw0,/dev/grspw1...
  *
  * 2007-05-24, Daniel Hellstrom <daniel@gaisler.com>
  *  Merged LEON3, LEON2 and RASTA driver to one - this.
- *  The driver is included and configured from grspw_pci.c 
+ *  The driver is included and configured from grspw_pci.c
  *  and grspw_rasta.c.
  *
  * 2007-05-23, Daniel Hellstrom <daniel@gaisler.com>
  *  Changed open call, now one need to first call open
  *  and then ioctl(fd,START,timeout) in order to setup
  *  hardware for communication.
- *  
+ *
  * 2007-05-23, Daniel Hellstrom <daniel@gaisler.com>
  *  Added ioctl(fd,SET_COREFREQ,freq_arg), the command
  *  can autodetect the register values disconnect and
@@ -93,7 +93,7 @@
 #define DEBUG_SPACEWIRE_FLAGS (DBGSPW_IOCALLS | DBGSPW_TX | DBGSPW_RX )
 
 /* #define DEBUG_SPACEWIRE_ONOFF */
- 
+
 #ifdef DEBUG_SPACEWIRE_ONOFF
 #define SPACEWIRE_DBG(fmt, args...)    do { { printk(" : %03d @ %18s()]:" fmt , __LINE__,__FUNCTION__,## args); }} while(0)
 #define SPACEWIRE_DBG2(fmt)            do { { printk(" : %03d @ %18s()]:" fmt , __LINE__,__FUNCTION__); }} while(0)
@@ -113,15 +113,15 @@ typedef struct {
    volatile unsigned int time;
    volatile unsigned int timer;
    volatile unsigned int pad;
-   
-   volatile unsigned int dma0ctrl; 
+
+   volatile unsigned int dma0ctrl;
    volatile unsigned int dma0rxmax;
    volatile unsigned int dma0txdesc;
    volatile unsigned int dma0rxdesc;
-   
+
    /* For GRSPW core 2 and onwards */
    volatile unsigned int dma0addr;
-   
+
 } LEON3_SPACEWIRE_Regs_Map;
 
 typedef struct {
@@ -149,7 +149,7 @@ typedef struct {
 #define SPW_ALIGN(p,c) ((((unsigned int)(p))+((c)-1))&~((c)-1))
 
 typedef struct {
-   /* configuration parameters */ 
+   /* configuration parameters */
    spw_config config;
 
    unsigned int tx_all_in_use;
@@ -165,7 +165,7 @@ typedef struct {
 
    /* statistics */
    spw_stats stat;
-   
+
    char *ptr_rxbuf0;
    char *ptr_txdbuf0;
    char *ptr_txhbuf0;
@@ -176,12 +176,12 @@ typedef struct {
    int open;
    int running;
    unsigned int core_freq_khz;
-   
+
 
    /* semaphores*/
    rtems_id txsp;
    rtems_id rxsp;
-   
+
    SPACEWIRE_RXBD *rx;
    SPACEWIRE_TXBD *tx;
 
@@ -219,7 +219,7 @@ static unsigned int _MEM_READ(void *addr) {
             : "=r"(tmp)
             : "r"(addr)
            );
-        return tmp;        
+        return tmp;
 
 }
 #endif
@@ -376,22 +376,22 @@ int GRSPW_PREFIX(_register)(amba_confarea_type *bus)
 {
         rtems_status_code r;
         rtems_device_major_number m;
-        
+
         /* Get System clock frequency */
         sys_freq_khz = 0;
-        
+
         amba_bus = bus;
-        
+
         /* Auto Detect the GRSPW core frequency by assuming that the system frequency is
          * is the same as the GRSPW core frequency.
          */
 #ifndef SYS_FREQ_KHZ
 #ifdef LEON3
-	/* LEON3: find timer address via AMBA Plug&Play info */	
+	/* LEON3: find timer address via AMBA Plug&Play info */
 	{
 		amba_apb_device gptimer;
 		LEON3_Timer_Regs_Map *tregs;
-		
+
 		if ( amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&gptimer) == 1 ){
 			tregs = (LEON3_Timer_Regs_Map *)gptimer.start;
 			sys_freq_khz = (tregs->scaler_reload+1)*1000;
@@ -400,7 +400,7 @@ int GRSPW_PREFIX(_register)(amba_confarea_type *bus)
 			sys_freq_khz = 40000; /* Default to 40MHz */
 			printk("GRSPW: Failed to detect system frequency\n\r");
 		}
-		
+
 	}
 #elif defined(LEON2)
         /* LEON2: use hardcoded address to get to timer */
@@ -414,8 +414,8 @@ int GRSPW_PREFIX(_register)(amba_confarea_type *bus)
 #else
 	/* Use hardcoded frequency */
 	sys_freq_khz = SYS_FREQ_KHZ;
-#endif        
- 			
+#endif
+
         SPACEWIRE_DBG2("register driver\n");
         if ((r = rtems_io_register_driver(0, &grspw_driver, &m)) == RTEMS_SUCCESSFUL) {
                 SPACEWIRE_DBG2("success\n");
@@ -423,21 +423,21 @@ int GRSPW_PREFIX(_register)(amba_confarea_type *bus)
         } else {
                 switch(r) {
                         case RTEMS_TOO_MANY:
-                                SPACEWIRE_DBG2("failed RTEMS_TOO_MANY\n"); 
+                                SPACEWIRE_DBG2("failed RTEMS_TOO_MANY\n");
                                 break;
                         case RTEMS_INVALID_NUMBER:
-                                SPACEWIRE_DBG2("failed RTEMS_INVALID_NUMBER\n"); 
+                                SPACEWIRE_DBG2("failed RTEMS_INVALID_NUMBER\n");
                                 break;
                         case RTEMS_RESOURCE_IN_USE:
-                                SPACEWIRE_DBG2("failed RTEMS_RESOURCE_IN_USE\n"); 
+                                SPACEWIRE_DBG2("failed RTEMS_RESOURCE_IN_USE\n");
                                 break;
                         default:
-                                SPACEWIRE_DBG("failed %i\n",r); 
+                                SPACEWIRE_DBG("failed %i\n",r);
                                 break;
                 }
                 return 1;
         }
-        
+
 }
 
 /* Get a value at least 6.4us in number of clock cycles */
@@ -466,7 +466,7 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev) {
         pDev->ptr_rxbuf0 = (char *) malloc(pDev->rxbufsize * pDev->rxbufcnt);
         pDev->ptr_txdbuf0 = (char *) malloc(pDev->txdbufsize * pDev->txbufcnt);
         pDev->ptr_txhbuf0 = (char *) malloc(pDev->txhbufsize * pDev->txbufcnt);
-        if ((pDev->ptr_rxbuf0 == NULL) || 
+        if ((pDev->ptr_rxbuf0 == NULL) ||
             (pDev->ptr_txdbuf0 == NULL) || (pDev->ptr_txhbuf0 == NULL)) {
                 return 1;
         } else {
@@ -487,11 +487,11 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
         if (pDev->ptr_txhbuf0) {
                 free(pDev->ptr_txhbuf0);
         }
-				
+
         pDev->ptr_rxbuf0 = (char *) malloc(pDev->rxbufsize * pDev->rxbufcnt);
         pDev->ptr_txdbuf0 = (char *) malloc(pDev->txdbufsize * pDev->txbufcnt);
         pDev->ptr_txhbuf0 = (char *) malloc(pDev->txhbufsize * pDev->txbufcnt);
-        if ((pDev->ptr_rxbuf0 == NULL) || 
+        if ((pDev->ptr_rxbuf0 == NULL) ||
             (pDev->ptr_txdbuf0 == NULL) || (pDev->ptr_txhbuf0 == NULL)) {
                 return 1;
         } else {
@@ -513,7 +513,7 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 /*
  *  Standard Interrupt handler
  */
-static rtems_isr grspw_interrupt_handler(rtems_vector_number v) 
+static rtems_isr grspw_interrupt_handler(rtems_vector_number v)
 {
         int minor;
 
@@ -530,12 +530,12 @@ static void grspw_interrupt(GRSPW_DEV *pDev){
         int dmactrl;
         int status;
         int ctrl;
-				
+
         status = SPW_STATUS_READ(pDev);
         SPW_STATUS_WRITE(pDev, SPW_STATUS_CE | SPW_STATUS_ER | SPW_STATUS_DE | SPW_STATUS_PE | SPW_STATUS_WE | SPW_STATUS_IA | SPW_STATUS_EE);
         dmactrl = SPW_READ(&pDev->regs->dma0ctrl);
         SPW_WRITE(&pDev->regs->dma0ctrl, dmactrl | SPW_DMACTRL_PR);
-        /* If linkinterrupts are enabled check if it was a linkerror irq and then send an event to the 
+        /* If linkinterrupts are enabled check if it was a linkerror irq and then send an event to the
            process set in the config */
         if (pDev->config.link_err_irq) {
                 if (status & (SPW_STATUS_CE | SPW_STATUS_ER | SPW_STATUS_DE | SPW_STATUS_PE | SPW_STATUS_WE)) {
@@ -570,7 +570,7 @@ static void grspw_interrupt(GRSPW_DEV *pDev){
         if (status & SPW_STATUS_EE) {
                 pDev->stat.early_ep++;
         }
-                
+
         /* Check for tx interrupts */
         while( (pDev->tx_sent != pDev->tx_cur) || pDev->tx_all_in_use) {
                 /* Has this descriptor been sent? */
@@ -580,18 +580,18 @@ static void grspw_interrupt(GRSPW_DEV *pDev){
                 }
                 /* Yes, increment status counters & tx_sent so we can use this descriptor to send more packets with */
                 pDev->stat.packets_sent++;
-                        
+
                 rtems_semaphore_release(pDev->txsp);
-                        
+
                 if ( ctrl & SPW_TXBD_LE ) {
                         pDev->stat.tx_link_err++;
                 }
-                        
+
                 /* step to next descriptor */
                 pDev->tx_sent = (pDev->tx_sent + 1) % pDev->txbufcnt;
                 pDev->tx_all_in_use = 0; /* not all of the descriptors can be in use since we just freed one. */
         }
-                
+
         /* Check for rx interrupts */
         if (dmactrl & SPW_DMACTRL_PR) {
                 rtems_semaphore_release(pDev->rxsp);
@@ -610,12 +610,12 @@ static rtems_device_driver grspw_initialize(
         GRSPW_DEV *pDev;
         char console_name[20];
 				amba_apb_device dev;
-                                
-        SPACEWIRE_DBG2("spacewire driver initialization\n");        
-        
+
+        SPACEWIRE_DBG2("spacewire driver initialization\n");
+
         /* Copy device name */
         strcpy(console_name,GRSPW_DEVNAME);
-        
+
         /* Get the number of GRSPW cores */
         i=0; spw_cores = 0; spw_cores2 = 0;
 
@@ -633,24 +633,24 @@ static rtems_device_driver grspw_initialize(
                 i++;
         }
 #endif
-        
+
         if ( (spw_cores+spw_cores2) < 1 ){
                 /* No GRSPW cores around... */
                 return RTEMS_SUCCESSFUL;
         }
-        
+
         /* Allocate memory for all spacewire cores */
         grspw_devs = (GRSPW_DEV *)malloc((spw_cores+spw_cores2) * sizeof(GRSPW_DEV));
-        
+
         /* Zero out all memory */
         memset(grspw_devs,0,(spw_cores+spw_cores2) * sizeof(GRSPW_DEV));
-        
+
         /* loop all found spacewire cores */
         i = 0;
         for(minor=0; minor<(spw_cores+spw_cores2); minor++){
 
                 pDev = &grspw_devs[minor];
-                
+
                 /* Get device */
                 if ( spw_cores > minor ) {
                         amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,GAISLER_SPACEWIRE,&dev,minor);
@@ -659,7 +659,7 @@ static rtems_device_driver grspw_initialize(
                         amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,GAISLER_GRSPW2,&dev,minor-spw_cores);
                         pDev->core_ver = 2;
                 }
-                
+
                 pDev->regs = (LEON3_SPACEWIRE_Regs_Map *)dev.start;
                 pDev->irq = dev.irq;
                 pDev->minor = minor;
@@ -667,7 +667,7 @@ static rtems_device_driver grspw_initialize(
 
                 /* register interrupt routine */
                 GRSPW_REG_INT(GRSPW_PREFIX(_interrupt_handler), pDev->irq, pDev);
-                
+
                 SPACEWIRE_DBG("spacewire core at [0x%x]\n", (unsigned int) pDev->regs);
 
                 /* initialize the code with some resonable values,
@@ -684,22 +684,22 @@ static rtems_device_driver grspw_initialize(
                 pDev->config.tx_block_on_full = 0;
                 pDev->config.rx_blocking = 0;
                 pDev->config.disable_err = 0;
-                pDev->config.link_err_irq = 0; 
-                pDev->config.event_id = 0; 
-                
+                pDev->config.link_err_irq = 0;
+                pDev->config.event_id = 0;
+
                 pDev->ptr_rxbuf0 = 0;
                 pDev->ptr_txdbuf0 = 0;
                 pDev->ptr_txhbuf0 = 0;
-								
+
 #ifdef GRSPW_STATIC_MEM
                 GRSPW_CALC_MEMOFS(spw_cores,minor,&pDev->membase,&pDev->memend,&pDev->mem_bdtable);
 #endif
-                
-                if (grspw_buffer_alloc(pDev)) 
+
+                if (grspw_buffer_alloc(pDev))
                         return RTEMS_NO_MEMORY;
-                
+
         }
-  
+
         /*  Register Device Names, /dev/grspw0, /dev/grspw1  ... */
         for (i = 0; i < spw_cores+spw_cores2; i++) {
            GRSPW_DEVNAME_NO(console_name,i);
@@ -709,29 +709,29 @@ static rtems_device_driver grspw_initialize(
               rtems_fatal_error_occurred(status);
            }
         }
-  
+
         /* Initialize Hardware and semaphores*/
         c = 'a';
         for (i = 0; i < spw_cores+spw_cores2; i++) {
                 pDev = &grspw_devs[i];
                 rtems_semaphore_create(
-                        rtems_build_name('T', 'x', 'S', c), 
-                        0, 
+                        rtems_build_name('T', 'x', 'S', c),
+                        0,
                         RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
-                        RTEMS_NO_PRIORITY_CEILING, 
-                        0, 
+                        RTEMS_NO_PRIORITY_CEILING,
+                        0,
                         &(pDev->txsp));
                 rtems_semaphore_create(
-                        rtems_build_name('R', 'x', 'S', c), 
-                        0, 
+                        rtems_build_name('R', 'x', 'S', c),
+                        0,
                         RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
-                        RTEMS_NO_PRIORITY_CEILING, 
-                        0, 
+                        RTEMS_NO_PRIORITY_CEILING,
+                        0,
                         &(pDev->rxsp));
                 c++;
                 grspw_hw_init(pDev);
         }
-        
+
         return RTEMS_SUCCESSFUL;
 }
 
@@ -739,7 +739,7 @@ static rtems_device_driver grspw_open(
         rtems_device_major_number major,
         rtems_device_minor_number minor,
         void                    * arg
-        ) 
+        )
 {
         GRSPW_DEV *pDev;
         SPACEWIRE_DBGC(DBGSPW_IOCALLS, "open [%i,%i]\n", major, minor);
@@ -748,13 +748,13 @@ static rtems_device_driver grspw_open(
                 return RTEMS_INVALID_NAME;
         }
         pDev = &grspw_devs[minor];
-        
+
         if ( pDev->open )
                 return RTEMS_RESOURCE_IN_USE;
-        
+
         /* Mark device open */
         pDev->open = 1;
-        
+
         pDev->stat.tx_link_err = 0;
         pDev->stat.rx_rmap_header_crc_err = 0;
         pDev->stat.rx_rmap_data_crc_err = 0;
@@ -769,16 +769,16 @@ static rtems_device_driver grspw_open(
         pDev->stat.invalid_address = 0;
         pDev->stat.packets_sent = 0;
         pDev->stat.packets_received = 0;
-        
+
         pDev->running = 0;
         pDev->core_freq_khz = 0;
-        
+
         /* Reset Core */
         grspw_hw_reset(pDev);
-        
+
         /* Read default configuration */
         grspw_hw_read_config(pDev);
-        
+
         return RTEMS_SUCCESSFUL;
 }
 
@@ -787,20 +787,20 @@ static rtems_device_driver grspw_close(
         rtems_device_minor_number minor,
         void                    * arg
         )
-{        
+{
         GRSPW_DEV *pDev = &grspw_devs[minor];
-        
-        SPACEWIRE_DBGC(DBGSPW_IOCALLS, "close [%i,%i]\n", major, minor);        
+
+        SPACEWIRE_DBGC(DBGSPW_IOCALLS, "close [%i,%i]\n", major, minor);
         rtems_semaphore_delete(pDev->txsp);
         rtems_semaphore_delete(pDev->rxsp);
 
         grspw_hw_stop(pDev,1,1);
-        
+
         grspw_hw_reset(pDev);
-        
+
         /* Mark device closed - not open */
         pDev->open = 0;
-        
+
         return RTEMS_SUCCESSFUL;
 }
 
@@ -814,21 +814,21 @@ static rtems_device_driver grspw_read(
         rtems_libio_rw_args_t *rw_args;
         unsigned int count = 0;
         rw_args = (rtems_libio_rw_args_t *) arg;
-        
+
         /* is link up? */
         if ( !pDev->running ) {
                 return RTEMS_INVALID_NAME;
         }
-        
+
         if ((rw_args->count < 1) || (rw_args->buffer == NULL)) {
                 return RTEMS_INVALID_NAME;
         }
-        
+
         SPACEWIRE_DBGC(DBGSPW_IOCALLS, "read  [%i,%i]: buf:0x%x len:%i \n", major, minor, (unsigned int)rw_args->buffer, rw_args->count);
-        
+
         while ( (count = grspw_hw_receive(pDev, rw_args->buffer, rw_args->count)) == 0) {
-		/* wait a moment for any descriptors to get available 
-		 * 
+		/* wait a moment for any descriptors to get available
+		 *
 		 * Semaphore is signaled by interrupt handler
 		 */
 		if (pDev->config.rx_blocking) {
@@ -839,8 +839,8 @@ static rtems_device_driver grspw_read(
 			return RTEMS_RESOURCE_IN_USE;
 		}
 	}
-        
-#ifdef DEBUG_SPACEWIRE_ONOFF  
+
+#ifdef DEBUG_SPACEWIRE_ONOFF
         if (DEBUG_SPACEWIRE_FLAGS & DBGSPW_DUMP) {
                 int k;
                 for (k = 0; k < count; k++){
@@ -852,10 +852,10 @@ static rtems_device_driver grspw_read(
                 printf ("\n");
         }
 #endif
-        
+
         rw_args->bytes_moved = count;
         return RTEMS_SUCCESSFUL;
-        
+
 }
 
 static rtems_device_driver grspw_write(
@@ -879,7 +879,7 @@ static rtems_device_driver grspw_write(
         }
 
         while ((rw_args->bytes_moved = grspw_hw_send(pDev, 0, NULL, rw_args->count, rw_args->buffer)) == 0) {
-                if (pDev->config.tx_block_on_full == 1) { 
+                if (pDev->config.tx_block_on_full == 1) {
                         SPACEWIRE_DBG2("Tx Block on full \n");
                         rtems_semaphore_obtain(pDev->txsp, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
                 } else {
@@ -905,11 +905,11 @@ static rtems_device_driver grspw_control(
         rtems_device_driver ret;
         rtems_libio_ioctl_args_t	*ioarg = (rtems_libio_ioctl_args_t *) arg;
         SPACEWIRE_DBGC(DBGSPW_IOCALLS, "ctrl [%i,%i]\n", major, minor);
-        
+
         if (!ioarg)
                 return RTEMS_INVALID_NAME;
 
-        
+
         ioarg->ioctl_return = 0;
         switch(ioarg->command) {
                 case SPACEWIRE_IOCTRL_SET_NODEADDR:
@@ -996,7 +996,7 @@ static rtems_device_driver grspw_control(
                                 return RTEMS_IO_ERROR;
                         }
                         pDev->config.clkdiv = tmp;
-                        break;                        
+                        break;
                 case SPACEWIRE_IOCTRL_SET_TIMER:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_TIMER %i\n", (unsigned int)ioarg->buffer);
                         if ( pDev->core_ver <= 1 ) {
@@ -1027,7 +1027,7 @@ static rtems_device_driver grspw_control(
                           SPACEWIRE_DBG("SPACEWIRE_IOCTRL_SET_DISCONNECT: not implemented for GRSPW2\n");
                         }
                         break;
-                case SPACEWIRE_IOCTRL_SET_PROMISCUOUS:        
+                case SPACEWIRE_IOCTRL_SET_PROMISCUOUS:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_PROMISCUOUS %i \n", (unsigned int)ioarg->buffer);
                         if ((unsigned int)ioarg->buffer > 1) {
                                 return RTEMS_INVALID_NAME;
@@ -1049,7 +1049,7 @@ static rtems_device_driver grspw_control(
                         }
                         pDev->config.rmapen = (unsigned int)ioarg->buffer;
                         break;
-                case SPACEWIRE_IOCTRL_SET_RMAPBUFDIS: 
+                case SPACEWIRE_IOCTRL_SET_RMAPBUFDIS:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_RMAPBUFDIS %i \n", (unsigned int)ioarg->buffer);
                         if ((unsigned int)ioarg->buffer > 1) {
                                 return RTEMS_INVALID_NAME;
@@ -1060,42 +1060,42 @@ static rtems_device_driver grspw_control(
                         }
                         pDev->config.rmapbufdis = (unsigned int)ioarg->buffer;
                         break;
-                case SPACEWIRE_IOCTRL_SET_CHECK_RMAP: 
+                case SPACEWIRE_IOCTRL_SET_CHECK_RMAP:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_CHECK_RMAP %i \n", (unsigned int)ioarg->buffer);
                         if ((unsigned int)ioarg->buffer > 1) {
                                 return RTEMS_INVALID_NAME;
                         }
                         pDev->config.check_rmap_err = (unsigned int)ioarg->buffer;
                         break;
-                case SPACEWIRE_IOCTRL_SET_RM_PROT_ID: 
+                case SPACEWIRE_IOCTRL_SET_RM_PROT_ID:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_RM_PROT_ID %i \n", (unsigned int)ioarg->buffer);
                         if ((unsigned int)ioarg->buffer > 1) {
                                 return RTEMS_INVALID_NAME;
                         }
                         pDev->config.rm_prot_id = (unsigned int)ioarg->buffer;
                         break;
-                case SPACEWIRE_IOCTRL_SET_TXBLOCK: 
+                case SPACEWIRE_IOCTRL_SET_TXBLOCK:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_TXBLOCK %i \n", (unsigned int)ioarg->buffer);
                         if ((unsigned int)ioarg->buffer > 1) {
                                 return RTEMS_INVALID_NAME;
                         }
                         pDev->config.tx_blocking = (unsigned int)ioarg->buffer;
                         break;
-                case SPACEWIRE_IOCTRL_SET_TXBLOCK_ON_FULL: 
+                case SPACEWIRE_IOCTRL_SET_TXBLOCK_ON_FULL:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_TXBLOCK_ON_FULL %i \n", (unsigned int)ioarg->buffer);
                         if ((unsigned int)ioarg->buffer > 1) {
                                 return RTEMS_INVALID_NAME;
                         }
                         pDev->config.tx_block_on_full = (unsigned int)ioarg->buffer;
-                        break;        
-                case SPACEWIRE_IOCTRL_SET_DISABLE_ERR: 
+                        break;
+                case SPACEWIRE_IOCTRL_SET_DISABLE_ERR:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_DISABLE_ERR %i \n", (unsigned int)ioarg->buffer);
                         if ((unsigned int)ioarg->buffer > 1) {
                                 return RTEMS_INVALID_NAME;
                         }
                         pDev->config.disable_err = (unsigned int)ioarg->buffer;
                         break;
-                case SPACEWIRE_IOCTRL_SET_LINK_ERR_IRQ: 
+                case SPACEWIRE_IOCTRL_SET_LINK_ERR_IRQ:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_LINK_ERR_IRQ %i \n", (unsigned int)ioarg->buffer);
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL, "CTRL REG: %x\n", SPW_CTRL_READ(pDev));
                         if ((unsigned int)ioarg->buffer > 1) {
@@ -1113,7 +1113,7 @@ static rtems_device_driver grspw_control(
                         pDev->config.event_id = (rtems_id)ioarg->buffer;
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL, "Event id: %i\n", pDev->config.event_id);
                         break;
-                        
+
                 /* Change MAX Packet size by:
                  *  - stop RX/TX (if on)
                  *  - wait for hw to complete RX DMA (if on)
@@ -1125,20 +1125,20 @@ static rtems_device_driver grspw_control(
                                 return RTEMS_INVALID_NAME;
                         ps = (spw_ioctl_packetsize*) ioarg->buffer;
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_RXPACKETSIZE %i \n", (unsigned int)ioarg->buffer);
-                        
+
                         tmp = pDev->running;
-                        
+
                         if ( pDev->running ){
                                 /* Stop RX */
-                                grspw_hw_stop(pDev,1,1); 
-                                
+                                grspw_hw_stop(pDev,1,1);
+
                                 /* If packetsize fails it is good to know if in running mode */
                                 pDev->running = 0;
-                                
+
                                 /* Wait for Receiver to finnish pending DMA transfers if any */
                                 grspw_hw_wait_rx_inactive(pDev);
                         }
-                        
+
                         /* Save new buffer sizes */
                         pDev->rxbufsize = ps->rxsize;
                         pDev->txdbufsize = ps->txdsize;
@@ -1146,9 +1146,9 @@ static rtems_device_driver grspw_control(
                         pDev->config.rxmaxlen = pDev->rxbufsize;
 
                         /* Free previous buffers & allocate buffers with new size */
-                        if (grspw_buffer_alloc(pDev)) 
+                        if (grspw_buffer_alloc(pDev))
                                 return RTEMS_NO_MEMORY;
-                        
+
                         /* if RX was actived before, we reactive it again */
                         if ( tmp ) {
                                 if ( (status = grspw_hw_startup(pDev,-1)) != RTEMS_SUCCESSFUL ) {
@@ -1199,7 +1199,7 @@ static rtems_device_driver grspw_control(
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_GET_STATUS=%i \n", (unsigned int)((SPW_STATUS_READ(pDev) >> 21) & 0x7));
                         *(unsigned int *)ioarg->buffer = (unsigned int )((SPW_STATUS_READ(pDev) >> 21) & 0x7);
                         break;
-                case SPACEWIRE_IOCTRL_GET_STATISTICS: 
+                case SPACEWIRE_IOCTRL_GET_STATISTICS:
                         if (ioarg->buffer == NULL)
                                 return RTEMS_INVALID_NAME;
                         SPACEWIRE_DBG2("SPACEWIRE_IOCTRL_GET_STATISTICS \n");
@@ -1240,22 +1240,22 @@ static rtems_device_driver grspw_control(
                                 return RTEMS_INVALID_NAME;
                         args = (spw_ioctl_pkt_send *)ioarg->buffer;
                         args->sent = 0;
-                        
+
                         /* is link up? */
                         if ( !pDev->running ) {
                                 return RTEMS_INVALID_NAME;
                         }
-        
-                        SPACEWIRE_DBGC(DBGSPW_IOCALLS, "write [%i,%i]: hlen: %i hbuf:0x%x dlen:%i dbuf:0x%x\n", major, minor, 
+
+                        SPACEWIRE_DBGC(DBGSPW_IOCALLS, "write [%i,%i]: hlen: %i hbuf:0x%x dlen:%i dbuf:0x%x\n", major, minor,
                                        (unsigned int)args->hlen, (int)args->hdr,(unsigned int)args->dlen, (int)args->data);
-                        
-                        if ((args->hlen > pDev->txhbufsize) || (args->dlen > pDev->txdbufsize) || 
-                            ((args->hlen+args->dlen) < 1) || 
+
+                        if ((args->hlen > pDev->txhbufsize) || (args->dlen > pDev->txdbufsize) ||
+                            ((args->hlen+args->dlen) < 1) ||
                             ((args->hdr == NULL) && (args->hlen != 0)) || ((args->data == NULL) && (args->dlen != 0))) {
                                 return RTEMS_INVALID_NAME;
                         }
                         while ((args->sent = grspw_hw_send(pDev, args->hlen, args->hdr, args->dlen, args->data)) == 0) {
-                                if (pDev->config.tx_block_on_full == 1) { 
+                                if (pDev->config.tx_block_on_full == 1) {
                                         SPACEWIRE_DBG2("Tx Block on full \n");
                                         rtems_semaphore_obtain(pDev->txsp, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
                                 } else {
@@ -1283,8 +1283,8 @@ static rtems_device_driver grspw_control(
                                 return RTEMS_IO_ERROR;
                         }
                         break;
-                
-                /* Calculate timer register from GRSPW Core frequency 
+
+                /* Calculate timer register from GRSPW Core frequency
                  * Also possible to set disconnect and timer64 from
                  *  - SPACEWIRE_IOCTRL_SET_DISCONNECT
                  *  - SPACEWIRE_IOCTRL_SET_TIMER
@@ -1298,21 +1298,21 @@ static rtems_device_driver grspw_control(
                                  */
                                  pDev->core_freq_khz = sys_freq_khz;
                         }
-                        
-                        /* Only GRSPW1 needs the Timer64 and Disconnect values 
+
+                        /* Only GRSPW1 needs the Timer64 and Disconnect values
                          * GRSPW2 and onwards doesn't have this register.
                          */
                         if ( pDev->core_ver <= 1 ){
                           /* Calculate Timer64 & Disconnect */
                           pDev->config.timer = grspw_calc_timer64(pDev->core_freq_khz);
                           pDev->config.disconnect = grspw_calc_disconnect(pDev->core_freq_khz);
-                          
+
                           /* Set Timer64 & Disconnect Register */
-                          SPW_WRITE(&pDev->regs->timer, 
+                          SPW_WRITE(&pDev->regs->timer,
                                  (SPW_READ(&pDev->regs->timer) & 0xFFC00000) |
                                  ((pDev->config.disconnect & 0x3FF)<<12) |
                                  (pDev->config.timer & 0xFFF));
-                        
+
                           /* Check that the registers were written successfully */
                           tmp = SPW_READ(&pDev->regs->timer) & 0x003fffff;
                           if ( ((tmp & 0xFFF) != pDev->config.timer) ||
@@ -1321,42 +1321,42 @@ static rtems_device_driver grspw_control(
                           }
                         }
                         break;
-                        
+
                 case SPACEWIRE_IOCTRL_START:
                         if ( pDev->running ){
                                 return RTEMS_INVALID_NAME;
                         }
-                        
+
                         /* Get timeout from userspace
                          *  timeout:
                          *   ¤  -1           = Default timeout
                          *   ¤  less than -1 = forever
                          *   ¤  0            = no wait, proceed if link is up
-                         *   ¤  positive     = specifies number of system clock ticks that 
+                         *   ¤  positive     = specifies number of system clock ticks that
                          *                     startup will wait for link to enter ready mode.
                          */
                         timeout = (int)ioarg->buffer;
-                        
+
                         if ( (ret=grspw_hw_startup(pDev,timeout)) != RTEMS_SUCCESSFUL ) {
                                 return ret;
                         }
                         pDev->running = 1;
                         break;
-                
+
                 case SPACEWIRE_IOCTRL_STOP:
                         if ( !pDev->running ){
                                 return RTEMS_INVALID_NAME;
                         }
                         pDev->running = 0;
-                        
+
                         /* Stop Receiver and transmitter */
                         grspw_hw_stop(pDev,1,1);
                         break;
-                
+
                 default:
                         return RTEMS_NOT_IMPLEMENTED;
         }
-                   
+
         SPACEWIRE_DBGC(DBGSPW_IOCALLS, "SPW_IOCTRL Return\n");
         return RTEMS_SUCCESSFUL;
 }
@@ -1375,7 +1375,7 @@ static int grspw_set_rxmaxlen(GRSPW_DEV *pDev) {
 
 static int grspw_hw_init(GRSPW_DEV *pDev) {
         unsigned int ctrl;
-        
+
         ctrl = SPW_CTRL_READ(pDev);
 
 #ifdef GRSPW_STATIC_MEM
@@ -1386,22 +1386,22 @@ static int grspw_hw_init(GRSPW_DEV *pDev) {
         pDev->tx = (SPACEWIRE_TXBD *) SPW_ALIGN(&pDev->_txtable, SPACEWIRE_BDTABLE_SIZE);
 #endif
         SPACEWIRE_DBG("hw_init [minor %i]\n", pDev->minor);
-        
+
         pDev->config.is_rmap = ctrl & SPW_CTRL_RA;
         pDev->config.is_rxunaligned = ctrl & SPW_CTRL_RX;
         pDev->config.is_rmapcrc = ctrl & SPW_CTRL_RC;
         return 0;
 }
 
-static int grspw_hw_waitlink (GRSPW_DEV *pDev, int timeout) 
+static int grspw_hw_waitlink (GRSPW_DEV *pDev, int timeout)
 {
         int j;
-        
+
         if ( timeout == -1 ){
                 /* Wait default timeout */
                 timeout = SPACEWIRE_INIT_TIMEOUT;
         }
-        
+
         j=0;
         while (SPW_LINKSTATE(SPW_STATUS_READ(pDev)) != 5) {
                 if ( timeout < -1 ) {
@@ -1410,7 +1410,7 @@ static int grspw_hw_waitlink (GRSPW_DEV *pDev, int timeout)
                         /* timeout reached, return fail */
                         return 1;
                 }
-                
+
                 /* Sleep for 10 ticks */
                 rtems_task_wake_after(10);
                 j+=10;
@@ -1421,7 +1421,7 @@ static int grspw_hw_waitlink (GRSPW_DEV *pDev, int timeout)
 static void grspw_hw_reset(GRSPW_DEV *pDev)
 {
         SPW_CTRL_WRITE(pDev, SPW_CTRL_RESET); /*reset core*/
-        SPW_STATUS_WRITE(pDev, SPW_STATUS_TO | SPW_STATUS_CE | SPW_STATUS_ER | SPW_STATUS_DE | SPW_STATUS_PE | 
+        SPW_STATUS_WRITE(pDev, SPW_STATUS_TO | SPW_STATUS_CE | SPW_STATUS_ER | SPW_STATUS_DE | SPW_STATUS_PE |
                          SPW_STATUS_WE | SPW_STATUS_IA | SPW_STATUS_EE); /*clear status*/
         SPW_CTRL_WRITE(pDev, SPW_CTRL_LINKSTART); /*start link core*/
 }
@@ -1429,13 +1429,13 @@ static void grspw_hw_reset(GRSPW_DEV *pDev)
 static void grspw_hw_read_config(GRSPW_DEV *pDev)
 {
         unsigned int tmp;
-        
+
         tmp = SPW_READ(&pDev->regs->nodeaddr);
         pDev->config.nodeaddr = 0xFF & tmp;
         pDev->config.nodemask = 0xFF & (tmp>>8);
         pDev->config.destkey = 0xFF & SPW_READ(&pDev->regs->destkey);
         pDev->config.clkdiv = 0xFFFF & SPW_READ(&pDev->regs->clkdiv);
-        
+
         tmp = SPW_CTRL_READ(pDev);
         pDev->config.promiscuous = 1 & (tmp >> 5);
         pDev->config.rmapen = 1 & (tmp >> 16);
@@ -1445,7 +1445,7 @@ static void grspw_hw_read_config(GRSPW_DEV *pDev)
         pDev->config.is_rmapcrc = 1 & (tmp >> 29);
         pDev->config.linkdisabled = 1 & tmp;
         pDev->config.linkstart = 1 & (tmp >> 1);
-        
+
         if ( pDev->core_ver <= 1 ){
           tmp = SPW_READ(&pDev->regs->timer);
           pDev->config.timer = 0xFFF & tmp;
@@ -1454,7 +1454,7 @@ static void grspw_hw_read_config(GRSPW_DEV *pDev)
           pDev->config.timer = 0;
           pDev->config.disconnect = 0;
         }
-        
+
         return;
 }
 
@@ -1463,17 +1463,17 @@ static int grspw_hw_startup (GRSPW_DEV *pDev, int timeout)
 {
         int i;
         unsigned int dmactrl;
-        
+
         SPW_WRITE(&pDev->regs->status, (SPW_STATUS_TO|SPW_STATUS_CE|SPW_STATUS_ER|SPW_STATUS_DE|SPW_STATUS_PE|SPW_STATUS_WE|SPW_STATUS_IA|SPW_STATUS_EE)); /*clear status*/
-        
+
         if (grspw_hw_waitlink(pDev,timeout)) {
                 SPACEWIRE_DBG2("Device open. Link is not up\n");
                 return RTEMS_TIMEOUT;
         }
-        
+
         SPW_WRITE(&pDev->regs->dma0ctrl, SPW_DMACTRL_PS | SPW_DMACTRL_PR | SPW_DMACTRL_TA | SPW_DMACTRL_RA); /*clear status, set ctrl*/
-        
-        
+
+
         if ((dmactrl = SPW_READ(&pDev->regs->dma0ctrl)) != 0) {
                 SPACEWIRE_DBG2("DMACtrl is not cleared\n");
                 return RTEMS_IO_ERROR;
@@ -1488,7 +1488,7 @@ static int grspw_hw_startup (GRSPW_DEV *pDev, int timeout)
         pDev->tx_cur = 0;
         pDev->tx_sent = 0;
         pDev->tx_all_in_use = 0;
-        
+
         /* prepare receive buffers */
         for (i = 0; i < pDev->rxbufcnt; i++) {
                 if (i+1 == pDev->rxbufcnt) {
@@ -1501,14 +1501,14 @@ static int grspw_hw_startup (GRSPW_DEV *pDev, int timeout)
         pDev->rxcur = 0;
         pDev->rxbufcur = -1;
         grspw_set_rxmaxlen(pDev);
-        
+
         SPW_WRITE(&pDev->regs->dma0txdesc, memarea_to_hw((unsigned int) pDev->tx));
         SPW_WRITE(&pDev->regs->dma0rxdesc, memarea_to_hw((unsigned int) pDev->rx));
-        
+
         /* start RX */
         dmactrl = SPW_READ(&pDev->regs->dma0ctrl);
         SPW_WRITE(&pDev->regs->dma0ctrl, (dmactrl & SPW_PREPAREMASK_RX) | SPW_DMACTRL_RD | SPW_DMACTRL_RXEN | SPW_DMACTRL_NS | SPW_DMACTRL_TXIE | SPW_DMACTRL_RXIE);
-        
+
         SPACEWIRE_DBGC(DBGSPW_TX,"0x%x: setup complete\n", (unsigned int)pDev->regs);
         return RTEMS_SUCCESSFUL;
 }
@@ -1517,8 +1517,8 @@ static int grspw_hw_startup (GRSPW_DEV *pDev, int timeout)
 static void grspw_hw_wait_rx_inactive(GRSPW_DEV *pDev)
 {
         while( SPW_READ(&pDev->regs->dma0ctrl) & SPW_DMACTRL_RX ){
-                /* switching may be needed: 
-                 *  - low frequency GRSPW 
+                /* switching may be needed:
+                 *  - low frequency GRSPW
                  *  - mega packet incoming
                  */
                 rtems_task_wake_after(1);
@@ -1526,10 +1526,10 @@ static void grspw_hw_wait_rx_inactive(GRSPW_DEV *pDev)
 }
 
 /* Stop the rx or/and tx by disabling the receiver/transmitter */
-static int grspw_hw_stop (GRSPW_DEV *pDev, int rx, int tx) 
+static int grspw_hw_stop (GRSPW_DEV *pDev, int rx, int tx)
 {
         unsigned int dmactrl;
-  
+
         /* stop rx and/or tx */
         dmactrl = SPW_READ(&pDev->regs->dma0ctrl);
         if ( rx ) {
@@ -1539,16 +1539,16 @@ static int grspw_hw_stop (GRSPW_DEV *pDev, int rx, int tx)
                 dmactrl &= ~(SPW_DMACTRL_TXEN|SPW_DMACTRL_TXIE);
         }
         /*SPW_WRITE(&pDev->regs->dma0ctrl, (dmactrl & SPW_PREPAREMASK_RX) & ~(SPW_DMACTRL_RD | SPW_DMACTRL_RXEN) & ~(SPW_DMACTRL_TXEN));*/
-        
+
         /* don't clear status flags */
         dmactrl &= ~(SPW_DMACTRL_RA|SPW_DMACTRL_PR|SPW_DMACTRL_AI);
         SPW_WRITE(&pDev->regs->dma0ctrl, dmactrl);
         return RTEMS_SUCCESSFUL;
 }
 
-int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dlen, char *data) 
+int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dlen, char *data)
 {
-        
+
         unsigned int dmactrl, ctrl;
 #ifdef DEBUG_SPACEWIRE_ONOFF
 				unsigned int k;
@@ -1557,17 +1557,17 @@ int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dl
         unsigned int cur = pDev->tx_cur;
         char *txh = pDev->ptr_txhbuf0 + (cur * pDev->txhbufsize);
         char *txd = pDev->ptr_txdbuf0 + (cur * pDev->txdbufsize);
-        
+
         ctrl = SPW_READ((volatile void *)&pDev->tx[cur].ctrl);
 
         if (ctrl & SPW_TXBD_EN) {
                 return 0;
         }
-        
+
         memcpy(&txd[0], data, dlen);
         memcpy(&txh[0], hdr, hlen);
 
-#ifdef DEBUG_SPACEWIRE_ONOFF  
+#ifdef DEBUG_SPACEWIRE_ONOFF
         if (DEBUG_SPACEWIRE_FLAGS & DBGSPW_DUMP) {
                 for (k = 0; k < hlen; k++){
                         if (k % 16 == 0) {
@@ -1587,7 +1587,7 @@ int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dl
                 printf ("\n");
         }
 #endif
-        
+
         pDev->tx[cur].addr_header = memarea_to_hw((unsigned int)txh);
         pDev->tx[cur].len = dlen;
         pDev->tx[cur].addr_data = memarea_to_hw((unsigned int)txd);
@@ -1596,19 +1596,19 @@ int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dl
         } else {
                 pDev->tx[cur].ctrl = SPW_TXBD_IE | SPW_TXBD_EN | hlen;
         }
-          
+
         dmactrl = SPW_READ(&pDev->regs->dma0ctrl);
         SPW_WRITE(&pDev->regs->dma0ctrl, (dmactrl & SPW_PREPAREMASK_TX) | SPW_DMACTRL_TXEN | SPW_DMACTRL_TXIE);
-       
+
         /* Update counters */
         rtems_interrupt_disable(level);
-        
+
         pDev->tx_cur = (pDev->tx_cur + 1) % pDev->txbufcnt;
         if (pDev->tx_cur == pDev->tx_sent) {
                 pDev->tx_all_in_use = 1;
         }
         rtems_interrupt_enable(level);
-        
+
         /* In blocking mode wait until message is sent */
 	if (pDev->config.tx_blocking) {
 		while ( SPW_READ(&pDev->regs->dma0ctrl) & SPW_DMACTRL_TXEN) {
@@ -1623,12 +1623,12 @@ int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dl
 
 static int grspw_hw_receive(GRSPW_DEV *pDev, char *b, int c) {
         unsigned int len, rxlen, ctrl;
-        unsigned int cur; 
+        unsigned int cur;
         unsigned int tmp;
         unsigned int dump_start_len;
         int i;
-        char *rxb;  
-        
+        char *rxb;
+
         if ( pDev->config.promiscuous ) {
 		dump_start_len = 0; /* make sure address and prot can be read in promiscuous mode */
 	} else if (pDev->config.rm_prot_id) {
@@ -1636,19 +1636,19 @@ static int grspw_hw_receive(GRSPW_DEV *pDev, char *b, int c) {
 	} else {
 		dump_start_len = 1; /* default: skip only source address */
 	}
-        
+
         rxlen = 0;
         cur = pDev->rxcur;
         rxb = pDev->ptr_rxbuf0 + (cur * pDev->rxbufsize);
 
         SPACEWIRE_DBGC(DBGSPW_RX, "0x%x: waitin packet at pos %i\n", (unsigned int) pDev->regs, cur);
-        
+
         ctrl = SPW_READ((volatile void *)&pDev->rx[cur].ctrl);
         if (ctrl & SPW_RXBD_EN) {
                 return rxlen;
         }
         SPACEWIRE_DBGC(DBGSPW_RX, "checking packet\n");
-        
+
         len = SPW_RXBD_LENGTH & ctrl;
         if (!((ctrl & SPW_RXBD_ERROR) || (pDev->config.check_rmap_err && (ctrl & SPW_RXBD_RMAPERROR)))) {
                 if (pDev->rxbufcur == -1) {
@@ -1671,7 +1671,7 @@ static int grspw_hw_receive(GRSPW_DEV *pDev, char *b, int c) {
                                 b[i] = MEM_READ(rxb+pDev->rxbufcur);
                         }
                 }
-                
+
                 pDev->rxbufcur += rxlen;
                 if (c >= tmp) {
                         SPACEWIRE_DBGC(DBGSPW_RX, "Next descriptor\n");
@@ -1683,7 +1683,7 @@ static int grspw_hw_receive(GRSPW_DEV *pDev, char *b, int c) {
         return rxlen;
 }
 
-static void grspw_rxnext(GRSPW_DEV *pDev) 
+static void grspw_rxnext(GRSPW_DEV *pDev)
 {
         unsigned int dmactrl;
         unsigned int cur = pDev->rxcur;
@@ -1695,17 +1695,17 @@ static void grspw_rxnext(GRSPW_DEV *pDev)
                 pDev->rx[cur].ctrl = ctrl | SPW_RXBD_EN | SPW_RXBD_IE;
                 cur++;
         }
-                
+
         pDev->rxcur = cur;
         pDev->rxbufcur = -1;
-        
+
         /* start RX */
         dmactrl = SPW_READ(&pDev->regs->dma0ctrl);
         SPW_WRITE(&pDev->regs->dma0ctrl, (dmactrl & SPW_PREPAREMASK_RX) | SPW_DMACTRL_RD | SPW_DMACTRL_RXEN | SPW_DMACTRL_RXIE | SPW_DMACTRL_NS);
-  
+
 }
 
-static void check_rx_errors(GRSPW_DEV *pDev, int ctrl) 
+static void check_rx_errors(GRSPW_DEV *pDev, int ctrl)
 {
         if (ctrl & SPW_RXBD_EEP) {
                 pDev->stat.rx_eep_err++;
@@ -1714,7 +1714,7 @@ static void check_rx_errors(GRSPW_DEV *pDev, int ctrl)
                 if (pDev->config.check_rmap_err) {
                         pDev->stat.rx_rmap_header_crc_err++;
                 }
-        }  
+        }
         if (ctrl & SPW_RXBD_EDC) {
                 if (pDev->config.check_rmap_err) {
                         pDev->stat.rx_rmap_data_crc_err++;

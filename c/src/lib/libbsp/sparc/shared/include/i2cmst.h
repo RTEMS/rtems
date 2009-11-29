@@ -47,7 +47,7 @@ typedef struct gr_i2cmst_regs {
 #define GRI2C_STS_AL          0x00000020 /* Arbitration lost */
 #define GRI2C_STS_TIP         0x00000002 /* Transfer in progress */
 #define GRI2C_STS_IF          0x00000001 /* Interrupt flag */
-        
+
 #define GRI2C_STATUS_IDLE     0x00000000
 
 /* The OC I2C core will perform a write after a start unless the RD bit
@@ -57,7 +57,7 @@ typedef struct gr_i2cmst_regs {
 typedef struct gr_i2cmst_prv {
   gr_i2cmst_regs_t    *reg_ptr;
   unsigned int        sysfreq;     /* System clock frequency in kHz */
-  unsigned char       sendstart;   /* START events are buffered here */ 
+  unsigned char       sendstart;   /* START events are buffered here */
   /* rtems_irq_number irq_number; */
   /* rtems_id         irq_sema_id; */
 } gr_i2cmst_prv_t;

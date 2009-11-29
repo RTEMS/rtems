@@ -24,7 +24,7 @@
 #define RDA_COUNT     32
 #define TDA_COUNT     32
 
-greth_configuration_t leon_greth_configuration; 
+greth_configuration_t leon_greth_configuration;
 
 int rtems_leon_greth_driver_attach(
   struct rtems_bsdnet_ifconfig *config,
@@ -38,11 +38,11 @@ int rtems_leon_greth_driver_attach(
 
   /* Scan for MAC AHB slave interface */
 	device_found = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_ETHMAC,&apbgreth);
-  if (device_found == 1) 
+  if (device_found == 1)
   {
 		base_addr = apbgreth.start;
 		eth_irq = apbgreth.irq + 0x10;
-		
+
     /* clear control register and reset NIC */
     *(volatile int *) base_addr = 0;
     *(volatile int *) base_addr = GRETH_CTRL_RST;
@@ -54,7 +54,7 @@ int rtems_leon_greth_driver_attach(
     if (rtems_greth_driver_attach( config, &leon_greth_configuration )) {
       LEON_Clear_interrupt(leon_greth_configuration.vector);
       LEON_Unmask_interrupt(leon_greth_configuration.vector);
-    } 
+    }
   }
   return 0;
 }

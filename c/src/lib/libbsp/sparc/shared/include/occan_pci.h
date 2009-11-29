@@ -29,7 +29,7 @@ int occan_pci_register(amba_confarea_type *bus);
  * PCI interrupt handler. irq = AMBA IRQ assigned to the OC_CAN device,
  * is found by reading pending register on IRQMP connected to the OC_CAN
  * device.
- * 
+ *
  */
 void occanpci_interrupt_handler(int irq, void *arg);
 

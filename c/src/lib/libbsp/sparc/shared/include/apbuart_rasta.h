@@ -21,16 +21,16 @@ extern "C" {
 
 /* Register APBUART driver, if APBUART devices are found.
  * bus = pointer to AMBA bus description used to search for APBUART(s).
- * 
+ *
  */
 
 int apbuart_rasta_register(amba_confarea_type *bus);
 
 /* This function must be called on APBUART interrupt. Called from the
- * RASTA interrupt handler. 
- * irq = AMBA IRQ assigned to the APBUART device, is found by reading 
+ * RASTA interrupt handler.
+ * irq = AMBA IRQ assigned to the APBUART device, is found by reading
  *       pending register on IRQMP connected to the APBUART device.
- * 
+ *
  */
 void apbuartrasta_interrupt_handler(int irq, void *arg);
 

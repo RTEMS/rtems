@@ -45,10 +45,10 @@ asm(
     ".text\n"
     ".align 4\n"
 "LEON3_Atomic_Swap:\n"
-"	retl\n"	
+"	retl\n"
 "	swapa [%o1] 1, %o0\n"
-); 
-									
+);
+
 
 
 void Shm_Lock(

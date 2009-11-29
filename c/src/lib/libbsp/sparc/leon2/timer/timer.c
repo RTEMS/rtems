@@ -10,10 +10,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to LEON implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
@@ -42,8 +42,8 @@ void benchmark_timer_initialize(void)
     benchmark_timer_is_initialized = true;
   }
 
-  LEON_REG.Timer_Control_2 = ( 
-    LEON_REG_TIMER_COUNTER_ENABLE_COUNTING | 
+  LEON_REG.Timer_Control_2 = (
+    LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |
       LEON_REG_TIMER_COUNTER_LOAD_COUNTER
   );
 

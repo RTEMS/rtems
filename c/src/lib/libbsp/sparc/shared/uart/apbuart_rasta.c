@@ -8,7 +8,7 @@
 /* Any non-static function will begin with */
 #define APBUART_PREFIX(name) apbuartrasta##name
 
-/* do nothing, assume that the interrupt handler is called 
+/* do nothing, assume that the interrupt handler is called
  * setup externally calling apbuartrasta_interrupt_handler.
  */
 #define APBUART_REG_INT(handler,irq,arg) \
@@ -27,15 +27,15 @@ void apbuartrasta_interrupt_handler(int irq, void *arg);
 int apbuart_rasta_register(amba_confarea_type *bus)
 {
 	/* Setup configuration */
-	
+
 	/* Register the driver */
 	return APBUART_PREFIX(_register)(bus);
 }
 
 
-/* Call this from RASTA interrupt handler 
+/* Call this from RASTA interrupt handler
  * irq = the irq number of the HW device local to that IRQMP controller
- * 
+ *
  */
 void apbuartrasta_interrupt_handler(int irq, void *arg){
 	apbuart_interrupt(arg);

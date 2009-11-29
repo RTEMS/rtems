@@ -38,9 +38,9 @@ struct brm_reg {
     volatile unsigned int mfiltb;          /* 0x3C */
     volatile unsigned int rt_cmd_leg[16];  /* 0x40-0x80 */
     volatile unsigned int enhanced;        /* 0x84 */
-    
+
     volatile unsigned int dummy[31];
-    
+
     volatile unsigned int w_ctrl;          /* 0x100 */
     volatile unsigned int w_irqctrl;       /* 0x104 */
     volatile unsigned int w_ahbaddr;       /* 0x108 */
@@ -63,7 +63,7 @@ struct rt_msg {
     unsigned short desc;
 };
 
-/* 
+/*
  * rtaddr[0] and subaddr[0] :  RT address and subaddress (for rt-rt receive addresses)
  * rtaddr[1] and subaddr[1] :  Only for RT-RT. Transmit addresses.
  *
@@ -71,9 +71,9 @@ struct rt_msg {
  *
  * ctrl, bit 0 (TR)      : 1 - transmit, 0 - receive. Ignored for rt-rt
  *       bit 1 (RTRT)    : 1 - rt to rt, 0 - normal
- *       bit 2 (AB)      : 1 - Bus B, 0 - Bus A    
+ *       bit 2 (AB)      : 1 - Bus B, 0 - Bus A
  *       bit 4:3 (Retry) : 1 - 1, 2 - 2, 3 - 3, 0 - 4
- *       bit 5 (END)     : End of list 
+ *       bit 5 (END)     : End of list
  *       bit 15 (BAME)   : Message error. Set by BRM if protocol error is detected
  *
  * tsw[0] : status word
@@ -83,7 +83,7 @@ struct rt_msg {
  *
  */
 struct bc_msg {
-    unsigned char  rtaddr[2];   
+    unsigned char  rtaddr[2];
     unsigned char  subaddr[2];
     unsigned short wc;
     unsigned short ctrl;
@@ -155,7 +155,7 @@ int brm_register_leon3_ramon_asic(void);
 
 #define CLKSEL_MASK 0x7
 
-/* Register BRM driver 
+/* Register BRM driver
  * See (struct brm_reg).w_ctrl for clksel and clkdiv.
  * See Enhanced register (the least signinficant 2 bits) in BRM Core for brm_freq
  * bus = &amba_conf for LEON3. (LEON2 not yet supported for this driver)

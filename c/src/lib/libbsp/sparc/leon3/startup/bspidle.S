@@ -15,9 +15,9 @@
  */
 
 
-	
+
 #include <rtems/asm.h>
-	
+
 /* LEON specific power-down function */
 
         .align 4
@@ -26,6 +26,6 @@ SYM(bsp_idle_thread):
 pwdloop:  mov   %g0, %asr19
           ba    pwdloop
           nop
-          retl 
+          retl
           nop
 

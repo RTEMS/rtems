@@ -10,10 +10,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
@@ -35,7 +35,7 @@ extern "C" {
 
 /* SPARC CPU variant: LEON2 */
 #define LEON2 1
-  
+
 /*
  *  BSP provides its own Idle thread body
  */
@@ -81,13 +81,13 @@ extern int   CPU_SPARC_HAS_SNOOPING;
 extern int   RAM_START;
 extern int   RAM_END;
 extern int   RAM_SIZE;
- 
+
 extern int   PROM_START;
 extern int   PROM_END;
 extern int   PROM_SIZE;
 
 extern int   CLOCK_SPEED;
- 
+
 extern int   end;        /* last address in the program */
 
 /* miscellaneous stuff assumed to exist */

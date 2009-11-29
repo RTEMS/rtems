@@ -91,7 +91,7 @@ amba_scan (amba_confarea_type * amba_conf, unsigned int ioarea,
        * Custom config 1 contain ioarea.
        */
       custom = amba_ahb_get_custom(amba_conf->ahbslv,i,1);
-     
+
       if ( amba_ver(conf) && amba_conf->next ){
         amba_conf->next->notroot = 1;
         amba_scan(amba_conf->next,custom,mmaps);
@@ -122,7 +122,7 @@ amba_print_dev(int devno, unsigned int conf){
 	}
 }
 
-void 
+void
 amba_apb_print_dev(int devno, unsigned int conf, unsigned int address){
 	int irq = amba_irq(conf);
 	if ( irq > 0 ){
@@ -139,14 +139,14 @@ amba_print_conf (amba_confarea_type * amba_conf)
 	int i,base=0;
 	unsigned int conf, iobar, address;
 	unsigned int apbmst;
-	
+
 	/* print all ahb masters */
 	printk("--- AMBA AHB Masters ---\n");
 	for(i=0; i<amba_conf->ahbmst.devnr; i++){
 		conf = amba_get_confword(amba_conf->ahbmst, i, 0);
 		amba_print_dev(i,conf);
 	}
-	
+
 	/* print all ahb slaves */
 	printk("--- AMBA AHB Slaves ---\n");
 	for(i=0; i<amba_conf->ahbslv.devnr; i++){
@@ -167,7 +167,7 @@ amba_print_conf (amba_confarea_type * amba_conf)
     address = amba_iobar_start(amba_conf->apbslv.apbmst[i], iobar);
 		amba_apb_print_dev(i-base,conf,address);
 	}
-	
+
 }
 /**** APB Slaves ****/
 

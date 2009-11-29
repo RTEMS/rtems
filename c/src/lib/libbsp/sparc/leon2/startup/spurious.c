@@ -1,11 +1,11 @@
 /*
  *  LEON Spurious Trap Handler
  *
- *  This is just enough of a trap handler to let us know what 
+ *  This is just enough of a trap handler to let us know what
  *  the likely source of the trap was.
  *
- *  Developed as part of the port of RTEMS to the LEON implementation 
- *  of the SPARC by On-Line Applications Research Corporation (OAR) 
+ *  Developed as part of the port of RTEMS to the LEON implementation
+ *  of the SPARC by On-Line Applications Research Corporation (OAR)
  *  under contract to the European Space Agency (ESA).
  *
  *  COPYRIGHT (c) 1995. European Space Agency.
@@ -41,31 +41,31 @@ rtems_isr bsp_spurious_handler(
      *  First the ones defined by the basic architecture
      */
 
-    case 0x00: 
+    case 0x00:
       printk( "reset\n" );
       break;
-    case 0x01: 
+    case 0x01:
       printk( "instruction access exception\n" );
       break;
-    case 0x02: 
+    case 0x02:
       printk( "illegal instruction\n" );
       break;
-    case 0x03: 
+    case 0x03:
       printk( "privileged instruction\n" );
       break;
-    case 0x04: 
+    case 0x04:
       printk( "fp disabled\n" );
       break;
-    case 0x07: 
+    case 0x07:
       printk( "memory address not aligned\n" );
       break;
-    case 0x08: 
+    case 0x08:
       printk( "fp exception\n" );
       break;
-    case 0x09: 
+    case 0x09:
       printk("data access exception at 0x%08x\n", LEON_REG.Failed_Address );
       break;
-    case 0x0A: 
+    case 0x0A:
       printk( "tag overflow\n" );
       break;
 
@@ -139,7 +139,7 @@ void bsp_spurious_initialize()
      */
 
     if (( trap == 5 || trap == 6 ) ||
-    	(( trap >= 0x11 ) && ( trap <= 0x1f )) || 
+    	(( trap >= 0x11 ) && ( trap <= 0x1f )) ||
     	(( trap >= 0x70 ) && ( trap <= 0x83 )))
       continue;
 

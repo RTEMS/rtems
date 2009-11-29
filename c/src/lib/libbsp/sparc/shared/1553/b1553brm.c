@@ -1,5 +1,5 @@
 /*
- *  BRM driver  
+ *  BRM driver
  *
  *  COPYRIGHT (c) 2006.
  *  Gaisler Research.
@@ -21,7 +21,7 @@
 #endif
 
 /* default name to /dev/brm */
-#if !defined(B1553BRM_DEVNAME) || !defined(B1553BRM_DEVNAME_NO) 
+#if !defined(B1553BRM_DEVNAME) || !defined(B1553BRM_DEVNAME_NO)
  #undef B1553BRM_DEVNAME
  #undef B1553BRM_DEVNAME_NO
  #define B1553BRM_DEVNAME "/dev/brm0"
@@ -68,7 +68,7 @@
 
 /* EVENT_QUEUE_SIZE sets the size of the event queue
  */
-#define EVENT_QUEUE_SIZE           1024  
+#define EVENT_QUEUE_SIZE           1024
 
 
 #define INDEX(x) ( x&(EVENT_QUEUE_SIZE-1) )
@@ -76,13 +76,13 @@
 #ifdef DEBUG
 #define DBG(x...) printk(x)
 #else
-#define DBG(x...) 
+#define DBG(x...)
 #endif
 
 #ifdef FUNCDEBUG
 #define FUNCDBG(x...) printk(x)
 #else
-#define FUNCDBG(x...) 
+#define FUNCDBG(x...)
 #endif
 
 #define READ_REG(address) _BRM_REG_READ16((unsigned int)address)
@@ -132,7 +132,7 @@ struct irq_log_list {
         volatile unsigned short iaw;
 };
 
-typedef struct { 
+typedef struct {
 
     unsigned int memarea_base;
     struct brm_reg *regs;
@@ -140,7 +140,7 @@ typedef struct {
     /* BRM descriptors */
     struct desc_table {
 
-        volatile unsigned short ctrl;        
+        volatile unsigned short ctrl;
         volatile unsigned short top;
         volatile unsigned short cur;
         volatile unsigned short bot;
@@ -160,7 +160,7 @@ typedef struct {
 				unsigned short ba;     /* branch address */
 				unsigned short timer;  /* timer value */
 			} descs[128]; /* 2k (1024 half words) */
-			
+
 			/* message data */
 			struct {
 				unsigned short data[32]; /* 1 message's data */
@@ -191,7 +191,7 @@ typedef struct {
 			struct desc_table rxmodes[32];
 			/* TX mode code descriptors */
 			struct desc_table txmodes[32];
-			
+
 			/* RX Sub Address messages */
 			struct circ_buf rxsuba_msgs[32];
 			/* TX Sub Address messages */
@@ -200,11 +200,11 @@ typedef struct {
 			struct circ_buf rxmode_msgs[32];
 			/* RX Mode Code messages */
 			struct circ_buf txmode_msgs[32];
-			
-			
+
+
 			/* offset to last 64bytes of 128k: tot-used-needed */
 			unsigned short unused[(64*1024-(4*32*4+4*32*9*34))-16*2];
-			
+
 			/* interrupt log at 64 bytes from end */
 			struct irq_log_list irq_logs[16];
 		} *rtmem;
@@ -224,7 +224,7 @@ typedef struct {
 			struct desc_table rxmodes[32];
 			/* TX mode code descriptors */
 			struct desc_table txmodes[32];
-			
+
 			/* RX Sub Address messages */
 			struct circ_buf_2 rxsuba_msgs[32];
 			/* TX Sub Address messages */
@@ -233,11 +233,11 @@ typedef struct {
 			struct circ_buf_2 rxmode_msgs[32];
 			/* RX Mode Code messages */
 			struct circ_buf_1 txmode_msgs[32];
-			
-			
+
+
 			/* offset to last 64bytes of 16k: tot-used-needed */
 			unsigned short unused[8*1024 -(4*32*4 +3*32*2*34 +1*32*1*34) -16*2];
-			
+
 			/* interrupt log at 64 bytes from end */
 			struct irq_log_list irq_logs[16];
 		} *rtmem;
@@ -266,11 +266,11 @@ typedef struct {
 		int minor;
 		int irqno;
 		unsigned int mode;
-#ifdef DEBUG    		
+#ifdef DEBUG
 		unsigned int log[EVENT_QUEUE_SIZE*4];
 		unsigned int log_i;
 #endif
-		
+
 		rtems_id event_id; /* event that may be signalled upon errors, needs to be set through ioctl command BRM_SET_EVENTID */
 		unsigned int status;
 		int bc_list_fail;
@@ -298,7 +298,7 @@ static int odd_parity(unsigned int data) {
     {
         i++;
         data &= (data - 1);
-    } 
+    }
 
     return !(i&1);
 }
@@ -346,25 +346,25 @@ int B1553BRM_PREFIX(_register)(amba_confarea_type *bus, unsigned int clksel, uns
     rtems_device_major_number m;
 
     FUNCDBG("brm_register:\n\r");
-		
+
 		/* save amba bus pointer */
 		amba_bus = bus;
 		if ( !bus ){
 			printk("brm_register: bus is NULL\n\r");
 			return 1;
 		}
-			
+
 #ifdef B1553BRM_LOCAL_MEM
 		allbrm_memarea = B1553BRM_LOCAL_MEM_ADR;
 #else
 		allbrm_memarea = 0;
 #endif
-		
+
 		/* Save clksel, clkdiv and brm_freq for later use */
 		allbrm_cfg_clksel = clksel & CLKSEL_MASK;
 		allbrm_cfg_clkdiv = clkdiv & CLKDIV_MASK;
 		allbrm_cfg_freq = brm_freq & BRM_FREQ_MASK;
-		
+
     if ((r = rtems_io_register_driver(0, &brm_driver, &m)) == RTEMS_SUCCESSFUL) {
         DBG("BRM: driver successfully registered, major: %d\n",m);
 
@@ -404,12 +404,12 @@ static rtems_device_driver rt_init(brm_priv *brm) {
 
   if ( brm->rt_event )
 		free(brm->rt_event);
-	
+
 	brm->bcmem = NULL;
 	brm->rtmem = (void *)brm->mem;
 
 	brm->rt_event = (struct rt_msg *) malloc(EVENT_QUEUE_SIZE*sizeof(struct rt_msg));
-  
+
 	if (brm->rt_event == NULL) {
 		DBG("BRM driver failed to allocated memory.");
 		return RTEMS_NO_MEMORY;
@@ -426,7 +426,7 @@ static rtems_device_driver rt_init(brm_priv *brm) {
 	brm->regs->w_ctrl	= (allbrm_cfg_clksel<<9) | (allbrm_cfg_clkdiv<<5) | 1;
 	brm->regs->w_irqctrl = 6;
 	brm->regs->w_ahbaddr = (unsigned int) memarea_to_hw(brm->memarea_base);
-		
+
 	clr_int_logs(brm->irq_log);
 
 	/* Legalize all commands */
@@ -434,19 +434,19 @@ static rtems_device_driver rt_init(brm_priv *brm) {
 		brm->regs->rt_cmd_leg[i] = 0;
 	}
 
-	/* Init descriptor table 
-	 * 
+	/* Init descriptor table
+	 *
 	 * Each circular buffer has room for 8 messages with up to 34 (32 data + miw + time) words (16b) in each.
 	 * The buffers must separated by 34 words.
 	 */
 
- 
+
 	/* RX Sub-address 0 - 31 */
 	for (i = 0; i < 32; i++) {
 		brm->rtmem->rxsubs[i].ctrl = 0x00E0;				/* Interrupt: INTX, IWA, and IBRD */
 		brm->rtmem->rxsubs[i].top  = OFS(brm->rtmem->rxsuba_msgs[i]);		     /* Top address */
 		brm->rtmem->rxsubs[i].cur  = OFS(brm->rtmem->rxsuba_msgs[i]);		     /* Current address */
-		brm->rtmem->rxsubs[i].bot  = OFS(brm->rtmem->rxsuba_msgs[i+1]) - sizeof(struct msg)/2; /* Bottom address */	
+		brm->rtmem->rxsubs[i].bot  = OFS(brm->rtmem->rxsuba_msgs[i+1]) - sizeof(struct msg)/2; /* Bottom address */
 		brm->last_read[i] = OFS(brm->rtmem->rxsuba_msgs[i]);
 	}
 	/* TX Sub-address 0 - 31 */
@@ -465,7 +465,7 @@ static rtems_device_driver rt_init(brm_priv *brm) {
 		brm->rtmem->rxmodes[i].cur  = OFS(brm->rtmem->rxmode_msgs[i]);			  /* Current address */
 		brm->rtmem->rxmodes[i].bot  = OFS(brm->rtmem->rxmode_msgs[i+1]) - sizeof(struct msg)/2;	/* Bottom address */
 		brm->last_read[i+64] = OFS(brm->rtmem->rxmode_msgs[i]);
-	}   
+	}
 	/* TX mode code 0 - 31 */
 	for (i = 0; i < 32; i++) {
 		brm->rtmem->txmodes[i].ctrl = 0x0060;					/* Interrupt: IWA and IBRD */
@@ -474,7 +474,7 @@ static rtems_device_driver rt_init(brm_priv *brm) {
 		brm->rtmem->txmodes[i].bot  = OFS(brm->rtmem->txmode_msgs[i+1]) - sizeof(struct msg)/2;	/* Bottom address */
 		brm->last_read[i+96] = OFS(brm->rtmem->txmode_msgs[i]);
 	}
-	
+
 	brm->mode = BRM_MODE_RT;
 
 	return RTEMS_SUCCESSFUL;
@@ -489,14 +489,14 @@ static rtems_device_driver bc_init(brm_priv *brm){
   if ( brm->rt_event )
 		free(brm->rt_event);
 	brm->rt_event = NULL;
-	
+
 	brm->bcmem = (void *)brm->mem;
 	brm->rtmem = NULL;
 	brm->irq_log = (struct irq_log_list *)&brm->bcmem->irq_logs[0];
-	
+
 	brm->head = brm->tail = 0;
 	brm->rx_blocking = brm->tx_blocking = 1;
-	
+
 	brm->regs->ctrl	  = 0x0006;  /* ping pong enable and enable interrupt log */
 	brm->regs->oper	  = 0x0800;  /* configure as BC */
 	brm->regs->imask	 = BRM_EOL_IRQ|BRM_BC_ILLCMD_IRQ|BRM_ILLOP_IRQ|BRM_DMAF_IRQ|BRM_WRAPF_IRQ|BRM_MERR_IRQ;
@@ -507,11 +507,11 @@ static rtems_device_driver bc_init(brm_priv *brm){
 	brm->regs->w_ctrl	= (allbrm_cfg_clksel<<9) | (allbrm_cfg_clkdiv<<5) | 1;
 	brm->regs->w_irqctrl = 6;
 	brm->regs->w_ahbaddr = (unsigned int) memarea_to_hw(brm->memarea_base);
-	
+
 	clr_int_logs(brm->irq_log);
-	
+
 	brm->mode = BRM_MODE_BC;
-	
+
 	return RTEMS_SUCCESSFUL;
 }
 
@@ -527,12 +527,12 @@ static rtems_device_driver bm_init(brm_priv *brm) {
 
   if ( brm->bm_event )
 		free(brm->bm_event);
-	
+
 	brm->bcmem = NULL;
 	brm->rtmem = NULL;
-	
+
 	brm->bm_event	 = (struct bm_msg *) malloc(EVENT_QUEUE_SIZE*sizeof(struct bm_msg));
- 
+
 	if (brm->bm_event == NULL) {
 		DBG("BRM driver failed to allocated memory.");
 		return RTEMS_NO_MEMORY;
@@ -553,11 +553,11 @@ static rtems_device_driver bm_init(brm_priv *brm) {
 	brm->regs->w_ctrl	= (allbrm_cfg_clksel<<9) | (allbrm_cfg_clkdiv<<5) | 1;
 	brm->regs->w_irqctrl = 6;
 	brm->regs->w_ahbaddr = (unsigned int) memarea_to_hw(brm->memarea_base);
-	
+
 	clr_int_logs(brm->irq_log);
-	
+
 	brm->mode = BRM_MODE_BM;
-	
+
 	return RTEMS_SUCCESSFUL;
 }
 
@@ -570,12 +570,12 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 	brm_priv *brm;
 	amba_ahb_device ambadev;
 	char *mem;
-   
+
 	FUNCDBG("brm_initialize\n");
 
 	brm_cores = 0;
 	strcpy(fs_name,B1553BRM_DEVNAME);
-	
+
 	/* Find all BRM devices */
 	dev_cnt = amba_get_number_ahbslv_devices(amba_bus,VENDOR_GAISLER,GAISLER_BRM);
 	if ( dev_cnt < 1 ){
@@ -583,16 +583,16 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 		printk("BRM: Failed to find any BRM cores\n\r");
 		return -1;
 	}
-		
+
 	/* allocate & zero memory for the brm devices */
 	brms = (brm_priv *)malloc(sizeof(*brms)*dev_cnt);
 	if ( !brms ){
 		printk("BRM: Failed to allocate SW memory\n\r");
 		return -1;
 	}
-	memset(brms,0,sizeof(*brms)*dev_cnt);	
-	
-	/* Allocate memory for all device's descriptors, 
+	memset(brms,0,sizeof(*brms)*dev_cnt);
+
+	/* Allocate memory for all device's descriptors,
 	 * they must be aligned to a XXX byte boundary.
 	 */
 	#define BRM_DESCS_PER_CTRL 128
@@ -606,7 +606,7 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 			printk("BRM: Failed to allocate HW memory\n\r");
 			return -1;
 		}
-	
+
 		/* align memory to 128k boundary */
 		mem = (char *)(((unsigned int)mem+0x1ffff) & ~0x1ffff);
 	}
@@ -617,34 +617,34 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 	/* initialize each brm device, one at a time */
 	for(minor=0; minor<dev_cnt; minor++){
 		brm = &brms[minor];
-		
+
 		/* Get AMBA AHB device info from Plug&Play */
 		amba_find_next_ahbslv(amba_bus,VENDOR_GAISLER,GAISLER_BRM,&ambadev,minor);
-		
+
 		/* Copy Basic HW info */
 		brm->regs = (void *)ambadev.start[0];
 		brm->irqno = ambadev.irq;
 		brm->minor = minor;
 		brm->irq = 0;
 #ifdef DEBUG
-		brm->log_i = 0;	
+		brm->log_i = 0;
 		memset(brm->log,0,sizeof(brm->log));
 #endif
-		
+
 		/* Set unique name */
 		B1553BRM_DEVNAME_NO(fs_name,minor);
-    
+
     DBG("Registering BRM core at [0x%x] irq %d, minor %d as %s\n",brm->regs,brm->irqno,minor,fs_name);
-		
+
 		/* Bind filesystem name to device number (minor) */
 		status = rtems_io_register_name(fs_name, major, minor);
     if (status != RTEMS_SUCCESSFUL)
 			rtems_fatal_error_occurred(status);
-	
+
 		/* RX Semaphore created with count = 0 */
 		if ( rtems_semaphore_create(rtems_build_name('B', 'M', 'R', '0'+minor),
 		         0,
-		         RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|RTEMS_NO_PRIORITY_CEILING, 
+		         RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|RTEMS_NO_PRIORITY_CEILING,
 		         0,
 		         &brm->rx_sem) != RTEMS_SUCCESSFUL ){
       printk("BRM: Failed to create rx semaphore\n");
@@ -654,7 +654,7 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 			/* TX Semaphore created with count = 1 */
 		if ( rtems_semaphore_create(rtems_build_name('B', 'M', 'T', '0'+minor),
 		         1,
-		         RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|RTEMS_NO_PRIORITY_CEILING, 
+		         RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|RTEMS_NO_PRIORITY_CEILING,
 		         0,
 		         &brm->tx_sem) != RTEMS_SUCCESSFUL ){
       printk("BRM: Failed to create tx semaphore\n");
@@ -664,69 +664,69 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 		/* Device Semaphore created with count = 1 */
 		if ( rtems_semaphore_create(rtems_build_name('B', 'M', 'D', '0'+minor),
 		         1,
-		         RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|RTEMS_NO_PRIORITY_CEILING, 
+		         RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|RTEMS_NO_PRIORITY_CEILING,
 		         0,
 		         &brm->dev_sem) != RTEMS_SUCCESSFUL ){
       printk("BRM: Failed to create device semaphore\n");
 	  	return RTEMS_INTERNAL_ERROR;
     }
 
-	
+
 		/* Set base address of all descriptors */
 		brm->memarea_base = (unsigned int)&mem[(128*1024) * minor];
 		brm->desc = (struct desc_table *) brm->memarea_base;
 		brm->mem = (volatile unsigned short *) brm->memarea_base;
  	  brm->irq_log	= (struct irq_log_list *)(brm->memarea_base + (0xFFE0<<1)); /* last 64byte */
-		
+
 		brm->bm_event = NULL;
 		brm->rt_event = NULL;
-		
+
 		/* Sel clock so that we can write to BRM's registers */
 		brm->regs->w_ctrl = (allbrm_cfg_clksel<<9) | (allbrm_cfg_clkdiv<<5);
 		/* Reset BRM core */
 		brm->regs->w_ctrl = 1<<10 | READ_REG(&brm->regs->w_ctrl);
-		
+
 		/* Register interrupt handler */
 		B1553BRM_REG_INT(B1553BRM_PREFIX(_interrupt_handler), brm->irqno, brm);
-		
+
 		rt_init(brm);
-		
+
 		DBG("BRM: LOG: 0x%lx, 0x%lx\n\r",brm->log,brm);
 	}
-	
+
 	/* save number of BRM cores found */
 	brm_cores = dev_cnt;
-	
+
 	DBG("BRM initialisation done.\n");
-	
+
 	return RTEMS_SUCCESSFUL;
 }
 
 static rtems_device_driver brm_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg) {
 		brm_priv *brm;
-	
+
     FUNCDBG("brm_open\n");
 
     if (minor >= brm_cores) {
         DBG("Wrong minor %d\n", minor);
         return RTEMS_UNSATISFIED; /* ENODEV */
     }
-		
+
 		brm = &brms[minor];
-   
+
     if (rtems_semaphore_obtain(brm->dev_sem, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT) != RTEMS_SUCCESSFUL) {
         DBG("brm_open: resource in use\n");
         return RTEMS_RESOURCE_IN_USE; /* EBUSY */
     }
-		
+
 		/* Set defaults */
 		brm->event_id = 0;
-    
+
     start_operation(brm);
- 
+
     return RTEMS_SUCCESSFUL;
 }
- 
+
 static rtems_device_driver brm_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
 	brm_priv *brm = &brms[minor];
@@ -737,7 +737,7 @@ static rtems_device_driver brm_close(rtems_device_major_number major, rtems_devi
 
 	return RTEMS_SUCCESSFUL;
 }
- 
+
 static int get_rt_messages(brm_priv *brm, void *buf, unsigned int msg_count) {
 
     struct rt_msg *dest = (struct rt_msg *) buf;
@@ -784,13 +784,13 @@ static rtems_device_driver brm_read(rtems_device_major_number major, rtems_devic
     int count = 0;
 		brm_priv *brm = &brms[minor];
     int (*get_messages)(brm_priv *brm, void *buf, unsigned int count);
-		
+
 		if ( ! (brm->mode & (BRM_MODE_RT | BRM_MODE_BM)) ){
 			return RTEMS_INVALID_NAME;
 		}
-  
+
     rw_args = (rtems_libio_rw_args_t *) arg;
-    
+
     if ( ((READ_REG(&brm->regs->oper)>>8) & 3) == 1 ) { /* RT */
         get_messages = get_rt_messages;
     }
@@ -815,7 +815,7 @@ static rtems_device_driver brm_read(rtems_device_major_number major, rtems_devic
 
     rw_args->bytes_moved = count;
     return RTEMS_SUCCESSFUL;
-  
+
 }
 
 
@@ -825,16 +825,16 @@ static rtems_device_driver brm_write(rtems_device_major_number major, rtems_devi
     struct rt_msg *source;
     unsigned int count=0, current, next, descriptor, wc, suba;
 		brm_priv *brm = &brms[minor];
-  
+
 		if ( ! (brm->mode & BRM_MODE_RT) ){
 			return RTEMS_INVALID_NAME;
 		}
-	
+
     rw_args = (rtems_libio_rw_args_t *) arg;
     source = (struct rt_msg *) rw_args->buffer;
 
     FUNCDBG("brm_write [%i,%i]: buf: 0x%x len: %i\n",major, minor, (unsigned int)rw_args->buffer,rw_args->count);
-  
+
     do {
 
         descriptor = source[count].desc & 0x7F;
@@ -846,14 +846,14 @@ static rtems_device_driver brm_write(rtems_device_major_number major, rtems_devi
         if (descriptor < 32 || descriptor >= 64)
             return RTEMS_INVALID_NAME;
 
-        current = brm->desc[descriptor].cur; 
+        current = brm->desc[descriptor].cur;
         next = brm->written[suba] + 2 + wc;
 
         if (brm->written[suba] < current) {
-            
+
             if (next > current) {
 
-                /* No room in transmission buffer */ 
+                /* No room in transmission buffer */
 
                 if (brm->tx_blocking && count == 0) {
                     rtems_semaphore_obtain(brm->tx_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -862,7 +862,7 @@ static rtems_device_driver brm_write(rtems_device_major_number major, rtems_devi
 									/* return the number of messages sent so far */
 									break;
 								}
-                else {	
+                else {
                     /* Translates to posix EBUSY */
                     return RTEMS_RESOURCE_IN_USE;
                 }
@@ -870,7 +870,7 @@ static rtems_device_driver brm_write(rtems_device_major_number major, rtems_devi
         }
 
         memcpy((void *)&brm->mem[brm->written[suba]], &source[count], (2+wc)*2);
-        
+
         count++;
 
         if (next >= brm->desc[descriptor].bot) {
@@ -879,8 +879,8 @@ static rtems_device_driver brm_write(rtems_device_major_number major, rtems_devi
         brm->written[suba] = next;
 
     }  while (count < rw_args->count);
-  
-    rw_args->bytes_moved = count; 
+
+    rw_args->bytes_moved = count;
 
     if (count >= 0) {
         return RTEMS_SUCCESSFUL;
@@ -890,7 +890,7 @@ static rtems_device_driver brm_write(rtems_device_major_number major, rtems_devi
 
 static rtems_device_driver brm_control(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
-    
+
     unsigned int i=0;
     unsigned short ctrl, oper, cw1, cw2;
     rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *) arg;
@@ -899,9 +899,9 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
 		brm_priv *brm = &brms[minor];
 		rtems_device_driver ret;
 		int len;
-    
+
     FUNCDBG("brm_control[%d]: [%i,%i]\n",minor,major, minor);
-  
+
     if (!ioarg) {
         DBG("brm_control: invalid argument\n");
         return RTEMS_INVALID_NAME;
@@ -917,17 +917,17 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
         if (data[0] == 0) {
             ret = bc_init(brm);
         }
-        else if (data[0] == 1) { 
-            ret = rt_init(brm);				
-        }  
-        else if (data[0] == 2) { 
-            ret = bm_init(brm);						
+        else if (data[0] == 1) {
+            ret = rt_init(brm);
+        }
+        else if (data[0] == 2) {
+            ret = bm_init(brm);
         }else
 					ret = RTEMS_INVALID_NAME;
 
 				if ( ret != RTEMS_SUCCESSFUL)
 							return ret;
-				
+
         if ( brm->mode & (BRM_MODE_RT | BRM_MODE_BM ) )
 					start_operation(brm);
         break;
@@ -950,7 +950,7 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
         start_operation(brm);
         break;
 
-    case BRM_SET_RT_ADDR:   
+    case BRM_SET_RT_ADDR:
         stop_operation(brm);
 				oper = READ_REG(&brm->regs->oper);
         oper &= 0x03FF;                               /* Clear bit 15-10 ...      */
@@ -959,8 +959,8 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
 				brm->regs->oper = oper;
         start_operation(brm);
         break;
- 
-    case BRM_SET_STD:   
+
+    case BRM_SET_STD:
         stop_operation(brm);
 				ctrl = READ_REG(&brm->regs->ctrl);
         ctrl &= 0xFF7F;                               /* Clear bit 7 ...           */
@@ -979,12 +979,12 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
      break;
 
     case BRM_TX_BLOCK:
-        brm->tx_blocking     = data[0];      
+        brm->tx_blocking     = data[0];
         break;
 
-    case BRM_RX_BLOCK: 
-        brm->rx_blocking     = data[0];   
-        break; 
+    case BRM_RX_BLOCK:
+        brm->rx_blocking     = data[0];
+        break;
 
     case BRM_DO_LIST:
 
@@ -1029,7 +1029,7 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
             brm->bcmem->descs[i].cw1 = cw1;
             brm->bcmem->descs[i].cw2 = cw2;
 						/* data pointer:
-						 * (&brm->bcmem->msg_data[i].data[0] & 0x1ffff) / 2 
+						 * (&brm->bcmem->msg_data[i].data[0] & 0x1ffff) / 2
 						 */
             brm->bcmem->descs[i].dptr = 1024+i*32;  /* data pointer */
 						brm->bcmem->descs[i].tsw[0] = 0;
@@ -1038,27 +1038,27 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
 						brm->bcmem->descs[i].timer = 0;
 
             memcpy((void *)&brm->bcmem->msg_data[i].data[0], &cmd_list[i].data[0], cmd_list[i].wc*2);
-          
+
             i++;
         }
 
         brm->bcmem->descs[i].ctrl = 0; /* end of list */
 
-        start_operation(brm);        
+        start_operation(brm);
 
-        break;  
+        break;
 
     case BRM_LIST_DONE:
 
         if ( brm->mode != BRM_MODE_BC ){
           return RTEMS_INVALID_NAME;
 				}
-				
+
 				/* Check if we are bus controller */
         if ( ((READ_REG(&brm->regs->oper)>>8) & 3) != 0 ) {
             return RTEMS_INVALID_NAME;
         }
-    
+
         if (is_executing(brm)) {
 
             data[0] = 0;
@@ -1071,8 +1071,8 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
             }else{
 							return RTEMS_RESOURCE_IN_USE;
 						}
-            
-            
+
+
         }
         else {
             data[0] = 1; /* done */
@@ -1083,8 +1083,8 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
         while ( (brm->cur_list[i].ctrl & BC_EOL) == 0) {
 
             if (READ_DMA(&brm->bcmem->descs[i].ctrl) & 1) {
-                brm->cur_list[i].ctrl |= 0x8000; /* Set BAME */ 
-            } 
+                brm->cur_list[i].ctrl |= 0x8000; /* Set BAME */
+            }
             if (brm->cur_list[i].ctrl & BC_TR) {
                 /* RT Transmit command, copy received data */
 								len = brm->cur_list[i].wc;
@@ -1103,15 +1103,15 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
     case BRM_CLR_STATUS:
 			brm->status = 0;
 			break;
-		
+
     case BRM_GET_STATUS: /* copy status */
 
 			if ( !ioarg->buffer )
 				return RTEMS_INVALID_NAME;
-			
+
 			*(unsigned int *)ioarg->buffer = brm->status;
 			break;
-    
+
 		case BRM_SET_EVENTID:
 			brm->event_id = (rtems_id)ioarg->buffer;
 			break;
@@ -1142,10 +1142,10 @@ static void brm_interrupt(brm_priv *brm) {
 	int signal_event=0;
 	unsigned int event_status=0;
 	#define SET_ERROR_DESCRIPTOR(descriptor) (event_status = (event_status & 0x0000ffff) | descriptor<<16)
- 		
+
 	while( (iiw=READ_REG(&brm->irq_log[brm->irq].iiw)) != 0xffff ){
 		iaw=READ_REG(&brm->irq_log[brm->irq].iaw);
-		
+
 		/* indicate that the interrupt log entry has been processed */
 		brm->irq_log[brm->irq].iiw = 0xffff;
 
@@ -1153,17 +1153,17 @@ static void brm_interrupt(brm_priv *brm) {
     descriptor = iaw >> 2;
     pending    = iiw;
     brm->irq = (brm->irq + 1) % 16;
-		
+
 		/* Clear the log so that we */
-		
-	
-    /* Subaddress accessed irq (RT only) 
+
+
+    /* Subaddress accessed irq (RT only)
      *
      * Can be either a receive or transmit command
      * as well as a mode code.
      */
     if (pending & BRM_SUBAD_IRQ) {
-        			
+
         /* Pointer to next free message in circular buffer */
         current = READ_DMA(&brm->desc[descriptor].cur);
 
@@ -1177,29 +1177,29 @@ static void brm_interrupt(brm_priv *brm) {
             if (descriptor < 32) {
                 wc = wc ? wc : 32;
             }
-            /* Data transmitted */ 
+            /* Data transmitted */
             else if (descriptor < 64) {
-                wc = wc ? wc : 32;  
+                wc = wc ? wc : 32;
                 rtems_semaphore_release(brm->tx_sem);
             }
             /* RX Mode code */
             else if (descriptor < 96) {
                 wc = (wc>>4);
-            }  
+            }
             /* TX Mode code */
             else if (descriptor < 128) {
                 wc = (wc>>4);
             }
 
-#ifdef DEBUG            
-            brm->log[brm->log_i++ % EVENT_QUEUE_SIZE] = (descriptor << 16) | wc; 
+#ifdef DEBUG
+            brm->log[brm->log_i++ % EVENT_QUEUE_SIZE] = (descriptor << 16) | wc;
             brm->log[brm->log_i++ % EVENT_QUEUE_SIZE] = current;
             brm->log[brm->log_i++ % EVENT_QUEUE_SIZE] = msgadr;
 #endif
 
             /* If there is room in the event queue, copy the event there */
             if (brm->head - brm->tail != EVENT_QUEUE_SIZE) {
-        
+
                 /* Copy to event queue */
 								brm->rt_event[INDEX(brm->head)].miw = READ_DMA(&brm->mem[msgadr]);
 								brm->rt_event[INDEX(brm->head)].time = READ_DMA(&brm->mem[msgadr+1]);
@@ -1229,12 +1229,12 @@ static void brm_interrupt(brm_priv *brm) {
 
             /* Wake any blocked rx thread */
             rtems_semaphore_release(brm->rx_sem);
-  
+
         }
-        
+
     }
 
-    if (pending & BRM_EOL_IRQ) {  
+    if (pending & BRM_EOL_IRQ) {
         rtems_semaphore_release(brm->tx_sem);
     }
 
@@ -1246,17 +1246,17 @@ static void brm_interrupt(brm_priv *brm) {
     }
 
     /* Monitor irq */
-    if (pending & BRM_MBC_IRQ) { 
-			
+    if (pending & BRM_MBC_IRQ) {
+
         stop_operation(brm);
         brm->regs->mbc = 1;
         start_operation(brm);
-        
+
         /* If there is room in the event queue, copy the event there */
         if (brm->head - brm->tail != EVENT_QUEUE_SIZE) {
-            
+
             /* Copy to event queue */
-         
+
             brm->bm_event[INDEX(brm->head)].miw  =  READ_DMA(&brm->mem[0]);
             brm->bm_event[INDEX(brm->head)].cw1  =  READ_DMA(&brm->mem[1]);
             brm->bm_event[INDEX(brm->head)].cw2  =  READ_DMA(&brm->mem[2]);
@@ -1276,7 +1276,7 @@ static void brm_interrupt(brm_priv *brm) {
             }
 /*            memcpy((void *)brm->bm_event[INDEX(brm->head)].data, &brm->mem[0x100], 32);*/
 
-#ifdef DEBUG            
+#ifdef DEBUG
             brm->log[brm->log_i++ % EVENT_QUEUE_SIZE] = READ_REG(&brm->regs->mbc);
             brm->log[brm->log_i++ % EVENT_QUEUE_SIZE] = READ_DMA(&brm->mem[0]);
             brm->log[brm->log_i++ % EVENT_QUEUE_SIZE] = READ_DMA(&brm->mem[1]);
@@ -1284,19 +1284,19 @@ static void brm_interrupt(brm_priv *brm) {
 #endif
 
             brm->head++;
-            
+
         }
         else {
             /* Indicate overrun */
             brm->rt_event[INDEX(brm->head)].miw |= 0x8000;
         }
-        
+
         /* Wake any blocking thread */
         rtems_semaphore_release(brm->rx_sem);
 
     }
-		
-		/* The reset of the interrupts 
+
+		/* The reset of the interrupts
 		 * cause a event to be signalled
 		 * so that user can handle error.
 		 */
@@ -1307,59 +1307,59 @@ static void brm_interrupt(brm_priv *brm) {
 			SET_ERROR_DESCRIPTOR(descriptor);
 			signal_event=1;
 		}
-		
+
 		if ( pending & BRM_ILLOP_IRQ){
 			FUNCDBG("BRM: BRM_ILLOP_IRQ\n\r");
 			brm->bc_list_fail = 1;
 			rtems_semaphore_release(brm->tx_sem);
 			event_status |= BRM_ILLOP_IRQ;
-			SET_ERROR_DESCRIPTOR(descriptor);			
+			SET_ERROR_DESCRIPTOR(descriptor);
 			signal_event=1;
 		}
-		
+
 		if ( pending & BRM_MERR_IRQ){
 			FUNCDBG("BRM: BRM_MERR_IRQ\n\r");
 			event_status |= BRM_MERR_IRQ;
 			SET_ERROR_DESCRIPTOR(descriptor);
 			signal_event=1;
 		}
-	    /* Clear Block Accessed Bit */ 
+	    /* Clear Block Accessed Bit */
     tmp = READ_REG(&brm->desc[descriptor].ctrl);
     brm->desc[descriptor].ctrl = tmp & ~0x10;
-		
+
 	} /* While */
-	
+
 	/* clear interrupt flags & handle Hardware errors */
 	pending = READ_REG(&brm->regs->ipend);
-	
+
 	if ( pending & BRM_DMAF_IRQ){
 		FUNCDBG("BRM: BRM_DMAF_IRQ\n\r");
 		event_status |= BRM_DMAF_IRQ;
 		signal_event=1;
 	}
-	
+
 	if ( pending & BRM_WRAPF_IRQ){
 		FUNCDBG("BRM: BRM_WRAPF_IRQ\n\r");
 		event_status |= BRM_WRAPF_IRQ;
 		signal_event=1;
 	}
-	
+
 	if ( pending & BRM_TAPF_IRQ){
 		FUNCDBG("BRM: BRM_TAPF_IRQ\n\r");
 		event_status |= BRM_TAPF_IRQ;
 		signal_event=1;
 	}
-	
+
 	/* Copy current mask to status mask */
 	if ( event_status ){
 		if ( event_status & 0xffff0000 )
 			brm->status &= 0x0000ffff;
 		brm->status |= event_status;
 	}
-	
+
 	/* signal event once */
 	if ( signal_event && (brm->event_id!=0) ){
 		rtems_event_send(brm->event_id, event_status);
 	}
-   
+
 }
