@@ -158,7 +158,7 @@ parity(u_char c)
 {
 	int i;
 
-	i = c ^ (c >> 1) ^ (c >> 2) ^ (c >> 3) ^ 
+	i = c ^ (c >> 1) ^ (c >> 2) ^ (c >> 3) ^
 	    (c >> 4) ^ (c >> 5) ^ (c >> 6) ^ (c >> 7);
 	return (i & 1);
 }
@@ -285,7 +285,7 @@ setup(rtems_shell_dd_globals* globals)
 	}
 
 	(void)gettimeofday(&tv, (struct timezone *)NULL);
-	st.start = tv.tv_sec + tv.tv_usec * 1e-6; 
+	st.start = tv.tv_sec + tv.tv_usec * 1e-6;
 }
 
 static void
@@ -301,7 +301,7 @@ getfdtype(rtems_shell_dd_globals* globals, IO *io)
 	if (S_ISREG(sb.st_mode))
 		io->flags |= ISTRUNC;
 #if RTEMS_REMOVED
-	if (S_ISCHR(sb.st_mode) || S_ISBLK(sb.st_mode)) { 
+	if (S_ISCHR(sb.st_mode) || S_ISBLK(sb.st_mode)) {
 		if (ioctl(io->fd, FIODTYPE, &type) == -1) {
 			err(exit_jump, 1, "%s", io->name);
 		} else {

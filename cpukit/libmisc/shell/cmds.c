@@ -53,7 +53,7 @@ static bool rtems_shell_register_command(const rtems_monitor_command_entry_t *e,
   if (strcmp("exit", e->command) != 0) {
     rtems_shell_cmd_t *shell_cmd =
       (rtems_shell_cmd_t *) malloc(sizeof(rtems_shell_cmd_t));
-   
+
     if (shell_cmd != NULL) {
       shell_cmd->name    = e->command;
       shell_cmd->topic   = "monitor";
@@ -61,7 +61,7 @@ static bool rtems_shell_register_command(const rtems_monitor_command_entry_t *e,
       shell_cmd->command = rtems_shell_main_monitor;
       shell_cmd->alias   = NULL;
       shell_cmd->next    = NULL;
-    
+
       if (rtems_shell_add_cmd_struct(shell_cmd) == NULL) {
         free(shell_cmd);
       }

@@ -31,20 +31,20 @@ int rtems_shell_main_setenv(int argc, char *argv[])
   }
 
   env = argv[1];
-  
+
   for (arg = 2; arg < argc; arg++)
     len += strlen (argv[arg]);
 
   len += argc - 2 - 1;
 
   string = malloc (len + 1);
-  
+
   if (!string)
   {
     printf ("error: no memory\n");
     return 1;
   }
-  
+
   for (arg = 2, p = string; arg < argc; arg++)
   {
     strcpy (p, argv[arg]);
@@ -55,7 +55,7 @@ int rtems_shell_main_setenv(int argc, char *argv[])
       p++;
     }
   }
-  
+
   if (setenv (env, string, 1) < 0)
   {
     printf ("error: %s\n", strerror (errno));

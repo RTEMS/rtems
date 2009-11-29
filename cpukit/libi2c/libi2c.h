@@ -10,19 +10,19 @@
 #define _RTEMS_LIBI2C_H
 /*$Id$*/
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2005,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -31,18 +31,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -51,9 +51,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <rtems.h>
 
@@ -118,7 +118,7 @@ rtems_i2c_ioctl (
 
 extern const rtems_driver_address_table rtems_libi2c_io_ops;
 
-/* Unfortunately, if you want to add this driver to 
+/* Unfortunately, if you want to add this driver to
  * a RTEMS configuration table then you need all the
  * members explicitly :-( (Device_driver_table should
  * hold pointers to rtems_driver_address_tables rather
@@ -131,7 +131,7 @@ extern const rtems_driver_address_table rtems_libi2c_io_ops;
  *
  * Currently the preferred way is having the BSP
  * call 'rtems_libi2c_initialize' followed by
- * 'rtems_libi2c_register_bus' and 
+ * 'rtems_libi2c_register_bus' and
  * 'rtems_libi2c_register_drv' and/or
  * 'mknod' (for 'raw' device nodes)
  * from the 'pretasking_hook'.
@@ -165,7 +165,7 @@ typedef struct rtems_libi2c_bus_t_
 } rtems_libi2c_bus_t;
 
 /* Access functions a low level driver must provide;
- * 
+ *
  * All of these, except read_bytes and write_bytes
  * return RTEMS_SUCCESSFUL on success and an error status
  * otherwise. The read and write ops return the number
@@ -189,7 +189,7 @@ typedef struct rtems_libi2c_bus_ops_
   int (*write_bytes) (rtems_libi2c_bus_t * bushdl, unsigned char *bytes,
                       int nbytes);
   /* ioctl misc functions */
-  int (*ioctl) (rtems_libi2c_bus_t * bushdl, 
+  int (*ioctl) (rtems_libi2c_bus_t * bushdl,
 		int   cmd,
 		void *buffer
 		);
@@ -205,7 +205,7 @@ typedef struct rtems_libi2c_bus_ops_
  * (i.e., libi2c) and the minor number encodes a bus# and a i2c address.
  *
  * The name will be registered in the filesystem (parent
- * directories must exist, also IMFS filesystem must exist see 
+ * directories must exist, also IMFS filesystem must exist see
  * CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM). It may be NULL in which case
  * the library will pick a default.
  *
@@ -264,10 +264,10 @@ extern rtems_device_major_number rtems_libi2c_major;
  * operations (the aforementioned EEPROM interprets any 3rd
  * and following byte written to the device as data, i.e., the
  * contents could easily be changed!).
- * The correct 'read-pointer offset' programming could be 
+ * The correct 'read-pointer offset' programming could be
  * implemented in 'open' and 'ioctl' of a high-level driver and
  * the user would then only have to perform harmless read
- * operations, e.g., 
+ * operations, e.g.,
  *
  *    fd = open("/dev/i2c.eeprom",O_RDONLY) / * opens and sets EEPROM read pointer * /
  *    ioctl(fd, IOCTL_SEEK, 0x200)			/ * repositions the read pointer       * /
@@ -278,14 +278,14 @@ extern rtems_device_major_number rtems_libi2c_major;
 
 /* struct provided at driver registration. The driver may store
  * private data behind the mandatory first fields but the size
- * must be set to the size of the entire struct, e.g., 
+ * must be set to the size of the entire struct, e.g.,
  *
  * struct driver_pvt {
  * 	rtems_libi2c_drv_t pub;
  * 	struct {  ...    } pvt;
  * } my_driver = {
  * 		{  ops: my_ops,
- * 		  size: sizeof(my_driver) 
+ * 		  size: sizeof(my_driver)
  * 		},
  * 		{ ...};
  * };
@@ -305,7 +305,7 @@ typedef struct rtems_libi2c_drv_t_
  *
  * The registration procedure also creates a filesystem node,
  * i.e., the returned minor number is not really needed.
- * 
+ *
  * If the 'name' argument is NULL, no filesystem node is
  * created (but this can be done 'manually' using rtems_libi2c_major
  * and the return value of this routine).
@@ -357,13 +357,13 @@ rtems_libi2c_write_bytes (rtems_device_minor_number minor,
 
 /* Send start, send address and read bytes */
 extern int
-rtems_libi2c_start_read_bytes (rtems_device_minor_number minor, 
+rtems_libi2c_start_read_bytes (rtems_device_minor_number minor,
 			       unsigned char *bytes,
                                int nbytes);
 
 /* Send start, send address and write bytes */
 extern int
-rtems_libi2c_start_write_bytes (rtems_device_minor_number minor, 
+rtems_libi2c_start_write_bytes (rtems_device_minor_number minor,
 				const unsigned char *bytes,
                                 int nbytes);
 
@@ -385,12 +385,12 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
  * retval = rtems_libi2c_ioctl(rtems_device_minor_number minor,
  *                             RTEMS_LIBI2C_IOCTL_READ_WRITE,
  *                              rtems_libi2c_read_write_t *arg);
- * 
- * This call performs a simultanous read/write transfer, 
+ *
+ * This call performs a simultanous read/write transfer,
  * which is possible (and sometimes needed) for SPI devices
- * 
+ *
  *   arg is a pointer to a rd_wr info data structure
- * 
+ *
  * This call is only needed for SPI devices
  */
 #define RTEMS_LIBI2C_IOCTL_START_TFM_READ_WRITE  2
@@ -401,17 +401,17 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
  *                             const unsigned char *wr_buffer,
  *                             int byte_cnt,
  *                             const rtems_libi2c_tfr_mode_t *tfr_mode_ptr);
- * 
+ *
  * This call addresses a slave and then:
  * - sets the proper transfer mode,
- *  - performs a simultanous  read/write transfer, 
+ *  - performs a simultanous  read/write transfer,
  *    (which is possible and sometimes needed for SPI devices)
  *    NOTE: - if rd_buffer is NULL, receive data will be dropped
  *          - if wr_buffer is NULL, bytes with content 0 will transmitted
- * 
- *   rd_buffer is a pointer to a receive buffer (or NULL) 
+ *
+ *   rd_buffer is a pointer to a receive buffer (or NULL)
  *   wr_buffer is a pointer to the data to be sent (or NULL)
- * 
+ *
  * This call is only needed for SPI devices
  */
 
@@ -420,12 +420,12 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
  * retval = rtems_libi2c_ioctl(rtems_device_minor_number minor,
  *                             RTEMS_LIBI2C_IOCTL_SET_TFRMODE,
  *                             const rtems_libi2c_tfr_mode_t *tfr_mode_ptr);
- * 
+ *
  * This call sets an SPI device to the transfer mode needed (baudrate etc.)
- * 
+ *
  *   tfr_mode is a pointer to a structure defining the SPI transfer mode needed
- *   (see below). 
- * 
+ *   (see below).
+ *
  * This call is only needed for SPI devices
  */
 
@@ -435,10 +435,10 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
  * retval = rtems_libi2c_ioctl(rtems_device_minor_number minor,
  *                             RTEMS_LIBI2C_IOCTL_GET_DRV_T,
  *                             const rtems_libi2c_drv_t *drv_t_ptr);
- * 
+ *
  * This call allows the a high-level driver to query its driver table entry,
  * including its private data appended to it during creation of the entry
- * 
+ *
  */
 
 /**

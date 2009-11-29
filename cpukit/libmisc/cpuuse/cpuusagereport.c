@@ -85,7 +85,7 @@ void rtems_cpu_usage_report_with_plugin(
       }
     }
   #endif
-  
+
   (*print)(
      context,
      "-------------------------------------------------------------------------------\n"
@@ -113,7 +113,7 @@ void rtems_cpu_usage_report_with_plugin(
           continue;
 
         rtems_object_get_name( the_thread->Object.id, sizeof(name), name );
- 
+
         (*print)(
           context,
           " 0x%08" PRIx32 " | %-38s |",

@@ -52,7 +52,7 @@ int rtems_shell_main_mdump(
       return -1;
     }
     if (max <= 0) {
-      max = 1;      /* print 1 item if 0 or neg. */ 
+      max = 1;      /* print 1 item if 0 or neg. */
       res = 0;
     } else {
       max--;

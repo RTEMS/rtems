@@ -41,28 +41,28 @@ int rtems_shell_main_route(
   int                cur_idx;
   int                flags;
   int                rc;
-  
+
   memset(&dst, 0, sizeof(dst));
   memset(&gw, 0, sizeof(gw));
   memset(&netmask, 0, sizeof(netmask));
-  
+
   dst.sin_len = sizeof(dst);
   dst.sin_family = AF_INET;
-  dst.sin_addr.s_addr = inet_addr("0.0.0.0");  
-  
+  dst.sin_addr.s_addr = inet_addr("0.0.0.0");
+
   gw.sin_len = sizeof(gw);
   gw.sin_family = AF_INET;
-  gw.sin_addr.s_addr = inet_addr("0.0.0.0"); 
-  
+  gw.sin_addr.s_addr = inet_addr("0.0.0.0");
+
   netmask.sin_len = sizeof(netmask);
   netmask.sin_family = AF_INET;
-  netmask.sin_addr.s_addr = inet_addr("255.255.255.0"); 
-  
+  netmask.sin_addr.s_addr = inet_addr("255.255.255.0");
+
   if (argc < 2) {
     rtems_bsdnet_show_inet_routes();
     return 0;
-  } 
-  
+  }
+
   if (strcmp(argv[1], "add") == 0) {
     cmd = RTM_ADD;
   } else if (strcmp(argv[1], "del") == 0) {
@@ -72,12 +72,12 @@ int rtems_shell_main_route(
     printf("\tit should be 'add' or 'del'\n");
     return -1;
   }
-  
+
   if (argc < 3) {
     printf("not enough arguments\n");
     return -1;
   }
-  
+
   if (strcmp(argv[2], "-host") == 0) {
     f_host = 1;
   } else if (strcmp(argv[2], "-net") == 0) {
@@ -87,14 +87,14 @@ int rtems_shell_main_route(
     printf("\tit should be '-host' or '-net'\n");
     return -1;
   }
-  
+
   if (argc < 4) {
     printf("not enough arguments\n");
     return -1;
   }
-  
+
   inet_pton(AF_INET, argv[3], &dst.sin_addr);
-  
+
   cur_idx = 4;
   while(cur_idx < argc) {
     if (strcmp(argv[cur_idx], "gw") == 0) {
@@ -119,7 +119,7 @@ int rtems_shell_main_route(
     }
     cur_idx += 1;
   }
-  
+
   flags = RTF_STATIC;
   if (f_gw != 0) {
     flags |= RTF_GATEWAY;

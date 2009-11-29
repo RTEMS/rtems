@@ -69,7 +69,7 @@ static int findOnPATH(
     strcat( scriptFile, "/" );
     strcat(
       scriptFile,
-      ( (userScriptName[0] == '.' && userScriptName[1] == '/') ? 
+      ( (userScriptName[0] == '.' && userScriptName[1] == '/') ?
          &userScriptName[2] : userScriptName)
     );
   }
@@ -82,7 +82,7 @@ static int findOnPATH(
   return 0;
 
 #if 0
-   /* 
+   /*
     * Does the command (argv[0]) contain a path ?, i.e. starts with
     * '.' or contains a '/'?
     */
@@ -120,7 +120,7 @@ int rtems_shell_main_joel(
   char                 scriptFile[PATH_MAX];
   struct getopt_data   getopt_reent;
 
-  memset(&getopt_reent, 0, sizeof(getopt_data)); 
+  memset(&getopt_reent, 0, sizeof(getopt_data));
   while ( (option = getopt_r( argc, argv, "o:p:s:t:v", &getopt_reent)) != -1 ) {
     switch ((char)option) {
       case 'o':
@@ -149,10 +149,10 @@ int rtems_shell_main_joel(
       case 't':
         taskName = getopt_reent.optarg;
         break;
-      case 'v':  
+      case 'v':
         verbose = 1;
         break;
-      case '?':  
+      case '?':
       default:
         rtems_shell_joel_usage();
         return -1;
@@ -160,7 +160,7 @@ int rtems_shell_main_joel(
   }
 
   if ( verbose ) {
-    fprintf( stderr, 
+    fprintf( stderr,
       "outputFile: %s\n"
       "taskPriority: %" PRId32 "\n"
       "stackSize: %" PRId32 "\n"
@@ -179,10 +179,10 @@ int rtems_shell_main_joel(
   if ( getopt_reent.optind >= argc ) {
     fprintf( stderr, "Shell: No script to execute\n" );
     return -1;
-  } 
- 
+  }
+
   /*
-   *  Find script on the path.  
+   *  Find script on the path.
    *
    *  NOTE: It is terrible that this is done twice but it
    *        seems to be the most expedient thing.
@@ -217,7 +217,7 @@ int rtems_shell_main_joel(
     return -1;
   return 0;
 }
-      
+
 rtems_shell_cmd_t rtems_shell_JOEL_Command = {
   "joel",                        /* name */
   "joel [args] SCRIPT",          /* usage */
@@ -303,7 +303,7 @@ int rtems_shell_script_file(
   scriptHead[length - 1] = '\0';
 
   /* fprintf( stderr, "FIRST LINE: -%s-\n", scriptHead ); */
-   
+
   /*
    *  Verify the name of the "shell" is joel.  This means
    *  the line starts with "#! joel".

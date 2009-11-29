@@ -97,7 +97,7 @@ rtems_monitor_dump_name(rtems_id id)
 {
     char name_buffer[18];
 
-    rtems_object_get_name( id, sizeof(name_buffer), name_buffer );  
+    rtems_object_get_name( id, sizeof(name_buffer), name_buffer );
 
     return fprintf( stdout, name_buffer );
 }

@@ -37,6 +37,6 @@ const char *rtems_bsp_cmdline_get_param_rhs(
   if ( *(d-1) == '\"' )
     d--;
   *d = '\0';
-    
+
   return value;
 }

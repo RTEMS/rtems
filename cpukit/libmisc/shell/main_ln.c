@@ -141,7 +141,7 @@ main_ln(rtems_shell_ln_globals* globals, int argc, char *argv[])
 	setprogname(argv[0]);
 	(void)setlocale(LC_ALL, "");
 #endif
-  
+
 	while ((ch = getopt_r(argc, argv, "fhinsv", &getopt_reent)) != -1)
 		switch (ch) {
 		case 'f':
@@ -159,7 +159,7 @@ main_ln(rtems_shell_ln_globals* globals, int argc, char *argv[])
 		case 's':
 			sflag = 1;
 			break;
-		case 'v':               
+		case 'v':
 			vflag = 1;
 			break;
 		case '?':

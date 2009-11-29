@@ -33,7 +33,7 @@ rtems_monitor_task_canonical(
     canonical_task->state = rtems_thread->current_state;
     canonical_task->wait_id = rtems_thread->Wait.id;
     canonical_task->events = api->pending_events;
-    /* 
+    /*
      * FIXME: make this optionally cpu_time_executed
      */
 #if 0

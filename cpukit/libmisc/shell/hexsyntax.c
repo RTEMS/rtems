@@ -63,7 +63,7 @@ newsyntax(rtems_shell_hexdump_globals* globals, int argc, char ***argvp)
 	char *p, **argv;
 
   struct getopt_data getopt_reent;
-  memset(&getopt_reent, 0, sizeof(getopt_data)); 
+  memset(&getopt_reent, 0, sizeof(getopt_data));
 
 	argv = *argvp;
 	if ((p = rindex(argv[0], 'h')) != NULL &&

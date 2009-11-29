@@ -39,7 +39,7 @@ rtems_monitor_part_dump_header(
   ID       NAME   ATTR        STARTADDR LENGTH    BUF_SIZE  USED_BLOCKS\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 1234
           1         2         3         4         5         6         7    */
-           
+
     rtems_monitor_separator();
 }
 

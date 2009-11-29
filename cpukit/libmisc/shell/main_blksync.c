@@ -36,7 +36,7 @@ int rtems_shell_main_blksync(
   const char* driver = NULL;
   int         arg;
   int         fd;
-  
+
   for (arg = 1; arg < argc; arg++) {
     if (argv[arg][0] == '-') {
       fprintf( stderr, "%s: invalid option: %s\n", argv[0], argv[arg]);
@@ -51,18 +51,18 @@ int rtems_shell_main_blksync(
       }
     }
   }
-  
+
   fd = open (driver, O_WRONLY, 0);
   if (fd < 0) {
     fprintf( stderr, "%s: driver open failed: %s\n", argv[0], strerror (errno));
     return 1;
   }
-  
+
   if (ioctl (fd, RTEMS_BLKIO_SYNCDEV) < 0) {
     fprintf( stderr, "%s: driver sync failed: %s\n", argv[0], strerror (errno));
     return 1;
   }
-  
+
   close (fd);
   return 0;
 }

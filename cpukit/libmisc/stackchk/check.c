@@ -153,7 +153,7 @@ void Stack_check_Initialize( void )
       p[2] = 0xDEADF00D;          /* DEAD FOOD GOOD DOG */
       p[3] = 0x600D0D06;
   }
-  
+
   /*
    * If appropriate, setup the interrupt stack for high water testing
    * also.
@@ -441,7 +441,7 @@ void Stack_check_Dump_threads_usage(
   } else {
     (*print_handler)( print_context, "%8" PRId32 "\n", used );
   }
-    
+
 
 }
 
@@ -474,7 +474,7 @@ void rtems_stack_checker_report_usage_with_plugin(
   print_handler = print;
 
   (*print)( context, "Stack usage by thread\n");
-  (*print)( context, 
+  (*print)( context,
 "    ID      NAME    LOW          HIGH     CURRENT     AVAILABLE     USED\n"
   );
 

@@ -129,7 +129,7 @@ pos_out(rtems_shell_dd_globals* globals)
 	off_t cnt;
 	ssize_t n;
 #endif
-  
+
 	/*
 	 * If not a tape, try seeking on the file.  Seeking on a pipe is
 	 * going to fail, but don't protect the user -- they shouldn't

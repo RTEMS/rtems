@@ -127,7 +127,7 @@ main_hexdump(rtems_shell_hexdump_globals* globals, int argc, char *argv[])
 #if RTEMS_REMOVED
 	(void)setlocale(LC_ALL, "");
 #endif
-  
+
 	if (!(p = rindex(argv[0], 'o')) || strcmp(p, "od"))
 		newsyntax(globals, argc, &argv);
 	else
@@ -158,4 +158,4 @@ rtems_shell_cmd_t rtems_shell_HEXDUMP_Command = {
   NULL,                                                     /* alias */
   NULL                                                      /* next */
 };
- 
+

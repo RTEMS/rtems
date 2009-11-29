@@ -101,7 +101,7 @@ rtems_monitor_init_task_dump(
     length += rtems_monitor_symbol_dump(&monitor_itask->entry, verbose);
 
     length += rtems_monitor_pad(25, length);
-    length += fprintf(stdout,"%" PRId32 " [0x%" PRIx32 "]", 
+    length += fprintf(stdout,"%" PRId32 " [0x%" PRIx32 "]",
       monitor_itask->argument, monitor_itask->argument);
 
     length += rtems_monitor_pad(39, length);

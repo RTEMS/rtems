@@ -42,16 +42,16 @@ const char *rtems_bsp_cmdline_get_param(
 )
 {
   const char *p;
-  
+
   if ( !name )
     return NULL;
-  
+
   if ( !value )
     return NULL;
-  
+
   if ( !length )
     return NULL;
-  
+
   value[0] = '\0';
 
   p = rtems_bsp_cmdline_get_param_raw( name );

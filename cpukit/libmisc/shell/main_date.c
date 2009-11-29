@@ -54,7 +54,7 @@ int rtems_shell_main_date(
 
     sprintf( buf, "%s %s", argv[1], argv[2] );
     result = strptime(
-      buf, 
+      buf,
       "%Y-%m-%d %T",
       &TOD
     );

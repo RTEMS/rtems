@@ -104,7 +104,7 @@ jcl(rtems_shell_dd_globals* globals, char **argv)
 	char *arg;
 
   oper = NULL;
-  
+
 	in.dbsz = out.dbsz = 512;
 
 	while ((oper = *++argv) != NULL) {
@@ -372,7 +372,7 @@ get_num(rtems_shell_dd_globals* globals, const char *val)
 	num = strtouq(val, &expr, 0);
 	if (errno != 0)				/* Overflow or underflow. */
 		err(exit_jump, 1, "%s", oper);
-	
+
 	if (expr == val)			/* No valid digits. */
 		errx(exit_jump, 1, "%s: illegal numeric value", oper);
 
@@ -446,7 +446,7 @@ get_off_t(rtems_shell_dd_globals* globals, const char *val)
 	num = strtoq(val, &expr, 0);
 	if (errno != 0)				/* Overflow or underflow. */
 		err(exit_jump, 1, "%s", oper);
-	
+
 	if (expr == val)			/* No valid digits. */
 		errx(exit_jump, 1, "%s: illegal numeric value", oper);
 

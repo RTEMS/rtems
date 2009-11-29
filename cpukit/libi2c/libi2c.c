@@ -2,19 +2,19 @@
 
 /* libi2c Implementation */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2005,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -23,18 +23,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -43,11 +43,11 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 /*
- * adaptations to also handle SPI devices 
+ * adaptations to also handle SPI devices
  * by Thomas Doerfler, embedded brains GmbH, Puchheim, Germany
  */
 #if HAVE_CONFIG_H
@@ -357,7 +357,7 @@ rtems_libi2c_initialize (void)
      */
     return 0;
   }
-  
+
   /* rtems_io_register_driver does NOT currently check nor report back
    * the return code of the 'init' operation, so we cannot
    * rely on return code since it may seem OK even if the driver 'init;
@@ -534,8 +534,8 @@ rtems_libi2c_send_addr (rtems_device_minor_number minor, int rw)
 }
 
 int
-rtems_libi2c_read_bytes (rtems_device_minor_number minor, 
-			 unsigned char *bytes, 
+rtems_libi2c_read_bytes (rtems_device_minor_number minor,
+			 unsigned char *bytes,
 			 int nbytes)
 {
   int sc;
@@ -551,8 +551,8 @@ rtems_libi2c_read_bytes (rtems_device_minor_number minor,
 }
 
 int
-rtems_libi2c_write_bytes (rtems_device_minor_number minor, 
-			  const unsigned char *bytes, 
+rtems_libi2c_write_bytes (rtems_device_minor_number minor,
+			  const unsigned char *bytes,
 			  int nbytes)
 {
   int sc;
@@ -568,7 +568,7 @@ rtems_libi2c_write_bytes (rtems_device_minor_number minor,
 }
 
 int
-rtems_libi2c_ioctl (rtems_device_minor_number minor, 
+rtems_libi2c_ioctl (rtems_device_minor_number minor,
 		    int cmd,
 		    ...)
 {
@@ -577,15 +577,15 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
   void *args;
   bool is_started = false;
   DECL_CHECKED_BH (busno, bush, minor, -)
-    
+
   va_start(ap, cmd);
   args = va_arg(ap, void *);
 
   switch(cmd) {
     /*
-     * add ioctls defined for this level here:    
+     * add ioctls defined for this level here:
      */
-    
+
   case RTEMS_LIBI2C_IOCTL_GET_DRV_T:
     /*
      * query driver table entry
@@ -611,18 +611,18 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
      * set tfr mode
      */
     if (sc == 0) {
-      sc = bush->ops->ioctl 
-	(bush, 
-	 RTEMS_LIBI2C_IOCTL_SET_TFRMODE, 
+      sc = bush->ops->ioctl
+	(bush,
+	 RTEMS_LIBI2C_IOCTL_SET_TFRMODE,
 	 &((rtems_libi2c_tfm_read_write_t *)args)->tfr_mode);
     }
     /*
      * perform read_write
      */
     if (sc == 0) {
-      sc = bush->ops->ioctl 
-	(bush, 
-	 RTEMS_LIBI2C_IOCTL_READ_WRITE, 
+      sc = bush->ops->ioctl
+	(bush,
+	 RTEMS_LIBI2C_IOCTL_READ_WRITE,
 	 &((rtems_libi2c_tfm_read_write_t *)args)->rd_wr);
     }
     if ((sc < 0) && (is_started)) {
@@ -637,9 +637,9 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
 }
 
 static int
-do_s_rw (rtems_device_minor_number minor, 
-	 unsigned char *bytes, 
-	 int nbytes, 
+do_s_rw (rtems_device_minor_number minor,
+	 unsigned char *bytes,
+	 int nbytes,
 	 int rw)
 {
   rtems_status_code   sc;
@@ -669,7 +669,7 @@ do_s_rw (rtems_device_minor_number minor,
 }
 
 int
-rtems_libi2c_start_read_bytes (rtems_device_minor_number minor, 
+rtems_libi2c_start_read_bytes (rtems_device_minor_number minor,
 			       unsigned char *bytes,
                                int nbytes)
 {
@@ -677,7 +677,7 @@ rtems_libi2c_start_read_bytes (rtems_device_minor_number minor,
 }
 
 int
-rtems_libi2c_start_write_bytes (rtems_device_minor_number minor, 
+rtems_libi2c_start_write_bytes (rtems_device_minor_number minor,
 				const unsigned char *bytes,
                                 int nbytes)
 {

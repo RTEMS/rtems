@@ -42,7 +42,7 @@ int rtems_shell_main_time(
   sc = rtems_clock_get_uptime(&start);
   if (sc != RTEMS_SUCCESSFUL)
     printf("error: cannot read time\n");
-  
+
   if (argc) {
     shell_cmd = rtems_shell_lookup_cmd(argv[1]);
     if ( argv[1] == NULL ) {
@@ -65,12 +65,12 @@ int rtems_shell_main_time(
     --period.tv_sec;
     period.tv_nsec += 1000000000UL;
   }
-  
+
   printf("time: %li:%02li:%02li.%03li\n",
          period.tv_sec / 3600,
          period.tv_sec / 60, period.tv_sec % 60,
          period.tv_nsec / 1000000);
-  
+
   return errorlevel;
 }
 

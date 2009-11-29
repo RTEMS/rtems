@@ -53,11 +53,11 @@ __RCSID("$NetBSD: cp.c,v 1.39 2005/10/24 12:59:07 kleink Exp $");
 #endif
 /*
  * Cp copies source files to target files.
- * 
+ *
  * The global PATH_T structure "to" always contains the path to the
  * current target file.  Since fts(3) does not change directories,
  * this path can be either absolute or dot-relative.
- * 
+ *
  * The basic algorithm is to initialize "to" and use fts(3) to traverse
  * the file hierarchy rooted in the argument list.  A trivial case is the
  * case of 'cp file1 file2'.  The more interesting case is the case of
@@ -129,7 +129,7 @@ main_cp(rtems_shell_cp_globals* cp_globals, int argc, char *argv[])
   struct getopt_data getopt_reent;
 
 	Hflag = Lflag = Pflag = 0;
-  memset(&getopt_reent, 0, sizeof(getopt_data)); 
+  memset(&getopt_reent, 0, sizeof(getopt_data));
 
 	while ((ch = getopt_r(argc, argv, "HLPRafilnprv", &getopt_reent)) != -1)
 		switch (ch) {
@@ -208,7 +208,7 @@ main_cp(rtems_shell_cp_globals* cp_globals, int argc, char *argv[])
 #if 0
 	(void)signal(SIGINFO, siginfo);
 #endif
-  
+
 	/* Save the target base in "to". */
 	target = argv[--argc];
 	if (strlcpy(to.p_path, target, sizeof(to.p_path)) >= sizeof(to.p_path))
@@ -446,7 +446,7 @@ copy(rtems_shell_cp_globals* cp_globals,
 			    curr->fts_level == 0)) {
 				if (copy_file(cp_globals, curr, dne))
 					badcp = rval = 1;
-			} else {	
+			} else {
 				if (copy_link(cp_globals, curr, !dne))
 					badcp = rval = 1;
 			}
@@ -552,4 +552,4 @@ rtems_shell_cmd_t rtems_shell_CP_Command = {
   NULL,                                                /* alias */
   NULL                                                 /* next */
 };
- 
+

@@ -242,7 +242,7 @@ rtems_monitor_line_editor (
 
     extended_key = rtems_monitor_getchar ();
     c = extended_key & KEYS_NORMAL_MASK;
-    
+
     /*
      * Make the extended_key usable as a boolean.
      */

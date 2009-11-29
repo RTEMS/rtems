@@ -135,7 +135,7 @@ copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *en
       (void)free(buf);
 			return (0);
 		} else if (iflag) {
-			(void)fprintf(stderr, "overwrite %s? %s", 
+			(void)fprintf(stderr, "overwrite %s? %s",
 					to.p_path, YESNO);
 			checkch = ch = getchar();
 			while (ch != '\n' && ch != EOF)
@@ -147,9 +147,9 @@ copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *en
 				return (1);
 			}
 		}
-		
+
 		if (fflag) {
-		    /* remove existing destination file name, 
+		    /* remove existing destination file name,
 		     * create a new file  */
 		    (void)unlink(to.p_path);
 				if (!lflag)
@@ -255,7 +255,7 @@ copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *en
 		}
 	}
 	(void)close(from_fd);
-	
+
 	/*
 	 * Don't remove the target even after an error.  The target might
 	 * not be a regular file, or its attributes might be important,
@@ -401,7 +401,7 @@ setfile(rtems_shell_cp_globals* cp_globals, struct stat *fs, int fd)
 			rval = 1;
 		}
 #endif
-  
+
 	return (rval);
 }
 

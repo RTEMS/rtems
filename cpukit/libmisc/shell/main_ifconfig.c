@@ -53,19 +53,19 @@ int rtems_shell_main_ifconfig(
   memset(&dstaddr, 0, sizeof(dstaddr));
   memset(&netmask, 0, sizeof(netmask));
   memset(&broadcast, 0, sizeof(broadcast));
-    
+
   ipaddr.sin_len = sizeof(ipaddr);
   ipaddr.sin_family = AF_INET;
-  
+
   dstaddr.sin_len = sizeof(dstaddr);
   dstaddr.sin_family = AF_INET;
-  
+
   netmask.sin_len = sizeof(netmask);
   netmask.sin_family = AF_INET;
-  
+
   broadcast.sin_len = sizeof(broadcast);
   broadcast.sin_family = AF_INET;
-  
+
   cur_idx = 0;
   if (argc <= 1) {
     /* display all interfaces */
@@ -84,11 +84,11 @@ int rtems_shell_main_ifconfig(
       cur_idx += 2;
     }
   }
-  
+
   if ((f_down !=0) && (f_ip != 0)) {
     f_up = 1;
   }
-  
+
   while(argc > cur_idx) {
     if (strcmp(argv[cur_idx], "up") == 0) {
       f_up = 1;
@@ -104,7 +104,7 @@ int rtems_shell_main_ifconfig(
       if ((cur_idx + 1) >= argc) {
         printf("No netmask address\n");
         return -1;
-      } 
+      }
       if (inet_pton(AF_INET, argv[cur_idx+1], &netmask.sin_addr) < 0) {
         printf("bad netmask: %s\n", argv[cur_idx]);
         return -1;
@@ -115,7 +115,7 @@ int rtems_shell_main_ifconfig(
       if ((cur_idx + 1) >= argc) {
         printf("No broadcast address\n");
         return -1;
-      } 
+      }
       if (inet_pton(AF_INET, argv[cur_idx+1], &broadcast.sin_addr) < 0) {
         printf("bad broadcast: %s\n", argv[cur_idx]);
         return -1;
@@ -126,7 +126,7 @@ int rtems_shell_main_ifconfig(
       if ((cur_idx + 1) >= argc) {
         printf("No pointopoint address\n");
         return -1;
-      } 
+      }
       if (inet_pton(AF_INET, argv[cur_idx+1], &dstaddr.sin_addr) < 0) {
         printf("bad pointopoint: %s\n", argv[cur_idx]);
         return -1;
@@ -139,7 +139,7 @@ int rtems_shell_main_ifconfig(
     }
     cur_idx += 1;
   }
-  
+
   printf("ifconfig ");
   if (iface != NULL) {
     printf("%s ", iface);
@@ -148,25 +148,25 @@ int rtems_shell_main_ifconfig(
       inet_ntop(AF_INET, &ipaddr.sin_addr, str, 256);
       printf("%s ", str);
     }
-      
+
     if (f_netmask != 0) {
       char str[256];
       inet_ntop(AF_INET, &netmask.sin_addr, str, 256);
       printf("netmask %s ", str);
     }
-      
+
     if (f_bcast != 0) {
       char str[256];
       inet_ntop(AF_INET, &broadcast.sin_addr, str, 256);
       printf("broadcast %s ", str);
     }
-      
+
     if (f_ptp != 0) {
       char str[256];
       inet_ntop(AF_INET, &dstaddr.sin_addr, str, 256);
       printf("pointopoint %s ", str);
     }
-      
+
     if (f_up != 0) {
       printf("up\n");
     } else if (f_down != 0) {
@@ -175,12 +175,12 @@ int rtems_shell_main_ifconfig(
       printf("\n");
     }
   }
-  
+
   if ((iface == NULL) || ((f_ip == 0) && (f_down == 0) && (f_up == 0))) {
     rtems_bsdnet_show_if_stats();
     return 0;
   }
-  
+
   flags = 0;
   if (f_netmask) {
     rc = rtems_bsdnet_ifconfig(iface, SIOCSIFNETMASK, &netmask);
@@ -189,7 +189,7 @@ int rtems_shell_main_ifconfig(
       return -1;
     }
   }
-  
+
   if (f_bcast) {
     rc = rtems_bsdnet_ifconfig(iface, SIOCSIFBRDADDR, &broadcast);
     if (rc < 0) {
@@ -197,7 +197,7 @@ int rtems_shell_main_ifconfig(
       return -1;
     }
   }
-  
+
   if (f_ptp) {
     rc = rtems_bsdnet_ifconfig(iface, SIOCSIFDSTADDR, &dstaddr);
     if (rc < 0) {
@@ -206,8 +206,8 @@ int rtems_shell_main_ifconfig(
     }
     flags |= IFF_POINTOPOINT;
   }
-  
-  /* This must come _after_ setting the netmask, broadcast addresses */    
+
+  /* This must come _after_ setting the netmask, broadcast addresses */
   if (f_ip) {
     rc = rtems_bsdnet_ifconfig(iface, SIOCSIFADDR, &ipaddr);
     if (rc < 0) {
@@ -215,15 +215,15 @@ int rtems_shell_main_ifconfig(
       return -1;
     }
   }
-  
+
   if (f_up != 0) {
     flags |= IFF_UP;
   }
-  
+
   if (f_down != 0) {
     printf("Warning: taking interfaces down is not supported\n");
   }
-  
+
   rc = rtems_bsdnet_ifconfig(iface, SIOCSIFFLAGS, &flags);
   if (rc < 0) {
     printf("Could not set interface flags: %s\n", strerror(errno));

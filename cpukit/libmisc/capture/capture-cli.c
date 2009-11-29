@@ -311,7 +311,7 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg __attribute__((unuse
   rtems_task_priority ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority floor = rtems_capture_watch_get_floor ();
   int                 last_count = 0;
-  
+
   for (;;)
   {
     rtems_capture_task_t* tasks[RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS + 1];
@@ -431,14 +431,14 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg __attribute__((unuse
 
     if (count < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS)
     {
-      j = RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS - count;   
+      j = RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS - count;
       while (j > 0)
       {
         fprintf (stdout, "\x1b[K\n");
         j--;
       }
     }
-    
+
     last_count = count;
 
     cli_load_thread_active = 0;
@@ -477,13 +477,13 @@ rtems_capture_cli_task_load (int                          argc __attribute__((un
   }
 
   name = rtems_build_name('C', 'P', 'l', 't');
-  
+
   sc = rtems_task_create (name, priority, 4 * 1024,
                           RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
                           RTEMS_PREEMPT | RTEMS_TIMESLICE | RTEMS_NO_ASR,
                           &id);
-  
-  if (sc != RTEMS_SUCCESSFUL) 
+
+  if (sc != RTEMS_SUCCESSFUL)
   {
     fprintf (stdout, "error: cannot create helper thread: %s\n",
              rtems_status_text (sc));
@@ -660,7 +660,7 @@ rtems_capture_cli_get_name_id (char*          arg,
      *          remove unless the score has been updated.
      */
     rtems_name   rname;
-    
+
     rname = rtems_build_name(arg[0], arg[1], arg[2], arg[3]);
     *name = rname;
     *valid_name = true;
@@ -1118,7 +1118,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
       {
         bool found = false;
         int  t;
-        
+
         for (t = 0; t < RTEMS_CAPTURE_CLI_TRIGGERS_NUM; t++)
           if (strcmp (argv[arg], rtems_capture_cli_triggers[t].name) == 0)
           {
@@ -1141,7 +1141,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
       {
         if (is_from)
           fprintf (stdout, "warning: extra 'from' ignored\n");
-        
+
         is_from = 1;
         continue;
       }
@@ -1170,7 +1170,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
         else
           fprintf (stdout, "warning: extra arguments ignored\n");
       }
-          
+
       if (valid_id)
       {
         if (is_from)
@@ -1200,7 +1200,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
              rtems_capture_cli_triggers[trigger].name);
     return;
   }
-  
+
   if (!to_valid_name && !to_valid_id && !from_valid_name && !from_valid_id)
   {
     fprintf (stdout, trigger_set_usage);
@@ -1351,7 +1351,7 @@ rtems_capture_cli_trace_records (int                          argc,
      * If we have no records then just exist. We still need to release
      * the reader lock.
      */
-    
+
     if (read == 0)
     {
       rtems_capture_release (read);
@@ -1359,7 +1359,7 @@ rtems_capture_cli_trace_records (int                          argc,
     }
 
     count = total < read ? total : read;
-    
+
     while (count--)
     {
       if (csv)
@@ -1403,7 +1403,7 @@ rtems_capture_cli_trace_records (int                          argc,
     }
 
     count = total < read ? total : read;
-    
+
     if (count < total)
       total -= count;
     else

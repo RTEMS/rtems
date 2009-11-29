@@ -145,10 +145,10 @@ main_rm(rtems_shell_rm_globals* globals, int argc, char *argv[])
 {
 	int ch;
 	char *p;
-  
+
   struct getopt_data getopt_reent;
   memset(&getopt_reent, 0, sizeof(getopt_data));
-  
+
 	/*
 	 * Test for the special case where the utility is called as
 	 * "unlink", for which the functionality provided is greatly

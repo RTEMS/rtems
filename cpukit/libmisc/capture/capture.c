@@ -40,7 +40,7 @@
  * watch filters.
  *
  * This feature has been disabled as it becomes confusing when
- * setting up filters and some event leak. 
+ * setting up filters and some event leak.
  */
 #if defined (RTEMS_CAPTURE_ENGINE_ALLOW_RELATED_EVENTS)
 #define RTEMS_CAPTURE_RECORD_EVENTS  (RTEMS_CAPTURE_CREATED_BY_EVENT | \
@@ -220,7 +220,7 @@ rtems_capture_by_in_to (uint32_t                 events,
   uint32_t valid_mask = RTEMS_CAPTURE_CONTROL_FROM_MASK (0);
   uint32_t valid_remainder = 0xffffffff;
   int      i;
-  
+
   for (i = 0; i < RTEMS_CAPTURE_TRIGGER_TASKS; i++)
   {
     /*
@@ -245,11 +245,11 @@ rtems_capture_by_in_to (uint32_t                 events,
                                        by->name, by->id))
         return 1;
     }
-    
+
     valid_mask >>= 1;
     valid_remainder >>= 1;
   }
-  
+
   return 0;
 }
 
@@ -400,7 +400,7 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
   rtems_capture_task_t*    task;
   rtems_capture_control_t* control;
   rtems_name               name;
-  
+
   task = _Workspace_Allocate (sizeof (rtems_capture_task_t));
 
   if (task == NULL)
@@ -414,9 +414,9 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
    */
 
   rtems_object_get_classic_name( new_task->Object.id, &name );
-  
+
   rtems_capture_dup_name (&task->name, name);
-  
+
   task->id               = new_task->Object.id;
   task->flags            = 0;
   task->in               = 0;
@@ -590,14 +590,14 @@ rtems_capture_trigger (rtems_capture_task_t* ft,
     uint32_t                 from_events = 0;
     uint32_t                 to_events = 0;
     uint32_t                 from_to_events = 0;
- 
+
     if (ft)
     {
       fc = ft->control;
       if (fc)
         from_events = fc->from_triggers & events;
     }
-    
+
     if (tt)
     {
       tc = tt->control;
@@ -636,7 +636,7 @@ rtems_capture_trigger (rtems_capture_task_t* ft,
 
     return 0;
   }
-  
+
   return 1;
 }
 
@@ -711,7 +711,7 @@ rtems_capture_start_task (rtems_tcb* current_task,
 
   if (st == NULL)
     st = rtems_capture_create_capture_task (started_task);
-  
+
   if (rtems_capture_trigger (ct, st, RTEMS_CAPTURE_START))
   {
     rtems_capture_record (ct, RTEMS_CAPTURE_STARTED_BY_EVENT);
@@ -802,7 +802,7 @@ rtems_capture_delete_task (rtems_tcb* current_task,
     rtems_capture_record (ct, RTEMS_CAPTURE_DELETED_BY_EVENT);
     rtems_capture_record (dt, RTEMS_CAPTURE_DELETED_EVENT);
   }
-  
+
   rtems_capture_task_stack_usage (dt);
 
   /*
@@ -1223,7 +1223,7 @@ rtems_capture_flush (bool prime)
   capture_count = 0;
   capture_in    = capture_records;
   capture_out   = 0;
-  
+
   rtems_interrupt_enable (level);
 
   task = capture_tasks;
@@ -1540,7 +1540,7 @@ rtems_capture_set_trigger (rtems_name                   from_name,
    * FROM ANY means trigger when the event happens TO this
    * task. TO ANY means FROM this task.
    */
-  
+
   if (mode == rtems_capture_to_any)
   {
     control = rtems_capture_create_control (from_name, from_id);
@@ -1559,9 +1559,9 @@ rtems_capture_set_trigger (rtems_name                   from_name,
     {
       bool done = false;
       int  i;
-      
+
       control->by_triggers |= flags;
-      
+
       for (i = 0; i < RTEMS_CAPTURE_TRIGGER_TASKS; i++)
       {
         if (rtems_capture_control_by_valid (control, i) &&
@@ -1616,7 +1616,7 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
   uint32_t                 flags;
 
   flags = rtems_capture_map_trigger (trigger);
-  
+
   if (mode == rtems_capture_to_any)
   {
     control = rtems_capture_find_control (from_name, from_id);
@@ -1643,9 +1643,9 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
     {
       bool done = false;
       int  i;
-      
+
       control->by_triggers &= ~flags;
-      
+
       for (i = 0; i < RTEMS_CAPTURE_TRIGGER_TASKS; i++)
       {
         if (rtems_capture_control_by_valid (control, i) &&
@@ -1808,7 +1808,7 @@ rtems_capture_release (uint32_t count)
 {
   rtems_capture_record_t* rec;
   uint32_t                counted;
-  
+
   rtems_interrupt_level level;
 
   rtems_interrupt_disable (level);
@@ -1819,7 +1819,7 @@ rtems_capture_release (uint32_t count)
   rtems_interrupt_enable (level);
 
   counted = count;
-  
+
   rec = &capture_records[capture_out];
 
   while (counted--)
@@ -1828,7 +1828,7 @@ rtems_capture_release (uint32_t count)
     rtems_capture_destroy_capture_task (rec->task);
     rec++;
   }
-  
+
   rtems_interrupt_disable (level);
 
   capture_count -= count;

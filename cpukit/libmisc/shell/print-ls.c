@@ -343,7 +343,7 @@ printstream(rtems_shell_ls_globals* globals, DISPLAY *dp)
 	if (f_size) {
 		if (f_humanize)
 			extwidth += dp->s_size + 1;
-		else 
+		else
 			extwidth += dp->s_block + 1;
 	}
 	if (f_type)

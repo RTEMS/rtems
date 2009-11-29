@@ -403,7 +403,7 @@ try_again:
 
 	if (state_fd > 0) {
 		rewind(state_f);
-		len = fprintf(state_f, 
+		len = fprintf(state_f,
 			      "clock: %04x tv: %016lu %08lu adj: %08d\n",
 			      clock_seq, last.tv_sec, last.tv_usec, adjustment);
 		fflush(state_f);

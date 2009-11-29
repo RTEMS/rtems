@@ -23,7 +23,7 @@ const char *rtems_bsp_cmdline_get_param_raw(
 
   if ( !name )
     return NULL;
-   
+
   if ( !bsp_boot_cmdline )
     return NULL;
 

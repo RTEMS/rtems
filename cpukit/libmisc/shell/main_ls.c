@@ -158,7 +158,7 @@ main_ls(rtems_shell_ls_globals* globals, int argc, char *argv[])
 
     struct getopt_data getopt_reent;
     memset(&getopt_reent, 0, sizeof(getopt_data));
-    
+
 #if RTEMS_REMOVED
 	setprogname(argv[0]);
 #endif
@@ -452,7 +452,7 @@ traverse(rtems_shell_ls_globals* globals, int argc, char *argv[], int options)
         fts_close(ftsp);
 		return;
     }
-    
+
 	/*
 	 * If not recursing down this tree and don't need stat info, just get
 	 * the names.
@@ -701,7 +701,7 @@ mastercmp_no_listdir(const FTSENT **a, const FTSENT **b)
 {
 	int a_info, b_info;
     int l_f_listdir = 0;
-    
+
 	a_info = (*a)->fts_info;
 	if (a_info == FTS_ERR)
 		return (0);

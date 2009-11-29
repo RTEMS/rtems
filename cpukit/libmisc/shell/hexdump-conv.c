@@ -132,7 +132,7 @@ retry:
 		if (!odmode) {
 			*pr->cchar = 'c';
 			(void)printf(pr->fmt, (int)wc);
-		} else {	
+		} else {
 			*pr->cchar = 'C';
 			assert(strcmp(pr->fmt, "%3C") == 0);
 			width = wcwidth(wc);

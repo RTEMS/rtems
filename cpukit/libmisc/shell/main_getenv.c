@@ -35,7 +35,7 @@ int rtems_shell_main_getenv(int argc, char *argv[])
   }
 
   printf ("%s\n", string);
-  
+
   return 0;
 }
 

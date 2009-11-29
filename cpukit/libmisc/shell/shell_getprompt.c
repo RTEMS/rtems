@@ -1,5 +1,5 @@
 /*
- *  Dynamically build the shell prompt 
+ *  Dynamically build the shell prompt
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -38,7 +38,7 @@ void rtems_shell_get_prompt(
 )
 {
   char curdir[256];
-  
+
   /* XXX: show_prompt user adjustable */
   getcwd(curdir,sizeof(curdir));
   snprintf(prompt, size - 1, "%s%s[%s] %c ",

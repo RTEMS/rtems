@@ -29,7 +29,7 @@ int rtems_shell_main_unsetenv(int argc, char *argv[])
     printf ("error: %s\n", strerror (errno));
     return 1;
   }
-  
+
   return 0;
 }
 

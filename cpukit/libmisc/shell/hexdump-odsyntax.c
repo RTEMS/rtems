@@ -76,7 +76,7 @@ oldsyntax(rtems_shell_hexdump_globals* globals, int argc, char ***argvp)
 	char **argv, *end;
 
   struct getopt_data getopt_reent;
-  memset(&getopt_reent, 0, sizeof(getopt_data)); 
+  memset(&getopt_reent, 0, sizeof(getopt_data));
 
 	/* Add initial (default) address format. -A may change it later. */
 #define	TYPE_OFFSET	7

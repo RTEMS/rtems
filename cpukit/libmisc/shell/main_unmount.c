@@ -34,7 +34,7 @@ int rtems_shell_main_unmount(
 {
   char* mount_point = NULL;
   int   arg;
-  
+
   for (arg = 1; arg < argc; arg++) {
     if (!mount_point)
       mount_point = argv[arg];
@@ -48,19 +48,19 @@ int rtems_shell_main_unmount(
     fprintf (stderr, "error: no mount point\n");
     return 1;
   }
-  
+
   /*
    * Unmount the disk.
    */
-  
+
   if (unmount (mount_point) < 0) {
     fprintf (stderr, "error: unmount failed: %s: %s\n",
              mount_point, strerror (errno));
     return 1;
   }
-  
+
   printf ("unmounted %s\n", mount_point);
-  
+
   return 0;
 }
 

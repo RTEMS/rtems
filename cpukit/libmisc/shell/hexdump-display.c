@@ -276,8 +276,8 @@ get(rtems_shell_hexdump_globals* globals)
 			 * XXX bcmp() is not quite right in the presence
 			 * of multibyte characters.
 			 */
-			if (vflag != ALL && 
-			    valid_save && 
+			if (vflag != ALL &&
+			    valid_save &&
 			    bcmp(curp, savp, nread) == 0) {
 				if (vflag != DUP)
 					(void)printf("*\n");

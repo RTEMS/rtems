@@ -49,12 +49,12 @@ rtems_shell_nfs_mounter (
   }
 
   nfsInit (0, 0);
-  
+
   uidhost = strdup (device);
   path = strchr (uidhost, ':');
   *path = '\0';
   path++;
-  
+
   ret = nfsMount(uidhost, path, (char*) mntpoint);
 
   free (uidhost);

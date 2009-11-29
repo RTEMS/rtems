@@ -128,8 +128,8 @@ rtems_shell_main_mv(int argc, char *argv[])
 }
 
 #define do_move(a1, a2)      do_move_mv(globals, a1, a2)
-#define fastcopy(a1, a2, a3) fastcopy_mv(globals, a1, a2, a3) 
-#define copy(a1, a2)         copy_mv(globals, a1, a2) 
+#define fastcopy(a1, a2, a3) fastcopy_mv(globals, a1, a2, a3)
+#define copy(a1, a2)         copy_mv(globals, a1, a2)
 #define usage()              usage_mv(globals)
 
 static int do_move_mv(rtems_shell_mv_globals* globals, char *from, char *to);
@@ -151,9 +151,9 @@ main_mv(rtems_shell_mv_globals* globals, int argc, char *argv[])
 
   struct getopt_data getopt_reent;
   memset(&getopt_reent, 0, sizeof(getopt_data));
-  
+
 /*	setprogname(argv[0]); */
-  
+
 	(void)setlocale(LC_ALL, "");
 
 	while ((ch = getopt_r(argc, argv, "ifv", &getopt_reent)) != -1)
@@ -331,7 +331,7 @@ fastcopy_mv(rtems_shell_mv_globals* globals, char *from, char *to, struct stat *
 	int nread, from_fd, to_fd;
 
   blen = 0;
-  
+
 	if ((from_fd = open(from, O_RDONLY, 0)) < 0) {
 		warn("%s", from);
 		return (1);
@@ -363,7 +363,7 @@ err:		if (unlink(to))
 		(void)close(to_fd);
 		return (1);
 	}
-  
+
   (void)free(bp);
 	(void)close(from_fd);
 #ifdef xBSD4_4

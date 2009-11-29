@@ -19,15 +19,15 @@
 
 int rtems_shell_make_args(
   char  *commandLine,
-  int   *argc_p, 
-  char **argv_p, 
+  int   *argc_p,
+  char **argv_p,
   int    max_args
 )
 {
   int   argc;
   char *command;
   int   status = 0;
-  
+
   argc = 0;
   command = commandLine;
 
