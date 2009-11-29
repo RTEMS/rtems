@@ -45,7 +45,7 @@ extern "C" {
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device driver is successfully initialized.
  */
 rtems_device_driver frame_buffer_initialize(
@@ -53,7 +53,7 @@ rtems_device_driver frame_buffer_initialize(
   rtems_device_minor_number  minor,
   void                      *arg
 );
- 
+
 /**
  *  @brief Frame Buffer Open Entry Point
  *
@@ -64,7 +64,7 @@ rtems_device_driver frame_buffer_initialize(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device driver is successfully opened.
  */
 rtems_device_driver frame_buffer_open(
@@ -83,7 +83,7 @@ rtems_device_driver frame_buffer_open(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device is successfully closed.
  */
 rtems_device_driver frame_buffer_close(
@@ -102,7 +102,7 @@ rtems_device_driver frame_buffer_close(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device is successfully read from.
  */
 rtems_device_driver frame_buffer_read(
@@ -121,7 +121,7 @@ rtems_device_driver frame_buffer_read(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device is successfully written.
  */
 rtems_device_driver frame_buffer_write(
@@ -140,7 +140,7 @@ rtems_device_driver frame_buffer_write(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device driver IO control operation is
  *          successfully performed.
  */

@@ -9,7 +9,7 @@
 /**
  * NV Disk Static RAM Device Driver.
  *
- * This driver maps an NV disk to static RAM. You can use this 
+ * This driver maps an NV disk to static RAM. You can use this
  */
 
 #if !defined (_RTEMS_NVDISK_SRAM_H_)

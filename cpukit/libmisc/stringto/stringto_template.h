@@ -98,7 +98,7 @@ rtems_status_code STRING_TO_NAME (
 
   /* If the user wants the end pointer back, then return it. */
   if ( endptr )
-    *endptr = end; 
+    *endptr = end;
 
   /* nothing was converted */
   if ( end == s )

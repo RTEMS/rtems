@@ -46,8 +46,8 @@ extern "C" {
 struct fb_bitfield {
 	uint32_t offset;		/* beginning of bitfield	*/
 	uint32_t length;		/* length of bitfield		*/
-	uint32_t msb_right;		/* != 0 : Most significant bit is */ 
-					/* right */ 
+	uint32_t msb_right;		/* != 0 : Most significant bit is */
+					/* right */
 };
 
 struct fb_var_screeninfo {

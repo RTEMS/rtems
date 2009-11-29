@@ -3,7 +3,7 @@
  *
  * The RTEMS monitor task.
  */
- 
+
 /*
  *  $Id$
  */

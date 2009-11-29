@@ -245,7 +245,7 @@ rtems_status_code rtems_object_set_name(
 /**
  *  @brief Get Lowest Valid Class Value
  *
- *  This method returns the lowest valid value Class for the 
+ *  This method returns the lowest valid value Class for the
  *  specified @a api.  Each API supports a different number
  *  of object classes.
  *
@@ -261,7 +261,7 @@ int rtems_object_api_minimum_class(
 /**
  *  @brief Get Highest Valid Class Value
  *
- *  This method returns the highest valid value Class for the 
+ *  This method returns the highest valid value Class for the
  *  specified @a api.  Each API supports a different number
  *  of object classes.
  *
@@ -278,7 +278,7 @@ int rtems_object_api_maximum_class(
 /**
  *  @brief Get Highest Valid Class Value
  *
- *  This method returns the lowest valid value Class for the 
+ *  This method returns the lowest valid value Class for the
  *  specified @a api.  Each API supports a different number
  *  of object classes.
  *
@@ -321,7 +321,7 @@ const char *rtems_object_get_api_name(
  *          the string "BAD CLASS"
  */
 const char *rtems_object_get_api_class_name(
-  int the_api, 
+  int the_api,
   int the_class
 );
 

@@ -44,13 +44,13 @@ bool rtems_stack_checker_is_blown( void );
  */
 void rtems_stack_checker_report_usage( void );
 
-/** @brief Print Stack Usage Report 
+/** @brief Print Stack Usage Report
  *
  *  This method prints a stack usage report for the curently executing
  *  task.
  *
- *  @param[in] context is the context to pass to the print handler 
- *  @param[in] print is the print handler 
+ *  @param[in] context is the context to pass to the print handler
+ *  @param[in] print is the print handler
  *
  *  @note It uses the caller's routine to print the report.
  */

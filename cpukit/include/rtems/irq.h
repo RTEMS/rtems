@@ -34,7 +34,7 @@ extern "C" {
 typedef unsigned char  rtems_irq_prio;
 struct  __rtems_irq_connect_data__;     /* forward declaratiuon */
 
-typedef unsigned int rtems_irq_number; 
+typedef unsigned int rtems_irq_number;
 typedef void *rtems_irq_hdl_param;
 typedef void (*rtems_irq_hdl)           (rtems_irq_hdl_param);
 typedef void (*rtems_irq_enable)        (const struct __rtems_irq_connect_data__*);

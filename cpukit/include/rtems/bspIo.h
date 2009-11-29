@@ -62,7 +62,7 @@ extern void putk(const char *s);
  *  as they see fit.
  */
 extern int printk_plugin(void *context, const char *fmt, ...);
- 
+
 /*
  *  Type definition for function which can be plugged in to
  *  certain reporting routines to redirect the output

@@ -80,7 +80,7 @@ typedef Watchdog_Nanoseconds_since_last_tick_routine
   rtems_nanoseconds_extension_routine;
 
 /**
- *  @brief Obtain Current Time of Day 
+ *  @brief Obtain Current Time of Day
  *
  *  This routine implements the rtems_clock_get directive.  It returns
  *  one of the following:
@@ -228,11 +228,11 @@ rtems_status_code rtems_clock_set_nanoseconds_extension(
  *
  *  This directive returns the system uptime.
  *
- *  @param[in] uptime is a pointer to the time structure 
+ *  @param[in] uptime is a pointer to the time structure
  *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the uptime will be 
+ *          source of the error.  If successful, the uptime will be
  *          filled in.
  */
 rtems_status_code rtems_clock_get_uptime(

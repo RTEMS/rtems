@@ -3,7 +3,7 @@
  *
  *  This file describes the Timer Driver for all boards.
  */
- 
+
 /*
  *
  *  COPYRIGHT (c) 1989-1999.

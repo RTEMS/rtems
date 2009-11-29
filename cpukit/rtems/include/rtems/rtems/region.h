@@ -47,7 +47,7 @@
 /**@{*/
 
 /**
- *  This constant is defined to extern most of the time when using 
+ *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
  *  in a single per manager file.
@@ -153,7 +153,7 @@ rtems_status_code rtems_region_get_information(
  *  @brief rtems_region_get_free_information
  *
  *  This routine implements the rtems_region_get_free_information directive.
- *  This directive returns information about the free blocks in the 
+ *  This directive returns information about the free blocks in the
  *  heap associated with this region.
  */
 rtems_status_code rtems_region_get_free_information(

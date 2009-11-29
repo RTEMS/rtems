@@ -52,13 +52,13 @@ typedef uint32_t   rtems_attribute;
  */
 #define RTEMS_GLOBAL              0x00000002
 
-/** 
+/**
  *  This is the attribute constant which reflects that blocking
  *  tasks will be managed using FIFO discipline.
  */
 #define RTEMS_FIFO                0x00000000
 
-/** 
+/**
  *  This is the attribute constant which reflects that blocking
  *  tasks will be managed using task priority discipline.
  */

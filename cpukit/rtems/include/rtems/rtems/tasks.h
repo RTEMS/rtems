@@ -45,7 +45,7 @@
 #include <rtems/rtems/status.h>
 
 /**
- *  This constant is defined to extern most of the time when using 
+ *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
  *  in a single per manager file.
@@ -205,7 +205,7 @@ typedef struct {
  *  the RTEMS API to function correctly.
  *
  *  @note Notepads must be the last entry in the structure and memory
- *        will be taken away from this structure when allocated if 
+ *        will be taken away from this structure when allocated if
  *        notespads are disabled by the application configuration.
  */
 typedef struct {
@@ -232,7 +232,7 @@ RTEMS_TASKS_EXTERN Objects_Information _RTEMS_tasks_Information;
 /**
  *  When the user configures a set of Classic API initialization tasks,
  *  This variable will point to the method used to initialize them.
- *  
+ *
  *  @note It is instantiated and initialized by confdefs.h based upon
  *        application requirements.
  */
@@ -414,7 +414,7 @@ rtems_status_code rtems_task_wake_after(
 
 /**
  *  @brief rtems_task_is_suspended
- 
+
  *  This directive returns a status indicating whether or not
  *  the specified task is suspended.
  */

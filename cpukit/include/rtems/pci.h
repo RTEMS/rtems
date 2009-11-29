@@ -1174,10 +1174,10 @@ pci_read_config_dword(
 
 static inline int
 pci_write_config_byte(
-  unsigned char bus, 
-  unsigned char slot, 
+  unsigned char bus,
+  unsigned char slot,
   unsigned char function,
-  unsigned char where, 
+  unsigned char where,
   uint8_t       val)
 {
   return BSP_pci_configuration.pci_functions->write_config_byte(

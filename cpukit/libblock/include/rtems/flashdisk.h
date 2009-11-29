@@ -50,7 +50,7 @@
 #define RTEMS_FDISK_IOCTL_PRINT_STATUS _IO('B', 133)
 
 /**
- * Flash Disk Monitoring Data allows a user to obtain 
+ * Flash Disk Monitoring Data allows a user to obtain
  * the current status of the disk.
  */
 typedef struct rtems_fdisk_monitor_data
@@ -120,7 +120,7 @@ typedef struct rtems_fdisk_driver_handlers
    * access and the segment descriptor must reference the segment
    * being requested. For example the segment number must resided in
    * the range [base, base + count).
-   * 
+   *
    * @param sd The segment descriptor.
    * @param device The device to read data from.
    * @param segment The segment within the device to read.
@@ -145,7 +145,7 @@ typedef struct rtems_fdisk_driver_handlers
    * segment to access and the segment descriptor must reference
    * the segment being requested. For example the segment number must
    * resided in the range [base, base + count).
-   * 
+   *
    * @param sd The segment descriptor.
    * @param device The device to write data from.
    * @param segment The segment within the device to write to.
@@ -170,7 +170,7 @@ typedef struct rtems_fdisk_driver_handlers
    * access and the segment descriptor must reference the segment
    * being requested. For example the segment number must resided in
    * the range [base, base + count).
-   * 
+   *
    * @param sd The segment descriptor.
    * @param device The device to read data from.
    * @param segment The segment within the device to read.
@@ -193,7 +193,7 @@ typedef struct rtems_fdisk_driver_handlers
    * segment to access and the segment descriptor must reference
    * the device segment being requested. For example the segment number
    * must resided in the range [base, base + count).
-   * 
+   *
    * @param sd The segment descriptor.
    * @param device The device to verify data in.
    * @param segment The segment within the device to verify.
@@ -216,7 +216,7 @@ typedef struct rtems_fdisk_driver_handlers
    * more than segment in a device if the device has repeating
    * segments. The segment number is the device segment to access and
    * the segment descriptor must reference the segment being requested.
-   * 
+   *
    * @param sd The segment descriptor.
    * @param device The device to erase the segment of.
    * @param segment The segment within the device to erase.
@@ -233,7 +233,7 @@ typedef struct rtems_fdisk_driver_handlers
    * more than segment in a device if the device has repeating
    * segments. The segment number is the segment to access and
    * the segment descriptor must reference the segment being requested.
-   * 
+   *
    * @param sd The segment descriptor.
    * @param device The device to erase.
    * @retval 0 No error.
@@ -283,7 +283,7 @@ typedef struct rtems_fdisk_device_desc
  * The available compacting segment count is the level when compaction occurs
  * when writing. If you set this to 0 then compaction will fail because
  * there will be no segments to compact into.
- * 
+ *
  * The info level can be 0 for off with error, and abort messages allowed.
  * Level 1 is warning messages, level 1 is informational messages, and level 3
  * is debugging type prints. The info level can be turned off with a compile
@@ -300,7 +300,7 @@ typedef struct rtems_flashdisk_config
                                                       driver. */
   uint32_t                       unavail_blocks; /**< Number of blocks not
                                                       available to the file sys. */
-  uint32_t                       compact_segs;   /**< Max number of segs to 
+  uint32_t                       compact_segs;   /**< Max number of segs to
                                                       compact in one pass. */
   uint32_t                       avail_compact_segs; /**< The number of segments
                                                           when compaction occurs

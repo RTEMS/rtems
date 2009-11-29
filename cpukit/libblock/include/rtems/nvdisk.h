@@ -58,7 +58,7 @@
 #define RTEMS_NVDISK_IOCTL_PRINT_STATUS _IO('B', 131)
 
 /**
- * NV Disk Monitoring Data allows a user to obtain 
+ * NV Disk Monitoring Data allows a user to obtain
  * the current status of the disk.
  */
 typedef struct rtems_nvdisk_monitor_data
@@ -89,7 +89,7 @@ typedef struct rtems_nvdisk_driver_handlers
   /**
    * Read data from the device into the buffer. Return an errno
    * error number if the data cannot be read.
-   * 
+   *
    * @param device The device to read data from.
    * @param flags Device specific flags for the driver.
    * @param base The base address of the device.
@@ -99,13 +99,13 @@ typedef struct rtems_nvdisk_driver_handlers
    * @retval 0 No error.
    * @retval EIO The read did not complete.
    */
-  int (*read) (uint32_t device, uint32_t flags, uint32_t base, 
+  int (*read) (uint32_t device, uint32_t flags, uint32_t base,
                uint32_t offset, void* buffer, uint32_t size);
 
   /**
    * Write data from the buffer to the device. Return an errno
    * error number if the device cannot be written to.
-   * 
+   *
    * @param device The device to write data to.
    * @param flags Device specific flags for the driver.
    * @param base The base address of the device.
@@ -115,13 +115,13 @@ typedef struct rtems_nvdisk_driver_handlers
    * @retval 0 No error.
    * @retval EIO The write did not complete or verify.
    */
-  int (*write) (uint32_t device, uint32_t flags, uint32_t base, 
+  int (*write) (uint32_t device, uint32_t flags, uint32_t base,
                 uint32_t offset, const void* buffer, uint32_t size);
 
   /**
    * Verify data in the buffer to the data in the device. Return an
    * errno error number if the device cannot be read or the data verified.
-   * 
+   *
    * @param device The device to verify the data with.
    * @param flags Device specific flags for the driver.
    * @param base The base address of the device.

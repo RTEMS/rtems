@@ -55,7 +55,7 @@ typedef uint32_t   Modes_Control;
  *  current execution mode.
  */
 #define RTEMS_CURRENT_MODE      0
- 
+
 /** This mode constant corresponds to the timeslice enable/disable bit. */
 #define RTEMS_TIMESLICE_MASK  0x00000200
 

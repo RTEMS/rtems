@@ -21,7 +21,7 @@ extern "C" {
  *
  *  This method prints @a length bytes beginning at @a buffer in
  *  a nice format similar to what one would expect from a debugger
- *  or ROM monitor.  
+ *  or ROM monitor.
  *
  *  @param[in] buffer is the address of the buffer
  *  @param[in] length is the length of the buffer

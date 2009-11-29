@@ -62,7 +62,7 @@ typedef rtems_isr ( *rtems_isr_entry )(
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 /**
  *  @brief Implementation of the rtems_interrupt_catch directive.
- *  
+ *
  *  This directive installs @a new_isr_handler as the RTEMS interrupt service
  *  routine for the interrupt vector with number @a vector.  The previous RTEMS
  *  interrupt service routine is returned in @a old_isr_handler.
@@ -77,7 +77,7 @@ rtems_status_code rtems_interrupt_catch(
 /**
  *  @brief Disables all maskable interrupts and returns the previous level in
  *  @a _isr_cookie.
- *  
+ *
  *  @note The interrupt level shall be of type @ref rtems_interrupt_level.
  */
 #define rtems_interrupt_disable( _isr_cookie ) \
@@ -86,7 +86,7 @@ rtems_status_code rtems_interrupt_catch(
 /**
  *  @brief Enables maskable interrupts to the level indicated by @a
  *  _isr_cookie.
- *  
+ *
  *  @note The interrupt level shall be of type @ref rtems_interrupt_level.
  */
 #define rtems_interrupt_enable( _isr_cookie ) \
@@ -95,7 +95,7 @@ rtems_status_code rtems_interrupt_catch(
 /**
  *  @brief Temporarily enables maskable interrupts to the level in @a
  *  _isr_cookie before redisabling them.
- *  
+ *
  *  @note The interrupt level shall be of type @ref rtems_interrupt_level.
  */
 #define rtems_interrupt_flash( _isr_cookie ) \
@@ -104,7 +104,7 @@ rtems_status_code rtems_interrupt_catch(
 /**
  *  @brief Returns true if the processor is currently servicing an interrupt
  *  and false otherwise.
- *  
+ *
  *  A return value of true indicates that the caller is an interrupt service
  *  routine and @b not a thread.  The directives available to an interrupt
  *  service routine are restricted.
@@ -114,14 +114,14 @@ rtems_status_code rtems_interrupt_catch(
 
 /**
  *  @brief This routine generates an interrupt.
- *  
+ *
  *  @note No implementation.
  */
 #define rtems_interrupt_cause( _interrupt_to_cause )
 
 /**
  *  @brief This routine clears the specified interrupt.
- *  
+ *
  *  @note No implementation.
  */
 #define rtems_interrupt_clear( _interrupt_to_clear )

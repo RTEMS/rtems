@@ -47,7 +47,7 @@ extern "C" {
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device driver is successfully initialized.
  */
 rtems_device_driver console_initialize(
@@ -55,7 +55,7 @@ rtems_device_driver console_initialize(
   rtems_device_minor_number  minor,
   void                      *arg
 );
- 
+
 /**
  *  @brief Console Open Entry Point
  *
@@ -66,7 +66,7 @@ rtems_device_driver console_initialize(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device driver is successfully opened.
  */
 rtems_device_driver console_open(
@@ -85,7 +85,7 @@ rtems_device_driver console_open(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device is successfully closed.
  */
 rtems_device_driver console_close(
@@ -104,7 +104,7 @@ rtems_device_driver console_close(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device is successfully read from.
  */
 rtems_device_driver console_read(
@@ -123,7 +123,7 @@ rtems_device_driver console_read(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device is successfully written.
  */
 rtems_device_driver console_write(
@@ -142,7 +142,7 @@ rtems_device_driver console_write(
  *  @param[in] minor is the device driver minor number
  *  @param[in] arg is the parameters to this call
  *
- *  @return This method returns RTEMS_SUCCESSFUL when 
+ *  @return This method returns RTEMS_SUCCESSFUL when
  *          the device driver IO control operation is
  *          successfully performed.
  */

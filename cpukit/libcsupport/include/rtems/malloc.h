@@ -51,7 +51,7 @@ typedef struct {
   void (*at_free)(void *);
 } rtems_malloc_statistics_functions_t;
 
-extern rtems_malloc_statistics_functions_t 
+extern rtems_malloc_statistics_functions_t
   rtems_malloc_statistics_helpers_table;
 extern rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers;
 
@@ -87,7 +87,7 @@ typedef void (*rtems_malloc_dirtier_t)(void *, size_t);
 extern rtems_malloc_dirtier_t *rtems_malloc_dirty_helper;
 
 /** @brief Dirty memory function
- *  
+ *
  *  This method fills the specified area with a non-zero pattern
  *  to aid in debugging programs which do not initialize their
  *  memory allocated from the heap.
@@ -115,12 +115,12 @@ int malloc_get_statistics(
  */
 void malloc_report_statistics(void);
 
-/** @brief Print Malloc Statistic Usage Report 
+/** @brief Print Malloc Statistic Usage Report
  *
  *  This method prints a malloc statistics report.
  *
- *  @param[in] context is the context to pass to the print handler 
- *  @param[in] print is the print handler 
+ *  @param[in] context is the context to pass to the print handler
+ *  @param[in] print is the print handler
  *
  *  @note It uses the CALLER's routine to print the report.
  */

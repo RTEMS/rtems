@@ -5,7 +5,7 @@
  *
  * Block device management.
  */
- 
+
 /*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
@@ -30,7 +30,7 @@ extern "C" {
  * @ingroup rtems_libblock
  *
  * Interface between device drivers and the
- * @ref rtems_bdbuf "block device buffer module". 
+ * @ref rtems_bdbuf "block device buffer module".
  *
  * The heart of the block device driver is the @ref RTEMS_BLKIO_REQUEST IO
  * control. This call puts IO @ref rtems_blkdev_request "requests" to the block
@@ -49,7 +49,7 @@ typedef enum rtems_blkdev_request_op {
   RTEMS_BLKDEV_CAPABILITIES    /**< Return the driver capabilities set. */
 } rtems_blkdev_request_op;
 
-/** 
+/**
  * Only consecutive multi-sector buffer requests are supported.
  *
  * This option means the cache will only supply multiple buffers that are
@@ -125,7 +125,7 @@ typedef struct rtems_blkdev_request {
   /**
    * Last IO operation completion status.
    */
-  rtems_status_code status; 
+  rtems_status_code status;
 
   /**
    * If @c status is not equal to @c RTEMS_SUCCESSFUL, this field contains the

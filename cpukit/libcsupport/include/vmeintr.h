@@ -5,7 +5,7 @@
  *  which should be provided by all BSPs for VMEbus Single Board
  *  Computers but currently only a few do so.
  */
- 
+
 /*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

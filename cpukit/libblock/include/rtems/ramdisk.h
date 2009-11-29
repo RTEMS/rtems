@@ -170,21 +170,21 @@ int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
  *   rtems_device_major_number major = 0;
  *   ramdisk *rd = NULL;
  *   dev_t dev = 0;
- * 
+ *
  *   sc = rtems_io_register_driver(0, &ramdisk_ops, &major);
  *   if (sc != RTEMS_SUCCESSFUL) {
  *     return RTEMS_UNSATISFIED;
  *   }
- * 
+ *
  *   rd = ramdisk_allocate(NULL, block_size, block_count, false);
  *   if (rd == NULL) {
  *     rtems_io_unregister_driver(major);
- * 
+ *
  *     return RTEMS_UNSATISFIED;
  *   }
- * 
+ *
  *   dev = rtems_filesystem_make_dev_t(major, 0);
- * 
+ *
  *   sc = rtems_disk_create_phys(
  *     dev,
  *     block_size,
@@ -196,10 +196,10 @@ int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
  *   if (sc != RTEMS_SUCCESSFUL) {
  *     ramdisk_free(rd);
  *     rtems_io_unregister_driver(major);
- * 
+ *
  *     return RTEMS_UNSATISFIED;
  *   }
- * 
+ *
  *   return RTEMS_SUCCESSFUL;
  * }
  * @endcode

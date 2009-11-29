@@ -36,7 +36,7 @@
 /**@{*/
 
 /**
- *  This constant is defined to extern most of the time when using 
+ *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
  *  in a single per manager file.
@@ -115,7 +115,7 @@ rtems_status_code rtems_barrier_create(
  *  extent of the search for the ID of the barrier named name.
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
- * 
+ *
  *  @param[in] name is the name of this barrier instance.
  *  @param[out] id will contain the id of this barrier.
  *

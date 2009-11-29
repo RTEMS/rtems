@@ -29,7 +29,7 @@
 #define _RTEMS_RTEMS_RATEMON_H
 
 /**
- *  This constant is defined to extern most of the time when using 
+ *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
  *  in a single per manager file.
@@ -107,32 +107,32 @@ extern "C" {
  */
 typedef enum {
   /**
-   * This value indicates the period is off the watchdog chain, 
+   * This value indicates the period is off the watchdog chain,
    * and has never been initialized.
    */
   RATE_MONOTONIC_INACTIVE,
 
   /**
-   * This value indicates the period is on the watchdog chain, and 
+   * This value indicates the period is on the watchdog chain, and
    * the owner is blocked waiting on it.
    */
   RATE_MONOTONIC_OWNER_IS_BLOCKING,
 
   /**
-   * This value indicates the period is on the watchdog chain, and 
+   * This value indicates the period is on the watchdog chain, and
    * running.  The owner should be executed or blocked waiting on
    * another object.
    */
   RATE_MONOTONIC_ACTIVE,
 
   /**
-   * This value indicates the period is on the watchdog chain, and 
+   * This value indicates the period is on the watchdog chain, and
    * has expired.  The owner should be blocked waiting for the next period.
    */
   RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING,
 
   /**
-   * This value indicates the period is off the watchdog chain, and 
+   * This value indicates the period is off the watchdog chain, and
    * has expired.  The owner is still executing and has taken too much
    * all time to complete this iteration of the period.
    */
@@ -150,7 +150,7 @@ typedef enum {
  *  statistics kept on each period instance.
  *
  *  @note The public structure uses struct timespec while the
- *        internal one uses Timestamp_Control. 
+ *        internal one uses Timestamp_Control.
  */
 typedef struct {
   /** This field contains the number of periods executed. */
@@ -267,7 +267,7 @@ typedef struct {
    */
   Rate_monotonic_Statistics               Statistics;
 }   Rate_monotonic_Control;
- 
+
 /**
  *  @brief Rate Monotonic Period Class Management Structure
  *

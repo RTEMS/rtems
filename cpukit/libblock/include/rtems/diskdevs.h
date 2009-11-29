@@ -5,7 +5,7 @@
  *
  * @brief Block device disk management API.
  */
- 
+
 /*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
@@ -37,7 +37,7 @@ typedef struct rtems_disk_device rtems_disk_device;
  * non-negative integers starting at zero.  There are also logical disks which
  * contain a subset of consecutive disk blocks.  The logical disks are used to
  * represent the partitions of a disk.  The disk devices are accessed via the
- * @ref rtems_bdbuf "block device buffer module". 
+ * @ref rtems_bdbuf "block device buffer module".
  *
  * @{
  */

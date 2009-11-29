@@ -3,7 +3,7 @@
  *
  * Real-time clock driver interface.
  */
- 
+
 /*
  *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).

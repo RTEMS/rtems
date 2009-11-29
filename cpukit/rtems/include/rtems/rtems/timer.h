@@ -36,7 +36,7 @@
 #define _RTEMS_RTEMS_TIMER_H
 
 /**
- *  This constant is defined to extern most of the time when using 
+ *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
  *  in a single per manager file.

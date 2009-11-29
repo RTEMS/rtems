@@ -5,7 +5,7 @@
  *
  * Block device buffer management.
  */
- 
+
 /*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
@@ -76,7 +76,7 @@ extern "C" {
 
  * The buffers are held in various lists in the cache.  All buffers follow this
  * state machine:
- *                                  
+ *
  * @dot
  * digraph state {
  *   e [label="EMPTY",style="filled",fillcolor="aquamarine"];
@@ -88,10 +88,10 @@ extern "C" {
  *   s [label="SYNC",style="filled",fillcolor="red"];
  *   m [label="MODIFIED",style="filled",fillcolor="gold"];
  *   i [label="INITIAL"];
- *   
+ *
  *   legend_transfer [label="Transfer Wake-Up",fontcolor="red",shape="none"];
  *   legend_access [label="Access Wake-Up",fontcolor="royalblue",shape="none"];
- *   
+ *
  *   i -> e [label="Init"];
  *   e -> f [label="Buffer Recycle"];
  *   f -> a [label="Get"];
@@ -111,7 +111,7 @@ extern "C" {
  *   s -> t [label="Swapout"];
  * }
  * @enddot
- *         
+ *
  * Empty or cached buffers are added to the LRU list and removed from this
  * queue when a caller requests a buffer.  This is referred to as getting a
  * buffer in the code and the event get in the state diagram.  The buffer is
@@ -119,7 +119,7 @@ extern "C" {
  * If the block is to be read by the user and not in the cache it is transfered
  * from the disk into memory.  If no buffers are on the LRU list the modified
  * list is checked.  If buffers are on the modified the swap out task will be
- * woken.  The request blocks until a buffer is available for recycle.  
+ * woken.  The request blocks until a buffer is available for recycle.
  *
  * A block being accessed is given to the file system layer and not accessible
  * to another requester until released back to the cache.  The same goes to a
@@ -404,7 +404,7 @@ rtems_bdbuf_get (dev_t device, rtems_blkdev_bnum block, rtems_bdbuf_buffer** bd)
  * and will not be returned to another user until released. If the buffer is
  * already with a user when this call is made the call is blocked until the
  * buffer is returned. The highest priority waiter will obtain the buffer
- * first. 
+ * first.
  *
  * @param device Device number (constructed of major and minor device number)
  * @param block  Linear media block number

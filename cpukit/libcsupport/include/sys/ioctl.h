@@ -34,7 +34,7 @@
  *	@(#)ioctl.h	8.6 (Berkeley) 3/28/94
  * $FreeBSD: src/sys/sys/ioctl.h,v 1.13 2004/06/11 11:16:26 phk Exp $
  */
- 
+
 /*
  * $Id$
  */

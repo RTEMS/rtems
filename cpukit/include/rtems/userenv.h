@@ -26,7 +26,7 @@ extern "C" {
  */
 
 /*
- * According to IEEE Std 1003.1-2001, 
+ * According to IEEE Std 1003.1-2001,
  * limits.h is supposed to provide _POSIX_LOGIN_NAME_MAX
  * FIXME: We should not rely on this.
  */
@@ -42,7 +42,7 @@ extern "C" {
 #endif
 
 typedef struct {
- rtems_id                         task_id;	
+ rtems_id                         task_id;
  rtems_filesystem_location_info_t current_directory;
  rtems_filesystem_location_info_t root_directory;
  /* Default mode for all files. */
@@ -58,8 +58,8 @@ typedef struct {
  pid_t                            pgrp; /* process group id */
 } rtems_user_env_t;
 
-extern rtems_user_env_t * rtems_current_user_env; 
-extern rtems_user_env_t   rtems_global_user_env; 
+extern rtems_user_env_t * rtems_current_user_env;
+extern rtems_user_env_t   rtems_global_user_env;
 
 #define rtems_filesystem_current     (rtems_current_user_env->current_directory)
 #define rtems_filesystem_root        (rtems_current_user_env->root_directory)
@@ -79,7 +79,7 @@ extern rtems_user_env_t   rtems_global_user_env;
 
 rtems_status_code rtems_libio_set_private_env(void);
 rtems_status_code rtems_libio_share_private_env(rtems_id task_id) ;
-	
+
 #ifdef __cplusplus
 }
 #endif
