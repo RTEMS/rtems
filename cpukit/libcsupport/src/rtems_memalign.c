@@ -40,7 +40,7 @@ int rtems_memalign(
   /*
    *  Do not attempt to allocate memory if not in correct system state.
    */
-  if ( _System_state_Is_up(_System_state_Get()) && 
+  if ( _System_state_Is_up(_System_state_Get()) &&
        !malloc_is_system_state_OK() )
     return EINVAL;
 
@@ -85,7 +85,7 @@ int rtems_memalign(
       (*rtems_malloc_boundary_helpers->at_malloc)(return_this, size);
   #endif
 
-  *pointer = return_this; 
+  *pointer = return_this;
   return 0;
 }
 #endif

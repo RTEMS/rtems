@@ -5,7 +5,7 @@
  *
  * @brief Block device disk management implementation.
  */
- 
+
 /*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
@@ -190,7 +190,7 @@ create_disk(dev_t dev, const char *name, rtems_disk_device **dd_ptr)
 
   if (name != NULL) {
     alloc_name = strdup(name);
-    
+
     if (alloc_name == NULL) {
       free(dd);
 
@@ -266,7 +266,7 @@ rtems_status_code rtems_disk_create_phys(
   if ((*handler)(dd, RTEMS_BLKDEV_CAPABILITIES, &dd->capabilities) < 0) {
     dd->capabilities = 0;
   }
-  
+
   disk_unlock();
 
   return RTEMS_SUCCESSFUL;

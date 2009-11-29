@@ -20,7 +20,7 @@
 
 int malloc_get_statistics(
   rtems_malloc_statistics_t *stats
-) 
+)
 {
   if ( !stats )
     return -1;

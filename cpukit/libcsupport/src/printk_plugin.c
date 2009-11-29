@@ -16,7 +16,7 @@
 #include <stdarg.h>
 #include <rtems/bspIo.h>
 
-int printk_plugin( 
+int printk_plugin(
   void *ignored __attribute__((unused)),
   const char *format,
   ...
@@ -29,6 +29,6 @@ int printk_plugin(
   vprintk( format, arg_pointer );
 
   va_end(arg_pointer); /* clean up when done */
-  
+
   return 0;
 }

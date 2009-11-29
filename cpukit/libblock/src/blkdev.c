@@ -5,7 +5,7 @@
  *
  * Block device management.
  */
- 
+
 /*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
@@ -272,7 +272,7 @@ rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
     size_t            *arg_size = argp;
     int                rc = 0;
-    
+
     switch (req)
     {
         case RTEMS_BLKIO_GETMEDIABLKSIZE:

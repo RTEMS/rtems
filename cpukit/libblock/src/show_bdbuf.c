@@ -83,7 +83,7 @@ typedef struct {
   int error;
   bool modified;
   bool in_progress;
-  bool actual;  
+  bool actual;
   int use_count;
   const CORE_mutex_Control *sema;
 } show_bdbuf_bdbuf_info_t;
@@ -128,24 +128,24 @@ rtems_status_code rtems_bdbuf_show_follow_chain_node_to_head
    */
   if (rc == RTEMS_SUCCESSFUL) {
     DISABLE_PREEMPTION(preempt_key);
-  }    
+  }
   /*
    * follow node to its head
-   * XXX: this is highly dependent on the chain implementation 
+   * XXX: this is highly dependent on the chain implementation
    * in score/src/chain.c and friends
    */
   while (the_node->previous != NULL) {
     the_node = the_node->previous;
-  } 
+  }
   /*
    * reenable preemption, if disabled
    */
   if (preempt_disabled) {
     ENABLE_PREEMPTION(preempt_key);
-  }    
+  }
   /*
-   * XXX: this depends n the chain implementation in 
-   * score/include/rtems/score/chain.h: 
+   * XXX: this depends n the chain implementation in
+   * score/include/rtems/score/chain.h:
    * Chain_Control is overlayed by two Cohain_Nodes
    */
   *the_head = (Chain_Control *)the_node;
@@ -176,7 +176,7 @@ rtems_status_code rtems_bdbuf_show_determine_chain_of_bdbuf
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   Chain_Control *the_chain_control;
 
-  
+
   *chn_ident = bdbuf_chain_ident_none;
   if (rc == RTEMS_SUCCESSFUL) {
     rc = rtems_bdbuf_show_follow_chain_node_to_head(&(the_bdbuf->link),
@@ -218,7 +218,7 @@ rtems_status_code rtems_bdbuf_show_getargs
 \*=========================================================================*/
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  int arg_error = 0; 
+  int arg_error = 0;
   int i;
   char *tmp_ptr;
   int nm_argc = 0;
@@ -231,7 +231,7 @@ rtems_status_code rtems_bdbuf_show_getargs
   selector->show_all = true;
 
   /*
-   * scan arguments 
+   * scan arguments
    */
   for (i = 1;
        (i < argc) && (arg_error == 0);
@@ -320,7 +320,7 @@ rtems_status_code rtems_bdbuf_show_getargs
   if (arg_error) {
     printf("%s: unknown argument %s\n",argv[0],argv[arg_error]);
     sc = RTEMS_NOT_DEFINED;
-  }  
+  }
   return sc;
 }
 
@@ -414,7 +414,7 @@ rtems_status_code rtems_bdbuf_show_pool_header
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
 
   if (rc == RTEMS_SUCCESSFUL) {
@@ -452,11 +452,11 @@ rtems_status_code rtems_show_bdbuf_get_bdbuf_info
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
 
-  /* 
-   * determine the chain we are in 
+  /*
+   * determine the chain we are in
    */
   if (rc == RTEMS_SUCCESSFUL) {
     rc = rtems_bdbuf_show_determine_chain_of_bdbuf(the_bdbuf,curr_pool,
@@ -476,7 +476,7 @@ rtems_status_code rtems_show_bdbuf_get_bdbuf_info
     bdbuf_info->modified    = the_bdbuf->modified;
     bdbuf_info->in_progress = the_bdbuf->in_progress;
     bdbuf_info->actual      = the_bdbuf->actual;
-    bdbuf_info->use_count   = the_bdbuf->use_count;    
+    bdbuf_info->use_count   = the_bdbuf->use_count;
     bdbuf_info->sema        = &(the_bdbuf->transfer_sema);
     bdbuf_info->pool_id     = the_bdbuf->pool;
   }
@@ -503,10 +503,10 @@ rtems_status_code rtems_show_bdbuf_match_filter
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   bool unmatch = false;
-  
+
   if (rc == RTEMS_SUCCESSFUL) {
     if (filter->bdbuf_all) {
       unmatch = false;
@@ -540,7 +540,7 @@ rtems_status_code rtems_show_bdbuf_print_wait_chain
 | Return Value:                                                             |
 |    rtems_status_code                                                      |
 \*=========================================================================*/
-{  
+{
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   Chain_Control *the_chain_head;
   const Chain_Node    *the_chain_node;
@@ -566,7 +566,7 @@ rtems_status_code rtems_show_bdbuf_print_wait_chain
 
     thread_id   = the_thread->Object.id;
     thread_name = the_thread->Object.name;
-    thread_name_nonstring = (uint32_t)thread_name.name_u32; 
+    thread_name_nonstring = (uint32_t)thread_name.name_u32;
     printf("%20s %3d (0x%08" PRIx32 ") %c%c%c%c\n",
 	   ((thread_cnt == 1) ? "Threads waiting:" : ""),
 	   thread_cnt,thread_id,
@@ -577,7 +577,7 @@ rtems_status_code rtems_show_bdbuf_print_wait_chain
 
     the_chain_node = the_chain_node->next;
   }
-	 
+
   return rc;
 }
 
@@ -601,7 +601,7 @@ rtems_status_code rtems_show_bdbuf_print
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
 
   /*
@@ -658,9 +658,9 @@ rtems_status_code rtems_show_bdbuf_print
     }
     else {
       printf("%3" PRIu32 "%2" PRIu32,
-	     ((bdbuf_info->dev == -1) 
+	     ((bdbuf_info->dev == -1)
 	      ? 0 : rtems_filesystem_dev_major_t(bdbuf_info->dev)),
-	     ((bdbuf_info->dev == -1) 
+	     ((bdbuf_info->dev == -1)
 	      ? 0 : rtems_filesystem_dev_minor_t(bdbuf_info->dev)));
     }
   }
@@ -721,9 +721,9 @@ rtems_status_code rtems_show_bdbuf_print
     }
     else {
       printf("%20s:%-10s ",
-	     ((bdbuf_info->status == RTEMS_SUCCESSFUL) 
+	     ((bdbuf_info->status == RTEMS_SUCCESSFUL)
 	      ? "SUCCESSFUL" : rtems_status_text(bdbuf_info->status)),
-	     ((bdbuf_info->status == RTEMS_SUCCESSFUL) 
+	     ((bdbuf_info->status == RTEMS_SUCCESSFUL)
 	      ? "" : strerror(bdbuf_info->error)));
     }
   }
@@ -788,8 +788,8 @@ void rtems_bdbuf_show_fnc
    */
   for (pool_idx = 0;
        (rc == RTEMS_SUCCESSFUL) && (pool_idx < pool_cnt);
-       pool_idx++) {    
-    if ((filter.pool_id < 0) || 
+       pool_idx++) {
+    if ((filter.pool_id < 0) ||
 	(filter.pool_id == pool_idx)) {
       curr_pool = pool_base + pool_idx;
       /*
@@ -812,9 +812,9 @@ void rtems_bdbuf_show_fnc
 	 * for all bdbufs in this pool
 	 */
 	for (bdbuf_idx = 0;
-	     ((rc == RTEMS_SUCCESSFUL) && 
+	     ((rc == RTEMS_SUCCESSFUL) &&
 	      (bdbuf_idx < curr_pool->nblks));
-	     bdbuf_idx++) {	  
+	     bdbuf_idx++) {
 	  /*
 	   * get infos about bdbuf
 	   */
@@ -839,7 +839,7 @@ void rtems_bdbuf_show_fnc
 	    if (bdbuf_matches) {
 	      rc = rtems_show_bdbuf_print(&bdbuf_info,&selector,
 					  false);
-	      if ((rc == RTEMS_SUCCESSFUL) && 
+	      if ((rc == RTEMS_SUCCESSFUL) &&
 		  selector.show_sema) {
 		rc = rtems_show_bdbuf_print_wait_chain(&(curr_pool->bdbufs[bdbuf_idx]));
 	      }
@@ -848,7 +848,7 @@ void rtems_bdbuf_show_fnc
 	    else {
 	      un_matched_cnt++;
 	    }
-	  }	  
+	  }
 	}
 	/*
 	 * print match statistics and footer
@@ -873,7 +873,7 @@ static rtems_monitor_command_entry_t rtems_show_bdbuf_cmds[] = {
   }
 };
 
-#ifndef ARRAY_CNT 
+#ifndef ARRAY_CNT
 #define ARRAY_CNT(arr) (sizeof((arr))/sizeof((arr)[0]))
 #endif
 

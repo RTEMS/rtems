@@ -63,7 +63,7 @@ typedef struct rtems_nvdisk_device_ctl
    * The device this segment resides on.
    */
   uint32_t device;
-  
+
   /**
    * Total number of pages in the device.
    */
@@ -134,7 +134,7 @@ static uint16_t* rtems_nvdisk_crc16_factor;
  * @relval RTEMS_SUCCESSFUL The table was generated.
  * @retval RTEMS_NO_MEMORY The table could not be allocated from the heap.
  */
-rtems_status_code 
+rtems_status_code
 rtems_nvdisk_crc16_gen_factors (uint16_t pattern)
 {
   uint32_t b;
@@ -275,7 +275,7 @@ rtems_nvdisk_device_read (const rtems_nvdisk* nvd,
   rtems_nvdisk_printf (nvd, "  dev-read: %02d-%08x: s=%d",
                       device, offset, size);
 #endif
-  return ops->read (device, dd->flags, dd->base, offset, buffer, size); 
+  return ops->read (device, dd->flags, dd->base, offset, buffer, size);
 }
 
 /**
@@ -296,7 +296,7 @@ rtems_nvdisk_device_write (const rtems_nvdisk* nvd,
   rtems_nvdisk_printf (nvd, "  dev-write: %02d-%08x: s=%d",
                       device, offset, size);
 #endif
-  return ops->write (device, dd->flags, dd->base, offset, buffer, size); 
+  return ops->write (device, dd->flags, dd->base, offset, buffer, size);
 }
 
 #if NOT_USED
@@ -318,7 +318,7 @@ rtems_nvdisk_device_verify (const rtems_nvdisk* nvd,
   rtems_nvdisk_printf (nvd, "  seg-verify: %02d-%08x: s=%d",
                       device, offset, size);
 #endif
-  return ops->verify (device, dd->flags, dd->base, offset, buffer, size); 
+  return ops->verify (device, dd->flags, dd->base, offset, buffer, size);
 }
 #endif
 
@@ -427,7 +427,7 @@ static rtems_nvdisk_device_ctl*
 rtems_nvdisk_get_device (rtems_nvdisk* nvd, uint32_t block)
 {
   uint32_t device;
-  
+
   if (block >= nvd->block_count)
   {
     rtems_nvdisk_error ("read-block: bad block: %d", block);
@@ -456,7 +456,7 @@ rtems_nvdisk_get_page (rtems_nvdisk_device_ctl* dc,
 {
   return block - dc->block_base;
 }
-    
+
 /**
  * Read a block. The block is checked to see if the page referenced
  * is valid and the page has a valid crc.
@@ -475,14 +475,14 @@ rtems_nvdisk_read_block (rtems_nvdisk* nvd, uint32_t block, uint8_t* buffer)
   uint16_t                 crc;
   uint16_t                 cs;
   int                      ret;
-  
+
   dc = rtems_nvdisk_get_device (nvd, block);
 
   if (!dc)
     return EIO;
 
   page = rtems_nvdisk_get_page (dc, block);
-  
+
 #if RTEMS_NVDISK_TRACE
   rtems_nvdisk_info (nvd, " read-block:%d=>%02d-%03d, cs:%04x",
                      block, dc->device, page, crc);
@@ -501,16 +501,16 @@ rtems_nvdisk_read_block (rtems_nvdisk* nvd, uint32_t block, uint8_t* buffer)
     memset (buffer, 0, nvd->block_size);
     return 0;
   }
-  
+
   ret = rtems_nvdisk_read_page (nvd, dc->device, page + dc->pages_desc, buffer);
 
   if (ret)
     return ret;
 
   cs = rtems_nvdisk_page_checksum (buffer, nvd->block_size);
-  
+
   if (cs != crc)
-  {    
+  {
     rtems_nvdisk_error ("read-block: crc failure: %d: buffer:%04x page:%04x",
                         block, cs, crc);
     return EIO;
@@ -539,14 +539,14 @@ rtems_nvdisk_write_block (rtems_nvdisk*        nvd,
   uint32_t                 page;
   uint16_t                 cs;
   int                      ret;
-  
+
   dc = rtems_nvdisk_get_device (nvd, block);
 
   if (!dc)
     return EIO;
 
   page = rtems_nvdisk_get_page (dc, block);
-  
+
   cs = rtems_nvdisk_page_checksum (buffer, nvd->block_size);
 
 #if RTEMS_NVDISK_TRACE
@@ -597,7 +597,7 @@ rtems_nvdisk_read (rtems_nvdisk* nvd, rtems_blkdev_request* req)
 
   req->req_done (req->done_arg,
                  ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR, ret);
- 
+
   return ret;
 }
 
@@ -637,7 +637,7 @@ rtems_nvdisk_write (rtems_nvdisk* nvd, rtems_blkdev_request* req)
 
   req->req_done (req->done_arg,
                  ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR, ret);
- 
+
   return 0;
 }
 
@@ -692,13 +692,13 @@ rtems_nvdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
     errno = ENODEV;
     return -1;
   }
-        
+
   if (rtems_nvdisks[minor].device_count == 0)
   {
     errno = ENODEV;
     return -1;
   }
-        
+
   errno = 0;
 
   sc = rtems_semaphore_obtain (rtems_nvdisks[minor].lock, RTEMS_WAIT, 0);
@@ -715,11 +715,11 @@ rtems_nvdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
           case RTEMS_BLKDEV_REQ_READ:
             errno = rtems_nvdisk_read (&rtems_nvdisks[minor], r);
             break;
-            
+
           case RTEMS_BLKDEV_REQ_WRITE:
             errno = rtems_nvdisk_write (&rtems_nvdisks[minor], r);
             break;
-            
+
           default:
             errno = EINVAL;
             break;
@@ -729,11 +729,11 @@ rtems_nvdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
       case RTEMS_NVDISK_IOCTL_ERASE_DISK:
         errno = rtems_nvdisk_erase_disk (&rtems_nvdisks[minor]);
         break;
-        
+
       case RTEMS_NVDISK_IOCTL_INFO_LEVEL:
         rtems_nvdisks[minor].info_level = (uint32_t) argp;
         break;
-        
+
       default:
         rtems_blkdev_ioctl (dd, req, argp);
         break;
@@ -787,9 +787,9 @@ rtems_nvdisk_initialize (rtems_device_major_number major,
     uint32_t blocks = 0;
 
     nvd = &rtems_nvdisks[minor];
-  
+
     name [sizeof(RTEMS_NVDISK_DEVICE_BASE_NAME)] += minor;
-  
+
     nvd->major        = major;
     nvd->minor        = minor;
     nvd->flags        = c->flags;
@@ -808,7 +808,7 @@ rtems_nvdisk_initialize (rtems_device_major_number major,
       dc->pages      = rtems_nvdisk_pages_in_device (nvd, &c->devices[device]);
       dc->pages_desc = rtems_nvdisk_page_desc_pages (nvd, &c->devices[device]);
       dc->block_base = blocks;
-      
+
       blocks += dc->pages - dc->pages_desc;
 
       dc->descriptor = &c->devices[device];
@@ -824,7 +824,7 @@ rtems_nvdisk_initialize (rtems_device_major_number major,
       rtems_nvdisk_error ("disk create phy failed");
       return sc;
     }
-  
+
     sc = rtems_semaphore_create (rtems_build_name ('N', 'V', 'D', 'K'), 1,
                                  RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE |
                                  RTEMS_INHERIT_PRIORITY, 0, &nvd->lock);

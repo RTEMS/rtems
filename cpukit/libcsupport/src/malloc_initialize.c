@@ -83,7 +83,7 @@ void RTEMS_Malloc_Initialize(
    *  be very very careful about destroying the initialization
    *  that has already been done.
    */
-    
+
   /*
    *  If the BSP is not clearing out the workspace, then it is most likely
    *  not clearing out the initial memory for the heap.  There is no
@@ -109,7 +109,7 @@ void RTEMS_Malloc_Initialize(
    */
 
   if ( !rtems_unified_work_area ) {
-    uintptr_t status = _Protected_heap_Initialize( 
+    uintptr_t status = _Protected_heap_Initialize(
       RTEMS_Malloc_Heap,
       heap_begin,
       heap_size,

@@ -36,7 +36,7 @@ void open_dev_console(void)
      * There may not be a console driver so this is OK.
      */
     return;
-  } 
+  }
 
   /*
    *  But if we find /dev/console once, we better find it twice more

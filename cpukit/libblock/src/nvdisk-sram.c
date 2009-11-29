@@ -10,7 +10,7 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h" 
+#include "config.h"
 #endif
 
 #include <stdio.h>
@@ -27,7 +27,7 @@
 static int
 rtems_nvdisk_sram_read (uint32_t device __attribute__((unused)),
                         uint32_t flags __attribute__((unused)),
-                        uint32_t base, 
+                        uint32_t base,
                         uint32_t offset,
                         void*    buffer,
                         uint32_t size)
@@ -39,7 +39,7 @@ rtems_nvdisk_sram_read (uint32_t device __attribute__((unused)),
 static int
 rtems_nvdisk_sram_write (uint32_t    device __attribute__((unused)),
                          uint32_t    flags __attribute__((unused)),
-                         uint32_t    base, 
+                         uint32_t    base,
                          uint32_t    offset,
                          const void* buffer,
                          uint32_t    size)
@@ -51,7 +51,7 @@ rtems_nvdisk_sram_write (uint32_t    device __attribute__((unused)),
 static int
 rtems_nvdisk_sram_verify (uint32_t    device __attribute__((unused)),
                           uint32_t    flags __attribute__((unused)),
-                          uint32_t    base, 
+                          uint32_t    base,
                           uint32_t    offset,
                           const void* buffer,
                           uint32_t    size)

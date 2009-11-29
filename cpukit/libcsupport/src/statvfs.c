@@ -51,9 +51,9 @@ statvfs (const char *path, struct statvfs *sb)
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   memset (sb, 0, sizeof (struct statvfs));
-  
+
   result = ( fs_mount_root->ops->statvfs_h )( fs_mount_root, sb );
-  
+
   rtems_filesystem_freenode( &loc );
 
   return result;

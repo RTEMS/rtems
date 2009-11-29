@@ -26,9 +26,9 @@
 #include <assert.h>
 #include <errno.h>
 
-/* define this to alias O_NDELAY to  O_NONBLOCK, i.e., 
+/* define this to alias O_NDELAY to  O_NONBLOCK, i.e.,
  * O_NDELAY is accepted on input but fcntl(F_GETFL) returns
- * O_NONBLOCK. This is because rtems has no distinction 
+ * O_NONBLOCK. This is because rtems has no distinction
  * between the two (but some systems have).
  * Note that accepting this alias creates a problem:
  * an application trying to clear the non-blocking flag
@@ -165,7 +165,7 @@ rtems_libio_t *rtems_libio_allocate( void )
       goto failed;
     iop = rtems_libio_iop_freelist;
     next = iop->data1;
-    (void) memset( iop, 0, sizeof(rtems_libio_t) ); 
+    (void) memset( iop, 0, sizeof(rtems_libio_t) );
     iop->flags = LIBIO_FLAGS_OPEN;
     iop->sem = sema;
     rtems_libio_iop_freelist = next;

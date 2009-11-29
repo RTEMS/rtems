@@ -131,14 +131,14 @@ void libc_wrapup(void)
     #else
       #define FINI_SYMBOL _fini
     #endif
- 
+
     extern void FINI_SYMBOL( void );
   #endif
 
 void EXIT_SYMBOL(int status)
 {
   /*
-   *  If the toolset uses init/fini sections, then we need to 
+   *  If the toolset uses init/fini sections, then we need to
    *  run the global destructors now.
    */
   #if defined(__USE_INIT_FINI__)

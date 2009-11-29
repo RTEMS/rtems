@@ -20,7 +20,7 @@
 #include <unistd.h>
 
 int tcflow (
-  int fd __attribute__((unused)), 
+  int fd __attribute__((unused)),
   int action __attribute__((unused)))
 {
   return 0;

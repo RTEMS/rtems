@@ -134,7 +134,7 @@ scandir(
 	}
 	closedir(dirp);
 	if (nitems && dcomp != NULL){
-		qsort(names, nitems, sizeof(struct dirent *), 
+		qsort(names, nitems, sizeof(struct dirent *),
 		(int (*)(const void *, const void *)) dcomp);
         }
 	*namelist = names;

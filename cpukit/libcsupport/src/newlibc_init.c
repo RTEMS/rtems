@@ -21,7 +21,7 @@
 
 /*
  *  Init libc for CYGNUS newlib
- * 
+ *
  *  Set up _REENT to use our global libc_global_reent.
  *  (newlib provides a global of its own, but we prefer our own name for it)
  *

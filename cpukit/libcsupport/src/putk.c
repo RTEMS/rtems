@@ -20,7 +20,7 @@
  *
  * Kernel putk (e.g. puts) function requiring minimal infrastrure.
  */
-void putk(const char *s) 
+void putk(const char *s)
 {
   const char *p = s;
 

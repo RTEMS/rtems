@@ -34,7 +34,7 @@ int rmdir(
   rtems_filesystem_location_info_t  loc;
   int                               i;
   int                               result;
-  
+
   /*
    *  Get the parent node of the node we wish to remove. Find the parent path.
    */
@@ -55,11 +55,11 @@ int rmdir(
   /*
    * Start from the parent to find the node that should be under it.
    */
-  
+
   loc = parentloc;
   name = pathname + parentpathlen;
   name += rtems_filesystem_prefix_separators( name, strlen( name ) );
-  
+
   result = rtems_filesystem_evaluate_relative_path( name , strlen( name ),
                                                     0, &loc, false );
   if ( result != 0 ) {

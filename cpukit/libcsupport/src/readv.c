@@ -59,7 +59,7 @@ ssize_t readv(
 
   /*
    *  OpenGroup says that you are supposed to return EINVAL if the
-   *  sum of the iov_len values in the iov array would overflow a 
+   *  sum of the iov_len values in the iov array would overflow a
    *  ssize_t.
    *
    *  Also we would like to ensure that no IO is performed if there
@@ -95,7 +95,7 @@ ssize_t readv(
   if ( all_zeros == true ) {
     return 0;
   }
-   
+
   /*
    *  Now process the readv().
    */

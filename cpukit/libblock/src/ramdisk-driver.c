@@ -117,7 +117,7 @@ ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
             }
             break;
         }
-  
+
         default:
             return rtems_blkdev_ioctl (dd, req, argp);
             break;

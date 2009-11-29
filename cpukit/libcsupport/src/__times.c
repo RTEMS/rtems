@@ -56,8 +56,8 @@ clock_t _times(
       Timestamp_Control per_tick;
       uint32_t          ticks;
       uint32_t          fractional_ticks;
-      
-      _Timestamp_Set( 
+
+      _Timestamp_Set(
         &per_tick,
         rtems_configuration_get_microseconds_per_tick() /
             TOD_MICROSECONDS_PER_SECOND,

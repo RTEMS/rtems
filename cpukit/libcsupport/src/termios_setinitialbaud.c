@@ -24,6 +24,6 @@ int  rtems_termios_set_initial_baud(
     return -1;
 
   ttyp->termios.c_cflag = (ttyp->termios.c_cflag & ~CBAUD) | cflags_baud;
-  
+
   return 0;
 }
