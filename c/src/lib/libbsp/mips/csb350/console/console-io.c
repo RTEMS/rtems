@@ -47,13 +47,13 @@ void console_outbyte_polled(
     while ((uart0->linestat & 0x20) == 0) {
         continue;
     }
-    
+
     uart0->txdata = ch;
     au_sync();
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */
@@ -74,11 +74,11 @@ int console_inbyte_nonblocking(
 
 #include <rtems/bspIo.h>
 
-void csb250_output_char(char c) 
-{ 
-    console_outbyte_polled( 0, c ); 
+void csb250_output_char(char c)
+{
+    console_outbyte_polled( 0, c );
     if (c == '\n') {
-        console_outbyte_polled( 0, '\r' ); 
+        console_outbyte_polled( 0, '\r' );
     }
 }
 

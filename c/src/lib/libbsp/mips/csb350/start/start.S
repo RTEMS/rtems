@@ -3,7 +3,7 @@
  *
  *  Copyright (c) 2005 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -29,7 +29,7 @@
 _start:
 	.set	noreorder
 
-	/* Get the address of start into $5 in a position independent 
+	/* Get the address of start into $5 in a position independent
 	 * fashion. This lets us know whether we have been relocated or not.
 	 */
 	$LF1 = . + 8
@@ -47,7 +47,7 @@ _branch:
 	li	v0, SR_PE|SR_FR|SR_KX|SR_SX|SR_UX
 	mtc0	v0, C0_SR
 2:
-/* Fix high bits, if any, of the PC so that exception handling 
+/* Fix high bits, if any, of the PC so that exception handling
    doesn't get confused.  */
 	la v0, 3f
 	jr	v0
@@ -75,7 +75,7 @@ zerobss:
 	   case main wants to write them back to the stack.  The caller is
 	   supposed to allocate stack space for parameters in registers in
 	   the old MIPS ABIs.  We must do this even though we aren't passing
-	   arguments, because main might be declared to have them. 
+	   arguments, because main might be declared to have them.
 
 	   Some ports need a larger alignment for the stack, so we subtract
 	   32, which satisifes the stack for the arguments and keeps the
@@ -98,7 +98,7 @@ init:
 					/* destructors */
 	move	a0,v0			/* pass through the exit code */
 	.end	init
-	
+
 /*
  * _sys_exit -- Exit from the application. Normally we cause a user trap
  *          to return to the ROM monitor for another run. NOTE: This is
@@ -121,5 +121,5 @@ _sys_exit:
 	b	7b			/* but loop back just in-case */
 	nop
 	.end _sys_exit
-        
+
 /* EOF crt0.S */

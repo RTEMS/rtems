@@ -4,17 +4,17 @@
 /******************************************************************************
 *
 * Copyright (c) 2004 Freescale Semiconductor, Inc.
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a
 * copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense,
 * and/or sell copies of the Software, and to permit persons to whom the
 * Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included
 * in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -26,7 +26,7 @@
 ******************************************************************************/
 
 /*******************************************************************************
- * Defines to control SmartDMA and its tasks. These defines are used for the 
+ * Defines to control SmartDMA and its tasks. These defines are used for the
  * task build process to minimize disconnects at the task/driver interface.
  ******************************************************************************/
 
@@ -49,7 +49,7 @@
 #define SDMA_DRD_MASK_FLAGS          0x0C000000  /* BD_FLAGS flag bits            */
 #define SDMA_DRD_MASK_LENGTH         0x03FFFFFF  /* BD_FLAGS length mask          */
 #define SDMA_BD_BIT_READY            30          /* Status BD ready bit           */
-#ifdef SAS_COMPILE 
+#ifdef SAS_COMPILE
  #define SDMA_BD_MASK_READY          constant(1<<SDMA_BD_BIT_READY)
 #else
  #define SDMA_BD_MASK_READY          (1<<SDMA_BD_BIT_READY)

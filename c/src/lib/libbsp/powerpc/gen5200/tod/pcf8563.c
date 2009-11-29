@@ -30,7 +30,7 @@
  * RTC I2C device address.
  *
  * Based on a ds1307 driver from:
- * 
+ *
  * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *
@@ -74,7 +74,7 @@ pcf8563_initialize(int minor)
     /* Read SECONDS register */
     try = 0;
     do {
-        status = i2c_wbrd(bus, addr, PCF8563_CONTROL1_ADR, 
+        status = i2c_wbrd(bus, addr, PCF8563_CONTROL1_ADR,
 			  &ctrl1, sizeof(ctrl1));
         try++;
     } while ((status != I2C_SUCCESSFUL) && (try < 15));
@@ -134,7 +134,7 @@ pcf8563_get_time(int minor, rtems_time_of_day *time)
 
     v1 = info[PCF8563_YEAR_ADR-PCF8563_SECOND_ADR];
     v2 = From_BCD(v1);
-    if ((info[PCF8563_MONTH_ADR-PCF8563_SECOND_ADR] 
+    if ((info[PCF8563_MONTH_ADR-PCF8563_SECOND_ADR]
 	 & PCF8563_MONTH_CENTURY) == 0) {
       time->year = 1900 + v2;
     }
@@ -198,10 +198,10 @@ pcf8563_set_time(int minor, const rtems_time_of_day *time)
     info[1 + PCF8563_MINUTE_ADR-PCF8563_SECOND_ADR] = To_BCD(time->minute);
     info[1 + PCF8563_SECOND_ADR-PCF8563_SECOND_ADR] = To_BCD(time->second);
     /* Do not set day of week */
-    info[1 + PCF8563_DAY_OF_WEEK_ADR-PCF8563_SECOND_ADR] = 1; 
+    info[1 + PCF8563_DAY_OF_WEEK_ADR-PCF8563_SECOND_ADR] = 1;
 
     /*
-     * add century info 
+     * add century info
      */
     if (time->year >= 2000) {
       info[1 + PCF8563_MONTH_ADR -PCF8563_SECOND_ADR] |= PCF8563_MONTH_CENTURY;

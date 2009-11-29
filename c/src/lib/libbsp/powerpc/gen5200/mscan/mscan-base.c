@@ -162,7 +162,7 @@ bool mscan_set_bit_rate( mscan *m, unsigned can_bit_rate)
   if (prescale_val > 64) {
     /* Leave initialization mode */
     mscan_initialization_mode_leave( m, &context);
-    
+
     return false;
   }
 
@@ -454,7 +454,7 @@ uint8_t *mscan_id_acceptance_register( mscan *m, unsigned i)
     &m->idar6,
     &m->idar7
   };
-  
+
   return idar [i];
 }
 
@@ -476,7 +476,7 @@ uint8_t *mscan_id_mask_register( mscan *m, unsigned i)
     &m->idmr6,
     &m->idmr7
   };
-  
+
   return idmr [i];
 }
 

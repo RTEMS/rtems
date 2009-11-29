@@ -25,7 +25,7 @@
 
 #include <bspopts.h>
 
-#include <libcpu/powerpc-utility.h> 
+#include <libcpu/powerpc-utility.h>
 
 /*
  * Some symbols defined in the linker command file.
@@ -109,7 +109,7 @@ LINKER_SYMBOL(MBAR);
 /*
  *  Codename: IceCube
  *  Compatible Boards:
- *     Freescape MPC5200LITE 
+ *     Freescape MPC5200LITE
  *     Embedded Planet EP5200
  */
 

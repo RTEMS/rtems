@@ -4,17 +4,17 @@
 /******************************************************************************
 *
 * Copyright (c) 2004 Freescale Semiconductor, Inc.
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a
 * copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense,
 * and/or sell copies of the Software, and to permit persons to whom the
 * Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included
 * in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -65,7 +65,7 @@ typedef struct {
 						 * cannot use this to track a task's BD pointer.
 						 */
 	uint16 currBDInUse; /* Current number of buffer descriptors assigned but*/
-						/*   not released yet.                              */					
+						/*   not released yet.                              */
 } TaskBDIdxTable_t;
 
 typedef enum {
@@ -77,7 +77,7 @@ typedef enum {
  * Allocates BD table if needed and updates the BD index table.
  * Do we want to hide this from the C API since it operates on task API?
  */
-void TaskSetup_BDTable(volatile uint32 *BasePtr, 
+void TaskSetup_BDTable(volatile uint32 *BasePtr,
                        volatile uint32 *LastPtr,
                        volatile uint32 *StartPtr,
                        int TaskNum, uint32 NumBD, uint16 MaxBD,

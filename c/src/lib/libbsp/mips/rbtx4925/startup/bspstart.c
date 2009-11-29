@@ -16,7 +16,7 @@
 
 #include <bsp.h>
 #include <libcpu/isr_entries.h>
- 
+
 /*
  *  bsp_start
  *

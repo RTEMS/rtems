@@ -21,7 +21,7 @@ void bsp_reset( void )
     BSP_IRQ_Benchmarking_Report();
   }
   #endif
- 
+
   /*
    * Now reset the CPU
    */

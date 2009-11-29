@@ -19,7 +19,7 @@
 #include <bsp.h>
 
 uint32_t bsp_clicks_per_microsecond;
- 
+
 /*
  *  bsp_start
  *

@@ -144,7 +144,7 @@ void bsp_start(void)
 
   #if defined(HAS_UBOOT)
     bsp_uboot_board_info = *bsp_uboot_board_info_ptr;
-  #endif  
+  #endif
 
   #if defined(HAS_UBOOT) && defined(SHOW_MORE_INIT_SETTINGS)
     {

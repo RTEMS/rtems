@@ -8,7 +8,7 @@
  * ######################################################################
  *
  * mips_start_of_legal_notice
- * 
+ *
  * Copyright (c) 2003 MIPS Technologies, Inc. All rights reserved.
  *
  *
@@ -52,9 +52,9 @@
  * and conditions covering this code from MIPS Technologies or an authorized
  * third party.
  *
- * 
+ *
  * mips_end_of_legal_notice
- * 
+ *
  *
  ************************************************************************/
 
@@ -170,7 +170,7 @@ typedef void *t_yamon_ref;
  *  Parameters :
  *  ------------
  *
- *  'rc' (OUT) : Return code 
+ *  'rc' (OUT) : Return code
  *
  *  Return values :
  *  ---------------
@@ -178,7 +178,7 @@ typedef void *t_yamon_ref;
  *  None (never returns)
  *
  ************************************************************************/
-typedef void 
+typedef void
 (*t_yamon_exit)(
     t_yamon_uint32 rc );	/* Return code				*/
 
@@ -207,7 +207,7 @@ typedef void
  *  None
  *
  ************************************************************************/
-typedef void 
+typedef void
 (*t_yamon_print)(
     t_yamon_uint32 port, /* Output port (not used, always tty0)		*/
     const char           *s ); /* String to output				*/
@@ -238,7 +238,7 @@ typedef void
  *  None
  *
  ************************************************************************/
-typedef void 
+typedef void
 (*t_yamon_print_count)(
     t_yamon_uint32 port,	/* Output port (not used, always tty0	*/
     char	   *s,		/* String to output			*/
@@ -357,33 +357,33 @@ typedef void
  *
  *  Registers an exception handler, also known as an "Exception Service
  *  Routine" (ESR) for the specified exception.
- *  
+ *
  *  Two special exception IDs are defined :
  *      YAMON_DEFAULT_HANDLER used for a default ESR.
  *      YAMON_DEFAULT_EJTAG_ESR used for EJTAG exceptions.
- *	
+ *
  *  The default ESR is called if no other ESR is registered
  *  for an exception. If no default ESR is registered, a static
  *  (i.e. not registered) "super default" function is invoked.
  *  This function prints out the registers and halts.
  *
- *  Deregistration of an ESR may be be done by calling this function 
+ *  Deregistration of an ESR may be be done by calling this function
  *  with 'esr' set to NULL.
  *  An ESR can also be deregistered using the 'yamon_deregister_esr'
  *  function.
  *
- *  An ESR may be registered even if a previously registered 
+ *  An ESR may be registered even if a previously registered
  *  ESR has not been deregistered. In this case the previously
  *  registered ESR is lost.
  *
- *  The ESR will get called with registers in the state they were 
- *  when the exception occurred. This includes all CP0 registers and 
+ *  The ESR will get called with registers in the state they were
+ *  when the exception occurred. This includes all CP0 registers and
  *  CPU registers $0..$31, except for k0,k1 ($26,$27).
  *
  *  In case an ESR does not want to handle the exception, it may
  *  call the return function passed in the 'retfunc' parameter.
  *
- *  Case 1 : 'retfunc' called by ESR registered for the 
+ *  Case 1 : 'retfunc' called by ESR registered for the
  *           INTERRUPT exception.
  *
  *  We assume an application has registered this ESR and wants
@@ -396,7 +396,7 @@ typedef void
  *
  *  Case 3 : 'retfunc' is called by the ESR registered as default ESR.
  *
- *  The exception will be handled as though no ESR is registered 
+ *  The exception will be handled as though no ESR is registered
  *  (i.e. the "super default" function is called).
  *
  *  Parameters :
@@ -436,7 +436,7 @@ typedef t_yamon_int32
  *  -------------
  *
  *  Deregisters ESR..
- *  
+ *
  *  Parameters :
  *  ------------
  *
@@ -464,7 +464,7 @@ typedef t_yamon_int32
  *  Description :
  *  -------------
  *
- *  Registers an Interrupt Service Routine (ISR) for the specified 
+ *  Registers an Interrupt Service Routine (ISR) for the specified
  *  CPU interrupt.
  *  The highest service priority is attached to HW-INT5, which is
  *  connected to the CPU-built-in CP0-timer. SW_INT0 gets the lowest
@@ -474,15 +474,15 @@ typedef t_yamon_int32
  *
  *  A special ID is defined :
  *      YAMON_DEFAULT_HANDLER used for a default ISR.
- *	
+ *
  *  The default ISR is called if no other ISR is registered
  *  for a CPU interrupt.
  *
  *  Deregistration of the default ISR may be done by calling
  *  this function with 'isr' set to NULL.
- *  Also, a new default ISR may be registered even if a 
+ *  Also, a new default ISR may be registered even if a
  *  previously registered ISR has not been deregistered.
- *  ISRs for specific CPU interrupts must be deregistered using 
+ *  ISRs for specific CPU interrupts must be deregistered using
  *  'yamon_deregister_cpu_isr'.
  *
  *  Parameters :
@@ -521,7 +521,7 @@ typedef t_yamon_int32
  *  -------------
  *
  *  Deregisters ISR for CPU interrupt.
- *  
+ *
  *  Parameters :
  *  ------------
  *
@@ -549,20 +549,20 @@ typedef t_yamon_int32
  *  Description :
  *  -------------
  *
- *  Registers an Interrupt Service Routine (ISR) for the specified 
- *  source in the interrupt controller. 
+ *  Registers an Interrupt Service Routine (ISR) for the specified
+ *  source in the interrupt controller.
  *
  *  A special ID is defined :
  *      YAMON_DEFAULT_HANDLER used for a default ISR.
- *	
+ *
  *  The default ISR is called if no other ISR is registered
  *  for an interrupt.
  *
  *  Deregistration of the default ISR may be done by calling
  *  this function with 'isr' set to NULL.
- *  Also, a new default ISR may be registered even if a 
+ *  Also, a new default ISR may be registered even if a
  *  previously registered ISR has not been deregistered.
- *  ISRs for specific interrupts must be deregistered using 
+ *  ISRs for specific interrupts must be deregistered using
  *  'yamon_deregister_ic_isr'.
  *
  *  Parameters :
@@ -601,7 +601,7 @@ typedef t_yamon_int32
  *  -------------
  *
  *  Deregisters ISR for source in interrupt controller.
- *  
+ *
  *  Parameters :
  *  ------------
  *

@@ -90,7 +90,7 @@ uint32_t Clock_isrs;              /* ISRs until next tick */
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -163,24 +163,24 @@ void Install_clock(
   /*
   *  Hardware specific initialize goes here
   */
-  
+
   /* Set up USC heartbeat timer to generate interrupts */
   disable_hbi();      /* Disable heartbeat interrupt in USC */
-  
+
               /* Install interrupt handler */
   Old_ticker = (rtems_isr_entry) set_vector( USC_isr, CLOCK_VECTOR, 1 );
-  
+
   init_hbt();        /* Initialize heartbeat timer */
-  
+
   reset_wdt();      /* Reset watchdog timer */
-  
+
   enable_wdi();      /* Enable watchdog interrupt in USC */
-  
+
   enable_hbi();      /* Enable heartbeat interrupt in USC */
-  
+
               /* Enable USC interrupt in MIPS processor */
   mips_enable_in_interrupt_mask(CLOCK_VECTOR_MASK);
-  
+
   /*
   *  Schedule the clock cleanup routine to execute if the application exits.
   */
@@ -211,14 +211,14 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
 

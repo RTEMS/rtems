@@ -34,7 +34,7 @@ extern "C" {
  */
 extern struct rtems_bsdnet_ifconfig *config;
 
-int rtems_au1x00_emac_attach(struct rtems_bsdnet_ifconfig *config, 
+int rtems_au1x00_emac_attach(struct rtems_bsdnet_ifconfig *config,
                              int attaching);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_au1x00_emac_attach

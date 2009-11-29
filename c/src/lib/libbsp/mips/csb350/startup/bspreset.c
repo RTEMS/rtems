@@ -14,7 +14,7 @@
 void bsp_reset(void)
 {
   void (*reset_func)(void);
-  
+
   reset_func = (void *)0xbfc00000;
 
   mips_set_sr( 0x00200000 ); /* all interrupts off, boot exception vectors */

@@ -184,7 +184,7 @@ _chk_int:
         /* wastes a lot of stack space for context?? */
 	ADDIU    sp,sp,-EXCP_STACK_SIZE
 
-        STREG ra, R_RA*R_SZ(sp)  /* store ra on the stack */ 
+        STREG ra, R_RA*R_SZ(sp)  /* store ra on the stack */
         STREG v0, R_V0*R_SZ(sp)
         STREG v1, R_V1*R_SZ(sp)
         STREG a0, R_A0*R_SZ(sp)
@@ -201,13 +201,13 @@ _chk_int:
         STREG t7, R_T7*R_SZ(sp)
         mflo  t0
         STREG t8, R_T8*R_SZ(sp)
-        STREG t0, R_MDLO*R_SZ(sp) 
+        STREG t0, R_MDLO*R_SZ(sp)
         STREG t9, R_T9*R_SZ(sp)
         mfhi  t0
         STREG gp, R_GP*R_SZ(sp)
-        STREG t0, R_MDHI*R_SZ(sp) 
+        STREG t0, R_MDHI*R_SZ(sp)
         STREG fp, R_FP*R_SZ(sp)
-	
+
         .set noat
         STREG AT, R_AT*R_SZ(sp)
         .set at
@@ -277,7 +277,7 @@ _ISR_Handler_cleanup:
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
    *    restore stack
    *  #endif
-   *  
+   *
    *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
    *    goto the label "exit interrupt (simple case)"
    */
@@ -311,7 +311,7 @@ _ISR_Handler_cleanup:
 	/* save off our stack frame so the context switcher can get to it */
 	la	t0,__exceptionStackFrame
 	STREG	sp,(t0)
-					
+
         jal     _Thread_Dispatch
         NOP
 
@@ -321,7 +321,7 @@ _ISR_Handler_cleanup:
 	STREG	zero,(t0)
 	NOP
 
-/* 
+/*
 ** turn interrupts back off while we restore context so
 ** a badly timed interrupt won't accidentally mess things up
 */
@@ -335,7 +335,7 @@ _ISR_Handler_cleanup:
 	or	t0,t1
 #elif __mips == 1
 	/* ints off, current & prev kernel mode on (kernel mode enabled is bit clear..argh!) */
-	li	t1,SR_IEC | SR_KUP | SR_KUC	
+	li	t1,SR_IEC | SR_KUP | SR_KUC
 	not	t1
 	and	t0, t1
 #endif
@@ -347,14 +347,14 @@ _ISR_Handler_cleanup:
 	**
 	** make sure previous int enable is on  because we're returning from an interrupt
 	** which means interrupts have to be enabled
-	
+
 	li	t1,SR_IEP
 	or	t0,t1
 	*/
 #endif
         mtc0    t0, C0_SR
 	NOP
-	
+
   /*
    *  prepare to get out of interrupt
    *  return from interrupt  (maybe to _ISR_Dispatch)
@@ -370,7 +370,7 @@ _ISR_Handler_exit:
         LDREG t8, R_MDLO*R_SZ(sp)
         LDREG t0, R_T0*R_SZ(sp)
         mtlo  t8
-        LDREG t8, R_MDHI*R_SZ(sp)           
+        LDREG t8, R_MDHI*R_SZ(sp)
         LDREG t1, R_T1*R_SZ(sp)
         mthi  t8
         LDREG t2, R_T2*R_SZ(sp)
@@ -390,10 +390,10 @@ _ISR_Handler_exit:
         LDREG a3, R_A3*R_SZ(sp)
         LDREG v1, R_V1*R_SZ(sp)
         LDREG v0, R_V0*R_SZ(sp)
-	
+
         LDREG k1, R_EPC*R_SZ(sp)
 	mtc0  k1,C0_EPC
-	
+
 	.set noat
         LDREG     AT, R_AT*R_SZ(sp)
         .set at
@@ -407,14 +407,14 @@ _ISR_Handler_quick_exit:
 
 	/* Interrupts from USC320 are serviced here */
 	.global	USC_isr
-	.extern	Clock_isr	
+	.extern	Clock_isr
 USC_isr:
 	/* check if it's a USC320 heartbeat interrupt */
         la      k0,INT_STAT	/* read INT_STAT register */
         lw      k0,(k0)
         nop			/* reading from external device	*/
         sll     k0,(31-21)	/* test bit 21 (HBI) */
-        
+
         bgez	k0,USC_isr2	/* branch if not a heartbeat interrupt */
 	NOP
 
@@ -434,7 +434,7 @@ USC_isr1:
 	nop
 USC_isr2:
 	j	ra		/* no serviceable interrupt, return without doing anything */
-	nop		
+	nop
 
        .set    reorder
 
@@ -450,7 +450,7 @@ FRAME(_BRK_Handler,sp,0,ra)
 	and	k1,k1,k0
 	la	k0,INT_CFG3
 	sw	k1,(k0)
-	
+
 	la  k0,_brk_esr_link	/* Jump to next exception handler in PMON exception chain */
 	lw  k0,(k0)
 	lw  k0,4(k0)
@@ -478,7 +478,7 @@ FRAME(init_exc_vecs,sp,0,ra)
 	.set noreorder
 
 	.extern mon_onintr
-	
+
 /* Install interrupt handler in PMON exception handling chain */
 
 	addiu	sp,sp,-8
@@ -517,30 +517,30 @@ FRAME(init_hbt,sp,0,ra)
 	la	t0,SYSTEM	# Unlock USC registers
 	li	t1,0xA5
 	sb	t1,(t0)
-	
+
 	la	t0,WD_HBI	# Initialize heatbeat and watchdog timers
 
-				# (1 / 64 MHz) * 4000 * (63 + 1) = 4000.0 microseconds 
+				# (1 / 64 MHz) * 4000 * (63 + 1) = 4000.0 microseconds
 				# Watchdog period is heartbeat period times watchdog timer constant (bits 7 - 0)
 				# Watchdog period = 4000 * 5 = 20000 microseconds
 	li	t1,(WD_EN | HBI_4000_PS | 0x00003F00 | 0x5)
 
-				# (1 / 64 MHz) * 4000 * (15 + 1) = 1000.0 microseconds 
+				# (1 / 64 MHz) * 4000 * (15 + 1) = 1000.0 microseconds
 				# Watchdog period is heartbeat period times watchdog timer constant (bits 7 - 0)
 				# Watchdog period = 1000 * 20 = 20000 microseconds
 	li	t1,(WD_EN | HBI_4000_PS | 0x00000F00 | 0x14)
 
-				# (1 / 64 MHz) * 40000 * (15 + 1) = 10000.0 microseconds 
+				# (1 / 64 MHz) * 40000 * (15 + 1) = 10000.0 microseconds
 				# Watchdog period is heartbeat period times watchdog timer constant (bits 7 - 0)
 				# Watchdog period = 10000 * 20 = 200000 microseconds
 	li	t1,(WD_EN | HBI_4000_PS | 0x00009600 | 0x14)
 
 	sw	t1,(t0)
-	
+
 	la	t0,SYSTEM	# Lock USC registers
 	li	t1,0x60
 	sb	t1,(t0)
-	
+
 	.set reorder
 	j	ra
 	nop
@@ -555,9 +555,9 @@ FRAME(reset_wdt,sp,0,ra)
 	.set noreorder
 
 	la	t0,WD_HBI+2	# Load address watchdog timer reset byte
-	li	t1,WD_INIT	
+	li	t1,WD_INIT
 	sb	t1,(t0)
-	
+
 	.set reorder
 	j	ra
 	nop
@@ -575,7 +575,7 @@ FRAME(disable_wdt,sp,0,ra)
 	li	t2,~WD_EN
 	and	t1,t1,t2
 	sw	t1,(t0)
-	
+
 	.set reorder
 	j	ra
 	nop
@@ -588,13 +588,13 @@ ENDFRAME(disable_wdt)
 */
 FRAME(enable_hbi,sp,0,ra)
 	.set noreorder
-	
+
 	la	t0,INT_CFG3	# Enable heartbeat interrupt in USC320
 	lw	t1,(t0)
 	li	t2,(HBI_MASK | MODE_TOTEM_POLE)
 	or	t1,t1,t2
 	sw	t1,(t0)
-	
+
 	.set reorder
 	j	ra
 	nop
@@ -612,7 +612,7 @@ FRAME(disable_hbi,sp,0,ra)
 	li	t2,~HBI_MASK
 	and	t1,t1,t2
 	sw	t1,(t0)
-	
+
 	.set reorder
 	j	ra
 	nop
@@ -626,13 +626,13 @@ ENDFRAME(disable_hbi)
 */
 FRAME(enable_wdi,sp,0,ra)
 	.set noreorder
-	
+
 	la	t0,INT_CFG1	# Enable watchdog interrupt in USC320
 	lw	t1,(t0)
 	li	t2,(WDI_MASK | MODE_TOTEM_POLE)
 	or	t1,t1,t2
 	sw	t1,(t0)
-	
+
 	.set reorder
 	j	ra
 	nop
@@ -645,17 +645,17 @@ ENDFRAME(enable_wdi)
 */
 FRAME(disable_wdi,sp,0,ra)
 	.set noreorder
-	
+
 	la	t0,INT_CFG1	# Disable watchdog interrupt in USC320
 	lw	t1,(t0)
 	li	t2,~(WDI_MASK | MODE_TOTEM_POLE)
 	and	t1,t1,t2
 	sw	t1,(t0)
-	
+
 	la	t0,INT_STAT	# Clear watchdog interrupt status bit
 	li	t1,WDI_MASK
 	sw	t1,(t0)
-	
+
 	.set reorder
 	j	ra
 	nop
@@ -666,7 +666,7 @@ ENDFRAME(disable_wdi)
 	.data
 
 k1tmp:	.word	0	/* Temporary strage for K1 during interrupt service */
-	
+
 /*************************************************************
 *
 * Exception handler links, used in PMON exception handler chains
@@ -676,7 +676,7 @@ k1tmp:	.word	0	/* Temporary strage for K1 during interrupt service */
 _int_esr_link:
 	.word	0
 	.word	hurricane_ISR_Handler
-	
+
 	/* Break exception service routine link */
 	.global	_brk_esr_link
 _brk_esr_link:
@@ -684,5 +684,5 @@ _brk_esr_link:
 	.word	_BRK_Handler
 
 
-	
+
 

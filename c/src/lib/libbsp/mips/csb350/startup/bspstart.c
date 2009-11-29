@@ -30,7 +30,7 @@ au1x00_uart_t *uart3 = (au1x00_uart_t *)AU1X00_UART3_ADDR;
  */
 void bsp_start( void )
 {
-  unsigned int compare = 0; 
+  unsigned int compare = 0;
 
   mips_set_sr( 0x7f00 );  /* all interrupts unmasked but globally off */
                           /* depend on the IRC to take care of things */

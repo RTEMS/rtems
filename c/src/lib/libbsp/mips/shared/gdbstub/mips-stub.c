@@ -118,7 +118,7 @@
 *       As an example, "0* " means the same thing as "0000".
 *
 *******************************************************************************/
-
+
 
 #include <string.h>
 #include <signal.h>
@@ -255,7 +255,7 @@ static struct z0break z0break_arr[BREAKNUM];
 static struct z0break *z0break_avail = NULL;
 static struct z0break *z0break_list  = NULL;
 
-
+
 /*
  * Convert an int to hex.
  */
@@ -334,7 +334,7 @@ mem2hex (void *_addr, int length, char *buf)
   return (buf);
 }
 
-
+
 /*
  * Convert a hex character to an int.
  */
@@ -531,7 +531,7 @@ bin2mem (
   return mem;
 }
 
-
+
 /*
  * Scan the input stream for a sequence for the form $<data>#<checksum>.
  */
@@ -649,7 +649,7 @@ putpacket (char *buffer)
   while  (getAck () != '+');
 }
 
-
+
 /*
  * Saved instruction data for single step support
  */
@@ -808,7 +808,7 @@ doSStep (void)
    return;
 }
 
-
+
 /*
  * Translate the R4600 exception code into a Unix-compatible signal.
  */
@@ -917,7 +917,7 @@ void gdb_stub_report_exception_info(
    *optr++ = '\0';
 }
 
-
+
 
 /*
  * Scratch frame used to retrieve contexts for different threads, so as

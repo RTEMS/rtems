@@ -147,7 +147,7 @@ void mpc5200_init_gpt(uint32_t gpt_no)
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[gpt_no]);
 
   gpt->status = GPT_STATUS_RESET;
-  gpt->emsel  = GPT_EMSEL_CE | GPT_EMSEL_ST_CONT | GPT_EMSEL_INTEN | 
+  gpt->emsel  = GPT_EMSEL_CE | GPT_EMSEL_ST_CONT | GPT_EMSEL_INTEN |
                 GPT_EMSEL_GPIO_OUT_HIGH | GPT_EMSEL_TIMER_MS_GPIO;
 
 }

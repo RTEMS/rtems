@@ -1,4 +1,4 @@
-/*  clock.s 
+/*  clock.s
  *
  *  This file contains the assembly code for the Hurricane BSP clock driver.
  *

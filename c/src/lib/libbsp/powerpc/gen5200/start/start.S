@@ -104,7 +104,7 @@
 .set	SDRAMCS1,		0x38
 .set	BOOTSTR,		0x4C
 .set	BOOTSTP,		0x50
-.set	ADREN,			0x54	
+.set	ADREN,			0x54
 .set	CSSR0,			0x58		/* Critical Interrupt SSR0 (603le only) */
 .set	CSSR1,			0x59		/* Critical Interrupt SSR1 (603le only) */
 .set    CFG,			0x20C
@@ -122,7 +122,7 @@
 
 /* Register offsets of MPC5x00 GPIO registers needed */
 .set	GPIOPCR,		0xb00
-.set	GPIOWE,			0xc00	
+.set	GPIOWE,			0xc00
 .set	GPIOWOD,		0xc04
 .set	GPIOWDD,		0xc08
 .set	GPIOWDO,		0xc0c
@@ -156,7 +156,7 @@
 
 .extern boot_card
 
-.section ".entry"  
+.section ".entry"
 PUBLIC_VAR (start)
 start:
 /* 1st: initialization work (common for RAM/ROM startup) */
@@ -164,9 +164,9 @@ start:
 	SETBITS r30, r29, MSR_ME|MSR_RI
 	CLRBITS r30, r29, MSR_EE
 	mtmsr	r30 				/* Set RI/ME, Clr EE in MSR */
-	
+
 #if defined(HAS_UBOOT)
-/* store pointer to UBoot bd_info board info structure */	
+/* store pointer to UBoot bd_info board info structure */
 	LWI	r31,bsp_uboot_board_info_ptr
 	stw	r3,0(r31)
 #endif /* defined(HAS_UBOOT) */
@@ -176,8 +176,8 @@ start:
 	LWI	r31, MBAR_RESET
 	LWI	r29, MBAR
 	rlwinm	r30, r29,16,16,31
-  	stw	r30, 0(r31) 			/* Set the MBAR */   	
-#endif   	
+  	stw	r30, 0(r31) 			/* Set the MBAR */
+#endif
 
    	LWI	r31, MBAR			/* set r31 to current MBAR */
 	/* init GPIOPCR */
@@ -188,70 +188,70 @@ start:
 	LWI	r30, GPIOPCR_INITVAL
 	or	r29,r29,r30
 	stw	r29, GPIOPCR(r31)
-	
-/* further initialization work (common RAM/ROM startup) */   
-	bl	TLB_init			/* Initialize TLBs */	
-	
-	
+
+/* further initialization work (common RAM/ROM startup) */
+	bl	TLB_init			/* Initialize TLBs */
+
+
 	bl	FID_DCache			/* Flush, inhibit and disable data cache */
-	
-	
+
+
 	bl	IDUL_ICache			/* Inhibit, disable and unlock instruction cache */
-	
-	
-	bl	FPU_init			/* Initialize FPU */	
-	
-	
+
+
+	bl	FPU_init			/* Initialize FPU */
+
+
 #if defined(NEED_LOW_LEVEL_INIT)
-	bl	SPRG_init			/* Initialize special purpose registers */	
-#endif	
-   	
+	bl	SPRG_init			/* Initialize special purpose registers */
+#endif
+
 #if defined(NEED_LOW_LEVEL_INIT)
 /* detect RAM/ROM startup (common for RAM/ROM startup) */
    	LWI     r20, bsp_rom_start		/* set the relocation offset */
-   	
-   	
+
+
 	LWI     r30, CFG_VAL			/* get CFG register content */
 	lwz	r30, CFG(r31)			/* set SDRAM single data rate / XLB_CLK=FVCO/4 / IPB_CLK=XLB_CLK/2 / PCICLK=IPB_CLK */
-	 
-	
+
+
 
 	lwz	r30, ADREN(r31)			/* get content of ADREN */
-	 
-	
-	
+
+
+
 	TSTBITS r30, r29, ADREN_BOOT_EN
 	bne	skip_ROM_start 			/* If BOOT_ROM is not enabled, skip further initialization */
 
-/* do some board dependent configuration (unique for ROM startup) */   	
-	bl	SPRG_brk_init			/* Initialize special purpose onchip breakpoint registers */	
-	
-   
+/* do some board dependent configuration (unique for ROM startup) */
+	bl	SPRG_brk_init			/* Initialize special purpose onchip breakpoint registers */
+
+
 	LWI     r30, CSCONTROL_VAL		/* get CSCONTROL register content */
 	stw	r30, CSCONTROL(r31)		/* enable internal/external bus error and master for CS */
-	 
-	
+
+
 
 #ifdef BRS5L
 	LWI	r30, CSBOOTROM_VAL
 	stw	r30, CSBOOTROM(r31)	 	/* Set CSBOOTROM */
-	
-	
+
+
 #endif
-	
+
 
 	/* FIXME: map BOOT ROM into final location with CS0 registers */
 	LWI	r30, bsp_rom_start
 	rlwinm	r30, r30,17,15,31
-	stw	r30, CS0STR(r31) 		/* Set CS0STR */	
-			
+	stw	r30, CS0STR(r31) 		/* Set CS0STR */
+
 	LWI	r30, bsp_rom_end
-	
+
 	rlwinm	r30, r30,17,15,31
 	stw	r30, CS0STP(r31) 		/* Set CS0STP */
-			
+
 	lwz	r30, ADREN(r31)			/* get content of ADREN */
-	SETBITS r30, r29, ADREN_CS0_EN	    
+	SETBITS r30, r29, ADREN_CS0_EN
 	stw	r30, ADREN(r31)			/* enable CS0 mapping */
 	isync
 	/* jump to same code in final BOOT ROM location */
@@ -262,13 +262,13 @@ start:
 	add	r30,r30,r29
 	mtctr	r30
 	bctr
-	
-reloc_in_CS0:	
+
+reloc_in_CS0:
 	/* disable CSBOOT (or map it to CS0 range) */
 	lwz	r30, ADREN(r31)			/* get content of ADREN */
-	CLRBITS r30, r29, ADREN_BOOT_EN	    
+	CLRBITS r30, r29, ADREN_BOOT_EN
 	stw	r30, ADREN(r31)			/* disable BOOT mapping */
-	
+
 	/* init SDRAM */
 	LWI	r30, bsp_ram_start
 	ori	r30, r30, 0x1a			/* size code: bank is 128MByte */
@@ -278,96 +278,96 @@ reloc_in_CS0:
 	srawi	r30, r30, 1
 	ori	r30, r30, 0x1a			/* size code: bank is 128MByte */
 	stw	r30, SDRAMCS1(r31) 		/* Set SDRAMCS1 */
-	
+
 	bl	SDRAM_init			/* Initialize SDRAM controller */
 
 /* init arbiter and stuff... */
 	LWI	r30, 0x8000a06e
 	stw	r30, ARBCFG(r31) 		/* Set ARBCFG */
-	
+
 	LWI	r30, 0x000000ff
 	stw	r30, ARBMPREN(r31) 		/* Set ARBMPREN */
-	
+
 	LWI	r30, 0x00001234
-	stw	r30, ARBMPRIO(r31) 		/* Set ARBPRIO */	
+	stw	r30, ARBMPRIO(r31) 		/* Set ARBPRIO */
 
 	LWI	r30, 0x0000001e
-	stw	r30, ARBSNOOP(r31) 		/* Set ARBSNOOP */	
+	stw	r30, ARBSNOOP(r31) 		/* Set ARBSNOOP */
 /* copy .text section from ROM to RAM location (unique for ROM startup) */
 	LA	r30, bsp_section_text_start	/* get start address of text section in RAM */
-	
-	
+
+
 	add	r30, r20, r30			/* get start address of text section in ROM (add reloc offset) */
-	
-	
+
+
 	LA	r29, bsp_section_text_start	/* get start address of text section in RAM */
-	
+
 
 	LA	r28, bsp_section_text_size	/* get size of RAM image */
-		
-	
+
+
 	bl	copy_image			/* copy text section from ROM to RAM location */
-	
+
 
 /* copy .data section from ROM to RAM location (unique for ROM startup) */
 	LA	r30, bsp_section_data_start	/* get start address of data section in RAM */
-	
-		
+
+
 	add	r30, r20, r30			/* get start address of data section in ROM (add reloc offset) */
-	
-		
+
+
 	LA	r29, bsp_section_data_start	/* get start address of data section in RAM */
-	
-	
+
+
 	LA	r28, bsp_section_data_size  	/* get size of RAM image */
-		
-	
+
+
 	bl	copy_image			/* copy initialized data section from ROM to RAM location */
-	
+
 
 	LA	r29, remap_rom 			/* get compile time address of label */
 	mtlr	r29
-	
+
 	blrl					/* now further execution RAM */
 
-remap_rom:	
+remap_rom:
 /* remap BOOT ROM to CS0 (common for RAM/ROM startup) */
 	lwz	r30, CSBOOTROM(r31)		/* get content of CSBOOTROM */
-	 
-	
-		
-	CLRBITS r30, r29, CSCONF_CE	    
-	stw	r30, CSBOOTROM(r31)		/* disable BOOT CS */ 
-	
-	
+
+
+
+	CLRBITS r30, r29, CSCONF_CE
+	stw	r30, CSBOOTROM(r31)		/* disable BOOT CS */
+
+
 
 	lwz	r30, ADREN(r31)			/* get content of ADREN */
-	 
-	
+
+
 
 	mr	r29, r30			/* move content of r30 to r29 */
-	
-	
+
+
 	LWI	r30, ADREN_BOOT_EN		/* mask ADREN_BOOT_EN */
-	andc	r29,r29,r30	
-	
-		
+	andc	r29,r29,r30
+
+
 	LWI	r30, ADREN_CS0_EN		/* unmask ADREN_CS0_EN */
-	or	r29,r29,r30	
-		
-	
+	or	r29,r29,r30
+
+
 	stw	r29,ADREN(r31)			/* Simultaneous enable CS0 and disable BOOT address space */
-	
-	
-	
+
+
+
 	lwz	r30, CSBOOTROM(r31)		/* get content of CSBOOTROM */
-	 
-	
-		
-	SETBITS r30, r29, CSCONF_CE	    
-	stw	r30, CSBOOTROM(r31)		/* disable BOOT CS */ 
-	
-	
+
+
+
+	SETBITS r30, r29, CSCONF_CE
+	stw	r30, CSBOOTROM(r31)		/* disable BOOT CS */
+
+
 
 skip_ROM_start:
 /* configure external DPRAM CS1 */
@@ -384,62 +384,62 @@ skip_ROM_start:
 	stw	r30, CS1STP(r31)
 
 	lwz	r30, ADREN(r31)			/* get content of ADREN */
-			
+
 	LWI	r29, ADREN_CS1_EN		/* unmask ADREN_CS1_EN */
-	or	r30, r30,r29	
-	
+	or	r30, r30,r29
+
 	stw	r30, ADREN(r31)			/* enable CS1 */
 
 /* clear entire on chip SRAM (unique for ROM startup) */
 	lis	r30, (MBAR+ONCHIP_SRAM_OFFSET)@h	/* get start address of onchip SRAM */
 	ori	r30, r30,(MBAR+ONCHIP_SRAM_OFFSET)@l
         LWI	r29, ONCHIP_SRAM_SIZE		/* get size of onchip SRAM */
-	
+
         bl      clr_mem				/* Clear onchip SRAM */
-	
+
 #endif /* defined(BRS5L) */
 /* clear .bss section (unique for ROM startup) */
 	LWI	r30, bsp_section_bss_start	/* get start address of bss section */
         LWI	r29, bsp_section_bss_size  	/* get size of bss section */
-        
+
 
         bl      clr_mem				/* Clear the bss section */
-	
+
 
 /* set stack pointer (common for RAM/ROM startup) */
-	LA	r1, bsp_section_text_start  
+	LA	r1, bsp_section_text_start
         addi    r1, r1, -0x10			/* Set up stack pointer = beginning of text section - 0x10 */
 
 	bl	__eabi				/* Set up EABI and SYSV environment */
-     
+
 /* enable dynamic power management(common for RAM/ROM startup) */
 	bl	PPC_HID0_rd			/* Get the content of HID0 */
-		
-	SETBITS r30, r29, HID0_DPM 		
+
+	SETBITS r30, r29, HID0_DPM
 	bl	PPC_HID0_wr			/* Set DPM in HID0 */
 
 /* clear arguments and do further init. in C (common for RAM/ROM startup) */
 
         /* Clear cmdline */
         xor r3, r3, r3
-        
+
         bl      SYM (boot_card)			/* Call the first C routine */
 
 #if defined(BRS5L)
-twiddle:				
+twiddle:
 	b	twiddle				/* We don't expect to return from boot_card but if we do */
 						/* wait here for watchdog to kick us into hard reset     */
 
-SDRAM_init:	 	
+SDRAM_init:
 #if defined (BRS5L)
       /* set GPIO_WKUP7 pin low for 66MHz buffering */
       /* or high for 133MHz registered buffering    */
 	LWI	r30, 0x80000000
-	
+
 	lwz	r29, GPIOWE(r31)
 	or	r29,r29,r30			/* set bit 0 in r29/GPIOWE */
 	stw	r29,GPIOWE(r31)
-	
+
 	lwz	r29, GPIOWOD(r31)
 	andc	r29,r29,r30			/* clear bit 0 in r29/GPIOWOD */
 	stw	r29,GPIOWOD(r31)
@@ -447,7 +447,7 @@ SDRAM_init:
 	lwz	r29, GPIOWDO(r31)
 	andc	r29,r29,r30			/* clear bit 0 in r29/GPIOWDO */
 	stw	r29,GPIOWDO(r31)
-	
+
 	lwz	r29, GPIOWDD(r31)
 	or	r29,r29,r30			/* set bit 0 in r29/GPIOWDD */
 	stw	r29,GPIOWDD(r31)
@@ -459,66 +459,66 @@ SDRAM_init:
 
 #endif
 #if 0
-	LWI	r30, 0xC2222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x2 */ 
-	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */ 
+	LWI	r30, 0xC2222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x2 */
+	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */
 						/* Refr.2No-Read delay=0x06, Write latency=0x0 */
 #else
 	/* See Erratum 342/339 in MPC5200_Errata_L25R_3_June.pdf:	*/
 	/* set 5 delays to their maximum to support two banks           */
-	LWI	r30, 0xCC222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x2 */ 
-	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */ 
+	LWI	r30, 0xCC222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x2 */
+	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */
 						/* Refr.2No-Read delay=0x06, Write latency=0x0 */
-#endif	
-	
-	LWI	r30, 0xCCC70004			/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */ 
+#endif
+
+	LWI	r30, 0xCCC70004			/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */
 	stw	r30, CFG2(r31)			/* Burst Read2Write delay=0xB, Burst length=0x7, Read Tap=0x4 */
-	
+
 #ifdef BRS5L
 	LWI	r30, 0xD1470000 		/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
 	stw	r30, CTRL(r31)			/* Refresh counter=0xFFFF */
-	
-	
+
+
 #else
 	LWI	r30, 0xD04F0000 		/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
 	stw	r30, CTRL(r31)			/* Refresh counter=0xFFFF */
-	
-	
-#endif	
-	lwz	r30, CTRL(r31) 
-	
+
+
+#endif
+	lwz	r30, CTRL(r31)
+
 
 	SETBITS	r30, r29, CTRL_PRECHARGE 	/* send two times precharge */
 	stw     r30, CTRL(r31)
-	
-	
+
+
 	stw     r30, CTRL(r31)
-	
-	
-	
+
+
+
 	lwz	r30, CTRL(r31)
-	
-	
+
+
 	SETBITS	r30, r29, CTRL_REFRESH 		/* send two times refresh */
 	stw     r30, CTRL(r31)
-	
-	
-	stw     r30, CTRL(r31)
-	
-	
-	
-	LWI	r30, 0x008D0000 		/* Op.Mode=0x0, Read CAS latency=0x2, Burst length=0x3, Write strobe puls */
-	stw	r30, MOD(r31)	
-	
-	
 
-	lwz	r30, CTRL(r31)			/* Clock enabled, Auto refresh enabled, Mem. data drv. Refresh counter=0xFFFF */  
-	
-	
+
+	stw     r30, CTRL(r31)
+
+
+
+	LWI	r30, 0x008D0000 		/* Op.Mode=0x0, Read CAS latency=0x2, Burst length=0x3, Write strobe puls */
+	stw	r30, MOD(r31)
+
+
+
+	lwz	r30, CTRL(r31)			/* Clock enabled, Auto refresh enabled, Mem. data drv. Refresh counter=0xFFFF */
+
+
  	CLRBITS	r30, r29, CTRL_BA1
  	stw     r30, CTRL(r31)
- 	 
-	
-	
+
+
+
 	blr
 
 
@@ -526,21 +526,21 @@ copy_image:
 	mr	r27, r28
 	srwi	r28, r28, 2
 	mtctr	r28
-	
-	
+
+
 	slwi	r28, r28, 2
 	sub     r27, r27, r28			/* maybe some residual bytes */
-	
-		
+
+
 copy_image_word:
 	lswi	r28, r30, 0x04
-	
+
 	stswi   r28, r29, 0x04			/* do word copy ROM -> RAM */
-	
+
 
 	addi    r30, r30, 0x04			/* increment source pointer */
 	addi    r29, r29, 0x04			/* increment destination pointer */
-	
+
 	bdnz	copy_image_word			/* decrement ctr and branch if not 0 */
 
 	cmpwi	r27, 0x00			/* copy image finished ? */
@@ -548,24 +548,24 @@ copy_image_word:
 	mtctr   r27				/* reload counter for residual bytes */
 copy_image_byte:
 	lswi	r28, r30, 0x01
-	
+
 	stswi   r28, r29, 0x01			/* do byte copy ROM -> RAM */
-	
-	
+
+
 	addi    r30, r30, 0x01			/* increment source pointer */
 	addi    r29, r29, 0x01			/* increment destination pointer */
-	
+
 	bdnz	copy_image_byte			/* decrement ctr and branch if not 0 */
-	
+
 copy_image_end:
 	blr
 #endif /* defined(BRS5L) */
 
 FID_DCache:
-	mflr	r26			
-	
-        bl      PPC_HID0_rd   
-        TSTBITS	r30, r29, HID0_DCE     
+	mflr	r26
+
+        bl      PPC_HID0_rd
+        TSTBITS	r30, r29, HID0_DCE
         bne     FID_DCache_exit			/* If data cache is switched of, skip further actions */
 
 	li   	r29, PPC_D_CACHE		/* 16 Kb data cache on 603e */
@@ -573,9 +573,9 @@ FID_DCache:
 
 FID_DCache_loop_1:
         lwz     r27, 0(r28)			/* Load data at address */
-                                    
+
         addi    r28, r28, PPC_CACHE_ALIGNMENT 	/* increment cache line address */
-        subi    r29, r29, PPC_CACHE_ALIGNMENT 	/* increment loop counter */    
+        subi    r29, r29, PPC_CACHE_ALIGNMENT 	/* increment loop counter */
         cmpwi	r29, 0x0
         bne     FID_DCache_loop_1		/* Loop until cache size is reached */
 
@@ -583,17 +583,17 @@ FID_DCache_loop_1:
 	LWI	r28, bsp_section_text_start	/* Reload base address (begin of RAM) */
 	xor	r27, r27, r27
 FID_DCache_loop_2:
-                                    
+
 	dcbf    r27, r28                	/* Flush and invalidate cache */
-	
+
         addi    r28, r28, PPC_CACHE_ALIGNMENT 	/* increment cache line address */
-	subi    r29, r29, PPC_CACHE_ALIGNMENT 	/* increment loop counter */ 
+	subi    r29, r29, PPC_CACHE_ALIGNMENT 	/* increment loop counter */
 	cmpwi	r29, 0x0
         bne     FID_DCache_loop_2		/* Loop around until cache size is reached */
 
-        bl      PPC_HID0_rd			/* Read HID0 */     
+        bl      PPC_HID0_rd			/* Read HID0 */
        	CLRBITS	r30, r29, HID0_DCE
-        bl      PPC_HID0_wr			/* Clear DCE */             
+        bl      PPC_HID0_wr			/* Clear DCE */
 
 FID_DCache_exit:
 	mtlr	r26
@@ -601,33 +601,33 @@ FID_DCache_exit:
 
 IDUL_ICache:
 	mflr 	r26
-	
-        bl      PPC_HID0_rd   
+
+        bl      PPC_HID0_rd
         TSTBITS	r30, r29, HID0_ICE
         bne     IDUL_ICache_exit		/* If instruction cache is switched of, skip further actions */
 
-	CLRBITS r30, r29, HID0_ICE     
+	CLRBITS r30, r29, HID0_ICE
         bl      PPC_HID0_wr 			/* Disable ICE bit */
 
-	SETBITS r30, r29, HID0_ICFI	
+	SETBITS r30, r29, HID0_ICFI
         bl	PPC_HID0_wr			/* Invalidate instruction cache */
-        
-        CLRBITS r30, r29, HID0_ICFI	
+
+        CLRBITS r30, r29, HID0_ICFI
         bl	PPC_HID0_wr			/* Disable cache invalidate */
-        
-        CLRBITS r30, r29, HID0_ILOCK	   
-        bl      PPC_HID0_wr			/* Disable instruction cache lock */               
+
+        CLRBITS r30, r29, HID0_ILOCK
+        bl      PPC_HID0_wr			/* Disable instruction cache lock */
 
 IDUL_ICache_exit:
 	mtlr	r26
 	blr
-	
-	
+
+
 TLB_init:					/* Initialize translation lookaside buffers (TLBs) */
 	xor	r30, r30, r30
-	xor	r29, r29, r29	
-	
-TLB_init_loop:	
+	xor	r29, r29, r29
+
+TLB_init_loop:
 	tlbie	r29
 	tlbsync
 	addi	r29, r29, 0x1000
@@ -638,16 +638,16 @@ TLB_init_loop:
 
 FPU_init:
 	mfmsr	r30				/* get content of MSR */
-	
-	
+
+
 	SETBITS r30, r29, MSR_FP
 	mtmsr	r30				/* enable FPU and FPU exceptions */
-	
-#if 0	
+
+#if 0
 	LA	r29, bsp_ram_start
 	stw	r29, 0x0(r29)
-#endif	
-	
+#endif
+
 	lfd 	f0, 0(r29)
 	fmr 	f1, f0
 	fmr 	f2, f0
@@ -680,8 +680,8 @@ FPU_init:
 	fmr 	f29, f0
 	fmr 	f30, f0
 	fmr 	f31, f0
-	
-			
+
+
 	mtfsfi	0, 0				/* initialize bit positons in FPSCR */
 	mtfsfi	1, 0
 	mtfsfi	2, 0
@@ -690,12 +690,12 @@ FPU_init:
 	mtfsfi	5, 0
 	mtfsfi	6, 0
 	mtfsfi	7, 0
-		
+
 	blr
 
 SPRG_init:					/* initialize registers */
 	xor	r30, r30, r30
-	
+
 	mtspr	XER, r30
 	mtspr	CTR, r30
 	mtspr	DSISR, r30
@@ -709,7 +709,7 @@ SPRG_init:					/* initialize registers */
 	mtspr	SPRG0, r30
 	mtspr	SPRG1, r30
 	mtspr	SPRG2, r30
-	mtspr	SPRG3, r30	
+	mtspr	SPRG3, r30
 	mtspr	SPRG4, r30
 	mtspr	SPRG5, r30
 	mtspr	SPRG6, r30
@@ -771,74 +771,74 @@ SPRG_init:					/* initialize registers */
 	mtsr	SR13, r30
 	mtsr	SR14, r30
 	mtsr	SR15, r30
-	
-	
-	
- 	
- 
+
+
+
+
+
 	blr
 
 SPRG_brk_init:
 	xor	r30, r30, r30
-	
+
 	mtspr	DABR2, r30
 	mtspr	DBCR, r30
 	mtspr	IBCR, r30
 	mtspr	IABR, r30
 	mtspr	HID2, r30
 	mtspr	DABR, r30
-	mtspr	IABR2, r30	
+	mtspr	IABR2, r30
 
-	
-	
-	 
+
+
+
 	blr
 
- 
+
 PPC_HID0_rd:					/* get HID0 content to r30 */
-        
-        
+
+
         mfspr   r30, HID0
-        
+
         blr
 
 
 PPC_HID0_wr:					/* put r30 content to HID0 */
-        
-        
+
+
         mtspr   HID0, r30
-        
+
         blr
 
 clr_mem:
-	mr 	r28, r29		
+	mr 	r28, r29
 	srwi	r29, r29, 2
         mtctr   r29				/* set ctr reg */
-        
-        
+
+
         slwi	r29, r29, 2
         sub     r28, r28, r29			/* maybe some residual bytes */
-        xor     r29, r29, r29		
-	
-	
+        xor     r29, r29, r29
+
+
 clr_mem_word:
         stswi   r29, r30, 0x04			/* store r29 (word) to r30 memory location */
         addi    r30, r30, 0x04			/* increment r30 */
-        
+
         bdnz    clr_mem_word			/* dec counter and loop */
-	
-	
+
+
 	cmpwi	r28, 0x00			/* clear mem. finished ? */
 	beq	clr_mem_end;
         mtctr   r28				/* reload counter for residual bytes */
 clr_mem_byte:
 	stswi   r29, r30, 0x01			/* store r29 (byte) to r30 memory location  */
 	addi    r30, r30, 0x01			/* update r30 */
-        
+
         bdnz    clr_mem_byte			/* dec counter and loop */
-        
+
 clr_mem_end:
         blr					/* return */
-        
 
- 
+
+

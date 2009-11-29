@@ -137,7 +137,7 @@ void _ISR_Handler()
 FRAME(rbtx4938_ISR_Handler,sp,0,ra)
 	.set noreorder
 
-#if 0	
+#if 0
 /* Activate TX4938 PIO19 signal for diagnostics */
 	lui	k0,0xff1f
 	ori	k0,k0,0xf500
@@ -148,7 +148,7 @@ FRAME(rbtx4938_ISR_Handler,sp,0,ra)
 	ori	k0,k0,0xf500
 	sw	k1,(k0)
 #endif
-	
+
 	mfc0 k0,C0_CAUSE	/* Determine if an interrupt generated this exception */
 	nop
 	and k1,k0,CAUSE_EXCMASK
@@ -190,7 +190,7 @@ _chk_int:
         /* wastes a lot of stack space for context?? */
 	ADDIU    sp,sp,-EXCP_STACK_SIZE
 
-        STREG ra, R_RA*R_SZ(sp)  /* store ra on the stack */ 
+        STREG ra, R_RA*R_SZ(sp)  /* store ra on the stack */
         STREG v0, R_V0*R_SZ(sp)
         STREG v1, R_V1*R_SZ(sp)
         STREG a0, R_A0*R_SZ(sp)
@@ -207,13 +207,13 @@ _chk_int:
         STREG t7, R_T7*R_SZ(sp)
         mflo  t0
         STREG t8, R_T8*R_SZ(sp)
-        STREG t0, R_MDLO*R_SZ(sp) 
+        STREG t0, R_MDLO*R_SZ(sp)
         STREG t9, R_T9*R_SZ(sp)
         mfhi  t0
         STREG gp, R_GP*R_SZ(sp)
-        STREG t0, R_MDHI*R_SZ(sp) 
+        STREG t0, R_MDHI*R_SZ(sp)
         STREG fp, R_FP*R_SZ(sp)
-	
+
         .set noat
         STREG AT, R_AT*R_SZ(sp)
         .set at
@@ -287,7 +287,7 @@ _chk_int:
 	mtc0 t1,C0_SR
 	nop
 #endif
-	
+
 _ISR_Handler_cleanup:
 
   /*
@@ -317,7 +317,7 @@ _ISR_Handler_cleanup:
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
    *    restore stack
    *  #endif
-   *  
+   *
    *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
    *    goto the label "exit interrupt (simple case)"
    */
@@ -351,7 +351,7 @@ _ISR_Handler_cleanup:
 	/* save off our stack frame so the context switcher can get to it */
 	la	t0,__exceptionStackFrame
 	STREG	sp,(t0)
-					
+
         jal     _Thread_Dispatch
         NOP
 
@@ -361,7 +361,7 @@ _ISR_Handler_cleanup:
 	STREG	zero,(t0)
 	NOP
 
-/* 
+/*
 ** turn interrupts back off while we restore context so
 ** a badly timed interrupt won't accidentally mess things up
 */
@@ -375,7 +375,7 @@ _ISR_Handler_cleanup:
 
         mtc0    t0, C0_SR
 	NOP
-	
+
   /*
    *  prepare to get out of interrupt
    *  return from interrupt  (maybe to _ISR_Dispatch)
@@ -391,7 +391,7 @@ _ISR_Handler_exit:
         LDREG t8, R_MDLO*R_SZ(sp)
         LDREG t0, R_T0*R_SZ(sp)
         mtlo  t8
-        LDREG t8, R_MDHI*R_SZ(sp)           
+        LDREG t8, R_MDHI*R_SZ(sp)
         LDREG t1, R_T1*R_SZ(sp)
         mthi  t8
         LDREG t2, R_T2*R_SZ(sp)
@@ -411,10 +411,10 @@ _ISR_Handler_exit:
         LDREG a3, R_A3*R_SZ(sp)
         LDREG v1, R_V1*R_SZ(sp)
         LDREG v0, R_V0*R_SZ(sp)
-	
+
         LDREG k1, R_EPC*R_SZ(sp)
 	mtc0  k1,C0_EPC
-	
+
 	.set noat
         LDREG     AT, R_AT*R_SZ(sp)
         .set at
@@ -428,7 +428,7 @@ _ISR_Handler_quick_exit:
 
 #if 0
 	.global	int7_isr
-	.extern	Interrupt_7_isr	
+	.extern	Interrupt_7_isr
 int7_isr:
 	/* Verify interrupt is from Timer */
         la      k0,IRCS		/* read Interrupt Current Status register */
@@ -464,7 +464,7 @@ FRAME(_BRK_Handler,sp,0,ra)
 	la	k0,INT_CFG3
 	sw	k1,(k0)
 #endif
-	
+
 	la  k0,_brk_esr_link	/* Jump to next exception handler in PMON exception chain */
 	lw  k0,(k0)
 	lw  k0,4(k0)
@@ -492,7 +492,7 @@ FRAME(init_exc_vecs,sp,0,ra)
 	.set noreorder
 
 	.extern mon_onintr
-	
+
 /* Install interrupt handler in PMON exception handling chain */
 
 	addiu	sp,sp,-8
@@ -522,7 +522,7 @@ ENDFRAME(init_exc_vecs)
 */
 FRAME(enable_int7,sp,0,ra)
 	.set noreorder
-	
+
 	la	t0,IRDM1	# Set interrupt controller detection mode (bits 2-3 = 0 for int 7 active low)
 	li	t1,0x0
 	sw	t1,(t0)
@@ -530,7 +530,7 @@ FRAME(enable_int7,sp,0,ra)
 	la	t0,IRLVL4	# Set interrupt controller level (bit 8-10 = 2 for int 7 at level 2)
 	li	t1,0x200
 	sw	t1,(t0)
-	
+
 	la	t0,IRMSK	# Set interrupt controller mask
 	li	t1,0x0
 	sw	t1,(t0)
@@ -566,7 +566,7 @@ ENDFRAME(disable_int7)
 *  tx4938exception:
 *       Diagnostic code that can be hooked to PMON interrupt handler.
 *       Generates pulse on PIO22 pin.
-*	Called from _exception code in PMON (see mips.s of PMON). 
+*	Called from _exception code in PMON (see mips.s of PMON).
 *	Return address is located in k1.
 */
 FRAME(tx4938exception,sp,0,ra)
@@ -609,7 +609,7 @@ ENDFRAME(tx4938exception)
 	.data
 
 k1tmp:	.word	0	/* Temporary strage for K1 during interrupt service */
-	
+
 /*************************************************************
 *
 * Exception handler links, used in PMON exception handler chains
@@ -619,7 +619,7 @@ k1tmp:	.word	0	/* Temporary strage for K1 during interrupt service */
 _int_esr_link:
 	.word	0
 	.word	rbtx4938_ISR_Handler
-	
+
 	/* Break exception service routine link */
 	.global	_brk_esr_link
 _brk_esr_link:
@@ -627,5 +627,5 @@ _brk_esr_link:
 	.word	_BRK_Handler
 
 
-	
+
 

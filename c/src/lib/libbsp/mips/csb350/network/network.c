@@ -3,7 +3,7 @@
  *
  *  Copyright (c) 2005 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -61,23 +61,23 @@ typedef struct
      * This entry *must* be the first in the sonic_softc structure.
      */
     struct arpcom                    arpcom;
-    
+
     /*
      * Interrupt vector
      */
     rtems_vector_number             vector;
-    
+
     /*
      *  Indicates configuration
      */
     int                             acceptBroadcast;
-    
+
     /*
      * Tasks waiting for interrupts
      */
     rtems_id                        rx_daemon_tid;
     rtems_id                        tx_daemon_tid;
-    
+
     /*
      * Buffers
      */
@@ -125,7 +125,7 @@ typedef struct
     unsigned long                   rx_watchdog;
     unsigned long                   rx_pkts;
     unsigned long                   rx_dropped;
-    
+
     unsigned long                   tx_deferred;
     unsigned long                   tx_underrun;
     unsigned long                   tx_aborted;
@@ -136,7 +136,7 @@ static au1x00_emac_softc_t softc[NUM_IFACES];
 
 
 /* function prototypes */
-int rtems_au1x00_emac_attach (struct rtems_bsdnet_ifconfig *config, 
+int rtems_au1x00_emac_attach (struct rtems_bsdnet_ifconfig *config,
                               int attaching);
 void au1x00_emac_init(void *arg);
 void au1x00_emac_init_hw(au1x00_emac_softc_t *sc);
@@ -160,10 +160,10 @@ static void mii_write(au1x00_emac_softc_t *sc, uint8_t reg, uint16_t val)
 
     /* write to address 0 - we only support address 0 */
     AU1X00_MAC_MIIDATA(sc->ctrl_regs) = val;
-    AU1X00_MAC_MIICTRL(sc->ctrl_regs) = (((reg & 0x1f) << 6) | 
+    AU1X00_MAC_MIICTRL(sc->ctrl_regs) = (((reg & 0x1f) << 6) |
                                          AU1X00_MAC_MIICTRL_MW);
     au_sync();
-    
+
     /* wait for it to complete */
     while (AU1X00_MAC_MIICTRL(sc->ctrl_regs) & AU1X00_MAC_MIICTRL_MB) {
         continue;
@@ -180,7 +180,7 @@ static void mii_read(au1x00_emac_softc_t *sc, uint8_t reg, uint16_t *val)
     /* write to address 0 - we only support address 0 */
     AU1X00_MAC_MIICTRL(sc->ctrl_regs) = ((reg & 0x1f) << 6);
     au_sync();
-    
+
     /* wait for it to complete */
     while (AU1X00_MAC_MIICTRL(sc->ctrl_regs) & AU1X00_MAC_MIICTRL_MB) {
         continue;
@@ -214,13 +214,13 @@ int rtems_au1x00_emac_attach (
     int unitnumber;
     char *unitname;
     static au1x00_emac_softc_t *sc;
-    
+
     /*
      * Parse driver name
      */
     if ((unitnumber = rtems_bsdnet_parse_driver_name (config, &unitname)) < 0)
         return 0;
-    
+
     /*
      * Is driver free?
      */
@@ -240,9 +240,9 @@ int rtems_au1x00_emac_attach (
     /*
      *  zero out the control structure
      */
-    
+
     memset((void *)sc, 0, sizeof(*sc));
-    
+
     sc->unitnumber = unitnumber;
     sc->int_ctrlr = AU1X00_IC0_ADDR;
 
@@ -260,7 +260,7 @@ int rtems_au1x00_emac_attach (
 
     /* If the ethernet controller is already set up, read the MAC address */
     if ((*sc->en_reg & 0x33) == 0x33) {
-        sc->arpcom.ac_enaddr[5] = ((AU1X00_MAC_ADDRHIGH(sc->ctrl_regs) >> 8) & 
+        sc->arpcom.ac_enaddr[5] = ((AU1X00_MAC_ADDRHIGH(sc->ctrl_regs) >> 8) &
                                    0xff);
         sc->arpcom.ac_enaddr[4] = ((AU1X00_MAC_ADDRHIGH(sc->ctrl_regs) >> 0) &
                                    0xff);
@@ -268,9 +268,9 @@ int rtems_au1x00_emac_attach (
                                    0xff);
         sc->arpcom.ac_enaddr[2] = ((AU1X00_MAC_ADDRLOW(sc->ctrl_regs) >> 16) &
                                    0xff);
-        sc->arpcom.ac_enaddr[1] = ((AU1X00_MAC_ADDRLOW(sc->ctrl_regs) >> 8) & 
+        sc->arpcom.ac_enaddr[1] = ((AU1X00_MAC_ADDRLOW(sc->ctrl_regs) >> 8) &
                                    0xff);
-        sc->arpcom.ac_enaddr[0] = ((AU1X00_MAC_ADDRLOW(sc->ctrl_regs) >> 0) & 
+        sc->arpcom.ac_enaddr[0] = ((AU1X00_MAC_ADDRLOW(sc->ctrl_regs) >> 0) &
                                    0xff);
     } else {
         /* It's not set up yet, so we set a MAC address */
@@ -281,7 +281,7 @@ int rtems_au1x00_emac_attach (
         sc->arpcom.ac_enaddr[1] = 0x23;
         sc->arpcom.ac_enaddr[0] = 0x00;
     }
-    
+
 
     if (config->mtu) {
         mtu = config->mtu;
@@ -290,7 +290,7 @@ int rtems_au1x00_emac_attach (
     }
 
     sc->acceptBroadcast = !config->ignore_broadcast;
-    
+
     /*
      * Set up network interface values
      */
@@ -317,19 +317,19 @@ int rtems_au1x00_emac_attach (
 
 void au1x00_emac_init(void *arg)
 {
-    au1x00_emac_softc_t     *sc = arg;      
+    au1x00_emac_softc_t     *sc = arg;
     struct ifnet *ifp = &sc->arpcom.ac_if;
 
-    /* 
-     *This is for stuff that only gets done once (au1x00_emac_init() 
-     * gets called multiple times 
+    /*
+     *This is for stuff that only gets done once (au1x00_emac_init()
+     * gets called multiple times
      */
     if (sc->tx_daemon_tid == 0)
     {
         /* Set up EMAC hardware */
         au1x00_emac_init_hw(sc);
-        
-        
+
+
         /* install the interrupt handler */
         if (sc->unitnumber == 0) {
             set_vector(au1x00_emac_isr, AU1X00_IRQ_MAC0, 1);
@@ -338,48 +338,48 @@ void au1x00_emac_init(void *arg)
         }
         AU1X00_IC_MASKCLR(sc->int_ctrlr) = sc->int_mask;
         au_sync();
-            
+
         /* set src bit */
         AU1X00_IC_SRCSET(sc->int_ctrlr) = sc->int_mask;
-        
+
         /* high level */
         AU1X00_IC_CFG0SET(sc->int_ctrlr) = sc->int_mask;
         AU1X00_IC_CFG1CLR(sc->int_ctrlr) = sc->int_mask;
         AU1X00_IC_CFG2SET(sc->int_ctrlr) = sc->int_mask;
-            
+
         /* assign to request 0 - negative logic */
         AU1X00_IC_ASSIGNSET(sc->int_ctrlr) = sc->int_mask;
         au_sync();
 
         /* Start driver tasks */
-        sc->tx_daemon_tid = rtems_bsdnet_newproc("ENTx", 
-                                                 4096, 
-                                                 au1x00_emac_tx_daemon, 
+        sc->tx_daemon_tid = rtems_bsdnet_newproc("ENTx",
+                                                 4096,
+                                                 au1x00_emac_tx_daemon,
                                                  sc);
-    
-        sc->rx_daemon_tid = rtems_bsdnet_newproc("ENRx", 
-                                                 4096, 
-                                                 au1x00_emac_rx_daemon, 
+
+        sc->rx_daemon_tid = rtems_bsdnet_newproc("ENRx",
+                                                 4096,
+                                                 au1x00_emac_rx_daemon,
                                                  sc);
-    
+
 
     }
     /* EMAC doesn't support promiscuous, so ignore requests */
     if (ifp->if_flags & IFF_PROMISC)
         printf ("Warning - AU1X00 EMAC doesn't support Promiscuous Mode!\n");
-    
+
     /*
      * Tell the world that we're running.
      */
     ifp->if_flags |= IFF_RUNNING;
-    
+
     /*
-     * start tx, rx 
+     * start tx, rx
      */
-    AU1X00_MAC_CONTROL(sc->ctrl_regs) |= (AU1X00_MAC_CTRL_TE | 
+    AU1X00_MAC_CONTROL(sc->ctrl_regs) |= (AU1X00_MAC_CTRL_TE |
                                              AU1X00_MAC_CTRL_RE);
     au_sync();
-    
+
 
 } /* au1x00_emac_init() */
 
@@ -390,7 +390,7 @@ void  au1x00_emac_init_hw(au1x00_emac_softc_t *sc)
     struct ifnet *ifp = &sc->arpcom.ac_if;
 
     /* reset the MAC */
-    *sc->en_reg = 0x40; 
+    *sc->en_reg = 0x40;
     au_sync();
     for (i = 0; i < 10000; i++) {
         continue;
@@ -404,9 +404,9 @@ void  au1x00_emac_init_hw(au1x00_emac_softc_t *sc)
     }
 
 /*
-    *sc->en_reg = (AU1X00_MAC_EN_CE | 
-                   AU1X00_MAC_EN_E2 | 
-                   AU1X00_MAC_EN_E1 | 
+    *sc->en_reg = (AU1X00_MAC_EN_CE |
+                   AU1X00_MAC_EN_E2 |
+                   AU1X00_MAC_EN_E1 |
                    AU1X00_MAC_EN_E0);
 */
     *sc->en_reg = 0x33;
@@ -445,7 +445,7 @@ void  au1x00_emac_init_hw(au1x00_emac_softc_t *sc)
     au_sync();
     printk("mac_control was set to 0x%x\n", AU1X00_MAC_CONTROL(sc->ctrl_regs));
     printk("mac_control addr is 0x%x\n", &AU1X00_MAC_CONTROL(sc->ctrl_regs));
-    
+
     /* initialize our receive buffer descriptors */
     for (i = 0; i < NUM_RX_DMA_BUFS; i++) {
         MGETHDR(m, M_WAIT, MT_DATA);
@@ -456,7 +456,7 @@ void  au1x00_emac_init_hw(au1x00_emac_softc_t *sc)
 
         /*
          * The receive buffer must be aligned with a cache line
-         * boundary. 
+         * boundary.
          */
         if (mtod(m, uint32_t) & 0x1f) {
 	  uint32_t *p = mtod(m, uint32_t *);
@@ -491,7 +491,7 @@ void  au1x00_emac_init_hw(au1x00_emac_softc_t *sc)
 void au1x00_emac_start(struct ifnet *ifp)
 {
     au1x00_emac_softc_t *sc = ifp->if_softc;
-    
+
     rtems_event_send(sc->tx_daemon_tid, START_TX_EVENT);
     ifp->if_flags |= IFF_OACTIVE;
 }
@@ -499,15 +499,15 @@ void au1x00_emac_start(struct ifnet *ifp)
 void au1x00_emac_stop (au1x00_emac_softc_t *sc)
 {
     struct ifnet *ifp = &sc->arpcom.ac_if;
-    
+
     ifp->if_flags &= ~IFF_RUNNING;
-    
+
     /*
      * Stop the transmitter and receiver.
      */
 
     /* Disable TX/RX  */
-    AU1X00_MAC_CONTROL(sc->ctrl_regs) &= ~(AU1X00_MAC_CTRL_TE | 
+    AU1X00_MAC_CONTROL(sc->ctrl_regs) &= ~(AU1X00_MAC_CTRL_TE |
                                       AU1X00_MAC_CTRL_RE);
     au_sync();
 }
@@ -577,7 +577,7 @@ void au1x00_emac_rx_daemon (void *arg)
 
         /* while there are packets to receive */
 
-        while (!(sc->rx_dma[sc->rx_head].addr & (AU1X00_MAC_DMA_RXADDR_DN | 
+        while (!(sc->rx_dma[sc->rx_head].addr & (AU1X00_MAC_DMA_RXADDR_DN |
                                                 AU1X00_MAC_DMA_RXADDR_EN))) {
             status = sc->rx_dma[sc->rx_head].stat;
             if (status & AU1X00_MAC_DMA_RXSTAT_MI) {
@@ -621,51 +621,51 @@ void au1x00_emac_rx_daemon (void *arg)
             }
 
             /* If no errrors, accept packet */
-            if ((status & (AU1X00_MAC_DMA_RXSTAT_CR | 
-                           AU1X00_MAC_DMA_RXSTAT_DB | 
+            if ((status & (AU1X00_MAC_DMA_RXSTAT_CR |
+                           AU1X00_MAC_DMA_RXSTAT_DB |
                            AU1X00_MAC_DMA_RXSTAT_RF)) == 0) {
 
                 sc->rx_pkts++;
 
                 /* find the start of the mbuf */
                 m = sc->rx_mbuf[sc->rx_head];
-                
+
                 /* set the length of the mbuf */
                 m->m_len = AU1X00_MAC_DMA_RXSTAT_LEN(sc->rx_dma[sc->rx_head].stat);
                 m->m_len -= 4; /* remove ethernet CRC */
-                
+
                 m->m_pkthdr.len = m->m_len;
-                
+
                 /* strip off the ethernet header from the mbuf */
                 /* but save the pointer to it */
                 eh = mtod (m, struct ether_header *);
                 m->m_data += sizeof(struct ether_header);
-                
+
                 /* give the received packet to the stack */
                 ether_input(ifp, eh, m);
                 /* get a new buf and make it ready for the MAC */
                 MGETHDR(m, M_WAIT, MT_DATA);
                 MCLGET(m, M_WAIT);
-                
+
                 m->m_pkthdr.rcvif = ifp;
                 m->m_nextpkt = 0;
-                
+
                 /*
                  * The receive buffer must be aligned with a cache line
-                 * boundary. 
+                 * boundary.
                  */
 		{
                   uint32_t *p = mtod(m, uint32_t *);
                   *p = (mtod(m, uint32_t) + 0x1f) & ~0x1f;
 		}
-            
+
             } else {
                 sc->rx_dropped++;
 
                 /* find the mbuf so we can reuse it*/
                 m = sc->rx_mbuf[sc->rx_head];
             }
-            
+
             /* set up the receive dma to use the mbuf's cluster */
             sc->rx_dma[sc->rx_head].addr = (mtod(m, uint32_t) & ~0xe0000000);
             au_sync();
@@ -673,7 +673,7 @@ void au1x00_emac_rx_daemon (void *arg)
 
             sc->rx_dma[sc->rx_head].addr |= AU1X00_MAC_DMA_RXADDR_EN;
             au_sync();
-            
+
 
             /* increment the buffer index */
             sc->rx_head++;
@@ -697,20 +697,20 @@ void au1x00_emac_sendpacket (struct ifnet *ifp, struct mbuf *m)
                                            AU1X00_MAC_DMA_TXADDR_DN)) != 0) {
         continue;
     }
-    
+
     /* copy the mbuf chain into the transmit buffer */
     l = m;
 
     txbuf = (uint32_t)sc->tx_buf[sc->tx_head];
     while (l != NULL)
     {
-        
+
         memcpy(((char *)txbuf + pkt_offset), /* offset into pkt for mbuf */
-               (char *)mtod(l, void *),      /* cast to void */ 
+               (char *)mtod(l, void *),      /* cast to void */
                l->m_len);                    /* length of this mbuf */
-        
+
         pkt_offset += l->m_len;              /* update offset */
-        l = l->m_next;                       /* get next mbuf, if any */     
+        l = l->m_next;                       /* get next mbuf, if any */
     }
 
     /* Pad if necessary */
@@ -722,12 +722,12 @@ void au1x00_emac_sendpacket (struct ifnet *ifp, struct mbuf *m)
     /* send it off */
     sc->tx_dma[sc->tx_head].stat = 0;
     sc->tx_dma[sc->tx_head].len = pkt_offset;
-    sc->tx_dma[sc->tx_head].addr = ((txbuf & ~0xe0000000) | 
+    sc->tx_dma[sc->tx_head].addr = ((txbuf & ~0xe0000000) |
                                     AU1X00_MAC_DMA_TXADDR_EN);
     au_sync();
 
 
-    /* 
+    /*
      *Without this delay, some outgoing packets never
      * make it out the device. Nothing in the documentation
      * explains this.
@@ -747,7 +747,7 @@ void au1x00_emac_sendpacket (struct ifnet *ifp, struct mbuf *m)
 } /* au1x00_emac_sendpacket () */
 
 
-        
+
 /* Show interface statistics */
 void au1x00_emac_stats (au1x00_emac_softc_t *sc)
 {
@@ -769,7 +769,7 @@ void au1x00_emac_stats (au1x00_emac_softc_t *sc)
     printf("RX runt:%-8lu", sc->rx_runt);
     printf("       RX watchdog:%-8lu", sc->rx_watchdog);
     printf("   RX dropped:%-8lu\n", sc->rx_dropped);
-    
+
     printf("TX Packets:%-8lu", sc->tx_pkts);
     printf("    TX Deferred:%-8lu", sc->tx_deferred);
     printf("   TX Underrun:%-8lu\n", sc->tx_underrun);
@@ -784,38 +784,38 @@ au1x00_emac_ioctl (struct ifnet *ifp, int command, caddr_t data)
 {
     au1x00_emac_softc_t *sc = ifp->if_softc;
     int error = 0;
-    
+
     switch (command) {
     case SIOCGIFADDR:
     case SIOCSIFADDR:
         ether_ioctl (ifp, command, data);
         break;
-        
+
     case SIOCSIFFLAGS:
         switch (ifp->if_flags & (IFF_UP | IFF_RUNNING))
         {
         case IFF_RUNNING:
             au1x00_emac_stop (sc);
             break;
-            
+
         case IFF_UP:
             au1x00_emac_init (sc);
             break;
-            
+
         case IFF_UP | IFF_RUNNING:
             au1x00_emac_stop (sc);
             au1x00_emac_init (sc);
             break;
-            
+
         default:
             break;
         } /* switch (if_flags) */
         break;
-        
+
     case SIO_RTEMS_SHOW_STATS:
         au1x00_emac_stats (sc);
         break;
-        
+
         /*
          * FIXME: All sorts of multicast commands need to be added here!
          */
@@ -841,7 +841,7 @@ rtems_isr au1x00_emac_isr (rtems_vector_number v)
     sc->interrupts++;
 
     /*
-     * Since there's no easy way to find out the source of the 
+     * Since there's no easy way to find out the source of the
      * interrupt, we have to look at the tx and rx dma buffers
      */
     /* receive interrupt */
@@ -850,7 +850,7 @@ rtems_isr au1x00_emac_isr (rtems_vector_number v)
         sc->rx_interrupts++;
         sc->rx_dma[sc->rx_tail].addr &= ~AU1X00_MAC_DMA_RXADDR_DN;
         au_sync();
-        
+
         sc->rx_tail++;
         if (sc->rx_tail >= NUM_RX_DMA_BUFS) {
             sc->rx_tail = 0;
@@ -865,7 +865,7 @@ rtems_isr au1x00_emac_isr (rtems_vector_number v)
         uint32_t status;
         tx_flag = 1;
         sc->tx_interrupts++;
-        
+
         status = sc->tx_dma[sc->tx_tail].stat;
         if (status & AU1X00_MAC_DMA_TXSTAT_DF) {
             sc->tx_deferred++;
@@ -876,7 +876,7 @@ rtems_isr au1x00_emac_isr (rtems_vector_number v)
         if (status & AU1X00_MAC_DMA_TXSTAT_FA) {
             sc->tx_aborted++;
         }
-        
+
         sc->tx_dma[sc->tx_tail].addr = 0;
         au_sync();
 

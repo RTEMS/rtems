@@ -19,7 +19,7 @@ two paragraphs in the transferred software.
 
 COPYRIGHT IDT CORPORATION 1996
 LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
-*/ 
+*/
 
 /*************************************************************************
 **
@@ -37,7 +37,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #include <rtems/asm.h>
 
 
-#if 0	
+#if 0
 	.extern _fdata,4		/* this is defined by the linker */
 	.extern _edata,4		/* this is defined by the linker */
 	.extern _idata,4		/* this is defined by the linker */
@@ -53,11 +53,11 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
   at least 16 megabytes of RAM */
 #define HARD_CODED_MEM_SIZE 0x1000000
 
-#define TMP_STKSIZE  1024 
+#define TMP_STKSIZE  1024
 
 /*
-** P_STACKSIZE is the size of the Prom Stack. 
-** the prom stack grows downward 
+** P_STACKSIZE is the size of the Prom Stack.
+** the prom stack grows downward
 */
 #define	P_STACKSIZE	0x2000   /* sets stack size to 8k */
 
@@ -72,7 +72,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 **		c) Clear all IntMask Enables
 **		d) Set kernel/disabled mode
 **	2)  Initialize Cause Register
-**		a)  clear software interrupt bits       
+**		a)  clear software interrupt bits
 **	3)  Determine FPU installed or not
 **		if not, clear CoProcessor 1 usable bit
 **	4)  Clear bss area
@@ -84,15 +84,15 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 **	9)  Flush Instruction and Data caches
 ** 	10)  If there is a Translation Lookaside Buffer, Clear the TLB
 ** 	11)  Execute initialization code if the IDT/c library is to be used
-** 
+**
 ** 	12)  Jump to user's "main()" (boot_card() for RTEMS)
 ** 	13)  Jump to promexit
 **
-**	IDT/C 5.x defines _R3000, IDT/C 6.x defines _R4000 internally. 
+**	IDT/C 5.x defines _R3000, IDT/C 6.x defines _R4000 internally.
 **	This is used to mark code specific to R3xxx or R4xxx processors.
-**	IDT/C 6.x defines __mips to be the ISA level for which we're 
-**	generating code. This is used to make sure the stack etc. is 
-**	double word aligned, when using -mips3 (default) or -mips2, 
+**	IDT/C 6.x defines __mips to be the ISA level for which we're
+**	generating code. This is used to make sure the stack etc. is
+**	double word aligned, when using -mips3 (default) or -mips2,
 **	when compiling with IDT/C6.x
 **
 ***************************************************************************/
@@ -110,7 +110,7 @@ FRAME(start,sp,0,ra)
 	nop
 	mtc0	zero,C0_CAUSE		/* clear software interrupts */
 	nop
-	
+
 	la	t0,0xBE200000		/* on Hurricane board, enable interrupt output signal from UART ch. B */
 	li	t1,0x8			/* UART INT B signal is left tri-state'd after reset, this results in processor interrupt signal being driven active low */
 	sw	t1,0x10(t0)
@@ -119,10 +119,10 @@ FRAME(start,sp,0,ra)
 	mtc0	v0,C0_CONFIG
 
 /*
-**	check to see if an fpu is really plugged in 
+**	check to see if an fpu is really plugged in
 */
 	li	t3,0xaaaa5555		/*  put a's and 5's in t3	*/
-	mtc1	t3,fp0			/* try to write them into fp0   */	
+	mtc1	t3,fp0			/* try to write them into fp0   */
 	mtc1	zero,fp1		/* try to write zero in fp	*/
 	mfc1	t0,fp0
 	mfc1	t1,fp1
@@ -140,7 +140,7 @@ FRAME(start,sp,0,ra)
 
 	mtc0	v0, C0_SR		/* reset status register */
 2:
-	la  	gp, _gp			
+	la  	gp, _gp
 
 #if 0
 					/* Initialize data sections from "rom" copy */
@@ -160,7 +160,7 @@ FRAME(start,sp,0,ra)
 	la	v1,end 			/* end of bss */
 4:	sw	zero,0(v0)
 	bltu	v0,v1,4b
-	add	v0,4 
+	add	v0,4
 
 
 /************************************************************************
@@ -173,7 +173,7 @@ FRAME(start,sp,0,ra)
 **
 *************************************************************************/
 	/* For MIPS 3, we need to be sure that the stack is aligned on a
-	 * double word boundary. 
+	 * double word boundary.
 	 */
 	andi	t0, v0, 0x7
 	beqz	t0, 11f   /* Last three bits Zero, already aligned */
@@ -185,11 +185,11 @@ FRAME(start,sp,0,ra)
 	add	v1, v0, TMP_STKSIZE 	/* end of bss + length of tmp stack */
 	sub	v1, v1, (4*4)		/* overhead */
 	move	sp, v1			/* set sp to top of stack */
-4:	sw	zero, 0(v0)  
+4:	sw	zero, 0(v0)
 	bltu	v0, v1, 4b		/* clear out temp stack */
-	add	v0, 4 
-	
-/* 	jal	init_exc_vecs */		/* install exception handlers */ 
+	add	v0, 4
+
+/* 	jal	init_exc_vecs */		/* install exception handlers */
 /*	nop */				/* MUST do before memory probes */
 
 					/* Force processor into uncached space during memory/cache probes */
@@ -216,7 +216,7 @@ FRAME(start,sp,0,ra)
 	move	v0, a0			/* mem_size */
 
 	/* For MIPS 3, we need to be sure that the stack (and hence v0
-	 * here) is aligned on a double word boundary. 
+	 * here) is aligned on a double word boundary.
 	 */
 	andi	t0, v0, 0x7
 	beqz	t0, 12f   /* Last three bits Zero, already aligned */
@@ -228,9 +228,9 @@ FRAME(start,sp,0,ra)
 
 /**************************************************************************
 **
-**  Permanent Stack - now know top of memory, put permanent stack there	
+**  Permanent Stack - now know top of memory, put permanent stack there
 **
-***************************************************************************/ 
+***************************************************************************/
 
 	la	t2, _fbss		/* cache mode as linked */
 	and	t2, 0xF0000000		/* isolate segment */
@@ -244,9 +244,9 @@ FRAME(start,sp,0,ra)
 	move	v1, v0
 	subu	v1, P_STACKSIZE 	/* clear requested stack size */
 
-7:	sw	zero, 0(v1)		/* clear P_STACKSIZE  stack */ 
+7:	sw	zero, 0(v1)		/* clear P_STACKSIZE  stack */
 	bltu	v1,v0,7b
-	add	v1, 4 
+	add	v1, 4
 	.set	reorder
 
 /* FIX THIS - This corrupts memory spaces */
@@ -258,7 +258,7 @@ FRAME(start,sp,0,ra)
 **
 **	If this chip supports a Translation Lookaside Buffer, clear it
 **
-***************************************************************************/ 
+***************************************************************************/
 
 	.set	noreorder
 	mfc0	t1,  C0_SR		/* look at Status Register */
@@ -279,7 +279,7 @@ FRAME(start,sp,0,ra)
 
 /************************************************************************
 **
-**  Initialization required if using IDT/c or libc.a, standard C Lib 
+**  Initialization required if using IDT/c or libc.a, standard C Lib
 **
 **  can SKIP if not necessary for application
 **
@@ -309,7 +309,7 @@ FRAME(start,sp,0,ra)
 1:
 	beq	zero,zero,1b
 	nop
-	
+
 ENDFRAME(start)
 
 /*
@@ -327,7 +327,7 @@ FRAME(_sys_exit,sp,0,ra)
 13:
 	b	13b				# but loop back just in-case
 	nop
-	
+
 ENDFRAME(_sys_exit)
 
 

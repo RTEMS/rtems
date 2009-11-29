@@ -1,17 +1,17 @@
 /******************************************************************************
 *
 * Copyright (c) 2004 Freescale Semiconductor, Inc.
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a
 * copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense,
 * and/or sell copies of the Software, and to permit persons to whom the
 * Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included
 * in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -52,7 +52,7 @@ static const char* const TaskVersionString = "BestComm API v2.2 20041209";
 /*
  * Hidden API data per task.
  */
- 
+
 static BDIdx BDHead[MAX_TASKS];
 static BDIdx BDTail[MAX_TASKS];
 
@@ -103,7 +103,7 @@ const char *TaskVersion(void)
  * \returns	TASK_ERR_NO_ERR on successful initialization.
  *			or TASK_ERR_API_ALREADY_INITIALIZED.
  *
- * This function is only used with physical addresses. 
+ * This function is only used with physical addresses.
  *
  * This function will also initialize API internal variables. The return
  * value TASK_ERR_API_ALREADY_INITIALIZED is intended to help determine if
@@ -116,12 +116,12 @@ int TasksInitAPI(uint8 *MBarRef)
 	 * for use by other functions.
 	 */
 	MBarGlobal = MBarRef;
-	
+
 	/*
 	 * The offset is 0 if physical and virtual are the same.
 	 */
 	MBarPhysOffsetGlobal = 0;
-	
+
 	/*
 	 * IF API has not been initialized yet then...
 	 * Make sure all BestComm interrupts are disabled and not pending.
@@ -131,7 +131,7 @@ int TasksInitAPI(uint8 *MBarRef)
 	 */
 	return TASK_ERR_NO_ERR;
 }
- 
+
 /*!
  * \brief	Initialize the API when virtual memory is used.
  * \param	MBarRef		Reference pointer to the device register memory
@@ -158,8 +158,8 @@ int TasksInitAPI_VM(uint8 *MBarRef, uint8 *MBarPhys)
 	 * for use by other functions.
 	 */
 	MBarGlobal = MBarRef;
-	MBarPhysOffsetGlobal = MBarPhys - MBarRef; 	
-	
+	MBarPhysOffsetGlobal = MBarPhys - MBarRef;
+
 	/*
 	 * If API has not been initialized yet then...
 	 * Make sure all BestComm interrupts are disabled and not pending.
@@ -169,7 +169,7 @@ int TasksInitAPI_VM(uint8 *MBarRef, uint8 *MBarPhys)
 	 */
 	return TASK_ERR_NO_ERR;
 }
- 
+
 /*!
  * \brief	\em Deprecated
  * \param	sdma Base address of the BestComm register set

@@ -98,18 +98,18 @@ static void calc_dbat_regvals(
   while ((end_addr & block_mask) != (base_addr & block_mask)) {
     block_mask <<= 1;
   }
-  
-  bat_ptr->batu.bepi = base_addr >> (32 - 15); 
+
+  bat_ptr->batu.bepi = base_addr >> (32 - 15);
   bat_ptr->batu.bl   = ~(block_mask >> (28 - 11));
   bat_ptr->batu.vs   = 1;
   bat_ptr->batu.vp   = 1;
-  
-  bat_ptr->batl.brpn = base_addr  >> (32 - 15); 
-  bat_ptr->batl.w    = flg_w; 
-  bat_ptr->batl.i    = flg_i; 
-  bat_ptr->batl.m    = flg_m; 
-  bat_ptr->batl.g    = flg_g; 
-  bat_ptr->batl.pp   = flg_bpp; 
+
+  bat_ptr->batl.brpn = base_addr  >> (32 - 15);
+  bat_ptr->batl.w    = flg_w;
+  bat_ptr->batl.i    = flg_i;
+  bat_ptr->batl.m    = flg_m;
+  bat_ptr->batl.g    = flg_g;
+  bat_ptr->batl.pp   = flg_bpp;
 }
 
 #if defined (BRS5L)
@@ -170,7 +170,7 @@ void cpu_init_bsp(void)
 {
   BAT dbat;
   uint32_t start = 0;
-  
+
   /*
    * Program BAT0 for RAM
    */
@@ -272,7 +272,7 @@ void cpu_init(void)
   /* Update MSR */
   ppc_set_machine_state_register( msr);
 
-  /* 
+  /*
    * Enable data cache.
    *
    * NOTE: TRACE32 now supports data cache for MGT5x00.

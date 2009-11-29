@@ -1,17 +1,17 @@
 /******************************************************************************
 *
 * Copyright (c) 2004 Freescale Semiconductor, Inc.
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a
 * copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense,
 * and/or sell copies of the Software, and to permit persons to whom the
 * Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included
 * in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -40,145 +40,145 @@ uint32 taskTable[] = {
 0x00000238,
 0x00000700,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001000,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task1(TASK_PCI_RX): Start of Entry -> 0xf0008020 */
 0x0000023c,  /* Task 0 Descriptor Table */
 0x00000268,
 0x00000780,  /* Task 0 Variable Table */
 0x00000027, /* No FDT */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001050,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task2(TASK_FEC_TX): Start of Entry -> 0xf0008040 */
 0x0000026c,  /* Task 0 Descriptor Table */
 0x000002f8,
 0x00000800,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x000010a0,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task3(TASK_FEC_RX): Start of Entry -> 0xf0008060 */
 0x000002fc,  /* Task 0 Descriptor Table */
 0x00000358,
 0x00000880,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x000010f0,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task4(TASK_LPC): Start of Entry -> 0xf0008080 */
 0x0000035c,  /* Task 0 Descriptor Table */
 0x0000038c,
 0x00000900,  /* Task 0 Variable Table */
 0x00000027, /* No FDT */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001140,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task5(TASK_ATA): Start of Entry -> 0xf00080a0 */
 0x00000390,  /* Task 0 Descriptor Table */
 0x000003c4,
 0x00000980,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001190,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task6(TASK_CRC16_DP_0): Start of Entry -> 0xf00080c0 */
 0x000003c8,  /* Task 0 Descriptor Table */
 0x0000040c,
 0x00000a00,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x000011e0,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task7(TASK_CRC16_DP_1): Start of Entry -> 0xf00080e0 */
 0x00000410,  /* Task 0 Descriptor Table */
 0x00000454,
 0x00000a80,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001230,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task8(TASK_GEN_DP_0): Start of Entry -> 0xf0008100 */
 0x00000458,  /* Task 0 Descriptor Table */
 0x00000488,
 0x00000b00,  /* Task 0 Variable Table */
 0x00000027, /* No FDT */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001280,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task9(TASK_GEN_DP_1): Start of Entry -> 0xf0008120 */
 0x0000048c,  /* Task 0 Descriptor Table */
 0x000004bc,
 0x00000b80,  /* Task 0 Variable Table */
 0x00000027, /* No FDT */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x000012d0,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task10(TASK_GEN_DP_2): Start of Entry -> 0xf0008140 */
 0x000004c0,  /* Task 0 Descriptor Table */
 0x000004f0,
 0x00000c00,  /* Task 0 Variable Table */
 0x00000027, /* No FDT */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001320,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task11(TASK_GEN_DP_3): Start of Entry -> 0xf0008160 */
 0x000004f4,  /* Task 0 Descriptor Table */
 0x00000524,
 0x00000c80,  /* Task 0 Variable Table */
 0x00000027, /* No FDT */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001370,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task12(TASK_GEN_TX_BD): Start of Entry -> 0xf0008180 */
 0x00000528,  /* Task 0 Descriptor Table */
 0x00000560,
 0x00000d00,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x000013c0,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task13(TASK_GEN_RX_BD): Start of Entry -> 0xf00081a0 */
 0x00000564,  /* Task 0 Descriptor Table */
 0x00000594,
 0x00000d80,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001410,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task14(TASK_GEN_DP_BD_0): Start of Entry -> 0xf00081c0 */
 0x00000598,  /* Task 0 Descriptor Table */
 0x000005cc,
 0x00000e00,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x00001460,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 /* Task15(TASK_GEN_DP_BD_1): Start of Entry -> 0xf00081e0 */
 0x000005d0,  /* Task 0 Descriptor Table */
 0x00000604,
 0x00000e80,  /* Task 0 Variable Table */
 0x00000f27,	/* Task 0 Function Descriptor Table & Flags */
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
 0x000014b0,  /* Task 0 context save space */
-0x00000000, 
+0x00000000,
 
 /* Task0(TASK_PCI_TX): Start of TDT -> 0xf0008200 */
 0xc080601b, /* 0000(../LIB_incl/hdplx.sc:167):  LCDEXT: idx0 = var1, idx1 = var0; ; idx0 += inc3, idx1 += inc3 */
@@ -1047,54 +1047,54 @@ uint32 taskTable[] = {
 0x00000000, /* inc[7] */
 
 /* Task0(TASK_PCI_TX): Start of FDT -> 0xf0008f00 */
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
-0x00000000, 
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
 0xa0045670, /* load_acc(), EU# 3 */
 0x80045670, /* unload_acc(), EU# 3 */
 0x21800000, /* and(), EU# 3 */

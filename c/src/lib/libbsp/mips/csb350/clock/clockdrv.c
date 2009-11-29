@@ -5,7 +5,7 @@
  *
  *  Copyright (c) 2005 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -46,27 +46,27 @@ uint32_t last_match;
 void au1x00_clock_init(void)
 {
     uint32_t wakemask;
-    /* Clear the trim register */ 
-    AU1X00_SYS_TOYTRIM(AU1X00_SYS_ADDR) = 0; 
-    
-    /* Clear the TOY counter */ 
-    while (AU1X00_SYS_CNTCTRL(AU1X00_SYS_ADDR) & AU1X00_SYS_CNTCTRL_TS); 
-    AU1X00_SYS_TOYWRITE(AU1X00_SYS_ADDR) = 0; 
-    while (AU1X00_SYS_CNTCTRL(AU1X00_SYS_ADDR) & AU1X00_SYS_CNTCTRL_TS); 
-    
-    wakemask = AU1X00_SYS_WAKEMSK(AU1X00_SYS_ADDR); 
+    /* Clear the trim register */
+    AU1X00_SYS_TOYTRIM(AU1X00_SYS_ADDR) = 0;
+
+    /* Clear the TOY counter */
+    while (AU1X00_SYS_CNTCTRL(AU1X00_SYS_ADDR) & AU1X00_SYS_CNTCTRL_TS);
+    AU1X00_SYS_TOYWRITE(AU1X00_SYS_ADDR) = 0;
+    while (AU1X00_SYS_CNTCTRL(AU1X00_SYS_ADDR) & AU1X00_SYS_CNTCTRL_TS);
+
+    wakemask = AU1X00_SYS_WAKEMSK(AU1X00_SYS_ADDR);
     wakemask |= AU1X00_SYS_WAKEMSK_M20;
-    AU1X00_SYS_WAKEMSK(AU1X00_SYS_ADDR) = wakemask; 
+    AU1X00_SYS_WAKEMSK(AU1X00_SYS_ADDR) = wakemask;
     AU1X00_IC_WAKESET(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2;
-    
-    tick_interval = 32768 * rtems_configuration_get_microseconds_per_tick(); 
-    tick_interval = tick_interval / 1000000; 
-    printk("tick_interval = %d\n", tick_interval); 
-    
-    last_match = AU1X00_SYS_TOYREAD(AU1X00_SYS_ADDR); 
-    AU1X00_SYS_TOYMATCH2(AU1X00_SYS_ADDR) = last_match + (50*tick_interval); 
+
+    tick_interval = 32768 * rtems_configuration_get_microseconds_per_tick();
+    tick_interval = tick_interval / 1000000;
+    printk("tick_interval = %d\n", tick_interval);
+
+    last_match = AU1X00_SYS_TOYREAD(AU1X00_SYS_ADDR);
+    AU1X00_SYS_TOYMATCH2(AU1X00_SYS_ADDR) = last_match + (50*tick_interval);
     AU1X00_IC_MASKSET(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2;
-    while (AU1X00_SYS_CNTCTRL(AU1X00_SYS_ADDR) & AU1X00_SYS_CNTCTRL_TM0); 
+    while (AU1X00_SYS_CNTCTRL(AU1X00_SYS_ADDR) & AU1X00_SYS_CNTCTRL_TM0);
 }
 
 #define Clock_driver_support_initialize_hardware() \
@@ -74,7 +74,7 @@ void au1x00_clock_init(void)
      au1x00_clock_init(); \
   } while(0)
 
-                  
+
 
 #define Clock_driver_support_shutdown_hardware()
 

@@ -140,7 +140,7 @@ i2cdrv_unload(void)
             i2cdrv_bus_clock_div_current = i2cdrv_bus_clock_div[qel->bus];
             mpc5200mbus_select_clock_divider(&mbus[qel->bus], i2cdrv_bus_clock_div_current);
         }
-        sc = mpc5200mbus_i2c_transfer(&mbus[qel->bus], qel->nmsg, qel->msg, 
+        sc = mpc5200mbus_i2c_transfer(&mbus[qel->bus], qel->nmsg, qel->msg,
 				      i2cdrv_done,qel);
         if (sc != RTEMS_SUCCESSFUL)
         {

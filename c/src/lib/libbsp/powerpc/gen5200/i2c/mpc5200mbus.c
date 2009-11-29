@@ -195,7 +195,7 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
     uint8_t   b;
     switch (bus->state)
     {
-      
+
         case STATE_UNINITIALIZED:
 	  /* this should never happen. */
 	  mpc5200mbus_machine_error(bus, event);
@@ -206,7 +206,7 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
                 case EVENT_NEXTMSG:  /* Start new message processing */
                     bus->cmsg++;
                     /* FALLTHRU */
-                
+
                 case EVENT_TRANSFER: /* Initiate new transfer */
                     if (bus->cmsg - bus->msg >= bus->nmsg)
                     {
@@ -217,7 +217,7 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
                         bus->done(bus->done_arg_ptr);
                         break;
                     }
-                    
+
                     /* Initiate START or REPEATED START condition on the bus */
                     if (event == EVENT_TRANSFER)
                     {
@@ -227,10 +227,10 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
                     {
                         mpc5200mbus_rstart(bus);
                     }
-                    
+
                     bus->byte = 0;
                     mpc5200mbus_tx_mode(bus);
-                    
+
                     /* Initiate slave address sending */
                     if (bus->cmsg->flags & I2C_MSG_ADDR_10)
                     {
@@ -264,13 +264,13 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
                         mpc5200mbus_send(bus, b);
                     }
                     break;
-                
+
                 default:
                     mpc5200mbus_machine_error(bus, event);
                     break;
             }
             break;
-        
+
         case STATE_ADDR_7:
             switch (event)
             {
@@ -282,7 +282,7 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
                         mpc5200mbus_send_ack(bus);
                     next_state(bus, STATE_RECEIVING);
                     break;
-                
+
                 case EVENT_NACK:
                     mpc5200mbus_error(bus, I2C_NO_DEVICE);
                     next_state(bus, STATE_IDLE);
@@ -294,14 +294,14 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
                     next_state(bus, STATE_IDLE);
                     mpc5200mbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                    
+
                 default:
                     mpc5200mbus_machine_error(bus, event);
                     break;
             }
             break;
 
-        case STATE_ADDR_1_R:         
+        case STATE_ADDR_1_R:
         case STATE_ADDR_1_W:
             switch (event)
             {
@@ -325,25 +325,25 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
                     }
                     break;
                 }
-                
+
                 case EVENT_NACK:
                     mpc5200mbus_error(bus, I2C_NO_DEVICE);
                     next_state(bus, STATE_IDLE);
                     mpc5200mbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                
+
                 case EVENT_ARB_LOST:
                     mpc5200mbus_error(bus, I2C_ARBITRATION_LOST);
                     next_state(bus, STATE_IDLE);
                     mpc5200mbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                
+
                 default:
                     mpc5200mbus_machine_error(bus, event);
                     break;
             }
             break;
-             
+
         case STATE_SENDING:
             switch (event)
             {
@@ -359,7 +359,7 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
                         next_state(bus, STATE_SENDING);
                     }
                     break;
-                    
+
                 case EVENT_NACK:
                     if (bus->byte == 0)
                     {
@@ -372,20 +372,20 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
                     next_state(bus, STATE_IDLE);
                     mpc5200mbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                    
+
                 case EVENT_ARB_LOST:
                     mpc5200mbus_error(bus, I2C_ARBITRATION_LOST);
                     next_state(bus, STATE_IDLE);
                     mpc5200mbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                
+
                 default:
                     mpc5200mbus_machine_error(bus, event);
                     break;
-                    
+
             }
             break;
-                
+
         case STATE_RECEIVING:
             switch (event)
             {
@@ -444,7 +444,7 @@ void mpc5200mbus_interrupt_handler(rtems_irq_hdl_param handle)
 {
     i2c_event event;
     mpc5200mbus *bus = handle;
-    
+
     event = mpc5200mbus_get_event(bus);
     /*
      * clear interrupt bit
@@ -454,34 +454,34 @@ void mpc5200mbus_interrupt_handler(rtems_irq_hdl_param handle)
     mpc5200mbus_machine(bus, event);
 }
 
-/* 
+/*
  * mpc5200_mbus_irq_enable
  *    enable irq for mbus
  */
 void mpc5200mbus_irq_enable(const rtems_irq_connect_data* ptr)
-{  
+{
   int minor = ((mpc5200mbus*)(ptr->handle))->bus_idx;
 
   mpc5200.i2c_regs[minor].mcr |= MPC5200_I2C_MCR_MIEN;
 }
 
-/* 
+/*
  * mpc5200_mbus_irq_disable
  *    enable irq for mbus
  */
 void mpc5200mbus_irq_disable(const rtems_irq_connect_data* ptr)
-{  
+{
   int minor = ((mpc5200mbus*)(ptr->handle))->bus_idx;
 
   mpc5200.i2c_regs[minor].mcr &= ~MPC5200_I2C_MCR_MIEN;
 }
 
-/* 
+/*
  * mpc5200_mbus_isOn
- *    check, whether irq is enabled 
+ *    check, whether irq is enabled
  */
 int mpc5200mbus_irq_isOn(const rtems_irq_connect_data* ptr)
-{  
+{
   int minor = ((mpc5200mbus*)(ptr->handle))->bus_idx;
 
   return (0 != (mpc5200.i2c_regs[minor].mcr & MPC5200_I2C_MCR_MIEN));
@@ -527,7 +527,7 @@ mpc5200mbus_select_clock_divider(mpc5200mbus *bus, int divider)
         int divider;
         int mbc;
     } dividers[] ={
-        { 20,   0x20 }, { 22,   0x21 }, { 24,   0x22 }, { 26,   0x23 }, 
+        { 20,   0x20 }, { 22,   0x21 }, { 24,   0x22 }, { 26,   0x23 },
         { 28,   0x00 }, { 30,   0x01 }, { 32,   0x25 }, { 34,   0x02 },
         { 36,   0x26 }, { 40,   0x03 }, { 44,   0x04 }, { 48,   0x05 },
         { 56,   0x06 }, { 64,   0x2a }, { 68,   0x07 }, { 72,   0x2B },
@@ -544,7 +544,7 @@ mpc5200mbus_select_clock_divider(mpc5200mbus *bus, int divider)
 
     if (bus == NULL)
         return RTEMS_INVALID_ADDRESS;
-    
+
     for (i = 0, mbc = -1; i < sizeof(dividers)/sizeof(dividers[0]); i++)
     {
         mbc = dividers[i].mbc;
@@ -578,13 +578,13 @@ mpc5200mbus_initialize(mpc5200mbus *i2c_bus)
 
     if (i2c_bus->state != STATE_UNINITIALIZED) /* Check if already initialized */
         return RTEMS_RESOURCE_IN_USE;
-            
+
     i2c_bus->state = STATE_IDLE;
     i2c_bus->msg = NULL;
     i2c_bus->cmsg = NULL;
     i2c_bus->nmsg = 0;
     i2c_bus->byte = 0;
-    
+
     /*
      * install interrupt handler
      */
@@ -614,7 +614,7 @@ mpc5200mbus_initialize(mpc5200mbus *i2c_bus)
     mpc5200.i2c_regs[i2c_bus->bus_idx].mcr |= MPC5200_I2C_MCR_MEN;
 
     rtems_interrupt_enable(level);
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -639,7 +639,7 @@ mpc5200mbus_i2c_transfer(mpc5200mbus *bus, int nmsg, i2c_message *msg,
 {
     if (bus->state == STATE_UNINITIALIZED)
         return RTEMS_NOT_CONFIGURED;
-    
+
     bus->done = done;
     bus->done_arg_ptr = done_arg_ptr;
     bus->cmsg = bus->msg = msg;
@@ -668,7 +668,7 @@ mpc5200mbus_i2c_done(mpc5200mbus *i2c_bus)
 
     if (i2c_bus->state == STATE_UNINITIALIZED)
         return RTEMS_NOT_CONFIGURED;
-    
+
     mpc5200.i2c_regs[i2c_bus->bus_idx].mcr = 0;
 
     return sc;

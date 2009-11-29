@@ -72,7 +72,7 @@ i2c_transfer_wait_sema(i2c_bus_number bus, i2c_message *msg, int nmsg)
     );
     if (sc != RTEMS_SUCCESSFUL)
         return I2C_RESOURCE_NOT_AVAILABLE;
-    sc = i2c_transfer(bus, nmsg, msg, 
+    sc = i2c_transfer(bus, nmsg, msg,
 		      i2c_transfer_sema_done_func, &sema);
     if (sc != RTEMS_SUCCESSFUL)
     {
@@ -107,7 +107,7 @@ i2c_transfer_wait_poll(i2c_bus_number bus, i2c_message *msg, int nmsg)
     volatile bool poll_done_flag;
     rtems_status_code sc;
     poll_done_flag = false;
-    sc = i2c_transfer(bus, nmsg, msg, 
+    sc = i2c_transfer(bus, nmsg, msg,
 		      i2c_transfer_poll_done_func,(void *)&poll_done_flag);
     if (sc != RTEMS_SUCCESSFUL)
         return sc;

@@ -4,17 +4,17 @@
 /******************************************************************************
 *
 * Copyright (c) 2004 Freescale Semiconductor, Inc.
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a
 * copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense,
 * and/or sell copies of the Software, and to permit persons to whom the
 * Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included
 * in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -34,10 +34,10 @@ typedef struct sdma_register_set {
     volatile uint8  IntVect1;   /* MBAR_SDMA + 0x10 sdPtd */
     volatile uint8  IntVect2;   /* MBAR_SDMA + 0x11 sdPtd */
     volatile uint16 PtdCntrl;   /* MBAR_SDMA + 0x12 sdPtd */
-    
+
     volatile uint32 IntPend;    /* MBAR_SDMA + 0x14 sdPtd */
     volatile uint32 IntMask;    /* MBAR_SDMA + 0x18 sdPtd */
-    
+
     volatile uint32 TCR01;      /* MBAR_SDMA + 0x1c sdPtd */
     volatile uint32 TCR23;      /* MBAR_SDMA + 0x20 sdPtd */
     volatile uint32 TCR45;      /* MBAR_SDMA + 0x24 sdPtd */
@@ -46,7 +46,7 @@ typedef struct sdma_register_set {
     volatile uint32 TCRAB;      /* MBAR_SDMA + 0x30 sdPtd */
     volatile uint32 TCRCD;      /* MBAR_SDMA + 0x34 sdPtd */
     volatile uint32 TCREF;      /* MBAR_SDMA + 0x38 sdPtd */
-    
+
     volatile uint8  IPR0;       /* MBAR_SDMA + 0x3c sdPtd */
     volatile uint8  IPR1;       /* MBAR_SDMA + 0x3d sdPtd */
     volatile uint8  IPR2;       /* MBAR_SDMA + 0x3e sdPtd */
