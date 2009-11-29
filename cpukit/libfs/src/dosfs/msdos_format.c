@@ -180,7 +180,7 @@ static int msdos_format_fill_sectors
   char *fill_buffer = NULL;
   uint32_t total_sectors = sector_cnt;
   int last_percent = -1;
-  
+
   /*
    * allocate and fill buffer
    */
@@ -200,7 +200,7 @@ static int msdos_format_fill_sectors
   /*
    * write to consecutive sectors
    */
-  while ((ret_val == 0) && 
+  while ((ret_val == 0) &&
 	 (sector_cnt > 0)) {
     int percent = (sector_cnt * 100) / total_sectors;
     if (percent != last_percent) {
@@ -212,13 +212,13 @@ static int msdos_format_fill_sectors
     start_sector++;
     sector_cnt--;
   }
-  
+
   msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL, "\n");
 
   if (ret_val)
     msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_INFO,
                          "filling error on sector: %d\n", start_sector);
-  
+
   /*
    * cleanup
    */
@@ -301,7 +301,7 @@ static int msdos_format_eval_sectors_per_cluster
   while (MS_BYTES_PER_CLUSTER_LIMIT / bytes_per_sector < sectors_per_cluster) {
     sectors_per_cluster /= 2;
   }
-  
+
   do {
     /*
      * compute number of data clusters for current data:
@@ -320,7 +320,7 @@ static int msdos_format_eval_sectors_per_cluster
       fat_capacity = fatdata_cluster_cnt * 4;
     }
 
-    sectors_per_fat = ((fat_capacity 
+    sectors_per_fat = ((fat_capacity
 			+ (bytes_per_sector - 1))
 		       / bytes_per_sector);
 
@@ -341,7 +341,7 @@ static int msdos_format_eval_sectors_per_cluster
     /*
      * when maximum cluster size is exceeded, we have invalid data, abort...
      */
-    if ((sectors_per_cluster * bytes_per_sector) 
+    if ((sectors_per_cluster * bytes_per_sector)
 	> MS_BYTES_PER_CLUSTER_LIMIT) {
       ret_val = EINVAL;
       finished = true;
@@ -384,9 +384,9 @@ static int msdos_format_determine_fmt_params
   uint32_t onebit;
   uint32_t sectors_per_cluster_adj = 0;
   uint64_t total_size = 0;
-  
+
   memset(fmt_params,0,sizeof(*fmt_params));
-  /* 
+  /*
    * this one is fixed in this implementation.
    * At least one thing we don't have to magically guess...
    */
@@ -402,7 +402,7 @@ static int msdos_format_determine_fmt_params
    * determine number of FATs
    */
   if (ret_val == 0) {
-    if ((rqdata == NULL) || 
+    if ((rqdata == NULL) ||
 	(rqdata->fat_num == 0)) {
       fmt_params->fat_num = 2;
     }
@@ -413,33 +413,33 @@ static int msdos_format_determine_fmt_params
       ret_val = EINVAL;
     }
   }
-  
+
   if (ret_val == 0)
     msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                          "number of fats: %d\n", fmt_params->fat_num);
-  
+
   /*
    * Now we get sort of a loop when determining things:
-   * The FAT type (FAT12/16/32) is determined ONLY from the 
+   * The FAT type (FAT12/16/32) is determined ONLY from the
    * data cluster count:
    * Disks with data cluster count <  4085 are FAT12.
    * Disks with data cluster count < 65525 are FAT16.
-   * The rest is FAT32 (no FAT128 available yet :-) 
+   * The rest is FAT32 (no FAT128 available yet :-)
    *
-   * The number of data clusters is the 
-   * total capacity 
+   * The number of data clusters is the
+   * total capacity
    * minus reserved sectors
    * minus root directory ares
    * minus storage needed for the FAT (and its copy/copies).
-   * 
+   *
    * The last item once again depends on the FAT type and the cluster count.
-   * 
+   *
    * So here is what we do in this formatter:
    * - If a FAT type is requested from the caller, we try to modify
    * the cluster size, until the data cluster count is in range
-   * - If no FAT type is given, we estimate a useful FAT type from 
+   * - If no FAT type is given, we estimate a useful FAT type from
    * the disk capacity and then adapt the cluster size
-   */  
+   */
 
   /*
    * determine characteristic values:
@@ -450,19 +450,19 @@ static int msdos_format_determine_fmt_params
    */
   /*
    * determine FAT type and sectors per cluster
-   * depends on 
+   * depends on
    */
   if (ret_val == 0) {
     fmt_params->sectors_per_cluster = 1;
-    if ((rqdata != NULL) && 
+    if ((rqdata != NULL) &&
 	(rqdata->fattype == MSDOS_FMT_FAT12)) {
       fmt_params->fattype = FAT_FAT12;
     }
-    else if ((rqdata != NULL) && 
+    else if ((rqdata != NULL) &&
 	     (rqdata->fattype == MSDOS_FMT_FAT16)) {
       fmt_params->fattype = FAT_FAT16;
     }
-    else if ((rqdata != NULL) && 
+    else if ((rqdata != NULL) &&
 	     (rqdata->fattype == MSDOS_FMT_FAT32)) {
       fmt_params->fattype = FAT_FAT32;
     }
@@ -477,17 +477,17 @@ static int msdos_format_determine_fmt_params
        * NOTE: maximum sect_per_clust is arbitrarily choosen with values that
        * are a compromise concerning capacity and efficency
        */
-      if (fmt_params->totl_sector_cnt 
+      if (fmt_params->totl_sector_cnt
           < ((uint32_t)FAT_FAT12_MAX_CLN)*8) {
         fmt_params->fattype = FAT_FAT12;
         /* start trying with small clusters */
-        fmt_params->sectors_per_cluster = 2; 
+        fmt_params->sectors_per_cluster = 2;
       }
-      else if (fmt_params->totl_sector_cnt 
+      else if (fmt_params->totl_sector_cnt
                < ((uint32_t)FAT_FAT16_MAX_CLN)*32) {
         fmt_params->fattype = FAT_FAT16;
         /* start trying with small clusters */
-        fmt_params->sectors_per_cluster = 2; 
+        fmt_params->sectors_per_cluster = 2;
       }
       else {
         #define ONE_GB (1024L * 1024L * 1024L)
@@ -504,10 +504,10 @@ static int msdos_format_determine_fmt_params
     /*
      * try to use user requested cluster size
      */
-    if ((rqdata != NULL) && 
+    if ((rqdata != NULL) &&
 	(rqdata->sectors_per_cluster > 0)) {
-      fmt_params->sectors_per_cluster = 
-	rqdata->sectors_per_cluster;    
+      fmt_params->sectors_per_cluster =
+	rqdata->sectors_per_cluster;
     }
     /*
      * check sectors per cluster.
@@ -518,7 +518,7 @@ static int msdos_format_determine_fmt_params
     for (onebit = 128;onebit >= 1;onebit = onebit>>1) {
       if (fmt_params->sectors_per_cluster >= onebit) {
 	fmt_params->sectors_per_cluster = onebit;
-	if (fmt_params->sectors_per_cluster 
+	if (fmt_params->sectors_per_cluster
 	    <= 32768L/fmt_params->bytes_per_sector) {
 	  /* value is small enough so this value is ok */
 	  onebit = 1;
@@ -530,7 +530,7 @@ static int msdos_format_determine_fmt_params
   if (ret_val == 0) {
     msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                          "sectors per cluster: %d\n", fmt_params->sectors_per_cluster);
-    
+
     if (fmt_params->fattype == FAT_FAT32) {
       /* recommended: for FAT32, always set reserved sector count to 32 */
       fmt_params->rsvd_sector_cnt = 32;
@@ -548,7 +548,7 @@ static int msdos_format_determine_fmt_params
       /* recommended: for FAT16, set files per root directory to 512 */
       /* for FAT12/FAT16, set files per root directory */
       /* must fill up an even count of sectors         */
-      if ((rqdata != NULL) && 
+      if ((rqdata != NULL) &&
 	  (rqdata->files_per_root_dir > 0)) {
 	fmt_params->files_per_root_dir = rqdata->files_per_root_dir;
       }
@@ -560,23 +560,23 @@ static int msdos_format_determine_fmt_params
 	  fmt_params->files_per_root_dir = 64;
 	}
       }
-      fmt_params->files_per_root_dir = (fmt_params->files_per_root_dir + 
+      fmt_params->files_per_root_dir = (fmt_params->files_per_root_dir +
 			    (2*fmt_params->bytes_per_sector/
 			     FAT_DIRENTRY_SIZE-1));
-      fmt_params->files_per_root_dir -= (fmt_params->files_per_root_dir % 
+      fmt_params->files_per_root_dir -= (fmt_params->files_per_root_dir %
 			     (2*fmt_params->bytes_per_sector
 			      /FAT_DIRENTRY_SIZE));
     }
-    fmt_params->root_dir_sectors = 
+    fmt_params->root_dir_sectors =
       (((fmt_params->files_per_root_dir * FAT_DIRENTRY_SIZE)
-	+ fmt_params->bytes_per_sector - 1) 
+	+ fmt_params->bytes_per_sector - 1)
        / fmt_params->bytes_per_sector);
   }
   if (ret_val == 0) {
-    fatdata_sect_cnt = (fmt_params->totl_sector_cnt - 
-			fmt_params->rsvd_sector_cnt - 
+    fatdata_sect_cnt = (fmt_params->totl_sector_cnt -
+			fmt_params->rsvd_sector_cnt -
 			fmt_params->root_dir_sectors);
-			
+
     /*
      * check values to get legal arrangement of FAT type and cluster count
      */
@@ -596,9 +596,9 @@ static int msdos_format_determine_fmt_params
    * determine media code
    */
   if (ret_val == 0) {
-    if ((rqdata != NULL) && 
+    if ((rqdata != NULL) &&
 	(rqdata->media != 0)) {
-      const char valid_media_codes[] = 
+      const char valid_media_codes[] =
 	{0xF0,0xF8,0xF9,0xFA,0xFB,0xFC,0xFD,0xFE,0xFF};
       if (NULL==memchr(valid_media_codes,
 		       rqdata->media,
@@ -619,18 +619,18 @@ static int msdos_format_determine_fmt_params
    * for formatting
    */
   if (fmt_params->root_dir_sectors > 0) {
-    fmt_params->root_dir_start_sec = 
+    fmt_params->root_dir_start_sec =
       fmt_params->rsvd_sector_cnt
-      + (fmt_params-> fat_num*fmt_params->sectors_per_fat); 
+      + (fmt_params-> fat_num*fmt_params->sectors_per_fat);
     fmt_params->root_dir_fmt_sec_cnt = fmt_params->root_dir_sectors;
   }
   else {
     /*
      * for FAT32: root directory is in cluster 2
      */
-    fmt_params->root_dir_start_sec = 
+    fmt_params->root_dir_start_sec =
       fmt_params->rsvd_sector_cnt
-      + (fmt_params-> fat_num*fmt_params->sectors_per_fat); 
+      + (fmt_params-> fat_num*fmt_params->sectors_per_fat);
     fmt_params->root_dir_fmt_sec_cnt = fmt_params->sectors_per_cluster;
   }
   /*
@@ -653,8 +653,8 @@ static int msdos_format_determine_fmt_params
       }
       else {
 	/*
-	 * non-printable character in given name, so keep stuck 
-	 * at that character and replace all following characters 
+	 * non-printable character in given name, so keep stuck
+	 * at that character and replace all following characters
 	 * with a ' '
 	 */
 	*to++=' ';
@@ -684,8 +684,8 @@ static int msdos_format_determine_fmt_params
       }
       else {
 	/*
-	 * non-printable character in given name, so keep stuck 
-	 * at that character and replace all following characters 
+	 * non-printable character in given name, so keep stuck
+	 * at that character and replace all following characters
 	 * with a ' '
 	 */
 	*to++=' ';
@@ -693,7 +693,7 @@ static int msdos_format_determine_fmt_params
       *to = '\0';
     }
   }
-      
+
   /*
    * determine usable Volume ID
    */
@@ -754,7 +754,7 @@ static int msdos_format_gen_mbr
    * with 0xEB,....
    */
   /*
-   * fill OEMName 
+   * fill OEMName
    */
   memcpy(FAT_GET_ADDR_BR_OEMNAME(mbr),
 	 fmt_params->OEMName,
@@ -762,7 +762,7 @@ static int msdos_format_gen_mbr
   FAT_SET_BR_BYTES_PER_SECTOR(mbr    , fmt_params->bytes_per_sector);
   FAT_SET_BR_SECTORS_PER_CLUSTER(mbr , fmt_params->sectors_per_cluster);
   FAT_SET_BR_RESERVED_SECTORS_NUM(mbr, fmt_params->rsvd_sector_cnt);
-  
+
   /* number of FATs on medium */
   FAT_SET_BR_FAT_NUM(mbr             , 2); /* standard/recommended value */
   FAT_SET_BR_FILES_PER_ROOT_DIR(mbr  , fmt_params->files_per_root_dir);
@@ -778,13 +778,13 @@ static int msdos_format_gen_mbr
     FAT_SET_BR_SECTORS_PER_FAT(mbr   ,fmt_params->sectors_per_fat);
     FAT_SET_BR_DRVNUM(mbr            , 0); /* only needed for INT13... */
     FAT_SET_BR_RSVD1(mbr             , 0); /* fill with zero */
-    FAT_SET_BR_BOOTSIG(mbr           , FAT_BR_BOOTSIG_VAL); 
+    FAT_SET_BR_BOOTSIG(mbr           , FAT_BR_BOOTSIG_VAL);
     FAT_SET_BR_VOLID(mbr             , fmt_params->vol_id); /* volume id */
   memcpy(FAT_GET_ADDR_BR_VOLLAB(mbr),
 	 fmt_params->VolLabel,
 	 FAT_BR_VOLLAB_SIZE);
     memcpy(FAT_GET_ADDR_BR_FILSYSTYPE(mbr),
-	   (fmt_params->fattype == FAT_FAT12) 
+	   (fmt_params->fattype == FAT_FAT12)
 	   ? "FAT12   "
 	   : "FAT16   ",
 	   FAT_BR_FILSYSTYPE_SIZE);
@@ -800,7 +800,7 @@ static int msdos_format_gen_mbr
 
     FAT_SET_BR_FAT32_DRVNUM(mbr      , 0); /* only needed for INT13... */
     FAT_SET_BR_FAT32_RSVD1(mbr       , 0); /* fill with zero */
-    FAT_SET_BR_FAT32_BOOTSIG(mbr     ,FAT_BR_FAT32_BOOTSIG_VAL); 
+    FAT_SET_BR_FAT32_BOOTSIG(mbr     ,FAT_BR_FAT32_BOOTSIG_VAL);
     FAT_SET_BR_FAT32_VOLID(mbr       , 0); /* not set */
     memset(FAT_GET_ADDR_BR_FAT32_VOLLAB(mbr)   ,0,FAT_BR_VOLLAB_SIZE);
     memcpy(FAT_GET_ADDR_BR_FAT32_FILSYSTYPE(mbr),
@@ -820,7 +820,7 @@ static int msdos_format_gen_mbr
   FAT_SET_VAL8(mbr,2,0x90);
   /*
    * FIXME: a nice little PC boot loader would be nice here.
-   * but where can I get one for free? 
+   * but where can I get one for free?
    */
   /*
    * Phuuu.... That's it.
@@ -847,7 +847,7 @@ static int msdos_format_gen_fsinfo
 \*=========================================================================*/
 {
   /*
-   * clear fsinfo sector data 
+   * clear fsinfo sector data
    */
   memset(fsinfo,0,FAT_TOTAL_FSINFO_SIZE);
   /*
@@ -856,8 +856,8 @@ static int msdos_format_gen_fsinfo
   FAT_SET_FSINFO_LEAD_SIGNATURE (fsinfo,FAT_FSINFO_LEAD_SIGNATURE_VALUE );
   FAT_SET_FSINFO_STRUC_SIGNATURE(fsinfo,FAT_FSINFO_STRUC_SIGNATURE_VALUE);
   FAT_SET_FSINFO_TRAIL_SIGNATURE(fsinfo,FAT_FSINFO_TRAIL_SIGNATURE_VALUE);
-  /* 
-   * write "empty" values for free cluster count and next cluster number 
+  /*
+   * write "empty" values for free cluster count and next cluster number
    */
   FAT_SET_FSINFO_FREE_CLUSTER_COUNT(fsinfo+FAT_FSI_INFO,
 				    0xffffffff);
@@ -889,7 +889,7 @@ int msdos_format
 {
   char                 tmp_sec[FAT_TOTAL_MBR_SIZE];
   int                  rc;
-  rtems_disk_device   *dd        = NULL; 
+  rtems_disk_device   *dd        = NULL;
   struct stat          stat_buf;
   int                  ret_val   = 0;
   int                  fd        = -1;
@@ -907,14 +907,14 @@ int msdos_format
     rc = stat(devname, &stat_buf);
     ret_val = rc;
   }
-  
-  /* rtems feature: no block devices, all are character devices */   
+
+  /* rtems feature: no block devices, all are character devices */
   if ((ret_val == 0) &&
       (!S_ISCHR(stat_buf.st_mode))) {
     errno = ENOTTY;
     ret_val = -1;
   }
-  
+
   /* check that  device is registered as block device and lock it */
   if (ret_val == 0) {
     dd = rtems_disk_obtain(stat_buf.st_rdev);
@@ -934,8 +934,8 @@ int msdos_format
     if (fd == -1)
     {
       ret_val= -1;
-    }    
-  }  
+    }
+  }
 
   /*
    * compute formatting parameters
@@ -958,7 +958,7 @@ int msdos_format
        0xe5);
   }
   /*
-   * create master boot record 
+   * create master boot record
    */
   if (ret_val == 0) {
     /*
@@ -975,7 +975,7 @@ int msdos_format
                            "generate MRB sector\n");
       ret_val = msdos_format_gen_mbr(tmp_sec,&fmt_params);
     }
-    
+
     /*
      * write master boot record to disk
      * also write copy of MBR to disk
@@ -983,20 +983,20 @@ int msdos_format
     if (ret_val == 0) {
       msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                            "write MRB sector\n");
-      ret_val = msdos_format_write_sec(fd, 
-                                       0, 
+      ret_val = msdos_format_write_sec(fd,
+                                       0,
                                        fmt_params.bytes_per_sector,
                                        tmp_sec);
     }
-    if ((ret_val == 0) && 
+    if ((ret_val == 0) &&
         (fmt_params.mbr_copy_sec != 0)) {
       /*
        * write copy of MBR
        */
       msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                            "write back up MRB sector\n");
-      ret_val = msdos_format_write_sec(fd, 
-                                       fmt_params.mbr_copy_sec , 
+      ret_val = msdos_format_write_sec(fd,
+                                       fmt_params.mbr_copy_sec ,
                                        fmt_params.bytes_per_sector,
                                        tmp_sec);
     }
@@ -1004,7 +1004,7 @@ int msdos_format
   /*
    * for FAT32: initialize info sector on disk
    */
-  if ((ret_val == 0) && 
+  if ((ret_val == 0) &&
       (fmt_params.fsinfo_sec != 0)) {
       ret_val = msdos_format_gen_fsinfo(tmp_sec);
   }
@@ -1013,7 +1013,7 @@ int msdos_format
    */
   if ((ret_val == 0) &&
       (fmt_params.fsinfo_sec != 0)) {
-    ret_val = msdos_format_write_sec(fd, 
+    ret_val = msdos_format_write_sec(fd,
 				     fmt_params.fsinfo_sec,
 				     fmt_params.bytes_per_sector,
 				     tmp_sec);
@@ -1058,7 +1058,7 @@ int msdos_format
        tmp_sec);
   }
   /*
-   * write FAT entry 0 as (0xffffff00|Media_type)EOC, 
+   * write FAT entry 0 as (0xffffff00|Media_type)EOC,
    * write FAT entry 1 as EOC
    * allocate directory in a FAT32 FS
    */

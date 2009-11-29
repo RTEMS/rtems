@@ -47,7 +47,7 @@ char_t *websUrlType(char_t *url, char_t *buf, int charCnt)
 		gstrcpy(buf, T("text/plain"));
 		return buf;
 	}
-	if (websUrlParse(url, &parsebuf, NULL, NULL, NULL, NULL, NULL, 
+	if (websUrlParse(url, &parsebuf, NULL, NULL, NULL, NULL, NULL,
 			NULL, &ext) < 0) {
 		gstrcpy(buf, T("text/plain"));
 		return buf;
@@ -72,8 +72,8 @@ char_t *websUrlType(char_t *url, char_t *buf, int charCnt)
  *	This must be freed by the caller. NOTE: tag is not yet fully supported.
  */
 
-int websUrlParse(char_t *url, char_t **pbuf, char_t **phost, char_t **ppath, 
-	char_t **pport, char_t **pquery, char_t **pproto, char_t **ptag, 
+int websUrlParse(char_t *url, char_t **pbuf, char_t **phost, char_t **ppath,
+	char_t **pport, char_t **pquery, char_t **pproto, char_t **ptag,
 	char_t **pext)
 {
 	char_t		*tok, *cp, *host, *path, *port, *proto, *tag, *query, *ext;
@@ -128,7 +128,7 @@ int websUrlParse(char_t *url, char_t **pbuf, char_t **phost, char_t **ppath,
 		}
 		if ((cp = gstrchr(tok, '/')) != NULL) {
 /*
- *			If a full URL is supplied, we need to copy the host and port 
+ *			If a full URL is supplied, we need to copy the host and port
  *			portions into static buffers.
  */
 			c = *cp;
@@ -155,7 +155,7 @@ int websUrlParse(char_t *url, char_t **pbuf, char_t **phost, char_t **ppath,
 		query = cp;
 		path = tok;
 		tok = query;
-	} 
+	}
 
 /*
  *	Parse the fragment identifier

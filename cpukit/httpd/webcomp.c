@@ -88,7 +88,7 @@ static int compile(char_t *fileList, char_t *prefix)
 
 	time(&now);
 	fprintf(stdout, "/*\n * webrom.c -- Compiled Web Pages\n *\n");
-	fprintf(stdout, " * Compiled by GoAhead WebCompile: %s */\n\n", 
+	fprintf(stdout, " * Compiled by GoAhead WebCompile: %s */\n\n",
 		gctime(&now));
 	fprintf(stdout, "#include \"wsIntrn.h\"\n\n");
 	fprintf(stdout, "#ifndef WEBS_PAGE_ROM\n");
@@ -109,7 +109,7 @@ static int compile(char_t *fileList, char_t *prefix)
 		}
 		if (gstat(file, &sbuf) == 0 && sbuf.st_mode & S_IFDIR) {
 			continue;
-		} 
+		}
 		if ((fd = gopen(file, O_RDONLY | O_BINARY)) < 0) {
 			fprintf(stderr, "Can't open file %s\n", file);
 			return -1;
@@ -170,12 +170,12 @@ static int compile(char_t *fileList, char_t *prefix)
 			fprintf(stdout, "    { T(\"/%s\"), 0, 0 },\n", cp);
 			continue;
 		}
-		fprintf(stdout, "    { T(\"/%s\"), page_%d, %d },\n", cp, nFile, 
+		fprintf(stdout, "    { T(\"/%s\"), page_%d, %d },\n", cp, nFile,
 			sbuf.st_size);
 		nFile++;
 	}
-	fclose(lp); 
-	
+	fclose(lp);
+
 	fprintf(stdout, "    { 0, 0, 0 },\n");
 	fprintf(stdout, "};\n");
 	fprintf(stdout, "#endif /* WEBS_PAGE_ROM */\n");

@@ -35,8 +35,8 @@ static void websDefaultWriteEvent(webs_t wp);
 /*
  *	Process a default URL request. This will validate the URL and handle "../"
  *	and will provide support for Active Server Pages. As the handler is the
- *	last handler to run, it always indicates that it has handled the URL 
- *	by returning 1. 
+ *	last handler to run, it always indicates that it has handled the URL
+ *	by returning 1.
  */
 
 int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
@@ -84,11 +84,11 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 /*
  *	Open the document. Stat for later use.
  */
-	if (websPageOpen(wp, lpath, path, SOCKET_RDONLY | SOCKET_BINARY, 
+	if (websPageOpen(wp, lpath, path, SOCKET_RDONLY | SOCKET_BINARY,
 		0666) < 0) {
 		websError(wp, 400, T("Cannot open URL <b>%s</b>"), url);
 		return 1;
-	} 
+	}
 
 	if (websPageStat(wp, lpath, path, &sbuf) < 0) {
 		websError(wp, 400, T("Cannot stat page for URL <b>%s</b>"), url);
@@ -234,7 +234,7 @@ int websValidateUrl(webs_t wp, char_t *path)
     * backslash character, like:
     *
     *  GoAhead is vulnerable to a directory traversal bug. A request such as
-    *  
+    *
     *  GoAhead-server/../../../../../../../ results in an error message
     *  'Cannot open URL'.
 
@@ -242,7 +242,7 @@ int websValidateUrl(webs_t wp, char_t *path)
     *  the
     *  web root and read arbitrary files from the server.
     *  Hence a request like:
-    * 
+    *
     *  GoAhead-server/..%5C..%5C..%5C..%5C..%5C..%5C/winnt/win.ini returns the
     *  contents of the win.ini file.
     * (Note that the description uses forward slashes (0x2F), but the example
@@ -257,12 +257,12 @@ int websValidateUrl(webs_t wp, char_t *path)
       *token = '/';
       token = gstrchr(token, '\\');
    }
-   
+
 	token = gstrtok(path, T("/"));
 
 /*
  *	Look at each directory segment and process "." and ".." segments
- *	Don't allow the browser to pop outside the root web. 
+ *	Don't allow the browser to pop outside the root web.
  */
 	while (token != NULL) {
 		if (gstrcmp(token, T("..")) == 0) {
@@ -363,7 +363,7 @@ static void websDefaultWriteEvent(webs_t wp)
 }
 
 /******************************************************************************/
-/* 
+/*
  *	Closing down. Free resources.
  */
 

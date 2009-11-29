@@ -1,4 +1,4 @@
-/* 
+/*
  *	webs.h -- GoAhead Web public header
  *
  * Copyright (c) GoAhead Software Inc., 1992-2000. All Rights Reserved.
@@ -13,7 +13,7 @@
 
 /******************************** Description *********************************/
 
-/* 
+/*
  *	GoAhead Web Server header. This defines the Web public APIs.
  *	Include this header for files that contain ASP or Form procedures.
  *	Include wsIntrn.h when creating URL handlers.
@@ -45,18 +45,18 @@
 #define WEBS_HTTP_PORT			T("httpPort")
 #define CGI_BIN					T("cgi-bin")
 
-/* 
+/*
  *	Request flags. Also returned by websGetRequestFlags().
  */
-#define WEBS_LOCAL_PAGE			0x1			/* Request for local webs page */ 
+#define WEBS_LOCAL_PAGE			0x1			/* Request for local webs page */
 #define WEBS_KEEP_ALIVE			0x2			/* HTTP/1.1 keep alive */
 #define WEBS_DONT_USE_CACHE		0x4			/* Not implemented cache support */
 #define WEBS_COOKIE				0x8			/* Cookie supplied in request */
 #define WEBS_IF_MODIFIED		0x10		/* If-modified-since in request */
 #define WEBS_POST_REQUEST		0x20		/* Post request operation */
 #define WEBS_LOCAL_REQUEST		0x40		/* Request from this system */
-#define WEBS_HOME_PAGE			0x80		/* Request for the home page */ 
-#define WEBS_ASP				0x100		/* ASP request */ 
+#define WEBS_HOME_PAGE			0x80		/* Request for the home page */
+#define WEBS_ASP				0x100		/* ASP request */
 #define WEBS_HEAD_REQUEST		0x200		/* Head request */
 #define WEBS_CLEN				0x400		/* Request had a content length */
 #define WEBS_FORM				0x800		/* Request is a form */
@@ -74,7 +74,7 @@
 #define WEBS_HANDLER_FIRST	0x1			/* Process this handler first */
 #define WEBS_HANDLER_LAST	0x2			/* Process this handler last */
 
-/* 
+/*
  *	Per socket connection webs structure
  */
 typedef struct websRec {
@@ -133,7 +133,7 @@ typedef websRec websType;
 
 /******************************** Prototypes **********************************/
 extern int		 websAccept(int sid, char *ipaddr, int port, int listenSid);
-extern int 		 websAspDefine(char_t *name, 
+extern int 		 websAspDefine(char_t *name,
 					int (*fn)(int ejid, webs_t wp, int argc, char_t **argv));
 extern int 		 websAspRequest(webs_t wp, char_t *lpath);
 extern void		 websCloseListen(void);
@@ -145,7 +145,7 @@ extern void  	 websError(webs_t wp, int code, char_t *msg, ...);
 /* function websErrorMsg() made extern 03 Jun 02 BgP */
 extern char_t 	*websErrorMsg(int code);
 extern void  	 websFooter(webs_t wp);
-extern int 		 websFormDefine(char_t *name, void (*fn)(webs_t wp, 
+extern int 		 websFormDefine(char_t *name, void (*fn)(webs_t wp,
 					char_t *path, char_t *query));
 extern char_t 	*websGetDefaultDir(void);
 extern char_t 	*websGetDefaultPage(void);
@@ -174,8 +174,8 @@ extern void 	 websPageClose(webs_t wp);
 extern int 		 websPublish(char_t *urlPrefix, char_t *path);
 extern void		 websRedirect(webs_t wp, char_t *url);
 extern void 	 websSecurityDelete(void);
-extern int 		 websSecurityHandler(webs_t wp, char_t *urlPrefix, 
-					char_t *webDir, int arg, char_t *url, char_t *path, 
+extern int 		 websSecurityHandler(webs_t wp, char_t *urlPrefix,
+					char_t *webDir, int arg, char_t *url, char_t *path,
 					char_t *query);
 extern void 	 websSetDefaultDir(char_t *dir);
 extern void 	 websSetDefaultPage(char_t *page);
@@ -193,16 +193,16 @@ extern void 	 websSetRequestWritten(webs_t wp, int written);
 extern void 	 websSetVar(webs_t wp, char_t *var, char_t *value);
 extern int 		 websTestVar(webs_t wp, char_t *var);
 extern void		 websTimeoutCancel(webs_t wp);
-extern int 		 websUrlHandlerDefine(char_t *urlPrefix, char_t *webDir, 
-					int arg, int (*fn)(webs_t wp, char_t *urlPrefix, 
-					char_t *webDir, int arg, char_t *url, char_t *path, 
+extern int 		 websUrlHandlerDefine(char_t *urlPrefix, char_t *webDir,
+					int arg, int (*fn)(webs_t wp, char_t *urlPrefix,
+					char_t *webDir, int arg, char_t *url, char_t *path,
 					char_t *query), int flags);
 extern int 		 websUrlHandlerDelete(int (*fn)(webs_t wp, char_t *urlPrefix,
-					char_t *webDir, int arg, char_t *url, char_t *path, 
+					char_t *webDir, int arg, char_t *url, char_t *path,
 					char_t *query));
 extern int		 websUrlHandlerRequest(webs_t wp);
-extern int 		 websUrlParse(char_t *url, char_t **buf, char_t **host, 
-					char_t **path, char_t **port, char_t **query, 
+extern int 		 websUrlParse(char_t *url, char_t **buf, char_t **host,
+					char_t **path, char_t **port, char_t **query,
 					char_t **proto, char_t **tag, char_t **ext);
 extern char_t 	*websUrlType(char_t *webs, char_t *buf, int charCnt);
 extern int 		 websWrite(webs_t wp, char_t* fmt, ...);
@@ -221,7 +221,7 @@ extern void 	websTimeout(void *arg, int id);
 extern void 	websReadEvent(webs_t wp);
 
 /*
- *	Prototypes for functions available when running as part of the 
+ *	Prototypes for functions available when running as part of the
  *	GoAhead Embedded Management Framework (EMF)
  */
 #ifdef EMF

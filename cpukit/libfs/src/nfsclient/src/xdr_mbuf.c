@@ -41,7 +41,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_mem.c,v 1.8 1999/08/28 00:0
 
 /*
  * xdr_mbuf,  XDR implementation using mbuf buffers
- * 
+ *
  * derived from:
  *
  * xdr_mem.h, XDR implementation using memory buffers.
@@ -49,7 +49,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_mem.c,v 1.8 1999/08/28 00:0
  * Copyright (C) 1984, Sun Microsystems, Inc.
  *
  * The MBUF stream is useful for BSDNET kernel (or RTEMS for that matter)
- * use. 
+ * use.
  */
 
 #include <string.h>
@@ -168,7 +168,7 @@ MBPrivate		mbp = (MBPrivate)xdrs->x_base;
 		fprintf(stderr,"xdrmbuf: end of chain\n");
 	}
 #endif
-	
+
 	return rval;
 }
 

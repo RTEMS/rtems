@@ -3,7 +3,7 @@
  *
  *  Application interface to MSDOS filesystem.
  */
- 
+
 /*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
@@ -14,7 +14,7 @@
  *
  *  @(#) $Id$
  */
- 
+
 #ifndef _RTEMS_DOSFS_H
 #define _RTEMS_DOSFS_H
 

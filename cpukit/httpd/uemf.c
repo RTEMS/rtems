@@ -50,8 +50,8 @@ void error(E_ARGS_DEC, int etype, char_t *fmt, ...)
 		fmtAlloc(&buf, E_MAX_ERROR, T("%s\n"), fmtBuf);
 /*#ifdef DEV*/
 	} else if (etype == E_ASSERT) {
-		fmtAlloc(&buf, E_MAX_ERROR, 
-			T("Assertion %s, failed at %s %d\n"), fmtBuf, E_ARGS); 
+		fmtAlloc(&buf, E_MAX_ERROR,
+			T("Assertion %s, failed at %s %d\n"), fmtBuf, E_ARGS);
 /*#endif*/
 	} else if (etype == E_USER) {
 		fmtAlloc(&buf, E_MAX_ERROR, T("%s\n"), fmtBuf);
@@ -60,7 +60,7 @@ void error(E_ARGS_DEC, int etype, char_t *fmt, ...)
     * bugfix -- if etype is not E_LOG, E_ASSERT, or E_USER, the call to
     * bfreeSafe(B_L, buf) below will fail, because 'buf' is randomly
     * initialized. To be nice, we format a message saying that this is an
-    * unknown message type, and in doing so give buf a valid value. Thanks 
+    * unknown message type, and in doing so give buf a valid value. Thanks
     * to Simon Byholm.
     */
    else {
@@ -129,7 +129,7 @@ void traceRaw(char_t *buf)
  *	Replace the default trace handler. Return a pointer to the old handler.
  */
 
-void (*traceSetHandler(void (*function)(int level, char_t *buf))) 
+void (*traceSetHandler(void (*function)(int level, char_t *buf)))
 	(int level, char *buf)
 {
 	void (*oldHandler)(int level, char_t *buf);
@@ -188,7 +188,7 @@ char_t *strlower(char_t *string)
 }
 
 /******************************************************************************/
-/* 
+/*
  *	Convert a string to upper case
  */
 
@@ -215,7 +215,7 @@ char_t *strupper(char_t *string)
 /******************************************************************************/
 /*
  *	Convert integer to ascii string. Allow a NULL string in which case we
- *	allocate a dynamic buffer. 
+ *	allocate a dynamic buffer.
  */
 
 char_t *stritoa(int n, char_t *string, int width)

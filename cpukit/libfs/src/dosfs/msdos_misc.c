@@ -68,7 +68,7 @@ msdos_is_valid_name_char(const char ch)
     if ((ch == '.') || isalnum(ch) ||
         (strchr("$%'-_@~`!(){}^#&", ch) != NULL))
         return MSDOS_NAME_SHORT;
-    
+
     return MSDOS_NAME_INVALID;
 }
 
@@ -143,19 +143,19 @@ msdos_name_type(const char *name, int name_len)
             uppercase = true;
         else if ((*name >= 'a') && (*name <= 'z'))
             lowercase = true;
-        
+
         count++;
         name++;
     }
 
     if (lowercase && uppercase)
         return MSDOS_NAME_LONG;
-    
+
     return MSDOS_NAME_SHORT;
 }
 
 /* msdos_long_to_short --
- *     Routine to creates a short name from a long. Start the end of the 
+ *     Routine to creates a short name from a long. Start the end of the
  *
  * PARAMETERS:
  *     name      - name to check
@@ -183,7 +183,7 @@ msdos_long_to_short(const char *lfn, int lfn_len, char* sfn, int sfn_len)
         sfn[0] = '.';
         return MSDOS_NAME_SHORT;
     }
-        
+
     if ((lfn[0] == '.') && (lfn[1] == '.') && (lfn_len == 2))
     {
         sfn[0] = sfn[1] = '.';
@@ -203,14 +203,14 @@ msdos_long_to_short(const char *lfn, int lfn_len, char* sfn, int sfn_len)
     /*
      * Is this a short name ?
      */
-    
+
     type = msdos_name_type (lfn, lfn_len);
 
     if (type == MSDOS_NAME_INVALID)
         return MSDOS_NAME_INVALID;
-    
+
     msdos_filename_unix2dos (lfn, lfn_len, sfn);
-    
+
     return type;
 }
 
@@ -251,7 +251,7 @@ msdos_get_token(const char  *path,
     }
 
     *ret_token = path;
-    
+
     /*
      *  If it is just a separator then it is the current dir.
      */
@@ -350,7 +350,7 @@ msdos_find_name(
         return rc;
 
     fat_fd->dir_pos = dir_pos;
-    
+
     /*
      * I don't like this if, but: we should do it, or should write new file
      * size and first cluster num to the disk after each write operation
@@ -824,7 +824,7 @@ msdos_set_first_char4file_name(
       dir_block_size = fs_info->fat.vol.rdir_size;
     else
       dir_block_size = fs_info->fat.vol.bpc;
-    
+
     if (dir_pos->lname.cln == FAT_FILE_SHORT_NAME)
       start = dir_pos->sname;
 
@@ -1001,16 +1001,16 @@ int msdos_find_name_in_fat_file(
     assert(name_len > 0);
 
     fat_dir_pos_init(dir_pos);
-    
+
     lfn_start.cln = lfn_start.ofs = FAT_FILE_SHORT_NAME;
-    
+
     /*
      * If the file name is long how many short directory
      * entries are needed ?
      */
     if (name_type == MSDOS_NAME_LONG)
         lfn_entries = ((name_len - 1) + MSDOS_LFN_LEN_PER_ENTRY) / MSDOS_LFN_LEN_PER_ENTRY;
-            
+
     if (FAT_FD_OF_ROOT_DIR(fat_fd) &&
         (fs_info->fat.vol.type & (FAT_FAT12 | FAT_FAT16)))
         bts2rd = fat_fd->fat_file_size;
@@ -1035,7 +1035,7 @@ int msdos_find_name_in_fat_file(
 #if MSDOS_FIND_PRINT
         printf ("MSFS:[2] dir_offset:%li\n", dir_offset);
 #endif
-        
+
         if (ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
             rtems_set_errno_and_return_minus_one(EIO);
 
@@ -1111,7 +1111,7 @@ int msdos_find_name_in_fat_file(
                    * Remainder is not empty so is this entry empty ?
                    */
                   empty_space_count++;
-                
+
                   if (empty_space_count == (lfn_entries + 1))
                     empty_space_found = true;
                 }
@@ -1176,7 +1176,7 @@ int msdos_find_name_in_fat_file(
                         if (lfn_entries != (*MSDOS_DIR_ENTRY_TYPE(entry) &
                                             MSDOS_LAST_LONG_ENTRY_MASK))
                             continue;
-                        
+
                         /*
                          * Get the checksum of the short entry.
                          */
@@ -1184,7 +1184,7 @@ int msdos_find_name_in_fat_file(
                         lfn_start.ofs = dir_entry;
                         lfn_entry = lfn_entries;
                         lfn_checksum = *MSDOS_DIR_LFN_CHECKSUM(entry);
-                        
+
 #if MSDOS_FIND_PRINT
                         printf ("MSFS:[4.3] lfn_checksum:%i\n",
                                 *MSDOS_DIR_LFN_CHECKSUM(entry));
@@ -1211,7 +1211,7 @@ int msdos_find_name_in_fat_file(
                     lfn_entry--;
                     o = lfn_entry * MSDOS_LFN_LEN_PER_ENTRY;
                     p = entry + 1;
-                        
+
 #if MSDOS_FIND_PRINT
                     printf ("MSFS:[5] lfne:%i\n", lfn_entry);
 #endif
@@ -1233,7 +1233,7 @@ int msdos_find_name_in_fat_file(
                                 lfn_start.cln = FAT_FILE_SHORT_NAME;
                             break;
                         }
-                        
+
                         if (((o + i) >= name_len) || (*p != name[o + i]))
                         {
                             lfn_start.cln = FAT_FILE_SHORT_NAME;
@@ -1256,7 +1256,7 @@ int msdos_find_name_in_fat_file(
 
                     lfn_matched = ((lfn_entry == 0) &&
                                    (lfn_start.cln != FAT_FILE_SHORT_NAME));
-                    
+
 #if MSDOS_FIND_PRINT
                     printf ("MSFS:[8.1] lfn_matched:%i\n", lfn_matched);
 #endif
@@ -1309,7 +1309,7 @@ int msdos_find_name_in_fat_file(
                             return rc;
 
                         dir_pos->sname.ofs = dir_entry;
-                        
+
                         if (lfn_start.cln != FAT_FILE_SHORT_NAME)
                         {
                           rc = fat_file_ioctl(mt_entry, fat_fd, F_CLU_NUM,
@@ -1318,7 +1318,7 @@ int msdos_find_name_in_fat_file(
                           if (rc != RC_OK)
                             return rc;
                         }
-                
+
                         dir_pos->lname.cln = lfn_start.cln;
                         dir_pos->lname.ofs = lfn_start.ofs;
 
@@ -1326,7 +1326,7 @@ int msdos_find_name_in_fat_file(
                                MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
                         return RC_OK;
                     }
-                    
+
                     lfn_start.cln = FAT_FILE_SHORT_NAME;
                     lfn_matched = false;
                 }
@@ -1363,7 +1363,7 @@ int msdos_find_name_in_fat_file(
         int      i;
         int      slot = (((empty_space_offset * bts2rd) + empty_space_entry) /
                          MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE) + lfn_entries + 1;
-                  
+
         msdos_short_name_hex(MSDOS_DIR_NAME(name_dir_entry), slot);
 
         for (i = 0; i < 11; i++, p++)
@@ -1408,7 +1408,7 @@ int msdos_find_name_in_fat_file(
     while (lfn_entry < (lfn_entries + 1))
     {
         int length = 0;
-        
+
         if (read_cluster)
         {
           uint32_t new_length;
@@ -1429,7 +1429,7 @@ int msdos_find_name_in_fat_file(
 #endif
             ret = fat_file_extend (mt_entry, fat_fd, empty_space_offset * bts2rd,
                                    &new_length);
-                                           
+
             if (ret != RC_OK)
               return ret;
 
@@ -1451,11 +1451,11 @@ int msdos_find_name_in_fat_file(
               rtems_set_errno_and_return_minus_one(EIO);
           }
         }
-        
+
 #if MSDOS_FIND_PRINT
         printf ("MSFS:[10] eso:%li\n", empty_space_offset);
 #endif
-        
+
         for (dir_entry = empty_space_entry;
              dir_entry < bts2rd;
              dir_entry += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
@@ -1467,7 +1467,7 @@ int msdos_find_name_in_fat_file(
 
             length += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE;
             lfn_entry++;
-            
+
 #if MSDOS_FIND_PRINT
             printf ("MSFS:[10] de:%li(%li) length:%i lfn_entry:%i\n",
                     dir_entry, (dir_entry / MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE),
@@ -1495,7 +1495,7 @@ int msdos_find_name_in_fat_file(
                   if (rc != RC_OK)
                     return rc;
                 }
-                
+
                 dir_pos->lname.cln = lfn_start.cln;
                 dir_pos->lname.ofs = lfn_start.ofs;
 
@@ -1516,23 +1516,23 @@ int msdos_find_name_in_fat_file(
               lfn_start.cln = empty_space_offset;
               lfn_start.ofs = dir_entry;
             }
-            
+
             /*
              * Clear the entry before loading the data.
              */
             memset (entry, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
 
             *MSDOS_DIR_LFN_CHECKSUM(entry) = lfn_checksum;
-            
+
             p = entry + 1;
             n = name + (lfn_entries - lfn_entry) * MSDOS_LFN_LEN_PER_ENTRY;
-            
+
             for (i = 0; i < MSDOS_LFN_LEN_PER_ENTRY; i++)
             {
                 *p = *n;
                 if (*n != 0)
                     n++;
-                
+
                 switch (i)
                 {
                     case 4:
@@ -1563,7 +1563,7 @@ int msdos_find_name_in_fat_file(
         empty_space_entry = 0;
         read_cluster = true;
     }
-    
+
     return 0;
 }
 
@@ -1616,7 +1616,7 @@ int msdos_find_node_by_cluster_num_in_fat_file(
         for (i = 0; i < bts2rd; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
             char* entry = (char*) fs_info->cl_buf + i;
-            
+
             /* if this and all rest entries are empty - return not-found */
             if ((*MSDOS_DIR_ENTRY_TYPE(entry)) ==
                 MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY)
@@ -1639,7 +1639,7 @@ int msdos_find_node_by_cluster_num_in_fat_file(
                 dir_pos->sname.ofs = i;
                 dir_pos->lname.cln = FAT_FILE_SHORT_NAME;
                 dir_pos->lname.ofs = FAT_FILE_SHORT_NAME;
-                
+
                 memcpy(dir_entry, entry,
                        MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
                 return RC_OK;

@@ -22,9 +22,9 @@
 
 int devFS_mknod(
   const char                        *path,
-  mode_t                             mode, 
-  dev_t                              dev,  
-  rtems_filesystem_location_info_t  *pathloc 
+  mode_t                             mode,
+  dev_t                              dev,
+  rtems_filesystem_location_info_t  *pathloc
 )
 {
   int                       i;
@@ -35,14 +35,14 @@ int devFS_mknod(
   ISR_Level                 level;
 
   /*
-   * This is a special case. In rtems_filesystem_initialize, 
-   * a special device '/dev' will be created. We check this 
-   * condition and do not create the '/dev' and the 'path' 
+   * This is a special case. In rtems_filesystem_initialize,
+   * a special device '/dev' will be created. We check this
+   * condition and do not create the '/dev' and the 'path'
    * actually passed in is 'dev', not '/dev'. Just return 0 to
    * indicate we are OK.
    */
 
-  if ((path[0] == 'd') && (path[1] == 'e') && 
+  if ((path[0] == 'd') && (path[1] == 'e') &&
       (path[2] == 'v') && (path[3] == '\0'))
       return 0;
 

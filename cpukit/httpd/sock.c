@@ -9,7 +9,7 @@
 /******************************** Description *********************************/
 
 /*
- *	Posix Socket Module.  This supports blocking and non-blocking buffered 
+ *	Posix Socket Module.  This supports blocking and non-blocking buffered
  *	socket I/O.
  */
 
@@ -41,8 +41,8 @@ static int	tryAlternateSendTo(int sock, char *buf, int toWrite, int i,
 
 /*********************************** Code *************************************/
 /*
- *	Write to a socket. Absorb as much data as the socket can buffer. Block if 
- *	the socket is in blocking mode. Returns -1 on error, otherwise the number 
+ *	Write to a socket. Absorb as much data as the socket can buffer. Block if
+ *	the socket is in blocking mode. Returns -1 on error, otherwise the number
  *	of bytes written.
  */
 
@@ -60,7 +60,7 @@ int	socketWrite(int sid, char *buf, int bufsize)
 	}
 
 /*
- *	Loop adding as much data to the output ringq as we can absorb. Initiate a 
+ *	Loop adding as much data to the output ringq as we can absorb. Initiate a
  *	flush when the ringq is too full and continue. Block in socketFlush if the
  *	socket is in blocking mode.
  */
@@ -104,7 +104,7 @@ int	socketWriteString(int sid, char_t *buf)
  #ifdef UNICODE
  	char	*byteBuf;
  	int		r, len;
- 
+
  	len = gstrlen(buf);
  	byteBuf = ballocUniToAsc(buf, len);
  	r = socketWrite(sid, byteBuf, len);
@@ -119,12 +119,12 @@ int	socketWriteString(int sid, char_t *buf)
 /*
  *	Read from a socket. Return the number of bytes read if successful. This
  *	may be less than the requested "bufsize" and may be zero. Return -1 for
- *	errors. Return 0 for EOF. Otherwise return the number of bytes read. 
+ *	errors. Return 0 for EOF. Otherwise return the number of bytes read.
  *	If this routine returns zero it indicates an EOF condition.
  *  which can be verified with socketEof()
- 
+
  *	Note: this ignores the line buffer, so a previous socketGets
- *	which read a partial line may cause a subsequent socketRead to miss some 
+ *	which read a partial line may cause a subsequent socketRead to miss some
  *	data. This routine may block if the socket is in blocking mode.
  *
  */
@@ -161,7 +161,7 @@ int	socketRead(int sid, char *buf, int bufsize)
 /*
  *			This flush is critical for readers of datagram packets. If the
  *			buffer is not big enough to read the whole datagram in one hit,
- *			the recvfrom call will fail. 
+ *			the recvfrom call will fail.
  */
 			ringqFlush(rq);
 			room = ringqPutBlkMax(rq);
@@ -181,7 +181,7 @@ int	socketRead(int sid, char *buf, int bufsize)
 			} else if (len == 0) {
 /*
  *				If bytesRead is 0, this is EOF since socketRead should never
- *				be called unless there is data yet to be read.  Set the flag.  
+ *				be called unless there is data yet to be read.  Set the flag.
  *				Then pass back the number of bytes read.
  */
 				if (bytesRead == 0) {
@@ -204,10 +204,10 @@ int	socketRead(int sid, char *buf, int bufsize)
 /*
  *	Get a string from a socket. This returns data in *buf in a malloced string
  *	after trimming the '\n'. If there is zero bytes returned, *buf will be set
- *	to NULL. If doing non-blocking I/O, it returns -1 for error, EOF or when 
+ *	to NULL. If doing non-blocking I/O, it returns -1 for error, EOF or when
  *	no complete line yet read. If doing blocking I/O, it will block until an
- *	entire line is read. If a partial line is read socketInputBuffered or 
- *	socketEof can be used to distinguish between EOF and partial line still 
+ *	entire line is read. If a partial line is read socketInputBuffered or
+ *	socketEof can be used to distinguish between EOF and partial line still
  *	buffered. This routine eats and ignores carriage returns.
  */
 
@@ -231,7 +231,7 @@ int	socketGets(int sid, char_t **buf)
 		if ((rc = socketRead(sid, &c, 1)) < 0) {
 			return rc;
 		}
-		
+
 		if (rc == 0) {
 /*
  *			If there is a partial line and we are at EOF, pretend we saw a '\n'
@@ -308,7 +308,7 @@ int socketFlush(int sid)
 						return -1;
 					}
 					continue;
-				} 
+				}
 #endif
 /*
  *				Ensure we get a FD_WRITE message when the socket can absorb
@@ -317,7 +317,7 @@ int socketFlush(int sid)
  */
 				if (sp->saveMask < 0 ) {
 					sp->saveMask = sp->handlerMask;
-					socketRegisterInterest(sp, 
+					socketRegisterInterest(sp,
 					sp->handlerMask | SOCKET_WRITABLE);
 				}
 				return 0;
@@ -433,7 +433,7 @@ void socketSetBufferSize(int sid, int in, int line, int out)
  *	is an event of interest as defined by handlerMask (SOCKET_READABLE, ...)
  */
 
-void socketCreateHandler(int sid, int handlerMask, socketHandler_t handler, 
+void socketCreateHandler(int sid, int handlerMask, socketHandler_t handler,
 		int data)
 {
 	socket_t	*sp;
@@ -535,7 +535,7 @@ static int socketDoOutput(socket_t *sp, char *buf, int toWrite, int *errCode)
  *	more data
  */
 #ifndef UEMF
-#ifdef WIN 
+#ifdef WIN
 	if (sp->interestEvents & FD_WRITE) {
 		emfTime_t blockTime = { 0, 0 };
 		emfSetMaxBlockTime(&blockTime);
@@ -547,9 +547,9 @@ static int socketDoOutput(socket_t *sp, char *buf, int toWrite, int *errCode)
 
 /******************************************************************************/
 /*
- *		If the sendto failed, swap the first two bytes in the 
+ *		If the sendto failed, swap the first two bytes in the
  *		sockaddr structure.  This is a kludge due to a change in
- *		VxWorks between versions 5.3 and 5.4, but we want the 
+ *		VxWorks between versions 5.3 and 5.4, but we want the
  *		product to run on either.
  */
 static int tryAlternateSendTo(int sock, char *buf, int toWrite, int i,
@@ -661,7 +661,7 @@ void socketFree(int sid)
 	for (i = 0; i < socketMax; i++) {
 		if ((sp = socketList[i]) == NULL) {
 			continue;
-		} 
+		}
 		socketHighestFd = max(socketHighestFd, sp->sock);
 	}
 }

@@ -74,7 +74,7 @@ char *websMD5binary(unsigned char *buf, int length)
 
 /*****************************************************************************/
 /*
- *	Convenience call to websMD5binary 
+ *	Convenience call to websMD5binary
  *	(Performs char_t to char conversion and back)
  */
 
@@ -115,9 +115,9 @@ char_t *websMD5(char_t *string)
 
 /******************************************************************************/
 /*
- *	Get a Nonce value for passing along to the client.  This function 
- *	composes the string "RANDOMKEY:timestamp:myrealm" and 
- *	calculates the MD5 digest placing it in output. 
+ *	Get a Nonce value for passing along to the client.  This function
+ *	composes the string "RANDOMKEY:timestamp:myrealm" and
+ *	calculates the MD5 digest placing it in output.
  */
 
 char_t *websCalcNonce(webs_t wp)
@@ -141,10 +141,10 @@ char_t *websCalcNonce(webs_t wp)
 	prenonce = NULL;
 #ifdef DIGEST_ACCESS_SUPPORT
 	fmtAlloc(&prenonce, 256, T("%s:%s:%s"), RANDOMKEY, gasctime(newtime),
-		wp->realm); 
+		wp->realm);
 #else
-	fmtAlloc(&prenonce, 256, T("%s:%s:%s"), RANDOMKEY, gasctime(newtime), 
-		RANDOMKEY); 
+	fmtAlloc(&prenonce, 256, T("%s:%s:%s"), RANDOMKEY, gasctime(newtime),
+		RANDOMKEY);
 #endif
 	a_assert(prenonce);
 /*
@@ -218,8 +218,8 @@ char_t *websCalcDigest(webs_t wp)
 	if (!wp->qop) {
 		fmtAlloc(&preDigest, 255, T("%s:%s:%s"), a1prime, wp->nonce, a2prime);
 	} else {
-		fmtAlloc(&preDigest, 255, T("%s:%s:%s:%s:%s:%s"), 
-			a1prime, 
+		fmtAlloc(&preDigest, 255, T("%s:%s:%s:%s:%s:%s"),
+			a1prime,
 			wp->nonce,
 			wp->nc,
 			wp->cnonce,

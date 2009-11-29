@@ -11,7 +11,7 @@
 /******************************** Description *********************************/
 
 /*
- *	Ejscript lexical analyser. This implementes a lexical analyser for a 
+ *	Ejscript lexical analyser. This implementes a lexical analyser for a
  *	a subset of the JavaScript language.
  */
 
@@ -508,7 +508,7 @@ static int getLexicalToken(ej_t* ep, int state)
 			}
 			return TOK_LITERAL;
 
-		case '0': case '1': case '2': case '3': case '4': 
+		case '0': case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
 			do {
 				if (tokenAddChar(ep, c) < 0) {
@@ -540,7 +540,7 @@ static int getLexicalToken(ej_t* ep, int state)
 					break;
 				}
 			}
-			if (! gisalpha(*tokq->servp) && *tokq->servp != '$' && 
+			if (! gisalpha(*tokq->servp) && *tokq->servp != '$' &&
 					*tokq->servp != '_') {
 				ejError(ep, T("Invalid identifier %s"), tokq->servp);
 				return TOK_ERR;
@@ -566,10 +566,10 @@ static int getLexicalToken(ej_t* ep, int state)
 				}
 			}
 
-/* 
+/*
  * 			Skip white space after token to find out whether this is
  * 			a function or not.
- */ 
+ */
 			while (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
 				if ((c = inputGetc(ep)) < 0)
 					break;
@@ -682,7 +682,7 @@ static void inputPutback(ej_t* ep, int c)
 
 /******************************************************************************/
 /*
- *	Convert a hex or octal character back to binary, return original char if 
+ *	Convert a hex or octal character back to binary, return original char if
  *	not a hex digit
  */
 

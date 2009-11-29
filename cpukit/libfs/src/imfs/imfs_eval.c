@@ -110,7 +110,7 @@ int IMFS_evaluate_permission(
   else {
     /* must be other - do nothing */;
   }
-  
+
   /*
    * If all of the flags are set we have permission
    * to do this.
@@ -311,7 +311,7 @@ int IMFS_evaluate_for_make(
   /*
    *  Evaluate all tokens until we are done or an error occurs.
    */
-  
+
   while( !done ) {
 
     type = IMFS_get_token( &path[i], pathlen, token, &len );

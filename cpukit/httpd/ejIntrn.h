@@ -1,4 +1,4 @@
-/* 
+/*
  *	ejIntrn.h -- Ejscript(TM) header
  *
  *	Copyright (c) GoAhead Software, Inc., 1992-2000
@@ -13,7 +13,7 @@
 
 /******************************** Description *********************************/
 
-/* 
+/*
  *	GoAhead Ejscript(TM) header. This defines the Ejscript API and internal
  *	structures.
  */
@@ -193,7 +193,7 @@ extern char_t	*ejEvalFile(int eid, char_t *path, char_t **emsg);
 #endif
 extern int		ejRemoveGlobalFunction(int eid, char_t *name);
 extern void		*ejGetGlobalFunction(int eid, char_t *name);
-extern int 		ejSetGlobalFunctionDirect(sym_fd_t functions, char_t *name, 
+extern int 		ejSetGlobalFunctionDirect(sym_fd_t functions, char_t *name,
 					int (*fn)(int eid, void *handle, int argc, char_t **argv));
 extern void 	ejError(ej_t* ep, char_t* fmt, ...);
 extern void		ejSetUserHandle(int eid, int handle);

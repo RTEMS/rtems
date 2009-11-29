@@ -281,7 +281,7 @@ _fat_block_release(
     fat_fs_info_t *fs_info = mt_entry->fs_info;
     return fat_buf_release(fs_info);
 }
-    
+
 /* fat_cluster_read --
  *     wrapper for reading a whole cluster at once
  *
@@ -398,9 +398,9 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
 
     /* Evaluate boot record */
     vol->bps = FAT_GET_BR_BYTES_PER_SECTOR(boot_rec);
- 
-    if ( (vol->bps != 512)  && 
-         (vol->bps != 1024) && 
+
+    if ( (vol->bps != 512)  &&
+         (vol->bps != 1024) &&
          (vol->bps != 2048) &&
          (vol->bps != 4096))
     {
@@ -443,7 +443,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     vol->fat_loc = FAT_GET_BR_RESERVED_SECTORS_NUM(boot_rec);
 
     vol->rdir_entrs = FAT_GET_BR_FILES_PER_ROOT_DIR(boot_rec);
-    
+
     /* calculate the count of sectors occupied by the root directory */
     vol->rdir_secs = ((vol->rdir_entrs * FAT_DIRENTRY_SIZE) + (vol->bps - 1)) /
                      vol->bps;
@@ -454,18 +454,18 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         vol->fat_length = FAT_GET_BR_SECTORS_PER_FAT(boot_rec);
     else
         vol->fat_length = FAT_GET_BR_SECTORS_PER_FAT32(boot_rec);
-  
-    vol->data_fsec = vol->fat_loc + vol->fats * vol->fat_length + 
+
+    vol->data_fsec = vol->fat_loc + vol->fats * vol->fat_length +
                      vol->rdir_secs;
 
     /* for  FAT12/16 root dir starts at(sector) */
     vol->rdir_loc = vol->fat_loc + vol->fats * vol->fat_length;
-  
+
     if ( (FAT_GET_BR_TOTAL_SECTORS_NUM16(boot_rec)) != 0)
         vol->tot_secs = FAT_GET_BR_TOTAL_SECTORS_NUM16(boot_rec);
     else
         vol->tot_secs = FAT_GET_BR_TOTAL_SECTORS_NUM32(boot_rec);
-  
+
     data_secs = vol->tot_secs - vol->data_fsec;
 
     vol->data_cls = data_secs / vol->spc;
@@ -496,7 +496,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     if (vol->type == FAT_FAT32)
     {
         vol->rdir_cl = FAT_GET_BR_FAT32_ROOT_CLUSTER(boot_rec);
-      
+
         vol->mirror = FAT_GET_BR_EXT_FLAGS(boot_rec) & FAT_BR_EXT_FLAGS_MIRROR;
         if (vol->mirror)
             vol->afat = FAT_GET_BR_EXT_FLAGS(boot_rec) & FAT_BR_EXT_FLAGS_FAT_NUM;
@@ -517,9 +517,9 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
             {
                 rtems_disk_release(vol->dd);
                 return -1;
-            }    
-      
-            if (FAT_GET_FSINFO_LEAD_SIGNATURE(fs_info_sector) != 
+            }
+
+            if (FAT_GET_FSINFO_LEAD_SIGNATURE(fs_info_sector) !=
                 FAT_FSINFO_LEAD_SIGNATURE_VALUE)
             {
                 _fat_block_release(mt_entry);
@@ -535,11 +535,11 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
                     _fat_block_release(mt_entry);
                     rtems_disk_release(vol->dd);
                     return -1;
-                }    
-                    
+                }
+
                 vol->free_cls = FAT_GET_FSINFO_FREE_CLUSTER_COUNT(fs_info_sector);
                 vol->next_cl = FAT_GET_FSINFO_NEXT_FREE_CLUSTER(fs_info_sector);
-                rc = fat_fat32_update_fsinfo_sector(mt_entry, 0xFFFFFFFF, 
+                rc = fat_fat32_update_fsinfo_sector(mt_entry, 0xFFFFFFFF,
                                                     0xFFFFFFFF);
                 if ( rc != RC_OK )
                 {

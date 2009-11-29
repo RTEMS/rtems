@@ -115,7 +115,7 @@ fat_file_open(
         rtems_set_errno_and_return_minus_one( ENOMEM );
 
     memset(lfat_fd, 0, sizeof(fat_file_fd_t));
-    
+
     lfat_fd->links_num = 1;
     lfat_fd->flags &= ~FAT_FILE_REMOVED;
     lfat_fd->map.last_cln = FAT_UNDEFINED_VALUE;
@@ -584,7 +584,7 @@ fat_file_extend(
     }
 
     fat_fd->fat_file_size = new_length;
-    
+
     return RC_OK;
 }
 

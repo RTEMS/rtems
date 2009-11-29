@@ -30,22 +30,22 @@
 static void		formAddUser(webs_t wp, char_t *path, char_t *query);
 static void		formDeleteUser(webs_t wp, char_t *path, char_t *query);
 static void		formDisplayUser(webs_t wp, char_t *path, char_t *query);
-static int		aspGenerateUserList(int eid, webs_t wp, 
+static int		aspGenerateUserList(int eid, webs_t wp,
 									int argc, char_t **argv);
 
 static void		formAddGroup(webs_t wp, char_t *path, char_t *query);
 static void		formDeleteGroup(webs_t wp, char_t *path, char_t *query);
-static int		aspGenerateGroupList(int eid, webs_t wp, 
+static int		aspGenerateGroupList(int eid, webs_t wp,
 									 int argc, char_t **argv);
 
 static void		formAddAccessLimit(webs_t wp, char_t *path, char_t *query);
 static void		formDeleteAccessLimit(webs_t wp, char_t *path, char_t *query);
-static int		aspGenerateAccessLimitList(int eid, webs_t wp, 
+static int		aspGenerateAccessLimitList(int eid, webs_t wp,
 										   int argc, char_t **argv);
 
-static int		aspGenerateAccessMethodList(int eid, webs_t wp, 
+static int		aspGenerateAccessMethodList(int eid, webs_t wp,
 											int argc, char_t **argv);
-static int		aspGeneratePrivilegeList(int eid, webs_t wp, 
+static int		aspGeneratePrivilegeList(int eid, webs_t wp,
 										 int argc, char_t **argv);
 
 static void		formSaveUserManagement(webs_t wp, char_t *path, char_t *query);
@@ -92,12 +92,12 @@ static void formAddUser(webs_t wp, char_t *path, char_t *query)
 
 	a_assert(wp);
 
-	userid = websGetVar(wp, T("user"), T("")); 
-	pass1 = websGetVar(wp, T("password"), T("")); 
-	pass2 = websGetVar(wp, T("passconf"), T("")); 
-	group = websGetVar(wp, T("group"), T("")); 
-	enabled = websGetVar(wp, T("enabled"), T("")); 
-	ok = websGetVar(wp, T("ok"), T("")); 
+	userid = websGetVar(wp, T("user"), T(""));
+	pass1 = websGetVar(wp, T("password"), T(""));
+	pass2 = websGetVar(wp, T("passconf"), T(""));
+	group = websGetVar(wp, T("group"), T(""));
+	enabled = websGetVar(wp, T("enabled"), T(""));
+	ok = websGetVar(wp, T("ok"), T(""));
 
 	websHeader(wp);
 	websMsgStart(wp);
@@ -163,8 +163,8 @@ static void formDeleteUser(webs_t wp, char_t *path, char_t *query)
 
 	a_assert(wp);
 
-	userid = websGetVar(wp, T("user"), T("")); 
-	ok = websGetVar(wp, T("ok"), T("")); 
+	userid = websGetVar(wp, T("user"), T(""));
+	ok = websGetVar(wp, T("ok"), T(""));
 
 	websHeader(wp);
 	websMsgStart(wp);
@@ -198,8 +198,8 @@ static void formDisplayUser(webs_t wp, char_t *path, char_t *query)
 
 	a_assert(wp);
 
-	userid = websGetVar(wp, T("user"), T("")); 
-	ok = websGetVar(wp, T("ok"), T("")); 
+	userid = websGetVar(wp, T("user"), T(""));
+	ok = websGetVar(wp, T("ok"), T(""));
 
 	websHeader(wp);
 	websWrite(wp, T("<body>"));
@@ -234,14 +234,14 @@ static int aspGenerateUserList(int eid, webs_t wp, int argc, char_t **argv)
 
 	a_assert(wp);
 
-	nBytes = websWrite(wp, 
+	nBytes = websWrite(wp,
 		T("<SELECT NAME=\"user\" SIZE=\"3\" TITLE=\"Select a User\">"));
 	row = 0;
 	userid = umGetFirstUser();
 	nBytesSent = 0;
 
 	while (userid && (nBytes > 0)) {
-		nBytes = websWrite(wp, T("<OPTION VALUE=\"%s\">%s\n"), 
+		nBytes = websWrite(wp, T("<OPTION VALUE=\"%s\">%s\n"),
 			userid, userid);
 		userid = umGetNextUser(userid);
 		nBytesSent += nBytes;
@@ -267,11 +267,11 @@ static void formAddGroup(webs_t wp, char_t *path, char_t *query)
 
 	a_assert(wp);
 
-	group = websGetVar(wp, T("group"), T("")); 
-	method = websGetVar(wp, T("method"), T("")); 
-	enabled = websGetVar(wp, T("enabled"), T("")); 
-	privilege = websGetVar(wp, T("privilege"), T("")); 
-	ok = websGetVar(wp, T("ok"), T("")); 
+	group = websGetVar(wp, T("group"), T(""));
+	method = websGetVar(wp, T("method"), T(""));
+	enabled = websGetVar(wp, T("enabled"), T(""));
+	privilege = websGetVar(wp, T("privilege"), T(""));
+	ok = websGetVar(wp, T("ok"), T(""));
 
 	websHeader(wp);
 	websMsgStart(wp);
@@ -319,7 +319,7 @@ static void formAddGroup(webs_t wp, char_t *path, char_t *query)
 			websWrite(wp, T("Unable to add group, \"%s\", code: %d "),
 				group, nCheck);
 		} else {
-			websWrite(wp, T("Group, \"%s\" was successfully added."), 
+			websWrite(wp, T("Group, \"%s\" was successfully added."),
 				group);
 		}
 	}
@@ -340,8 +340,8 @@ static void formDeleteGroup(webs_t wp, char_t *path, char_t *query)
 
 	a_assert(wp);
 
-	group = websGetVar(wp, T("group"), T("")); 
-	ok = websGetVar(wp, T("ok"), T("")); 
+	group = websGetVar(wp, T("group"), T(""));
+	ok = websGetVar(wp, T("ok"), T(""));
 
 	websHeader(wp);
 	websMsgStart(wp);
@@ -379,7 +379,7 @@ static int aspGenerateGroupList(int eid, webs_t wp, int argc, char_t **argv)
 
 	row = 0;
 	nBytesSent = 0;
-	nBytes = websWrite(wp, 
+	nBytes = websWrite(wp,
 		T("<SELECT NAME=\"group\" SIZE=\"3\" TITLE=\"Select a Group\">"));
 /*
  *  Add a special "<NONE>" element to allow de-selection
@@ -412,11 +412,11 @@ static void formAddAccessLimit(webs_t wp, char_t *path, char_t *query)
 
 	a_assert(wp);
 
-	url = websGetVar(wp, T("url"), T("")); 
-	group = websGetVar(wp, T("group"), T("")); 
-	method = websGetVar(wp, T("method"), T("")); 
-	secure = websGetVar(wp, T("secure"), T("")); 
-	ok = websGetVar(wp, T("ok"), T("")); 
+	url = websGetVar(wp, T("url"), T(""));
+	group = websGetVar(wp, T("group"), T(""));
+	method = websGetVar(wp, T("method"), T(""));
+	secure = websGetVar(wp, T("secure"), T(""));
+	ok = websGetVar(wp, T("ok"), T(""));
 
 	websHeader(wp);
 	websMsgStart(wp);
@@ -466,8 +466,8 @@ static void formDeleteAccessLimit(webs_t wp, char_t *path, char_t *query)
 
 	a_assert(wp);
 
-	url = websGetVar(wp, T("url"), T("")); 
-	ok = websGetVar(wp, T("ok"), T("")); 
+	url = websGetVar(wp, T("url"), T(""));
+	ok = websGetVar(wp, T("ok"), T(""));
 
 	websHeader(wp);
 	websMsgStart(wp);
@@ -475,10 +475,10 @@ static void formDeleteAccessLimit(webs_t wp, char_t *path, char_t *query)
 	if (gstricmp(ok, T("ok")) != 0) {
 		websWrite(wp, T("Delete Access Limit Cancelled"));
 	} else if (umDeleteAccessLimit(url) != 0) {
-		websWrite(wp, T("ERROR: Unable to delete Access Limit for [%s]"), 
+		websWrite(wp, T("ERROR: Unable to delete Access Limit for [%s]"),
 			url);
 	} else {
-		websWrite(wp, T("Access Limit for [%s], was successfully deleted."), 
+		websWrite(wp, T("Access Limit for [%s], was successfully deleted."),
 			url);
 	}
 
@@ -492,7 +492,7 @@ static void formDeleteAccessLimit(webs_t wp, char_t *path, char_t *query)
  *  Generate HTML to create a list box containing the access limits
  */
 
-static int aspGenerateAccessLimitList(int eid, webs_t wp, 
+static int aspGenerateAccessLimitList(int eid, webs_t wp,
 									  int argc, char_t **argv)
 {
 	char_t	*url;
@@ -502,7 +502,7 @@ static int aspGenerateAccessLimitList(int eid, webs_t wp,
 
 	row = nBytesSent = 0;
 	url = umGetFirstAccessLimit();
-	nBytes = websWrite(wp, 
+	nBytes = websWrite(wp,
 		T("<SELECT NAME=\"url\" SIZE=\"3\" TITLE=\"Select a URL\">"));
 
 	while (url && (nBytes > 0)) {
@@ -521,22 +521,22 @@ static int aspGenerateAccessLimitList(int eid, webs_t wp,
  *  Generate HTML to create a list box containing the access methods
  */
 
-static int aspGenerateAccessMethodList(int eid, webs_t wp, 
+static int aspGenerateAccessMethodList(int eid, webs_t wp,
 									   int argc, char_t **argv)
 {
 	int		nBytes;
 
 	a_assert(wp);
 
-	nBytes = websWrite(wp, 
+	nBytes = websWrite(wp,
 		T("<SELECT NAME=\"method\" SIZE=\"3\" TITLE=\"Select a Method\">"));
-	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">FULL ACCESS\n"), 
+	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">FULL ACCESS\n"),
 		AM_FULL);
-	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">BASIC ACCESS\n"), 
+	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">BASIC ACCESS\n"),
 		AM_BASIC);
-	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\" SELECTED>DIGEST ACCESS\n"), 
+	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\" SELECTED>DIGEST ACCESS\n"),
 		AM_DIGEST);
-	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">NO ACCESS\n"), 
+	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">NO ACCESS\n"),
 		AM_NONE);
 	nBytes += websWrite(wp, T("</SELECT>"));
 
@@ -547,7 +547,7 @@ static int aspGenerateAccessMethodList(int eid, webs_t wp,
  *  Generate HTML to create a list box containing privileges
  */
 
-static int aspGeneratePrivilegeList(int eid, webs_t wp, 
+static int aspGeneratePrivilegeList(int eid, webs_t wp,
 									int argc, char_t **argv)
 {
 	int		nBytes;
@@ -558,7 +558,7 @@ static int aspGeneratePrivilegeList(int eid, webs_t wp,
 	nBytes += websWrite(wp, T("MULTIPLE TITLE=\"Choose Privileges\">"));
 	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">READ\n"), PRIV_READ);
 	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">EXECUTE\n"), PRIV_WRITE);
-	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">ADMINISTRATE\n"), 
+	nBytes += websWrite(wp, T("<OPTION VALUE=\"%d\">ADMINISTRATE\n"),
 		PRIV_ADMIN);
 	nBytes += websWrite(wp, T("</SELECT>"));
 
@@ -576,7 +576,7 @@ static void formSaveUserManagement(webs_t wp, char_t *path, char_t *query)
 
 	a_assert(wp);
 
-	ok = websGetVar(wp, T("ok"), T("")); 
+	ok = websGetVar(wp, T("ok"), T(""));
 
 	websHeader(wp);
 	websMsgStart(wp);
@@ -605,7 +605,7 @@ static void formLoadUserManagement(webs_t wp, char_t *path, char_t *query)
 
 	a_assert(wp);
 
-	ok = websGetVar(wp, T("ok"), T("")); 
+	ok = websGetVar(wp, T("ok"), T(""));
 
 	websHeader(wp);
 	websMsgStart(wp);

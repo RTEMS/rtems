@@ -174,26 +174,26 @@ char_t *ejEvalFile(int eid, char_t *path, char_t **emsg)
 		ejError(ep, T("Bad handle %d"), eid);
 		return NULL;
 	}
-	
+
 	if (gstat(path, &sbuf) < 0) {
 		gclose(fd);
 		ejError(ep, T("Cant stat %s"), path);
 		return NULL;
 	}
-	
+
 	if ((fileBuf = balloc(B_L, sbuf.st_size + 1)) == NULL) {
 		gclose(fd);
 		ejError(ep, T("Cant malloc %d"), sbuf.st_size);
 		return NULL;
 	}
-	
+
 	if (gread(fd, fileBuf, sbuf.st_size) != (int)sbuf.st_size) {
 		gclose(fd);
 		bfree(B_L, fileBuf);
 		ejError(ep, T("Error reading %s"), path);
 		return NULL;
 	}
-	
+
 	fileBuf[sbuf.st_size] = '\0';
 	gclose(fd);
 
@@ -292,13 +292,13 @@ char_t *ejEval(int eid, char_t *script, char_t **emsg)
 	int		state;
 	void	*endlessLoopTest;
 	int		loopCounter;
-	
-	
+
+
 	a_assert(script);
 
 	if (emsg) {
 		*emsg = NULL;
-	} 
+	}
 
 	if ((ep = ejPtr(eid)) == NULL) {
 		return NULL;

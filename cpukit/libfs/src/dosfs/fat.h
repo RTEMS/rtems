@@ -50,7 +50,7 @@ extern "C" {
 #    define CF_LE_L(v) CPU_swap_u32((uint32_t)(v))
 #    define CT_LE_W(v) CPU_swap_u16((uint16_t)(v))
 #    define CT_LE_L(v) CPU_swap_u32((uint32_t)(v))
-#else  
+#else
 #    define CF_LE_W(v) (v)
 #    define CF_LE_L(v) (v)
 #    define CT_LE_W(v) (v)
@@ -103,7 +103,7 @@ extern "C" {
 
 #define FAT_GET_ADDR(x, ofs)       ((uint8_t *)(x) + (ofs))
 
-#define FAT_GET_VAL8(x, ofs)       (uint8_t)(*((uint8_t *)(x) + (ofs))) 
+#define FAT_GET_VAL8(x, ofs)       (uint8_t)(*((uint8_t *)(x) + (ofs)))
 
 #define FAT_GET_VAL16(x, ofs)                               \
     (uint16_t)( (*((uint8_t *)(x) + (ofs))) |           \
@@ -114,10 +114,10 @@ extern "C" {
                   ((uint32_t)(*((uint8_t *)(x) + (ofs) + 1)) << 8)  | \
                   ((uint32_t)(*((uint8_t *)(x) + (ofs) + 2)) << 16) | \
                   ((uint32_t)(*((uint8_t *)(x) + (ofs) + 3)) << 24) )
-                    
+
 #define FAT_SET_VAL8(x, ofs,val)                    \
                  (*((uint8_t *)(x)+(ofs))=(uint8_t)(val))
- 
+
 #define FAT_SET_VAL16(x, ofs,val) do {              \
                  FAT_SET_VAL8((x),(ofs),(val));     \
                  FAT_SET_VAL8((x),(ofs)+1,(val)>>8);\
@@ -139,8 +139,8 @@ extern "C" {
 #define FAT_GET_BR_BYTES_PER_SECTOR(x)       FAT_GET_VAL16(x, 11)
 #define FAT_SET_BR_BYTES_PER_SECTOR(x,val)   FAT_SET_VAL16(x, 11,val)
 
-#define FAT_GET_BR_SECTORS_PER_CLUSTER(x)    FAT_GET_VAL8( x, 13) 
-#define FAT_SET_BR_SECTORS_PER_CLUSTER(x,val)FAT_SET_VAL8( x, 13,val) 
+#define FAT_GET_BR_SECTORS_PER_CLUSTER(x)    FAT_GET_VAL8( x, 13)
+#define FAT_SET_BR_SECTORS_PER_CLUSTER(x,val)FAT_SET_VAL8( x, 13,val)
 
 #define FAT_GET_BR_RESERVED_SECTORS_NUM(x)   FAT_GET_VAL16(x, 14)
 #define FAT_SET_BR_RESERVED_SECTORS_NUM(x,val) FAT_SET_VAL16(x, 14,val)
@@ -154,8 +154,8 @@ extern "C" {
 #define FAT_GET_BR_TOTAL_SECTORS_NUM16(x)    FAT_GET_VAL16(x, 19)
 #define FAT_SET_BR_TOTAL_SECTORS_NUM16(x,val)FAT_SET_VAL16(x, 19,val)
 
-#define FAT_GET_BR_MEDIA(x)                  FAT_GET_VAL8( x, 21) 
-#define FAT_SET_BR_MEDIA(x,val)              FAT_SET_VAL8( x, 21,val) 
+#define FAT_GET_BR_MEDIA(x)                  FAT_GET_VAL8( x, 21)
+#define FAT_SET_BR_MEDIA(x,val)              FAT_SET_VAL8( x, 21,val)
 
 #define FAT_GET_BR_SECTORS_PER_FAT(x)        FAT_GET_VAL16(x, 22)
 #define FAT_SET_BR_SECTORS_PER_FAT(x,val)    FAT_SET_VAL16(x, 22,val)
@@ -251,8 +251,8 @@ extern "C" {
 #define FAT_GET_FSINFO_TRAIL_SIGNATURE(x)     FAT_GET_VAL32(x,508)
 #define FAT_SET_FSINFO_TRAIL_SIGNATURE(x,val) FAT_SET_VAL32(x,508,val)
 #define FAT_FSINFO_TRAIL_SIGNATURE_VALUE  (0xAA550000)
-/* 
- * I read FSInfo sector from offset 484 to access the information, so offsets 
+/*
+ * I read FSInfo sector from offset 484 to access the information, so offsets
  * of these fields a relative
  */
 #define FAT_GET_FSINFO_FREE_CLUSTER_COUNT(x)      FAT_GET_VAL32(x, 4)

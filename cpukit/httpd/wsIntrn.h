@@ -1,4 +1,4 @@
-/* 
+/*
  *	wsIntrn.h -- Internal GoAhead Web server header
  *
  * Copyright (c) GoAhead Software Inc., 1992-2000. All Rights Reserved.
@@ -7,13 +7,13 @@
  *
  * $Id$
  */
- 
+
 #ifndef _h_WEBS_INTERNAL
 #define _h_WEBS_INTERNAL 1
 
 /******************************** Description *********************************/
 
-/* 
+/*
  *	Internal GoAhead Web Server header. This defines the Web private APIs
  *	Include this header when you want to create URL handlers.
  */
@@ -21,7 +21,7 @@
 /*********************************** Defines **********************************/
 
 /*
- *	Define this to enable logging of web accesses to a file 
+ *	Define this to enable logging of web accesses to a file
  *		#define WEBS_LOG_SUPPORT 1
  *
  *	Define this to enable HTTP/1.1 keep alive support
@@ -129,7 +129,7 @@
 #include	"webs.h"
 
 /********************************** Defines ***********************************/
-/* 
+/*
  *	Read handler flags and state
  */
 #define WEBS_BEGIN			0x1			/* Beginning state */
@@ -147,10 +147,10 @@
 /*
  *	URL handler structure. Stores the leading URL path and the handler
  *	function to call when the URL path is seen.
- */ 
+ */
 typedef struct {
-	int		(*handler)(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg, 
-			char_t *url, char_t *path, 
+	int		(*handler)(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
+			char_t *url, char_t *path,
 			char_t *query);					/* Callback URL handler function */
 	char_t	*webDir;						/* Web directory if required */
 	char_t	*urlPrefix;						/* URL leading prefix */
@@ -159,7 +159,7 @@ typedef struct {
 	int		flags;							/* Flags */
 } websUrlHandlerType;
 
-/* 
+/*
  *	Webs statistics
  */
 typedef struct {
@@ -179,7 +179,7 @@ typedef struct {
 
 extern websStatsType websStats;				/* Web access stats */
 
-/* 
+/*
  *	Error code list
  */
 typedef struct {
@@ -187,7 +187,7 @@ typedef struct {
 	char_t	*msg;							/* HTTP error message */
 } websErrorType;
 
-/* 
+/*
  *	Mime type list
  */
 typedef struct {
@@ -244,8 +244,8 @@ extern void		 websFormOpen(void);
 extern void		 websFormClose(void);
 extern int		 websAspWrite(int ejid, webs_t wp, int argc, char_t **argv);
 extern void  	 websDefaultClose(void);
-extern int 		 websDefaultHandler(webs_t wp, char_t *urlPrefix, 
-					char_t *webDir, int arg, char_t *url, char_t *path, 
+extern int 		 websDefaultHandler(webs_t wp, char_t *urlPrefix,
+					char_t *webDir, int arg, char_t *url, char_t *path,
 					char_t *query);
 extern int 		 websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
 					int arg, char_t *url, char_t *path, char_t *query);
@@ -258,7 +258,7 @@ extern char_t	 *websGetCgiCommName(void);
 extern int		 websLaunchCgiProc(char_t *cgiPath, char_t **argp,
 					char_t **envp, char_t *stdIn, char_t *stdOut);
 extern int 		 websOpen(int sid);
-extern void 	 websResponse(webs_t wp, int code, char_t *msg, 
+extern void 	 websResponse(webs_t wp, int code, char_t *msg,
 					char_t *redirect);
 extern int 		 websJavaScriptEval(webs_t wp, char_t *script);
 extern int 		 websPageReadData(webs_t wp, char *buf, int nBytes);
@@ -276,10 +276,10 @@ extern void 	 websRomPageClose(int fd);
 extern int 		 websRomPageReadData(webs_t wp, char *buf, int len);
 extern int 	 	 websRomPageStat(char_t *path, websStatType *sbuf);
 extern long		 websRomPageSeek(webs_t wp, long offset, int origin);
-extern void 	 websSetRequestSocketHandler(webs_t wp, int mask, 
+extern void 	 websSetRequestSocketHandler(webs_t wp, int mask,
 					void (*fn)(webs_t wp));
 extern int 		 websSolutionHandler(webs_t wp, char_t *urlPrefix,
-					char_t *webDir, int arg, char_t *url, char_t *path, 
+					char_t *webDir, int arg, char_t *url, char_t *path,
 					char_t *query);
 extern void 	 websUrlHandlerClose(void);
 extern int 		 websUrlHandlerOpen(void);
@@ -290,7 +290,7 @@ extern char_t*	 websGetDateString(websStatType* sbuf);
 extern int		strcmpci(char_t* s1, char_t* s2);
 
 /*
- *	Prototypes for functions available when running as part of the 
+ *	Prototypes for functions available when running as part of the
  *	GoAhead Embedded Management Framework (EMF)
  */
 #ifdef EMF

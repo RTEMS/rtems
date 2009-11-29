@@ -65,8 +65,8 @@ extern void SSLC_add_all_algorithms(void);
 
 /*************************** Forward Declarations *****************************/
 
-static int		websSSLSetCertStuff(SSL_CTX *ctx, 
-									char *cert_file, 
+static int		websSSLSetCertStuff(SSL_CTX *ctx,
+									char *cert_file,
 									char *key_file);
 static int		websSSLVerifyCallback(int ok, X509_STORE_CTX *ctx);
 static RSA		*websSSLTempRSACallback(SSL *s, int is_export, int keylength);
@@ -91,12 +91,12 @@ int websSSLOpen()
 {
 	char		*certFile, *keyFile, *CApath, *CAfile;
 	SSL_METHOD	*meth;
-	
+
 /*
  *	Install and initialize the SSL library
  */
 	apps_startup();
-	trace(7, T("SSL: Initializing SSL\n")); 
+	trace(7, T("SSL: Initializing SSL\n"));
 
 #ifdef SSLC
 	SSL_library_init();
@@ -117,7 +117,7 @@ int websSSLOpen()
 	a_assert(sslctx);
 
 	if (sslctx == NULL) {
-		trace(2, T("SSL: Unable to create SSL context!\n")); 
+		trace(2, T("SSL: Unable to create SSL context!\n"));
 		return -1;
 	}
 
@@ -135,7 +135,7 @@ int websSSLOpen()
 	CAfile = DEFAULT_CA_FILE;
 	if ((!SSL_CTX_load_verify_locations(sslctx, CAfile, CApath)) ||
 		(!SSL_CTX_set_default_verify_paths(sslctx))) {
-		trace(2, T("SSL: Unable to set cert verification locations!\n")); 
+		trace(2, T("SSL: Unable to set cert verification locations!\n"));
 		websSSLClose();
 		return -1;
 	}
@@ -168,11 +168,11 @@ int websSSLOpen()
 /*
  *	Open the socket
  */
-	sslListenSock = socketOpenConnection(NULL, SSL_PORT, 
+	sslListenSock = socketOpenConnection(NULL, SSL_PORT,
 		websSSLAccept, SOCKET_BLOCK);
 
 	if (sslListenSock < 0) {
-		trace(2, T("SSL: Unable to open SSL socket on port <%d>!\n"), 
+		trace(2, T("SSL: Unable to open SSL socket on port <%d>!\n"),
 			SSL_PORT);
 		return -1;
 	}
@@ -197,7 +197,7 @@ int websSSLIsOpen()
 
 void websSSLClose()
 {
-	trace(7, T("SSL: Closing SSL\n")); 
+	trace(7, T("SSL: Closing SSL\n"));
 
 	if (sslctx != NULL) {
 		SSL_CTX_free(sslctx);
@@ -245,8 +245,8 @@ int websSSLAccept(int sid, char *ipaddr, int port, int listenSid)
  *	Check if this is a request from a browser on this system. This is useful
  *	to know for permitting administrative operations only for local access
  */
-	if (gstrcmp(wp->ipaddr, T("127.0.0.1")) == 0 || 
-			gstrcmp(wp->ipaddr, websIpaddr) == 0 || 
+	if (gstrcmp(wp->ipaddr, T("127.0.0.1")) == 0 ||
+			gstrcmp(wp->ipaddr, websIpaddr) == 0 ||
 			gstrcmp(wp->ipaddr, websHost) == 0) {
 		wp->flags |= WEBS_LOCAL_REQUEST;
 	}
@@ -288,12 +288,12 @@ static void websSSLSocketEvent(int sid, int mask, int iwp)
 
 	if (mask & SOCKET_READABLE) {
 		websSSLReadEvent(wp);
-	} 
+	}
 	if (mask & SOCKET_WRITABLE) {
 		if (wp->writeSocket) {
 			(*wp->writeSocket)(wp);
 		}
-	} 
+	}
 }
 
 /******************************************************************************/
@@ -432,10 +432,10 @@ int websSSLSetCertStuff(SSL_CTX *ctx, char *certFile, char *keyFile)
 	a_assert (certFile);
 
 	if (certFile != NULL) {
-		if (SSL_CTX_use_certificate_file(ctx, certFile, 
+		if (SSL_CTX_use_certificate_file(ctx, certFile,
 			SSL_FILETYPE_PEM) <= 0) {
 			trace(2, T("SSL: Unable to set certificate file <%s>\n"),
-				certFile); 
+				certFile);
 			return -1;
 		}
 
@@ -445,17 +445,17 @@ int websSSLSetCertStuff(SSL_CTX *ctx, char *certFile, char *keyFile)
 
 		if (SSL_CTX_use_PrivateKey_file(ctx, keyFile, SSL_FILETYPE_PEM) <= 0) {
 			trace(2, T("SSL: Unable to set private key file <%s>\n"),
-				keyFile); 
+				keyFile);
 			return -1;
 		}
 
-/*		
+/*
  *		Now we know that a key and cert have been set against
- *		the SSL context 
+ *		the SSL context
  */
 		if (!SSL_CTX_check_private_key(ctx)) {
 			trace(2, T("SSL: Check of private key file <%s> FAILED!\n"),
-				keyFile); 
+				keyFile);
 			return -1;
 		}
 	}
@@ -477,11 +477,11 @@ int websSSLSetCertFile(char_t *certFile)
 		return -1;
 	}
 
-	if (SSL_CTX_use_certificate_file(sslctx, certFile, 
+	if (SSL_CTX_use_certificate_file(sslctx, certFile,
 		SSL_FILETYPE_PEM) <= 0) {
 		return -1;
 	}
-/*		
+/*
  *	Confirm that the certificate and the private key jive.
  */
 	if (!SSL_CTX_check_private_key(sslctx)) {
@@ -508,7 +508,7 @@ int websSSLSetKeyFile(char_t *keyFile)
 	if (SSL_CTX_use_PrivateKey_file(sslctx, keyFile, SSL_FILETYPE_PEM) <= 0) {
 		return -1;
 	}
-/*		
+/*
  *	Confirm that the certificate and the private key jive.
  */
 	if (!SSL_CTX_check_private_key(sslctx)) {
@@ -548,7 +548,7 @@ static RSA *websSSLTempRSACallback(SSL *ssl, int isExport, int keyLength)
 
 /******************************************************************************/
 /*
- *	Free SSL resources 
+ *	Free SSL resources
  */
 
 int websSSLFree(websSSL_t *wsp)
@@ -557,7 +557,7 @@ int websSSLFree(websSSL_t *wsp)
 		return -1;
 	}
 
-/* 
+/*
  *	Make sure we re-use sessions
  */
 	if (wsp->ssl != NULL) {
@@ -584,7 +584,7 @@ int websSSLEof(websSSL_t *wsp)
 
 	if ((wsp == NULL) || (wsp->bio == NULL)) {
 		return -1;
-	} 
+	}
 
 	return BIO_eof(wsp->bio);
 }
@@ -601,7 +601,7 @@ int websSSLRead(websSSL_t *wsp, char_t *buf, int len)
 
 	if ((wsp == NULL) || (wsp->bio == NULL)) {
 		return -1;
-	} 
+	}
 
 	return BIO_read(wsp->bio, buf, len);
 }
@@ -626,14 +626,14 @@ int websSSLGets(websSSL_t *wsp, char_t **buf)
 
 	if ((wsp == NULL) || (wsp->bio == NULL)) {
 		return -1;
-	} 
+	}
 
 	while (1) {
 
 		if ((rc = BIO_read(wsp->bio, &c, 1)) < 0) {
 			return rc;
 		}
-		
+
 		if (rc == 0) {
 /*
  *			If there is a partial line and we are at EOF, pretend we saw a '\n'
@@ -655,7 +655,7 @@ int websSSLGets(websSSL_t *wsp, char_t **buf)
 			return len;
 		} else if (c == '\r') {
 			continue;
-		} 
+		}
 /*
  *		Append character to buf
  */
@@ -682,7 +682,7 @@ int websSSLWrite(websSSL_t *wsp, char_t *buf, int len)
 
 	if ((wsp == NULL) || (wsp->bio == NULL)) {
 		return -1;
-	} 
+	}
 
 	return BIO_write(wsp->bio, buf, len);
 }
@@ -698,7 +698,7 @@ int websSSLFlush(websSSL_t *wsp)
 
 	if ((wsp == NULL) || (wsp->bio == NULL)) {
 		return -1;
-	} 
+	}
 
 	return BIO_flush(wsp->bio);
 }

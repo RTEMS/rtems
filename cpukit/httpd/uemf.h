@@ -13,7 +13,7 @@
 
 /******************************** Description *********************************/
 
-/* 
+/*
  *	GoAhead Web Server header. This defines the Web public APIs
  */
 
@@ -71,7 +71,7 @@
 	#include	<netinet/in.h>
 #endif /* NW */
 
-#ifdef SCOV5 
+#ifdef SCOV5
 	#include	<sys/types.h>
 	#include	<stdio.h>
 	#include	"sys/socket.h"
@@ -279,8 +279,8 @@ struct timeval
 #endif /* NW */
 
 /********************************** Unicode ***********************************/
-/* 
- *	Constants and limits. Also FNAMESIZE and PATHSIZE are currently defined 
+/*
+ *	Constants and limits. Also FNAMESIZE and PATHSIZE are currently defined
  *	in param.h to be 128 and 512
  */
 #define TRACE_MAX			(4096 - 48)
@@ -312,8 +312,8 @@ typedef unsigned short 		char_t;
 typedef unsigned short		uchar_t;
 
 /*
- *	Text size of buffer macro. A buffer bytes will hold (size / char size) 
- *	characters. 
+ *	Text size of buffer macro. A buffer bytes will hold (size / char size)
+ *	characters.
  */
 #define	TSZ(x)				(sizeof(x) / sizeof(char_t))
 
@@ -653,7 +653,7 @@ typedef struct {
 #endif /* __NO_PACK */
 
 /*
- *	Allocation flags 
+ *	Allocation flags
  */
 #define VALUE_ALLOCATE		0x1
 
@@ -691,7 +691,7 @@ typedef struct {
  *    ^                           ^                       ^               ^
  *    |                           |                       |               |
  *  rq->buf                    rq->servp               rq->endp      rq->enduf
- *     
+ *
  *	The queue is empty when servp == endp.  This means that the queue will hold
  *	at most rq->buflen -1 bytes.  It is the fillers responsibility to ensure
  *	the ringq is never filled such that servp == endp.
@@ -727,8 +727,8 @@ typedef struct {
 #endif /* B_STATS */
 
 /*
- *	Block classes are: 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 
- *					   16384, 32768, 65536 
+ *	Block classes are: 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192,
+ *					   16384, 32768, 65536
  */
 typedef struct {
 	union {
@@ -810,7 +810,7 @@ extern int		cronFree(cron_t *cp);
 /*                                 SOCKET                                     */
 /******************************************************************************/
 /*
- *	Socket flags 
+ *	Socket flags
  */
 
 #if ((defined (WIN) || defined (CE)) && defined (WEBS))
@@ -846,7 +846,7 @@ extern int		cronFree(cron_t *cp);
 /*
  *	Handler event masks
  */
-#define SOCKET_READABLE			0x2		/* Make socket readable */ 
+#define SOCKET_READABLE			0x2		/* Make socket readable */
 #define SOCKET_WRITABLE			0x4		/* Make socket writable */
 #define SOCKET_EXCEPTION		0x8		/* Interested in exceptions */
 #define EMF_SOCKET_MESSAGE		(WM_USER+13)
@@ -858,7 +858,7 @@ extern int		cronFree(cron_t *cp);
 #endif /* LITTLEFOOT */
 
 typedef void 	(*socketHandler_t)(int sid, int mask, int data);
-typedef int		(*socketAccept_t)(int sid, char *ipaddr, int port, 
+typedef int		(*socketAccept_t)(int sid, char *ipaddr, int port,
 					int listenSid);
 typedef struct {
 	char			host[64];				/* Host name */
@@ -1025,7 +1025,7 @@ extern int		scriptEval(int engine, char_t *cmd, char_t **rslt, int chan);
 
 extern void		socketClose(void);
 extern void		socketCloseConnection(int sid);
-extern void		socketCreateHandler(int sid, int mask, socketHandler_t 
+extern void		socketCreateHandler(int sid, int mask, socketHandler_t
 					handler, int arg);
 extern void		socketDeleteHandler(int sid);
 extern int		socketEof(int sid);
@@ -1036,7 +1036,7 @@ extern int		socketGets(int sid, char_t **buf);
 extern int		socketGetPort(int sid);
 extern int		socketInputBuffered(int sid);
 extern int		socketOpen(void);
-extern int 		socketOpenConnection(char *host, int port, 
+extern int 		socketOpenConnection(char *host, int port,
 					socketAccept_t accept, int flags);
 extern void 	socketProcess(int hid);
 extern int		socketRead(int sid, char *buf, int len);
@@ -1047,7 +1047,7 @@ extern int 		socketSelect(int hid, int timeout);
 extern int 		socketGetHandle(int sid);
 extern int 		socketSetBlock(int sid, int flags);
 extern int 		socketGetBlock(int sid);
-extern int 		socketAlloc(char *host, int port, socketAccept_t accept, 
+extern int 		socketAlloc(char *host, int port, socketAccept_t accept,
 					int flags);
 extern void 	socketFree(int sid);
 extern int		socketGetError(void);
@@ -1074,9 +1074,9 @@ extern void 	symSubClose(void);
 
 extern void		trace(int lev, char_t *fmt, ...);
 extern void		traceRaw(char_t *buf);
-extern void		(*traceSetHandler(void (*function)(int level, char_t *buf))) 
+extern void		(*traceSetHandler(void (*function)(int level, char_t *buf)))
 					(int level, char_t *buf);
- 
+
 extern value_t 	valueInteger(long value);
 extern value_t	valueString(char_t *value, int flags);
 extern value_t	valueErrmsg(char_t *value);

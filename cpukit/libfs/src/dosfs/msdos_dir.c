@@ -14,7 +14,7 @@
 #include "config.h"
 #endif
 
-#include <ctype.h> 
+#include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <assert.h>
@@ -258,7 +258,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
         for (i = 0; i < ret; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
             char* entry = (char*) fs_info->cl_buf + i;
-            
+
             /*
              * Is this directory from here on empty ?
              */
@@ -288,7 +288,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                 int   o;
                 char* p;
                 int   q;
-                
+
                 /*
                  * Is this is the first entry of a LFN ?
                  */
@@ -306,7 +306,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                      */
                     lfn_start =
                       ((j * bts2rd) + i) / MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE;
-                    
+
                     /*
                      * Get the number of entries so we can count down and
                      * also the checksum of the short entry.
@@ -330,7 +330,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                     lfn_start = FAT_FILE_SHORT_NAME;
                     continue;
                 }
-             
+
                 /*
                  * Extract the file name into the directory entry. The data is
                  * stored in UNICODE characters (16bit). No translation is
@@ -340,16 +340,16 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                  * trailing nul character. We need to range check the length to
                  * fit in the directory entry name field.
                  */
-                
+
                 lfn_entries--;
                 p = entry + 1;
                 o = lfn_entries * MSDOS_LFN_LEN_PER_ENTRY;
-                
+
                 for (q = 0; q < MSDOS_LFN_LEN_PER_ENTRY; q++)
                 {
                     if (o >= (sizeof(tmp_dirent.d_name) - 1))
                         break;
-                        
+
                     tmp_dirent.d_name[o++] = *p;
 
                     if (*p == '\0')
@@ -372,7 +372,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
             else
             {
                 fat_dir_pos_t dir_pos;
-              
+
                 /*
                  * Skip active entries until get the entry to start from.
                  */
@@ -446,7 +446,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                 {
                     tmp_dirent.d_namlen = strlen(tmp_dirent.d_name);
                 }
-                
+
                 memcpy(buffer + cmpltd, &tmp_dirent, sizeof(struct dirent));
 
                 iop->offset = iop->offset + sizeof(struct dirent);
@@ -461,7 +461,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                     return rc;
                 }
             }
-            
+
             if (count <= 0)
                 break;
         }

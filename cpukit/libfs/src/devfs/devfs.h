@@ -1,4 +1,4 @@
-/** 
+/**
 *  @file  libfs/devfs/devfs.h
 *
 *  This include file contains all constants and structures associated
@@ -18,7 +18,7 @@ extern "C" {
  *  This structure define the type of device table
  */
 
-typedef struct 
+typedef struct
 {
   /** This member points to device name which is a null-terminated string */
   char                     *device_name;
@@ -44,7 +44,7 @@ extern int rtems_deviceio_errno(rtems_status_code code);
 
 /**
  *  The following defines the device table size. This values
- *  is configured during application configuration time by 
+ *  is configured during application configuration time by
  *  the user. The default value is set to 4.
  */
 
@@ -56,20 +56,20 @@ extern uint32_t rtems_device_table_size;
  *  handlers.
  */
 
-extern rtems_filesystem_operations_table devFS_ops; 
+extern rtems_filesystem_operations_table devFS_ops;
 
 /**
  *  The following defines the device-only filesystem operating
  *  handlers.
  */
 
-extern rtems_filesystem_file_handlers_r  devFS_file_handlers; 
+extern rtems_filesystem_file_handlers_r  devFS_file_handlers;
 
 
 /**
  *  This handler maps open operation to rtems_io_open.
  *  @param iop This is the RTEMS's internal representation of file.
- *  @param pathname a null-terminated string that starts with /dev. 
+ *  @param pathname a null-terminated string that starts with /dev.
  *  @param flag access flags
  *  @param mode access mode
  *  @retval the same as open
@@ -166,10 +166,10 @@ extern int devFS_stat(
 
 /**
  *  This routine is invoked upon determination of a node type.
- *  Since this is a device-only filesystem, so there is only 
+ *  Since this is a device-only filesystem, so there is only
  *  one node type in the system.
- *  
- *  @param pathloc contains filesytem access information, this 
+ *
+ *  @param pathloc contains filesytem access information, this
  *         parameter is ignored
  *  @retval always returns RTEMS_FILESYSTEM_DEVICE
  */
@@ -182,14 +182,14 @@ extern int devFS_node_type(
 
 /**
  *  This routine is invoked to determine if 'pathname' exists.
- *  This routine first check access flags, then it searches 
+ *  This routine first check access flags, then it searches
  *  the device table to get the information.
- * 
+ *
  *  @param pathname device name to be searched
  *  @param flags access flags
  *  @param pathloc contains filesystem access information
- *  @retval upon success(pathname exists), this routines 
- *  returns 0; if 'flag' is invalid, it returns -1 and errno 
+ *  @retval upon success(pathname exists), this routines
+ *  returns 0; if 'flag' is invalid, it returns -1 and errno
  *  is set to EIO; otherwise, it returns -1 and errno is set to ENOENT
  */
 
@@ -202,19 +202,19 @@ extern int devFS_evaluate_path(
 
 
 /**
- *  This routine is given a path to evaluate and a valid start 
+ *  This routine is given a path to evaluate and a valid start
  *  location. It is responsible for finding the parent node for
  *  a requested make command, setting pathloc information to
- *  identify the parent node, and setting the name pointer to 
- *  the first character of the name of the new node. In device 
+ *  identify the parent node, and setting the name pointer to
+ *  the first character of the name of the new node. In device
  *  only filesystem, devices do not has a tree hierarchy, there
- *  are no parent-child relationship. So this routine is rather 
+ *  are no parent-child relationship. So this routine is rather
  *  simple, it just set *name to path and returns
  *
  *  @param path device path to be evaluated
- *  @param pathloc contains filesystem access information, this 
+ *  @param pathloc contains filesystem access information, this
  *         parameter is ignored
- *  @param name 
+ *  @param name
  *  @retval always returns 0
  */
 
@@ -228,9 +228,9 @@ extern int devFS_evaluate_for_make(
 
 /**
  *  This routine is invoked upon registration of a new device
- *  file. It is responsible for creating a item in the main 
- *  device table. This routine searches the device table in 
- *  sequential order, when found a empty slot, it fills the slot 
+ *  file. It is responsible for creating a item in the main
+ *  device table. This routine searches the device table in
+ *  sequential order, when found a empty slot, it fills the slot
  *  with proper values.
  *
  *  @param path the device file name to be registered
@@ -239,15 +239,15 @@ extern int devFS_evaluate_for_make(
  *  @param pathloc contains filesystem access information
  *  @retval upon success, this routine returns 0; if 'path'
  *  already exist, it returns -1 and errno is set to EEXIST;
- *  if device table is full, it returns -1 and errno is set 
+ *  if device table is full, it returns -1 and errno is set
  *  to ENOMEM
  */
 
 extern int devFS_mknod(
    const char                        *path,
-   mode_t                             mode, 
-   dev_t                              dev,  
-   rtems_filesystem_location_info_t  *pathloc 
+   mode_t                             mode,
+   dev_t                              dev,
+   rtems_filesystem_location_info_t  *pathloc
 );
 
 
@@ -256,10 +256,10 @@ extern int devFS_mknod(
  *  It is responsible for creating the main device table,
  *  initializing it to a known state, and set device file operation
  *  handlers. After this, the device-only filesytem is ready for use
- * 
+ *
  *  @param  temp_mt_entry
  *  @retval upon success, this routine returns 0; otherwise it returns
- *  -1 and errno is set to proper value. The only error is when malloc 
+ *  -1 and errno is set to proper value. The only error is when malloc
  *  failed, and errno is set to NOMEM.
  */
 
@@ -272,15 +272,15 @@ extern int devFS_initialize(
  *  This routine retrieves all the device registered in system, and
  *  prints out their detail information. For example, on one system,
  *  devFS_show will print out following message:
- *  
+ *
  *  /dev/console     0  0
  *  /dev/clock       1  0
  *  /dev/tty0        0  0
  *  /flash           2  0
- * 
- *  This routine is intended for debugging, and can be used by shell 
+ *
+ *  This routine is intended for debugging, and can be used by shell
  *  program to provide user with the system information.
- *  
+ *
  *  @param  none
  *  @retval 0
  */

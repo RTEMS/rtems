@@ -146,7 +146,7 @@ dummyproc(caddr_t ext_buf, u_int ext_size)
  * and 'free' procs. (The latter may call the
  * user back once the networking stack has
  * released the buffer).
- * 
+ *
  * The callbacks are provided with the 'closure'
  * pointer and the 'buflen' argument.
  */
@@ -200,7 +200,7 @@ sendto_nocpy (
 		if (/*auio.uio_resid != len &&*/ (error == EINTR || error == EWOULDBLOCK))
 			error = 0;
 	}
-	if (error) 
+	if (error)
 		errno = error;
 	else
 		ret = buflen;
@@ -244,7 +244,7 @@ recv_mbuf_from(int s, struct mbuf **ppm, long len, struct sockaddr *fromaddr, in
 	auio.uio_offset = 0;
 */
 	auio.uio_resid = len;
-	error = soreceive (so, &from, &auio, (struct mbuf **) ppm, 
+	error = soreceive (so, &from, &auio, (struct mbuf **) ppm,
 			(struct mbuf **)NULL,
 			NULL);
 	if (error) {

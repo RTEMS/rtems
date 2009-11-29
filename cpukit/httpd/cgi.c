@@ -11,7 +11,7 @@
 /********************************** Description *******************************/
 /*
  *	This module implements the /cgi-bin handler. CGI processing differs from
- *	goforms processing in that each CGI request is executed as a separate 
+ *	goforms processing in that each CGI request is executed as a separate
  *	process, rather than within the webserver process. For each CGI request the
  *	environment of the new process must be set to include all the CGI variables
  *	and its standard input and output must be directed to the socket.  This
@@ -45,7 +45,7 @@ static int		cgiMax;			/* Size of hAlloc list */
 /*
  *	Process a form request. Returns 1 always to indicate it handled the URL
  */
-int websCgiHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg, 
+int websCgiHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 		char_t *url, char_t *path, char_t* query)
 {
 	cgiRec		*cgip;
@@ -100,7 +100,7 @@ int websCgiHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	}
 #endif /* ! VXWORKS */
 
-         
+
 /*
  *	Get the CWD for resetting after launching the child process CGI
  */
@@ -116,12 +116,12 @@ int websCgiHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 /*
  *	Build command line arguments.  Only used if there is no non-encoded
  *	= character.  This is indicative of a ISINDEX query.  POST separators
- *	are & and others are +.  argp will point to a balloc'd array of 
+ *	are & and others are +.  argp will point to a balloc'd array of
  *	pointers.  Each pointer will point to substring within the
- *	query string.  This array of string pointers is how the spawn or 
- *	exec routines expect command line arguments to be passed.  Since 
+ *	query string.  This array of string pointers is how the spawn or
+ *	exec routines expect command line arguments to be passed.  Since
  *	we don't know ahead of time how many individual items there are in
- *	the query string, the for loop includes logic to grow the array 
+ *	the query string, the for loop includes logic to grow the array
  *	size via brealloc.
  */
 	argpsize = 10;
@@ -143,9 +143,9 @@ int websCgiHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	*(argp+n) = NULL;
 /*
  *	Add all CGI variables to the environment strings to be passed
- *	to the spawned CGI process.  This includes a few we don't 
+ *	to the spawned CGI process.  This includes a few we don't
  *	already have in the symbol table, plus all those that are in
- *	the cgiVars symbol table.  envp will point to a balloc'd array of 
+ *	the cgiVars symbol table.  envp will point to a balloc'd array of
  *	pointers.  Each pointer will point to a balloc'd string containing
  *	the keyword value pair in the form keyword=value.  Since we don't
  *	know ahead of time how many environment strings there will be the
@@ -183,14 +183,14 @@ int websCgiHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
  */
 	if (wp->cgiStdin == NULL) {
 		wp->cgiStdin = websGetCgiCommName();
-	} 
+	}
 	stdIn = wp->cgiStdin;
 	stdOut = websGetCgiCommName();
 /*
  *	Now launch the process.  If not successful, do the cleanup of resources.
  *	If successful, the cleanup will be done after the process completes.
  */
-	if ((pHandle = websLaunchCgiProc(cgiPath, argp, envp, stdIn, stdOut)) 
+	if ((pHandle = websLaunchCgiProc(cgiPath, argp, envp, stdIn, stdOut))
 		== -1) {
 		websError(wp, 200, T("failed to spawn CGI task"));
 		for (ep = envp; *ep != NULL; ep++) {
@@ -234,7 +234,7 @@ void websCgiGatherOutput (cgiRec *cgip)
 {
 	gstat_t	sbuf;
 	char_t	cgiBuf[FNAMESIZE];
-	if ((gstat(cgip->stdOut, &sbuf) == 0) && 
+	if ((gstat(cgip->stdOut, &sbuf) == 0) &&
 		(sbuf.st_size > cgip->fplacemark)) {
 		int fdout;
 		fdout = gopen(cgip->stdOut, O_RDONLY | O_BINARY, 0444 );
@@ -283,15 +283,15 @@ void websCgiCleanup()
  *				We get here if the CGI process has terminated.  Clean up.
  */
 				nTries = 0;
-/*				
+/*
  *				Make sure we didn't miss something during a task switch.
  *				Maximum wait is 100 times 10 msecs (1 second).
  */
 				while ((cgip->fplacemark == 0) && (nTries < 100)) {
 					websCgiGatherOutput(cgip);
-/*					
- *					There are some cases when we detect app exit 
- *					before the file is ready. 
+/*
+ *					There are some cases when we detect app exit
+ *					before the file is ready.
  */
 					if (cgip->fplacemark == 0) {
 #ifdef WIN

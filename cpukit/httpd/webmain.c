@@ -57,7 +57,7 @@ typedef struct {
 
 /* The following holds the pointer to an allocated websTimer_t structure .
  * Using this method only one timer can be active at a time, but
- * for the WebServer, this should be OK. 
+ * for the WebServer, this should be OK.
  */
 websTimer_t *tp;
 
@@ -75,7 +75,7 @@ static void memLeaks(void);
 #endif
 static timer_t timer_id;
 static void rtems_httpd_daemon(rtems_task_argument args);
- 
+
 /*********************************** Code *************************************/
 /*
  *	Main -- entry point from RTEMS
@@ -90,7 +90,7 @@ int rtems_initialize_webserver(void)
    * Default HTTPD priority.
    **********************************************************************/
   priority = 40;
-  
+
   sc = rtems_task_create(rtems_build_name('H', 'T', 'P', 'D'),
 			 priority, 8*1024,
 			 RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR |
@@ -106,7 +106,7 @@ int rtems_initialize_webserver(void)
    if (sc != RTEMS_SUCCESSFUL)
    {
       return(RTEMS_UNSATISFIED);
-   }   
+   }
 
    return(RTEMS_SUCCESSFUL);
 
@@ -116,7 +116,7 @@ static void
 rtems_httpd_daemon(rtems_task_argument args)
 {
 /*
- *	Initialize the memory allocator. Allow use of malloc and start with a 
+ *	Initialize the memory allocator. Allow use of malloc and start with a
  *	10K heap.
  */
 	bopen(NULL, (10 * 1024), B_USE_MALLOC);
@@ -185,14 +185,14 @@ static int initWebs(void)
 	socketOpen();
 
 /*
- *	Define the local Ip address, host name, default home page and the 
+ *	Define the local Ip address, host name, default home page and the
  *	root web directory.
  */
 	if (gethostname(host, sizeof(host)) < 0) {
 		error(E_L, E_LOG, T("Can't get hostname"));
 		return -1;
 		}
-	
+
 /*	intaddr.s_addr = (unsigned long) hostGetByName(host); */
 	if ((hp = gethostbyname(host)) == NULL) {
 		error(E_L, E_LOG, T("Can't get host address"));
@@ -228,7 +228,7 @@ static int initWebs(void)
 #endif
 	websSetPassword(password);
 
-/* 
+/*
  *	Open the web server on the given port. If that port is taken, try
  *	the next sequential port for up to "retries" attempts.
  */
@@ -236,14 +236,14 @@ static int initWebs(void)
 
 /*
  * 	First create the URL handlers. Note: handlers are called in sorted order
- *	with the longest path handler examined first. Here we define the security 
+ *	with the longest path handler examined first. Here we define the security
  *	handler, forms handler and the default web page handler.
  */
-	websUrlHandlerDefine(T(""), NULL, 0, websSecurityHandler, 
+	websUrlHandlerDefine(T(""), NULL, 0, websSecurityHandler,
 		WEBS_HANDLER_FIRST);
 	websUrlHandlerDefine(T("/goform"), NULL, 0, websFormHandler, 0);
-	websUrlHandlerDefine(T(""), NULL, 0, websDefaultHandler, 
-		WEBS_HANDLER_LAST); 
+	websUrlHandlerDefine(T(""), NULL, 0, websDefaultHandler,
+		WEBS_HANDLER_LAST);
 
 /*
  *	Now define two test procedures. Replace these with your application
@@ -255,14 +255,14 @@ static int initWebs(void)
 /*
  *	Create a handler for the default home page
  */
-	websUrlHandlerDefine(T("/"), NULL, 0, websHomePageHandler, 0); 
+	websUrlHandlerDefine(T("/"), NULL, 0, websHomePageHandler, 0);
 	return 0;
 }
 
 /******************************************************************************/
 /*
  *	Test Javascript binding for ASP. This will be invoked when "aspTest" is
- *	embedded in an ASP page. See web/asp.asp for usage. Set browser to 
+ *	embedded in an ASP page. See web/asp.asp for usage. Set browser to
  *	"localhost/asp.asp" to test.
  */
 
@@ -286,8 +286,8 @@ static void formTest(webs_t wp, char_t *path, char_t *query)
 {
 	char_t	*name, *address;
 
-	name = websGetVar(wp, T("name"), T("Joe Smith")); 
-	address = websGetVar(wp, T("address"), T("1212 Milky Way Ave.")); 
+	name = websGetVar(wp, T("name"), T("Joe Smith"));
+	address = websGetVar(wp, T("address"), T("1212 Milky Way Ave."));
 
 	websHeader(wp);
 	websWrite(wp, T("<body><h2>Name: %s, Address: %s</h2>\n"), name, address);
@@ -342,7 +342,7 @@ void *emfCreateTimer(int delay, void (*routine)(long arg), 	long arg)
 		bfree(B_L, tp);
 		return NULL;
 	}
-	
+
 #if 0
 	act.sa_flags = 0;
 	sigemptyset(&act.sa_mask);
@@ -387,7 +387,7 @@ static void timerProc(int signo)
 	websTimer_t wtp = *tp;
 
 /* Copy the timer structure to a local first and delete it before calling
- * the function, since the function could create another timer.  In this 
+ * the function, since the function could create another timer.  In this
  * implementation, only one timer can be allocated at a time.
  */
 
@@ -420,7 +420,7 @@ static int websHomePageHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
 /******************************************************************************/
 
 #if B_STATS
-static void memLeaks() 
+static void memLeaks()
 {
 	int		fd=1;
 

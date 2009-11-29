@@ -10,7 +10,7 @@
 /******************************** Description *********************************/
 
 /*
- *	Posix Socket Module.  This supports blocking and non-blocking buffered 
+ *	Posix Socket Module.  This supports blocking and non-blocking buffered
  *	socket I/O.
  */
 
@@ -163,7 +163,7 @@ int socketOpenConnection(char *host, int port, socketAccept_t accept, int flags)
 #else
 			hostent = gethostbyname(host);
 			if (hostent != NULL) {
-				memcpy((char *) &sockaddr.sin_addr, 
+				memcpy((char *) &sockaddr.sin_addr,
 					(char *) hostent->h_addr_list[0],
 					(size_t) hostent->h_length);
 			} else {
@@ -221,7 +221,7 @@ int socketOpenConnection(char *host, int port, socketAccept_t accept, int flags)
  */
 	if (host) {
 /*
- *		Connect to the remote server in blocking mode, then go into 
+ *		Connect to the remote server in blocking mode, then go into
  *		non-blocking mode if desired.
  */
 		if (!dgram) {
@@ -250,7 +250,7 @@ int socketOpenConnection(char *host, int port, socketAccept_t accept, int flags)
 
 			}
 			if ((rc = connect(sp->sock, (struct sockaddr *) &sockaddr,
-				sizeof(sockaddr))) < 0 && 
+				sizeof(sockaddr))) < 0 &&
 				(rc = tryAlternateConnect(sp->sock,
 				(struct sockaddr *) &sockaddr)) < 0) {
 #if (defined (WIN) || defined (CE))
@@ -272,7 +272,7 @@ int socketOpenConnection(char *host, int port, socketAccept_t accept, int flags)
  */
 		rc = 1;
 		setsockopt(sp->sock, SOL_SOCKET, SO_REUSEADDR, (char *)&rc, sizeof(rc));
-		if (bind(sp->sock, (struct sockaddr *) &sockaddr, 
+		if (bind(sp->sock, (struct sockaddr *) &sockaddr,
 				sizeof(sockaddr)) < 0) {
 			socketFree(sid);
 			return -1;
@@ -308,9 +308,9 @@ int socketOpenConnection(char *host, int port, socketAccept_t accept, int flags)
 
 /******************************************************************************/
 /*
- *	If the connection failed, swap the first two bytes in the 
+ *	If the connection failed, swap the first two bytes in the
  *	sockaddr structure.  This is a kludge due to a change in
- *	VxWorks between versions 5.3 and 5.4, but we want the 
+ *	VxWorks between versions 5.3 and 5.4, but we want the
  *	product to run on either.
  */
 
@@ -451,20 +451,20 @@ int socketGetInput(int sid, char *buf, int toRead, int *errCode)
 	} else {
 		bytesRead = recv(sp->sock, buf, toRead, 0);
 	}
-   
+
    /*
-    * BUG 01865 -- CPU utilization hangs on Windows. The original code used 
+    * BUG 01865 -- CPU utilization hangs on Windows. The original code used
     * the 'errno' global variable, which is not set by the winsock functions
     * as it is under *nix platforms. We use the platform independent
-    * socketGetError() function instead, which does handle Windows correctly. 
+    * socketGetError() function instead, which does handle Windows correctly.
     * Other, *nix compatible platforms should work as well, since on those
     * platforms, socketGetError() just returns the value of errno.
     * Thanks to Jonathan Burgoyne for the fix.
     */
-   if (bytesRead < 0) 
+   if (bytesRead < 0)
    {
       *errCode = socketGetError();
-      if (*errCode == ECONNRESET) 
+      if (*errCode == ECONNRESET)
       {
          sp->flags |= SOCKET_CONNRESET;
          return 0;
@@ -599,7 +599,7 @@ int socketReady(int sid)
 			} else {
 				continue;
 			}
-		} 
+		}
 		if (sp->flags & SOCKET_CONNRESET) {
 			socketCloseConnection(sid);
 			return 0;
@@ -623,7 +623,7 @@ int socketReady(int sid)
 
 /******************************************************************************/
 /*
- * 	Wait for a handle to become readable or writable and return a number of 
+ * 	Wait for a handle to become readable or writable and return a number of
  *	noticed events. Timeout is in milliseconds.
  */
 
@@ -773,7 +773,7 @@ int socketSelect(int sid, int timeout)
  */
 		index = sp->sock / (NBBY * sizeof(fd_mask));
 		bit = 1 << (sp->sock % (NBBY * sizeof(fd_mask)));
-		
+
 /*
  * 		Set the appropriate bit in the ready masks for the sp->sock.
  */
@@ -893,11 +893,11 @@ static int socketDoEvent(socket_t *sp)
 
 	sid = sp->sid;
 	if (sp->currentEvents & SOCKET_READABLE) {
-		if (sp->flags & SOCKET_LISTENING) { 
+		if (sp->flags & SOCKET_LISTENING) {
 			socketAccept(sp);
 			sp->currentEvents = 0;
 			return 1;
-		} 
+		}
 
 	} else {
 /*
@@ -929,11 +929,11 @@ static int socketDoEvent(socket_t *sp)
  *	socket, so we must be very careful after calling the handler.
  */
 	if (sp->handler && (sp->handlerMask & sp->currentEvents)) {
-		(sp->handler)(sid, sp->handlerMask & sp->currentEvents, 
+		(sp->handler)(sid, sp->handlerMask & sp->currentEvents,
 			sp->handler_data);
 /*
  *		Make sure socket pointer is still valid, then reset the currentEvents.
- */ 
+ */
 		if (socketList && sid < socketMax && socketList[sid] == sp) {
 			sp->currentEvents = 0;
 		}
@@ -1008,7 +1008,7 @@ int socketDontBlock()
 	int			i;
 
 	for (i = 0; i < socketMax; i++) {
-		if ((sp = socketList[i]) == NULL || 
+		if ((sp = socketList[i]) == NULL ||
 				(sp->handlerMask & SOCKET_READABLE) == 0) {
 			continue;
 		}

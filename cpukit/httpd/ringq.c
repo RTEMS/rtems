@@ -36,7 +36,7 @@
  *    ^                           ^                       ^               ^
  *    |                           |                       |               |
  *  rq->buf                    rq->servp               rq->endp      rq->enduf
- *     
+ *
  *	The queue is empty when servp == endp.  This means that the queue will hold
  *	at most rq->buflen -1 bytes.  It is the filler's responsibility to ensure
  *	the ringq is never filled such that servp == endp.
@@ -77,7 +77,7 @@ int			ringqGrowCalls = 0;
  *	Create a new ringq. "increment" is the amount to increase the size of the
  *	ringq should it need to grow to accomodate data being added. "maxsize" is
  *	an upper limit (sanity level) beyond which the q must not grow. Set maxsize
- *	to -1 to imply no upper limit. The buffer for the ringq is always 
+ *	to -1 to imply no upper limit. The buffer for the ringq is always
  *	dynamically allocated. Set maxsize
  */
 
@@ -123,7 +123,7 @@ void ringqClose(ringq_t *rq)
 
 /******************************************************************************/
 /*
- *	Return the length of the data in the ringq. Users must fill the queue to 
+ *	Return the length of the data in the ringq. Users must fill the queue to
  *	a high water mark of at most one less than the queue size.
  */
 
@@ -167,7 +167,7 @@ int ringqGetc(ringq_t *rq)
 
 /******************************************************************************/
 /*
- *	Add a char to the queue. Note if being used to store wide strings 
+ *	Add a char to the queue. Note if being used to store wide strings
  *	this does not add a trailing '\0'. Grow the q as required.
  */
 
@@ -413,7 +413,7 @@ int ringqGetBlk(ringq_t *rq, unsigned char *buf, int size)
 
 /******************************************************************************/
 /*
- *	Return the maximum number of bytes the ring q can accept via a single 
+ *	Return the maximum number of bytes the ring q can accept via a single
  *	block copy. Useful if the user is doing their own data insertion.
  */
 
@@ -423,7 +423,7 @@ int ringqPutBlkMax(ringq_t *rq)
 
 	a_assert(rq);
 	a_assert(rq->buflen == (rq->endbuf - rq->buf));
-	
+
 	space = rq->buflen - RINGQ_LEN(rq) - 1;
 	in_a_line = rq->endbuf - rq->endp;
 
@@ -432,7 +432,7 @@ int ringqPutBlkMax(ringq_t *rq)
 
 /******************************************************************************/
 /*
- *	Return the maximum number of bytes the ring q can provide via a single 
+ *	Return the maximum number of bytes the ring q can provide via a single
  *	block copy. Useful if the user is doing their own data retrieval.
  */
 

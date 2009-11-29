@@ -274,7 +274,7 @@ msdos_filename_unix2dos(const char *un, int unlen, char *dn)
 		un++;
 		unlen--;
 	}
-  
+
 	/*
 	 * Copy the unix filename into the dos filename string upto the end
 	 * of string, a '.', or 8 characters. Whichever happens first stops

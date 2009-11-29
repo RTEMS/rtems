@@ -115,7 +115,7 @@ extern int pipe_lseek(
 extern void rtems_pipe_initialize (void);
 
 #ifdef __cplusplus
-}  
+}
 #endif
 
 #endif

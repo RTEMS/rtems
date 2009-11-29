@@ -56,7 +56,7 @@ int msdos_mknod(
     rtems_status_code    sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t     *fs_info = pathloc->mt_entry->fs_info;
     msdos_token_types_t  type = 0;
-    
+
     /*
      *  Figure out what type of msdos node this is.
      */

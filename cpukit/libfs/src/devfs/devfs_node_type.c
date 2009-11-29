@@ -17,7 +17,7 @@ int devFS_node_type(
 )
 {
   /*
-   * There is only one type of node: device 
+   * There is only one type of node: device
    */
 
   return RTEMS_FILESYSTEM_DEVICE;

@@ -6,7 +6,7 @@
 
 /* This code funnels arbitrary task's UDP/RPC requests
  * through one socket to arbitrary servers.
- * The replies are gathered and dispatched to the 
+ * The replies are gathered and dispatched to the
  * requestors.
  * One task handles all the sending and receiving
  * work including retries.
@@ -15,20 +15,20 @@
  * of the results (except for the RPC header which
  * is handled by the daemon).
  */
- 
-/* 
+
+/*
  * Authorship
  * ----------
  * This software (NFS-2 client implementation for RTEMS) was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2002-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * The NFS-2 client implementation for RTEMS was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -37,18 +37,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -57,9 +57,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <rtems.h>
 #include <rtems/error.h>
@@ -100,7 +100,7 @@
 						 *  into different areas of the data.
 						 *
 						 * If undefined, the regular 'sendto()'
-						 *  interface is used. 
+						 *  interface is used.
 						 */
 
 #undef REJECT_SERVERIP_MISMATCH
@@ -136,7 +136,7 @@ static struct timeval _rpc_default_timeout = { 10 /* secs */, 0 /* usecs */ };
  * thread doing RPC IO (e.g. NFS)
  */
 #define RTEMS_RPC_EVENT		RTEMS_EVENT_30	/* THE event used by RPCIO. Every task doing
-											 * RPC IO will receive this - hence it is 
+											 * RPC IO will receive this - hence it is
 											 * RESERVED
 											 */
 #define RPCIOD_RX_EVENT		RTEMS_EVENT_1	/* Events the RPCIOD is using/waiting for */
@@ -347,7 +347,7 @@ typedef struct RpcUdpXactPoolRec_ {
  * objects are registered.
  * A number of bits in a transaction's XID maps 1:1 to
  * an index in this table. Hence, the XACT matching
- * an RPC/UDP reply packet can quickly be found 
+ * an RPC/UDP reply packet can quickly be found
  * The size of this table imposes a hard limit on the
  * number of all created transactions in the system.
  */
@@ -542,7 +542,7 @@ struct pmap		pmaparg;
 		/* dont use non-reentrant pmap_getport ! */
 
 		pmap_err = rpcUdpCallRp(
-						paddr, 
+						paddr,
 						PMAPPROG,
 						PMAPVERS,
 						PMAPPROC_GETPORT,
@@ -564,7 +564,7 @@ struct pmap		pmaparg;
 
 	if (0==paddr->sin_port) {
 			return RPC_PROGNOTREGISTERED;
-	} 
+	}
 
 	rval       			= (RpcUdpServer)MY_MALLOC(sizeof(*rval));
 	memset(rval, 0, sizeof(*rval));
@@ -576,7 +576,7 @@ struct pmap		pmaparg;
 	/* start with a long retransmission interval - it
 	 * will be adapted dynamically
 	 */
-	rval->retry_period  = RPCIOD_RETX_CAP_S * ticksPerSec; 
+	rval->retry_period  = RPCIOD_RETX_CAP_S * ticksPerSec;
 
 	rval->auth 			= auth;
 
@@ -670,7 +670,7 @@ register int	i,j;
 	rval = (RpcUdpXact)MY_CALLOC(1,sizeof(*rval) - sizeof(rval->obuf) + size);
 
 	if (rval) {
-	
+
 		header.rm_xid             = 0;
 		header.rm_direction       = CALL;
 		header.rm_call.cb_rpcvers = RPC_MSG_VERSION;
@@ -688,7 +688,7 @@ register int	i,j;
 		rval->obuf.xid = (xidHashSeed++ ^ ((unsigned long)rval>>10)) & XACT_HASH_MSK;
 		i=j=(rval->obuf.xid & XACT_HASH_MSK);
 		if (msgQ) {
-			/* if there's no message queue, refuse to 
+			/* if there's no message queue, refuse to
 			 * give them transactions; we might be in the process to
 			 * go away...
 			 */
@@ -896,7 +896,7 @@ rtems_event_set		gotEvents;
 #ifndef MBUF_RX
 	xact->ibufsize = 0;
 #endif
-	
+
 	if (refresh && locked_refresh(xact->server)) {
 		rtems_task_ident(RTEMS_SELF, RTEMS_WHO_AM_I, &xact->requestor);
 		if ( rtems_message_queue_send(msgQ, &xact, sizeof(xact)) ) {
@@ -1036,7 +1036,7 @@ enum clnt_stat	err;
 	/* TODO: could maintain a server cache */
 
 	x->server = s;
-	
+
 	*pclnt = x;
 
 	return RPC_SUCCESS;
@@ -1132,7 +1132,7 @@ nodeAppend(ListNode l, ListNode n)
 		n->next->prev = n;
 	l->next = n;
 	n->prev = l;
-	
+
 }
 
 /* this code does the work */
@@ -1161,7 +1161,7 @@ rtems_status_code	status;
 		if ( RTEMS_SUCCESSFUL !=
 			 (stat = rtems_event_receive(
 						RPCIOD_RX_EVENT | RPCIOD_TX_EVENT | RPCIOD_KILL_EVENT,
-						RTEMS_WAIT | RTEMS_EVENT_ANY, 
+						RTEMS_WAIT | RTEMS_EVENT_ANY,
 						next_retrans,
 						&events)) ) {
 			ASSERT( RTEMS_TIMEOUT == stat );
@@ -1316,13 +1316,13 @@ rtems_status_code	status;
 									__FILE__,
 									__LINE__,
 									xact->requestor);
-					}	
+					}
 
 				} else {
 					int len;
 
 					len = (int)XDR_GETPOS(&xact->xdrs);
-				
+
 #ifdef MBUF_TX
 					xact->refcnt = 1;	/* sendto itself */
 #endif
@@ -1438,7 +1438,7 @@ rtems_status_code	status;
 				 * respect to 'then' - hence:
 				 *
 				 * abs_age == old_age + old_then == new_age + new_then
-				 * 
+				 *
 				 * ==> new_age = old_age + old_then - new_then == old_age - 'now'
 				 */
 				((RpcUdpXact)n)->age  -= now;
@@ -1641,7 +1641,7 @@ int        len  = (int)XDR_GETPOS(&xact->xdrs);
  * The semantics of the 'pibuf' pointer are
  * as follows:
  *
- * MBUF_RX: 
+ * MBUF_RX:
  *
  */
 

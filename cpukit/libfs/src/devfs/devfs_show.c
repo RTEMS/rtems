@@ -26,7 +26,7 @@ int devFS_Show(void)
 
   for (i = 0; i < rtems_device_table_size; i++){
     if (device_name_table[i].device_name){
-        printk("/%s %d %d\n", device_name_table[i].device_name, 
+        printk("/%s %d %d\n", device_name_table[i].device_name,
             device_name_table[i].major, device_name_table[i].minor);
     }
   }

@@ -13,7 +13,7 @@
 /*
  *	This module implements the /goform handler. It emulates CGI processing
  *	but performs this in-process and not as an external process. This enables
- *	a very high performance implementation with easy parsing and decoding 
+ *	a very high performance implementation with easy parsing and decoding
  *	of query strings and posted data.
  */
 
@@ -30,7 +30,7 @@ static sym_fd_t	formSymtab = -1;			/* Symbol table for form handlers */
  *	Process a form request. Returns 1 always to indicate it handled the URL
  */
 
-int websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg, 
+int websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	char_t *url, char_t *path, char_t *query)
 {
 	sym_t		*sp;
@@ -58,7 +58,7 @@ int websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	}
 
 /*
- *	Lookup the C form function first and then try tcl (no javascript support 
+ *	Lookup the C form function first and then try tcl (no javascript support
  *	yet).
  */
 	sp = symLookup(formSymtab, formName);
@@ -92,7 +92,7 @@ int websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
  *	Define a form function in the "form" map space.
  */
 
-int websFormDefine(char_t *name, void (*fn)(webs_t wp, char_t *path, 
+int websFormDefine(char_t *name, void (*fn)(webs_t wp, char_t *path,
 	char_t *query))
 {
 	a_assert(name && *name);

@@ -13,16 +13,16 @@
 /*
  *	This module implements a very fast block allocation scheme suitable for
  *	ROMed environments. It maintains block class queues for rapid allocation
- *	and minimal fragmentation. This module does not coalesce blocks. The 
- *	storage space may be populated statically or via the traditional malloc 
- *	mechanisms. Large blocks greater than the maximum class size may be 
- *	allocated from the O/S or run-time system via malloc. To permit the use 
+ *	and minimal fragmentation. This module does not coalesce blocks. The
+ *	storage space may be populated statically or via the traditional malloc
+ *	mechanisms. Large blocks greater than the maximum class size may be
+ *	allocated from the O/S or run-time system via malloc. To permit the use
  *	of malloc, call bopen with flags set to B_USE_MALLOC (this is the default).
- *	It is recommended that bopen be called first thing in the application. 
- *	If it is not, it will be called with default values on the first call to 
+ *	It is recommended that bopen be called first thing in the application.
+ *	If it is not, it will be called with default values on the first call to
  *	balloc(). Note that this code is not designed for multi-threading purposes
  *	and it depends on newly declared variables being initialized to zero.
- */  
+ */
 
 /********************************* Includes ***********************************/
 
@@ -85,7 +85,7 @@ static int 				bStatsMemMalloc = 0;	/* Malloced memory */
 #endif /* B_STATS */
 
 /*
- *	ROUNDUP4(size) returns the next higher integer value of size that is 
+ *	ROUNDUP4(size) returns the next higher integer value of size that is
  *	divisible by 4, or the value of size if size is divisible by 4.
  *	ROUNDUP4() is used in aligning memory allocations on 4-byte boundaries.
  *
@@ -131,10 +131,10 @@ static int ballocGetSize(int size, int *q);
 /********************************** Code **************************************/
 /*
  *	Initialize the balloc module. bopen should be called the very first thing
- *	after the application starts and bclose should be called the last thing 
- *	before exiting. If bopen is not called, it will be called on the first 
- *	allocation with default values. "buf" points to memory to use of size 
- *	"bufsize". If buf is NULL, memory is allocated using malloc. flags may 
+ *	after the application starts and bclose should be called the last thing
+ *	before exiting. If bopen is not called, it will be called on the first
+ *	allocation with default values. "buf" points to memory to use of size
+ *	"bufsize". If buf is NULL, memory is allocated using malloc. flags may
  *	be set to B_USE_MALLOC if using malloc is okay. This routine will allocate
  *	an initial buffer of size bufsize for use by the application.
  */
@@ -205,7 +205,7 @@ void bclose(void)
 
 /******************************************************************************/
 /*
- *	Allocate a block of the requested size. First check the block 
+ *	Allocate a block of the requested size. First check the block
  *	queues for a suitable one.
  */
 
@@ -289,7 +289,7 @@ void *balloc(B_ARGS_DEC, int size)
 	} else {
 		if (bFreeLeft > memSize) {
 /*
- *			The q was empty, and the free list has spare memory so 
+ *			The q was empty, and the free list has spare memory so
  *			create a new block out of the primary free block
  */
 			bp = (bType*) bFreeNext;
@@ -390,7 +390,7 @@ void bfree(B_ARGS_DEC, void *mp)
 		free(bp);
 		return;
 	}
-		
+
 #ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 	bFillBlock(bp, memSize);
 #endif
@@ -442,7 +442,7 @@ char *bstrdupA(B_ARGS_DEC, char *s)
 /*
  *	Duplicate an ascii string, allow NULL pointers and then dup an empty string.
  *	If UNICODE, bstrdup above works with wide chars, so we need this routine
- *	for ascii strings. 
+ *	for ascii strings.
  */
 
 char_t *bstrdup(B_ARGS_DEC, char_t *s)
@@ -463,7 +463,7 @@ char_t *bstrdup(B_ARGS_DEC, char_t *s)
 /******************************************************************************/
 /*
  *	Reallocate a block. Allow NULL pointers and just do a malloc.
- *	Note: if the realloc fails, we return NULL and the previous buffer is 
+ *	Note: if the realloc fails, we return NULL and the previous buffer is
  *	preserved.
  */
 
@@ -494,7 +494,7 @@ void *brealloc(B_ARGS_DEC, void *mp, int newsize)
 
 /******************************************************************************/
 /*
- *	Find the size of the block to be balloc'ed.  It takes in a size, finds the 
+ *	Find the size of the block to be balloc'ed.  It takes in a size, finds the
  *	smallest binary block it fits into, adds an overhead amount and returns.
  *	q is the binary size used to keep track of block sizes in use.  Called
  *	from both balloc and bfree.
@@ -526,8 +526,8 @@ static void bFillBlock(void *buf, int bufsize)
 /******************************************************************************/
 #ifdef B_STATS
 /*
- *	Statistics. Do output via calling the writefn callback function with 
- *	"handle" as the output file handle. 
+ *	Statistics. Do output via calling the writefn callback function with
+ *	"handle" as the output file handle.
  */
 
 void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...))
@@ -568,9 +568,9 @@ void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...))
 		}
 		mem = count * (1 << (q + B_SHIFT));
 		total += mem;
-		(*writefn)(handle, 
+		(*writefn)(handle,
 			T("%2d %5d   %4d %6d  %4d %5d   %4d\n"),
-			q, 1 << (q + B_SHIFT), count, mem, bStats[q].inuse, 
+			q, 1 << (q + B_SHIFT), count, mem, bStats[q].inuse,
 			bStats[q].inuse * (1 << (q + B_SHIFT)), bStats[q].alloc);
 	}
 
@@ -581,7 +581,7 @@ void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...))
  *
  *	bFreeSize			Initial memory reserved with bopen call
  *	bStatsMemMalloc		memory from calls to system MALLOC
- *	bStatsMemMax		
+ *	bStatsMemMax
  *	bStatsBallocMax		largest amount of memory from balloc calls
  *	bStatsMemInUse
  *	bStatsBallocInUse	present balloced memory being used
@@ -599,7 +599,7 @@ void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...))
 	(*writefn)(handle, T("Memory currently in use   %7d\n"), bStatsMemInUse);
 	(*writefn)(handle, T("Memory currently balloced %7d\n"), bStatsBallocInUse);
 	(*writefn)(handle, T("Max blocks allocated      %7d\n"), bStatsBlksMax);
-	(*writefn)(handle, T("Maximum stack used        %7d\n"), 
+	(*writefn)(handle, T("Maximum stack used        %7d\n"),
 		(int) bStackStart - (int) bStackMin);
 
 	(*writefn)(handle, T("Free memory on all queues %7d\n"), total);
@@ -618,17 +618,17 @@ void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...))
 	}
 	memcpy(files, bStatsFiles, len);
 	qsort(files, bStatsFilesMax, sizeof(bStatsFileType), bStatsFileSort);
-	
+
 	(*writefn)(handle, T("\nMemory Currently Allocated\n"));
 	total = 0;
-	(*writefn)(handle, 
+	(*writefn)(handle,
 		T("                      bytes, blocks in use, total times,")
 		T("largest,   q\n"));
 
 	for (fp = files; fp < &files[bStatsFilesMax]; fp++) {
 		if (fp->file[0]) {
 			(*writefn)(handle, T("%18s, %7d,         %5d,      %6d, %7d,%4d\n"),
-				fp->file, fp->allocated, fp->count, fp->times, fp->largest, 
+				fp->file, fp->allocated, fp->count, fp->times, fp->largest,
 				fp->q);
 			total += fp->allocated;
 		}
@@ -644,7 +644,7 @@ void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...))
 			cp = (char_t*) ((char*) blkp->ptr + sizeof(bType));
 			fp = blkp->who;
 			if (gisalnum(*cp)) {
-				(*writefn)(handle, T("%-50s allocated by %s\n"), cp, 
+				(*writefn)(handle, T("%-50s allocated by %s\n"), cp,
 					fp->file);
 			}
 		}
@@ -774,7 +774,7 @@ static void bStatsFree(B_ARGS_DEC, void *ptr, int q, int size)
 	bStats[q].inuse--;
 
 /*
- *	Update the per block stats. Try from the end first 
+ *	Update the per block stats. Try from the end first
  */
 	for (bp = &bStatsBlks[bStatsBlksMax - 1]; bp >= bStatsBlks; bp--) {
 		if (bp->ptr == ptr) {
@@ -832,7 +832,7 @@ void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...))
 /******************************************************************************/
 /*
  *	verifyUsedBlock verifies that a block which was previously allocated is
- *	still uncorrupted.  
+ *	still uncorrupted.
  */
 
 static void verifyUsedBlock(bType *bp, int q)
@@ -885,7 +885,7 @@ void verifyBallocSpace()
 /*
  *	First verify all the free blocks.
  */
-	for (q = 0; q < B_MAX_CLASS; q++) {	
+	for (q = 0; q < B_MAX_CLASS; q++) {
 		for (bp = bQhead[q]; bp != NULL; bp = bp->u.next) {
 			verifyFreeBlock(bp, q);
 		}

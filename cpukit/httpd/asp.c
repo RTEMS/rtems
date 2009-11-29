@@ -11,8 +11,8 @@
 /******************************** Description *********************************/
 
 /*
- *	The ASP module processes ASP pages and executes embedded scripts. It 
- *	support an open scripting architecture with in-built support for 
+ *	The ASP module processes ASP pages and executes embedded scripts. It
+ *	support an open scripting architecture with in-built support for
  *	Ejscript(TM).
  */
 
@@ -69,7 +69,7 @@ void websAspClose(void)
 /******************************************************************************/
 /*
  *	Process ASP requests and expand all scripting commands. We read the
- *	entire ASP page into memory and then process. If you have really big 
+ *	entire ASP page into memory and then process. If you have really big
  *	documents, it is better to make them plain HTML files rather than ASPs.
  */
 
@@ -194,7 +194,7 @@ int websAspRequest(webs_t wp, char_t *lpath)
  */
 					if (websValid(wp)) {
 						if (result) {
-							websWrite(wp, T("<h2><b>ASP Error: %s</b></h2>\n"), 
+							websWrite(wp, T("<h2><b>ASP Error: %s</b></h2>\n"),
 								result);
 							websWrite(wp, T("<pre>%s</pre>"), nextp);
 							bfree(B_L, result);
@@ -243,10 +243,10 @@ done:
  *	Define an ASP Ejscript function. Bind an ASP name to a C procedure.
  */
 
-int websAspDefine(char_t *name, 
+int websAspDefine(char_t *name,
 	int (*fn)(int ejid, webs_t wp, int argc, char_t **argv))
 {
-	return ejSetGlobalFunctionDirect(websAspFunctions, name, 
+	return ejSetGlobalFunctionDirect(websAspFunctions, name,
 		(int (*)(int, void*, int, char_t**)) fn);
 }
 
@@ -260,7 +260,7 @@ int websAspWrite(int ejid, webs_t wp, int argc, char_t **argv)
 	int		i;
 
 	a_assert(websValid(wp));
-	
+
 	for (i = 0; i < argc; ) {
 		a_assert(argv);
 		if (websWriteBlock(wp, argv[i], gstrlen(argv[i])) < 0) {
@@ -305,7 +305,7 @@ static char_t *strtokcmp(char_t *s1, char_t *s2)
  *	Skip white space
  */
 
-static char_t *skipWhite(char_t *s) 
+static char_t *skipWhite(char_t *s)
 {
 	a_assert(s);
 

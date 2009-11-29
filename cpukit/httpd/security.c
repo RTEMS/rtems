@@ -24,7 +24,7 @@
 
 /********************************** Defines ***********************************/
 /*
- *	The following #defines change the behaviour of security in the absence 
+ *	The following #defines change the behaviour of security in the absence
  *	of User Management.
  *	Note that use of User management functions require prior calling of
  *	umInit() to behave correctly
@@ -53,7 +53,7 @@ static int		debugSecurity = 0;
  *	Determine if this request should be honored
  */
 
-int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg, 
+int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 						char_t *url, char_t *path, char_t *query)
 {
 	char_t			*type, *userid, *password, *accessLimit;
@@ -77,7 +77,7 @@ int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	if (accessLimit == NULL) {
 		return 0;
 	}
-		 
+
 /*
  *	Check to see if URL must be encrypted
  */
@@ -116,7 +116,7 @@ int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 		if (!umUserExists(userid)) {
 			websStats.access++;
 			websError(wp, 401, T("Access Denied\nUnknown User"));
-			trace(3, T("SEC: Unknown user <%s> attempted to access <%s>\n"), 
+			trace(3, T("SEC: Unknown user <%s> attempted to access <%s>\n"),
 				userid, path);
 			nRet = 1;
 		} else if (!umUserCanAccessURL(userid, accessLimit)) {
@@ -153,7 +153,7 @@ int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 			a_assert(wp->digest);
 			a_assert(wp->nonce);
 			a_assert(wp->password);
-							 
+
 			digestCalc = websCalcDigest(wp);
 			a_assert(digestCalc);
 
@@ -175,7 +175,7 @@ int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 			}
 #endif
 			websStats.errors++;
-			websError(wp, 401, 
+			websError(wp, 401,
 				T("Access to this document requires a password"));
 			nRet = 1;
 		}
@@ -211,7 +211,7 @@ void websSecurityDelete(void)
 
 /******************************************************************************/
 /*
- *	Store the new password, expect a decoded password. Store in websPassword in 
+ *	Store the new password, expect a decoded password. Store in websPassword in
  *	the decoded form.
  */
 

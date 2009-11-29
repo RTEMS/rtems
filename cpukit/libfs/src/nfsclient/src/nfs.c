@@ -4,19 +4,19 @@
 
 /* Author: Till Straumann <strauman@slac.stanford.edu> 2002 */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software (NFS-2 client implementation for RTEMS) was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2002-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * The NFS-2 client implementation for RTEMS was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -25,18 +25,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -45,9 +45,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #ifdef	HAVE_CONFIG_H
 #include <config.h>
@@ -105,7 +105,7 @@
  * variable 'nfsStBlksize'.
  * Thanks to Steven Johnson <sjohnson@sakuraindustries.com> for helping
  * working on this issue.
- */   
+ */
 #define DEFAULT_NFS_ST_BLKSIZE			NFS_MAXDATA
 
 /* dont change this without changing the maximal write size */
@@ -139,7 +139,7 @@ static struct timeval _nfscalltimeout = { 10, 0 };	/* {secs, us } */
  * This has an impact on performance, as e.g. getcwd() stats() all
  * directory entries when it believes it has crossed a mount point
  * (a.st_dev != b.st_dev).
- * 
+ *
  * OTOH, it also might cause node comparison failure! E.g. 'getcwd()'
  * assumes that two nodes residing in the same directory must be located
  * on the same device and hence compares 'st_ino' only.
@@ -194,7 +194,7 @@ static struct timeval _nfscalltimeout = { 10, 0 };	/* {secs, us } */
 						rtems_semaphore_obtain((s),    \
 									RTEMS_WAIT,        \
 									RTEMS_NO_TIMEOUT); \
-					} while (0) 
+					} while (0)
 
 #define UNLOCK(s)	do { rtems_semaphore_release((s)); \
 					} while (0)
@@ -219,7 +219,7 @@ xdr_strbuf(XDR *xdrs, strbuf *obj)
 }
 
 /* Read 'readlink' results into a 'strbuf'.
- * This is convenient as it avoids  
+ * This is convenient as it avoids
  * one extra step of copying / lenght
  * checking.
  */
@@ -427,7 +427,7 @@ typedef struct serporid {
 	}				serporid_u;
 } serporid;
 
-/* an XDR routine to encode/decode the inverted diropres 
+/* an XDR routine to encode/decode the inverted diropres
  * into an nfsnodestat;
  *
  * NOTE: this routine only acts on
@@ -435,7 +435,7 @@ typedef struct serporid {
  *   - 'serporid.file'
  *   - 'serporid.attributes'
  * and leaves the 'arg_u' alone.
- * 
+ *
  * The idea is that a 'diropres' is read into 'serporid'
  * which can then be used as an argument to subsequent
  * NFS-RPCs (after filling in the node's arg_u).
@@ -448,7 +448,7 @@ xdr_serporidok(XDR *xdrs, serporidok *objp)
      if (!xdr_fattr (xdrs, &objp->attributes))
          return FALSE;
     return TRUE;
-}   
+}
 
 static bool_t
 xdr_serporid(XDR *xdrs, serporid *objp)
@@ -511,10 +511,10 @@ typedef struct NfsRec_ {
 		 */
 	u_short								 id;
 		/* Our RTEMS filesystem mt_entry
-		 */ 
+		 */
 	rtems_filesystem_mount_table_entry_t *mt_entry;
 		/* Next NfsRec on a linked list who
-		 * is anchored at nfsGlob 
+		 * is anchored at nfsGlob
 		 */
 	struct NfsRec_						 *next;
 		/* Who we pretend we are
@@ -560,7 +560,7 @@ typedef struct NfsNodeRec_ {
  *****************************************/
 
 static int nfs_readlink(
-	rtems_filesystem_location_info_t  *loc,     	/* IN  */       
+	rtems_filesystem_location_info_t  *loc,     	/* IN  */
 	char							  *buf,			/* OUT */
 	size_t							  len
 );
@@ -608,7 +608,7 @@ rtems_filesystem_resolve_location(char *buf, int len, rtems_filesystem_location_
 
 
 /* * * * * * * * * * * * * * * * * *
-	Trivial Operations on a NfsNode 
+	Trivial Operations on a NfsNode
  * * * * * * * * * * * * * * * * * */
 
 /* determine if a location 'l' is an NFS root node */
@@ -723,7 +723,7 @@ static struct nfsstats {
  * Global variable to tune the 'st_blksize' (stat(2)) value this nfs
  * client should report.
  * size on the server.
- */                   
+ */
 #ifndef DEFAULT_NFS_ST_BLKSIZE
 #define DEFAULT_NFS_ST_BLKSIZE	NFS_MAXDATA
 #endif
@@ -1157,7 +1157,7 @@ int				rval = -1;
 /* Check the 'age' of a node's stats
  * and read the attributes from the server
  * if necessary.
- * 
+ *
  * ARGS:	node	node to update
  * 			force	enforce updating ignoring
  * 					the timestamp/age
@@ -1188,7 +1188,7 @@ updateAttr(NfsNode node, int force)
 
 		node->age = nowSeconds();
 	}
-	
+
 	return 0;
 }
 
@@ -1352,7 +1352,7 @@ struct rtems_filesystem_location_info_tt
  * before passing control to the new FS' evalpath_h()
  *
  */
-	
+
 STATIC int nfs_do_evalpath(
 	const char                        *pathname,      /* IN     */
 	int                                pathnamelen,   /* IN     */
@@ -1386,7 +1386,7 @@ unsigned long	niu,siu;
 	/* from here on, the NFS is protected from being unmounted
 	 * since the node refcount is > 1
 	 */
-	
+
 	/* clone the node */
 	if ( !node ) {
 		/* nodeClone sets errno */
@@ -1791,7 +1791,7 @@ sattr	arg;
 	arg.gid = group;
 
 	return nfs_sattr(pathloc->node_access, &arg, SATTR_UID | SATTR_GID);
-	
+
 }
 
 /* Cleanup the FS private info attached to pathloc->node_access */
@@ -1802,7 +1802,7 @@ static int nfs_freenode(
 Nfs	nfs    = ((NfsNode)pathloc->node_access)->nfs;
 
 #if DEBUG & DEBUG_COUNT_NODES
-	/* print counts at entry where they are > 0 so 'nfs' is safe from being destroyed 
+	/* print counts at entry where they are > 0 so 'nfs' is safe from being destroyed
 	 * and there's no race condition
 	 */
 	fprintf(stderr,
@@ -2058,7 +2058,7 @@ LOCK(nfsGlob.llock);
 
 	status = buildIpAddr(&uid, &gid, 0, &saddr, &path);
 	assert( !status );
-	
+
 	stat = mntcall( &saddr,
 					MOUNTPROC_UMNT,
 					(xdrproc_t)xdr_dirpath, &path,
@@ -2076,7 +2076,7 @@ LOCK(nfsGlob.llock);
 
 	nfsNodeDestroy(mt_entry->mt_fs_root.node_access);
 	mt_entry->mt_fs_root.node_access = 0;
-	
+
 	nfsDestroy(mt_entry->fs_info);
 	mt_entry->fs_info = 0;
 
@@ -2229,7 +2229,7 @@ NfsNode					node = loc->node_access;
 }
 
 static int nfs_do_readlink(
-	rtems_filesystem_location_info_t  *loc,     	/* IN  */       
+	rtems_filesystem_location_info_t  *loc,     	/* IN  */
 	strbuf							  *psbuf		/* IN/OUT */
 )
 {
@@ -2264,7 +2264,7 @@ int					rval;
 }
 
 static int nfs_readlink(
-	rtems_filesystem_location_info_t  *loc,     	/* IN  */       
+	rtems_filesystem_location_info_t  *loc,     	/* IN  */
 	char							  *buf,			/* OUT */
 	size_t							  len
 )
@@ -2397,7 +2397,7 @@ int	 							rval = RVAL_ERR_AND_DO_FREENODE;
 			}
 		} else {
 			/* link points to an absolute path '/xxx' */
-				
+
 			/* release this node; filesystem_evaluate_path() will
 			 * lookup a new one.
 			 */
@@ -2864,7 +2864,7 @@ fattr	*fa  = &SERP_ATTR(node);
 		return -1;
 	}
 
-/* done by caller 
+/* done by caller
 	memset(buf, 0, sizeof(*buf));
  */
 
@@ -3007,7 +3007,7 @@ sattr	arg;
 
 	arg.mode = mode;
 	return nfs_sattr(loc->node_access, &arg, SATTR_MODE);
-	
+
 }
 
 /* just set the size attribute to 'length'
@@ -3169,7 +3169,7 @@ rtems_device_driver nfs_initialize(
      * only reason for using this API was getting
      * a major number, after all).
      *
-	 * Something must be present, however, to 
+	 * Something must be present, however, to
 	 * reserve a slot in the driver table.
 	 */
 	return RTEMS_SUCCESSFUL;
@@ -3198,7 +3198,7 @@ Nfs		nfs;
 		fprintf(stderr,"nfsMountsShow(): no memory\n");
 		return -1;
 	}
-	
+
 	fprintf(f,"Currently Mounted NFS:\n");
 
 	LOCK(nfsGlob.llock);

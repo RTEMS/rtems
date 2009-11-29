@@ -16,7 +16,7 @@
 #include <rtems/score/wkspace.h>
 #include "devfs.h"
 
-rtems_filesystem_operations_table devFS_ops = 
+rtems_filesystem_operations_table devFS_ops =
 {
     devFS_evaluate_path,
     devFS_evaluate_for_make,
@@ -38,7 +38,7 @@ rtems_filesystem_operations_table devFS_ops =
 };
 
 
-rtems_filesystem_file_handlers_r devFS_file_handlers = 
+rtems_filesystem_file_handlers_r devFS_file_handlers =
 {
     devFS_open,
     devFS_close,
@@ -74,7 +74,7 @@ int devFS_initialize(
       rtems_set_errno_and_return_minus_one( ENOMEM );
 
   memset(
-    device_name_table, 0, 
+    device_name_table, 0,
     sizeof( rtems_device_name_t ) * ( rtems_device_table_size )
     );
 
