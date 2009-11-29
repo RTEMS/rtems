@@ -1850,7 +1850,7 @@ void uti596_init(
     printk(("uti596_init: After attach, status of board = 0x%x\n", sc->scb.status ))
     #endif
   }
- 
+
   /*
    * In case the ISR discovers there are no resources it reclaims
    * them and restarts

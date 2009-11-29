@@ -298,9 +298,9 @@ Entry:
  */
 .align 4
     PUBLIC (_uhoh)
-SYM(_uhoh): 
+SYM(_uhoh):
     nop                 | Leave spot for breakpoint
-    stop    #0x2700             | Stop with interrupts disabled 
+    stop    #0x2700             | Stop with interrupts disabled
     bra.w   SYM(_uhoh)          | Stuck forever
 
 .align 4
@@ -336,16 +336,16 @@ vectcpy:
     move.l a0@+,a1@+       | Copy the vector table
     sub.l  #1,d0
     bne.s  vectcpy
-     
+
     /*
      * Remainder of the startup code is handled by C code
      */
     jmp SYM(Init5282)       | Start C code (which never returns)
-    
+
 /***************************************************************************
    Function : CopyDataClearBSSAndStart
 
-   Description : Copy DATA segment, Copy SRAM segment, clear BSS segment, 
+   Description : Copy DATA segment, Copy SRAM segment, clear BSS segment,
    start C program. Assume that DATA and BSS sizes are multiples of 4.
  ***************************************************************************/
 .align 4
@@ -354,7 +354,7 @@ vectcpy:
 SYM(CopyDataClearBSSAndStart):
     lea SYM(_data_dest_start),a0        | Get start of DATA in RAM
     lea SYM(_data_src_start),a2     | Get start of DATA in ROM
-        sub.l   #SYM(_header_offset),a2          | Change source by the amount of the header offset 
+        sub.l   #SYM(_header_offset),a2          | Change source by the amount of the header offset
     cmpl    a0,a2                   | Are they the same?
     beq.s   NODATACOPY              | Yes, no copy necessary
     lea SYM(_data_dest_end),a1      | Get end of DATA in RAM
@@ -365,7 +365,7 @@ DATACOPYLOOPTEST:
     cmpl    a1,a0                   | Done?
     bcs.s   DATACOPYLOOP                | No, skip
 NODATACOPY:
-        
+
 /* Now, clear BSS */
         lea _clear_start,a0     | Get start of BSS
     lea _clear_end,a1       | Get end of BSS
@@ -389,7 +389,7 @@ MULTI_TASK_EXIT:
         nop
         nop
         trap    #14
-        bra     MULTI_TASK_EXIT      
+        bra     MULTI_TASK_EXIT
 
 
 END_CODE

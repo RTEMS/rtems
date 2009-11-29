@@ -1,7 +1,7 @@
 /*
  *  av5282 BSP header file
  */
- 
+
 #ifndef __SBav5282_BSP_H
 #define __SBav5282_BSP_H
 

@@ -119,7 +119,7 @@ i2cdrv_unload(void)
             i2cdrv_bus_clock_div_current = i2cdrv_bus_clock_div[qel->bus];
             mcfmbus_select_clock_divider(&mbus, i2cdrv_bus_clock_div_current);
         }
-        sc = mcfmbus_i2c_transfer(&mbus, qel->nmsg, qel->msg, 
+        sc = mcfmbus_i2c_transfer(&mbus, qel->nmsg, qel->msg,
 				  i2cdrv_done,qel);
         if (sc != RTEMS_SUCCESSFUL)
         {

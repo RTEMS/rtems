@@ -2,7 +2,7 @@
  *  This is where the real hardware setup is done. A minimal stack
  *  has been provided by the start.S code. No normal C or RTEMS
  *  functions can be called from here.
- * 
+ *
  * This routine is pretty simple for the uC5282 because all the hard
  * work has been done by the bootstrap dBUG code.
  */
@@ -24,7 +24,7 @@ void Init5282 (void)
 {
     int x;
     int temp = 0;
-    
+
     /*Setup the GPIO Registers */
     MCF5282_GPIO_PBCDPAR = 0x80;
     MCF5282_GPIO_PEPAR = 0x5100;
@@ -35,7 +35,7 @@ void Init5282 (void)
     MCF5282_QADC_DDRQB = 0x07;
     MCF5282_GPTA_GPTDDR = 0x0C;
     MCF5282_GPTA_GPTPORT = 0x4;
-    
+
     /*Setup the Chip Selects so CS0 is flash */
     MCF5282_CS0_CSAR =(0xff800000 & 0xffff0000)>>16;
     MCF5282_CS0_CSMR = 0x007f0001;
@@ -54,11 +54,11 @@ void Init5282 (void)
 		temp +=1;
 	}
 	/* set ip ( bit 3 ) in dacr */
-	MCF5282_SDRAMC_DACR0 |= (0x00000008) ; 
+	MCF5282_SDRAMC_DACR0 |= (0x00000008) ;
 	/* init precharge */
 	*((short *)MM_SDRAM_BASE) = 0;
 	/* set RE in dacr */
-	MCF5282_SDRAMC_DACR0 |= (0x00008000);  
+	MCF5282_SDRAMC_DACR0 |= (0x00008000);
 	/* wait */
 	for(x=0; x<20000; x++)
 	{
@@ -72,7 +72,7 @@ void Init5282 (void)
 		temp +=1;
 	}
 	*((unsigned long*)MM_SDRAM_BASE)=0x12345678;
-    
+
     /* Copy the interrupt vector table to address 0x0 in SDRAM */
     {
         uint32_t *inttab = (uint32_t *)&INTERRUPT_VECTOR;

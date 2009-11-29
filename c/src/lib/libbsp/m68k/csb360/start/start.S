@@ -12,7 +12,7 @@
  *  Based on start.S from mcf520elite BSP:
  *    Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  *    Author: Victor V. Vengerov <vvv@oktet.ru>
- *	
+ *
  *  Based on work:
  *    David Fiddes, D.J@fiddes.surfaid.org
  *    http://www.calm.hw.ac.uk/davidf/coldfire/
@@ -317,7 +317,7 @@ SYM(start):
 	move.l	#(INITIAL_STACK),sp	| Set up stack again (may be we are
 					| going here from monitor or with
 					| BDM interface assistance)
-	
+
 	/*
 	 * Remainder of the startup code is handled by C code
 	 */
@@ -355,7 +355,7 @@ SYM(start_csb360):
 	jsr	SYM(boot_card)		| Call C boot_card function to startup RTEMS
 
 
-	
+
 # Wait forever
 _stop:
 	nop
@@ -389,7 +389,7 @@ _avec2_int:
 
 _avec3_int:
 	nop
-	jmp	_unexp_int 
+	jmp	_unexp_int
 
 _avec4_int:
 	nop

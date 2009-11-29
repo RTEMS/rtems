@@ -24,10 +24,10 @@
 
 BEGIN_CODE
 #define INITIAL_STACK __SRAMBASE+SRAM_SIZE-4
-	
+
 	PUBLIC (INTERRUPT_VECTOR)
 SYM(INTERRUPT_VECTOR):
-    .long   INITIAL_STACK   |   0: Initial 'SSP'    
+    .long   INITIAL_STACK   |   0: Initial 'SSP'
     .long   start           |   1: Initial PC
     .long   SYM(_uhoh)      |   2: Bus error
     .long   SYM(_uhoh)      |   3: Address error
@@ -290,9 +290,9 @@ SYM(INTERRUPT_VECTOR):
  */
 .align 4
     PUBLIC (_uhoh)
-SYM(_uhoh): 
+SYM(_uhoh):
     nop                 	| Leave spot for breakpoint
-    stop    #0x2700             | Stop with interrupts disabled 
+    stop    #0x2700             | Stop with interrupts disabled
     bra.w   SYM(_uhoh)          | Stuck forever
 
 .align 4
@@ -318,12 +318,12 @@ SYM(start):
     move.l  #__SRAMBASE+1,d0        | Enable the MCF5235 internal SRAM
     movec   d0,%rambar              | ...so we have a stack
 
-    move.l  #0x20000201, d0 
+    move.l  #0x20000201, d0
     move.l   d0,(0x40000008)        | set up 2nd RAMBAR to make 2nd port avail to FEC
 
     move.l  #__IPSBAR+1,d0          | Enable the MCF5235 internal peripherals
     move.l  d0,DEFAULT_IPSBAR
-        
+
     /*
      * Remainder of the startup code is handled by C code
      */
@@ -332,7 +332,7 @@ SYM(start):
 /***************************************************************************
    Function : CopyDataClearBSSAndStart
 
-   Description : Copy DATA segment, Copy SRAM segment, clear BSS segment, 
+   Description : Copy DATA segment, Copy SRAM segment, clear BSS segment,
    start C program. Assume that DATA and BSS sizes are multiples of 4.
  ***************************************************************************/
 .align 4
@@ -340,7 +340,7 @@ SYM(start):
     PUBLIC (CopyDataClearBSSAndStart)
 SYM(CopyDataClearBSSAndStart):
     lea SYM(_data_dest_start),a0        | Get start of DATA in RAM
-    lea SYM(_data_src_start),a2     | Get start of DATA in ROM 
+    lea SYM(_data_src_start),a2     | Get start of DATA in ROM
     cmpl    a0,a2                   | Are they the same?
     beq.s   NODATACOPY              | Yes, no copy necessary
     lea SYM(_data_dest_end),a1      | Get end of DATA in RAM
@@ -351,7 +351,7 @@ DATACOPYLOOPTEST:
     cmpl    a1,a0                   | Done?
     bcs.s   DATACOPYLOOP                | No, skip
 NODATACOPY:
-        
+
 /* Now, clear BSS */
         lea _clear_start,a0     | Get start of BSS
     lea _clear_end,a1       | Get end of BSS
@@ -375,8 +375,8 @@ MULTI_TASK_EXIT:
         nop
         nop
         trap    #14
-        bra     MULTI_TASK_EXIT 
-	
+        bra     MULTI_TASK_EXIT
+
 END_CODE
 
         .align 2

@@ -14,14 +14,14 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  *  $Id$
  */
 
 #include <bsp.h>
 #include <rtems/error.h>
 #include <errno.h>
- 
+
 /*
  * Location of 'VME' access
  */
@@ -53,7 +53,7 @@ extern char RamBase[];
  * If a write to the CACR is performed to clear the cache (CINV = BIT 24 set)
  * and only a partial clear will be done (INVI = BIT 21 or INVD = BIT 20 set),
  * then cache corruption may  occur.
- * 
+ *
  * 6.2 Workaround
  * All loads of the CACR that perform a cache clear operation (CINV = BIT 24)
  * should be followed immediately by a NOP instruction.  This avoids the cache
@@ -63,16 +63,16 @@ extern char RamBase[];
  *
  * Buffered writes must be disabled as described in "MCF5282 Chip Errata",
  * MCF5282DE, Rev. 6, 5/2009:
- *   SECF124: Buffered Write May Be Executed Twice 
- *   Errata type: Silicon 
- *   Affected component: Cache 
+ *   SECF124: Buffered Write May Be Executed Twice
+ *   Errata type: Silicon
+ *   Affected component: Cache
  *   Description: If buffered writes are enabled using the CACR or ACR
  *                registers, the imprecise write transaction generated
- *                by a buffered write may be executed twice. 
- *   Workaround: Do not enable buffered writes in the CACR or ACR registers: 
- *               CACR[8] = DBWE (default buffered write enable) must be 0 
- *               ACRn[5] = BUFW (buffered write enable) must be 0 
- *   Fix plan: Currently, there are no plans to fix this. 
+ *                by a buffered write may be executed twice.
+ *   Workaround: Do not enable buffered writes in the CACR or ACR registers:
+ *               CACR[8] = DBWE (default buffered write enable) must be 0
+ *               ACRn[5] = BUFW (buffered write enable) must be 0
+ *   Fix plan: Currently, there are no plans to fix this.
  */
 #define m68k_set_cacr_nop(_cacr) asm volatile ("movec %0,%%cacr\n\tnop" : : "d" (_cacr))
 #define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr" : : "d" (_cacr))
@@ -282,7 +282,7 @@ void bsp_start( void )
    *   Two A24/D16 spaces, supervisor data acces
    */
   MCF5282_CS1_CSAR = MCF5282_CS_CSAR_BA(VME_ONE_BASE);
-  MCF5282_CS1_CSMR = MCF5282_CS_CSMR_BAM_16M | 
+  MCF5282_CS1_CSMR = MCF5282_CS_CSMR_BAM_16M |
                      MCF5282_CS_CSMR_CI |
                      MCF5282_CS_CSMR_SC |
                      MCF5282_CS_CSMR_UC |
@@ -290,7 +290,7 @@ void bsp_start( void )
                      MCF5282_CS_CSMR_V;
   MCF5282_CS1_CSCR = MCF5282_CS_CSCR_PS_16;
   MCF5282_CS2_CSAR = MCF5282_CS_CSAR_BA(VME_TWO_BASE);
-  MCF5282_CS2_CSMR = MCF5282_CS_CSMR_BAM_16M | 
+  MCF5282_CS2_CSMR = MCF5282_CS_CSMR_BAM_16M |
                      MCF5282_CS_CSMR_CI |
                      MCF5282_CS_CSMR_SC |
                      MCF5282_CS_CSMR_UC |
@@ -511,7 +511,7 @@ fpga_trampoline (rtems_vector_number v)
 static rtems_isr
 trampoline (rtems_vector_number v)
 {
-    if (handlerTab[v].func) 
+    if (handlerTab[v].func)
         (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
 }
 
@@ -605,7 +605,7 @@ rtems_interrupt_level level;
                     if (source < 8)
                         MCF5282_EPORT_EPIER |= 1 << source;
                     else
-                        *(&MCF5282_INTC0_ICR1 + (source - 1)) = 
+                        *(&MCF5282_INTC0_ICR1 + (source - 1)) =
                                                        MCF5282_INTC_ICR_IL(l) |
                                                        MCF5282_INTC_ICR_IP(p);
           enable_irq(source);
@@ -691,7 +691,7 @@ rtems_bsp_reset_cause(char *buf, size_t capacity)
   int bit, rsr;
   size_t i;
   const char *cp;
-    
+
   if (buf == NULL)
     return;
   if (capacity)
@@ -709,13 +709,13 @@ rtems_bsp_reset_cause(char *buf, size_t capacity)
         case MCF5282_RESET_RSR_LOL:  cp = "Loss of lock";       break;
         default:                     cp = "??";                 break;
       }
-      i += snprintf(buf+i, capacity-i, cp); 
+      i += snprintf(buf+i, capacity-i, cp);
       if (i >= capacity)
         break;
       rsr &= ~bit;
       if (rsr == 0)
         break;
-      i += snprintf(buf+i, capacity-i, ", "); 
+      i += snprintf(buf+i, capacity-i, ", ");
       if (i >= capacity)
         break;
     }

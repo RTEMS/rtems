@@ -1,7 +1,7 @@
 /*
  *  mcf52235 BSP header file
  */
- 
+
 #ifndef _BSP_H
 #define _BSP_H
 
@@ -22,9 +22,9 @@ extern "C" {
 /***************************************************************************/
 /**  Hardware data structure headers                                      **/
 #include <mcf5223x/mcf5223x.h>
-    
+
 /* Declare base address of peripherals area */
-#define __IPSBAR ((vuint8 *) 0x40000000)    
+#define __IPSBAR ((vuint8 *) 0x40000000)
 
 /***************************************************************************/
 /**  Network driver configuration                                         **/

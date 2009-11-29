@@ -1,7 +1,7 @@
 /*
  *  mcf52235 BSP header file
  */
- 
+
 #ifndef _BSP_H
 #define _BSP_H
 
@@ -23,8 +23,8 @@ extern "C" {
 
 typedef volatile unsigned char vuint8;
 typedef volatile unsigned short vuint16;
-typedef volatile unsigned long vuint32;    
-    
+typedef volatile unsigned long vuint32;
+
 /***************************************************************************/
 /**  Network driver configuration                                         **/
 struct rtems_bsdnet_ifconfig;

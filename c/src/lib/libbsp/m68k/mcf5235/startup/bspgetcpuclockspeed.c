@@ -6,12 +6,12 @@
  *  found in the file LICENSE in this distribution or at
  *
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  *  $Id$
  */
 
 #include <bsp.h>
- 
+
 extern char _CPUClockSpeed[];
 
 uint32_t get_CPU_clock_speed(void)

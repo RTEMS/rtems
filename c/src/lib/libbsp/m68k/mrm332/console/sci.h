@@ -42,7 +42,7 @@
 #define SCI_IOCTL_MODE_1200             0x80    /* 1200,n,8,1 download mode */
 #define SCI_IOCTL_MODE_9600             0x81    /* 9600,n,8,1 download mode */
 #define SCI_IOCTL_MODE_9_BIT            0x82    /* 9600,forced,8,1 command mode */
-
+
 
 /*******************************************************************************
   SCI Registers
@@ -83,7 +83,7 @@
 #define SCI_BAUD_4800           109
 #define SCI_BAUD_2400           218
 #define SCI_BAUD_1200           437
-
+
 
 /*  SCI Control Register 1  (SCCR1)  $FFFC0A
 
@@ -109,7 +109,7 @@
     | | +-------------------------------------  13 wired-or mode
     | +---------------------------------------  14 loop mode
     +-----------------------------------------  15 unused
-  
+
     0 0 0 0 - 0 0 0 0 - 0 0 0 0 - 0 0 0 0       reset value
 */
 
@@ -149,7 +149,7 @@
 #define SCI_TXD_OPEN_DRAIN      0x2000          /* 0010-0000-0000-0000 */
 #define SCI_LOOPBACK_MODE       0x4000          /* 0100-0000-0000-0000 */
 #define SCI_SCCR1_UNUSED        0x8000          /* 1000-0000-0000-0000 */
-
+
 
 /*  SCI Status Register  (SCSR)  $FFFC0C
 
@@ -175,7 +175,7 @@
     | | +-------------------------------------  13 always zero
     | +---------------------------------------  14 always zero
     +-----------------------------------------  15 always zero
-  
+
     0 0 0 0 - 0 0 0 1 - 1 0 0 0 - 0 0 0 0       reset value
 */
 
@@ -197,7 +197,7 @@
 
 #define SCI_XMTR_AVAILABLE      0x0180          /* 0000-0001-1000-0000 */
 
-
+
 
 /*******************************************************************************
   Function prototypes

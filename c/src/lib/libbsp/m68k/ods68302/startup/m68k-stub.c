@@ -167,7 +167,7 @@ enum regnames {D0,D1,D2,D3,D4,D5,D6,D7,
                FPCONTROL,FPSTATUS,FPIADDR
               };
 
-
+
 /* We keep a whole frame cache here.  "Why?", I hear you cry, "doesn't
    GDB handle that sort of thing?"  Well, yes, I believe the only
    reason for this cache is to save and restore floating point state

@@ -473,7 +473,7 @@ static void fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
   firstTxBd = sc->txBdBase + sc->txBdHead;
 
   for (;;) {
-    /* 
+    /*
      * Wait for buffer descriptor to become available
      */
     if ((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
@@ -539,9 +539,9 @@ static void fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
 
       txBd->buffer = p;
       txBd->length = m->m_len;
-      
+
       rtems_cache_flush_multiple_data_lines(txBd->buffer, txBd->length);
-      
+
       sc->txMbuf[sc->txBdHead] = m;
       nAdded++;
       if (++sc->txBdHead == sc->txBdCount) {

@@ -22,7 +22,7 @@
 .extern _StackInit
 
 BEGIN_CODE
-    
+
     PUBLIC (_INTERRUPT_VECTOR)
 SYM(_INTERRUPT_VECTOR):
 
@@ -313,12 +313,12 @@ _cfm_msec:  .long   0x00000000
  */
 .align 4
     PUBLIC (_uhoh)
-SYM(_uhoh): 
+SYM(_uhoh):
     nop                     | Leave spot for breakpoint
-    stop    #0x2700         | Stop with interrupts disabled 
+    stop    #0x2700         | Stop with interrupts disabled
     bra.w   SYM(_uhoh)      | Stuck forever
 
-/* 
+/*
  * Spurious Interrupt Handler
  */
 .align 4
@@ -327,18 +327,18 @@ SYM(_spuriousInterrupt):
     addql   #1, SYM(_M68kSpuriousInterruptCount)
     rte
 
-/* 
+/*
  * Write VBR Register
  */
 .align 4
     PUBLIC (_wr_vbr)
 SYM(_wr_vbr):
     move.l  4(sp), d0
-    movec   d0, vbr 
+    movec   d0, vbr
     nop
-    rts	
+    rts
 
-/* 
+/*
  * Board startup
  * Disable watchdog, interrupts
  * Enable sram
@@ -359,7 +359,7 @@ SYM(start):
     add.l   #0x21, d0
     movec   d0, %rambar
 
-    /* Locate Stack Pointer */ 
+    /* Locate Stack Pointer */
     move.l  #_StackInit, sp
 
     /* Initialize FLASHBAR */
@@ -371,7 +371,7 @@ SYM(start):
 
 _continue_startup:
 
-    /* Locate Stack Pointer */ 
+    /* Locate Stack Pointer */
     move.l  #_StackInit, sp
 
     /* Save off intial D0 and D1 to RAM */
@@ -385,8 +385,8 @@ _continue_startup:
     jmp SYM(Init52235)
 
 _change_flashbar:
-    /* 
-    * The following sequence is used to set FLASHBAR. Since we may 
+    /*
+    * The following sequence is used to set FLASHBAR. Since we may
     * be executing from Flash, we must put the routine into SRAM for
     * execution and then jump back to Flash using the new address.
     *
@@ -402,7 +402,7 @@ _change_flashbar:
     * This routine is not necessary if the default Flash address
     * (0x00000000) is used.
     *
-    * If running in SRAM, change_flashbar should not be executed 
+    * If running in SRAM, change_flashbar should not be executed
     */
 
     move.l  #RamBase, a0

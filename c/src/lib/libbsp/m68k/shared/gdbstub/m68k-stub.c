@@ -152,7 +152,7 @@ const char gdb_hexchars[]="0123456789abcdef";
 #define highhex(x) gdb_hexchars [(x >> 4) & 0xf]
 #define lowhex(x) gdb_hexchars [x & 0xf]
 
-
+
 /* We keep a whole frame cache here.  "Why?", I hear you cry, "doesn't
    GDB handle that sort of thing?"  Well, yes, I believe the only
    reason for this cache is to save and restore floating point state

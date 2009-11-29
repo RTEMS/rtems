@@ -2,7 +2,7 @@
  * This is where the real hardware setup is done. A minimal stack
  * has been provided by the start.S code. No normal C or RTEMS
  * functions can be called from here.
- * 
+ *
  * This routine is pretty simple for the uC5282 because all the hard
  * work has been done by the bootstrap dBUG code.
  *
@@ -26,7 +26,7 @@
 void Init5282 (void)
 {
     extern void CopyDataClearBSSAndStart (void);
-    
+
     /*
      * Copy data, clear BSS and call boot_card()
      */

@@ -22,7 +22,7 @@
 .extern _StackInit
 
 BEGIN_CODE
-    
+
     PUBLIC (_INTERRUPT_VECTOR)
 SYM(_INTERRUPT_VECTOR):
 
@@ -298,12 +298,12 @@ SYM(_INTERRUPT_VECTOR):
  */
 .align 4
     PUBLIC (_uhoh)
-SYM(_uhoh): 
+SYM(_uhoh):
     nop                     | Leave spot for breakpoint
-    stop    #0x2700         | Stop with interrupts disabled 
+    stop    #0x2700         | Stop with interrupts disabled
     bra.w   SYM(_uhoh)      | Stuck forever
 
-/* 
+/*
  * Spurious Interrupt Handler
  */
 .align 4
@@ -312,18 +312,18 @@ SYM(_spuriousInterrupt):
     addql   #1, SYM(_M68kSpuriousInterruptCount)
     rte
 
-/* 
+/*
  * Write VBR Register
  */
 .align 4
     PUBLIC (_wr_vbr)
 SYM(_wr_vbr):
     move.l  4(sp), d0
-    movec   d0, vbr 
+    movec   d0, vbr
     nop
-    rts	
+    rts
 
-/* 
+/*
  * Board startup
  * Disable watchdog, interrupts
  * Enable sram
@@ -344,11 +344,11 @@ SYM(start):
     add.l   #0x221,d0
     movec   d0,%rambar
 
-    /* Save off intial D0 and D1 to RAM */ 
+    /* Save off intial D0 and D1 to RAM */
     move.l  d6, SYM(_d0_reset)
     move.l  d7, SYM(_d1_reset)
 
-    /* Locate Stack Pointer */ 
+    /* Locate Stack Pointer */
     move.l  #_StackInit,sp
 
     /*

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Code Modified for the MC68230 by Doug McBride, Colorado Space Grant College
  *
  *  COPYRIGHT (c) 1989-1999.

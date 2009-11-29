@@ -54,13 +54,13 @@ void console_outbyte_polled(
     while ((uart->ucsr & MCF5272_USR_TXRDY) == 0) {
         continue;
     }
-    
+
     uart->udata = ch;
     for (i = 0; i < 1000; i++) g_cnt++;
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */

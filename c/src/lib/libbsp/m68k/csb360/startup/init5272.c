@@ -24,7 +24,7 @@
  *  found in the file LICENSE in this distribution or at
  *
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  *  $Id$
  */
 
@@ -107,12 +107,12 @@ init5272(void)
 
     /* Set RAM Base Address register */
     m68k_set_srambar((BSP_RAMBAR & MCF5272_RAMBAR_BA) | MCF5272_RAMBAR_V);
-    
+
     /* Set System Control Register:
      * Enet has highest priority, 16384 bus cycles before timeout
      */
     g_sim_regs->scr = (MCF5272_SCR_HWR_16384);
-    
+
     /* System Protection Register:
      * Enable Hardware watchdog timer.
      */
@@ -136,8 +136,8 @@ init5272(void)
         }
     }
     m68k_set_vbr(BSP_RAMBAR);
-    
-    
+
+
     /*
      * Setup ACRs so that if cache turned on, periphal accesses
      * are not messed up.  (Non-cacheable, serialized)
@@ -158,7 +158,7 @@ init5272(void)
     /* Enable the caches */
     m68k_set_cacr(MCF5272_CACR_CENB |
                   MCF5272_CACR_DCM);       /* Default is not cached */
-  
+
   /*
    * Copy data, clear BSS, switch stacks and call boot_card()
    */

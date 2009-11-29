@@ -28,7 +28,7 @@
 #undef DEBUG
 static m360_spi_softc_t *m360_spi_softc_ptr;
 /*
- * this is a dummy receive buffer for sequences, 
+ * this is a dummy receive buffer for sequences,
  * where only send data are available
  */
 uint8_t m360_spi_dummy_rxbuf[2];
@@ -139,7 +139,7 @@ static int m360_spi_wait
     /*
      * allow interrupts, when receiver is not empty
      */
-    m360.spim = (M360_SPIE_TXE | M360_SPIE_TXB | 
+    m360.spim = (M360_SPIE_TXE | M360_SPIE_TXB |
 		 M360_SPIE_BSY | M360_SPIE_MME);
 
     rc = rtems_semaphore_obtain(softc_ptr->irq_sema_id,
@@ -165,7 +165,7 @@ static int m360_spi_wait
   }
 
   act_status = m360.spie;
-  if ((act_status  & (M360_SPIE_TXE | M360_SPIE_TXB | 
+  if ((act_status  & (M360_SPIE_TXE | M360_SPIE_TXB |
 		      M360_SPIE_BSY | M360_SPIE_MME))!= M360_SPIE_TXB) {
 #if defined(DEBUG)
     printk("... exit with RTEMS_IO_ERROR,"
@@ -199,14 +199,14 @@ static rtems_isr m360_spi_irq_handler
 \*=========================================================================*/
 {
   m360_spi_softc_t *softc_ptr = m360_spi_softc_ptr;
-  
+
   /*
-   * disable interrupt mask 
+   * disable interrupt mask
    */
   m360.spim = 0;
   if (softc_ptr->initialized) {
     rtems_semaphore_release(softc_ptr->irq_sema_id);
-  }  
+  }
 }
 
 /*=========================================================================*\
@@ -239,7 +239,7 @@ static void m360_spi_install_irq_handler
      */
     rc = rtems_semaphore_create(rtems_build_name('s','p','i','s'),
 				0,
-				RTEMS_FIFO 
+				RTEMS_FIFO
 				| RTEMS_SIMPLE_BINARY_SEMAPHORE,
 				0,
 				&softc_ptr->irq_sema_id);
@@ -286,7 +286,7 @@ static void m360_spi_install_irq_handler
     }
   }
 }
-  
+
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
@@ -307,7 +307,7 @@ rtems_status_code m360_spi_init
 {
   m360_spi_softc_t *softc_ptr = &(((m360_spi_desc_t *)(bh))->softc);
   rtems_status_code rc = RTEMS_SUCCESSFUL;
-  
+
 #if defined(DEBUG)
   printk("m360_spi_init called... ");
 #endif
@@ -317,7 +317,7 @@ rtems_status_code m360_spi_init
   /*
    * FIXME: set default mode in SPMODE
    */
-  
+
   /*
    * allocate BDs (1x RX, 1x TX)
    */
@@ -337,7 +337,7 @@ rtems_status_code m360_spi_init
   m360.spip.rfcr  = M360_RFCR_MOT | M360_RFCR_DMA_SPACE;
   m360.spip.tfcr  = M360_RFCR_MOT | M360_RFCR_DMA_SPACE;
   m360.spip.mrblr = 2;
-  
+
   /*
    * issue "InitRxTx" Command to CP
    */
@@ -354,23 +354,23 @@ rtems_status_code m360_spi_init
      * set up ports
      * LINE      PAR  DIR  DAT
      * -----------------------
-     * MOSI       1    1    x 
+     * MOSI       1    1    x
      * MISO       1    1    x
      * CLK        1    1    x
      */
-    
+
     /* set Port B Pin Assignment Register... */
-    m360.pbpar = 
+    m360.pbpar =
       m360.pbpar
-      | M360_PB_SPI_MISO_MSK 
-      | M360_PB_SPI_MOSI_MSK 
+      | M360_PB_SPI_MISO_MSK
+      | M360_PB_SPI_MOSI_MSK
       | M360_PB_SPI_CLK_MSK;
-    
+
     /* set Port B Data Direction Register... */
-    m360.pbdir = 
-      m360.pbdir 
-      | M360_PB_SPI_MISO_MSK 
-      | M360_PB_SPI_MOSI_MSK 
+    m360.pbdir =
+      m360.pbdir
+      | M360_PB_SPI_MISO_MSK
+      | M360_PB_SPI_MOSI_MSK
       | M360_PB_SPI_CLK_MSK;
   }
   /*
@@ -426,7 +426,7 @@ static int m360_spi_read_write_bytes
       m360.spip.mrblr          = sizeof(m360_spi_dummy_rxbuf);
       softc_ptr->rx_bd->buffer = m360_spi_dummy_rxbuf;
       softc_ptr->rx_bd->length = 0;
-      softc_ptr->rx_bd->status = (M360_BD_EMPTY | M360_BD_WRAP | 
+      softc_ptr->rx_bd->status = (M360_BD_EMPTY | M360_BD_WRAP |
 				  M360_BD_CONTINUOUS);
     }
     else {
@@ -446,7 +446,7 @@ static int m360_spi_read_write_bytes
        */
       softc_ptr->tx_bd->buffer = m360_spi_dummy_rxbuf;
       softc_ptr->tx_bd->length = len;
-      softc_ptr->tx_bd->status = (M360_BD_READY | M360_BD_WRAP | 
+      softc_ptr->tx_bd->status = (M360_BD_READY | M360_BD_WRAP |
 				  M360_BD_CONTINUOUS);
     }
     else {
@@ -566,7 +566,7 @@ rtems_status_code m360_spi_set_tfr_mode
       spimode |= M360_SPMODE_CP;
     }
   }
-  
+
   if (rc == RTEMS_SUCCESSFUL) {
     /*
      * disable SPI
@@ -605,12 +605,12 @@ int m360_spi_ioctl
 
   switch(cmd) {
   case RTEMS_LIBI2C_IOCTL_SET_TFRMODE:
-    ret_val = 
+    ret_val =
       -m360_spi_set_tfr_mode(bh,
 				(const rtems_libi2c_tfr_mode_t *)arg);
     break;
   case RTEMS_LIBI2C_IOCTL_READ_WRITE:
-    ret_val = 
+    ret_val =
       m360_spi_read_write_bytes(bh,
 				((rtems_libi2c_read_write_t *)arg)->rd_buf,
 				((rtems_libi2c_read_write_t *)arg)->wr_buf,
@@ -655,20 +655,20 @@ static rtems_status_code bsp_spi_sel_addr
    * GPIO1[24] is SPI_A0
    * GPIO1[25] is SPI_A1
    * GPIO1[26] is SPI_A2
-   * set pins to address 
+   * set pins to address
    */
   switch(addr) {
   case PGH360_SPI_ADDR_EEPROM:
     m360.pbdat &= ~PGH360_PB_SPI_EEP_CE_MSK;
     break;
   case PGH360_SPI_ADDR_DISP4_DATA:
-    m360.pbdat = (m360.pbdat 
-		  & ~(PGH360_PB_SPI_DISP4_CE_MSK | 
+    m360.pbdat = (m360.pbdat
+		  & ~(PGH360_PB_SPI_DISP4_CE_MSK |
 		      PGH360_PB_SPI_DISP4_RS_MSK));
     break;
   case PGH360_SPI_ADDR_DISP4_CTRL:
-    m360.pbdat = (m360.pbdat 
-		  & ~(PGH360_PB_SPI_DISP4_CE_MSK) 
+    m360.pbdat = (m360.pbdat
+		  & ~(PGH360_PB_SPI_DISP4_CE_MSK)
 		  |   PGH360_PB_SPI_DISP4_RS_MSK);
     break;
   default:
@@ -721,7 +721,7 @@ static rtems_status_code bsp_spi_send_stop
   printk("bsp_spi_send_stop called... ");
 #endif
 #if defined(PGH360)
-    m360.pbdat = (m360.pbdat 
+    m360.pbdat = (m360.pbdat
 		  | PGH360_PB_SPI_DISP4_CE_MSK
 		  | PGH360_PB_SPI_EEP_CE_MSK);
 #endif
@@ -788,7 +788,7 @@ rtems_status_code bsp_register_spi
   /*
    * init port pins used to address/select SPI devices
    */
-  
+
 #if defined(PGH360)
 
   /*
@@ -799,24 +799,24 @@ rtems_status_code bsp_register_spi
    * DISP4_CS   0    1 act-high
    * DISP4_RS   0    1 active
    */
-  
+
   /* set Port B Pin Assignment Register... */
-  m360.pbpar = 
-    (m360.pbpar 
-     & ~(PGH360_PB_SPI_EEP_CE_MSK 
+  m360.pbpar =
+    (m360.pbpar
+     & ~(PGH360_PB_SPI_EEP_CE_MSK
 	 | PGH360_PB_SPI_DISP4_CE_MSK
 	 | PGH360_PB_SPI_DISP4_RS_MSK));
-  
+
     /* set Port B Data Direction Register... */
-  m360.pbdir = 
-    m360.pbdir 
-    | PGH360_PB_SPI_EEP_CE_MSK 
+  m360.pbdir =
+    m360.pbdir
+    | PGH360_PB_SPI_EEP_CE_MSK
     | PGH360_PB_SPI_DISP4_CE_MSK
     | PGH360_PB_SPI_DISP4_RS_MSK;
-  
+
   /* set Port B Data Register to inactive CE state */
-  m360.pbdat = 
-    m360.pbdat 
+  m360.pbdat =
+    m360.pbdat
     | PGH360_PB_SPI_DISP4_CE_MSK
     | PGH360_PB_SPI_DISP4_RS_MSK;
 #endif

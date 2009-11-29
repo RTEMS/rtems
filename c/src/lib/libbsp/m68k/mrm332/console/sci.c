@@ -36,7 +36,7 @@
 * $Id$
 *
 *****************************************************************************/
-
+
 /*****************************************************************************
   Overview of serial port console terminal input/output
 *****************************************************************************/
@@ -74,7 +74,7 @@
                                                |         |
                                                +---------+
 */
-
+
 
 /*****************************************************************************
   Section A - Include Files
@@ -89,7 +89,7 @@
 #include <libchip/sersupp.h>
 #include "sci.h"
 /*#include "../misc/include/cpu332.h" */
-
+
 
 /*****************************************************************************
   Section B - Manifest Constants
@@ -115,19 +115,19 @@
 #define SYS_CLOCK       (XTAL * 4.0 * (NUMB_Y+1) * (1 << (2 * NUMB_W + NUMB_X)))
 
 #endif
-
+
 
 /*****************************************************************************
   Section C - External Data
 *****************************************************************************/
 
-
+
 
 /*****************************************************************************
   Section D - External Functions
 *****************************************************************************/
 
-
+
 
 /*****************************************************************************
   Section E - Local Functions
@@ -199,7 +199,7 @@ static void    SciRcvBufFlush( void );                  /* unused routine */
 
 void SciUnitTest(void);                                 /* test routine */
 void SciPrintStats(void);                               /* test routine */
-
+
 
 /*****************************************************************************
   Section F - Local Variables
@@ -237,7 +237,7 @@ BSP_polling_getchar_function_type  BSP_poll_char   = NULL;
 #ifdef ID_STRINGS
 static const char SciIdent[]="$Id$";
 #endif
-
+
 
 /*****************************************************************************
   Section G - A circular buffer for rcv chars when the driver interface is used.
@@ -259,7 +259,7 @@ static uint8_t   SciRcvBufGetIndex = 0; /* array index to take out next char */
 
 static uint16_t  SciRcvBufCount = 0;   /* how many bytes are in the buffer */
 
-
+
 
 /*****************************************************************************
   Section H - RTEMS termios callbacks for the interrupt version of the driver
@@ -292,7 +292,7 @@ static const rtems_termios_callbacks SciPolledCallbacks =
     NULL,                                   /* start remote xmit */
     FALSE                                   /* output uses interrupts */
 };
-
+
 
 /*
  *                              SECTION 0
@@ -316,7 +316,7 @@ void SCI_output_char(char c)
 
     return;
 }
-
+
 
 /****************************************************************************
 * Func:     SciGetTermiosHandlers
@@ -339,7 +339,7 @@ const rtems_termios_callbacks * SciGetTermiosHandlers( int32_t   polled )
         return &SciInterruptCallbacks;          /* interrupt driven */
     }
 }
-
+
 
 /****************************************************************************
 * Func:     SciIsr
@@ -399,7 +399,7 @@ rtems_isr SciIsr( rtems_vector_number vector )
         *SCSR &= SCI_CLEAR_RX_INT;              /* clear the interrupt */
     }
 }
-
+
 
 /*
  *                              SECTION 1
@@ -440,7 +440,7 @@ static int8_t   SciRcvBufGetChar(void)
 
     return ch;                                  /* return the char */
 }
-
+
 
 /****************************************************************************
 * Func:     SciRcvBufPutChar
@@ -474,7 +474,7 @@ static void SciRcvBufPutChar( uint8_t   ch )
 
     return;                                     /* return */
 }
-
+
 
 /****************************************************************************
 * Func:     SciRcvBufFlush
@@ -505,7 +505,7 @@ static void SciRcvBufFlush( void )
     return;                                     /* return */
 }
 #endif
-
+
 
 /*
  *
@@ -579,7 +579,7 @@ int   SciInterruptOpen(
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /****************************************************************************
 * Func:     SciInterruptClose
@@ -602,7 +602,7 @@ int   SciInterruptClose(
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /****************************************************************************
 * Func:     SciInterruptWrite
@@ -647,7 +647,7 @@ int   SciInterruptWrite(
 
     return 1;                                   /* return success */
 }
-
+
 
 /****************************************************************************
 * Func:     SciSetAttributes
@@ -735,7 +735,7 @@ int   SciSetAttributes(
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /*
  *
@@ -796,7 +796,7 @@ int   SciPolledOpen(
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /****************************************************************************
 * Func:     SciPolledClose
@@ -819,7 +819,7 @@ int   SciPolledClose(
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /****************************************************************************
 * Func:     SciPolledRead
@@ -846,7 +846,7 @@ int   SciPolledRead(
 
     return -1;                              /* return error */
 }
-
+
 
 /****************************************************************************
 * Func:     SciPolledWrite
@@ -889,7 +889,7 @@ int   SciPolledWrite(
 
     return written;                             /* return count */
 }
-
+
 
 /*
  *
@@ -938,7 +938,7 @@ rtems_device_driver SciInitialize (
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /****************************************************************************
 * Func:     SciOpen
@@ -981,7 +981,7 @@ rtems_device_driver SciOpen (
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /****************************************************************************
 * Func:     SciClose
@@ -1018,7 +1018,7 @@ rtems_device_driver SciClose (
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /****************************************************************************
 * Func:     SciRead
@@ -1078,7 +1078,7 @@ rtems_device_driver SciRead (
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /****************************************************************************
 * Func:     SciWrite
@@ -1127,7 +1127,7 @@ rtems_device_driver SciWrite (
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /****************************************************************************
 * Func:     SciControl
@@ -1186,7 +1186,7 @@ rtems_device_driver SciControl (
 
     return RTEMS_SUCCESSFUL;
 }
-
+
 
 /*
  *
@@ -1231,7 +1231,7 @@ static void SciSetBaud(uint32_t   rate)
 
     return;
 }
-
+
 
 /****************************************************************************
 * Func:     SciSetParity
@@ -1271,7 +1271,7 @@ static void SciSetParity(uint16_t   parity)
 
     return;
 }
-
+
 
 /****************************************************************************
 * Func:     SciSetDataBits
@@ -1306,7 +1306,7 @@ static void SciSetDataBits(uint16_t   bits)
 
     return;
 }
-
+
 
 /****************************************************************************
 * Func:     SciDisableAllInterrupts
@@ -1345,7 +1345,7 @@ static void inline SciDisableTransmitInterrupts( void )
 {
     *SCCR1 &= SCI_DISABLE_INT_TX;
 }
-
+
 
 /****************************************************************************
 * Func:     SciEnableTransmitter, SciDisableTransmitter
@@ -1376,7 +1376,7 @@ static void inline SciDisableReceiver( void )
 {
     *SCCR1 &= SCI_DISABLE_RCVR;
 }
-
+
 
 /****************************************************************************
 * Func:     SciWriteCharWait
@@ -1432,7 +1432,7 @@ void SciWriteCharNoWait(uint8_t   c)
 
     return;
 }
-
+
 
 /****************************************************************************
 * Func:     SciReadCharWait
@@ -1486,7 +1486,7 @@ uint8_t   inline SciReadCharNoWait( void )
 
     return ch;                                  /* return the char */
 }
-
+
 
 /****************************************************************************
 * Func:     SciCharAvailable
@@ -1501,7 +1501,7 @@ uint8_t   inline SciCharAvailable( void )
 {
     return ( *SCSR & SCI_RCVR_READY );          /* char in data register? */
 }
-
+
 
 /****************************************************************************
 * Func:     SciSendBreak
@@ -1527,7 +1527,7 @@ void SciSendBreak( void )
 
     return;
 }
-
+
 
 /*
  *
@@ -1567,7 +1567,7 @@ printk("SCI read result=%d,byte=%x\r\n",result,byte);
     return;
 }
 #endif
-
+
 
 /****************************************************************************
 * Func:     SciPrintStats

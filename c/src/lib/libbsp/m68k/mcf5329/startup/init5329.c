@@ -31,13 +31,13 @@ void Init5329(void)
   register uint8_t *dbp, *sbp;
   register uint32_t *dp, *sp;
 
-  /* 
+  /*
    * Initialize the hardware
    */
   init_main();
 
-  /* 
-   * Copy the vector table to RAM 
+  /*
+   * Copy the vector table to RAM
    */
 
   if (_VBR != _INTERRUPT_VECTOR) {
@@ -50,8 +50,8 @@ void Init5329(void)
 
   _wr_vbr((uint32_t) _VBR);
 
-  /* 
-   * Move initialized data from ROM to RAM. 
+  /*
+   * Move initialized data from ROM to RAM.
    */
   if (_data_src_start != _data_dest_start) {
     dbp = (uint8_t *) _data_dest_start;
@@ -61,8 +61,8 @@ void Init5329(void)
       *dbp++ = *sbp++;
   }
 
-  /* 
-   * Zero uninitialized data 
+  /*
+   * Zero uninitialized data
    */
 
   if (_clear_start != _clear_end) {

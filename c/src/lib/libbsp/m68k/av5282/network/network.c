@@ -115,7 +115,7 @@ static rtems_isr
 mcf5282_fec_rx_interrupt_handler( rtems_vector_number v )
 {
     MCF5282_FEC_EIR = MCF5282_FEC_EIR_RXF;
-    MCF5282_FEC_EIMR &= ~MCF5282_FEC_EIMR_RXF;    
+    MCF5282_FEC_EIMR &= ~MCF5282_FEC_EIMR_RXF;
     enet_driver[0].rxInterrupts++;
     rtems_event_send(enet_driver[0].rxDaemonTid, RX_INTERRUPT_EVENT);
 }
@@ -124,7 +124,7 @@ static rtems_isr
 mcf5282_fec_tx_interrupt_handler( rtems_vector_number v )
 {
     MCF5282_FEC_EIR = MCF5282_FEC_EIR_TXF;
-    MCF5282_FEC_EIMR &= ~MCF5282_FEC_EIMR_TXF;    
+    MCF5282_FEC_EIMR &= ~MCF5282_FEC_EIMR_TXF;
     enet_driver[0].txInterrupts++;
     rtems_event_send(enet_driver[0].txDaemonTid, TX_INTERRUPT_EVENT);
 }
@@ -264,7 +264,7 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
      *   Full duplex
      *   No loopback
      */
-    MCF5282_FEC_RCR = MCF5282_FEC_RCR_MAX_FL(MAX_MTU_SIZE) | 
+    MCF5282_FEC_RCR = MCF5282_FEC_RCR_MAX_FL(MAX_MTU_SIZE) |
                       MCF5282_FEC_RCR_MII_MODE;
 
     /*
@@ -334,7 +334,7 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
     MCF5282_INTC0_ICR27 = MCF5282_INTC_ICR_IL(FEC_IRQ_LEVEL) |
                           MCF5282_INTC_ICR_IP(FEC_IRQ_RX_PRIORITY);
     MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT27 | MCF5282_INTC_IMRL_MASKALL);
-    
+
         status = rtems_interrupt_catch(mcf5282_mii_interrupt_handler, MII_VECTOR, &old_handler);
     if (status != RTEMS_SUCCESSFUL)
         rtems_panic ("Can't attach MCF5282 FEC MII interrupt handler: %s\n",
@@ -504,9 +504,9 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
      */
     nAdded = 0;
     firstTxBd = sc->txBdBase + sc->txBdHead;
-    
+
     while(m != NULL) {
-		/* 
+		/*
 		* Wait for buffer descriptor to become available
 		*/
 		if ((sc->txBdActiveCount + nAdded)  == sc->txBdCount) {
@@ -514,7 +514,7 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
 		* Clear old events.
 		*/
 		MCF5282_FEC_EIR = MCF5282_FEC_EIR_TXF;
-	
+
 		/*
 		* Wait for buffer descriptor to become available.
 		* Check for buffer descriptors before waiting for the event.
@@ -525,9 +525,9 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
 		while ((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
 			rtems_event_set events;
 			int level;
-	
+
 			rtems_interrupt_disable(level);
-			MCF5282_FEC_EIMR |= MCF5282_FEC_EIMR_TXF;    
+			MCF5282_FEC_EIMR |= MCF5282_FEC_EIMR_TXF;
 			rtems_interrupt_enable(level);
 			sc->txRawWait++;
 			rtems_bsdnet_event_receive(TX_INTERRUPT_EVENT,
@@ -537,13 +537,13 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
 			fec_retire_tx_bd(sc);
 		}
 		}
-	
+
 		/*
 		* Don't set the READY flag on the first fragment
 		* until the whole packet has been readied.
 		*/
 		status = nAdded ? MCF5282_FEC_TxBD_R : 0;
-	
+
 		/*
 		* The IP fragmentation routine in ip_output
 		* can produce fragments with zero length.
@@ -622,9 +622,9 @@ fec_txDaemon(void *arg)
         /*
          * Wait for packet
          */
-        rtems_bsdnet_event_receive(START_TRANSMIT_EVENT, 
-                                    RTEMS_EVENT_ANY | RTEMS_WAIT, 
-                                    RTEMS_NO_TIMEOUT, 
+        rtems_bsdnet_event_receive(START_TRANSMIT_EVENT,
+                                    RTEMS_EVENT_ANY | RTEMS_WAIT,
+                                    RTEMS_NO_TIMEOUT,
                                     &events);
 
         /*
