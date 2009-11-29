@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -65,11 +65,11 @@ extern "C" {
 	extern int sgIP_ARP_ProcessIPFrame(sgIP_Hub_HWInterface * hw, sgIP_memblock * mb);
 	extern int sgIP_ARP_ProcessARPFrame(sgIP_Hub_HWInterface * hw, sgIP_memblock * mb);
 	extern int sgIP_ARP_SendProtocolFrame(sgIP_Hub_HWInterface * hw, sgIP_memblock * mb, unsigned short protocol, unsigned long destaddr);
-	
+
 	extern int sgIP_ARP_SendARPResponse(sgIP_Hub_HWInterface * hw, sgIP_memblock * mb);
 	extern int sgIP_ARP_SendGratARP(sgIP_Hub_HWInterface * hw);
 	extern int sgIP_ARP_SendARPRequest(sgIP_Hub_HWInterface * hw, int protocol, unsigned long protocol_addr);
-	
+
 
 
 #ifdef __cplusplus

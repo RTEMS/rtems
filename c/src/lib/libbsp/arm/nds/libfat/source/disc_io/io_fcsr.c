@@ -4,14 +4,14 @@
 	compact_flash.c
 	By chishm (Michael Chisholm)
 
-	Hardware Routines for using a GBA Flash Cart and SRAM as a 
+	Hardware Routines for using a GBA Flash Cart and SRAM as a
 	block device.
 
 	The file system must be 512 byte aligned, in cart address space.
 	SRAM is supported.
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -73,7 +73,7 @@ _FCSR_isInserted
 Is a GBA Flash Cart with a valid file system inserted?
 bool return OUT:  true if a GBA FC card is inserted
 -----------------------------------------------------------------*/
-bool _FCSR_isInserted (void) 
+bool _FCSR_isInserted (void)
 {
 	bool flagFoundFileSys = false;
 
@@ -101,7 +101,7 @@ _FCSR_clearStatus
 Finish any pending operations
 bool return OUT:  always true for GBA FC
 -----------------------------------------------------------------*/
-bool _FCSR_clearStatus (void) 
+bool _FCSR_clearStatus (void)
 {
 	return true;
 }
@@ -117,7 +117,7 @@ void* buffer OUT: pointer to 512 byte buffer to store data in
 bool return OUT: true if successful
 -----------------------------------------------------------------*/
 bool _FCSR_readSectors (u32 sector, u32 numSectors, void* buffer)
-{	
+{
 	int i;
 	bool flagSramSector = false;
 	int readLength = numSectors * BYTES_PER_READ;
@@ -223,14 +223,14 @@ bool _FCSR_writeSectors (u32 sector, u8 numSectors, void* buffer)
 _FCSR_shutdown
 unload the Flash Cart interface
 -----------------------------------------------------------------*/
-bool _FCSR_shutdown(void) 
+bool _FCSR_shutdown(void)
 {
 	int i;
 	if (_FCSR_clearStatus() == false)
 		return false;
 
 	_FCSR_FileSysPointer = 0;
-	
+
 	for (i=0; i < 4; i++)
 	{
 		_FCSR_SramSectorPointer[i] = 0;
@@ -277,11 +277,11 @@ bool _FCSR_startUp(void)
 	// Get SRAM sector regions from header block
 	for (i = 0; i < 4; i++)
 	{
-		_FCSR_SramSectorStart[i] = fileSysPointer[i+4];	
+		_FCSR_SramSectorStart[i] = fileSysPointer[i+4];
 		SramRegionSize[i] = fileSysPointer[i+8];
 		_FCSR_SramSectorEnd[i] = _FCSR_SramSectorStart[i] + SramRegionSize[i];
 	}
-	
+
 	// Calculate SRAM region pointers
 	_FCSR_SramSectorPointer[0] = (u8*)(SRAM_START + 4);
 	for (i = 1; i < 4; i++)

@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -47,7 +47,7 @@ int sgIP_IP_ReceivePacket(sgIP_memblock * mb) {
 		SGIP_DEBUG_MESSAGE(("-%i/%i",mb->totallength,htons(iphdr->tot_length)));
 		sgIP_memblock_free(mb);
 		return 0; // bad size.
-	} 
+	}
 	sgIP_memblock_trimsize(mb,htons(iphdr->tot_length));
 	// check version
 	if((iphdr->version_ihl>>4)!=4) {

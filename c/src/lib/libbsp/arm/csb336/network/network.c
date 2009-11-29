@@ -77,13 +77,13 @@ typedef struct
      * This entry *must* be the first in the sonic_softc structure.
      */
     struct arpcom arpcom;
-    
+
     int accept_bcast;
-    
+
     /* Tasks waiting for interrupts */
     rtems_id rx_task;
     rtems_id tx_task;
-    
+
     eth_stats_t stats;
 
 } mc9328mxl_enet_softc_t;
@@ -92,7 +92,7 @@ static mc9328mxl_enet_softc_t softc;
 
 
 /* function prototypes */
-int rtems_mc9328mxl_enet_attach(struct rtems_bsdnet_ifconfig *config, 
+int rtems_mc9328mxl_enet_attach(struct rtems_bsdnet_ifconfig *config,
                                 void *chip);
 void mc9328mxl_enet_init(void *arg);
 void mc9328mxl_enet_init_hw(mc9328mxl_enet_softc_t *sc);
@@ -102,7 +102,7 @@ void mc9328mxl_enet_tx_task (void *arg);
 void mc9328mxl_enet_sendpacket (struct ifnet *ifp, struct mbuf *m);
 void mc9328mxl_enet_rx_task(void *arg);
 void mc9328mxl_enet_stats(mc9328mxl_enet_softc_t *sc);
-static int mc9328mxl_enet_ioctl(struct ifnet *ifp, 
+static int mc9328mxl_enet_ioctl(struct ifnet *ifp,
                                 ioctl_command_t command, caddr_t data);
 
 
@@ -116,7 +116,7 @@ int rtems_mc9328mxl_enet_attach (
     int unitnumber;
     char *unitname;
     int tmp;
-    
+
     /*
      * Parse driver name
      */
@@ -124,7 +124,7 @@ int rtems_mc9328mxl_enet_attach (
     if (unitnumber < 0) {
         return 0;
     }
-    
+
     /*
      * Is driver free?
      */
@@ -138,11 +138,11 @@ int rtems_mc9328mxl_enet_attach (
         printf ("Driver already in use.\n");
         return 0;
     }
-    
+
     /* zero out the control structure  */
     memset( &softc, 0, sizeof(softc) );
-    
-    
+
+
     /* set the MAC address */
     tmp = lan91c11x_read_reg(LAN91C11X_IA0);
     softc.arpcom.ac_enaddr[0] = tmp & 0xff;
@@ -163,7 +163,7 @@ int rtems_mc9328mxl_enet_attach (
     }
 
     softc.accept_bcast = !config->ignore_broadcast;
-    
+
     /*
      * Set up network interface values
      */
@@ -179,7 +179,7 @@ int rtems_mc9328mxl_enet_attach (
     if (ifp->if_snd.ifq_maxlen == 0) {
         ifp->if_snd.ifq_maxlen = ifqmaxlen;
     }
-    
+
     /* Attach the interface */
     if_attach (ifp);
     ether_ifattach (ifp);
@@ -188,52 +188,52 @@ int rtems_mc9328mxl_enet_attach (
 
 void mc9328mxl_enet_init(void *arg)
 {
-    mc9328mxl_enet_softc_t     *sc = arg;      
+    mc9328mxl_enet_softc_t     *sc = arg;
     struct ifnet *ifp = &sc->arpcom.ac_if;
-    
-    /* 
-     *This is for stuff that only gets done once (mc9328mxl_enet_init() 
-     * gets called multiple times 
+
+    /*
+     *This is for stuff that only gets done once (mc9328mxl_enet_init()
+     * gets called multiple times
      */
     if (sc->tx_task == 0)
     {
         /* Set up ENET hardware */
         mc9328mxl_enet_init_hw(sc);
-        
+
         /* Start driver tasks */
-        sc->rx_task = rtems_bsdnet_newproc("ENrx", 
-                                           4096, 
-                                           mc9328mxl_enet_rx_task, 
+        sc->rx_task = rtems_bsdnet_newproc("ENrx",
+                                           4096,
+                                           mc9328mxl_enet_rx_task,
                                            sc);
-        sc->tx_task = rtems_bsdnet_newproc("ENtx", 
-                                           4096, 
-                                           mc9328mxl_enet_tx_task, 
+        sc->tx_task = rtems_bsdnet_newproc("ENtx",
+                                           4096,
+                                           mc9328mxl_enet_tx_task,
                                            sc);
     } /* if tx_task */
-    
+
 
     /* Configure for promiscuous if needed */
     if (ifp->if_flags & IFF_PROMISC) {
-        lan91c11x_write_reg(LAN91C11X_RCR, 
+        lan91c11x_write_reg(LAN91C11X_RCR,
                             (lan91c11x_read_reg(LAN91C11X_RCR) |
                              LAN91C11X_RCR_PRMS));
     }
-        
-    
+
+
     /*
      * Tell the world that we're running.
      */
     ifp->if_flags |= IFF_RUNNING;
-    
+
     /* Enable TX/RX */
-    lan91c11x_write_reg(LAN91C11X_TCR, 
+    lan91c11x_write_reg(LAN91C11X_TCR,
                         (lan91c11x_read_reg(LAN91C11X_TCR) |
                          LAN91C11X_TCR_TXENA));
 
-    lan91c11x_write_reg(LAN91C11X_RCR, 
+    lan91c11x_write_reg(LAN91C11X_RCR,
                         (lan91c11x_read_reg(LAN91C11X_RCR) |
                          LAN91C11X_RCR_RXEN));
-    
+
 
 } /* mc9328mxl_enet_init() */
 
@@ -254,7 +254,7 @@ void  mc9328mxl_enet_init_hw(mc9328mxl_enet_softc_t *sc)
 
 
     stat = lan91c11x_read_phy_reg(PHY_STAT);
-    
+
     if(stat & PHY_STAT_CAPT4) {
         my |= PHY_ADV_T4;
     }
@@ -274,22 +274,22 @@ void  mc9328mxl_enet_init_hw(mc9328mxl_enet_softc_t *sc)
     if(stat & PHY_STAT_CAPTH) {
         my |= PHY_ADV_10HDX;
     }
-    
+
     my |= PHY_ADV_CSMA;
-    
+
     lan91c11x_write_phy_reg(PHY_AD, my);
 
 
     /* Enable Autonegotiation */
 #if 0
-    lan91c11x_write_phy_reg(PHY_CTRL, 
+    lan91c11x_write_phy_reg(PHY_CTRL,
                             (PHY_CTRL_ANEGEN | PHY_CTRL_ANEGRST));
 #endif
 
     /* Enable full duplex, let MAC take care
      * of padding and CRC.
      */
-    lan91c11x_write_reg(LAN91C11X_TCR, 
+    lan91c11x_write_reg(LAN91C11X_TCR,
                         (LAN91C11X_TCR_PADEN |
                          LAN91C11X_TCR_SWFDUP));
 
@@ -297,7 +297,7 @@ void  mc9328mxl_enet_init_hw(mc9328mxl_enet_softc_t *sc)
     lan91c11x_write_reg(LAN91C11X_RCR, 0);
 
     /* Enable auto-negotiation, LEDA is link, LEDB is traffic */
-    lan91c11x_write_reg(LAN91C11X_RPCR, 
+    lan91c11x_write_reg(LAN91C11X_RPCR,
                         (LAN91C11X_RPCR_ANEG |
                          LAN91C11X_RPCR_LS2B));
 
@@ -308,9 +308,9 @@ void  mc9328mxl_enet_init_hw(mc9328mxl_enet_softc_t *sc)
 
     /* Disable error interrupts, enable auto release */
     lan91c11x_write_reg(LAN91C11X_CTRL, LAN91C11X_CTRL_AUTO);
-    
+
     /* Reset MMU */
-    lan91c11x_write_reg(LAN91C11X_MMUCMD, 
+    lan91c11x_write_reg(LAN91C11X_MMUCMD,
                         LAN91C11X_MMUCMD_RESETMMU );
 
 
@@ -324,7 +324,7 @@ void  mc9328mxl_enet_init_hw(mc9328mxl_enet_softc_t *sc)
 
     /* Enable interrupts on GPIO Port A3 */
     /*   Make pin 3 an input */
-    MC9328MXL_GPIOA_DDIR &= ~bit(3);   
+    MC9328MXL_GPIOA_DDIR &= ~bit(3);
 
     /*   Use GPIO function for pin 3 */
     MC9328MXL_GPIOA_GIUS |= bit(3);
@@ -338,13 +338,13 @@ void  mc9328mxl_enet_init_hw(mc9328mxl_enet_softc_t *sc)
 
     /* Install the interrupt handler */
     BSP_install_rtems_irq_handler(&mc9328mxl_enet_isr_data);
-    
+
 } /* mc9328mxl_enet_init_hw() */
 
 void mc9328mxl_enet_start(struct ifnet *ifp)
 {
     mc9328mxl_enet_softc_t *sc = ifp->if_softc;
-    
+
     rtems_event_send(sc->tx_task, START_TRANSMIT_EVENT);
     ifp->if_flags |= IFF_OACTIVE;
 }
@@ -352,19 +352,19 @@ void mc9328mxl_enet_start(struct ifnet *ifp)
 void mc9328mxl_enet_stop (mc9328mxl_enet_softc_t *sc)
 {
     struct ifnet *ifp = &sc->arpcom.ac_if;
-    
+
     ifp->if_flags &= ~IFF_RUNNING;
-    
+
 
     /* Stop the transmitter and receiver. */
-    lan91c11x_write_reg(LAN91C11X_TCR, 
-                        (lan91c11x_read_reg(LAN91C11X_TCR) & 
+    lan91c11x_write_reg(LAN91C11X_TCR,
+                        (lan91c11x_read_reg(LAN91C11X_TCR) &
                          ~LAN91C11X_TCR_TXENA));
 
-    lan91c11x_write_reg(LAN91C11X_RCR, 
-                        (lan91c11x_read_reg(LAN91C11X_RCR) & 
+    lan91c11x_write_reg(LAN91C11X_RCR,
+                        (lan91c11x_read_reg(LAN91C11X_RCR) &
                         ~LAN91C11X_RCR_RXEN));
-    
+
 }
 
 /*
@@ -376,7 +376,7 @@ void mc9328mxl_enet_tx_task(void *arg)
     struct ifnet *ifp = &sc->arpcom.ac_if;
     struct mbuf *m;
     rtems_event_set events;
-    
+
     for (;;)
     {
         rtems_bsdnet_event_receive(
@@ -384,7 +384,7 @@ void mc9328mxl_enet_tx_task(void *arg)
             RTEMS_EVENT_ANY | RTEMS_WAIT,
             RTEMS_NO_TIMEOUT,
             &events);
-        
+
         /* Send packets till queue is empty */
         for (;;)
         {
@@ -395,7 +395,7 @@ void mc9328mxl_enet_tx_task(void *arg)
             }
             mc9328mxl_enet_sendpacket (ifp, m);
             softc.stats.tx_packets++;
-        
+
         }
         ifp->if_flags &= ~IFF_OACTIVE;
     }
@@ -419,7 +419,7 @@ void mc9328mxl_enet_sendpacket (struct ifnet *ifp, struct mbuf *m)
     } while (l != NULL);
 
     /* Allocate a TX buffer */
-    lan91c11x_write_reg(LAN91C11X_MMUCMD, 
+    lan91c11x_write_reg(LAN91C11X_MMUCMD,
                         (LAN91C11X_MMUCMD_ALLOCTX |
                          (size >> 8)));
 
@@ -446,18 +446,18 @@ void mc9328mxl_enet_sendpacket (struct ifnet *ifp, struct mbuf *m)
     if (size & 1) {
         size++;
     }
-    lan91c11x_write_reg(LAN91C11X_DATA, size + 6);  
+    lan91c11x_write_reg(LAN91C11X_DATA, size + 6);
 
     lan91c11x_lock();
 
     /* Copy the mbuf */
-    l = m; 
+    l = m;
     start = 0;
     d = 0;
     while (l != NULL)
     {
         uint8_t *data;
-        
+
         data = mtod(l, uint8_t *);
 
         for (i = start; i < l->m_len; i++) {
@@ -474,10 +474,10 @@ void mc9328mxl_enet_sendpacket (struct ifnet *ifp, struct mbuf *m)
 
         l = l->m_next;
     }
-    
+
     /* write control byte */
     if (i & 1) {
-        lan91c11x_write_reg_fast(LAN91C11X_DATA, 
+        lan91c11x_write_reg_fast(LAN91C11X_DATA,
                             htons(LAN91C11X_PKT_CTRL_ODD | d));
     } else {
         lan91c11x_write_reg_fast(LAN91C11X_DATA, 0);
@@ -486,18 +486,18 @@ void mc9328mxl_enet_sendpacket (struct ifnet *ifp, struct mbuf *m)
     lan91c11x_unlock();
 
     /* Enable TX interrupts */
-    lan91c11x_write_reg(LAN91C11X_INT, 
+    lan91c11x_write_reg(LAN91C11X_INT,
                         (lan91c11x_read_reg(LAN91C11X_INT) |
                          LAN91C11X_INT_TXMASK |
                          LAN91C11X_INT_TXEMASK));
 
     /* Enqueue it */
-    lan91c11x_write_reg(LAN91C11X_MMUCMD, 
+    lan91c11x_write_reg(LAN91C11X_MMUCMD,
                         LAN91C11X_MMUCMD_ENQUEUE);
-    
+
     /* free the mbuf chain we just copied */
     m_freem(m);
-    
+
 } /* mc9328mxl_enet_sendpacket () */
 
 
@@ -525,7 +525,7 @@ void mc9328mxl_enet_rx_task(void *arg)
             &events);
 
         /* Configure for reads from RX data area */
-        lan91c11x_write_reg(LAN91C11X_PTR, 
+        lan91c11x_write_reg(LAN91C11X_PTR,
                             (LAN91C11X_PTR_AUTOINC |
                              LAN91C11X_PTR_RCV |
                              LAN91C11X_PTR_READ));
@@ -540,16 +540,16 @@ void mc9328mxl_enet_rx_task(void *arg)
 
         /* get an mbuf for this packet */
         MGETHDR(m, M_WAIT, MT_DATA);
-            
+
         /* now get a cluster pointed to by the mbuf */
         /* since an mbuf by itself is too small */
         MCLGET(m, M_WAIT);
 
         lan91c11x_lock();
-            
+
         /* Copy the received packet into an mbuf */
         for (i = 0; i < (pktlen / 2); i++) {
-            ((uint16_t*)m->m_ext.ext_buf)[i] = 
+            ((uint16_t*)m->m_ext.ext_buf)[i] =
                 lan91c11x_read_reg_fast(LAN91C11X_DATA);
         }
 
@@ -561,23 +561,23 @@ void mc9328mxl_enet_rx_task(void *arg)
         lan91c11x_unlock();
 
         /* Release the packets memory */
-        lan91c11x_write_reg(LAN91C11X_MMUCMD, 
+        lan91c11x_write_reg(LAN91C11X_MMUCMD,
                             LAN91C11X_MMUCMD_REMTOP);
 
         /* set the receiving interface */
         m->m_pkthdr.rcvif = ifp;
         m->m_nextpkt = 0;
-            
+
         /* set the length of the mbuf */
         m->m_len = pktlen - (sizeof(struct ether_header));
         m->m_pkthdr.len = m->m_len;
-            
+
         /* strip off the ethernet header from the mbuf */
         /* but save the pointer to it */
         eh = mtod (m, struct ether_header *);
         m->m_data += sizeof(struct ether_header);
-        
-            
+
+
         softc.stats.rx_packets++;
 
         /* give all this stuff to the stack */
@@ -589,7 +589,7 @@ void mc9328mxl_enet_rx_task(void *arg)
         lan91c11x_write_reg(LAN91C11X_INT, int_reg);
 
     }
-} /* mc9328mxl_enet_rx_task */ 
+} /* mc9328mxl_enet_rx_task */
 
 
 /* Show interface statistics */
@@ -609,7 +609,7 @@ static void enet_isr_on(const rtems_irq_connect_data *unused)
 {
     /* Enable interrupts */
     MC9328MXL_AITC_INTENNUM = MC9328MXL_INT_GPIO_PORTA;
-    
+
     return;
 }
 
@@ -636,38 +636,38 @@ mc9328mxl_enet_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
     mc9328mxl_enet_softc_t *sc = ifp->if_softc;
     int error = 0;
-    
+
     switch (command) {
     case SIOCGIFADDR:
     case SIOCSIFADDR:
         ether_ioctl (ifp, command, data);
         break;
-        
+
     case SIOCSIFFLAGS:
         switch (ifp->if_flags & (IFF_UP | IFF_RUNNING))
         {
         case IFF_RUNNING:
             mc9328mxl_enet_stop (sc);
             break;
-            
+
         case IFF_UP:
             mc9328mxl_enet_init (sc);
             break;
-            
+
         case IFF_UP | IFF_RUNNING:
             mc9328mxl_enet_stop (sc);
             mc9328mxl_enet_init (sc);
             break;
-            
+
         default:
             break;
         } /* switch (if_flags) */
         break;
-        
+
     case SIO_RTEMS_SHOW_STATS:
         mc9328mxl_enet_stats (sc);
         break;
-        
+
         /*
          * FIXME: All sorts of multicast commands need to be added here!
          */
@@ -686,14 +686,14 @@ static void enet_isr(rtems_irq_hdl_param unused)
     softc.stats.interrupts++;
     /* get the ISR status and determine RX or TX */
     int_reg = lan91c11x_read_reg(LAN91C11X_INT);
-    
+
     /* Handle RX interrupts */
     if ((int_reg & LAN91C11X_INT_RX) && (int_reg & LAN91C11X_INT_RXMASK)) {
         softc.stats.rx_interrupts++;
 
         /* Disable the interrupt */
         int_reg &= ~LAN91C11X_INT_RXMASK;
-        
+
         rtems_event_send (softc.rx_task, START_RECEIVE_EVENT);
     }
 
@@ -716,7 +716,7 @@ static void enet_isr(rtems_irq_hdl_param unused)
         softc.stats.txerr_interrupts++;
         printk("Caught TX interrupt - error on transmission\n");
     }
-    
+
     /* Update the interrupt register on the 91c11x */
     lan91c11x_write_reg(LAN91C11X_INT, int_reg);
 

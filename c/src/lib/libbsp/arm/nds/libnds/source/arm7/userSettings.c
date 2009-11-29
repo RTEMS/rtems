@@ -39,10 +39,10 @@ void readUserSettings() {
 
 	uint32 userSettingsBase;
 	readFirmware( 0x20, &userSettingsBase,2);
-	
+
 	uint32 slot1Address = userSettingsBase * 8;
 	uint32 slot2Address = userSettingsBase * 8 + 0x100;
-	
+
 	readFirmware( slot1Address , &slot1, sizeof(PERSONAL_DATA));
 	readFirmware( slot2Address , &slot2, sizeof(PERSONAL_DATA));
 	readFirmware( slot1Address + 0x70, &slot1count, 2);
@@ -52,20 +52,20 @@ void readUserSettings() {
 
 	// default to slot 1 user Settings
 	void *currentSettings = &slot1;
-	
+
 	short calc1CRC = swiCRC16( 0xffff, &slot1, sizeof(PERSONAL_DATA));
 	short calc2CRC = swiCRC16( 0xffff, &slot2, sizeof(PERSONAL_DATA));
 
 	// bail out if neither slot is valid
 	if ( calc1CRC != slot1CRC && calc2CRC != slot2CRC) return;
-	
+
 	// if both slots are valid pick the most recent
-	if ( calc1CRC == slot1CRC && calc2CRC == slot2CRC ) { 
+	if ( calc1CRC == slot1CRC && calc2CRC == slot2CRC ) {
 		currentSettings = (slot2count == (( slot2count + 1 ) & 0x7f) ? &slot2 : &slot1);
 	} else {
 		if ( calc2CRC == slot2CRC )
 			currentSettings = &slot2;
 	}
 	memcpy ( PersonalData, currentSettings, sizeof(PERSONAL_DATA));
-	
+
 }

@@ -1,7 +1,7 @@
 // DS Wifi interface code
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
 // wifi_shared.h - Shared structures to be used by arm9 and arm7
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -35,7 +35,7 @@ SOFTWARE.
 // on spinlock contention, the side unsuccessfully attempting the lock reverts the lock.
 // if the unlocking side sees the lock incorrectly set, the unlocking side will delay until it has reverted to the correct value, then continue unlocking.
 // there should be a delay of at least about ~10-20 cycles between a lock and unlock, to prevent contention.
-#define SPINLOCK_NOBODY			0x0000	
+#define SPINLOCK_NOBODY			0x0000
 #define SPINLOCK_ARM7			0x0001
 #define SPINLOCK_ARM9			0x0002
 
@@ -143,11 +143,11 @@ enum WIFI_STATS {
    WSTAT_ARM7_UPDATES,
    WSTAT_DEBUG,
 	// harware stats (function mostly unknown.)
-	WSTAT_HW_1B0,WSTAT_HW_1B1,WSTAT_HW_1B2,WSTAT_HW_1B3,WSTAT_HW_1B4,WSTAT_HW_1B5,WSTAT_HW_1B6,WSTAT_HW_1B7,	
-	WSTAT_HW_1B8,WSTAT_HW_1B9,WSTAT_HW_1BA,WSTAT_HW_1BB,WSTAT_HW_1BC,WSTAT_HW_1BD,WSTAT_HW_1BE,WSTAT_HW_1BF,	
+	WSTAT_HW_1B0,WSTAT_HW_1B1,WSTAT_HW_1B2,WSTAT_HW_1B3,WSTAT_HW_1B4,WSTAT_HW_1B5,WSTAT_HW_1B6,WSTAT_HW_1B7,
+	WSTAT_HW_1B8,WSTAT_HW_1B9,WSTAT_HW_1BA,WSTAT_HW_1BB,WSTAT_HW_1BC,WSTAT_HW_1BD,WSTAT_HW_1BE,WSTAT_HW_1BF,
 	WSTAT_HW_1C0,WSTAT_HW_1C1,WSTAT_HW_1C4,WSTAT_HW_1C5,
-	WSTAT_HW_1D0,WSTAT_HW_1D1,WSTAT_HW_1D2,WSTAT_HW_1D3,WSTAT_HW_1D4,WSTAT_HW_1D5,WSTAT_HW_1D6,WSTAT_HW_1D7,	
-	WSTAT_HW_1D8,WSTAT_HW_1D9,WSTAT_HW_1DA,WSTAT_HW_1DB,WSTAT_HW_1DC,WSTAT_HW_1DD,WSTAT_HW_1DE,WSTAT_HW_1DF,	
+	WSTAT_HW_1D0,WSTAT_HW_1D1,WSTAT_HW_1D2,WSTAT_HW_1D3,WSTAT_HW_1D4,WSTAT_HW_1D5,WSTAT_HW_1D6,WSTAT_HW_1D7,
+	WSTAT_HW_1D8,WSTAT_HW_1D9,WSTAT_HW_1DA,WSTAT_HW_1DB,WSTAT_HW_1DC,WSTAT_HW_1DD,WSTAT_HW_1DE,WSTAT_HW_1DF,
 
 	NUM_WIFI_STATS
 };
@@ -258,7 +258,7 @@ typedef struct WIFI_MAINSTRUCT {
 	Wifi_AccessPoint wfc_ap[3];
 	unsigned long wfc_config[3][5]; // ip, snmask, gateway, primarydns, 2nddns
 	u8 wfc_wepkey[3][16];
-	
+
 
 	// wifi data
 	u32 rxbufIn, rxbufOut; // bufIn/bufOut have 2-byte granularity.
@@ -269,7 +269,7 @@ typedef struct WIFI_MAINSTRUCT {
 
 	// stats data
 	u32 stats[NUM_WIFI_STATS];
-   
+
 	u16 debug[30];
 
    u32 random; // semirandom number updated at the convenience of the arm7. use for initial seeds & such.

@@ -20,7 +20,7 @@ struct TreeNode
 		directory = 0;
 		prev = next = 0;
 	}
-	
+
 	// new entry in same directory
 	TreeNode *New(const char *name, bool isdir)
 	{

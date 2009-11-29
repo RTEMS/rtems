@@ -50,12 +50,12 @@ extern "C" {
 	\param charStart ascii code of the first character in the font
 	\param map base address of the map to use for printing
 	\param pal 16 color palette index to use
-	\param bitDepth 256/16 color tile flag. 
-	
+	\param bitDepth 256/16 color tile flag.
+
 	Initializes the console with the given parameters. When pal is greater than 15 and
 	bitDepth is 16 then	all non zero entries in the font are set to index 255. When bitDepth
 	is not 16 then the font tiles are created as 8bit (256 color).
- 
+
 */
 void consoleInit(u16* font, u16* charBase, u16 numCharacters, u8 charStart, u16* map, u8 pal, u8 bitDepth);
 /*! \fn void consoleInitDefault(u16* map, u16* charBase, u8 bitDepth)
@@ -65,7 +65,7 @@ void consoleInit(u16* font, u16* charBase, u16 numCharacters, u8 charStart, u16*
 	\param bitDepth 256/16 color tile flag
 
 	This function calls consoleInit() with the default built in font and character ranges, the parameters given
-	are as for that function. 
+	are as for that function.
 */
 void consoleInitDefault(u16* map, u16* charBase, u8 bitDepth);
 

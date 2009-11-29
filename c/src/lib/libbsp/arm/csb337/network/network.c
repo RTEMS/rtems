@@ -523,8 +523,8 @@ void  at91rm9200_emac_init_hw(at91rm9200_emac_softc_t *sc)
 	#if defined(PHY_DBG)
           printk("10MBIT, ");
         #endif
-      }                
-                        
+      }
+
       if (emac_link_status & (PHY_STAT_100BASE_X_FDX | PHY_STAT_10BASE_FDX)) {
         EMAC_REG(EMAC_CFG) |= EMAC_CFG_FD;
 	#if defined(PHY_DBG)
@@ -535,7 +535,7 @@ void  at91rm9200_emac_init_hw(at91rm9200_emac_softc_t *sc)
 	#if defined(PHY_DBG)
           printk("Half Duplex.\n");
         #endif
-      }                
+      }
 
       /* Set PHY LED modes.  Traffic Meter Mode for ACTLED
        * Set Bit 6 - Traffic Mode on

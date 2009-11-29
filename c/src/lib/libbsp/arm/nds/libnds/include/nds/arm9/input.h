@@ -27,9 +27,30 @@
      distribution.
 
 	$Log$
+	Revision 1.2  2008/08/20 16:31:41  joel
+	2008-08-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+		* block/block.c, console/console.c, dswifi/arm9/source/sgIP.h,
+		dswifi/arm9/source/sgIP_ARP.h, dswifi/arm9/source/sgIP_Config.h,
+		dswifi/arm9/source/sgIP_DHCP.h, dswifi/arm9/source/sgIP_DNS.h,
+		dswifi/arm9/source/sgIP_Hub.h, dswifi/arm9/source/sgIP_ICMP.h,
+		dswifi/arm9/source/sgIP_IP.h, dswifi/arm9/source/sgIP_TCP.h,
+		dswifi/arm9/source/sgIP_UDP.h, dswifi/arm9/source/sgIP_memblock.h,
+		dswifi/arm9/source/wifi_arm9.c, dswifi/arm9/source/wifi_arm9.h,
+		dswifi/include/dswifi7.h, dswifi/include/dswifi9.h, fb/fb.c,
+		include/my_ipc.h, libfat/source/disc_io/disc_io.h,
+		libfat/source/disc_io/io_nmmc.c,
+		libnds/include/nds/arm9/exceptions.h,
+		libnds/include/nds/arm9/input.h, libnds/include/nds/arm9/ndsmotion.h,
+		libnds/include/nds/arm9/videoGL.h, libnds/source/arm9/console.c,
+		libnds/source/arm9/gurumeditation.c, libnds/source/arm9/ndsmotion.c,
+		libnds/source/common/card.c, libnds/source/common/interrupts.c,
+		sound/sound.c, startup/start.c, touchscreen/reco.h, wifi/compat.c,
+		wifi/compat.h: Fix most warnings.
+
 	Revision 1.1  2008/04/16 18:37:32  joel
 	2008-04-16	Matthieu Bucchianeri <mbucchia@gmail.com>
-	
+
 		* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
 		mk_libnds.sh, patch.libnds, preinstall.am, block/block.c,
 		clock/clock.c, console/console.c, coproc/coproc.S, coproc/coproc.c,
@@ -164,44 +185,44 @@
 		touchscreen/reco.h, touchscreen/touchscreen.c,
 		touchscreen/touchscreen.h, wifi/compat.c, wifi/compat.h, wifi/wifi.c:
 		New files.
-	
+
 	Revision 1.14  2006/02/25 02:18:53  wntrmute
 	doxygenation updates
-	
+
 	Revision 1.13  2006/01/12 09:10:47  wntrmute
 	Added key repeat as suggested by pepsiman
-	
+
 	Revision 1.12  2006/01/10 05:50:24  dovoto
 	uhmm...about that KEY_R vs KEY_L thing...lets pretend that never happened
-	
+
 	Revision 1.11  2006/01/10 05:45:24  dovoto
 	KEY_L and KEY_R were swapped
-	
+
 	Revision 1.10  2005/11/27 07:55:14  joatski
 	Fixed my mistake in the changelogs
-	
+
 	Revision 1.9  2005/11/27 07:48:45  joatski
 	Changed function returns to uint32
-	
+
 	Revision 1.8  2005/11/14 11:59:49  wntrmute
 	reformat for consistency
-	
+
 	Revision 1.7  2005/11/03 23:38:49  wntrmute
 	don't use enum for key function returns
-	
+
 	Revision 1.6  2005/10/18 04:17:04  wntrmute
 	doxygenation
-	
+
 	Revision 1.5  2005/10/13 16:30:11  dovoto
 	Changed KEYPAD_BITS to a typedef enum, this resolved some issues with multiple redefinition of KEYPAD_BITS (although this error did not allways occur).
-	
+
 	Revision 1.4  2005/10/03 21:21:21  wntrmute
 	doxygenation
-	
+
 	Revision 1.3  2005/09/07 18:03:36  wntrmute
 	renamed key input registers
 	moved key bit definitions to input.h
-	
+
 	Revision 1.2  2005/08/23 17:06:10  wntrmute
 	converted all endings to unix
 

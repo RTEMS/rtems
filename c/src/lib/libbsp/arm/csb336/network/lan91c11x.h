@@ -29,7 +29,7 @@ void lan91c11x_lock(void);
 #define LAN91C11X_BASE_ADDR 0x12000000
 
 #define LAN91C11X_REG(_b_, _r_) ((((_b_) & 0xf) << 4) | ((_r_) & 0xf))
-                                       
+
 
 #define LAN91C11X_TCR             (LAN91C11X_REG(0, 0x0))
 #define LAN91C11X_EPHSTAT         (LAN91C11X_REG(0, 0x2))

@@ -5,10 +5,10 @@
 	uniformed io-interface to work with Chishm's FAT library
 
 	Written by MightyMax
-  
+
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -49,26 +49,26 @@
 
 	2006-05-18 - Chishm
 		* Rewritten for FATlib disc.c
-		
+
 	2006-06-19 - Chishm
 		* Changed read and write interface to accept a u32 instead of a u8 for the number of sectors
-		
+
 	2006-07-11 - Chishm
 		* Removed disc_Cache* functions, since there is now a proper unified cache
 		* Removed SUPPORT_* defines
 		* Rewrote device detection functions
 		* First libfat release
-	
+
 	2006-07-25 - Chishm
 		* Changed IO_INTERFACEs to const
-		
+
 	2006-08-02 - Chishm
 		* Added NinjaDS
-		
+
 	2006-12-25 - Chishm
 		* Added DLDI
 		* Removed experimental interfaces
-		
+
 	2007-05-01 - Chishm
 		* Removed FCSR
 */
@@ -153,7 +153,7 @@ const IO_INTERFACE* _FAT_disc_dsSlotFindInterface (void)
 
 /*
  * When running on an NDS, check the either slot for a valid memory
- * card interface. 
+ * card interface.
  * When running on a GBA, call _FAT_disc_gbaSlotFindInterface
  * If an interface is found, it is set as the default interace
  * and it returns true. Otherwise the default interface is left

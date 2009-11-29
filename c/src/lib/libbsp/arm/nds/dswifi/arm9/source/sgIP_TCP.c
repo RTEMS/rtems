@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -32,7 +32,7 @@ sgIP_Record_TCP * tcprecords;
 int port_counter;
 unsigned long lasttime;
 extern unsigned long volatile sgIP_timems;
-sgIP_TCP_SYNCookie synlist[SGIP_TCP_MAXSYNS]; 
+sgIP_TCP_SYNCookie synlist[SGIP_TCP_MAXSYNS];
 
 int numsynlist; // number of active entries in synlist (earliest first)
 
@@ -54,7 +54,7 @@ void sgIP_TCP_Timer() { // scan through tcp records and resend anything necessar
 		   synlist[i].timebackoff*=2;
 		   if(synlist[i].timebackoff>SGIP_TCP_BACKOFFMAX) synlist[i].timebackoff=SGIP_TCP_BACKOFFMAX;
 		   if(j>synlist[i].timebackoff) synlist[i].timenext=0; else synlist[i].timenext=synlist[i].timebackoff-j;
-		   // resend SYN		
+		   // resend SYN
 		   sgIP_TCP_SendSynReply(SGIP_TCP_FLAG_SYN|SGIP_TCP_FLAG_ACK,synlist[i].localseq,synlist[i].remoteseq,synlist[i].localip,synlist[i].remoteip,synlist[i].localport,synlist[i].remoteport,-1);
 	   } else {
 		   synlist[i].timenext-=time;
@@ -82,7 +82,7 @@ void sgIP_TCP_Timer() { // scan through tcp records and resend anything necessar
 			j=rec->time_backoff;
 			j*=2;
 			if(j>SGIP_TCP_BACKOFFMAX) j=SGIP_TCP_BACKOFFMAX;
-            sgIP_TCP_SendPacket(rec,SGIP_TCP_FLAG_SYN,0);   
+            sgIP_TCP_SendPacket(rec,SGIP_TCP_FLAG_SYN,0);
 			rec->time_backoff=j; // preserve backoff
          }
          break;
@@ -100,7 +100,7 @@ void sgIP_TCP_Timer() { // scan through tcp records and resend anything necessar
 		 }
          j=rec->buf_tx_out-rec->buf_tx_in;
          if(j<0) j+=SGIP_TCP_TRANSMITBUFFERLENGTH;
-         j+=(int)(rec->sequence-rec->sequence_next); 
+         j+=(int)(rec->sequence-rec->sequence_next);
          if(j>0) {// never-sent bytes
             if(time>SGIP_TCP_TRANSMIT_DELAY) { // 1000 is an arbitrary constant.
                j=rec->buf_tx_out-rec->buf_tx_in;
@@ -182,7 +182,7 @@ void sgIP_TCP_Timer() { // scan through tcp records and resend anything necessar
             rec->tcpstate=SGIP_TCP_STATE_CLOSED;
          }
          break;
-      }      
+      }
 
 
       rec=rec->next;
@@ -266,17 +266,17 @@ int sgIP_TCP_ReceivePacket(sgIP_memblock * mb, unsigned long srcip, unsigned lon
       if(tcp->tcpflags&SGIP_TCP_FLAG_ACK) {
          int i,j;
          for(i=0;i<numsynlist;i++) {
-            if(synlist[i].localseq+1==tcpack) { // oki! this is probably legit ;) 
+            if(synlist[i].localseq+1==tcpack) { // oki! this is probably legit ;)
                rec=synlist[i].linked; // we have the data we need.
                // remove entry from synlist
                numsynlist--;
                i*=3;
                for(;i<numsynlist;i++) {
                   synlist[i]=synlist[i+1]; // assume struct copy
-               }              
+               }
                for(j=0;j<rec->maxlisten;j++) if(!rec->listendata[j]) break; // find last entry in listen queue
                if(j==rec->maxlisten) { rec=0; break; } // discard this connection! we have no space in the listen queue.
-               
+
                rec->listendata[j]=sgIP_TCP_AllocRecord();
                j++;
                if(j!=rec->maxlisten) rec->listendata[j]=0;
@@ -298,7 +298,7 @@ int sgIP_TCP_ReceivePacket(sgIP_memblock * mb, unsigned long srcip, unsigned lon
                rec->txwindow=rec->sequence+htons(tcp->window);
 
                sgIP_memblock_free(mb);
-               return 0;               
+               return 0;
             }
          }
       }
@@ -382,7 +382,7 @@ int sgIP_TCP_ReceivePacket(sgIP_memblock * mb, unsigned long srcip, unsigned lon
 				delta1=(int)(tcpseq-rec->ack);
 				if(delta1<0) { // data is partly ack'd...just copy what we need.
 					datastart-=delta1;
-					datalen+=delta1; 
+					datalen+=delta1;
 				}
 				// copy data into the fifo
 				rec->ack+=datalen;
@@ -424,7 +424,7 @@ int sgIP_TCP_ReceivePacket(sgIP_memblock * mb, unsigned long srcip, unsigned lon
             numsynlist--;
             for(delta1=0;delta1<numsynlist;delta1++) {
                synlist[delta1]=synlist[delta1+1]; // assume struct copy
-            } 
+            }
          }
          {
             unsigned long myseq,myport;
@@ -453,7 +453,7 @@ int sgIP_TCP_ReceivePacket(sgIP_memblock * mb, unsigned long srcip, unsigned lon
          sgIP_TCP_SendPacket(rec,SGIP_TCP_FLAG_ACK,0);
          rec->tcpstate=SGIP_TCP_STATE_ESTABLISHED;
          rec->retrycount=0;
-         break;         
+         break;
       case SGIP_TCP_FLAG_SYN: // just got a syn...
          rec->ack=tcpseq+1;
          rec->sequence=tcpack;
@@ -479,7 +479,7 @@ int sgIP_TCP_ReceivePacket(sgIP_memblock * mb, unsigned long srcip, unsigned lon
          rec->tcpstate=SGIP_TCP_STATE_CLOSE_WAIT;
          rec->ack=tcpseq+datalen+1;
          sgIP_TCP_SendPacket(rec,SGIP_TCP_FLAG_ACK,0);
-         
+
       }
 		break;
 	case SGIP_TCP_STATE_FIN_WAIT_1: // sent a FIN, haven't got FIN or ACK yet.
@@ -819,7 +819,7 @@ int sgIP_TCP_Connect(sgIP_Record_TCP * rec, unsigned long destip, int destport) 
 		rec->srcip=sgIP_IP_GetLocalBindAddr(0,destip);
 		rec->srcport=htons(sgIP_TCP_GetUnusedOutgoingPort());
 		rec->destip=destip;
-		rec->destport=destport;		
+		rec->destport=destport;
 	} else if(rec->tcpstate==SGIP_TCP_STATE_UNUSED) { // already bound to a local address.
       rec->srcip=sgIP_IP_GetLocalBindAddr(rec->srcip,destip);
 		rec->destip=destip;
@@ -874,14 +874,14 @@ int sgIP_TCP_Send(sgIP_Record_TCP * rec, const char * datatosend, int datalength
    }
 	SGIP_INTR_UNPROTECT();
    if(datalength==0) return SGIP_ERROR(EWOULDBLOCK);
-	return datalength;	
+	return datalength;
 }
 int sgIP_TCP_Recv(sgIP_Record_TCP * rec, char * databuf, int buflength, int flags) {
 	if(!rec || !databuf) return SGIP_ERROR(EINVAL); //error
    if(rec->buf_rx_in==rec->buf_rx_out) {
       if(rec->tcpstate==SGIP_TCP_STATE_CLOSED || rec->tcpstate==SGIP_TCP_STATE_CLOSE_WAIT) {
          if(rec->errorcode) return SGIP_ERROR(rec->errorcode);
-         return SGIP_ERROR0(ESHUTDOWN); 
+         return SGIP_ERROR0(ESHUTDOWN);
       }
       return SGIP_ERROR(EWOULDBLOCK); //error no data
    }

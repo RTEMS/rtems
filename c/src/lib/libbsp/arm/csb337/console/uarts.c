@@ -1,11 +1,11 @@
 /*
  *  Console driver for for KIT637_V6 (CSB637)
  *
- *  This driver uses the shared console driver in 
+ *  This driver uses the shared console driver in
  *  ...../libbsp/shared/console.c
  *
  *  Copyright (c) 2003 by Cogent Computer Systems
- *  Written by Jay Monkman <jtm@lopingdog.com> 
+ *  Written by Jay Monkman <jtm@lopingdog.com>
  *
  * Modified by Fernando Nicodemos <fgnicodemos@terra.com.br>
  * from NCB - Sistemas Embarcados Ltda. (Brazil)
@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  Modified and FrameBuffer Console Device Support added by 
+ *  Modified and FrameBuffer Console Device Support added by
  *  Joel Sherrill, 2009.
  *
  *  $Id$
@@ -46,35 +46,35 @@ extern console_fns dbgu_fns;
   extern console_fns umoncons_fns;
   #define UMON_CONS_DEV 1
 #else
-  #define UMON_CONS_DEV 0 
+  #define UMON_CONS_DEV 0
 #endif
 
 #if ENABLE_USART0 || ENABLE_USART1 || ENABLE_USART2 || ENABLE_USART3
   extern console_fns usart_polling_fns;
 #endif
 
-#if ENABLE_USART0 
+#if ENABLE_USART0
   #define USART0_DEV 1
 #else
-  #define USART0_DEV 0 
+  #define USART0_DEV 0
 #endif
 
-#if ENABLE_USART1 
+#if ENABLE_USART1
   #define USART1_DEV 1
 #else
-  #define USART1_DEV 0 
+  #define USART1_DEV 0
 #endif
 
 #if ENABLE_USART2
   #define USART2_DEV 1
 #else
-  #define USART2_DEV 0 
+  #define USART2_DEV 0
 #endif
 
 #if ENABLE_USART3
   #define USART3_DEV 1
 #else
-  #define USART3_DEV 0 
+  #define USART3_DEV 0
 #endif
 
 #define NUM_DEVS \
@@ -85,7 +85,7 @@ extern console_fns dbgu_fns;
 unsigned long Console_Port_Count = NUM_DEVS;
 console_data  Console_Port_Data[NUM_DEVS];
 
-/* 
+/*
  * There's one item in array for each UART.
  *
  * Some of these fields are marked "NOT USED". They are not used

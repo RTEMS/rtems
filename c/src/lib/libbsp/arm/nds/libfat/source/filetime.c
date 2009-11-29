@@ -3,7 +3,7 @@
  Conversion of file time and date values to various other types
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -27,11 +27,11 @@
 
 	2006-07-11 - Chishm
 		* Original release
-		
+
 	2006-09-30 - Chishm
 		* Validity checks performed on the time supplied by the IPC
 		* Cleaned up magic numbers
-		
+
 	2006-10-01 - Chishm
 		* Fixed incorrect use of bitwise-or instead of logical-or
 */
@@ -70,17 +70,17 @@ u16 _FAT_filetime_getTimeFromRTC (void) {
 	hour = (IPC->time.rtc.hours >= HOUR_PM_INDICATOR ? IPC->time.rtc.hours - HOUR_PM_INDICATOR : IPC->time.rtc.hours);
 	minute = IPC->time.rtc.minutes;
 	second = IPC->time.rtc.seconds;
-	
+
 	// Check that the values are all in range.
 	// If they are not, return 0 (no timestamp)
 	if ((hour < 0) || (hour > MAX_HOUR))	return 0;
 	if ((minute < 0) || (minute > MAX_MINUTE)) return 0;
 	if ((second < 0) || (second > MAX_SECOND)) return 0;
-	
+
 	return (
 		((hour & 0x1F) << 11) |
 		((minute & 0x3F) << 5) |
-		((second >> 1) & 0x1F) 
+		((second >> 1) & 0x1F)
 	);
 #else
 	return 0;
@@ -91,16 +91,16 @@ u16 _FAT_filetime_getTimeFromRTC (void) {
 u16 _FAT_filetime_getDateFromRTC (void) {
 #ifdef NDS
 	int year, month, day;
-	
+
 	year = IPC->time.rtc.year;
 	month = IPC->time.rtc.month;
 	day = IPC->time.rtc.day;
-	
+
 	if ((year < MIN_YEAR) || (year > MAX_YEAR)) return 0;
 	if ((month < MIN_MONTH) || (month > MAX_MONTH)) return 0;
 	if ((day < MIN_DAY) || (day > MAX_DAY)) return 0;
-	
-	return ( 
+
+	return (
 		(((year + 20) & 0x7F) <<9) |	// Adjust for MS-FAT base year (1980 vs 2000 for DS clock)
 		((month & 0xF) << 5) |
 		(day & 0x1F)
@@ -113,17 +113,17 @@ u16 _FAT_filetime_getDateFromRTC (void) {
 time_t _FAT_filetime_to_time_t (u16 time, u16 date) {
 	int hour, minute, second;
 	int day, month, year;
-	
+
 	time_t result;
-	
+
 	hour = time >> 11;
 	minute = (time >> 5) & 0x3F;
 	second = (time & 0x1F) << 1;
-	
+
 	day = date & 0x1F;
 	month = (date >> 5) & 0x0F;
 	year = date >> 9;
-	
+
 	// Second values are averages, so time value won't be 100% accurate,
 	// but should be within the correct month.
 	result 	= second

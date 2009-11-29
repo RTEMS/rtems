@@ -82,17 +82,17 @@ void lpc24xx_dma_channel_disable(unsigned channel, bool force)
   if (channel < GPDMA_CH_NUMBER) {
     volatile lpc24xx_dma_channel *ch = GPDMA_CH_BASE_ADDR(channel);
     uint32_t cfg = ch->cfg;
- 
+
     if (!force) {
       /* Halt */
       ch->cfg = SET_FLAG(cfg, GPDMA_CH_CFG_HALT);
- 
+
       /* Wait for inactive */
       do {
         cfg = ch->cfg;
       } while (IS_FLAG_SET(cfg, GPDMA_CH_CFG_ACTIVE));
     }
- 
+
     /* Disable */
     ch->cfg = CLEAR_FLAG(cfg, GPDMA_CH_CFG_EN);
   }

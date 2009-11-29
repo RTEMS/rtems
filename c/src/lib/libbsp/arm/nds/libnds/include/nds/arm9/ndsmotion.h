@@ -2,7 +2,7 @@
 	$Id$
 
 	DS Motion Card/DS Motion Pak functionality
-	
+
 	Copyright (C) 2007
 		Michael Noland (joat)
 		Jason Rogers (dovoto)
@@ -28,8 +28,8 @@
 
 ---------------------------------------------------------------------------------*/
 
-/*! \file ndsmotion.h 
-\brief interface code for the ds motion card, ds motion pak, MK6 
+/*! \file ndsmotion.h
+\brief interface code for the ds motion card, ds motion pak, MK6
 
 */
 #ifndef NDS_MOTION_INCLUDE
@@ -37,7 +37,7 @@
 //---------------------------------------------------------------------------------
 
 
-typedef struct 
+typedef struct
 {
 	short xoff, yoff, zoff, goff;
 	short xsens, ysens, zsens, gsens;

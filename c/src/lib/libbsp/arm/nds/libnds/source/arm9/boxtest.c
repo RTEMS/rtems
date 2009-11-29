@@ -83,6 +83,6 @@ int BoxTest(v16 x, v16 y, v16 z, v16 width, v16 height, v16 depth)
 int BoxTestf(float x, float y, float z, float width, float height, float depth)
 //---------------------------------------------------------------------------------
 {
-  return BoxTest(floattov16(x), floattov16(y), floattov16(z), 
+  return BoxTest(floattov16(x), floattov16(y), floattov16(z),
                  floattov16(width), floattov16(height), floattov16(depth));
 }

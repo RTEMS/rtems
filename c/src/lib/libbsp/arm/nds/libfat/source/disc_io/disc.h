@@ -2,9 +2,9 @@
  disc.h
  Interface to the low level disc functions. Used by the higher level
  file system code.
- 
+
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -68,7 +68,7 @@ static inline bool _FAT_disc_isInserted (const IO_INTERFACE* disc) {
 }
 
 /*
-Read numSectors sectors from a disc, starting at sector. 
+Read numSectors sectors from a disc, starting at sector.
 numSectors is between 1 and 256
 sector is from 0 to 2^28
 buffer is a pointer to the memory to fill
@@ -78,7 +78,7 @@ static inline bool _FAT_disc_readSectors (const IO_INTERFACE* disc, u32 sector, 
 }
 
 /*
-Write numSectors sectors to a disc, starting at sector. 
+Write numSectors sectors to a disc, starting at sector.
 numSectors is between 1 and 256
 sector is from 0 to 2^28
 buffer is a pointer to the memory to read from

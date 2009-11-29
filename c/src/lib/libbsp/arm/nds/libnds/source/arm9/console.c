@@ -83,7 +83,7 @@ static void consoleCls(char mode) {
 			col = colTemp;
 			row = rowTemp;
 			break;
-		}	
+		}
 		case '1':
 		{
 			colTemp = col;
@@ -97,7 +97,7 @@ static void consoleCls(char mode) {
 			col = colTemp;
 			row = rowTemp;
 			break;
-		}	
+		}
 		case '2':
 		{
 			row = 0;
@@ -108,7 +108,7 @@ static void consoleCls(char mode) {
 			row = 0;
 			col = 0;
 			break;
-		}	
+		}
 	}
 }
 //---------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ static void consoleClearLine(char mode) {
 			col = colTemp;
 
 			break;
-		}	
+		}
 		case '1':
 		{
 			colTemp = col;
@@ -145,7 +145,7 @@ static void consoleClearLine(char mode) {
 			col = colTemp;
 
 			break;
-		}	
+		}
 		case '2':
 		{
 			colTemp = col;
@@ -202,7 +202,7 @@ int con_write(struct _reent *r,int fd,const char *ptr,int len) {
 				chr = *(tmp++);
 				i++; count++; escapelen++;
 				int parameter;
-				
+
 				switch (chr) {
 					/////////////////////////////////////////
 					// Cursor directional movement
@@ -374,12 +374,12 @@ void consoleInit(	u16* font, u16* charBase,
 }
 
 //---------------------------------------------------------------------------------
-// Places the console in a default mode using bg0 of the sub display, and vram c for 
+// Places the console in a default mode using bg0 of the sub display, and vram c for
 // font and map..this is provided for rapid prototyping and nothing more
 void consoleDemoInit(void) {
 //---------------------------------------------------------------------------------
 	videoSetModeSub(MODE_0_2D | DISPLAY_BG0_ACTIVE);	//sub bg 0 will be used to print text
-	vramSetBankC(VRAM_C_SUB_BG); 
+	vramSetBankC(VRAM_C_SUB_BG);
 
 	SUB_BG0_CR = BG_MAP_BASE(31);
 
@@ -430,7 +430,7 @@ void consolePrintChar(char c) {
 			The only special characters we will handle are tab (\t), carriage return (\r) & line feed (\n).
 			Carriage return & line feed will function the same: go to next line and put cursor at the beginning.
 			For everything else, use VT sequences.
-			
+
 			Reason: VT sequences are more specific to the task of cursor placement.
 			The special escape sequences \b \f & \v are archaic and non-portable.
 		*/

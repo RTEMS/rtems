@@ -1,7 +1,7 @@
 /*
  * GP32 startup code
  *
- *      
+ *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  *
@@ -15,7 +15,7 @@
 #warning The call is "void boot_card(const char* cmdline);"
 #warning You need to pass a NULL.
 #warning Please check and remove these warnings.
-        
+
 /* Some standard definitions...*/
 .equ PSR_MODE_USR,       0x10
 .equ PSR_MODE_FIQ,       0x11
@@ -68,16 +68,16 @@ _start:
 _start2:
 @---------------------------------------------------------------------------------
 
-        /* 
+        /*
          * Since I don't plan to return to the bootloader,
          * I don't have to save the registers.
          *
-         * I'll just set the CPSR for SVC mode, interrupts 
+         * I'll just set the CPSR for SVC mode, interrupts
          * off, and ARM instructions.
          */
         mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)
         msr     cpsr, r0
- 
+
         /* --- Initialize stack pointer registers */
         /* Enter IRQ mode and set up the IRQ stack pointer */
         mov     r0, #(PSR_MODE_IRQ | PSR_I | PSR_F)     /* No interrupts */
@@ -99,7 +99,7 @@ _start2:
         ldr     r1, =_abt_stack_size
         ldr     sp, =_abt_stack
         add     sp, sp, r1
-        
+
         /* Set up the SVC stack pointer last and stay in SVC mode */
         mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)     /* No interrupts */
         msr     cpsr, r0
@@ -107,7 +107,7 @@ _start2:
         ldr     sp, =_svc_stack
         add     sp, sp, r1
         sub     sp, sp, #0x64
-	
+
 
 	/* disable mmu, I and D caches*/
 	nop
@@ -124,7 +124,7 @@ _start2:
 	mov   r1,#0x00
 Loop1:
 	mov   r2,#0x00
-Loop2: 
+Loop2:
 	mov r3, r2, lsl#26
 	orr r3, r3, r1, lsl#5
 	mcr p15, 0, r3, c7, c14, 2
@@ -134,19 +134,19 @@ Loop2:
 	add r1, r1, #0x01
 	cmp r1, #8
 	bne Loop1
-	
 
-        /* 
+
+        /*
          * Initialize the MMU. After we return, the MMU is enabled,
          * and memory may be remapped. I hope we don't remap this
          * memory away.
          */
         ldr     r0, =mem_map
-        bl      mmu_init               
+        bl      mmu_init
 
-        /* 
+        /*
          * Initialize the exception vectors. This includes the
-         * exceptions vectors (0x00000000-0x0000001c), and the 
+         * exceptions vectors (0x00000000-0x0000001c), and the
          * pointers to the exception handlers (0x00000020-0x0000003c).
          */
         mov     r0, #0
@@ -155,11 +155,11 @@ Loop2:
         stmia   r0!, {r2-r9}
         ldmia   r1!, {r2-r9}
         stmia   r0!, {r2-r9}
-	
+
         /* Now we are prepared to start the BSP's C code */
         bl      boot_card
 
-        /* 
+        /*
          * Theoretically, we could return to what started us up,
          * but we'd have to have saved the registers and stacks.
          * Instead, we'll just reset.
@@ -169,13 +169,13 @@ Loop2:
         /* We shouldn't get here. If we do, hang */
 _hang:  b       _hang
 
-        
-/* 
+
+/*
  * This is the exception vector table and the pointers to
  * the functions that handle the exceptions. It's a total
  * of 16 words (64 bytes)
  */
-vector_block:   
+vector_block:
         ldr     pc, Reset_Handler
         ldr     pc, Undefined_Handler
         ldr     pc, SWI_Handler
@@ -187,7 +187,7 @@ vector_block:
 
 Reset_Handler:          b       bsp_reset
 Undefined_Handler:      b       Undefined_Handler
-SWI_Handler:            b       SWI_Handler 
+SWI_Handler:            b       SWI_Handler
 Prefetch_Handler:       b       Prefetch_Handler
 Abort_Handler:          b       Abort_Handler
                         nop

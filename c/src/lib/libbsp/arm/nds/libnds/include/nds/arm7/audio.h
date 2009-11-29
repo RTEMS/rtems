@@ -87,7 +87,7 @@ extern "C" {
 
 /*---------------------------------------------------------------------------------
 	microphone code based on neimod's microphone example.
-	See: http://neimod.com/dstek/ 
+	See: http://neimod.com/dstek/
 	Chris Double (chris.double@double.co.nz)
 	http://www.double.co.nz/nintendo_ds
 ---------------------------------------------------------------------------------*/
@@ -101,7 +101,7 @@ u8 MIC_ReadData();
 /*---------------------------------------------------------------------------------
 	Fill the buffer with data from the microphone. The buffer will be
 	signed sound data at 16kHz. Once the length of the buffer is
-	reached, no more data will be stored. Uses ARM7 timer 0.  
+	reached, no more data will be stored. Uses ARM7 timer 0.
 ---------------------------------------------------------------------------------*/
 void StartRecording(u8* buffer, int length);
 
@@ -116,7 +116,7 @@ void ProcessMicrophoneTimerIRQ();
 void PM_SetAmp(u8 control);
 
 //---------------------------------------------------------------------------------
-// Turn the microphone on 
+// Turn the microphone on
 //---------------------------------------------------------------------------------
 static inline void MIC_On() {
 //---------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ static inline void MIC_On() {
 
 
 //---------------------------------------------------------------------------------
-// Turn the microphone off 
+// Turn the microphone off
 //---------------------------------------------------------------------------------
 static inline void MIC_Off() {
 //---------------------------------------------------------------------------------

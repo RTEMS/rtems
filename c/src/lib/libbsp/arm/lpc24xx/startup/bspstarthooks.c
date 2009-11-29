@@ -145,89 +145,89 @@ static void __attribute__((section(".bsp_start"))) lpc24xx_init_emc_1(void)
        */
 
       /* Global dynamic settings */
- 
+
       /* FIXME */
       EMC_DYN_APR = 2;
- 
+
       /* Data-in to active command period tWR + tRP */
       EMC_DYN_DAL = 4;
- 
+
       /* Load mode register to active or refresh command period 2 tCK */
       EMC_DYN_MRD = 1;
- 
+
       /* Active to precharge command period 44 ns */
       EMC_DYN_RAS = 3;
- 
+
       /* Active to active command period 66 ns */
       EMC_DYN_RC = 4;
- 
+
       /* Use command delayed strategy */
       EMC_DYN_RD_CFG = 1;
- 
+
       /* Auto refresh period 66 ns */
       EMC_DYN_RFC = 4;
- 
+
       /* Precharge command period 20 ns */
       EMC_DYN_RP = 1;
- 
+
       /* Active bank a to active bank b command period 15 ns */
       EMC_DYN_RRD = 1;
- 
+
       /* FIXME */
       EMC_DYN_SREX = 5;
- 
+
       /* Write recovery time 15 ns */
       EMC_DYN_WR = 1;
- 
+
       /* Exit self refresh to active command period 75 ns */
       EMC_DYN_XSR = 5;
- 
+
       /* Dynamic Memory 0: Micron M T48LC 4M16 A2 P 75 IT */
- 
+
       /*
        * Use SDRAM, 0 0 001 01 address mapping, disabled buffer, unprotected writes
        */
       EMC_DYN_CFG0 = 0x0280;
- 
+
       /* CAS and RAS latency */
       EMC_DYN_RASCAS0 = 0x0202;
- 
+
       /* Wait 50 micro seconds */
       lpc24xx_cpu_delay(3600);
- 
+
       /* Send command: NOP */
       EMC_DYN_CTRL = EMC_DYN_CTRL_CE | EMC_DYN_CTRL_CS | EMC_DYN_CTRL_CMD_NOP;
- 
+
       /* Wait 50 micro seconds */
       lpc24xx_cpu_delay(3600);
- 
+
       /* Send command: PRECHARGE ALL */
       EMC_DYN_CTRL = EMC_DYN_CTRL_CE | EMC_DYN_CTRL_CS | EMC_DYN_CTRL_CMD_PALL;
- 
+
       /* Shortest possible refresh period */
       EMC_DYN_RFSH = 0x01;
- 
+
       /* Wait at least 128 AHB clock cycles */
       lpc24xx_cpu_delay(128);
- 
+
       /* Wait 1 micro second */
       lpc24xx_cpu_delay(72);
- 
+
       /* Set refresh period */
       EMC_DYN_RFSH = 0x46;
- 
+
       /* Send command: MODE */
       EMC_DYN_CTRL = EMC_DYN_CTRL_CE | EMC_DYN_CTRL_CS | EMC_DYN_CTRL_CMD_MODE;
- 
+
       /* Set mode register in SDRAM */
       *((volatile uint32_t *) (0xa0000000 | (0x23 << (1 + 2 + 8))));
- 
+
       /* Send command: NORMAL */
       EMC_DYN_CTRL = 0;
- 
+
       /* Enable buffer */
       EMC_DYN_CFG0 |= 0x00080000;
- 
+
       /* Test RAM */
       lpc24xx_ram_test_32();
     }

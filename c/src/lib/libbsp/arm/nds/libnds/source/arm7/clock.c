@@ -171,7 +171,7 @@ void rtcGetTimeAndDate(uint8 * time) {
 void rtcSetTimeAndDate(uint8 * time) {
 //---------------------------------------------------------------------------------
 	uint8 command[8];
-	
+
 	int i;
 	for ( i=0; i< 8; i++ ) {
 		command[i+1] = time[i];
@@ -204,7 +204,7 @@ void rtcGetTime(uint8 * time) {
 void rtcSetTime(uint8 * time) {
 //---------------------------------------------------------------------------------
 	uint8 command[4];
-	
+
 	int i;
 	for ( i=0; i< 3; i++ ) {
 		command[i+1] = time[i];
@@ -226,7 +226,7 @@ void syncRTC() {
 			}
 		}
 	}
-	
+
 	IPC->unixTime++;
 }
 
@@ -246,11 +246,11 @@ void initClockIRQ() {
 	command[0] = WRITE_STATUS_REG2;
 	command[1] = 0x41;
 	rtcTransaction(command, 2, 0, 0);
-	
+
 	command[0] = WRITE_INT_REG1;
 	command[1] = 0x01;
 	rtcTransaction(command, 2, 0, 0);
-	
+
 	command[0] = WRITE_INT_REG2;
 	command[1] = 0x00;
 	command[2] = 0x21;
@@ -270,9 +270,9 @@ void initClockIRQ() {
 	currentTime.tm_mday = IPC->time.rtc.day;
 	currentTime.tm_mon  = IPC->time.rtc.month - 1;
 	currentTime.tm_year = IPC->time.rtc.year + 100;
-	
+
 	currentTime.tm_isdst = -1;
-	
+
 	IPC->unixTime = mktime(&currentTime);
 }
 

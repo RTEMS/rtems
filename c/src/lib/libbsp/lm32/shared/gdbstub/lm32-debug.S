@@ -2,7 +2,7 @@
  *  lm32 debug exception vectors
  *
  *  Michael Walle <michael@walle.cc>, 2009
- * 
+ *
  *  If debugging is enabled the debug exception base address (deba) gets
  *  remapped to this file.
  *
@@ -175,14 +175,14 @@ debug_isr_handler:
 	call	r3
 3:
 	lw	r1, (sp+4)
-	lw	r2, (sp+8) 
-	lw	r3, (sp+12) 
-	lw	r4, (sp+16) 
-	lw	r5, (sp+20) 
-	lw	r6, (sp+24) 
-	lw	r7, (sp+28) 
-	lw	r8, (sp+32) 
-	lw	r9, (sp+36) 
+	lw	r2, (sp+8)
+	lw	r3, (sp+12)
+	lw	r4, (sp+16)
+	lw	r5, (sp+20)
+	lw	r6, (sp+24)
+	lw	r7, (sp+28)
+	lw	r8, (sp+32)
+	lw	r9, (sp+36)
 	lw	r10, (sp+40)
 	lw	ra, (sp+44)
 	lw	ea, (sp+48)
@@ -208,7 +208,7 @@ debug_isr_handler:
 	wcsr	EBA, ea
 	lw	ea, (sp+140)
 	wcsr	DEBA, ea
-	/* Restore EA from PC */        
+	/* Restore EA from PC */
 	lw	ea, (sp+128)
 	/* Stack pointer must be restored last, in case it has been updated */
 	lw	sp, (sp+124)
@@ -254,7 +254,7 @@ save_all:
 	sw	(r0+140), r1
 	rcsr	r1, IE
 	sw	(r0+144), r1
-	               
+
 	/* Work out EID from exception entry point address */
 	andi    r1, ra, 0xff
 	srui    r1, r1, 5
@@ -274,14 +274,14 @@ save_all:
 /* Restore gp registers */
 restore_gp:
 	lw	r1, (r0+4)
-	lw	r2, (r0+8) 
-	lw	r3, (r0+12) 
-	lw	r4, (r0+16) 
-	lw	r5, (r0+20) 
-	lw	r6, (r0+24) 
-	lw	r7, (r0+28) 
-	lw	r8, (r0+32) 
-	lw	r9, (r0+36) 
+	lw	r2, (r0+8)
+	lw	r3, (r0+12)
+	lw	r4, (r0+16)
+	lw	r5, (r0+20)
+	lw	r6, (r0+24)
+	lw	r7, (r0+28)
+	lw	r8, (r0+32)
+	lw	r9, (r0+36)
 	lw	r10, (r0+40)
 	lw	r11, (r0+44)
 	lw	r12, (r0+48)
@@ -315,7 +315,7 @@ e_restore_and_return:
 	wcsr	EBA, ea
 	lw	ea, (r0+140)
 	wcsr	DEBA, ea
-	/* Restore EA from PC */        
+	/* Restore EA from PC */
 	lw	ea, (r0+128)
 	xor	r0, r0, r0
 	eret
@@ -333,7 +333,7 @@ b_restore_and_return:
 	wcsr	EBA, ba
 	lw	ba, (r0+140)
 	wcsr	DEBA, ba
-	/* Restore BA from PC */        
+	/* Restore BA from PC */
 	lw	ba, (r0+128)
 	xor	r0, r0, r0
 	bret

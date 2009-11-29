@@ -1,10 +1,10 @@
 /*
- io_sc_common.h 
+ io_sc_common.h
 
  Routines common to all version of the Super Card
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -37,7 +37,7 @@
 
 // Values for changing mode
 #define SC_MODE_RAM 0x5
-#define SC_MODE_MEDIA 0x3 
+#define SC_MODE_MEDIA 0x3
 #define SC_MODE_RAM_RO 0x1
 
 extern void _SC_changeMode (u8 mode);

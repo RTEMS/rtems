@@ -40,7 +40,7 @@ void BSP_uart_init(int baud)
   uartwrite(LM32_UART_MCR, LM32_UART_MCR_DTR | LM32_UART_MCR_RTS);
 
   /* Set baud rate */
-  uartwrite(LM32_UART_DIV, CPU_FREQUENCY/baud);   
+  uartwrite(LM32_UART_DIV, CPU_FREQUENCY/baud);
 }
 
 void BSP_uart_polled_write(char ch)

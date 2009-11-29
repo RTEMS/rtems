@@ -1,9 +1,9 @@
 /*
 	libfat.c
 	Simple functionality for startup, mounting and unmounting of FAT-based devices.
-	
+
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -30,13 +30,13 @@
 
 	2006-08-13 - Chishm
 		* Moved all externally visible directory related functions to fatdir
-		
+
 	2006-08-14 - Chishm
 		* Added extended devoptab_t functions
-		
+
 	2007-01-10 - Chishm
 		* fatInit now sets the correct path when setAsDefaultDevice
-		
+
 	2007-01-11 - Chishm
 		* Added missing #include <unistd.h>
 */
@@ -78,11 +78,11 @@ const devoptab_t dotab_fat = {
 bool fatInit (u32 cacheSize, bool setAsDefaultDevice) {
 #ifdef NDS
 	bool slot1Device, slot2Device;
-	
+
 	// Try mounting both slots
 	slot1Device = _FAT_partition_mount (PI_SLOT_1, cacheSize);
 	slot2Device = _FAT_partition_mount (PI_SLOT_2, cacheSize);
-	
+
 	// Choose the default device
 	if (slot1Device) {
 		_FAT_partition_setDefaultInterface (PI_SLOT_1);
@@ -96,21 +96,21 @@ bool fatInit (u32 cacheSize, bool setAsDefaultDevice) {
 	bool cartSlotDevice;
 
 	cartSlotDevice = _FAT_partition_mount (PI_CART_SLOT, cacheSize);
-	
+
 	if (cartSlotDevice) {
 		_FAT_partition_setDefaultInterface (PI_CART_SLOT);
 	} else {
 		return false;
-	}	
-	
+	}
+
 #endif	// defined NDS
 
 	AddDevice (&dotab_fat);
-	
+
 	if (setAsDefaultDevice) {
 		chdir ("fat:/");
 	}
-	
+
 	return true;
 }
 

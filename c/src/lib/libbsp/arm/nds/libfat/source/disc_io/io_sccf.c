@@ -10,7 +10,7 @@
 	CF routines modified with help from Darkfader
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -66,7 +66,7 @@ static const CF_REGISTERS _SCCF_Registers = {
 
 
 bool _SCCF_startup(void) {
-	_SC_changeMode (SC_MODE_MEDIA);	
+	_SC_changeMode (SC_MODE_MEDIA);
 	return _CF_startup(&_SCCF_Registers);
 }
 

@@ -180,7 +180,7 @@ int cardEepromGetType(void)
         c9f=cardEepromCommand(0x9f,0);
         c00=cardEepromCommand(0x00,0);
 
-        if((c00==0x00) && (c9f==0x00)) return 0; // PassMe? 
+        if((c00==0x00) && (c9f==0x00)) return 0; // PassMe?
         if((c00==0xff) && (c05==0xff) && (c9f==0xff))return -1;
 
         if((c00==0xff) &&  (c05 & 0xFD) == 0xF0 && (c9f==0xff))return 1;
@@ -227,10 +227,10 @@ uint32 cardEepromGetSize() {
         uint8 c9f;
         c9f=cardEepromCommand(0x9f,0);
 
-        if(c9f==0x14)         
+        if(c9f==0x14)
             return 1024*1024; //   NEW TYPE 3++ 8Mbit(1024KByte)
 
-        if(c9f==0x13)         
+        if(c9f==0x13)
             return 512*1024;  //   NEW TYPE 3+ 4Mbit(512KByte)
 
         return 256*1024;      //   TYPE 3  2Mbit(256KByte)
@@ -251,8 +251,8 @@ void cardReadEeprom(uint32 address, uint8 *data, uint32 length, uint32 addrtype)
     if (addrtype == 3) {
         CARD_EEPDATA = (address >> 16) & 0xFF;
 	    EepromWaitBusy();
-    } 
-    
+    }
+
     if (addrtype >= 2) {
         CARD_EEPDATA = (address >> 8) & 0xFF;
 	    EepromWaitBusy();
@@ -320,9 +320,9 @@ void cardWriteEeprom(uint32 address, uint8 *data, uint32 length, uint32 addrtype
             EepromWaitBusy();
         }
 
-		for (i=0; address<address_end && i<maxblocks; i++, address++) { 
-            CARD_EEPDATA = *data++; 
-            EepromWaitBusy(); 
+		for (i=0; address<address_end && i<maxblocks; i++, address++) {
+            CARD_EEPDATA = *data++;
+            EepromWaitBusy();
         }
 		CARD_CR1 = /*MODE*/0x40;
 

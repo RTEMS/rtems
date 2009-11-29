@@ -22,9 +22,30 @@
 		distribution.
 
 	$Log$
+	Revision 1.2  2008/08/20 16:31:41  joel
+	2008-08-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+		* block/block.c, console/console.c, dswifi/arm9/source/sgIP.h,
+		dswifi/arm9/source/sgIP_ARP.h, dswifi/arm9/source/sgIP_Config.h,
+		dswifi/arm9/source/sgIP_DHCP.h, dswifi/arm9/source/sgIP_DNS.h,
+		dswifi/arm9/source/sgIP_Hub.h, dswifi/arm9/source/sgIP_ICMP.h,
+		dswifi/arm9/source/sgIP_IP.h, dswifi/arm9/source/sgIP_TCP.h,
+		dswifi/arm9/source/sgIP_UDP.h, dswifi/arm9/source/sgIP_memblock.h,
+		dswifi/arm9/source/wifi_arm9.c, dswifi/arm9/source/wifi_arm9.h,
+		dswifi/include/dswifi7.h, dswifi/include/dswifi9.h, fb/fb.c,
+		include/my_ipc.h, libfat/source/disc_io/disc_io.h,
+		libfat/source/disc_io/io_nmmc.c,
+		libnds/include/nds/arm9/exceptions.h,
+		libnds/include/nds/arm9/input.h, libnds/include/nds/arm9/ndsmotion.h,
+		libnds/include/nds/arm9/videoGL.h, libnds/source/arm9/console.c,
+		libnds/source/arm9/gurumeditation.c, libnds/source/arm9/ndsmotion.c,
+		libnds/source/common/card.c, libnds/source/common/interrupts.c,
+		sound/sound.c, startup/start.c, touchscreen/reco.h, wifi/compat.c,
+		wifi/compat.h: Fix most warnings.
+
 	Revision 1.1  2008/04/16 18:37:33  joel
 	2008-04-16	Matthieu Bucchianeri <mbucchia@gmail.com>
-	
+
 		* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
 		mk_libnds.sh, patch.libnds, preinstall.am, block/block.c,
 		clock/clock.c, console/console.c, coproc/coproc.S, coproc/coproc.c,
@@ -159,28 +180,28 @@
 		touchscreen/reco.h, touchscreen/touchscreen.c,
 		touchscreen/touchscreen.h, wifi/compat.c, wifi/compat.h, wifi/wifi.c:
 		New files.
-	
+
 	Revision 1.10  2007/02/06 12:00:32  wntrmute
 	use uint32 for irqEnable
-	
+
 	Revision 1.9  2006/06/16 07:35:14  wntrmute
 	more moves to REG_ values
 	implement SetYtrigger helper function
 	set bits in REG_DISPSTAT for IRQ_VCOUNT
-	
+
 	Revision 1.8  2006/02/21 00:12:35  wntrmute
 	clear interrupts and enable REG_IME in irqInit
-	
+
 	Revision 1.7  2005/12/12 13:03:29  wntrmute
 	set/clear LCD interrupts in irqEnable/Disable
-	
+
 	Revision 1.6  2005/11/07 01:11:08  wntrmute
 	more doxygen
 	moved IntrMain declaration to C file
-	
+
 	Revision 1.5  2005/09/20 05:00:24  wntrmute
 	use new register definitions
-	
+
 	Revision 1.4  2005/09/04 16:28:04  wntrmute
 	place irqTable in ewram
 

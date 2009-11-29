@@ -4,7 +4,7 @@
  on various block devices.
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -31,7 +31,7 @@
 
 	2006-08-10 - Chishm
 		* Fixed problem when openning files starting with "fat"
-		
+
 	2006-10-28 - Chishm
 		* _partitions changed to _FAT_partitions to maintain the same style of naming as the functions
 */
@@ -47,7 +47,7 @@
 
 #include "mem_allocate.h"
 
-/* 
+/*
 This device name, as known by DevKitPro
 */
 const char* DEVICE_NAME = "fat";
@@ -145,7 +145,7 @@ static PARTITION* _FAT_partition_constructor ( const IO_INTERFACE* disc, u32 cac
 		if (i == 0x1FE) {
 			for (i=0x1BE; (i < 0x1FE) && (sectorBuffer[i+0x04] == 0x00); i+= 0x10);
 		}
-		
+
 		// Go to first valid partition
 		if ( i != 0x1FE) {
 			// Make sure it found a partition
@@ -171,18 +171,18 @@ static PARTITION* _FAT_partition_constructor ( const IO_INTERFACE* disc, u32 cac
 	// Store required information about the file system
 	partition->fat.sectorsPerFat = u8array_to_u16(sectorBuffer, BPB_sectorsPerFAT);
 	if (partition->fat.sectorsPerFat == 0) {
-		partition->fat.sectorsPerFat = u8array_to_u32( sectorBuffer, BPB_FAT32_sectorsPerFAT32); 
+		partition->fat.sectorsPerFat = u8array_to_u32( sectorBuffer, BPB_FAT32_sectorsPerFAT32);
 	}
 
-	partition->numberOfSectors = u8array_to_u16( sectorBuffer, BPB_numSectorsSmall); 
+	partition->numberOfSectors = u8array_to_u16( sectorBuffer, BPB_numSectorsSmall);
 	if (partition->numberOfSectors == 0) {
-		partition->numberOfSectors = u8array_to_u32( sectorBuffer, BPB_numSectors);	
+		partition->numberOfSectors = u8array_to_u32( sectorBuffer, BPB_numSectors);
 	}
 
 	partition->bytesPerSector = BYTES_PER_READ;	// Sector size is redefined to be 512 bytes
 	partition->sectorsPerCluster = sectorBuffer[BPB_sectorsPerCluster] * u8array_to_u16(sectorBuffer, BPB_bytesPerSector) / BYTES_PER_READ;
 	partition->bytesPerCluster = partition->bytesPerSector * partition->sectorsPerCluster;
-	partition->fat.fatStart = bootSector + u8array_to_u16(sectorBuffer, BPB_reservedSectors); 
+	partition->fat.fatStart = bootSector + u8array_to_u16(sectorBuffer, BPB_reservedSectors);
 
 	partition->rootDirStart = partition->fat.fatStart + (sectorBuffer[BPB_numFATs] * partition->fat.sectorsPerFat);
 	partition->dataStart = partition->rootDirStart + (( u8array_to_u16(sectorBuffer, BPB_rootEntries) * DIR_ENTRY_DATA_SIZE) / partition->bytesPerSector);
@@ -205,7 +205,7 @@ static PARTITION* _FAT_partition_constructor ( const IO_INTERFACE* disc, u32 cac
 		partition->rootDirCluster = FAT16_ROOT_DIR_CLUSTER;
 	} else {
 		// Set up for the FAT32 way
-		partition->rootDirCluster = u8array_to_u32(sectorBuffer, BPB_FAT32_rootClus); 
+		partition->rootDirCluster = u8array_to_u32(sectorBuffer, BPB_FAT32_rootClus);
 		// Check if FAT mirroring is enabled
 		if (!(sectorBuffer[BPB_FAT32_extFlags] & 0x80)) {
 			// Use the active FAT
@@ -218,10 +218,10 @@ static PARTITION* _FAT_partition_constructor ( const IO_INTERFACE* disc, u32 cac
 
 	// Set current directory to the root
 	partition->cwdCluster = partition->rootDirCluster;
-	
+
 	// Check if this disc is writable, and set the readOnly property appropriately
 	partition->readOnly = !(_FAT_disc_features(disc) & FEATURE_MEDIUM_CANWRITE);
-	
+
 	// There are currently no open files on this partition
 	partition->openFileCount = 0;
 
@@ -238,10 +238,10 @@ bool _FAT_partition_mount (PARTITION_INTERFACE partitionNumber, u32 cacheSize) {
 #ifdef NDS
 	int i;
 	const IO_INTERFACE* disc = NULL;
-	
+
 	if (_FAT_partitions[partitionNumber] != NULL) {
 		return false;
-	}	
+	}
 
 	switch (partitionNumber) {
 		case PI_SLOT_1:
@@ -263,7 +263,7 @@ bool _FAT_partition_mount (PARTITION_INTERFACE partitionNumber, u32 cacheSize) {
 	if (disc == NULL) {
 		return false;
 	}
-	
+
 	// See if that disc is already in use, if so, then just copy the partition pointer
 	for (i = 0; i < MAXIMUM_PARTITIONS; i++) {
 		if ((_FAT_partitions[i] != NULL) && (_FAT_partitions[i]->disc == disc)) {
@@ -280,27 +280,27 @@ bool _FAT_partition_mount (PARTITION_INTERFACE partitionNumber, u32 cacheSize) {
 
 #else // not defined NDS
 	const IO_INTERFACE* disc = NULL;
-	
+
 	if (_FAT_partitions[partitionNumber] != NULL) {
 		return false;
-	}	
+	}
 
 	// Only ever one partition on GBA
 	disc = _FAT_disc_gbaSlotFindInterface ();
 	_FAT_partitions[partitionNumber] = _FAT_partition_constructor (disc, cacheSize);
-	
+
 #endif // defined NDS
 
 	return true;
 }
 
 bool _FAT_partition_mountCustomInterface (const IO_INTERFACE* device, u32 cacheSize) {
-#ifdef NDS	
+#ifdef NDS
 	int i;
-	
+
 	if (_FAT_partitions[PI_CUSTOM] != NULL) {
 		return false;
-	}	
+	}
 
 	if (device == NULL) {
 		return false;
@@ -319,11 +319,11 @@ bool _FAT_partition_mountCustomInterface (const IO_INTERFACE* device, u32 cacheS
 	if (_FAT_partitions[PI_CUSTOM] == NULL) {
 		return false;
 	}
-	
+
 #else // not defined NDS
 	if (_FAT_partitions[PI_CART_SLOT] != NULL) {
 		return false;
-	}	
+	}
 
 	if (device == NULL) {
 		return false;
@@ -331,7 +331,7 @@ bool _FAT_partition_mountCustomInterface (const IO_INTERFACE* device, u32 cacheS
 
 	// Only ever one partition on GBA
 	_FAT_partitions[PI_CART_SLOT] = _FAT_partition_constructor (device, cacheSize);
-	
+
 #endif // defined NDS
 
 	return true;
@@ -342,39 +342,39 @@ bool _FAT_partition_setDefaultInterface (PARTITION_INTERFACE partitionNumber) {
 	if ((partitionNumber < 1) || (partitionNumber >= MAXIMUM_PARTITIONS)) {
 		return false;
 	}
-	
+
 	if (_FAT_partitions[partitionNumber] == NULL) {
 		return false;
 	}
-	
+
 	_FAT_partitions[PI_DEFAULT] = _FAT_partitions[partitionNumber];
-#endif	
+#endif
 	return true;
 }
 
 bool _FAT_partition_setDefaultPartition (PARTITION* partition) {
 #ifdef NDS	// Can only set the default partition when there is more than 1, so doesn't apply to GBA
 	int i;
-	
+
 	if (partition == NULL) {
 		return false;
 	}
-	
+
 	// Ensure that this device is already in the list
 	for (i = 1; i < MAXIMUM_PARTITIONS; i++) {
 		if (_FAT_partitions[i] == partition) {
 			break;
 		}
 	}
-	
+
 	// It wasn't in the list, so fail
 	if (i == MAXIMUM_PARTITIONS) {
 		return false;
-	}	
-	
+	}
+
 	// Change the default partition / device to this one
 	_FAT_partitions[PI_DEFAULT] = partition;
-	
+
 #endif
 	return true;
 }
@@ -382,23 +382,23 @@ bool _FAT_partition_setDefaultPartition (PARTITION* partition) {
 bool _FAT_partition_unmount (PARTITION_INTERFACE partitionNumber) {
 	int i;
 	PARTITION* partition = _FAT_partitions[partitionNumber];
-	
+
 	if (partition == NULL) {
 		return false;
 	}
-	
+
 	if (partition->openFileCount > 0) {
 		// There are still open files that need closing
 		return false;
 	}
-	
+
 	// Remove all references to this partition
 	for (i = 0; i < MAXIMUM_PARTITIONS; i++) {
 		if (_FAT_partitions[i] == partition) {
 			_FAT_partitions[i] = NULL;
 		}
 	}
-	
+
 	_FAT_partition_destructor (partition);
 	return true;
 }
@@ -406,18 +406,18 @@ bool _FAT_partition_unmount (PARTITION_INTERFACE partitionNumber) {
 bool _FAT_partition_unsafeUnmount (PARTITION_INTERFACE partitionNumber) {
 	int i;
 	PARTITION* partition = _FAT_partitions[partitionNumber];
-	
+
 	if (partition == NULL) {
 		return false;
 	}
-	
+
 	// Remove all references to this partition
 	for (i = 0; i < MAXIMUM_PARTITIONS; i++) {
 		if (_FAT_partitions[i] == partition) {
 			_FAT_partitions[i] = NULL;
 		}
 	}
-	
+
 	_FAT_cache_invalidate (partition->cache);
 	_FAT_partition_destructor (partition);
 	return true;
@@ -427,7 +427,7 @@ PARTITION* _FAT_partition_getPartitionFromPath (const char* path) {
 #ifdef NDS
 	int namelen;
 	int partitionNumber;
-	
+
 	// Device name extraction code taken from DevKitPro
 	namelen = strlen(DEVICE_NAME);
 	if (strchr (path, ':') == NULL) {
@@ -448,11 +448,11 @@ PARTITION* _FAT_partition_getPartitionFromPath (const char* path) {
 		// Incorrect device name
 		return NULL;
 	}
-	
+
 	if ((partitionNumber < 0) || (partitionNumber >= MAXIMUM_PARTITIONS)) {
 		return NULL;
 	}
-	
+
 	return _FAT_partitions[partitionNumber];
 #else // not defined NDS
 	// Only one possible partition on GBA

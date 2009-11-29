@@ -84,15 +84,15 @@ extern "C" {
             1b    Alarm 2 interrupt
     7   R/W Test Mode (0=Normal, 1=Test, don't use) (cleared on Reset)
 */
-#define STATUS_TEST      (1<<7)  // 
-#define STATUS_INT2AE    (1<<6)  // 
+#define STATUS_TEST      (1<<7)  //
+#define STATUS_INT2AE    (1<<6)  //
 #define STATUS_SC3       (1<<5)  // R/W scratch bit
 #define STATUS_SC2       (1<<4)  // R/W scratch bit
 
 #define STATUS_32kE      (1<<3)  // Interrupt mode bits
-#define STATUS_INT1AE    (1<<2)  // 
-#define STATUS_INT1ME    (1<<1)  // 
-#define STATUS_INT1FE    (1<<0)  // 
+#define STATUS_INT1AE    (1<<2)  //
+#define STATUS_INT1ME    (1<<1)  //
+#define STATUS_INT1FE    (1<<0)  //
 
 // full 7 bytes for time and date
 #define WRITE_TIME_AND_DATE	0x64

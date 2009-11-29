@@ -1,7 +1,7 @@
 /*
  * font8x16.h
  *
- * Simple 8 x 16 font printable characters only.  To lookoup, subtract 
+ * Simple 8 x 16 font printable characters only.  To lookoup, subtract
  * FIRST_CHAR from the character, multiply x FONT_HEIGHT and get the next
  * FONT_WIDTH bytes.
  *
@@ -38,7 +38,7 @@
 #define FONT_WIDTH		8
 #define FONT_HEIGHT 	16
 #define FIRST_CHAR 		0x20
-#define LAST_CHAR 		0x7f  
+#define LAST_CHAR 		0x7f
 #define CURSOR_ON  		0x7F
 #define CURSOR_OFF 		0x20
 

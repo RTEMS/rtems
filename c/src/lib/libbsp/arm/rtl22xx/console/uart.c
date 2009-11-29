@@ -1,10 +1,10 @@
 /*
  *  console driver for RTL22xx UARTs
  *
- *  This driver uses the shared console driver in 
+ *  This driver uses the shared console driver in
  *  ...../libbsp/shared/console.c
  *
- *  If you want the driver to be interrupt driven, you 
+ *  If you want the driver to be interrupt driven, you
  *  need to write the ISR, and in the ISR insert the
  *  chars into termios's queue.
  *  Copyright (c) By ray <rayx.cn@gmail.com>
@@ -52,8 +52,8 @@ console_data  Console_Port_Data[NUM_DEVS];
 rtems_device_minor_number  Console_Port_Minor = 0;
 
 /* Pointers to functions for handling the UART. */
-console_fns uart_fns = 
-{ 
+console_fns uart_fns =
+{
     libchip_serial_default_probe,
     uart_first_open,
     uart_last_close,
@@ -65,7 +65,7 @@ console_fns uart_fns =
     FALSE      /* TRUE if interrupt driven, FALSE if not. */
 };
 
-/* 
+/*
  * There's one item in array for each UART.
  *
  * Some of these fields are marked "NOT USED". They are not used
@@ -119,25 +119,25 @@ console_tbl Console_Port_Tbl[] = {
 /* Functions called via termios callbacks (i.e. the ones in uart_fns */
 /*********************************************************************/
 
-/* 
- * This is called the first time each device is opened. If the driver 
- * is interrupt driven, you should enable interrupts here. Otherwise, 
+/*
+ * This is called the first time each device is opened. If the driver
+ * is interrupt driven, you should enable interrupts here. Otherwise,
  * it's probably safe to do nothing.
  *
  * Since micromonitor already set up the UART, we do nothing.
  */
-static int uart_first_open(int major, int minor, void *arg) 
+static int uart_first_open(int major, int minor, void *arg)
 {
     return 0;
 }
 
 
-/* 
- * This is called the last time each device is closed. If the driver 
- * is interrupt driven, you should disable interrupts here. Otherwise, 
+/*
+ * This is called the last time each device is closed. If the driver
+ * is interrupt driven, you should disable interrupts here. Otherwise,
  * it's probably safe to do nothing.
  */
-static int uart_last_close(int major, int minor, void *arg) 
+static int uart_last_close(int major, int minor, void *arg)
 {
     return 0;
 }
@@ -149,7 +149,7 @@ static int uart_last_close(int major, int minor, void *arg)
  * Return -1 if there's no data, otherwise return
  * the character in lowest 8 bits of returned int.
  */
-static int uart_read(int minor) 
+static int uart_read(int minor)
 {
     char c;
 
@@ -175,8 +175,8 @@ static int uart_read(int minor)
 }
 
 
-/* 
- * Write buffer to UART 
+/*
+ * Write buffer to UART
  *
  * return 1 on success, -1 on error
  */
@@ -200,7 +200,7 @@ static int uart_write(int minor, const char *buf, int len)
           printk("Unknown console minor number %d\n", minor);
           return -1;
     }
-    
+
     return 1;
 }
 
@@ -218,7 +218,7 @@ static void uart_init(int minor)
 		U0IER = 0x00;                         // disable all interrupts
 
 		// set the baudrate
-		U0LCR = 1<<7;             // select divisor latches 
+		U0LCR = 1<<7;             // select divisor latches
 		U0DLL = (uint8_t)baud;                // set for baud low byte
 		U0DLM = (uint8_t)(baud >> 8);         // set for baud high byte
 
@@ -226,23 +226,23 @@ static void uart_init(int minor)
 		// user specified operating parameters
 		U0LCR = (mode & ~ULCR_DLAB_ENABLE);
 		U0FCR = mode>>8; /*fifo mode*/
-		
+
 		// set port pins for UART1
 		PINSEL0 = (PINSEL0 & ~U1_PINMASK) | U1_PINSEL;
-		
+
 		U1IER = 0x00;						  // disable all interrupts
 	}else if(minor==1){
 		// set the baudrate
-		U1LCR = ULCR_DLAB_ENABLE;			  // select divisor latches 
+		U1LCR = ULCR_DLAB_ENABLE;			  // select divisor latches
 		U1DLL = (uint8_t)baud;				  // set for baud low byte
 		U1DLM = (uint8_t)(baud >> 8);		  // set for baud high byte
-		
+
 		// set the number of characters and other
 		// user specified operating parameters
 		U1LCR = (mode & ~ULCR_DLAB_ENABLE);
 		U1FCR = mode>>8;/*fifo mode*/
 	}
-		
+
 #endif
 }
 
@@ -253,7 +253,7 @@ static void    uart_write_polled(int minor, char c)
 }
 
 /* This is for setting baud rate, bits, etc. */
-static int     uart_set_attributes(int minor, const struct termios *t) 
+static int     uart_set_attributes(int minor, const struct termios *t)
 {
     return 0;
 }
@@ -264,7 +264,7 @@ static int     uart_set_attributes(int minor, const struct termios *t)
  * functions use them instead.
  */
 /***********************************************************************/
-/* 
+/*
  * Read from UART. This is used in the exit code, and can't
  * rely on interrupts.
 */
@@ -275,7 +275,7 @@ int uart_poll_read(int minor)
 
 
 /*
- * Write a character to the console. This is used by printk() and 
+ * Write a character to the console. This is used by printk() and
  * maybe other low level functions. It should not use interrupts or any
  * RTEMS system calls. It needs to be very simple
  */
@@ -300,29 +300,29 @@ BSP_polling_getchar_function_type BSP_poll_char = _BSP_get_char;
 * init USART 0¡£8 bit, 1 Stop,No checkout, BPS115200
 ****************************************************************************/
 void  UART0_Ini(void)
-{ 
+{
    long Fdiv;
    int i;
    PINSEL0 = 0x00000005;		    // I/O to UART0
    U0LCR = 0x83;		            // DLAB = 1
    Fdiv = (Fpclk >>4) / UART_BPS;  // configure BPS
-   U0DLM = Fdiv/256;							
-   U0DLL = Fdiv%256;						
+   U0DLM = Fdiv/256;
+   U0DLL = Fdiv%256;
    U0LCR = 0x03;
 
    for(i=0;i<10;i++){
      U0THR = 67;		//send a C to see if is OK
      while( (U0LSR&0x40)==0 );
-   }  
+   }
 }
-				
+
 
 /****************************************************************************
 *Send a Byte
 ****************************************************************************/
 void  UART0_SendByte(char data)
-{  
-    U0THR = data;	
+{
+    U0THR = data;
 
     while( (U0LSR&0x40)==0 );
 }

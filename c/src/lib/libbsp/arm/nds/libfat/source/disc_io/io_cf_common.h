@@ -6,7 +6,7 @@
  Common Compact Flash card values
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -30,7 +30,7 @@
 
 	2006-07-11 - Chishm
 		* Original release
-		
+
 	2006-07-16 - Chishm
 		* Combined all CF interfaces into one common set of routines
 */

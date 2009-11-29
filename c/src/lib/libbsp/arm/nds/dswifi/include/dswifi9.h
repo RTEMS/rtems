@@ -1,6 +1,6 @@
 // DSWifi Project - Arm9 Library Header File (dswifi9.h)
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -79,11 +79,11 @@ enum WIFI_STATS {
 	WSTAT_TXBYTES,
 	WSTAT_TXDATABYTES,
 	// harware stats (function mostly unknown.)
-	WSTAT_HW_1B0,WSTAT_HW_1B1,WSTAT_HW_1B2,WSTAT_HW_1B3,WSTAT_HW_1B4,WSTAT_HW_1B5,WSTAT_HW_1B6,WSTAT_HW_1B7,	
-	WSTAT_HW_1B8,WSTAT_HW_1B9,WSTAT_HW_1BA,WSTAT_HW_1BB,WSTAT_HW_1BC,WSTAT_HW_1BD,WSTAT_HW_1BE,WSTAT_HW_1BF,	
+	WSTAT_HW_1B0,WSTAT_HW_1B1,WSTAT_HW_1B2,WSTAT_HW_1B3,WSTAT_HW_1B4,WSTAT_HW_1B5,WSTAT_HW_1B6,WSTAT_HW_1B7,
+	WSTAT_HW_1B8,WSTAT_HW_1B9,WSTAT_HW_1BA,WSTAT_HW_1BB,WSTAT_HW_1BC,WSTAT_HW_1BD,WSTAT_HW_1BE,WSTAT_HW_1BF,
 	WSTAT_HW_1C0,WSTAT_HW_1C1,WSTAT_HW_1C4,WSTAT_HW_1C5,
-	WSTAT_HW_1D0,WSTAT_HW_1D1,WSTAT_HW_1D2,WSTAT_HW_1D3,WSTAT_HW_1D4,WSTAT_HW_1D5,WSTAT_HW_1D6,WSTAT_HW_1D7,	
-	WSTAT_HW_1D8,WSTAT_HW_1D9,WSTAT_HW_1DA,WSTAT_HW_1DB,WSTAT_HW_1DC,WSTAT_HW_1DD,WSTAT_HW_1DE,WSTAT_HW_1DF,	
+	WSTAT_HW_1D0,WSTAT_HW_1D1,WSTAT_HW_1D2,WSTAT_HW_1D3,WSTAT_HW_1D4,WSTAT_HW_1D5,WSTAT_HW_1D6,WSTAT_HW_1D7,
+	WSTAT_HW_1D8,WSTAT_HW_1D9,WSTAT_HW_1DA,WSTAT_HW_1DB,WSTAT_HW_1DC,WSTAT_HW_1DD,WSTAT_HW_1DE,WSTAT_HW_1DF,
 
 	NUM_WIFI_STATS
 };
@@ -202,7 +202,7 @@ extern void Wifi_DisableWifi(void);
 //   associated to an AP, but actively receiving and potentially transmitting
 extern void Wifi_EnableWifi(void);
 
-// Wifi_SetPromiscuousMode: Allows the DS to enter or leave a "promsicuous" mode, in which 
+// Wifi_SetPromiscuousMode: Allows the DS to enter or leave a "promsicuous" mode, in which
 //   all data that can be received is forwarded to the arm9 for user processing.
 //   Best used with Wifi_RawSetPacketHandler, to allow user code to use the data
 //   (well, the lib won't use 'em, so they're just wasting CPU otherwise.)
@@ -218,7 +218,7 @@ extern void Wifi_ScanMode(void);
 //  int channel: the channel to change to, in the range of 1-13
 extern void Wifi_SetChannel(int channel);
 
-// Wifi_GetNumAP: 
+// Wifi_GetNumAP:
 //  Returns: the current number of APs that are known about and tracked internally
 extern int Wifi_GetNumAP(void);
 
@@ -248,7 +248,7 @@ extern int Wifi_ConnectAP(Wifi_AccessPoint * apdata, int wepmode, int wepkeyid, 
 extern void Wifi_AutoConnect(void);
 
 // Wifi_AssocStatus: Returns information about the status of connection to an AP
-//  Returns: a value from the WIFI_ASSOCSTATUS enum, continue polling until you 
+//  Returns: a value from the WIFI_ASSOCSTATUS enum, continue polling until you
 //            receive ASSOCSTATUS_CONNECTED or ASSOCSTATUS_CANNOTCONNECT
 extern int Wifi_AssocStatus(void);
 
@@ -261,7 +261,7 @@ extern int Wifi_DisconnectAP(void);
 //  int num_ms:		The number of milliseconds since the last time this function was called.
 extern void Wifi_Timer(int num_ms);
 
-// Wifi_GetIP: 
+// Wifi_GetIP:
 //  Returns:  The current IP address of the DS (may not be valid before connecting to an AP, or setting the IP manually.)
 extern unsigned long Wifi_GetIP(void); // get local ip
 
@@ -270,7 +270,7 @@ extern unsigned long Wifi_GetIP(void); // get local ip
 //  unsigned long * pSnmask:	pointer to receive the currently configured subnet mask
 //  unsigned long * pDns1:		pointer to receive the currently configured primary DNS server IP
 //  unsigned long * pDns2:		pointer to receive the currently configured secondary DNS server IP
-//  Returns:					The current IP address of the DS 
+//  Returns:					The current IP address of the DS
 extern unsigned long Wifi_GetIPInfo(unsigned long * pGateway,unsigned long * pSnmask,unsigned long * pDns1,unsigned long * pDns2);
 
 // Wifi_SetIP: Set the DS's IP address and other IP configuration information.
@@ -297,7 +297,7 @@ extern u32 Wifi_GetStats(int statnum);
 
 // Wifi_RawTxFrame: Send a raw 802.11 frame at a specified rate
 //  unsigned short datalen:	The length in bytes of the frame to send
-//  unsigned short rate:	The rate to transmit at (Specified as mbits/10, 1mbit=0x000A, 2mbit=0x0014)		
+//  unsigned short rate:	The rate to transmit at (Specified as mbits/10, 1mbit=0x000A, 2mbit=0x0014)
 //  unsigned short * data:	Pointer to the data to send (should be halfword-aligned)
 //  Returns:				Nothing of interest.
 extern int Wifi_RawTxFrame(unsigned short datalen, unsigned short rate, unsigned short * data);
@@ -319,7 +319,7 @@ extern int Wifi_RxRawReadPacket(long packetID, long readlength, unsigned short *
 //   is available.
 extern void Wifi_Update(void);
 
-// Wifi_Sync: Call this function when requested to sync by the arm7 side of the 
+// Wifi_Sync: Call this function when requested to sync by the arm7 side of the
 //   wifi lib
 extern void Wifi_Sync(void);
 

@@ -1,6 +1,6 @@
 // DSWifi Project - Arm7 Library Header file (dswifi7.h)
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -71,7 +71,7 @@ extern void Wifi_Init(unsigned long WifiData);
 //   called again.
 extern void Wifi_Deinit(void);
 
-// Wifi_Sync: Call this function when requested to sync by the arm9 side of the 
+// Wifi_Sync: Call this function when requested to sync by the arm9 side of the
 //   wifi lib
 extern void Wifi_Sync(void);
 

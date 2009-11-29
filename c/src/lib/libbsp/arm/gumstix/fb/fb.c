@@ -33,16 +33,16 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static struct fb_var_screeninfo fb_var =
   {
-    .xres = SCREEN_WIDTH, 
-    .yres = SCREEN_HEIGHT, 
+    .xres = SCREEN_WIDTH,
+    .yres = SCREEN_HEIGHT,
     .bits_per_pixel = BPP
   };
 
 static struct fb_fix_screeninfo fb_fix =
   {
-    .smem_start = (volatile char *)LCD_DMA_POINTER, 
-    .smem_len = LCD_BUFFER_SIZE, 
-    .type = FB_TYPE_PACKED_PIXELS, 
+    .smem_start = (volatile char *)LCD_DMA_POINTER,
+    .smem_len = LCD_BUFFER_SIZE,
+    .type = FB_TYPE_PACKED_PIXELS,
     .visual = FB_VISUAL_TRUECOLOR,
     .line_length = SCREEN_WIDTH * (BPP/8)
   };
@@ -70,7 +70,7 @@ static void enable_fbskyeye(void)
   LCCR3 |= 4<<24;
   FDADR0 = LCD_DMA_POINTER - 0x1000;
   LCCR0 |= LCCR0_ENB;
-}  
+}
 
 
 static void disable_fbskyeye(void)
@@ -119,8 +119,8 @@ frame_buffer_open( rtems_device_major_number major,
   if (pthread_mutex_trylock(&mutex)== 0){
       /* restore previous state.  for VGA this means return to text mode.
        * leave out if graphics hardware has been initialized in
-       * frame_buffer_initialize() 
-       */ 
+       * frame_buffer_initialize()
+       */
      printk( "FBSKYEYE open called.\n" );
      enable_fbskyeye();
      return RTEMS_SUCCESSFUL;
@@ -166,7 +166,7 @@ frame_buffer_write( rtems_device_major_number major,
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
   memcpy( (void *) (fb_fix.smem_start + rw_args->offset), rw_args->buffer, rw_args->bytes_moved);
-  return RTEMS_SUCCESSFUL; 
+  return RTEMS_SUCCESSFUL;
 }
 
 static int get_palette( struct fb_cmap *cmap )

@@ -166,7 +166,7 @@ void glResetTextures(void) {
 
 //---------------------------------------------------------------------------------
 //	glGenTextures creates integer names for your table
-//	takes n as the number of textures to generate and 
+//	takes n as the number of textures to generate and
 //	a pointer to the names array that it needs to fill.
 //  Returns 1 if succesful and 0 if out of texture names
 //---------------------------------------------------------------------------------
@@ -185,43 +185,43 @@ int glGenTextures(int n, int *names) {
 
 //---------------------------------------------------------------------------------
 // glBindTexure sets the current named
-//	texture to the active texture.  Target 
+//	texture to the active texture.  Target
 //	is ignored as all DS textures are 2D
 //---------------------------------------------------------------------------------
 void glBindTexture(int target, int name) {
 //---------------------------------------------------------------------------------
-	if (name == 0) 
-		GFX_TEX_FORMAT = 0; 
-	else 
-		GFX_TEX_FORMAT = glGlob->textures[name]; 
+	if (name == 0)
+		GFX_TEX_FORMAT = 0;
+	else
+		GFX_TEX_FORMAT = glGlob->textures[name];
 
 
 	glGlob->activeTexture = name;
 }
 //---------------------------------------------------------------------------------
 // glColorTable establishes the location of the current palette.
-//	Roughly follows glColorTableEXT. Association of palettes with 
-//	named textures is left to the application. 
+//	Roughly follows glColorTableEXT. Association of palettes with
+//	named textures is left to the application.
 //---------------------------------------------------------------------------------
 void glColorTable( uint8 format, uint32 addr ) {
 //---------------------------------------------------------------------------------
 	GFX_PAL_FORMAT = addr>>(4-(format==GL_RGB4));
 }
-                     
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
-void glTexCoord2f32(int32 u, int32 v) { 
-//---------------------------------------------------------------------------------
-	int x, y; 
 
-	x = ((glGlob->textures[glGlob->activeTexture]) >> 20) & 7; 
-	y = ((glGlob->textures[glGlob->activeTexture]) >> 23) & 7; 
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+void glTexCoord2f32(int32 u, int32 v) {
+//---------------------------------------------------------------------------------
+	int x, y;
 
-	glTexCoord2t16(f32tot16 (mulf32(u,inttof32(8<<x))), f32tot16 (mulf32(v,inttof32(8<<y)))); 
+	x = ((glGlob->textures[glGlob->activeTexture]) >> 20) & 7;
+	y = ((glGlob->textures[glGlob->activeTexture]) >> 23) & 7;
+
+	glTexCoord2t16(f32tot16 (mulf32(u,inttof32(8<<x))), f32tot16 (mulf32(v,inttof32(8<<y))));
 }
 
 //---------------------------------------------------------------------------------
-// glTexParameter although named the same 
+// glTexParameter although named the same
 //	as its gl counterpart it is not compatible
 //	Effort may be made in the future to make it so.
 //---------------------------------------------------------------------------------
@@ -260,7 +260,7 @@ int getNextPaletteSlot(u16 count, uint8 format) {
 	uint32 result = alignVal(glGlob->nextPBlock, 1<<(4-(format==GL_RGB4)));
 
 	// convert count to bytes and align to next (smallest format) palette block
-	count = alignVal( count<<1, 1<<3 ); 
+	count = alignVal( count<<1, 1<<3 );
 
 	// ensure that end is within palette video mem
 	if( result+count > 0x10000 )   // VRAM_F - VRAM_E
@@ -268,7 +268,7 @@ int getNextPaletteSlot(u16 count, uint8 format) {
 
 	glGlob->nextPBlock = result+count;
 	return (int)result;
-} 
+}
 
 //---------------------------------------------------------------------------------
 uint16* vramGetBank(uint16 *addr) {
@@ -324,7 +324,7 @@ int vramIsTextureBank(uint16 *addr) {
 	}
 	else
 		return 0;
-} 
+}
 //---------------------------------------------------------------------------------
 uint32* getNextTextureSlot(int size) {
 //---------------------------------------------------------------------------------
@@ -335,7 +335,7 @@ uint32* getNextTextureSlot(int size) {
 	while(!vramIsTextureBank((uint16*)glGlob->nextBlock - 1) && glGlob->nextBlock <= (uint32*)VRAM_E)
 	{
 		glGlob->nextBlock = (uint32*)vramGetBank((uint16*)result) + (0x20000 >> 2); //next bank
-		result = glGlob->nextBlock;        
+		result = glGlob->nextBlock;
 		glGlob->nextBlock += size >> 2;
 	}
 
@@ -343,7 +343,7 @@ uint32* getNextTextureSlot(int size) {
 		result = 0;
 	}
 	return result;
-} 
+}
 
 //---------------------------------------------------------------------------------
 // Similer to glTextImage2D from gl it takes a pointer to data

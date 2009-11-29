@@ -1,9 +1,9 @@
 /*
 	fat.h
 	Simple functionality for startup, mounting and unmounting of FAT-based devices.
-	
+
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -27,10 +27,10 @@
 
 	2006-07-11 - Chishm
 		* Original release
-		
+
 	2006-07-14
 		* fatInitialise renamed to fatInit
-		
+
 	2006-07-16 - Chishm
 		* Added fatInitDefault
 */
@@ -105,7 +105,7 @@ bool fatUnsafeUnmount (PARTITION_INTERFACE partitionNumber);
 
 /*
 Set the default device for access by fat: and fat0:
-PD_DEFAULT is unallowed. 
+PD_DEFAULT is unallowed.
 Doesn't do anything useful on GBA, since there is only one device
 */
 bool fatSetDefaultInterface (PARTITION_INTERFACE partitionNumber);

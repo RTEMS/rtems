@@ -77,7 +77,7 @@ int lpc24xx_eth_attach_detach(
  *
  * @code
  * #include <bsp.h>
- * 
+ *
  * #define CONFIGURE_INIT
  *
  * #define CONFIGURE_IDLE_TASK_BODY lpc24xx_idle

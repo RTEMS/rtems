@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -50,7 +50,7 @@ typedef struct SGIP_RECORD_UDP {
 	unsigned long srcip;
 	unsigned long destip;
 	unsigned short srcport,destport;
-	
+
 	sgIP_memblock * incoming_queue;
 	sgIP_memblock * incoming_queue_end;
 

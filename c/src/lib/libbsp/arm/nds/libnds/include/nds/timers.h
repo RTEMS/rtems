@@ -32,7 +32,7 @@
 	The timers are fed with a 33.4 MHz source on the ARM9.  The ARM7
 	timing hasn't been tested yet, but is likely to be the same.
 */
-	
+
 //---------------------------------------------------------------------------------
 #ifndef NDS_TIMERS_INCLUDE
 #define NDS_TIMERS_INCLUDE
@@ -61,15 +61,15 @@ extern "C" {
 	Clock divider is controlled by %TIMER_CR(n) \n
 	\n
 	<b>Example Usage:</b>
-		
-		%TIMER_DATA(0) = %TIMER_FREQ(freq_in_hz); \n	
+
+		%TIMER_DATA(0) = %TIMER_FREQ(freq_in_hz); \n
 		%TIMER_CR(0) = %TIMER_DIV1 | %TIMER_ENABLE; \n
 	\n
 	Max frequency is: 33554432Hz\n
 	Min frequency is: 512Hz\n
 */
 #define TIMER_FREQ(n)    (-0x2000000/(n))
-	
+
 //!	A macro that calculates %TIMER_DATA(n) settings for a given frequency of n.
 /*!	Use the appropriate macro depending on clock divider:  \n
 	<ul>
@@ -83,13 +83,13 @@ extern "C" {
 	Clock divider is controlled by %TIMER_CR(n) \n
 	\n
 	<b>Example Usage:</b>
-		%TIMER_DATA(x) = %TIMER_FREQ_64(freq_in_hz)\n	
+		%TIMER_DATA(x) = %TIMER_FREQ_64(freq_in_hz)\n
 	\n
 	Max frequency is: 524288Hz\n
 	Min frequency is: 8Hz\n
 */
 #define TIMER_FREQ_64(n)  (-(0x2000000>>6)/(n))
-	
+
 //!	A macro that calculates %TIMER_DATA(n) settings for a given frequency of n.
 /*!	Use the appropriate macro depending on clock divider:  \n
 	<ul>
@@ -102,13 +102,13 @@ extern "C" {
 	Clock divider is controlled by %TIMER_CR(n) \n
 	\n
 	<b>Example Usage:</b>
-		%TIMER_DATA(x) = %TIMER_FREQ_256(freq_in_hz)\n	
+		%TIMER_DATA(x) = %TIMER_FREQ_256(freq_in_hz)\n
 	\n
 	Max frequency is: 131072Hz\n
 	Min frequency is: 2Hz\n
 */
 #define TIMER_FREQ_256(n) (-(0x2000000>>8)/(n))
-	
+
 //!	A macro that calculates %TIMER_DATA(n) settings for a given frequency of n.
 /*!	Use the appropriate macro depending on clock divider:  \n
 	<ul>
@@ -121,7 +121,7 @@ extern "C" {
 	Clock divider is controlled by %TIMER_CR(n) \n
 	\n
 	<b>Example Usage:</b>
-		%TIMER_DATA(x) = %TIMER_FREQ_1024(freq_in_hz)\n	
+		%TIMER_DATA(x) = %TIMER_FREQ_1024(freq_in_hz)\n
 	\n
 	Max frequency is: 32768Hz\n
 	Min frequency is: 0.5Hz\n
@@ -166,13 +166,13 @@ extern "C" {
 /*!	<b>Example Usage:</b> %TIMER_CR(x) = %TIMER_ENABLE | %TIMER_DIV_64; \n
 	\n
 	Possible bit defines: \n
-	
-	\see TIMER_ENABLE 
-	\see TIMER_IRQ_REQ 
-	\see TIMER_DIV_1 
-	\see TIMER_DIV_64 
-	\see TIMER_DIV_256 
-	\see TIMER_DIV_1024 
+
+	\see TIMER_ENABLE
+	\see TIMER_IRQ_REQ
+	\see TIMER_DIV_1
+	\see TIMER_DIV_64
+	\see TIMER_DIV_256
+	\see TIMER_DIV_1024
 */
 #define TIMER_CR(n) (*(vuint16*)(0x04000102+((n)<<2)))
 

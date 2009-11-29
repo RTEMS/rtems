@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
- 
+
 #include <bsp.h>
 #include <string.h>
 #include <signal.h>
@@ -70,13 +70,13 @@ static char remcomInBuffer[BUFMAX];
 static char remcomOutBuffer[BUFMAX];
 
 /*
- * Set by debugger to indicate that when handling memory faults (bus errors), the 
+ * Set by debugger to indicate that when handling memory faults (bus errors), the
  * handler should set the mem_err flag and skip over the faulting instruction
  */
 static volatile int may_fault;
 
 /*
- * Set by bus error exception handler, this indicates to caller of mem2hex, 
+ * Set by bus error exception handler, this indicates to caller of mem2hex,
  * hex2mem or bin2mem that there has been an error.
  */
 static volatile int mem_err;
@@ -88,7 +88,7 @@ static char branch_step;
 /* Saved instructions */
 static unsigned int *seq_ptr;
 static unsigned int seq_insn;
-static unsigned int *branch_ptr;                      
+static unsigned int *branch_ptr;
 static unsigned int branch_insn;
 
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
@@ -144,7 +144,7 @@ static char *mem2hex(
 )
 {
   unsigned char ch;
-  
+
   while (count-- > 0)
   {
     ch = *mem++;
@@ -178,7 +178,7 @@ static unsigned char *hex2mem(
     ch |= hex(*buf++);
     /* Attempt to write data to memory */
     *mem++ = ch;
-    /* Return NULL if write caused an exception */      
+    /* Return NULL if write caused an exception */
     if (mem_err)
       return NULL;
   }
@@ -204,11 +204,11 @@ static unsigned char *bin2mem(
     c = *buf++;
     if (c == 0x7d)
       c = *buf++ ^ 0x20;
-    /* Attempt to write value to memory */  
+    /* Attempt to write value to memory */
     *mem++ = c;
-    /* Return NULL if write caused an exception */      
+    /* Return NULL if write caused an exception */
     if (mem_err)
-      return NULL; 
+      return NULL;
   }
 
   return mem;
@@ -262,7 +262,7 @@ static int compute_signal(
       return SIGSEGV;
     case LM32_EXCEPTION_DIVIDE_BY_ZERO:
       return SIGFPE;
-  }  
+  }
 
   return SIGHUP;  /* default for things we don't know about */
 }
@@ -293,7 +293,7 @@ retry:
       if (ch == '$')
         goto retry;
       if (ch == '#')
-        break;     
+        break;
       checksum = checksum + ch;
       buffer[count] = ch;
       count = count + 1;
@@ -366,19 +366,19 @@ static void putpacket(
        * as the character we just transmitted
        */
       run_length = 0;
-      run_idx = count;  
+      run_idx = count;
       while ((buffer[run_idx++] == ch) && (run_length < 97))
         run_length++;
       /* Encode run length as an ASCII character */
       run_length_char = (char)(run_length + 29);
-      if (   (run_length >= 3) 
+      if (   (run_length >= 3)
           && (run_length_char != '$')
           && (run_length_char != '#')
           && (run_length_char != '+')
           && (run_length_char != '-')
          )
       {
-        /* Transmit run-length */ 
+        /* Transmit run-length */
         gdb_put_debug_char('*');
         checksum += '*';
         gdb_put_debug_char(run_length_char);
@@ -394,7 +394,7 @@ static void putpacket(
       count += 1;
     }
 #endif
-   
+
     gdb_put_debug_char('#');
     gdb_put_debug_char(highhex(checksum));
     gdb_put_debug_char(lowhex(checksum));
@@ -424,11 +424,11 @@ static void flush_cache(void)
   __asm__ __volatile__ ("wcsr ICC, r0\n"
                         "nop\n"
                         "nop\n"
-                        "nop\n" 
+                        "nop\n"
                         "wcsr DCC, r0\n"
                         "nop\n"
                         "nop\n"
-                        "nop" 
+                        "nop"
                        );
 }
 
@@ -439,35 +439,35 @@ static int set_hw_breakpoint(
 )
 {
   int bp;
-  
-  /* Find a free break point register and then set it */      
+
+  /* Find a free break point register and then set it */
   __asm__ ("rcsr  %0, BP0" : "=r" (bp));
-  if ((bp & 0x01) == 0) 
+  if ((bp & 0x01) == 0)
   {
     __asm__ ("wcsr  BP0, %0" : : "r" (address | 1));
     return 1;
   }
   __asm__ ("rcsr  %0, BP1" : "=r" (bp));
-  if ((bp & 0x01) == 0) 
+  if ((bp & 0x01) == 0)
   {
     __asm__ ("wcsr  BP1, %0" : : "r" (address | 1));
     return 1;
   }
   __asm__ ("rcsr  %0, BP2" : "=r" (bp));
-  if ((bp & 0x01) == 0) 
+  if ((bp & 0x01) == 0)
   {
     __asm__ ("wcsr  BP2, %0" : : "r" (address | 1));
     return 1;
   }
   __asm__ ("rcsr  %0, BP3" : "=r" (bp));
-  if ((bp & 0x01) == 0) 
+  if ((bp & 0x01) == 0)
   {
     __asm__ ("wcsr  BP3, %0" : : "r" (address | 1));
     return 1;
   }
 
   /* No free breakpoint registers */
-  return -1;        
+  return -1;
 }
 
 /* Remove a h/w breakpoint which should be set at the given address */
@@ -477,28 +477,28 @@ static int disable_hw_breakpoint(
 )
 {
   int bp;
-  
+
   /* Try to find matching breakpoint register */
   __asm__ ("rcsr  %0, BP0" : "=r" (bp));
-  if ((bp & 0xfffffffc) == (address & 0xfffffffc)) 
+  if ((bp & 0xfffffffc) == (address & 0xfffffffc))
   {
     __asm__ ("wcsr  BP0, %0" : : "r" (0));
     return 1;
   }
   __asm__ ("rcsr  %0, BP1" : "=r" (bp));
-  if ((bp & 0xfffffffc) == (address & 0xfffffffc)) 
+  if ((bp & 0xfffffffc) == (address & 0xfffffffc))
   {
     __asm__ ("wcsr  BP1, %0" : : "r" (0));
     return 1;
   }
   __asm__ ("rcsr  %0, BP2" : "=r" (bp));
-  if ((bp & 0xfffffffc) == (address & 0xfffffffc)) 
+  if ((bp & 0xfffffffc) == (address & 0xfffffffc))
   {
     __asm__ ("wcsr  BP2, %0" : : "r" (0));
     return 1;
   }
   __asm__ ("rcsr  %0, BP3" : "=r" (bp));
-  if ((bp & 0xfffffffc) == (address & 0xfffffffc)) 
+  if ((bp & 0xfffffffc) == (address & 0xfffffffc))
   {
     __asm__ ("wcsr  BP3, %0" : : "r" (0));
     return 1;
@@ -519,10 +519,10 @@ static void gdb_stub_report_exception_info(
   char *ptr;
   int sigval;
 
-  /* Convert exception ID to a signal number */          
+  /* Convert exception ID to a signal number */
   sigval = compute_signal(registers[LM32_REG_EID]);
 
-  /* Set pointer to start of output buffer */  
+  /* Set pointer to start of output buffer */
   ptr = remcomOutBuffer;
 
   *ptr++ = 'T';
@@ -585,7 +585,7 @@ void handle_exception(void)
     thread = rtems_gdb_stub_get_current_thread();
 #endif
   current_thread = thread;
-  
+
   /*
    * Check for bus error caused by this code (rather than the program being
    * debugged)
@@ -604,10 +604,10 @@ void handle_exception(void)
   {
     /* Remove breakpoints */
     *seq_ptr = seq_insn;
-    if (branch_step)      
-      *branch_ptr = branch_insn;      
+    if (branch_step)
+      *branch_ptr = branch_insn;
     stepping = 0;
-  }   
+  }
 
   /* Reply to host that an exception has occured with some basic info */
   gdb_stub_report_exception_info(thread);
@@ -639,7 +639,7 @@ void handle_exception(void)
         if (do_threads && current_thread != thread )
           regptr = &current_thread_registers;
 #endif
-        ptr = mem2hex((unsigned char*)regptr, remcomOutBuffer, NUM_REGS * 4); 
+        ptr = mem2hex((unsigned char*)regptr, remcomOutBuffer, NUM_REGS * 4);
         break;
 
       /* Set the value of the CPU registers */
@@ -649,7 +649,7 @@ void handle_exception(void)
         if (do_threads && current_thread != thread )
           regptr = &current_thread_registers;
 #endif
-        hex2mem(ptr, (unsigned char*)regptr, NUM_REGS * 4); 
+        hex2mem(ptr, (unsigned char*)regptr, NUM_REGS * 4);
         strcpy(remcomOutBuffer, "OK");
         break;
 
@@ -724,7 +724,7 @@ void handle_exception(void)
           registers[LM32_REG_PC] = addr;
         flush_cache();
         return;
-        
+
       /* Step */
       case 's':
         /* try to read optional parameter, pc unchanged if no parm */
@@ -736,32 +736,32 @@ void handle_exception(void)
         opcode = insn & 0xfc000000;
         if (   (opcode == 0xe0000000)
             || (opcode == 0xf8000000)
-           ) 
+           )
         {
           branch_step = 1;
           branch_target = registers[LM32_REG_PC]
               + (((signed)insn << 6) >> 4);
-        }   
+        }
         else if (   (opcode == 0x44000000)
-                 || (opcode == 0x48000000) 
-                 || (opcode == 0x4c000000) 
-                 || (opcode == 0x50000000) 
-                 || (opcode == 0x54000000) 
-                 || (opcode == 0x5c000000) 
-                ) 
+                 || (opcode == 0x48000000)
+                 || (opcode == 0x4c000000)
+                 || (opcode == 0x50000000)
+                 || (opcode == 0x54000000)
+                 || (opcode == 0x5c000000)
+                )
         {
           branch_step = 1;
           branch_target = registers[LM32_REG_PC] +
               + (((signed)insn << 16) >> 14);
         }
         else if (   (opcode == 0xd8000000)
-                 || (opcode == 0xc0000000) 
+                 || (opcode == 0xc0000000)
                 )
         {
           branch_step = 1;
           branch_target = registers[(insn >> 21) & 0x1f];
-        }      
-        else 
+        }
+        else
           branch_step = 0;
 
         /* Set breakpoint after instruction we're stepping */
@@ -769,7 +769,7 @@ void handle_exception(void)
         seq_ptr++;
         seq_insn = *seq_ptr;
         *seq_ptr = LM32_BREAK;
-		
+
         /* Make sure one insn doesn't get replaced twice */
         if (seq_ptr == (unsigned int*)branch_target)
           branch_step = 0;
@@ -805,7 +805,7 @@ void handle_exception(void)
             break;
         }
         break;
-                  
+
       case 'z':
         switch (*ptr++)
         {
@@ -820,11 +820,11 @@ void handle_exception(void)
               if (err > 0)
                 strcpy(remcomOutBuffer, "OK");
               else if (err < 0)
-                strcpy(remcomOutBuffer, "E28"); 
-            }              
+                strcpy(remcomOutBuffer, "E28");
+            }
             else
               strcpy(remcomOutBuffer, "E22");
-            break; 
+            break;
         }
         break;
 
@@ -858,7 +858,7 @@ void handle_exception(void)
       }
       break;
 #endif
- 
+
       /* Set thread */
       case 'H':
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
@@ -923,8 +923,8 @@ void handle_exception(void)
         /* We reset by branching to the reset exception handler. */
         registers[LM32_REG_PC] = 0;
         return;
-#endif          
-      }                       
+#endif
+      }
 
     /* reply to the request */
     putpacket(remcomOutBuffer);
@@ -935,7 +935,7 @@ void gdb_handle_break(rtems_vector_number vector, CPU_Interrupt_frame *frame)
 {
   int i;
   unsigned int *int_regs = (unsigned int*)frame;
-  
+
   /* copy extended frame to registers */
   registers[LM32_REG_R0]   = 0;
   for (i = 1; i < NUM_REGS; i++)
@@ -957,13 +957,13 @@ void gdb_handle_break(rtems_vector_number vector, CPU_Interrupt_frame *frame)
 void lm32_gdb_stub_install(int enable_threads)
 {
   unsigned int dc;
-  
+
   /* set DEBA and remap all exception */
   __asm__("wcsr DEBA, %0" : : "r" (&_deba));
   __asm__("rcsr %0, DC" : "=r" (dc));
   dc |= 0x2;
   __asm__("wcsr DC, %0" : : "r" (dc));
-  
+
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
   if( enable_threads )
     do_threads = 1;

@@ -11,7 +11,7 @@
  *      Jay Monkman <jmonkman@adventnetworks.com>
  *
  *  This is a simple implement of abort
- *   
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -99,7 +99,7 @@ void _print_full_context(uint32_t spsr)
 }
 
 
-/* This function is supposed to figure out what caused the 
+/* This function is supposed to figure out what caused the
  * data abort, do that, then return.
  *
  * All unhandled instructions cause the system to hang.
@@ -107,7 +107,7 @@ void _print_full_context(uint32_t spsr)
 
 void do_data_abort(
   uint32_t         insn,
-  uint32_t         spsr, 
+  uint32_t         spsr,
   Context_Control *ctx
 )
 {
@@ -149,7 +149,7 @@ void do_data_abort(
     printk("\n\nUnrecognized instruction\n");
     break;
   }
-    
+
   printk("data_abort at address 0x%x, instruction: 0x%x,   spsr = 0x%x\n",
          ctx->register_lr - 8, insn, spsr);
 

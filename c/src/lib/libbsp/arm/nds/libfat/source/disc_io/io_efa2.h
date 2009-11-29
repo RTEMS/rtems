@@ -1,11 +1,11 @@
 /*
  io_efa2.h by CyteX
-	
+
  Based on io_mpfc.h by chishm (Michael Chisholm)
-	
+
  Hardware Routines for reading the NAND flash located on
  EFA2 flash carts
-	
+
  Used with permission from Cytex.
 */
 

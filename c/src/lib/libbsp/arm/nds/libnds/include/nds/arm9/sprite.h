@@ -85,9 +85,9 @@ typedef enum
 	OBJMODE_BLENDED,	/**< Color blending is on - Sprite can use HW blending features. */
 	OBJMODE_WINDOWED,	/**< Sprite can be seen only inside the sprite window. */
 	OBJMODE_BITMAP,		/**< Sprite is not using tiles - per pixel image data. */
- 
+
 } tObjMode;
- 
+
 /**
  * @enum tObjShape
  * @brief Sprite shape mode.
@@ -98,7 +98,7 @@ typedef enum {
 	OBJSHAPE_TALL,		/**< Sprite shape is NxM with N < M (Height > Width). */
 	OBJSHAPE_FORBIDDEN,	/**< Sprite shape is undefined. */
 } tObjShape;
- 
+
 /**
  * @enum tObjSize
  * @brief Object shape mode.
@@ -134,7 +134,7 @@ typedef enum {
 
 typedef union {
 	struct {
- 
+
 		struct {
 			u16 posY						:8;	/**< Sprite Y position. */
 			union {
@@ -153,7 +153,7 @@ typedef union {
 				};
 			};
 		};
- 
+
 		union {
 			struct {
 				u16 posX					:9;	/**< Sprite X position. */
@@ -176,21 +176,21 @@ typedef union {
 				};
 			};
 		};
- 
+
 		struct {
 			u16 tileIdx						:10;/**< Upper-left tile index. */
 			tObjPriority objPriority		:2;	/**< Sprite priority. */
 			u8 objPal						:4;	/**< Sprite palette to use in paletted color modes. */
 		};
- 
+
 		u16 attribute3;							/**< Four of those are used as a sprite rotation matrice */
 	};
- 
+
 	struct {
 		uint16 attribute[3];
 		uint16 filler;
 	};
- 
+
 } SpriteEntry, * pSpriteEntry;
 
 
@@ -219,6 +219,6 @@ typedef union {
 	SpriteEntry spriteBuffer[SPRITE_COUNT];
 	SpriteRotation matrixBuffer[MATRIX_COUNT];
 } tOAM;
- 
+
 
 #endif // _libnds_sprite_h_

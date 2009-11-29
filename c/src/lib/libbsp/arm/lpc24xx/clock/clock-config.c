@@ -107,16 +107,16 @@ static uint32_t lpc24xx_clock_nanoseconds_since_last_tick( void)
   uint64_t clock = LPC24XX_CCLK;
   uint32_t clicks = T0TC;
   uint64_t ns = ((uint64_t) clicks * 1000000000) / clock;
-  
+
   return (uint32_t) ns;
 }
- 
+
 #define Clock_driver_support_initialize_hardware() lpc24xx_clock_initialize()
 
 #define Clock_driver_support_install_isr( isr, old_isr) lpc24xx_clock_handler_install()
 
 #define Clock_driver_support_shutdown_hardware() lpc24xx_clock_cleanup()
-  
+
 #define Clock_driver_nanoseconds_since_last_tick lpc24xx_clock_nanoseconds_since_last_tick
 
 /* Include shared source clock driver code */

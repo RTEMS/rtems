@@ -4,7 +4,7 @@
  a FAT partition
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -130,7 +130,7 @@ Returns true on success, false on failure
 */
 bool _FAT_directory_entryFromPath (PARTITION* partition, DIR_ENTRY* entry, const char* path, const char* pathEnd);
 
-/* 
+/*
 Changes the current directory to the one specified by path
 Returns true on success, false on failure
 */
@@ -154,10 +154,10 @@ bool _FAT_directory_addEntry (PARTITION* partition, DIR_ENTRY* entry, u32 dirClu
 /*
 Get the start cluster of a file from it's entry data
 */
-u32 _FAT_directory_entryGetCluster (const u8* entryData); 
+u32 _FAT_directory_entryGetCluster (const u8* entryData);
 
-/* 
-Fill in the file name and entry data of DIR_ENTRY* entry. 
+/*
+Fill in the file name and entry data of DIR_ENTRY* entry.
 Assumes that the entry's dataStart and dataEnd are correct
 Returns true on success, false on failure
 */

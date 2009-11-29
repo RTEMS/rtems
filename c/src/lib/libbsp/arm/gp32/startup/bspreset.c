@@ -4,7 +4,7 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
- */ 
+ */
 
 #include <bsp.h>
 

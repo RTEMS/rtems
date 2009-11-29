@@ -1,14 +1,14 @@
 /*
-	io_scsd.c 
+	io_scsd.c
 
 	Hardware Routines for reading a Secure Digital card
 	using the SC SD
-	
-	Some code based on scsd_c.c, written by Amadeus 
+
+	Some code based on scsd_c.c, written by Amadeus
 	and Jean-Pierre Thomasset as part of DSLinux.
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -29,20 +29,20 @@
  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
+
 	2006-07-22 - Chishm
 		* First release of stable code
-		
+
 	2006-07-25 - Chishm
 		* Improved startup function that doesn't delay hundreds of seconds
 		  before reporting no card inserted.
 
 	2006-08-05 - Chishm
 		* Tries multiple times to get a Relative Card Address at startup
-		
+
 	2006-08-07 - Chishm
 		* Moved the SD initialization to a common function
-		
+
 	2006-08-19 - Chishm
 		* Added SuperCard Lite support
 */
@@ -88,7 +88,7 @@ static u32 _SCSD_relativeCardAddress = 0;	// Preshifted Relative Card Address
 extern bool _SCSD_writeData_s (u8 *data, u16* crc);
 
 static inline void _SCSD_unlock (void) {
-	_SC_changeMode (SC_MODE_MEDIA);	
+	_SC_changeMode (SC_MODE_MEDIA);
 }
 
 static inline void _SCSD_enable_lite (void) {
@@ -115,11 +115,11 @@ static bool _SCSD_sendCommand (u8 command, u32 argument) {
 	if (i == 0) {
 		return false;
 	}
-		
+
 	dataByte = REG_SCSD_CMD;
 
 	tempDataPtr = databuff;
-	
+
 	while (length--) {
 		dataByte = *tempDataPtr++;
 		for (curBit = 7; curBit >=0; curBit--){
@@ -127,30 +127,30 @@ static bool _SCSD_sendCommand (u8 command, u32 argument) {
 			dataByte = dataByte << 1;
 		}
 	}
-	
+
 	return true;
 }
 
 // Returns the response from the SD card to a previous command.
 static bool _SCSD_getResponse (u8* dest, u32 length) {
-	u32 i;	
+	u32 i;
 	int dataByte;
 	int numBits = length * 8;
-	
+
 	// Wait for the card to be non-busy
 	i = BUSY_WAIT_TIMEOUT;
 	while (((REG_SCSD_CMD & 0x01) != 0) && (--i));
 	if (dest == NULL) {
 		return true;
 	}
-	
+
 	if (i == 0) {
 		// Still busy after the timeout has passed
 		return false;
 	}
-	
+
 	// The first bit is always 0
-	dataByte = 0;	
+	dataByte = 0;
 	numBits--;
 	// Read the remaining bits in the response.
 	// It's always most significant bit first
@@ -167,7 +167,7 @@ static bool _SCSD_getResponse (u8* dest, u32 length) {
 	for (i = 0; i < 16; i++) {
 		dataByte = REG_SCSD_CMD;
 	}
-	
+
 	return true;
 }
 
@@ -211,22 +211,22 @@ bool _SCSD_cmd_17byte_response (u8* responseBuffer, u8 command, u32 data) {
 
 static bool _SCSD_initCard (void) {
 	_SCSD_enable_lite();
-	
+
 	// Give the card time to stabilise
 	_SCSD_sendClocks (NUM_STARTUP_CLOCKS);
-	
+
 	// Reset the card
 	if (!_SCSD_sendCommand (GO_IDLE_STATE, 0)) {
 		return false;
 	}
 
 	_SCSD_sendClocks (NUM_STARTUP_CLOCKS);
-	
+
 	// Card is now reset, including it's address
 	_SCSD_relativeCardAddress = 0;
 
 	// Init the card
-	return _SD_InitCard (_SCSD_cmd_6byte_response, 
+	return _SD_InitCard (_SCSD_cmd_6byte_response,
 				_SCSD_cmd_17byte_response,
 				true,
 				&_SCSD_relativeCardAddress);
@@ -237,7 +237,7 @@ static bool _SCSD_readData (void* buffer) {
 	u16* buff = (u16*)buffer;
 	volatile register u32 temp;
 	int i;
-	
+
 	i = BUSY_WAIT_TIMEOUT;
 	while ((REG_SCSD_DATAREAD & SCSD_STS_BUSY) && (--i));
 	if (i == 0) {
@@ -256,17 +256,17 @@ static bool _SCSD_readData (void* buffer) {
 		while(i--) {
 			temp = REG_SCSD_DATAREAD_32;
 			temp = REG_SCSD_DATAREAD_32 >> 16;
-			*buff++ = temp; 
+			*buff++ = temp;
 		}
 	}
 
-	
+
 	for (i = 0; i < 8; i++) {
 		temp = REG_SCSD_DATAREAD_32;
 	}
-	
+
 	temp = REG_SCSD_DATAREAD;
-	
+
 	return true;
 }
 
@@ -300,7 +300,7 @@ bool _SCSD_readSectors (u32 sector, u32 numSectors, void* buffer) {
 	u32 i;
 	u8* dest = (u8*) buffer;
 	u8 responseBuffer[6];
-	
+
 	if (numSectors == 1) {
 		// If it's only reading one sector, use the (slightly faster) READ_SINGLE_BLOCK
 		if (!_SCSD_sendCommand (READ_SINGLE_BLOCK, sector * BYTES_PER_READ)) {
@@ -316,13 +316,13 @@ bool _SCSD_readSectors (u32 sector, u32 numSectors, void* buffer) {
 		if (!_SCSD_sendCommand (READ_MULTIPLE_BLOCK, sector * BYTES_PER_READ)) {
 			return false;
 		}
-	
+
 		for(i=0; i < numSectors; i++, dest+=BYTES_PER_READ) {
 			if (!_SCSD_readData(dest)) {
 				return false;
 			}
 		}
-	
+
 		// Stop the streaming
 		_SCSD_sendCommand (STOP_TRANSMISSION, 0);
 		_SCSD_getResponse_R1b (responseBuffer);
@@ -342,7 +342,7 @@ bool _SCSD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
 	while (numSectors--) {
 		// Calculate the CRC16
 		_SD_CRC16 ( data, BYTES_PER_READ, (u8*)crc);
-		
+
 		// Send write command and get a response
 		_SCSD_sendCommand (WRITE_BLOCK, offset);
 		if (!_SCSD_getResponse_R1 (responseBuffer)) {
@@ -353,13 +353,13 @@ bool _SCSD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
 		if (! _SCSD_writeData_s (data, crc)) {
 			return false;
 		}
-			
+
 		// Send a few clocks to the SD card
 		_SCSD_sendClocks(0x10);
-		
+
 		offset += BYTES_PER_READ;
 		data += BYTES_PER_READ;
-		
+
 		// Wait until card is finished programming
 		i = WRITE_TIMEOUT;
 		responseBuffer[3] = 0;
@@ -372,7 +372,7 @@ bool _SCSD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
 			}
 		} while (((responseBuffer[3] & 0x1f) != ((SD_STATE_TRAN << 1) | READY_FOR_DATA)));
 	}
-	
+
 	return true;
 }
 

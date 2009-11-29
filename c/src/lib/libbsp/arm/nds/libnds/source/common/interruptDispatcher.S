@@ -22,9 +22,35 @@
 		distribution.
 
 	$Log$
+	Revision 1.2  2008/08/19 15:47:14  joel
+	2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+		* dswifi/arm7/makefile, dswifi/include/netinet/in.h,
+		libnds/basicARM7/source/defaultARM7.c, libnds/include/gbfs.h,
+		libnds/include/nds/bios.h, libnds/include/nds/card.h,
+		libnds/include/nds/dma.h, libnds/include/nds/interrupts.h,
+		libnds/include/nds/ipc.h, libnds/include/nds/jtypes.h,
+		libnds/include/nds/registers_alt.h, libnds/include/nds/system.h,
+		libnds/include/nds/timers.h, libnds/include/nds/arm7/audio.h,
+		libnds/include/nds/arm7/clock.h, libnds/include/nds/arm7/serial.h,
+		libnds/include/nds/arm7/touch.h, libnds/include/nds/arm9/boxtest.h,
+		libnds/include/nds/arm9/cache.h, libnds/include/nds/arm9/console.h,
+		libnds/include/nds/arm9/ndsmotion.h, libnds/include/nds/arm9/video.h,
+		libnds/include/nds/arm9/videoGL.h, libnds/source/arm7/audio.c,
+		libnds/source/arm7/clock.c, libnds/source/arm7/microphone.c,
+		libnds/source/arm7/touch.c, libnds/source/arm7/userSettings.c,
+		libnds/source/arm9/boxtest.c, libnds/source/arm9/gurumeditation.c,
+		libnds/source/arm9/ndsmotion.c, libnds/source/arm9/videoGL.c,
+		libnds/source/common/card.c,
+		libnds/source/common/interruptDispatcher.S, touchscreen/reco.c: Fix
+		various warnings by fixing prototypes. Remove unused .bin files.
+		Convert all files to UNIX CF/LF.
+		* libnds/source/arm9/COS.bin, libnds/source/arm9/SIN.bin,
+		libnds/source/arm9/TAN.bin, libnds/source/arm9/default_font.bin: Removed.
+
 	Revision 1.1  2008/04/17 23:09:41  joel
 	2008-04-17	Joel Sherrill <joel.sherrill@OARcorp.com>
-	
+
 		* Makefile.am: Move .s files to .S
 		* dswifi/common/source/spinlock.S, libfat/source/disc_io/io_dldi.S,
 		libfat/source/disc_io/io_scsd_s.S, libnds/source/arm9/COS.S,
@@ -39,10 +65,10 @@
 		libnds/source/arm9/exceptionHandler.s, libnds/source/arm9/icache.s,
 		libnds/source/common/biosCalls.s,
 		libnds/source/common/interruptDispatcher.s: Removed.
-	
+
 	Revision 1.1  2008/04/16 18:37:33  joel
 	2008-04-16	Matthieu Bucchianeri <mbucchia@gmail.com>
-	
+
 		* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
 		mk_libnds.sh, patch.libnds, preinstall.am, block/block.c,
 		clock/clock.c, console/console.c, coproc/coproc.S, coproc/coproc.c,
@@ -177,38 +203,38 @@
 		touchscreen/reco.h, touchscreen/touchscreen.c,
 		touchscreen/touchscreen.h, wifi/compat.c, wifi/compat.h, wifi/wifi.c:
 		New files.
-	
+
 	Revision 1.10  2007/08/11 06:00:23  wntrmute
 	make nesting really work
-	
+
 	Revision 1.9  2007/01/10 15:48:27  wntrmute
 	remove unused code
-	
+
 	Revision 1.8  2006/12/16 09:10:02  wntrmute
 	acknowledge interrupt before calling handler
-	
+
 	Revision 1.7  2006/04/26 05:11:31  wntrmute
 	rebase dtcm, take __irq_flags and __irq_vector from linker script
 	move arm7 irq vector & irq flags to actual locations
-	
+
 	Revision 1.6  2006/04/23 18:19:15  wntrmute
 	reworked interrupt code to allow dtcm moving
-	
+
 	Revision 1.5  2005/12/12 13:01:55  wntrmute
 	disable interrupts on return from user handler
-	
+
 	Revision 1.4  2005/10/21 22:43:42  wntrmute
 	restore REG_IME on exit from null handler
-	
+
 	Revision 1.3  2005/09/27 18:21:53  wntrmute
 	safer nested interrupt support
-	
+
 	Revision 1.2  2005/09/04 16:37:01  wntrmute
 	check for NULL handler
-	
+
 	Revision 1.1  2005/09/03 17:09:35  wntrmute
 	added interworking aware interrupt dispatcher
-	
+
 
 ---------------------------------------------------------------------------------*/
 
@@ -282,7 +308,7 @@ got_handler:
 	msr	cpsr,r2
 
 	str	r0, [r3, #0x0214]	@ IF Clear
-	
+
 	push	{lr}
 	adr	lr, IntrRet
 	bx	r1

@@ -1,10 +1,10 @@
 /*
-	io_m3_common.h 
+	io_m3_common.h
 
 	Routines common to all version of the Super Card
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -42,6 +42,6 @@ void _SC_changeMode(u8 mode) {
 	*unlockAddress = 0xA55A ;
 	*unlockAddress = mode ;
 	*unlockAddress = mode ;
-} 
+}
 
 

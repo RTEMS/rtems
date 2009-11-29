@@ -45,7 +45,7 @@ extern "C" {
 */
 void	IC_InvalidateAll(void);
 
-	
+
 /*! \fn IC_InvalidateRange(const void *base, u32 size)
 	\brief invalidate the instruction cache for a range of addresses.
 	\param base base address of the region to invalidate

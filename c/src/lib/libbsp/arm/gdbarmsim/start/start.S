@@ -80,7 +80,7 @@
 	    - Allow linker script to provide stack via __stack symbol - see
 	      defintion of .Lstack
 	    - Provide "hooks" that may be used by the application to add
-	      custom init code - see .Lhwinit and .Lswinit	
+	      custom init code - see .Lhwinit and .Lswinit
 	    - Go through all execution modes and set up stack for each of them.
 	      Loosely based on init.s from ARM/Motorola example code.
               Note: Mode switch via CPSR is not allowed once in non-privileged
@@ -91,10 +91,10 @@
 	cmp	r3, #0
 #ifdef __thumb2__
 	it	eq
-#endif	
+#endif
 	ldreq	r3, .LC0
 	/* Note: This 'mov' is essential when starting in User, and ensures we
-		 always get *some* sp value for the initial mode, even if we 
+		 always get *some* sp value for the initial mode, even if we
 		 have somehow missed it below (in which case it gets the same
 		 value as FIQ - not ideal, but better than nothing.) */
 	mov	sp, r3
@@ -107,8 +107,8 @@
 	msr     CPSR_c, #0xD1	/* FIRQ mode, interrupts disabled */
 	mov 	sp, r3
 	sub	sl, sp, #0x1000	/* This mode also has its own sl (see below) */
-	
-	mov	r3, sl	
+
+	mov	r3, sl
 	msr     CPSR_c, #0xD7	/* Abort mode, interrupts disabled */
 	mov	sp, r3
 	sub	r3, r3, #0x1000
@@ -120,7 +120,7 @@
 	msr     CPSR_c, #0xD2	/* IRQ mode, interrupts disabled */
 	mov	sp, r3
 	sub	r3, r3, #0x2000
-		
+
 	msr     CPSR_c, #0xD3	/* Supervisory mode, interrupts disabled */
 
 	mov	sp, r3
@@ -128,11 +128,11 @@
 	bic	r3, r3, #0x00FF	/* Align with current 64k block */
 	bic	r3, r3, #0xFF00
 
-	str	r3, [r3, #-4]	/* Move value into user mode sp without */ 
-	ldmdb	r3, {sp}^       /* changing modes, via '^' form of ldm */ 
+	str	r3, [r3, #-4]	/* Move value into user mode sp without */
+	ldmdb	r3, {sp}^       /* changing modes, via '^' form of ldm */
 	orr	r2, r2, #0xC0	/* Back to original mode, presumably SVC, */
 	msr	CPSR_c, r2	/* with FIQ/IRQ disable bits forced to 1 */
-#endif	
+#endif
 .LC23:
 	/* Setup a default stack-limit in-case the code has been
 	   compiled with "-mapcs-stack-check".  Hard-wiring this value
@@ -148,11 +148,11 @@
 	mov 	a2, #0			/* Second arg: fill value */
 	mov	fp, a2			/* Null frame pointer */
 	mov	r7, a2			/* Null frame pointer for Thumb */
-	
+
 	ldr	a1, .LC1		/* First arg: start of memory block */
-	ldr	a3, .LC2	
+	ldr	a3, .LC2
 	sub	a3, a3, a1		/* Third arg: length of block */
-	
+
 
 #if defined(__thumb__) && !defined(__thumb2__)
 	/* Enter Thumb mode.... */
@@ -162,9 +162,9 @@
 	.code 16
 	.global __change_mode
 	.thumb_func
-__change_mode:	
+__change_mode:
 #endif
-	
+
 	bl	FUNCTION (memset)
 #if !defined (ARM_RDP_MONITOR) && !defined (ARM_RDI_MONITOR)
 /* Changes by toralf: Taken from libgloss/m68k/crt0.S
@@ -180,7 +180,7 @@ __change_mode:
 	mov	lr, pc
 	mov	pc, r3
 #endif
-.LC24:	
+.LC24:
 	ldr	r3, .Lswinit
 	cmp	r3, #0
 	beq	.LC25
@@ -191,13 +191,13 @@ __change_mode:
 	mov	pc, r3
 #endif
 
-.LC25:	
+.LC25:
 	mov	r0, #0		/*  no arguments  */
 	mov	r1, #0		/*  no argv either */
 #else
 	/* Need to set up standard file handles */
 	bl	FUNCTION (initialise_monitor_handles)
-	
+
 #ifdef ARM_RDP_MONITOR
 	swi	SWI_GetEnv	/*  sets r0 to point to the command line */
 	mov	r1, r0
@@ -289,7 +289,7 @@ __change_mode:
 	str	r4, [r3]
 	add	r3, #4
 	b	.LC15
-.LC14:	
+.LC14:
 	/* Ensure doubleword stack alignment.  */
 	mov	r4, sp
 	mov	r5, #7
@@ -328,10 +328,10 @@ change_back:
 	   With an Angel debug monitor, this will report 'Unknown SWI'.	 */
 	swi	SWI_Exit
 #endif
-	
-	/* For Thumb, constants must be after the code since only 
+
+	/* For Thumb, constants must be after the code since only
 	   positive offsets are supported for PC relative addresses.  */
-	
+
 	.align 0
 .LC0:
 #ifdef ARM_RDI_MONITOR
@@ -342,15 +342,15 @@ change_back:
 	   may be defined externally; .Lstack will be used instead of .LC0 if
 	   it points to a non-0 value. Also set up references to "hooks" that
            may be used by the application to provide additional init code. */
-	
+
 #ifdef __pe__
 	.word	0x800000
 #else
 	.word	0x80000			/* Top of RAM on the PIE board.  */
 #endif
-.Lstack:	
+.Lstack:
 	.word	__stack
-.Lhwinit:	
+.Lhwinit:
 	.word	FUNCTION (hardware_init_hook)
 .Lswinit:
 	.word	FUNCTION (software_init_hook)
@@ -360,13 +360,13 @@ change_back:
 	   runtime (meaning "ignore setting") for the variables, when the user
 	   does not provide the symbols. (The linker uses a weak symbol if,
 	   and only if, a normal version of the same symbol isn't provided
-	   e.g. by a linker script or another object file.) */	
+	   e.g. by a linker script or another object file.) */
 
 	.weak __stack
-	.weak FUNCTION (hardware_init_hook) 
+	.weak FUNCTION (hardware_init_hook)
 	.weak FUNCTION (software_init_hook)
 #endif
-	
+
 #endif
 #if defined(__ELF__) && !defined(__USING_SJLJ_EXCEPTIONS__)
 	/* Protect against unhandled exceptions.  */
@@ -396,7 +396,7 @@ __stack_base__:	.word	0
 StackLimit:	.word	0
 CommandLine:	.space	256,0	/*  Maximum length of 255 chars handled.  */
 #endif
-	
+
 #ifdef __pe__
 	.section .idata$3
 	.long	0,0,0,0,0,0,0,0

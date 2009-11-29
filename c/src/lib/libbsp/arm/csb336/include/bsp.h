@@ -39,7 +39,7 @@ int get_perclk1_freq(void);
 extern struct rtems_bsdnet_ifconfig *config;
 
 /* Change these to match your board */
-int rtems_mc9328mxl_enet_attach(struct rtems_bsdnet_ifconfig *config, 
+int rtems_mc9328mxl_enet_attach(struct rtems_bsdnet_ifconfig *config,
                                 void *chip);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_mc9328mxl_enet_attach

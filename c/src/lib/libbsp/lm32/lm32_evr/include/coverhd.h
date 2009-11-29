@@ -2,9 +2,9 @@
  *
  *  This include file has defines to represent the overhead associated
  *  with calling a particular directive from C.  These are used in the
- *  Timing Test Suite to ignore the overhead required to pass arguments 
- *  to directives.  On some CPUs and/or target boards, this overhead 
- *  is significant and makes it difficult to distinguish internal 
+ *  Timing Test Suite to ignore the overhead required to pass arguments
+ *  to directives.  On some CPUs and/or target boards, this overhead
+ *  is significant and makes it difficult to distinguish internal
  *  RTEMS execution time from that used to call the directive.
  *  This file should be updated after running the C overhead timing
  *  test.  Once this update has been performed, the RTEMS Time Test

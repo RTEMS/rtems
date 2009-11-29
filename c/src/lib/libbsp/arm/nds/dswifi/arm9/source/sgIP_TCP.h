@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -99,7 +99,7 @@ typedef struct SGIP_TCP_SYNCOOKIE {
 	unsigned long localseq, remoteseq;
 	unsigned long localip, remoteip;
 	unsigned short localport, remoteport;
-	unsigned long timenext,timebackoff; 
+	unsigned long timenext,timebackoff;
 	sgIP_Record_TCP * linked; // parent listening connection
 } sgIP_TCP_SYNCookie;
 

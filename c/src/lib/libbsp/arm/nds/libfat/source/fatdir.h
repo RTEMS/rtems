@@ -1,11 +1,11 @@
 /*
  fatdir.h
- 
- Functions used by the newlib disc stubs to interface with 
+
+ Functions used by the newlib disc stubs to interface with
  this library
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -30,10 +30,10 @@
 	2006-08-13 - Chishm
 		* Moved all externally visible directory related functions to fatdir
 		* Added _FAT_mkdir_r
-		
+
 	2006-08-14 - Chishm
 		* Added directory iterator functions
-		
+
 	2007-01-10 - Chishm
 		* Updated directory iterator functions for DevkitPro r20
 */

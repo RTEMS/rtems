@@ -37,7 +37,7 @@ static void imx_uart_init(int minor);
 static void imx_uart_set_baud(int, int);
 static int imx_uart_poll_write(int, const char *, int);
 
-#if defined(USE_INTERRUPTS) 
+#if defined(USE_INTERRUPTS)
 static void imx_uart_tx_isr(rtems_irq_hdl_param);
 static void imx_uart_rx_isr(rtems_irq_hdl_param);
 static void imx_uart_isr_on(const rtems_irq_connect_data *irq);
@@ -49,7 +49,7 @@ static int imx_uart_intr_write(int, const char *, int);
 
 
 /* TERMIOS callbacks */
-#if defined(USE_INTERRUPTS) 
+#if defined(USE_INTERRUPTS)
 rtems_termios_callbacks imx_uart_cbacks = {
     .firstOpen            = imx_uart_first_open,
     .lastClose            = imx_uart_last_close,
@@ -60,7 +60,7 @@ rtems_termios_callbacks imx_uart_cbacks = {
     .startRemoteTx        = NULL,
     .outputUsesInterrupts = 1,
 };
-#else 
+#else
 rtems_termios_callbacks imx_uart_cbacks = {
     .firstOpen            = imx_uart_first_open,
     .lastClose            = imx_uart_last_close,
@@ -73,7 +73,7 @@ rtems_termios_callbacks imx_uart_cbacks = {
 };
 #endif
 
-#if defined(USE_INTERRUPTS) 
+#if defined(USE_INTERRUPTS)
 static rtems_irq_connect_data imx_uart_tx_isr_data[NUM_DEVS];
 static rtems_irq_connect_data imx_uart_rx_isr_data[NUM_DEVS];
 #endif
@@ -141,7 +141,7 @@ rtems_device_driver console_open(
 
     return rc;
 }
- 
+
 rtems_device_driver console_close(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
@@ -150,7 +150,7 @@ rtems_device_driver console_close(
 {
     return rtems_termios_close(arg);
 }
- 
+
 rtems_device_driver console_read(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
@@ -159,7 +159,7 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read(arg);
 }
- 
+
 rtems_device_driver console_write(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
@@ -168,7 +168,7 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write(arg);
 }
- 
+
 rtems_device_driver console_control(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
@@ -186,25 +186,25 @@ static void imx_uart_init(int minor)
     imx_uart_data[minor].idx   = 0;
 
     if (minor == 0) {
-#if defined(USE_INTERRUPTS) 
+#if defined(USE_INTERRUPTS)
         imx_uart_tx_isr_data[minor].name = BSP_INT_UART1_TX;
         imx_uart_rx_isr_data[minor].name = BSP_INT_UART1_RX;
 #endif
-        imx_uart_data[minor].regs = 
+        imx_uart_data[minor].regs =
             (mc9328mxl_uart_regs_t *) MC9328MXL_UART1_BASE;
     } else if (minor == 1) {
-#if defined(USE_INTERRUPTS) 
+#if defined(USE_INTERRUPTS)
         imx_uart_tx_isr_data[minor].name = BSP_INT_UART2_TX;
         imx_uart_rx_isr_data[minor].name = BSP_INT_UART2_RX;
 #endif
-        imx_uart_data[minor].regs = 
+        imx_uart_data[minor].regs =
             (mc9328mxl_uart_regs_t *) MC9328MXL_UART2_BASE;
     } else {
-        rtems_panic("%s:%d Unknown UART minor number %d\n", 
-                    __FUNCTION__, __LINE__, minor); 
+        rtems_panic("%s:%d Unknown UART minor number %d\n",
+                    __FUNCTION__, __LINE__, minor);
     }
 
-#if defined(USE_INTERRUPTS) 
+#if defined(USE_INTERRUPTS)
     imx_uart_tx_isr_data[minor].hdl    = imx_uart_tx_isr;
     imx_uart_tx_isr_data[minor].handle = &imx_uart_data[minor];
     imx_uart_tx_isr_data[minor].on     = imx_uart_isr_on;
@@ -234,8 +234,8 @@ static void imx_uart_init(int minor)
     imx_uart_data[minor].regs->cr4 = 0;
 
     imx_uart_data[minor].regs->fcr = (
-        MC9328MXL_UART_FCR_TXTL(32) | 
-        MC9328MXL_UART_FCR_RFDIV_1 | 
+        MC9328MXL_UART_FCR_TXTL(32) |
+        MC9328MXL_UART_FCR_RFDIV_1 |
         MC9328MXL_UART_FCR_RXTL(1));
 
     imx_uart_set_baud(minor, 38400);
@@ -247,8 +247,8 @@ static int imx_uart_first_open(int major, int minor, void *arg)
     rtems_libio_open_close_args_t *args = arg;
 
     imx_uart_data[minor].tty   = args->iop->data1;
-    
-#if defined(USE_INTERRUPTS) 
+
+#if defined(USE_INTERRUPTS)
     BSP_install_rtems_irq_handler(&imx_uart_tx_isr_data[minor]);
     BSP_install_rtems_irq_handler(&imx_uart_rx_isr_data[minor]);
 
@@ -260,7 +260,7 @@ static int imx_uart_first_open(int major, int minor, void *arg)
 
 static int imx_uart_last_close(int major, int minor, void *arg)
 {
-#if defined(USE_INTERRUPTS) 
+#if defined(USE_INTERRUPTS)
     BSP_remove_rtems_irq_handler(&imx_uart_tx_isr_data[minor]);
     BSP_remove_rtems_irq_handler(&imx_uart_rx_isr_data[minor]);
 #endif
@@ -268,7 +268,7 @@ static int imx_uart_last_close(int major, int minor, void *arg)
     return 0;
 }
 
-static int imx_uart_poll_read(int minor) 
+static int imx_uart_poll_read(int minor)
 {
     if (imx_uart_data[minor].regs->sr2 & MC9328MXL_UART_SR2_RDR) {
         return imx_uart_data[minor].regs->rxd & 0xff;
@@ -278,7 +278,7 @@ static int imx_uart_poll_read(int minor)
 }
 
 
-static int imx_uart_poll_write(int minor, const char *buf, int len) 
+static int imx_uart_poll_write(int minor, const char *buf, int len)
 {
     int i;
     for (i = 0; i < len; i++) {
@@ -293,22 +293,22 @@ static int imx_uart_poll_write(int minor, const char *buf, int len)
 
 }
 
-#if defined(USE_INTERRUPTS) 
+#if defined(USE_INTERRUPTS)
 static int imx_uart_intr_write(int minor, const char *buf, int len)
 {
     imx_uart_data[minor].buf = buf;
     imx_uart_data[minor].len = len;
     imx_uart_data[minor].idx = 0;
-        
+
     imx_uart_data[minor].regs->cr1 |= MC9328MXL_UART_CR1_TXMPTYEN;
 
     return 1;
 }
 #endif
 
-    
+
 /* This is for setting baud rate, bits, etc. */
-static int imx_uart_set_attrs(int minor, const struct termios *t) 
+static int imx_uart_set_attrs(int minor, const struct termios *t)
 {
     int baud;
 
@@ -318,7 +318,7 @@ static int imx_uart_set_attrs(int minor, const struct termios *t)
     return 0;
 }
 
-#if defined(USE_INTERRUPTS) 
+#if defined(USE_INTERRUPTS)
 static void imx_uart_isr_on(const rtems_irq_connect_data *irq)
 {
     MC9328MXL_AITC_INTENNUM = irq->name;
@@ -403,12 +403,12 @@ static void imx_uart_set_baud(int minor, int baud)
     case MC9328MXL_UART_FCR_RFDIV_6:  ref_freq = perclk1/6; break;
     case MC9328MXL_UART_FCR_RFDIV_7:  ref_freq = perclk1/7; break;
     default:
-        rtems_panic("%s:%d Unknown RFDIV: 0x%x", 
+        rtems_panic("%s:%d Unknown RFDIV: 0x%x",
                     __FUNCTION__, __LINE__,
                     fcr & MC9328MXL_UART_FCR_RFDIV_MASK);
         break;
     }
-    
+
     denom = ref_freq / baud;
 
     imx_uart_data[minor].regs->bir = 0xf;
@@ -416,7 +416,7 @@ static void imx_uart_set_baud(int minor, int baud)
 }
 
 
-/* 
+/*
  * Polled, non-blocking read from UART
  */
 int imx_uart_poll_read_char(int minor)
@@ -424,7 +424,7 @@ int imx_uart_poll_read_char(int minor)
     return imx_uart_poll_read(minor);
 }
 
-/* 
+/*
  * Polled, blocking write from UART
  */
 void  imx_uart_poll_write_char(int minor, char c)

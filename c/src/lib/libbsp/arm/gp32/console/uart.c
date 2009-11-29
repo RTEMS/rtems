@@ -1,10 +1,10 @@
 /*
  *  console driver for S3C2400 UARTs
  *
- *  This driver uses the shared console driver in 
+ *  This driver uses the shared console driver in
  *  ...../libbsp/shared/console.c
  *
- *  If you want the driver to be interrupt driven, you 
+ *  If you want the driver to be interrupt driven, you
  *  need to write the ISR, and in the ISR insert the
  *  chars into termios's queue.
  *
@@ -53,8 +53,8 @@ console_data  Console_Port_Data[NUM_DEVS];
 rtems_device_minor_number  Console_Port_Minor = 0;
 
 /* Pointers to functions for handling the UART. */
-console_fns uart_fns = 
-{ 
+console_fns uart_fns =
+{
     libchip_serial_default_probe,
     uart_first_open,
     uart_last_close,
@@ -66,7 +66,7 @@ console_fns uart_fns =
     FALSE      /* TRUE if interrupt driven, FALSE if not. */
 };
 
-/* 
+/*
  * There's one item in array for each UART.
  *
  * Some of these fields are marked "NOT USED". They are not used
@@ -99,25 +99,25 @@ console_tbl Console_Port_Tbl[] = {
 /* Functions called via termios callbacks (i.e. the ones in uart_fns */
 /*********************************************************************/
 
-/* 
- * This is called the first time each device is opened. If the driver 
- * is interrupt driven, you should enable interrupts here. Otherwise, 
+/*
+ * This is called the first time each device is opened. If the driver
+ * is interrupt driven, you should enable interrupts here. Otherwise,
  * it's probably safe to do nothing.
  *
  * Since micromonitor already set up the UART, we do nothing.
  */
-static int uart_first_open(int major, int minor, void *arg) 
+static int uart_first_open(int major, int minor, void *arg)
 {
     return 0;
 }
 
 
-/* 
- * This is called the last time each device is closed. If the driver 
- * is interrupt driven, you should disable interrupts here. Otherwise, 
+/*
+ * This is called the last time each device is closed. If the driver
+ * is interrupt driven, you should disable interrupts here. Otherwise,
  * it's probably safe to do nothing.
  */
-static int uart_last_close(int major, int minor, void *arg) 
+static int uart_last_close(int major, int minor, void *arg)
 {
     return 0;
 }
@@ -129,7 +129,7 @@ static int uart_last_close(int major, int minor, void *arg)
  * Return -1 if there's no data, otherwise return
  * the character in lowest 8 bits of returned int.
  */
-static int uart_read(int minor) 
+static int uart_read(int minor)
 {
     char c;
 
@@ -148,8 +148,8 @@ static int uart_read(int minor)
 }
 
 
-/* 
- * Write buffer to UART 
+/*
+ * Write buffer to UART
  *
  * return 1 on success, -1 on error
  */
@@ -163,14 +163,14 @@ static int uart_write(int minor, const char *buf, int len)
             while(!(rUTRSTAT0 & 0x2)) {
                 continue;
             }
-            
+
            rUTXH0 = (char) buf[i];
         }
     } else {
         printk("Unknown console minor number: %d\n", minor);
         return -1;
     }
-    
+
     return 1;
 }
 
@@ -180,13 +180,13 @@ static void uart_init(int minor)
 {
 	int i;
 	unsigned int reg = 0;
-	
+
 	/* enable UART0 */
 	rCLKCON|=0x100;
 
 	/* value is calculated so : (int)(PCLK/16./baudrate) -1 */
 	reg = get_PCLK() / (16 * 115200) - 1;
-       
+
 	/* FIFO enable, Tx/Rx FIFO clear */
 	rUFCON0 = 0x07;
 	rUMCON0 = 0x0;
@@ -200,7 +200,7 @@ static void uart_init(int minor)
 	rUBRDIV0 = reg;
 
 	for (i = 0; i < 100; i++);
-	
+
 }
 
 /* I'm not sure this is needed for the shared console driver. */
@@ -210,7 +210,7 @@ static void    uart_write_polled(int minor, char c)
 }
 
 /* This is for setting baud rate, bits, etc. */
-static int     uart_set_attributes(int minor, const struct termios *t) 
+static int     uart_set_attributes(int minor, const struct termios *t)
 {
     return 0;
 }
@@ -221,7 +221,7 @@ static int     uart_set_attributes(int minor, const struct termios *t)
  * functions use them instead.
  */
 /***********************************************************************/
-/* 
+/*
  * Read from UART. This is used in the exit code, and can't
  * rely on interrupts.
 */
@@ -232,7 +232,7 @@ int uart_poll_read(int minor)
 
 
 /*
- * Write a character to the console. This is used by printk() and 
+ * Write a character to the console. This is used by printk() and
  * maybe other low level functions. It should not use interrupts or any
  * RTEMS system calls. It needs to be very simple
  */

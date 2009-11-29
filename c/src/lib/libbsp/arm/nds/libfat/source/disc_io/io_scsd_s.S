@@ -3,11 +3,11 @@
 @
 @	Hardware Routines for reading a Secure Digital card
 @	using the SC SD
-@	
+@
 @	Based on code supplied by Romman
 @
 @ Copyright (c) 2006 Michael "Chishm" Chisholm
-@	
+@
 @ Redistribution and use in source and binary forms, with or without modification,
 @ are permitted provided that the following conditions are met:
 @
@@ -39,7 +39,7 @@
 
     .align 4
 	.arm
-	
+
 	.equ	REG_SCSD_DATAWRITE,	0x09000000
 	.equ	BYTES_PER_READ,	0x200
 	.equ	SCSD_STS_BUSY,	0x100
@@ -50,7 +50,7 @@
 @ bool _SCSD_writeData_s (u8 *data, u16* crc)
 
     .global _SCSD_writeData_s
-	
+
 _SCSD_writeData_s:
 	stmfd   r13!, {r4-r5}
 	mov		r5, #BYTES_PER_READ
@@ -64,7 +64,7 @@ _SCSD_writeData_busy_wait:
 	moveq	r0, #FALSE			@ return false on failure
 	beq		_SCSD_writeData_return
 	@ Check the busy bit of the status register
-	ldrh	r3, [r2]   
+	ldrh	r3, [r2]
 	tst		r3,	#SCSD_STS_BUSY
 	beq		_SCSD_writeData_busy_wait
 
@@ -72,45 +72,45 @@ _SCSD_writeData_busy_wait:
 
 	mov		r3, #0 				@ start bit
 	strh	r3,[r2]
-	
+
 @ Check if the data buffer is aligned on a halfword boundary
 	tst		r0, #1
 	beq		_SCSD_writeData_data_loop
-	
+
 @ Used when the source data is unaligned
 _SCSD_writeData_data_loop_unaligned:
 		ldrb	r3, [r0], #1
 		ldrb	r4, [r0], #1
 		orr		r3, r3, r4, lsl #8
-		stmia   r2, {r3-r4}  
-	subs    r5, r5, #2                 
+		stmia   r2, {r3-r4}
+	subs    r5, r5, #2
     bne     _SCSD_writeData_data_loop_unaligned
 	b		_SCSD_writeData_crc
-	
+
 @ Write the data to the card
 @ 4 halfwords are transmitted to the Supercard at once, for timing purposes
 @ Only the first halfword needs to contain data for standard SuperCards
 @ For the SuperCard Lite, the data is split into 4 nibbles, one per halfword
 _SCSD_writeData_data_loop:
 		ldrh	r3, [r0], #2
-		
-@ This bit added for SCLite. Notice that the shift is not the same as in 
+
+@ This bit added for SCLite. Notice that the shift is not the same as in
 @ the original (buggy) code supplied by Romman
 		add	r3, r3, r3, lsl #20
 		mov	r4, r3, lsr #8
-		
-		stmia   r2, {r3-r4}  
-		
-	subs    r5, r5, #2                 
-    bne     _SCSD_writeData_data_loop 
-	
+
+		stmia   r2, {r3-r4}
+
+	subs    r5, r5, #2
+    bne     _SCSD_writeData_data_loop
+
 @ Send the data CRC
 _SCSD_writeData_crc:
 	cmp		r1, #0
 	movne	r0, r1
 	movne	r1, #0
 	movne	r5, #8
-	bne		_SCSD_writeData_data_loop 
+	bne		_SCSD_writeData_data_loop
 
 	mov		r3, #0xff 			@ end bit
 	strh	r3, [r2]
@@ -123,16 +123,16 @@ _SCSD_writeData_finished_wait:
 	moveq	r0, #FALSE			@ return false on failure
 	beq		_SCSD_writeData_return
 	@ Check the busy bit of the status register
-	ldrh	r3, [r2]   
+	ldrh	r3, [r2]
 	tst		r3, #0x100
 	bne		_SCSD_writeData_finished_wait
 
 @ Send 8 more clocks, as required by the SD card
-	ldmia   r2, {r3-r4} 
+	ldmia   r2, {r3-r4}
 
 @ return true for success
 	mov 	r0, #TRUE
-	
+
 _SCSD_writeData_return:
 	ldmfd	r13!,{r4-r5}
 	bx      r14

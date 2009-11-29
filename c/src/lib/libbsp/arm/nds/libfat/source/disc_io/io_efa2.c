@@ -45,7 +45,7 @@ drop chishm <at> hotmail <dot> com a line
 // ID of Samsung K9K1G NAND flash chip
 #define EFA2_NAND_ID 0xEC79A5C0
 
-// first sector of udisk 
+// first sector of udisk
 #define EFA2_UDSK_START 0x40
 
 //
@@ -99,7 +99,7 @@ static void _EFA2_nand_lock(void) {
 
 //
 // Set NAND Flash chip enable and write protection bits ?
-// 
+//
 //   val | ~CE | ~WP |
 //  -----+-----+-----+
 //     0 |  0  |  0  |
@@ -123,7 +123,7 @@ static inline void _EFA2_nand_reset(void) {
 
 //
 // Read out NAND ID information, could be used for card detection
-// 
+//
 //                    | EFA2 1GBit |
 //  ------------------+------------+
 //         maker code |    0xEC    |
@@ -164,7 +164,7 @@ EFA2_clearStatus
 Reads and checks NAND status information
 bool return OUT:  true if NAND is idle
 -----------------------------------------------------------------*/
-bool _EFA2_clearStatus (void) 
+bool _EFA2_clearStatus (void)
 {
 	// tbd: currently there is no write support, so always return
 	// true, there is no possibility for pending operations
@@ -176,7 +176,7 @@ EFA2_isInserted
 Checks to see if the NAND chip used by the EFA2 is present
 bool return OUT:  true if the correct NAND chip is found
 -----------------------------------------------------------------*/
-bool _EFA2_isInserted (void) 
+bool _EFA2_isInserted (void)
 {
 	_EFA2_clearStatus();
 	return (_EFA2_nand_id() == EFA2_NAND_ID);
@@ -219,7 +219,7 @@ bool _EFA2_readSectors (u32 sector, u32 numSecs, void* buffer)
 	_EFA2_nand_reset();
 
 	// set NAND to READ1 operation mode and transfer page address
-	REG_EFA2_NAND_CMD = 0x00;                // write READ1 command  
+	REG_EFA2_NAND_CMD = 0x00;                // write READ1 command
 	REG_EFA2_NAND_WR  = 0x00;                // write address  [7:0]
 	REG_EFA2_NAND_WR  = (page      ) & 0xff; // write address [15:8]
 	REG_EFA2_NAND_WR  = (page >> 8 ) & 0xff; // write address[23:16]
@@ -276,7 +276,7 @@ bool _EFA2_writeSectors (u32 sector, u8 numSecs, void* buffer)
 EFA2_shutdown
 unload the EFA2 interface
 -----------------------------------------------------------------*/
-bool _EFA2_shutdown(void) 
+bool _EFA2_shutdown(void)
 {
 	return _EFA2_clearStatus();
 }

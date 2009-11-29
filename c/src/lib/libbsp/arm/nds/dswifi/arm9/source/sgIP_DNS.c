@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -122,7 +122,7 @@ int sgIP_DNS_isipaddress(const char * name, unsigned long * ipdest) {
 		if(g[0]>=0x100 || g[1]>=0x1000000) return 0;
 		out_addr= (g[0]<<24) | g[1];
 		break;
-	case 2: 
+	case 2:
 		if(g[0]>=0x100 || g[1]>=0x100 || g[2]>=0x10000) return 0;
 		out_addr= (g[0]<<24) | (g[1]<<16) | g[2];
 		break;
@@ -254,7 +254,7 @@ int sgIP_DNS_genquery(const char * name) {
    querydata_s[4]=0; // no nameserver records
    querydata_s[5]=0; // no additional records
    // question section
-   
+
    querydata_c+=12;
    querydata_s+=6;
    j=0;
@@ -338,7 +338,7 @@ sgIP_DNS_Hostent * sgIP_DNS_gethostbyname(const char * name) {
    if(dns_sock==-1) {
       hw=sgIP_Hub_GetDefaultInterface();
       serverip=hw->dns[0];
- 
+
       dns_sock=socket(AF_INET,SOCK_DGRAM,0);
       i=1;
       i=ioctl(dns_sock,FIONBIO,&i); // set non-blocking
@@ -398,7 +398,7 @@ dns_listenonly:
 
                return NULL;
             }
-           
+
             resdata_c+=12;
             while(q) { // ignore questions
                do {
@@ -414,7 +414,7 @@ dns_listenonly:
             naddr=0;
             rec=sgIP_DNS_GetUnusedRecord();
             rec->flags=SGIP_DNS_FLAG_ACTIVE | SGIP_DNS_FLAG_BUSY;
-            while(a) { 
+            while(a) {
                if(nalias<SGIP_DNS_MAXALIASES) sgIP_DNS_CopyAliasAt(rec->aliases[nalias++],resdata_c-responsedata);
                do {
                   j=resdata_c[0];
@@ -473,7 +473,7 @@ unsigned long inet_addr(const char *cp) {
 
 int inet_aton(const char *cp, struct in_addr *inp) {
 	unsigned long IP;
-	
+
 	if(sgIP_DNS_isipaddress(cp,&IP)) {
 		inp->s_addr = IP;
 		return 1;

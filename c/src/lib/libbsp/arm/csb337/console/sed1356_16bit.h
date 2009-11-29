@@ -37,9 +37,9 @@
 #include "bits.h"
 /*------------------------------------------------------------------------
  * cpu specific code must define the following board specific macros.
- * in cpuio.h.  These examples assume the SED135x has been placed in 
+ * in cpuio.h.  These examples assume the SED135x has been placed in
  * the correct endian mode via hardware.
- * #define SED_MEM_BASE   0xf0600000 <-- just example addresses, 
+ * #define SED_MEM_BASE   0xf0600000 <-- just example addresses,
  * #define SED_REG_BASE    0xf0400000 <-- define for each board
  * #define SED_STEP      1 <-- 1 = device is on 16-bit boundry, 2 = 32-bit boundry, 4 = 64-bit boundry
  * #define SED_REG16(_x_)    *(vushortr *)(SED_REG_BASE + (_x_ * SED_STEP))  // Control/Status Registers
@@ -80,7 +80,7 @@
 #define SED1356_REG_LCD_DISP_START_LO_and_MID    SED_REG16(0x42)
 #define SED1356_REG_LCD_DISP_START_HI           SED_REG16(0x44)
 #define SED1356_REG_LCD_ADD_OFFSET_LO_and_HI    SED_REG16(0x46)
-#define SED1356_REG_LCD_PIXEL_PAN             SED_REG16(0x48)  
+#define SED1356_REG_LCD_PIXEL_PAN             SED_REG16(0x48)
 #define SED1356_REG_LCD_FIFO_THRESH_LO_and_HI    SED_REG16(0x4a)
 /* CRT/TV Control registers */
 #define SED1356_REG_CRT_HOR_DISP                 SED_REG16(0x50)
@@ -100,7 +100,7 @@
 #define SED1356_REG_LCD_CURSOR_X_POS_LO_and_HI     SED_REG16(0x72)
 #define SED1356_REG_LCD_CURSOR_Y_POS_LO_and_HI    SED_REG16(0x74)
 #define SED1356_REG_LCD_CURSOR_BLUE_and_GREEN_CLR_0  SED_REG16(0x76)
-#define SED1356_REG_LCD_CURSOR_RED_CLR_0      SED_REG16(0x78)  
+#define SED1356_REG_LCD_CURSOR_RED_CLR_0      SED_REG16(0x78)
 #define SED1356_REG_LCD_CURSOR_BLUE_and_GREEN_CLR_1  SED_REG16(0x7a)
 #define SED1356_REG_LCD_CURSOR_RED_CLR_1      SED_REG16(0x7c)
 #define SED1356_REG_LCD_CURSOR_FIFO_THRESH      SED_REG16(0x7e)
@@ -152,8 +152,8 @@
 #define SED1356_GPIO_GPIO1           BIT1
 
 /* SED1356_REG_MCLK_CFG */
-#define SED1356_MCLK_DIV2          BIT4 
-#define SED1356_MCLK_SRC_BCLK        BIT0 
+#define SED1356_MCLK_DIV2          BIT4
+#define SED1356_MCLK_SRC_BCLK        BIT0
 #define SED1356_MCLK_SRC_CLKI        0x00
 
 /* SED1356_REG_LCD_PCLK_CFG, SED1356_REG_CRT_PCLK_CFG
@@ -170,11 +170,11 @@
 #define SED1356_PCLK_SRC_MCLK        0x03
 
 /* SED1356_REG_MEM_CFG_and_REF_RATE - even */
-#define SED1356_MEM_CFG_2CAS_EDO      0x00   
-#define SED1356_MEM_CFG_2CAS_FPM      0x01   
-#define SED1356_MEM_CFG_2WE_EDO        0x02   
-#define SED1356_MEM_CFG_2WE_FPM        0x03   
-#define SED1356_MEM_CFG_MASK        0x03   
+#define SED1356_MEM_CFG_2CAS_EDO      0x00
+#define SED1356_MEM_CFG_2CAS_FPM      0x01
+#define SED1356_MEM_CFG_2WE_EDO        0x02
+#define SED1356_MEM_CFG_2WE_FPM        0x03
+#define SED1356_MEM_CFG_MASK        0x03
 
 /* SED1356_REG_MEM_CFG_and_REF_RATE - odd */
 #define SED1356_REF_TYPE_CBR        0x00 << 6 << 8
@@ -236,7 +236,7 @@
 #define SED1356_MEM_TMG1_FPM80_MCLK20    0x01 << 8
 
 
-/* Bit definitions                         
+/* Bit definitions
  *
  * SED1356_REG_PANEL_TYPE_AND_MOD_RATE - even
  */
@@ -425,87 +425,87 @@ LU_BRT_WHITE      /* 15 */
 /* Vertical and Horizontal Pulse, Start and Non-Display values vary depending
  * upon the mode.  The following section gives some insight into how the
  * values are arrived at.
- * ms = milliseconds, us = microseconds, ns = nanoseconds    
- * Mhz = Megaherz, Khz = Kiloherz, Hz = Herz   
+ * ms = milliseconds, us = microseconds, ns = nanoseconds
+ * Mhz = Megaherz, Khz = Kiloherz, Hz = Herz
  *
- * ***************************************************************************************************   
+ * ***************************************************************************************************
  * CRT Mode is 640x480 @ 72Hz VESA compatible timing.  PCLK = 31.5Mhz (31.75ns)
- * ***************************************************************************************************   
+ * ***************************************************************************************************
  *
- *                               CRT MODE HORIZONTAL TIMING PARAMETERS   
+ *                               CRT MODE HORIZONTAL TIMING PARAMETERS
  *
- *                                       |<-------Tha------->|   
- *                                       |___________________|                     ______   
- * Display Enable   _____________________|                   |____________________|      
- *                                       |                   |   
- * Horizontal Pulse __           ________|___________________|________          __________   
- *                    |_________|        |                   |        |________|   
- *                    |<- Thp ->|        |                   |        |   
- *                    |         |<-Thbp->|                   |        |   
- *                    |                                      |<-Thfp->|   
- *                    |<----------------------Tht-------------------->|    
+ *                                       |<-------Tha------->|
+ *                                       |___________________|                     ______
+ * Display Enable   _____________________|                   |____________________|
+ *                                       |                   |
+ * Horizontal Pulse __           ________|___________________|________          __________
+ *                    |_________|        |                   |        |________|
+ *                    |<- Thp ->|        |                   |        |
+ *                    |         |<-Thbp->|                   |        |
+ *                    |                                      |<-Thfp->|
+ *                    |<----------------------Tht-------------------->|
  *
- * Tha  - Active Display Time                      = 640 pixels   
- * Thp  - Horizontal Pulse       = 1.27us/31.75ns  =  40 pixels   
- * Thbp - Horizontal Front Porch = 1.016us/31.75ns =  32 pixels   
- * Thfp - Horizontal Back Porch  = 3.8us/31.75ns   = 120 pixels   
- * Tht  - Total Horizontal Time                    = 832 pixels x 32.75ns/pixel = 26.416us or 38.785Khz   
+ * Tha  - Active Display Time                      = 640 pixels
+ * Thp  - Horizontal Pulse       = 1.27us/31.75ns  =  40 pixels
+ * Thbp - Horizontal Front Porch = 1.016us/31.75ns =  32 pixels
+ * Thfp - Horizontal Back Porch  = 3.8us/31.75ns   = 120 pixels
+ * Tht  - Total Horizontal Time                    = 832 pixels x 32.75ns/pixel = 26.416us or 38.785Khz
  *
- * Correlation between horizontal timing parameters and SED registers   
+ * Correlation between horizontal timing parameters and SED registers
  */
 #define SED_HOR_PULSE_WIDTH_CRT 0x07 /* Horizontal Pulse Width Register           = (Thp/8) - 1 */
 #define SED_HOR_PULSE_START_CRT  0x02 /* Horizontal Pulse Start Position Register    = ((Thfp + 2)/8) - 1 */
 #define SED_HOR_NONDISP_CRT    0x17 /* Horizontal Non-Display Period Register     = ((Thp + Thfp + Thbp)/8) - 1 */
 /*
- *                                CRT MODE VERTICAL TIMING PARAMTERS   
+ *                                CRT MODE VERTICAL TIMING PARAMTERS
  *
- *                                       |<-------Tva------->|   
- *                                       |___________________|                     ______   
- * Display Enable   _____________________|                   |_____________________|      
- *                                       |                   |   
- * Vertical Pulse   __           ________|___________________|________          __________   
- *                    |_________|        |                   |        |________|   
- *                    |<- Tvp ->|        |                   |        |   
- *                    |         |<-Tvbp->|                   |        |   
- *                    |                                      |<-Tvfp->|   
- *                    |<----------------------Tvt-------------------->|    
+ *                                       |<-------Tva------->|
+ *                                       |___________________|                     ______
+ * Display Enable   _____________________|                   |_____________________|
+ *                                       |                   |
+ * Vertical Pulse   __           ________|___________________|________          __________
+ *                    |_________|        |                   |        |________|
+ *                    |<- Tvp ->|        |                   |        |
+ *                    |         |<-Tvbp->|                   |        |
+ *                    |                                      |<-Tvfp->|
+ *                    |<----------------------Tvt-------------------->|
  *
- * Tva  - Active Display Time   = 480 lines   
- * Tvp  - Vertical Pulse        =  3 lines   
- * Tvfp - Vertical Front Porch  =   9 lines   
- * Tvbp - Vertical Back Porch   =  28 lines   
- * Tvt  - Total Horizontal Time = 520 lines x 26.416us/line = 13.73632ms or 72.8Hz   
+ * Tva  - Active Display Time   = 480 lines
+ * Tvp  - Vertical Pulse        =  3 lines
+ * Tvfp - Vertical Front Porch  =   9 lines
+ * Tvbp - Vertical Back Porch   =  28 lines
+ * Tvt  - Total Horizontal Time = 520 lines x 26.416us/line = 13.73632ms or 72.8Hz
  *
- * Correlation between vertical timing parameters and SED registers   
+ * Correlation between vertical timing parameters and SED registers
  */
 #define SED_VER_PULSE_WIDTH_CRT 0x02 // VRTC/FPFRAME Pulse Width Register    = Tvp - 1
-#define SED_VER_PULSE_START_CRT 0x08 // VRTC/FPFRAME Start Position Register = Tvfp - 1            
+#define SED_VER_PULSE_START_CRT 0x08 // VRTC/FPFRAME Start Position Register = Tvfp - 1
 #define SED_VER_NONDISP_CRT    0x27 // Vertical Non-Display Period Register = (Tvp + Tvfp + Tvbp) - 1
 /*
- *****************************************************************************************************   
+ *****************************************************************************************************
  * DUAL LCD Mode is 640x480 @ 60Hz VGA compatible timing.   PCLK = 25.175Mhz (39.722ns)
- *****************************************************************************************************   
+ *****************************************************************************************************
  *
- *                              LCD MODE HORIZONTAL TIMING PARAMTERS   
+ *                              LCD MODE HORIZONTAL TIMING PARAMTERS
  *
- *                                       |<-------Tha------->|   
- *                                       |___________________|                     ______   
- * Display Enable   _____________________|                   |____________________|      
- *                                       |                   |   
- * Horizontal Pulse __           ________|___________________|________          __________   
- *                    |_________|        |                   |        |________|   
- *                    |<- Thp ->|        |                   |        |   
- *                    |         |<-Thbp->|                   |        |   
- *                    |                                      |<-Thfp->|   
- *                    |<----------------------Tht-------------------->|    
+ *                                       |<-------Tha------->|
+ *                                       |___________________|                     ______
+ * Display Enable   _____________________|                   |____________________|
+ *                                       |                   |
+ * Horizontal Pulse __           ________|___________________|________          __________
+ *                    |_________|        |                   |        |________|
+ *                    |<- Thp ->|        |                   |        |
+ *                    |         |<-Thbp->|                   |        |
+ *                    |                                      |<-Thfp->|
+ *                    |<----------------------Tht-------------------->|
  *
- * Tha  - Active Display Time                     = 640 pixels   
- * Thp  - Horizontal Pulse       = 3.8us/39.72ns  =  96 pixels   
- * Thfp - Horizontal Front Porch = .595us/39.72ns =  16 pixels   
- * Thbp - Horizontal Backporch   = 1.9us/39.72ns  =  48 pixels   
- * Tht  - Total Horizontal Time  =                = 800 pixels @ 39.72ns/pixel = 31.776us or 31.47Khz   
+ * Tha  - Active Display Time                     = 640 pixels
+ * Thp  - Horizontal Pulse       = 3.8us/39.72ns  =  96 pixels
+ * Thfp - Horizontal Front Porch = .595us/39.72ns =  16 pixels
+ * Thbp - Horizontal Backporch   = 1.9us/39.72ns  =  48 pixels
+ * Tht  - Total Horizontal Time  =                = 800 pixels @ 39.72ns/pixel = 31.776us or 31.47Khz
  *
- * Correlation between horizontal timing parameters and SED registers   
+ * Correlation between horizontal timing parameters and SED registers
  *#define SED_HOR_PULSE_WIDTH_LCD 0x0b // HRTC/FPLINE Pulse Width Register       = (Thp/8) - 1
  *#define SED_HOR_PULSE_START_LCD  0x02 // HRTC/FPLINE Start Position Register    = (Thfp/8) - 2
  *#define SED_HOR_NONDISP_LCD   0x13 // Horizontal Non-Display Period Register = ((Thp + Thfp + Thbp)/8) - 1
@@ -516,28 +516,28 @@ extern long SED_HOR_NONDISP_LCD;
 
 /*
  *
- *                              LCD MODE VERTICAL TIMING PARAMTERS   
+ *                              LCD MODE VERTICAL TIMING PARAMTERS
  *
- *                                       |<-------Tva------->|   
- *                                       |___________________|                     ______   
- * Display Enable   _____________________|                   |_____________________|      
- *                                       |                   |   
- * Vertical Pulse   __           ________|___________________|________          __________   
- *                    |_________|        |                   |        |________|   
- *                    |<- Tvp ->|        |                   |        |   
- *                    |         |<-Tvbp->|                   |        |   
- *                    |                                      |<-Tvfp->|   
- *                    |<----------------------Tvt-------------------->|    
+ *                                       |<-------Tva------->|
+ *                                       |___________________|                     ______
+ * Display Enable   _____________________|                   |_____________________|
+ *                                       |                   |
+ * Vertical Pulse   __           ________|___________________|________          __________
+ *                    |_________|        |                   |        |________|
+ *                    |<- Tvp ->|        |                   |        |
+ *                    |         |<-Tvbp->|                   |        |
+ *                    |                                      |<-Tvfp->|
+ *                    |<----------------------Tvt-------------------->|
  *
- * Tva  - Active Display Time   = 480 lines   
- * Tvp  - Vertical Pulse        = 2 lines   
- * Tvfp - Vertical Front Porch  = 10 lines   
- * Tvbp - Vertical Backporch    = 33 lines   
- * Tvt  - Total Horizontal Time = 525 lines @ 31.776us/line = 16.682ms or 60Hz   
+ * Tva  - Active Display Time   = 480 lines
+ * Tvp  - Vertical Pulse        = 2 lines
+ * Tvfp - Vertical Front Porch  = 10 lines
+ * Tvbp - Vertical Backporch    = 33 lines
+ * Tvt  - Total Horizontal Time = 525 lines @ 31.776us/line = 16.682ms or 60Hz
  *
- * Correlation between vertical timing parameters and SED registers   
+ * Correlation between vertical timing parameters and SED registers
  *#define SED_VER_PULSE_WIDTH_LCD 0x01 // VRTC/FPFRAME Pulse Width Register    = Tvp - 1
- *#define SED_VER_PULSE_START_LCD 0x09 // VRTC/FPFRAME Start Position Register = Tvfp - 1            
+ *#define SED_VER_PULSE_START_LCD 0x09 // VRTC/FPFRAME Start Position Register = Tvfp - 1
  *#define SED_VER_NONDISP_LCD   0x2c // Vertical Non-Display Period Register = (Tvp + Tvfp + Tvbp) - 1
  */
 extern long SED_VER_PULSE_WIDTH_LCD;

@@ -60,12 +60,12 @@ void Clock_driver_support_initialize_hardware(void)
   clockwrite(LM32_CLOCK_PERIOD,
 	     (CPU_FREQUENCY /
 	      (1000000 / rtems_configuration_get_microseconds_per_tick())));
-  
+
   /* Enable clock interrupts and start in continuous mode */
-  clockwrite(LM32_CLOCK_CR, LM32_CLOCK_CR_ITO | 
-	     LM32_CLOCK_CR_CONT | 
+  clockwrite(LM32_CLOCK_CR, LM32_CLOCK_CR_ITO |
+	     LM32_CLOCK_CR_CONT |
 	     LM32_CLOCK_CR_START);
-  
+
   lm32_interrupt_unmask(CLOCK_IRQMASK);
 }
 

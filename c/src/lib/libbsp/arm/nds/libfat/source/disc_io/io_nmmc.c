@@ -9,10 +9,10 @@
 	Submit bug reports for this device to the NeoFlash forums
 
 	See license.txt for license details.
-	
+
 	2006-02-09 - www.neoflash.com:
 	 * First stable release
-	
+
 	2006-02-13 - Chishm
 	 * Added ReadMK2Config function
 	 * Added read config test to init function so no unnecessary card commands are sent
@@ -83,7 +83,7 @@ static void _Neo_WriteMK2Config(u8 config) {
 	_Neo_EnableEEPROM(false);
 }
 
-static u8 _Neo_ReadMK2Config(void) 
+static u8 _Neo_ReadMK2Config(void)
 {
 	u8 config;
 	_Neo_EnableEEPROM(true);
@@ -100,7 +100,7 @@ static u8 _Neo_ReadMK2Config(void)
 
 u8 selectMMC_command [8] = {0xFF, 0x00, 0x6A, 0xDF, 0x37, 0x59, 0x33, 0xA3};
 
-static void _Neo_SelectMMC (u8 dataByte) 
+static void _Neo_SelectMMC (u8 dataByte)
 {
 	selectMMC_command[1] = dataByte;	// Set enable / disable byte
 	cardWriteCommand (selectMMC_command);	// Send "5. Use the EEPROM CS to access the MK2 MMC/SD card"
@@ -150,12 +150,12 @@ static bool _Neo_CheckMMCResponse( u8 response, u8 mask )	{
 static bool _Neo_InitMMC(void)	{
 	_Neo_MK2GameMode();
 	_Neo_WriteMK2Config( MK2_CONFIG_ZIP_RAM_CLOSE | MK2_CONFIG_GAME_FLASH_CLOSE);
-	
+
 	// Make sure the configuration was accepted
 	if (_Neo_ReadMK2Config() != (MK2_CONFIG_ZIP_RAM_CLOSE | MK2_CONFIG_GAME_FLASH_CLOSE)) {
 		return false;	// If not, then it wasn't initialised properly
 	}
-	
+
 	return true;
 }
 
@@ -163,7 +163,7 @@ static bool _Neo_InitMMC(void)	{
 
 bool _NMMC_isInserted(void)	{
 	int i;
-	
+
 	_Neo_EnableMMC( true );		// Open SPI port to MMC card
 	_Neo_SendMMCCommand(MMC_SEND_CSD, 0);
 	if( _Neo_CheckMMCResponse( 0x00, 0xFF ) == false )	{				// Make sure no errors occured
@@ -179,13 +179,13 @@ bool _NMMC_isInserted(void)	{
 	for (i = 0; i < 28; i++) {
 		_Neo_SPI(0xff);
 	}
-		
+
 	return true;
 }
 
 bool _NMMC_clearStatus (void) {
 	u32 i;
-	
+
 	_Neo_EnableMMC( true );		// Open SPI port to MMC card
 	for (i = 0; i < 10; i++) {
 		_Neo_SPI(0xFF);			// Send 10 0xFF bytes to MMC card
@@ -220,14 +220,14 @@ bool _NMMC_startUp(void) {
 		return false;
 	}
 	_Neo_EnableMMC( true );		// Open SPI port to MMC card
-	
+
 	// Set block length
 	_Neo_SendMMCCommand(MMC_SET_BLOCKLEN, BYTES_PER_READ );
 	if( _Neo_CheckMMCResponse( 0x00, 0xFF ) == false )	{				// Make sure no errors occured
 		_Neo_EnableMMC( false );
 		return false;
 	}
-	
+
 	// Check if we can use a higher SPI frequency
 	_Neo_SendMMCCommand(MMC_SEND_CSD, 0);
 	if( _Neo_CheckMMCResponse( 0x00, 0xFF ) == false )	{				// Make sure no errors occured
@@ -248,76 +248,76 @@ bool _NMMC_startUp(void) {
 	if ((transSpeed & 0xf0) >= 0x30) {
 		_NMMC_spi_freq = 0;
 	}
-	
+
 	_Neo_EnableMMC( false );
-	
+
 	return true;
-} 
+}
 
 
-bool _NMMC_writeSectors (u32 sector, u32 totalSecs, const void* buffer)	
+bool _NMMC_writeSectors (u32 sector, u32 totalSecs, const void* buffer)
 {
 	u32 i;
 	u8 *p=(u8*)buffer;
-	
+
 	sector *= BYTES_PER_READ;
-	
+
 	_Neo_EnableMMC( true );												// Open SPI port to MMC card
 	_Neo_SendMMCCommand( 25, sector );
 	if( _Neo_CheckMMCResponse( 0x00, 0xFF ) == false )	{				// Make sure no errors occured
 		_Neo_EnableMMC( false );
 		return false;
 	}
-	
+
 	while (totalSecs--) {
 		_Neo_SPI( 0xFC );												// Send Start Block token
 		for( i = 0; i < BYTES_PER_READ; i++ )							// Send a block of data
 			_Neo_SPI( *p++ );
 		_Neo_SPI( 0xFF );												// Send fake CRC16
 		_Neo_SPI( 0xFF );												// Send fake CRC16
-		
+
 		if( ( _Neo_SPI( 0xFF ) & 0x0F ) != 0x05 )	{					// Make sure the block was accepted
 			_Neo_EnableMMC( false );
 			return false;
 		}
 		while( _Neo_SPI( 0xFF ) == 0x00 );								// Wait for the block to be written
 	}
-	
+
 	// Stop transmission block
 	_Neo_SPI( 0xFD );													// Send Stop Transmission Block token
 	for( i = 0; i < BYTES_PER_READ; i++ )								// Send a block of fake data
 		_Neo_SPI( 0xFF );
 	_Neo_SPI( 0xFF );													// Send fake CRC16
 	_Neo_SPI( 0xFF );													// Send fake CRC16
-		
+
 	_Neo_SPI (0xFF); 													// Send 8 clocks
 	while( _Neo_SPI( 0xFF ) == 0x00 );									// Wait for the busy signal to clear
 
-	
-	for ( i = 0; i < 0x10; i++) {	
+
+	for ( i = 0; i < 0x10; i++) {
 		_Neo_SPI (0xFF);													// Send clocks for the MMC card to finish what it's doing
 	}
-	
+
 	_Neo_EnableMMC( false );											// Close SPI port to MMC card
 	return true;
 }
 
-bool _NMMC_readSectors (u32 sector, u32 totalSecs, void* buffer)	
+bool _NMMC_readSectors (u32 sector, u32 totalSecs, void* buffer)
 {
 	u32 i;
 	u8 *p=(u8*)buffer;
-	
+
 	sector *= BYTES_PER_READ;
-	
+
 	_Neo_EnableMMC( true );												// Open SPI port to MMC card
-	
+
 	while (totalSecs--) {
 		_Neo_SendMMCCommand(MMC_READ_BLOCK, sector );
 		if( _Neo_CheckMMCResponse( 0x00, 0xFF ) == false )	{			// Make sure no errors occured
 			_Neo_EnableMMC( false );
 			return false;
 		}
-	
+
 		if( _Neo_CheckMMCResponse( 0xFE, 0xFF ) == false )	{			// Check for Start Block token
 			_Neo_EnableMMC( false );
 			return false;
@@ -328,7 +328,7 @@ bool _NMMC_readSectors (u32 sector, u32 totalSecs, void* buffer)
 		_Neo_SPI( 0xFF );												// Ignore CRC16
 		sector += BYTES_PER_READ;
 	}
-	
+
 	_Neo_EnableMMC( false );											// Close SPI port to MMC card
 	return true;
 }

@@ -60,11 +60,11 @@ typedef unsigned int rtems_irq_number;
 #define BSP_KBDINT    16
 #define BSP_SS2RX     17
 #define BSP_SS2TX     18
-#define BSP_UTXINT2   19 
-#define BSP_URXINT2   20 
+#define BSP_UTXINT2   19
+#define BSP_URXINT2   20
  /* int interrupt status/mask register 3 */
 #define BSP_DAIINT    21
-#define BSP_MAX_INT   22 
+#define BSP_MAX_INT   22
 
 /*
  * Type definition for RTEMS managed interrupts

@@ -374,7 +374,7 @@ typedef struct {
     u16 ydx;
     u16 ydy;
     u32 centerX;
-    u32 centerY;    
+    u32 centerY;
 } bg_rotation;
 
 typedef struct {

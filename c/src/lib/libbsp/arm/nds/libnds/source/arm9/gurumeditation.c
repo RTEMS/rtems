@@ -236,7 +236,7 @@ static void defaultHandler(void) {
 			exceptionAddress = getExceptionAddress( codeAddress, thumbState);
 		else
 			exceptionAddress = codeAddress;
-			
+
 	} else {
 		if (thumbState)
 			offset = 2;

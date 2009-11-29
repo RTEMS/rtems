@@ -2,7 +2,7 @@
  * Cogent CSB337 startup code
  *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
- *      
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -28,25 +28,25 @@
 .text
 .globl  _start
 _start:
-        /* 
+        /*
          * Since I don't plan to return to the bootloader,
          * I don't have to save the registers.
          *
-         * I'll just set the CPSR for SVC mode, interrupts 
+         * I'll just set the CPSR for SVC mode, interrupts
          * off, and ARM instructions.
          */
         mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)
         msr     cpsr, r0
-        
+
         /* zero the bss */
         ldr     r1, =_bss_end_
         ldr     r0, =_bss_start_
 
-_bss_init:        
+_bss_init:
         mov     r2, #0
         cmp     r0, r1
         strlot  r2, [r0], #4
-        blo     _bss_init        /* loop while r0 < r1 */ 
+        blo     _bss_init        /* loop while r0 < r1 */
 
 
         /* --- Initialize stack pointer registers */
@@ -70,26 +70,26 @@ _bss_init:
         ldr     r1, =_abt_stack_size
         ldr     sp, =_abt_stack
         add     sp, sp, r1
-        
+
         /* Set up the SVC stack pointer last and stay in SVC mode */
         mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)     /* No interrupts */
         msr     cpsr, r0
         ldr     r1, =_svc_stack_size
         ldr     sp, =_svc_stack
         add     sp, sp, r1
-        sub     sp, sp, #0x64   
+        sub     sp, sp, #0x64
 
-        /* 
+        /*
          * Initialize the MMU. After we return, the MMU is enabled,
          * and memory may be remapped. I hope we don't remap this
          * memory away.
          */
         ldr     r0, =mem_map
-        bl      mmu_init               
+        bl      mmu_init
 
-        /* 
+        /*
          * Initialize the exception vectors. This includes the
-         * exceptions vectors (0x00000000-0x0000001c), and the 
+         * exceptions vectors (0x00000000-0x0000001c), and the
          * pointers to the exception handlers (0x00000020-0x0000003c).
          */
         mov     r0, #0
@@ -103,7 +103,7 @@ _bss_init:
         mov     r0, #0
         bl      boot_card
 
-        /* 
+        /*
          * Theoretically, we could return to what started us up,
          * but we'd have to have saved the registers and stacks.
          * Instead, we'll just reset.
@@ -113,13 +113,13 @@ _bss_init:
         /* We shouldn't get here. If we do, hang */
 _hang:  b       _hang
 
-        
-/* 
+
+/*
  * This is the exception vector table and the pointers to
  * the functions that handle the exceptions. It's a total
  * of 16 words (64 bytes)
  */
-vector_block:   
+vector_block:
         ldr     pc, Reset_Handler
         ldr     pc, Undefined_Handler
         ldr     pc, SWI_Handler
@@ -131,7 +131,7 @@ vector_block:
 
 Reset_Handler:          b       bsp_reset
 Undefined_Handler:      b       Undefined_Handler
-SWI_Handler:            b       SWI_Handler 
+SWI_Handler:            b       SWI_Handler
 Prefetch_Handler:       b       Prefetch_Handler
 Abort_Handler:          b       Abort_Handler
                         nop

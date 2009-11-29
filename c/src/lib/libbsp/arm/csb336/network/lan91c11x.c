@@ -82,29 +82,29 @@ uint16_t lan91c11x_read_phy_reg(int reg)
 {
     int i;
     uint16_t mask;
-    uint16_t bits[64];  
+    uint16_t bits[64];
     int clk_idx = 0;
     int input_idx = 0;
     uint16_t phydata;
-    
+
     /* 32 consecutive ones on MDO to establish sync */
     for (i = 0; i < 32; ++i) {
         bits[clk_idx++] = LAN91C11X_MGMT_MDOE | LAN91C11X_MGMT_MDO;
     }
-    
+
     /* Start code <01> */
     bits[clk_idx++] = LAN91C11X_MGMT_MDOE;
     bits[clk_idx++] = LAN91C11X_MGMT_MDOE | LAN91C11X_MGMT_MDO;
-    
+
     /* Read command <10> */
     bits[clk_idx++] = LAN91C11X_MGMT_MDOE | LAN91C11X_MGMT_MDO;
     bits[clk_idx++] = LAN91C11X_MGMT_MDOE;
-    
+
     /* Output the PHY address, msb first - Internal PHY is address 0 */
     for (i = 0; i < 5; ++i) {
         bits[clk_idx++] = LAN91C11X_MGMT_MDOE;
     }
-    
+
     /* Output the phy register number, msb first */
     mask = 0x10;
     for (i = 0; i < 5; ++i) {
@@ -113,57 +113,57 @@ uint16_t lan91c11x_read_phy_reg(int reg)
         } else {
             bits[clk_idx++] = LAN91C11X_MGMT_MDOE;
         }
-        
-        
+
+
         /* Shift to next lowest bit */
         mask >>= 1;
     }
-    
+
     /* 1 bit time for turnaround */
     bits[clk_idx++] = 0;
-    
+
     /* Input starts at this bit time */
     input_idx = clk_idx;
-    
+
     /* Will input 16 bits */
     for (i = 0; i < 16; ++i) {
         bits[clk_idx++] = 0;
     }
-    
+
     /* Final clock bit */
     bits[clk_idx++] = 0;
-    
+
     /* Turn off all MII Interface bits */
-    lan91c11x_write_reg(LAN91C11X_MGMT, 
+    lan91c11x_write_reg(LAN91C11X_MGMT,
                         lan91c11x_read_reg(LAN91C11X_MGMT) & 0xfff0);
-    
+
     /* Clock all 64 cycles */
     for (i = 0; i < sizeof bits; ++i) {
         /* Clock Low - output data */
         lan91c11x_write_reg(LAN91C11X_MGMT, bits[i]);
         rtems_task_wake_after(1);
-        
+
         /* Clock Hi - input data */
         lan91c11x_write_reg(LAN91C11X_MGMT, bits[i] | LAN91C11X_MGMT_MCLK);
         rtems_task_wake_after(1);
         bits[i] |= lan91c11x_read_reg(LAN91C11X_MGMT) & LAN91C11X_MGMT_MDI;
     }
-    
+
     /* Return to idle state */
     /* Set clock to low, data to low, and output tristated */
     lan91c11x_write_reg(LAN91C11X_MGMT, lan91c11x_read_reg(LAN91C11X_MGMT) & 0xfff0);
     rtems_task_wake_after(1);
-    
+
     /* Recover input data */
     phydata = 0;
     for (i = 0; i < 16; ++i) {
         phydata <<= 1;
-        
+
         if (bits[input_idx++] & LAN91C11X_MGMT_MDI) {
             phydata |= 0x0001;
         }
     }
-    
+
     return phydata;
 }
 
@@ -173,27 +173,27 @@ void lan91c11x_write_phy_reg(int reg, uint16_t phydata)
 {
     int i;
     ushort mask;
-    ushort bits[64];  
+    ushort bits[64];
     int clk_idx = 0;
-    
+
     /* 32 consecutive ones on MDO to establish sync */
     for (i = 0; i < 32; ++i) {
         bits[clk_idx++] = LAN91C11X_MGMT_MDOE | LAN91C11X_MGMT_MDO;
     }
-    
+
     /* Start code <01> */
     bits[clk_idx++] = LAN91C11X_MGMT_MDOE;
     bits[clk_idx++] = LAN91C11X_MGMT_MDOE | LAN91C11X_MGMT_MDO;
-    
+
     /* Write command <01> */
     bits[clk_idx++] = LAN91C11X_MGMT_MDOE;
     bits[clk_idx++] = LAN91C11X_MGMT_MDOE | LAN91C11X_MGMT_MDO;
-    
+
     /* Output the PHY address, msb first - Internal PHY is address 0 */
     for (i = 0; i < 5; ++i) {
         bits[clk_idx++] = LAN91C11X_MGMT_MDOE;
     }
-    
+
     /* Output the phy register number, msb first */
     mask = 0x10;
     for (i = 0; i < 5; ++i) {
@@ -202,15 +202,15 @@ void lan91c11x_write_phy_reg(int reg, uint16_t phydata)
         } else {
             bits[clk_idx++] = LAN91C11X_MGMT_MDOE;
         }
-        
+
         /* Shift to next lowest bit */
         mask >>= 1;
     }
-    
+
     /* 2 extra bit times for turnaround */
     bits[clk_idx++] = 0;
     bits[clk_idx++] = 0;
-    
+
     /* Write out 16 bits of data, msb first */
     mask = 0x8000;
     for (i = 0; i < 16; ++i) {
@@ -225,27 +225,27 @@ void lan91c11x_write_phy_reg(int reg, uint16_t phydata)
     }
 
     /* Turn off all MII Interface bits */
-    lan91c11x_write_reg(LAN91C11X_MGMT, 
+    lan91c11x_write_reg(LAN91C11X_MGMT,
                         lan91c11x_read_reg(LAN91C11X_MGMT) & 0xfff0);
-    
+
     /* Clock all 64 cycles */
     for (i = 0; i < sizeof bits; ++i) {
         /* Clock Low - output data */
         lan91c11x_write_reg(LAN91C11X_MGMT, bits[i]);
         rtems_task_wake_after(1);
-        
+
         /* Clock Hi - input data */
         lan91c11x_write_reg(LAN91C11X_MGMT, bits[i] | LAN91C11X_MGMT_MCLK);
         rtems_task_wake_after(1);
         bits[i] |= lan91c11x_read_reg(LAN91C11X_MGMT) & LAN91C11X_MGMT_MDI;
     }
-    
+
     /* Return to idle state */
     /* Set clock to low, data to low, and output tristated */
-    lan91c11x_write_reg(LAN91C11X_MGMT, 
+    lan91c11x_write_reg(LAN91C11X_MGMT,
                         lan91c11x_read_reg(LAN91C11X_MGMT) & 0xfff0);
     rtems_task_wake_after(1);
-    
+
 }
 
 

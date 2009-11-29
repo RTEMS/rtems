@@ -239,8 +239,8 @@ ne_read_data (struct ne_softc *sc, int addr, int len, unsigned char *p)
   {
     unsigned char d;
     while (len > 0)
-    {      
-      inport_byte(dport, d);      
+    {
+      inport_byte(dport, d);
       *p++ = d;
       len--;
     }
@@ -309,7 +309,7 @@ ne_check_status (struct ne_softc *sc, int from_irq_handler)
       if (from_irq_handler)
         outport_byte(port + IMR, NE_INTERRUPTS);
       return;
-    } 
+    }
 
     /* Check for transmitted packet.  The transmit daemon may now be
        able to send another packet to the device.  */
@@ -346,7 +346,7 @@ ne_check_status (struct ne_softc *sc, int from_irq_handler)
   }
 
   outport_byte (port + CMDR, MSK_PG0 | MSK_STA | MSK_RD2);
-  
+
 }
 
 /* Handle an NE2000 interrupt.  */
@@ -399,7 +399,7 @@ ne_interrupt_off (const rtems_irq_connect_data *irq)
     outport_byte (sc->port + IMR, 0);
 }
 
-/* 
+/*
  *Return whether NE2000 interrupts are on.
  *If it is eanbled, return 1
 */
@@ -581,7 +581,7 @@ ne_rx_daemon (void *arg)
       reset = 0;
 
       /* Read the buffer header */
-      startaddr = startpage * NE_PAGE_SIZE;    
+      startaddr = startpage * NE_PAGE_SIZE;
       ne_read_data(sc, startaddr, sizeof(hdr), (unsigned char *)&hdr);
       next = hdr.next;
 
@@ -657,7 +657,7 @@ ne_rx_daemon (void *arg)
       m->m_pkthdr.rcvif = ifp;
       m->m_nextpkt = 0;
 
-      p = mtod (m, unsigned char *);      
+      p = mtod (m, unsigned char *);
       m->m_len = m->m_pkthdr.len = len - (sizeof(struct ether_header) + 2);
 
       toend = NE_STOP_PAGE * NE_PAGE_SIZE - startaddr;
@@ -671,7 +671,7 @@ ne_rx_daemon (void *arg)
 
       if (len > 0)
         ne_read_data (sc, startaddr, len, p);
-      
+
       m->m_data +=2;
       eh = mtod(m, struct ether_header *);
       m->m_data += sizeof (struct ether_header);
@@ -1185,7 +1185,7 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
     /* We use 16 as the default IRQ.  */
   sc->irno = XSCALE_IRQ_NETWORK;
-  
+
 
 
   /*IO prts are mapped to 0X40000600 */

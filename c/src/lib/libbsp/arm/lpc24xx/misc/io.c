@@ -223,7 +223,7 @@ rtems_status_code lpc24xx_gpio_config(
     /* Resistor */
     LPC24XX_PINMODE [select] =
       (LPC24XX_PINMODE [select] & ~(LPC24XX_IO_SELECT_MASK << shift))
-        | ((resistor & LPC24XX_IO_SELECT_MASK) << shift); 
+        | ((resistor & LPC24XX_IO_SELECT_MASK) << shift);
 
     rtems_interrupt_flash(level);
 

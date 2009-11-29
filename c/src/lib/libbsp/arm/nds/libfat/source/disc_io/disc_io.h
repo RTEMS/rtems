@@ -3,7 +3,7 @@
  Interface template for low level disc functions.
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -27,7 +27,7 @@
 
 	2006-07-11 - Chishm
 		* Original release
-		
+
 	2006-07-16 - Chishm
 		* Renamed _CF_USE_DMA to _IO_USE_DMA
 		* Renamed _CF_ALLOW_UNALIGNED to _IO_ALLOW_UNALIGNED
@@ -44,7 +44,7 @@
 // Use DMA to read the card, remove this line to use normal reads/writes
 // #define _IO_USE_DMA
 
-// Allow buffers not alligned to 16 bits when reading files. 
+// Allow buffers not alligned to 16 bits when reading files.
 // Note that this will slow down access speed, so only use if you have to.
 // It is also incompatible with DMA
 #define _IO_ALLOW_UNALIGNED

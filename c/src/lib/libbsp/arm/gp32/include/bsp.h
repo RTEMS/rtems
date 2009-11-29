@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------+
-| bsp.h - ARM BSP 
+| bsp.h - ARM BSP
 +--------------------------------------------------------------------------+
 | This include file contains definitions related to the ARM BSP.
 +--------------------------------------------------------------------------+
@@ -10,7 +10,7 @@
 |  The license and distribution terms for this file may be
 |  found in found in the file LICENSE in this distribution or at
 |  http://www.rtems.com/license/LICENSE.
-| 
+|
 |  $Id$
 +--------------------------------------------------------------------------*/
 

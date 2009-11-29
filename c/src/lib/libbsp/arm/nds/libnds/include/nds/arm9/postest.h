@@ -31,7 +31,7 @@ distribution.
 #include <nds/arm9/video.h>
 #include <nds/arm9/videoGL.h>
 
-/*! \brief true if the hardware is currently performing a position/vertex/box test.  
+/*! \brief true if the hardware is currently performing a position/vertex/box test.
 \return whether a test is being performed */
 GL_STATIC_INL bool PosTestBusy() {
 	return (GFX_STATUS & BIT(0))!=0;
@@ -40,7 +40,7 @@ GL_STATIC_INL bool PosTestBusy() {
 /*! \file postest.h
 \brief Position Test Functions.<BR>
 The position test multiplies a given vector by the position matrix and returns the coords(x,y,z,w). The position test is really quick, about 10x faster than a box test.
-*/ 
+*/
 
 /*! \brief Starts a position test asynchronously
 \param x specifies x offset from the current modelview matrix

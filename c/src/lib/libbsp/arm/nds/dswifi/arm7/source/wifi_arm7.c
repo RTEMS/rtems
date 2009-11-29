@@ -1,7 +1,7 @@
 // DS Wifi interface code
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
 // wifi_arm7.c - arm7 wifi interface code
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -67,7 +67,7 @@ void InitFlashData() {
 
 int ReadFlashByte(int address) {
 	if(address<0 || address>511) return 0;
-	return FlashData[address];		
+	return FlashData[address];
 }
 
 int ReadFlashBytes(int address, int numbytes) {
@@ -546,7 +546,7 @@ void Wifi_Intr_RxEnd() {
 		WifiData->stats[WSTAT_RXBYTES]+=full_packetlen;
 		WifiData->stats[WSTAT_RXDATABYTES]+=full_packetlen-12;
 
-		
+
 		// process packet here
 		temp=Wifi_ProcessReceivedFrame(base,full_packetlen); // returns packet type
 		if(temp&WifiData->reqPacketFlags || WifiData->reqReqFlags&WFLAG_REQ_PROMISC) { // if packet type is requested, forward it to the rx queue
@@ -635,7 +635,7 @@ void Wifi_Interrupt() {
 	if(wIF& 0x0020) { W_IF=0x0020;  Wifi_Intr_CntOverflow();  } // 5) AckCount Overflow
 	if(wIF& 0x0040) { W_IF=0x0040;  Wifi_Intr_DoNothing();  } // 6) Start Rx
 	if(wIF& 0x0080) { W_IF=0x0080;  Wifi_Intr_StartTx();  } // 7) Start Tx
-	if(wIF& 0x0100) { W_IF=0x0100;  Wifi_Intr_DoNothing();  } // 8) 
+	if(wIF& 0x0100) { W_IF=0x0100;  Wifi_Intr_DoNothing();  } // 8)
 	if(wIF& 0x0200) { W_IF=0x0200;  Wifi_Intr_DoNothing();  } // 9)
 	if(wIF& 0x0400) { W_IF=0x0400;  Wifi_Intr_DoNothing();  } //10)
 	if(wIF& 0x0800) { W_IF=0x0800;  Wifi_Intr_DoNothing();  } //11) RF Wakeup
@@ -1055,9 +1055,9 @@ void Wifi_SetChannel(int channel) {
             Wifi_RFWrite( (ReadFlashByte(n)<<8) | ReadFlashByte(n+channel+1) | 0x050000 );
             n+=15;
         }
-		
+
 		swiDelay( 12583 ); // 1500 us delay
-        
+
 		break;
     default:
         break;
@@ -1232,7 +1232,7 @@ int Wifi_SendAssocPacket() { // uses arm7 data in our struct
 	} else {
 		((u16 *)(data+i))[0]=0x0021; // CAPS info
 	}
-	
+
 	((u16 *)(data+i))[1]=WIFI_REG(0x8E); // Listen interval
 	i+=4;
 	data[i++]=0; // SSID element
@@ -1247,7 +1247,7 @@ int Wifi_SendAssocPacket() { // uses arm7 data in our struct
 		for(j=2;j<16;j++) WifiData->baserates7[j]=WifiData->baserates7[j-1];
 	}
 	WifiData->baserates7[1]=0x04;
-	
+
 	WifiData->baserates7[15]=0;
 	for(j=0;j<16;j++) if(WifiData->baserates7[j]==0) break;
 	numrates=j;
@@ -1500,9 +1500,9 @@ int Wifi_ProcessReceivedFrame(int macbase, int framelen) {
 							if(WifiData->authlevel==WIFI_AUTHLEVEL_AUTHENTICATED || WifiData->authlevel==WIFI_AUTHLEVEL_DEASSOCIATED) {
 								WifiData->authlevel=WIFI_AUTHLEVEL_ASSOCIATED;
 								WifiData->authctr=0;
-								
 
-								
+
+
 							}
 						} else { // status code = failure!
 							WifiData->curMode=WIFIMODE_CANNOTASSOCIATE;
@@ -1513,7 +1513,7 @@ int Wifi_ProcessReceivedFrame(int macbase, int framelen) {
 
 
 			return WFLAG_PACKET_MGT;
-		case 0x00: // 0000 00 Assoc Request  
+		case 0x00: // 0000 00 Assoc Request
 		case 0x08: // 0010 00 Reassoc Request
 		case 0x10: // 0100 00 Probe Request
 		case 0x24: // 1001 00 ATIM
@@ -1547,7 +1547,7 @@ int Wifi_ProcessReceivedFrame(int macbase, int framelen) {
                                 if(((u16 *)(data+24))[2]==0) { // status code: successful
                                     // scrape challenge text and send challenge reply
                                     if(data[24+6]==0x10) { // 16 = challenge text - this value must be 0x10 or else!
-                                        Wifi_SendSharedKeyAuthPacket2(data[24+7],data+24+8);                                        
+                                        Wifi_SendSharedKeyAuthPacket2(data[24+7],data+24+8);
                                     }
                                 } else { // rejected, just give up.
                                     WifiData->curMode=WIFIMODE_CANNOTASSOCIATE;

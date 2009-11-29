@@ -1,11 +1,11 @@
 /*
  *  Console driver for GUMSTIX by Yang Xi <hiyangxi@gmail.com>
  *
- *  This driver uses the shared console driver in 
+ *  This driver uses the shared console driver in
  *  ...../libbsp/shared/console.c
  *
  *  Copyright (c) 2003 by Cogent Computer Systems
- *  Written by Jay Monkman <jtm@lopingdog.com> 
+ *  Written by Jay Monkman <jtm@lopingdog.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -34,7 +34,7 @@ console_data  Console_Port_Data[NUM_DEVS];
 rtems_device_minor_number  Console_Port_Minor = 0;
 extern console_fns ffuart_fns;
 
-/* 
+/*
  * There's one item in array for each UART.
  *
  * Some of these fields are marked "NOT USED". They are not used

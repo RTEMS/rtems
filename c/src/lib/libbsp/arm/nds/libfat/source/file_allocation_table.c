@@ -4,7 +4,7 @@
  a FAT partition
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -28,10 +28,10 @@
 
 	2006-07-11 - Chishm
 		* Original release
-		
+
 	2006-07-11 - Chishm
 		* Made several fixes related to free clusters, thanks to Loopy
-		
+
 	2006-10-01 - Chishm
 		* Added _FAT_fat_linkFreeClusterCleared to clear a cluster when it is allocated
 */
@@ -49,13 +49,13 @@ u32 _FAT_fat_nextCluster(PARTITION* partition, u32 cluster)
 	u32 nextCluster = CLUSTER_FREE;
 	u32 sector;
 	int offset;
-	
-	switch (partition->filesysType) 
+
+	switch (partition->filesysType)
 	{
 		case FS_UNKNOWN:
 			nextCluster = CLUSTER_FREE;
 			break;
-			
+
 		case FS_FAT12:
 			sector = partition->fat.fatStart + (((cluster * 3) / 2) / BYTES_PER_READ);
 			offset = ((cluster * 3) / 2) % BYTES_PER_READ;
@@ -64,61 +64,61 @@ u32 _FAT_fat_nextCluster(PARTITION* partition, u32 cluster)
 			_FAT_cache_readPartialSector (partition->cache, &nextCluster, sector, offset, sizeof(u8));
 
 			offset++;
-			
+
 			if (offset >= BYTES_PER_READ) {
 				offset = 0;
 				sector++;
 			}
-			
+
 			_FAT_cache_readPartialSector (partition->cache, ((u8*)&nextCluster) + sizeof(u8), sector, offset, sizeof(u8));
-			
+
 			if (cluster & 0x01) {
 				nextCluster = nextCluster >> 4;
 			} else 	{
 				nextCluster &= 0x0FFF;
 			}
-			
+
 			if (nextCluster >= 0x0FF7)
 			{
 				nextCluster = CLUSTER_EOF;
 			}
 
 			break;
-			
+
 		case FS_FAT16:
 			sector = partition->fat.fatStart + ((cluster << 1) / BYTES_PER_READ);
 			offset = (cluster % (BYTES_PER_READ >> 1)) << 1;
-			
+
 			_FAT_cache_readPartialSector (partition->cache, &nextCluster, sector, offset, sizeof(u16));
-			
+
 			if (nextCluster >= 0xFFF7)
 			{
 				nextCluster = CLUSTER_EOF;
 			}
 			break;
-			
+
 		case FS_FAT32:
 			sector = partition->fat.fatStart + ((cluster << 2) / BYTES_PER_READ);
 			offset = (cluster % (BYTES_PER_READ >> 2)) << 2;
-			
+
 			_FAT_cache_readPartialSector (partition->cache, &nextCluster, sector, offset, sizeof(u32));
-			
+
 			if (nextCluster >= 0x0FFFFFF7)
 			{
 				nextCluster = CLUSTER_EOF;
 			}
 			break;
-			
+
 		default:
 			nextCluster = CLUSTER_FREE;
 			break;
 	}
-	
+
 	return nextCluster;
 }
 
 /*
-writes value into the correct offset within a partition's FAT, based 
+writes value into the correct offset within a partition's FAT, based
 on the cluster number.
 */
 static bool _FAT_fat_writeFatEntry (PARTITION* partition, u32 cluster, u32 value) {
@@ -130,13 +130,13 @@ static bool _FAT_fat_writeFatEntry (PARTITION* partition, u32 cluster, u32 value
 	{
 		return false;
 	}
-	
-	switch (partition->filesysType) 
+
+	switch (partition->filesysType)
 	{
 		case FS_UNKNOWN:
 			return false;
 			break;
-			
+
 		case FS_FAT12:
 			sector = partition->fat.fatStart + (((cluster * 3) / 2) / BYTES_PER_READ);
 			offset = ((cluster * 3) / 2) % BYTES_PER_READ;
@@ -158,15 +158,15 @@ static bool _FAT_fat_writeFatEntry (PARTITION* partition, u32 cluster, u32 value
 				_FAT_cache_writePartialSector (partition->cache, ((u8*)&value) + sizeof(u8), sector, offset, sizeof(u8));
 
 			} else {
-			
+
 				_FAT_cache_writePartialSector (partition->cache, &value, sector, offset, sizeof(u8));
-		
+
 				offset++;
 				if (offset >= BYTES_PER_READ) {
 					offset = 0;
 					sector++;
 				}
-				
+
 				_FAT_cache_readPartialSector (partition->cache, &oldValue, sector, offset, sizeof(u8));
 
 				value = ((value >> 8) & 0x0F) | (oldValue & 0xF0);
@@ -175,34 +175,34 @@ static bool _FAT_fat_writeFatEntry (PARTITION* partition, u32 cluster, u32 value
 			}
 
 			break;
-			
+
 		case FS_FAT16:
 			sector = partition->fat.fatStart + ((cluster << 1) / BYTES_PER_READ);
-			offset = (cluster % (BYTES_PER_READ >> 1)) << 1; 
+			offset = (cluster % (BYTES_PER_READ >> 1)) << 1;
 
 			_FAT_cache_writePartialSector (partition->cache, &value, sector, offset, sizeof(u16));
 
 			break;
-			
+
 		case FS_FAT32:
 			sector = partition->fat.fatStart + ((cluster << 2) / BYTES_PER_READ);
 			offset = (cluster % (BYTES_PER_READ >> 2)) << 2;
-			
+
 			_FAT_cache_writePartialSector (partition->cache, &value, sector, offset, sizeof(u32));
 
 			break;
-			
+
 		default:
 			return false;
 			break;
 	}
-			
+
 	return true;
 }
 
 /*-----------------------------------------------------------------
 gets the first available free cluster, sets it
-to end of file, links the input cluster to it then returns the 
+to end of file, links the input cluster to it then returns the
 cluster number
 If an error occurs, return CLUSTER_FREE
 -----------------------------------------------------------------*/
@@ -223,7 +223,7 @@ u32 _FAT_fat_linkFreeCluster(PARTITION* partition, u32 cluster) {
 	if ((curLink >= CLUSTER_FIRST) && (curLink <= lastCluster)) {
 		return curLink;	// Return the current link - don't allocate a new one
 	}
-	
+
 	// Get a free cluster
 	firstFree = partition->fat.firstFree;
 	// Start at first valid cluster
@@ -270,7 +270,7 @@ u32 _FAT_fat_linkFreeClusterCleared (PARTITION* partition, u32 cluster) {
 	u32 newCluster;
 	int i;
 	u8 emptySector[BYTES_PER_READ];
-	
+
 	// Link the cluster
 	newCluster = _FAT_fat_linkFreeCluster(partition, cluster);
 
@@ -281,14 +281,14 @@ u32 _FAT_fat_linkFreeClusterCleared (PARTITION* partition, u32 cluster) {
 	// Clear all the sectors within the cluster
 	memset (emptySector, 0, BYTES_PER_READ);
 	for (i = 0; i < partition->sectorsPerCluster; i++) {
-		_FAT_disc_writeSectors (partition->disc, 
+		_FAT_disc_writeSectors (partition->disc,
 			_FAT_fat_clusterToSector (partition, newCluster) + i,
 			1, emptySector);
 	}
-	
+
 	return newCluster;
 }
-	
+
 
 /*-----------------------------------------------------------------
 _FAT_fat_clearLinks
@@ -296,10 +296,10 @@ frees any cluster used by a file
 -----------------------------------------------------------------*/
 bool _FAT_fat_clearLinks (PARTITION* partition, u32 cluster) {
 	u32 nextCluster;
-	
+
 	if ((cluster < 0x0002) || (cluster > partition->fat.lastCluster))
 		return false;
-		
+
 	// If this clears up more space in the FAT before the current free pointer, move it backwards
 	if (cluster < partition->fat.firstFree) {
 		partition->fat.firstFree = cluster;

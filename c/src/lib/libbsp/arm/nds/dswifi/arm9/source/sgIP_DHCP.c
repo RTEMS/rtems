@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -82,7 +82,7 @@ void sgIP_DHCP_BeginDgram(int dgramtype) {
 
    // ensure packet is zero'd.. seems to pacify some routers.  malloc doesn't initialise the memory returned.
    memset(dhcp_p,0,sizeof(sgIP_DHCP_Packet));
-   
+
    dhcp_p->op=1;                 // 1==BOOTREQUEST
    dhcp_p->htype=1;              // 1== ethernet address type
    dhcp_p->hlen=6;               // hardware address length
@@ -96,7 +96,7 @@ void sgIP_DHCP_BeginDgram(int dgramtype) {
    dhcp_p->giaddr=0;
 
    memcpy(dhcp_p->chaddr,dhcp_int->hwaddr,6);
-   
+
    dhcp_optionptr=0;
    dhcp_p->options[dhcp_optionptr++]=0x63;
    dhcp_p->options[dhcp_optionptr++]=0x82;
@@ -143,7 +143,7 @@ void sgIP_DHCP_BeginDgram(int dgramtype) {
    dhcp_p->options[dhcp_optionptr++]=0x3C; // DHCP Vendor Class ID
    dhcp_p->options[dhcp_optionptr++]=strlen(SGIP_DHCP_CLASSNAME);
    for(i=0;i<strlen(SGIP_DHCP_CLASSNAME);i++) {
-      dhcp_p->options[dhcp_optionptr++]=(SGIP_DHCP_CLASSNAME)[i];   
+      dhcp_p->options[dhcp_optionptr++]=(SGIP_DHCP_CLASSNAME)[i];
    }
 
    // reason we don't send it immediately is in case the calling code wants to modify some data or add some options.
@@ -177,7 +177,7 @@ void sgIP_DHCP_Start(sgIP_Hub_HWInterface * interface, int getDNS) { // begin dh
    bind(dhcp_socket,(struct sockaddr *)&sain,sizeof(sain));
    i=1;
    ioctl(dhcp_socket,FIONBIO,&i);
-   
+
    sgIP_DHCP_BeginDgram(DHCP_TYPE_DISCOVER);
    sgIP_DHCP_SendDgram();
 }
@@ -337,9 +337,9 @@ int gethostname(char *name, size_t len)
     if (name == NULL)
         return SGIP_ERROR(EFAULT);
 
-    if ( len <= size ) 
+    if ( len <= size )
         return SGIP_ERROR(EINVAL);
-        
+
     strncpy(name, dhcp_hostname, size);
     name[size]=0;
     return 0;
@@ -352,12 +352,12 @@ int sethostname(const char *name, size_t len)
     int size = sizeof(dhcp_hostname);
     if (name == NULL)
         return SGIP_ERROR(EFAULT);
-    
-    if ( len > size - 1) 
+
+    if ( len > size - 1)
         return SGIP_ERROR(EINVAL);
-        
-   rec = sgIP_DNS_FindDNSRecord(dhcp_hostname);        
-  
+
+   rec = sgIP_DNS_FindDNSRecord(dhcp_hostname);
+
    strncpy(dhcp_hostname, name, len);
    dhcp_hostname[len]=0;
    strncpy(rec->aliases[0], name, len);

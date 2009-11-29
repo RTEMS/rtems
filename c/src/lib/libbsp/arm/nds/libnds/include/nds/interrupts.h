@@ -132,7 +132,7 @@ struct IntTable{IntFn handler; u32 mask;};
 
 	Call this function at the start of any application which requires interrupt support.
 	This function should be used in preference to irqInitHandler.
-	 
+
 */
 void irqInit(void);
 /*! \fn irqSet(IRQ_MASK irq, VoidFunctionPointer handler)
@@ -160,7 +160,7 @@ void irqClear(IRQ_MASK irq);
 
 	This function installs the main interrupt function, all interrupts are serviced through this routine. For most
 	purposes the libnds interrupt dispacther should be used in preference to user code unless you know *exactly* what you're doing.
-	
+
 	\param handler Address of the function to use as an interrupt dispatcher
 	\note the function *must* be ARM code
 */

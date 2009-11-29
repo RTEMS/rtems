@@ -40,7 +40,7 @@ extern "C" {
   /*
    * lm32 requires certain aligment of mbuf because unaligned uint32_t
    * accesses are not handled properly.
-   */ 
+   */
 
 #define CPU_U32_FIX
 
@@ -51,8 +51,8 @@ extern int rtems_tsmac_driver_attach(struct rtems_bsdnet_ifconfig *config,
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "TSMAC0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_tsmac_driver_attach
 
-  /* 
-   * Due to a hardware design error (RJ45 connector with 10baseT magnetics) 
+  /*
+   * Due to a hardware design error (RJ45 connector with 10baseT magnetics)
    * we are forced to use 10baseT mode.
    */
 

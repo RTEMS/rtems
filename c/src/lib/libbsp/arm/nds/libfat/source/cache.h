@@ -1,16 +1,16 @@
 /*
  cache.h
- The cache is not visible to the user. It should be flushed 
+ The cache is not visible to the user. It should be flushed
  when any file is closed or changes are made to the filesystem.
- 
- This cache implements a least-used-page replacement policy. This will 
- distribute sectors evenly over the pages, so if less than the maximum 
+
+ This cache implements a least-used-page replacement policy. This will
+ distribute sectors evenly over the pages, so if less than the maximum
  pages are used at once, they should all eventually remain in the cache.
  This also has the benefit of throwing out old sectors, so as not to keep
  too many stale pages around.
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -106,7 +106,7 @@ Write any dirty sectors back to disc and clear out the contents of the cache
 */
 bool _FAT_cache_flush (CACHE* cache);
 
-/* 
+/*
 Clear out the contents of the cache without writing any dirty sectors first
 */
 void _FAT_cache_invalidate (CACHE* cache);

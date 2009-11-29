@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -82,7 +82,7 @@ int socket(int domain, int type, int protocol) {
 		socketlist[s].conn_ptr=sgIP_TCP_AllocRecord();
 	} else if(type==SOCK_DGRAM) {
 		socketlist[s].flags=SGIP_SOCKET_FLAG_ACTIVE | SGIP_SOCKET_FLAG_TYPE_UDP;
-		socketlist[s].conn_ptr=sgIP_UDP_AllocRecord();		
+		socketlist[s].conn_ptr=sgIP_UDP_AllocRecord();
 	} else {
 		SGIP_INTR_UNPROTECT();
 		return SGIP_ERROR(EINVAL);
@@ -138,7 +138,7 @@ int connect(int socket, const struct sockaddr * addr, int addr_len) {
 		do {
 			i=((sgIP_Record_TCP *)socketlist[socket].conn_ptr)->tcpstate;
 			if(i==SGIP_TCP_STATE_ESTABLISHED || i==SGIP_TCP_STATE_CLOSE_WAIT) {retval=0; break;}
-			if(i==SGIP_TCP_STATE_CLOSED || i==SGIP_TCP_STATE_UNUSED || i==SGIP_TCP_STATE_LISTEN || i==SGIP_TCP_STATE_NODATA) 
+			if(i==SGIP_TCP_STATE_CLOSED || i==SGIP_TCP_STATE_UNUSED || i==SGIP_TCP_STATE_LISTEN || i==SGIP_TCP_STATE_NODATA)
 			{	retval=SGIP_ERROR(((sgIP_Record_TCP *)socketlist[socket].conn_ptr)->errorcode); break; }
 			if(socketlist[socket].flags&SGIP_SOCKET_FLAG_NONBLOCKING) break;
 			SGIP_INTR_UNPROTECT();
@@ -316,7 +316,7 @@ int ioctl(int socket, long cmd, void * arg) {
 
 int setsockopt(int socket, int level, int option_name, const void * data, int data_len) {
    return 0;
-} 
+}
 int getsockopt(int socket, int level, int option_name, void * data, int * data_len) {
    return 0;
 }

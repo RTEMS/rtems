@@ -29,9 +29,9 @@ void bsp_reset(void)
                   "bx  %[tmp]           \n" \
                   "nop                  \n" \
                   : [tmp]"=&r" (tmp) );
-  #else                   
+  #else
     asm volatile ("b _start");
-  #endif   
+  #endif
   while(1);
 #endif
 }

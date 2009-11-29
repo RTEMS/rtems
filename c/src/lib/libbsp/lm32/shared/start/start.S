@@ -29,9 +29,9 @@
      .globl  crt0
      .type   crt0,@function
 
-LatticeDDInit:	
-__start:	
-_start:	
+LatticeDDInit:
+__start:
+_start:
 start:
 	/* Clear r0 */
 	xor	r0,r0,r0
@@ -51,7 +51,7 @@ start:
 breakpoint_handler:
 	rcsr	r7, DEBA
 	addi	r7, r7, 32
-	b	r7 
+	b	r7
 	nop
 	nop
 	nop
@@ -60,7 +60,7 @@ breakpoint_handler:
 instruction_bus_error_handler:
 	rcsr	r7, DEBA
 	addi	r7, r7, 64
-	b	r7 
+	b	r7
 	nop
 	nop
 	nop
@@ -69,7 +69,7 @@ instruction_bus_error_handler:
 watchpoint_handler:
 	rcsr	r7, DEBA
 	addi	r7, r7, 96
-	b	r7 
+	b	r7
 	nop
 	nop
 	nop
@@ -78,7 +78,7 @@ watchpoint_handler:
 data_bus_error_handler:
 	rcsr	r7, DEBA
 	addi	r7, r7, 128
-	b	r7 
+	b	r7
 	nop
 	nop
 	nop
@@ -87,7 +87,7 @@ data_bus_error_handler:
 divide_by_zero_handler:
 	rcsr	r7, DEBA
 	addi	r7, r7, 160
-	b	r7 
+	b	r7
 	nop
 	nop
 	nop
@@ -106,14 +106,14 @@ interrupt_handler:
 system_call_handler:
 	rcsr	r7, DEBA
 	addi	r7, r7, 224
-	b	r7 
+	b	r7
 	nop
 	nop
 	nop
 	nop
 	nop
 
-crt0:	
+crt0:
 	/* Flush data cache */
 	addi	r1, r0, 1
 	wcsr	DCC, r1
@@ -153,7 +153,7 @@ crt0:
 	#define	SYS_exit	1
 
         mvi     r8, SYS_exit
-        scall   
+        scall
 #endif
 
 .dead_end:

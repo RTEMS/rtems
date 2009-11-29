@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -204,7 +204,7 @@ int sgIP_UDP_Bind(sgIP_Record_UDP * rec, int srcport, unsigned long srcip) {
 int sgIP_UDP_RecvFrom(sgIP_Record_UDP * rec, char * destbuf, int buflength, int flags, unsigned long * sender_ip, unsigned short * sender_port) {
 	if(!rec || !destbuf || !sender_ip || !sender_port || buflength==0) return SGIP_ERROR(EINVAL);
 	SGIP_INTR_PROTECT();
-	if(rec->incoming_queue==0) { 
+	if(rec->incoming_queue==0) {
 		SGIP_INTR_UNPROTECT();
 		return SGIP_ERROR(EWOULDBLOCK);
 	}
@@ -234,7 +234,7 @@ int sgIP_UDP_RecvFrom(sgIP_Record_UDP * rec, char * destbuf, int buflength, int 
 		sgIP_memblock_free(mb);
 	}
 	if(!(rec->incoming_queue)) rec->incoming_queue_end=0;
-	
+
 	SGIP_INTR_UNPROTECT();
 	return buf_start;
 }

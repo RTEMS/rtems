@@ -230,11 +230,11 @@ static void tsmac_rxDaemon(void *arg)
 
   for(;;)
     {
-      rtems_bsdnet_event_receive( RTEMS_ALL_EVENTS, 
+      rtems_bsdnet_event_receive( RTEMS_ALL_EVENTS,
 				  RTEMS_WAIT | RTEMS_EVENT_ANY,
-				  RTEMS_NO_TIMEOUT, 
+				  RTEMS_NO_TIMEOUT,
 				  &events);
-      
+
 #ifdef DEBUG
       printk(TSMAC_NAME ": tsmac_rxDaemon wakeup\n");
 #endif
@@ -247,10 +247,10 @@ static void tsmac_rxDaemon(void *arg)
 
 	  /* Get number of RX frames in RX FIFO */
 	  rxq = tsmacread(LM32_TSMAC_RX_FRAMES_CNT);
-      
+
 	  if (rxq == 0)
 	    break;
-	
+
 	  /* Get lenght of frame */
 	  len = tsmacread(LM32_TSMAC_RX_LEN_FIFO);
 #ifdef DEBUG
@@ -263,7 +263,7 @@ static void tsmac_rxDaemon(void *arg)
 	   */
 	  MGETHDR(m, M_WAIT, MT_DATA);
 	  MCLGET(m, M_WAIT);
-  
+
 	  m->m_pkthdr.rcvif = ifp;
 
 	  buf = (uint32_t *) mtod(m, uint32_t*);
@@ -279,7 +279,7 @@ static void tsmac_rxDaemon(void *arg)
 	  printk("\n");
 #endif
 
-	  m->m_len = m->m_pkthdr.len = 
+	  m->m_len = m->m_pkthdr.len =
 	    len - sizeof(uint32_t) - sizeof(struct ether_header);
 	  eh = mtod(m, struct ether_header*);
 	  m->m_data += sizeof(struct ether_header);
@@ -290,7 +290,7 @@ static void tsmac_rxDaemon(void *arg)
 
 	  /* Notify the ip stack that there is a new packet */
 	  ether_input(ifp, eh, m);
-	  
+
 	  /*
 	   * Release RX frame
 	   */
@@ -322,7 +322,7 @@ static void tsmac_sendpacket(struct ifnet *ifp, struct mbuf *m)
 	}
       printk("\n");
 #endif
-	       
+
       if (nm->m_len > 0)
 	{
 	  memcpy(&tsmac_txbuf[len], (char *)nm->m_data, nm->m_len);
@@ -394,7 +394,7 @@ static void tsmac_txDaemon(void *arg)
 #endif
 	      break;
 	    }
-	  
+
 	  /*
 	   * Get the next mbuf chain to transmit.
 	   */
@@ -442,7 +442,7 @@ void tsmac_init_hardware(struct tsmac_softc *tsmac)
 	 tsmacregread(LM32_TSMAC_MAC_ADDR_2_BYTE0));
   printk(TSMAC_NAME ": MAC TX_RX_STS %04x\n",
 	 tsmacregread(LM32_TSMAC_TX_RX_STS_BYTE0));
-#endif  
+#endif
 
   /*
    * Set our physical address
@@ -460,12 +460,12 @@ void tsmac_init_hardware(struct tsmac_softc *tsmac)
 	 tsmacregread(LM32_TSMAC_MAC_ADDR_1_BYTE0));
   printk(TSMAC_NAME ": MAC MAC_ADDR2 %04x\n",
 	 tsmacregread(LM32_TSMAC_MAC_ADDR_2_BYTE0));
-#endif  
+#endif
 
   /*
    * Configure PHY
    */
-  
+
   phyid = tsmacphyread(PHY_PHYIDR1);
 #ifdef DEBUG
   printk(TSMAC_NAME ": PHYIDR1 %08x\n", phyid);
@@ -491,7 +491,7 @@ void tsmac_init_hardware(struct tsmac_softc *tsmac)
   tsmacphywrite(PHY_ANAR, PHY_ANAR_10_FD | PHY_ANAR_10 | PHY_ANAR_SEL_DEF);
   stat = tsmacphyread(PHY_ANAR);
 #ifdef DEBUG
-  printk(TSMAC_NAME ": PHY ANAR %04x, wrote %04x\n", stat, 
+  printk(TSMAC_NAME ": PHY ANAR %04x, wrote %04x\n", stat,
 	 PHY_ANAR_10_FD | PHY_ANAR_10 | PHY_ANAR_SEL_DEF);
 #endif
 #endif /* TSMAC_FORCE_10BASET */
@@ -501,7 +501,7 @@ void tsmac_init_hardware(struct tsmac_softc *tsmac)
 #endif
 
   /* Enable receive and transmit interrupts */
-  tsmacwrite(LM32_TSMAC_INTR_ENB, INTR_ENB | 
+  tsmacwrite(LM32_TSMAC_INTR_ENB, INTR_ENB |
 	     INTR_RX_SMRY | INTR_TX_SMRY |
 	     INTR_RX_PKT_RDY | INTR_TX_PKT_SENT);
 }
@@ -541,13 +541,13 @@ void tsmac_init(void *arg)
       /* Interrupt line for TSMAC */
       lm32_interrupt_unmask(TSMAC_IRQMASK);
    }
-  
+
   ifp->if_flags |= IFF_RUNNING;
-  
+
   /*
    * Receive broadcast
    */
-  
+
   tsmacregwrite(LM32_TSMAC_TX_RX_CTL_BYTE0, TX_RX_CTL_RECEIVE_BRDCST |
 		TX_RX_CTL_RECEIVE_PAUSE);
 
@@ -557,7 +557,7 @@ void tsmac_init(void *arg)
    * Enable receiver
    */
 
-  tsmacregwrite(LM32_TSMAC_MODE_BYTE0, MODE_TX_EN | MODE_RX_EN | MODE_FC_EN);  
+  tsmacregwrite(LM32_TSMAC_MODE_BYTE0, MODE_TX_EN | MODE_RX_EN | MODE_FC_EN);
 
   /*
    * Wake up receive task to receive packets in queue
@@ -767,7 +767,7 @@ int rtems_tsmac_driver_attach(struct rtems_bsdnet_ifconfig *config, int attachin
     mtu = config->mtu;
   else
     mtu = ETHERMTU;
-	
+
   /*
    * Set up network interface values
    */
@@ -811,7 +811,7 @@ rtems_isr tsmac_interrupt_handler(rtems_vector_number vector)
   rx_stat = tsmacread(LM32_TSMAC_RX_STATUS);
   if (rx_stat & STAT_RX_FIFO_FULL)
     tsmac->rxFifoFull++;
-  
+
   tx_stat = tsmacread(LM32_TSMAC_TX_STATUS);
   if (tx_stat & STAT_TX_FIFO_FULL)
     tsmac->txFifoFull++;

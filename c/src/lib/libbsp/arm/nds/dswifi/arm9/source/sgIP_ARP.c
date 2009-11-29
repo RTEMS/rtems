@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -65,7 +65,7 @@ int sgIP_is_broadcast_address(sgIP_Hub_HWInterface * hw, unsigned long ipaddr) {
 }
 
 // this function will protect against malformed packets that could cause internal problems.
-int sgIP_ARP_Check_isok(sgIP_Hub_HWInterface * hw, sgIP_memblock * mb, sgIP_Header_ARP * arp) { 
+int sgIP_ARP_Check_isok(sgIP_Hub_HWInterface * hw, sgIP_memblock * mb, sgIP_Header_ARP * arp) {
 	return 1; // doesn't do anything yet ;)
 }
 
@@ -184,7 +184,7 @@ int sgIP_ARP_SendProtocolFrame(sgIP_Hub_HWInterface * hw, sgIP_memblock * mb, un
 			if(ArpRecords[i].queued_packet) { // if there is already a queued packet, reject the new one.
 				sgIP_memblock_free(mb);
 				return 0; // couldn't send.
-			} else {		
+			} else {
 				sgIP_memblock_exposeheader(mb,-14); // re-hide ethernet header.
 				ArpRecords[i].queued_packet=mb; // queue packet.
 				ArpRecords[i].linked_protocol=protocol; // queue packet.

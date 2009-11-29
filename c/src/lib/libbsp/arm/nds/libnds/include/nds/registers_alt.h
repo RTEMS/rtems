@@ -28,7 +28,7 @@
 
 /*
 	This file should be deprecated.
-	
+
 	All hardware register defines should be replaced with REG_ for consistency and namespacing
 
 	http://forum.gbadev.org/viewtopic.php?t=4993

@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2004 by Cogent Computer Systems
  * Written by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -38,7 +38,7 @@ void bsp_start_default( void )
   /* disable interrupts */
   AIC_CTL_REG(AIC_IDCR) = 0xffffffff;
 
-  /* 
+  /*
    * Some versions of the bootloader have the MAC address
    * reversed. This fixes it, if necessary.
    */
@@ -48,15 +48,15 @@ void bsp_start_default( void )
    * Init rtems exceptions management
    */
   rtems_exception_init_mngt();
-  
+
   /*
    * Init rtems interrupt management
    */
   rtems_irq_mngt_init();
-    
+
 } /* bsp_start */
 
-/* 
+/*
  * Some versions of the bootloader shipped with the CSB337
  * reverse the MAC address. This function tests for that,
  * and fixes the MAC address.

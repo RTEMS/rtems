@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -123,7 +123,7 @@ int sgIP_Hub_ReceiveHardwarePacket(sgIP_Hub_HWInterface * hw, sgIP_memblock * pa
 		// hide ethernet header for higher-level protocols
 		sgIP_memblock_exposeheader(packet,-14);
 		for(n=0;n<SGIP_HUB_MAXPROTOCOLINTERFACES;n++) {
-			if(ProtocolInterfaces[n].flags&SGIP_FLAG_PROTOCOL_ENABLED && ProtocolInterfaces[n].protocol==protocol) { // this protocol handler 
+			if(ProtocolInterfaces[n].flags&SGIP_FLAG_PROTOCOL_ENABLED && ProtocolInterfaces[n].protocol==protocol) { // this protocol handler
 				return ProtocolInterfaces[n].ReceivePacket(packet);
 			}
 		}
@@ -147,13 +147,13 @@ int sgIP_Hub_SendProtocolPacket(int protocol, sgIP_memblock * packet, unsigned l
 	// resolve protocol address to hardware address & send packet
 	if( (src_address & hw->snmask) == (dest_address & hw->snmask)	// on same network
 	 	|| dest_address == 0xFFFFFFFF )				// or broadcast address, send directly.
-	{ 
+	{
 		return sgIP_ARP_SendProtocolFrame(hw,packet,protocol,dest_address);
 	} else { // eek, on different network. Send to gateway
 		return sgIP_ARP_SendProtocolFrame(hw,packet,protocol,hw->gateway);
 	}
 }
-// send packet on a hardware interface. 
+// send packet on a hardware interface.
 int sgIP_Hub_SendRawPacket(sgIP_Hub_HWInterface * hw, sgIP_memblock * packet) {
 	if(!hw || !packet) return 0;
 	if(hw->flags&SGIP_FLAG_HWINTERFACE_ENABLED) {

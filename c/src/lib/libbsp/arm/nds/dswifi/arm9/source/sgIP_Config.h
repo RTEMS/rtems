@@ -1,6 +1,6 @@
 // DSWifi Project - sgIP Internet Protocol Stack Implementation
 // Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org - http://www.akkit.org
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -33,14 +33,14 @@ SOFTWARE.
 // General options - these control the core functionality of the stack.
 
 // SGIP_USEDYNAMICMEMORY: Allows the stack to use memory as it needs it, via malloc()/free()
-//  This option is extremely useful in environments where it can be used, as it prevents the 
+//  This option is extremely useful in environments where it can be used, as it prevents the
 //  overhead of allocating per-connection memory in advance, and allows an unlimited number
 //  of connections, provided the memory space.  This option requires the implementation of
-//  two C functions, "void * sgIP_malloc(int)" and "void sgIP_free(void *)", which behave 
+//  two C functions, "void * sgIP_malloc(int)" and "void sgIP_free(void *)", which behave
 //  similarly to the malloc and free functions commonly used in C.
 #define SGIP_USEDYNAMICMEMORY
 
-// SGIP_INTERRUPT_THREADING_MODEL: Provides memory protection in a system that can allow 
+// SGIP_INTERRUPT_THREADING_MODEL: Provides memory protection in a system that can allow
 //  multiple processing "threads" by way of interrupts.  This is not required on single
 //  threaded systems, and not adequate on multithreaded systems, but provides a way to
 //  allow protection against contention on interrupt-driven systems.  This option requires
@@ -52,7 +52,7 @@ SOFTWARE.
 
 // SGIP_MULTITHREADED_THREADING_MODEL: Standard memory protection for large multithreaded
 //  systems, such as operating systems and the like.  This kind of memory protection is
-//  useful for true multithreaded systems but useless in a single-threaded system and 
+//  useful for true multithreaded systems but useless in a single-threaded system and
 //  harmful in an interrupt-based multiprocess system.
 //#define SGIP_MULTITHREADED_THREADING_MODEL
 
@@ -66,7 +66,7 @@ SOFTWARE.
 //  received, however, in a memory-tight situation, much smaller values can be used.
 #define SGIP_MEMBLOCK_DATASIZE		1600
 
-// SGIP_MEMBLOCK_BASENUM: The starting number of memblocks that will be allocated. This is 
+// SGIP_MEMBLOCK_BASENUM: The starting number of memblocks that will be allocated. This is
 //  also the total number of memblocks that will be allocated if sgIP is not configured to use
 //  dynamic memory allocation.
 #define SGIP_MEMBLOCK_BASENUM		12
@@ -127,7 +127,7 @@ SOFTWARE.
 //  (at least on most smaller systems)
 #define SGIP_ARP_MAXENTRIES						32
 
-// SGIP_HUB_MAXHWINTERFACES: The maximum number of hardware interfaces the sgIP hub will 
+// SGIP_HUB_MAXHWINTERFACES: The maximum number of hardware interfaces the sgIP hub will
 //  connect to. A hardware interface being some port (ethernet, wifi, etc) that will relay
 //  packets to the outside world.
 #define SGIP_HUB_MAXHWINTERFACES				1
@@ -198,7 +198,7 @@ SOFTWARE.
 #define SGIP_DEBUG_MESSAGE(param) sgIP_dbgprint param
 #define SGIP_DEBUG_ERROR(param) sgIP_dbgprint param; while(1);
 #else
-#define SGIP_DEBUG_MESSAGE(param) 
+#define SGIP_DEBUG_MESSAGE(param)
 #define SGIP_DEBUG_ERROR(param)
 #endif
 

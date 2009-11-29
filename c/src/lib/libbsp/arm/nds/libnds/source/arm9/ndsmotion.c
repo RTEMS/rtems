@@ -2,7 +2,7 @@
 	$Id$
 
 	DS Motion Card/DS Motion Pak functionality
-	
+
 	Copyright (C) 2007
 		Michael Noland (joat)
 		Jason Rogers (dovoto)
@@ -171,7 +171,7 @@ int motion_init(void) {
 	sysSetBusOwners(true, true);
 	// first, check for the DS Motion Pak - type 1
 	if( motion_pak_is_inserted() == 1 )
-    { 
+    {
         card_type = 1;
         return 1;
 	}// next, check for DS Motion Card - type 2
@@ -180,11 +180,11 @@ int motion_init(void) {
          card_type = 2;
          return 2;
 	}
-    
+
     motion_MK6_sensor_mode(); // send command to switch MK6 to sensor mode
-	
+
     if( motion_enable(3) == 1 )
-    { 
+    {
         card_type = 3;
         return 3;
 	}// if neither cases are true, then return 0 to indicate no DS Motion Sensor
@@ -237,7 +237,7 @@ signed int motion_read_x(void) {
 			output = ( (motion_spi(0x00)<<8)|motion_spi(0x00) )>>4; // read 16 bits and store as a 12 bit number
 			SPI_Off()
 			return output;
-			break;			
+			break;
 		default:
 			return 0;
 			break;
@@ -276,7 +276,7 @@ signed int motion_read_y(void) {
 			output = ( (motion_spi(0x00)<<8)|motion_spi(0x00) )>>4; // read 16 bits and store as a 12 bit number
 			SPI_Off()
 			return output;
-			break;				
+			break;
 		default:
 			return 0;
 			break;
@@ -315,7 +315,7 @@ signed int motion_read_z(void) {
 			output = ( (motion_spi(0x00)<<8)|motion_spi(0x00) )>>4; // read 16 bits and store as a 12 bit number
 			SPI_Off()
 			return output;
-			break;				
+			break;
 		default:
 			return 0;
 			break;
@@ -354,7 +354,7 @@ signed int motion_read_gyro(void) {
 			output = ( (motion_spi(0x00)<<8)|motion_spi(0x00) )>>4; // read 16 bits and store as a 12 bit number
 			SPI_Off()
 			return output;
-			break;				
+			break;
 		default:
 			return 0;
 			break;
@@ -483,6 +483,6 @@ int motion_read_ain_2(void){
 	swiDelay(WAIT_CYCLES); // wait after for Motion Pak to be ready for next command
 	signed int output = (signed int)( (High_byte<<8 | Low_byte)>>4);
 	return output;
-}	
+}
 
 

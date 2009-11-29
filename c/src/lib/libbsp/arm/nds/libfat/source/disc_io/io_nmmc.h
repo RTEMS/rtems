@@ -1,5 +1,5 @@
 /*
- io_nmmc.h 
+ io_nmmc.h
 
  Hardware Routines for reading an SD or MMC card using
  a Neoflash MK2 or MK3.
@@ -8,7 +8,7 @@
  moddified and used with permission of www.neoflash.com
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 

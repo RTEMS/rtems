@@ -2,7 +2,7 @@
 // DSRegs.h - (c) 2005-2006 Stephen Stair
 // General reference mumbo jumbo to give me easy access to the regs I like.
 //////////////////////////////////////////////////////////////////////////
-/****************************************************************************** 
+/******************************************************************************
 DSWifi Lib and test materials are licenced under the MIT open source licence:
 Copyright (c) 2005-2006 Stephen Stair
 
@@ -135,7 +135,7 @@ SOFTWARE.
 	if((bank)&1) { VRAMBANKCNT[(bank)>>1] = (VRAMBANKCNT[(bank)>>1]&0x00ff) | (((set)&0xff)<<8); } else \
 		{ VRAMBANKCNT[(bank)>>1] = (VRAMBANKCNT[(bank)>>1]&0xff00) | ((set)&0xff); }
 
-// joypad input 
+// joypad input
 #define		KEYINPUT	(*((u16 volatile *) 0x04000130))
 #define		KEYCNT		(*((u16 volatile *) 0x04000132))
 

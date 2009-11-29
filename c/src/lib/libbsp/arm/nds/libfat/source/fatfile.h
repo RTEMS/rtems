@@ -1,11 +1,11 @@
 /*
  fatfile.h
- 
- Functions used by the newlib disc stubs to interface with 
+
+ Functions used by the newlib disc stubs to interface with
  this library
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -29,11 +29,11 @@
 
 	2006-07-11 - Chishm
 		* Original release
-		
+
 	2006-07-17 - Chishm
 		* Made all path inputs const char*
 		* Added _FAT_rename_r
-		
+
 	2006-07-24 - Chishm
 		* Removed padding workaround from FILE_STRUCT
 

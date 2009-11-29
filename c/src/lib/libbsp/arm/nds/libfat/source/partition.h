@@ -4,7 +4,7 @@
  on various block devices.
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -109,7 +109,7 @@ based on the device number
 bool _FAT_partition_setDefaultInterface (PARTITION_INTERFACE partitionNumber);
 
 /*
-Set the default device for access by fat: and fat0:, 
+Set the default device for access by fat: and fat0:,
 based on the partition pointer
 */
 bool _FAT_partition_setDefaultPartition (PARTITION* partition);

@@ -36,7 +36,7 @@ static void lpc24xx_uart_set_register( uint32_t addr, uint8_t i, uint8_t val)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
 
-  reg [i] = val; 
+  reg [i] = val;
 }
 
 rtems_device_minor_number Console_Port_Minor = 0;

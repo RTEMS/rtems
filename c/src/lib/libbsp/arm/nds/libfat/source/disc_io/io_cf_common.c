@@ -4,14 +4,14 @@
 	compact_flash.c
 	By chishm (Michael Chisholm)
 
-	Common hardware routines for using a compact flash card. This is not reentrant 
-	and does not do range checking on the supplied addresses. This is designed to 
+	Common hardware routines for using a compact flash card. This is not reentrant
+	and does not do range checking on the supplied addresses. This is designed to
 	be as fast as possible.
 
 	CF routines modified with help from Darkfader
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -75,13 +75,13 @@ bool return OUT:  true if a CF card is idle
 -----------------------------------------------------------------*/
 bool _CF_clearStatus (void) {
 	int i;
-	
+
 	// Wait until CF card is finished previous commands
 	i=0;
 	while ((*(cfRegisters.command) & CF_STS_BUSY) && (i < CF_CARD_TIMEOUT)) {
 		i++;
 	}
-	
+
 	// Wait until card is ready for commands
 	i = 0;
 	while ((!(*(cfRegisters.status) & CF_STS_INSERTED)) && (i < CF_CARD_TIMEOUT)) {
@@ -121,7 +121,7 @@ bool _CF_readSectors (u32 sector, u32 numSectors, void* buffer) {
 	while ((*(cfRegisters.command) & CF_STS_BUSY) && (i < CF_CARD_TIMEOUT)) {
 		i++;
 	}
-	
+
 	// Wait until card is ready for commands
 	i = 0;
 	while ((!(*(cfRegisters.status) & CF_STS_INSERTED)) && (i < CF_CARD_TIMEOUT)) {
@@ -129,20 +129,20 @@ bool _CF_readSectors (u32 sector, u32 numSectors, void* buffer) {
 	}
 	if (i >= CF_CARD_TIMEOUT)
 		return false;
-	
+
 	// Set number of sectors to read
-	*(cfRegisters.sectorCount) = (numSectors < 256 ? numSectors : 0);	// Read a maximum of 256 sectors, 0 means 256	
-	
+	*(cfRegisters.sectorCount) = (numSectors < 256 ? numSectors : 0);	// Read a maximum of 256 sectors, 0 means 256
+
 	// Set read sector
 	*(cfRegisters.lba1) = sector & 0xFF;						// 1st byte of sector number
 	*(cfRegisters.lba2) = (sector >> 8) & 0xFF;					// 2nd byte of sector number
 	*(cfRegisters.lba3) = (sector >> 16) & 0xFF;				// 3rd byte of sector number
 	*(cfRegisters.lba4) = ((sector >> 24) & 0x0F )| CF_CMD_LBA;	// last nibble of sector number
-	
+
 	// Set command to read
 	*(cfRegisters.command) = CF_CMD_READ;
-	
-	
+
+
 	while (numSectors--)
 	{
 		// Wait until card is ready for reading
@@ -153,7 +153,7 @@ bool _CF_readSectors (u32 sector, u32 numSectors, void* buffer) {
 		}
 		if (i >= CF_CARD_TIMEOUT)
 			return false;
-		
+
 		// Read data
 #ifdef _IO_USE_DMA
  #ifdef NDS
@@ -175,12 +175,12 @@ bool _CF_readSectors (u32 sector, u32 numSectors, void* buffer) {
 			}
 		} else {
 			while(i--)
-				*buff++ = *(cfRegisters.data); 
+				*buff++ = *(cfRegisters.data);
 		}
 #else
 		i=256;
 		while(i--)
-			*buff++ = *(cfRegisters.data); 
+			*buff++ = *(cfRegisters.data);
 #endif
 	}
 #if (defined _IO_USE_DMA) && (defined NDS)
@@ -209,7 +209,7 @@ bool _CF_writeSectors (u32 sector, u32 numSectors, void* buffer) {
 	u8 *buff_u8 = (u8*)buffer;
 	int temp;
 #endif
-	
+
 #if defined _IO_USE_DMA && defined NDS && defined ARM9
 	DC_FlushRange( buffer, j * BYTES_PER_READ);
 #endif
@@ -220,7 +220,7 @@ bool _CF_writeSectors (u32 sector, u32 numSectors, void* buffer) {
 	{
 		i++;
 	}
-	
+
 	// Wait until card is ready for commands
 	i = 0;
 	while ((!(*(cfRegisters.status) & CF_STS_INSERTED)) && (i < CF_CARD_TIMEOUT))
@@ -229,19 +229,19 @@ bool _CF_writeSectors (u32 sector, u32 numSectors, void* buffer) {
 	}
 	if (i >= CF_CARD_TIMEOUT)
 		return false;
-	
+
 	// Set number of sectors to write
-	*(cfRegisters.sectorCount) = (numSectors < 256 ? numSectors : 0);	// Write a maximum of 256 sectors, 0 means 256	
-	
+	*(cfRegisters.sectorCount) = (numSectors < 256 ? numSectors : 0);	// Write a maximum of 256 sectors, 0 means 256
+
 	// Set write sector
 	*(cfRegisters.lba1) = sector & 0xFF;						// 1st byte of sector number
 	*(cfRegisters.lba2) = (sector >> 8) & 0xFF;					// 2nd byte of sector number
 	*(cfRegisters.lba3) = (sector >> 16) & 0xFF;				// 3rd byte of sector number
 	*(cfRegisters.lba4) = ((sector >> 24) & 0x0F )| CF_CMD_LBA;	// last nibble of sector number
-	
+
 	// Set command to write
 	*(cfRegisters.command) = CF_CMD_WRITE;
-	
+
 	while (numSectors--)
 	{
 		// Wait until card is ready for writing
@@ -252,7 +252,7 @@ bool _CF_writeSectors (u32 sector, u32 numSectors, void* buffer) {
 		}
 		if (i >= CF_CARD_TIMEOUT)
 			return false;
-		
+
 		// Write data
 #ifdef _IO_USE_DMA
  #ifdef NDS
@@ -274,19 +274,19 @@ bool _CF_writeSectors (u32 sector, u32 numSectors, void* buffer) {
 			}
 		} else {
 		while(i--)
-			*(cfRegisters.data) = *buff++; 
+			*(cfRegisters.data) = *buff++;
 		}
 #else
 		i=256;
 		while(i--)
-			*(cfRegisters.data) = *buff++; 
+			*(cfRegisters.data) = *buff++;
 #endif
 	}
 #if defined _IO_USE_DMA && defined NDS
 	// Wait for end of transfer before returning
 	while(DMA3_CR & DMA_BUSY);
 #endif
-	
+
 	return true;
 }
 

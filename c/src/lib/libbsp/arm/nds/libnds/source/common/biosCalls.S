@@ -24,9 +24,27 @@
 		distribution.
 
 	$Log$
+	Revision 1.1  2008/04/17 23:09:41  joel
+	2008-04-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+		* Makefile.am: Move .s files to .S
+		* dswifi/common/source/spinlock.S, libfat/source/disc_io/io_dldi.S,
+		libfat/source/disc_io/io_scsd_s.S, libnds/source/arm9/COS.S,
+		libnds/source/arm9/SIN.S, libnds/source/arm9/TAN.S,
+		libnds/source/arm9/dcache.S, libnds/source/arm9/default_font.S,
+		libnds/source/arm9/icache.S, libnds/source/common/biosCalls.S,
+		libnds/source/common/interruptDispatcher.S: New files.
+		* dswifi/common/source/spinlock.s, libfat/source/disc_io/io_dldi.s,
+		libfat/source/disc_io/io_scsd_s.s, libnds/source/arm9/COS.s,
+		libnds/source/arm9/SIN.s, libnds/source/arm9/TAN.s,
+		libnds/source/arm9/dcache.s, libnds/source/arm9/default_font.s,
+		libnds/source/arm9/exceptionHandler.s, libnds/source/arm9/icache.s,
+		libnds/source/common/biosCalls.s,
+		libnds/source/common/interruptDispatcher.s: Removed.
+
 	Revision 1.1  2008/04/16 18:37:32  joel
 	2008-04-16	Matthieu Bucchianeri <mbucchia@gmail.com>
-	
+
 		* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
 		mk_libnds.sh, patch.libnds, preinstall.am, block/block.c,
 		clock/clock.c, console/console.c, coproc/coproc.S, coproc/coproc.c,
@@ -161,22 +179,22 @@
 		touchscreen/reco.h, touchscreen/touchscreen.c,
 		touchscreen/touchscreen.h, wifi/compat.c, wifi/compat.h, wifi/wifi.c:
 		New files.
-	
+
 	Revision 1.5  2006/03/15 12:37:14  wntrmute
 	reformatted for legibility
 	grouped arm7 and arm9 specific code
-	
+
 	Revision 1.4  2006/03/03 07:20:14  joatski
 	Fixed a couple of little bugs (e.g. swiSetHaltCR using r0 instead of r2 on ARM7)
 	Commented out ARM7 swis in ARM9 mode, and vis versa
-	
+
 	Revision 1.3  2006/01/17 00:13:36  dovoto
 	Fixed swi 08 so lable and global matched "swiChangeSoundBias"
-	
+
 	Revision 1.2  2005/09/03 13:47:13  wntrmute
 	added logging to header
 	reformatted for legibility
-	
+
 
 ---------------------------------------------------------------------------------*/
 

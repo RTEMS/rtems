@@ -1,16 +1,16 @@
 /*
  cache.c
- The cache is not visible to the user. It should be flushed 
+ The cache is not visible to the user. It should be flushed
  when any file is closed or changes are made to the filesystem.
- 
- This cache implements a least-used-page replacement policy. This will 
- distribute sectors evenly over the pages, so if less than the maximum 
+
+ This cache implements a least-used-page replacement policy. This will
+ distribute sectors evenly over the pages, so if less than the maximum
  pages are used at once, they should all eventually remain in the cache.
  This also has the benefit of throwing out old sectors, so as not to keep
  too many stale pages around.
 
  Copyright (c) 2006 Michael "Chishm" Chisholm
-	
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
@@ -51,7 +51,7 @@ CACHE* _FAT_cache_constructor (u32 numberOfPages, const IO_INTERFACE* discInterf
 	if (numberOfPages < 2) {
 		numberOfPages = 2;
 	}
-	
+
 	cache = (CACHE*) _FAT_mem_allocate (sizeof(CACHE));
 	if (cache == NULL) {
 		return false;
@@ -59,7 +59,7 @@ CACHE* _FAT_cache_constructor (u32 numberOfPages, const IO_INTERFACE* discInterf
 
 	cache->disc = discInterface;
 	cache->numberOfPages = numberOfPages;
-	
+
 
 	cacheEntries = (CACHE_ENTRY*) _FAT_mem_allocate ( sizeof(CACHE_ENTRY) * numberOfPages);
 	if (cacheEntries == NULL) {
@@ -163,7 +163,7 @@ bool _FAT_cache_readPartialSector (CACHE* cache, void* buffer, u32 sector, u32 o
 	return true;
 }
 
-/* 
+/*
 Writes some data to a cache page, making sure it is loaded into memory first.
 */
 bool _FAT_cache_writePartialSector (CACHE* cache, const void* buffer, u32 sector, u32 offset, u32 size) {
@@ -177,14 +177,14 @@ bool _FAT_cache_writePartialSector (CACHE* cache, const void* buffer, u32 sector
 	if (page == CACHE_FREE) {
 		return false;
 	}
-	
+
 	memcpy (cache->pages + (CACHE_PAGE_SIZE * page) + offset, buffer, size);
 	cache->cacheEntries[page].dirty = true;
 
 	return true;
 }
 
-/* 
+/*
 Writes some data to a cache page, zeroing out the page first
 */
 bool _FAT_cache_eraseWritePartialSector (CACHE* cache, const void* buffer, u32 sector, u32 offset, u32 size) {
@@ -198,7 +198,7 @@ bool _FAT_cache_eraseWritePartialSector (CACHE* cache, const void* buffer, u32 s
 	if (page == CACHE_FREE) {
 		return false;
 	}
-	
+
 	memset (cache->pages + (CACHE_PAGE_SIZE * page), 0, CACHE_PAGE_SIZE);
 	memcpy (cache->pages + (CACHE_PAGE_SIZE * page) + offset, buffer, size);
 	cache->cacheEntries[page].dirty = true;
@@ -208,7 +208,7 @@ bool _FAT_cache_eraseWritePartialSector (CACHE* cache, const void* buffer, u32 s
 
 
 /*
-Flushes all dirty pages to disc, clearing the dirty flag. 
+Flushes all dirty pages to disc, clearing the dirty flag.
 Also resets all pages' page count to 0.
 */
 bool _FAT_cache_flush (CACHE* cache) {
