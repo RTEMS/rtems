@@ -94,7 +94,7 @@ void _ISR_Handler(void)
    *
    *  LABEL "exit interrupt (simple case):
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
-   *    if outermost interrupt 
+   *    if outermost interrupt
    *      restore stack
    *  #endif
    *  prepare to get out of interrupt

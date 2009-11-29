@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  score/src/ts64toticks.c
  */
 

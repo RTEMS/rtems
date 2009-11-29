@@ -35,7 +35,7 @@ bool _Protected_heap_Resize_block(
   uintptr_t          avail_mem_size;
 
   _RTEMS_Lock_allocator();
-    status = _Heap_Resize_block( 
+    status = _Heap_Resize_block(
       the_heap, starting_address, size, &old_mem_size, &avail_mem_size );
   _RTEMS_Unlock_allocator();
   return (status == HEAP_RESIZE_SUCCESSFUL);

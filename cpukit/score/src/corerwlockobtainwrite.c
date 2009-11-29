@@ -26,7 +26,7 @@
  *  _CORE_rwlock_Obtain_for_writing
  *
  *  This function waits for the rwlock to become available.  Optionally,
- *  a limit may be placed on the duration of the spin.  
+ *  a limit may be placed on the duration of the spin.
  *
  *  Input parameters:
  *    the_rwlock    - the rwlock control block to initialize

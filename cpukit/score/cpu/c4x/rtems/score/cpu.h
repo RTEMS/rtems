@@ -48,7 +48,7 @@ extern "C" {
  *
  *  C4x Specific Information:
  *
- *  We might as well try to inline this code until there is a 
+ *  We might as well try to inline this code until there is a
  *  code space problem.
  */
 
@@ -164,7 +164,7 @@ extern "C" {
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
  *
  *  C4x Specific Information:
@@ -194,7 +194,7 @@ extern "C" {
  *
  *  C4x Specific Information:
  *
- *  See c4x.h for more details but the bottom line is that the 
+ *  See c4x.h for more details but the bottom line is that the
  *  few extended registers required to be preserved across subroutines
  *  calls are considered part of the integer context.  This eliminates
  *  overhead.
@@ -242,7 +242,7 @@ extern "C" {
  *
  *  C4x Specific Information:
  *
- *  There is no known reason to make the IDLE task floating point and 
+ *  There is no known reason to make the IDLE task floating point and
  *  no point in wasting the memory or increasing the context switch
  *  time for the IDLE task.
  */
@@ -276,7 +276,7 @@ extern "C" {
  *
  *  C4x Specific Information:
  *
- *  There is no reason to avoid the deferred FP switch logic on this 
+ *  There is no reason to avoid the deferred FP switch logic on this
  *  CPU family.
  */
 
@@ -434,27 +434,27 @@ extern "C" {
  *
  *  From email with Michael Hayes:
  *  > > But what are the rules for what is passed in what registers?
- *  
+ *
  *  Args are passed in the following registers (in order):
- *  
+ *
  *  AR2, R2, R3, RC, RS, RE
- *  
+ *
  *  However, the first and second floating point values are always in R2
  *  and R3 (and all other floats are on the stack).  Structs are always
  *  passed on the stack.  If the last argument is an ellipsis, the
  *  previous argument is passed on the stack so that its address can be
  *  taken for the stdargs macros.
- *  
+ *
  *   > > What is assumed to be preserved across calls?
- *  
- *  AR3, AR4, AR5, AR6, AR7   
+ *
+ *  AR3, AR4, AR5, AR6, AR7
  *  R4, R5, R8              (using STI/LDI)
  *  R6, R7                  (using STF/LDF)
- *  
+ *
  *   > > What is assumed to be scratch registers?
- *  
+ *
  *  R0, R1, R2, R3, AR0, AR1, AR2, IR0, IR1, BK, RS, RE, RC, R9, R10, R11
- *  
+ *
  *  Based on this information, the task specific context is quite small
  *  but the interrupt context is much larger.  In fact, it could
  *  easily be argued that there is no point in distinguishing between
@@ -627,7 +627,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *
  *  C4x Specific Information:
  *
- *  Based on the information provided in section 7.6.1 (p. 7-26) 
+ *  Based on the information provided in section 7.6.1 (p. 7-26)
  *  titled "TMS320C30 and TMS320C31 Interrupt Vector Table" and section
  *  7.6.2 "TMS320C32 Interrupt Vector Table" of the TMS32C3x User's
  *  Guide (rev L, July 1997), vectors are numbered 0x00 - 0x3F.  Thus
@@ -993,7 +993,7 @@ void _CPU_Context_Initialize(
  *  There does not appear to be a simple way to do this on this
  *  processor family that is better than the generic algorithm.
  *  Almost certainly, a hand-optimized assembly version of the
- *  generic algorithm could be written although it is not 
+ *  generic algorithm could be written although it is not
  *  worth the development effort at this time.
  */
 
@@ -1065,14 +1065,14 @@ void _CPU_Initialize(void);
 /*
  *  _CPU_ISR_install_raw_handler
  *
- *  This routine installs a "raw" interrupt handler directly into the 
+ *  This routine installs a "raw" interrupt handler directly into the
  *  processor's vector table.
  *
  *  C4x Specific Information:
  *
  *  XXXanswer
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -1199,18 +1199,18 @@ void _CPU_Context_restore_fp(
  *
  *  XXXanswer
  */
- 
+
 static inline uint32_t CPU_swap_u32(
   uint32_t value
 )
 {
   uint32_t   byte1, byte2, byte3, byte4, swapped;
- 
+
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
   byte2 = (value >> 8)  & 0xff;
   byte1 =  value        & 0xff;
- 
+
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return( swapped );
 }

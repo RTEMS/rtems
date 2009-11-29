@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  score/src/timespecdividebyinteger.c
  */
 

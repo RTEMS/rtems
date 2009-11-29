@@ -65,7 +65,7 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_fifo (
       _ISR_Enable( level );
       return THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
     }
-      
+
   /*
    *  An interrupt completed the thread's blocking request.
    *  For example, the blocking thread could have been given

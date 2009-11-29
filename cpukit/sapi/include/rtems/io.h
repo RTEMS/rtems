@@ -5,7 +5,7 @@
  *
  * @brief Classic Input/Output Manager API.
  */
- 
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

@@ -94,7 +94,7 @@ void _Objects_Extend_information(
    * Allocate the name table, and the objects and if it fails either return or
    * generate a fatal error depending on auto-extending being active.
    */
-  
+
   block_size = information->allocation_size * information->size;
   if ( information->auto_extend ) {
     new_object_block = _Workspace_Allocate( block_size );
@@ -103,7 +103,7 @@ void _Objects_Extend_information(
   } else {
     new_object_block = _Workspace_Allocate_or_fatal_error( block_size );
   }
-  
+
   /*
    *  If the index_base is the maximum we need to grow the tables.
    */
@@ -152,7 +152,7 @@ void _Objects_Extend_information(
       _Workspace_Free( new_object_block );
       return;
     }
-    
+
     /*
      *  Break the block into the various sections.
      */

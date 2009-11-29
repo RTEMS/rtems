@@ -53,37 +53,37 @@ void _Watchdog_Tickle(
     goto leave;
 
   the_watchdog = _Watchdog_First( header );
-  
+
   /*
    * For some reason, on rare occasions the_watchdog->delta_interval
    * of the head of the watchdog chain is 0.  Before this test was
    * added, on these occasions an event (which usually was supposed
    * to have a timeout of 1 tick would have a delta_interval of 0, which
-   * would be decremented to 0xFFFFFFFF by the unprotected 
+   * would be decremented to 0xFFFFFFFF by the unprotected
    * "the_watchdog->delta_interval--;" operation.
    * This would mean the event would not timeout, and also the chain would
    * be blocked, because a timeout with a very high number would be at the
    * head, rather than at the end.
    * The test "if (the_watchdog->delta_interval != 0)"
-   * here prevents this from occuring. 
-   * 
-   * We were not able to categorically identify the situation that causes 
-   * this, but proved it to be true empirically.  So this check causes 
+   * here prevents this from occuring.
+   *
+   * We were not able to categorically identify the situation that causes
+   * this, but proved it to be true empirically.  So this check causes
    * correct behaviour in this circumstance.
-   * 
+   *
    * The belief is that a race condition exists whereby an event at the head
    * of the chain is removed (by a pending ISR or higher priority task)
-   * during the _ISR_Flash( level ); in _Watchdog_Insert, but the watchdog 
-   * to be inserted has already had its delta_interval adjusted to 0, and 
-   * so is added to the head of the chain with a delta_interval of 0.  
-   * 
+   * during the _ISR_Flash( level ); in _Watchdog_Insert, but the watchdog
+   * to be inserted has already had its delta_interval adjusted to 0, and
+   * so is added to the head of the chain with a delta_interval of 0.
+   *
    * Steven Johnson - 12/2005 (gcc-3.2.3 -O3 on powerpc)
    */
   if (the_watchdog->delta_interval != 0) {
     the_watchdog->delta_interval--;
     if ( the_watchdog->delta_interval != 0 )
       goto leave;
-  }      
+  }
 
   do {
      watchdog_state = _Watchdog_Remove( the_watchdog );

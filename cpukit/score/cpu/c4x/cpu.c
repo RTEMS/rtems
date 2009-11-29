@@ -48,7 +48,7 @@ void _CPU_Initialize(void)
  *  C4x Specific Information:
  *
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -61,7 +61,7 @@ void _CPU_ISR_install_raw_handler(
    *  This is where we install the interrupt handler into the "raw" interrupt
    *  table used by the CPU to dispatch interrupt handlers.
    */
-    
+
   ittp = c4x_get_ittp();
   *old_handler = ittp[ vector ];
   ittp[ vector ] = new_handler;
@@ -70,7 +70,7 @@ void _CPU_ISR_install_raw_handler(
 /*XXX */
 
 #define C4X_CACHE       1
-#define C4X_BASE_ST     (C4X_CACHE==1) ? 0x4800 : 0x4000 
+#define C4X_BASE_ST     (C4X_CACHE==1) ? 0x4800 : 0x4000
 
 void _CPU_Context_Initialize(
   Context_Control       *_the_context,

@@ -88,7 +88,7 @@ void _Thread_Handler( void )
   executing = _Thread_Executing;
 
   /*
-   * Some CPUs need to tinker with the call frame or registers when the 
+   * Some CPUs need to tinker with the call frame or registers when the
    * thread actually begins to execute for the first time.  This is a
    * hook point where the port gets a shot at doing whatever it requires.
    */

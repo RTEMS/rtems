@@ -20,7 +20,7 @@ void _API_Mutex_Lock(
   API_Mutex_Control *the_mutex
 )
 {
-  ISR_Level level; 
+  ISR_Level level;
 
   _ISR_Disable( level );
 

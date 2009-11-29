@@ -56,7 +56,7 @@ void _CPU_Context_Initialize(
   if ( !new_level )         /* interrupt level 0 --> enabled */
     frame->flg |= 0x40;
   frame->a0 = 0x01020304;
-  frame->a1 =0xa1a2a3a4; 
+  frame->a1 =0xa1a2a3a4;
   frame->r0r2 = 0;
   frame->r1r3 = 0;
   frame->frameLow = ((uint32_t)frame)  & 0xffff;

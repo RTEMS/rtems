@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  score/src/timespecgreaterthan.c
  */
 
@@ -36,7 +36,7 @@ bool _Timespec_Greater_than(
 
   /* ASSERT: lhs->tv_sec == rhs->tv_sec */
   if ( lhs->tv_nsec > rhs->tv_nsec )
-    return true; 
+    return true;
 
   return false;
 }

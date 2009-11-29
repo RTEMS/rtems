@@ -63,7 +63,7 @@ Objects_Control *_Objects_Get(
    *  outside this class.
    *
    *  If the Id matches the api, class, and node but index portion is 0,
-   *  then the subtraction will underflow and the addition of 1 will 
+   *  then the subtraction will underflow and the addition of 1 will
    *  result in a 0 index.  The zeroth element in the local_table is
    *  always NULL.
    *

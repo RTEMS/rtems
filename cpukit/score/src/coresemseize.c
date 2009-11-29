@@ -64,7 +64,7 @@ void _CORE_semaphore_Seize(
     return;
   }
 
-  /* 
+  /*
    *  If the semaphore was not available and the caller was not willing
    *  to block, then return immediately with a status indicating that
    *  the semaphore was not available and the caller never blocked.

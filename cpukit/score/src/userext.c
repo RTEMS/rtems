@@ -45,13 +45,13 @@ void _User_extensions_Handler_initialization(void)
       _Workspace_Allocate_or_fatal_error(
         number_of_extensions * sizeof( User_extensions_Control )
       );
-  
+
     memset (
       extension,
       0,
       number_of_extensions * sizeof( User_extensions_Control )
     );
-  
+
     for ( i = 0 ; i < number_of_extensions ; i++ ) {
       _User_extensions_Add_set_with_table (extension, &initial_extensions[i]);
       extension++;

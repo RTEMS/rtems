@@ -90,7 +90,7 @@ struct c4x_timer {
 /*
  *  IO Flags
  *
- *  NOTE: iof on c3x, iiof on c4x 
+ *  NOTE: iof on c3x, iiof on c4x
  */
 
 #ifdef _TMS320C40

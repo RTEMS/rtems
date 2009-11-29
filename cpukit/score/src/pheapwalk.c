@@ -36,7 +36,7 @@ bool _Protected_heap_Walk(
    * If we are called from within a dispatching critical section,
    * then it is forbidden to lock a mutex.  But since we are inside
    * a critical section, it should be safe to walk it unlocked.
-   * 
+   *
    * NOTE: Dispatching is also disabled during initialization.
    */
   if ( !_Thread_Dispatch_disable_level ) {

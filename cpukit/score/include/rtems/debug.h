@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  rtems/debug.h
  *
  *  This include file contains the information pertaining to the debug

@@ -67,7 +67,7 @@ void _IO_Manager_initialization(void)
    *  have to allocate a new driver table and copy theirs to it.
    */
 
-  _IO_Driver_address_table = (rtems_driver_address_table *) 
+  _IO_Driver_address_table = (rtems_driver_address_table *)
       _Workspace_Allocate_or_fatal_error(
         sizeof( rtems_driver_address_table ) * ( number_of_drivers )
       );

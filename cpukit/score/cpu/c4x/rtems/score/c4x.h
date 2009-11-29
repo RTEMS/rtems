@@ -33,29 +33,29 @@ extern "C" {
  *  dependent features are present in a particular member
  *  of the family.
  */
- 
+
 #if defined(_C30)
 #define CPU_MODEL_NAME  "C30"
 
 #elif defined(_C31)
 #define CPU_MODEL_NAME  "C31"
- 
+
 #elif defined(_C32)
 #define CPU_MODEL_NAME  "C32"
- 
+
 #elif defined(_C33)
 #define CPU_MODEL_NAME  "C33"
- 
+
 #elif defined(_C40)
 #define CPU_MODEL_NAME  "C40"
- 
+
 #elif defined(_C44)
 #define CPU_MODEL_NAME  "C44"
- 
+
 #else
- 
+
 #error "Unsupported CPU Model"
- 
+
 #endif
 
 /*
@@ -69,7 +69,7 @@ extern "C" {
  *  point registers", the notion of floating point is very inherent to
  *  applications.  In addition, the calling conventions require that
  *  only a few extended registers be preserved across subroutine calls.
- *  The overhead of including these few registers in the basic 
+ *  The overhead of including these few registers in the basic
  *  context is small compared to the overhead of managing the notion
  *  of separate floating point contexts.  So we decided to pretend that
  *  there is no FPU on the C3x or C4x.
@@ -156,7 +156,7 @@ static inline unsigned int cpu_st_get(void)
 
 #define c4x_global_interrupts_get() \
   (cpu_st_get() & C4X_ST_GIE)
-  
+
 #define c4x_global_interrupts_disable() \
   cpu_st_bit_clear(C4X_ST_GIE)
 
@@ -191,7 +191,7 @@ static inline unsigned int c3x_get_if(void)
 
 static inline void c3x_set_if(unsigned int _if_value)
 {
-  __asm__( "ldi %0, if" : : "g" (_if_value) : "if", "cc"); 
+  __asm__( "ldi %0, if" : : "g" (_if_value) : "if", "cc");
 }
 
 /*
@@ -211,7 +211,7 @@ static inline unsigned int c3x_get_ie(void)
 
 static inline void c3x_set_ie(unsigned int _ie_value)
 {
-  __asm__ volatile ( "ldi %0, ie" : : "g" (_ie_value) : "ie", "cc"); 
+  __asm__ volatile ( "ldi %0, ie" : : "g" (_ie_value) : "ie", "cc");
 }
 
 /*
@@ -222,7 +222,7 @@ static inline void c3x_set_ie(unsigned int _ie_value)
  *  c3x_ie_mask_flash   - temporarily restores previous IE mask
  *  c3x_ie_mask_set     - sets a specific set of the IE mask
  */
- 
+
 #define c3x_ie_mask_all( _isr_cookie ) \
   do { \
     __asm__("ldi  ie,%0\n" \
@@ -280,7 +280,7 @@ static inline unsigned int c4x_get_iif(void)
 
 static inline void c4x_set_iif(unsigned int _iif_value)
 {
-  __asm__( "ldi %0, iif" : : "g" (_iif_value) : "iif", "cc"); 
+  __asm__( "ldi %0, iif" : : "g" (_iif_value) : "iif", "cc");
 }
 
 /*
@@ -300,7 +300,7 @@ static inline unsigned int c4x_get_iie(void)
 
 static inline void c4x_set_iie(unsigned int _iie_value)
 {
-  __asm__( "ldi %0, iie" : : "g" (_iie_value) : "iie", "cc"); 
+  __asm__( "ldi %0, iie" : : "g" (_iie_value) : "iie", "cc");
 }
 
 /*
@@ -331,15 +331,15 @@ static inline void c4x_set_iie(unsigned int _iie_value)
  */
 
 static inline void * c4x_get_ittp(void)
-{ 
+{
   register unsigned int _if_value;
-  
+
   __asm__( "ldi if, %0" : "=r" (_if_value) );
-  return (void *)((_if_value & 0xffff0000) >> 8); 
-}  
+  return (void *)((_if_value & 0xffff0000) >> 8);
+}
 
 static inline void c4x_set_ittp(void *_ittp_value)
-{  
+{
   unsigned int _if_value;
   unsigned int _ittp_field;
 
@@ -356,7 +356,7 @@ static inline void c4x_set_ittp(void *_ittp_value)
 #else
   c3x_set_if( _if_value );
 #endif
-}  
+}
 
 #endif /* ifndef ASM */
 

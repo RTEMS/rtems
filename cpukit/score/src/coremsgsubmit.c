@@ -108,7 +108,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     the_message =
         _CORE_message_queue_Allocate_message_buffer( the_message_queue );
 
-    #if defined(RTEMS_DEBUG) 
+    #if defined(RTEMS_DEBUG)
       /*
        *  NOTE: If the system is consistent, this error should never occur.
        */

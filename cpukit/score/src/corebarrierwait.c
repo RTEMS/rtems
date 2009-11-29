@@ -60,14 +60,14 @@ void _CORE_barrier_Wait(
   _ISR_Disable( level );
   the_barrier->number_of_waiting_threads++;
   if ( _CORE_barrier_Is_automatic( &the_barrier->Attributes ) ) {
-    if ( the_barrier->number_of_waiting_threads == 
+    if ( the_barrier->number_of_waiting_threads ==
 	 the_barrier->Attributes.maximum_count) {
       executing->Wait.return_code = CORE_BARRIER_STATUS_AUTOMATICALLY_RELEASED;
       _ISR_Enable( level );
       _CORE_barrier_Release( the_barrier, id, api_barrier_mp_support );
       return;
     }
-  } 
+  }
 
   _Thread_queue_Enter_critical_section( &the_barrier->Wait_queue );
   executing->Wait.queue          = &the_barrier->Wait_queue;

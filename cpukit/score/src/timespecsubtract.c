@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  score/src/timespecsubtract.c
  */
 
@@ -32,7 +32,7 @@ void _Timespec_Subtract(
 
   if (end->tv_nsec < start->tv_nsec) {
     result->tv_sec  = end->tv_sec - start->tv_sec - 1;
-    result->tv_nsec = 
+    result->tv_nsec =
       (TOD_NANOSECONDS_PER_SECOND - start->tv_nsec) + end->tv_nsec;
   } else {
     result->tv_sec  = end->tv_sec - start->tv_sec;

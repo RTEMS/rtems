@@ -84,7 +84,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   the_mutex->nest_count--;
 
-  if ( the_mutex->nest_count != 0 ) { 
+  if ( the_mutex->nest_count != 0 ) {
     /*
      *  All error checking is on the locking side, so if the lock was
      *  allowed to acquired multiple times, then we should just deal with

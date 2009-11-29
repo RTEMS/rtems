@@ -26,7 +26,7 @@
  *  _CORE_spinlock_Wait
  *
  *  This function waits for the spinlock to become available.  Optionally,
- *  a limit may be placed on the duration of the spin.  
+ *  a limit may be placed on the duration of the spin.
  *
  *  Input parameters:
  *    the_spinlock - the spinlock control block to initialize
@@ -48,7 +48,7 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
   #endif
 
   _ISR_Disable( level );
-    if ( (the_spinlock->lock == CORE_SPINLOCK_LOCKED) && 
+    if ( (the_spinlock->lock == CORE_SPINLOCK_LOCKED) &&
          (the_spinlock->holder == _Thread_Executing->Object.id) ) {
       _ISR_Enable( level );
       return CORE_SPINLOCK_HOLDER_RELOCKING;
@@ -89,12 +89,12 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
        *  POSIX does not say anything about ISRs, that implies that
        *  another thread must be able to run while spinning.  We are
        *  not blocking so that implies we are at least preemptible
-       *  and possibly time-sliced.  
-       *  
+       *  and possibly time-sliced.
+       *
        *  So first, we will enable interrpts to allow for them to happen.
        *  Then we will "flash" the thread dispatching critical section
        *  so other threads have a chance to run.
-       * 
+       *
        *  A spinlock cannot be deleted while it is being used so we are
        *  safe from deletion.
        */
@@ -104,7 +104,7 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
 
        _Thread_Enable_dispatch();
        /* Another thread could get dispatched here */
-        
+
        /* Reenter the critical sections so we can attempt the lock again. */
        _Thread_Disable_dispatch();
 

@@ -5,7 +5,7 @@
  *
  * @brief Classic Input/Output Manager implementation.
  */
- 
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -41,7 +41,7 @@ static rtems_status_code rtems_io_obtain_major_number(
 {
   rtems_device_major_number n = _IO_Number_of_drivers;
   rtems_device_major_number m = 0;
-  
+
   /* major is error checked by caller */
 
   for ( m = 0; m < n; ++m ) {

@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  score/src/timespecaddto.c
  */
 

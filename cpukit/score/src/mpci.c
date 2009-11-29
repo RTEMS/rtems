@@ -122,7 +122,7 @@ void _MPCI_Create_server( void )
     &_Thread_Internal_information,
     _MPCI_Receive_server_tcb,
     NULL,        /* allocate the stack */
-    _Stack_Minimum() + 
+    _Stack_Minimum() +
       CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK +
       _Configuration_MP_table->extra_mpci_receive_server_stack,
     CPU_ALL_TASKS_ARE_FP,

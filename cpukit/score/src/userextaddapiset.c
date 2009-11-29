@@ -36,7 +36,7 @@ void _User_extensions_Add_API_set (
 #endif
   {
     the_extension->Switch.thread_switch = the_extension->Callouts.thread_switch;
-    _Chain_Append( 
+    _Chain_Append(
       &_User_extensions_Switches_list, &the_extension->Switch.Node );
   }
 }

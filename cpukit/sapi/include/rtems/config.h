@@ -1,7 +1,7 @@
 /**
  * @file rtems/config.h
  */
- 
+
 /*
  *  This include file contains the table of user defined configuration
  *  parameters.
@@ -80,7 +80,7 @@ typedef struct {
   /** This is the maximum number of proxies. */
   uint32_t            maximum_proxies;
 
-  /** The MPCI Receive server is assumed to have a stack of at least 
+  /** The MPCI Receive server is assumed to have a stack of at least
    *  minimum stack size.  This field specifies the amount of extra
    *  stack this task will be given in bytes.
    */
@@ -154,7 +154,7 @@ typedef struct {
 
   /** If this element is TRUE, then RTEMS will zero the Executive Workspace.
    *  When this element is FALSE, it is assumed that the BSP or invoking
-   *  environment has ensured that memory was cleared before RTEMS was 
+   *  environment has ensured that memory was cleared before RTEMS was
    *  invoked.
    */
   bool                           do_zero_of_workspace;
@@ -225,7 +225,7 @@ extern rtems_configuration_table  Configuration;
 #define rtems_configuration_get_idle_task_stack_size() \
         (Configuration.idle_task_stack_size)
 
-/* XXX We need to get this from the generated table 
+/* XXX We need to get this from the generated table
  *     since BSPs need it before the pointer is set.
  *     Eventually all should be done this way.
  */
@@ -239,7 +239,7 @@ extern rtems_configuration_table    Configuration;
 
 #define rtems_configuration_get_stack_free_hook() \
         (Configuration.stack_free_hook)
- 
+
 /**
   * This macro assists in accessing the field which indicates whether
   * RTEMS is responsible for zeroing the Executive Workspace.

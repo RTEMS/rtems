@@ -38,7 +38,7 @@ void _CPU_Initialize(void)
  *
  *  XXX document implementation including references if appropriate
  */
- 
+
 uint32_t   _CPU_ISR_Get_level( void )
 {
   int flag;
@@ -55,7 +55,7 @@ uint32_t   _CPU_ISR_Get_level( void )
  *
  *  XXX document implementation including references if appropriate
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,

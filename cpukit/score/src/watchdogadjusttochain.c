@@ -31,12 +31,12 @@ void _Watchdog_Adjust_to_chain(
 {
   Watchdog_Interval  units = units_arg;
   ISR_Level          level;
-  Watchdog_Control  *first; 
-  
+  Watchdog_Control  *first;
+
   if ( units <= 0 ) {
     return;
   }
- 
+
   _ISR_Disable( level );
 
   while ( 1 ) {
@@ -69,7 +69,7 @@ void _Watchdog_Adjust_to_chain(
       _Chain_Append_unprotected( to_fire, &first->Node );
 
       _ISR_Flash( level );
- 
+
       if ( _Chain_Is_empty( header ) )
         break;
       first = _Watchdog_First( header );

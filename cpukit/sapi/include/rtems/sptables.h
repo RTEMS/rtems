@@ -4,7 +4,7 @@
  *  This include file contains the executive's pre-initialized tables
  *  used when in a single processor configuration.
  */
- 
+
 /*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

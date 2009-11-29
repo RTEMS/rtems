@@ -24,8 +24,8 @@
  *         support the RTEMS Test Suites into something that can be
  *         used remarkably reliably by most applications.
  */
- 
-/* 
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -76,21 +76,21 @@ extern rtems_configuration_table        Configuration;
 #include <rtems/libio.h>
 
 #ifdef CONFIGURE_INIT
-rtems_libio_init_functions_t rtems_libio_init_helper = 
+rtems_libio_init_functions_t rtems_libio_init_helper =
     #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
     NULL;
     #else
     rtems_libio_init;
     #endif
 
-rtems_libio_supp_functions_t rtems_libio_supp_helper = 
+rtems_libio_supp_functions_t rtems_libio_supp_helper =
     #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
     NULL;
     #else
     open_dev_console;
     #endif
 
-rtems_fs_init_functions_t    rtems_fs_init_helper = 
+rtems_fs_init_functions_t    rtems_fs_init_helper =
     #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
     NULL;
     #else
@@ -109,7 +109,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This macro defines the number of POSIX file descriptors allocated 
+ *  This macro defines the number of POSIX file descriptors allocated
  *  and managed by libio.  These are the "integer" file descriptors that
  *  are used by calls like open(2) and read(2).
  */
@@ -258,7 +258,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_STACK_CHECKER_ENABLED
   #warning "STACK_CHECKER_ON deprecated -- use CONFIGURE_STACK_CHECKER_ENABLED"
 #endif
-  
+
 /**
  *  This configures the stack checker user extension.
  */
@@ -467,7 +467,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   /**
    *  This configures the malloc family plugin which dirties memory
    *  allocated.  This is helpful for finding unitialized data structure
-   *  problems. 
+   *  problems.
    */
   rtems_malloc_dirtier_t *rtems_malloc_dirty_helper =
     #if defined(CONFIGURE_MALLOC_DIRTY)
@@ -494,8 +494,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   ((_max) & ~RTEMS_UNLIMITED_OBJECTS)
 
 /**
- *  This macro accounts for how memory for a set of configured objects is 
- *  allocated from the Executive Workspace.  
+ *  This macro accounts for how memory for a set of configured objects is
+ *  allocated from the Executive Workspace.
  *
  *  NOTE: It does NOT attempt to address the more complex case of unlimited
  *        objects.
@@ -771,7 +771,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
                               RTEMS_BDBUF_BUFFER_MAX_SIZE_DEFAULT
   #endif
   #ifdef CONFIGURE_INIT
-    const rtems_bdbuf_config rtems_bdbuf_configuration = { 
+    const rtems_bdbuf_config rtems_bdbuf_configuration = {
       CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS,
       CONFIGURE_BDBUF_MAX_WRITE_BLOCKS,
       CONFIGURE_SWAPOUT_TASK_PRIORITY,
@@ -1253,7 +1253,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   /**
    *  This is the maximum number of Ada tasks which can be concurrently
-   *  in existence.  Twenty (20) are required to run all tests in the 
+   *  in existence.  Twenty (20) are required to run all tests in the
    *  ACATS (formerly ACVC).
    */
   #ifndef CONFIGURE_MAXIMUM_ADA_TASKS
@@ -1665,7 +1665,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    (CONFIGURE_MAXIMUM_TASKS + \
     CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS + \
     CONFIGURE_MAXIMUM_ITRON_TASKS \
-   ) 
+   )
 
 /**
  *  This macro reserves the memory required by the statically configured
@@ -1815,7 +1815,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(
         CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS ),
     CONFIGURE_MEMORY_FOR_ITRON_PORTS( CONFIGURE_MAXIMUM_ITRON_PORTS ),
-    CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS( 
+    CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(
         CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS ),
     CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(
         CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS ),
@@ -1914,7 +1914,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *        needed without requring being high enough logical to
    *        include the full configuration table.
    */
-  uint32_t rtems_minimum_stack_size = 
+  uint32_t rtems_minimum_stack_size =
     CONFIGURE_MINIMUM_TASK_STACK_SIZE;
 
   /** This variable specifies the maximum priority value that
@@ -1980,7 +1980,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #if defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) || \
         defined(CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE)
       void _POSIX_Threads_Initialize_user_threads_body(void);
-      void (*_POSIX_Threads_Initialize_user_threads_p)(void) = 
+      void (*_POSIX_Threads_Initialize_user_threads_p)(void) =
                 _POSIX_Threads_Initialize_user_threads_body;
     #else
       void (*_POSIX_Threads_Initialize_user_threads_p)(void) = NULL;
@@ -1997,7 +1997,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #if defined(CONFIGURE_ITRON_INIT_TASK_TABLE) || \
         defined(CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE)
       void _ITRON_Task_Initialize_user_tasks_body(void);
-      void (*_ITRON_Initialize_user_tasks_p)(void) = 
+      void (*_ITRON_Initialize_user_tasks_p)(void) =
                 _ITRON_Task_Initialize_user_tasks_body;
     #else
       void (*_ITRON_Initialize_user_tasks_p)(void) = NULL;
@@ -2099,8 +2099,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  You must either explicity include or exclude the clock driver.
  *  It is such a common newbie error to leave it out.  Maybe this
  *  will put an end to it.
- *  
- *  NOTE: If you are using the timer driver, it is considered 
+ *
+ *  NOTE: If you are using the timer driver, it is considered
  *        mutually exclusive with the clock driver because the
  *        drivers are assumed to use the same "timer" hardware
  *        on many boards.
@@ -2136,7 +2136,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
      (CONFIGURE_MAXIMUM_PRIORITY != 255))
   #error "Maximum priority is not 1 less than a power of 2 between 4 and 256"
 #endif
-    
+
 #if (CONFIGURE_MAXIMUM_PRIORITY > PRIORITY_DEFAULT_MAXIMUM)
   #error "Maximum priority configured higher than supported by target."
 #endif

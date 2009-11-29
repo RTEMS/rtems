@@ -78,7 +78,7 @@ void _Thread_Clear_state(
          *  then we have a new heir.  This may or may not result in a
          *  context switch.
          *
-         *  Normal case: 
+         *  Normal case:
          *    If the current thread is preemptible, then we need to do
          *    a context switch.
          *  Pseudo-ISR case:

@@ -214,7 +214,7 @@ bool _Thread_Initialize(
   /*
    *  We assume the Allocator Mutex is locked and dispatching is
    *  enabled when we get here.  We want to be able to run the
-   *  user extensions with dispatching enabled.  The Allocator 
+   *  user extensions with dispatching enabled.  The Allocator
    *  Mutex provides sufficient protection to let the user extensions
    *  run safely.
    */
@@ -229,7 +229,7 @@ failed:
   for ( i=0 ; i <= THREAD_API_LAST ; i++ )
     if ( the_thread->API_Extensions[i] )
       _Workspace_Free( the_thread->API_Extensions[i] );
-  
+
   if ( extensions_area )
     (void) _Workspace_Free( extensions_area );
 

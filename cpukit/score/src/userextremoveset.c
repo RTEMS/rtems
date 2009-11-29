@@ -29,7 +29,7 @@ void _User_extensions_Remove_set (
 )
 {
   _Chain_Extract( &the_extension->Node );
-  
+
   /*
    * If a switch handler is present, remove it.
    */

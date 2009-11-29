@@ -1,4 +1,4 @@
-/** 
+/**
  *  @file  score/src/timespectoticks.c
  */
 
@@ -36,7 +36,7 @@ uint32_t _Timespec_To_ticks(
 {
   uint32_t  ticks;
 
-  if ( (time->tv_sec == 0) && (time->tv_nsec == 0) ) 
+  if ( (time->tv_sec == 0) && (time->tv_nsec == 0) )
     return 0;
 
   ticks  = time->tv_sec * TOD_TICKS_PER_SECOND;

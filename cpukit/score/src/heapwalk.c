@@ -366,7 +366,7 @@ bool _Heap_Walk(
         block,
         next_block
       );
-      
+
       return false;
     }
 
@@ -378,7 +378,7 @@ bool _Heap_Walk(
         block,
         block_size
       );
-      
+
       return false;
     }
 
@@ -391,7 +391,7 @@ bool _Heap_Walk(
         block_size,
         min_block_size
       );
-      
+
       return false;
     }
 
@@ -403,10 +403,10 @@ bool _Heap_Walk(
         block,
         next_block
       );
-      
+
       return false;
     }
-   
+
     if ( !_Heap_Is_prev_used( next_block ) ) {
       if ( !_Heap_Walk_check_free_block( source, printer, heap, block ) ) {
         return false;

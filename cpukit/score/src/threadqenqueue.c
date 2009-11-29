@@ -71,7 +71,7 @@ void _Thread_queue_Enqueue_with_handler(
 
   /*
    *  If the thread wants to timeout, then schedule its timer.
-   */ 
+   */
   if ( timeout ) {
     _Watchdog_Initialize(
        &the_thread->Timer,
@@ -85,7 +85,7 @@ void _Thread_queue_Enqueue_with_handler(
 
   /*
    *  Now enqueue the thread per the discipline for this thread queue.
-   */ 
+   */
   if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
     enqueue_p = _Thread_queue_Enqueue_priority;
   else /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
