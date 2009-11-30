@@ -25,6 +25,8 @@
 /*  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2009 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -52,6 +54,7 @@ extern "C" {
 #include <rtems/score/object.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/chain.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/attr.h>
 
@@ -120,19 +123,6 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
              );
 
 /**
- *  The following defines the information control block used to manage
- *  this class of objects.
- */
-RTEMS_TIMER_EXTERN Objects_Information  _Timer_Information;
-
-/**
- *  Pointer to TCB of the Timer Server.  This is NULL before the
- *  server is executing and task-based timers are not allowed to be
- *  initiated until the server is started.
- */
-RTEMS_TIMER_EXTERN Thread_Control *_Timer_Server;
-
-/**
  *  The following records define the control block used to manage
  *  each timer.
  */
@@ -144,6 +134,91 @@ typedef struct {
   /** This field indicates what type of timer this currently is. */
   Timer_Classes    the_class;
 }   Timer_Control;
+
+typedef struct Timer_server_Control Timer_server_Control;
+
+/**
+ * @brief Method used to schedule the insertion of task based timers.
+ */
+typedef void (*Timer_server_Schedule_operation)(
+  Timer_server_Control *timer_server,
+  Timer_Control        *timer
+);
+
+typedef struct {
+  /**
+   * @brief This watchdog that will be registered in the system tick mechanic
+   * for timer server wake-up.
+   */
+  Watchdog_Control System_watchdog;
+
+  /**
+   * @brief Chain for watchdogs which will be triggered by the timer server.
+   */
+  Chain_Control Chain;
+
+  /**
+   * @brief Last known time snapshot of the timer server.
+   *
+   * The units may be ticks or seconds.
+   */
+  Watchdog_Interval volatile last_snapshot;
+} Timer_server_Watchdogs;
+
+struct Timer_server_Control {
+  /**
+   * @brief Timer server thread.
+   */
+  Thread_Control *thread;
+
+  /**
+   * @brief The schedule operation method of the timer server.
+   */
+  Timer_server_Schedule_operation schedule_operation;
+
+  /**
+   * @brief Interval watchdogs triggered by the timer server.
+   */
+  Timer_server_Watchdogs Interval_watchdogs;
+
+  /**
+   * @brief TOD watchdogs triggered by the timer server.
+   */
+  Timer_server_Watchdogs TOD_watchdogs;
+
+  /**
+   * @brief Chain of timers scheduled for insert.
+   *
+   * This pointer is not @c NULL whenever the interval and TOD chains are
+   * processed.  After the processing this list will be checked and if
+   * necessary the processing will be restarted.  Processing of these chains
+   * can be only interrupted through interrupts.
+   */
+  Chain_Control *volatile insert_chain;
+
+  /**
+   * @brief Indicates that the timer server is active or not.
+   *
+   * The server is active after the delay on a system watchdog.  The activity
+   * period of the server ends when no more watchdogs managed by the server
+   * fire.  The system watchdogs must not be manipulated when the server is
+   * active.
+   */
+  bool volatile active;
+};
+
+/**
+ * @brief Pointer to default timer server control block.
+ *
+ * This value is @c NULL when the default timer server is not initialized.
+ */
+RTEMS_TIMER_EXTERN Timer_server_Control *volatile _Timer_server;
+
+/**
+ *  The following defines the information control block used to manage
+ *  this class of objects.
+ */
+RTEMS_TIMER_EXTERN Objects_Information  _Timer_Information;
 
 /**
  *  @brief _Timer_Manager_initialization
@@ -318,21 +393,6 @@ rtems_status_code rtems_timer_get_information(
   Objects_Id               id,
   rtems_timer_information *the_info
 );
-
-/**
- *  This type defines the method used to schedule the insertion of task
- *  based timers.
- */
-typedef void (*Timer_Server_schedule_operation_t)(
-  Timer_Control     *the_timer
-);
-
-/**
- *  This variable will point to the schedule operation method once the
- *  timer server is initialized.
- */
-RTEMS_TIMER_EXTERN Timer_Server_schedule_operation_t
-  _Timer_Server_schedule_operation;
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/timer.inl>

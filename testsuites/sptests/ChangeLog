@@ -1,3 +1,15 @@
+2009-11-30	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* sp68/init.c, sp68/Makefile.am, sp68/sp68.doc, sp68/sp68.scn,
+	spintrcritical17/init.c, spintrcritical17/Makefile.am,
+	spintrcritical17/spintrcritical17.doc,
+	spintrcritical17/spintrcritical17.scn: New files.
+	* Makefile.am, configure.ac: Update for test sp68 and spintrcritical17.
+	* sp31/task1.c, sp67/init.c: Changes for new timer server
+	implementation.
+	* sp52/init.c: The init task must be preemptible to let the timer
+	server run.
+
 2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1460/cpukit

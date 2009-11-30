@@ -13,7 +13,7 @@ SUBDIRS = \
     sp30 sp31 sp32 sp33 sp34 sp35      sp37 sp38 sp39 \
     sp40 sp41 sp42 sp43 sp44 sp45 sp46 sp47 sp48 sp49 \
     sp50 sp51 sp52 sp53 sp54 sp55 sp56 sp57 sp58 sp59 \
-    sp60 sp61 sp62 sp63 sp64 sp65 sp66 sp67 \
+    sp60 sp61 sp62 sp63 sp64 sp65 sp66 sp67 sp68 \
     spchain spclockget spcoverage spobjgetnext spnotepad01 spprintk spsize \
     spstkalloc spthreadq01 spwatchdog spwkspace \
     spfatal01 spfatal02 spfatal03 spfatal04 spfatal05 spfatal06 spfatal07 \
@@ -21,7 +21,8 @@ SUBDIRS = \
     spintrcritical01 spintrcritical02 spintrcritical03 spintrcritical04 \
     spintrcritical05 spintrcritical06 spintrcritical07 spintrcritical08 \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \
-    spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16
+    spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16 \
+    spintrcritical17
  
 DIST_SUBDIRS = $(SUBDIRS) spfatal_support spintrcritical_support
 EXTRA_DIST = spfatal_support/init.c spfatal_support/system.h

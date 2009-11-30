@@ -15,6 +15,8 @@
 /*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2009 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -39,308 +41,388 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/thread.h>
 
-/**
- *  This chain contains the list of interval timers that are
- *  executed in the context of the Timer Server.
- */
-Chain_Control _Timer_Ticks_chain;
+static Timer_server_Control _Timer_server_Default;
 
-/**
- *  This chain contains the list of time of day timers that are
- *  executed in the context of the Timer Server.
- */
-Chain_Control _Timer_Seconds_chain;
-
-/**
- *  This chain holds the set of timers to be inserted when the
- *  server runs again.
- */
-Chain_Control _Timer_To_be_inserted;
-
-/**
- *  This variables keeps track of the last time the Timer Server actually
- *  processed the ticks chain.
- */
-Watchdog_Interval _Timer_Server_ticks_last_time;
-
-/**
- *  This variable keeps track of the last time the Timer Server actually
- *  processed the seconds chain.
- */
-Watchdog_Interval _Timer_Server_seconds_last_time;
-
-/**
- *  This is the timer used to control when the Timer Server wakes up to
- *  service "when" timers.
- *
- *  @note The timer in the Timer Server TCB is used for ticks timer.
- */
-Watchdog_Control _Timer_Seconds_timer;
-
-/**
- *  This method is used to temporarily disable updates to the 
- *  Ticks Timer Chain managed by the Timer Server.
- */
-#define _Timer_Server_stop_ticks_timer() \
-      _Watchdog_Remove( &_Timer_Server->Timer )
-
-/**
- *  This method is used to temporarily disable updates to the 
- *  Seconds Timer Chain managed by the Timer Server.
- */
-#define _Timer_Server_stop_seconds_timer() \
-      _Watchdog_Remove( &_Timer_Seconds_timer );
-
-/**
- *  This method resets a timer and places it on the Ticks chain.  It
- *  is assumed that the timer has already been canceled.
- */
-#define _Timer_Server_reset_ticks_timer() \
-   do { \
-      if ( !_Chain_Is_empty( &_Timer_Ticks_chain ) ) { \
-        _Watchdog_Insert_ticks( &_Timer_Server->Timer, \
-           ((Watchdog_Control *)_Timer_Ticks_chain.first)->delta_interval ); \
-      } \
-   } while (0)
-
-/**
- *  This method resets a timer and places it on the Seconds chain.  It
- *  is assumed that the timer has already been canceled.
- */
-#define _Timer_Server_reset_seconds_timer() \
-   do { \
-      if ( !_Chain_Is_empty( &_Timer_Seconds_chain ) ) { \
-        _Watchdog_Insert_seconds( &_Timer_Seconds_timer, \
-          ((Watchdog_Control *)_Timer_Seconds_chain.first)->delta_interval ); \
-      } \
-   } while (0)
-
-/**
- *  @brief _Timer_Server_process_insertions
- *
- *  This method processes the set of timers scheduled for insertion
- *  onto one of the Timer Server chains.
- *
- *  @note It is only to be called from the Timer Server task.
- */
-static void _Timer_Server_process_insertions(void)
+static void _Timer_server_Stop_interval_system_watchdog(
+  Timer_server_Control *ts
+)
 {
-  Timer_Control *the_timer;
+  _Watchdog_Remove( &ts->Interval_watchdogs.System_watchdog );
+}
 
-  while ( 1 ) {
-    the_timer = (Timer_Control *) _Chain_Get( &_Timer_To_be_inserted );
-    if ( the_timer == NULL )
-      break;
+static void _Timer_server_Reset_interval_system_watchdog(
+  Timer_server_Control *ts
+)
+{
+  ISR_Level level;
 
-    if ( the_timer->the_class == TIMER_INTERVAL_ON_TASK ) {
-      _Watchdog_Insert( &_Timer_Ticks_chain, &the_timer->Ticker );
-    } else if ( the_timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
-      _Watchdog_Insert( &_Timer_Seconds_chain, &the_timer->Ticker );
-    }
+  _Timer_server_Stop_interval_system_watchdog( ts );
+
+  _ISR_Disable( level );
+  if ( !_Chain_Is_empty( &ts->Interval_watchdogs.Chain ) ) {
+    Watchdog_Interval delta_interval =
+      _Watchdog_First( &ts->Interval_watchdogs.Chain )->delta_interval;
+    _ISR_Enable( level );
+
+    /*
+     *  The unit is TICKS here.
+     */
+    _Watchdog_Insert_ticks(
+      &ts->Interval_watchdogs.System_watchdog,
+      delta_interval
+    );
+  } else {
+    _ISR_Enable( level );
   }
 }
 
-/**
- *  @brief _Timer_Server_process_ticks_chain
- *
- *  This routine is responsible for adjusting the list of task-based
- *  interval timers to reflect the passage of time.
- *
- *  @param[in] to_fire will contain the set of timers that are to be fired.
- *
- *  @note It is only to be called from the Timer Server task.
- */
-static void _Timer_Server_process_ticks_chain(
-  Chain_Control *to_fire
+static void _Timer_server_Stop_tod_system_watchdog(
+  Timer_server_Control *ts
 )
 {
-  Watchdog_Interval snapshot;
-  Watchdog_Interval ticks;
-
-  snapshot = _Watchdog_Ticks_since_boot;
-  if ( snapshot >= _Timer_Server_ticks_last_time )
-    ticks = snapshot - _Timer_Server_ticks_last_time;
-  else
-    ticks = (0xFFFFFFFF - _Timer_Server_ticks_last_time) + snapshot;
-
-  _Timer_Server_ticks_last_time = snapshot;
-  _Watchdog_Adjust_to_chain( &_Timer_Ticks_chain, ticks, to_fire );
+  _Watchdog_Remove( &ts->TOD_watchdogs.System_watchdog );
 }
 
-/**
- *  @brief _Timer_Server_process_seconds_chain
- *
- *  This routine is responsible for adjusting the list of task-based
- *  time of day timers to reflect the passage of time.
- *
- *  @param[in] to_fire will contain the set of timers that are to be fired.
- *
- *  @note It is only to be called from the Timer Server task.
- */
-static void _Timer_Server_process_seconds_chain(
-  Chain_Control *to_fire
+static void _Timer_server_Reset_tod_system_watchdog(
+  Timer_server_Control *ts
 )
 {
+  ISR_Level level;
+
+  _Timer_server_Stop_tod_system_watchdog( ts );
+
+  _ISR_Disable( level );
+  if ( !_Chain_Is_empty( &ts->TOD_watchdogs.Chain ) ) {
+    Watchdog_Interval delta_interval =
+      _Watchdog_First( &ts->TOD_watchdogs.Chain )->delta_interval;
+    _ISR_Enable( level );
+
+    /*
+     *  The unit is SECONDS here.
+     */
+    _Watchdog_Insert_seconds(
+      &ts->TOD_watchdogs.System_watchdog,
+      delta_interval
+    );
+  } else {
+    _ISR_Enable( level );
+  }
+}
+
+static void _Timer_server_Insert_timer(
+  Timer_server_Control *ts,
+  Timer_Control *timer
+)
+{
+  if ( timer->the_class == TIMER_INTERVAL_ON_TASK ) {
+    _Watchdog_Insert( &ts->Interval_watchdogs.Chain, &timer->Ticker );
+  } else if ( timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
+    _Watchdog_Insert( &ts->TOD_watchdogs.Chain, &timer->Ticker );
+  }
+}
+
+static void _Timer_server_Insert_timer_and_make_snapshot(
+  Timer_server_Control *ts,
+  Timer_Control *timer
+)
+{
+  Watchdog_Control *first_watchdog;
+  Watchdog_Interval delta_interval;
+  Watchdog_Interval last_snapshot;
   Watchdog_Interval snapshot;
-  Watchdog_Interval ticks;
+  Watchdog_Interval delta;
+  ISR_Level level;
+
+  /*
+   *  We have to update the time snapshots here, because otherwise we may have
+   *  problems with the integer range of the delta values.  The time delta DT
+   *  from the last snapshot to now may be arbitrarily long.  The last snapshot
+   *  is the reference point for the delta chain.  Thus if we do not update the
+   *  reference point we have to add DT to the initial delta of the watchdog
+   *  being inserted.  This could result in an integer overflow.
+   */
+
+  _Thread_Disable_dispatch();
+
+  if ( timer->the_class == TIMER_INTERVAL_ON_TASK ) {
+    /*
+     *  We have to advance the last known ticks value of the server and update
+     *  the watchdog chain accordingly.
+     */
+    _ISR_Disable( level );
+    snapshot = _Watchdog_Ticks_since_boot;
+    last_snapshot = ts->Interval_watchdogs.last_snapshot;
+    if ( !_Chain_Is_empty( &ts->Interval_watchdogs.Chain ) ) {
+      first_watchdog = _Watchdog_First( &ts->Interval_watchdogs.Chain );
+
+      /*
+       *  We assume adequate unsigned arithmetic here.
+       */
+      delta = snapshot - last_snapshot;
+
+      delta_interval = first_watchdog->delta_interval;
+      if (delta_interval > delta) {
+        delta_interval -= delta;
+      } else {
+        delta_interval = 0;
+      }
+      first_watchdog->delta_interval = delta_interval;
+    }
+    ts->Interval_watchdogs.last_snapshot = snapshot;
+    _ISR_Enable( level );
+
+    _Watchdog_Insert( &ts->Interval_watchdogs.Chain, &timer->Ticker );
+
+    if ( !ts->active ) {
+      _Timer_server_Reset_interval_system_watchdog( ts );
+    }
+  } else if ( timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
+    /*
+     *  We have to advance the last known seconds value of the server and update
+     *  the watchdog chain accordingly.
+     */
+    _ISR_Disable( level );
+    snapshot = (Watchdog_Interval) _TOD_Seconds_since_epoch();
+    last_snapshot = ts->TOD_watchdogs.last_snapshot;
+    if ( !_Chain_Is_empty( &ts->TOD_watchdogs.Chain ) ) {
+      first_watchdog = _Watchdog_First( &ts->TOD_watchdogs.Chain );
+      delta_interval = first_watchdog->delta_interval;
+      if ( snapshot > last_snapshot ) {
+        /*
+         *  We advanced in time.
+         */
+        delta = snapshot - last_snapshot;
+        if (delta_interval > delta) {
+          delta_interval -= delta;
+        } else {
+          delta_interval = 0;
+        }
+      } else {
+        /*
+         *  Someone put us in the past.
+         */
+        delta = last_snapshot - snapshot;
+        delta_interval += delta;
+      }
+      first_watchdog->delta_interval = delta_interval;
+    }
+    ts->TOD_watchdogs.last_snapshot = snapshot;
+    _ISR_Enable( level );
+
+    _Watchdog_Insert( &ts->TOD_watchdogs.Chain, &timer->Ticker );
+
+    if ( !ts->active ) {
+      _Timer_server_Reset_tod_system_watchdog( ts );
+    }
+  }
+
+  _Thread_Enable_dispatch();
+}
+
+static void _Timer_server_Schedule_operation_method(
+  Timer_server_Control *ts,
+  Timer_Control *timer
+)
+{
+  if ( ts->insert_chain == NULL ) {
+    _Timer_server_Insert_timer_and_make_snapshot( ts, timer );
+  } else {
+    /*
+     *  We interrupted a critical section of the timer server.  The timer
+     *  server is not preemptible, so we must be in interrupt context here.  No
+     *  thread dispatch will happen until the timer server finishes its
+     *  critical section.  We have to use the protected chain methods because
+     *  we may be interrupted by a higher priority interrupt.
+     */
+    _Chain_Append( ts->insert_chain, &timer->Object.Node );
+  }
+}
+
+static void _Timer_server_Process_interval_watchdogs(
+  Timer_server_Watchdogs *watchdogs,
+  Chain_Control *fire_chain
+)
+{
+  Watchdog_Interval snapshot = _Watchdog_Ticks_since_boot;
+
+  /*
+   *  We assume adequate unsigned arithmetic here.
+   */
+  Watchdog_Interval delta = snapshot - watchdogs->last_snapshot;
+
+  watchdogs->last_snapshot = snapshot;
+
+  _Watchdog_Adjust_to_chain( &watchdogs->Chain, delta, fire_chain );
+}
+
+static void _Timer_server_Process_tod_watchdogs(
+  Timer_server_Watchdogs *watchdogs,
+  Chain_Control *fire_chain
+)
+{
+  Watchdog_Interval snapshot = (Watchdog_Interval) _TOD_Seconds_since_epoch();
+  Watchdog_Interval last_snapshot = watchdogs->last_snapshot;
+  Watchdog_Interval delta;
 
   /*
    *  Process the seconds chain.  Start by checking that the Time
    *  of Day (TOD) has not been set backwards.  If it has then
-   *  we want to adjust the _Timer_Seconds_chain to indicate this.
+   *  we want to adjust the watchdogs->Chain to indicate this.
    */
-  snapshot =  _TOD_Seconds_since_epoch();
-  if ( snapshot > _Timer_Server_seconds_last_time ) {
+  if ( snapshot > last_snapshot ) {
     /*
      *  This path is for normal forward movement and cases where the
      *  TOD has been set forward.
      */
-    ticks = snapshot - _Timer_Server_seconds_last_time;
-    _Watchdog_Adjust_to_chain( &_Timer_Seconds_chain, ticks, to_fire );
+    delta = snapshot - last_snapshot;
+    _Watchdog_Adjust_to_chain( &watchdogs->Chain, delta, fire_chain );
 
-  } else if ( snapshot < _Timer_Server_seconds_last_time ) {
+  } else if ( snapshot < last_snapshot ) {
      /*
       *  The current TOD is before the last TOD which indicates that
       *  TOD has been set backwards.
       */
-     ticks = _Timer_Server_seconds_last_time - snapshot;
-     _Watchdog_Adjust( &_Timer_Seconds_chain, WATCHDOG_BACKWARD, ticks );
+     delta = last_snapshot - snapshot;
+     _Watchdog_Adjust( &watchdogs->Chain, WATCHDOG_BACKWARD, delta );
   }
-  _Timer_Server_seconds_last_time = snapshot;
+
+  watchdogs->last_snapshot = snapshot;
 }
 
-/**
- *  @brief _Timer_Server_body
- *
- *  This is the server for task based timers.  This task executes whenever
- *  a task-based timer should fire.  It services both "after" and "when"
- *  timers.  It is not created automatically but must be created explicitly
- *  by the application before task-based timers may be initiated.
- *
- *  @param[in] ignored is the the task argument that is ignored
- */
-rtems_task _Timer_Server_body(
-  rtems_task_argument argument __attribute__((unused))
-)
+static void _Timer_server_Process_insertions( Timer_server_Control *ts )
 {
-  Chain_Control to_fire;
+  while ( true ) {
+    Timer_Control *timer = (Timer_Control *) _Chain_Get( ts->insert_chain );
 
-  _Chain_Initialize_empty( &to_fire );
-
-  /*
-   *  Initialize the "last time" markers to indicate the timer that
-   *  the server was initiated.
-   */
-  _Timer_Server_ticks_last_time   = _Watchdog_Ticks_since_boot;
-  _Timer_Server_seconds_last_time = _TOD_Seconds_since_epoch();
-
-  /*
-   *  Insert the timers that were inserted before we got to run.
-   *  This should be done with dispatching disabled.
-   */
-  _Thread_Disable_dispatch();
-    _Timer_Server_process_insertions();
-  _Thread_Enable_dispatch();
-
-  while(1) {
-
-    /*
-     *  Block until there is something to do.
-     */
-    _Thread_Disable_dispatch();
-      _Thread_Set_state( _Timer_Server, STATES_DELAYING );
-      _Timer_Server_reset_ticks_timer();
-      _Timer_Server_reset_seconds_timer();
-    _Thread_Enable_dispatch();
-
-    /********************************************************************
-     ********************************************************************
-     ****                TIMER SERVER BLOCKS HERE                    ****
-     ********************************************************************
-     ********************************************************************/
-
-    /*
-     *  Disable dispatching while processing the timers since we want
-     *  the removal of the timers from the chain to be atomic.
-     *
-     *  NOTE: Dispatching is disabled for interrupt based TSRs.
-     *        Dispatching is enabled for task based TSRs so they
-     *          can temporarily malloc memory or block.
-     *        _ISR_Nest_level is 0 for task-based TSRs and non-zero
-     *          for the others.
-     */
-    _Thread_Disable_dispatch();
-
-    /*
-     *  At this point, at least one of the timers this task relies
-     *  upon has fired.  Stop them both while we process any outstanding
-     *  timers.  Before we block, we will restart them.
-     */
-    _Timer_Server_stop_ticks_timer();
-    _Timer_Server_stop_seconds_timer();
-
-    /*
-     *  Remove all the timers that need to fire so we can invoke them
-     *  outside the critical section.
-     */
-    _Timer_Server_process_ticks_chain( &to_fire );
-    _Timer_Server_process_seconds_chain( &to_fire );
-
-    /*
-     *  Insert the timers that have been requested to be inserted.
-     */
-    _Timer_Server_process_insertions();
-
-    /*
-     * Enable dispatching to process the set that are ready "to fire."
-     */
-    _Thread_Enable_dispatch();
-
-    /*
-     *  Now we actually invoke the TSR for all the timers that fired.
-     *  This is done with dispatching
-     */
-    while (1) {
-      Watchdog_Control *watch;
-      ISR_Level         level;
-
-      _ISR_Disable( level );
-      watch = (Watchdog_Control *) _Chain_Get_unprotected( &to_fire );
-      if ( watch == NULL ) {
-        _ISR_Enable( level );
-        break;
-      }
-
-      watch->state = WATCHDOG_INACTIVE;
-      _ISR_Enable( level );
-
-      (*watch->routine)( watch->id, watch->user_data );
+    if ( timer == NULL ) {
+      break;
     }
 
-    /*
-     *  Insert the timers that have been requested to be inserted.
-     */
-    _Timer_Server_process_insertions();
+    _Timer_server_Insert_timer( ts, timer );
   }
+}
 
+static void _Timer_server_Get_watchdogs_that_fire_now(
+  Timer_server_Control *ts,
+  Chain_Control *insert_chain,
+  Chain_Control *fire_chain
+)
+{
+  /*
+   *  Afterwards all timer inserts are directed to this chain and the interval
+   *  and TOD chains will be no more modified by other parties.
+   */
+  ts->insert_chain = insert_chain;
+
+  while ( true ) {
+    ISR_Level level;
+
+    /*
+     *  Remove all the watchdogs that need to fire so we can invoke them.
+     */
+    _Timer_server_Process_interval_watchdogs(
+      &ts->Interval_watchdogs,
+      fire_chain
+    );
+    _Timer_server_Process_tod_watchdogs( &ts->TOD_watchdogs, fire_chain );
+
+    /*
+     *  The insertions have to take place here, because they reference the
+     *  current time.  The previous process methods take a snapshot of the
+     *  current time.  In case someone inserts a watchdog with an initial value
+     *  of zero it will be processed in the next iteration of the timer server
+     *  body loop.
+     */
+    _Timer_server_Process_insertions( ts );
+
+    _ISR_Disable( level );
+    if ( _Chain_Is_empty( insert_chain ) ) {
+      ts->insert_chain = NULL;
+      _ISR_Enable( level );
+
+      break;
+    } else {
+      _ISR_Enable( level );
+    }
+  }
 }
 
 /**
- *  This method schedules the insertion of timers on the proper list.  It
- *  wakes up the Timer Server task to process the insertion.
+ *  @brief Timer server body.
  *
- *  @param[in] the_timer is the timer to insert
- *
- *  @note It is highly likely the executing task will be preempted after
- *        the directive invoking this is executed.
+ *  This is the server for task based timers.  This task executes whenever a
+ *  task-based timer should fire.  It services both "after" and "when" timers.
+ *  It is not created automatically but must be created explicitly by the
+ *  application before task-based timers may be initiated.  The parameter
+ *  @a arg points to the corresponding timer server control block.
  */
-static void _Timer_Server_schedule_operation_method(
-  Timer_Control     *the_timer
+static rtems_task _Timer_server_Body(
+  rtems_task_argument arg
 )
 {
-  _Chain_Append( &_Timer_To_be_inserted, &the_timer->Object.Node );
-  _Watchdog_Remove( &_Timer_Server->Timer );
-  _Thread_Delay_ended( _Timer_Server->Object.id, NULL );
+  Timer_server_Control *ts = (Timer_server_Control *) arg;
+  Chain_Control insert_chain;
+  Chain_Control fire_chain;
+
+  _Chain_Initialize_empty( &insert_chain );
+  _Chain_Initialize_empty( &fire_chain );
+
+  while ( true ) {
+    _Timer_server_Get_watchdogs_that_fire_now( ts, &insert_chain, &fire_chain );
+
+    if ( !_Chain_Is_empty( &fire_chain ) ) {
+      /*
+       *  Fire the watchdogs.
+       */
+      while ( true ) {
+        Watchdog_Control *watchdog;
+        ISR_Level level;
+
+        /*
+         *  It is essential that interrupts are disable here since an interrupt
+         *  service routine may remove a watchdog from the chain.
+         */
+        _ISR_Disable( level );
+        watchdog = (Watchdog_Control *) _Chain_Get_unprotected( &fire_chain );
+        if ( watchdog != NULL ) {
+          watchdog->state = WATCHDOG_INACTIVE;
+          _ISR_Enable( level );
+        } else {
+          _ISR_Enable( level );
+
+          break;
+        }
+
+        /*
+         *  The timer server may block here and wait for resources or time.
+         *  The system watchdogs are inactive and will remain inactive since
+         *  the active flag of the timer server is true.
+         */
+        (*watchdog->routine)( watchdog->id, watchdog->user_data );
+      }
+    } else {
+      ts->active = false;
+
+      /*
+       *  Block until there is something to do.
+       */
+      _Thread_Disable_dispatch();
+        _Thread_Set_state( ts->thread, STATES_DELAYING );
+        _Timer_server_Reset_interval_system_watchdog( ts );
+        _Timer_server_Reset_tod_system_watchdog( ts );
+      _Thread_Enable_dispatch();
+
+      ts->active = true;
+
+      /*
+       *  Maybe an interrupt did reset the system timers, so we have to stop
+       *  them here.  Since we are active now, there will be no more resets
+       *  until we are inactive again.
+       */
+      _Timer_server_Stop_interval_system_watchdog( ts );
+      _Timer_server_Stop_tod_system_watchdog( ts );
+    }
+  }
 }
 
 /**
@@ -353,7 +435,7 @@ static void _Timer_Server_schedule_operation_method(
  *  @param[in] stack_size is the stack size in bytes
  *  @param[in] attribute_set is the timer server attributes
  *
- *  @return This method returns RTEMS_SUCCESSFUL if successful and an 
+ *  @return This method returns RTEMS_SUCCESSFUL if successful and an
  *          error code otherwise.
  */
 rtems_status_code rtems_timer_initiate_server(
@@ -362,11 +444,12 @@ rtems_status_code rtems_timer_initiate_server(
   rtems_attribute      attribute_set
 )
 {
-  rtems_id            id;
-  rtems_status_code   status;
-  rtems_task_priority _priority;
-  static bool         initialized = false;
-  bool                tmpInitialized;
+  rtems_id              id;
+  rtems_status_code     status;
+  rtems_task_priority   _priority;
+  static bool           initialized = false;
+  bool                  tmpInitialized;
+  Timer_server_Control *ts = &_Timer_server_Default;
 
   /*
    *  Make sure the requested priority is valid.  The if is
@@ -390,11 +473,6 @@ rtems_status_code rtems_timer_initiate_server(
 
   if ( tmpInitialized )
     return RTEMS_INCORRECT_STATE;
-
-  /*
-   *  Initialize the set of timers to be inserted by the server.
-   */
-  _Chain_Initialize_empty( &_Timer_To_be_inserted );
 
   /*
    *  Create the Timer Server with the name the name of "TIME".  The attribute
@@ -433,11 +511,8 @@ rtems_status_code rtems_timer_initiate_server(
   /*
    *  We work with the TCB pointer, not the ID, so we need to convert
    *  to a TCB pointer from here out.
-   *
-   *  NOTE: Setting the pointer to the Timer Server TCB to a value other than
-   *        NULL indicates that task-based timer support is initialized.
    */
-  _Timer_Server = (Thread_Control *)_Objects_Get_local_object(
+  ts->thread = (Thread_Control *)_Objects_Get_local_object(
     &_RTEMS_tasks_Information,
     _Objects_Get_index(id)
   );
@@ -445,31 +520,52 @@ rtems_status_code rtems_timer_initiate_server(
   /*
    *  Initialize the timer lists that the server will manage.
    */
-  _Chain_Initialize_empty( &_Timer_Ticks_chain );
-  _Chain_Initialize_empty( &_Timer_Seconds_chain );
+  _Chain_Initialize_empty( &ts->Interval_watchdogs.Chain );
+  _Chain_Initialize_empty( &ts->TOD_watchdogs.Chain );
 
   /*
    *  Initialize the timers that will be used to control when the
    *  Timer Server wakes up and services the task-based timers.
    */
-  _Watchdog_Initialize( &_Timer_Server->Timer, _Thread_Delay_ended, id, NULL );
-  _Watchdog_Initialize( &_Timer_Seconds_timer, _Thread_Delay_ended, id, NULL );
+  _Watchdog_Initialize(
+    &ts->Interval_watchdogs.System_watchdog,
+    _Thread_Delay_ended,
+    id,
+    NULL
+  );
+  _Watchdog_Initialize(
+    &ts->TOD_watchdogs.System_watchdog,
+    _Thread_Delay_ended,
+    id,
+    NULL
+  );
 
   /*
-   *  Initialize the pointer to the timer reset method so applications
-   *  that do not use the Timer Server do not have to pull it in.
+   *  Initialize the pointer to the timer schedule method so applications that
+   *  do not use the Timer Server do not have to pull it in.
    */
-  _Timer_Server_schedule_operation = _Timer_Server_schedule_operation_method;
+  ts->schedule_operation = _Timer_server_Schedule_operation_method;
+
+  ts->Interval_watchdogs.last_snapshot = _Watchdog_Ticks_since_boot;
+  ts->TOD_watchdogs.last_snapshot = (Watchdog_Interval) _TOD_Seconds_since_epoch();
+
+  ts->insert_chain = NULL;
+  ts->active = false;
+
+  /*
+   * The default timer server is now available.
+   */
+  _Timer_server = ts;
 
   /*
    *  Start the timer server
    */
   status = rtems_task_start(
-    id,                                    /* the id from create */
-    _Timer_Server_body,                    /* the timer server entry point */
-    0                                      /* there is no argument */
+    id,
+    _Timer_server_Body,
+    (rtems_task_argument) ts
   );
-  
+
   #if defined(RTEMS_DEBUG)
     /*
      *  One would expect a call to rtems_task_delete() here to clean up

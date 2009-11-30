@@ -54,6 +54,9 @@ rtems_task Init(
   status = rtems_timer_create( rtems_build_name('T', 'M', '2', ' '), &timer2 );
   directive_failed( status, "rtems_timer_create #1" );
 
+  /* Manipulate the time */
+  _Watchdog_Ticks_since_boot = (Watchdog_Interval) -15;
+
   /* initiate timer server */
   puts( "Init - Initiate the timer server" );
   status = rtems_timer_initiate_server(
@@ -63,35 +66,27 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_timer_initiate_server" );
 
+  /* Give the timer server some time to initialize */
   status = rtems_task_wake_after( 10 );
   directive_failed( status, "task wake_after" );
 
   status = rtems_timer_server_fire_after(
     timer1,
-    0xffff,
+    10,
     TIMER_service_routine,
     (void*) &_timer_passage_1
   );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
-  /* Make the timer server think that the ticks has wrapped */
-  _Timer_Server_ticks_last_time = 100;
-
-  status = rtems_task_wake_after( 10 );
-  directive_failed( status, "task wake_after" );
-
-  /* Make the timer server think that the ticks has wrapped */
-  _Timer_Server_ticks_last_time = 200;
-
   status = rtems_timer_server_fire_after(
     timer2,
-    0xffff,
+    20,
     TIMER_service_routine,
     (void*) &_timer_passage_2
   );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
-  status = rtems_task_wake_after( 10 );
+  status = rtems_task_wake_after( 15 );
   directive_failed( status, "task wake_after" );
 
   if (!_timer_passage_1) {

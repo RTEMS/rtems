@@ -1,0 +1,9 @@
+*** TEST 68 ***
+test case: SEMAPHORE
+test case: MUTEX
+test case: MESSAGE QUEUE
+test case: REGION
+test case: EVENT
+test case: BARRIER
+test case: TASK WAKE AFTER
+*** END OF TEST 68 ***

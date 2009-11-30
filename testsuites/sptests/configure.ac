@@ -93,6 +93,7 @@ sp64/Makefile
 sp65/Makefile
 sp66/Makefile
 sp67/Makefile
+sp68/Makefile
 spchain/Makefile
 spclockget/Makefile
 spcoverage/Makefile
@@ -124,6 +125,7 @@ spintrcritical13/Makefile
 spintrcritical14/Makefile
 spintrcritical15/Makefile
 spintrcritical16/Makefile
+spintrcritical17/Makefile
 spnotepad01/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile

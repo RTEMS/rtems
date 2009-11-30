@@ -55,6 +55,8 @@ rtems_status_code rtems_timer_reset(
         _Watchdog_Remove( &the_timer->Ticker );
         _Watchdog_Insert( &_Watchdog_Ticks_chain, &the_timer->Ticker );
       } else if ( the_timer->the_class == TIMER_INTERVAL_ON_TASK ) {
+        Timer_server_Control *timer_server = _Timer_server;
+
         /*
          *  There is no way for a timer to have this class unless
          *  it was scheduled as a server fire.  That requires that
@@ -62,13 +64,13 @@ rtems_status_code rtems_timer_reset(
          *  occur unless something is internally wrong.
          */
         #if defined(RTEMS_DEBUG)
-          if ( !_Timer_Server_schedule_operation ) {
+          if ( !timer_server ) {
             _Thread_Enable_dispatch();
             return RTEMS_INCORRECT_STATE;
           }
         #endif
         _Watchdog_Remove( &the_timer->Ticker );
-        (*_Timer_Server_schedule_operation)( the_timer );
+        (*timer_server->schedule_operation)( timer_server, the_timer );
       } else {
         /*
          *  Must be dormant or time of day timer (e.g. TIMER_DORMANT,

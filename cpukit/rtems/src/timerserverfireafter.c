@@ -53,8 +53,9 @@ rtems_status_code rtems_timer_server_fire_after(
   Timer_Control        *the_timer;
   Objects_Locations     location;
   ISR_Level             level;
+  Timer_server_Control *timer_server = _Timer_server;
 
-  if ( !_Timer_Server )
+  if ( !timer_server )
     return RTEMS_INCORRECT_STATE;
 
   if ( !routine )
@@ -92,12 +93,7 @@ rtems_status_code rtems_timer_server_fire_after(
         the_timer->Ticker.initial = ticks;
       _ISR_Enable( level );
 
-      /*
-       * _Timer_Server_schedule_operation != NULL because we checked that
-       * _Timer_Server was != NULL above.  Both are set at the same time.
-       */
-
-      (*_Timer_Server_schedule_operation)( the_timer );
+      (*timer_server->schedule_operation)( timer_server, the_timer );
 
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;

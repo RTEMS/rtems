@@ -53,8 +53,9 @@ rtems_status_code rtems_timer_server_fire_when(
   Timer_Control        *the_timer;
   Objects_Locations     location;
   rtems_interval        seconds;
+  Timer_server_Control *timer_server = _Timer_server;
 
-  if ( !_Timer_Server )
+  if ( !timer_server )
     return RTEMS_INCORRECT_STATE;
 
   if ( !_TOD_Is_set )
@@ -79,12 +80,7 @@ rtems_status_code rtems_timer_server_fire_when(
       _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
       the_timer->Ticker.initial = seconds - _TOD_Seconds_since_epoch();
 
-      /*
-       * _Timer_Server_schedule_operation != NULL because we checked that
-       * _Timer_Server was != NULL above.  Both are set at the same time.
-       */
-
-      (*_Timer_Server_schedule_operation)( the_timer );
+      (*timer_server->schedule_operation)( timer_server, the_timer );
 
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;

@@ -1,3 +1,17 @@
+2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/include/rtems/rtems/timer.h: Added timer server control block
+	Timer_server_Control.  Removed _Timer_Server thread pointer. Added
+	_Timer_server pointer to the default timer server control block.
+	* rtems/src/rtemstimer.c, rtems/src/timerreset.c,
+	rtems/src/timerserverfireafter.c, rtems/src/timerserverfirewhen.c:
+	Update for changes above.
+	* rtems/src/timerserver.c: Rework of the timer server implementation.
+	It is now possible to insert timers without the help of the timer
+	server thread.  This reduces the need for a thread dispatch.  The
+	timer server can now block on any resource type.  Timer callbacks can
+	even wait for time.
+
 2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/shell.c: Always duplicate the environment passed to us

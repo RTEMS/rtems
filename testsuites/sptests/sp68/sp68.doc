@@ -1,0 +1,21 @@
+#
+#  $Id$
+#
+#  Copyright (c) 2009 embedded brains GmbH.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp68
+
+directives:
+
+  rtems_timer_server_fire_after
+
+concepts:
+
++ Ensure that the default timer server can cope with blocking calls.

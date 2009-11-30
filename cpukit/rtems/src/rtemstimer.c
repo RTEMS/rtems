@@ -56,10 +56,9 @@ void _Timer_Manager_initialization(void)
   );
 
   /*
-   *  Initialize the pointer to the Timer Server TCB to NULL indicating
-   *  that task-based timer support is not initialized.
+   *  Initialize the pointer to the default timer server control block to NULL
+   *  indicating that task-based timer support is not initialized.
    */
 
-  _Timer_Server = NULL;
-  _Timer_Server_schedule_operation = NULL;
+  _Timer_server = NULL;
 }
