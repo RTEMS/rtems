@@ -1,6 +1,6 @@
 /* GT64260 register base mapping on the MVME5500
  *
- * (C) Shuchen K. Feng <feng1@bnl.gov>,NSLS, 
+ * (C) Shuchen K. Feng <feng1@bnl.gov>,NSLS,
  * Brookhaven National Laboratory, 2003
  *
  */

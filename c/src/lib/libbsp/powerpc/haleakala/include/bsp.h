@@ -72,7 +72,7 @@ extern "C" {
 
   /* Network Defines */
   #define RTEMS_BSP_NETWORK_DRIVER_NAME     "eth0"
-  
+
   struct rtems_bsdnet_ifconfig;
   int rtems_emac_driver_attach(struct rtems_bsdnet_ifconfig* config, int attaching);
   #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_emac_driver_attach
@@ -91,7 +91,7 @@ extern "C" {
     rtems_vector_number vector,                   /* vector number      */
     int                 type                      /* RTEMS or RAW intr  */
   );
-  
+
 #endif /* ASM */
 
 #ifdef __cplusplus

@@ -23,7 +23,7 @@
 #include <bsp/opbintctrl.h>
 
 /*
- * the following definitions specify the indices used 
+ * the following definitions specify the indices used
  * to interface the interrupt handler API
  */
 
@@ -70,8 +70,8 @@ extern "C" {
  */
   typedef enum {
     BSP_OPBINTC_IRQ_FIRST	= BSP_OPBINTC_IRQ_LOWEST_OFFSET,
-    /* 
-     * Note: for this BSP, the peripheral names are derived 
+    /*
+     * Note: for this BSP, the peripheral names are derived
      * from the Xilinx parameter file
      */
     BSP_OPBINTC_IRQ_LAST 	= BSP_OPBINTC_IRQ_MAX_OFFSET,

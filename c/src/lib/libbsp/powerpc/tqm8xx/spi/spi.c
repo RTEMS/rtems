@@ -33,7 +33,7 @@
 #undef DEBUG
 
 /*
- * this is a dummy receive buffer for sequences, 
+ * this is a dummy receive buffer for sequences,
  * where only send data are available
  */
 uint8_t m8xx_spi_dummy_rxbuf[2];
@@ -144,7 +144,7 @@ static int m8xx_spi_wait
     /*
      * allow interrupts, when receiver is not empty
      */
-    m8xx.spim = (M8xx_SPIE_TXE | M8xx_SPIE_TXB | 
+    m8xx.spim = (M8xx_SPIE_TXE | M8xx_SPIE_TXB |
 		 M8xx_SPIE_BSY | M8xx_SPIE_MME);
 
     rc = rtems_semaphore_obtain(softc_ptr->irq_sema_id,
@@ -170,7 +170,7 @@ static int m8xx_spi_wait
   }
 
   act_status = m8xx.spie;
-  if ((act_status  & (M8xx_SPIE_TXE | M8xx_SPIE_TXB | 
+  if ((act_status  & (M8xx_SPIE_TXE | M8xx_SPIE_TXB |
 		      M8xx_SPIE_BSY | M8xx_SPIE_MME))!= M8xx_SPIE_TXB) {
 #if defined(DEBUG)
     printk("... exit with RTEMS_IO_ERROR,"
@@ -204,14 +204,14 @@ static rtems_isr m8xx_spi_irq_handler
 \*=========================================================================*/
 {
   m8xx_spi_softc_t *softc_ptr = arg;
-  
+
   /*
-   * disable interrupt mask 
+   * disable interrupt mask
    */
   m8xx.spim = 0;
   if (softc_ptr->initialized) {
     rtems_semaphore_release(softc_ptr->irq_sema_id);
-  }  
+  }
 }
 
 static void
@@ -259,7 +259,7 @@ static void m8xx_spi_install_irq_handler
    */
   rc = rtems_semaphore_create(rtems_build_name('s','p','i','s'),
 			      0,
-			      RTEMS_FIFO 
+			      RTEMS_FIFO
 			      | RTEMS_SIMPLE_BINARY_SEMAPHORE,
 			      0,
 			      &softc_ptr->irq_sema_id);
@@ -280,7 +280,7 @@ static void m8xx_spi_install_irq_handler
     }
   }
 }
-  
+
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
@@ -301,7 +301,7 @@ rtems_status_code m8xx_spi_init
 {
   m8xx_spi_softc_t *softc_ptr = &(((m8xx_spi_desc_t *)(bh))->softc);
   rtems_status_code rc = RTEMS_SUCCESSFUL;
-  
+
 #if defined(DEBUG)
   printk("m8xx_spi_init called... ");
 #endif
@@ -311,7 +311,7 @@ rtems_status_code m8xx_spi_init
   /*
    * FIXME: set default mode in SPMODE
    */
-  
+
   /*
    * allocate BDs (1x RX, 1x TX)
    */
@@ -331,7 +331,7 @@ rtems_status_code m8xx_spi_init
   m8xx.spip.rfcr  = M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0);
   m8xx.spip.tfcr  = M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0);
   m8xx.spip.mrblr = 2;
-  
+
   /*
    * issue "InitRxTx" Command to CP
    */
@@ -348,23 +348,23 @@ rtems_status_code m8xx_spi_init
      * set up ports
      * LINE      PAR  DIR  DAT
      * -----------------------
-     * MOSI       1    1    x 
+     * MOSI       1    1    x
      * MISO       1    1    x
      * CLK        1    1    x
      */
-    
+
     /* set Port B Pin Assignment Register... */
-    m8xx.pbpar = 
+    m8xx.pbpar =
       m8xx.pbpar
-      | M8xx_PB_SPI_MISO_MSK 
-      | M8xx_PB_SPI_MOSI_MSK 
+      | M8xx_PB_SPI_MISO_MSK
+      | M8xx_PB_SPI_MOSI_MSK
       | M8xx_PB_SPI_CLK_MSK;
-    
+
     /* set Port B Data Direction Register... */
-    m8xx.pbdir = 
-      m8xx.pbdir 
-      | M8xx_PB_SPI_MISO_MSK 
-      | M8xx_PB_SPI_MOSI_MSK 
+    m8xx.pbdir =
+      m8xx.pbdir
+      | M8xx_PB_SPI_MISO_MSK
+      | M8xx_PB_SPI_MOSI_MSK
       | M8xx_PB_SPI_CLK_MSK;
   }
   /*
@@ -420,7 +420,7 @@ static int m8xx_spi_read_write_bytes
       m8xx.spip.mrblr          = sizeof(m8xx_spi_dummy_rxbuf);
       softc_ptr->rx_bd->buffer = m8xx_spi_dummy_rxbuf;
       softc_ptr->rx_bd->length = 0;
-      softc_ptr->rx_bd->status = (M8xx_BD_EMPTY | M8xx_BD_WRAP | 
+      softc_ptr->rx_bd->status = (M8xx_BD_EMPTY | M8xx_BD_WRAP |
 				  M8xx_BD_CONTINUOUS);
     }
     else {
@@ -440,7 +440,7 @@ static int m8xx_spi_read_write_bytes
        */
       softc_ptr->tx_bd->buffer = m8xx_spi_dummy_rxbuf;
       softc_ptr->tx_bd->length = len;
-      softc_ptr->tx_bd->status = (M8xx_BD_READY | M8xx_BD_WRAP | 
+      softc_ptr->tx_bd->status = (M8xx_BD_READY | M8xx_BD_WRAP |
 				  M8xx_BD_CONTINUOUS);
     }
     else {
@@ -561,7 +561,7 @@ rtems_status_code m8xx_spi_set_tfr_mode
       spimode |= M8xx_SPMODE_CP;
     }
   }
-  
+
   if (rc == RTEMS_SUCCESSFUL) {
     /*
      * disable SPI
@@ -600,12 +600,12 @@ int m8xx_spi_ioctl
 
   switch(cmd) {
   case RTEMS_LIBI2C_IOCTL_SET_TFRMODE:
-    ret_val = 
+    ret_val =
       -m8xx_spi_set_tfr_mode(bh,
 				(const rtems_libi2c_tfr_mode_t *)arg);
     break;
   case RTEMS_LIBI2C_IOCTL_READ_WRITE:
-    ret_val = 
+    ret_val =
       m8xx_spi_read_write_bytes(bh,
 				((rtems_libi2c_read_write_t *)arg)->rd_buf,
 				((rtems_libi2c_read_write_t *)arg)->wr_buf,
@@ -650,20 +650,20 @@ static rtems_status_code bsp_spi_sel_addr
    * GPIO1[24] is SPI_A0
    * GPIO1[25] is SPI_A1
    * GPIO1[26] is SPI_A2
-   * set pins to address 
+   * set pins to address
    */
   switch(addr) {
   case PGH360_SPI_ADDR_EEPROM:
     m8xx.pbdat &= ~PGH360_PB_SPI_EEP_CE_MSK;
     break;
   case PGH360_SPI_ADDR_DISP4_DATA:
-    m8xx.pbdat = (m8xx.pbdat 
-		  & ~(PGH360_PB_SPI_DISP4_CE_MSK | 
+    m8xx.pbdat = (m8xx.pbdat
+		  & ~(PGH360_PB_SPI_DISP4_CE_MSK |
 		      PGH360_PB_SPI_DISP4_RS_MSK));
     break;
   case PGH360_SPI_ADDR_DISP4_CTRL:
-    m8xx.pbdat = (m8xx.pbdat 
-		  & ~(PGH360_PB_SPI_DISP4_CE_MSK) 
+    m8xx.pbdat = (m8xx.pbdat
+		  & ~(PGH360_PB_SPI_DISP4_CE_MSK)
 		  |   PGH360_PB_SPI_DISP4_RS_MSK);
     break;
   default:
@@ -716,7 +716,7 @@ static rtems_status_code bsp_spi_send_stop
   printk("bsp_spi_send_stop called... ");
 #endif
 #if defined(PGH360)
-    m8xx.pbdat = (m8xx.pbdat 
+    m8xx.pbdat = (m8xx.pbdat
 		  | PGH360_PB_SPI_DISP4_CE_MSK
 		  | PGH360_PB_SPI_EEP_CE_MSK);
 #endif
@@ -783,7 +783,7 @@ rtems_status_code bsp_register_spi
   /*
    * init port pins used to address/select SPI devices
    */
-  
+
 #if defined(PGH360)
 
   /*
@@ -794,24 +794,24 @@ rtems_status_code bsp_register_spi
    * DISP4_CS   0    1 act-high
    * DISP4_RS   0    1 active
    */
-  
+
   /* set Port B Pin Assignment Register... */
-  m8xx.pbpar = 
-    (m8xx.pbpar 
-     & ~(PGH360_PB_SPI_EEP_CE_MSK 
+  m8xx.pbpar =
+    (m8xx.pbpar
+     & ~(PGH360_PB_SPI_EEP_CE_MSK
 	 | PGH360_PB_SPI_DISP4_CE_MSK
 	 | PGH360_PB_SPI_DISP4_RS_MSK));
-  
+
     /* set Port B Data Direction Register... */
-  m8xx.pbdir = 
-    m8xx.pbdir 
-    | PGH360_PB_SPI_EEP_CE_MSK 
+  m8xx.pbdir =
+    m8xx.pbdir
+    | PGH360_PB_SPI_EEP_CE_MSK
     | PGH360_PB_SPI_DISP4_CE_MSK
     | PGH360_PB_SPI_DISP4_RS_MSK;
-  
+
   /* set Port B Data Register to inactive CE state */
-  m8xx.pbdat = 
-    m8xx.pbdat 
+  m8xx.pbdat =
+    m8xx.pbdat
     | PGH360_PB_SPI_DISP4_CE_MSK
     | PGH360_PB_SPI_DISP4_RS_MSK;
 #endif

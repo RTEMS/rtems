@@ -161,7 +161,7 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 
 	/*
 	 * Set default ticker.
-	 * 
+	 *
 	 * The function rtems_clock_tick() returns a status code.  This value
 	 * will be discarded since the RTEMS documentation claims that it is
 	 * always successful.

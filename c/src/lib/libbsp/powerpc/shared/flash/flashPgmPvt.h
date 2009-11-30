@@ -10,10 +10,10 @@
 /* DO NOT INCLUDE THIS HEADER FROM APPLICATION CODE          */
 
 /*
- * Glue interface -- to be used only internally by BSP 
+ * Glue interface -- to be used only internally by BSP
  * and chip drivers:
  * - BSP provides info about what chip drivers to use
- *   as well as 'wiring' info (how many devices are 
+ *   as well as 'wiring' info (how many devices are
  *   operated in parallel etc).
  * - Chip drivers provide low-level 'methods' / 'ops'
  *   for performing basic operations which are used
@@ -40,19 +40,19 @@
  *        width to make it more generic.
  */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * The software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -61,18 +61,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -81,9 +81,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <stdint.h>
 
@@ -185,7 +185,7 @@ struct vendesc {
 	                    /* array of supported devices;
 						 * the 'ops' specified below
 						 * are used to access these devices
-						 */ 
+						 */
 	struct devdesc	      *known_devs;
 						/* access methods for talking to
 						 * devices associated with this
@@ -202,14 +202,14 @@ struct flash_bank_ops {
 /* Read vendor/device ID; Return 0 on success, nonzero if unable to read id */
 	int            (*get_id)(struct bankdesc *b, uint32_t addr, uint32_t *pVendorId, uint32_t *pDeviceId);
 /* Unlock block holding 'addr'ess
- * 
+ *
  *   NOTES: - device switched back to array mode on exit.
  *          - 'addr' must be 32-bit aligned.
  */
 
 	void           (*unlock_block)(struct bankdesc *b, uint32_t addr);
 /* Lock block holding 'addr'ess
- * 
+ *
  *   NOTES: - device switched back to array mode on exit.
  *          - 'addr' must be 32-bit aligned.
  */
@@ -255,9 +255,9 @@ struct flash_bank_ops {
 struct flash_bsp_ops {
 /* Return descriptor for bank # 'bank' or NULL (invalid arg) */
 	struct bankdesc *(*bankcheck)(int bank, int quiet);
-/* set (enbl:1), clear (enbl:0) or query (enbl:-1) 
+/* set (enbl:1), clear (enbl:0) or query (enbl:-1)
  * on-board write protection.
- * 
+ *
  * RETURNS 0 on success, nonzero on error.
  */
 	int              (*flash_wp)(int bank, int enbl);

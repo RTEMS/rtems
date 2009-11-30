@@ -16,7 +16,7 @@ void bsp_reset(void)
   printk("Printing a stack trace for your convenience :-)\n");
   CPU_print_stack();
   /* shutdown and reboot */
-   
+
 #if defined(mvme2100)
   *(unsigned char*)0xffe00000 |= 0x80;
 #else

@@ -109,7 +109,7 @@ printk("ERROR BSP_irq_enable_at_i8259s Being Called for %d\n", (int)name);
       BSP_irq_enable_at_i8259s ((int) name);
     }
 #endif
-    
+
     if (is_pci_irq(name)) {
       /*
        * Enable interrupt at OPENPIC level

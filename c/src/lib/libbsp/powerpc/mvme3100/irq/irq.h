@@ -97,7 +97,7 @@ extern "C" {
 #define BSP_UART_COM2_IRQ		(BSP_CORE_IRQ_LOWEST_OFFSET + 26)
 #define BSP_I2C_IRQ				(BSP_CORE_IRQ_LOWEST_OFFSET + 27)
 
-/* 
+/*
  * Some internal (CORE) name definitions
  */
 /* Ethernet (FEC) */

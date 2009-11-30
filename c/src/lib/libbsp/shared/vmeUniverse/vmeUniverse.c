@@ -2,19 +2,19 @@
 
 /* Driver for the Tundra Universe II pci-vme bridge */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2000-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -23,18 +23,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -43,9 +43,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <stdio.h>
 #include <inttypes.h>
@@ -224,7 +224,7 @@ WRITE_LE(
 #warning "SYNC instruction unknown for this architecture"
 #endif
 
-/* registers should be mapped to guarded, non-cached memory; hence 
+/* registers should be mapped to guarded, non-cached memory; hence
  * subsequent stores are ordered. eieio is only needed to enforce
  * ordering of loads with respect to stores.
  */
@@ -267,11 +267,11 @@ return READ_LE0((volatile LERegister *)(((unsigned long)adrs)+off));
 }
 
 #define PORT_UNALIGNED(addr,port) \
-	( (port)%4 ? ((addr) & 0xffff) : ((addr) & 4095) ) 
+	( (port)%4 ? ((addr) & 0xffff) : ((addr) & 4095) )
 
 
 #define UNIV_REV(base) (READ_LE(base,2*sizeof(LERegister)) & 0xff)
-	
+
 #if defined(__rtems__) && 0
 static int
 uprintk(char *fmt, va_list ap)
@@ -306,7 +306,7 @@ va_list	ap;
 		 * to a buffer.
 		 */
 		vprintk(fmt,ap);
-	} else 
+	} else
 #endif
 	{
 		vfprintf(f,fmt,ap);
@@ -440,7 +440,7 @@ unsigned long vdw =0;
 
 			mode |= UNIV_CTL_VAS24;
 			break;
-	
+
 
 		case VME_AM_EXT_SUP_PGM:
 		case VME_AM_EXT_USR_PGM:
@@ -736,7 +736,7 @@ showUniversePort(
 		if ( cntrl & UNIV_MCTL_PWEN )
 			uprintf(f,", PWEN");
 	} else {
-		uprintf(f,"%s %s %s %s", 
+		uprintf(f,"%s %s %s %s",
 			cntrl&UNIV_SCTL_PGM ?   "Pgm," : "    ",
 			cntrl&UNIV_SCTL_DAT ?   "Dat," : "    ",
 			cntrl&UNIV_SCTL_SUPER ? "Sup," : "    ",
@@ -859,7 +859,7 @@ int	rval;
 
 	CHECK_DFLT_BASE(base);
 
-	rptr = (base + 
+	rptr = (base +
 		(ismaster ? UNIV_REGOFF_PCITGT0_CTRL : UNIV_REGOFF_VMESLV0_CTRL)/sizeof(LERegister));
 #undef TSILL
 #ifdef TSILL
@@ -874,7 +874,7 @@ int	rval;
 	/* only rev. 2 has 8 ports */
 	if (UNIV_REV(base)<2) return -1;
 
-	rptr = (base + 
+	rptr = (base +
 		(ismaster ? UNIV_REGOFF_PCITGT4_CTRL : UNIV_REGOFF_VMESLV4_CTRL)/sizeof(LERegister));
 	for (port=4; port<UNIV_NUM_MPORTS; port++) {
 		if ((rval=func(ismaster,port,rptr,arg))) return rval;
@@ -998,7 +998,7 @@ vmeUniverseReset(void)
 	vmeUniverseDisableAllSlaves();
 
 	vmeUniverseDisableAllMasters();
-	
+
 	vmeUniverseWriteReg(UNIV_VCSR_CLR_SYSFAIL, UNIV_REGOFF_VCSR_CLR);
 
 	/* clear interrupt status bits */
@@ -1235,7 +1235,7 @@ unsigned long b;
 	vmeUniverseWriteRegXX(base, v |  b, UNIV_REGOFF_VINT_EN );
 
 	return 0;
-	
+
 }
 
 int
@@ -1267,10 +1267,10 @@ uint32_t mode;
 
 	if ( VME_AM_IS_SHORT(as) ) {
 		mode |= UNIV_VRAI_CTL_VAS_A16;
-	} else 
+	} else
 	if ( VME_AM_IS_STD(as) ) {
 		mode |= UNIV_VRAI_CTL_VAS_A24;
-	} else 
+	} else
 	if ( VME_AM_IS_EXT(as) ) {
 		mode |= UNIV_VRAI_CTL_VAS_A32;
 	} else {
@@ -1327,7 +1327,7 @@ uint32_t dctl;
 	/* Luckily DCTL bits match MCTL bits so we can use am2mode */
 	if ( am2mode( 1, xfer_mode, &dctl ) )
 		return BSP_VMEDMA_STATUS_UNSUP;
-	
+
 	/* However, the book says that for DMA VAS==5 [which would
 	 * be a CSR access] is reserved. Tests indicate that
 	 * CSR access works on the IIb/d but not really (odd 32-bit
@@ -1371,7 +1371,7 @@ uint32_t dctl;
 			dctl |= UNIV_DCTL_VDW_32;
 		}
 	}
-	
+
 	/* Set direction flag */
 
 	if ( BSP_VMEDMA_MODE_PCI2VME & xfer_mode )
@@ -1406,7 +1406,7 @@ uint32_t dctl, dgcs;
 			dgcs |= ( xfer_mode & BSP_VMEDMA_MODE_NOINC_VME ) ?
 					UNIV_DGCS_VON_2048 : UNIV_DGCS_VON_1024;
 		break;
-		
+
 		case BSP_VMEDMA_OPT_LOWLATENCY:
 			dgcs |= UNIV_DGCS_VOFF_0_US;
 			/* VON counts are different in NO_VINC mode :-( */
@@ -1857,14 +1857,14 @@ register unsigned long		s;
  * like this:
  *
  *
- *   VME IRQ ------ 
- *                  & ----- LINT_STAT ---- 
+ *   VME IRQ ------
+ *                  & ----- LINT_STAT ----
  *                  |                       &  ---------- PCI LINE
  *                  |                       |
- *                  |                       | 
- *       LINT_EN --------------------------- 
+ *                  |                       |
+ *       LINT_EN ---------------------------
  *
- *  I.e. 
+ *  I.e.
  *   - if LINT_EN is disabled, a VME IRQ will not set LINT_STAT.
  *   - while LINT_STAT is set, it will pull the PCI line unless
  *     masked by LINT_EN.
@@ -1926,7 +1926,7 @@ unsigned long 		linten;
 				/* try the special handler */
 				universeSpecialISR( lintstat & SPECIAL_IRQ_MSK );
 
-				/* 
+				/*
 				 * let the pic end this cycle
 				 */
 				if ( 0 == pin )
@@ -2114,7 +2114,7 @@ unsigned long cpu_base, vme_reg_base;
 	pic_pin[0] = pic_pin0 < 0 ? vmeUniverse0PciIrqLine : pic_pin0;
 	i = 1;
 	while ( (uni_pin[i] = va_arg(ap, int)) >= 0 ) {
-		
+
 		if ( i >= UNIV_NUM_WIRES ) {
 			                                       return -5;
 		}
@@ -2315,9 +2315,9 @@ int				shift;
 
 	rtems_interrupt_disable(flags);
 	if ( dis<0 )
-		vmeUniverseWriteReg( vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) & ~v, UNIV_REGOFF_LINT_EN ); 
+		vmeUniverseWriteReg( vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) & ~v, UNIV_REGOFF_LINT_EN );
 	else {
-		vmeUniverseWriteReg( vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) |  v, UNIV_REGOFF_LINT_EN  ); 
+		vmeUniverseWriteReg( vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) |  v, UNIV_REGOFF_LINT_EN  );
 	}
 	rtems_interrupt_enable(flags);
 		return 0;
@@ -2425,14 +2425,14 @@ LoopbackTstArgs		a;
 
 	if ( !vmeUniverseIntIsEnabled(level) && 0==vmeUniverseIntEnable(level) )
 		doDisable = 1;
-	
+
 	/* make sure there are no pending interrupts */
 	vmeUniverseWriteReg( UNIV_LINT_STAT_SW_IACK,  UNIV_REGOFF_LINT_STAT );
 
 	if ( vmeUniverseIntEnable( UNIV_VME_SW_IACK_INT_VEC ) ) {
 		fprintf(stderr,"Unable to enable IACK interrupt\n");
 		goto bail;
-	}	
+	}
 
 	printf("vmeUniverse VME interrupt loopback test; STARTING...\n");
 	printf(" --> asserting VME IRQ level %i\n", level);

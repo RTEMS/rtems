@@ -3,7 +3,7 @@
  *	the application.  It is built with (but not linked with) the monitor,
  *	then the monlib.o file is linked with the application.
  *	The only requirement on the application is that it know where the address
- *	of the monCom function is in the monitor's space.  
+ *	of the monCom function is in the monitor's space.
  *	The monCom function will be accessible in some "well-known" way (processor
  *	and platform dependent) so that this will not be a problem.
  *
@@ -132,7 +132,7 @@ static int	(*_moncom)(int,void *,void *, void *);
  * is to be used, then simply redefine them here.  Refer to the monitor
  * app note that discusses multi-tasking access to the monitor API for more
  * information.
- * 
+ *
  * TFS_MONLOCK/UNLOCK:
  * Lock/unlock for functions that access TFS flash space:
  */
@@ -158,7 +158,7 @@ static int	(*_moncom)(int,void *,void *, void *);
 #define HEAP_MONUNLOCK		monUnlock
 
 /* BLOCKING_MONLOCK/UNLOCK:
- * Lock/unlock for functions in the monitor that block waiting for 
+ * Lock/unlock for functions in the monitor that block waiting for
  * console input.
  */
 #define BLOCKING_MONLOCK	monLock
@@ -182,7 +182,7 @@ static int	(*_moncom)(int,void *,void *, void *);
  *			know it.
  *	lock:	Points to a function in the application code that will be
  *			used by the monitor as a lock-out function (some kind of
- *			semaphore in the application).  
+ *			semaphore in the application).
  *	unlock:	Points to a function in the application code that will be
  *			used by the monitor as an un-lock-out function (undo whatever
  *			lock-out mechanism was done by lock).
@@ -288,7 +288,7 @@ monConnect(int (*mon)(int,void *,void *,void *),
  * is already active, so when the function tries to call some other mon_xxx
  * function it won't be able to because of the lock already being set.
  *
- * With these functions in the application space, the user can do the 
+ * With these functions in the application space, the user can do the
  * following:
  *	call %DisableLock
  *  call %Func_with_monXXX_in_it
@@ -319,7 +319,7 @@ EnableMonLock(void)
  * These functions must test both the function pointer and the state
  * of the ignorelock variable.  The function DisableMonLock() sets the
  * ignorelock variable to 2 because it is being executed through "call"
- * which means that the lock is active.  
+ * which means that the lock is active.
  */
 static void
 monLock(void)
@@ -358,7 +358,7 @@ int
 mon_com(int cmd, void *arg1, void *arg2, void *arg3)
 {
 	int	ret;
-	
+
 	GENERIC_MONLOCK();
 	ret = _moncom(cmd,arg1,arg2,arg3);
 	GENERIC_MONUNLOCK();
@@ -369,7 +369,7 @@ int
 mon_putchar(char c)
 {
 	int	ret;
-	
+
 	CONSOLE_MONLOCK();
 	ret = _rputchar(c);
 	CONSOLE_MONUNLOCK();

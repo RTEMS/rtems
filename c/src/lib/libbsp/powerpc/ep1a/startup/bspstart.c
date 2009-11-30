@@ -88,7 +88,7 @@ uint32_t VME_Slot1 = FALSE;
 /*
  * PCI Bus Frequency
  */
-unsigned int BSP_bus_frequency; 
+unsigned int BSP_bus_frequency;
 
 /*
  * processor clock frequency
@@ -103,25 +103,25 @@ unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
 void BSP_panic(char *s)
 {
   printk("%s PANIC %s\n",_RTEMS_version, s);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
 
 void _BSP_Fatal_error(unsigned int v)
 {
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
- 
+
 int BSP_FLASH_Disable_writes(
   uint32_t    area
 )
 {
   unsigned char    data;
-  
+
   data = *GENERAL_REGISTER1;
   data |= DISABLE_USER_FLASH;
   *GENERAL_REGISTER1 = data;
-                                                                            
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -130,11 +130,11 @@ int BSP_FLASH_Enable_writes(
 )
 {
   unsigned char    data;
-                                                                                                                        
+
   data = *GENERAL_REGISTER1;
   data &= (~DISABLE_USER_FLASH);
   *GENERAL_REGISTER1 = data;
-                                                                                                                        
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -143,7 +143,7 @@ void BSP_FLASH_set_page(
 )
 {
   unsigned char  data;
-                                                                                                                        
+
   /* Set the flash page register. */
   data = *GENERAL_REGISTER2;
   data &= ~(BSP_FLASH_PAGE_MASK);
@@ -170,7 +170,7 @@ void zero_bss(void)
 
 char * save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
 {
-#if 0  
+#if 0
   residualCopy = *r3;
   strncpy(loaderParam, additional_boot_options, MAX_LOADER_ADD_PARM);
   loaderParam[MAX_LOADER_ADD_PARM - 1] ='\0';
@@ -186,14 +186,14 @@ unsigned int get_eumbbar(void) {
 
   asm volatile( "lis %0,0xfec0; ori  %0,%0,0x0000": "=r" (a) );
   asm volatile("sync");
-                                                                
-  asm volatile("lis %0,0x8000; ori %0,%0,0x0078": "=r"(e) ); 
-  asm volatile("stwbrx  %0,0x0,%1": "=r"(e): "r"(a));  
+
+  asm volatile("lis %0,0x8000; ori %0,%0,0x0078": "=r"(e) );
+  asm volatile("stwbrx  %0,0x0,%1": "=r"(e): "r"(a));
   asm volatile("sync");
 
-  asm volatile("lis %0,0xfee0; ori %0,%0,0x0000": "=r" (a) ); 
+  asm volatile("lis %0,0xfee0; ori %0,%0,0x0000": "=r" (a) );
   asm volatile("sync");
-                                                         
+
   asm volatile("lwbrx %0,0x0,%1": "=r" (e): "r" (a));
   asm volatile("isync");
   return e;
@@ -212,12 +212,12 @@ void Read_ep1a_config_registers( ppc_cpu_id_t myCpu ) {
   value = *BOARD_REVISION_REGISTER2 & HARDWARE_ID_MASK;
   if ( value == HARDWARE_ID_PPC5_EP1A )
     printk("  EP1A     ");
-  else if ( value == HARDWARE_ID_EP1B ) 
+  else if ( value == HARDWARE_ID_EP1B )
     printk("  EP1B     ");
   else
     printk("  Unknown  ");
- 
-  value = *BOARD_REVISION_REGISTER2&0x1; 
+
+  value = *BOARD_REVISION_REGISTER2&0x1;
   printk("Board ID %08x", value);
   if(value == 0x0){
     VME_Slot1 = TRUE;
@@ -293,10 +293,10 @@ void bsp_start( void )
   myCpu         = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
-  EUMBBAR = get_eumbbar(); 
+  EUMBBAR = get_eumbbar();
   printk("EUMBBAR 0x%08x\n", EUMBBAR );
 
-  /* 
+  /*
    * Note this sets BSP_processor_frequency based upon register settings.
    * It must be done prior to setting up hooks.
    */
@@ -341,13 +341,13 @@ ShowBATS();
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Going to start PCI buses scanning and initialization\n");
-#endif  
+#endif
   pci_initialize();
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Number of PCI buses found is : %d\n", pci_bus_count());
 #endif
-#ifdef TEST_RAW_EXCEPTION_CODE  
+#ifdef TEST_RAW_EXCEPTION_CODE
   printk("Testing exception handling Part 1\n");
 
   /*
@@ -360,17 +360,17 @@ ShowBATS();
    */
   printk("Testing exception handling Part 2\n");
   __asm__ __volatile ("sc");
-#endif  
+#endif
 
   /*
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
-  
+
   /* Activate the page table mappings only after
    * initializing interrupts because the irq_mng_init()
    * routine needs to modify the text
-   */           
+   */
   if (pt) {
 #ifdef  SHOW_MORE_INIT_SETTINGS
     printk("Page table setup finished; will activate it NOW...\n");
@@ -394,5 +394,5 @@ ShowBATS();
 #ifdef SHOW_MORE_INIT_SETTINGS
   ShowBATS();
   printk("Exit from bspstart\n");
-#endif  
+#endif
 }

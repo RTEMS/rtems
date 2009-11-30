@@ -1,6 +1,6 @@
 /*
  *  This file contains the TTY driver table for the EP1A
- * 
+ *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -386,47 +386,47 @@ static bool config_68360_scc_base_probe(int minor, unsigned long busNo, unsigned
 static bool config_68360_scc_base_probe_1( int minor ) {
   return config_68360_scc_base_probe(minor, 0, 11, 1);
 }
-                                                                                                                
+
 static bool config_68360_scc_base_probe_2( int minor ) {
   return config_68360_scc_base_probe(minor, 0, 11, 2);
 }
-                                                                                                                 
+
 static bool config_68360_scc_base_probe_3( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 11, 3);
 }
-                                                                                                                 
+
 static bool config_68360_scc_base_probe_4( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 11, 4);
 }
-                                                                                                                
+
 static bool config_68360_scc_base_probe_5( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 16, 1);
 }
-                                                                                                                 
+
 static bool config_68360_scc_base_probe_6( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 16, 2);
 }
-                                                                                                                 
+
 static bool config_68360_scc_base_probe_7( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 16, 3);
 }
-                                                                                                                 
+
 static bool config_68360_scc_base_probe_8( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 16, 4);
 }
-                                                                                                                 
+
 static bool config_68360_scc_base_probe_9( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 15, 1);
 }
-                                                                                                                 
+
 static bool config_68360_scc_base_probe_10( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 15, 2);
 }
-                                                                                                                 
+
 static bool config_68360_scc_base_probe_11( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 15, 3);
 }
-                                                                                                                 
+
 static bool config_68360_scc_base_probe_12( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 15, 4);
 }

@@ -23,7 +23,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-	
+
 	/* Define UIC interrupt numbers; IRQs that cause an external interrupt that needs further decode.
 	   These are arbitrary but it makes things easier if they match the CPU interrupt numbers */
 
@@ -103,7 +103,7 @@ extern "C" {
 	#define	BSP_UIC_EIPKP_SLAVE		(BSP_UIC1_IRQ_LOWEST_OFFSET + 7)
 	#define	BSP_UIC_GPT_TIMER5		(BSP_UIC1_IRQ_LOWEST_OFFSET + 8)
 	#define	BSP_UIC_GPT_TIMER6		(BSP_UIC1_IRQ_LOWEST_OFFSET + 9)
-	
+
 	#define	BSP_UIC_GPT_TIMER0		(BSP_UIC1_IRQ_LOWEST_OFFSET + 16)
 	#define	BSP_UIC_GPT_TIMER1		(BSP_UIC1_IRQ_LOWEST_OFFSET + 17)
 	#define	BSP_UIC_IRQ7			(BSP_UIC1_IRQ_LOWEST_OFFSET + 18)
@@ -127,7 +127,7 @@ extern "C" {
 	#define	BSP_UIC_PCIe0INTC		(BSP_UIC2_IRQ_LOWEST_OFFSET + 2)
 	#define	BSP_UIC_PCIe0INTD		(BSP_UIC2_IRQ_LOWEST_OFFSET + 3)
 	#define	BSP_UIC_IRQ3			(BSP_UIC2_IRQ_LOWEST_OFFSET + 4)
-	
+
 	#define	BSP_UIC_USBOTG			(BSP_UIC2_IRQ_LOWEST_OFFSET + 30)
 
 	#define	BSP_UIC_IRQ_NUMBER			(95)
@@ -143,7 +143,7 @@ extern "C" {
 
 	#define BSP_PIT				BSP_PROCESSOR_IRQ_LOWEST_OFFSET	/* Required by ppc403/clock.c */
 	#define	BSP_FIT				BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 1
-	#define	BSP_WDOG			BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 2 
+	#define	BSP_WDOG			BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 2
 
 	#define BSP_PROCESSOR_IRQ_NUMBER	    (3)
 	#define BSP_PROCESSOR_IRQ_LOWEST_OFFSET	(BSP_UIC_IRQ_MAX_OFFSET + 1)
@@ -154,10 +154,10 @@ extern "C" {
 	#define BSP_IRQ_NUMBER		 	(BSP_PROCESSOR_IRQ_MAX_OFFSET + 1)
 	#define BSP_LOWEST_OFFSET		(BSP_UIC_IRQ_LOWEST_OFFSET)
 	#define BSP_MAX_OFFSET			(BSP_IRQ_NUMBER - 1)
-	
+
 	extern void BSP_rtems_irq_mng_init(unsigned cpuId);		// Implemented in irq_init.c
 	#include <bsp/irq_supp.h>
-	
+
 	#ifdef __cplusplus
 	}
 	#endif

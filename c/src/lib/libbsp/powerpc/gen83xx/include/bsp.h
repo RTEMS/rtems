@@ -36,7 +36,7 @@
 
 #endif /* MPC8313ERDB */
 
-#include <libcpu/powerpc-utility.h> 
+#include <libcpu/powerpc-utility.h>
 
 #include <bsp/hwreg_vals.h>
 

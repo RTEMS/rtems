@@ -111,8 +111,8 @@ void bsp_start( void )
   ppc_cpu_revision_t myCpuRevision;
 
   /*
-   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() 
-   * function store the result in global variables 
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
+   * function store the result in global variables
    * so that it can be used latter...
    */
   myCpu 	    = get_ppc_cpu_type();
@@ -134,7 +134,7 @@ void bsp_start( void )
   bsp_timer_least_valid = 3;
 
   /*
-   * Initialize default raw exception handlers. 
+   * Initialize default raw exception handlers.
    */
   sc = ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,

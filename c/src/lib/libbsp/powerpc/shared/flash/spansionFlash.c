@@ -10,19 +10,19 @@
  * and in 16-bit mode (width=2).
  */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * The software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -31,18 +31,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -51,9 +51,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <rtems.h>
 #include <stdio.h>
@@ -420,18 +420,18 @@ rtems_interval p,i;
 	}
 	return -1;
 }
-	
+
 STATIC void
 flash_print_stat_s160(struct bankdesc *b, uint32_t sta, int verbose)
 {
 	fprintf(stderr,"Flash Spansion 160 error %"PRIi32"\n", sta);
 }
-	
+
 STATIC uint32_t
 flash_write_line_s160(struct bankdesc *b, uint32_t a, char *s, uint32_t N)
 {
 uint32_t        sta, nxt, j, v;
-union    bconv  buf;  
+union    bconv  buf;
 
 	if ( 0 == N )
 		return -11;

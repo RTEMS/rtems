@@ -43,11 +43,11 @@
  * NOTE: VME addresses should NEVER be translated using these constants!
  *       they are strictly for BSP internal use. Drivers etc. should use
  *       the translation routines int VME.h (BSP_vme2local_adrs/BSP_local2vme_adrs).
- * 
+ *
  *           CPU ADDR                  PCI_ADDR                                VME ADDR
- * 
+ *
  *           00000000                  XXXXXXXX                                XXXXXXXX
- *    ^  ^   ........         
+ *    ^  ^   ........
  *    |  |
  *    |  |  e.g., RAM                  XXXXXXXX
  *    |  |                                                                     00000000
@@ -70,7 +70,7 @@
  *        VME devices   hostbridge                 mapped by
  *       visible here                              universe
  *                    =====================================================
- * 
+ *
  */
 
 /* fundamental addresses for BSP (CHRPxxx and PREPxxx are from libcpu/io.h) */
@@ -82,7 +82,7 @@
 /* offset of pci memory as seen from the CPU */
 #define PCI_MEM_BASE		0
 /* where (in CPU addr. space) does the PCI window start */
-#define PCI_MEM_WIN0		0x80000000 
+#define PCI_MEM_WIN0		0x80000000
 
 #else
 #define	_IO_BASE		PREP_ISA_IO_BASE

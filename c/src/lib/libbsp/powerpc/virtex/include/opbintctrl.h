@@ -82,7 +82,7 @@ extern "C" {
    * activate the interrupt controller
    */
   rtems_status_code opb_intc_init(void);
-  
+
 #ifdef __cplusplus
 }
 #endif

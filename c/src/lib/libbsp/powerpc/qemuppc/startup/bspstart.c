@@ -74,7 +74,7 @@ void bsp_start( void )
 
   /*
    *  initialize the device driver parameters
-   * assume we are running with 20MHz bus 
+   * assume we are running with 20MHz bus
    * this should speed up some tests :-)
    */
   BSP_bus_frequency        = 20;

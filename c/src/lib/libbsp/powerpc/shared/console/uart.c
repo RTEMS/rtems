@@ -142,7 +142,7 @@ BSP_uart_init(int uart, int baud, int hwFlow)
 
   /* Sanity check */
   SANITY_CHECK(uart);
-  
+
   /* Make sure any printk activity drains before
    * re-initializing.
    */
@@ -756,7 +756,7 @@ BSP_uart_termios_isr_com(int uart)
 
 /*
  * XXX - Note that this can now be one isr with the uart
- *       passed as the parameter. 
+ *       passed as the parameter.
  */
 void
 BSP_uart_termios_isr_com1(void *unused)

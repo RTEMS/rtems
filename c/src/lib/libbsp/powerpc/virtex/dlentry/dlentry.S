@@ -41,7 +41,7 @@
 #warning The call is "void boot_card(const char* cmdline);"
 #warning You need to pass a NULL.
 #warning Please check and remove these errors.
-	
+
 /*
  *  The virtex ELF link scripts support three special sections:
  *    .entry    The actual entry point
@@ -116,7 +116,7 @@ text_length:
 	lis	r2,__vectors@h          /* set EVPR exc. vector prefix */
 #else
 	lis	r2,0
-#endif		
+#endif
 	mtspr	evpr,r2
 
         /*-------------------------------------------------------------------

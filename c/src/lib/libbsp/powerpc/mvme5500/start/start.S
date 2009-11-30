@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- * 
+ *
  */
 
 #include <rtems/asm.h>
@@ -25,7 +25,7 @@
 
 #define KERNELBASE	0x0
 #define MEM256MB        0x10000000
-	
+
 #define MONITOR_ENTER			\
 	mfmsr	r10		;	\
 	ori	r10,r10,MSR_IP	;	\
@@ -33,20 +33,20 @@
 	li	r10,0x63	;	\
 	sc
 
-		
+
 	.text
 	.globl	__rtems_entry_point
 	.type	__rtems_entry_point,@function
 __rtems_entry_point:
 #ifdef DEBUG_EARLY_START
 	MONITOR_ENTER
-#endif	
-		
-/* 
+#endif
+
+/*
  * PREP
  * This is jumped to on prep systems right after the kernel is relocated
  * to its proper place in memory by the boot loader.  The expected layout
- * of the regs is:	
+ * of the regs is:
  *   r3: ptr to residual data
  *   r4: initrd_start or if no initrd then 0
  *   r5: initrd_end - unused if r4 is 0
@@ -56,7 +56,7 @@ __rtems_entry_point:
  *   The Prep boot loader insure that the MMU is currently off...
  *
  */
-	
+
 	mr	r31,r3			/* save parameters */
 	mr	r30,r4
 	mr	r29,r5
@@ -69,7 +69,7 @@ __rtems_entry_point:
 	bl	flush_tlbs
 /*
  * Use the first pair of BAT registers to map the 1st 256MB
- * of RAM to KERNELBASE. 
+ * of RAM to KERNELBASE.
  */
 	lis	r11,KERNELBASE@h
 	ori	r11,r11,0x1ffe		/* set up BAT0 registers for 604+ */
@@ -92,18 +92,18 @@ __rtems_entry_point:
 	mtspr	DBAT1L,r8		/* N.B. 6xx (not 601) have valid */
 	mtspr	DBAT1U,r11		/* bit in upper BAT register */
 	mtspr	IBAT1L,r8
-	mtspr	IBAT1U,r11	
+	mtspr	IBAT1U,r11
 	isync
 
 /*
- * we now have the two 256M of ram mapped with the bats. We are still 
- * running on the bootloader stack and cannot switch to an RTEMS allocated 
+ * we now have the two 256M of ram mapped with the bats. We are still
+ * running on the bootloader stack and cannot switch to an RTEMS allocated
  * init stack before copying the residual data that may have been set just
  * after rtems_end address. This bug has been experienced on MVME2304. Thank
  * to Till Straumann <strauman@SLAC.Stanford.EDU> for hunting it and
  * suggesting the appropriate code.
  */
-	
+
 enter_C_code:
 	bl	MMUon
 	bl  __eabi	/* setup EABI and SYSV environment */
@@ -115,7 +115,7 @@ enter_C_code:
 	mr	r4,r30
 	mr	r5,r29
 	mr	r6,r28
-	mr	r7,r27 
+	mr	r7,r27
 	bl	save_boot_params
 	/*
 	 * stack = &__rtems_end + 4096
@@ -129,10 +129,10 @@ enter_C_code:
     /* pass result of 'save_boot_params' to 'boot_card' in R3 */
 	bl	boot_card
 	bl	_return_to_ppcbug
-	
+
 	.globl  MMUon
 	.type	MMUon,@function
-MMUon:	
+MMUon:
 	mfmsr	r0
 	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
 #if (PPC_HAS_FPU == 0)
@@ -145,10 +145,10 @@ MMUon:
 	mtsrr1	r0
 	SYNC
 	rfi
-	
+
 	.globl  MMUoff
 	.type	MMUoff,@function
-MMUoff:	
+MMUoff:
 	mfmsr	r0
 	ori	r0,r0,MSR_IR| MSR_DR | MSR_IP
 	mflr	r11
@@ -161,14 +161,14 @@ MMUoff:
 	.globl	_return_to_ppcbug
 	.type	_return_to_ppcbug,@function
 
-	
+
 _return_to_ppcbug:
 	mflr	r30
 	bl	MMUoff
 	MONITOR_ENTER
 	bl	MMUon
 	mtctr	r30
-	bctr	
+	bctr
 
 flush_tlbs:
 	lis	r20, 0x1000

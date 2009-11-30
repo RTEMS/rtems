@@ -95,7 +95,7 @@ static rtems_task test_mpc55xx_dspi_writer( rtems_task_argument arg)
 
 	sc = rtems_libi2c_send_addr( device, MPC55XX_TEST_DSPI_ADDRESS);
 	RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_addr");
-	
+
 	for (i = 0; i < MPC55XX_TEST_DSPI_BUFSIZE; ++i) {
 		test_mpc55xx_dspi_writer_outbuf [0] [i] = 0xa5;
 		test_mpc55xx_dspi_writer_outbuf [1] [i] = 0xa5;
@@ -164,7 +164,7 @@ static rtems_task test_mpc55xx_dspi_reader( rtems_task_argument arg)
 
 	sc = rtems_libi2c_send_addr( device, MPC55XX_TEST_DSPI_ADDRESS);
 	RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_addr");
-	
+
 	for (i = 0; i < MPC55XX_TEST_DSPI_BUFSIZE; ++i) {
 		test_mpc55xx_dspi_reader_inbuf [i] = -1;
 	}
@@ -182,7 +182,7 @@ static rtems_task test_mpc55xx_dspi_reader( rtems_task_argument arg)
 		RTEMS_CHECK_SC_TASK( sc, "rtems_semaphore_obtain");
 
 		RTEMS_DEBUG_PRINT( "Pong\n");
-		
+
 		rv = rtems_libi2c_read_bytes( device, test_mpc55xx_dspi_reader_inbuf, MPC55XX_TEST_DSPI_BUFSIZE);
 		RTEMS_CHECK_RV_TASK( rv, "rtems_libi2c_read_bytes");
 
@@ -287,7 +287,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 	#if 0
 	rtems_id writer_task_id;
 	rtems_id reader_task_id;
-	
+
 	sc = rtems_task_create(
 		rtems_build_name( 'T', 'W', 'R', 'T'),
 		2,
@@ -306,7 +306,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 		&reader_task_id
 	);
 	RTEMS_CHECK_SC( sc, "rtems_task_create");
-	
+
 	sc = rtems_task_start( writer_task_id, test_mpc55xx_dspi_writer, 0);
 	RTEMS_CHECK_SC( sc, "rtems_task_start");
 	sc = rtems_task_start( reader_task_id, test_mpc55xx_dspi_reader, 0);
@@ -506,7 +506,7 @@ rtems_task test_sd_card( rtems_task_argument arg)
 	int b = 0;
 	const char device_name [] = "/dev/spi0.sd-card-0";
 	fd = open( device_name, O_RDWR);
-	
+
 	RTEMS_CHECK_RV_TASK( fd, "open");
 	while (1) {
 		for (i = 0; i < TEST_SD_CARD_BUF_SIZE; ++i) {
@@ -520,7 +520,7 @@ rtems_task test_sd_card( rtems_task_argument arg)
 	}
 	rv = close( fd);
 	RTEMS_CHECK_RV_TASK( rv, "close");
-	
+
 	/* Read */
 	fd = open( device_name, O_RDWR);
 	RTEMS_CHECK_RV_TASK( fd, "open");

@@ -4,19 +4,19 @@
 
 /* Driver for the Tundra Universe II pci-vme bridge */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2000-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -25,18 +25,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -45,9 +45,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 /* Register definitions */
 /* NOTE: all registers contents in PCI space are LITTLE ENDIAN */
@@ -413,7 +413,7 @@ typedef struct VmeUniverseDMAPacketRec_ {
 
 /* Location Monitor control register */
 #define		UNIV_REGOFF_LM_CTL		0xf64
-# define	UNIV_LM_CTL_EN				(1<<31)	/* image enable */ 
+# define	UNIV_LM_CTL_EN				(1<<31)	/* image enable */
 # define	UNIV_LM_CTL_PGM				(1<<23)	/* program AM */
 # define	UNIV_LM_CTL_DATA			(1<<22)	/* data AM */
 # define	UNIV_LM_CTL_SUPER			(1<<21)	/* supervisor AM */
@@ -427,7 +427,7 @@ typedef struct VmeUniverseDMAPacketRec_ {
 
 /* VMEbus register access image control register */
 #define		UNIV_REGOFF_VRAI_CTL	0xf70
-# define	UNIV_VRAI_CTL_EN			(1<<31)	/* image enable */ 
+# define	UNIV_VRAI_CTL_EN			(1<<31)	/* image enable */
 # define	UNIV_VRAI_CTL_PGM			(1<<23)	/* program AM */
 # define	UNIV_VRAI_CTL_DATA			(1<<22)	/* data AM */
 # define	UNIV_VRAI_CTL_SUPER			(1<<21)	/* supervisor AM */
@@ -508,7 +508,7 @@ vmeUniverseReset(void);
  *  #define _VME_UNIVERSE_DECLARE_SHOW_ROUTINES
  *  #include <vmeUniverse.h>
  */
-/* print the current configuration of all master ports to 
+/* print the current configuration of all master ports to
  * f (stderr if NULL)
  */
 void
@@ -684,7 +684,7 @@ vmeUniverseDisableAllMastersXX(volatile LERegister *ubase);
 void
 vmeUniverseDisableAllSlavesXX(volatile LERegister *ubase);
 
-/* print the current configuration of all master ports to 
+/* print the current configuration of all master ports to
  * f (stderr if NULL)
  */
 void
@@ -701,7 +701,7 @@ vmeUniverseSlavePortsShowXX(
 /* Raise a VME Interrupt at 'level' and respond with 'vector' to a
  * handler on the VME bus. (The handler could be a different board
  * or the universe itself - [only works with universe II]).
- * 
+ *
  * Note that you could install a interrupt handler at UNIV_VME_SW_IACK_INT_VEC
  * to be notified of an IACK cycle having completed.
  *
@@ -740,7 +740,7 @@ vmeUniverseIntRaise(int level, unsigned vector);
 /* Map internal register block to VME.
  *
  * This routine is intended for BSP implementors. The registers can be
- * made accessible from VME so that the interrupt handler can flush the 
+ * made accessible from VME so that the interrupt handler can flush the
  * bridge FIFO (see below). The preferred method is by accessing VME CSR,
  * though, if these are mapped [and the BSP provides an outbound window].
  * On the universe we can also disable posted writes in the 'ordinary'
@@ -790,7 +790,7 @@ vmeUniverseMapCRG(unsigned long vme_base, unsigned long address_space);
 typedef void (*VmeUniverseISR) (void *usrArg, unsigned long vector);
 
 /* use these special vectors to connect a handler to the
- * universe specific interrupts (such as "DMA done", 
+ * universe specific interrupts (such as "DMA done",
  * VOWN, error irqs etc.)
  * NOTE: The wrapper clears all status LINT bits (except
  * for regular VME irqs). Also note that it is the user's
@@ -801,7 +801,7 @@ typedef void (*VmeUniverseISR) (void *usrArg, unsigned long vector);
  * DO NOT CHANGE THE ORDER OF THESE VECTORS - THE DRIVER
  * DEPENDS ON IT
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * 
+ *
  */
 #define UNIV_VOWN_INT_VEC			256
 #define UNIV_DMA_INT_VEC			257
@@ -844,7 +844,7 @@ VmeUniverseISR
 vmeUniverseISRGet(unsigned long vector, void **parg);
 
 /* utility routines to enable/disable a VME IRQ level.
- * 
+ *
  * To enable/disable the internal interrupt sources (special vectors above)
  * pass a vector argument > 255.
  *
@@ -858,8 +858,8 @@ vmeUniverseIntDisable(unsigned int level);
 /* Check if an interrupt level or internal source is enabled:
  *
  * 'level': VME level 1..7 or internal special vector > 255
- * 
- * RETURNS: value > 0 if interrupt is currently enabled, 
+ *
+ * RETURNS: value > 0 if interrupt is currently enabled,
  *          zero      if interrupt is currently disabled,
  *          -1        on error (invalid argument).
  */
@@ -879,7 +879,7 @@ vmeUniverseIntIsEnabled(unsigned int level);
  * different hardware priorities of the PIC. Let's
  * say you want to give IRQ level 7 the highest priority.
  * You could then give 'pin 0' a higher priority (at the
- * PIC) and 'pin 1' a lower priority and issue. 
+ * PIC) and 'pin 1' a lower priority and issue.
  *
  *   for ( i=1; i<7; i++ ) vmeUniverseIntRoute(i, 1);
  *
@@ -893,7 +893,7 @@ vmeUniverseIntIsEnabled(unsigned int level);
  *              routes it to the alternate wire
  *              (specialIrqUnivOut)
  * RETURNS: 0 on success, nonzero on error (invalid arguments)
- * 
+ *
  * NOTES:	- DONT change the universe 'map' registers
  *            directly. The driver caches routing internally.
  *          - support for the 'specialIrqUnivOut' wire is
@@ -910,7 +910,7 @@ vmeUniverseIntRoute(unsigned int level, unsigned int pin);
  *  - waits for both interrupts: 'ordinary' VME interrupt of 'level' and
  *    IACK completion interrupt ('special' vector UNIV_VME_SW_IACK_INT_VEC).
  *
- * NOTES: 
+ * NOTES:
  *  - make sure no other handler responds to 'level'.
  *  - make sure no ISR is installed on both vectors yet.
  *  - ISRs installed by this routine are removed after completion.
@@ -956,7 +956,7 @@ vmeUniverseIntLoopbackTst(int level, unsigned vector);
  * are wired.
  * Optionally, the first PIC input line can be read from PCI config space
  * but the second must be passed to this routine. Note that the info read
- * from PCI config space is wrong for many boards! 
+ * from PCI config space is wrong for many boards!
  *
  * PARAMETERS:
  *       vmeIrqUnivOut: to which output pin (of the universe) should the 7
@@ -972,7 +972,7 @@ vmeUniverseIntLoopbackTst(int level, unsigned vector);
  *                      the PIC is determined by reading PCI config space.
  *
  * RETURNS: 0 on success, -1 on failure.
- *						
+ *
  */
 
 /* This routine is outside of the __INSIDE_RTEMS_BSP__ test for bwrds compatibility ONLY */
@@ -988,13 +988,13 @@ vmeUniverseInstallIrqMgr(int vmeIrqUnivOut,
 
 /* up to 4 universe outputs are now supported by this alternate
  * entry point.
- * Terminate the vararg list (uni_pin/pic_pin pairs) with a 
+ * Terminate the vararg list (uni_pin/pic_pin pairs) with a
  * '-1' uni_pin.
- * E.g., the old interface is now just a wrapper to 
+ * E.g., the old interface is now just a wrapper to
  *   vmeUniverseInstallIrqMgrAlt(0, vmeUnivOut, vmePicLint, specUnivOut, specPicLine, -1);
  *
  * The 'IRQ_MGR_SHARED' flag uses the BSP_install_rtems_shared_irq_handler()
- * API. CAVEAT: shared interrupts need RTEMS workspace, i.e., the 
+ * API. CAVEAT: shared interrupts need RTEMS workspace, i.e., the
  * VME interrupt manager can only be installed *after workspace is initialized*
  * if 'shared' is nonzero (i.e., *not* from bspstart()).
  *

@@ -62,7 +62,7 @@ int console_inbyte_nonblocking(
   int port
 )
 {
- 
+
   if ( __inb(0x3f8 + 0x05) & 0x01 )
     return __inb(0x3f8 + 0x00);
   return -1;

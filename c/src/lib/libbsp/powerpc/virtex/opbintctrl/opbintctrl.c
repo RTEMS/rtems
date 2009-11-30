@@ -45,7 +45,7 @@ RTEMS_INLINE_ROUTINE uint32_t get_ipr(void)
 
 void BSP_irq_enable_at_opbintc (rtems_irq_number irqnum)
 {
-  *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_SIE)) 
+  *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_SIE))
     = 1 << (irqnum - BSP_OPBINTC_IRQ_LOWEST_OFFSET);
 }
 
@@ -67,9 +67,9 @@ void BSP_irq_handle_at_opbintc(void)
   c = 0;
   mask = 0;
 
-  for (i = 0; 
-       (i < BSP_OPBINTC_PER_IRQ_NUMBER) 
-	 && (ipr != 0); 
+  for (i = 0;
+       (i < BSP_OPBINTC_PER_IRQ_NUMBER)
+	 && (ipr != 0);
        i++) {
     c = (1 << i);
 

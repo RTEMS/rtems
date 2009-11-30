@@ -22,17 +22,17 @@
 #warning The call is "void boot_card(const char* cmdline);"
 #warning You need to pass a NULL.
 #warning Please check and remove these warnings.
-	
+
 /**
  * @defgroup mpc55xx_asm Assembler files
  *
  * @ingroup mpc55xx
  */
-   
+
 #include <libcpu/powerpc-utility.h>
 #include <mpc55xx/reg-defs.h>
 
-.section ".entry", "ax"  
+.section ".entry", "ax"
 PUBLIC_VAR (start)
 start:
 /*
@@ -214,7 +214,7 @@ start:
 
 	/* Clear command line */
 	xor r3, r3, r3
-	
+
 	/* Start RTEMS */
 	bl SYM (boot_card)
 
@@ -260,7 +260,7 @@ no_chache_invalidation_abort:
 
 	/* Wait? */
 	bne check_cache_invalidation
- 
+
 	/* Enable cache */
 	LWI r6, L1CSR0_SETTINGS
 	mfspr r5, L1CSR0
@@ -270,7 +270,7 @@ no_chache_invalidation_abort:
 	mtspr L1CSR0, r5
 
 	/* Return */
-	blr   
+	blr
 
-twiddle:				
+twiddle:
 	b	twiddle

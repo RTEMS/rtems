@@ -110,18 +110,18 @@ static void calc_dbat_regvals(
   while ((end_addr & block_mask) != (base_addr & block_mask)) {
     block_mask <<= 1;
   }
-  
-  bat_ptr->batu.bepi = base_addr >> (32 - 15); 
+
+  bat_ptr->batu.bepi = base_addr >> (32 - 15);
   bat_ptr->batu.bl   = ~(block_mask >> (28 - 11));
   bat_ptr->batu.vs   = 1;
   bat_ptr->batu.vp   = 1;
-  
-  bat_ptr->batl.brpn = base_addr  >> (32 - 15); 
-  bat_ptr->batl.w    = flg_w; 
-  bat_ptr->batl.i    = flg_i; 
-  bat_ptr->batl.m    = flg_m; 
-  bat_ptr->batl.g    = flg_g; 
-  bat_ptr->batl.pp   = flg_bpp; 
+
+  bat_ptr->batl.brpn = base_addr  >> (32 - 15);
+  bat_ptr->batl.w    = flg_w;
+  bat_ptr->batl.i    = flg_i;
+  bat_ptr->batl.m    = flg_m;
+  bat_ptr->batl.g    = flg_g;
+  bat_ptr->batl.pp   = flg_bpp;
 }
 
 static void clear_mmu_regs( void)
@@ -132,7 +132,7 @@ static void clear_mmu_regs( void)
   for (i = 0;i < 16;i++) {
     asm volatile( "mtsrin %0, %1\n" : : "r" (i * 0x1000), "r" (i << (31 - 3)));
   }
-  
+
   /* Clear TLBs */
   for (i = 0;i < 32;i++) {
     asm volatile( "tlbie %0\n" : : "r" (i << (31 - 19)));
@@ -151,7 +151,7 @@ void cpu_init( void)
   PPC_CLEAR_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_ILOCK | HID0_DLOCK);
   PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_ICFI | HID0_DCI);
   PPC_CLEAR_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_ICFI | HID0_DCI);
-  
+
   /*
    * Set up IBAT registers in MMU
    */
@@ -301,7 +301,7 @@ void cpu_init( void)
   ppc_set_machine_state_register( msr);
 
   /*
-   * In HID0: 
+   * In HID0:
    *  - Enable dynamic power management
    *  - Enable machine check interrupts
    */

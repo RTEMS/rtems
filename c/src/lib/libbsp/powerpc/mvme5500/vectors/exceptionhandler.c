@@ -1,18 +1,18 @@
 /* $Id$ */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 5/2002,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -21,18 +21,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -41,9 +41,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 /* Copyright :
  * (C) S. Kate Feng <feng1@bnl.gov> 4/2004 modified it for MVME5500
  */
@@ -83,7 +83,7 @@ rtems_id		id=0;
 int			recoverable = 0;
 char			*fmt="Uhuuuh, Exception %d in unknown task???\n";
 int			quiet=0;
-	
+
  if (!quiet) printk("In BSP_exceptionHandler()\n");
    /* If we are in interrupt context, we are in trouble - skip the user
     * hook and panic
@@ -113,7 +113,7 @@ int			quiet=0;
 	   fmt="exception %d\n";
 	}
     }
-	
+
     if (ext && ext->lowlevelHook && ext->lowlevelHook(excPtr,ext,0)) {
 		/* they did all the work and want us to do nothing! */
       printk("they did all the work and want us to do nothing!\n");
@@ -163,10 +163,10 @@ int			quiet=0;
        printk("\t XER = %08x\n", excPtr->EXC_XER);
        printk("\t LR  = %08x\n", excPtr->EXC_LR);
        printk("\t DAR = %08x\n", excPtr->EXC_DAR);
-	
+
        BSP_printStackTrace(excPtr);
     }
-	
+
     if (ASM_MACH_VECTOR == excPtr->_EXC_number) {
        /* ollah , we got a machine check - this could either
 	* be a TEA, MCP or internal; let's see and provide more info
@@ -176,7 +176,7 @@ int			quiet=0;
        if ( ! (excPtr->EXC_SRR1 & (SRR1_TEA_EXC | SRR1_MCP_EXC)) ) {
 	   if (!quiet)
 	       printk("SRR1\n");
-       } else { 
+       } else {
 	   if (excPtr->EXC_SRR1 & (SRR1_TEA_EXC)) {
 	      if (!quiet)
 		 printk(" TEA");
@@ -196,7 +196,7 @@ int			quiet=0;
     } else if (ASM_DEC_VECTOR == excPtr->_EXC_number) {
 		recoverable = 1;
     } else if (ASM_SYS_VECTOR == excPtr->_EXC_number) {
-#ifdef TEST_RAW_EXCEPTION_CODE 
+#ifdef TEST_RAW_EXCEPTION_CODE
 		recoverable = 1;
 #else
 		recoverable = 0;

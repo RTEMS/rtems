@@ -323,7 +323,7 @@ static int test_intname(
     }
   }
 
-   if( _nopin  ) 
+   if( _nopin  )
    {
       printk("pci : Device %d:0x%02x:%d supplied a bogus interrupt_pin %d\n", pbus, pslot, pfun, int_pin );
       return -1;

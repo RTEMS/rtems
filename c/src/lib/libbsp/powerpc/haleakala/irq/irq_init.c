@@ -57,7 +57,7 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
   int i;
-  
+
   /*
    * re-init the rtemsIrq table
    */
@@ -82,8 +82,8 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
       "Unable to initialize RTEMS interrupt management!!! System locked\n"
     );
   }
-  
-  #ifdef TRACE_IRQ_INIT  
+
+  #ifdef TRACE_IRQ_INIT
     printk("RTEMS IRQ management is now operational\n");
   #endif
 }

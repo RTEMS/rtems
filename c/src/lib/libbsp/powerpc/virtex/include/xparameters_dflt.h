@@ -5,8 +5,8 @@
 * Version: Xilinx EDK 8.2.02 EDK_Im_Sp2.4
 * DO NOT EDIT.
 *
-* Copyright (c) 2005 Xilinx, Inc.  All rights reserved. 
-* 
+* Copyright (c) 2005 Xilinx, Inc.  All rights reserved.
+*
 * Description: Driver parameters
 *
 *******************************************************************/

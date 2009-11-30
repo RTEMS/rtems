@@ -208,7 +208,7 @@ void bsp_start(void)
 	RTEMS_DEBUG_PRINT( "Interrupt stack start : 0x%08x\n", interrupt_stack_start);
 	RTEMS_DEBUG_PRINT( "Interrupt stack end   : 0x%08x\n", interrupt_stack_start + interrupt_stack_size);
 	RTEMS_DEBUG_PRINT( "Interrupt stack size  : 0x%08x\n", interrupt_stack_size);
-	
+
 	/*
 	 * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
 	 * function store the result in global variables so that it can be used
@@ -216,13 +216,13 @@ void bsp_start(void)
 	 */
 	myCpu = get_ppc_cpu_type();
 	myCpuRevision = get_ppc_cpu_revision();
-	
+
 	/* Time reference value */
 	bsp_clicks_per_usec = bsp_clock_speed / 1000000;
 
 	/* Initialize External Bus Interface */
 	mpc55xx_ebi_init();
-	
+
 	/* Initialize exceptions */
 	RTEMS_DEBUG_PRINT( "Initialize exceptions ...\n");
 	sc = ppc_exc_initialize(
@@ -244,7 +244,7 @@ void bsp_start(void)
 	} else {
 		DEBUG_DONE();
 	}
-	
+
 	/* Initialize eMIOS */
 	mpc55xx_emios_initialize( 1);
 

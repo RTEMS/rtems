@@ -27,7 +27,7 @@
 
 /* Device classes and subclasses */
 #define PCI_CLASS_GT6426xAB_BRIDGE_PCI  0x0580    /* <SKF> */
-          
+
 /*
  * Vendor and card ID's: sort these numerically according to vendor
  * (and according to card ID within vendor). Send all updates to

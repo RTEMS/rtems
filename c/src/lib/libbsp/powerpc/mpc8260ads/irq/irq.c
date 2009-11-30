@@ -192,18 +192,18 @@ int BSP_irq_disable_at_cpm(const rtems_irq_number irqLine)
 
   return 0;
 }
-                                                                                             
-int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine)                                  
-{                                                                                           
-       int cpm_irq_index;                                                                   
-                                                                                            
-       if (!is_cpm_irq(irqLine))                                                            
-               return 0;                                                                    
-                                                                                            
-       cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);                       
-                                                                                            
-       return ((m8260.simr_h & SIU_MaskBit[cpm_irq_index].mask_h) ||                        
-                   (m8260.simr_l & SIU_MaskBit[cpm_irq_index].mask_l));                     
+
+int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine)
+{
+       int cpm_irq_index;
+
+       if (!is_cpm_irq(irqLine))
+               return 0;
+
+       cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
+
+       return ((m8260.simr_h & SIU_MaskBit[cpm_irq_index].mask_h) ||
+                   (m8260.simr_l & SIU_MaskBit[cpm_irq_index].mask_l));
 }
 
 #ifdef DISPATCH_HANDLER_STAT
@@ -274,8 +274,8 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned excNum)
       m8260.sipnr_h |= SIU_MaskBit[irq].mask_h;
       m8260.sipnr_l |= SIU_MaskBit[irq].mask_l;
 
-      /* 
-       * make sure, that the masking operations in 
+      /*
+       * make sure, that the masking operations in
        * ICTL and MSR are executed in order
        */
       asm volatile("sync":::"memory");
@@ -291,8 +291,8 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned excNum)
       /* disable exceptions again */
       _CPU_MSR_SET(msr);
 
-      /* 
-       * make sure, that the masking operations in 
+      /*
+       * make sure, that the masking operations in
        * ICTL and MSR are executed in order
        */
       asm volatile("sync":::"memory");

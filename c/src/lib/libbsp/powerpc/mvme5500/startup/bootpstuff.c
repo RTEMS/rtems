@@ -29,7 +29,7 @@ static ParmRec parmList[]={
 			FLAG_MAND,
 	},
 	{ "BP_GTWY=",  &net_config.gateway,
-			FLAG_CLRBP, 
+			FLAG_CLRBP,
 	},
 	{ "BP_MYIP=",  &boot_my_ip,
 			FLAG_MAND | FLAG_CLRBP,

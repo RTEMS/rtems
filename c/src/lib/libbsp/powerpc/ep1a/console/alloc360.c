@@ -25,15 +25,15 @@
 #include <rtems/bspIo.h>
 
 
-#define DEBUG_PRINT 1 
+#define DEBUG_PRINT 1
 
 void M360SetupMemory( M68360_t ptr ){
   volatile m360_t  *m360;
-  
+
   m360  = ptr->m360;
 
 #if DEBUG_PRINT
-printk("m360->mcr:0x%08x  Q1_360_SIM_MCR:0x%08x\n", 
+printk("m360->mcr:0x%08x  Q1_360_SIM_MCR:0x%08x\n",
        (unsigned int)&(m360->mcr), ((unsigned int)m360+Q1_360_SIM_MCR));
 #endif
   ptr->bdregions[0].base = (char *)&m360->dpram1[0];
@@ -93,7 +93,7 @@ M360AllocateBufferDescriptors (M68360_t ptr, int count)
         continue;
       }
       *cp = 0x0;
-    } 
+    }
 
     have = ptr->bdregions[i].size - ptr->bdregions[i].used;
     if (have >= want) {

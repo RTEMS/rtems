@@ -291,7 +291,7 @@ static const uint8_t mpc83xx_ipic_mask_position_table [MPC83XX_IPIC_VECTOR_NUMBE
 };
 
 /*
- * this array will be filled with mask values needed 
+ * this array will be filled with mask values needed
  * to temporarily disable all IRQ soures with lower or same
  * priority of the current source (whose vector is the array index)
  */
@@ -493,8 +493,8 @@ rtems_status_code mpc83xx_ipic_calc_prio2mask( void)
  */
 rtems_status_code mpc83xx_ipic_initialize( void)
 {
-	/* 
-	 * mask off all interrupts 
+	/*
+	 * mask off all interrupts
 	 */
 	mpc83xx.ipic.simsr [0] = 0;
 	mpc83xx.ipic.simsr [1] = 0;

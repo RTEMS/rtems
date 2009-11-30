@@ -1,6 +1,6 @@
 /* rsPMCQ1.c - Radstone PMCQ1 Common Initialisation Code
  *
- * Copyright 2000 Radstone Technology 
+ * Copyright 2000 Radstone Technology
  *
  * THIS FILE IS PROVIDED TO YOU, THE USER, "AS IS", WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
@@ -34,7 +34,7 @@ call rsPMCQ1Init() to perform ba  sic initialisation of the PMCQ1's.
 #include <libcpu/io.h>
 #include <bsp/irq.h>
 #include <stdlib.h>
-#include <rtems/bspIo.h>        
+#include <rtems/bspIo.h>
 #include <bsp/pci.h>
 #include <bsp.h>
 #include "rsPMCQ1.h"
@@ -103,7 +103,7 @@ int read32( int addr){
 
 
 void rsPMCQ1_scc_nullFunc(void) {}
-  
+
 /*******************************************************************************
 * rsPMCQ1Int - handle a PMCQ1 interrupt
 *
@@ -185,7 +185,7 @@ unsigned int rsPMCQ1MaIntConnect (
 
   for (boardData = pmcq1BoardData; boardData; boardData = boardData->pNext)
   {
-    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) && 
+    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) &&
         (boardData->funcNo == funcNo))
     {
       boardData->maInt = routine;
@@ -206,7 +206,7 @@ unsigned int rsPMCQ1MaIntConnect (
 
   return (status);
 }
-    
+
 /*******************************************************************************
 *
 * rsPMCQ1MaIntDisconnect - disconnect a MiniAce interrupt routine
@@ -227,7 +227,7 @@ unsigned int rsPMCQ1MaIntDisconnect(
   unsigned int status = RTEMS_IO_ERROR;
 
   for (boardData = pmcq1BoardData; boardData; boardData = boardData->pNext) {
-    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) && 
+    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) &&
         (boardData->funcNo == funcNo))
     {
       boardData->maInt = NULL;
@@ -239,7 +239,7 @@ unsigned int rsPMCQ1MaIntDisconnect(
 
   return (status);
 }
-    
+
 /*******************************************************************************
 *
 * rsPMCQ1QuiccIntConnect - connect a Quicc interrupt routine
@@ -263,8 +263,8 @@ unsigned int rsPMCQ1QuiccIntConnect(
 
   for (boardData = pmcq1BoardData; boardData; boardData = boardData->pNext)
   {
-    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) && 
-        (boardData->funcNo == funcNo)) 
+    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) &&
+        (boardData->funcNo == funcNo))
     {
       boardData->quiccInt = routine;
       boardData->quiccArg = arg;
@@ -274,7 +274,7 @@ unsigned int rsPMCQ1QuiccIntConnect(
   }
   return (status);
 }
-    
+
 /*******************************************************************************
 *
 * rsPMCQ1QuiccIntDisconnect - disconnect a Quicc interrupt routine
@@ -294,9 +294,9 @@ unsigned int rsPMCQ1QuiccIntDisconnect(
   PPMCQ1BoardData boardData;
   unsigned int status = RTEMS_IO_ERROR;
 
-  for (boardData = pmcq1BoardData; boardData; boardData = boardData->pNext) 
+  for (boardData = pmcq1BoardData; boardData; boardData = boardData->pNext)
   {
-    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) && 
+    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) &&
         (boardData->funcNo == funcNo))
     {
       boardData->quiccInt = NULL;
@@ -308,8 +308,8 @@ unsigned int rsPMCQ1QuiccIntDisconnect(
 
   return (status);
 }
- 
-   
+
+
 /*******************************************************************************
 *
 * rsPMCQ1Init - initialize the PMCQ1's
@@ -363,7 +363,7 @@ unsigned int rsPMCQ1Init(void)
     eieio();
 
     /*
-     * Hold QBus in reset for 1ms 
+     * Hold QBus in reset for 1ms
      */
     MsDelay();
 
@@ -376,7 +376,7 @@ unsigned int rsPMCQ1Init(void)
     /* If a QUICC is fitted initialise it */
     if (PMCQ1_Read_EPLD(baseaddr, PMCQ1_BUILD_OPTION) & PMCQ1_QUICC_FITTED)
     {
-#ifdef DEBUG_360 
+#ifdef DEBUG_360
   printk(" Found QUICC busNo %d slotNo %d\n", busNo, slotNo);
 #endif
 
@@ -393,7 +393,7 @@ unsigned int rsPMCQ1Init(void)
       eieio();
 
       /* Disable the SWT and perform basic initialisation */
-      write8(baseaddr+Q1_360_SIM_SYPCR,0);		
+      write8(baseaddr+Q1_360_SIM_SYPCR,0);
       eieio();
 
       write32(baseaddr+Q1_360_SIM_MCR,0xa0001029);
@@ -411,11 +411,11 @@ unsigned int rsPMCQ1Init(void)
       eieio();
       write32(baseaddr+Q1_360_SIM_OR0,0x1ff00000);  /*| MEMC_OR_FC*/
       eieio();
-      write32(baseaddr+Q1_360_SIM_BR0,0);  
+      write32(baseaddr+Q1_360_SIM_BR0,0);
       eieio();
       write32(baseaddr+Q1_360_SIM_OR1,(0x5ff00000 | 0x00000780));  /*| MEMC_OR_FC*/
       eieio();
-      write32(baseaddr+Q1_360_SIM_BR1,(0x00000040 | 0x00000001 | 0x00200280) );  
+      write32(baseaddr+Q1_360_SIM_BR1,(0x00000040 | 0x00000001 | 0x00200280) );
       eieio();
     }
 
@@ -465,7 +465,7 @@ unsigned int rsPMCQ1Init(void)
     /*
      * Enable PMCQ1 Interrupts from QSPAN-II
      */
-        
+
     *(unsigned long *)(bridgeaddr + 0x600) = 0x00001000;
     eieio();
     *(unsigned long *)(bridgeaddr + 0x604) |= 0x00001000;
@@ -549,7 +549,7 @@ unsigned int rsPMCQ1Commission( unsigned long busNo, unsigned long slotNo )
         printk("Error writing byte %d expected 0x%02x got 0x%02x\n",
                i, rsPMCQ1eeprom[i], (unsigned char)(val >> 8));
         status = RTEMS_IO_ERROR;
-        break;	
+        break;
       }
     }
   }

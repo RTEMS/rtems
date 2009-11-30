@@ -25,7 +25,7 @@
  */
 void initialize_PCI_bridge (void)
 {
-  /* Note: Accept DINKs setup of the PCI Bridge and don't 
+  /* Note: Accept DINKs setup of the PCI Bridge and don't
    *       change anything.
    */
 }

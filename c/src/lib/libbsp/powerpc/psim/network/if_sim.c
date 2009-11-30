@@ -256,7 +256,7 @@ int                f;
 					ifp->if_flags &= ~(IFF_RUNNING | IFF_OACTIVE);
 				}
 			}
-			
+
 		break;
 
 		case SIO_RTEMS_SHOW_STATS:
@@ -461,7 +461,7 @@ rtems_irq_connect_data ihdl;
 
 	ihdl.name   = ifcfg->irno;
 	ihdl.hdl    = ifsim_isr;
-	ihdl.handle = sc; 
+	ihdl.handle = sc;
 	ihdl.on     = ifsim_irq_on;
 	ihdl.off    = ifsim_irq_off;
 	ihdl.isOn   = ifsim_irq_ison;

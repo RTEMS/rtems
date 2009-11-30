@@ -101,7 +101,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 #if 0 /* We now let the clock driver hook the exception directly */
   case ASM_BOOKE_DEC_VECTOR:
     BSP_rtems_irq_tbl[BSP_PIT].hdl
-      (BSP_rtems_irq_tbl[BSP_PIT].handle);    
+      (BSP_rtems_irq_tbl[BSP_PIT].handle);
     break;
 #endif
 #if 0 /* Critical interrupts not yet supported */
@@ -111,7 +111,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   }
   return 0;
 }
-  
+
 /***********************************************************
  * functions to set/get/remove interrupt handlers
  ***********************************************************/
@@ -166,7 +166,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
   rtems_interrupt_level level;
-  
+
   /*
    * check for valid IRQ name
    */
@@ -185,7 +185,7 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
   rtems_interrupt_level level;
-  
+
   /*
    * check for valid IRQ name
    */
@@ -268,7 +268,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
   /*
    * store any irq-like processor exceptions
    */
-  for (i = BSP_PROCESSOR_IRQ_LOWEST_OFFSET; 
+  for (i = BSP_PROCESSOR_IRQ_LOWEST_OFFSET;
        i < BSP_PROCESSOR_IRQ_MAX_OFFSET;
        i++) {
     if (BSP_rtems_irq_tbl[i].hdl != config->defaultEntry.hdl) {
@@ -290,7 +290,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 
 /*
  * dummy for an empty IRQ handler entry
- */ 
+ */
 static rtems_irq_connect_data emptyIrq = {
   0, 		         /* Irq Name                 */
   BSP_irq_nop_hdl,       /* handler function         */
@@ -342,6 +342,6 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
    */
   if (!BSP_rtems_irq_mngt_set(&initialConfig)) {
     BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
-  }  
+  }
 }
 

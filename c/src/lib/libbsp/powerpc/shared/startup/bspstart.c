@@ -121,11 +121,11 @@ char * save_boot_params(
 #if defined(mvme2100)
 unsigned int EUMBBAR;
 
-/* 
+/*
  * Return the current value of the Embedded Utilities Memory Block Base Address
  * Register (EUMBBAR) as read from the processor configuration register using
  * Processor Address Map B (CHRP).
- */ 
+ */
 unsigned int get_eumbbar(void) {
   out_le32( (uint32_t*)0xfec00000, 0x80000078 );
   return in_le32( (uint32_t*)0xfee00000 );
@@ -154,7 +154,7 @@ void bsp_start( void )
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
-   * function store the result in global variables so that it can be used 
+   * function store the result in global variables so that it can be used
    * later...
    */
   myCpu 	= get_ppc_cpu_type();
@@ -186,7 +186,7 @@ void bsp_start( void )
 
 #if defined(mvme2100)
   /* Need 0xfec00000 mapped for this */
-  EUMBBAR = get_eumbbar(); 
+  EUMBBAR = get_eumbbar();
 #endif
 
   /*
@@ -358,7 +358,7 @@ void bsp_start( void )
 #endif
     BSP_pgtbl_activate(pt);
     /* finally, switch off DBAT3 */
-    setdbat(3, 0, 0, 0, 0); 
+    setdbat(3, 0, 0, 0, 0);
   }
 
 #if defined(DEBUG_BATS)

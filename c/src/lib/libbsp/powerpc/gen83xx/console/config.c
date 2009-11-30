@@ -23,7 +23,7 @@
 /* derived from: */
 /*
  *  This file contains the TTY driver table for the EP1A
- * 
+ *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

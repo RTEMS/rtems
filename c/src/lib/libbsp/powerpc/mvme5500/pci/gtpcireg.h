@@ -58,8 +58,8 @@
 #define PCI_ACCCTLBASEL_PCISwap_NoSwap 0x1000000
 
 #define PCI0_P2P_CONFIG                         0x1d14
-#define PCI_SNOOP_BASE0_LOW                     0x1f00                    
-#define PCI_SNOOP_BASE0_HIGH                    0x1f04   
+#define PCI_SNOOP_BASE0_LOW                     0x1f00
+#define PCI_SNOOP_BASE0_HIGH                    0x1f04
 #define PCI_SNOOP_TOP0                          0x1f08
 
 #define PCI0_SCS0_BAR_SIZE                      0x0c08
@@ -87,8 +87,8 @@
 #define PCI1_ACCESS_CNTL_BASE1_HIGH             0x1e94
 #define PCI1_ACCESS_CNTL_BASE1_TOP              0x1e98
 
-#define PCI_SNOOP_BASE1_LOW                     0x1f10                    
-#define PCI_SNOOP_BASE1_HIGH                    0x1f14   
+#define PCI_SNOOP_BASE1_LOW                     0x1f10
+#define PCI_SNOOP_BASE1_HIGH                    0x1f14
 #define PCI_SNOOP_TOP1                          0x1f18
 
 #define PCI0_CMD_CNTL                           0xc00

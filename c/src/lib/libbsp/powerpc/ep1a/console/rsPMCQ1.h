@@ -37,28 +37,28 @@
  * PMCQ1 definitions
  */
 
-/* 
- * 360 definitions 
+/*
+ * 360 definitions
  */
 
 #define Q1_360_MBAR		0x0003ff00				/* master base address register */
 
 #define REG_B_OFFSET		0x1000					/* offset to the internal registers */
 
-#define Q1_360_SIM_MCR		(REG_B_OFFSET+0x00)		
-#define Q1_360_SIM_PEPAR	(REG_B_OFFSET+0x16)		
-#define Q1_360_SIM_SYPCR	(REG_B_OFFSET+0x22)		
-#define Q1_360_SIM_PICR		(REG_B_OFFSET+0x26)		
-#define Q1_360_SIM_PITR		(REG_B_OFFSET+0x2A)		
-#define Q1_360_SIM_GMR		(REG_B_OFFSET+0x40)	
-#define Q1_360_SIM_BR0		(REG_B_OFFSET+0x50)	
-#define Q1_360_SIM_OR0		(REG_B_OFFSET+0x54)	
-#define Q1_360_SIM_BR1		(REG_B_OFFSET+0x60)	
-#define Q1_360_SIM_OR1		(REG_B_OFFSET+0x64)	
+#define Q1_360_SIM_MCR		(REG_B_OFFSET+0x00)
+#define Q1_360_SIM_PEPAR	(REG_B_OFFSET+0x16)
+#define Q1_360_SIM_SYPCR	(REG_B_OFFSET+0x22)
+#define Q1_360_SIM_PICR		(REG_B_OFFSET+0x26)
+#define Q1_360_SIM_PITR		(REG_B_OFFSET+0x2A)
+#define Q1_360_SIM_GMR		(REG_B_OFFSET+0x40)
+#define Q1_360_SIM_BR0		(REG_B_OFFSET+0x50)
+#define Q1_360_SIM_OR0		(REG_B_OFFSET+0x54)
+#define Q1_360_SIM_BR1		(REG_B_OFFSET+0x60)
+#define Q1_360_SIM_OR1		(REG_B_OFFSET+0x64)
 
-#define Q1_360_CPM_ICCR		(REG_B_OFFSET+0x500)		
-#define Q1_360_CPM_SDCR		(REG_B_OFFSET+0x51E)		
-#define Q1_360_CPM_CICR		(REG_B_OFFSET+0x540)		
+#define Q1_360_CPM_ICCR		(REG_B_OFFSET+0x500)
+#define Q1_360_CPM_SDCR		(REG_B_OFFSET+0x51E)
+#define Q1_360_CPM_CICR		(REG_B_OFFSET+0x540)
 
 /*
  * EPLD offsets
@@ -123,9 +123,9 @@ typedef void (*FUNCION_PTR) (int);
 
 
 
-typedef struct _PMCQ1BoardData 
+typedef struct _PMCQ1BoardData
 {
-    struct _PMCQ1BoardData   		*pNext;     
+    struct _PMCQ1BoardData   		*pNext;
     unsigned long			busNo;
     unsigned long			slotNo;
     unsigned long			funcNo;
@@ -143,10 +143,10 @@ extern PPMCQ1BoardData  pmcq1BoardData;
  * Function declarations
  */
 extern unsigned int rsPMCQ1QuiccIntConnect(
-  unsigned long         busNo, 
-  unsigned long         slotNo, 
-  unsigned long         funcNo, 
-  FUNCION_PTR           routine, 
+  unsigned long         busNo,
+  unsigned long         slotNo,
+  unsigned long         funcNo,
+  FUNCION_PTR           routine,
   int                   arg
 );
 unsigned int rsPMCQ1Init(void);

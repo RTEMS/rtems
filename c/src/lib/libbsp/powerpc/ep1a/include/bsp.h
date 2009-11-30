@@ -21,18 +21,18 @@
 #include <bsp/vectors.h>
 
 /* fundamental addresses for BSP (CHRPxxx and PREPxxx are from libcpu/io.h) */
-#define	_IO_BASE	        CHRP_ISA_IO_BASE 
+#define	_IO_BASE	        CHRP_ISA_IO_BASE
 #define _ISA_MEM_BASE           CHRP_ISA_MEM_BASE
 /* address of our ram on the PCI bus   */
 #define PCI_DRAM_OFFSET         CHRP_PCI_DRAM_OFFSET
 #define PCI_MEM_BASE            0x80000000
-#define PCI_MEM_BASE_ADJUSTMENT 0 
+#define PCI_MEM_BASE_ADJUSTMENT 0
 /* address of our ram on the PCI bus   */
 #define	PCI_DRAM_OFFSET		CHRP_PCI_DRAM_OFFSET
 
 /* offset of pci memory as seen from the CPU */
 #undef  PCI_MEM_BASE
-#define PCI_MEM_BASE		0x00000000  
+#define PCI_MEM_BASE		0x00000000
 
 /* Override the default values for the following     DEFAULT */
 #define PCI_CONFIG_ADDR                 0xfec00000  /* 0xcf8 */
@@ -67,7 +67,7 @@
 
 #define PMC_SLOT1_PRESENT                0x02
 #define PMC_SLOT2_PRESENT                0x01
- 
+
 /* BOARD_REVISION_REGISTER1 */
 #define ARTWORK_REVISION_MASK            0xf0
 #define BUILD_REVISION_MASK              0x0f
@@ -105,7 +105,7 @@
  *  address definitions for several devices
  *
  */
-#define UART_OFFSET_1_8245 (0x04500)   
+#define UART_OFFSET_1_8245 (0x04500)
 #define UART_OFFSET_2_8245 (0x04600)
 #define UART_BASE_COM1     0xff800000
 #define UART_BASE_COM2     0xff800040
@@ -117,7 +117,7 @@
  * 8245 docs.
  * This is an offset from EUMBBAR
  */
-#define BSP_OPEN_PIC_BASE_OFFSET     0x40000  
+#define BSP_OPEN_PIC_BASE_OFFSET     0x40000
 
 /* BSP_PIC_DO_EOI is optionally used by the 'vmeUniverse' driver
  * to implement VME IRQ priorities in software.
@@ -151,7 +151,7 @@
 extern unsigned int EUMBBAR;
 
 /*
- * Total memory 
+ * Total memory
  */
 extern unsigned int BSP_mem_size;
 
@@ -181,7 +181,7 @@ extern int BSP_disconnect_clock_handler (void);
 extern int BSP_connect_clock_handler (void);
 
 /*
- * FLASH 
+ * FLASH
  */
 int BSP_FLASH_Enable_writes( uint32_t area );
 int BSP_FLASH_Disable_writes(  uint32_t area );

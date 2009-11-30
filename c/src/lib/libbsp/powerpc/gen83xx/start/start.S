@@ -16,10 +16,10 @@
 +-----------------------------------------------------------------+
 | this file contains the startup assembly code                    |
 \*===============================================================*/
-/* $Id$ */   
+/* $Id$ */
 
 
-#include <libcpu/powerpc-utility.h> 
+#include <libcpu/powerpc-utility.h>
 #include <rtems/powerpc/cache.h>
 #include <bsp.h>
 #include <mpc83xx/mpc83xx.h>
@@ -27,7 +27,7 @@
 .macro SET_IMM_REGW base, reg2, offset, value
 	LA \reg2, \value
 	stw \reg2,\offset(\base)
-.endm 
+.endm
 
 #define REP8(l) l ; l; l; l; l; l; l; l;
 
@@ -37,7 +37,7 @@
 #if defined(RESET_CONF_WRD_L)
 .section ".resconf","ax"
 PUBLIC_VAR (reset_conf_words)
-reset_conf_words:	
+reset_conf_words:
 	REP8( .byte ((RESET_CONF_WRD_L >> 24) & 0xff))
 	REP8( .byte ((RESET_CONF_WRD_L >> 16) & 0xff))
 	REP8( .byte ((RESET_CONF_WRD_L >>  8) & 0xff))
@@ -51,10 +51,10 @@ reset_conf_words:
 
 .section ".vectors","ax"
 PUBLIC_VAR (reset_vec)
-reset_vec:	
+reset_vec:
 	bl rom_entry
-	
-.section ".entry"  
+
+.section ".entry"
 PUBLIC_VAR (start)
 start:
 
@@ -84,7 +84,7 @@ copy_uboot_board_info:
 #endif /* HAS_UBOOT */
 
 	/*
-	 * basic CPU setup:	
+	 * basic CPU setup:
 	 * init MSR
 	 */
 	mfmsr	r30
@@ -93,18 +93,18 @@ copy_uboot_board_info:
 	mtmsr	r30 				/* Set RI/ME, Clr EE in MSR */
 
 	b start_rom_skip
-	
+
 PUBLIC_VAR (rom_entry)
 rom_entry:
 	/*
-	 * basic CPU setup:	
+	 * basic CPU setup:
 	 * init MSR
 	 */
 	mfmsr	r30
 	SETBITS r30, r29, MSR_ME|MSR_RI
 	CLRBITS r30, r29, MSR_IP|MSR_EE
 	mtmsr	r30 				/* Set RI/ME, Clr EE in MSR */
-	
+
 	/*
 	 * ROM startup: remap IMMR to 0xE0000000
 	 * use special sequence from MPC8349EA RM Rev 1, 5.2.4.1.1 "Updating IMMRBAR"
@@ -147,14 +147,14 @@ rom_entry:
 	mtlr	r29
 	blr                     /* now further execution in upper ROM */
 
-start_code_in_rom:	
+start_code_in_rom:
 
 #ifdef LBLAWBAR0_VAL
 	SET_IMM_REGW r31,r30,LBLAWBAR0_OFF,LBLAWBAR0_VAL
 #endif
 #ifdef LBLAWAR0_VAL
 	SET_IMM_REGW r31,r30,LBLAWAR0_OFF,LBLAWAR0_VAL
-#endif	
+#endif
 #ifdef LBLAWBAR1_VAL
 	SET_IMM_REGW r31,r30,LBLAWBAR1_OFF,LBLAWBAR1_VAL
 #endif
@@ -232,7 +232,7 @@ start_code_in_rom:
 	 */
 #ifdef MRPTR_VAL
 	SET_IMM_REGW r31,r30,MRPTR_OFF,MRPTR_VAL
-#endif	
+#endif
 	/*
 	 * ROM startup: init SDRAM
 	 */
@@ -357,7 +357,7 @@ start_rom_skip:
 start_rom_skip1:
 	mflr r20
 	LA   r30,start_rom_skip1
-	sub. r20,r20,r30	
+	sub. r20,r20,r30
 	/*
 	 * execution address offset == 0?
 	 * then do not relocate code and data
@@ -367,24 +367,24 @@ start_rom_skip1:
 	 * ROM or relocatable startup: copy startup code to SDRAM
 	 */
 	/* get start address of text section in RAM */
-	LA	r29, bsp_section_text_start  
+	LA	r29, bsp_section_text_start
 	/* get start address of text section in ROM (add reloc offset) */
-	add	r30, r20, r29    
+	add	r30, r20, r29
 	/* get size of startup code */
 	LA	r28, end_reloc_startup
 	LA	r31, bsp_section_text_start
 	sub	28,r28,r31
 	/* copy startup code from ROM to RAM location */
-	bl	copy_image      
-	
+	bl	copy_image
+
 	/*
 	 * ROM startup: jump to code copy in  SDRAM
 	 */
 	/* get compile time address of label */
-	LA	r29, copy_rest_of_text 
+	LA	r29, copy_rest_of_text
 	mtlr	r29
 	blr                     /* now further execution RAM */
-copy_rest_of_text:	
+copy_rest_of_text:
 #ifdef LCRR_VAL
 	SET_IMM_REGW r31,r30,LCRR_OFF,LCRR_VAL
 #endif
@@ -394,27 +394,27 @@ copy_rest_of_text:
 	/* get start address of rest of code in RAM */
 	LA	r29, end_reloc_startup
 	/* get start address of text section in ROM (add reloc offset) */
-	add	r30, r20, r29    
+	add	r30, r20, r29
 	/* get size of rest of code */
 	LA	r28, bsp_section_text_start
 	LA	r31, bsp_section_text_size
 	add	r28,r28,r31
 	sub	r28,r28,r29
 	bl	copy_image      /* copy text section from ROM to RAM location */
-	
+
 	/*
 	 * ROM or relocatable startup: copy data to SDRAM
 	 */
 	/* get start address of data section in RAM */
-	LA	r29, bsp_section_data_start 
+	LA	r29, bsp_section_data_start
 	/* get start address of data section in ROM (add reloc offset) */
-	add	r30, r20, r29    
+	add	r30, r20, r29
 	/* get size of RAM image */
-	LA	r28, bsp_section_data_size  
+	LA	r28, bsp_section_data_size
 	/* copy initialized data section from ROM to RAM location */
-	bl	copy_image       
+	bl	copy_image
 
-start_code_in_ram:	
+start_code_in_ram:
 
 	/*
 	 * ROM/RAM startup: clear bss in SDRAM
@@ -427,8 +427,8 @@ start_code_in_ram:
 	 */
 
 	/* Set stack pointer (common for RAM/ROM startup) */
-	LA	r1, bsp_section_text_start  
-        addi    r1, r1, -0x10 /* Set up stack pointer = beginning of text section - 0x10 */     
+	LA	r1, bsp_section_text_start
+        addi    r1, r1, -0x10 /* Set up stack pointer = beginning of text section - 0x10 */
 
 	/* Create NULL */
 	li r0, 0
@@ -451,12 +451,12 @@ start_code_in_ram:
         xor r3, r3, r3
 
         bl      SYM (boot_card)  /* Call the first C routine */
-	
+
 twiddle:
 	/* We don't expect to return from boot_card but if we do */
 	/* wait here for watchdog to kick us into hard reset     */
-	b	twiddle          
-						
+	b	twiddle
+
 copy_image:
 	mr	r27, r28
 	srwi	r28, r28, 2
@@ -466,13 +466,13 @@ copy_image:
 	sub     r27, r27, r28			/* maybe some residual bytes */
 copy_image_word:
 	lswi	r28, r30, 0x04
-	
+
 	stswi   r28, r29, 0x04			/* do word copy ROM -> RAM */
-	
+
 
 	addi    r30, r30, 0x04			/* increment source pointer */
 	addi    r29, r29, 0x04			/* increment destination pointer */
-	
+
 	bdnz	copy_image_word			/* decrement ctr and branch if not 0 */
 
 	cmpwi	r27, 0x00			/* copy image finished ? */
@@ -480,19 +480,19 @@ copy_image_word:
 	mtctr   r27				/* reload counter for residual bytes */
 copy_image_byte:
 	lswi	r28, r30, 0x01
-	
+
 	stswi   r28, r29, 0x01			/* do byte copy ROM -> RAM */
-	
-	
+
+
 	addi    r30, r30, 0x01			/* increment source pointer */
 	addi    r29, r29, 0x01			/* increment destination pointer */
-	
+
 	bdnz	copy_image_byte			/* decrement ctr and branch if not 0 */
-	
+
 copy_image_end:
 	blr
 
-	
+
 /**
  * @fn int mpc83xx_zero_4( void *dest, size_t n)
  *
@@ -542,7 +542,7 @@ mpc83xx_zero_4_tail:
 	stwx	r0, r3, r8
 	addi	r8, r8, 16
 	bdnz	mpc83xx_zero_4_tail
-	
+
 	/* Return */
 	blr
 

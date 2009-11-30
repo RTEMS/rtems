@@ -8,7 +8,7 @@
  * All rights reserved.
  *
  * This code is derived from software contributed to The NetBSD Foundation
- * by Charles M. Hannum; by William R. Studenmund; by Jason R. Thorpe. 
+ * by Charles M. Hannum; by William R. Studenmund; by Jason R. Thorpe.
  *
  */
 
@@ -114,7 +114,7 @@ int pci_get_capability(int b, int d, int f, int capid,int *offset,uint32_t *valu
   uint32_t reg, ofs;
 
   /*  i82544EI PCI_CAPLISTPTR_REG */
-  pci_read_config_dword(b,d,f,PCI_CAPLISTPTR_REG, &reg);   
+  pci_read_config_dword(b,d,f,PCI_CAPLISTPTR_REG, &reg);
   ofs = PCI_CAPLIST_PTR(reg);
   while (ofs != 0) {
 #ifdef DIAGNOSTIC

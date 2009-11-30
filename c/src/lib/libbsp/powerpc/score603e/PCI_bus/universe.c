@@ -166,7 +166,7 @@ void initialize_universe(void)
    */
   jumper_selection = PCI_bus_read(
                      (volatile uint32_t*)SCORE603E_VME_JUMPER_ADDR );
-  printk("initialize_universe: Read 0x%x = 0x%x\n", 
+  printk("initialize_universe: Read 0x%x = 0x%x\n",
           SCORE603E_VME_JUMPER_ADDR, jumper_selection);
   jumper_selection = (jumper_selection >> 3) & 0x1f;
 
@@ -182,7 +182,7 @@ void initialize_universe(void)
      printk ("Invalid SCORE603E_UNIVERSE_CHIP_ID: 0x08%" PRId32 "\n", pci_id);
      rtems_fatal_error_occurred( 0x603e0bad );
    } else {
-     printk("initialize_universe: Reg 0x%x read 0x%x\n", 
+     printk("initialize_universe: Reg 0x%x read 0x%x\n",
      SCORE603E_IO_VME_UNIVERSE_BASE, pci_id );
    }
 

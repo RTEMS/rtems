@@ -3,7 +3,7 @@
 /* VMEConfig.h, S. Kate Feng modified it for MVME5500 3/04  */
 /* BSP specific address space configuration parameters */
 
-/* 
+/*
  * The BSP maps VME address ranges into
  * one BAT.
  * NOTE: the BSP (startup/bspstart.c) uses

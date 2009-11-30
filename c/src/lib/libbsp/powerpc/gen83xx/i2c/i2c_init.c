@@ -47,7 +47,7 @@ static mpc83xx_i2c_desc_t mpc83xx_i2c_bus_tbl[2] = {
       .irq_number = BSP_IPIC_IRQ_I2C2,
       .base_frq = 0 /* will be set during initiailization */
     }
-  } 
+  }
 };
 
 rtems_libi2c_bus_t *mpc83xx_i2c_bus_descriptor[2] = {
@@ -89,7 +89,7 @@ rtems_status_code bsp_register_i2c
    * I2C1 is clocked with TSEC 1
    */
   if (((mpc83xx.clk.sccr >> (31-1)) & 0x03) > 0) {
-    mpc83xx_i2c_bus_tbl[0].softc.base_frq = 
+    mpc83xx_i2c_bus_tbl[0].softc.base_frq =
       (BSP_bus_frequency
        /((mpc83xx.clk.sccr >> (31-1)) & 0x03));
   }

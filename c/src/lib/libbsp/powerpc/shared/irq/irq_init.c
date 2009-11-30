@@ -274,11 +274,11 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
    */
   openpic_init(1, mvme2100_openpic_initpolarities, mvme2100_openpic_initsenses, 16, 16, BSP_bus_frequency);
 #else
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Going to initialize raven interrupt controller (openpic compliant)\n");
 #endif
   openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses, 0, 0, 0);
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif
   if ( currentBoard == MESQUITE ) {
@@ -330,8 +330,8 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
        */
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
     }
-  
-#ifdef TRACE_IRQ_INIT  
+
+#ifdef TRACE_IRQ_INIT
     printk("RTEMS IRQ management is now operational\n");
 #endif
 }

@@ -96,14 +96,14 @@ void xilTemacFifoRead64(uint32_t aBaseAddr, uint32_t* aBuf, uint32_t aBytes)
   uint32_t xtrabytes = aBytes % 8;
   uint32_t i;
 
-  for(i = 0; i < numqwords; i++) 
+  for(i = 0; i < numqwords; i++)
   {
     aBuf[ (i*2)   ] = IN32(aBaseAddr + XTE_PFIFO_RX_DATA_OFFSET);
     aBuf[ (i*2)+1 ] = IN32(aBaseAddr + XTE_PFIFO_RX_DATA_OFFSET + 4);
   }
 
   /* If there was a non qword sized read */
-  if( xtrabytes != 0 ) 
+  if( xtrabytes != 0 )
   {
     uint32_t lastdwordMS = IN32(aBaseAddr + XTE_PFIFO_RX_DATA_OFFSET);
     uint32_t lastdwordLS = IN32(aBaseAddr + XTE_PFIFO_RX_DATA_OFFSET + 4);
@@ -236,17 +236,17 @@ void xilTemacStart(struct ifnet *ifp)
 
     /* Reset plb temac */
     OUT32(base + XTE_DSR_OFFSET, XTE_DSR_RESET_MASK);
-    /* Don't have usleep on rtems 4.6 
+    /* Don't have usleep on rtems 4.6
     usleep(1);
     */
     /* @ fastest ppc clock of 500 MHz = 2ns clk */
     uint32_t i = 0;
     for( i = 0; i < 1 * 500; i++) {
     }
-      
+
     /* Reset hard temac */
     OUT32(base + XTE_CR_OFFSET, XTE_CR_HTRST_MASK);
-    /* Don't have usleep on rtems 4.6 
+    /* Don't have usleep on rtems 4.6
     usleep(4);
     */
     for( i = 0; i < 4 * 500; i++) {
@@ -291,7 +291,7 @@ void xilTemacStart(struct ifnet *ifp)
     rtems_status_code   sc;
     extern rtems_isr xilTemacIsr( rtems_vector_number aVector );
     sc = opb_intc_set_vector( xilTemacIsr, xilTemac->iIsrVector, &xilTemac->iOldHandler );
-    if( sc != RTEMS_SUCCESSFUL ) 
+    if( sc != RTEMS_SUCCESSFUL )
     {
       xilTemac->iOldHandler = 0;
       printk("%s: Could not set interrupt vector for interface '%s' opb_intc_set_vector ret: %d\n", DRIVER_PREFIX, xilTemac->iUnitName, sc );
@@ -351,7 +351,7 @@ void xilTemacStart(struct ifnet *ifp)
     printk("%s: xiltemacStart, ipier: %08x\n",DRIVER_PREFIX, ipier);
 
     /* Enable device global interrutps */
-    OUT32(base + XTE_DGIE_OFFSET, XTE_DGIE_ENABLE_MASK); 
+    OUT32(base + XTE_DGIE_OFFSET, XTE_DGIE_ENABLE_MASK);
     ifp->if_flags |= IFF_RUNNING;
   }
 }
@@ -362,7 +362,7 @@ void xilTemacInit( void *voidptr )
 
 void xilTemacReset(struct ifnet *ifp)
 {
-   xilTemacStop( ifp ); 
+   xilTemacStop( ifp );
    xilTemacStart( ifp );
 }
 
@@ -405,7 +405,7 @@ void xilTemacPrintStats( struct ifnet *ifp )
    printf("%s:Rx Rej Length Fifo Full: %lu\n", DRIVER_PREFIX, xilTemac->iStats.iRxRejectedLengthFifoFull);
    printf("%s:        Rx Stray Events: %lu\n", DRIVER_PREFIX, xilTemac->iStats.iRxStrayEvents);
    printf("%s:         Rx Max Drained: %lu\n", DRIVER_PREFIX, xilTemac->iStats.iRxMaxDrained);
-   printf("%s:          Tx Interrupts: %lu\n", DRIVER_PREFIX, xilTemac->iStats.iTxInterrupts); 
+   printf("%s:          Tx Interrupts: %lu\n", DRIVER_PREFIX, xilTemac->iStats.iTxInterrupts);
    printf("%s:         Tx Max Drained: %lu\n", DRIVER_PREFIX, xilTemac->iStats.iTxMaxDrained);
 
    printf("\n");
@@ -423,7 +423,7 @@ void xilTemacIsrSingle(struct XilTemac* xilTemac)
     /*assert(0);*/
   } else {
     /* Handle all error conditions first */
-    if( disr & (XTE_DXR_DPTO_MASK | XTE_DXR_TERR_MASK | 
+    if( disr & (XTE_DXR_DPTO_MASK | XTE_DXR_TERR_MASK |
                 XTE_DXR_RECV_FIFO_MASK | XTE_DXR_SEND_FIFO_MASK) ) {
       printk("%s: Fatal Bus error, disr: %08x\n", DRIVER_PREFIX, disr);
       /*assert(0);*/
@@ -443,11 +443,11 @@ void xilTemacIsrSingle(struct XilTemac* xilTemac)
       }
 
       if(pending & XTE_IPXR_RECV_DONE_MASK) {
-        /* We've received a packet 
+        /* We've received a packet
            - inc stats
            - disable rx interrupt
-           - signal rx thread to empty out fifo 
-             (rx thread must renable interrupt) 
+           - signal rx thread to empty out fifo
+             (rx thread must renable interrupt)
         */
         xilTemac->iStats.iRxInterrupts++;
 
@@ -458,22 +458,22 @@ void xilTemacIsrSingle(struct XilTemac* xilTemac)
       if(pending & XTE_IPXR_XMIT_DONE_MASK) {
         /* We've transmitted a packet.  This interrupt is only ever enabled in
            the ipier if the tx thread didn't have enough space in the data fifo
-           or the tplr fifo.  If that's the case, we: 
+           or the tplr fifo.  If that's the case, we:
            - inc stats
            - disable tx interrupt
            - signal tx thread that a transmit has completed and thus there is now
-             room to send again. 
+             room to send again.
         */
         xilTemac->iStats.iTxInterrupts++;
 
         newipier &= ~XTE_IPXR_XMIT_DONE_MASK;
 
-        rtems_event_send(gXilTxThread, xilTemac->iIoEvent);  
+        rtems_event_send(gXilTxThread, xilTemac->iIoEvent);
       }
       if(pending & XTE_IPXR_RECV_DROPPED_MASK) {
         /* A packet was dropped (because it was invalid, or receiving it
-           have overflowed one of the rx fifo's).  
-           - Increment stats. 
+           have overflowed one of the rx fifo's).
+           - Increment stats.
            - Clear interrupt condition.
         */
         uint32_t toggle = 0;
@@ -493,7 +493,7 @@ void xilTemacIsrSingle(struct XilTemac* xilTemac)
         OUT32(base + XTE_IPISR_OFFSET, toggle);
       }
       if(pending & XTE_IPXR_AUTO_NEG_MASK) {
-        printk("%s: Autonegotiation finished\n", DRIVER_PREFIX); 
+        printk("%s: Autonegotiation finished\n", DRIVER_PREFIX);
         OUT32(base + XTE_IPISR_OFFSET, XTE_IPXR_AUTO_NEG_MASK);
       }
       if(newipier != ipier) {
@@ -502,7 +502,7 @@ void xilTemacIsrSingle(struct XilTemac* xilTemac)
     }
   }
 }
-  
+
 #if PPC_HAS_CLASSIC_EXCEPTIONS
 rtems_isr xilTemacIsr( rtems_vector_number aVector )
 {
@@ -549,7 +549,7 @@ int xilTemacIoctl(struct ifnet* ifp, ioctl_command_t   aCommand, caddr_t aData)
 {
   struct XilTemac* xilTemac = ifp->if_softc;
   int32_t error = 0;
-  
+
   switch(aCommand) {
     case SIOCGIFADDR:
     case SIOCSIFADDR:
@@ -557,7 +557,7 @@ int xilTemacIoctl(struct ifnet* ifp, ioctl_command_t   aCommand, caddr_t aData)
       break;
 
     case SIOCSIFFLAGS:
-      switch(ifp->if_flags & (IFF_UP | IFF_RUNNING)) 
+      switch(ifp->if_flags & (IFF_UP | IFF_RUNNING))
       {
         case IFF_RUNNING:
           xilTemacStop(ifp);
@@ -579,12 +579,12 @@ int xilTemacIoctl(struct ifnet* ifp, ioctl_command_t   aCommand, caddr_t aData)
     case SIOCADDMULTI:
     case SIOCDELMULTI: {
         struct ifreq* ifr = (struct ifreq*) aData;
-        error = ((aCommand == SIOCADDMULTI) ?  
-                 ( ether_addmulti(ifr, &(xilTemac->iArpcom)) ) : 
-                 ( ether_delmulti(ifr, &(xilTemac->iArpcom))) 
+        error = ((aCommand == SIOCADDMULTI) ?
+                 ( ether_addmulti(ifr, &(xilTemac->iArpcom)) ) :
+                 ( ether_delmulti(ifr, &(xilTemac->iArpcom)))
            );
         /* ENETRESET indicates that driver should update its multicast filters */
-        if(error == ENETRESET) 
+        if(error == ENETRESET)
         {
             error = xilTemacSetMulticastFilter( ifp );
         }
@@ -601,7 +601,7 @@ int xilTemacIoctl(struct ifnet* ifp, ioctl_command_t   aCommand, caddr_t aData)
   }
   return error;
 }
-  
+
 void xilTemacSend(struct ifnet* ifp)
 {
   struct XilTemac* xilTemac = ifp->if_softc;
@@ -633,14 +633,14 @@ void xilTemacSendPacket(struct ifnet *ifp, struct mbuf* aMbuf)
     uint32_t i = 0;
     printk("MBUF: 0x%08x : ", (int32_t) n->m_data);
     for (i=0;i<n->m_len;i+=2) {
-      printk("%02x%02x ", mtod(n, unsigned char*)[i], mtod(n, unsigned char*)[i+1]); 
+      printk("%02x%02x ", mtod(n, unsigned char*)[i], mtod(n, unsigned char*)[i+1]);
     }
     printk("\n");
 #endif
 
     if( n->m_len > 0 ) {
-      memcpy( &gTxBuf[ len ], (char *)n->m_data, n->m_len); 
-      len += n->m_len; 
+      memcpy( &gTxBuf[ len ], (char *)n->m_data, n->m_len);
+      len += n->m_len;
     }
     if( (n = n->m_next) == 0) {
       break;
@@ -664,7 +664,7 @@ void xilTemacTxThreadSingle(struct ifnet* ifp)
   struct XilTemac* xilTemac = ifp->if_softc;
   struct mbuf*     m;
   uint32_t base = xilTemac->iAddr;
-  
+
 #ifdef DEBUG
   printk("%s: tx send packet, interface '%s'\n", DRIVER_PREFIX, xilTemac->iUnitName );
 #endif
@@ -719,7 +719,7 @@ void xilTemacTxThread( void *ignore )
 
   for(;;) {
     /* Wait for:
-       - notification from stack of packet to send OR 
+       - notification from stack of packet to send OR
        - notification from interrupt handler that there is space available to
          send already queued packets
     */
@@ -741,7 +741,7 @@ void xilTemacTxThread( void *ignore )
           }
 
         } else {
-          printk("%s: xilTemacTxThread: event received for device: %s, but device not active\n", 
+          printk("%s: xilTemacTxThread: event received for device: %s, but device not active\n",
             DRIVER_PREFIX, xilTemac->iUnitName);
           assert(0);
         }
@@ -800,7 +800,7 @@ void xilTemacRxThreadSingle(struct ifnet* ifp)
      * there's no more packets, this will turn it off.
      */
     OUT32(base + XTE_IPISR_OFFSET, XTE_IPXR_RECV_DONE_MASK);
-  } 
+  }
 
   /* End) All Rx packets serviced, renable rx interrupt */
   uint32_t ipier = IN32(base + XTE_IPIER_OFFSET);
@@ -821,14 +821,14 @@ void xilTemacRxThreadSingle(struct ifnet* ifp)
    * bad happens, as long as we don't read from the rx fifo's if nothing is
    * there.  It is just not as efficient as possible (rx thread being evented
    * pointlessly) and a bit disconcerting about how it's ocurring.
-   * The best way to reproduce this is to have two clients run: 
-   * $ ping <host> -f -s 65507 
+   * The best way to reproduce this is to have two clients run:
+   * $ ping <host> -f -s 65507
    * This flood pings the device from two clients with the maximum size ping
    * packet.  It absolutely hammers the device under test.  Eventually, (if
    * you leave it running overnight for instance), you'll get a couple of these
    * stray rx events. */
   if(npkts == 0) {
-    /*printk("%s: RxThreadSingle: fatal error: event received, but no packets available\n", DRIVER_PREFIX); 
+    /*printk("%s: RxThreadSingle: fatal error: event received, but no packets available\n", DRIVER_PREFIX);
     assert(0); */
     xilTemac->iStats.iRxStrayEvents++;
   }
@@ -846,9 +846,9 @@ void xilTemacRxThread( void *ignore )
 #endif
 
   for(;;) {
-    rtems_bsdnet_event_receive( RTEMS_ALL_EVENTS, 
+    rtems_bsdnet_event_receive( RTEMS_ALL_EVENTS,
                                 RTEMS_WAIT | RTEMS_EVENT_ANY,
-                                RTEMS_NO_TIMEOUT, 
+                                RTEMS_NO_TIMEOUT,
                                 &events);
 
 #ifdef DEBUG
@@ -884,7 +884,7 @@ int32_t xilTemac_driver_attach(struct rtems_bsdnet_ifconfig* aBsdConfig, int aDu
    struct XilTemac* xilTemac;
 
    unit = rtems_bsdnet_parse_driver_name(aBsdConfig, &unitName);
-   if(unit < 0 ) 
+   if(unit < 0 )
    {
       printk("%s: Interface Unit number < 0\n", DRIVER_PREFIX );
       return 0;
@@ -896,7 +896,7 @@ int32_t xilTemac_driver_attach(struct rtems_bsdnet_ifconfig* aBsdConfig, int aDu
       return 0;
    }
 
-   if( aBsdConfig->hardware_address == NULL ) 
+   if( aBsdConfig->hardware_address == NULL )
    {
       printk("%s: No MAC address given for interface '%s'\n", DRIVER_PREFIX, unitName );
       return 0;
@@ -917,11 +917,11 @@ int32_t xilTemac_driver_attach(struct rtems_bsdnet_ifconfig* aBsdConfig, int aDu
 
    memcpy( xilTemac->iArpcom.ac_enaddr, aBsdConfig->hardware_address, ETHER_ADDR_LEN);
 
-   if( aBsdConfig->mtu ) 
+   if( aBsdConfig->mtu )
    {
       mtu = aBsdConfig->mtu;
-   } 
-   else 
+   }
+   else
    {
       mtu = ETHERMTU;
    }
@@ -937,7 +937,7 @@ int32_t xilTemac_driver_attach(struct rtems_bsdnet_ifconfig* aBsdConfig, int aDu
 
    ifp->if_flags  =  IFF_BROADCAST | IFF_SIMPLEX | IFF_MULTICAST;
 
-   if(ifp->if_snd.ifq_maxlen == 0) 
+   if(ifp->if_snd.ifq_maxlen == 0)
    {
       ifp->if_snd.ifq_maxlen = ifqmaxlen;
    }
@@ -946,7 +946,7 @@ int32_t xilTemac_driver_attach(struct rtems_bsdnet_ifconfig* aBsdConfig, int aDu
    ether_ifattach(ifp);
 
    /* create shared rx & tx threads */
-   if( (gXilRxThread == 0) && (gXilTxThread == 0) ) 
+   if( (gXilRxThread == 0) && (gXilTxThread == 0) )
    {
       printk("%s: Creating shared RX/TX threads\n", DRIVER_PREFIX );
       gXilRxThread = rtems_bsdnet_newproc("xerx", 4096, xilTemacRxThread, NULL );
@@ -954,7 +954,7 @@ int32_t xilTemac_driver_attach(struct rtems_bsdnet_ifconfig* aBsdConfig, int aDu
    }
 
    printk("%s: Initializing driver for '%s'\n", DRIVER_PREFIX, xilTemac->iUnitName );
-   
+
    printk("%s: base address 0x%08X, intnum 0x%02X, \n",
           DRIVER_PREFIX,
           aBsdConfig->bpar,

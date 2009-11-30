@@ -50,7 +50,7 @@ void bsp_get_work_area(
    *  you are allocating the Work Area in a new BSP.
    */
   #ifdef BSP_GET_WORK_AREA_DEBUG
-    { 
+    {
       void *sp = __builtin_frame_address(0);
       void *end = *work_area_start + *work_area_size;
       printk(

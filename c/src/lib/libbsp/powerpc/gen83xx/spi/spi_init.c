@@ -104,13 +104,13 @@ static rtems_status_code bsp_spi_sel_addr
    * GPIO1[24] is SPI_A0
    * GPIO1[25] is SPI_A1
    * GPIO1[26] is SPI_A2
-   * set pins to address 
+   * set pins to address
    */
-  mpc83xx.gpio[0].gpdat = 
+  mpc83xx.gpio[0].gpdat =
     (mpc83xx.gpio[0].gpdat & ~(0x7  << (31-26)))
     |                         (addr << (31-26));
   /*
-   * GPIO1[27] is high-active strobe 
+   * GPIO1[27] is high-active strobe
    */
   mpc83xx.gpio[0].gpdat |= (1 << (31- 27));
 
@@ -154,7 +154,7 @@ static rtems_status_code bsp_spi_send_start_dummy
 #elif defined( HSC_CM01)
 
   /*
-   * GPIO1[27] is high-active strobe 
+   * GPIO1[27] is high-active strobe
    * set it to inactive/ low
    */
   mpc83xx.gpio[0].gpdat &= ~(0x1 << (31-27));
@@ -204,7 +204,7 @@ static rtems_status_code bsp_spi_send_stop
 
   /*
    * deselect device
-   * GPIO1[27] is high-active strobe 
+   * GPIO1[27] is high-active strobe
    */
   mpc83xx.gpio[0].gpdat &= ~(1 << (31- 27));
 
@@ -351,7 +351,7 @@ rtems_status_code bsp_register_spi
    * GPIO1[24] is SPI_A0
    * GPIO1[25] is SPI_A1
    * GPIO1[26] is SPI_A2
-   * GPIO1[27] is high-active strobe 
+   * GPIO1[27] is high-active strobe
    * set pins to be output, low
    */
   mpc83xx.gpio[0].gpdat &= ~(0xf << (31-27));

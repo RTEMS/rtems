@@ -19,14 +19,14 @@
  *     (Copyright : NDA item)
  *  2) The implementation of picPrioTable[] is an original work by the
  *     author to optimize the software IRQ priority scheduling because
- *     Discovery controller does not provide H/W IRQ priority schedule. 
+ *     Discovery controller does not provide H/W IRQ priority schedule.
  *     It ensures the fastest/faster interrupt service to the
  *     highest/higher priority IRQ, if pendig.
  *  3) _CPU_MSR_SET() needs RTEMS_COMPILER_MEMORY_BARRIER()
- * 
+ *
  */
 
-#include <stdio.h>  
+#include <stdio.h>
 #include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -58,7 +58,7 @@ static unsigned int BSP_irq_prio_mask_tbl[3][BSP_PIC_IRQ_NUMBER];
 
 /*
  * location used to store initial tables used for interrupt
- * management.BSP copy of the configuration 
+ * management.BSP copy of the configuration
  */
 static rtems_irq_global_settings	BSP_config;
 static rtems_irq_connect_data*		rtems_hdl_tbl;
@@ -72,13 +72,13 @@ void (*default_rtems_hdl)(rtems_irq_hdl_param) = (void(*)(rtems_irq_hdl_param)) 
 
 static volatile unsigned  *BSP_irqMask_reg[3];
 static volatile unsigned  *BSP_irqCause_reg[3];
-static volatile unsigned  BSP_irqMask_cache[3]={0,0,0}; 
+static volatile unsigned  BSP_irqMask_cache[3]={0,0,0};
 
 static int picPrioTblPtr=0;
 static unsigned int GPPIrqInTbl=0;
 static unsigned long long MainIrqInTbl=0;
 
-/* 
+/*
  * The software developers are forbidden to setup picPrioTable[],
  * as it is a powerful engine for the BSP to find the pending
  * highest priority IRQ at run time.  It ensures the fastest/faster
@@ -89,7 +89,7 @@ static unsigned long long MainIrqInTbl=0;
  * while the BSP_enable_irq_at_pic(), and BSP_disable_irq_at_pic()
  * commands are invoked.
  *
- * The picPrioTable[96] lists the enabled CPU main and GPP external interrupt 
+ * The picPrioTable[96] lists the enabled CPU main and GPP external interrupt
  * numbers [0 (lowest)- 95 (highest)] starting from the highest priority
  * one to the lowest priority one. The highest priority interrupt is
  * located at picPrioTable[0], and the lowest priority interrupt is located
@@ -99,8 +99,8 @@ static unsigned long long MainIrqInTbl=0;
  */
 #define DynamicIsrTable
 #ifdef DynamicIsrTable
-/* BitNums for Main Interrupt Lo/High Cause, -1 means invalid bit */ 
-static unsigned int picPrioTable[BSP_PIC_IRQ_NUMBER]={ 
+/* BitNums for Main Interrupt Lo/High Cause, -1 means invalid bit */
+static unsigned int picPrioTable[BSP_PIC_IRQ_NUMBER]={
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -112,7 +112,7 @@ static unsigned int picPrioTable[BSP_PIC_IRQ_NUMBER]={
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
      -1, -1, -1, -1, -1, -1 };
 #else
-static unsigned int picPrioTable[BSP_PIC_IRQ_NUMBER]={ 
+static unsigned int picPrioTable[BSP_PIC_IRQ_NUMBER]={
      80, 84, 76, 77, 32, -1, -1, -1, -1, -1,
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -148,7 +148,7 @@ static inline int is_processor_irq(const rtems_irq_number irqLine)
 /*
  * ------------------------ RTEMS Irq helper functions ----------------
  */
- 
+
 /*
  * Caution : this function assumes the variable "BSP_config"
  * is already set and that the tables it contains are still valid
@@ -174,38 +174,38 @@ static void compute_pic_masks_from_prio(void)
         irq_prio_mask =0;
         isGppMain =1;
         break;
-      default : 
+      default :
         isGppMain =0;
         irq_prio_mask = (unsigned long long) (1LLU << i);
 	break;
     }
-    if ( isGppMain) continue; 
+    if ( isGppMain) continue;
     for (j = 0; j <BSP_MAIN_IRQ_NUMBER; j++) {
         /*
          * Mask interrupts at PIC level that have a lower priority
-         * or <Till Straumann> a equal priority. 
+         * or <Till Straumann> a equal priority.
          */
         if (BSP_config.irqPrioTbl [i] >= BSP_config.irqPrioTbl [j])
 	   irq_prio_mask |= (unsigned long long)(1LLU << j);
     }
-    
+
 
     BSP_irq_prio_mask_tbl[0][i] = irq_prio_mask & 0xffffffff;
     BSP_irq_prio_mask_tbl[1][i] = (irq_prio_mask>>32) & 0xffffffff;
 #if 0
     printk("irq_mask_prio_tbl[%d]:0x%8x%8x\n",i,BSP_irq_prio_mask_tbl[1][i],
 	   BSP_irq_prio_mask_tbl[0][i]);
-#endif 
+#endif
 
     BSP_irq_prio_mask_tbl[2][i] = 1<<i;
     /* Compute for the GPP priority interrupt mask */
-    for (j=BSP_GPP_IRQ_LOWEST_OFFSET; j <BSP_PROCESSOR_IRQ_LOWEST_OFFSET; j++) {      
+    for (j=BSP_GPP_IRQ_LOWEST_OFFSET; j <BSP_PROCESSOR_IRQ_LOWEST_OFFSET; j++) {
       if (BSP_config.irqPrioTbl [i] >= BSP_config.irqPrioTbl [j])
-	   BSP_irq_prio_mask_tbl[2][i] |= 1 << (j-BSP_GPP_IRQ_LOWEST_OFFSET); 
+	   BSP_irq_prio_mask_tbl[2][i] |= 1 << (j-BSP_GPP_IRQ_LOWEST_OFFSET);
     }
 #if 0
     printk("GPPirq_mask_prio_tbl[%d]:0x%8x\n",i,BSP_irq_prio_mask_tbl[2][i]);
-#endif 
+#endif
   }
 }
 
@@ -217,7 +217,7 @@ static void UpdateMainIrqTbl(int irqNum)
     case BSP_MAIN_GPP7_0_IRQ:
     case BSP_MAIN_GPP15_8_IRQ:
     case BSP_MAIN_GPP23_16_IRQ:
-    case BSP_MAIN_GPP31_24_IRQ:  
+    case BSP_MAIN_GPP31_24_IRQ:
       return;  /* Do nothing, let GPP take care of it */
       break;
   }
@@ -226,11 +226,11 @@ static void UpdateMainIrqTbl(int irqNum)
 #endif
 
   /* If entry not in table*/
-  if ( ((irqNum<BSP_GPP_IRQ_LOWEST_OFFSET) && 
+  if ( ((irqNum<BSP_GPP_IRQ_LOWEST_OFFSET) &&
         (!((unsigned long long)(1LLU << irqNum) & MainIrqInTbl))) ||
-       ((irqNum>BSP_MICH_IRQ_MAX_OFFSET) && 
+       ((irqNum>BSP_MICH_IRQ_MAX_OFFSET) &&
         (!(( 1 << (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET)) & GPPIrqInTbl))))
-  { 
+  {
       while ( picPrioTable[i]!=-1) {
         if (BSP_config.irqPrioTbl[irqNum]>BSP_config.irqPrioTbl[picPrioTable[i]]) {
           /* all other lower priority entries shifted right */
@@ -246,15 +246,15 @@ static void UpdateMainIrqTbl(int irqNum)
      if (!shifted) picPrioTable[picPrioTblPtr] =irqNum;
 
      if (irqNum >BSP_MICH_IRQ_MAX_OFFSET)
-        GPPIrqInTbl |= (1<< (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET)); 
-     else      
+        GPPIrqInTbl |= (1<< (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET));
+     else
         MainIrqInTbl |= (unsigned long long)(1LLU << irqNum);
      picPrioTblPtr++;
   }
 #ifdef SHOW_MORE_INIT_SETTINGS
   val2 = (MainIrqInTbl>>32) & 0xffffffff;
   val1 = MainIrqInTbl&0xffffffff;
-  printk("irqNum %d, MainIrqInTbl 0x%x%x\n", irqNum, val2, val1); 
+  printk("irqNum %d, MainIrqInTbl 0x%x%x\n", irqNum, val2, val1);
   BSP_printPicIsrTbl();
 #endif
 
@@ -269,13 +269,13 @@ static void CleanMainIrqTbl(int irqNum)
     case BSP_MAIN_GPP7_0_IRQ:
     case BSP_MAIN_GPP15_8_IRQ:
     case BSP_MAIN_GPP23_16_IRQ:
-    case BSP_MAIN_GPP31_24_IRQ: 
+    case BSP_MAIN_GPP31_24_IRQ:
       return;  /* Do nothing, let GPP take care of it */
-      break;  
+      break;
   }
-  if ( ((irqNum<BSP_GPP_IRQ_LOWEST_OFFSET) && 
+  if ( ((irqNum<BSP_GPP_IRQ_LOWEST_OFFSET) &&
         ((unsigned long long)(1LLU << irqNum) & MainIrqInTbl)) ||
-       ((irqNum>BSP_MICH_IRQ_MAX_OFFSET) && 
+       ((irqNum>BSP_MICH_IRQ_MAX_OFFSET) &&
         (( 1 << (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET)) & GPPIrqInTbl)))
   { /* If entry in table*/
      for (i=0; i<64; i++) {
@@ -285,8 +285,8 @@ static void CleanMainIrqTbl(int irqNum)
               picPrioTable[j]=picPrioTable[j+1];
           }
           if (irqNum >BSP_MICH_IRQ_MAX_OFFSET)
-            GPPIrqInTbl &= ~(1<< (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET)); 
-          else      
+            GPPIrqInTbl &= ~(1<< (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET));
+          else
             MainIrqInTbl &= ~(1LLU << irqNum);
           picPrioTblPtr--;
           break;
@@ -306,7 +306,7 @@ void BSP_enable_irq_at_pic(const rtems_irq_number irqNum)
   bitNum = (((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET)%32;
   regNum = (((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET)>>5;
 
-  rtems_interrupt_disable(level); 
+  rtems_interrupt_disable(level);
 
 #ifdef DynamicIsrTable
   UpdateMainIrqTbl((int) irqNum);
@@ -336,7 +336,7 @@ int BSP_disable_irq_at_pic(const rtems_irq_number irqNum)
   bitNum = (((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET)%32;
   regNum = (((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET)>>5;
 
-  rtems_interrupt_disable(level); 
+  rtems_interrupt_disable(level);
 
 #ifdef DynamicIsrTable
   CleanMainIrqTbl((int) irqNum);
@@ -360,7 +360,7 @@ void BSP_disable_pic_irq(const rtems_irq_number irqNum)
 }
 
 /* Use shared/irq : 2008 */
-int BSP_setup_the_pic(rtems_irq_global_settings* config)  
+int BSP_setup_the_pic(rtems_irq_global_settings* config)
 {
     int i;
 
@@ -384,13 +384,13 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
     out_le32(GT_CommUnitArb_Ctrl, (in_le32(GT_CommUnitArb_Ctrl)| (1<<10)));
 
 #if 0
-    printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n", 
+    printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n",
 	   in_le32(BSP_irqMask_reg[0]),
 	   in_le32(BSP_irqCause_reg[0]));
-    printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n", 
+    printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n",
 	   in_le32(BSP_irqMask_reg[1]),
 	   in_le32(BSP_irqCause_reg[1]));
-    printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n", 
+    printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n",
 	   in_le32(BSP_irqMask_reg[2]),
 	   in_le32(BSP_irqCause_reg[2]));
 #endif
@@ -399,24 +399,24 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
     for (i=0; i<3; i++) {
       out_le32(BSP_irqCause_reg[i], 0);
       out_le32(BSP_irqMask_reg[i], 0);
-    }         
+    }
     in_le32(BSP_irqMask_reg[2]);
     compute_pic_masks_from_prio();
 
 #if 0
-    printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n", 
+    printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n",
 	   in_le32(BSP_irqMask_reg[0]),
 	   in_le32(BSP_irqCause_reg[0]));
-    printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n", 
+    printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n",
 	   in_le32(BSP_irqMask_reg[1]),
 	   in_le32(BSP_irqCause_reg[1]));
-    printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n", 
+    printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n",
 	   in_le32(BSP_irqMask_reg[2]),
 	   in_le32(BSP_irqCause_reg[2]));
 #endif
 
     /*
-     * 
+     *
      */
     for (i=BSP_MICL_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET ; i++) {
       if ( BSP_config.irqHdlTbl[i].hdl != BSP_config.defaultEntry.hdl) {
@@ -428,9 +428,9 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
 	BSP_disable_irq_at_pic(i);
       }
     }
-    for (i= BSP_MAIN_GPP7_0_IRQ; i < BSP_MAIN_GPP31_24_IRQ; i++) 
+    for (i= BSP_MAIN_GPP7_0_IRQ; i < BSP_MAIN_GPP31_24_IRQ; i++)
       BSP_enable_irq_at_pic(i);
-    
+
     return(1);
 }
 
@@ -446,14 +446,14 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 
   if (excNum == ASM_DEC_VECTOR) {
       bsp_irq_dispatch_list( rtems_hdl_tbl, BSP_DECREMENTER, default_rtems_hdl);
-      return 0;   
+      return 0;
   }
 
   for (j=0; j<3; j++ ) oldMask[j] = BSP_irqMask_cache[j];
   for (j=0; j<3; j++) irqCause[j] = in_le32(BSP_irqCause_reg[j]) & in_le32(BSP_irqMask_reg[j]);
 
   while (((irq = picPrioTable[i++])!=-1)&& (loop++ < MAX_IRQ_LOOP))
-  {    
+  {
     if (irqCause[group= irq/32] & ( 1<<(irq % 32))) {
       for (j=0; j<3; j++)
         BSP_irqMask_cache[j] &= (~ BSP_irq_prio_mask_tbl[j][irq]);
@@ -466,7 +466,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
       bsp_irq_dispatch_list( rtems_hdl_tbl, irq, default_rtems_hdl);
 
       for (j=0; j<3; j++ ) BSP_irqMask_cache[j] = oldMask[j];
- 
+
       out_le32(BSP_irqMask_reg[0], oldMask[0]);
       out_le32(BSP_irqMask_reg[1], oldMask[1]);
       out_le32(BSP_irqMask_reg[2], oldMask[2]);

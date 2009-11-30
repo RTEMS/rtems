@@ -36,7 +36,7 @@
  *  Further changes to derive for the PPC405CR/GP/GPr/EX/EXr
  *  by Michael Hamel ADInstruments Ltd 2008
  *
- * 
+ *
  *  Id: dlentry.S,v 1.2 2000/08/02 16:30:57 joel Exp
  */
 
@@ -44,7 +44,7 @@
 #warning The call is "void boot_card(const char* cmdline);"
 #warning You need to pass a NULL.
 #warning Please check and remove these warnings.
-	
+
 #include <rtems/asm.h>
 
 /*
@@ -82,7 +82,7 @@
 			PUBLIC_VAR (start)
 			PUBLIC_VAR (download_entry)
 			PUBLIC_VAR (__rtems_entry_point)
-		
+
 SYM(start):
 SYM(download_entry):
 SYM(__rtems_entry_point):
@@ -95,7 +95,7 @@ SYM(__rtems_entry_point):
 /*---------------------------------------------------------------------------
  * Parameters from linker
  *--------------------------------------------------------------------------*/
- 
+
 base_addr:
 toc_pointer:
 		.long	s.got
@@ -125,10 +125,10 @@ text_length:
 
 			/* Initialise procesor registers generally */
 			bl		init405
-			
+
 			/* Clear .bss and .sbss */
 			bl		bssclr
-			
+
 			/*-------------------------------------------------------------------
 			 * C_setup.
 			 *------------------------------------------------------------------*/
@@ -141,9 +141,9 @@ text_length:
 			stw		r3, 12(r1)
 
 			bl		__eabi				/* Initialise EABI: sets up r2 & r13 */
-			
+
 			li		r3, 0			/* command line */
-			
+
 			b       SYM (boot_card) 	 /* call the first C routine */
 
 /*---------------------------------------------------------------------------
@@ -175,11 +175,11 @@ clear_sbss:	stwu	r0,4(r2)
  * Generic 405 register setup
  *--------------------------------------------------------------------------*/
 init405:
-			li		r0, 0	
+			li		r0, 0
 			mtmsr	r0
 			mticcr	r0
 			mtdccr	r0
-						
+
 			li		r3,0x7FFC	# 405EX-specific
 			mtsgr	r3			# Clear guarded mode on all storage except PCIe region
 
@@ -201,13 +201,13 @@ dcloop:		dccci	0,r3		# invalidate line
 			mtdcwr	r0			# Select write-back caching
 			lis		r3,0xC000	# Enable 0000 0000 to 0FFF FFFF
 			# mtdccr	r3			# Enable data cache
-			
+
 			mtevpr	r0
 			mtesr	r0
 			mtxer	r0
-			
+
 			lwarx   r3,r0,r0		# get some data/set resv bit
-			stwcx.	r3,r0,r0		# store out and clear resv bit	
+			stwcx.	r3,r0,r0		# store out and clear resv bit
 
 			lis		r3,0xDEAD
 			ori		r3,r3,0xBEEF	# Make distintive uninitialised value

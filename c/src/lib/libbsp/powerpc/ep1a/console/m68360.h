@@ -1,20 +1,20 @@
 /*
- *  MOTOROLA MC68360 QUAD INTEGRATED COMMUNICATIONS CONTROLLER (QUICC)  
- *                                                                     
- *                        HARDWARE DECLARATIONS                       
- *                                                                   
- *                                                                  
- *  Submitted By:                                                  
- *                                                                
- *      W. Eric Norum                                            
- *      Saskatchewan Accelerator Laboratory                     
- *      University of Saskatchewan                             
- *      107 North Road                                       
- *      Saskatoon, Saskatchewan, CANADA                    
- *      S7N 5C6                                         
- *                                                   
- *      eric@skatter.usask.ca                      
- *                                            
+ *  MOTOROLA MC68360 QUAD INTEGRATED COMMUNICATIONS CONTROLLER (QUICC)
+ *
+ *                        HARDWARE DECLARATIONS
+ *
+ *
+ *  Submitted By:
+ *
+ *      W. Eric Norum
+ *      Saskatchewan Accelerator Laboratory
+ *      University of Saskatchewan
+ *      107 North Road
+ *      Saskatoon, Saskatchewan, CANADA
+ *      S7N 5C6
+ *
+ *      eric@skatter.usask.ca
+ *
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -759,7 +759,7 @@ typedef struct m360_ {
   volatile uint8_t          _pad14[0xF0-0xD0];
   volatile uint8_t          _pad15[0x100-0xF0];
   volatile uint8_t          _pad16[0x500-0x100];
-  
+
   /*
    * IDMA1 Block
    */
@@ -777,7 +777,7 @@ typedef struct m360_ {
   volatile uint8_t          csr1;
   volatile uint8_t          _pad21;
   volatile uint16_t          _pad22;
-  
+
   /*
    * SDMA Block
    */
@@ -785,7 +785,7 @@ typedef struct m360_ {
   volatile uint8_t          _pad23;
   volatile uint16_t          sdcr;
   volatile uint32_t         sdar;
-  
+
   /*
    * IDMA2 Block
    */
@@ -802,7 +802,7 @@ typedef struct m360_ {
   volatile uint8_t          _pad28;
   volatile uint16_t          _pad29;
   volatile uint32_t         _pad30;
-  
+
   /*
    * CPIC Block
    */
@@ -826,7 +826,7 @@ typedef struct m360_ {
   volatile uint16_t          pcint;
   volatile uint16_t          _pad32;
   volatile uint32_t         _pad33[5];
-  
+
   /*
    * TIMER Block
    */
@@ -854,7 +854,7 @@ typedef struct m360_ {
   volatile uint16_t          ter3;
   volatile uint16_t          ter4;
   volatile uint32_t         _pad36[2];
-  
+
   /*
    * CP Block
    */

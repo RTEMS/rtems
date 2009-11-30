@@ -315,7 +315,7 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 
 			/* round to nearest integer:
 			 *   round(Bus_freq/33000000) = floor( 2*(Bus_freq/33e6) + 1 ) / 2
-			 */ 
+			 */
 			ratio   = epic_freq / 16500000 + 1;
 			ratio >>= 2; /* EICR value is half actual divisor */
 			if ( 0==ratio )

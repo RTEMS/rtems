@@ -31,7 +31,7 @@
 #include <rtems/irq-extension.h>
 
 /*
- * the following definitions specify the indices used 
+ * the following definitions specify the indices used
  * to interface the interrupt handler API
  */
 

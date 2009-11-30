@@ -28,8 +28,8 @@ static void    umoncons_write_polled(int minor, char c);
 static int     umoncons_set_attributes(int minor, const struct termios *t);
 
 /* Pointers to functions for handling the UART. */
-console_fns umoncons_fns = 
-{ 
+console_fns umoncons_fns =
+{
   libchip_serial_default_probe,
   umoncons_first_open,
   umoncons_last_close,
@@ -45,23 +45,23 @@ console_fns umoncons_fns =
 /* Functions called via callbacks (i.e. the ones in uart_fns */
 /*********************************************************************/
 
-/* 
+/*
  * This is called the first time each device is opened. Since
- * the driver is polled, we don't have to do anything. If the driver 
- * were interrupt driven, we'd enable interrupts here. 
+ * the driver is polled, we don't have to do anything. If the driver
+ * were interrupt driven, we'd enable interrupts here.
 */
-static int umoncons_first_open(int major, int minor, void *arg) 
+static int umoncons_first_open(int major, int minor, void *arg)
 {
   return 0;
 }
 
 
-/* 
+/*
  * This is called the last time each device is closed.  Since
- * the driver is polled, we don't have to do anything. If the driver 
- * were interrupt driven, we'd disable interrupts here. 
+ * the driver is polled, we don't have to do anything. If the driver
+ * were interrupt driven, we'd disable interrupts here.
 */
-static int umoncons_last_close(int major, int minor, void *arg) 
+static int umoncons_last_close(int major, int minor, void *arg)
 {
   return 0;
 }
@@ -73,7 +73,7 @@ static int umoncons_last_close(int major, int minor, void *arg)
  * return -1 if there's no data, otherwise return
  * the character in lowest 8 bits of returned int.
 */
-static int umoncons_read(int minor) 
+static int umoncons_read(int minor)
 {
   if ( !mon_gotachar() )
     return -1;
@@ -81,8 +81,8 @@ static int umoncons_read(int minor)
 }
 
 
-/* 
- * Write buffer to LCD 
+/*
+ * Write buffer to LCD
  *
  * return 1 on success, -1 on error
 */
@@ -110,7 +110,7 @@ static void umoncons_write_polled(int minor, char c)
 }
 
 /* This is for setting baud rate, bits, etc. */
-static int umoncons_set_attributes(int minor, const struct termios *t) 
+static int umoncons_set_attributes(int minor, const struct termios *t)
 {
   return 0;
 }
@@ -121,7 +121,7 @@ static int umoncons_set_attributes(int minor, const struct termios *t)
  * functions use them instead.
  */
 /***********************************************************************/
-/* 
+/*
  * Read from UART. This is used in the exit code, and can't
  * rely on interrupts.
 */

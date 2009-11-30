@@ -17,21 +17,21 @@
 | this file contains the startup assembly code                    |
 | it is based on the gen83xx BSP                                  |
 \*===============================================================*/
-/* $Id$ */   
+/* $Id$ */
 
-#include <libcpu/powerpc-utility.h> 
+#include <libcpu/powerpc-utility.h>
 #include <rtems/powerpc/cache.h>
 #include <bsp.h>
 #include <mpc8xx.h>
 
 .extern boot_card
 
-.section ".entry"  
+.section ".entry"
 PUBLIC_VAR (start)
 start:
 
 	/*
-	 * basic CPU setup:	
+	 * basic CPU setup:
 	 * init MSR
 	 */
 	mfmsr	r30
@@ -50,7 +50,7 @@ start:
 start_1:
 	mflr r20
 	LA   r30,start_1
-	sub. r20,r20,r30	
+	sub. r20,r20,r30
 	/*
 	 * execution address offset == 0?
 	 * then do not relocate code and data
@@ -60,51 +60,51 @@ start_1:
 	 * ROM or relocatable startup: copy startup code to SDRAM
 	 */
 	/* get start address of text section in RAM */
-	LA	r29, bsp_section_text_start  
+	LA	r29, bsp_section_text_start
 	/* get start address of text section in ROM (add reloc offset) */
-	add	r30, r20, r29    
+	add	r30, r20, r29
 	/* get size of startup code */
 	LA	r28, end_reloc_startup
 	LA	r31, bsp_section_text_start
 	sub	28,r28,r31
 	/* copy startup code from ROM to RAM location */
-	bl	copy_image      
-	
+	bl	copy_image
+
 	/*
 	 * jump to code copy in  SDRAM
 	 */
 	/* get compile time address of label */
-	LA	r29, copy_rest_of_text 
+	LA	r29, copy_rest_of_text
 	mtlr	r29
 	blr                     /* now further execution RAM */
-copy_rest_of_text:	
+copy_rest_of_text:
 	/*
 	 * ROM or relocatable startup: copy rest of code to SDRAM
 	 */
 	/* get start address of rest of code in RAM */
 	LA	r29, end_reloc_startup
 	/* get start address of text section in ROM (add reloc offset) */
-	add	r30, r20, r29    
+	add	r30, r20, r29
 	/* get size of rest of code */
 	LA	r28, bsp_section_text_start
 	LA	r31, bsp_section_text_size
 	add	r28,r28,r31
 	sub	r28,r28,r29
 	bl	copy_image      /* copy text section from ROM to RAM location */
-	
+
 	/*
 	 * ROM or relocatable startup: copy data to SDRAM
 	 */
 	/* get start address of data section in RAM */
-	LA	r29, bsp_section_data_start 
+	LA	r29, bsp_section_data_start
 	/* get start address of data section in ROM (add reloc offset) */
-	add	r30, r20, r29    
+	add	r30, r20, r29
 	/* get size of RAM image */
-	LA	r28, bsp_section_data_size  
+	LA	r28, bsp_section_data_size
 	/* copy initialized data section from ROM to RAM location */
-	bl	copy_image       
+	bl	copy_image
 
-start_code_in_ram:	
+start_code_in_ram:
 
 	/*
 	 * ROM/RAM startup: clear bss in SDRAM
@@ -117,8 +117,8 @@ start_code_in_ram:
 	 */
 
 	/* Set stack pointer (common for RAM/ROM startup) */
-	LA	r1, bsp_section_text_start  
-        addi    r1, r1, -0x10 /* Set up stack pointer = beginning of text section - 0x10 */     
+	LA	r1, bsp_section_text_start
+        addi    r1, r1, -0x10 /* Set up stack pointer = beginning of text section - 0x10 */
 
 	/* Create NULL */
 	li r0, 0
@@ -139,19 +139,19 @@ start_code_in_ram:
 	 * init some CPU stuff
 	 */
 	bl SYM (_InitTQM8xx)
-	
+
 /* clear arguments and do further init. in C (common for RAM/ROM startup) */
 
         /* Clear cmdline */
         xor r3, r3, r3
 
         bl      SYM (boot_card)  /* Call the first C routine */
-	
+
 twiddle:
 	/* We don't expect to return from boot_card but if we do */
 	/* wait here for watchdog to kick us into hard reset     */
-	b	twiddle          
-						
+	b	twiddle
+
 copy_with_watchdog:
      addi    r5,r5,16
      rlwinm. r5,r5,28,4,31
@@ -200,7 +200,7 @@ copy_image_4word:
 	stw	r21, 4(r29)
 	stw	r22, 8(r29)
 	stw	r23,12(r29)
-	
+
 	addi    r30, r30, 0x10		/* increment source pointer */
 	addi    r29, r29, 0x10		/* increment destination pointer */
 	/*
@@ -208,7 +208,7 @@ copy_image_4word:
 	 */
 	sth     r25,14(r26)
 	sth     r24,14(r26)
-	
+
 	bdnz	copy_image_4word	/* decrement ctr and branch if not 0 */
 
 	cmpwi	r27, 0x00		/* copy image finished ? */
@@ -216,19 +216,19 @@ copy_image_4word:
 	mtctr   r27			/* reload counter for residual bytes */
 copy_image_byte:
 	lswi	r28, r30, 0x01
-	
+
 	stswi   r28, r29, 0x01		/* do byte copy ROM -> RAM */
-	
-	
+
+
 	addi    r30, r30, 0x01		/* increment source pointer */
 	addi    r29, r29, 0x01		/* increment destination pointer */
-	
+
 	bdnz	copy_image_byte		/* decrement ctr and branch if not 0 */
-	
+
 copy_image_end:
 	blr
 
-	
+
 /**
  * @fn int mpc8xx_zero_4( void *dest, size_t n)
  *
@@ -278,7 +278,7 @@ mpc8xx_zero_4_tail:
 	stwx	r0, r3, r8
 	addi	r8, r8, 16
 	bdnz	mpc8xx_zero_4_tail
-	
+
 	/* Return */
 	blr
 

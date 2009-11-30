@@ -81,25 +81,25 @@ static void mpc55xx_clock_initialize( void)
   }
 
   /* Configure eMIOS channel */
-  
+
   /* Set channel in GPIO mode */
   ccr.B.MODE = MPC55XX_EMIOS_MODE_GPIO_INPUT;
   regs->CCR.R = ccr.R;
-  
+
   /* Clear status flags */
   csr.B.OVR = 1;
   csr.B.OVFL = 1;
   csr.B.FLAG = 1;
   regs->CSR.R = csr.R;
-  
+
   /* Set timer period */
   regs->CADR.R = (uint32_t) interval - 1;
-  
+
   /* Set unused registers */
   regs->CBDR.R = 0;
   regs->CCNTR.R = 0;
   regs->ALTCADR.R = 0;
-  
+
   /* Set control register */
   ccr.B.MODE = MPC55XX_EMIOS_MODE_MC_UP_INT_CLK;
   ccr.B.UCPREN = 1;
@@ -132,17 +132,17 @@ static uint32_t mpc55xx_clock_nanoseconds_since_last_tick( void)
   uint64_t clicks = EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CCNTR.R;
   uint64_t clock = bsp_clock_speed;
   uint64_t ns = (clicks * 1000000000) / clock;
-  
+
   return (uint32_t) ns;
 }
- 
+
 #define Clock_driver_support_initialize_hardware() mpc55xx_clock_initialize()
 
 #define Clock_driver_support_install_isr( isr, old_isr) \
   mpc55xx_clock_handler_install()
 
 #define Clock_driver_support_shutdown_hardware() mpc55xx_clock_cleanup()
-  
+
 #define Clock_driver_nanoseconds_since_last_tick \
   mpc55xx_clock_nanoseconds_since_last_tick
 

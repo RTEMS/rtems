@@ -91,7 +91,7 @@ extern "C" {
 #include <mpc8xx/console.h>
 #include <bsp/vectors.h>
 #include <bsp/tqm.h>
-#include <libcpu/powerpc-utility.h> 
+#include <libcpu/powerpc-utility.h>
 
 /*
  * Network driver configuration
@@ -99,25 +99,25 @@ extern "C" {
 struct rtems_bsdnet_ifconfig;
 
 #if BSP_USE_NETWORK_FEC
-extern int rtems_fec_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, 
+extern int rtems_fec_enet_driver_attach (struct rtems_bsdnet_ifconfig *config,
 					 int attaching);
 #define RTEMS_BSP_FEC_NETWORK_DRIVER_NAME	"fec1"
 #define RTEMS_BSP_FEC_NETWORK_DRIVER_ATTACH	rtems_fec_enet_driver_attach
 #endif
 
 #if BSP_USE_NETWORK_SCC
-extern int rtems_scc_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, 
+extern int rtems_scc_enet_driver_attach (struct rtems_bsdnet_ifconfig *config,
 					 int attaching);
 #define RTEMS_BSP_SCC_NETWORK_DRIVER_NAME	"scc1"
 #define RTEMS_BSP_SCC_NETWORK_DRIVER_ATTACH	rtems_scc_enet_driver_attach
 #endif
 
 #if BSP_USE_NETWORK_FEC
-#define RTEMS_BSP_NETWORK_DRIVER_NAME	RTEMS_BSP_FEC_NETWORK_DRIVER_NAME	
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	RTEMS_BSP_FEC_NETWORK_DRIVER_ATTACH	
+#define RTEMS_BSP_NETWORK_DRIVER_NAME	RTEMS_BSP_FEC_NETWORK_DRIVER_NAME
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	RTEMS_BSP_FEC_NETWORK_DRIVER_ATTACH
 #elif BSP_USE_NETWORK_SCC
-#define RTEMS_BSP_NETWORK_DRIVER_NAME	RTEMS_BSP_SCC_NETWORK_DRIVER_NAME	
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	RTEMS_BSP_SCC_NETWORK_DRIVER_ATTACH	
+#define RTEMS_BSP_NETWORK_DRIVER_NAME	RTEMS_BSP_SCC_NETWORK_DRIVER_NAME
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	RTEMS_BSP_SCC_NETWORK_DRIVER_ATTACH
 #endif
 /*
  * We need to decide how much memory will be non-cacheable. This

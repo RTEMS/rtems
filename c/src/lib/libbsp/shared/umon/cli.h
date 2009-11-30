@@ -68,7 +68,7 @@ struct	monCommand {
  *		reason. The docommand() function does not print a message here, it
  *		is assumed that the error message was printed by the local function.
  *	CMD_PARAM_ERROR:
- *		Command line did not parse properly.  Control was passed to a 
+ *		Command line did not parse properly.  Control was passed to a
  *		local command function, but argument syntax caused it to choke.
  *		In this case docommand() will print out the generic CLI syntax error
  *		message.
@@ -96,7 +96,7 @@ struct	monCommand {
 #define CMD_MONRC_DENIED	-6
 
 /* Notes on help text array:
- * The monitor's CLI processor assumes that every command's help text 
+ * The monitor's CLI processor assumes that every command's help text
  * array abides by a few basic rules...
  * First of all, it assumes that every array has AT LEAST two strings.
  * The first string in the array of strings is assumed to be a one-line

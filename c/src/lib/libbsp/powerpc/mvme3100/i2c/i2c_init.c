@@ -2,20 +2,20 @@
 
 /* Register i2c bus driver & devices */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software ('mvme3100' RTEMS BSP) was created by
  *
  *     Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * The 'mvme3100' BSP was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -24,18 +24,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -44,9 +44,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <rtems.h>
 #include <bsp.h>
@@ -92,7 +92,7 @@ int busno, succ = 0;
 		safe_printf("Initializing I2C library failed\n");
 		return -1;
 	}
-	
+
 	/* Register our bus driver */
 	if ( (busno=rtems_libi2c_register_bus(
 					BSP_I2C_BUS0_NAME,

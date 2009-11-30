@@ -71,7 +71,7 @@ __rtems_entry_point:
  */
 	lis	r11,KERNELBASE@h
 /* set up BAT registers for 604 */
-	ori	r11,r11,0x1ffe		
+	ori	r11,r11,0x1ffe
 	li	r8,2			/* R/W access */
 	isync
 	mtspr	DBAT0L,r8		/* N.B. 6xx (not 601) have valid */
@@ -115,7 +115,7 @@ enter_C_code:
 	li   r0, (CPU_STACK_ALIGNMENT-1)
 	andc r1, r9, r0
 	/*
-	 * We are now in a environment that is totally independent from 
+	 * We are now in a environment that is totally independent from
 	 * bootloader setup.
 	 */
     /* pass result of 'save_boot_params' to 'boot_card' in R3 */

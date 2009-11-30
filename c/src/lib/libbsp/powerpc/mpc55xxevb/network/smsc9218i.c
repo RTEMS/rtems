@@ -581,7 +581,7 @@ static void smsc9218i_receive_task(void *arg)
 
     /* Wait for events */
     sc = rtems_bsdnet_event_receive(
-      SMSC9218I_EVENT_RX | SMSC9218I_EVENT_PHY, 
+      SMSC9218I_EVENT_RX | SMSC9218I_EVENT_PHY,
       RTEMS_EVENT_ANY | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events
@@ -650,7 +650,7 @@ static void smsc9218i_receive_task(void *arg)
 
         /* Wait for eDMA events */
         sc = rtems_bsdnet_event_receive(
-          SMSC9218I_EVENT_EDMA | SMSC9218I_EVENT_EDMA_ERROR, 
+          SMSC9218I_EVENT_EDMA | SMSC9218I_EVENT_EDMA_ERROR,
           RTEMS_EVENT_ANY | RTEMS_WAIT,
           RTEMS_NO_TIMEOUT,
           &events
@@ -870,7 +870,7 @@ static struct mbuf *smsc9218i_next_transmit_fragment(
       jc->done = true;
 
       SMSC9218I_PRINTF("tx: inactive\n");
-    } 
+    }
   }
 
   return m;
@@ -1222,7 +1222,7 @@ static void smsc9218i_transmit_task(void *arg)
       SMSC9218I_EVENT_TX
         | SMSC9218I_EVENT_TX_START
         | SMSC9218I_EVENT_EDMA
-        | SMSC9218I_EVENT_EDMA_ERROR, 
+        | SMSC9218I_EVENT_EDMA_ERROR,
       RTEMS_EVENT_ANY | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events
@@ -1471,8 +1471,8 @@ static void smsc9218i_interface_init(void *arg)
     /* Start receive task */
     if (e->receive_task == RTEMS_ID_NONE) {
       e->receive_task = rtems_bsdnet_newproc(
-        "ntrx", 
-        4096, 
+        "ntrx",
+        4096,
         smsc9218i_receive_task,
         e
       );
@@ -1481,8 +1481,8 @@ static void smsc9218i_interface_init(void *arg)
     /* Start transmit task */
     if (e->transmit_task == RTEMS_ID_NONE) {
       e->transmit_task = rtems_bsdnet_newproc(
-        "nttx", 
-        4096, 
+        "nttx",
+        4096,
         smsc9218i_transmit_task,
         e
       );

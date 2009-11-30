@@ -74,7 +74,7 @@ static int  conSetAttr(int minor, const struct termios *);
 typedef struct TtySTblRec_ {
   char          *name;
   rtems_irq_hdl  isr;
-} TtySTblRec, *TtySTbl;               
+} TtySTblRec, *TtySTbl;
 
 static TtySTblRec ttyS[]={
     { "/dev/ttyS0",
@@ -197,7 +197,7 @@ rtems_device_driver console_open(
   rtems_status_code              status;
   static rtems_termios_callbacks cb =
 #if defined(USE_POLLED_IO)
-  { 
+  {
      NULL,                              /* firstOpen */
      NULL,                              /* lastClose */
      NULL,                              /* pollRead */
@@ -208,7 +208,7 @@ rtems_device_driver console_open(
      TERMIOS_POLLED                     /* outputUsesInterrupts */
   };
 #else
-  { 
+  {
      console_first_open,                /* firstOpen */
      console_last_close,                /* lastClose */
 #if ( TERMIOS_OUTPUT_MODE == TERMIOS_TASK_DRIVEN )

@@ -1,6 +1,6 @@
 /* tfs.h:
  *	Header file for TFS transactions, used by both application and monitor.
- * 
+ *
  *	General notice:
  *	This code is part of a boot-monitor package developed as a generic base
  *	platform for embedded system designs.  As such, it is likely to be
@@ -62,8 +62,8 @@
 #define TFS_ULVL2	0x00000400	/* '2'	level 2 */
 #define TFS_ULVL3	0x00000600	/* '3'	level 3 */
 #define TFS_NSTALE	0x00000800	/* File is NOT stale, invisible to user.
-								 * When this bit is clear, the file is 
-								 * considered stale (see notes in tfsadd()). 
+								 * When this bit is clear, the file is
+								 * considered stale (see notes in tfsadd()).
 								 * See notes in tfsclose() for this.
 								 */
 #define TFS_ACTIVE	0x00008000	/* Used to indicate that file is not deleted. */

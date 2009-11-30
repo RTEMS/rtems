@@ -31,13 +31,13 @@
 #define XTE_IPIER_OFFSET 0x00000028  /**< IP interrupt enable */
 #define XTE_DSR_OFFSET   0x00000040  /**< Device software reset (write) */
 
-/** IPIF transmit fifo 
+/** IPIF transmit fifo
  */
 #define XTE_PFIFO_TX_BASE_OFFSET    0x00002000  /**< Packet FIFO Tx channel */
 #define XTE_PFIFO_TX_VACANCY_OFFSET 0x00002004  /**< Packet Fifo Tx Vacancy */
 #define XTE_PFIFO_TX_DATA_OFFSET    0x00002100  /**< IPIF Tx packet fifo port */
 
-/** IPIF receive fifo 
+/** IPIF receive fifo
  */
 #define XTE_PFIFO_RX_BASE_OFFSET    0x00002010  /**< Packet FIFO Rx channel */
 #define XTE_PFIFO_RX_VACANCY_OFFSET 0x00002014  /**< Packet Fifo Rx Vacancy */
@@ -45,7 +45,7 @@
 
 /** IPIF fifo masks
  */
-#define XTE_PFIFO_COUNT_MASK     0x00FFFFFF 
+#define XTE_PFIFO_COUNT_MASK     0x00FFFFFF
 
 /** IPIF transmit and recieve DMA offsets
  */
@@ -332,7 +332,7 @@
 #define XTE_EMIID_MIIMDECADDR_MASK  0x0000FFFF   /**< Address port */
 
 
-struct XilTemacStats 
+struct XilTemacStats
 {
   volatile uint32_t iInterrupts;
 

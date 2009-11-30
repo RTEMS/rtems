@@ -13,8 +13,8 @@
  * For full TWSI protocol description look in Philips Semiconductor
  * TWSI spec.
  *
- * We need it to read out I2C devices used for the MVME5500 
- * (eg. the memory SPD and VPD). 
+ * We need it to read out I2C devices used for the MVME5500
+ * (eg. the memory SPD and VPD).
  *
  */
 #include <libcpu/spr.h>  /*registers.h included here for rtems_bsp_delay()*/
@@ -42,8 +42,8 @@ void GT64260TWSIinit(void)
 
      /* See 24.2.5 : Assume bus speed is 133MHZ
       * Try to be close to the default frequency : 62.5KHZ
-      * value 0x2c: 69.27 KHz TWSI bus clock 
-      */  
+      * value 0x2c: 69.27 KHz TWSI bus clock
+      */
      outl(0x2c, TWSI_BAUDE_RATE);
      rtems_bsp_delay(1000);
 
@@ -54,11 +54,11 @@ void GT64260TWSIinit(void)
 #if TWSI_DEBUG
      printk(")\n");
 #endif
-  }     
+  }
 }
 
 /* return the interrupt flag */
-int GT64260TWSIintFlag(void) 
+int GT64260TWSIintFlag(void)
 {
   unsigned int loop;
 
@@ -70,7 +70,7 @@ int GT64260TWSIintFlag(void)
   return(0);
 }
 
-int GT64260TWSIstop(void) 
+int GT64260TWSIstop(void)
 {
 
 #if TWSI_DEBUG
@@ -97,8 +97,8 @@ int GT64260TWSIstop(void)
 
 int GT64260TWSIstart(void)
 {
-  unsigned int loop;	
-  unsigned int status;	
+  unsigned int loop;
+  unsigned int status;
 
 #if TWSI_DEBUG
   printk("GT64260TWSIstart(");
@@ -113,7 +113,7 @@ int GT64260TWSIstart(void)
   if (GT64260TWSIintFlag()) {
      /* Check for completion of START sequence */
      for (loop = 0; loop<MAX_LOOP; loop++ ) {
-         /* if (start condition transmitted) || 
+         /* if (start condition transmitted) ||
           *    (repeated start condition transmitted )
           */
          if (((status= inl( TWSI_STATUS)) == 8) || (status == 0x10)) {
@@ -130,9 +130,9 @@ int GT64260TWSIstart(void)
   return(-1);
 }
 
-int GT64260TWSIread(unsigned char * pData, int lastByte) 
+int GT64260TWSIread(unsigned char * pData, int lastByte)
 {
-  unsigned int loop;		
+  unsigned int loop;
 
 #if TWSI_DEBUG
   printk("GT64260TWSIread(");
@@ -145,7 +145,7 @@ int GT64260TWSIread(unsigned char * pData, int lastByte)
      for (loop = 0; loop< MAX_LOOP; loop++) {
        /* if Master received read data, acknowledge transmitted */
        if ( (inl( TWSI_STATUS) == 0x50)) {
-	   *pData = (unsigned char) inl( TWSI_DATA); 
+	   *pData = (unsigned char) inl( TWSI_DATA);
    	   rtems_bsp_delay(1500);
 
            /* Clear INTFLAG and set Enable bit only */
@@ -165,16 +165,16 @@ int GT64260TWSIread(unsigned char * pData, int lastByte)
 }
 
 /* do a TWSI write cycle on the TWSI bus*/
-int GT64260TWSIwrite(unsigned char Data) 
+int GT64260TWSIwrite(unsigned char Data)
 {
-  unsigned int loop;		
-  unsigned int status;	
+  unsigned int loop;
+  unsigned int status;
 
 #if TWSI_DEBUG
   printk("GT64260TWSIwrite(");
 #endif
   /* Write data into the TWSI data register */
-  outl(((unsigned int) Data), TWSI_DATA); 
+  outl(((unsigned int) Data), TWSI_DATA);
   rtems_bsp_delay(1000);
 
   /* Clear INTFLG in the control register to drive data onto TWSI bus */
@@ -192,7 +192,7 @@ int GT64260TWSIwrite(unsigned char Data)
 	    return(-1);
 	 }
          /* if (address + write bit transmitted, acknowledge received)
-	  *    (Master transmmitted data byte, acknowledge received) 
+	  *    (Master transmmitted data byte, acknowledge received)
           *    (address + read bit transmitted, acknowledge received)
           */
 	 if ((status == 0x18)||(status == 0x28)||(status == 0x40)) {

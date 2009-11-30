@@ -40,7 +40,7 @@
 #warning The call is "void boot_card(const char* cmdline);"
 #warning You need to pass a NULL.
 #warning Please check and remove these warnings.
-	
+
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/io.h>
@@ -73,7 +73,7 @@ __rtems_entry_point:
 	 */
 	li      r3,MSR_IR | MSR_DR | MSR_FP
 	mtmsr   r3
-        
+
         /* XXX - ADD BACK IN CACHING INSTRUCTIONS */
 
 	/* clear bss */

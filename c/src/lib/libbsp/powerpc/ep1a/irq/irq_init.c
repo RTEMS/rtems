@@ -127,7 +127,7 @@ static unsigned char mcp750_openpic_initsenses[] = {
     1,	/*14 MCP750_INT_PCI_BUS2_INTC */
     1,	/*15 MCP750_INT_PCI_BUS2_INTD */
     1,
-    1, 
+    1,
     1,
     1,
     1,
@@ -151,9 +151,9 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   /*
    * First initialize the Interrupt management hardware
    */
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Going to initialize openpic compliant device\n");
-#endif       
+#endif
   /* FIXME (t.s.): we should probably setup the EOI delay by
    * passing a non-zero 'epic_freq' argument (frequency of the
    * EPIC serial interface) but I don't know the value on this
@@ -161,7 +161,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
    */
   openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses, 0, 16, 0 /* epic_freq */);
 
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif
 
@@ -191,8 +191,8 @@ printk("Call BSP_rtems_irq_mngt_set\n");
        */
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
     }
-  
-#ifdef TRACE_IRQ_INIT  
+
+#ifdef TRACE_IRQ_INIT
     printk("RTEMS IRQ management is now operationnal\n");
 #endif
 }

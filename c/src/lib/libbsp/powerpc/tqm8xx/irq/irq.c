@@ -68,11 +68,11 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
   if (BSP_IS_CPM_IRQ(irqnum)) {
     bsp_irq_enable_at_CPM(irqnum);
     return RTEMS_SUCCESSFUL;
-  } 
+  }
   else if (BSP_IS_SIU_IRQ(irqnum)) {
     bsp_irq_enable_at_SIU(irqnum);
     return RTEMS_SUCCESSFUL;
-  } 
+  }
   return RTEMS_INVALID_ID;
 }
 
@@ -81,11 +81,11 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
   if (BSP_IS_CPM_IRQ(irqnum)) {
     bsp_irq_disable_at_CPM(irqnum);
     return RTEMS_SUCCESSFUL;
-  } 
+  }
   else if (BSP_IS_SIU_IRQ(irqnum)) {
     bsp_irq_disable_at_SIU(irqnum);
     return RTEMS_SUCCESSFUL;
-  } 
+  }
   return RTEMS_INVALID_ID;
 }
 
@@ -100,13 +100,13 @@ static int BSP_irq_handle_at_cpm(void)
   /* Get vector number: write IACK=1, then read vectir */
   m8xx.civr = 1;
   cpvecnum  = (m8xx.civr >> 11) + BSP_CPM_IRQ_LOWEST_OFFSET;
-  
+
   /*
    * Check the vector number,
    * enable exceptions and dispatch the handler.
    * NOTE: lower-prio interrupts are automatically masked in CPIC
    */
-  if (BSP_IS_CPM_IRQ(cpvecnum)) {      
+  if (BSP_IS_CPM_IRQ(cpvecnum)) {
     /* Enable all interrupts */
     msr = ppc_external_exceptions_enable();
     /* Dispatch interrupt handlers */
@@ -144,16 +144,16 @@ static int BSP_irq_handle_at_siu( unsigned excNum)
      * Check the vector number, mask lower priority interrupts, enable
      * exceptions and dispatch the handler.
      */
-    if (BSP_IS_SIU_IRQ(sivecnum)) {      
+    if (BSP_IS_SIU_IRQ(sivecnum)) {
       simask_save = m8xx.simask;
       /*
        * if this is the CPM interrupt, mask lower prio interrupts at SIU
        * else mask lower and same priority interrupts
        */
-      m8xx.simask &= ~0 << (32 
+      m8xx.simask &= ~0 << (32
 			    - sivecnum
-			    - ((is_cpm_irq) ? 1 : 0)); 
-    
+			    - ((is_cpm_irq) ? 1 : 0));
+
       if (is_cpm_irq) {
 	BSP_irq_handle_at_cpm();
       }
@@ -169,8 +169,8 @@ static int BSP_irq_handle_at_siu( unsigned excNum)
 	 */
 	m8xx.sipend = 1 << (31 - sivecnum);
       }
-      
-    
+
+
       /* Restore initial masks */
       m8xx.simask = simask_save;
     } else {
@@ -186,11 +186,11 @@ static int BSP_irq_handle_at_siu( unsigned excNum)
  */
 rtems_status_code mpc8xx_cpic_initialize( void)
 {
-  /* 
-   * mask off all interrupts 
+  /*
+   * mask off all interrupts
    */
   m8xx.cimr   = 0;
-  /* 
+  /*
    * make sure CPIC request proper level at SIU interrupt controller
    */
   m8xx.cicr  = (0x00e41f00 |
@@ -204,15 +204,15 @@ rtems_status_code mpc8xx_cpic_initialize( void)
  */
 rtems_status_code mpc8xx_siu_int_initialize( void)
 {
-  /* 
-   * mask off all interrupts 
+  /*
+   * mask off all interrupts
    */
   m8xx.simask = 0;
 
   return RTEMS_SUCCESSFUL;
 }
 
-int mpc8xx_exception_handler(BSP_Exception_frame *frame, 
+int mpc8xx_exception_handler(BSP_Exception_frame *frame,
 			     unsigned exception_number)
 {
   return BSP_irq_handle_at_siu(exception_number);
@@ -226,7 +226,7 @@ rtems_status_code bsp_interrupt_facility_initialize()
   }
   /* Initialize the SIU interrupt controller */
   if (mpc8xx_siu_int_initialize()) {
-    return RTEMS_IO_ERROR;    
+    return RTEMS_IO_ERROR;
   }
   /* Initialize the CPIC interrupt controller */
   return mpc8xx_cpic_initialize();

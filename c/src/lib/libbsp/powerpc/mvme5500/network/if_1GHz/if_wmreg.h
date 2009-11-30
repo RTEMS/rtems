@@ -732,7 +732,7 @@ struct livengood_tcpip_ctxdesc {
 #define ICH_GFPREG_BASE_MASK       0x1FFF
 #define ICH_FLASH_LINEAR_ADDR_MASK 0x00FFFFFF
 
-/* start of Kate Feng added */ 
+/* start of Kate Feng added */
 #define WMREG_GPTC      0x4080  /* Good packets transmitted count */
 #define WMREG_GPRC      0x4074  /* Good packets received count */
 #define WMREG_CRCERRS   0x4000  /* CRC Error Count */

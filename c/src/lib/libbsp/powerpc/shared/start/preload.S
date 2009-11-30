@@ -12,11 +12,11 @@
  *
  * The SMON firmware is unable to load the RTEMS image below
  * 0x2000 (I believe their stack is growing below 0x1000).
- * 
+ *
  * The code provided by this file is responsible for the performing
  * the following steps:
  *
- *  1) Save commandline parameters to an area that is 
+ *  1) Save commandline parameters to an area that is
  *       a) not covered by the downloaded image
  *       b) will not be overwritten by the moved image
  *          nor the final BSS segment (rtems clears BSS
@@ -29,7 +29,7 @@
  *     data (such as its stack).
  *  3) Flush the cache to make sure the relocated image is actually
  *     in memory.
- *  4) setup RTEMS environment (initial register values), most 
+ *  4) setup RTEMS environment (initial register values), most
  *     notably an initial STACK. The initial stack may be small and
  *     is used by RTEMS only at a very early stage.
  *     A safe place for the stack seems to be the 00..0x7f area.
@@ -111,7 +111,7 @@ here:
 	/* at this point the register contents are
 	 * R3:  command line start
 	 * R4:  R3 + command line length
-	 * R5:  address we are running from / loaded to 
+	 * R5:  address we are running from / loaded to
 	 * R27: image end
 	 */
 
@@ -162,7 +162,7 @@ leaveparms:
 	li		r16, 0x80
 	cmpw	r5, r16			/* 'from' must be > 0x80 */
 	blt		panic
-	
+
 1:	/* store some arbitrary, nonzero stuff in 0..0x7c */
 	stwu	r16,-4(r16)
 	cmpwi	r16,0
@@ -176,7 +176,7 @@ leaveparms:
 #else
 	li		r16,CACHE_LINE_SIZE
 #endif
-	
+
     lis		r3,preload@h
 	ori		r3,r3,preload@l
 	mr		r4,r5			/* from-addr */
@@ -187,7 +187,7 @@ leaveparms:
 	 */
 	lis		r0,return_here@h
 	ori		r0,r0,return_here@l
-	mtlr	r0	
+	mtlr	r0
 	b		domove			/* move the preloader itself */
 return_here:
 	/* now we move the entire rest of the image */

@@ -40,7 +40,7 @@
  * clocking infos
  */
 #define BSP_CLKIN_FRQ 66000000L
-#define RCFG_SYSPLL_MF 4 
+#define RCFG_SYSPLL_MF 4
 #define RCFG_COREPLL_MF 4
 
 /*
@@ -80,7 +80,7 @@
  * clocking infos
  */
 #define BSP_CLKIN_FRQ 30000000L
-#define RCFG_SYSPLL_MF 11 
+#define RCFG_SYSPLL_MF 11
 #define RCFG_COREPLL_MF 4
 /*
  * Reset configuration words
@@ -115,7 +115,7 @@
 
 #endif
 
-#if defined(MPC8349EAMDS) 
+#if defined(MPC8349EAMDS)
 /**************************
  * for Freescale MPC8349EAMDS
  */
@@ -126,7 +126,7 @@
 
 /*
  * Local Access Windows
- * FIXME: decode bit settings 
+ * FIXME: decode bit settings
  */
 #define LBLAWBAR0_VAL  0xFE000000
 #define LBLAWAR0_VAL   0x80000016
@@ -138,7 +138,7 @@
 #define DDRLAWAR0_VAL  0x8000001B
 /*
  * Local Bus (Memory) Controller
- * FIXME: decode bit settings 
+ * FIXME: decode bit settings
  */
 #define BR0_VAL 0xFE001001
 #define OR0_VAL 0xFF806FF7
@@ -148,7 +148,7 @@
 #define OR2_VAL 0xFC006901
 /*
  * SDRAM registers
- * FIXME: decode bit settings 
+ * FIXME: decode bit settings
  */
 #define MRPTR_VAL 0x20000000
 #define LSRT_VAL  0x32000000
@@ -157,7 +157,7 @@
 
 /*
  * DDR-SDRAM registers
- * FIXME: decode bit settings 
+ * FIXME: decode bit settings
  */
 #define CS2_BNDS_VAL                 0x00000007
 #define CS3_BNDS_VAL                 0x0008000F
@@ -201,7 +201,7 @@
 
 /*
  * Local Access Windows
- * FIXME: decode bit settings 
+ * FIXME: decode bit settings
  */
 
 #define LBLAWBAR0_VAL  bsp_rom_start
@@ -212,7 +212,7 @@
 #define DDRLAWAR0_VAL  0x8000001B
 /*
  * Local Bus (Memory) Controller
- * FIXME: decode bit settings 
+ * FIXME: decode bit settings
  */
 #define BR0_VAL (0xFE000000 | 0x01001)
 #define OR0_VAL 0xFE000E54
@@ -238,7 +238,7 @@
 
 /*
  * DDR-SDRAM registers
- * FIXME: decode bit settings 
+ * FIXME: decode bit settings
  */
 #define DDRCDR_VAL                   0x00000001
 #define CS0_BNDS_VAL                 0x0000000F
@@ -273,8 +273,8 @@
 /* value of input clock divider (derived from pll mode reg) */
 #define BSP_SYSPLL_CKID (((mpc83xx.clk.spmr>>(31-8))&0x01)+1)
 /* value of system pll (derived from pll mode reg) */
-#define BSP_SYSPLL_MF    ((mpc83xx.clk.spmr>>(31-7))&0x0f) 
+#define BSP_SYSPLL_MF    ((mpc83xx.clk.spmr>>(31-7))&0x0f)
 /* value of system pll (derived from pll mode reg) */
-#define BSP_COREPLL_MF   ((mpc83xx.clk.spmr>>(31-15))&0x7f) 
+#define BSP_COREPLL_MF   ((mpc83xx.clk.spmr>>(31-15))&0x7f)
 
 #endif /* __GEN83xx_HWREG_VALS_h */

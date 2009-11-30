@@ -111,7 +111,7 @@ BSP_enable_irq_at_pic(const rtems_irq_number name)
       BSP_irq_enable_at_i8259s ((int) name - BSP_ISA_IRQ_LOWEST_OFFSET);
     }
 #endif
-    
+
     if (is_pci_irq(name)) {
       /*
        * Enable interrupt at OPENPIC level

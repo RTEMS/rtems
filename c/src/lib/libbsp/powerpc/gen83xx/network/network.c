@@ -87,8 +87,8 @@ int BSP_tsec_attach
 
     if (unitNumber == 1) {
       /*
-       * init system I/O configuration registers 
-       * to ensure proper pin functions 
+       * init system I/O configuration registers
+       * to ensure proper pin functions
        */
       mpc83xx.syscon.sicrh = mpc83xx.syscon.sicrh & ~0x1F800000;
       /*
@@ -99,8 +99,8 @@ int BSP_tsec_attach
     }
     if (unitNumber == 2) {
       /*
-       * init system I/O configuration registers 
-       * to ensure proper pin functions 
+       * init system I/O configuration registers
+       * to ensure proper pin functions
        */
       mpc83xx.syscon.sicrh = mpc83xx.syscon.sicrh & ~0x007f8000;
       /*
@@ -116,7 +116,7 @@ int BSP_tsec_attach
     /*
      * Nothing special needed for TSEC1 operation
      */
-#endif    
+#endif
   }
   /*
    * add MAC address into config->hardware_adderss
@@ -131,7 +131,7 @@ int BSP_tsec_attach
     /* we expect it htere from the boot loader */
     reg_ptr = &mpc83xx.tsec[unitNumber - 1];
     config->hardware_address = hw_addr[unitNumber-1];
-    
+
     hw_addr[unitNumber-1][5] = (reg_ptr->macstnaddr[0] >> 24) & 0xff;
     hw_addr[unitNumber-1][4] = (reg_ptr->macstnaddr[0] >> 16) & 0xff;
     hw_addr[unitNumber-1][3] = (reg_ptr->macstnaddr[0] >>  8) & 0xff;

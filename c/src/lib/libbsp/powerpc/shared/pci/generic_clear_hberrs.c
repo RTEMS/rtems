@@ -56,7 +56,7 @@ int             count;
     if ( !PCI_STATUS_OK(pcistat) ) {
         printk("Unable to clear PCI errors: still 0x%04x after 10 attempts\n", pcistat);
     }
-	
+
 	rval &= PCI_ERR_BITS;
 
 	/* Some VME bridges (Tsi148) don't propagate VME bus errors to PCI status reg. */

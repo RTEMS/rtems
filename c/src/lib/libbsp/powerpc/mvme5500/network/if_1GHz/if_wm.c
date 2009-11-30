@@ -6,10 +6,10 @@
  * Acknowledgements:
  * netBSD : Copyright (c) 2001, 2002, 2003, 2004 Wasabi Systems, Inc.
  *          Jason R. Thorpe for Wasabi Systems, Inc.
- * Intel : NDA document 
+ * Intel : NDA document
  *
  * Some notes from the author, S. Kate Feng :
- * 
+ *
  * 1) The error reporting routine i82544EI_error() employs two pointers
  *    for the error report buffer. One for the ISR and another one for
  *    the error report.
@@ -27,7 +27,7 @@
  *    to WB region", MII mode (PHY) instead of TBI mode.
  * 6) We currently only use 32-bit (instead of 64-bit) DMA addressing.
  * 7) Implementation for Jumbo Frame and TCP checksum is not completed yet.
- *    
+ *
  */
 
 #define BYTE_ORDER BIG_ENDIAN
@@ -52,7 +52,7 @@
 
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtems_bsdnet_internal.h>
-#include <rtems/error.h>           
+#include <rtems/error.h>
 #include <errno.h>
 
 #include <rtems/rtems/types.h>
@@ -111,7 +111,7 @@ static int	wm_debug = WM_DEBUG_TX|WM_DEBUG_RX|WM_DEBUG_LINK; /* May 7, 2009 */
 #define TX_EVENT		RTEMS_EVENT_4
 #define ERR_EVENT		RTEMS_EVENT_5
 #define INIT_EVENT              RTEMS_EVENT_6
- 
+
 #define ALL_EVENTS (KILL_EVENT|START_TRANSMIT_EVENT|RX_EVENT|TX_EVENT|ERR_EVENT|INIT_EVENT)
 
 /* <skf> used 64 in 4.8.0, TOD; try 4096 */
@@ -244,7 +244,7 @@ static void i82544EI_irq_on(const rtems_irq_connect_data *irq)
 {
   struct wm_softc *sc;
   unsigned int irqMask=  ICR_TXDW | ICR_LSC | ICR_RXSEQ | ICR_RXDMT0 | ICR_RXO | ICR_RXT0 | ICR_RXCFG;
-  
+
   for (sc= root_i82544EI_dev; sc; sc= sc-> next_module) {
     CSR_WRITE(sc,WMREG_IMS,(CSR_READ(sc,WMREG_IMS)| irqMask) );
     return;
@@ -273,7 +273,7 @@ static rtems_irq_connect_data i82544IrqData={
         (rtems_irq_hdl_param) NULL,
 	(rtems_irq_enable) i82544EI_irq_on,
 	(rtems_irq_disable) i82544EI_irq_off,
-	(rtems_irq_is_enabled) i82544EI_irq_is_on, 
+	(rtems_irq_is_enabled) i82544EI_irq_is_on,
 };
 
 int rtems_i82544EI_driver_attach(struct rtems_bsdnet_ifconfig *config, int attach)
@@ -293,11 +293,11 @@ int rtems_i82544EI_driver_attach(struct rtems_bsdnet_ifconfig *config, int attac
 
   if ( !strncmp((const char *)name,"autoz",5))
      memcpy(name,"gtGHz",5);
-          
-  printk("\nAttaching MVME5500 1GHz NIC%d\n", unit); 
+
+  printk("\nAttaching MVME5500 1GHz NIC%d\n", unit);
   printk("RTEMS-mvme5500 BSP Copyright (c) 2004,2005,2008, Brookhaven National Lab., Shuchen Kate Feng \n");
 
-  /* Make sure certain elements e.g. descriptor lists are aligned.*/ 
+  /* Make sure certain elements e.g. descriptor lists are aligned.*/
   softc_mem = rtems_bsdnet_malloc(sizeof(*sc) + SOFTC_ALIGN, M_FREE, M_NOWAIT);
 
   /* Check for the very unlikely case of no memory. */
@@ -321,22 +321,22 @@ int rtems_i82544EI_driver_attach(struct rtems_bsdnet_ifconfig *config, int attac
   if ( pci_mem_find(b,d,f,PCI_MAPREG_START, &sc->sc_membase, &sc->sc_memsize))
      rtems_panic("i82544EI: unable to map memory space\n");
 
-#ifdef WM_DEBUG 
+#ifdef WM_DEBUG
   printk("Memory base addr 0x%x\n", sc->sc_membase);
 #endif
   BSP_1GHz_membase= sc->sc_membase;
 
 #ifdef WM_DEBUG
   printk("Memory base addr 0x%x\n", sc->sc_membase);
-  printk("txdesc[0] addr:0x%x, rxdesc[0] addr:0x%x, sizeof sc %d\n",&sc->sc_txdescs[0], &sc->sc_rxdescs[0], sizeof(*sc));      
+  printk("txdesc[0] addr:0x%x, rxdesc[0] addr:0x%x, sizeof sc %d\n",&sc->sc_txdescs[0], &sc->sc_rxdescs[0], sizeof(*sc));
 #endif
 
 
-  sc->sc_ctrl=CSR_READ(sc,WMREG_CTRL);  
+  sc->sc_ctrl=CSR_READ(sc,WMREG_CTRL);
   /*
    * Determine a few things about the bus we're connected to.
    */
-  reg = CSR_READ(sc,WMREG_STATUS); 
+  reg = CSR_READ(sc,WMREG_STATUS);
   if (reg & STATUS_BUS64) sc->sc_flags |= WM_F_BUS64;
   sc->sc_bus_speed = (reg & STATUS_PCI66) ? 66 : 33;
 #ifdef WM_DEBUG
@@ -360,7 +360,7 @@ int rtems_i82544EI_driver_attach(struct rtems_bsdnet_ifconfig *config, int attac
    * Read the Ethernet address from the EEPROM.
    */
   if (wm_read_eeprom(sc, EEPROM_OFF_MACADDR,
-	    sizeof(myea) / sizeof(myea[0]), myea)) 
+	    sizeof(myea) / sizeof(myea[0]), myea))
      rtems_panic("i82544ei 1GHZ ethernet: unable to read Ethernet address");
 
   enaddr[0] = myea[0] & 0xff;
@@ -409,11 +409,11 @@ int rtems_i82544EI_driver_attach(struct rtems_bsdnet_ifconfig *config, int attac
    * media structures accordingly.
    */
   if ((CSR_READ(sc, WMREG_STATUS) & STATUS_TBIMODE) != 0) {
-    /* 1000BASE-X : fiber  (TBI mode) 
+    /* 1000BASE-X : fiber  (TBI mode)
        wm_tbi_mediainit(sc); */
   } else {   /* 1000BASE-T : copper (internal PHY mode), for the mvme5500 */
 	   wm_gmii_mediainit(sc);
-  }  
+  }
 
   ifp = &sc->arpcom.ac_if;
   /* set this interface's name and unit */
@@ -421,13 +421,13 @@ int rtems_i82544EI_driver_attach(struct rtems_bsdnet_ifconfig *config, int attac
   ifp->if_name = name;
   ifp->if_softc = sc;
   ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX | IFF_MULTICAST;
-#ifdef RTEMS_ETHERMTU_JUMBO 
+#ifdef RTEMS_ETHERMTU_JUMBO
   sc->arpcom.ec_capabilities |= ETHERCAP_JUMBO_MTU;
   ifp->if_mtu = config->mtu ? config->mtu : ETHERMTU_JUMBO;
 #else
   ifp->if_mtu = config->mtu ? config->mtu : ETHERMTU;
 #endif
-#ifdef RTEMS_CKSUM_OFFLOAD 
+#ifdef RTEMS_CKSUM_OFFLOAD
   /* < skf> The following is really not related to jumbo frame
   sc->arpcom.ec_capabilities |= ETHERCAP_VLAN_MTU;*/
   ifp->if_capabilities |= IFCAP_CSUM_IPv4_Tx | IFCAP_CSUM_IPv4_Rx |
@@ -481,7 +481,7 @@ static void wm_reset(struct wm_softc *sc)
   * 82544 has a Packet Buffer of 64K.
   * Default allocation : PBA=40K for Rx, leaving 24K for Tx.
   * Default for jumbo: PBA=48K for Rx, leaving 16K for Tx.
-  */  
+  */
   sc->sc_pba = sc->arpcom.ac_if.if_mtu > 8192 ? PBA_40K : PBA_48K;
   CSR_WRITE(sc, WMREG_PBA, sc->sc_pba);
 
@@ -499,7 +499,7 @@ static void wm_reset(struct wm_softc *sc)
 
   sc->sc_ctrl_ext = CSR_READ(sc,WMREG_CTRL_EXT);
   sc->sc_ctrl_ext |= CTRL_EXT_EE_RST;
-  CSR_WRITE(sc, WMREG_CTRL_EXT, sc->sc_ctrl_ext);  
+  CSR_WRITE(sc, WMREG_CTRL_EXT, sc->sc_ctrl_ext);
   CSR_READ(sc, WMREG_STATUS);
   /* Wait for EEPROM reload */
   rtems_bsp_delay(2000);
@@ -523,7 +523,7 @@ i82544EI_ifstart(struct ifnet *ifp)
   if ((ifp->if_flags & IFF_RUNNING) == 0) {
 #ifdef WM_DEBUG
      printk("IFF_RUNNING==0\n");
-#endif		
+#endif
      return;
   }
 
@@ -549,7 +549,7 @@ static void i82544EI_stats(struct wm_softc *sc)
   printf("       Tx Interrupts:%-8lu\n", sc->stats.txInterrupts);
   printf("   Transmitt Packets:%-8u\n", CSR_READ(sc,WMREG_GPTC));
   printf("   Transmitt  errors:%-8lu\n", ifp->if_oerrors);
-  printf("         Active Txqs:%-8lu\n", sc->txq_nactive); 
+  printf("         Active Txqs:%-8lu\n", sc->txq_nactive);
   printf("          collisions:%-8u\n", CSR_READ(sc,WMREG_COLC));
   printf("          Crc Errors:%-8u\n", CSR_READ(sc,WMREG_CRCERRS));
   printf("  Link Status Change:%-8lu\n", sc->stats.linkStatusChng);
@@ -654,16 +654,16 @@ static void i82544EI_sendpacket(struct wm_softc *sc, struct mbuf *m)
     sc->txq_free--;
   }
   else /* multiple mbufs in this packet */
-  { 
+  {
     struct mbuf *mtp, *mdest;
     volatile unsigned char *pt;
     int len, y, loop=0;
 
 #ifdef WM_DEBUG_TX
     printk("multi mbufs ");
-#endif 
+#endif
     mtp = m;
-    while ( mtp) { 
+    while ( mtp) {
       MGETHDR(mdest, M_WAIT, MT_DATA);
       MCLGET(mdest, M_WAIT);
       pt = (volatile unsigned char *)mdest->m_data;
@@ -673,12 +673,12 @@ static void i82544EI_sendpacket(struct wm_softc *sc, struct mbuf *m)
          * the length of each descriptor can be up to 16288 bytes.
          * For packets which fill more than one buffer ( >2k), we
          * chain them together.
-         * <Kate Feng> : This effective for packets > 2K 
+         * <Kate Feng> : This effective for packets > 2K
          * The other way is effective for packets < 2K
          */
         if ( ((y=(len+mtp->m_len)) > sizeof(union mcluster))) {
           printk(" >%d, use next descriptor\n", sizeof(union mcluster));
-	  break; 
+	  break;
         }
         memcpy((void *)pt,(char *)mtp->m_data, mtp->m_len);
         pt += mtp->m_len;
@@ -692,16 +692,16 @@ static void i82544EI_sendpacket(struct wm_softc *sc, struct mbuf *m)
       sc->txs_lastdesc = sc->txq_next;
       sc->txq_next = WM_NEXTTX(sc->txq_next);
       sc->txq_nactive ++;
-      if (sc->txq_free) 
+      if (sc->txq_free)
          sc->txq_free--;
       else
          rtems_panic("i8254EI : no more free descriptors");
     } /* end for while */
     /* free old mbuf chain */
-    m_freem(m); 
+    m_freem(m);
     m=0;
   }  /* end  multiple mbufs */
-   
+
   DPRINTF(WM_DEBUG_TX,("%s: TX: desc %d: cmdlen 0x%08x\n", sc->dv_xname,
 	 sc->txs_lastdesc, le32toh(sc->sc_txdescs[sc->txs_lastdesc].wtx_cmdlen)));
   DPRINTF(WM_DEBUG_TX,("status 0x%08x\n",sc->sc_txdescs[sc->txq_fi].wtx_fields.wtxu_status));
@@ -724,9 +724,9 @@ static void i82544EI_txq_free(struct wm_softc *sc, uint8_t status)
 {
   struct ifnet *ifp = &sc->arpcom.ac_if;
 
-  /* We might use the statistics registers instead of variables 
+  /* We might use the statistics registers instead of variables
    * to keep tack of the network statistics
-   */ 
+   */
 
   /* statistics */
   ifp->if_opackets++;
@@ -734,7 +734,7 @@ static void i82544EI_txq_free(struct wm_softc *sc, uint8_t status)
   if (status & (WTX_ST_EC|WTX_ST_LC)) {
        ifp->if_oerrors++;
 
-     if (status & WTX_ST_LC)  
+     if (status & WTX_ST_LC)
         printf("%s: late collision\n", sc->dv_xname);
      else if (status & WTX_ST_EC) {
         ifp->if_collisions += 16;
@@ -768,23 +768,23 @@ static void i82544EI_txq_done(struct wm_softc *sc)
   }
 }
 
-static void wm_init_rxdesc(struct wm_softc *sc, int x)	
-{			
-  wiseman_rxdesc_t *__rxd = &(sc)->sc_rxdescs[(x)];		
+static void wm_init_rxdesc(struct wm_softc *sc, int x)
+{
+  wiseman_rxdesc_t *__rxd = &(sc)->sc_rxdescs[(x)];
   struct mbuf *m;
 
   m = sc->rxs_mbuf[x];
-		
-  __rxd->wrx_addr.wa_low=htole32(mtod(m, void*));  
-  __rxd->wrx_addr.wa_high = 0;				        
-  __rxd->wrx_len = 0;                                             
-  __rxd->wrx_cksum = 0;                                           
-  __rxd->wrx_status = 0;	 					
-  __rxd->wrx_errors = 0;                                          
-  __rxd->wrx_special = 0;                                         
-  /* Receive Descriptor Tail: add Rx desc. to H/W free list */    
-  CSR_WRITE(sc,WMREG_RDT, (x)); 			        	
-} 
+
+  __rxd->wrx_addr.wa_low=htole32(mtod(m, void*));
+  __rxd->wrx_addr.wa_high = 0;
+  __rxd->wrx_len = 0;
+  __rxd->wrx_cksum = 0;
+  __rxd->wrx_status = 0;
+  __rxd->wrx_errors = 0;
+  __rxd->wrx_special = 0;
+  /* Receive Descriptor Tail: add Rx desc. to H/W free list */
+  CSR_WRITE(sc,WMREG_RDT, (x));
+}
 
 static void i82544EI_rx(struct wm_softc *sc)
 {
@@ -851,7 +851,7 @@ static void i82544EI_rx(struct wm_softc *sc)
     ether_input (ifp, eh, m);
     /* Pass it on. */
     ifp->if_ipackets++;
-    
+
     give_it_back:
     /* Add a new receive buffer to the ring.*/
     if (wm_add_rxbuf(sc, i) != 0) {
@@ -937,7 +937,7 @@ static int i82544EI_init_hw(struct wm_softc *sc)
   CSR_WRITE(sc,WMREG_TDLEN, sizeof(sc->sc_txdescs));
   CSR_WRITE(sc,WMREG_TDH, 0);
   CSR_WRITE(sc,WMREG_TDT, 0);
-  CSR_WRITE(sc,WMREG_TIDV, 0 ); 
+  CSR_WRITE(sc,WMREG_TIDV, 0 );
   /* CSR_WRITE(sc,WMREG_TADV, 128);  not for 82544 */
 
   CSR_WRITE(sc,WMREG_TXDCTL, TXDCTL_PTHRESH(0) |
@@ -968,7 +968,7 @@ static int i82544EI_init_hw(struct wm_softc *sc)
   }
 #endif
 
-  TxDescCmd |= WTX_CMD_EOP|WTX_CMD_IFCS|WTX_CMD_RS; 
+  TxDescCmd |= WTX_CMD_EOP|WTX_CMD_IFCS|WTX_CMD_RS;
 
   /* Initialize the transmit job descriptors. */
   for (i = 0; i < NTXDESC; i++) {
@@ -976,7 +976,7 @@ static int i82544EI_init_hw(struct wm_softc *sc)
       sc->sc_txdescs[i].wtx_fields.wtxu_options=cksumfields;
       sc->sc_txdescs[i].wtx_addr.wa_high = 0;
       sc->sc_txdescs[i].wtx_addr.wa_low = 0;
-      sc->sc_txdescs[i].wtx_cmdlen = htole32(TxDescCmd); 
+      sc->sc_txdescs[i].wtx_cmdlen = htole32(TxDescCmd);
   }
 
   /*
@@ -989,7 +989,7 @@ static int i82544EI_init_hw(struct wm_softc *sc)
   CSR_WRITE(sc,WMREG_RDLEN, sizeof(sc->sc_rxdescs));
   CSR_WRITE(sc,WMREG_RDH, 0);
   CSR_WRITE(sc,WMREG_RDT, 0);
-  CSR_WRITE(sc,WMREG_RDTR, 0 |RDTR_FPD); 
+  CSR_WRITE(sc,WMREG_RDTR, 0 |RDTR_FPD);
   /* CSR_WRITE(sc, WMREG_RADV, 256);  not for 82544.  */
 
   for (i = 0; i < NRXDESC; i++) {
@@ -1049,7 +1049,7 @@ static int i82544EI_init_hw(struct wm_softc *sc)
   CSR_WRITE(sc,WMREG_CTRL_EXT, sc->sc_ctrl_ext);
 #endif
 
-  /* MOTLoad : WMREG_RXCSUM (0x5000)= 0, no Rx checksum offloading */ 
+  /* MOTLoad : WMREG_RXCSUM (0x5000)= 0, no Rx checksum offloading */
 #ifdef RTEMS_CKSUM_OFFLOAD
   /*
    * Set up checksum offload parameters.
@@ -1094,7 +1094,7 @@ static int i82544EI_init_hw(struct wm_softc *sc)
    */
   sc->sc_tctl = TCTL_EN | TCTL_PSP | TCTL_CT(TX_COLLISION_THRESHOLD) |
 	    TCTL_COLD(TX_COLLISION_DISTANCE_FDX) |
-            TCTL_RTLC /* retransmit on late collision */; 
+            TCTL_RTLC /* retransmit on late collision */;
 
   /*
    * Set up the receive control register; we actually program
@@ -1185,7 +1185,7 @@ static void i82544EI_ifinit(void *arg)
   sc->daemonTid = rtems_bsdnet_newproc(i82544EI_TASK_NAME,4096,i82544EI_daemon,arg);
 
   /* ...all done! */
-  sc->arpcom.ac_if.if_flags |= IFF_RUNNING; 
+  sc->arpcom.ac_if.if_flags |= IFF_RUNNING;
 
 #ifdef WM_DEBUG
   printk(")");
@@ -1271,7 +1271,7 @@ static void wm_stop(struct ifnet *ifp, int disable)
 
 #ifdef WM_DEBUG
   printk("wm_stop(");
-#endif  
+#endif
   /* Stop the transmit and receive processes. */
   CSR_WRITE(sc,WMREG_TCTL, 0);
   CSR_WRITE(sc,WMREG_RCTL, 0);
@@ -1283,7 +1283,7 @@ static void wm_stop(struct ifnet *ifp, int disable)
   ifp->if_flags &= ~(IFF_RUNNING | IFF_OACTIVE);
 #ifdef WM_DEBUG
   printk(")\n");
-#endif  
+#endif
 }
 
 /*
@@ -1341,7 +1341,7 @@ static void wm_eeprom_recvbits(struct wm_softc *sc, uint32_t *valp, int nbits)
  *
  * Read a word from the EEPROM using the MicroWire protocol.
  *
- * (The 82544EI Gigabit Ethernet Controller is compatible with 
+ * (The 82544EI Gigabit Ethernet Controller is compatible with
  * most MicroWire interface, serial EEPROM devices.)
  */
 static int wm_read_eeprom_uwire(struct wm_softc *sc, int word, int wordcnt, uint16_t *data)
@@ -1510,7 +1510,7 @@ static void wm_set_filter(struct wm_softc *sc)
 
 #ifdef WM_DEBUG
   printk("wm_set_filter(");
-#endif  
+#endif
   mta_reg = WMREG_CORDOVA_MTA;
   sc->sc_rctl &= ~(RCTL_BAM | RCTL_UPE | RCTL_MPE);
 
@@ -1578,7 +1578,7 @@ static void wm_set_filter(struct wm_softc *sc)
 
 #ifdef WM_DEBUG
   printk("RCTL 0x%x)\n", CSR_READ(sc,WMREG_RCTL));
-#endif  
+#endif
 }
 
 static void i82544EI_error(struct wm_softc *sc)
@@ -1596,9 +1596,9 @@ static void i82544EI_error(struct wm_softc *sc)
 	      intr_status, ifp->if_ierrors);
     }
   }
-  else 
+  else
     printk("%s%d: Ghost interrupt ?\n",ifp->if_name,ifp->if_unit);
-  sc->if_errsts[sc->if_err_ptr1]=0;  
+  sc->if_errsts[sc->if_err_ptr1]=0;
   if ((++sc->if_err_ptr1)==IF_ERR_BUFSZE) sc->if_err_ptr1=0; /* Till Straumann */
 }
 
@@ -1643,7 +1643,7 @@ static void i82544EI_daemon(void *arg)
      if (events & RX_EVENT)  i82544EI_rx(sc); /* in ISR instead */
 
      /* clean up and try sending packets */
-     do { 
+     do {
 	i82544EI_txq_done(sc);
 
         while (sc->txq_free>0) {
@@ -1651,7 +1651,7 @@ static void i82544EI_daemon(void *arg)
 	      m=0;
 	      IF_DEQUEUE(&ifp->if_snd,m);
               if (m==0) break;
-              i82544EI_sendpacket(sc, m); 
+              i82544EI_sendpacket(sc, m);
            }
            else {
 	      i82544EI_txq_done(sc);
@@ -1669,7 +1669,7 @@ static void i82544EI_daemon(void *arg)
      ifp->if_flags &= ~IFF_OACTIVE;
 
      /* Log errors and other uncommon events. */
-     if (events & ERR_EVENT) i82544EI_error(sc); 
+     if (events & ERR_EVENT) i82544EI_error(sc);
      /* Rx overrun */
      if ( events & INIT_EVENT) {
         printk("Warnning, Rx overrun.  Make sure the old mbuf was free\n");
@@ -1695,7 +1695,7 @@ static void i82544EI_daemon(void *arg)
   rtems_bsdnet_semaphore_release();
   rtems_semaphore_release(sc->daemonSync);
 
-  /* Note that I dont use sc->daemonTid here - 
+  /* Note that I dont use sc->daemonTid here -
    * theoretically, that variable could already
    * hold a newly created TID
    */
@@ -1732,7 +1732,7 @@ static void wm_gmii_mediainit(struct wm_softc *sc)
 
 #if 1
   /* <skf> May 2009 : The value that should be programmed into IPGT is 10 */
-  sc->sc_tipg = TIPG_IPGT(10)+TIPG_IPGR1(8)+TIPG_IPGR2(6); 
+  sc->sc_tipg = TIPG_IPGT(10)+TIPG_IPGR1(8)+TIPG_IPGR2(6);
 #else
   sc->sc_tipg = TIPG_1000T_DFLT; /* 0x602008 */
 #endif

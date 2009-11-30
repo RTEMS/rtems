@@ -21,7 +21,7 @@
 
 /**
  * @name Memory Map
- * @{                       
+ * @{
  */
 
 typedef struct {
@@ -95,7 +95,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Receive Status
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_RX_STS_FILTER_FAIL SMSC9218I_FLAG(30)
@@ -117,7 +117,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Transmit Status
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_TX_STS_GET_TAG(reg) SMSC9218I_GET_FIELD_16(reg, 16)
@@ -133,7 +133,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Transmit Command A
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_TX_A_IOC SMSC9218I_FLAG(31)
@@ -149,7 +149,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Transmit Command B
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_TX_B_TAG(val) SMSC9218I_FIELD_16(val, 16)
@@ -162,7 +162,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Chip ID and Revision
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_ID_REV_GET_ID(reg) SMSC9218I_GET_FIELD_16(reg, 16)
@@ -174,7 +174,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Interrupt Configuration
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_IRQ_CFG_INT_DEAS(val) SMSC9218I_FIELD_8(val, 24)
@@ -190,7 +190,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Interrupt Status
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_INT_STS_SW SMSC9218I_FLAG(31)
@@ -220,7 +220,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Interrupt Enable
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_INT_EN_SW SMSC9218I_FLAG(31)
@@ -250,7 +250,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Byte Order Testing
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_BYTE_TEST SMSC9218I_SWAP(0x87654321U)
@@ -259,7 +259,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name FIFO Level Interrupts
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_FIFO_INT_TDAL(val) SMSC9218I_FIELD_8(val, 24)
@@ -273,7 +273,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Receive Configuration
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_RX_CFG_END_ALIGN_4 0
@@ -289,7 +289,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Transmit Configuration
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_TX_CFG_SDUMP SMSC9218I_FLAG(15)
@@ -302,7 +302,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Hardware Configuration
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_HW_CFG_AMDIX SMSC9218I_FLAG(24)
@@ -317,7 +317,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Receive Datapath Control
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_RX_DP_CTRL_FFWD SMSC9218I_FLAG(31)
@@ -326,7 +326,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Receive FIFO Information
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_RX_FIFO_INF_GET_SUSED(reg) SMSC9218I_GET_FIELD_8(reg, 16)
@@ -336,7 +336,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Transmit FIFO Information
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_TX_FIFO_INF_GET_SUSED(reg) SMSC9218I_GET_FIELD_8(reg, 16)
@@ -346,7 +346,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Power Management Control
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PMT_CTRL_PM_MODE_D0 0
@@ -368,7 +368,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name General Purpose IO Configuration
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_GPIO_CFG_LED3 SMSC9218I_FLAG(30)
@@ -393,7 +393,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name General Purpose Timer Configuration
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_GPT_CFG_TIMER_EN SMSC9218I_FLAG(29)
@@ -404,7 +404,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name General Purpose Timer Count
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_GPT_CNT_GET_CNT SMSC9218I_GET_FIELD_16(reg, 0)
@@ -413,7 +413,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Word Swap
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_ENDIAN_BIG 0xffffffffU
@@ -422,7 +422,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Free Run Counter
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_FREE_RUN_GET(reg) SMSC9218I_SWAP(reg)
@@ -431,7 +431,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Receiver Dropped Frames Counter
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_RX_DROP_GET(reg) SMSC9218I_SWAP(reg)
@@ -440,7 +440,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name MAC Control and Status Synchronizer Command
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_CSR_CMD_BUSY SMSC9218I_FLAG(31)
@@ -452,7 +452,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name MAC Control Register
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_CR 0x00000001U
@@ -484,7 +484,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name MAC Address High
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_ADDRH 0x00000002U
@@ -494,7 +494,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name MAC Address Low
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_ADDRL 0x00000003U
@@ -504,7 +504,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Multicast Hash Table High
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_HASHH 0x00000004U
@@ -514,7 +514,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Multicast Hash Table Low
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_HASHL 0x00000005U
@@ -524,7 +524,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name MII Access
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_MII_ACC 0x00000006U
@@ -537,7 +537,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name MII Data
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_MII_DATA 0x00000007U
@@ -546,7 +546,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Flow Control
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_FLOW 0x00000008U
@@ -559,7 +559,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name VLAN1 Tag
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_VLAN1 0x00000009U
@@ -568,7 +568,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name VLAN2 Tag
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_VLAN2 0x0000000aU
@@ -577,7 +577,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Wake-up Frame Filter
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_WUFF 0x0000000bU
@@ -586,7 +586,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Wake-up Control and Status
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_MAC_WUCSR 0x0000000cU
@@ -600,7 +600,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Basic Control
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_BCR 0x00000000U
@@ -617,7 +617,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Basic Status
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_BSR 0x00000001U
@@ -637,7 +637,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name PHY Identifier 1
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_ID1 0x00000002U
@@ -649,7 +649,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name PHY Identifier 2
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_ID2 0x00000003U
@@ -663,7 +663,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Auto-negotiation Advertisment
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_ANAR 0x00000004U
@@ -684,7 +684,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Auto-negotiation Link Partner Ability
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_ANLPAR 0x00000005U
@@ -702,7 +702,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Auto-negotiation Expansion
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_ANEXPR 0x00000006U
@@ -716,7 +716,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Mode Control and Status
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_MCSR 0x00000011U
@@ -727,7 +727,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Special Modes
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_SPMODES 0x00000012U
@@ -736,7 +736,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Special Control and Status Indications
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_CSIR 0x0000001bU
@@ -748,7 +748,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Interrupt Source Flag
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_ISR 0x0000001dU
@@ -764,7 +764,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name Interrupt Mask
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_IMR 0x0000001eU
@@ -780,7 +780,7 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
 
 /**
  * @name PHY Special Control and Status
- * @{                       
+ * @{
  */
 
 #define SMSC9218I_PHY_PHYSCSR 0x0000001fU

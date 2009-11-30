@@ -1,8 +1,8 @@
-/* GT64260eth.h 
+/* GT64260eth.h
  *
  * Copyright (c) 2002 Allegro Networks, Inc., Wasabi Systems, Inc.
  * All rights reserved.
- * 
+ *
  * RTEMS/Mvme5500 port 2004  by S. Kate Feng, <feng1@bnl.gov>,
  * All rights reserved.
  *
@@ -51,7 +51,7 @@
 #define HASH_TABLE_SIZE 16
 #define HASH_DRAM_SIZE  HASH_TABLE_SIZE*1024  /* size of DRAM for hash table */
 #define INTR_ERR_SIZE   16
-		
+
 enum GTeth_txprio {
 	GE_TXPRIO_HI=1,
 	GE_TXPRIO_LO=0,
@@ -83,7 +83,7 @@ struct GTeth_softc {
   unsigned int txq_nintr;       /* number of txq desc. send TX_EVENT */
   unsigned int txq_outptr;	/* where to put next transmit packet */
   unsigned int txq_inptr;       /* start of 1st queued tx packet */
-  unsigned int txq_free;	/* free Tx queue slots. */  
+  unsigned int txq_free;	/* free Tx queue slots. */
   unsigned txq_intrbits;	/* bits to write to EIMR */
   unsigned txq_esdcmrbits;	/* bits to write to ESDCMR */
   unsigned txq_epsrbits;	/* bits to test with EPSR */
@@ -114,7 +114,7 @@ struct GTeth_softc {
   unsigned sc_intrmask;		/* current EIMR value */
   unsigned sc_idlemask;		/* suspended EIMR bits */
   unsigned sc_max_frame_length;	/* maximum frame length */
-  unsigned rx_buf_sz; 
+  unsigned rx_buf_sz;
 
   /* Hash table related members */
   unsigned long long *sc_hashtable;

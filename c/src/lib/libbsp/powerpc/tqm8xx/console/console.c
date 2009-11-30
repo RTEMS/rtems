@@ -242,11 +242,11 @@ sccBRGval (int baud)
 typedef struct {
   uint32_t reg_content;
   int link_cnt;
-}brg_state_t; 
+}brg_state_t;
 brg_state_t scc_brg_state[BRG_CNT];
 
 /*
- * initialize brg_state 
+ * initialize brg_state
  */
 static void sccBRGinit(void)
 {
@@ -318,7 +318,7 @@ static int sccBRGalloc(int chan,int baud)
   }
 #endif
 
-  rtems_interrupt_disable(level);  
+  rtems_interrupt_disable(level);
 
   if (new_brg < 0) {
     /* search for brg with this settings */
@@ -329,9 +329,9 @@ static int sccBRGalloc(int chan,int baud)
 	new_brg = brg_idx;
       }
     }
-    /* 
-     * if not found: check, whether brg currently in use 
-     * is linked only from our channel  
+    /*
+     * if not found: check, whether brg currently in use
+     * is linked only from our channel
      */
     if ((new_brg < 0) &&
 	(old_brg >= 0) &&
@@ -349,17 +349,17 @@ static int sccBRGalloc(int chan,int baud)
   }
 
   /* decrease old link count */
-  if ((old_brg >= 0) && 
+  if ((old_brg >= 0) &&
       (old_brg < 4)) {
     scc_brg_state[old_brg].link_cnt--;
   }
   /* increase new brg link count, set brg */
-  if ((new_brg >= 0) && 
+  if ((new_brg >= 0) &&
       (new_brg < 4)) {
     scc_brg_state[new_brg].link_cnt++;
     scc_brg_state[new_brg].reg_content = reg_val;
     (&m8xx.brgc1)[new_brg] = reg_val;
-  }  
+  }
   rtems_interrupt_enable(level);
 
   /* connect to scc/smc */
@@ -419,7 +419,7 @@ sccSetAttributes (int minor, const struct termios *t)
 }
 
 /*
- * Interrupt handler 
+ * Interrupt handler
  */
 static rtems_isr
 sccInterruptHandler (void *arg)
@@ -431,7 +431,7 @@ sccInterruptHandler (void *arg)
    */
   if (CHN_EVENT_GET(chan) & 0x1) {
     /*
-     * clear SCC event flag 
+     * clear SCC event flag
      */
     CHN_EVENT_CLR(chan,0x01);
     /*
@@ -448,8 +448,8 @@ sccInterruptHandler (void *arg)
       /*
        * clear status
        */
-      sccCurrRxBd[chan]->status = 
-	(sccCurrRxBd[chan]->status 
+      sccCurrRxBd[chan]->status =
+	(sccCurrRxBd[chan]->status
 	 & (M8xx_BD_WRAP | M8xx_BD_INTERRUPT))
 	| M8xx_BD_EMPTY;
       /*
@@ -480,7 +480,7 @@ sccInterruptHandler (void *arg)
     while((sccDequTxBd[chan] != sccPrepTxBd[chan]) &&
 	  ((sccDequTxBd[chan]->status & M8xx_BD_READY) == 0)) {
       if (sccttyp[chan] != NULL) {
-	rtems_termios_dequeue_characters (sccttyp[chan], 
+	rtems_termios_dequeue_characters (sccttyp[chan],
 					  sccDequTxBd[chan]->length);
       }
       /*
@@ -531,17 +531,17 @@ sccInitialize (int chan)
      * round up rxBuf[chan] to start at a cache line size
      */
     rxBuf[chan] = (sccRxBuf_t *)
-      (((uint32_t)rxBuf[chan]) + 
+      (((uint32_t)rxBuf[chan]) +
        (PPC_CACHE_ALIGNMENT
 	- ((uint32_t)rxBuf[chan]) % PPC_CACHE_ALIGNMENT));
   }
   /*
-   * Allocate buffer descriptors 
+   * Allocate buffer descriptors
    */
-  sccCurrRxBd[chan] = 
+  sccCurrRxBd[chan] =
     sccFrstRxBd[chan] = m8xx_bd_allocate(SCC_RXBD_CNT);
-  sccPrepTxBd[chan] = 
-    sccDequTxBd[chan] = 
+  sccPrepTxBd[chan] =
+    sccDequTxBd[chan] =
     sccFrstTxBd[chan] = m8xx_bd_allocate(SCC_TXBD_CNT);
   switch(chan) {
   case CONS_CHN_SCC1:
@@ -612,7 +612,7 @@ sccInitialize (int chan)
     /*
      * Configure port B pins to enable SMTXD1 and SMRXD1 pins
      */
-    m8xx.pbpar |=  0xC0; 
+    m8xx.pbpar |=  0xC0;
     m8xx.pbdir &= ~0xC0;
     break;
   case CONS_CHN_SMC2:
@@ -624,11 +624,11 @@ sccInitialize (int chan)
     break;
   }
   /*
-   * allocate and connect BRG 
+   * allocate and connect BRG
    */
   sccBRGalloc(chan,9600);
-  
-  
+
+
   /*
    * Set up SCCx parameter RAM common to all protocols
    */
@@ -640,7 +640,7 @@ sccInitialize (int chan)
     CHN_PARAM_SET(chan,mrblr,RXBUFSIZE);
   else
     CHN_PARAM_SET(chan,mrblr,1);
-  
+
   /*
    * Set up SCCx parameter RAM UART-specific parameters
    */
@@ -652,7 +652,7 @@ sccInitialize (int chan)
     m8xx_console_chan_desc[chan].parms.sccp->un.uart.character[0]=0x8000; /* no char filter */
     m8xx_console_chan_desc[chan].parms.sccp->un.uart.rccm=0x80FF; /* control character mask */
   }
-  
+
   /*
    * Set up the Receive Buffer Descriptors
    */
@@ -675,13 +675,13 @@ sccInitialize (int chan)
     sccFrstTxBd[chan][i].length = 0;
     sccFrstTxBd[chan][i].buffer = NULL;
   }
-  
+
   /*
    * Set up SCC general and protocol-specific mode registers
    */
   CHN_EVENT_CLR(chan,~0);	/* Clear any pending events */
   CHN_MASK_SET(chan,0);	        /* Mask all interrupt/event sources */
-	       
+
   if (m8xx_console_chan_desc[chan].is_scc) {
     m8xx_console_chan_desc[chan].regs.sccr->psmr = 0xb000; /* 8N1, CTS flow control */
     m8xx_console_chan_desc[chan].regs.sccr->gsmr_h = 0x00000000;
@@ -693,9 +693,9 @@ sccInitialize (int chan)
   /*
    * Send "Init parameters" command
    */
-  m8xx_cp_execute_cmd(M8xx_CR_OP_INIT_RX_TX 
+  m8xx_cp_execute_cmd(M8xx_CR_OP_INIT_RX_TX
 		      | m8xx_console_chan_desc[chan].cr_chan_code);
-  
+
   /*
    * Enable receiver and transmitter
    */
@@ -707,7 +707,7 @@ sccInitialize (int chan)
   }
 
   if (m8xx_scc_mode[chan] != TERMIOS_POLLED) {
-    
+
     rtems_irq_connect_data irq_conn_data = {
       m8xx_console_chan_desc[chan].ivec_src,
       sccInterruptHandler,         /* rtems_irq_hdl           */
@@ -735,9 +735,9 @@ sccPollRead (int minor)
     if ((sccCurrRxBd[chan]->status & M8xx_BD_EMPTY) != 0) {
       return -1;
     }
-    
-    if (0 == (sccCurrRxBd[chan]->status & (M8xx_BD_OVERRUN 
-					   | M8xx_BD_PARITY_ERROR 
+
+    if (0 == (sccCurrRxBd[chan]->status & (M8xx_BD_OVERRUN
+					   | M8xx_BD_PARITY_ERROR
 					   | M8xx_BD_FRAMING_ERROR
 					   | M8xx_BD_BREAK
 					   | M8xx_BD_IDLE))) {
@@ -749,8 +749,8 @@ sccPollRead (int minor)
        * clear status
        */
     }
-    sccCurrRxBd[chan]->status = 
-      (sccCurrRxBd[chan]->status 
+    sccCurrRxBd[chan]->status =
+      (sccCurrRxBd[chan]->status
        & (M8xx_BD_WRAP | M8xx_BD_INTERRUPT))
       | M8xx_BD_EMPTY;
     /*
@@ -788,8 +788,8 @@ sccInterruptWrite (int minor, const char *buf, int len)
     /*
      * clear status, set ready bit
      */
-    sccPrepTxBd[chan]->status = 
-      (sccPrepTxBd[chan]->status 
+    sccPrepTxBd[chan]->status =
+      (sccPrepTxBd[chan]->status
        & M8xx_BD_WRAP)
       | M8xx_BD_READY | M8xx_BD_INTERRUPT;
     if ((sccPrepTxBd[chan]->status & M8xx_BD_WRAP) != 0) {
@@ -808,18 +808,18 @@ sccPollWrite (int minor, const char *buf, int len)
   static char txBuf[CONS_CHN_CNT][SCC_TXBD_CNT];
   int chan = minor;
   int bd_used;
-  
+
   while (len--) {
     while (sccPrepTxBd[chan]->status & M8xx_BD_READY)
       continue;
     bd_used = sccPrepTxBd[chan]-sccFrstTxBd[chan];
     txBuf[chan][bd_used] = *buf++;
       rtems_cache_flush_multiple_data_lines((const void *)&txBuf[chan][bd_used],
-					    sizeof(txBuf[chan][bd_used]));    
+					    sizeof(txBuf[chan][bd_used]));
     sccPrepTxBd[chan]->buffer = &(txBuf[chan][bd_used]);
     sccPrepTxBd[chan]->length = 1;
-    sccPrepTxBd[chan]->status = 
-      (sccPrepTxBd[chan]->status 
+    sccPrepTxBd[chan]->status =
+      (sccPrepTxBd[chan]->status
        & M8xx_BD_WRAP)
       | M8xx_BD_READY;
     if ((sccPrepTxBd[chan]->status & M8xx_BD_WRAP) != 0) {
@@ -844,7 +844,7 @@ static void console_debug_putc_onlcr(const char c)
 
   if (BSP_output_chan != CONS_CHN_NONE) {
     rtems_interrupt_disable(irq_level);
-    
+
     if (c == '\n') {
       sccPollWrite (BSP_output_chan,&cr_chr,1);
     }
@@ -917,18 +917,18 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
        * Register the device
        */
       status = rtems_io_register_name (tty_name,
-				       major, 
+				       major,
 				       channel_list[entry].minor);
       if (status != RTEMS_SUCCESSFUL) {
 	rtems_fatal_error_occurred (status);
       }
-    }	  
+    }
   }
   /*
    * register /dev/console
    */
   status = rtems_io_register_name ("/dev/console",
-				   major, 
+				   major,
 				   CONSOLE_CHN);
   if (status != RTEMS_SUCCESSFUL) {
     rtems_fatal_error_occurred (status);
@@ -974,7 +974,7 @@ rtems_device_driver console_open(
     0			/* outputUsesInterrupts */
   };
 
-  if (m8xx_scc_mode[chan] == TERMIOS_IRQ_DRIVEN) {    
+  if (m8xx_scc_mode[chan] == TERMIOS_IRQ_DRIVEN) {
     status = rtems_termios_open (major, minor, arg, &interruptCallbacks);
     sccttyp[chan] = args->iop->data1;
   }
@@ -984,7 +984,7 @@ rtems_device_driver console_open(
   }
   return status;
 }
- 
+
 /*
  * Close the device
  */
@@ -1056,7 +1056,7 @@ static int scc_io_set_trm_char(rtems_device_minor_number minor,
     }
   }
   /*
-   * transfer characters 
+   * transfer characters
    */
   if (rc == RTEMS_SUCCESSFUL) {
     if (trm_char_info->char_cnt > CON8XX_TRM_CHAR_CNT) {
@@ -1066,7 +1066,7 @@ static int scc_io_set_trm_char(rtems_device_minor_number minor,
       /*
        * check, whether device is a SCC
        */
-      if ((rc == RTEMS_SUCCESSFUL) && 
+      if ((rc == RTEMS_SUCCESSFUL) &&
 	  !m8xx_console_chan_desc[minor].is_scc) {
 	rc = RTEMS_UNSATISFIED;
       }
@@ -1096,14 +1096,14 @@ rtems_device_driver console_control(
 				    rtems_device_minor_number minor,
 				    void                    * arg
 				    )
-{ 
+{
   rtems_libio_ioctl_args_t *ioa=arg;
 
   switch (ioa->command) {
 #if 0
   case CON8XX_IO_SET_TRM_CHAR:
     return scc_io_set_trm_char(minor, ioa);
-#endif    
+#endif
   default:
     return rtems_termios_ioctl (arg);
     break;

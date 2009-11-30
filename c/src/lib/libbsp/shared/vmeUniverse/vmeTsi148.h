@@ -4,19 +4,19 @@
 
 /* Driver for the Tundra Tsi148 pci-vme bridge */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -25,18 +25,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -45,9 +45,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <stdint.h>
 #include <bsp/vme_am_defs.h>
@@ -79,7 +79,7 @@ typedef volatile uint32_t BERegister; /* emphasize contents are big endian */
 
 /*
  * Scan the PCI busses for the Nth (N=='instance') Tsi148 VME bridge.
- * 
+ *
  * RETURNS:
  *    contents of the IRQ_LINE PCI config register on Success,
  *    the base address of the Tsi148 register block is stored in
@@ -245,7 +245,7 @@ vmeTsi148XlateAddr(
  */
 #ifdef _VME_TSI148_DECLARE_SHOW_ROUTINES
 
-/* Print the current configuration of all outbound ports to 
+/* Print the current configuration of all outbound ports to
  * f (stdout if NULL)
  */
 
@@ -255,7 +255,7 @@ vmeTsi148OutboundPortsShowXX(BERegister *base, FILE *f);
 void
 vmeTsi148OutboundPortsShow(FILE *f);
 
-/* Print the current configuration of all inbound ports to 
+/* Print the current configuration of all inbound ports to
  * f (stdout if NULL)
  */
 
@@ -295,7 +295,7 @@ vmeTsi148DisableAllOutboundPorts(void);
 #	define TSI_VEAT_AM(v)		(((v)>>8)&63)
 #	define TSI_VEAT_XAM(v)		((v)&255)
 
-/* Check and clear the error (AKA 'exception') register. 
+/* Check and clear the error (AKA 'exception') register.
  * Note that the Tsi148 does *not* propagate VME bus errors of any kind to
  * the PCI status register and hence this routine (or registering an ISR
  * to the TSI_VERR_INT_VEC) is the only means for detecting a bus error.
@@ -320,7 +320,7 @@ vmeTsi148ClearVMEBusErrors(uint32_t *paddr);
 /* Map internal register block to VME.
  *
  * This routine is intended for BSP implementors. The registers must be
- * accessible from VME so that the interrupt handler can flush the 
+ * accessible from VME so that the interrupt handler can flush the
  * bridge FIFO (see below).
  *
  *            vme_base: VME address where the TSI registers (4k) can be mapped.
@@ -399,8 +399,8 @@ vmeTsi148IntDisable(unsigned int level);
 /* Check if an interrupt level or internal source is enabled:
  *
  * 'level': VME level 1..7 or internal special vector > 255
- * 
- * RETURNS: value > 0 if interrupt is currently enabled, 
+ *
+ * RETURNS: value > 0 if interrupt is currently enabled,
  *          zero      if interrupt is currently disabled,
  *          -1        on error (invalid argument).
  */
@@ -432,7 +432,7 @@ vmeTsi148SetIackWidth(int level, int width);
  * different hardware priorities of the PIC. Let's
  * say you want to give IRQ level 7 the highest priority.
  * You could then give 'pin 0' a higher priority (at the
- * PIC) and 'pin 1' a lower priority and issue. 
+ * PIC) and 'pin 1' a lower priority and issue.
  *
  *   for ( i=1; i<7; i++ ) vmeTsi148IntRoute(i, 1);
  *
@@ -446,7 +446,7 @@ vmeTsi148SetIackWidth(int level, int width);
  *              etc.
  *
  * RETURNS: 0 on success, nonzero on error (invalid arguments)
- * 
+ *
  * NOTES:	- DONT change the tsi148 'map' registers
  *            directly. The driver caches routing internally.
  *          - support for the extra wires (beyond wire #0) is
@@ -460,7 +460,7 @@ vmeTsi148IntRoute(unsigned int level, unsigned int pin);
 /* Raise a VME Interrupt at 'level' and respond with 'vector' to a
  * handler on the VME bus. (The handler could be a different board
  * or the tsi148 itself.
- * 
+ *
  * Note that you could install a interrupt handler at TSI_VME_SW_IACK_INT_VEC
  * to be notified of an IACK cycle having completed.
  *
@@ -497,7 +497,7 @@ vmeTsi148IntRaise(int level, unsigned vector);
  *  - waits for both interrupts: 'ordinary' VME interrupt of 'level' and
  *    IACK completion interrupt ('special' vector TSI_VME_SW_IACK_INT_VEC).
  *
- * NOTES: 
+ * NOTES:
  *  - make sure no other handler responds to 'level'.
  *  - make sure no ISR is installed on both vectors yet.
  *  - ISRs installed by this routine are removed after completion.
@@ -529,7 +529,7 @@ vmeTsi148IntLoopbackTst(int level, unsigned vector);
  * DO NOT CHANGE THE ORDER OF THESE VECTORS - THE DRIVER
  * DEPENDS ON IT
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * 
+ *
  * Deliberately, these vectors match the universe driver's
  */
 /* 256 no VOWN interrupt */
@@ -584,14 +584,14 @@ vmeTsi148IntLoopbackTst(int level, unsigned vector);
  * are wired.
  * Optionally, the first PIC input line can be read from PCI config space
  * but the second must be passed to this routine. Note that the info read
- * from PCI config space is wrong for some boards! 
+ * from PCI config space is wrong for some boards!
  *
  * PARAMETERS:
- *              flags:  VMETSI148_IRQ_MGR_FLAG_SHARED:  
+ *              flags:  VMETSI148_IRQ_MGR_FLAG_SHARED:
  *                      use the BSP_install_rtems_shared_irq_handler() instead
  *                      of BSP_install_rtems_irq_handler(). Use this if the PIC
  *                      line is used by other devices, too.
- *                      CAVEAT: shared interrupts need RTEMS workspace, i.e., the 
+ *                      CAVEAT: shared interrupts need RTEMS workspace, i.e., the
  *                      VME interrupt manager can only be installed
  *                      *after workspace is initialized* if 'shared' is nonzero
  *                      (i.e., *not* from bspstart()).

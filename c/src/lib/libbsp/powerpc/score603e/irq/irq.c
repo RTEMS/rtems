@@ -195,7 +195,7 @@ printk(" BSP_install_rtems_irq_handler %d\n", irq->name );
     /* XXX -FIX ME !! */
     if (is_pci_irq(irq->name)) {
       /*
-       * Enable interrupt 
+       * Enable interrupt
        */
       printk("is_pci_irq = TRUE - FIX THIS!\n");
     }
@@ -288,7 +288,7 @@ printk(" BSP_remove_rtems_irq_handler %d\n", irq->name );
     /* XXX - FIX ME !! */
     if (is_pci_irq(irq->name)) {
       /*
-       * disable interrupt 
+       * disable interrupt
        */
     }
     if (is_processor_irq(irq->name)) {
@@ -357,7 +357,7 @@ printk(" BSP_rtems_irq_mngt_set\n");
      */
 
     /*
-     *  XXX - FIX ME !!!  
+     *  XXX - FIX ME !!!
      */
     for (i=BSP_PCI_IRQ_LOWEST_OFFSET; i < BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER ; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {

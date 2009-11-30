@@ -39,7 +39,7 @@ void bsp_get_work_area(
 )
 {
   *work_area_start = bsp_section_bss_end;
-  *work_area_size = bsp_ram_end - 2 * 
+  *work_area_size = bsp_ram_end - 2 *
         MPC55XX_INTERRUPT_STACK_SIZE - bsp_section_bss_end;
   *heap_start = bsp_external_ram_start;
   *heap_size = (uintptr_t) bsp_external_ram_size;

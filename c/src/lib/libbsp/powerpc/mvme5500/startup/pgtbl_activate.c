@@ -9,7 +9,7 @@
  * default activation procedure.
  */
 
-/* Author: Till Straumann, <strauman@slac.stanford.edu>, 4/2002 
+/* Author: Till Straumann, <strauman@slac.stanford.edu>, 4/2002
  * Kate Feng <feng1@bnl.gov> ported it to MVME5500, 4/2004
  */
 

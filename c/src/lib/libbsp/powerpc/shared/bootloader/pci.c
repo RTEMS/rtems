@@ -770,7 +770,7 @@ void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
 
 #ifdef PCI_DEBUG
       printk("   readbase bus %d, (%04x:%04x), base %08x, size %08x, type %d\n",
-             r->dev->bus->number, 
+             r->dev->bus->number,
              r->dev->vendor,
              r->dev->device,
              r->base,
@@ -1190,15 +1190,15 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
 #endif
 
 #ifdef WRITE_BRIDGE_ENABLE
-         pcibios_write_config_word(pdev->bus->number, 
-                                   pdev->devfn, 
-                                   PCI_BRIDGE_CONTROL, 
+         pcibios_write_config_word(pdev->bus->number,
+                                   pdev->devfn,
+                                   PCI_BRIDGE_CONTROL,
                                    (uint16_t)( 0 ));
 
-         pcibios_write_config_word(pdev->bus->number, 
-                                   pdev->devfn, 
-                                   PCI_COMMAND, 
-                                   (uint16_t)( PCI_COMMAND_IO | 
+         pcibios_write_config_word(pdev->bus->number,
+                                   pdev->devfn,
+                                   PCI_COMMAND,
+                                   (uint16_t)( PCI_COMMAND_IO |
                                                  PCI_COMMAND_MEMORY |
                                                  PCI_COMMAND_MASTER ));
 #endif

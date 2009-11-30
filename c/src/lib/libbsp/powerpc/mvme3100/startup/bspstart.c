@@ -28,13 +28,13 @@
 #include <libcpu/spr.h>
 #include <libcpu/io.h>
 #include <libcpu/e500_mmu.h>
-#include <bsp/uart.h> 
-#include <bsp/irq.h> 
-#include <bsp/pci.h> 
+#include <bsp/uart.h>
+#include <bsp/irq.h>
+#include <bsp/pci.h>
 #include <bsp/vpd.h>
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
-#include <rtems/powerpc/powerpc.h> 
+#include <rtems/powerpc/powerpc.h>
 
 #define SHOW_MORE_INIT_SETTINGS
 #undef  DEBUG
@@ -68,11 +68,11 @@ uint32_t bsp_clicks_per_usec         = 0;
  * Total memory using RESIDUAL DATA
  */
 unsigned int BSP_mem_size            = 0;
-/* 
+/*
  * PCI Bus Frequency
  */
 unsigned int BSP_pci_bus_frequency   = 0xdeadbeef;
-/* 
+/*
  * PPC Bus Frequency
  */
 unsigned int BSP_bus_frequency       = 0;
@@ -250,7 +250,7 @@ VpdBufRec          vpdData [] = {
 
 	/*
 	 * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
-	 * function store the result in global variables so that it can be used 
+	 * function store the result in global variables so that it can be used
 	 * later...
 	 */
 	myCpu 	      = get_ppc_cpu_type();
@@ -412,7 +412,7 @@ VpdBufRec          vpdData [] = {
 		if (0) {
 			asm volatile("mtmsr %0"::"r"(msr|0x8000));
 			for (i=0; i<12; i++)
-				BSP_enable_irq_at_pic(i); 
+				BSP_enable_irq_at_pic(i);
 			printk("IRQS enabled\n");
 		}
 	}

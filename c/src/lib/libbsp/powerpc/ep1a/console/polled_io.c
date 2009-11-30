@@ -206,34 +206,34 @@ unsigned int keymap_count = 7;
  */
 
 char func_buf[] = {
-	'\033', '[', '[', 'A', 0, 
-	'\033', '[', '[', 'B', 0, 
-	'\033', '[', '[', 'C', 0, 
-	'\033', '[', '[', 'D', 0, 
-	'\033', '[', '[', 'E', 0, 
-	'\033', '[', '1', '7', '~', 0, 
-	'\033', '[', '1', '8', '~', 0, 
-	'\033', '[', '1', '9', '~', 0, 
-	'\033', '[', '2', '0', '~', 0, 
-	'\033', '[', '2', '1', '~', 0, 
-	'\033', '[', '2', '3', '~', 0, 
-	'\033', '[', '2', '4', '~', 0, 
-	'\033', '[', '2', '5', '~', 0, 
-	'\033', '[', '2', '6', '~', 0, 
-	'\033', '[', '2', '8', '~', 0, 
-	'\033', '[', '2', '9', '~', 0, 
-	'\033', '[', '3', '1', '~', 0, 
-	'\033', '[', '3', '2', '~', 0, 
-	'\033', '[', '3', '3', '~', 0, 
-	'\033', '[', '3', '4', '~', 0, 
-	'\033', '[', '1', '~', 0, 
-	'\033', '[', '2', '~', 0, 
-	'\033', '[', '3', '~', 0, 
-	'\033', '[', '4', '~', 0, 
-	'\033', '[', '5', '~', 0, 
-	'\033', '[', '6', '~', 0, 
-	'\033', '[', 'M', 0, 
-	'\033', '[', 'P', 0, 
+	'\033', '[', '[', 'A', 0,
+	'\033', '[', '[', 'B', 0,
+	'\033', '[', '[', 'C', 0,
+	'\033', '[', '[', 'D', 0,
+	'\033', '[', '[', 'E', 0,
+	'\033', '[', '1', '7', '~', 0,
+	'\033', '[', '1', '8', '~', 0,
+	'\033', '[', '1', '9', '~', 0,
+	'\033', '[', '2', '0', '~', 0,
+	'\033', '[', '2', '1', '~', 0,
+	'\033', '[', '2', '3', '~', 0,
+	'\033', '[', '2', '4', '~', 0,
+	'\033', '[', '2', '5', '~', 0,
+	'\033', '[', '2', '6', '~', 0,
+	'\033', '[', '2', '8', '~', 0,
+	'\033', '[', '2', '9', '~', 0,
+	'\033', '[', '3', '1', '~', 0,
+	'\033', '[', '3', '2', '~', 0,
+	'\033', '[', '3', '3', '~', 0,
+	'\033', '[', '3', '4', '~', 0,
+	'\033', '[', '1', '~', 0,
+	'\033', '[', '2', '~', 0,
+	'\033', '[', '3', '~', 0,
+	'\033', '[', '4', '~', 0,
+	'\033', '[', '5', '~', 0,
+	'\033', '[', '6', '~', 0,
+	'\033', '[', 'M', 0,
+	'\033', '[', 'P', 0,
 };
 
 char *funcbufptr = func_buf;
@@ -321,7 +321,7 @@ unsigned int accent_table_size = 68;
 
 
 /* These #defines have been copied from drivers/char/pc_keyb.h, by
- * Martin Mares (mj@ucw.cz).  
+ * Martin Mares (mj@ucw.cz).
  * converted to offsets by Till Straumann <strauman@slac.stanford.edu>
  */
 #define KBD_STATUS_REG		0x4	/* Status register (R) */
@@ -386,7 +386,7 @@ SPR_RO(PVR)
 #endif /* USE_KBD_SUPPORT */
 
 
-/* Early messages after mm init but before console init are kept in log 
+/* Early messages after mm init but before console init are kept in log
  * buffers.
  */
 #define PAGE_LOG_CHARS (PAGE_SIZE-sizeof(int)-sizeof(u_long)-1)
@@ -511,7 +511,7 @@ static void pfree(void* p)
   --global_index;
 }
 #endif
-  
+
 
 void log_putc(const u_char c) {
 	console_log *l;
@@ -521,11 +521,11 @@ void log_putc(const u_char c) {
 	if (!l) {
 		l=__palloc(sizeof(console_log));
 		memset(l, 0, sizeof(console_log));
-		if (!console_global_data.log) 
+		if (!console_global_data.log)
 			console_global_data.log = l;
 		else {
 			console_log *p;
-			for (p=console_global_data.log; 
+			for (p=console_global_data.log;
 			     p->next; p=p->next);
 			p->next = l;
 		}
@@ -536,7 +536,7 @@ void log_putc(const u_char c) {
 /* This puts is non standard since it does not automatically add a newline
  * at the end. So it is made private to avoid confusion in other files.
  */
-static 
+static
 void puts(const u_char *s)
 {
         char c;
@@ -551,10 +551,10 @@ static
 void flush_log(void) {
 	console_log *p, *next;
 	if (console_global_data.vacuum_sent) {
-#ifdef TRACE_FLUSH_LOG	  
-		printk("%d characters sent into oblivion before MM init!\n", 
+#ifdef TRACE_FLUSH_LOG
+		printk("%d characters sent into oblivion before MM init!\n",
 		       console_global_data.vacuum_sent);
-#endif		
+#endif
 	}
 	for(p=console_global_data.log; p; p=next) {
 		puts(p->data);
@@ -572,7 +572,7 @@ void serial_putc(const u_char c)
 	while ((INL_CONSOLE_INB(lsr) & LSR_THRE) == 0) ;
 	INL_CONSOLE_OUTB(thr, c);
 }
- 
+
 int serial_getc(void)
 {
 	while ((INL_CONSOLE_INB(lsr) & LSR_DR) == 0) ;
@@ -589,16 +589,16 @@ static void scroll(void)
 {
 	int i;
 
-	memcpy ( (u_char *)vidmem, (u_char *)vidmem + console_global_data.cols * 2, 
+	memcpy ( (u_char *)vidmem, (u_char *)vidmem + console_global_data.cols * 2,
 		 ( console_global_data.lines - 1 ) * console_global_data.cols * 2 );
-	for ( i = ( console_global_data.lines - 1 ) * console_global_data.cols * 2; 
-	      i < console_global_data.lines * console_global_data.cols * 2; 
+	for ( i = ( console_global_data.lines - 1 ) * console_global_data.cols * 2;
+	      i < console_global_data.lines * console_global_data.cols * 2;
 	      i += 2 )
 		vidmem[i] = ' ';
 }
 
 /*
- * cursor() sets an offset (0-1999) into the 80x25 text area   
+ * cursor() sets an offset (0-1999) into the 80x25 text area
  */
 static void
 cursor(int x, int y)
@@ -610,7 +610,7 @@ cursor(int x, int y)
 	vga_outb(0x15, pos);
 }
 
-void 
+void
 vga_putc(const u_char c)
 {
 	int x,y;
@@ -630,7 +630,7 @@ vga_putc(const u_char c)
 	} else if (c == '\r') {
 		x = 0;
 	} else {
-		vidmem [ ( x + console_global_data.cols * y ) * 2 ] = c; 
+		vidmem [ ( x + console_global_data.cols * y ) * 2 ] = c;
 		if ( ++x >= console_global_data.cols ) {
 			x = 0;
 			if ( ++y >= console_global_data.lines ) {
@@ -767,7 +767,7 @@ static int kbd_get(int ms) {
 			else
 				return data;
 		}
-		if (--ms < 0) return -1; 
+		if (--ms < 0) return -1;
 #ifdef __BOOT__
 		boot_udelay(1000);
 #else
@@ -778,7 +778,7 @@ static int kbd_get(int ms) {
 
 static void kbd_put(u_char c, int ms, int port) {
   	while (kbd_inb(KBD_STATUS_REG) & KBD_STAT_IBF) {
-		if (--ms < 0) return; 
+		if (--ms < 0) return;
 #ifdef __BOOT__
 		boot_udelay(1000);
 #else
@@ -802,14 +802,14 @@ int kbdreset(void)
 
 	/* Enable then reset the KB */
 	kbd_put(KBD_CCMD_KBD_ENABLE, 10, KBD_CNTL_REG);
-	
+
 	while (1) {
 		kbd_put(KBD_CMD_RESET, 10, KBD_DATA_REG);
 		c = kbd_get(1000);
 		if (c == KBD_REPLY_ACK) break;
 		if (c != KBD_REPLY_RESEND) return 2;
 	}
-	
+
 	if (kbd_get(1000) != KBD_REPLY_POR) return 3;
 
 	/* Disable the keyboard while setting up the controller */
@@ -818,7 +818,7 @@ int kbdreset(void)
 
 	/* Enable interrupts and keyboard controller */
 	kbd_put(KBD_CCMD_WRITE_MODE, 10, KBD_CNTL_REG);
-	kbd_put(KBD_MODE_KBD_INT | KBD_MODE_SYS | 
+	kbd_put(KBD_MODE_KBD_INT | KBD_MODE_SYS |
 		KBD_MODE_DISABLE_MOUSE | KBD_MODE_KCC,
 		10, KBD_DATA_REG);
 
@@ -835,30 +835,30 @@ int kbd_tstc(void)
 }
 #endif /* USE_KBD_SUPPORT */
 
-const struct console_io 
+const struct console_io
 vacuum_console_functions = {
-  	vacuum_putc, 
-	vacuum_getc, 
+  	vacuum_putc,
+	vacuum_getc,
 	vacuum_tstc
 };
 
 static const struct console_io
 log_console_functions = {
-  	log_putc, 
-	vacuum_getc, 
+  	log_putc,
+	vacuum_getc,
 	vacuum_tstc
 }
 ,
 serial_console_functions = {
-	serial_putc, 
-	serial_getc, 
+	serial_putc,
+	serial_getc,
 	serial_tstc
 }
 #if defined(USE_KBD_SUPPORT) && defined(USE_VGA_SUPPORT)
 ,
 vga_console_functions = {
-	vga_putc, 
-	kbd_getc, 
+	vga_putc,
+	kbd_getc,
 	kbd_tstc
 }
 #endif
@@ -868,7 +868,7 @@ console_io* curIo = (console_io*) &vacuum_console_functions;
 
 int select_console(ioType t) {
   static ioType curType = CONSOLE_VACUUM;
-  
+
   switch (t) {
   case CONSOLE_VACUUM 	: curIo = (console_io*)&vacuum_console_functions; break;
   case CONSOLE_LOG 	: curIo = (console_io*)&log_console_functions; break;
@@ -911,7 +911,7 @@ int printk(const char *fmt, ...) {
 	int i;
 	/* Should not be a problem with 8kB of stack */
 	char buf[1024];
-	
+
 	va_start(args, fmt);
 	i = k_vsprintf(buf, fmt, args);
 	va_end(args);
@@ -949,7 +949,7 @@ do {	u32 t1, t2, t3;							 \
 	    "=r" (num), "=&r" (t1), "=&r" (t2), "=&r"(t3), "=&b" (rmd) : \
 	    "0" (num));							 \
 									 \
-} while(0); 
+} while(0);
 
 #define SIGN	1		/* unsigned/signed long */
 #define LARGE	2		/* use 'ABCDEF' instead of 'abcdef' */
@@ -976,7 +976,7 @@ static char * number(char * str, int size, int type, u64 num)
 			sign = '-';
 			num = -num;
 			size--;
-		} 
+		}
 	}
 
 	i = 0;
@@ -990,7 +990,7 @@ static char * number(char * str, int size, int type, u64 num)
 		}
 		tmp[i++] = digits[rem];
 	} while (num != 0);
-		
+
 	size -= i;
 	if (!(type&(ZEROPAD)))
 		while(size-->0)
@@ -1024,14 +1024,14 @@ int k_vsprintf(char *buf, const char *fmt, va_list args)
 			*str++ = *fmt;
 			continue;
 		}
-			
+
 		/* process flags, only 0 padding needed */
 		flags = 0;
 		if (*++fmt == '0' ) {
 			flags |= ZEROPAD;
 			fmt++;
 		}
-		
+
 		/* get field width */
 		field_width = -1;
 		if (is_digit(*fmt))
@@ -1094,14 +1094,14 @@ int k_vsprintf(char *buf, const char *fmt, va_list args)
 				--fmt;
 			continue;
 		}
-		/* This ugly code tries to minimize the number of va_arg() 
-		 * since they expand to a lot of code on PPC under the SYSV 
-		 * calling conventions (but not with -mcall-aix which has 
+		/* This ugly code tries to minimize the number of va_arg()
+		 * since they expand to a lot of code on PPC under the SYSV
+		 * calling conventions (but not with -mcall-aix which has
 		 * other problems). Arguments have at least the size of a
 		 * long allocated, and we use this fact to minimize bloat.
 		 * (and pointers are assimilated to unsigned long too).
 		 */
-		if (sizeof(long long) > sizeof(long) && flags & LLONG) 
+		if (sizeof(long long) > sizeof(long) && flags & LLONG)
 			num = va_arg(args, unsigned long long);
 		else {
 			u_long n = va_arg(args, unsigned long);
@@ -1111,10 +1111,10 @@ int k_vsprintf(char *buf, const char *fmt, va_list args)
 				else
 				  	n = (unsigned short) n;
 			} else if (! flags & LONG) {
-				/* Here the compiler correctly removes this 
+				/* Here the compiler correctly removes this
 				 * do nothing code on 32 bit PPC.
 				 */
-				if (flags & SIGN) 
+				if (flags & SIGN)
 					n = (int) n;
 				else
 					n = (unsigned) n;

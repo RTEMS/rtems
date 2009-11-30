@@ -44,9 +44,9 @@ BSP_VMEchipTypes BSP_getVMEchipType();
 /* The version of Discovery system controller */
 
 typedef enum {
-	notdefined, 
+	notdefined,
 	GT64260A,
-	GT64260B,	    
+	GT64260B,
 	MV64360,
 } DiscoveryChipVersion;
 
@@ -68,9 +68,9 @@ DiscoveryChipVersion BSP_getDiscoveryChipVersion();
 #define BSP_NVRAM_BASE_ADDR     0xf1110000
 
 #define BSP_RTC_INTA_REG        0x7ff0
-#define BSP_RTC_SECOND	        0x7ff2  
+#define BSP_RTC_SECOND	        0x7ff2
 #define BSP_RTC_MINUTE	        0x7ff3
-#define BSP_RTC_HOUR	        0x7ff4  
+#define BSP_RTC_HOUR	        0x7ff4
 #define BSP_RTC_DATE	        0x7ff5
 #define BSP_RTC_INTERRUPTS      0x7ff6
 #define BSP_RTC_WATCHDOG        0x7ff7
@@ -103,7 +103,7 @@ DiscoveryChipVersion BSP_getDiscoveryChipVersion();
 
 /* The glues to Till's vmeUniverse, although the name does not
  * actually reflect the relevant architect of the MVME5500.
- * Till TODO ? :  BSP_PCI_DO_EOI instead ? 
+ * Till TODO ? :  BSP_PCI_DO_EOI instead ?
  * BSP_EXT_IRQ0 instead of BSP_PCI_IRQ0 ?
  *
  */
@@ -184,4 +184,4 @@ static inline void ioBar()
     asm volatile("eieio":::"memory");
 }
 
-#endif 
+#endif

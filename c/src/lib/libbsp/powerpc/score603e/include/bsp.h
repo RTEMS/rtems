@@ -64,7 +64,7 @@ extern "C" {
 
 #define Initialize_Board_ctrl_register()                         \
   *SCORE603E_BOARD_CTRL_REG = (*SCORE603E_BOARD_CTRL_REG |       \
-                               SCORE603E_BRD_FLASH_DISABLE_MASK) 
+                               SCORE603E_BRD_FLASH_DISABLE_MASK)
 
 #define Processor_Synchronize() \
   asm volatile(" eieio ")

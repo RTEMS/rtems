@@ -29,7 +29,7 @@ typedef struct {
   uint32_t sdram_size;  /* existing SDRAM size */
   uint32_t flash_base;  /* start address flash */
   uint32_t flash_size;  /* existing Flash size */
-  uint32_t flash_offset; 
+  uint32_t flash_offset;
   uint32_t sram_base;   /* start address sram                */
   uint32_t sram_size;   /* existing sram size                */
   uint32_t immr_base;   /* start address internal memory map */

@@ -37,7 +37,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include "console.h"
-                                                            
+
 typedef struct uart_reg
 {
   volatile unsigned char reg;
@@ -50,7 +50,7 @@ uint8_t Read_ns16550_register(
 {
   struct uart_reg *p = (struct uart_reg *)ulCtrlPort;
   uint8_t  ucData;
-  ucData = p[ucRegNum].reg;  
+  ucData = p[ucRegNum].reg;
   asm volatile("sync");
   return ucData;
 }
@@ -62,6 +62,6 @@ void  Write_ns16550_register(
 )
 {
   struct uart_reg *p = (struct uart_reg *)ulCtrlPort;
-  p[ucRegNum].reg = ucData; 
+  p[ucRegNum].reg = ucData;
   asm volatile("sync");
 }

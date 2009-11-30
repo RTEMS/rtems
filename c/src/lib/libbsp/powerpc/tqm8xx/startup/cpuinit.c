@@ -106,7 +106,7 @@ void _InitTQM8xx (void)
    *   Timebase Source is GCLK2 / 16
    */
   m8xx.sccrk = M8xx_UNLOCK_KEY;		/* unlock SCCR */
-  m8xx.sccr |= 0x02000000;		
+  m8xx.sccr |= 0x02000000;
 
   /* Unlock the timebase and decrementer registers. */
   m8xx.tbk = M8xx_UNLOCK_KEY;
@@ -124,7 +124,7 @@ void _InitTQM8xx (void)
   _mtspr( M8xx_TBL_WR, r1 );
 }
 /*
- * further initialization (called from bsp_start) 
+ * further initialization (called from bsp_start)
  */
 void cpu_init(void)
 {

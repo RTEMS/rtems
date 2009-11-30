@@ -27,7 +27,7 @@
 
 /*
  *  Dump U-Boot Board Information Structure
- *  
+ *
  *  u - pointer to information structure
  */
 void dumpUBootBDInfo(
@@ -78,7 +78,7 @@ void dumpUBootBDInfo(
       u->bi_pcifreq
     #endif
   );
- 
+
 }
 #endif
 

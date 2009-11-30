@@ -2,19 +2,19 @@
 
 /* Driver for the Tundra Tsi148 pci-vme bridge */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -23,18 +23,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -43,9 +43,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <rtems.h>
 #include <stdio.h>
@@ -405,7 +405,7 @@ static Tsi148Dev devs[NUM_TSI_DEVS] = {{0}};
 extern int vmeTsi148RegPort;
 extern int vmeTsi148RegCSR;
 
-/* registers should be mapped to guarded, non-cached memory; hence 
+/* registers should be mapped to guarded, non-cached memory; hence
  * subsequent stores are ordered. eieio is only needed to enforce
  * ordering of loads with respect to stores.
  */
@@ -421,7 +421,7 @@ va_list	ap;
 		 * to a buffer.
 		 */
 		vprintk(fmt,ap);
-	} else 
+	} else
 	{
 		vfprintf(f,fmt,ap);
 	}
@@ -524,7 +524,7 @@ uint32_t v;
 	/* Clear BDFAIL / (--> SYSFAIL) */
 #	define TSI_VSTAT_BDFAIL		(1<<14)
 	TSI_WR(base, TSI_VSTAT_REG, TSI_RD(base, TSI_VSTAT_REG) & ~TSI_VSTAT_BDFAIL);
-	/* Set (long) bus master timeout; the timeout actually overrides 
+	/* Set (long) bus master timeout; the timeout actually overrides
 	 * the DMA block size so that the DMA settings would effectively
 	 * not be used.
 	 * Also, we enable 'release on request' mode so that we normally
@@ -1015,14 +1015,14 @@ unsigned long		tsau_reg, tat_reg, gran, skip;
 		break;
 
 		case VME_MODE_AS_MATCH:
-			if ( outbound ) 
+			if ( outbound )
 				mode_msk = TSI_OTAT_ADMODE(-1) | TSI_OTAT_EN;
 			else
 				mode_msk = TSI_ITAT_AS(-1) | TSI_ITAT_EN;
 		break;
 
 		default:
-			if ( outbound ) 
+			if ( outbound )
 				mode_msk = TSI_OTAT_PGM | TSI_OTAT_SUP | TSI_OTAT_ADMODE(-1) | TSI_OTAT_EN;
 			else
 				mode_msk = TSI_ITAT_PGM | TSI_ITAT_DATA | TSI_ITAT_SUP | TSI_ITAT_USR | TSI_ITAT_AS(-1) | TSI_ITAT_EN;
@@ -1059,7 +1059,7 @@ unsigned long		tsau_reg, tat_reg, gran, skip;
 			limit += gran;
 
 			if ( !reverse ) {
-				start += offst;	
+				start += offst;
 				limit += offst;
 				offst  = -offst;
 			}
@@ -1295,10 +1295,10 @@ uint32_t mode;
 
 	if ( VME_AM_IS_SHORT(as) ) {
 		mode |= TSI_CRGAT_A16;
-	} else 
+	} else
 	if ( VME_AM_IS_STD(as) ) {
 		mode |= TSI_CRGAT_A24;
-	} else 
+	} else
 	if ( VME_AM_IS_EXT(as) ) {
 		mode |= TSI_CRGAT_A32;
 	} else {
@@ -1597,7 +1597,7 @@ rtems_irq_connect_data	xx;
 	xx.off    = my_no_op;
 	xx.isOn   = my_isOn;
 	xx.hdl    = isr;
-	xx.handle = (rtems_irq_hdl_param)slot; 
+	xx.handle = (rtems_irq_hdl_param)slot;
 	xx.name   = pic_line;
 
 	if ( shared ) {
@@ -1685,7 +1685,7 @@ unsigned long cpu_base, vme_reg_base;
 	pic_pin[0] = pic_pin0 < 0 ? devs[0].irqLine : pic_pin0;
 	i = 1;
 	while ( (tsi_pin[i] = va_arg(ap, int)) >= 0 ) {
-		
+
 		if ( i >= TSI_NUM_WIRES ) {
 			                                       return -5;
 		}
@@ -1772,7 +1772,7 @@ unsigned long cpu_base, vme_reg_base;
 	specialPin = tsi_pin[1] >= 0 ? 1 : 0;
 
 	/* setup routing */
-	
+
 	/* IntRoute checks for mgr being installed */
 	vmeTsi148IrqMgrInstalled=1;
 
@@ -1944,7 +1944,7 @@ unsigned long v;
 	TSI_WR(base, TSI_VICR_REG, v);
 
 	return 0;
-	
+
 }
 
 int
@@ -2020,7 +2020,7 @@ LoopbackTstArgs		a;
 
 	if ( !vmeTsi148IntIsEnabled(level) && 0==vmeTsi148IntEnable(level) )
 		doDisable = 1;
-	
+
 	/* make sure there are no pending interrupts */
 	TSI_WR(b, TSI_INTC_REG, TSI_INTC_IACKC);
 
@@ -2133,9 +2133,9 @@ vmeTsi148ClearVMEBusErrors(uint32_t *paddr)
 
 /* descriptor must be 8-byte aligned */
 typedef struct VmeTsi148DmaListDescriptorRec_ {
-	BEValue						dsau,  dsal;	
-	BEValue						ddau,  ddal;	
-	BEValue						dsat,  ddat;	
+	BEValue						dsau,  dsal;
+	BEValue						ddau,  ddal;
+	BEValue						dsat,  ddat;
 	BEValue						dnlau, dnlal;
 	BEValue						dcnt,  ddbs;
 } VmeTsi148DmaListDescriptorRec;
@@ -2161,7 +2161,7 @@ VMEDmaListClassRec	vmeTsi148DmaListClass = {
 };
 
 /* DMA Control */
-#define TSI_DMA_REG(off,i)	((off)+(((i)&1)<<7))	
+#define TSI_DMA_REG(off,i)	((off)+(((i)&1)<<7))
 
 #define TSI_DCTL_REG(i)		TSI_DMA_REG(0x500,i)
 #define TSI_DCTL0_REG		0x500
@@ -2437,10 +2437,10 @@ uint32_t vmeatt, pciatt, sat, dat;
 
 	switch ( mode ) {
 		case BSP_VMEDMA_OPT_THROUGHPUT:
-			ctl |= TSI_DCTL_VBKS_1024;		
+			ctl |= TSI_DCTL_VBKS_1024;
 			ctl |= TSI_DCTL_VBOT_0us;
 		break;
-		
+
 		case BSP_VMEDMA_OPT_LOWLATENCY:
 			ctl |= TSI_DCTL_VBKS_32;
 			ctl |= TSI_DCTL_VBOT_0us;
@@ -2541,7 +2541,7 @@ uint32_t src, dst, ctl;
 	asm volatile("":::"memory");
 
 	/* Start transfer */
-	ctl  = TSI_RD(base, TSI_DCTL_REG(channel)) | TSI_DCTL_DGO | TSI_DCTL_MOD;		
+	ctl  = TSI_RD(base, TSI_DCTL_REG(channel)) | TSI_DCTL_DGO | TSI_DCTL_MOD;
 	TSI_WR(base, TSI_DCTL_REG(channel), ctl);
 
 	return 0;

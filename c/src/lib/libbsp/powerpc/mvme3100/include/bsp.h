@@ -26,7 +26,7 @@
  *  confdefs.h overrides for this BSP:
  */
 #define CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
- 
+
 #define BSP_INTERRUPT_STACK_SIZE          (16 * 1024)
 
 /*
@@ -47,11 +47,11 @@
  * NOTE: VME addresses should NEVER be translated using these constants!
  *       they are strictly for BSP internal use. Drivers etc. should use
  *       the translation routines int VME.h (BSP_vme2local_adrs/BSP_local2vme_adrs).
- * 
+ *
  *           CPU ADDR                  PCI_ADDR                                VME ADDR
- * 
+ *
  *           00000000                  XXXXXXXX                                XXXXXXXX
- *    ^  ^   ........         
+ *    ^  ^   ........
  *    |  |
  *    |  |  e.g., RAM                  XXXXXXXX
  *    |  |                                                                     00000000
@@ -74,18 +74,18 @@
  *        VME devices   hostbridge                 mapped by
  *       visible here                              universe
  *                    =====================================================
- * 
+ *
  */
 
 /* fundamental addresses for BSP (CHRPxxx and PREPxxx are from libcpu/io.h) */
-#define	_IO_BASE            0xe0000000 /* Motload's PCI IO base */	
+#define	_IO_BASE            0xe0000000 /* Motload's PCI IO base */
 #define	_ISA_MEM_BASE		CHRP_ISA_MEM_BASE
 /* address of our ram on the PCI bus   */
 #define	PCI_DRAM_OFFSET		CHRP_PCI_DRAM_OFFSET
 /* offset of pci memory as seen from the CPU */
 #define PCI_MEM_BASE		0
 /* where (in CPU addr. space) does the PCI window start */
-#define PCI_MEM_WIN0		0x80000000 
+#define PCI_MEM_WIN0		0x80000000
 
 /*
  *  Base address definitions for several devices
@@ -117,7 +117,7 @@
 #define BSP_USR1_I2C_ADDR			(0xA6>>1)		/* the 2nd user EEPROM */
 #define BSP_THM_I2C_ADDR			(0x90>>1)		/* the DS1621 temperature sensor & thermostat */
 #define BSP_RTC_I2C_ADDR			(0xD0>>1)		/* the DS1375 wall-clock */
-	
+
 #define BSP_I2C_BUS_DESCRIPTOR		mpc8540_i2c_bus_descriptor
 
 #define BSP_I2C_BUS0_NAME             "/dev/i2c0"
@@ -152,7 +152,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/* Initialize the I2C driver and register all devices 
+/* Initialize the I2C driver and register all devices
  * RETURNS 0 on success, -1 on error.
  *
  * Access to the VPD and user EEPROMS as well
@@ -165,15 +165,15 @@ extern "C" {
  *   /dev/i2c0.ds1621       (read-only; one byte: board-temp in degC)
  *   /dev/i2c0.ds1621-raw   (read-write; transfer bytes to/from the ds1621)
  *   /dev/i2c0.ds1375-raw   (read-write; transfer bytes to/from the ds1375)
- *	
+ *
  */
 int
 BSP_i2c_initialize();
 
 /* System Control Register */
 #define BSP_MVME3100_SYS_CR				((volatile uint8_t *)0xe2000001)
-#define BSP_MVME3100_SYS_CR_RESET_MSK		(7<<5)	
-#define BSP_MVME3100_SYS_CR_RESET			(5<<5)	
+#define BSP_MVME3100_SYS_CR_RESET_MSK		(7<<5)
+#define BSP_MVME3100_SYS_CR_RESET			(5<<5)
 #define BSP_MVME3100_SYS_CR_EEPROM_WP		(1<<1)
 #define BSP_MVME3100_SYS_CR_TSTAT_MSK		(1<<0)
 

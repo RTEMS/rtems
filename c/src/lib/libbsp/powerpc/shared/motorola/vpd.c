@@ -8,19 +8,19 @@ VPD = "MOTOROLA" , { field }
 field = type, length, { data }
 */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software ('beatnik' RTEMS BSP for MVME6100 and MVME5500) was
  *     created by Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * The 'beatnik' BSP was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -29,18 +29,18 @@ field = type, length, { data }
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -49,9 +49,9 @@ field = type, length, { data }
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <rtems.h>
 #include <string.h>
@@ -97,7 +97,7 @@ uint8_t            fp[2];
 	fp[0] = early_fp>>8;
 	fp[1] = early_fp;
 	write_bytes(dev,fp,2);
-	
+
 	start(d);
 	addr(d, BSP_VPD_I2C_ADDR, I2C_READ);
 	rval = d->ops->read_bytes(d, buf, len);
@@ -119,7 +119,7 @@ int got, rval = 0;
 		if ( (got = read_bytes(fd, buf+rval, len)) <= 0 )
 			return -1;
 		len -= got;
-		rval+= got;	
+		rval+= got;
 	}
 	return rval;
 }
@@ -148,7 +148,7 @@ static int	  (*stop)(int fd);
 /*
 		init(dev);
  *
- *	 Hangs - probably would need a delay here - just leave motload settings 
+ *	 Hangs - probably would need a delay here - just leave motload settings
  */
 
 		read_bytes = early_read;
@@ -267,7 +267,7 @@ L2 Cache Configuration             : FF FF FF FF FF FF FF FF
 VPD Revision                       : 00 03 00 00
 L3 Cache Configuration             : 01 01 07 02 03 00 00 00
                                    : 01 00
-                                                                                        
+
 
 
 

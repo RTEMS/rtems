@@ -16,11 +16,11 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  * Copyright 2004, 2005 Brookhaven National Laboratory and
- *                 Shuchen Kate Feng <feng1@bnl.gov> 
+ *                 Shuchen Kate Feng <feng1@bnl.gov>
  *
  *    - modified shared/irq/irq.h for Mvme5500 (no ISA devices/PIC)
  *    - Discovery GT64260 interrupt controller instead of 8259.
- *    - Added support for software IRQ priority levels. 
+ *    - Added support for software IRQ priority levels.
  *    - modified to optimize the IRQ latency and handling
  *
  *  $Id$
@@ -46,13 +46,13 @@
  * (OPENPIC_VEC_SOURCE in openpic.h)
  */
 
-  /* See section 25.2 , Table 734 of GT64260 controller 
+  /* See section 25.2 , Table 734 of GT64260 controller
    * Main Interrupt Cause Low register
    */
 #define BSP_MICL_IRQ_NUMBER           (32)
 #define BSP_MICL_IRQ_LOWEST_OFFSET    (0)
 #define BSP_MICL_IRQ_MAX_OFFSET       (BSP_MICL_IRQ_LOWEST_OFFSET + BSP_MICL_IRQ_NUMBER -1)
-  /* 
+  /*
    * Main Interrupt Cause High register
    */
 #define BSP_MICH_IRQ_NUMBER           (32)
@@ -73,7 +73,7 @@
 #define BSP_PROCESSOR_IRQ_MAX_OFFSET	(BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER - 1)
 
   /* allow a couple of vectors for VME and counter/timer irq sources etc.
-   * This is probably not needed any more. 
+   * This is probably not needed any more.
    */
 #define BSP_MISC_IRQ_NUMBER		(30)
 #define BSP_MISC_IRQ_LOWEST_OFFSET	(BSP_PROCESSOR_IRQ_MAX_OFFSET + 1)

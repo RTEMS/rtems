@@ -9,7 +9,7 @@
  * 8/17/2006 : S. Kate Feng
  *             uses in_le32()/out_le32(), instead of inl()/outl() for compatibility.
  *
- * 11/2008 : Enable "PCI Read Agressive Prefetch", 
+ * 11/2008 : Enable "PCI Read Agressive Prefetch",
  *           "PCI Read Line Agressive Prefetch", and
  *           "PCI Read Multiple Agressive Prefetch" to improve the
  *           performance of the PCI based applications (e.g. 1GHz NIC).
@@ -21,7 +21,7 @@
 #include <bsp.h>
 #include <bsp/pci.h>
 #include <bsp/gtreg.h>
-#include <bsp/gtpcireg.h> 
+#include <bsp/gtpcireg.h>
 
 #define PCI_DEBUG     0
 
@@ -37,7 +37,7 @@
 #ifdef PCI2CPU_ORDER
 #define PCI_ACCCTLBASEL_VALUE          0x01079000
 #else
-#define PCI_ACCCTLBASEL_VALUE          0x01071000 
+#define PCI_ACCCTLBASEL_VALUE          0x01071000
 #endif
 
 
@@ -86,12 +86,12 @@ void pciAccessInit(void)
     data = in_le32((volatile unsigned int *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80)));
 #if 0
     printk("PCI%d_ACCESS_CNTL_BASE0_LOW was 0x%x\n",PciLocal,data);
-#endif 
+#endif
     data |= PCI_ACCCTLBASEL_VALUE;
     data &= ~0x300000;
     out_le32((volatile unsigned int *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80)), data);
 #if 0
-      printf("PCI%d_ACCESS_CNTL_BASE0_LOW now 0x%x\n",PciLocal,in_le32((volatile unsigned int *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80)))); 
+      printf("PCI%d_ACCESS_CNTL_BASE0_LOW now 0x%x\n",PciLocal,in_le32((volatile unsigned int *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80))));
 #endif
   }
 }

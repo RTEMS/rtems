@@ -2,10 +2,10 @@
  *
  * Copyright (c) 2003,2004 Brookhaven National  Laboratory
  *               S. Kate Feng <feng1@bnl.gov>
- * All rights reserved 
+ * All rights reserved
  *
  * Acknowledgements:
- * netBSD : Copyright (c) 2002 Allegro Networks, Inc., Wasabi Systems, Inc. 
+ * netBSD : Copyright (c) 2002 Allegro Networks, Inc., Wasabi Systems, Inc.
  * Marvell : NDA document for the discovery system controller
  *
  * Some notes from the author, S. Kate Feng :
@@ -16,7 +16,7 @@
  * 2) Implemented hardware snoop instead of software snoop
  *    to ensure SDRAM cache coherency. (Copyright : NDA item)
  * 3) Added S/W support for multi mbuf.  (TODO : Let the H/W do it)
- *    
+ *
  */
 #define BYTE_ORDER BIG_ENDIAN
 
@@ -37,7 +37,7 @@
 
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtems_bsdnet_internal.h>
-#include <rtems/error.h>           
+#include <rtems/error.h>
 #include <errno.h>
 
 #include <rtems/rtems/types.h>
@@ -65,12 +65,12 @@ extern unsigned char ReadConfVPD_buff(int offset); /* in startup/bspstart.c */
 
 #define GT_ETH_TASK_NAME  "Geth"
 #define PKT_BUF_SZ 1536
-#define SOFTC_ALIGN  31   
-#define HASH_ALIGN   15   
+#define SOFTC_ALIGN  31
+#define HASH_ALIGN   15
 
 #define TXQ_HiLmt_OFF 2
 
-/* <skf> 
+/* <skf>
  * 1. printk debug is for diagnosis only, which may cause
  * unexpected result, especially if txq is under heavy load
  * because CPU is fast with a decent cache.
@@ -81,7 +81,7 @@ extern unsigned char ReadConfVPD_buff(int offset); /* in startup/bspstart.c */
 #if 0
 #define GE_FORGOT
 #define GE_NORX
-#define GT_DEBUG 
+#define GT_DEBUG
 #endif
 
 /* RTEMS event to kill the daemon */
@@ -138,7 +138,7 @@ static void GT64260eth_irq_on(const rtems_irq_connect_data *irq)
   for (sc= root_GT64260eth_dev; sc; sc= sc-> next_module) {
     outl(0x30883444,ETH0_EIMR); /* MOTLoad default interrupt mask */
     return;
-  }  
+  }
 }
 
 static void GT64260eth_irq_off(const rtems_irq_connect_data *irq)
@@ -168,7 +168,7 @@ static void GT64260eth_isr(void)
        sc->intr_errsts[sc->intr_err_ptr2++]=cause;
        sc->intr_err_ptr2 %=INTR_ERR_SIZE;   /* Till Straumann */
        events |= ERR_EVENT;
-  }  
+  }
 
   /* ETH_IR_RxBuffer_3|ETH_IR_RxError_3 */
   if (cause & 0x880000) {
@@ -200,7 +200,7 @@ static rtems_irq_connect_data GT64260ethIrqData={
         NULL,
 	(rtems_irq_enable) GT64260eth_irq_on,
 	(rtems_irq_disable) GT64260eth_irq_off,
-	(rtems_irq_is_enabled) GT64260eth_irq_is_on, 
+	(rtems_irq_is_enabled) GT64260eth_irq_is_on,
 };
 
 static void GT64260eth_init_hw(struct GTeth_softc *sc)
@@ -217,7 +217,7 @@ static void GT64260eth_init_hw(struct GTeth_softc *sc)
 
   sc->rxq_intrbits=0;
   sc->sc_flags=0;
-  
+
 #ifndef GE_NORX
   GTeth_rx_setup(sc);
 #endif
@@ -248,7 +248,7 @@ static void GT64260eth_init_hw(struct GTeth_softc *sc)
    */
   if (!BSP_install_rtems_irq_handler(&GT64260ethIrqData))
      printk("GT64260eth: unable to install ISR");
-   
+
   /* The ethernet port is ready to transmit/receive */
   outl(sc->sc_pcr | ETH_EPCR_EN, ETH0_EPCR);
 
@@ -319,8 +319,8 @@ static void GT64260eth_ifinit(void *arg)
   }
 
 #ifndef GE_NOHASH
-  /* Mvme5500, the user must initialize the hash table before enabling the 
-   * Ethernet controller 
+  /* Mvme5500, the user must initialize the hash table before enabling the
+   * Ethernet controller
    */
   GTeth_hash_init(sc);
   GTeth_hash_fill(sc);
@@ -360,7 +360,7 @@ int rtems_GT64260eth_driver_attach(struct rtems_bsdnet_ifconfig *config, int att
 
   unit = rtems_bsdnet_parse_driver_name(config, &name);
   if (unit < 0) return 0;
- 
+
   printk("\nEthernet driver name %s unit %d \n",name, unit);
   printk("RTEMS-mvme5500 BSP Copyright (c) 2004, Brookhaven National Lab., Shuchen Kate Feng \n");
   /* Make certain elements e.g. descriptor lists are aligned. */
@@ -481,7 +481,7 @@ int rtems_GT64260eth_driver_attach(struct rtems_bsdnet_ifconfig *config, int att
   /*  ifp->if_watchdog = GTeth_ifwatchdog;*/
 
   if (ifp->if_snd.ifq_maxlen == 0)
-    ifp->if_snd.ifq_maxlen = ifqmaxlen; 
+    ifp->if_snd.ifq_maxlen = ifqmaxlen;
 
   /* create the synchronization semaphore */
   if (RTEMS_SUCCESSFUL != rtems_semaphore_create(
@@ -513,7 +513,7 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
   printf("      Framing Errors:%-8lu\n", sc->stats.frame_errors);
   printf("          Crc Errors:%-8lu\n", sc->stats.crc_errors);
   printf("    Oversized Frames:%-8lu\n", sc->stats.length_errors);
-  printf("         Active Rxqs:%-8u\n",  sc->rxq_active); 
+  printf("         Active Rxqs:%-8u\n",  sc->rxq_active);
   printf("       Tx Interrupts:%-8lu\n", sc->stats.txInterrupts);
 #endif
   printf("Multi-BuffTx Packets:%-8lu\n", sc->stats.txMultiBuffPacket);
@@ -525,7 +525,7 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
   printf("   Transmitt Packets:%-8lu\n", ifp->if_opackets);
   printf("   Transmitt  errors:%-8lu\n", ifp->if_oerrors);
   printf("    Tx/Rx collisions:%-8lu\n", ifp->if_collisions);
-  printf("         Active Txqs:%-8u\n", sc->txq_nactive); 
+  printf("         Active Txqs:%-8u\n", sc->txq_nactive);
 #endif
 }
 
@@ -595,7 +595,7 @@ static int GTeth_ifioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data)
 
 #ifdef GT_DEBUG
   printk("exit ioctl\n");
-#endif	
+#endif
   return error;
 }
 
@@ -610,7 +610,7 @@ static void GTeth_ifstart(struct ifnet *ifp)
   if ((ifp->if_flags & IFF_RUNNING) == 0) {
 #ifdef GT_DEBUG
      printk("IFF_RUNNING==0\n");
-#endif		
+#endif
      return;
   }
 
@@ -644,7 +644,7 @@ static void GTeth_init_rx_ring(struct GTeth_softc *sc)
 
   for (i = 0; i < RX_RING_SIZE; i++, rxd++, nxtaddr += sizeof(*rxd)) {
     struct mbuf *m;
- 
+
     rxd->ed_lencnt= sc->rx_buf_sz <<16;
     rxd->ed_cmdsts = RX_CMD_F|RX_CMD_L|RX_CMD_O|RX_CMD_EI;
 
@@ -653,7 +653,7 @@ static void GTeth_init_rx_ring(struct GTeth_softc *sc)
     m->m_pkthdr.rcvif =  &sc->arpcom.ac_if;
     sc->rxq_mbuf[i] = m;
 
-    /* convert mbuf pointer to data pointer of correct type */	
+    /* convert mbuf pointer to data pointer of correct type */
     rxd->ed_bufptr = (unsigned) mtod(m, void *);
 
     /*
@@ -706,23 +706,23 @@ static int GT64260eth_rx(struct GTeth_softc *sc)
     byteCount = rxd->ed_lencnt & 0xffff;
 
     if (cmdsts & RX_CMD_O) {
-      if (byteCount == 0) 
+      if (byteCount == 0)
          return(0);
 
      /* <Kate Feng> Setting command/status to be zero seems to eliminate
       * the spurious interrupt associated with the GE_FORGOT issue.
       */
-      rxd->ed_cmdsts=0; 
+      rxd->ed_cmdsts=0;
 
 #ifdef GE_FORGOT
-      /* 
+      /*
        * For dignosis purpose only. Not a good practice to turn it on
        */
       printk("Rxq %d %d %d\n", sc->rxq_fi, byteCount,nloops);
 #endif
     }
 
-    /* GT gave the ownership back to the CPU or the length has 
+    /* GT gave the ownership back to the CPU or the length has
      * been rewritten , which means there
      * is new packet in the descriptor/buffer
      */
@@ -762,8 +762,8 @@ static int GT64260eth_rx(struct GTeth_softc *sc)
      MCLGET (m, M_WAIT);
      m->m_pkthdr.rcvif = ifp;
      sc->rxq_mbuf[sc->rxq_fi]= m;
-     /* convert mbuf pointer to data pointer of correct type */	
-     rxd->ed_bufptr = (unsigned) mtod(m, void*); 
+     /* convert mbuf pointer to data pointer of correct type */
+     rxd->ed_bufptr = (unsigned) mtod(m, void*);
      rxd->ed_lencnt = (unsigned long) sc->rx_buf_sz <<16;
      rxd->ed_cmdsts = RX_CMD_F|RX_CMD_L|RX_CMD_O|RX_CMD_EI;
 
@@ -791,7 +791,7 @@ static void GTeth_rx_setup(struct GTeth_softc *sc)
      outl( sc->rxq_desc_busaddr,ETH0_ECRDP3);
 #ifdef GT_DEBUG
      printk("ETH0_EFRDP3 0x%x, ETH0_ECRDP3 0x%x \n", inl(ETH0_EFRDP3),
-	    inl(ETH0_ECRDP3)); 
+	    inl(ETH0_ECRDP3));
 #endif
   }
   sc->sc_intrmask |= sc->rxq_intrbits;
@@ -907,7 +907,7 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
   unsigned intrmask = sc->sc_intrmask;
   unsigned loop=0, index= sc->txq_lo;
 
-  /* 
+  /*
    * The end-of-list descriptor we put on last time is the starting point
    * for this packet.  The GT is supposed to terminate list processing on
    * a NULL nxtptr but that currently is broken so a CPU-owned descriptor
@@ -920,14 +920,14 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
     sc->stats.txSinglMaxLen= MAX(m->m_len, sc->stats.txSinglMaxLen);
   }
   else /* multiple mbufs in this packet */
-  { 
+  {
     struct mbuf *mtp, *mdest;
     volatile unsigned char *pt;
     int len, y;
 
 #ifdef GT_DEBUG
     printk("multi mbufs ");
-#endif    
+#endif
     MGETHDR(mdest, M_WAIT, MT_DATA);
     MCLGET(mdest, M_WAIT);
     pt = (volatile unsigned char *)mdest->m_data;
@@ -935,9 +935,9 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
       loop++;
       if ( (y=(len+mtp->m_len)) > sizeof(union mcluster)) {
 	/* GT64260 allows us to chain the remaining to the next
-         * free descriptors. 
+         * free descriptors.
          */
-        printk("packet size %x > mcluster %x\n", y,sizeof(union mcluster)); 
+        printk("packet size %x > mcluster %x\n", y,sizeof(union mcluster));
 	printk("GT64260eth : packet too large ");
       }
       memcpy((void *)pt,(char *)mtp->m_data, mtp->m_len);
@@ -946,7 +946,7 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
     printk("%d ",mtp->m_len);
 #endif
       len += mtp->m_len;
-      sc->stats.txBuffMaxLen=MAX(mtp->m_len,sc->stats.txBuffMaxLen); 
+      sc->stats.txBuffMaxLen=MAX(mtp->m_len,sc->stats.txBuffMaxLen);
     }
     sc->stats.txMultiMaxLoop=MAX(loop, sc->stats.txMultiMaxLoop);
 #if 0
@@ -961,14 +961,14 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
   }
   if (m->m_len < ET_MINLEN) m->m_len = ET_MINLEN;
 
-  txd->ed_bufptr = (unsigned) mtod(m, void*); 
+  txd->ed_bufptr = (unsigned) mtod(m, void*);
   txd->ed_lencnt = m->m_len << 16;
   /*txd->ed_cmdsts = TX_CMD_L|TX_CMD_GC|TX_CMD_P|TX_CMD_O|TX_CMD_F|TX_CMD_EI;*/
   txd->ed_cmdsts = 0x80c70000;
   while (txd->ed_cmdsts != 0x80c70000);
   memBar();
 
-#ifdef GT_DEBUG 
+#ifdef GT_DEBUG
   printk("len = %d, cmdsts 0x%x ", m->m_len,txd->ed_cmdsts);
 #endif
 
@@ -1042,10 +1042,10 @@ static unsigned GTeth_txq_done(struct GTeth_softc *sc)
 	*/
        nextin = (sc->txq_fi + 1) % TX_RING_SIZE;
 
-       if (sc->txq_desc[nextin].ed_cmdsts & TX_CMD_O) return(0); 
+       if (sc->txq_desc[nextin].ed_cmdsts & TX_CMD_O) return(0);
        printk("Txq%d forgot\n",sc->txq_fi);
     } /* end checking GT64260eth owner */
-    GTeth_txq_free(sc, cmdsts);   
+    GTeth_txq_free(sc, cmdsts);
   }  /* end while */
   if (GTeth_debug>0) printk(")\n");
   return(1);
@@ -1097,7 +1097,7 @@ static void GTeth_tx_start(struct GTeth_softc *sc)
       printk("next desc. @ 0x%x\n",txd->ed_nxtptr);
 #endif
   }
- 
+
   sc->txq_intrbits = ETH_IR_TxEndHigh|ETH_IR_TxBufferHigh;
   sc->txq_esdcmrbits = ETH_ESDCMR_TXDH; /* Start Tx high */
   sc->txq_epsrbits = ETH_EPSR_TxHigh;
@@ -1175,7 +1175,7 @@ static int GTeth_hash_compute(struct GTeth_softc *sc,unsigned char eaddr[ETHER_A
 #ifdef GT_DEBUG
   printk("eaddr= %s add1:%x add0:%x\n", ether_sprintf1(eaddr), add1, add0);
 #endif
-    
+
   /*
    * hashResult is the 15 bits Hash entry address.
    * ethernetADD is a 48 bit number, which is derived from the Ethernet
@@ -1231,8 +1231,8 @@ static int GTeth_hash_compute(struct GTeth_softc *sc,unsigned char eaddr[ETHER_A
   printk(")");
 #endif
 
-  /* 1/2K address filtering (MOTLoad default )? ->16KB memory required 
-   * or 8k address filtering ? -> 256KB memory required 
+  /* 1/2K address filtering (MOTLoad default )? ->16KB memory required
+   * or 8k address filtering ? -> 256KB memory required
    */
   return result & ((sc->sc_pcr & ETH_EPCR_HS_512) ? 0x7ff : 0x7fff);
 }
@@ -1290,7 +1290,7 @@ static int GTeth_hash_entry_op(struct GTeth_softc *sc, enum GTeth_hash_op op,
   for (limit = HSH_LIMIT; limit > 0 ; --limit) {
       /*
        * Does the GT wrap at the end, stop at the, or overrun the
-       * end?  Assume it wraps for now.  Stash a copy of the 
+       * end?  Assume it wraps for now.  Stash a copy of the
        * current hash entry.
        */
       unsigned long long *he_p = &sc->sc_hashtable[hash];
@@ -1336,7 +1336,7 @@ static int GTeth_hash_entry_op(struct GTeth_softc *sc, enum GTeth_hash_op op,
        if (maybe_he_p == NULL && (thishe & HSH_S)) {
 	  maybe_he_p = he_p;
 	  maybe_hash = hash;
-       }		
+       }
        hash = (hash + 1) & (sc->sc_hashmask / sizeof(he));
   }
 
@@ -1425,7 +1425,7 @@ static void GTeth_hash_init(struct GTeth_softc *sc)
 
   if (GTeth_debug>0) printk("GTeth_hash_init(");
   /* MOTLoad defualt : 512 bytes of address filtering, which
-   * requires 16KB of memory 
+   * requires 16KB of memory
    */
 #if 1
   hash_mem = rtems_bsdnet_malloc(HASH_DRAM_SIZE + HASH_ALIGN, M_FREE, M_NOWAIT);
@@ -1453,7 +1453,7 @@ static void GT64260eth_error(struct GTeth_softc *sc)
    * by the ISR, we must disable interrupts here
    */
   if (intr_status) {
-    printk("%s%d: ICR = 0x%x ", 
+    printk("%s%d: ICR = 0x%x ",
 	   ifp->if_name, ifp->if_unit, intr_status);
 #if 1
     if (intr_status & INTR_RX_ERROR) {
@@ -1467,10 +1467,10 @@ static void GT64260eth_error(struct GTeth_softc *sc)
        printk("Txq error,  if_oerrors %d\n",ifp->if_oerrors);
     }
   }
-  else 
+  else
     printk("%s%d: Ghost interrupt ?\n",ifp->if_name,
 	   ifp->if_unit);
-  sc->intr_errsts[sc->intr_err_ptr1++]=0;  
+  sc->intr_errsts[sc->intr_err_ptr1++]=0;
   sc->intr_err_ptr1 %= INTR_ERR_SIZE;   /* Till Straumann */
 }
 #endif
@@ -1483,7 +1483,7 @@ static void GT64260eth_daemon(void *arg)
   struct mbuf	*m=0;
   struct ifnet	*ifp=&sc->arpcom.ac_if;
 
-#if 0	
+#if 0
   /* see comments in GT64260eth_init(); in newer versions of
    * rtems, we hold the network semaphore at this point
    */
@@ -1509,7 +1509,7 @@ static void GT64260eth_daemon(void *arg)
 				RTEMS_WAIT | RTEMS_EVENT_ANY,
 				RTEMS_NO_TIMEOUT,
 				&events);
- 
+
      if (KILL_EVENT & events) break;
 
 #ifndef GE_NORX
@@ -1521,7 +1521,7 @@ static void GT64260eth_daemon(void *arg)
 #endif
 
      /* clean up and try sending packets */
-     do { 
+     do {
 	 if (sc->txq_nactive) GTeth_txq_done(sc);
 
          while (sc->txq_free>0) {
@@ -1529,7 +1529,7 @@ static void GT64260eth_daemon(void *arg)
 	      m=0;
 	      IF_DEQUEUE(&ifp->if_snd,m);
               if (m==0) break;
-              GT64260eth_sendpacket(sc, m); 
+              GT64260eth_sendpacket(sc, m);
            }
            else {
               GTeth_txq_done(sc);
@@ -1548,7 +1548,7 @@ static void GT64260eth_daemon(void *arg)
 
        /* Log errors and other uncommon events. */
 #ifdef GT64260eth_DEBUG
-       if (events & ERR_EVENT) GT64260eth_error(sc); 
+       if (events & ERR_EVENT) GT64260eth_error(sc);
 #endif
   } /* end for(;;) { rtems_bsdnet_event_receive() .....*/
 
@@ -1568,7 +1568,7 @@ static void GT64260eth_daemon(void *arg)
   rtems_bsdnet_semaphore_release();
   rtems_semaphore_release(sc->daemonSync);
 
-  /* Note that I dont use sc->daemonTid here - 
+  /* Note that I dont use sc->daemonTid here -
    * theoretically, that variable could already
    * hold a newly created TID
    */

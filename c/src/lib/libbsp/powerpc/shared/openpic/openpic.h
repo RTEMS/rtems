@@ -336,7 +336,7 @@ extern unsigned openpic_set_eoi_delay(unsigned tb_cycles);
  * and 'level sensitive', respectively.
  * NOTE: if you do pass arrays then their size must either
  *       match the number of sources read from the device or
- *       that value must be overridden by specifying 
+ *       that value must be overridden by specifying
  *       a non-zero 'num_sources' parameter.
  *
  * Nonzero 'epic_freq' activates the EOI delay if the EPIC is

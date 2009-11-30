@@ -88,7 +88,7 @@ MMU_TLB_table_t MMU_TLB_table[] = {
   { 0xFA200200,	0x13,	0xFA2009FF },	/* IMMR - PS=16K */
   /*
    *
-   * Flash: Start address 0x40000000, 8M, 
+   * Flash: Start address 0x40000000, 8M,
    *	ASID=0x0, APG=0x0, not guarded memory,
    *	R/O,X for all, no ASID comparison, not cache-inhibited.
    * EPN		TWC	RPN

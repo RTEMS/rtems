@@ -33,12 +33,12 @@ unsigned int BSP_heap_start;
 /*
  * PCI Bus Frequency
  */
-unsigned int BSP_bus_frequency;  
+unsigned int BSP_bus_frequency;
 
 /*
  * processor clock frequency
  */
-unsigned int BSP_processor_frequency; 
+unsigned int BSP_processor_frequency;
 
 /*
  * Time base divisior (how many tick for 1 second).
@@ -180,7 +180,7 @@ void bsp_start( void )
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
-   * function store the result in global variables so that it can be used 
+   * function store the result in global variables so that it can be used
    * later...
    */
   myCpu         = get_ppc_cpu_type();
@@ -199,7 +199,7 @@ void bsp_start( void )
 
   BSP_mem_size = RamSize;
   printk("BSP_mem_size: 0x%x\n", BSP_mem_size );
- 
+
 
   /*
    * Initialize default raw exception handlers.
@@ -239,11 +239,11 @@ void bsp_start( void )
   /*
    * Initalize RTEMS IRQ system
    */
-  #if DEBUG  
+  #if DEBUG
     printk("bspstart: Call BSP_rtems_irq_mng_init\n");
   #endif
   BSP_rtems_irq_mng_init(0);
-  
+
   #if DEBUG
     printk("bsp_start: end BSPSTART\n");
     ShowBATS();

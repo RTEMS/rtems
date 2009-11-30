@@ -28,7 +28,7 @@ static int bsp_uboot_environ_check_crc(void)
   unsigned long crc;
   unsigned long max;
 
-  for (max=0 ; max <= 0x20000 ; max+=4 ) { 
+  for (max=0 ; max <= 0x20000 ; max+=4 ) {
     crc = crc32( 0, NULL, 0 );
     crc = crc32( crc, &uboot_environment[4], max);
     printk( "crc=0x%08lx need %0x max=%d\n", crc,
@@ -49,7 +49,7 @@ const char *bsp_uboot_getenv(
     return NULL;
 
   for ( i=4 ; i<uboot_environment_size ; i++ ) {
-    memset( lhs, '\0', sizeof(lhs) );   
+    memset( lhs, '\0', sizeof(lhs) );
     for( j=0 ; uboot_environment[i] != '=' && j<sizeof(lhs) ; i++, j++ ) {
       lhs[j] = uboot_environment[i];
     }

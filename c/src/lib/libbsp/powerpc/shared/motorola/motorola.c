@@ -113,12 +113,12 @@ static struct _int_map mtx603_intmap[] = {
 
 static struct _int_map mvme23xx_intmap[] = {
 /* Raven Hostbridge; has int_pin == 0
-   {0,  0, 0, {{0, {-1,-1,-1,-1}}, 
+   {0,  0, 0, {{0, {-1,-1,-1,-1}},
                NULL_PINMAP}},
 */
 
 /* Winbond PCI/ISA 83c553; has int_pin == 0
-   {0, 11, 0, {{0, {-1,-1,-1,-1}}, 
+   {0, 11, 0, {{0, {-1,-1,-1,-1}},
                NULL_PINMAP}},
 */
 
@@ -156,12 +156,12 @@ static struct _int_map mvme23xx_intmap[] = {
 
 static struct _int_map mvme24xx_intmap[] = {
 /* Raven Hostbridge; has int_pin == 0
-   {0,  0, 0, {{0, {-1,-1,-1,-1}}, 
+   {0,  0, 0, {{0, {-1,-1,-1,-1}},
                NULL_PINMAP}},
 */
 
 /* Winbond PCI/ISA 83c553; has int_pin == 0
-   {0, 11, 0, {{0, {-1,-1,-1,-1}}, 
+   {0, 11, 0, {{0, {-1,-1,-1,-1}},
                NULL_PINMAP}},
 */
 
@@ -195,12 +195,12 @@ static struct _int_map mvme24xx_intmap[] = {
 
 static struct _int_map mvme27xx_intmap[] = {
 /* Raven Hostbridge; has int_pin == 0 */
-   {0,  0, 0, {{0, {-1,-1,-1,-1}}, 
+   {0,  0, 0, {{0, {-1,-1,-1,-1}},
                NULL_PINMAP}},
 
 
 /* Winbond PCI/ISA 83c553; has int_pin == 0 */
-   {0, 11, 0, {{0, {-1,-1,-1,-1}}, 
+   {0, 11, 0, {{0, {-1,-1,-1,-1}},
                NULL_PINMAP}},
 
    {0, 13, PCI_FIXUP_OPT_OVERRIDE_NAME,
@@ -369,11 +369,11 @@ motorolaBoard getMotorolaBoard(void)
   for (entry = 0; mot_boards[entry].cpu_type != 0; entry++) {
     if ((mot_boards[entry].cpu_type & 0xff) != cpu_type)
       continue;
-    
+
     if ((mot_boards[entry].proc_type != PPC_UNKNOWN) &&
 	(mot_boards[entry].proc_type != proc_type))
       /*
-       * IMD: processor type does not match 
+       * IMD: processor type does not match
        * (here we distinguish a MVME2300 and a MVME2400)
        */
       continue;

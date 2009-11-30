@@ -18,7 +18,7 @@ _start:
 
         bl      cmain
 	.size _start, . - _start
-	
+
 	.global __eabi
 __eabi:
 	blr

@@ -12,7 +12,7 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE
- * 
+ *
  */
 #include <libcpu/io.h>
 #include <libcpu/spr.h>
@@ -54,17 +54,17 @@ rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER]={
    * This table is where the developers can change the levels of priority
    * based on the need of their applications.
    *
-   * actual priorities for CPU MAIN and GPP interrupts (0-95) 
+   * actual priorities for CPU MAIN and GPP interrupts (0-95)
    *
    *	0   means that only current interrupt is masked (lowest priority)
    *	255 is only used by bits 24, 25, 26 and 27 of the CPU high
-   *        interrupt Mask: (e.g. GPP7_0, GPP15_8, GPP23_16, GPP31_24). 
+   *        interrupt Mask: (e.g. GPP7_0, GPP15_8, GPP23_16, GPP31_24).
    *        The IRQs of those four bits are always enabled. When it's used,
    *        the IRQ number is never listed in the dynamic picIsrTable[96].
    *
    *        The priorities of GPP interrupts were decided by their own
    *        value set at  BSPirqPrioTable.
-   *            
+   *
    */
   /* CPU Main cause low interrupt */
   /* 0-15 */
@@ -75,7 +75,7 @@ rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER]={
   /* 32-47 */
   2/*10/100MHZ*/, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   /* 48-63 */
-  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0,
   255 /*GPP0-7*/, 255/*GPP8-15*/, 255/*GPP16-23*/, 255/*GPP24-31*/, 0, 0, 0, 0,
   /* GPP interrupts */
   /* GPP0-7 */
@@ -83,7 +83,7 @@ rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER]={
   /* GPP8-15 */
   47/*PMC1A*/,46/*PMC1B*/,45/*PMC1C*/,44/*PMC1D*/,30/*VME0*/, 29/*VME1*/,3,1,
   /* GPP16-23 */
-  37/*PMC2A*/,36/*PMC2B*/,35/*PMC2C*/,34/*PMC2D*/,23/*1GHZ*/, 0,0,0,  
+  37/*PMC2A*/,36/*PMC2B*/,35/*PMC2C*/,34/*PMC2D*/,23/*1GHZ*/, 0,0,0,
   /* GPP24-31 */
   7/*watchdog*/, 0,0,0,0,0,0,0
 };
@@ -102,13 +102,13 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   /*
    * First initialize the Interrupt management hardware
    */
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Initializing the interrupt controller of the GT64260\n");
-#endif       
+#endif
 
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Going to re-initialize the rtemsIrq table %d\n",BSP_IRQ_NUMBER);
-#endif       
+#endif
   /*
    * Initialize Rtems management interrupt table
    */
@@ -116,7 +116,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
    * re-init the rtemsIrq table
    */
   for (i = 0; i < BSP_IRQ_NUMBER; i++) {
-    rtemsIrq[i]      = defaultIrq;    
+    rtemsIrq[i]      = defaultIrq;
     rtemsIrq[i].name = i;
   }
 
@@ -129,9 +129,9 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   initial_config.irqBase	= BSP_LOWEST_OFFSET;
   initial_config.irqPrioTbl	= BSPirqPrioTable;
 
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Going to setup irq mngt configuration\n");
-#endif       
+#endif
 
   rtems_interrupt_disable(l);
   if (!BSP_rtems_irq_mngt_set(&initial_config)) {
@@ -140,11 +140,11 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
        */
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
   }
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Done setup irq mngt configuration\n");
 #endif
 
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("RTEMS IRQ management is now operationnal\n");
 #endif
 }

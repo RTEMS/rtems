@@ -17,7 +17,7 @@
  *
  *  Copyright 2004, 2008 Brookhaven National Laboratory and
  *                  Shuchen K. Feng, <feng1@bnl.gov>
- *   
+ *
  *   - to be consistent with the original pci.c written by Eric Valette
  *   - added 2nd PCI support for discovery based PCI bridge (e.g. mvme5500/mvme6100)
  *   - added bus support for the expansion of PMCSpan as per request by Peter
@@ -30,7 +30,7 @@
 #include <bsp/irq.h>
 #include <bsp/pci.h>
 #include <bsp/gtreg.h>
-#include <bsp/gtpcireg.h> 
+#include <bsp/gtpcireg.h>
 #include <bsp.h>
 
 #include <stdio.h>
@@ -123,7 +123,7 @@ unsigned char func, unsigned char offset, unsigned short *val)
      n=1;
   }
 
-  *val = 0xffff; 
+  *val = 0xffff;
   if ((offset&1)|| (offset & ~0xff)) return PCIBIOS_BAD_REGISTER_NUMBER;
 #if 0
   printk("addr %x, data %x, pack %x \n", config_addr,
@@ -135,7 +135,7 @@ unsigned char func, unsigned char offset, unsigned short *val)
 }
 
 static int indirect_pci_read_config_dword(unsigned char bus, unsigned char dev,
-unsigned char func, unsigned char offset, unsigned int *val) 
+unsigned char func, unsigned char offset, unsigned int *val)
 {
   int n=0;
 
@@ -144,7 +144,7 @@ unsigned char func, unsigned char offset, unsigned int *val)
      n=1;
   }
 
-  *val = 0xffffffff; 
+  *val = 0xffffffff;
   if ((offset&3)|| (offset & ~0xff)) return PCIBIOS_BAD_REGISTER_NUMBER;
 
   out_be32(BSP_pci[n].pci_config_addr, pciConfigPack(bus,dev,func,offset));
@@ -152,7 +152,7 @@ unsigned char func, unsigned char offset, unsigned int *val)
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int indirect_pci_write_config_byte(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned char val) 
+static int indirect_pci_write_config_byte(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned char val)
 {
   int n=0;
 
@@ -168,7 +168,7 @@ static int indirect_pci_write_config_byte(unsigned char bus, unsigned char dev,u
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int indirect_pci_write_config_word(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned short val) 
+static int indirect_pci_write_config_word(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned short val)
 {
   int n=0;
 
@@ -184,7 +184,7 @@ static int indirect_pci_write_config_word(unsigned char bus, unsigned char dev,u
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int indirect_pci_write_config_dword(unsigned char bus,unsigned char dev,unsigned char func, unsigned char offset, unsigned int val) 
+static int indirect_pci_write_config_dword(unsigned char bus,unsigned char dev,unsigned char func, unsigned char offset, unsigned int val)
 {
   int n=0;
 
@@ -263,7 +263,7 @@ int pci_initialize(void)
       }
 
       if (!deviceFound) deviceFound=1;
-      switch(ulDeviceID) { 
+      switch(ulDeviceID) {
         case (PCI_VENDOR_ID_MARVELL+(PCI_DEVICE_ID_MARVELL_GT6426xAB<<16)):
           pci_read_config_byte(0,0,0,PCI_REVISION_ID, &data8);
           switch(data8) {
@@ -298,7 +298,7 @@ int pci_initialize(void)
                  ucBusNumber,ucSlotNumber);
 #endif
 	  break;
-       default : 
+       default :
 #if PCI_PRINT
           printk("BSP unlisted vendor, Bus%d Slot%d DeviceID 0x%x \n",
              ucBusNumber,ucSlotNumber, ulDeviceID);
@@ -317,7 +317,7 @@ int pci_initialize(void)
 			  0,
 			  PCI_BASE_ADDRESS_0,
                           &data);
-      printk("Bus%d BASE_ADDRESS_0 0x%x \n",ucBusNumber, data);  
+      printk("Bus%d BASE_ADDRESS_0 0x%x \n",ucBusNumber, data);
       pci_read_config_dword(ucBusNumber,
 			  ucSlotNumber,
 			  0,
@@ -336,14 +336,14 @@ int pci_initialize(void)
 			  0,
 			  PCI_BASE_ADDRESS_3,
                           &data);
-      printk("Bus%d BASE_ADDRESS_3 0x%x \n", ucBusNumber, data);  
+      printk("Bus%d BASE_ADDRESS_3 0x%x \n", ucBusNumber, data);
 
       pci_read_config_word(ucBusNumber,
  			  ucSlotNumber,
 			  0,
 			  PCI_INTERRUPT_LINE,
                           &sdata);
-      printk("Bus%d INTERRUPT_LINE 0x%x \n", ucBusNumber, sdata);  
+      printk("Bus%d INTERRUPT_LINE 0x%x \n", ucBusNumber, sdata);
 
       /* We always enable internal memory. */
       pci_read_config_dword(ucBusNumber,
@@ -374,7 +374,7 @@ int pci_initialize(void)
 
 #if PCI_DEBUG
       printk("Bus%d Slot 0x%x HEADER/LAT/CACHE 0x%x \n",
-             ucBusNumber, ucSlotNumber, ulHeader);    
+             ucBusNumber, ucSlotNumber, ulHeader);
 #endif
 
       for (ucFnNumber=1;ucFnNumber<ucNumFuncs;ucFnNumber++) {
@@ -393,8 +393,8 @@ int pci_initialize(void)
 				  ucSlotNumber,
 				  ucFnNumber,
 				  PCI_CLASS_REVISION,
-				  &ulClass); 
-#if PCI_DEBUG    
+				  &ulClass);
+#if PCI_DEBUG
          printk("Bus%d Slot 0x%x Func %d classID 0x%x \n",ucBusNumber,ucSlotNumber,
              ucFnNumber, ulClass);
 #endif
@@ -404,10 +404,10 @@ int pci_initialize(void)
     if (deviceFound) ucMaxPCIBus++;
   } /* for (ucBusNumber=0; ucBusNumber<BSP_MAX_PCI_BUS; ... */
 #if PCI_DEBUG
-  printk("number of PCI buses: %d, numPCIDevs %d\n", 
+  printk("number of PCI buses: %d, numPCIDevs %d\n",
 	 pci_bus_count(), numPCIDevs);
 #endif
-  pci_interface(); 
+  pci_interface();
   return(0);
 }
 

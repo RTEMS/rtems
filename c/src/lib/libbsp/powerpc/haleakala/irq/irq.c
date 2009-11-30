@@ -69,11 +69,11 @@ static inline int IsUICIRQ(const rtems_irq_number irqLine)
 static void WriteIState(void)
 /* Write the gEnabledInts state masked by gIntInhibited to the hardware */
 {
-	PPC_SET_DEVICE_CONTROL_REGISTER(UIC0_ER, 
+	PPC_SET_DEVICE_CONTROL_REGISTER(UIC0_ER,
 					gEnabledInts[0] & ~gIntInhibited[0]);
-	PPC_SET_DEVICE_CONTROL_REGISTER(UIC1_ER, 
+	PPC_SET_DEVICE_CONTROL_REGISTER(UIC1_ER,
 					gEnabledInts[1] & ~gIntInhibited[1]);
-	PPC_SET_DEVICE_CONTROL_REGISTER(UIC2_ER, 
+	PPC_SET_DEVICE_CONTROL_REGISTER(UIC2_ER,
 					gEnabledInts[2] & ~gIntInhibited[2]);
 }
 
@@ -96,7 +96,7 @@ BSP_disable_irq_at_pic(const rtems_irq_number irq)
 		uint32_t oldState;
 		int		 iword = irq>>5;
 		uint32_t mask = (0x80000000 >> (irq & 0x1F));
-		
+
 		oldState = gEnabledInts[iword] & mask;
 		gEnabledInts[iword] &= ~mask;
 		WriteIState();
@@ -109,14 +109,14 @@ int
 BSP_setup_the_pic(rtems_irq_global_settings* config)
 {
 	int i;
-	
+
 	dflt_entry     = config->defaultEntry;
 	rtems_hdl_tblP = config->irqHdlTbl;
 	for (i=0; i<kUICWords; i++)
 		gIntInhibited[i] = 0;
-		
+
 	/* disable all interrupts */
-	PPC_SET_DEVICE_CONTROL_REGISTER (UIC2_ER, 0x00000000);	
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC2_ER, 0x00000000);
 	/* Set Critical / Non Critical interrupts */
 	PPC_SET_DEVICE_CONTROL_REGISTER (UIC2_CR, 0x00000000);
 	/* Set Interrupt Polarities */
@@ -153,7 +153,7 @@ BSP_setup_the_pic(rtems_irq_global_settings* config)
 	PPC_SET_DEVICE_CONTROL_REGISTER (UIC0_VR, 0x00000001);
 	/* clear all interrupts */
 	PPC_SET_DEVICE_CONTROL_REGISTER (UIC0_SR, 0xffffffff);
-	
+
 	return 1;
 }
 
@@ -164,8 +164,8 @@ BSP_setup_the_pic(rtems_irq_global_settings* config)
  *
  * No support for critical interrupts here yet
  */
- 
-int 
+
+int
 C_dispatch_irq_handler( BSP_Exception_frame* frame, unsigned int excNum )
 {
 	if (excNum == ASM_EXT_VECTOR) {
@@ -180,15 +180,15 @@ C_dispatch_irq_handler( BSP_Exception_frame* frame, unsigned int excNum )
 		gIntInhibited[0] |= active[0];
 		gIntInhibited[1] |= active[1];
 		gIntInhibited[2] |= active[2];
-		
+
 		/*  ...and update the hardware so the active interrupts are disabled */
 		WriteIState();
-		
+
 		/* Loop, calling bsp_irq_dispatch_list for each active interrupt */
 		while ((active[0] | active[1] | active[2]) != 0) {
 			uint32_t index = -1;
 			uint32_t bit, bmask;
-			
+
 			/* Find an active interrupt, searching 0..2, bit 0..bit 31 (IBM order) */
 			do {
 				index++;
@@ -201,17 +201,17 @@ C_dispatch_irq_handler( BSP_Exception_frame* frame, unsigned int excNum )
 			/* Write a 1-bit to the appropriate status register to clear it */
 			bmask = 0x80000000 >> bit;
 			switch (index) {
-			case 0: 
+			case 0:
 			  PPC_SET_DEVICE_CONTROL_REGISTER(UIC0_SR, bmask);
 			  break;
-			case 1: 
+			case 1:
 			  PPC_SET_DEVICE_CONTROL_REGISTER(UIC1_SR, bmask);
 			  break;
-			case 2: 
+			case 2:
 			  PPC_SET_DEVICE_CONTROL_REGISTER(UIC2_SR, bmask);
 			  break;
 			}
-			
+
 			/* Clear in the active record and gIntInhibited */
 			active[index] &= ~bmask;
 			gIntInhibited[index] &= ~bmask;
@@ -220,20 +220,20 @@ C_dispatch_irq_handler( BSP_Exception_frame* frame, unsigned int excNum )
 		/* Update the hardware again so the interrupts we have handled are unmasked */
 		WriteIState();
 		return 0;
-		
+
 	} else if (excNum == ASM_DEC_VECTOR) {		/* 0x1000 remapped by C_dispatch_dec_handler_bookE  */
 		bsp_irq_dispatch_list(rtems_hdl_tblP, BSP_PIT, dflt_entry.hdl);
 		return 0;
-		
+
 	} else if (excNum == ASM_BOOKE_FIT_VECTOR) {		/* 0x1010 mapped to 0x13 by ppc_get_vector_addr */
 		bsp_irq_dispatch_list(rtems_hdl_tblP, BSP_FIT, dflt_entry.hdl);
 		return 0;
-		
+
 	} else if (excNum == ASM_BOOKE_WDOG_VECTOR) {		/* 0x1020 mapped to 0x14 by ppc_get_vector_addr */
 		bsp_irq_dispatch_list(rtems_hdl_tblP, BSP_WDOG, dflt_entry.hdl);
 		return 0;
-		
-	} else 
+
+	} else
 		return -1; /* unhandled interrupt, panic time */
 }
 

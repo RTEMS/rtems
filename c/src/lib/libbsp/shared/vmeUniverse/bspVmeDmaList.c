@@ -4,19 +4,19 @@
  * implementation of generic parts of the 'linked-list VME DMA' API.
  */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2006, 2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -25,18 +25,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -45,9 +45,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -88,9 +88,9 @@ int i;
 		pc->freeList = calloc( (LCHUNK),  sizeof(*pc->freeList));
 
 		if ( ! (pc->freeList) ) {
-			return 0;	
+			return 0;
 		}
-		
+
 		/* link together and set 'class' pointer */
 		for (i=0; i<(LCHUNK)-1; i++) {
 			pc->freeList[i].n     = &pc->freeList[i+1];
@@ -150,7 +150,7 @@ lfree(VMEDmaListNode d)
 	if ( d->p || d->n )
 		return -1;
 	d->n = d->class->freeList;
-	d->class->freeList = d;	
+	d->class->freeList = d;
 	return 0;
 }
 
@@ -269,7 +269,7 @@ DmaDescriptorSetNxt setnxt = d->class->desc_setnxt;
 	}
 	if ( lenq(anchor, d) )
 		return -1;
-	/* update descriptor pointers */ 
+	/* update descriptor pointers */
 	if ( anchor ) {
 		setnxt(d->d,      d->n ? d->n->d : 0);
 		setnxt(anchor->d, d->d);
