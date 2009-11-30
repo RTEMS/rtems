@@ -1,3 +1,9 @@
+2009-11-30	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* umon/cli.h, umon/monlib.c, umon/monlib.h, umon/tfs.h,
+	umon/tfsDriver.c, umon/umon.h, umon/umonrtemsglue.c: Update to match
+	development version.
+
 2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clockdrv_shell.h: Clean up.

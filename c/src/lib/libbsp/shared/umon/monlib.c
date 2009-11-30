@@ -1,37 +1,50 @@
-/* monlib.c:
- *	This file is part of the monitor code, but it is actually linked into
- *	the application.  It is built with (but not linked with) the monitor,
- *	then the monlib.o file is linked with the application.
- *	The only requirement on the application is that it know where the address
- *	of the monCom function is in the monitor's space.
- *	The monCom function will be accessible in some "well-known" way (processor
- *	and platform dependent) so that this will not be a problem.
+/*
+ *  monlib.c -
+ *  This file is part of the monitor code, but it is actually linked into
+ *  the application.  It is built with (but not linked with) the monitor,
+ *  then the monlib.o file is linked with the application.
+ *  The only requirement on the application is that it know where the address
+ *  of the monCom function is in the monitor's space.
+ *  The monCom function will be accessible in some "well-known" way (processor
+ *  and platform dependent) so that this will not be a problem.
  *
- *	This monlib.c file is a replacement for the older mechanism that was
- *	a bit more error-prone...  A table of function pointers existed at some
- *	well-known location in the monitor, and the content of that table was
- *	assumed to also be "well-known".  This new version only assumes that the
- *	pointer to monCom is well-known; everything else will work based on the
- *	fact that the monitor and application will share the monlib.h header
- *	file.
+ *  This monlib.c file is a replacement for the older mechanism that was
+ *  a bit more error-prone...  A table of function pointers existed at some
+ *  well-known location in the monitor, and the content of that table was
+ *  assumed to also be "well-known".  This new version only assumes that the
+ *  pointer to monCom is well-known; everything else will work based on the
+ *  fact that the monitor and application will share the monlib.h header
+ *  file.
  *
- *	General notice:
- *	This code is part of a boot-monitor package developed as a generic base
- *	platform for embedded system designs.  As such, it is likely to be
- *	distributed to various projects beyond the control of the original
- *	author.  Please notify the author of any enhancements made or bugs found
- *	so that all may benefit from the changes.  In addition, notification back
- *	to the author will allow the new user to pick up changes that may have
- *	been made by other users after this version of the code was distributed.
+ **************************************************************************
+ *  General notice:
+ *  This code is part of a boot-monitor package developed as a generic base
+ *  platform for embedded system designs.  As such, it is likely to be
+ *  distributed to various projects beyond the control of the original
+ *  author.  Please notify the author of any enhancements made or bugs found
+ *  so that all may benefit from the changes.  In addition, notification back
+ *  to the author will allow the new user to pick up changes that may have
+ *  been made by other users after this version of the code was distributed.
  *
- *	Note1: the majority of this code was edited with 4-space tabs.
- *	Note2: as more and more contributions are accepted, the term "author"
- *		   is becoming a mis-representation of credit.
+ *  Note1: the majority of this code was edited with 4-space tabs.
+ *  Note2: as more and more contributions are accepted, the term "author"
+ *         is becoming a mis-representation of credit.
  *
- *	Original author:	Ed Sutter
- *	Email:				esutter@lucent.com
- *	Phone:				908-582-2351
+ *  Original author:    Ed Sutter
+ *  Email:              esutter@alcatel-lucent.com
+ *  Phone:              908-582-2351
+ **************************************************************************
+ *
+ *  Ed Sutter has been informed that this code is being used in RTEMS.
+ *
+ *  This code was reformatted by Joel Sherrill from OAR Corporation and
+ *  Fernando Nicodemos <fgnicodemos@terra.com.br> from NCB - Sistemas
+ *  Embarcados Ltda. (Brazil) to be more compliant with RTEMS coding
+ *  standards and to eliminate C++ style comments.
+ *
+ *  $Id$
  */
+
 #include <umon/monlib.h>
 
 static int		(*_tfsseek)(int,int,int);
