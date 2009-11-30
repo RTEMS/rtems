@@ -140,7 +140,7 @@ _U(longjmp):
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
- 
+
 
 void _CPU_Context_save_fp(
   Context_Control_fp **fp_context_ptr
@@ -175,7 +175,7 @@ SYM(_CPU_Context_save_fp):
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
- 
+
 
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
@@ -215,7 +215,7 @@ SYM(_CPU_Context_switch):
 	/*save registers*/
 #if 1
 /*if this section is removed there is a problem.*/
-/*debug section start*/ 
+/*debug section start*/
 	pop	r22
 	pop	r23
 	push	r22
@@ -340,7 +340,7 @@ SYM(_CPU_Context_Initialize):
 	PUSH	R17
 	PUSH	R28
 	PUSH	R29
-	//calculate new stack pointer 
+	//calculate new stack pointer
 	ADD	R22, R18
 	ADC	R23, R19
 	MOV	R26, R22
@@ -385,7 +385,7 @@ NEW_LEVEL_ZERO:
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
- 
+
 
 void _ISR_Handler(void)
 {
@@ -446,7 +446,7 @@ void _ISR_Handler(void)
    *
    *  LABEL "exit interrupt (simple case):
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
-   *    if outermost interrupt 
+   *    if outermost interrupt
    *      restore stack
    *  #endif
    *  prepare to get out of interrupt

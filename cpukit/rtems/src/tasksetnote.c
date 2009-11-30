@@ -61,7 +61,7 @@ rtems_status_code rtems_task_set_note(
 
   if ( !rtems_configuration_get_notepads_enabled() )
     return RTEMS_NOT_CONFIGURED;
-    
+
   /*
    *  NOTE:  There is no check for < RTEMS_NOTEPAD_FIRST because that would
    *         be checking an unsigned number for being negative.

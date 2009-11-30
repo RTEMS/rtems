@@ -25,4 +25,4 @@ int rtems_object_id_get_node(
 )
 {
   return _Objects_Get_node( id );
-} 
+}

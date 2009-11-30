@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "iotnx5.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* I/O registers */
 
@@ -108,7 +108,7 @@
 #define USITC   0
 
 #define USISR   _SFR_IO8(0x0E)
-#define USISIF  7 
+#define USISIF  7
 #define USIOIF  6
 #define USIPF   5
 #define USIDC   4
@@ -129,7 +129,7 @@
 #define ADC2D   4
 #define ADC3D   3
 #define ADC1D   2
-#define AIN1D   1 
+#define AIN1D   1
 #define AIN0D   0
 
 #define PCMSK   _SFR_IO8(0x15)

@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "io43u35x.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* I/O registers */
 
@@ -417,7 +417,7 @@
 #define    ADIE     3
 #define    ADPS2    2
 #define    ADPS1    1
-#define    ADPS0    0  
+#define    ADPS0    0
 
 /* Constants */
 #define    RAMEND   0x045F     /*Last On-Chip SRAM Location*/

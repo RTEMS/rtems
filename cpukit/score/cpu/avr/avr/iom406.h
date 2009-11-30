@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "iom406.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* I/O registers */
 
@@ -349,13 +349,13 @@
 
 /* Pin Change Mask Register 1 */
 #define PCMSK1  _SFR_MEM8(0x6C)
-#define PCINT15 7 
-#define PCINT14 6 
-#define PCINT13 5 
-#define PCINT12 4 
-#define PCINT11 3 
-#define PCINT10 2 
-#define PCINT9  1 
+#define PCINT15 7
+#define PCINT14 6
+#define PCINT13 5
+#define PCINT12 4
+#define PCINT11 3
+#define PCINT10 2
+#define PCINT9  1
 #define PCINT8  0
 
 /* Reserved [0x6D] */
@@ -756,7 +756,7 @@
 /* Lock Bits */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
-#define __BOOT_LOCK_BITS_1_EXIST 
+#define __BOOT_LOCK_BITS_1_EXIST
 
 
 /* Signature */

@@ -27,7 +27,7 @@
 extern void *malloc(size_t);
 
 /*
- * Default allocator for mbuf data. Over-ride in user code to change 
+ * Default allocator for mbuf data. Over-ride in user code to change
  * the way mbuf's are allocated.
  */
 

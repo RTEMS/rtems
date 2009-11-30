@@ -53,6 +53,6 @@ rtems_status_code rtems_clock_get_tod(
   tmbuf->second = time.tm_sec;
   tmbuf->ticks  = now.tv_usec /
     rtems_configuration_get_microseconds_per_tick();
- 
+
   return RTEMS_SUCCESSFUL;
 }

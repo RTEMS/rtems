@@ -583,7 +583,7 @@ ppp_send_config(
     int unit,
     int mtu,
     uint32_t asyncmap,
-    int pcomp, 
+    int pcomp,
     int accomp)
 {
     u_int x;
@@ -626,7 +626,7 @@ ppp_set_xaccm(
  */
 void
 ppp_recv_config(
-    int unit, 
+    int unit,
     int mru,
     uint32_t asyncmap,
     int pcomp, int accomp)
@@ -977,7 +977,7 @@ dodefaultroute(
 
     memset((void *) &netmask, 0, sizeof(netmask));
     netmask.sin_len = sizeof netmask;
-    netmask.sin_addr.s_addr = INADDR_ANY;  
+    netmask.sin_addr.s_addr = INADDR_ANY;
     netmask.sin_family = AF_INET;
 
     if (cmd=='s') {	

@@ -122,7 +122,7 @@ upap_init(int unit)
 void
 upap_authwithpeer(
     int unit,
-    char *user, 
+    char *user,
     char *password)
 {
     upap_state *u = &upap[unit];
@@ -505,7 +505,7 @@ upap_sauthreq(upap_state *u)
     outlen = UPAP_HEADERLEN + 2 * sizeof (u_char) +
 	u->us_userlen + u->us_passwdlen;
     outp = outpacket_buf;
-    
+
     MAKEHEADER(outp, PPP_PAP);
 
     PUTCHAR(UPAP_AUTHREQ, outp);

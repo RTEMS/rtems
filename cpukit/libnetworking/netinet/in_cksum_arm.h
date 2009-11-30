@@ -239,7 +239,7 @@ int
 in4_cksum(
     struct mbuf *m,
     u_int8_t nxt,
-    int off, 
+    int off,
     int len )
 {
 	u_int sum = 0;
@@ -254,14 +254,14 @@ in4_cksum(
 		panic("in4_cksum: offset too short");
 	    if (m->m_len < sizeof(struct ip))
 		panic("in4_cksum: bad mbuf chain");
-	    
+	
 	    bzero(&ipov, sizeof(ipov));
 	    ipov.ih_len = htons(len);
-	    ipov.ih_pr = nxt; 
-	    ipov.ih_src = mtod(m, struct ip *)->ip_src; 
+	    ipov.ih_pr = nxt;
+	    ipov.ih_src = mtod(m, struct ip *)->ip_src;
 	    ipov.ih_dst = mtod(m, struct ip *)->ip_dst;
 	    w = (u_char *)&ipov;
-	    
+	
 	    /* assumes sizeof(ipov) == 20 */
 	    ADD16;
 	    ADD4;

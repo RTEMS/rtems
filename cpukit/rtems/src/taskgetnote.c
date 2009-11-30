@@ -63,7 +63,7 @@ rtems_status_code rtems_task_get_note(
 
   if ( !rtems_configuration_get_notepads_enabled() )
     return RTEMS_NOT_CONFIGURED;
-    
+
   if ( !note )
     return RTEMS_INVALID_ADDRESS;
 

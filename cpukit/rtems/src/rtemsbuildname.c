@@ -28,4 +28,4 @@ rtems_name rtems_build_name(
 )
 {
   return _Objects_Build_name( C1, C2, C3, C4 );
-} 
+}

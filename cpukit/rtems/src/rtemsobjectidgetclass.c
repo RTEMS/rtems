@@ -25,4 +25,4 @@ int rtems_object_id_get_class(
 )
 {
   return _Objects_Get_class( id );
-} 
+}

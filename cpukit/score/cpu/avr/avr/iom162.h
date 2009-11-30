@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "iom162.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* Memory mapped I/O registers */
 
@@ -164,7 +164,7 @@
 #define UCSR1A	_SFR_IO8(0x02)	/* USART 1 Control and Status Register A */
 #define UCSR1B	_SFR_IO8(0x01)	/* USART 1 Control and Status Register B */
 #define	UBRR1L  _SFR_IO8(0x00)  /* USART 0 Baud Rate Register High Byte */
- 
+
 
 /* Interrupt vectors (byte addresses) */
 
@@ -457,7 +457,7 @@
 
 
 
-/* SPMCR bit definitions */ 
+/* SPMCR bit definitions */
 
 #define SPMIE	7
 #define RWWSB	6
@@ -940,7 +940,7 @@
 /* Lock Bits */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
-#define __BOOT_LOCK_BITS_1_EXIST 
+#define __BOOT_LOCK_BITS_1_EXIST
 
 
 /* Signature */

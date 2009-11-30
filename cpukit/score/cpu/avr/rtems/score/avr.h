@@ -3,7 +3,7 @@
  */
 
 /*
- *  This file sets up basic CPU dependency settings based on 
+ *  This file sets up basic CPU dependency settings based on
  *  compiler settings.  For example, it can determine if
  *  floating point is available.  This particular implementation
  *  is specified to the avr port.
@@ -36,10 +36,10 @@ extern "C" {
  *  that this port supports and which RTEMS CPU model they correspond
  *  to.
  */
- 
+
 /*
- *  Figure out all CPU Model Feature Flags based upon compiler 
- *  predefines. 
+ *  Figure out all CPU Model Feature Flags based upon compiler
+ *  predefines.
  */
 #if defined(__AVR__)
 
@@ -88,9 +88,9 @@ extern "C" {
 #endif
 
 #else
- 
+
 #error "Unsupported CPU Model"
- 
+
 #endif
 
 /*

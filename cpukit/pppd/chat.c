@@ -47,7 +47,7 @@
  *      In the same vein as above, added CLR_REPORT keyword.
  *
  *      Allow for comments. Line starting with '#' are comments and are
- *      ignored. If a '#' is to be expected as the first character, the 
+ *      ignored. If a '#' is to be expected as the first character, the
  *      expect string must be quoted.
  *
  *
@@ -85,7 +85,7 @@
 /*	$Id$ */
 
 /*
-	Fixes and some Changes by Wilfried Busalski Lancier-Monitoring GmbH Germany 
+	Fixes and some Changes by Wilfried Busalski Lancier-Monitoring GmbH Germany
 	wilfried.busalski@muenster.de
 	
 	Fixes:	put_string()		Free memory allocated by clean()
@@ -179,7 +179,7 @@ int clear_abort_next = 0;
 
 char *report_string[MAX_REPORTS] ;
 char  report_buffer[50] ;
-int n_reports = 0, report_next = 0, report_gathering = 0 ; 
+int n_reports = 0, report_next = 0, report_gathering = 0 ;
 int clear_report_next = 0;
 
 int say_next = 0, hup_next = 0;
@@ -246,7 +246,7 @@ int chatmain(int fd, int mode, char *pScript)
   ttyfd     = fd;
 
   script=pScript;
-  
+
   if ( debug ) {
     dbglog("chat_main: %s\n", script);
   }
@@ -359,7 +359,7 @@ static char *clean(
 
 	case 'T':
 	    if (sending && phone_num) {
-		for (phchar = phone_num; *phchar != '\0'; phchar++) 
+		for (phchar = phone_num; *phchar != '\0'; phchar++)
 		    *s1++ = *phchar;
 	    }
 	    else {
@@ -370,7 +370,7 @@ static char *clean(
 
 	case 'U':
 	    if (sending && phone_num2) {
-		for (phchar = phone_num2; *phchar != '\0'; phchar++) 
+		for (phchar = phone_num2; *phchar != '\0'; phchar++)
 		    *s1++ = *phchar;
 	    }
 	    else {
@@ -407,7 +407,7 @@ static char *clean(
 	    else
 		*s1++ = 'N';
 	    break;
-	    
+	
 	case '$':			/* ARI */
 	    if (use_env) {
 		*s1++ = cur_chr;
@@ -517,7 +517,7 @@ void chat_expect (
 		++hup_next;
         return;
     }
- 
+
     if (strcmp(s, "ABORT") == 0) {
 		++abort_next;
 		return;

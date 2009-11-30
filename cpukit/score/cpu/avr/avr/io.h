@@ -45,7 +45,7 @@
     but most of the details come from the respective include file.
 
     Note that this file always includes the following files:
-    \code 
+    \code
     #include <avr/sfr_defs.h>
     #include <avr/portpins.h>
     #include <avr/common.h>
@@ -71,8 +71,8 @@
     <br>
     - \b XRAMEND
     <br>
-    The last possible RAM location that is addressable. This is equal to 
-    RAMEND for devices that do not allow for external RAM. For devices 
+    The last possible RAM location that is addressable. This is equal to
+    RAMEND for devices that do not allow for external RAM. For devices
     that allow external RAM, this will be larger than RAMEND.
     <br>
     - \b E2END
@@ -86,11 +86,11 @@
     - \b SPM_PAGESIZE
     <br>
     For devices with bootloader support, the flash pagesize
-    (in bytes) to be used for the \c SPM instruction. 
+    (in bytes) to be used for the \c SPM instruction.
     - \b E2PAGESIZE
     <br>
     The size of the EEPROM page.
-    
+
 */
 
 #ifndef _AVR_IO_H_

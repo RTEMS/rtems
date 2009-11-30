@@ -75,13 +75,13 @@ void _Event_Surrender(
    *  If we are in an ISR and sending to the current thread, then
    *  we have a critical section issue to deal with.
    */
-  if ( _ISR_Is_in_progress() && 
+  if ( _ISR_Is_in_progress() &&
        _Thread_Is_executing( the_thread ) &&
        ((_Event_Sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT) ||
         (_Event_Sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED)) ) {
     if ( seized_events == event_condition || _Options_Is_any(option_set) ) {
       api->pending_events = _Event_sets_Clear( pending_events,seized_events );
-      the_thread->Wait.count = 0; 
+      the_thread->Wait.count = 0;
       *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
       _Event_Sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
     }

@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "iomx8.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* I/O registers */
 
@@ -203,7 +203,7 @@
 #define EEAR    _SFR_IO16(0x21)
 #define EEARL   _SFR_IO8(0x21)
 #define EEARH   _SFR_IO8(0X22)
-/* 
+/*
 Even though EEARH is not used by the mega48, the EEAR8 bit in the register
 must be written to 0, according to the datasheet, hence the EEARH register
 must be defined for the mega48.
@@ -297,7 +297,7 @@ must be defined for the mega48.
 #define MCUCR   _SFR_IO8 (0x35)
 /* MCUCR */
 #define PUD     4
-#if defined (__AVR_ATmega88__) || defined (__AVR_ATmega168__) 
+#if defined (__AVR_ATmega88__) || defined (__AVR_ATmega168__)
 #define IVSEL   1
 #define IVCE    0
 #endif

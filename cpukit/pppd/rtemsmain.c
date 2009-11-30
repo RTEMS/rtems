@@ -758,9 +758,9 @@ ppptimeout(
     int time)
 {
     struct callout *newp, *p, **pp;
-  
+
     MAINDEBUG(("Timeout %p:%p in %d seconds.", func, arg, time));
-  
+
     /*
      * Allocate timeout.
      */
@@ -771,7 +771,7 @@ ppptimeout(
     gettimeofday(&timenow, NULL);
     newp->c_time.tv_sec = timenow.tv_sec + time;
     newp->c_time.tv_usec = timenow.tv_usec;
-  
+
     /*
      * Find correct place and link it in.
      */
@@ -794,9 +794,9 @@ pppuntimeout(
     void *arg)
 {
     struct callout **copp, *freep;
-  
+
     MAINDEBUG(("Untimeout %p:%p.", func, arg));
-  
+
     /*
      * Find first matching timeout and remove it from the list.
      */

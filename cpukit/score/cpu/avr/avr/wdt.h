@@ -84,7 +84,7 @@
     \endcode
 
     Saving the value of MCUSR in \c mcusr_mirror is only needed if the
-    application later wants to examine the reset source, but in particular, 
+    application later wants to examine the reset source, but in particular,
     clearing the watchdog reset flag before disabling the
     watchdog is required, according to the datasheet.
 */
@@ -93,7 +93,7 @@
    \ingroup avr_watchdog
    Reset the watchdog timer.  When the watchdog timer is enabled,
    a call to this instruction is required before the timer expires,
-   otherwise a watchdog-initiated device reset will occur. 
+   otherwise a watchdog-initiated device reset will occur.
 */
 
 #define wdt_reset() __asm__ __volatile__ ("wdr")
@@ -122,8 +122,8 @@
    \ingroup avr_watchdog
    Enable the watchdog timer, configuring it for expiry after
    \c timeout (which is a combination of the \c WDP0 through
-   \c WDP2 bits to write into the \c WDTCR register; For those devices 
-   that have a \c WDTCSR register, it uses the combination of the \c WDP0 
+   \c WDP2 bits to write into the \c WDTCR register; For those devices
+   that have a \c WDTCSR register, it uses the combination of the \c WDP0
    through \c WDP3 bits).
 
    See also the symbolic constants \c WDTO_15MS et al.
@@ -232,7 +232,7 @@ __asm__ __volatile__ ( \
 || defined(__AVR_ATA6289__)
 
 /* Use STS instruction. */
- 
+
 #define wdt_enable(value)   \
 __asm__ __volatile__ (  \
     "in __tmp_reg__,__SREG__" "\n\t"    \
@@ -263,8 +263,8 @@ __asm__ __volatile__ (  \
 )
 
 
-    
-#else  
+
+#else
 
 /* Use OUT instruction. */
 
@@ -286,8 +286,8 @@ __asm__ __volatile__ (  \
 
 /**
    \ingroup avr_watchdog
-   Disable the watchdog timer, if possible.  This attempts to turn off the 
-   Enable bit in the watchdog control register. See the datasheet for 
+   Disable the watchdog timer, if possible.  This attempts to turn off the
+   Enable bit in the watchdog control register. See the datasheet for
    details.
 */
 #define wdt_disable() \
@@ -362,11 +362,11 @@ __asm__ __volatile__ (  \
 
 /** \ingroup avr_watchdog
     See \c WDT0_15MS
-    Note: This is only available on the 
-    ATtiny2313, 
-    ATtiny24, ATtiny44, ATtiny84, 
-    ATtiny25, ATtiny45, ATtiny85, 
-    ATtiny261, ATtiny461, ATtiny861, 
+    Note: This is only available on the
+    ATtiny2313,
+    ATtiny24, ATtiny44, ATtiny84,
+    ATtiny25, ATtiny45, ATtiny85,
+    ATtiny261, ATtiny461, ATtiny861,
     ATmega48, ATmega88, ATmega168,
     ATmega48P, ATmega88P, ATmega168P, ATmega328P,
     ATmega164P, ATmega324P, ATmega644P, ATmega644,
@@ -383,11 +383,11 @@ __asm__ __volatile__ (  \
 
 /** \ingroup avr_watchdog
     See \c WDT0_15MS
-    Note: This is only available on the 
-    ATtiny2313, 
-    ATtiny24, ATtiny44, ATtiny84, 
-    ATtiny25, ATtiny45, ATtiny85, 
-    ATtiny261, ATtiny461, ATtiny861, 
+    Note: This is only available on the
+    ATtiny2313,
+    ATtiny24, ATtiny44, ATtiny84,
+    ATtiny25, ATtiny45, ATtiny85,
+    ATtiny261, ATtiny461, ATtiny861,
     ATmega48, ATmega88, ATmega168,
     ATmega48P, ATmega88P, ATmega168P, ATmega328P,
     ATmega164P, ATmega324P, ATmega644P, ATmega644,
@@ -403,6 +403,6 @@ __asm__ __volatile__ (  \
 #define WDTO_8S     9
 
 #endif  /* defined(__DOXYGEN__) || defined(WDP3) */
-   
+
 
 #endif /* _AVR_WDT_H_ */

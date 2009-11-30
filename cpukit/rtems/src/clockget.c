@@ -49,21 +49,21 @@ rtems_status_code rtems_clock_get(
     return RTEMS_INVALID_ADDRESS;
 
   if ( option == RTEMS_CLOCK_GET_TOD )
-    return rtems_clock_get_tod( (rtems_time_of_day *)time_buffer ); 
+    return rtems_clock_get_tod( (rtems_time_of_day *)time_buffer );
 
   if ( option == RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH )
       return rtems_clock_get_seconds_since_epoch((rtems_interval *)time_buffer);
 
   if ( option == RTEMS_CLOCK_GET_TICKS_SINCE_BOOT ) {
     rtems_interval *interval = (rtems_interval *)time_buffer;
- 
+
     *interval = rtems_clock_get_ticks_since_boot();
     return RTEMS_SUCCESSFUL;
   }
 
   if ( option == RTEMS_CLOCK_GET_TICKS_PER_SECOND ) {
     rtems_interval *interval = (rtems_interval *)time_buffer;
-  
+
     *interval = rtems_clock_get_ticks_per_second();
     return RTEMS_SUCCESSFUL;
   }

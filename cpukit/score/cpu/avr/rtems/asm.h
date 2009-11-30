@@ -301,7 +301,7 @@
 	.if   (.L_movw_dst < 0) || (.L_movw_src < 0)
 		.err    ; Invalid 'X_movw' arg.
 	.endif
-                
+
 	.if ((.L_movw_src) - (.L_movw_dst))  /* different registers */
 		.if (((.L_movw_src) | (.L_movw_dst)) & 0x01)
 			.if (((.L_movw_src)-(.L_movw_dst)) & 0x80) /* src < dest */
@@ -382,7 +382,7 @@
     .err	; Invalid dst arg of 'X_lpm' macro.
   .endif
 
-  /* src evaluation	*/    
+  /* src evaluation	*/
   .L_lpm_src = -1
   .L_lpm_n = 0
   .irp  reg,  z,Z,z+,Z+
@@ -396,7 +396,7 @@
     .err	; Invalid src arg of 'X_lpm' macro.
   .endif
 
-  /* instruction(s)	*/    
+  /* instruction(s)	*/
   .if  .L_lpm_src < 2
     .if  .L_lpm_dst == 0
 	lpm

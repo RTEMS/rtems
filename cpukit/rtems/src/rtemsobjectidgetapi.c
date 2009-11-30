@@ -25,4 +25,4 @@ int rtems_object_id_get_api(
 )
 {
   return _Objects_Get_API( id );
-} 
+}

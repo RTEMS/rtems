@@ -110,7 +110,7 @@ ididididid NNNN ccccc mmmmmm X
     status = rtems_rate_monotonic_get_statistics( id, &the_stats );
     if ( status != RTEMS_SUCCESSFUL )
       continue;
-    
+
     /* If the above passed, so should this but check it anyway */
     status = rtems_rate_monotonic_get_status( id, &the_status );
     #if defined(RTEMS_DEBUG)
@@ -121,7 +121,7 @@ ididididid NNNN ccccc mmmmmm X
     rtems_object_get_name( the_status.owner, sizeof(name), name );
 
     /*
-     *  Print part of report line that is not dependent on granularity 
+     *  Print part of report line that is not dependent on granularity
      */
     (*print)( context,
       "0x%08" PRIx32 " %4s %5" PRId32 " %6" PRId32 " ",

@@ -54,7 +54,7 @@ bool _TOD_Validate(
   uint32_t   days_in_month;
   uint32_t   ticks_per_second;
 
-  ticks_per_second = TOD_MICROSECONDS_PER_SECOND / 
+  ticks_per_second = TOD_MICROSECONDS_PER_SECOND /
 	    rtems_configuration_get_microseconds_per_tick();
   if ((!the_tod)                                  ||
       (the_tod->ticks  >= ticks_per_second)       ||

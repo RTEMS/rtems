@@ -49,7 +49,7 @@ rtems_status_code rtems_clock_set(
 
   if ( _TOD_Validate( time_buffer ) ) {
     newtime.tv_sec = _TOD_To_seconds( time_buffer );
-    newtime.tv_nsec = time_buffer->ticks * 
+    newtime.tv_nsec = time_buffer->ticks *
       rtems_configuration_get_nanoseconds_per_tick();
 
     _Thread_Disable_dispatch();

@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "io43u32x.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* I/O registers */
 
@@ -71,7 +71,7 @@
 #define DDRE	_SFR_IO8(0x02)
 
 /* Data Register, Port E */
-#define PORTE	_SFR_IO8(0x03) 
+#define PORTE	_SFR_IO8(0x03)
 
 /* SPI Control Register */
 #define SPCR	_SFR_IO8(0x0D)

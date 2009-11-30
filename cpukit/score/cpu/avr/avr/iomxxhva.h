@@ -1,4 +1,4 @@
-/* Copyright (c) 2007, Anatoly Sokolov 
+/* Copyright (c) 2007, Anatoly Sokolov
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "iomxxhva.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* Registers and associated bit numbers */
 
@@ -115,7 +115,7 @@
 
 #define EIMSK   _SFR_IO8(0x1D)
 #define INT2    2
-#define INT1    1 
+#define INT1    1
 #define INT0    0
 
 #define GPIOR0  _SFR_IO8(0x1E)

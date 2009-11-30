@@ -196,7 +196,7 @@ rtems_status_code rtems_semaphore_create(
       &the_semaphore->Core_control.mutex,
       &the_mutex_attr,
       (count == 1) ? CORE_MUTEX_UNLOCKED : CORE_MUTEX_LOCKED
-    ); 
+    );
 
     if ( mutex_status == CORE_MUTEX_STATUS_CEILING_VIOLATED ) {
       _Semaphore_Free( the_semaphore );

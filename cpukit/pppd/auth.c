@@ -419,7 +419,7 @@ start_networks(void)
  */
 void
 auth_peer_fail(
-    int unit, 
+    int unit,
     int protocol)
 {
     /*
@@ -434,7 +434,7 @@ auth_peer_fail(
  */
 void
 auth_peer_success(
-    int unit, 
+    int unit,
     int protocol,
     char *name,
     int namelen)
@@ -474,7 +474,7 @@ auth_peer_success(
  */
 void
 auth_withpeer_fail(
-    int unit, 
+    int unit,
     int protocol )
 {
     if (passwd_from_file)
@@ -494,7 +494,7 @@ auth_withpeer_fail(
  */
 void
 auth_withpeer_success(
-    int unit, 
+    int unit,
     int protocol )
 {
     int bit;
@@ -527,7 +527,7 @@ auth_withpeer_success(
  */
 void
 np_up(
-    int unit, 
+    int unit,
     int proto )
 {
     int tlim;
@@ -576,7 +576,7 @@ np_down(
  */
 void
 np_finished(
-    int unit, 
+    int unit,
     int proto )
 {
     if (--num_np_open <= 0) {

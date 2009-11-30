@@ -42,7 +42,7 @@
 #  define _AVR_IOXXX_H_ "iox256a3.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 
 #ifndef _AVR_ATxmega256A3_H_
@@ -6438,21 +6438,21 @@ IO Module Instances. Mapped to memory.
 
 // Generic Port Pins
 
-#define PIN0_bm 0x01 
+#define PIN0_bm 0x01
 #define PIN0_bp 0
 #define PIN1_bm 0x02
 #define PIN1_bp 1
-#define PIN2_bm 0x04 
+#define PIN2_bm 0x04
 #define PIN2_bp 2
-#define PIN3_bm 0x08 
+#define PIN3_bm 0x08
 #define PIN3_bp 3
-#define PIN4_bm 0x10 
+#define PIN4_bm 0x10
 #define PIN4_bp 4
-#define PIN5_bm 0x20 
+#define PIN5_bm 0x20
 #define PIN5_bp 5
-#define PIN6_bm 0x40 
+#define PIN6_bm 0x40
 #define PIN6_bp 6
-#define PIN7_bm 0x80 
+#define PIN7_bm 0x80
 #define PIN7_bp 7
 
 

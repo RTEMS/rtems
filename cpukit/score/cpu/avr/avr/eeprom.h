@@ -185,7 +185,7 @@ void __eewr_block (void *, const void *, size_t, void (*)(uint8_t *, uint8_t));
     \ingroup avr_eeprom
     Loops until the eeprom is no longer busy.
     \returns Nothing.
- */ 	 
+ */ 	
 #define eeprom_busy_wait() do {} while (!eeprom_is_ready())
 
 
@@ -201,7 +201,7 @@ __ATTR_PURE__ static __inline__ uint8_t eeprom_read_byte (const uint8_t *__p)
     EEAR = (size_t)__p;
 #endif
     /* Use inline assembly below as some AVRs have problems with accessing
-    EECR with STS instructions. For example, see errata for ATmega64. 
+    EECR with STS instructions. For example, see errata for ATmega64.
     The code below also assumes that EECR and EEDR are in the I/O space.
     */
     uint8_t __result;

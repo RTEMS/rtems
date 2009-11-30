@@ -49,7 +49,7 @@ rtems_status_code rtems_task_variable_delete(
         if (tvp->ptr == ptr) {
           if (prev)
             prev->next = tvp->next;
-          else      
+          else
             the_thread->task_variables = (rtems_task_variable_t *)tvp->next;
 
           _RTEMS_Tasks_Invoke_task_variable_dtor( the_thread, tvp );

@@ -30,7 +30,7 @@
  */
 void _CPU_Initialize(void)
 {
- 
+
   /*
    *  If there is not an easy way to initialize the FP context
    *  during Context_Initialize, then it is usually easier to
@@ -49,7 +49,7 @@ void _CPU_Initialize(void)
  *
  *  XXX document implementation including references if appropriate
  */
- 
+
 uint32_t   _CPU_ISR_Get_level( void )
 {
   /*
@@ -68,7 +68,7 @@ uint32_t   _CPU_ISR_Get_level( void )
  *
  *  XXX document implementation including references if appropriate
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,

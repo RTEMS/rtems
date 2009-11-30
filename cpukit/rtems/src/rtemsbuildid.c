@@ -28,4 +28,4 @@ rtems_id rtems_build_id(
 )
 {
   return _Objects_Build_id( api, class, node, index );
-} 
+}

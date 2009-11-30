@@ -61,7 +61,7 @@ void _Rate_monotonic_Initiate_statistics(
    *  When this routine is invoked from _Rate_monotonic_Timeout, it will not.
    */
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    if (owning_thread == _Thread_Executing) { 
+    if (owning_thread == _Thread_Executing) {
 
       rtems_thread_cpu_usage_t ran;
 
@@ -126,7 +126,7 @@ void _Rate_monotonic_Update_statistics(
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     {
       Thread_CPU_usage_t ran, used;
-       
+
       /* Grab CPU usage when the thread got switched in */
       used = _Thread_Executing->cpu_time_used;
 
@@ -141,7 +141,7 @@ void _Rate_monotonic_Update_statistics(
       _Timestamp_Add_to( &used, &ran );
 
        /* executed = current cpu usage - value at start of period */
-      _Timestamp_Subtract( 
+      _Timestamp_Subtract(
          &the_period->owner_executed_at_period,
          &used,
          &executed
@@ -163,10 +163,10 @@ void _Rate_monotonic_Update_statistics(
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     _Timestamp_Add_to( &stats->total_cpu_time, &executed );
 
-    if ( _Timestamp_Less_than( &executed, &stats->min_cpu_time ) ) 
+    if ( _Timestamp_Less_than( &executed, &stats->min_cpu_time ) )
       stats->min_cpu_time = executed;
 
-    if ( _Timestamp_Greater_than( &executed, &stats->max_cpu_time ) ) 
+    if ( _Timestamp_Greater_than( &executed, &stats->max_cpu_time ) )
       stats->max_cpu_time = executed;
   #else
     stats->total_cpu_time  += executed;

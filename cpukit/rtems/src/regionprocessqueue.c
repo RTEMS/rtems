@@ -51,10 +51,10 @@ void _Region_Process_queue(
    *  Switch from using the memory allocation mutex to using a
    *  dispatching disabled critical section.  We have to do this
    *  because this thread may unblock one or more threads that were
-   *  waiting on memory.  
+   *  waiting on memory.
    *
    *  NOTE: Be sure to disable dispatching before unlocking the mutex
-   *        since we do not want to open a window where a context 
+   *        since we do not want to open a window where a context
    *        switch could occur.
    */
   _Thread_Disable_dispatch();

@@ -44,7 +44,7 @@ rtems_status_code rtems_object_set_name(
   information  = _Objects_Get_information_id( tmpId );
   if ( !information )
     return RTEMS_INVALID_ID;
- 
+
   the_object = _Objects_Get( information, tmpId, &location );
   switch ( location ) {
 

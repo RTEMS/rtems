@@ -1,4 +1,4 @@
-/*      
+/*
   $Id$
 
   Description: Wrapper around DHCP client to restart it when the interface
@@ -32,7 +32,7 @@
 
   * Optionally, after the interface is configured (either with DHCP or
     statically), a task is started to monitor it.  When the interface remains
-    disconnected (i.e. its IFF_RUNNING flag is off) for NETWORK_FAIL_TIMEOUT 
+    disconnected (i.e. its IFF_RUNNING flag is off) for NETWORK_FAIL_TIMEOUT
     seconds, the dhcp lease renewal is stopped.  As soon as the interface is
     connected again, DHCP is started again as above.
     If NETWORK_FAIL_TIMEOUT is set to 0, the monitor task is not started.

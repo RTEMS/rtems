@@ -159,7 +159,7 @@ ChapAuthWithPeer(
 
     /*
      * We get here as a result of LCP coming up.
-     * So even if CHAP was open before, we will 
+     * So even if CHAP was open before, we will
      * have to re-authenticate ourselves.
      */
     cstate->clientstate = CHAPCS_LISTEN;
@@ -176,7 +176,7 @@ ChapAuthPeer(
     int digest)
 {
     chap_state *cstate = &chap[unit];
-  
+
     cstate->chal_name = our_name;
     cstate->chal_type = digest;
 
@@ -201,7 +201,7 @@ ChapChallengeTimeout(
     void *arg)
 {
     chap_state *cstate = (chap_state *) arg;
-  
+
     /* if we aren't sending challenges, don't worry.  then again we */
     /* probably shouldn't be here either */
     if (cstate->serverstate != CHAPSS_INITIAL_CHAL &&
@@ -266,7 +266,7 @@ ChapLowerUp(
     int unit)
 {
     chap_state *cstate = &chap[unit];
-  
+
     if (cstate->clientstate == CHAPCS_INITIAL)
 	cstate->clientstate = CHAPCS_CLOSED;
     else if (cstate->clientstate == CHAPCS_PENDING)
@@ -292,7 +292,7 @@ ChapLowerDown(
     int unit)
 {
     chap_state *cstate = &chap[unit];
-  
+
     /* Timeout(s) pending?  Cancel if so. */
     if (cstate->serverstate == CHAPSS_INITIAL_CHAL ||
 	cstate->serverstate == CHAPSS_RECHALLENGE)
@@ -340,7 +340,7 @@ ChapInput(
     u_char *inp;
     u_char code, id;
     int len;
-  
+
     /*
      * Parse header (code, id and length).
      * If packet too short, drop it.
@@ -362,7 +362,7 @@ ChapInput(
 	return;
     }
     len -= CHAP_HEADERLEN;
-  
+
     /*
      * Action depends on code (as in fact it usually does :-).
      */
@@ -370,11 +370,11 @@ ChapInput(
     case CHAP_CHALLENGE:
 	ChapReceiveChallenge(cstate, inp, id, len);
 	break;
-    
+
     case CHAP_RESPONSE:
 	ChapReceiveResponse(cstate, inp, id, len);
 	break;
-    
+
     case CHAP_FAILURE:
 	ChapReceiveFailure(cstate, inp, id, len);
 	break;
@@ -407,7 +407,7 @@ ChapReceiveChallenge(
     char rhostname[256];
     MD5_CTX mdContext;
     u_char hash[MD5_SIGNATURE_SIZE];
- 
+
     if (cstate->clientstate == CHAPCS_CLOSED ||
 	cstate->clientstate == CHAPCS_PENDING) {
 	CHAPDEBUG(("ChapReceiveChallenge: in state %d", cstate->clientstate));
@@ -455,7 +455,7 @@ ChapReceiveChallenge(
     cstate->resp_transmits = 0;
 
     /*  generate MD based on negotiated type */
-    switch (cstate->resp_type) { 
+    switch (cstate->resp_type) {
 
     case CHAP_DIGEST_MD5:
 	MD5Init(&mdContext);
@@ -556,7 +556,7 @@ ChapReceiveResponse(
     } else {
 
 	/*  generate MD based on negotiated type */
-	switch (cstate->chal_type) { 
+	switch (cstate->chal_type) {
 
 	case CHAP_DIGEST_MD5:		/* only MD5 is defined for now */
 	    if (remmd_len != MD5_SIGNATURE_SIZE)
@@ -565,7 +565,7 @@ ChapReceiveResponse(
 	    MD5Update(&mdContext, &cstate->chal_id, 1);
 	    MD5Update(&mdContext, secret, secret_len);
 	    MD5Update(&mdContext, cstate->challenge, cstate->chal_len);
-	    MD5Final(hash, &mdContext); 
+	    MD5Final(hash, &mdContext);
 
 	    /* compare local and remote MDs and send the appropriate status */
 	    if (memcmp (hash, remmd, MD5_SIGNATURE_SIZE) == 0)
@@ -690,7 +690,7 @@ ChapSendChallenge(
     BCOPY(cstate->chal_name, outp, name_len);	/* append hostname */
 
     output(cstate->unit, outpacket_buf, outlen + PPP_HDRLEN);
-  
+
     TIMEOUT(ChapChallengeTimeout, cstate, cstate->timeouttime);
     ++cstate->chal_transmits;
 }
@@ -718,7 +718,7 @@ ChapSendStatus(
     outp = outpacket_buf;
 
     MAKEHEADER(outp, PPP_CHAP);	/* paste in a header */
-  
+
     PUTCHAR(code, outp);
     PUTCHAR(cstate->chal_id, outp);
     PUTSHORT(outlen, outp);
@@ -741,8 +741,8 @@ ChapGenChallenge(
     u_char *ptr = cstate->challenge;
     int i;
 
-    /* pick a random challenge length between MIN_CHALLENGE_LENGTH and 
-       MAX_CHALLENGE_LENGTH */  
+    /* pick a random challenge length between MIN_CHALLENGE_LENGTH and
+       MAX_CHALLENGE_LENGTH */
     chal_len =  (unsigned) ((drand48() *
 			     (MAX_CHALLENGE_LENGTH - MIN_CHALLENGE_LENGTH)) +
 			    MIN_CHALLENGE_LENGTH);

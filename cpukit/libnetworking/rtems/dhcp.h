@@ -5,7 +5,7 @@
 
   Copyright Cybertec Pty Ltd, 2005
   All rights reserved Cybertec Pty Ltd, 2005
-    
+
   This software with is provided ``as is'' and with NO WARRANTY.
 
   ------------------------------------------------------------------------

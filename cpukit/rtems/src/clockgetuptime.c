@@ -45,7 +45,7 @@ rtems_status_code rtems_clock_get_uptime(
 {
   if ( !uptime )
     return RTEMS_INVALID_ADDRESS;
-  
+
   _TOD_Get_uptime_as_timespec( uptime );
   return RTEMS_SUCCESSFUL;
 }

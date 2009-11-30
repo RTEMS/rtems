@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "ioat94k.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* I/O registers */
 
@@ -210,33 +210,33 @@
 
 /* Interrupt vectors */
 
-#define SIG_FPGA_INTERRUPT0     _VECTOR(1)   /* FPGA_INT0  */        
+#define SIG_FPGA_INTERRUPT0     _VECTOR(1)   /* FPGA_INT0  */
 #define SIG_INTERRUPT0          _VECTOR(2)   /* EXT_INT0   */
-#define SIG_FPGA_INTERRUPT1     _VECTOR(3)   /* FPGA_INT1  */        
+#define SIG_FPGA_INTERRUPT1     _VECTOR(3)   /* FPGA_INT1  */
 #define SIG_INTERRUPT1          _VECTOR(4)   /* EXT_INT1   */
-#define SIG_FPGA_INTERRUPT2     _VECTOR(5)   /* FPGA_INT2  */        
+#define SIG_FPGA_INTERRUPT2     _VECTOR(5)   /* FPGA_INT2  */
 #define SIG_INTERRUPT2          _VECTOR(6)   /* EXT_INT2   */
-#define SIG_FPGA_INTERRUPT3     _VECTOR(7)   /* FPGA_INT3  */        
+#define SIG_FPGA_INTERRUPT3     _VECTOR(7)   /* FPGA_INT3  */
 #define SIG_INTERRUPT3          _VECTOR(8)   /* EXT_INT3   */
-#define SIG_OUTPUT_COMPARE2     _VECTOR(9)   /* TIM2_COMP  */        
-#define SIG_OVERFLOW2           _VECTOR(10)  /* TIM2_OVF   */        
-#define SIG_INPUT_CAPTURE1      _VECTOR(11)  /* TIM1_CAPT  */        
-#define SIG_OUTPUT_COMPARE1A    _VECTOR(12)  /* TIM1_COMPA */        
-#define SIG_OUTPUT_COMPARE1B    _VECTOR(13)  /* TIM1_COMPB */        
-#define SIG_OVERFLOW1           _VECTOR(14)  /* TIM1_OVF   */        
-#define SIG_OUTPUT_COMPARE0     _VECTOR(15)  /* TIM0_COMP  */        
-#define SIG_OVERFLOW0           _VECTOR(16)  /* TIM0_OVF   */        
-#define SIG_FPGA_INTERRUPT4     _VECTOR(17)  /* FPGA_INT4  */        
-#define SIG_FPGA_INTERRUPT5     _VECTOR(18)  /* FPGA_INT5  */        
-#define SIG_FPGA_INTERRUPT6     _VECTOR(19)  /* FPGA_INT6  */        
-#define SIG_FPGA_INTERRUPT7     _VECTOR(20)  /* FPGA_INT7  */        
+#define SIG_OUTPUT_COMPARE2     _VECTOR(9)   /* TIM2_COMP  */
+#define SIG_OVERFLOW2           _VECTOR(10)  /* TIM2_OVF   */
+#define SIG_INPUT_CAPTURE1      _VECTOR(11)  /* TIM1_CAPT  */
+#define SIG_OUTPUT_COMPARE1A    _VECTOR(12)  /* TIM1_COMPA */
+#define SIG_OUTPUT_COMPARE1B    _VECTOR(13)  /* TIM1_COMPB */
+#define SIG_OVERFLOW1           _VECTOR(14)  /* TIM1_OVF   */
+#define SIG_OUTPUT_COMPARE0     _VECTOR(15)  /* TIM0_COMP  */
+#define SIG_OVERFLOW0           _VECTOR(16)  /* TIM0_OVF   */
+#define SIG_FPGA_INTERRUPT4     _VECTOR(17)  /* FPGA_INT4  */
+#define SIG_FPGA_INTERRUPT5     _VECTOR(18)  /* FPGA_INT5  */
+#define SIG_FPGA_INTERRUPT6     _VECTOR(19)  /* FPGA_INT6  */
+#define SIG_FPGA_INTERRUPT7     _VECTOR(20)  /* FPGA_INT7  */
 #define SIG_UART0_RECV          _VECTOR(21)  /* UART0_RXC  */
 #define SIG_UART0_DATA          _VECTOR(22)  /* UART0_DRE  */
 #define SIG_UART0_TRANS         _VECTOR(23)  /* UART0_TXC  */
-#define SIG_FPGA_INTERRUPT8     _VECTOR(24)  /* FPGA_INT8  */        
-#define SIG_FPGA_INTERRUPT9     _VECTOR(25)  /* FPGA_INT9  */        
-#define SIG_FPGA_INTERRUPT10    _VECTOR(26)  /* FPGA_INT10 */        
-#define SIG_FPGA_INTERRUPT11    _VECTOR(27)  /* FPGA_INT11 */        
+#define SIG_FPGA_INTERRUPT8     _VECTOR(24)  /* FPGA_INT8  */
+#define SIG_FPGA_INTERRUPT9     _VECTOR(25)  /* FPGA_INT9  */
+#define SIG_FPGA_INTERRUPT10    _VECTOR(26)  /* FPGA_INT10 */
+#define SIG_FPGA_INTERRUPT11    _VECTOR(27)  /* FPGA_INT11 */
 #define SIG_UART1_RECV          _VECTOR(28)  /* UART1_RXC  */
 #define SIG_UART1_DATA          _VECTOR(29)  /* UART1_DRE  */
 #define SIG_UART1_TRANS         _VECTOR(30)  /* UART1_TXC  */

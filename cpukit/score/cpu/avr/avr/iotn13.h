@@ -47,7 +47,7 @@
 #  define _AVR_IOXXX_H_ "iotn13.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* I/O registers and bit names */
 

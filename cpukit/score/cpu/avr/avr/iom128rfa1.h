@@ -5219,7 +5219,7 @@ struct __reg_TST_RX_LENGTH {
 /* Lock Bits */
 
 #define __BOOT_LOCK_BITS_0_EXIST
-#define __BOOT_LOCK_BITS_1_EXIST 
+#define __BOOT_LOCK_BITS_1_EXIST
 #define __LOCK_BITS_EXIST
 
 

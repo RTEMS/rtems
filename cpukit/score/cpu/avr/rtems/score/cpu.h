@@ -150,7 +150,7 @@ extern "C" {
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
  *
  *  AVR Specific Information:
@@ -189,7 +189,7 @@ extern "C" {
  *  an i387 and wish to leave floating point support out of RTEMS.
  *
  *  The CPU_SOFTWARE_FP is used to indicate whether or not there
- *  is software implemented floating point that must be context 
+ *  is software implemented floating point that must be context
  *  switched.  The determination of whether or not this applies
  *  is very tool specific and the state saved/restored is also
  *  compiler specific.
@@ -425,7 +425,7 @@ extern "C" {
 
 typedef struct {
     	uint16_t 	stack_pointer;
-   	uint8_t		status; //SREG 
+   	uint8_t		status; //SREG
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
@@ -566,7 +566,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *
  *  NOTE:  This does not have to be a power of 2 although it should be
  *         a multiple of 2 greater than or equal to 2.  The requirement
- *         to be a multiple of 2 is because the heap uses the least 
+ *         to be a multiple of 2 is because the heap uses the least
  *         significant field of the front and back flags to indicate
  *         that a block is in use or free.  So you do not want any odd
  *         length blocks really putting length data in that bit.
@@ -943,8 +943,8 @@ uint32_t   _CPU_ISR_Get_level( void );
 /*context_initialize asm function*/
 
 void context_initialize(unsigned short* context,
-		unsigned short stack_add, 
-		unsigned short entry_point);  
+		unsigned short stack_add,
+		unsigned short entry_point);
 
 /*PAGE
  *
@@ -987,7 +987,7 @@ void _CPU_Context_Initialize(
 *
 */
 
-void _CPU_Push(uint16_t _SP_, uint16_t entry_point); 
+void _CPU_Push(uint16_t _SP_, uint16_t entry_point);
 
 
 
@@ -1007,14 +1007,14 @@ void _CPU_Initialize(void);
 /*
  *  _CPU_ISR_install_raw_handler
  *
- *  This routine installs a "raw" interrupt handler directly into the 
+ *  This routine installs a "raw" interrupt handler directly into the
  *  processor's vector table.
  *
  *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -1150,18 +1150,18 @@ void _CPU_Context_restore_fp(
  *
  *  XXX document implementation including references if appropriate
  */
- 
+
 static inline uint32_t CPU_swap_u32(
   uint32_t value
 )
 {
   uint32_t   byte1, byte2, byte3, byte4, swapped;
- 
+
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
   byte2 = (value >> 8)  & 0xff;
   byte1 =  value        & 0xff;
- 
+
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return( swapped );
 }

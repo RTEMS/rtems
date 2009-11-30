@@ -53,7 +53,7 @@ void _Message_queue_Manager_initialization(void)
     &_Message_queue_Information,  /* object information table */
     OBJECTS_CLASSIC_API,          /* object API */
     OBJECTS_RTEMS_MESSAGE_QUEUES, /* object class */
-    Configuration_RTEMS_API.maximum_message_queues, 
+    Configuration_RTEMS_API.maximum_message_queues,
                                   /* maximum objects of this class */
     sizeof( Message_queue_Control ),
                                   /* size of this object's control block */

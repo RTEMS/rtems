@@ -1019,7 +1019,7 @@ ipcp_reqci(
      * Reset all his options.
      */
     BZERO(ho, sizeof(*ho));
-    
+
     /*
      * Process all his options.
      */
@@ -1193,7 +1193,7 @@ ipcp_reqci(
 	    ho->vj_protocol = cishort;
 	    if (cilen == CILEN_VJ) {
 		GETCHAR(maxslotindex, p);
-		if (maxslotindex > ao->maxslotindex) { 
+		if (maxslotindex > ao->maxslotindex) {
 		    orc = CONFNAK;
 		    if (!reject_if_disagree){
 			DECPTR(1, p);
@@ -1427,7 +1427,7 @@ ipcp_up(
 	    }
 
 	    /* assign a default route through the interface if required */
-	    if (ipcp_wantoptions[f->unit].default_route) 
+	    if (ipcp_wantoptions[f->unit].default_route)
 		if (sifdefaultroute(f->unit, go->ouraddr, ho->hisaddr))
 		    default_route_set[f->unit] = 1;
 
@@ -1474,7 +1474,7 @@ ipcp_up(
 	sifnpmode(f->unit, PPP_IP, NPMODE_PASS);
 
 	/* assign a default route through the interface if required */
-	if (ipcp_wantoptions[f->unit].default_route) 
+	if (ipcp_wantoptions[f->unit].default_route)
 	    if (sifdefaultroute(f->unit, go->ouraddr, ho->hisaddr))
 		default_route_set[f->unit] = 1;
 

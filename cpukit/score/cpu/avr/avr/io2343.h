@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "io2343.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 /* I/O registers */
 

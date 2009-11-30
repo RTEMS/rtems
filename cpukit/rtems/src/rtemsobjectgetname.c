@@ -30,4 +30,4 @@ char *rtems_object_get_name(
 )
 {
   return _Objects_Get_name_as_string( id, length, name );
-} 
+}

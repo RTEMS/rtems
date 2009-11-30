@@ -42,7 +42,7 @@
 #  define _AVR_IOXXX_H_ "iotnx61.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 #ifndef _AVR_IOTNx61_H_
 #define _AVR_IOTNx61_H_ 1
