@@ -1,5 +1,16 @@
 2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+        * score/include/rtems/score/protectedheap.h,
+        score/src/pheapallocate.c: Changed base implementation of protected
+        heap allocations to use _Heap_Allocate_aligned_with_boundary().
+	* libcsupport/include/rtems/malloc.h, libcsupport/src/rtems_malloc.c:
+	Check system state. Process deferred frees. Renamed rtems_malloc() in
+	rtems_heap_allocate_aligned_with_boundary().
+        * score/src/pheapallocatealigned.c: Removed file.
+        * score/Makefile.am: Update for removed file.
+
+2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libblock/include/rtems/bdbuf.h: Documentation.
 	* libblock/include/rtems/blkdev.h: Avoid designated initializers for
 	C++ compatibility.

@@ -24,16 +24,23 @@
 #include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
-void *_Protected_heap_Allocate(
-  Heap_Control *the_heap,
-  uintptr_t     size
+void *_Protected_heap_Allocate_aligned_with_boundary(
+  Heap_Control *heap,
+  uintptr_t     size,
+  uintptr_t     alignment,
+  uintptr_t     boundary
 )
 {
   void *p;
 
   _RTEMS_Lock_allocator();
-    p = _Heap_Allocate( the_heap, size );
+    p = _Heap_Allocate_aligned_with_boundary(
+      heap,
+      size,
+      alignment,
+      boundary
+    );
   _RTEMS_Unlock_allocator();
+
   return p;
 }
-

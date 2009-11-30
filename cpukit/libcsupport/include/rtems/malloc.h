@@ -169,7 +169,11 @@ int rtems_memalign(
  * @return A pointer to the begin of the allocated memory area, or @c NULL if
  * no memory is available or the parameters are inconsistent.
  */
-void *rtems_malloc(size_t size, uintptr_t alignment, uintptr_t boundary);
+void *rtems_heap_allocate_aligned_with_boundary(
+  size_t size,
+  uintptr_t alignment,
+  uintptr_t boundary
+);
 
 #ifdef __cplusplus
 }

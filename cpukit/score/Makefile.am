@@ -138,7 +138,7 @@ libscore_a_SOURCES += src/objectallocatebyindex.c src/objectgetbyindex.c
 endif
 
 ## PROTECTED_HEAP_C_FILES
-libscore_a_SOURCES += src/pheapallocatealigned.c src/pheapallocate.c \
+libscore_a_SOURCES += src/pheapallocate.c \
     src/pheapextend.c src/pheapfree.c src/pheapgetsize.c \
     src/pheapgetblocksize.c src/pheapgetfreeinfo.c src/pheapgetinfo.c \
     src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c

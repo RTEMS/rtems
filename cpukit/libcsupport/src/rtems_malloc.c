@@ -28,23 +28,29 @@
 #ifdef RTEMS_NEWLIB
 #include "malloc_p.h"
 
-#include <stdlib.h>
-#include <errno.h>
-
-void *rtems_malloc(size_t size, uintptr_t alignment, uintptr_t boundary)
+void *rtems_heap_allocate_aligned_with_boundary(
+  size_t size,
+  uintptr_t alignment,
+  uintptr_t boundary
+)
 {
-  void *p = NULL;
+  if (
+    _System_state_Is_up( _System_state_Get() )
+      && !malloc_is_system_state_OK()
+  ) {
+    return NULL;
+  }
 
-  _RTEMS_Lock_allocator();
-   p = _Heap_Allocate_aligned_with_boundary(
-     RTEMS_Malloc_Heap,
-     size,
-     alignment,
-     boundary
-   );
-  _RTEMS_Unlock_allocator();
+  malloc_deferred_frees_process();
 
-  return p;
+  /* FIXME: Statistics, boundary checks */
+
+  return _Protected_heap_Allocate_aligned_with_boundary(
+    RTEMS_Malloc_Heap,
+    size,
+    alignment,
+    boundary
+  );
 }
 
 #endif
