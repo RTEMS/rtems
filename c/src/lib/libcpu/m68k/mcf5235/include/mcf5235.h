@@ -158,7 +158,7 @@ typedef volatile uint32		vuint32; /* 32 bits */
 /*
  * Functions provided by mcf5xxx.s
  */
- 
+
 int 	asm_set_ipl (uint32);
 void	mcf5xxx_wr_cacr (uint32);
 void	mcf5xxx_wr_acr0 (uint32);
@@ -862,16 +862,16 @@ extern uint8 __IPSBAR[];
 #define MCF5235_CAN_MBUF1_DATAH(x)		(*(vuint32  *)(void *)(&__IPSBAR[0x1C009C+((x)*0x30000)]))
 #define MCF5235_CAN_MBUF2_DATAL(x)	    (*(vuint32  *)(void *)(&__IPSBAR[0x1C00A8+((x)*0x30000)]))
 #define MCF5235_CAN_MBUF2_DATAH(x)	    (*(vuint32  *)(void *)(&__IPSBAR[0x1C00AC+((x)*0x30000)]))
-																				  
-																				  
-/* Bit definitions and macros for MCF5235_CAN_CANMCR */								  
-#define MCF5235_CAN_CANMCR_MAXMB(x)            (((x)&0x0000000F)<<0)				  
-#define MCF5235_CAN_CANMCR_SUPV                (0x00800000)							  
-#define MCF5235_CAN_CANMCR_FRZACK              (0x01000000)							  
-#define MCF5235_CAN_CANMCR_SOFTRST             (0x02000000)							  
-#define MCF5235_CAN_CANMCR_HALT                (0x10000000)							  
-#define MCF5235_CAN_CANMCR_FRZ                 (0x40000000)							  
-#define MCF5235_CAN_CANMCR_MDIS                (0x80000000)							  
+
+
+/* Bit definitions and macros for MCF5235_CAN_CANMCR */
+#define MCF5235_CAN_CANMCR_MAXMB(x)            (((x)&0x0000000F)<<0)
+#define MCF5235_CAN_CANMCR_SUPV                (0x00800000)
+#define MCF5235_CAN_CANMCR_FRZACK              (0x01000000)
+#define MCF5235_CAN_CANMCR_SOFTRST             (0x02000000)
+#define MCF5235_CAN_CANMCR_HALT                (0x10000000)
+#define MCF5235_CAN_CANMCR_FRZ                 (0x40000000)
+#define MCF5235_CAN_CANMCR_MDIS                (0x80000000)
 #define MCF5235_CAN_CANCTRL_PROPSEG(x)         (((x)&0x00000007)<<0)
 #define MCF5235_CAN_CANCTRL_LOM                (0x00000008)
 #define MCF5235_CAN_CANCTRL_LBUF               (0x00000010)
@@ -1737,7 +1737,7 @@ extern uint8 __IPSBAR[];
 
 /************************************************************
 *
-*	Clock 
+*	Clock
 *************************************************************/
 /* Register read/write macros */
 #define MCF5235_FMPLL_SYNCR    (*(vuint32*)(void*)(&__IPSBAR[0x120000]))

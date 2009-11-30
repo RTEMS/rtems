@@ -281,7 +281,7 @@ typedef struct {
     volatile uint16_t _res3;
     volatile uint16_t pbdat;
 
-    volatile uint16_t pcddr; 
+    volatile uint16_t pcddr;
     volatile uint16_t _res4;
 
     volatile uint16_t _res5;
@@ -321,7 +321,7 @@ typedef struct {
 
 typedef struct {
     volatile uint32_t dcmr;
-    
+
     volatile uint16_t _res0;
     volatile uint16_t dcir;
 
@@ -586,12 +586,12 @@ typedef struct {
     volatile uint16_t rfmr;
     volatile uint16_t _res3;
     volatile uint16_t rfmmr;
-    volatile uint8_t  _res4[3]; 
+    volatile uint8_t  _res4[3];
     volatile uint8_t  far;
     volatile uint32_t asr;
     volatile uint32_t drr1;
     volatile uint32_t drr2;
-    volatile uint16_t _res5; 
+    volatile uint16_t _res5;
     volatile uint16_t specr;
     volatile uint16_t _res6;
     volatile uint16_t ep0sr;

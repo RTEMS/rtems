@@ -582,7 +582,7 @@
 #define MCF5206E_TMR_CE_NONE     (0x0000) /* Disable Interrupt on capture
                                              event */
 #define MCF5206E_TMR_OM          (0x0020) /* Output Mode - Toggle output */
-#define MCF5206E_TMR_ORI         (0x0010) /* Output Reference Interrupt 
+#define MCF5206E_TMR_ORI         (0x0010) /* Output Reference Interrupt
                                              Enable */
 #define MCF5206E_TMR_FRR         (0x0008) /* Free Run/Restart */
 #define MCF5206E_TMR_ICLK        (0x0006) /* Input Clock Source */

@@ -216,10 +216,10 @@ void mcdma_glue_init
 			     &old_handler)) {
       rtems_panic ("Can't attach MFC548x MCDma interrupt handler\n");
     }
-    MCF548X_INTC_ICRn(MCDMA_IRQ_VECTOR - 64) =   
+    MCF548X_INTC_ICRn(MCDMA_IRQ_VECTOR - 64) =
       MCF548X_INTC_ICRn_IL(MCDMA_IRQ_LEVEL) |
       MCF548X_INTC_ICRn_IP(MCDMA_IRQ_PRIORITY);
-    
+
     MCF548X_INTC_IMRH &= ~(1 << (MCDMA_IRQ_VECTOR % 32));
   }
 }

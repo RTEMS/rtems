@@ -1,8 +1,8 @@
 /*
  *  Clock Driver for MCF5272 CPU
  *
- *  This driver initailizes timer1 on the MCF5272 as the 
- *  main system clock 
+ *  This driver initailizes timer1 on the MCF5272 as the
+ *  main system clock
  *
  *  Copyright 2004 Cogent Computer Systems
  *  Author: Jay Monkman <jtm@lopingdog.com>
@@ -40,7 +40,7 @@ volatile uint32_t Clock_driver_ticks;
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -52,7 +52,7 @@ rtems_isr (*rtems_clock_hook)(rtems_vector_number) = NULL;
  *
  * PARAMETERS:
  *     vector - timer interrupt vector number
- 
+
  * RETURNS:
  *     none
  */
@@ -91,10 +91,10 @@ Clock_exit(void)
         icr = icr & ~(MCF5272_ICR1_TMR1_MASK | MCF5272_ICR1_TMR1_PI);
         icr |= (MCF5272_ICR1_TMR1_IPL(0) | MCF5272_ICR1_TMR1_PI);
         g_intctrl_regs->icr1 = icr;
-        
+
         /* reset timer1 */
         g_timer_regs->tmr1 = MCF5272_TMR_CLK_STOP;
-        
+
         /* clear pending */
         g_timer_regs->ter1 = MCF5272_TER_REF | MCF5272_TER_CAP;
     }
@@ -117,17 +117,17 @@ Install_clock(rtems_isr_entry clock_isr)
   uint32_t icr;
   Clock_driver_ticks = 0;
   if (rtems_configuration_get_ticks_per_timeslice()) {
-      
+
       /* Register the interrupt handler */
       set_vector(clock_isr, BSP_INTVEC_TMR1, 1);
-      
+
       /* Reset timer 1 */
       g_timer_regs->tmr1 = MCF5272_TMR_RST;
       g_timer_regs->tmr1 = MCF5272_TMR_CLK_STOP;
       g_timer_regs->tmr1 = MCF5272_TMR_RST;
       g_timer_regs->tcn1 = 0;  /* reset counter */
       g_timer_regs->ter1 = MCF5272_TER_REF | MCF5272_TER_CAP;
-      
+
       /* Set Timer 1 prescaler so that it counts in microseconds */
       g_timer_regs->tmr1 = (
           ((((BSP_SYSTEM_FREQUENCY / 1000000) - 1) << MCF5272_TMR_PS_SHIFT) |
@@ -137,12 +137,12 @@ Install_clock(rtems_isr_entry clock_isr)
            MCF5272_TMR_CLK_MSTR                                        |
            MCF5272_TMR_RST));
 
-      /* Set the timer timeout value from the BSP config */      
+      /* Set the timer timeout value from the BSP config */
       g_timer_regs->trr1 = rtems_configuration_get_microseconds_per_tick() - 1;
 
       /* Feed system frequency to the timer */
       g_timer_regs->tmr1 |= MCF5272_TMR_CLK_MSTR;
-          
+
       /* Configure timer1 interrupts */
       icr = g_intctrl_regs->icr1;
       icr = icr & ~(MCF5272_ICR1_TMR1_MASK | MCF5272_ICR1_TMR1_PI);
@@ -174,10 +174,10 @@ Clock_initialize(rtems_device_major_number major,
                  void *pargp)
 {
     Install_clock (Clock_isr);
- 
+
     /* Make major/minor avail to others such as shared memory driver */
     rtems_clock_major = major;
     rtems_clock_minor = minor;
- 
+
     return RTEMS_SUCCESSFUL;
 }

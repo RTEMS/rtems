@@ -47,13 +47,13 @@ void _CPU_cache_flush_1_data_line(const void *d_addr)
   adr += 1;
   asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
   adr += 1;
-  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));  
+  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
 }
 
 void _CPU_cache_flush_entire_data(void)
 {
   register unsigned long set, adr;
-  
+
   for(set = 0; set < 256; ++set) {
     adr = (set << 4);
     asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
@@ -62,7 +62,7 @@ void _CPU_cache_flush_entire_data(void)
     adr += 1;
     asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
     adr += 1;
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));  
+    asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
   }
 }
 
@@ -136,4 +136,4 @@ void _CPU_cache_invalidate_entire_data(void)
 void _CPU_cache_invalidate_1_data_line(const void *addr)
 {
   _CPU_cache_invalidate_1_instruction_line(addr);
-} 
+}

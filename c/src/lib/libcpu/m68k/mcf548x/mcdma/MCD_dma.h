@@ -294,53 +294,53 @@ int MCD_startDma (
    u32 funcDesc   /* a description of byte swapping, bit swapping, and CRC actions */
 );
 
-/* 
- * MCD_initDma() initializes the DMA API by setting up a pointer to the DMA 
- * registers, relocating and creating the appropriate task structures, and 
+/*
+ * MCD_initDma() initializes the DMA API by setting up a pointer to the DMA
+ * registers, relocating and creating the appropriate task structures, and
  * setting up some global settings
  */
 int MCD_initDma (dmaRegs *sDmaBarAddr, void *taskTableDest, u32 flags);
 
-/* 
+/*
  * MCD_dmaStatus() returns the status of the DMA on the requested channel.
  */
 int MCD_dmaStatus (int channel);
 
-/* 
+/*
  * MCD_XferProgrQuery() returns progress of DMA on requested channel
  */
 int MCD_XferProgrQuery (int channel, MCD_XferProg *progRep);
 
-/* 
+/*
  * MCD_killDma() halts the DMA on the requested channel, without any
  * intention of resuming the DMA.
  */
 int MCD_killDma (int channel);
 
-/* 
+/*
  * MCD_continDma() continues a DMA which as stopped due to encountering an
  * unready buffer descriptor.
  */
 int MCD_continDma (int channel);
 
-/* 
+/*
  * MCD_pauseDma() pauses the DMA on the given channel ( if any DMA is
- * running on that channel). 
+ * running on that channel).
  */
 int MCD_pauseDma (int channel);
 
-/* 
+/*
  * MCD_resumeDma() resumes the DMA on a given channel (if any DMA is
  * running on that channel).
  */
 int MCD_resumeDma (int channel);
 
-/* 
+/*
  * MCD_csumQuery provides the checksum/CRC after performing a non-chained DMA
  */
 int MCD_csumQuery (int channel, u32 *csum);
 
-/* 
+/*
  * MCD_getCodeSize provides the packed size required by the microcoded task
  * and structures.
  */

@@ -6,13 +6,13 @@
  *  found in the file LICENSE in this distribution or at
  *
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  *  $Id$
  */
 
 #include <rtems.h>
 #include <mcf5235/mcf5235.h>
- 
+
 /*
  *  Default value for the cacr is set by the BSP
  */

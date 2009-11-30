@@ -1982,7 +1982,7 @@ u32 MCD_modelTaskTableSrc[]=
     0x00000000,
     0x00000000,
     0x00000000,
-#endif    
+#endif
     (u32)MCD_ENetRcv_TDT,
     (u32)&((u8*)MCD_ENetRcv_TDT)[0x0000009c],
     0x00000000,

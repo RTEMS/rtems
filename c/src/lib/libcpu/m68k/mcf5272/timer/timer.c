@@ -18,7 +18,7 @@
  *  found in the file LICENSE in this distribution or at
  *
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  *  timer.c,v 1.1 2001/10/26 19:32:40 joel Exp
  */
 
@@ -26,7 +26,7 @@
 #include <bsp.h>
 #include <mcf5272/mcf5272.h>
 
-#define TRR2_VAL 65530  
+#define TRR2_VAL 65530
 
 uint32_t Timer_interrupts;
 
@@ -51,7 +51,7 @@ benchmark_timer_initialize(void)
     uint32_t icr;
     /* Catch timer2 interrupts */
     set_vector(timerisr, BSP_INTVEC_TMR2, 0);
-    
+
     /* Reset Timer */
     g_timer_regs->tmr2 = MCF5272_TMR_RST;
     g_timer_regs->tmr2 = MCF5272_TMR_CLK_STOP;
@@ -116,12 +116,12 @@ benchmark_timer_read( void )
      *  rolled over.
      */
     clicks = g_timer_regs->tcn2;
-  
+
     /* Stop Timer... */
     g_timer_regs->tmr2 = MCF5272_TMR_CLK_STOP | MCF5272_TMR_RST;
 
     /*
-     *  Total is calculated by taking into account the number of timer 
+     *  Total is calculated by taking into account the number of timer
      *  overflow interrupts since the timer was initialized and clicks
      *  since the last interrupts.
      */

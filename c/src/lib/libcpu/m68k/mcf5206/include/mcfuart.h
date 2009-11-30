@@ -27,7 +27,7 @@
 #define SYSTEM_CLOCK_FREQUENCY BSP_SYSTEM_FREQUENCY
 #endif
 
-/* 
+/*
  * The following structure is a descriptor of single UART channel.
  * It contains the initialization information about channel and
  * current operating values
@@ -37,12 +37,12 @@ typedef struct mcfuart {
    uint8_t             intvec;           /* UART interrupt vector number, or
                                                 0 if polled I/O */
    void               *tty;              /* termios channel descriptor */
-   
+
    volatile const uint8_t  *tx_buf;      /* Transmit buffer from termios */
    volatile uint32_t        tx_buf_len;  /* Transmit buffer length */
    volatile uint32_t        tx_ptr;      /* Index of next char to transmit*/
    rtems_isr_entry          old_handler; /* Saved interrupt handler */
-   
+
    tcflag_t                 c_iflag;    /* termios input mode flags */
    bool                     parerr_mark_flag; /* Parity error processing
                                                   state */
