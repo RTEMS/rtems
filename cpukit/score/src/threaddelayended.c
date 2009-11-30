@@ -59,7 +59,12 @@ void _Thread_Delay_ended(
 #endif
       break;
     case OBJECTS_LOCAL:
-      _Thread_Unblock( the_thread );
+      _Thread_Clear_state(
+        the_thread,
+        STATES_DELAYING
+          | STATES_WAITING_FOR_TIME
+          | STATES_INTERRUPTIBLE_BY_SIGNAL
+      );
       _Thread_Unnest_dispatch();
       break;
   }

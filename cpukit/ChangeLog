@@ -1,5 +1,10 @@
 2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* score/src/threaddelayended.c: Clear only the states that are used to
+	block until someone calls _Thread_Delay_ended().
+ 
+2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* score/include/rtems/score/protectedheap.h,
 	score/src/pheapallocate.c: Changed base implementation of protected
 	heap allocations to use _Heap_Allocate_aligned_with_boundary().
