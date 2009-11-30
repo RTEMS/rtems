@@ -5,7 +5,7 @@
 %define __debug_install_post %{nil}
 
 Name:         @rpmprefix@@tool_target@
-Release:      @SOLARIS_RPMREL@%{?dist}
+Release:      @SOLARIS_RPMREL@
 License:      Sun Microsystems
 Group:        Development/Tools
 

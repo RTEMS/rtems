@@ -22,9 +22,9 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am $(srcdir)/binuti
 	  | $(MKSPEC0) > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 
-@rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
+$(rpmprefix)$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
 	$(MKSPEC) $(TARGET)-binutils.spec.in | $(SPECSTRIP) $(BINUTILS_OPTS) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
-noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
+CLEANFILES += $(rpmprefix)$(TARGET)-binutils.spec
+noinst_DATA += $(rpmprefix)$(TARGET)-binutils.spec
 
 EXTRA_DIST += $(BINUTILS_SUBPACKAGES)

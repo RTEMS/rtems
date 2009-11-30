@@ -37,7 +37,7 @@
 %define __debug_install_post %{nil}
 
 Name:         sparc-sun-solaris2.7
-Release:      0.20091006.1%{?dist}
+Release:      0.20091130.1%{?dist}
 License:      Sun Microsystems
 Group:        Development/Tools
 

@@ -12,7 +12,7 @@ $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 	> $(TARGET)-libs.spec.in
 CLEANFILES += $(TARGET)-libs.spec.in
 	                      
-@rpmprefix@$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
+$(rpmprefix)$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
 	$(MKSPEC) $(TARGET)-libs.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
-noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
+CLEANFILES += $(rpmprefix)$(TARGET)-libs.spec
+noinst_DATA += $(rpmprefix)$(TARGET)-libs.spec

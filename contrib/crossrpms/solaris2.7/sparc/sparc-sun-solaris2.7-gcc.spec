@@ -41,7 +41,7 @@ Summary:      	sparc-sun-solaris2.7 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20091020.1%{?dist}
+Release:      	0.20091130.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -85,9 +85,10 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 # FIXME: This is an ugly cludge
 %{?fc10:%global mpfr_provided 2.3.2}
 %{?fc11:%global mpfr_provided 2.4.1}
-%{?suse10_3:%global mpfr_provided 2.2.1}
+%{?fc12:%global mpfr_provided 2.4.1}
 %{?suse11_0:%global mpfr_provided 2.3.1}
 %{?suse11_1:%global mpfr_provided 2.3.2}
+%{?suse11_2:%global mpfr_provided 2.4.1}
 %{?cygwin:%global mpfr_provided 2.4.1}
 %{?mingw32:%global mpfr_provided %{nil}}
 
@@ -433,22 +434,17 @@ libgcc sparc-sun-solaris2.7-gcc.
 
 %files -n sparc-sun-solaris2.7-gcc
 %defattr(-,root,root)
-%dir %{_prefix}
 
-%dir %{_mandir}
-%dir %{_mandir}/man1
 %{_mandir}/man1/sparc-sun-solaris2.7-gcc.1*
 %{_mandir}/man1/sparc-sun-solaris2.7-cpp.1*
 %{_mandir}/man1/sparc-sun-solaris2.7-gcov.1*
 
-%dir %{_bindir}
 %{_bindir}/sparc-sun-solaris2.7-cpp%{_exeext}
 %{_bindir}/sparc-sun-solaris2.7-gcc%{_exeext}
 %{_bindir}/sparc-sun-solaris2.7-gcc-%{gcc_version}%{_exeext}
 %{_bindir}/sparc-sun-solaris2.7-gcov%{_exeext}
 %{_bindir}/sparc-sun-solaris2.7-gccbug
 
-%dir %{_libexecdir}
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/sparc-sun-solaris2.7
 %dir %{_libexecdir}/gcc/sparc-sun-solaris2.7/%{gcc_version}
@@ -458,8 +454,6 @@ libgcc sparc-sun-solaris2.7-gcc.
 
 %files -n sparc-sun-solaris2.7-gcc-libgcc -f build/files.gcc
 %defattr(-,root,root)
-%dir %{_prefix}
-%dir %{_gcclibdir}
 %dir %{_gcclibdir}/gcc
 %dir %{_gcclibdir}/gcc/sparc-sun-solaris2.7
 %dir %{_gcclibdir}/gcc/sparc-sun-solaris2.7/%{gcc_version}
@@ -510,17 +504,12 @@ License:	GPL
 
 %files -n sparc-sun-solaris2.7-gcc-c++
 %defattr(-,root,root)
-%dir %{_prefix}
 
-%dir %{_mandir}
-%dir %{_mandir}/man1
 %{_mandir}/man1/sparc-sun-solaris2.7-g++.1*
 
-%dir %{_bindir}
 %{_bindir}/sparc-sun-solaris2.7-c++%{_exeext}
 %{_bindir}/sparc-sun-solaris2.7-g++%{_exeext}
 
-%dir %{_libexecdir}
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/sparc-sun-solaris2.7
 %dir %{_libexecdir}/gcc/sparc-sun-solaris2.7/%{gcc_version}
@@ -529,8 +518,6 @@ License:	GPL
 
 %files -n sparc-sun-solaris2.7-gcc-libstdc++ -f build/files.g++
 %defattr(-,root,root)
-%dir %{_prefix}
-%dir %{_gcclibdir}
 %dir %{_gcclibdir}/gcc
 %dir %{_gcclibdir}/gcc/sparc-sun-solaris2.7
 %dir %{_gcclibdir}/gcc/sparc-sun-solaris2.7/%{gcc_version}
@@ -554,15 +541,10 @@ GCC fortran compiler for sparc-sun-solaris2.7.
 
 %files -n sparc-sun-solaris2.7-gcc-gfortran
 %defattr(-,root,root)
-%dir %{_prefix}
-%dir %{_bindir}
 %{_bindir}/sparc-sun-solaris2.7-gfortran%{_exeext}
 
-%dir %{_mandir}
-%dir %{_mandir}/man1
 %{_mandir}/man1/sparc-sun-solaris2.7-gfortran.1*
 
-%dir %{_libexecdir}
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/sparc-sun-solaris2.7
 %dir %{_libexecdir}/gcc/sparc-sun-solaris2.7/%{gcc_version}
@@ -583,8 +565,6 @@ License:	GPL
 
 %files -n sparc-sun-solaris2.7-gcc-libgfortran -f build/files.gfortran
 %defattr(-,root,root)
-%dir %{_prefix}
-%dir %{_gcclibdir}
 %dir %{_gcclibdir}/gcc
 %dir %{_gcclibdir}/gcc/sparc-sun-solaris2.7
 %dir %{_gcclibdir}/gcc/sparc-sun-solaris2.7/%{gcc_version}
@@ -609,8 +589,6 @@ GCC objc compiler for sparc-sun-solaris2.7.
 
 %files -n sparc-sun-solaris2.7-gcc-objc
 %defattr(-,root,root)
-%dir %{_exec_prefix}
-%dir %{_libexecdir}
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/sparc-sun-solaris2.7
 %dir %{_libexecdir}/gcc/sparc-sun-solaris2.7/%{gcc_version}
@@ -631,8 +609,6 @@ Support libraries for GCC's objc compiler for sparc-sun-solaris2.7.
 
 %files -n sparc-sun-solaris2.7-gcc-libobjc -f build/files.objc
 %defattr(-,root,root)
-%dir %{_prefix}
-%dir %{_gcclibdir}
 %dir %{_gcclibdir}/gcc
 %dir %{_gcclibdir}/gcc/sparc-sun-solaris2.7
 %dir %{_gcclibdir}/gcc/sparc-sun-solaris2.7/%{gcc_version}

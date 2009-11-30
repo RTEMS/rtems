@@ -38,7 +38,7 @@ Name:		sparc-sun-solaris2.7-binutils
 Summary:	Binutils for target sparc-sun-solaris2.7
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20091020.2%{?dist}
+Release:	0.20091130.1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -164,14 +164,9 @@ GNU binutils targetting sparc-sun-solaris2.7.
 
 %files -n sparc-sun-solaris2.7-binutils
 %defattr(-,root,root)
-%dir %{_prefix}
-%dir %{_datarootdir}
 
-%dir %{_mandir}
-%dir %{_mandir}/man1
 %{_mandir}/man1/sparc-sun-solaris2.7-*.1*
 
-%dir %{_bindir}
 %{_bindir}/sparc-sun-solaris2.7-*
 
 %dir %{_exec_prefix}/sparc-sun-solaris2.7
