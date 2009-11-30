@@ -21,7 +21,7 @@
 #include <rtems/libio.h>
 #include "mcf5206/mcfuart.h"
 
-/* 
+/*
  * int_driven_uart -- mapping between interrupt vector number and
  * UART descriptor structures
  */
@@ -33,7 +33,7 @@ static struct {
 /* Forward function declarations */
 static rtems_isr
 mcfuart_interrupt_handler(rtems_vector_number vec);
-         
+
 /*
  * mcfuart_init --
  *     This function verifies the input parameters and perform initialization
@@ -56,14 +56,14 @@ mcfuart_init(mcfuart *uart, void *tty, uint8_t   intvec,
 {
     if (uart == NULL)
         return RTEMS_INVALID_ADDRESS;
-    
+
     if ((chn <= 0) || (chn > MCF5206E_UART_CHANNELS))
         return RTEMS_INVALID_NUMBER;
-    
+
     uart->chn = chn;
     uart->intvec = intvec;
     uart->tty = tty;
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -107,9 +107,9 @@ mcfuart_set_baudrate(mcfuart *uart, speed_t baud)
 #endif
         default:      rate = 9600; break;
     }
-        
+
     div = SYSTEM_CLOCK_FREQUENCY / (rate * 32);
-    
+
     *MCF5206E_UBG1(MBAR,uart->chn) = (uint8_t)((div >> 8) & 0xff);
     *MCF5206E_UBG2(MBAR,uart->chn) = (uint8_t)(div & 0xff);
 }
@@ -136,16 +136,16 @@ mcfuart_reset(mcfuart *uart)
 {
     register uint32_t   chn;
     rtems_status_code rc;
-    
+
     if (uart == NULL)
         return RTEMS_INVALID_ADDRESS;
-    
+
     chn = uart->chn;
-    
+
     /* Reset the receiver and transmitter */
     *MCF5206E_UCR(MBAR,chn) = MCF5206E_UCR_MISC_RESET_RX;
     *MCF5206E_UCR(MBAR,chn) = MCF5206E_UCR_MISC_RESET_TX;
-    
+
     /*
      * Program the vector number for a UART module interrupt, or
      * disable UART interrupts if polled I/O. Enable the desired
@@ -170,16 +170,16 @@ mcfuart_reset(mcfuart *uart)
     {
         *MCF5206E_UIMR(MBAR,chn) = 0;
     }
-    
+
     /* Select the receiver and transmitter clock. */
     mcfuart_set_baudrate(uart, B19200); /* dBUG defaults (unfortunately,
                                            it is differ to termios default */
-    *MCF5206E_UCSR(MBAR,chn) = 
+    *MCF5206E_UCSR(MBAR,chn) =
         MCF5206E_UCSR_RCS_TIMER | MCF5206E_UCSR_TCS_TIMER;
-    
+
     /* Mode Registers 1,2 - set termios defaults (8N1) */
     *MCF5206E_UCR(MBAR,chn) = MCF5206E_UCR_MISC_RESET_MR;
-    *MCF5206E_UMR(MBAR,chn) = 
+    *MCF5206E_UMR(MBAR,chn) =
 /*      MCF5206E_UMR1_RXRTS | */
         MCF5206E_UMR1_PM_NO_PARITY |
         MCF5206E_UMR1_BC_8;
@@ -187,12 +187,12 @@ mcfuart_reset(mcfuart *uart)
         MCF5206E_UMR2_CM_NORMAL |
 /*      MCF5206E_UMR2_TXCTS | */
         MCF5206E_UMR2_SB_1;
-    
+
     /* Enable Receiver and Transmitter */
     *MCF5206E_UCR(MBAR,chn) = MCF5206E_UCR_MISC_RESET_ERR;
     *MCF5206E_UCR(MBAR,chn) = MCF5206E_UCR_TC_ENABLE;
     *MCF5206E_UCR(MBAR,chn) = MCF5206E_UCR_RC_ENABLE;
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -212,7 +212,7 @@ rtems_status_code
 mcfuart_disable(mcfuart *uart)
 {
     rtems_status_code rc;
-    *MCF5206E_UCR(MBAR,uart->chn) = 
+    *MCF5206E_UCR(MBAR,uart->chn) =
         MCF5206E_UCR_TC_DISABLE |
         MCF5206E_UCR_RC_DISABLE;
     if (uart->intvec != 0)
@@ -247,18 +247,18 @@ mcfuart_set_attributes(mcfuart *uart, const struct termios *t)
     int level;
     speed_t baud;
     uint8_t   umr1, umr2;
-    
+
     baud = cfgetospeed(t);
     umr1 = 0;
     umr2 = MCF5206E_UMR2_CM_NORMAL;
-    
+
     /* Set flow control */
     if ((t->c_cflag & CRTSCTS) != 0)
     {
         umr1 |= MCF5206E_UMR1_RXRTS;
         umr2 |= MCF5206E_UMR2_TXCTS;
     }
-    
+
     /* Set character size */
     switch (t->c_cflag & CSIZE)
     {
@@ -267,7 +267,7 @@ mcfuart_set_attributes(mcfuart *uart, const struct termios *t)
         case CS7: umr1 |= MCF5206E_UMR1_BC_7; break;
         case CS8: umr1 |= MCF5206E_UMR1_BC_8; break;
     }
-    
+
     /* Set number of stop bits */
     if ((t->c_cflag & CSTOPB) != 0)
     {
@@ -291,7 +291,7 @@ mcfuart_set_attributes(mcfuart *uart, const struct termios *t)
             umr2 |= MCF5206E_UMR2_SB_1;
         }
     }
-    
+
     /* Set parity mode */
     if ((t->c_cflag & PARENB) != 0)
     {
@@ -308,9 +308,9 @@ mcfuart_set_attributes(mcfuart *uart, const struct termios *t)
     {
         umr1 |= MCF5206E_UMR1_PM_NO_PARITY;
     }
-    
+
     rtems_interrupt_disable(level);
-    *MCF5206E_UCR(MBAR,uart->chn) = 
+    *MCF5206E_UCR(MBAR,uart->chn) =
         MCF5206E_UCR_TC_DISABLE | MCF5206E_UCR_RC_DISABLE;
     mcfuart_set_baudrate(uart, baud);
     *MCF5206E_UCR(MBAR,uart->chn) = MCF5206E_UCR_MISC_RESET_MR;
@@ -318,7 +318,7 @@ mcfuart_set_attributes(mcfuart *uart, const struct termios *t)
     *MCF5206E_UMR(MBAR,uart->chn) = umr2;
     if ((t->c_cflag & CREAD) != 0)
     {
-        *MCF5206E_UCR(MBAR,uart->chn) = 
+        *MCF5206E_UCR(MBAR,uart->chn) =
             MCF5206E_UCR_TC_ENABLE | MCF5206E_UCR_RC_ENABLE;
     }
     else
@@ -326,7 +326,7 @@ mcfuart_set_attributes(mcfuart *uart, const struct termios *t)
         *MCF5206E_UCR(MBAR,uart->chn) = MCF5206E_UCR_TC_ENABLE;
     }
     rtems_interrupt_enable(level);
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -423,7 +423,7 @@ mcfuart_interrupt_handler(rtems_vector_number vec)
     register uint8_t   uisr;
     register int chn;
     register int bp = 0;
-    
+
     /* Find UART descriptor from vector number */
     if (int_driven_uart[0].vec == vec)
         uart = int_driven_uart[0].uart;
@@ -431,15 +431,15 @@ mcfuart_interrupt_handler(rtems_vector_number vec)
         uart = int_driven_uart[1].uart;
     else
         return;
-    
+
     chn = uart->chn;
-    
+
     uisr = *MCF5206E_UISR(MBAR, chn);
     if (uisr & MCF5206E_UISR_DB)
     {
         *MCF5206E_UCR(MBAR, chn) = MCF5206E_UCR_MISC_RESET_BRK;
     }
-    
+
     /* Receiving */
     while (1)
     {
@@ -465,9 +465,9 @@ mcfuart_interrupt_handler(rtems_vector_number vec)
             {
                 buf[bp++] = *MCF5206E_URB(MBAR, chn);
             }
-            
+
             /* Reset error condition if any errors has been detected */
-            if (usr & (MCF5206E_USR_RB | MCF5206E_USR_FE | 
+            if (usr & (MCF5206E_USR_RB | MCF5206E_USR_FE |
                        MCF5206E_USR_PE | MCF5206E_USR_OE))
             {
                 *MCF5206E_UCR(MBAR, chn) = MCF5206E_UCR_MISC_RESET_ERR;
@@ -480,7 +480,7 @@ mcfuart_interrupt_handler(rtems_vector_number vec)
             break;
         }
     }
-    
+
     /* Transmitting */
     while (1)
     {
@@ -525,7 +525,7 @@ mcfuart_interrupt_write(mcfuart *uart, const char *buf, int len)
     uart->tx_buf = buf;
     uart->tx_buf_len = len;
     uart->tx_ptr = 0;
-    *MCF5206E_UIMR(MBAR, uart->chn) = 
+    *MCF5206E_UIMR(MBAR, uart->chn) =
             MCF5206E_UIMR_FFULL | MCF5206E_UIMR_TXRDY;
     while (((*MCF5206E_USR(MBAR,uart->chn) & MCF5206E_USR_TXRDY) != 0) &&
            (uart->tx_ptr < uart->tx_buf_len))

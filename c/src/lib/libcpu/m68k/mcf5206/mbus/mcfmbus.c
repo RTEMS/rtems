@@ -181,7 +181,7 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                 case EVENT_NEXTMSG:  /* Start new message processing */
                     bus->cmsg++;
                     /* FALLTHRU */
-                
+
                 case EVENT_TRANSFER: /* Initiate new transfer */
                     if (bus->cmsg - bus->msg >= bus->nmsg)
                     {
@@ -192,7 +192,7 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                         bus->done(bus->done_arg_ptr);
                         break;
                     }
-                    
+
                     /* Initiate START or REPEATED START condition on the bus */
                     if (event == EVENT_TRANSFER)
                     {
@@ -202,10 +202,10 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                     {
                         mcfmbus_rstart(bus);
                     }
-                    
+
                     bus->byte = 0;
                     mcfmbus_tx_mode(bus);
-                    
+
                     /* Initiate slave address sending */
                     if (bus->cmsg->flags & I2C_MSG_ADDR_10)
                     {
@@ -239,13 +239,13 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                         mcfmbus_send(bus, b);
                     }
                     break;
-                
+
                 default:
                     mcfmbus_machine_error(bus, event);
                     break;
             }
             break;
-        
+
         case STATE_ADDR_7:
             switch (event)
             {
@@ -257,7 +257,7 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                         mcfmbus_send_ack(bus);
                     next_state(bus, STATE_RECEIVING);
                     break;
-                
+
                 case EVENT_NACK:
                     mcfmbus_error(bus, I2C_NO_DEVICE);
                     next_state(bus, STATE_IDLE);
@@ -269,14 +269,14 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                     next_state(bus, STATE_IDLE);
                     mcfmbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                    
+
                 default:
                     mcfmbus_machine_error(bus, event);
                     break;
             }
             break;
 
-        case STATE_ADDR_1_R:         
+        case STATE_ADDR_1_R:
         case STATE_ADDR_1_W:
             switch (event)
             {
@@ -300,25 +300,25 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                     }
                     break;
                 }
-                
+
                 case EVENT_NACK:
                     mcfmbus_error(bus, I2C_NO_DEVICE);
                     next_state(bus, STATE_IDLE);
                     mcfmbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                
+
                 case EVENT_ARB_LOST:
                     mcfmbus_error(bus, I2C_ARBITRATION_LOST);
                     next_state(bus, STATE_IDLE);
                     mcfmbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                
+
                 default:
                     mcfmbus_machine_error(bus, event);
                     break;
             }
             break;
-             
+
         case STATE_SENDING:
             switch (event)
             {
@@ -334,7 +334,7 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                         next_state(bus, STATE_SENDING);
                     }
                     break;
-                    
+
                 case EVENT_NACK:
                     if (bus->byte == 0)
                     {
@@ -347,20 +347,20 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                     next_state(bus, STATE_IDLE);
                     mcfmbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                    
+
                 case EVENT_ARB_LOST:
                     mcfmbus_error(bus, I2C_ARBITRATION_LOST);
                     next_state(bus, STATE_IDLE);
                     mcfmbus_machine(bus, EVENT_NEXTMSG);
                     break;
-                
+
                 default:
                     mcfmbus_machine_error(bus, event);
                     break;
-                    
+
             }
             break;
-                
+
         case STATE_RECEIVING:
             switch (event)
             {
@@ -463,7 +463,7 @@ mcfmbus_select_clock_divider(mcfmbus *i2c_bus, int divider)
         int divider;
         int mbc;
     } dividers[] ={
-        { 20,   0x20 }, { 22,   0x21 }, { 24,   0x22 }, { 26,   0x23 }, 
+        { 20,   0x20 }, { 22,   0x21 }, { 24,   0x22 }, { 26,   0x23 },
         { 28,   0x00 }, { 30,   0x01 }, { 32,   0x25 }, { 34,   0x02 },
         { 36,   0x26 }, { 40,   0x03 }, { 44,   0x04 }, { 48,   0x05 },
         { 56,   0x06 }, { 64,   0x2a }, { 68,   0x07 }, { 72,   0x2B },
@@ -480,7 +480,7 @@ mcfmbus_select_clock_divider(mcfmbus *i2c_bus, int divider)
 
     if (i2c_bus == NULL)
         return RTEMS_INVALID_ADDRESS;
-    
+
     for (i = 0, mbc = -1; i < sizeof(dividers)/sizeof(dividers[0]); i++)
     {
         mbc = dividers[i].mbc;
@@ -511,20 +511,20 @@ mcfmbus_initialize(mcfmbus *i2c_bus, uint32_t   base)
 
     if (mbus != NULL) /* Check if already initialized */
         return RTEMS_RESOURCE_IN_USE;
-        
+
     if (i2c_bus == NULL)
         return RTEMS_INVALID_ADDRESS;
 
-    
+
     i2c_bus->base = base;
     i2c_bus->state = STATE_IDLE;
     i2c_bus->msg = NULL;
     i2c_bus->cmsg = NULL;
     i2c_bus->nmsg = 0;
     i2c_bus->byte = 0;
-    
+
     sc = rtems_interrupt_catch(
-        mcfmbus_interrupt_handler, 
+        mcfmbus_interrupt_handler,
         24 + ((*MCF5206E_ICR(base, MCF5206E_INTR_MBUS) & MCF5206E_ICR_IL) >>
                                    MCF5206E_ICR_IL_S),
         &i2c_bus->oldisr
@@ -540,7 +540,7 @@ mcfmbus_initialize(mcfmbus *i2c_bus, uint32_t   base)
     *MCF5206E_MBDR(base) = 0x1F; /* Maximum possible divider is 3840 */
     *MCF5206E_MBCR(base) = MCF5206E_MBCR_MEN | MCF5206E_MBCR_MIEN;
     rtems_interrupt_enable(level);
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -565,7 +565,7 @@ mcfmbus_i2c_transfer(mcfmbus *bus, int nmsg, i2c_message *msg,
 {
     if (bus != mbus)
         return RTEMS_NOT_CONFIGURED;
-    
+
     bus->done = done;
     bus->done_arg_ptr = done_arg_ptr;
     bus->cmsg = bus->msg = msg;
@@ -594,12 +594,12 @@ mcfmbus_i2c_done(mcfmbus *i2c_bus)
     uint32_t   base;
     if (mbus == NULL)
         return RTEMS_NOT_CONFIGURED;
-    
+
     if (mbus != i2c_bus)
         return RTEMS_INVALID_ADDRESS;
-    
+
     base = i2c_bus->base;
-    
+
     *MCF5206E_IMR(base) |= MCF5206E_INTR_BIT(MCF5206E_INTR_MBUS);
     *MCF5206E_MBCR(base) = 0;
 
