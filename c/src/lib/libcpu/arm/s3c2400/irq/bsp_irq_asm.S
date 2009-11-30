@@ -14,24 +14,24 @@
  */
 
 #define __asm__
-                
-/* 
- * Function to obtain, execute an IT handler and acknowledge the IT 
+
+/*
+ * Function to obtain, execute an IT handler and acknowledge the IT
  */
 
         .globl bsp_interrupt_dispatch
-        
-bsp_interrupt_dispatch :      
+
+bsp_interrupt_dispatch :
 
         ldr     r0, =0x14400014  /* Read rINTOFFSET */
         ldr     r1, [r0]
 
         ldr     r0, =bsp_vector_table
         ldr     r0, [r0, r1, LSL #2]    /* Read the address */
-        
+
         stmdb     sp!,{lr}
         ldr     lr, =IRQ_return         /* prepare the return from handler  */
-        
+
         mov pc, r0
 
 IRQ_return:

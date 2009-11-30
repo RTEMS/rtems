@@ -172,8 +172,8 @@ MG5UART_STATIC int mg5uart_set_attributes(
 
   cmdSave = MG5UART_GETREG( pMG5UART, MG5UART_COMMAND_REGISTER );
 
-  MG5UART_SETREG( pMG5UART, 
-		  MG5UART_COMMAND_REGISTER, 
+  MG5UART_SETREG( pMG5UART,
+		  MG5UART_COMMAND_REGISTER,
 		  (cmdSave & ~(MONGOOSEV_UART_ALL_STATUS_BITS << shift)) | (cmd << shift) );
 
   MG5UART_SETREG( pMG5UART_port, MG5UART_BAUD_RATE, baudcmd );
@@ -305,8 +305,8 @@ MG5UART_STATIC int mg5uart_open(
 
   MG5UART_SETREG( pMG5UART_port, MG5UART_BAUD_RATE, baudcmd );
 
-  MG5UART_SETREG( pMG5UART, 
-		  MG5UART_COMMAND_REGISTER, 
+  MG5UART_SETREG( pMG5UART,
+		  MG5UART_COMMAND_REGISTER,
 		  cmd = (cmdSave & ~(MONGOOSEV_UART_ALL_STATUS_BITS << shift)) | (cmd << shift) );
 
   rtems_interrupt_enable(Irql);
@@ -352,8 +352,8 @@ MG5UART_STATIC int mg5uart_close(
   rtems_interrupt_disable(Irql);
   cmdSave = MG5UART_GETREG( pMG5UART, MG5UART_COMMAND_REGISTER );
 
-  MG5UART_SETREG( pMG5UART, 
-		  MG5UART_COMMAND_REGISTER,  
+  MG5UART_SETREG( pMG5UART,
+		  MG5UART_COMMAND_REGISTER,
 		  (cmdSave & ~(MONGOOSEV_UART_ALL_STATUS_BITS << shift)) | (cmd << shift) );
   rtems_interrupt_enable(Irql);
 
@@ -393,7 +393,7 @@ MG5UART_STATIC void mg5uart_write_polled(
    */
   timeout = 2000;
 
-  while( --timeout ) 
+  while( --timeout )
   {
     status = MG5UART_GETREG(pMG5UART, MG5UART_STATUS_REGISTER) >> shift;
 
@@ -411,7 +411,7 @@ MG5UART_STATIC void mg5uart_write_polled(
      */
 
 #if 0
-     if(_System_state_Is_up(_System_state_Get())) 
+     if(_System_state_Is_up(_System_state_Get()))
      {
        rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
      }
@@ -473,8 +473,8 @@ __ISR(rx_ready, MG5UART_IRQ_RX_READY)
 
 
 MG5UART_STATIC void mg5uart_process_isr_rx_error(
-   int  minor, 
-   uint32_t   mask 
+   int  minor,
+   uint32_t   mask
 )
 {
   uint32_t                pMG5UART;
@@ -524,7 +524,7 @@ MG5UART_STATIC void mg5uart_process_tx_isr(
 {
    uint32_t        pMG5UART;
    int             shift;
-   
+
    pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
 
    mg5uart_enable_interrupts(minor, MG5UART_ENABLE_ALL_EXCEPT_TX);
@@ -533,7 +533,7 @@ MG5UART_STATIC void mg5uart_process_tx_isr(
       shift = MONGOOSEV_UART0_IRQ_SHIFT;
    else
       shift = MONGOOSEV_UART1_IRQ_SHIFT;
-      
+
    MG5UART_SETREG(
       pMG5UART,
       MG5UART_STATUS_REGISTER,
@@ -549,7 +549,7 @@ MG5UART_STATIC void mg5uart_process_tx_isr(
     *  There are no more characters to transmit.  The tx interrupts are be cleared
     *  by writing data to the uart, so just disable the tx interrupt sources.
     */
-  
+
    Console_Port_Data[minor].bActive = FALSE;
 
    /* mg5uart_enable_interrupts(minor, MG5UART_ENABLE_ALL_EXCEPT_TX); */
@@ -659,7 +659,7 @@ MG5UART_STATIC int mg5uart_write_support_int(
 
   MG5UART_SETREG(pMG5UART_port, MG5UART_TX_BUFFER, *buf);
 
-  if( Console_Port_Data[minor].bActive == FALSE ) 
+  if( Console_Port_Data[minor].bActive == FALSE )
   {
      Console_Port_Data[minor].bActive = TRUE;
      mg5uart_enable_interrupts(minor, MG5UART_ENABLE_ALL);
@@ -690,7 +690,7 @@ MG5UART_STATIC int mg5uart_write_support_polled(
   /*
    * poll each byte in the string out of the port.
    */
-  while (nwrite < len) 
+  while (nwrite < len)
   {
     mg5uart_write_polled(minor, *buf++);
     nwrite++;
@@ -734,11 +734,11 @@ MG5UART_STATIC int mg5uart_inbyte_nonblocking_polled(
      status = MG5UART_GETREG(pMG5UART, MG5UART_STATUS_REGISTER) >> shift;
   }
 
-  if ( status & MONGOOSEV_UART_RX_READY ) 
+  if ( status & MONGOOSEV_UART_RX_READY )
   {
      return (int) MG5UART_GETREG(pMG5UART_port, MG5UART_RX_BUFFER);
-  } 
-  else 
+  }
+  else
   {
      return -1;
   }

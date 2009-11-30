@@ -95,7 +95,7 @@ zero_big_data:
 	evstddx r0, r3, r8
 	addi r8, r8, 32
 	bdnz zero_big_data
-	
+
 	/* Return */
 	blr
 
@@ -145,6 +145,6 @@ zero_big_line:
 	dcbz r3, r8
 	addi r8, r8, 128
 	bdnz zero_big_line
-	
+
 	/* Return */
 	blr

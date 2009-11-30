@@ -11,7 +11,7 @@
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *	
+ *
  *  T. Straumann - 11/2001: added support for 7400 (no AltiVec yet)
  *  S.K. Feng    - 10/2003: added support for 7455 (no AltiVec yet)
  *
@@ -40,7 +40,7 @@
 #define PPC_860   0x50
 #define PPC_821   PPC_860
 #define PPC_8260  0x81
-#define PPC_8240  PPC_8260 
+#define PPC_8240  PPC_8260
 
 /* ALTIVEC instructions (not recognized by off-the shelf gcc yet) */
 #define DSSALL	.long	0x7e00066c		/* DSSALL altivec instruction opcode */
@@ -54,13 +54,13 @@
 
 #define DL1HWF	(1<<(31-8))
 #define L2HWF	(1<<(31-20))
-	
+
 #FIXME Should really move this to C code
 
 	.globl L1_caches_enables
 	.type  L1_caches_enables, @function
-	
-L1_caches_enables:	
+
+L1_caches_enables:
 	/*
 	 * Enable caches and 604-specific features if necessary.
 	 */
@@ -87,15 +87,15 @@ L1_caches_enables:
 	cror	6,6,10
 	cror	6,6,14
 	cmpi	2,r9,PPC_750	/* or 750 */
-	cror	6,6,10	
+	cror	6,6,10
 	cmpi	2,r9,PPC_7400	/* or 7400 */
-	cror	6,6,10		
+	cror	6,6,10
 	cmpli   0,r9,PPC_7455   /* or 7455 */
 	beq     1f
 	cmpli   0,r9,PPC_7457   /* or 7457 */
 	bne		2f
 1:
-	/* 7455:link register stack,branch folding & 
+	/* 7455:link register stack,branch folding &
 	 * TBEN : enable the time base and decrementer.
 	 * EMCP bit is defined in HID1. However, it's not used
 	 * in mvme5500 board because of GT64260 (e.g. it's connected
@@ -103,7 +103,7 @@ L1_caches_enables:
 	 */
 	oris    r11,r11,(HID0_LRSTK|HID0_FOLD|HID0_TBEN)@h
 	ori     r11,r11,(HID0_LRSTK|HID0_FOLD|HID0_TBEN)@l
-2:	cror    2,2,10	
+2:	cror    2,2,10
 	bne	3f
 	ori	r11,r11,HID0_BTIC	/* enable branch tgt cache on 7400 , 7455 , 7457 */
 3:	cror	2,2,6
@@ -119,14 +119,14 @@ L1_caches_enables:
 	blr
 
 	.globl get_L1CR
-.type  get_L1CR, @function	
+.type  get_L1CR, @function
 get_L1CR:
 	mfspr   r3,HID0
 	blr
-			
+
 	.globl get_L2CR
-	.type  get_L2CR, @function	
-get_L2CR:	
+	.type  get_L2CR, @function
+get_L2CR:
 	/* Make sure this is a > 750 chip */
 	mfspr	r3,PVR
 	rlwinm	r3,r3,16,16,31
@@ -135,12 +135,12 @@ get_L2CR:
 	cmplwi  r3,PPC_7400	/* it's a 7400 */
 	beq	1f
 	cmplwi  r3,PPC_7455	/* it's a 7455 */
-	beq	1f	
+	beq	1f
 	cmplwi  r3,PPC_7457	/* it's a 7457 */
-	beq	1f	
+	beq	1f
 	li	r3,-1
 	blr
-	
+
 1:
 	/* Return the L2CR contents */
 	mfspr	r3,L2CR
@@ -148,18 +148,18 @@ get_L2CR:
 
 	.globl set_L2CR
 	.type  set_L2CR, @function
-set_L2CR:	
+set_L2CR:
 	/* Usage:
-	 * When setting the L2CR register, you must do a few special things.  
-	 * If you are enabling the cache, you must perform a global invalidate. 
+	 * When setting the L2CR register, you must do a few special things.
+	 * If you are enabling the cache, you must perform a global invalidate.
 	 * If you are disabling the cache, you must flush the cache contents first.
 	 * This routine takes care of doing these things.  When first
-	 * enabling the cache, make sure you pass in the L2CR you want, as well as 
-	 * passing in the global invalidate bit set.  A global invalidate will 
-	 * only be performed if the L2I bit is set in applyThis.  When enabling 
+	 * enabling the cache, make sure you pass in the L2CR you want, as well as
+	 * passing in the global invalidate bit set.  A global invalidate will
+	 * only be performed if the L2I bit is set in applyThis.  When enabling
 	 * the cache, you should also set the L2E bit in applyThis.  If you
-	 * want to modify the L2CR contents after the cache has been enabled, 
-	 * the recommended procedure is to first call __setL2CR(0) to disable 
+	 * want to modify the L2CR contents after the cache has been enabled,
+	 * the recommended procedure is to first call __setL2CR(0) to disable
 	 * the cache and then call it again with the new values for L2CR.  Examples:
 	 *
 	 *	_setL2CR(0)		-	disables the cache
@@ -171,13 +171,13 @@ set_L2CR:
 	 *				-	L2I set to perform a global invalidation
 	 *				-	L2OH set to 1 nS
 	 *
-	 * A similar call should work for your card.  You need to know the correct 
-	 * setting for your card and then place them in the fields I have outlined 
-	 * above.  Other fields support optional features, such as L2DO which caches 
-	 * only data, or L2TS which causes cache pushes from the L1 cache to go to 
+	 * A similar call should work for your card.  You need to know the correct
+	 * setting for your card and then place them in the fields I have outlined
+	 * above.  Other fields support optional features, such as L2DO which caches
+	 * only data, or L2TS which causes cache pushes from the L1 cache to go to
 	 *the L2 cache instead of to main memory.
 	 */
-	
+
 	/* Make sure this is a > 750 chip */
 	mfspr	r0,PVR
 	rlwinm	r0,r0,16,16,31
@@ -186,17 +186,17 @@ set_L2CR:
 	cmplwi	r0,PPC_7400
 	beq	thisIs750
 	cmplwi	r0,PPC_7455
-	beq	thisIs750	
+	beq	thisIs750
 	cmplwi	r0,PPC_7457
-	beq	thisIs750	
+	beq	thisIs750
 	li	r3,-1
 	blr
-	
+
 thisIs750:
 	/* Get the current enable bit of the L2CR into r4 */
 	mfspr	r4,L2CR
 	rlwinm	r4,r4,0,0,0
-	
+
 	/* See if we want to perform a global inval this time. */
 	rlwinm	r6,r3,0,10,10		/* r6 contains the new invalidate bit */
 	rlwinm.	r5,r3,0,0,0		/* r5 contains the new enable bit */
@@ -209,7 +209,7 @@ thisIs750:
 	mtmsr	r4
 	bne	dontDisableCache	/* Only disable the cache if L2CRApply has the enable bit off */
 
-	cmplwi  r0,PPC_7400		/* 7400 ? */ 
+	cmplwi  r0,PPC_7400		/* 7400 ? */
 	bne	disableCache		/* use traditional method */
 
 	/* On the 7400, they recommend using the hardware flush feature */
@@ -241,18 +241,18 @@ disableCache:
 	mtmsr	r4
 	sync
 	isync
-	mfspr	r4, MSSCR0	
+	mfspr	r4, MSSCR0
 	rlwinm	r4,r4,0,29,0		/* Turn off the L2PFE bits */
 	mtspr	MSSCR0, r4
-	sync	
+	sync
 	/* flush L1 first */
 	lis	r4,0x0001
 	mtctr	r4
 	li	r4,0
-	li      r0,0 
+	li      r0,0
 loadFlush:
 	lwzx	r0,r0,r4
-	dcbf	r0,r4	
+	dcbf	r0,r4
 	addi	r4,r4,CACHE_LINE_SIZE	/* Go to start of next cache line */
 	bdnz	loadFlush
 	sync
@@ -269,8 +269,8 @@ loadFlush:
 	sync
 	/* L2 flushed,L2IO & L2DO got cleared in the dontDisableCache:  */
 	b	reenableDR
-	
-not745x:			
+
+not745x:
 	sync
 	mtmsr	r4
 	isync
@@ -286,7 +286,7 @@ loadLoop:
 	lwzx	r0,r0,r4
 	addi	r4,r4,CACHE_LINE_SIZE	/* Go to start of next cache line */
 	bdnz	loadLoop
-	
+
 	/* Now, flush the first 2MB of memory */
 	lis		r4,0x0001
 	mtctr	r4
@@ -296,17 +296,17 @@ flushLoop:
 	dcbf	r0,r4
 	addi	r4,r4,CACHE_LINE_SIZE	/* Go to start of next cache line */
 	bdnz	flushLoop
-reenableDR:	
+reenableDR:
 	rlwinm	r4,r7,0,17,15		/* still mask EE but reenable data relocation */
 	sync
 	mtmsr	r4
 	isync
 
 flushDone:
-	
+
 	/* Turn off the L2CR enable bit. */
 	rlwinm	r3,r3,0,1,31
-	
+
 dontDisableCache:
 	/* Set up the L2CR configuration bits */
 	sync
@@ -314,7 +314,7 @@ dontDisableCache:
 	sync
 	cmplwi	r6,0
 	beq	noInval
-	
+
 	/* Perform a global invalidation */
 	oris	r3,r3,0x0020
 	sync
@@ -324,11 +324,11 @@ invalCompleteLoop:				/* Wait for the invalidation to complete */
 	mfspr	r3,L2CR
 	rlwinm.	r4,r3,0,31,31
 	bne	invalCompleteLoop
-	
+
 	rlwinm	r3,r3,0,11,9;		/* Turn off the L2I bit */
 	sync
 	mtspr	L2CR,r3
-	
+
 noInval:
 	sync
 	/* re-enable interrupts, i.e. restore original MSR */
@@ -336,7 +336,7 @@ noInval:
 	/* See if we need to enable the cache */
 	cmplwi	r5,0
 	beqlr
-	
+
 enableCache:
 	/* Enable the cache */
 	oris	r3,r3,0x8000
@@ -344,20 +344,20 @@ enableCache:
 	sync
 	blr
 
-	
+
 	.globl get_L3CR
-	.type  get_L3CR, @function	
-get_L3CR:	
+	.type  get_L3CR, @function
+get_L3CR:
 	/* Make sure this is a 7455 chip */
 	mfspr	r3,PVR
 	rlwinm	r3,r3,16,16,31
 	cmplwi  r3,PPC_7455	/* it's a 7455 */
-	beq	1f	
+	beq	1f
 	cmplwi  r3,PPC_7457	/* it's a 7457 */
-	beq	1f	
+	beq	1f
 	li	r3,-1
 	blr
-	
+
 1:
 	/* Return the L3CR contents */
 	mfspr	r3,L3CR
@@ -365,34 +365,34 @@ get_L3CR:
 
 	.globl set_L3CR
 	.type  set_L3CR, @function
-set_L3CR:	
+set_L3CR:
 	/* Usage:
-	 * When setting the L3CR register, you must do a few special things.  
+	 * When setting the L3CR register, you must do a few special things.
 	 * If you are enabling the cache, you must perform a global invalidate.
 	 * Then call cpu_enable_l3cr(l3cr).
 	 * If you are disabling the cache, you must flush the cache contents first.
 	 * This routine takes care of doing these things.  If you
-	 * want to modify the L3CR contents after the cache has been enabled, 
-	 * the recommended procedure is to first call __setL3CR(0) to disable 
-	 * the cache and then call cpu_enable_l3cr with the new values for 
+	 * want to modify the L3CR contents after the cache has been enabled,
+	 * the recommended procedure is to first call __setL3CR(0) to disable
+	 * the cache and then call cpu_enable_l3cr with the new values for
 	 * L3CR.
 	 */
-	
+
 	/* Make sure this is a 7455 chip */
 	mfspr	r0,PVR
 	rlwinm	r0,r0,16,16,31
 	cmplwi	r0,PPC_7455
-	beq	thisIs7455	
+	beq	thisIs7455
 	cmplwi	r0,PPC_7457
-	beq	thisIs7455	
+	beq	thisIs7455
 	li	r3,-1
 	blr
-	
+
 thisIs7455:
 	/* Get the current enable bit of the L3CR into r4 */
 	mfspr	r4,L3CR
 	rlwinm	r4,r4,0,0,0
-	
+
 	/* See if we want to perform a global inval this time. */
 	rlwinm	r6,r3,0,10,10		/* r6 contains the new invalidate bit */
 	rlwinm.	r5,r3,0,0,0		/* r5 contains the new enable bit */
@@ -411,7 +411,7 @@ thisIs7455:
 	sync
 	mtmsr	r4
 	isync				/* make sure memory accesses have completed */
-	/* 7455: L3 :	 hardware flush 	
+	/* 7455: L3 :	 hardware flush
 	 * Set the L3CR[L3IO & L3DO] bits to completely lock the L3 cache */
 	mfspr   r0, L3CR
 	lis     r4, L3CR_LOCK_745x@h
@@ -428,19 +428,19 @@ thisIs7455:
 	sync
 	mtmsr	r4
 	isync
-	
+
 	/* Turn off the L3CR enable bit. */
 	rlwinm	r3,r3,0,1,31
-	
-dontDisableL3Cache:		
+
+dontDisableL3Cache:
 	/* Set up the L3CR configuration bits */
 	sync
 	mtspr	L3CR,r3
 	sync
-ifL3Inval:	
+ifL3Inval:
 	cmplwi	r6,0
 	beq	noL3Inval
-	
+
 	/* Perform a global invalidation */
 	oris	r3,r3,0x0020
 	sync
@@ -450,19 +450,19 @@ invalCompleteL3:				/* Wait for the invalidation to complete */
 	mfspr	r3,L3CR
 	rlwinm.	r4,r3,0,31,31
 	bne	invalCompleteL3
-	
+
 	rlwinm	r3,r3,0,11,9;		/* Turn off the L3I bit */
 	sync
 	mtspr	L3CR,r3
 	sync
-	
+
 noL3Inval:
 	/* re-enable interrupts, i.e. restore original MSR */
 	mtmsr	r7					/* (no sync needed) */
 	/* See if we need to enable the cache */
 	cmplwi	r5,0
 	beqlr
-	
+
 enableL3Cache:
 	/* Enable the cache */
 	oris	r3,r3,0x8000

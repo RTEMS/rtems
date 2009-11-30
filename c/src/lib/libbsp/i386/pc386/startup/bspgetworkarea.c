@@ -94,7 +94,7 @@ void bsp_size_memory(void)
         break;
       }
     }
-      
+
     topAddr = (i-1)*1024*1024 - 4;
   } else {
     printk( "hardcoded\n" );

@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2005 by Cogent Computer Systems
  * Written by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -189,15 +189,15 @@
 #define MEM_STADDR3	0x11003f00
 
 /*
- * SDCS0 - 
- * SDCS1 - 
- * SDCS2 - 
+ * SDCS0 -
+ * SDCS1 -
+ * SDCS2 -
  */
 #define MEM_SDMODE0		0x00552229
 #define MEM_SDMODE1		0x00552229
 #define MEM_SDMODE2		0x00552229
 
-#define MEM_SDADDR0		0x001003F8 
+#define MEM_SDADDR0		0x001003F8
 #define MEM_SDADDR1		0x001023F8
 #define MEM_SDADDR2		0x001043F8
 
@@ -245,7 +245,7 @@
 
 
 
-#define AU1X00_SYS_TOYTRIM(x)    (*(volatile uint32_t*)(x + 0x00))    
+#define AU1X00_SYS_TOYTRIM(x)    (*(volatile uint32_t*)(x + 0x00))
 #define AU1X00_SYS_TOYWRITE(x)   (*(volatile uint32_t*)(x + 0x04))
 #define AU1X00_SYS_TOYMATCH0(x)  (*(volatile uint32_t*)(x + 0x08))
 #define AU1X00_SYS_TOYMATCH1(x)  (*(volatile uint32_t*)(x + 0x0c))
@@ -315,7 +315,7 @@ typedef struct {
     uint32_t _rsv0;
     uint32_t _rsv1;
 } au1x00_macdma_rx_t;
-                                           
+
 
 typedef struct {
     volatile uint32_t stat;
@@ -323,7 +323,7 @@ typedef struct {
     volatile uint32_t len;
     uint32_t _rsv0;
 } au1x00_macdma_tx_t;
-                                           
+
 #define AU1X00_MAC_CTRL_RA                (bit(31))
 #define AU1X00_MAC_CTRL_EM                (bit(30))
 #define AU1X00_MAC_CTRL_DO                (bit(23))
@@ -392,7 +392,7 @@ typedef struct {
 
 
 #define AU1X00_MAC_DMA_TXSTAT_PR          (bit(31))
-#define AU1X00_MAC_DMA_TXSTAT_CC_MASK     (0xf << 10)      
+#define AU1X00_MAC_DMA_TXSTAT_CC_MASK     (0xf << 10)
 #define AU1X00_MAC_DMA_TXSTAT_LO          (bit(9))
 #define AU1X00_MAC_DMA_TXSTAT_DF          (bit(8))
 #define AU1X00_MAC_DMA_TXSTAT_UR          (bit(7))
@@ -425,8 +425,8 @@ typedef struct {
     volatile uint32_t enable;
 } au1x00_uart_t;
 
-extern au1x00_uart_t *uart0;    
-extern au1x00_uart_t *uart3;    
+extern au1x00_uart_t *uart0;
+extern au1x00_uart_t *uart3;
 
 /*
  *  Interrupt Vector Numbers

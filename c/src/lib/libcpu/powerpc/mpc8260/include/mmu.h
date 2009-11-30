@@ -1,7 +1,7 @@
-/* 
+/*
  * mmu.h
- * 
- * This include file contains definitions pertaining 
+ *
+ * This include file contains definitions pertaining
  * to the MMU on the MPC8xx.
  *
  * Copyright (c) 1999, National Research Council of Canada
@@ -29,7 +29,7 @@ typedef struct {
 } MMU_TLB_table_t;
 
 /*
- * The MMU_TLB_table and its size, MMU_N_TLB_Table_Entries, must be 
+ * The MMU_TLB_table and its size, MMU_N_TLB_Table_Entries, must be
  * supplied by the BSP.
  */
 extern MMU_TLB_table_t MMU_TLB_table[];	/* MMU TLB table supplied by BSP */

@@ -1,4 +1,4 @@
-/* 
+/*
  * vectors.h Exception frame related contant and API.
  *
  *  This include file describe the data structure and the functions implemented
@@ -28,10 +28,10 @@
 #define NUM_EXCEPTIONS		0x20
 
 /*
- * The callee (high level exception code written in C) 
+ * The callee (high level exception code written in C)
  * will store the Link Registers (return address) at entry r1 + 4 !!!.
  * So let room for it!!!.
- */ 
+ */
 #define LINK_REGISTER_CALLEE_UPDATE_ROOM 4
 #define SRR0_FRAME_OFFSET 8
 #define SRR1_FRAME_OFFSET 12
@@ -140,7 +140,7 @@ typedef void rtems_exception_handler_t (CPU_Exception_frame* excPtr);
 /*
  * Exception handler table.
  *
- * This table contains pointers to assembly-language exception handlers. 
+ * This table contains pointers to assembly-language exception handlers.
  * The common exception prologue in vectors.S looks up an entry in this
  * table and jumps to it.  No return address is saved, so the handlers in
  * this table must return directly to the interrupted code.

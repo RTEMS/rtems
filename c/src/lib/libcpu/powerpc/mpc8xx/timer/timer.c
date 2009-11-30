@@ -67,7 +67,7 @@ void benchmark_timer_initialize(void)
   /* set interrupt level and enable timebase. This should never */
   /*  generate an interrupt however. */
   m8xx.tbscr |= M8xx_TBSCR_TBIRQ(4) | M8xx_TBSCR_TBE;
-  
+
   Timer_starting = get_itimer();
 }
 

@@ -17,7 +17,7 @@
 
 #define SIC_IMASK                (SIC_BASE_ADDRESS + 0x000c)
 #define SIC_IAR_BASE_ADDRESS     (SIC_BASE_ADDRESS + 0x0010)
-#define SIC_IAR_PITCH                                   0x04 
+#define SIC_IAR_PITCH                                   0x04
 #define SIC_IAR0                 (SIC_BASE_ADDRESS + 0x0010)
 #if SIC_IAR_COUNT > 1
 #define SIC_IAR1                 (SIC_BASE_ADDRESS + 0x0014)

@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2002 by Cogent Computer Systems
  * Written by Mike Kelly <mike@cogcomp.com>
- *      
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *

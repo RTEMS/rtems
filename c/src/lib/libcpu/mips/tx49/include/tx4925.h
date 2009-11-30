@@ -26,7 +26,7 @@
 #define TX4925_CFG_RAMP 0xE030		/* Register Address Mapping Register */
 
 /* Pin Configuration register bits */
-#define SELCHI	0x00100000		
+#define SELCHI	0x00100000
 #define SELTMR0 0x00000200
 
 
@@ -64,7 +64,7 @@
 #define TWIS	0x8
 
 
-/* 
+/*
  *	Interrupt Controller Registers
  */
 #define TX4925_IRQCTL_DEN 0xF600		/* Interrupt Detection Enable Register */

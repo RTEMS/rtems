@@ -1,6 +1,6 @@
 /*
  *  NXP/Philips LPC22XX/LPC21xx Interrupt handler
- *  Ray 2007 <rayx.cn@gmail.com> to support LPC ARM     
+ *  Ray 2007 <rayx.cn@gmail.com> to support LPC ARM
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -16,8 +16,8 @@
 
 extern void default_int_handler(void);
 
-/* 
- * Interrupt system initialization. Disable interrupts, clear 
+/*
+ * Interrupt system initialization. Disable interrupts, clear
  * any that are pending.
  */
 void BSP_rtems_irq_mngt_init(void)
@@ -33,7 +33,7 @@ void BSP_rtems_irq_mngt_init(void)
   for (i=0; i<BSP_MAX_INT; i++) {
       *(vectorTable + i) = (long)(default_int_handler);
   }
-   
+
   /*
    * Set IRQHandler
    */
@@ -56,10 +56,10 @@ void BSP_rtems_irq_mngt_init(void)
    * In case we must find an ABORT error,
    * enable the next lines and set a breakpoint
    * in ABORTHandler.
-   */  
+   */
 #if 1
   DATA_ABORT_VECTOR_ADDR = 0xE59FF018;
-#endif  
+#endif
 
   /*
    * Init the Vectored Interrupt Controller (VIC)

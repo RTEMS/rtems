@@ -1,7 +1,7 @@
 /*
  * Interrupt handler Header file for PXA By Yang Xi <hiyangxi@gmail.com>
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
- *      
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -21,7 +21,7 @@ extern "C" {
 /*
  * Include some preprocessor value also used by assember code
  */
-  
+
 #include <rtems.h>
 #include <pxa255.h>
 
@@ -77,7 +77,7 @@ void BSP_rtems_irq_mngt_init();
 int BSP_install_rtems_irq_handler       (const rtems_irq_connect_data*);
 
 /*
- * function to get the current RTEMS irq handler for ptr->name. 
+ * function to get the current RTEMS irq handler for ptr->name.
  */
 int BSP_get_current_rtems_irq_handler   (rtems_irq_connect_data* ptr);
 

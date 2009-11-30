@@ -40,7 +40,7 @@ typedef struct {
 
 extern rtems_libi2c_bus_ops_t bfin_spi_libi2c_bus_ops;
 
- 
+
 void bfin_spi_isr(int source);
 
 

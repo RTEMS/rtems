@@ -722,8 +722,8 @@ typedef struct m8xxBufferDescriptor_ {
 */
 typedef struct m8xxIDMABufferDescriptor_ {
   uint16_t          status;
-  uint8_t           dfcr;       
-  uint8_t           sfcr;       
+  uint8_t           dfcr;
+  uint8_t           sfcr;
   uint32_t          length;
   void                    *source;
   void                    *destination;
@@ -1116,14 +1116,14 @@ typedef struct m8xxIDMABufferDescriptor_ {
  *  Value to write to a key register to unlock the corresponding SIU register
  */
 #define M8xx_UNLOCK_KEY         0x55CCAA33
- 
+
 /*
 *************************************************************************
 *   MPC8xx INTERNAL MEMORY MAP REGISTERS (IMMR provides base address)   *
 *************************************************************************
 */
 typedef struct m8xx_ {
-        
+
   /*
    * SIU Block
    */
@@ -1144,7 +1144,7 @@ typedef struct m8xx_ {
   uint32_t        _pad1[3];
   uint32_t        sdcr;
   uint8_t         _pad2[0x80-0x34];
-  
+
   /*
    * PCMCIA Block
    */
@@ -1173,7 +1173,7 @@ typedef struct m8xx_ {
   uint32_t        _pad5;
   uint32_t        per;
   uint32_t        _pad6;
-  
+
   /*
    * MEMC Block
    */
@@ -1188,7 +1188,7 @@ typedef struct m8xx_ {
   uint16_t        mptpr;
   uint32_t        mdr;
   uint8_t         _pad9[0x200-0x180];
-  
+
   /*
    * System integration timers
    */
@@ -1210,8 +1210,8 @@ typedef struct m8xx_ {
   uint16_t        pitr;
   uint16_t        _pad_14_2;
   uint8_t         _pad15[0x280-0x24c];
-  
-  
+
+
   /*
    * Clocks and Reset
    */
@@ -1219,8 +1219,8 @@ typedef struct m8xx_ {
   uint32_t        plprcr;
   uint32_t        rsr;
   uint8_t         _pad16[0x300-0x28c];
-  
-  
+
+
   /*
    * System integration timers keys
    */
@@ -1237,7 +1237,7 @@ typedef struct m8xx_ {
   uint32_t        piscrk;
   uint32_t        pitck;
   uint8_t         _pad19[0x380-0x348];
-  
+
   /*
    * Clocks and Reset Keys
    */
@@ -1247,8 +1247,8 @@ typedef struct m8xx_ {
   uint8_t         _pad20[0x400-0x38c];
   uint8_t         _pad21[0x800-0x400];
   uint8_t         _pad22[0x860-0x800];
-  
-  
+
+
   /*
    * I2C
    */
@@ -1264,7 +1264,7 @@ typedef struct m8xx_ {
   uint8_t         _pad27[3];
   uint8_t         i2cmr;
   uint8_t         _pad28[0x900-0x875];
-  
+
   /*
    * DMA Block
    */
@@ -1282,7 +1282,7 @@ typedef struct m8xx_ {
   uint8_t         _pad34[3];
   uint8_t         idmr2;
   uint8_t         _pad35[0x930-0x91d];
-  
+
   /*
    * CPM Interrupt Control Block
    */
@@ -1292,7 +1292,7 @@ typedef struct m8xx_ {
   uint32_t        cipr;
   uint32_t        cimr;
   uint32_t        cisr;
-  
+
   /*
    * I/O Port Block
    */
@@ -1312,7 +1312,7 @@ typedef struct m8xx_ {
   uint16_t        _pad40;
   uint16_t        pddat;
   uint8_t         _pad41[8];
-  
+
   /*
    * CPM Timers Block
    */
@@ -1358,7 +1358,7 @@ typedef struct m8xx_ {
   uint16_t        _pad47;
   uint16_t        rtmr;
   uint8_t         _pad48[0x9f0-0x9dc];
-  
+
   /*
    * BRG Block
    */
@@ -1366,7 +1366,7 @@ typedef struct m8xx_ {
   uint32_t        brgc2;
   uint32_t        brgc3;
   uint32_t        brgc4;
-  
+
   /*
    * SCC Block
    */
@@ -1384,7 +1384,7 @@ typedef struct m8xx_ {
    */
   m8xxSMCRegisters_t    smc1;
   m8xxSMCRegisters_t    smc2;
-  
+
   /*
    * SPI Block
    */
@@ -1397,7 +1397,7 @@ typedef struct m8xx_ {
   uint8_t         _pad52[2];
   uint8_t         spcom;
   uint16_t        _pad53[2];
-  
+
   /*
    * PIP Block
    */
@@ -1410,7 +1410,7 @@ typedef struct m8xx_ {
   uint16_t        pbodr;
   uint32_t        pbdat;
   uint32_t        _pad56[6];
-  
+
   /*
    * SI Block
    */
@@ -1434,7 +1434,7 @@ typedef struct m8xx_ {
   uint8_t         lcdram[512];
 #endif
   uint8_t         _pad62[0x2000-0x1000];
-  
+
   /*
    * Dual-port RAM
    */
@@ -1444,11 +1444,11 @@ typedef struct m8xx_ {
   uint8_t         dpram3[0x600];  /* BD/DATA*/
   uint8_t         dpram4[0x200];  /* BD/DATA/UCODE */
   uint8_t         _pad63[0x3c00-0x3000];
-  
+
   /* When using SCC1 for ethernet, we lose the use of I2C since
    *  their parameters would overlap. Motorola has a microcode
    *  patch to move parameters around so that both can be used
-   *  together. It is available on their web site somewhere 
+   *  together. It is available on their web site somewhere
    *  under http://www.mot.com/mpc8xx. If ethernet is used on
    *  one (or more) of the other SCCs, then other CPM features
    *  will be unavailable:
@@ -1463,7 +1463,7 @@ typedef struct m8xx_ {
   uint8_t         _rsv2[0xcc0-0xCB0-sizeof(m8xxMiscParms_t)];
   m8xxIDMAparms_t       idma1p;
   uint8_t         _rsv3[0xd00-0xcc0-sizeof(m8xxIDMAparms_t)];
-  
+
   m8xxSCCparms_t        scc2p;
   uint8_t         _rsv4[0xD80-0xD00-sizeof(m8xxSCCparms_t)];
   m8xxSPIparms_t        spip;
@@ -1472,14 +1472,14 @@ typedef struct m8xx_ {
   uint8_t         _rsv6[0xDC0-0xDB0-sizeof(m8xxTimerParms_t)];
   m8xxIDMAparms_t       idma2p;
   uint8_t         _rsv7[0xE00-0xDC0-sizeof(m8xxIDMAparms_t)];
-  
+
   m8xxSCCparms_t        scc3p; /* Not available on MPC821 */
   uint8_t         _rsv8[0xE80-0xE00-sizeof(m8xxSCCparms_t)];
   m8xxSMCparms_t        smc1p;
   uint8_t         _rsv9[0xEC0-0xE80-sizeof(m8xxSMCparms_t)];
   m8xxDSPparms_t        dsp1p;
   uint8_t         _rsv10[0xF00-0xEC0-sizeof(m8xxDSPparms_t)];
-  
+
   m8xxSCCparms_t        scc4p; /* Not available on MPC821 */
   uint8_t         _rsv11[0xF80-0xF00-sizeof(m8xxSCCparms_t)];
   m8xxSMCparms_t        smc2p;

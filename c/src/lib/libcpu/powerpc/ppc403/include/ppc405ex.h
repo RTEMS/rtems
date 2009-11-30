@@ -3,7 +3,7 @@
 
 Constants for manipulating system registers of PPC 405EX in C
 
-Michael Hamel ADInstruments May 2008 
+Michael Hamel ADInstruments May 2008
 
 */
 

@@ -108,9 +108,9 @@ void mmu_init(mmu_sect_map_t *map)
 
         while (sects > 0) {
             lvl1_base[vbase] = MMU_SET_LVL1_SECT(pbase << 20,
-                                                 MMU_SECT_AP_ALL, 
-                                                 0, 
-                                                 c, 
+                                                 MMU_SECT_AP_ALL,
+                                                 0,
+                                                 c,
                                                  b);
             pbase++;
             vbase++;
@@ -249,4 +249,4 @@ void mmu_set_cpu_async_mode(void)
     reg |= 0xc0000000;
     mmu_set_ctrl(reg);
 }
-    
+

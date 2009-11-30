@@ -41,7 +41,7 @@ extern "C" {
  *
  * @code
  * #include <bsp/stackalloc.h>
- * 
+ *
  * #define CONFIGURE_INIT
  *
  * #include <confdefs.h>

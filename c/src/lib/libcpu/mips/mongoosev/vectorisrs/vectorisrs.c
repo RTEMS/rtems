@@ -91,7 +91,7 @@ int assertSoftwareInterrupt( uint32_t   n )
 static volatile uint32_t   _ivcause, _ivsr;
 
 
-static uint32_t   READ_CAUSE(void) 
+static uint32_t   READ_CAUSE(void)
 {
    mips_get_cause( _ivcause );
    _ivcause &= SR_IMASK;	/* mask off everything other than the interrupt bits */
@@ -140,7 +140,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
       if ( cshifted & 0x01 )       /* SW[0] */
       {
 	 CALL_ISR( MONGOOSEV_IRQ_SOFTWARE_1, frame );
-      } 
+      }
       if ( cshifted & 0x02 )       /* SW[1] */
       {
 	 CALL_ISR( MONGOOSEV_IRQ_SOFTWARE_2, frame );
@@ -156,7 +156,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
       CLR_ISR_FLAG( 0x4 );
       if( (cshifted = READ_CAUSE()) & 0x3 ) goto intvect;
    }
-    
+
    if ( cshifted & 0x08 )       /* IP[1] ==> INT1 == TIMER2*/
    {
       SET_ISR_FLAG( 0x8 );
@@ -164,7 +164,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
       CLR_ISR_FLAG( 0x8 );
       if( (cshifted = READ_CAUSE()) & 0x7 ) goto intvect;
    }
-    
+
    if ( cshifted & 0x10 )       /* IP[2] ==> INT2 */
    {
       SET_ISR_FLAG( 0x10 );
@@ -172,7 +172,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
       CLR_ISR_FLAG( 0x10 );
       if( (cshifted = READ_CAUSE()) & 0xf ) goto intvect;
    }
-    
+
    if ( cshifted & 0x20 )       /* IP[3] ==> INT3 == FPU interrupt */
    {
       SET_ISR_FLAG( 0x20 );
@@ -180,7 +180,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
       CLR_ISR_FLAG( 0x20 );
       if( (cshifted = READ_CAUSE()) & 0x1f ) goto intvect;
    }
-    
+
    if ( cshifted & 0x40 )       /* IP[4] ==> INT4, external interrupt */
    {
       SET_ISR_FLAG( 0x40 );
@@ -198,7 +198,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
       pf_icr = MONGOOSEV_READ( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER );
 
 /*
-      for (bit=0, pf_mask = 1;    bit < 32;     bit++, pf_mask <<= 1 ) 
+      for (bit=0, pf_mask = 1;    bit < 32;     bit++, pf_mask <<= 1 )
       {
 	 if ( pf_icr & pf_mask )
 	 {
@@ -208,7 +208,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 	    pf_reset |= pf_mask;
 	    if( (cshifted = READ_CAUSE()) & 0xff ) break;
 	 }
-      } 
+      }
 */
 
       /*
@@ -217,7 +217,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
        * way thru a full 32 bits.  pf_mask shifts left 8 bits at a time
        * to serve as a interrupt cause test mask.
        */
-      for( bit=0, pf_mask = 0xff;    (bit < 32 && pf_icr);     (bit+=8, pf_mask <<= 8) ) 
+      for( bit=0, pf_mask = 0xff;    (bit < 32 && pf_icr);     (bit+=8, pf_mask <<= 8) )
       {
 	 if ( pf_icr & pf_mask )
 	 {

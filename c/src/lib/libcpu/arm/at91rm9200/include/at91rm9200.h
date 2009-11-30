@@ -32,7 +32,7 @@ typedef volatile unsigned long vulong;
 #define AIC_SVR_REG(_x_)        *(vulong *)(AIC_SVR_BASE + (_x_ & 0x7c))
 
 /* Control Register - 32 of them */
-#define AIC_CTL_BASE            0xFFFFF100      
+#define AIC_CTL_BASE            0xFFFFF100
 #define AIC_CTL_REG(_x_)        *(vulong *)(AIC_CTL_BASE + (_x_ & 0x7f))
 
 /* Register Offsets */
@@ -103,9 +103,9 @@ typedef volatile unsigned long vulong;
 /* AIC_SMR */
 #define AIC_SMR_PRIOR(_x_)      ((_x_ & 0x07) << 0)
 #define AIC_SMR_SRC_LVL_LOW     (0 << 5)        /* Are these right? docs don't say which is high/low     */
-#define AIC_SMR_SRC_EDGE_LOW    (1 << 5)        
-#define AIC_SMR_SRC_LVL_HI      (2 << 5)        
-#define AIC_SMR_SRC_EDGE_HI     (3 << 5)        
+#define AIC_SMR_SRC_EDGE_LOW    (1 << 5)
+#define AIC_SMR_SRC_LVL_HI      (2 << 5)
+#define AIC_SMR_SRC_EDGE_HI     (3 << 5)
 
 /**************************************************************************/
 /* Debug Unit		                                                  */
@@ -192,7 +192,7 @@ typedef volatile unsigned long vulong;
  * Note that each of the following peripherals has it's own
  * set of these registers starting at offset 0x100 from it's
  * base address: DBGU, SPI, USART and SSC
- * To access the DMA for a peripheral, use the macro for that 
+ * To access the DMA for a peripheral, use the macro for that
  * peripheral but with these register offsets
  **************************************************************************/
 /* Register Offsets */

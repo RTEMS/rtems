@@ -6,7 +6,7 @@
  *	    More detailed information can be found on motorola
  *	    site and more precisely in the following book :
  *
- *		MPC750 
+ *		MPC750
  *		Risc Microporcessor User's Manual
  *		Motorola REF : MPC750UM/AD 8/97
  *
@@ -57,7 +57,7 @@ extern int setibat(int bat_index, unsigned long virt, unsigned long phys,
 
 /* read DBAT # 'idx' into *pu / *pl. NULL pointers may be passed.
  * If pu and pl are NULL, the bat contents are dumped to the console (printk).
- * 
+ *
  * RETURNS: upper BAT contents or (-1) if index is invalid
  */
 extern int getdbat(int bat_index, unsigned long *pu, unsigned long *pl);

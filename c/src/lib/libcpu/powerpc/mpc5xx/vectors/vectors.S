@@ -14,7 +14,7 @@
  *
  *  $Id$
  */
-	
+
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/vectors.h>
@@ -22,7 +22,7 @@
 #define SYNC \
 	sync; \
 	isync
-	
+
 
 /*
  * Hardware exception vector table.
@@ -92,7 +92,7 @@ common_prologue:
 	lwz	r3, 0(r3)				/* get entry */
 	mtlr	r3					/* run it */
 	blr
-	
+
 
 /*
  * Default exception handler.
@@ -106,7 +106,7 @@ common_prologue:
  * LR have been saved.  R4 holds the exception number.
  */
 	.text
-		
+
 PUBLIC_VAR(default_exception_handler)
 SYM (default_exception_handler):
 	/*
@@ -129,7 +129,7 @@ SYM (default_exception_handler):
 	 * the frame.
 	 *
 	 * Note that R2 should never change (it's the EABI pointer to
-	 * .sdata2), but we save it just in case.  
+	 * .sdata2), but we save it just in case.
 	 *
 	 * Recall that R3 and R4 were saved by the specific- and
 	 * common-exception handlers before entry to this routine.
@@ -153,7 +153,7 @@ SYM (default_exception_handler):
 
 	/*
 	 * Call C-language portion of the default exception handler, passing
-	 * in the address of the frame.  
+	 * in the address of the frame.
 	 *
 	 * To simplify things a bit, we assume that the target routine is
 	 * within +/- 32 Mbyte from here, which is a reasonable assumption
@@ -192,7 +192,7 @@ SYM (default_exception_handler):
 	mtsrr1	r0
 	lwz	r0, SRR0_FRAME_OFFSET(r1)
 	mtsrr0	r0
-	
+
 	/*
 	 * Restore the final GPR, close the stack frame, and return to the
 	 * interrupted code.

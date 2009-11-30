@@ -56,10 +56,10 @@ void Clock_exit( void );
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
- 
+
 /*
  *  ISR Handler
  */
@@ -104,7 +104,7 @@ void clockOn(void* unused)
       s_value    = (plprcr_val & (0x00300000)) >> (31-11);
       mfi_value  = (plprcr_val & (0x000f0000)) >> (31-15);
       pdf_value  = (plprcr_val & (0x00000006)) >> (31-30);
-      extclk = (((uint64_t)bsp_clock_speed) 
+      extclk = (((uint64_t)bsp_clock_speed)
 		* ((pdf_value + 1) * (mfd_value + 1))
 		/ (mfi_value * (mfd_value + 1) + mfn_value)
 		* (1 << s_value));
@@ -128,7 +128,7 @@ void clockOn(void* unused)
   else {
     pit_value = (rtems_configuration_get_microseconds_per_tick() *
 		 bsp_clicks_per_usec);
-  
+
     m8xx.sccr &= ~(1<<23);
   }
 if ((pit_value > 0xffff) || force_prescaler){
@@ -162,7 +162,7 @@ void
 clockOff(void* unused)
 {
   /* disable PIT and PIT interrupts */
-  m8xx.piscr &= ~(M8xx_PISCR_PTE | M8xx_PISCR_PIE); 
+  m8xx.piscr &= ~(M8xx_PISCR_PTE | M8xx_PISCR_PIE);
 }
 
 int clockIsOn(void* unused)
@@ -203,13 +203,13 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
-  
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }

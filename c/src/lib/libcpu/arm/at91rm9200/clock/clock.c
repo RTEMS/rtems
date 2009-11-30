@@ -34,7 +34,7 @@ static unsigned long st_pimr_reload;
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
     /* enable timer interrupt */
-    ST_REG(ST_IER) = ST_SR_PITS; 
+    ST_REG(ST_IER) = ST_SR_PITS;
 }
 
 /**
@@ -58,13 +58,13 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
     /* check timer interrupt */
-    return ST_REG(ST_IMR) & ST_SR_PITS; 
+    return ST_REG(ST_IMR) & ST_SR_PITS;
 }
 
 rtems_isr Clock_isr(rtems_vector_number vector);
 
 /* Replace the first value with the clock's interrupt name. */
-rtems_irq_connect_data clock_isr_data = {AT91RM9200_INT_SYSIRQ,   
+rtems_irq_connect_data clock_isr_data = {AT91RM9200_INT_SYSIRQ,
                                          (rtems_irq_hdl)Clock_isr,
                                          clock_isr_on,
                                          clock_isr_off,
@@ -88,11 +88,11 @@ void Clock_driver_support_initialize_hardware(void)
     (((rtems_configuration_get_microseconds_per_tick() * slck) + (1000000/2))/ 1000000);
   st_pimr_reload = st_pimr_value;
 
-  /* read the status to clear the int */ 
+  /* read the status to clear the int */
   st_str = ST_REG(ST_SR);
-    
+
   /* set priority */
-  AIC_SMR_REG(AIC_SMR_SYSIRQ) = AIC_SMR_PRIOR(0x7); 
+  AIC_SMR_REG(AIC_SMR_SYSIRQ) = AIC_SMR_PRIOR(0x7);
 
   /* set the timer value */
   ST_REG(ST_PIMR) = st_pimr_reload;

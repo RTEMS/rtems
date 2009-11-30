@@ -37,5 +37,5 @@ void bsp_cleanup( void )
    */
   #if (BSP_PRESS_KEY_FOR_RESET) || (BSP_RESET_BOARD_AT_EXIT)
     bsp_reset();
-  #endif 
+  #endif
 }

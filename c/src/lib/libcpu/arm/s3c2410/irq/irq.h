@@ -23,7 +23,7 @@ extern "C" {
 /*
  * Include some preprocessor value also used by assember code
  */
-  
+
 #include <rtems.h>
 #include <s3c2410.h>
 
@@ -40,34 +40,34 @@ extern void default_int_handler();
 #define BSP_EINT4_7           4
 #define BSP_EINT8_23          5
 #define BSP_nBATT_FLT         7
-#define BSP_INT_TICK          8  
-#define BSP_INT_WDT           9 
-#define BSP_INT_TIMER0       10    
-#define BSP_INT_TIMER1       11    
-#define BSP_INT_TIMER2       12    
-#define BSP_INT_TIMER3       13    
-#define BSP_INT_TIMER4       14    
-#define BSP_INT_UART2        15    
-#define BSP_INT_LCD          16        
-#define BSP_INT_DMA0         17  
-#define BSP_INT_DMA1         18  
-#define BSP_INT_DMA2         19  
-#define BSP_INT_DMA3         20  
-#define BSP_INT_SDI          21 
-#define BSP_INT_SPI0         22 
-#define BSP_INT_UART1        23   
-#define BSP_INT_USBD         25  
-#define BSP_INT_USBH         26  
-#define BSP_INT_IIC          27 
-#define BSP_INT_UART0        28   
-#define BSP_INT_SPI1         29   
-#define BSP_INT_RTC          30 
-#define BSP_INT_ADC          31 
-#define BSP_MAX_INT          32 
+#define BSP_INT_TICK          8
+#define BSP_INT_WDT           9
+#define BSP_INT_TIMER0       10
+#define BSP_INT_TIMER1       11
+#define BSP_INT_TIMER2       12
+#define BSP_INT_TIMER3       13
+#define BSP_INT_TIMER4       14
+#define BSP_INT_UART2        15
+#define BSP_INT_LCD          16
+#define BSP_INT_DMA0         17
+#define BSP_INT_DMA1         18
+#define BSP_INT_DMA2         19
+#define BSP_INT_DMA3         20
+#define BSP_INT_SDI          21
+#define BSP_INT_SPI0         22
+#define BSP_INT_UART1        23
+#define BSP_INT_USBD         25
+#define BSP_INT_USBH         26
+#define BSP_INT_IIC          27
+#define BSP_INT_UART0        28
+#define BSP_INT_SPI1         29
+#define BSP_INT_RTC          30
+#define BSP_INT_ADC          31
+#define BSP_MAX_INT          32
 
 extern void *bsp_vector_table;
 #define VECTOR_TABLE &bsp_vector_table
-  
+
 /*
  * Type definition for RTEMS managed interrupts
  */
@@ -99,9 +99,9 @@ typedef struct __rtems_irq_connect_data__ {
      * It is usually called immediately AFTER connecting the interrupt handler.
      * RTEMS may well need such a function when restoring normal interrupt
      * processing after a debug session.
-     * 
+     *
      */
-    rtems_irq_enable            on;     
+    rtems_irq_enable            on;
 
     /*
      * function for disabling interrupts at device level (ONLY!).
@@ -176,7 +176,7 @@ void BSP_rtems_irq_mngt_init();
  *      4) perform rescheduling when necessary,
  *      5) restore the C scratch registers...
  *      6) restore initial execution flow
- * 
+ *
  */
 int BSP_install_rtems_irq_handler       (const rtems_irq_connect_data*);
 

@@ -37,10 +37,10 @@ void benchmark_timer_initialize(void)
 {
   benchmark_timer_interrupts = 0;
   _set_var_vect (timer_ra_interrupt, ivec_timer_a0);
-  TA0MR = 0x00; 
-  TA0   = 0xffff; 
-  TA0IC = 0x05; 
-  TABSR = 0x55; 
+  TA0MR = 0x00;
+  TA0   = 0xffff;
+  TA0IC = 0x05;
+  TABSR = 0x55;
 }
 
 uint32_t benchmark_timer_read(void)
@@ -49,7 +49,7 @@ uint32_t benchmark_timer_read(void)
 
   count = 0xFFFF - TA0;
   count += benchmark_timer_interrupts * 0xFFFFL;
- 
+
   if (!benchmark_timer_find_average_overhead) {
     if ( count > benchmark_timer_overhead )
       count -= benchmark_timer_overhead;

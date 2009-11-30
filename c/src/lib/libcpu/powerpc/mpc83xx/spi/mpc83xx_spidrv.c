@@ -101,7 +101,7 @@ static rtems_status_code mpc83xx_spi_char_mode
   else {
     if (lsb_first) {
       /*
-       * non-reversed data (LSB first): 4..16 bits valid 
+       * non-reversed data (LSB first): 4..16 bits valid
        * always aligned to bit 16 of data register
        */
       if ((bits_per_char >= 4) &&
@@ -226,14 +226,14 @@ static void mpc83xx_spi_irq_handler
 \*=========================================================================*/
 {
   mpc83xx_spi_softc_t *softc_ptr = (mpc83xx_spi_softc_t *)handle;
-  
+
   /*
-   * disable interrupt mask 
+   * disable interrupt mask
    */
   softc_ptr->reg_ptr->spim = 0;
   if (softc_ptr->initialized) {
     rtems_semaphore_release(softc_ptr->irq_sema_id);
-  }  
+  }
 }
 
 /*=========================================================================*\
@@ -319,7 +319,7 @@ static void mpc83xx_spi_install_irq_handler
      */
     rc = rtems_semaphore_create(rtems_build_name('s','p','i','s'),
 				0,
-				RTEMS_FIFO 
+				RTEMS_FIFO
 				| RTEMS_SIMPLE_BINARY_SEMAPHORE,
 				0,
 				&softc_ptr->irq_sema_id);
@@ -374,7 +374,7 @@ rtems_status_code mpc83xx_spi_init
   /*
    * FIXME: set default mode in SPIM
    */
-  
+
   /*
    * init interrupt stuff
    */
@@ -415,7 +415,7 @@ int mpc83xx_spi_read_write_bytes
   rtems_status_code rc;
   int bc = 0;
   int bytes_per_char = softc_ptr->bytes_per_char;
-  int bit_shift      = softc_ptr->bit_shift; 
+  int bit_shift      = softc_ptr->bit_shift;
   uint32_t spird_val;
 
 #if defined(DEBUG)
@@ -457,11 +457,11 @@ int mpc83xx_spi_read_write_bytes
      */
 #if defined(USE_LAST_BIT)
     rc = mpc83xx_spi_wait(softc_ptr,
-			  ((len == 0) 
-			   ? MPC83XX_SPIE_LT 
+			  ((len == 0)
+			   ? MPC83XX_SPIE_LT
 			   : MPC83XX_SPIE_NE),
-			  ((len == 0) 
-			   ? MPC83XX_SPIE_LT 
+			  ((len == 0)
+			   ? MPC83XX_SPIE_LT
 			   : MPC83XX_SPIE_NF)
 			  | MPC83XX_SPIE_NE,
 			  MPC83XX_SPIE_LT
@@ -614,7 +614,7 @@ rtems_status_code mpc83xx_spi_set_tfr_mode
       spimode |= MPC83XX_SPIMODE_CP;
     }
   }
-  
+
   if (rc == RTEMS_SUCCESSFUL) {
     /*
      * disable SPI
@@ -653,12 +653,12 @@ int mpc83xx_spi_ioctl
 
   switch(cmd) {
   case RTEMS_LIBI2C_IOCTL_SET_TFRMODE:
-    ret_val = 
+    ret_val =
       -mpc83xx_spi_set_tfr_mode(bh,
 				(const rtems_libi2c_tfr_mode_t *)arg);
     break;
   case RTEMS_LIBI2C_IOCTL_READ_WRITE:
-    ret_val = 
+    ret_val =
       mpc83xx_spi_read_write_bytes(bh,
 				   ((rtems_libi2c_read_write_t *)arg)->rd_buf,
 				   ((rtems_libi2c_read_write_t *)arg)->wr_buf,

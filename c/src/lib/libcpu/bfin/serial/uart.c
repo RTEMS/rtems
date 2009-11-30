@@ -1,5 +1,5 @@
 /*  UART driver for Blackfin
- * 
+ *
  *  Copyright (c) 2008 Kallisti Labs, Los Gatos, CA, USA
  *             written by Allan Hessenflow <allanh@kallisti.com>
  *
@@ -9,7 +9,7 @@
  *
  *  $Id$
  */
- 
+
 
 #include <rtems.h>
 #include <rtems/libio.h>
@@ -34,7 +34,7 @@ static void initializeHardware(int minor) {
   uint16_t r;
 
   base = uartsConfig->channels[minor].base_address;
- 
+
   *(uint16_t volatile *) (base + UART_IER_OFFSET) = 0;
 
   if (uartsConfig->channels[minor].force_baud)
@@ -60,12 +60,12 @@ static void initializeHardware(int minor) {
 static int pollRead(int minor) {
   int c;
   char *base;
- 
+
   base = uartsConfig->channels[minor].base_address;
- 
+
   /* check to see if driver is using interrupts so this call will be
      harmless (though non-functional) in case some debug code tries to
-     use it */ 
+     use it */
   if (!uartsConfig->channels[minor].use_interrupts &&
       *((uint16_t volatile *) (base + UART_LSR_OFFSET)) & UART_LSR_DR)
     c = *((uint16_t volatile *) (base + UART_RBR_OFFSET));
@@ -87,7 +87,7 @@ char bfin_uart_poll_read(int minor) {
 
 void bfin_uart_poll_write(int minor, char c) {
   char *base;
- 
+
   base = uartsConfig->channels[minor].base_address;
 
   while (!(*((uint16_t volatile *) (base + UART_LSR_OFFSET)) & UART_LSR_THRE))
@@ -158,7 +158,7 @@ static int pollWrite(int minor, const char *buf, int len) {
 
 static void enableInterrupts(int minor) {
   char *base;
- 
+
   base = uartsConfig->channels[minor].base_address;
 
   *(uint16_t volatile *) (base + UART_IER_OFFSET) = UART_IER_ETBEI |

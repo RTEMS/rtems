@@ -7,29 +7,29 @@
  * @brief PowerPC Exceptions API.
  */
 
-/*                                                               
- * Copyright (C) 1999 Eric Valette (valette@crf.canon.fr)        
- *                    Canon Centre Recherche France.             
+/*
+ * Copyright (C) 1999 Eric Valette (valette@crf.canon.fr)
+ *                    Canon Centre Recherche France.
  *
  * Copyright (C) 2007 Till Straumann <strauman@slac.stanford.edu>
- *                                                               
- * Copyright (C) 2009 embedded brains GmbH.                      
- *                                                               
- * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>           
- * to support 603, 603e, 604, 604e exceptions                    
- *                                                               
- * Moved to "libcpu/powerpc/new-exceptions" and consolidated     
- * by Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>       
- * to be common for all PPCs with new exceptions.                
- *                                                               
+ *
+ * Copyright (C) 2009 embedded brains GmbH.
+ *
+ * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
+ * to support 603, 603e, 604, 604e exceptions
+ *
+ * Moved to "libcpu/powerpc/new-exceptions" and consolidated
+ * by Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+ * to be common for all PPCs with new exceptions.
+ *
  * Derived from file "libcpu/powerpc/new-exceptions/raw_exception.h".
  * Derived from file "libcpu/powerpc/new-exceptions/bspsupport/ppc_exc_bspsupp.h".
- *                                                                   
- * The license and distribution terms for this file may be           
- * found in found in the file LICENSE in this distribution or at     
- * http://www.rtems.com/license/LICENSE.                             
- *                                                                   
- * $Id$        
+ *
+ * The license and distribution terms for this file may be
+ * found in found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 /* DO NOT INTRODUCE #ifdef <cpu_flavor> in this file */
@@ -413,7 +413,7 @@ typedef int (*ppc_exc_handler_t)(BSP_Exception_frame *f, unsigned vector);
 /**
  * @brief Bits for MSR update.
  *
- * Bits in MSR that are enabled during execution of exception handlers / ISRs 
+ * Bits in MSR that are enabled during execution of exception handlers / ISRs
  * (on classic PPC these are DR/IR/RI [default], on bookE-style CPUs they should
  * be set to 0 during initialization)
  *

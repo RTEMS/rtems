@@ -1,4 +1,4 @@
-/* 
+/*
  * irq.h
  *
  *  This include file describe the data structure and the functions implemented
@@ -40,8 +40,8 @@ extern volatile unsigned int ppc_cached_irq_mask;
  * Symblolic IRQ names and related definitions.
  */
 
-  /* 
-   * Base vector for our USIU IRQ handlers. 
+  /*
+   * Base vector for our USIU IRQ handlers.
    */
 #define CPU_USIU_VECTOR_BASE	(CPU_ASM_IRQ_VECTOR_BASE)
   /*
@@ -71,7 +71,7 @@ extern volatile unsigned int ppc_cached_irq_mask;
 #define CPU_MAX_OFFSET		(CPU_PROC_IRQ_MAX_OFFSET)
   /*
    * USIU IRQ symbolic name definitions.
-   */	       
+   */
 #define CPU_USIU_EXT_IRQ_0      (CPU_USIU_IRQ_MIN_OFFSET + 0)
 #define CPU_USIU_INT_IRQ_0      (CPU_USIU_IRQ_MIN_OFFSET + 1)
 
@@ -80,19 +80,19 @@ extern volatile unsigned int ppc_cached_irq_mask;
 
 #define CPU_USIU_EXT_IRQ_2      (CPU_USIU_IRQ_MIN_OFFSET + 4)
 #define CPU_USIU_INT_IRQ_2      (CPU_USIU_IRQ_MIN_OFFSET + 5)
-  
+
 #define CPU_USIU_EXT_IRQ_3      (CPU_USIU_IRQ_MIN_OFFSET + 6)
 #define CPU_USIU_INT_IRQ_3      (CPU_USIU_IRQ_MIN_OFFSET + 7)
-  
+
 #define CPU_USIU_EXT_IRQ_4      (CPU_USIU_IRQ_MIN_OFFSET + 8)
 #define CPU_USIU_INT_IRQ_4      (CPU_USIU_IRQ_MIN_OFFSET + 9)
 
 #define CPU_USIU_EXT_IRQ_5      (CPU_USIU_IRQ_MIN_OFFSET + 10)
 #define CPU_USIU_INT_IRQ_5      (CPU_USIU_IRQ_MIN_OFFSET + 11)
-  
+
 #define CPU_USIU_EXT_IRQ_6      (CPU_USIU_IRQ_MIN_OFFSET + 12)
 #define CPU_USIU_INT_IRQ_6      (CPU_USIU_IRQ_MIN_OFFSET + 13)
-  
+
 #define CPU_USIU_EXT_IRQ_7      (CPU_USIU_IRQ_MIN_OFFSET + 14)
 #define CPU_USIU_INT_IRQ_7      (CPU_USIU_IRQ_MIN_OFFSET + 15)
 
@@ -101,7 +101,7 @@ extern volatile unsigned int ppc_cached_irq_mask;
    */
 #define CPU_PERIODIC_TIMER	(CPU_USIU_INT_IRQ_6)
 #define CPU_UIMB_INTERRUPT	(CPU_USIU_INT_IRQ_7)
-              
+
   /*
    * UIMB IRQ symbolic name definitions.  The first 8 sources are aliases to
    * the USIU interrupts of the same number, because they are detected in
@@ -140,7 +140,7 @@ extern volatile unsigned int ppc_cached_irq_mask;
 #define CPU_UIMB_IRQ_29         (CPU_UIMB_IRQ_MIN_OFFSET+21)
 #define CPU_UIMB_IRQ_30         (CPU_UIMB_IRQ_MIN_OFFSET+22)
 #define CPU_UIMB_IRQ_31         (CPU_UIMB_IRQ_MIN_OFFSET+23)
- 
+
   /*
    * Symbolic names for UIMB interrupt sources.
    */

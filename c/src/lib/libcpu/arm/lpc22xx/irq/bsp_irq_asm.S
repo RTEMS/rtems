@@ -12,8 +12,8 @@
  *  $Id$
  */
 #define __asm__
-	
-/* 
+
+/*
  * BSP specific interrupt handler for INT or FIQ. In here
  * you do determine which interrupt happened and call its
  * handler.
@@ -30,7 +30,7 @@ bsp_interrupt_dispatch :
  * From source, determine offset into expanded vector table
  * and load handler address into r0.
  */
- 
+
   ldr 	r0, =0xFFFFF030  /* Read the vector number */
     ldr	r0, [r0]
 #ifdef __thumb__

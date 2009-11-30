@@ -171,7 +171,7 @@ sh4uart_set_baudrate(sh4uart *uart, speed_t baud)
     volatile uint8_t *smr1 = (volatile uint8_t *)SH7750_SCSMR1;
     *smr1 &= ~SH7750_SCSMR_CKS;
     *smr1 |= n << SH7750_SCSMR_CKS_S;
-  } else { 
+  } else {
     volatile uint16_t *smr2 = (volatile uint16_t *)SH7750_SCSMR2;
     *smr2 &= ~SH7750_SCSMR_CKS;
     *smr2 |= n << SH7750_SCSMR_CKS_S;

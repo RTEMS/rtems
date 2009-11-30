@@ -9,7 +9,7 @@
 /*
  * Copyright (C) 2007 Till Straumann <strauman@slac.stanford.edu>
  *
- * Copyright (C) 2009 embedded brains GmbH.                      
+ * Copyright (C) 2009 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in found in the file LICENSE in this distribution or at

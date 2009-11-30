@@ -41,10 +41,10 @@ uint32_t get_UCLK(void)
 /* return HCLK frequency */
 uint32_t get_HCLK(void)
 {
-    if (rCLKDIVN & 0x2) 
+    if (rCLKDIVN & 0x2)
 	return get_FCLK()/2;
     else
-	return get_FCLK();    
+	return get_FCLK();
 }
 
 /* return PCLK frequency */

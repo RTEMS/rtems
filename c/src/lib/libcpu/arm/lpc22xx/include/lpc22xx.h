@@ -2,7 +2,7 @@
  * Philips LPC22XX/LPC21xx Register definitions
  *
  * Copyright (c) 2006 by Ray <rayx.cn@gmail.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -318,7 +318,7 @@
 #define CAN5TDA3        (*((volatile unsigned long *) 0xE0054058))      /* lpc2119\lpc2129\lpc2292\lpc2294 only */
 #define CAN5TDB3        (*((volatile unsigned long *) 0xE005405C))      /* lpc2119\lpc2129\lpc2292\lpc2294 only */
 
-#ifdef CONFIG_ARCH_LPC22xx 
+#ifdef CONFIG_ARCH_LPC22xx
 #define CAN6MOD         (*((volatile unsigned long *) 0xE0058000))      /* lpc2292\lpc2294 only */
 #define CAN6CMR         (*((volatile unsigned long *) 0xE0058004))      /* lpc2292\lpc2294 only */
 #define CAN6GSR         (*((volatile unsigned long *) 0xE0058008))      /* lpc2292\lpc2294 only */
@@ -455,7 +455,7 @@
 
 /*
 	Register define for constant
-*/	
+*/
 #define	REG_U0RBR				0xE000C000
 #define REG_U1RBR				0xE0010000
 

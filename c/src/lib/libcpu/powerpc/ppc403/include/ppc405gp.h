@@ -73,7 +73,7 @@ enum {
 	kEMACSoftRst  = 0x20000000,
 	kEMACTxEnable = 0x10000000,
 	kEMACRxEnable = 0x08000000,
-	
+
 	// Mode 1 bits
 	kEMACFullDuplex = 0x80000000,
 	kEMACIgnoreSQE  = 0x01000000,
@@ -82,11 +82,11 @@ enum {
 	kEMAC2KTxFIFO	 = 0x00080000,
 	kEMACTx0Multi	 = 0x00008000,
 	kEMACTxDependent= 0x00014000,
-	
+
 	// Tx mode bits
 	kEMACNewPacket0	= 0x80000000,
 	kEMACNewPacket1	= 0x40000000,
-	
+
 	// Receive mode bits
 	kEMACStripPadding = 0x80000000,
 	kEMACStripFCS     = 0x40000000,
@@ -99,7 +99,7 @@ enum {
 	kEMACHashRcv		= 0x00200000,
 	kEMACBrcastRcv		= 0x00100000,
 	kEMACMultcastRcv	= 0x00080000,
-	
+
 	// Buffer descriptor control bits
 	kMALTxReady			= 0x8000,
 	kMALRxEmpty			= 0x8000,
@@ -108,7 +108,7 @@ enum {
 	kMALLast				= 0x1000,
 	kMALRxFirst			= 0x0800,
 	kMALInterrupt		= 0x0400,
-	
+
 	// EMAC Tx descriptor bits sent
 	kEMACGenFCS			= 0x200,
 	kEMACGenPad			= 0x100,
@@ -116,7 +116,7 @@ enum {
 	kEMACRepSrcAddr	= 0x040,
 	kEMACInsVLAN		= 0x020,
 	kEMACRepVLAN		= 0x010,
-	
+
 	// EMAC TX descriptor bits returned
 	kEMACErrMask      = 0x3FF,
 	kEMACFCSWrong		= 0x200,
@@ -129,7 +129,7 @@ enum {
 	kEMACOneColl		= 0x004,
 	kEMACUnderrun		= 0x002,
 	kEMACSQEFail		= 0x001,
-	
+
 	// EMAC Rx descriptor bits returned
 	kEMACOverrun  		= 0x200,
 	kEMACPausePkt 		= 0x100,

@@ -16,7 +16,7 @@
  *
  *  $Id$
  */
-  
+
 #include <rtems.h>
 #include <rtems/score/apiext.h>
 #include <mpc5xx.h>
@@ -28,12 +28,12 @@
  * Convert an rtems_irq_number constant to an interrupt level
  * suitable for programming into an I/O device's interrupt level field.
  */
- 
+
 int CPU_irq_level_from_symbolic_name(const rtems_irq_number name)
 {
   if (CPU_USIU_EXT_IRQ_0 <= name && name <= CPU_USIU_INT_IRQ_7)
     return (name - CPU_USIU_EXT_IRQ_0) / 2;
-    
+
   if (CPU_UIMB_IRQ_8 <= name && name <= CPU_UIMB_IRQ_31)
     return 8 + (name - CPU_UIMB_IRQ_8);
 
@@ -84,9 +84,9 @@ static inline int is_proc_irq(const rtems_irq_number irqLine)
 
 
 /*
- * Masks used to mask off the interrupts. For exmaple, for ILVL2, the  
- * mask is used to mask off interrupts ILVL2, IRQ3, ILVL3, ... IRQ7    
- * and ILVL7.                                                          
+ * Masks used to mask off the interrupts. For exmaple, for ILVL2, the
+ * mask is used to mask off interrupts ILVL2, IRQ3, ILVL3, ... IRQ7
+ * and ILVL7.
  *
  */
 const static unsigned int USIU_IvectMask[CPU_USIU_IRQ_COUNT] =
@@ -134,7 +134,7 @@ static void compute_USIU_IvectMask_from_prio ()
  */
 static int isValidInterrupt(int irq)
 {
-  if ( (irq < CPU_MIN_OFFSET) || (irq > CPU_MAX_OFFSET) 
+  if ( (irq < CPU_MIN_OFFSET) || (irq > CPU_MAX_OFFSET)
         || (irq == CPU_UIMB_INTERRUPT) )
     return 0;
   return 1;
@@ -164,7 +164,7 @@ int CPU_irq_enabled_at_uimb(const rtems_irq_number irqLine)
 int CPU_irq_enable_at_usiu(const rtems_irq_number irqLine)
 {
   int usiu_irq_index;
-  
+
   if (!is_usiu_irq(irqLine))
     return 1;
 
@@ -181,7 +181,7 @@ int CPU_irq_disable_at_usiu(const rtems_irq_number irqLine)
 
   if (!is_usiu_irq(irqLine))
     return 1;
-  
+
   usiu_irq_index = ((int) (irqLine) - CPU_USIU_IRQ_MIN_OFFSET);
   ppc_cached_irq_mask &= ~(1 << (31-usiu_irq_index));
   usiu.simask = ppc_cached_irq_mask;
@@ -207,7 +207,7 @@ int CPU_irq_enabled_at_usiu(const rtems_irq_number irqLine)
 int CPU_install_rtems_irq_handler	(const rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level       level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -228,14 +228,14 @@ int CPU_install_rtems_irq_handler	(const rtems_irq_connect_data* irq)
      * store the data provided by user
      */
     rtems_hdl_tbl[irq->name] = *irq;
-    
+
     if (is_uimb_irq(irq->name)) {
       /*
        * Enable interrupt at UIMB level
        */
       CPU_irq_enable_at_uimb (irq->name);
     }
-    
+
     if (is_usiu_irq(irq->name)) {
       /*
        * Enable interrupt at USIU level
@@ -254,7 +254,7 @@ int CPU_install_rtems_irq_handler	(const rtems_irq_connect_data* irq)
      */
 	if (irq->on)
     	irq->on(irq);
-    
+
     rtems_interrupt_enable(level);
 
     return 1;
@@ -273,7 +273,7 @@ int CPU_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 int CPU_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level       level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -311,7 +311,7 @@ int CPU_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
       /*
        * disable exception at processor level
        */
-    }    
+    }
 
     /*
      * restore the default irq value
@@ -424,7 +424,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
-    
+
     rtems_hdl_tbl[CPU_DECREMENTER].hdl(rtems_hdl_tbl[CPU_DECREMENTER].handle);
 
     _CPU_MSR_SET(msr);
@@ -448,20 +448,20 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
      * interrupts.
      */
     usiu.sipend = (1 << (31 - irq));
-    
+
     if (uimbIntr)  {
       /*
        * Look at the bits set in the UIMB interrupt-pending register.  The
-       * highest-order set bit indicates the handler we will run. 
+       * highest-order set bit indicates the handler we will run.
        *
        * Unfortunately, we can't easily mask individual UIMB interrupts
        * unless they use USIU levels 0 to 6, so we must mask all low-level
        * (level > 7) UIMB interrupts while we service any interrupt.
        */
       int uipend = imb.uimb.uipend << 8;
-      
+
       if (uipend == 0) {	/* spurious interrupt?  use last vector */
-        irq = CPU_UIMB_IRQ_MAX_OFFSET;	
+        irq = CPU_UIMB_IRQ_MAX_OFFSET;
       }
       else {
         irq = CPU_UIMB_IRQ_MIN_OFFSET;
@@ -473,7 +473,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
-    
+
     rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
 
     _CPU_MSR_SET(msr);
@@ -482,7 +482,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     usiu.simask = ppc_cached_irq_mask;
   }
 }
-  
+
 void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
 {
   /*

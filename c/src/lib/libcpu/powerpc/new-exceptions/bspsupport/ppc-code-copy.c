@@ -36,4 +36,4 @@ void ppc_code_copy(void *dest, const void *src, size_t n)
     rtems_cache_invalidate_multiple_instruction_lines(dest, n);
     ppc_synchronize_instructions();
   }
-} 
+}

@@ -37,12 +37,12 @@ rtems_irq_connect_data clock_isr_data = {
     .isOn   = clock_isr_is_on,
 };
 
-/* If you follow the code, this is never used, so any value 
+/* If you follow the code, this is never used, so any value
  * should work
  */
 #define CLOCK_VECTOR 0
 
-    
+
 /**
  * When we get the clock interrupt
  *    - clear the interrupt bit?
@@ -72,9 +72,9 @@ rtems_irq_connect_data clock_isr_data = {
  *   - enable it
  *   - clear any pending interrupts
  *
- * Since you may want the clock always running, you can 
+ * Since you may want the clock always running, you can
  * enable interrupts here. If you do so, the clock_isr_on(),
- * clock_isr_off(), and clock_isr_is_on() functions can be 
+ * clock_isr_off(), and clock_isr_is_on() functions can be
  * NOPs.
  */
 #define Clock_driver_support_initialize_hardware() \
@@ -95,7 +95,7 @@ rtems_irq_connect_data clock_isr_data = {
      } while (0)
 
 /**
- * Do whatever you need to shut the clock down and remove the 
+ * Do whatever you need to shut the clock down and remove the
  * interrupt handler. Since this normally only gets called on
  * RTEMS shutdown, you may not need to do anything other than
  * remove the ISR.

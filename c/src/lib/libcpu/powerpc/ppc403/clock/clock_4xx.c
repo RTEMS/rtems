@@ -62,7 +62,7 @@ volatile uint32_t   Clock_driver_ticks;
 static uint32_t   pit_value, tick_time;
 
 void Clock_exit( void );
- 
+
 rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
@@ -76,10 +76,10 @@ extern bool bsp_timer_internal_clock;
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
- 
+
 /*
  *  ISR Handler
  */
@@ -99,7 +99,7 @@ int ClockIsOn(const rtems_irq_connect_data* unused)
 void ClockOff(const rtems_irq_connect_data* unused)
 {
     register uint32_t   r;
- 
+
 	r = mfspr(TCR);
 	mtspr(TCR, r & ~(PIE | ARE) );
 }
@@ -109,7 +109,7 @@ void ClockOn(const rtems_irq_connect_data* unused)
     uint32_t   iocr, r;
 	ppc_cpu_id_t cpu;
     Clock_driver_ticks = 0;
- 
+
  	cpu = get_ppc_cpu_type();
 	if (cpu==PPC_405GP) {
 		iocr = mfdcr(CPC0_CR1);
@@ -138,7 +138,7 @@ void ClockOn(const rtems_irq_connect_data* unused)
 
 void Install_clock(void (*clock_isr)(void *))
 {
-  
+
     /*
      * initialize the interval here
      * First tick is set to right amount of time in the future
@@ -193,14 +193,14 @@ ReInstall_clock(void (*new_clock_isr)(void *))
  * Called via atexit()
  * Remove the clock interrupt handler by setting handler to NULL
  *
- * This will not work on the 405GP because 
- * when bit's are set in TCR they can only be unset by a reset 
+ * This will not work on the 405GP because
+ * when bit's are set in TCR they can only be unset by a reset
  */
 
 void Clock_exit(void)
 {
     rtems_irq_connect_data clockIrqConnData;
-    
+
     clockIrqConnData.name = BSP_PIT;
     if (!BSP_get_current_rtems_irq_handler(&clockIrqConnData)) {
       printk("Unable to stop system clock\n");
@@ -217,12 +217,12 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }

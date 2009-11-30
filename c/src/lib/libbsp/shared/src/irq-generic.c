@@ -7,7 +7,7 @@
  */
 
 /*
- * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette. 
+ * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
  * Copyright (c) 2008, 2009
  * embedded brains GmbH

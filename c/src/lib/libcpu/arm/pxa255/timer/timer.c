@@ -8,7 +8,7 @@
  *  Timer_initialize() and Read_timer().  Read_timer() usually returns
  *  the number of microseconds since Timer_initialize() exitted.
  *
- *  It is important that the timer start/stop overhead be determined 
+ *  It is important that the timer start/stop overhead be determined
  *  when porting or modifying this code.
  *
  *  The license and distribution terms for this file may be
@@ -29,7 +29,7 @@ bool benchmark_timer_find_average_overhead;
 bool benchmark_timer_is_initialized = false;
 
 /*
- * Use the timer count register to measure. 
+ * Use the timer count register to measure.
  * The frequency of it is 3.4864MHZ
  * The longest period we are able to capture is 4G/3.4864MHZ
  */
@@ -62,7 +62,7 @@ int benchmark_timer_read(void)
     total -= tick_time;
   else
     total += 0xffffffff - tick_time; /*Round up but not overflow*/
-      
+
   if ( benchmark_timer_find_average_overhead == true )
     return total;          /*Counter cycles*/
 

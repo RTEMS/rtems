@@ -49,16 +49,16 @@ m8xx_dpram_allocate( unsigned int byte_count )
   unsigned int i;
   ISR_Level level;
   void *blockp = NULL;
-  
+
   byte_count = (byte_count + 3) & ~0x3;
-  
+
   /*
    * Running with interrupts disabled is usually considered bad
    * form, but this routine is probably being run as part of an
    * initialization sequence so the effect shouldn't be too severe.
    */
   _ISR_Disable (level);
-  
+
   for ( i = 0; i < NUM_DPRAM_REGIONS; i++ ) {
     /*
      * Verify that the region is available for use.
@@ -84,9 +84,9 @@ m8xx_dpram_allocate( unsigned int byte_count )
       break;
     }
   }
-  
+
   _ISR_Enable(level);
-  
+
   if (blockp == NULL)
     rtems_panic("Can't allocate %d bytes of dual-port RAM.\n", byte_count);
   return blockp;

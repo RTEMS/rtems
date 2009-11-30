@@ -3,7 +3,7 @@
  *
  * Derived from /c/src/lib/libbsp/i386/shared/comm/tty_drv.c
  *
- * Modifications to PPC405GP by Dennis Ehlin 
+ * Modifications to PPC405GP by Dennis Ehlin
  *
  */
 
@@ -73,7 +73,7 @@ struct ttyasync {
 /*---------------------------------------------------------------------------+
 | Alternate function registers
 +---------------------------------------------------------------------------*/
-  #define AFR   ISR	
+  #define AFR   ISR
 
 /*---------------------------------------------------------------------------+
 | Line control Register.
@@ -154,7 +154,7 @@ int tty0_round(double x)
   return (int)((int)((x-(int)x)*1000)>500 ? x+1 : x);
 }
 
-void 
+void
 tty0BaudSet(uint32_t   baudrate)
 {
   uint32_t   tmp;
@@ -214,13 +214,13 @@ tty0PollRead (int minor)
   /* Wait for character */
   while ((tty0port->LSR & LSR_RSR)==0);;
 
-  return tty0port->RBR;  
+  return tty0port->RBR;
 }
 
 
-static int 
+static int
 tty0PollWrite(int minor,const char *buf,int len)
-{  
+{
 
   while (len-- > 0) {
     while (!(tty0port->LSR & LSR_THE));;
@@ -231,7 +231,7 @@ tty0PollWrite(int minor,const char *buf,int len)
 #endif
 
 /* ================ Termios support  =================*/
-    
+
 static int tty0InterruptWrite (int minor, const char *buf, int len)
 {
 
@@ -239,9 +239,9 @@ static int tty0InterruptWrite (int minor, const char *buf, int len)
     {
       return 0;
     }
- 
+
   /* Write character */
-  
+
   tty0port->THR = (*buf &0xff);
   tty0port->IER |= IER_XMT;     /* always enable tx interrupt */
 
@@ -259,7 +259,7 @@ static rtems_isr tty0serial_ISR(rtems_vector_number v)
   for(;;)
     {
 	  vect = tty0port->ISR & 0x0f;
-	  if(vect & 1) 
+	  if(vect & 1)
 	  {
 		  /* no more interrupts */
           if(off > 0) {
@@ -273,32 +273,32 @@ static rtems_isr tty0serial_ISR(rtems_vector_number v)
 	  }
 
 	vect = vect & 0xe; /*mask out all except interrupt pending*/
-      
+
     switch(vect)
 	{
 
 	case ISR_Tx :
-	  /* 
-	   * TX holding empty: we have to disable these interrupts 
-	   * if there is nothing more to send. 
+	  /*
+	   * TX holding empty: we have to disable these interrupts
+	   * if there is nothing more to send.
 	   */
 
 	  /* If nothing else to send disable interrupts */
 	  ret = rtems_termios_dequeue_characters(tty0ttyp, 1);
-         
+
           if ( ret == 0 ) {
    	    tty0port->IER &= ~IER_XMT;
           }
-		   
+
 	  break;
 	case ISR_RxTO:
 	case ISR_Rx :
 
               /* disable interrupts and notify termios */
-	       tty0port->IER &= ~IER_RCV; 
+	       tty0port->IER &= ~IER_RCV;
 
 	      /* read all bytes in fifo*/
-  	       while (( off < sizeof(buf) ) && (  tty0port->LSR & LSR_RSR )) 
+  	       while (( off < sizeof(buf) ) && (  tty0port->LSR & LSR_RSR ))
 			  {
 				buf[off++] = tty0port->RBR;
 			  }
@@ -318,17 +318,17 @@ static rtems_isr tty0serial_ISR(rtems_vector_number v)
 }
 
 
-/* 
+/*
  *
- * deinit TTY0 
+ * deinit TTY0
  *
  */
 void
-tty0DeInit(void) 
+tty0DeInit(void)
 {
   /*
-   * disable interrupts for serial tty0port 
-   * set it to state to work with polling boot monitor, if any... 
+   * disable interrupts for serial tty0port
+   * set it to state to work with polling boot monitor, if any...
    */
 
   /* set up baud rate to original state */
@@ -338,13 +338,13 @@ tty0DeInit(void)
 
 }
 
-/* 
+/*
  *
- * init SPI 
+ * init SPI
  *
  */
-rtems_status_code 
-tty0Initialize(void) 
+rtems_status_code
+tty0Initialize(void)
 {
   register unsigned tmp;
   rtems_isr_entry previous_isr; /* this is a dummy */
@@ -354,10 +354,10 @@ tty0Initialize(void)
   extern bool bsp_serial_external_clock;
 
   /*
-   * Initialise the serial tty0port 
+   * Initialise the serial tty0port
    */
 
-  /* 
+  /*
    * Select clock source and set uart internal clock divisor
    */
 
@@ -379,22 +379,22 @@ tty0Initialize(void)
 
   /* set up baud rate */
   tty0BaudSet(bsp_serial_rate);
- 
+
 
 #ifdef TTY0_USE_INTERRUPT
 
     /* add rx/tx isr to vector table */
 
-    if (TTY0_USE_UART==0) 
+    if (TTY0_USE_UART==0)
 	ictrl_set_vector(tty0serial_ISR,PPC_IRQ_EXT_UART0,&previous_isr);
     else
 	ictrl_set_vector(tty0serial_ISR,PPC_IRQ_EXT_UART1,&previous_isr);
-    
+
     /* Enable and clear FIFO */
     tty0port->FCR = FCR_FE | FCR_CRF | FCR_CTF | FCR_RT14;
 
     /* Read status to clear them */
-    _tmp = tty0port->LSR;   
+    _tmp = tty0port->LSR;
     _tmp = tty0port->RBR;
     _tmp = tty0port->MSR;
 
@@ -446,9 +446,9 @@ rtems_device_driver tty0_initialize(
   /*
    * Do device-specific initialization
    */
-   
+
   /*tty0Initialize ();   Moved this to open instead */
- 
+
   /*
    * Register the device
    */
@@ -462,7 +462,7 @@ rtems_device_driver tty0_initialize(
 /*
  *  Open entry point
  */
- 
+
 rtems_device_driver tty0_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -511,11 +511,11 @@ rtems_device_driver tty0_open(
 
     return sc;
 }
- 
+
 /*
  *  Close entry point
  */
- 
+
 rtems_device_driver tty0_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -524,11 +524,11 @@ rtems_device_driver tty0_close(
 {
   return rtems_termios_close (arg);
 }
- 
+
 /*
  * read bytes from the serial port. We only have stdin.
  */
- 
+
 rtems_device_driver tty0_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -537,11 +537,11 @@ rtems_device_driver tty0_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
- 
+
 rtems_device_driver tty0_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -550,11 +550,11 @@ rtems_device_driver tty0_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 /*
  *  IO Control entry point
  */
- 
+
 rtems_device_driver tty0_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

@@ -190,7 +190,7 @@ static int mpc55xx_esci_termios_first_open( int major, int minor, void *arg)
 	}
 
 	/* Connect TTY */
-	e->tty = tty;	
+	e->tty = tty;
 
 	/* Enable interrupts */
 	if (MPC55XX_ESCI_USE_INTERRUPTS( e)) {
@@ -380,7 +380,7 @@ static int mpc55xx_esci_termios_set_attributes( int minor, const struct termios 
 		br = 0;
 	}
 	cr1.B.SBR = br;
-		 
+
 	/* Number of data bits */
 	if ((t->c_cflag & CSIZE) != CS8) {
 		return RTEMS_IO_ERROR;
@@ -390,7 +390,7 @@ static int mpc55xx_esci_termios_set_attributes( int minor, const struct termios 
 	/* Parity */
 	cr1.B.PE = (t->c_cflag & PARENB) ? 1 : 0;
 	cr1.B.PT = (t->c_cflag & PARODD) ? 1 : 0;
-	
+
 	/* Stop bits */
 	if ( t->c_cflag & CSTOPB ) {
 		/* Two stop bits */
@@ -484,11 +484,11 @@ static const rtems_termios_callbacks mpc55xx_esci_termios_callbacks_polled = {
 rtems_device_driver console_initialize( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	int console_done = 0; 
-	int termios_do_init = 1; 
+	int console_done = 0;
+	int termios_do_init = 1;
 	rtems_device_minor_number i = 0;
 	mpc55xx_esci_driver_entry *e = NULL;
-	
+
 	for (i = 0; i < MPC55XX_ESCI_NUMBER; ++i) {
 		e = &mpc55xx_esci_driver_table [i];
 		sc = rtems_io_register_name ( e->device_name, major, i);

@@ -5,12 +5,12 @@
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  COPYRIGHT (c) 1998 by IMD
- * 
+ *
  *  Changes from IMD are covered by the original distributions terms.
  *  changes include interrupt support and termios support
- *  for backward compatibility, the original polled driver has been 
+ *  for backward compatibility, the original polled driver has been
  *  renamed to console.c.polled
- * 
+ *
  *  This file has been initially created (polled version) by
  *
  *  Author:	Andrew Bray <andy@i-cubed.co.uk>
@@ -110,7 +110,7 @@ struct async {
 /*---------------------------------------------------------------------------+
 | Alternate function registers
 +---------------------------------------------------------------------------*/
-  #define AFR   ISR	
+  #define AFR   ISR
 
 /*---------------------------------------------------------------------------+
 | Line control Register.
@@ -190,7 +190,7 @@ static int spiBaudRound(double x)
   return (int)((int)((x-(int)x)*1000)>500 ? x+1 : x);
 }
 
-void 
+void
 spiBaudSet(uint32_t   baudrate)
 {
   uint32_t   tmp;
@@ -250,13 +250,13 @@ spiPollRead (int minor)
   /* Wait for character */
   while ((port->LSR & LSR_RSR)==0);;
 
-  return port->RBR;  
+  return port->RBR;
 }
 
 
-static int 
+static int
 spiPollWrite(int minor,const char *buf,int len)
-{  
+{
 
   while (len-- > 0) {
     while (!(port->LSR & LSR_THE));;
@@ -275,7 +275,7 @@ spiStartRemoteTx (int minor)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable (level);
-  port->SPCTL |= CRRts;            activate RTS  
+  port->SPCTL |= CRRts;            activate RTS
   rtems_interrupt_enable (level);
 */
   return 0;
@@ -288,7 +288,7 @@ spiStopRemoteTx (int minor)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable (level);
-  port->SPCTL &= ~CRRts;            deactivate RTS  
+  port->SPCTL &= ~CRRts;            deactivate RTS
   rtems_interrupt_enable (level);
 */
   return 0;
@@ -308,12 +308,12 @@ static rtems_isr serial_ISR(rtems_vector_number v)
   int res;
 
   _isr=port->ISR & 0x0E;
-   
+
    if ((_isr == ISR_Rx) || (_isr==ISR_RxTO)) {
     	ch = port->RBR;
     	rtems_termios_enqueue_raw_characters (spittyp,&ch,1);
    }
-   
+
    if (_isr == ISR_Tx) {
 	res = rtems_termios_dequeue_characters (spittyp,1);
 	if (res==0) {
@@ -324,18 +324,18 @@ static rtems_isr serial_ISR(rtems_vector_number v)
 }
 
 
-/* 
+/*
  *
- * deinit SPI 
+ * deinit SPI
  *
  */
 void
-spiDeInit(void) 
+spiDeInit(void)
 {
   extern uint32_t bsp_serial_rate;
   /*
-   * disable interrupts for serial port 
-   * set it to state to work with polling boot monitor, if any... 
+   * disable interrupts for serial port
+   * set it to state to work with polling boot monitor, if any...
    */
 
 
@@ -346,13 +346,13 @@ spiDeInit(void)
 
 }
 
-/* 
+/*
  *
- * init SPI 
+ * init SPI
  *
  */
-rtems_status_code 
-spiInitialize(void) 
+rtems_status_code
+spiInitialize(void)
 {
   register unsigned tmp;
   rtems_isr_entry previous_isr; /* this is a dummy */
@@ -361,10 +361,10 @@ spiInitialize(void)
   extern uint32_t bsp_serial_rate;
 
   /*
-   * Initialise the serial port 
+   * Initialise the serial port
    */
 
-  /* 
+  /*
    * Select clock source and set uart internal clock divisor
    */
 
@@ -386,11 +386,11 @@ spiInitialize(void)
 
   /* set up baud rate */
   spiBaudSet(bsp_serial_rate);
- 
+
   if (ppc403_spi_interrupt) {
 
     /* add rx/tx isr to vector table */
-    if (USE_UART==0) 
+    if (USE_UART==0)
 	ictrl_set_vector(serial_ISR,PPC_IRQ_EXT_UART0,&previous_isr);
     else
 	ictrl_set_vector(serial_ISR,PPC_IRQ_EXT_UART1,&previous_isr);
@@ -458,7 +458,7 @@ rtems_device_driver console_initialize(
 /*
  *  Open entry point
  */
- 
+
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -498,11 +498,11 @@ rtems_device_driver console_open(
   }
   return sc;
 }
- 
+
 /*
  *  Close entry point
  */
- 
+
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -511,11 +511,11 @@ rtems_device_driver console_close(
 {
   return rtems_termios_close (arg);
 }
- 
+
 /*
  * read bytes from the serial port. We only have stdin.
  */
- 
+
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -524,11 +524,11 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
- 
+
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -537,11 +537,11 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 /*
  *  IO Control entry point
  */
- 
+
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

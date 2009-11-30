@@ -74,8 +74,8 @@ void benchmark_timer_initialize( void )
                         ALTERA_AVALON_TIMER_CONTROL_START_MSK;
 
   /* This is the most safe place for resetting the overflow
-     counter - just _after_ we reset the timer. Depending 
-     on the SOPC configuration, the counter may not be 
+     counter - just _after_ we reset the timer. Depending
+     on the SOPC configuration, the counter may not be
      stoppable and it doesn't make sense to assume that
      there is any "safe" period before resetting. */
 
@@ -129,7 +129,7 @@ int benchmark_timer_read( void )
   if(total < LEAST_VALID) return 0;
 
   if(benchmark_timer_find_average_overhead != TRUE) total-= AVG_OVERHEAD;
- 
+
   return total;
 }
 

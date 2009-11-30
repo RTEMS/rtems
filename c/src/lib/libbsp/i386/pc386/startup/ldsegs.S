@@ -222,7 +222,7 @@ SYM(Interrupt_descriptor_table):
 	.rept 256
 	.word 0,0,0,0
 	.endr
-		
+
 /*---------------------------------------------------------------------------+
 | Descriptor of IDT
 +--------------------------------------------------------------------------*/
@@ -231,7 +231,7 @@ SYM(Interrupt_descriptor_table):
 SYM(idtdesc):
 	.word  (256*8 - 1)
 	.long  SYM (Interrupt_descriptor_table)
-	
+
 END_DATA
 
     .section .m_hdr

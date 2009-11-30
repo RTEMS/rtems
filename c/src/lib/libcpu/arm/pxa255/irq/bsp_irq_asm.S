@@ -1,7 +1,7 @@
 /*
  * PXA255 Interrupt handler by Yang Xi <hiyangxi@gmail.com>
  * Copyright (c) 2004 by Jay Monkman <jtm@lopgindog.com>
- *      
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -10,7 +10,7 @@
  */
 
 #define __asm__
-        
+
         .globl bsp_interrupt_dispatch
 bsp_interrupt_dispatch :
 /*

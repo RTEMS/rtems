@@ -84,7 +84,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void)
   /******
    * Get nanoseconds using Pentium-compatible TSC register
    ******/
-  
+
   uint64_t                 diff_nsec;
 
   diff_nsec = rdtsc() - pc586_tsc_at_tick;
@@ -106,7 +106,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void)
 
   return (uint32_t)diff_nsec;
 }
-  
+
 uint32_t bsp_clock_nanoseconds_since_last_tick_i8254(void)
 {
 
@@ -179,7 +179,7 @@ static void calibrate_tsc(void)
   begin_time = rdtsc();
 
   for (i = rtems_clock_get_ticks_per_second() * pc386_isrs_per_tick;
-       i != 0; --i ) {   
+       i != 0; --i ) {
     /* We know we've just completed a tick when timer goes from low to high */
     then_lsb = then_msb = 0xff;
     do {
@@ -200,7 +200,7 @@ static void calibrate_tsc(void)
 #if 0
   printk( "CPU clock at %u MHz\n", (uint32_t)(pc586_tsc_per_tick / 1000000));
 #endif
-  
+
   pc586_tsc_per_tick /= rtems_clock_get_ticks_per_second();
 }
 
@@ -218,7 +218,7 @@ static void clockOn(
   pc386_clock_click_count = US_TO_TICK(pc386_microseconds_per_isr);
 
   #if 0
-    printk( "configured usecs per tick=%d \n", 
+    printk( "configured usecs per tick=%d \n",
       rtems_configuration_get_microseconds_per_tick() );
     printk( "Microseconds per ISR =%d\n", pc386_microseconds_per_isr );
     printk( "final ISRs per=%d\n", pc386_isrs_per_tick );
@@ -267,7 +267,7 @@ void Clock_driver_support_initialize_hardware(void)
 {
   bool use_tsc = false;
   bool use_8254 = false;
-  
+
   #if (CLOCK_DRIVER_USE_TSC == 1)
     use_tsc = true;
   #endif
@@ -275,7 +275,7 @@ void Clock_driver_support_initialize_hardware(void)
   #if (CLOCK_DRIVER_USE_8254 == 1)
     use_8254 = true;
   #endif
- 
+
   if ( !use_tsc && !use_8254 ) {
     if ( x86_has_tsc() ) use_tsc  = true;
     else                 use_8254 = true;
@@ -284,12 +284,12 @@ void Clock_driver_support_initialize_hardware(void)
   if ( use_8254 ) {
     /* printk( "Use 8254\n" ); */
     Clock_driver_support_at_tick = Clock_driver_support_at_tick_empty;
-    Clock_driver_nanoseconds_since_last_tick = 
+    Clock_driver_nanoseconds_since_last_tick =
       bsp_clock_nanoseconds_since_last_tick_i8254;
   } else {
     /* printk( "Use TSC\n" ); */
     Clock_driver_support_at_tick = Clock_driver_support_at_tick_tsc;
-    Clock_driver_nanoseconds_since_last_tick = 
+    Clock_driver_nanoseconds_since_last_tick =
       bsp_clock_nanoseconds_since_last_tick_tsc;
   }
 

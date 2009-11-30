@@ -2,7 +2,7 @@
  * Atmel AT91RM9200 PMC functions
  *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *

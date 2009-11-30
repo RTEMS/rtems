@@ -51,10 +51,10 @@ extern "C" {
 
 
 /* Till S. 2008/07/10:
- * 
+ *
  * Using the macros/definitions which depend on a preprocessor
  * symbol defining the CPU flavor is discouraged.
- * I recommend to not use definitions from this file and 
+ * I recommend to not use definitions from this file and
  * in particular - not to add more bits and pieces.
  *
  * Instead, try to use run-time detection (see e.g. cpuIdent.c/cpuIdent.h)
@@ -79,7 +79,7 @@ extern "C" {
  *    + PPC_HAS_EXCEPTION_PREFIX - 1
  *    + PPC_USE_MULTIPLE         - 0
  */
- 
+
 /*
  *  Define the low power mode models
  *
@@ -107,7 +107,7 @@ extern "C" {
  *  predefines.
  */
 
-#if defined(ppc403) 
+#if defined(ppc403)
 /*
  *  IBM 403
  *
@@ -115,7 +115,7 @@ extern "C" {
  *
  *  Does not have user mode.
  */
- 
+
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_HAS_RI    	        0
 #define PPC_HAS_RFCI    	1
@@ -146,8 +146,8 @@ extern "C" {
 #define PPC_LOW_POWER_MODE	PPC_LOW_POWER_MODE_STANDARD
 
 /* Based on comments by Sergei Organov <osv@Javad.RU> */
-#define PPC_I_CACHE        	0 
-#define PPC_D_CACHE        	0 
+#define PPC_I_CACHE        	0
+#define PPC_D_CACHE        	0
 
 #elif defined(mpc505) || defined(mpc509)
 /*
@@ -168,7 +168,7 @@ extern "C" {
 /*
  *  Submitted with original port -- book checked only.
  */
- 
+
 #define PPC_USE_MULTIPLE	1
 #define PPC_I_CACHE		0
 #define PPC_D_CACHE		32768
@@ -177,12 +177,12 @@ extern "C" {
 /*
  *  Submitted with original port -- book checked only.
  */
- 
+
 #define PPC_I_CACHE		8192
 #define PPC_D_CACHE		8192
 
 #elif defined(ppc603e)
- 
+
 /*
  *  Submitted with original port.
  *
@@ -198,15 +198,15 @@ extern "C" {
 /*
  *  Submitted with original port -- book checked only.
  */
- 
+
 #define PPC_I_CACHE		16384
 #define PPC_D_CACHE		16384
- 
+
 #elif defined(mpc860)
-/* 
- *  Added by Jay Monkman (jmonkman@frasca.com) 6/28/98 
+/*
+ *  Added by Jay Monkman (jmonkman@frasca.com) 6/28/98
  *  with some changes by Darlene Stewart (Darlene.Stewart@iit.nrc.ca)
- */ 
+ */
 #define PPC_I_CACHE             4096
 #define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
@@ -219,9 +219,9 @@ extern "C" {
 #define PPC_MSR_3		0x00000000
 
 #elif defined(mpc821)
-/* 
+/*
  *  Added by Andrew Bray <andy@chaos.org.uk> 6/April/1999
- */ 
+ */
 #define PPC_I_CACHE             4096
 #define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
@@ -265,9 +265,9 @@ extern "C" {
 #define PPC_CACHE_ALIGNMENT 32
 
 #else
- 
+
 #error "Unsupported CPU Model"
- 
+
 #endif
 
 /*
@@ -381,7 +381,7 @@ extern "C" {
 #define PPC_IRQ_FIRST           PPC_IRQ_SYSTEM_RESET
 
 #if defined(ppc403) || defined(ppc405)
-                                  
+
 #define PPC_IRQ_CRIT     PPC_IRQ_SYSTEM_RESET /*0x00100- Critical int. pin */
 #define PPC_IRQ_PIT      (PPC_STD_IRQ_LAST+1) /*0x01000- Pgm interval timer*/
 #define PPC_IRQ_FIT	 (PPC_STD_IRQ_LAST+2) /*0x01010- Fixed int. timer  */
@@ -408,10 +408,10 @@ extern "C" {
 
 #elif defined(ppc601)
 #define PPC_IRQ_TRACE    (PPC_STD_IRQ_LAST+1) /*0x02000-Run/Trace Exception*/
-#define PPC_IRQ_LAST     PPC_IRQ_TRACE       
+#define PPC_IRQ_LAST     PPC_IRQ_TRACE
 
 #elif defined(ppc602)
-#define PPC_IRQ_LAST     (PPC_STD_IRQ_LAST) 
+#define PPC_IRQ_LAST     (PPC_STD_IRQ_LAST)
 
 #elif defined(ppc603) || defined(ppc603e)
 #define PPC_IRQ_TRANS_MISS (PPC_STD_IRQ_LAST+1) /*0x1000-Ins Translation Miss*/
@@ -419,12 +419,12 @@ extern "C" {
 #define PPC_IRQ_DATA_STORE (PPC_STD_IRQ_LAST+3) /*0x1200-Data Store Miss     */
 #define PPC_IRQ_ADDR_BRK   (PPC_STD_IRQ_LAST+4) /*0x1300-Instruction Bkpoint */
 #define PPC_IRQ_SYS_MGT    (PPC_STD_IRQ_LAST+5) /*0x1400-System Management   */
-#define PPC_IRQ_LAST       PPC_IRQ_SYS_MGT    
+#define PPC_IRQ_LAST       PPC_IRQ_SYS_MGT
 
 #elif defined(mpc604)
 #define PPC_IRQ_ADDR_BRK (PPC_STD_IRQ_LAST+1) /*0x1300- Inst. addr break  */
 #define PPC_IRQ_SYS_MGT  (PPC_STD_IRQ_LAST+2) /*0x1400- System Management */
-#define PPC_IRQ_LAST     PPC_IRQ_SYS_MGT  
+#define PPC_IRQ_LAST     PPC_IRQ_SYS_MGT
 
 #elif defined(mpc860) || defined(mpc821)
 #define PPC_IRQ_EMULATE         (PPC_STD_IRQ_LAST+1) /*0x1000-Software emulation  */
@@ -507,14 +507,14 @@ extern "C" {
 #define PPC_IRQ_CPM_IDMA3	(PPC_STD_IRQ_LAST + 58)
 #define PPC_IRQ_CPM_IDMA4	(PPC_STD_IRQ_LAST + 59)
 #define PPC_IRQ_CPM_SDMA	(PPC_STD_IRQ_LAST + 60)
-#define PPC_IRQ_CPM_RES_A	(PPC_STD_IRQ_LAST + 61)	
+#define PPC_IRQ_CPM_RES_A	(PPC_STD_IRQ_LAST + 61)
 #define PPC_IRQ_CPM_TIMER1	(PPC_STD_IRQ_LAST + 62)
 #define PPC_IRQ_CPM_TIMER2	(PPC_STD_IRQ_LAST + 63)
 #define PPC_IRQ_CPM_TIMER3	(PPC_STD_IRQ_LAST + 64)
 #define PPC_IRQ_CPM_TIMER4	(PPC_STD_IRQ_LAST + 65)
 #define PPC_IRQ_CPM_TMCNT	(PPC_STD_IRQ_LAST + 66)
 #define PPC_IRQ_CPM_PIT		(PPC_STD_IRQ_LAST + 67)
-#define PPC_IRQ_CPM_RES_B	(PPC_STD_IRQ_LAST + 68)	
+#define PPC_IRQ_CPM_RES_B	(PPC_STD_IRQ_LAST + 68)
 #define PPC_IRQ_CPM_IRQ1	(PPC_STD_IRQ_LAST + 69)
 #define PPC_IRQ_CPM_IRQ2	(PPC_STD_IRQ_LAST + 70)
 #define PPC_IRQ_CPM_IRQ3	(PPC_STD_IRQ_LAST + 71)

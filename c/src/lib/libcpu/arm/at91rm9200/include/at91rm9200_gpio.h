@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2002 by Cogent Computer Systems
  * Written by Mike Kelly <mike@cogcomp.com>
- *      
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -59,16 +59,16 @@
  *
  * PORT A
  */
-#define GPIO_0          BIT0    
-#define GPIO_1          BIT1    
-#define GPIO_2          BIT2    
-#define GPIO_3          BIT3    
-#define GPIO_4          BIT4    
-#define GPIO_5          BIT5    
-#define GPIO_6          BIT6    
-#define GPIO_7          BIT7    
-#define GPIO_8          BIT8    
-#define GPIO_9          BIT9    
+#define GPIO_0          BIT0
+#define GPIO_1          BIT1
+#define GPIO_2          BIT2
+#define GPIO_3          BIT3
+#define GPIO_4          BIT4
+#define GPIO_5          BIT5
+#define GPIO_6          BIT6
+#define GPIO_7          BIT7
+#define GPIO_8          BIT8
+#define GPIO_9          BIT9
 #define GPIO_10         BIT10
 #define GPIO_11         BIT11
 #define GPIO_12         BIT12
@@ -92,16 +92,16 @@
 #define GPIO_30         BIT30
 #define GPIO_31         BIT31
 /* PORT B */
-#define GPIO_32         BIT0    
-#define GPIO_33         BIT1    
-#define GPIO_34         BIT2    
-#define GPIO_35         BIT3    
-#define GPIO_36         BIT4    
-#define GPIO_37         BIT5    
-#define GPIO_38         BIT6    
-#define GPIO_39         BIT7    
-#define GPIO_40         BIT8    
-#define GPIO_41         BIT9    
+#define GPIO_32         BIT0
+#define GPIO_33         BIT1
+#define GPIO_34         BIT2
+#define GPIO_35         BIT3
+#define GPIO_36         BIT4
+#define GPIO_37         BIT5
+#define GPIO_38         BIT6
+#define GPIO_39         BIT7
+#define GPIO_40         BIT8
+#define GPIO_41         BIT9
 #define GPIO_42         BIT10
 #define GPIO_43         BIT11
 #define GPIO_44         BIT12
@@ -125,16 +125,16 @@
 #define GPIO_62         BIT30
 #define GPIO_63         BIT31
 /* PORT C */
-#define GPIO_64         BIT0    
-#define GPIO_65         BIT1    
-#define GPIO_66         BIT2    
-#define GPIO_67         BIT3    
-#define GPIO_68         BIT4    
-#define GPIO_69         BIT5    
-#define GPIO_70         BIT6    
-#define GPIO_71         BIT7    
-#define GPIO_72         BIT8    
-#define GPIO_73         BIT9    
+#define GPIO_64         BIT0
+#define GPIO_65         BIT1
+#define GPIO_66         BIT2
+#define GPIO_67         BIT3
+#define GPIO_68         BIT4
+#define GPIO_69         BIT5
+#define GPIO_70         BIT6
+#define GPIO_71         BIT7
+#define GPIO_72         BIT8
+#define GPIO_73         BIT9
 #define GPIO_74         BIT10
 #define GPIO_75         BIT11
 #define GPIO_76         BIT12
@@ -158,16 +158,16 @@
 #define GPIO_94         BIT30
 #define GPIO_95         BIT31
 /* PORT D */
-#define GPIO_96         BIT0    
-#define GPIO_97         BIT1    
-#define GPIO_98         BIT2    
-#define GPIO_99         BIT3    
-#define GPIO_100        BIT4    
-#define GPIO_101        BIT5    
-#define GPIO_102        BIT6    
-#define GPIO_103        BIT7    
-#define GPIO_104        BIT8    
-#define GPIO_105        BIT9    
+#define GPIO_96         BIT0
+#define GPIO_97         BIT1
+#define GPIO_98         BIT2
+#define GPIO_99         BIT3
+#define GPIO_100        BIT4
+#define GPIO_101        BIT5
+#define GPIO_102        BIT6
+#define GPIO_103        BIT7
+#define GPIO_104        BIT8
+#define GPIO_105        BIT9
 #define GPIO_106        BIT10
 #define GPIO_107        BIT11
 #define GPIO_108        BIT12
@@ -376,9 +376,9 @@
 #define PIOD_ASR_RTS2   BIT23   /* USART 2 RTS */
 #define PIOD_ASR_RTS3   BIT24   /* USART 3 RTS */
 #define PIOD_ASR_DTR1   BIT25   /* USART 1 DTR */
-                   
+
 /* Port D, Alternate Function B */
-                
+
 #define PIOC_ASR_TSYNC  BIT7    /* ETM Sync      */
 #define PIOC_ASR_TCLK   BIT8    /* ETM Clock */
 #define PIOC_ASR_TPS0   BIT9    /* ETM Processor Status 0 */

@@ -12,8 +12,8 @@
  *  $Id$
  */
 #define __asm__
-	
-/* 
+
+/*
  * BSP specific interrupt handler for INT or FIQ. In here
  * you do determine which interrupt happened and call its
  * handler.
@@ -29,7 +29,7 @@ bsp_interrupt_dispatch :
   ldr	r1, [r0]
   mov   r1, r1, LSR #16         /* get the NIVECTOR into 16 LSbits */
 
-  /* find the ISR's address based on the vector */	
+  /* find the ISR's address based on the vector */
   ldr   r0, =bsp_vector_table
   mov   r1, r1, LSL #3          /* Shift vector to get offset into table */
   add   r1, r0, r1              /* r1 has address of vector entry */

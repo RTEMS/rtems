@@ -21,7 +21,7 @@
  *
  * The timer_isr prints a message then polls
  * the variable 'timer_poll' while it has the value
- * of the timer # then sets it to -1 and prints 
+ * of the timer # then sets it to -1 and prints
  * the 'leave' message.
  *
  * To test nested interrupts:
@@ -49,7 +49,7 @@
  *  The timer IRQs can be unhooked with
  *     timer_instdis( 0, 0, period );
  *     timer_instdis( 1, 0, period );
- */ 
+ */
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <bsp/openpic.h>
@@ -74,7 +74,7 @@ uint32_t lat = (OpenPIC->Global.Timer[(int)p].Current_Count & 0x7fffffff);
 	while ( timer_poll == (int)p )
 		;
 	timer_poll = -1;
-	
+
 	printk("Leaving ISR (%i)\n",(int)p);
 }
 

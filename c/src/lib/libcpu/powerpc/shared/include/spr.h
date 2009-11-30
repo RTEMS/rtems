@@ -55,7 +55,7 @@ static inline unsigned long _read_MSR(void)
 	unsigned long val;
 	asm volatile("mfmsr %0" : "=r" (val));
 	return val;
-} 
+}
 
 static inline void _write_MSR(unsigned long val)
 {
@@ -68,7 +68,7 @@ static inline unsigned long _read_SR(void * va)
 	unsigned long val;
 	asm volatile("mfsrin %0,%1" : "=r" (val): "r" (va));
 	return val;
-} 
+}
 
 static inline void _write_SR(unsigned long val, void * va)
 {

@@ -59,7 +59,7 @@
 	 *   3. load register with vector info
 	 *   4. branch
 	 *
-	 */ 
+	 */
 
 /*
  *****************************************************************************
@@ -99,7 +99,7 @@ ppc_exc_min_prolog_async_\_NAME:
 	stw	r1, ppc_exc_lock_\_PRI@sdarel(r13)
 	/*	We have no stack frame yet; store VECTOR_REGISTER in special area;
 	 * a higher-priority (critical) interrupt uses a different area
-	 * (hence the different prologue snippets) (\PRI) 
+	 * (hence the different prologue snippets) (\PRI)
 	 */
 	stw	VECTOR_REGISTER, ppc_exc_vector_register_\_PRI@sdarel(r13)
 	/*	Load vector.
@@ -131,7 +131,7 @@ ppc_exc_min_prolog_sync_\_NAME:
 	ba	wrap_nopush_\_FLVR
 
 	.endm
-		
+
 /*
  *****************************************************************************
  * MACRO: TEST_1ST_OPCODE_crit
@@ -199,7 +199,7 @@ ppc_exc_min_prolog_sync_\_NAME:
 	GET_INTERRUPT_MASK mask=SCRATCH_REGISTER_1
 	/* EQ(cr0) = ((interrupt_mask & MSR_CE) == 0) */
 	andis.	SCRATCH_REGISTER_1, SCRATCH_REGISTER_1, MSR_CE@h
-	beq	TEST_LOCK_crit_done_\_FLVR		
+	beq	TEST_LOCK_crit_done_\_FLVR
 
 	/* STD interrupt could have been interrupted before executing the 1st
 	 * instruction which sets the lock; check this case by looking at the
@@ -212,7 +212,7 @@ ppc_exc_min_prolog_sync_\_NAME:
 	 *   *(PC) == 'stw r1, ppc_exc_lock_std@sdarel(r13)'
 	 *
 	 */
-	
+
 	/* check lock */
 	lwz	SCRATCH_REGISTER_1, ppc_exc_lock_std@sdarel(r13)
 	cmplwi	CR_LOCK, SCRATCH_REGISTER_1, 0
@@ -544,7 +544,7 @@ wrap_change_msr_done_\_FLVR:
 	 * We add FRAME_LINK_SPACE to the frame pointer because the high level
 	 * handler expects a BSP_Exception_frame structure.
 	 */
-	addi	r3, FRAME_REGISTER, FRAME_LINK_SPACE 
+	addi	r3, FRAME_REGISTER, FRAME_LINK_SPACE
 
 	/*
 	 * Second parameter = vector number (r4 is the VECTOR_REGISTER)
@@ -611,7 +611,7 @@ wrap_handler_done_\_FLVR:
 	LA	SCRATCH_REGISTER_0, ppc_exc_wrapup
 
 	/* First parameter = exception frame pointer + FRAME_LINK_SPACE */
-	addi	r3, FRAME_REGISTER, FRAME_LINK_SPACE 
+	addi	r3, FRAME_REGISTER, FRAME_LINK_SPACE
 
 	/* Call ppc_exc_wrapup() */
 	mtctr	SCRATCH_REGISTER_0
@@ -633,7 +633,7 @@ wrap_restore_msr_done_\_FLVR:
 	lwz	FRAME_REGISTER, FRAME_OFFSET(r1)
 
 	/* Restore XER and CTR */
-	lwz	SCRATCH_REGISTER_0, EXC_XER_OFFSET(r1) 
+	lwz	SCRATCH_REGISTER_0, EXC_XER_OFFSET(r1)
 	lwz	SCRATCH_REGISTER_1, EXC_CTR_OFFSET(r1)
 	mtxer	SCRATCH_REGISTER_0
 	mtctr	SCRATCH_REGISTER_1
@@ -728,7 +728,7 @@ wrap_restore_non_volatile_regs_\_FLVR:
 
 	/* Restore small data area anchor (SYSV) */
 	lwz	r13, GPR13_OFFSET(r1)
-	
+
 	/* r14 is the FRAME_REGISTER and will be restored elsewhere */
 
 	/* Restore non-volatile registers r15 .. r31 */
@@ -742,7 +742,7 @@ wrap_restore_non_volatile_regs_\_FLVR:
 wrap_call_global_handler_\_FLVR:
 
 	/* First parameter = exception frame pointer + FRAME_LINK_SPACE */
-	addi	r3, FRAME_REGISTER, FRAME_LINK_SPACE 
+	addi	r3, FRAME_REGISTER, FRAME_LINK_SPACE
 
 	/* Load global handler address */
 	LW	SCRATCH_REGISTER_0, globalExceptHdl

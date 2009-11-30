@@ -8,7 +8,7 @@
 
 #ifndef IRQ_SHARED_IRQ_C_GLUE_H
 #define IRQ_SHARED_IRQ_C_GLUE_H
-/* 
+/*
  *  This header describes the routines that are needed by the shared
  *  version of 'irq.c' (implementing the RTEMS irq API). They
  *  must be provided by the BSP.

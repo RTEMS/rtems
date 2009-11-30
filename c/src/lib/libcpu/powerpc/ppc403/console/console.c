@@ -5,12 +5,12 @@
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  COPYRIGHT (c) 1998 by IMD
- * 
+ *
  *  Changes from IMD are covered by the original distributions terms.
  *  changes include interrupt support and termios support
- *  for backward compatibility, the original polled driver has been 
+ *  for backward compatibility, the original polled driver has been
  *  renamed to console.c.polled
- * 
+ *
  *  This file has been initially created (polled version) by
  *
  *  Author:	Andrew Bray <andy@i-cubed.co.uk>
@@ -205,7 +205,7 @@ spiStopRemoteTx (int minor)
   return 0;
 }
 
-void 
+void
 spiBaudSet(uint32_t   baudrate)
 {
   uint32_t   tmp;
@@ -266,8 +266,8 @@ spiPollRead (int minor)
       port->SPLS = (LSRFramingError | LSROverrunError | LSRParityError |
 		    LSRBreakInterrupt);
     }
-  } 
-  return port->SPRB;  
+  }
+  return port->SPRB;
 }
 
 static int
@@ -278,9 +278,9 @@ spiInterruptWrite (int minor, const char *buf, int len)
   return 0;
 }
 
-static int 
+static int
 spiPollWrite(int minor,const char *buf,int len)
-{  
+{
   unsigned char status;
 
   while (len-- > 0) {
@@ -295,18 +295,18 @@ spiPollWrite(int minor,const char *buf,int len)
   return 0;
 }
 
-/* 
+/*
  *
- * deinit SPI 
+ * deinit SPI
  *
  */
 void
-spiDeInit(void) 
+spiDeInit(void)
 {
   extern uint32_t bsp_serial_rate;
   /*
-   * disable interrupts for serial port 
-   * set it to state to work with polling boot monitor, if any... 
+   * disable interrupts for serial port
+   * set it to state to work with polling boot monitor, if any...
    */
 
   /* set up baud rate to original state */
@@ -317,8 +317,8 @@ spiDeInit(void)
 		LSRParityError | LSRBreakInterrupt);
 
   /* set up port control: DTR/RTS active,8 bit,1 stop,no parity */
-  port->SPCTL = (CRNormal | 
-		 CRDtr | CRRts | 
+  port->SPCTL = (CRNormal |
+		 CRDtr | CRRts |
 		 CRWordLength8 | CRParityDisable | CRStopBitsOne);
 
   /* clear handshake status bits */
@@ -330,13 +330,13 @@ spiDeInit(void)
 
 }
 
-/* 
+/*
  *
- * init SPI 
+ * init SPI
  *
  */
-rtems_status_code 
-spiInitialize(void) 
+rtems_status_code
+spiInitialize(void)
 {
   register unsigned tmp;
   rtems_isr_entry previous_isr; /* this is a dummy */
@@ -344,12 +344,12 @@ spiInitialize(void)
   extern uint32_t bsp_serial_rate;
 
   /*
-   * Initialise the serial port 
+   * Initialise the serial port
    */
 
-  /* 
-   * select RTS/CTS hardware handshake lines, 
-   * select clock source 
+  /*
+   * select RTS/CTS hardware handshake lines,
+   * select clock source
    */
   asm volatile ("mfdcr %0, 0xa0" : "=r" (tmp)); /* IOCR */
 
@@ -366,8 +366,8 @@ spiInitialize(void)
   spiBaudSet(bsp_serial_rate);
 
   /* set up port control: DTR/RTS active,8 bit,1 stop,no parity */
-  port->SPCTL = (CRNormal | 
-		 CRDtr | CRRts | 
+  port->SPCTL = (CRNormal |
+		 CRDtr | CRRts |
 		 CRWordLength8 | CRParityDisable | CRStopBitsOne);
 
   /* clear handshake status bits */
@@ -445,7 +445,7 @@ rtems_device_driver console_initialize(
 /*
  *  Open entry point
  */
- 
+
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -477,7 +477,7 @@ rtems_device_driver console_open(
 
   if (ppc403_spi_interrupt) {
     rtems_libio_open_close_args_t *args = arg;
-    
+
     sc = rtems_termios_open (major, minor, arg, &intrCallbacks);
     spittyp = args->iop->data1;
   }
@@ -486,11 +486,11 @@ rtems_device_driver console_open(
   }
   return sc;
 }
- 
+
 /*
  *  Close entry point
  */
- 
+
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -499,11 +499,11 @@ rtems_device_driver console_close(
 {
   return rtems_termios_close (arg);
 }
- 
+
 /*
  * read bytes from the serial port. We only have stdin.
  */
- 
+
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -512,11 +512,11 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
- 
+
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -525,11 +525,11 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 /*
  *  IO Control entry point
  */
- 
+
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

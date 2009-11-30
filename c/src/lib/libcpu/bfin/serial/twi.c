@@ -1,7 +1,7 @@
 /* this is not much more than a shell; it does not do anything useful yet */
 
 /*  TWI (I2C) driver for Blackfin
- * 
+ *
  *  Copyright (c) 2008 Kallisti Labs, Los Gatos, CA, USA
  *             written by Allan Hessenflow <allanh@kallisti.com>
  *
@@ -11,7 +11,7 @@
  *
  *  $Id$
  */
- 
+
 
 #include <stdlib.h>
 #include <rtems.h>
@@ -49,9 +49,9 @@ rtems_status_code bfin_twi_init(int channel, bfin_twi_config_t *config) {
 
   if (channel < 0 || channel >= N_BFIN_TWI)
     return RTEMS_INVALID_NUMBER;
-    
+
   base = config->base;
-  twi[channel].base = base;    
+  twi[channel].base = base;
 
   result = rtems_semaphore_create(rtems_build_name('t','w','i','s'),
                                   0,
@@ -77,7 +77,7 @@ rtems_status_code bfin_twi_init(int channel, bfin_twi_config_t *config) {
       TWI_CONTROL_TWI_ENA;
   BFIN_REG16(base, TWI_CLKDIV_OFFSET) = config->fast ?
                                         ((8 << TWI_CLKDIV_CLKHI_SHIFT) |
-                                         (17 << TWI_CLKDIV_CLKLOW_SHIFT)) : 
+                                         (17 << TWI_CLKDIV_CLKLOW_SHIFT)) :
                                         ((33 << TWI_CLKDIV_CLKHI_SHIFT) |
                                          (67 << TWI_CLKDIV_CLKLOW_SHIFT));
   BFIN_REG16(base, TWI_SLAVE_CTL_OFFSET) = 0;

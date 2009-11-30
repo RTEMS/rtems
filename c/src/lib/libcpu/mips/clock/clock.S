@@ -1,4 +1,4 @@
-/*  clock.s 
+/*  clock.s
  *
  *  This file contains the assembly code for the IDT 4650 clock driver.
  *

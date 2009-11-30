@@ -1,6 +1,6 @@
-/* 
+/*
  *  This file contains the maximum number of vectors.  This can not
- *  be determined without knowing the RTEMS CPU model. 
+ *  be determined without knowing the RTEMS CPU model.
  *
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,5 +1,5 @@
 /*
- *  RM5231 Interrupt Vectoring 
+ *  RM5231 Interrupt Vectoring
  *
  *  vectorisrs.c,v 1.6 2004/06/23 18:16:36
  */

@@ -679,8 +679,8 @@ typedef struct m83xxUSB_DRRegisters_ {
 } m83xxUSB_DRRegisters_t;
 
   /*
-   * this enumeration defines the index 
-   * of a given rmon mib counter 
+   * this enumeration defines the index
+   * of a given rmon mib counter
    * in the tsec_rmon_mib array
    */
 typedef enum {
@@ -1114,7 +1114,7 @@ typedef struct m83xxRegisters_ {
   uint8_t                 reserved0_4000[0x4500-0x4000];
   m83xxDUARTRegisters_t   duart[2];
   uint8_t                 reserved0_4700[0x5000-0x4700];
-  m83xxLBCRegisters_t     lbc;  
+  m83xxLBCRegisters_t     lbc;
   uint8_t                 reserved0_5100[0x7000-0x5100];
   m83xxSPIRegisters_t     spi;
   uint8_t                 reserved0_7100[0x8000-0x7100];
@@ -1228,9 +1228,9 @@ extern m83xxRegisters_t mpc83xx;
 #define RCWLR_DDRCM_1_1  (0 << (31- 1))    /* 1:1 */
 #define RCWLR_DDRCM_2_1  (1 << (31- 1))    /* 2:1 */
                                           /* System PLL mult. factor */
-#define RCWLR_SPMF(n) (((n)&0xf)<<(31- 7)) 
+#define RCWLR_SPMF(n) (((n)&0xf)<<(31- 7))
                                           /* Core PLL mult. factor   */
-#define RCWLR_COREPLL(n) (((n)&0xff)<<(31-15)) 
+#define RCWLR_COREPLL(n) (((n)&0xff)<<(31-15))
 
                                            /* PCI host mode          */
 #define RCWHR_PCI_AGENT  (0 << (31- 0))    /* agent mode             */
@@ -1298,38 +1298,38 @@ typedef struct PQ_BufferDescriptor_ {
 /*
  * Bits in receive buffer descriptor status word
  */
-#define M83xx_BD_EMPTY           (1<<15) 
-#define M83xx_BD_RO1             (1<<14) 
-#define M83xx_BD_WRAP            (1<<13) 
-#define M83xx_BD_INTERRUPT       (1<<12) 
-#define M83xx_BD_LAST            (1<<11) 
-#define M83xx_BD_CONTROL_CHAR    (1<<11) 
-#define M83xx_BD_FIRST_IN_FRAME  (1<<10) 
-#define M83xx_BD_MISS            (1<<8)  
-#define M83xx_BD_BROADCAST       (1<<7)  
-#define M83xx_BD_MULTICAST       (1<<6)  
-#define M83xx_BD_LONG            (1<<5)  
-#define M83xx_BD_NONALIGNED      (1<<4)  
-#define M83xx_BD_SHORT           (1<<3)  
-#define M83xx_BD_CRC_ERROR       (1<<2)  
-#define M83xx_BD_OVERRUN         (1<<1)  
-#define M83xx_BD_COLLISION       (1<<0)  
+#define M83xx_BD_EMPTY           (1<<15)
+#define M83xx_BD_RO1             (1<<14)
+#define M83xx_BD_WRAP            (1<<13)
+#define M83xx_BD_INTERRUPT       (1<<12)
+#define M83xx_BD_LAST            (1<<11)
+#define M83xx_BD_CONTROL_CHAR    (1<<11)
+#define M83xx_BD_FIRST_IN_FRAME  (1<<10)
+#define M83xx_BD_MISS            (1<<8)
+#define M83xx_BD_BROADCAST       (1<<7)
+#define M83xx_BD_MULTICAST       (1<<6)
+#define M83xx_BD_LONG            (1<<5)
+#define M83xx_BD_NONALIGNED      (1<<4)
+#define M83xx_BD_SHORT           (1<<3)
+#define M83xx_BD_CRC_ERROR       (1<<2)
+#define M83xx_BD_OVERRUN         (1<<1)
+#define M83xx_BD_COLLISION       (1<<0)
 
 /*
  * Bits in transmit buffer descriptor status word
  * Many bits have the same meaning as those in receiver buffer descriptors.
  */
-#define M83xx_BD_READY           (1<<15) 
-#define M83xx_BD_PAD_CRC         (1<<14) 
+#define M83xx_BD_READY           (1<<15)
+#define M83xx_BD_PAD_CRC         (1<<14)
 /* WRAP/Interrupt as in Rx BDs */
-#define M83xx_BD_TX_CRC          (1<<10) 
-#define M83xx_BD_DEFER           (1<<9)  
-#define M83xx_BD_TO1             (1<<8)  
-#define M83xx_BD_HFE_            (1<<7)  
-#define M83xx_BD_LATE_COLLISION  (1<<7)  
-#define M83xx_BD_RETRY_LIMIT     (1<<6)  
-#define M83xx_BD_RETRY_COUNT(x)  (((x)&0x3C)>>2) 
-#define M83xx_BD_UNDERRUN        (1<<1)  
-#define M83xx_BD_TXTRUNC         (1<<0)  
+#define M83xx_BD_TX_CRC          (1<<10)
+#define M83xx_BD_DEFER           (1<<9)
+#define M83xx_BD_TO1             (1<<8)
+#define M83xx_BD_HFE_            (1<<7)
+#define M83xx_BD_LATE_COLLISION  (1<<7)
+#define M83xx_BD_RETRY_LIMIT     (1<<6)
+#define M83xx_BD_RETRY_COUNT(x)  (((x)&0x3C)>>2)
+#define M83xx_BD_UNDERRUN        (1<<1)
+#define M83xx_BD_TXTRUNC         (1<<0)
 
 #endif /* _MPC83XX_MPC83XX_H */

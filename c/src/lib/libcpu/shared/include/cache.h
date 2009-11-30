@@ -1,6 +1,6 @@
 /*
  *  libcpu Cache Manager Support
- *  
+ *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -13,7 +13,7 @@
  *  They provide the processor specific actions to take for
  *  implementing most of the RTEMS Cache Manager directives,
  *  and should only ever be called by these directives.
- *  
+ *
  *  The API for the RTEMS Cache Manager can be found in
  *  c/src/exec/rtems/include/rtems/rtems/cache.h
  *

@@ -22,11 +22,11 @@
  * @defgroup mpc55xx BSP for MPC55xx boards
  */
 
-/** 
+/**
  * @defgroup mpc55xx_config Configuration files
- * 
+ *
  * @ingroup mpc55xx
- * 
+ *
  * Makefiles, configure scripts etc.
  */
 

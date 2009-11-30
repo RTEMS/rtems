@@ -1,4 +1,4 @@
-/* 
+/*
  * Address Probing for M68k/ColdFire
  */
 

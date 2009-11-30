@@ -77,13 +77,13 @@ void bsp_ide_cmdline_init(void)
   bool ide1 = IDE1_DEFAULT;
   bool ide2 = IDE2_DEFAULT;
   const char* ide;
-  
+
   /*
    * Can have:
    *  --ide=0,1
    */
   ide = bsp_cmdline_arg ("--ide=");
-  
+
   if (ide)
   {
     int i;
@@ -91,9 +91,9 @@ void bsp_ide_cmdline_init(void)
      * If a command line option exists remove the defaults.
      */
     ide1 = ide2 = false;
-    
+
     ide += sizeof ("--ide=") - 1;
-    
+
     for (i = 0; i < 3; i++)
     {
       switch (ide[i])
@@ -133,7 +133,7 @@ void bsp_ide_cmdline_init(void)
    * type information.
    */
   ide = bsp_cmdline_arg ("--ide-show");
-  
+
   if (ide)
     pc386_ide_show = true;
 }

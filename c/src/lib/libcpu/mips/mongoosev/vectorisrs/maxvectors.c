@@ -1,6 +1,6 @@
-/* 
+/*
  *  This file contains the maximum number of vectors.  This can not
- *  be determined without knowing the RTEMS CPU model. 
+ *  be determined without knowing the RTEMS CPU model.
  *
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
@@ -17,9 +17,9 @@
  */
 
 /*
- *  The Synova Mongoose-V attached one of the eight interrupt bits 
+ *  The Synova Mongoose-V attached one of the eight interrupt bits
  *  to a Peripheral Function Interrupt Cause Register on-CPU.
- *  This results in: 2 software interrupts, 5 interrupts 
+ *  This results in: 2 software interrupts, 5 interrupts
  *  through the IP bits, and 32 more from the PFICR.  Some of
  *  these are reserved but for simplicity in processing, we
  *  reserve slots for those bits anyway.

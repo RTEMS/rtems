@@ -4,7 +4,7 @@
  *  Suite.  Each measured time period is demarcated by calls to
  *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
  *  the number of microseconds since benchmark_timer_initialize() exitted.
- *  
+ *
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
  *             written by Alain Schaefer <alain.schaefer@easc.ch>
  *                    and Antonio Giovanini <antonio@atos.com.br>
@@ -15,7 +15,7 @@
  *
  *  $Id$
  */
- 
+
 
 #include <rtems.h>
 #include <bsp.h>
@@ -26,7 +26,7 @@ bool benchmark_timer_find_average_overhead;
 
 /*
  * benchmark_timer_initialize
- * 
+ *
  * Blackfin processor has a counter for clock cycles.
  */
 void benchmark_timer_initialize( void )
@@ -40,7 +40,7 @@ void benchmark_timer_initialize( void )
   asm ("R2 = SYSCFG;");
   asm ("BITSET(R2,1);");
   asm ("SYSCFG = R2");
- 
+
 }
 
 /*
@@ -64,7 +64,7 @@ int benchmark_timer_read( void )
   uint32_t          total;
   register uint32_t cycles asm ("R2");
 
-  /* stop counter */ 
+  /* stop counter */
   asm("R2 = SYSCFG;");
   asm("BITCLR(R2,1);");
   asm("SYSCFG = R2;");
@@ -74,7 +74,7 @@ int benchmark_timer_read( void )
   clicks = cycles; /* Clock cycles */
 
   /* converting to microseconds */
-  total = clicks / (CCLK/1000000); 
+  total = clicks / (CCLK/1000000);
 
   if ( benchmark_timer_find_average_overhead == 1 )
     return total;          /* in XXX microsecond units */

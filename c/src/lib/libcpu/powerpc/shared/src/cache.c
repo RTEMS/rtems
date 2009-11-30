@@ -23,10 +23,10 @@
  * They provide the basic implementation for the rtems_* cache
  * management routines. If a given function has no meaning for the CPU,
  * it does nothing by default.
- * 
+ *
  * FIXME: Some functions simply have not been implemented.
  */
- 
+
 #if defined(ppc603) || defined(ppc603e) || defined(mpc8260) /* And possibly others */
 
 /* Helpful macros */

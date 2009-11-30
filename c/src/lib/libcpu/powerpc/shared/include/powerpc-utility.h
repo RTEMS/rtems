@@ -14,7 +14,7 @@
  * D-82178 Puchheim
  * Germany
  * rtems@embedded-brains.de
- * 
+ *
  * access function for Device Control Registers inspired by "ppc405common.h"
  * from Michael Hamel ADInstruments May 2008
  *
@@ -213,7 +213,7 @@ static inline void ppc_synchronize_instructions(void)
 
 /**
  * @brief Enables external exceptions.
- * 
+ *
  * You can use this function to enable the external exceptions and restore the
  * machine state with ppc_external_exceptions_disable() later.
  */
@@ -236,7 +236,7 @@ static inline uint32_t ppc_external_exceptions_enable(void)
 
 /**
  * @brief Restores machine state.
- * 
+ *
  * @see ppc_external_exceptions_enable()
  */
 static inline void ppc_external_exceptions_disable(uint32_t msr)
@@ -345,7 +345,7 @@ static inline  void PPC_Set_timebase_register (uint64_t tbr)
   tbr_high = (uint32_t) (tbr >> 32);
   asm volatile( "mtspr 284, %0" : : "r" (tbr_low));
   asm volatile( "mtspr 285, %0" : : "r" (tbr_high));
-  
+
 }
 
 static inline uint32_t ppc_decrementer_register(void)
@@ -606,11 +606,11 @@ void ppc_code_copy(void *dest, const void *src, size_t n);
 	LWI 	\reg2, \mask
 	and	\reg1, \reg1, \reg2
 	cmplw	\reg1, \reg2
-.endm	
-	
+.endm
+
 .macro 	SETBITS reg1, reg2, mask
 	LWI 	\reg2, \mask
-	or	\reg1, \reg1, \reg2 
+	or	\reg1, \reg1, \reg2
 .endm
 
 .macro 	CLRBITS reg1, reg2, mask

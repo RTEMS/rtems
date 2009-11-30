@@ -1,6 +1,6 @@
 /*  ictrl.h
  *
- *  This file contains definitions and declarations for the 
+ *  This file contains definitions and declarations for the
  *  PowerPC 403 CPU built-in external interrupt controller
  *
  *
@@ -35,9 +35,9 @@
 extern "C" {
 #endif
 
-/* 
+/*
  *  definitions for second level IRQ handler support
- *  External Interrupts via EXTERNAL/EISR 
+ *  External Interrupts via EXTERNAL/EISR
  */
 #define PPC_IRQ_EXT_BASE        (PPC_IRQ_LAST+1)
 
@@ -74,18 +74,18 @@ extern "C" {
 
 /*
  *
- * install a user vector for one of the external interrupt sources 
+ * install a user vector for one of the external interrupt sources
  *
- */ 
+ */
 rtems_status_code
 ictrl_set_vector(rtems_isr_entry   new_handler,
 		 uint32_t          vector,
 		 rtems_isr_entry   *old_handler
 );
 /*
- * activate the interrupt controller 
+ * activate the interrupt controller
  */
-rtems_status_code 
+rtems_status_code
 ictrl_init(void);
 
 #ifdef __cplusplus

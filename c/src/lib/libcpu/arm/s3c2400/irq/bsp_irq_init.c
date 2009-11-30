@@ -18,7 +18,7 @@
 
 extern void default_int_handler();
 
-void BSP_rtems_irq_mngt_init() 
+void BSP_rtems_irq_mngt_init()
 {
     long *vectorTable;
     int i;

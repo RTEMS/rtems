@@ -18,7 +18,7 @@
  *      IMD makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Modifications for PPC405GP by Dennis Ehlin 
+ *  Modifications for PPC405GP by Dennis Ehlin
  *
  */
 
@@ -31,101 +31,101 @@
 /*
  *  ISR vector table to dispatch external interrupts
  */
- 
+
 rtems_isr_entry ictrl_vector_table[PPC_IRQ_EXT_MAX];
 
-/* 
+/*
  *
  *  some utilities to access the EXI* registers
  *
  */
 
-/* 
- *  clear bits in EXISR that have a bit set in mask 
+/*
+ *  clear bits in EXISR that have a bit set in mask
  */
 #if defined(ppc405)
-RTEMS_INLINE_ROUTINE void 
-clr_exisr(uint32_t   mask) 
+RTEMS_INLINE_ROUTINE void
+clr_exisr(uint32_t   mask)
 {
     asm volatile ("mtdcr 0xC0,%0"::"r" (mask));/*EXISR*/
-} 
+}
 
-/* 
- *  get value of EXISR 
+/*
+ *  get value of EXISR
  */
-RTEMS_INLINE_ROUTINE uint32_t   
-get_exisr(void) 
+RTEMS_INLINE_ROUTINE uint32_t
+get_exisr(void)
 {
     uint32_t   val;
 
     asm volatile ("mfdcr %0,0xC0":"=r" (val));/*EXISR*/
-    return val; 
-} 
+    return val;
+}
 
-/* 
- *  get value of EXIER 
+/*
+ *  get value of EXIER
  */
-RTEMS_INLINE_ROUTINE uint32_t   
-get_exier(void) 
+RTEMS_INLINE_ROUTINE uint32_t
+get_exier(void)
 {
     uint32_t   val;
     asm volatile ("mfdcr %0,0xC2":"=r" (val));/*EXIER*/
-    return val; 
-} 
+    return val;
+}
 
-/* 
- *  set value of EXIER 
+/*
+ *  set value of EXIER
  */
-RTEMS_INLINE_ROUTINE void 
-set_exier(uint32_t   val) 
+RTEMS_INLINE_ROUTINE void
+set_exier(uint32_t   val)
 {
     asm volatile ("mtdcr 0xC2,%0"::"r" (val));/*EXIER*/
-} 
+}
 
 #else /* not ppc405 */
 
-RTEMS_INLINE_ROUTINE void 
-clr_exisr(uint32_t   mask) 
+RTEMS_INLINE_ROUTINE void
+clr_exisr(uint32_t   mask)
 {
     asm volatile ("mtdcr 0x40,%0"::"r" (mask));/*EXISR*/
-} 
+}
 
-/* 
- *  get value of EXISR 
+/*
+ *  get value of EXISR
  */
-RTEMS_INLINE_ROUTINE uint32_t   
-get_exisr(void) 
+RTEMS_INLINE_ROUTINE uint32_t
+get_exisr(void)
 {
     uint32_t   val;
 
     asm volatile ("mfdcr %0,0x40":"=r" (val));/*EXISR*/
-    return val; 
-} 
+    return val;
+}
 
-/* 
- *  get value of EXIER 
+/*
+ *  get value of EXIER
  */
-RTEMS_INLINE_ROUTINE uint32_t   
-get_exier(void) 
+RTEMS_INLINE_ROUTINE uint32_t
+get_exier(void)
 {
     uint32_t   val;
     asm volatile ("mfdcr %0,0x42":"=r" (val));/*EXIER*/
-    return val; 
-} 
+    return val;
+}
 
-/* 
- *  set value of EXIER 
+/*
+ *  set value of EXIER
  */
-RTEMS_INLINE_ROUTINE void 
-set_exier(uint32_t   val) 
+RTEMS_INLINE_ROUTINE void
+set_exier(uint32_t   val)
 {
     asm volatile ("mtdcr 0x42,%0"::"r" (val));/*EXIER*/
-} 
+}
 #endif /* ppc405 */
-/* 
+/*
  *  enable an external interrupt, make this interrupt consistent
  */
-RTEMS_INLINE_ROUTINE void 
+RTEMS_INLINE_ROUTINE void
 enable_ext_irq( uint32_t   mask)
 {
   rtems_interrupt_level level;
@@ -135,10 +135,10 @@ enable_ext_irq( uint32_t   mask)
   rtems_interrupt_enable(level);
 }
 
-/* 
+/*
  *  disable an external interrupt, make this interrupt consistent
  */
-RTEMS_INLINE_ROUTINE void 
+RTEMS_INLINE_ROUTINE void
 disable_ext_irq( uint32_t   mask)
 {
   rtems_interrupt_level level;
@@ -150,19 +150,19 @@ disable_ext_irq( uint32_t   mask)
 
 /*
  *
- *  this function is called, when a external interrupt is present and 
+ *  this function is called, when a external interrupt is present and
  *  enabled but there is no handler installed. It will clear
  *  the corresponding enable bits and call the spurious handler
  *  present in the CPU Configuration Table, if any.
  *
  */
-void 
-ictrl_spurious_handler(uint32_t   spurious_mask, 
+void
+ictrl_spurious_handler(uint32_t   spurious_mask,
 		       CPU_Interrupt_frame *cpu_frame)
 {
   int v;
   extern void (*bsp_spurious_handler)(uint32_t   vector, CPU_Interrupt_frame *);
-  
+
   for (v=0; v < PPC_IRQ_EXT_MAX; v++) {
     if (VEC_TO_EXMSK(v) & spurious_mask) {
       clr_exisr(VEC_TO_EXMSK(v));
@@ -182,7 +182,7 @@ ictrl_spurious_handler(uint32_t   spurious_mask,
 /*
  *  ISR Handler: this is called from the primary exception dispatcher
  */
- 
+
 void
 ictrl_isr(rtems_vector_number vector,CPU_Interrupt_frame *cpu_frame)
 {
@@ -221,9 +221,9 @@ ictrl_isr(rtems_vector_number vector,CPU_Interrupt_frame *cpu_frame)
 
 /*
  *
- * install a user vector for one of the external interrupt sources 
+ * install a user vector for one of the external interrupt sources
  *
- */ 
+ */
 rtems_status_code
 ictrl_set_vector(rtems_isr_entry   new_handler,
 		 uint32_t          vector,
@@ -261,7 +261,7 @@ ictrl_set_vector(rtems_isr_entry   new_handler,
 
 /*
  * Called via atexit()
- * deactivate the interrupt controller 
+ * deactivate the interrupt controller
  */
 
 void
@@ -270,14 +270,14 @@ ictrl_exit(void)
   /* mark them all unused */
   disable_ext_irq(~0);
   clr_exisr(~0);
-  
+
 }
 
 /*
- * activate the interrupt controller 
+ * activate the interrupt controller
  */
 
-rtems_status_code 
+rtems_status_code
 ictrl_init(void)
 {
   proc_ptr dummy;
@@ -285,7 +285,7 @@ ictrl_init(void)
   /* mark them all unused */
   disable_ext_irq(~0);
   clr_exisr(~0);
-  
+
   /* install the external interrupt handler */
   _CPU_ISR_install_vector(PPC_IRQ_EXTERNAL,
 			  ictrl_isr,

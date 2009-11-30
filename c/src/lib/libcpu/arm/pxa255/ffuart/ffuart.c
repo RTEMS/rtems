@@ -31,8 +31,8 @@ static void    ffuart_write_polled(int minor, char c);
 static int     ffuart_set_attributes(int minor, const struct termios *t);
 
 /* Pointers to functions for handling the UART. */
-console_fns ffuart_fns = 
-{ 
+console_fns ffuart_fns =
+{
     libchip_serial_default_probe,
     ffuart_first_open,
     ffuart_last_close,
@@ -45,23 +45,23 @@ console_fns ffuart_fns =
 };
 
 
-/* 
+/*
  * This is called the first time each device is opened. Since
- * the driver is polled, we don't have to do anything. If the driver 
- * were interrupt driven, we'd enable interrupts here. 
+ * the driver is polled, we don't have to do anything. If the driver
+ * were interrupt driven, we'd enable interrupts here.
  */
-static int ffuart_first_open(int major, int minor, void *arg) 
+static int ffuart_first_open(int major, int minor, void *arg)
 {
     return 0;
 }
 
 
-/* 
+/*
  * This is called the last time each device is closed.  Since
- * the driver is polled, we don't have to do anything. If the driver 
- * were interrupt driven, we'd disable interrupts here. 
+ * the driver is polled, we don't have to do anything. If the driver
+ * were interrupt driven, we'd disable interrupts here.
  */
-static int ffuart_last_close(int major, int minor, void *arg) 
+static int ffuart_last_close(int major, int minor, void *arg)
 {
     return 0;
 }
@@ -73,7 +73,7 @@ static int ffuart_last_close(int major, int minor, void *arg)
  * return -1 if there's no data, otherwise return
  * the character in lowest 8 bits of returned int.
  */
-static int ffuart_read(int minor) 
+static int ffuart_read(int minor)
 {
     char c;
     console_tbl *console_entry;
@@ -90,15 +90,15 @@ static int ffuart_read(int minor)
     if (!(ffuart->lsr & FULL_RECEIVE)) {
         return -1;
     }
-    
-    c  = ffuart->rbr & 0xff; 
-    
+
+    c  = ffuart->rbr & 0xff;
+
     return c;
 }
 
 
-/* 
- * Write buffer to UART 
+/*
+ * Write buffer to UART
  *
  * return 1 on success, -1 on error
  */
@@ -124,7 +124,7 @@ static int ffuart_write(int minor, const char *buf, int len)
                 break;
             }
         }
-        
+
         c = (char) buf[i];
 #if ON_SKYEYE != 1
 	if(c=='\n'){
@@ -140,14 +140,14 @@ static int ffuart_write(int minor, const char *buf, int len)
 	}
 #endif
         ffuart->rbr = c;
-        
+
         /* the TXRDY flag does not seem to update right away (is this true?) */
         /* so we wait a bit before continuing */
         for (x = 0; x < 100; x++) {
             dbg_dly++; /* using a global so this doesn't get optimized out */
         }
     }
-    
+
     return 1;
 }
 
@@ -155,7 +155,7 @@ static int ffuart_write(int minor, const char *buf, int len)
 static void ffuart_init(int minor)
 {
 
- 
+
     console_tbl *console_entry;
     ffuart_reg_t  *ffuart;
     unsigned int divisor;
@@ -163,11 +163,11 @@ static void ffuart_init(int minor)
     console_entry = BSP_get_uart_from_minor(minor);
 
 
-    
+
     if (console_entry == NULL) {
         return;
     }
-   
+
     ffuart = (ffuart_reg_t *)console_entry->ulCtrlPort1;
     ffuart->lcr |= DLAB;
     /*Set the Bound*/
@@ -191,7 +191,7 @@ static void ffuart_write_polled(int minor, char c)
 }
 
 /* This is for setting baud rate, bits, etc. */
-static int ffuart_set_attributes(int minor, const struct termios *t) 
+static int ffuart_set_attributes(int minor, const struct termios *t)
 {
     return 0;
 }
@@ -202,7 +202,7 @@ static int ffuart_set_attributes(int minor, const struct termios *t)
  * functions use them instead.
  */
 /***********************************************************************/
-/* 
+/*
  * Read from UART. This is used in the exit code, and can't
  * rely on interrupts.
  */
@@ -213,7 +213,7 @@ int ffuart_poll_read(int minor)
 
 
 /*
- * Write a character to the console. This is used by printk() and 
+ * Write a character to the console. This is used by printk() and
  * maybe other low level functions. It should not use interrupts or any
  * RTEMS system calls. It needs to be very simple
  */

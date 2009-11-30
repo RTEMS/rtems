@@ -25,7 +25,7 @@
 /*
  * FIXME: This is not used anywhere.
  */
-#if (PPC_D_CACHE != 0) 
+#if (PPC_D_CACHE != 0)
 #define _CPU_Data_Cache_Block_Invalidate( _address ) \
   do { register void *__address = (_address); \
        register uint32_t   _zero = 0; \

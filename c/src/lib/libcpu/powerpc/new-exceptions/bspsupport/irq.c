@@ -40,7 +40,7 @@ SPR_RW(PPC405_TSR)
 /* legacy mode for bookE DEC exception;
  * to avoid the double layer of function calls
  * (dec_handler_bookE -> C_dispatch_irq_handler -> user handler)
- * it is preferrable for the user to hook the DEC 
+ * it is preferrable for the user to hook the DEC
  * exception directly.
  * However, the legacy mode works with less modifications
  * of user code.
@@ -52,11 +52,11 @@ int C_dispatch_dec_handler_bookE (BSP_Exception_frame *frame, unsigned int excNu
 	 * re-enables MSR_EE.
 	 * Note that PPC405 uses a different SPR# for TSR
 	 */
-	if ( ppc_cpu_is_bookE()==PPC_BOOKE_405) 
+	if ( ppc_cpu_is_bookE()==PPC_BOOKE_405)
 		_write_PPC405_TSR( BOOKE_TSR_DIS );
 	else
 		_write_BOOKE_TSR( BOOKE_TSR_DIS );
-	return C_dispatch_irq_handler(frame, ASM_DEC_VECTOR);	
+	return C_dispatch_irq_handler(frame, ASM_DEC_VECTOR);
 }
 
 /*
@@ -348,7 +348,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 
 	for ( i = config->irqBase; i < config->irqBase + config->irqNb; i++ ) {
 		for( vchain = &rtems_hdl_tbl[i];
-		     ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+		     ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
 		     vchain = (rtems_irq_connect_data*)vchain->next_handler )
 		{
 			if (vchain->on)
@@ -361,9 +361,9 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 /* Do NOT disable; there might be boards with cascaded
  * interrupt controllers where the BSP (incorrectly) does
  * not ignore the cascaded interrupts in BSP_disable_irq_at_pic()!
- * Instead, we rely on BSP_setup_the_pic() for a good 
- * initial configuration. 
- * 
+ * Instead, we rely on BSP_setup_the_pic() for a good
+ * initial configuration.
+ *
 			BSP_disable_irq_at_pic(i);
  */
 		}
@@ -374,7 +374,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 	{
 			ppc_exc_set_handler(ASM_EXT_VECTOR, C_dispatch_irq_handler);
 
-			if ( ppc_cpu_is_bookE() ) { 
+			if ( ppc_cpu_is_bookE() ) {
 				/* bookE decrementer interrupt needs to be cleared BEFORE
 				 * dispatching the user ISR (because the user ISR is called
 				 * with EE enabled)

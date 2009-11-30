@@ -1,6 +1,6 @@
 /*
  *  This file implements simple console IO via JTAG UART.
- * 
+ *
  *  Based on no_cpu/console.c
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -25,7 +25,7 @@
 /*  is_character_ready
  *
  *  If a character is available, this routine reads it and stores
- *  it in 
+ *  it in
  *  reads the character and stores
  *
  *  Input parameters: NONE
@@ -92,7 +92,7 @@ int console_inbyte_nonblocking(
  */
 
 void console_outbyte_polled(
-  int  port, 
+  int  port,
   char ch
 )
 {

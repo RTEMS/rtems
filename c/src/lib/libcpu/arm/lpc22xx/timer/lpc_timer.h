@@ -11,16 +11,16 @@
 #define TCR_ENABLE_BIT  0
 #define TCR_RESET_BIT   1
 
-// The channel name which is used in matching, in fact they represent 
-// corresponding Match Register 
+// The channel name which is used in matching, in fact they represent
+// corresponding Match Register
 #define CH_MAXNUM       4
 #define CH0             0
 #define CH1             1
 #define CH2             2
 #define CH3             3
 
-// The channel name which is used in capturing, in fact they represent 
-// corresponding Capture Register 
+// The channel name which is used in capturing, in fact they represent
+// corresponding Capture Register
 #define CPCH_MAXNUM     4
 #define CPCH0           0
 #define CPCH1           1

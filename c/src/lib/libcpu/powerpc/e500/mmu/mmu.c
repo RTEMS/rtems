@@ -15,23 +15,23 @@
  *        (the 7 LSBs, that is) can be mapped with TLB0 since there
  *        are only two entries per 'way'.
  *
- *        Since this is a real-time OS we want to stay away from 
+ *        Since this is a real-time OS we want to stay away from
  *        software TLB replacement.
  */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -40,18 +40,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -60,9 +60,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 /* 8450 MSR definitions; note that there are *substantial* differences
  * compared to classic powerpc; in particular, IS/DS are *different*
@@ -230,8 +230,8 @@ int i;
 		return;
 	}
 	for ( i=0; i<16; i++ ) {
-		if ( !rtems_e500_tlb_va_cache[i].att.v ) 
-			continue;	
+		if ( !rtems_e500_tlb_va_cache[i].att.v )
+			continue;
 		myprintf(f,"#%2i: TID 0x%03x, TS %i, ea 0x%08x .. 0x%08x\n",
 			i,
 			rtems_e500_tlb_va_cache[i].va.va_tid,
@@ -259,7 +259,7 @@ int idx = key & ~E500_SELTLB_1;
 	}
 }
 
-/* 
+/*
  * Read a TLB entry from the hardware; if it is a TLB1 entry
  * then the current settings are stored in the
  * rtems_e500_tlb_va_cache[] structure.
@@ -500,7 +500,7 @@ rtems_interrupt_level lvl;
 	/* OK to proceed */
 	mas1 |= MAS1_IPROT | MAS1_TID(tid);
 
-	if ( sz >= 0 ) 
+	if ( sz >= 0 )
 		mas1 |= MAS1_V | MAS1_TSIZE(sz);
 
 	mas2 = MAS2_EPN( ea>>12 ) | E500_TLB_ATTR_WIMGE(attr);
@@ -668,11 +668,11 @@ rtems_interrupt_level lvl;
 	if ( (key & E500_SELTLB_1) ) {
 		if ( (key & ~E500_SELTLB_1) > 15 ) {
 			myprintf(stderr,"Invalid TLB index; TLB1 index must be < 16\n");
-			return -1;	
+			return -1;
 		}
 	} else if ( key > 255 ) {
 			myprintf(stderr,"Invalid TLB index; TLB0 index must be < 256\n");
-			return -1;	
+			return -1;
 	}
 
 	/* Must not invalidate page 0 which holds vectors, text etc...  */

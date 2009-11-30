@@ -1,9 +1,9 @@
 /*
- *  Au1x00 Interrupt Vectoring 
+ *  Au1x00 Interrupt Vectoring
  *
  * Copyright (c) 2005 by Cogent Computer Systems
  * Written by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -44,7 +44,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
   if ( cause & 0x80 ) {
       unsigned long zero = 0;
       /*
-       * I don't see a good way to disable the compare 
+       * I don't see a good way to disable the compare
        * interrupt, so let's just ignore it.
        */
       asm volatile ("mtc0 %0, $11\n" :: "r" (zero));
@@ -56,23 +56,23 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
   if ( cause & 0x40 ) {
       CALL_ISR( AU1X00_IRQ_PERF, frame );
   }
-  
+
   /* Interrupt controller 0 */
   if ( cause & 0x0c ) {
       call_vectored_isr(frame, cause, (void *)AU1X00_IC0_ADDR);
   }
-  
+
   /* Interrupt controller 1 */
   if ( cause & 0x30 ) {
       call_vectored_isr(frame, cause, (void *)AU1X00_IC1_ADDR);
   }
-  
+
   /* SW[0] */
   if ( cause & 0x01 )
       CALL_ISR( AU1X00_IRQ_SW0, frame );
-  
+
   /* SW[1] */
-  if ( cause & 0x02 ) 
+  if ( cause & 0x02 )
       CALL_ISR( AU1X00_IRQ_SW1, frame );
 }
 
@@ -90,8 +90,8 @@ void mips_default_isr( int vector )
 }
 
 static void call_vectored_isr(
-    CPU_Interrupt_frame *frame, 
-    uint32_t cause, 
+    CPU_Interrupt_frame *frame,
+    uint32_t cause,
     void *ctrlr
     )
 {

@@ -1,7 +1,7 @@
 /* placeholder (just a shell) */
 
 /*  SPI driver for Blackfin
- * 
+ *
  *  Copyright (c) 2008 Kallisti Labs, Los Gatos, CA, USA
  *             written by Allan Hessenflow <allanh@kallisti.com>
  *
@@ -11,7 +11,7 @@
  *
  *  $Id$
  */
- 
+
 
 #include <stdlib.h>
 #include <rtems.h>

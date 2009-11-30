@@ -73,7 +73,7 @@ void benchmark_timer_initialize(void)
 /*
   m860.tbscr |= M860_TBSCR_TBIRQ(4) | M860_TBSCR_TBE;
 */
-				
+
 
   Timer_starting = get_itimer();
 }

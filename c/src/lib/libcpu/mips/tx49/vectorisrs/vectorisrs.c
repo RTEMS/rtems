@@ -1,5 +1,5 @@
 /*
- *  TX4925 Interrupt Vectoring 
+ *  TX4925 Interrupt Vectoring
  *
  *  vectorisrs.c,v 1.6 2004/06/23 18:16:36
  */
@@ -35,7 +35,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
     unsigned int v = (cause >> (CAUSE_IPSHIFT + 3)) & 0x1f;
     CALL_ISR( MIPS_INTERRUPT_BASE + v, frame );
   }
-   
+
   if ( pending & 0x01 )       /* IP[0] */
     CALL_ISR( TX4925_IRQ_SOFTWARE_1, frame );
 
@@ -53,9 +53,9 @@ void mips_default_isr( int vector )
 
   printk( "Unhandled isr exception: vector 0x%02x, cause 0x%08X, sr 0x%08X\n",
       vector, cause, sr );
-  
+
   while(1);	/* Lock it up */
-  
+
   rtems_fatal_error_occurred(1);
 }
 

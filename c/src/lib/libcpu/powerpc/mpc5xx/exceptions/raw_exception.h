@@ -62,7 +62,7 @@
 #ifndef ASM
 
 /*
- * Type definition for raw exceptions. 
+ * Type definition for raw exceptions.
  */
 
 typedef unsigned char  rtems_vector;
@@ -73,7 +73,7 @@ typedef struct {
   rtems_vector			vector;
   rtems_exception_handler_t*	raw_hdl;
 }rtems_raw_except_hdl;
-  
+
 typedef void (*rtems_raw_except_enable)		(const struct __rtems_raw_except_connect_data__*);
 typedef void (*rtems_raw_except_disable)	(const struct __rtems_raw_except_connect_data__*);
 typedef int  (*rtems_raw_except_is_enabled)	(const struct __rtems_raw_except_connect_data__*);
@@ -93,16 +93,16 @@ typedef struct __rtems_raw_except_connect_data__{
    * libcpu library, this library should have no knowledge of
    * board specific hardware to manage exceptions and thus the
    * "on" routine must enable the except at processor level only.
-   * 
+   *
    */
-    rtems_raw_except_enable	on;	
+    rtems_raw_except_enable	on;
   /*
    * function for disabling raw exceptions. In order to be consistent
    * with the fact that the raw connexion can defined in the
    * libcpu library, this library should have no knowledge of
    * board specific hardware to manage exceptions and thus the
    * "on" routine must disable the except both at device and PIC level.
-   * 
+   *
    */
   rtems_raw_except_disable	off;
   /*

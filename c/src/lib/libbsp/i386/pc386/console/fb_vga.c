@@ -86,7 +86,7 @@ rtems_device_driver frame_buffer_initialize(
     printk("Error registering /dev/fb0 FBVGA framebuffer device!\n");
     rtems_fatal_error_occurred( status );
   }
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -102,13 +102,13 @@ rtems_device_driver frame_buffer_open(
   if (pthread_mutex_trylock(&mutex)== 0){
       /* restore previous state.  for VGA this means return to text mode.
        * leave out if graphics hardware has been initialized in
-       * frame_buffer_initialize() 
+       * frame_buffer_initialize()
        */
       ega_hwinit();
-      printk( "FBVGA open called.\n" );     
+      printk( "FBVGA open called.\n" );
       return RTEMS_SUCCESSFUL;
   }
-  
+
   return RTEMS_UNSATISFIED;
 }
 
@@ -145,7 +145,7 @@ rtems_device_driver frame_buffer_read(
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
   memcpy(rw_args->buffer, (const void *) (fb_fix.smem_start + rw_args->offset), rw_args->bytes_moved);
-  return RTEMS_SUCCESSFUL;    
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
@@ -160,7 +160,7 @@ rtems_device_driver frame_buffer_write(
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
   memcpy( (void *) (fb_fix.smem_start + rw_args->offset), rw_args->buffer, rw_args->bytes_moved);
-  return RTEMS_SUCCESSFUL;       
+  return RTEMS_SUCCESSFUL;
 }
 
 static int get_fix_screen_info( struct fb_fix_screeninfo *info )

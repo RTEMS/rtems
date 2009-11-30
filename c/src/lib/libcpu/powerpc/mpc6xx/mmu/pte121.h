@@ -2,19 +2,19 @@
 #define _LIBCPU_PTE121_H
 /* $Id$ */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 4/2002, 2003, 2004,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -23,18 +23,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -43,9 +43,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 /* Rudimentary page/hash table support for Powerpc
  *
@@ -56,7 +56,7 @@
  *
  * PURPOSE:
  *    1) allow write-protection of text/read-only data areas
- *    2) provide more effective-address space in case 
+ *    2) provide more effective-address space in case
  *       the BATs are not enough
  *    3) allow 'alias' mappings. Such aliases can only use
  *       the upper bits of the VSID since VSID & 0xf and the
@@ -67,7 +67,7 @@
  *       be big enough!.
  *    -  only one page table supported.
  *    -  no locking implemented. If multiple threads modify
- *       the page table, it is the user's responsibility to 
+ *       the page table, it is the user's responsibility to
  *       implement exclusive access.
  */
 
@@ -92,7 +92,7 @@ typedef struct PTERec_ {
  * RETURNS: a handle to the internal data structure
  *          used to manage the page table. NULL on
  *          error.
- *          
+ *
  * NOTES:   - 'base' must be aligned to the size
  *          - minimal ldSize is 16 (== 64k)
  *          - this routine maps the page table itself
@@ -100,7 +100,7 @@ typedef struct PTERec_ {
  *            the CPU from overwriting the page table,
  *            it can still be corrupted by PCI bus masters
  *            (like DMA engines, [VME] bridges etc.) and
- *            even by this CPU if either the MMU is off 
+ *            even by this CPU if either the MMU is off
  *            or if there is a DBAT mapping granting write
  *            access...
  */
@@ -118,7 +118,7 @@ triv121PgTblInit(unsigned long base, unsigned ldSize);
  *  ldSize = triv121PgTblLdMinSize(memsize);
  *  memsize -= (1<<ldSize);  / * reduce memory available to RTEMS * /
  *  pgTbl  = triv121PgTblInit(memsize,ldSize);
- * 
+ *
  */
 unsigned long
 triv121PgTblLdMinSize(unsigned long size);
@@ -167,7 +167,7 @@ triv121PgTblMap(
   unsigned protection      /* 'pp' access protection: Super      User
                             *
                             *   0                      r/w       none
-                            *   1                      r/w       ro   
+                            *   1                      r/w       ro
                             *   2                      r/w       r/w
                             *   3                      ro        ro
                             */
@@ -231,7 +231,7 @@ APte triv121DumpEa(unsigned long ea);
  */
 APte triv121FindPte(unsigned long vsid, unsigned long pi);
 
-/* 
+/*
  * Unmap an effective address
  *
  * RETURNS: pte that mapped the ea or NULL if no
@@ -239,7 +239,7 @@ APte triv121FindPte(unsigned long vsid, unsigned long pi);
  */
 APte triv121UnmapEa(unsigned long ea);
 
-/* 
+/*
  * Change the WIMG and PP attributes of the page containing 'ea'
  *
  * NOTES:   The 'wimg' and 'pp' may be <0 to indicate that no

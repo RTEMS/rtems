@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  
+ *
  *  The functions in this file implement the API to the RTEMS Cache Manager and
  *  are divided into data cache and instruction cache functions. Data cache
  *  functions only have bodies if a data cache is supported. Instruction
@@ -16,14 +16,14 @@
  *  Support for a particular cache exists only if CPU_x_CACHE_ALIGNMENT is
  *  defined, where x E {DATA, INSTRUCTION}. These definitions are found in
  *  the Cache Manager Wrapper header files, often
- *  
+ *
  *  rtems/c/src/lib/libcpu/CPU/cache_.h
- *  
+ *
  *  The functions below are implemented with CPU dependent inline routines
  *  found in the cache.c files for each CPU. In the event that a CPU does
  *  not support a specific function for a cache it has, the CPU dependent
  *  routine does nothing (but does exist).
- *  
+ *
  *  At this point, the Cache Manager makes no considerations, and provides no
  *  support for BSP specific issues such as a secondary cache. In such a system,
  *  the CPU dependent routines would have to be modified, or a BSP layer added
@@ -60,7 +60,7 @@ rtems_cache_flush_multiple_data_lines( const void * d_addr, size_t n_bytes )
   if( n_bytes == 0 )
     /* Do nothing if number of bytes to flush is zero */
     return;
-    
+
   final_address = (void *)((size_t)d_addr + n_bytes - 1);
   d_addr = (void *)((size_t)d_addr & ~(CPU_DATA_CACHE_ALIGNMENT - 1));
   while( d_addr <= final_address )  {
@@ -92,7 +92,7 @@ rtems_cache_invalidate_multiple_data_lines( const void * d_addr, size_t n_bytes 
   if( n_bytes == 0 )
     /* Do nothing if number of bytes to invalidate is zero */
     return;
-    
+
   final_address = (void *)((size_t)d_addr + n_bytes - 1);
   d_addr = (void *)((size_t)d_addr & ~(CPU_DATA_CACHE_ALIGNMENT - 1));
   while( final_address >= d_addr ) {
@@ -219,7 +219,7 @@ rtems_cache_invalidate_multiple_instruction_lines( const void * i_addr, size_t n
   if( n_bytes == 0 )
     /* Do nothing if number of bytes to invalidate is zero */
     return;
-    
+
   final_address = (void *)((size_t)i_addr + n_bytes - 1);
   i_addr = (void *)((size_t)i_addr & ~(CPU_INSTRUCTION_CACHE_ALIGNMENT - 1));
   while( final_address > i_addr ) {

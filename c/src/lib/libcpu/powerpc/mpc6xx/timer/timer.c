@@ -42,7 +42,7 @@ int Timer_get_clicks_overhead(void)
 }
 
 /*
- * benchmark_timer_initialize 
+ * benchmark_timer_initialize
  */
 void benchmark_timer_initialize(void)
 {

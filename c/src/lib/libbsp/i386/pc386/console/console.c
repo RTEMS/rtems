@@ -228,8 +228,8 @@ console_initialize(rtems_device_major_number major,
                    void                      *arg)
 {
   rtems_status_code status;
-  
- 
+
+
   /* Initialize the KBD interface */
   kbd_init();
 

@@ -41,7 +41,7 @@ rtems_status_code mpc55xx_intc_get_priority( rtems_vector_number vector, unsigne
 	} else {
 		*priority = MPC55XX_INTC_INVALID_PRIORITY;
 		return RTEMS_INVALID_NUMBER;
-	}	       
+	}
 }
 
 /**
@@ -58,7 +58,7 @@ rtems_status_code mpc55xx_intc_set_priority( rtems_vector_number vector, unsigne
 		}
 	} else {
 		return RTEMS_INVALID_NUMBER;
-	}	       
+	}
 }
 
 /**
@@ -71,7 +71,7 @@ rtems_status_code mpc55xx_intc_raise_software_irq( rtems_vector_number vector)
 		return RTEMS_SUCCESSFUL;
 	} else {
 		return RTEMS_INVALID_NUMBER;
-	}	       
+	}
 }
 
 /**
@@ -84,7 +84,7 @@ rtems_status_code mpc55xx_intc_clear_software_irq( rtems_vector_number vector)
 		return RTEMS_SUCCESSFUL;
 	} else {
 		return RTEMS_INVALID_NUMBER;
-	}	       
+	}
 }
 
 /**

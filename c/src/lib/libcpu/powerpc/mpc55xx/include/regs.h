@@ -2809,7 +2809,7 @@ extern "C" {
         .DADDR = 0,
         .CDF = { .R = 0 },
         .DLAST_SGA = 0,
-        .BMF = { .R = 0 } 
+        .BMF = { .R = 0 }
     };
 
 #define EDMA_TCD_BITER_MASK 0x7fff

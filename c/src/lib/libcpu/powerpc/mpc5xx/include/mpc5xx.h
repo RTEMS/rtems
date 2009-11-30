@@ -44,7 +44,7 @@
  *                                                                       *
  *      Corrections/additions:                                           *
  *        Copyright (c) 1999, National Research Council of Canada        *
- *  
+ *
  *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
@@ -340,14 +340,14 @@ do {					\
 #define UIMB_UMCR_STOP          (1<<31)
 #define UIMB_UMCR_IRQMUX(x)     ((x)<<29)
 #define UIMB_UMCR_HSPEED        (1<<28)
- 
+
 /*
  *************************************************************************
  *              QSMCM Serial Communications Interface (SCI)              *
  *************************************************************************
  */
- 
- 
+
+
 #define QSMCM_ILDSCI(x)        ((x)<<8)    /* SCI interrupt level */
 
 #define QSMCM_SCI_BAUD(x)      ((x)&0x1FFF) /* Baud rate field */
@@ -417,7 +417,7 @@ typedef struct usiu_ {
   uint8_t	_pad71[0x03C-0x034];
   uint32_t      pdmcr;
   uint8_t       _pad2[0x100-0x40];
-  
+
   /*
    * MEMC Block
    */
@@ -428,7 +428,7 @@ typedef struct usiu_ {
   uint8_t       _pad8[0x178-0x148];
   uint16_t      mstat;
   uint8_t       _pad9[0x200-0x17A];
-  
+
   /*
    * System integration timers
    */
@@ -450,7 +450,7 @@ typedef struct usiu_ {
   uint16_t      pitr;
   uint16_t      _pad_14_2;
   uint8_t       _pad15[0x280-0x24c];
-  
+
   /*
    * Clocks and Reset
    */
@@ -462,7 +462,7 @@ typedef struct usiu_ {
   uint16_t	_pad73;
   uint16_t	vsrmcr;
   uint8_t       _pad16[0x300-0x292];
-  
+
   /*
    * System integration timers keys
    */
@@ -479,7 +479,7 @@ typedef struct usiu_ {
   uint32_t      piscrk;
   uint32_t      pitck;
   uint8_t       _pad19[0x380-0x348];
-  
+
   /*
    * Clocks and Reset Keys
    */
@@ -541,7 +541,7 @@ typedef struct m5xxSPIRegisters_ {
 
 /*
  * Queued Serial Multi-Channel Module (QSMCM)
- */ 
+ */
 typedef struct m5xxQSMCMRegisters_ {
   uint16_t      qsmcmmcr;
   uint16_t      qtest;

@@ -106,7 +106,7 @@ wrap_change_msr_done_naked:
 	 * We add FRAME_LINK_SPACE to the frame pointer because the high level
 	 * handler expects a BSP_Exception_frame structure.
 	 */
-	addi	r3, r1, FRAME_LINK_SPACE 
+	addi	r3, r1, FRAME_LINK_SPACE
 
 	/*
 	 * Second parameter = vector number (r4 is the VECTOR_REGISTER)
@@ -127,7 +127,7 @@ wrap_change_msr_done_naked:
 wrap_restore_msr_done_naked:
 
 	/* Restore XER and CTR */
-	lwz	SCRATCH_REGISTER_0, EXC_XER_OFFSET(r1) 
+	lwz	SCRATCH_REGISTER_0, EXC_XER_OFFSET(r1)
 	lwz	SCRATCH_REGISTER_1, EXC_CTR_OFFSET(r1)
 	mtxer	SCRATCH_REGISTER_0
 	mtctr	SCRATCH_REGISTER_1

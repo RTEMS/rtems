@@ -54,7 +54,7 @@ uint32_t   Clock_Decrementer_value;
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -214,12 +214,12 @@ void Clock_exit( void )
 {
   (void) BSP_disconnect_clock_handler ();
 }
- 
+
 uint32_t Clock_driver_nanoseconds_since_last_tick(void)
 {
   uint32_t clicks, tmp;
 
-  PPC_Get_decrementer( clicks ); 
+  PPC_Get_decrementer( clicks );
 
   /*
    * Multiply by 1000 here separately from below so we do not overflow
@@ -257,7 +257,7 @@ rtems_interrupt_level l,tcr;
   Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
             (rtems_configuration_get_microseconds_per_tick()/1000);
 
-  /* set the decrementer now, prior to installing the handler 
+  /* set the decrementer now, prior to installing the handler
    * so no interrupts will happen in a while.
    */
   PPC_Set_decrementer( (unsigned)-1 );
@@ -298,7 +298,7 @@ rtems_interrupt_level l,tcr;
     rtems_fatal_error_occurred(1);
   }
   /* make major/minor avail to others such as shared memory driver */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
 

@@ -40,7 +40,7 @@
 
 /*
  * FIXME: This file is not used anywhere inside of RTEMS source-tree.
- * Notify OAR if you actually use it, otherwise it might be removed in 
+ * Notify OAR if you actually use it, otherwise it might be removed in
  * future versions of RTEMS
  */
 
@@ -65,7 +65,7 @@ extern "C" {
  *
  *    + PPC_DEBUG_MODEL          - PPC_DEBUG_MODEL_STANDARD
  */
- 
+
 /*
  *  Define the debugging assistance models found in the PPC family.
  *

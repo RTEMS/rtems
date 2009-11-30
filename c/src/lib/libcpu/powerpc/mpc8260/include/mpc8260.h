@@ -738,8 +738,8 @@ typedef struct m8260BufferDescriptor_ {
 */
 typedef struct m8260IDMABufferDescriptor_ {
   uint16_t          status;
-  uint8_t           dfcr;       
-  uint8_t           sfcr;       
+  uint8_t           dfcr;
+  uint8_t           sfcr;
   uint32_t          length;
   void                    *source;
   void                    *destination;
@@ -1178,7 +1178,7 @@ typedef struct m8260_ {
 
   uint8_t  	cpm_pad2[16384];	/* 0xC000 - 0xFFFF Reserved      */
 
-        
+
   /*
    * General SIU Block
    */
@@ -1237,7 +1237,7 @@ typedef struct m8260_ {
   uint32_t        immr;
   uint8_t         mem_pad4[84];
 
-  
+
   /*
    * System integration timers
    */
@@ -1255,7 +1255,7 @@ typedef struct m8260_ {
   uint8_t  		sit_pad3[94];
   uint8_t  		sit_pad4[2390];
 
-  
+
   /*
    * Interrupt Controller
    */
@@ -1283,7 +1283,7 @@ typedef struct m8260_ {
   uint32_t        rsr;
   uint32_t        rmr;
   uint8_t         clr_pad0[104];
-  
+
 
   /*
    * Input/ Output Port
@@ -1369,7 +1369,7 @@ typedef struct m8260_ {
   uint8_t         idmr4;
   uint8_t         dma_pad9[707];
 
-  
+
   /*
    * FCC Block
    */
@@ -1404,8 +1404,8 @@ typedef struct m8260_ {
   uint8_t         i2m_pad4[3];
   uint8_t         i2cmr;
   uint8_t         i2m_pad5[331];
-  
-  
+
+
   /*
    * CPM Block
    */
@@ -1419,7 +1419,7 @@ typedef struct m8260_ {
   uint8_t         cpm_pad4[2];
   uint32_t        rtsr;
   uint8_t         cpm_pad5[12];
-  
+
 
   /*
    * BRG 1-4 Block
@@ -1428,7 +1428,7 @@ typedef struct m8260_ {
   uint32_t        brgc2;
   uint32_t        brgc3;
   uint32_t        brgc4;
-  
+
 
   /*
    * SCC Block
@@ -1438,14 +1438,14 @@ typedef struct m8260_ {
   m8260SCCRegisters_t   scc3;
   m8260SCCRegisters_t   scc4;
 
-  
+
   /*
    * SMC Block
    */
   m8260SMCRegisters_t    smc1;
   m8260SMCRegisters_t    smc2;
 
-  
+
   /*
    * SPI Block
    */
@@ -1458,7 +1458,7 @@ typedef struct m8260_ {
   uint8_t         spcom;
   uint8_t         spi_pad3[82];
 
-  
+
   /*
    * CPM Mux Block
    */

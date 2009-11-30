@@ -14,7 +14,7 @@
  *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
  *  the number of microseconds since benchmark_timer_initialize() exitted.
  *
- *  It is important that the timer start/stop overhead be determined 
+ *  It is important that the timer start/stop overhead be determined
  *  when porting or modifying this code.
  *
  *  $Id$
@@ -29,7 +29,7 @@ uint32_t g_freq;
 
 bool benchmark_timer_find_average_overhead;
 
-    
+
 /*
  * Set up Timer 1
  */
@@ -37,7 +37,7 @@ void benchmark_timer_initialize( void )
 {
     uint32_t cr;
 
-    /* stop TIMER1*/ 
+    /* stop TIMER1*/
     cr=rTCON & 0xFFFFF0FF;
     rTCON=(cr | (0x0 << 8));
 
@@ -45,15 +45,15 @@ void benchmark_timer_initialize( void )
     cr=rTCFG1 & 0xFFFFFF0F;
     rTCFG1=(cr | (0<<4));
 
-    /* input freq=PLCK/2 Mhz*/ 
-    g_freq = get_PCLK() / 2000; 
+    /* input freq=PLCK/2 Mhz*/
+    g_freq = get_PCLK() / 2000;
     rTCNTB1 = 0xFFFF;
 
-    /* start TIMER1 with manual reload */ 
+    /* start TIMER1 with manual reload */
     cr=rTCON & 0xFFFFF0FF;
     rTCON=(cr | (0x1 << 9));
     rTCON=(cr | (0x1 << 8));
- 
+
     g_start =  rTCNTO1;
 }
 
@@ -83,16 +83,16 @@ int benchmark_timer_read( void )
      *  interrupts since the timer was initialized and clicks since the last
      *  interrupts.
      */
-    
+
     total = (g_start - t);
 
     /* convert to microseconds */
-    total = (total*1000) / g_freq; 
+    total = (total*1000) / g_freq;
 
     if ( benchmark_timer_find_average_overhead == 1 ) {
-        return (int) total; 
+        return (int) total;
     } else if ( total < LEAST_VALID ) {
-        return 0;       
+        return 0;
     }
 
     /*

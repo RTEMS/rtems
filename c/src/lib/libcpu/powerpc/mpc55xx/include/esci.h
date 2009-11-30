@@ -18,9 +18,9 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
-/** 
+/**
  * @defgroup mpc55xx_esci Enhanced Serial Communication Interface (eSCI).
- * 
+ *
  * @ingroup mpc55xx
  */
 

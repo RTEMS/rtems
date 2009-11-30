@@ -123,7 +123,7 @@ void _CPU_Context_Initialize(
 
 #if (PPC_ABI == PPC_ABI_SVR4)
   /*
-   * SVR4 says R2 is for 'system-reserved' use; it cannot hurt to 
+   * SVR4 says R2 is for 'system-reserved' use; it cannot hurt to
    * propagate R2 to all task contexts.
    */
   { uint32_t    r2 = 0;
@@ -171,8 +171,8 @@ void _CPU_Install_interrupt_stack( void )
 void _CPU_ISR_install_vector(
   uint32_t    vector,
   proc_ptr    new_handler,
-  proc_ptr   *old_handler 
-) 
+  proc_ptr   *old_handler
+)
 {
   BSP_panic("_CPU_ISR_install_vector called\n");
 }

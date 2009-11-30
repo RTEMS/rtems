@@ -14,7 +14,7 @@
  *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from 
+ *  Derived from
  *    c/src/lib/libcpu/powerpc/mpc8xx/console_generic/console_generic.c:
  *  Author: Jay Monkman (jmonkman@frasca.com)
  *  Copyright (C) 1998 by Frasca International, Inc.
@@ -84,15 +84,15 @@ static struct termios default_termios = {
   { 0 }					/* control characters */
 };
 
-  
+
 /*
  * Termios callback functions
  */
 
 int
 m5xx_uart_firstOpen(
-  int major, 
-  int minor, 
+  int major,
+  int minor,
   void *arg
 )
 {
@@ -109,7 +109,7 @@ m5xx_uart_firstOpen(
 
 int
 m5xx_uart_lastClose(
-  int major, 
+  int major,
   int minor,
   void* arg
 )
@@ -129,7 +129,7 @@ m5xx_uart_pollRead(
 {
   volatile m5xxSCIRegisters_t *regs = sci_descs[minor].regs;
   int c = -1;
-  
+
   if ( regs ) {
     while ( (regs->scsr & QSMCM_SCI_RDRF) == 0 )
       ;
@@ -139,7 +139,7 @@ m5xx_uart_pollRead(
   return c;
 }
 
-int 
+int
 m5xx_uart_write(
   int minor,
   const char *buf,
@@ -170,7 +170,7 @@ m5xx_uart_pollWrite(
   return 0;
 }
 
-int 
+int
 m5xx_uart_setAttributes(
   int minor,
   const struct termios *t
@@ -179,11 +179,11 @@ m5xx_uart_setAttributes(
   uint16_t sccr0 = sci_descs[minor].regs->sccr0;
   uint16_t sccr1 = sci_descs[minor].regs->sccr1;
   int baud;
-  
+
   /*
    * Check that port number is valid
    */
-  if ( (minor < SCI1_MINOR) || (minor > SCI2_MINOR) ) 
+  if ( (minor < SCI1_MINOR) || (minor > SCI2_MINOR) )
     return RTEMS_INVALID_NUMBER;
 
   /* Baud rate */
@@ -212,10 +212,10 @@ m5xx_uart_setAttributes(
   if (baud > 0) {
     extern uint32_t bsp_clock_speed;
     sccr0 &= ~QSMCM_SCI_BAUD(-1);
-    sccr0 |= 
+    sccr0 |=
       QSMCM_SCI_BAUD((bsp_clock_speed + (16 * baud)) / (32 * baud));
   }
-     
+
   /* Number of data bits -- not available with MPC5xx SCI */
   switch ( t->c_cflag & CSIZE ) {
     case CS5:     break;
@@ -236,7 +236,7 @@ m5xx_uart_setAttributes(
     sccr1 |= QSMCM_SCI_PE;
   else
     sccr1 &= ~QSMCM_SCI_PE;
-  
+
   if ( t->c_cflag & PARODD )
     sccr1 |= QSMCM_SCI_PT;
   else
@@ -248,29 +248,29 @@ m5xx_uart_setAttributes(
     sccr1 |= QSMCM_SCI_RE;
   else
     sccr1 &= ~QSMCM_SCI_RE;
-    
+
   /* Write hardware registers */
   sci_descs[minor].regs->sccr0 = sccr0;
   sci_descs[minor].regs->sccr1 = sccr1;
-  
+
   return RTEMS_SUCCESSFUL;
 }
 
 
-/* 
+/*
  * Interrupt handling.
  */
 static void
 m5xx_sci_interrupt_handler (rtems_irq_hdl_param unused)
 {
   int minor;
-  
+
   for ( minor = 0; minor < NUM_PORTS; minor++ ) {
     sci_desc *desc = &sci_descs[minor];
     int sccr1 = desc->regs->sccr1;
     int scsr = desc->regs->scsr;
-        
-    /* 
+
+    /*
      * Character received?
      */
     if ((sccr1 & QSMCM_SCI_RIE) && (scsr & QSMCM_SCI_RDRF)) {
@@ -306,14 +306,14 @@ m5xx_uart_initialize (int minor)
   /*
    * Check that minor number is valid.
    */
-  if ( (minor < SCI1_MINOR) || (minor > SCI2_MINOR) ) 
+  if ( (minor < SCI1_MINOR) || (minor > SCI2_MINOR) )
     return;
 
   /*
    * Configure and enable receiver and transmitter.
    */
   m5xx_uart_setAttributes(minor, &default_termios);
-   
+
   /*
    * Connect interrupt if not yet done.
    */
@@ -325,7 +325,7 @@ m5xx_uart_initialize (int minor)
     irq_data.on   = m5xx_sci_nop;	/* can't enable both channels here */
     irq_data.off  = m5xx_sci_nop;	/* can't disable both channels here */
     irq_data.isOn = m5xx_sci_isOn;
-    
+
     if (!CPU_install_rtems_irq_handler (&irq_data)) {
       printk("Unable to connect SCI Irq handler\n");
       rtems_fatal_error_occurred(1);

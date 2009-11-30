@@ -41,7 +41,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_irq_hdl         *HdlTable;
     rtems_interrupt_level  level;
-    
+
     if (!isValidInterrupt(irq->name)) {
         return 0;
     }
@@ -53,7 +53,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     if (*(HdlTable + irq->name) != default_int_handler) {
         return 0;
     }
-    
+
     rtems_interrupt_disable(level);
 
     /*
@@ -78,7 +78,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_irq_hdl         *HdlTable;
     rtems_interrupt_level  level;
-  
+
     if (!isValidInterrupt(irq->name)) {
         return 0;
     }
@@ -103,7 +103,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * restore the default irq value
      */
     *(HdlTable + irq->name) = default_int_handler;
-          
+
     rtems_interrupt_enable(level);
 
     return 1;

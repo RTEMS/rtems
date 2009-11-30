@@ -1,7 +1,7 @@
-/* 
+/*
  * cpm.h
- * 
- * This include file contains definitions pertaining 
+ *
+ * This include file contains definitions pertaining
  * to the Communications Processor Module (CPM) on the MPC8xx.
  *
  * Copyright (c) 1999, National Research Council of Canada
@@ -104,7 +104,7 @@ void *m8xx_dpram_allocate( unsigned int byte_count );
 #define m8xx_RISC_timer_table_allocate(count)	\
 		m8xx_dpram_allocate( (count) * 4 )
 
-		
+
 
 int m8xx_get_brg_cd (int baud);
 int m8xx_get_brg(unsigned brgmask, int baud);
@@ -114,7 +114,7 @@ void m8xx_free_brg(int brg_num);
 int m8xx_get_clk( unsigned clkmask );
 void m8xx_free_clk( int clk_num );
 
-		
+
 #ifdef __cplusplus
 }
 #endif

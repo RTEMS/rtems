@@ -1,7 +1,7 @@
 /*
  * Philps LPC22XX Interrupt handler
- * 
- * Copyright (c)  2006 by Ray<rayx.cn@gmail.com>  to support LPC ARM      
+ *
+ * Copyright (c)  2006 by Ray<rayx.cn@gmail.com>  to support LPC ARM
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -37,11 +37,11 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_interrupt_level level;
     rtems_irq_hdl        *bsp_tbl;
     int                  *vic_cntl;
-    
+
     bsp_tbl = (rtems_irq_hdl *)VICVectAddrBase;
 
     vic_cntl=(int *)VICVectCntlBase;
-    
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -66,8 +66,8 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      */
     vic_cntl[irq->name] = 0x20 | irq->name;
 
-    VICIntEnable |= 1 << irq->name; 
-    
+    VICIntEnable |= 1 << irq->name;
+
     if(irq->on)
     {
     	irq->on(irq);
@@ -75,11 +75,11 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
 
     rtems_interrupt_enable(level);
-    
+
     return 1;
 }
 
-/* 
+/*
  * Remove and interrupt handler
  *
  * You should only have to add the code to mask the interrupt.
@@ -91,7 +91,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_irq_hdl        *bsp_tbl;
 
     bsp_tbl = (rtems_irq_hdl *)&VICVectAddr0;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -116,7 +116,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * restore the default irq value
      */
     bsp_tbl[irq->name] = default_int_handler;
-    
+
     rtems_interrupt_enable(level);
 
     return 1;

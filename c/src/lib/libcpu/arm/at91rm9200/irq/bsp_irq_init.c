@@ -2,7 +2,7 @@
  * Atmel AT91RM9200 Interrupt handler
  *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
- *      
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -17,8 +17,8 @@
 
 extern void default_int_handler(void);
 
-/* 
- * Interrupt system initialization. Disable interrupts, clear 
+/*
+ * Interrupt system initialization. Disable interrupts, clear
  * any that are pending.
  */
 void BSP_rtems_irq_mngt_init(void)

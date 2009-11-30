@@ -10,7 +10,7 @@
  *
  *  $Id$
  */
- 
+
 
 #include <rtems.h>
 #include "tod.h"
@@ -21,7 +21,7 @@
 
 /* The following are inside RTEMS -- we are violating visibility!!!
  * Perhaps an API could be defined to get days since 1 Jan.
- */ 
+ */
 extern const uint16_t   _TOD_Days_to_date[2][13];
 
 /*
@@ -42,8 +42,8 @@ void setRealTimeFromRTEMS (void)
 {
   rtems_time_of_day time_buffer;
   rtems_status_code status;
-  
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time_buffer );  
+
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time_buffer );
   if (status == RTEMS_SUCCESSFUL){
     setRealTime(&time_buffer);
   }
@@ -56,9 +56,9 @@ void setRealTimeFromRTEMS (void)
 void setRealTimeToRTEMS (void)
 {
   rtems_time_of_day time_buffer;
-  
-  getRealTime(&time_buffer);  
-  rtems_clock_set( &time_buffer );  
+
+  getRealTime(&time_buffer);
+  rtems_clock_set( &time_buffer );
 }
 
  /*
@@ -70,16 +70,16 @@ int setRealTime(
 {
   uint32_t days;
   rtems_time_of_day tod_temp;
-  
+
   tod_temp = *tod;
-  
+
   days = (tod_temp.year - TOD_BASE_YEAR) * 365 + \
           _TOD_Days_to_date[0][tod_temp.month] + tod_temp.day - 1;
   if (tod_temp.month < 3)
     days +=  Leap_years_until_now (tod_temp.year - 1);
   else
     days +=  Leap_years_until_now (tod_temp.year);
-  
+
   *((uint32_t volatile *)RTC_STAT) = (days << RTC_STAT_DAYS_SHIFT)|
                                      (tod_temp.hour << RTC_STAT_HOURS_SHIFT)|
                                      (tod_temp.minute << RTC_STAT_MINUTES_SHIFT)|
@@ -99,21 +99,21 @@ void getRealTime(
   uint32_t days, rtc_reg;
   rtems_time_of_day tod_temp = { 0, 0, 0 };
   int n, Leap_year;
-  
-  rtc_reg = *((uint32_t volatile *)RTC_STAT); 
-  
+
+  rtc_reg = *((uint32_t volatile *)RTC_STAT);
+
   days = (rtc_reg >> RTC_STAT_DAYS_SHIFT) + 1;
-  
+
   /* finding year */
   tod_temp.year = days/365 + TOD_BASE_YEAR;
   if (days%365 >  Leap_years_until_now (tod_temp.year - 1)) {
     days = (days%365) -  Leap_years_until_now (tod_temp.year - 1);
-  } else { 
+  } else {
     tod_temp.year--;
     days = (days%365) + 365 -  Leap_years_until_now (tod_temp.year - 1);
   }
 
-  /* finding month and day */  
+  /* finding month and day */
   Leap_year = (((!(tod_temp.year%4)) && (tod_temp.year%100)) ||
               (!(tod_temp.year%400)))?1:0;
   for (n=1; n<=12; n++) {

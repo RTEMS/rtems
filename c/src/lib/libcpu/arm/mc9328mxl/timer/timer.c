@@ -5,7 +5,7 @@
  *
  * Copyright (c) 2004 Cogent Computer Systems
  *        Written by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -17,7 +17,7 @@
  *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
  *  the number of microseconds since benchmark_timer_initialize() exitted.
  *
- *  It is important that the timer start/stop overhead be determined 
+ *  It is important that the timer start/stop overhead be determined
  *  when porting or modifying this code.
  *
  *  $Id$
@@ -32,13 +32,13 @@ uint32_t g_freq;
 
 bool benchmark_timer_find_average_overhead;
 
-    
+
 /*
  * Set up Timer 1
  */
 void benchmark_timer_initialize( void )
 {
-    MC9328MXL_TMR2_TCTL = (MC9328MXL_TMR_TCTL_CLKSRC_PCLK1 | 
+    MC9328MXL_TMR2_TCTL = (MC9328MXL_TMR_TCTL_CLKSRC_PCLK1 |
                             MC9328MXL_TMR_TCTL_FRR |
                             MC9328MXL_TMR_TCTL_TEN);
     /* set prescaler to 1 (register value + 1) */ \
@@ -80,12 +80,12 @@ int benchmark_timer_read( void )
   total = (t - g_start);
 
   /* convert to nanoseconds */
-  total = (total * 1000)/ g_freq; 
+  total = (total * 1000)/ g_freq;
 
   if ( benchmark_timer_find_average_overhead == 1 ) {
-    return (int) total; 
+    return (int) total;
   } else if ( total < LEAST_VALID ) {
-      return 0;       
+      return 0;
   }
   /*
    *  Somehow convert total into microseconds

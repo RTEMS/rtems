@@ -35,7 +35,7 @@ typedef struct _PTE {
 	unsigned long g:1;	/* Guarded */
 	unsigned long  :1;	/* Unused */
 	unsigned long pp:2;	/* Page protection */
-} PTE; 
+} PTE;
 
 /* Values for PP (assumes Ks=0, Kp=1) */
 #define PP_RWXX	0	/* Supervisor read/write, User none */
@@ -71,7 +71,7 @@ typedef struct _BATU {		/* Upper part of BAT (all except 601) */
 	unsigned long bl:11;	/* Block size mask */
 	unsigned long vs:1;	/* Supervisor valid */
 	unsigned long vp:1;	/* User valid */
-} BATU;   
+} BATU;
 
 typedef struct _P601_BATL {	/* Lower part of BAT for 601 processor */
 	unsigned long brpn:15;	/* Real page index (physical address) */
@@ -139,7 +139,7 @@ typedef struct _pte {
 #define PT_SHIFT (12)			/* Page Table */
 #define PT_MASK  0x03FF
 #define PG_SHIFT (12)			/* Page Entry */
- 
+
 
 /* MMU context */
 
@@ -156,13 +156,13 @@ typedef struct _MMU_context {
 #define HASH_TABLE_SIZE_1M	0x00100000
 #define HASH_TABLE_SIZE_2M	0x00200000
 #define HASH_TABLE_SIZE_4M	0x00400000
-#define HASH_TABLE_MASK_64K	0x000   
-#define HASH_TABLE_MASK_128K	0x001   
-#define HASH_TABLE_MASK_256K	0x003   
+#define HASH_TABLE_MASK_64K	0x000
+#define HASH_TABLE_MASK_128K	0x001
+#define HASH_TABLE_MASK_256K	0x003
 #define HASH_TABLE_MASK_512K	0x007
-#define HASH_TABLE_MASK_1M	0x00F   
-#define HASH_TABLE_MASK_2M	0x01F   
-#define HASH_TABLE_MASK_4M	0x03F   
+#define HASH_TABLE_MASK_1M	0x00F
+#define HASH_TABLE_MASK_2M	0x01F
+#define HASH_TABLE_MASK_4M	0x03F
 
 /* invalidate a TLB entry */
 static inline void _tlbie(unsigned long va)

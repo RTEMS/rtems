@@ -2,7 +2,7 @@
  * Atmel AT91RM9200 Interrupt handler
  *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopgindog.com>
- *      
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -12,7 +12,7 @@
  *  $Id$
  */
 #define __asm__
-        
+
         .globl bsp_interrupt_dispatch
 bsp_interrupt_dispatch :
 /*
@@ -21,7 +21,7 @@ bsp_interrupt_dispatch :
  * and load vector into r0 and handler address into r1.
  */
         ldr     r0, =0xFFFFF100   /* AIC_CTL_BASE + AIC_IVR */
-        ldr     r1, [r0]                
+        ldr     r1, [r0]
         str     r1, [r0]          /* write back in case we are using protect */
 
 	ldr     r0, =0xFFFFF108   /* AIC_CTL_BASE + AIC_ISR */
@@ -35,7 +35,7 @@ bsp_interrupt_dispatch :
 IRQ_return:
         ldr   r2, =0xFFFFF130     /* AIC_CTL_BASE + AIC_EIOCR */
         str   r1, [r2]
-       
+
         ldmia sp!,{lr}
 
         mov pc, lr

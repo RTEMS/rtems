@@ -61,7 +61,7 @@ int mpc5xx_vector_is_valid(rtems_vector vector)
         case ASM_MEBREAK_VECTOR:
         case ASM_NMEBREAK_VECTOR:
           return 1;
-        default: 
+        default:
           return 0;
       }
     default:
@@ -85,19 +85,19 @@ int mpc5xx_set_exception  (const rtems_raw_except_connect_data* except)
    * RATIONALE : to always have the same transition by forcing the user
    * to get the previous handler before accepting to disconnect.
    */
-  if (exception_handler_table[except->exceptIndex] != 
+  if (exception_handler_table[except->exceptIndex] !=
       default_raw_except_entry.hdl.raw_hdl) {
     return 0;
   }
 
   rtems_interrupt_disable(level);
-  
+
   raw_except_table[except->exceptIndex] = *except;
 
   exception_handler_table[except->exceptIndex] = except->hdl.raw_hdl;
   if (except->on)
   	except->on(except);
-  
+
   rtems_interrupt_enable(level);
   return 1;
 }
@@ -107,16 +107,16 @@ int mpc5xx_get_current_exception (rtems_raw_except_connect_data* except)
   if (!mpc5xx_vector_is_valid(except->exceptIndex)){
     return 0;
   }
-    
+
   *except = raw_except_table[except->exceptIndex];
-    
+
   return 1;
 }
 
 int mpc5xx_delete_exception (const rtems_raw_except_connect_data* except)
 {
   rtems_interrupt_level level;
-  
+
   if (!mpc5xx_vector_is_valid(except->exceptIndex)){
     return 0;
   }
@@ -135,14 +135,14 @@ int mpc5xx_delete_exception (const rtems_raw_except_connect_data* except)
 
   if (except->off)
   	except->off(except);
-  exception_handler_table[except->exceptIndex] = 
+  exception_handler_table[except->exceptIndex] =
     default_raw_except_entry.hdl.raw_hdl;
-  
+
   raw_except_table[except->exceptIndex] = default_raw_except_entry;
   raw_except_table[except->exceptIndex].exceptIndex = except->exceptIndex;
 
   rtems_interrupt_enable(level);
-    
+
   return 1;
 }
 
@@ -156,7 +156,7 @@ int mpc5xx_init_exceptions (rtems_raw_except_global_settings* config)
 {
   unsigned 		i;
   rtems_interrupt_level level;
-  
+
   /*
    * store various accelerators
    */

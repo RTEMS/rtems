@@ -75,7 +75,7 @@ void benchmark_timer_initialize(void)
               | USIU_TBSCR_TBF 		/* freeze timebase during debug */
               | USIU_TBSCR_TBE;		/* enable timebase */
   usiu.tbscrk = 0;
-  
+
   Timer_starting = get_itimer();
 }
 

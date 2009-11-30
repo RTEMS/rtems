@@ -20,13 +20,13 @@
 #ifndef _MG5UART_MULTIPLIER
 #define _MG5UART_MULTIPLIER 1
 #define _MG5UART_NAME(_X) _X
-#define _MG5UART_TYPE uint32_t  
+#define _MG5UART_TYPE uint32_t
 #endif
 
 #define CALCULATE_REGISTER_ADDRESS( _base, _reg ) \
   (_MG5UART_TYPE *)((_base) + ((_reg) * _MG5UART_MULTIPLIER ))
 
-/* 
+/*
  *  MG5UART Get Register Routine
  */
 

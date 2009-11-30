@@ -1,8 +1,8 @@
 /*
  * Interrupt handler Header file
  *
- * Copyright (c) 2006 by Ray <rayx.cn@gmail.com> to support LPC ARM  
- *	
+ * Copyright (c) 2006 by Ray <rayx.cn@gmail.com> to support LPC ARM
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -25,7 +25,7 @@ extern "C" {
 /*
  * Include some preprocessor value also used by assember code
  */
-  
+
 #include <rtems.h>
 #include <lpc22xx.h>
 
@@ -66,7 +66,7 @@ extern void default_int_handler();
 #define LPC22xx_INTERRUPT_CAN4RX 27	/* CAN2 Rx interrupt */
 #define BSP_MAX_INT              28
 
-#define UNDEFINED_INSTRUCTION_VECTOR_ADDR   (*(u_long *)0x00000004L)   
+#define UNDEFINED_INSTRUCTION_VECTOR_ADDR   (*(u_long *)0x00000004L)
 #define SOFTWARE_INTERRUPT_VECTOR_ADDR      (*(u_long *)0x00000008L)
 #define PREFETCH_ABORT_VECTOR_ADDR          (*(u_long *)0x0000000CL)
 #define DATA_ABORT_VECTOR_ADDR              (*(u_long *)0x00000010L)
@@ -77,7 +77,7 @@ extern void default_int_handler();
 #define IRQ_ISR_ADDR                        (*(u_long *)0x00000038L)
 #define FIQ_ISR_ADDR                        (*(u_long *)0x0000003CL)
 
-              
+
 typedef unsigned char  rtems_irq_level;
 typedef unsigned char  rtems_irq_trigger;
 
@@ -91,7 +91,7 @@ typedef int  (*rtems_irq_is_enabled)(const struct __rtems_irq_connect_data__*);
 
 //extern rtems_irq_hdl bsp_vector_table[BSP_MAX_INT];
 #define VECTOR_TABLE VICVectAddrBase
-  											   
+
 typedef struct __rtems_irq_connect_data__ {
     /* IRQ line */
     rtems_irq_number              name;
@@ -127,7 +127,7 @@ void BSP_rtems_irq_mngt_init();
 int BSP_install_rtems_irq_handler       (const rtems_irq_connect_data*);
 
 /*
- * function to get the current RTEMS irq handler for ptr->name. 
+ * function to get the current RTEMS irq handler for ptr->name.
  */
 int BSP_get_current_rtems_irq_handler   (rtems_irq_connect_data* ptr);
 

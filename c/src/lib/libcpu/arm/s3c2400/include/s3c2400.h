@@ -472,7 +472,7 @@ typedef union
   unsigned long all;
 } LCDCON1;
 
-typedef union { 
+typedef union {
   struct {
     unsigned VSPW:6;    /* TFT: Vertical sync pulse width determines the */
                         /*   VSYNC pulse's high level width by counting the */

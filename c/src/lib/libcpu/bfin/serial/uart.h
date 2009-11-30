@@ -50,7 +50,7 @@ rtems_device_driver bfin_uart_open(rtems_device_major_number major,
 
 void bfin_uart_isr(int source);
 
- 
+
 #ifdef __cplusplus
 }
 #endif

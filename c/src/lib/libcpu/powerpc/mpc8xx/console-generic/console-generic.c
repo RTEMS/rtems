@@ -122,7 +122,7 @@ m8xx_get_brg_cd (int baud)
 }
 
 
-/* 
+/*
  *  This function will fail if more that 4 baud rates have been selected
  *  at any time since the OS started. It needs to be fixed. FIXME
  */
@@ -181,7 +181,7 @@ static int
 m8xx_smc_set_attributes (int minor, const struct termios *t)
 {
   int baud, brg=0, csize=0, ssize, psize;
-  uint16_t   clen=0, cstopb, parenb, parodd, cread; 
+  uint16_t   clen=0, cstopb, parenb, parodd, cread;
 
   /* Baud rate */
   switch (t->c_cflag & CBAUD) {
@@ -209,7 +209,7 @@ m8xx_smc_set_attributes (int minor, const struct termios *t)
   if (baud > 0)
     brg = m8xx_get_brg_clk(baud);     /* 4 BRGs, 6 serial ports - hopefully */
                                       /*  at least 2 ports will be the same */
- 
+
   /* Number of data bits */
   switch ( t->c_cflag & CSIZE ) {
     case CS5:     csize = 5;       break;
@@ -235,15 +235,15 @@ m8xx_smc_set_attributes (int minor, const struct termios *t)
     parenb = 0x0000;              /* No parity on Tx and Rx */
     psize  = 0;
   }
-  
+
   if ( t->c_cflag & PARODD )
     parodd = 0x0000;              /* Odd parity */
   else
     parodd = 0x0100;
 
-  /* 
+  /*
    * Character Length = start + data + parity + stop - 1
-   */ 
+   */
   switch ( 1 + csize + psize + ssize - 1 ) {
     case 6:     clen = 0x3000;       break;
     case 7:     clen = 0x3800;       break;
@@ -257,7 +257,7 @@ m8xx_smc_set_attributes (int minor, const struct termios *t)
     cread = 0x0023;		/* UART normal operation, enable Rx and Tx */
   else
     cread = 0x0021;		/* UART normal operation, enable Tx */
-    
+
   /* Write the SIMODE/SMCMR registers */
   switch (minor) {
     case SMC1_MINOR:
@@ -306,7 +306,7 @@ m8xx_scc_set_attributes (int minor, const struct termios *t)
     brg = m8xx_get_brg_clk(baud);     /* 4 BRGs, 5 serial ports - hopefully */
                                       /*  at least 2 ports will be the same */
                                       /*  Write the SICR register below */
-    
+
   /* Number of data bits */
   switch ( t->c_cflag & CSIZE ) {
     case CS5:     csize = 0x0000;       break;
@@ -320,13 +320,13 @@ m8xx_scc_set_attributes (int minor, const struct termios *t)
     cstopb = 0x4000;              /* Two stop bits */
   else
     cstopb = 0x0000;              /* One stop bit */
-    
+
   /* Parity */
   if ( t->c_cflag & PARENB )
     parenb = 0x0010;              /* Parity enabled on Tx and Rx */
   else
     parenb = 0x0000;              /* No parity on Tx and Rx */
-    
+
   if ( t->c_cflag & PARODD )
     parodd = 0x0000;              /* Odd parity */
   else
@@ -349,12 +349,12 @@ m8xx_scc_set_attributes (int minor, const struct termios *t)
       break;
   #endif
   }
-  
+
   return 0;
 }
 
 
-int 
+int
 m8xx_uart_setAttributes(
   int minor,
   const struct termios *t
@@ -363,7 +363,7 @@ m8xx_uart_setAttributes(
   /*
    * Check that port number is valid
    */
-  if ( (minor < SMC1_MINOR) || (minor > NUM_PORTS-1) ) 
+  if ( (minor < SMC1_MINOR) || (minor > NUM_PORTS-1) )
     return 0;
 
   switch (minor) {
@@ -396,8 +396,8 @@ static void m8xx_scc2_interrupt_handler (void *unused)
 
     /* Check that the buffer is ours */
     if ((RxBd[SCC2_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_cache_invalidate_multiple_data_lines( 
-        (const void *) RxBd[SCC2_MINOR]->buffer, 
+      rtems_cache_invalidate_multiple_data_lines(
+        (const void *) RxBd[SCC2_MINOR]->buffer,
         RxBd[SCC2_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC2_MINOR],
@@ -438,8 +438,8 @@ m8xx_scc3_interrupt_handler (void *unused)
 
     /* Check that the buffer is ours */
     if ((RxBd[SCC3_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_cache_invalidate_multiple_data_lines( 
-        (const void *) RxBd[SCC3_MINOR]->buffer, 
+      rtems_cache_invalidate_multiple_data_lines(
+        (const void *) RxBd[SCC3_MINOR]->buffer,
         RxBd[SCC3_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC3_MINOR],
@@ -479,8 +479,8 @@ m8xx_scc4_interrupt_handler (void *unused)
 
     /* Check that the buffer is ours */
     if ((RxBd[SCC4_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_cache_invalidate_multiple_data_lines( 
-        (const void *) RxBd[SCC4_MINOR]->buffer, 
+      rtems_cache_invalidate_multiple_data_lines(
+        (const void *) RxBd[SCC4_MINOR]->buffer,
         RxBd[SCC4_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC4_MINOR],
@@ -520,8 +520,8 @@ m8xx_smc1_interrupt_handler (void *unused)
 
     /* Check that the buffer is ours */
     if ((RxBd[SMC1_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_cache_invalidate_multiple_data_lines( 
-        (const void *) RxBd[SMC1_MINOR]->buffer, 
+      rtems_cache_invalidate_multiple_data_lines(
+        (const void *) RxBd[SMC1_MINOR]->buffer,
         RxBd[SMC1_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SMC1_MINOR],
@@ -561,8 +561,8 @@ m8xx_smc2_interrupt_handler (void *unused)
 
     /* Check that the buffer is ours */
     if ((RxBd[SMC2_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_cache_invalidate_multiple_data_lines( 
-        (const void *) RxBd[SMC2_MINOR]->buffer, 
+      rtems_cache_invalidate_multiple_data_lines(
+        (const void *) RxBd[SMC2_MINOR]->buffer,
         RxBd[SMC2_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SMC2_MINOR],
@@ -641,7 +641,7 @@ int m8xx_scc_isOn(const rtems_irq_connect_data* ptr)
 }
 
 static rtems_irq_connect_data consoleIrqData;
-	
+
 void
 m8xx_uart_scc_initialize (int minor)
 {
@@ -652,7 +652,7 @@ m8xx_uart_scc_initialize (int minor)
   /*
    * Check that minor number is valid
    */
-  if ( (minor < SCC2_MINOR) || (minor > NUM_PORTS-1) ) 
+  if ( (minor < SCC2_MINOR) || (minor > NUM_PORTS-1) )
     return;
 
   /* Get the sicr clock source bit values for 9600 bps */
@@ -694,7 +694,7 @@ m8xx_uart_scc_initialize (int minor)
     case SCC2_MINOR:
       sccparms = &m8xx.scc2p;
       sccregs = &m8xx.scc2;
-      
+
       m8xx.papar |=  0x000C;        /* PA12 & PA13 are dedicated peripheral pins */
       m8xx.padir &= ~0x000C;        /* PA13 & PA12 must not drive the UART lines */
       m8xx.paodr &= ~0x000C;        /* PA12 & PA13 are not open drain */
@@ -702,7 +702,7 @@ m8xx_uart_scc_initialize (int minor)
       m8xx.pcpar &= ~0x00C0;        /* PC8 & PC9 are SCC2 DCD and CTS */
       m8xx.pcdir &= ~0x00C2;        /* PC8, PC9 & PC14 must not drive the UART lines */
       m8xx.pcso  |=  0x00C0;        /* Enable DCD and CTS inputs */
-      
+
       m8xx.sicr &= 0xFFFF00FF;      /* Clear TCS2 & RCS2, GR2=no grant, SC2=NMSI mode */
       m8xx.sicr |= (brg<<11) | (brg<<8); /* TCS2 = RCS2 = brg */
       break;
@@ -711,12 +711,12 @@ m8xx_uart_scc_initialize (int minor)
     case SCC3_MINOR:
       sccparms = &m8xx.scc3p;
       sccregs = &m8xx.scc3;
-      
+
       m8xx.pcpar &= ~0x0300;        /* PC6 & PC7 are SCC3 DCD and CTS */
       m8xx.pcdir &= ~0x0300;        /* PC6 & PC7 must not drive the UART lines */
       m8xx.pcso  |=  0x0300;        /* Enable DCD and CTS inputs */
       m8xx.pdpar |=  0x0130;        /* PD7, PD10 & PD11 are dedicated peripheral pins */
-      
+
       m8xx.sicr &= 0xFF00FFFF;      /* Clear TCS3 & RCS3, GR3=no grant, SC3=NMSI mode */
       m8xx.sicr |= (brg<<19) | (brg<<16); /* TCS3 = RCS3 = brg */
       break;
@@ -724,12 +724,12 @@ m8xx_uart_scc_initialize (int minor)
     case SCC4_MINOR:
       sccparms = &m8xx.scc4p;
       sccregs = &m8xx.scc4;
-      
+
       m8xx.pcpar &= ~0x0C00;        /* PC4 & PC5 are SCC4 DCD and CTS */
       m8xx.pcdir &= ~0x0C00;        /* PC4 & PC5 must not drive the UART lines */
       m8xx.pcso  |=  0x0C00;        /* Enable DCD and CTS inputs */
       m8xx.pdpar |=  0x02C0;        /* PD6, PD8 & PD9 are dedicated peripheral pins */
-       
+
       m8xx.sicr &= 0x00FFFFFF;      /* Clear TCS4 & RCS4, GR4=no grant, SC4=NMSI mode */
       m8xx.sicr |= (brg<<27) | (brg<<24); /* TCS4 = RCS4 = brg */
       break;
@@ -822,7 +822,7 @@ m8xx_uart_scc_initialize (int minor)
     consoleIrqData.on = m8xx_scc_enable;
     consoleIrqData.off = m8xx_scc_disable;
     consoleIrqData.isOn = m8xx_scc_isOn;
-    
+
     switch (minor) {
     case SCC2_MINOR:
       consoleIrqData.name = BSP_CPM_IRQ_SCC2;
@@ -834,7 +834,7 @@ m8xx_uart_scc_initialize (int minor)
       consoleIrqData.name = BSP_CPM_IRQ_SCC3;
       consoleIrqData.hdl = m8xx_scc3_interrupt_handler;
       break;
-      
+
     case SCC4_MINOR:
       consoleIrqData.name = BSP_CPM_IRQ_SCC4;
       consoleIrqData.hdl = m8xx_scc4_interrupt_handler;
@@ -895,7 +895,7 @@ m8xx_uart_smc_initialize (int minor)
   /*
    * Check that minor number is valid
    */
-  if ( (minor < SMC1_MINOR) || (minor > SMC2_MINOR) ) 
+  if ( (minor < SMC1_MINOR) || (minor > SMC2_MINOR) )
     return;
 
   m8xx.sdcr = 0x01;                 /* as per section 16.10.2.1 MPC821UM/AD */
@@ -922,7 +922,7 @@ m8xx_uart_smc_initialize (int minor)
     case SMC1_MINOR:
       smcparms = &m8xx.smc1p;
       smcregs = &m8xx.smc1;
-      
+
       m8xx.pbpar |=  0x000000C0;    /* PB24 & PB25 are dedicated peripheral pins */
       m8xx.pbdir &= ~0x000000C0;    /* PB24 & PB25 must not drive UART lines */
       m8xx.pbodr &= ~0x000000C0;    /* PB24 & PB25 are not open drain */
@@ -934,16 +934,16 @@ m8xx_uart_smc_initialize (int minor)
     case SMC2_MINOR:
       smcparms = &m8xx.smc2p;
       smcregs = &m8xx.smc2;
-      
+
       m8xx.pbpar |=  0x00000C00;    /* PB20 & PB21 are dedicated peripheral pins */
       m8xx.pbdir &= ~0x00000C00;    /* PB20 & PB21 must not drive the UART lines */
       m8xx.pbodr &= ~0x00000C00;    /* PB20 & PB21 are not open drain */
-      
+
       m8xx.simode &= 0x0FFFFFFF;    /* Clear SMC2CS & SMC2 for NMSI mode */
       m8xx.simode |= brg << 28;     /* SMC2CS = brg */
       break;
   }
-  
+
   /*
    * Set up SMC1 parameter RAM common to all protocols
    */
@@ -994,7 +994,7 @@ m8xx_uart_smc_initialize (int minor)
       m8xx_cp_execute_cmd (M8xx_CR_OP_INIT_RX_TX | M8xx_CR_CHAN_SMC2);
       break;
   }
-  
+
   /*
    * Enable receiver and transmitter
    */
@@ -1008,7 +1008,7 @@ m8xx_uart_smc_initialize (int minor)
 	  consoleIrqData.name = BSP_CPM_IRQ_SMC1;
 	  consoleIrqData.hdl  = m8xx_smc1_interrupt_handler;
 	  break;
-      
+
     	case SMC2_MINOR:
 	  consoleIrqData.name = BSP_CPM_IRQ_SMC2_OR_PIP;
 	  consoleIrqData.hdl  = m8xx_smc2_interrupt_handler;
@@ -1025,7 +1025,7 @@ void
 m8xx_uart_initialize(void)
 {
   int i;
-  
+
   for (i=0; i < 4; i++) {
     brg_spd[i] = 0;
     brg_used[i] = 0;
@@ -1044,7 +1044,7 @@ m8xx_uart_pollRead(
   if (RxBd[minor]->status & M8xx_BD_EMPTY) {
     return -1;
   }
-  rtems_cache_invalidate_multiple_data_lines( 
+  rtems_cache_invalidate_multiple_data_lines(
     (const void *) RxBd[minor]->buffer,
     RxBd[minor]->length
   );
@@ -1057,7 +1057,7 @@ m8xx_uart_pollRead(
 /*
  *  TODO: Get a free buffer and set it up.
  */
-int 
+int
 m8xx_uart_write(
   int minor,
   const char *buf,
@@ -1070,7 +1070,7 @@ m8xx_uart_write(
   TxBd[minor]->status = M8xx_BD_READY | M8xx_BD_WRAP | M8xx_BD_INTERRUPT;
   return 0;
 }
-  
+
 
 int
 m8xx_uart_pollWrite(

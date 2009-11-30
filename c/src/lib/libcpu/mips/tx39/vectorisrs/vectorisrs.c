@@ -1,5 +1,5 @@
 /*
- *  TX3904 Interrupt Vectoring 
+ *  TX3904 Interrupt Vectoring
  *
  *  $Id$
  */
@@ -38,7 +38,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
     unsigned int v = (cause >> 2) & 0x0f;
     CALL_ISR( MIPS_INTERRUPT_BASE + v, frame );
   }
-   
+
   if ( cause & 0x02 )       /* SW[0] */
     CALL_ISR( TX3904_IRQ_SOFTWARE_1, frame );
 

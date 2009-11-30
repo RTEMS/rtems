@@ -66,7 +66,7 @@ typedef enum
  * below.
  */
 
-typedef struct { 
+typedef struct {
 	unsigned has_altivec		: 1;
 	unsigned has_fpu			: 1;
 	unsigned has_hw_ptbl_lkup	: 1;

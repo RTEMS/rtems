@@ -54,7 +54,7 @@ static rtems_status_code mpc83xx_i2c_find_clock_divider
     int divider;
     int fdr_val;
   } dividers[] ={
-    {  256,0x20 }, {  288,0x21 }, {  320,0x22 }, {  352,0x23 }, 
+    {  256,0x20 }, {  288,0x21 }, {  320,0x22 }, {  352,0x23 },
     {  384,0x00 }, {  416,0x01 }, {  448,0x25 }, {  480,0x02 },
     {  512,0x26 }, {  576,0x03 }, {  640,0x04 }, {  704,0x05 },
     {  768,0x29 }, {  832,0x06 }, {  896,0x2a }, { 1024,0x07 },
@@ -118,7 +118,7 @@ static int mpc83xx_i2c_wait
 
   if (softc_ptr->initialized) {
     /*
-     * enable interrupt mask 
+     * enable interrupt mask
      */
     softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_MIEN;
     rc = rtems_semaphore_obtain(softc_ptr->irq_sema_id,RTEMS_WAIT,100);
@@ -171,19 +171,19 @@ static void mpc83xx_i2c_irq_handler
 \*=========================================================================*/
 {
   mpc83xx_i2c_softc_t *softc_ptr = (mpc83xx_i2c_softc_t *)handle;
-  
+
   /*
    * clear IRQ flag
    */
   softc_ptr->reg_ptr->i2csr &= ~MPC83XX_I2CSR_MIF;
 
   /*
-   * disable interrupt mask 
+   * disable interrupt mask
    */
   softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MIEN;
   if (softc_ptr->initialized) {
     rtems_semaphore_release(softc_ptr->irq_sema_id);
-  }  
+  }
 }
 
 /*=========================================================================*\
@@ -269,7 +269,7 @@ static void mpc83xx_i2c_install_irq_handler
      */
     rc = rtems_semaphore_create(rtems_build_name('i','2','c','s'),
 				0,
-				RTEMS_FIFO 
+				RTEMS_FIFO
 				| RTEMS_SIMPLE_BINARY_SEMAPHORE,
 				0,
 				&softc_ptr->irq_sema_id);
@@ -339,13 +339,13 @@ static rtems_status_code mpc83xx_i2c_init
   /*
    * set own slave address to broadcast (0x00)
    */
-  softc_ptr->reg_ptr->i2cadr = 0x00 ; 
+  softc_ptr->reg_ptr->i2cadr = 0x00 ;
 
   /*
    * set control register to module enable
    */
   softc_ptr->reg_ptr->i2ccr = MPC83XX_I2CCR_MEN;
-  
+
   /*
    * init interrupt stuff
    */
@@ -386,7 +386,7 @@ static rtems_status_code mpc83xx_i2c_send_start
 #endif
   if (0 != (softc_ptr->reg_ptr->i2ccr & MPC83XX_I2CCR_MSTA)) {
     /*
-     * already started, so send a "repeated start" 
+     * already started, so send a "repeated start"
      */
     softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_RSTA;
   }
@@ -470,11 +470,11 @@ static rtems_status_code mpc83xx_i2c_send_addr
    */
   if (addr > 0x7f) {
     long_addr = true;
-    addr_byte = (0xf0 
+    addr_byte = (0xf0
 		 | ((addr >> 7) & 0x06)
 		 | ((rw) ? 1 : 0));
     /*
-     * send first byte 
+     * send first byte
      */
     softc_ptr->reg_ptr->i2cdr = addr_byte;
     /*
@@ -491,9 +491,9 @@ static rtems_status_code mpc83xx_i2c_send_addr
     }
   }
   /*
-   * send (final) byte 
+   * send (final) byte
    */
-  addr_byte = ((addr << 1) 
+  addr_byte = ((addr << 1)
 	       | ((rw) ? 1 : 0));
 
   softc_ptr->reg_ptr->i2cdr = addr_byte;
@@ -541,7 +541,7 @@ static int mpc83xx_i2c_read_bytes
   softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MTX;
   softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_TXAK;
   /*
-   * FIXME: do we need to deactivate TXAK from the start, 
+   * FIXME: do we need to deactivate TXAK from the start,
    * when only one byte is to be received?
    */
   /*
@@ -569,7 +569,7 @@ static int mpc83xx_i2c_read_bytes
       return -rc;
     }
     *p++ = softc_ptr->reg_ptr->i2cdr;
-      
+
   }
 
  /*
@@ -611,7 +611,7 @@ static int mpc83xx_i2c_write_bytes
 #if defined(DEBUG)
   printk("mpc83xx_i2c_write_bytes called... ");
 #endif
-  softc_ptr->reg_ptr->i2ccr = 
+  softc_ptr->reg_ptr->i2ccr =
     (softc_ptr->reg_ptr->i2ccr & ~MPC83XX_I2CCR_TXAK) | MPC83XX_I2CCR_MTX;
   while (len-- > 0) {
     softc_ptr->reg_ptr->i2cdr = *p++;

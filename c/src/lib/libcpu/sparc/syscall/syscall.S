@@ -7,7 +7,7 @@
  *    + SYS_exit	(halt)
  *    + SYS_irqdis	(disable interrupts)
  *    + SYS_irqset	(set interrupt level)
- * 
+ *
  *  COPYRIGHT:
  *
  *  COPYRIGHT (c) 1995. European Space Agency.
@@ -50,10 +50,10 @@ SYM(syscall):
 	mov   	%l4, %psr
 	ba,a	9f
 
-1:					
-	ta	0			! halt 
+1:
+	ta	0			! halt
 9:					! leave
-	mov	0, %g1			! clear %g1 
+	mov	0, %g1			! clear %g1
         jmpl    %l2, %g0
         rett    %l2 + 4
 

@@ -4,7 +4,7 @@
  * This uses timer 0 for timing measurments.
  *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -16,7 +16,7 @@
  *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
  *  the number of microseconds since benchmark_timer_initialize() exitted.
  *
- *  It is important that the timer start/stop overhead be determined 
+ *  It is important that the timer start/stop overhead be determined
  *  when porting or modifying this code.
  *
  *  $Id$
@@ -31,7 +31,7 @@ uint16_t tstart;
 bool benchmark_timer_find_average_overhead;
 uint32_t tick_time;
 /*
- * Set up TC0 - 
+ * Set up TC0 -
  *   timer_clock2 (MCK/8)
  *   capture mode - this shouldn't matter
  */

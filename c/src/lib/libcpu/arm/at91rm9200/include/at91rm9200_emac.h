@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2003 by Cogent Computer Systems
  * Written by Mike Kelly <mike@cogcomp.com>
- *      
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -104,7 +104,7 @@
 #define EMAC_TSR_BNQ    BIT4          /* 1 = Transmit buffer not queued */
 #define EMAC_TSR_COMP   BIT5          /* 1 = Transmit complete */
 #define EMAC_TSR_UND    BIT6          /* 1 = Transmit underrun */
- 
+
 /* Receive Status Register, EMAC_RSR, Offset 0x20 */
 #define EMAC_RSR_BNA    BIT0          /* 1 = Buffer not available */
 #define EMAC_RSR_REC    BIT1          /* 1 = Frame received */
@@ -137,7 +137,7 @@
 #define EMAC_MAN_WRITE          (0x1 << 28)           /* Transfer is a write */
 #define EMAC_MAN_READ           (0x2 << 28)           /* Transfer is a read */
 #define EMAC_MAN_HIGH           BIT30                 /* Must be set */
-#define EMAC_MAN_LOW            BIT31 
+#define EMAC_MAN_LOW            BIT31
 
 /*
  * Bit assignments for Receive Buffer Descriptor

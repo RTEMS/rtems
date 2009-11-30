@@ -41,7 +41,7 @@ typedef struct mpc83xx_spi_softc {
 } mpc83xx_spi_softc_t ;
 
 typedef struct {
-  rtems_libi2c_bus_t  bus_desc;	
+  rtems_libi2c_bus_t  bus_desc;
   mpc83xx_spi_softc_t softc;
 } mpc83xx_spi_desc_t;
 

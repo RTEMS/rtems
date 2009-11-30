@@ -25,7 +25,7 @@ _start:
 	add3	r2, r2, #low(__bss_start); R2 = start of BSS
 	seth	r3, #shigh(_end)
 	add3	r3, r3, #low(_end)	; R3 = end of BSS + 1
-	
+
 	sub	r3, r2		; R3 = BSS size in bytes
 	mv	r4, r3
 	srli	r4, #2		; R4 = BSS size in longwords (rounded down)

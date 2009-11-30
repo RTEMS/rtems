@@ -96,10 +96,10 @@ static int isr_is_on(const rtems_irq_connect_data *irq)
 }
 
 static rtems_irq_connect_data ps2_isr_data = { AUX_IRQ,
-                                               ps2_mouse_interrupt, 
+                                               ps2_mouse_interrupt,
                                                0,
-                                               isr_on,  
-                                               isr_off, 
+                                               isr_on,
+                                               isr_off,
                                                isr_is_on };
 
 /*

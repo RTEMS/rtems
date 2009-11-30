@@ -36,7 +36,7 @@ typedef struct mpc83xx_i2c_softc {
 } mpc83xx_i2c_softc_t ;
 
 typedef struct {
-  rtems_libi2c_bus_t	   bus_desc;	
+  rtems_libi2c_bus_t	   bus_desc;
   struct mpc83xx_i2c_softc softc;
 } mpc83xx_i2c_desc_t;
 

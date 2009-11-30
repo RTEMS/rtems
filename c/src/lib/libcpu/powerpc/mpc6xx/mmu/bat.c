@@ -6,7 +6,7 @@
  *	    More detailed information can be found on motorola
  *	    site and more precisely in the following book :
  *
- *		MPC750 
+ *		MPC750
  *		Risc Microporcessor User's Manual
  *		Mtorola REF : MPC750UM/AD 8/97
  *
@@ -380,7 +380,7 @@ setbat (int typ, int bat_index, unsigned long virt, unsigned long phys,
       init_done = 1;
     }
   }
-  
+
   err = check_overlap (typ, virt, size);
   if ((size >= (1 << 17)) && (err >= 0) && (err != bat_index)) {
     rtems_interrupt_enable (level);

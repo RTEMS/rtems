@@ -1,7 +1,7 @@
-/* 
+/*
  * cpm.h
- * 
- * This include file contains definitions pertaining 
+ *
+ * This include file contains definitions pertaining
  * to the Communications Processor Module (CPM) on the MPC8xx.
  *
  * Copyright (c) 1999, National Research Council of Canada

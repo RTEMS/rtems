@@ -1,10 +1,10 @@
 /*
  *  Driver for AT91RM9200 USART ports
  *
- * COPYRIGHT (c) 2006-2009. 
+ * COPYRIGHT (c) 2006-2009.
  * NCB - Sistemas Embarcados Ltda. (Brazil)
  * Fernando Nicodemos <fgnicodemos@terra.com.br>
- * 
+ *
  * and
  *
  * COPYRIGHT (c) 1989-2009.
@@ -60,7 +60,7 @@ at91rm9200_usart_regs_t *usart_get_base(int minor)
 
   if (console_entry == NULL)
     return 0;
- 
+
   port = (at91rm9200_usart_regs_t *) console_entry->ulCtrlPort1;
   //printk( "minor=%d entry=%p port=%p\n", minor, console_entry, port );
 
@@ -241,11 +241,11 @@ static int usart_set_attributes(int minor, const struct termios *t)
 	mode |= US_MR_PAR_NONE;
 
   baud_requested = t->c_cflag & CBAUD;
-  
+
   /* If not, set the dbgu console baud as USART baud default */
   if (!baud_requested)
-    baud_requested = BSP_get_baud();  
-  
+    baud_requested = BSP_get_baud();
+
   baud = rtems_termios_baud_to_number(baud_requested);
 
   brgr = (at91rm9200_get_mck() / 16) / baud;

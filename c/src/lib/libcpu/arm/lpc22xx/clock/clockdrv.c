@@ -35,7 +35,7 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
                                          3,     /* unused for ARM cpus */
                                          0 };   /* unused for ARM cpus */
 
-/* If you follow the code, this is never used, so any value 
+/* If you follow the code, this is never used, so any value
  * should work
  */
 #define CLOCK_VECTOR 0
@@ -72,16 +72,16 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
  *   - enable it
  *   - clear any pending interrupts
  *
- * Since you may want the clock always running, you can 
+ * Since you may want the clock always running, you can
  * enable interrupts here. If you do so, the clock_isr_on(),
- * clock_isr_off(), and clock_isr_is_on() functions can be 
+ * clock_isr_off(), and clock_isr_is_on() functions can be
  * NOPs.
  */
- 
+
   /* set timer to generate interrupt every rtems_configuration_get_microseconds_per_tick()
    * MR0/(LPC22xx_Fpclk/(PR0+1)) = 10/1000 = 0.01s
-   */			
-	
+   */
+
 #define Clock_driver_support_initialize_hardware() \
   do { \
 	T0TCR &= 0; 	 /* disable and clear timer 0, set to  */ \
@@ -95,7 +95,7 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
    } while (0)
 
 /**
- * Do whatever you need to shut the clock down and remove the 
+ * Do whatever you need to shut the clock down and remove the
  * interrupt handler. Since this normally only gets called on
  * RTEMS shutdown, you may not need to do anything other than
  * remove the ISR.
@@ -110,12 +110,12 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
 	uint32_t clicks;
-	
+
 	clicks = T0TC;  /*T0TC is the 32bit time counter 0*/
-	
+
 	return (uint32_t) (rtems_configuration_get_microseconds_per_tick() - clicks) * 1000;
 }
-	
+
 #define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
 
 

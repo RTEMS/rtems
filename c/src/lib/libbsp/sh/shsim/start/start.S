@@ -25,7 +25,7 @@
 #warning The call is "void boot_card(const char* cmdline);"
 #warning You need to pass a NULL.
 #warning Please check and remove these warnings.
-	
+
 	BEGIN_CODE
 	PUBLIC(start)
 SYM (start):
@@ -62,7 +62,7 @@ SYM (start):
 	mov #0,r4		! command line
 	mov.l main_k,r0
 	jsr @r0
-	
+
 
 	! call exit
 	mov	r0,r4

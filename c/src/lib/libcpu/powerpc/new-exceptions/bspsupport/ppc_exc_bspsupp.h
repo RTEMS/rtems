@@ -40,7 +40,7 @@ extern "C" {
 typedef int (*ppc_exc_handler_t)(BSP_Exception_frame *f, unsigned int vector);
 
 /*
- * Bits in MSR that are enabled during execution of exception handlers / ISRs 
+ * Bits in MSR that are enabled during execution of exception handlers / ISRs
  * (on classic PPC these are DR/IR/RI [default], on bookE-style CPUs they should
  * be set to 0 during initialization)
  *
@@ -95,7 +95,7 @@ typedef uint32_t ppc_exc_min_prolog_t[4];
 /* Templates are ppc_raw_except_func BUT they must be exactly 16 bytes */
 typedef rtems_raw_except_func ppc_exc_min_prolog_template_t;
 
-/* 
+/*
  * Expand a prolog template into 'buf' using vector 'vec'
  */
 void

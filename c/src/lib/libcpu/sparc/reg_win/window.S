@@ -1,19 +1,19 @@
 /*
  *  window.s
  *
- *  This file contains the register window management routines for the 
+ *  This file contains the register window management routines for the
  *  SPARC architecture.  Trap handlers for the following capabilities
  *  are included in this file:
  *
  *    + Window Overflow
  *    + Window Underflow
  *    + Flushing All Windows
- * 
+ *
  *  COPYRIGHT:
  *
- *  This file includes the window overflow and underflow handlers from 
- *  the file srt0.s provided with the binary distribution of the SPARC 
- *  Instruction Simulator (SIS) found at 
+ *  This file includes the window overflow and underflow handlers from
+ *  the file srt0.s provided with the binary distribution of the SPARC
+ *  Instruction Simulator (SIS) found at
  *  ftp://ftp.estec.esa.nl/pub/ws/wsd/erc32.
  *
  *  COPYRIGHT (c) 1995. European Space Agency.
@@ -41,7 +41,7 @@
 SYM(window_overflow_trap_handler):
 
         /*
-         *  Calculate new WIM by "rotating" the valid bits in the WIM right 
+         *  Calculate new WIM by "rotating" the valid bits in the WIM right
          *  by one position.  The following shows how the bits move for a SPARC
          *  cpu implementation where SPARC_NUMBER_OF_REGISTER_WINDOWS is 8.
          *
@@ -49,7 +49,7 @@ SYM(window_overflow_trap_handler):
          *    NEW WIM = 07654321
          *
          *  NOTE: New WIM must be stored in a global register since the
-         *        "save" instruction just prior to the load of the wim 
+         *        "save" instruction just prior to the load of the wim
          *        register will result in the local register set changing.
          */
 
@@ -58,7 +58,7 @@ SYM(window_overflow_trap_handler):
         srl  %l3, 1, %g1                 ! g1 = WIM >> 1
         sll  %l3, SPARC_NUMBER_OF_REGISTER_WINDOWS-1 , %l4
                                          ! l4 = WIM << (Number Windows - 1)
-        or   %l4, %g1, %g1               ! g1 = (WIM >> 1) | 
+        or   %l4, %g1, %g1               ! g1 = (WIM >> 1) |
                                          !      (WIM << (Number Windows - 1))
 
         save                             ! Get into window to be saved.
@@ -92,7 +92,7 @@ SYM(window_overflow_trap_handler):
 SYM(window_underflow_trap_handler):
 
         /*
-         *  Calculate new WIM by "rotating" the valid bits in the WIM left 
+         *  Calculate new WIM by "rotating" the valid bits in the WIM left
          *  by one position.  The following shows how the bits move for a SPARC
          *  cpu implementation where SPARC_NUMBER_OF_REGISTER_WINDOWS is 8.
          *
@@ -100,7 +100,7 @@ SYM(window_underflow_trap_handler):
          *    NEW WIM = 07654321
          *
          *  NOTE: New WIM must be stored in a global register since the
-         *        "save" instruction just prior to the load of the wim 
+         *        "save" instruction just prior to the load of the wim
          *        register will result in the local register set changing.
          */
 
@@ -170,9 +170,9 @@ SYM(window_underflow_trap_handler):
          *    l1 = pc
          *    l2 = npc
          */
- 
+
         PUBLIC(window_flush_trap_handler)
- 
+
 SYM(window_flush_trap_handler):
         /*
          *  Save the global registers we will be using
@@ -195,47 +195,47 @@ SYM(window_flush_trap_handler):
         sll     %g4, %g5, %g4                 ! g4 = WIM mask for CWP+1 invalid
 
         restore                               ! go back one register window
- 
+
 save_frame_loop:
         sll     %g4, 1, %g5                   ! rotate the "wim" left 1
         srl     %g4, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g4
         or      %g4, %g5, %g4                 ! g4 = wim if we do one restore
- 
+
         /*
          *  If a restore would not underflow, then continue.
          */
- 
+
         andcc   %g4, %g2, %g0                 ! Any windows to flush?
         bnz     done_flushing                 ! No, then continue
         nop
- 
+
         restore                               ! back one window
- 
+
         /*
          *  Now save the window just as if we overflowed to it.
          */
- 
+
         std     %l0, [%sp + CPU_STACK_FRAME_L0_OFFSET]
         std     %l2, [%sp + CPU_STACK_FRAME_L2_OFFSET]
         std     %l4, [%sp + CPU_STACK_FRAME_L4_OFFSET]
         std     %l6, [%sp + CPU_STACK_FRAME_L6_OFFSET]
- 
+
         std     %i0, [%sp + CPU_STACK_FRAME_I0_OFFSET]
         std     %i2, [%sp + CPU_STACK_FRAME_I2_OFFSET]
         std     %i4, [%sp + CPU_STACK_FRAME_I4_OFFSET]
         std     %i6, [%sp + CPU_STACK_FRAME_I6_FP_OFFSET]
- 
+
         ba      save_frame_loop
         nop
- 
+
 done_flushing:
- 
+
         add     %g3, 2, %g3                   ! calculate desired WIM
         and     %g3, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g3
         mov     1, %g4
         sll     %g4, %g3, %g4                 ! g4 = new WIM
         mov     %g4, %wim
- 
+
         mov     %g1, %psr                     ! restore PSR
         nop
         nop

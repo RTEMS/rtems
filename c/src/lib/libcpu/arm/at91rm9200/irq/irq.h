@@ -2,7 +2,7 @@
  * Interrupt handler Header file
  *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
- *      
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -24,7 +24,7 @@ extern "C" {
 /*
  * Include some preprocessor value also used by assember code
  */
-  
+
 #include <rtems.h>
 #include <at91rm9200.h>
 
@@ -35,7 +35,7 @@ extern void default_int_handler();
 /* possible interrupt sources on the AT91RM9200 */
 #define AT91RM9200_INT_FIQ        0
 #define AT91RM9200_INT_SYSIRQ     1
-#define AT91RM9200_INT_PIOA       2 
+#define AT91RM9200_INT_PIOA       2
 #define AT91RM9200_INT_PIOB       3
 #define AT91RM9200_INT_PIOC       4
 #define AT91RM9200_INT_PIOD       5
@@ -71,7 +71,7 @@ extern void default_int_handler();
 /* we can treat the AT91RM9200 AIC_SVR_BASE as */
 /* a vector table */
 #define VECTOR_TABLE AIC_SVR_BASE
-                                                                                           
+
 typedef unsigned char  rtems_irq_level;
 typedef unsigned char  rtems_irq_trigger;
 
@@ -117,7 +117,7 @@ void BSP_rtems_irq_mngt_init();
 int BSP_install_rtems_irq_handler       (const rtems_irq_connect_data*);
 
 /*
- * function to get the current RTEMS irq handler for ptr->name. 
+ * function to get the current RTEMS irq handler for ptr->name.
  */
 int BSP_get_current_rtems_irq_handler   (rtems_irq_connect_data* ptr);
 

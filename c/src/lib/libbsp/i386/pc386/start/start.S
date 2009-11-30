@@ -104,7 +104,7 @@ speakl:	jmp	speakl             # and SPIN!!!
 	/* Save multiboot info if we detect a multiboot loader */
 	cmp 	$0x2badb002,eax
 	jne	2f
-	
+
 	/* We have multiboot info; let's hope DS and ES are OK... */
 	movl	ebx, SYM(_boot_multiboot_info_p)
 	/* Check for memory size info and save */
@@ -231,7 +231,7 @@ SYM (zero_bss):
 	jne     1f
 	movl    $SYM (no_sse_msg), 0(esp)
 	jmp     SYM(_sse_panic)
-1:	
+1:
 #ifdef __SSE2__
 	testl   $0x04000000, eax
 	jne     1f
@@ -301,7 +301,7 @@ SYM(_boot_multiboot_cmdline):
 	.rept 256 /* cmd line */
 	.byte 0
 	.endr
-	
+
 	PUBLIC(_stack_size)
 SYM(_stack_size):
 	.long STACK_SIZE

@@ -73,7 +73,7 @@ void bfin_interrupt_enable_all(int source, bool enable);
 /* disable a source independently of the individual ISR enables (starts
    out all enabled) */
 void bfin_interrupt_enable_global(int source, bool enable);
- 
+
 #ifdef __cplusplus
 }
 #endif
