@@ -1,3 +1,29 @@
+2009-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnds/include/nds/arm9/exceptions.h,
+	libnds/include/nds/arm9/image.h,
+	libnds/include/nds/arm9/input.h,
+	libnds/include/nds/arm9/math.h,
+	libnds/include/nds/arm9/pcx.h,
+	libnds/include/nds/arm9/rumble.h,
+	libnds/include/nds/arm9/sound.h,
+	libnds/include/nds/arm9/trig_lut.h,
+	libnds/source/arm9/dcache.S,
+	libnds/source/arm9/exceptionHandler.S,
+	libnds/source/arm9/exceptions.c,
+	libnds/source/arm9/image.c,
+	libnds/source/arm9/keys.c,
+	libnds/source/arm9/pcx.c,
+	libnds/source/arm9/rumble.c,
+	libnds/source/arm9/sound.c,
+	libnds/source/arm9/system.c,
+	libnds/source/arm9/touch.c,
+	libnds/source/common/biosCalls.S,
+	libnds/source/common/gbfs.c,
+	libnds/source/common/interruptDispatcher.S,
+	libnds/source/common/interrupts.c:
+	Remove CVS-$Log's.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/nds.cfg: Remove RTEMS_BSP_FAMILY.
