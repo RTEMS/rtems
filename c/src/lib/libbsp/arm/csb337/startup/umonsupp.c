@@ -2,6 +2,9 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Modified by Fernando Nicodemos <fgnicodemos@terra.com.br>
+ *  from NCB - Sistemas Embarcados Ltda. (Brazil)
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.

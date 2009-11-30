@@ -1,11 +1,21 @@
 /*
- *  CSB337 Memory Map
+ * CSB337 and CSB637 Memory map
  *
- *  Copyright (c) 2004 by Cogent Computer Systems
- *  Written by Jay Monkman <jtm@lopingdog.com>
+ * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
+ * File from the old CSB337 RTEMS BSP
+ * 
+ *  Modified by Joel Sherill 
+ *  from OAR Corporation and 
+ *  Fernando Nicodemos <fgnicodemos@terra.com.br>
+ *  from NCB - Sistemas Embarcados Ltda. (Brazil)
+ * 
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
+
 #include <rtems.h>
 #include <libcpu/mmu.h>
 
@@ -19,13 +29,15 @@ mmu_sect_map_t mem_map[] = {
     {0x00200000, 0x00000000,   1,    MMU_CACHE_NONE},     /* SRAM */
     {0x00200000, 0x00200000,   1,    MMU_CACHE_NONE},     /* SRAM */
     {0x10000000, 0x10000000,   8,    MMU_CACHE_NONE},     /* FLASH */
-#if csb637
+#if csb637 /* CSB637 or KIT637_V6 */
+    {0x20000000, 0x20000000,  64,    MMU_CACHE_WTHROUGH}, /* SDRAM */
+#elif kit637_v6 
     {0x20000000, 0x20000000,  64,    MMU_CACHE_WTHROUGH}, /* SDRAM */
 #else /* CSB337 */
     {0x20000000, 0x20000000,  32,    MMU_CACHE_WTHROUGH}, /* SDRAM */
 #endif
 #if ENABLE_LCD
-    {0x30000000, 0x30000000,   8,    MMU_CACHE_NONE},     /* video */
+    {0x30000000, 0x30000000,   8,    MMU_CACHE_NONE},     /* Video buffer - 8MB */
 #endif
     {0x40000000, 0x40000000,   1,    MMU_CACHE_NONE},     /* Expansion CS0 */
     {0x50000000, 0x50000000,   1,    MMU_CACHE_NONE},     /* CF CE 1 */

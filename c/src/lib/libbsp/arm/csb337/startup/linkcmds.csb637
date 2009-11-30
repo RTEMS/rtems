@@ -1,13 +1,17 @@
 /*
- * Cogent CSB337 Linker script
+ * Cogent CSB637 linker script
  *
- * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
- *	
+ *  Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
+ *  File from the old CSB337 RTEMS BSP
+ * 
+ *  Modified by Joel Sherill 
+ *  from OAR Corporation and 
+ *  Fernando Nicodemos <fgnicodemos@terra.com.br>
+ *  from NCB - Sistemas Embarcados Ltda. (Brazil)
+ * 
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *
  *  http://www.rtems.com/license/LICENSE.
- *
  *
  *  $Id$
  */

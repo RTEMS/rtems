@@ -45,10 +45,12 @@ $(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirs
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
 
+if ENABLE_LCD
 $(PROJECT_INCLUDE)/sed1356.h: include/sed1356.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sed1356.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sed1356.h
-
+endif
+if ENABLE_UMON
 $(PROJECT_INCLUDE)/umon/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/umon
 	@: > $(PROJECT_INCLUDE)/umon/$(dirstamp)
@@ -74,7 +76,7 @@ PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 $(PROJECT_INCLUDE)/rtems/umon.h: ../../shared/umon/umon.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/umon.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/umon.h
-
+endif
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h

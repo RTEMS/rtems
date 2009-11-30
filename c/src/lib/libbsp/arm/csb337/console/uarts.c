@@ -135,7 +135,7 @@ console_tbl Console_Port_Tbl[] = {
     0                  /* ulIntVector - NOT USED */
   },
 #endif
-#if ENABLE_UMON
+#if (ENABLE_UMON && ENABLE_UMON_CONSOLE)
   {
     "/dev/umon",       /* sDeviceName */
     SERIAL_CUSTOM,     /* deviceType */

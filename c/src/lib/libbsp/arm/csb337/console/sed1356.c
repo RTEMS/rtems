@@ -1,5 +1,5 @@
 /*
- *  SED1356 Support
+ *  SED1356 Support (for  KIT637_V6 (CSB637)
  *
  *  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
  *  which includes this notice:
@@ -25,8 +25,10 @@
  *
  *  Ed Sutter has been informed that this code is being used in RTEMS.
  *
- *  The code has been reformatted to be more compliant with RTEMS
- *  coding standards and to eliminate C++ style comments.
+ *  This code was reformatted by Joel Sherrill from OAR Corporation and
+ *  Fernando Nicodemos <fgnicodemos@terra.com.br> from NCB - Sistemas
+ *  Embarcados Ltda. (Brazil) to be more compliant with RTEMS coding
+ *  standards and to eliminate C++ style comments.
  *
  *  $Id$
  */

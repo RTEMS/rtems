@@ -1,3 +1,11 @@
+2009-11-30	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* Makefile.am, preinstall.am, console/fbcons.c, console/font8x16.h,
+	console/sed1356.c, console/uarts.c, include/sed1356.h,
+	startup/bspstart.c, startup/linkcmds.csb337, startup/linkcmds.csb637,
+	startup/memmap.c, startup/umonsupp.c: Update to match development
+	version.
+
 2009-11-21	Fernando Nicodemos <fgnicodemos@terra.com.br>
 
 	* Makefile.am, configure.ac, console/uarts.c: Add initial support for
