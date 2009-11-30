@@ -43,6 +43,17 @@ typedef Chain_Node rtems_chain_node;
  */
 typedef Chain_Control rtems_chain_control;
 
+/**
+ *  @brief Chain initializer for an empty chain with designator @a name.
+ */
+#define RTEMS_CHAIN_INITIALIZER_EMPTY(name) \
+  CHAIN_INITIALIZER_EMPTY(name)
+
+/**
+ *  @brief Chain definition for an empty chain with designator @a name.
+ */
+#define RTEMS_CHAIN_DEFINE_EMPTY(name) \
+  CHAIN_DEFINE_EMPTY(name)
 
 #include <rtems/chain.inl>
 

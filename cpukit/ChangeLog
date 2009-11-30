@@ -26,6 +26,11 @@
 
 2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* score/include/rtems/score/chain.h, sapi/include/rtems/chain.h: Added
+	defines for initialization of empty chains. 
+
+2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* rtems/include/rtems/rtems/timer.h: Added timer server control block
 	Timer_server_Control.  Removed _Timer_Server thread pointer. Added
 	_Timer_server pointer to the default timer server control block.

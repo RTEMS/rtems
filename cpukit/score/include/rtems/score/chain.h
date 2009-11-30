@@ -94,6 +94,22 @@ typedef struct {
 } Chain_Control;
 
 /**
+ *  @brief Chain initializer for an empty chain with designator @a name.
+ */
+#define CHAIN_INITIALIZER_EMPTY(name) \
+  { \
+    (Chain_Node *) &(name).permanent_null, \
+    NULL, \
+    (Chain_Node *) &(name) \
+  }
+
+/**
+ *  @brief Chain definition for an empty chain with designator @a name.
+ */
+#define CHAIN_DEFINE_EMPTY(name) \
+  Chain_Control name = CHAIN_INITIALIZER_EMPTY(name)
+
+/**
  *  @brief Initialize a Chain Header
  *
  *  This routine initializes @a the_chain structure to manage the
