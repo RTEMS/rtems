@@ -17,8 +17,8 @@
 \*===============================================================*/
 
 
-#ifndef _LIBCHIP_SPI_MEMDRV_H 
-#define _LIBCHIP_SPI_MEMDRV_H 
+#ifndef _LIBCHIP_SPI_MEMDRV_H
+#define _LIBCHIP_SPI_MEMDRV_H
 
 #include <rtems/libi2c.h>
 

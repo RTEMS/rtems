@@ -1,5 +1,5 @@
 /*  cplb.h
- *  
+ *
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
  *             written by Alain Schaefer <alain.schaefer@easc.ch>
  *
@@ -14,7 +14,7 @@
 
 /* CPLB configurations */
 #define CPLB_DEF_CACHE_WT	CPLB_L1_CHBL | CPLB_WT
-#define CPLB_DEF_CACHE_WB	CPLB_L1_CHBL 
+#define CPLB_DEF_CACHE_WB	CPLB_L1_CHBL
 #define CPLB_CACHE_ENABLED	CPLB_L1_CHBL | CPLB_DIRTY
 
 #define CPLB_DEF_CACHE		CPLB_L1_CHBL | CPLB_WT

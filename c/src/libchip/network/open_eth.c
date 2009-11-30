@@ -243,7 +243,7 @@ open_eth_initialize_hardware (struct open_eth_softc *sc)
     if (!sc->en100MHz) mii_cr = 0;
     write_mii(0, mii_cr | 0x8000);
     while (read_mii(0) & 0x8000) {}
-    if (!sc->en100MHz) write_mii(0, 0); 
+    if (!sc->en100MHz) write_mii(0, 0);
     mii_cr = read_mii(0);
     printf("open_eth: driver attached, PHY config : 0x%04" PRIx32 "\n", read_mii(0));
 

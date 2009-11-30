@@ -1248,7 +1248,7 @@ xl_mii_writereg(
 static int
 xl_miibus_readreg(
    struct elnk_softc	*sc,
-   int			phy, 
+   int			phy,
    int			reg )
 {
    struct xl_mii_frame	frame;
@@ -1278,8 +1278,8 @@ xl_miibus_readreg(
 static int
 xl_miibus_writereg(
    struct elnk_softc		*sc,
-   int			phy, 
-   int			reg, 
+   int			phy,
+   int			reg,
    int			data )
 {
    struct xl_mii_frame	frame;
@@ -2657,7 +2657,7 @@ elnk_init (void *arg)
          xl_miibus_writereg(sc, 0x18, MII_ANAR, ANAR_10 | ANAR_TX | ANAR_10_FD | ANAR_TX_FD );  /*  ANAR_T4 */
          xl_miibus_writereg(sc, 0x18, MII_BMCR, BMCR_STARTNEG | BMCR_AUTOEN );
 
-         for (i=0; ((sr = xl_miibus_readreg(sc, 0x18, MII_BMSR)) & BMSR_ACOMP) == 0 && i < 20; i++) 
+         for (i=0; ((sr = xl_miibus_readreg(sc, 0x18, MII_BMSR)) & BMSR_ACOMP) == 0 && i < 20; i++)
             DELAY(10000);
       }
 

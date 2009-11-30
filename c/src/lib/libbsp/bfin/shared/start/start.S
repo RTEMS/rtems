@@ -1,6 +1,6 @@
 
 
-#include <rtems/bfin/bfin.h>   
+#include <rtems/bfin/bfin.h>
 
 #include <bspopts.h>
 
@@ -39,7 +39,7 @@ __start:
     /* Start by setting up a stack */
     sp.h = 0xFFB0;
     sp.l = 0x0F00;
-    
+
     /* Maybe we should zero the memory in the .bss section.  */
 
     /* This changes to the supervisor mode */
@@ -47,34 +47,34 @@ __start:
     p0.h = START;
     p1.l = LO(EVT15);
     p1.h = HI(EVT15);
-    
+
     [P1] = P0;
-    
+
     P0.h = HI(IMASK);
     P0.l = LO(IMASK);
     R0 = [P0];
     /* R1.l = EVT_IVG15 & 0xFFFF; */
     R1.l = 0x8000;
-    
+
     R0 = R0 | R1;
-    
+
     [P0] = R0;
 
     RAISE 15;
-    
+
     P0.l = WAIT;
     P0.h = WAIT;
 
     RETI = P0;
     RTI;
-    
+
     /* endless loop to wait */
-    WAIT:   
+    WAIT:
     jump WAIT;
-    
+
     START:
     [--SP] = RETI;
-    
+
     p0.h = _bss_start;
     p0.l = _bss_start;
     p1.h = _end;
@@ -82,7 +82,7 @@ __start:
     r0 = p0;
     r1 = p1;
     r1 = r1 - r0;
-    p1 = r1;    
+    p1 = r1;
     r0 = 0;
 
     /* Set _bss_start until _end to zero */
@@ -96,8 +96,8 @@ __start:
     call (p0);
 
     p0.l = _exit;
-    p0.h = _exit; 
-    P3 = P4; 
+    p0.h = _exit;
+    P3 = P4;
     jump    (p0)        /* Should not return.  */
 
 .global _null_isr

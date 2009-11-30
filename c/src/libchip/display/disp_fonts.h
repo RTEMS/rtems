@@ -30,8 +30,8 @@ typedef int8_t disp_font_dimen;
 
 struct disp_font_bounding_box
 {
-  disp_font_dimen w, h, x, y; 
-}; 
+  disp_font_dimen w, h, x, y;
+};
 
 struct disp_font_glyph
 {

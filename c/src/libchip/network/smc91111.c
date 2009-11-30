@@ -47,13 +47,13 @@
    2 for added data IO output: get_reg, put_reg
    4 for packet allocation/free output
    8 for only startup status, so we can tell we're installed OK
-   16 dump phy read/write 
+   16 dump phy read/write
    32 precise register dump
    64 dump packets
 */
 /*#define DEBUG (-1)*/
 /*#define DEBUG (-1 & ~(16))*/
-#define DEBUG (0) 
+#define DEBUG (0)
 
 #include "smc91111config.h"
 #include <libchip/smc91111.h>
@@ -569,7 +569,7 @@ static void sendpacket(struct ifnet *ifp, struct mbuf *m)
 
 		CYG_ASSERT(sdata, "!No sg data pointer here");
 
-		/* start on an odd offset? 
+		/* start on an odd offset?
 		 * If last byte also (1byte mbuf with different pointer should not occur)
 		 * let following code handle it
 		 */
@@ -579,7 +579,7 @@ static void sendpacket(struct ifnet *ifp, struct mbuf *m)
 			odd = ~odd;
 			len--;
 		}
-		
+
 		/* speed up copying a bit, never copy last word */
 		while(len >= 17){
 			put_data(cpd, *(sdata));
@@ -593,13 +593,13 @@ static void sendpacket(struct ifnet *ifp, struct mbuf *m)
 			sdata += 8;
 			len -= 16;
 		}
-		
+
 		/* copy word wise, skip last word */
 		while (len >= 3) {
 			put_data(cpd, *sdata++);
 			len -= sizeof(*sdata);
 		}
-		
+
 		/* one or two bytes left to put into fifo */
 		if ( len > 1 ){
 			/* the last 2bytes */
@@ -1637,7 +1637,7 @@ void lan91cxx_print_bank(int bank){
 		regno=i+bank<<3;
 		regval[i] = get_reg(cpd, regno);
 	}
-	printk("---- BANK %d ----\n\r",bank);	
+	printk("---- BANK %d ----\n\r",bank);
 	for(i=0; i<8; i++){
 		printk("0x%x: 0x%x\n\r",i,regval[i]);
 	}

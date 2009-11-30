@@ -4,7 +4,7 @@
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
- *  
+ *
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
  *             written by Alain Schaefer <alain.schaefer@easc.ch>
  *                    and Antonio Giovanini <antonio@atos.com.br>
@@ -105,16 +105,16 @@ void bsp_start(void)
 
  /*
   * initPLL
-  * 
+  *
   * Routine to initialize the PLL. The BF537 Stamp uses a 27 Mhz XTAL. BISON
   * See "../bf537Stamp/include/bsp.h" for more information.
   */
 
 static void initPLL(void) {
- 
+
 #ifdef BISON
   unsigned int n;
-  
+
   /* Configure PLL registers */
   *((uint16_t*)PLL_LOCKCNT) = 0x1000;
   *((uint16_t*)PLL_DIV) = PLL_CSEL|PLL_SSEL;
@@ -124,16 +124,16 @@ static void initPLL(void) {
   asm("cli r0;");
   asm("idle;");
   asm("sti r0;");
-  
+
   /* Delay for PLL stabilization */
-  for (n=0; n<200; n++) {} 
+  for (n=0; n<200; n++) {}
 #endif
-  
+
 }
 
  /*
   * initEBIU
-  * 
+  *
   * Configure extern memory
   */
 
@@ -153,8 +153,8 @@ static void initEBIU(void) {
   *((uint32_t*)EBIU_AMBCTL0)  = 0x7bb07bb0L;
   *((uint32_t*)EBIU_AMBCTL1)  = 0x7bb07bb0L;
   *((uint16_t*)EBIU_AMGCTL)   = 0x000f;
-  
-  /* Configure SDRAM 
+
+  /* Configure SDRAM
   *((uint32_t*)EBIU_SDGCTL) = 0x0091998d;
   *((uint16_t*)EBIU_SDBCTL) = 0x0013;
   *((uint16_t*)EBIU_SDRRC)  = 0x0817;
@@ -164,7 +164,7 @@ static void initEBIU(void) {
 
  /*
   * initGPIO
-  * 
+  *
   * Enable LEDs port
   */
 static void initGPIO(void) {

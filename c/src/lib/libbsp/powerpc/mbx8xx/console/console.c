@@ -538,7 +538,7 @@ serial_init(void)
 	bd_t	*bd;
 
 #if NVRAM_CONFIGURE == 1
-	if ( ((nvram->console_mode & 0x06) != 0x04 ) || 
+	if ( ((nvram->console_mode & 0x06) != 0x04 ) ||
 	     ((nvram->console_mode & 0x30) != 0x20 )) {
 	  /*
 	   * FIXME: refine this condition...

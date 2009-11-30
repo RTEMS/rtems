@@ -37,8 +37,8 @@ typedef struct _greth_regs {
 
 #define GRETH_TOTAL_BD           128
 #define GRETH_MAXBUF_LEN         1520
-                                
-/* Tx BD */                     
+
+/* Tx BD */
 #define GRETH_TXD_ENABLE      0x0800 /* Tx BD Enable */
 #define GRETH_TXD_WRAP        0x1000 /* Tx BD Wrap (last BD) */
 #define GRETH_TXD_IRQ         0x2000 /* Tx BD IRQ Enable */
@@ -58,13 +58,13 @@ typedef struct _greth_regs {
 #define GRETH_TXD_CS          (GRETH_TXD_IPCS            | \
                                GRETH_TXD_TCPCS           | \
                                GRETH_TXD_UDPCS)
-                                
-/* Rx BD */                     
+
+/* Rx BD */
 #define GRETH_RXD_ENABLE      0x0800 /* Rx BD Enable */
 #define GRETH_RXD_WRAP        0x1000 /* Rx BD Wrap (last BD) */
 #define GRETH_RXD_IRQ         0x2000 /* Rx BD IRQ Enable */
 
-#define GRETH_RXD_DRIBBLE     0x4000 /* Rx BD Dribble Nibble Status */                                
+#define GRETH_RXD_DRIBBLE     0x4000 /* Rx BD Dribble Nibble Status */
 #define GRETH_RXD_TOOLONG     0x8000 /* Rx BD Too Long Status */
 #define GRETH_RXD_CRCERR      0x10000 /* Rx BD CRC Error Status */
 #define GRETH_RXD_OVERRUN     0x20000 /* Rx BD Overrun Status */
@@ -131,12 +131,12 @@ int rtems_greth_driver_attach (
 );
 
 /* PHY data */
-struct phy_device_info 
+struct phy_device_info
 {
    int vendor;
    int device;
    int rev;
-   
+
    int adv;
    int part;
 

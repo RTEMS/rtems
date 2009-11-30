@@ -21,8 +21,8 @@
  */
 
 
-#ifndef _LIBCHIP_SPI_FLASH_M25P40_H 
-#define _LIBCHIP_SPI_FLASH_M25P40_H 
+#ifndef _LIBCHIP_SPI_FLASH_M25P40_H
+#define _LIBCHIP_SPI_FLASH_M25P40_H
 
 #include <libchip/spi-memdrv.h>
 
@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 /*
- * pass one of these descriptor pointers to rtems_libi2c_register_drv 
+ * pass one of these descriptor pointers to rtems_libi2c_register_drv
  */
 extern rtems_libi2c_drv_t *spi_flash_m25p40_rw_driver_descriptor;
 

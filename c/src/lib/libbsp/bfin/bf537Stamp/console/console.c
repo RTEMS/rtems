@@ -1,5 +1,5 @@
 /*  Console driver for bf537Stamp
- * 
+ *
  *  Copyright (c) 2008 Kallisti Labs, Los Gatos, CA, USA
  *             written by Allan Hessenflow <allanh@kallisti.com>
  *
@@ -9,7 +9,7 @@
  *
  *  $Id$
  */
- 
+
 
 #include <rtems.h>
 #include <rtems/libio.h>

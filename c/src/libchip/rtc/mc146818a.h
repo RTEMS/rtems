@@ -43,7 +43,7 @@
 #define MC146818A_STATUSD     0x0d    /* status register D */
 #define  MC146818ASD_PWR       0x80   /* clock lost power */
 
- 
+
 /*
  *  Driver function table
  */

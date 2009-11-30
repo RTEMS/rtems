@@ -38,7 +38,7 @@ static spi_memdrv_t spi_fram_fm25l256_rw_drv_t = {
   }
 };
 
-rtems_libi2c_drv_t *spi_fram_fm25l256_rw_driver_descriptor = 
+rtems_libi2c_drv_t *spi_fram_fm25l256_rw_driver_descriptor =
 &spi_fram_fm25l256_rw_drv_t.libi2c_drv_entry;
 
 static spi_memdrv_t spi_fram_fm25l256_ro_drv_t = {
@@ -56,5 +56,5 @@ static spi_memdrv_t spi_fram_fm25l256_ro_drv_t = {
   }
 };
 
-rtems_libi2c_drv_t *spi_fram_fm25l256_ro_driver_descriptor = 
+rtems_libi2c_drv_t *spi_fram_fm25l256_ro_driver_descriptor =
 &spi_fram_fm25l256_ro_drv_t.libi2c_drv_entry;

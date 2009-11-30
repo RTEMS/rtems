@@ -674,8 +674,8 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	 * HCS (> 2G capacity).  SD spec requires the correct CRC7 be sent even
 	 * when in SPI mode.  So this will just change the default CRC7 and
 	 * keep it there for all subsequent commands (which just require a do
-	 * not care CRC byte).  
-	 */	
+	 * not care CRC byte).
+	 */
 	SD_CARD_COMMAND_SET_CRC7( e->command, 0x43U);
 	rv = sd_card_send_register_command( e, SD_CARD_CMD_SEND_IF_COND, if_cond_reg, &if_cond_reg);
 
@@ -686,9 +686,9 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	 * fail.
 	 */
 	if (rv < 0) {
-		/* Failed CMD8, so SD 1.x or MMC */ 
+		/* Failed CMD8, so SD 1.x or MMC */
 		cmd_arg = 0;
-	} else { 
+	} else {
 		cmd_arg = SD_CARD_FLAG_HCS;
 	}
 
@@ -729,7 +729,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 				}
 			}
 		} else {
-			/* 
+			/*
 			 * Does not seem to be SD card.  Do init for MMC.
 			 * First send CMD58 once to enable check for HCS
 			 * (similar to CMD8 of SD) with bits 30:29 set to 10b.
@@ -763,7 +763,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 				RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Failed to initialize MMC");
 			}
 		}
-	
+
 		/*
 		 * Not idle?
 		 *
@@ -802,14 +802,14 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		/*
 		 * Card is MMC.  Unless already proven to be not HCS (< 4.2)
 		 * must do CMD58 again to check the OCR bits 30:29.
-		 */ 
+		 */
 		if (high_capacity) {
 			uint32_t reg = 0;
 
 			/*
 			 * The argument should still be correct since was never
 			 * set to 0
-			 */ 
+			 */
 			rv = sd_card_send_register_command( e, SD_CARD_CMD_READ_OCR, cmd_arg, &reg);
 			RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Failed CMD58 for MMC 4.2");
 
@@ -906,7 +906,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		/* For high capacity cards the address is in blocks */
 		e->block_size_shift = 0;
 	} else if (e->block_size_shift == 10) {
-		/* 
+		/*
 		 * Low capacity 2GByte cards with reported block size of 1024
 		 * need to be set back to block size of 512 per 'Simplified
 		 * Physical Layer Specification Version 2.0' section 4.3.2.

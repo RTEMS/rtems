@@ -544,7 +544,7 @@ BSP_pci_read_config_byte(
   unsigned char fun,
   unsigned char offset,
   unsigned char *val
-) 
+)
 {
   int sig;
 
@@ -560,7 +560,7 @@ BSP_pci_read_config_word(
   unsigned char fun,
   unsigned char offset,
   unsigned short *val
-) 
+)
 {
   int sig;
 
@@ -576,7 +576,7 @@ BSP_pci_read_config_dword(
   unsigned char fun,
   unsigned char offset,
   uint32_t     *val
-) 
+)
 {
   int sig;
 
@@ -592,7 +592,7 @@ BSP_pci_write_config_byte(
   unsigned char fun,
   unsigned char offset,
   unsigned char val
-) 
+)
 {
   int sig;
 
@@ -608,7 +608,7 @@ BSP_pci_write_config_word(
   unsigned char fun,
   unsigned char offset,
   unsigned short val
-) 
+)
 {
   int sig;
 
@@ -624,7 +624,7 @@ BSP_pci_write_config_dword(
   unsigned char fun,
   unsigned char offset,
   uint32_t      val
-) 
+)
 {
   int sig;
 

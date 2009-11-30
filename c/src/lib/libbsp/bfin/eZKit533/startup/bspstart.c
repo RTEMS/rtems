@@ -4,7 +4,7 @@
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
- *  
+ *
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
  *             written by Alain Schaefer <alain.schaefer@easc.ch>
  *                    and Antonio Giovanini <antonio@atos.com.br>
@@ -21,7 +21,7 @@
 #include <cplb.h>
 #include <libcpu/interrupt.h>
 
-const unsigned int dcplbs_table[16][2] = {  
+const unsigned int dcplbs_table[16][2] = {
   { 0xFFA00000,   (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) },
   { 0xFF900000,   (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) }, /* L1 Data B */
   { 0xFF800000,   (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) }, /* L1 Data A */
@@ -42,10 +42,10 @@ const unsigned int dcplbs_table[16][2] = {
 };
 
 
-const unsigned int _icplbs_table[16][2] = { 
+const unsigned int _icplbs_table[16][2] = {
   { 0xFFA00000,   (PAGE_SIZE_1MB | CPLB_I_PAGE_MGMT | CPLB_I_PAGE_MGMT | 0x4) },  /* L1 Code */
   { 0xEF000000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      /* AREA DE BOOT */
-  { 0xFFB00000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      
+  { 0xFFB00000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },
   { 0x20300000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      /* Async Memory Bank 3 */
   { 0x20200000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      /* Async Memory Bank 2 (Secnd) */
   { 0x20100000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      /* Async Memory Bank 1 (Prim B) */
@@ -91,7 +91,7 @@ void bsp_pretasking_hook(void)
 void bsp_start( void )
 {
   /* BSP Hardware Initialization*/
-  Init_RTC();   /* Blackfin Real Time Clock initialization */  
+  Init_RTC();   /* Blackfin Real Time Clock initialization */
   Init_PLL();   /* PLL initialization */
   Init_EBIU();  /* EBIU initialization */
   Init_Flags(); /* GPIO initialization */
@@ -104,14 +104,14 @@ void bsp_start( void )
 
 /*
  * Init_PLL
- * 
+ *
  * Routine to initialize the PLL. The Ezkit uses a 27 Mhz XTAL.
  * See "../eZKit533/include/bsp.h" for more information.
  */
 void Init_PLL (void)
 {
   unsigned int n;
-  
+
   /* Configure PLL registers */
   *((uint16_t*)PLL_LOCKCNT) = 0x1000;
   *((uint16_t*)PLL_DIV) = PLL_CSEL|PLL_SSEL;
@@ -121,14 +121,14 @@ void Init_PLL (void)
   asm("cli r0;");
   asm("idle;");
   asm("sti r0;");
-  
+
   /* Delay for PLL stabilization */
-  for (n=0; n<200; n++) {} 
+  for (n=0; n<200; n++) {}
 }
 
  /*
   * Init_EBIU
-  * 
+  *
   * Configure extern memory
   */
 
@@ -138,8 +138,8 @@ void Init_EBIU (void)
   *((uint32_t*)EBIU_AMBCTL0)  = 0x7bb07bb0L;
   *((uint32_t*)EBIU_AMBCTL1)  = 0x7bb07bb0L;
   *((uint16_t*)EBIU_AMGCTL)   = 0x000f;
-  
-  /* Configure SDRAM 
+
+  /* Configure SDRAM
   *((uint32_t*)EBIU_SDGCTL) = 0x0091998d;
   *((uint16_t*)EBIU_SDBCTL) = 0x0013;
   *((uint16_t*)EBIU_SDRRC)  = 0x0817;
@@ -148,7 +148,7 @@ void Init_EBIU (void)
 
 /*
  * Init_Flags
- * 
+ *
  * Enable LEDs port
  */
 void Init_Flags(void)
@@ -157,9 +157,9 @@ void Init_Flags(void)
   *((uint16_t*)FIO_DIR)     = 0x0000;
   *((uint16_t*)FIO_EDGE)    = 0x0100;
   *((uint16_t*)FIO_MASKA_D) = 0x0100;
-  
+
   *((uint8_t*)FlashA_PortB_Dir)  = 0x3f;
-  *((uint8_t*)FlashA_PortB_Data) = 0x00;    
+  *((uint8_t*)FlashA_PortB_Data) = 0x00;
 }
 
 /*
@@ -168,7 +168,7 @@ void Init_Flags(void)
  */
 void setLED (uint8_t value)
 {
-  *((uint8_t*)FlashA_PortB_Data) = value;    
+  *((uint8_t*)FlashA_PortB_Data) = value;
 }
 
 /*
@@ -193,5 +193,5 @@ void initCPLB(void)
     *data = dcplbs_table[i][1];
     addr++;
     data++;
-  } 
+  }
 }

@@ -49,7 +49,7 @@ void Shm_install_timer(void)
 
   status = rtems_timer_create( rtems_build_name( 'S', 'H', 'P', 'L' ), &id );
   assert( !status );
-  
+
   status = rtems_timer_fire_after( id, 1, Shm_Poll_TSR, NULL );
   assert( !status );
 }

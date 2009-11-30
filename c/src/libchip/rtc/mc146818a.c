@@ -1,5 +1,5 @@
 /*
- *  This file interfaces with the real-time clock found in 
+ *  This file interfaces with the real-time clock found in
  *  a Motorola MC146818A (common on PC hardware)
  *
  *  Year 2K Notes:
@@ -99,7 +99,7 @@ int mc146818a_get_time(
   while (((*getReg)( mc146818a, MC146818A_STATUSA ) & MC146818ASA_TUP) != 0) {
       rtems_interrupt_flash( level );
   }
-  
+
   /*
    * Read the time (we have at least 244 usec to do this)
    */
@@ -150,7 +150,7 @@ int mc146818a_set_time(
    * Stop the RTC
    */
   (*setReg)( mc146818a, MC146818A_STATUSB, MC146818ASB_HALT|MC146818ASB_24HR );
-  
+
   if ( time->year >= 2088 )
     rtems_fatal_error_occurred( RTEMS_INVALID_NUMBER );
 
@@ -160,7 +160,7 @@ int mc146818a_set_time(
   (*setReg)( mc146818a, MC146818A_HRS,   To_BCD(time->hour) );
   (*setReg)( mc146818a, MC146818A_MIN,   To_BCD(time->minute) );
   (*setReg)( mc146818a, MC146818A_SEC,   To_BCD(time->second) );
- 
+
   /*
    * Restart the RTC
    */

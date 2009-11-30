@@ -99,7 +99,7 @@ rtems_am29lv160_blank (const rtems_fdisk_segment_desc* sd,
   offset += sd->offset + (segment - sd->segment) * sd->size;
 
   seg_8 += offset;
-  
+
   count = offset & (sizeof (uint32_t) - 1);
   size -= count;
 
@@ -112,12 +112,12 @@ rtems_am29lv160_blank (const rtems_fdisk_segment_desc* sd,
 #endif
       return EIO;
     }
-  
+
   seg_32 = (volatile uint32_t*) seg_8;
-  
-  count = size  / sizeof (uint32_t);  
+
+  count = size  / sizeof (uint32_t);
   size -= count * sizeof (uint32_t);
-  
+
   while (count--)
     if (*seg_32++ != 0xffffffff)
     {
@@ -127,7 +127,7 @@ rtems_am29lv160_blank (const rtems_fdisk_segment_desc* sd,
 #endif
       return EIO;
     }
-  
+
   seg_8 = (volatile uint8_t*) seg_32;
 
   while (size--)
@@ -139,7 +139,7 @@ rtems_am29lv160_blank (const rtems_fdisk_segment_desc* sd,
 #endif
       return EIO;
     }
-  
+
   return 0;
 }
 
@@ -153,7 +153,7 @@ rtems_am29lv160_verify (const rtems_fdisk_segment_desc* sd,
 {
   const rtems_am29lv160_config* ac = &rtems_am29lv160_configuration[device];
   const uint8_t*                addr = ac->base;
-  
+
   addr += (sd->offset + (segment - sd->segment) * sd->size) + offset;
 
   if (memcmp (addr, buffer, size) != 0)
@@ -180,7 +180,7 @@ rtems_am29lv160_toggle_wait_8 (volatile uint8_t* status)
 
       if (((status1 ^ status2) & (1 << 6)) == 0)
         return 0;
-        
+
 #if AM26LV160_ERROR_TRACE
       printf ("AM26LV160: error bit detected: %p = 0x%04x\n",
               status, status1);
@@ -230,19 +230,19 @@ rtems_am29lv160_write_data_8 (volatile uint8_t* base,
 {
   volatile uint8_t*     seg = base + offset;
   rtems_interrupt_level level;
-  
+
   /*
    * Issue a reset.
    */
   *base = 0xf0;
-    
+
   while (size)
   {
     rtems_interrupt_disable (level);
     *(base + 0xaaa) = 0xaa;
     *(base + 0x555) = 0x55;
     *(base + 0xaaa) = 0xa0;
-    *seg = *data++; 
+    *seg = *data++;
     rtems_interrupt_enable (level);
     if (rtems_am29lv160_toggle_wait_8 (seg++) != 0)
       return EIO;
@@ -267,12 +267,12 @@ rtems_am29lv160_write_data_16 (volatile uint16_t* base,
   rtems_interrupt_level level;
 
   size /= 2;
-      
+
   /*
    * Issue a reset.
    */
   *base = 0xf0;
-    
+
   while (size)
   {
     rtems_interrupt_disable (level);
@@ -289,7 +289,7 @@ rtems_am29lv160_write_data_16 (volatile uint16_t* base,
   /*
    * Issue a reset.
    */
-  *base = 0xf0; 
+  *base = 0xf0;
 
   return 0;
 }
@@ -375,12 +375,12 @@ rtems_am29lv160_erase (const rtems_fdisk_segment_desc* sd,
     {
       volatile uint8_t* base = ac->base;
       volatile uint8_t* seg  = base + offset;
-      
+
       /*
        * Issue a reset.
        */
       rtems_interrupt_disable (level);
-      *base = 0xf0;    
+      *base = 0xf0;
       *(base + 0xaaa) = 0xaa;
       *(base + 0x555) = 0x55;
       *(base + 0xaaa) = 0x80;
@@ -388,7 +388,7 @@ rtems_am29lv160_erase (const rtems_fdisk_segment_desc* sd,
       *(base + 0x555) = 0x55;
       *seg = 0x30;
       rtems_interrupt_enable (level);
-      
+
       ret = rtems_am29lv160_toggle_wait_8 (seg);
 
       /*
@@ -413,7 +413,7 @@ rtems_am29lv160_erase (const rtems_fdisk_segment_desc* sd,
       *(base + 0x2aa) = 0x55;
       *seg = 0x30;
       rtems_interrupt_enable (level);
-      
+
       ret = rtems_am29lv160_toggle_wait_16 (seg);
 
       /*
@@ -447,7 +447,7 @@ rtems_am29lv160_erase_device (const rtems_fdisk_device_desc* dd,
   for (segment = 0; segment < dd->segment_count; segment++)
   {
     uint32_t seg_segment;
-    
+
     for (seg_segment = 0;
          seg_segment < dd->segments[segment].count;
          seg_segment++)
@@ -459,7 +459,7 @@ rtems_am29lv160_erase_device (const rtems_fdisk_device_desc* dd,
         return ret;
     }
   }
-  
+
   return 0;
 }
 

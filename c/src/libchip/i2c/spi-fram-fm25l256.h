@@ -21,8 +21,8 @@
  */
 
 
-#ifndef _LIBCHIP_SPI_FRAM_FM25L256_H 
-#define _LIBCHIP_SPI_FRAM_FM25L256_H 
+#ifndef _LIBCHIP_SPI_FRAM_FM25L256_H
+#define _LIBCHIP_SPI_FRAM_FM25L256_H
 
 #include <libchip/spi-memdrv.h>
 
@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 /*
- * pass one of these descriptor pointers to rtems_libi2c_register_drv 
+ * pass one of these descriptor pointers to rtems_libi2c_register_drv
  */
 extern rtems_libi2c_drv_t *spi_fram_fm25l256_rw_driver_descriptor;
 

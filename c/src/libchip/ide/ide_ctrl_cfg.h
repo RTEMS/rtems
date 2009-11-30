@@ -1,7 +1,7 @@
 /*
  * ide_ctrl_cfg.h
  *
- * LibChip library IDE controller header file - structures used for 
+ * LibChip library IDE controller header file - structures used for
  * configuration and plugin interface definition.
  *
  * Copyright (C) 2002 OKTET Ltd., St.-Petersburg, Russia

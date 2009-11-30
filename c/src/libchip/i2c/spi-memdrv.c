@@ -162,11 +162,11 @@ rtems_status_code spi_memdrv_write
       rc = RTEMS_INVALID_ADDRESS;
     }
   }
-  while ((rc == RTEMS_SUCCESSFUL) && 
+  while ((rc == RTEMS_SUCCESSFUL) &&
 	 (cnt > bytes_sent)) {
     curr_cnt = cnt - bytes_sent;
     if ((mem_param_ptr->page_size > 0) &&
-	(off              / mem_param_ptr->page_size) != 
+	(off              / mem_param_ptr->page_size) !=
 	((off+curr_cnt+1) / mem_param_ptr->page_size)) {
       curr_cnt = mem_param_ptr->page_size - (off % mem_param_ptr->page_size);
     }
@@ -185,7 +185,7 @@ rtems_status_code spi_memdrv_write
 			       RTEMS_LIBI2C_IOCTL_SET_TFRMODE,
 			       &tfr_mode);
     }
-    
+
     /*
      * address device
      */
@@ -369,7 +369,7 @@ rtems_status_code spi_memdrv_read
   }
 
   if (off >= mem_param_ptr->mem_size) {
-    /* 
+    /*
      * HACK: beyond size of memory array? then read status register instead
      */
     /*
@@ -411,7 +411,7 @@ rtems_status_code spi_memdrv_read
     }
   }
   /*
-   * fetch read data 
+   * fetch read data
    */
   if (rc == RTEMS_SUCCESSFUL) {
     ret_cnt = rtems_libi2c_read_bytes (minor,buf,cnt);
@@ -419,7 +419,7 @@ rtems_status_code spi_memdrv_read
       rc = -ret_cnt;
     }
   }
-    
+
   /*
    * terminate transfer
    */

@@ -82,7 +82,7 @@ static rtems_status_code disp_hcms29xx_font_struct_size
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   size_t font_size = 0;
   size_t glyph_idx;
@@ -94,7 +94,7 @@ static rtems_status_code disp_hcms29xx_font_struct_size
     rc = RTEMS_INVALID_ADDRESS;
   }
   if (rc == RTEMS_SUCCESSFUL) {
-    font_size = 
+    font_size =
       sizeof(*src);                      /* font_base structure       */
   }
   glyph_idx = 0;
@@ -105,9 +105,9 @@ static rtems_status_code disp_hcms29xx_font_struct_size
 	+ (size_t) src->latin1[glyph_idx]->bb.w;
     }
     glyph_idx++;
-  }	 
-  *dst_size = font_size;  
-  
+  }
+  *dst_size = font_size;
+
   return rc;
 }
 
@@ -122,7 +122,7 @@ static inline unsigned char disp_hcms29xx_bitswap
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
-  unsigned char byte 
+  unsigned char byte
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -132,7 +132,7 @@ static inline unsigned char disp_hcms29xx_bitswap
   unsigned char result = 0;
   int smsk,dmsk;
   for (smsk =  0x01,dmsk=0x80;
-       smsk < 0x100; 
+       smsk < 0x100;
        smsk<<=1   ,dmsk>>=1) {
     if ((byte & smsk) != 0) {
       result |= (unsigned char) dmsk;
@@ -162,7 +162,7 @@ static rtems_status_code disp_hcms29xx_copy_font
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   char *alloc_next = (char *)dst;
   size_t glyph_idx = 0;
@@ -173,7 +173,7 @@ static rtems_status_code disp_hcms29xx_copy_font
   /*
    * check parameters
    */
-  if ((rc == RTEMS_SUCCESSFUL) && 
+  if ((rc == RTEMS_SUCCESSFUL) &&
       ((src == NULL) ||
        (dst == NULL))) {
     rc = RTEMS_INVALID_ADDRESS;
@@ -198,18 +198,18 @@ static rtems_status_code disp_hcms29xx_copy_font
       dst->latin1[glyph_idx] = (struct disp_font_glyph *)alloc_next;
       alloc_next += sizeof(*(dst->latin1[glyph_idx]));
       /*
-       * copy source values. 
+       * copy source values.
        * Note: bitmap will be reassigned later
        */
-      *(struct disp_font_glyph *)(dst->latin1[glyph_idx]) = 
+      *(struct disp_font_glyph *)(dst->latin1[glyph_idx]) =
 	*(src->latin1[glyph_idx]);
     }
     else {
       dst->latin1[glyph_idx] = NULL;
     }
     glyph_idx++;
-  }	 
-  
+  }
+
   /*
    * for all glyphs: reassign bitmap
    */
@@ -240,11 +240,11 @@ static rtems_status_code disp_hcms29xx_copy_font
 	else if (shift_cnt > 0) {
 	  byte = byte >> shift_cnt;
 	}
-	((unsigned char *)(dst->latin1[glyph_idx]->bitmap))[bcnt] = byte;      
+	((unsigned char *)(dst->latin1[glyph_idx]->bitmap))[bcnt] = byte;
       }
     }
     glyph_idx++;
-  }	 
+  }
   return rc;
 }
 
@@ -269,13 +269,13 @@ static rtems_status_code disp_hcms29xx_alloc_copy_font
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   size_t src_size = 0;
   /*
    * check parameters
    */
-  if ((rc == RTEMS_SUCCESSFUL) && 
+  if ((rc == RTEMS_SUCCESSFUL) &&
       ((src == NULL)
        || (dst == NULL))) {
     rc = RTEMS_INVALID_ADDRESS;
@@ -361,15 +361,15 @@ static rtems_status_code disp_hcms29xx_send_to_display
    * send data
    */
   if (rc == RTEMS_SUCCESSFUL) {
-    curr_font = 
-      softc_ptr->disp_param.rotate 
-      ? disp_hcms29xx_font_rotate 
+    curr_font =
+      softc_ptr->disp_param.rotate
+      ? disp_hcms29xx_font_rotate
       : disp_hcms29xx_font_normal;
 
     char_avail = true;
     /*
      * FIXME: for rotated display, write last character first...
-     * maybe we should copy everything to a common buffer and use 
+     * maybe we should copy everything to a common buffer and use
      * ONE SPI transfer?
      */
     for (i = 0;
@@ -381,15 +381,15 @@ static rtems_status_code disp_hcms29xx_send_to_display
       if (char_avail && (c == '\0')) {
 	char_avail = false;
       }
-      glyph_ptr = (char_avail 
+      glyph_ptr = (char_avail
 		   ? curr_font->latin1[c]
 		   : NULL);
       if (glyph_ptr == NULL) {
 	glyph_ptr = curr_font->latin1[' '];
-      }	   
+      }
 
-      digit = (softc_ptr->disp_param.rotate 
-	       ? DISP_HCMS29XX_DIGIT_CNT-1-i 
+      digit = (softc_ptr->disp_param.rotate
+	       ? DISP_HCMS29XX_DIGIT_CNT-1-i
 	       : i);
       /*
        * send 5 bytes from (char *)glyph_ptr->bitmap to SPI
@@ -447,15 +447,15 @@ static rtems_status_code disp_hcms29xx_send_to_control
        run++) {
     if (rc == RTEMS_SUCCESSFUL) {
       if (run == 0) {
-	ctrl_buffer = 
-	  (0              << 7) | 
+	ctrl_buffer =
+	  (0              << 7) |
 	  ((sleep & 0x01) << 6) |
 	  ((peak  & 0x03) << 4) |
 	  ((pwm & 0x0f)   << 0);
       }
       else {
-	ctrl_buffer = 
-	  (1              << 7) | 
+	ctrl_buffer =
+	  (1              << 7) |
 	  ((div   & 0x01) << 1) |
 	  ((chain & 0x01) << 0);
       }
@@ -525,7 +525,7 @@ static rtems_timer_service_routine disp_hcms29xx_timer_sr
 {
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   disp_hcms29xx_drv_t *softc_ptr = arg;
-  
+
 
   if (rc == RTEMS_SUCCESSFUL) {
     rc = rtems_event_send(softc_ptr->disp_param.task_id,
@@ -568,7 +568,7 @@ static rtems_task disp_hcms29xx_update_task
     rc = disp_hcms29xx_send_to_control(softc_ptr,
 				       14,3,1,0,0);/* pwm/peak/nosleep/div/chain */
   }
-  
+
   /*
    * set display to blank
    */
@@ -596,7 +596,7 @@ static rtems_task disp_hcms29xx_update_task
 			     &my_events);
     if (my_events & DISP_HCMS29XX_EVENT_NEWSTR) {
       /*
-       * fetch new string consistently into local buffer 
+       * fetch new string consistently into local buffer
        */
       if (rc == RTEMS_SUCCESSFUL) {
 	rc = rtems_semaphore_obtain(softc_ptr->disp_param.trns_sema_id,
@@ -608,12 +608,12 @@ static rtems_task disp_hcms29xx_update_task
 		sizeof(softc_ptr->disp_param.disp_buffer));
 	softc_ptr->disp_param.disp_buffer[sizeof(softc_ptr->disp_param.disp_buffer)-1] = '\0';
 	softc_ptr->disp_param.disp_buf_cnt =
-	  (int) strlen(softc_ptr->disp_param.disp_buffer);	
+	  (int) strlen(softc_ptr->disp_param.disp_buffer);
       }
       if (rc == RTEMS_SUCCESSFUL) {
 	rc = rtems_semaphore_release(softc_ptr->disp_param.trns_sema_id);
       }
-      /* 
+      /*
        * set initial offset to negative value
        * to make string static for some ticks
        */
@@ -639,7 +639,7 @@ static rtems_task disp_hcms29xx_update_task
       rc = disp_hcms29xx_send_to_display(softc_ptr,
 					 softc_ptr->disp_param.disp_buffer);
     }
-    else if (disp_offset 
+    else if (disp_offset
 	     < (softc_ptr->disp_param.disp_buf_cnt - DISP_HCMS29XX_DIGIT_CNT)) {
       rc = disp_hcms29xx_send_to_display(softc_ptr,
 					 softc_ptr->disp_param.disp_buffer+disp_offset);
@@ -650,7 +650,7 @@ static rtems_task disp_hcms29xx_update_task
 					 + softc_ptr->disp_param.disp_buf_cnt
 					 - DISP_HCMS29XX_DIGIT_CNT);
     }
-    /* 
+    /*
      * activate timer, if needed
      */
     if (rc == RTEMS_SUCCESSFUL) {
@@ -664,9 +664,9 @@ static rtems_task disp_hcms29xx_update_task
 	rc = rtems_timer_cancel(disp_hcms29xx_timer_id);
       }
     }
-  }    
+  }
   /*
-   * FIXME: display task is dead... 
+   * FIXME: display task is dead...
    */
 }
 
@@ -690,7 +690,7 @@ static rtems_status_code disp_hcms29xx_update
 \*=========================================================================*/
 {
   rtems_status_code rc = RTEMS_SUCCESSFUL;
-  
+
   /*
    * obtain trns semaphore
    */
@@ -719,7 +719,7 @@ static rtems_status_code disp_hcms29xx_update
     rc = rtems_event_send(softc_ptr->disp_param.task_id,
 			  DISP_HCMS29XX_EVENT_NEWSTR);
   }
-  
+
   return rc;
 }
 
@@ -758,10 +758,10 @@ rtems_device_driver disp_hcms29xx_dev_initialize
    * initialize font management
    * FIXME: check, that default glyph exists
    * FIXME: check font size to be 5x7
-   */  
+   */
   /*
    * translate font according to direction/baseline
-   */  
+   */
   if (rc == RTEMS_SUCCESSFUL) {
     rc = disp_hcms29xx_alloc_copy_font(
 			       &FONT_BASE,
@@ -789,7 +789,7 @@ rtems_device_driver disp_hcms29xx_dev_initialize
 				     0,
 				     &softc_ptr->disp_param.trns_sema_id);
   }
- 
+
   /*
    * create and start display task
    */
@@ -802,7 +802,7 @@ rtems_device_driver disp_hcms29xx_dev_initialize
 			   &softc_ptr->disp_param.task_id);
   }
   if (rc == RTEMS_SUCCESSFUL) {
-    rc = rtems_task_start(softc_ptr->disp_param.task_id, 
+    rc = rtems_task_start(softc_ptr->disp_param.task_id,
 			  disp_hcms29xx_update_task, 0 );
   }
   /*
@@ -812,7 +812,7 @@ rtems_device_driver disp_hcms29xx_dev_initialize
     rc = rtems_io_register_name (devname, major, 0);
   }
   return rc;
-}	  
+}
 
 /*=========================================================================*\
 | Function:                                                                 |
@@ -838,14 +838,14 @@ rtems_device_driver disp_hcms29xx_dev_open
   /*
    * FIXME: get softc_ptr
    */
-  /* 
+  /*
    * ensure, that disp_hcms29xx device is assumed to be empty
    */
   softc_ptr->disp_param.dev_buf_cnt = 0;
 
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
@@ -875,27 +875,27 @@ rtems_device_driver disp_hcms29xx_dev_write
 
   for (cnt = 0;cnt < args->count;cnt++) {
     /*
-     * accumulate characters written into display dev buffer 
+     * accumulate characters written into display dev buffer
      */
-    if (((softc_ptr->disp_param.dev_buf_cnt > 0) 
+    if (((softc_ptr->disp_param.dev_buf_cnt > 0)
 	&&((args->buffer[cnt] == '\n')
 	   || (args->buffer[cnt] == '\0'))
 	 )
-	||( softc_ptr->disp_param.dev_buf_cnt >= 
+	||( softc_ptr->disp_param.dev_buf_cnt >=
 	    (int) sizeof(softc_ptr->disp_param.dev_buffer) - 1)) {
       softc_ptr->disp_param.dev_buffer[softc_ptr->disp_param.dev_buf_cnt] = '\0';
       /*
-       * transfer string to display string, redisplay it... 
+       * transfer string to display string, redisplay it...
        */
       disp_hcms29xx_update(softc_ptr,softc_ptr->disp_param.dev_buffer);
-      softc_ptr->disp_param.dev_buf_cnt = 0;      
+      softc_ptr->disp_param.dev_buf_cnt = 0;
     }
-    /* 
+    /*
      * write to dev_buf, if '\n' occured or display device buffer is full
      */
     if ((args->buffer[cnt] != '\n') &&
 	(args->buffer[cnt] != '\0')) {
-      softc_ptr->disp_param.dev_buffer[softc_ptr->disp_param.dev_buf_cnt++] = 
+      softc_ptr->disp_param.dev_buffer[softc_ptr->disp_param.dev_buf_cnt++] =
 	args->buffer[cnt];
     }
   }
@@ -933,13 +933,13 @@ rtems_device_driver disp_hcms29xx_dev_close
 
   /* flush buffer, if not empty */
   if (softc_ptr->disp_param.dev_buf_cnt > 0) {
-      softc_ptr->disp_param.dev_buffer[softc_ptr->disp_param.dev_buf_cnt] = 
+      softc_ptr->disp_param.dev_buffer[softc_ptr->disp_param.dev_buf_cnt] =
 	'\0';
       /*
-       * transfer string to display string, redisplay it... 
+       * transfer string to display string, redisplay it...
        */
       disp_hcms29xx_update(softc_ptr,softc_ptr->disp_param.dev_buffer);
-      softc_ptr->disp_param.dev_buf_cnt = 0;      
-  }    
+      softc_ptr->disp_param.dev_buf_cnt = 0;
+  }
   return RTEMS_SUCCESSFUL;
 }

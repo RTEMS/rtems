@@ -1,5 +1,5 @@
 /*  bsp.h
- *  
+ *
  *  This include file contains all board IO definitions for bf537Stamp.
  *
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
@@ -12,7 +12,7 @@
  *
  *  $Id$
  */
- 
+
 
 #ifndef _BSP_H
 #define _BSP_H
@@ -34,7 +34,7 @@ extern "C" {
 #define BSP_DATA_CACHE_CONFIG  (3 << DMEM_CONTROL_DMC_SHIFT)
 
 
-/* 
+/*
  * PLL and clock setup values:
  */
 

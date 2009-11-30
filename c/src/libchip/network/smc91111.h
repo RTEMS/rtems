@@ -356,13 +356,13 @@ typedef struct lan91cxx_priv_data {
     rtems_id txDaemonTid;
 
     scmv91111_configuration_t config;
-  
+
     /* backend */
     int rpc_cur_mode;
     int autoneg_active;
     int phyaddr;
     unsigned int lastPhy18;
-  
+
     int txbusy;                         /* A packet has been sent*/
     unsigned long txkey;                /* Used to ack when packet sent*/
     unsigned short* base;               /* Base I/O address of controller*/
@@ -395,42 +395,42 @@ typedef struct _debug_regs_pair {
 } debug_regs_pair;
 
 static debug_regs_pair debug_regs[] = {
-  {LAN91CXX_TCR        , "LAN91CXX_TCR"       ,0},  
-  {LAN91CXX_EPH_STATUS , "LAN91CXX_EPH_STATUS",0},  
-  {LAN91CXX_RCR        , "LAN91CXX_RCR"       ,0},         
-  {LAN91CXX_COUNTER    , "LAN91CXX_COUNTER"   ,0},     
-  {LAN91CXX_MIR        , "LAN91CXX_MIR"       ,0},         
-  {LAN91CXX_MCR        , "LAN91CXX_MCR"       ,0},         
-  {LAN91CXX_RPCR       , "LAN91CXX_RPCR"      ,0},        
-  {LAN91CXX_RESERVED_0 , "LAN91CXX_RESERVED_0",0},  
-  {LAN91CXX_BS         , "LAN91CXX_BS"        ,0},          
-  {LAN91CXX_CONFIG     , "LAN91CXX_CONFIG"    ,0},      
-  {LAN91CXX_BASE_REG   , "LAN91CXX_BASE_REG"  ,0},    
-  {LAN91CXX_IA01       , "LAN91CXX_IA01"      ,0},        
-  {LAN91CXX_IA23       , "LAN91CXX_IA23"      ,0},        
-  {LAN91CXX_IA45       , "LAN91CXX_IA45"      ,0},        
-  {LAN91CXX_GENERAL    , "LAN91CXX_GENERAL"   ,0},     
-  {LAN91CXX_CONTROL    , "LAN91CXX_CONTROL"   ,0},     
-  {LAN91CXX_BS2        , "LAN91CXX_BS2"       ,0},         
-  {LAN91CXX_MMU_COMMAND, "LAN91CXX_MMU_COMMAND",0}, 
-  {LAN91CXX_PNR        , "LAN91CXX_PNR"        ,0},         
-  {LAN91CXX_FIFO_PORTS , "LAN91CXX_FIFO_PORTS" ,0},  
-  {LAN91CXX_POINTER    , "LAN91CXX_POINTER"    ,0},     
-  {LAN91CXX_DATA_HIGH  , "LAN91CXX_DATA_HIGH"  ,0},   
-  {LAN91CXX_DATA       , "LAN91CXX_DATA"       ,0},        
+  {LAN91CXX_TCR        , "LAN91CXX_TCR"       ,0},
+  {LAN91CXX_EPH_STATUS , "LAN91CXX_EPH_STATUS",0},
+  {LAN91CXX_RCR        , "LAN91CXX_RCR"       ,0},
+  {LAN91CXX_COUNTER    , "LAN91CXX_COUNTER"   ,0},
+  {LAN91CXX_MIR        , "LAN91CXX_MIR"       ,0},
+  {LAN91CXX_MCR        , "LAN91CXX_MCR"       ,0},
+  {LAN91CXX_RPCR       , "LAN91CXX_RPCR"      ,0},
+  {LAN91CXX_RESERVED_0 , "LAN91CXX_RESERVED_0",0},
+  {LAN91CXX_BS         , "LAN91CXX_BS"        ,0},
+  {LAN91CXX_CONFIG     , "LAN91CXX_CONFIG"    ,0},
+  {LAN91CXX_BASE_REG   , "LAN91CXX_BASE_REG"  ,0},
+  {LAN91CXX_IA01       , "LAN91CXX_IA01"      ,0},
+  {LAN91CXX_IA23       , "LAN91CXX_IA23"      ,0},
+  {LAN91CXX_IA45       , "LAN91CXX_IA45"      ,0},
+  {LAN91CXX_GENERAL    , "LAN91CXX_GENERAL"   ,0},
+  {LAN91CXX_CONTROL    , "LAN91CXX_CONTROL"   ,0},
+  {LAN91CXX_BS2        , "LAN91CXX_BS2"       ,0},
+  {LAN91CXX_MMU_COMMAND, "LAN91CXX_MMU_COMMAND",0},
+  {LAN91CXX_PNR        , "LAN91CXX_PNR"        ,0},
+  {LAN91CXX_FIFO_PORTS , "LAN91CXX_FIFO_PORTS" ,0},
+  {LAN91CXX_POINTER    , "LAN91CXX_POINTER"    ,0},
+  {LAN91CXX_DATA_HIGH  , "LAN91CXX_DATA_HIGH"  ,0},
+  {LAN91CXX_DATA       , "LAN91CXX_DATA"       ,0},
   {LAN91CXX_INTERRUPT  , "LAN91CXX_INTERRUPT"  ,0},
   {LAN91CXX_BS3        , "LAN91CXX_BS3"        ,0},
   {LAN91CXX_MT01       , "LAN91CXX_MT01"       ,0},
-  {LAN91CXX_MT23       , "LAN91CXX_MT23"       ,0},   
-  {LAN91CXX_MT45       , "LAN91CXX_MT45"       ,0},      
+  {LAN91CXX_MT23       , "LAN91CXX_MT23"       ,0},
+  {LAN91CXX_MT45       , "LAN91CXX_MT45"       ,0},
   {LAN91CXX_MT67       , "LAN91CXX_MT67"       ,0},
 /*{LAN91CXX_MGMT       , "LAN91CXX_MGMT"       ,0},      */
-  {LAN91CXX_REVISION   , "LAN91CXX_REVISION"   ,0},  
-  {LAN91CXX_ERCV       , "LAN91CXX_ERCV"       ,0},      
-  {LAN91CXX_BS4        , "LAN91CXX_BS4"        ,0},             
+  {LAN91CXX_REVISION   , "LAN91CXX_REVISION"   ,0},
+  {LAN91CXX_ERCV       , "LAN91CXX_ERCV"       ,0},
+  {LAN91CXX_BS4        , "LAN91CXX_BS4"        ,0},
 
 
-  
+
   {-1,0}
 };
 
@@ -448,7 +448,7 @@ get_reg(struct lan91cxx_priv_data *cpd, int regno)
     HAL_WRITE_UINT16(cpd->base+(LAN91CXX_BS), CYG_CPU_TO_LE16(regno>>3));
     HAL_READ_UINT16(cpd->base+((regno&0x7)), val);
     val = CYG_LE16_TO_CPU(val);
-    
+
     /*rtems_interrupt_enable(Irql);*/
 
 #ifdef DEBUG & 32
@@ -462,7 +462,7 @@ get_reg(struct lan91cxx_priv_data *cpd, int regno)
 #else
     db2_printf("%sread  reg %d:%x -> 0x%04x\n", dbg_prefix, regno>>3,(regno&0x7)*2, val);
 #endif
-    
+
     return val;
 }
 #endif /* SMSC_PLATFORM_DEFINED_GET_REG*/
@@ -485,12 +485,12 @@ put_reg(struct lan91cxx_priv_data *cpd, int regno, unsigned short val)
 #else
     db2_printf("%swrite reg %d:%x <- 0x%04x\n", dbg_prefix, regno>>3,(regno&0x7)*2, val);
 #endif
-    
+
     /*rtems_interrupt_disable(Irql);*/
-    
+
     HAL_WRITE_UINT16(cpd->base+(LAN91CXX_BS), CYG_CPU_TO_LE16(regno>>3));
     HAL_WRITE_UINT16(cpd->base+((regno&0x7)), CYG_CPU_TO_LE16(val));
-    
+
     /*rtems_interrupt_enable(Irql);*/
 
 }
@@ -503,7 +503,7 @@ static __inline__ void
 put_data(struct lan91cxx_priv_data *cpd, unsigned short val)
 {
     db2_printf("%s[wdata] <- 0x%04x\n", dbg_prefix, val);
-    
+
     HAL_WRITE_UINT16(cpd->base+((LAN91CXX_DATA & 0x7)), val);
 
 }
@@ -513,7 +513,7 @@ static __inline__ void
 put_data8(struct lan91cxx_priv_data *cpd, unsigned char val)
 {
     db2_printf("%s[bdata] <- 0x%02x\n", dbg_prefix, val);
-    
+
     HAL_WRITE_UINT8(((unsigned char *)(cpd->base+((LAN91CXX_DATA & 0x7))))+1, val);
 
 }
@@ -526,7 +526,7 @@ static __inline__ rxd_t
 get_data(struct lan91cxx_priv_data *cpd)
 {
     rxd_t val;
-	
+
 #ifdef LAN91CXX_32BIT_RX
     HAL_READ_UINT32(cpd->base+((LAN91CXX_DATA_HIGH & 0x7)), val);
 #else
@@ -545,7 +545,7 @@ static __inline__ unsigned short
 get_banksel(struct lan91cxx_priv_data *cpd)
 {
     unsigned short val;
-    
+
     HAL_READ_UINT16(cpd->base+(LAN91CXX_BS), val);
     val = CYG_LE16_TO_CPU(val);
     db2_printf("read bank sel val 0x%04x\n", val);

@@ -535,7 +535,7 @@ struct dc_mii_frame {
 /*
  * Special ASIX-specific bits in the ASIX NETCFG register (CSR6).
  */
-#define DC_AX_NETCFG_RX_BROAD	0x00000100 
+#define DC_AX_NETCFG_RX_BROAD	0x00000100
 
 /*
  * RX Filter Index Register values
@@ -627,7 +627,7 @@ struct dc_mii_frame {
 		DC_SETBIT(sc, DC_PN_GPIO, ((r) << 4));	\
 		DC_CLRBIT(sc, DC_PN_GPIO, (r));		\
 	}
-	
+
 /* shortcut MII access register */
 #define DC_PN_MII_DATA		0x0000FFFF
 #define DC_PN_MII_RESERVER	0x00020000
@@ -706,7 +706,7 @@ struct dc_softc {
 	u_int32_t		dc_flags;
 	u_int32_t		dc_txthresh;
 	u_int8_t		*dc_srom;
-	struct dc_mediainfo	*dc_mi;		
+	struct dc_mediainfo	*dc_mi;
 /*
 	struct callout_handle	dc_stat_ch;
 */
@@ -820,7 +820,7 @@ struct dc_softc {
 #define DC_REVISION_82C168	0x10
 #define DC_REVISION_82C169	0x20
 
-/* 
+/*
  * Lite-On PNIC II device ID. Note: this is actually a Macronix 98715A
  * with wake on lan/magic packet support.
  */

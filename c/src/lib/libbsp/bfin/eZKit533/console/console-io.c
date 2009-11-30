@@ -1,5 +1,5 @@
 /*  console-io.c
- * 
+ *
  *  This file contains the hardware specific portions of the TTY driver
  *  for the serial ports for ezkit533.
  *
@@ -13,7 +13,7 @@
  *
  *  $Id$
  */
- 
+
 
 #include <rtems.h>
 #include <rtems/libio.h>

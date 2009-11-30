@@ -60,7 +60,7 @@ ide_controller_initialize(rtems_device_major_number  major,
 
         if ((IDE_Controller_Table[minor].probe == NULL ||
              IDE_Controller_Table[minor].probe(minor)) &&
-            (IDE_Controller_Table[minor].fns->ctrl_probe == NULL || 
+            (IDE_Controller_Table[minor].fns->ctrl_probe == NULL ||
 	     IDE_Controller_Table[minor].fns->ctrl_probe(minor)))
         {
             status = rtems_io_register_name(IDE_Controller_Table[minor].name,

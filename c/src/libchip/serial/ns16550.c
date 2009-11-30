@@ -19,7 +19,7 @@
  *
  *  This driver uses the termios pseudo driver.
  */
- 
+
 /*
  * $Id$
  */
