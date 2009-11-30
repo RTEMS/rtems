@@ -374,6 +374,10 @@ rtems_termios_close (void *arg)
 			/*
 			 * default: just flush output buffer
 			 */
+			sc = rtems_semaphore_obtain (tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+			if (sc != RTEMS_SUCCESSFUL) {
+				rtems_fatal_error_occurred (sc);
+			}
 		        drainOutput (tty);
 		}
 
