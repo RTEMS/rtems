@@ -3,7 +3,7 @@ Makefile
 Makefile.in
 aclocal.m4
 configure
-config.*
+config.guess
 autom4te*
 missing
 install-sh

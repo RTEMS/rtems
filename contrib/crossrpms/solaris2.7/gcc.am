@@ -32,9 +32,9 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add 
 	  | $(MKSPEC0) > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
 
-@rpmprefix@$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
+$(rpmprefix)$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
 	$(MKSPEC) $(TARGET)-gcc.spec.in | $(SPECSTRIP) $(GCC_OPTS) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-gcc.spec
-noinst_DATA += @rpmprefix@$(TARGET)-gcc.spec
+CLEANFILES += $(rpmprefix)$(TARGET)-gcc.spec
+noinst_DATA += $(rpmprefix)$(TARGET)-gcc.spec
 
 EXTRA_DIST += $(GCC_SUBPACKAGES)
