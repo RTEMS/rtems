@@ -79,6 +79,7 @@ extern "C" {
  *
  * @dot
  * digraph state {
+ *   size="16,8";
  *   e [label="EMPTY",style="filled",fillcolor="aquamarine"];
  *   f [label="FRESH",style="filled",fillcolor="seagreen"];
  *   c [label="CACHED",style="filled",fillcolor="chartreuse"];
@@ -159,47 +160,73 @@ extern "C" {
  */
 
 /**
- * State of a buffer of the cache.
+ * @brief State of a buffer of the cache.
+ *
+ * The state has several implications.  Depending on the state a buffer can be
+ * in the AVL tree, in a list, in use by an entity and a group user or not.
  */
 typedef enum
 {
   /**
-   * Not in the cache.  Not in a list.  Not in use.
+   * @brief Empty.
+   *
+   * Not in the AVL tree.  Not in a list.  Not in use.  Not a user of its
+   * group.
    */
   RTEMS_BDBUF_STATE_EMPTY = 0,
 
   /**
-   * In the cache.  Not in a list.  In use by a get or read request.
+   * @brief Fresh.
+   *
+   * In the AVL tree.  Not in a list.  In use by a get or read request.  A user
+   * of its group.
    */
   RTEMS_BDBUF_STATE_FRESH,
 
   /**
-   * In the cache.  In the LRU list.  Not in use.
+   * @brief Cached.
+   *
+   * In the AVL tree.  In the LRU list.  Not in use.  Not a user of its group.
    */
-  RTEMS_BDBUF_STATE_CACHED,          /**< In the cache and available */
+  RTEMS_BDBUF_STATE_CACHED,
 
   /**
-   * In the cache.  Not in a list.  In use by an upper layer.
+   * @brief Accessed by upper layer.
+   *
+   * In the AVL tree.  Not in a list.  In use by an upper layer.  A user of its
+   * group.
    */
   RTEMS_BDBUF_STATE_ACCESS,
 
   /**
-   * In the cache.  Not in a list.  In use by an upper layer.
+   * @brief Accessed and modified by upper layer.
+   *
+   * In the AVL tree.  Not in a list.  In use by an upper layer.  A user of its
+   * group.
    */
   RTEMS_BDBUF_STATE_ACCESS_MODIFIED,
 
   /**
-   * In the cache.  In the modified list.  Not in use.
+   * @brief Modified by upper layer.
+   *
+   * In the AVL tree.  In the modified list.  In use by swapout mechanic.  A
+   * user of its group.
    */
   RTEMS_BDBUF_STATE_MODIFIED,
 
   /**
-   * In the cache.  In the sync list.  Not in use.
+   * @brief Scheduled for synchronization.
+   *
+   * In the AVL tree.  In the sync list.  In use by swapout mechanic.  A user
+   * of its group.
    */
   RTEMS_BDBUF_STATE_SYNC,
 
   /**
-   * In the cache.  Not in a list.  In use by the block device driver.
+   * @brief In transfer by block device driver.
+   *
+   * In the AVL tree.  Not in a list.  In use by the block device driver.  A
+   * user of its group.
    */
   RTEMS_BDBUF_STATE_TRANSFER
 } rtems_bdbuf_buf_state;

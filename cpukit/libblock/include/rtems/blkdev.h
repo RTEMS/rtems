@@ -182,11 +182,11 @@ typedef struct rtems_blkdev_request {
  * appropriate IO control handler.
  */
 #define RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES \
-  .open_entry = rtems_blkdev_generic_open, \
-  .close_entry = rtems_blkdev_generic_close, \
-  .read_entry = rtems_blkdev_generic_read, \
-  .write_entry = rtems_blkdev_generic_write, \
-  .control_entry = rtems_blkdev_generic_ioctl
+  rtems_blkdev_generic_open, \
+  rtems_blkdev_generic_close, \
+  rtems_blkdev_generic_read, \
+  rtems_blkdev_generic_write, \
+  rtems_blkdev_generic_ioctl
 
 /**
  * Generic block device read primitive.

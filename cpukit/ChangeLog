@@ -1,5 +1,14 @@
 2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libblock/include/rtems/bdbuf.h: Documentation.
+	* libblock/include/rtems/blkdev.h: Avoid designated initializers for
+	C++ compatibility.
+	* libblock/src/bdbuf.c: Fixed invalid state transition from FRESH to
+	CACHED.
+	* libblock/src/ide_part_table.c: Free memory in case of an error.
+
+2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* rtems/include/rtems/rtems/timer.h: Added timer server control block
 	Timer_server_Control.  Removed _Timer_Server thread pointer. Added
 	_Timer_server pointer to the default timer server control block.

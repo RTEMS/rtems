@@ -1831,14 +1831,17 @@ rtems_bdbuf_create_read_request (rtems_blkdev_request *req,
   if (media_block_end - media_block < transfer_count)
     transfer_count = media_block_end - media_block;
 
-  bd = rtems_bdbuf_get_buffer_for_access (dev, media_block, bds_per_group);
-
   req->bufnum = 0;
+
+  bd = rtems_bdbuf_get_buffer_for_access (dev, media_block, bds_per_group);
 
   req->bufs [0].user   = bd;
   req->bufs [0].block  = media_block;
   req->bufs [0].length = block_size;
   req->bufs [0].buffer = bd->buffer;
+
+  if (rtems_bdbuf_tracer)
+    rtems_bdbuf_show_users ("read", bd);
 
   switch (bd->state)
   {
@@ -1846,6 +1849,7 @@ rtems_bdbuf_create_read_request (rtems_blkdev_request *req,
     case RTEMS_BDBUF_STATE_MODIFIED:
       return;
     case RTEMS_BDBUF_STATE_FRESH:
+      rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_TRANSFER);
       break;
     default:
       rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_1);
@@ -1854,11 +1858,6 @@ rtems_bdbuf_create_read_request (rtems_blkdev_request *req,
 
   while (transfer_index < transfer_count)
   {
-    rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_TRANSFER);
-
-    if (rtems_bdbuf_tracer)
-      rtems_bdbuf_show_users ("reading", bd);
-
     media_block += media_block_count;
 
     bd = rtems_bdbuf_get_buffer_for_read_ahead (dev, media_block,
@@ -1867,10 +1866,15 @@ rtems_bdbuf_create_read_request (rtems_blkdev_request *req,
     if (bd == NULL)
       break;
 
+    rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_TRANSFER);
+
     req->bufs [transfer_index].user   = bd;
     req->bufs [transfer_index].block  = media_block;
     req->bufs [transfer_index].length = block_size;
     req->bufs [transfer_index].buffer = bd->buffer;
+
+    if (rtems_bdbuf_tracer)
+      rtems_bdbuf_show_users ("read-ahead", bd);
 
     ++transfer_index;
   }

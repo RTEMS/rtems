@@ -513,6 +513,7 @@ rtems_ide_part_table_initialize(char *dev_name)
     rc = rtems_ide_part_table_get(dev_name, disk_desc);
     if (rc != RTEMS_SUCCESSFUL)
     {
+        free(disk_desc);
         return rc;
     }
 
