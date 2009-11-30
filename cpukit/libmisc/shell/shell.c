@@ -162,7 +162,7 @@ int rtems_shell_line_editor(
       {
         case RTEMS_SHELL_KEYS_END:
           if (output)
-            fprintf(out,line + col);
+            fprintf(out, "%s", line + col);
           col = (int) strlen (line);
           break;
 
@@ -278,7 +278,7 @@ int rtems_shell_line_editor(
 
         case 5:/*Control-e*/
           if (output)
-            fprintf(out,line + col);
+            fprintf(out, "%s", line + col);
           col = (int) strlen (line);
           break;
 
@@ -364,7 +364,7 @@ int rtems_shell_line_editor(
               for (ch = end + 1; ch > col; ch--)
                 line[ch] = line[ch - 1];
               if (output) {
-                fprintf(out, line + col);
+                fprintf(out, "%s", line + col);
                 for (bs = 0; bs < (end - col + 1); bs++)
                   fputc('\b', out);
               }

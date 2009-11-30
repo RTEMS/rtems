@@ -36,6 +36,10 @@
 
 2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libmisc/shell/shell.c: Added format string to fprintf().
+
+2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* rtems/include/rtems/rtems/timer.h: Added timer server control block
 	Timer_server_Control.  Removed _Timer_Server thread pointer. Added
 	_Timer_server pointer to the default timer server control block.
