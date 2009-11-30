@@ -35,7 +35,7 @@ void timespec_divide_by_zero(void)
   _Timespec_Divide( &t1, &zero, &ival_percentage, &fval_percentage );
   rtems_test_assert( ival_percentage == 0 );
   rtems_test_assert( fval_percentage == 0 );
-  
+
 }
 
 rtems_task Init(

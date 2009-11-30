@@ -100,7 +100,7 @@ void Screen4()
   status = rtems_clock_get_tod_timeval( &tv );
   directive_failed( status, "clock_get_tod_timeval OK" );
 
-  seconds = tv.tv_sec; 
+  seconds = tv.tv_sec;
   printf( "TA1 - current time - %s\n", ctime(&seconds) );
 
 }

@@ -67,7 +67,7 @@ rtems_task Init(
   puts( "Init - rtems_task_start - delay task - OK" );
   status = rtems_task_start( task_id, Blocking_task, 0 );
   directive_failed( status, "rtems_task_start" );
-  
+
   puts( "Init - rtems_region_create - OK" );
   status = rtems_region_create(
     rtems_build_name('R', 'N', '0', '1'),

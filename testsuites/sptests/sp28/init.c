@@ -218,7 +218,7 @@ void test_multiple_taskvars(void)
   directive_failed( sc, "get multiple #2" );
   sc = rtems_task_variable_get( RTEMS_SELF, (void **)&taskvar1, &value );
   directive_failed( sc, "get multiple #2" );
-  
+
   /*
    *  Delete task variables in various spots on the chain
    */
@@ -317,7 +317,7 @@ void test_delete_from_other_task(void)
   directive_failed( sc, "task start other" );
 
   rtems_task_wake_after( 100 );
-  
+
   if ( test_dtor_ran != 1 ) {
     printf( "Test dtor ran %" PRIu32 " times not 1 times as expected\n", test_dtor_ran );
     rtems_test_exit(0);
@@ -364,7 +364,7 @@ void test_delete_as_side_effect(void)
   directive_failed( sc, "task start deleter" );
 
   rtems_task_wake_after( 100 );
-  
+
   if ( test_dtor_ran != 2 ) {
     printf( "Test dtor ran %" PRIu32 " times not 2 times as expected\n", test_dtor_ran );
     rtems_test_exit(0);

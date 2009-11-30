@@ -54,7 +54,7 @@ void *POSIX_Init(
   puts( "Init -  pthread_create - OK" );
   sc = pthread_create( &Thread, NULL, BlockingThread, NULL );
   fatal_posix_service_status( sc, 0, "Thread create ok" );
- 
+
   puts( "Init - sleep to let BlockingThread run" );
   sleep(1);
 

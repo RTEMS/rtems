@@ -46,7 +46,7 @@ rtems_task Init(
 
   remaining = usleep( 3 * 1000000 );
   rtems_test_assert( !remaining );
-  
+
   sc = clock_gettime( CLOCK_REALTIME, &tv );
   rtems_test_assert( !sc );
 

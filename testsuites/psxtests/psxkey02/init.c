@@ -27,7 +27,7 @@ void *POSIX_Init(
   void                   *alloced;
 
   puts( "\n\n*** TEST KEY 02 ***" );
-  
+
   puts( "Init - rtems_workspace_get_information - OK" );
   sb = rtems_workspace_get_information( &start );
   assert( sb );
@@ -63,10 +63,10 @@ void *POSIX_Init(
 
   puts( "Init - pthread_key_create - ENOMEM" );
   while (1) {
-    
+
     sb = rtems_workspace_allocate( to_alloc, &alloced );
     assert( sb );
-   
+
     sc = pthread_key_create( &key, NULL );
 
     /* free the memory we snagged, then check the status */

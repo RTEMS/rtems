@@ -92,7 +92,7 @@ void *POSIX_Init(
   while ( attr.mq_msgsize > 0 ) {
     sb = rtems_workspace_allocate( to_alloc, &alloced );
     assert( sb );
-   
+
     second_Queue = mq_open(name,O_CREAT | O_RDWR, 0x777, &attr );
 
     /* free the memory we snagged, then check the status */

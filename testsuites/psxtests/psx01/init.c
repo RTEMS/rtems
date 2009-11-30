@@ -73,12 +73,12 @@ void *POSIX_Init(
   status = sched_rr_get_interval( 4, &tr );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ESRCH );
-  
+
   puts( "Init: sched_rr_get_interval -- EINVAL (invalid interval pointer)" );
   status = sched_rr_get_interval( getpid(), NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
-  
+
   /* print the round robin time quantum */
 
   status = sched_rr_get_interval( getpid(), &tr );

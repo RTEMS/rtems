@@ -58,7 +58,7 @@ Thread_blocking_operation_States getState(void)
   Semaphore_Control *sem;
 
   sem = (Semaphore_Control *)_Objects_Get(
-    &_Semaphore_Information, Semaphore, &location ); 
+    &_Semaphore_Information, Semaphore, &location );
   if ( location != OBJECTS_LOCAL ) {
     puts( "Bad object lookup" );
     rtems_test_exit(0);
@@ -122,7 +122,7 @@ rtems_task Init(
   if ( case_hit ) {
     puts( "Init - Case hit" );
     puts( "*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
-  } else 
+  } else
     puts( "Init - Case not hit - ran too long" );
 
   rtems_test_exit(0);

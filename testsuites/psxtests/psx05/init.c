@@ -595,7 +595,7 @@ void *POSIX_Init(
 
   priority = sched_get_priority_max( SCHED_FIFO );
   priority = (priority == 254) ? 200 : 13;
-  
+
   printf( "Init: pthread_mutex_setprioceiling - new ceiling = %d\n", priority );
   status = pthread_mutex_setprioceiling( &Mutex2_id, priority, &old_ceiling );
   assert( !status );
@@ -669,7 +669,7 @@ void *POSIX_Init(
   status = pthread_mutex_destroy( &Mutex2_id );
   if( status )
     printf( "status mutex destroy:%d\n", status );
-  
+
   status = pthread_mutexattr_init( &attr );
   if( status )
     printf( "status mutexattr:%d\n", status );
@@ -679,7 +679,7 @@ void *POSIX_Init(
   if ( status )
     printf( "status recursive mutex :%d\n", status );
   assert( !status );
-  
+
   puts( "*** END OF POSIX TEST 5 ***" );
   rtems_test_exit( 0 );
 

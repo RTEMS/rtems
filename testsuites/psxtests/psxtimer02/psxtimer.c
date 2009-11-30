@@ -41,7 +41,7 @@ void *POSIX_Init (
   timer_t           timer;
   timer_t           timer1;
   struct itimerspec itimer;
-  
+
   /*
    *  If these are not filled in correctly, we don't pass its error checking.
    */

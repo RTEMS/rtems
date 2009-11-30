@@ -175,7 +175,7 @@ rtems_task Init(
   put_name( tmpName, FALSE );
   puts( " - rtems_build_name for TEMP" );
 
-  
+
   /*
    * rtems_object_get_name - cases
    */
@@ -272,7 +272,7 @@ rtems_task Init(
   puts( "rtems_build_id - build an id to match init task" );
   tmpId = rtems_build_id( OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS, 1, 1 ),
   assert( tmpId == main_task );
-  
+
   puts( "rtems_object_id_get_api - OK" );
   part = rtems_object_id_get_api( main_task );
   assert( part == OBJECTS_CLASSIC_API );
@@ -332,7 +332,7 @@ rtems_task Init(
    *  Another screen break for the API and class name tests
    */
   rtems_test_pause();
- 
+
   printf( "rtems_object_get_api_name(0) = %s\n", rtems_object_get_api_name(0) );
   printf( "rtems_object_get_api_name(255) = %s\n",
     rtems_object_get_api_name(255));
@@ -344,14 +344,14 @@ rtems_task Init(
   printf( "rtems_object_get_api_name(ITRON_API) = %s\n",
      rtems_object_get_api_name(OBJECTS_ITRON_API) );
 
-  printf( "rtems_object_get_api_class_name(0, RTEMS_TASKS) = %s\n", 
+  printf( "rtems_object_get_api_class_name(0, RTEMS_TASKS) = %s\n",
     rtems_object_get_api_class_name( 0, OBJECTS_RTEMS_TASKS ) );
-  printf( "rtems_object_get_api_class_name(CLASSIC_API, 0) = %s\n", 
+  printf( "rtems_object_get_api_class_name(CLASSIC_API, 0) = %s\n",
     rtems_object_get_api_class_name( OBJECTS_CLASSIC_API, 0 ) );
-  printf("rtems_object_get_api_class_name(INTERNAL_API, MUTEXES) = %s\n", 
+  printf("rtems_object_get_api_class_name(INTERNAL_API, MUTEXES) = %s\n",
     rtems_object_get_api_class_name(
        OBJECTS_INTERNAL_API, OBJECTS_INTERNAL_MUTEXES));
-  printf("rtems_object_get_api_class_name(CLASSIC_API, RTEMS_BARRIERS) = %s\n", 
+  printf("rtems_object_get_api_class_name(CLASSIC_API, RTEMS_BARRIERS) = %s\n",
     rtems_object_get_api_class_name(
        OBJECTS_CLASSIC_API, OBJECTS_RTEMS_BARRIERS));
 
@@ -360,7 +360,7 @@ rtems_task Init(
    */
 
   rtems_test_pause();
-  
+
   puts( "rtems_object_get_class_information - INVALID_ADDRESS" );
   sc = rtems_object_get_class_information(
              OBJECTS_INTERNAL_API, OBJECTS_INTERNAL_THREADS, NULL );

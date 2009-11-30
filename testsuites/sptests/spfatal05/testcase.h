@@ -60,13 +60,13 @@ void force_error()
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  directive_failed( status, "rtems_task_create" ); 
+  directive_failed( status, "rtems_task_create" );
 
   status = rtems_task_start( id, EmptyTask, 0 );
   directive_failed( status, "rtems_task_start" );
 
   status = rtems_task_wake_after( 10 );
   directive_failed( status, "rtems_task_wake_after" );
-  
+
   /* we will not run this far */
 }

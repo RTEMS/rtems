@@ -53,7 +53,7 @@ unsigned char ReadBuffer[MAX_BUFFER];
  *
  * Fill the test buffer.
  *
- * Returns: TRUE if buffer filled 
+ * Returns: TRUE if buffer filled
  *          FALSE if buffer failed to fill
  *
  */
@@ -88,7 +88,7 @@ int doFunctionalTest(void) {
   struct iovec  wrvec[4];
   int           rc;
 
-  
+
   /*
    * Setup the iovec
    */
@@ -216,7 +216,7 @@ int doErrorTest(void)
   rc = writev(fd, NULL, 4);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "writev error 2: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -225,7 +225,7 @@ int doErrorTest(void)
   rc = readv(fd, NULL, 4);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "readv error 2: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -234,7 +234,7 @@ int doErrorTest(void)
   rc = writev(fd, vec, 0);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "writev error 3: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -243,7 +243,7 @@ int doErrorTest(void)
   rc = readv(fd, vec, 0);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "readv error 3: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -252,7 +252,7 @@ int doErrorTest(void)
   rc = writev(fd, vec, -2);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "writev error 4: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -261,7 +261,7 @@ int doErrorTest(void)
   rc = readv(fd, vec, -100);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "readv error 4: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -274,7 +274,7 @@ int doErrorTest(void)
   rc = writev(fd, vec, 2);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "writev error 5: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -287,7 +287,7 @@ int doErrorTest(void)
   rc = readv(fd, vec, 2);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "readv error 5: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -300,7 +300,7 @@ int doErrorTest(void)
   rc = writev(fd, vec, 2);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "writev error 6: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -313,7 +313,7 @@ int doErrorTest(void)
   rc = readv(fd, vec, 2);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "readv error 6: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -328,7 +328,7 @@ int doErrorTest(void)
   rc = writev(fd, vec, 3);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "writev error 7: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -341,7 +341,7 @@ int doErrorTest(void)
   rc = readv(fd, vec, 2);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "readv error 7: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -354,7 +354,7 @@ int doErrorTest(void)
   rc = writev(fd, vec, 2);
   if ( (rc != 0) ) {
     printf( "writev error 8: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 
@@ -367,7 +367,7 @@ int doErrorTest(void)
   rc = readv(fd, vec, 2);
   if ( (rc != 0) ) {
     printf( "readv error 8: %d=%s\n", errno, strerror(errno) );
-    fclose(fp); 
+    fclose(fp);
     return FALSE;
   }
 

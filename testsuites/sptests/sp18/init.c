@@ -23,7 +23,7 @@ rtems_task Init(
   size_t                  stack_size;
 
   puts( "\n\n*** TEST 18 ***" );
-  
+
   puts( "Init - rtems_workspace_get_information - OK" );
   sb = rtems_workspace_get_information( &start );
   assert( sb );
@@ -41,7 +41,7 @@ rtems_task Init(
 
   puts( "Init - rtems_task_create - Unsatisfied on Extensions" );
   while (1) {
-   
+
     sc = rtems_task_create(
       rtems_build_name( 'T', 'E', 'S', 'T' ),
       1,

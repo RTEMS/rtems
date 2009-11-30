@@ -42,7 +42,7 @@ rtems_task Periodic_Task(
     status = rtems_rate_monotonic_period( period_id, 25 );
     directive_failed(status, "rate_monotonic_period");
     partial_loop = 0;
-  
+
     start = rtems_clock_get_ticks_since_boot();
     end   = start + 5;
     while ( end <= rtems_clock_get_ticks_since_boot() )

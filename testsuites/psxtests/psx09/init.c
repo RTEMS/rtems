@@ -174,7 +174,7 @@ void *POSIX_Init(
     }
 
     now = time( &now );
-    if ( now - start > 3 ) 
+    if ( now - start > 3 )
       break;
 
     priority = schedparam.sched_priority;

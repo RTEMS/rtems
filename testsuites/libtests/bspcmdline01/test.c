@@ -42,7 +42,7 @@ void test_errors(void)
   assert( p == NULL );
 
   bsp_boot_cmdline = NULL;
-  
+
   puts( "bsp_cmdline_get_param - bsp_boot_cmdline=NULL - returns NULL" );
   p = bsp_cmdline_get_param( "name", result, 5 );
   assert( p == NULL );
@@ -86,7 +86,7 @@ void test_search(
       printf( "bsp_cmdline_get_param_raw(%s) returned (%s)\n", param, p );
     else
       printf( "bsp_cmdline_get_param_raw(%s) returned NULL\n", param );
-    
+
     assert( p );
   }
 
@@ -116,7 +116,7 @@ void test_search(
 
 void test_cmdline(void)
 {
-    
+
   puts( "\n\n*** TEST OF PARSING BOOT COMMAND STRING ***" );
 
   puts( "Test Parameter Error Conditions" );

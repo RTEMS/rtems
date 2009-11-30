@@ -23,7 +23,7 @@
 
 /*
  * HACK: API visibility violation
- * rtems_shell_main_monitor should better be declared in rtems/shell.h 
+ * rtems_shell_main_monitor should better be declared in rtems/shell.h
  */
 extern int rtems_shell_main_monitor(int argc, char **argv);
 
@@ -41,11 +41,11 @@ rtems_task Init(
   int                argc;
   char               *argv[MAX_ARGS];
   char               tmp[256];
-  
+
   puts( "\n*** START OF MONITOR02 ***\n");
-  
+
   for (i=0; i < MAX_ARGS && Commands[i] ; i++) {
-    strcpy( tmp, Commands[i] ); 
+    strcpy( tmp, Commands[i] );
     if (!rtems_shell_make_args(tmp, &argc, argv, MAX_ARGS) ) {
       printf( "===> %s\n", Commands[i] );
       rtems_shell_main_monitor(argc, argv);

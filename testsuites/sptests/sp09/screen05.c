@@ -121,7 +121,7 @@ void Screen5()
   status = rtems_semaphore_create(
     Semaphore_name[ 1 ],
     1,
-    RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY_CEILING | 
+    RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY_CEILING |
       RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY,
     10,
     &Junk_id

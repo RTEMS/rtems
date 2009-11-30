@@ -46,7 +46,7 @@ rtems_task Task5(
 
   /*
    * Use TOD_MICROSECONDS_TO_TICKS not RTEMS_MICROSECONDS_TO_TICKS to
-   * test C implementation in SuperCore -- not macro version used 
+   * test C implementation in SuperCore -- not macro version used
    * everywhere else.
    */
   status = rtems_task_wake_after( TOD_MICROSECONDS_TO_TICKS( 1000000 ) );

@@ -37,7 +37,7 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  rtems_status_code rc;  
+  rtems_status_code rc;
   rtems_id          taskId;
   rtems_id          taskId1;
 

@@ -103,7 +103,7 @@ const char *CallerName(void)
 
 #define NofMediumTask_C 3
 
-/* RTEMS identifiers */                                               
+/* RTEMS identifiers */
 rtems_id  TaMedium[NofMediumTask_C]; /* Medium-prio tasks accessing */
                                      /*    the common local HW */
 rtems_id  TaHwSim;                   /* HW simulator */
@@ -191,7 +191,7 @@ rtems_task LocalHwSim_Exec(rtems_task_argument TaskArg)
   int ISRCount = 0;
 #endif
   printf("LocalHwSim_Exec begins...\n");
-  
+
   while(1) {
     if (StartHw) {
       /* A test task has activated the HW, wait for a while and then
@@ -238,7 +238,7 @@ rtems_isr  LocalHwIsr(/*in*/ rtems_vector_number   Vector)
 void AccessLocalHw(void)
 {
   rtems_status_code     Sts;
-    
+
   rtems_task_priority   EnterPrio;   /* Statistics log */
   rtems_task_priority   AccessPrio;  /*      :         */
   rtems_task_priority   LeavePrio;   /*      :         */
@@ -291,7 +291,7 @@ void AccessLocalHw(void)
     if ( ++Iterations == 10 ) {
       puts( "*** END OF TEST 35 ***" );
       exit(0);
-    } 
+    }
   #endif
   return;
 }
@@ -299,7 +299,7 @@ void AccessLocalHw(void)
 void AccessRemoteHw(void)
 {
   rtems_status_code     Sts;
-    
+
   rtems_task_priority   EnterPrio;   /* Statistics log */
   rtems_task_priority   AccessPrio;  /*      :         */
   rtems_task_priority   LeavePrio;   /*      :         */
@@ -356,29 +356,29 @@ void AccessRemoteHw(void)
 /* The Init operation (the Init-task) */
 rtems_task Init(rtems_task_argument ignored)
 {
-  rtems_status_code status;   
+  rtems_status_code status;
 #if defined(TEST_USE_ISR)
-  rtems_isr_entry   DummyIsr; 
+  rtems_isr_entry   DummyIsr;
 #endif
   int i;
-  
+
   puts( "\n\n*** TEST 35 ***" );
 
   /* Create synchronisation semaphore for LocalHwIsr -> Test Tasks */
   status = rtems_semaphore_create(
     rtems_build_name ('S', 'Y', 'N', 'C'),           /* name */
     0,                                               /* initial count = 0 */
-    RTEMS_LOCAL                   | 
-    RTEMS_SIMPLE_BINARY_SEMAPHORE | 
-    RTEMS_NO_INHERIT_PRIORITY     | 
-    RTEMS_NO_PRIORITY_CEILING     | 
+    RTEMS_LOCAL                   |
+    RTEMS_SIMPLE_BINARY_SEMAPHORE |
+    RTEMS_NO_INHERIT_PRIORITY     |
+    RTEMS_NO_PRIORITY_CEILING     |
     RTEMS_FIFO,
     0,
     &LocalHwSync_S);                                 /* *id */
   directive_failed( status, "rtems_semaphore_create (SYNC)" );
-  
+
   printf( "Sync Mutex Id = 0x%08" PRIxrtems_id "\n", LocalHwSync_S );
-  
+
   /* Create resource semaphore for exclusive access to the local HW */
   status = rtems_semaphore_create(
     rtems_build_name ('R', 'E', 'S', '1'), /* name             */
@@ -406,14 +406,14 @@ rtems_task Init(rtems_task_argument ignored)
   directive_failed( status, "rtems_semaphore_create (RES2)" );
 
   printf( "Remote Mutex Id = 0x%08" PRIxrtems_id "\n", RemoteHwAccess_R );
-  
+
 #if defined(TEST_USE_ISR)
   /* Install ISR for HW/SW synchronization, use ta 0x85 which is synchronous */
   status = rtems_interrupt_catch(LocalHwIsr, 0x85 + 0x100, &DummyIsr);
   directive_failed( status, "rtems_interrupt_catch" );
 #endif
 
-  
+
   printf("Ending Init-task\n");
   /* Create and start all tasks in the test */
 

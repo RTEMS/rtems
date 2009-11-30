@@ -44,7 +44,7 @@ rtems_task Init(
   printk( "%%u of -16 -- %u\n", -16 );
 
   /* string formats */
-  printk( "%%s of Mary Had a Little Lamb -- (%s)\n", 
+  printk( "%%s of Mary Had a Little Lamb -- (%s)\n",
           "Mary Had a Little Lamb" );
   printk( "%%s of NULL -- (%s)\n", NULL );
   printk( "%%12s of joel -- (%20s)\n", "joel" );

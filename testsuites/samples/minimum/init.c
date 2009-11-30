@@ -1,4 +1,4 @@
-/*  Minimum Size Application Initialization 
+/*  Minimum Size Application Initialization
  *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
@@ -20,7 +20,7 @@ rtems_task Init(
 
   /* Real application would call idle loop functionality */
 
-  /* but in this case, just return and fall into a fatal error */ 
+  /* but in this case, just return and fall into a fatal error */
 }
 
 /* configuration information */

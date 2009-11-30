@@ -193,7 +193,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_start of Waiter" );
   }
 
-  puts( "Delay to let Waiters block" ); 
+  puts( "Delay to let Waiters block" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 
@@ -207,7 +207,7 @@ rtems_task Init(
     exit(0);
   }
 
-  puts( "Delay to let Waiters print a message" ); 
+  puts( "Delay to let Waiters print a message" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 
@@ -230,7 +230,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_start of Waiter" );
   }
 
-  puts( "Delay to let Waiters block" ); 
+  puts( "Delay to let Waiters block" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 
@@ -238,7 +238,7 @@ rtems_task Init(
   status = rtems_barrier_delete( Barrier );
   directive_failed(status, "rtems_barrier_delete");
 
-  puts( "Delay to let Waiters print a message" ); 
+  puts( "Delay to let Waiters print a message" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 
@@ -268,7 +268,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_start of Waiter" );
   }
 
-  puts( "Delay to let task wait on barrier" ); 
+  puts( "Delay to let task wait on barrier" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed(status, "rtems_task_wake_after");
 

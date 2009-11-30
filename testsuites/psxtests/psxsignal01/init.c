@@ -186,7 +186,7 @@ void *POSIX_Init(
     Timer_id[ 0 ],
     1,
     Signal_duringISR_TSR,
-    NULL 
+    NULL
   );
   sleep(5);
   /* signal occurs during interruptible sleep */
@@ -201,7 +201,7 @@ void *POSIX_Init(
     Timer_id[ 0 ],
     10,
     Signal_duringISR_TSR,
-    NULL 
+    NULL
   );
   do {
     end = rtems_clock_get_ticks_since_boot();
@@ -215,7 +215,7 @@ void *POSIX_Init(
 /* end of install a signal handler for SIGUSR1 */
 
   Signal_occurred = 0;
-  
+
   puts("*** Validate unexpected program termination ***");
   puts( "*** END OF POSIX TEST SIGNAL ***" );
   _POSIX_signals_Abnormal_termination_handler( SIGUSR1 );

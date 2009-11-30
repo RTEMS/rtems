@@ -61,5 +61,5 @@ void *task_c(
 TEST_EXTERN pthread_t        Init_id;
 TEST_EXTERN pthread_t        Task_id;
 
-#undef TEST_EXTERN 
+#undef TEST_EXTERN
 /* end of include file */

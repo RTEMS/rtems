@@ -86,7 +86,7 @@ int main(
 
   /*************** NOT INITIALIZED CHECKS *****************/
   /* cheat visibility */
-  attr.is_initialized = 0; 
+  attr.is_initialized = 0;
   puts( "pthread_barrierattr_setpshared( &attr, shared ) -- EINVAL" );
   status = pthread_barrierattr_setpshared( &attr, PTHREAD_PROCESS_SHARED );
   assert( status == EINVAL );

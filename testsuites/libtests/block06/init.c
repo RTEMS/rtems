@@ -340,7 +340,7 @@ bdbuf_task_control_init (int                       task,
 {
   char name[6];
   sprintf (name, "bdt%d", task);
-  
+
   tc->die    = false;
   tc->name   = strdup (name); /* leaks */
   tc->task   = 0;
@@ -366,7 +366,7 @@ bdbuf_disk_ioctl_watcher (bdbuf_disk* bdd, int update)
       else
         bdd->watch_count = 0;
     }
-    
+
     if (bdd->watch_count == 0)
     {
       bdbuf_send_watch_event (bdd->watcher_name,
@@ -375,7 +375,7 @@ bdbuf_disk_ioctl_watcher (bdbuf_disk* bdd, int update)
       bdd->watcher = 0;
     }
   }
-  
+
   return true;
 }
 
@@ -385,7 +385,7 @@ bdbuf_disk_ioctl_process (bdbuf_disk* bdd, rtems_blkdev_request* req)
 {
   bool result = true;
   int  b;
-  
+
   /*
    * Perform the requested action.
    */
@@ -393,7 +393,7 @@ bdbuf_disk_ioctl_process (bdbuf_disk* bdd, rtems_blkdev_request* req)
   {
     case BDBUF_DISK_NOOP:
       break;
-      
+
     case BDBUF_DISK_WAIT:
       if (bdd->waiting)
         bdbuf_test_printf ("disk ioctl: bad waiter: %s:%08x\n",
@@ -445,7 +445,7 @@ bdbuf_disk_ioctl_leave (bdbuf_disk* bdd, int buffer_count)
    * Handle the watcher.
    */
   bdbuf_disk_ioctl_watcher (bdd, buffer_count);
-  
+
   return true;
 }
 
@@ -464,7 +464,7 @@ bdbuf_disk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
   bdbuf_disk           *bdd = rtems_disk_driver_data (dd);
 
   errno = 0;
-  
+
   if (!bdbuf_disk_lock (bdd))
   {
     errno = EIO;
@@ -505,14 +505,14 @@ bdbuf_disk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
             }
             bdbuf_disk_ioctl_leave (bdd, r->bufnum);
             break;
-            
+
           case RTEMS_BLKDEV_REQ_WRITE:
             if (!bdbuf_disk_ioctl_process (bdd, r))
               errno = EIO;
             r->req_done (r->done_arg, RTEMS_SUCCESSFUL, 0);
             bdbuf_disk_ioctl_leave (bdd, r->bufnum);
             break;
-            
+
           default:
             errno = EBADRQC;
             break;
@@ -544,12 +544,12 @@ bdbuf_disk_initialize (rtems_device_major_number major,
                        void*                     arg)
 {
   rtems_status_code sc;
-  
+
   bdbuf_test_printf ("disk io init: ");
   sc = rtems_disk_io_initialize ();
   if (!bdbuf_test_print_sc (sc, true))
     return sc;
-  
+
   for (minor = 0; minor < BDBUF_DISKS; minor++)
   {
     char              name[sizeof (BDBUF_DISK_DEVICE_BASE_NAME) + 10];
@@ -560,7 +560,7 @@ bdbuf_disk_initialize (rtems_device_major_number major,
               BDBUF_DISK_DEVICE_BASE_NAME "%" PRIu32, minor);
 
     bdd->name = strdup (name);
-    
+
     bdbuf_test_printf ("disk init: %s\n", bdd->name);
     bdbuf_test_printf ("disk lock: ");
 
@@ -582,7 +582,7 @@ bdbuf_disk_initialize (rtems_device_major_number major,
       bdbuf_test_print_sc (sc, true);
       return sc;
     }
-    
+
   }
   return RTEMS_SUCCESSFUL;
 }
@@ -607,7 +607,7 @@ static bool
 bdbuf_tests_setup_disk (rtems_device_major_number* major)
 {
   rtems_status_code sc;
-  
+
   /*
    * Register the disk driver.
    */
@@ -616,7 +616,7 @@ bdbuf_tests_setup_disk (rtems_device_major_number* major)
   sc = rtems_io_register_driver (RTEMS_DRIVER_AUTO_MAJOR,
                                  &bdbuf_disk_io_ops,
                                  major);
-  
+
   return sc == RTEMS_SUCCESSFUL;
 }
 
@@ -629,7 +629,7 @@ bdbuf_tests_create_task (bdbuf_task_control* tc,
 
   bdbuf_test_printf ("creating task: %s: priority: %d: ",
                      tc->name, priority);
-  
+
   sc = rtems_task_create (rtems_build_name (tc->name[0], tc->name[1],
                                             tc->name[2], tc->name[3]),
                           priority,
@@ -639,9 +639,9 @@ bdbuf_tests_create_task (bdbuf_task_control* tc,
                           &tc->task);
   if (!bdbuf_test_print_sc (sc, true))
     return false;
-  
+
   bdbuf_test_printf ("starting task: %s: ", tc->name);
-  
+
   sc = rtems_task_start (tc->task, entry_point, (rtems_task_argument) tc);
 
   return bdbuf_test_print_sc (sc, true);
@@ -659,7 +659,7 @@ bdbuf_tests_task_0_test_1 (bdbuf_task_control* tc)
   bool                passed;
   int                 i;
   rtems_bdbuf_buffer* bd;
-  
+
   /*
    * Set task control's passed to false to handle a timeout.
    */
@@ -677,7 +677,7 @@ bdbuf_tests_task_0_test_1 (bdbuf_task_control* tc)
       passed = false;
       break;
     }
-        
+
     bdbuf_test_printf ("%s: rtems_bdbuf_release[0]: ", tc->name);
     sc = rtems_bdbuf_release (bd);
     if (!bdbuf_test_print_sc (sc, true))
@@ -686,7 +686,7 @@ bdbuf_tests_task_0_test_1 (bdbuf_task_control* tc)
       break;
     }
   }
-        
+
   tc->passed = passed;
   tc->test = 0;
 }
@@ -704,18 +704,18 @@ bdbuf_tests_task_0_test_2 (bdbuf_task_control* tc)
   int                 i;
   rtems_bdbuf_buffer* bd;
   rtems_chain_control buffers;
-  
+
   /*
    * Set task control's passed to false to handle a timeout.
    */
   tc->passed = false;
   passed = true;
-        
+
   /*
    * Get the blocks 0 -> 4 and hold them.
    */
   rtems_chain_initialize_empty (&buffers);
-        
+
   for (i = 0; (i < 5) && passed; i++)
   {
     dev_t device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
@@ -732,7 +732,7 @@ bdbuf_tests_task_0_test_2 (bdbuf_task_control* tc)
    * Wake the master to tell it we have the buffers.
    */
   bdbuf_send_wait_event (tc->name, "wake master", tc->master);
-                
+
   if (passed)
   {
     /*
@@ -765,7 +765,7 @@ bdbuf_tests_task_0_test_2 (bdbuf_task_control* tc)
       }
     }
   }
-        
+
   tc->passed = passed;
   tc->test = 0;
 }
@@ -780,7 +780,7 @@ bdbuf_tests_task_0_test_3 (bdbuf_task_control* tc)
   bool                passed;
   rtems_bdbuf_buffer* bd;
   dev_t               device;
-  
+
   /*
    * Set task control's passed to false to handle a timeout.
    */
@@ -847,24 +847,24 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
   rtems_bdbuf_buffer* bd;
   rtems_chain_control buffers;
   size_t              num = bdbuf_test_buffer_count ();
-  
+
   /*
    * Set task control's passed to false to handle a timeout.
    */
   tc->passed = false;
   passed = true;
-        
+
   /*
    * Clear any disk settings.
    */
   bdbuf_clear_disk_driver_watch (tc);
   bdbuf_set_disk_driver_action (tc, BDBUF_DISK_NOOP);
-  
+
   /*
    * Get the blocks 0 -> 4 and hold them.
    */
   rtems_chain_initialize_empty (&buffers);
-        
+
   for (i = 0; (i < num) && passed; i++)
   {
     dev_t device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
@@ -881,7 +881,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
    * Wake the master to tell it we have the buffers.
    */
   bdbuf_send_wait_event (tc->name, "wake master", tc->master);
-                
+
   if (passed)
   {
     bdbuf_sleep (250);
@@ -893,7 +893,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
      * remainder. This tests the swap out timer on each buffer.
      */
     bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[0]: unblocks task 1\n",
-                       tc->name);    
+                       tc->name);
     bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
     sc = rtems_bdbuf_release_modified (bd);
     bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[0]: ", tc->name);
@@ -922,7 +922,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
           bdbuf_sleep (500);
 
           bdbuf_set_disk_driver_watch (tc, num / 2);
-        
+
           for (i = 0; (i < (num / 2)) && passed; i++)
           {
             bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[%d]: ",
@@ -948,7 +948,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
       }
     }
   }
-        
+
   tc->passed = passed;
   tc->test = 0;
 }
@@ -967,24 +967,24 @@ bdbuf_tests_task_0_test_6 (bdbuf_task_control* tc)
   int                 i;
   rtems_bdbuf_buffer* bd;
   rtems_chain_control buffers;
-  
+
   /*
    * Set task control's passed to false to handle a timeout.
    */
   tc->passed = false;
   passed = true;
-        
+
   /*
    * Clear any disk settings.
    */
   bdbuf_clear_disk_driver_watch (tc);
   bdbuf_set_disk_driver_action (tc, BDBUF_DISK_NOOP);
-  
+
   /*
    * Get the blocks 0 -> 4 and hold them.
    */
   rtems_chain_initialize_empty (&buffers);
-        
+
   for (i = 0; (i < 5) && passed; i++)
   {
     dev_t device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
@@ -1013,7 +1013,7 @@ bdbuf_tests_task_0_test_6 (bdbuf_task_control* tc)
 
     passed = bdbuf_test_print_sc (rtems_bdbuf_sync (bd), true);
   }
-        
+
   tc->passed = passed;
   tc->test = 0;
 }
@@ -1027,13 +1027,13 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
   rtems_bdbuf_buffer* bd;
   rtems_chain_control buffers;
   dev_t               device;
-  
+
   /*
    * Set task control's passed to false to handle a timeout.
    */
   tc->passed = false;
   passed = true;
-        
+
   /*
    * Clear any disk settings.
    */
@@ -1041,12 +1041,12 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
   bdbuf_set_disk_driver_action (tc, BDBUF_DISK_NOOP);
 
   device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-  
+
   /*
    * Get the blocks 0 -> 4 and hold them.
    */
   rtems_chain_initialize_empty (&buffers);
-        
+
   for (i = 0; (i < 5) && passed; i++)
   {
     bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
@@ -1074,7 +1074,7 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
                        rtems_filesystem_dev_minor_t (device));
     passed = bdbuf_test_print_sc (rtems_bdbuf_syncdev (device), true);
   }
-        
+
   tc->passed = passed;
   tc->test = 0;
 }
@@ -1090,13 +1090,13 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
   rtems_chain_node*   node;
   rtems_chain_node*   pnode;
   dev_t               device;
-  
+
   /*
    * Set task control's passed to false to handle a timeout.
    */
   tc->passed = false;
   passed = true;
-        
+
   /*
    * Clear any disk settings.
    */
@@ -1104,12 +1104,12 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
   bdbuf_set_disk_driver_action (tc, BDBUF_DISK_NOOP);
 
   device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-  
+
   /*
    * Get the blocks 0 -> 4 and hold them.
    */
   rtems_chain_initialize_empty (&buffers);
-        
+
   for (i = 0; (i < 5) && passed; i++)
   {
     bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
@@ -1152,7 +1152,7 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
      * Check the block order.
      */
     bdbuf_set_disk_driver_action (tc, BDBUF_DISK_BLOCKS_INORDER);
-    
+
     bdbuf_test_printf ("%s: rtems_bdbuf_syncdev[%d:%d]: checking order\n",
                        tc->name, i,
                        rtems_filesystem_dev_major_t (device),
@@ -1173,7 +1173,7 @@ static void
 bdbuf_tests_task_0 (rtems_task_argument arg)
 {
   bdbuf_task_control* tc = (bdbuf_task_control*) arg;
-  
+
   while (!tc->die)
   {
     switch (tc->test)
@@ -1188,7 +1188,7 @@ bdbuf_tests_task_0 (rtems_task_argument arg)
       case 1:
         bdbuf_tests_task_0_test_1 (tc);
         break;
-        
+
       case 2:
         bdbuf_tests_task_0_test_2 (tc);
         break;
@@ -1246,7 +1246,7 @@ bdbuf_tests_ranged_get_release (bdbuf_task_control* tc,
   bool                passed;
   int                 i;
   rtems_bdbuf_buffer* bd;
-  
+
   /*
    * Set task control's passed to false to handle a timeout.
    */
@@ -1256,7 +1256,7 @@ bdbuf_tests_ranged_get_release (bdbuf_task_control* tc,
   for (i = lower; (i < upper) && passed; i++)
   {
     dev_t device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-    
+
     bdbuf_test_printf ("%s: rtems_bdbuf_get[%d]: blocking ...\n", tc->name, i);
     sc = rtems_bdbuf_get (device, i, &bd);
     bdbuf_test_printf ("%s: rtems_bdbuf_get[%d]: ", tc->name, i);
@@ -1280,7 +1280,7 @@ bdbuf_tests_ranged_get_release (bdbuf_task_control* tc,
     if (wake_master)
       bdbuf_send_wait_event (tc->name, "wake master", tc->master);
   }
-        
+
   tc->passed = passed;
   tc->test = 0;
 }
@@ -1345,7 +1345,7 @@ static void
 bdbuf_tests_task_2 (rtems_task_argument arg)
 {
   bdbuf_task_control* tc = (bdbuf_task_control*) arg;
-  
+
   while (!tc->die)
   {
     switch (tc->test)
@@ -1385,7 +1385,7 @@ static rtems_task_entry bdbuf_test_tasks[] =
   bdbuf_tests_task_1,
   bdbuf_tests_task_2
 };
-  
+
 #define BDBUF_TESTS_PRI_HIGH (30)
 
 /**
@@ -1403,7 +1403,7 @@ bdbuf_tests_finished (bdbuf_task_control* tasks)
     int t;
 
     finished = true;
-    
+
     for (t = 0; t < BDBUF_TEST_TASKS; t++)
       if (tasks[t].test)
       {
@@ -1413,7 +1413,7 @@ bdbuf_tests_finished (bdbuf_task_control* tasks)
 
     if (finished)
       break;
-    
+
     bdbuf_sleep (250);
     time++;
   }
@@ -1430,7 +1430,7 @@ bdbuf_tests_finished (bdbuf_task_control* tasks)
         break;
       }
   }
-  
+
   return finished;
 }
 
@@ -1446,9 +1446,9 @@ bdbuf_test_1 (bdbuf_task_control* tasks)
 
   /*
    * Use pool 0.
-   */  
+   */
   tasks[0].minor = 0;
-  
+
   bdbuf_send_wait_event ("master", "wake task 0", tasks[0].task);
 
   return bdbuf_tests_finished (tasks);
@@ -1465,7 +1465,7 @@ static bool
 bdbuf_test_2 (bdbuf_task_control* tasks)
 {
   int i;
-  
+
   tasks[0].test = 2;
   tasks[1].test = 2;
   tasks[2].test = 2;
@@ -1493,21 +1493,21 @@ bdbuf_test_2 (bdbuf_task_control* tasks)
    * Wake task 2.
    */
   bdbuf_send_wait_event ("master", "wake task 2", tasks[2].task);
-  
+
   for (i = 0; i < 5; i++)
   {
     /*
      * Wake task 0 and watch task 2 then task 1 get the released buffer.
      */
     bdbuf_send_wait_event ("master", "wake task 0", tasks[0].task);
-    
+
     /*
      * Wait until task 2 has the buffer.
      */
     if (bdbuf_wait ("master", BDBUF_SECONDS (5)) != RTEMS_SUCCESSFUL)
       return false;
   }
-  
+
   /*
    * Wait for the tests to finish.
    */
@@ -1534,7 +1534,7 @@ bdbuf_test_3 (bdbuf_task_control* tasks)
    * Wake task 0.
    */
   bdbuf_send_wait_event ("master", "wake task 0", tasks[0].task);
-  
+
   return bdbuf_tests_finished (tasks);
 }
 
@@ -1580,7 +1580,7 @@ bdbuf_test_4 (bdbuf_task_control* tasks)
    * Wake task 0 to release it buffers.
    */
   bdbuf_send_wait_event ("master", "wake task 0", tasks[0].task);
-  
+
   return bdbuf_tests_finished (tasks);
 }
 
@@ -1626,7 +1626,7 @@ bdbuf_test_5 (bdbuf_task_control* tasks)
    * Wake task 0 to release it buffers.
    */
   bdbuf_send_wait_event ("master", "wake task 0", tasks[0].task);
-  
+
   return bdbuf_tests_finished (tasks);
 }
 
@@ -1712,7 +1712,7 @@ typedef struct bdbuf_test_ident
   const char* label;
   bdbuf_test  test;
 } bdbuf_test_ident;
-  
+
 /**
  * Table of tests.
  */
@@ -1775,7 +1775,7 @@ bdbuf_tester (void)
                                                 BDBUF_TESTS_PRI_HIGH + 1,
                                                 &old_priority),
                        true);
-  
+
   /*
    * This sets up the buffer pools.
    */
@@ -1795,13 +1795,13 @@ bdbuf_tester (void)
   /*
    * Start the test tasks used to test the threading parts
    * of the bdbuf code.
-   */  
+   */
   for (t = 0; t < BDBUF_TEST_TASKS; t++)
   {
     bdbuf_task_control_init (t, &tasks[t],
                              rtems_task_self (),
                              major);
-  
+
     if (!bdbuf_tests_create_task (&tasks[t],
                                   BDBUF_TESTS_PRI_HIGH - t,
                                   bdbuf_test_tasks[t]))

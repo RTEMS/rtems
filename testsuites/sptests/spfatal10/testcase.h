@@ -19,6 +19,6 @@
 void force_error()
 {
   __assert_func( __FILE__, __LINE__, "Init", "forced" );
-   
+
   /* we will not run this far */
 }

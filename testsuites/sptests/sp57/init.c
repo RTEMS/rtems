@@ -48,7 +48,7 @@ rtems_task Init(
   puts( "Init - rtems_task_start - delay task - OK" );
   status = rtems_task_start( task_id, Delay_task, 0 );
   directive_failed( status, "rtems_task_start" );
-  
+
   puts( "Init - rtems_task_wake_after - let delay task block - OK" );
   status = rtems_task_wake_after( RTEMS_MILLISECONDS_TO_TICKS(1000) );
   directive_failed( status, "rtems_task_wake_after" );
@@ -56,7 +56,7 @@ rtems_task Init(
   puts( "Init - rtems_task_restart - delay task - OK" );
   status = rtems_task_restart( task_id, 0 );
   directive_failed( status, "rtems_task_restart" );
-  
+
   puts( "*** END OF TEST 57 ***" );
   rtems_test_exit(0);
 }

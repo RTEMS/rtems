@@ -132,7 +132,7 @@ rtems_task Init(
   printf(
     "Event sent from ISR hitting synchronization point has %soccurred\n",
     (( case_hit == TRUE ) ? "" : "NOT ")
-  ); 
+  );
 
   /*
    * Test Event send successful from ISR -- receive has timeout
@@ -167,7 +167,7 @@ rtems_task Init(
     "Event sent from ISR (with timeout) hitting synchronization "
       "point has %soccurred\n",
     (( case_hit == TRUE ) ? "" : "NOT ")
-  ); 
+  );
 
   puts( "*** END OF TEST 39 ***" );
   rtems_test_exit( 0 );

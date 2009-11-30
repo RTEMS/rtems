@@ -45,7 +45,7 @@ const char *CallerName(void)
     uint32_t u;
     unsigned char c[4];
   } TempName;
-  
+
   #if defined(TEST_ON_RTEMS_45)
     TempName.u = *(uint32_t *)_Thread_Executing->Object.name;
   #else
@@ -95,22 +95,22 @@ rtems_task BlockingTasks(rtems_task_argument arg)
 
 rtems_task Init(rtems_task_argument ignored)
 {
-  rtems_status_code   status;   
+  rtems_status_code   status;
   int                 i;
-  
+
   puts( "\n\n*** TEST 34 ***" );
 
   /* Create synchronisation semaphore for LocalHwIsr -> Test Tasks */
   status = rtems_semaphore_create(
     rtems_build_name ('S', 'E', 'M', '1'),           /* name */
     0,                                               /* initial count = 0 */
-    RTEMS_LOCAL                   | 
-    RTEMS_COUNTING_SEMAPHORE      | 
+    RTEMS_LOCAL                   |
+    RTEMS_COUNTING_SEMAPHORE      |
     RTEMS_PRIORITY,
     0,
     &Semaphore);                                    /* *id */
   directive_failed( status, "rtems_semaphore_create" );
-  
+
   /* Create and start all tasks in the test */
 
   for (i = 0; i < NUMBER_OF_BLOCKING_TASKS; i++) {
@@ -122,7 +122,7 @@ rtems_task Init(rtems_task_argument ignored)
       RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,   /* Attributes */
       &Blockers[i]);                                     /* Assigned ID */
     directive_failed( status, "rtems_task_create (BLKn)" );
-  
+
     printf( "Blockers[%d] Id = 0x%08" PRIxrtems_id "\n", i, Blockers[i] );
     status = rtems_task_start(
       Blockers[i],

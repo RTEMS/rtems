@@ -104,7 +104,7 @@ void Validate_attributes(
 #define Get_Queue_Name( i )  Test_q[i].name
 char *Build_Queue_Name( int i ) {
 
-  static char Queue_Name[PATH_MAX + 2]; 
+  static char Queue_Name[PATH_MAX + 2];
 
   sprintf(Queue_Name,"mq%d", i+1 );
   return Queue_Name;
@@ -1248,7 +1248,7 @@ void *POSIX_Init(
   verify_with_threads();
   verify_mq_receive();
   verify_mq_send();
-  
+
   puts( "*** END OF POSIX MESSAGE QUEUE TEST ***" );
   rtems_test_exit( 0 );
 

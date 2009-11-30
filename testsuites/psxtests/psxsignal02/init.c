@@ -70,7 +70,7 @@ const char *Actions[] = {
   "Spins",
   "Sleeps"
 };
-  
+
 
 typedef struct {
   int         priority;
@@ -95,7 +95,7 @@ void *Test_Thread(void *arg)
   Test_t *test = (Test_t *)arg;
 
   Install_Signal_Handler( test->name );
-  
+
   printf( "%s - %s\n", test->name, Actions[test->action] );
   switch ( test->action ) {
     case SUSPEND:

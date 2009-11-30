@@ -32,7 +32,7 @@ void *POSIX_Init(
   puts( "Init - pthread_cond_broadcast - auto initialize - EINVAL" );
   sc = pthread_cond_broadcast( &cond2 );
   fatal_posix_service_status( sc, EINVAL, "cond lock EINVAL" );
-  
+
   puts( "Init - pthread_cond_destroy - OK" );
   sc = pthread_cond_destroy( &cond1 );
   fatal_posix_service_status( sc, 0, "cond destroy OK" );

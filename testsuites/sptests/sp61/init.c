@@ -27,7 +27,7 @@ rtems_task Init(
 
   puts( "Init - restore System State and shutdown for real" );
   _System_state_Set( SYSTEM_STATE_UP );
-  
+
   puts( "*** END OF TEST 61 ***" );
   rtems_test_exit(0);
 }

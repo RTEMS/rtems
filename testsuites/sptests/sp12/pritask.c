@@ -52,7 +52,7 @@ rtems_task Priority_task(
   }
 
   /* special case of setting priority while holding a resource */
-  { 
+  {
     rtems_task_priority priority;
     rtems_task_priority old_priority;
 

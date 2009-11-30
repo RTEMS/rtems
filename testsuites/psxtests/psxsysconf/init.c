@@ -29,8 +29,8 @@ void *POSIX_Init(
   sc = sysconf( -1 );
   fatal_posix_service_status_errno( sc, EINVAL, "bad conf name" );
 
-#if UNUSED  
-/* FIXME: This test doesn't make sense. 
+#if UNUSED
+/* FIXME: This test doesn't make sense.
  * On targets with sizeof(int) < sizeof(long), compilation will fail,
  * On targets with sizeof(int) == sizeof(long) the call is valid.
  */

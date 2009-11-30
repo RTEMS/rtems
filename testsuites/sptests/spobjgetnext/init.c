@@ -16,14 +16,14 @@
 #include "system.h"
 
 /* prototypes */
-int scan_objects( 
+int scan_objects(
   Objects_Information *information,
   Objects_Id           start
 );
 
 #define MAX_SCAN 10
 
-int scan_objects( 
+int scan_objects(
   Objects_Information *information,
   Objects_Id           start
 )
@@ -44,7 +44,7 @@ int scan_objects(
       &id
     );
     if ( !o[i] )
-      break; 
+      break;
     if ( location == OBJECTS_ERROR )
       break;
     /* XXX check dispatch level with macros */
@@ -54,7 +54,7 @@ int scan_objects(
     /* XXX should be able to check that next Id is not one we have seen */
   }
   return i;
-}  
+}
 
 rtems_task Init(
   rtems_task_argument argument

@@ -98,7 +98,7 @@ void *POSIX_Init(
     );
     rtems_test_exit( 0 );
   }
- 
+
   puts( "Init - mq_send from ISR returned correct status" );
 
   puts( "*** END OF POSIX MESSAGE QUEUE TEST 3 ***" );

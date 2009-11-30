@@ -34,7 +34,7 @@ rtems_task Task_1_through_3(
 
   /*
    * Use TOD_MILLISECONDS_TO_TICKS not RTEMS_MILLISECONDS_TO_TICKS to
-   * test C implementation in SuperCore -- not macro version used 
+   * test C implementation in SuperCore -- not macro version used
    * everywhere else.
    */
   ticks = TOD_MILLISECONDS_TO_TICKS( task_number( tid ) * 5 * 1000 );

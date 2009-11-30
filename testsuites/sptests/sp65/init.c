@@ -29,14 +29,14 @@ rtems_task Init(
 {
   int                  status;
   rtems_id             Mutex_id, Task_id;
-  
+
   puts( "\n\n*** TEST " TEST_NAME " ***" );
 
   /*
    *  Create binary semaphore (a.k.a. Mutex) with Priority Ceiling
    *  attribute.
    */
-   
+
   puts( "Creating semaphore" );
   status = rtems_semaphore_create(
     rtems_build_name( 's','e','m','1' ),
@@ -50,9 +50,9 @@ rtems_task Init(
   puts( "Calling rtems_semaphore_obtain" );
   status = rtems_semaphore_obtain( Mutex_id, RTEMS_DEFAULT_OPTIONS, 0 );
   directive_failed( status, "rtems_semaphore_obtain" );
-  
+
   puts( "Calling rtems_task_create" );
-  status = rtems_task_create( rtems_build_name( 'T', 'A', 'S', '1' ), 
+  status = rtems_task_create( rtems_build_name( 'T', 'A', 'S', '1' ),
     TASK_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
@@ -60,17 +60,17 @@ rtems_task Init(
     &Task_id
   );
   directive_failed( status, "rtems_task_create" );
-  
+
   puts( "Calling rtems_task_start" );
   status = rtems_task_start( Task_id, Task_1, (rtems_task_argument)&Mutex_id );
   directive_failed( status, "rtems_task_start" );
-  
+
   sleep(1);
-  
+
   puts( "Calling semaphore release" );
   status = rtems_semaphore_release( Mutex_id );
   directive_failed( status, "rtems_semaphore_release" );
-  
+
 
   puts( "*** END OF TEST 65 ***" );
 

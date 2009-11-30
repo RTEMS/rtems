@@ -71,7 +71,7 @@ void Screen3()
   #if defined(__m32c__)
     skipUnsatisfied = true;
   #endif
- 
+
   if ( skipUnsatisfied ) {
     puts(
       "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED  -- SKIPPED"

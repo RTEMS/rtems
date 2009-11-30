@@ -84,7 +84,7 @@ void *POSIX_Init(
     printf( "Init - pthread_mutexattr_settype - %s\n", TypesToCheck[i].name );
     sc = pthread_mutexattr_settype( &attr, TypesToCheck[i].type );
     rtems_test_assert( sc == TypesToCheck[i].status );
-    
+
     type = -2;
 
     if ( TypesToCheck[i].status == 0 ) {

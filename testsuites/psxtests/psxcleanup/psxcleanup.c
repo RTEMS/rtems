@@ -155,7 +155,7 @@ void initialize_lock_t(lock_t *l)
 {
   pthread_mutexattr_t mutexattr;    /* mutex attributes */
   pthread_condattr_t  condattr;     /* condition attributes */
-  
+
   if (pthread_mutexattr_init (&mutexattr) != 0) {
     perror ("Error in mutex attribute init\n");
   }
@@ -250,12 +250,12 @@ void *POSIX_Init(
   sleep(1);
 
   /*************** ERROR CASES  ***************/
-  puts("Call pthread_cleanup_push with NULL handler"); 
+  puts("Call pthread_cleanup_push with NULL handler");
   pthread_cleanup_push(NULL, NULL);
 
-  puts("Call pthread_cleanup_pop with no push"); 
+  puts("Call pthread_cleanup_pop with no push");
   pthread_cleanup_pop(1);
- 
+
   /*************** END OF TEST *****************/
   puts( "*** END OF POSIX CLEANUP TEST ***\n" );
   rtems_test_exit(0);

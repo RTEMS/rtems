@@ -40,7 +40,7 @@ rtems_task Init(
   puts( "\n\n*** TEST 50 ***" );
 
   sc = rtems_timer_initiate_server(
-    1, 
+    1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES
   );
@@ -63,7 +63,7 @@ rtems_task Init(
 
       sc = rtems_clock_get_uptime( &uptime );
       directive_failed( sc, "rtems_clock_get_uptime" );
- 
+
       printf( "Timer fired at %" PRItime_t "\n", uptime.tv_sec );
     }
 

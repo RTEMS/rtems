@@ -142,7 +142,7 @@ void Fatal_extension(
     else
       printk( "ERROR==> Fatal Extension is internal set to FALSE expected TRUE\n" );
   }
-  
+
   if ( error !=  FATAL_ERROR_EXPECTED_ERROR ) {
     printk( "ERROR==> Fatal Error Expected (");
     Put_Error( source, FATAL_ERROR_EXPECTED_ERROR );

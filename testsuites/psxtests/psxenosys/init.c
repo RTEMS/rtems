@@ -38,7 +38,7 @@ void check_enosys(int status);
 
 void check_enosys(int status)
 {
-  if ( (status == -1) && (errno == ENOSYS) ) 
+  if ( (status == -1) && (errno == ENOSYS) )
     return;
   puts( "ERROR -- did not return ENOSYS as expected" );
   rtems_test_exit(0);

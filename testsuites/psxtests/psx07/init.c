@@ -125,7 +125,7 @@ void *POSIX_Init(
   /* reset all the fields */
   status = pthread_attr_init( &attr );
   posix_service_failed( status, "pthread_attr_init");
-  
+
   attr.stacksize = rtems_configuration_get_work_space_size() * 10;
   puts( "Init - pthread_create - EAGAIN (stacksize too large)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
@@ -192,7 +192,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_create - ENOTSUP (unsupported system contention scope)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  fatal_directive_check_status_only( status, ENOTSUP, 
+  fatal_directive_check_status_only( status, ENOTSUP,
     "unsupported system contention scope" );
 
   status = pthread_attr_init( &attr );

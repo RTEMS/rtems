@@ -31,7 +31,7 @@ void *countTaskDeferred(void *ignored)
 {
   int i=0;
   int type,state;
-  
+
   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &type);
   pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &state);
   while (1) {

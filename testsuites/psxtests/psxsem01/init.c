@@ -177,7 +177,7 @@ void *POSIX_Init(
     errno, ENAMETOOLONG, "sem_open errorno ENAMETOOLONG" );
 
   puts( "Init: sem_open - sem1 SUCCESSFUL" );
-  n_sem1 = sem_open( "sem1",O_CREAT, 0777, 1 ); 
+  n_sem1 = sem_open( "sem1",O_CREAT, 0777, 1 );
   assert( n_sem1 != SEM_FAILED );
 
   puts( "Init: sem_destroy - named sem1 - EINVAL" );

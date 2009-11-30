@@ -259,7 +259,7 @@ extern "C" {
  * Various inttypes.h-stype macros to assist printing
  * certain system types on different targets.
  */
- 
+
 /* HACK: Presume time_t to be a "long" */
 /* HACK: There is no portable way to print time_t's */
 #define PRItime_t "ld"

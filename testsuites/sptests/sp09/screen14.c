@@ -120,7 +120,7 @@ void Screen14()
 
   /* bad id */
   build_time( &time, 12, 31, 1994, 9, 0, 0, 0 );
-  status = rtems_timer_fire_when( 
+  status = rtems_timer_fire_when(
     rtems_build_id( 1, 1, 1, 256 ),
     &time,
     Delayed_routine,
@@ -159,8 +159,8 @@ void Screen14()
     "rtems_timer_fire_when with NULL handler"
   );
   puts( "TA1 - rtems_timer_fire_when - RTEMS_INVALID_ADDRESS" );
-  
-  /* invalid time -- before RTEMS epoch */ 
+
+  /* invalid time -- before RTEMS epoch */
   build_time( &time, 2, 5, 1987, 8, 30, 45, 0 );
   status = rtems_timer_fire_when( Timer_id[ 1 ], &time, Delayed_routine, NULL );
   fatal_directive_status(

@@ -1,4 +1,4 @@
-/* 
+/*
  *  This routine is the initialization task of test to exercise some
  *  timezone functionality.
  *
@@ -45,7 +45,7 @@ rtems_task Init(
   rtems_status_code status;
 
   puts( "\n\n*** TIMEZONE TEST ***" );
-  
+
   build_time( &time, 3, 14, 2007, 15, 9, 26, 5 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );

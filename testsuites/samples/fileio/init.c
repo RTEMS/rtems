@@ -160,7 +160,7 @@ void fileio_start_shell(void)
   );
 
   writeScript(
-    "/scripts/js", 
+    "/scripts/js",
     "#! joel\n"
     "\n"
     "date\n"
@@ -170,13 +170,13 @@ void fileio_start_shell(void)
   );
 
   writeScript(
-    "/scripts/j1", 
+    "/scripts/j1",
     "#! joel -s 20480 -t JESS\n"
     "stackuse\n"
   );
 
   rtems_shell_write_file(
-    "/scripts/j2", 
+    "/scripts/j2",
     "echo j2 TEST FILE\n"
     "echo j2   SHOULD BE non-executable AND\n"
     "echo j2   DOES NOT have the magic first line\n"
@@ -701,7 +701,7 @@ Init (rtems_task_argument ignored)
   Task_name = rtems_build_name('F','M','N','U');
 
   status = rtems_task_create(
-    Task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2, 
+    Task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2,
     RTEMS_DEFAULT_MODES ,
     RTEMS_FLOATING_POINT | RTEMS_DEFAULT_ATTRIBUTES, &Task_id
   );
@@ -738,7 +738,7 @@ rtems_shell_alias_t Shell_USERECHO_Alias = {
   "usercmd",                 /* command */
   "userecho"                 /* alias */
 };
-  
+
 
 #define CONFIGURE_SHELL_USER_COMMANDS &Shell_USERCMD_Command
 #define CONFIGURE_SHELL_USER_ALIASES &Shell_USERECHO_Alias

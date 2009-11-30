@@ -139,7 +139,7 @@ static void test_heap_cases_1(void)
 
   /*
    * Another odd case.  What we are trying to do from Sergei
-   * 
+   *
    * 32-bit CPU when CPU_ALIGNMENT = 4 (most targets have 8) with the
    * code like this:
    */
@@ -165,15 +165,15 @@ static void test_heap_cases_1(void)
   /* XXX what should we expect */
   test_free( p3 );
   test_free( p1 );
-  
+
   /*
-   *  To tackle a special case of resizing a block in order to cover the 
+   *  To tackle a special case of resizing a block in order to cover the
    *  code in heapresizeblock.c
    *
-   *  Re-initialise the heap, so that the blocks created from now on 
+   *  Re-initialise the heap, so that the blocks created from now on
    *  are contiguous.
    */
-  test_heap_default_init(); 
+  test_heap_default_init();
   puts( "Heap Initialized" );
   p1 = _Heap_Allocate( &TestHeap, 400 );
   rtems_test_assert( p1 != NULL );
@@ -182,7 +182,7 @@ static void test_heap_cases_1(void)
   rsc = _Heap_Resize_block( &TestHeap, p1, 256, &u1, &u2 );
   rtems_test_assert( rsc == HEAP_RESIZE_SUCCESSFUL );
   test_free( p1 );
-  test_free( p2 );  
+  test_free( p2 );
 }
 
 #define TEST_DEFAULT_PAGE_SIZE 128
@@ -506,23 +506,23 @@ static void test_heap_allocate(void)
 
   /* Force the page size to a small enough value */
   TestHeap.page_size = page_size;
-  
+
   alignment = first_page_begin - sizeof(uintptr_t);
   p1 = test_alloc( alloc_size, alignment, boundary, NULL );
-  
+
   first_page_begin = ((uintptr_t) TestHeap.first_block ) + HEAP_BLOCK_HEADER_SIZE;
   alignment = first_page_begin + sizeof(uintptr_t);
   p1 = test_alloc( alloc_size, alignment, boundary, NULL );
 
-  first_page_begin = ((uintptr_t) TestHeap.first_block ) 
+  first_page_begin = ((uintptr_t) TestHeap.first_block )
 	  + HEAP_BLOCK_HEADER_SIZE;
   alignment = first_page_begin;
   p1 = test_alloc_simple( alloc_size, alignment, boundary );
-  
+
   puts( "\tallocate last block with different boundarys" );
   page_size = TEST_DEFAULT_PAGE_SIZE;
   test_heap_init( page_size );
-  previous_last_block_begin = ((uintptr_t) TestHeap.last_block ) 
+  previous_last_block_begin = ((uintptr_t) TestHeap.last_block )
 	  - TestHeap.min_block_size;
   previous_last_page_begin = previous_last_block_begin
 	  + HEAP_BLOCK_HEADER_SIZE;
@@ -530,7 +530,7 @@ static void test_heap_allocate(void)
   alignment = sizeof(uintptr_t);
   boundary = 0;
   p1 = test_alloc( alloc_size, alignment, boundary, (void *) (previous_last_page_begin + sizeof(uintptr_t)));
-  
+
   test_heap_init( page_size );
   boundary = ((uintptr_t) TestHeap.last_block );
   p1 = test_alloc( alloc_size, alignment, boundary, (void *) previous_last_page_begin );
@@ -561,15 +561,15 @@ static void test_heap_allocate(void)
 
   boundary = (uintptr_t) TestHeap.last_block;
   p1 = test_alloc( alloc_size, alignment, boundary, NULL );
-  
+
   alloc_size = 0;
   p1 = test_alloc( alloc_size, alignment, boundary, NULL );
-  
+
   alloc_size = 1;
   alignment = sizeof(uintptr_t);
   boundary = 0;
   p1 = test_alloc_simple( alloc_size, alignment, boundary );
-    
+
   puts( "\ttry to create a block, which is not possible because of the alignment and boundary" );
 
   alloc_size = 2;
@@ -597,13 +597,13 @@ static void test_block_alloc(
   int free_variant,
   int alloc_variant,
   uintptr_t alloc_begin,
-  uintptr_t alloc_size 
+  uintptr_t alloc_size
 )
 {
   void *p1 = NULL;
   void *p2 = NULL;
   void *p3 = NULL;
- 
+
   uintptr_t size_fresh_heap = 0;
   uintptr_t pages_per_default_block = 0;
   uint32_t exp_free_pages = 0;
@@ -611,16 +611,16 @@ static void test_block_alloc(
   uint32_t exp_used_blocks = 0;
 
   test_heap_init( TEST_DEFAULT_PAGE_SIZE );
-  
+
   size_fresh_heap = _Heap_Get_size( &TestHeap );
   exp_free_pages = size_fresh_heap / TestHeap.page_size;
 
   p1 = test_create_used_block();
   p2 = test_create_used_block();
   p3 = test_create_used_block();
-  
-  pages_per_default_block = _Heap_Block_size( 
-    _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size ) 
+
+  pages_per_default_block = _Heap_Block_size(
+    _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size )
   ) / TestHeap.page_size;
 
   if (free_variant == 1) {
@@ -640,13 +640,13 @@ static void test_block_alloc(
   );
 
   test_check_alloc_simple( (void *) alloc_begin, alloc_size, 0, 0 );
-  
+
   /* check statistics */
   switch( free_variant ) {
     case 1:
       exp_free_pages = exp_free_pages - 2 * pages_per_default_block;
       exp_used_blocks = 2;
-      
+
       switch( alloc_variant ) {
 	case 1:
 	  /* allocate block full space */
@@ -672,7 +672,7 @@ static void test_block_alloc(
     case 2:
       exp_free_pages = exp_free_pages - 2 * pages_per_default_block;
       exp_used_blocks = 2;
-      
+
       switch( alloc_variant ) {
 	case 1:
 	  /* allocate block full space */
@@ -698,7 +698,7 @@ static void test_block_alloc(
     case 3:
       exp_free_pages = exp_free_pages - pages_per_default_block;
       exp_used_blocks = 2;
-      
+
       switch( alloc_variant ) {
 	case 1:
 	  /* allocate block full space */
@@ -725,7 +725,7 @@ static void test_block_alloc(
     default:
       exp_free_pages = exp_free_pages - 3 * pages_per_default_block;
       exp_used_blocks = 3;
-      
+
       switch( alloc_variant ) {
 	case 1:
 	  /* allocate block full space */
@@ -767,7 +767,7 @@ static void test_heap_do_block_allocate( int variant, void *p2 )
   alloc_begin = alloc_box_begin;
   alloc_size = 0;
   test_block_alloc( variant, 0, alloc_begin, alloc_size );
-  
+
   puts( "\tallocate block full space");
   alloc_begin = alloc_box_begin;
   alloc_size = alloc_box_size + HEAP_BLOCK_SIZE_OFFSET
@@ -778,7 +778,7 @@ static void test_heap_do_block_allocate( int variant, void *p2 )
   alloc_begin = alloc_box_begin + TEST_DEFAULT_PAGE_SIZE;
   alloc_size = 0;
   test_block_alloc( variant, 2, alloc_begin, alloc_size );
-  
+
   puts( "\tallocate block at the end");
   alloc_begin = alloc_box_end - TEST_DEFAULT_PAGE_SIZE;
   alloc_size = TEST_DEFAULT_PAGE_SIZE + HEAP_BLOCK_SIZE_OFFSET
@@ -853,7 +853,7 @@ static void test_simple_resize_block(
 {
   uintptr_t old_size = 0;
   uintptr_t new_size = 0;
- 
+
   Heap_Resize_status status = _Heap_Resize_block(
     &TestHeap,
     alloc_pointer,
@@ -911,7 +911,7 @@ static void test_heap_resize_block(void)
   test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_SUCCESSFUL );
 
   puts( "\tdecrease size");
-  
+
   puts( "\t\tdecrease a block with two pages to one page" );
   test_heap_init( TEST_DEFAULT_PAGE_SIZE );
   p1 = test_alloc_two_pages();
@@ -931,7 +931,7 @@ static void test_heap_extend(void)
 
   /*
    * Easier to hit extend with a dedicated heap.
-   * 
+   *
    */
   _Heap_Initialize( &TestHeap, TestHeapMemory, 512, 0 );
 
@@ -954,7 +954,7 @@ static void test_heap_info(void)
   s1 = malloc_free_space();
   p1 = malloc( 512 );
   s2 = malloc_free_space();
-  puts( "malloc_free_space - check malloc space drops after malloc" ); 
+  puts( "malloc_free_space - check malloc space drops after malloc" );
   rtems_test_assert( s1 );
   rtems_test_assert( s2 );
   rtems_test_assert( s2 <= s1 );

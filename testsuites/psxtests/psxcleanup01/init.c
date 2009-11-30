@@ -31,7 +31,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_cleanup_pop - do not execute" );
   pthread_cleanup_pop(0);
- 
+
   puts( "*** END OF POSIX CLEANUP TEST 01 ***\n" );
   rtems_test_exit(0);
 }

@@ -116,7 +116,7 @@ rtems_task Init(
 )
 {
   puts( "\n\n*** TEST 63 ***" );
-  
+
   test_case_one();
 
   test_case_two();

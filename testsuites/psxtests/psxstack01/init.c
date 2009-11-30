@@ -58,7 +58,7 @@ void *POSIX_Init(
   assert( Stack_Low );
   Stack_High = Stack_Low + PTHREAD_MINIMUM_STACK_SIZE;
 
-  puts( "Init - Initialize thread attribute for user provided stack" ); 
+  puts( "Init - Initialize thread attribute for user provided stack" );
   sc = pthread_attr_init( &attr );
   assert( !sc );
 

@@ -110,7 +110,7 @@ int main(
 
   /*************** NOT INITIALIZED CHECKS *****************/
   /* cheat visibility */
-  attr.is_initialized = 0; 
+  attr.is_initialized = 0;
   puts( "pthread_rwlockattr_setpshared( &attr, shared ) -- EINVAL" );
   status = pthread_rwlockattr_setpshared( &attr, PTHREAD_PROCESS_SHARED );
   assert( status == EINVAL );
@@ -338,7 +338,7 @@ int main(
   assert( !status );
 
   sleep(2);
- 
+
   /*************** CREATE THREADS AND LET THEM OBTAIN WRITE LOCK *************/
   puts( "pthread_rwlock_trywrlock(RWLock) -- OK" );
   status = pthread_rwlock_trywrlock(&RWLock);
@@ -367,7 +367,7 @@ int main(
   puts( "clock_gettime(CLOCK_REALTIME, &abstime) -- OK" );
   status = clock_gettime( CLOCK_REALTIME, &abstime );
   assert( !status );
-  
+
   abstime.tv_sec += 1;
   puts( "pthread_rwlock_timedwrlock( &RWLock, &abstime) -- OK" );
   status = pthread_rwlock_timedwrlock( &RWLock, &abstime );
@@ -421,7 +421,7 @@ int main(
   puts( "pthread_rwlock_unlock ( &rwlock ) -- OK" );
   status = pthread_rwlock_unlock( &rwlock );
   assert( status == 0 );
-  
+
   puts( "pthread_rwlock_unlock ( &rwlock ) -- OK" );
   status = pthread_rwlock_unlock( &rwlock );
   assert( status == 0 );

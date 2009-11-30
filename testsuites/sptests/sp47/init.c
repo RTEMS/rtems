@@ -40,7 +40,7 @@ rtems_task Init(rtems_task_argument ignored)
   sc = rtems_task_create(
     rtems_build_name('t', 's', 't', '0'),
     100,
-    RTEMS_MINIMUM_STACK_SIZE, 
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_NO_ASR,
     RTEMS_DEFAULT_ATTRIBUTES,
     &ti

@@ -90,7 +90,7 @@ rtems_task Init(
       break;
   }
 
-  puts( "Signal sent from ISR has been processed" ); 
+  puts( "Signal sent from ISR has been processed" );
   puts( "*** END OF TEST 38 ***" );
   rtems_test_exit( 0 );
 }

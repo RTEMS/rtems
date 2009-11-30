@@ -105,7 +105,7 @@ void test_adjtime(void)
   rtems_time_of_day *the_tod;
   rtems_time_of_day  tod;
   rtems_interval     ticks;
-  
+
   the_tod = &Dates[0];
 
   print_time( "rtems_clock_set          ", the_tod, "\n" );
@@ -151,7 +151,7 @@ void test_adjtime(void)
   assert( sc == 0 );
 
   /*
-   * spin until over 1/2 of the way to the 
+   * spin until over 1/2 of the way to the
    */
   ticks = rtems_clock_get_ticks_per_second();
   assert( ticks );

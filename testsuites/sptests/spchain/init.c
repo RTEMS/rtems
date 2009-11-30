@@ -21,9 +21,9 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  rtems_chain_control  chain1;  
+  rtems_chain_control  chain1;
   rtems_chain_node    *p;
-  test_node            node1, node2;  
+  test_node            node1, node2;
   int                  id;
 
   puts( "\n\n*** TEST OF RTEMS CHAIN API ***" );

@@ -65,12 +65,12 @@ rtems_task Locker_task(
   rtems_status_code status;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
-  directive_failed( status, "rtems_task_ident" ); 
+  directive_failed( status, "rtems_task_ident" );
 
   task_index = task_number( tid ) - 1;
 
   status = rtems_semaphore_obtain( Semaphore, RTEMS_DEFAULT_OPTIONS, 0 );
-  directive_failed( status, "rtems_semaphore_obtain" ); 
+  directive_failed( status, "rtems_semaphore_obtain" );
 
   put_name( Task_name[ task_index ], FALSE );
   puts( " - unblocked - OK" );
@@ -93,10 +93,10 @@ void do_test(
     0,                                       /* IGNORED */
     &Semaphore
   );
-  directive_failed( status, "rtems_semaphore_create" ); 
+  directive_failed( status, "rtems_semaphore_create" );
 
   for (i=0 ; i< MAX_TASKS ; i++ ) {
-    
+
     Task_name[ i ] = rtems_build_name(
        'T',
        'A',
@@ -112,36 +112,36 @@ void do_test(
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ i ]
     );
-    directive_failed( status, "rtems_task_create" ); 
+    directive_failed( status, "rtems_task_create" );
 
     status = rtems_task_start(
       Task_id[ i ], Locker_task, (rtems_task_argument)i );
-    directive_failed( status, "rtems_task_start" ); 
+    directive_failed( status, "rtems_task_start" );
 
     status = rtems_task_wake_after( 10 );
-    directive_failed( status, "rtems_task_wake_after" ); 
+    directive_failed( status, "rtems_task_wake_after" );
   }
 
   for (i=0 ; i< MAX_TASKS ; i++ ) {
     if ( extract == FALSE ) {
       status = rtems_semaphore_release( Semaphore );
-      directive_failed( status, "rtems_semaphore_release" ); 
+      directive_failed( status, "rtems_semaphore_release" );
 
       status = rtems_task_wake_after( 100 );
-      directive_failed( status, "rtems_task_wake_after" ); 
+      directive_failed( status, "rtems_task_wake_after" );
     } else {
       status = rtems_task_delete( Task_id[ i ]  );
-      directive_failed( status, "rtems_task_delete" ); 
+      directive_failed( status, "rtems_task_delete" );
     }
   }
-  
+
   /* one extra release for the initial state */
   status = rtems_semaphore_release( Semaphore );
-  directive_failed( status, "rtems_semaphore_release" ); 
+  directive_failed( status, "rtems_semaphore_release" );
 
   /* now delete the semaphore since no one is waiting and it is unlocked */
   status = rtems_semaphore_delete( Semaphore );
-  directive_failed( status, "rtems_semaphore_delete" ); 
+  directive_failed( status, "rtems_semaphore_delete" );
 }
 
 rtems_task Init(

@@ -40,7 +40,7 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 
 void force_error()
 {
-  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) 
+  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
     Configuration.interrupt_stack_size = (STACK_MINIMUM_SIZE-1);
     rtems_initialize_data_structures();
   #else
@@ -50,6 +50,6 @@ void force_error()
     );
     rtems_test_exit(0);
   #endif
-   
+
   /* we will not run this far */
 }

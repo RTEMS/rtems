@@ -38,7 +38,7 @@ void test_errors(void)
   assert( p == NULL );
 
   bsp_boot_cmdline = NULL;
-  
+
   puts( "rtems_bsp_cmdline_get_param - bsp_boot_cmdline=NULL - returns NULL" );
   p = rtems_bsp_cmdline_get_param( "name", result, 5 );
   assert( p == NULL );
@@ -83,7 +83,7 @@ void test_search(
       printf( "rtems_bsp_cmdline_get_param_raw(%s) returned (%s)\n", param, p );
     else
       printf( "rtems_bsp_cmdline_get_param_raw(%s) returned NULL\n", param );
-    
+
     assert( p );
   }
 

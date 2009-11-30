@@ -38,7 +38,7 @@ rtems_task Blocker(
 
   puts( "Blocker - Got memory after resize" );
   case_hit = true;
-  
+
   (void) rtems_task_delete( RTEMS_SELF );
 }
 
@@ -53,7 +53,7 @@ rtems_task Init(
   size_t             size;
 
   puts( "\n\n*** TEST 62 ***" );
-  
+
   puts( "Init - rtems_task_create Blocker - OK" );
   sc = rtems_task_create(
     rtems_build_name( 'B', 'L', 'C', 'K' ),

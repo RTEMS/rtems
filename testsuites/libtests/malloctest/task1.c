@@ -14,7 +14,7 @@
  */
 
 #include "system.h"
-#include <rtems/malloc.h> 
+#include <rtems/malloc.h>
 #include <string.h>
 #include <stdlib.h>
 

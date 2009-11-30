@@ -22,7 +22,7 @@
 static char  Too_Long_Name[PATH_MAX + 2];
 static char  Longest_Name[PATH_MAX + 1];
 
-const char *Get_Too_Long_Name(void) 
+const char *Get_Too_Long_Name(void)
 {
   int i;
 
@@ -43,7 +43,7 @@ const char *Get_Longest_Name(void)
 }
 
 void Allocate_majority_of_workspace( int smallest )
-{ 
+{
   bool                   result;
   Heap_Information_block info;
   void                   *temp;
@@ -54,9 +54,9 @@ void Allocate_majority_of_workspace( int smallest )
     perror("==> Error Getting workspace information");
 
   do {
-    result = rtems_workspace_allocate( 
-      info.Free.largest-16, 
-      &temp 
+    result = rtems_workspace_allocate(
+      info.Free.largest-16,
+      &temp
     );
     if ((!result) || (!temp))
       perror("Unable to allocate from workspace");

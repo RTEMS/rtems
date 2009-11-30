@@ -23,7 +23,7 @@ rtems_rate_monotonic_period_states getState(void)
   Rate_monotonic_Control *period;
 
   period = (Rate_monotonic_Control *)_Objects_Get(
-    &_Rate_monotonic_Information, Period, &location ); 
+    &_Rate_monotonic_Information, Period, &location );
   if ( location != OBJECTS_LOCAL ) {
     puts( "Bad object lookup" );
     rtems_test_exit(0);
@@ -79,7 +79,7 @@ rtems_task Init(
   if ( case_hit ) {
     puts( "Init - It appears the case has been hit" );
     puts( "*** END OF TEST INTERRUPT CRITICAL SECTION 08 ***" );
-  } else 
+  } else
     puts( "Init - Case not hit - ran too long" );
   rtems_test_exit(0);
 }

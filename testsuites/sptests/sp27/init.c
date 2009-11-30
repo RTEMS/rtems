@@ -111,7 +111,7 @@ rtems_task Init(
 )
 {
   puts( "\n\n*** TEST " TEST_NAME " ***" );
-  puts( "Testing " TEST_SEMAPHORE_TYPE " semaphore flush" ); 
+  puts( "Testing " TEST_SEMAPHORE_TYPE " semaphore flush" );
   doTest();
   puts( "*** END OF TEST " TEST_NAME " ***" );
 

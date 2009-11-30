@@ -41,7 +41,7 @@ static bool interrupt_critical_busy_wait( void )
 
   if ( max > 0 ) {
     Maximum_current = max - 1;
-    
+
     return false;
   } else {
     Maximum_current = Maximum;

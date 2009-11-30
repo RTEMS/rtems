@@ -33,28 +33,28 @@ rtems_task Init(
   assert( retbool == true );
 
   puts( "rtems_workspace_allocate - null pointer" );
-  retbool = rtems_workspace_allocate( 42, NULL ); 
+  retbool = rtems_workspace_allocate( 42, NULL );
   assert( retbool == false );
 
   puts( "rtems_workspace_allocate - 0 bytes" );
-  retbool = rtems_workspace_allocate( 0, &p1 ); 
+  retbool = rtems_workspace_allocate( 0, &p1 );
   assert( retbool == false );
 
   puts( "rtems_workspace_allocate - too many bytes" );
-  retbool = rtems_workspace_allocate( info.Free.largest * 2, &p1 ); 
+  retbool = rtems_workspace_allocate( info.Free.largest * 2, &p1 );
   assert( retbool == false );
 
   puts( "rtems_workspace_allocate - 42 bytes" );
-  retbool = rtems_workspace_allocate( 42, &p1 ); 
+  retbool = rtems_workspace_allocate( 42, &p1 );
   assert( retbool == true );
   assert( p1 != NULL );
 
   puts( "rtems_workspace_free - NULL" );
-  retbool = rtems_workspace_free( NULL ); 
+  retbool = rtems_workspace_free( NULL );
   assert( retbool == false );
 
   puts( "rtems_workspace_free - previous pointer to 42 bytes" );
-  retbool = rtems_workspace_free( p1 ); 
+  retbool = rtems_workspace_free( p1 );
   assert( retbool == true );
 
   puts( "*** END OF TEST WORKSPACE CLASSIC API ***" );

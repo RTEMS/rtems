@@ -55,7 +55,7 @@ rtems_task Init(
 
   rtems_monitor_init (0);
   rtems_capture_cli_init (0);
-  
+
   setup_tasks_to_watch ();
 
   rtems_task_delete (RTEMS_SELF);

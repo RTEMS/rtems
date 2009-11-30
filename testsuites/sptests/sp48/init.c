@@ -33,7 +33,7 @@ rtems_task Init(rtems_task_argument ignored)
       rtems_build_name('s', 'e', 'm', ' '),
       1,
       RTEMS_DEFAULT_ATTRIBUTES,
-      0, 
+      0,
       &Semaphores[i]
     );
     /* printf("Creating %i id=0x%08x\n", i, Semaphores[i]); */

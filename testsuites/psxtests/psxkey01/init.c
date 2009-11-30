@@ -43,12 +43,12 @@ void *POSIX_Init(
   printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
 
   Allocate_majority_of_workspace(84);
-  
+
   puts("Init: pthread_key_create - ENOMEM (Workspace not available)");
   empty_line();
   status = pthread_key_create( &Key_id[0], Key_destructor );
   fatal_directive_check_status_only( status, ENOMEM, "no workspace available" );
-   
+
   puts( "*** END OF POSIX KEY 01 TEST ***" );
   rtems_test_exit( 0 );
 

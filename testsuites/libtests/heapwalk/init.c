@@ -204,7 +204,7 @@ static void test_main_loop(void)
   Heap_Block *next_block = NULL;
 
   puts( "Test the main loop" );
-  
+
   puts( "\tset the blocksize so, that the next block is outside the heap" );
   test_heap_init_custom();
   /* use all blocks */
@@ -270,7 +270,7 @@ static void test_check_free_block(void)
   Heap_Block *first_free_block = NULL;
   Heap_Block *secound_free_block = NULL;
   void *p1 = NULL;
-  
+
   puts( "test the _Heap_Walk_check_free_block() function" );
 
   puts( "\tset a previous size for the next block which is not equal to the size of the actual block" );

@@ -25,7 +25,7 @@ rtems_task Init(
   puts( "Init - rtems_debug_is_enabled - is 0x1 set? No" );
   is_set = rtems_debug_is_enabled( 0x1 );
   rtems_test_assert(is_set == false);
-  
+
   puts( "Init - rtems_debug_enable - set 0x1" );
   rtems_debug_enable(0x1);
   rtems_test_assert(_Debug_Level == 0x1);
@@ -33,7 +33,7 @@ rtems_task Init(
   puts( "Init - rtems_debug_is_enabled - is 0x1 set? Yes" );
   is_set = rtems_debug_is_enabled( 0x1 );
   rtems_test_assert(is_set == true);
-  
+
   puts( "Init - rtems_debug_disable - clear 0x1" );
   rtems_debug_disable(0x1);
   rtems_test_assert(_Debug_Level == 0x0);
@@ -41,7 +41,7 @@ rtems_task Init(
   puts( "Init - rtems_debug_is_enabled - is 0x1 set? No" );
   is_set = rtems_debug_is_enabled( 0x1 );
   rtems_test_assert(is_set == false);
-  
+
   puts( "*** END OF TEST 10 ***" );
   rtems_test_exit(0);
 }

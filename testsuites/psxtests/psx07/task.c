@@ -46,7 +46,7 @@ void *Task_2(
    */
 
   /*
-   *  Consume time so the cpu budget callout will run.  
+   *  Consume time so the cpu budget callout will run.
    *
    *  DO NOT BLOCK!!!
    */
@@ -56,7 +56,7 @@ void *Task_2(
       now = time(&now);
     } while (start == now);
     start = time(&start);
-    
+
     printf( "Time elapsed Task_2: %2d (seconds)\n", i++ );
   }
 

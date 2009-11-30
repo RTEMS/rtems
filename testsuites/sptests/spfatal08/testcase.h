@@ -34,7 +34,7 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_TEST_NAME            "8"
 #define FATAL_ERROR_DESCRIPTION          "Core workspace too small"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE 
+#define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_WORKSPACE_ALLOCATION
 
 char Workspace[ 256 ] CPU_STRUCTURE_ALIGNMENT;

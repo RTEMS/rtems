@@ -81,7 +81,7 @@ int main(
   assert( rstatus == RTEMS_SUCCESSFUL );
 
   sleep(1);
-  
+
   puts( "pthread_spin_unlock( &Spinlock ) -- OK" );
   status = pthread_spin_unlock( &Spinlock );
   assert( status == 0 );

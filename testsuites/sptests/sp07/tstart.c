@@ -31,7 +31,7 @@ void Task_start_extension(
   if ( task_number( started_task->Object.id ) > 0 ) {
     name = Task_name[ task_number( started_task->Object.id ) ];
 /*
- * FIXME: There should be a public function to 
+ * FIXME: There should be a public function to
  * convert numeric rtems_names into char arrays
  * c.f. rtems_name_to_characters() in rtems/rtems/support.inl
  * but it's private.

@@ -31,7 +31,7 @@ void *Test_Thread(
   puts( "Test_Thread - pthread_setspecific - OK" );
   sc = pthread_setspecific( Key, key_value );
   assert( !sc );
-  
+
   puts( "Test_Thread - pthread_exit to run key destructors - OK" );
   return NULL;
 }
@@ -45,13 +45,13 @@ void *POSIX_Init(
   struct timespec  delay_request;
 
   puts( "\n\n*** TEST KEY 03 ***" );
-  
+
   /*
    *  Key with NULL destructor
    */
   puts( "Init - pthread_key_create with NULL destructor - OK" );
   sc = pthread_key_create( &Key, NULL );
-  assert( !sc ); 
+  assert( !sc );
 
   puts( "Init - pthread_create - OK" );
   sc = pthread_create( &thread, NULL, Test_Thread, &sc );
@@ -73,7 +73,7 @@ void *POSIX_Init(
   destructor_ran = false;
   puts( "Init - pthread_key_create with non-NULL destructor - OK" );
   sc = pthread_key_create( &Key, destructor );
-  assert( !sc ); 
+  assert( !sc );
 
   puts( "Init - pthread_create - OK" );
   sc = pthread_create( &thread, NULL, Test_Thread, NULL );

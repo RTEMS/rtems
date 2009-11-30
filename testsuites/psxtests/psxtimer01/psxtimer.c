@@ -81,7 +81,7 @@ void StopTimer(
     rtems_test_exit(0);
   }
 }
- 
+
 /* task A  */
 void * task_a (void *arg)
 {
@@ -125,7 +125,7 @@ void * task_a (void *arg)
     timergetdata.it_value.tv_sec, timergetdata.it_value.tv_nsec,
     timergetdata.it_interval.tv_sec, timergetdata.it_interval.tv_nsec
   );
-   
+
 
    /* periodic activity */
    while(1) {
@@ -188,7 +188,7 @@ void * task_b (void *arg)
    if (timer_settime(timer_id,TIMER_ABSTIME,&timerdata,NULL) == -1) {
      perror ("Error in timer setting\n");
      rtems_test_exit(0);
-   }     
+   }
 
    /* periodic activity */
    while(1) {
@@ -196,7 +196,7 @@ void * task_b (void *arg)
        perror ("Error in sigwait\n");
        rtems_test_exit(0);
      }
- 
+
      if (timer_gettime(timer_id, &timerdata) == -1) {
        perror ("Error in timer_gettime\n");
        rtems_test_exit(0);
@@ -208,7 +208,7 @@ void * task_b (void *arg)
       *  and thus they are close but not equal.  Can we test for this?
       */
      if ( !_Timespec_Equal_to( &timerdata.it_value, &my_period) ){
-       printf( "NOT EQUAL %d:%d != %d:%d\n", 
+       printf( "NOT EQUAL %d:%d != %d:%d\n",
           timerdata.it_value.tv_sec,
           timerdata.it_value.tv_nsec,
           my_period.tv_sec,
@@ -220,8 +220,8 @@ void * task_b (void *arg)
 
      pthread_mutex_lock (&data.mutex);
      clock = time(NULL);
-     printf("Executing task B with count = %2i %s", 
-       params->count, ctime(&clock) 
+     printf("Executing task B with count = %2i %s",
+       params->count, ctime(&clock)
      );
      data.updated = TRUE;
      pthread_cond_signal  (&data.sync);
@@ -292,8 +292,8 @@ void * task_c (void *arg)
        pthread_cond_wait (&data.sync,&data.mutex);
      }
      clock = time(NULL);
-     printf("Executing task C with count = %2i %s", 
-       params->count, ctime(&clock) 
+     printf("Executing task C with count = %2i %s",
+       params->count, ctime(&clock)
      );
 
      if ( count && (count % 5) == 0 ) {
@@ -301,7 +301,7 @@ void * task_c (void *arg)
        sleep(1);
        overruns = timer_getoverrun( timer_id );
        printf( "task C: timer_getoverrun - overruns=%d\n", overruns );
-      
+
        if (timer_gettime(timer_id, &timergetdata) == -1) {
 	 perror ("Error in timer setting\n");
          rtems_test_exit(0);

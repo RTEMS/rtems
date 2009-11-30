@@ -422,7 +422,7 @@ rtems_task Init(
 
   /*
    * Test character size
-   */ 
+   */
   puts(
     "\n"
     "Init - open - " TERMIOS_TEST_DRIVER_DEVICE_NAME " - OK"
@@ -444,7 +444,7 @@ rtems_task Init(
 
   /*
    * Test parity
-   */ 
+   */
   puts(
     "\n"
     "Init - open - " TERMIOS_TEST_DRIVER_DEVICE_NAME " - OK"
@@ -468,7 +468,7 @@ rtems_task Init(
 
   /*
    * Test stop bits
-   */ 
+   */
   puts(
     "\n"
     "Init - open - " TERMIOS_TEST_DRIVER_DEVICE_NAME " - OK"

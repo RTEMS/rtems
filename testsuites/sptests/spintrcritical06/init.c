@@ -46,7 +46,7 @@ Thread_blocking_operation_States getState(void)
   Semaphore_Control *sem;
 
   sem = (Semaphore_Control *)_Objects_Get(
-    &_Semaphore_Information, Semaphore, &location ); 
+    &_Semaphore_Information, Semaphore, &location );
   if ( location != OBJECTS_LOCAL ) {
     puts( "Bad object lookup" );
     rtems_test_exit(0);

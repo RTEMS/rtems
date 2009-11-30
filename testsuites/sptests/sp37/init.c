@@ -62,7 +62,7 @@ void test_interrupt_inline(void)
 
   puts( "interrupt enable (use inline)" );
   rtems_interrupt_enable( level );
-  
+
   puts( "interrupt level attribute (use inline)" );
   level_attribute = rtems_interrupt_level_attribute( level );
   level_attribute_macro = RTEMS_INTERRUPT_LEVEL(level);
@@ -168,7 +168,7 @@ rtems_timer_service_routine test_unblock_task(
     status = rtems_timer_fire_after( timer, 1, test_unblock_task, NULL );
     directive_failed( status, "timer_fire_after failed" );
     return;
-  } 
+  }
 
   blocked_task_status = 2;
   _Thread_Disable_dispatch();
@@ -288,7 +288,7 @@ rtems_task Init(
 
   puts( "interrupt enable (use body)" );
   rtems_interrupt_enable( level );
-  
+
   puts( "interrupt level attribute (use body)" );
   level_attribute = rtems_interrupt_level_attribute( level );
   level_attribute_macro = RTEMS_INTERRUPT_LEVEL(level);
@@ -307,7 +307,7 @@ rtems_task Init(
 
   status = rtems_task_wake_after( 100 );
   directive_failed( status, "wake_after failed" );
-  
+
   check_isr_worked( "inline", isr_in_progress_body );
 
   check_isr_worked( "body", isr_in_progress_body );
