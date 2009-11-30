@@ -70,6 +70,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <errno.h>
 
 #include <rtems/shell.h>
 
@@ -98,14 +99,15 @@ static bool rtems_shell_get_text(
 
   tcdrain( fd_in);
   if (out != NULL){
-    tcdrain( fileno( out));
+    tcdrain( fileno(out) );
   }
 
   while (true) {
-    int c = fgetc( in);
+    int c = fgetc(in);
 
     switch (c) {
       case EOF:
+        clearerr( in );
         return false;
       case '\n':
       case '\r':
@@ -138,6 +140,7 @@ static bool rtems_shell_get_text(
         break;
     }
   }
+  return true;
 }
 
 bool rtems_shell_login_prompt(
@@ -147,7 +150,7 @@ bool rtems_shell_login_prompt(
   rtems_shell_login_check_t check
 )
 {
-  int fd_in = fileno( in);
+  int fd_in = fileno(in);
   struct termios termios_previous;
   bool restore_termios = false;
   int i = 0;
@@ -168,22 +171,23 @@ bool rtems_shell_login_prompt(
     char user [32];
     char passphrase [128];
 
-    fprintf( out, "%s login: ", device);
-    fflush( out);
-    if ( !rtems_shell_get_text( in, out, user, sizeof( user)) )
+    fprintf( out, "%s login: ", device );
+    fflush( out );
+    result = rtems_shell_get_text( in, out, user, sizeof(user) );
+    if ( !result )
       break;
 
     fflush( in);
     fprintf( out, "Password: ");
     fflush( out);
-    if ( !rtems_shell_get_text( in, NULL, passphrase, sizeof( passphrase)) )
+    result = rtems_shell_get_text( in, NULL, passphrase, sizeof(passphrase) );
+    if ( !result )
       break;
     fputc( '\n', out);
 
-    result = check( user, passphrase);
-    if (result) {
+    result = check( user, passphrase );
+    if (result)
       break;
-    }
 
     fprintf( out, "Login incorrect\n\n");
     sleep( 2);

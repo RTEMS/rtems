@@ -1,3 +1,8 @@
+2009-11-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/login_prompt.c: Fix problem where timeout on login
+	prompt at console results in tight loop repeating login prompt.
+
 2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/src/threaddelayended.c: Clear only the states that are used to
