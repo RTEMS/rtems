@@ -17,6 +17,8 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 #include <stdio.h>
@@ -152,6 +154,8 @@ static void test_diskdevs(void)
 
   sc = rtems_io_unregister_driver(major);
   ASSERT_SC(sc);
+
+  ramdisk_free(rd);
 
   sc = rtems_disk_io_done();
   ASSERT_SC(sc);

@@ -1,0 +1,32 @@
+#
+# $Id$
+#
+# Copyright (c) 2009
+# embedded brains GmbH
+# Obere Lagerstr. 30
+# D-82178 Puchheim
+# Germany
+# <rtems@embedded-brains.de>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: block01
+
+directives:
+
+  rtems_disk_create_log
+  rtems_disk_create_phys
+  rtems_disk_delete
+  rtems_disk_io_done
+  rtems_disk_io_initialize
+  rtems_disk_release
+
+concepts:
+
++ Check error conditions.
++ Create and delete physical and logical disks.

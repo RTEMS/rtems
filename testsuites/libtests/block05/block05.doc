@@ -1,0 +1,44 @@
+#
+# $Id$
+#
+# Copyright (c) 2009
+# embedded brains GmbH
+# Obere Lagerstr. 30
+# D-82178 Puchheim
+# Germany
+# <rtems@embedded-brains.de>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: block05
+
+directives:
+
+  rtems_bdbuf_get
+  rtems_bdbuf_read
+  rtems_bdbuf_release
+  rtems_bdbuf_release_modified
+  rtems_bdbuf_sync
+
+concepts:
+
++ State machine test.
+
+State changes count during this test:
+
+      |                          PREVIOUS STATE
+------+-------------------------------------------------------------------
+      |         EM      FR      CA      AC      AM      MO      SY      TR
+      | EM    6480       0    5040       0       0       0       0       0
+      | FR    5041       0   23040       0       0       0       0       0
+      | CA       0       0       0   22212       0       0       0   31608
+NEW   | AC       0   17569   25739       0       0       0       0       0
+STATE | AM       0       0       0       0       0    3348       0       0
+      | MO       0       0       0   10548    2232       0       0       0
+      | SY       0       0       0   10548    1116       0       0       0
+      | TR       0   10512       0       0       0    9432   11664       0

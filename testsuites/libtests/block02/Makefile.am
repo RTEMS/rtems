@@ -7,7 +7,7 @@ MANAGERS = io semaphore event
 rtems_tests_PROGRAMS = block02
 block02_SOURCES = init.c
 
-dist_rtems_tests_DATA = block02.scn
+dist_rtems_tests_DATA = block02.scn block02.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

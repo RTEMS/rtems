@@ -1,3 +1,14 @@
+2009-11-30	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* block05/init.c: Check block size. Improved output.
+	* block01/init.c: Free ramdisk before exit.
+	* block01/block01.doc, block02/block02.doc, block03/block03.doc,
+	block04/block04.doc, block05/block05.doc, block06/block06.doc,
+	block07/block07.doc: New files.
+	* block01/Makefile.am, block02/Makefile.am, block03/Makefile.am,
+	block04/Makefile.am, block05/Makefile.am, block06/Makefile.am,
+	block07/Makefile.am: Add new files.
+
 2009-11-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* block02/.cvsignore, block03/.cvsignore, block04/.cvsignore,
