@@ -11,6 +11,7 @@ DIST_SUBDIRS += freebsd6.4
 DIST_SUBDIRS += freebsd7.0
 DIST_SUBDIRS += freebsd7.1
 DIST_SUBDIRS += freebsd7.2
+DIST_SUBDIRS += freebsd8.0
 DIST_SUBDIRS += mingw32
 DIST_SUBDIRS += netbsd5.0.1
 DIST_SUBDIRS += solaris2.7
