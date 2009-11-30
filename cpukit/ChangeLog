@@ -9,6 +9,12 @@
 
 2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/src/vprintk.c: Fixed output of unsigned integers.
+	Changed type of boolean variables to bool.  Use unsigned integer type
+	for radix and width parameters.
+
+2009-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* rtems/include/rtems/rtems/timer.h: Added timer server control block
 	Timer_server_Control.  Removed _Timer_Server thread pointer. Added
 	_Timer_server pointer to the default timer server control block.

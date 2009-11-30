@@ -22,14 +22,15 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <rtems/bspIo.h>
 
 static void printNum(
   long num,
-  int base,
-  int sign,
-  int maxwidth,
-  int lead
+  unsigned base,
+  bool sign,
+  unsigned maxwidth,
+  char lead
 );
 
 /*
@@ -46,16 +47,15 @@ void vprintk(
   va_list     ap
 )
 {
-  char     c;
-  int      lflag, base, sign, width, lead, minus;
-
   for (; *fmt != '\0'; fmt++) {
-    lflag = 0;
-    base  = 0;
-    sign = 0;
-    width = 0;
-    minus = 0;
-    lead = ' ';
+    unsigned base = 0;
+    unsigned width = 0;
+    bool lflag = false;
+    bool minus = false;
+    bool sign = false;
+    char lead = ' ';
+    char c;
+
     if (*fmt != '%') {
       BSP_output_char(*fmt);
       continue;
@@ -66,26 +66,26 @@ void vprintk(
       fmt++;
     }
     if (*fmt == '-' ) {
-      minus = 1;
+      minus = true;
       fmt++;
     }
     while (*fmt >= '0' && *fmt <= '9' ) {
       width *= 10;
-      width += (*fmt - '0');
+      width += ((unsigned) *fmt - '0');
       fmt++;
     }
 
     if ((c = *fmt) == 'l') {
-      lflag = 1;
+      lflag = true;
       c = *++fmt;
     }
     if ( c == 'c' ) {
-      char chr = (char) va_arg(ap, int);
+      char chr = va_arg(ap, char);
       BSP_output_char(chr);
       continue;
     }
     if ( c == 's' ) {
-      int i, len;
+      unsigned i, len;
       char *s, *str;
 
       str = va_arg(ap, char *);
@@ -122,16 +122,16 @@ void vprintk(
 
     /* must be a numeric format or something unsupported */
     if ( c == 'o' || c == 'O' ) {
-      base = 8; sign = 0;
+      base = 8; sign = false;
     } else if ( c == 'i' || c == 'I' ||
                 c == 'd' || c == 'D' ) {
-      base = 10; sign = 1;
+      base = 10; sign = true;
     } else if ( c == 'u' || c == 'U' ) {
-      base = 10; sign = 0;
+      base = 10; sign = false;
     } else if ( c == 'x' || c == 'X' ) {
-      base = 16; sign = 0;
+      base = 16; sign = false;
     } else if ( c == 'p' ) {
-      base = 16; sign = 0; lflag = 1;
+      base = 16; sign = false; lflag = true;
     } else {
       BSP_output_char(c);
       continue;
@@ -155,31 +155,34 @@ void vprintk(
  */
 static void printNum(
   long num,
-  int base,
-  int sign,
-  int maxwidth,
-  int lead
+  unsigned base,
+  bool sign,
+  unsigned maxwidth,
+  char lead
 )
 {
-  long n;
-  int count;
+  unsigned long unsigned_num;
+  unsigned long n;
+  unsigned count;
   char toPrint[20];
 
-  if ( (sign == 1) && ((long)num <  0) ) {
+  if ( sign && (num <  0) ) {
     BSP_output_char('-');
-    num = -num;
+    unsigned_num = (unsigned long) -num;
     if (maxwidth) maxwidth--;
+  } else {
+    unsigned_num = (unsigned long) num;
   }
 
   count = 0;
-  while ((n = num / base) > 0) {
-    toPrint[count++] = (char) (num - (n*base));
-    num = n;
+  while ((n = unsigned_num / base) > 0) {
+    toPrint[count++] = (char) (unsigned_num - (n * base));
+    unsigned_num = n;
   }
-  toPrint[count++] = (char) num;
+  toPrint[count++] = (char) unsigned_num;
 
   for (n=maxwidth ; n > count; n-- )
-    BSP_output_char((char) lead);
+    BSP_output_char(lead);
 
   for (n = 0; n < count; n++) {
     BSP_output_char("0123456789ABCDEF"[(int)(toPrint[count-(n+1)])]);
