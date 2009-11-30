@@ -1,3 +1,9 @@
+2009-11-30	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* sp68/Makefile.in, sp68/.cvsignore,
+	* spintrcritical17/Makefile.in, spintrcritical17/.cvsignore:
+	removed unneeded Makefile.in, added cvsignore
+	
 2009-11-30	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* sp68/init.c, sp68/Makefile.am, sp68/sp68.doc, sp68/sp68.scn,
