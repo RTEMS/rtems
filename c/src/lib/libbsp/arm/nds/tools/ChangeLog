@@ -1,3 +1,7 @@
+2009-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bin2s.c: Remove CVS-$Log's.
+
 2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ndstool/include/banner.h, ndstool/include/header.h,
