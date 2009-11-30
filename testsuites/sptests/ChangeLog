@@ -171,6 +171,11 @@
 	spobjgetnext/init.c, spprintk/init.c:
 	Eliminate unused vars.
 
+2009-10-23	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* spintrcritical06/init.c, spintrcritical15/init.c, sp46/init.c: Fixed
+	confdefs.h define typos.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
