@@ -1,3 +1,7 @@
+2009-11-30	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* at91rm9200/include/at91rm9200.h: Update to match development version.
+
 2009-11-21	Fernando Nicodemos <fgnicodemos@terra.com.br>
 
 	* Makefile.am, preinstall.am, at91rm9200/include/at91rm9200.h: Add
