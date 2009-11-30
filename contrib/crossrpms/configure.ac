@@ -160,12 +160,9 @@ AC_CONFIG_FILES([solaris2.7/sparc/Makefile])
 AC_CONFIG_FILES([freebsd6.4/Makefile])
 AC_CONFIG_FILES([freebsd6.4/i586/Makefile])
 
-AC_CONFIG_FILES([freebsd7.0/Makefile])
-AC_CONFIG_FILES([freebsd7.0/i586/Makefile])
-AC_CONFIG_FILES([freebsd7.1/Makefile])
-AC_CONFIG_FILES([freebsd7.1/i586/Makefile])
 AC_CONFIG_FILES([freebsd7.2/Makefile])
 AC_CONFIG_FILES([freebsd7.2/i586/Makefile])
+
 AC_CONFIG_FILES([freebsd8.0/Makefile])
 AC_CONFIG_FILES([freebsd8.0/i586/Makefile])
 

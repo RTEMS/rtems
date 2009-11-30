@@ -8,8 +8,6 @@ SUBDIRS = @HOST_SUBDIRS@ @TARGET_SUBDIRS@
 
 DIST_SUBDIRS  = cygwin
 DIST_SUBDIRS += freebsd6.4
-DIST_SUBDIRS += freebsd7.0
-DIST_SUBDIRS += freebsd7.1
 DIST_SUBDIRS += freebsd7.2
 DIST_SUBDIRS += freebsd8.0
 DIST_SUBDIRS += mingw32
