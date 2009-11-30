@@ -53,7 +53,7 @@ int clock_getres(
       if ( res ) {
         res->tv_sec = rtems_configuration_get_microseconds_per_tick() /
             TOD_MICROSECONDS_PER_SECOND;
-        res->tv_nsec = rtems_configuration_get_nanoseconds_per_tick(); 
+        res->tv_nsec = rtems_configuration_get_nanoseconds_per_tick();
       }
       break;
 

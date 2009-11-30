@@ -58,7 +58,7 @@
       } \
     } \
   } while (0)
- 
+
 POSIX_Mutex_Control *_POSIX_Mutex_Get (
   pthread_mutex_t   *mutex,
   Objects_Locations *location

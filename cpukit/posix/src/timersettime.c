@@ -50,7 +50,7 @@ int timer_settime(
     /* The number of nanoseconds is not correct */
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
-  
+
   if ( flags != TIMER_ABSTIME && flags != POSIX_TIMER_RELATIVE ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
@@ -62,8 +62,8 @@ int timer_settime(
     struct timespec now;
     _TOD_Get( &now );
     /* Check for seconds in the past */
-    if ( _Timespec_Greater_than( &now, &normalize.it_value ) ) 
-      rtems_set_errno_and_return_minus_one( EINVAL ); 
+    if ( _Timespec_Greater_than( &now, &normalize.it_value ) )
+      rtems_set_errno_and_return_minus_one( EINVAL );
     _Timespec_Subtract( &now, &normalize.it_value, &normalize.it_value );
   }
 
@@ -95,8 +95,8 @@ int timer_settime(
        /* Convert from seconds and nanoseconds to ticks */
        ptimer->ticks  = _Timespec_To_ticks( &value->it_interval );
        initial_period = _Timespec_To_ticks( &normalize.it_value );
-       
-        
+
+
        activated = _POSIX_Timer_Insert_helper(
          &ptimer->Timer,
          initial_period,

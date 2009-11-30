@@ -43,7 +43,7 @@ int pthread_spin_init(
 {
   POSIX_Spinlock_Control   *the_spinlock;
   CORE_spinlock_Attributes  attributes;
-  
+
 
   if ( !spinlock )
     return EINVAL;

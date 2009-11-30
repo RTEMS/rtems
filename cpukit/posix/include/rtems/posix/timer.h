@@ -25,7 +25,7 @@ extern "C" {
 
 /* Timer is free */
 #define POSIX_TIMER_STATE_FREE        0x01
-                                                                
+
 /* Created timer but not running          */
 #define POSIX_TIMER_STATE_CREATE_NEW  0x02
 

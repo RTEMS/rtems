@@ -53,7 +53,7 @@ int sem_timedwait(
    *  then we do a polling operation and convert the UNSATISFIED
    *  status into the appropriate error.
    *
-   *  If the status is POSIX_ABSOLUTE_TIMEOUT_INVALID, 
+   *  If the status is POSIX_ABSOLUTE_TIMEOUT_INVALID,
    *  POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST, or POSIX_ABSOLUTE_TIMEOUT_IS_NOW,
    *  then we should not wait.
    */

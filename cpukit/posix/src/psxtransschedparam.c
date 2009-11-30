@@ -63,7 +63,7 @@ int _POSIX_Thread_Translate_sched_param(
 
     if ( !_POSIX_Priority_Is_valid( param->ss_low_priority ) )
       return EINVAL;
-    
+
     *budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
     *budget_callout = _POSIX_Threads_Sporadic_budget_callout;
     return 0;

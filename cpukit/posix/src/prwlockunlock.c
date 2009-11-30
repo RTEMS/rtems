@@ -41,7 +41,7 @@ int pthread_rwlock_unlock(
   POSIX_RWLock_Control  *the_rwlock;
   Objects_Locations      location;
   CORE_RWLock_Status     status;
-  
+
   if ( !rwlock )
     return EINVAL;
 

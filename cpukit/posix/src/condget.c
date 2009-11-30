@@ -57,4 +57,4 @@ POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
     location
   );
 }
- 
+

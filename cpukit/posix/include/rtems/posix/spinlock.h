@@ -70,7 +70,7 @@ void _POSIX_Spinlock_Manager_initialization(void);
  *
  *  @param[in] the_spinlock_status is the SuperCore status.
  *
- *  @return the corresponding POSIX status 
+ *  @return the corresponding POSIX status
  */
 int _POSIX_Spinlock_Translate_core_spinlock_return_code(
   CORE_spinlock_Status  the_spinlock_status

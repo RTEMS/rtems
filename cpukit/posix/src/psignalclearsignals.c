@@ -61,7 +61,7 @@ bool _POSIX_signals_Clear_signals(
   else
     signals_blocked = SIGNAL_ALL_MASK;
 
-  /* XXX is this right for siginfo type signals? */ 
+  /* XXX is this right for siginfo type signals? */
   /* XXX are we sure they can be cleared the same way? */
 
   _ISR_Disable( level );

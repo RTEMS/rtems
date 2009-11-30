@@ -200,7 +200,7 @@ static int rtems_tftp_mount_me(
    *  These need to be looked at for full POSIX semantics.
    */
 
-  temp_mt_entry->pathconf_limits_and_options = rtems_tftp_limits_and_options; 
+  temp_mt_entry->pathconf_limits_and_options = rtems_tftp_limits_and_options;
 
 
   /*
@@ -208,7 +208,7 @@ static int rtems_tftp_mount_me(
    *
    *  NOTE:  This could be in an fsinfo for this filesystem type.
    */
-  
+
   sc = rtems_semaphore_create (
     rtems_build_name('T', 'F', 'T', 'P'),
     1,
@@ -222,7 +222,7 @@ static int rtems_tftp_mount_me(
   );
 
   if (sc != RTEMS_SUCCESSFUL)
-    rtems_set_errno_and_return_minus_one( ENOMEM ); 
+    rtems_set_errno_and_return_minus_one( ENOMEM );
 
   return 0;
 }
@@ -231,16 +231,16 @@ static int rtems_tftp_mount_me(
  * Initialize the TFTP driver
  */
 
-int rtems_bsdnet_initialize_tftp_filesystem (void) 
+int rtems_bsdnet_initialize_tftp_filesystem (void)
 {
     int                                   status;
     rtems_filesystem_mount_table_entry_t *entry;
 
     status = mkdir( TFTP_PATHNAME_PREFIX, S_IRWXU | S_IRWXG | S_IRWXO );
     if ( status == -1 )
-        return status; 
+        return status;
 
-    status = mount( 
+    status = mount(
             &entry,
             &rtems_tftp_ops,
             RTEMS_FILESYSTEM_READ_WRITE,
@@ -298,7 +298,7 @@ sendStifle (struct tftpStream *tp, struct sockaddr_in *to)
     msg.opcode = htons (TFTP_OPCODE_ERROR);
     msg.errorCode = htons (5);
     len = sizeof msg.opcode + sizeof msg.errorCode + 1;
-    len += sprintf (msg.errorMessage, "GO AWAY"); 
+    len += sprintf (msg.errorMessage, "GO AWAY");
 
     /*
      * Send it
@@ -340,7 +340,7 @@ getPacket (struct tftpStream *tp, int retryCount)
                 tp->firstReply = 0;
                 tp->farAddress.sin_port = from.i.sin_port;
             }
-            if (tp->farAddress.sin_port == from.i.sin_port) 
+            if (tp->farAddress.sin_port == from.i.sin_port)
                 break;
         }
 
@@ -423,9 +423,9 @@ static int rtems_tftp_evaluate_for_make(
    rtems_filesystem_location_info_t   *pathloc,    /* IN/OUT */
    const char                        **name __attribute__((unused))        /* OUT    */
 )
-{  
+{
   pathloc->node_access = NULL;
-  rtems_set_errno_and_return_minus_one( EIO );    
+  rtems_set_errno_and_return_minus_one( EIO );
 }
 
 /*
@@ -482,7 +482,7 @@ fixPath (char *path)
     return;
 }
 
-static int rtems_tftp_eval_path(  
+static int rtems_tftp_eval_path(
   const char                        *pathname,     /* IN     */
   int                                pathnamelen,  /* IN     */		
   int                                flags,        /* IN     */
@@ -498,7 +498,7 @@ static int rtems_tftp_eval_path(
     if (pathname[strlen(pathname)-1] == '/') {
         int isRelative = (pathloc->node_access != ROOT_NODE_ACCESS);
         char *cp;
-        
+
         /*
          * Reject attempts to open() directories
          */
@@ -581,18 +581,18 @@ static int rtems_tftp_open_worker(
     /*
      * Extract file pathname component
      */
-    while (*cp2 == '/') 
+    while (*cp2 == '/')
         cp2++;
     if (strcmp (cp2, "BOOTP_FILE") == 0) {
         cp2 = rtems_bsdnet_bootp_boot_file_name;
-        while (*cp2 == '/') 
+        while (*cp2 == '/')
             cp2++;
     }
     if (*cp2 == '\0')
         return ENOENT;
     remoteFilename = cp2;
     if (strlen (remoteFilename) > (TFTP_BUFSIZE - 10))
-        return ENOENT;        
+        return ENOENT;
 
     /*
      * Find a free stream
@@ -690,7 +690,7 @@ static int rtems_tftp_open_worker(
         /*
          * Send the request
          */
-        if (sendto (tp->socket, (char *)&tp->pkbuf, len, 0, 
+        if (sendto (tp->socket, (char *)&tp->pkbuf, len, 0,
                     (struct sockaddr *)&tp->farAddress,
                     sizeof tp->farAddress) < 0) {
             close (tp->socket);
@@ -876,7 +876,7 @@ static int rtems_tftp_flush ( struct tftpStream *tp )
         if (rtems_tftp_driver_debug)
             printf ("TFTP: SEND %d (%d)\n", tp->blocknum, tp->nused);
 #endif
-        if (sendto (tp->socket, (char *)&tp->pkbuf, wlen, 0, 
+        if (sendto (tp->socket, (char *)&tp->pkbuf, wlen, 0,
                                         (struct sockaddr *)&tp->farAddress,
                                         sizeof tp->farAddress) < 0)
             return EIO;
@@ -1029,19 +1029,19 @@ rtems_filesystem_operations_table  rtems_tftp_ops = {
     NULL,                            /* symlink */
     NULL,                            /* readlin */
 };
-  
+
 rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
-    rtems_tftp_open,   /* open */     
-    rtems_tftp_close,  /* close */    
-    rtems_tftp_read,   /* read */     
-    rtems_tftp_write,  /* write */    
-    NULL,              /* ioctl */    
-    NULL,              /* lseek */    
-    NULL,              /* fstat */    
-    NULL,              /* fchmod */   
+    rtems_tftp_open,   /* open */
+    rtems_tftp_close,  /* close */
+    rtems_tftp_read,   /* read */
+    rtems_tftp_write,  /* write */
+    NULL,              /* ioctl */
+    NULL,              /* lseek */
+    NULL,              /* fstat */
+    NULL,              /* fchmod */
     rtems_tftp_ftruncate, /* ftruncate */
     NULL,              /* fpathconf */
-    NULL,              /* fsync */    
+    NULL,              /* fsync */
     NULL,              /* fdatasync */
     NULL,              /* fcntl */
     NULL               /* rmnod */

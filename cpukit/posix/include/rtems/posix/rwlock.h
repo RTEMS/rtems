@@ -70,7 +70,7 @@ void _POSIX_RWLock_Manager_initialization(void);
  *
  *  @param[in] the_RWLock_status is the SuperCore status.
  *
- *  @return the corresponding POSIX status 
+ *  @return the corresponding POSIX status
  */
 int _POSIX_RWLock_Translate_core_RWLock_return_code(
   CORE_RWLock_Status  the_RWLock_status

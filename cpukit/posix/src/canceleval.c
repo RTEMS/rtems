@@ -34,5 +34,5 @@ void _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch(
     _POSIX_Thread_Exit( the_thread, PTHREAD_CANCELED );
   } else
     _Thread_Enable_dispatch();
-  
+
 }

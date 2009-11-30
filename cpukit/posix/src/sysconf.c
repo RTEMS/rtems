@@ -42,7 +42,7 @@ long sysconf(
 
   if ( name == _SC_GETPW_R_SIZE_MAX )
     return 1024;
-  
+
   if ( name == _SC_PAGESIZE )
     return PAGE_SIZE;
 

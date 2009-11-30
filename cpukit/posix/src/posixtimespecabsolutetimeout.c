@@ -42,7 +42,7 @@ POSIX_Absolute_timeout_conversion_results_t _POSIX_Absolute_timeout_to_ticks(
   struct timespec current_time;
   struct timespec difference;
 
-  
+
   /*
    *  Make sure there is always a value returned.
    */

@@ -67,7 +67,7 @@ bool _POSIX_Priority_Is_valid(
  *  @param[in] priority is the POSIX API priority.
  *
  *  @return This method returns the corresponding SuperCore priority.
- */ 
+ */
 RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Priority_To_core(
   int priority
 );
@@ -81,7 +81,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Priority_To_core(
  *  @param[in] priority is the POSIX API priority.
  *
  *  @return This method returns the corresponding POSIX priority.
- */ 
+ */
 RTEMS_INLINE_ROUTINE int _POSIX_Priority_From_core(
   Priority_Control priority
 );

@@ -58,7 +58,7 @@ int clock_gettime(
   if ( clock_id == CLOCK_THREAD_CPUTIME )
     rtems_set_errno_and_return_minus_one( ENOSYS );
 #endif
-  
+
   rtems_set_errno_and_return_minus_one( EINVAL );
 
   return 0;

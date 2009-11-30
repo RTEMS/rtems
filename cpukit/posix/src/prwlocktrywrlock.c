@@ -40,7 +40,7 @@ int pthread_rwlock_trywrlock(
 {
   POSIX_RWLock_Control  *the_rwlock;
   Objects_Locations      location;
-  
+
   if ( !rwlock )
     return EINVAL;
 

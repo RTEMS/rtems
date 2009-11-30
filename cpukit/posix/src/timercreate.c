@@ -36,10 +36,10 @@ int timer_create(
 
   if ( clock_id != CLOCK_REALTIME )
     rtems_set_errno_and_return_minus_one( EINVAL );
- 
+
   if ( !timerid )
     rtems_set_errno_and_return_minus_one( EINVAL );
- 
+
  /*
   *  The data of the structure evp are checked in order to verify if they
   *  are coherent.

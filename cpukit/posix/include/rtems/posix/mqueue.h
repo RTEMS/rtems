@@ -4,7 +4,7 @@
  *  This include file contains all the private support information for
  *  POSIX Message Queues.
  */
- 
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

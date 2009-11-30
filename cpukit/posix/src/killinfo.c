@@ -145,7 +145,7 @@ int killinfo(
     api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
     #if defined(DEBUG_SIGNAL_PROCESSING)
-      printk( "Waiting Thread=%p option=0x%08x mask=0x%08x blocked=0x%08x\n", 
+      printk( "Waiting Thread=%p option=0x%08x mask=0x%08x blocked=0x%08x\n",
         the_thread, the_thread->Wait.option, mask, api->signals_blocked);
     #endif
 
@@ -212,8 +212,8 @@ int killinfo(
 
       #if defined(DEBUG_SIGNAL_PROCESSING)
         printk("\n 0x%08x/0x%08x %d/%d 0x%08x 1",
-          the_thread->Object.id, 
-          ((interested) ? interested->Object.id : 0), 
+          the_thread->Object.id,
+          ((interested) ? interested->Object.id : 0),
           the_thread->current_priority, interested_priority,
           the_thread->current_state
         );
@@ -273,7 +273,7 @@ int killinfo(
           interested_priority = the_thread->current_priority;
           continue;
         }
- 
+
         DEBUG_STEP("6");
         /* prefer blocked/interruptible over blocked/not interruptible */
         if ( !_States_Is_interruptible_by_signal(interested->current_state) ) {

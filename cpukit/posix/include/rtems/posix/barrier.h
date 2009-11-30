@@ -70,7 +70,7 @@ void _POSIX_Barrier_Manager_initialization(void);
  *
  *  @param[in] the_barrier_status is the SuperCore status.
  *
- *  @return the corresponding POSIX status 
+ *  @return the corresponding POSIX status
  */
 int _POSIX_Barrier_Translate_core_barrier_return_code(
   CORE_barrier_Status  the_barrier_status

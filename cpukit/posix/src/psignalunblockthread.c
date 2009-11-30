@@ -91,13 +91,13 @@ bool _POSIX_signals_Unblock_thread(
      *    + If it is blocked on an interruptible signal, THEN
      *        we unblock the thread.
      *    + If it is in the ready state AND
-     *      we are sending from an ISR AND 
+     *      we are sending from an ISR AND
      *      it is the interrupted thread AND
      *      it is not blocked, THEN
      *        we need to dispatch at the end of this ISR.
      *    + Any other combination, do nothing.
      */
-    
+
     the_thread->do_post_task_switch_extension = true;
 
     if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {

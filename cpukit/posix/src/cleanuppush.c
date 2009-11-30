@@ -41,7 +41,7 @@ void pthread_cleanup_push(
 
   /*
    *  The POSIX standard does not address what to do when the routine
-   *  is NULL.  It also does not address what happens when we cannot 
+   *  is NULL.  It also does not address what happens when we cannot
    *  allocate memory or anything else bad happens.
    */
   if ( !routine )

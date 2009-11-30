@@ -45,7 +45,7 @@ int pthread_rwlock_timedrdlock(
   Watchdog_Interval                            ticks;
   bool                                         do_wait = true;
   POSIX_Absolute_timeout_conversion_results_t  status;
-  
+
   if ( !rwlock )
     return EINVAL;
 
@@ -58,7 +58,7 @@ int pthread_rwlock_timedrdlock(
    *  then we do a polling operation and convert the UNSATISFIED
    *  status into the appropriate error.
    *
-   *  If the status is POSIX_ABSOLUTE_TIMEOUT_INVALID, 
+   *  If the status is POSIX_ABSOLUTE_TIMEOUT_INVALID,
    *  POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST, or POSIX_ABSOLUTE_TIMEOUT_IS_NOW,
    *  then we should not wait.
    */

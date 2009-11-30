@@ -49,7 +49,7 @@ void _POSIX_Threads_cancel_run(
 /**
  *  @brief _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch
  *
- *  This routine separates a piece of code that existed as part of 
+ *  This routine separates a piece of code that existed as part of
  *  another routine, but had to be separated to improve coverage.
  *
  *  @param[in] the_thread is the thread to evaluate canceling

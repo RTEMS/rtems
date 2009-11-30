@@ -79,7 +79,7 @@ int sigtimedwait(
    */
   if ( !set )
     rtems_set_errno_and_return_minus_one( EINVAL );
-  
+
   /*  NOTE: This is very specifically a RELATIVE not ABSOLUTE time
    *        in the Open Group specification.
    */

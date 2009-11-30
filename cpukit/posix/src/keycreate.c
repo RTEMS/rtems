@@ -72,7 +72,7 @@ int pthread_key_create(
             true,
             INTERNAL_ERROR_IMPLEMENTATION_KEY_CREATE_INCONSISTENCY
           );
-      #endif 
+      #endif
       bytes_to_allocate = sizeof( void * ) *
         (_Objects_Information_table[ the_api ][ 1 ]->maximum + 1);
       table = _Workspace_Allocate( bytes_to_allocate );
