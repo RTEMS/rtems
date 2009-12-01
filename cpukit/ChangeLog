@@ -1,3 +1,11 @@
+2009-12-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/Makefile.am: Split no_posix.c so using sleep() does not
+	pull in kill() stubs.
+	* libcsupport/src/kill_noposix.c, libcsupport/src/sleep_noposix.c:
+	New files.
+	* libcsupport/src/no_posix.c: Removed.
+
 2009-12-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/src/vprintk.c: Fixed usage of va_arg().

@@ -40,48 +40,9 @@ int _kill_r( struct _reent *ptr, pid_t pid, int sig )
   return 0;
 }
 #endif
-#endif
 
 int __kill( pid_t pid, int sig )
 {
-  return 0;
-}
-
-
-/*
- *  3.4.3 Delay Process Execution, P1003.1b-1993, p. 81
- *
- *  $Id$
- */
-
-#include <time.h>
-#include <unistd.h>
-
-#include <rtems.h>
-
-#if !defined(RTEMS_POSIX_API)
-unsigned int sleep(
-  unsigned int seconds
-)
-{
-  rtems_status_code status;
-  rtems_interval    ticks_per_second;
-  rtems_interval    ticks;
-
-  status = rtems_clock_get(
-  RTEMS_CLOCK_GET_TICKS_PER_SECOND,
-  &ticks_per_second
-  );
-
-  ticks = seconds * ticks_per_second;
-
-  status = rtems_task_wake_after( ticks );
-
-  /*
-   *  Returns the "unslept" amount of time.  In RTEMS signals are not
-   *  interruptable, so tasks really sleep all of the requested time.
-   */
-
   return 0;
 }
 #endif
