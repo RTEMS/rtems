@@ -1,0 +1,31 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: stringto01
+
+Directives:
+
+  rtems_string_to_pointer
+  rtems_string_to_unsigned_char
+  rtems_string_to_int
+  rtems_string_to_unsigned_int
+  rtems_string_to_long
+  rtems_string_to_unsigned_long
+  rtems_string_to_long_long
+  rtems_string_to_unsigned_long_long
+  rtems_string_to_float
+  rtems_string_to_double
+
+Concepts:
+
++ Exhaustively test strong to number conversion helpers.

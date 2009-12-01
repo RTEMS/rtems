@@ -51,6 +51,7 @@ rtems++/Makefile
 rtmonuse/Makefile
 stackchk/Makefile
 stackchk01/Makefile
+stringto01/Makefile
 termios/Makefile
 termios01/Makefile
 termios02/Makefile

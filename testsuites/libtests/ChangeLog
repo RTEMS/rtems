@@ -1,3 +1,10 @@
+2009-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add string_to_xxx conversion test.
+	* stringto01/.cvsignore, stringto01/Makefile.am,
+	stringto01/stringto01.doc, stringto01/stringto01.scn,
+	stringto01/stringto_test_template.h: New files.
+
 2009-11-30	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* block05/init.c: Check block size. Improved output.

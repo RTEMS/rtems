@@ -1,0 +1,82 @@
+*** STRING TO CONVERSION TEST ***
+
+Testing rtems_string_to_pointer
+rtems_string_to_pointer - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_pointer - 0x123 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_pointer - 0x123 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_pointer - xxx w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_pointer - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+
+Testing rtems_string_to_unsigned_char
+rtems_string_to_unsigned_char - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_unsigned_char - 123 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_unsigned_char - 123 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_unsigned_char - YYY w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_unsigned_char - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+
+Testing rtems_string_to_int
+rtems_string_to_int - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_int - 123 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_int - 123 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_int - YYY w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_int - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_int - overflow - RTEMS_INVALID_NUMBER
+
+Testing rtems_string_to_unsigned_int
+rtems_string_to_unsigned_int - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_unsigned_int - 123 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_unsigned_int - 123 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_unsigned_int - YYY w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_unsigned_int - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_unsigned_int - overflow - RTEMS_INVALID_NUMBER
+
+Testing rtems_string_to_long
+rtems_string_to_long - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_long - 123 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_long - 123 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_long - YYY w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_long - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_long - overflow - RTEMS_INVALID_NUMBER
+rtems_string_to_long- RTEMS_INVALID_NUMBER
+
+Testing rtems_string_to_unsigned_long
+rtems_string_to_unsigned_long - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_unsigned_long - 123 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_unsigned_long - 123 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_unsigned_long - YYY w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_unsigned_long - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_unsigned_long - overflow - RTEMS_INVALID_NUMBER
+
+Testing rtems_string_to_long_long
+rtems_string_to_long_long - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_long_long - 123 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_long_long - 123 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_long_long - YYY w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_long_long - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_long_long - overflow - RTEMS_INVALID_NUMBER
+rtems_string_to_long_long- RTEMS_INVALID_NUMBER
+
+Testing rtems_string_to_unsigned_long_long
+rtems_string_to_unsigned_long_long - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_unsigned_long_long - 123 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_unsigned_long_long - 123 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_unsigned_long_long - YYY w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_unsigned_long_long - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_unsigned_long_long - overflow - RTEMS_INVALID_NUMBER
+
+Testing rtems_string_to_float
+rtems_string_to_float - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_float - 1.23 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_float - 1.23 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_float - zzz w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_float - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_float - overflow - RTEMS_INVALID_NUMBER
+
+Testing rtems_string_to_double
+rtems_string_to_double - NULL return value - RTEMS_INVALID_ADDRESS
+rtems_string_to_double - 1.23 NULL endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_double - 1.23 w/endptr return value - RTEMS_SUCCESSFUL
+rtems_string_to_double - zzz w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_double - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_double - overflow - RTEMS_INVALID_NUMBER
+*** END OF STRING TO CONVERSION TEST ***
