@@ -104,9 +104,16 @@ rtems_status_code STRING_TO_NAME (
   if ( end == s )
     return RTEMS_NOT_DEFINED;
 
+  /*
+   * In theory, we should check this but newlib never returns anything
+   * but range errors.  So this is unreachable code based upon the newlib
+   * implementation of strXXX methods as of 1 December 2009. --joel
+   */
+  #if 0
   /* there was a conversion error */
   if ( (result == ZERO) && errno )
     return RTEMS_INVALID_NUMBER;
+  #endif
 
   #ifdef STRING_TO_MAX
     /* there was an overflow */

@@ -78,6 +78,27 @@ rtems_status_code rtems_string_to_int(
 );
 
 /**
+ *  @brief Convert String to Unsigned Int (with validation)
+ *
+ *  This method converts a string to an unsigned int with range validation.
+ *
+ *  @param[in] s is the string to convert
+ *  @param[in] n points to the variable to place the converted output in
+ *  @param[in] endptr is used to keep track of the position in the string
+ *  @param[in] base is the expected base of the number
+ *
+ *  @return This method returns RTEMS_SUCCESSFUL on successful conversion
+ *          and *n is filled in.  Otherwise, the status indicates the
+ *          source of the error.
+ */
+rtems_status_code rtems_string_to_unsigned_int(
+  const char    *s,
+  unsigned int  *n,
+  char         **endptr,
+  int            base
+);
+
+/**
  *  @brief Convert String to Long (with validation)
  *
  *  This method converts a string to a long with
