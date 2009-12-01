@@ -1,3 +1,7 @@
+2009-12-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/vprintk.c: Fixed usage of va_arg().
+
 2009-11-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/login_prompt.c: Fix problem where timeout on login

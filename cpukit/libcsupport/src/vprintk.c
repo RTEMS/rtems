@@ -80,7 +80,8 @@ void vprintk(
       c = *++fmt;
     }
     if ( c == 'c' ) {
-      char chr = va_arg(ap, char);
+      /* need a cast here since va_arg() only takes fully promoted types */
+      char chr = (char) va_arg(ap, int);
       BSP_output_char(chr);
       continue;
     }
