@@ -1,3 +1,19 @@
+2009-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add POSIX.
+	* configure.ac: Add POSIX/.
+	* POSIX/calloc.c, POSIX/close.c, POSIX/COPYING, POSIX/dup2.c,
+	POSIX/fcntl.c, POSIX/fork.c, POSIX/free.c, POSIX/fstat.c,
+	POSIX/getdents.c, POSIX/getlogin.c, POSIX/getpwnam.c,
+	POSIX/getpwuid.c, POSIX/getuid.c, POSIX/issetugid.c,
+	POSIX/kill.c, POSIX/longjmp.c, POSIX/lseek.c, POSIX/lstat.c,
+	POSIX/Makefile.am, POSIX/Makefile.in, POSIX/malloc.c,
+	POSIX/nanosleep.c, POSIX/open.c, POSIX/pipe.c, 
+	POSIX/posix_memalign.c, POSIX/read.c, POSIX/README,
+	POSIX/realloc.c, POSIX/setjmp.c, POSIX/sigfillset.c,
+	POSIX/sigprocmask.c, POSIX/stat.c, POSIX/unlink.c, POSIX/vfork.c,
+	POSIX/waitpid.c, POSIX/write.c: New.
+
 2009-12-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* stringto01/init.c: New file.
