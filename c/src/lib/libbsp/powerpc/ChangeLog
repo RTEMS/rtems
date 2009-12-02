@@ -1,5 +1,10 @@
 2009-12-01	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/start/start.S: Added AltiVec support (initializing
+	MSR[VE], VSCR and VRSAVE).
+
+2009-12-01	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vme/vme_universe.c: moved extern declaration
 	out of local scope.
 

@@ -7,7 +7,11 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
+<<<<<<< start.S
  *  $Id$
+=======
+ *  $Id$
+>>>>>>> 1.25
  *
  */
 
@@ -60,6 +64,21 @@ __rtems_entry_point:
 	mr	r29,r5
 	mr	r28,r6
 	mr	r27,r7
+
+#ifdef __ALTIVEC__
+	/* enable altivec; gcc may use it! */
+	mfmsr r0
+	oris  r0, r0, (1<<(31-16-6))
+	mtmsr r0
+	/*
+	 * set vscr and vrsave to known values
+	 */
+	li    r0, 0
+	mtvrsave r0
+	vxor   0,0,0
+	mtvscr 0
+#endif
+
 	/*
 	 * Make sure we have nothing in BATS and TLB
 	 */
