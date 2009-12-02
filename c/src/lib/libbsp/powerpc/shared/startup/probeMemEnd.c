@@ -90,8 +90,6 @@ extern uint32_t __rtems_end[];
 #define __DO_ALIGN(a, s)	(((uint32_t)(a) + (s)-1) & ~((s)-1))
 #define __ALIGN(a)	__DO_ALIGN(a, (1<<LD_MEM_PROBE_STEP))
 
-extern void __here_s_the_real_end(void);
-
 #define SWITCH_MSR(msr)		\
 	do {					\
 	register uint32_t __rr;	\
@@ -185,15 +183,10 @@ register          uint32_t flags;
 	 * even probe our own stack :-)
 	 */
 
-	/* are we really at the highest address ? */
-	if ( probe < (volatile uint32_t *)__here_s_the_real_end ) {
-		probe = (volatile uint32_t*)__ALIGN(__here_s_the_real_end);
-	}
-
 	if ( CPU_lockUnlockCaches(1) )
 		return 0;
 
-	asm volatile("mfmsr %0":"=r"(flags));
+	_CPU_MSR_GET(flags);
 
 	SWITCH_MSR( flags & ~(MSR_EE|MSR_DR|MSR_IR) );
 
@@ -225,5 +218,3 @@ register          uint32_t flags;
 
 	return (uint32_t) probe;
 }
-
-void __here_s_the_real_end(void) {}

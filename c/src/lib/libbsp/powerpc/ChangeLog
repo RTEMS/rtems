@@ -1,3 +1,8 @@
+2009-12-01	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/startup/probeMemEnd.c: removed __here_s_the_real_end
+	check. __rtems_end should be good enough.
+
 2009-11-11	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/start/start.S: Align initial stack to
