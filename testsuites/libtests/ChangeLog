@@ -1,3 +1,7 @@
+2009-12-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* stringto01/init.c: New file.
+
 2009-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: Add string_to_xxx conversion test.
