@@ -1,5 +1,14 @@
 2009-12-02	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
+	* libcsupport/src/__times.c, libmisc/cpuuse/cpuusagedata.c,
+	libmisc/cpuuse/cpuusagereport.c, libmisc/cpuuse/cpuusagereset.c,
+	rtems/include/rtems/rtems/types.h, rtems/src/ratemongetstatistics.c,
+	rtems/src/ratemonreportstatistics.c, score/src/threaddispatch.c,
+	score/src/threadinitialize.c, score/src/threadtickletimeslice.c:
+	Updated copyright line.
+
+2009-12-02	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
 	* configure.ac, libcsupport/src/__times.c,
 	libmisc/cpuuse/cpuusagedata.c, libmisc/cpuuse/cpuusagereport.c,
 	libmisc/cpuuse/cpuusagereset.c, rtems/include/rtems/rtems/ratemon.h,

@@ -1,7 +1,7 @@
 /*
  *  times() - POSIX 1003.1b 4.5.2 - Get Process Times
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
