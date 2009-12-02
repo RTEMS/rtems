@@ -2,7 +2,7 @@
  *
  *  This file contains the basic algorithms for all assembly code used
  *  in an specific CPU port of RTEMS.  These algorithms must be implemented
- *  in assembly language. 
+ *  in assembly language.
  *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -12,10 +12,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
@@ -34,7 +34,7 @@
  *  at *fp_context_ptr.  If the point to load the FP context
  *  from is changed then the pointer is modified by this routine.
  *
- *  NOTE: See the README in this directory for information on the 
+ *  NOTE: See the README in this directory for information on the
  *        management of the "EF" bit in the PSR.
  */
 
@@ -46,13 +46,13 @@ SYM(_CPU_Context_save_fp):
         /*
          *  The following enables the floating point unit.
          */
-   
+
         mov     %psr, %l0
         sethi   %hi(SPARC_PSR_EF_MASK), %l1
         or      %l1, %lo(SPARC_PSR_EF_MASK), %l1
         or      %l0, %l1, %l0
         mov     %l0, %psr                  ! **** ENABLE FLOAT ACCESS ****
-	nop; nop; nop;			   ! Need three nops before EF is 
+	nop; nop; nop;			   ! Need three nops before EF is
         ld      [%i0], %l0		   ! active due to pipeline delay!!!
         std     %f0, [%l0 + FO_F1_OFFSET]
         std     %f2, [%l0 + F2_F3_OFFSET]
@@ -83,7 +83,7 @@ SYM(_CPU_Context_save_fp):
  *  at *fp_context_ptr.  If the point to load the FP context
  *  from is changed then the pointer is modified by this routine.
  *
- *  NOTE: See the README in this directory for information on the 
+ *  NOTE: See the README in this directory for information on the
  *        management of the "EF" bit in the PSR.
  */
 
@@ -95,13 +95,13 @@ SYM(_CPU_Context_restore_fp):
         /*
          *  The following enables the floating point unit.
          */
-   
+
         mov     %psr, %l0
         sethi   %hi(SPARC_PSR_EF_MASK), %l1
         or      %l1, %lo(SPARC_PSR_EF_MASK), %l1
         or      %l0, %l1, %l0
         mov     %l0, %psr                  ! **** ENABLE FLOAT ACCESS ****
-	nop; nop; nop;			   ! Need three nops before EF is 
+	nop; nop; nop;			   ! Need three nops before EF is
         ld      [%i0], %l0		   ! active due to pipeline delay!!!
         ldd     [%l0 + FO_F1_OFFSET], %f0
         ldd     [%l0 + F2_F3_OFFSET], %f2
@@ -181,9 +181,9 @@ SYM(_CPU_Context_restore_heir):
          *  Flush all windows with valid contents except the current one.
          *  In examining the set register windows, one may logically divide
          *  the windows into sets (some of which may be empty) based on their
-         *  current status:  
+         *  current status:
          *
-         *    + current (i.e. in use), 
+         *    + current (i.e. in use),
          *    + used (i.e. a restore would not trap)
          *    + invalid (i.e. 1 in corresponding bit in WIM)
          *    + unused
@@ -202,9 +202,9 @@ SYM(_CPU_Context_restore_heir):
          *
          *  In this case, we only would save the used windows -- 6 and 7.
          *
-         *   Traps are disabled for the same logical period as in a 
+         *   Traps are disabled for the same logical period as in a
          *     flush all windows trap handler.
-         *   
+         *
          *    Register Usage while saving the windows:
          *      g1 = current PSR
          *      g2 = current wim
@@ -238,17 +238,17 @@ save_frame_loop:
         bnz     done_flushing                 ! No, then continue
         nop
 
-        restore                               ! back one window 
+        restore                               ! back one window
 
         /*
          *  Now save the window just as if we overflowed to it.
          */
- 
+
         std     %l0, [%sp + CPU_STACK_FRAME_L0_OFFSET]
         std     %l2, [%sp + CPU_STACK_FRAME_L2_OFFSET]
         std     %l4, [%sp + CPU_STACK_FRAME_L4_OFFSET]
         std     %l6, [%sp + CPU_STACK_FRAME_L6_OFFSET]
- 
+
         std     %i0, [%sp + CPU_STACK_FRAME_I0_OFFSET]
         std     %i2, [%sp + CPU_STACK_FRAME_I2_OFFSET]
         std     %i4, [%sp + CPU_STACK_FRAME_I4_OFFSET]
@@ -262,7 +262,7 @@ done_flushing:
         add     %g3, 1, %g3                   ! calculate desired WIM
         and     %g3, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g3
         mov     1, %g4
-        sll     %g4, %g3, %g4                 ! g4 = new WIM 
+        sll     %g4, %g3, %g4                 ! g4 = new WIM
         mov     %g4, %wim
 
         or      %g1, SPARC_PSR_ET_MASK, %g1
@@ -559,9 +559,9 @@ fpu_revb:
 	bne,a	 dont_fix_pil2
         wr       %l0, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
 	ba,a	 simple_return
-	 
+	
 enable_irq:
-        or       %g5, SPARC_PSR_PIL_MASK, %g4 
+        or       %g5, SPARC_PSR_PIL_MASK, %g4
         wr       %g4, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
 	nop; nop; nop
 	fmovs	 %f0, %f0
@@ -658,7 +658,7 @@ dont_fix_pil2:
         bnz      simple_return   ! Yes, then do a "simple" exit
         ! NOTE: Use the delay slot
         sethi    %hi(SYM(_Context_Switch_necessary)), %l4
-        
+
 
         /*
          *  If a context switch is necessary, then do fudge stack to
@@ -685,7 +685,7 @@ dont_fix_pil2:
                                  ! use the delay slot to clear the signals
                                  !   to the currently executing task flag
         st       %g0, [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))]
-                                 
+
 
         /*
          *  Invoke interrupt dispatcher.
@@ -707,7 +707,7 @@ SYM(_ISR_Dispatch):
 
         sub      %fp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
 
-        or      %l0, SPARC_PSR_ET_MASK, %l7    ! l7 = PSR with ET=1 
+        or      %l0, SPARC_PSR_ET_MASK, %l7    ! l7 = PSR with ET=1
         mov     %l7, %psr                      !  **** ENABLE TRAPS ****
         nop
         nop
@@ -719,7 +719,7 @@ isr_dispatch:
 	/*
 	 *  We invoked _Thread_Dispatch in a state similar to the interrupted
 	 *  task.  In order to safely be able to tinker with the register
-	 *  windows and get the task back to its pre-interrupt state, 
+	 *  windows and get the task back to its pre-interrupt state,
 	 *  we need to disable interrupts disabled so we can safely tinker
 	 *  with the register windowing.  In particular, the CWP in the PSR
 	 *  is fragile during this period. (See PR578.)
@@ -788,7 +788,7 @@ simple_return:
         and     %l3, SPARC_PSR_CWP_MASK, %l3   ! want "current" CWP
         andn    %l0, SPARC_PSR_CWP_MASK, %l0   ! want rest from task
         or      %l3, %l0, %l0                  ! install it later...
-        andn    %l0, SPARC_PSR_ET_MASK, %l0 
+        andn    %l0, SPARC_PSR_ET_MASK, %l0
 
         /*
          *  Restore tasks global and out registers

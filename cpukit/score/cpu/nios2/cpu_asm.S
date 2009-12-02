@@ -89,12 +89,12 @@ _CPU_Context_restore:
 
 _exception_vector:
 
-    /* 
+    /*
      * First, re-wind so we're pointed to the instruction where the exception
      * occurred.
      */
 
-    addi ea, ea, -4 
+    addi ea, ea, -4
 
     /*
      * Now test to determine the cause of the exception.
@@ -117,7 +117,7 @@ _exception_vector:
 
     br _ISR_Handler
 
-/* ===================================================================== 
+/* =====================================================================
  * Exception handler:
  *   Responsible for unimplemented instructions and other software
  *   exceptions. Not responsible for hardware interrupts. Currently,
@@ -182,7 +182,7 @@ _Exception_Handler:
     addi gp, gp, %lo(_gp)
 
     /*
-     * Pass a pointer to the stack frame as the input argument of the 
+     * Pass a pointer to the stack frame as the input argument of the
      * exception handler (CPU_Exception_frame *).
      */
 
@@ -198,8 +198,8 @@ _Exception_Handler:
 stuck_in_exception:
     br stuck_in_exception
 
-    /* 
-     * Restore the saved registers, so that all general purpose registers 
+    /*
+     * Restore the saved registers, so that all general purpose registers
      * have been restored to their state at the time the interrupt occured.
      */
 
@@ -252,13 +252,13 @@ stuck_in_exception:
 
 _ISR_Handler:
 
-    /* 
-     * Process an external hardware interrupt. 
+    /*
+     * Process an external hardware interrupt.
      *
-     * First, preserve all callee saved registers on 
+     * First, preserve all callee saved registers on
      * the stack. (See the Nios2 ABI documentation for details).
      *
-     * Do we really need to save all? 
+     * Do we really need to save all?
      *
      * If this is interrupting a task (and not another interrupt),
      * everything is saved into the task's stack, thus putting us
@@ -331,13 +331,13 @@ _ISR_Handler:
     .extern __ISR_Handler
     call    __ISR_Handler
 
-    /* 
+    /*
      * Now that the interrupt processing is complete, prepare to return to
      * the interrupted code.
      */
 
     /*
-     * Restore the saved registers, so that all general purpose registers 
+     * Restore the saved registers, so that all general purpose registers
      * have been restored to their state at the time the interrupt occured.
      */
 

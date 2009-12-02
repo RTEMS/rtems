@@ -17,7 +17,7 @@
  *     is closed. Rather let 'read()' return a 0 count so
  *     they may cleanup. Some magic hack works around termios
  *     limitation.
- * 
+ *
  *  $Id$
  */
 
@@ -77,8 +77,8 @@ struct pty_tt {
  int                       opened;
  int                       socket;
  int                       last_cr;
- unsigned                  iac_mode;   
- unsigned char             sb_buf[SB_MAX];  
+ unsigned                  iac_mode;
+ unsigned char             sb_buf[SB_MAX];
  int                       sb_ind;
  int                       width;
  int                       height;
@@ -92,7 +92,7 @@ static rtems_device_major_number pty_major;
 
 
 /* This procedure returns the devname for a pty slot free.
- * If not slot availiable (field socket>=0) 
+ * If not slot availiable (field socket>=0)
  *  then the socket argument is closed
  */
 
@@ -110,7 +110,7 @@ char *  telnet_get_pty(int socket)
     if ( !telnet_ptys ) {
       return NULL;
     }
-      
+
     for (ndx=0;ndx<rtems_telnetd_maximum_ptys;ndx++) {
 
       if (telnet_ptys[ndx].socket<0) {
@@ -132,9 +132,9 @@ char *  telnet_get_pty(int socket)
 /*-----------------------------------------------------------*/
 /*
  * The NVT terminal is negociated in PollRead and PollWrite
- * with every BYTE sendded or received. 
- * A litle status machine in the pty_read_byte(int minor) 
- * 
+ * with every BYTE sendded or received.
+ * A litle status machine in the pty_read_byte(int minor)
+ *
  */
 static const char IAC_AYT_RSP[]="\r\nAYT? Yes, RTEMS-SHELL is here\r\n";
 static const char IAC_BRK_RSP[]="<*Break*>";
@@ -269,7 +269,7 @@ static int read_pty(int minor)
 
        case IAC_WILL:
            if (value==34){
-              send_iac(minor,IAC_DONT,   34);  /*LINEMODE*/ 
+              send_iac(minor,IAC_DONT,   34);  /*LINEMODE*/
               send_iac(minor,IAC_DO  ,    1);  /*ECHO    */
            } else if (value==31) {
               send_iac(minor,IAC_DO  ,   31);  /*NAWS    */
@@ -285,7 +285,7 @@ static int read_pty(int minor)
        case IAC_DO  :
            if (value==3) {
               send_iac(minor,IAC_WILL,    3);  /* GO AHEAD*/
-           } else  if (value==1) {                         
+           } else  if (value==1) {
               /* ECHO */
            } else {
               send_iac(minor,IAC_WONT,value);
@@ -303,7 +303,7 @@ static int read_pty(int minor)
               pty->iac_mode=value;
               return -1;
            } else {
-              result=value;  
+              result=value;
               if ( 0
 #if 0               /* pass CRLF through - they should use termios to handle it */
                  ||  ((value=='\n') && (pty->last_cr))
@@ -327,7 +327,7 @@ static int ptyPollWrite(int minor, const char * buf,int len) ;
 static int ptyPollRead(int minor) ;
 static const rtems_termios_callbacks * pty_get_termios_handlers(int polled) ;
 /*-----------------------------------------------------------*/
-/* Set the 'Hardware'                                        */ 
+/* Set the 'Hardware'                                        */
 /*-----------------------------------------------------------*/
 static int
 ptySetAttributes(int minor,const struct termios *t) {
@@ -339,7 +339,7 @@ ptySetAttributes(int minor,const struct termios *t) {
   return 0;
 }
 /*-----------------------------------------------------------*/
-static int 
+static int
 ptyPollInitialize(int major,int minor,void * arg) {
   rtems_libio_open_close_args_t * args = (rtems_libio_open_close_args_t*)arg;
   struct termios t;
@@ -358,7 +358,7 @@ ptyPollInitialize(int major,int minor,void * arg) {
   }
 }
 /*-----------------------------------------------------------*/
-static int 
+static int
 ptyShutdown(int major,int minor,void * arg) {
   if (minor<rtems_telnetd_maximum_ptys) {
     telnet_ptys[minor].opened=FALSE;
@@ -371,7 +371,7 @@ ptyShutdown(int major,int minor,void * arg) {
   return 0;
 }
 /*-----------------------------------------------------------*/
-/* Write Characters into pty device                          */ 
+/* Write Characters into pty device                          */
 /*-----------------------------------------------------------*/
 static int
 ptyPollWrite(int minor, const char * buf,int len) {
@@ -425,7 +425,7 @@ rtems_device_driver my_pty_initialize(
 
   telnet_ptys = malloc( rtems_telnetd_maximum_ptys * sizeof (pty_t) );
 
-  /* 
+  /*
    * Set up ptys
    */
 
@@ -510,7 +510,7 @@ rtems_device_driver my_pty_open(
   sc = rtems_termios_open(major,minor,arg,pty_get_termios_handlers(FALSE));
   return sc;
 }
- 
+
 /*
  *  Close entry point
  */

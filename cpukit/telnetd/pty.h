@@ -7,7 +7,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *  $Id$
  */
 
@@ -24,7 +24,7 @@ extern "C" {
 extern size_t rtems_pty_maximum_ptys;
 
 /* Return the devname for a free pty slot.
- * If no slot available (socket>=0) 
+ * If no slot available (socket>=0)
  * then the socket argument is closed
  */
 char * rtems_pty_get(int socket);

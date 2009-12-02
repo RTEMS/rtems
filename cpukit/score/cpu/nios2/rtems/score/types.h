@@ -3,7 +3,7 @@
  */
 
 /*
- *  This include file contains type definitions pertaining to the 
+ *  This include file contains type definitions pertaining to the
  *  Altera Nios II processor family.
  *
  *  COPYRIGHT (c) 1989-1999.

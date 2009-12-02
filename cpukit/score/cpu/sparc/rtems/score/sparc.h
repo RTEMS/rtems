@@ -3,7 +3,7 @@
  */
 
 /*
- *  This include file contains information pertaining to the SPARC 
+ *  This include file contains information pertaining to the SPARC
  *  processor family.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -32,19 +32,19 @@ extern "C" {
  *
  *  Currently recognized feature flags:
  *
- *    + SPARC_HAS_FPU 
+ *    + SPARC_HAS_FPU
  *        0 - no HW FPU
  *        1 - has HW FPU (assumed to be compatible w/90C602)
  *
- *    + SPARC_HAS_BITSCAN 
+ *    + SPARC_HAS_BITSCAN
  *        0 - does not have scan instructions
  *        1 - has scan instruction  (not currently implemented)
- * 
+ *
  *    + SPARC_NUMBER_OF_REGISTER_WINDOWS
  *        8 is the most common number supported by SPARC implementations.
  *        SPARC_PSR_CWP_MASK is derived from this value.
  */
- 
+
 /*
  *  Some higher end SPARCs have a bitscan instructions. It would
  *  be nice to take advantage of them.  Right now, there is no
@@ -62,9 +62,9 @@ extern "C" {
  */
 
 #define SPARC_NUMBER_OF_REGISTER_WINDOWS 8
- 
+
 /*
- *  This should be determined based on some soft float derived 
+ *  This should be determined based on some soft float derived
  *  cpp predefine but gcc does not currently give us that information.
  */
 
@@ -192,24 +192,24 @@ extern "C" {
 /*
  *  Get and set the Y
  */
- 
+
 #define sparc_get_y( _y ) \
   do { \
     asm volatile( "rd %%y, %0" :  "=r" (_y) : "0" (_y) ); \
   } while ( 0 )
- 
+
 #define sparc_set_y( _y ) \
   do { \
     asm volatile( "wr %0, %%y" :  "=r" (_y) : "0" (_y) ); \
   } while ( 0 )
 
 /*
- *  Manipulate the interrupt level in the psr 
+ *  Manipulate the interrupt level in the psr
  */
 
 uint32_t sparc_disable_interrupts(void);
 void sparc_enable_interrupts(uint32_t);
-  
+
 #define sparc_flash_interrupts( _level ) \
   do { \
     register uint32_t   _ignored = 0; \

@@ -71,7 +71,7 @@
 #include <stdlib.h>
 
 #define REENTRANT
-/* Re-entrantify me -- all this junk needs to be in 
+/* Re-entrantify me -- all this junk needs to be in
  * struct crypt_data to make this really reentrant... */
 
 /* TS; not really - only the stuff in Des_Context */
@@ -127,8 +127,8 @@ static struct Des_Context single;
 #define old_rawkey0 des_ctx->old_rawkey0
 #define old_rawkey1 des_ctx->old_rawkey1
 
-/* Static stuff that stays resident and doesn't change after 
- * being initialized, and therefore doesn't need to be made 
+/* Static stuff that stays resident and doesn't change after
+ * being initialized, and therefore doesn't need to be made
  * reentrant. */
 static u_char	init_perm[64], final_perm[64];
 static u_char	m_sbox[4][4096];
@@ -241,7 +241,7 @@ static const u_char	bits8[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 
 static const u_int32_t *bits28, *bits24;
 
 
-static int 
+static int
 ascii_to_bin(char ch)
 {
   if (ch > 'z')
@@ -773,7 +773,7 @@ __des_crypt_r(const char *key, const char *setting, char *output, int sz)
      */
     output[9] = '\0';
     p = (u_char *)output + strlen(output);
-  } else 
+  } else
 #endif
   {
     /*
