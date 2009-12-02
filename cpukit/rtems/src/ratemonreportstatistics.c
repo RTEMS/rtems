@@ -23,8 +23,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/score/timespec.h>
 
-#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
-    defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   /* We print to 1/10's of milliseconds */
   #define NANOSECONDS_DIVIDER 1000
   #define PERCENT_FMT     "%04" PRId32
@@ -54,10 +53,8 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
     return;
 
   (*print)( context, "Period information by period\n" );
-  #if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
     (*print)( context, "--- CPU times are in seconds ---\n" );
-  #endif
-  #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
     (*print)( context, "--- Wall times are in seconds ---\n" );
   #endif
 /*
@@ -74,28 +71,22 @@ ididididid NNNN ccccc mmmmmm X
 \n");
 */
   (*print)( context, "   ID     OWNER COUNT MISSED     "
-       #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+       #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
           "     "
        #endif
           "CPU TIME     "
-       #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-          "    "
-       #endif
-       #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-          "      "
+       #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+          "          "
        #endif
           "   WALL TIME\n"
   );
   (*print)( context, "                               "
-       #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+       #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
           "     "
        #endif
           "MIN/MAX/AVG    "
-       #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-          "    "
-       #endif
-       #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-          "      "
+       #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+          "          "
        #endif
           "  MIN/MAX/AVG\n"
   );
@@ -141,7 +132,7 @@ ididididid NNNN ccccc mmmmmm X
      *  print CPU Usage part of statistics
      */
     {
-    #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
       struct timespec  cpu_average;
       struct timespec *min_cpu = &the_stats.min_cpu_time;
       struct timespec *max_cpu = &the_stats.max_cpu_time;
@@ -177,7 +168,7 @@ ididididid NNNN ccccc mmmmmm X
      *  print wall time part of statistics
      */
     {
-    #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+    #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
       struct timespec  wall_average;
       struct timespec *min_wall = &the_stats.min_wall_time;
       struct timespec *max_wall = &the_stats.max_wall_time;

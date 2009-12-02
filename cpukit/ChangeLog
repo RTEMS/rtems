@@ -1,3 +1,16 @@
+2009-12-02	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* configure.ac, libcsupport/src/__times.c,
+	libmisc/cpuuse/cpuusagedata.c, libmisc/cpuuse/cpuusagereport.c,
+	libmisc/cpuuse/cpuusagereset.c, rtems/include/rtems/rtems/ratemon.h,
+	rtems/include/rtems/rtems/types.h, rtems/src/ratemongetstatistics.c,
+	rtems/src/ratemongetstatus.c, rtems/src/ratemonperiod.c,
+	rtems/src/ratemonreportstatistics.c,
+	score/include/rtems/score/thread.h, score/src/threaddispatch.c,
+	score/src/threadinitialize.c, score/src/threadtickletimeslice.c:
+	Changed the configuration of statistics granularity to use just one
+	define.
+
 2009-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shttpd/def.h: Use __m32c__ for m32c.

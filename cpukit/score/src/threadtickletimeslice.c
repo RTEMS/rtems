@@ -49,7 +49,7 @@ void _Thread_Tickle_timeslice( void )
 
   executing = _Thread_Executing;
 
-  #ifndef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+  #ifdef __RTEMS_USE_TICKS_FOR_STATISTICS__
     /*
      *  Increment the number of ticks this thread has been executing
      */

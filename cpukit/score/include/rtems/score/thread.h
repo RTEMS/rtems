@@ -47,16 +47,8 @@ extern "C" {
  *  The user can define this at configure time and go back to ticks
  *  resolution.
  */
-#ifndef __RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timestamp.h>
-
-  /**
-   *  This macro enables the nanosecond accurate statistics
-   *
-   *  When not defined, the older style tick accurate granularity
-   *  is used.
-   */
-  #define RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
 
   typedef Timestamp_Control Thread_CPU_usage_t;
 #else
@@ -75,10 +67,6 @@ extern "C" {
 #include <rtems/score/tod.h>
 #include <rtems/score/tqdata.h>
 #include <rtems/score/watchdog.h>
-
-#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-  /* XXX include something for timespec */
-#endif
 
 /**
  *  The following defines the "return type" of a thread.
@@ -516,7 +504,7 @@ SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
  */
 SCORE_EXTERN struct _reent **_Thread_libc_reent;
 
-#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
 
   /**
    * This contains the time since boot when the last context switch occurred.

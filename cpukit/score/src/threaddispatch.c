@@ -30,7 +30,7 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timestamp.h>
 #endif
 
@@ -102,7 +102,7 @@ void _Thread_Dispatch( void )
       heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
     _ISR_Enable( level );
 
-    #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
       {
         Timestamp_Control uptime, ran;
         _TOD_Get_uptime( &uptime );

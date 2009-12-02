@@ -22,7 +22,7 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <assert.h>
-#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timestamp.h>
 #endif
 
@@ -51,7 +51,7 @@ clock_t _times(
    *  this thread.
    */
 
-  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
     {
       Timestamp_Control per_tick;
       uint32_t          ticks;

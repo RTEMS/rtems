@@ -54,25 +54,11 @@
 extern "C" {
 #endif
 
-/*
- *  The user can define this at configure time and go back to ticks
- *  resolution.
- */
-#if !defined(__RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__)
-  /**
-   *  Enable the nanosecond accurate statistics
-   *
-   *  When not defined, the older style tick accurate granularity
-   *  is used.
-   */
-  #define RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-#endif
-
 /**
  *  This is the public type used for the rate monotonic timing
  *  statistics.
  */
-#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timespec.h>
 
   typedef struct timespec rtems_rate_monotonic_period_time_t;
@@ -84,7 +70,7 @@ extern "C" {
  *  This is the internal type used for the rate monotonic timing
  *  statistics.
  */
-#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timestamp.h>
 
   typedef Timestamp_Control Rate_monotonic_Period_time_t;
@@ -435,7 +421,7 @@ void _Rate_monotonic_Initiate_statistics(
  *
  *  This method resets the statistics information for a period instance.
  */
-#ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
      do { \
         /* set the minimums to a large value */ \
@@ -458,7 +444,7 @@ void _Rate_monotonic_Initiate_statistics(
  *
  *  This helper method resets the period CPU usage statistics structure.
  */
-#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
      do { \
         /* set the minimums to a large value */ \
