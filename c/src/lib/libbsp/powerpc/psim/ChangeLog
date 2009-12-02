@@ -1,3 +1,13 @@
+2009-12-01	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, start/start.S: Added AltiVec support
+	(only effective if user modifies psim.cfg: CPU_CFLAGS
+	choosing a CPU architecture with AltiVec or directly
+	adding -maltivec, -mabi=altivec).
+
+	* start/start.S: removed '.file' statement which 
+	confused gdb.
+
 2009-11-15	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c: use normal get_ppc_cpu_type()
