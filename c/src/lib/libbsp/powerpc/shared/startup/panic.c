@@ -7,7 +7,7 @@
 #include <libcpu/stackTrace.h>
 
 static void
-rebootQuestion()
+rebootQuestion(void)
 {
 	printk("Press a key to reboot\n");
 	BSP_poll_char_via_serial();
