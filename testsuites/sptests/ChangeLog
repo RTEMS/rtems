@@ -1,3 +1,7 @@
+2009-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp25/task1.c: Use PRIuPTR for segment_sizes.
+
 2009-11-30	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* sp68/Makefile.in, sp68/.cvsignore,
