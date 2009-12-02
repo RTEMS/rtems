@@ -1,5 +1,14 @@
 2009-12-01	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/cpu.c, new-exceptions/cpu_asm.S,
+	new-exceptions/bspsupport/ppc_exc_asm_macros.h,
+	new-exceptions/bspsupport/ppc_exc_initialize.c,
+	new-exceptions/bspsupport/vectors.h:
+	Added AltiVec support (save/restore volatile vregs
+	across exceptions).
+	
+2009-12-01	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am, mpc6xx/altivec: new directory implementing
 	support for AltiVec context saving/restoring.
 

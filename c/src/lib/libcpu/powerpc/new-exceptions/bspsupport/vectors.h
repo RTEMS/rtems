@@ -189,6 +189,22 @@
 #define EXC_XER_OFFSET 156
 #define EXC_LR_OFFSET 160
 
+#define EXC_GENERIC_SIZE 176
+
+#ifdef __ALTIVEC__
+#define EXC_VEC_OFFSET EXC_GENERIC_SIZE
+#ifndef PPC_CACHE_ALIGNMENT
+#error "Missing include file!"
+#endif
+/*   20 volatile registers
+ * + cache-aligned area for vcsr, vrsave
+ * + area for alignment
+ */
+#define EXC_VEC_SIZE   (16*20 + 2*PPC_CACHE_ALIGNMENT)
+#else
+#define EXC_VEC_SIZE   (0)
+#endif
+
 /* Exception stack frame -> BSP_Exception_frame */
 #define FRAME_LINK_SPACE 8
 
@@ -197,7 +213,7 @@
  * As SVR4 ABI requires 16, make it 16 (as some
  * exception may need more registers to be processed...)
  */
-#define EXCEPTION_FRAME_END 176
+#define EXCEPTION_FRAME_END (EXC_GENERIC_SIZE + EXC_VEC_SIZE)
 
 /** @} */
 

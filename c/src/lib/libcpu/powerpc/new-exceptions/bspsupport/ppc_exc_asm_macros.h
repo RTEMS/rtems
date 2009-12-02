@@ -520,6 +520,27 @@ wrap_disable_thread_dispatching_done_\_FLVR:
 
 wrap_change_msr_done_\_FLVR:
 
+#ifdef __ALTIVEC__
+	LA  SCRATCH_REGISTER_0, _CPU_save_altivec_volatile
+	mtctr SCRATCH_REGISTER_0
+	addi r3, FRAME_REGISTER, EXC_VEC_OFFSET
+	bctrl
+	/*
+	 * Establish defaults for vrsave and vscr
+	 */
+	li       SCRATCH_REGISTER_0, 0
+	mtvrsave SCRATCH_REGISTER_0
+	/*
+	 * Use java/c9x mode; clear saturation bit 
+	 */
+	vxor     0, 0, 0
+	mtvscr   0
+	/*
+	 * Reload VECTOR_REGISTER
+	 */
+	lwz	     VECTOR_REGISTER, EXCEPTION_NUMBER_OFFSET(FRAME_REGISTER)
+#endif
+
 	/*
 	 * Call high level exception handler
 	 */
@@ -618,6 +639,13 @@ wrap_handler_done_\_FLVR:
 	bctrl
 
 wrap_thread_dispatching_done_\_FLVR:
+
+#ifdef __ALTIVEC__
+	LA  SCRATCH_REGISTER_0, _CPU_load_altivec_volatile
+	mtctr   SCRATCH_REGISTER_0  	
+	addi    r3, FRAME_REGISTER, EXC_VEC_OFFSET	
+	bctrl
+#endif
 
 	/* Restore MSR? */
 	bne	CR_MSR, wrap_restore_msr_\_FLVR

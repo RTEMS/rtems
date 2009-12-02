@@ -293,52 +293,67 @@ PROC (_CPU_Context_switch):
 	sync
 	isync
 	/* This assumes that all the registers are in the given order */
-	li	r5, 32
-	addi	r3,r3,-4
 #if ( PPC_USE_DATA_CACHE )
-	dcbz	r5, r3
+#if PPC_CACHE_ALIGNMENT != 32
+#error "code assumes PPC_CACHE_ALIGNMENT == 32!"
 #endif
-	stw	r1, GP_1+4(r3)
-	stw	r2, GP_2+4(r3)
+	li	r5, PPC_CACHE_ALIGNMENT
+#endif
+	addi	r9,r3,-4
+#if ( PPC_USE_DATA_CACHE )
+	dcbz	r5, r9
+#endif
+	stw	r1, GP_1+4(r9)
+	stw	r2, GP_2+4(r9)
 #if (PPC_USE_MULTIPLE == 1)
-	addi	r3, r3, GP_18+4
+	addi	r9, r9, GP_18+4
 #if ( PPC_USE_DATA_CACHE )
-	dcbz	r5, r3
+	dcbz	r5, r9
 #endif
-	stmw	r13, GP_13-GP_18(r3)
+	stmw	r13, GP_13-GP_18(r9)
 #else
-	stw	r13, GP_13+4(r3)
-	stw	r14, GP_14+4(r3)
-	stw	r15, GP_15+4(r3)
-	stw	r16, GP_16+4(r3)
-	stw	r17, GP_17+4(r3)
-	stwu	r18, GP_18+4(r3)
+	stw	r13, GP_13+4(r9)
+	stw	r14, GP_14+4(r9)
+	stw	r15, GP_15+4(r9)
+	stw	r16, GP_16+4(r9)
+	stw	r17, GP_17+4(r9)
+	stwu	r18, GP_18+4(r9)
 #if ( PPC_USE_DATA_CACHE )
-	dcbz	r5, r3
+	dcbz	r5, r9
 #endif
-	stw	r19, GP_19-GP_18(r3)
-	stw	r20, GP_20-GP_18(r3)
-	stw	r21, GP_21-GP_18(r3)
-	stw	r22, GP_22-GP_18(r3)
-	stw	r23, GP_23-GP_18(r3)
-	stw	r24, GP_24-GP_18(r3)
-	stw	r25, GP_25-GP_18(r3)
-	stw	r26, GP_26-GP_18(r3)
-	stw	r27, GP_27-GP_18(r3)
-	stw	r28, GP_28-GP_18(r3)
-	stw	r29, GP_29-GP_18(r3)
-	stw	r30, GP_30-GP_18(r3)
-	stw	r31, GP_31-GP_18(r3)
+	stw	r19, GP_19-GP_18(r9)
+	stw	r20, GP_20-GP_18(r9)
+	stw	r21, GP_21-GP_18(r9)
+	stw	r22, GP_22-GP_18(r9)
+	stw	r23, GP_23-GP_18(r9)
+	stw	r24, GP_24-GP_18(r9)
+	stw	r25, GP_25-GP_18(r9)
+	stw	r26, GP_26-GP_18(r9)
+	stw	r27, GP_27-GP_18(r9)
+	stw	r28, GP_28-GP_18(r9)
+	stw	r29, GP_29-GP_18(r9)
+	stw	r30, GP_30-GP_18(r9)
+	stw	r31, GP_31-GP_18(r9)
 #endif
 #if ( PPC_USE_DATA_CACHE )
 	dcbt	r0, r4
 #endif
 	mfcr	r6
-	stw	r6, GP_CR-GP_18(r3)
+	stw	r6, GP_CR-GP_18(r9)
 	mflr	r7
-	stw	r7, GP_PC-GP_18(r3)
+	stw	r7, GP_PC-GP_18(r9)
 	mfmsr	r8
-	stw	r8, GP_MSR-GP_18(r3)
+	stw	r8, GP_MSR-GP_18(r9)
+
+#ifdef __ALTIVEC__
+	mr      r14, r4 
+	EXTERN_PROC(_CPU_Context_switch_altivec)
+	bl		_CPU_Context_switch_altivec
+	mr      r4, r14
+#if ( PPC_USE_DATA_CACHE )
+	li      r5, PPC_CACHE_ALIGNMENT
+#endif
+#endif
 
 #if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
@@ -431,5 +446,8 @@ PROC (_CPU_Context_restore):
 	lwz	r30, GP_30(r3)
 	lwz	r31, GP_31(r3)
 #endif
-
+#ifdef __ALTIVEC__
+	EXTERN_PROC(_CPU_Context_restore_altivec)
+	b _CPU_Context_restore_altivec
+#endif
 	blr

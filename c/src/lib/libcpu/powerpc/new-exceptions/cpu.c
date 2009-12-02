@@ -33,6 +33,7 @@
 #include <rtems/score/context.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/cpu.h>
 #include <rtems/powerpc/powerpc.h>
 
 /*  _CPU_Initialize
@@ -45,6 +46,9 @@
 void _CPU_Initialize(void)
 {
   /* Do nothing */
+#ifdef __ALTIVEC__
+  _CPU_Initialize_altivec();
+#endif
 }
 
 /*PAGE
@@ -143,6 +147,10 @@ void _CPU_Context_Initialize(
   }
 #else
 #error unsupported PPC_ABI
+#endif
+
+#ifdef __ALTIVEC__
+  _CPU_Context_initialize_altivec(the_context);
 #endif
 }
 
