@@ -10,7 +10,7 @@
 
 #include "defs.h"
 
-void 
+void
 set_close_on_exec(int fd)
 {
 	(void) fcntl(fd, F_SETFD, FD_CLOEXEC);

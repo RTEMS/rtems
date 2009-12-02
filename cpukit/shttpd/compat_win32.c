@@ -508,19 +508,19 @@ WinMain(HINSTANCE h, HINSTANCE prev, char *cmdline, int show)
 	hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(ID_ICON));
 	if (hIcon == NULL)
 		hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	cls.lpfnWndProc = (WNDPROC) WindowProc; 
+	cls.lpfnWndProc = (WNDPROC) WindowProc;
 	cls.hIcon = hIcon;
-	cls.lpszClassName = "shttpd v." VERSION; 
+	cls.lpszClassName = "shttpd v." VERSION;
 
-	if (!RegisterClass(&cls)) 
+	if (!RegisterClass(&cls))
 		elog(E_FATAL, NULL, "RegisterClass: %d", ERRNO);
 	else if ((hWnd = CreateWindow(cls.lpszClassName, "",WS_OVERLAPPEDWINDOW,
 	    0, 0, 0, 0, NULL, NULL, NULL, ctx)) == NULL)
 		elog(E_FATAL, NULL, "CreateWindow: %d", ERRNO);
 
-	while (GetMessage(&msg, (HWND) NULL, 0, 0)) { 
-		TranslateMessage(&msg); 
-		DispatchMessage(&msg); 
+	while (GetMessage(&msg, (HWND) NULL, 0, 0)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 
 	return (0);
@@ -534,7 +534,7 @@ fix_directory_separators(char *path)
 		if (*path == '/')
 			*path = '\\';
 		if (*path == '\\')
-			while (path[1] == '\\' || path[1] == '/') 
+			while (path[1] == '\\' || path[1] == '/')
 				(void) memmove(path + 1,
 				    path + 2, strlen(path + 2) + 1);
 	}
@@ -715,7 +715,7 @@ closedir(DIR *dir)
 		free(dir);
 	}
 
-	if (result == -1) 
+	if (result == -1)
 		errno = EBADF;
 
 	return (result);

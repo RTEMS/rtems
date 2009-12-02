@@ -209,7 +209,7 @@ initialize_context(struct shttpd_ctx *ctx, const char *config_file,
 				elog(E_FATAL,0,"init_ctx: bad line: [%s]",line);
 
 			if ((opt = find_option(0, var)) == NULL)
-				elog(E_FATAL, NULL, 
+				elog(E_FATAL, NULL,
 				    "set_option: unknown variable [%s]", var);
 			set_option(opt, val, tmpvars);
 		}

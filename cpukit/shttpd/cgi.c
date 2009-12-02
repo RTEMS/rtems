@@ -119,7 +119,7 @@ add_http_headers_to_env(struct env_block *b, const char *s, int len)
 
 		/* Find where this header ends. Remember where value starts */
 		for (p = s, v = NULL; p < e && *p != '\n'; p++)
-			if (v == NULL && *p == ':') 
+			if (v == NULL && *p == ':')
 				v = p;
 
 		/* 2 null terminators and "HTTP_" */
@@ -186,7 +186,7 @@ prepare_environment(const struct conn *c, const char *prog,
 	addenv(blk, "PATH_TRANSLATED=%s", prog);
 
 	if (h->ct.v_vec.len > 0)
-		addenv(blk, "CONTENT_TYPE=%.*s", 
+		addenv(blk, "CONTENT_TYPE=%.*s",
 		    h->ct.v_vec.len, h->ct.v_vec.ptr);
 
 	if (c->query != NULL)
