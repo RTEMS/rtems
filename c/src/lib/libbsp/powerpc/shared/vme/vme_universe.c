@@ -373,6 +373,8 @@ unsigned short	rval;
 #define VME_CLEAR_BRIDGE_ERRORS tsi_clear_errors
 #endif
 
+extern unsigned short (*_BSP_clear_vmebridge_errors)(int);
+
 int BSP_VMEInit(void)
 {
 #if defined(_VME_DRIVER_UNIVERSE)
@@ -392,7 +394,6 @@ int BSP_VMEInit(void)
 	vmeTsi148Reset();
 #ifdef VME_CLEAR_BRIDGE_ERRORS
 	{
-	extern unsigned short (*_BSP_clear_vmebridge_errors)(void);
 
 	  _BSP_clear_vmebridge_errors = VME_CLEAR_BRIDGE_ERRORS;
 
