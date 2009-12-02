@@ -1,3 +1,7 @@
+2009-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/avr.h: Add avr6.
+
 2009-08-11	Josh Switnicki <josh.switnicki@utoronto.ca>
 
 	* cpu.c, cpu_asm.S, rtems/score/cpu.h: Fix bug in

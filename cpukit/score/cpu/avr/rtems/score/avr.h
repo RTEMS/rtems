@@ -80,6 +80,10 @@ extern "C" {
 #define CPU_MODEL_NAME  "avr51"
 #define AVR_HAS_FPU     1
 
+#elif __AVR_ARCH__ == 6
+#define CPU_MODEL_NAME  "avr6"
+#define AVR_HAS_FPU     1
+
 #else
 #error "Unsupported __AVR_ARCH__"
 #endif
