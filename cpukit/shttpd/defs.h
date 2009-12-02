@@ -34,7 +34,27 @@
 #define	EXPIRE_TIME	3600		/* Expiration time, seconds	*/
 #define	ENV_MAX		4096		/* Size of environment block	*/
 #define	CGI_ENV_VARS	64		/* Maximum vars passed to CGI	*/
+#ifdef __rtems__
+#if defined(__SIZEOF_SIZE_T__) && (__SIZEOF_SIZE_T__ <= 2)
+/* HACK: Reduce the array size on targets with 16bit size_t */
+# if defined(__AVR__)
+/* FIXME: 1500 is sufficient to avoid compilation breakdown. */
+# define URI_MAX		(32767-1500)
+# elif defined(__M32C__)
+/* FIXME: 1500 is sufficient to avoid compilation breakdown. */
+# define URI_MAX		(32767-1500)
+# else
+/* Theoretically, this should work on all targets with 16bit size_t
+ * In practice, it trips over other compiler limitations. */
+# define URI_MAX         32767
+# endif
+#else // __SIZEOF_SIZE_T__ > 2
+/* HACK: 32768 is 1 too much to fit into 16bit array indices. */
+#define	URI_MAX		32767		/* Maximum URI size		*/
+#endif
+#else // __rtems__
 #define	URI_MAX		32768		/* Maximum URI size		*/
+#endif
 #define	MIN_REQ_LEN	16		/* "GET / HTTP/1.1\n\n"		*/
 
 #define	NELEMS(ar)	(sizeof(ar) / sizeof(ar[0]))

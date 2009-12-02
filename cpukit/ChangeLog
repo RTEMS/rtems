@@ -1,3 +1,8 @@
+2009-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shttpd/def.h: Shrink default URI_MAX to 32767.
+	Add special cases for sizeof(size_t) < 2.
+
 2009-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libmisc/stringto/stringto.h, libmisc/stringto/stringto_template.h:
