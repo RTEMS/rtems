@@ -905,8 +905,10 @@ do_dssall (void)
    * MSR_VE is set hoping that
    *  a) on non-altivec CPUs MSR_VE reads as zero
    *  b) all altivec CPUs use the same bit
+   *
+   * NOTE: psim doesn't implement dssall so we skip if we run on psim
    */
-  if (_read_MSR () & MSR_VE) {
+  if ( (_read_MSR () & MSR_VE) && PPC_PSIM != get_ppc_cpu_type() ) {
     /* this construct is needed because we don't know
      * if this file is compiled with -maltivec.
      * (I plan to add altivec support outside of
