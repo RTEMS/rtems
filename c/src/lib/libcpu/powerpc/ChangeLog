@@ -1,5 +1,10 @@
 2009-12-01	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am, mpc6xx/altivec: new directory implementing
+	support for AltiVec context saving/restoring.
+
+2009-12-01	Till Straumann <strauman@slac.stanford.edu>
+
 	* mpc6xx/mmu/bat.c, mpc6xx/mmu/pte121.c: skip data-
 	streaming (dssall etc.) instructions on PPC_PSIM
 	currently (unimplemented by PSIM :-( ).

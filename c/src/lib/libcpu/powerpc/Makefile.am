@@ -241,7 +241,14 @@ noinst_PROGRAMS += mpc6xx/timer.rel
 mpc6xx_timer_rel_SOURCES = mpc6xx/timer/timer.c
 mpc6xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc6xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# mpc6xx/altivec
+noinst_PROGRAMS += mpc6xx/altivec.rel
+mpc6xx_altivec_rel_SOURCES = mpc6xx/altivec/vec_sup.c mpc6xx/altivec/vec_sup_asm.S
+mpc6xx_altivec_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc6xx_altivec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
+EXTRA_DIST      += mpc6xx/altivec/README
 
 if e500
 # mpc6xx/clock
