@@ -40,7 +40,7 @@
 # if defined(__AVR__)
 /* FIXME: 1500 is sufficient to avoid compilation breakdown. */
 # define URI_MAX		(32767-1500)
-# elif defined(__M32C__)
+# elif defined(__m32c__)
 /* FIXME: 1500 is sufficient to avoid compilation breakdown. */
 # define URI_MAX		(32767-1500)
 # else

@@ -1,5 +1,9 @@
 2009-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shttpd/def.h: Use __m32c__ for m32c.
+
+2009-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* shttpd/def.h: Shrink default URI_MAX to 32767.
 	Add special cases for sizeof(size_t) < 2.
 
