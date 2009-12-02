@@ -252,6 +252,19 @@ typedef struct {
     uint32_t   cr;	/* PART of the CR is non volatile for all */
     uint32_t   pc;	/* Program counter/Link register */
     uint32_t   msr;	/* Initial interrupt level */
+#ifdef __ALTIVEC__
+	/* 12 non-volatile vector registers, cache-aligned area for vscr/vrsave
+	 * and padding to ensure cache-alignment.
+	 * Unfortunately, we can't verify the cache line size here
+	 * in the cpukit but altivec support code will produce an
+	 * error if this is ever different from 32 bytes.
+	 * 
+	 * Note: it is the BSP/CPU-support's responsibility to
+	 *       save/restore volatile vregs across interrupts
+	 *       and exceptions.
+	 */
+	uint8_t    altivec[16*12 + 32 + 32];
+#endif
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
@@ -644,6 +657,48 @@ void _CPU_Context_save_fp(
 
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
+);
+
+/*
+ * _CPU_Initialize_altivec()
+ *
+ * Global altivec-related initialization.
+ */
+void
+_CPU_Initialize_altivec(void);
+
+/*
+ * _CPU_Context_switch_altivec
+ *
+ * This routine switches the altivec contexts passed to it.
+ */
+
+void
+_CPU_Context_switch_altivec(
+  Context_Control *from,
+  Context_Control *to
+);
+
+/*
+ * _CPU_Context_restore_altivec
+ *
+ * This routine restores the altivec context passed to it.
+ */
+
+void
+_CPU_Context_restore_altivec(
+  Context_Control *ctxt
+);
+
+/*
+ * _CPU_Context_initialize_altivec
+ *
+ * This routine initializes the altivec context passed to it.
+ */
+
+void
+_CPU_Context_initialize_altivec(
+  Context_Control *ctxt
 );
 
 void _CPU_Fatal_error(
