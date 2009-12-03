@@ -1,3 +1,7 @@
+2009-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bspcmdline01/test.c: Removed.
+
 2009-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add POSIX.
