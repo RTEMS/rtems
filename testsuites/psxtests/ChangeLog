@@ -1,3 +1,10 @@
+2009-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: New test to exercise getgrnam and getpwnam
+	families.
+	* psxpasswd01/.cvsignore, psxpasswd01/Makefile.am, psxpasswd01/init.c,
+	psxpasswd01/psxpasswd01.doc, psxpasswd01/psxpasswd01.scn: New files.
+
 2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1460/cpukit

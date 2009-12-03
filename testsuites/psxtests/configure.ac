@@ -97,6 +97,7 @@ psxmsgq03/Makefile
 psxmsgq04/Makefile
 psxmutexattr01/Makefile
 psxobj01/Makefile
+psxpasswd01/Makefile
 psxreaddir/Makefile
 psxrdwrv/Makefile
 psxrwlock01/Makefile

@@ -1,0 +1,28 @@
+*** PASSWORD/GROUP TEST ***
+Init - getpwnam("root") -- OK
+  username: root
+  user password: *
+  user ID: 0
+  group ID: 0
+  real name: 
+  home directory: /
+  shell program: /bin/sh
+Init - getpwnam("rtems") -- OK
+  username: rtems
+  user password: *
+  user ID: 1
+  group ID: 1
+  real name: 
+  home directory: /
+  shell program: /bin/sh
+
+Init - getgrnam("root") -- OK
+  group name: root
+  group  password: x
+  group  ID: 0
+Init - getgrnam("rtems") -- OK
+  group name: rtems
+  group  password: x
+  group  ID: 1
+*** END OF PASSWORD/GROUP TEST ***
+
