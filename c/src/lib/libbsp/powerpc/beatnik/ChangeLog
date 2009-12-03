@@ -1,3 +1,8 @@
+2009-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am: Account for coverhd.h and tm27.h. Use
+	stubs for both.
+
 2009-11-06  Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, irq/discovery_pic.c, irq/irq_init.c:
