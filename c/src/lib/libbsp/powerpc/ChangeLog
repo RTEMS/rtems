@@ -1,3 +1,8 @@
+2009-12-03	Till Straumann <strauman@slac.stanford.edu>
+
+	* acinclude.m4, beatnik: Imported/added 'beatnik'
+	BSP.
+
 2009-12-01	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/start/start.S: Added AltiVec support (initializing
