@@ -1,0 +1,261 @@
+OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
+              "elf32-powerpc")
+OUTPUT_ARCH(powerpc)
+ENTRY(_start)
+/* Do we need any of these for elf?
+   __DYNAMIC = 0;    */
+PROVIDE (__stack = 0);
+
+
+MEMORY {
+    BOTTOM  : ORIGIN = 0x00,    LENGTH = 0x80
+    MAILBOX : ORIGIN = 0x80,    LENGTH = 0x80	/* RESERVED */
+	VECTORS	: ORIGIN = 0x100 ,  LENGTH = 0x3000 - 0x100
+	CODE : ORIGIN = 0x3000 , LENGTH = 32M-0x3000
+}
+SECTIONS
+{
+  /* discard the 'shared/vector.S' entry point section */
+  /DISCARD/ :
+  {
+ 	*(.entry_point_section)
+  }
+
+
+  .vectors :
+  {
+	/* should be the first thing... */
+	*(.ppc_preloader_section)
+
+   /*
+    * This section is used only if NO_DYNAMIC_EXCEPTION_VECTOR_INSTALL
+    * is defined in vectors/vectors.S
+    *  *(.vectors)
+    * We actually RELY on dynamic vector installation since we need
+    * this space for the preloader...
+    */
+  } > VECTORS
+
+
+  /* START OF THE LOADED IMAGE (parts moved by the preloader) */
+  .image_start :
+  {
+	__rtems_start = ABSOLUTE(.);
+  } > CODE
+
+  /* Read-only sections, merged into text segment: */
+  .interp   : { *(.interp) }	> CODE
+  .hash           : { *(.hash)          }	> CODE
+  .dynsym         : { *(.dynsym)                }	> CODE
+  .dynstr         : { *(.dynstr)                }	> CODE
+  .gnu.version   : { *(.gnu.version)      }	> CODE
+  .gnu.version_d   : { *(.gnu.version_d)  }	> CODE
+  .gnu.version_r   : { *(.gnu.version_r)  }	> CODE
+  .rela.text     :
+    { *(.rela.text) *(.rela.gnu.linkonce.t*) }	> CODE
+  .rela.data     :
+    { *(.rela.data) *(.rela.gnu.linkonce.d*) }	> CODE
+  .rela.rodata   :
+    { *(.rela.rodata) *(.rela.gnu.linkonce.r*) }	> CODE
+  .rela.got       : { *(.rela.got)      }	> CODE
+  .rela.got1      : { *(.rela.got1)     }	> CODE
+  .rela.got2      : { *(.rela.got2)     }	> CODE
+  .rela.ctors     : { *(.rela.ctors)    }	> CODE
+  .rela.dtors     : { *(.rela.dtors)    }	> CODE
+  .rela.init      : { *(.rela.init)     }	> CODE
+  .rela.fini      : { *(.rela.fini)     }	> CODE
+  .rela.bss       : { *(.rela.bss)      }	> CODE
+  .rela.plt       : { *(.rela.plt)      }	> CODE
+  .rela.sdata     : { *(.rela.sdata)    }	> CODE
+  .rela.sbss      : { *(.rela.sbss)     }	> CODE
+  .rela.sdata2    : { *(.rela.sdata2)   }	> CODE
+  .rela.sbss2     : { *(.rela.sbss2)    }	> CODE
+
+  .init			  : { *(.init)			} >CODE
+
+  .text      :	
+  {
+    *(.text*)	
+ 
+    /*
+     * Special FreeBSD sysctl sections.
+     */
+    . = ALIGN (16);
+    __start_set_sysctl_set = .;
+    *(set_sysctl_*);
+    __stop_set_sysctl_set = ABSOLUTE(.);
+    *(set_domain_*);
+    *(set_pseudo_*);
+ 
+   /* .gnu.warning sections are handled specially by elf32.em.  */
+    *(.gnu.warning)
+    *(.gnu.linkonce.t*)
+  }  > CODE
+
+  .fini			  : { _fini = .; *(.fini)	} >CODE
+  .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> CODE
+  .rodata1        : { *(.rodata1) }	> CODE
+_SDA2_BASE_ = __SDATA2_START__ + 0x8000;
+  .sdata2         : { *(.sdata2) *(.gnu.linkonce.s2.*)  }	> CODE
+  .sbss2          : { 
+    				PROVIDE (__sbss2_start = .);
+					  *(.sbss2*) *(.gnu.linkonce.sb2.*)
+					  /* avoid empty sdata2/sbss2 area because __eabi wouldn't set up r2
+					   * (IMPORTANT if run-time loading is involved)
+					   */
+					  . += 1 ;
+    				PROVIDE (__sbss2_end = .);
+					}	> CODE
+  .eh_frame	      : { *.(eh_frame)		} >CODE
+  _etext = .;
+  PROVIDE (etext = .);
+  /* Adjust the address for the data segment.  We want to adjust up to
+     the same address within the page on the next page up.  It would
+     be more correct to do this:
+       . = ALIGN(0x40000) + (ALIGN(8) & (0x40000 - 1));
+     The current expression does not correctly handle the case of a
+     text segment ending precisely at the end of a page; it causes the
+     data segment to skip a page.  The above expression does not have
+     this problem, but it will currently (2/95) cause BFD to allocate
+     a single segment, combining both text and data, for this case.
+     This will prevent the text segment from being shared among
+     multiple executions of the program; I think that is more
+     important than losing a page of the virtual address space (note
+     that no actual memory is lost; the page which is skipped can not
+     be referenced).  */
+ .data  ALIGN(0x1000)  :
+  {
+	PROVIDE(__DATA_START__ = ABSOLUTE(.) );
+    *(.data)
+    *(.gnu.linkonce.d*)	
+    CONSTRUCTORS
+  } > CODE
+  .data1   : { *(.data1) }	> CODE
+  PROVIDE (__EXCEPT_START__ = .);
+  .gcc_except_table   : { *(.gcc_except_table) } > CODE
+  PROVIDE (__EXCEPT_END__ = .);
+  .got1           : { *(.got1) }	> CODE
+  .dynamic        : { *(.dynamic) }	> CODE
+  /* Put .ctors and .dtors next to the .got2 section, so that the pointers
+     get relocated with -mrelocatable. Also put in the .fixup pointers.
+     The current compiler no longer needs this, but keep it around for 2.7.2  */
+                PROVIDE (_GOT2_START_ = .);
+  .got2           :  { *(.got2) }	> CODE
+/*
+                PROVIDE (__CTOR_LIST__ = .);
+  .ctors          : { *(.ctors) }	> CODE
+                PROVIDE (__CTOR_END__ = .);
+*/
+  .ctors :
+  {
+    KEEP(*crtbegin.o(.ctors))
+    KEEP(*(EXCLUDE_FILE(*crtend.o) .ctors))
+    KEEP(*(SORT(.ctors.*)))
+    KEEP(*(.ctors))
+  } > CODE
+  .dtors :
+  {
+    KEEP(*crtbegin.o(.dtors))
+    KEEP(*(EXCLUDE_FILE(*crtend.o) .dtors))
+    KEEP(*(SORT(.dtors.*)))
+    KEEP(*(.dtors))
+  } > CODE
+/*
+                PROVIDE (__DTOR_LIST__ = .);
+  .dtors          : { *(.dtors) }	> CODE
+                PROVIDE (__DTOR_END__ = .);
+*/
+                PROVIDE (_FIXUP_START_ = .);
+  .fixup          : { *(.fixup) }	> CODE
+                PROVIDE (_FIXUP_END_ = .);
+                PROVIDE (_GOT2_END_ = .);
+                PROVIDE (_GOT_START_ = .);
+  .got            : { *(.got) }	> CODE
+  .got.plt        : { *(.got.plt) }	> CODE
+                PROVIDE (_GOT_END_ = .);
+
+  .jcr            : { KEEP (*(.jcr)) } > CODE
+
+  /* We want the small data sections together, so single-instruction offsets
+     can access them all, and initialized data all before uninitialized, so
+     we can shorten the on-disk segment size.  */
+_SDA_BASE_ = __SDATA_START__ + 0x8000;
+  .sdata          : { *(.sdata*) *(.gnu.linkonce.s.*) }	> CODE
+  _edata  =  .;
+  PROVIDE (edata = .);
+/* END OF THE LOADED IMAGE (parts moved by the preloader) */
+/* BELOW THIS POINT, NO LOADABLE ITEMS MUST APPEAR */
+  .sbss      :
+  {
+    PROVIDE (__sbss_start = ABSOLUTE(.));
+    *(.sbss) *(.sbss.*) *(.gnu.linkonce.sb.*)
+    *(.scommon)
+    *(.dynsbss)
+	/* avoid empty sdata/sbss area because __eabi wouldn't set up r13
+	 * (IMPORTANT if run-time loading is involved)
+	 */
+	. += 1 ;
+    PROVIDE (__sbss_end = ABSOLUTE(.));
+  } > CODE
+  .plt   : { *(.plt) }	> CODE
+  .bss       :
+  {
+   PROVIDE (__bss_start = ABSOLUTE(.));
+   *(.dynbss)
+   *(.bss*) *(.gnu.linkonce.b.*)
+   *(COMMON)
+  . = ALIGN(16);
+  } > CODE
+  /* proper alignment for SYSV stack
+   * (init stack is allocated just after __rtems_end
+   */
+  . = ALIGN(16);
+  _end = . ;
+  __rtems_end = . ;
+  PROVIDE (end = .);
+  /DISCARD/ : 
+  {
+    *(.comment)
+  }
+
+
+  /* Stabs debugging sections.  */
+  .stab 0 : { *(.stab) }
+  .stabstr 0 : { *(.stabstr) }
+  .stab.excl 0 : { *(.stab.excl) }
+  .stab.exclstr 0 : { *(.stab.exclstr) }
+  .stab.index 0 : { *(.stab.index) }
+  .stab.indexstr 0 : { *(.stab.indexstr) }
+  .comment 0 : { *(.comment) }
+
+  /* DWARF debug sections.
+     Symbols in the DWARF debugging sections are relative to the beginning
+     of the section so we begin them at 0.  */
+  /* DWARF 1 */
+  .debug          0 : { *(.debug) }
+  .line           0 : { *(.line) }
+  
+  /* GNU DWARF 1 extensions */
+  .debug_srcinfo  0 : { *(.debug_srcinfo) }
+  .debug_sfnames  0 : { *(.debug_sfnames) }
+  
+  /* DWARF 1.1 and DWARF 2 */
+  .debug_aranges  0 : { *(.debug_aranges) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  
+  /* DWARF 2 */
+  .debug_info     0 : { *(.debug_info) }
+  .debug_abbrev   0 : { *(.debug_abbrev) }
+  .debug_line     0 : { *(.debug_line) }
+  .debug_frame    0 : { *(.debug_frame) }
+  .debug_str      0 : { *(.debug_str) }
+  .debug_loc      0 : { *(.debug_loc) }
+  .debug_macinfo  0 : { *(.debug_macinfo) }
+  
+  /* SGI/MIPS DWARF 2 extensions */
+  .debug_weaknames 0 : { *(.debug_weaknames) }
+  .debug_funcnames 0 : { *(.debug_funcnames) }
+  .debug_typenames 0 : { *(.debug_typenames) }
+  .debug_varnames  0 : { *(.debug_varnames) }
+  /* These must appear regardless of  .  */
+}

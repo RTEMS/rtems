@@ -1,0 +1,97 @@
+#ifndef RTEMS_COMPAT_DEFS_H
+#define RTEMS_COMPAT_DEFS_H
+
+/* Symbol definitions for a particular driver */
+
+/* Copyright: Till Straumann <strauman@slac.stanford.edu>, 2005;
+ * License:   see LICENSE file.
+ */
+
+/* Number of device instances the driver should support
+ * - may be limited to 1 depending on IRQ API
+ * (braindamaged PC586 and powerpc)
+ */
+#define NETDRIVER_SLOTS 1
+/* String name to print with error messages */
+#define NETDRIVER       "PCN"
+/* Name snippet used to make global symbols unique to this driver */
+#define NETDRIVER_PREFIX pcn
+
+/* Define according to endianness of the *ethernet*chip*
+ * (not the CPU - most probably are LE)
+ * This must be either NET_CHIP_LE or NET_CHIP_BE
+ */
+
+#define NET_CHIP_LE
+#undef  NET_CHIP_BE
+
+/* Define either NET_CHIP_MEM_IO or NET_CHIP_PORT_IO,
+ * depending whether the CPU sees it in memory address space
+ * or (e.g. x86) uses special I/O instructions.
+ */
+#define NET_CHIP_MEM_IO
+#undef  NET_CHIP_PORT_IO
+
+/* The name of the hijacked 'bus handle' field in the softc
+ * structure. We use this field to store the chip's base address.
+ */
+#define NET_SOFTC_BHANDLE_FIELD pcn_bhandle
+
+/* define the names of the 'if_XXXreg.h' and 'if_XXXvar.h' headers
+ * (only if present, i.e., if the BSDNET driver has no respective
+ * header, leave this undefined).
+ *
+ */
+#undef  IF_REG_HEADER <if_XXXreg.h>
+#undef  IF_VAR_HEADER <if_XXXvar.h>
+
+/* define if a pci device */
+#define NETDRIVER_PCI <bsp/pci.h>
+
+/* Macros to disable and enable interrupts, respectively.
+ * The 'disable' macro is expanded in the ISR, the 'enable'
+ * macro is expanded in the driver task.
+ * The global network semaphore usually provides mutex
+ * protection of the device registers.
+ * Special care must be taken when coding the 'disable' macro,
+ * however to MAKE SURE THERE ARE NO OTHER SIDE EFFECTS such
+ * as:
+ *    - macro must not clear any status flags
+ *    - macro must save/restore any context information
+ *      (e.g., a address register pointer or a bank switch register)
+ *
+ * ARGUMENT: the macro arg is a pointer to the driver's 'softc' structure
+ */
+
+/* Here EXAMPLES for the pcnet chip which addresses registers indirectly
+ * through a 'address-pointer' (RAP) and 'data-port' (RDP) register pair:
+#define NET_DISABLE_IRQS(sc)		do { \
+		unsigned rap = CSR_READ_4((sc),PCN_IO32_RAP); \
+		unsigned val; \
+		CSR_WRITE_4((sc),PCN_IO32_RAP,PCN_CSR_CSR); \
+		val = CSR_READ_4((sc),PCN_IO32_RDP); \
+		CSR_WRITE_4((sc), PCN_IO32_RDP,  val & ~(CSR0_INT_STATUS_MASK | PCN_CSR_INTEN)); \
+		CSR_WRITE_4((sc), PCN_IO32_RAP, rap); \
+		} while (0)
+
+#define NET_ENABLE_IRQS(sc)	do { \
+		unsigned flags,val;	\
+		rtems_interrupt_disable(flags); \
+		CSR_WRITE_4((sc),PCN_IO32_RAP,PCN_CSR_CSR); \
+		val = CSR_READ_4((sc),PCN_IO32_RDP); \
+		CSR_WRITE_4((sc), PCN_IO32_RDP,  (val & ~CSR0_INT_STATUS_MASK) | PCN_CSR_INTEN); \
+		rtems_interrupt_enable(flags); \
+		} while (0)
+*/
+
+/* Driver may provide a macro/function to copy the hardware address
+ * from the device into 'softc.arpcom'.
+ * If this is undefined, the driver must to the copy itself.
+ * Preferrably, it should check soft.arpcom.ac_enaddr for all
+ * zeros and leave it alone if it is nonzero, i.e., write it
+ * to the hardware.
+#define NET_READ_MAC_ADDR(sc)
+ */
+		
+#define KASSERT(a...) do {} while (0)
+#endif
