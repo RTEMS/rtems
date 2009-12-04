@@ -66,7 +66,7 @@ extern "C" {
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
  */
 
@@ -311,7 +311,7 @@ typedef struct {
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
-extern void*                     _VBR; 
+extern void*                     _VBR;
 
 #if ( M68K_HAS_VBR == 0 )
 
@@ -336,7 +336,7 @@ typedef struct {
 #define M68K_JMP     0x4EF9
 
       /* points to jsr-exception-table in targets wo/ VBR register */
-SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256]; 
+SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256];
 
 #endif /* M68K_HAS_VBR */
 
@@ -659,10 +659,10 @@ void _CPU_Initialize(void);
 /*
  *  _CPU_ISR_install_raw_handler
  *
- *  This routine installs a "raw" interrupt handler directly into the 
+ *  This routine installs a "raw" interrupt handler directly into the
  *  processor's vector table.
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -724,7 +724,7 @@ void _CPU_Context_restore_fp(
 /*
  *  Hooks for the Floating Point Support Package (FPSP) provided by Motorola
  *
- *  NOTES:  
+ *  NOTES:
  *
  *  Motorola 68k family CPU's before the 68040 used a coprocessor
  *  (68881 or 68882) to handle floating point.  The 68040 has internal

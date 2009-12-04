@@ -14,10 +14,10 @@
  *
  * For more information, refer to Motorola's "Modular Microcontroller
  * Family Queued Serial Module Reference Manual" (Motorola document
- * QSMRM/AD). 
+ * QSMRM/AD).
  *
  * This file was created by John S. Gwynne to support Motorola's 68332 MCU.
- * 
+ *
  * Redistribution and use in source and binary forms are permitted
  * provided that the following conditions are met:
  * 1. Redistribution of source code and documentation must retain
@@ -53,7 +53,7 @@
 #undef SIM_MM
 #define SIM_MM 1
 #define QSM_CRB 0xfffc00
-#endif 
+#endif
 
 
 #define QSMCR (volatile unsigned short int * const)(0x00 + QSM_CRB)

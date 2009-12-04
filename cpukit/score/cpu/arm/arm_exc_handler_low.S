@@ -63,7 +63,7 @@ _go_back_1:
 	ldr     sp,  [r13, #REG_SP]
 	ldr     lr,  [r13, #REG_LR]
 	add     r13,r13,#SIZE_REGS
-	movs	pc,r14			/* return  */ 
+	movs	pc,r14			/* return  */
 	
 /* FIXME:       _Exception_Handler_Abort is untested */
 DEFINE_FUNCTION_ARM(_Exception_Handler_Abort)

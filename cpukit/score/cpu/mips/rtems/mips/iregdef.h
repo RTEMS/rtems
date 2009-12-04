@@ -21,7 +21,7 @@ COPYRIGHT IDT CORPORATION 1996
 LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
   $Id$
-*/ 
+*/
 
 /*
 **	iregdef.h - IDT R3000 register structure header file
@@ -39,7 +39,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
  *         Look towards end of this file.
  */
 /*
-** register names 
+** register names
 */
 #define r0	$0
 #define r1	$1

@@ -12,7 +12,7 @@
  *
  * $Id$
  */
- 
+
 #ifndef _RTEMS_SCORE_CPU_H
 #define _RTEMS_SCORE_CPU_H
 
@@ -394,13 +394,13 @@ typedef struct CPU_Interrupt_frame {
  *  endianness for ALL fetches -- both code and data -- so the code
  *  will be fetched incorrectly.
  */
- 
+
 static inline uint32_t CPU_swap_u32(
   uint32_t value
 )
 {
   uint32_t   swapped;
- 
+
   asm volatile("rlwimi %0,%1,8,24,31;"
 	       "rlwimi %0,%1,24,16,23;"
 	       "rlwimi %0,%1,8,8,15;"

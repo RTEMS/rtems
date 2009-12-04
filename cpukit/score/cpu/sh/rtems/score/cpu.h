@@ -14,7 +14,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998-2006.
  *  On-Line Applications Research Corporation (OAR).
@@ -125,11 +125,11 @@ extern "C" {
 /*
  * We define the interrupt stack in the linker script
  */
-#define CPU_ALLOCATE_INTERRUPT_STACK FALSE 
+#define CPU_ALLOCATE_INTERRUPT_STACK FALSE
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
  */
 
@@ -293,7 +293,7 @@ extern "C" {
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
 #endif
- 
+
 /*
  *  The following defines the number of bits actually used in the
  *  interrupt field of the task mode.  How those bits map to the
@@ -374,7 +374,7 @@ typedef struct {
   uint32_t   *r0;	/* arg return */
 
   uint32_t   gbr;
-  uint32_t   sr; 
+  uint32_t   sr;
 
 } Context_Control;
 
@@ -536,9 +536,9 @@ SCORE_EXTERN void CPU_delay( uint32_t   microseconds );
  *
  *  SH Specific Information: NONE
  */
- 
+
 #define _CPU_Initialize_vectors()
- 
+
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
@@ -607,7 +607,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *        where the PSR contains an enable FPU bit.
  */
 
-/* 
+/*
  * FIXME: defined as a function for debugging - should be a macro
  */
 SCORE_EXTERN void _CPU_Context_Initialize(
@@ -818,10 +818,10 @@ void _CPU_Initialize(void);
 /*
  *  _CPU_ISR_install_raw_handler
  *
- *  This routine installs a "raw" interrupt handler directly into the 
+ *  This routine installs a "raw" interrupt handler directly into the
  *  processor's vector table.
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,

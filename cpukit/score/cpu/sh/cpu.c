@@ -10,7 +10,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998-2001.
  *  On-Line Applications Research Corporation (OAR).
@@ -21,7 +21,7 @@
  *
  *  $Id$
  */
- 
+
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/sh_io.h>
@@ -71,7 +71,7 @@ void _CPU_Initialize(void)
  *
  *  _CPU_ISR_Get_level
  */
- 
+
 uint32_t   _CPU_ISR_Get_level( void )
 {
   /*
@@ -79,9 +79,9 @@ uint32_t   _CPU_ISR_Get_level( void )
    */
 
   register uint32_t   _mask ;
-  
+
   sh_get_interrupt_level( _mask );
-  
+
   return ( _mask);
 }
 
@@ -89,7 +89,7 @@ uint32_t   _CPU_ISR_Get_level( void )
  *
  *  _CPU_ISR_install_raw_handler
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -102,11 +102,11 @@ void _CPU_ISR_install_raw_handler(
    */
   volatile proc_ptr	*vbr ;
 
-#if SH_PARANOID_ISR  
+#if SH_PARANOID_ISR
   uint32_t  		level ;
 
   sh_disable_interrupts( level );
-#endif    
+#endif
 
   /* get vbr */
   asm ( "stc vbr,%0" : "=r" (vbr) );
@@ -155,7 +155,7 @@ void _CPU_ISR_install_vector(
 #endif
 
  /*
-  *  We put the actual user ISR address in '_ISR_Vector_table'.  
+  *  We put the actual user ISR address in '_ISR_Vector_table'.
   *  This will be used by __ISR_Handler so the user gets control.
   */
 
@@ -193,7 +193,7 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
 
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 
-uint8_t   _bit_set_table[16] = 
+uint8_t   _bit_set_table[16] =
   { 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 1,0};
 
 

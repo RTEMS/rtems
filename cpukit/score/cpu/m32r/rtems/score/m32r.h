@@ -1,5 +1,5 @@
 /*
- *  This file sets up basic CPU dependency settings based on 
+ *  This file sets up basic CPU dependency settings based on
  *  compiler settings.  For example, it can determine if
  *  floating point is available.  This particular implementation
  *  is specified to the NO CPU port.
@@ -32,25 +32,25 @@ extern "C" {
  *  that this port supports and which RTEMS CPU model they correspond
  *  to.
  */
- 
+
 #if defined(rtems_multilib)
 /*
- *  Figure out all CPU Model Feature Flags based upon compiler 
- *  predefines. 
+ *  Figure out all CPU Model Feature Flags based upon compiler
+ *  predefines.
  */
 
 #define CPU_MODEL_NAME  "rtems_multilib"
 #define NOCPU_HAS_FPU     1
 
 #elif defined(__m32r__)
- 
+
 #define CPU_MODEL_NAME  "m32r"
 #define NOCPU_HAS_FPU     1
- 
+
 #else
- 
+
 #error "Unsupported CPU Model"
- 
+
 #endif
 
 /*

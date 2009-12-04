@@ -3,14 +3,14 @@
  *   Copyright Comnet Technologies Ltd 1999
  *
  *  Based on example code and other ports with this copyright:
- *  
+ *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
- *  
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *  
+ *
  *  $Id$
  */
 
@@ -18,18 +18,18 @@
 ;.equ	RUNCONTEXT_ARG,	 er0
 ;.equ	HEIRCONTEXT_ARG, er1
 	
-/*      
+/*
  *  Make sure we tell the assembler what type of CPU model we are
  *  being compiled for.
- */ 
+ */
 
 #if defined(__H8300H__)
         .h8300h
 #endif
-#if defined(__H8300S__) 
+#if defined(__H8300S__)
         .h8300s
 #endif
-#if defined(__H8300SX__) 
+#if defined(__H8300SX__)
         .h8300sx
 #endif
         .text
@@ -121,7 +121,7 @@ __ISR_Handler:
 nested:
 	mov.l	er6,@-er7	; save sp so pop regardless of nest level
 	
-;; Inc  system counters 
+;; Inc  system counters
 	mov.l	@__ISR_Nest_level,er1
 	inc.l	#1,er1
 	mov.l	er1,@__ISR_Nest_level

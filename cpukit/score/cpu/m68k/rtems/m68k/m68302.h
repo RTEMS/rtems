@@ -227,7 +227,7 @@ enum m68302_ivec_e {
  * The DRAM refresh memory map replaces the SCC2 Tx BD 6 and Tx BD 7
  * structures in the parameter RAM.
  *
- * Access to the DRAM registers can be accomplished by 
+ * Access to the DRAM registers can be accomplished by
  * the following approach:
  *
  *	volatile m302_DRAM_refresh_t *dram;
@@ -599,7 +599,7 @@ typedef struct {
 } m302_dualPortRAM_t;
 
 /* some useful defines the some of the registers above */
-  
+
 
 /* ----
    MC68302 Chip Select Registers

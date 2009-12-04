@@ -41,7 +41,7 @@ void _CPU_Initialize(void)
  *
  *  This routine returns the current interrupt level.
  */
- 
+
 uint32_t   _CPU_ISR_Get_level( void )
 {
   unsigned int _ccr;
@@ -61,7 +61,7 @@ uint32_t   _CPU_ISR_Get_level( void )
  *
  *  _CPU_ISR_install_raw_handler
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,

@@ -8,7 +8,7 @@
  *      should still work OK.
  *
  *  Conversion to MIPS port by Alan Cudmore <alanc@linuxstart.com> and
- *           Joel Sherrill <joel@OARcorp.com>. 
+ *           Joel Sherrill <joel@OARcorp.com>.
  *
  *    These changes made the code conditional on standard cpp predefines,
  *    merged the mips1 and mips3 code sequences as much as possible,
@@ -29,7 +29,7 @@
  *             copies, and that the name of Transition Networks not be used in
  *             advertising or publicity pertaining to distribution of the
  *             software without specific, written prior permission.
- *             Transition Networks makes no representations about the 
+ *             Transition Networks makes no representations about the
  *             suitability of this software for any purpose.
  *
  *  COPYRIGHT (c) 1989-2001.
@@ -49,19 +49,19 @@
 
 
 
-/* 
-** Exception stack frame pointer used in cpu_asm to pass the exception stack frame 
+/*
+** Exception stack frame pointer used in cpu_asm to pass the exception stack frame
 ** address to the context switch code.
 */
 #if (__mips == 1) || (__mips == 32)
 typedef uint32_t ESF_PTR_TYPE;
-#elif (__mips == 3) 
+#elif (__mips == 3)
 typedef uint64_t ESF_PTR_TYPE;
 #else
 #error "unknown MIPS ISA"
 #endif
 
-ESF_PTR_TYPE __exceptionStackFrame = 0; 
+ESF_PTR_TYPE __exceptionStackFrame = 0;
 
 
 
@@ -124,12 +124,12 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
 {
   unsigned int sr, srbits;
 
-  /* 
-  ** mask off the int level bits only so we can 
+  /*
+  ** mask off the int level bits only so we can
   ** preserve software int settings and FP enable
   ** for this thread.  Note we don't force software ints
   ** enabled when changing level, they were turned on
-  ** when this task was created, but may have been turned 
+  ** when this task was created, but may have been turned
   ** off since, so we'll just leave them alone.
   */
 
@@ -158,7 +158,7 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
     mips_set_sr(sr);                 * first disable ie bit (recommended) *
   }
 */
- 
+
 #elif __mips == 1
   mips_set_sr( (sr & ~SR_IEC) );
   srbits = sr & ~(0xfc00 | SR_IEC);
@@ -184,7 +184,7 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
  *  Output parameters:  NONE
  *
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,

@@ -11,7 +11,7 @@
  *  NOTE: The spacing in the use of these macros
  *        is critical to them working as advertised.
  */
- 
+
 /*
  *  COPYRIGHT:
  *
@@ -96,7 +96,7 @@
 
 #define NUM_IRQ_VECTOR          6       // IRQ number
 #define NUM_FIQ_VECTOR          7       // IRQ number
-										// 										// 
+										// 										//
 #define CPSR_IRQ_DISABLE        0x80    // FIQ disabled when =1
 #define CPSR_FIQ_DISABLE        0x40    // FIQ disabled when =1
 #define CPSR_THUMB_ENABLE       0x20    // Thumb mode when =1

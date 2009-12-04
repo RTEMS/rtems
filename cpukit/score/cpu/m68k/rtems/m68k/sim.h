@@ -12,7 +12,7 @@
  *  () Clock signal generation for other intermodule bus (IMB) members
  *  and external devices.
  *
- *  () The generation of chip-select signals that simplify external 
+ *  () The generation of chip-select signals that simplify external
  *  circuitry interface.
  *
  *  () Data ports that are available for general purpose input and
@@ -22,10 +22,10 @@
  *
  * For more information, refer to Motorola's "Modular Microcontroller
  * Family System Integration Module Reference Manual" (Motorola document
- * SIMRM/AD). 
+ * SIMRM/AD).
  *
  * This file was created by John S. Gwynne to support Motorola's 68332 MCU.
- * 
+ *
  * Redistribution and use in source and binary forms are permitted
  * provided that the following conditions are met:
  * 1. Redistribution of source code and documentation must retain
@@ -215,7 +215,7 @@
    used. These bits always read zero; write have no effect. CSPAR0 bit
    1 always reads one; writes to CSPAR0 bit 1 have no effect. */
 #define CSPAR1 SIM_VOLATILE_USHORT_POINTER(0x46 + SIM_CRB)
-				/* Chip Select Pin Assignment 
+				/* Chip Select Pin Assignment
 				   Register 1 */
 /* CSPAR1 contains five two-bit fields that determine the finctions of
    corresponding chip-select pins. CSPAR1[15:10] are not used. These

@@ -52,12 +52,12 @@ extern "C" {
  *  dependent features are present in a particular member
  *  of the family.
  */
- 
+
 #if defined(__mips_soft_float)
 #define MIPS_HAS_FPU 0
 #else
 #define MIPS_HAS_FPU 1
-#endif 
+#endif
 
 
 #if (__mips == 1)
@@ -165,7 +165,7 @@ extern "C" {
 
 
 /*
- *  Access the Breakpoint Program Counter & Mask registers 
+ *  Access the Breakpoint Program Counter & Mask registers
  *  (_x for BPC, _y for mask)
  */
 
@@ -190,7 +190,7 @@ extern "C" {
 
 
 /*
- *  Access the Breakpoint Data Address & Mask registers 
+ *  Access the Breakpoint Data Address & Mask registers
  *  (_x for BDA, _y for mask)
  */
 
@@ -241,9 +241,9 @@ extern "C" {
 #endif
 
 /*
- *  Manipulate interrupt mask 
+ *  Manipulate interrupt mask
  *
- *  mips_unmask_interrupt( _mask) 
+ *  mips_unmask_interrupt( _mask)
  *    enables interrupts - mask is positioned so it only needs to be or'ed
  *    into the status reg. This also does some other things !!!! Caution
  *    should be used if invoking this while in the middle of a debugging

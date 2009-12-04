@@ -16,7 +16,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998-2001.
  *  On-Line Applications Research Corporation (OAR).
@@ -30,7 +30,7 @@
 
 #ifndef _RTEMS_SCORE_SH_IO_H
 #define _RTEMS_SCORE_SH_IO_H
- 
+
 #define readb(addr) 	(*(volatile unsigned char *) (addr))
 #define readw(addr) 	(*(volatile unsigned short *) (addr))
 #define readl(addr) 	(*(volatile unsigned int *) (addr))

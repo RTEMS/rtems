@@ -391,11 +391,11 @@ extern "C" {
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
 #if (__mips == 1) || (__mips == 32)
-#define __MIPS_REGISTER_TYPE     uint32_t  
-#define __MIPS_FPU_REGISTER_TYPE uint32_t  
+#define __MIPS_REGISTER_TYPE     uint32_t
+#define __MIPS_FPU_REGISTER_TYPE uint32_t
 #elif __mips == 3
-#define __MIPS_REGISTER_TYPE     uint64_t  
-#define __MIPS_FPU_REGISTER_TYPE uint64_t  
+#define __MIPS_REGISTER_TYPE     uint64_t
+#define __MIPS_FPU_REGISTER_TYPE uint64_t
 #else
 #error "mips register size: unknown architecture level!!"
 #endif
@@ -464,13 +464,13 @@ typedef struct {
  *  This struct reflects the stack frame employed in ISR_Handler.  Note
  *  that the ISR routine save some of the registers to this frame for
  *  all interrupts and exceptions.  Other registers are saved only on
- *  exceptions, while others are not touched at all.  The untouched 
- *  registers are not normally disturbed by high-level language 
+ *  exceptions, while others are not touched at all.  The untouched
+ *  registers are not normally disturbed by high-level language
  *  programs so they can be accessed when required.
  *
  *  The registers and their ordering in this struct must directly
  *  correspond to the layout and ordering of * shown in iregdef.h,
- *  as cpu_asm.S uses those definitions to fill the stack frame.  
+ *  as cpu_asm.S uses those definitions to fill the stack frame.
  *  This struct provides access to the stack frame for C code.
  *
  *  Similarly, this structure is used by debugger stubs and exception
@@ -820,17 +820,17 @@ void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
  *  The per-thread status register holds the interrupt enable, FP enable
  *  and global interrupt enable for that thread.  It means each thread can
  *  enable its own set of interrupts.  If interrupts are disabled, RTEMS
- *  can still dispatch via blocking calls.  This is the function of the 
- *  "Interrupt Level", and on the MIPS, it controls the IEC bit and all 
+ *  can still dispatch via blocking calls.  This is the function of the
+ *  "Interrupt Level", and on the MIPS, it controls the IEC bit and all
  *  the hardware interrupts as defined in the SR.  Software ints
- *  are automatically enabled for all threads, as they will only occur under 
- *  program control anyhow.  Besides, the interrupt level parm is only 8 bits, 
+ *  are automatically enabled for all threads, as they will only occur under
+ *  program control anyhow.  Besides, the interrupt level parm is only 8 bits,
  *  and controlling the software ints plus the others would require 9.
  *
- *  If the Interrupt Level is 0, all ints are on.  Otherwise, the 
- *  Interrupt Level should supply a bit pattern to impose on the SR 
+ *  If the Interrupt Level is 0, all ints are on.  Otherwise, the
+ *  Interrupt Level should supply a bit pattern to impose on the SR
  *  interrupt bits; bit 0 applies to the mips1 IEC bit/mips3 EXL&IE, bits 1 thru 6
- *  apply to the SR register Intr bits from bit 10 thru bit 15.  Bit 7 of 
+ *  apply to the SR register Intr bits from bit 10 thru bit 15.  Bit 7 of
  *  the Interrupt Level parameter is unused at this time.
  *
  *  These are the only per-thread SR bits, the others are maintained

@@ -49,7 +49,7 @@
  */
 
 #ifndef __USER_LABEL_PREFIX__
-#define __USER_LABEL_PREFIX__ 
+#define __USER_LABEL_PREFIX__
 #endif
 
 #ifndef __REGISTER_PREFIX__
@@ -210,8 +210,8 @@
 /* The following registers are for the MPC5xx */
 #define eie     0x050   /* External Interrupt Enable Register */
 #define eid     0x051   /* External Interrupt Disable Register */
-#define nri     0x052   /* Non-Recoverable Interrupt Register */ 
-  
+#define nri     0x052   /* Non-Recoverable Interrupt Register */
+
 #elif defined(mpc860) || defined(mpc821)
 /* The following registers are for the MPC8x0 */
 #define der     0x095   /* Debug Enable Register */

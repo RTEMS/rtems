@@ -14,7 +14,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE
- * 
+ *
  *
  *  COPYRIGHT (c) 1998-2001.
  *  On-Line Applications Research Corporation (OAR).
@@ -36,14 +36,14 @@ extern "C" {
 /*
  *  This file contains the information required to build
  *  RTEMS for a particular member of the "SH" family.
- *  
+ *
  *  It does  this by setting variables to indicate which implementation
  *  dependent features are present in a particular member of the family.
  */
 
 /*
- *  Figure out all CPU Model Feature Flags based upon compiler 
- *  predefines. 
+ *  Figure out all CPU Model Feature Flags based upon compiler
+ *  predefines.
  */
 
 #if defined(__SH2E__) || defined(__SH3E__)
@@ -53,7 +53,7 @@ extern "C" {
 
 #elif defined(__SH4__) || defined(__SH4_SINGLE_ONLY__)
 
-/* 
+/*
  * Define this if you want to use XD-registers.
  * Then this registers will be saved/restored on context switch.
  * ! They will not be saved/restored on interrupts!
@@ -68,7 +68,7 @@ extern "C" {
 #define SH_HAS_FPU 0
 #endif
 
-#elif defined(__sh1__) || defined(__sh2__) || defined(__sh3__) 
+#elif defined(__sh1__) || defined(__sh2__) || defined(__sh3__)
 #define SH_HAS_FPU 0
 #else
 #warning Cannot detect FPU support, assuming no FPU
@@ -108,7 +108,7 @@ extern "C" {
     "stc sr,%0\n\t" \
     "ldc %1,sr\n\t"\
   : "=&r" (_level ) \
-  : "r" (SH_IRQDIS_VALUE) ); 
+  : "r" (SH_IRQDIS_VALUE) );
 
 #define sh_enable_interrupts( _level ) \
   asm volatile( "ldc %0,sr\n\t" \
@@ -121,7 +121,7 @@ extern "C" {
  *  sections into two or more parts.  The parameter _level is not
  *  modified.
  */
-     
+
 #define sh_flash_interrupts( _level ) \
   asm volatile( \
     "ldc %1,sr\n\t" \
@@ -142,7 +142,7 @@ extern "C" {
     "ldc r5,sr\n\t"\
   : "=&r" (_level ) \
   : "r" (SH_IRQDIS_MASK) \
-  : "r5" ); 
+  : "r5" );
 
 #define sh_enable_interrupts( _level ) \
   asm volatile( "ldc %0,sr\n\t" \
@@ -155,7 +155,7 @@ extern "C" {
  *  sections into two or more parts.  The parameter _level is not
  *  modified.
  */
-     
+
 #define sh_flash_interrupts( _level ) \
   asm volatile( \
     "stc sr,r5\n\t" \
@@ -189,18 +189,18 @@ extern "C" {
  *  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.
  */
- 
+
 static inline uint32_t sh_swap_u32(
   uint32_t value
 )
 {
   register uint32_t swapped;
-  
-  asm volatile ( 
+
+  asm volatile (
     "swap.b %1,%0; "
     "swap.w %0,%0; "
-    "swap.b %0,%0" 
-    : "=r" (swapped) 
+    "swap.b %0,%0"
+    : "=r" (swapped)
     : "r"  (value) );
 
   return( swapped );
@@ -220,8 +220,8 @@ static inline uint16_t sh_swap_u16(
 #define CPU_swap_u32( value ) sh_swap_u32( value )
 #define CPU_swap_u16( value ) sh_swap_u16( value )
 
-extern unsigned int sh_set_irq_priority( 
-  unsigned int irq, 
+extern unsigned int sh_set_irq_priority(
+  unsigned int irq,
   unsigned int prio );
 
 #endif /* !ASM */

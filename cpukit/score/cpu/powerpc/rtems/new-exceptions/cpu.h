@@ -104,7 +104,7 @@ extern "C" {
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
  */
 
@@ -153,7 +153,7 @@ extern "C" {
  */
 
 #ifndef ASM
-  
+
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
@@ -194,7 +194,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  */
 
 #ifndef ASM
-  
+
 SCORE_EXTERN struct {
   uint32_t      *Disable_level;
   void          *Stack;
@@ -259,7 +259,7 @@ SCORE_EXTERN struct {
  */
 
 #ifndef ASM
-  
+
 static inline uint32_t   _CPU_ISR_Get_level( void )
 {
   register unsigned int msr;
@@ -280,7 +280,7 @@ static inline void _CPU_ISR_Set_level( uint32_t   level )
   }
   _CPU_MSR_SET(msr);
 }
-  
+
 void BSP_panic(char *);
 
 /* Fatal Error manager macros */

@@ -274,7 +274,7 @@ extern "C" {
  *  H8300 Specific Information:
  *
  *  XXX
- *  The port initially called a BSP dependent routine called 
+ *  The port initially called a BSP dependent routine called
  *  IDLE_Monitor.  The idle task body can be overridden by
  *  the BSP in newer versions of RTEMS.
  */
@@ -484,7 +484,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  It is highly unlikely the H8300 will get used in a multiprocessor system.
  */
 
-#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0 
+#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 /*
  *  This defines the number of entries in the ISR_Vector_table managed
@@ -642,7 +642,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *
  *  H8300 Specific Information:
  *
- *  XXX  
+ *  XXX
  */
 
 #if defined(__H8300H__) || defined(__H8300S__)
@@ -652,7 +652,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
     asm volatile( "stc ccr, %0 ; orc #0x80,ccr " \
              : "=m" (__ccr) /* : "0" (__ccr) */ ); \
     (_isr_cookie) = __ccr; \
-  } while (0) 
+  } while (0)
 #else
 #define _CPU_ISR_Disable( _isr_cookie ) (_isr_cookie) = 0
 #endif
@@ -673,7 +673,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
   do { \
     unsigned char __ccr = (unsigned char) (_isr_cookie); \
     asm volatile( "ldc %0, ccr" :  : "m" (__ccr) ); \
-  } while (0) 
+  } while (0)
 #else
 #define _CPU_ISR_Enable( _isr_cookie )
 #endif
@@ -694,7 +694,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
   do { \
     unsigned char __ccr = (unsigned char) (_isr_cookie); \
     asm volatile( "ldc %0, ccr ; orc #0x80,ccr " :  : "m" (__ccr) ); \
-  } while (0) 
+  } while (0)
 #else
 #define _CPU_ISR_Flash( _isr_cookie )
 #endif
@@ -852,8 +852,8 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 #define _CPU_Fatal_halt( _error ) \
  	printk("Fatal Error %d Halted\n",_error); \
-	for(;;) 
-  
+	for(;;)
+
 
 /* end of Fatal Error manager macros */
 
@@ -986,14 +986,14 @@ void _CPU_Initialize(void);
 /*
  *  _CPU_ISR_install_raw_handler
  *
- *  This routine installs a "raw" interrupt handler directly into the 
+ *  This routine installs a "raw" interrupt handler directly into the
  *  processor's vector table.
  *
  *  H8300 Specific Information:
  *
  *  XXX
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -1129,18 +1129,18 @@ void _CPU_Context_restore_fp(
  *
  *  This is the generic implementation.
  */
- 
+
 static inline uint32_t   CPU_swap_u32(
   uint32_t   value
 )
 {
   uint32_t   byte1, byte2, byte3, byte4, swapped;
- 
+
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
   byte2 = (value >> 8)  & 0xff;
   byte1 =  value        & 0xff;
- 
+
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return( swapped );
 }

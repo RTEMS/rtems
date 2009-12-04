@@ -61,7 +61,7 @@ extern "C" {
  *  This file contains the information required to build
  *  RTEMS for the PowerPC family.
  */
- 
+
 /* Generic ppc */
 
 #ifdef _SOFT_FLOAT
@@ -72,7 +72,7 @@ extern "C" {
 #define CPU_MODEL_NAME "Generic (classic FPU)"
 #endif
 
-#define PPC_ALIGNMENT			8  
+#define PPC_ALIGNMENT			8
 #define PPC_STRUCTURE_ALIGNMENT	32
 
 /*
@@ -132,7 +132,7 @@ extern "C" {
  *  support doubles (8-byte floating point numbers).
  *
  *  If the model does NOT have FP support, then the model does
- *  NOT have double length FP registers. 
+ *  NOT have double length FP registers.
  */
 
 #if (PPC_HAS_FPU)

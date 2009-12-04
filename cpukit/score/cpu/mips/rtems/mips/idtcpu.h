@@ -21,7 +21,7 @@ COPYRIGHT IDT CORPORATION 1996
 LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
   $Id$
-*/ 
+*/
 
 /*
 ** idtcpu.h -- cpu related defines
@@ -70,7 +70,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define X_VEC	(K0BASE+0x080)		/* xtlbmiss vector */
 #define C_VEC	(K0BASE+0x100)		/* cache error vector */
 #define E_VEC	(K0BASE+0x180)		/* exception vector */
-#else 
+#else
 #error "EXCEPTION VECTORS: unknown ISA level"
 #endif
 #define	R_VEC	(K1BASE+0x1fc00000)	/* reset vector */
@@ -184,7 +184,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #endif
 */
 /* Disabled by joel -- horrible overload of common word.
-#ifndef wait 
+#ifndef wait
 #define wait .word 0x42000020
 #endif wait
 */
@@ -279,7 +279,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #endif
 */
 /* Disabled by joel -- horrible overload of common word.
-#ifndef wait 
+#ifndef wait
 #define wait .word 0x42000020
 #endif wait
 */

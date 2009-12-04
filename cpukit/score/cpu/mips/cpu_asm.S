@@ -19,7 +19,7 @@
  *             Networks makes no representations about the suitability
  *             of this software for any purpose.
  *    2000: Reworked by Alan Cudmore <alanc@linuxstart.com> to become
- *          the baseline of the more general MIPS port.  
+ *          the baseline of the more general MIPS port.
  *    2001: Joel Sherrill <joel@OARcorp.com> continued this rework,
  *          rewriting as much as possible in C and added the JMR3904 BSP
  *          so testing could be performed on a simulator.
@@ -39,7 +39,7 @@
  *          support for R4000 processors running 32 bit code.  Fixed #define
  *          problems that caused fpu code to always be included even when no
  *          fpu is present.
- *  
+ *
  *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -160,38 +160,38 @@
 #define C0_EPC_OFFSET 12
 
 /* NOTE: these constants must match the Context_Control_fp structure in cpu.h */
-#define FP0_OFFSET  0 
-#define FP1_OFFSET  1 
-#define FP2_OFFSET  2 
-#define FP3_OFFSET  3 
-#define FP4_OFFSET  4 
-#define FP5_OFFSET  5 
-#define FP6_OFFSET  6 
-#define FP7_OFFSET  7 
-#define FP8_OFFSET  8 
-#define FP9_OFFSET  9 
-#define FP10_OFFSET 10 
-#define FP11_OFFSET 11 
-#define FP12_OFFSET 12 
-#define FP13_OFFSET 13 
-#define FP14_OFFSET 14 
-#define FP15_OFFSET 15 
-#define FP16_OFFSET 16 
-#define FP17_OFFSET 17 
-#define FP18_OFFSET 18 
-#define FP19_OFFSET 19 
-#define FP20_OFFSET 20 
-#define FP21_OFFSET 21 
-#define FP22_OFFSET 22 
-#define FP23_OFFSET 23 
-#define FP24_OFFSET 24 
-#define FP25_OFFSET 25 
-#define FP26_OFFSET 26 
-#define FP27_OFFSET 27 
-#define FP28_OFFSET 28 
-#define FP29_OFFSET 29 
-#define FP30_OFFSET 30 
-#define FP31_OFFSET 31 
+#define FP0_OFFSET  0
+#define FP1_OFFSET  1
+#define FP2_OFFSET  2
+#define FP3_OFFSET  3
+#define FP4_OFFSET  4
+#define FP5_OFFSET  5
+#define FP6_OFFSET  6
+#define FP7_OFFSET  7
+#define FP8_OFFSET  8
+#define FP9_OFFSET  9
+#define FP10_OFFSET 10
+#define FP11_OFFSET 11
+#define FP12_OFFSET 12
+#define FP13_OFFSET 13
+#define FP14_OFFSET 14
+#define FP15_OFFSET 15
+#define FP16_OFFSET 16
+#define FP17_OFFSET 17
+#define FP18_OFFSET 18
+#define FP19_OFFSET 19
+#define FP20_OFFSET 20
+#define FP21_OFFSET 21
+#define FP22_OFFSET 22
+#define FP23_OFFSET 23
+#define FP24_OFFSET 24
+#define FP25_OFFSET 25
+#define FP26_OFFSET 26
+#define FP27_OFFSET 27
+#define FP28_OFFSET 28
+#define FP29_OFFSET 29
+#define FP30_OFFSET 30
+#define FP31_OFFSET 31
 #define FPCS_OFFSET 32
 
 	
@@ -222,9 +222,9 @@ FRAME(_CPU_Context_save_fp,sp,0,ra)
         .set noreorder
         .set noat
 
-	/* 
-	** Make sure the FPU is on before we save state.  This code 
-	** is here because the FPU context switch might occur when an 
+	/*
+	** Make sure the FPU is on before we save state.  This code
+	** is here because the FPU context switch might occur when an
 	** integer task is switching out with a FP task switching in.
 	*/
 	mfc0	t0,C0_SR
@@ -245,7 +245,7 @@ FRAME(_CPU_Context_save_fp,sp,0,ra)
 	jal	_CPU_Context_save_fp_from_exception
 	NOP
 	
-	/* 
+	/*
 	** Reassert the task's state because we've not saved it yet.
 	*/
 	mtc0	t1,C0_SR
@@ -321,9 +321,9 @@ FRAME(_CPU_Context_restore_fp,sp,0,ra)
         .set noat
         .set noreorder
 	
-	/* 
-	** Make sure the FPU is on before we retrieve state.  This code 
-	** is here because the FPU context switch might occur when an 
+	/*
+	** Make sure the FPU is on before we retrieve state.  This code
+	** is here because the FPU context switch might occur when an
 	** integer task is switching out with a FP task switching in.
 	*/
 	mfc0	t0,C0_SR
@@ -344,7 +344,7 @@ FRAME(_CPU_Context_restore_fp,sp,0,ra)
 	jal	_CPU_Context_restore_fp_from_exception
 	NOP
 
-	/* 
+	/*
 	** Reassert the old task's state because we've not restored the
 	** new one yet.
 	*/
@@ -439,14 +439,14 @@ FRAME(_CPU_Context_switch,sp,0,ra)
         STREG s7,S7_OFFSET*R_SZ(a0)
 
 	
-	/* 
+	/*
 	** this code grabs the userspace EPC if we're dispatching from
 	** an interrupt frame or supplies the address of the dispatch
-	** routines if not.  This is entirely for the gdbstub's benefit so 
+	** routines if not.  This is entirely for the gdbstub's benefit so
 	** it can know where each task is running.
 	**
 	** Its value is only set when calling threadDispatch from
-	** the interrupt handler and is cleared immediately when this 
+	** the interrupt handler and is cleared immediately when this
 	** routine gets it.
 	*/
 	
@@ -504,14 +504,14 @@ _CPU_Context_switch_restore:
 
 /*
 ** Incorporate the incoming task's FP coprocessor state and interrupt mask/enable
-** into the status register.  We jump thru the requisite hoops to ensure we 
+** into the status register.  We jump thru the requisite hoops to ensure we
 ** maintain all other SR bits as global values.
 **
-** Get the task's FPU enable, int mask & int enable bits.  Although we keep the 
+** Get the task's FPU enable, int mask & int enable bits.  Although we keep the
 ** software int enables on a per-task basis, the rtems_task_create
-** Interrupt Level & int level manipulation functions cannot enable/disable them, 
-** so they are automatically enabled for all tasks.  To turn them off, a task  
-** must itself manipulate the SR register.  
+** Interrupt Level & int level manipulation functions cannot enable/disable them,
+** so they are automatically enabled for all tasks.  To turn them off, a task
+** must itself manipulate the SR register.
 **
 ** Although something of a hack on this processor, we treat the SR register
 ** int enables as the RTEMS interrupt level.  We use the int level
@@ -523,7 +523,7 @@ _CPU_Context_switch_restore:
 ** interrupt enable state is recorded.  The task swapping in will apply its
 ** specific SR bits, including interrupt enable.  If further task-specific
 ** SR bits are arranged, it is this code, the cpu.c interrupt level stuff and
-** cpu.h task initialization code that will be affected.  
+** cpu.h task initialization code that will be affected.
 */
 
 	li	t2,SR_CU1
@@ -531,12 +531,12 @@ _CPU_Context_switch_restore:
 
 	/* int enable bits */
 #if (__mips == 3) || (__mips == 32)
-	/* 
+	/*
 	** Save IE
 	*/
 	or	t2,SR_IE
 #elif __mips == 1
-	/* 
+	/*
 	** Save current, previous & old int enables.  This is key because
 	** we can dispatch from within the stack frame used by an
 	** interrupt service.  The int enables nest, but not beyond
@@ -623,7 +623,7 @@ ENDFRAME(_DBG_Handler)
  *  This routine provides the RTEMS interrupt management.
  *
  *  void _ISR_Handler()
- * 
+ *
  *
  *  This discussion ignores a lot of the ugly details in a real
  *  implementation such as saving enough registers/state to be
@@ -654,7 +654,7 @@ FRAME(_ISR_Handler,sp,0,ra)
         /* wastes a lot of stack space for context?? */
 	ADDIU    sp,sp,-EXCP_STACK_SIZE
 
-        STREG ra, R_RA*R_SZ(sp)  /* store ra on the stack */ 
+        STREG ra, R_RA*R_SZ(sp)  /* store ra on the stack */
         STREG v0, R_V0*R_SZ(sp)
         STREG v1, R_V1*R_SZ(sp)
         STREG a0, R_A0*R_SZ(sp)
@@ -671,11 +671,11 @@ FRAME(_ISR_Handler,sp,0,ra)
         STREG t7, R_T7*R_SZ(sp)
         mflo  t0
         STREG t8, R_T8*R_SZ(sp)
-        STREG t0, R_MDLO*R_SZ(sp) 
+        STREG t0, R_MDLO*R_SZ(sp)
         STREG t9, R_T9*R_SZ(sp)
         mfhi  t0
         STREG gp, R_GP*R_SZ(sp)
-        STREG t0, R_MDHI*R_SZ(sp) 
+        STREG t0, R_MDHI*R_SZ(sp)
         STREG fp, R_FP*R_SZ(sp)
 	
         .set noat
@@ -747,16 +747,16 @@ _ISR_Handler_Exception:
         andi     t0,t0,(SR_CU1 >> 16)
         beqz     t0, 1f
         NOP
-        
+
         la       a1,R_F0*R_SZ(sp)
-        jal      _CPU_Context_save_fp_from_exception 
+        jal      _CPU_Context_save_fp_from_exception
         NOP
         mfc1     t0,C1_REVISION
         mfc1     t1,C1_STATUS
         STREG    t0,R_FEIR*R_SZ(sp)
         STREG    t1,R_FCSR*R_SZ(sp)
-        
-1:      
+
+1:
 #endif
 	
 	move	 a0,sp
@@ -764,10 +764,10 @@ _ISR_Handler_Exception:
 	NOP
 
 	
-	/* 
+	/*
 	** Note, if the exception vector returns, rely on it to have
 	** adjusted EPC so we will return to some correct address.  If
-	** this is not done, we might get stuck in an infinite loop because 
+	** this is not done, we might get stuck in an infinite loop because
 	** we'll return to the instruction where the exception occured and
 	** it could throw again.
 	**
@@ -839,7 +839,7 @@ excreturn:
         andi     t0,t0,(SR_CU1 >> 16)
         beqz     t0, 2f
         NOP
-        
+
         la       a1,R_F0*R_SZ(sp)
         jal      _CPU_Context_restore_fp_from_exception
         NOP
@@ -861,9 +861,9 @@ excreturn:
         /* do NOT restore the sp as this could mess up the world */
         /* do NOT restore the cause as this could mess up the world */
 
-	/* 
+	/*
 	** Jump all the way out.  If theres a pending interrupt, just
-	** let it be serviced later.  Since we're probably using the 
+	** let it be serviced later.  Since we're probably using the
 	** gdb stub, we've already disrupted the ISR service timing
 	** anyhow.  We oughtn't mix exception and interrupt processing
 	** in the same exception call in case the exception stuff
@@ -960,7 +960,7 @@ _ISR_Handler_1:
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
    *    restore stack
    *  #endif
-   *  
+   *
    *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
    *    goto the label "exit interrupt (simple case)"
    */
@@ -994,7 +994,7 @@ _ISR_Handler_1:
 	
 #elif (__mips == 3) || (__mips == 32)
 	
-	/* 
+	/*
 	** clear XL and set IE so we can get interrupts.
 	*/
 	li	t1, SR_EXL
@@ -1013,22 +1013,22 @@ _ISR_Handler_1:
         jal     _Thread_Dispatch
         NOP
 
-	/* 
+	/*
 	** And make sure its clear in case we didn't dispatch.  if we did, its
-	** already cleared 
+	** already cleared
 	*/
 	la	t0,__exceptionStackFrame
 	STREG	zero,(t0)
 	NOP
 
-/* 
+/*
 ** turn interrupts back off while we restore context so
 ** a badly timed interrupt won't mess things up
 */
         mfc0    t0, C0_SR
 
 #if __mips == 1
- 
+
 	/* ints off, current & prev kernel mode on (kernel mode enabled is bit clear..argh!) */
 	li	t1,SR_IEC | SR_KUP | SR_KUC	
 	not	t1
@@ -1038,10 +1038,10 @@ _ISR_Handler_1:
 
 #elif (__mips == 3) || (__mips == 32)
 
-	/* make sure EXL and IE are set so ints are disabled & we can update EPC for the return */ 
+	/* make sure EXL and IE are set so ints are disabled & we can update EPC for the return */
         li   t1,SR_IE		/* Clear IE first (recommended) */
-        not  t1 
-        and  t0,t1 
+        not  t1
+        and  t0,t1
         mtc0 t0,C0_SR
   	NOP
   	
@@ -1097,7 +1097,7 @@ _ISR_Handler_exit:
         LDREG t8, R_MDLO*R_SZ(sp)
         LDREG t0, R_T0*R_SZ(sp)
         mtlo  t8
-        LDREG t8, R_MDHI*R_SZ(sp)           
+        LDREG t8, R_MDHI*R_SZ(sp)
         LDREG t1, R_T1*R_SZ(sp)
         mthi  t8
         LDREG t2, R_T2*R_SZ(sp)

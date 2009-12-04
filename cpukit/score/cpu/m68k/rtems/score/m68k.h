@@ -71,9 +71,9 @@ extern "C" {
  *    implement the output buffer impedance selection mode of operation."
  *
  *  M68K_HAS_EXTB_L is used to enable/disable usage of the extb.l instruction
- *  which is not available for 68000 or 68ec000 cores (68000, 68001, 68008, 
+ *  which is not available for 68000 or 68ec000 cores (68000, 68001, 68008,
  *  68010, 68302, 68306, 68307).  This instruction is available on the 68020
- *  up and the cpu32 based models.  
+ *  up and the cpu32 based models.
  *
  *  M68K_HAS_MISALIGNED is non-zero if the CPU allows byte-misaligned
  *  data access (68020, 68030, 68040, 68060, CPU32+).
@@ -91,7 +91,7 @@ extern "C" {
 # define CPU_NAME "Motorola ColdFire"
 
 # if defined(__mcfisaa__)
-/* Motorola ColdFire ISA A */ 
+/* Motorola ColdFire ISA A */
 # define CPU_MODEL_NAME         "mcfisaa"
 # define M68K_HAS_VBR             1
 # define M68K_HAS_BFFFO           0
@@ -101,7 +101,7 @@ extern "C" {
 # define M68K_HAS_MISALIGNED      1
 
 # elif defined(__mcfisaaplus__)
-/* Motorola ColdFire ISA A+ */ 
+/* Motorola ColdFire ISA A+ */
 # define CPU_MODEL_NAME         "mcfisaaplus"
 # define M68K_HAS_VBR             1
 # define M68K_HAS_BFFFO           0
@@ -111,7 +111,7 @@ extern "C" {
 # define M68K_HAS_MISALIGNED      1
 
 # elif defined(__mcfisab__)
-/* Motorola ColdFire ISA B */ 
+/* Motorola ColdFire ISA B */
 # define CPU_MODEL_NAME         "mcfisab"
 # define M68K_HAS_VBR             1
 # define M68K_HAS_BFFFO           0
@@ -169,8 +169,8 @@ extern "C" {
 #else
 
 /*
- *  Figure out all CPU Model Feature Flags based upon compiler 
- *  predefines.   Notice the only exception to this is that 
+ *  Figure out all CPU Model Feature Flags based upon compiler
+ *  predefines.   Notice the only exception to this is that
  *  gcc does not distinguish between CPU32 and CPU32+.  This
  *  feature selection logic is setup such that if RTEMS__mcpu32p__
  *  is defined, then CPU32+ rules are used.  Otherwise, the safe
@@ -181,7 +181,7 @@ extern "C" {
 
 /*
  * One stack size fits all 68000 processors.
- */ 
+ */
 # define M68K_CPU_STACK_MINIMUM_SIZE 4096
 
 # if (defined(__mc68020__) && !defined(__mcpu32__))
@@ -200,9 +200,9 @@ extern "C" {
 #  define M68K_HAS_FPU            0
 #  define M68K_HAS_FPSP_PACKAGE   0
 #  endif
- 
+
 # elif defined(__mc68030__)
- 
+
 # define CPU_MODEL_NAME          "m68030"
 # define M68K_HAS_VBR             1
 # define M68K_HAS_SEPARATE_STACKS 1
@@ -217,7 +217,7 @@ extern "C" {
 #  define M68K_HAS_FPU            0
 #  define M68K_HAS_FPSP_PACKAGE   0
 #  endif
- 
+
 # elif defined(__mc68040__)
 
 # define CPU_MODEL_NAME          "m68040"
@@ -234,7 +234,7 @@ extern "C" {
 #  define M68K_HAS_FPU            0
 #  define M68K_HAS_FPSP_PACKAGE   0
 #  endif
- 
+
 # elif defined(__mc68060__)
 
 # define CPU_MODEL_NAME          "m68060"
@@ -251,7 +251,7 @@ extern "C" {
 #  define M68K_HAS_FPU            0
 #  define M68K_HAS_FPSP_PACKAGE   0
 #  endif
- 
+
 # elif defined(__mc68302__)
 
 # define CPU_MODEL_NAME          "m68302"
@@ -266,7 +266,7 @@ extern "C" {
 
   /* gcc and egcs do not distinguish between CPU32 and CPU32+ */
 # elif defined(RTEMS__mcpu32p__)
- 
+
 # define CPU_MODEL_NAME          "mcpu32+"
 # define M68K_HAS_VBR             1
 # define M68K_HAS_SEPARATE_STACKS 0
@@ -278,7 +278,7 @@ extern "C" {
 # define M68K_HAS_FPSP_PACKAGE    0
 
 # elif defined(__mcpu32__)
- 
+
 # define CPU_MODEL_NAME          "mcpu32"
 # define M68K_HAS_VBR             1
 # define M68K_HAS_SEPARATE_STACKS 0
@@ -290,7 +290,7 @@ extern "C" {
 # define M68K_HAS_FPSP_PACKAGE    0
 
 # elif defined(__mc68000__)
- 
+
 # define CPU_MODEL_NAME          "m68000"
 # define M68K_HAS_VBR             0
 # define M68K_HAS_SEPARATE_STACKS 0
@@ -376,7 +376,7 @@ extern "C" {
     asm volatile( "move.w %%sr,%0" : "=d" (_tmpsr)); \
     _level = (_tmpsr & 0x0700) >> 8; \
   } while (0)
-    
+
 #define m68k_set_interrupt_level( _newlevel ) \
   do { \
     register uint32_t   _tmpsr; \
@@ -394,7 +394,7 @@ extern "C" {
   asm volatile ( "movec   %0,%%vbr " : : "r" (vbr))
 
 #elif ( defined(__mcoldfire__) )
-extern void*                     _VBR; 
+extern void*                     _VBR;
 #define m68k_get_vbr( _vbr ) _vbr = &_VBR
 
 #define m68k_set_vbr( _vbr ) \
@@ -402,7 +402,7 @@ extern void*                     _VBR;
     asm volatile ( "movec   %0,%%vbr " : : "r" (_vbr)); \
     _VBR = (void *)_vbr; \
   } while(0)
-  
+
 #else
 #define m68k_get_vbr( _vbr ) _vbr = (void *)_VBR
 #define m68k_set_vbr( _vbr )
@@ -429,23 +429,23 @@ static inline uint32_t m68k_swap_u32(
   )
 {
   uint32_t   byte1, byte2, byte3, byte4, swapped;
-    
+
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
   byte2 = (value >> 8)  & 0xff;
   byte1 =  value        & 0xff;
-           
+
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return( swapped );
 }
- 
+
 static inline uint16_t m68k_swap_u16(
   uint16_t value
 )
 {
   return (((value & 0xff) << 8) | ((value >> 8) & 0xff));
 }
-                  
+
 #else
 
 static inline uint32_t m68k_swap_u32(
@@ -484,7 +484,7 @@ static inline uint16_t m68k_swap_u16(
  *
  *	This function is used to map virtual addresses to physical
  *	addresses.
- * 
+ *
  *	FIXME: ASSUMES THAT VIRTUAL ADDRESSES ARE THE SAME AS THE
  *	PHYSICAL ADDRESSES
  */

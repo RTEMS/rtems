@@ -2,7 +2,7 @@
  * @file rtems/score/arm.h
  */
 
-/*  
+/*
  *  $Id$
  *
  *  COPYRIGHT (c) 2000 Canon Research Centre France SA.

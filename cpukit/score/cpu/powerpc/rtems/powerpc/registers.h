@@ -43,7 +43,7 @@
 /* Bit encodings for Hardware Implementation Register (HID0)
    on PowerPC 603, 604, etc. processors (not 601). */
 
-/* WARNING: HID0/HID1 are *truely* implementation dependent! 
+/* WARNING: HID0/HID1 are *truely* implementation dependent!
  *          you *cannot* rely on the same bits to be present,
  *          at the same place or even in the same register
  *          on different CPU familys.
