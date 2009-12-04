@@ -94,6 +94,9 @@ unlink_SOURCES = unlink.c
 check_PROGRAMS += vfork
 vfork_SOURCES = vfork.c
 
+check_PROGRAMS += wait
+wait_SOURCES = wait.c
+
 check_PROGRAMS += waitpid
 waitpid_SOURCES = waitpid.c
 
