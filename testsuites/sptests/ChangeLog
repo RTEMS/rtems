@@ -1,3 +1,8 @@
+2009-12-04	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* sp31/sp31.scn, sp31/task1.c, spintrcritical17/init.c: New test
+	cases. Updated copyright notice.
+
 2009-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp25/task1.c: Use PRIuPTR for segment_sizes.
