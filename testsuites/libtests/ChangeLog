@@ -1,5 +1,6 @@
 2009-12-04      Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* POSIX/sigfillset.c: Let main() return "status".
 	* POSIX/Makefile.am: Add sigaddset, sigdelset, sigemptyset,
 	sigismember.
 	* POSIX/sigaddset.c, POSIX/sigdelset.c, POSIX/sigemptyset.c,

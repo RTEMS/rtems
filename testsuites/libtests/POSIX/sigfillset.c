@@ -15,5 +15,5 @@ main (void)
   int status;
   status = sigfillset (&set);
 
-  return 0;
+  return status;
 }
