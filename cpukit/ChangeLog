@@ -1,5 +1,9 @@
 2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/Makefile.am: Unconditionally build fork.c, vfork.c.
+
+2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac, posix/Makefile.am, wrapup/Makefile.am:
 	Eliminate AM_CONDITIONAL LIBPOSIX.
 
