@@ -1,6 +1,12 @@
 #
 #  $Id$
 #
+#  Fernando Nicodemos <fgnicodemos@terra.com.br>
+#  from NCB - Sistemas Embarcados Ltda. (Brazil)
+#
+#  Joel Sherill
+#  from OAR Corporation
+#
 
 This directory contains support for utilitizing MicroMonitor
 (http://www.umonfw.com/) capabilities from within an RTEMS

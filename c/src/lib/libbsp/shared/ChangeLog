@@ -1,3 +1,7 @@
+2009-12-04	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* umon/README, umon/tfs.h: Missing parts of previous commit.
+
 2009-11-30	Fernando Nicodemos <fgnicodemos@terra.com.br>
 
 	* umon/cli.h, umon/monlib.c, umon/monlib.h, umon/tfs.h,
