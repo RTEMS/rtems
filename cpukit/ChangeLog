@@ -1,5 +1,12 @@
 2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/sigaddset.c, posix/src/sigdelset.c,
+	posix/src/sigemptyset.c, posix/src/sigfillset.c,
+	posix/src/sigismember.c, posix/src/sigprocmask.c:
+	Remove unnecessary includes.
+
+2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/Makefile.am: Unconditionally install
 	posix/include/rtems/posix/sigset.h.
 	* posix/include/rtems/posix/psignal.h: Reflect having split out
