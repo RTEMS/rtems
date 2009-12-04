@@ -17,23 +17,7 @@
 #define _RTEMS_POSIX_PSIGNAL_H
 
 #include <rtems/posix/pthread.h>
-
-/*
- *  Currently 32 signals numbered 1-32 are defined
- */
-
-#define SIGNAL_EMPTY_MASK  0x00000000
-#define SIGNAL_ALL_MASK    0xffffffffL
-
-static inline sigset_t signo_to_mask(
-  uint32_t sig
-)
-{
-  return 1u << (sig - 1);
-}
-
-#define is_valid_signo( _sig ) \
-  ((_sig) >= 1 && (_sig) <= 32 )
+#include <rtems/posix/sigset.h>
 
 #define _States_Is_interruptible_signal( _states ) \
   ( ((_states) & \
