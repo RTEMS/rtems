@@ -62,9 +62,10 @@ endif
 
 libposix_a_SOURCES += src/fork.c src/vfork.c
 
+libposix_a_SOURCES += src/wait.c src/waitpid.c
+
 if HAS_PTHREADS
-libposix_a_SOURCES +=  src/pthreadatfork.c \
-    src/wait.c src/waitpid.c
+libposix_a_SOURCES +=  src/pthreadatfork.c
 
 ## BARRIER_C_FILES
 libposix_a_SOURCES += src/barrierattrdestroy.c src/barrierattrgetpshared.c \
