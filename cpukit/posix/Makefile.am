@@ -19,6 +19,10 @@ libposix_a_SOURCES += src/sleep.c src/usleep.c
 libposix_a_SOURCES += src/nanosleep.c src/clockgettime.c src/clocksettime.c \
     src/clockgetres.c
 
+include_rtems_posixdir = $(includedir)/rtems/posix
+
+include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
+
 if HAS_PTHREADS
 # include
 
@@ -27,9 +31,8 @@ include_HEADERS = include/sched.h include/aio.h include/mqueue.h \
 
 # include/rtems/posix
 
-include_rtems_posixdir = $(includedir)/rtems/posix
 
-include_rtems_posix_HEADERS = include/rtems/posix/cancel.h \
+include_rtems_posix_HEADERS += include/rtems/posix/cancel.h \
     include/rtems/posix/cond.h include/rtems/posix/config.h \
     include/rtems/posix/key.h include/rtems/posix/mqueue.h \
     include/rtems/posix/mutex.h include/rtems/posix/posixapi.h \
