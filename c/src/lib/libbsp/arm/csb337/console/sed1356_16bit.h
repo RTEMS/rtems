@@ -1,5 +1,6 @@
 /*
- * sed1356.h: SED1356 LCD/CRT Controllers - 16-Bit access mode
+ * sed1356.h: SED1356 LCD/CRT Controllers for KIT637_V6 (CSB637)
+ *            16-Bit access mode
  *
  *  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
  *  which includes this notice:
@@ -25,8 +26,10 @@
  *
  *  Ed Sutter has been informed that this code is being used in RTEMS.
  *
- *  The code has been reformatted to be more compliant with RTEMS
- *  coding standards and to eliminate C++ style comments.
+ *  The code has been reformatted by Joel Sherrill from OAR Corporation and 
+ *  Fernando Nicodemos <fgnicodemos@terra.com.br> from NCB - Sistemas
+ *  Embarcados Ltda. (Brazil) to be more compliant with RTEMS coding standards 
+ *  and to eliminate C++ style comments.
  *
  *  $Id$
  */

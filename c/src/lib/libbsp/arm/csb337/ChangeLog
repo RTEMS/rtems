@@ -1,3 +1,8 @@
+2009-12-04	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* README, README.kit637_v6, console/sed1356_16bit.h, startup/memmap.c:
+	Missing parts of previous commit.
+
 2009-11-30	Fernando Nicodemos <fgnicodemos@terra.com.br>
 
 	* Makefile.am, preinstall.am, console/fbcons.c, console/font8x16.h,
