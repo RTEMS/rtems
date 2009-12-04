@@ -15,12 +15,10 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/pthread.h>
-#include <rtems/posix/psignal.h>
+#include <rtems/posix/sigset.h>
 #include <rtems/seterr.h>
 
 int sigaddset(
