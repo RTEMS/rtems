@@ -18,6 +18,15 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
+$(PROJECT_INCLUDE)/rtems/posix/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/posix
+	@: > $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/posix/sigset.h: include/rtems/posix/sigset.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/sigset.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/sigset.h
+
 if HAS_PTHREADS
 $(PROJECT_INCLUDE)/sched.h: include/sched.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sched.h
@@ -38,11 +47,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/semaphore.h
 $(PROJECT_INCLUDE)/devctl.h: include/devctl.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/devctl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/devctl.h
-
-$(PROJECT_INCLUDE)/rtems/posix/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/posix
-	@: > $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/posix/cancel.h: include/rtems/posix/cancel.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cancel.h
