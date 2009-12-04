@@ -135,8 +135,14 @@ libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
     src/kill_r.c src/pause.c src/psignalclearprocesssignals.c \
     src/psignalsetprocesssignals.c src/psignalchecksignal.c \
     src/psignalclearsignals.c src/psignalunblockthread.c src/pthreadkill.c \
-    src/pthreadsigmask.c src/sigaction.c src/sigaddset.c src/sigdelset.c \
-    src/sigemptyset.c src/sigfillset.c src/sigismember.c src/sigpending.c \
+    src/pthreadsigmask.c src/sigaction.c
+endif
+
+libposix_a_SOURCES += src/sigaddset.c src/sigdelset.c src/sigfillset.c \
+   src/sigemptyset.c src/sigismember.c
+
+if HAS_PTHREADS
+libposix_a_SOURCES += src/sigpending.c \
     src/sigprocmask.c src/sigqueue.c src/sigsuspend.c src/sigtimedwait.c \
     src/sigwait.c src/sigwaitinfo.c src/signal_2.c src/ualarm.c
 

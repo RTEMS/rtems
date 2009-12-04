@@ -1,5 +1,12 @@
 2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/Makefile.am: Unconditionally build
+	posix/src/sigaddset.c, posix/src/sigdelset.c,
+	posix/src/sigfillset.c, posix/src/sigemptyset.c,
+	posix/src/sigismember.c.
+
+2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/src/sigaddset.c, posix/src/sigdelset.c,
 	posix/src/sigemptyset.c, posix/src/sigfillset.c,
 	posix/src/sigismember.c, posix/src/sigprocmask.c:
