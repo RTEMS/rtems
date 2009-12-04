@@ -1,5 +1,10 @@
 2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/rtems/posix/sigset.h: New (Split out from
+	posix/include/rtems/posix/psignal.h).
+
+2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/Makefile.am: Unconditionally build src/wait.c src/waitpid.c.
 	* posix/Makefile.am: Unconditionally build src/fork.c, src/vfork.c.
 
