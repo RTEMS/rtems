@@ -1,6 +1,7 @@
 2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* posix/Makefile.am: Unconditionally build fork.c, vfork.c.
+	* posix/Makefile.am: Unconditionally build src/wait.c src/waitpid.c.
+	* posix/Makefile.am: Unconditionally build src/fork.c, src/vfork.c.
 
 2009-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
