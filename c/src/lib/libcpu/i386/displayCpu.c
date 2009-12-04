@@ -134,7 +134,7 @@ static const char * AMDmodel(void)
 {
 	const char *p=NULL;
 	int i;
-	
+
 	if (x86_model < 16)
 		for (i=0; i<sizeof(amd_models)/sizeof(struct cpu_model_info); i++)
 			if (amd_models[i].x86 == x86) {
@@ -187,14 +187,14 @@ void printCpuInfo(void)
 	"16",  "17", "18", "19", "20", "21", "22", "23"
 	"24",  "25", "26", "27", "28", "29", "30", "31"
   };
-         
-  printk("cpu         : %c86\n", x86+'0'); 
+
+  printk("cpu         : %c86\n", x86+'0');
   printk("model       : %s\n",
 	 have_cpuid ? getmodel(x86, x86_model) : "unknown");
   if (x86_vendor_id [0] == '\0')
     strcpy(x86_vendor_id, "unknown");
   printk("vendor_id   : %s\n", x86_vendor_id);
-        
+
   if (x86_mask)
     if (strncmp(x86_vendor_id, "Cyrix", 5) != 0) {
       printk("stepping    : %d\n", x86_mask);
@@ -204,7 +204,7 @@ void printCpuInfo(void)
     }
   else
     printk("stepping    : unknown\n");
-        
+
   printk("fpu         : %s\n", (hard_math ? "yes" : "no"));
   printk("cpuid       : %s\n", (have_cpuid ? "yes" : "no"));
   printk("flags       :");

@@ -20,20 +20,20 @@
 //	to handle the exception.
 //
 //	If the exception was completely handled by the package, then
-//	the return will be via a 'jmp fpsp_done'.  Unless there is 
+//	the return will be via a 'jmp fpsp_done'.  Unless there is
 //	OS specific work to be done (such as handling a context switch or
 //	interrupt) the user program can be resumed via 'rte'.
 //
 //	In the following skeleton code, some typical 'real_xxxx' handling
 //	code is shown.  This code may need to be moved to an appropriate
 //	place in the target system, or rewritten.
-//	
+//
 
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //  $Id$
@@ -68,7 +68,7 @@ SYM(_fpspEntry_dz):
 //
 //	All inexact exceptions are real, but the 'real' handler
 //	will probably want to clear the pending exception.
-//	The provided code will clear the E3 exception (if pending), 
+//	The provided code will clear the E3 exception (if pending),
 //	otherwise clear the E1 exception.  The frestore is not really
 //	necessary for E1 exceptions.
 //
@@ -82,7 +82,7 @@ SYM(_fpspEntry_dz):
 // to the appropriate  handler for the exception in the fpsr.  Note
 // that this fix is only for d43b parts, and is skipped if the
 // version number is not $40.
-// 
+//
 //
 	.global	SYM(_fpspEntry_inex)
 	.global	real_inex
@@ -102,7 +102,7 @@ SYM(_fpspEntry_inex):
 	bra		snan
 inex_ckofl:
 	btstb		#ovfl_bit,2(sp) //test for ovfl
-	beq		inex_ckufl 
+	beq		inex_ckufl
 	addl		#4,sp
 	frestore	(sp)+
 	unlk		a6
@@ -146,7 +146,7 @@ inex_done:
 	frestore	(sp)+
 	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+2*4],%za0)
-	
+
 //
 //	Overflow exception
 //
@@ -164,7 +164,7 @@ ovfl_done:
 	frestore	(sp)+
 	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+6*4],%za0)
-	
+
 //
 //	Underflow exception
 //
@@ -182,7 +182,7 @@ unfl_done:
 	frestore	(sp)+
 	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+4*4],%za0)
-	
+
 //
 //	Signalling NAN exception
 //
@@ -213,7 +213,7 @@ real_operr:
 	frestore	(sp)+
 	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+5*4],%za0)
-	
+
 //
 //	BSUN exception
 //
@@ -237,7 +237,7 @@ real_bsun:
 //
 //	F-line exception
 //
-//	A 'real' F-line exception is one that the FPSP is not supposed to 
+//	A 'real' F-line exception is one that the FPSP is not supposed to
 //	handle. E.g. an instruction with a co-processor ID that is not 1.
 //
 	.global	SYM(_fpspEntry_fline)
@@ -341,7 +341,7 @@ user_write:
 //	a1 - supervisor destination address
 //	d0 - number of bytes to read (maximum count is 12)
 //
-// Like mem_write, mem_read always reads with a supervisor 
+// Like mem_write, mem_read always reads with a supervisor
 // destination address on the supervisor stack.  Also like mem_write,
 // the EXC_SR is checked and a simple memory copy is done if reading
 // from supervisor space is indicated.

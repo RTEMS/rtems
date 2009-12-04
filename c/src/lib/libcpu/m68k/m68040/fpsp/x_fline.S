@@ -15,8 +15,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 X_FLINE:	//idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -54,7 +54,7 @@ fpsp_fline:
 	leal	L_SCR1(%a6),%a1	//use L_SCR1 as scratch
 	movel	#4,%d0
 	addl	#4,%a6		//to offset the sub.l #4,a7 above so that
-//				;a6 can point correctly to the stack frame 
+//				;a6 can point correctly to the stack frame
 //				;before branching to mem_read
 	bsrl	mem_read
 	subl	#4,%a6
@@ -64,7 +64,7 @@ fpsp_fline:
 	bne	not_mvcr	//exit if not
 	bfextu	%d0{#16:#6},%d1
 	cmpib	#0x17,%d1		//check if it is an FMOVECR encoding
-	bne	not_mvcr	
+	bne	not_mvcr
 //				;if an FMOVECR instruction, fix stack
 //				;and go to FPSP_UNIMP
 fix_stack:

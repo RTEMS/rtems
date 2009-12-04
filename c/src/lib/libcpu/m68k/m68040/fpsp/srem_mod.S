@@ -23,7 +23,7 @@
 //       ---------
 //
 //       Step 1.  Save and strip signs of X and Y: signX := sign(X),
-//                signY := sign(Y), X := |X|, Y := |Y|, 
+//                signY := sign(Y), X := |X|, Y := |Y|,
 //                signQ := signX EOR signY. Record whether MOD or REM
 //                is requested.
 //
@@ -43,7 +43,7 @@
 //
 //       Step 4.  At this point, R = X - QY = MOD(X,Y). Set
 //                Last_Subtract := false (used in Step 7 below). If
-//                MOD is requested, go to Step 6. 
+//                MOD is requested, go to Step 6.
 //
 //       Step 5.  R = MOD(X,Y), but REM(X,Y) is requested.
 //            5.1 If R < Y/2, then R = MOD(X,Y) = REM(X,Y). Go to
@@ -63,13 +63,13 @@
 //                X = 2^(j)*(Q+1)Y. set Q := 2^(j)*(Q+1),
 //                R := 0. Return signQ, last 7 bits of Q, and R.
 //
-//                
-             
+//
+
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 SREM_MOD:    //idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -364,10 +364,10 @@ Fix_Sign:
 //..Get Q
 //
 Get_Q:
-   clrl		%d6		
+   clrl		%d6
    movew               SignQ(%a6),%d6        // ...D6 is sign(Q)
    movel               #8,%d7
-   lsrl                %d7,%d6           
+   lsrl                %d7,%d6
    andil               #0x0000007F,%d3   // ...7 bits of Q
    orl                 %d6,%d3           // ...sign and bits of Q
    swap                 %d3
@@ -393,7 +393,7 @@ Finish:
 Rem_is_0:
 //..R = 2^(-j)X - Q Y = Y, thus R = 0 and quotient = 2^j (Q+1)
    addql               #1,%d3
-   cmpil               #8,%d0           // ...D0 is j 
+   cmpil               #8,%d0           // ...D0 is j
    bges                Q_Big
 
    lsll                %d0,%d3

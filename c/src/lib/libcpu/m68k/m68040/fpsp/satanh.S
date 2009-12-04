@@ -15,7 +15,7 @@
 //
 //	Accuracy and Monotonicity: The returned result is within 3 ulps in
 //		64 significant bit, i.e. within 0.5001 ulp to 53 bits if the
-//		result is subsequently rounded to double precision. The 
+//		result is subsequently rounded to double precision. The
 //		result is provably monotonic in double precision.
 //
 //	Speed: The program satanh takes approximately 270 cycles.
@@ -35,7 +35,7 @@
 //	3. If |X| > 1, go to 5.
 //
 //	4. (|X| = 1) Generate infinity with an appropriate sign and
-//		divide-by-zero by	
+//		divide-by-zero by
 //		sgn := sign(X)
 //		atan(X) := sgn / (+0).
 //		Exit.
@@ -47,8 +47,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //satanh	idnt	2,1 | Motorola 040 Floating Point Software Package

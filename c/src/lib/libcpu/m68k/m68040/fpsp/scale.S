@@ -11,7 +11,7 @@
 //	The entry point sscale is called from do_func to emulate
 //	the fscale unimplemented instruction.
 //
-//	Input: Double-extended destination operand in FPTEMP, 
+//	Input: Double-extended destination operand in FPTEMP,
 //		double-extended source operand in ETEMP.
 //
 //	Output: The function returns scale(X,Y) to fp0.
@@ -19,12 +19,12 @@
 //	Modifies: fp0.
 //
 //	Algorithm:
-//		
+//
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //SCALE    idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -149,7 +149,7 @@ nden_exit:
 src_neg:
 	addl		%d0,%d1		//add src to dest
 	beqs		denorm		//if zero, result is denorm
-	blts		fix_dnrm	//if negative, result is 
+	blts		fix_dnrm	//if negative, result is
 //					;needing denormalization
 	tstb		L_SCR1(%a6)
 	beqs		sneg_pos
@@ -163,7 +163,7 @@ sneg_pos:
 
 //
 // The result exponent is below denorm value.  Test for catastrophic
-// underflow and force zero if true.  If not, try to shift the 
+// underflow and force zero if true.  If not, try to shift the
 // mantissa right until a zero exponent exists.
 //
 fix_dnrm:
@@ -231,7 +231,7 @@ no_dir:
 	rts
 
 //
-// The rounding mode changed the zero to a smallest denorm. Call 
+// The rounding mode changed the zero to a smallest denorm. Call
 // t_resdnrm with exceptional operand in ETEMP.
 //
 sm_dnrm:
@@ -252,7 +252,7 @@ not_zero:
 fix_exit:
 	bras		sm_dnrm
 
-	
+
 //
 // The result has underflowed to zero. Return zero and set
 // unfl, aunfl, and ainex.
@@ -286,7 +286,7 @@ neg_zero:
 	clrl		FP_SCR1(%a6)	//clear the exceptional operand
 	clrl		FP_SCR1+4(%a6)	//for gen_except.
 	clrl		FP_SCR1+8(%a6)
-	fmoves		#0x80000000,%fp0	
+	fmoves		#0x80000000,%fp0
 	rts
 pos_zero:
 	clrl		FP_SCR1(%a6)	//clear the exceptional operand
@@ -301,7 +301,7 @@ pos_zero:
 // then adding the remainder of the source to the exponent.
 //
 dst_dnrm:
-	moveml		%d2/%d3,-(%a7)	
+	moveml		%d2/%d3,-(%a7)
 	movew		FPTEMP_EX(%a6),%d1
 	movel		FPTEMP_HI(%a6),%d2
 	movel		FPTEMP_LO(%a6),%d3
@@ -315,7 +315,7 @@ dst_loop:
 	roxll		#1,%d2
 	bras		dst_loop
 //
-// Destination became normalized.  Simply add the remaining 
+// Destination became normalized.  Simply add the remaining
 // portion of the src to the exponent.
 //
 dst_norm:

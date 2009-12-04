@@ -10,10 +10,10 @@
  *
  *  $Id$
  */
- 
+
 
 #if 0 /* this file no longer used */
- 
+
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/isr.h>

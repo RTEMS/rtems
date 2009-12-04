@@ -1,18 +1,18 @@
 /* $Id$ */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2009,
  *     Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  *     under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -21,18 +21,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -41,10 +41,10 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
-                                               
+
 
 /* Code for testing FPU/SSE context save/restore across exceptions
  * (including interrupts).
@@ -60,7 +60,7 @@
  *       2b loads context from 1) into FPU/SSE
  *       2c raises an exception or interrupt
  *
- *   *  (2d save FPU/SSE context after irq/exception returns to 
+ *   *  (2d save FPU/SSE context after irq/exception returns to
  *          separate area for verification
  *       2e reload original FP/SSE context.)
  *
@@ -228,7 +228,7 @@ fp_ld(Context_Control_sse *p_ctxt, int i)
 
 #define SSECLOBBER \
 	"xmm0","xmm1","xmm2","xmm3",    \
-	"xmm4","xmm5","xmm6","xmm7"    
+	"xmm4","xmm5","xmm6","xmm7"
 
 static void
 sse_clobber(uint32_t x)
@@ -308,7 +308,7 @@ stor_ctxt(Context_Control_sse *p_ctxt)
 		rval = 1;             \
 		if ( !quiet )         \
            fprintf(stderr,#fld" mismatch ("fmt" != "fmt")\n",a->fld, b->fld); \
-	} 
+	}
 
 #define FLTCMP(i)                                   \
 	do {                                            \
@@ -664,7 +664,7 @@ int                     errs = 0;
 
 	/* Test if FP/SSE context is saved/restored across an exception */
 	sse_test_ohdl      = _currentExcHandler;
-	_currentExcHandler = sse_test_ehdl; 
+	_currentExcHandler = sse_test_ehdl;
 
 	if ( (sse_tests & SSE_TEST_FPU_EXC) ) {
 		if ( (st = exc_raise(FP_EXC)) ) {

@@ -4,10 +4,10 @@
 //	gen_except.sa 3.7 1/16/92
 //
 //	gen_except --- FPSP routine to detect reportable exceptions
-//	
+//
 //	This routine compares the exception enable byte of the
 //	user_fpcr on the stack with the exception status byte
-//	of the user_fpsr. 
+//	of the user_fpsr.
 //
 //	Any routine which may report an exceptions must load
 //	the stack frame in memory with the exceptional operand(s).
@@ -25,14 +25,14 @@
 //
 //	Note: The IEEE standard specifies that inex2 is to be
 //	reported if ovfl occurs and the ovfl enable bit is not
-//	set but the inex2 enable bit is.  
+//	set but the inex2 enable bit is.
 //
 //
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 GEN_EXCEPT:    //idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -72,12 +72,12 @@ gen_except:
 //
 	movel	ETEMP_EX(%a6),ETEMP_EX(%a1) //copy etemp from unimp
 	movel	ETEMP_HI(%a6),ETEMP_HI(%a1) //frame to busy frame
-	movel	ETEMP_LO(%a6),ETEMP_LO(%a1) 
+	movel	ETEMP_LO(%a6),ETEMP_LO(%a1)
 	movel	CMDREG1B(%a6),CMDREG1B(%a1) //set inst in frame to unimp
 	movel	CMDREG1B(%a6),%d0		//fix cmd1b to make it
 	andl	#0x03c30000,%d0		//work for cmd3b
 	bfextu	CMDREG1B(%a6){#13:#1},%d1	//extract bit 2
-	lsll	#5,%d1			
+	lsll	#5,%d1
 	swap	%d1
 	orl	%d1,%d0			//put it in the right place
 	bfextu	CMDREG1B(%a6){#10:#3},%d1	//extract bit 3,4,5
@@ -88,7 +88,7 @@ gen_except:
 //
 // Or in the FPSR from the emulation with the USER_FPSR on the stack.
 //
-	fmovel	%FPSR,%d0		
+	fmovel	%FPSR,%d0
 	orl	%d0,USER_FPSR(%a6)
 	movel	USER_FPSR(%a6),FPSR_SHADOW(%a1) //set exc bits
 	orl	#sx_mask,E_BYTE(%a1)
@@ -110,7 +110,7 @@ test_rev:
 	cmpib	#UNIMP_41_SIZE-4,1(%a7)	//test for rev unimp frame
 	bnel	fpsp_fmt_error		//if not $28 or $30
 	leal	UNIMP_41_SIZE+LOCAL_SIZE(%a7),%a1
-	
+
 unimp_con:
 //
 // Fix up the new unimp frame with entries from the old unimp frame
@@ -119,23 +119,23 @@ unimp_con:
 //
 // Or in the FPSR from the emulation with the USER_FPSR on the stack.
 //
-	fmovel	%FPSR,%d0		
+	fmovel	%FPSR,%d0
 	orl	%d0,USER_FPSR(%a6)
 	bra	do_clean
 
 //
 // Frame is idle, so check for exceptions reported through
-// USER_FPSR and set the unimp frame accordingly.  
+// USER_FPSR and set the unimp frame accordingly.
 // A7 must be incremented to the point before the
 // idle fsave vector to the unimp vector.
 //
-	
+
 do_check:
 	addl	#4,%a7			//point A7 back to unimp frame
 //
 // Or in the FPSR from the emulation with the USER_FPSR on the stack.
 //
-	fmovel	%FPSR,%d0		
+	fmovel	%FPSR,%d0
 	orl	%d0,USER_FPSR(%a6)
 //
 // On a busy frame, we must clear the nmnexc bits.
@@ -167,10 +167,10 @@ frame_com:
 bsun_exc:
 	bra	do_clean
 //
-// The typical work to be done to the unimp frame to report an 
+// The typical work to be done to the unimp frame to report an
 // exception is to set the E1/E3 byte and clr the U flag.
-// commonE1 does this for E1 exceptions, which are snan, 
-// operr, and dz.  commonE3 does this for E3 exceptions, which 
+// commonE1 does this for E1 exceptions, which are snan,
+// operr, and dz.  commonE3 does this for E3 exceptions, which
 // are inex2 and inex1, and also clears the E1 exception bit
 // left over from the unimp exception.
 //
@@ -188,7 +188,7 @@ uniE3:
 
 unsE3:
 	tstb	RES_FLG(%a6)
-	bnes	unsE3_0	
+	bnes	unsE3_0
 unsE3_1:
 	bsetb	#E3,E_BYTE(%a6)		//set E3 flag
 unsE3_0:
@@ -196,7 +196,7 @@ unsE3_0:
 	movel	CMDREG1B(%a6),%d0
 	andl	#0x03c30000,%d0		//work for cmd3b
 	bfextu	CMDREG1B(%a6){#13:#1},%d1	//extract bit 2
-	lsll	#5,%d1			
+	lsll	#5,%d1
 	swap	%d1
 	orl	%d1,%d0			//put it in the right place
 	bfextu	CMDREG1B(%a6){#10:#3},%d1	//extract bit 3,4,5
@@ -220,8 +220,8 @@ no_match:
 	beqs	no_exc			//if clear, exit
 	bras	ovfl_unfl		//go to unfl_ovfl to determine if
 //					;it is an unsupp or unimp exc
-	
-// No exceptions are to be reported.  If the instruction was 
+
+// No exceptions are to be reported.  If the instruction was
 // unimplemented, no FPU restore is necessary.  If it was
 // unsupported, we must perform the restore.
 no_exc:
@@ -245,13 +245,13 @@ uni_no_exc:
 //
 // Unimplemented Instruction Handler:
 // Ovfl:
-//   Only scosh, setox, ssinh, stwotox, and scale can set overflow in 
+//   Only scosh, setox, ssinh, stwotox, and scale can set overflow in
 //   this manner.
 // Unfl:
 //   Stwotox, setox, and scale can set underflow in this manner.
 //   Any of the other Library Routines such that f(x)=x in which
-//   x is an extended denorm can report an underflow exception. 
-//   It is the responsibility of the exception-causing exception 
+//   x is an extended denorm can report an underflow exception.
+//   It is the responsibility of the exception-causing exception
 //   to make sure that WBTEMP is correct.
 //
 //   The exceptional operand is in FP_SCR1.
@@ -308,7 +308,7 @@ busy_fr:
 	movel	CMDREG1B(%a6),%d0		//fix cmd1b to make it
 	andl	#0x03c30000,%d0		//work for cmd3b
 	bfextu	CMDREG1B(%a6){#13:#1},%d1	//extract bit 2
-	lsll	#5,%d1			
+	lsll	#5,%d1
 	swap	%d1
 	orl	%d1,%d0			//put it in the right place
 	bfextu	CMDREG1B(%a6){#10:#3},%d1	//extract bit 3,4,5
@@ -320,10 +320,10 @@ busy_fr:
 //
 // Check if the frame to be restored is busy or unimp.
 //** NOTE *** Bug fix for errata (0d43b #3)
-// If the frame is unimp, we must create a busy frame to 
+// If the frame is unimp, we must create a busy frame to
 // fix the bug with the nmnexc bits in cases in which they
 // are set by a previous instruction and not cleared by
-// the save. The frame will be unimp only if the final 
+// the save. The frame will be unimp only if the final
 // instruction in an emulation routine caused the exception
 // by doing an fmove <ea>,fp0.  The exception operand, in
 // internal format, is in fptemp.
@@ -364,7 +364,7 @@ loop2:
 	bfins	%d0,NMCEXC(%a1){#4:#4}	//and insert them in nmcexc
 	movel	USER_FPSR(%a6),FPSR_SHADOW(%a1) //set exc bits
 	orl	#sx_mask,E_BYTE(%a1)
-	
+
 do_restore:
 	moveml	USER_DA(%a6),%d0-%d1/%a0-%a1
 	fmovemx USER_FP0(%a6),%fp0-%fp3
@@ -376,10 +376,10 @@ do_restore:
 cont:
 	unlk	%a6
 //
-// If trace mode enabled, then go to trace handler.  This handler 
-// cannot have any fp instructions.  If there are fp inst's and an 
-// exception has been restored into the machine then the exception 
-// will occur upon execution of the fp inst.  This is not desirable 
+// If trace mode enabled, then go to trace handler.  This handler
+// cannot have any fp instructions.  If there are fp inst's and an
+// exception has been restored into the machine then the exception
+// will occur upon execution of the fp inst.  This is not desirable
 // in the kernel (supervisor mode).  See MC68040 manual Section 9.3.8.
 //
 finish_up:
@@ -438,12 +438,12 @@ loop40:	clrl	-(%sp)
         movel  USER_D1(%a6),%d1  // restore d1
 	movel	#0x40280000,-(%sp)
 	frestore (%sp)+
-	unlk  	%a5	
+	unlk  	%a5
 	rts
 
 frame_41:
 	tstb	1(%sp)		// check to see if idle
-	bne	notidle	
+	bne	notidle
 idle41:
 	clrl	(%sp)		// get rid of old fsave frame
         movel  %d1,USER_D1(%a6)  // save d1
@@ -453,18 +453,18 @@ loop41:	clrl	-(%sp)
         movel  USER_D1(%a6),%d1  // restore d1
 	movel	#0x41300000,-(%sp)
 	frestore (%sp)+
-	unlk	%a5	
+	unlk	%a5
 	rts
 
 notidle:
-	bclrb	#etemp15_bit,-40(%a5) 
+	bclrb	#etemp15_bit,-40(%a5)
 	frestore (%sp)+
-	unlk	%a5	
+	unlk	%a5
 	rts
 
 nofix:
 	frestore (%sp)+
-	unlk	%a5	
+	unlk	%a5
 	rts
 
 	|end

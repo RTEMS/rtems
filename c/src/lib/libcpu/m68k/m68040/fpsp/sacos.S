@@ -14,7 +14,7 @@
 //
 //	Accuracy and Monotonicity: The returned result is within 3 ulps in
 //		64 significant bit, i.e. within 0.5001 ulp to 53 bits if the
-//		result is subsequently rounded to double precision. The 
+//		result is subsequently rounded to double precision. The
 //		result is provably monotonic in double precision.
 //
 //	Speed: The program sCOS takes approximately 310 cycles.
@@ -40,8 +40,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //SACOS	idnt	2,1 | Motorola 040 Floating Point Software Package
@@ -112,6 +112,6 @@ ACOSBIG:
 ACOSP1:
 	fmovel		%d1,%FPCR
 	fmoves		#0x00000000,%fp0
-	rts				//Facos ; of +1 is exact	
+	rts				//Facos ; of +1 is exact
 
 	|end

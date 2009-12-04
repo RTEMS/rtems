@@ -10,7 +10,7 @@
 //	or when storing to memory, the contents of a floating-point
 //	data register are too large to be represented in the
 //	destination format.
-//		
+//
 // Trap disabled results
 //
 // If the instruction is move_out, then garbage is stored in the
@@ -37,8 +37,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 X_OVFL:	//idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -75,7 +75,7 @@ fpsp_ovfl:
 //	if overflow traps not enabled check for inexact exception
 //
 	btstb	#ovfl_bit,FPCR_ENABLE(%a6)
-	beqs	ck_inex	
+	beqs	ck_inex
 //
 	btstb		#E3,E_BYTE(%a6)
 	beqs		no_e3_1
@@ -122,7 +122,7 @@ no_e3_2:
 	frestore	(%a7)+
 	unlk		%a6
 	bral		real_inex
-	
+
 ovfl_exit:
 	bclrb	#E3,E_BYTE(%a6)	//test and clear E3 bit
 	beqs	e1_set
@@ -154,7 +154,7 @@ e1_set:
 //
 ovf_adj:
 //
-// Have a0 point to the correct operand. 
+// Have a0 point to the correct operand.
 //
 	btstb	#E3,E_BYTE(%a6)	//test E3 bit
 	beqs	ovf_e1
@@ -180,7 +180,7 @@ ovf_com:
  	bsrl	ovf_r_x3	//returns a0 pointing to result
 	moveb	L_SCR1(%a6),FPSR_CC(%a6)
 	bral	store		//stores to memory or register
-	
+
 not_opc011:
 	bsrl	ovf_r_x2	//returns a0 pointing to result
 	bral	store		//stores to memory or register

@@ -16,7 +16,7 @@
 // of the mantissa are sent to the integer unit).
 //
 // For trap enabled the 040 does the following:
-// If the inst is move_out, then the results are the same as for trap 
+// If the inst is move_out, then the results are the same as for trap
 // disabled with the exception posted.  If the instruction is not move_
 // out, the dest. is not modified, and the exception is posted.
 //
@@ -24,8 +24,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 X_SNAN:	//idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -141,7 +141,7 @@ loop2:
 	bral		fpsp_done
 
 //
-// Move_out 
+// Move_out
 //
 move_out:
 	movel		EXC_EA(%a6),%a0	//get <ea> from exc frame
@@ -149,18 +149,18 @@ move_out:
 	bfextu		CMDREG1B(%a6){#3:#3},%d0 //move rx field to d0{2:0}
 	cmpil		#0,%d0		//check for long
 	beqs		sto_long	//branch if move_out long
-	
+
 	cmpil		#4,%d0		//check for word
 	beqs		sto_word	//branch if move_out word
-	
+
 	cmpil		#6,%d0		//check for byte
 	beqs		sto_byte	//branch if move_out byte
-	
+
 //
 // Not byte, word or long
 //
 	rts
-//	
+//
 // Get the 32 most significant bits of etemp mantissa
 //
 sto_long:
@@ -169,13 +169,13 @@ sto_long:
 //
 // Set signalling nan bit
 //
-	bsetl		#30,%d1			
+	bsetl		#30,%d1
 //
 // Store to the users destination address
 //
 	tstl		%a0		//check if <ea> is 0
 	beqs		wrt_dn		//destination is a data register
-	
+
 	movel		%d1,-(%a7)	//move the snan onto the stack
 	movel		%a0,%a1		//load dest addr into a1
 	movel		%a7,%a0		//load src addr of snan into a0
@@ -191,7 +191,7 @@ sto_word:
 //
 // Set signalling nan bit
 //
-	bsetl		#30,%d1			
+	bsetl		#30,%d1
 //
 // Store to the users destination address
 //
@@ -213,7 +213,7 @@ sto_byte:
 //
 // Set signalling nan bit
 //
-	bsetl		#30,%d1			
+	bsetl		#30,%d1
 //
 // Store to the users destination address
 //
@@ -255,7 +255,7 @@ wrt_byte:
 // Check if it is a src nan or dst nan
 //
 not_out:
-	movel		DTAG(%a6),%d0	
+	movel		DTAG(%a6),%d0
 	bfextu		%d0{#0:#3},%d0	//isolate dtag in lsbs
 
 	cmpib		#3,%d0		//check for nan in destination

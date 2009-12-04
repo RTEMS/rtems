@@ -4,7 +4,7 @@
 
 /*
  *  Defines a couple of Macros used in cpu_asm.S
- * 
+ *
  *  COPYRIGHT (c) 2006 by Atos Automacao Industrial Ltda.
  *             written by Alain Schaefer <alain.schaefer@easc.ch>
  *                    and Antonio Giovanini <antonio@atos.com.br>

@@ -3,28 +3,28 @@
 //
 //	slog2.sa 3.1 12/10/90
 //
-//       The entry point slog10 computes the base-10 
+//       The entry point slog10 computes the base-10
 //	logarithm of an input argument X.
-//	slog10d does the same except the input value is a 
-//	denormalized number.  
+//	slog10d does the same except the input value is a
+//	denormalized number.
 //	sLog2 and sLog2d are the base-2 analogues.
 //
-//       INPUT:	Double-extended value in memory location pointed to 
+//       INPUT:	Double-extended value in memory location pointed to
 //		by address register a0.
 //
-//       OUTPUT: log_10(X) or log_2(X) returned in floating-point 
+//       OUTPUT: log_10(X) or log_2(X) returned in floating-point
 //		register fp0.
 //
-//       ACCURACY and MONOTONICITY: The returned result is within 1.7 
-//		ulps in 64 significant bit, i.e. within 0.5003 ulp 
-//		to 53 bits if the result is subsequently rounded 
-//		to double precision. The result is provably monotonic 
+//       ACCURACY and MONOTONICITY: The returned result is within 1.7
+//		ulps in 64 significant bit, i.e. within 0.5003 ulp
+//		to 53 bits if the result is subsequently rounded
+//		to double precision. The result is provably monotonic
 //		in double precision.
 //
-//       SPEED:	Two timings are measured, both in the copy-back mode. 
-//		The first one is measured when the function is invoked 
-//		the first time (so the instructions and data are not 
-//		in cache), and the second one is measured when the 
+//       SPEED:	Two timings are measured, both in the copy-back mode.
+//		The first one is measured when the function is invoked
+//		the first time (so the instructions and data are not
+//		in cache), and the second one is measured when the
 //		function is reinvoked at the same input argument.
 //
 //       ALGORITHM and IMPLEMENTATION NOTES:
@@ -44,7 +44,7 @@
 //            2.2  Return ans := Y * INV_L10.
 //
 //
-//       slog10: 
+//       slog10:
 //
 //       Step 0.   If X < 0, create a NaN and raise the invalid operation
 //                 flag. Otherwise, save FPCR in D1; set FpCR to default.
@@ -98,15 +98,15 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //SLOG2    idnt    2,1 | Motorola 040 Floating Point Software Package
 
 	|section	8
 
-	|xref	t_frcinx	
+	|xref	t_frcinx
 	|xref	t_operr
 	|xref	slogn
 	|xref	slognd

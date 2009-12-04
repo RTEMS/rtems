@@ -15,11 +15,11 @@
 //
 //	Accuracy and Monotonicity: The returned result is within 2 ulps in
 //		64 significant bit, i.e. within 0.5001 ulp to 53 bits if the
-//		result is subsequently rounded to double precision. The 
+//		result is subsequently rounded to double precision. The
 //		result is provably monotonic in double precision.
 //
-//	Speed: The program slogn takes approximately 190 cycles for input 
-//		argument X such that |X-1| >= 1/16, which is the the usual 
+//	Speed: The program slogn takes approximately 190 cycles for input
+//		argument X such that |X-1| >= 1/16, which is the the usual
 //		situation. For those arguments, slognp1 takes approximately
 //		 210 cycles. For the less common arguments, the program will
 //		 run no worse than 10% slower.
@@ -47,26 +47,26 @@
 //	Step 2: Let 1+X = 2**k * Y, where 1 <= Y < 2. Define F as done in Step 2
 //		of the algorithm for LOGN and compute log(1+X) as
 //		k*log(2) + log(F) + poly where poly approximates log(1+u),
-//		u = (Y-F)/F. 
+//		u = (Y-F)/F.
 //
 //	Implementation Notes:
 //	Note 1. There are 64 different possible values for F, thus 64 log(F)'s
-//		need to be tabulated. Moreover, the values of 1/F are also 
+//		need to be tabulated. Moreover, the values of 1/F are also
 //		tabulated so that the division in (Y-F)/F can be performed by a
 //		multiplication.
 //
 //	Note 2. In Step 2 of lognp1, in order to preserved accuracy, the value
-//		Y-F has to be calculated carefully when 1/2 <= X < 3/2. 
+//		Y-F has to be calculated carefully when 1/2 <= X < 3/2.
 //
 //	Note 3. To fully exploit the pipeline, polynomials are usually separated
 //		into two parts evaluated independently before being added up.
-//	
+//
 
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //slogn	idnt	2,1 | Motorola 040 Floating Point Software Package
@@ -264,7 +264,7 @@ slognd:
 //----the value TWOTO100 is no longer needed.
 //----Note that this code assumes the denormalized input is NON-ZERO.
 
-     moveml	%d2-%d7,-(%a7)		// ...save some registers 
+     moveml	%d2-%d7,-(%a7)		// ...save some registers
      movel	#0x00000000,%d3		// ...D3 is exponent of smallest norm. #
      movel	4(%a0),%d4
      movel	8(%a0),%d5		// ...(D4,D5) is (Hi_X,Lo_X)
@@ -349,7 +349,7 @@ LOGMAIN:
 //--NOTE THAT U = (Y-F)/F IS VERY SMALL AND THUS APPROXIMATING
 //--LOG(1+U) CAN BE VERY EFFICIENT.
 //--ALSO NOTE THAT THE VALUE 1/F IS STORED IN A TABLE SO THAT NO
-//--DIVISION IS NEEDED TO CALCULATE (Y-F)/F. 
+//--DIVISION IS NEEDED TO CALCULATE (Y-F)/F.
 
 //--GET K, Y, F, AND ADDRESS OF 1/F.
 	asrl	#8,%d0
@@ -365,7 +365,7 @@ LOGMAIN:
 	andil	#0xFE000000,FFRAC(%a6) // ...FIRST 7 BITS OF Y
 	oril	#0x01000000,FFRAC(%a6) // ...GET F: ATTACH A 1 AT THE EIGHTH BIT
 	movel	FFRAC(%a6),%d0	// ...READY TO GET ADDRESS OF 1/F
-	andil	#0x7E000000,%d0	
+	andil	#0x7E000000,%d0
 	asrl	#8,%d0
 	asrl	#8,%d0
 	asrl	#4,%d0		// ...SHIFTED 20, D0 IS THE DISPLACEMENT
@@ -392,7 +392,7 @@ LP1CONT1:
 //--[U + V*(A1+V*(A3+V*A5))]  +  [U*V*(A2+V*(A4+V*A6))]
 
 	fmovex	%fp2,%fp3
-	fmovex	%fp2,%fp1	
+	fmovex	%fp2,%fp1
 
 	fmuld	LOGA6,%fp1	// ...V*A6
 	fmuld	LOGA5,%fp2	// ...V*A5
@@ -442,7 +442,7 @@ LP1CONT2:
 	fmovex	%fp1,%fp0
 	fmulx	%fp0,%fp0	// ...FP0 IS V
 	fmovex	%fp1,SAVEU(%a6) // ...STORE U IN MEMORY, FREE FP1
-	fmovex	%fp0,%fp1	
+	fmovex	%fp0,%fp1
 	fmulx	%fp1,%fp1	// ...FP1 IS W
 
 	fmoved	LOGB5,%fp3
@@ -467,7 +467,7 @@ LP1CONT2:
 	fmulx	%fp1,%fp0	// ...U*V*( [B1+W*(B3+W*B5)] + [V*(B2+W*B4)] )
 
 	fmovel	%d1,%fpcr
-	faddx	SAVEU(%a6),%fp0		
+	faddx	SAVEU(%a6),%fp0
 	bra	t_frcinx
 	rts
 
@@ -551,7 +551,7 @@ KISNEG1:
 	asrl	#8,%d0
 	asrl	#4,%d0		// ...D0 CONTAINS DISPLACEMENT FOR 1/F
 	faddx	%fp1,%fp1		// ...GET 2Z
-	fmovemx %fp2-%fp2/%fp3,-(%sp)	// ...SAVE FP2 
+	fmovemx %fp2-%fp2/%fp3,-(%sp)	// ...SAVE FP2
 	faddx	%fp1,%fp0		// ...FP0 IS Y-F = (2-F)+2Z
 	lea	LOGTBL,%a0	// ...A0 IS ADDRESS OF 1/F
 	addal	%d0,%a0

@@ -6,25 +6,25 @@
 //	fpsp_unfl --- FPSP handler for underflow exception
 //
 // Trap disabled results
-//	For 881/2 compatibility, sw must denormalize the intermediate 
-// result, then store the result.  Denormalization is accomplished 
-// by taking the intermediate result (which is always normalized) and 
-// shifting the mantissa right while incrementing the exponent until 
-// it is equal to the denormalized exponent for the destination 
-// format.  After denormalization, the result is rounded to the 
+//	For 881/2 compatibility, sw must denormalize the intermediate
+// result, then store the result.  Denormalization is accomplished
+// by taking the intermediate result (which is always normalized) and
+// shifting the mantissa right while incrementing the exponent until
+// it is equal to the denormalized exponent for the destination
+// format.  After denormalization, the result is rounded to the
 // destination format.
-//		
+//
 // Trap enabled results
-// 	All trap disabled code applies.	In addition the exceptional 
-// operand needs to made available to the user with a bias of $6000 
+// 	All trap disabled code applies.	In addition the exceptional
+// operand needs to made available to the user with a bias of $6000
 // added to the exponent.
 //
 
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 X_UNFL:	//idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -93,7 +93,7 @@ ck_inex:
 
 //
 // Inexact enabled and reported, and we must take an inexact exception
-//	
+//
 take_inex:
 	btstb		#E3,E_BYTE(%a6)
 	beqs		no_e3_2
@@ -147,7 +147,7 @@ unf_res:
 //					;1=sgl, 2=dbl
 //					;we need the RND_PREC in the
 //					;upper word for round
-	movew		#0,-(%a7)	
+	movew		#0,-(%a7)
 	movew		%d0,-(%a7)	//copy RND_PREC to stack
 //
 //
@@ -201,7 +201,7 @@ unf_cont:
 // must not corrupt a0 and d0.
 //
 //
-// Perform Round	
+// Perform Round
 //	Input:		a0 points to input operand
 //			d0{31:29} has guard, round, sticky
 //			d1{01:00} has rounding mode
@@ -224,7 +224,7 @@ opc011:
 	bsrl		g_dfmtou
 	tstb		%d0
 	beqs		ext_opc011	//If extended, do not subtract
-// 				;If destination format is sgl/dbl, 
+// 				;If destination format is sgl/dbl,
 	tstb		LOCAL_HI(%a0)	//If rounded result is normal,don't
 //					;subtract
 	bmis		ext_opc011
@@ -259,7 +259,7 @@ ck_sgn:
 	bsetb		#neg_bit,FPSR_CC(%a6)
 
 //
-// Finish.  
+// Finish.
 //
 unf_done:
 	btstb		#inex2_bit,FPSR_EXCEPT(%a6)

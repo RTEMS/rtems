@@ -1,5 +1,5 @@
 /*
- * cpu.h  - This file contains definitions for data structure related 
+ * cpu.h  - This file contains definitions for data structure related
  *          to Intel system programming. More information can be found
  *	    on Intel site and more precisely in the following book :
  *
@@ -147,7 +147,7 @@ do { register unsigned short __port  = _port; \
    } while (0)
 
 /*
- * Type definition for raw interrupts. 
+ * Type definition for raw interrupts.
  */
 
 typedef unsigned char  rtems_vector_offset;
@@ -167,16 +167,16 @@ typedef struct __rtems_raw_irq_connect_data__{
    * libcpu library, this library should have no knowledge of
    * board specific hardware to manage interrupts and thus the
    * "on" routine must enable the irq both at device and PIC level.
-   * 
+   *
    */
-    rtems_raw_irq_enable	on;	
+    rtems_raw_irq_enable	on;
   /*
    * function for disabling raw interrupts. In order to be consistent
    * with the fact that the raw connexion can defined in the
    * libcpu library, this library should have no knowledge of
    * board specific hardware to manage interrupts and thus the
    * "on" routine must disable the irq both at device and PIC level.
-   * 
+   *
    */
   rtems_raw_irq_disable		off;
   /*
@@ -204,7 +204,7 @@ typedef struct {
 
 /*
  * C callable function enabling to get handler currently connected to a vector
- * 
+ *
  */
 rtems_raw_irq_hdl get_hdl_from_vector(rtems_vector_offset);
 
@@ -335,7 +335,7 @@ typedef union {
   page_table_bits	bits;
   unsigned int		table_entry;
 } page_table_entry;
- 
+
 /*
  * definitions related to page table entry
  */
@@ -371,12 +371,12 @@ extern void 	_CPU_disable_cache();
 extern void 	_CPU_enable_cache();
 extern int 	_CPU_map_phys_address
                       (void **mappedAddress, void *physAddress,
-		       int size, int flag); 
-extern int 	_CPU_unmap_virt_address (void *mappedAddress, int size); 
+		       int size, int flag);
+extern int 	_CPU_unmap_virt_address (void *mappedAddress, int size);
 extern int 	_CPU_change_memory_mapping_attribute
                          (void **newAddress, void *mappedAddress,
 			  unsigned int size, unsigned int flag);
-extern int  	_CPU_display_memory_attribute(); 
+extern int  	_CPU_display_memory_attribute();
 
 # endif /* ASM */
 

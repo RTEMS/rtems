@@ -85,8 +85,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //SSIN	idnt	2,1 | Motorola 040 Floating Point Software Package
@@ -206,7 +206,7 @@ SINMAIN:
 
 //--HIDE THE NEXT THREE INSTRUCTIONS
 	lea		PITBL+0x200,%a1 // ...TABLE OF N*PI/2, N = -32,...,32
-	
+
 
 //--FP1 IS NOW READY
 	fmovel		%fp1,N(%a6)		// ...CONVERT TO INTEGER
@@ -275,7 +275,7 @@ SINPOLY:
 	faddx		%fp2,%fp1	// ...[A1+T(A3+T(A5+TA7))]+[S(A2+T(A4+TA6))]
 //--FP3 RELEASED, RESTORE NOW AND TAKE SOME ADVANTAGE OF HIDING
 //--FP2 RELEASED, RESTORE NOW AND TAKE FULL ADVANTAGE OF HIDING
-	
+
 
 	fmulx		%fp1,%fp0		// ...SIN(R')-R'
 //--FP1 RELEASED.
@@ -337,7 +337,7 @@ COSPOLY:
 	fmulx		%fp2,%fp0	// ...S(B2+T(B4+T(B6+TB8)))
 //--FP3 RELEASED, RESTORE NOW AND TAKE SOME ADVANTAGE OF HIDING
 //--FP2 RELEASED.
-	
+
 
 	faddx		%fp1,%fp0
 //--FP1 RELEASED
@@ -354,7 +354,7 @@ SINBORS:
 //--IF |X| < 2**(-40), RETURN X OR 1.
 	cmpil		#0x3FFF8000,%d0
 	bgts		REDUCEX
-        
+
 
 SINSM:
 	movel		ADJN(%a6),%d0
@@ -468,7 +468,7 @@ WORK:
         movew		%d2,FP_SCR2(%a6)
 	clrw           FP_SCR2+2(%a6)
 	movel		#0xC90FDAA2,FP_SCR2+4(%a6)
-	clrl		FP_SCR2+8(%a6)		// ...FP_SCR2 is  2**(L) * Piby2_1	
+	clrl		FP_SCR2+8(%a6)		// ...FP_SCR2 is  2**(L) * Piby2_1
 
 //--FP2 IS READY
 	fsubs		TWOTO63(%a6),%fp2		// ...FP2 is N
@@ -516,7 +516,7 @@ RESTORE:
 	movel		(%a7)+,%d2
 	fmovemx	(%a7)+,%fp2-%fp5
 
-	
+
 	movel		ADJN(%a6),%d0
 	cmpil		#4,%d0
 
@@ -561,7 +561,7 @@ SCMAIN:
 
 //--HIDE THE NEXT THREE INSTRUCTIONS
 	lea		PITBL+0x200,%a1 // ...TABLE OF N*PI/2, N = -32,...,32
-	
+
 
 //--FP1 IS NOW READY
 	fmovel		%fp1,N(%a6)		// ...CONVERT TO INTEGER
@@ -579,7 +579,7 @@ SCCONT:
 //--HIDE THE NEXT TWO
 	movel		N(%a6),%d0
 	rorl		#1,%d0
-	
+
 	cmpil		#0,%d0		// ...D0 < 0 IFF N IS ODD
 	bge		NEVEN
 
@@ -643,7 +643,7 @@ NODD:
 	fmulx		%fp0,%fp1	 // ...S(A1+...)
 	fmulx		%fp2,%fp0	 // ...S(B2+...)
 
-	
+
 
 	fmulx		RPRIME(%a6),%fp1	// ...R'S(A1+...)
 	fadds		COSB1,%fp0	// ...B1+S(B2...)
@@ -711,7 +711,7 @@ NEVEN:
 	fmulx		%fp0,%fp1	 // ...S(B2+...)
 	fmulx		%fp2,%fp0	 // ...s(a1+...)
 
-	
+
 
 	fadds		COSB1,%fp1	// ...B1+S(B2...)
 	fmulx		RPRIME(%a6),%fp0	// ...R'S(A1+...)
@@ -730,7 +730,7 @@ NEVEN:
 SCBORS:
 	cmpil		#0x3FFF8000,%d0
 	bgt		REDUCEX
-        
+
 
 SCSM:
 	movew		#0x0000,XDCARE(%a6)

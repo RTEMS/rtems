@@ -76,7 +76,7 @@ void _CPU_Initialize(void)
    * As a courtesy, we double-check here but it
    * may be too late (which is also why we don't
    * enable SSE here).
-   */ 
+   */
   {
   uint32_t cr4;
     __asm__ __volatile__("mov %%cr4, %0":"=r"(cr4));

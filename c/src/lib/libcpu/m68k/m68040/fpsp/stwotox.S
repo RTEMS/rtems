@@ -78,8 +78,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //STWOTOX	idnt	2,1 | Motorola 040 Floating Point Software Package
@@ -224,14 +224,14 @@ TWOOK1:
 	cmpil		#0x400D80C0,%d0		// ...|X| > 16480?
 	bles		TWOMAIN
 	bra		EXPBORS
-	
+
 
 TWOMAIN:
 //--USUAL CASE, 2^(-70) <= |X| <= 16480
 
 	fmovex		%fp0,%fp1
 	fmuls		#0x42800000,%fp1  // ...64 * X
-	
+
 	fmovel		%fp1,N(%a6)		// ...N = ROUND-TO-INT(64 X)
 	movel		%d2,-(%sp)
 	lea		EXPTBL,%a1 	// ...LOAD ADDRESS OF TABLE OF 2^(J/64)
@@ -266,7 +266,7 @@ TWOMAIN:
 	clrw		FACT2HI+2(%a6)
 	clrl		FACT2LOW(%a6)
 	addw		%d0,FACT1(%a6)
-	
+
 	fmulx		LOG2,%fp0	// ...FP0 IS R
 	addw		%d0,FACT2(%a6)
 
@@ -334,7 +334,7 @@ TENMAIN:
 
 	fmovex		%fp0,%fp1
 	fmuld		L2TEN64,%fp1	// ...X*64*LOG10/LOG2
-	
+
 	fmovel		%fp1,N(%a6)		// ...N=INT(X*64*LOG10/LOG2)
 	movel		%d2,-(%sp)
 	lea		EXPTBL,%a1 	// ...LOAD ADDRESS OF TABLE OF 2^(J/64)
@@ -377,7 +377,7 @@ TENMAIN:
 	clrl		FACT2LOW(%a6)
 
 	fmulx		LOG10,%fp0	// ...FP0 IS R
-	
+
 	addw		%d0,FACT1(%a6)
 	addw		%d0,FACT2(%a6)
 
@@ -407,9 +407,9 @@ expr:
 
 	fmulx		%fp1,%fp2		// ...FP2 IS S*(A1+S*(A3+S*A5))
 	faddx		%fp3,%fp0		// ...FP0 IS R+R*S*(A2+S*A4)
-	
+
 	faddx		%fp2,%fp0		// ...FP0 IS EXP(R) - 1
-	
+
 
 //--FINAL RECONSTRUCTION PROCESS
 //--EXP(X) = 2^M*2^(J/64) + 2^M*2^(J/64)*(EXP(R)-1)  -  (1 OR 0)

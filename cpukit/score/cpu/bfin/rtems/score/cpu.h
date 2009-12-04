@@ -5,7 +5,7 @@
 /*
  *  This include file contains information pertaining to the Blackfin
  *  processor.
- * 
+ *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *  adapted to Blackfin by Alain Schaefer <alain.schaefer@easc.ch>
@@ -169,7 +169,7 @@ extern "C" {
 
 /**
  *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
  *
  *  Port Specific Information:
@@ -196,7 +196,7 @@ extern "C" {
  *  an i387 and wish to leave floating point support out of RTEMS.
  */
 
-/** 
+/**
  *  @def CPU_SOFTWARE_FP
  *
  *  Does the CPU have no hardware floating point and GCC provides a
@@ -204,7 +204,7 @@ extern "C" {
  *  switched?
  *
  *  This feature conditional is used to indicate whether or not there
- *  is software implemented floating point that must be context 
+ *  is software implemented floating point that must be context
  *  switched.  The determination of whether or not this applies
  *  is very tool specific and the state saved/restored is also
  *  compiler specific.
@@ -356,7 +356,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_STRUCTURE_ALIGNMENT 
+#define CPU_STRUCTURE_ALIGNMENT
 
 /**
  *  @defgroup CPUEndian Processor Dependent Endianness Support
@@ -477,18 +477,18 @@ typedef struct {
 
     uint32_t   register_p3;
     uint32_t   register_p4;
-    uint32_t   register_p5;                         
+    uint32_t   register_p5;
     uint32_t   register_fp;
     uint32_t   register_sp;
-    
+
     uint32_t   register_l0;
     uint32_t   register_l1;
     uint32_t   register_l2;
-    uint32_t   register_l3;    
-    
+    uint32_t   register_l3;
+
     uint32_t   register_rets;
 
-    uint32_t   imask;  
+    uint32_t   imask;
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
@@ -511,7 +511,7 @@ typedef struct {
  *  in @ref Context_Control.
  */
 typedef struct {
-    /** This field is a hint that a port will have a number of integer 
+    /** This field is a hint that a port will have a number of integer
      *  registers that need to be saved when an interrupt occurs or
      *  when a context switch occurs at the end of an ISR.
      */
@@ -551,14 +551,14 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 /**
  *  @ingroup CPUInterrupt
- *  This variable points to the lowest physical address of the interrupt 
+ *  This variable points to the lowest physical address of the interrupt
  *  stack.
  */
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
 
 /**
  *  @ingroup CPUInterrupt
- *  This variable points to the lowest physical address of the interrupt 
+ *  This variable points to the lowest physical address of the interrupt
  *  stack.
  */
 SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
@@ -652,7 +652,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *
  *  @note  This does not have to be a power of 2 although it should be
  *         a multiple of 2 greater than or equal to 2.  The requirement
- *         to be a multiple of 2 is because the heap uses the least 
+ *         to be a multiple of 2 is because the heap uses the least
  *         significant field of the front and back flags to indicate
  *         that a block is in use or free.  So you do not want any odd
  *         length blocks really putting length data in that bit.
@@ -729,7 +729,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
   {                                     \
        asm volatile ("cli %0; csync \n" : "=d" (_level) );     \
   }
-  
+
 
 /**
  *  @ingroup CPUInterrupt
@@ -941,7 +941,7 @@ void _CPU_Context_Initialize(
 /**
  *  @defgroup CPUBitfield Processor Dependent Bitfield Manipulation
  *
- *  This set of routines are used to implement fast searches for 
+ *  This set of routines are used to implement fast searches for
  *  the most important ready task.
  */
 
@@ -966,7 +966,7 @@ void _CPU_Context_Initialize(
 /**
  *  @ingroup CPUBitfield
  *  This routine sets @a _output to the bit number of the first bit
- *  set in @a _value.  @a _value is of CPU dependent type 
+ *  set in @a _value.  @a _value is of CPU dependent type
  *  @a Priority_Bit_map_control.  This type may be either 16 or 32 bits
  *  wide although only the 16 least significant bits will be used.
  *
@@ -1009,14 +1009,14 @@ void _CPU_Context_Initialize(
         if _value > 0x00ff
           _value >>=8
           _number = 8;
-  
+
         if _value > 0x0000f
           _value >=8
           _number += 4
-  
+
         _number += bit_set_table[ _value ]
 @endverbatim
-  
+
  *    where bit_set_table[ 16 ] has values which indicate the first
  *      bit set
  *
@@ -1089,7 +1089,7 @@ void _CPU_Initialize(void);
 
 /**
  *  @ingroup CPUInterrupt
- *  This routine installs a "raw" interrupt handler directly into the 
+ *  This routine installs a "raw" interrupt handler directly into the
  *  processor's vector table.
  *
  *  @param[in] vector is the vector number
@@ -1251,12 +1251,12 @@ static inline uint32_t CPU_swap_u32(
 )
 {
   uint32_t   byte1, byte2, byte3, byte4, swapped;
- 
+
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
   byte2 = (value >> 8)  & 0xff;
   byte1 =  value        & 0xff;
- 
+
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return( swapped );
 }

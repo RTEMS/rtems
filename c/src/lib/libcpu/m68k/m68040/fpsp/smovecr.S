@@ -17,8 +17,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //SMOVECR	idnt	2,1 | Motorola 040 Floating Point Software Package
@@ -41,7 +41,7 @@
 
 FZERO:	.long	00000000
 //
-//	FMOVECR 
+//	FMOVECR
 //
 	.global	smovcr
 smovcr:
@@ -57,7 +57,7 @@ smovcr:
 	cmpib	#0x0e,%d0		//check range $0b - $0e
 	bles	SM_TBL		//valid constants in this range
 	cmpib	#0x2f,%d0		//check range $10 - $2f
-	bles	Z_VAL		//if in this range, return zero 
+	bles	Z_VAL		//if in this range, return zero
 	cmpib	#0x3f,%d0		//check range $30 - $3f
 	ble  	BG_TBL		//valid constants in this range
 Z_VAL:
@@ -151,7 +151,7 @@ not_ext:
 	lea	FP_SCR1(%a6),%a0
 	btstb	#sign_bit,LOCAL_EX(%a0)
 	sne	LOCAL_SGN(%a0)		//convert to internal ext. format
-	
+
 	bsr	round			//go round the mantissa
 
 	bfclr	LOCAL_SGN(%a0){#0:#8}	//convert back to IEEE ext format

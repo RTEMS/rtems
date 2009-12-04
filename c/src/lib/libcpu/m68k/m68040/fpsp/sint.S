@@ -3,8 +3,8 @@
 //
 //	sint.sa 3.1 12/10/90
 //
-//	The entry point sINT computes the rounded integer 
-//	equivalent of the input argument, sINTRZ computes 
+//	The entry point sINT computes the rounded integer
+//	equivalent of the input argument, sINTRZ computes
 //	the integer rounded to zero of the input argument.
 //
 //	Entry points sint and sintrz are called from do_func
@@ -26,10 +26,10 @@
 //
 //	Algorithm: (sint and sintrz)
 //
-//	1. If exp(X) >= 63, return X. 
+//	1. If exp(X) >= 63, return X.
 //	   If exp(X) < 0, return +/- 0 or +/- 1, according to
 //	   the rounding mode.
-//	
+//
 //	2. (X is in range) set rsc = 63 - exp(X). Unnormalize the
 //	   result to the exponent $403e.
 //
@@ -53,8 +53,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //SINT    idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -80,9 +80,9 @@
 sint:
 	bfextu	FPCR_MODE(%a6){#2:#2},%d1	//use user's mode for rounding
 //					;implicitly has extend precision
-//					;in upper word. 
+//					;in upper word.
 	movel	%d1,L_SCR1(%a6)		//save mode bits
-	bras	sintexc			
+	bras	sintexc
 
 //
 //	FINT with extended denorm inputs.
@@ -117,13 +117,13 @@ sintmz:
 sintrz:
 	movel	#1,L_SCR1(%a6)		//use rz mode for rounding
 //					;implicitly has extend precision
-//					;in upper word. 
-	bras	sintexc			
+//					;in upper word.
+	bras	sintexc
 //
 //	SINTDO
 //
 //	Input:	a0 points to an IEEE extended format operand
-// 	Output:	fp0 has the result 
+// 	Output:	fp0 has the result
 //
 // Exceptions:
 //
@@ -135,7 +135,7 @@ sintrz:
 sintdo:
 	bfextu	FPCR_MODE(%a6){#2:#2},%d1	//use user's mode for rounding
 //					;implicitly has ext precision
-//					;in upper word. 
+//					;in upper word.
 	movel	%d1,L_SCR1(%a6)		//save mode bits
 //
 // Real work of sint is in sintexc
@@ -143,7 +143,7 @@ sintdo:
 sintexc:
 	bclrb	#sign_bit,LOCAL_EX(%a0)	//convert to internal extended
 //					;format
-	sne	LOCAL_SGN(%a0)		
+	sne	LOCAL_SGN(%a0)
 	cmpw	#0x403e,LOCAL_EX(%a0)	//check if (unbiased) exp > 63
 	bgts	out_rnge			//branch if exp < 63
 	cmpw	#0x3ffd,LOCAL_EX(%a0)	//check if (unbiased) exp < 0
@@ -189,7 +189,7 @@ un_rnrz:
 un_rnrz_neg:
 	bsr	ld_mzero
 	bra	t_inx2
-	
+
 //
 // Input is greater than 2^63.  All bits are significant.  Return
 // the input.

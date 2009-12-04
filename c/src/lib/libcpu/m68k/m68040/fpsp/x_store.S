@@ -13,8 +13,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 X_STORE:	//idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -56,7 +56,7 @@ is_pos:
 //	in the USER_FPn variable on the stack because all exception
 //	handlers restore fp0-fp3 from there.
 //
-	cmpb	#0x80,%d0		
+	cmpb	#0x80,%d0
 	bnes	not_fp0
 	fmovemx %fp0-%fp0,USER_FP0(%a6)
 	rts
@@ -139,7 +139,7 @@ dest_dbl:
 	addw	#0x3ff,%d0	//add double precision bias
 	swap	%d0		//d0 now in upper word
 	lsll	#4,%d0		//d0 now in proper place for dbl prec exp
-	tstb	LOCAL_SGN(%a1)	
+	tstb	LOCAL_SGN(%a1)
 	beqs	get_mant	//if positive, go process mantissa
 	bsetl	#31,%d0		//if negative, put in sign information
 //				; before continuing
@@ -210,7 +210,7 @@ dest_sgl:
 	addw	#0x7f,%d0		//add single precision bias
 	swap	%d0		//put exp in upper word of d0
 	lsll	#7,%d0		//shift it into single exp bits
-	tstb	LOCAL_SGN(%a1)	
+	tstb	LOCAL_SGN(%a1)
 	beqs	get_sman	//if positive, continue
 	bsetl	#31,%d0		//if negative, put in sign first
 	bras	get_sman	//get mantissa
@@ -242,7 +242,7 @@ sgl_Dn:
 	orl	#0x10,%d1		//reg_dest wants size added to reg#
 	bral	reg_dest	//size is X, rts in reg_dest will
 //				;return to caller of dest_sgl
-	
+
 dest_ext:
 	tstb	LOCAL_SGN(%a1)	//put back sign into exponent word
 	beqs	dstx_cont

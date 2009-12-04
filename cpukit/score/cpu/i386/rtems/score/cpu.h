@@ -360,7 +360,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 uint32_t   _CPU_ISR_Get_level( void );
 
-/*  Make sure interrupt stack has space for ISR 
+/*  Make sure interrupt stack has space for ISR
  *  'vector' arg at the top and that it is aligned
  *  properly.
  */
@@ -391,7 +391,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 /*
  * Stack alignment note:
- * 
+ *
  * We want the stack to look to the '_entry_point' routine
  * like an ordinary stack frame as if '_entry_point' was
  * called from C-code.
@@ -405,7 +405,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *      ------      (alignment boundary)
  * SP-> return_addr return here when _entry_point returns which (never happens)
  *
- *   
+ *
  * Hence we must initialize the stack as follows
  *
  *         [arg1          ]:  n/a

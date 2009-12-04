@@ -6,20 +6,20 @@
 //	This file contains routines used by other programs.
 //
 //	ovf_res: used by overflow to force the correct
-//		 result. ovf_r_k, ovf_r_x2, ovf_r_x3 are 
+//		 result. ovf_r_k, ovf_r_x2, ovf_r_x3 are
 //		 derivatives of this routine.
 //	get_fline: get user's opcode word
 //	g_dfmtou: returns the destination format.
 //	g_opcls: returns the opclass of the float instruction.
-//	g_rndpr: returns the rounding precision. 
+//	g_rndpr: returns the rounding precision.
 //	reg_dest: write byte, word, or long data to Dn
 //
 //
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //UTIL	idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -41,13 +41,13 @@
 // are unnecessary as ovf_res always returns the sign separately from
 // the exponent.
 //					;+inf
-EXT_PINF:	.long	0x7fff0000,0x00000000,0x00000000,0x00000000	
+EXT_PINF:	.long	0x7fff0000,0x00000000,0x00000000,0x00000000
 //					;largest +ext
-EXT_PLRG:	.long	0x7ffe0000,0xffffffff,0xffffffff,0x00000000	
+EXT_PLRG:	.long	0x7ffe0000,0xffffffff,0xffffffff,0x00000000
 //					;largest magnitude +sgl in ext
-SGL_PLRG:	.long	0x407e0000,0xffffff00,0x00000000,0x00000000	
+SGL_PLRG:	.long	0x407e0000,0xffffff00,0x00000000,0x00000000
 //					;largest magnitude +dbl in ext
-DBL_PLRG:	.long	0x43fe0000,0xffffffff,0xfffff800,0x00000000	
+DBL_PLRG:	.long	0x43fe0000,0xffffffff,0xfffff800,0x00000000
 //					;largest -ext
 
 tblovfl:
@@ -72,7 +72,7 @@ tblovfl:
 //
 //	ovf_r_k --- overflow result calculation
 //
-// This entry point is used by kernel_ex.  
+// This entry point is used by kernel_ex.
 //
 // This forces the destination precision to be extended
 //
@@ -81,7 +81,7 @@ tblovfl:
 //
 	.global	ovf_r_k
 ovf_r_k:
-	lea	ETEMP(%a6),%a0	//a0 points to source operand	
+	lea	ETEMP(%a6),%a0	//a0 points to source operand
 	bclrb	#sign_bit,ETEMP_EX(%a6)
 	sne	ETEMP_SGN(%a6)	//convert to internal IEEE format
 
@@ -114,10 +114,10 @@ ovf_e3_exc:
 	beql	ovff_dbl		//force precision is double
 	movew	CMDREG3B(%a6),%d0		//get the command word again
 	andil	#0x7f,%d0			//clear all except operation
-	cmpil	#0x33,%d0			
+	cmpil	#0x33,%d0
 	beql	ovf_fsgl		//fsglmul or fsgldiv
 	cmpil	#0x30,%d0
-	beql	ovf_fsgl		
+	beql	ovf_fsgl
 	bra	ovf_fpcr		//instruction is none of the above
 //					;use FPCR
 ovf_e1_exc:
@@ -134,7 +134,7 @@ ovf_e1_exc:
 	cmpil 	#0x00000024,%d0
 	beql	ovf_fsgl		//fsgldiv
 	bra	ovf_fpcr		//none of the above, use FPCR
-// 
+//
 //
 // Inst is either fsgldiv or fsglmul.  Force extended precision.
 //
@@ -154,7 +154,7 @@ ovff_dbl:
 ovf_fpcr:
 	bfextu	FPCR_MODE(%a6){#0:#2},%d0 //set round precision
 	bra	ovf_res
-	
+
 //
 //
 //	ovf_r_x3 --- overflow result calculation
@@ -194,7 +194,7 @@ ovf_res:
 EXT_RN:
 	leal	EXT_PINF,%a1	//answer is +/- infinity
 	bsetb	#inf_bit,FPSR_CC(%a6)
-	bra	set_sign	//now go set the sign	
+	bra	set_sign	//now go set the sign
 EXT_RZ:
 	leal	EXT_PLRG,%a1	//answer is +/- large number
 	bra	set_sign	//now go set the sign
@@ -315,9 +315,9 @@ get_fline:
 	rts
 //
 // 	g_rndpr --- put rounding precision in d0{1:0}
-//	
+//
 //	valid return codes are:
-//		00 - extended 
+//		00 - extended
 //		01 - single
 //		10 - double
 //
@@ -352,7 +352,7 @@ g_rndpr:
 // For move out instructions (opclass 011) the destination format
 // is the same as the rounding precision.  Pass results from g_dfmtou.
 //
-	bsr 	g_dfmtou	
+	bsr 	g_dfmtou
 	rts
 op_0x0:
 	btstb	#E3,E_BYTE(%a6)
@@ -366,7 +366,7 @@ unf_e3_exc:
 	beql	unff_dbl
 	movew	CMDREG3B(%a6),%d0	//get the command word again
 	andil	#0x7f,%d0		//clear all except operation
-	cmpil	#0x33,%d0			
+	cmpil	#0x33,%d0
 	beql	unf_fsgl	//fsglmul or fsgldiv
 	cmpil	#0x30,%d0
 	beql	unf_fsgl	//fsgldiv or fsglmul
@@ -410,7 +410,7 @@ unff_dbl:
 // Force extended
 //
 unf_fsgl:
-	movel	#0,%d0		
+	movel	#0,%d0
 	rts
 //
 // Get rounding precision set in FPCR{7:6}.
@@ -438,7 +438,7 @@ opc_1b:
 //	If E1, the format is from cmdreg1b{12:10}
 //	If E3, the format is extended.
 //
-//	Dest. Fmt.	
+//	Dest. Fmt.
 //		extended  010 -> 00
 //		single    001 -> 01
 //		double    101 -> 10
@@ -470,17 +470,17 @@ not_dbl:
 // are unnecessary as unf_sub always returns the sign separately from
 // the exponent.
 //					;+zero
-EXT_PZRO:	.long	0x00000000,0x00000000,0x00000000,0x00000000	
+EXT_PZRO:	.long	0x00000000,0x00000000,0x00000000,0x00000000
 //					;+zero
-SGL_PZRO:	.long	0x3f810000,0x00000000,0x00000000,0x00000000	
+SGL_PZRO:	.long	0x3f810000,0x00000000,0x00000000,0x00000000
 //					;+zero
-DBL_PZRO:	.long	0x3c010000,0x00000000,0x00000000,0x00000000	
+DBL_PZRO:	.long	0x3c010000,0x00000000,0x00000000,0x00000000
 //					;smallest +ext denorm
-EXT_PSML:	.long	0x00000000,0x00000000,0x00000001,0x00000000	
+EXT_PSML:	.long	0x00000000,0x00000000,0x00000001,0x00000000
 //					;smallest +sgl denorm
-SGL_PSML:	.long	0x3f810000,0x00000100,0x00000000,0x00000000	
+SGL_PSML:	.long	0x3f810000,0x00000100,0x00000000,0x00000000
 //					;smallest +dbl denorm
-DBL_PSML:	.long	0x3c010000,0x00000000,0x00000800,0x00000000	
+DBL_PSML:	.long	0x3c010000,0x00000000,0x00000800,0x00000000
 //
 //	UNF_SUB --- underflow result calculation
 //
@@ -524,7 +524,7 @@ unf_sub:
 uEXT_RN:
 	leal	EXT_PZRO,%a1	//answer is +/- zero
 	bsetb	#z_bit,FPSR_CC(%a6)
-	bra	uset_sign	//now go set the sign	
+	bra	uset_sign	//now go set the sign
 uEXT_RZ:
 	leal	EXT_PZRO,%a1	//answer is +/- zero
 	bsetb	#z_bit,FPSR_CC(%a6)
@@ -631,7 +631,7 @@ end_unfr:
 //
 //
 // Input:
-//	L_SCR1: Data 
+//	L_SCR1: Data
 //	d1:     data size and dest register number formatted as:
 //
 //	32		5    4     3     2     1     0

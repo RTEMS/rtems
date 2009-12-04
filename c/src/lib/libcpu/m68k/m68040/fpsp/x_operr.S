@@ -15,8 +15,8 @@
 // the dest format is integer (b, w, l) and the operr is caused by
 // integer overflow, or the source op is inf, then the result stored is
 // garbage.
-// There are three cases in which operr is incorrectly signaled on the 
-// 040.  This occurs for move_out of format b, w, or l for the largest 
+// There are three cases in which operr is incorrectly signaled on the
+// 040.  This occurs for move_out of format b, w, or l for the largest
 // negative integer (-2^7 for b, -2^15 for w, -2^31 for l).
 //
 //	  On opclass = 011 fmove.(b,w,l) that causes a conversion
@@ -38,15 +38,15 @@
 // Note 2: For trap enabled 040 does the following:
 // If the inst is move_out, then same as Note 1.
 // If the inst is not move_out, the dest is not modified.
-// The exceptional operand is not defined for integer overflow 
+// The exceptional operand is not defined for integer overflow
 // during a move_out.
 //
 
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 X_OPERR:	//idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -79,7 +79,7 @@ fpsp_operr:
 	beqs	operr_end
 
 //
-// If the destination size is B,W,or L, the operr must be 
+// If the destination size is B,W,or L, the operr must be
 // handled here.
 //
 	movel	CMDREG1B(%a6),%d0
@@ -92,9 +92,9 @@ fpsp_operr:
 	beq	operr_byte
 
 //
-// The size is not B,W,or L, so the operr is handled by the 
+// The size is not B,W,or L, so the operr is handled by the
 // kernel handler.  Set the operr bits and clean up, leaving
-// only the integer exception frame on the stack, and the 
+// only the integer exception frame on the stack, and the
 // fpu in the original exceptional state.
 //
 operr_end:
@@ -113,7 +113,7 @@ operr_long:
 	moveb	STAG(%a6),%d0	//test stag for nan
 	andib	#0xe0,%d0		//clr all but tag
 	cmpib	#0x60,%d0		//check for nan
-	beq	operr_nan	
+	beq	operr_nan
 	cmpil	#0x80000000,FPTEMP_LO(%a6) //test if ls lword is special
 	bnes	chklerr		//if not equal, check for incorrect operr
 	bsr	check_upper	//check if exp and ms mant are special
@@ -160,7 +160,7 @@ operr_word:
 	moveb	STAG(%a6),%d0	//test stag for nan
 	andib	#0xe0,%d0		//clr all but tag
 	cmpib	#0x60,%d0		//check for nan
-	beq	operr_nan	
+	beq	operr_nan
 	cmpil	#0xffff8000,FPTEMP_LO(%a6) //test if ls lword is special
 	bnes	chkwerr		//if not equal, check for incorrect operr
 	bsr	check_upper	//check if exp and ms mant are special
@@ -187,7 +187,7 @@ operr_byte:
 	moveb	STAG(%a6),%d0	//test stag for nan
 	andib	#0xe0,%d0		//clr all but tag
 	cmpib	#0x60,%d0		//check for nan
-	beqs	operr_nan	
+	beqs	operr_nan
 	cmpil	#0xffffff80,FPTEMP_LO(%a6) //test if ls lword is special
 	bnes	chkberr		//if not equal, check for incorrect operr
 	bsr	check_upper	//check if exp and ms mant are special
@@ -231,7 +231,7 @@ store_max:
 	bclrb	#inex2_bit,FPSR_EXCEPT(%a6)
 	bclrb	#ainex_bit,FPSR_AEXCEPT(%a6)
 	fmovel	#0,%FPSR
-	
+
 	tstw	FPTEMP_EX(%a6)	//check sign
 	blts	load_neg
 	movel	#0x7fffffff,%d0
@@ -282,7 +282,7 @@ dest_mem:
 	bsrl	mem_write
 	rts
 //
-// Check the exponent for $c000 and the upper 32 bits of the 
+// Check the exponent for $c000 and the upper 32 bits of the
 // mantissa for $ffffffff.  If both are true, return d0 clr
 // and store the lower n bits of the least lword of FPTEMP
 // to d0 for write out.  If not, it is a real operr, and set d0.

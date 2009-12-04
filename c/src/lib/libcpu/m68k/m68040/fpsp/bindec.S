@@ -21,7 +21,7 @@
 //
 //	Algorithm:
 //
-//	A1.	Set RM and size ext;  Set SIGMA = sign of input.  
+//	A1.	Set RM and size ext;  Set SIGMA = sign of input.
 //		The k-factor is saved for use in d7. Clear the
 //		BINDEC_FLG for separating normalized/denormalized
 //		input.  If input is unnormalized or denormalized,
@@ -31,15 +31,15 @@
 //
 //	A3.	Compute ILOG.
 //		ILOG is the log base 10 of the input value.  It is
-//		approximated by adding e + 0.f when the original 
-//		value is viewed as 2^^e * 1.f in extended precision.  
+//		approximated by adding e + 0.f when the original
+//		value is viewed as 2^^e * 1.f in extended precision.
 //		This value is stored in d6.
 //
 //	A4.	Clr INEX bit.
-//		The operation in A3 above may have set INEX2.  
+//		The operation in A3 above may have set INEX2.
 //
 //	A5.	Set ICTR = 0;
-//		ICTR is a flag used in A13.  It must be set before the 
+//		ICTR is a flag used in A13.  It must be set before the
 //		loop entry A6.
 //
 //	A6.	Calculate LEN.
@@ -61,9 +61,9 @@
 //		of ISCALE and X.  A table is given in the code.
 //
 //	A8.	Clr INEX; Force RZ.
-//		The operation in A3 above may have set INEX2.  
+//		The operation in A3 above may have set INEX2.
 //		RZ mode is forced for the scaling operation to insure
-//		only one rounding error.  The grs bits are collected in 
+//		only one rounding error.  The grs bits are collected in
 //		the INEX flag for use in A10.
 //
 //	A9.	Scale X -> Y.
@@ -92,11 +92,11 @@
 //		the mantissa by 10.
 //
 //	A14.	Convert the mantissa to bcd.
-//		The binstr routine is used to convert the LEN digit 
+//		The binstr routine is used to convert the LEN digit
 //		mantissa to bcd in memory.  The input to binstr is
 //		to be a fraction; i.e. (mantissa)/10^LEN and adjusted
 //		such that the decimal point is to the left of bit 63.
-//		The bcd digits are stored in the correct position in 
+//		The bcd digits are stored in the correct position in
 //		the final string area in memory.
 //
 //	A15.	Convert the exponent to bcd.
@@ -133,8 +133,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //BINDEC    idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -173,7 +173,7 @@ bindec:
 //     separating  normalized/denormalized input.  If the input
 //     is a denormalized number, set the BINDEC_FLG memory word
 //     to signal denorm.  If the input is unnormalized, normalize
-//     the input and test for denormalized result.  
+//     the input and test for denormalized result.
 //
 	fmovel	#rm_mode,%FPCR	//set RM and ext
 	movel	(%a0),L_SCR2(%a6)	//save exponent for sign check
@@ -253,7 +253,7 @@ A3_cont:
 	subw	#0x3fff,%d0	//strip off bias
 	faddw	%d0,%fp0		//add in exp
 	fsubs	FONE,%fp0	//subtract off 1.0
-	fbge	pos_res		//if pos, branch 
+	fbge	pos_res		//if pos, branch
 	fmulx	LOG2UP1,%fp0	//if neg, mul by LOG2UP1
 	fmovel	%fp0,%d6		//put ILOG in d6 as a lword
 	bras	A4_str		//go move out ILOG
@@ -263,14 +263,14 @@ pos_res:
 
 
 // A4. Clr INEX bit.
-//     The operation in A3 above may have set INEX2.  
+//     The operation in A3 above may have set INEX2.
 
-A4_str:	
+A4_str:
 	fmovel	#0,%FPSR		//zero all of fpsr - nothing needed
 
 
 // A5. Set ICTR = 0;
-//     ICTR is a flag used in A13.  It must be set before the 
+//     ICTR is a flag used in A13.  It must be set before the
 //     loop entry A6. The lower word of d5 is used for ICTR.
 
 	clrw	%d5		//clear ICTR
@@ -305,7 +305,7 @@ A4_str:
 //	L_SCR1:x/x
 //	L_SCR2:first word of X packed/Unchanged
 
-A6_str:	
+A6_str:
 	tstl	%d7		//branch on sign of k
 	bles	k_neg		//if k <= 0, LEN = ILOG + 1 - k
 	movel	%d7,%d4		//if k > 0, LEN = k
@@ -377,13 +377,13 @@ LEN_ng:
 //	L_SCR1:x/x
 //	L_SCR2:first word of X packed/Unchanged
 
-A7_str:	
+A7_str:
 	tstl	%d7		//test sign of k
 	bgts	k_pos		//if pos and > 0, skip this
 	cmpl	%d6,%d7		//test k - ILOG
 	blts	k_pos		//if ILOG >= k, skip this
 	movel	%d7,%d6		//if ((k<0) & (ILOG < k)) ILOG = k
-k_pos:	
+k_pos:
 	movel	%d6,%d0		//calc ILOG + 1 - LEN in d0
 	addql	#1,%d0		//add the 1
 	subl	%d4,%d0		//sub off LEN
@@ -397,9 +397,9 @@ k_pos:
 	bgts	no_inf		//if false, skip rest
 	addil	#24,%d0		//add in 24 to iscale
 	movel	#24,%d2		//put 24 in d2 for A9
-no_inf:	
+no_inf:
 	negl	%d0		//and take abs of ISCALE
-iscale:	
+iscale:
 	fmoves	FONE,%fp1	//init fp1 to 1
 	bfextu	USER_FPCR(%a6){#26:#2},%d1 //get initial rmode bits
 	lslw	#1,%d1		//put them in bits 2:1
@@ -427,33 +427,33 @@ not_rp:
 	leal	PTENRM,%a1	//load a1 with RM table base
 rmode:
 	clrl	%d3		//clr table index
-e_loop:	
+e_loop:
 	lsrl	#1,%d0		//shift next bit into carry
 	bccs	e_next		//if zero, skip the mul
 	fmulx	(%a1,%d3),%fp1	//mul by 10**(d3_bit_no)
-e_next:	
+e_next:
 	addl	#12,%d3		//inc d3 to next pwrten table entry
 	tstl	%d0		//test if ISCALE is zero
 	bnes	e_loop		//if not, loop
 
 
 // A8. Clr INEX; Force RZ.
-//     The operation in A3 above may have set INEX2.  
+//     The operation in A3 above may have set INEX2.
 //     RZ mode is forced for the scaling operation to insure
-//     only one rounding error.  The grs bits are collected in 
+//     only one rounding error.  The grs bits are collected in
 //     the INEX flag for use in A10.
 //
 // Register usage:
 //	Input/Output
 
-	fmovel	#0,%FPSR		//clr INEX 
+	fmovel	#0,%FPSR		//clr INEX
 	fmovel	#rz_mode,%FPCR	//set RZ rounding mode
 
 
 // A9. Scale X -> Y.
 //     The mantissa is scaled to the desired number of significant
 //     digits.  The excess digits are collected in INEX2. If mul,
-//     Check d2 for excess 10 exponential value.  If not zero, 
+//     Check d2 for excess 10 exponential value.  If not zero,
 //     the iscale value would have caused the pwrten calculation
 //     to overflow.  Only a negative iscale can cause this, so
 //     multiply by 10^(d2), which is now only allowed to be 24,
@@ -482,7 +482,7 @@ e_next:
 //	L_SCR1:x/x
 //	L_SCR2:first word of X packed/Unchanged
 
-A9_str:	
+A9_str:
 	fmovex	(%a0),%fp0	//load X from memory
 	fabsx	%fp0		//use abs(X)
 	tstw	%d5		//LAMBDA is in lower word of d5
@@ -500,9 +500,9 @@ sc_mul:
 	movel	#18,%d3		//load count for busy stack
 A9_loop:
 	clrl	-(%a7)		//clear lword on stack
-	dbf	%d3,A9_loop	
+	dbf	%d3,A9_loop
 	moveb	VER_TMP(%a6),(%a7) //write current version number
-	moveb	#BUSY_SIZE-4,1(%a7) //write current busy size 
+	moveb	#BUSY_SIZE-4,1(%a7) //write current busy size
 	moveb	#0x10,0x44(%a7)	//set fcefpte[15] bit
 	movew	#0x0023,0x40(%a7)	//load cmdreg1b with mul command
 	moveb	#0xfe,0x8(%a7)	//load all 1s to cu savepc
@@ -539,7 +539,7 @@ A9_con:
 //	fp1: 10^ISCALE/Unchanged
 //	fp2: x/x
 
-A10_st:	
+A10_st:
 	fmovel	%FPSR,%d0		//get FPSR
 	fmovex	%fp0,FP_SCR2(%a6)	//move Y to memory
 	leal	FP_SCR2(%a6),%a2	//load a2 with ptr to FP_SCR2
@@ -555,9 +555,9 @@ A10_st:
 //      routine expects the FPCR value to be in USER_FPCR for
 //      mode and precision.  The original FPCR is saved in L_SCR1.
 
-A11_st:	
+A11_st:
 	movel	USER_FPCR(%a6),L_SCR1(%a6) //save it for later
-	andil	#0x00000030,USER_FPCR(%a6) //set size to ext, 
+	andil	#0x00000030,USER_FPCR(%a6) //set size to ext,
 //					;block exceptions
 
 
@@ -586,13 +586,13 @@ A11_st:
 //	L_SCR2:first word of X packed/Unchanged
 
 A12_st:
-	moveml	%d0-%d1/%a0-%a1,-(%a7)	//save regs used by sintd0	
+	moveml	%d0-%d1/%a0-%a1,-(%a7)	//save regs used by sintd0
 	movel	L_SCR1(%a6),-(%a7)
 	movel	L_SCR2(%a6),-(%a7)
 	leal	FP_SCR2(%a6),%a0		//a0 is ptr to F_SCR2(a6)
 	fmovex	%fp0,(%a0)		//move Y to memory at FP_SCR2(a6)
 	tstl	L_SCR2(%a6)		//test sign of original operand
-	bges	do_fint			//if pos, use Y 
+	bges	do_fint			//if pos, use Y
 	orl	#0x80000000,(%a0)		//if neg, use -Y
 do_fint:
 	movel	USER_FPSR(%a6),-(%a7)
@@ -601,7 +601,7 @@ do_fint:
 	addl	#4,%a7
 	movel	(%a7)+,L_SCR2(%a6)
 	movel	(%a7)+,L_SCR1(%a6)
-	moveml	(%a7)+,%d0-%d1/%a0-%a1	//restore regs used by sint	
+	moveml	(%a7)+,%d0-%d1/%a0-%a1	//restore regs used by sint
 	movel	L_SCR2(%a6),FP_SCR2(%a6)	//restore original exponent
 	movel	L_SCR1(%a6),USER_FPCR(%a6) //restore user's FPCR
 
@@ -637,7 +637,7 @@ do_fint:
 //	L_SCR1:original USER_FPCR/Unchanged
 //	L_SCR2:first word of X packed/Unchanged
 
-A13_st:	
+A13_st:
 	swap	%d5		//put ICTR in lower word of d5
 	tstw	%d5		//check if ICTR = 0
 	bne	not_zr		//if non-zero, go to second test
@@ -648,7 +648,7 @@ A13_st:
 	movel	%d4,%d0		//put LEN in d0
 	subql	#1,%d0		//d0 = LEN -1
 	clrl	%d3		//clr table index
-l_loop:	
+l_loop:
 	lsrl	#1,%d0		//shift next bit into carry
 	bccs	l_next		//if zero, skip the mul
 	fmulx	(%a1,%d3),%fp2	//mul by 10**(d3_bit_no)
@@ -674,7 +674,7 @@ A13_con:
 	subql	#1,%d6		//subtract 1 from ILOG
 	movew	#1,%d5		//set ICTR
 	fmovel	#rm_mode,%FPCR	//set rmode to RM
-	fmuls	FTEN,%fp2	//compute 10^LEN 
+	fmuls	FTEN,%fp2	//compute 10^LEN
 	bra	A6_str		//return to A6 and recompute YINT
 test_2:
 	fmuls	FTEN,%fp2	//compute 10^LEN
@@ -690,7 +690,7 @@ fix_ex:
 	fmovel	#rm_mode,%FPCR	//set rmode to RM
 	bra	A6_str		//return to A6 and recompute YINT
 //
-// Since ICTR <> 0, we have already been through one adjustment, 
+// Since ICTR <> 0, we have already been through one adjustment,
 // and shouldn't have another; this is to check if abs(YINT) = 10^LEN
 // 10^LEN is again computed using whatever table is in a1 since the
 // value calculated cannot be inexact.
@@ -717,11 +717,11 @@ z_next:
 
 
 // A14. Convert the mantissa to bcd.
-//      The binstr routine is used to convert the LEN digit 
+//      The binstr routine is used to convert the LEN digit
 //      mantissa to bcd in memory.  The input to binstr is
 //      to be a fraction; i.e. (mantissa)/10^LEN and adjusted
 //      such that the decimal point is to the left of bit 63.
-//      The bcd digits are stored in the correct position in 
+//      The bcd digits are stored in the correct position in
 //      the final string area in memory.
 //
 //
@@ -747,7 +747,7 @@ z_next:
 //	L_SCR1:original USER_FPCR/Unchanged
 //	L_SCR2:first word of X packed/Unchanged
 
-A14_st:	
+A14_st:
 	fmovel	#rz_mode,%FPCR	//force rz for conversion
 	fdivx	%fp2,%fp0		//divide abs(YINT) by 10^LEN
 	leal	FP_SCR1(%a6),%a0
@@ -764,7 +764,7 @@ A14_st:
 	bgts	no_sft		//if so, don't shift
 	negl	%d0		//make exp positive
 m_loop:
-	lsrl	#1,%d2		//shift d2:d3 right, add 0s 
+	lsrl	#1,%d2		//shift d2:d3 right, add 0s
 	roxrl	#1,%d3		//the number of places
 	dbf	%d0,m_loop	//given in d0
 no_sft:
@@ -819,7 +819,7 @@ zer_m:
 //	L_SCR1:original USER_FPCR/Exponent digits on return from binstr
 //	L_SCR2:first word of X packed/Unchanged
 
-A15_st:	
+A15_st:
 	tstb	BINDEC_FLG(%a6)	//check for denorm
 	beqs	not_denorm
 	ftstx	%fp0		//test for zero
@@ -841,7 +841,7 @@ not_denorm:
 	fbne	not_zero	//if zero, force exponent
 	fmoves	FONE,%fp0	//force exponent to 1
 	bras	convrt		//do it
-not_zero:	
+not_zero:
 	fmovel	%d6,%fp0		//float ILOG
 	fabsx	%fp0		//get abs of ILOG
 convrt:
@@ -854,7 +854,7 @@ convrt:
 	subiw	#0x3ffd,%d0	//subtract off bias
 	negw	%d0		//make exp positive
 x_loop:
-	lsrl	#1,%d2		//shift d2:d3 right 
+	lsrl	#1,%d2		//shift d2:d3 right
 	roxrl	#1,%d3		//the number of places
 	dbf	%d0,x_loop	//given in d0
 x_loop_fin:
@@ -865,12 +865,12 @@ x_loop_fin:
 	movel	#4,%d0		//put 4 in d0 for binstr call
 	leal	L_SCR1(%a6),%a0	//a0 is ptr to L_SCR1 for exp digits
 	bsr	binstr		//call binstr to convert exp
-	movel	L_SCR1(%a6),%d0	//load L_SCR1 lword to d0 
+	movel	L_SCR1(%a6),%d0	//load L_SCR1 lword to d0
 	movel	#12,%d1		//use d1 for shift count
 	lsrl	%d1,%d0		//shift d0 right by 12
 	bfins	%d0,FP_SCR1(%a6){#4:#12} //put e3:e2:e1 in FP_SCR1
 	lsrl	%d1,%d0		//shift d0 right by 12
-	bfins	%d0,FP_SCR1(%a6){#16:#4} //put e4 in FP_SCR1 
+	bfins	%d0,FP_SCR1(%a6){#16:#4} //put e4 in FP_SCR1
 	tstb	%d0		//check if e4 is zero
 	beqs	A16_st		//if zero, skip rest
 	orl	#opaop_mask,USER_FPSR(%a6) //set OPERR & AIOP in USER_FPSR
@@ -901,14 +901,14 @@ x_loop_fin:
 
 A16_st:
 	clrl	%d0		//clr d0 for collection of signs
-	andib	#0x0f,FP_SCR1(%a6) //clear first nibble of FP_SCR1 
+	andib	#0x0f,FP_SCR1(%a6) //clear first nibble of FP_SCR1
 	tstl	L_SCR2(%a6)	//check sign of original mantissa
 	bges	mant_p		//if pos, don't set SM
 	moveql	#2,%d0		//move 2 in to d0 for SM
 mant_p:
 	tstl	%d6		//check sign of ILOG
 	bges	wr_sgn		//if pos, don't set SE
-	addql	#1,%d0		//set bit 0 in d0 for SE 
+	addql	#1,%d0		//set bit 0 in d0 for SE
 wr_sgn:
 	bfins	%d0,FP_SCR1(%a6){#0:#2} //insert SM and SE into FP_SCR1
 

@@ -8,7 +8,7 @@
 //
 //	Fixes for bugs: 1238
 //
-//	Bug: 1238 
+//	Bug: 1238
 //
 //
 //    /* The following dirty_bit clear should be left in
@@ -153,8 +153,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //BUGFIX    idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -168,8 +168,8 @@
 	.global	b1238_fix
 b1238_fix:
 //
-// This code is entered only on completion of the handling of an 
-// nu-generated ovfl, unfl, or inex exception.  If the version 
+// This code is entered only on completion of the handling of an
+// nu-generated ovfl, unfl, or inex exception.  If the version
 // number of the fsave is not $40, this handler is not necessary.
 // Simply branch to fix_done and exit normally.
 //
@@ -185,7 +185,7 @@ b1238_fix:
 
 //
 // Test the register conflict aspect.  If opclass0, check for
-// cu src equal to xu dest or equal to nu dest.  If so, go to 
+// cu src equal to xu dest or equal to nu dest.  If so, go to
 // op0.  Else, or if opclass2, check for cu dest equal to
 // xu dest or equal to nu dest.  If so, go to tst_opcl.  Else,
 // exit, it is not the bug case.
@@ -197,17 +197,17 @@ b1238_fix:
 	bne	op2sgl			//not opclass 0, check op2
 //
 // Check for cu and nu register conflict.  If one exists, this takes
-// priority over a cu and xu conflict. 
+// priority over a cu and xu conflict.
 //
-	bfextu	CMDREG1B(%a6){#3:#3},%d0	//get 1st src 
+	bfextu	CMDREG1B(%a6){#3:#3},%d0	//get 1st src
 	bfextu	CMDREG3B(%a6){#6:#3},%d1	//get 3rd dest
 	cmpb	%d0,%d1
 	beqs	op0			//if equal, continue bugfix
 //
-// Check for cu dest equal to nu dest.  If so, go and fix the 
+// Check for cu dest equal to nu dest.  If so, go and fix the
 // bug condition.  Otherwise, exit.
 //
-	bfextu	CMDREG1B(%a6){#6:#3},%d0	//get 1st dest 
+	bfextu	CMDREG1B(%a6){#6:#3},%d0	//get 1st dest
 	cmpb	%d0,%d1			//cmp 1st dest with 3rd dest
 	beqs	op0			//if equal, continue bugfix
 //
@@ -216,7 +216,7 @@ b1238_fix:
 	bfextu	CMDREG2B(%a6){#6:#3},%d1	//get 2nd dest
 	cmpb	%d0,%d1			//cmp 1st dest with 2nd dest
 	beqs	op0_xu			//if equal, continue bugfix
-	bfextu	CMDREG1B(%a6){#3:#3},%d0	//get 1st src 
+	bfextu	CMDREG1B(%a6){#3:#3},%d0	//get 1st src
 	cmpb	%d0,%d1			//cmp 1st src with 2nd dest
 	beq	op0_xu
 	bne	fix_done		//if the reg checks fail, exit
@@ -246,7 +246,7 @@ setete15:
 
 //
 // We have the case in which a conflict exists between the cu src or
-// dest and the dest of the xu.  We must clear the instruction in 
+// dest and the dest of the xu.  We must clear the instruction in
 // the cu and restore the state, allowing the instruction in the
 // xu to complete.  Remember, the instruction in the nu
 // was exceptional, and was completed by the appropriate handler.
@@ -256,7 +256,7 @@ setete15:
 // exceptional, we choose to kill the process.
 //
 //	Items saved from the stack:
-//	
+//
 //		$3c stag     - L_SCR1
 //		$40 cmdreg1b - L_SCR2
 //		$44 dtag     - L_SCR3
@@ -265,8 +265,8 @@ setete15:
 // fpu.
 //
 op0_xu:
-	movel	STAG(%a6),L_SCR1(%a6)	
-	movel	CMDREG1B(%a6),L_SCR2(%a6)	
+	movel	STAG(%a6),L_SCR1(%a6)
+	movel	CMDREG1B(%a6),L_SCR2(%a6)
 	movel	DTAG(%a6),L_SCR3(%a6)
 	andil	#0xe0000000,L_SCR3(%a6)
 	moveb	#0,CU_SAVEPC(%a6)
@@ -275,13 +275,13 @@ op0_xu:
 	fsave	-(%a7)
 //
 // Check if the instruction which just completed was exceptional.
-// 
+//
 	cmpw	#0x4060,(%a7)
 	beq	op0_xb
-// 
+//
 // It is necessary to isolate the result of the instruction in the
 // xu if it is to fp0 - fp3 and write that value to the USER_FPn
-// locations on the stack.  The correct destination register is in 
+// locations on the stack.  The correct destination register is in
 // cmdreg2b.
 //
 	bfextu	CMDREG2B(%a6){#6:#3},%d0	//get dest register no
@@ -340,7 +340,7 @@ op0_sete15:
 
 //
 // The frame returned is busy.  It is not possible to reconstruct
-// the code sequence to allow completion.  We will jump to 
+// the code sequence to allow completion.  We will jump to
 // fpsp_fmt_error and allow the kernel to kill the process.
 //
 op0_xb:
@@ -355,20 +355,20 @@ op2sgl:
 	cmpiw	#0x4400,%d0		//test for opclass 2 and size=sgl
 	bne	fix_done		//if not, it is not bug 1238
 //
-// Check for cu dest equal to nu dest or equal to xu dest, with 
+// Check for cu dest equal to nu dest or equal to xu dest, with
 // a cu and nu conflict taking priority an nu conflict.  If either,
 // go and fix the bug condition.  Otherwise, exit.
 //
-	bfextu	CMDREG1B(%a6){#6:#3},%d0	//get 1st dest 
+	bfextu	CMDREG1B(%a6){#6:#3},%d0	//get 1st dest
 	bfextu	CMDREG3B(%a6){#6:#3},%d1	//get 3rd dest
 	cmpb	%d0,%d1			//cmp 1st dest with 3rd dest
 	beq	op2_com			//if equal, continue bugfix
-	bfextu	CMDREG2B(%a6){#6:#3},%d1	//get 2nd dest 
+	bfextu	CMDREG2B(%a6){#6:#3},%d1	//get 2nd dest
 	cmpb	%d0,%d1			//cmp 1st dest with 2nd dest
 	bne	fix_done		//if the reg checks fail, exit
 //
 // We have the case in which a conflict exists between the cu src or
-// dest and the dest of the xu.  We must clear the instruction in 
+// dest and the dest of the xu.  We must clear the instruction in
 // the cu and restore the state, allowing the instruction in the
 // xu to complete.  Remember, the instruction in the nu
 // was exceptional, and was completed by the appropriate handler.
@@ -378,7 +378,7 @@ op2sgl:
 // exceptional, we choose to kill the process.
 //
 //	Items saved from the stack:
-//	
+//
 //		$3c stag     - L_SCR1
 //		$40 cmdreg1b - L_SCR2
 //		$44 dtag     - L_SCR3
@@ -388,9 +388,9 @@ op2sgl:
 // fpu.
 //
 op2_xu:
-	movel	STAG(%a6),L_SCR1(%a6)	
-	movel	CMDREG1B(%a6),L_SCR2(%a6)	
-	movel	DTAG(%a6),L_SCR3(%a6)	
+	movel	STAG(%a6),L_SCR1(%a6)
+	movel	CMDREG1B(%a6),L_SCR2(%a6)
+	movel	DTAG(%a6),L_SCR3(%a6)
 	andil	#0xe0000000,L_SCR3(%a6)
 	moveb	#0,CU_SAVEPC(%a6)
 	movel	ETEMP(%a6),FP_SCR2(%a6)
@@ -401,13 +401,13 @@ op2_xu:
 	fsave	-(%a7)
 //
 // Check if the instruction which just completed was exceptional.
-// 
+//
 	cmpw	#0x4060,(%a7)
 	beq	op2_xb
-// 
+//
 // It is necessary to isolate the result of the instruction in the
 // xu if it is to fp0 - fp3 and write that value to the USER_FPn
-// locations on the stack.  The correct destination register is in 
+// locations on the stack.  The correct destination register is in
 // cmdreg2b.
 //
 	bfextu	CMDREG2B(%a6){#6:#3},%d0	//get dest register no
@@ -460,12 +460,12 @@ op2_com:
 	bnes	case2
 	movew	#0x43FF,ETEMP_EX(%a6)	//to double +max
 	bra	finish
-case2:	
+case2:
 	cmpw	#0xC07F,ETEMP_EX(%a6)	//single -max
 	bnes	case3
 	movew	#0xC3FF,ETEMP_EX(%a6)	//to double -max
 	bra	finish
-case3:	
+case3:
 	cmpw	#0x3F80,ETEMP_EX(%a6)	//single +min
 	bnes	case4
 	movew	#0x3C00,ETEMP_EX(%a6)	//to double +min
@@ -481,7 +481,7 @@ case4:
 // an fline illegal instruction to be executed.
 //
 // You should replace the jump to fpsp_fmt_error with a jump
-// to the entry point used to kill a process. 
+// to the entry point used to kill a process.
 //
 op2_xb:
 	jmp	fpsp_fmt_error

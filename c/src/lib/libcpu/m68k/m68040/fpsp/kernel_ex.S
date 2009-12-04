@@ -1,21 +1,21 @@
 //
 //      $Id$
 //
-//	kernel_ex.sa 3.3 12/19/90 
+//	kernel_ex.sa 3.3 12/19/90
 //
-// This file contains routines to force exception status in the 
+// This file contains routines to force exception status in the
 // fpu for exceptional cases detected or reported within the
 // transcendental functions.  Typically, the t_xx routine will
 // set the appropriate bits in the USER_FPSR word on the stack.
 // The bits are tested in gen_except.sa to determine if an exceptional
-// situation needs to be created on return from the FPSP. 
+// situation needs to be created on return from the FPSP.
 //
 
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 KERNEL_EX:    //idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -51,7 +51,7 @@ huge:     .long 0x7ffe0000,0xffffffff,0xffffffff
 //
 //	if dz trap disabled
 //		store properly signed inf (use sign of etemp) into fp0
-//		set FPSR exception status dz bit, condition code 
+//		set FPSR exception status dz bit, condition code
 //		inf bit, and accrued dz bit
 //		return
 //		frestore the frame into the machine (done by unimp_hd)
@@ -63,7 +63,7 @@ huge:     .long 0x7ffe0000,0xffffffff,0xffffffff
 //		frestore the frame into the machine (done by unimp_hd)
 //
 // t_dz2 is used by monadic functions such as flogn (from do_func).
-// t_dz is used by monadic functions such as satanh (from the 
+// t_dz is used by monadic functions such as satanh (from the
 // transcendental function).
 //
 t_dz2:
@@ -106,10 +106,10 @@ dz_ena_end:
 //	OPERR exception
 //
 //	if (operr trap disabled)
-//		set FPSR exception status operr bit, condition code 
+//		set FPSR exception status operr bit, condition code
 //		nan bit; Store default NAN into fp0
 //		frestore the frame into the machine (done by unimp_hd)
-//	
+//
 //	else (operr trap enabled)
 //		set FPSR exception status operr bit, accrued operr bit
 //		set flag to disable sto_res from corrupting fp register
@@ -161,13 +161,13 @@ unfl_ena:
 
 unfl_dis:
 	bfextu	FPCR_MODE(%a6){#0:#2},%d0	//get round precision
-	
+
 	bclrb	#sign_bit,LOCAL_EX(%a0)
 	sne	LOCAL_SGN(%a0)		//convert to internal ext format
 
 	bsr	unf_sub			//returns IEEE result at a0
 //					;and sets FPSR_CC accordingly
-	
+
 	bfclr	LOCAL_SGN(%a0){#0:#8}	//convert back to IEEE ext format
 	beqs	unfl_fin
 
@@ -177,7 +177,7 @@ unfl_dis:
 unfl_fin:
 	fmovemx (%a0),%fp0-%fp0		//store result in fp0
 	rts
-	
+
 
 //
 //	t_ovfl2 --- OVFL exception (without inex2 returned)
@@ -282,7 +282,7 @@ no_uacc1:
 //	DST_NAN
 //
 // Determine if the destination nan is signalling or non-signalling,
-// and set the FPSR bits accordingly.  See the MC68040 User's Manual 
+// and set the FPSR bits accordingly.  See the MC68040 User's Manual
 // section 3.2.2.5 NOT-A-NUMBERS.
 //
 dst_nan:
@@ -290,7 +290,7 @@ dst_nan:
 	beqs	dst_pos			//if clr, it was positive
 	bsetb	#neg_bit,FPSR_CC(%a6)	//set N bit
 dst_pos:
-	btstb	#signan_bit,FPTEMP_HI(%a6) //check if signalling 
+	btstb	#signan_bit,FPTEMP_HI(%a6) //check if signalling
 	beqs	dst_snan		//branch if signalling
 
 	fmovel	%d1,%fpcr			//restore user's rmode/prec
@@ -302,14 +302,14 @@ dst_pos:
 	andib	#0xe0,%d0
 	cmpib	#0x60,%d0
 	bnes	no_snan
-	btstb	#signan_bit,ETEMP_HI(%a6) //check if signalling 
+	btstb	#signan_bit,ETEMP_HI(%a6) //check if signalling
 	bnes	no_snan
 	orl	#snaniop_mask,USER_FPSR(%a6) //set NAN, SNAN, AIOP
 no_snan:
-	rts	
+	rts
 
 dst_snan:
-	btstb	#snan_bit,FPCR_ENABLE(%a6) //check if trap enabled 
+	btstb	#snan_bit,FPCR_ENABLE(%a6) //check if trap enabled
 	beqs	dst_dis			//branch if disabled
 
 	orb	#nan_tag,DTAG(%a6)	//set up dtag for nan
@@ -318,9 +318,9 @@ dst_snan:
 	rts
 
 dst_dis:
-	bsetb	#signan_bit,FPTEMP_HI(%a6) //set SNAN bit in sop 
+	bsetb	#signan_bit,FPTEMP_HI(%a6) //set SNAN bit in sop
 	fmovel	%d1,%fpcr			//restore user's rmode/prec
-	fmovex FPTEMP(%a6),%fp0		//load non-sign. nan 
+	fmovex FPTEMP(%a6),%fp0		//load non-sign. nan
 	orl	#snaniop_mask,USER_FPSR(%a6) //set NAN, SNAN, AIOP
 	rts
 
@@ -328,7 +328,7 @@ dst_dis:
 //	SRC_NAN
 //
 // Determine if the source nan is signalling or non-signalling,
-// and set the FPSR bits accordingly.  See the MC68040 User's Manual 
+// and set the FPSR bits accordingly.  See the MC68040 User's Manual
 // section 3.2.2.5 NOT-A-NUMBERS.
 //
 src_nan:
@@ -336,16 +336,16 @@ src_nan:
 	beqs	src_pos			//if clr, it was positive
 	bsetb	#neg_bit,FPSR_CC(%a6)	//set N bit
 src_pos:
-	btstb	#signan_bit,ETEMP_HI(%a6) //check if signalling 
+	btstb	#signan_bit,ETEMP_HI(%a6) //check if signalling
 	beqs	src_snan		//branch if signalling
 	fmovel	%d1,%fpcr			//restore user's rmode/prec
 	fmovex ETEMP(%a6),%fp0		//return the non-signalling nan
-	rts	
+	rts
 
 src_snan:
-	btstb	#snan_bit,FPCR_ENABLE(%a6) //check if trap enabled 
+	btstb	#snan_bit,FPCR_ENABLE(%a6) //check if trap enabled
 	beqs	src_dis			//branch if disabled
-	bsetb	#signan_bit,ETEMP_HI(%a6) //set SNAN bit in sop 
+	bsetb	#signan_bit,ETEMP_HI(%a6) //set SNAN bit in sop
 	orb	#norm_tag,DTAG(%a6)	//set up dtag for norm
 	orb	#nan_tag,STAG(%a6)	//set up stag for nan
 	st	STORE_FLG(%a6)		//do not store a result
@@ -353,9 +353,9 @@ src_snan:
 	rts
 
 src_dis:
-	bsetb	#signan_bit,ETEMP_HI(%a6) //set SNAN bit in sop 
+	bsetb	#signan_bit,ETEMP_HI(%a6) //set SNAN bit in sop
 	fmovel	%d1,%fpcr			//restore user's rmode/prec
-	fmovex ETEMP(%a6),%fp0		//load non-sign. nan 
+	fmovex ETEMP(%a6),%fp0		//load non-sign. nan
 	orl	#snaniop_mask,USER_FPSR(%a6) //set NAN, SNAN, AIOP
 	rts
 
@@ -369,7 +369,7 @@ t_extdnrm:
 	bras	xdnrm_con
 //
 // Entry point for scale with extended denorm.  The function does
-// not set inex2, aunfl, or ainex.  
+// not set inex2, aunfl, or ainex.
 //
 t_resdnrm:
 	orl	#unfl_mask,USER_FPSR(%a6)
@@ -404,7 +404,7 @@ xdnrm_dn:
 	bfclr	LOCAL_SGN(%a0){#0:#8}	//change back to IEEE ext format
 	beqs	xdep
 	bsetb	#sign_bit,LOCAL_EX(%a0)
-xdep:	
+xdep:
 	bfclr	STAG(%a6){#5:#3}		//clear wbtm66,wbtm1,wbtm0
 	bsetb	#wbtemp15_bit,WB_BYTE(%a6) //set wbtemp15
 	bclrb	#sticky_bit,STICKY(%a6)	//clear sticky bit
@@ -441,7 +441,7 @@ xdnrm_store:
 //
 	.global	t_avoid_unsupp
 t_avoid_unsupp:
-	link	%a2,#-LOCAL_SIZE		//so that a2 fpsp.h negative 
+	link	%a2,#-LOCAL_SIZE		//so that a2 fpsp.h negative
 //					;offsets may be used
 	fsave	-(%a7)
 	tstb	1(%a7)			//check if idle, exit if so

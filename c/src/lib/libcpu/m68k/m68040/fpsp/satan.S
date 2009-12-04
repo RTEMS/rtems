@@ -45,8 +45,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //satan	idnt	2,1 | Motorola 040 Floating Point Software Package
@@ -54,7 +54,7 @@
 	|section	8
 
 #include "fpsp.defs"
-	
+
 BOUNDS1:	.long 0x3FFB8000,0x4002FFFF
 
 ONE:	.long 0x3F800000
@@ -324,7 +324,7 @@ ATANMAIN:
 //--THE REASON FOR THIS REARRANGEMENT IS TO MAKE THE INDEPENDENT
 //--PARTS A1*U*V AND (A2 + ... STUFF) MORE LOAD-BALANCED
 
-	
+
 	fmovex		%fp0,%fp1
 	fmulx		%fp1,%fp1
 	fmoved		ATANA3,%fp2
@@ -334,7 +334,7 @@ ATANMAIN:
 	faddd		ATANA2,%fp2	// ...A2+V*(A3+V)
 	fmuld		ATANA1,%fp1	// ...A1*U*V
 	fmulx		%fp2,%fp1		// ...A1*U*V*(A2+V*(A3+V))
-	
+
 	faddx		%fp1,%fp0		// ...ATAN(U), FP1 RELEASED
 	fmovel		%d1,%FPCR		//restore users exceptions
 	faddx		ATANF(%a6),%fp0	// ...ATAN(X)
@@ -358,7 +358,7 @@ ATANSM:
 //--COMPUTE POLYNOMIAL
 	fmulx		%fp0,%fp0	// ...FP0 IS Y = X*X
 
-	
+
 	movew		#0x0000,XDCARE(%a6)
 
 	fmovex		%fp0,%fp1
@@ -383,7 +383,7 @@ ATANSM:
 	fmulx		X(%a6),%fp0		// ...X*Y
 
 	faddx		%fp2,%fp1		// ...[B1+Z*(B3+Z*B5)]+[Y*(B2+Z*(B4+Z*B6))]
-	
+
 
 	fmulx		%fp1,%fp0	// ...X*Y*([B1+Z*(B3+Z*B5)]+[Y*(B2+Z*(B4+Z*B6))])
 
@@ -415,7 +415,7 @@ ATANBIG:
 	fmoves		#0xBF800000,%fp1	// ...LOAD -1
 	fdivx		%fp0,%fp1		// ...FP1 IS -1/X
 
-	
+
 //--DIVIDE IS STILL CRANKING
 
 	fmovex		%fp1,%fp0		// ...FP0 IS X'
@@ -441,14 +441,14 @@ ATANBIG:
 	fmulx		X(%a6),%fp0		// ...X'*Y
 
 	faddx		%fp2,%fp1		// ...[Y*(C2+Z*C4)]+[C1+Z*(C3+Z*C5)]
-	
+
 
 	fmulx		%fp1,%fp0		// ...X'*Y*([B1+Z*(B3+Z*B5)]
 //					...	+[Y*(B2+Z*(B4+Z*B6))])
 	faddx		X(%a6),%fp0
 
 	fmovel		%d1,%FPCR		//restore users exceptions
-	
+
 	btstb		#7,(%a0)
 	beqs		pos_big
 
@@ -476,5 +476,5 @@ pos_huge:
 	fmovel		%d1,%fpcr
 	fsubx		PTINY,%fp0
 	bra		t_frcinx
-	
+
 	|end

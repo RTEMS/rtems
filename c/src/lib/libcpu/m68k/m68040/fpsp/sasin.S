@@ -14,7 +14,7 @@
 //
 //	Accuracy and Monotonicity: The returned result is within 3 ulps in
 //		64 significant bit, i.e. within 0.5001 ulp to 53 bits if the
-//		result is subsequently rounded to double precision. The 
+//		result is subsequently rounded to double precision. The
 //		result is provably monotonic in double precision.
 //
 //	Speed: The program sASIN takes approximately 310 cycles.
@@ -40,8 +40,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //SASIN	idnt	2,1 | Motorola 040 Floating Point Software Package
@@ -99,7 +99,7 @@ asinbig:
 	andil		#0x80000000,%d0	// ...SIGN BIT OF X
 	oril		#0x3F800000,%d0	// ...+-1 IN SGL FORMAT
 	movel		%d0,-(%sp)	// ...push SIGN(X) IN SGL-FMT
-	fmovel		%d1,%FPCR		
+	fmovel		%d1,%FPCR
 	fmuls		(%sp)+,%fp0
 	bra		t_frcinx
 

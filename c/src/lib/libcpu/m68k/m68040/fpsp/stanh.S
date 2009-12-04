@@ -51,14 +51,14 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //STANH	idnt	2,1 | Motorola 040 Floating Point Software Package
 
 	|section	8
-	
+
 #include "fpsp.defs"
 
 	.set	X,FP_SCR5

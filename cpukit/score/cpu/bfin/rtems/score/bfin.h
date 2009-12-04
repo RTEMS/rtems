@@ -1,6 +1,6 @@
 /*  bfin.h
  *
- *  This file sets up basic CPU dependency settings based on 
+ *  This file sets up basic CPU dependency settings based on
  *  compiler settings.  For example, it can determine if
  *  floating point is available.  This particular implementation
  *  is specified to the Blackfin port.
@@ -38,24 +38,24 @@ extern "C" {
  *  that this port supports and which RTEMS CPU model they correspond
  *  to.
  */
- 
+
 /*
- *  Figure out all CPU Model Feature Flags based upon compiler 
- *  predefines. 
+ *  Figure out all CPU Model Feature Flags based upon compiler
+ *  predefines.
  */
 #if defined(__BFIN__)
 #define CPU_MODEL_NAME  "BF533"
 #define BF_HAS_FPU   0
 #else
- 
+
 #error "Unsupported CPU Model"
- 
+
 #endif
 
 /*
  *  Define the name of the CPU family.
  */
- 
+
 #define CPU_NAME "BFIN"
 
 #ifdef __cplusplus

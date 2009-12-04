@@ -7,9 +7,9 @@
 //	Library functions return result in fp0.	If fp0 is not the
 //	users destination register then fp0 is moved to the the
 //	correct floating-point destination register.  fp0 and fp1
-//	are then restored to the original contents. 
+//	are then restored to the original contents.
 //
-//	Input:	result in fp0,fp1 
+//	Input:	result in fp0,fp1
 //
 //		d2 & a0 should be kept unmodified
 //
@@ -21,8 +21,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 STO_RES:	//idnt	2,1 | Motorola 040 Floating Point Software Package

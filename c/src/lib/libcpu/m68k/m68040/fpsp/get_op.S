@@ -18,7 +18,7 @@
 //
 // - For unnormalized numbers (opclass 0, 2, or 3) the
 // number(s) is normalized and the operand type tag is updated.
-//		
+//
 // - For a packed number (opclass 2) the number is unpacked and the
 // operand type tag is updated.
 //
@@ -43,7 +43,7 @@
 // the '040.  The '040 then re-executes the fadd.x fpm,fpn with
 // a normalized number in the source and the instruction is
 // successful.
-//		
+//
 // Next consider if in the process of normalizing the un-
 // normalized number it becomes a denormalized number.  The
 // routine which converts the unnorm to a norm (called mk_norm)
@@ -56,8 +56,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 GET_OP:    //idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -196,7 +196,7 @@ uns_notpacked:
 
 uni_getop:
 	bfextu	CMDREG1B(%a6){#0:#6},%d0 //get opclass and src fields
-	cmpil	#0x17,%d0		//if op class and size fields are $17, 
+	cmpil	#0x17,%d0		//if op class and size fields are $17,
 //				;it is FMOVECR; if not, continue
 //
 // If the instruction is fmovecr, exit get_op.  It is handled
@@ -228,21 +228,21 @@ dst_ex_dnrm:
 	movew	FPTEMP_EX(%a6),%d0 //get destination exponent
 	andiw	#0x7fff,%d0	//mask sign, check if exp = 0000
 	beqs	src_op_ck	//if denorm then check source op.
-//				;denorms are taken care of in res_func 
+//				;denorms are taken care of in res_func
 //				;(unsupp) or do_func (unimp)
 //				;else unnorm fall through
 	leal	FPTEMP(%a6),%a0	//point a0 to dop - used in mk_norm
 	bsr	mk_norm		//go normalize - mk_norm returns:
-//				;L_SCR1{7:5} = operand tag 
+//				;L_SCR1{7:5} = operand tag
 //				;	(000 = norm, 100 = denorm)
-//				;L_SCR1{4} = fpte15 or ete15 
+//				;L_SCR1{4} = fpte15 or ete15
 //				;	0 = exp >  $3fff
 //				;	1 = exp <= $3fff
-//				;and puts the normalized num back 
+//				;and puts the normalized num back
 //				;on the fsave stack
 //
-	moveb L_SCR1(%a6),DTAG(%a6) //write the new tag & fpte15 
-//				;to the fsave stack and fall 
+	moveb L_SCR1(%a6),DTAG(%a6) //write the new tag & fpte15
+//				;to the fsave stack and fall
 //				;through to check source operand
 //
 src_op_ck:
@@ -257,19 +257,19 @@ src_op_ck:
 src_ex_dnrm:
 	movew	ETEMP_EX(%a6),%d0 //get source exponent
 	andiw	#0x7fff,%d0	//mask sign, check if exp = 0000
-	beq	end_getop	//if denorm then exit, denorms are 
+	beq	end_getop	//if denorm then exit, denorms are
 //				;handled in do_func
 	leal	ETEMP(%a6),%a0	//point a0 to sop - used in mk_norm
 	bsr	mk_norm		//go normalize - mk_norm returns:
-//				;L_SCR1{7:5} = operand tag 
+//				;L_SCR1{7:5} = operand tag
 //				;	(000 = norm, 100 = denorm)
-//				;L_SCR1{4} = fpte15 or ete15 
+//				;L_SCR1{4} = fpte15 or ete15
 //				;	0 = exp >  $3fff
 //				;	1 = exp <= $3fff
-//				;and puts the normalized num back 
+//				;and puts the normalized num back
 //				;on the fsave stack
 //
-	moveb	L_SCR1(%a6),STAG(%a6) //write the new tag & ete15 
+	moveb	L_SCR1(%a6),STAG(%a6) //write the new tag & ete15
 	rts			//end_getop
 
 //
@@ -287,7 +287,7 @@ is_double:
 	movew	#0x3c01,%d1	//write the bias for a dbl denorm
 common:
 	btstb	#sign_bit,ETEMP_EX(%a6) //grab sign bit of mantissa
-	beqs	pos	
+	beqs	pos
 	bset	#15,%d1		//set sign bit because it is negative
 pos:
 	movew	%d1,ETEMP_EX(%a6)
@@ -299,7 +299,7 @@ pos:
 	movew	%d1,CMDREG1B(%a6)	//write back to the command word in stack
 //				;this is needed to fix unsupp data stack
 	leal	ETEMP(%a6),%a0	//point a0 to sop
-	
+
 	bsr	mk_norm		//convert sgl/dbl denorm to norm
 	moveb	L_SCR1(%a6),STAG(%a6) //put tag into source tag reg - d0
 	rts			//end_getop
@@ -308,7 +308,7 @@ pos:
 // instruction is dyadic or monadic is still unknown
 //
 pack_source:
-	movel	FPTEMP_LO(%a6),ETEMP(%a6)	//write ms part of packed 
+	movel	FPTEMP_LO(%a6),ETEMP(%a6)	//write ms part of packed
 //				;number to etemp slot
 	bsr	chk_dy_mo	//set dyadic/monadic flag
 	bsr	unpack
@@ -327,7 +327,7 @@ pack_dya:
 	btstb	#7,DTAG(%a6)	//check dest tag for unnorm or denorm
 	bne	dst_ex_dnrm	//else, handle the unnorm or ext denorm
 //
-// Dest is not denormalized.  Check for norm, and set fpte15 
+// Dest is not denormalized.  Check for norm, and set fpte15
 // accordingly.
 //
 	moveb	DTAG(%a6),%d0
@@ -359,7 +359,7 @@ end_getop:
 // unsupported data type exception.  Set if dyadic.
 //
 chk_dy_mo:
-	movew	CMDREG1B(%a6),%d0	
+	movew	CMDREG1B(%a6),%d0
 	btstl	#5,%d0		//testing extension command word
 	beqs	set_mon		//if bit 5 = 0 then monadic
 	btstl	#4,%d0		//know that bit 5 = 1
@@ -408,7 +408,7 @@ set_mon:
 //	L_SCR1{7:5} = operand tag (000 = norm, 100 = denorm)
 //	L_SCR1{4}   = fpte15 or ete15 (0 = exp > $3fff, 1 = exp <=$3fff)
 //	the normalized operand is placed back on the fsave stack
-mk_norm:	
+mk_norm:
 	clrl	L_SCR1(%a6)
 	bclrb	#sign_bit,LOCAL_EX(%a0)
 	sne	LOCAL_SGN(%a0)	//transform into internal extended format
@@ -428,11 +428,11 @@ reload:
 	cmpw	#0x3fff,LOCAL_EX(%a0) //if exp > $3fff
 	bgts	end_mk		//   fpte15/ete15 already set to 0
 	bsetb	#4,L_SCR1(%a6)	//else set fpte15/ete15 to 1
-//				;calling routine actually sets the 
-//				;value on the stack (along with the 
-//				;tag), since this routine doesn't 
+//				;calling routine actually sets the
+//				;value on the stack (along with the
+//				;tag), since this routine doesn't
 //				;know if it should set ete15 or fpte15
-//				;ie, it doesn't know if this is the 
+//				;ie, it doesn't know if this is the
 //				;src op or dest op.
 end_mk:
 	bfclr	LOCAL_SGN(%a0){#0:#8}
@@ -457,7 +457,7 @@ no_unfl:
 //
 uns_opx:
 	bsr	nrm_zero	//normalize the number
-	btstb	#7,LOCAL_HI(%a0)	//check if integer bit (j-bit) is set 
+	btstb	#7,LOCAL_HI(%a0)	//check if integer bit (j-bit) is set
 	beqs	uns_den		//if clear then now have a denorm
 uns_nrm:
 	orb	#norm_tag,L_SCR1(%a6) //set tag to norm
@@ -470,7 +470,7 @@ uns_den:
 //
 uni_inst:
 	bsr	nrm_zero
-	btstb	#7,LOCAL_HI(%a0)	//check if integer bit (j-bit) is set 
+	btstb	#7,LOCAL_HI(%a0)	//check if integer bit (j-bit) is set
 	beqs	uni_den		//if clear then now have a denorm
 uni_nrm:
 	orb	#norm_tag,L_SCR1(%a6) //set tag to norm
@@ -482,9 +482,9 @@ uni_den:
 //
 //	Decimal to binary conversion
 //
-// Special cases of inf and NaNs are completed outside of decbin.  
+// Special cases of inf and NaNs are completed outside of decbin.
 // If the input is an snan, the snan bit is not set.
-// 
+//
 // input:
 //	ETEMP(a6)	- points to packed decimal string in memory
 // output:
@@ -612,16 +612,16 @@ mnot_spec:
 
 finish:
 	movew	CMDREG1B(%a6),%d0	//get the command word
-	andw	#0xfbff,%d0	//change the source specifier field to 
+	andw	#0xfbff,%d0	//change the source specifier field to
 //				;extended (was packed).
 	movew	%d0,CMDREG1B(%a6)	//write command word back to fsave stack
-//				;we need to do this so the 040 will 
-//				;re-execute the inst. without taking 
+//				;we need to do this so the 040 will
+//				;re-execute the inst. without taking
 //				;another packed trap.
 
 fix_stag:
-//Converted result is now in etemp on fsave stack, now set the source 
-//tag (stag) 
+//Converted result is now in etemp on fsave stack, now set the source
+//tag (stag)
 //	if (ete =$7fff) then INF or NAN
 //		if (etemp = $x.0----0) then
 //			stag = INF
@@ -634,7 +634,7 @@ fix_stag:
 //			stag = NORM
 //
 // Note also that the etemp_15 bit (just right of the stag) must
-// be set accordingly.  
+// be set accordingly.
 //
 	movew		ETEMP_EX(%a6),%d1
 	andiw		#0x7fff,%d1   //strip sign
@@ -653,7 +653,7 @@ is_nan:
 	movel		#0x60,%d0
 	rts
 z_or_nrm:
-	tstw		%d1  
+	tstw		%d1
 	bnes		is_nrm
 is_zro:
 // For a zero, set etemp_15
@@ -672,7 +672,7 @@ end_is_nrm:
 	movel		#0,%d0
 end_fix:
 	rts
- 
+
 end_get:
 	rts
 	|end

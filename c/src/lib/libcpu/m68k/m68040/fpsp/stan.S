@@ -52,8 +52,8 @@
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //STAN	idnt	2,1 | Motorola 040 Floating Point Software Package
@@ -239,10 +239,10 @@ TANCONT:
 	fmulx		%fp0,%fp2	 	// ...RS(P1+S(P2+SP3))
 
 	fmulx		%fp3,%fp1	 	// ...S(Q1+S(Q2+S(Q3+SQ4)))
-	
+
 
 	faddx		%fp2,%fp0	 	// ...R+RS(P1+S(P2+SP3))
-	
+
 
 	fadds		#0x3F800000,%fp1	// ...1+S(Q1+...)
 
@@ -277,11 +277,11 @@ NODD:
 	fmulx		%fp1,%fp2	 	// ...RS(P1+S(P2+SP3))
 
 	fmulx		%fp3,%fp0	 	// ...S(Q1+S(Q2+S(Q3+SQ4)))
-	
+
 
 	faddx		%fp2,%fp1	 	// ...R+RS(P1+S(P2+SP3))
 	fadds		#0x3F800000,%fp0	// ...1+S(Q1+...)
-	
+
 
 	fmovex		%fp1,-(%sp)
 	eoril		#0x80000000,(%sp)
@@ -399,7 +399,7 @@ WORK:
         movew		%d2,FP_SCR2(%a6)
 	clrw           FP_SCR2+2(%a6)
 	movel		#0xC90FDAA2,FP_SCR2+4(%a6)
-	clrl		FP_SCR2+8(%a6)		// ...FP_SCR2 is  2**(L) * Piby2_1	
+	clrl		FP_SCR2+8(%a6)		// ...FP_SCR2 is  2**(L) * Piby2_1
 
 //--FP2 IS READY
 	fsubs		TWOTO63(%a6),%fp2		// ...FP2 is N
@@ -447,7 +447,7 @@ RESTORE:
 	movel		(%a7)+,%d2
 	fmovemx	(%a7)+,%fp2-%fp5
 
-	
+
 	movel		N(%a6),%d0
         rorl		#1,%d0
 

@@ -62,17 +62,17 @@
 //	it is negative.
 //
 //	Clean up and return.  Check if the final mul or div resulted
-//	in an inex2 exception.  If so, set inex1 in the fpsr and 
+//	in an inex2 exception.  If so, set inex1 in the fpsr and
 //	check if the inex1 exception is enabled.  If so, set d7 upper
 //	word to $0100.  This will signal unimp.sa that an enabled inex1
 //	exception occurred.  Unimp will fix the stack.
-//	
+//
 
 //		Copyright (C) Motorola, Inc. 1990
 //			All Rights Reserved
 //
-//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA 
-//	The copyright notice above does not evidence any  
+//	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF MOTOROLA
+//	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
 //DECBIN    idnt    2,1 | Motorola 040 Floating Point Software Package
@@ -109,7 +109,7 @@ RTABLE:	.byte	0,0,0,0
 	.set	FSTRT,0
 //
 	.set	ESTRT,4
-	.set	EDIGITS,2	// 
+	.set	EDIGITS,2	//
 //
 // Constants in single precision
 FZERO: 	.long	0x00000000
@@ -226,7 +226,7 @@ nextlw:
 	addql	#1,%d1		//inc lw pointer in mantissa
 	cmpl	#2,%d1		//test for last lw
 	ble	loadlw		//if not, get last one
-	
+
 //
 //  Check the sign of the mant and make the value in fp0 the same sign.
 //
@@ -234,7 +234,7 @@ m_sign:
 	btst	#31,(%a0)	//test sign of the mantissa
 	beq	ap_st_z		//if clear, go to append/strip zeros
 	fnegx	%fp0		//if set, negate fp0
-	
+
 //
 // Append/strip zeros:
 //
@@ -409,7 +409,7 @@ ap_n_en:
 //
 // Pwrten calculates the exponent factor in the selected rounding mode
 // according to the following table:
-//	
+//
 //	Sign of Mant  Sign of Exp  Rounding Mode  PWRTEN Rounding Mode
 //
 //	ANY	  ANY	RN	RN
@@ -497,7 +497,7 @@ mul:
 // it will be inex2, but will be reported as inex1 by get_op.
 //
 end_dec:
-	fmovel	%FPSR,%d0		//get status register	
+	fmovel	%FPSR,%d0		//get status register
 	bclrl	#inex2_bit+8,%d0	//test for inex2 and clear it
 	fmovel	%d0,%FPSR		//return status reg w/o inex2
 	beqs	no_exc		//skip this if no exc
