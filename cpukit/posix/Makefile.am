@@ -7,8 +7,6 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
 
-if LIBPOSIX
-
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = libposix.a
@@ -174,7 +172,6 @@ libposix_a_SOURCES += src/sched_getparam.c src/sched_getprioritymax.c \
     src/sched_getprioritymin.c src/sched_getscheduler.c \
     src/sched_rr_get_interval.c src/sched_setparam.c \
     src/sched_setscheduler.c src/sched_yield.c src/sysconf.c
-endif
 endif
 
 include $(srcdir)/preinstall.am
