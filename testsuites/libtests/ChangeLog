@@ -1,5 +1,12 @@
 2009-12-04      Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* POSIX/Makefile.am: Add sigaddset, sigdelset, sigemptyset,
+	sigismember.
+	* POSIX/sigaddset.c, POSIX/sigdelset.c, POSIX/sigemptyset.c,
+	POSIX/sigismember.c: New.
+
+2009-12-04      Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* POSIX/Makefile.am: Add wait.
 	* POSIX/wait.c: New.
 

@@ -79,8 +79,20 @@ realloc_SOURCES = realloc.c
 check_PROGRAMS += setjmp
 setjmp_SOURCES = setjmp.c
 
+check_PROGRAMS += sigaddset
+sigaddset_SOURCES = sigaddset.c
+
+check_PROGRAMS += sigdelset
+sigdelset_SOURCES = sigdelset.c
+
+check_PROGRAMS += sigemptyset
+sigemptyset_SOURCES = sigemptyset.c
+
 check_PROGRAMS += sigfillset
 sigfillset_SOURCES = sigfillset.c
+
+check_PROGRAMS += sigismember
+sigismember = sigismember.c
 
 check_PROGRAMS += sigprocmask
 sigprocmask_SOURCES = sigprocmask.c
