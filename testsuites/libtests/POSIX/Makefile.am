@@ -73,6 +73,9 @@ posix_memalign_SOURCES = posix_memalign.c
 check_PROGRAMS += read
 read_SOURCES = read.c
 
+check_PROGRAMS += readv
+readv_SOURCES = readv.c
+
 check_PROGRAMS += realloc
 realloc_SOURCES = realloc.c
 
@@ -114,3 +117,6 @@ waitpid_SOURCES = waitpid.c
 
 check_PROGRAMS += write
 write_SOURCES = write.c
+
+check_PROGRAMS += writev
+writev_SOURCES = writev.c
