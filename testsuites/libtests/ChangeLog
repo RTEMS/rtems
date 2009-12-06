@@ -1,3 +1,8 @@
+2009-12-06      Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* POSIX/Makefile.am: Add readv, writev.
+	* POSIX/writev.c, POSIX/readv.c: New.
+
 2009-12-04      Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* POSIX/sigfillset.c: Let main() return "status".
