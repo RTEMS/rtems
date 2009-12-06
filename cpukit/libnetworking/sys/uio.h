@@ -38,6 +38,7 @@
 #define	_SYS_UIO_H_
 
 #include <rtems/bsd/sys/cdefs.h>
+#include <sys/types.h>
 
 /*
  *  POSIX compliant iovec definition
@@ -64,7 +65,7 @@ struct uio {
 	struct	iovec *uio_iov;		/* scatter/gather list */
 	int	uio_iovcnt;		/* length of scatter/gather list */
 	off_t	uio_offset;		/* offset in target object */
-	int	uio_resid;		/* remaining bytes to process */
+	ssize_t	uio_resid;		/* remaining bytes to process */
 	enum	uio_seg uio_segflg;	/* address space */
 	enum	uio_rw uio_rw;		/* operation */
 #if !defined(__rtems__)
