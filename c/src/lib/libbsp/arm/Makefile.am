@@ -13,7 +13,6 @@ EXTRA_DIST =
 
 # comm
 EXTRA_DIST += shared/comm/uart.h
-EXTRA_DIST += shared/comm/console.c
 EXTRA_DIST += shared/comm/uart.c
 
 # irq
