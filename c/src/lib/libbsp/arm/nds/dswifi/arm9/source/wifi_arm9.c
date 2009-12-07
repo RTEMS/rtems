@@ -355,11 +355,11 @@ void Wifi_SetSyncHandler(WifiSyncHandler wshfunc) {
    synchandler=wshfunc;
 }
 
-void Wifi_DisableWifi() {
+void Wifi_DisableWifi(void) {
 	WifiData->reqMode=WIFIMODE_DISABLED;
 	WifiData->reqReqFlags &= ~WFLAG_REQ_APCONNECT;
 }
-void Wifi_EnableWifi() {
+void Wifi_EnableWifi(void) {
 	WifiData->reqMode=WIFIMODE_NORMAL;
 	WifiData->reqReqFlags &= ~WFLAG_REQ_APCONNECT;
 }
@@ -368,7 +368,7 @@ void Wifi_SetPromiscuousMode(int enable) {
 	else WifiData->reqReqFlags &= ~WFLAG_REQ_PROMISC;
 }
 
-void Wifi_ScanMode() {
+void Wifi_ScanMode(void) {
 	WifiData->reqMode=WIFIMODE_SCAN;
 	WifiData->reqReqFlags &= ~WFLAG_REQ_APCONNECT;
 }
@@ -380,7 +380,7 @@ void Wifi_SetChannel(int channel) {
 }
 
 
-int Wifi_GetNumAP() {
+int Wifi_GetNumAP(void) {
 	int i,j;
 	j=0;
 	for(i=0;i<WIFI_MAX_AP;i++) if(WifiData->aplist[i].flags&WFLAG_APDATA_ACTIVE) j++;
@@ -515,7 +515,7 @@ void sgIP_DNS_Record_Localhost(void)
     rec->flags=SGIP_DNS_FLAG_ACTIVE | SGIP_DNS_FLAG_BUSY|SGIP_DNS_FLAG_RESOLVED;
 }
 
-int Wifi_AssocStatus() {
+int Wifi_AssocStatus(void) {
 	switch(wifi_connect_state) {
 		case -1: // error
 			return ASSOCSTATUS_CANNOTCONNECT;
@@ -824,13 +824,13 @@ unsigned long Wifi_Init(int initflags) {
 	return (u32) &Wifi_Data_Struct;
 }
 
-int Wifi_CheckInit() {
+int Wifi_CheckInit(void) {
 	if(!WifiData) return 0;
 	return ((WifiData->flags7 & WFLAG_ARM7_ACTIVE) && (WifiData->flags9 & WFLAG_ARM9_ARM7READY));
 }
 
 
-void Wifi_Update() {
+void Wifi_Update(void) {
 	int cnt;
 	int base, base2, len, fulllen;
 	if(!WifiData) return;
@@ -926,7 +926,7 @@ void Wifi_Update() {
 // Ip addr get/set functions
 #ifdef WIFI_USE_TCP_SGIP
 
-u32 Wifi_GetIP() {
+u32 Wifi_GetIP(void) {
 	if(wifi_hw) return wifi_hw->ipaddr;
 	return 0;
 }

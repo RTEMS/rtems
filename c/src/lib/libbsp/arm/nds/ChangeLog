@@ -1,5 +1,6 @@
 2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* dswifi/arm9/source/wifi_arm9.c: Add missing prototypes.
 	* console/console.c (nds_write): Adjust prototype.
 
 2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
