@@ -51,7 +51,7 @@ console_push (char c)
   ch = c;
 }
 
-char
+int
 nds_getch (void)
 {
   char c;
@@ -62,10 +62,8 @@ nds_getch (void)
   return c;
 }
 
-BSP_output_char_function_type BSP_output_char =
-  (BSP_output_char_function_type) nds_putch;
-BSP_polling_getchar_function_type BSP_poll_char =
-  (BSP_polling_getchar_function_type) nds_getch;
+BSP_output_char_function_type BSP_output_char = nds_putch;
+BSP_polling_getchar_function_type BSP_poll_char = nds_getch;
 
 /*
  * console write operation.

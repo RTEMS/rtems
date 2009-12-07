@@ -1,5 +1,9 @@
 2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* console/console.c: Let nds_getch return "int". Remove casts.
+
+2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* block/block.c: Adjust prototype mismatches.
 	* Makefile.am: Remove -Dcaddr_t=uint32_t.
 
