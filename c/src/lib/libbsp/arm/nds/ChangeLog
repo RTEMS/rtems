@@ -1,3 +1,11 @@
+2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* dswifi/arm7/source/wifi_arm7.c, dswifi/arm7/source/wifi_arm7.h,
+	dswifi/arm9/source/wifi_arm9.c, libnds/include/nds/arm7/audio.h,
+	libnds/include/nds/arm7/clock.h, libnds/include/nds/arm7/serial.h,
+	libnds/include/nds/arm7/touch.h, libnds/source/arm7/clock.c,
+	libnds/source/arm7/touch.c, rtc/rtc.c: Eliminate various warnings.
+
 2009-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnds/include/nds/arm9/exceptions.h,
