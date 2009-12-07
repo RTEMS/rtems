@@ -72,7 +72,7 @@ BSP_polling_getchar_function_type BSP_poll_char =
  */
 
 static int
-nds_write (rtems_device_minor_number minor, const char *buf, int len)
+nds_write (int minor, const char *buf, int len)
 {
   int count;
 

@@ -1,5 +1,9 @@
 2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* console/console.c (nds_write): Adjust prototype.
+
+2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* dswifi/arm7/source/wifi_arm7.c, dswifi/arm7/source/wifi_arm7.h,
 	dswifi/arm9/source/wifi_arm9.c, libnds/include/nds/arm7/audio.h,
 	libnds/include/nds/arm7/clock.h, libnds/include/nds/arm7/serial.h,
