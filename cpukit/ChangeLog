@@ -1,3 +1,9 @@
+2009-12-07	Cindy Cicalese <cicalese@mitre.org>
+
+	PR 1477/cpukit
+	* score/src/objectsetname.c: Ensure destination is NULL terminated.
+	String copy was not getting the NULL.
+
 2009-11-11	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1471/cpukit
