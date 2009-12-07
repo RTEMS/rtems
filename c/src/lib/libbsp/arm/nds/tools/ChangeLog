@@ -1,3 +1,7 @@
+2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ndstool/source/ndsextract.cpp: Add missing const's.
+
 2009-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bin2s: Remove.

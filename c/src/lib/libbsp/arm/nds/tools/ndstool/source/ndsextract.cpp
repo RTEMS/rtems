@@ -25,7 +25,7 @@ void MkDir(char *name)
  * ExtractFile
  * if rootdir==0 nothing will be written
  */
-void ExtractFile(char *rootdir, char *prefix, char *entry_name, unsigned int file_id)
+void ExtractFile(char *rootdir, const char *prefix, char *entry_name, unsigned int file_id)
 {
 	unsigned int save_filepos = ftell(fNDS);
 
@@ -107,7 +107,7 @@ bool MatchName(char *name, char *mask, int level=0)
  * ExtractDirectory
  * filerootdir can be 0 for just listing files
  */
-void ExtractDirectory(char *prefix, unsigned int dir_id)
+void ExtractDirectory(const char *prefix, unsigned int dir_id)
 {
 	char strbuf[MAXPATHLEN];
 	unsigned int save_filepos = ftell(fNDS);
