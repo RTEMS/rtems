@@ -58,7 +58,7 @@ nds_flash_write_reg (int minor, int reg, uint16_t value)
 }
 
 void
-nds_flash_read_block (int minor, uint16_t block_size,
+nds_flash_read_block (int minor, uint32_t block_size,
                       rtems_blkdev_sg_buffer * bufs,
                       uint32_t * cbuf, uint32_t * pos)
 {
@@ -66,7 +66,7 @@ nds_flash_read_block (int minor, uint16_t block_size,
 }
 
 void
-nds_flash_write_block (int minor, uint16_t block_size,
+nds_flash_write_block (int minor, uint32_t block_size,
                        rtems_blkdev_sg_buffer * bufs,
                        uint32_t * cbuf, uint32_t * pos)
 {
