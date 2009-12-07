@@ -377,7 +377,7 @@ static unsigned char inputch = ASCII_CR;    /**< input character value */
  *  @param  None
  *  @return Selected char code
  */
-char gba_getch(void)
+int gba_getch(void)
 {
   int  keyx, key  = 0;
 

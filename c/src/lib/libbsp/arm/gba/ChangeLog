@@ -1,3 +1,8 @@
+2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/conio.c, console/console.c, include/conio.h:
+	Let *getch return "int". Remove casts.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/gba.cfg: Remove RTEMS_BSP_FAMILY.

@@ -74,7 +74,7 @@ static int gba_setAttributes(int minor, const struct termios *t)
 /** BSP_output_char for printk support */
 BSP_output_char_function_type     BSP_output_char = (BSP_output_char_function_type)     gba_putch;
 /** BSP_poll_char for printk support */
-BSP_polling_getchar_function_type BSP_poll_char   = (BSP_polling_getchar_function_type) gba_getch;
+BSP_polling_getchar_function_type BSP_poll_char   = gba_getch;
 
 /**
  *  @brief Console device driver INITIALIZE entry point

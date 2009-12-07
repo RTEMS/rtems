@@ -82,7 +82,7 @@ void    gba_putch(char _c);
 void    gba_puts(const char *_str);
 int     gba_printf(const char *_format, ...);
 void    gba_gotoxy(int _x, int _y);
-char    gba_getch(void);
+int     gba_getch(void);
 
 
 #ifdef __cplusplus
