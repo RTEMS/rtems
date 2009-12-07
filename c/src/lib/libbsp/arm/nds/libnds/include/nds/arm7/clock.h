@@ -130,7 +130,7 @@ void rtcGetData(uint8 * data, uint32 size);
 void BCDToInteger(uint8 * data, uint32 length);
 void integerToBCD(uint8 * data, uint32 length);
 
-void initClockIRQ();
+void initClockIRQ(void);
 
 #ifdef __cplusplus
 }

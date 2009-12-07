@@ -96,7 +96,7 @@ extern "C" {
 /*---------------------------------------------------------------------------------
 	Read a byte from the microphone
 ---------------------------------------------------------------------------------*/
-u8 MIC_ReadData();
+u8 MIC_ReadData(void);
 
 /*---------------------------------------------------------------------------------
 	Fill the buffer with data from the microphone. The buffer will be
@@ -108,17 +108,17 @@ void StartRecording(u8* buffer, int length);
 /*---------------------------------------------------------------------------------
 	Stop recording data, and return the length of data recorded.
 ---------------------------------------------------------------------------------*/
-int StopRecording();
+int StopRecording(void);
 
 /* This must be called during IRQ_TIMER0 */
-void ProcessMicrophoneTimerIRQ();
+void ProcessMicrophoneTimerIRQ(void);
 
 void PM_SetAmp(u8 control);
 
 //---------------------------------------------------------------------------------
 // Turn the microphone on
 //---------------------------------------------------------------------------------
-static inline void MIC_On() {
+static inline void MIC_On(void) {
 //---------------------------------------------------------------------------------
   PM_SetAmp(PM_AMP_ON);
 }
@@ -127,7 +127,7 @@ static inline void MIC_On() {
 //---------------------------------------------------------------------------------
 // Turn the microphone off
 //---------------------------------------------------------------------------------
-static inline void MIC_Off() {
+static inline void MIC_Off(void) {
 //---------------------------------------------------------------------------------
   PM_SetAmp(PM_AMP_OFF);
 }

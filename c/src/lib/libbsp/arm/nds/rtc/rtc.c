@@ -65,7 +65,7 @@ nds_rtc_get_time (int minor, rtems_time_of_day * time)
  */
 
 int
-nds_rtc_set_time (int minor, rtems_time_of_day * time)
+nds_rtc_set_time (int minor, const rtems_time_of_day * time)
 {
   return -1;
 }

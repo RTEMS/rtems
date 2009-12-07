@@ -57,7 +57,7 @@ extern "C" {
 
 
 
-touchPosition touchReadXY();
+touchPosition touchReadXY(void);
 
 uint16 touchRead(uint32 command);
 uint32 touchReadTemperature(int * t1, int * t2);

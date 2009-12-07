@@ -115,7 +115,7 @@ int crc16_slow(u8 * data, int length) {
     return crc;
 }
 
-void GetWfcSettings() {
+void GetWfcSettings(void) {
    u8 data[256];
    int i,n, c;
    unsigned long s;
@@ -517,7 +517,7 @@ void Wifi_TxRaw(u16 * data, int datalen) {
 	WifiData->stats[WSTAT_TXDATABYTES]+=datalen-12;
 }
 
-int Wifi_TxCheck() {
+int Wifi_TxCheck(void) {
 	if(WIFI_REG(0xA8)&0x8000) return 0;
 	return 1;
 }
@@ -528,7 +528,7 @@ int Wifi_TxCheck() {
 //  Wifi Interrupts
 //
 
-void Wifi_Intr_RxEnd() {
+void Wifi_Intr_RxEnd(void) {
 	int base;
 	int packetlen;
 	int full_packetlen;
@@ -570,7 +570,7 @@ void Wifi_Intr_RxEnd() {
 u16 count_ofs_list[CNT_STAT_NUM] = {
 	0x1B0, 0x1B2, 0x1B4, 0x1B6, 0x1B8, 0x1BA, 0x1BC, 0x1BE, 0x1C0, 0x1C4, 0x1D0, 0x1D2, 0x1D4, 0x1D6, 0x1D8, 0x1DA, 0x1DC, 0x1DE
 };
-void Wifi_Intr_CntOverflow() {
+void Wifi_Intr_CntOverflow(void) {
 	int i;
 	int s,d;
 	s=CNT_STAT_START;
@@ -581,13 +581,13 @@ void Wifi_Intr_CntOverflow() {
 	}
 }
 
-void Wifi_Intr_StartTx() {
+void Wifi_Intr_StartTx(void) {
 	if(WifiData->reqReqFlags&WFLAG_REQ_PROMISC) { // attempt to ensure packet is received
 
 	}
 }
 
-void Wifi_Intr_TxEnd() { // assume that we can now tx something new.
+void Wifi_Intr_TxEnd(void) { // assume that we can now tx something new.
 	if(arm7qlen) {
 		Wifi_TxRaw(arm7q, arm7qlen);
 		keepalive_time=0;
@@ -609,18 +609,18 @@ void Wifi_Intr_TxEnd() { // assume that we can now tx something new.
 	}
 }
 
-void Wifi_Intr_TBTT() {
+void Wifi_Intr_TBTT(void) {
 	if(WIFI_REG(0xA8)&0x8000) {
 		WIFI_REG(0xAE)=0x000D;
 	}
 }
 
-void Wifi_Intr_DoNothing() {
+void Wifi_Intr_DoNothing(void) {
 }
 
 
 
-void Wifi_Interrupt() {
+void Wifi_Interrupt(void) {
 	int wIF;
 	if(!WifiData) return;
 	if(!(WifiData->flags7&WFLAG_ARM7_RUNNING)) return;
@@ -653,7 +653,7 @@ void Wifi_Interrupt() {
 
 
 
-void Wifi_Update() {
+void Wifi_Update(void) {
 	int i;
 	if(!WifiData) return;
    WifiData->random ^=(W_RANDOM ^ (W_RANDOM<<11) ^ (W_RANDOM<<22));
@@ -1180,7 +1180,7 @@ int Wifi_SendOpenSystemAuthPacket() {
 	return Wifi_TxQueue((u16 *)data, i+6);
 }
 
-int Wifi_SendSharedKeyAuthPacket() {
+int Wifi_SendSharedKeyAuthPacket(void) {
 	// max size is 12+24+4+6 = 46
 	u8 data[64];
 	int i;
