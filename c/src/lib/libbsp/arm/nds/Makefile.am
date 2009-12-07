@@ -149,7 +149,7 @@ if HAS_NETWORKING
 noinst_PROGRAMS += dswifi9.rel
 dswifi9_rel_SOURCES =  	dswifi/arm9/source/wifi_arm9.c			\
 			dswifi/common/source/spinlock.S
-dswifi9_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/dswifi/include -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/common/source -I$(srcdir)/wifi -D_KERNEL -Dcaddr_t=uint32_t
+dswifi9_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/dswifi/include -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/common/source -I$(srcdir)/wifi -D_KERNEL
 dswifi9_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
