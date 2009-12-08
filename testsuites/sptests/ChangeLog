@@ -1,5 +1,9 @@
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp31/task1.c: Fixed spacing.
+
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp18/init.c, sp31/task1.c, sp43/init.c, sp63/init.c, sp64/init.c,
 	spfatal10/testcase.h, spfatal11/testcase.h, spobjgetnext/init.c,
 	spwkspace/init.c: Use rtems_test_assert() consistently instead of
