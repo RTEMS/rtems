@@ -45,12 +45,13 @@ extern "C" {
  *  Check that that the dispatch disable level is proper for the
  *  mode/state of the test.  Normally it should be 0 when in task space.
  */
-
 #define check_dispatch_disable_level( _expect ) \
   do { \
     if ( (_expect) != -1 && _Thread_Dispatch_disable_level != (_expect) ) { \
-      printf( "\n_Thread_Dispatch_disable_level is (%" PRId32 ") not %d\n", \
-              _Thread_Dispatch_disable_level, (_expect) ); \
+      printk( \
+        "\n_Thread_Dispatch_disable_level is (%" PRId32 \
+           ") not %d detected at %s:%d\n", \
+         _Thread_Dispatch_disable_level, (_expect), __FILE__, __LINE__ ); \
       FLUSH_OUTPUT(); \
       rtems_test_exit( 1 ); \
     } \
@@ -59,7 +60,6 @@ extern "C" {
 /*
  *  These macros properly report errors within the Classic API
  */
-
 #define directive_failed( _dirstat, _failmsg )  \
  fatal_directive_status( _dirstat, RTEMS_SUCCESSFUL, _failmsg )
 

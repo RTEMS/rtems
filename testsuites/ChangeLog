@@ -1,3 +1,10 @@
+2009-12-08	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* support/include/test_support.h, support/include/tmacros.h,
+	support/src/test_support.c: Added support functions to spin for a
+	number of ticks and to spin until the next tick.
+	* support/src/spin.c: New file.
+
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* support/include/tmacros.h: Use rtems_test_assert() consistently

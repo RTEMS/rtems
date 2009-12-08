@@ -1,11 +1,5 @@
-/*  long_name
- *
- *  This set of routines is create names that are the maximum length or one over
- *  the maximum length.
- *
- *  Output parameters:  constant character string of max length or max length + 1
- *
- *  COPYRIGHT (c) 1989-2008.
+/*
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
