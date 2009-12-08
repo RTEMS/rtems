@@ -1,0 +1,25 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp69
+
+directives:
+
+  rtems_rate_monotonic_get_status
+
+concepts:
+
++ Verify that the status values returned for an inactive period are all zero.
++ Ensure that RTEMS_NOT_DEFINED is returned if the cpu usage is reset after
+  a period is initiated.
++ Verify the correctness of the status values returned on an active period.

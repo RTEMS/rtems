@@ -94,6 +94,7 @@ sp65/Makefile
 sp66/Makefile
 sp67/Makefile
 sp68/Makefile
+sp69/Makefile
 spchain/Makefile
 spclockget/Makefile
 spcoverage/Makefile

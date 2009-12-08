@@ -1,3 +1,9 @@
+2009-12-08	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* Makefile.am, configure.ac: Added a test for rate_monotonic_get_status
+	to ensure that all paths are tested.
+	* sp69/Makefile.am, sp69/init.c, sp69/sp69.doc, sp69/sp69.scn: New files.
+
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp31/task1.c: Fixed spacing.
