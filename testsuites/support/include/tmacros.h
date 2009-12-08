@@ -23,7 +23,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 #include <rtems/error.h>
 #include <rtems/score/thread.h> /*  _Thread_Dispatch_disable_level */
 
@@ -250,10 +249,12 @@ extern "C" {
         number_of_initialization_tasks )
 
 #define rtems_test_assert(__exp) \
-  if (!(__exp)) { \
-    printf( "%s: %d %s\n", __FILE__, __LINE__, #__exp ); \
-    rtems_test_exit(0); \
-  }
+  do { \
+    if (!(__exp)) { \
+      printf( "%s: %d %s\n", __FILE__, __LINE__, #__exp ); \
+      rtems_test_exit(0); \
+    } \
+  } while (0)
 
 /*
  * Various inttypes.h-stype macros to assist printing
