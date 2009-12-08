@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,6 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <stdio.h>
-#include <assert.h>
 
 void ITRON_Init( void )
 {
@@ -331,7 +330,7 @@ void ITRON_Init( void )
   /*  Call from task independent portion to cause E_OBJ
   puts( "Init - chg_pri - change priority of TSK_SELF - E_OBJ" );
   status = chg_pri( XXX - INTERRUPT, 1 );
-  assert( status == E_OBJ );
+  rtems_test_assert( status == E_OBJ );
   */
 
   puts( "Init - chg_pri - task is DORMANT - E_OBJ" );
@@ -410,7 +409,7 @@ void ITRON_Init( void )
   /*  XXX Call from task independent portion to cause E_ID
   puts( "Init - ref_tsk - reference INTERRUPT - E_ID" );
   status = ref_tsk( &pk_rtsk, TSK_SELF );
-  assert( status == E_ID );
+  rtems_test_assert( status == E_ID );
   */
 
   puts( "Init - ref_tsk - task does not exist - E_NOEXS" );

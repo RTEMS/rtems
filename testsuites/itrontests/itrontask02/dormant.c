@@ -18,7 +18,6 @@
  *  $Id$
  */
 
-#include <assert.h>
 #include "system.h"
 
 void Dormant_task(void)
@@ -27,7 +26,7 @@ void Dormant_task(void)
   ext_tsk( );
 
   puts( "ERROR==>ext_tsk of DORMANT returned" );
-  assert(0);
+  rtems_test_assert(0);
 }
 
 

@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,6 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <stdio.h>
-#include <assert.h>
 
 void ITRON_Init( void )
 {
@@ -134,5 +133,5 @@ void ITRON_Init( void )
   directive_failed( status, "sta_tsk of TA3" );
 
   exd_tsk();
-  assert(0);
+  rtems_test_assert(0);
 }

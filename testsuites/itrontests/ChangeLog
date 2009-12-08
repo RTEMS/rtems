@@ -1,3 +1,11 @@
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* itronmbf01/init.c, itronsem01/init.c, itronsem01/system.h,
+	itrontask02/dormant.c, itrontask02/init.c, itrontask03/init.c,
+	itrontask03/preempt.c: Use rtems_test_assert() consistently instead
+	of system assert(). rtems_test_assert() is designed to integrate into
+	the RTEMS test suite infrastructure.
+
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* itrontime01/init.c: Use %ld to print "time"s.
