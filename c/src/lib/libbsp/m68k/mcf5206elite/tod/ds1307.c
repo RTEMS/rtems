@@ -171,7 +171,7 @@ ds1307_get_time(int minor, rtems_time_of_day *time)
  *     -1, if error occured
  */
 int
-ds1307_set_time(int minor, rtems_time_of_day *time)
+ds1307_set_time(int minor, const rtems_time_of_day *time)
 {
     i2c_bus_number bus;
     i2c_address addr;
