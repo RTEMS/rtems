@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,7 +28,7 @@ void *Task_2(
 
   printf( "Task_2: sending SIGUSR1\n" );
   status = pthread_kill( Init_id, SIGUSR1 );
-  assert( !status );
+  rtems_test_assert(  !status );
 
      /* switch to Init */
 

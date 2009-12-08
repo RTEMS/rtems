@@ -15,7 +15,12 @@
  *  implementation of this appears to seek to the ((off/DIRENT_SIZE) + 1)
  *  record where DIRENT_SIZE seems to be 12 bytes.
  *
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
  *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
@@ -24,7 +29,6 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <string.h>
-#include <assert.h>
 #include <unistd.h>
 #include <errno.h>
 #include <rtems/libio.h>
@@ -35,10 +39,10 @@ void touch( char *file )
 {
   int fd;
 
-  assert( file );
+  rtems_test_assert(  file );
 
   fd = open( file, O_RDWR|O_CREAT, 0777 );
-  assert( fd != -1 );
+  rtems_test_assert(  fd != -1 );
   close( fd );
 }
 
@@ -47,7 +51,7 @@ int fileexists( char *file )
   int         status;
   struct stat statbuf;
 
-  assert( file );
+  rtems_test_assert(  file );
 
   status = stat( file, &statbuf );
 
@@ -86,19 +90,19 @@ int main(
   printf( "\n\n*** CHROOT01 TEST ***\n" );
 
   status = mkdir( "/one", 0777);
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   status = mkdir( "/one/one", 0777);
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   status = mkdir( "/one/two", 0777);
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   touch( "/one/one.test" );
   touch( "/one/two/two.test" );
 
   status = chroot( "/one" );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   status = fileexists( "/one/one.test" );
   printf( "%s on /one/one.test\n", (!status) ? "SUCCESS" : "FAILURE" );

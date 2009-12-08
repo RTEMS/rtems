@@ -32,10 +32,10 @@ void *Task_1_through_3(
   for ( i=0 ; i<5 ; i++ ) {
     print_current_time( "Task1: ", "" );
     status = pthread_kill( Init_id, SIGUSR1 );
-    assert( !status );
+    rtems_test_assert(  !status );
 
     seconds = sleep( 1 );
-    assert( !seconds );
+    rtems_test_assert(  !seconds );
   }
   puts( "*** END OF POSIX TEST 2 ***" );
   rtems_test_exit( 0 );

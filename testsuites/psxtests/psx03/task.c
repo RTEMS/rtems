@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,7 +33,7 @@ void *Task_1(
 
   puts( "Task_1: pthread_kill - SIGUSR2 to Init" );
   status = pthread_kill( Init_id, SIGUSR2 );
-  assert( !status );
+  rtems_test_assert( !status );
 
   pthread_exit( NULL );
 
@@ -54,7 +54,7 @@ void *Task_2(
 
   puts( "Task_1: pthread_kill - SIGUSR1 to Init" );
   status = pthread_kill( Init_id, SIGUSR1 );
-  assert( !status );
+  rtems_test_assert( !status );
 
   pthread_exit( NULL );
 

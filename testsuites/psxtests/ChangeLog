@@ -1,3 +1,26 @@
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/pmacros.h, psx01/task.c, psx02/init.c, psx02/task.c,
+	psx03/init.c, psx03/task.c, psx04/init.c, psx04/task1.c,
+	psx04/task2.c, psx04/task3.c, psx05/init.c, psx05/task.c,
+	psx05/task2.c, psx05/task3.c, psx06/init.c, psx06/task.c,
+	psx06/task2.c, psx07/init.c, psx08/init.c, psx08/task2.c,
+	psx08/task3.c, psx09/init.c, psx10/init.c, psx10/task.c,
+	psx10/task2.c, psx10/task3.c, psx11/init.c, psx11/task.c,
+	psx12/init.c, psxalarm01/init.c, psxbarrier01/test.c,
+	psxcancel01/init.c, psxchroot01/test.c, psxclock/init.c,
+	psxfile01/test.c, psxfile01/test_cat.c, psxfile01/test_extend.c,
+	psxfile01/test_write.c, psxitimer/init.c, psxkey01/task.c,
+	psxkey02/init.c, psxkey03/init.c, psxmount/test.c, psxmsgq01/init.c,
+	psxmsgq03/init.c, psxmsgq04/init.c, psxreaddir/test.c,
+	psxrwlock01/test.c, psxsem01/init.c, psxsignal01/init.c,
+	psxsignal01/task1.c, psxsignal02/init.c, psxsignal03/init.c,
+	psxsignal05/init.c, psxspin01/test.c, psxspin02/test.c,
+	psxstack01/init.c, psxstat/test.c, psxtime/test.c, psxualarm/init.c:
+	Use rtems_test_assert() consistently instead of system assert().
+	rtems_test_assert() is designed to integrate into the RTEMS test
+	suite infrastructure.
+
 2009-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: New test to exercise getgrnam and getpwnam

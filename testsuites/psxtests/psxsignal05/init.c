@@ -74,7 +74,7 @@ void *POSIX_Init(
     true,              /* is_global */
     false              /* check_blocked */
   );
-  assert( bc );
+  rtems_test_assert(  bc );
 
   puts( "*** END OF POSIX TEST SIGNAL " TEST_NAME " ***" );
   rtems_test_exit(0);

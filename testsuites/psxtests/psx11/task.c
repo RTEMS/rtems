@@ -50,10 +50,10 @@ void *Task_1(
   struct timespec delay;
 
   status = clock_gettime( CLOCK_REALTIME, &start );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = sched_rr_get_interval( getpid(), &delay );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   /* double the rr interval for confidence */
 
@@ -69,7 +69,7 @@ void *Task_1(
   for ( ; ; ) {
 
     status = clock_gettime( CLOCK_REALTIME, &current );
-    assert( !status );
+    rtems_test_assert(  !status );
 
     diff_timespec( &start, &current, &difference );
 

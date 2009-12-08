@@ -52,10 +52,10 @@ void *POSIX_Init(
   /* create a couple of threads */
 
   status = pthread_create( &Task_id, NULL, Task_1, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = pthread_create( &Task2_id, NULL, Task_2, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   /* create a key */
 
@@ -66,31 +66,31 @@ void *POSIX_Init(
   status = pthread_key_create( &Key_id, Key_destructor );
   if ( status )
     printf( "status = %d\n", status );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   printf( "Destructor invoked %d times\n", Destructor_invoked );
 
   puts( "Init: pthread_key_create - EAGAIN (too many keys)" );
   status = pthread_key_create( &Key_id, Key_destructor );
-  assert( status == EAGAIN );
+  rtems_test_assert(  status == EAGAIN );
 
   puts( "Init: pthread_setspecific - EINVAL (invalid key)" );
   status = pthread_setspecific( (pthread_t) -1, &Data_array[ 0 ] );
-  assert( status == EINVAL );
+  rtems_test_assert(  status == EINVAL );
 
   puts( "Init: pthread_getspecific - EINVAL (invalid key)" );
   key_data = pthread_getspecific( (pthread_t) -1 );
-  assert( !key_data );
+  rtems_test_assert(  !key_data );
 
   puts( "Init: pthread_key_delete - EINVAL (invalid key)" );
   status = pthread_key_delete( (pthread_t) -1 );
-  assert( status == EINVAL );
+  rtems_test_assert(  status == EINVAL );
 
   printf( "Init: Setting the key to %d\n", 0 );
   status = pthread_setspecific( Key_id, &Data_array[ 0 ] );
   if ( status )
     printf( "status = %d\n", status );
-  assert( !status );
+  rtems_test_assert(  !status );
 
      /* switch to task 1 */
 
@@ -101,7 +101,7 @@ void *POSIX_Init(
   remaining = sleep( 3 );
   if ( remaining )
      printf( "seconds remaining = %d\n", remaining );
-  assert( !remaining );
+  rtems_test_assert(  !remaining );
 
      /* switch to task 1 */
 
@@ -111,7 +111,7 @@ void *POSIX_Init(
   status = pthread_key_delete( Key_id );
   if ( status )
     printf( "status = %d\n", status );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   printf( "Destructor invoked %d times\n", Destructor_invoked );
 

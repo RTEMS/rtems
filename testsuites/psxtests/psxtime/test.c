@@ -13,7 +13,6 @@
  */
 
 #include <tmacros.h>
-#include <assert.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -67,16 +66,16 @@ void check_a_tod(
 
   print_time( "rtems_clock_set          ", the_tod, "\n" );
   status = rtems_clock_set( the_tod );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   do {
     status = rtems_clock_get_tod( &new_tod );
-    assert( !status );
+    rtems_test_assert(  !status );
     print_time( "rtems_clock_get_tod          ", &new_tod, "\n" );
 
     /* now do the posix time gets */
     result = gettimeofday( &tv, 0 );
-    assert( result == 0 );
+    rtems_test_assert(  result == 0 );
     a_time_t = tv.tv_sec;   /* ctime() takes a time_t */
     printf( "gettimeofday: %s", ctime( &a_time_t) );
 
@@ -110,7 +109,7 @@ void test_adjtime(void)
 
   print_time( "rtems_clock_set          ", the_tod, "\n" );
   status = rtems_clock_set( the_tod );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   delta.tv_sec = 0;
   delta.tv_usec = 0;
@@ -119,56 +118,56 @@ void test_adjtime(void)
 
   puts( "adjtime - NULL delta - EINVAL" );
   sc = adjtime( NULL, &olddelta );
-  assert( sc == -1 );
-  assert( errno == EINVAL );
+  rtems_test_assert(  sc == -1 );
+  rtems_test_assert(  errno == EINVAL );
 
   puts( "adjtime - delta out of range - EINVAL" );
   delta.tv_usec = 1000000000; /* 100 seconds worth */
   sc = adjtime( &delta, &olddelta );
-  assert( sc == -1 );
-  assert( errno == EINVAL );
+  rtems_test_assert(  sc == -1 );
+  rtems_test_assert(  errno == EINVAL );
 
   puts( "adjtime - delta too small - do nothing" );
   delta.tv_sec = 0;
   delta.tv_usec = 1;
   sc = adjtime( &delta, &olddelta );
-  assert( sc == 0 );
+  rtems_test_assert(  sc == 0 );
 
   puts( "adjtime - delta too small - do nothing, olddelta=NULL" );
   sc = adjtime( &delta, NULL );
-  assert( sc == 0 );
+  rtems_test_assert(  sc == 0 );
 
   puts( "adjtime - delta of one second forward" );
   delta.tv_sec = 1;
   delta.tv_usec = 0;
   sc = adjtime( &delta, &olddelta );
-  assert( sc == 0 );
+  rtems_test_assert(  sc == 0 );
 
   puts( "adjtime - delta of almost two seconds forward" );
   delta.tv_sec = 1;
   delta.tv_usec = 1000000 - 1;
   sc = adjtime( &delta, &olddelta );
-  assert( sc == 0 );
+  rtems_test_assert(  sc == 0 );
 
   /*
    * spin until over 1/2 of the way to the
    */
   ticks = rtems_clock_get_ticks_per_second();
-  assert( ticks );
+  rtems_test_assert(  ticks );
   ticks /= 2;
   do {
     status = rtems_clock_get_tod( &tod );
-    assert( !status );
+    rtems_test_assert(  !status );
   } while ( tod.ticks <= ticks );
 
   puts( "adjtime - delta of almost one second forward which bumps second" );
   delta.tv_sec = 0;
   delta.tv_usec = 1000000 - 1;
   sc = adjtime( &delta, &olddelta );
-  assert( sc == 0 );
+  rtems_test_assert(  sc == 0 );
 
   status = rtems_clock_get_tod( &tod );
-  assert( !status );
+  rtems_test_assert(  !status );
   print_time( "rtems_clock_get_tod          ", &tod, "\n" );
 }
 

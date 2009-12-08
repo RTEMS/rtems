@@ -6,6 +6,13 @@
  *  The defined behavior is a seek() followed by a write() extends the file
  *  and zero fills the new length part.
  *
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -18,8 +25,6 @@
 #include <errno.h>
 #include <string.h>
 #include <ctype.h>
-
-#include <assert.h>
 
 #include <pmacros.h>
 
@@ -43,7 +48,7 @@ void test_extend(
   }
 
   status = lseek( fd, offset - 1, SEEK_SET );
-  assert( status != -1 );
+  rtems_test_assert( status != -1 );
 
   status = write( fd, &c, 1 );
   if ( status == -1 ) {
@@ -58,5 +63,5 @@ void test_extend(
   }
 
   status = close( fd );
-  assert( !status );
+  rtems_test_assert( !status );
 }

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,7 +52,7 @@ void *POSIX_Init(
     priority_1
   );
   status = pthread_setschedparam( Init_id, SCHED_FIFO, &param );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   param.sched_priority = priority_2;
 
@@ -61,7 +61,7 @@ void *POSIX_Init(
     priority_2
   );
   status = pthread_setschedparam( Init_id, SCHED_RR, &param );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   param.sched_priority = priority_3;
 
@@ -70,59 +70,59 @@ void *POSIX_Init(
     priority_3
   );
   status = pthread_setschedparam( Init_id, SCHED_OTHER, &param );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   /* create a thread as SCHED_FIFO */
 
   printf(
     "Init: create a thread of SCHED_FIFO with priority %d\n", priority_4 );
   status = pthread_attr_init( &attr );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   attr.schedpolicy = SCHED_FIFO;
   attr.schedparam.sched_priority = priority_4;
 
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "Init: join with the other thread" );
   status = pthread_join( Task_id, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   /* create a thread as SCHED_RR */
 
   printf( "Init: create a thread of SCHED_RR with priority %d\n", priority_4 );
   status = pthread_attr_init( &attr );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
-  assert( !status );
+  rtems_test_assert(  !status );
   attr.schedpolicy = SCHED_RR;
   attr.schedparam.sched_priority = priority_4;
 
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "Init: join with the other thread" );
   status = pthread_join( Task_id, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   /* create a thread as SCHED_OTHER */
 
   printf(
     "Init: create a thread of SCHED_OTHER with priority %d\n", priority_4 );
   status = pthread_attr_init( &attr );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   attr.schedpolicy = SCHED_OTHER;
   attr.schedparam.sched_priority = priority_4;
 
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "Init: join with the other thread" );
   status = pthread_join( Task_id, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "*** END OF POSIX TEST 11 ***" );
   rtems_test_exit( 0 );

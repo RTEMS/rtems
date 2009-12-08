@@ -55,14 +55,14 @@ void *POSIX_Init(
   if ( Queue == (-1) ) {
     perror( "mq_open failed" );
   }
-  assert( Queue != (-1) );
+  rtems_test_assert(  Queue != (-1) );
 
   puts( "Init - send to message queue" );
   status = mq_send( Queue, (const char *)&status, sizeof(int), 1 );
   if ( status == (-1) ) {
     perror( "mq_status failed" );
   }
-  assert( status != (-1) );
+  rtems_test_assert(  status != (-1) );
 
   /*
    * Now create the timer we will send to a full queue from.

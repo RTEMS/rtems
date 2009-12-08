@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,14 +30,14 @@ void *Task_2(
   status = pthread_mutex_lock( &Mutex2_id );
   if ( status )
     printf( "status =%d\n", status );
-  assert( !status );
+  rtems_test_assert(  !status );
   printf( "Task 2: mutex acquired\n" );
 
      /* switch to init */
 
   printf( "Task 2: unlock Mutex 2\n" );
   status = pthread_mutex_unlock( &Mutex2_id );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   printf( "Task 2: exit\n" );
   pthread_exit( NULL );

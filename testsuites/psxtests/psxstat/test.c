@@ -13,7 +13,6 @@
  */
 
 #include <tmacros.h>
-#include <assert.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -180,7 +179,7 @@ void stat_a_file(
   int         minor2;
 
 
-  assert( file );
+  rtems_test_assert( file );
 
   printf( "stat( %s ) returned ", file );
   fflush( stdout );
@@ -273,7 +272,7 @@ void make_multiple_files(
   while ( files[i] ) {
     printf( "Making file %s\n", files[i] );
     status = mknod( files[i], ( S_IFREG | S_IROTH|S_IWOTH ), 0LL );
-    assert( !status );
+    rtems_test_assert( !status );
     i++;
   }
   puts( "" );
@@ -290,7 +289,7 @@ void make_multiple_bad_files(
   while ( files[i] ) {
     printf( "Making file %s ", files[i] );
     status = mknod( files[i], ( S_IFREG | S_IROTH|S_IWOTH ), 0LL );
-    assert( status );
+    rtems_test_assert( status );
     printf( ": %s\n", strerror( errno ) );
     i++;
   }
@@ -309,16 +308,16 @@ void make_multiple_links(
   while ( new[i] && existing[i] ) {
     printf( "Making file %s\n", new[i] );
     status = link( existing[i], new[i] );
-    assert( !status );
+    rtems_test_assert( !status );
     i++;
   }
   puts( "" );
 
   status = link( "fred", "bob" );
-  assert( status == -1 );
+  rtems_test_assert( status == -1 );
 
   status = link( existing[1], "doug/bob" );
-  assert( status == -1 );
+  rtems_test_assert( status == -1 );
 }
 
 
@@ -329,7 +328,7 @@ void make_too_many_links(void)
   char   name [20];
 
   status = mkdir("/dummy", S_IRWXU );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   for (i=1; i<= LINK_MAX; i++) {
 
@@ -337,9 +336,9 @@ void make_too_many_links(void)
     printf( "Making file %s\n", name );
     status = link("/dummy" , name );
     if( i < LINK_MAX )
-       assert( !status );
+       rtems_test_assert( !status );
     else
-       assert( status == -1 );
+       rtems_test_assert( status == -1 );
 
   }
 }
@@ -358,22 +357,22 @@ void make_a_symlink(
 
   printf( "Making file %s\n", new );
   status = symlink( existing, new );
-  assert( !status );
+  rtems_test_assert( !status );
 
   printf( "Verify with readlink\n");
   status = readlink( new, buf, 100 );
   len = strlen( existing );
-  assert ( status == len );
+  rtems_test_assert ( status == len );
 
   status = readlink( new, buf, 3 );
   len = strlen( existing );
   if (len < 3 )
-    assert( status == len );
+    rtems_test_assert( status == len );
   else
-    assert( status == 3 );
+    rtems_test_assert( status == 3 );
 
   status = strcmp( existing, buf );
-  assert( !status );
+  rtems_test_assert( !status );
 }
 
 void make_multiple_symlinks(void)
@@ -394,7 +393,7 @@ void make_multiple_symlinks(void)
  stat_a_file( SymLinks[4] );
 
  status = symlink(  "//links", "bob/frank" );
- assert (status == -1);
+ rtems_test_assert (status == -1);
 
 }
 /*
@@ -407,9 +406,9 @@ void make_too_many_symlinks()
     sprintf( name1, "SymLink%d", i );
     status = symlink( "/dummy", name1 );
     if( i < MAXSYMLINK )
-       assert( !status );
+       rtems_test_assert( !status );
     else
-       assert( status == -1 );
+       rtems_test_assert( status == -1 );
   }
 }
 */
@@ -453,7 +452,7 @@ void make_multiple_directories(
   while ( files[i] ) {
     printf( "Making directory %s\n", files[i] );
     status = mkdir( files[i], S_IRWXU );
-    assert( !status );
+    rtems_test_assert( !status );
     i++;
   }
   puts( "" );
@@ -478,8 +477,8 @@ void Cause_faults(void)
 #if 0
   printf("\n\nPass an invalid mode to chmod should fail with EPERM \n" );
   status = chmod( Files[0], S_IFREG );
-  assert( status == -1 );
-  assert( errno == EPERM );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EPERM );
 #endif
 
   /*
@@ -487,12 +486,12 @@ void Cause_faults(void)
    */
 
   status = chmod( Files[0], S_IXUSR );
-  assert( status != -1 );
+  rtems_test_assert( status != -1 );
 
   printf("chdir to a file should fail with ENOTDIR\n");
   status = chdir( Files[0] );
-  assert( status == -1 );
-  assert( errno == ENOTDIR );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOTDIR );
 
   /*
    * Change mode to read/write on a directory.
@@ -501,28 +500,28 @@ void Cause_faults(void)
 
   printf("Verify RWX permission on %s via access\n", Directories[0]);
   status = access( Directories[0], ( R_OK | W_OK | X_OK )  );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf( "chmod of %s to Read/Write\n", Directories[0] );
   status = chmod( Directories[0], (S_IXGRP | S_IXOTH) );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf( "chmod fred should fail with ENOENT\n" );
   status = chmod( "fred", (S_IXGRP | S_IXOTH) );
-  assert( status == -1 );
-  assert( errno == ENOENT );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOENT );
 
   strcpy(longer_name, Directories[0] );
   strcat(longer_name, "/BADNAME" );
   printf( "Create under %s should fail with EACCES\n", Directories[0] );
   status = mkdir( longer_name , S_IRWXU );
-  assert( status == -1 );
-  assert( errno == EACCES );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EACCES );
 
   printf("chdir to %s should fail with EACCES\n", Directories[4] );
   status = chdir( Directories[4] );
-  assert( status == -1 );
-  assert( errno == EACCES );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EACCES );
 
   /*
    * Check stat with a NULL buffer.
@@ -530,8 +529,8 @@ void Cause_faults(void)
 
   printf("Stat with a NULL buffer should fail with EFAULT\n");
   status = stat( Directories[0], NULL );
-  assert( status == -1 );
-  assert( errno == EFAULT );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EFAULT );
 
   /*
    * Set current to a directory with no owner permissions.
@@ -540,33 +539,33 @@ void Cause_faults(void)
 
   printf( "\n\nchmod of %s to Read/Write\n", Directories[0] );
   status = chmod( Directories[0], (S_IXGRP | S_IXOTH) );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf("mkdir %s should fail with EACCESS\n", longer_name );
   status = mkdir( longer_name , S_IRWXU );
-  assert( status == -1 );
-  assert( errno == EACCES );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EACCES );
 
   printf("\n%s Should exist ( access )\n",Directories[0] );
   status = access( Directories[0], F_OK );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
   printf("\n%s Should have read  permission( access )\n",Directories[0] );
   status = access( Directories[0], R_OK );
-  assert( status != 0 );
+  rtems_test_assert( status != 0 );
   printf("\n%s Should have write permission( access )\n",Directories[0] );
   status = access( Directories[0], W_OK );
-  assert( status != 0 );
+  rtems_test_assert( status != 0 );
   printf("\n%s Should not have execute permission( access )\n",Directories[0] );
   status = access( Directories[0], X_OK );
-  assert( status != 0 );
+  rtems_test_assert( status != 0 );
 
   printf("\nRestore %s to RWX\n",Directories[0] );
   status = chmod( Directories[0], S_IRWXU );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf("chdir to /my_mount_point \n");
   status = chdir( "/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   /*
    * Remove one of the directories.
@@ -575,21 +574,21 @@ void Cause_faults(void)
 
   printf( "Remove %s\n", Directories[5] );
   status = rmdir( Directories[5] );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   stat_a_file( Directories[5] );
   status = access( Directories[5], F_OK );
-  assert( status != 0 );
+  rtems_test_assert( status != 0 );
 
   stat_a_file( Links_to_Dirs[5] );
   status = readlink( Links_to_Dirs[5], longer_name, 3 );
-  assert( status == -1 );
-  assert( errno == EINVAL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
 
   stat_a_file( Links_to_dirlinks[5] );
   printf("Chdir to %s\n", Links_to_Dirs[5] );
   status = chdir( Links_to_Dirs[5] );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   /*
    * Verify we cannot move up from a node with no parent node.
@@ -597,8 +596,8 @@ void Cause_faults(void)
 
   printf("Chdir to .. should fail with ENOENT\n" );
   status = chdir( ".." );
-  assert( status == -1 );
-  assert( errno == ENOENT );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOENT );
 
   /*
    * Create a subdirectory under the dangling node.
@@ -606,16 +605,16 @@ void Cause_faults(void)
 
   printf("mkdir ../t should fail with ENOENT\n" );
   status = mkdir( "../t" , S_IRWXU );
-  assert( status == -1 );
-  assert( errno == ENOENT );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOENT );
 
   printf("mkdir t\n");
   status = mkdir( "t" , S_IRWXU );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf("chdir to /my_mount_point\n");
   status = chdir( "/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   /*
    * Check rmdir, rmnod, and unlink
@@ -623,31 +622,31 @@ void Cause_faults(void)
 
   printf("rmdir %s should fail with ENOTDIR\n", Links_to_Dirs[5] );
   status = rmdir( Links_to_Dirs[5] );
-  assert( status == -1 );
-  assert( errno == ENOTDIR );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOTDIR );
 
   printf("unlink %s\n", Links_to_Dirs[5] );
   status = unlink( Links_to_Dirs[5] );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf("unlink %s should fail with ENOTEMPTY\n", Links_to_dirlinks[5] );
   status = unlink(  Links_to_dirlinks[5] );
-  assert( status == -1 );
-  assert( errno == ENOTEMPTY );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOTEMPTY );
 
   strcpy( longer_name,  Links_to_dirlinks[5] );
   strcat( longer_name, "/t");
   printf("rmdir %s\n", longer_name );
   status = rmdir( longer_name );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf("unlink %s\n", Links_to_Dirs[5]);
   status = unlink( Links_to_dirlinks[5] );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   status = chdir( Directories[0] );
   status = mkdir ( "my_mount_point", S_IRWXU );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf("Attempting to mount IMFS file system at /dir1/my_mount_point \n");
   status = mount(
@@ -656,16 +655,16 @@ void Cause_faults(void)
      RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
      "/my_mount_point/dir1/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf("rmdir /dir1/my_mount_point should fail with EBUSY\n");
   status = rmdir ("/my_mount_point/dir1/my_mount_point" );
-  assert( status == -1 );
-  assert( errno == EBUSY );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EBUSY );
 
   printf( "Unmount /my_mount_point/dir1/my_mount_point\n");
   status = unmount( "/my_mount_point/dir1/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   /*
    * Verify write permission is checked.
@@ -673,30 +672,30 @@ void Cause_faults(void)
 
   printf("chmod of %s to group and other execute\n", Files[0] );
   status = chmod (Files[0], (S_IXGRP | S_IXOTH) );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf("Open %s for write should fail with EACCES\n", Files[0] );
   fd = open (Files[0], O_WRONLY);
-  assert( fd == -1 );
-  assert( errno == EACCES );
+  rtems_test_assert( fd == -1 );
+  rtems_test_assert( errno == EACCES );
 
   printf("chmod of %s to User Execute and Read\n", Directories[3] );
   status = chmod (Directories[3], (S_IXUSR | S_IRUSR) );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
   strcpy(longer_name, Directories[3] );
   strcat(longer_name, "/NewFile" );
   printf("Mkdir of %s should fail with EACCES\n",longer_name );
   status = mkdir( longer_name, S_IRWXU );
-  assert( status != 0 );
-  assert( errno == EACCES );
+  rtems_test_assert( status != 0 );
+  rtems_test_assert( errno == EACCES );
 
   printf("Making too many hard links.\n" );
   make_too_many_links( );
 
   printf( "pass fstat a null pointer should fail with EFAULT\n");
   status = fstat( fd, NULL );
-  assert( status == -1 );
-  assert( errno == EFAULT);
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EFAULT);
 
   /*
    * The current directory MUST be restored at the end of this test.
@@ -704,7 +703,7 @@ void Cause_faults(void)
 
   printf("chdir to /my_mount_point \n");
   status = chdir( "/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
 }
 
@@ -748,18 +747,18 @@ int main(
    */
 
   status = mkdir("/my_mount_point",  S_IRWXU );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
   status = mount(
      &mt_entry,
      &IMFS_ops,
      RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
      "my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
   status = chdir( "/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
   status = mkdir("dev",  S_IRWXU );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
 
   /*

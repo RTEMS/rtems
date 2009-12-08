@@ -582,7 +582,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setinheritsched - EXPLICIT - SUCCESSFUL" );
   status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   schedparam.ss_replenish_period.tv_sec = 3;
   schedparam.ss_replenish_period.tv_nsec = 3;
@@ -599,7 +599,7 @@ void *POSIX_Init(
   posix_service_failed( status, "pthread_attr_setschedparam");
 
   status = pthread_create( &Task2_id, &attr, Task_2, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = pthread_join( Task2_id, NULL );
   posix_service_failed( status, " pthread_join");

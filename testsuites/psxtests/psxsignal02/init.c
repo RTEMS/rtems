@@ -35,14 +35,14 @@ void Install_Signal_Handler(
   sigset_t          mask;
 
   sc = sigemptyset( &mask );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   sc = sigaddset( &mask, SIGUSR1 );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   printf( "%s - Unblock SIGUSR1\n", task_name );
   sc = pthread_sigmask( SIG_UNBLOCK, &mask, NULL );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 }
 
 /*
@@ -137,43 +137,43 @@ void *POSIX_Init(
 
   puts( "Init - Raise my priority" );
   sc = pthread_attr_init( &attr );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   param.sched_priority = 30;
   sc = pthread_setschedparam( pthread_self(), SCHED_RR, &param );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   for ( i=0, test=Threads ; test->priority != -1 ; i++, test++ ) {
     printf( "Init - Create thread %d, priority=%d\n", i, test->priority );
     sc = pthread_attr_init( &attr );
-    assert( !sc );
+    rtems_test_assert(  !sc );
 
     sc = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
-    assert( !sc );
+    rtems_test_assert(  !sc );
 
     sc = pthread_attr_setschedpolicy( &attr, SCHED_RR );
-    assert( !sc );
+    rtems_test_assert(  !sc );
 
     param.sched_priority = test->priority;
     sc = pthread_attr_setschedparam( &attr, &param );
-    assert( !sc );
+    rtems_test_assert(  !sc );
 
     sc = pthread_create( &id, &attr, Test_Thread, test );
-    assert( !sc );
+    rtems_test_assert(  !sc );
 
     puts( "Init - sleep - let thread settle - OK" );
     delay_request.tv_sec = 0;
     delay_request.tv_nsec = 50000000;
     sc = nanosleep( &delay_request, NULL );
-    assert( !sc );
+    rtems_test_assert(  !sc );
   }
 
   puts( "Init - sending SIGUSR1" );
   sc =  kill( getpid(), SIGUSR1 );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   /* we are just scheduling the signal, not delivering it */
-  assert( Signal_occurred == false );
+  rtems_test_assert(  Signal_occurred == false );
 
   puts( "*** END OF POSIX TEST SIGNAL 02 ***" );
   rtems_test_exit(0);

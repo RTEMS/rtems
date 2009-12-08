@@ -210,7 +210,7 @@ rtems_task Init(
   delay_request.tv_sec = 1;
   delay_request.tv_nsec = 35000000;
   sc = nanosleep( &delay_request, NULL );
-  assert( !sc );
+  rtems_test_assert( !sc );
 
   /* print the current real time again */
   sc = clock_gettime( CLOCK_REALTIME, &tv );

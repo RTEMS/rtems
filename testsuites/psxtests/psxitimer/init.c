@@ -26,48 +26,48 @@ void *POSIX_Init(
   /* test getitimer stub */
   puts( "getitimer -- bad which - EINVAL " );
   status = getitimer( 1234, &itimer );
-  assert( status == -1 && errno == EINVAL );
+  rtems_test_assert(  status == -1 && errno == EINVAL );
 
   puts( "getitimer -- NULL pointer - EFAULT " );
   status = getitimer( ITIMER_REAL, NULL );
-  assert( status == -1 && errno == EFAULT );
+  rtems_test_assert(  status == -1 && errno == EFAULT );
 
   puts( "getitimer -- ITIMER_REAL - ENOSYS " );
   status = getitimer( ITIMER_REAL, &itimer );
-  assert( status == -1 && errno == ENOSYS );
+  rtems_test_assert(  status == -1 && errno == ENOSYS );
 
   puts( "getitimer -- ITIMER_VIRTUAL - ENOSYS " );
   status = getitimer( ITIMER_VIRTUAL, &itimer );
-  assert( status == -1 && errno == ENOSYS );
+  rtems_test_assert(  status == -1 && errno == ENOSYS );
 
   puts( "getitimer -- ITIMER_PROF - ENOSYS " );
   status = getitimer( ITIMER_PROF, &itimer );
-  assert( status == -1 && errno == ENOSYS );
+  rtems_test_assert(  status == -1 && errno == ENOSYS );
 
   /* test setitimer stub */
   puts( "setitimer -- bad which - EINVAL " );
   status = setitimer( 1234, &itimer, &otimer );
-  assert( status == -1 && errno == EINVAL );
+  rtems_test_assert(  status == -1 && errno == EINVAL );
 
   puts( "setitimer -- NULL value pointer - EFAULT " );
   status = setitimer( ITIMER_REAL, NULL, &otimer );
-  assert( status == -1 && errno == EFAULT );
+  rtems_test_assert(  status == -1 && errno == EFAULT );
 
   puts( "setitimer -- NULL value pointer - EFAULT " );
   status = setitimer( ITIMER_REAL, &itimer, NULL );
-  assert( status == -1 && errno == EFAULT );
+  rtems_test_assert(  status == -1 && errno == EFAULT );
 
   puts( "setitimer -- ITIMER_REAL - ENOSYS " );
   status = setitimer( ITIMER_REAL, &itimer, &otimer );
-  assert( status == -1 && errno == ENOSYS );
+  rtems_test_assert(  status == -1 && errno == ENOSYS );
 
   puts( "setitimer -- ITIMER_VIRTUAL - ENOSYS " );
   status = setitimer( ITIMER_VIRTUAL, &itimer, &otimer );
-  assert( status == -1 && errno == ENOSYS );
+  rtems_test_assert(  status == -1 && errno == ENOSYS );
 
   puts( "setitimer -- ITIMER_PROF - ENOSYS " );
   status = setitimer( ITIMER_PROF, &itimer, &otimer );
-  assert( status == -1 && errno == ENOSYS );
+  rtems_test_assert(  status == -1 && errno == ENOSYS );
 
   puts( "*** END OF POSIX TEST ITIMER ***" );
   rtems_test_exit(0);

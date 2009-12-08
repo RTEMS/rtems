@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,7 +30,7 @@ void *Task_1(
 
   seconds = sleep( 5 );
   printf( "Task_1: %d seconds left\n", seconds );
-  assert( seconds );
+  rtems_test_assert(  seconds );
 
      /* switch to Init */
 

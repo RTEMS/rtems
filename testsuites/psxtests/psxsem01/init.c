@@ -178,7 +178,7 @@ void *POSIX_Init(
 
   puts( "Init: sem_open - sem1 SUCCESSFUL" );
   n_sem1 = sem_open( "sem1",O_CREAT, 0777, 1 );
-  assert( n_sem1 != SEM_FAILED );
+  rtems_test_assert(  n_sem1 != SEM_FAILED );
 
   puts( "Init: sem_destroy - named sem1 - EINVAL" );
   status = sem_destroy(n_sem1);
@@ -218,7 +218,7 @@ void *POSIX_Init(
 
   puts( "Init: sem_open - Open an existing sem ( same id )" );
   n_sem2 = sem_open("sem1", 0 );
-  assert( n_sem2 == n_sem1 );
+  rtems_test_assert(  n_sem2 == n_sem1 );
 
   /*
    * Unlink the semaphore, then verify an open of the same name produces a
@@ -231,8 +231,8 @@ void *POSIX_Init(
 
   puts( "Init: sem_open - Reopen sem1 SUCCESSFUL with a different id" );
   n_sem2 = sem_open( "sem1", O_CREAT | O_EXCL, 0777, 1);
-  assert( n_sem2 != SEM_FAILED );
-  assert( n_sem2 != n_sem1 );
+  rtems_test_assert(  n_sem2 != SEM_FAILED );
+  rtems_test_assert(  n_sem2 != n_sem1 );
 
   /*
    * Validate we can call close on a semaphore opened with sem_open.
@@ -289,7 +289,7 @@ void *POSIX_Init(
   status = sem_unlink("sem2");
   fatal_posix_service_status( status, -1, "sem_unlink error return status");
   fatal_posix_service_status( errno, ENOENT, "sem_unlink errno ENOENT");
-  assert( (status == -1) && (errno == ENOENT) );
+  rtems_test_assert(  (status == -1) && (errno == ENOENT) );
 
 
   /* Try adding in unlinking before closing... (can we still open?) */

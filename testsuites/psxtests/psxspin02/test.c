@@ -1,7 +1,7 @@
 /*
  *  This test exercises the POSIX Spinlock manager.
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -11,7 +11,6 @@
  *  $Id$
  */
 
-#include <assert.h>
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -28,11 +27,11 @@ rtems_task SpinlockThread(rtems_task_argument arg)
 
   puts( "pthread_spin_trylock( &Spinlock ) -- EBUSY" );
   status = pthread_spin_trylock( &Spinlock );
-  assert( status == EBUSY );
+  rtems_test_assert(  status == EBUSY );
 
   puts( "pthread_spin_unlock( &Spinlock ) -- EPERM" );
   status = pthread_spin_unlock( &Spinlock );
-  assert( status == EPERM );
+  rtems_test_assert(  status == EPERM );
 
   rtems_task_delete( RTEMS_SELF );
 }
@@ -59,12 +58,12 @@ int main(
   /* This successfully creates one */
   puts( "pthread_spin_init( &Spinlock, PTHREAD_PROCESS_PRIVATE ) -- OK" );
   status = pthread_spin_init( &Spinlock, PTHREAD_PROCESS_PRIVATE );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   /* Lock it */
   puts( "pthread_spin_lock( &Spinlock ) -- OK" );
   status = pthread_spin_lock( &Spinlock );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   /*  Create a helper task */
   rstatus = rtems_task_create(
@@ -75,20 +74,20 @@ int main(
      RTEMS_DEFAULT_ATTRIBUTES,
      &taskid
   );
-  assert( rstatus == RTEMS_SUCCESSFUL );
+  rtems_test_assert(  rstatus == RTEMS_SUCCESSFUL );
 
   rstatus = rtems_task_start( taskid, SpinlockThread, 0 );
-  assert( rstatus == RTEMS_SUCCESSFUL );
+  rtems_test_assert(  rstatus == RTEMS_SUCCESSFUL );
 
   sleep(1);
 
   puts( "pthread_spin_unlock( &Spinlock ) -- OK" );
   status = pthread_spin_unlock( &Spinlock );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   puts( "pthread_spin_destroy( &Spinlock ) -- OK" );
   status = pthread_spin_destroy( &Spinlock );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   /*************** END OF TEST *****************/
   puts( "*** END OF POSIX SPINLOCK TEST 02 ***" );

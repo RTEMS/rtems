@@ -56,7 +56,7 @@ void *POSIX_Init(
   /* install a signal handler */
 
   status = sigemptyset( &act.sa_mask );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
@@ -69,43 +69,43 @@ void *POSIX_Init(
   Signal_occurred = 0;
 
   status = pthread_kill( Init_id, SIGUSR1 );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   Signal_occurred = 0;
 
   /* now block the signal, send it, see if it is pending, and unblock it */
 
   status = sigemptyset( &mask );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = sigaddset( &mask, SIGUSR1 );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   printf( "Init: Block SIGUSR1\n" );
   status = sigprocmask( SIG_BLOCK, &mask, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = sigpending( &pending_set );
-  assert( !status );
+  rtems_test_assert(  !status );
   printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
 
 
   printf( "Init: send SIGUSR1 to self\n" );
   status = pthread_kill( Init_id, SIGUSR1 );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = sigpending( &pending_set );
-  assert( !status );
+  rtems_test_assert(  !status );
   printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
 
   printf( "Init: Unblock SIGUSR1\n" );
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   /* create a thread */
 
   status = pthread_create( &Task_id, NULL, Task_1_through_3, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   /*
    *  Loop for 5 seconds seeing how many signals we catch
@@ -122,10 +122,10 @@ void *POSIX_Init(
     status = nanosleep ( &tv, &tr );
 
     if ( status == -1 ) {
-      assert( errno == EINTR );
-      assert( tr.tv_nsec || tr.tv_sec );
+      rtems_test_assert(  errno == EINTR );
+      rtems_test_assert(  tr.tv_nsec || tr.tv_sec );
     } else if ( !status ) {
-      assert( !tr.tv_nsec && !tr.tv_sec );
+      rtems_test_assert(  !tr.tv_nsec && !tr.tv_sec );
     }
 
     printf(

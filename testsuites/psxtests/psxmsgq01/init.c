@@ -130,7 +130,7 @@ void open_test_queues(void)
     else
       Test_q[que].mq = mq_open( tq->name, tq->oflag, 0x777, &attr );
 
-    assert( Test_q[que].mq != (-1) );
+    rtems_test_assert(  Test_q[que].mq != (-1) );
   }
 
   status = mq_close( Test_q[NUMBER_OF_TEST_QUEUES].mq );
@@ -223,7 +223,7 @@ void validate_mq_open_error_codes(void)
   puts( "Init: mq_open - Create an Existing mq (EEXIST)" );
   open_mq[0] = mq_open(
     Build_Queue_Name(0), O_CREAT | O_RDWR | O_NONBLOCK, 0x777, NULL );
-  assert( open_mq[0] != (-1) );
+  rtems_test_assert(  open_mq[0] != (-1) );
 
   n_mq2 = mq_open(
     Build_Queue_Name(0), O_CREAT | O_EXCL | O_RDONLY, 0x777, NULL);
@@ -245,8 +245,8 @@ void validate_mq_open_error_codes(void)
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES; i++) {
     open_mq[i] = mq_open(
       Build_Queue_Name(i), O_CREAT | O_RDWR | O_NONBLOCK, 0x777, NULL );
-    assert( open_mq[i] != (-1) );
-    assert( open_mq[i] );
+    rtems_test_assert(  open_mq[i] != (-1) );
+    rtems_test_assert(  open_mq[i] );
     /*XXX - Isn't there a more general check */
 /* JRS     printf( "mq_open 0x%x %s\n", open_mq[i], Build_Queue_Name(i) ); */
   }
@@ -494,7 +494,7 @@ void Read_msg_from_que(
   sprintf( err_msg, "%s msg %s size failure", Test_q[ que ].name, ptr->msg );
   fatal_int_service_status( status, ptr->size, err_msg );
 
-  assert( !strcmp( message, ptr->msg ) );
+  rtems_test_assert(  !strcmp( message, ptr->msg ) );
   strcpy( message, "No Message" );
 
   sprintf( err_msg,"%s msg %s size failure", Test_q[ que ].name, ptr->msg );
@@ -683,7 +683,7 @@ void verify_open_functionality(void)
   puts( "Init: mq_open - Open an existing mq ( same id )" );
   n_mq = mq_open( RD_NAME, 0 );
   fatal_posix_service_status(
-  assert( n_mq == Test_q[RD_QUEUE].mq );
+  rtems_test_assert(  n_mq == Test_q[RD_QUEUE].mq );
 #endif
 }
 
@@ -704,8 +704,8 @@ void verify_unlink_functionality(void)
   fatal_posix_service_status( status, 0, "mq_unlink locked message queue");
 
   n_mq = mq_open( DEFAULT_NAME, DEFAULT_ATTR, 0x777, NULL );
-  assert( n_mq != (-1) );
-  assert( n_mq != Test_q[ DEFAULT_RW ].mq );
+  rtems_test_assert(  n_mq != (-1) );
+  rtems_test_assert(  n_mq != Test_q[ DEFAULT_RW ].mq );
 
 
   status = mq_unlink( DEFAULT_NAME );
@@ -888,10 +888,10 @@ void wait_for_signal(
   timeout.tv_nsec = 0;
 
   status = sigemptyset( waitset );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = sigaddset( waitset, SIGUSR1 );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   printf( "waiting on any signal for %d seconds.\n", sec );
   signo = sigtimedwait( waitset, &siginfo, &timeout );
@@ -1007,7 +1007,7 @@ void verify_with_threads(void)
 
   Start_Test( "multi-thread Task 4 Receive Test"  );
   status = pthread_create( &id, NULL, Task_4, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
   puts( "Init: mq_receive - Empty queue changes to non-blocking (EAGAIN)" );
   status = mq_receive( Test_q[BLOCKING].mq, message, 100, &priority );
   fatal_int_service_status( status, -1, "mq_receive error return status");
@@ -1022,7 +1022,7 @@ void verify_with_threads(void)
 
   Start_Test( "multi-thread Task 1 Test"  );
   status = pthread_create( &id, NULL, Task_1, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
   Read_msg_from_que(  BLOCKING, 0 ); /* Block until init writes */
   print_current_time( "Init: ", "" );
 
@@ -1036,7 +1036,7 @@ void verify_with_threads(void)
   Start_Test( "multi-thread Task 4 Send Test"  );
   fill_message_queues( "Init:" );
   status = pthread_create( &id, NULL, Task_4, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
   puts( "Init: mq_send - Full queue changes to non-blocking (EAGAIN)" );
   status = mq_send(Test_q[BLOCKING].mq, message, 0, 0 );
   fatal_posix_service_status( status, -1, "mq_send error return status");
@@ -1051,7 +1051,7 @@ void verify_with_threads(void)
   Start_Test( "multi-thread Task 2 Test"  );
   fill_message_queues( "Init:" );
   status = pthread_create( &id, NULL, Task_2, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
   Show_send_msg_to_que( "Init:", BLOCKING, Priority_Order[0] );
   print_current_time( "Init: ", "" );
   verify_queues_full( "Init:" );
@@ -1065,7 +1065,7 @@ void verify_with_threads(void)
   Start_Test( "multi-thread Task 3 Test"  );
   fill_message_queues( "Init:" );
   status = pthread_create( &id, NULL, Task_3, NULL );
-  assert( !status );
+  rtems_test_assert(  !status );
   puts( "Init: mq_send - Block while thread deletes queue (EBADF)" );
   ptr = &Predefined_Msgs[0];
   status = mq_send( Test_q[BLOCKING].mq, ptr->msg, ptr->size , ptr->priority );
@@ -1271,7 +1271,7 @@ void *Task_1 (
 
   /* switch to Init */
 
-  assert( 0 );
+  rtems_test_assert(  0 );
   return NULL; /* just so the compiler thinks we returned something */
 }
 

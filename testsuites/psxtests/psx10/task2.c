@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -29,15 +29,15 @@ void *Task_2(
   printf( "Task_2: ID is 0x%08" PRIxpthread_t "\n", Task_id );
 
   status = pthread_mutex_lock( &Mutex_id );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "Task_2: pthread_cond_wait" );
   status = pthread_cond_wait( &Cond1_id, &Mutex_id );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "Task_2: back from pthread_cond_wait release mutex" );
   status = pthread_mutex_unlock( &Mutex_id );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "Task_2: task exit" );
   pthread_exit( NULL );

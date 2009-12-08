@@ -15,17 +15,22 @@
  *  implementation of this appears to seek to the ((off/DIRENT_SIZE) + 1)
  *  record where DIRENT_SIZE seems to be 12 bytes.
  *
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
  *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <dirent.h>
 #include <string.h>
-#include <assert.h>
 #include <unistd.h>
 #include <errno.h>
 #include <rtems.h>
@@ -127,23 +132,23 @@ int main(
 
   printf("create /b/my_file\n");
   fd = open ("/b/my_file", O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
-  assert( fd != 0 );
+  rtems_test_assert(  fd != 0 );
   close (fd);
 
   printf("Verify /b/my_file\n");
   fd = open("/b/my_file", S_IRWXU|S_IRWXG|S_IRWXO);
-  assert( fd != 0 );
+  rtems_test_assert(  fd != 0 );
   close( fd );
 
 
   printf("create c/y/my_mount_point/my_dir/d\n");
   fd = open ("c/y/my_mount_point/my_dir/d", O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
-  assert( fd != 0 );
+  rtems_test_assert(  fd != 0 );
   close (fd);
 
   printf("Verify c/y/my_mount_point/my_dir/d\n");
   fd = open("c/y/my_mount_point/my_dir/d", S_IRWXU|S_IRWXG|S_IRWXO);
-  assert( fd != 0 );
+  rtems_test_assert(  fd != 0 );
   close( fd );
 
   /*
@@ -157,7 +162,7 @@ int main(
      RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
      mount_point_string );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
   if( mt_entry == NULL ){
      printf(" NULL mount table entry was returned\n");
   }
@@ -218,8 +223,8 @@ int main(
    RTEMS_FILESYSTEM_READ_WRITE,
    NULL,
    mount_point_string );
-  assert( status == -1 );
-  assert( errno == EINVAL );
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == EINVAL );
 
   /*
    * Verify mount with option of -62 fails with EINVAL
@@ -232,8 +237,8 @@ int main(
      -62,
      NULL,
      "/c/y/my_mount_point" );
-  assert( status == -1 );
-  assert( errno == EINVAL );
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == EINVAL );
 
   /*
    * Mount a Read Only File system.
@@ -246,7 +251,7 @@ int main(
      RTEMS_FILESYSTEM_READ_ONLY,
      NULL,
      "/c/y/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
   if( mt_entry == NULL ){
      printf(" NULL mount table entry was returned\n");
   }
@@ -260,11 +265,11 @@ int main(
 
   printf("create c/y/my_mount_point/../../y/my_mount_point/new_dir\n");
   status = mkdir("c/y/my_mount_point/../../y/my_mount_point/new_dir",S_IRWXU );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
   status = stat("c/y/my_mount_point/../../y/my_mount_point/new_dir",&statbuf );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
   status = stat("c/y/my_mount_point/new_dir/..", &statbuf );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   /*
    * Attempt to mount a second file system at a used mount point.
@@ -277,8 +282,8 @@ int main(
      RTEMS_FILESYSTEM_READ_ONLY,
      NULL,
      "/c/y/my_mount_point" );
-  assert( status == -1 );
-  assert( errno == EBUSY);
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == EBUSY);
 
   /*
    * Attempt to mount at a file.
@@ -291,8 +296,8 @@ int main(
      RTEMS_FILESYSTEM_READ_ONLY,
      NULL,
      "/b/my_file" );
-  assert( status == -1 );
-  assert( errno == ENOTDIR );
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == ENOTDIR );
 
 
   /*
@@ -301,15 +306,15 @@ int main(
 
   printf("Create and chdir to /c/y/my_mount_point/mydir\n");
   status = mkdir( "/c/y/my_mount_point/mydir", 0777);
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   status = chdir( "/c/y/my_mount_point/mydir" );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   printf("unmount of /c/y/my_mount_point should fail with EBUSY\n");
   status = unmount( "/c/y/my_mount_point" );
-  assert( status == -1 );
-  assert( errno == EBUSY );
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == EBUSY );
 
   /*
    * Chdir to root and verify we can unmount the file system now.
@@ -317,11 +322,11 @@ int main(
 
   printf("chdir to / and verify we can unmount /c/y/my_mount_point\n");
   status = chdir( "/" );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   printf("unmount /c/y/my_mount_point \n");
   status = unmount( "/c/y/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   /*
    * Attempt to unmount a directory that does not exist.
@@ -329,8 +334,8 @@ int main(
 
   printf("unmount /b/mount_point should fail with EINVAL\n");
   status = unmount( "/b/mount_point" );
-  assert( status == -1 );
-  assert( errno == ENOENT );
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == ENOENT );
 
   /*
    * Remount the filesystem.
@@ -343,7 +348,7 @@ int main(
      RTEMS_FILESYSTEM_READ_ONLY,
      NULL,
      "/c/y/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   /*
    * Create a file and directory then open the directory.
@@ -352,24 +357,24 @@ int main(
 
   printf("Create and open /c/y/my_mount_point/my_file\n");
   fd = open( "/c/y/my_mount_point/my_file", O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
-  assert( fd != -1 );
+  rtems_test_assert(  fd != -1 );
   status = close( fd );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   printf("\nmkdir /c/y/my_mount_point/my_dir\n");
   status = mkdir( "/c/y/my_mount_point/my_dir", 0x1c0 );
   printf("Open /c/y/my_mount_point/my_dir\n");
   directory = opendir( "/c/y/my_mount_point/my_dir" );
-  assert( directory );
+  rtems_test_assert(  directory );
 
   printf("Unmount /c/y/my_mount_point should fail with EBUSY\n");
   status = unmount( "/c/y/my_mount_point" );
-  assert( status == -1 );
-  assert( errno == EBUSY );
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == EBUSY );
 
   printf("Close /c/y/my_mount_point/my_dir\n");
   status = closedir( directory );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   /*
    * Attempt to unmount a directory that is not a mount point.
@@ -377,8 +382,8 @@ int main(
 
   printf("Unmount /c/y/my_mount_point/my_dir should fail with EACCES\n");
   status = unmount( "/c/y/my_mount_point/my_dir" );
-  assert( status == -1 );
-  assert( errno == EACCES );
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == EACCES );
 
   /*
    * Verify a file system can not be unmounted with a mounted file system
@@ -392,12 +397,12 @@ int main(
      RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
      "/c/y/my_mount_point/my_dir");
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   printf("unmount /c/y/my_mount_point should fail with EBUSY\n");
   status = unmount( "/c/y/my_mount_point" );
-  assert( status == -1 );
-  assert( errno == EBUSY );
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == EBUSY );
 
   /*
    * Verify you cannot create a hard link across mounted file systems.
@@ -405,11 +410,11 @@ int main(
 
   printf("Verify a hard link across filesystems fails with EXDEV\n");
   status = mkdir( "/c/y/my_mount_point/my_dir2", S_IRWXU  );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   status = link( "/c/y/my_mount_point/my_dir2", "/c/y/my_mount_point/my_dir/my_link" );
-  assert( status == -1 );
-  assert( errno == EXDEV );
+  rtems_test_assert(  status == -1 );
+  rtems_test_assert(  errno == EXDEV );
 
   /*
    * Create a symbolic link across mountpoints.
@@ -417,13 +422,13 @@ int main(
 
   printf("Verify a symbolic link across file systems works\n");
   status = symlink( "/c/y/my_mount_point/my_dir2", "/c/y/my_mount_point/my_dir/my_link" );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
   status = stat( "/c/y/my_mount_point/my_dir/my_link", &statbuf );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   printf("unmount /c/y/my_mount_point/my_dir\n");
   status = unmount( "/c/y/my_mount_point/my_dir" );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   /*
    * Verify symblic link no longer works.
@@ -431,11 +436,11 @@ int main(
 
   printf("Verify the symbolic link now fails\n");
   status = stat( "/c/y/my_mount_point/my_dir/my_link", &statbuf );
-  assert( status != 0 );
+  rtems_test_assert(  status != 0 );
 
   printf("unmount /c/y/my_mount_point\n");
   status = unmount( "/c/y/my_mount_point" );
-  assert( status == 0 );
+  rtems_test_assert(  status == 0 );
 
   printf( "\n\n*** END OF MOUNT/UNMOUNT TEST ***\n" );
   rtems_test_exit(0);

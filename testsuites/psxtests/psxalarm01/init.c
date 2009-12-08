@@ -70,7 +70,7 @@ void *POSIX_Init(
   /* install a signal handler for SIGALRM and unblock it */
 
   sc = sigemptyset( &act.sa_mask );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
@@ -78,21 +78,21 @@ void *POSIX_Init(
   sigaction( SIGALRM, &act, NULL );
 
   sc = sigemptyset( &mask );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   sc = sigaddset( &mask, SIGALRM );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   puts( "Init: Unblock SIGALRM" );
   sc = sigprocmask( SIG_UNBLOCK, &mask, NULL );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   /* schedule the alarm */
 
   puts( "Init: Firing alarm in 1 second" );
   remaining = alarm( 1 );
   printf( "Init: %d seconds left on previous alarm\n", sc );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   puts( "Init: Wait for alarm" );
   sleep( 2 );
@@ -100,7 +100,7 @@ void *POSIX_Init(
   puts( "Init: Cancel alarm" );
   remaining = alarm( 0 );
   printf( "Init: %d seconds left on previous alarm\n", remaining );
-  assert( remaining == 0 );
+  rtems_test_assert(  remaining == 0 );
 
   puts( "*** END OF POSIX ALARM TEST 01***" );
   rtems_test_exit( 0 );

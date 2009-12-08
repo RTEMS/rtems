@@ -15,7 +15,12 @@
  *  implementation of this appears to seek to the ((off/DIRENT_SIZE) + 1)
  *  record where DIRENT_SIZE seems to be 12 bytes.
  *
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
  *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
@@ -25,11 +30,9 @@
 #include <fcntl.h>
 #include <dirent.h>
 #include <string.h>
-#include <assert.h>
 #include <unistd.h>
 #include <errno.h>
 #include <rtems/imfs.h>
-#include <assert.h>
 
 DIR *directory;
 DIR *directory2;
@@ -71,7 +74,7 @@ void complete_printdir( char *path )
   int status;
 
   the_dir = opendir( path );
-  assert( the_dir );
+  rtems_test_assert( the_dir );
   printdir( the_dir );
   status = closedir( the_dir );
 }
@@ -188,8 +191,8 @@ void test_across_mount(void)
    */
 
   printf("Validate readdir across mount point\n");
-  assert( mkdir( "/imfs", 0777 ) == 0 );
-  assert( mkdir( "/imfs/should_be_hidden", 0777 ) == 0 );
+  rtems_test_assert( mkdir( "/imfs", 0777 ) == 0 );
+  rtems_test_assert( mkdir( "/imfs/should_be_hidden", 0777 ) == 0 );
   complete_printdir("/imfs" );
   printf("Attempting to mount IMFS file system at /imfs \n");
   status = mount(
@@ -198,16 +201,16 @@ void test_across_mount(void)
      RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
      "/imfs" );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
   if( mt_entry == NULL ){
      printf(" NULL mount table entry was returned\n");
   }
   printf( "create /imfs/testdir and /imfs/testdir/testsubdir\n");
 
   status = mkdir( "/imfs/testdir", 0777 );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
   status = mkdir( "/imfs/testdir/testsubdir", 0777 );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   complete_printdir("/imfs" );
   complete_printdir("/imfs/" );
@@ -273,7 +276,7 @@ int main(
 
   printf("open /b/myfile\n");
   fd = open ("/b/my_file", O_CREAT, S_IRWXU);
-  assert( fd != -1 );
+  rtems_test_assert( fd != -1 );
   close (fd);
 
   printf("scandir a file status: ");
@@ -287,20 +290,20 @@ int main(
 
   printf("Open /b/new_file\n");
   fd  = open( "/b/new_file", O_CREAT, S_IRWXU );
-  assert( fd != -1 );
+  rtems_test_assert( fd != -1 );
 
   printf("fcntl F_SETFD should return 0\n");
   status = fcntl( fd, F_SETFD, 1 );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf("fcntl F_SETFD should return 1\n");
   status = fcntl( fd, F_GETFD, 1 );
-  assert( status == 1 );
+  rtems_test_assert( status == 1 );
 
 #if 0
   printf("fcntl F_DUPFD should return 0\n");
   status = fcntl( fd, F_DUPFD, 0 );
-  assert ( status == 0 );
+  rtems_test_assert ( status == 0 );
 #else
   printf("fcntl F_DUPFD should return 0 -- skip until implemented\n");
 #endif
@@ -308,41 +311,41 @@ int main(
   printf("fcntl F_GETFL returns current flags\n");
   status = fcntl( fd, F_GETFL, 1 );
   printf("fcntl F_GETFL returned 0x%x\n", status );
-  assert( status != -1 );
+  rtems_test_assert( status != -1 );
 
   printf("fcntl F_SETFL to add O_APPEND and O_NONBLOCK\n");
   status = fcntl( fd, F_SETFL, O_APPEND|O_NONBLOCK );
-  assert ( status != -1 );
+  rtems_test_assert ( status != -1 );
 
   printf("fcntl F_GETFL return current flags to see changes\n");
   status = fcntl( fd, F_GETFL, 1 );
   printf("fcntl F_GETFL returned 0x%x\n", status );
-  assert( status != -1 );
+  rtems_test_assert( status != -1 );
 
   printf("fcntl F_GETLK should return -1\n");
   status = fcntl( fd, F_GETLK, 1 );
-  assert ( status == -1 );
+  rtems_test_assert ( status == -1 );
 
   printf("fcntl F_SETLK should return -1\n");
   status = fcntl( fd, F_SETLK, 1 );
-  assert ( status == -1 );
+  rtems_test_assert ( status == -1 );
 
   printf("fcntl F_SETLKW should return -1\n");
   status = fcntl( fd, F_SETLKW, 1 );
-  assert ( status == -1 );
+  rtems_test_assert ( status == -1 );
 
   printf("fcntl F_SETOWN should return -1\n");
   status = fcntl( fd, F_SETOWN, 1 );
-  assert ( status == -1 );
+  rtems_test_assert ( status == -1 );
 
   printf("fcntl F_GETOWN should return -1\n");
   status = fcntl( fd, F_GETOWN, 1 );
-  assert ( status == -1 );
+  rtems_test_assert ( status == -1 );
 
   printf("fcntl invalid argument should return -1\n");
   status = fcntl( fd, 0xb, 1 );
   printf("Status %d\n",status);
-  assert( status == -1 );
+  rtems_test_assert( status == -1 );
 
   printf("opendir and readdir /b/myfile\n");
   directory_not = opendir ("/b/my_file");
@@ -354,7 +357,7 @@ int main(
 
   printf("chdir to /b/myfile\n");
   status = chdir ("/b/my_file");
-  assert (status == -1);
+  rtems_test_assert (status == -1);
 
   printf( "\nPerforming stat of directory /\n");
   status = stat( "/", &s );
@@ -362,18 +365,18 @@ int main(
 
   puts( "\nOpen and print directory /" );
   directory = opendir("/");
-  assert( directory );
+  rtems_test_assert( directory );
   printdir(directory);
 
   printf("\nmkdir /d/my_dir\n");
   status = mkdir( "/d/my_dir", 0x1c0 );
   printf("Open /d/my_dir\n");
   directory_not = opendir( "/d/my_dir" );
-  assert( directory_not );
+  rtems_test_assert( directory_not );
 
   printf( "remove /d/my_dir.\n" );
   status = rmdir( "/d/my_dir" );
-  assert( status == 0 );
+  rtems_test_assert( status == 0 );
 
   printf( "close /d/my_dir.\n" );
   closedir( directory_not );
@@ -381,14 +384,14 @@ int main(
   printf( "\nOpening directory /c\n" );
   directory2 = opendir("/c");
 
-  assert( directory2 );
+  rtems_test_assert( directory2 );
 
   printdir(directory2);
   status = closedir( directory2 );
 
   printf( "\nOpening directory /c/y\n" );
   directory3 = opendir("/c/y");
-  assert( directory3 );
+  rtems_test_assert( directory3 );
   printdir(directory3);
   status = closedir( directory3 );
 

@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,14 +31,14 @@ void *Task_3(
   printf( "Task 3: pthread_mutex_lock unavailable (inherit case)\n" );
   status = pthread_mutex_lock( &Mutex2_id );
   printf( "Task 3: mutex acquired\n" );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   printf( "Task 3: unlock Mutex 2\n" );
   status = pthread_mutex_unlock( &Mutex2_id );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = pthread_getschedparam( pthread_self(), &policy, &param );
-  assert( !status );
+  rtems_test_assert(  !status );
   printf( "Task 3: pthread_getschedparam priority = %d\n", param.sched_priority );
 
   printf( "Task 3: exit\n" );

@@ -72,7 +72,7 @@ void *POSIX_Init(
 
   puts( "Init: pthread_getschedparam - SUCCESSFUL" );
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   priority = schedparam.sched_priority;
   sprintf( buffer, " - current priority = %d", priority );
@@ -88,10 +88,10 @@ void *POSIX_Init(
 
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   priority = schedparam.sched_priority;
   sprintf( buffer, " - new priority = %d", priority );
@@ -101,7 +101,7 @@ void *POSIX_Init(
 
   for ( passes=0 ; passes <= 3 ; ) {
     status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-    assert( !status );
+    rtems_test_assert(  !status );
 
     if ( priority != schedparam.sched_priority ) {
       priority = schedparam.sched_priority;
@@ -116,7 +116,7 @@ void *POSIX_Init(
   empty_line();
 
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   schedparam.ss_replenish_period.tv_sec = 0;
   schedparam.ss_replenish_period.tv_nsec = 500000000;  /* 1/2 second */
@@ -132,23 +132,23 @@ void *POSIX_Init(
 
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "Init: Initializing mutex attributes for priority ceiling" );
   status = pthread_mutexattr_init( &attr );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_INHERIT );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "Init: Creating a mutex" );
   status = pthread_mutex_init( &Mutex_id, &attr );
   if ( status )
     printf( "status = %d\n", status );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   priority = schedparam.sched_priority;
   sprintf( buffer, " - new priority = %d", priority );
@@ -162,11 +162,11 @@ void *POSIX_Init(
   status = pthread_mutex_lock( &Mutex_id );
   if ( status )
     printf( "status = %d %s\n", status, strerror(status) );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   for ( ; ; ) {
     status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-    assert( !status );
+    rtems_test_assert(  !status );
 
     if ( schedparam.sched_priority == LOW_PRIORITY ) {
       puts( "ERROR - Init's priority lowered while holding mutex" );
@@ -182,7 +182,7 @@ void *POSIX_Init(
     print_current_time( "Init: ", buffer );
 
     status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-    assert( !status );
+    rtems_test_assert(  !status );
 
     priority = schedparam.sched_priority;
     sprintf( buffer, " - new priority = %d", priority );
@@ -197,10 +197,10 @@ void *POSIX_Init(
   status = pthread_mutex_unlock( &Mutex_id );
   if ( status )
     printf( "status = %d\n", status );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   priority = schedparam.sched_priority;
   sprintf( buffer, " - new priority = %d", priority );
@@ -208,14 +208,14 @@ void *POSIX_Init(
 
   for ( ; ; ) {
     status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-    assert( !status );
+    rtems_test_assert(  !status );
 
     if ( schedparam.sched_priority == LOW_PRIORITY )
       break;
   }
 
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   priority = schedparam.sched_priority;
   sprintf( buffer, " - new priority = %d", priority );

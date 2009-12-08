@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,14 +33,14 @@ void *Task_2(
   status = pthread_setspecific( Key_id, &Data_array[ 2 ] );
   if ( status )
     printf( "status = %d\n", status );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   key_data = pthread_getspecific( Key_id );
   printf( "Task_2: Got the key value of %ld\n",
           (unsigned long) ((uint32_t   *)key_data - Data_array) );
   if ( status )
     printf( "status = %d\n", status );
-  assert( !status );
+  rtems_test_assert(  !status );
 
   puts( "Task2: exitting" );
   pthread_exit( NULL );

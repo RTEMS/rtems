@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,13 +31,13 @@ void *Task_1(
   status = pthread_mutex_trylock( &Mutex_id );
   if ( status != EBUSY )
     printf( "status = %d\n", status );
-  assert( status == EBUSY );
+  rtems_test_assert(  status == EBUSY );
 
   printf( "Task: pthread_mutex_lock unavailable\n" );
   status = pthread_mutex_lock( &Mutex_id );
   if ( status )
     printf( "status = %d\n", status );
-  assert( !status );
+  rtems_test_assert(  !status );
 
      /* switch to init */
 

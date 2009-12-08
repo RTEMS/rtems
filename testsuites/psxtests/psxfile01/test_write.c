@@ -2,6 +2,13 @@
  *  A test support function which performs a write() and
  *  handles implied open(), lseek(), write(), and close() operations.
  *
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -13,8 +20,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
-
-#include <assert.h>
 
 #include <pmacros.h>
 
@@ -42,7 +47,7 @@ void test_write(
   }
 
   status = lseek( fd, offset, SEEK_SET );
-  assert( status != -1 );
+  rtems_test_assert( status != -1 );
 
   status = write( fd, buffer, length );
   if ( status == -1 ) {
@@ -57,5 +62,5 @@ void test_write(
   }
 
   status = close( fd );
-  assert( !status );
+  rtems_test_assert( !status );
 }

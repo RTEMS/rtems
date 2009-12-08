@@ -55,28 +55,28 @@ void *POSIX_Init(
 
   puts( "Init - Allocate stack from heap" );
   Stack_Low = malloc(PTHREAD_MINIMUM_STACK_SIZE);
-  assert( Stack_Low );
+  rtems_test_assert(  Stack_Low );
   Stack_High = Stack_Low + PTHREAD_MINIMUM_STACK_SIZE;
 
   puts( "Init - Initialize thread attribute for user provided stack" );
   sc = pthread_attr_init( &attr );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   sc = pthread_attr_setstackaddr( &attr, Stack_Low );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   sc = pthread_attr_setstacksize( &attr, PTHREAD_MINIMUM_STACK_SIZE );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   /* create threads */
   sc = pthread_create( &id, &attr, Test_Thread, NULL );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   puts( "Init - let other thread run" );
   delay_request.tv_sec = 0;
   delay_request.tv_nsec = 5 * 100000000;
   sc = nanosleep( &delay_request, NULL );
-  assert( !sc );
+  rtems_test_assert(  !sc );
 
   puts( "*** END OF POSIX STACK ATTRIBUTE TEST 01 ***" );
   rtems_test_exit(0);
