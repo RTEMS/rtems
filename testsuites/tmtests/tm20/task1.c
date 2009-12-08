@@ -11,7 +11,6 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
-#include <assert.h>
 
 rtems_device_major_number _STUB_major = 1;
 
@@ -160,7 +159,7 @@ rtems_task Task_1(
 
     buffer_count++;
 
-    assert( buffer_count < PARTITION_BUFFER_POINTERS );
+    rtems_test_assert( buffer_count < PARTITION_BUFFER_POINTERS );
   }
 
   benchmark_timer_initialize();

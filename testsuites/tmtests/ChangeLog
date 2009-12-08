@@ -1,3 +1,9 @@
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tm20/task1.c: Use rtems_test_assert() consistently instead of system
+	assert(). rtems_test_assert() is designed to integrate into the RTEMS
+	test suite infrastructure.
+
 2009-11-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* tmoverhd/testtask.c: Apply RTEMS_GCC_NOWARN_USED.
