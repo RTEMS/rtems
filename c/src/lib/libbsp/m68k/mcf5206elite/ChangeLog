@@ -1,5 +1,6 @@
 2009-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* include/i2c.h (i2c_transfer_done): Fix type mismatch.
 	* tod/ds1307.c (ds1307_set_time): Fix broken prototype.
 
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
