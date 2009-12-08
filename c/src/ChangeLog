@@ -1,3 +1,10 @@
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/network/dec21140.c, libchip/network/elnk.c,
+	libchip/network/if_dc.c: Ensure PCI drivers are built on all
+	supported configurations. PowerPC conditionals were not current and
+	code was not being built on supported BSPs.
+
 2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libchip/network/smc91111.c: Formatting.

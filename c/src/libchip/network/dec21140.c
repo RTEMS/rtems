@@ -49,17 +49,18 @@
   #define DEC21140_SUPPORTED
   #define PCI_DRAM_OFFSET 0
 #endif
-#if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(ppc603e))
+#if defined(__PPC__)
   #define DEC21140_SUPPORTED
 #endif
+
+#include <bsp.h>
+#include <rtems/pci.h>
 
 #if !defined(PCI_DRAM_OFFSET)
   #undef DEC21140_SUPPORTED
 #endif
 
 #if defined(DEC21140_SUPPORTED)
-#include <bsp.h>
-#include <rtems/pci.h>
 
 #if defined(__PPC__)
 #include <libcpu/byteorder.h>

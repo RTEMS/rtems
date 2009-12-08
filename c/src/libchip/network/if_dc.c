@@ -108,16 +108,19 @@
   	#define DRIVER_SUPPORTED
 #endif
 
-#if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(ppc603e))
+#if defined(__PPC__)
   	#define DRIVER_SUPPORTED
 	#warning The if_dc driver is untested on the PPC platform !!!
 #endif
 
+#include <bsp.h>
+#include <rtems/pci.h>
+
+#if !defined(PCI_DRAM_OFFSET)
+  #undef DRIVER_SUPPORTED
+#endif
 
 #if defined(DRIVER_SUPPORTED) /* this covers the file "globally"... */
-#include <bsp.h>
-#include <rtems.h>
-#include <rtems/pci.h>
 
 #include <rtems/error.h>
 #include <errno.h>

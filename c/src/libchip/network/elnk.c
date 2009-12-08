@@ -75,9 +75,12 @@
   #define PCI_DRAM_OFFSET 0
 #endif
 
-#if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(ppc603e))
+#if defined(__PPC__)
 #define ELNK_SUPPORTED
 #endif
+
+#include <bsp.h>
+#include <rtems/pci.h>
 
 #if !defined(PCI_DRAM_OFFSET)
   #undef ELNK_SUPPORTED
@@ -87,8 +90,6 @@
 
 
 #if defined(ELNK_SUPPORTED)
-#include <bsp.h>
-#include <rtems/pci.h>
 
 #if defined(__PPC__)
 #include <libcpu/byteorder.h>
