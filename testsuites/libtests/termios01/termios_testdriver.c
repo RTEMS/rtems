@@ -14,7 +14,6 @@
 #include "tmacros.h"
 #include <rtems/libio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <termios.h>
 #include <rtems/termiostypes.h>
 #include "termios_testdriver.h"

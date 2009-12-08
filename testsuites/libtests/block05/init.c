@@ -19,7 +19,7 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <assert.h>
+#include "tmacros.h"
 #include <stdarg.h>
 #include <errno.h>
 
@@ -27,7 +27,7 @@
 #include <rtems/bdbuf.h>
 #include <rtems/diskdevs.h>
 
-#define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
+#define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
 #define PRIORITY_INIT 1
 
@@ -164,7 +164,7 @@ static rtems_bdbuf_buffer *get(enum get_type type, enum blk_kind kind)
       bds_per_group = 1;
       break;
     default:
-      assert(false);
+      rtems_test_assert(false);
       break;
   }
 
@@ -176,12 +176,12 @@ static rtems_bdbuf_buffer *get(enum get_type type, enum blk_kind kind)
       get_bd = rtems_bdbuf_read;
       break;
     default:
-      assert(false);
+      rtems_test_assert(false);
       break;
   }
 
   sc = (*get_bd)(dev, blk_index, &bd);
-  assert(
+  rtems_test_assert(
     sc == RTEMS_SUCCESSFUL
       && bd->dev == dev
       && bd->block == blk_index
@@ -207,7 +207,7 @@ static void rel(rtems_bdbuf_buffer *bd, enum rel_type type)
       rel_bd = rtems_bdbuf_sync;
       break;
     default:
-      assert(false);
+      rtems_test_assert(false);
       break;
   }
 
@@ -266,7 +266,7 @@ static void task_resume(rtems_task_argument arg)
         do_resume = finish_low && finish_high;
         break;
       default:
-        assert(false);
+        rtems_test_assert(false);
         break;
     }
 
@@ -310,7 +310,7 @@ static void execute_test(unsigned i)
   ASSERT_SC(sc);
 
   sc = rtems_bdbuf_get(dev_b, 0, &bd);
-  assert(sc == RTEMS_SUCCESSFUL && bd->dev == dev_b && bd->block == 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL && bd->dev == dev_b && bd->block == 0);
 
   sc = rtems_bdbuf_release(bd);
   ASSERT_SC(sc);
@@ -323,7 +323,7 @@ static void execute_test(unsigned i)
       suspend = false;
       break;
     default:
-      assert(false);
+      rtems_test_assert(false);
       break;
   }
 

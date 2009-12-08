@@ -19,14 +19,14 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <assert.h>
+#include "tmacros.h"
 
 #include <rtems.h>
 #include <rtems/ramdisk.h>
 #include <rtems/bdbuf.h>
 #include <rtems/diskdevs.h>
 
-#define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
+#define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
 #define PRIORITY_INIT 10
 
@@ -66,7 +66,7 @@ static void task_low(rtems_task_argument arg)
 
   printk("L: sync done: 0\n");
 
-  assert(false);
+  rtems_test_assert(false);
 }
 
 static void task_high(rtems_task_argument arg)

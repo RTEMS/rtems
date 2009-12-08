@@ -19,14 +19,14 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <assert.h>
+#include "tmacros.h"
 
 #include <rtems.h>
 #include <rtems/ramdisk.h>
 #include <rtems/bdbuf.h>
 #include <rtems/diskdevs.h>
 
-#define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
+#define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
 #define PRIORITY_INIT 10
 
@@ -59,18 +59,18 @@ static void task_low(rtems_task_argument arg)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
-  assert(!sync_done);
+  rtems_test_assert(!sync_done);
 
   printk("L: try access: A0\n");
 
   sc = rtems_bdbuf_get(dev_a, 0, &bd);
   ASSERT_SC(sc);
 
-  assert(sync_done);
+  rtems_test_assert(sync_done);
 
   printk("L: access: A0\n");
 
-  assert(bd->dev == dev_a);
+  rtems_test_assert(bd->dev == dev_a);
 
   printk("*** END OF TEST BLOCK 2 ***\n");
 
@@ -82,14 +82,14 @@ static void task_high(rtems_task_argument arg)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
-  assert(!sync_done);
+  rtems_test_assert(!sync_done);
 
   printk("H: try access: A0\n");
 
   sc = rtems_bdbuf_get(dev_a, 0, &bd);
   ASSERT_SC(sc);
 
-  assert(sync_done);
+  rtems_test_assert(sync_done);
 
   printk("H: access: A0\n");
 

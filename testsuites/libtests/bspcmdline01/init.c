@@ -23,30 +23,30 @@ void test_errors(void)
 
   puts( "rtems_bsp_cmdline_get_param - name=NULL - returns NULL" );
   p = rtems_bsp_cmdline_get_param( NULL, result, 32 );
-  assert( p == NULL );
+  rtems_test_assert( p == NULL );
 
   puts( "rtems_bsp_cmdline_get_param - result=NULL - returns NULL" );
   p = rtems_bsp_cmdline_get_param( "name", NULL, 32 );
-  assert( p == NULL );
+  rtems_test_assert( p == NULL );
 
   puts( "rtems_bsp_cmdline_get_param - length=0 - returns NULL" );
   p = rtems_bsp_cmdline_get_param( "name", result, 0 );
-  assert( p == NULL );
+  rtems_test_assert( p == NULL );
 
   puts( "rtems_bsp_cmdline_get_param_raw - name=NULL - returns NULL" );
   p = rtems_bsp_cmdline_get_param_raw( NULL );
-  assert( p == NULL );
+  rtems_test_assert( p == NULL );
 
   bsp_boot_cmdline = NULL;
 
   puts( "rtems_bsp_cmdline_get_param - bsp_boot_cmdline=NULL - returns NULL" );
   p = rtems_bsp_cmdline_get_param( "name", result, 5 );
-  assert( p == NULL );
+  rtems_test_assert( p == NULL );
 
   puts(
     "rtems_bsp_cmdline_get_param_raw - bsp_boot_cmdline=NULL - returns NULL" );
   p = rtems_bsp_cmdline_get_param_raw( "name" );
-  assert( p == NULL );
+  rtems_test_assert( p == NULL );
 }
 
 void test_search(
@@ -77,14 +77,14 @@ void test_search(
       puts( "ERROR - rtems_bsp_cmdline_get_param_raw did not return NULL" );
     else
       printf( "rtems_bsp_cmdline_get_param_raw(%s) returned NULL\n", param );
-    assert( !p );
+    rtems_test_assert( !p );
   } else {
     if ( p )
       printf( "rtems_bsp_cmdline_get_param_raw(%s) returned (%s)\n", param, p );
     else
       printf( "rtems_bsp_cmdline_get_param_raw(%s) returned NULL\n", param );
 
-    assert( p );
+    rtems_test_assert( p );
   }
 
   printf( "rtems_bsp_cmdline_get_param_rhs(%s)\n", param );
@@ -95,11 +95,11 @@ void test_search(
       puts( "ERROR - rtems_bsp_cmdline_get_param_rhs did not return NULL" );
     else
       printf( "rtems_bsp_cmdline_get_param_rhs(%s) returned NULL\n", param );
-    assert( !p );
+    rtems_test_assert( !p );
   } else {
     if ( !p )
       puts( "ERROR - rtems_bsp_cmdline_get_param_rhs returned NULL" );
-    assert( p );
+    rtems_test_assert( p );
     printf(
       "rtems_bsp_cmdline_get_param_rhs(%s) returned (%s) value=(%s)\n",
       param,

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -13,7 +13,6 @@
 #include <rtems/stringto.h>
 
 #include <stdio.h>
-#include <assert.h>
 
 /* Test pointer conversions */
 #define TEST_STRING_TO_TYPE          void *

@@ -1,3 +1,13 @@
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* block01/init.c, block02/init.c, block03/init.c, block04/init.c,
+	block05/init.c, block07/init.c, bspcmdline01/init.c,
+	stringto01/init.c, stringto01/stringto_test_template.h,
+	termios01/init.c, termios01/termios_testdriver.c, termios02/init.c:
+	Use rtems_test_assert() consistently instead of system assert().
+	rtems_test_assert() is designed to integrate into the RTEMS test
+	suite infrastructure.
+
 2009-12-06      Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* POSIX/Makefile.am: Add readv, writev.

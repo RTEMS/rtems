@@ -23,14 +23,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <assert.h>
+#include "tmacros.h"
 
 #include <rtems.h>
 #include <rtems/ramdisk.h>
 #include <rtems/bdbuf.h>
 #include <rtems/diskdevs.h>
 
-#define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
+#define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
 #define PRIORITY_INIT 1
 
@@ -64,13 +64,13 @@ static void change_block_size(void)
   uint32_t new_block_size = BLOCK_SIZE_B;
   int fd = open("/dev/rda", O_RDWR);
 
-  assert(fd >= 0);
+  rtems_test_assert(fd >= 0);
 
   rv = ioctl(fd, RTEMS_BLKIO_SETBLKSIZE, &new_block_size);
-  assert(rv == 0);
+  rtems_test_assert(rv == 0);
 
   rv = close(fd);
-  assert(rv == 0);
+  rtems_test_assert(rv == 0);
 }
 
 static void task_low(rtems_task_argument arg)
@@ -85,7 +85,7 @@ static void task_low(rtems_task_argument arg)
 
   printk("L: access: 0\n");
 
-  assert(bd->group->bds_per_group == 2);
+  rtems_test_assert(bd->group->bds_per_group == 2);
 
   printk("L: release: 0\n");
 
@@ -111,7 +111,7 @@ static void task_mid(rtems_task_argument arg)
 
   printk("M: access: 0\n");
 
-  assert(bd->group->bds_per_group == 1);
+  rtems_test_assert(bd->group->bds_per_group == 1);
 
   printk("M: release: 0\n");
 
@@ -137,7 +137,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: access: 0\n");
 
-  assert(bd->group->bds_per_group == 1);
+  rtems_test_assert(bd->group->bds_per_group == 1);
 
   printk("H: release: 0\n");
 

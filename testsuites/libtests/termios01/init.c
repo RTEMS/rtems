@@ -10,7 +10,6 @@
  */
 
 #include "tmacros.h"
-#include <assert.h>
 #include <termios.h>
 #include <rtems/termiostypes.h>
 #include <fcntl.h>
@@ -129,11 +128,11 @@ void test_termios_baud2index(void)
   );
   puts( "termios_baud_to_index(-2) - NOT OK" );
   i = rtems_termios_baud_to_index( -2 );
-  assert ( i == -1 );
+  rtems_test_assert( i == -1 );
 
   puts( "termios_baud_to_index(572) - NOT OK" );
   i = rtems_termios_baud_to_index( -2 );
-  assert ( i == -1 );
+  rtems_test_assert( i == -1 );
 
   if ( i != -1 )
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
@@ -160,11 +159,11 @@ void test_termios_baud2number(void)
   );
   puts( "termios_baud_to_number(-2) - NOT OK" );
   i = rtems_termios_baud_to_number( -2 );
-  assert ( i == -1 );
+  rtems_test_assert( i == -1 );
 
   puts( "termios_baud_to_number(572) - NOT OK" );
   i = rtems_termios_baud_to_number( -2 );
-  assert ( i == -1 );
+  rtems_test_assert( i == -1 );
 
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
     printf( "termios_baud_to_number(B%" PRIdrtems_termios_baud_t ") - OK\n", baud_table[i].baud );
@@ -194,11 +193,11 @@ void test_termios_number_to_baud(void)
   );
   puts( "termios_number_to_baud(-2) - NOT OK" );
   i = rtems_termios_number_to_baud( -2 );
-  assert ( i == -1 );
+  rtems_test_assert( i == -1 );
 
   puts( "termios_number_to_baud(572) - NOT OK" );
   i = rtems_termios_number_to_baud( -2 );
-  assert ( i == -1 );
+  rtems_test_assert( i == -1 );
 
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
     printf( "termios_number_to_baud(B%" PRIdrtems_termios_baud_t ") - OK\n", baud_table[i].baud );

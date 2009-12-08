@@ -43,7 +43,7 @@ void TEST_STRING_TO_NAME(void)
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, NULL, &endptr );
   #endif
-  assert( status == RTEMS_INVALID_ADDRESS );
+  rtems_test_assert( status == RTEMS_INVALID_ADDRESS );
 
   /* Basic conversion works for return value, return end pointer */
   puts(
@@ -55,8 +55,8 @@ void TEST_STRING_TO_NAME(void)
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, &value, NULL );
   #endif
-  assert( status == RTEMS_SUCCESSFUL );
-  assert( value == (TEST_STRING_TO_TYPE)GOOD_VALUE );
+  rtems_test_assert( status == RTEMS_SUCCESSFUL );
+  rtems_test_assert( value == (TEST_STRING_TO_TYPE)GOOD_VALUE );
 
   /* Basic conversion works for return value */
   endptr = NULL;
@@ -69,9 +69,9 @@ void TEST_STRING_TO_NAME(void)
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, &value, &endptr );
   #endif
-  assert( status == RTEMS_SUCCESSFUL );
-  assert( endptr );
-  assert( value == (TEST_STRING_TO_TYPE)GOOD_VALUE );
+  rtems_test_assert( status == RTEMS_SUCCESSFUL );
+  rtems_test_assert( endptr );
+  rtems_test_assert( value == (TEST_STRING_TO_TYPE)GOOD_VALUE );
 
   /* Bad conversion works for return value */
   endptr = NULL;
@@ -84,8 +84,8 @@ void TEST_STRING_TO_NAME(void)
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( BAD_VALUE_STRING, &value, &endptr );
   #endif
-  assert( status == RTEMS_NOT_DEFINED );
-  assert( endptr );
+  rtems_test_assert( status == RTEMS_NOT_DEFINED );
+  rtems_test_assert( endptr );
 
   /* Conversion of empty string */
   endptr = NULL;
@@ -99,9 +99,9 @@ void TEST_STRING_TO_NAME(void)
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( "", &value, &endptr );
   #endif
-  assert( status == RTEMS_NOT_DEFINED );
-  assert( endptr );
-  assert( value == (TEST_STRING_TO_TYPE)0 );
+  rtems_test_assert( status == RTEMS_NOT_DEFINED );
+  rtems_test_assert( endptr );
+  rtems_test_assert( value == (TEST_STRING_TO_TYPE)0 );
 
   /* Conversion of number that is too large */
   #if defined(TEST_TOO_LARGE_STRING)
@@ -117,8 +117,8 @@ void TEST_STRING_TO_NAME(void)
     #endif
     if ( status != RTEMS_INVALID_NUMBER )
       printf( "ERROR = %s\n", rtems_status_text(status) );
-    assert( status == RTEMS_INVALID_NUMBER );
-    assert( endptr );
+    rtems_test_assert( status == RTEMS_INVALID_NUMBER );
+    rtems_test_assert( endptr );
   #endif
 
   /* Conversion of number that is too small */
@@ -132,8 +132,8 @@ void TEST_STRING_TO_NAME(void)
     #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
       status = STRING_TO_NAME_METHOD( TEST_TOO_SMALL_STRING, &value, &endptr );
     #endif
-    assert( status == RTEMS_INVALID_NUMBER );
-    assert( endptr );
+    rtems_test_assert( status == RTEMS_INVALID_NUMBER );
+    rtems_test_assert( endptr );
   #endif
 }
 

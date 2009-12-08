@@ -23,20 +23,20 @@ rtems_task Init(
 
   printf( "tcdrain(12) - EBADF\n" );
   sc = tcdrain(12);
-  assert( sc == -1 );
-  assert( errno == EBADF );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EBADF );
 
   printf( "tcdrain(stdin) - OK\n" );
   sc = tcdrain(0);
-  assert( !sc );
+  rtems_test_assert( !sc );
 
   printf( "tcdrain(stdout) - OK\n" );
   tcdrain(1);
-  assert( !sc );
+  rtems_test_assert( !sc );
 
   printf( "tcdrain(stderr) - OK\n" );
   tcdrain(2);
-  assert( !sc );
+  rtems_test_assert( !sc );
 
   printf( "*** END OF TERMIOS 02 TEST ***\n" );
   exit( 0 );
