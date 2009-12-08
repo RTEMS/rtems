@@ -54,8 +54,6 @@ extern "C" {
 #include <libcpu/cpu.h>
 #include <rtems/bspIo.h>
 
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
-
 /*
  * Network driver configuration
  */

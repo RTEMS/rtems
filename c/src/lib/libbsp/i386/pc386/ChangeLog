@@ -1,3 +1,8 @@
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: BSP should not define
+	CONFIGURE_NUMBER_OF_TERMIOS_PORTS.
+
 2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ne2000/ne2000.c: Logic on defaulting port number was inverted when
