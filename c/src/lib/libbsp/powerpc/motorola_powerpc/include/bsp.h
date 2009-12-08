@@ -124,6 +124,13 @@
 #define BSP_CONSOLE_PORT	BSP_UART_COM1
 #define BSP_UART_BAUD_BASE	115200
 
+#if defined(MVME_HAS_DEC21140)
+struct rtems_bsdnet_ifconfig;
+#define RTEMS_BSP_NETWORK_DRIVER_NAME "dc1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_dec21140_driver_attach
+extern int rtems_dec21140_driver_attach();
+#endif
+
 #include <bsp/openpic.h>
 /* BSP_PIC_DO_EOI is optionally used by the 'vmeUniverse' driver
  * to implement VME IRQ priorities in software.

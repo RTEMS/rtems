@@ -1,3 +1,7 @@
+2009-12-08	Eric Norum <wenorum@lbl.gov>
+
+	* include/bsp.h: Add network configuration preprocessor macros.
+
 2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am: Update for exception support changes.
