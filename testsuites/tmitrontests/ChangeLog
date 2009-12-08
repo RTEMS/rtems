@@ -1,3 +1,9 @@
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tmitronsem01/system.h: Use rtems_test_assert() consistently instead
+	of system assert(). rtems_test_assert() is designed to integrate into
+	the RTEMS test suite infrastructure.
+
 2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/timesys.h: Use PRId32.
