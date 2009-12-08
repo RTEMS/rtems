@@ -1,3 +1,7 @@
+2009-12-08	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* console/font8x16.h, console/sed1356.c: Fix typos.
+
 2009-12-04	Fernando Nicodemos <fgnicodemos@terra.com.br>
 
 	* README, README.kit637_v6, console/sed1356_16bit.h, startup/memmap.c:

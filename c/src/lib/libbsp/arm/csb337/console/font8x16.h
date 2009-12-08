@@ -40,7 +40,7 @@
 #define FONT_WIDTH		8
 #define FONT_HEIGHT 		16
 #define FIRST_CHAR 		0x20
-#define LAST_CHAR 		0x7f
+#define LAST_CHAR 		0x7F
 #define CURSOR_ON  		0x7F
 #define CURSOR_OFF 		0x20
 

@@ -1,5 +1,5 @@
 /*
- *  SED1356 Support (for  KIT637_V6 (CSB637)
+ *  SED1356 Support for KIT637_V6 (CSB637)
  *
  *  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
  *  which includes this notice:
