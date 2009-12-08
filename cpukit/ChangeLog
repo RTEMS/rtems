@@ -1,3 +1,10 @@
+2009-12-08	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* rtems/include/rtems/rtems/ratemon.h, rtems/src/ratemongetstatus.c,
+	rtems/src/ratemonperiod.c: Factored out common code to ensure
+	consistent behavior between rtems_rate_monotonic_get_status and
+	rtems_rate_monotonic_report_statistics.
+
 2009-12-07	Cindy Cicalese <cicalese@mitre.org>
 
 	PR 1477/cpukit

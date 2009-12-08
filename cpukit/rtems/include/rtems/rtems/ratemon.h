@@ -47,6 +47,11 @@
  *
  *  This encapsulates functionality related to the
  *  Classic API Rate Monotonic Manager.
+ *
+ *  Statistics are kept for each period and can be obtained or printed via
+ *  API calls.  The statistics kept include minimum, maximum and average times
+ *  for both cpu usage and wall time.  The statistics indicate the execution time
+ *  used by the owning thread between successive calls to rtems_rate_monotonic_period.
  */
 /**@{*/
 
@@ -224,18 +229,6 @@ typedef struct {
   rtems_rate_monotonic_period_states      state;
 
   /**
-   * This field contains the total CPU usage used while executing
-   * the body of the loop that is executed each period.
-   */
-  Thread_CPU_usage_t                      owner_executed_at_period;
-
-  /**
-   * This field contains the total wall timer that passed while
-   * executing the body of the loop that is executed each period.
-   */
-  Rate_monotonic_Period_time_t            time_at_period;
-
-  /**
    * This field contains the length of the next period to be
    * executed.
    */
@@ -248,8 +241,20 @@ typedef struct {
   Thread_Control                         *owner;
 
   /**
-   * This field contains the statistics which are maintained
-   * on each period.
+   * This field contains the cpu usage value of the owning thread when
+   * the period was initiated.  It is used to compute the period's
+   * statistics.
+   */
+  Thread_CPU_usage_t                      cpu_usage_period_initiated;
+
+  /**
+   * This field contains the wall time value when the period
+   * was initiated.  It is used to compute the period's statistics.
+   */
+  Rate_monotonic_Period_time_t            time_period_initiated;
+
+  /**
+   * This field contains the statistics maintained for the period.
    */
   Rate_monotonic_Statistics               Statistics;
 }   Rate_monotonic_Control;
@@ -285,9 +290,8 @@ rtems_status_code rtems_rate_monotonic_create(
  *  @brief rtems_rate_monotonic_ident
  *
  *  This routine implements the rtems_rate_monotonic_ident directive.
- *  This directive returns the period ID associated with name.
- *  If more than one period is named name, then the period
- *  to which the ID belongs is arbitrary.
+ *  It returns the period ID associated with name.  If more than one period
+ *  is named name, then the period to which the ID belongs is arbitrary.
  */
 rtems_status_code rtems_rate_monotonic_ident(
   rtems_name    name,
@@ -341,7 +345,7 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
 /**
  *  @brief rtems_rate_monotonic_reset_statistics
  *
- *  This directive allows a thread to reset the statistics information
+ *  This routine allows a thread to reset the statistics information
  *  on a specific period instance.
  */
 rtems_status_code rtems_rate_monotonic_reset_statistics(
@@ -351,7 +355,7 @@ rtems_status_code rtems_rate_monotonic_reset_statistics(
 /**
  *  @brief rtems_rate_monotonic_reset_all_statistics
  *
- *  This directive allows a thread to reset the statistics information
+ *  This routine allows a thread to reset the statistics information
  *  on ALL period instances.
  */
 void rtems_rate_monotonic_reset_all_statistics( void );
@@ -359,7 +363,7 @@ void rtems_rate_monotonic_reset_all_statistics( void );
 /**
  *  @brief rtems_rate_monotonic_report_statistics
  *
- *  This directive allows a thread to print the statistics information
+ *  This routine allows a thread to print the statistics information
  *  on ALL period instances which have non-zero counts using printk.
  */
 void rtems_rate_monotonic_report_statistics_with_plugin(
@@ -370,7 +374,7 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
 /**
  *  @brief rtems_rate_monotonic_report_statistics
  *
- *  This directive allows a thread to print the statistics information
+ *  This routine allows a thread to print the statistics information
  *  on ALL period instances which have non-zero counts using printk.
  */
 void rtems_rate_monotonic_report_statistics( void );
@@ -401,6 +405,27 @@ rtems_status_code rtems_rate_monotonic_period(
 void _Rate_monotonic_Timeout(
   Objects_Id  id,
   void       *ignored
+);
+
+/**
+ *  @brief _Rate_monotonic_Get_status(
+ *
+ *  This routine is invoked to compute the elapsed wall time and cpu
+ *  time for a period.
+ *
+ *  @param[in] the_period points to the period being operated upon.
+ *  @param[out] wall_since_last_period is set to the wall time elapsed
+ *              since the period was initiated.
+ *  @param[out] cpu_since_last_period is set to the cpu time used by the
+ *              owning thread since the period was initiated.
+ *
+ *  @return This routine returns true if the status can be determined
+ *          and false otherwise.
+ */
+bool _Rate_monotonic_Get_status(
+  Rate_monotonic_Control        *the_period,
+  Rate_monotonic_Period_time_t  *wall_since_last_period,
+  Thread_CPU_usage_t            *cpu_since_last_period
 );
 
 /**
