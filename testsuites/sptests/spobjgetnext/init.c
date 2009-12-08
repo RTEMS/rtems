@@ -74,27 +74,27 @@ rtems_task Init(
 
   puts( "Init - _Objects_Get_next - NULL object information" );
   o = _Objects_Get_next( NULL, main_task, &location, &id );
-  assert( o == NULL );
+  rtems_test_assert( o == NULL );
 
   puts( "Init - _Objects_Get_next - NULL location" );
   o = _Objects_Get_next( info, main_task, NULL, &id );
-  assert( o == NULL );
+  rtems_test_assert( o == NULL );
 
   puts( "Init - _Objects_Get_next - NULL id" );
   o = _Objects_Get_next( info, main_task, &location, NULL );
-  assert( o == NULL );
+  rtems_test_assert( o == NULL );
 
   /* XXX push the three NULL error cases */
 
   /* simple case of only all tasks in the system, starting at initial */
   count = scan_objects( info, OBJECTS_ID_INITIAL_INDEX );
   printf( "%d RTEMS Task%s\n", count, ((count == 1) ? "" : "s") );
-  assert( count == 1 );
+  rtems_test_assert( count == 1 );
 
   /* simple case of only 1 task in the system, starting at that task */
   count = scan_objects( info, main_task );
   printf( "%d RTEMS Task%s\n", count, ((count == 1) ? "" : "s") );
-  assert( count == 1 );
+  rtems_test_assert( count == 1 );
 
   /* XXX create >= 1 task and make sure the counts are correct when */
   /* XXX you start the search at initial, first id, arbitrary id */

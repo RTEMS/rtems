@@ -30,19 +30,19 @@ void test_case_one(void)
   puts( "Init - _Heap_Initialize (for test one) - OK" );
   heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
   printf( "Init - Heap size=%" PRIu32 "\n", heap_size );
-  assert( heap_size );
+  rtems_test_assert( heap_size );
 
   puts( "Init - _Heap_Allocate - too large size (overflow)- not OK");
   ptr1 = _Heap_Allocate( &Heap, UINTPTR_MAX );
-  assert( !ptr1 );
+  rtems_test_assert( !ptr1 );
 
   puts( "Init - _Heap_Allocate_aligned - OK");
   ptr1 = _Heap_Allocate_aligned( &Heap, 64, 32 );
-  assert( ptr1 );
+  rtems_test_assert( ptr1 );
 
   puts( "Init - _Heap_Resize_block - OK");
   hc = _Heap_Resize_block( &Heap, ptr1, 4, &old, &avail );
-  assert( !hc );
+  rtems_test_assert( !hc );
 }
 
 /*
@@ -60,15 +60,15 @@ void test_case_two(void)
   puts( "\nInit - _Heap_Initialize (for test two) - OK" );
   heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
   printf( "Init - Heap size=%" PRIu32 "\n", heap_size );
-  assert( heap_size );
+  rtems_test_assert( heap_size );
 
   puts( "Init - _Heap_Allocate_aligned - OK");
   ptr1 = _Heap_Allocate_aligned( &Heap, 64, 4 );
-  assert( ptr1 );
+  rtems_test_assert( ptr1 );
 
   puts( "Init - _Heap_Resize_block - OK");
   hc = _Heap_Resize_block( &Heap, ptr1, 56, &old, &avail );
-  assert( !hc );
+  rtems_test_assert( !hc );
 }
 
 /*

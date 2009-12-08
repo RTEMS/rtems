@@ -10,6 +10,8 @@
  *  $Id$
  */
 
+#include <assert.h>
+
 #define FATAL_ERROR_TEST_NAME            "11"
 #define FATAL_ERROR_DESCRIPTION          "asserting with non-NULL strings..."
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_RTEMS_API

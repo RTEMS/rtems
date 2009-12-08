@@ -42,13 +42,13 @@ rtems_task Init(
 
   puts( "Init - rtems_workspace_get_information - OK" );
   sb = rtems_workspace_get_information( &start );
-  assert( sb );
+  rtems_test_assert( sb );
 
   #if 0
     printf( "Init - workspace free = %d\n", start.Free.largest );
     printf( "Init - workspace free blocks = %d\n", start.Free.number );
   #endif
-  assert( start.Free.number == 1 );
+  rtems_test_assert( start.Free.number == 1 );
   to_alloc = start.Free.largest;
 
   /* find the largest we can actually allocate */
@@ -69,15 +69,15 @@ rtems_task Init(
    * Verify heap is still in same shape if we couldn't allocate a region
    */
   sb = rtems_workspace_get_information( &info );
-  assert( sb );
-  assert( info.Free.largest == start.Free.largest );
-  assert( info.Free.number  == start.Free.number  );
+  rtems_test_assert( sb );
+  rtems_test_assert( info.Free.largest == start.Free.largest );
+  rtems_test_assert( info.Free.number  == start.Free.number  );
 
   puts( "Init - rtems_region_create - auto-extend - RTEMS_UNSATISFIED" );
   while (1) {
 
     sb = rtems_workspace_allocate( to_alloc, &alloced );
-    assert( sb );
+    rtems_test_assert( sb );
 
     sc = rtems_region_create(
       rtems_build_name( 'R', 'N', '2', ' ' ),
@@ -107,9 +107,9 @@ rtems_task Init(
       printf( "Init - workspace free/blocks = %d/%d\n",
         info.Free.largest, info.Free.number );
     #endif
-    assert( sb );
-    assert( info.Free.largest == start.Free.largest );
-    assert( info.Free.number  == start.Free.number  );
+    rtems_test_assert( sb );
+    rtems_test_assert( info.Free.largest == start.Free.largest );
+    rtems_test_assert( info.Free.number  == start.Free.number  );
 
     to_alloc -= 8;
     if ( to_alloc == 0 )
@@ -124,7 +124,7 @@ rtems_task Init(
    */
   puts( "Init - rtems_region_delete - OK" );
   sc = rtems_region_delete( region2 );
-  assert( sc == 0 );
+  rtems_test_assert( sc == 0 );
 
   /*
    *  Although it is intuitive that after deleting the region the
@@ -139,9 +139,9 @@ rtems_task Init(
         printf( "Init - workspace free/blocks = %d/%d\n",
       info.Free.largest, info.Free.number );
     #endif
-    assert( sb );
-    assert( info.Free.largest == start.Free.largest );
-    assert( info.Free.number  == start.Free.number  );
+    rtems_test_assert( sb );
+    rtems_test_assert( info.Free.largest == start.Free.largest );
+    rtems_test_assert( info.Free.number  == start.Free.number  );
   #endif
 
   puts( "*** END OF TEST 64 ***" );

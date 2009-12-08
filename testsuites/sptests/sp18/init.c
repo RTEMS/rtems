@@ -26,13 +26,13 @@ rtems_task Init(
 
   puts( "Init - rtems_workspace_get_information - OK" );
   sb = rtems_workspace_get_information( &start );
-  assert( sb );
+  rtems_test_assert( sb );
 
   #if 0
     printf( "Init - workspace free = %d\n", start.Free.largest );
     printf( "Init - workspace free blocks = %d\n", start.Free.number );
   #endif
-  assert( start.Free.number == 1 );
+  rtems_test_assert( start.Free.number == 1 );
   stack_size = start.Free.largest;
 
   #if 0
@@ -60,9 +60,9 @@ rtems_task Init(
      * Verify heap is still in same shape if we couldn't allocate a task
      */
     sb = rtems_workspace_get_information( &info );
-    assert( sb );
-    assert( info.Free.largest == start.Free.largest );
-    assert( info.Free.number  == start.Free.number  );
+    rtems_test_assert( sb );
+    rtems_test_assert( info.Free.largest == start.Free.largest );
+    rtems_test_assert( info.Free.number  == start.Free.number  );
 
     stack_size -= 8;
     if ( stack_size <= RTEMS_MINIMUM_STACK_SIZE )
@@ -81,9 +81,9 @@ rtems_task Init(
 
   puts( "Init - verify workspace has same memory" );
   sb = rtems_workspace_get_information( &info );
-  assert( sb );
-  assert( info.Free.largest == start.Free.largest );
-  assert( info.Free.number  == start.Free.number  );
+  rtems_test_assert( sb );
+  rtems_test_assert( info.Free.largest == start.Free.largest );
+  rtems_test_assert( info.Free.number  == start.Free.number  );
 
   puts( "*** END OF TEST 18 ***" );
   rtems_test_exit(0);

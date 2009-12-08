@@ -270,24 +270,24 @@ rtems_task Init(
    */
 
   puts( "rtems_build_id - build an id to match init task" );
-  tmpId = rtems_build_id( OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS, 1, 1 ),
-  assert( tmpId == main_task );
+  tmpId = rtems_build_id( OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS, 1, 1 );
+  rtems_test_assert( tmpId == main_task );
 
   puts( "rtems_object_id_get_api - OK" );
   part = rtems_object_id_get_api( main_task );
-  assert( part == OBJECTS_CLASSIC_API );
+  rtems_test_assert( part == OBJECTS_CLASSIC_API );
 
   puts( "rtems_object_id_get_class - OK" );
   part = rtems_object_id_get_class( main_task );
-  assert( part == OBJECTS_RTEMS_TASKS );
+  rtems_test_assert( part == OBJECTS_RTEMS_TASKS );
 
   puts( "rtems_object_id_get_node - OK" );
   part = rtems_object_id_get_node( main_task );
-  assert( part == 1 );
+  rtems_test_assert( part == 1 );
 
   puts( "rtems_object_id_get_index - OK" );
   part = rtems_object_id_get_index( main_task );
-  assert( part == 1 );
+  rtems_test_assert( part == 1 );
 
   /*
    * Start another screen and do the API/Class min/max routines

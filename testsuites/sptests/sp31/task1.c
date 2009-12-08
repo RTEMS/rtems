@@ -140,7 +140,7 @@ rtems_task Task_1(
     info.start_time + info.initial );
   printf( "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
     schedule_time() );
-  assert(  (info.start_time + info.initial) == schedule_time() );
+  rtems_test_assert(  (info.start_time + info.initial) == schedule_time() );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
   status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
@@ -157,7 +157,7 @@ rtems_task Task_1(
     info.start_time + info.initial );
   printf( "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
     schedule_time() );
-  assert(  (info.start_time + info.initial) == schedule_time() );
+  rtems_test_assert(  (info.start_time + info.initial) == schedule_time() );
 
   puts( "TA1 - rtems_timer_cancel - timer 1" );
   status = rtems_timer_cancel( tmid );

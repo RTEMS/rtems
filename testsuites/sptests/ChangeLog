@@ -1,3 +1,11 @@
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp18/init.c, sp31/task1.c, sp43/init.c, sp63/init.c, sp64/init.c,
+	spfatal10/testcase.h, spfatal11/testcase.h, spobjgetnext/init.c,
+	spwkspace/init.c: Use rtems_test_assert() consistently instead of
+	system assert(). rtems_test_assert() is designed to integrate into
+	the RTEMS test suite infrastructure.
+
 2009-12-04	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* sp31/sp31.scn, sp31/task1.c, spintrcritical17/init.c: New test
