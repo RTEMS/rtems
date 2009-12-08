@@ -46,46 +46,39 @@ User_extensions_routine bsp_fatal_error_occurred(
     char strbuf[254];   /* In case count is bumped up by one by 167Bug */
   } my_p_str;
 
-  my_p_str.index = 0;
-  my_p_str.index += strcat(
-      my_p_str.strbuf + my_p_str.index,
+  strcat(my_p_str.strbuf,
       "\r\nRTEMS Fatal Error Occurred:\r\n    the_source  = " );
 
   switch ( the_source ) {
     case INTERNAL_ERROR_CORE:
-      my_p_str.index += strcat(
-          my_p_str.strbuf + my_p_str.index,
+      strcat(my_p_str.strbuf,
           "INTERNAL_ERROR_CORE\r\n    is_internal = " );
       break;
 
     case INTERNAL_ERROR_RTEMS_API:
-      my_p_str.index += strcat(
-          my_p_str.strbuf + my_p_str.index,
+      strcat(my_p_str.strbuf,
           "INTERNAL_ERROR_RTEMS_API\r\n    is_internal = " );
       break;
 
     case INTERNAL_ERROR_POSIX_API:
-      my_p_str.index += strcat(
-          my_p_str.strbuf + my_p_str.index,
+      strcat(my_p_str.strbuf,
           "INTERNAL_ERROR_POSIX_API\r\n    is_internal = " );
       break;
 
     default:
-      my_p_str.index += strcat(
-          my_p_str.strbuf + my_p_str.index,
+      strcat(my_p_str.strbuf,
           "UNKNOWN\r\n    is_internal = " );
       break;
   }
 
   if ( is_internal )
-    my_p_str.index += strcat(
-        my_p_str.strbuf + my_p_str.index,
+    strcat(my_p_str.strbuf,
         "TRUE\r\n    the_error   = 0x|10,8|\r\n" );
   else
-    my_p_str.index += strcat(
-        my_p_str.strbuf + my_p_str.index,
+    strcat(my_p_str.strbuf,
         "FALSE\r\n    the_error   = 0x|10,8|\r\n" );
 
+  my_p_str.index = strlen(my_p_str.strbuf);
   lcsr->intr_ena = 0;               /* disable interrupts */
   m68k_set_vbr(0xFFE00000);         /* restore 167Bug vectors */
 

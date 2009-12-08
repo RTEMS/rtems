@@ -1,3 +1,8 @@
+2009-12-08	Eric Norum <wenorum@lbl.gov>
+
+	PR 1479/bsps
+	* fatal/bspfatal.c: Complete strcat conversion.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/mvme167.cfg: Remove RTEMS_BSP_FAMILY.
