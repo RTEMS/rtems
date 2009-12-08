@@ -67,7 +67,7 @@ typedef struct i2c_message {
 #define I2C_MSG_ERRSKIP (0x04)  /* Skip message if last transfered message
                                    is failed */
 /* Type for function which is called when transfer over I2C bus is finished */
-typedef void (*i2c_transfer_done) (uint32_t         arg);
+typedef void (*i2c_transfer_done) (void *arg);
 
 /* i2c_initialize --
  *     I2C driver initialization. This function usually called on device
