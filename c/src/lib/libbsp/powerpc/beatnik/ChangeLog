@@ -1,5 +1,10 @@
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* include/bsp.h: BSP should not define
+	CONFIGURE_NUMBER_OF_TERMIOS_PORTS.
+
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* network/if_em/Makefile, network/if_gfe/Makefile: Removed.
 
 2009-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>

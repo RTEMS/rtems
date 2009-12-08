@@ -59,16 +59,12 @@ BSP_getDiscoveryVersion(int assertion);
 
 /*
  *  confdefs.h overrides for this BSP:
- *   - termios serial ports (defaults to 1)
  *   - Interrupt stack space is not minimum if defined.
  */
-
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 #define BSP_INTERRUPT_STACK_SIZE          (16 * 1024)
 
 /*
  *  base address definitions for several devices
- *
  */
 #define BSP_MV64x60_BASE    		(0xf1000000)
 #define BSP_MV64x60_DEV1_BASE		(0xf1100000)
