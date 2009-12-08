@@ -32,6 +32,8 @@
 #include <bsp.h>
 #include "mcf5206/mcf5206e.h"
 
+extern void CopyDataClearBSSAndStart(unsigned long ramsize);
+
 #define m68k_set_cacr( _cacr ) \
   asm volatile ( "movec %0,%%cacr\n\t" \
                  "nop\n" \
@@ -80,7 +82,6 @@
 void
 Init5206e(void)
 {
-    extern void CopyDataClearBSSAndStart(unsigned long ramsize);
 
     /* Set Module Base Address register */
     m68k_set_mbar((MBAR & MCF5206E_MBAR_BA) | MCF5206E_MBAR_V);

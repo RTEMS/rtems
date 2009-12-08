@@ -1,5 +1,10 @@
 2009-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* startup/init5206e.c: Make prototype of CopyDataClearBSSAndStart
+	global.
+
+2009-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* include/i2c.h (i2c_transfer_done): Fix type mismatch.
 	* tod/ds1307.c (ds1307_set_time): Fix broken prototype.
 
