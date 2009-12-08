@@ -1,3 +1,7 @@
+2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* network/if_em/Makefile, network/if_gfe/Makefile: Removed.
+
 2009-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, preinstall.am: Account for coverhd.h and tm27.h. Use
