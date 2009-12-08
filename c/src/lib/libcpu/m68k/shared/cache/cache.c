@@ -7,12 +7,12 @@
 #include <rtems.h>
 #include "cache_.h"
 
-/*  
+/*
  *  Since the cacr is common to all mc680x0, provide macros
  *  for masking values in that register.
  */
 
-/* 
+/*
  *  Used to clear bits in the cacr.
  */
 #define _CPU_CACR_AND(mask)                                        \
@@ -26,7 +26,7 @@
   }
 
 
-/*  
+/*
  *  Used to set bits in the cacr.
  */
 #define _CPU_CACR_OR(mask)                                         \
@@ -39,7 +39,7 @@
    : "=d" (_ctl) : "0" (_ctl), "d" (_value) : "%%cc" );            \
   }
 
-   
+
 /*
  * CACHE MANAGER: The following functions are CPU-specific.
  * They provide the basic implementation for the rtems_* cache
