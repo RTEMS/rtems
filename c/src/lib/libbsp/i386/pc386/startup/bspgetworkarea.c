@@ -13,8 +13,13 @@
  *  $Id$
  */
 
+/* #define BSP_GET_WORK_AREA_DEBUG */
 #include <bsp.h>
 #include <bsp/bootcard.h>
+
+#ifdef BSP_GET_WORK_AREA_DEBUG
+  #include <rtems/bspIo.h>
+#endif
 
 /*
  *  These are provided by the linkcmds.
@@ -74,6 +79,9 @@ void bsp_size_memory(void)
        (_boot_multiboot_info.flags & 1) &&
        _boot_multiboot_info.mem_upper ) {
     bsp_mem_size = _boot_multiboot_info.mem_upper * 1024;
+    #ifdef BSP_GET_WORK_AREA_DEBUG
+      printk( "Multiboot info says we have 0x%08x\n", bsp_mem_size );
+    #endif
   }
 
   if ( (uintptr_t) RamSize == (uintptr_t) 0xFFFFFFFF ) {
@@ -89,16 +97,21 @@ void bsp_size_memory(void)
 
     for(i=lowest; i<=2048; i++) {
       topAddr = i*1024*1024 - 4;
-      val =  *(uint32_t*)topAddr;
+      val =  *(volatile uint32_t*)topAddr;
       if (val != topAddr) {
         break;
       }
     }
 
     topAddr = (i-1)*1024*1024 - 4;
+    #ifdef BSP_GET_WORK_AREA_DEBUG
+      printk( "Dynamically sized to 0x%08x\n", topAddr );
+    #endif
   } else {
-    printk( "hardcoded\n" );
     topAddr = (uintptr_t) RamSize;
+    #ifdef BSP_GET_WORK_AREA_DEBUG
+      printk( "hardcoded to 0x%08x\n", topAddr );
+    #endif
   }
 
   bsp_mem_size = topAddr;
@@ -120,10 +133,13 @@ void bsp_get_work_area(
   *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
   *heap_size       = (uintptr_t) HeapSize;
 
-  #if 0
+  #ifdef BSP_GET_WORK_AREA_DEBUG
+    printk( "bsp_mem_size = 0x%08x\n", bsp_mem_size );
+    printk( "rtemsFreeMemStart = 0x%08x\n", rtemsFreeMemStart );
     printk( "WorkArea Base = %p\n", *work_area_start );
     printk( "WorkArea Size = 0x%08x\n", *work_area_size );
     printk( "C Program Heap Base = %p\n", *heap_start );
     printk( "C Program Heap Size = 0x%08x\n", *heap_size );
+    printk( "End of WorkArea = %p\n", *work_area_start +  *work_area_size );
   #endif
 }

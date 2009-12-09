@@ -1,3 +1,11 @@
+2009-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspgetworkarea.c: Add debug printk's.
+	* startup/linkcmds: Using "-Wl,--defsym -Wl,RamSize=0x1000000"
+	results in _RamSize being defined.  Handle this properly.
+
+
+
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: BSP should not define
