@@ -1,3 +1,11 @@
+2009-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h, startup/bspgetworkarea.c: Rework bsp_size_memory() to
+	ensure that multiboot information regarding memory size is used as
+	the primary source. This was broken in the move to supporting a
+	unified workspace. It worked this way in 4.9 so this was a
+	regression.
+
 2009-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspgetworkarea.c: Add debug printk's.

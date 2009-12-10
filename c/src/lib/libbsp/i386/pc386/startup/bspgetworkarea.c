@@ -41,36 +41,29 @@ struct multiboot_info {
 extern struct multiboot_info _boot_multiboot_info;
 
 /*
+ *  This is the first address of the memory we can use for the RTEMS
+ *  Work Area.
+ */ 
+static uintptr_t rtemsWorkAreaStart;
+
+/*
  * Board's memory size easily be overridden by application.
  */
-uint32_t bsp_mem_size = 0;
+static uint32_t bsp_mem_size = 0;
 
 /* Size of stack used during initialization. Defined in 'start.s'.  */
 extern uint32_t _stack_size;
 
-/* Address of start of free memory. */
-uintptr_t rtemsFreeMemStart;
-
-
 void bsp_size_memory(void)
 {
   uintptr_t topAddr;
-  uintptr_t lowest;
-  uint32_t  val;
-  int       i;
 
-  /* set the value of start of free memory. */
-  rtemsFreeMemStart = (uint32_t)WorkAreaBase + _stack_size;
+  /* Set the value of start of free memory. */
+  rtemsWorkAreaStart = (uint32_t)WorkAreaBase + _stack_size;
 
-  /* Place RTEMS workspace at beginning of free memory. */
-
-  if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
-    rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-
-  /* find the lowest 1M boundary to probe */
-  lowest = ((rtemsFreeMemStart + (1<<20)) >> 20) + 1;
-  if ( lowest  < 2 )
-      lowest = 2;
+  /* Align the RTEMS Work Area at beginning of free memory. */
+  if (rtemsWorkAreaStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
+    rtemsWorkAreaStart = (rtemsWorkAreaStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
   /* The memory detection algorithm is very crude; try
    * to use multiboot info, if possible (set from start.S)
@@ -78,18 +71,29 @@ void bsp_size_memory(void)
   if ( ((uintptr_t)RamSize == (uintptr_t) 0xFFFFFFFF)  &&
        (_boot_multiboot_info.flags & 1) &&
        _boot_multiboot_info.mem_upper ) {
-    bsp_mem_size = _boot_multiboot_info.mem_upper * 1024;
+    topAddr = _boot_multiboot_info.mem_upper * 1024;
     #ifdef BSP_GET_WORK_AREA_DEBUG
-      printk( "Multiboot info says we have 0x%08x\n", bsp_mem_size );
+      printk( "Multiboot info says we have 0x%08x\n", topAddr );
     #endif
-  }
+  } else if ( (uintptr_t) RamSize == (uintptr_t) 0xFFFFFFFF ) {
+    uintptr_t lowest;
+    uint32_t  val;
+    int       i;
 
-  if ( (uintptr_t) RamSize == (uintptr_t) 0xFFFFFFFF ) {
     /*
      * We have to dynamically size memory. Memory size can be anything
-     * between no less than 2M and 2048M.
-     * let us first write
+     * between no less than 2M and 2048M.  If we can write a value to
+     * an address and read the same value back, then the memory is there.
+     *
+     * WARNING: This can detect memory which should be reserved for
+     *          graphics controllers which share the CPU's RAM.
      */
+
+    /* find the lowest 1M boundary to probe */
+    lowest = ((rtemsWorkAreaStart + (1<<20)) >> 20) + 1;
+    if ( lowest  < 2 )
+      lowest = 2;
+
     for (i=2048; i>=lowest; i--) {
       topAddr = i*1024*1024 - 4;
       *(volatile uint32_t*)topAddr = topAddr;
@@ -103,7 +107,7 @@ void bsp_size_memory(void)
       }
     }
 
-    topAddr = (i-1)*1024*1024 - 4;
+    topAddr = (i-1)*1024*1024;
     #ifdef BSP_GET_WORK_AREA_DEBUG
       printk( "Dynamically sized to 0x%08x\n", topAddr );
     #endif
@@ -116,6 +120,7 @@ void bsp_size_memory(void)
 
   bsp_mem_size = topAddr;
 }
+
 /*
  *  This method returns the base address and size of the area which
  *  is to be allocated between the RTEMS Workspace and the C Program
@@ -128,14 +133,14 @@ void bsp_get_work_area(
   uintptr_t  *heap_size
 )
 {
-  *work_area_start = (void *) rtemsFreeMemStart;
-  *work_area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsFreeMemStart;
+  *work_area_start = (void *) rtemsWorkAreaStart;
+  *work_area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsWorkAreaStart;
   *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
   *heap_size       = (uintptr_t) HeapSize;
 
   #ifdef BSP_GET_WORK_AREA_DEBUG
     printk( "bsp_mem_size = 0x%08x\n", bsp_mem_size );
-    printk( "rtemsFreeMemStart = 0x%08x\n", rtemsFreeMemStart );
+    printk( "rtemsWorkAreaStart = 0x%08x\n", rtemsWorkAreaStart );
     printk( "WorkArea Base = %p\n", *work_area_start );
     printk( "WorkArea Size = 0x%08x\n", *work_area_size );
     printk( "C Program Heap Base = %p\n", *heap_start );

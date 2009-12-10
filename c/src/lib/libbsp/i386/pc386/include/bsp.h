@@ -162,10 +162,6 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 extern interrupt_gate_descriptor Interrupt_descriptor_table[IDT_SIZE];
 extern segment_descriptors Global_descriptor_table   [GDT_SIZE];
 
-extern uint32_t                  rtemsFreeMemStart;
-  /* Address of start of free memory - should be used when creating new
-     partitions or regions and updated afterwards. */
-
 /*-------------------------------------------------------------------------+
 | Function Prototypes.
 +--------------------------------------------------------------------------*/
