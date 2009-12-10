@@ -17,10 +17,12 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_id                            period_id;
-  rtems_name                          period_name;
-  rtems_rate_monotonic_period_status  period_status;
-  rtems_status_code                   status;
+  rtems_id                                period_id;
+  rtems_name                              period_name;
+  rtems_rate_monotonic_period_status      period_status;
+  rtems_status_code                       status;
+  rtems_rate_monotonic_period_statistics  statistics;
+  int                                     i;
 
   period_name = rtems_build_name('P','E','R','1');
 
@@ -88,9 +90,7 @@ rtems_task Init(
   /*
    * Check normal get_status results.
    */
-  puts(
-    "rtems_rate_monotonic_get_status - verify values of an active period"
-  );
+  puts( "rtems_rate_monotonic_get_status - verify values of an active period" );
   rtems_test_spin_until_next_tick();
   status = rtems_rate_monotonic_period( period_id, 100 );
   directive_failed( status, "rate_monotonic_period" );
@@ -140,7 +140,42 @@ rtems_task Init(
     rtems_test_assert( period_status.executed_since_last_period <= 12 );
   #endif
 
-  puts("*** END OF TEST 69 ***");
+  /* ensure the missed periods are properly accounted for */
+  puts( "rtems_rate_monotonic_cancel -  OK" );
+  status = rtems_rate_monotonic_cancel( period_id );
+  directive_failed( status, "rate_monotonic_cancel" );
+
+  puts( "Testing statistics on missed periods" );
+  rtems_test_spin_until_next_tick();
+  status = rtems_rate_monotonic_period( period_id, 50 );
+  directive_failed( status, "rate_monotonic_period above loop" );
+
+  for ( i=1 ; i <= 3 ; i++ ) {
+    status = rtems_task_wake_after( 100 );
+    directive_failed( status, "rtems_task_wake_after(100)" );
+
+    rtems_test_spin_until_next_tick();
+    status = rtems_rate_monotonic_period( period_id, 50 );
+    fatal_directive_status(
+      status,
+      RTEMS_TIMEOUT,
+      "rtems_rate_monotonic_period 2-n"
+    );
+
+    status = rtems_rate_monotonic_get_statistics( period_id, &statistics );
+    directive_failed( status, "rate_monotonic_get_statistics" );
+    if ( statistics.missed_count != i ) {
+      printf(
+        "Expected %d got %d for missed_count\n",
+        i,
+        statistics.missed_count
+      );
+    }
+   
+    rtems_test_assert( statistics.missed_count == i );
+  }
+  
+  puts( "*** END OF TEST 69 ***" );
 
   rtems_test_exit(0);
 }

@@ -23,3 +23,4 @@ concepts:
 + Ensure that RTEMS_NOT_DEFINED is returned if the cpu usage is reset after
   a period is initiated.
 + Verify the correctness of the status values returned on an active period.
++ Ensure the missed period count is properly maintained.

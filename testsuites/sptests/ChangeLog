@@ -1,5 +1,10 @@
 2009-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp69/init.c, sp69/sp69.doc, sp69/sp69.scn: Add test for statistics on
+	expired periods. This detected the recently introduced PR1480.
+
+2009-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp69/.cvsignore: New file.
 
 2009-12-08	Glenn Humphrey <glenn.humphrey@OARcorp.com>
