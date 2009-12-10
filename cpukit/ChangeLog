@@ -1,3 +1,10 @@
+2009-12-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1480/cpukit
+	* rtems/src/ratemonperiod.c: Use _Rate_monotonic_Update_statistics()
+	when period is expired, not _Rate_monotonic_Initiate_statistics().
+	The cound of missed periods was never updated.
+
 2009-12-07	Cindy Cicalese <cicalese@mitre.org>
 
 	PR 1477/cpukit
