@@ -360,8 +360,10 @@ int timer_settime(
              _POSIX_Timer_TSR,
              ptimer
            );
-           if ( !activated )
+           if ( !activated ) {
+             _Thread_Enable_dispatch();
              return 0;
+           }
 
            /* The timer has been started and is running */
            /* return the old ones in "ovalue" */
