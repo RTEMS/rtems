@@ -439,12 +439,12 @@ static void bsp_out_char (char c)
 
 BSP_output_char_function_type BSP_output_char = bsp_out_char;
 
-static char bsp_in_char(void)
+static int bsp_in_char(void)
 {
   int tmp;
 
   while ((tmp = console_inbyte_nonblocking(0)) < 0);
-  return (char) tmp;
+  return tmp;
 }
 
 BSP_polling_getchar_function_type BSP_poll_char = bsp_in_char;

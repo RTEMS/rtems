@@ -1,3 +1,7 @@
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c: Let bsp_in_char return int.
+
 2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: sparc/shared/bspstart.c was really leon2 specific. So
