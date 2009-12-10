@@ -35,10 +35,10 @@ void console_initialize_hardware(void);
  *  Console Termios Support Entry Points
  *
  */
-int console_write_support (
+ssize_t console_write_support (
   int         minor,
   const char *bufarg,
-  int         len
+  size_t      len
 )
 {
   int nwrite = 0;
