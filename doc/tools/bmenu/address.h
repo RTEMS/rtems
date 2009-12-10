@@ -25,8 +25,8 @@
  *  converted to an access type before being used further.
  */
 
-STATIC INLINE void *_Addresses_Add_offset ( 
-  void       *base, 
+STATIC INLINE void *_Addresses_Add_offset (
+  void       *base,
   size_t      offset
 );
 

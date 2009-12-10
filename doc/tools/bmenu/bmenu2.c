@@ -1,13 +1,13 @@
 /*
  *  main.c
- *  
+ *
  *  This program takes a texinfo file without node and menu commands,
  *  build those commands and inserts them.
  *
  *  It works by reading the input file into a linked list of lines
  *  and then performing sweeps on that list until all formatting is
- *  complete.  After the program is run, there is still a little 
- *  clean up to be performed by hand.  The following have to be fixed 
+ *  complete.  After the program is run, there is still a little
+ *  clean up to be performed by hand.  The following have to be fixed
  *  by hand:
  *    + previous of the first node
  *    + next of the last node
@@ -50,14 +50,14 @@ Chain_Control    Lines;
 
 FILE           *OutFile;
 
-static void ProcessFile2( 
+static void ProcessFile2(
   FILE *infile,
   FILE *outfile );
 static void PrintFile2(
   FILE *outfile );
-static void ReadFileIntoChain2( 
+static void ReadFileIntoChain2(
   FILE *InFile );
-  
+
 /*************************************************************************
  *************************************************************************
  *****                 DATA TYPES AND CONSTANT TABLES                *****
@@ -69,7 +69,7 @@ static void ReadFileIntoChain2(
 
 char *Usage_Strings[] = {
   "\n",
-  "usage: cmd [-cv] [-p prev] [-n next] [-u up] \n", 
+  "usage: cmd [-cv] [-p prev] [-n next] [-u up] \n",
   "\n",
   "EOF"
 };
@@ -81,7 +81,7 @@ char *Usage_Strings[] = {
 
 #define PAGE_SEPARATOR                            "#PAGE"
 
-/* 
+/*
  *  Section Delimiter Keywords
  */
 
@@ -90,7 +90,7 @@ char *Usage_Strings[] = {
 /*
  *  Level indicates where in the format the delimiter is allowed to occur.
  *    1 indicates a major section divider (e.g. "ATTRIBUTE DESCRIPTIONS:").
- *    2 indicates a subsection (e.g. "ATTRIBUTE:"). 
+ *    2 indicates a subsection (e.g. "ATTRIBUTE:").
  *    3 indicates a heading (e.g. "DESCRIPTION:").
  */
 
@@ -99,7 +99,7 @@ char *Usage_Strings[] = {
 #define SUBSECTION      2
 #define SUBSUBSECTION   3
 #define HEADING         4
-  
+
 typedef enum {
   UNUSED,                            /* dummy 0 slot */
   KEYWORD_CHAPTER,
@@ -113,7 +113,7 @@ typedef enum {
   KEYWORD_LOWER,
   KEYWORD_OTHER,
   KEYWORD_END
-  
+
 }  Keyword_indices_t;
 
 #define KEYWORD_FIRST KEYOWRD_CHAPTER
@@ -187,7 +187,7 @@ Keyword_info_t Keywords[] = {
  *  exit_application
  */
 
-void exit_application( 
+void exit_application(
   int status
 )
 {
@@ -195,7 +195,7 @@ void exit_application(
 /*
   fprintf( stderr, "*** Error encountered on line %d ***\n", CurrentLine );
 */
-  fclose( OutFile ); 
+  fclose( OutFile );
   exit( status );
 }
 
@@ -223,12 +223,12 @@ void PrintLine(
 #if 0
   fprintf( stderr, "%s\n", line->Contents );
 #else
-  /* 
+  /*
    *  Include some debugging information
    */
   fprintf(
     stderr,
-    "<%d,%d,%d>:%s\n", 
+    "<%d,%d,%d>:%s\n",
     line->keyword,
     line->format,
     line->level,
@@ -274,11 +274,11 @@ Line_Control *AllocateLine( void )
     new_line = (Line_Control *) _Chain_Get( &Line_Pool );
     assert( new_line );
   }
- 
+
 /*
  *  This is commented out because although it is helpful during debug,
  *  it consumes a significant percentage of the program's execution time.
- 
+
   memset( new_line->Contents, '\0', sizeof( new_line->Contents ) );
 */
   new_line->number = -1;
@@ -314,14 +314,14 @@ Line_Control *DeleteLine(
 )
 {
   Line_Control *next;
-  
-  next = (Line_Control *)line->Node.next; 
+
+  next = (Line_Control *)line->Node.next;
   _Chain_Extract( &line->Node );
   FreeLine( line );
   return next;
 }
 
-/* 
+/*
  *  PrintSurroundingLines
  */
 
@@ -335,8 +335,8 @@ void PrintSurroundingLines(
   int           real_backward;
   Line_Control *local;
 
-  for ( local=line, real_backward=0, i=1 ; 
-        i<=backward ; 
+  for ( local=line, real_backward=0, i=1 ;
+        i<=backward ;
         i++, real_backward++ ) {
     if ( &local->Node == Lines.first )
       break;
@@ -347,7 +347,7 @@ void PrintSurroundingLines(
     PrintLine( local );
     local = (Line_Control *) local->Node.next;
   }
- 
+
   PrintLine( local );
 
   for ( i=1 ; i<=forward ; i++ ) {
@@ -356,7 +356,7 @@ void PrintSurroundingLines(
       break;
     PrintLine( local );
   }
- 
+
 }
 
 /*
@@ -388,7 +388,7 @@ void LineCopyFromRight(
 {
   char *p;
 
-  for ( p=line->Contents ; *p != ' ' ; p++ ) 
+  for ( p=line->Contents ; *p != ' ' ; p++ )
     ;
   p++;  /* skip the ' ' */
   for ( ; isspace( *p ) ; p++ )
@@ -418,7 +418,7 @@ void LineCopySectionName(
       ;
   }
 
-  for ( ; *p ; ) 
+  for ( ; *p ; )
     *d++ = *p++;
 
   *d = '\0';
@@ -458,13 +458,13 @@ int main(
         NodeNameIncludesChapter = 0;
         break;
       case 'p':
-        DocsPreviousNode = strdup(optarg); 
+        DocsPreviousNode = strdup(optarg);
         break;
       case 'n':
-        DocsNextNode = strdup(optarg); 
+        DocsNextNode = strdup(optarg);
         break;
       case 'u':
-        DocsUpNode = strdup(optarg); 
+        DocsUpNode = strdup(optarg);
         break;
 
       case '?':
@@ -478,14 +478,14 @@ int main(
      usage();
      return 0 ;
   }
-  
+
   if ( Verbose )
     fprintf( stderr, "Arguments successfully parsed\n" );
 
   FillLinePool();
 
-  ProcessFile2( stdin, stdout );  
-   
+  ProcessFile2( stdin, stdout );
+
   if ( Verbose )
     fprintf( stderr, "Exitting\n" );
 
@@ -528,20 +528,20 @@ void ProcessFile2(
 
    FormatToTexinfo();
 
-   if ( Verbose ) 
+   if ( Verbose )
      fprintf( stderr, "-------->FILE FORMATTED TO TEXINFO\n" );
 
    /*
-    *  Print the file 
+    *  Print the file
     */
 
    PrintFile2( outfile );
 
-   if ( Verbose ) 
+   if ( Verbose )
      fprintf( stderr, "-------->FILE PRINTED\n" );
 
    /*
-    *  Clean Up 
+    *  Clean Up
     */
 
    ReleaseFile();
@@ -566,7 +566,7 @@ void usage( void )
  *  ReadFileIntoChain
  */
 
-void ReadFileIntoChain2( 
+void ReadFileIntoChain2(
   FILE *InFile
 )
 {
@@ -589,21 +589,21 @@ void ReadFileIntoChain2(
 
    for ( ;; ) {
       line = fgets( Buffer, BUFFER_SIZE, InFile );
-      if ( !line ) 
+      if ( !line )
         break;
 
       Buffer[ strlen( Buffer ) - 1 ] = '\0';
 
       new_line = AllocateLine();
- 
+
       strcpy( new_line->Contents, Buffer );
 
       new_line->number = ++line_count;
- 
-      _Chain_Append( &Lines, &new_line->Node );
-   } 
 
-   fclose( InFile ); 
+      _Chain_Append( &Lines, &new_line->Node );
+   }
+
+   fclose( InFile );
 }
 
 /*
@@ -616,19 +616,19 @@ void StripBlanks( void )
   Keyword_indices_t  index;
   int                indentation;
   int                length;
- 
+
   for ( line = (Line_Control *) Lines.first ;
         !_Chain_Is_last( &line->Node ) ;
         line = (Line_Control *) line->Node.next
         ) {
 
     /*
-     *  Strip white space from the end of each line 
+     *  Strip white space from the end of each line
      */
 
     length = strlen( line->Contents );
 
-    while ( isspace( line->Contents[ --length ] ) ) 
+    while ( isspace( line->Contents[ --length ] ) )
       line->Contents[ length ] = '\0';
 
     if ( strstr( line->Contents, "@chapter" ) )
@@ -651,7 +651,7 @@ void StripBlanks( void )
       line->keyword = KEYWORD_LOWER;
     else
       line->keyword = KEYWORD_OTHER;
-    
+
   }
   line = AllocateLine();
   line->keyword = KEYWORD_END;
@@ -679,7 +679,7 @@ boolean strIsAllSpace(
  *  BuildTexinfoNodes
  */
 
-void BuildTexinfoNodes( void ) 
+void BuildTexinfoNodes( void )
 {
   char               Buffer[ BUFFER_SIZE ];
   Line_Control      *line;
@@ -717,7 +717,7 @@ void BuildTexinfoNodes( void )
          line->keyword == KEYWORD_APPENDIX ||
          line->keyword == KEYWORD_PREFACE ||
          line->keyword == KEYWORD_CHAPHEADING ) {
-    
+
       strcpy( ChapterName, NodeName );
 
     } else if ( NodeNameIncludesChapter ) {
@@ -828,8 +828,8 @@ continue_menu_loop:
 
         if ( (up_node->level == -1) )
           continue;
-          
-        if ( up_node->level == (line->level - 1) ) { 
+
+        if ( up_node->level == (line->level - 1) ) {
           LineCopySectionName( up_node, Buffer );
           if (NodeNameIncludesChapter) {
             if (!strcmp(ChapterName, Buffer))
@@ -899,7 +899,7 @@ void FormatToTexinfo( void )
     fprintf( stderr, "-------->INSERTING TEXINFO MENUS\n" );
 
   for ( line = (Line_Control *) Lines.first ;
-        !_Chain_Is_last( &line->Node ) ; 
+        !_Chain_Is_last( &line->Node ) ;
         line = (Line_Control *) line->Node.next ) {
 
     switch (line->keyword) {
@@ -959,7 +959,7 @@ void PrintFile2(
   assert( OutFile );
 
   for ( line = (Line_Control *) Lines.first ;
-        !_Chain_Is_last( &line->Node ) ; 
+        !_Chain_Is_last( &line->Node ) ;
         line = (Line_Control *) line->Node.next ) {
     fprintf( OutFile, "%s\n", line->Contents );
 /*
@@ -978,7 +978,7 @@ void PrintFile2(
  *  DumpList
  */
 
-void DumpList( 
+void DumpList(
   Chain_Control  *the_list
 )
 {
@@ -987,7 +987,7 @@ void DumpList(
   fprintf( stderr, "---> Dumping list (%p)\n", the_list );
 
   for ( line = (Line_Control *) the_list->first ;
-      !_Chain_Is_last( &line->Node ) ; 
+      !_Chain_Is_last( &line->Node ) ;
       line = (Line_Control *) line->Node.next ) {
     /* if (line->level != -1) */
       PrintLine( line );
@@ -1005,7 +1005,7 @@ void ReleaseFile()
    Line_Control *next;
 
    for ( line = (Line_Control *) Lines.first ;
-         !_Chain_Is_last( &line->Node ) ; 
+         !_Chain_Is_last( &line->Node ) ;
        ) {
      next = (Line_Control *) line->Node.next;
      line = next;
@@ -1038,7 +1038,7 @@ void strtoInitialCaps(
 
     for ( ; *source && !isspace( *source ) ; source++ )
       *destination++ = tolower( *source );
-     
+
     if ( !*source )
       break;
   }

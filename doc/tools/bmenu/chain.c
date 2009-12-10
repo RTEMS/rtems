@@ -16,7 +16,7 @@
  *
  *  _Chain_Initialize
  *
- *  This kernel routine initializes a doubly linked chain. 
+ *  This kernel routine initializes a doubly linked chain.
  *
  *  Input parameters:
  *    the_chain        - pointer to chain header
@@ -27,14 +27,14 @@
  *  Output parameters:  NONE
  */
 
-void _Chain_Initialize( 
+void _Chain_Initialize(
   Chain_Control *the_chain,
   void           *starting_address,
   size_t         number_nodes,
   size_t         node_size
 )
 {
-  size_t  count; 
+  size_t  count;
   Chain_Node *current;
   Chain_Node *next;
 
@@ -62,11 +62,11 @@ void _Chain_Initialize(
  *
  *  Input parameters:
  *    the_chain - pointer to chain header
- * 
- *  Output parameters: 
+ *
+ *  Output parameters:
  *    return_node - pointer to node in chain allocated
  *    CHAIN_END   - if no nodes available
- * 
+ *
  *  INTERRUPT LATENCY:
  *    only case
  */
@@ -78,7 +78,7 @@ Chain_Node *_Chain_Get(
   Chain_Node *return_node;
 
   return_node = NULL;
-    if ( !_Chain_Is_empty( the_chain ) ) 
+    if ( !_Chain_Is_empty( the_chain ) )
       return_node = _Chain_Get_first_unprotected( the_chain );
   return return_node;
 }
@@ -92,14 +92,14 @@ Chain_Node *_Chain_Get(
  *  Input parameters:
  *    the_chain - pointer to chain header
  *    node      - address of node to put at rear of chain
- * 
+ *
  *  Output parameters:  NONE
- * 
+ *
  *  INTERRUPT LATENCY:
  *    only case
  */
 
-void _Chain_Append( 
+void _Chain_Append(
   Chain_Control *the_chain,
   Chain_Node    *node
 )
@@ -115,17 +115,17 @@ void _Chain_Append(
  *
  *  Input parameters:
  *    node - pointer to node in chain to be deleted
- * 
+ *
  *  Output parameters:  NONE
- * 
+ *
  *  INTERRUPT LATENCY:
  *    only case
  */
 
-void _Chain_Extract( 
+void _Chain_Extract(
   Chain_Node *node
 )
-{ 
+{
     _Chain_Extract_unprotected( node );
 }
 
@@ -139,14 +139,14 @@ void _Chain_Extract(
  *  Input parameters:
  *    after_node - pointer to node in chain to be inserted after
  *    node       - pointer to node to be inserted
- * 
+ *
  *  Output parameters:  NONE
- * 
+ *
  *  INTERRUPT LATENCY:
  *    only case
  */
 
-void _Chain_Insert( 
+void _Chain_Insert(
   Chain_Node *after_node,
   Chain_Node *node
 )
@@ -156,17 +156,17 @@ void _Chain_Insert(
 
 /*PAGE
  *
- *  _Chain_Insert_chain 
+ *  _Chain_Insert_chain
  *
  *  This routine inserts a chain after the specified node in another
- *  chain. It is assumed that the insert after node is not on the 
- *  second chain. 
+ *  chain. It is assumed that the insert after node is not on the
+ *  second chain.
  *
  *  Input parameters:
  *    insert_after - insert the chain after this node
  *    to_insert    - the chain to insert
- */ 
- 
+ */
+
 void _Chain_Insert_chain(
   Chain_Node    *insert_after,
   Chain_Control *to_insert

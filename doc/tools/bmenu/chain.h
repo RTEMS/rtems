@@ -1,5 +1,5 @@
 /*  chain.h
- * 
+ *
  *  This include file contains all the constants and structures associated
  *  with the Doubly Linked Chain Handler.
  *
@@ -43,11 +43,11 @@ struct Chain_Node_struct {
  *
  *  NOTE:  This implementation does not require special checks for
  *         manipulating the first and last elements on the chain.
- *         To accomplish this the chain control structure is 
+ *         To accomplish this the chain control structure is
  *         treated as two overlapping chain nodes.  The permanent
  *         head of the chain overlays a node structure on the
  *         first and permanent_null fields.  The permanent tail
- *         of the chain overlays a node structure on the 
+ *         of the chain overlays a node structure on the
  *         permanent_null and last elements of the structure.
  */
 
@@ -57,7 +57,7 @@ typedef struct {
   Chain_Node *last;
 } Chain_Control;
 
-/* 
+/*
  *  _Chain_Initialize
  *
  *  This routine initializes the_chain structure to manage the
@@ -65,14 +65,14 @@ typedef struct {
  *  starting_address.  Each node is of node_size bytes.
  */
 
-void _Chain_Initialize( 
+void _Chain_Initialize(
   Chain_Control *the_chain,
   void          *starting_address,
   size_t         number_nodes,
   size_t         node_size
 );
 
-/* 
+/*
  *  _Chain_Initialize_empty
  *
  *  This routine initializes the specified chain to contain zero nodes.
@@ -82,7 +82,7 @@ STATIC INLINE void _Chain_Initialize_empty(
   Chain_Control *the_chain
 );
 
-/* 
+/*
  *  _Chain_Extract_unprotected
  *
  *  This routine extracts the_node from the chain on which it resides.
@@ -94,7 +94,7 @@ STATIC INLINE void _Chain_Extract_unprotected(
   Chain_Node *the_node
 );
 
-/* 
+/*
  *  _Chain_Extract
  *
  *  This routine extracts the_node from the chain on which it resides.
@@ -102,11 +102,11 @@ STATIC INLINE void _Chain_Extract_unprotected(
  *  extract operation.
  */
 
-void _Chain_Extract( 
+void _Chain_Extract(
   Chain_Node *the_node
 );
 
-/* 
+/*
  *  _Chain_Get_unprotected
  *
  *  This function removes the first node from the_chain and returns
@@ -115,11 +115,11 @@ void _Chain_Extract(
  *  get operation.
  */
 
-STATIC INLINE Chain_Node *_Chain_Get_unprotected( 
+STATIC INLINE Chain_Node *_Chain_Get_unprotected(
   Chain_Control *the_chain
 );
 
-/* 
+/*
  *  _Chain_Get
  *
  *  This function removes the first node from the_chain and returns
@@ -128,11 +128,11 @@ STATIC INLINE Chain_Node *_Chain_Get_unprotected(
  *  get operation.
  */
 
-Chain_Node *_Chain_Get( 
+Chain_Node *_Chain_Get(
   Chain_Control *the_chain
 );
 
-/* 
+/*
  *  _Chain_Get_first_unprotected
  *
  *  This function removes the first node from the_chain and returns
@@ -140,11 +140,11 @@ Chain_Node *_Chain_Get(
  *  the atomicity of the get operation.
  */
 
-STATIC INLINE Chain_Node *_Chain_Get_first_unprotected( 
+STATIC INLINE Chain_Node *_Chain_Get_first_unprotected(
   Chain_Control *the_chain
 );
 
-/* 
+/*
  *  _Chain_Insert_unprotected
  *
  *  This routine inserts the_node on a chain immediately following
@@ -157,7 +157,7 @@ STATIC INLINE void _Chain_Insert_unprotected(
   Chain_Node *the_node
 );
 
-/* 
+/*
  *  _Chain_Insert
  *
  *  This routine inserts the_node on a chain immediately following
@@ -165,12 +165,12 @@ STATIC INLINE void _Chain_Insert_unprotected(
  *  of the extract operation.
  */
 
-void _Chain_Insert( 
+void _Chain_Insert(
   Chain_Node *after_node,
   Chain_Node *the_node
 );
 
-/* 
+/*
  *  _Chain_Append_unprotected
  *
  *  This routine appends the_node onto the end of the_chain.
@@ -183,7 +183,7 @@ STATIC INLINE void _Chain_Append_unprotected(
   Chain_Node    *the_node
 );
 
-/* 
+/*
  *  _Chain_Append
  *
  *  This routine appends the_node onto the end of the_chain.
@@ -191,12 +191,12 @@ STATIC INLINE void _Chain_Append_unprotected(
  *  append operation.
  */
 
-void _Chain_Append( 
+void _Chain_Append(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 );
 
-/* 
+/*
  *  _Chain_Prepend_unprotected
  *
  *  This routine prepends the_node onto the front of the_chain.
@@ -209,7 +209,7 @@ STATIC INLINE void _Chain_Prepend_unprotected(
   Chain_Node    *the_node
 );
 
-/* 
+/*
  *  _Chain_Prepend
  *
  *  This routine prepends the_node onto the front of the_chain.
@@ -235,7 +235,7 @@ void _Chain_Insert_chain(
   Chain_Control *to_insert
 );
 
-/* 
+/*
  *  _Chain_Head
  *
  *  This function returns a pointer to the first node on the chain.
@@ -245,7 +245,7 @@ STATIC INLINE Chain_Node *_Chain_Head(
   Chain_Control *the_chain
 );
 
-/* 
+/*
  *  _Chain_Tail
  *
  *  This function returns a pointer to the last node on the chain.
@@ -255,7 +255,7 @@ STATIC INLINE Chain_Node *_Chain_Tail(
   Chain_Control *the_chain
 );
 
-/* 
+/*
  *  _Chain_Is_head
  *
  *  This function returns TRUE if the_node is the head of the_chain and
@@ -267,7 +267,7 @@ STATIC INLINE boolean _Chain_Is_head(
   Chain_Node    *the_node
 );
 
-/* 
+/*
  *  _Chain_Is_tail
  *
  *  This function returns TRUE if the_node is the tail of the_chain and
@@ -279,7 +279,7 @@ STATIC INLINE boolean _Chain_Is_tail(
   Chain_Node    *the_node
 );
 
-/* 
+/*
  *  _Chain_Is_first
  *
  *  This function returns TRUE if the_node is the first node on a chain and
@@ -290,7 +290,7 @@ STATIC INLINE boolean _Chain_Is_first(
   Chain_Node *the_node
 );
 
-/* 
+/*
  *  _Chain_Is_last
  *
  *  This function returns TRUE if the_node is the last node on a chain and
@@ -301,7 +301,7 @@ STATIC INLINE boolean _Chain_Is_last(
   Chain_Node *the_node
 );
 
-/* 
+/*
  *  _Chain_Is_empty
  *
  *  This function returns TRUE if there a no nodes on the_chain and
@@ -312,7 +312,7 @@ STATIC INLINE boolean _Chain_Is_empty(
   Chain_Control *the_chain
 );
 
-/* 
+/*
  *  _Chain_Has_only_one_node
  *
  *  This function returns TRUE if there is only one node on the_chain and
@@ -323,7 +323,7 @@ STATIC INLINE boolean _Chain_Has_only_one_node(
   Chain_Control *the_chain
 );
 
-/* 
+/*
  *  _Chain_Is_null
  *
  *  This function returns TRUE if the_chain is NULL and FALSE otherwise.
@@ -333,7 +333,7 @@ STATIC INLINE boolean _Chain_Is_null(
   Chain_Control *the_chain
 );
 
-/* 
+/*
  *  _Chain_Is_null_node
  *
  *  This function returns TRUE if the_node is NULL and FALSE otherwise.

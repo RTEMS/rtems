@@ -23,7 +23,7 @@
 
 #define NUMBER_ELEMENTS( _x ) (sizeof(_x) / sizeof _x[0])
 
-void exit_application( 
+void exit_application(
   int status
 );
 
@@ -54,14 +54,14 @@ int CheckSections( void );
 
 void GenerateLists( void );
 
-void GenerateAList( 
+void GenerateAList(
   char          *section,
   Chain_Control *the_list
 );
 
 void LookForInternalInconsistencies( void );
 
-int Match_Argument( 
+int Match_Argument(
   char  **array,
   int     entries,
   char   *users
@@ -89,7 +89,7 @@ void PrintFile(
    char *out
 );
 
-void DumpList( 
+void DumpList(
   Chain_Control  *the_list
 );
 
