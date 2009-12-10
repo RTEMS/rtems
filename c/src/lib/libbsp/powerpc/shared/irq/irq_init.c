@@ -56,6 +56,9 @@ static rtems_irq_global_settings     	initial_config;
 static rtems_irq_connect_data     	defaultIrq = {
   /* vectorIdex,	 hdl		, handle	, on		, off		, isOn */
   0, 			 nop_func	, NULL		, nop_func	, nop_func	, not_connected
+#ifdef BSP_SHARED_HANDLER_SUPPORT
+  , NULL /* next_handler */
+#endif
 };
 static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   /*
