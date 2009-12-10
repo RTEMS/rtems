@@ -1,3 +1,7 @@
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/console/polled_io.c: Add prototype for boot_udelay.
+
 2009-12-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* acinclude.m4, beatnik: Imported/added 'beatnik'
