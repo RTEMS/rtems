@@ -22,8 +22,8 @@ bus_bridge_pair;
 bus_bridge_pair *find_bridges(struct ptf *p);
 
 int is_bridged(
-  char *cpu_master, 
-  char *dev_master, 
+  char *cpu_master,
+  char *dev_master,
   bus_bridge_pair *bridges);
 
 #endif

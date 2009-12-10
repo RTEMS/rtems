@@ -52,7 +52,7 @@ struct ptf_parser_state
     whitespace_before_item_value,
     more_section_name_chars,
     more_item_value_chars,
-  } expectation; 
+  } expectation;
 };
 
 /***************************************************************************/
@@ -240,7 +240,7 @@ void parse_char(struct ptf_parser_state *state, int c)
 #endif
 
       if(is_not_quoted && c == '}')
-      { 
+      {
         parser_event = section_closed;
       }
       else if(is_no_space)
@@ -469,7 +469,7 @@ struct ptf *ptf_parse_file(char *filename)
 
   f = fopen(filename, "r");
   if(f == NULL)
-  { 
+  {
     perror(filename);
     return NULL;
   };
@@ -686,7 +686,7 @@ int ptf_advance_until(
         {
           if(strcmp(leaf->value, value) == 0) return 0; /* got it */
         }
-      } 
+      }
       else if(leaf->name != NULL)
       {
         if(strcmp(leaf->name, name) == 0)
@@ -712,7 +712,7 @@ int ptf_advance_until(
 /***************************************************************************/
 
 struct ptf *ptf_find(
-  struct ptf *tree, 
+  struct ptf *tree,
   struct ptf_item *item,
   ptf_item_type ttype,
   char *name,
@@ -764,8 +764,8 @@ struct ptf *ptf_next(
 
 int ptf_match(
   struct ptf *const ptf,
-  struct ptf_item *const match, 
-  const ptf_match_action action, 
+  struct ptf_item *const match,
+  const ptf_match_action action,
   void *arg)
 {
     int count;
@@ -788,7 +788,7 @@ int ptf_match(
 #endif
 
         if(mtype == p->type &&
-           (mname==NULL || p->name==NULL || strcmp(mname, p->name)==0) && 
+           (mname==NULL || p->name==NULL || strcmp(mname, p->name)==0) &&
            (mvalue==NULL || p->value==NULL || strcmp(mvalue, p->value)==0))
         {
             pi.item[pi.level] = p;

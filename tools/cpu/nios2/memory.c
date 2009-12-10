@@ -72,14 +72,14 @@ memory_desc *find_memory(device_desc *devices)
           {
             tmd->dev = dd;
 
-            if(memory == NULL) 
+            if(memory == NULL)
             {
               tmd->next = NULL;
               memory = tmd;
             }
             else
             {
-              if(tmd->size > memory->size) 
+              if(tmd->size > memory->size)
               {
                 tmd->next = memory;
                 memory = tmd;
@@ -101,4 +101,4 @@ memory_desc *find_memory(device_desc *devices)
   return memory;
 }
 
- 
+

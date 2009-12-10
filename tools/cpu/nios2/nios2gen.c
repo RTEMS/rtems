@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
         output_order--;
         break;
 
-      case 'L': /* Do not output linker script */ 
+      case 'L': /* Do not output linker script */
         output_linkcmds = 0;
         break;
 
@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Couldn't parse '%s'.\n", argv[optind]);
         return -1;
       };
-  
+
       if(verbose) printf("Successfully read config PTF file %s.\n", argv[optind]);
 
       cfg = ptf_concat(cfg, morecfg);
@@ -290,18 +290,18 @@ int main(int argc, char *argv[])
         fprintf(stderr, "you want to use with this BSP in your config file.\n");
         fprintf(stderr, "The available CPUs are named as follows:\n");
         ptf_match(sopc, &class_spec, printf_ptf_value, "  %s\n");
-        return -1;  
+        return -1;
       };
 
       if(cpu_count == 0)
       {
         fprintf(stderr, "There is no NIOS2 cpu in the system.\n");
-        return -1;  
+        return -1;
       }
     };
 
     if(verbose)
-    { 
+    {
       printf("Using NIOS II CPU '%s'.\n", cpu->value);
       printf("Only modules mastered by this CPU are considered now.\n");
     };
@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
     if(verbose) printf("Looking for memory...\n");
 
     memory = find_memory(devices);
-    
+
     if(verbose)
     {
       if(memory)

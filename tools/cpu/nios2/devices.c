@@ -65,9 +65,9 @@ void set_dev_cfgname(struct ptf_item *pi, void *arg)
 
 
 device_desc *find_devices(
-  struct ptf *ptf, 
-  struct ptf *cfg, 
-  struct ptf *cpu, 
+  struct ptf *ptf,
+  struct ptf *cfg,
+  struct ptf *cpu,
   bus_bridge_pair *bridges)
 {
     struct ptf system     = { section, "SYSTEM", 0, 0, 0 };

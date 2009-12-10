@@ -14,7 +14,7 @@
 #include "ptf.h"
 #include "bridges.h"
 
-typedef struct dev_descr 
+typedef struct dev_descr
 {
   int slaves;
   char *cfgname;
@@ -24,9 +24,9 @@ typedef struct dev_descr
 device_desc;
 
 device_desc *find_devices(
-  struct ptf *ptf, 
-  struct ptf *cfg, 
-  struct ptf *cpu, 
+  struct ptf *ptf,
+  struct ptf *cfg,
+  struct ptf *cpu,
   bus_bridge_pair *bridges);
 
 #endif

@@ -112,11 +112,11 @@ void fwrite_linkcmds_file(FILE *file, struct ptf *cfg, struct ptf *cpu, device_d
   {
     fprintf(file, "    %s : ORIGIN = 0x%08X, LENGTH = 0x%08X\n", tmd->dev->cfgname, tmd->base, tmd->size);
   }
- 
+
 
   fprintf(file, "}\n\n");
 
   ptf_match(cfg, &maliepil, fwrite_value, file);
 }
 
- 
+

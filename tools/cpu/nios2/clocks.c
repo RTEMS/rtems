@@ -51,7 +51,7 @@ clock_desc *find_clocks( struct ptf *sopc, struct ptf *cfg )
 
     struct ptf named     = { item, 0, 0, 0, 0 };
     struct ptf_item clk_cfg = { 2, &all, &named };
-  
+
     clocks = NULL;
     ptf_match(sopc, &clk_spec, add_clock_spec, &clocks);
 

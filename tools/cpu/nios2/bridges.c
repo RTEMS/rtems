@@ -12,7 +12,7 @@
 /* Find bus bridges */
 
 /* This part of the program builds a list with pairs of bus
-   master port names (each is "device name/master port name"). 
+   master port names (each is "device name/master port name").
    It is then possible to find if a given master is actually
    available under a different master port name through bridges.
  */
@@ -21,7 +21,7 @@
    tristate_bridge_0/tristate_master, and
    tristate_bridge_0 itself is slave of cpu0/data_master, the
    bridge information would be stored as this bus_bridge_pair:
-      mastered_by = "cpu0/data_master" and 
+      mastered_by = "cpu0/data_master" and
       bridges_to = "tristate_bridge_0/tristate_master".
    That allows to deduce that SRAM is actually mastered by
    cpu0/data_master. If there were any address or bus width
@@ -36,8 +36,8 @@
 #include "bridges.h"
 
 int is_bridged(
-  char *cpu_master, 
-  char *dev_master, 
+  char *cpu_master,
+  char *dev_master,
   bus_bridge_pair *bridges)
 {
   char *curr_master;
@@ -47,7 +47,7 @@ int is_bridged(
 
   for(bbp = bridges; bbp != NULL; bbp=bbp->next)
   {
-    if(strcmp(cpu_master, bbp->mastered_by) == 0 && 
+    if(strcmp(cpu_master, bbp->mastered_by) == 0 &&
        is_bridged(bbp->bridges_to, dev_master, bridges))
     {
       return 1; /* cpu masters dev via bridge */
