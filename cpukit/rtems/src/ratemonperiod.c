@@ -349,7 +349,7 @@ rtems_status_code rtems_rate_monotonic_period(
           /*
            *  Update statistics from the concluding period
            */
-          _Rate_monotonic_Initiate_statistics( the_period );
+          _Rate_monotonic_Update_statistics( the_period );
 
           _ISR_Enable( level );
 
