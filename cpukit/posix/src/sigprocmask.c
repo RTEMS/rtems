@@ -30,5 +30,9 @@ int sigprocmask(
    *  P1003.1c/Draft 10, p. 38 maps sigprocmask to pthread_sigmask.
    */
 
+#if defined(RTEMS_POSIX_API)
   return pthread_sigmask( how, set, oset );
+#else
+  return -1;
+#endif
 }
