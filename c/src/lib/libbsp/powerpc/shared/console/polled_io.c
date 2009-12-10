@@ -40,7 +40,7 @@
 #include "console.inl"
 
 #ifdef __BOOT__
-extern void boot_udelay();
+extern void boot_udelay(uint32_t   _microseconds);
 void * __palloc(u_long);
 void  pfree(void *);
 #else
