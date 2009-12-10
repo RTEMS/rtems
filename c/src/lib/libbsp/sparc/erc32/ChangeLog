@@ -1,3 +1,8 @@
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c:
+	Reflect changes to rtems_termios_callbacks->write.
+
 2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Switch to ../../shared/bspstart.c

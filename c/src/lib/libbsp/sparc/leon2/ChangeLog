@@ -1,5 +1,10 @@
 2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* console/console.c:
+	Reflect changes to rtems_termios_callbacks->write.
+
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* console/console.c: Let bsp_in_char return int.
 
 2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>

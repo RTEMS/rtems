@@ -281,7 +281,7 @@ void console_outbyte_interrupt(
  *
  */
 
-int console_write_support (int minor, const char *buf, int len)
+ssize_t console_write_support (int minor, const char *buf, size_t len)
 {
   int nwrite = 0;
 
