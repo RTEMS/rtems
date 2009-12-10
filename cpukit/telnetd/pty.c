@@ -323,7 +323,7 @@ static int read_pty(int minor)
 static int ptySetAttributes(int minor,const struct termios *t);
 static int ptyPollInitialize(int major,int minor,void * arg) ;
 static int ptyShutdown(int major,int minor,void * arg) ;
-static int ptyPollWrite(int minor, const char * buf,int len) ;
+static ssize_t ptyPollWrite(int minor, const char * buf, size_t len) ;
 static int ptyPollRead(int minor) ;
 static const rtems_termios_callbacks * pty_get_termios_handlers(int polled) ;
 /*-----------------------------------------------------------*/
@@ -373,9 +373,9 @@ ptyShutdown(int major,int minor,void * arg) {
 /*-----------------------------------------------------------*/
 /* Write Characters into pty device                          */
 /*-----------------------------------------------------------*/
-static int
-ptyPollWrite(int minor, const char * buf,int len) {
-  int count;
+static ssize_t
+ptyPollWrite(int minor, const char * buf, size_t len) {
+  size_t count;
   if (minor<rtems_telnetd_maximum_ptys) {
     if (telnet_ptys[minor].socket<0)
       return -1;

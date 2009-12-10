@@ -1,5 +1,10 @@
 2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* telnetd/pty.c:
+	Reflect changes to rtems_termios_callbacks->write.
+
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/rtems/libio.h: Change termios-write to ssize_t
 	write(...., size_t).
 
