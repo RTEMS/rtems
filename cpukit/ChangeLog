@@ -1,5 +1,10 @@
 2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/rtems/libio.h: Change termios-write to ssize_t
+	write(...., size_t).
+
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/Makefile.am: Unconditionally build src/sigprocmask.c.
 	* posix/src/sigprocmask.c: Provide stub if RTEMS_POSIX_API 
 	is disabled.

@@ -566,7 +566,7 @@ typedef struct rtems_termios_callbacks {
   int    (*firstOpen)(int major, int minor, void *arg);
   int    (*lastClose)(int major, int minor, void *arg);
   int    (*pollRead)(int minor);
-  int    (*write)(int minor, const char *buf, int len);
+  ssize_t (*write)(int minor, const char *buf, size_t len);
   int    (*setAttributes)(int minor, const struct termios *t);
   int    (*stopRemoteTx)(int minor);
   int    (*startRemoteTx)(int minor);
