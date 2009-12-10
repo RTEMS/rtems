@@ -292,11 +292,9 @@ conSetAttr(int minor, const struct termios *t)
  * BSP initialization
  */
 
-BSP_output_char_function_type BSP_output_char =
-                       (BSP_output_char_function_type)    BSP_output_char_via_serial;
+BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
 
-BSP_polling_getchar_function_type BSP_poll_char =
-                      (BSP_polling_getchar_function_type) BSP_poll_char_via_serial;
+BSP_polling_getchar_function_type BSP_poll_char = BSP_poll_char_via_serial;
 
 int BSP_poll_read(int ttyMinor){
 

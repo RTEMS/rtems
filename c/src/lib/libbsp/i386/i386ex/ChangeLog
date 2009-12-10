@@ -1,3 +1,7 @@
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c: Eliminate casts.
+
 2009-11-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* clock/ckinit.c: Fix Clock_isr prototype.
