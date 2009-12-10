@@ -98,7 +98,7 @@ const char *mg_get_option(const struct mg_context *, const char *option_name);
  * Return value:
  *	-1 if option is unknown
  *	0  if mg_set_option() failed
- *	1  if mg_set_option() succeeded 
+ *	1  if mg_set_option() succeeded
  */
 int mg_set_option(struct mg_context *, const char *opt_name, const char *value);
 
@@ -113,7 +113,7 @@ int mg_set_option(struct mg_context *, const char *opt_name, const char *value);
  * If password is not NULL, entry is added (or modified if already exists).
  * If password is NULL, entry is deleted. Return:
  *	1 on success
- *	0 on error 
+ *	0 on error
  */
 int mg_modify_passwords_file(struct mg_context *ctx, const char *file_name,
 		const char *user_name, const char *password);
@@ -224,7 +224,7 @@ void mg_authorize(struct mg_connection *);
  *	NULL      if the variable is not found
  *	non-NULL  if found. NOTE: this returned value is dynamically allocated
  *		  and is subject to mg_free() when no longer needed. It is
- *		  an application's responsibility to mg_free() the variable. 
+ *		  an application's responsibility to mg_free() the variable.
  */
 char *mg_get_var(const struct mg_connection *, const char *var_name);
 
