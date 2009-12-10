@@ -445,7 +445,7 @@ void _BSP_output_char(char c)
 
 BSP_output_char_function_type BSP_output_char = _BSP_output_char;
 
-char _BSP_poll_char(void)
+int _BSP_poll_char(void)
 {
     return poll_read();
 }
