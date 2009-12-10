@@ -141,9 +141,11 @@ endif
 libposix_a_SOURCES += src/sigaddset.c src/sigdelset.c src/sigfillset.c \
    src/sigemptyset.c src/sigismember.c
 
+libposix_a_SOURCES += src/sigprocmask.c
+
 if HAS_PTHREADS
 libposix_a_SOURCES += src/sigpending.c \
-    src/sigprocmask.c src/sigqueue.c src/sigsuspend.c src/sigtimedwait.c \
+    src/sigqueue.c src/sigsuspend.c src/sigtimedwait.c \
     src/sigwait.c src/sigwaitinfo.c src/signal_2.c src/ualarm.c
 
 ## RWLOCK_C_FILES
