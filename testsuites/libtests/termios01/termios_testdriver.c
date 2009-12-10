@@ -30,9 +30,9 @@ void termios_test_driver_outbyte_polled(
 {
 }
 
-int termios_test_driver_write_support (int minor, const char *buf, int len)
+ssize_t termios_test_driver_write_support (int minor, const char *buf, size_t len)
 {
-  int nwrite = 0;
+  size_t nwrite = 0;
 
   while (nwrite < len) {
 #if (TERMIOS_TEST_DRIVER_USE_INTERRUPTS)
