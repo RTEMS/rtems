@@ -102,11 +102,15 @@ int timer_settime(
          _POSIX_Timer_TSR,
          ptimer
        );
-       if ( !activated )
+       if ( !activated ) {
+         _Thread_Enable_dispatch();
          return 0;
+       }
 
-       /* The timer has been started and is running */
-       /* return the old ones in "ovalue" */
+       /*
+        * The timer has been started and is running.  So we return the
+        * old ones in "ovalue"
+        */
        if ( ovalue )
          *ovalue = ptimer->timer_data;
        ptimer->timer_data = normalize;
@@ -114,7 +118,7 @@ int timer_settime(
        /* Indicate that the time is running */
        ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
        _TOD_Get( &ptimer->time );
-        _Thread_Enable_dispatch();
+       _Thread_Enable_dispatch();
        return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

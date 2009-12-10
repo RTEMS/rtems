@@ -1,5 +1,10 @@
 2009-12-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	PR 1482
+	* posix/src/timersettime.c: Exit dispatching critical section.
+
+2009-12-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 1480/cpukit
 	* rtems/src/ratemonperiod.c: Use _Rate_monotonic_Update_statistics()
 	when period is expired, not _Rate_monotonic_Initiate_statistics().
