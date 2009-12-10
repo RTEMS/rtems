@@ -1,3 +1,9 @@
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/Makefile.am: Unconditionally build src/sigprocmask.c.
+	* posix/src/sigprocmask.c: Provide stub if RTEMS_POSIX_API 
+	is disabled.
+
 2009-12-08	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* rtems/include/rtems/rtems/ratemon.h, rtems/src/ratemongetstatus.c,
