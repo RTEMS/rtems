@@ -1,3 +1,7 @@
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/comm/uart.c, shared/comm/uart.h: Adjust prototypes.
+
 2009-11-10	Till Straumann <strauman@slac.stanford.edu>
 
 	* pc386/make/custom/pc586-sse.cfg, pc386/start/start.S,

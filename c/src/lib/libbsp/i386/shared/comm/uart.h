@@ -1,5 +1,3 @@
-
-
 /*
  * This software is Copyright (C) 1998 by T.sqware - all rights limited
  * It is provided in to the public domain "as is", can be freely modified
@@ -32,8 +30,8 @@ void BSP_uart_termios_isr_com1();
 void BSP_uart_termios_isr_com2();
 void BSP_uart_dbgisr_com1(void);
 void BSP_uart_dbgisr_com2(void);
-extern unsigned BSP_poll_char_via_serial(void);
-extern void BSP_output_char_via_serial(int val);
+extern int BSP_poll_char_via_serial(void);
+extern void BSP_output_char_via_serial(char val);
 extern int BSPConsolePort;
 extern int BSPBaseBaud;
 /*

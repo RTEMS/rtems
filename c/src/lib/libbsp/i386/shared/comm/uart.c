@@ -405,7 +405,7 @@ BSP_uart_polled_write(int uart, int val)
 }
 
 void
-BSP_output_char_via_serial(int val)
+BSP_output_char_via_serial(char val)
 {
   BSP_uart_polled_write(BSPConsolePort, val);
   if (val == '\n') BSP_uart_polled_write(BSPConsolePort,'\r');
@@ -434,8 +434,8 @@ BSP_uart_polled_read(int uart)
   return (int)(val & 0xff);
 }
 
-unsigned
-BSP_poll_char_via_serial()
+int
+BSP_poll_char_via_serial(void)
 {
 	return BSP_uart_polled_read(BSPConsolePort);
 }
