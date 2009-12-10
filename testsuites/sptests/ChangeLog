@@ -1,5 +1,10 @@
 2009-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp14/sp14.doc, sp14/sp14.scn: doc file have scn contents. Fix and
+	update.
+
+2009-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp69/init.c, sp69/sp69.doc, sp69/sp69.scn: Add test for statistics on
 	expired periods. This detected the recently introduced PR1480.
 

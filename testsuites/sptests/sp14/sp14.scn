@@ -1,3 +1,6 @@
+Could not open '/dev/kqemu' - QEMU acceleration layer not activated: No such file or directory
+
+
 *** TEST 14 ***
 TA1 - rtems_signal_catch - RTEMS_INTERRUPT_LEVEL( 3 )
 TA1 - rtems_signal_send - RTEMS_SIGNAL_16 to self
@@ -6,21 +9,13 @@ ASR - EXIT  - signal => 00010000
 TA1 - rtems_signal_send - RTEMS_SIGNAL_0 to self
 ASR - ENTRY - signal => 00000001
 ASR - rtems_task_wake_after - yield processor
-TA2 - rtems_signal_send - RTEMS_SIGNAL_17 to TA1
-TA2 - rtems_task_wake_after - yield processor
-ASR - ENTRY - signal => 00020000
-ASR - EXIT  - signal => 00020000
 ASR - EXIT  - signal => 00000001
 TA1 - rtems_signal_catch - RTEMS_NO_ASR
 <pause>
 TA1 - rtems_signal_send - RTEMS_SIGNAL_1 to self
 ASR - ENTRY - signal => 00000002
 ASR - rtems_task_wake_after - yield processor
-TA2 - rtems_signal_send - RTEMS_SIGNAL_18 and RTEMS_SIGNAL_19 to TA1
-TA2 - rtems_task_wake_after - yield processor
 ASR - EXIT  - signal => 00000002
-ASR - ENTRY - signal => 000c0000
-ASR - EXIT  - signal => 000c0000
 TA1 - rtems_task_mode - disable ASRs
 TA1 - sending signal to RTEMS_SELF from timer
 TA1 - waiting for signal to arrive
@@ -28,6 +23,12 @@ TA1 - timer routine got the correct arguments
 TA1 - rtems_task_mode - enable ASRs
 ASR - ENTRY - signal => 00000008
 ASR - EXIT  - signal => 00000008
+TA2 - rtems_signal_send - RTEMS_SIGNAL_17 to TA1
+TA2 - rtems_task_wake_after - yield processor
+TA2 - rtems_signal_send - RTEMS_SIGNAL_18 and RTEMS_SIGNAL_19 to TA1
+TA2 - rtems_task_wake_after - yield processor
+ASR - ENTRY - signal => 000e0000
+ASR - EXIT  - signal => 000e0000
 TA1 - rtems_signal_catch - asraddr of NULL
 TA1 - rtems_task_delete - delete self
 *** END OF TEST 14 ***
