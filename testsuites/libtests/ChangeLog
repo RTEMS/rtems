@@ -1,3 +1,8 @@
+2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* termios01/termios_testdriver.c: 
+	Reflect changes to rtems_termios_callbacks->write.
+
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* block01/init.c, block02/init.c, block03/init.c, block04/init.c,
