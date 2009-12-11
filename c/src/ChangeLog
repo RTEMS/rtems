@@ -1,3 +1,10 @@
+2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1483/cpukit
+	* libchip/network/dec21140.c, libchip/network/elnk.c,
+	libchip/network/if_dc.c: Move #include <rtems/pci.h> into #if
+	*_SUPPORTED-guarded code sections.
+
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/network/dec21140.c, libchip/network/elnk.c,
