@@ -1003,7 +1003,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK))
       + (unsigned int)PCI_MEM_BASE;
 
-   sc->base = (unsigned int *)(tmp);
+   sc->base = (uint32_t*)(tmp);
 
    pci_read_config_byte(pbus,
                         pdev,
