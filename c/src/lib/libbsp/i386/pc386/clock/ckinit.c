@@ -75,6 +75,7 @@ void Clock_driver_support_at_tick_empty(void)
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
+    _old = NULL; \
   } while(0)
 
 extern volatile uint32_t Clock_driver_isrs;

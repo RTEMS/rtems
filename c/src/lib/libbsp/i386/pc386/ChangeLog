@@ -1,5 +1,9 @@
 2009-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* clock/ckinit.c: Fix warning.
+
+2009-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* startup/bspgetworkarea.c: Make bsp_mem_size available for page table
 	initialization.
 
