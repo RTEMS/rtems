@@ -135,15 +135,15 @@ void _Rate_monotonic_Update_statistics(
       /* Grab CPU usage when the thread got switched in */
       used = _Thread_Executing->cpu_time_used;
 
-      /* partial period, cpu usage info reset while executing.  Throw away */
-      if (_Timespec_Less_than( &used, &the_period->owner_executed_at_period))
-        return;
-
       /* How much time time since last context switch */
       _Timespec_Subtract(&_Thread_Time_of_last_context_switch, &uptime, &ran);
 
       /* executed += ran */
       _Timespec_Add_to( &used, &ran );
+
+      /* partial period, cpu usage info reset while executing.  Throw away */
+      if (_Timespec_Less_than( &used, &the_period->owner_executed_at_period))
+        return;
 
        /* executed = current cpu usage - value at start of period */
       _Timespec_Subtract( 
