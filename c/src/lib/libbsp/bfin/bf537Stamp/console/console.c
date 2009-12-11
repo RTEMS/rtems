@@ -69,7 +69,7 @@ static void bf537Stamp_BSP_output_char(char c) {
   bfin_uart_poll_write(0, c);
 }
 
-static char bf537Stamp_BSP_poll_char(void) {
+static int bf537Stamp_BSP_poll_char(void) {
 
   return bfin_uart_poll_read(0);
 }
