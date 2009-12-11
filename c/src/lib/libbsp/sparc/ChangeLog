@@ -1,8 +1,12 @@
+2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1483/cpukit
+	* shared/include/pci.h: Rename pci_config into rtems_pci_config_t.
+
 2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/bsppretaskinghook.c: New file.  Was really common.  
 	* shared/bspstart.c: Removed.  Was really leon2 specific.
-
 
 2009-10-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
