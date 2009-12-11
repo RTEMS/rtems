@@ -1133,9 +1133,9 @@ typedef struct {
   volatile unsigned char*            pci_config_addr;
   volatile unsigned char*            pci_config_data;
   const pci_config_access_functions* pci_functions;
-} pci_config;
+} rtems_pci_config_t;
 
-extern pci_config BSP_pci_configuration;
+extern rtems_pci_config_t BSP_pci_configuration;
 
 static inline int
 pci_read_config_byte(
