@@ -221,11 +221,11 @@ const pci_config_access_functions pci_access_functions = {
     BSP_pci_write_config_dword
 };
 
-pci_config BSP_pci_configuration = { (volatile unsigned char*)PCI_CONFIG_ADDR,
-			             (volatile unsigned char*)PCI_CONFIG_DATA,
-			             &pci_access_functions };
-
-
+rtems_pci_config_t BSP_pci_configuration = {
+   (volatile unsigned char*)PCI_CONFIG_ADDR,
+   (volatile unsigned char*)PCI_CONFIG_DATA,
+   &pci_access_functions
+};
 
 
 int init_grpci(void) {

@@ -67,7 +67,7 @@
 static int      numPCIDevs=0;
 static DiscoveryChipVersion BSP_sysControllerVersion = 0;
 static BSP_VMEchipTypes BSP_VMEinterface = 0;
-static pci_config BSP_pci[2]={
+static rtems_pci_config_t BSP_pci[2]={
   {(volatile unsigned char*) (GT64x60_PCI_CONFIG_ADDR),
    (volatile unsigned char*) (GT64x60_PCI_CONFIG_DATA),
    0 /* defined at BSP_pci_configuration */},
@@ -92,7 +92,7 @@ static unsigned char ucMaxPCIBus=0;
 /* Please note that PCI0 and PCI1 does not correlate with the busNum 0 and 1.
  */
 static int indirect_pci_read_config_byte(unsigned char bus,unsigned char dev,unsigned char func,
-unsigned char offset,unsigned char *val)
+unsigned char offset, uint8_t *val)
 {
   int n=0;
 
@@ -114,7 +114,7 @@ unsigned char offset,unsigned char *val)
 }
 
 static int indirect_pci_read_config_word(unsigned char bus, unsigned char dev,
-unsigned char func, unsigned char offset, unsigned short *val)
+unsigned char func, unsigned char offset, uint16_t *val)
 {
   int n=0;
 
@@ -135,7 +135,7 @@ unsigned char func, unsigned char offset, unsigned short *val)
 }
 
 static int indirect_pci_read_config_dword(unsigned char bus, unsigned char dev,
-unsigned char func, unsigned char offset, unsigned int *val)
+unsigned char func, unsigned char offset, uint32_t *val)
 {
   int n=0;
 
@@ -152,7 +152,7 @@ unsigned char func, unsigned char offset, unsigned int *val)
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int indirect_pci_write_config_byte(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned char val)
+static int indirect_pci_write_config_byte(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, uint8_t val)
 {
   int n=0;
 
@@ -168,7 +168,7 @@ static int indirect_pci_write_config_byte(unsigned char bus, unsigned char dev,u
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int indirect_pci_write_config_word(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned short val)
+static int indirect_pci_write_config_word(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, uint16_t val)
 {
   int n=0;
 
@@ -184,7 +184,7 @@ static int indirect_pci_write_config_word(unsigned char bus, unsigned char dev,u
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int indirect_pci_write_config_dword(unsigned char bus,unsigned char dev,unsigned char func, unsigned char offset, unsigned int val)
+static int indirect_pci_write_config_dword(unsigned char bus,unsigned char dev,unsigned char func, unsigned char offset, uint32_t val)
 {
   int n=0;
 
@@ -210,7 +210,7 @@ const pci_config_access_functions pci_indirect_functions = {
 };
 
 
-pci_config BSP_pci_configuration = {
+rtems_pci_config_t BSP_pci_configuration = {
            (volatile unsigned char*) (GT64x60_PCI_CONFIG_ADDR),
 	   (volatile unsigned char*) (GT64x60_PCI_CONFIG_DATA),
 	   &pci_indirect_functions};
