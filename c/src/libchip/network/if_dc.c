@@ -114,13 +114,13 @@
 #endif
 
 #include <bsp.h>
-#include <rtems/pci.h>
 
 #if !defined(PCI_DRAM_OFFSET)
   #undef DRIVER_SUPPORTED
 #endif
 
 #if defined(DRIVER_SUPPORTED) /* this covers the file "globally"... */
+#include <rtems/pci.h>
 
 #include <rtems/error.h>
 #include <errno.h>

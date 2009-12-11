@@ -80,7 +80,6 @@
 #endif
 
 #include <bsp.h>
-#include <rtems/pci.h>
 
 #if !defined(PCI_DRAM_OFFSET)
   #undef ELNK_SUPPORTED
@@ -90,6 +89,7 @@
 
 
 #if defined(ELNK_SUPPORTED)
+#include <rtems/pci.h>
 
 #if defined(__PPC__)
 #include <libcpu/byteorder.h>
