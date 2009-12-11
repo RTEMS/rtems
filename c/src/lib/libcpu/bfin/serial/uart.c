@@ -148,12 +148,13 @@ void debug_write_word(int word) {
  *
  */
 
-static int pollWrite(int minor, const char *buf, int len) {
+static ssize_t pollWrite(int minor, const char *buf, size_t len) {
 
-  while (len-- > 0)
+  size_t count;
+  for ( count = 0; count < len; count++ )
     bfin_uart_poll_write(minor, *buf++);
 
-  return 0;
+  return count;
 }
 
 static void enableInterrupts(int minor) {
@@ -175,7 +176,7 @@ static void disableAllInterrupts(void) {
   }
 }
 
-static int interruptWrite(int minor, const char *buf, int len) {
+static ssize_t interruptWrite(int minor, const char *buf, size_t len) {
   char *base;
 
   base = uartsConfig->channels[minor].base_address;
@@ -183,7 +184,8 @@ static int interruptWrite(int minor, const char *buf, int len) {
   uartsConfig->channels[minor].flags |= BFIN_UART_XMIT_BUSY;
   *(uint16_t volatile *) (base + UART_THR_OFFSET) = *buf;
 
-  return 0;
+  /* one byte written */
+  return 1;
 }
 
 static int setAttributes(int minor, const struct termios *termios) {

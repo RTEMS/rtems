@@ -1,3 +1,8 @@
+2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* serial/uart.c:
+	Reflect changes to rtems_termios_callbacks->write.
+
 2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* clock/rtc.c: Add initializer (Silence warning).
