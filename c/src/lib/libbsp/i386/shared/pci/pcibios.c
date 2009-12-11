@@ -642,7 +642,7 @@ const pci_config_access_functions pci_indirect_functions = {
   BSP_pci_write_config_dword
 };
 
-pci_config BSP_pci_configuration = {
+rtems_pci_config_t BSP_pci_configuration = {
   (volatile unsigned char*)0,
   (volatile unsigned char*)0,
   &pci_indirect_functions
