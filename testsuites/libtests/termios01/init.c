@@ -502,7 +502,7 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_DRIVERS 3
 
 /* one for the console and one for the test port */
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
+#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 3
 
 /* we need to be able to open the test device */
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4

@@ -1,3 +1,7 @@
+2009-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* termios01/init.c: Increase number of termios ports by 1.
+
 2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* termios01/termios_testdriver.c: 
