@@ -56,7 +56,7 @@ static void eZKit533_BSP_output_char(char c) {
   bfin_uart_poll_write(0, c);
 }
 
-static char eZKit533_BSP_poll_char(void) {
+static int eZKit533_BSP_poll_char(void) {
 
   return bfin_uart_poll_read(0);
 }

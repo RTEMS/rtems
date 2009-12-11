@@ -1,3 +1,7 @@
+2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console-io.c: Let eZKit533_BSP_poll_char return int.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/eZKit533.cfg: Remove RTEMS_BSP_FAMILY.
