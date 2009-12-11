@@ -146,7 +146,7 @@ void au1x00_emac_tx_daemon (void *arg);
 void au1x00_emac_rx_daemon (void *arg);
 void au1x00_emac_sendpacket (struct ifnet *ifp, struct mbuf *m);
 void au1x00_emac_stats (au1x00_emac_softc_t *sc);
-static int au1x00_emac_ioctl (struct ifnet *ifp, int command, caddr_t data);
+static int au1x00_emac_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data);
 static void mii_write(au1x00_emac_softc_t *sc, uint8_t reg, uint16_t val);
 static void mii_read(au1x00_emac_softc_t *sc, uint8_t reg, uint16_t *val);
 static void mii_init(au1x00_emac_softc_t *sc);
@@ -780,7 +780,7 @@ void au1x00_emac_stats (au1x00_emac_softc_t *sc)
 
 /*  Driver ioctl handler */
 static int
-au1x00_emac_ioctl (struct ifnet *ifp, int command, caddr_t data)
+au1x00_emac_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
     au1x00_emac_softc_t *sc = ifp->if_softc;
     int error = 0;

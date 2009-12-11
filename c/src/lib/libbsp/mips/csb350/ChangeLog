@@ -1,3 +1,7 @@
+2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* network/network.c (au1x00_emac_ioctl): Use ioctl_command_t.
+
 2009-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspstart.c: Remove nested externs.
