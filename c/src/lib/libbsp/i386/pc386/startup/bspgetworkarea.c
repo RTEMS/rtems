@@ -49,7 +49,7 @@ static uintptr_t rtemsWorkAreaStart;
 /*
  * Board's memory size easily be overridden by application.
  */
-static uint32_t bsp_mem_size = 0;
+uint32_t bsp_mem_size = 0;
 
 /* Size of stack used during initialization. Defined in 'start.s'.  */
 extern uint32_t _stack_size;
@@ -118,6 +118,7 @@ void bsp_size_memory(void)
     #endif
   }
 
+  
   bsp_mem_size = topAddr;
 }
 

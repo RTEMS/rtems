@@ -1,3 +1,8 @@
+2009-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspgetworkarea.c: Make bsp_mem_size available for page table
+	initialization.
+
 2009-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h, startup/bspgetworkarea.c: Rework bsp_size_memory() to
