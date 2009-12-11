@@ -1,3 +1,7 @@
+2009-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* page.c: Use bsp_mem_size.
+
 2009-10-28  Till Straumann <strauman@slac.stanford.edu>
 
 	* displayCpu.c: Fixed formatting for prettier printing;

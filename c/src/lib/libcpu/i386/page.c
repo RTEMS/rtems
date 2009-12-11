@@ -31,8 +31,7 @@ static int directoryEntry=0;
 static int tableEntry=0;
 static page_directory *pageDirectory;
 
-extern uint32_t   rtemsFreeMemStart;
-
+extern uint32_t   bsp_mem_size;
 
 /*************************************************************************/
 /************** IT IS A ONE-TO-ONE TRANSLATION ***************************/
@@ -72,7 +71,6 @@ void _CPU_enable_paging(void)
 
 int init_paging(void)
 {
-  int memorySize;
   int nbPages;
   int nbInitPages;
   char *Tables;
@@ -81,14 +79,8 @@ int init_paging(void)
   unsigned int physPage;
   int nbTables=0;
 
-  /*
-   * rtemsFreeMemStart is the last valid 32-bits address
-   * so the size is rtemsFreeMemStart + 4
-   */
-  memorySize = rtemsFreeMemStart + 4;
-
-  nbPages = ( (memorySize - 1) / PG_SIZE ) + 1;
-  nbTables = ( (memorySize - 1) / FOUR_MB ) + 2;
+  nbPages = ( (bsp_mem_size - 1) / PG_SIZE ) + 1;
+  nbTables = ( (bsp_mem_size - 1) / FOUR_MB ) + 2;
 
   /* allocate 1 page more to page alignement */
   Tables = (char *)malloc( (nbTables + 1)*sizeof(page_table) );
