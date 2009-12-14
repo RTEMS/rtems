@@ -6,7 +6,7 @@ include $(top_srcdir)/../../../testsuites/automake/compile.am
 SUBDIRS = node1 node2
 #include $(top_srcdir)/ada.am
 
-#mptest.exe: mptest.adb
+#mptest$(EXEEXT): mptest.adb
 #	$(GNATCOMPILE) -margs -a $< -o $@
 
 #if EXPADA
