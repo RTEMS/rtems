@@ -116,6 +116,21 @@ extern int rtems_mcf548x_fec_driver_attach_detach(struct rtems_bsdnet_ifconfig *
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"fec1"
 #define RTEMS_BSP_NETWORK_DRIVER_NAME2	"fec2"
 
+#ifdef HAS_DBUG
+  typedef struct {
+    uint32_t console_baudrate;
+    uint8_t  server_ip [4];
+    uint8_t  client_ip [4];
+    uint8_t  gateway_ip[4];
+    uint8_t  netmask   [4];
+    uint8_t  spare[4];
+    uint8_t  macaddr   [6];
+    uint32_t ethport;   /* default fec port: 1 = fec1, 2 = fec2 */
+    uint32_t uartport;  /* default fec port: 1 = psc0, 2 = psc1... */    
+  } dbug_settings_t;
+  
+#define DBUG_SETTINGS (*(const dbug_settings_t *)0xFC020000)
+#endif /* HAS_DBUG */
 #ifdef __cplusplus
 }
 #endif

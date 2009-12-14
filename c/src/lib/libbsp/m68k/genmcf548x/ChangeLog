@@ -1,3 +1,8 @@
+2009-12-14	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* console/console.c, include/bsp.h, network/network.c: get vital
+	data from dBUG for COBRA5475 board
+
 2009-11-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/init548x.c: Comment out junk from end of #endif.

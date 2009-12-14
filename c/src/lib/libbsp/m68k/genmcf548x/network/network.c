@@ -1759,6 +1759,17 @@ int rtems_mcf548x_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
       );
   }
 #endif
+#ifdef HAS_DBUG
+  if ((sc->arpcom.ac_enaddr[0] == 0) &&
+      (sc->arpcom.ac_enaddr[1] == 0) &&
+      (sc->arpcom.ac_enaddr[2] == 0)) {
+      memcpy(
+        (void *)sc->arpcom.ac_enaddr,
+        DBUG_SETTINGS.macaddr,
+        ETHER_ADDR_LEN
+      );
+  }
+#endif
   if(config->mtu)
     mtu = config->mtu;
   else
