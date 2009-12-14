@@ -1,3 +1,9 @@
+2009-12-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* new-exceptions/bspsupport/ppc_exc_bspsupp.h: Removed file.
+	* new-exceptions/bspsupport/ppc_exc_test.c,
+	new-exceptions/bspsupport/README: Update for removed file.
+
 2009-12-01	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/cpu.c, new-exceptions/cpu_asm.S,

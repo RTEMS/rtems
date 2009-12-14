@@ -186,8 +186,15 @@ USAGE
 
 	BSP initialization; call
 
-	    initialize_exceptions();
-		BSP_rtems_irq_mngt_set();
+	rtems_status_code sc = ppc_exc_initialize(
+	  PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+	  interrupt_stack_begin,
+	  interrupt_stack_size
+	);
+	if (sc != RTEMS_SUCCESSFUL) {
+	  BSP_panic("cannot initialize exceptions");
+	}
+	BSP_rtems_irq_mngt_set();
 
 	Note that BSP_rtems_irq_mngt_set() hooks the C_dispatch_irq_handler()
 	to the external and decrementer (PIT exception for bookE; a decrementer
@@ -202,7 +209,7 @@ USAGE
 
 	Hooking exceptions:
 
-	The API defined in ppc_exc_bspsupp.h declares routines for connecting
+	The API defined in vectors.h declares routines for connecting
 	a C-handler to any exception. Note that the execution environment
 	of the C-handler depends on the exception being synchronous or
 	asynchronous:
@@ -231,15 +238,15 @@ USAGE
 
 		- add
 
-		  include_bsp_HEADERS += \
-		    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h   \
-			../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h  \
-			../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
+		    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h
+		    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
+
+		  to 'include_bsp_HEADERS'
 
 		- add
 
-		    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
-		    ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel \
+		    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel
+		    ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel
 
 		  to 'libbsp_a_LIBADD'
 

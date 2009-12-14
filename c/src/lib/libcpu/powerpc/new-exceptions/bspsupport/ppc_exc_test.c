@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "vectors.h"
-#include "ppc_exc_bspsupp.h"
 
 
 typedef struct regs_ {
