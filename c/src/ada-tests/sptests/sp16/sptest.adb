@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2007.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,7 +21,6 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -36,6 +35,7 @@ package body SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -240,6 +240,7 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       RNID              : RTEMS.ID;
       SEGMENT_ADDRESS_1 : RTEMS.ADDRESS;
       SEGMENT_ADDRESS_2 : RTEMS.ADDRESS;
@@ -547,6 +548,7 @@ TEST_SUPPORT.PAUSE;
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
       SEGMENT_ADDRESS_1 : RTEMS.ADDRESS;
       SEGMENT_ADDRESS_2 : RTEMS.ADDRESS;
@@ -633,6 +635,7 @@ TEST_SUPPORT.PAUSE;
    procedure TASK_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       SEGMENT_ADDRESS_1 : RTEMS.ADDRESS;
       SEGMENT_ADDRESS_2 : RTEMS.ADDRESS;
       STATUS            : RTEMS.STATUS_CODES;
@@ -675,6 +678,7 @@ TEST_SUPPORT.PAUSE;
    procedure TASK_4 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       SEGMENT_ADDRESS_1 : RTEMS.ADDRESS;
       SEGMENT_ADDRESS_2 : RTEMS.ADDRESS;
       STATUS            : RTEMS.STATUS_CODES;
@@ -727,6 +731,7 @@ TEST_SUPPORT.PAUSE;
    procedure TASK_5 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       SEGMENT_ADDRESS_1 : RTEMS.ADDRESS;
       SEGMENT_ADDRESS_2 : RTEMS.ADDRESS;
       STATUS            : RTEMS.STATUS_CODES;

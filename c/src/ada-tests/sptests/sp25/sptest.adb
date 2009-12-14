@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -20,8 +20,6 @@
 --  $Id$
 --
 
-with INTERFACES; use INTERFACES;
-with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -36,6 +34,7 @@ package body SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -108,6 +107,7 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       RNID              : RTEMS.ID;
       SEGMENT_ADDRESS_1 : RTEMS.ADDRESS;
       SEGMENT_ADDRESS_2 : RTEMS.ADDRESS;
@@ -259,7 +259,7 @@ TEST_SUPPORT.PAUSE;
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_RETURN_SEGMENT" );
       TEXT_IO.NEW_LINE;
-      SEGMENT_ADDRESS_3 := RTEMS.NULL_ADDRESS;
+      -- SEGMENT_ADDRESS_3 := RTEMS.NULL_ADDRESS;
 
       TEXT_IO.PUT( 
          "TA1 - region_return_segment - return segment to region 1 - "
@@ -272,7 +272,7 @@ TEST_SUPPORT.PAUSE;
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_RETURN_SEGMENT" );
       TEXT_IO.NEW_LINE;
-      SEGMENT_ADDRESS_4 := RTEMS.NULL_ADDRESS;
+      -- SEGMENT_ADDRESS_4 := RTEMS.NULL_ADDRESS;
 
       TEXT_IO.PUT( 
          "TA1 - region_return_segment - return segment to region 1 - "
@@ -285,7 +285,7 @@ TEST_SUPPORT.PAUSE;
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_RETURN_SEGMENT" );
       TEXT_IO.NEW_LINE;
-      SEGMENT_ADDRESS_1 := RTEMS.NULL_ADDRESS;
+      -- SEGMENT_ADDRESS_1 := RTEMS.NULL_ADDRESS;
 
       TEXT_IO.PUT( 
          "TA1 - region_return_segment - return segment to region 1 - "
@@ -298,7 +298,7 @@ TEST_SUPPORT.PAUSE;
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_RETURN_SEGMENT" );
       TEXT_IO.NEW_LINE;
-      SEGMENT_ADDRESS_2 := RTEMS.NULL_ADDRESS;
+      -- SEGMENT_ADDRESS_2 := RTEMS.NULL_ADDRESS;
 
       TEXT_IO.PUT( 
          "TA1 - region_return_segment - return segment to region 1 - "
@@ -311,7 +311,7 @@ TEST_SUPPORT.PAUSE;
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_RETURN_SEGMENT" );
       TEXT_IO.NEW_LINE;
-      SEGMENT_ADDRESS_7 := RTEMS.NULL_ADDRESS;
+      -- SEGMENT_ADDRESS_7 := RTEMS.NULL_ADDRESS;
 
       TEXT_IO.PUT( 
          "TA1 - region_return_segment - return segment to region 1 - "
@@ -324,7 +324,7 @@ TEST_SUPPORT.PAUSE;
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_RETURN_SEGMENT" );
       TEXT_IO.NEW_LINE;
-      SEGMENT_ADDRESS_6 := RTEMS.NULL_ADDRESS;
+      -- SEGMENT_ADDRESS_6 := RTEMS.NULL_ADDRESS;
 
       TEXT_IO.PUT( 
          "TA1 - region_return_segment - return segment to region 1 - "
@@ -337,7 +337,7 @@ TEST_SUPPORT.PAUSE;
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_RETURN_SEGMENT" );
       TEXT_IO.NEW_LINE;
-      SEGMENT_ADDRESS_8 := RTEMS.NULL_ADDRESS;
+      -- SEGMENT_ADDRESS_8 := RTEMS.NULL_ADDRESS;
 
       TEXT_IO.PUT( 
          "TA1 - region_return_segment - return segment to region 1 - "
@@ -350,7 +350,7 @@ TEST_SUPPORT.PAUSE;
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_RETURN_SEGMENT" );
       TEXT_IO.NEW_LINE;
-      SEGMENT_ADDRESS_5 := RTEMS.NULL_ADDRESS;
+      -- SEGMENT_ADDRESS_5 := RTEMS.NULL_ADDRESS;
 
       TEXT_IO.PUT_LINE(
          "TA1 - region_delete - walks heap if debug enabled"

@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2008.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -20,11 +20,9 @@
 --  $Id$
 --
 
-with INTERFACES; use INTERFACES;
 with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
-with Ada.Strings.Unbounded;
 with System; use System;  -- for Null Pointer comparison
 
 package body SPTEST is

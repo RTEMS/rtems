@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,7 +21,6 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -36,6 +35,7 @@ package body SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       TIME   : RTEMS.TIME_OF_DAY;
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -95,6 +95,8 @@ package body SPTEST is
       IGNORED_ID      : in     RTEMS.ID;
       IGNORED_ADDRESS : in     RTEMS.ADDRESS
    ) is
+      pragma Unreferenced(IGNORED_ID);
+      pragma Unreferenced(IGNORED_ADDRESS);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -135,6 +137,7 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       TMID   : RTEMS.ID;
       TIME   : RTEMS.TIME_OF_DAY;
       STATUS : RTEMS.STATUS_CODES;

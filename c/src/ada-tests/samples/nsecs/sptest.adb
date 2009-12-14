@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2007.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -23,7 +23,6 @@
 with Ada.Integer_Text_IO;
 with Interfaces.C;
 with RTEMS;
-with Test_Support;
 with Text_IO;
 use type Interfaces.C.Long;
 use type RTEMS.Time_T;
@@ -63,6 +62,7 @@ package body SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       Status : RTEMS.Status_Codes;
       Start  : RTEMS.Timespec;
       Stop   : RTEMS.Timespec;

@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2007.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,7 +21,6 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -129,6 +128,7 @@ package body SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -254,6 +254,7 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS            : RTEMS.STATUS_CODES;
       THE_PRIORITY      : RTEMS.TASK_PRIORITY;
       PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
@@ -341,6 +342,7 @@ package body SPTEST is
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS            : RTEMS.STATUS_CODES;
       THE_PRIORITY      : RTEMS.TASK_PRIORITY;
       PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
@@ -426,6 +428,7 @@ package body SPTEST is
    procedure TASK_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
    
@@ -446,6 +449,7 @@ package body SPTEST is
    procedure TASK_4 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
    begin
 
       Flush_Task_Event_Log;
@@ -482,6 +486,7 @@ package body SPTEST is
       UNUSED       : in     RTEMS.TCB_POINTER;
       CREATED_TASK : in     RTEMS.TCB_POINTER
    ) return RTEMS.Boolean is
+      pragma Unreferenced(UNUSED);
    begin
 
       if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( CREATED_TASK ) ) > 0 then
@@ -527,6 +532,7 @@ package body SPTEST is
       UNUSED         : in     RTEMS.TCB_POINTER;
       RESTARTED_TASK : in     RTEMS.TCB_POINTER
    ) is
+      pragma Unreferenced(UNUSED);
    begin
 
       if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RESTARTED_TASK ) ) > 0 then
@@ -548,6 +554,7 @@ package body SPTEST is
       UNUSED       : in     RTEMS.TCB_POINTER;
       STARTED_TASK : in     RTEMS.TCB_POINTER
    ) is
+      pragma Unreferenced(UNUSED);
    begin
 
       if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( STARTED_TASK ) ) > 0 then

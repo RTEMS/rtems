@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2007.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,7 +21,6 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
 
@@ -35,6 +34,7 @@ package body SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -143,7 +143,7 @@ package body SPTEST is
 
    procedure SCREEN_1
    is
-      NOTEPAD_VALUE     : RTEMS.UNSIGNED32;
+      NOTEPAD_VALUE     : RTEMS.UNSIGNED32 := 0;
       SELF_ID           : RTEMS.ID;
       PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
       STATUS            : RTEMS.STATUS_CODES;
@@ -1194,7 +1194,7 @@ package body SPTEST is
       BUFFER         : SPTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
       COUNT          : RTEMS.UNSIGNED32;
-      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32 := 0;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
@@ -3024,6 +3024,7 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
    begin
 
       SPTEST.SCREEN_1;
@@ -3080,6 +3081,7 @@ package body SPTEST is
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -3115,9 +3117,10 @@ package body SPTEST is
    procedure TASK_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       BUFFER         : SPTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
-      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32 := 0;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
@@ -3158,6 +3161,7 @@ package body SPTEST is
    procedure TASK_4 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 

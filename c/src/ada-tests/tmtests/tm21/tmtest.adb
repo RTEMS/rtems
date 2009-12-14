@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -20,13 +20,11 @@
 --  $Id$
 --
 
-with INTERFACES; use INTERFACES;
-with RTEMS;
 with RTEMS_CALLING_OVERHEAD;
 with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
-with UNSIGNED32_IO;
+with TIMER_DRIVER;
 
 package body TMTEST is
 
@@ -38,6 +36,7 @@ package body TMTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       ID     : RTEMS.ID;
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -72,6 +71,7 @@ package body TMTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       ID       : RTEMS.ID;
       OVERHEAD : RTEMS.UNSIGNED32;
       STATUS   : RTEMS.STATUS_CODES;

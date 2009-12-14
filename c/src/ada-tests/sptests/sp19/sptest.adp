@@ -18,7 +18,6 @@
 
 with INTERFACES; use INTERFACES;
 with FLOAT_IO;
-with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -261,6 +260,7 @@ package body SPTEST is
    procedure FP_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS     : RTEMS.STATUS_CODES;
       TID        : RTEMS.ID;
       TIME       : RTEMS.TIME_OF_DAY;
@@ -344,6 +344,7 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS     : RTEMS.STATUS_CODES;
       TID        : RTEMS.ID;
       TIME       : RTEMS.TIME_OF_DAY;

@@ -11,7 +11,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2007.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -20,8 +20,6 @@
 --
 --  $Id$
 --
-
-with RTEMS;
 
 package body DUMMY_RTEMS is
 
@@ -36,6 +34,11 @@ package body DUMMY_RTEMS is
       ID               :    out RTEMS.ID;
       RESULT           :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
+      pragma Unreferenced(INITIAL_PRIORITY);
+      pragma Unreferenced(STACK_SIZE);
+      pragma Unreferenced(INITIAL_MODES);
+      pragma Unreferenced(ATTRIBUTE_SET);
    begin
 
       ID := 0;
@@ -49,6 +52,8 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
+      pragma Unreferenced(NODE);
    begin
 
       ID := 0;
@@ -62,6 +67,9 @@ package body DUMMY_RTEMS is
       ARGUMENT    : in     RTEMS.UNSIGNED32;
       RESULT      :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(ENTRY_POINT);
+      pragma Unreferenced(ARGUMENT);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -73,6 +81,8 @@ package body DUMMY_RTEMS is
       ARGUMENT : in     RTEMS.UNSIGNED32;
       RESULT   :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(ARGUMENT);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -83,6 +93,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -93,6 +104,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -103,6 +115,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -115,6 +128,8 @@ package body DUMMY_RTEMS is
       OLD_PRIORITY :    out RTEMS.TASK_PRIORITY;
       RESULT       :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(NEW_PRIORITY);
    begin
 
       OLD_PRIORITY := 0;
@@ -128,6 +143,8 @@ package body DUMMY_RTEMS is
       PREVIOUS_MODE_SET :    out RTEMS.MODE;
       RESULT            :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(MODE_SET);
+      pragma Unreferenced(MASK);
    begin
 
       PREVIOUS_MODE_SET := 0;
@@ -141,6 +158,8 @@ package body DUMMY_RTEMS is
       NOTE    :    out RTEMS.UNSIGNED32;
       RESULT  :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(NOTEPAD);
    begin
 
       NOTE := 0;
@@ -154,6 +173,9 @@ package body DUMMY_RTEMS is
       NOTE    : in     RTEMS.UNSIGNED32;
       RESULT  :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(NOTEPAD);
+      pragma Unreferenced(NOTE);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -164,6 +186,7 @@ package body DUMMY_RTEMS is
       TIME_BUFFER : in     RTEMS.TIME_OF_DAY;
       RESULT      :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(TIME_BUFFER);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -174,6 +197,7 @@ package body DUMMY_RTEMS is
       TICKS  : in     RTEMS.INTERVAL;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(TICKS);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -202,6 +226,8 @@ package body DUMMY_RTEMS is
       TIME_BUFFER : in     RTEMS.ADDRESS;
       RESULT      :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(OPTION);
+      pragma Unreferenced(TIME_BUFFER);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -212,6 +238,7 @@ package body DUMMY_RTEMS is
       TIME_BUFFER : in     RTEMS.TIME_OF_DAY;
       RESULT      :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(TIME_BUFFER);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -234,6 +261,7 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
    begin
 
       ID := 0;
@@ -245,6 +273,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -256,6 +285,7 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
    begin
 
       ID := 0;
@@ -270,6 +300,10 @@ package body DUMMY_RTEMS is
       USER_DATA : in     RTEMS.ADDRESS;
       RESULT    :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(TICKS);
+      pragma Unreferenced(ROUTINE);
+      pragma Unreferenced(USER_DATA);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -283,6 +317,10 @@ package body DUMMY_RTEMS is
       USER_DATA : in     RTEMS.ADDRESS;
       RESULT    :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(WALL_TIME);
+      pragma Unreferenced(ROUTINE);
+      pragma Unreferenced(USER_DATA);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -293,6 +331,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -303,6 +342,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -319,6 +359,10 @@ package body DUMMY_RTEMS is
       ID               :    out RTEMS.ID;
       RESULT           :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
+      pragma Unreferenced(COUNT);
+      pragma Unreferenced(ATTRIBUTE_SET);
+      pragma Unreferenced(PRIORITY_CEILING);
    begin
 
       ID := 0;
@@ -330,6 +374,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -342,6 +387,8 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
+      pragma Unreferenced(NODE);
    begin
 
       ID := 0;
@@ -355,6 +402,9 @@ package body DUMMY_RTEMS is
       TIMEOUT    : in     RTEMS.INTERVAL;
       RESULT     :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(OPTION_SET);
+      pragma Unreferenced(TIMEOUT);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -365,6 +415,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -381,6 +432,10 @@ package body DUMMY_RTEMS is
       ID               :    out RTEMS.ID;
       Result           :    out RTEMS.Status_Codes
    ) is
+      pragma Unreferenced(Name);
+      pragma Unreferenced(Count);
+      pragma Unreferenced(Max_Message_Size);
+      pragma Unreferenced(Attribute_Set);
    begin
 
       ID := 0;
@@ -394,6 +449,8 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
+      pragma Unreferenced(NODE);
    begin
 
       ID := 0;
@@ -405,6 +462,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -417,6 +475,9 @@ package body DUMMY_RTEMS is
       Size   : in     RTEMS.Unsigned32;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(BUFFER);
+      pragma Unreferenced(Size);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -429,6 +490,9 @@ package body DUMMY_RTEMS is
       Size   : in     RTEMS.Unsigned32;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(BUFFER);
+      pragma Unreferenced(Size);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -442,6 +506,9 @@ package body DUMMY_RTEMS is
       COUNT  :    out RTEMS.UNSIGNED32;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(BUFFER);
+      pragma Unreferenced(Size);
    begin
 
       COUNT := 0;
@@ -457,6 +524,10 @@ package body DUMMY_RTEMS is
       Size       :    out RTEMS.Unsigned32;
       RESULT     :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(BUFFER);
+      pragma Unreferenced(OPTION_SET);
+      pragma Unreferenced(TIMEOUT);
    begin
 
       Size := 0;
@@ -469,6 +540,7 @@ package body DUMMY_RTEMS is
       COUNT  :    out RTEMS.UNSIGNED32;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       COUNT := 0;
@@ -483,6 +555,8 @@ package body DUMMY_RTEMS is
       EVENT_IN : in     RTEMS.EVENT_SET;
       RESULT   :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(EVENT_IN);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -496,6 +570,9 @@ package body DUMMY_RTEMS is
       EVENT_OUT  :    out RTEMS.EVENT_SET;
       RESULT     :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(EVENT_IN);
+      pragma Unreferenced(OPTION_SET);
+      pragma Unreferenced(TICKS);
    begin
 
       EVENT_OUT := 0;
@@ -510,6 +587,8 @@ package body DUMMY_RTEMS is
       MODE_SET    : in     RTEMS.MODE;
       RESULT      :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ASR_HANDLER);
+      pragma Unreferenced(MODE_SET);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -521,6 +600,8 @@ package body DUMMY_RTEMS is
       SIGNAL_SET : in     RTEMS.SIGNAL_SET;
       RESULT     :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(SIGNAL_SET);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -538,6 +619,11 @@ package body DUMMY_RTEMS is
       ID               :    out RTEMS.ID;
       RESULT           :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
+      pragma Unreferenced(STARTING_ADDRESS);
+      pragma Unreferenced(LENGTH);
+      pragma Unreferenced(BUFFER_SIZE);
+      pragma Unreferenced(ATTRIBUTE_SET);
    begin
 
       ID := 0;
@@ -551,6 +637,8 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
+      pragma Unreferenced(NODE);
    begin
 
       ID := 0;
@@ -562,6 +650,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -573,6 +662,7 @@ package body DUMMY_RTEMS is
       BUFFER :    out RTEMS.ADDRESS;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       BUFFER := RTEMS.Null_Address;
@@ -585,6 +675,8 @@ package body DUMMY_RTEMS is
       BUFFER : in     RTEMS.ADDRESS;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(BUFFER);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -602,6 +694,11 @@ package body DUMMY_RTEMS is
       ID               :    out RTEMS.ID;
       RESULT           :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
+      pragma Unreferenced(STARTING_ADDRESS);
+      pragma Unreferenced(LENGTH);
+      pragma Unreferenced(PAGE_SIZE);
+      pragma Unreferenced(ATTRIBUTE_SET);
    begin
 
       ID := 0;
@@ -614,6 +711,7 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
    begin
 
       ID := 0;
@@ -625,6 +723,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -639,6 +738,10 @@ package body DUMMY_RTEMS is
       SEGMENT    :    out RTEMS.ADDRESS;
       RESULT     :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(SIZE);
+      pragma Unreferenced(OPTION_SET);
+      pragma Unreferenced(TIMEOUT);
    begin
 
       SEGMENT := RTEMS.Null_Address;
@@ -651,6 +754,8 @@ package body DUMMY_RTEMS is
       SEGMENT : in     RTEMS.ADDRESS;
       RESULT  :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(SEGMENT);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -667,6 +772,10 @@ package body DUMMY_RTEMS is
       ID             :    out RTEMS.ID;
       RESULT         :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
+      pragma Unreferenced(INTERNAL_START);
+      pragma Unreferenced(EXTERNAL_START);
+      pragma Unreferenced(LENGTH);
    begin
 
       ID := 0;
@@ -679,6 +788,7 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
    begin
 
       ID := 0;
@@ -690,6 +800,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -702,6 +813,8 @@ package body DUMMY_RTEMS is
       INTERNAL :    out RTEMS.ADDRESS;
       RESULT   :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(EXTERNAL);
    begin
 
       INTERNAL := RTEMS.Null_Address;
@@ -715,6 +828,8 @@ package body DUMMY_RTEMS is
       EXTERNAL :    out RTEMS.ADDRESS;
       RESULT   :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(INTERNAL);
    begin
 
       EXTERNAL := RTEMS.Null_Address;
@@ -727,6 +842,7 @@ package body DUMMY_RTEMS is
    procedure FATAL_ERROR_OCCURRED (
       THE_ERROR : in     RTEMS.UNSIGNED32
    ) is
+      pragma Unreferenced(THE_ERROR);
    begin
 
       NULL;
@@ -740,6 +856,7 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
    begin
 
       ID := 0;
@@ -752,6 +869,7 @@ package body DUMMY_RTEMS is
       ID     :    out RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(NAME);
    begin
 
       ID := 0;
@@ -763,6 +881,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -773,6 +892,7 @@ package body DUMMY_RTEMS is
       ID     : in     RTEMS.ID;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
@@ -784,6 +904,8 @@ package body DUMMY_RTEMS is
       LENGTH  : in     RTEMS.INTERVAL;
       RESULT  :    out RTEMS.STATUS_CODES
    ) is
+      pragma Unreferenced(ID);
+      pragma Unreferenced(LENGTH);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;

@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2007.
+--  COPYRIGHT (c) 1989-2009.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,7 +21,6 @@
 --
 
 with Interfaces; use Interfaces;
-with RTEMS;
 with Unsigned32_IO;
 with Status_IO;
 with Text_IO;
@@ -190,7 +189,7 @@ package body Test_Support is
       Text_IO.Put( C3 );
       Text_IO.Put( C4 );
 
-      if New_Line = True then
+      if New_Line then
          Text_IO.New_Line;
       end if;
 
