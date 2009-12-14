@@ -672,7 +672,7 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 14 and 15" );
 
       TEXT_IO.PUT_LINE( 
-     "TA2 - event_receive - waiting forever on EVENT_17 or EVENT_18 - EVENT_ANY"
+   "TA2 - event_receive - waiting forever on EVENT_17 or EVENT_18 - EVENT_ANY"
       );
       RTEMS.EVENT_RECEIVE( 
          RTEMS.EVENT_17 + RTEMS.EVENT_18,

@@ -131,12 +131,6 @@ package body Test_Support is
       Text_IO.Put_Line( "<pause> " );
       -- Text_IO.Get_Line( Ignored_String, Ignored_Last );
 
-   -- exception
-
-   --    when Text_IO.End_Error =>
-   --    -- ignore this error.  It happens when redirecting input from /dev/null 
-   --    return;
-
    end Pause;
 
 --PAGE
@@ -159,12 +153,6 @@ package body Test_Support is
       Text_IO.Put_Line( "> " );
    --    Text_IO.Get_Line( Ignored_String, Ignored_Last );
  
-   -- exception
-
-   --    when Text_IO.End_Error =>
-   --    -- ignore this error.  It happens when redirecting input from /dev/null 
-   --    return;
-
    end Pause_And_Screen_Number;
 
 --PAGE
@@ -207,8 +195,6 @@ package body Test_Support is
 
       -- probably OK
       return RTEMS.Get_Index( TID ) - 1;
-      --   Ignoring this component.
-      --   - RTEMS.Configuration.RTEMS_API_Configuration.Number_Of_Initialization_Tasks;
 
    end Task_Number;
 

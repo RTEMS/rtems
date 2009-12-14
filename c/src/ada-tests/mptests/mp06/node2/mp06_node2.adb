@@ -3,7 +3,8 @@
 --
 --  DESCRIPTION:
 --
---  This is the entry point for Test MP06_NODE2 of the Single Processor Test Suite.
+--  This is the entry point for Test MP06_NODE2 of the Multiprocessor
+--  Test Suite.
 --
 --  DEPENDENCIES: 
 --

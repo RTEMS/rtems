@@ -204,7 +204,7 @@ package body MPTEST is
 
             exit when RTEMS.IS_STATUS_SUCCESSFUL( STATUS );
 
-            exit when not RTEMS.ARE_STATUSES_EQUAL( STATUS, RTEMS.NOT_DEFINED );
+            exit when not RTEMS.ARE_STATUSES_EQUAL(STATUS, RTEMS.NOT_DEFINED);
    
          end loop;
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_SEND" );

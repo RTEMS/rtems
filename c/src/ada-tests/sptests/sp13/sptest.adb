@@ -616,7 +616,7 @@ TEST_SUPPORT.PAUSE;
               SPTEST.QUEUE_ID( 1 ),
               STATUS
           );
-          TEST_SUPPORT.DIRECTIVE_FAILED( status, "message_queue_create of Q1" );
+          TEST_SUPPORT.DIRECTIVE_FAILED(status, "message_queue_create of Q1");
 
           BIG_SEND_BUFFER := (others => CHARACTER'POS( 'A' ));
           BIG_RECEIVE_BUFFER := (others => CHARACTER'POS( 'Z' ));
@@ -666,7 +666,8 @@ TEST_SUPPORT.PAUSE;
           end if;
 
           if (BIG_SEND_BUFFER( BIG_SEND_BUFFER'FIRST .. Integer( SIZE )) /=
-            BIG_RECEIVE_BUFFER( BIG_RECEIVE_BUFFER'FIRST .. Integer( SIZE ))) then
+            BIG_RECEIVE_BUFFER( BIG_RECEIVE_BUFFER'FIRST .. Integer( SIZE )))
+          then
               TEXT_IO.PUT_LINE("TA1 - exact size data match failed");
           end if;
 

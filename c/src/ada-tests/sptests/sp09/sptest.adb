@@ -1323,7 +1323,7 @@ package body SPTEST is
         RTEMS.INVALID_ID,
         "MESSAGE_QUEUE_GET_NUMBER_PENDING WITH ILLEGAL ID"
       );
-      TEXT_IO.PUT_LINE( "TA1 - message_queue_get_number_pending - INVALID_ID" );
+      TEXT_IO.PUT_LINE("TA1 - message_queue_get_number_pending - INVALID_ID");
 
       RTEMS.MESSAGE_QUEUE_FLUSH( 100, COUNT, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
