@@ -124,7 +124,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
 #vectors
 include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h
 include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
-include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
 #vme
 include_bsp_HEADERS += vme/VMEConfig.h \

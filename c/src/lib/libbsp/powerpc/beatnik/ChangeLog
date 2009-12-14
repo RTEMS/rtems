@@ -1,3 +1,7 @@
+2009-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am, preinstall.am: Removed ppc_exc_bspsupp.h include file.
+
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: BSP should not define
