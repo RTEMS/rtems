@@ -18,114 +18,98 @@
  */
 
 /*
- * These two non-volatile registers contain the program status for INT and SVC
- * mode.  It is important that they are directly accessible in THUMB
- * instruction mode.
+ * The upper EXCHANGE_SIZE bytes of the INT stack area are used for data
+ * exchange between INT and SVC mode.  Below of this is the actual INT stack.
+ * The exchange area is only accessed if INT is disabled.
  */
-#define MODE_INT r4
-#define MODE_SVC r5
 
-/*
- * These three non-volatile registers are used to exchange information between
- * INT and SVC mode.
- */
-#define SCRATCH_0 r6
-#define SCRATCH_1 r7
-#define SCRATCH_2 r8
+#define EXCHANGE_LR r4
+#define EXCHANGE_SPSR r5
+#define EXCHANGE_CPSR r6
+#define EXCHANGE_INT_SP r7
 
-/* List of scratch registers.  They will be saved and restored in INT mode. */
-#define SCRATCH_LIST {SCRATCH_0, SCRATCH_1, SCRATCH_2}
+#define EXCHANGE_LIST {EXCHANGE_LR, EXCHANGE_SPSR, EXCHANGE_CPSR, EXCHANGE_INT_SP}
+#define EXCHANGE_SIZE 16
 
-/*
- * List of all volatile registers (r0, r1, r2, r3, r12 and lr), registers
- * containing the interrupt context (return address in SCRATCH_0 and saved
- * program status in SCRATCH_1) and non-volatile registers used for modes
- * (MODE_INT and MODE_SVC).  They will be saved and restored in SVC mode.
- */
-#define TASK_CONTEXT_LIST \
-	{r0, r1, r2, r3, MODE_INT, MODE_SVC, SCRATCH_0, SCRATCH_1, r12, lr}
+#define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, r12}
+#define CONTEXT_SIZE 28
 
-/*
- * List of all volatile registers (r0, r1, r2, r3, r12 and lr) and the saved
- * program status (SCRATCH_0 register).  They will be saved and restored in INT
- * mode.
- */
-#define INTERRUPT_CONTEXT_LIST \
-	{r0, r1, r2, r3, SCRATCH_0, r12, lr}
-
-.extern _ISR_Thread_dispatch
 .extern _ISR_Nest_level
+.extern _ISR_Signals_to_thread_executing
+.extern _ISR_Thread_dispatch
 .extern _Thread_Dispatch_disable_level
+
 .extern bsp_interrupt_dispatch
+
+.macro SWITCH_FROM_THUMB_TO_ARM
+#ifdef __thumb__
+.align 2
+	bx	pc
+.arm
+#endif /* __thumb__ */
+.endm
+
+.macro SWITCH_FROM_ARM_TO_THUMB REG
+#ifdef __thumb__
+	add	\REG, pc, #1
+	bx	\REG
+.thumb
+#endif /* __thumb__ */
+.endm
 
 .arm
 .globl arm_exc_interrupt
 arm_exc_interrupt:
 
-	/* Save scratch registers on INT stack */
-	stmdb	sp!, SCRATCH_LIST
+	/* Save exchange registers to exchange area */
+	stmdb	sp, EXCHANGE_LIST
 
-	/* Increment interrupt nest level */
-	ldr	SCRATCH_0, =_ISR_Nest_level
-	ldr	SCRATCH_1, [SCRATCH_0]
-	add	SCRATCH_2, SCRATCH_1, #1
-	str	SCRATCH_2, [SCRATCH_0]
-
-	/* Branch for nested interrupts */
-	cmp	SCRATCH_1, #0
-	bne	nested_interrupt_context_save
-
-	/* Move interrupt context and CPSR to scratch registers */
-	mov	SCRATCH_0, lr
-	mrs	SCRATCH_1, spsr
-	mrs	SCRATCH_2, cpsr
+	/* Set exchange registers */
+	mov	EXCHANGE_LR, lr
+	mrs	EXCHANGE_SPSR, spsr
+	mrs	EXCHANGE_CPSR, cpsr
+	sub	EXCHANGE_INT_SP, sp, #EXCHANGE_SIZE
 
 	/* Switch to SVC mode */
-	orr	SCRATCH_2, SCRATCH_2, #0x1
-	msr	cpsr_c, SCRATCH_2
-
-	/* Save context on SVC stack */
-	stmdb	sp!, TASK_CONTEXT_LIST
-
-	/* Save SVC mode program status to non-volatile register */
-	mov	MODE_SVC, SCRATCH_2
-
-	/* Save INT mode program status to non-volatile register */
-	bic	MODE_INT, MODE_SVC, #0x1
-	
-	/* Switch to INT mode */
-	msr	cpsr_c, MODE_INT
-
-	/* Restore scratch registers from INT stack */
-	ldmia	sp!, SCRATCH_LIST
+	orr	EXCHANGE_CPSR, EXCHANGE_CPSR, #0x1
+	msr	cpsr, EXCHANGE_CPSR
 
 	/*
-	 * At this point the INT stack is in the exception entry state and
-	 * contains no data for us.  The context is saved on the SVC stack.  We
-	 * can easily switch modes via the registers MODE_INT and MODE_SVC
-	 * which are valid through subroutine calls.  We can use all volatile
-	 * registers in both modes.  Note that this comment describes the non
-	 * nested interrupt entry.  For a nested interrupt things are
-	 * different, since we can save everything on the INT stack and there
-	 * is no need to switch modes.
+	 * Save context.  We save the LR separately because it has to be
+	 * restored in SVC mode.  The other registers can be restored in INT
+	 * mode.
 	 */
+	stmdb	sp!, CONTEXT_LIST
+	stmdb	sp!, {lr}
 
-task_context_save_done:
+	/* Remember INT stack pointer */
+	mov	r1, EXCHANGE_INT_SP
+
+	/* Restore exchange registers from exchange area */
+	ldmia	r1, EXCHANGE_LIST
+
+	/* Get interrupt nest level */
+	ldr	r0, =_ISR_Nest_level
+	ldr	r2, [r0]
+
+	/* Switch stack if necessary and save original stack pointer */
+	mov	r3, sp
+	cmp	r2, #0
+	moveq	sp, r1
+	stmdb	sp!, {r3}
 
 	/* Switch to THUMB instructions if necessary */
-#ifdef __thumb__
-	add	r0, pc, #1
-	bx	r0
-.thumb
-#endif /* __thumb__ */
+	SWITCH_FROM_ARM_TO_THUMB        r1
 
-	/* Increment thread dispatch disable level */
+	/* Increment interrupt nest and thread dispatch disable level */
 	ldr	r1, =_Thread_Dispatch_disable_level
 	ldr	r3, [r1]
-	add	r3, r3, #1
+	add	r2, #1
+	add	r3, #1
+	str	r2, [r0]
 	str	r3, [r1]
 
-	/* Call BSP dependent interrrupt dispatcher */
+	/* Call BSP dependent interrupt dispatcher */
 	bl	bsp_interrupt_dispatch
 
 	/* Decrement interrupt nest and thread dispatch disable level */
@@ -133,97 +117,80 @@ task_context_save_done:
 	ldr	r1, =_Thread_Dispatch_disable_level
 	ldr	r2, [r0]
 	ldr	r3, [r1]
-	sub	r2, r2, #1
-	sub	r3, r3, #1
+	sub	r2, #1
+	sub	r3, #1
 	str	r2, [r0]
 	str	r3, [r1]
 
-	/* Switch to ARM instructions if necessary */
-#ifdef __thumb__
-.align 2
-	bx	pc
-.arm
-#endif /* __thumb__ */
+	/* Restore stack pointer */
+	SWITCH_FROM_THUMB_TO_ARM
+	ldr	sp, [sp]
+	SWITCH_FROM_ARM_TO_THUMB	r0
 
-	/* Branch if we have a nested interrupt */
-	cmp	r2, #0
-	bne	nested_interrupt_return
-
-	/* Branch if thread dispatching is disabled */
+	/* Check thread dispatch disable level */
 	cmp	r3, #0
 	bne	thread_dispatch_done
-	
-	/*
-	 * Switch to SVC mode.  It is important to call the thread dispatcher
-	 * in SVC mode since overwise the INT stack may need to store an
-	 * arbitrary number of contexts and it may lead to an invalid order of
-	 * stack operations.
-	 */
-	msr	cpsr_c, MODE_SVC
 
-	/* Call thread dispatcher */
+	/* Check context switch necessary */
+	ldr	r0, =_Context_Switch_necessary
+	ldrb	r1, [r0]
+	ldr	r0, =_ISR_Signals_to_thread_executing
+	cmp	r1, #0
+	bne	do_thread_dispatch
+
+	/* Check ISR signals to thread executing */
+	ldrb	r1, [r0]
+	cmp	r1, #0
+	beq	thread_dispatch_done
+
+        /* This aligns thread_dispatch_done on a 4 byte boundary */
 #ifdef __thumb__
-	ldr	r0, =_ISR_Thread_dispatch
-	mov	lr, pc
-	bx	r0
-.thumb
-	bx	pc
 	nop
-.arm
-#else
-	bl	_ISR_Thread_dispatch
-#endif
+#endif /* __thumb__ */
 
-	/* Switch to INT mode */
-	msr	cpsr_c, MODE_INT
+do_thread_dispatch:
+
+	/* Clear ISR signals to thread executing */
+	strb	r3, [r0]
+
+	/* Thread dispatch */
+	bl	_Thread_Dispatch
 
 thread_dispatch_done:
 
-	/* Save scratch registers on INT stack */
-	stmdb	sp!, SCRATCH_LIST
+	/* Switch to ARM instructions if necessary */
+	SWITCH_FROM_THUMB_TO_ARM
 
-	/* Switch to SVC mode */
-	msr	cpsr_c, MODE_SVC
+	/* Restore link register */
+	ldmia	sp!, {lr}
 
-	/* Move INT mode program status to scratch register */
-	mov	SCRATCH_2, MODE_INT
+	/*
+	 * XXX: Remember and restore stack pointer.  The data on the stack is
+	 * still in use.  So the stack is now in an inconsistent state.  The
+	 * FIQ handler implementation must not use this area.
+	 */
+	mov	r0, sp
+	add	sp, #CONTEXT_SIZE
 
-	/* Restore context from SVC stack */
-	ldmia	sp!, TASK_CONTEXT_LIST
+	/* Get INT mode program status register */
+	mrs	r1, cpsr
+	bic	r1, r1, #0x1
 
 	/* Switch to INT mode */
-	msr	cpsr_c, SCRATCH_2
+	msr	cpsr, r1
 
-	/* Restore interrupt context */
-	mov	lr, SCRATCH_0
-	msr	spsr, SCRATCH_1
+	/* Save EXCHANGE_LR and EXCHANGE_SPSR registers to exchange area */
+	stmdb	sp!, {EXCHANGE_LR, EXCHANGE_SPSR}
 
-	/* Restore scratch registers from INT stack */
-	ldmia	sp!, SCRATCH_LIST
+	/* Restore context */
+	ldmia	r0, CONTEXT_LIST
 
-	/* Return from interrupt */
-	subs	pc, lr, #4
+	/* Set return address and program status */
+	mov	lr, EXCHANGE_LR
+	msr	spsr, EXCHANGE_SPSR
 
-nested_interrupt_context_save:
-
-	/* Move saved program status register to scratch register */
-	mrs	SCRATCH_0, spsr
-
-	/* Save context on INT stack */
-	stmdb	sp!, INTERRUPT_CONTEXT_LIST
-
-	b	task_context_save_done
-
-nested_interrupt_return:
-
-	/* Restore context from INT stack */
-	ldmia	sp!, INTERRUPT_CONTEXT_LIST
-
-	/* Restore saved program status register */
-	msr	spsr, SCRATCH_0
-
-	/* Restore scratch registers from INT stack */
-	ldmia	sp!, SCRATCH_LIST
+	/* Restore EXCHANGE_LR and EXCHANGE_SPSR registers from exchange area */
+	ldmia	sp!, {EXCHANGE_LR, EXCHANGE_SPSR}
 
 	/* Return from interrupt */
 	subs	pc, lr, #4

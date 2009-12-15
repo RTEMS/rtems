@@ -1,3 +1,11 @@
+2009-12-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/score/arm.h: Recognize ARMv5TEJ.
+	* arm_exc_interrupt.S: The previous implementation was broken.  In
+	case of a nested interrupt the link register of the INT mode was not
+	properly restored.  This lead to a major rewrite.  Interrupt
+	processing is now done in SVC mode.
+
 2009-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/arm.h: Recognize ARMv7A.
