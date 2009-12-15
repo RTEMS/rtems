@@ -44,7 +44,7 @@ typedef struct {
   uint8_t * volatile end;
 } lpc24xx_i2c_bus_entry;
 
-static void lpc24xx_i2c_handler( void *arg)
+static void lpc24xx_i2c_handler(void *arg)
 {
   lpc24xx_i2c_bus_entry *e = arg;
   volatile lpc24xx_i2c *regs = e->regs;
@@ -97,20 +97,20 @@ static void lpc24xx_i2c_handler( void *arg)
 
   /* Notify task if necessary */
   if (notify) {
-    bsp_interrupt_vector_disable( e->vector);
+    bsp_interrupt_vector_disable(e->vector);
 
-    rtems_semaphore_release( e->state_update);
+    rtems_semaphore_release(e->state_update);
   }
 }
 
-static rtems_status_code lpc24xx_i2c_wait( lpc24xx_i2c_bus_entry *e)
+static rtems_status_code lpc24xx_i2c_wait(lpc24xx_i2c_bus_entry *e)
 {
-  bsp_interrupt_vector_enable( e->vector);
+  bsp_interrupt_vector_enable(e->vector);
 
-  return rtems_semaphore_obtain( e->state_update, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  return rtems_semaphore_obtain(e->state_update, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 }
 
-static rtems_status_code lpc24xx_i2c_init( rtems_libi2c_bus_t *bus)
+static rtems_status_code lpc24xx_i2c_init(rtems_libi2c_bus_t *bus)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
@@ -119,21 +119,21 @@ static rtems_status_code lpc24xx_i2c_init( rtems_libi2c_bus_t *bus)
 
   /* Create semaphore */
   sc = rtems_semaphore_create (
-    rtems_build_name ( 'I', '2', 'C', '0' + e->index),
+    rtems_build_name ('I', '2', 'C', '0' + e->index),
     0,
     RTEMS_SIMPLE_BINARY_SEMAPHORE,
     0,
     &e->state_update
   );
-  RTEMS_CHECK_SC( sc, "create status update semaphore");
+  RTEMS_CHECK_SC(sc, "create status update semaphore");
 
   /* Enable module power */
-  sc = lpc24xx_module_enable( LPC24XX_MODULE_I2C, e->index, LPC24XX_MODULE_CCLK_8);
-  RTEMS_CHECK_SC( sc, "enable module");
+  sc = lpc24xx_module_enable(LPC24XX_MODULE_I2C_0 + e->index, LPC24XX_MODULE_CCLK_8);
+  RTEMS_CHECK_SC(sc, "enable module");
 
   /* IO configuration */
-  sc = lpc24xx_io_config( LPC24XX_MODULE_I2C, e->index, e->config);
-  RTEMS_CHECK_SC( sc, "IO configuration");
+  sc = lpc24xx_io_config(LPC24XX_MODULE_I2C_0 + e->index, e->config);
+  RTEMS_CHECK_SC(sc, "IO configuration");
 
   /* Clock high and low duty cycles */
   regs->sclh = cycles;
@@ -150,8 +150,8 @@ static rtems_status_code lpc24xx_i2c_init( rtems_libi2c_bus_t *bus)
     lpc24xx_i2c_handler,
     e
   );
-  RTEMS_CHECK_SC( sc, "install interrupt handler");
-  bsp_interrupt_vector_disable( e->vector);
+  RTEMS_CHECK_SC(sc, "install interrupt handler");
+  bsp_interrupt_vector_disable(e->vector);
 
   /* Enable module in master mode */
   regs->conset = LPC24XX_I2C_EN;
@@ -162,7 +162,7 @@ static rtems_status_code lpc24xx_i2c_init( rtems_libi2c_bus_t *bus)
   return RTEMS_SUCCESSFUL;
 }
 
-static rtems_status_code lpc24xx_i2c_send_start( rtems_libi2c_bus_t *bus)
+static rtems_status_code lpc24xx_i2c_send_start(rtems_libi2c_bus_t *bus)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
@@ -173,13 +173,13 @@ static rtems_status_code lpc24xx_i2c_send_start( rtems_libi2c_bus_t *bus)
   regs->conset = LPC24XX_I2C_STA;
 
   /* Wait */
-  sc = lpc24xx_i2c_wait( e);
-  RTEMS_CHECK_SC( sc, "wait for state update");
+  sc = lpc24xx_i2c_wait(e);
+  RTEMS_CHECK_SC(sc, "wait for state update");
 
   return RTEMS_SUCCESSFUL;
 }
 
-static rtems_status_code lpc24xx_i2c_send_stop( rtems_libi2c_bus_t *bus)
+static rtems_status_code lpc24xx_i2c_send_stop(rtems_libi2c_bus_t *bus)
 {
   lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
   volatile lpc24xx_i2c *regs = e->regs;
@@ -213,8 +213,8 @@ static rtems_status_code lpc24xx_i2c_send_addr(
   regs->conclr = LPC24XX_I2C_STA | LPC24XX_I2C_SI;
 
   /* Wait */
-  sc = lpc24xx_i2c_wait( e);
-  RTEMS_CHECK_SC_RV( sc, "wait for state update");
+  sc = lpc24xx_i2c_wait(e);
+  RTEMS_CHECK_SC_RV(sc, "wait for state update");
 
   /* Check state */
   state = regs->stat;
@@ -225,7 +225,7 @@ static rtems_status_code lpc24xx_i2c_send_addr(
   return RTEMS_SUCCESSFUL;
 }
 
-static int lpc24xx_i2c_read( rtems_libi2c_bus_t *bus, unsigned char *in, int n)
+static int lpc24xx_i2c_read(rtems_libi2c_bus_t *bus, unsigned char *in, int n)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
@@ -253,8 +253,8 @@ static int lpc24xx_i2c_read( rtems_libi2c_bus_t *bus, unsigned char *in, int n)
   regs->conclr = LPC24XX_I2C_SI;
 
   /* Wait */
-  sc = lpc24xx_i2c_wait( e);
-  RTEMS_CHECK_SC_RV( sc, "wait for state update");
+  sc = lpc24xx_i2c_wait(e);
+  RTEMS_CHECK_SC_RV(sc, "wait for state update");
 
   /* Check state */
   state = regs->stat;
@@ -290,8 +290,8 @@ static int lpc24xx_i2c_write(
   regs->conclr = LPC24XX_I2C_SI;
 
   /* Wait */
-  sc = lpc24xx_i2c_wait( e);
-  RTEMS_CHECK_SC_RV( sc, "wait for state update");
+  sc = lpc24xx_i2c_wait(e);
+  RTEMS_CHECK_SC_RV(sc, "wait for state update");
 
   /* Check state */
   state = regs->stat;
@@ -310,14 +310,14 @@ static int lpc24xx_i2c_set_transfer_mode(
   return -RTEMS_NOT_IMPLEMENTED;
 }
 
-static int lpc24xx_i2c_ioctl( rtems_libi2c_bus_t *bus, int cmd, void *arg)
+static int lpc24xx_i2c_ioctl(rtems_libi2c_bus_t *bus, int cmd, void *arg)
 {
   int rv = -1;
   const rtems_libi2c_tfr_mode_t *tm = (const rtems_libi2c_tfr_mode_t *) arg;
 
   switch (cmd) {
     case RTEMS_LIBI2C_IOCTL_SET_TFRMODE:
-      rv = lpc24xx_i2c_set_transfer_mode( bus, tm);
+      rv = lpc24xx_i2c_set_transfer_mode(bus, tm);
       break;
     default:
       rv = -RTEMS_NOT_DEFINED;
@@ -341,7 +341,7 @@ static const rtems_libi2c_bus_ops_t lpc24xx_i2c_ops = {
   static lpc24xx_i2c_bus_entry lpc24xx_i2c_entry_0 = {
     .bus = {
       .ops = &lpc24xx_i2c_ops,
-      .size = sizeof( lpc24xx_i2c_bus_entry)
+      .size = sizeof(lpc24xx_i2c_bus_entry)
     },
     .regs = (volatile lpc24xx_i2c *) I2C0_BASE_ADDR,
     .index = 0,
@@ -357,7 +357,7 @@ static const rtems_libi2c_bus_ops_t lpc24xx_i2c_ops = {
   static lpc24xx_i2c_bus_entry lpc24xx_i2c_entry_1 = {
     .bus = {
       .ops = &lpc24xx_i2c_ops,
-      .size = sizeof( lpc24xx_i2c_bus_entry)
+      .size = sizeof(lpc24xx_i2c_bus_entry)
     },
     .regs = (volatile lpc24xx_i2c *) I2C1_BASE_ADDR,
     .index = 1,
@@ -373,7 +373,7 @@ static const rtems_libi2c_bus_ops_t lpc24xx_i2c_ops = {
   static lpc24xx_i2c_bus_entry lpc24xx_i2c_entry_2 = {
     .bus = {
       .ops = &lpc24xx_i2c_ops,
-      .size = sizeof( lpc24xx_i2c_bus_entry)
+      .size = sizeof(lpc24xx_i2c_bus_entry)
     },
     .regs = (volatile lpc24xx_i2c *) I2C2_BASE_ADDR,
     .index = 2,

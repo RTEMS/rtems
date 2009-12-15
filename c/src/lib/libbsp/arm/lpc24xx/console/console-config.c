@@ -25,14 +25,14 @@
 #include <bsp/lpc24xx.h>
 #include <bsp/irq.h>
 
-static uint8_t lpc24xx_uart_register( uint32_t addr, uint8_t i)
+static uint8_t lpc24xx_uart_register(uint32_t addr, uint8_t i)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
 
   return (uint8_t) reg [i];
 }
 
-static void lpc24xx_uart_set_register( uint32_t addr, uint8_t i, uint8_t val)
+static void lpc24xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
 
@@ -129,7 +129,7 @@ console_tbl Console_Port_Tbl [] = {
 };
 
 #define LPC24XX_UART_NUMBER \
-  (sizeof( Console_Port_Tbl) / sizeof( Console_Port_Tbl [0]))
+  (sizeof(Console_Port_Tbl) / sizeof(Console_Port_Tbl [0]))
 
 unsigned long Console_Port_Count = LPC24XX_UART_NUMBER;
 

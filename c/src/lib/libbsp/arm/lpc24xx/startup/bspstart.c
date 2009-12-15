@@ -33,15 +33,15 @@
 void bsp_start(void)
 {
   /* Initialize Timer 1 */
-  lpc24xx_module_enable(LPC24XX_MODULE_TIMER, 1, LPC24XX_MODULE_CCLK);
+  lpc24xx_module_enable(LPC24XX_MODULE_TIMER_1, LPC24XX_MODULE_CCLK);
 
   /* Initialize standard timer */
   lpc24xx_timer_initialize();
 
   /* Initialize console */
   #ifdef LPC24XX_CONFIG_CONSOLE
-    lpc24xx_module_enable(LPC24XX_MODULE_UART, 0, LPC24XX_MODULE_CCLK);
-    lpc24xx_io_config(LPC24XX_MODULE_UART, 0, LPC24XX_CONFIG_CONSOLE);
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_0, LPC24XX_MODULE_CCLK);
+    lpc24xx_io_config(LPC24XX_MODULE_UART_0, LPC24XX_CONFIG_CONSOLE);
     U0LCR = 0;
     U0IER = 0;
     U0LCR = 0x80;
@@ -60,23 +60,25 @@ void bsp_start(void)
   lpc24xx_dma_initialize();
 
   /* Task stacks */
-  bsp_stack_initialize(
-    bsp_section_stack_begin,
-    (uintptr_t) bsp_section_stack_size
-  );
+  #ifdef LPC24XX_SPECIAL_TASK_STACKS_SUPPORT
+    bsp_stack_initialize(
+      bsp_section_stack_begin,
+      (uintptr_t) bsp_section_stack_size
+    );
+  #endif
 
   /* UART configurations */
   #ifdef LPC24XX_CONFIG_UART_1
-    lpc24xx_module_enable(LPC24XX_MODULE_UART, 1, LPC24XX_MODULE_CCLK);
-    lpc24xx_io_config(LPC24XX_MODULE_UART, 1, LPC24XX_CONFIG_UART_1);
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_1, LPC24XX_MODULE_CCLK);
+    lpc24xx_io_config(LPC24XX_MODULE_UART_1, LPC24XX_CONFIG_UART_1);
   #endif
   #ifdef LPC24XX_CONFIG_UART_2
-    lpc24xx_module_enable(LPC24XX_MODULE_UART, 2, LPC24XX_MODULE_CCLK);
-    lpc24xx_io_config(LPC24XX_MODULE_UART, 2, LPC24XX_CONFIG_UART_2);
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_2, LPC24XX_MODULE_CCLK);
+    lpc24xx_io_config(LPC24XX_MODULE_UART_2, LPC24XX_CONFIG_UART_2);
   #endif
   #ifdef LPC24XX_CONFIG_UART_3
-    lpc24xx_module_enable(LPC24XX_MODULE_UART, 3, LPC24XX_MODULE_CCLK);
-    lpc24xx_io_config(LPC24XX_MODULE_UART, 3, LPC24XX_CONFIG_UART_3);
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_3, LPC24XX_MODULE_CCLK);
+    lpc24xx_io_config(LPC24XX_MODULE_UART_3, LPC24XX_CONFIG_UART_3);
   #endif
 }
 

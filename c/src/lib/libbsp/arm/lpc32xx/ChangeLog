@@ -1,0 +1,9 @@
+2009-12-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_specs, configure.ac, console/console-config.c, include/bsp.h,
+	include/irq-config.h, include/irq.h, include/lpc32xx.h,
+	include/lpc-clock-config.h, irq/irq.c,
+	make/custom/lpc32xx_phycore.cfg, Makefile.am, misc/timer.c,
+	preinstall.am, README, rtc/rtc-config.c, startup/bspreset.c,
+	startup/bspstart.c, startup/bspstarthooks.c,
+	startup/linkcmds.lpc32xx_phycore: New files.

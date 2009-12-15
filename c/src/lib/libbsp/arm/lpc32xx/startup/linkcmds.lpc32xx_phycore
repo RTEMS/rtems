@@ -1,22 +1,23 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_linker_ea
+ * @ingroup lpc32xx_linker_phycore
  *
  * @brief Memory map.
  */
 
 /**
- * @defgroup lpc24xx_linker_ea QVGA Base Board Memory Map
+ * @defgroup lpc32xx_linker_phycore phyCORE-LPC3250 Memory Map
  *
  * @ingroup bsp_linker
  *
- * @brief QVGA Base Board from Embedded Artists (LPC2478) memory map.
+ * @brief phyCORE-LPC3250 memory map.
  *
  * <table>
  *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
- *   <tr><td>RAM_INT</td><td>0x40000000</td><td>64k</td></tr>
- *   <tr><td>RAM_EXT</td><td>0xa0000000</td><td>32M</td></tr>
+ *   <tr><td>RAM_INT</td><td>0x08000000</td><td>256k</td></tr>
+ *   <tr><td>RAM_EXT</td><td>0x80000000</td><td>64M</td></tr>
+ *   <tr><td>ROM_EXT</td><td>0xe0000000</td><td>2M</td></tr>
  * </table>
  *
  * <table>
@@ -26,7 +27,7 @@
  *   <tr><td>.text</td><td>RAM_EXT</td><td>RAM_EXT</td></tr>
  *   <tr><td>.rodata</td><td>RAM_EXT</td><td>RAM_EXT</td></tr>
  *   <tr><td>.data</td><td>RAM_EXT</td><td>RAM_EXT</td></tr>
- *   <tr><td>.fast</td><td>RAM_INT</td><td>RAM_EXT</td></tr>
+ *   <tr><td>.fast</td><td>RAM_EXT</td><td>RAM_EXT</td></tr>
  *   <tr><td>.bss</td><td>RAM_EXT</td><td></td></tr>
  *   <tr><td>.work</td><td>RAM_EXT</td><td></td></tr>
  *   <tr><td>.stack</td><td>RAM_INT</td><td></td></tr>
@@ -34,8 +35,9 @@
  */
 
 MEMORY {
-        RAM_INT (AIW) : ORIGIN = 0x40000000, LENGTH = 64k
-        RAM_EXT (AIW) : ORIGIN = 0xa0000000, LENGTH = 32M
+        RAM_INT (AIW) : ORIGIN = 0x08000000, LENGTH = 256k
+        RAM_EXT (AIW) : ORIGIN = 0x80000000, LENGTH = 64M /* SDRAM on DYCS0 */
+        ROM_EXT (RX) : ORIGIN = 0xe0000000, LENGTH = 2M /* NOR flash on CS0 */
         NIRVANA : ORIGIN = 0, LENGTH = 0
 }
 
@@ -47,10 +49,12 @@ REGION_ALIAS ("REGION_RODATA", RAM_EXT);
 REGION_ALIAS ("REGION_RODATA_LOAD", RAM_EXT);
 REGION_ALIAS ("REGION_DATA", RAM_EXT);
 REGION_ALIAS ("REGION_DATA_LOAD", RAM_EXT);
-REGION_ALIAS ("REGION_FAST", RAM_INT);
+REGION_ALIAS ("REGION_FAST", RAM_EXT);
 REGION_ALIAS ("REGION_FAST_LOAD", RAM_EXT);
 REGION_ALIAS ("REGION_BSS", RAM_EXT);
 REGION_ALIAS ("REGION_WORK", RAM_EXT);
 REGION_ALIAS ("REGION_STACK", RAM_INT);
+
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
 
 INCLUDE linkcmds.base

@@ -68,6 +68,9 @@
 
 #define LPC24XX_IRQ_PRIORITY_VALUE_MIN 0U
 #define LPC24XX_IRQ_PRIORITY_VALUE_MAX 15U
+#define LPC24XX_IRQ_PRIORITY_COUNT (LPC24XX_IRQ_PRIORITY_VALUE_MAX + 1U)
+#define LPC24XX_IRQ_PRIORITY_HIGHEST LPC24XX_IRQ_PRIORITY_VALUE_MIN
+#define LPC24XX_IRQ_PRIORITY_LOWEST LPC24XX_IRQ_PRIORITY_VALUE_MAX
 
 /**
  * @brief Minimum vector number.
@@ -79,11 +82,9 @@
  */
 #define BSP_INTERRUPT_VECTOR_MAX LPC24XX_IRQ_I2S
 
-void bsp_interrupt_dispatch( void);
+void lpc24xx_irq_set_priority(rtems_vector_number vector, unsigned priority);
 
-void lpc24xx_irq_set_priority( rtems_vector_number vector, unsigned priority);
-
-unsigned lpc24xx_irq_priority( rtems_vector_number vector);
+unsigned lpc24xx_irq_get_priority(rtems_vector_number vector);
 
 /** @} */
 

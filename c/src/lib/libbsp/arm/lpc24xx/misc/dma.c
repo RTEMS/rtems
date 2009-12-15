@@ -33,7 +33,7 @@ static bool lpc24xx_dma_channel_occupation [GPDMA_CH_NUMBER];
 void lpc24xx_dma_initialize(void)
 {
   /* Enable module power */
-  lpc24xx_module_enable(LPC24XX_MODULE_GPDMA, 0, LPC24XX_MODULE_PCLK_DEFAULT);
+  lpc24xx_module_enable(LPC24XX_MODULE_GPDMA, LPC24XX_MODULE_PCLK_DEFAULT);
 
   /* Disable module */
   GPDMA_CONFIG = 0;

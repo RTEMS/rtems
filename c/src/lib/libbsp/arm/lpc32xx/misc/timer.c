@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup lpc32xx
  *
  * @brief Benchmark timer support.
  */
@@ -22,34 +22,34 @@
 #include <rtems.h>
 #include <rtems/timerdrv.h>
 
-#include <bsp/system-clocks.h>
-
 static bool benchmark_timer_find_average_overhead = false;
 
 static uint32_t benchmark_timer_base;
 
+/* TODO */
+static uint32_t lpc32xx_timer(void)
+{
+  return 0;
+}
+
 void benchmark_timer_initialize(void)
 {
-  benchmark_timer_base = lpc24xx_timer();
+  benchmark_timer_base = lpc32xx_timer();
 }
 
 uint32_t benchmark_timer_read(void)
 {
-  uint32_t delta = lpc24xx_timer() - benchmark_timer_base;
+  uint32_t delta = lpc32xx_timer() - benchmark_timer_base;
 
   if (benchmark_timer_find_average_overhead) {
     return delta;
   } else {
-    /* Value determined by tmck for NCS board */
-    if (delta > 74) {
-      return delta - 74;
-    } else {
-      return 0;
-    }
+    /* TODO */
+    return 0;
   }
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(bool find_average_overhead )
+void benchmark_timer_disable_subtracting_average_overhead(bool find_average_overhead)
 {
   benchmark_timer_find_average_overhead = find_average_overhead;
 }

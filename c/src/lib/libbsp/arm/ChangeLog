@@ -1,3 +1,9 @@
+2009-12-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/linker-symbols.h: C++ compatibility.
+	* shared/lpc/include/lpc-timer.h, shared/lpc/clock/lpc-clock-config.c:
+	New files.
+
 2009-12-07	Ralf Corsépius <ralf.corsepiu@rtems.org>
 
 	* shared/comm/console.c: Remove (Unused).

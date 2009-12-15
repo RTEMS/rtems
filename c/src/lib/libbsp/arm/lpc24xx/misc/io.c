@@ -36,10 +36,9 @@
 
 #define LPC24XX_IO_ALTERNATE_2 0x3U
 
-#define LPC24XX_IO_ENTRY(mod, idx, cfg, begin_port, begin_index, last_port, last_index, function) \
+#define LPC24XX_IO_ENTRY(mod, cfg, begin_port, begin_index, last_port, last_index, function) \
   { \
     .module = mod, \
-    .index = idx, \
     .config = cfg, \
     .pin_begin = LPC24XX_IO_INDEX_BY_PORT(begin_port, begin_index), \
     .pin_last = LPC24XX_IO_INDEX_BY_PORT(last_port, last_index), \
@@ -47,8 +46,7 @@
   }
 
 typedef struct {
-  unsigned module : 5;
-  unsigned index : 4;
+  unsigned module : 6;
   unsigned config : 4;
   unsigned pin_begin : 8;
   unsigned pin_last : 8;
@@ -59,59 +57,58 @@ typedef void (*lpc24xx_io_iterate_routine)(unsigned /* pin */, unsigned /* funct
 
 static const lpc24xx_io_entry lpc24xx_io_config_table [] = {
   /* UART */
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 0, 0, 0, 2, 0, 3, LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 1, 0, 0, 15, 0, 16, LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 1, 1, 2, 0, 2, 1, LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 1, 2, 3, 16, 3, 17, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 2, 0, 0, 10, 0, 11, LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 2, 1, 2, 8, 2, 9, LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 2, 2, 4, 22, 4, 23, LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 3, 0, 0, 0, 0, 1, LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 3, 1, 0, 25, 0, 26, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART, 3, 2, 4, 28, 4, 29, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_0, 0, 0, 2, 0, 3, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_1, 0, 0, 15, 0, 16, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_1, 1, 2, 0, 2, 1, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_1, 2, 3, 16, 3, 17, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_2, 0, 0, 10, 0, 11, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_2, 1, 2, 8, 2, 9, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_2, 2, 4, 22, 4, 23, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_3, 0, 0, 0, 0, 1, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_3, 1, 0, 25, 0, 26, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_UART_3, 2, 4, 28, 4, 29, LPC24XX_IO_ALTERNATE_2),
 
   /* Ethernet */
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 0, 1, 0, 1, 17, LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 1, 1, 0, 1, 1, LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 1, 1, 4, 1, 4, LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 1, 1, 8, 1, 10, LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 1, 1, 14, 1, 17, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 0, 1, 0, 1, 17, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 1, 1, 0, 1, 1, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 1, 1, 4, 1, 4, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 1, 1, 8, 1, 10, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ETHERNET, 1, 1, 14, 1, 17, LPC24XX_IO_ALTERNATE_0),
 
   /* ADC */
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ADC, 0, 0, 0, 12, 0, 13, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ADC, 0, 0, 12, 0, 13, LPC24XX_IO_ALTERNATE_2),
 
   /* I2C */
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 0, 0, 0, 27, 0, 28, LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 1, 0, 0, 0, 0, 1, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 1, 1, 0, 19, 0, 20, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 1, 2, 2, 14, 2, 15, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 2, 0, 0, 10, 0, 11, LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 2, 1, 2, 30, 2, 31, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C, 2, 2, 4, 20, 4, 21, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_0, 0, 0, 27, 0, 28, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_1, 0, 0, 0, 0, 1, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_1, 1, 0, 19, 0, 20, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_1, 2, 2, 14, 2, 15, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_2, 0, 0, 10, 0, 11, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_2, 1, 2, 30, 2, 31, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_2, 2, 4, 20, 4, 21, LPC24XX_IO_ALTERNATE_1),
 
   /* SSP */
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 0, 0, 15, 0, 18, LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 1, 1, 20, 0, 21, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 1, 1, 23, 0, 24, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 2, 2, 22, 2, 23, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 0, 2, 2, 26, 2, 27, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 0, 0, 6, 0, 9, LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 1, 0, 12, 0, 13, LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 1, 0, 14, 0, 14, LPC24XX_IO_ALTERNATE_2),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 1, 1, 31, 1, 31, LPC24XX_IO_ALTERNATE_1),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP, 1, 2, 4, 20, 4, 23, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_0, 0, 0, 15, 0, 18, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_0, 1, 1, 20, 0, 21, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_0, 1, 1, 23, 0, 24, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_0, 2, 2, 22, 2, 23, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_0, 2, 2, 26, 2, 27, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_1, 0, 0, 6, 0, 9, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_1, 1, 0, 12, 0, 13, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_1, 1, 0, 14, 0, 14, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_1, 1, 1, 31, 1, 31, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_1, 2, 4, 20, 4, 23, LPC24XX_IO_ALTERNATE_2),
 
   /* USB */
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_USB, 0, 0, 0, 29, 0, 30, LPC24XX_IO_ALTERNATE_0),
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_USB, 0, 0, 1, 19, 1, 19, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_USB, 0, 0, 29, 0, 30, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_USB, 0, 1, 19, 1, 19, LPC24XX_IO_ALTERNATE_1),
 
   /* Terminate */
-  LPC24XX_IO_ENTRY(LPC24XX_MODULE_COUNT, 0, 0, 0, 0, 0, 0, 0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_COUNT, 0, 0, 0, 0, 0, 0),
 };
 
 static rtems_status_code lpc24xx_io_iterate(
   lpc24xx_module module,
-  unsigned index,
   unsigned config,
   lpc24xx_io_iterate_routine routine
 )
@@ -120,7 +117,7 @@ static rtems_status_code lpc24xx_io_iterate(
   const lpc24xx_io_entry *e = &lpc24xx_io_config_table [0];
 
   while (e->module != LPC24XX_MODULE_COUNT) {
-    if (e->module == module && e->index == index && e->config == config) {
+    if (e->module == module && e->config == config) {
       unsigned pin = e->pin_begin;
       unsigned last = e->pin_last;
       unsigned function = e->pin_function;
@@ -172,20 +169,18 @@ static void lpc24xx_io_do_release(unsigned pin, unsigned function)
 
 rtems_status_code lpc24xx_io_config(
   lpc24xx_module module,
-  unsigned index,
   unsigned config
 )
 {
-  return lpc24xx_io_iterate(module, index, config, lpc24xx_io_do_config);
+  return lpc24xx_io_iterate(module, config, lpc24xx_io_do_config);
 }
 
 rtems_status_code lpc24xx_io_release(
   lpc24xx_module module,
-  unsigned index,
   unsigned config
 )
 {
-  return lpc24xx_io_iterate(module, index, config, lpc24xx_io_do_release);
+  return lpc24xx_io_iterate(module, config, lpc24xx_io_do_release);
 }
 
 rtems_status_code lpc24xx_gpio_config(
@@ -239,197 +234,102 @@ rtems_status_code lpc24xx_gpio_config(
   return RTEMS_SUCCESSFUL;
 }
 
+#define LPC24XX_MODULE_ENTRY(mod, pwr, clk, idx) \
+  [mod] = { \
+    .power = pwr, \
+    .clock = clk, \
+    .index = idx \
+  }
+
+typedef struct {
+  unsigned char power : 1;
+  unsigned char clock : 1;
+  unsigned char index : 6;
+} lpc24xx_module_entry;
+
+static const lpc24xx_module_entry lpc24xx_module_table [] = {
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_ACF, 0, 1, 15),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_ADC, 1, 1, 12),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_BAT_RAM, 0, 1, 16),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_CAN_0, 1, 1, 13),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_CAN_1, 1, 1, 14),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_DAC, 0, 1, 11),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_EMC, 1, 0, 11),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_ETHERNET, 1, 0, 30),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_GPDMA, 1, 1, 29),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_GPIO, 0, 1, 17),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2C_0, 1, 1, 7),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2C_1, 1, 1, 19),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2C_2, 1, 1, 26),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2S, 1, 1, 27),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_LCD, 1, 1, 20),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_MCI, 1, 1, 28),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PCB, 0, 1, 18),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PWM_0, 1, 1, 5),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PWM_1, 1, 1, 6),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_RTC, 1, 1, 9),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SPI, 1, 1, 8),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SSP_0, 1, 1, 21),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SSP_1, 1, 1, 10),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SYSCON, 0, 1, 30),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_TIMER_0, 1, 1, 1),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_TIMER_1, 1, 1, 2),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_TIMER_2, 1, 1, 22),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_TIMER_3, 1, 1, 23),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_0, 1, 1, 3),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_1, 1, 1, 4),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_2, 1, 1, 24),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_3, 1, 1, 25),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_USB, 1, 0, 31),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_WDT, 0, 1, 0)
+};
+
 static rtems_status_code lpc24xx_module_do_enable(
   lpc24xx_module module,
-  unsigned index,
   lpc24xx_module_clock clock,
   bool enable
 )
 {
-  const unsigned NO_POWER = 32U;
-  const unsigned INVALID = 33U;
-  unsigned power_bit = INVALID;
-  unsigned clock_shift = INVALID;
+  rtems_interrupt_level level;
+  bool has_power = false;
+  bool has_clock = false;
+  unsigned index = 0;
 
-  /* Check clock value */
+  if ((unsigned) module >= LPC24XX_MODULE_COUNT) {
+      return RTEMS_INVALID_ID;
+  }
+
   if ((clock & ~LPC24XX_MODULE_CLOCK_MASK) != 0U) {
     return RTEMS_INVALID_NUMBER;
   }
 
-  /* Get power bit */
-  switch (module) {
-    case LPC24XX_MODULE_ACF:
-      if (index == 0) {
-        power_bit = NO_POWER;
-        clock_shift = 30U;
-      }
-      break;
-    case LPC24XX_MODULE_ADC:
-      if (index == 0) {
-        power_bit = 12U;
-      }
-      break;
-    case LPC24XX_MODULE_BAT_RAM:
-      if (index == 0) {
-        power_bit = NO_POWER;
-        clock_shift = 32U;
-      }
-      break;
-    case LPC24XX_MODULE_CAN:
-      if (index < 2) {
-        power_bit = 13U + index;
-      }
-      break;
-    case LPC24XX_MODULE_DAC:
-      if (index == 0) {
-        power_bit = NO_POWER;
-        clock_shift = 22U;
-      }
-      break;
-    case LPC24XX_MODULE_EMC:
-      if (index == 0) {
-        power_bit = 11U;
-      }
-      break;
-    case LPC24XX_MODULE_ETHERNET:
-      if (index == 0) {
-        power_bit = 30U;
-      }
-      break;
-    case LPC24XX_MODULE_GPDMA:
-      if (index == 0) {
-        power_bit = 29U;
-      }
-      break;
-    case LPC24XX_MODULE_GPIO:
-      if (index == 0) {
-        power_bit = NO_POWER;
-        clock_shift = 34U;
-      }
-      break;
-    case LPC24XX_MODULE_I2C:
-      switch (index) {
-        case 0U:
-          power_bit = 7U;
-          break;
-        case 1U:
-          power_bit = 19U;
-          break;
-        case 2U:
-          power_bit = 26U;
-          break;
-      }
-      break;
-    case LPC24XX_MODULE_I2S:
-      if (index == 0) {
-        power_bit = 27U;
-      }
-      break;
-    case LPC24XX_MODULE_LCD:
-      if (index == 0) {
-        power_bit = 20U;
-      }
-      break;
-    case LPC24XX_MODULE_MCI:
-      if (index == 0) {
-        power_bit = 28U;
-      }
-      break;
-    case LPC24XX_MODULE_PCB:
-      if (index == 0) {
-        power_bit = NO_POWER;
-        clock_shift = 36U;
-      }
-      break;
-    case LPC24XX_MODULE_PWM:
-      if (index < 2) {
-        power_bit = 5U + index;
-      }
-      break;
-    case LPC24XX_MODULE_RTC:
-      if (index == 0) {
-        power_bit = 9U;
-      }
-      break;
-    case LPC24XX_MODULE_SPI:
-      if (index == 0) {
-        power_bit = 8U;
-      }
-      break;
-    case LPC24XX_MODULE_SSP:
-      switch (index) {
-        case 0U:
-          power_bit = 21U;
-          break;
-        case 1U:
-          power_bit = 10U;
-          break;
-      }
-      break;
-    case LPC24XX_MODULE_SYSCON:
-      if (index == 0) {
-        power_bit = NO_POWER;
-        clock_shift = 60U;
-      }
-      break;
-    case LPC24XX_MODULE_TIMER:
-      if (index < 2) {
-        power_bit = 1U + index;
-      } else if (index < 4) {
-        power_bit = 20U + index;
-      }
-      break;
-    case LPC24XX_MODULE_UART:
-      if (index < 2) {
-        power_bit = 3U + index;
-      } else if (index < 4) {
-        power_bit = 22U + index;
-      }
-      break;
-    case LPC24XX_MODULE_USB:
-      if (index == 0) {
-        power_bit = 31U;
-      }
-      break;
-    case LPC24XX_MODULE_WDT:
-      if (index == 0) {
-        power_bit = NO_POWER;
-        clock_shift = 0U;
-      }
-      break;
-    default:
-      return RTEMS_INVALID_ID;
-  }
-
-  /* Check power bit */
-  if (power_bit == INVALID) {
-    return RTEMS_INVALID_ID;
-  }
-
-  /* Get clock shift */
-  if (clock_shift == INVALID) {
-    clock_shift = power_bit << 1U;
-  }
+  has_power = lpc24xx_module_table [module].power;
+  has_clock = lpc24xx_module_table [module].clock;
+  index = lpc24xx_module_table [module].index;
 
   /* Enable or disable module */
   if (enable) {
-    rtems_interrupt_level level;
-
-    rtems_interrupt_disable(level);
-    PCONP |= 1U << power_bit;
-    rtems_interrupt_enable(level);
+    if (has_power) {
+      rtems_interrupt_disable(level);
+      PCONP |= 1U << index;
+      rtems_interrupt_enable(level);
+    }
 
     if (module != LPC24XX_MODULE_USB) {
-      rtems_interrupt_disable(level);
-      if (clock_shift < 32U) {
-        PCLKSEL0 = (PCLKSEL0 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
-            | (clock << clock_shift);
-      } else {
-        clock_shift -= 32U;
-        PCLKSEL1 = (PCLKSEL1 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
-            | (clock << clock_shift);
+      if (has_clock) {
+        unsigned clock_shift = 2U * index;
+
+        rtems_interrupt_disable(level);
+        if (clock_shift < 32U) {
+          PCLKSEL0 = (PCLKSEL0 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
+              | (clock << clock_shift);
+        } else {
+          clock_shift -= 32U;
+          PCLKSEL1 = (PCLKSEL1 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
+              | (clock << clock_shift);
+        }
+        rtems_interrupt_enable(level);
       }
-      rtems_interrupt_enable(level);
     } else {
       unsigned pllclk = lpc24xx_pllclk();
       unsigned usbsel = pllclk / 48000000U - 1U;
@@ -441,11 +341,11 @@ static rtems_status_code lpc24xx_module_do_enable(
       USBCLKCFG = usbsel;
     }
   } else {
-    rtems_interrupt_level level;
-
-    rtems_interrupt_disable(level);
-    PCONP &= ~(1U << power_bit);
-    rtems_interrupt_enable(level);
+    if (has_power) {
+      rtems_interrupt_disable(level);
+      PCONP &= ~(1U << index);
+      rtems_interrupt_enable(level);
+    }
   }
 
   return RTEMS_SUCCESSFUL;
@@ -453,17 +353,15 @@ static rtems_status_code lpc24xx_module_do_enable(
 
 rtems_status_code lpc24xx_module_enable(
   lpc24xx_module module,
-  unsigned index,
   lpc24xx_module_clock clock
 )
 {
-  return lpc24xx_module_do_enable(module, index, clock, true);
+  return lpc24xx_module_do_enable(module, clock, true);
 }
 
 rtems_status_code lpc24xx_module_disable(
-  lpc24xx_module module,
-  unsigned index
+  lpc24xx_module module
 )
 {
-  return lpc24xx_module_do_enable(module, index, 0U, false);
+  return lpc24xx_module_do_enable(module, 0U, false);
 }

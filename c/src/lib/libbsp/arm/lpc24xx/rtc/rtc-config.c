@@ -25,10 +25,10 @@
 
 #define LPC24XX_RTC_NUMBER 1
 
-static void lpc24xx_rtc_initialize( int minor)
+static void lpc24xx_rtc_initialize(int minor)
 {
   /* Enable module power */
-  lpc24xx_module_enable( LPC24XX_MODULE_RTC, 0, LPC24XX_MODULE_PCLK_DEFAULT);
+  lpc24xx_module_enable(LPC24XX_MODULE_RTC, LPC24XX_MODULE_PCLK_DEFAULT);
 
   /* Enable the RTC and use external clock */
   RTC_CCR = RTC_CCR_CLKEN | RTC_CCR_CLKSRC;
@@ -42,7 +42,7 @@ static void lpc24xx_rtc_initialize( int minor)
   RTC_ILR = RTC_ILR_RTCCIF | RTC_ILR_RTCALF | RTC_ILR_RTSSF;
 }
 
-static int lpc24xx_rtc_get_time( int minor, rtems_time_of_day *tod)
+static int lpc24xx_rtc_get_time(int minor, rtems_time_of_day *tod)
 {
   tod->ticks = 0;
   tod->second = RTC_SEC;
@@ -55,7 +55,7 @@ static int lpc24xx_rtc_get_time( int minor, rtems_time_of_day *tod)
   return 0;
 }
 
-static int lpc24xx_rtc_set_time( int minor, const rtems_time_of_day *tod)
+static int lpc24xx_rtc_set_time(int minor, const rtems_time_of_day *tod)
 {
   RTC_SEC = tod->second;
   RTC_MIN = tod->minute;
@@ -67,7 +67,7 @@ static int lpc24xx_rtc_set_time( int minor, const rtems_time_of_day *tod)
   return 0;
 }
 
-static bool lpc24xx_rtc_probe( int minor)
+static bool lpc24xx_rtc_probe(int minor)
 {
   return true;
 }

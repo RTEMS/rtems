@@ -23,14 +23,14 @@
 #include <bsp/irq-generic.h>
 #include <bsp/lpc24xx.h>
 
-static inline bool lpc24xx_irq_is_valid( rtems_vector_number vector)
+static inline bool lpc24xx_irq_is_valid(rtems_vector_number vector)
 {
   return vector <= BSP_INTERRUPT_VECTOR_MAX;
 }
 
-void lpc24xx_irq_set_priority( rtems_vector_number vector, unsigned priority)
+void lpc24xx_irq_set_priority(rtems_vector_number vector, unsigned priority)
 {
-  if (lpc24xx_irq_is_valid( vector)) {
+  if (lpc24xx_irq_is_valid(vector)) {
     if (priority > LPC24XX_IRQ_PRIORITY_VALUE_MAX) {
       priority = LPC24XX_IRQ_PRIORITY_VALUE_MAX;
     }
@@ -39,16 +39,16 @@ void lpc24xx_irq_set_priority( rtems_vector_number vector, unsigned priority)
   }
 }
 
-unsigned lpc24xx_irq_priority( rtems_vector_number vector)
+unsigned lpc24xx_irq_get_priority(rtems_vector_number vector)
 {
-  if (lpc24xx_irq_is_valid( vector)) {
+  if (lpc24xx_irq_is_valid(vector)) {
     return VICVectPriorityBase [vector];
   } else {
     return LPC24XX_IRQ_PRIORITY_VALUE_MIN - 1U;
   }
 }
 
-void bsp_interrupt_dispatch( void)
+void bsp_interrupt_dispatch(void)
 {
   /* Read current vector number */
   rtems_vector_number vector = VICVectAddr;
@@ -57,37 +57,34 @@ void bsp_interrupt_dispatch( void)
   uint32_t psr = arm_status_irq_enable();
 
   /* Dispatch interrupt handlers */
-  bsp_interrupt_handler_dispatch( vector);
+  bsp_interrupt_handler_dispatch(vector);
 
   /* Restore program status register */
-  arm_status_restore( psr);
+  arm_status_restore(psr);
 
   /* Acknowledge interrupt */
   VICVectAddr = 0;
 }
 
-rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  if (lpc24xx_irq_is_valid( vector)) {
+  if (lpc24xx_irq_is_valid(vector)) {
     VICIntEnable = 1U << vector;
   }
 
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  if (lpc24xx_irq_is_valid( vector)) {
+  if (lpc24xx_irq_is_valid(vector)) {
     VICIntEnClear = 1U << vector;
   }
 
   return RTEMS_SUCCESSFUL;
 }
 
-/* FIXME */
-void arm_exc_interrupt( void);
-
-rtems_status_code bsp_interrupt_facility_initialize( void)
+rtems_status_code bsp_interrupt_facility_initialize(void)
 {
   volatile uint32_t *addr = VICVectAddrBase;
   volatile uint32_t *prio = VICVectPriorityBase;
@@ -117,12 +114,12 @@ rtems_status_code bsp_interrupt_facility_initialize( void)
   VICVectAddr = 0;
 
   /* Install the IRQ exception handler */
-  _CPU_ISR_install_vector( ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
+  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
 
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_handler_default( rtems_vector_number vector)
+void bsp_interrupt_handler_default(rtems_vector_number vector)
 {
-  printk( "spurious interrupt: %u\n", vector);
+  printk("spurious interrupt: %u\n", vector);
 }

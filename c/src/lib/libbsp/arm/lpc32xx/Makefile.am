@@ -2,7 +2,7 @@
 #
 # @file
 #
-# @brief Makefile of LibBSP for the LPC24XX boards.
+# @brief Makefile of LibBSP for the LPC32XX boards.
 #
 
 # $Id$
@@ -37,12 +37,7 @@ include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-timer.h
 include_bsp_HEADERS += include/irq-config.h
 include_bsp_HEADERS += include/irq.h
-include_bsp_HEADERS += include/lpc24xx.h
-include_bsp_HEADERS += include/system-clocks.h
-include_bsp_HEADERS += include/ssp.h
-include_bsp_HEADERS += include/dma.h
-include_bsp_HEADERS += include/i2c.h
-include_bsp_HEADERS += include/io.h
+include_bsp_HEADERS += include/lpc32xx.h
 include_bsp_HEADERS += include/lpc-clock-config.h
 
 include_HEADERS += ../../shared/include/tm27.h
@@ -59,11 +54,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
 project_lib_DATA += ../shared/startup/linkcmds.base
-EXTRA_DIST = startup/linkcmds.lpc24xx_ea
-EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_int
-EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_ext
-EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_ram
-EXTRA_DIST += startup/linkcmds.lpc2362
+
+EXTRA_DIST = startup/linkcmds.lpc32xx_phycore
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -110,19 +102,12 @@ libbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c \
 libbsp_a_SOURCES += ../../shared/tod.c \
 	rtc/rtc-config.c
 
-# Misc
-libbsp_a_SOURCES += misc/system-clocks.c \
-	misc/dma.c \
-	misc/dma-copy.c \
-	misc/bspidle.c \
-	misc/io.c \
-	misc/timer.c
+# Timer
+libbsp_a_SOURCES += misc/timer.c
 
 # SSP
-libbsp_a_SOURCES += ssp/ssp.c
 
 # I2C
-libbsp_a_SOURCES += i2c/i2c.c
 
 # Start hooks (FIXME: This is brittle.)
 libbsp_a_SOURCES += startup/bspstarthooks.c
@@ -137,13 +122,13 @@ bspstarthooks.o: startup/bspstarthooks.c
 
 if HAS_NETWORKING
 
-noinst_PROGRAMS = network.rel
+# noinst_PROGRAMS = network.rel
 
-network_rel_SOURCES = network/network.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D__BSD_VISIBLE
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+# network_rel_SOURCES = network/network.c
+# network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D__BSD_VISIBLE
+# network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-libbsp_a_LIBADD = network.rel
+# libbsp_a_LIBADD = network.rel
 
 endif
 

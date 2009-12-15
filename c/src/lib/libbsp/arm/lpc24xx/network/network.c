@@ -899,15 +899,14 @@ static void lpc24xx_eth_interface_init(void *arg)
     /* Enable module power */
     lpc24xx_module_enable(
       LPC24XX_MODULE_ETHERNET,
-      0,
       LPC24XX_MODULE_PCLK_DEFAULT
     );
 
     /* Module IO configuration */
     #ifdef LPC24XX_ETHERNET_RMII
-    	lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 0, 0);
+    	lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 0);
     #else
-    	lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 0, 1);
+    	lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 1);
     #endif
 
     /* Soft reset */

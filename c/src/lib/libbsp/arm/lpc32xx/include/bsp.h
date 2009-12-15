@@ -1,25 +1,26 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup lpc32xx
  *
  * @brief Global BSP definitions.
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
+ * Copyright (c) 2009
+ * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
  * Germany
- * rtems@embedded-brains.de
+ * <rtems@embedded-brains.de>
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef LIBBSP_ARM_LPC24XX_BSP_H
-#define LIBBSP_ARM_LPC24XX_BSP_H
+#ifndef LIBBSP_ARM_LPC32XX_BSP_H
+#define LIBBSP_ARM_LPC32XX_BSP_H
 
 #include <bspopts.h>
 
@@ -38,11 +39,11 @@ extern "C" {
 struct rtems_bsdnet_ifconfig;
 
 /**
- * @defgroup lpc24xx LPC24XX Support
+ * @defgroup lpc32xx LPC32XX Support
  *
  * @ingroup bsp_kit
  *
- * @brief LPC24XX support package.
+ * @brief LPC32XX support package.
  *
  * @{
  */
@@ -50,7 +51,7 @@ struct rtems_bsdnet_ifconfig;
 /**
  * @brief Network driver attach and detach function.
  */
-int lpc24xx_eth_attach_detach(
+int lpc32xx_eth_attach_detach(
   struct rtems_bsdnet_ifconfig *config,
   int attaching
 );
@@ -58,7 +59,7 @@ int lpc24xx_eth_attach_detach(
 /**
  * @brief Standard network driver attach and detach function.
  */
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	lpc24xx_eth_attach_detach
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	lpc32xx_eth_attach_detach
 
 /**
  * @brief Standard network driver name.
@@ -80,12 +81,12 @@ int lpc24xx_eth_attach_detach(
  *
  * #define CONFIGURE_INIT
  *
- * #define CONFIGURE_IDLE_TASK_BODY bsp_idle_thread
+ * #define CONFIGURE_IDLE_TASK_BODY lpc32xx_idle
  *
  * #include <confdefs.h>
  * @endcode
  */
-void *bsp_idle_thread(uintptr_t ignored);
+void *lpc32xx_idle(uintptr_t ignored);
 
 /** @} */
 
@@ -95,4 +96,4 @@ void *bsp_idle_thread(uintptr_t ignored);
 }
 #endif /* __cplusplus */
 
-#endif /* LIBBSP_ARM_LPC24XX_BSP_H */
+#endif /* LIBBSP_ARM_LPC32XX_BSP_H */

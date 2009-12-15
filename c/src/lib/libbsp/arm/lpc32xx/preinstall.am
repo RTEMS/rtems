@@ -93,29 +93,9 @@ $(PROJECT_INCLUDE)/bsp/irq.h: include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
-$(PROJECT_INCLUDE)/bsp/lpc24xx.h: include/lpc24xx.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc24xx.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc24xx.h
-
-$(PROJECT_INCLUDE)/bsp/system-clocks.h: include/system-clocks.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/system-clocks.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/system-clocks.h
-
-$(PROJECT_INCLUDE)/bsp/ssp.h: include/ssp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ssp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ssp.h
-
-$(PROJECT_INCLUDE)/bsp/dma.h: include/dma.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/dma.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/dma.h
-
-$(PROJECT_INCLUDE)/bsp/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2c.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h
-
-$(PROJECT_INCLUDE)/bsp/io.h: include/io.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/io.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/io.h
+$(PROJECT_INCLUDE)/bsp/lpc32xx.h: include/lpc32xx.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc32xx.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc32xx.h
 
 $(PROJECT_INCLUDE)/bsp/lpc-clock-config.h: include/lpc-clock-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-clock-config.h

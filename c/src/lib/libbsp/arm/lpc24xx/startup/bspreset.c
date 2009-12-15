@@ -23,11 +23,11 @@
 #include <bsp/bootcard.h>
 #include <bsp/lpc24xx.h>
 
-void bsp_reset( void)
+void bsp_reset(void)
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_disable( level);
+  rtems_interrupt_disable(level);
 
   /* Trigger watchdog reset */
   WDCLKSEL = 0;

@@ -22,6 +22,10 @@
 #ifndef LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H
 #define LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /**
  * @defgroup bsp_linker Linker Support
  *
@@ -99,5 +103,9 @@ LINKER_SYMBOL(bsp_section_stack_end)
 LINKER_SYMBOL(bsp_section_stack_size)
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H */
