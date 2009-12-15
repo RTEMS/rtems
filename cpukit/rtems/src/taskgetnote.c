@@ -52,7 +52,7 @@
  */
 
 rtems_status_code rtems_task_get_note(
-  Objects_Id  id,
+  rtems_id    id,
   uint32_t    notepad,
   uint32_t   *note
 )

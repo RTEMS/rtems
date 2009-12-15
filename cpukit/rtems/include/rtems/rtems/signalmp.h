@@ -75,7 +75,7 @@ typedef struct {
 rtems_status_code _Signal_MP_Send_request_packet (
   Signal_MP_Remote_operations operation,
   Objects_Id                  task_id,
-  rtems_signal_set      signal_in
+  rtems_signal_set            signal_in
 );
 
 /**

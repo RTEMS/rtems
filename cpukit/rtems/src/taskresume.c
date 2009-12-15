@@ -48,7 +48,7 @@
  */
 
 rtems_status_code rtems_task_resume(
-  Objects_Id id
+  rtems_id id
 )
 {
   register Thread_Control *the_thread;

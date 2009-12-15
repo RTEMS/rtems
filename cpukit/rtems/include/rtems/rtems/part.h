@@ -104,12 +104,12 @@ void _Partition_Manager_initialization(void);
  *  created partition in ID.
  */
 rtems_status_code rtems_partition_create(
-  rtems_name          name,
-  void               *starting_address,
-  uint32_t            length,
-  uint32_t            buffer_size,
+  rtems_name       name,
+  void            *starting_address,
+  uint32_t         length,
+  uint32_t         buffer_size,
   rtems_attribute  attribute_set,
-  Objects_Id         *id
+  rtems_id        *id
 );
 
 /**
@@ -124,9 +124,9 @@ rtems_status_code rtems_partition_create(
  *  encompass all nodes.
  */
 rtems_status_code rtems_partition_ident(
-  rtems_name    name,
-  uint32_t      node,
-  Objects_Id   *id
+  rtems_name  name,
+  uint32_t    node,
+  rtems_id   *id
 );
 
 /**
@@ -136,7 +136,7 @@ rtems_status_code rtems_partition_ident(
  *  partition indicated by ID is deleted.
  */
 rtems_status_code rtems_partition_delete(
-  Objects_Id id
+  rtems_id id
 );
 
 /**
@@ -147,8 +147,8 @@ rtems_status_code rtems_partition_delete(
  *  If a buffer is allocated, its address is returned in buffer.
  */
 rtems_status_code rtems_partition_get_buffer(
-  Objects_Id  id,
-  void       **buffer
+  rtems_id   id,
+  void     **buffer
 );
 
 /**
@@ -159,8 +159,8 @@ rtems_status_code rtems_partition_get_buffer(
  *  have been previously allocated from the same partition.
  */
 rtems_status_code rtems_partition_return_buffer(
-  Objects_Id  id,
-  void       *buffer
+  rtems_id  id,
+  void     *buffer
 );
 
 #ifndef __RTEMS_APPLICATION__

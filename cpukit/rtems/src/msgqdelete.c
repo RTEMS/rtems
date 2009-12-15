@@ -50,7 +50,7 @@
  */
 
 rtems_status_code rtems_message_queue_delete(
-  Objects_Id id
+  rtems_id id
 )
 {
   register Message_queue_Control *the_message_queue;

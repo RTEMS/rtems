@@ -43,9 +43,9 @@
  */
 
 rtems_status_code rtems_region_extend(
-  Objects_Id          id,
-  void               *starting_address,
-  uintptr_t           length
+  rtems_id   id,
+  void      *starting_address,
+  uintptr_t  length
 )
 {
   uintptr_t           amount_extended;

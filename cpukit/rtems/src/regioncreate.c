@@ -53,7 +53,7 @@ rtems_status_code rtems_region_create(
   uintptr_t           length,
   uintptr_t           page_size,
   rtems_attribute     attribute_set,
-  Objects_Id         *id
+  rtems_id           *id
 )
 {
   rtems_status_code  return_status;

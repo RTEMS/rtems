@@ -38,7 +38,7 @@
  */
 
 rtems_status_code rtems_rate_monotonic_cancel(
-  Objects_Id id
+  rtems_id id
 )
 {
   Rate_monotonic_Control *the_period;

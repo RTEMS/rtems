@@ -48,7 +48,7 @@ rtems_status_code rtems_port_create(
   void         *internal_start,
   void         *external_start,
   uint32_t      length,
-  Objects_Id   *id
+  rtems_id     *id
 )
 {
   register Dual_ported_memory_Control *the_port;

@@ -54,10 +54,10 @@
  */
 
 rtems_status_code rtems_message_queue_broadcast(
-  Objects_Id            id,
-  const void           *buffer,
-  size_t                size,
-  uint32_t             *count
+  rtems_id    id,
+  const void *buffer,
+  size_t      size,
+  uint32_t   *count
 )
 {
   register Message_queue_Control *the_message_queue;

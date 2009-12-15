@@ -43,9 +43,9 @@
  */
 
 rtems_status_code rtems_region_get_segment_size(
-  Objects_Id         id,
-  void              *segment,
-  uintptr_t         *size
+  rtems_id   id,
+  void      *segment,
+  uintptr_t *size
 )
 {
   Objects_Locations        location;

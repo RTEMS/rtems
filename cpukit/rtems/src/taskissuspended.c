@@ -49,7 +49,7 @@
  */
 
 rtems_status_code rtems_task_is_suspended(
-  Objects_Id id
+  rtems_id id
 )
 {
   register Thread_Control *the_thread;

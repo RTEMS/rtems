@@ -40,7 +40,7 @@
  */
 
 rtems_status_code rtems_port_delete(
-  Objects_Id id
+  rtems_id id
 )
 {
   register Dual_ported_memory_Control *the_port;

@@ -52,7 +52,7 @@
  */
 
 rtems_status_code rtems_task_set_priority(
-  Objects_Id           id,
+  rtems_id             id,
   rtems_task_priority  new_priority,
   rtems_task_priority *old_priority
 )

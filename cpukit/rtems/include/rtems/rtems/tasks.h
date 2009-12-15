@@ -261,7 +261,7 @@ rtems_status_code rtems_task_create(
   size_t               stack_size,
   rtems_mode           initial_modes,
   rtems_attribute      attribute_set,
-  Objects_Id          *id
+  rtems_id            *id
 );
 
 /**
@@ -278,7 +278,7 @@ rtems_status_code rtems_task_create(
 rtems_status_code rtems_task_ident(
   rtems_name    name,
   uint32_t      node,
-  Objects_Id   *id
+  rtems_id     *id
 );
 
 /**
@@ -288,7 +288,7 @@ rtems_status_code rtems_task_ident(
  *  task indicated by ID is deleted.
  */
 rtems_status_code rtems_task_delete(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**
@@ -299,7 +299,7 @@ rtems_status_code rtems_task_delete(
  *  is returned in note.
  */
 rtems_status_code rtems_task_get_note(
-  Objects_Id  id,
+  rtems_id    id,
   uint32_t    notepad,
   uint32_t   *note
 );
@@ -312,7 +312,7 @@ rtems_status_code rtems_task_get_note(
  *  is returned in note.
  */
 rtems_status_code rtems_task_set_note(
-  Objects_Id id,
+  rtems_id   id,
   uint32_t   notepad,
   uint32_t   note
 );
@@ -339,7 +339,7 @@ rtems_status_code rtems_task_mode(
  *  point with the new argument.
  */
 rtems_status_code rtems_task_restart(
-  Objects_Id id,
+  rtems_id   id,
   uint32_t   arg
 );
 
@@ -350,7 +350,7 @@ rtems_status_code rtems_task_restart(
  *  SUSPENDED state is set for task associated with ID.
  */
 rtems_status_code rtems_task_suspend(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**
@@ -360,7 +360,7 @@ rtems_status_code rtems_task_suspend(
  *  SUSPENDED state is cleared for task associated with ID.
  */
 rtems_status_code rtems_task_resume(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**
@@ -372,7 +372,7 @@ rtems_status_code rtems_task_resume(
  *  in old_priority.
  */
 rtems_status_code rtems_task_set_priority(
-  Objects_Id           id,
+  rtems_id             id,
   rtems_task_priority  new_priority,
   rtems_task_priority *old_priority
 );
@@ -385,7 +385,7 @@ rtems_status_code rtems_task_set_priority(
  *  set to entry_point with the initial argument.
  */
 rtems_status_code rtems_task_start(
-  Objects_Id   id,
+  rtems_id     id,
   rtems_task_entry entry_point,
   rtems_task_argument     argument
 );
@@ -419,7 +419,7 @@ rtems_status_code rtems_task_wake_after(
  *  the specified task is suspended.
  */
 rtems_status_code rtems_task_is_suspended(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**

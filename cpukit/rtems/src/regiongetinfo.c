@@ -43,7 +43,7 @@
  */
 
 rtems_status_code rtems_region_get_information(
-  Objects_Id              id,
+  rtems_id                id,
   Heap_Information_block *the_info
 )
 {

@@ -55,11 +55,11 @@
  */
 
 rtems_status_code rtems_message_queue_create(
-  rtems_name          name,
-  uint32_t            count,
-  size_t              max_message_size,
-  rtems_attribute     attribute_set,
-  Objects_Id         *id
+  rtems_name       name,
+  uint32_t         count,
+  size_t           max_message_size,
+  rtems_attribute  attribute_set,
+  rtems_id        *id
 )
 {
   register Message_queue_Control *the_message_queue;

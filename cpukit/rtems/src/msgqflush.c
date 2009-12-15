@@ -53,8 +53,8 @@
  */
 
 rtems_status_code rtems_message_queue_flush(
-  Objects_Id  id,
-  uint32_t   *count
+  rtems_id  id,
+  uint32_t *count
 )
 {
   register Message_queue_Control *the_message_queue;

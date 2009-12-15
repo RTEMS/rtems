@@ -42,8 +42,8 @@
  */
 
 rtems_status_code rtems_timer_create(
-  rtems_name    name,
-  Objects_Id   *id
+  rtems_name  name,
+  rtems_id   *id
 )
 {
   Timer_Control *the_timer;

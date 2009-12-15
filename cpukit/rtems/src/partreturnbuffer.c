@@ -42,8 +42,8 @@
  */
 
 rtems_status_code rtems_partition_return_buffer(
-  Objects_Id  id,
-  void       *buffer
+  rtems_id  id,
+  void     *buffer
 )
 {
   register Partition_Control *the_partition;

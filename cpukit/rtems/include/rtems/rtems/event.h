@@ -79,7 +79,7 @@ void _Event_Manager_initialization( void );
  *  the task's event condition, then it is unblocked.
  */
 rtems_status_code rtems_event_send (
-  Objects_Id         id,
+  rtems_id        id,
   rtems_event_set event_in
 );
 

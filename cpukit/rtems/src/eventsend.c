@@ -41,7 +41,7 @@
  */
 
 rtems_status_code rtems_event_send(
-  Objects_Id        id,
+  rtems_id          id,
   rtems_event_set   event_in
 )
 {

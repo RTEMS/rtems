@@ -43,7 +43,7 @@
  */
 
 rtems_status_code rtems_timer_fire_after(
-  Objects_Id                         id,
+  rtems_id                           id,
   rtems_interval                     ticks,
   rtems_timer_service_routine_entry  routine,
   void                              *user_data

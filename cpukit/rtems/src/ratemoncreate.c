@@ -41,8 +41,8 @@
  */
 
 rtems_status_code rtems_rate_monotonic_create(
-  rtems_name    name,
-  Objects_Id   *id
+  rtems_name  name,
+  rtems_id   *id
 )
 {
   Rate_monotonic_Control *the_period;

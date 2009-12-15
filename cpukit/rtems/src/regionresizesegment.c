@@ -44,7 +44,7 @@
  */
 
 rtems_status_code rtems_region_resize_segment(
-  Objects_Id  id,
+  rtems_id    id,
   void       *segment,
   uintptr_t   size,
   uintptr_t  *old_size

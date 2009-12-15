@@ -44,9 +44,9 @@
  */
 
 rtems_status_code rtems_partition_ident(
-  rtems_name    name,
-  uint32_t      node,
-  Objects_Id   *id
+  rtems_name  name,
+  uint32_t    node,
+  rtems_id   *id
 )
 {
   Objects_Name_or_id_lookup_errors  status;

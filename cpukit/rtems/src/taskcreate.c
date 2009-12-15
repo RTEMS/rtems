@@ -61,7 +61,7 @@ rtems_status_code rtems_task_create(
   size_t               stack_size,
   rtems_mode           initial_modes,
   rtems_attribute      attribute_set,
-  Objects_Id          *id
+  rtems_id            *id
 )
 {
   register Thread_Control *the_thread;

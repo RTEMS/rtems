@@ -99,7 +99,7 @@ rtems_status_code rtems_port_create(
   void         *internal_start,
   void         *external_start,
   uint32_t      length,
-  Objects_Id   *id
+  rtems_id     *id
 );
 
 /**
@@ -111,7 +111,7 @@ rtems_status_code rtems_port_create(
  */
 rtems_status_code rtems_port_ident(
   rtems_name    name,
-  Objects_Id   *id
+  rtems_id     *id
 );
 
 /**
@@ -121,7 +121,7 @@ rtems_status_code rtems_port_ident(
  *  the port associated with ID.
  */
 rtems_status_code rtems_port_delete(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**
@@ -132,7 +132,7 @@ rtems_status_code rtems_port_delete(
  *  external port address for the specified port ID.
  */
 rtems_status_code rtems_port_external_to_internal(
-  Objects_Id   id,
+  rtems_id     id,
   void        *external,
   void       **internal
 );
@@ -145,7 +145,7 @@ rtems_status_code rtems_port_external_to_internal(
  *  internal port address for the specified port ID.
  */
 rtems_status_code rtems_port_internal_to_external(
-  Objects_Id   id,
+  rtems_id     id,
   void        *internal,
   void       **external
 );

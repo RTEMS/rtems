@@ -44,9 +44,9 @@
  */
 
 rtems_status_code rtems_port_internal_to_external(
-  Objects_Id   id,
-  void        *internal,
-  void       **external
+  rtems_id   id,
+  void      *internal,
+  void     **external
 )
 {
   register Dual_ported_memory_Control *the_port;

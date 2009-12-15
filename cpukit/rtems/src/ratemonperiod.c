@@ -242,8 +242,8 @@ void _Rate_monotonic_Update_statistics(
  */
 
 rtems_status_code rtems_rate_monotonic_period(
-  Objects_Id        id,
-  rtems_interval    length
+  rtems_id       id,
+  rtems_interval length
 )
 {
   Rate_monotonic_Control              *the_period;

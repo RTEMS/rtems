@@ -41,8 +41,8 @@
  */
 
 rtems_status_code rtems_rate_monotonic_ident(
-  rtems_name    name,
-  Objects_Id   *id
+  rtems_name  name,
+  rtems_id   *id
 )
 {
   Objects_Name_or_id_lookup_errors  status;

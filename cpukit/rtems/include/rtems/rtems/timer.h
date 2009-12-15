@@ -236,7 +236,7 @@ void _Timer_Manager_initialization(void);
  */
 rtems_status_code rtems_timer_create(
   rtems_name    name,
-  Objects_Id   *id
+  rtems_id     *id
 );
 
 /**
@@ -249,7 +249,7 @@ rtems_status_code rtems_timer_create(
  */
 rtems_status_code rtems_timer_ident(
   rtems_name    name,
-  Objects_Id   *id
+  rtems_id     *id
 );
 
 /**
@@ -259,7 +259,7 @@ rtems_status_code rtems_timer_ident(
  *  to stop the timer associated with ID from firing.
  */
 rtems_status_code rtems_timer_cancel(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**
@@ -269,7 +269,7 @@ rtems_status_code rtems_timer_cancel(
  *  timer indicated by ID is deleted.
  */
 rtems_status_code rtems_timer_delete(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**
@@ -282,7 +282,7 @@ rtems_status_code rtems_timer_delete(
  *  part of servicing a periodic interupt.
  */
 rtems_status_code rtems_timer_fire_after(
-  Objects_Id                         id,
+  rtems_id                           id,
   rtems_interval                     ticks,
   rtems_timer_service_routine_entry  routine,
   void                              *user_data
@@ -298,7 +298,7 @@ rtems_status_code rtems_timer_fire_after(
  *  clock tick interrupt.
  */
 rtems_status_code rtems_timer_server_fire_after(
-  Objects_Id                         id,
+  rtems_id                           id,
   rtems_interval                     ticks,
   rtems_timer_service_routine_entry  routine,
   void                              *user_data
@@ -314,7 +314,7 @@ rtems_status_code rtems_timer_server_fire_after(
  *  part of servicing a periodic interupt.
  */
 rtems_status_code rtems_timer_fire_when(
-  Objects_Id                          id,
+  rtems_id                            id,
   rtems_time_of_day                  *wall_time,
   rtems_timer_service_routine_entry   routine,
   void                               *user_data
@@ -330,7 +330,7 @@ rtems_status_code rtems_timer_fire_when(
  *  clock tick interrupt.
  */
 rtems_status_code rtems_timer_server_fire_when(
-  Objects_Id                          id,
+  rtems_id                            id,
   rtems_time_of_day                  *wall_time,
   rtems_timer_service_routine_entry   routine,
   void                               *user_data
@@ -345,7 +345,7 @@ rtems_status_code rtems_timer_server_fire_when(
  *  were used to initiate this timer.
  */
 rtems_status_code rtems_timer_reset(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**
@@ -390,7 +390,7 @@ typedef struct {
  *  This directive returns information about the timer.
  */
 rtems_status_code rtems_timer_get_information(
-  Objects_Id               id,
+  rtems_id                 id,
   rtems_timer_information *the_info
 );
 

@@ -45,8 +45,8 @@
  */
 
 rtems_status_code rtems_rate_monotonic_get_status(
-  Objects_Id                           id,
-  rtems_rate_monotonic_period_status  *status
+  rtems_id                            id,
+  rtems_rate_monotonic_period_status *status
 )
 {
   Thread_CPU_usage_t             executed;

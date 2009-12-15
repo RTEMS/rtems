@@ -41,7 +41,7 @@
  */
 
 rtems_status_code rtems_signal_send(
-  Objects_Id        id,
+  rtems_id          id,
   rtems_signal_set  signal_set
 )
 {

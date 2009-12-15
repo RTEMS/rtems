@@ -40,7 +40,7 @@
  */
 
 rtems_status_code rtems_rate_monotonic_reset_statistics(
-  Objects_Id                               id
+  rtems_id id
 )
 {
   Objects_Locations              location;

@@ -69,7 +69,7 @@ rtems_status_code rtems_signal_catch(
  *  sends the signal_set to the task specified by ID.
  */
 rtems_status_code rtems_signal_send(
-  Objects_Id             id,
+  rtems_id         id,
   rtems_signal_set signal_set
 );
 

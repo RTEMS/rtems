@@ -51,8 +51,8 @@
  */
 
 rtems_status_code rtems_task_restart(
-  Objects_Id id,
-  uint32_t   argument
+  rtems_id  id,
+  uint32_t  argument
 )
 {
   register Thread_Control *the_thread;

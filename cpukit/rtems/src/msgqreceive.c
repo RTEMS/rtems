@@ -54,11 +54,11 @@
  */
 
 rtems_status_code rtems_message_queue_receive(
-  Objects_Id            id,
-  void                 *buffer,
-  size_t               *size,
-  rtems_option          option_set,
-  rtems_interval        timeout
+  rtems_id        id,
+  void           *buffer,
+  size_t         *size,
+  rtems_option    option_set,
+  rtems_interval  timeout
 )
 {
   register Message_queue_Control *the_message_queue;

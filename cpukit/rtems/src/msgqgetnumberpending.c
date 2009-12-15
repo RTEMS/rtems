@@ -51,8 +51,8 @@
  */
 
 rtems_status_code rtems_message_queue_get_number_pending(
-  Objects_Id  id,
-  uint32_t   *count
+  rtems_id  id,
+  uint32_t *count
 )
 {
   register Message_queue_Control *the_message_queue;

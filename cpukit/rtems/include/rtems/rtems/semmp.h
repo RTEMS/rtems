@@ -150,7 +150,7 @@ Semaphore_MP_Packet *_Semaphore_MP_Get_packet ( void );
  */
 void  _Semaphore_Core_mutex_mp_support (
   Thread_Control *the_thread,
-  rtems_id        id
+  Objects_Id      id
 );
 
 /**
@@ -162,7 +162,7 @@ void  _Semaphore_Core_mutex_mp_support (
  */
 void  _Semaphore_Core_semaphore_mp_support (
   Thread_Control *the_thread,
-  rtems_id        id
+  Objects_Id      id
 );
 
 #ifdef __cplusplus

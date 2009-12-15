@@ -42,7 +42,7 @@
  */
 
 rtems_status_code rtems_partition_delete(
-  Objects_Id id
+  rtems_id id
 )
 {
   register Partition_Control *the_partition;

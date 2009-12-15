@@ -41,8 +41,8 @@
  */
 
 rtems_status_code rtems_rate_monotonic_get_statistics(
-  Objects_Id                               id,
-  rtems_rate_monotonic_period_statistics  *statistics
+  rtems_id                                id,
+  rtems_rate_monotonic_period_statistics *statistics
 )
 {
   Objects_Locations                        location;

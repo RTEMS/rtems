@@ -1,3 +1,46 @@
+2009-12-15	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* rtems/include/rtems/rtems/dpmem.h, rtems/include/rtems/rtems/event.h,
+	rtems/include/rtems/rtems/message.h,
+	rtems/include/rtems/rtems/part.h,
+	rtems/include/rtems/rtems/ratemon.h,
+	rtems/include/rtems/rtems/region.h,
+	rtems/include/rtems/rtems/semmp.h,
+	rtems/include/rtems/rtems/signal.h,
+	rtems/include/rtems/rtems/signalmp.h,
+	rtems/include/rtems/rtems/tasks.h, rtems/include/rtems/rtems/timer.h,
+	rtems/src/dpmemcreate.c, rtems/src/dpmemdelete.c,
+	rtems/src/dpmemexternal2internal.c, rtems/src/dpmemident.c,
+	rtems/src/dpmeminternal2external.c, rtems/src/eventsend.c,
+	rtems/src/msgqbroadcast.c, rtems/src/msgqcreate.c,
+	rtems/src/msgqdelete.c, rtems/src/msgqflush.c,
+	rtems/src/msgqgetnumberpending.c, rtems/src/msgqident.c,
+	rtems/src/msgqreceive.c, rtems/src/msgqsend.c,
+	rtems/src/msgqurgent.c, rtems/src/partcreate.c,
+	rtems/src/partdelete.c, rtems/src/partgetbuffer.c,
+	rtems/src/partident.c, rtems/src/partreturnbuffer.c,
+	rtems/src/ratemoncancel.c, rtems/src/ratemoncreate.c,
+	rtems/src/ratemondelete.c, rtems/src/ratemongetstatistics.c,
+	rtems/src/ratemongetstatus.c, rtems/src/ratemonident.c,
+	rtems/src/ratemonperiod.c, rtems/src/ratemonresetstatistics.c,
+	rtems/src/regioncreate.c, rtems/src/regiondelete.c,
+	rtems/src/regionextend.c, rtems/src/regiongetfreeinfo.c,
+	rtems/src/regiongetinfo.c, rtems/src/regiongetsegment.c,
+	rtems/src/regiongetsegmentsize.c, rtems/src/regionident.c,
+	rtems/src/regionresizesegment.c, rtems/src/regionreturnsegment.c,
+	rtems/src/signalmp.c, rtems/src/signalsend.c, rtems/src/taskcreate.c,
+	rtems/src/taskdelete.c, rtems/src/taskgetnote.c,
+	rtems/src/taskident.c, rtems/src/taskissuspended.c,
+	rtems/src/taskrestart.c, rtems/src/taskresume.c,
+	rtems/src/tasksetnote.c, rtems/src/tasksetpriority.c,
+	rtems/src/tasksuspend.c, rtems/src/timercancel.c,
+	rtems/src/timercreate.c, rtems/src/timerdelete.c,
+	rtems/src/timerfireafter.c, rtems/src/timerfirewhen.c,
+	rtems/src/timergetinfo.c, rtems/src/timerident.c,
+	rtems/src/timerreset.c, rtems/src/timerserverfireafter.c,
+	rtems/src/timerserverfirewhen.c: Changed Objects_Id to rtems_id in
+	the public API.
+
 2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1483/cpukit

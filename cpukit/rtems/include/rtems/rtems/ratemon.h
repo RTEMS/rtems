@@ -194,7 +194,7 @@ typedef struct {
  */
 typedef struct {
   /** This is the Id of the thread using this period. */
-  Objects_Id                           owner;
+  rtems_id                             owner;
 
   /** This is the current state of this period. */
   rtems_rate_monotonic_period_states   state;
@@ -283,7 +283,7 @@ void _Rate_monotonic_Manager_initialization(void);
  */
 rtems_status_code rtems_rate_monotonic_create(
   rtems_name    name,
-  Objects_Id   *id
+  rtems_id     *id
 );
 
 /**
@@ -295,7 +295,7 @@ rtems_status_code rtems_rate_monotonic_create(
  */
 rtems_status_code rtems_rate_monotonic_ident(
   rtems_name    name,
-  Objects_Id   *id
+  rtems_id     *id
 );
 
 /**
@@ -306,7 +306,7 @@ rtems_status_code rtems_rate_monotonic_ident(
  *  run.
  */
 rtems_status_code rtems_rate_monotonic_cancel(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**
@@ -316,7 +316,7 @@ rtems_status_code rtems_rate_monotonic_cancel(
  *  period indicated by ID is deleted.
  */
 rtems_status_code rtems_rate_monotonic_delete(
-  Objects_Id id
+  rtems_id   id
 );
 
 /**
@@ -327,7 +327,7 @@ rtems_status_code rtems_rate_monotonic_delete(
  *
  */
 rtems_status_code rtems_rate_monotonic_get_status(
-  Objects_Id                           id,
+  rtems_id                             id,
   rtems_rate_monotonic_period_status  *status
 );
 
@@ -338,7 +338,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
  *  Statistics gathered from the use of this period are returned.
  */
 rtems_status_code rtems_rate_monotonic_get_statistics(
-  Objects_Id                              id,
+  rtems_id                                id,
   rtems_rate_monotonic_period_statistics *statistics
 );
 
@@ -349,7 +349,7 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
  *  on a specific period instance.
  */
 rtems_status_code rtems_rate_monotonic_reset_statistics(
-  Objects_Id                               id
+  rtems_id                                 id
 );
 
 /**
@@ -388,7 +388,7 @@ void rtems_rate_monotonic_report_statistics( void );
  *  result is set to indicate the current state of the period.
  */
 rtems_status_code rtems_rate_monotonic_period(
-  Objects_Id      id,
+  rtems_id        id,
   rtems_interval  length
 );
 
@@ -403,7 +403,7 @@ rtems_status_code rtems_rate_monotonic_period(
  *  state and not restarted.
  */
 void _Rate_monotonic_Timeout(
-  Objects_Id  id,
+  rtems_id    id,
   void       *ignored
 );
 

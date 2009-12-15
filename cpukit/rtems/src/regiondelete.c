@@ -43,7 +43,7 @@
  */
 
 rtems_status_code rtems_region_delete(
-  Objects_Id id
+  rtems_id id
 )
 {
   Objects_Locations   location;

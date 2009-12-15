@@ -120,7 +120,7 @@ rtems_status_code rtems_message_queue_create(
   uint32_t         count,
   size_t           max_message_size,
   rtems_attribute  attribute_set,
-  Objects_Id      *id
+  rtems_id        *id
 );
 
 /**
@@ -135,9 +135,9 @@ rtems_status_code rtems_message_queue_create(
  *  encompass all nodes.
  */
 rtems_status_code rtems_message_queue_ident(
-  rtems_name    name,
-  uint32_t      node,
-  Objects_Id   *id
+  rtems_name  name,
+  uint32_t    node,
+  rtems_id   *id
 );
 
 /**
@@ -147,7 +147,7 @@ rtems_status_code rtems_message_queue_ident(
  *  message queue indicated by ID is deleted.
  */
 rtems_status_code rtems_message_queue_delete(
-  Objects_Id id
+  rtems_id id
 );
 
 /**
@@ -164,9 +164,9 @@ rtems_status_code rtems_message_queue_delete(
  *  chain of pending messages for this message queue.
  */
 rtems_status_code rtems_message_queue_send(
-  Objects_Id            id,
-  const void           *buffer,
-  size_t                size
+  rtems_id    id,
+  const void *buffer,
+  size_t      size
 );
 
 /**
@@ -179,9 +179,9 @@ rtems_status_code rtems_message_queue_send(
  *  than at the REAR.
  */
 rtems_status_code rtems_message_queue_urgent(
-  Objects_Id            id,
-  const void           *buffer,
-  size_t                size
+  rtems_id    id,
+  const void *buffer,
+  size_t      size
 );
 
 /**
@@ -193,10 +193,10 @@ rtems_status_code rtems_message_queue_urgent(
  *  If no tasks are waiting, then the message buffer will not be queued.
  */
 rtems_status_code rtems_message_queue_broadcast(
-  Objects_Id            id,
-  const void           *buffer,
-  size_t                size,
-  uint32_t             *count
+  rtems_id    id,
+  const void *buffer,
+  size_t      size,
+  uint32_t   *count
 );
 
 /**
@@ -211,11 +211,11 @@ rtems_status_code rtems_message_queue_broadcast(
  *  optionally, timeout clock ticks have passed.
  */
 rtems_status_code rtems_message_queue_receive(
-  Objects_Id            id,
-  void                 *buffer,
-  size_t               *size,
-  rtems_option          option_set,
-  rtems_interval        timeout
+  rtems_id        id,
+  void           *buffer,
+  size_t         *size,
+  rtems_option    option_set,
+  rtems_interval  timeout
 );
 
 /**
@@ -227,8 +227,8 @@ rtems_status_code rtems_message_queue_receive(
  *  chain.  The number of messages flushed is returned in COUNT.
  */
 rtems_status_code rtems_message_queue_flush(
-  Objects_Id  id,
-  uint32_t   *count
+  rtems_id  id,
+  uint32_t *count
 );
 
 /**
@@ -240,8 +240,8 @@ rtems_status_code rtems_message_queue_flush(
  *  chain.  The number of messages pending is returned in COUNT.
  */
 rtems_status_code rtems_message_queue_get_number_pending(
-  Objects_Id  id,
-  uint32_t   *count
+  rtems_id  id,
+  uint32_t *count
 );
 
 
@@ -256,7 +256,7 @@ rtems_status_code rtems_message_queue_get_number_pending(
  *  which will be inserted at the front of the queue.
  */
 rtems_status_code _Message_queue_Submit(
-  Objects_Id                  id,
+  rtems_id                    id,
   const void                 *buffer,
   size_t                      size,
   Message_queue_Submit_types  submit_type
@@ -292,7 +292,7 @@ rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
  */
 void  _Message_queue_Core_message_queue_mp_support (
   Thread_Control *the_thread,
-  Objects_Id      id
+  rtems_id        id
 );
 #endif
 

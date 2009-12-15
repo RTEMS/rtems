@@ -47,12 +47,12 @@
  */
 
 rtems_status_code rtems_partition_create(
-  rtems_name          name,
-  void               *starting_address,
-  uint32_t            length,
-  uint32_t            buffer_size,
-  rtems_attribute     attribute_set,
-  Objects_Id         *id
+  rtems_name       name,
+  void            *starting_address,
+  uint32_t         length,
+  uint32_t         buffer_size,
+  rtems_attribute  attribute_set,
+  rtems_id        *id
 )
 {
   register Partition_Control *the_partition;

@@ -43,7 +43,7 @@
  */
 
 rtems_status_code rtems_timer_get_information(
-  Objects_Id               id,
+  rtems_id                 id,
   rtems_timer_information *the_info
 )
 {

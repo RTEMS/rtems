@@ -57,9 +57,9 @@
 #endif
 
 rtems_status_code rtems_message_queue_urgent(
-  Objects_Id            id,
-  const void           *buffer,
-  size_t                size
+  rtems_id    id,
+  const void *buffer,
+  size_t      size
 )
 {
   register Message_queue_Control  *the_message_queue;

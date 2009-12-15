@@ -40,7 +40,7 @@
  */
 
 rtems_status_code rtems_timer_delete(
-  Objects_Id id
+  rtems_id id
 )
 {
   Timer_Control     *the_timer;
