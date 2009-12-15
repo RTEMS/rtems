@@ -108,11 +108,11 @@ rtems_task Init(
   /* Check status values. */
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
     printf(
-      "wall time should be ~600000000 is %d\n",
+      "wall time should be ~600000000 is %" PRId32 "\n",
       period_status.since_last_period.tv_nsec
     );
     printf(
-      "cpu time should be ~100000000 is %d\n",
+      "cpu time should be ~100000000 is %" PRId32 "\n",
       period_status.executed_since_last_period.tv_nsec
     );
     rtems_test_assert( period_status.since_last_period.tv_sec == 0 );
@@ -127,11 +127,11 @@ rtems_task Init(
     );
   #else
     printf(
-      "wall time should be ~60 is %d\n",
+      "wall time should be ~60 is %" PRId32 "\n",
       (int) period_status.since_last_period
     );
     printf(
-      "cpu time should be ~10 is %d\n",
+      "cpu time should be ~10 is %" PRId32 "\n",
       (int) period_status.executed_since_last_period
     );
     rtems_test_assert( period_status.since_last_period >= 60 );
@@ -166,7 +166,7 @@ rtems_task Init(
     directive_failed( status, "rate_monotonic_get_statistics" );
     if ( statistics.missed_count != i ) {
       printf(
-        "Expected %d got %d for missed_count\n",
+        "Expected %d got %" PRIu32 " for missed_count\n",
         i,
         statistics.missed_count
       );

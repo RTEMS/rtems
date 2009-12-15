@@ -1,3 +1,7 @@
+2009-12-15	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* sp69/init.c: Fixed warnings.
+
 2009-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp14/sp14.doc, sp14/sp14.scn: doc file have scn contents. Fix and
