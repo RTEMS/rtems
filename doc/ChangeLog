@@ -1,3 +1,8 @@
+2009-12-16	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* bsp_howto/console.t: adaption to ssize_t return value for
+	my_driver_write() function
+
 2009-11-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1460/cpukit

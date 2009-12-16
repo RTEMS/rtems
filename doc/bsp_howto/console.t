@@ -260,9 +260,15 @@ Termios for simple character IO.
 The @code{my_driver_poll_write} routine is responsible for writing @code{n}
 characters from @code{buf} to the serial device specified by @code{minor}.
 
+On success, the number of bytes written is returned (zero indicates nothing
+was written).  On error, @code{-1} is returned.
+
+NOTE: Due to the current implementation of termios, any data passed into
+  the write function will be lost. 
+
 @example
 @group
-static int my_driver_poll_write(int minor, const char *buf, int n)
+static ssize_t my_driver_poll_write(int minor, const char *buf, size_t n)
 @{
     my_driver_entry *e = &my_driver_table [minor];
     int i = 0;
@@ -278,7 +284,7 @@ static int my_driver_poll_write(int minor, const char *buf, int n)
         my_driver_write_char(e, buf [i]);
     @}
     
-    return 0;
+    return n;
 @}
 @end group
 @end example
@@ -380,9 +386,13 @@ to fill the output buffer.  If the transmit interrupt arises before Termios was
 able to fill the transmit buffer you will end up with one interrupt per
 character.
 
+On error, the function should return @code{-1}. On success, it should return
+@code{0}, since it the interrupt handler will report the actual number of
+characters transmitted.
+ 
 @example
 @group
-static int my_driver_interrupt_write(int minor, const char *buf, int n)
+static ssize_t my_driver_interrupt_write(int minor, const char *buf, size_t n)
 @{
     my_driver_entry *e = &my_driver_table [minor];
     
@@ -394,7 +404,7 @@ static int my_driver_interrupt_write(int minor, const char *buf, int n)
 
     /*
      * Tell the device to transmit some characters from buf (less than
-     * or equal to n).  If the device is finished it should raise an
+     * or equal to n).  When the device is finished it should raise an
      * interrupt.  The interrupt handler will notify Termios that these
      * characters have been transmitted and this may trigger this write
      * function again.  You may have to store the number of outstanding
