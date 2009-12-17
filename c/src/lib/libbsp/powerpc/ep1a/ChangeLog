@@ -1,6 +1,6 @@
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* console/console.c: adapted to new prototype for *_write
+	* console/mc68360_scc.c: adapted to new prototype for *_write
 	function
 
 2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
