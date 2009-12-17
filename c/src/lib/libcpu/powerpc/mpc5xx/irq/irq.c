@@ -119,7 +119,7 @@ const static unsigned int USIU_IvectMask[CPU_USIU_IRQ_COUNT] =
  * is already set and that the tables it contains are still valid
  * and accessible.
  */
-static void compute_USIU_IvectMask_from_prio ()
+static void compute_USIU_IvectMask_from_prio (void)
 {
   /*
    * In theory this is feasible. No time to code it yet. See i386/shared/irq.c

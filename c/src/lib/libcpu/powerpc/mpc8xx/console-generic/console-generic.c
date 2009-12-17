@@ -1057,11 +1057,11 @@ m8xx_uart_pollRead(
 /*
  *  TODO: Get a free buffer and set it up.
  */
-int
+ssize_t
 m8xx_uart_write(
   int minor,
   const char *buf,
-  int len
+  size_t len
 )
 {
   rtems_cache_flush_multiple_data_lines( buf, len );
@@ -1072,11 +1072,11 @@ m8xx_uart_write(
 }
 
 
-int
+ssize_t
 m8xx_uart_pollWrite(
   int minor,
   const char *buf,
-  int len
+  size_t len
 )
 {
   while (len--) {
@@ -1088,5 +1088,5 @@ m8xx_uart_pollWrite(
     TxBd[minor]->length = 1;
     TxBd[minor]->status = M8xx_BD_READY | M8xx_BD_WRAP;
   }
-  return 0;
+  return len;
 }

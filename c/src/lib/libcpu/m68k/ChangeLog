@@ -1,3 +1,8 @@
+2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mcf5206/include/mcfuart.h, mcf5206/include/mcfuart.c: adapted to
+	new prototype for *_write function
+
 2009-10-15	Thomas Doefler <thomas.doerfler@embedded-brains.de>
 
 	* Makefile.am, mcf548x/mcdma/MCD_dma.h, mcf548x/mcdma/MCD_dmaApi.c,
@@ -9,7 +14,7 @@
 2009-10-08	Thomas Doefler <thomas.doerfler@embedded-brains.de>
 
 	* mcf5282/include/mcf5282.h: add missing (x) params to four
-	macros, added paranthesis around usage of x in some macros	
+	macros, added paranthesis around usage of x in some macros
 
 2009-09-10	Till Straumann <strauman@slac.stanford.edu>
 

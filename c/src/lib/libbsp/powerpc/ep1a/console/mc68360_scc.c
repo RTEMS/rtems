@@ -859,15 +859,15 @@ int mc68360_scc_inbyte_nonblocking_polled(
  *
  */
 
-int mc68360_scc_write_support_polled(
+ssize_t mc68360_scc_write_support_polled(
   int         minor,
   const char *buf,
-  int         len
+  size_t      len
 )
 {
   printk("mc68360_scc_write_support_polled: minor %d char %c len %d\n",
          minor, buf, len );
-  return 0;
+  return len;
 }
 
 /*

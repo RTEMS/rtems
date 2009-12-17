@@ -126,7 +126,7 @@ bool char_ready(int port, char *ch)
 
 char inbyte(int port)
 {
-  unsigned char tmp_char;
+  char tmp_char;
 
   while ( !char_ready(port, &tmp_char) );
   return tmp_char;

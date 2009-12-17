@@ -68,7 +68,7 @@
                            MCF548X_PSC_SR_PE_CRCERR | \
                            MCF548X_PSC_SR_OE )
 
-static int IntUartPollWrite(int minor, const char *buf, int len);
+static ssize_t IntUartPollWrite(int minor, const char *buf, size_t len);
 static int IntUartPollRead (int minor);
 
 static void
@@ -525,8 +525,8 @@ IntUartInitialize(void)
    to initiate a transmit sequence. Calling this routine enables Tx
    interrupts.
  ***************************************************************************/
-static int
-IntUartInterruptWrite (int minor, const char *buf, int len)
+static ssize_t
+IntUartInterruptWrite (int minor, const char *buf, size_t len)
 {
 	int level;
 
@@ -674,9 +674,10 @@ if (!((MCF548X_PSC_SR(minor) & MCF548X_PSC_SR_RXRDY)))
    appropriate internal uart channel waiting till each one is sucessfully
    transmitted.
  ***************************************************************************/
-static int
-IntUartPollWrite (int minor, const char *buf, int len)
+static ssize_t
+IntUartPollWrite (int minor, const char *buf, size_t len)
 {
+	size_t retval = len;
 /* loop over buffer */
 	while ( len-- )
 	{
@@ -686,7 +687,7 @@ IntUartPollWrite (int minor, const char *buf, int len)
 		/* transmit data byte */
 		*((uint8_t *)&MCF548X_PSC_TB(minor)) = *buf++;
 	}
-	return 0;
+	return retval;
 }
 
 /***************************************************************************

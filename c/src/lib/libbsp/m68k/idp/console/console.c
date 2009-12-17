@@ -135,7 +135,7 @@ char inbyte(
   int port
 )
 {
-  unsigned char tmp_char;
+  char tmp_char;
 
   /* If you come into this routine without checking is_character_ready() first
      and you want nonblocking code, then it's your own fault */

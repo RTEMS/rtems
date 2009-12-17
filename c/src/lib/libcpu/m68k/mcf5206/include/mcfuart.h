@@ -89,14 +89,14 @@ mcfuart_poll_read(mcfuart *uart);
 /* mcfuart_interrupt_write --
  *     This function initiate transmitting of the buffer in interrupt mode.
  */
-int
-mcfuart_interrupt_write(mcfuart *uart, const char *buf, int len);
+ssize_t
+mcfuart_interrupt_write(mcfuart *uart, const char *buf, size_t len);
 
 /* mcfuart_poll_write --
  *     This function transmit buffer byte-by-byte in polling mode.
  */
-int
-mcfuart_poll_write(mcfuart *uart, const char *buf, int len);
+ssize_t
+mcfuart_poll_write(mcfuart *uart, const char *buf, size_t len);
 
 /* mcfuart_stop_remote_tx --
  *     This function stop data flow from remote device.

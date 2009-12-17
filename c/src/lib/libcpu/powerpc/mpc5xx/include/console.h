@@ -24,8 +24,8 @@ void m5xx_uart_initialize(int minor);
 int m5xx_uart_firstOpen(int maj, int min, void *arg);
 int m5xx_uart_lastClose(int maj, int min, void *arg);
 int m5xx_uart_pollRead(int minor);
-int m5xx_uart_pollWrite(int minor, const char* buf, int len);
-int m5xx_uart_write(int minor, const char *buf, int len);
+ssize_t m5xx_uart_pollWrite(int minor, const char* buf, size_t len);
+ssize_t m5xx_uart_write    (int minor, const char *buf, size_t len);
 int m5xx_uart_setAttributes(int, const struct termios* t);
 
 #define NUM_PORTS	2	/* number of serial ports */

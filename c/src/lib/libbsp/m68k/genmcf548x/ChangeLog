@@ -1,3 +1,8 @@
+2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* console/console.c: adapted to new prototype for *_write
+	function
+
 2009-12-14	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* console/console.c, include/bsp.h, network/network.c: get vital

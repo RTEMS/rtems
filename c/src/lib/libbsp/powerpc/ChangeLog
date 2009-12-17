@@ -1,3 +1,8 @@
+2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* shared/console/uart.c, shared/console/uart.h: adapted to new
+	prototype for *_write function
+
 2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1483/cpukit

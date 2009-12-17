@@ -1,3 +1,8 @@
+2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* console/console.c: adapted to new prototype for *_write
+	function
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/gen68360.cfg: Remove RTEMS_BSP_FAMILY.
@@ -44,8 +49,8 @@
 
 2008-10-21      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	        * spi/mc68360_spidrv.h:
-	        removed orphaned file
+	* spi/mc68360_spidrv.h:
+	removed orphaned file
 
 2008-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 

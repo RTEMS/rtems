@@ -551,12 +551,13 @@ int mpc5200_uart_pollRead(
 }
 
 
-int mpc5200_uart_pollWrite(
+ssize_t mpc5200_uart_pollWrite(
   int minor,
   const char *buf,
-  int len
+  size_t len
 )
 {
+  size_t retval = len;
   const char *tmp_buf = buf;
   struct mpc5200_psc *psc =
     (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
@@ -572,15 +573,14 @@ int mpc5200_uart_pollWrite(
     tmp_buf++;
 
   }
-  return 0;
+  return retval;
 
 }
 
-
-int mpc5200_uart_write(
+ssize_t mpc5200_uart_write(
   int         minor,
   const char *buf,
-  int len
+  size_t len
 )
 {
   int frame_len = len;
@@ -648,7 +648,7 @@ static int A_BSP_get_char(void)
    */
   #if !defined(HAS_UBOOT)
     if (console_initialized == false)
-     return;
+     return -1;
   #endif
 
   return mpc5200_uart_pollRead(0);

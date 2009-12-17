@@ -1,3 +1,9 @@
+2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* console/console.c, console/m340uart.c, include/m340uart.h,
+	timer/timer.c:
+	adapted to new prototype for *_write function
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/gen68340.cfg: Remove RTEMS_BSP_FAMILY.

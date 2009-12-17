@@ -1,3 +1,17 @@
+2009-12-17      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc5xx/irq/irq.c: removed warning
+
+2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc5xx/include/console.h,
+	mpc5xx/console-generic/console-generic.c,
+	mpc8xx/include/console.h,
+	mpc8xx/console-generic/console-generic.c,
+	mpc8260/include/console.h,
+	mpc8260/console-generic/console-generic.c: adapted to new prototype
+	for *_write function
+
 2009-12-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* new-exceptions/bspsupport/ppc_exc_bspsupp.h: Removed file.
@@ -12,7 +26,7 @@
 	new-exceptions/bspsupport/vectors.h:
 	Added AltiVec support (save/restore volatile vregs
 	across exceptions).
-	
+
 2009-12-01	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, mpc6xx/altivec: new directory implementing
@@ -31,16 +45,16 @@
 	for firmware I/O.
 
 	Added entries for AltiVec on PSIM.
-	
+
 2009-11-15	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/include/cpuIdent.c: Set 604 features + altivec if
 	running on PSIM.
-	
+
 2009-11-03  Thomas Doerfler  <Thomas.Doerfler@imd-systems.de>
 
 	* shared/include/powerpc-utility.h, shared/include/byteorder.h,
-	shared/include/cpuIdent.h: 
+	shared/include/cpuIdent.h:
 	add c++ declaration brackets
 	* Makefile.am, mpc8260/clock: removed mpc8260 specific clock
 	driver

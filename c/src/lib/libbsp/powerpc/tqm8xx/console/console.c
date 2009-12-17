@@ -776,8 +776,8 @@ sccPollRead (int minor)
  * Polling devices:
  *	Transmit all characters.
  */
-static int
-sccInterruptWrite (int minor, const char *buf, int len)
+static ssize_t
+sccInterruptWrite (int minor, const char *buf, size_t len)
 {
   int chan = minor;
 
@@ -802,12 +802,13 @@ sccInterruptWrite (int minor, const char *buf, int len)
   return 0;
 }
 
-static int
-sccPollWrite (int minor, const char *buf, int len)
+static ssize_t
+sccPollWrite (int minor, const char *buf, size_t len)
 {
   static char txBuf[CONS_CHN_CNT][SCC_TXBD_CNT];
   int chan = minor;
   int bd_used;
+  size_t retval = len;
 
   while (len--) {
     while (sccPrepTxBd[chan]->status & M8xx_BD_READY)
@@ -829,7 +830,7 @@ sccPollWrite (int minor, const char *buf, int len)
       sccPrepTxBd[chan]++;
     }
   }
-  return 0;
+  return retval;
 }
 
 /*

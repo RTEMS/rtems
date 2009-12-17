@@ -254,10 +254,10 @@ rtems_device_driver console_initialize(
  *  Console Termios output entry point.
  *
  */
-int console_write_support(
+ssize_t console_write_support(
   int   minor,
   const char *buf,
-  int   len)
+  size_t   len)
 {
   int nwrite = 0;
   volatile uint8_t         *csr;

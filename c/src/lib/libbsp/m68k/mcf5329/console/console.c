@@ -22,8 +22,8 @@
                              MCF_UART_USR_PE | \
                              MCF_UART_USR_OE )
 
-static int IntUartPollWrite(int minor, const char *buf, int len);
-static int IntUartInterruptWrite(int minor, const char *buf, int len);
+static ssize_t IntUartPollWrite(int minor, const char *buf, size_t len);
+static ssize_t IntUartInterruptWrite(int minor, const char *buf, size_t len);
 
 static void _BSP_null_char(char c)
 {
@@ -353,7 +353,7 @@ static void IntUartInitialize(void)
    to initiate a transmit sequence. Calling this routine enables Tx
    interrupts.
  ***************************************************************************/
-static int IntUartInterruptWrite(int minor, const char *buf, int len)
+static ssize_t IntUartInterruptWrite(int minor, const char *buf, size_t len)
 {
   int level;
 
@@ -486,8 +486,9 @@ static int IntUartPollRead(int minor)
    appropriate internal uart channel waiting till each one is sucessfully
    transmitted.
  ***************************************************************************/
-static int IntUartPollWrite(int minor, const char *buf, int len)
+static ssize_t IntUartPollWrite(int minor, const char *buf, size_t len)
 {
+  size_t retval = len;
   /* loop over buffer */
   while (len--) {
     /* block until we can transmit */
@@ -496,7 +497,7 @@ static int IntUartPollWrite(int minor, const char *buf, int len)
     /* transmit data byte */
     MCF_UART_UTB(minor) = *buf++;
   }
-  return (0);
+  return retval;
 }
 
 /***************************************************************************

@@ -1,3 +1,7 @@
+2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* startup/bspstart.c: warning removal
+
 2009-11-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* INSTALL: Remove.

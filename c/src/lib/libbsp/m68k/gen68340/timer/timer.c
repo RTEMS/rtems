@@ -188,8 +188,6 @@ void Fifo_Full_benchmark_timer_initialize (void)
          rtems_isr_entry old_handler;
 	 rtems_status_code sc;
 
-	 extern void _Debug_ISR_Handler_Console(void);
-
 	 sc = rtems_interrupt_catch (InterruptHandler,
 	  			     TIMER1_VECTOR,
 				     &old_handler);

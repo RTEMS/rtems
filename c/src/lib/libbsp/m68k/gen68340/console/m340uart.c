@@ -266,15 +266,16 @@ int dbugRead (int minor)
   Output parameters: always successfull
   Description: polled write
  *****************************************************/
-int dbugWrite (int minor, const char *buf, int len)
+ssize_t dbugWrite (int minor, const char *buf, size_t len)
 {
 	static char txBuf;
+	size_t retval = len;
 
 	while (len--) {
  		txBuf = *buf++;
         	dbug_out_char( minor, (int)txBuf );
 	}
-	return 0;
+	return retval;
 }
 
 static void fmt_num( int minor, unsigned long, unsigned );

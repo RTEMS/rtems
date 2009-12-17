@@ -395,15 +395,17 @@ mcfuart_poll_read(mcfuart *uart)
  * RETURNS:
  *     0
  */
-int
-mcfuart_poll_write(mcfuart *uart, const char *buf, int len)
+ssize_t
+mcfuart_poll_write(mcfuart *uart, const char *buf, size_t len)
 {
+  size_t retval = len;
+
     while (len--)
     {
         while ((*MCF5206E_USR(MBAR, uart->chn) & MCF5206E_USR_TXRDY) == 0);
         *MCF5206E_UTB(MBAR, uart->chn) = *buf++;
     }
-    return 0;
+    return retval;
 }
 
 /* mcfuart_interrupt_handler --
@@ -517,8 +519,8 @@ mcfuart_interrupt_handler(rtems_vector_number vec)
  * RETURNS:
  *     0
  */
-int
-mcfuart_interrupt_write(mcfuart *uart, const char *buf, int len)
+ssize_t
+mcfuart_interrupt_write(mcfuart *uart, const char *buf, size_t len)
 {
     int level;
     rtems_interrupt_disable(level);

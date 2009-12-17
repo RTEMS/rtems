@@ -1098,11 +1098,11 @@ m8xx_uart_pollRead(
 /*
  *  TODO: Get a free buffer and set it up.
  */
-int
+ssize_t
 m8xx_uart_write(
   int minor,
   const char *buf,
-  int len
+  size_t len
 )
 {
   while( (TxBd[minor]->status) & M8260_BD_READY );
@@ -1115,13 +1115,14 @@ m8xx_uart_write(
 }
 
 
-int
+ssize_t
 m8xx_uart_pollWrite(
   int minor,
   const char *buf,
-  int len
+  size_t len
 )
 {
+  size_t retval = len;
 
   while (len--) {
     while (TxBd[minor]->status & M8260_BD_READY)
@@ -1133,5 +1134,5 @@ m8xx_uart_pollWrite(
     TxBd[minor]->status = M8260_BD_READY | M8260_BD_WRAP;
   }
 
-  return 0;
+  return retval;
 }

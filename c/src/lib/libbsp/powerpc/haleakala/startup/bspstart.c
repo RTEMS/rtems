@@ -71,6 +71,8 @@
 
 #include <stdio.h>
 
+LINKER_SYMBOL(intrStack_start);
+LINKER_SYMBOL(intrStack_size);
 /*
  *  Driver configuration parameters
  */
@@ -170,8 +172,6 @@ BSP_output_char_function_type BSP_output_char = DirectUARTWrite;
 void bsp_start( void )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  LINKER_SYMBOL(intrStack_start);
-  LINKER_SYMBOL(intrStack_size);
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
 

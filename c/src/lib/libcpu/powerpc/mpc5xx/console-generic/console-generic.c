@@ -139,11 +139,10 @@ m5xx_uart_pollRead(
   return c;
 }
 
-int
-m5xx_uart_write(
+ssize_t m5xx_uart_write(
   int minor,
   const char *buf,
-  int len
+  size_t len
 )
 {
   volatile m5xxSCIRegisters_t *regs = sci_descs[minor].regs;
@@ -153,21 +152,22 @@ m5xx_uart_write(
   return 0;
 }
 
-int
-m5xx_uart_pollWrite(
+ssize_t m5xx_uart_pollWrite(
   int minor,
   const char *buf,
-  int len
+  size_t len
 )
 {
   volatile m5xxSCIRegisters_t *regs = sci_descs[minor].regs;
+  size_t retval = len;
 
   while ( len-- ) {
     while ( (regs->scsr & QSMCM_SCI_TDRE) == 0 )
       ;
     regs->scdr = *buf++;
   }
-  return 0;
+
+  return retval;
 }
 
 int

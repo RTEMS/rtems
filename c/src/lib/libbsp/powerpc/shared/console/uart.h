@@ -15,26 +15,26 @@
 #include <sys/ioctl.h>
 #include <rtems/libio.h>
 
-void BSP_uart_init(int uart, int baud, int hwFlow);
-void BSP_uart_set_baud(int uart, int baud);
-void BSP_uart_intr_ctrl(int uart, int cmd);
-void BSP_uart_throttle(int uart);
-void BSP_uart_unthrottle(int uart);
-int  BSP_uart_polled_status(int uart);
-void BSP_uart_polled_write(int uart, int val);
-int  BSP_uart_polled_read(int uart);
-void BSP_uart_termios_set(int uart, void *ttyp);
-int  BSP_uart_termios_write_com(int minor, const char *buf, int len);
-int  BSP_uart_termios_read_com (int minor);
-void BSP_uart_termios_isr_com1(void *unused);
-void BSP_uart_termios_isr_com2(void *unused);
-void BSP_uart_dbgisr_com1(void);
-void BSP_uart_dbgisr_com2(void);
-int  BSP_uart_install_isr(int uart, rtems_irq_hdl handler);
-int  BSP_uart_remove_isr(int uart, rtems_irq_hdl handler);
-int  BSP_uart_termios_write_polled(int minor, const char *buf, int len);
-int  BSP_uart_get_break_cb(int uart, rtems_libio_ioctl_args_t *arg);
-int  BSP_uart_set_break_cb(int uart, rtems_libio_ioctl_args_t *arg);
+void     BSP_uart_init(int uart, int baud, int hwFlow);
+void     BSP_uart_set_baud(int uart, int baud);
+void     BSP_uart_intr_ctrl(int uart, int cmd);
+void     BSP_uart_throttle(int uart);
+void     BSP_uart_unthrottle(int uart);
+int      BSP_uart_polled_status(int uart);
+void     BSP_uart_polled_write(int uart, int val);
+int      BSP_uart_polled_read(int uart);
+void     BSP_uart_termios_set(int uart, void *ttyp);
+ssize_t  BSP_uart_termios_write_com(int minor, const char *buf, size_t len);
+int      BSP_uart_termios_read_com (int minor);
+void     BSP_uart_termios_isr_com1(void *unused);
+void     BSP_uart_termios_isr_com2(void *unused);
+void     BSP_uart_dbgisr_com1(void);
+void     BSP_uart_dbgisr_com2(void);
+int      BSP_uart_install_isr(int uart, rtems_irq_hdl handler);
+int      BSP_uart_remove_isr(int uart, rtems_irq_hdl handler);
+ssize_t BSP_uart_termios_write_polled(int minor, const char *buf, size_t len);
+int      BSP_uart_get_break_cb(int uart, rtems_libio_ioctl_args_t *arg);
+int      BSP_uart_set_break_cb(int uart, rtems_libio_ioctl_args_t *arg);
 
 extern unsigned BSP_poll_char_via_serial(void);
 extern void BSP_output_char_via_serial(const char val);

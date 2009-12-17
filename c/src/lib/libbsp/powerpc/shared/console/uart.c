@@ -554,8 +554,8 @@ BSP_uart_termios_set(int uart, void *p)
   return;
 }
 
-int
-BSP_uart_termios_write_polled(int minor, const char *buf, int len)
+ssize_t
+BSP_uart_termios_write_polled(int minor, const char *buf, size_t len)
 {
   int uart=minor;	/* could differ, theoretically */
   int nwrite;
@@ -569,8 +569,8 @@ BSP_uart_termios_write_polled(int minor, const char *buf, int len)
   return nwrite;
 }
 
-int
-BSP_uart_termios_write_com(int minor, const char *buf, int len)
+ssize_t
+BSP_uart_termios_write_com(int minor, const char *buf, size_t len)
 {
   int uart=minor;	/* could differ, theoretically */
   assert(buf != NULL);

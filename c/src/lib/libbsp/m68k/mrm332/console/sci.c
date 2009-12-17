@@ -154,15 +154,15 @@ rtems_device_driver SciControl(                        /* device driver api */
 rtems_device_driver SciRead (
     rtems_device_major_number, rtems_device_minor_number, void *);
 
-int   SciInterruptOpen(int, int, void *);               /* termios api */
-int   SciInterruptClose(int, int, void *);              /* termios api */
-int   SciInterruptWrite(int, const char *, int);        /* termios api */
+int     SciInterruptOpen(int, int, void *);               /* termios api */
+int     SciInterruptClose(int, int, void *);              /* termios api */
+ssize_t SciInterruptWrite(int, const char *, size_t);     /* termios api */
 
-int   SciSetAttributes(int, const struct termios*);     /* termios api */
-int   SciPolledOpen(int, int, void *);                  /* termios api */
-int   SciPolledClose(int, int, void *);                 /* termios api */
-int   SciPolledRead(int);                               /* termios api */
-int   SciPolledWrite(int, const char *, int);           /* termios api */
+int     SciSetAttributes(int, const struct termios*);     /* termios api */
+int     SciPolledOpen(int, int, void *);                  /* termios api */
+int     SciPolledClose(int, int, void *);                 /* termios api */
+int     SciPolledRead(int);                               /* termios api */
+ssize_t SciPolledWrite(int, const char *, size_t);        /* termios api */
 
 static void SciSetBaud(uint32_t   rate);                /* hardware routine */
 static void SciSetDataBits(uint16_t   bits);            /* hardware routine */
@@ -615,10 +615,10 @@ int   SciInterruptClose(
 * Scope:    public API
 ****************************************************************************/
 
-int   SciInterruptWrite(
+ssize_t   SciInterruptWrite(
     int         minor,
     const char *buf,
-    int         len
+    size_t      len
 )
 {
     /* We are using interrupt driven output so termios only sends us */
@@ -626,17 +626,17 @@ int   SciInterruptWrite(
 
     if ( !len )                                 /* no data? */
     {
-        return 0;                               /* return error */
+        return -1;                              /* return error */
     }
 
     if ( minor != SCI_MINOR )                   /* check the minor dev num */
     {
-        return 0;                               /* return error */
+        return -1;                              /* return error */
     }
 
     if ( SciOpened == DRIVER_OPENED )           /* is the driver api open? */
     {
-        return 1;                               /* yep, throw this away */
+        return -1;                              /* yep, throw this away */
     }
 
     SciWriteCharNoWait(*buf);                   /* try to send a char */
@@ -645,7 +645,7 @@ int   SciInterruptWrite(
 
     SciEnableTransmitInterrupts();              /* enable the tx interrupt */
 
-    return 1;                                   /* return success */
+    return 0;                                   /* return success */
 }
 
 
@@ -860,13 +860,13 @@ int   SciPolledRead(
 * Scope:    public termios API
 ****************************************************************************/
 
-int   SciPolledWrite(
+ssize_t SciPolledWrite(
     int         minor,
     const char *buf,
-    int         len
+    size_t      len
 )
 {
-    int32_t   written = 0;
+    ssize_t written = 0;
 
     if ( minor != SCI_MINOR )                   /* check minor device num */
     {

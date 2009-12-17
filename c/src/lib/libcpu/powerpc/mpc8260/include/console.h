@@ -14,8 +14,8 @@ void m8xx_uart_smc_initialize (int minor);
 
 /* Termios callbacks */
 int m8xx_uart_pollRead(int minor);
-int m8xx_uart_pollWrite(int minor, const char* buf, int len);
-int m8xx_uart_write(int minor, const char *buf, int len);
+ssize_t m8xx_uart_pollWrite(int minor, const char* buf, size_t len);
+ssize_t m8xx_uart_write(int minor, const char *buf, size_t len);
 int m8xx_uart_setAttributes(int, const struct termios* t);
 
 
