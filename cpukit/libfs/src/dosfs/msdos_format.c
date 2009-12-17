@@ -250,11 +250,11 @@ static int msdos_format_gen_volid
 {
   int ret_val = 0;
   int rc;
-  rtems_clock_time_value time_value;
+  struct timeval time_value;
 
-  rc = rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE,&time_value);
+  rc = rtems_clock_get_tod_timeval(&time_value);
   if (rc == RTEMS_SUCCESSFUL) {
-    *volid_ptr = time_value.seconds + time_value.microseconds;
+    *volid_ptr = time_value.tv_sec + time_value.tv_sec;
   }
   else {
     *volid_ptr = rand();

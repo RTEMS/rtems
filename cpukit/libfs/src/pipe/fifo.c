@@ -560,6 +560,6 @@ void rtems_pipe_initialize (void)
     rtems_fatal_error_occurred (sc);
 
   rtems_interval now;
-  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+  now = rtems_clock_get_ticks_since_boot();
   rtems_pipe_no = now;
 }

@@ -52,7 +52,7 @@ processPacket (struct ntpPacketSmall *p, int state, void *unused)
 	if ( state )
 		return 0;
 
-	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second);
+	ticks_per_second = rtems_clock_get_ticks_per_second();
 	tbuf = ntohl (p->transmit_timestamp.integer) - UNIX_BASE_TO_NTP_BASE - rtems_bsdnet_timeoffset;
 	lt = gmtime (&tbuf);
 	rt.year = lt->tm_year + 1900;

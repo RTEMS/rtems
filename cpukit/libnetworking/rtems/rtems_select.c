@@ -121,7 +121,7 @@ select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 	int error, timo;
 	int retval = 0;
 	rtems_id tid;
-	rtems_interval then, now;
+	rtems_interval then = 0, now;
 	rtems_event_set events;
 
 	if (nfds < 0)
@@ -130,7 +130,7 @@ select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 		timo = tv->tv_sec * hz + tv->tv_usec / tick;
 		if (timo == 0)
 			timo = 1;
-		rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then);
+		then = rtems_clock_get_ticks_since_boot();
 	}
 	else {
 		timo = 0;
@@ -156,7 +156,7 @@ select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 		if (error || retval)
 			break;
 		if (timo) {
-			rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+			now = rtems_clock_get_ticks_since_boot();
 			timo -= now - then;
 			if (timo <= 0)
 				break;

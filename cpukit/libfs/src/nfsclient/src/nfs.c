@@ -2128,7 +2128,8 @@ static int nfs_mknod(
 	rtems_filesystem_location_info_t  *pathloc     /* IN/OUT */
 )
 {
-rtems_clock_time_value	now;
+
+struct timeval				now;
 diropres				res;
 NfsNode					node = pathloc->node_access;
 mode_t					type = S_IFMT & mode;
@@ -2140,7 +2141,7 @@ mode_t					type = S_IFMT & mode;
 	fprintf(stderr,"nfs_mknod: creating %s\n", path);
 #endif
 
-	rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE, &now);
+        rtems_clock_get_tod_timeval(&now);
 
 	SERP_ARGS(node).createarg.name       		= (filename)path;
 	SERP_ARGS(node).createarg.attributes.mode	= mode;
@@ -2148,10 +2149,10 @@ mode_t					type = S_IFMT & mode;
 	SERP_ARGS(node).createarg.attributes.uid	= 0;
 	SERP_ARGS(node).createarg.attributes.gid	= 0;
 	SERP_ARGS(node).createarg.attributes.size	= 0;
-	SERP_ARGS(node).createarg.attributes.atime.seconds	= now.seconds;
-	SERP_ARGS(node).createarg.attributes.atime.useconds	= now.microseconds;
-	SERP_ARGS(node).createarg.attributes.mtime.seconds	= now.seconds;
-	SERP_ARGS(node).createarg.attributes.mtime.useconds	= now.microseconds;
+	SERP_ARGS(node).createarg.attributes.atime.seconds	= now.tv_sec;
+	SERP_ARGS(node).createarg.attributes.atime.useconds	= now.tv_usec;
+	SERP_ARGS(node).createarg.attributes.mtime.seconds	= now.tv_sec;
+	SERP_ARGS(node).createarg.attributes.mtime.useconds	= now.tv_usec;
 
 	if ( nfscall( node->nfs->server,
 						NFSPROC_CREATE,
@@ -2190,7 +2191,7 @@ static int nfs_symlink(
 	const char                        *node_name
 )
 {
-rtems_clock_time_value	now;
+struct timeval				now;
 nfsstat					status;
 NfsNode					node = loc->node_access;
 
@@ -2199,7 +2200,7 @@ NfsNode					node = loc->node_access;
 	fprintf(stderr,"nfs_symlink: creating %s -> %s\n", link_name, node_name);
 #endif
 
-	rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE, &now);
+	rtems_clock_get_tod_timeval(&now);
 
 	SERP_ARGS(node).symlinkarg.name       		= (filename)link_name;
 	SERP_ARGS(node).symlinkarg.to				= (nfspath) node_name;
@@ -2209,10 +2210,10 @@ NfsNode					node = loc->node_access;
 	SERP_ARGS(node).symlinkarg.attributes.uid	= 0;
 	SERP_ARGS(node).symlinkarg.attributes.gid	= 0;
 	SERP_ARGS(node).symlinkarg.attributes.size	= 0;
-	SERP_ARGS(node).symlinkarg.attributes.atime.seconds	 = now.seconds;
-	SERP_ARGS(node).symlinkarg.attributes.atime.useconds = now.microseconds;
-	SERP_ARGS(node).symlinkarg.attributes.mtime.seconds	 = now.seconds;
-	SERP_ARGS(node).symlinkarg.attributes.mtime.useconds = now.microseconds;
+	SERP_ARGS(node).symlinkarg.attributes.atime.seconds  = now.tv_sec;
+	SERP_ARGS(node).symlinkarg.attributes.atime.useconds = now.tv_usec;
+	SERP_ARGS(node).symlinkarg.attributes.mtime.seconds  = now.tv_sec;
+	SERP_ARGS(node).symlinkarg.attributes.mtime.useconds = now.tv_usec;
 
 	if ( nfscall( node->nfs->server,
 						NFSPROC_SYMLINK,
@@ -2918,7 +2919,7 @@ static int
 nfs_sattr(NfsNode node, sattr *arg, u_long mask)
 {
 
-rtems_clock_time_value	now;
+struct timeval				now;
 nfstime					nfsnow, t;
 int						e;
 u_int					mode;
@@ -2926,11 +2927,11 @@ u_int					mode;
 	if (updateAttr(node, 0 /* only if old */))
 		return -1;
 
-	rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE, &now);
+        rtems_clock_get_tod_timeval(&now);
 
 	/* TODO: add rtems EPOCH - UNIX EPOCH seconds */
-	nfsnow.seconds  = now.seconds;
-	nfsnow.useconds = now.microseconds;
+	nfsnow.seconds  = now.tv_sec;
+	nfsnow.useconds = now.tv_usec;
 
 	/* merge permission bits into existing type bits */
 	mode = SERP_ATTR(node).mode;

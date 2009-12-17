@@ -288,10 +288,11 @@ rtems_bsdnet_initialize (void)
 	/*
 	 * Compute clock tick conversion factors
 	 */
-	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &rtems_bsdnet_ticks_per_second);
+	rtems_bsdnet_ticks_per_second = rtems_clock_get_ticks_per_second();
 	if (rtems_bsdnet_ticks_per_second <= 0)
 		rtems_bsdnet_ticks_per_second = 1;
-	rtems_bsdnet_microseconds_per_tick = 1000000 / rtems_bsdnet_ticks_per_second;
+	rtems_bsdnet_microseconds_per_tick =
+		1000000 / rtems_bsdnet_ticks_per_second;
 
 	/*
 	 * Ensure that `seconds' is greater than 0
@@ -554,7 +555,7 @@ networkDaemon (void *task_argument)
 				arpintr ();
 		}
 
-		rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+  		now = rtems_clock_get_ticks_since_boot();
 		ticksPassed = now - ticksWhenCalloutsLastChecked;
 		if (ticksPassed != 0) {
 			ticksWhenCalloutsLastChecked = now;
@@ -677,7 +678,7 @@ microtime (struct timeval *t)
 {
 	rtems_interval now;
 
-	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+	now = rtems_clock_get_ticks_since_boot();
 	t->tv_sec = now / rtems_bsdnet_ticks_per_second;
 	t->tv_usec = (now % rtems_bsdnet_ticks_per_second) * rtems_bsdnet_microseconds_per_tick;
 }
@@ -687,7 +688,7 @@ rtems_bsdnet_seconds_since_boot (void)
 {
 	rtems_interval now;
 
-	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+	now = rtems_clock_get_ticks_since_boot();
 	return now / rtems_bsdnet_ticks_per_second;
 }
 
@@ -699,7 +700,7 @@ rtems_bsdnet_random (void)
 {
 	rtems_interval now;
 
-	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+	now = rtems_clock_get_ticks_since_boot();
 	return (now * 99991);
 }
 

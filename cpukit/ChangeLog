@@ -1,5 +1,14 @@
 2009-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/termios.c, libfs/src/dosfs/msdos_format.c,
+	libfs/src/nfsclient/src/nfs.c, libfs/src/pipe/fifo.c,
+	libnetworking/lib/rtems_bsdnet_ntp.c, libnetworking/lib/tftpDriver.c,
+	libnetworking/rtems/rtems_glue.c, libnetworking/rtems/rtems_select.c:
+	Eliminate uses of deprecated rtems_clock_get() and replace with
+	properly typed routine.
+
+2009-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* telnetd/telnetd.c: Honor configuration setting for telnet daemon
 	stack size.
 

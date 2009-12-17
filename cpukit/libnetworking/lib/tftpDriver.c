@@ -637,7 +637,7 @@ static int rtems_tftp_open_worker(
      * Bind the socket to a local address
      */
     retryCount = 0;
-    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+    now = rtems_clock_get_ticks_since_boot();
     for (;;) {
         int try = (now + retryCount) % 10;
 
@@ -923,7 +923,7 @@ static int rtems_tftp_close(
          */
         rtems_interval ticksPerSecond;
         sendStifle (tp, &tp->farAddress);
-        rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond);
+        ticksPerSecond = rtems_clock_get_ticks_per_second();
         rtems_task_wake_after (1 + ticksPerSecond / 10);
     }
     close (tp->socket);
