@@ -265,7 +265,7 @@ greth_initialize_hardware (struct greth_softc *sc)
     int tmp1;
     int tmp2;
     unsigned int msecs;
-    rtems_clock_time_value tstart, tnow;
+    struct timeval tstart, tnow;
 
     greth_regs *regs;
 
@@ -305,7 +305,7 @@ greth_initialize_hardware (struct greth_softc *sc)
             /*wait for auto negotiation to complete*/
             msecs = 0;
             sc->auto_neg = 1;
-            if ( rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE,&tstart) == RTEMS_NOT_DEFINED){
+            if ( rtems_clock_get_tod_timeval(&tstart) == RTEMS_NOT_DEFINED){
                 /* Not inited, set to epoch */
                 rtems_time_of_day time;
                 time.year   = 1988;
@@ -317,14 +317,14 @@ greth_initialize_hardware (struct greth_softc *sc)
                 time.ticks  = 0;
                 rtems_clock_set(&time);
 
-                tstart.seconds = 0;
-                tstart.microseconds = 0;
-                rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE,&tstart);
+                tstart.tv_sec = 0;
+                tstart.tv_usec = 0;
+                rtems_clock_get_tod_timeval(&tstart);
             }
             while (!(((phystatus = read_mii(phyaddr, 1)) >> 5) & 1)) {
-                    if ( rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE,&tnow) != RTEMS_SUCCESSFUL )
-                      printk("rtems_clock_get failed\n\r");
-                    msecs = (tnow.seconds-tstart.seconds)*1000+(tnow.microseconds-tstart.microseconds)/1000;
+                    if ( rtems_clock_get_tod_timeval(&tnow) != RTEMS_SUCCESSFUL )
+                      printk("rtems_clock_get_tod_timeval failed\n\r");
+                    msecs = (tnow.tv_sec-tstart.tv_sec)*1000+(tnow.tv_usec-tstart.tv_usec)/1000;
                     if ( msecs > GRETH_AUTONEGO_TIMEOUT_MS ){
                             sc->auto_neg_time = msecs;
                             printk("Auto negotiation timed out. Selecting default config\n\r");
