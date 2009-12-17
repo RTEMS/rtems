@@ -334,7 +334,7 @@ rtems_status_code rtems_telnetd_initialize( void)
   telnetd_task_id = telnetd_spawn_task(
     "TNTD",
     rtems_telnetd_config.priority,
-    RTEMS_MINIMUM_STACK_SIZE,
+    rtems_telnetd_config.stack_size,
     rtems_task_telnetd,
     0
   );
