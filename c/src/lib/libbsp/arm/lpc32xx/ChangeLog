@@ -1,3 +1,7 @@
+2009-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bspopts.h.in: Regenerated.
+
 2009-12-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* bsp_specs, configure.ac, console/console-config.c, include/bsp.h,
