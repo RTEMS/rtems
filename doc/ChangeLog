@@ -1,3 +1,7 @@
+2009-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/clock.t: Eliminate unused type rtems_clock_time_value.
+
 2009-12-16	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* bsp_howto/console.t: adaption to ssize_t return value for

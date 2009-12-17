@@ -85,34 +85,16 @@ type Time_Of_Day is
 
 The native date and time format is the only format
 supported when setting the system date and time using the
-@code{@value{DIRPREFIX}clock_get} directive.  Some applications
+@code{@value{DIRPREFIX}clock_set} directive.  Some applications
 expect to operate on a "UNIX-style" date and time data structure.  The 
+@code{@value{DIRPREFIX}clock_get_tod_timeval} always returns
+the date and time in @code{struct timeval} format.  The 
 @code{@value{DIRPREFIX}clock_get} directive can optionally return
-the current date and time in the
-following @value{STRUCTURE}:
+the current date and time in this format.  
 
-@ifset is-C
-@example
-@group
-typedef struct @{
-  uint32_t seconds;       /* seconds since RTEMS epoch*/
-  uint32_t microseconds;  /* since last second        */
-@} rtems_clock_time_value;
-@end group
-@end example
-@end ifset
-
-@ifset is-Ada
-@example
-type Clock_Time_Value is
-   record
-      Seconds      : Unsigned32;
-      Microseconds : Unsigned32;
-   end record;
-@end example
-@end ifset
-
-The seconds field in this @value{STRUCTURE} is the number of seconds
+The @code{struct timeval} data structure has two fields: @code{tv_sec}
+and @code{tv_usec} which are seconds and microseconds, respectively.
+The @code{tv_sec} field in this data structure is the number of seconds
 since the POSIX epoch of January 1, 1970 but will never be prior to
 the RTEMS epoch of January 1, 1988.
 
