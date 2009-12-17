@@ -1,5 +1,10 @@
 2009-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/include/rtems/rtems/clock.h: Eliminate unused type
+	rtems_clock_time_value.
+
+2009-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/termios.c, libfs/src/dosfs/msdos_format.c,
 	libfs/src/nfsclient/src/nfs.c, libfs/src/pipe/fifo.c,
 	libnetworking/lib/rtems_bsdnet_ntp.c, libnetworking/lib/tftpDriver.c,
