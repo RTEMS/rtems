@@ -111,18 +111,18 @@ static bool rtems_shell_get_text(
         return false;
       case '\n':
       case '\r':
-        put( '\n', out);
+        put('\n', out);
         line [i] = '\0';
         return true;
       case  127:
       case '\b':
         if (i > 0) {
-          put( '\b', out);
-          put( ' ', out);
-          put( '\b', out);
+          put('\b', out);
+          put(' ', out);
+          put('\b', out);
           --i;
         } else {
-          put( '\a', out);
+          put('\a', out);
         }
         break;
       default:
@@ -132,10 +132,10 @@ static bool rtems_shell_get_text(
             ++i;
             put( c, out);
           } else {
-            put( '\a', out);
+            put('\a', out);
           }
         } else {
-          put( '\a', out);
+          put('\a', out);
         }
         break;
     }
@@ -159,10 +159,13 @@ bool rtems_shell_login_prompt(
   if (tcgetattr( fd_in, &termios_previous) == 0) {
     struct termios termios_new = termios_previous;
 
+    /*
+     *  Stay in canonical mode so we can tell EOF and dropped connections.
+     *  But read one character at a time and do not echo it.
+     */
     termios_new.c_lflag &= (unsigned char) ~ECHO;
-    termios_new.c_lflag &= (unsigned char) ~ICANON;
-    termios_new.c_cc [VTIME] = 255;
-    termios_new.c_cc [VMIN] = 0;
+    termios_new.c_cc [VTIME] = 0;
+    termios_new.c_cc [VMIN] = 1;
 
     restore_termios = tcsetattr( fd_in, TCSANOW, &termios_new) == 0;
   }

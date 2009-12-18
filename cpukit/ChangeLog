@@ -1,3 +1,11 @@
+2009-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/login_prompt.c: Switch from non-canonical mode with
+	timeout (Case C) to blocking IO waiting for single character on
+	login. In Case C mode, you cannot tell EOF from no data available.
+	This means we cannot tell when a telnet connection is dropped. This
+	was changed from 4.9 and resulted in breakage.
+
 2009-12-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1474
