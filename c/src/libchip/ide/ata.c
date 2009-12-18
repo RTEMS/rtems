@@ -1009,7 +1009,7 @@ ata_queue_task(rtems_task_argument arg)
 static int
 ata_ioctl(rtems_disk_device *dd, uint32_t cmd, void *argp)
 {
-    dev_t                     device = rtems_disk_physical_device_number(dd);
+    dev_t                     device = rtems_disk_get_device_identifier(dd);
     rtems_status_code         status;
     rtems_device_minor_number rel_minor;
 

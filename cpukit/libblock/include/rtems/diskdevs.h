@@ -143,57 +143,37 @@ struct rtems_disk_device {
  * @{
  */
 
-static inline dev_t rtems_disk_physical_device_number(
+static inline dev_t rtems_disk_get_device_identifier(
   const rtems_disk_device *dd
 )
-{
-  return dd->phys_dev->dev;
-}
-
-static inline rtems_device_major_number rtems_disk_physical_major_number(
-  const rtems_disk_device *dd
-)
-{
-  return rtems_filesystem_dev_major_t(dd->phys_dev->dev);
-}
-
-static inline rtems_device_minor_number rtems_disk_physical_minor_number(
-  const rtems_disk_device *dd
-)
-{
-  return rtems_filesystem_dev_minor_t(dd->phys_dev->dev);
-}
-
-static inline dev_t rtems_disk_device_number(const rtems_disk_device *dd)
 {
   return dd->dev;
 }
 
-static inline rtems_device_major_number rtems_disk_major_number(
+static inline rtems_device_major_number rtems_disk_get_major_number(
   const rtems_disk_device *dd
 )
 {
   return rtems_filesystem_dev_major_t(dd->dev);
 }
 
-static inline rtems_device_minor_number rtems_disk_minor_number(
+static inline rtems_device_minor_number rtems_disk_get_minor_number(
   const rtems_disk_device *dd
 )
 {
   return rtems_filesystem_dev_minor_t(dd->dev);
 }
 
-static inline void *rtems_disk_driver_data(const rtems_disk_device *dd)
+static inline void *rtems_disk_get_driver_data(
+  const rtems_disk_device *dd
+)
 {
   return dd->driver_data;
 }
 
-static inline uint32_t rtems_disk_block_size(const rtems_disk_device *dd)
-{
-  return dd->block_size;
-}
-
-static inline uint32_t rtems_disk_media_block_size(const rtems_disk_device *dd)
+static inline uint32_t rtems_disk_get_media_block_size(
+  const rtems_disk_device *dd
+)
 {
   return dd->media_block_size;
 }

@@ -1,3 +1,13 @@
+2009-12-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1474
+	* libblock/include/rtems/diskdevs.h, libblock/src/bdbuf.c,
+	libblock/src/blkdev.c: Pass only physical disc devices to the block
+	device driver.  Reject direct usage of RTEMS_BLKIO_REQUEST though an
+	IO control.  Renamed and removed disk device structure access methods.
+	* libblock/src/flashdisk.c, libblock/src/nvdisk.c,
+	libblock/src/ramdisk-driver.c: Update for block device API change.
+
 2009-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/include/rtems/rtems/clock.h: Eliminate unused type

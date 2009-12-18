@@ -251,15 +251,18 @@ rtems_blkdev_generic_ioctl(
             break;
 
         case RTEMS_BLKIO_REQUEST:
-        {
-            rtems_blkdev_request *req = args->buffer;
-	    args->ioctl_return = (uint32_t) dd->ioctl(dd, args->command, req);
+            /*
+             * It is not allowed to directly access the driver circumventing
+             * the cache.
+             */
+            rc = RTEMS_INVALID_NAME;
+            args->ioctl_return = -1;
             break;
-        }
 
         default:
-	    args->ioctl_return = (uint32_t) dd->ioctl(dd, args->command,
-			                              args->buffer);
+            args->ioctl_return = (uint32_t) dd->ioctl(dd->phys_dev,
+                                                      args->command,
+                                                      args->buffer);
             break;
     }
     rtems_disk_release(dd);

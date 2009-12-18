@@ -101,7 +101,7 @@ ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
         case RTEMS_BLKIO_REQUEST:
         {
             rtems_blkdev_request *r = argp;
-            struct ramdisk *rd = rtems_disk_driver_data(dd);
+            struct ramdisk *rd = rtems_disk_get_driver_data(dd);
 
             switch (r->req)
             {

@@ -1914,7 +1914,7 @@ rtems_bdbuf_execute_read_request (rtems_blkdev_request *req,
     req->status = RTEMS_RESOURCE_IN_USE;
     req->error = 0;
 
-    result = dd->ioctl (dd, RTEMS_BLKIO_REQUEST, req);
+    result = dd->ioctl (dd->phys_dev, RTEMS_BLKIO_REQUEST, req);
 
     if (result == 0)
     {
@@ -2324,7 +2324,8 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
            * Perform the transfer. No cache locks, no preemption, only the disk
            * device is being held.
            */
-          result = dd->ioctl (dd, RTEMS_BLKIO_REQUEST, transfer->write_req);
+          result = dd->ioctl (dd->phys_dev, RTEMS_BLKIO_REQUEST,
+                              transfer->write_req);
           if (result < 0)
           {
             rtems_bdbuf_lock_cache ();

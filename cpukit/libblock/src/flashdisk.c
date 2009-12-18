@@ -2343,7 +2343,7 @@ rtems_fdisk_print_status (rtems_flashdisk* fd)
 static int
 rtems_fdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
 {
-  dev_t                     dev = rtems_disk_physical_device_number (dd);
+  dev_t                     dev = rtems_disk_get_device_identifier (dd);
   rtems_device_minor_number minor = rtems_filesystem_dev_minor_t (dev);
   rtems_blkdev_request*     r = argp;
   rtems_status_code         sc;
