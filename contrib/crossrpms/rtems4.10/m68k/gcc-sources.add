@@ -36,5 +36,9 @@ Source5:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-objc-%{gcc_pkgvers}.ta
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
 Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.17.0-rtems4.10-20091104.diff
 %endif
+%if "%{newlib_version}" == "1.18.0"
+Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20091218.diff
+%endif
 %{?_without_sources:NoSource:	50}
 %endif
