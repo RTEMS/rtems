@@ -1282,7 +1282,7 @@ static int rtems_ftpfs_ioctl(
       me->timeout = *timeout;
       break;
     default:
-      rtems_set_errno_and_return_minus_one( EBADRQC);
+      rtems_set_errno_and_return_minus_one(EINVAL);
   }
 
   return 0;

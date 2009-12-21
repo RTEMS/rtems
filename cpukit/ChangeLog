@@ -1,3 +1,7 @@
+2009-12-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libnetworking/lib/ftpfs.c: Use EINVAL not EBADRQC.
+
 2009-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/login_prompt.c: Switch from non-canonical mode with
