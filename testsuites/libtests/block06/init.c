@@ -461,7 +461,7 @@ static int
 bdbuf_disk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
 {
   rtems_blkdev_request *r = argp;
-  bdbuf_disk           *bdd = rtems_disk_driver_data (dd);
+  bdbuf_disk           *bdd = rtems_disk_get_driver_data (dd);
 
   errno = 0;
 
@@ -514,13 +514,13 @@ bdbuf_disk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
             break;
 
           default:
-            errno = EBADRQC;
+            errno = EINVAL;
             break;
         }
         break;
 
       default:
-        errno = EBADRQC;
+        errno = EINVAL;
         break;
     }
 

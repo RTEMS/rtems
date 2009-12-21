@@ -1,3 +1,8 @@
+2009-12-21	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* block06/init.c: Update for disk device API change.  Changed EBADRQC
+	to EINVAL.
+
 2009-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* termios01/init.c: Increase number of termios ports by 1.
