@@ -1,3 +1,8 @@
+2009-12-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/rtems++/rtemsEvent.h, include/rtems++/rtemsMessageQueue.h:
+	Fixed timeout calculation.
+
 2009-11-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* src/rtemsInterrupt.cc: #include <cstdlib>.

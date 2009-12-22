@@ -154,7 +154,7 @@ const rtems_status_code rtemsMessageQueue::receive(const void *buffer,
                                                    rtems_interval micro_secs,
                                                    bool wait)
 {
-  rtems_interval usecs =
+  rtems_interval usecs = micro_secs &&
     (micro_secs < rtems_configuration_get_microseconds_per_tick()) ?
     rtems_configuration_get_microseconds_per_tick() : micro_secs;
   return set_status_code(rtems_message_queue_receive(id,
