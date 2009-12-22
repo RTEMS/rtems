@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 7.0
-%define gdb_rpmvers %{expand:%(echo 7.0 | tr - _)} 
+%define gdb_version 7.0.1
+%define gdb_rpmvers %{expand:%(echo 7.0.1 | tr - _)} 
 
 Name:		rtems-4.10-sparc-rtems4.10-gdb
 Summary:	Gdb for target sparc-rtems4.10
@@ -127,7 +127,7 @@ BuildRequires:	texinfo >= 4.2
 Requires:	rtems-4.10-gdb-common
 
 Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20091007.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20091222.diff
 
 %description
 GDB for target sparc-rtems4.10
