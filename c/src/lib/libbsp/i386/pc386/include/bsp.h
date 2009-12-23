@@ -54,6 +54,8 @@ extern "C" {
 #include <libcpu/cpu.h>
 #include <rtems/bspIo.h>
 
+#define BSP_HAS_FRAME_BUFFER 1
+
 /*
  * Network driver configuration
  */
