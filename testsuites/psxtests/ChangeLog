@@ -1,3 +1,8 @@
+2009-12-28	Shrikant Gaikwad <n3oo3n@gmail.com>
+
+	* psx13/test.c, psx13/psx13.scn Added new routine PipeTestNull()
+	to cover the trivial NULL case for pipe function.
+
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxrwlock01/test.c, psxspin01/test.c, psxspin02/test.c: Fix spacing

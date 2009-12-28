@@ -25,11 +25,9 @@ SUBDIRS += psxfile01 psxreaddir psxstat psxmount psx13 psxchroot01 \
 ## Until sys/uio.h is moved to libcsupport, we have to have networking
 ## enabled to support readv and writev.  Hopefully this is a temporary
 ## situation.
-if HAS_NETWORKING
-if HAS_POSIX
+## if NEWLIB
 SUBDIRS += psxrdwrv
-endif
-endif
+## endif
 
 DIST_SUBDIRS = $(SUBDIRS) psxfatal_support
 EXTRA_DIST = psxfatal_support/init.c psxfatal_support/system.h

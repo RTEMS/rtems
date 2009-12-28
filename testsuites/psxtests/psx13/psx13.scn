@@ -8,6 +8,7 @@ Testing fdatasync()...... Success.
 Testing umask().......... Success.
 Testing utime().......... Success.
 Testing pipe()........... Success.
+Testing pipe() with NULL........... Failed!!!
 Testing fsync().......... Success.
 Testing pathconf()....... Success.
 Testing fpathconf()...... Success.

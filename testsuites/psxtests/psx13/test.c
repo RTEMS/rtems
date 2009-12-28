@@ -45,6 +45,7 @@ int FDataSyncTest(void);
 int UMaskTest(void);
 int UTimeTest(void);
 int PipeTest(void);
+int PipeTestNull(void);
 int PathConfTest(void);
 int FPathConfTest(void);
 int FSyncTest(void);
@@ -457,6 +458,20 @@ int PipeTest (void)
   return(retval);
 }
 
+int PipeTestNull (void)
+{
+  int error = 0, retval = FALSE;
+
+  error = pipe(NULL);
+
+  if ((error == -1) && (errno == ENOSYS))
+    retval = TRUE;
+  else
+    retval = FALSE;
+
+  return(retval);
+}
+
 /* ---------------------------------------------------------------
  * PathConfTest function
  *
@@ -650,6 +665,12 @@ int main(
 
    printf ("Testing pipe()........... ");
     if (PipeTest() == TRUE)
+      printf ("Success.\n");
+    else
+      printf ("Failed!!!\n");
+
+   printf ("Testing pipe() with NULL........... ");
+    if (PipeTestNull() == TRUE)
       printf ("Success.\n");
     else
       printf ("Failed!!!\n");

@@ -1,13 +1,10 @@
 /*
- *  Psx13
- *
  *  This test exercises the following routines:
  *
- *  readv - implemented
- *  writev - implemented
+ *    + readv
+ *    + writev
  *
- *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -204,7 +201,7 @@ int doErrorTest(void)
   /*
    * Open the file for the rest of the tests
    */
-  fp = fopen(TESTFILE, "wt");
+  fp = fopen(TESTFILE, "w+");
   if ( fp == NULL ) {
     printf( "fopen for error 2: %d=%s\n", errno, strerror(errno));
     return FALSE;
@@ -327,7 +324,7 @@ int doErrorTest(void)
   puts("writev iov_len total overflows -- EINVAL");
   rc = writev(fd, vec, 3);
   if ( (rc != -1) || (errno != EINVAL) ) {
-    printf( "writev error 7: %d=%s\n", errno, strerror(errno) );
+    printf( "writev error 7: rc=%d %d=%s\n", rc, errno, strerror(errno) );
     fclose(fp);
     return FALSE;
   }
@@ -340,7 +337,7 @@ int doErrorTest(void)
   puts("readv iov_len total overflows -- EINVAL");
   rc = readv(fd, vec, 2);
   if ( (rc != -1) || (errno != EINVAL) ) {
-    printf( "readv error 7: %d=%s\n", errno, strerror(errno) );
+    printf( "read error 7: rc=%d %d=%s\n", rc, errno, strerror(errno) );
     fclose(fp);
     return FALSE;
   }
