@@ -8,6 +8,7 @@ rtems_bsp_cmdline_get_param - length=0 - returns NULL
 rtems_bsp_cmdline_get_param_raw - name=NULL - returns NULL
 rtems_bsp_cmdline_get_param - bsp_boot_cmdline=NULL - returns NULL
 rtems_bsp_cmdline_get_param_raw - bsp_boot_cmdline=NULL - returns NULL
+rtems_bsp_cmdline_get_param - bsp_boot_cmdline = edit name = edit -no error
 
 Testing for param=(--arg)
   Command Line : (--arg=)

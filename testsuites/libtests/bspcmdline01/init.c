@@ -47,6 +47,11 @@ void test_errors(void)
     "rtems_bsp_cmdline_get_param_raw - bsp_boot_cmdline=NULL - returns NULL" );
   p = rtems_bsp_cmdline_get_param_raw( "name" );
   rtems_test_assert( p == NULL );
+  
+  bsp_boot_cmdline = "edit";
+  puts ( "rtems_bsp_cmdline_get_param - bsp_boot_cmdline = edit name = edit -no error" );
+  p = rtems_bsp_cmdline_get_param("edit", result, 5);
+  rtems_test_assert( p == NULL );
 }
 
 void test_search(
