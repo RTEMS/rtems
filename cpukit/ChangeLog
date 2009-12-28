@@ -1,3 +1,8 @@
+2009-12-28	Shrikant Gaikwad <n3oo3n@gmail.com>
+
+	* cpukit/libfs/src/pipe/pipe.c Restructured code to remove the
+	goto statements.
+
 2009-12-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libnetworking/lib/ftpfs.c: Use EINVAL not EBADRQC.

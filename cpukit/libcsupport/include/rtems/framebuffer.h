@@ -32,7 +32,7 @@ extern "C" {
  *  This macro defines the standard device driver table entry for
  *  a frame buffer device driver.
  */
-#define FRAMEBUFFER_DRIVER_TABLE_ENTRY \
+#define FRAME_BUFFER_DRIVER_TABLE_ENTRY \
   { frame_buffer_initialize, frame_buffer_open, frame_buffer_close, \
     frame_buffer_read, frame_buffer_write, frame_buffer_control }
 
