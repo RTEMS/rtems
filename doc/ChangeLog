@@ -1,3 +1,9 @@
+2010-01-11	Marc Pignat <marc.pignat@hevs.ch>
+
+	PR 1490/doc
+	* user/clock.t: Fix typo. rtems_clock_get_ticks_per_second not
+	rtems_clock_get_ticks_per_seconds.
+
 2009-07-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/region.t: Fix typos where semaphore referenced instead of region
