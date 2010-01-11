@@ -14,7 +14,7 @@ AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip 1.10])
 AC_ARG_ENABLE(osname,AS_HELP_STRING(
 [--enable-osname=<dir> ... os name]),
 [osname="$enable_osname"],
-[osname="fedora-10"])
+[osname="centos-5"])
 
 case $osname in
 centos-5* | redhat-el5* | fedora-7* | fedora-8* | fedora-9* | fedora-10* | fedora-11* | fedora-12* | fedora-13* )
