@@ -1,3 +1,10 @@
+2010-01-11	Allan Hessenflow <allanh@kallisti.com>
+
+	* serial/spi.c, serial/spi.h:
+	Fill in skeleton with functional SPI master code.
+	* include/spiRegs.h:
+	Correct spi shadow register declaration.
+
 2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* serial/uart.c:

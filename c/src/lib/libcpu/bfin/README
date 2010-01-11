@@ -9,7 +9,7 @@ It is assumed that bsp.h includes <libcpu/bfxxx.h>, where xxx is
 the processor type.  This is how the libcpu modules determine which
 processor variant they're being built for.
 
-serial/spi* and serial/sport* are currently just placeholders.
-serial/twi* does not contain enough code to do anything useful;
-it is however a start at an I2C driver.
+serial/sport* is currently just a placeholders.  serial/twi* does not
+contain enough code to do anything useful; it is however a start at an
+I2C driver.
 
