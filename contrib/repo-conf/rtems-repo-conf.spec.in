@@ -67,5 +67,4 @@ Yum configuration for RTEMS/@RTEMS_API@
 
 %files -n rtems-@RTEMS_API@-yum-conf
 %defattr(-,root,root,-)
-%{_sysconfdir}/pki/rpm-gpg/gpg-pubkey*
 %config(noreplace) %{_sysconfdir}/yum.repos.d/*.repo
