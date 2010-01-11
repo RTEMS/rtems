@@ -24,7 +24,7 @@ fedora-11* | fedora-12* | fedora-13* )
   yum_verdir="\$\$releasever"
   apt_verdir="\$\$(VERSION)"
   ;;
-centos-5* | redhat-el5* | fedora-7* | fedora-8* | fedora-9* | fedora-10*)
+centos-5* | redhat-el5* | fedora-7* | fedora-8* | fedora-9* | fedora-10* )
   os_name="CentOS"
   os_subdir="centos"
   os_vers=`echo $osname| sed -e 's,^.*-,,'`
