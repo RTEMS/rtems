@@ -30,24 +30,37 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%package -n rtems-@RTEMS_API@-release
+Summary:        Base package for rtems-@RTEMS_API@ package sets
+Group:          RTEMS/@RTEMS_API@
+
+%description -n rtems-@RTEMS_API@-release
+Base package for rtems-@RTEMS_API@ package sets.
+
+%files -n rtems-@RTEMS_API@-release
+%defattr(-,root,root,-)
+%{_sysconfdir}/pki/rpm-gpg/gpg-pubkey*
+
 %package -n rtems-@RTEMS_API@-apt-conf
 Summary:        Apt-repomd configuration for RTEMS/@RTEMS_API@
 Group:          RTEMS/@RTEMS_API@
 Requires:       apt >= 0.5.15lorg3
+Requires:       rtems-@RTEMS_API@-release = %{version}-%{release}
 
 %description -n rtems-@RTEMS_API@-apt-conf
 Apt-repomd configuration for RTEMS/@RTEMS_API@
 
 %files -n rtems-@RTEMS_API@-apt-conf
 %defattr(-,root,root,-)
-%{_sysconfdir}/apt/gpg
+%exclude %{_sysconfdir}/apt/gpg
 %config(noreplace) %{_sysconfdir}/apt/sources.list.d/rtems-@RTEMS_API@.list
-%{_sysconfdir}/apt/vendors.list.d/rtems.list
+%exclude %{_sysconfdir}/apt/vendors.list.d/rtems.list
 
 %package -n rtems-@RTEMS_API@-yum-conf
 Summary:        yum configuration for RTEMS/@RTEMS_API@
 Group:          RTEMS/@RTEMS_API@
 Requires:       yum > 2.0
+Requires:       rtems-@RTEMS_API@-release = %{version}-%{release}
 
 %description -n rtems-@RTEMS_API@-yum-conf
 Yum configuration for RTEMS/@RTEMS_API@
