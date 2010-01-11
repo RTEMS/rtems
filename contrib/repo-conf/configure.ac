@@ -2,29 +2,29 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.64)
-AC_INIT([rtems-]_RTEMS_API[-repo-conf],[0.23],[http://www.rtems.org/bugzilla],
+AC_INIT([rtems-]_RTEMS_API[-repo-conf],[0.24],[http://www.rtems.org/bugzilla],
   [rtems-]_RTEMS_API[-repo-conf])
 RTEMS_VERSIONING
 
 AC_CONFIG_SRCDIR([gpg])
 AC_CONFIG_AUX_DIR([.])
 AC_SUBST([RTEMS_API],[_RTEMS_API])
-AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip dist-xz 1.10])
+AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip dist-xz 1.10.1])
 
 AC_ARG_ENABLE(osname,AS_HELP_STRING(
 [--enable-osname=<dir> ... os name]),
 [osname="$enable_osname"],
-[osname="fedora-11"])
+[osname="fedora-12"])
 
 case $osname in
-fedora-10* | fedora-11* | fedora-12* )
+fedora-11* | fedora-12* | fedora-13* )
   os_name="Fedora"
   os_subdir="fedora"
   os_vers=`echo $osname| sed -e 's,^.*-,,'`
   yum_verdir="\$\$releasever"
   apt_verdir="\$\$(VERSION)"
   ;;
-centos-5* | redhat-el5* | fedora-7* | fedora-8* | fedora-9* )
+centos-5* | redhat-el5* | fedora-7* | fedora-8* | fedora-9* | fedora-10* )
   os_name="CentOS"
   os_subdir="centos"
   os_vers=`echo $osname| sed -e 's,^.*-,,'`
