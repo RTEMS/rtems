@@ -545,7 +545,7 @@ system date and time to application specific specifications.
 @ifset is-C
 @findex rtems_clock_get_ticks_per_second
 @example
-rtems_interval rtems_clock_get_ticks_per_seconds(void);
+rtems_interval rtems_clock_get_ticks_per_second(void);
 @end example
 @end ifset
 

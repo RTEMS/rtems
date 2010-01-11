@@ -1,3 +1,9 @@
+2010-01-11	Marc Pignat <marc.pignat@hevs.ch>
+
+	PR 1490/doc
+	* user/clock.t: Fix typo. rtems_clock_get_ticks_per_second not
+	rtems_clock_get_ticks_per_seconds.
+
 2009-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/clock.t: Eliminate unused type rtems_clock_time_value.
