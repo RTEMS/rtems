@@ -17,7 +17,7 @@ AC_ARG_ENABLE(osname,AS_HELP_STRING(
 [osname="fedora-12"])
 
 case $osname in
-fedora-11* | fedora-12* | fedora-13 )
+fedora-11* | fedora-12* | fedora-13* )
   os_name="Fedora"
   os_subdir="fedora"
   os_vers=`echo $osname| sed -e 's,^.*-,,'`
