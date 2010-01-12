@@ -13,6 +13,7 @@ noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 libscorecpu_a_SOURCES = cpu.c \
 	cpu_asm.S \
+	arm_exc_abort.S \
 	arm_exc_interrupt.S \
 	arm_exc_handler_low.S \
 	arm_exc_handler_high.c

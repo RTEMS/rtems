@@ -141,4 +141,20 @@
     .globl name ; name: ; .globl name ## _arm ; name ## _arm:
 #endif
 
+.macro SWITCH_FROM_THUMB_TO_ARM
+#ifdef __thumb__
+.align 2
+	bx	pc
+.arm
+#endif /* __thumb__ */
+.endm
+
+.macro SWITCH_FROM_ARM_TO_THUMB REG
+#ifdef __thumb__
+	add	\REG, pc, #1
+	bx	\REG
+.thumb
+#endif /* __thumb__ */
+.endm
+
 #endif /* _RTEMS_ASM_H */

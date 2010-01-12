@@ -158,6 +158,8 @@ void lpc32xx_irq_set_activation_type(rtems_vector_number vector, lpc32xx_irq_act
 
 lpc32xx_irq_activation_type lpc32xx_irq_get_activation_type(rtems_vector_number vector);
 
+void lpc32xx_set_exception_handler(Arm_symbolic_exception_name exception, void (*handler)(void));
+
 /** @} */
 
 #endif /* ASM */

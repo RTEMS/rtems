@@ -1,3 +1,10 @@
+2010-01-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/arm-cp15.h, shared/include/cache.h,
+	shared/include/cache_.h: New files.
+	* Makefile.am, preinstall.am: Update for new files.
+	* shared/arm920/mmu.c: Include and use <libcpu/arm-cp15.h>.
+
 2009-11-30	Fernando Nicodemos <fgnicodemos@terra.com.br>
 
 	* at91rm9200/include/at91rm9200.h: Update to match development version.

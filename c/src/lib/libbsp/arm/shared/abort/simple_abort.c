@@ -56,7 +56,7 @@ char *_print_full_context_mode2txt[0x10]={
 void _print_full_context(uint32_t spsr)
 {
   char *mode;
-  uint32_t prev_sp,prev_lr,cpsr,tmp;
+  uint32_t prev_sp,prev_lr,cpsr,arm_switch_reg;
   int i, j;
 
   printk("active thread thread 0x%08x\n", _Thread_Executing->Object.id);
@@ -65,16 +65,16 @@ void _print_full_context(uint32_t spsr)
   if(!mode) mode="unknown";
 
   asm volatile (
-    THUMB_TO_ARM
+    ARM_SWITCH_TO_ARM
     "mrs %[cpsr], cpsr\n"
-    "orr %[tmp], %[spsr], #0xc0\n"
-    "msr cpsr_c, %[tmp]\n"
+    "orr %[arm_switch_reg], %[spsr], #0xc0\n"
+    "msr cpsr_c, %[arm_switch_reg]\n"
     "mov %[prev_sp], sp\n"
     "mov %[prev_lr], lr\n"
     "msr cpsr_c, %[cpsr]\n"
-    ARM_TO_THUMB
+    ARM_SWITCH_BACK
     : [prev_sp] "=&r" (prev_sp), [prev_lr] "=&r" (prev_lr),
-      [cpsr] "=&r" (cpsr), [tmp] "=&r" (tmp)
+      [cpsr] "=&r" (cpsr), [arm_switch_reg] "=&r" (arm_switch_reg)
     : [spsr] "r" (spsr)
     : "cc"
   );

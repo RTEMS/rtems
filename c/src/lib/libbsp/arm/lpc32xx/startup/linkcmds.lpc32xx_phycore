@@ -36,7 +36,7 @@
 
 MEMORY {
         RAM_INT (AIW) : ORIGIN = 0x08000000, LENGTH = 256k
-        RAM_EXT (AIW) : ORIGIN = 0x80000000, LENGTH = 64M /* SDRAM on DYCS0 */
+        RAM_EXT (AIW) : ORIGIN = 0x80000000, LENGTH = 64M - 16k /* SDRAM on DYCS0 */
         ROM_EXT (RX) : ORIGIN = 0xe0000000, LENGTH = 2M /* NOR flash on CS0 */
         NIRVANA : ORIGIN = 0, LENGTH = 0
 }
@@ -56,5 +56,8 @@ REGION_ALIAS ("REGION_WORK", RAM_EXT);
 REGION_ALIAS ("REGION_STACK", RAM_INT);
 
 bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
+bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
+
+bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1M;
 
 INCLUDE linkcmds.base

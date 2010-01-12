@@ -1,3 +1,10 @@
+2010-01-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lpc-ethernet-config.h: New file.
+	* network/network.c: Removed file.
+	* Makefile.am, configure.ac, preinstall.am, include/bsp.h,
+	include/lpc24xx.h: Changes throughout.
+
 2009-12-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* clock/clock-config.c: Removed file.

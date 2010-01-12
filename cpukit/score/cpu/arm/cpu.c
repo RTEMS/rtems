@@ -56,31 +56,31 @@ void _CPU_Context_Initialize(
 
 void _CPU_ISR_Set_level( uint32_t level )
 {
-  uint32_t reg;
+  uint32_t arm_switch_reg;
 
   asm volatile (
-    THUMB_TO_ARM
-    "mrs %0, cpsr\n"
-    "bic %0, %0, #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"
-    "orr %0, %0, %1\n"
+    ARM_SWITCH_TO_ARM
+    "mrs %[arm_switch_reg], cpsr\n"
+    "bic %[arm_switch_reg], #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"
+    "orr %[arm_switch_reg], %[level]\n"
     "msr cpsr, %0\n"
-    ARM_TO_THUMB
-    : "=r" (reg)
-    : "r" (level)
+    ARM_SWITCH_BACK
+    : [arm_switch_reg] "=&r" (arm_switch_reg)
+    : [level] "r" (level)
   );
 }
 
 uint32_t _CPU_ISR_Get_level( void )
 {
-  uint32_t reg;
+  ARM_SWITCH_REGISTERS;
   uint32_t level;
 
   asm volatile (
-    THUMB_TO_ARM
-    "mrs %0, cpsr\n"
-    "and %1, %0, #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"
-    ARM_TO_THUMB
-    : "=r" (reg), "=r" (level)
+    ARM_SWITCH_TO_ARM
+    "mrs %[level], cpsr\n"
+    "and %[level], #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"
+    ARM_SWITCH_BACK
+    : [level] "=&r" (level) ARM_SWITCH_ADDITIONAL_OUTPUT
   );
 
   return level;

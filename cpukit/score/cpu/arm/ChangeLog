@@ -1,3 +1,12 @@
+2010-01-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* arm_exc_abort.S: New file.
+	* Makefile.am: Update for new file.
+	* arm_exc_interrupt.S, cpu.c, rtems/asm.h, rtems/score/cpu.h: Changed
+	macros which switch from and to THUMB mode.  Added a default prefetch
+	and data abort handler which reports the complete processor context.
+	Added PSR defines.
+
 2009-12-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/arm.h: Recognize ARMv5TEJ.

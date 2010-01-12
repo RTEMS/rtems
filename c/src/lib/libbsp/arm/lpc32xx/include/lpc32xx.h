@@ -90,5 +90,6 @@
 #define LPC32XX_UART_CLKMODE (*(volatile uint32_t *) 0x40054004)
 #define LPC32XX_UART_LOOP (*(volatile uint32_t *) 0x40054008)
 #define LPC32XX_SW_INT (*(volatile uint32_t *) 0x400040a8)
+#define LPC32XX_MAC_CLK_CTRL (*(volatile uint32_t *) 0x40004090)
 
 #endif /* LIBBSP_ARM_LPC32XX_LPC32XX_H */

@@ -207,29 +207,29 @@
 #define FIO4CLR        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0x9C))
 
 /* FIOs can be accessed through WORD, HALF-WORD or BYTE. */
-#define FIO0DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x01))
-#define FIO1DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x21))
-#define FIO2DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x41))
-#define FIO3DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x61))
-#define FIO4DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x81))
+#define FIO0DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x00))
+#define FIO1DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x20))
+#define FIO2DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x40))
+#define FIO3DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x60))
+#define FIO4DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x80))
 
-#define FIO0DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x02))
-#define FIO1DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x22))
-#define FIO2DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x42))
-#define FIO3DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x62))
-#define FIO4DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x82))
+#define FIO0DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x01))
+#define FIO1DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x21))
+#define FIO2DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x41))
+#define FIO3DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x61))
+#define FIO4DIR1       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x81))
 
-#define FIO0DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x03))
-#define FIO1DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x23))
-#define FIO2DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x43))
-#define FIO3DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x63))
-#define FIO4DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x83))
+#define FIO0DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x02))
+#define FIO1DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x22))
+#define FIO2DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x42))
+#define FIO3DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x62))
+#define FIO4DIR2       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x82))
 
-#define FIO0DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x04))
-#define FIO1DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x24))
-#define FIO2DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x44))
-#define FIO3DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x64))
-#define FIO4DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x84))
+#define FIO0DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x03))
+#define FIO1DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x23))
+#define FIO2DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x43))
+#define FIO3DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x63))
+#define FIO4DIR3       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x83))
 
 #define FIO0DIRL       (*(volatile uint16_t *) (FIO_BASE_ADDR + 0x00))
 #define FIO1DIRL       (*(volatile uint16_t *) (FIO_BASE_ADDR + 0x20))
@@ -1836,190 +1836,6 @@ typedef struct {
 #define GPDMA_CH_CFG_ACTIVE 0x00020000U
 
 #define GPDMA_CH_CFG_HALT 0x00040000U
-
-/* Ethernet (MAC) */
-
-typedef struct {
-  uint32_t start;
-  uint32_t control;
-} lpc24xx_eth_transfer_descriptor;
-
-typedef struct {
-  uint32_t status;
-  uint32_t hash_crc;
-} lpc24xx_eth_receive_info;
-
-#define ETH_TRANSFER_DESCRIPTOR_SIZE 8
-
-#define ETH_RECEIVE_INFO_SIZE 8
-
-#define ETH_TRANSMIT_STATUS_SIZE 4
-
-/* ETH_RX_CTRL */
-
-#define ETH_RX_CTRL_SIZE_MASK 0x000007ffU
-
-#define GET_ETH_RX_CTRL_SIZE(reg) \
-  GET_FIELD(reg, ETH_RX_CTRL_SIZE_MASK, 0)
-
-#define SET_ETH_RX_CTRL_SIZE(reg, val) \
-  SET_FIELD(reg, val, ETH_RX_CTRL_SIZE_MASK, 0)
-
-#define ETH_RX_CTRL_INTERRUPT 0x80000000U
-
-/* ETH_RX_STAT */
-
-#define ETH_RX_STAT_RXSIZE_MASK 0x000007ffU
-
-#define GET_ETH_RX_STAT_RXSIZE(reg) \
-  GET_FIELD(reg, ETH_RX_STAT_RXSIZE_MASK, 0)
-
-#define SET_ETH_RX_STAT_RXSIZE(reg, val) \
-  SET_FIELD(reg, val, ETH_RX_STAT_RXSIZE_MASK, 0)
-
-#define ETH_RX_STAT_BYTES 0x00000100U
-
-#define ETH_RX_STAT_CONTROL_FRAME 0x00040000U
-
-#define ETH_RX_STAT_VLAN 0x00080000U
-
-#define ETH_RX_STAT_FAIL_FILTER 0x00100000U
-
-#define ETH_RX_STAT_MULTICAST 0x00200000U
-
-#define ETH_RX_STAT_BROADCAST 0x00400000U
-
-#define ETH_RX_STAT_CRC_ERROR 0x00800000U
-
-#define ETH_RX_STAT_SYMBOL_ERROR 0x01000000U
-
-#define ETH_RX_STAT_LENGTH_ERROR 0x02000000U
-
-#define ETH_RX_STAT_RANGE_ERROR 0x04000000U
-
-#define ETH_RX_STAT_ALIGNMENT_ERROR 0x08000000U
-
-#define ETH_RX_STAT_OVERRUN 0x10000000U
-
-#define ETH_RX_STAT_NO_DESCRIPTOR 0x20000000U
-
-#define ETH_RX_STAT_LAST_FLAG 0x40000000U
-
-#define ETH_RX_STAT_ERROR 0x80000000U
-
-/* ETH_TX_CTRL */
-
-#define ETH_TX_CTRL_SIZE_MASK 0x000007ffU
-
-#define GET_ETH_TX_CTRL_SIZE(reg) \
-  GET_FIELD(reg, ETH_TX_CTRL_SIZE_MASK, 0)
-
-#define SET_ETH_TX_CTRL_SIZE(reg, val) \
-  SET_FIELD(reg, val, ETH_TX_CTRL_SIZE_MASK, 0)
-
-#define ETH_TX_CTRL_OVERRIDE 0x04000000U
-
-#define ETH_TX_CTRL_HUGE 0x08000000U
-
-#define ETH_TX_CTRL_PAD 0x10000000U
-
-#define ETH_TX_CTRL_CRC 0x20000000U
-
-#define ETH_TX_CTRL_LAST 0x40000000U
-
-#define ETH_TX_CTRL_INTERRUPT 0x80000000U
-
-/* ETH_TX_STAT */
-
-#define ETH_TX_STAT_COLLISION_COUNT_MASK 0x01e00000U
-
-#define GET_ETH_TX_STAT_COLLISION_COUNT(reg) \
-  GET_FIELD(reg, ETH_TX_STAT_COLLISION_COUNT_MASK, 21)
-
-#define SET_ETH_TX_STAT_COLLISION_COUNT(reg, val) \
-  SET_FIELD(reg, val, ETH_TX_STAT_COLLISION_COUNT_MASK, 21)
-
-#define ETH_TX_STAT_DEFER 0x02000000U
-
-#define ETH_TX_STAT_EXCESSIVE_DEFER 0x04000000U
-
-#define ETH_TX_STAT_EXCESSIVE_COLLISION 0x08000000U
-
-#define ETH_TX_STAT_LATE_COLLISION 0x10000000U
-
-#define ETH_TX_STAT_UNDERRUN 0x20000000U
-
-#define ETH_TX_STAT_NO_DESCRIPTOR 0x40000000U
-
-#define ETH_TX_STAT_ERROR 0x80000000U
-
-/* ETH_INT */
-
-#define ETH_INT_RX_OVERRUN 0x00000001U
-
-#define ETH_INT_RX_ERROR 0x00000002U
-
-#define ETH_INT_RX_FINISHED 0x00000004U
-
-#define ETH_INT_RX_DONE 0x00000008U
-
-#define ETH_INT_TX_UNDERRUN 0x00000010U
-
-#define ETH_INT_TX_ERROR 0x00000020U
-
-#define ETH_INT_TX_FINISHED 0x00000040U
-
-#define ETH_INT_TX_DONE 0x00000080U
-
-#define ETH_INT_SOFT 0x00001000U
-
-#define ETH_INT_WAKEUP 0x00002000U
-
-/* ETH_RX_FIL_CTRL */
-
-#define ETH_RX_FIL_CTRL_ACCEPT_UNICAST 0x00000001U
-
-#define ETH_RX_FIL_CTRL_ACCEPT_BROADCAST 0x00000002U
-
-#define ETH_RX_FIL_CTRL_ACCEPT_MULTICAST 0x00000004U
-
-#define ETH_RX_FIL_CTRL_ACCEPT_UNICAST_HASH 0x00000008U
-
-#define ETH_RX_FIL_CTRL_ACCEPT_MULTICAST_HASH 0x00000010U
-
-#define ETH_RX_FIL_CTRL_ACCEPT_PERFECT 0x00000020U
-
-#define ETH_RX_FIL_CTRL_MAGIC_PACKET_WOL 0x00001000U
-
-#define ETH_RX_FIL_CTRL_RX_FILTER_WOL 0x00002000U
-
-/* ETH_CMD */
-
-#define ETH_CMD_RX_ENABLE 0x00000001U
-
-#define ETH_CMD_TX_ENABLE 0x00000002U
-
-#define ETH_CMD_REG_RESET 0x00000008U
-
-#define ETH_CMD_TX_RESET 0x00000010U
-
-#define ETH_CMD_RX_RESET 0x00000020U
-
-#define ETH_CMD_PASS_RUNT_FRAME 0x00000040U
-
-#define ETH_CMD_PASS_RX_FILTER 0X00000080U
-
-#define ETH_CMD_TX_FLOW_CONTROL 0x00000100U
-
-#define ETH_CMD_RMII 0x00000200U
-
-#define ETH_CMD_FULL_DUPLEX 0x00000400U
-
-/* ETH_STAT */
-
-#define ETH_STAT_RX_ACTIVE 0x00000001U
-
-#define ETH_STAT_TX_ACTIVE 0x00000002U
 
 /* AHBCFG */
 

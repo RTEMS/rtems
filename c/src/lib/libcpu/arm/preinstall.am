@@ -27,6 +27,10 @@ PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 $(PROJECT_INCLUDE)/libcpu/mmu.h: shared/include/mmu.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h
+
+$(PROJECT_INCLUDE)/libcpu/arm-cp15.h: shared/include/arm-cp15.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
 endif
 if pxa255
 $(PROJECT_INCLUDE)/pxa255.h: pxa255/include/pxa255.h $(PROJECT_INCLUDE)/$(dirstamp)

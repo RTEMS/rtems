@@ -17,6 +17,7 @@
  */
 
 #include <rtems/asm.h>
+#include <rtems/score/cpu.h>
 
 #include <bspopts.h>
 #include <bsp/linker-symbols.h>
@@ -32,19 +33,6 @@
 
 .globl start
 .globl bsp_start_memcpy
-
-/* Program Status Register definitions */
-
-.equ PSR_MODE_USR,   0x10
-.equ PSR_MODE_FIQ,   0x11
-.equ PSR_MODE_IRQ,   0x12
-.equ PSR_MODE_SVC,   0x13
-.equ PSR_MODE_ABT,   0x17
-.equ PSR_MODE_UNDEF, 0x1b
-.equ PSR_MODE_SYS,   0x1f
-.equ PSR_I,          0x80
-.equ PSR_F,          0x40
-.equ PSR_T,          0x20
 
 .section ".bsp_start", "ax"
 
@@ -117,33 +105,33 @@ start:
 	/*
 	 * Set SVC mode, disable interrupts and enable ARM instructions.
 	 */
-	mov	r0, #(PSR_MODE_SVC | PSR_I | PSR_F)
+	mov	r0, #(ARM_PSR_M_SVC | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 
 	/* Initialize stack pointer registers for the various modes */
 
 	/* Enter IRQ mode and set up the IRQ stack pointer */
-	mov	r0, #(PSR_MODE_IRQ | PSR_I | PSR_F)
+	mov	r0, #(ARM_PSR_M_IRQ | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	sp, =bsp_stack_irq_end
 
 	/* Enter FIQ mode and set up the FIQ stack pointer */
-	mov	r0, #(PSR_MODE_FIQ | PSR_I | PSR_F)
+	mov	r0, #(ARM_PSR_M_FIQ | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	sp, =bsp_stack_fiq_end
 
 	/* Enter ABT mode and set up the ABT stack pointer */
-	mov	r0, #(PSR_MODE_ABT | PSR_I | PSR_F)
+	mov	r0, #(ARM_PSR_M_ABT | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	sp, =bsp_stack_abt_end
 
-	/* Enter UNDEF mode and set up the UNDEF stack pointer */
-	mov	r0, #(PSR_MODE_UNDEF | PSR_I | PSR_F)
+	/* Enter UND mode and set up the UND stack pointer */
+	mov	r0, #(ARM_PSR_M_UND | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
-	ldr	sp, =bsp_stack_undef_end
+	ldr	sp, =bsp_stack_und_end
 
 	/* Enter SVC mode and set up the SVC stack pointer */
-	mov	r0, #(PSR_MODE_SVC | PSR_I | PSR_F)
+	mov	r0, #(ARM_PSR_M_SVC | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	sp, =bsp_stack_svc_end
 
@@ -178,32 +166,16 @@ bsp_start_hook_0_done:
 	/* Branch to start hook 1 */
 	bl	bsp_start_hook_1
 
+	SWITCH_FROM_ARM_TO_THUMB	r0
+
 	/* Branch to boot card */
 	mov	r0, #0
-#ifdef __thumb__
-	ldr	r3, =boot_card
-	mov	lr, pc
-	bx      r3
-.thumb
-	bx	pc
-	nop
-.arm
-#else
 	bl	boot_card
-#endif
 
 	/* Branch to reset function */
-#ifdef __thumb__
-	ldr	r3, =bsp_reset
-	mov	lr, pc
-	bx      r3
-.thumb
-	bx	pc
-	nop
-.arm
-#else
 	bl	bsp_reset
-#endif
+
+	SWITCH_FROM_THUMB_TO_ARM
 
 	/* Spin forever */
 

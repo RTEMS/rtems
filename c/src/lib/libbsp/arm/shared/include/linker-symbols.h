@@ -54,9 +54,9 @@ LINKER_SYMBOL(bsp_stack_abt_begin)
 LINKER_SYMBOL(bsp_stack_abt_end)
 LINKER_SYMBOL(bsp_stack_abt_size)
 
-LINKER_SYMBOL(bsp_stack_undef_begin)
-LINKER_SYMBOL(bsp_stack_undef_end)
-LINKER_SYMBOL(bsp_stack_undef_size)
+LINKER_SYMBOL(bsp_stack_und_begin)
+LINKER_SYMBOL(bsp_stack_und_end)
+LINKER_SYMBOL(bsp_stack_und_size)
 
 LINKER_SYMBOL(bsp_stack_svc_begin)
 LINKER_SYMBOL(bsp_stack_svc_end)

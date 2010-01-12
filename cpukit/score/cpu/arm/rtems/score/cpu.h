@@ -8,6 +8,8 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
+ *  Copyright (c) 2009 embedded brains GmbH.
+ *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
  *  Copyright (c) 2006 OAR Corporation
@@ -44,12 +46,41 @@
 #endif
 
 #ifdef __thumb__
-  #define ARM_TO_THUMB "add %0, pc, #1\nbx %0\n.thumb\n"
-  #define THUMB_TO_ARM ".align 2\nbx pc\n.arm\n"
+  #define ARM_SWITCH_REGISTERS uint32_t arm_switch_reg
+  #define ARM_SWITCH_TO_ARM ".align 2\nbx pc\n.arm\n"
+  #define ARM_SWITCH_BACK "add %[arm_switch_reg], pc, #1\nbx %[arm_switch_reg]\n.thumb\n"
+  #define ARM_SWITCH_OUTPUT [arm_switch_reg] "=&r" (arm_switch_reg)
+  #define ARM_SWITCH_ADDITIONAL_OUTPUT , ARM_SWITCH_OUTPUT
 #else
-  #define ARM_TO_THUMB
-  #define THUMB_TO_ARM
+  #define ARM_SWITCH_REGISTERS
+  #define ARM_SWITCH_TO_ARM
+  #define ARM_SWITCH_BACK
+  #define ARM_SWITCH_OUTPUT
+  #define ARM_SWITCH_ADDITIONAL_OUTPUT
 #endif
+
+#define ARM_PSR_N (1 << 31)
+#define ARM_PSR_Z (1 << 30)
+#define ARM_PSR_C (1 << 29)
+#define ARM_PSR_V (1 << 28)
+#define ARM_PSR_Q (1 << 27)
+#define ARM_PSR_J (1 << 24)
+#define ARM_PSR_GE_SHIFT 16
+#define ARM_PSR_GE_MASK (0xf << ARM_PSR_GE_SHIFT)
+#define ARM_PSR_E (1 << 9)
+#define ARM_PSR_A (1 << 8)
+#define ARM_PSR_I (1 << 7)
+#define ARM_PSR_F (1 << 6)
+#define ARM_PSR_T (1 << 5)
+#define ARM_PSR_M_SHIFT 0
+#define ARM_PSR_M_MASK (0x1f << ARM_PSR_M_SHIFT)
+#define ARM_PSR_M_USR 0x10
+#define ARM_PSR_M_FIQ 0x11
+#define ARM_PSR_M_IRQ 0x12
+#define ARM_PSR_M_SVC 0x13
+#define ARM_PSR_M_ABT 0x17
+#define ARM_PSR_M_UND 0x1b
+#define ARM_PSR_M_SYS 0x1f
 
 /* If someone uses THUMB we assume she wants minimal code size */
 #ifdef __thumb__
@@ -205,16 +236,16 @@ SCORE_EXTERN Context_Control_fp _CPU_Null_fp_context;
 
 static inline uint32_t arm_interrupt_disable( void )
 {
-  uint32_t reg;
+  uint32_t arm_switch_reg;
   uint32_t level;
 
   asm volatile (
-    THUMB_TO_ARM
-    "mrs %1, cpsr\n"
-    "orr %0, %1, #0x80\n"
-    "msr cpsr, %0\n"
-    ARM_TO_THUMB
-    : "=r" (reg), "=r" (level)
+    ARM_SWITCH_TO_ARM
+    "mrs %[level], cpsr\n"
+    "orr %[arm_switch_reg], %[level], #0x80\n"
+    "msr cpsr, %[arm_switch_reg]\n"
+    ARM_SWITCH_BACK
+    : [arm_switch_reg] "=&r" (arm_switch_reg), [level] "=&r" (level)
   );
 
   return level;
@@ -222,54 +253,46 @@ static inline uint32_t arm_interrupt_disable( void )
 
 static inline void arm_interrupt_enable( uint32_t level )
 {
-  #ifdef __thumb__
-    uint32_t reg;
+  ARM_SWITCH_REGISTERS;
 
-    asm volatile (
-      THUMB_TO_ARM
-      "msr cpsr, %1\n"
-      ARM_TO_THUMB
-      : "=r" (reg)
-      : "r" (level)
-    );
-  #else
-    asm volatile (
-      "msr cpsr, %0"
-      :
-      : "r" (level)
-    );
-  #endif
+  asm volatile (
+    ARM_SWITCH_TO_ARM
+    "msr cpsr, %[level]\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [level] "r" (level)
+  );
 }
 
 static inline void arm_interrupt_flash( uint32_t level )
 {
-  uint32_t reg;
+  uint32_t arm_switch_reg;
 
   asm volatile (
-    THUMB_TO_ARM
-    "mrs %0, cpsr\n"
-    "msr cpsr, %1\n"
-    "msr cpsr, %0\n"
-    ARM_TO_THUMB
-    : "=r" (reg)
-    : "r" (level)
+    ARM_SWITCH_TO_ARM
+    "mrs %[arm_switch_reg], cpsr\n"
+    "msr cpsr, %[level]\n"
+    "msr cpsr, %[arm_switch_reg]\n"
+    ARM_SWITCH_BACK
+    : [arm_switch_reg] "=&r" (arm_switch_reg)
+    : [level] "r" (level)
   );
 }
 
 static inline uint32_t arm_status_irq_enable( void )
 {
-  uint32_t reg;
+  uint32_t arm_switch_reg;
   uint32_t psr;
 
   RTEMS_COMPILER_MEMORY_BARRIER();
 
   asm volatile (
-    THUMB_TO_ARM
-    "mrs %1, cpsr\n"
-    "bic %0, %1, #0x80\n"
-    "msr cpsr, %0\n"
-    ARM_TO_THUMB
-    : "=r" (reg), "=r" (psr)
+    ARM_SWITCH_TO_ARM
+    "mrs %[psr], cpsr\n"
+    "bic %[arm_switch_reg], %[psr], #0x80\n"
+    "msr cpsr, %[arm_switch_reg]\n"
+    ARM_SWITCH_BACK
+    : [arm_switch_reg] "=&r" (arm_switch_reg), [psr] "=&r" (psr)
   );
 
   return psr;
@@ -277,23 +300,15 @@ static inline uint32_t arm_status_irq_enable( void )
 
 static inline void arm_status_restore( uint32_t psr )
 {
-  #ifdef __thumb__
-    uint32_t reg;
+  ARM_SWITCH_REGISTERS;
 
-    asm volatile (
-      THUMB_TO_ARM
-      "msr cpsr, %1\n"
-      ARM_TO_THUMB
-      : "=r" (reg)
-      : "r" (psr)
-    );
-  #else
-    asm volatile (
-      "msr cpsr, %0"
-      :
-      : "r" (psr)
-    );
-  #endif
+  asm volatile (
+    ARM_SWITCH_TO_ARM
+    "msr cpsr, %[psr]\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [psr] "r" (psr)
+  );
 
   RTEMS_COMPILER_MEMORY_BARRIER();
 }
@@ -402,15 +417,41 @@ static inline uint16_t CPU_swap_u16( uint16_t value )
 
 extern uint32_t arm_cpu_mode;
 
-void arm_exc_abort_data( void );
+typedef struct {
+  uint32_t r0;
+  uint32_t r1;
+  uint32_t r2;
+  uint32_t r3;
+  uint32_t r4;
+  uint32_t r5;
+  uint32_t r6;
+  uint32_t r7;
+  uint32_t r8;
+  uint32_t r9;
+  uint32_t r10;
+  uint32_t r11;
+  uint32_t r12;
+  uint32_t sp;
+  uint32_t lr;
+  uint32_t pc;
+  uint32_t cpsr;
+} arm_cpu_context;
 
-void arm_exc_abort_prefetch( void );
+typedef void arm_exc_abort_handler( arm_cpu_context *context );
+
+void arm_exc_data_abort_set_handler( arm_exc_abort_handler handler );
+
+void arm_exc_data_abort( void );
+
+void arm_exc_prefetch_abort_set_handler( arm_exc_abort_handler handler );
+
+void arm_exc_prefetch_abort( void );
+
+void bsp_interrupt_dispatch( void );
 
 void arm_exc_interrupt( void );
 
 void arm_exc_undefined( void );
-
-void bsp_interrupt_dispatch( void );
 
 #ifdef __cplusplus
 }

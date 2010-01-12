@@ -25,16 +25,23 @@ OUTPUT_ARCH (arm)
 ENTRY (start)
 
 /*
- * BSP: Global symbols
+ * BSP: Global symbols that may be defined externally
  */
 
-bsp_section_align = 32;
+bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 4;
 
-bsp_stack_align = 4;
+bsp_section_align = DEFINED (bsp_section_align) ? bsp_section_align : 32;
 
-/*
- * BSP: Symbols that may be defined externally
- */
+bsp_section_start_end_align = DEFINED (bsp_section_start_end_align) ? bsp_section_start_end_align : bsp_section_align;
+bsp_section_vector_end_align = DEFINED (bsp_section_vector_end_align) ? bsp_section_vector_end_align : bsp_section_align;
+bsp_section_text_end_align = DEFINED (bsp_section_text_end_align) ? bsp_section_text_end_align : bsp_section_align;
+bsp_section_rodata_end_align = DEFINED (bsp_section_rodata_end_align) ? bsp_section_rodata_end_align : bsp_section_align;
+bsp_section_data_end_align = DEFINED (bsp_section_data_end_align) ? bsp_section_data_end_align : bsp_section_align;
+bsp_section_fast_end_align = DEFINED (bsp_section_fast_end_align) ? bsp_section_fast_end_align : bsp_section_align;
+bsp_section_bss_end_align = DEFINED (bsp_section_bss_end_align) ? bsp_section_bss_end_align : bsp_section_align;
+
+bsp_section_vbarrier_align = DEFINED (bsp_section_vbarrier_align) ? bsp_section_vbarrier_align : 1;
+bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1;
 
 bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 128;
 bsp_stack_abt_size = ALIGN (bsp_stack_abt_size, bsp_stack_align);
@@ -48,8 +55,8 @@ bsp_stack_irq_size = ALIGN (bsp_stack_irq_size, bsp_stack_align);
 bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 512;
 bsp_stack_svc_size = ALIGN (bsp_stack_svc_size, bsp_stack_align);
 
-bsp_stack_undef_size = DEFINED (bsp_stack_undef_size) ? bsp_stack_undef_size : 128;
-bsp_stack_undef_size = ALIGN (bsp_stack_undef_size, bsp_stack_align);
+bsp_stack_und_size = DEFINED (bsp_stack_und_size) ? bsp_stack_und_size : 128;
+bsp_stack_und_size = ALIGN (bsp_stack_und_size, bsp_stack_align);
 
 SECTIONS {
 	.start : {
@@ -62,8 +69,9 @@ SECTIONS {
 		 * BSP: System startup entry
 		 */
 		KEEP (*(.bsp_start))
+		KEEP (*(.bsp_start_data))
 
-		. = ALIGN (bsp_section_align);
+		. = ALIGN (bsp_section_start_end_align);
 
 		/*
 		 * BSP: End of start section
@@ -107,16 +115,16 @@ SECTIONS {
 		. = . + bsp_stack_svc_size;
 		bsp_stack_svc_end = .;
 
-		bsp_stack_undef_begin = .;
-		. = . + bsp_stack_undef_size;
-		bsp_stack_undef_end = .;
+		bsp_stack_und_begin = .;
+		. = . + bsp_stack_und_size;
+		bsp_stack_und_end = .;
 
 		/*
 		 * BSP: Special vector data
 		 */
 		*(.bsp_vector)
 
-		. = ALIGN (bsp_section_align);
+		. = ALIGN (bsp_section_vector_end_align);
 
 		/*
 		 * BSP: End of vector section
@@ -125,6 +133,10 @@ SECTIONS {
 	} > REGION_VECTOR AT > REGION_VECTOR
 
 	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
+
+	.vbarrier : {
+		. = ALIGN (bsp_section_vbarrier_align);
+        } > REGION_VECTOR
 
 	.text : {
 		/*
@@ -175,7 +187,7 @@ SECTIONS {
 		 */
 		KEEP (*(.fini))
 
-		. = ALIGN (bsp_section_align);
+		. = ALIGN (bsp_section_text_end_align);
 
 		/*
 		 * BSP: End of text section
@@ -203,7 +215,7 @@ SECTIONS {
 		*(.rodata .rodata.* .gnu.linkonce.r.*)
 		*(.rodata1)
 
-		. = ALIGN (bsp_section_align);
+		. = ALIGN (bsp_section_rodata_end_align);
 
 		/*
 		 * BSP: End of rodata section
@@ -214,6 +226,10 @@ SECTIONS {
 	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
 
 	bsp_section_rodata_load_begin = LOADADDR (.rodata);
+
+	.robarrier : {
+		. = ALIGN (bsp_section_robarrier_align);
+        } > REGION_RODATA
 
 	.data : {
 		/*
@@ -264,7 +280,7 @@ SECTIONS {
 		KEEP (*(.gnu.linkonce.d.*personality*))
 		SORT(CONSTRUCTORS)
 
-		. = ALIGN (bsp_section_align);
+		. = ALIGN (bsp_section_data_end_align);
 
 		/*
 		 * BSP: End of data section
@@ -281,7 +297,7 @@ SECTIONS {
 
 		*(.bsp_fast)
 
-		. = ALIGN (bsp_section_align);
+		. = ALIGN (bsp_section_fast_end_align);
 
 		bsp_section_fast_end = .;
 	} > REGION_FAST AT > REGION_FAST_LOAD
@@ -300,7 +316,7 @@ SECTIONS {
 		*(.dynbss)
 		*(.bss .bss.* .gnu.linkonce.b.*)
 
-		. = ALIGN (bsp_section_align);
+		. = ALIGN (bsp_section_bss_end_align);
 
 		/*
 		 * BSP: End of bss section

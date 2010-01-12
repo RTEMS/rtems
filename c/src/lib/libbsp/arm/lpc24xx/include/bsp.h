@@ -50,7 +50,7 @@ struct rtems_bsdnet_ifconfig;
 /**
  * @brief Network driver attach and detach function.
  */
-int lpc24xx_eth_attach_detach(
+int lpc_eth_attach_detach(
   struct rtems_bsdnet_ifconfig *config,
   int attaching
 );
@@ -58,7 +58,7 @@ int lpc24xx_eth_attach_detach(
 /**
  * @brief Standard network driver attach and detach function.
  */
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	lpc24xx_eth_attach_detach
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH lpc_eth_attach_detach
 
 /**
  * @brief Standard network driver name.

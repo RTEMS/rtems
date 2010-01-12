@@ -23,6 +23,8 @@
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <bsp/lpc32xx.h>
+#include <bsp/linker-symbols.h>
+#include <bsp/mmu.h>
 
 /*
  * Mask out SIC 1 and 2 IRQ request. There is no need to mask out the FIQ,
@@ -125,15 +127,15 @@ static inline void lpc32xx_irq_clear_bit_in_field(unsigned index, lpc32xx_irq_fi
 
 static inline unsigned lpc32xx_irq_get_index(uint32_t val)
 {
-  uint32_t reg;
+  ARM_SWITCH_REGISTERS;
 
   asm volatile (
-    THUMB_TO_ARM
-    "clz %1, %1\n"
-    "rsb %1, %1, #31\n"
-    ARM_TO_THUMB
-    : "=&r" (reg), "=r" (val)
-    : "1" (val)
+    ARM_SWITCH_TO_ARM
+    "clz %[val], %[val]\n"
+    "rsb %[val], %[val], #31\n"
+    ARM_SWITCH_BACK
+    : [val] "=r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+    : "[val]" (val)
   );
 
   return val;
@@ -304,6 +306,21 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
+void lpc32xx_set_exception_handler(
+  Arm_symbolic_exception_name exception,
+  void (*handler)(void)
+)
+{
+  if ((unsigned) exception < MAX_EXCEPTIONS) {
+    uint32_t *table = (uint32_t *) bsp_section_vector_begin + MAX_EXCEPTIONS;
+
+    table [exception] = (uint32_t) handler;
+
+    rtems_cache_flush_multiple_data_lines(NULL, 64);
+    rtems_cache_invalidate_multiple_data_lines(NULL, 64);
+  }
+}
+
 rtems_status_code bsp_interrupt_facility_initialize(void)
 {
   size_t i = 0;
@@ -341,7 +358,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   lpc32xx_sic_1->atr = 0x26000;
   lpc32xx_sic_2->atr = 0x0;
 
-  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
+  lpc32xx_set_exception_handler(ARM_EXCEPTION_IRQ, arm_exc_interrupt);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -349,24 +366,4 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 void bsp_interrupt_handler_default(rtems_vector_number vector)
 {
   printk("spurious interrupt: %u\n", vector);
-}
-
-static void lpc32xx_irq_dump_controller(volatile lpc32xx_irq_controller *controller)
-{
-  printk(
-    "er  %08x\nrsr %08x\nsr  %08x\napr %08x\natr %08x\nitr %08x\n",
-    controller->er,
-    controller->rsr,
-    controller->sr,
-    controller->apr,
-    controller->atr,
-    controller->itr
-  );
-}
-
-void lpc32xx_irq_dump(void)
-{
-  lpc32xx_irq_dump_controller(lpc32xx_mic);
-  lpc32xx_irq_dump_controller(lpc32xx_sic_1);
-  lpc32xx_irq_dump_controller(lpc32xx_sic_2);
 }
