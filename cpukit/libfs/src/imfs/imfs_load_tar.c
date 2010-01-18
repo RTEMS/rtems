@@ -1,4 +1,11 @@
 /*
+ *  COPYRIGHT (c) 1989-2010.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  * $Id$
  */
 
@@ -6,13 +13,13 @@
 #include "config.h"
 #endif
 
-/**************************************************************************
+/*
  * This file implements the "mount" procedure for tar-based IMFS
  * extensions.  The TAR is not actually mounted under the IMFS.
  * Directories from the TAR file are created as usual in the IMFS.
  * File entries are created as IMFS_LINEAR_FILE nodes with their nods
  * pointing to addresses in the TAR image.
- *************************************************************************/
+ */ 
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -26,7 +33,7 @@
 #include <rtems/untar.h>
 #include <rtems/tar.h>
 
-/**************************************************************************
+/*
  * TAR file format:
  *
  *   Offset   Length   Contents
@@ -54,13 +61,13 @@
  *   sum = 0;
  *   for(i = 0; i < 512; i++)
  *       sum += 0xFF & header[i];
- *************************************************************************/
+ */
 
 #define MAX_NAME_FIELD_SIZE      99
 
 #define MIN(a,b)   ((a)>(b)?(b):(a))
 
-/**************************************************************************
+/*
  * rtems_tarfs_load
  *
  * Here we create the mountpoint directory and load the tarfs at
@@ -70,9 +77,8 @@
  *    needed.
  *  - For files, we make our own calls to IMFS eval_for_make and
  *    create_node.
- *************************************************************************/
-int
-rtems_tarfs_load(
+ */
+int rtems_tarfs_load(
   char *mountpoint,
   uint8_t *tar_image,
   size_t tar_size
@@ -98,20 +104,19 @@ rtems_tarfs_load(
       return(-1);
 
    if (root_loc.ops != &IMFS_ops)
-      return(-1);
+      return -1;
 
-   /***********************************************************************
+   /*
     * Create an IMFS node structure pointing to tar image memory.
-    **********************************************************************/
+    */
    offset = 0;
-   while (1)
-   {
+   while (1) {
       if (offset + 512 > tar_size)
          break;
 
-      /******************************************************************
+      /*
        * Read a header.
-       ******************************************************************/
+       */
       hdr_ptr = (char *) &tar_image[offset];
       offset += 512;
       if (strncmp(&hdr_ptr[257], "ustar  ", 7))
@@ -128,30 +133,31 @@ rtems_tarfs_load(
       if (_rtems_tar_header_checksum(hdr_ptr) != hdr_chksum)
          break;
 
-      /******************************************************************
+      /*
        * Generate an IMFS node depending on the file type.
        * - For directories, just create directories as usual.  IMFS
        *   will take care of the rest.
        * - For files, create a file node with special tarfs properties.
-       *****************************************************************/
-      if (linkflag == DIRTYPE)
-      {
+       */
+      if (linkflag == DIRTYPE) {
          strcpy(full_filename, mountpoint);
          if (full_filename[strlen(full_filename)-1] != '/')
             strcat(full_filename, "/");
          strcat(full_filename, filename);
          mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO);
       }
-      /******************************************************************
+      /*
        * Create a LINEAR_FILE node
-       *****************************************************************/
-      else if (linkflag == REGTYPE)
-      {
+       *
+       * NOTE: Coverity thinks this is a resource leak since a node
+       *       is created but never deleted.  The scope of the allocation
+       *       is that of a file -- not this method.  Coverity Id 20.
+       */
+      else if (linkflag == REGTYPE) {
          const char  *name;
 
          loc = root_loc;
-         if (IMFS_evaluate_for_make(filename, &loc, &name) == 0)
-         {
+         if (IMFS_evaluate_for_make(filename, &loc, &name) == 0) {
             node = IMFS_create_node(&loc,
                         IMFS_LINEAR_FILE, (char *)name,
                         (file_mode & (S_IRWXU | S_IRWXG | S_IRWXO)) | S_IFREG,
@@ -165,6 +171,6 @@ rtems_tarfs_load(
       }
    }
 
-   return(status);
+   return status;
 }
 

@@ -1,5 +1,14 @@
 2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 19
+	Coverity Id 20
+	Coverity Id 21
+	* libfs/src/imfs/imfs_link.c, libfs/src/imfs/imfs_load_tar.c,
+	libfs/src/imfs/imfs_mknod.c: Add comment to explain allocation is
+	for life of file, not scope of method.
+
+2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 12
 	Coverity Id 13
 	Coverity Id 14

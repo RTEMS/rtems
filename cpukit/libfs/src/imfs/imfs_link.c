@@ -5,7 +5,7 @@
  *  name given in name.  The link node is set to point to the node at
  *  to_loc.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,6 +51,10 @@ int IMFS_link(
 
   /*
    *  Create a new link node.
+   *
+   * NOTE: Coverity thinks this is a resource leak since a node
+   *       is created but never deleted.  The scope of the allocation
+   *       is that of a file -- not this method.  Coverity Id 19.
    */
 
   new_node = IMFS_create_node(

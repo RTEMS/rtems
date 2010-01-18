@@ -3,7 +3,7 @@
  *
  *  Routine to create a node in the IMFS file system.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -63,8 +63,11 @@ int IMFS_mknod(
 
   /*
    *  Allocate and fill in an IMFS jnode
+   *
+   * NOTE: Coverity thinks this is a resource leak since a node
+   *       is created but never deleted.  The scope of the allocation
+   *       is that of a file -- not this method.  Coverity Id 21.
    */
-
   new_node = IMFS_create_node(
     pathloc,
     type,
