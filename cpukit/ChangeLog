@@ -1,7 +1,18 @@
 2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
-	* libfs/src/imfs/imfs_symlink.c: Add comment on Coverity CID22. This is
-	not a resource leak.
+	Coverity Id 12
+	Coverity Id 13
+	Coverity Id 14
+	Coverity Id 15
+	* libmisc/stackchk/check.c: Rewrote loop to avoid possible buffer
+	overruns when the pattern area size is not a multiple of 16.  There
+	were no current ports impacted by this but better to be safe.
+
+2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	Coverity Id 22
+	* libfs/src/imfs/imfs_symlink.c: Add comment to explain why this
+	is not a resource leak.
 
 2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 

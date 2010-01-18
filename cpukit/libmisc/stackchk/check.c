@@ -6,7 +6,7 @@
  *         CPU grows up or down and installs the correct
  *         extension routines for that direction.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -135,7 +135,12 @@ Stack_Control Stack_check_Interrupt_stack;
  */
 void Stack_check_Initialize( void )
 {
+  int       i;
   uint32_t *p;
+  static    pattern[ 4 ] = {
+    0xFEEDF00D, 0x0BAD0D06,  /* FEED FOOD to  BAD DOG */
+    0xDEADF00D, 0x600D0D06   /* DEAD FOOD but GOOD DOG */
+  };
 
   if (Stack_check_Initialized)
     return;
@@ -143,15 +148,9 @@ void Stack_check_Initialize( void )
   /*
    * Dope the pattern and fill areas
    */
-
-  for ( p = Stack_check_Pattern.pattern;
-        p < &Stack_check_Pattern.pattern[PATTERN_SIZE_WORDS];
-        p += 4
-      ) {
-      p[0] = 0xFEEDF00D;          /* FEED FOOD to BAD DOG */
-      p[1] = 0x0BAD0D06;
-      p[2] = 0xDEADF00D;          /* DEAD FOOD GOOD DOG */
-      p[3] = 0x600D0D06;
+  p = Stack_check_Pattern.pattern;
+  for ( i = 0; i < PATTERN_SIZE_WORDS; i++ ) {
+      p[i] = pattern[ i%4 ];
   }
 
   /*
