@@ -1,5 +1,10 @@
 2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libfs/src/imfs/imfs_symlink.c: Add comment on Coverity CID22. This is
+	not a resource leak.
+
+2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/imfs/imfs_symlink.c: Spacing.
 
 2009-12-28	Shrikant Gaikwad <n3oo3n@gmail.com>

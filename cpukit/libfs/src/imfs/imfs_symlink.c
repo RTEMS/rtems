@@ -54,6 +54,12 @@ int IMFS_symlink(
 
   /*
    *  Create a new link node.
+   *
+   *  NOTE: Coverity CID 22 notes this as a resource leak.  We are ignoring
+   *        this analysis because in this particular case it is wrong. This
+   *        method creates a symbolic link node for the IMFS.  The memory
+   *        allocated must persist for the life of the symbolic link not
+   *        the life of the method.
    */
 
   new_node = IMFS_create_node(
