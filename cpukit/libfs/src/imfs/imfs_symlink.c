@@ -5,7 +5,7 @@
  *  with the name given in name.  The node is set to point to the node at
  *  to_loc.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,9 +47,9 @@ int IMFS_symlink(
    * Duplicate link name
    */
 
-  info.sym_link.name = strdup( link_name);
+  info.sym_link.name = strdup(link_name);
   if (info.sym_link.name == NULL) {
-    rtems_set_errno_and_return_minus_one( ENOMEM);
+    rtems_set_errno_and_return_minus_one(ENOMEM);
   }
 
   /*
@@ -65,8 +65,8 @@ int IMFS_symlink(
   );
 
   if (new_node == NULL) {
-    free( info.sym_link.name);
-    rtems_set_errno_and_return_minus_one( ENOMEM);
+    free(info.sym_link.name);
+    rtems_set_errno_and_return_minus_one(ENOMEM);
   }
 
   return 0;
