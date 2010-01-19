@@ -1,5 +1,12 @@
 2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 28
+	* libcsupport/src/termios.c: Set then unconditionally to avoid
+	potential paths where it might be used uninitialized. Recommended by
+	Eric Norum.
+
+2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 18
 	* libmisc/shell/fts.c: Add free(parent) to correct leak.
 

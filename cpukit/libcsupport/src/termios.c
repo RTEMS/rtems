@@ -975,8 +975,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 	}
 	else {
 		rtems_interval then, now;
-		if (!tty->termios.c_cc[VMIN] && tty->termios.c_cc[VTIME])
-			then = rtems_clock_get_ticks_since_boot();
+		then = rtems_clock_get_ticks_since_boot();
 		for (;;) {
 			n = (*tty->device.pollRead)(tty->minor);
 			if (n < 0) {
