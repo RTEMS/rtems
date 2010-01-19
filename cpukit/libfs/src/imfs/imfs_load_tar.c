@@ -79,29 +79,34 @@
  *    create_node.
  */
 int rtems_tarfs_load(
-  char *mountpoint,
+  char    *mountpoint,
   uint8_t *tar_image,
-  size_t tar_size
+  size_t   tar_size
 )
 {
-   rtems_filesystem_location_info_t root_loc;
-   rtems_filesystem_location_info_t loc;
-   const char     *hdr_ptr;
-   char            filename[100];
-   char            full_filename[256];
-   int             hdr_chksum;
-   unsigned char   linkflag;
-   unsigned long   file_size;
-   unsigned long   file_mode;
-   int             offset;
-   unsigned long   nblocks;
-   IMFS_jnode_t    *node;
-   int             status;
+   rtems_filesystem_location_info_t  root_loc;
+   rtems_filesystem_location_info_t  loc;
+   const char                       *hdr_ptr;
+   char                             filename[100];
+   char                             full_filename[256];
+   int                              hdr_chksum;
+   unsigned char                    linkflag;
+   unsigned long                    file_size;
+   unsigned long                    file_mode;
+   int                              offset;
+   unsigned long                    nblocks;
+   IMFS_jnode_t                    *node;
+   int                              status;
 
-   status = rtems_filesystem_evaluate_path(mountpoint, strlen(mountpoint),
-                                           0, &root_loc, 0);
+   status = rtems_filesystem_evaluate_path(
+      mountpoint,
+      strlen(mountpoint),
+      0,
+      &root_loc,
+      0
+   );
    if (status != 0)
-      return(-1);
+      return -1;
 
    if (root_loc.ops != &IMFS_ops)
       return -1;
@@ -111,66 +116,70 @@ int rtems_tarfs_load(
     */
    offset = 0;
    while (1) {
-      if (offset + 512 > tar_size)
-         break;
+    if (offset + 512 > tar_size)
+      break;
 
-      /*
-       * Read a header.
-       */
-      hdr_ptr = (char *) &tar_image[offset];
-      offset += 512;
-      if (strncmp(&hdr_ptr[257], "ustar  ", 7))
-         break;
+    /*
+     * Read a header.
+     */
+    hdr_ptr = (char *) &tar_image[offset];
+    offset += 512;
+    if (strncmp(&hdr_ptr[257], "ustar  ", 7))
+      break;
 
-      strncpy(filename, hdr_ptr, MAX_NAME_FIELD_SIZE);
-      filename[MAX_NAME_FIELD_SIZE] = '\0';
+    strncpy(filename, hdr_ptr, MAX_NAME_FIELD_SIZE);
+    filename[MAX_NAME_FIELD_SIZE] = '\0';
 
-      linkflag   = hdr_ptr[156];
-      file_mode  = _rtems_octal2ulong(&hdr_ptr[100], 8);
-      file_size  = _rtems_octal2ulong(&hdr_ptr[124], 12);
-      hdr_chksum = _rtems_octal2ulong(&hdr_ptr[148], 8);
+    linkflag   = hdr_ptr[156];
+    file_mode  = _rtems_octal2ulong(&hdr_ptr[100], 8);
+    file_size  = _rtems_octal2ulong(&hdr_ptr[124], 12);
+    hdr_chksum = _rtems_octal2ulong(&hdr_ptr[148], 8);
 
-      if (_rtems_tar_header_checksum(hdr_ptr) != hdr_chksum)
-         break;
+    if (_rtems_tar_header_checksum(hdr_ptr) != hdr_chksum)
+      break;
 
-      /*
-       * Generate an IMFS node depending on the file type.
-       * - For directories, just create directories as usual.  IMFS
-       *   will take care of the rest.
-       * - For files, create a file node with special tarfs properties.
-       */
-      if (linkflag == DIRTYPE) {
-         strcpy(full_filename, mountpoint);
-         if (full_filename[strlen(full_filename)-1] != '/')
-            strcat(full_filename, "/");
-         strcat(full_filename, filename);
-         mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO);
+    /*
+     * Generate an IMFS node depending on the file type.
+     * - For directories, just create directories as usual.  IMFS
+     *   will take care of the rest.
+     * - For files, create a file node with special tarfs properties.
+     */
+    if (linkflag == DIRTYPE) {
+      strcpy(full_filename, mountpoint);
+      if (full_filename[strlen(full_filename)-1] != '/')
+        strcat(full_filename, "/");
+      strcat(full_filename, filename);
+      mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO);
+    }
+    /*
+     * Create a LINEAR_FILE node
+     *
+     *  NOTE: Coverity Id 20 reports this as a leak.
+     *        While technically not a leak, it indicated that
+     *        IMFS_create_node was ONLY passed a NULL when we created the
+     *        root node.  We added a new IMFS_create_root_node() so this
+     *        path no longer existed.  The result was simpler code which
+     *        should not have this path. 
+     */
+    else if (linkflag == REGTYPE) {
+      const char  *name;
+
+      loc = root_loc;
+      if (IMFS_evaluate_for_make(filename, &loc, &name) == 0) {
+        node = IMFS_create_node(
+          &loc,
+          IMFS_LINEAR_FILE, (char *)name,
+          (file_mode & (S_IRWXU | S_IRWXG | S_IRWXO)) | S_IFREG,
+          NULL
+        );
+        node->info.linearfile.size   = file_size;
+        node->info.linearfile.direct = &tar_image[offset];
       }
-      /*
-       * Create a LINEAR_FILE node
-       *
-       * NOTE: Coverity thinks this is a resource leak since a node
-       *       is created but never deleted.  The scope of the allocation
-       *       is that of a file -- not this method.  Coverity Id 20.
-       */
-      else if (linkflag == REGTYPE) {
-         const char  *name;
 
-         loc = root_loc;
-         if (IMFS_evaluate_for_make(filename, &loc, &name) == 0) {
-            node = IMFS_create_node(&loc,
-                        IMFS_LINEAR_FILE, (char *)name,
-                        (file_mode & (S_IRWXU | S_IRWXG | S_IRWXO)) | S_IFREG,
-                        NULL);
-            node->info.linearfile.size   = file_size;
-            node->info.linearfile.direct = &tar_image[offset];
-         }
-
-         nblocks = (((file_size) + 511) & ~511) / 512;
-         offset += 512 * nblocks;
-      }
-   }
-
-   return status;
+      nblocks = (((file_size) + 511) & ~511) / 512;
+      offset += 512 * nblocks;
+    }
+  }
+  return status;
 }
 

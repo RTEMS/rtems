@@ -1,3 +1,12 @@
+2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_creat.c,
+	libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/imfs_link.c,
+	libfs/src/imfs/imfs_load_tar.c, libfs/src/imfs/imfs_mknod.c,
+	libfs/src/imfs/imfs_symlink.c: Create special helper method for
+	creating the j-node for the root directory. This lets us assume that
+	every j-node created otherwise has a parent node.
+
 2010-01-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/include/rtems/bdbuf.h: Documentation.  Renamed

@@ -46,7 +46,6 @@ int IMFS_mknod(
   /*
    *  Figure out what type of IMFS node this is.
    */
-
   if ( S_ISDIR(mode) )
     type = IMFS_DIRECTORY;
   else if ( S_ISREG(mode) )
@@ -64,9 +63,12 @@ int IMFS_mknod(
   /*
    *  Allocate and fill in an IMFS jnode
    *
-   * NOTE: Coverity thinks this is a resource leak since a node
-   *       is created but never deleted.  The scope of the allocation
-   *       is that of a file -- not this method.  Coverity Id 21.
+   *  NOTE: Coverity Id 21 reports this as a leak.
+   *        While technically not a leak, it indicated that IMFS_create_node
+   *        was ONLY passed a NULL when we created the root node.  We
+   *        added a new IMFS_create_root_node() so this path no longer
+   *        existed.  The result was simpler code which should not have
+   *        this path. 
    */
   new_node = IMFS_create_node(
     pathloc,

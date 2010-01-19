@@ -1,7 +1,7 @@
 /*
  *  Header file for the In-Memory File System
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -322,7 +322,6 @@ extern int IMFS_eval_path(
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 );
 
-
 extern int IMFS_link(
   rtems_filesystem_location_info_t  *to_loc,      /* IN */
   rtems_filesystem_location_info_t  *parent_loc,  /* IN */
@@ -351,6 +350,14 @@ extern int IMFS_mknod(
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 );
 
+extern IMFS_jnode_t *IMFS_allocate_node(
+  IMFS_jnode_types_t                type,         /* IN  */
+  const char                       *name,         /* IN  */
+  mode_t                            mode          /* IN  */
+);
+
+extern IMFS_jnode_t *IMFS_create_root_node(void);
+
 extern IMFS_jnode_t *IMFS_create_node(
   rtems_filesystem_location_info_t *parent_loc,   /* IN  */
   IMFS_jnode_types_t                type,         /* IN  */
@@ -360,9 +367,9 @@ extern IMFS_jnode_t *IMFS_create_node(
 );
 
 extern int IMFS_evaluate_for_make(
-  const char                         *path,        /* IN     */
-  rtems_filesystem_location_info_t   *pathloc,     /* IN/OUT */
-  const char                        **name         /* OUT    */
+  const char                         *path,       /* IN     */
+  rtems_filesystem_location_info_t   *pathloc,    /* IN/OUT */
+  const char                        **name        /* OUT    */
 );
 
 extern int IMFS_mount(

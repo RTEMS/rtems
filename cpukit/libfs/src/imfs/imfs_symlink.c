@@ -40,13 +40,11 @@ int IMFS_symlink(
   /*
    * Remove any separators at the end of the string.
    */
-
   IMFS_get_token( node_name, strlen( node_name ), new_name, &i );
 
   /*
    * Duplicate link name
    */
-
   info.sym_link.name = strdup(link_name);
   if (info.sym_link.name == NULL) {
     rtems_set_errno_and_return_minus_one(ENOMEM);
@@ -55,13 +53,13 @@ int IMFS_symlink(
   /*
    *  Create a new link node.
    *
-   *  NOTE: Coverity CID 22 notes this as a resource leak.  We are ignoring
-   *        this analysis because in this particular case it is wrong. This
-   *        method creates a symbolic link node for the IMFS.  The memory
-   *        allocated must persist for the life of the symbolic link not
-   *        the life of the method.
+   *  NOTE: Coverity CID 22 notes this as a resource leak.
+   *        While technically not a leak, it indicated that IMFS_create_node
+   *        was ONLY passed a NULL when we created the root node.  We
+   *        added a new IMFS_create_root_node() so this path no longer
+   *        existed.  The result was simpler code which should not have
+   *        this path. 
    */
-
   new_node = IMFS_create_node(
     parent_loc,
     IMFS_SYM_LINK,

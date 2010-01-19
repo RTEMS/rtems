@@ -38,7 +38,6 @@ int IMFS_link(
   /*
    *  Verify this node can be linked to.
    */
-
   info.hard_link.link_node = to_loc->node_access;
   if ( info.hard_link.link_node->st_nlink >= LINK_MAX )
     rtems_set_errno_and_return_minus_one( EMLINK );
@@ -46,17 +45,18 @@ int IMFS_link(
   /*
    * Remove any separators at the end of the string.
    */
-
   IMFS_get_token( token, strlen( token ), new_name, &i );
 
   /*
    *  Create a new link node.
    *
-   * NOTE: Coverity thinks this is a resource leak since a node
-   *       is created but never deleted.  The scope of the allocation
-   *       is that of a file -- not this method.  Coverity Id 19.
+   *  NOTE: Coverity Id 19 reports this as a leak
+   *        While technically not a leak, it indicated that IMFS_create_node
+   *        was ONLY passed a NULL when we created the root node.  We
+   *        added a new IMFS_create_root_node() so this path no longer
+   *        existed.  The result was simpler code which should not have
+   *        this path. 
    */
-
   new_node = IMFS_create_node(
     parent_loc,
     IMFS_HARD_LINK,
@@ -71,7 +71,6 @@ int IMFS_link(
   /*
    * Increment the link count of the node being pointed to.
    */
-
   info.hard_link.link_node->st_nlink++;
   IMFS_update_ctime( info.hard_link.link_node );
 
