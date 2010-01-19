@@ -40,6 +40,8 @@ block04/Makefile
 block05/Makefile
 block06/Makefile
 block07/Makefile
+block08/Makefile
+block09/Makefile
 bspcmdline01/Makefile
 cpuuse/Makefile
 heapwalk/Makefile

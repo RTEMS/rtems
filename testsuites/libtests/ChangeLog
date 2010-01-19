@@ -1,3 +1,24 @@
+2010-01-18	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* block09/block09.doc, block09/init.c, block09/.cvsignore,
+	block09/block09.scn, block09/Makefile.am: New files.
+	* configure.ac, Makefile.am: Update for new files.
+	* block05/block05.doc: Update for new state transitions.
+	* block05/init.c, block06/init.c: Update for block device API change.
+
+2010-01-18	Oleg Kravtsov <Oleg.Kravtsov@oktetlabs.ru>
+
+	* block08/bdbuf_test1_1.c, block08/bdbuf_test1_2.c,
+	block08/bdbuf_test1_3.c, block08/bdbuf_test1_4.c,
+	block08/bdbuf_test1_5.c, block08/bdbuf_test2_1.c,
+	block08/bdbuf_test2_2.c, block08/bdbuf_test3_1.c,
+	block08/bdbuf_test3_2.c, block08/bdbuf_test3_3.c,
+	block08/bdbuf_test4_1.c, block08/bdbuf_test4_2.c,
+	block08/bdbuf_test4_3.c, block08/bdbuf_tests.c, block08/bdbuf_tests.h,
+	block08/block08.doc, block08/block08.scn, block08/.cvsignore,
+	block08/init.c, block08/Makefile.am, block08/system.h,
+	block08/test_disk.c: New files.
+
 2009-12-28	Aanjhan Ranganathan <aanjhan@gmail.com>
 
 	* bspcmdline01/init.c, bspcmdline01/bspcmdline01.scn: Added test case

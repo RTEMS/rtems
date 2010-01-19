@@ -1,0 +1,86 @@
+test_disk_ioctl() Unexpected request comes 2
+TEST DISK - OK
+DEV: /dev/testdisk [1024]
+Test 1.4 - STARTED
+Thread #1 started
+Thread #2 started
+DISK_DRV: R [40]
+Test 1.4: Step 3 - OK
+Test 1.4: Step 5 - OK
+TEST PASSED
+Test 1.5 - STARTED
+Thread #1 started
+Thread #2 started
+DISK_DRV: R [50]
+Test 1.5: Step 1 - OK
+Test 1.5: Step 4 - OK
+TEST PASSED
+Test 2.1 - STARTED
+Thread #1 started
+Thread #2 started
+DISK_DRV: R [60]
+Test 2.1: Step 3 - OK
+Test 2.1: Step 5 - OK
+DISK_DRV: W [60]
+TEST PASSED
+Test 2.2 - STARTED
+Thread #1 started
+Thread #2 started
+DISK_DRV: R [70]
+Test 2.2: Step 3 - OK
+Test 2.2: Step 5 - OK
+DISK_DRV: W [70]
+TEST PASSED
+Test 3.1 - STARTED
+Thread #1 started
+Thread #2 started
+Test 3.1: Step 3 - OK
+DISK_DRV: W [80]
+Test 3.1: Step 5 - OK
+DISK_DRV: W [85]
+TEST PASSED
+Test 3.2 - STARTED
+Thread #1 started
+Thread #2 started
+Thread #3 started
+DISK_DRV: R [90]
+Thread #2 DEBLOCK
+Test 3.2: Step 5 - OK
+DISK_DRV: W [92]
+Thread #3 DEBLOCK
+DISK_DRV: W [94]
+TEST PASSED
+Test 3.3 - STARTED
+Thread #1 started
+Thread #2 started
+Thread #3 started
+DISK_DRV: R [96]
+DISK_DRV: R [98]
+Thread #2 DEBLOCK
+Test 3.3: Step 5 - OK
+DISK_DRV: R [100]
+Thread #3 DEBLOCK
+TEST PASSED
+Test 4.1 - STARTED
+Thread #1 started
+Thread #2 started
+DISK_DRV: R [112]
+Test 4.1: Step 2 - OK
+DISK_DRV: W [112]
+Test 4.1: Step 5 - OK
+TEST PASSED
+Test 4.2 - STARTED
+Thread #1 started
+Thread #2 started
+DISK_DRV: R [114]
+DISK_DRV: W [114]
+Test 4.2: Step 3 - OK
+Test 4.2: Step 7 - OK
+TEST PASSED
+Test 4.3 - STARTED
+Thread #1 started
+Thread #2 started
+DISK_DRV: R [116]
+DISK_DRV: W [116]
+Test 4.3: Step 4 - OK
+TEST PASSED

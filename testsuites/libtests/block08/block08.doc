@@ -1,0 +1,319 @@
+bdbuf tests
+~~~~~~~~~~~
+
+Test 1
+~~~~~~
+
+Tests of this group check the behaviour of rtems_bdbuf_read() function
+in different situations.
+
+Test 1.1
+~~~~~~~~
+
+Check the behaviour of rtems_bdbuf_read function with different 
+reports from disk device driver.
+
+1. Call rtems_bdbuf_read() function and disk device driver ioctl()
+   function returns 0, and the result of asynchronous read complete 
+   notification is successful.
+   Check that rtems_bdbuf_read() returns RTEMS_SUCCESSFUL and
+   provides buffer descriptor.
+2. Call rtems_bdbuf_read() function and disk device driver ioctl()
+   function returns -1 (there will be no asynchronous read complete
+   notification).
+   Check that rtems_bdbuf_read() returns RTEMS_IO_ERROR.
+3. Call rtems_bdbuf_read() function and disk device driver ioctl()
+   function returns 0, but the result of asynchronous read complete 
+   notification is faulty (with some erroneous status).
+   Check that rtems_bdbuf_read() returns that status and does not
+   return buffer descriptor.
+
+Test 1.2
+~~~~~~~~
+
+Check how rtems_bdbuf_read() handles two readers waiting for a buffer
+for the same block number in cases when disk device driver reports 
+failure in read complete notification.
+
+1. Call rtems_bdbuf_read() function in thread #1 and block on 
+   waiting for read complete notification.
+2. Call rtems_bdbuf_read() function in thread #2 for the same block
+   number. As the result it blocks on this read as well (but it will
+   block on transfer semaphore).
+3. Disk device reports an error in read complete notification.
+   As the result an error is returned from rtems_bdbuf_read() in 
+   thread #1.
+4. rtems_bdbuf_read() called in thread #2 should try to re-read data
+   again so disk device ioctl() function is called again for this
+   block number.
+5. Disk device reports an error in read complete notification.
+   As the result an error is returned from rtems_bdbuf_read() in 
+   thread #2.
+
+Test 1.3
+~~~~~~~~
+
+Check how rtems_bdbuf_read() handles two readers waiting for a buffer
+for the same block number in cases when disk device driver reports 
+failure in read complete notification.
+
+1. Call rtems_bdbuf_read() function in thread #1 and block on 
+   waiting for read complete notification.
+2. Call rtems_bdbuf_read() function in thread #2 for the same block
+   number. As the result it blocks on this read as well (but it will
+   block on transfer semaphore).
+3. Disk device reports an error in read complete notification.
+   As the result an error is returned from rtems_bdbuf_read() in 
+   thread #1.
+4. rtems_bdbuf_read() called in thread #2 should try to re-read data
+   again so disk device ioctl() function is called again for this
+   block number.
+5. This time disk device reports success in read complete notification.
+   As the result rtems_bdbuf_read() in thread #2 shall return RTEMS_SUCCESSFUL
+   and provide buffer descriptor.
+6. Call rtems_bdbuf_release() function in thread #2.
+
+Test 1.4
+~~~~~~~~
+
+Check how rtems_bdbuf_read() handles two readers waiting for a buffer
+for the same block number in cases when disk device driver reports 
+success in read complete notification.
+
+1. Call rtems_bdbuf_read() function in thread #1 and block on 
+   waiting for read complete notification.
+2. Call rtems_bdbuf_read() function in thread #2 for the same block
+   number. As the result it blocks on this read as well (but it will
+   block on transfer semaphore).
+3. Disk device reports success in read complete notification.
+   As the result rtems_bdbuf_read() function retuens RTEMS_SUCCESSFUL
+   in thread #1.
+4. Thread #1 releases buffer with rtems_bdbuf_release() function.
+5. rtems_bdbuf_read() function in thread #2 unlocks and returns
+   RTEMS_SUCCESSFUL.
+6. Call rtems_bdbuf_release() function in thread #2.
+
+ISSUE (A)
+Due to implementation constrains of bdbuf library there is no way to 
+handle such a situation according to task priority, but it is
+coded in such a way that task requested this buffer first will get it
+first (even though it is less priority task).
+
+Test 1.5
+~~~~~~~~
+
+Check how rtems_bdbuf_read() handles read request for a buffer that
+is owned by an application.
+
+1. Call rtems_bdbuf_read() function in thread #1 and provide successful
+   read complete notification for this operation.
+   As the result rtems_bdbuf_read() returns RTEMS_SUCCESSFUL in thread #1.
+2. In thread #2 call rtems_bdbuf_read() function for the same block number.
+   A buffer for this block is owned by an application and as the result 
+   thread #2 block on this function.
+3. Call rtems_bdbuf_release() function in thread #1 in order to give
+   it back under control of bdbuf library.
+4. Buffer now is ready to be returned for another application and as 
+   the result rtems_bdbuf_read() unblocks and returns RTEMS_SUCCESSFUL 
+   in thread #2.
+5. Call rtems_bdbuf_release() function in thread #2.
+
+
+Test 2.1
+~~~~~~~~
+
+Check how rtems_bdbuf_read() and rtems_bdbuf_release_modified() coexist.
+rtems_bdbuf_read() is blocked when required buffer is being transferred. 
+
+1. Call rtems_bdbuf_read() function in thread #1 and block on 
+   waiting for read complete notification.
+2. Call rtems_bdbuf_read() function in thread #2 for the same block
+   number. As the result it blocks on this read as well (but it will
+   block on transfer semaphore).
+3. Disk device reports success in read complete notification.
+   As the result rtems_bdbuf_read() function retuens RTEMS_SUCCESSFUL
+   in thread #1.
+4. Thread #1 releases buffer with rtems_bdbuf_release_modified() function.
+5. rtems_bdbuf_read() function in thread #2 unlocks and returns
+   RTEMS_SUCCESSFUL.
+6. Wait swapout period and check that the buffer is not requested to be
+   flushed to a disk.
+7. Call rtems_bdbuf_release() function in thread #2.
+8. Check that this block number is requested for a flush in swapout period.
+
+ISSUE (A)
+
+Test 2.2
+~~~~~~~~
+
+The same as Test 2.1, but on step 7 thread #2 calls 
+rtems_bdbuf_release_modified().
+Check how rtems_bdbuf_read() and rtems_bdbuf_release_modified() coexist.
+rtems_bdbuf_read() is blocked when required buffer is being transferred.
+
+1. Call rtems_bdbuf_read() function in thread #1 and block on 
+   waiting for read complete notification.
+2. Call rtems_bdbuf_read() function in thread #2 for the same block
+   number. As the result it blocks on this read as well (but it will
+   block on transfer semaphore).
+3. Disk device reports success in read complete notification.
+   As the result rtems_bdbuf_read() function retuens RTEMS_SUCCESSFUL
+   in thread #1.
+4. Thread #1 releases buffer with rtems_bdbuf_release_modified() function.
+5. rtems_bdbuf_read() function in thread #2 unlocks and returns
+   RTEMS_SUCCESSFUL.
+6. Wait swapout period and check that the buffer is not requested to be
+   flushed to a disk.
+7. Call rtems_bdbuf_release_modified() function in thread #2.
+8. Check that this block number is requested for a flush in swapout period.
+
+Test 2.3
+~~~~~~~~
+
+Check how rtems_bdbuf_read() and rtems_bdbuf_release_modified() coexist.
+rtems_bdbuf_read() is blocked when required buffer is owned by another
+application.
+
+1. Call rtems_bdbuf_read() function in thread #1 and provide successful
+   read complete notification for this operation.
+   As the result rtems_bdbuf_read() returns RTEMS_SUCCESSFUL in thread #1.
+2. In thread #2 call rtems_bdbuf_read() function for the same block number.
+   A buffer for this block is owned by an application and as the result 
+   thread #2 block on this function.
+3. Call rtems_bdbuf_release_modified() function in thread #1 in order 
+   to give it back under control of bdbuf library.
+4. Buffer now is ready to be returned for another application and as 
+   the result rtems_bdbuf_read() unblocks and returns RTEMS_SUCCESSFUL 
+   in thread #2.
+5. Wait swapout period and check that the buffer is not requested to be
+   flushed to a disk.
+6. Call rtems_bdbuf_release() function in thread #2.
+7. Check that this block number is requested for a flush in swapout period.
+
+Test 2.4
+~~~~~~~~
+
+Check how rtems_bdbuf_read() and rtems_bdbuf_release_modified() coexist.
+rtems_bdbuf_read() is blocked when required buffer is owned by another
+application.
+The same as Test 2.3 but thread #2 releases buffer with 
+rtems_bdbuf_release_modified() function.
+
+1. Call rtems_bdbuf_read() function in thread #1 and provide successful
+   read complete notification for this operation.
+   As the result rtems_bdbuf_read() returns RTEMS_SUCCESSFUL in thread #1.
+2. In thread #2 call rtems_bdbuf_read() function for the same block number.
+   A buffer for this block is owned by an application and as the result 
+   thread #2 block on this function.
+3. Call rtems_bdbuf_release_modified() function in thread #1 in order 
+   to give it back under control of bdbuf library.
+4. Buffer now is ready to be returned for another application and as 
+   the result rtems_bdbuf_read() unblocks and returns RTEMS_SUCCESSFUL 
+   in thread #2.
+5. Wait swapout period and check that the buffer is not requested to be
+   flushed to a disk.
+6. Call rtems_bdbuf_release_modified() function in thread #2.
+7. Check that this block number is requested for a flush in swapout period.
+
+
+
+Test 3
+~~~~~~
+
+Tests of this group check the behaviour of concurent reads from 
+different tasks. Reads are done for different block numbers.
+
+Test 3.1
+~~~~~~~~
+
+Check how read/release work in case of only one buffer in ready list.
+
+1. In thread #1 call rtems_bdbuf_get(#N) to get an empty block #N.
+2. In thread #1 call rtems_bdbuf_release_modified() for previously got buffer.
+3. In thread #1 call rtems_bdbuf_read(#N) to get the same buffer
+   (after this call a buffer is in AVL tree with ACCESS_MODIFIED state).
+4. In thread #2 call rtems_bdbuf_read/get(#M).
+5. In thread #1 call rtems_bdbuf_release(#N).
+6. Check that in thread #2 a buffer is obtained.
+
+Test 3.2
+~~~~~~~~
+
+Check that when there are some tasks waiting for an available buffer only
+one of them get a buffer after some other task releases one.
+
+1. Call rtems_bdbuf_read(#N1) in thread #1.
+2. Call rtems_bdbuf_get(#N2) in thread #2.
+   This thread blocks because we have no buffers available.
+3. Call rtems_bdbuf_get(#N3) in thread #3.
+   This thread also blocks because we have no buffers available.
+4. Call rtems_bdbuf_release_modified(#N1) in thread #1.
+5. Check that only one thread (thread #2 or thread #3) got a buffer.
+   Another thread shall still be blocked.
+
+Test 3.3
+~~~~~~~~
+
+The same as Test 3.2, but instead of calling rtems_bdbuf_get() in 
+threads #1 and #2, it calls rtems_bdbuf_read().
+
+1. Call rtems_bdbuf_read(#N1) in thread #1.
+2. Call rtems_bdbuf_read(#N2) in thread #2.
+   This thread blocks because we have no buffers available.
+3. Call rtems_bdbuf_read(#N3) in thread #3.
+   This thread also blocks because we have no buffers available.
+4. Call rtems_bdbuf_release(#N1) in thread #1.
+5. Check that only one thread (thread #2 or thread #3) got a buffer.
+   Another thread shall still be blocked.
+6. Call rtems_bdbuf_release(#N2) in thread #2 and check that thread #3
+   got a buffer as the result.
+
+Test 4
+~~~~~~
+
+Group of tests for sync buffer functionality.
+
+Test 4.1
+~~~~~~~~
+
+1. Call rtems_bdbuf_read(#N) in thread #1.
+2. Call rtems_bdbuf_read(#N) from thread #2.
+   Thread #2 blocks on this call.
+3. Call rtems_bdbuf_sync(#N) in thread #1.
+4. After a while disk driver gets write request for block #N.
+   Notify bdbuf library about write complete event.
+5. Check that thread #1 unlocked after this.
+6. Check that thread #2 unblocks and get buffer #N.
+7. Release buffer in thread #2.
+
+Test 4.2
+~~~~~~~~
+
+1. Call rtems_bdbuf_read(#N) in thread #1.
+2. Call rtems_bdbuf_sync(#N) in thread #1.
+3. After a while disk driver gets write request for block #N.
+4. Call rtems_bdbuf_read(#N) from thread #2 (before reply from the driver).
+   Thread #2 blocks on this call.
+5. Notify bdbuf library about write complete event.
+6. Check that rtems_bdbuf_sync(#N) in thread #1 unlocked after this.
+   (in fact a thread to unlock might be any).
+7. Check that thread #2 unblocks and get buffer #N.
+8. Release buffer in thread #2.
+
+Test 4.3
+~~~~~~~~
+
+1. Call rtems_bdbuf_read(#N) in thread #1.
+2. Call rtems_bdbuf_sync(#N) in thread #1.
+3. After a while disk driver gets write request for block #N.
+   Notify bdbuf about write complete event.
+4. Check that rtems_bdbuf_sync(#N) in thread #1 unlocked after this.
+5. Call rtems_bdbuf_read(#N) in thread #2.
+6. Check that buffer is successfully obtained in thread #2.
+7. Call rtems_bdbuf_release(#N) in thread #2.
+
+
+Test 4.4
+~~~~~~~~
+
+TODO: Two brances in sync() function should be tested.
