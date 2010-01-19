@@ -25,6 +25,7 @@ if HAS_NETWORKING
 SRCS += ../libchip/libnetchip.a
 endif
 SRCS += ../libchip/libi2cio.a
+SRCS += ../libchip/libdisplay.a
 
 if HAS_MP
 SRCS += ../libchip/shmdr.rel

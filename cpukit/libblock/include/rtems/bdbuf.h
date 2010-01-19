@@ -80,11 +80,12 @@ extern "C" {
  * @dot
  * digraph state {
  *   size="16,8";
- *   e [label="EMPTY",style="filled",fillcolor="aquamarine"];
- *   f [label="FRESH",style="filled",fillcolor="seagreen"];
+ *   f [label="FREE",style="filled",fillcolor="aquamarine"];
+ *   e [label="EMPTY",style="filled",fillcolor="seagreen"];
  *   c [label="CACHED",style="filled",fillcolor="chartreuse"];
- *   a [label="ACCESS",style="filled",fillcolor="royalblue"];
+ *   ac [label="ACCESS CACHED",style="filled",fillcolor="royalblue"];
  *   am [label="ACCESS MODIFIED",style="filled",fillcolor="royalblue"];
+ *   ae [label="ACCESS EMPTY",style="filled",fillcolor="royalblue"];
  *   t [label="TRANSFER",style="filled",fillcolor="red"];
  *   s [label="SYNC",style="filled",fillcolor="red"];
  *   m [label="MODIFIED",style="filled",fillcolor="gold"];
@@ -93,22 +94,28 @@ extern "C" {
  *   legend_transfer [label="Transfer Wake-Up",fontcolor="red",shape="none"];
  *   legend_access [label="Access Wake-Up",fontcolor="royalblue",shape="none"];
  *
- *   i -> e [label="Init"];
- *   e -> f [label="Buffer Recycle"];
- *   f -> a [label="Get"];
- *   f -> t [label="Read\nRead Ahead"];
- *   c -> e [label="Reallocate\nBlock Size Changed"];
- *   c -> a [label="Get\nRead"];
- *   c -> f [label="Buffer Recycle"];
- *   t -> c [label="Write Transfer Done\nRead Transfer Done\nRead Ahead Transfer Done",color="red",fontcolor="red"];
+ *   i -> f [label="Init"];
+ *   f -> e [label="Buffer Recycle"];
+ *   e -> ae [label="Get"];
+ *   e -> t [label="Read\nRead Ahead"];
+ *   c -> f [label="Reallocate\nBlock Size Changed"];
+ *   c -> ac [label="Get\nRead"];
+ *   c -> e [label="Buffer Recycle"];
+ *   t -> c [label="Transfer Done",color="red",fontcolor="red"];
+ *   t -> e [label="Transfer Error With Waiter",color="red",fontcolor="red"];
+ *   t -> f [label="Transfer Error Without Waiter",color="red",fontcolor="red"];
  *   m -> t [label="Swapout"];
  *   m -> s [label="Block Size Changed"];
  *   m -> am [label="Get\nRead"];
- *   a -> m [label="Release Modified",color="royalblue",fontcolor="royalblue"];
- *   a -> s [label="Sync",color="royalblue",fontcolor="royalblue"];
- *   a -> c [label="Release",color="royalblue",fontcolor="royalblue"];
+ *   ac -> m [label="Release Modified",color="royalblue",fontcolor="royalblue"];
+ *   ac -> s [label="Sync",color="royalblue",fontcolor="royalblue"];
+ *   ac -> c [label="Release",color="royalblue",fontcolor="royalblue"];
  *   am -> m [label="Release\nRelease Modified",color="royalblue",fontcolor="royalblue"];
  *   am -> s [label="Sync",color="royalblue",fontcolor="royalblue"];
+ *   ae -> m [label="Release Modified",color="royalblue",fontcolor="royalblue"];
+ *   ae -> s [label="Sync",color="royalblue",fontcolor="royalblue"];
+ *   ae -> e [label="Release With Waiter",color="royalblue",fontcolor="royalblue"];
+ *   ae -> f [label="Release Without Waiter",color="royalblue",fontcolor="royalblue"];
  *   s -> t [label="Swapout"];
  * }
  * @enddot
@@ -164,69 +171,95 @@ extern "C" {
  *
  * The state has several implications.  Depending on the state a buffer can be
  * in the AVL tree, in a list, in use by an entity and a group user or not.
+ *
+ * <table>
+ *   <tr>
+ *     <th>State</th><th>Valid Data</th><th>AVL Tree</th>
+ *     <th>LRU List</th><th>Modified List</th><th>Synchronization List</th>
+ *     <th>Group User</th><th>External User</th>
+ *   </tr>
+ *   <tr>
+ *     <td>FREE</td><td></td><td></td>
+ *     <td>X</td><td></td><td></td><td></td><td></td>
+ *   </tr>
+ *   <tr>
+ *     <td>EMPTY</td><td></td><td>X</td>
+ *     <td>X</td><td></td><td></td><td></td><td></td>
+ *   </tr>
+ *   <tr>
+ *     <td>CACHED</td><td>X</td><td>X</td>
+ *     <td>X</td><td></td><td></td><td></td><td></td>
+ *   </tr>
+ *   <tr>
+ *     <td>ACCESS_CACHED</td><td>X</td><td>X</td>
+ *     <td></td><td></td><td></td><td>X</td><td>X</td>
+ *   </tr>
+ *   <tr>
+ *     <td>ACCESS_MODIFIED</td><td>X</td><td>X</td>
+ *     <td></td><td></td><td></td><td>X</td><td>X</td>
+ *   </tr>
+ *   <tr>
+ *     <td>ACCESS_EMPTY</td><td></td><td>X</td>
+ *     <td></td><td></td><td></td><td>X</td><td>X</td>
+ *   </tr>
+ *   <tr>
+ *     <td>MODIFIED</td><td>X</td><td>X</td>
+ *     <td></td><td>X</td><td></td><td>X</td><td></td>
+ *   </tr>
+ *   <tr>
+ *     <td>SYNC</td><td>X</td><td>X</td>
+ *     <td></td><td></td><td>X</td><td>X</td><td></td>
+ *   </tr>
+ *   <tr>
+ *     <td>TRANSFER</td><td>X</td><td>X</td>
+ *     <td></td><td></td><td></td><td>X</td><td>X</td>
+ *   </tr>
+ * </table>
  */
 typedef enum
 {
   /**
-   * @brief Empty.
-   *
-   * Not in the AVL tree.  Not in a list.  Not in use.  Not a user of its
-   * group.
+   * @brief Free.
    */
-  RTEMS_BDBUF_STATE_EMPTY = 0,
+  RTEMS_BDBUF_STATE_FREE = 0,
 
   /**
-   * @brief Fresh.
-   *
-   * In the AVL tree.  Not in a list.  In use by a get or read request.  A user
-   * of its group.
+   * @brief Empty.
    */
-  RTEMS_BDBUF_STATE_FRESH,
+  RTEMS_BDBUF_STATE_EMPTY,
 
   /**
    * @brief Cached.
-   *
-   * In the AVL tree.  In the LRU list.  Not in use.  Not a user of its group.
    */
   RTEMS_BDBUF_STATE_CACHED,
 
   /**
-   * @brief Accessed by upper layer.
-   *
-   * In the AVL tree.  Not in a list.  In use by an upper layer.  A user of its
-   * group.
+   * @brief Accessed by upper layer with cached data.
    */
-  RTEMS_BDBUF_STATE_ACCESS,
+  RTEMS_BDBUF_STATE_ACCESS_CACHED,
 
   /**
-   * @brief Accessed and modified by upper layer.
-   *
-   * In the AVL tree.  Not in a list.  In use by an upper layer.  A user of its
-   * group.
+   * @brief Accessed by upper layer with modified data.
    */
   RTEMS_BDBUF_STATE_ACCESS_MODIFIED,
 
   /**
+   * @brief Accessed by upper layer with invalid data.
+   */
+  RTEMS_BDBUF_STATE_ACCESS_EMPTY,
+
+  /**
    * @brief Modified by upper layer.
-   *
-   * In the AVL tree.  In the modified list.  In use by swapout mechanic.  A
-   * user of its group.
    */
   RTEMS_BDBUF_STATE_MODIFIED,
 
   /**
    * @brief Scheduled for synchronization.
-   *
-   * In the AVL tree.  In the sync list.  In use by swapout mechanic.  A user
-   * of its group.
    */
   RTEMS_BDBUF_STATE_SYNC,
 
   /**
    * @brief In transfer by block device driver.
-   *
-   * In the AVL tree.  Not in a list.  In use by the block device driver.  A
-   * user of its group.
    */
   RTEMS_BDBUF_STATE_TRANSFER
 } rtems_bdbuf_buf_state;
@@ -260,8 +293,6 @@ typedef struct rtems_bdbuf_buffer
   rtems_blkdev_bnum block;      /**< block number on the device */
 
   unsigned char*    buffer;     /**< Pointer to the buffer memory area */
-  int               error;      /**< If not 0 indicate an error value (errno)
-                                 * which can be used by user later */
 
   volatile rtems_bdbuf_buf_state state;  /**< State of the buffer. */
 

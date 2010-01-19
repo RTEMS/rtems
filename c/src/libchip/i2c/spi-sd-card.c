@@ -1005,7 +1005,7 @@ static int sd_card_disk_block_read( sd_card_driver_entry *e, rtems_blkdev_reques
 	RTEMS_CHECK_SC_RV( sc, "Stop");
 
 	/* Done */
-	r->req_done( r->done_arg, RTEMS_SUCCESSFUL, 0);
+	r->req_done( r->done_arg, RTEMS_SUCCESSFUL);
 
 	return 0;
 
@@ -1020,7 +1020,7 @@ sd_card_disk_block_read_cleanup:
 	sd_card_stop( e);
 
 	/* Done */
-	r->req_done( r->done_arg, RTEMS_IO_ERROR, 0);
+	r->req_done( r->done_arg, RTEMS_IO_ERROR);
 
 	return rv;
 }
@@ -1094,7 +1094,7 @@ static int sd_card_disk_block_write( sd_card_driver_entry *e, rtems_blkdev_reque
 	RTEMS_CHECK_SC_RV( sc, "Stop");
 
 	/* Done */
-	r->req_done( r->done_arg, RTEMS_SUCCESSFUL, 0);
+	r->req_done( r->done_arg, RTEMS_SUCCESSFUL);
 
 	return 0;
 
@@ -1113,7 +1113,7 @@ sd_card_disk_block_write_cleanup:
 	sd_card_stop( e);
 
 	/* Done */
-	r->req_done( r->done_arg, RTEMS_IO_ERROR, 0);
+	r->req_done( r->done_arg, RTEMS_IO_ERROR);
 
 	return rv;
 }

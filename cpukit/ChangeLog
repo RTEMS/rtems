@@ -1,3 +1,21 @@
+2010-01-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/bdbuf.h: Documentation.  Renamed
+	RTEMS_BDBUF_STATE_EMPTY in RTEMS_BDBUF_STATE_FREE.  Renamed
+	RTEMS_BDBUF_STATE_FRESH in RTEMS_BDBUF_STATE_EMPTY.  Renamed
+	RTEMS_BDBUF_STATE_ACCESS in RTEMS_BDBUF_STATE_ACCESS_CACHED.  New
+	state RTEMS_BDBUF_STATE_ACCESS_EMPTY.  Removed error field from
+	rtems_bdbuf_buffer.
+	* libblock/include/rtems/blkdev.h:  Documentation.  Removed error
+	field from block device IO control.
+	* libblock/src/bdbuf.c: Update for block device API change.  New block
+	device driver error policies.  A transfer error or a write to a
+	deleted disk will invalidate the block data now.  See test
+	"libtests/block09".  A get and release sequence will no longer trigger
+	a disk write.
+	* libblock/src/flashdisk.c, libblock/src/nvdisk.c,
+	libblock/src/ramdisk-driver.c: Update for block device API change.
+
 2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	Coverity Id 27

@@ -546,7 +546,7 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
  */
 static inline void
 ata_request_done(ata_req_t *areq, rtems_device_minor_number ctrl_minor,
-                 rtems_status_code status, int error)
+                 rtems_status_code status)
 {
     assert(areq);
 
@@ -554,7 +554,7 @@ ata_request_done(ata_req_t *areq, rtems_device_minor_number ctrl_minor,
     ata_printf("ata_request_done: entry\n");
 #endif
 
-    ATA_EXEC_CALLBACK(areq, status, error);
+    ATA_EXEC_CALLBACK(areq, status);
     rtems_chain_extract(&areq->link);
 
     if (!rtems_chain_is_empty(&ata_ide_ctrls[ctrl_minor].reqs))
@@ -586,14 +586,14 @@ ata_request_done(ata_req_t *areq, rtems_device_minor_number ctrl_minor,
 static inline void
 ata_non_data_request_done(ata_req_t *areq,
                           rtems_device_minor_number ctrl_minor,
-                          rtems_status_code status, int error)
+                          rtems_status_code status, int info)
 {
 #if ATA_DEBUG
     ata_printf("ata_non_data_request_done: entry\n");
 #endif
 
     areq->status = status;
-    areq->error = error;
+    areq->info = info;
     rtems_semaphore_release(areq->sema);
 }
 
@@ -784,7 +784,7 @@ ata_pio_in_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 
     if (areq->cnt == 0)
     {
-        ata_request_done(areq, ctrl_minor, RTEMS_SUCCESSFUL, RTEMS_SUCCESSFUL);
+        ata_request_done(areq, ctrl_minor, RTEMS_SUCCESSFUL);
     }
     else if (IDE_Controller_Table[ctrl_minor].int_driven == false)
     {
@@ -822,7 +822,7 @@ ata_pio_out_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 
     if (areq->cnt == 0)
     {
-        ata_request_done(areq, ctrl_minor, RTEMS_SUCCESSFUL, RTEMS_SUCCESSFUL);
+        ata_request_done(areq, ctrl_minor, RTEMS_SUCCESSFUL);
     }
     else
     {
@@ -909,8 +909,7 @@ ata_queue_task(rtems_task_argument arg)
                  * status and start processing of the next request in the
                  * controller queue
                  */
-                ata_request_done(areq, ctrl_minor, RTEMS_SUCCESSFUL,
-                                 msg.error);
+                ata_request_done(areq, ctrl_minor, RTEMS_SUCCESSFUL);
                 break;
 
             case ATA_MSG_ERROR_EVT:
@@ -919,8 +918,7 @@ ata_queue_task(rtems_task_argument arg)
                  * status and start processing of the next request in the
                  * controller queue
                  */
-                ata_request_done(areq, ctrl_minor, RTEMS_UNSATISFIED,
-                                 msg.error);
+                ata_request_done(areq, ctrl_minor, RTEMS_IO_ERROR);
                 break;
 
             case ATA_MSG_GEN_EVT:
@@ -948,8 +946,7 @@ ata_queue_task(rtems_task_argument arg)
                                                       RTEMS_UNSATISFIED,
                                                       RTEMS_IO_ERROR);
                         else
-                            ata_request_done(areq, ctrl_minor, RTEMS_UNSATISFIED,
-                                             RTEMS_IO_ERROR);
+                            ata_request_done(areq, ctrl_minor, RTEMS_IO_ERROR);
                         break;
                     }
                 }
@@ -977,9 +974,7 @@ ata_queue_task(rtems_task_argument arg)
 #if ATA_DEBUG
                         ata_printf("ata_queue_task: non-supported command type\n");
 #endif
-                        ata_request_done(areq, ctrl_minor,
-                                         RTEMS_UNSATISFIED,
-                                         RTEMS_NOT_IMPLEMENTED);
+                        ata_request_done(areq, ctrl_minor, RTEMS_IO_ERROR);
                         break;
                 }
                 break;
@@ -1315,19 +1310,19 @@ rtems_ata_initialize(rtems_device_major_number major,
         if (breq.req.status == RTEMS_SUCCESSFUL)
         {
           /* disassemble returned diagnostic codes */
-          if (breq.req.error == ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT)
+          if (areq.info == ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT)
           {
             printk("ATA: ctrl:%d: primary, secondary\n", ctrl_minor);
             ATA_DEV_INFO(ctrl_minor,0).present = true;
             ATA_DEV_INFO(ctrl_minor,1).present = true;
           }
-          else if (breq.req.error == ATA_DEV0_PASSED_DEV1_FAILED)
+          else if (areq.info == ATA_DEV0_PASSED_DEV1_FAILED)
           {
             printk("ATA: ctrl:%d: primary\n", ctrl_minor);
             ATA_DEV_INFO(ctrl_minor,0).present = true;
             ATA_DEV_INFO(ctrl_minor,1).present = false;
           }
-          else if (breq.req.error < ATA_DEV1_PASSED_DEV0_FAILED)
+          else if (areq.info < ATA_DEV1_PASSED_DEV0_FAILED)
           {
             printk("ATA: ctrl:%d: secondary\n", ctrl_minor);
             ATA_DEV_INFO(ctrl_minor,0).present = false;
@@ -1521,7 +1516,6 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
             if ( 10000 == retries ) {
               /* probably no drive connected */
               areq->breq->status = RTEMS_UNSATISFIED;
-              areq->breq->error = RTEMS_IO_ERROR;
               return;
             }
         }
@@ -1545,8 +1539,7 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
 
     if (val & IDE_REGISTER_STATUS_ERR)
     {
-        areq->breq->status = RTEMS_UNSATISFIED;
-        areq->breq->error = RTEMS_IO_ERROR;
+        areq->breq->status = RTEMS_IO_ERROR;
         return;
     }
 
@@ -1579,15 +1572,14 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
 
         case ATA_COMMAND_TYPE_NON_DATA:
             areq->breq->status = RTEMS_SUCCESSFUL;
-            areq->breq->error = val1;
+            areq->info = val1;
             break;
 
         default:
 #if ATA_DEBUG
             ata_printf("ata_queue_task: non-supported command type\n");
 #endif
-            areq->breq->status = RTEMS_UNSATISFIED;
-            areq->breq->error = RTEMS_NOT_IMPLEMENTED;
+            areq->breq->status = RTEMS_IO_ERROR;
             break;
     }
 }

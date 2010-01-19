@@ -2071,8 +2071,7 @@ rtems_fdisk_read (rtems_flashdisk* fd, rtems_blkdev_request* req)
     }
   }
 
-  req->req_done (req->done_arg,
-                 ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR, ret);
+  req->req_done (req->done_arg, ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR);
 
   return ret;
 }
@@ -2107,8 +2106,7 @@ rtems_fdisk_write (rtems_flashdisk* fd, rtems_blkdev_request* req)
     }
   }
 
-  req->req_done (req->done_arg,
-                 ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR, ret);
+  req->req_done (req->done_arg, ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR);
 
   return 0;
 }

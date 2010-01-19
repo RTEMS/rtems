@@ -210,14 +210,14 @@ typedef struct ata_req_s {
                                * processing of the ata request is required
                                */
     rtems_status_code status; /* status of ata request processing */
-    int               error;  /* device error code */
+    int               info;  /* device info code */
 } ata_req_t;
 
 /* call callback provided by block device request if it is defined */
-#define ATA_EXEC_CALLBACK(areq, status, error) \
+#define ATA_EXEC_CALLBACK(areq, status) \
     do {\
         if (((areq)->breq != NULL) && ((areq)->breq->req_done != NULL)) \
-            (areq)->breq->req_done((areq)->breq->done_arg, status, error); \
+            (areq)->breq->req_done((areq)->breq->done_arg, status); \
     } while (0)
 
 /* ATA RTEMS driver events types */
