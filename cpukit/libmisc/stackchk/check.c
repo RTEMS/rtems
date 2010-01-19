@@ -6,7 +6,7 @@
  *         CPU grows up or down and installs the correct
  *         extension routines for that direction.
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -137,7 +137,7 @@ void Stack_check_Initialize( void )
 {
   int       i;
   uint32_t *p;
-  static    pattern[ 4 ] = {
+  static    uint32_t pattern[ 4 ] = {
     0xFEEDF00D, 0x0BAD0D06,  /* FEED FOOD to  BAD DOG */
     0xDEADF00D, 0x600D0D06   /* DEAD FOOD but GOOD DOG */
   };

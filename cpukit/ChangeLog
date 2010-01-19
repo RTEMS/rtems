@@ -1,5 +1,9 @@
 2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/stackchk/check.c: Fix warning.
+
+2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 12
 	* libfs/src/imfs/memfile.c: Check for NULL return value.
 
