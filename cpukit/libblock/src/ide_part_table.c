@@ -223,7 +223,7 @@ read_extended_partition(uint32_t start, rtems_part_desc_t *ext_part)
 {
     int                  i;
     dev_t                dev;
-    rtems_sector_data_t *sector;
+    rtems_sector_data_t *sector = NULL;
     uint32_t             here;
     uint8_t             *data;
     rtems_part_desc_t   *new_part_desc;
@@ -244,11 +244,14 @@ read_extended_partition(uint32_t start, rtems_part_desc_t *ext_part)
     rc = get_sector(dev, here, &sector);
     if (rc != RTEMS_SUCCESSFUL)
     {
+        if (sector)
+            free(sector);
         return rc;
     }
 
     if (!msdos_signature_check(sector))
     {
+        free(sector);
         return RTEMS_INTERNAL_ERROR;
     }
 
