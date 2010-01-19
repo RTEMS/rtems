@@ -317,7 +317,7 @@ static rtems_status_code
 read_mbr(rtems_disk_desc_t *disk_desc)
 {
     int                  part_num;
-    rtems_sector_data_t *sector;
+    rtems_sector_data_t *sector = NULL;
     rtems_part_desc_t   *part_desc;
     uint8_t             *data;
     rtems_status_code    rc;
@@ -327,6 +327,8 @@ read_mbr(rtems_disk_desc_t *disk_desc)
     rc = get_sector(dev, 0, &sector);
     if (rc != RTEMS_SUCCESSFUL)
     {
+        if (sector)
+            free(sector);
         return rc;
     }
 

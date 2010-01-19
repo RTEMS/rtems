@@ -1,5 +1,12 @@
 2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 24
+	* libblock/src/ide_part_table.c: Initialize sector to NULL and add
+	free(sector) on error return path from get_sector() to fix potential
+	leak.
+
+2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 25
 	* libblock/src/ide_part_table.c: Add free(sector) on error return path
 	to fix leak.
