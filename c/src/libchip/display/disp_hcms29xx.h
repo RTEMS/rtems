@@ -32,7 +32,7 @@ extern "C" {
 #define DISP_HCMS29XX_TEXT_CNT (128)
 
   typedef struct {
-    rtems_device_major_number minor;   /* minor device number            */
+    rtems_device_minor_number minor;   /* minor device number            */
     /*
      * in the disp_buffer, the string to be displayed is placed
      */
@@ -60,8 +60,98 @@ extern "C" {
   /*
    * pass this descriptor pointer to rtems_libi2c_register_drv
    */
-  extern rtems_libi2c_drv_t *disp_hcms29xx__driver_descriptor;
+  extern rtems_libi2c_drv_t *disp_hcms29xx_driver_descriptor;
 
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+rtems_device_driver disp_hcms29xx_dev_initialize
+  (
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   prepare the display device driver to accept write calls                 |
+|   register device with its name                                           |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+   );
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    rtems_status_code                                                      |
+\*=========================================================================*/
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+rtems_device_driver disp_hcms29xx_dev_open
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   open the display device                                                 |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+ );
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    rtems_status_code                                                      |
+\*=========================================================================*/
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+rtems_device_driver disp_hcms29xx_dev_write
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   write to display device                                                 |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+ );
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    rtems_status_code                                                      |
+\*=========================================================================*/
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+rtems_device_driver disp_hcms29xx_dev_close
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   close the display device                                                |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+ );
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    rtems_status_code                                                      |
+\*=========================================================================*/
+
+#define DISP_HCMS29XX_DRIVER {			\
+    disp_hcms29xx_dev_initialize,		\
+      disp_hcms29xx_dev_open,			\
+      NULL,					\
+      disp_hcms29xx_dev_write,			\
+      NULL,					\
+      disp_hcms29xx_dev_close}
+  
+    
 #ifdef __cplusplus
 }
 #endif

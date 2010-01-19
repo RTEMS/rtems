@@ -132,6 +132,21 @@ extern int rtems_scc_enet_driver_attach (struct rtems_bsdnet_ifconfig *config,
 #undef RTEMS_BSP_HAS_IDE_DRIVER
 
 /*
+ * SPI driver configuration
+ */
+
+  /* select values for SPI addressing */
+#define PGHPLUS_SPI_ADDR_EEPROM 0
+#define PGHPLUS_SPI_ADDR_DISP4  1
+  /* NOTE: DISP4 occupies two consecutive addresses for data and control port */
+#define PGHPLUS_SPI_ADDR_DISP4_DATA  (PGHPLUS_SPI_ADDR_DISP4)
+#define PGHPLUS_SPI_ADDR_DISP4_CTRL  (PGHPLUS_SPI_ADDR_DISP4_DATA+1)
+
+  /* bit masks for Port B lines */
+#define PGHPLUS_PB_SPI_EEP_CE_MSK     (1<< 0)
+#define PGHPLUS_PB_SPI_DISP4_RS_MSK   (1<<15)
+#define PGHPLUS_PB_SPI_DISP4_CE_MSK   (1<<14)
+/*
  * our (internal) bus frequency
  */
 extern uint32_t BSP_bus_frequency;

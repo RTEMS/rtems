@@ -19,7 +19,8 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <mpc8xx.h>
-#include "spi.h"
+#include <bsp/spi.h>
+#include <libchip/disp_hcms29xx.h>
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
 #include <errno.h>
@@ -625,7 +626,7 @@ int m8xx_spi_ioctl
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_spi_sel_addr
+static rtems_status_code bsp_dummy_spi_sel_addr
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -639,44 +640,16 @@ static rtems_status_code bsp_spi_sel_addr
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
-|    o = ok or error code                                                   |
+|    rtems_status_code                                                      |
 \*=========================================================================*/
-{
-#if defined(PGH360)
-  /*
-   * select given device
-   */
-  /*
-   * GPIO1[24] is SPI_A0
-   * GPIO1[25] is SPI_A1
-   * GPIO1[26] is SPI_A2
-   * set pins to address
-   */
-  switch(addr) {
-  case PGH360_SPI_ADDR_EEPROM:
-    m8xx.pbdat &= ~PGH360_PB_SPI_EEP_CE_MSK;
-    break;
-  case PGH360_SPI_ADDR_DISP4_DATA:
-    m8xx.pbdat = (m8xx.pbdat
-		  & ~(PGH360_PB_SPI_DISP4_CE_MSK |
-		      PGH360_PB_SPI_DISP4_RS_MSK));
-    break;
-  case PGH360_SPI_ADDR_DISP4_CTRL:
-    m8xx.pbdat = (m8xx.pbdat
-		  & ~(PGH360_PB_SPI_DISP4_CE_MSK)
-		  |   PGH360_PB_SPI_DISP4_RS_MSK);
-    break;
-  default:
-    return RTEMS_INVALID_NUMBER;
-  }
-#endif /* PGH360 */
+{			    
   return  RTEMS_SUCCESSFUL;
 }
 
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_spi_send_start_dummy
+static rtems_status_code bsp_dummy_spi_send_start
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -691,13 +664,83 @@ static rtems_status_code bsp_spi_send_start_dummy
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
-  return 0;
+  return RTEMS_SUCCESSFUL;
 }
 
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_spi_send_stop
+static rtems_status_code bsp_dummy_spi_send_stop
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   deselect SPI                                                            |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ rtems_libi2c_bus_t *bh                  /* bus specifier structure        */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    o = ok or error code                                                   |
+\*=========================================================================*/
+{
+  return RTEMS_SUCCESSFUL;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static rtems_status_code bsp_pghplus_spi_sel_addr
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   address a slave device on the bus                                       |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ rtems_libi2c_bus_t *bh,                 /* bus specifier structure        */
+ uint32_t addr,                          /* address to send on bus         */
+ int rw                                  /* 0=write,1=read                 */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    rtems_status_code                                                      |
+\*=========================================================================*/
+{			    
+#if defined(PGHPLUS)
+  pbdat_val = m8xx.pbdat | (PGHPLUS_SPI_PB_DISP4_RS_MSK |
+			    PGHPLUS_SPI_PB_DISP4_CE_MSK |
+			    PGHPLUS_SPI_PB_EEP_CE_MSK);
+  /*
+   * select given device
+   */
+  switch(addr) {
+  case PGHPLUS_SPI_ADDR_EEPROM:
+    pbdat_val &= ~PGHPLUS_SPI_PB_EEP_CE_MSK;
+    break;
+  case PGHPLUS_SPI_ADDR_DISP4_DATA:
+    pbdat_val = (m8xx.pbdat
+		  & ~(PGHPLUS_PB_SPI_DISP4_CE_MSK |
+		      PGHPLUS_PB_SPI_DISP4_RS_MSK));
+    break;
+  case PGHPLUS_SPI_ADDR_DISP4_CTRL:
+    pbdat_val = (m8xx.pbdat
+		  & ~(PGHPLUS_PB_SPI_DISP4_CE_MSK)
+		  |   PGHPLUS_PB_SPI_DISP4_RS_MSK);
+    break;
+  default:
+    return RTEMS_INVALID_NUMBER;
+  }
+  m8xx_pbdat = pbdat_val
+#endif /* PGHPLUS */
+  return  RTEMS_SUCCESSFUL;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static rtems_status_code bsp_pghplus_spi_send_stop
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -713,17 +756,120 @@ static rtems_status_code bsp_spi_send_stop
 \*=========================================================================*/
 {
 #if defined(DEBUG)
-  printk("bsp_spi_send_stop called... ");
+  printk("bsp_pghplus_spi_send_stop called... ");
 #endif
-#if defined(PGH360)
     m8xx.pbdat = (m8xx.pbdat
-		  | PGH360_PB_SPI_DISP4_CE_MSK
-		  | PGH360_PB_SPI_EEP_CE_MSK);
-#endif
+		  | PGHPLUS_PB_SPI_DISP4_CE_MSK
+		  | PGHPLUS_PB_SPI_EEP_CE_MSK);
 #if defined(DEBUG)
   printk("... exit OK\r\n");
 #endif
-  return 0;
+  return RTEMS_SUCCESSFUL;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static rtems_status_code bsp_pghplus_spi_init
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   do board specific init:                                                 |
+|   - initialize pins for addressing                                        |
+|   - register further drivers                                              |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ int spi_busno
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    o = ok or error code                                                   |
+\*=========================================================================*/
+{
+  int ret_code;
+
+#if defined(DEBUG)
+  printk("bsp_pghplus_spi_init called... ");
+#endif
+
+  /*
+   * init port pins used to address/select SPI devices
+   */
+
+  /*
+   * set up ports
+   * LINE      PAR  DIR  DAT
+   * -----------------------
+   * EEP_CE     0    1 act-high
+   * DISP4_CS   0    1 act-high
+   * DISP4_RS   0    1 active
+   */
+
+  /* set Port B Pin Assignment Register... */
+  m8xx.pbpar =
+    (m8xx.pbpar
+     & ~(PGHPLUS_PB_SPI_EEP_CE_MSK
+	 | PGHPLUS_PB_SPI_DISP4_CE_MSK
+	 | PGHPLUS_PB_SPI_DISP4_RS_MSK));
+
+    /* set Port B Data Direction Register... */
+  m8xx.pbdir =
+    m8xx.pbdir
+    | PGHPLUS_PB_SPI_EEP_CE_MSK
+    | PGHPLUS_PB_SPI_DISP4_CE_MSK
+    | PGHPLUS_PB_SPI_DISP4_RS_MSK;
+
+  /* set Port B Data Register to inactive CE state */
+  m8xx.pbdat =
+    m8xx.pbdat
+    | PGHPLUS_PB_SPI_DISP4_CE_MSK
+    | PGHPLUS_PB_SPI_DISP4_RS_MSK;
+
+  /*
+   * register devices
+   */
+  ret_code = rtems_libi2c_register_drv("disp",
+				       disp_hcms29xx_driver_descriptor,
+				       spi_busno,PGHPLUS_SPI_ADDR_DISP4);
+  if (ret_code < 0) {
+    return -ret_code;
+  }
+
+#if defined(DEBUG)
+  printk("... exit OK\r\n");
+#endif
+  return RTEMS_SUCCESSFUL;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static rtems_status_code bsp_dummy_spi_init
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   do board specific init:                                                 |
+|   - initialize pins for addressing                                        |
+|   - register further drivers                                              |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ int spi_busno
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    o = ok or error code                                                   |
+\*=========================================================================*/
+{
+#if defined(DEBUG)
+  printk("bsp_dummy_spi_init called... ");
+#endif
+
+#if defined(DEBUG)
+  printk("... exit OK\r\n");
+#endif
+  return RTEMS_SUCCESSFUL;
 }
 
 /*=========================================================================*\
@@ -732,9 +878,9 @@ static rtems_status_code bsp_spi_send_stop
 
 rtems_libi2c_bus_ops_t bsp_spi_ops = {
   init:             m8xx_spi_init,
-  send_start:       bsp_spi_send_start_dummy,
-  send_stop:        bsp_spi_send_stop,
-  send_addr:        bsp_spi_sel_addr,
+  send_start:       bsp_dummy_spi_send_start,
+  send_stop:        SPI_SEND_STOP_FNC,
+  send_addr:        SPI_SEND_ADDR_FNC,
   read_bytes:       m8xx_spi_read_bytes,
   write_bytes:      m8xx_spi_write_bytes,
   ioctl:            m8xx_spi_ioctl
@@ -780,41 +926,6 @@ rtems_status_code bsp_register_spi
    */
   rtems_libi2c_initialize ();
 
-  /*
-   * init port pins used to address/select SPI devices
-   */
-
-#if defined(PGH360)
-
-  /*
-   * set up ports
-   * LINE      PAR  DIR  DAT
-   * -----------------------
-   * EEP_CE     0    1 act-high
-   * DISP4_CS   0    1 act-high
-   * DISP4_RS   0    1 active
-   */
-
-  /* set Port B Pin Assignment Register... */
-  m8xx.pbpar =
-    (m8xx.pbpar
-     & ~(PGH360_PB_SPI_EEP_CE_MSK
-	 | PGH360_PB_SPI_DISP4_CE_MSK
-	 | PGH360_PB_SPI_DISP4_RS_MSK));
-
-    /* set Port B Data Direction Register... */
-  m8xx.pbdir =
-    m8xx.pbdir
-    | PGH360_PB_SPI_EEP_CE_MSK
-    | PGH360_PB_SPI_DISP4_CE_MSK
-    | PGH360_PB_SPI_DISP4_RS_MSK;
-
-  /* set Port B Data Register to inactive CE state */
-  m8xx.pbdat =
-    m8xx.pbdat
-    | PGH360_PB_SPI_DISP4_CE_MSK
-    | PGH360_PB_SPI_DISP4_RS_MSK;
-#endif
 
   /*
    * register SPI bus
@@ -825,23 +936,12 @@ rtems_status_code bsp_register_spi
     return -ret_code;
   }
   spi_busno = ret_code;
-#if defined(PGH360)
-  /*
-   * register devices
-   */
-#if 0
-  ret_code = rtems_libi2c_register_drv(RTEMS_BSP_SPI_FLASH_DEVICE_NAME,
-				       spi_flash_m25p40_rw_driver_descriptor,
-				       spi_busno,0x00);
-  if (ret_code < 0) {
-    return -ret_code;
-  }
-#endif
-#endif /* defined(PGH360) */
+
+  SPI_BOARD_INIT_FNC(spi_busno);
   /*
    * FIXME: further drivers, when available
    */
-  return 0;
+  return RTEMS_SUCCESSFUL;
 }
 
 

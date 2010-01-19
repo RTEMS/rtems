@@ -499,19 +499,21 @@ sccInterruptHandler (void *arg)
 static void
 mpc8xx_console_irq_on(const rtems_irq_connect_data *irq)
 {
-    CHN_MASK_SET(irq->name,3);	/* Enable TX and RX interrupts */
+    CHN_MASK_SET(irq->name - BSP_CPM_IRQ_LOWEST_OFFSET,
+		 3);	/* Enable TX and RX interrupts */
 }
 
 static void
 mpc8xx_console_irq_off(const rtems_irq_connect_data *irq)
 {
-    CHN_MASK_SET(irq->name,0);	/* Disable TX and RX interrupts */
+    CHN_MASK_SET(irq->name - BSP_CPM_IRQ_LOWEST_OFFSET,
+		 0);	/* Disable TX and RX interrupts */
 }
 
 static int
 mpc8xx_console_irq_isOn(const rtems_irq_connect_data *irq)
 {
-  return (0 != CHN_MASK_GET(irq->name)); /* Check TX and RX interrupts */
+  return (0 != CHN_MASK_GET(irq->name - BSP_CPM_IRQ_LOWEST_OFFSET)); /* Check TX and RX interrupts */
 }
 
 static void

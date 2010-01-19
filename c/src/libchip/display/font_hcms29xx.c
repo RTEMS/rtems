@@ -1560,7 +1560,7 @@ struct disp_font_glyph glyph_hp_fixed_5_7_127 = {
   5, 0, bitmap_hp_fixed_5_7_127,
 };
 
-const struct disp_font_base font_base_hp_fixed_5_7 = {
+const struct disp_font_base font_hcms29xx_base = {
   1,               /* trans */
   {5, 7, 0, -1},  /* fbb w, h, x, y */
   7, 0,            /* ascent, descent */

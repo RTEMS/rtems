@@ -31,8 +31,6 @@
 extern "C" {
 #endif
 
-extern disp_font_t font_hcms29xx;
-
 extern struct disp_font_base font_hcms29xx_base;
 
 #ifdef __cplusplus

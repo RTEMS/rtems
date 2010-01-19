@@ -33,7 +33,7 @@
 #include <rtems/libio.h>
 #include <bsp.h>
 #include <rtems/libi2c.h>
-#include "disp_hcms29xx.h"
+#include <libchip/disp_hcms29xx.h>
 #include "font_hcms29xx.h"
 #define FONT_BASE font_hcms29xx_base
 
@@ -58,6 +58,8 @@ const rtems_libi2c_tfr_mode_t spi_disphcms29xx_tfr_mode = {
   .clock_phs = true,
   .idle_char = 0
 };
+
+static disp_hcms29xx_drv_t disp_hcms29xx_drv_tbl;
 
 /*=========================================
  * font management functions
@@ -544,7 +546,7 @@ static rtems_task disp_hcms29xx_update_task
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
-   rtems_task_argument argument /* softc_ptr */
+   rtems_task_argument argument 
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -555,7 +557,7 @@ static rtems_task disp_hcms29xx_update_task
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   int disp_offset = 0;
   rtems_id disp_hcms29xx_timer_id;
-  disp_hcms29xx_drv_t *softc_ptr = (disp_hcms29xx_drv_t *)argument;
+  disp_hcms29xx_drv_t *softc_ptr = &disp_hcms29xx_drv_tbl;
 
   /*
    * initialize display:
@@ -748,11 +750,7 @@ rtems_device_driver disp_hcms29xx_dev_initialize
  */
 {
   rtems_status_code rc = RTEMS_SUCCESSFUL;
-  static char *devname = {"/dev/disp"};
-  disp_hcms29xx_drv_t *softc_ptr = NULL;
-  /*
-   * FIXME: get softc_ptr
-   */
+  disp_hcms29xx_drv_t *softc_ptr = &disp_hcms29xx_drv_tbl;
 
   /*
    * initialize font management
@@ -803,13 +801,7 @@ rtems_device_driver disp_hcms29xx_dev_initialize
   }
   if (rc == RTEMS_SUCCESSFUL) {
     rc = rtems_task_start(softc_ptr->disp_param.task_id,
-			  disp_hcms29xx_update_task, 0 );
-  }
-  /*
-   * Register the device
-   */
-  if (rc == RTEMS_SUCCESSFUL) {
-    rc = rtems_io_register_name (devname, major, 0);
+			  disp_hcms29xx_update_task,0);
   }
   return rc;
 }
@@ -834,10 +826,7 @@ rtems_device_driver disp_hcms29xx_dev_open
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  disp_hcms29xx_drv_t *softc_ptr = NULL;
-  /*
-   * FIXME: get softc_ptr
-   */
+  disp_hcms29xx_drv_t *softc_ptr = &disp_hcms29xx_drv_tbl;
   /*
    * ensure, that disp_hcms29xx device is assumed to be empty
    */
@@ -868,10 +857,7 @@ rtems_device_driver disp_hcms29xx_dev_write
 {
   rtems_libio_rw_args_t *args = arg;
   uint32_t cnt;
-  disp_hcms29xx_drv_t *softc_ptr = NULL;
-  /*
-   * FIXME: get softc_ptr
-   */
+  disp_hcms29xx_drv_t *softc_ptr = &disp_hcms29xx_drv_tbl;
 
   for (cnt = 0;cnt < args->count;cnt++) {
     /*
@@ -924,22 +910,30 @@ rtems_device_driver disp_hcms29xx_dev_close
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  disp_hcms29xx_drv_t *softc_ptr = NULL;
 
-  /*
-   * FIXME: get softc_ptr
-   */
-  return RTEMS_NOT_IMPLEMENTED;
-
-  /* flush buffer, if not empty */
-  if (softc_ptr->disp_param.dev_buf_cnt > 0) {
-      softc_ptr->disp_param.dev_buffer[softc_ptr->disp_param.dev_buf_cnt] =
-	'\0';
-      /*
-       * transfer string to display string, redisplay it...
-       */
-      disp_hcms29xx_update(softc_ptr,softc_ptr->disp_param.dev_buffer);
-      softc_ptr->disp_param.dev_buf_cnt = 0;
-  }
   return RTEMS_SUCCESSFUL;
 }
+
+/*
+ * driver operation tables
+ */
+static rtems_driver_address_table disp_hcms29xx_ops = {
+  initialization_entry: disp_hcms29xx_dev_initialize,
+  open_entry:           disp_hcms29xx_dev_open,
+  write_entry:          disp_hcms29xx_dev_write,
+  close_entry:          disp_hcms29xx_dev_close
+};
+
+
+static disp_hcms29xx_drv_t disp_hcms29xx_drv_tbl = {
+  {/* public fields */
+  ops:         &disp_hcms29xx_ops, 
+  size:        sizeof (disp_hcms29xx_drv_t),
+  },
+  { /* our private fields */
+  }
+};
+
+rtems_libi2c_drv_t *disp_hcms29xx_driver_descriptor = 
+  &disp_hcms29xx_drv_tbl.libi2c_drv_entry;
+

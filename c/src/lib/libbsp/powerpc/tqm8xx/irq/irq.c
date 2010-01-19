@@ -52,14 +52,14 @@ rtems_status_code bsp_irq_enable_at_SIU(rtems_vector_number irqnum)
 rtems_status_code bsp_irq_disable_at_CPM(rtems_vector_number irqnum)
 {
   rtems_vector_number vecnum = irqnum - BSP_CPM_IRQ_LOWEST_OFFSET;
-  m8xx.cimr &= ~(1 << (31 - vecnum));
+  m8xx.cimr &= ~(1 << (vecnum));
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_irq_enable_at_CPM(rtems_vector_number irqnum)
 {
   rtems_vector_number vecnum = irqnum - BSP_CPM_IRQ_LOWEST_OFFSET;
-  m8xx.cimr |= (1 << (31 - vecnum));
+  m8xx.cimr |= (1 << (vecnum));
   return RTEMS_SUCCESSFUL;
 }
 
@@ -193,10 +193,12 @@ rtems_status_code mpc8xx_cpic_initialize( void)
   /*
    * make sure CPIC request proper level at SIU interrupt controller
    */
-  m8xx.cicr  = (0x00e41f00 |
+  m8xx.cicr  = (0x00e41f80 |
 		((BSP_CPM_INTERRUPT/2) << 13));
-
-  return RTEMS_SUCCESSFUL;
+  /*
+   * enable CPIC interrupt in SIU interrupt controller
+   */
+  return bsp_irq_enable_at_SIU(BSP_CPM_INTERRUPT);
 }
 
 /*

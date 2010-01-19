@@ -51,7 +51,7 @@ RTEMS_BSPOPTS_HELP([PRINTK_CHN],
  each other.])
 
 RTEMS_BSPOPTS_SET([CONS_SMC1_MODE],[tqm8xx_stk8xx],[CONS_MODE_POLLED])
-RTEMS_BSPOPTS_SET([CONS_SMC1_MODE],[pghplus],[CONS_MODE_POLLED])
+RTEMS_BSPOPTS_SET([CONS_SMC1_MODE],[pghplus],[CONS_MODE_IRQ])
 RTEMS_BSPOPTS_SET([CONS_SMC1_MODE],[*],[CONS_MODE_UNUSED])
 RTEMS_BSPOPTS_HELP([CONS_SMC1_MODE],
 [(BSP--SMC1 UART IF mode) Must be defined if SMC1 is used as a tty (UART)
@@ -88,6 +88,24 @@ RTEMS_BSPOPTS_HELP([CONS_SCC4_MODE],
 [(BSP--SCC4 UART IF mode) Must be defined if SCC4 is used as a tty (UART)
  channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for
  interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not used])
+
+RTEMS_BSPOPTS_SET([SPI_BOARD_INIT_FNC],[pghplus],[bsp_pghplus_spi_init])
+RTEMS_BSPOPTS_SET([SPI_BOARD_INIT_FNC],[*],[bsp_dummy_spi_init])
+RTEMS_BSPOPTS_HELP([SPI_BOARD_INIT_FNC],
+[(BSP--SPI board init function) Specify the function that inits the board 
+ port lines and further devices.])
+
+RTEMS_BSPOPTS_SET([SPI_SEND_STOP_FNC],[pghplus],[bsp_pghplus_spi_send_stop])
+RTEMS_BSPOPTS_SET([SPI_SEND_STOP_FNC],[*],[bsp_dummy_spi_send_stop])
+RTEMS_BSPOPTS_HELP([SPI_SEND_STOP_FNC],
+[(BSP--SPI send stop function) Specify the function that deaddresses SPI 
+ devices. Set to bsp_dummy_spi_send_stop for dummy implementation])
+
+RTEMS_BSPOPTS_SET([SPI_SEND_ADDR_FNC],[pghplus],[bsp_pghplus_spi_sel_addr])
+RTEMS_BSPOPTS_SET([SPI_SEND_ADDR_FNC],[*],[bsp_dummy_spi_sel_addr])
+RTEMS_BSPOPTS_HELP([SPI_SEND_ADDR_FNC],
+[(BSP--SPI send address function) Specify the function that addresses SPI 
+ devices. Set to bsp_dummy_spi_sel_addr for dummy implementation])
 
 # add selection of primary network interface
 RTEMS_BSPOPTS_SET([BSP_USE_NETWORK_FEC],[pghplus],[1])
