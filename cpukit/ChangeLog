@@ -1,5 +1,12 @@
 2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 5
+	* score/src/objectinitializeinformation.c: Do not modify maximum
+	parameter. Clean up and simplify code. This should help the Coverity
+	path analysis to avoid reporting issues.
+
+2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_creat.c,
 	libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/imfs_link.c,
 	libfs/src/imfs/imfs_load_tar.c, libfs/src/imfs/imfs_mknod.c,
