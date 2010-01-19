@@ -1,5 +1,15 @@
 2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 27
+	* libblock/src/ramdisk-config.c: Coverity notes that the
+	calloc() is a resource leak.  This is allocating memory for
+	a RAM disk which will persist for the life of the system. RTEMS
+	has no "de-initialize" driver call so there is no corresponding
+	free(r).  Coverity is correct that it is never freed but this is
+	not a problem.
+
+2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/stackchk/check.c: Fix warning.
 
 2010-01-18	Joel Sherrill <joel.sherrill@oarcorp.com>
