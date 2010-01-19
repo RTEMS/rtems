@@ -204,7 +204,7 @@ fts_open(
 			SET(FTS_NOCHDIR);
 		}
 	}
-
+	free(parent);
 	return (sp);
 
 mem3:	fts_lfree(root);
