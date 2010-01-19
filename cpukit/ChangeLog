@@ -1,5 +1,11 @@
 2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 10
+	* libblock/src/bdbuf.c: Rework loop conditional to avoid potential use
+	of NULL pointer.
+
+2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 23
 	* libmisc/monitor/mon-monitor.c: Add fclose() of file.
 

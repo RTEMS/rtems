@@ -2253,6 +2253,7 @@ rtems_bdbuf_null_disk_ioctl (rtems_disk_device *dd, uint32_t req, void *arg)
 static void
 rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
 {
+  rtems_chain_node *node;
   static rtems_disk_device null_disk = {
     .capabilities = 0,
     .ioctl = rtems_bdbuf_null_disk_ioctl
@@ -2301,12 +2302,10 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
     transfer->write_req->status = RTEMS_RESOURCE_IN_USE;
     transfer->write_req->bufnum = 0;
 
-    while (!rtems_chain_is_empty (&transfer->bds))
+    while ((node = rtems_chain_get(&transfer->bds)) != NULL)
     {
-      rtems_bdbuf_buffer* bd =
-        (rtems_bdbuf_buffer*) rtems_chain_get (&transfer->bds);
-
-      bool write = false;
+      rtems_bdbuf_buffer* bd = (rtems_bdbuf_buffer*) node;
+      bool                write = false;
 
       /*
        * If the device only accepts sequential buffers and this is not the
