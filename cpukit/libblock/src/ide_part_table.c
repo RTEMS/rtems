@@ -192,7 +192,7 @@ data_to_part_desc(uint8_t *data, rtems_part_desc_t **new_part_desc)
      * - FAT type and non-zero
      */
     if (is_extended(part_desc->sys_type) ||
-	((is_fat_partition(part_desc->sys_type)) && (part_desc->size != 0))) {
+       ((is_fat_partition(part_desc->sys_type)) && (part_desc->size != 0))) {
       *new_part_desc = part_desc;
     }
     else {
@@ -333,6 +333,7 @@ read_mbr(rtems_disk_desc_t *disk_desc)
     /* check if the partition table structure is MS-DOS style */
     if (!msdos_signature_check(sector))
     {
+        free(sector);
         return RTEMS_INTERNAL_ERROR;
     }
 

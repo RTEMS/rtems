@@ -1,5 +1,11 @@
 2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 25
+	* libblock/src/ide_part_table.c: Add free(sector) on error return path
+	to fix leak.
+
+2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 5
 	* score/src/objectinitializeinformation.c: Do not modify maximum
 	parameter. Clean up and simplify code. This should help the Coverity
