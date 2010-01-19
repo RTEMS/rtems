@@ -1,5 +1,10 @@
 2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 23
+	* libmisc/monitor/mon-monitor.c: Add fclose() of file.
+
+2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libblock/src/ide_part_table.c: Another error path without a
 	free(sector).
 

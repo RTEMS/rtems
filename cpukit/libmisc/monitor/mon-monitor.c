@@ -447,6 +447,7 @@ rtems_monitor_symbols_loadup(void)
     }
 
 done:
+    fclose(fp);
     return;
 }
 
