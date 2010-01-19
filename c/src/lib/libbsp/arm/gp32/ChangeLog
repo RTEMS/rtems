@@ -1,3 +1,7 @@
+2010-01-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* smc/smc.c: Update for block device API change.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/gp32.cfg: Remove RTEMS_BSP_FAMILY.
