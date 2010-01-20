@@ -450,6 +450,7 @@ isint2:					switch(fu->bcnt) {
 		(void)printf("\n");
 	}
 #endif
+  free(pr);
 }
 
 void
