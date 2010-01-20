@@ -1,5 +1,12 @@
 2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 7
+	Coverity Id 8
+	* libblock/src/bdpart.c: Verify libblock is really set after
+	rtems_bdbuf_read() before using it.
+
+2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 5
 	* score/src/objectextendinformation.c: Check object_blocks for NULL to
 	determine when to allocate object block table.
