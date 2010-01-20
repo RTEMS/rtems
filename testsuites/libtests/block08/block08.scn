@@ -1,3 +1,4 @@
+*** TEST BLOCK 8 ***
 test_disk_ioctl() Unexpected request comes 2
 TEST DISK - OK
 DEV: /dev/testdisk [1024]
@@ -84,3 +85,4 @@ DISK_DRV: R [116]
 DISK_DRV: W [116]
 Test 4.3: Step 4 - OK
 TEST PASSED
+*** END OF TEST BLOCK 8 ***
