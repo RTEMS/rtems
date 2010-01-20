@@ -1,5 +1,10 @@
 2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 30
+	* libmisc/shell/hexdump-parse.c:
+
+2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 1
 	* libmisc/shell/fts.c:
 

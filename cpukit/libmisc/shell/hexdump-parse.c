@@ -420,6 +420,10 @@ isint2:					switch(fu->bcnt) {
 			for (pr = fu->nextpr; pr; pr = pr->nextpr)
 				fu->bcnt += pr->bcnt;
 	}
+	if (pr) {
+		free(pr);
+		pr = NULL;
+	}
 	/*
 	 * If the format string interprets any data at all, and it's
 	 * not the same as the blocksize, and its last format unit
@@ -451,8 +455,6 @@ isint2:					switch(fu->bcnt) {
 		(void)printf("\n");
 	}
 #endif
-	if (pr)
-		free(pr);
 }
 
 void
