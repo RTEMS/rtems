@@ -1,5 +1,10 @@
 2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 3
+	* libmisc/shell/shell.c: Remove dead code path and fix warning.
+
+2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/hexdump-parse.c: Fix uninitialized warning.
 
 2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>

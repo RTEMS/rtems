@@ -237,10 +237,6 @@ int rtems_shell_line_editor(
             fprintf(out,"\r%*c", clen, ' ');
             fprintf(out,"\r%s%s", prompt, line);
           }
-          else {
-            if (output)
-              fputc('\x7', out);
-          }
         }
         break;
 
@@ -769,7 +765,7 @@ bool rtems_shell_main_loop(
           /* evaluate cmd section */
           c = cmds[cmd];
           while (*c) {
-            if (!isblank(*c))
+            if (!isblank((int)*c))
               break;
             c++;
           }
