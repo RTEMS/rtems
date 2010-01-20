@@ -1,3 +1,7 @@
+2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp43/init.c: Fix warning.
+
 2009-12-15	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* sp69/init.c: Fixed warnings.
