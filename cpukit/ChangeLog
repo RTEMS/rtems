@@ -1,5 +1,11 @@
 2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 5
+	* score/src/objectextendinformation.c: Check object_blocks for NULL to
+	determine when to allocate object block table.
+
+2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 27
 	* libmisc/fsmount/fsmount.c: Ensure calloc() returns memory and then we
 	do not have to check null when freeing it. Coverity noted it was used
