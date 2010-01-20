@@ -772,8 +772,10 @@ mem1:				saved_errno = errno;
 			if (nlinks) {
 				p->fts_info = FTS_NS;
 				p->fts_errno = cderrno;
-			} else
+			} /* else
 				p->fts_info = FTS_NSOK;
+			  */
+			  /* Coverity Scan Id 1 says above is dead code */
 			p->fts_accpath = cur->fts_accpath;
 		} else if (nlinks == 0
 #ifdef DT_DIR
