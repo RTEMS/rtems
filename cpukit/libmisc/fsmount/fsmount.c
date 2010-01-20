@@ -70,14 +70,20 @@ int rtems_fsmount_create_mount_point
    * allocate temp memory to rebuild path name
    */
   tok_buffer = calloc(strlen(mount_point)+1,sizeof(char));
+  if ( !tok_buffer )
+    return -1;
   token = tok_buffer;
   total_len = 0;
   do {
     /*
      * scan through given string, one segment at a time
      */
-    token_type = IMFS_get_token(mount_point+total_len,strlen(mount_point+total_len),
-                                token,&token_len);
+    token_type = IMFS_get_token(
+      mount_point+total_len,
+      strlen(mount_point+total_len),
+      token,
+      &token_len
+    );
     total_len += token_len;
     strncpy(tok_buffer,mount_point,total_len);
     tok_buffer[total_len] = '\0';
@@ -100,11 +106,9 @@ int rtems_fsmount_create_mount_point
 	   (token_type != IMFS_INVALID_TOKEN));
 
   /*
-   * return token buffer to heap
+   * return token buffer to heap. Verified to be non-NULL when calloc'ed.
    */
-  if (tok_buffer != NULL) {
-    free(tok_buffer);
-  }
+  free(tok_buffer);
   return rc;
 }
 
