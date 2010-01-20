@@ -230,8 +230,10 @@ rewrite(rtems_shell_hexdump_globals* globals, FS *fs)
 				err(exit_jump, 1, NULL);
 			if (!fu->nextpr)
 				fu->nextpr = pr;
-			else
-				*nextpr = pr;
+			else {
+				if (nextpr)
+					*nextpr = pr;
+			}
 
 			/* Skip preceding text and up to the next % sign. */
 			for (p1 = fmtp; *p1 && *p1 != '%'; ++p1);
