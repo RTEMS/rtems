@@ -217,6 +217,7 @@ rewrite(rtems_shell_hexdump_globals* globals, FS *fs)
 	int nconv, prec;
 	size_t len;
 
+	pr = NULL;
 	nextpr = NULL;
 	prec = 0;
 
@@ -450,7 +451,8 @@ isint2:					switch(fu->bcnt) {
 		(void)printf("\n");
 	}
 #endif
-  free(pr);
+	if (pr)
+		free(pr);
 }
 
 void
