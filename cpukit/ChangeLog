@@ -1,3 +1,9 @@
+2010-01-20	Chris Johns <chrisj@rtems.org>
+
+	Coverity Id 9
+	* libmisc/shell/main_ls.c: Modify conditional to avoid NULL
+	dereference.
+
 2010-01-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	Coverity Id 10

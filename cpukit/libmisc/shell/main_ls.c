@@ -627,7 +627,7 @@ display(rtems_shell_ls_globals* globals, FTSENT *p, FTSENT *list)
 				np->group = &np->data[ulen + 1];
 				(void)strcpy(np->group, group);
 
-				if (f_flags) {
+				 if (f_flags && flags) {
 					np->flags = &np->data[ulen + glen + 2];
 				  	(void)strcpy(np->flags, flags);
 				}
