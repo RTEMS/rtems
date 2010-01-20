@@ -1,5 +1,9 @@
 2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* block08/.cvsignore, block09/.cvsignore: New files.
+
+2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* block08/init.c: Remove warning.
 
 2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
