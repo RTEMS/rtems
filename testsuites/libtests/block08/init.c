@@ -24,11 +24,10 @@
 
 rtems_task Init(rtems_task_argument argument)
 {
-  rtems_status_code status;
-
   puts( "\n\n*** TEST BLOCK 8 ***" );
   run_bdbuf_tests();
   puts( "*** END OF TEST BLOCK 8 ***" );
+
   exit(0);
 }
 
