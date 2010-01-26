@@ -28,9 +28,9 @@
 #include <rtems/extension.h>
 
 rtems_status_code rtems_extension_create(
-  rtems_name              name,
-  rtems_extensions_table *extension_table,
-  rtems_id               *id
+  rtems_name                    name,
+  const rtems_extensions_table *extension_table,
+  rtems_id                     *id
 )
 {
   Extension_Control *the_extension;

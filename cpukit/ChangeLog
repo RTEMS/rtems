@@ -1,3 +1,12 @@
+2010-01-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/src/userextaddapiset.c: Removed file.
+	* score/Makefile.am: Update for removed file.
+	* sapi/include/rtems/extension.h, sapi/src/extensioncreate.c,
+	score/include/rtems/score/userext.h: The function
+	_User_extensions_Add_API_set is now inline.  Added const qualifier to
+	extension table parameter in extension create and set functions.
+
 2010-01-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	Coverity Id 30

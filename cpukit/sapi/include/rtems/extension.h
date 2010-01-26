@@ -147,9 +147,9 @@ typedef User_extensions_routine
  * the following system events, the extensions are invoked in forward order:
  *
  * - Task creation
- * - Task initiation
- * - Task reinitiation
- * - Task deletion
+ * - Task start
+ * - Task restart
+ * - Task exit
  * - Task context switch
  * - Post task context switch
  * - Task begins to execute
@@ -204,9 +204,9 @@ typedef User_extensions_Table                     rtems_extensions_table;
  * @retval RTEMS_TOO_MANY Too many extension sets created.
  */
 rtems_status_code rtems_extension_create(
-  rtems_name              name,
-  rtems_extensions_table *extension_table,
-  rtems_id               *id
+  rtems_name                    name,
+  const rtems_extensions_table *extension_table,
+  rtems_id                     *id
 );
 
 /**

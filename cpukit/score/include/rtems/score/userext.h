@@ -173,12 +173,12 @@ typedef void( *User_extensions_thread_exitted_extension )(
 );
 
 /**
- * @brief Task fatal error extension.
+ * @brief Fatal error extension.
  *
  * It corresponds to _Internal_error_Occurred() (used by the
  * rtems_fatal_error_occurred() directive).  The first parameter contains the
- * internal error source.  The second parameter indicates if it was an internal
- * error.  The third parameter contains the error code.
+ * error source.  The second parameter indicates if it was an internal error.
+ * The third parameter contains the error code.
  *
  * This extension should not call any RTEMS directives.
  */
@@ -246,19 +246,16 @@ void _User_extensions_Add_set(
   User_extensions_Control *extension
 );
 
-/** @brief User extensions Add to API extension set
- *
- *  This routine is used to add an API extension set to the active list.
- *
- *  @param[in] the_extension is the extension set to add
- */
-void _User_extensions_Add_API_set (
-  User_extensions_Control *the_extension
-);
+RTEMS_INLINE_ROUTINE void _User_extensions_Add_API_set(
+  User_extensions_Control *extension
+)
+{
+  _User_extensions_Add_set( extension );
+}
 
 RTEMS_INLINE_ROUTINE void _User_extensions_Add_set_with_table(
-  User_extensions_Control *extension,
-  User_extensions_Table   *extension_table
+  User_extensions_Control     *extension,
+  const User_extensions_Table *extension_table
 )
 {
   extension->Callouts = *extension_table;
