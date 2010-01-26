@@ -1,0 +1,47 @@
+#
+# $Id$
+#
+# Copyright (c) 2010
+# embedded brains GmbH
+# Obere Lagerstr. 30
+# D-82178 Puchheim
+# Germany
+# <rtems@embedded-brains.de>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: block10
+
+directives:
+
+  rtems_bdbuf_get
+  rtems_bdbuf_read
+  rtems_bdbuf_release
+  rtems_bdbuf_release_modified
+  rtems_bdbuf_sync
+
+concepts:
+
++ Purge functions test in various states
+
+State changes count during this test:
+
+         |         PREVIOUS STATE
+         | FR EM CA AC AM AE AP MO SY TF TP
+---------+---------------------------------
+      FR |  0 28  0  0  0  0  0  0  0  0  0
+      EM | 28  0  4  0  0 14 18  2  2  0  2
+      CA |  0  0  0  2  0  0  0  0  0 18  0
+      AC |  0  0 16  0  0  0  0  0  0  0  0
+NEW   AM |  0  0  0  0  0  0  0  6  0  0  0
+STATE AE |  0 26  0  0  0  0  0  0  0  0  0
+      AP |  0  0  0  6  6  6  0  0  0  0  0
+      MO |  0  0  0  2  0  6  0  0  0  0  0
+      SY |  0  0  0  6  0  0  0  0  0  0  0
+      TF |  0 16  0  0  0  0  0  0  4  0  0
+      TP |  0  0  0  0  0  0  0  0  0  2  0

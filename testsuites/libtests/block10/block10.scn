@@ -1,0 +1,226 @@
+*** TEST BLOCK 10 ***
+test case [access]: get and release with waiter
+I: try get                                     
+I: get                                         
+W: try get                                     
+I: purge                                       
+I: release                                     
+I: release done                                
+W: get                                         
+W: release                                     
+W: release done                                
+test case [access]: get and release without waiter
+I: try get                                        
+I: get                                            
+I: purge                                          
+I: release                                        
+I: release done                                   
+test case [access]: get and release modified with waiter
+I: try get                                              
+I: get                                                  
+W: try get                                              
+I: purge                                                
+I: release modified                                     
+I: release modified done                                
+W: get                                                  
+W: release                                              
+W: release done                                         
+test case [access]: get and release modified without waiter
+I: try get                                                 
+I: get                                                     
+I: purge                                                   
+I: release modified                                        
+I: release modified done                                   
+test case [access]: get and sync with waiter               
+I: try get                                                 
+I: get                                                     
+W: try get                                                 
+I: purge                                                   
+I: sync                                                    
+I: sync done                                               
+W: get                                                     
+W: release                                                 
+W: release done                                            
+test case [access]: get and sync without waiter            
+I: try get                                                 
+I: get                                                     
+I: purge                                                   
+I: sync                                                    
+I: sync done                                               
+test case [access]: access modified and release with waiter
+I: try get modified                                        
+I: get modified                                            
+W: try get                                                 
+I: purge                                                   
+I: release                                                 
+I: release done                                            
+W: get                                                     
+W: release                                                 
+W: release done                                            
+test case [access]: access modified and release without waiter
+I: try get modified                                           
+I: get modified                                               
+I: purge                                                      
+I: release                                                    
+I: release done                                               
+test case [access]: access modified and release modified with waiter
+I: try get modified                                                 
+I: get modified                                                     
+W: try get                                                          
+I: purge                                                            
+I: release modified                                                 
+I: release modified done                                            
+W: get                                                              
+W: release                                                          
+W: release done                                                     
+test case [access]: access modified and release modified without waiter
+I: try get modified                                                    
+I: get modified                                                        
+I: purge                                                               
+I: release modified                                                    
+I: release modified done                                               
+test case [access]: access modified and sync with waiter               
+I: try get modified                                                    
+I: get modified                                                        
+W: try get                                                             
+I: purge                                                               
+I: sync                                                                
+I: sync done                                                           
+W: get                                                                 
+W: release                                                             
+W: release done                                                        
+test case [access]: access modified and sync without waiter            
+I: try get modified                                                    
+I: get modified                                                        
+I: purge                                                               
+I: sync                                                                
+I: sync done                                                           
+test case [access]: read and release with waiter                       
+I: try read                                                            
+I: read                                                                
+W: try get                                                             
+I: purge                                                               
+I: release                                                             
+I: release done                                                        
+W: get                                                                 
+W: release                                                             
+W: release done                                                        
+test case [access]: read and release without waiter                    
+I: try read                                                            
+I: read                                                                
+I: purge                                                               
+I: release                                                             
+I: release done                                                        
+test case [access]: read and release modified with waiter              
+I: try read                                                            
+I: read                                                                
+W: try get                                                             
+I: purge                                                               
+I: release modified                                                    
+I: release modified done                                               
+W: get                                                                 
+W: release                                                             
+W: release done                                                        
+test case [access]: read and release modified without waiter           
+I: try read                                                            
+I: read                                                                
+I: purge                                                               
+I: release modified                                                    
+I: release modified done                                               
+test case [access]: read and sync with waiter                          
+I: try read                                                            
+I: read                                                                
+W: try get                                                             
+I: purge                                                               
+I: sync                                                                
+I: sync done                                                           
+W: get                                                                 
+W: release                                                             
+W: release done                                                        
+test case [access]: read and sync without waiter                       
+I: try read                                                            
+I: read                                                                
+I: purge                                                               
+I: sync                                                                
+I: sync done                                                           
+test case [intermediate]: release with waiter                          
+I: try read                                                            
+I: read                                                                
+W: try get                                                             
+I: release                                                             
+I: release done                                                        
+I: purge                                                               
+W: get                                                                 
+W: release                                                             
+W: release done                                                        
+test case [intermediate]: release without waiter                       
+I: try read                                                            
+I: read                                                                
+I: release                                                             
+I: release done                                                        
+I: purge                                                               
+test case [intermediate]: release modified with waiter                 
+I: try read                                                            
+I: read                                                                
+W: try get                                                             
+I: release modified                                                    
+I: release modified done                                               
+I: purge                                                               
+W: get                                                                 
+W: release                                                             
+W: release done                                                        
+test case [intermediate]: release modified without waiter              
+I: try read                                                            
+I: read                                                                
+I: release modified                                                    
+I: release modified done                                               
+I: purge                                                               
+test case [intermediate]: sync with waiter                             
+I: try read                                                            
+I: read                                                                
+W: try get                                                             
+I: sync                                                                
+I: sync done                                                           
+I: purge                                                               
+W: get                                                                 
+W: release                                                             
+W: release done
+test case [intermediate]: sync without waiter
+I: try read
+I: read
+I: sync
+I: sync done
+I: purge
+test case [transfer]: sync with waiter
+I: try read
+I: read
+W: try get
+I: sync
+P: purge
+I: sync done
+W: get
+W: release
+W: release done
+test case [transfer]: sync without waiter
+I: try read
+I: read
+I: sync
+P: purge
+I: sync done
+test case [transfer]: transfer with waiter
+I: try read
+I: read
+W: try get
+I: sync
+P: purge
+I: sync done
+W: get
+W: release
+W: release done
+test case [transfer]: transfer without waiter
+I: try read
+I: read
+I: sync
+P: purge
+I: sync done
+*** END OF TEST BLOCK 10 ***

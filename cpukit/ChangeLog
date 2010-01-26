@@ -1,5 +1,14 @@
 2010-01-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libblock/include/rtems/bdbuf.h: Documentation.  New states
+	RTEMS_BDBUF_STATE_ACCESS_PURGED and RTEMS_BDBUF_STATE_TRANSFER_PURGED.
+	Declare rtems_bdbuf_purge_dev() and rtems_bdbuf_purge_major().
+	* libblock/src/bdbuf.c: Implemented ability to purge buffers from the
+	cache depending on the device identifier or major number.  See test
+	"libtests/block10".
+
+2010-01-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* score/src/userextaddapiset.c: Removed file.
 	* score/Makefile.am: Update for removed file.
 	* sapi/include/rtems/extension.h, sapi/src/extensioncreate.c,

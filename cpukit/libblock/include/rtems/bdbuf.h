@@ -86,7 +86,9 @@ extern "C" {
  *   ac [label="ACCESS CACHED",style="filled",fillcolor="royalblue"];
  *   am [label="ACCESS MODIFIED",style="filled",fillcolor="royalblue"];
  *   ae [label="ACCESS EMPTY",style="filled",fillcolor="royalblue"];
+ *   ap [label="ACCESS PURGED",style="filled",fillcolor="royalblue"];
  *   t [label="TRANSFER",style="filled",fillcolor="red"];
+ *   tp [label="TRANSFER PURGED",style="filled",fillcolor="red"];
  *   s [label="SYNC",style="filled",fillcolor="red"];
  *   m [label="MODIFIED",style="filled",fillcolor="gold"];
  *   i [label="INITIAL"];
@@ -97,26 +99,33 @@ extern "C" {
  *   i -> f [label="Init"];
  *   f -> e [label="Buffer Recycle"];
  *   e -> ae [label="Get"];
- *   e -> t [label="Read\nRead Ahead"];
- *   c -> f [label="Reallocate\nBlock Size Changed"];
+ *   e -> t [label="Read"];
+ *   e -> f [label="Nobody Waits"];
  *   c -> ac [label="Get\nRead"];
- *   c -> e [label="Buffer Recycle"];
+ *   c -> e [label="Buffer Recycle\nPurge"];
+ *   c -> f [label="Reallocate\nBlock Size Changed"];
  *   t -> c [label="Transfer Done",color="red",fontcolor="red"];
- *   t -> e [label="Transfer Error With Waiter",color="red",fontcolor="red"];
- *   t -> f [label="Transfer Error Without Waiter",color="red",fontcolor="red"];
+ *   t -> e [label="Transfer Error",color="red",fontcolor="red"];
+ *   t -> tp [label="Purge"];
+ *   tp -> e [label="Transfer Done\nTransfer Error",color="red",fontcolor="red"];
  *   m -> t [label="Swapout"];
  *   m -> s [label="Block Size Changed"];
  *   m -> am [label="Get\nRead"];
+ *   m -> e [label="Purge"];
  *   ac -> m [label="Release Modified",color="royalblue",fontcolor="royalblue"];
  *   ac -> s [label="Sync",color="royalblue",fontcolor="royalblue"];
  *   ac -> c [label="Release",color="royalblue",fontcolor="royalblue"];
+ *   ac -> ap [label="Purge"];
  *   am -> m [label="Release\nRelease Modified",color="royalblue",fontcolor="royalblue"];
  *   am -> s [label="Sync",color="royalblue",fontcolor="royalblue"];
+ *   am -> ap [label="Purge"];
  *   ae -> m [label="Release Modified",color="royalblue",fontcolor="royalblue"];
  *   ae -> s [label="Sync",color="royalblue",fontcolor="royalblue"];
- *   ae -> e [label="Release With Waiter",color="royalblue",fontcolor="royalblue"];
- *   ae -> f [label="Release Without Waiter",color="royalblue",fontcolor="royalblue"];
+ *   ae -> e [label="Release",color="royalblue",fontcolor="royalblue"];
+ *   ae -> ap [label="Purge"];
+ *   ap -> e [label="Release\nRelease Modified\nSync",color="royalblue",fontcolor="royalblue"];
  *   s -> t [label="Swapout"];
+ *   s -> e [label="Purge",color="red",fontcolor="red"];
  * }
  * @enddot
  *
@@ -184,22 +193,26 @@ extern "C" {
  *   </tr>
  *   <tr>
  *     <td>EMPTY</td><td></td><td>X</td>
- *     <td>X</td><td></td><td></td><td></td><td></td>
+ *     <td></td><td></td><td></td><td></td><td></td>
  *   </tr>
  *   <tr>
  *     <td>CACHED</td><td>X</td><td>X</td>
  *     <td>X</td><td></td><td></td><td></td><td></td>
  *   </tr>
  *   <tr>
- *     <td>ACCESS_CACHED</td><td>X</td><td>X</td>
+ *     <td>ACCESS CACHED</td><td>X</td><td>X</td>
  *     <td></td><td></td><td></td><td>X</td><td>X</td>
  *   </tr>
  *   <tr>
- *     <td>ACCESS_MODIFIED</td><td>X</td><td>X</td>
+ *     <td>ACCESS MODIFIED</td><td>X</td><td>X</td>
  *     <td></td><td></td><td></td><td>X</td><td>X</td>
  *   </tr>
  *   <tr>
- *     <td>ACCESS_EMPTY</td><td></td><td>X</td>
+ *     <td>ACCESS EMPTY</td><td></td><td>X</td>
+ *     <td></td><td></td><td></td><td>X</td><td>X</td>
+ *   </tr>
+ *   <tr>
+ *     <td>ACCESS PURGED</td><td></td><td>X</td>
  *     <td></td><td></td><td></td><td>X</td><td>X</td>
  *   </tr>
  *   <tr>
@@ -212,6 +225,10 @@ extern "C" {
  *   </tr>
  *   <tr>
  *     <td>TRANSFER</td><td>X</td><td>X</td>
+ *     <td></td><td></td><td></td><td>X</td><td>X</td>
+ *   </tr>
+ *   <tr>
+ *     <td>TRANSFER PURGED</td><td></td><td>X</td>
  *     <td></td><td></td><td></td><td>X</td><td>X</td>
  *   </tr>
  * </table>
@@ -249,6 +266,11 @@ typedef enum
   RTEMS_BDBUF_STATE_ACCESS_EMPTY,
 
   /**
+   * @brief Accessed by upper layer with purged data.
+   */
+  RTEMS_BDBUF_STATE_ACCESS_PURGED,
+
+  /**
    * @brief Modified by upper layer.
    */
   RTEMS_BDBUF_STATE_MODIFIED,
@@ -261,7 +283,12 @@ typedef enum
   /**
    * @brief In transfer by block device driver.
    */
-  RTEMS_BDBUF_STATE_TRANSFER
+  RTEMS_BDBUF_STATE_TRANSFER,
+
+  /**
+   * @brief In transfer by block device driver and purged.
+   */
+  RTEMS_BDBUF_STATE_TRANSFER_PURGED
 } rtems_bdbuf_buf_state;
 
 /**
@@ -541,6 +568,22 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd);
  */
 rtems_status_code
 rtems_bdbuf_syncdev (dev_t dev);
+
+/**
+ * @brief Purges all buffers that matches the device identifier @a dev.
+ *
+ * This may result in loss of data.
+ */
+void
+rtems_bdbuf_purge_dev (dev_t dev);
+
+/**
+ * @brief Purges all buffers that matches the device major number @a major.
+ *
+ * This may result in loss of data.
+ */
+void
+rtems_bdbuf_purge_major (rtems_device_major_number major);
 
 /** @} */
 
