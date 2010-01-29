@@ -1,3 +1,6 @@
+2010-01-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+	* libblock/src/bdbuf.c: Fixed invalid chain extract.
+
 2010-01-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/include/rtems/bdbuf.h: Documentation.  New states

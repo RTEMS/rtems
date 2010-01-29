@@ -1523,8 +1523,9 @@ rtems_bdbuf_wait_for_access (rtems_bdbuf_buffer *bd)
         rtems_bdbuf_group_release (bd);
         /* Fall through */
       case RTEMS_BDBUF_STATE_CACHED:
-      case RTEMS_BDBUF_STATE_EMPTY:
         rtems_chain_extract (&bd->link);
+        /* Fall through */
+      case RTEMS_BDBUF_STATE_EMPTY:
         return;
       case RTEMS_BDBUF_STATE_ACCESS_CACHED:
       case RTEMS_BDBUF_STATE_ACCESS_EMPTY:
