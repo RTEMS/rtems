@@ -1,3 +1,10 @@
+2010-02-01	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1492/bsps
+	* shared/startup/sbrk.c: When BSP_sbrk_policy had the value (-1)
+	(-> give all memory to the heap initially) then the computation
+	of the remaining heap size was wrong.
+
 2009-03-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1385/cpukit

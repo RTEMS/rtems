@@ -89,9 +89,10 @@ uint32_t
 _bsp_sbrk_init(uint32_t         heap_start, uint32_t         *heap_size_p)
 {
   uint32_t         rval=0;
+  uint32_t         orig_size;
 
   remaining_start =  heap_start;
-  remaining_size  = *heap_size_p;
+  orig_size = remaining_size  = *heap_size_p;
 
   if (remaining_start < LIMIT_32M &&
       remaining_start + remaining_size > LIMIT_32M) {
@@ -105,7 +106,8 @@ _bsp_sbrk_init(uint32_t         heap_start, uint32_t         *heap_size_p)
   if ( 0 != &BSP_sbrk_policy ) {
   	switch ( BSP_sbrk_policy ) {
 		case (uint32_t)(-1):
-			remaining_start  = heap_start + *heap_size_p;
+			remaining_start  = heap_start + orig_size;
+			*heap_size_p     = orig_size;
 			remaining_size   = 0;
 			/* return a nonzero sbrk_amount because the libsupport code
 			 * at some point divides by this number prior to trying an
