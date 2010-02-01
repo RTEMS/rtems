@@ -328,7 +328,7 @@ rtems_create_root_fs (void)
    * Create a `/etc/hosts' file.
    */
 
-  if (rtems_rootfs_append_host_rec (0x7f000001, "localhost", "localdomain"))
+  if (rtems_rootfs_append_host_rec (htonl (0x7f000001), "localhost", "localdomain"))
     return -1;
 
   return 0;

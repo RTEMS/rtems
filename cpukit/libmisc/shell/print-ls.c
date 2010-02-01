@@ -161,11 +161,13 @@ printlong(rtems_shell_ls_globals* globals, DISPLAY *dp)
 				(void)printf("%*s ", dp->s_size, szbuf);
 			} else {
 #endif
-				(void)printf("%*llu ", dp->s_size,
-				    (long long)sp->st_size);
-#if RTEMS_REMOVED
+      {
+        unsigned long long size = sp->st_blocks;
+        size *= sp->st_blksize;
+        if (size < 0x100000000ULL)
+          size = sp->st_size;
+				(void)printf("%*llu ", dp->s_size, size);
   		}
-#endif
 		if (f_accesstime)
 			printtime(globals, sp->st_atime);
 		else if (f_statustime)

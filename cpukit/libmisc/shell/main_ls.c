@@ -360,7 +360,8 @@ main_ls(rtems_shell_ls_globals* globals, int argc, char *argv[])
 		if (!kflag)
 			(void)getbsize(NULL, &blocksize);
 #else
-        blocksize = 1024;
+        /* Make equal to 1 so ls -l shows the actual blcok count */
+        blocksize = 512;
 #endif
 		blocksize /= 512;
 	}
@@ -542,6 +543,7 @@ display(rtems_shell_ls_globals* globals, FTSENT *p, FTSENT *list)
 	btotal = stotal = maxblock = maxsize = 0;
 	maxmajor = maxminor = 0;
 	for (cur = list, entries = 0; cur; cur = cur->fts_link) {
+    uint64_t size;
 		if (cur->fts_info == FTS_ERR || cur->fts_info == FTS_NS) {
 			warnx("%s: %s",
 			    cur->fts_name, strerror(cur->fts_errno));
@@ -571,14 +573,17 @@ display(rtems_shell_ls_globals* globals, FTSENT *p, FTSENT *list)
 			maxlen = cur->fts_namelen;
 		if (needstats) {
 			sp = cur->fts_statp;
+      size = ((uint64_t) sp->st_blocks) * sp->st_blksize;
+      if (size < 0x100000000ULL)
+        size = sp->st_size;
 			if (sp->st_blocks > maxblock)
 				maxblock = sp->st_blocks;
 			if (sp->st_ino > maxinode)
 				maxinode = sp->st_ino;
 			if (sp->st_nlink > maxnlink)
 				maxnlink = sp->st_nlink;
-			if (sp->st_size > maxsize)
-				maxsize = sp->st_size;
+			if (size > maxsize)
+				maxsize = size;
 			if (S_ISCHR(sp->st_mode) || S_ISBLK(sp->st_mode)) {
 				bcfile = 1;
 				if (major(sp->st_rdev) > maxmajor)
@@ -588,7 +593,7 @@ display(rtems_shell_ls_globals* globals, FTSENT *p, FTSENT *list)
 			}
 
 			btotal += sp->st_blocks;
-			stotal += sp->st_size;
+			stotal += size;
 			if (f_longform) {
 				if (f_numericonly ||
 				    (user = user_from_uid(sp->st_uid, 0)) ==

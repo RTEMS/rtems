@@ -1,3 +1,12 @@
+2010-02-01	Chris Johns <chrisj@rtems.org>
+
+	* libmisc/shell/fts.c: Updated to the latest NetBSD version to
+	resolve heap allocation bugs.
+	* libmisc/shell/main_ls.c, libmisc/shell/print-ls.c: Fix printing
+	size bugs.
+	* libnetworking/rtems/mkrootfs.c: Fix byte order bug when creating
+	the loopback interface address.
+	
 2010-01-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
 	* libblock/src/bdbuf.c: Fixed invalid chain extract.
 
