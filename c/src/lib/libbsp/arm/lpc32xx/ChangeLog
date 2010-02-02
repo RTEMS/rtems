@@ -1,3 +1,7 @@
+2010-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/lpc32xx_phycore.cfg: Remove -W* flags.
+
 2010-01-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/lpc-ethernet-config.h, include/mmu.h: New files.
