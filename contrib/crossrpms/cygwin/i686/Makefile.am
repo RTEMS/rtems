@@ -8,8 +8,8 @@ CYGWIN_VERS = 1.7.1-1
 CYGWIN_RPMREL = 0.20100204.0%{?dist}
 include ../cygwin.am
 
-W32API_VERS = 3.13-1
-W32API_RPMREL = 0.20090827.0%{?dist}
+W32API_VERS = 3.14-1
+W32API_RPMREL = 0.20100204.0%{?dist}
 include ../w32api.am
 
 NCURSES_VERS = 5.7-5

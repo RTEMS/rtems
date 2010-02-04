@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define w32api_version 3.13-1
-%define w32api_rpmvers %{expand:%(echo 3.13-1 | tr - _)} 
+%define w32api_version 3.14-1
+%define w32api_rpmvers %{expand:%(echo 3.14-1 | tr - _)} 
 
 Name:         i686-pc-cygwin-w32api
-Release:      0.20090827.0%{?dist}
+Release:      0.20100204.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
