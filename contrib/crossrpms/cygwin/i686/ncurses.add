@@ -13,7 +13,7 @@ Version:      	%ncurses_rpmvers
 Summary:      	Cygwin ncurses Libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/ncurses/ncurses-%{ncurses_version}.tar.bz2
-Source1:	ftp://cygwin.com/pub/cygwin/release/ncurses/libncurses9/libncurses9-%{ncurses_version}.tar.bz2
+Source1:	ftp://cygwin.com/pub/cygwin/release/ncurses/libncurses10/libncurses10-%{ncurses_version}.tar.bz2
 Source2:	ftp://cygwin.com/pub/cygwin/release/ncurses/libncurses-devel/libncurses-devel-%{ncurses_version}.tar.bz2
 
 BuildRequires:  @rpmprefix@@tool_target@-terminfo
