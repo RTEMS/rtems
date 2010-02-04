@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define mpfr_version 2.4.1-1
-%define mpfr_rpmvers %{expand:%(echo 2.4.1-1 | tr - _)} 
+%define mpfr_version 2.4.1-4
+%define mpfr_rpmvers %{expand:%(echo 2.4.1-4 | tr - _)} 
 
 Name:         i686-pc-cygwin-mpfr
-Release:      0.20090827.0%{?dist}
+Release:      0.20100204.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
