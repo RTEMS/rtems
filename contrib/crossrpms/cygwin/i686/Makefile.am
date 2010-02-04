@@ -4,8 +4,8 @@ TARGET = i686-pc-cygwin
 
 include $(top_srcdir)/mkspec.am
 
-CYGWIN_VERS = 1.5.25-15
-CYGWIN_RPMREL = 0.20090827.0%{?dist}
+CYGWIN_VERS = 1.7.1-1
+CYGWIN_RPMREL = 0.20100204.0%{?dist}
 include ../cygwin.am
 
 W32API_VERS = 3.13-1
