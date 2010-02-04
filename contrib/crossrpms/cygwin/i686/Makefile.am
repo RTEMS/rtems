@@ -12,8 +12,8 @@ W32API_VERS = 3.14-1
 W32API_RPMREL = 0.20100204.0%{?dist}
 include ../w32api.am
 
-NCURSES_VERS = 5.7-5
-NCURSES_RPMREL = 0.20090827.0%{?dist}
+NCURSES_VERS = 5.7-18
+NCURSES_RPMREL = 0.20100204.0%{?dist}
 include ../ncurses.am
 
 EXPAT_VERS = 2.0.1-1
