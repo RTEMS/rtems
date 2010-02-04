@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define terminfo_version 5.5_20061104-1
-%define terminfo_rpmvers %{expand:%(echo 5.5_20061104-1 | tr - _)} 
+%define terminfo_version 5.7_20091114-13
+%define terminfo_rpmvers %{expand:%(echo 5.7_20091114-13 | tr - _)} 
 
 Name:         i686-pc-cygwin-terminfo
-Release:      0.20090827.0%{?dist}
+Release:      0.20100204.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -60,12 +60,6 @@ Cygwin terminfo libraries.
   # Setup sys-root (Usable for gcc >= 3.4)
   mkdir -p i686-pc-cygwin/sys-root
   ( cd i686-pc-cygwin/sys-root ; %{__tar} xvjf %{SOURCE0})
-  rm -f i686-pc-cygwin/sys-root/usr/share/terminfo/e/Eterm-color
-  rm -f i686-pc-cygwin/sys-root/usr/share/terminfo/n/ncr260vt300wpp
-  pushd i686-pc-cygwin/sys-root/usr/share/terminfo
-  ln -s ../e/Eterm e/Eterm-color
-  ln -s ../n/NCR260VT300WPP0 n/ncr260vt300wpp 
-  popd
 
 %install
   rm -rf $RPM_BUILD_ROOT
