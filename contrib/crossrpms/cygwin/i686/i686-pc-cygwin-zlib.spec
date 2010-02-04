@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define zlib_version 1.2.3-3
-%define zlib_rpmvers %{expand:%(echo 1.2.3-3 | tr - _)} 
+%define zlib_version 1.2.3-10
+%define zlib_rpmvers %{expand:%(echo 1.2.3-10 | tr - _)} 
 
 Name:         i686-pc-cygwin-zlib
-Release:      0.20090827.0%{?dist}
+Release:      0.20100204.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
