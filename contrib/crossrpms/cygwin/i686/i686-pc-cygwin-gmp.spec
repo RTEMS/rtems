@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gmp_version 4.2.4-1
-%define gmp_rpmvers %{expand:%(echo 4.2.4-1 | tr - _)} 
+%define gmp_version 4.3.1-3
+%define gmp_rpmvers %{expand:%(echo 4.3.1-3 | tr - _)} 
 
 Name:         i686-pc-cygwin-gmp
-Release:      0.20090827.0%{?dist}
+Release:      0.20100204.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
