@@ -30,15 +30,15 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 20080624-2
-%define binutils_version 2.18.50
-%define binutils_rpmvers %{expand:%(echo "2.18.50" | tr - _ )}
+%define binutils_pkgvers 2.19.51-1
+%define binutils_version 2.19.51-1
+%define binutils_rpmvers %{expand:%(echo "2.19.51-1" | tr - _ )}
 
 Name:		i686-pc-cygwin-binutils
 Summary:	Binutils for target i686-pc-cygwin
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20090829.1%{?dist}
+Release:	0.20100204.0%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -73,10 +73,6 @@ cd binutils-%{binutils_pkgvers}
 cd ..
 
 %build
-%if "i686-pc-cygwin" == "i686-pc-cygwin"
-# The cygwin sources are leaking memory
-  RPM_OPT_FLAGS="$(echo "$RPM_OPT_FLAGS"|sed -e 's; -Wp,-D_FORTIFY_SOURCE=2;;')"
-%endif
   mkdir -p build
   cd build
 %if "%{_build}" != "%{_host}"
