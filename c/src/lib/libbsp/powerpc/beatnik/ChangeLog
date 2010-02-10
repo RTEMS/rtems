@@ -1,3 +1,21 @@
+2010-02-09  Till Straumann <strauman@slac.stanford.edu>
+
+	* network/if_mve/mv643xx_eth.c: Fixed alignment attribute
+	in descriptor declaration. Not the pointers to the descriptors
+	have to be aligned but the descriptors themselves (didn't
+	cause problems but caused unnecessary holes in 'private' struct).
+
+	FIX: Added more robustness when number of available TX descriptors
+	drops to zero. (This can e.g., happen if the link goes bad causing
+	packets to stall in the FIFO.) At the following points the transmitter
+	is explicitly (re-)started:
+	  o when link comes up and number of available TXDs is zero the
+	    TX is restarted.
+	  o on a failed attempt to send data due to lack of TXDs the
+	    TX is restarted if swiping the TX ring doesn't yield any
+	    buffers (i.e., if the # of available buffers is still zero
+	    after the swipe).
+
 2009-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am: Removed ppc_exc_bspsupp.h include file.

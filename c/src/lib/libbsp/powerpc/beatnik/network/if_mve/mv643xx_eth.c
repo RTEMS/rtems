@@ -687,8 +687,7 @@ typedef volatile struct mveth_rx_desc {
 	void		*u_buf;						/* user buffer */
 	volatile struct mveth_rx_desc *next;	/* next descriptor (CPU address; next_desc_ptr is a DMA address) */
 	uint32_t	pad[2];
-} MvEthRxDescRec, *MvEthRxDesc
-__attribute__(( aligned(RING_ALIGNMENT) ));
+} __attribute__(( aligned(RING_ALIGNMENT) )) MvEthRxDescRec, *MvEthRxDesc;
 
 typedef volatile struct mveth_tx_desc {
 #ifndef __BIG_ENDIAN__
@@ -703,8 +702,7 @@ typedef volatile struct mveth_tx_desc {
 	uint32_t	workaround[2];				/* use this space to work around the 8byte problem (is this real?) */
 	void		*u_buf;						/* user buffer */
 	volatile struct mveth_tx_desc *next;	/* next descriptor (CPU address; next_desc_ptr is a DMA address)   */
-} MvEthTxDescRec, *MvEthTxDesc
-__attribute__(( aligned(RING_ALIGNMENT) ));
+} __attribute__(( aligned(RING_ALIGNMENT) )) MvEthTxDescRec, *MvEthTxDesc;
 
 /* Assume there are never more then 64k aliasing entries */
 typedef uint16_t Mc_Refcnt[MV643XX_ETH_NUM_MCAST_ENTRIES*4];
@@ -1221,6 +1219,19 @@ unsigned wc = 0;
 }
 
 /* MID-LAYER SUPPORT ROUTINES */
+
+/* Start TX if descriptors are exhausted */
+static __inline__ void
+mveth_start_tx(struct mveth_private *mp)
+{
+uint32_t running;
+	if ( mp->avail <= 0 ) {
+		running = MV_READ(MV643XX_ETH_TRANSMIT_QUEUE_COMMAND_R(mp->port_num));
+		if ( ! (running & MV643XX_ETH_TX_START(0)) ) {
+			MV_WRITE(MV643XX_ETH_TRANSMIT_QUEUE_COMMAND_R(mp->port_num), MV643XX_ETH_TX_START(0));
+		}
+	}
+}
 
 /* Stop TX and wait for the command queues to stop and the fifo to drain */
 static uint32_t
@@ -1955,6 +1966,8 @@ startover:
 
 	/* if no descriptor is available; try to wipe the queue */
 	if ( (mp->avail < 1) && MVETH_CLEAN_ON_SEND(mp)<=0 ) {
+		/* Maybe TX is stalled and needs to be restarted */
+		mveth_start_tx(mp);
 		return -1;
 	}
 
@@ -2000,6 +2013,9 @@ startover:
 					nmbs++;
 
 					if ( mp->avail < 1 && MVETH_CLEAN_ON_SEND(mp)<=0 ) {
+							/* Maybe TX was stalled - try to restart */
+							mveth_start_tx(mp);
+
 							/* not enough descriptors; cleanup...
 							 * the first slot was never used, so we start
 							 * at mp->d_tx_h->next;
@@ -2142,6 +2158,8 @@ int                     frst_len;
 	/* if no descriptor is available; try to wipe the queue */
 	if (   ( mp->avail < needed )
         && ( MVETH_CLEAN_ON_SEND(mp) <= 0 || mp->avail < needed ) ) {
+		/* Maybe TX was stalled and needs a restart */
+		mveth_start_tx(mp);
 		return -1;
 	}
 
@@ -2606,6 +2624,8 @@ int media = IFM_MAKEWORD(0,0,0,0);
 	if ( 0 == BSP_mve_media_ioctl(mp, SIOCGIFMEDIA, &media)) {
 		if ( IFM_LINK_OK & media ) {
 			mveth_update_serial_port(mp, media);
+			/* If TX stalled because there was no buffer then whack it */
+			mveth_start_tx(mp);
 		}
 		if ( pmedia )
 			*pmedia = media;
