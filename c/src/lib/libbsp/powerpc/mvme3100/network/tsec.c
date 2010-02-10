@@ -198,6 +198,10 @@ void tsec_dump_rring(struct tsec_private *mp);
 #define EV_IS_PHY(ev)			( (ev) & 2 )
 #endif
 
+#ifndef MAXEBERRS
+#define MAXEBERRS 10
+#endif
+
 #define EV_IS_ANY(ev)			( (ev) & ((1<<EV_PER_UNIT) - 1) )
 
 #define EV_MSK                  ( ( 1 << (EV_PER_UNIT * TSEC_NUM_DRIVER_SLOTS) ) - 1)
@@ -697,6 +701,8 @@ struct tsec_private {
 		unsigned	packet;
 		unsigned	odrops;
 		unsigned	repack;
+		unsigned	eberrs;
+		unsigned	dmarst;
 	}               stats;
 	uint16_t		mc_refcnt[NUM_MC_HASHES];
 };
@@ -1580,6 +1586,8 @@ FEC_Enet_Base b;
 	fprintf(f, "TX  IRQS: %u\n", mp->stats.xirqs);
 	fprintf(f, "RX  IRQS: %u\n", mp->stats.rirqs);
 	fprintf(f, "ERR IRQS: %u\n", mp->stats.eirqs);
+	fprintf(f, "bus errs: %u\n", mp->stats.eberrs);
+	fprintf(f, "dmawhack: %u\n", mp->stats.dmarst);
 	fprintf(f, "LNK IRQS: %u\n", mp->stats.lirqs);
 	fprintf(f, "maxchain: %u\n", mp->stats.maxchain);
 	fprintf(f, "xpackets: %u\n", mp->stats.packet);
@@ -2272,9 +2280,14 @@ static void tsec_eisr(rtems_irq_hdl_param arg)
 {
 struct tsec_private   *mp = (struct tsec_private *)arg;
 rtems_interrupt_level l;
+uint32_t              pending;
 
 	rtems_interrupt_disable( l );
-		mp->irq_pending |= tsec_dis_clr_irqs( mp );
+		/* make local copy since ISR may ack and clear mp->pending;
+		 * also, we want the fresh bits not the ORed state including
+		 * the past...
+		 */
+		mp->irq_pending |= (pending = tsec_dis_clr_irqs( mp ));
 	rtems_interrupt_enable( l );
 
 	mp->stats.eirqs++;
@@ -2283,6 +2296,16 @@ rtems_interrupt_level l;
 		mp->isr( mp->isr_arg );
 	else
 		rtems_event_send( mp->tid, mp->event );
+
+	if ( (TSEC_IEVENT_TXE & pending) ) {
+		if ( (TSEC_IEVENT_EBERR & pending) && ++mp->stats.eberrs > MAXEBERRS ) {
+			printk(DRVNAME" BAD error: max # of DMA bus errors reached\n");
+		} else {
+			/* Restart DMA -- do we have to clear DMACTRL[GTS], too ?? */
+			fec_wr( mp->base, TSEC_TSTAT, TSEC_TSTAT_THLT );
+			mp->stats.dmarst++;
+		}
+	}
 }
 
 static void tsec_lisr(rtems_irq_hdl_param arg)

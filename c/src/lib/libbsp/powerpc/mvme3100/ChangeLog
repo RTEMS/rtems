@@ -1,3 +1,9 @@
+2010-02-09	Till Straumann <strauman@slac.stanford.edu>
+
+	* network/tsec.c: Added code to restart halted DMA
+	after a TX error (from error-isr). Added statistics
+	counters for restarts and DMA bus errors.
+
 2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am: Update for exception support changes.
