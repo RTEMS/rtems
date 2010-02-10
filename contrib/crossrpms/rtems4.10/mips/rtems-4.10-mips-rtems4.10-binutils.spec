@@ -53,7 +53,7 @@ Name:		rtems-4.10-mips-rtems4.10-binutils
 Summary:	Binutils for target mips-rtems4.10
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -88,10 +88,6 @@ cd ..
 
 %build
   export PATH="%{_bindir}:${PATH}"
-%if "mips-rtems4.10" == "i686-pc-cygwin"
-# The cygwin sources are leaking memory
-  RPM_OPT_FLAGS="$(echo "$RPM_OPT_FLAGS"|sed -e 's; -Wp,-D_FORTIFY_SOURCE=2;;')"
-%endif
   mkdir -p build
   cd build
 %if "%{_build}" != "%{_host}"
