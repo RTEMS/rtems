@@ -30,7 +30,7 @@ Version:        %{gcc_rpmvers}
 License:	GPL
 
 %description -n @rpmprefix@@tool_target@-gcc-libstdc++
-%{_summary}
+%{summary}
 
 
 %files -n @rpmprefix@@tool_target@-gcc-c++
