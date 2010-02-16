@@ -158,7 +158,7 @@ int open(
   iop->flags     |= rtems_libio_fcntl_flags( flags );
   iop->pathinfo   = loc;
 
-  if ( !iop->handlers->open_h ) {
+  if ( !iop->handlers || !iop->handlers->open_h ) {
     rc = ENOTSUP;
     goto done;
   }

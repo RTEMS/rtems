@@ -34,6 +34,7 @@ int rmdir(
   rtems_filesystem_location_info_t  loc;
   int                               i;
   int                               result;
+  bool                              free_parentloc = false;
 
   /*
    *  Get the parent node of the node we wish to remove. Find the parent path.
@@ -50,6 +51,8 @@ int rmdir(
                                             false );
     if ( result != 0 )
       return -1;
+
+    free_parentloc = true;
   }
 
   /*
@@ -63,7 +66,8 @@ int rmdir(
   result = rtems_filesystem_evaluate_relative_path( name , strlen( name ),
                                                     0, &loc, false );
   if ( result != 0 ) {
-    rtems_filesystem_freenode( &parentloc );
+    if ( free_parentloc )
+      rtems_filesystem_freenode( &parentloc );
     return -1;
   }
 
@@ -73,13 +77,15 @@ int rmdir(
 
   if ( !loc.ops->node_type_h ){
     rtems_filesystem_freenode( &loc );
-    rtems_filesystem_freenode( &parentloc );
+    if ( free_parentloc )
+      rtems_filesystem_freenode( &parentloc );
     rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ){
     rtems_filesystem_freenode( &loc );
-    rtems_filesystem_freenode( &parentloc );
+    if ( free_parentloc )
+      rtems_filesystem_freenode( &parentloc );
     rtems_set_errno_and_return_minus_one( ENOTDIR );
   }
 
@@ -89,14 +95,16 @@ int rmdir(
 
   if ( !loc.handlers->rmnod_h ){
     rtems_filesystem_freenode( &loc );
-    rtems_filesystem_freenode( &parentloc );
+    if ( free_parentloc )
+      rtems_filesystem_freenode( &parentloc );
     rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result =  (*loc.handlers->rmnod_h)( &parentloc, &loc );
 
   rtems_filesystem_freenode( &loc );
-  rtems_filesystem_freenode( &parentloc );
+  if ( free_parentloc )
+    rtems_filesystem_freenode( &parentloc );
 
   return result;
 }
