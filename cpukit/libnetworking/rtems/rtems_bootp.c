@@ -18,9 +18,12 @@
 void
 rtems_bsdnet_do_bootp (void)
 {
+  bool ok;
 	rtems_bsdnet_semaphore_obtain ();
-	bootpc_init (FALSE);
+	ok = bootpc_init (false, true);
 	rtems_bsdnet_semaphore_release ();
+  if (!ok)
+    panic ("rtems_bsdnet_do_bootp: bootp failed");
 }
 
 /*
@@ -30,7 +33,10 @@ rtems_bsdnet_do_bootp (void)
 void
 rtems_bsdnet_do_bootp_and_rootfs (void)
 {
+  bool ok;
 	rtems_bsdnet_semaphore_obtain ();
-	bootpc_init (TRUE);
+	ok = bootpc_init (true, true);
 	rtems_bsdnet_semaphore_release ();
+  if (!ok)
+    panic ("rtems_bsdnet_do_bootp_and_rootfs: bootp failed");
 }

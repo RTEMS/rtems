@@ -152,8 +152,6 @@ bootpc_adjust_interface(struct ifreq *ireq,struct socket *so,
 			struct sockaddr_in *gw,
 			struct proc *procp);
 
-void bootpc_init(int update_files);
-
 #ifdef BOOTP_DEBUG
 void
 bootpboot_p_sa(struct sockaddr *sa, struct sockaddr *ma)
@@ -463,7 +461,7 @@ bootpc_call(
 			goto gotreply;	/* break two levels */
 
 		} /* while secs */
-	} /* forever send/receive */
+	} /* send/receive a number of times then return an error */
 	{
 		uint32_t addr = ntohl(sin->sin_addr.s_addr);
         printf("BOOTP timeout for server %lu.%lu.%lu.%lu\n",
@@ -943,8 +941,8 @@ processOptions (unsigned char *optbuf, int optbufSize)
 
 #define EALEN 6
 
-void
-bootpc_init(int update_files)
+bool
+bootpc_init(bool update_files, bool forever)
 {
   struct bootp_packet call;
   struct bootp_packet reply;
@@ -965,7 +963,7 @@ bootpc_init(int update_files)
    * If already filled in, don't touch it here 
    */
   if (nfs_diskless_valid)
-    return;
+    return true;
 
   /*
    * If we are to update the files create the root
@@ -991,7 +989,7 @@ bootpc_init(int update_files)
 	break;
   if (ifp == NULL) {
     printf("bootpc_init: no suitable interface\n");
-    return;
+    return false;
   }
   bzero(&ireq,sizeof(ireq));
   sprintf(ireq.ifr_name, "%s%d", ifp->if_name,ifp->if_unit);
@@ -1000,28 +998,31 @@ bootpc_init(int update_files)
 
   if ((error = socreate(AF_INET, &so, SOCK_DGRAM, 0,procp)) != 0) {
     printf("bootpc_init: socreate, error=%d", error);
-    return;
+    return false;
   }
   if (bootpc_fakeup_interface(&ireq,so,procp) != 0) {
-    return;
+    soclose(so);
+    return false;
   }
 
   /* Get HW address */
 
   for (ifa = ifp->if_addrlist;ifa; ifa = ifa->ifa_next)
     if (ifa->ifa_addr->sa_family == AF_LINK &&
-	(sdl = ((struct sockaddr_dl *) ifa->ifa_addr)) &&
-	sdl->sdl_type == IFT_ETHER)
+        (sdl = ((struct sockaddr_dl *) ifa->ifa_addr)) &&
+        sdl->sdl_type == IFT_ETHER)
       break;
   
   if (!sdl) {
     printf("bootpc: Unable to find HW address\n");
-    return;
+    soclose(so);
+    return false;
   }
   if (sdl->sdl_alen != EALEN ) {
     printf("bootpc: HW address len is %d, expected value is %d\n",
 	   sdl->sdl_alen,EALEN);
-    return;
+    soclose(so);
+    return false;
   }
 
   printf("bootpc hw address is ");
@@ -1036,32 +1037,39 @@ bootpc_init(int update_files)
   bootpboot_p_iflist();
   bootpboot_p_rtlist();
 #endif
-  
-  bzero((caddr_t) &call, sizeof(call));
 
-  /* bootpc part */
-  call.op = 1; 			/* BOOTREQUEST */
-  call.htype= 1;		/* 10mb ethernet */
-  call.hlen=sdl->sdl_alen;	/* Hardware address length */
-  call.hops=0;	
-  xid++;
-  call.xid = txdr_unsigned(xid);
-  bcopy(LLADDR(sdl),&call.chaddr,sdl->sdl_alen);
+  while (true) {
+    bzero((caddr_t) &call, sizeof(call));
+
+    /* bootpc part */
+    call.op = 1; 			/* BOOTREQUEST */
+    call.htype= 1;		/* 10mb ethernet */
+    call.hlen=sdl->sdl_alen;	/* Hardware address length */
+    call.hops=0;	
+    xid++;
+    call.xid = txdr_unsigned(xid);
+    bcopy(LLADDR(sdl),&call.chaddr,sdl->sdl_alen);
   
-  call.vend[0]=99;
-  call.vend[1]=130;
-  call.vend[2]=83;
-  call.vend[3]=99;
-  call.vend[4]=255;
+    call.vend[0]=99;
+    call.vend[1]=130;
+    call.vend[2]=83;
+    call.vend[3]=99;
+    call.vend[4]=255;
   
-  call.secs = 0;
-  call.flags = htons(0x8000); /* We need an broadcast answer */
+    call.secs = 0;
+    call.flags = htons(0x8000); /* We need an broadcast answer */
   
-  error = bootpc_call(&call,&reply,procp);
+    error = bootpc_call(&call,&reply,procp);
   
-  if (error) {
+    if (!error)
+      break;
+    
     printf("BOOTP call failed -- error %d", error);
-    return;
+
+    if (!forever) {
+      soclose(so);
+      return false;
+    }
   }
   
   /*
@@ -1200,4 +1208,6 @@ bootpc_init(int update_files)
   error = bootpc_adjust_interface(&ireq,so,
 				  &myaddr,&dhcp_netmask,&dhcp_gw,procp);
   soclose(so);
+
+  return true;
 }

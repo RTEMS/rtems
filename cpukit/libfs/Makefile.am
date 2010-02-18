@@ -62,6 +62,21 @@ libdosfs_a_SOURCES += src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
     src/dosfs/dosfs.h
 endif
 
+# RFS
+noinst_LIBRARIES += librfs.a
+librfs_a_SOURCES = \
+    src/rfs/rtems-rfs-bitmaps.c src/rfs/rtems-rfs-block.c \
+    src/rfs/rtems-rfs-buffer-bdbuf.c src/rfs/rtems-rfs-buffer.c \
+    src/rfs/rtems-rfs-dir-hash.c src/rfs/rtems-rfs-file.c \
+    src/rfs/rtems-rfs-group.c src/rfs/rtems-rfs-inode.c \
+    src/rfs/rtems-rfs-rtems-dev.c src/rfs/rtems-rfs-rtems-utils.c \
+    src/rfs/rtems-rfs-rtems.c src/rfs/rtems-rfs-shell.c \
+    src/rfs/rtems-rfs-bitmaps-ut.c src/rfs/rtems-rfs-dir.c \
+    src/rfs/rtems-rfs-file-system.c src/rfs/rtems-rfs-format.c \
+    src/rfs/rtems-rfs-link.c src/rfs/rtems-rfs-mutex.c \
+    src/rfs/rtems-rfs-rtems-dir.c src/rfs/rtems-rfs-rtems-file.c \
+    src/rfs/rtems-rfs-trace.c
+
 # ---
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

@@ -595,7 +595,8 @@ rtems_nvdisk_read (rtems_nvdisk* nvd, rtems_blkdev_request* req)
     }
   }
 
-  req->req_done (req->done_arg, ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR);
+  req->status = ret ? RTEMS_IO_ERROR : RTEMS_SUCCESSFUL;
+  req->req_done (req->done_arg, req->status);
 
   return ret;
 }
@@ -634,7 +635,8 @@ rtems_nvdisk_write (rtems_nvdisk* nvd, rtems_blkdev_request* req)
     }
   }
 
-  req->req_done (req->done_arg, ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR);
+  req->status = ret ? RTEMS_IO_ERROR : RTEMS_SUCCESSFUL;
+  req->req_done (req->done_arg, req->status);
 
   return 0;
 }

@@ -95,6 +95,29 @@ if LIBDOSFS
 include_rtems_HEADERS += libfs/src/dosfs/dosfs.h
 endif
 
+# RFS
+include_rtems_HEADERS += \
+   libfs/src/rfs/rtems-rfs.h \
+   libfs/src/rfs/rtems-rfs-format.h \
+   libfs/src/rfs/rtems-rfs-shell.h
+include_rtems_rfsdir = $(include_rtemsdir)/rfs
+include_rtems_rfs_HEADERS = \
+   libfs/src/rfs/rtems-rfs-bitmaps.h \
+   libfs/src/rfs/rtems-rfs-block-pos.h \
+   libfs/src/rfs/rtems-rfs-block.h \
+   libfs/src/rfs/rtems-rfs-buffer.h \
+   libfs/src/rfs/rtems-rfs-data.h \
+   libfs/src/rfs/rtems-rfs-dir.h \
+   libfs/src/rfs/rtems-rfs-dir-hash.h \
+   libfs/src/rfs/rtems-rfs-file.h \
+   libfs/src/rfs/rtems-rfs-file-system-fwd.h \
+   libfs/src/rfs/rtems-rfs-file-system.h \
+   libfs/src/rfs/rtems-rfs-group.h \
+   libfs/src/rfs/rtems-rfs-inode.h \
+   libfs/src/rfs/rtems-rfs-link.h \
+   libfs/src/rfs/rtems-rfs-mutex.h \
+   libfs/src/rfs/rtems-rfs-trace.h
+
 ## libblock
 include_rtems_HEADERS += libblock/include/rtems/bdbuf.h \
     libblock/include/rtems/blkdev.h libblock/include/rtems/diskdevs.h \

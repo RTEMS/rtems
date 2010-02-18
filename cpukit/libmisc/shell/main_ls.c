@@ -573,8 +573,9 @@ display(rtems_shell_ls_globals* globals, FTSENT *p, FTSENT *list)
 			maxlen = cur->fts_namelen;
 		if (needstats) {
 			sp = cur->fts_statp;
-      size = ((uint64_t) sp->st_blocks) * sp->st_blksize;
-      if (size < 0x100000000ULL)
+      if (sp->st_size < 0)
+        size = sp->st_size * -1;
+      else
         size = sp->st_size;
 			if (sp->st_blocks > maxblock)
 				maxblock = sp->st_blocks;

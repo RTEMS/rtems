@@ -179,7 +179,7 @@ void domaininit (void *);
 void ifinit (void *);
 void ipintr (void);
 void arpintr (void);
-void bootpc_init(int );
+bool bootpc_init(bool, bool);
 int socket (int, int, int);
 int ioctl (int, ioctl_command_t, ...);
 

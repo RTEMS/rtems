@@ -172,6 +172,83 @@ $(PROJECT_INCLUDE)/rtems/dosfs.h: libfs/src/dosfs/dosfs.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dosfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dosfs.h
 endif
+$(PROJECT_INCLUDE)/rtems/rtems-rfs.h: libfs/src/rfs/rtems-rfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems-rfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems-rfs.h
+
+$(PROJECT_INCLUDE)/rtems/rtems-rfs-format.h: libfs/src/rfs/rtems-rfs-format.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems-rfs-format.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems-rfs-format.h
+
+$(PROJECT_INCLUDE)/rtems/rtems-rfs-shell.h: libfs/src/rfs/rtems-rfs-shell.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems-rfs-shell.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems-rfs-shell.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/rfs
+	@: > $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-bitmaps.h: libfs/src/rfs/rtems-rfs-bitmaps.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-bitmaps.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-bitmaps.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-block-pos.h: libfs/src/rfs/rtems-rfs-block-pos.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-block-pos.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-block-pos.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-block.h: libfs/src/rfs/rtems-rfs-block.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-block.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-block.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-buffer.h: libfs/src/rfs/rtems-rfs-buffer.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-buffer.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-buffer.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-data.h: libfs/src/rfs/rtems-rfs-data.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-data.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-data.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-dir.h: libfs/src/rfs/rtems-rfs-dir.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-dir.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-dir.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-dir-hash.h: libfs/src/rfs/rtems-rfs-dir-hash.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-dir-hash.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-dir-hash.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-file.h: libfs/src/rfs/rtems-rfs-file.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-file.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-file.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-file-system-fwd.h: libfs/src/rfs/rtems-rfs-file-system-fwd.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-file-system-fwd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-file-system-fwd.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-file-system.h: libfs/src/rfs/rtems-rfs-file-system.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-file-system.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-file-system.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-group.h: libfs/src/rfs/rtems-rfs-group.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-group.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-group.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-inode.h: libfs/src/rfs/rtems-rfs-inode.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-inode.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-inode.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-link.h: libfs/src/rfs/rtems-rfs-link.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-link.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-link.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-mutex.h: libfs/src/rfs/rtems-rfs-mutex.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-mutex.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-mutex.h
+
+$(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-trace.h: libfs/src/rfs/rtems-rfs-trace.h $(PROJECT_INCLUDE)/rtems/rfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-trace.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-trace.h
+
 $(PROJECT_INCLUDE)/rtems/bdbuf.h: libblock/include/rtems/bdbuf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bdbuf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bdbuf.h

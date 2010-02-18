@@ -32,6 +32,7 @@ if LIBDOSFS
 TMP_LIBS += ../libfs/libdosfs.a
 endif
 TMP_LIBS += ../libfs/libimfs.a
+TMP_LIBS += ../libfs/librfs.a
 
 TMP_LIBS += ../libmisc/libmonitor.a
 TMP_LIBS += ../libmisc/libuntar.a

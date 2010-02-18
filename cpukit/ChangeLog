@@ -1,3 +1,55 @@
+2010-02-18	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-bitmaps.c,
+	libfs/src/rfs/rtems-rfs-bitmaps.h,
+	libfs/src/rfs/rtems-rfs-bitmaps-ut.c,
+	libfs/src/rfs/rtems-rfs-block.c, libfs/src/rfs/rtems-rfs-block.h,
+	libfs/src/rfs/rtems-rfs-block-pos.h,
+	libfs/src/rfs/rtems-rfs-buffer-bdbuf.c,
+	libfs/src/rfs/rtems-rfs-buffer.c,
+	libfs/src/rfs/rtems-rfs-buffer-devio.c,
+	libfs/src/rfs/rtems-rfs-buffer.h, libfs/src/rfs/rtems-rfs-data.h,
+	libfs/src/rfs/rtems-rfs-dir.c, libfs/src/rfs/rtems-rfs-dir.h,
+	libfs/src/rfs/rtems-rfs-dir-hash.c,
+	libfs/src/rfs/rtems-rfs-dir-hash.h,
+	libfs/src/rfs/rtems-rfs-file.c, libfs/src/rfs/rtems-rfs-file.h,
+	libfs/src/rfs/rtems-rfs-file-system.c,
+	libfs/src/rfs/rtems-rfs-file-system-fwd.h,
+	libfs/src/rfs/rtems-rfs-file-system.h,
+	libfs/src/rfs/rtems-rfs-format.c,
+	libfs/src/rfs/rtems-rfs-format.h, libfs/src/rfs/rtems-rfs-group.c,
+	libfs/src/rfs/rtems-rfs-group.h, libfs/src/rfs/rtems-rfs.h,
+	libfs/src/rfs/rtems-rfs-inode.c, libfs/src/rfs/rtems-rfs-inode.h,
+	libfs/src/rfs/rtems-rfs-link.c, libfs/src/rfs/rtems-rfs-link.h,
+	libfs/src/rfs/rtems-rfs-mutex.c, libfs/src/rfs/rtems-rfs-mutex.h,
+	libfs/src/rfs/rtems-rfs-rtems.c,
+	libfs/src/rfs/rtems-rfs-rtems-dev.c,
+	libfs/src/rfs/rtems-rfs-rtems-dir.c,
+	libfs/src/rfs/rtems-rfs-rtems-file.c,
+	libfs/src/rfs/rtems-rfs-rtems.h,
+	libfs/src/rfs/rtems-rfs-rtems-utils.c,
+	libfs/src/rfs/rtems-rfs-shell.c, libfs/src/rfs/rtems-rfs-shell.h,
+	libfs/src/rfs/rtems-rfs-trace.c, libfs/src/rfs/rtems-rfs-trace.h:
+	New.
+
+	* Makefile.am, preinstall.am, libfs/Makefile.am,
+	wrapup/Makefile.am: Updated with the RFS support.
+
+	* libfs/README: Updated after 10 years.
+
+	* libblock/src/flashdisk.c, libblock/src/nvdisk.c,
+	libblock/src/ramdisk-driver.c: Updated to the new error reporting
+	in libblock.
+	
+	* libmisc/shell/main_ls.c, libmisc/shell/print-ls.c: Fix printing
+	the size in long mode.
+
+	* libnetworking/nfs/bootp_subr.c,
+	libnetworking/rtems/rtems_bootp.c,
+	libnetworking/rtems/rtems_bsdnet_internal.h: Return the BOOTP/DHCP
+	to the forever behaviour of 4.9 with the ability to call BOOTP and
+	control the process if required.
+	
 2010-02-16	Chris Johns <chrisj@rtems.org>
 
 	* libcsupport/src/open.c: Tighten the open handler check.

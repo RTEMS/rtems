@@ -134,7 +134,7 @@
  * @todo A sequence number for the block could be added. This would
  *       mean a larger descriptor size. Need to make the sequence
  *       large like 20+ bits so a large file system would not have
- *       more blocks available then the sequence number.
+ *       more blocks available than the sequence number.
  */
 typedef struct rtems_fdisk_page_desc
 {
@@ -1304,9 +1304,9 @@ rtems_fdisk_queue_segment (rtems_flashdisk* fd, rtems_fdisk_segment_ctl* sc)
 
 /**
  * Compact the used segments to free what is available. Find the segment
- * with the most avalable number of pages and see if the we have
+ * with the most avalable number of pages and see if we have
  * used segments that will fit. The used queue is sorted on the least
- * number active pages.
+ * number of active pages.
  */
 static int
 rtems_fdisk_compact (rtems_flashdisk* fd)
@@ -1701,7 +1701,7 @@ rtems_fdisk_recover_block_mappings (rtems_flashdisk* fd)
  * @return EIO Invalid block size, block number, segment pointer, crc,
  *             page flags.
  */
-static int
+static bool
 rtems_fdisk_read_block (rtems_flashdisk* fd,
                         uint32_t         block,
                         uint8_t*         buffer)
@@ -2071,7 +2071,8 @@ rtems_fdisk_read (rtems_flashdisk* fd, rtems_blkdev_request* req)
     }
   }
 
-  req->req_done (req->done_arg, ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR);
+  req->status = ret ? RTEMS_IO_ERROR : RTEMS_SUCCESSFUL;
+  req->req_done (req->done_arg, req->status);
 
   return ret;
 }
@@ -2106,7 +2107,8 @@ rtems_fdisk_write (rtems_flashdisk* fd, rtems_blkdev_request* req)
     }
   }
 
-  req->req_done (req->done_arg, ret ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR);
+  req->status = ret ? RTEMS_IO_ERROR : RTEMS_SUCCESSFUL;
+  req->req_done (req->done_arg, req->status);
 
   return 0;
 }

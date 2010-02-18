@@ -162,9 +162,10 @@ printlong(rtems_shell_ls_globals* globals, DISPLAY *dp)
 			} else {
 #endif
       {
-        unsigned long long size = sp->st_blocks;
-        size *= sp->st_blksize;
-        if (size < 0x100000000ULL)
+        unsigned long long size;
+        if (sp->st_size < 0)
+          size = sp->st_size * -1;
+        else
           size = sp->st_size;
 				(void)printf("%*llu ", dp->s_size, size);
   		}

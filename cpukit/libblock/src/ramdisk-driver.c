@@ -65,6 +65,7 @@ ramdisk_read(struct ramdisk *rd, rtems_blkdev_request *req)
 #endif
         memcpy(sg->buffer, from + (sg->block * rd->block_size), sg->length);
     }
+    req->status = RTEMS_SUCCESSFUL;
     req->req_done(req->done_arg, RTEMS_SUCCESSFUL);
     return 0;
 }
@@ -89,6 +90,7 @@ ramdisk_write(struct ramdisk *rd, rtems_blkdev_request *req)
 #endif
         memcpy(to + (sg->block * rd->block_size), sg->buffer, sg->length);
     }
+    req->status = RTEMS_SUCCESSFUL;
     req->req_done(req->done_arg, RTEMS_SUCCESSFUL);
     return 0;
 }
