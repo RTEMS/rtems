@@ -1,3 +1,8 @@
+2010-02-18	Chris Johns <chrisj@rtems.org>
+
+	* networking/networkapp.t: Updated the BOOTP/DHCP to document the
+	default behaviour of looping forever.
+
 2010-01-11	Marc Pignat <marc.pignat@hevs.ch>
 
 	PR 1490/doc

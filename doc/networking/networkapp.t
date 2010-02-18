@@ -120,14 +120,32 @@ A pointer to the first configuration structure of the first network
 device.  This structure is described in the following section.
 You must provide a value for this entry since there is no default value for it.
 
-
 @item void (*bootp)(void)
-This entry should be set to @code{rtems_bsdnet_do_bootp}
-if your application will use BOOTP/DHCP
-to obtain network configuration information.
-It should be set to @code{NULL}
-if your application does not use BOOTP/DHCP.
+This entry should be set to @code{rtems_bsdnet_do_bootp} if your
+application by default uses the BOOTP/DHCP client protocol to obtain
+network configuration information.  It should be set to @code{NULL} if
+your application does not use BOOTP/DHCP.
 
+You can also use @code{rtems_bsdnet_do_bootp_rootfs} to have a set of
+standard files created with the information return by the BOOTP/DHCP
+protocol. The IP address is added to @file{/etc/hosts} with the host
+name and domain returned. If no host name or domain is returned
+@code{me.mydomain} is used. The BOOTP/DHCP server's address is also
+added to @file{/etc/hosts}. The domain name server listed in the
+BOOTP/DHCP information are added to @file{/etc/resolv.conf}. A
+@code{search} record is also added if a domain is returned. The files
+are created if they do not exist.
+
+The default @code{rtems_bsdnet_do_bootp} and
+@code{rtems_bsdnet_do_bootp_rootfs} handlers will loop for-ever
+waiting for a BOOTP/DHCP server to respond. If an error is detected
+such as not valid interface or valid hardware address the target will
+reboot allowing any hardware reset to correct itself.
+
+You can provide your own custom handler which allows you to perform
+an initialization that meets your specific system requirements. For
+example you could try BOOTP/DHCP then enter a configuration tool if no
+server is found allowing the user to switch to a static configuration.
 
 @item int network_task_priority 
 The priority at which the network task and network device
