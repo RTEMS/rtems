@@ -50,6 +50,7 @@ extern rtems_shell_cmd_t rtems_shell_RMDIR_Command;
 extern rtems_shell_cmd_t rtems_shell_CHROOT_Command;
 extern rtems_shell_cmd_t rtems_shell_CHMOD_Command;
 extern rtems_shell_cmd_t rtems_shell_CAT_Command;
+extern rtems_shell_cmd_t rtems_shell_MKRFS_Command;
 extern rtems_shell_cmd_t rtems_shell_MSDOSFMT_Command;
 extern rtems_shell_cmd_t rtems_shell_MV_Command;
 extern rtems_shell_cmd_t rtems_shell_RM_Command;
@@ -62,6 +63,7 @@ extern rtems_shell_cmd_t rtems_shell_BLKSYNC_Command;
 extern rtems_shell_cmd_t rtems_shell_FDISK_Command;
 extern rtems_shell_cmd_t rtems_shell_DD_Command;
 extern rtems_shell_cmd_t rtems_shell_HEXDUMP_Command;
+extern rtems_shell_cmd_t rtems_shell_DEBUGRFS_Command;
 
 extern rtems_shell_cmd_t rtems_shell_RTC_Command;
 
@@ -91,6 +93,7 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
 /*
  *  Externs for mount command helpers
  */
+extern rtems_shell_filesystems_t rtems_shell_Mount_RFS;
 extern rtems_shell_filesystems_t rtems_shell_Mount_MSDOS;
 extern rtems_shell_filesystems_t rtems_shell_Mount_TFTP;
 extern rtems_shell_filesystems_t rtems_shell_Mount_FTP;
@@ -292,6 +295,11 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
       &rtems_shell_CAT_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_MKRFS)) || \
+        defined(CONFIGURE_SHELL_COMMAND_MKRFS)
+      &rtems_shell_MKRFS_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_MSDOSFMT)) || \
         defined(CONFIGURE_SHELL_COMMAND_MSDOSFMT)
       &rtems_shell_MSDOSFMT_Command,
@@ -351,6 +359,11 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
         defined(CONFIGURE_SHELL_COMMAND_HEXDUMP)
       &rtems_shell_HEXDUMP_Command,
     #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_DEBUGRFS)) || \
+        defined(CONFIGURE_SHELL_COMMAND_DEBUGRFS)
+      &rtems_shell_DEBUGRFS_Command,
+    #endif
 
     /*
      *  RTEMS Related commands
@@ -380,7 +393,6 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
         defined(CONFIGURE_SHELL_COMMAND_WKSPACE_INFO)
       &rtems_shell_WKSPACE_INFO_Command,
     #endif
-
 
     /*
      *  Malloc family commands
@@ -437,6 +449,9 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
        !defined(CONFIGURE_SHELL_COMMAND_NO_MOUNT)) || \
        defined(CONFIGURE_SHELL_COMMAND_MOUNT)
     rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[] = {
+      #if defined(CONFIGURE_SHELL_MOUNT_RFS)
+        &rtems_shell_Mount_RFS,
+      #endif
       #if defined(CONFIGURE_SHELL_MOUNT_MSDOS)
         &rtems_shell_Mount_MSDOS,
       #endif

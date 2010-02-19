@@ -199,16 +199,9 @@ create_disk(dev_t dev, const char *name, rtems_disk_device **dd_ptr)
   }
 
   if (name != NULL) {
-    rtems_device_major_number major = 0;
-    rtems_device_minor_number minor = 0;
-
-    rtems_filesystem_split_dev_t(dev, major, minor);
-
-    sc = rtems_io_register_name(name, major, minor);
-    if (sc != RTEMS_SUCCESSFUL) {
+    if (mknod(alloc_name, 0777 | S_IFBLK, dev) < 0) {
       free(alloc_name);
       free(dd);
-
       return RTEMS_UNSATISFIED;
     }
   }

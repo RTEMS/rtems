@@ -166,10 +166,10 @@ int rtems_shell_main_msdos_format(
 #define OPTIONS "[-v label] [-r size] [-t any/12/16/32]"
 
 rtems_shell_cmd_t rtems_shell_MSDOSFMT_Command = {
-  "msdosfmt",                                /* name */
-  "msdosfmt " OPTIONS " path # format disk", /* usage */
+  "mkdos",                                   /* name */
+  "mkdos " OPTIONS " path # format disk",    /* usage */
   "files",                                   /* topic */
   rtems_shell_main_msdos_format,             /* command */
-  NULL,                                      /* alias */
+  "msdosfmt",                                /* alias */
   NULL                                       /* next */
 };

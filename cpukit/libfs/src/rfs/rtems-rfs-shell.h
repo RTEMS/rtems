@@ -30,6 +30,15 @@
  * @param argv The argument variables.
  * @return int The exit code for the command. A 0 is no error.
  */
-int rtems_rfs_shell_debugrfs (int argc, char *argv[]);
+int rtems_shell_debugrfs (int argc, char *argv[]);
+
+/**
+ * The shell command for formatting an RFS file system.
+ *
+ * @param argc The argument count.
+ * @param argv The argument variables.
+ * @return int The exit code for the command. A 0 is no error.
+ */
+int rtems_shell_rfs_format (int argc, char* argv[]);
 
 #endif

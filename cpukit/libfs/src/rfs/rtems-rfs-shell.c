@@ -22,6 +22,7 @@
 #include <rtems/rfs/rtems-rfs-group.h>
 #include <rtems/rfs/rtems-rfs-inode.h>
 #include <rtems/rfs/rtems-rfs-dir.h>
+#include <rtems/rtems-rfs-format.h>
 
 #include <sys/statvfs.h>
 
@@ -608,7 +609,7 @@ rtems_rfs_shell_usage (const char* arg)
 }
 
 int
-rtems_rfs_shell_debugrfs (int argc, char *argv[])
+rtems_shell_debugrfs (int argc, char *argv[])
 {
   const rtems_rfs_shell_cmd table[] =
   {
@@ -663,4 +664,94 @@ rtems_rfs_shell_debugrfs (int argc, char *argv[])
   }
   
   return 1;
+}
+
+int
+rtems_shell_rfs_format (int argc, char* argv[])
+{
+  rtems_rfs_format_config config;
+  const char*             driver = NULL;
+  int                     arg;
+
+  memset (&config, 0, sizeof (rtems_rfs_format_config));
+
+  for (arg = 1; arg < argc; arg++)
+  {
+    if (argv[arg][0] == '-')
+    {
+      switch (argv[arg][1])
+      {
+        case 'v':
+          config.verbose = true;
+          break;
+          
+        case 's':
+          arg++;
+          if (arg >= argc)
+          {
+            printf ("error: block size needs an argument\n");
+            return 1;
+          }
+          config.block_size = strtoul (argv[arg], 0, 0);
+          break;
+        
+        case 'b':
+          arg++;
+          if (arg >= argc)
+          {
+            printf ("error: group block count needs an argument\n");
+            return 1;
+          }
+          config.group_blocks = strtoul (argv[arg], 0, 0);
+          break;
+          
+        case 'i':
+          arg++;
+          if (arg >= argc)
+          {
+            printf ("error: group inode count needs an argument\n");
+            return 1;
+          }
+          config.group_inodes = strtoul (argv[arg], 0, 0);
+          break;
+
+        case 'I':
+          config.initialise_inodes = true;
+          break;
+          
+        case 'o':
+          arg++;
+          if (arg >= argc)
+          {
+            printf ("error: inode percentage overhead needs an argument\n");
+            return 1;
+          }
+          config.inode_overhead = strtoul (argv[arg], 0, 0);
+          break;
+          
+        default:
+          printf ("error: invalid option: %s\n", argv[arg]);
+          return 1;
+      }
+    }
+    else
+    {
+      if (!driver)
+        driver = argv[arg];
+      else
+      {
+        printf ("error: only one driver name allowed: %s\n", argv[arg]);
+        return 1;
+      }
+    }
+  }
+
+  if (rtems_rfs_format (driver, &config) < 0)
+  {
+    printf ("error: format of %s failed: %s\n",
+            driver, strerror (errno));
+    return 1;
+  }
+  
+  return 0;
 }

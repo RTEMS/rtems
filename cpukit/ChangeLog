@@ -1,3 +1,20 @@
+2010-02-19	Chris Johns <chrisj@rtems.org>
+
+	* libblock/src/diskdevs.c: Create the devices as block devices.
+
+	* libmisc/shell/main_debugrfs.c, libmisc/shell/main_mkrfs.c,
+	libmisc/shell/main_mount_rfs.c: New.
+
+	* libmisc/shell/main_msdosfmt.c: Change the command to mkdos and
+	alias the old name.
+
+	* libmisc/shell/shellconfig.h, libmisc/Makefile.am: Add RFS
+	support.
+
+	* libfs/src/rfs/rtems-rfs-shell.c,
+	libfs/src/rfs/rtems-rfs-shell.h: Move the format command code into
+	the shell file.
+	
 2010-02-18	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-bitmaps.c,
