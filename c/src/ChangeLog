@@ -1,3 +1,8 @@
+2010-02-19	Chris Johns <chrisj@rtems.org>
+
+	* libchip/ide/ide_controller.c: Create the devices as block
+	devices.
+
 2010-01-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/ide/ata_internal.h, libchip/ide/ata.c

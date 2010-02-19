@@ -61,15 +61,14 @@ ide_controller_initialize(rtems_device_major_number  major,
         if ((IDE_Controller_Table[minor].probe == NULL ||
              IDE_Controller_Table[minor].probe(minor)) &&
             (IDE_Controller_Table[minor].fns->ctrl_probe == NULL ||
-	     IDE_Controller_Table[minor].fns->ctrl_probe(minor)))
+             IDE_Controller_Table[minor].fns->ctrl_probe(minor)))
         {
-            status = rtems_io_register_name(IDE_Controller_Table[minor].name,
-                                            major, minor);
-            if (status != RTEMS_SUCCESSFUL)
+            dev_t  dev;
+            dev = rtems_filesystem_make_dev_t( major, minor );
+            if (mknod(IDE_Controller_Table[minor].name,
+                      0777 | S_IFBLK, dev ) < 0)
                 rtems_fatal_error_occurred(status);
-
             IDE_Controller_Table[minor].fns->ctrl_initialize(minor);
-
             IDE_Controller_Table[minor].status = IDE_CTRL_INITIALIZED;
         }
     }
