@@ -295,7 +295,7 @@ rtems_rfs_buffer_open (const char* name, rtems_rfs_file_system* fs)
   /*
    * Is the device a block device ?
    */
-  if (!S_ISCHR (st.st_mode))
+  if (!S_ISBLK (st.st_mode))
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_OPEN))
       printf ("rtems-rfs: buffer-open: '%s' is not a block device\n", name);
