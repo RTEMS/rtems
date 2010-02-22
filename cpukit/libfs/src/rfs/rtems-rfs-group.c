@@ -314,3 +314,33 @@ rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
   
   return rc;
 }
+
+int
+rtems_rfs_group_usage (rtems_rfs_file_system* fs,
+                       size_t*                blocks,
+                       size_t*                inodes)
+{
+  int g;
+  
+  *blocks = 0;
+  *inodes = 0;
+  
+  for (g = 0; g < fs->group_count; g++)
+  {
+    rtems_rfs_group* group = &fs->groups[g];
+    *blocks +=
+      rtems_rfs_bitmap_map_size(&group->block_bitmap) -
+      rtems_rfs_bitmap_map_free (&group->block_bitmap);
+    *inodes +=
+      rtems_rfs_bitmap_map_size (&group->inode_bitmap) -
+      rtems_rfs_bitmap_map_free (&group->inode_bitmap);
+  }
+
+  if (*blocks > rtems_rfs_fs_blocks (fs))
+    *blocks = rtems_rfs_fs_blocks (fs);
+  if (*inodes > rtems_rfs_fs_inodes (fs))
+    *inodes = rtems_rfs_fs_inodes (fs);
+  
+  return 0;
+}
+

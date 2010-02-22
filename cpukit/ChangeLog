@@ -1,3 +1,19 @@
+2010-02-23	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-dir.c: Fix printf format warning for a
+	64bit off_t.
+	
+	* libfs/src/rfs/rtems-rfs-file-system.h: Add a macro to get the
+	file system flags.
+	
+	* libfs/src/rfs/rtems-rfs-group.c,
+	libfs/src/rfs/rtems-rfs-group.h: Add rtems_rfs_group_usage.
+	
+	* libfs/src/rfs/rtems-rfs-rtems.c: Fill in all the fields in the
+	statvfs struct.
+	
+	* libfs/src/rfs/rtems-rfs-shell.c: Use rtems_rfs_group_usage.
+
 2010-02-20	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/dosfs/fat.c, libfs/src/rfs/rtems-rfs-buffer.c: Block

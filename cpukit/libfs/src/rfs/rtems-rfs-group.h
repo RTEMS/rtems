@@ -148,4 +148,16 @@ int rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
                                  rtems_rfs_bitmap_bit   no,
                                  bool*                  state);
 
+/**
+ * Determine the number of blocks and inodes used.
+ *
+ * @param fs The file system data.
+ * @prarm blocks The number of blocks used.
+ * @param inodes The number of inodes used.
+ * @return int The error number (errno). No error if 0.
+ */
+int rtems_rfs_group_usage (rtems_rfs_file_system* fs,
+                           size_t*                blocks,
+                           size_t*                inodes);
+
 #endif

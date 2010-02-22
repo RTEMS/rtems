@@ -246,6 +246,12 @@ struct rtems_rfs_file_system_t
 };
 
 /**
+ * Return the flags.
+ *
+ * @param _fs Pointer to the file system.
+ */
+#define rtems_rfs_fs_flags(_f) ((_f)->flags)
+/**
  * Should bitmap buffers be released when finished ?
  *
  * @param _fs Pointer to the file system.

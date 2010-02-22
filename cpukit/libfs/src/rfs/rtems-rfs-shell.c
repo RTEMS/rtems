@@ -140,20 +140,8 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
 
   rtems_rfs_shell_lock_rfs (fs);
 
-  blocks = 0;
-  inodes = 0;
+  rtems_rfs_group_usage (fs, &blocks, &inodes);
   
-  for (g = 0; g < fs->group_count; g++)
-  {
-    rtems_rfs_group* group = &fs->groups[g];
-    blocks +=
-      rtems_rfs_bitmap_map_size(&group->block_bitmap) -
-      rtems_rfs_bitmap_map_free (&group->block_bitmap);
-    inodes +=
-      rtems_rfs_bitmap_map_size (&group->inode_bitmap) -
-      rtems_rfs_bitmap_map_free (&group->inode_bitmap);
-  }
-
   rtems_rfs_shell_unlock_rfs (fs);
 
   bpcent = (blocks * 1000) / rtems_rfs_fs_blocks (fs);

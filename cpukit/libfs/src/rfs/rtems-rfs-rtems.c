@@ -1101,12 +1101,21 @@ rtems_rfs_rtems_statvfs (rtems_filesystem_location_info_t* pathloc,
                          struct statvfs*                   sb)
 {
   rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (pathloc);
+  size_t                 blocks;
+  size_t                 inodes;
 
-  sb->f_bsize = rtems_rfs_fs_block_size (fs);
-  sb->f_frsize = rtems_rfs_fs_media_block_size (fs);
-  sb->f_blocks = rtems_rfs_fs_media_blocks (fs);
-
-  sb->f_fsid = RTEMS_RFS_SB_MAGIC;
+  rtems_rfs_group_usage (fs, &blocks, &inodes);
+  
+  sb->f_bsize   = rtems_rfs_fs_block_size (fs);
+  sb->f_frsize  = rtems_rfs_fs_media_block_size (fs);
+  sb->f_blocks  = rtems_rfs_fs_media_blocks (fs);
+  sb->f_bfree   = rtems_rfs_fs_blocks (fs) - blocks;
+  sb->f_bavail  = sb->f_bfree;
+  sb->f_files   = rtems_rfs_fs_inodes (fs) - inodes;
+  sb->f_ffree   = sb->f_files;
+  sb->f_favail  = sb->f_files;
+  sb->f_fsid    = RTEMS_RFS_SB_MAGIC;
+  sb->f_flag    = rtems_rfs_fs_flags (fs);
   sb->f_namemax = rtems_rfs_fs_max_name (fs);
   
   return 0;
