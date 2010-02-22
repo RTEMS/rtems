@@ -1111,9 +1111,9 @@ rtems_rfs_rtems_statvfs (rtems_filesystem_location_info_t* pathloc,
   sb->f_blocks  = rtems_rfs_fs_media_blocks (fs);
   sb->f_bfree   = rtems_rfs_fs_blocks (fs) - blocks;
   sb->f_bavail  = sb->f_bfree;
-  sb->f_files   = rtems_rfs_fs_inodes (fs) - inodes;
-  sb->f_ffree   = sb->f_files;
-  sb->f_favail  = sb->f_files;
+  sb->f_files   = rtems_rfs_fs_inodes (fs);
+  sb->f_ffree   = rtems_rfs_fs_inodes (fs) - inodes;
+  sb->f_favail  = sb->f_ffree;
   sb->f_fsid    = RTEMS_RFS_SB_MAGIC;
   sb->f_flag    = rtems_rfs_fs_flags (fs);
   sb->f_namemax = rtems_rfs_fs_max_name (fs);
