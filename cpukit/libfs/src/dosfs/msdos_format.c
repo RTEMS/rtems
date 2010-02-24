@@ -910,7 +910,7 @@ int msdos_format
 
   /* rtems feature: no block devices, all are character devices */
   if ((ret_val == 0) &&
-      (!S_ISCHR(stat_buf.st_mode))) {
+      (!S_ISBLK(stat_buf.st_mode))) {
     errno = ENOTTY;
     ret_val = -1;
   }

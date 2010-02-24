@@ -1,3 +1,10 @@
+2010-02-24	Chris Johns <chrisj@rtems.org>
+
+	* libmisc/shell/main_msdosfmt.c, libmisc/shell/shellconfig.h: Fix
+	the alias as I did understand how it worked.
+
+	* libfs/src/dosfs/msdos_format.c: Test for a block device.
+
 2010-02-23	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-dir.c: Fix printf format warning for a

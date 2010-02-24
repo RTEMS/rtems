@@ -52,6 +52,7 @@ extern rtems_shell_cmd_t rtems_shell_CHMOD_Command;
 extern rtems_shell_cmd_t rtems_shell_CAT_Command;
 extern rtems_shell_cmd_t rtems_shell_MKRFS_Command;
 extern rtems_shell_cmd_t rtems_shell_MSDOSFMT_Command;
+extern rtems_shell_cmd_t rtems_shell_MSDOSFMT_Alias;
 extern rtems_shell_cmd_t rtems_shell_MV_Command;
 extern rtems_shell_cmd_t rtems_shell_RM_Command;
 extern rtems_shell_cmd_t rtems_shell_LN_Command;
@@ -303,6 +304,7 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_MSDOSFMT)) || \
         defined(CONFIGURE_SHELL_COMMAND_MSDOSFMT)
       &rtems_shell_MSDOSFMT_Command,
+      &rtems_shell_MSDOSFMT_Alias,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_MV)) || \
