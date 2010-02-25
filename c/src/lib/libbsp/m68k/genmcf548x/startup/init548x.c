@@ -321,4 +321,8 @@ gpio_init(void)
         );
 
 #endif
+    /* 
+     * make sure the "edge port" has all interrupts disabled
+     */
+    MCF548X_EPORT_EPIER = 0;
 }

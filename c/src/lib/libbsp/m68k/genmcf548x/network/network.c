@@ -1721,13 +1721,6 @@ int rtems_mcf548x_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
       /* There is no entry in NVRAM, but there is in the ifconfig struct, so use it. */
       memcpy((void *)sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
       }
-    else
-      {
-      /* There is no ethernet address provided, so it could be read
-       * from the Ethernet protocol block of SCC1 in DPRAM.
-       */
-      rtems_panic("No Ethernet address specified!\n");
-      }
 
 #else /* NVRAM_CONFIGURE != 1 */
 
@@ -1735,15 +1728,6 @@ int rtems_mcf548x_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
     {
 
     memcpy(sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
-
-    }
-  else
-    {
-
-    /* There is no ethernet address provided, so it could be read
-     * from the Ethernet protocol block of SCC1 in DPRAM.
-     */
-    rtems_panic("No Ethernet address specified!\n");
 
     }
 
@@ -1770,6 +1754,14 @@ int rtems_mcf548x_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
       );
   }
 #endif
+  if ((sc->arpcom.ac_enaddr[0] == 0) &&
+      (sc->arpcom.ac_enaddr[1] == 0) &&
+      (sc->arpcom.ac_enaddr[2] == 0)) {
+    /* There is no ethernet address provided, so it could be read
+     * from the Ethernet protocol block of SCC1 in DPRAM.
+     */
+    rtems_panic("No Ethernet address specified!\n");
+  }
   if(config->mtu)
     mtu = config->mtu;
   else

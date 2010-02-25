@@ -1,3 +1,10 @@
+2010-02-24      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* network/network.c: combine all checks for missing MAC address
+	* startup/bspstart.c: enable FPU, if POSIX init task present
+	* startup/init548x.c: explicitly disable all edge port interrupts
+
+
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* console/console.c: adapted to new prototype for *_write

@@ -274,11 +274,11 @@ void bsp_start( void )
   _CPU_cacr_shadow = BSP_CACR_INIT;
 
   /* Switch on FPU in CACR shadow register if necessary */
-  if (
-    Configuration_RTEMS_API.User_initialization_tasks_table != NULL &&
-      (Configuration_RTEMS_API.User_initialization_tasks_table->attribute_set
-        & RTEMS_FLOATING_POINT) != 0
-  ) {
+  if ((Configuration_POSIX_API.number_of_initialization_threads > 0) ||
+      ((Configuration_RTEMS_API.number_of_initialization_tasks > 0) &&
+       (Configuration_RTEMS_API.User_initialization_tasks_table
+	->attribute_set & RTEMS_FLOATING_POINT) != 0)
+      ) {
     _CPU_cacr_shadow &= ~MCF548X_CACR_DF;
   }
 
