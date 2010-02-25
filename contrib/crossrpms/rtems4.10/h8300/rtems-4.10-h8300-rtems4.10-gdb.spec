@@ -52,7 +52,7 @@ Name:		rtems-4.10-h8300-rtems4.10-gdb
 Summary:	Gdb for target h8300-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -128,7 +128,7 @@ Requires:	rtems-4.10-gdb-common
 
 %if "%{gdb_version}" == "7.0.90"
 Source0: ftp://sourceware.org/pub/gdb/snapshots/branch/gdb-7.0.90.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-7.0.90-rtems4.10-20100223.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-7.0.90-rtems4.10-20100225.diff
 %endif
 
 %if "%{gdb_version}" == "7.0.1"
