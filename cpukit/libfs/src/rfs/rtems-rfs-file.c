@@ -275,7 +275,9 @@ rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
       return rc;
   }
   
-  if (read && rtems_rfs_block_map_last (rtems_rfs_file_map (handle)))
+  if (read
+      && rtems_rfs_block_map_last (rtems_rfs_file_map (handle))
+      && rtems_rfs_block_map_size_offset (rtems_rfs_file_map (handle)))
     size = rtems_rfs_block_map_size_offset (rtems_rfs_file_map (handle));
   else
     size = rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle));
@@ -419,6 +421,7 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
 {
   rtems_rfs_block_map* map  = rtems_rfs_file_map (handle);
   rtems_rfs_pos        size;
+  int                  rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
     printf ("rtems-rfs: file-set-size: size=%Lu\n", new_size);
@@ -427,131 +430,136 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
    * Short cut for the common truncate on open call.
    */
   if (new_size == 0)
-    return rtems_rfs_block_map_free_all (rtems_rfs_file_fs (handle), map);
-      
-  size = rtems_rfs_file_size (handle);
-  
-  /*
-   * If the file is same size do nothing else grow or shrink it ?
-   */
-  if (size != new_size)
   {
-    if (size < new_size)
+    rc = rtems_rfs_block_map_free_all (rtems_rfs_file_fs (handle), map);
+    if (rc > 0)
+      return rc;
+  }
+  else
+  {
+    size = rtems_rfs_file_size (handle);
+  
+    /*
+     * If the file is same size do nothing else grow or shrink it ?
+     */
+    if (size != new_size)
     {
-      /*
-       * Grow. Fill with 0's.
-       */
-      rtems_rfs_pos count;
-      uint32_t      length;
-      bool          read_block;
-
-      count = new_size - size;
-      length = rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle));
-      read_block = false;
-        
-      while (count)
+      if (size < new_size)
       {
-        rtems_rfs_buffer_block block;
-        rtems_rfs_block_pos    bpos;
-        uint8_t*               dst;
-        int                    rc;
-
         /*
-         * Get the block position for the current end of the file as seen by
-         * the map. If not found and the EOF grow the map then fill the block
-         * with 0.
+         * Grow. Fill with 0's.
          */
-        rtems_rfs_block_size_get_bpos (rtems_rfs_block_map_size (map), &bpos);
-        rc = rtems_rfs_block_map_find (rtems_rfs_file_fs (handle),
-                                       map, &bpos, &block);
-        if (rc > 0)
+        rtems_rfs_pos count;
+        uint32_t      length;
+        bool          read_block;
+
+        count = new_size - size;
+        length = rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle));
+        read_block = false;
+        
+        while (count)
         {
+          rtems_rfs_buffer_block block;
+          rtems_rfs_block_pos    bpos;
+          uint8_t*               dst;
+
           /*
-           * Have we reached the EOF ?
+           * Get the block position for the current end of the file as seen by
+           * the map. If not found and the EOF grow the map then fill the block
+           * with 0.
            */
-          if (rc != ENXIO)
+          rtems_rfs_block_size_get_bpos (rtems_rfs_block_map_size (map), &bpos);
+          rc = rtems_rfs_block_map_find (rtems_rfs_file_fs (handle),
+                                         map, &bpos, &block);
+          if (rc > 0)
+          {
+            /*
+             * Have we reached the EOF ?
+             */
+            if (rc != ENXIO)
+              return rc;
+
+            rc = rtems_rfs_block_map_grow (rtems_rfs_file_fs (handle),
+                                           map, 1, &block);
+            if (rc > 0)
+              return rc;
+          }
+
+          if (count < (length - bpos.boff))
+          {
+            length = count + bpos.boff;
+            read_block = true;
+            rtems_rfs_block_map_set_size_offset (map, length);
+          }
+          else
+          {
+            rtems_rfs_block_map_set_size_offset (map, 0);
+          }
+
+          /*
+           * Only read the block if the length is not the block size.
+           */
+          rc = rtems_rfs_buffer_handle_request (rtems_rfs_file_fs (handle),
+                                                rtems_rfs_file_buffer (handle),
+                                                block, read_block);
+          if (rc > 0)
             return rc;
 
-          rc = rtems_rfs_block_map_grow (rtems_rfs_file_fs (handle),
-                                         map, 1, &block);
+          dst = rtems_rfs_buffer_data (&handle->buffer);
+          memset (dst + bpos.boff, 0, length - bpos.boff);
+
+          rtems_rfs_buffer_mark_dirty (rtems_rfs_file_buffer (handle));
+
+          rc = rtems_rfs_buffer_handle_release (rtems_rfs_file_fs (handle),
+                                                rtems_rfs_file_buffer (handle));
+          if (rc > 0)
+            return rc;
+        
+          count -= length - bpos.boff;
+        }
+      }
+      else
+      {
+        /*
+         * Shrink
+         */
+        rtems_rfs_block_no blocks;
+        uint32_t           offset;
+    
+        blocks =
+          rtems_rfs_block_map_count (map) -
+          (((new_size - 1) /
+            rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle))) + 1);
+
+        offset =
+          new_size % rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle));
+      
+        if (blocks)
+        {
+          int rc;
+          rc = rtems_rfs_block_map_shrink (rtems_rfs_file_fs (handle),
+                                           rtems_rfs_file_map (handle),
+                                           blocks);
           if (rc > 0)
             return rc;
         }
 
-        if (count < (length - bpos.boff))
-        {
-          length = count + bpos.boff;
-          read_block = true;
-          rtems_rfs_block_map_set_size_offset (map, length);
-        }
-        else
-        {
-          rtems_rfs_block_map_set_size_offset (map, 0);
-        }
+        rtems_rfs_block_map_set_size_offset (map, offset);
 
-        /*
-         * Only read the block if the length is not the block size.
-         */
-        rc = rtems_rfs_buffer_handle_request (rtems_rfs_file_fs (handle),
-                                              rtems_rfs_file_buffer (handle),
-                                              block, read_block);
-        if (rc > 0)
-          return rc;
-
-        dst = rtems_rfs_buffer_data (&handle->buffer);
-        memset (dst + bpos.boff, 0, length - bpos.boff);
-
-        rtems_rfs_buffer_mark_dirty (rtems_rfs_file_buffer (handle));
-
-        rc = rtems_rfs_buffer_handle_release (rtems_rfs_file_fs (handle),
-                                              rtems_rfs_file_buffer (handle));
-        if (rc > 0)
-          return rc;
-        
-        count -= length - bpos.boff;
+        if (rtems_rfs_block_pos_past_end (rtems_rfs_file_bpos (handle),
+                                          rtems_rfs_block_map_size (map)))
+          rtems_rfs_block_size_get_bpos (rtems_rfs_block_map_size (map),
+                                         rtems_rfs_file_bpos (handle));
       }
     }
-    else
-    {
-      /*
-       * Shrink
-       */
-      rtems_rfs_block_no blocks;
-      uint32_t           offset;
-    
-      blocks =
-        rtems_rfs_block_map_count (map) -
-        (((new_size - 1) /
-          rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle))) + 1);
-
-      offset =
-        new_size % rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle));
-      
-      if (blocks)
-      {
-        int rc;
-        rc = rtems_rfs_block_map_shrink (rtems_rfs_file_fs (handle),
-                                         rtems_rfs_file_map (handle),
-                                         blocks);
-        if (rc > 0)
-          return rc;
-      }
-
-      rtems_rfs_block_map_set_size_offset (map, offset);
-
-      if (rtems_rfs_block_pos_past_end (rtems_rfs_file_bpos (handle),
-                                        rtems_rfs_block_map_size (map)))
-        rtems_rfs_block_size_get_bpos (rtems_rfs_block_map_size (map),
-                                       rtems_rfs_file_bpos (handle));
-    }
-    
-    handle->shared->size.count  = rtems_rfs_block_map_count (map);
-    handle->shared->size.offset = rtems_rfs_block_map_size_offset (map);
-
-    if (rtems_rfs_file_update_mtime (handle))
-      handle->shared->mtime = time (NULL);
   }
- 
+
+  handle->shared->size.count  = rtems_rfs_block_map_count (map);
+  handle->shared->size.offset = rtems_rfs_block_map_size_offset (map);
+
+  if (rtems_rfs_file_update_mtime (handle))
+    handle->shared->mtime = time (NULL);
+  
   return 0;
 }
 

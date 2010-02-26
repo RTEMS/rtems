@@ -61,8 +61,10 @@ rtems_rfs_inodes_from_percent (rtems_rfs_file_system* fs,
                                int                    percentage)
 {
   int blocks;
-  blocks = (rtems_rfs_bits_per_block (fs) * percentage) / 100;
-  return blocks * (rtems_rfs_fs_block_size (fs) / sizeof (rtems_rfs_inode));
+  blocks = ((rtems_rfs_fs_blocks (fs) -
+             RTEMS_RFS_SUPERBLOCK_SIZE) * percentage) / 100;
+  blocks = rtems_rfs_rup_quotient (blocks, fs->group_count);
+  return blocks * (rtems_rfs_fs_block_size (fs) / RTEMS_RFS_INODE_SIZE);
 }
 
 /**
@@ -72,9 +74,17 @@ static int
 rtems_rfs_inode_overhead (rtems_rfs_file_system* fs)
 {
   int blocks;
-  blocks =
-    (fs->group_inodes * sizeof (rtems_rfs_inode)) / rtems_rfs_fs_block_size (fs);
-  return ((blocks + 1) * 100 * 10) / rtems_rfs_bits_per_block (fs);
+  int bits_per_block;
+  blocks = rtems_rfs_rup_quotient(fs->group_inodes * RTEMS_RFS_INODE_SIZE,
+                                  rtems_rfs_fs_block_size (fs));
+  bits_per_block = rtems_rfs_bits_per_block (fs);
+  /*
+   * There could be more bits that there are blocks, eg 512K disk with 512
+   * blocks.
+   */
+  if (bits_per_block > (rtems_rfs_fs_blocks (fs) - RTEMS_RFS_SUPERBLOCK_SIZE))
+    bits_per_block = rtems_rfs_fs_blocks (fs) - RTEMS_RFS_SUPERBLOCK_SIZE;
+  return ((blocks + 1) * 100 * 10) / bits_per_block;
 }
 
 static bool
@@ -86,7 +96,7 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
   {
     uint64_t total_size = rtems_rfs_fs_media_size (fs);
 
-    if (total_size > GIGS (2))
+    if (total_size >= GIGS (1))
     {
       uint32_t gigs = (total_size + GIGS (1)) / GIGS (1);
       int      b;
@@ -96,8 +106,8 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
       fs->block_size = 1 << b;
     }
 
-    if (fs->block_size < 1024)
-      fs->block_size = 1024;
+    if (fs->block_size < 512)
+      fs->block_size = 512;
     
     if (fs->block_size > (4 * 1024))
       fs->block_size = (4 * 1024);
@@ -126,6 +136,16 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
     return false;
   }
   
+  fs->blocks = rtems_rfs_fs_media_size (fs) / fs->block_size;
+
+  /*
+   * The bits per block sets the upper limit for the number of blocks in a
+   * group. The disk will be divided into groups which are the number of bits
+   * per block.
+   */  
+  fs->group_count = rtems_rfs_rup_quotient (rtems_rfs_fs_blocks (fs),
+                                            rtems_rfs_bits_per_block (fs));
+
   fs->group_inodes = config->group_inodes;
   if (!fs->group_inodes)
   {
@@ -143,7 +163,7 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
   /*
    * Round up to fill a block because the minimum allocation unit is a block.
    */
-  fs->inodes_per_block = rtems_rfs_fs_block_size (fs) / sizeof (rtems_rfs_inode);
+  fs->inodes_per_block = rtems_rfs_fs_block_size (fs) / RTEMS_RFS_INODE_SIZE;
   fs->group_inodes =
     rtems_rfs_rup_quotient (fs->group_inodes,
                             fs->inodes_per_block) * fs->inodes_per_block;
@@ -398,6 +418,7 @@ rtems_rfs_write_superblock (rtems_rfs_file_system* fs)
   memset (sb, 0xff, rtems_rfs_fs_block_size (fs));
 
   write_sb (RTEMS_RFS_SB_OFFSET_MAGIC, RTEMS_RFS_SB_MAGIC);
+  write_sb (RTEMS_RFS_SB_OFFSET_VERSION, RTEMS_RFS_VERSION);
   write_sb (RTEMS_RFS_SB_OFFSET_BLOCKS, rtems_rfs_fs_blocks (fs));
   write_sb (RTEMS_RFS_SB_OFFSET_BLOCK_SIZE, rtems_rfs_fs_block_size (fs));
   write_sb (RTEMS_RFS_SB_OFFSET_BAD_BLOCKS, fs->bad_blocks);
@@ -405,6 +426,7 @@ rtems_rfs_write_superblock (rtems_rfs_file_system* fs)
   write_sb (RTEMS_RFS_SB_OFFSET_GROUPS, fs->group_count);
   write_sb (RTEMS_RFS_SB_OFFSET_GROUP_BLOCKS, fs->group_blocks);
   write_sb (RTEMS_RFS_SB_OFFSET_GROUP_INODES, fs->group_inodes);
+  write_sb (RTEMS_RFS_SB_OFFSET_INODE_SIZE, RTEMS_RFS_INODE_SIZE);
 
   rtems_rfs_buffer_mark_dirty (&handle);
 
@@ -549,16 +571,6 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
   if (!rtems_rfs_check_config (&fs, config))
     return -1;
 
-  fs.blocks = rtems_rfs_fs_media_size (&fs) / fs.block_size;
-
-  /*
-   * The bits per block sets the upper limit for the number of blocks in a
-   * group. The disk will be divided into groups which are the number of bits
-   * per block.
-   */  
-  fs.group_count =
-    ((rtems_rfs_fs_blocks (&fs) - 1) / rtems_rfs_bits_per_block (&fs)) + 1;
-
   if (config->verbose)
   {
     printf ("rtems-rfs: format: media size = %llu\n",
@@ -575,7 +587,7 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
             rtems_rfs_fs_block_size (&fs));
     printf ("rtems-rfs: format: bits per block = %u\n",
             rtems_rfs_bits_per_block (&fs));
-    printf ("rtems-rfs: format: inode size = %lu\n", sizeof (rtems_rfs_inode));
+    printf ("rtems-rfs: format: inode size = %lu\n", RTEMS_RFS_INODE_SIZE);
     printf ("rtems-rfs: format: inodes = %lu (%d.%d%%)\n",
             fs.group_inodes * fs.group_count,
             rtems_rfs_inode_overhead (&fs) / 10,

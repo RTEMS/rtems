@@ -211,8 +211,11 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
 
   rc = rtems_rfs_inode_open (fs, *ino, &inode, true);
   if (rc > 0)
+  {
+    rtems_rfs_inode_free (fs, *ino);
     return rc;
-
+  }
+  
   rc = rtems_rfs_inode_initialise (&inode, links, mode, uid, gid);
   if (rc > 0)
   {
@@ -223,6 +226,8 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
 
   /*
    * Only handle the specifics of a directory. Let caller handle the others.
+   *
+   * The inode delete will free the inode.
    */
   if (RTEMS_RFS_S_ISDIR (mode))
   {
@@ -307,7 +312,7 @@ rtems_rfs_inode_delete (rtems_rfs_file_system*  fs,
       rc = rtems_rfs_block_map_close (fs, &map);
       if (rc > 0)
         rrc = rc;
-      memset (handle->node, 0xff, sizeof (rtems_rfs_inode));
+      memset (handle->node, 0xff, RTEMS_RFS_INODE_SIZE);
       rtems_rfs_buffer_mark_dirty (&handle->buffer);
       /*
        * Do the release here to avoid the ctime field being set on a

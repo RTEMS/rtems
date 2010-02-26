@@ -32,6 +32,13 @@
 #include <rtems/rfs/rtems-rfs-dir.h>
 #include <rtems/rfs/rtems-rfs-dir-hash.h>
 
+/**
+ * Validate the directory entry data.
+ */
+#define rtems_rfs_dir_entry_valid(_f, _l, _i) \
+  (((_l) <= RTEMS_RFS_DIR_ENTRY_SIZE) || ((_l) >= rtems_rfs_fs_max_name (_f)) \
+   || (_i < RTEMS_RFS_ROOT_INO) || (_i > rtems_rfs_fs_inodes (_f)))
+
 int
 rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
                           rtems_rfs_inode_handle* inode,
@@ -136,10 +143,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
         if (elength == RTEMS_RFS_DIR_ENTRY_EMPTY)
           break;
         
-        if ((elength <= RTEMS_RFS_DIR_ENTRY_SIZE)
-            || (elength >= rtems_rfs_fs_max_name (fs))
-            || (*ino < RTEMS_RFS_ROOT_INO)
-            || (*ino >= rtems_rfs_fs_inodes (fs)))
+        if (rtems_rfs_dir_entry_valid (fs, elength, *ino))
         {
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
             printf ("rtems-rfs: dir-lookup-ino: " \
@@ -331,10 +335,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
         break;
       }
       
-      if ((elength <= RTEMS_RFS_DIR_ENTRY_SIZE)
-          || (elength >= rtems_rfs_fs_max_name (fs))
-          || (eino < RTEMS_RFS_ROOT_INO)
-          || (eino >= rtems_rfs_fs_inodes (fs)))
+      if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_ADD_ENTRY))
           printf ("rtems-rfs: dir-add-entry: " \
@@ -425,10 +426,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
       if (elength == RTEMS_RFS_DIR_ENTRY_EMPTY)
         break;
       
-      if ((elength <= RTEMS_RFS_DIR_ENTRY_SIZE)
-          || (elength >= rtems_rfs_fs_max_name (fs))
-          || (eino < RTEMS_RFS_ROOT_INO)
-          || (eino >= rtems_rfs_fs_inodes (fs)))
+      if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
           printf ("rtems-rfs: dir-del-entry: " \
@@ -572,10 +570,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
 
     if (elength != RTEMS_RFS_DIR_ENTRY_EMPTY)
     {
-      if ((elength <= RTEMS_RFS_DIR_ENTRY_SIZE)
-          || (elength >= rtems_rfs_fs_max_name (fs))
-          || (eino < RTEMS_RFS_ROOT_INO)
-          || (eino >= rtems_rfs_fs_inodes (fs)))
+      if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
           printf ("rtems-rfs: dir-read: " \
@@ -690,10 +685,7 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
       if (elength == RTEMS_RFS_DIR_ENTRY_EMPTY)
         break;
 
-      if ((elength <= RTEMS_RFS_DIR_ENTRY_SIZE)
-          || (elength >= rtems_rfs_fs_max_name (fs))
-          || (eino < RTEMS_RFS_ROOT_INO)
-          || (eino >= rtems_rfs_fs_inodes (fs)))
+      if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_EMPTY))
           printf ("rtems-rfs: dir-empty: " \

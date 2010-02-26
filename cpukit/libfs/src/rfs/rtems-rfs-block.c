@@ -626,6 +626,8 @@ rtems_rfs_block_map_indirect_shrink (rtems_rfs_file_system*   fs,
       int b;
       for (b = 0; b < RTEMS_RFS_INODE_BLOCKS; b++)
         map->blocks[b] = rtems_rfs_block_get_number (buffer, b);
+
+      rtems_rfs_buffer_handle_reset (buffer);
     }
     else
     {

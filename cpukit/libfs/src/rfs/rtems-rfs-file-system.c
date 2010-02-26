@@ -54,9 +54,9 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
   
   if (read_sb (RTEMS_RFS_SB_OFFSET_MAGIC) != RTEMS_RFS_SB_MAGIC)
   {
-    rtems_rfs_buffer_handle_close (fs, &handle);
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_OPEN))
       printf ("rtems-rfs: read-superblock: invalid superblock, bad magic\n");
+    rtems_rfs_buffer_handle_close (fs, &handle);
     return EIO;
   }
 
@@ -65,19 +65,39 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
 
   if (rtems_rfs_fs_size(fs) > rtems_rfs_fs_media_size (fs))
   {
-    rtems_rfs_buffer_handle_close (fs, &handle);
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_OPEN))
       printf ("rtems-rfs: read-superblock: invalid superblock block/size count\n");
+    rtems_rfs_buffer_handle_close (fs, &handle);
     return EIO;
   }
 
+  if ((read_sb (RTEMS_RFS_SB_OFFSET_VERSION) & RTEMS_RFS_VERSION_MASK) !=
+      (RTEMS_RFS_VERSION * RTEMS_RFS_VERSION_MASK))
+  {
+    if (rtems_rfs_trace (RTEMS_RFS_TRACE_OPEN))
+      printf ("rtems-rfs: read-superblock: incompatible version: %08x (%08x)\n",
+              read_sb (RTEMS_RFS_SB_OFFSET_VERSION), RTEMS_RFS_VERSION_MASK);
+    rtems_rfs_buffer_handle_close (fs, &handle);
+    return EIO;
+  }
+      
+  if (read_sb (RTEMS_RFS_SB_OFFSET_INODE_SIZE) != RTEMS_RFS_INODE_SIZE)
+  {
+    if (rtems_rfs_trace (RTEMS_RFS_TRACE_OPEN))
+      printf ("rtems-rfs: read-superblock: inode size mismatch: fs:%d target:%d\n",
+              read_sb (RTEMS_RFS_SB_OFFSET_VERSION), RTEMS_RFS_VERSION_MASK);
+    rtems_rfs_buffer_handle_close (fs, &handle);
+    return EIO;
+  }
+      
   fs->bad_blocks      = read_sb (RTEMS_RFS_SB_OFFSET_BAD_BLOCKS);
   fs->max_name_length = read_sb (RTEMS_RFS_SB_OFFSET_MAX_NAME_LENGTH);
   fs->group_count     = read_sb (RTEMS_RFS_SB_OFFSET_GROUPS);
   fs->group_blocks    = read_sb (RTEMS_RFS_SB_OFFSET_GROUP_BLOCKS);
   fs->group_inodes    = read_sb (RTEMS_RFS_SB_OFFSET_GROUP_INODES);
 
-  fs->blocks_per_block = rtems_rfs_fs_block_size (fs) / sizeof (rtems_rfs_inode_block);
+  fs->blocks_per_block =
+    rtems_rfs_fs_block_size (fs) / sizeof (rtems_rfs_inode_block);
   
   fs->block_map_singly_blocks =
     fs->blocks_per_block * RTEMS_RFS_INODE_BLOCKS;
@@ -86,7 +106,7 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
 
   fs->inodes = fs->group_count * fs->group_inodes;
 
-  fs->inodes_per_block = fs->block_size / sizeof (rtems_rfs_inode);
+  fs->inodes_per_block = fs->block_size / RTEMS_RFS_INODE_SIZE;
   
   if (fs->group_blocks >
       rtems_rfs_bitmap_numof_bits (rtems_rfs_fs_block_size (fs)))

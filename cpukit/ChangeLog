@@ -1,3 +1,34 @@
+2010-02-26	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-block.c: Reset a buffer handle after
+	moving down an indirection level.
+
+	* libfs/src/rfs/rtems-rfs-dir.c: Move directory entry validation
+	into a macro and use the macro. Fix the range check on the ino so
+	all inodes can be used.
+
+	* libfs/src/rfs/rtems-rfs-file-system.c,
+	libfs/src/rfs/rtems-rfs-file-system.h:: Add a version number to
+	the superblock. Use RTEMS_RFS_INODE_SIZE.
+
+	* libfs/src/rfs/rtems-rfs-file.c: Fix the size offset on partial
+	block lengths. Set the size in the file handle on a truncate to
+	0.
+
+	* libfs/src/rfs/rtems-rfs-format.c:  Add a version number to
+	the superblock. Use RTEMS_RFS_INODE_SIZE. A better set of defaults
+	for small disks.
+
+	* libfs/src/rfs/rtems-rfs-inode.c: Use RTEMS_RFS_INODE_SIZE. Free
+	the allocated inode if it cannot be opened.
+
+	* libfs/src/rfs/rtems-rfs-inode.h: Add RTEMS_RFS_INODE_SIZE.
+
+	* libfs/src/rfs/rtems-rfs-rtems-file.c: Move some of the iop
+	acceses inside the fs lock.
+
+	* libfs/src/rfs/rtems-rfs-shell.c: Use RTEMS_RFS_INODE_SIZE.
+
 2010-02-24	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/main_msdosfmt.c, libmisc/shell/shellconfig.h: Fix

@@ -169,6 +169,11 @@ typedef struct rtems_rfs_inode_t
 } rtems_rfs_inode;
 
 /**
+ * The size of an inode.
+ */
+#define RTEMS_RFS_INODE_SIZE (sizeof (rtems_rfs_inode))
+
+/**
  * RFS Inode Handle.
  */
 typedef struct rtems_rfs_inode_handle_t

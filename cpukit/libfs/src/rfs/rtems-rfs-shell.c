@@ -114,7 +114,6 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
   size_t inodes;
   int    bpcent;
   int    ipcent;
-  int    g;
 
   printf ("RFS Filesystem Data\n");
   printf ("             flags: %08lx\n", fs->flags);
@@ -367,7 +366,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
       {
         printf (" %5lu: pos=%06lu:%04lx %c ",
                 ino, rtems_rfs_buffer_bnum (&inode.buffer),
-                inode.offset * sizeof (rtems_rfs_inode),
+                inode.offset * RTEMS_RFS_INODE_SIZE,
                 allocated ? 'A' : 'F');
     
         if (!allocated && !forced)

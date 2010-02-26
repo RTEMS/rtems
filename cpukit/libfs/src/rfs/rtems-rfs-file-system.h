@@ -27,13 +27,26 @@
  */
 #define RTEMS_RFS_SB_OFFSET_MAGIC           (0)
 #define RTEMS_RFS_SB_MAGIC                  (0x28092001)
-#define RTEMS_RFS_SB_OFFSET_BLOCK_SIZE      (4)
-#define RTEMS_RFS_SB_OFFSET_BLOCKS          (8)
-#define RTEMS_RFS_SB_OFFSET_BAD_BLOCKS      (12)
-#define RTEMS_RFS_SB_OFFSET_MAX_NAME_LENGTH (16)
-#define RTEMS_RFS_SB_OFFSET_GROUPS          (20)
-#define RTEMS_RFS_SB_OFFSET_GROUP_BLOCKS    (24)
-#define RTEMS_RFS_SB_OFFSET_GROUP_INODES    (28)
+#define RTEMS_RFS_SB_OFFSET_VERSION         (RTEMS_RFS_SB_OFFSET_MAGIC           + 4)
+#define RTEMS_RFS_SB_OFFSET_BLOCK_SIZE      (RTEMS_RFS_SB_OFFSET_VERSION         + 4)
+#define RTEMS_RFS_SB_OFFSET_BLOCKS          (RTEMS_RFS_SB_OFFSET_BLOCK_SIZE      + 4)
+#define RTEMS_RFS_SB_OFFSET_BAD_BLOCKS      (RTEMS_RFS_SB_OFFSET_BLOCKS          + 4)
+#define RTEMS_RFS_SB_OFFSET_MAX_NAME_LENGTH (RTEMS_RFS_SB_OFFSET_BAD_BLOCKS      + 4)
+#define RTEMS_RFS_SB_OFFSET_GROUPS          (RTEMS_RFS_SB_OFFSET_MAX_NAME_LENGTH + 4)
+#define RTEMS_RFS_SB_OFFSET_GROUP_BLOCKS    (RTEMS_RFS_SB_OFFSET_GROUPS          + 4)
+#define RTEMS_RFS_SB_OFFSET_GROUP_INODES    (RTEMS_RFS_SB_OFFSET_GROUP_BLOCKS    + 4)
+#define RTEMS_RFS_SB_OFFSET_INODE_SIZE      (RTEMS_RFS_SB_OFFSET_GROUP_INODES    + 4)
+
+/**
+ * RFS Version Number.
+ */
+#define RTEMS_RFS_VERSION (0x00000000)
+
+/**
+ * RFS Version Number Mask. The mask determines which bits of the version
+ * number indicate compatility issues.
+ */
+#define RTEMS_RFS_VERSION_MASK (0x00000000)
 
 /**
  * The root inode number. Do not use 0 as this has special meaning in some Unix
