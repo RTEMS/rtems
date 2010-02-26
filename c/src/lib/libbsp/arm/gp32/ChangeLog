@@ -1,3 +1,7 @@
+2010-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* smc/smc.c: Replace EBADRQC with EINVAL.
+
 2010-01-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* smc/smc.c: Update for block device API change.

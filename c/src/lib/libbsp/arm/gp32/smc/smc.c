@@ -603,14 +603,14 @@ smc_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
                 case RTEMS_BLKDEV_REQ_WRITE:
 		    return smc_write(r);
                 default:
-                    errno = EBADRQC;
+                    errno = EINVAL;
                     return -1;
             }
             break;
         }
 
         default:
-            errno = EBADRQC;
+            errno = EINVAL;
             return -1;
     }
 }
