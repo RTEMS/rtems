@@ -1,3 +1,7 @@
+2010-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* block10/.cvsignore: New file.
+
 2010-01-21	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* block05/block05.png, block10/block10.doc, block10/init.c,
