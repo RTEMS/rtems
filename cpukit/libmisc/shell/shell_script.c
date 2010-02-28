@@ -320,7 +320,7 @@ int rtems_shell_script_file(
    */
 
   /*
-   * Check for arguments in fist line of the script.  This changes
+   * Check for arguments in the first line of the script.  This changes
    * how the shell task is run.
    */
 

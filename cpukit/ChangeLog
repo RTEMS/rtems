@@ -1,3 +1,7 @@
+2010-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/shell_script.c: Fix typo.
+
 2010-02-26	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-block.c: Reset a buffer handle after
