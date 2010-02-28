@@ -1,3 +1,7 @@
+2010-03-01	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-buffer.h: Add `rtems_rfs_buffer_handle_reset'.
+
 2010-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/shell_script.c: Fix typo.
