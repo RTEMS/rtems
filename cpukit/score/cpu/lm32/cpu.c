@@ -161,7 +161,10 @@ void _CPU_Install_interrupt_stack( void )
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
-
-  for( ; ; )
-    /* insert your "halt" instruction here */ ;
+  for( ; ; ) {
+    /* The LM32 softcore itself hasn't any HLT instruction. But the
+     * LM32 qemu target interprets this nop instruction as HLT.
+     */
+    asm volatile("and r0, r0, r0");
+ }
 }

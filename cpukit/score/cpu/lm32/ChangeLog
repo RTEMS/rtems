@@ -1,3 +1,8 @@
+2010-03-02	Michael Walle <michael@walle.cc>
+
+	* cpu.c: Provide body for CPU specific Idle thread. This halts on qemu
+	but is just a nop on a real cpu.
+
 2009-05-05	Michael Walle <michael@walle.cc>
 
 	* cpu_asm.S, irq.c, rtems/score/cpu.h: Add lm32 gdb stub support.
