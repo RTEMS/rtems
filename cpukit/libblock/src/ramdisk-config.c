@@ -35,7 +35,7 @@ ramdisk_initialize(
         return rc;
 
     /*
-     * Coverity Id 27 notes that this calloc() is a resource leak.
+     * Coverity Id 27 & 31 note that this calloc() is a resource leak.
      *
      * This is allocating memory for a RAM disk which will persist for
      * the life of the system. RTEMS has no "de-initialize" driver call
@@ -82,5 +82,10 @@ ramdisk_initialize(
             r->initialized = false;
         }
     }
+    /*
+     * We need to tell Coverity that we know we are returning without
+     * freeing r.  This looks suspiciously like a leak. :)
+     */
+    /* coverity[leaked_storage : FALSE] */
     return RTEMS_SUCCESSFUL;
 }
