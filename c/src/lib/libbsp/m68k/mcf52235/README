@@ -33,7 +33,6 @@ In you project before you include confdefs.h, define some or all of the
 following:
 
 #define CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
-#define CONFIGURE_DISABLE_CLASSIC_NOTEPADS
 #define CONFIGURE_INIT_TASK_STACK_SIZE x
 #define CONFIGURE_MINIMUM_TASK_STACK_SIZE x
 #define CONFIGURE_INTERRUPT_STACK_SIZE x

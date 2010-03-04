@@ -1,3 +1,8 @@
+2010-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* README: CONFIGURE_DISABLE_CLASSIC_NOTEPADS is typo of
+	CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS. Fix it.
+
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* console/console.c: adapted to new prototype for *_write
