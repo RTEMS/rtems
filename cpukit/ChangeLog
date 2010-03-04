@@ -1,5 +1,9 @@
 2010-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libblock/src/ramdisk-config.c: Revert accidental commit.
+
+2010-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libblock/src/ramdisk-config.c, sapi/include/confdefs.h:
 	CONFIGURE_DISABLE_CLASSIC_NOTEPADS is typo of
 	CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS. Fix it.
