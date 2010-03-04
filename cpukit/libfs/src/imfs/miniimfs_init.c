@@ -49,7 +49,9 @@ const rtems_filesystem_operations_table  miniIMFS_ops = {
   NULL, /* XXX IMFS_utime, */
   NULL, /* XXX IMFS_evaluate_link, */
   NULL, /* XXX IMFS_symlink, */
-  NULL  /* XXX IMFS_readlink */
+  NULL, /* XXX IMFS_readlink */
+  NULL, /* XXX IMFS_rename */
+  NULL  /* XXX IMFS_statvfs */
 };
 
 /*

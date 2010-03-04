@@ -24,13 +24,15 @@
 #include <rtems/rfs/rtems-rfs-trace.h>
 #include <rtems/rfs/rtems-rfs-dir.h>
 #include <rtems/rfs/rtems-rfs-dir-hash.h>
+#include <rtems/rfs/rtems-rfs-link.h>
 
 int
 rtems_rfs_link (rtems_rfs_file_system* fs,
                 const char*            name,
                 int                    length,
                 rtems_rfs_ino          parent,
-                rtems_rfs_ino          target)
+                rtems_rfs_ino          target,
+                bool                   link_dir)
 {
   rtems_rfs_inode_handle parent_inode;
   rtems_rfs_inode_handle target_inode;
@@ -50,7 +52,11 @@ rtems_rfs_link (rtems_rfs_file_system* fs,
   if (rc)
     return rc;
 
-  if (S_ISDIR (rtems_rfs_inode_get_mode (&target_inode)))
+  /*
+   * If the target inode is a directory and we cannot link directories
+   * return a not supported error code.
+   */
+  if (!link_dir && S_ISDIR (rtems_rfs_inode_get_mode (&target_inode)))
   {
     rtems_rfs_inode_close (fs, &target_inode);
     return ENOTSUP;
@@ -99,11 +105,12 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
                   rtems_rfs_ino          parent,
                   rtems_rfs_ino          target,
                   uint32_t               doff,
-                  bool                   dir)
+                  rtems_rfs_unlink_dir   dir_mode)
 {
   rtems_rfs_inode_handle parent_inode;
   rtems_rfs_inode_handle target_inode;
   uint16_t               links;
+  bool                   dir;
   int                    rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_UNLINK))
@@ -112,29 +119,35 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
   rc = rtems_rfs_inode_open (fs, target, &target_inode, true);
   if (rc)
     return rc;
-
+  
+  /*
+   * If a directory process the unlink mode.
+   */
+  
+  dir = RTEMS_RFS_S_ISDIR (rtems_rfs_inode_get_mode (&target_inode));  
   if (dir)
   {
-    rc = rtems_rfs_dir_empty (fs, &target_inode);
-    if (rc > 0)
+    switch (dir_mode)
     {
-      if (rtems_rfs_trace (RTEMS_RFS_TRACE_UNLINK))
-        printf ("rtems-rfs: dir-empty: %d: %s\n", rc, strerror (rc));
-      rtems_rfs_inode_close (fs, &target_inode);
-      return rc;
-    }
-  }
-  else
-  {
-    /*
-     * Directories not allowed and the target is a directory.
-     */
-    if (RTEMS_RFS_S_ISDIR (rtems_rfs_inode_get_mode (&target_inode)))
-    {
-      if (rtems_rfs_trace (RTEMS_RFS_TRACE_UNLINK))
-        printf ("rtems-rfs: link is a directory\n");
-      rtems_rfs_inode_close (fs, &target_inode);
-      return EISDIR;
+      case rtems_rfs_unlink_dir_denied:
+        if (rtems_rfs_trace (RTEMS_RFS_TRACE_UNLINK))
+          printf ("rtems-rfs: link is a directory\n");
+        rtems_rfs_inode_close (fs, &target_inode);
+        return EISDIR;
+
+      case rtems_rfs_unlink_dir_if_empty:
+        rc = rtems_rfs_dir_empty (fs, &target_inode);
+        if (rc > 0)
+        {
+          if (rtems_rfs_trace (RTEMS_RFS_TRACE_UNLINK))
+            printf ("rtems-rfs: dir-empty: %d: %s\n", rc, strerror (rc));
+          rtems_rfs_inode_close (fs, &target_inode);
+          return rc;
+        }
+        break;
+
+      default:
+        break;
     }
   }
   

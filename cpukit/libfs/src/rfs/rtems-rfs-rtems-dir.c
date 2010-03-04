@@ -205,7 +205,7 @@ rtems_rfs_rtems_dir_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
 
   rtems_rfs_rtems_lock (fs);
   
-  rc = rtems_rfs_unlink (fs, parent, ino, doff, true);
+  rc = rtems_rfs_unlink (fs, parent, ino, doff, rtems_rfs_unlink_dir_if_empty);
   if (rc)
   {
     rtems_rfs_rtems_unlock (fs);

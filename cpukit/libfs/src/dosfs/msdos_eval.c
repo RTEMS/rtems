@@ -108,7 +108,7 @@ msdos_eval_path(
     while ((type != MSDOS_NO_MORE_PATH) && (type != MSDOS_INVALID_TOKEN))
     {
         type = msdos_get_token(&pathname[i], pathnamelen, &token, &token_len);
-        pathnamelen += token_len;
+        pathnamelen -= token_len;
         i += token_len;
 
         fat_fd = pathloc->node_access;
@@ -152,7 +152,7 @@ msdos_eval_path(
 
                         rtems_semaphore_release(fs_info->vol_sema);
                         return (*pathloc->ops->evalpath_h)(&(pathname[i-token_len]),
-                                                           pathnamelen - token_len,
+                                                           pathnamelen + token_len,
                                                            flags, pathloc);
                     }
                 }

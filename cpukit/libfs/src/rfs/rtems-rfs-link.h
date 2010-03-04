@@ -26,20 +26,33 @@
 #include <rtems/rfs/rtems-rfs-inode.h>
 
 /**
- * Create a link.
+ * Directory unlink modes.
+ */
+typedef enum rtems_rfs_unlink_dir_e
+{
+  rtems_rfs_unlink_dir_denied,   /**< Not allowed to unlink a directory. */
+  rtems_rfs_unlink_dir_if_empty, /**< Unlink if the directory is empty. */
+  rtems_rfs_unlink_dir_allowed   /**< Unlinking of directories is allowed. */
+} rtems_rfs_unlink_dir;
+
+/**
+ * Create a link. Do not link directories unless renaming or you will create
+ * loops in the file system.
  *
  * @param fs The file system.
  * @param name The name of the link.
  * @param length The length of the name.
  * @param parent The inode number of the parent directory.
  * @param target The inode of the target.
+ * @param link_dir If true directories can be linked. Useful when renaming.
  * @return int The error number (errno). No error if 0.
  */
 int rtems_rfs_link (rtems_rfs_file_system* fs,
                     const char*            name,
                     int                    length,
                     rtems_rfs_ino          parent,
-                    rtems_rfs_ino          target);
+                    rtems_rfs_ino          target,
+                    bool                   link_dir);
 
 /**
  * Unlink the node from the parent directory. A directory offset for the target
@@ -50,14 +63,14 @@ int rtems_rfs_link (rtems_rfs_file_system* fs,
  * @param parent The inode number of the parent directory.
  * @param target The inode of the target.
  * @param doff Parent directory entry offset for the target entry.
- * @param dir If true unlinking of directory nodes is allowed.
+ * @param dir_mode Directory unlink mode.
  * @return int The error number (errno). No error if 0.
  */
 int rtems_rfs_unlink (rtems_rfs_file_system* fs,
                       rtems_rfs_ino          parent,
                       rtems_rfs_ino          target,
                       uint32_t               doff,
-                      bool                   dir);
+                      rtems_rfs_unlink_dir   dir_mode);
 
 /**
  * Symbolic link is an inode that has a path attached.

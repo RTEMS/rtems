@@ -1,3 +1,43 @@
+2010-03-04	Chris Johns <chrisj@rtems.org>
+
+	* libcsupport/include/rtems/libio.h, libcsupport/src/_rename_r.c:
+	Add a rename file op and have rename use it.
+
+	* libfs/Makefile.am, libfs/src/dosfs/msdos_rename.c,
+	libfs/src/imfs/imfs_rename.c: New files to support the rename file
+	op.
+
+	* libfs/src/imfs/imfs.h: Add rename interface.
+
+	* libfs/src/imfs/imfs_init.c: Add rename handler.
+
+	* libfs/src/imfs/miniimfs_init.c: Fix up ops struct.
+	
+	* libfs/src/dosfs/msdos.h: Add msdos_rename and remove
+	msdos_file_link.
+
+	* libfs/src/dosfs/msdos_create.c: Remove the link call.
+	
+	* libfs/src/dosfs/msdos_eval.c: Fix a path parsing bug.
+
+	* libfs/src/dosfs/msdos_init.c: Add rename handler and clean up
+	the struct naming.
+
+	* libfs/src/rfs/rtems-rfs-link.c, libfs/src/rfs/rtems-rfs-link.h:
+	Change the link call to allow linking of directories if told to
+	and change the unlink to handle unlink directories that are not
+	empty so rename can be supported.
+
+	* libfs/src/rfs/rtems-rfs-rtems-dir.c: Fix the link/unlink calls.
+
+	* libfs/src/rfs/rtems-rfs-rtems.c: Add a rename handler. Fix the
+	link/unlink calls.
+	
+	* libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_format.c,
+	libfs/src/dosfs/msdos_misc.c, httpd/asp.c,
+	libfs/src/nfsclient/src/nfs.c: Work around a newlib warning when
+	using the is*() family of calls.
+
 2010-03-01	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-buffer.h: Add `rtems_rfs_buffer_handle_reset'.

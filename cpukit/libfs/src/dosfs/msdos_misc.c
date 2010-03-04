@@ -65,7 +65,7 @@ msdos_is_valid_name_char(const char ch)
     if (strchr(" +,;=[]", ch) != NULL)
         return MSDOS_NAME_LONG;
 
-    if ((ch == '.') || isalnum(ch) ||
+    if ((ch == '.') || isalnum((int)ch) ||
         (strchr("$%'-_@~`!(){}^#&", ch) != NULL))
         return MSDOS_NAME_SHORT;
 

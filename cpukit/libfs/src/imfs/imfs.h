@@ -529,6 +529,13 @@ extern int IMFS_readlink(
  size_t                             bufsize
 );
 
+extern int IMFS_rename(
+  rtems_filesystem_location_info_t  *old_loc,         /* IN */
+  rtems_filesystem_location_info_t  *old_parent_loc,  /* IN */
+  rtems_filesystem_location_info_t  *new_parent_loc,  /* IN */
+  const char                        *new_name         /* IN */
+);
+
 extern int IMFS_fdatasync(
   rtems_libio_t *iop
 );

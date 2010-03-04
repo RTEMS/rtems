@@ -259,6 +259,11 @@ int msdos_utime(
   time_t                            modtime  /* IN */
 );
 
+int msdos_rename(rtems_filesystem_location_info_t  *old_parent_loc,
+                 rtems_filesystem_location_info_t  *old_loc,
+                 rtems_filesystem_location_info_t  *new_parent_loc,
+                 const char                        *new_name);
+
 int msdos_initialize_support(
   rtems_filesystem_mount_table_entry_t    *temp_mt_entry,
   const rtems_filesystem_operations_table *op_table,
@@ -322,12 +327,6 @@ msdos_dir_chmod(
 
 int msdos_file_rmnod(rtems_filesystem_location_info_t *parent_pathloc, /* IN */
                      rtems_filesystem_location_info_t *pathloc /* IN */);
-
-int msdos_file_link(
-  rtems_filesystem_location_info_t *to_loc,
-  rtems_filesystem_location_info_t *pa_loc,
-  const char                       *token
-);
 
 int msdos_dir_open(
   rtems_libio_t *iop,             /* IN  */

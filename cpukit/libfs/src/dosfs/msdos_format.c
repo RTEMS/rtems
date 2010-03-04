@@ -648,7 +648,7 @@ static int msdos_format_determine_fmt_params
     for (cnt = 0;
 	 cnt < (sizeof(fmt_params->OEMName)-1);
 	 cnt++) {
-      if (isprint(*from)) {
+      if (isprint((int)*from)) {
 	*to++ = *from++;
       }
       else {
@@ -679,7 +679,7 @@ static int msdos_format_determine_fmt_params
     for (cnt = 0;
 	 cnt < (sizeof(fmt_params->VolLabel)-1);
 	 cnt++) {
-      if (isprint(*from)) {
+      if (isprint((int)*from)) {
 	*to++ = *from++;
       }
       else {

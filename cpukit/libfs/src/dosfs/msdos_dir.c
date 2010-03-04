@@ -146,7 +146,7 @@ msdos_format_dirent_with_dot(char *dst,const char *src)
   src_tmp = src;
   len = i;
   while (i-- > 0) {
-    *dst++ = tolower(*src_tmp++);
+    *dst++ = tolower((int)(*src_tmp++));
   }
   /*
    * find last non-blank character of extension
@@ -165,7 +165,7 @@ msdos_format_dirent_with_dot(char *dst,const char *src)
     len += i + 1; /* extension + dot */
     src_tmp = src + MSDOS_SHORT_BASE_LEN;
     while (i-- > 0) {
-      *dst++ = tolower(*src_tmp++);
+      *dst++ = tolower((int)(*src_tmp++));
       len++;
     }
   }

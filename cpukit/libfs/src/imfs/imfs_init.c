@@ -50,6 +50,7 @@ const rtems_filesystem_operations_table  IMFS_ops = {
   IMFS_evaluate_link,
   IMFS_symlink,
   IMFS_readlink,
+  IMFS_rename,
   NULL
 };
 

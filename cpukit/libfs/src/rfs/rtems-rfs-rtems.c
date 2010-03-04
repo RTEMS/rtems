@@ -478,7 +478,7 @@ rtems_rfs_rtems_link (rtems_filesystem_location_info_t* to_loc,
   
   rtems_rfs_rtems_lock (fs);
   
-  rc = rtems_rfs_link (fs, name, strlen (name), parent, target);
+  rc = rtems_rfs_link (fs, name, strlen (name), parent, target, false);
   if (rc)
   {
     rtems_rfs_rtems_unlock (fs);
@@ -514,7 +514,7 @@ rtems_rfs_rtems_unlink (rtems_filesystem_location_info_t* parent_loc,
     printf("rtems-rfs-rtems: unlink: parent:%ld doff:%lu ino:%ld\n",
            parent, doff, ino);
   
-  rc = rtems_rfs_unlink (fs, parent, ino, doff, false);
+  rc = rtems_rfs_unlink (fs, parent, ino, doff, rtems_rfs_unlink_dir_denied);
   if (rc)
   {
     rtems_rfs_rtems_unlock (fs);
@@ -1043,6 +1043,7 @@ rtems_rfs_rtems_mknod (const char                       *name,
  *
  * @param parent_pathloc
  * @param pathloc
+ * @return int 
  */
 int
 rtems_rfs_rtems_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
@@ -1060,7 +1061,7 @@ rtems_rfs_rtems_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
 
   rtems_rfs_rtems_lock (fs);
   
-  rc = rtems_rfs_unlink (fs, parent, ino, doff, false);
+  rc = rtems_rfs_unlink (fs, parent, ino, doff, rtems_rfs_unlink_dir_denied);
   if (rc)
   {
     rtems_rfs_rtems_unlock (fs);
@@ -1076,6 +1077,7 @@ rtems_rfs_rtems_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
  * everything related to this device.
  *
  * @param iop
+ * @return int 
  */
 int
 rtems_rfs_rtems_fdatasync (rtems_libio_t* iop)
@@ -1085,6 +1087,68 @@ rtems_rfs_rtems_fdatasync (rtems_libio_t* iop)
   rc = rtems_rfs_buffer_sync (rtems_rfs_rtems_pathloc_dev (&iop->pathinfo));
   if (rc)
     return rtems_rfs_rtems_error ("fdatasync: sync", rc);
+
+  return 0;
+}
+
+/**
+ * Rename the node.
+ *
+ * @param old_parent_loc The old name's parent location.
+ * @param old_loc The old name's location.
+ * @param new_parent_loc The new name's parent location.
+ * @param new_name The new name.
+ * @return int 
+ */
+int
+rtems_rfs_rtems_rename(rtems_filesystem_location_info_t* old_parent_loc,
+                       rtems_filesystem_location_info_t* old_loc,
+                       rtems_filesystem_location_info_t* new_parent_loc,
+                       const char*                       new_name)
+{
+  rtems_rfs_file_system*  fs = rtems_rfs_rtems_pathloc_dev (old_loc);
+  rtems_rfs_ino           old_parent;
+  rtems_rfs_ino           new_parent;
+  rtems_rfs_ino           ino;
+  uint32_t                doff;
+  int                     rc;
+  
+  old_parent = rtems_rfs_rtems_get_pathloc_ino (old_parent_loc);
+  new_parent = rtems_rfs_rtems_get_pathloc_ino (new_parent_loc);
+
+  ino  = rtems_rfs_rtems_get_pathloc_ino (old_loc);
+  doff = rtems_rfs_rtems_get_pathloc_doff (old_loc);
+
+  if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_RENAME))
+    printf ("rtems-rfs: rename: ino:%ld doff:%lu, new parent:%ld new name:%s\n",
+            ino, doff, new_parent, new_name);
+
+  rtems_rfs_rtems_lock (fs);
+
+  /*
+   * Link to the inode before unlinking so the inode is not erased when
+   * unlinked.
+   */
+  rc = rtems_rfs_link (fs, new_name, strlen (new_name), new_parent, ino, true);
+  if (rc)
+  {
+    rtems_rfs_rtems_unlock (fs);
+    return rtems_rfs_rtems_error ("rename: linking", rc);
+  }
+  
+  /*
+   * Unlink all inodes even directories with the dir option as false because a
+   * directory may not be empty.
+   */
+  rc = rtems_rfs_unlink (fs, old_parent, ino, doff,
+                         rtems_rfs_unlink_dir_allowed);
+  if (rc)
+  {
+    rtems_rfs_rtems_unlock (fs);
+    return rtems_rfs_rtems_error ("rename: unlinking", rc);
+  }
+
+  rtems_rfs_rtems_unlock (fs);
 
   return 0;
 }
@@ -1150,7 +1214,7 @@ int rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t *mt_entry);
 int rtems_rfs_rtems_shutdown (rtems_filesystem_mount_table_entry_t *mt_entry);
 
 /**
- *  RFS file system operations table
+ * RFS file system operations table.
  */
 const rtems_filesystem_operations_table rtems_rfs_ops =
 {
@@ -1170,6 +1234,7 @@ const rtems_filesystem_operations_table rtems_rfs_ops =
   .eval_link_h    = NULL, /* never called cause we lie in the node type */
   .symlink_h      = rtems_rfs_rtems_symlink,
   .readlink_h     = rtems_rfs_rtems_readlink,
+  .rename_h       = rtems_rfs_rtems_rename,
   .statvfs_h      = rtems_rfs_rtems_statvfs
 };
 

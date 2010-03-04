@@ -19,27 +19,24 @@
 #include "msdos.h"
 
 const rtems_filesystem_operations_table  msdos_ops = {
-    msdos_eval_path,
-    msdos_eval4make,
-#if 0
-     NULL,                 /* msdos_link */
-#else
-    msdos_file_link,      /* msdos_link (pseudo-functionality) */
-#endif
-    msdos_file_rmnod,
-    msdos_node_type,
-    msdos_mknod,
-    NULL,                 /* msdos_chown */
-    msdos_free_node_info,
-    NULL,
-    msdos_initialize,
-    NULL,
-    msdos_shut_down,      /* msdos_shut_down */
-    NULL,                 /* msdos_utime */
-    NULL,
-    NULL,
-    NULL,
-    NULL
+  .evalpath_h     =  msdos_eval_path,
+  .evalformake_h  =  msdos_eval4make,
+  .link_h         =  NULL,
+  .unlink_h       =  msdos_file_rmnod,
+  .node_type_h    =  msdos_node_type,
+  .mknod_h        =  msdos_mknod,
+  .chown_h        =  NULL,
+  .freenod_h      =  msdos_free_node_info,
+  .mount_h        =  NULL,
+  .fsmount_me_h   =  msdos_initialize,
+  .unmount_h      =  NULL,
+  .fsunmount_me_h =  msdos_shut_down,
+  .utime_h        =  NULL,
+  .eval_link_h    =  NULL,
+  .symlink_h      =  NULL,
+  .readlink_h     =  NULL,
+  .rename_h       =  msdos_rename,
+  .statvfs_h      =  NULL
 };
 
 /* msdos_initialize --
