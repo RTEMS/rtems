@@ -1,3 +1,8 @@
+2010-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/conf.t: CONFIGURE_DISABLE_CLASSIC_NOTEPADS is typo of
+	CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS. Fix it.
+
 2010-02-18	Chris Johns <chrisj@rtems.org>
 
 	* networking/networkapp.t: Updated the BOOTP/DHCP to document the
