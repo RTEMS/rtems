@@ -10,9 +10,9 @@ EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
 include ../libs.am
 
-BINUTILS_VERS = 2.19.1
+BINUTILS_VERS = 2.20.1
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 0.20090830.0
+BINUTILS_RPMREL = 0.20100305.1
 include ../binutils.am
 BINUTILS_OPTS +=
 
