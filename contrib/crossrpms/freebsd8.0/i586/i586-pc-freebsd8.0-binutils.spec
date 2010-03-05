@@ -30,15 +30,15 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.20
-%define binutils_version 2.20
-%define binutils_rpmvers %{expand:%(echo "2.20" | tr - _ )}
+%define binutils_pkgvers 2.20.1
+%define binutils_version 2.20.1
+%define binutils_rpmvers %{expand:%(echo "2.20.1" | tr - _ )}
 
 Name:		i586-pc-freebsd8.0-binutils
 Summary:	Binutils for target i586-pc-freebsd8.0
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20091021.1%{?dist}
+Release:	0.20100305.1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -69,10 +69,6 @@ cd binutils-%{binutils_pkgvers}
 cd ..
 
 %build
-%if "i586-pc-freebsd8.0" == "i686-pc-cygwin"
-# The cygwin sources are leaking memory
-  RPM_OPT_FLAGS="$(echo "$RPM_OPT_FLAGS"|sed -e 's; -Wp,-D_FORTIFY_SOURCE=2;;')"
-%endif
   mkdir -p build
   cd build
 %if "%{_build}" != "%{_host}"
