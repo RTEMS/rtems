@@ -1,3 +1,7 @@
+2010-03-09	Joel Sherrill <joel.sherrilL@oarcorp.com>
+
+	* libmisc/Makefile.am: Remove duplicate file from list.
+
 2010-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libblock/src/ramdisk-config.c: Revert accidental commit.

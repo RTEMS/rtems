@@ -138,8 +138,8 @@ libstringto_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/stringto
 libstringto_a_SOURCES = stringto/stringtodouble.c stringto/stringtofloat.c \
     stringto/stringtoint.c stringto/stringtolong.c stringto/stringtolonglong.c \
     stringto/stringtopointer.c stringto/stringtounsignedint.c \
-    stringto/stringtounsignedchar.c stringto/stringtounsignedint.c \
-    stringto/stringtounsignedlong.c stringto/stringtounsignedlonglong.c
+    stringto/stringtounsignedchar.c stringto/stringtounsignedlong.c \
+    stringto/stringtounsignedlonglong.c
 
 EXTRA_DIST += stringto/stringto_template.h
 
