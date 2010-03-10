@@ -5,6 +5,7 @@
 #include <libcpu/bf537.h>
 #include <libcpu/sicRegs.h>
 #include <libcpu/cecRegs.h>
+#include <libcpu/dmaRegs.h>
 #include <libcpu/coreTimerRegs.h>
 
 #ifndef LO
@@ -53,6 +54,17 @@ __start:
 	r0 = 0xffff (z);
 	[p0] = r0;
 
+	/* disable all dma channels */
+	p0.h = HI(DMA0_BASE_ADDRESS + DMA_CONFIG_OFFSET);
+	p0.l = LO(DMA0_BASE_ADDRESS + DMA_CONFIG_OFFSET);
+	p1 = DMA_PITCH;
+	p2 = DMA_CHANNELS;
+	r0 = ~DMA_CONFIG_DMAEN;
+	lsetup(loop1,loop2) lc0 = p2;
+loop1:	r1 = w[p0];
+	r1 = r0 & r1;
+loop2:  w[p0 ++ p1] = r1.l;
+
 	/* this is so we can stay in supervisor mode and still be able to
 	   accept interrupts later. */
 	p0.h = start;
@@ -94,9 +106,9 @@ start:
 	r0 = 0;
 
 	/* Set _bss_start until _end to zero */
-	lsetup(loop1,loop2) lc0 = p1;
-loop1:	b[p0] = r0;
-loop2:	p0 +=1;
+	lsetup(loop3,loop4) lc0 = p1;
+loop3:	b[p0] = r0;
+loop4:	p0 +=1;
 
 	l0 = 0;
 	l1 = 0;

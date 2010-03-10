@@ -1,3 +1,15 @@
+2010-03-10	Marc Pignat <marc.pignat@hevs.ch>
+
+	PR 1488/bsps
+	* start/start.S: Micromon on bf537 uses DMA for UART reception.
+	This prevents the UART driver in RTEMS from working (and also
+	causes received characters to be stored in a buffer that RTEMS
+	doesn't know about, so it's potentially dangerous, but in practice
+	the risk is small since an RTEMS app intended to be booted from
+	Micromon would normally be configured to leave the RAM Micromon
+	uses reserved).  The attached patch corrects this by disabling
+	all DMA channels at startup.
+
 2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console-io.c: Let bf537Stamp_BSP_poll_char return int.
