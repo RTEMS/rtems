@@ -1,0 +1,24 @@
+diff -Naur binutils-2.20.1.orig/bfd/Makefile.am binutils-2.20.1/bfd/Makefile.am
+--- binutils-2.20.1.orig/bfd/Makefile.am	2010-03-03 14:31:55.000000000 +0100
++++ binutils-2.20.1/bfd/Makefile.am	2010-03-10 07:14:32.000000000 +0100
+@@ -4,7 +4,7 @@
+ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ 
+ # Uncomment the following line when doing a release.
+-# RELEASE=y
++RELEASE=y
+ 
+ INCDIR = $(srcdir)/../include
+ CSEARCH = -I. -I$(srcdir) -I$(INCDIR)
+diff -Naur binutils-2.20.1.orig/bfd/Makefile.in binutils-2.20.1/bfd/Makefile.in
+--- binutils-2.20.1.orig/bfd/Makefile.in	2010-03-03 14:59:15.000000000 +0100
++++ binutils-2.20.1/bfd/Makefile.in	2010-03-10 07:26:28.000000000 +0100
+@@ -317,7 +317,7 @@
+ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ 
+ # Uncomment the following line when doing a release.
+-# RELEASE=y
++RELEASE = y
+ INCDIR = $(srcdir)/../include
+ CSEARCH = -I. -I$(srcdir) -I$(INCDIR)
+ SUBDIRS = doc po
