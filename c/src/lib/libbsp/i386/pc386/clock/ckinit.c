@@ -47,6 +47,11 @@ uint64_t pc586_tsc_at_tick;
 /* this driver may need to count ISRs per tick */
 #define CLOCK_DRIVER_ISRS_PER_TICK pc386_isrs_per_tick
 
+/* if so, the driver may use the count in Clock_driver_support_at_tick */
+#ifdef CLOCK_DRIVER_ISRS_PER_TICK
+extern volatile uint32_t Clock_driver_isrs;
+#endif
+
 #define READ_8254( _lsb, _msb )                               \
   do { outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_LATCH);      \
      inport_byte(TIMER_CNTR0, _lsb);                          \
@@ -66,7 +71,18 @@ uint32_t (*Clock_driver_nanoseconds_since_last_tick)(void) = NULL;
  */
 void Clock_driver_support_at_tick_tsc(void)
 {
+#ifdef CLOCK_DRIVER_ISRS_PER_TICK
+  /*
+   *  The driver is multiple ISRs per clock tick.
+  */
+  if (!Clock_driver_isrs)
+    pc586_tsc_at_tick = rdtsc();
+#else
+  /*
+   *  The driver is one ISR per clock tick.
+   */
   pc586_tsc_at_tick = rdtsc();
+#endif
 }
 
 void Clock_driver_support_at_tick_empty(void)

@@ -1,3 +1,10 @@
+2010-03-10	Gedare Bloom <gedare@gwu.edu>
+
+	PR 1495/bsp
+	* clock/ckinit.c, make/custom/pc386.cfg: Calling
+	rtems_clock_get_uptime() in a tight loop sometimes showed time moving
+	backwards.
+
 2009-12-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Add BSP_HAS_FRAME_BUFFER.
