@@ -1,3 +1,9 @@
+2010-03-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1497/bsps
+	* startup/bspreset.c: Do not enable interrupts while waiting for board
+	to reset.
+
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* console/console.c: adapted to new prototype for *_write
