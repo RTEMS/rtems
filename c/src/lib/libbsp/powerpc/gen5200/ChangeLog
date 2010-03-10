@@ -1,3 +1,9 @@
+2010-03-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1497/bsps
+	* startup/bspclean.c: Do not enable interrupts while waiting for board
+	to reset.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.
