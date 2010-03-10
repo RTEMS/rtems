@@ -99,6 +99,17 @@ void _Objects_Initialize_information(
   maximum_per_allocation = maximum & ~OBJECTS_UNLIMITED_OBJECTS;
 
   /*
+   *  Unlimited and maximum of zero is illogical.
+   */
+  if ( information->auto_extend && maximum_per_allocation == 0) {
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      true,
+      INTERNAL_ERROR_UNLIMITED_AND_MAXIMUM_IS_0
+    );
+  }
+
+  /*
    *  The allocation unit is the maximum value
    */
   information->allocation_size = maximum_per_allocation;

@@ -1,3 +1,9 @@
+2010-03-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/interr.h,
+	score/src/objectinitializeinformation.c: Add new fatal error for
+	configuring unlimited and maximum of 0.
+
 2010-03-09	Joel Sherrill <joel.sherrilL@oarcorp.com>
 
 	* libmisc/Makefile.am: Remove duplicate file from list.
