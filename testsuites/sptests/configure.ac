@@ -110,6 +110,7 @@ spfatal09/Makefile
 spfatal10/Makefile
 spfatal11/Makefile
 spfatal12/Makefile
+spfatal13/Makefile
 spintrcritical01/Makefile
 spintrcritical02/Makefile
 spintrcritical03/Makefile
