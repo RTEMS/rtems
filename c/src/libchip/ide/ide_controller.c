@@ -18,7 +18,7 @@
 #define IDE_CONTROLLER_TRACE 0
 
 #include <rtems/chain.h>
-#include <assert.h>
+#include <errno.h>
 #include <rtems/blkdev.h>
 
 #include <libchip/ide_ctrl_cfg.h>
@@ -48,7 +48,6 @@ ide_controller_initialize(rtems_device_major_number  major,
                           void                      *args)
 {
     unsigned long       minor;
-    rtems_status_code   status;
 
     /* FIXME: may be it should be done on compilation phase */
     if (IDE_Controller_Count > IDE_CTRL_MAX_MINOR_NUMBER)
@@ -67,7 +66,7 @@ ide_controller_initialize(rtems_device_major_number  major,
             dev = rtems_filesystem_make_dev_t( major, minor );
             if (mknod(IDE_Controller_Table[minor].name,
                       0777 | S_IFBLK, dev ) < 0)
-                rtems_fatal_error_occurred(status);
+                rtems_fatal_error_occurred(errno);
             IDE_Controller_Table[minor].fns->ctrl_initialize(minor);
             IDE_Controller_Table[minor].status = IDE_CTRL_INITIALIZED;
         }

@@ -1,5 +1,10 @@
 2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libchip/ide/ide_controller.c: Fix warnings for uninitialized
+	variable.
+
+2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libchip/network/i82586.c: Fix warnings for ctype methods.
 
 2010-02-19	Chris Johns <chrisj@rtems.org>
