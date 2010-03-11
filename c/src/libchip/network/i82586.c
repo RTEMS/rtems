@@ -246,7 +246,7 @@ char *bitmask_snprintf(unsigned long value, const char *format, char *buf, int b
   while (*format)
   {
     if (value & 0x80000000)
-      while (isalnum(*format))
+      while (isalnum((int)*format))
         *b++ = *format;
     else
       *b++ = '0';
