@@ -316,7 +316,7 @@ bool fileio_str2size(const char *str,uint32_t   *res_ptr)
 {
   bool failed = false;
   unsigned long size;
-  char suffix = ' ';
+  unsigned char suffix = ' ';
 
   if (1 > sscanf(str,"%lu%c",&size,&suffix)) {
     failed = true;

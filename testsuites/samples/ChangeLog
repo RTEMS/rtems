@@ -1,3 +1,7 @@
+2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* fileio/init.c: Fix warnings for ctype methods.
+
 2009-11-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* loopback/init.c: Adjust return-type of rtems_bsdnet_loopattach to
