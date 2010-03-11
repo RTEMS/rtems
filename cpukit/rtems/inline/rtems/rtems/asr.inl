@@ -38,7 +38,7 @@ RTEMS_INLINE_ROUTINE void _ASR_Initialize (
   ASR_Information *information
 )
 {
-  information->is_enabled      = true;
+  information->is_enabled      = false;
   information->handler         = NULL;
   information->mode_set        = RTEMS_DEFAULT_MODES;
   information->signals_posted  = 0;

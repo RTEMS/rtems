@@ -1,3 +1,9 @@
+2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1458/cpukit
+	* rtems/inline/rtems/rtems/asr.inl: Do not enable signals by default.
+	Wait for a signal handler to be installed.
+
 2010-03-11	Andrei Mozzhuhin <nopscmn@gmail.com>
 
 	PR 1496/shell
