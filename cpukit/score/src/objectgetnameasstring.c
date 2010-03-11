@@ -84,7 +84,7 @@ char *_Objects_Get_name_as_string(
       d = name;
       if ( s ) {
         for ( i=0 ; i<(length-1) && *s ; i++, s++, d++ ) {
-          *d = (isprint(*s)) ? *s : '*';
+          *d = (isprint((int)*s)) ? *s : '*';
         }
       }
       *d = '\0';

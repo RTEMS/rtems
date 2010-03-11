@@ -277,8 +277,8 @@ static rtems_ftpfs_reply rtems_ftpfs_get_reply(
 )
 {
   rtems_ftpfs_reply_state state = RTEMS_FTPFS_REPLY_START;
-  char reply_first [RTEMS_FTPFS_REPLY_SIZE] = { 'a', 'a', 'a' };
-  char reply_last [RTEMS_FTPFS_REPLY_SIZE] = { 'b', 'b', 'b' };
+  unsigned char reply_first [RTEMS_FTPFS_REPLY_SIZE] = { 'a', 'a', 'a' };
+  unsigned char reply_last [RTEMS_FTPFS_REPLY_SIZE] = { 'b', 'b', 'b' };
   size_t reply_first_index = 0;
   size_t reply_last_index = 0;
   char buf [128];
@@ -856,7 +856,7 @@ static void rtems_ftpfs_pasv_parser(
   size_t i = 0;
 
   for (i = 0; i < len; ++i) {
-    char c = buf [i];
+    int c = buf [i];
 
     switch (e->state) {
       case RTEMS_FTPFS_PASV_START:

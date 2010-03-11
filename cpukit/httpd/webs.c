@@ -861,7 +861,7 @@ static void websParseRequest(webs_t wp)
 			value = T("");
 		}
 
-		while (gisspace(*value)) {
+		while (gisspace((int)*value)) {
 			value++;
 		}
 		strlower(key);
@@ -897,7 +897,7 @@ static void websParseRequest(webs_t wp)
  *			Truncate authType at the next non-alpha character
  */
 			cp = authType;
-			while (gisalpha(*cp)) {
+			while (gisalpha((int)*cp)) {
 				cp++;
 			}
 			*cp = '\0';
@@ -1667,14 +1667,15 @@ int websWriteDataNonBlock(webs_t wp, char *buf, int nChars)
 
 void websDecodeUrl(char_t *decoded, char_t *token, int len)
 {
-	char_t	*ip,  *op;
+	unsigned char	*ip;
+	char_t	*op;
 	int		num, i, c;
 
 	a_assert(decoded);
 	a_assert(token);
 
 	op = decoded;
-	for (ip = token; *ip && len > 0; ip++, op++) {
+	for (ip = (unsigned char *)token; *ip && len > 0; ip++, op++) {
 		if (*ip == '+') {
 			*op = ' ';
 		} else if (*ip == '%' && gisxdigit(ip[1]) && gisxdigit(ip[2])) {

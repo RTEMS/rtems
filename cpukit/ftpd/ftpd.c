@@ -1568,18 +1568,18 @@ skip_options(char **p)
   char* buf = *p;
   char* last = NULL;
   while(1) {
-    while(isspace(*buf))
+    while(isspace((int)*buf))
       ++buf;
     if(*buf == '-') {
       if(*++buf == '-') { /* `--' should terminate options */
-        if(isspace(*++buf)) {
+        if(isspace((int)*++buf)) {
           last = buf;
           do ++buf;
-          while(isspace(*buf));
+          while(isspace((int)*buf));
           break;
         }
       }
-      while(*buf && !isspace(*buf))
+      while(*buf && !isspace((int)*buf))
         ++buf;
       last = buf;
     }
@@ -1612,18 +1612,18 @@ split_command(char *buf, char **cmd, char **opts, char **args)
 {
   char* eoc;
   char* p = buf;
-  while(isspace(*p))
+  while(isspace((int)*p))
     ++p;
   *cmd = p;
-  while(*p && !isspace(*p))
+  while(*p && !isspace((int)*p))
   {
-    *p = toupper(*p);
+    *p = toupper((int)*p);
     ++p;
   }
   eoc = p;
   if(*p)
     *p++ = '\0';
-  while(isspace(*p))
+  while(isspace((int)*p))
     ++p;
   *opts = p;
   skip_options(&p);

@@ -1,5 +1,17 @@
 2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* ftpd/ftpd.c, httpd/uemf.c, httpd/um.c, httpd/webs.c,
+	httpd/websuemf.c, libblock/src/diskdevs.c,
+	libmisc/capture/capture-cli.c, libmisc/monitor/mon-network.c,
+	libmisc/shell/hexdump-odsyntax.c, libmisc/shell/main_ifconfig.c,
+	libmisc/uuid/parse.c, libnetworking/lib/ftpfs.c,
+	libnetworking/libc/gethostbyht.c, libnetworking/libc/getnetnamadr.c,
+	libnetworking/libc/inet_network.c,
+	libnetworking/rtems/rtems_mii_ioctl.c,
+	score/src/objectgetnameasstring.c: Fix warnings for ctype methods.
+
+2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/shell_makeargs.c: Fix warnings.
 
 2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>

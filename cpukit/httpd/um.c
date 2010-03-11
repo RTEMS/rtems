@@ -255,7 +255,7 @@ int umRestore(char_t *filename)
 static int umEncryptString(char_t *textString)
 {
 	char_t	*enMask;
-	char_t	enChar;
+	unsigned char	enChar;
 	int		numChars;
 
 	a_assert(textString);
@@ -1419,7 +1419,7 @@ static bool_t umCheckName(char_t *name)
 
 	if (name && *name) {
 		while (*name) {
-			if (gisspace(*name)) {
+			if (gisspace((int)*name)) {
 				return FALSE;
 			}
 

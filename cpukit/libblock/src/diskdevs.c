@@ -170,7 +170,6 @@ create_disk_table_entry(dev_t dev)
 static rtems_status_code
 create_disk(dev_t dev, const char *name, rtems_disk_device **dd_ptr)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_disk_device **dd_entry = create_disk_table_entry(dev);
   rtems_disk_device *dd = NULL;
   char *alloc_name = NULL;

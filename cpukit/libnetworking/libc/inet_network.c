@@ -62,13 +62,13 @@ again:
 	if (*cp == 'x' || *cp == 'X')
 		base = 16, cp++;
 	while ((c = *cp) != 0) {
-		if (isdigit(c)) {
+		if (isdigit((int)c)) {
 			val = (val * base) + (c - '0');
 			cp++;
 			continue;
 		}
-		if (base == 16 && isxdigit(c)) {
-			val = (val << 4) + (c + 10 - (islower(c) ? 'a' : 'A'));
+		if (base == 16 && isxdigit((int)c)) {
+			val = (val << 4) + (c + 10 - (islower((int)c) ? 'a' : 'A'));
 			cp++;
 			continue;
 		}
@@ -80,7 +80,7 @@ again:
 		*pp++ = val, cp++;
 		goto again;
 	}
-	if (*cp && !isspace(*cp))
+	if (*cp && !isspace((int)*cp))
 		return (INADDR_NONE);
 	*pp++ = val;
 	n = pp - parts;

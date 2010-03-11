@@ -219,7 +219,7 @@ odoffset(rtems_shell_hexdump_globals* globals, int argc, char ***argvp)
 	p = argc == 1 ? (*argvp)[0] : (*argvp)[1];
 
 	if (*p != '+' && (argc < 2 ||
-	    (!isdigit(p[0]) && (p[0] != 'x' || !isxdigit(p[1])))))
+	    (!isdigit((int)p[0]) && (p[0] != 'x' || !isxdigit((int)p[1])))))
 		return;
 
 	base = 0;
@@ -229,7 +229,7 @@ odoffset(rtems_shell_hexdump_globals* globals, int argc, char ***argvp)
 	 */
 	if (p[0] == '+')
 		++p;
-	if (p[0] == 'x' && isxdigit(p[1])) {
+	if (p[0] == 'x' && isxdigit((int)p[1])) {
 		++p;
 		base = 16;
 	} else if (p[0] == '0' && p[1] == 'x') {
@@ -239,9 +239,9 @@ odoffset(rtems_shell_hexdump_globals* globals, int argc, char ***argvp)
 
 	/* skip over the number */
 	if (base == 16)
-		for (num = p; isxdigit(*p); ++p);
+		for (num = p; isxdigit((int)*p); ++p);
 	else
-		for (num = p; isdigit(*p); ++p);
+		for (num = p; isdigit((int)*p); ++p);
 
 	/* check for no number */
 	if (num == p)

@@ -168,7 +168,7 @@ int emfInstGet(void)
 
 char_t *strlower(char_t *string)
 {
-	char_t	*s;
+	unsigned char	*s;
 
 	a_assert(string);
 
@@ -176,7 +176,7 @@ char_t *strlower(char_t *string)
 		return NULL;
 	}
 
-	s = string;
+	s = (unsigned char *)string;
 	while (*s) {
 		if (gisupper(*s)) {
 			*s = (char_t) gtolower(*s);
@@ -194,14 +194,14 @@ char_t *strlower(char_t *string)
 
 char_t *strupper(char_t *string)
 {
-	char_t	*s;
+	unsigned char	*s;
 
 	a_assert(string);
 	if (string == NULL) {
 		return NULL;
 	}
 
-	s = string;
+	s = (unsigned char *)string;
 	while (*s) {
 		if (gislower(*s)) {
 			*s = (char_t) gtoupper(*s);

@@ -642,7 +642,7 @@ rtems_capture_cli_get_name_id (char*          arg,
   l = strlen (arg);
 
   for (i = 0; i < l; i++)
-    if (!isxdigit (arg[i]))
+    if (!isxdigit ((int)arg[i]))
       break;
 
   if (i == l)
@@ -1324,7 +1324,7 @@ rtems_capture_cli_trace_records (int                          argc,
       l = strlen (argv[arg]);
 
       for (i = 0; i < l; i++)
-        if (!isdigit (argv[arg][i]))
+        if (!isdigit ((int)argv[arg][i]))
         {
           fprintf (stdout, "error: not a number\n");
           return;
