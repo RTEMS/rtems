@@ -25,22 +25,38 @@ int rtems_shell_make_args(
 )
 {
   int   argc;
-  char *command;
+  char *ch;
   int   status = 0;
-
+ 
   argc = 0;
-  command = commandLine;
+  ch = commandLine;
 
-  while ( 1 ) {
-    command = strtok( command, " \t\r\n" );
-    if ( command == NULL )
+  while ( *ch ) {
+
+    while ( isspace(*ch) ) ch++;
+
+    if ( *ch == '\0' )
       break;
-    argv_p[ argc++ ] = command;
-    command = '\0';
-    if ( argc == (max_args-1) ) {
-      status = -1;
-      break;
+
+    if ( *ch == '"' ) {
+      argv_p[ argc++ ] = ++ch;
+      while ( ( *ch == '\0' ) && ( *ch != '"' ) ) ch++;
+    } else {
+      argv_p[ argc++ ] = ch;
+      while ( ( *ch == '\0' ) && ( !isspace(*ch) ) ) ch++;
     }
+
+    if ( *ch == '\0' )
+      break;
+
+    *ch++ = '\0';
+
+    if ( argc == (max_args-1) ) {
+        status = -1;
+        break;
+    }
+
+
   }
   argv_p[ argc ] = NULL;
   *argc_p = argc;
