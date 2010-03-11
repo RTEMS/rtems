@@ -1,3 +1,11 @@
+2010-03-11	Ken Peters <kptrs@yahoo.com>
+
+	PR 1456/cpukit
+	* libcsupport/src/ttyname.c: ttyname_r() when called directly (not via
+	ttyname()) does not prefix the caller provided buffer with the
+	predefined _PATH_DEV string (/dev/). Thus the directory search fails
+	and no tty name is returned to the caller.
+
 2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ftpd/ftpd.c, httpd/uemf.c, httpd/um.c, httpd/webs.c,

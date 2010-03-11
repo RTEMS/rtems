@@ -55,7 +55,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-static char ttyname_buf[sizeof (_PATH_DEV) + MAXNAMLEN] = _PATH_DEV;
+static char ttyname_buf[sizeof (_PATH_DEV) + MAXNAMLEN];
 
 /*
  *  ttyname_r() - POSIX 1003.1b 4.7.2 - Demetermine Terminal Device Name
@@ -83,6 +83,9 @@ int ttyname_r(
 
   if ((dp = opendir (_PATH_DEV)) == NULL)
     rtems_set_errno_and_return_minus_one(EBADF);
+
+  /* Place the base directory in the path. */
+  strncpy (name, _PATH_DEV, namesize);
 
   for (rval = NULL; (dirp = readdir (dp)) != NULL ;)
     {
