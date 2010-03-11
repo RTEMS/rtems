@@ -16,6 +16,7 @@
 #endif
 
 #include <string.h>
+#include <ctype.h>
 
 int rtems_shell_make_args(
   char  *commandLine,
@@ -33,7 +34,7 @@ int rtems_shell_make_args(
 
   while ( *ch ) {
 
-    while ( isspace(*ch) ) ch++;
+    while ( isspace((int)*ch) ) ch++;
 
     if ( *ch == '\0' )
       break;
@@ -43,7 +44,7 @@ int rtems_shell_make_args(
       while ( ( *ch == '\0' ) && ( *ch != '"' ) ) ch++;
     } else {
       argv_p[ argc++ ] = ch;
-      while ( ( *ch == '\0' ) && ( !isspace(*ch) ) ) ch++;
+      while ( ( *ch == '\0' ) && ( !isspace((int)*ch) ) ) ch++;
     }
 
     if ( *ch == '\0' )

@@ -1,5 +1,9 @@
 2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/shell_makeargs.c: Fix warnings.
+
+2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1458/cpukit
 	* rtems/inline/rtems/rtems/asr.inl: Do not enable signals by default.
 	Wait for a signal handler to be installed.
