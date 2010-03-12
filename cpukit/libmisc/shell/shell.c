@@ -765,7 +765,7 @@ bool rtems_shell_main_loop(
           /* evaluate cmd section */
           c = cmds[cmd];
           while (*c) {
-            if (!isblank((int)*c))
+            if (!isblank((unsigned char)*c))
               break;
             c++;
           }

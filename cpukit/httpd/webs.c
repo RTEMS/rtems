@@ -861,7 +861,7 @@ static void websParseRequest(webs_t wp)
 			value = T("");
 		}
 
-		while (gisspace((int)*value)) {
+		while (gisspace((unsigned char)*value)) {
 			value++;
 		}
 		strlower(key);
@@ -897,7 +897,7 @@ static void websParseRequest(webs_t wp)
  *			Truncate authType at the next non-alpha character
  */
 			cp = authType;
-			while (gisalpha((int)*cp)) {
+			while (gisalpha((unsigned char)*cp)) {
 				cp++;
 			}
 			*cp = '\0';

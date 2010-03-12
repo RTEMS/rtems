@@ -73,7 +73,7 @@ int rtems_shell_main_ifconfig(
     cur_idx += 1;
   } else {
     iface = argv[1];
-    if (isdigit((int)*argv[2])) {
+    if (isdigit((unsigned char)*argv[2])) {
       if (inet_pton(AF_INET, argv[2], &ipaddr.sin_addr) < 0) {
         printf("bad ip address: %s\n", argv[2]);
         return 0;

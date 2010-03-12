@@ -34,7 +34,7 @@ int rtems_shell_make_args(
 
   while ( *ch ) {
 
-    while ( isspace((int)*ch) ) ch++;
+    while ( isspace((unsigned char)*ch) ) ch++;
 
     if ( *ch == '\0' )
       break;
@@ -44,7 +44,7 @@ int rtems_shell_make_args(
       while ( ( *ch == '\0' ) && ( *ch != '"' ) ) ch++;
     } else {
       argv_p[ argc++ ] = ch;
-      while ( ( *ch == '\0' ) && ( !isspace((int)*ch) ) ) ch++;
+      while ( ( *ch == '\0' ) && ( !isspace((unsigned char)*ch) ) ) ch++;
     }
 
     if ( *ch == '\0' )

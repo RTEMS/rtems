@@ -287,7 +287,7 @@ static char_t *strtokcmp(char_t *s1, char_t *s2)
 
 	s1 = skipWhite(s1);
 	len = gstrlen(s2);
-	for (len = gstrlen(s2); len > 0 && (tolower((int)*s1) == tolower((int)*s2)); len--) {
+	for (len = gstrlen(s2); len > 0 && (tolower((unsigned char)*s1) == tolower((unsigned char)*s2)); len--) {
 		if (*s2 == '\0') {
 			return s1;
 		}
@@ -312,7 +312,7 @@ static char_t *skipWhite(char_t *s)
 	if (s == NULL) {
 		return s;
 	}
-	while (*s && gisspace((int)*s)) {
+	while (*s && gisspace((unsigned char)*s)) {
 		s++;
 	}
 	return s;

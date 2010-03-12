@@ -1144,7 +1144,7 @@ static int evalCond(ej_t *ep, char_t *lhs, int rel, char_t *rhs)
 	a_assert(rel > 0);
 
 	lval = 0;
-	if (gisdigit((int)*lhs) && gisdigit((int)*rhs)) {
+	if (gisdigit((unsigned char)*lhs) && gisdigit((unsigned char)*rhs)) {
 		l = gatoi(lhs);
 		r = gatoi(rhs);
 		switch (rel) {
@@ -1159,7 +1159,7 @@ static int evalCond(ej_t *ep, char_t *lhs, int rel, char_t *rhs)
 			return -1;
 		}
 	} else {
-		if (!gisdigit((int)*lhs)) {
+		if (!gisdigit((unsigned char)*lhs)) {
 			ejError(ep, T("Conditional must be numeric"), lhs);
 		} else {
 			ejError(ep, T("Conditional must be numeric"), rhs);
@@ -1190,7 +1190,7 @@ static int evalExpr(ej_t *ep, char_t *lhs, int rel, char_t *rhs)
  */
 	numeric = 1;
 	for (cp = lhs; *cp; cp++) {
-		if (!gisdigit((int)*cp)) {
+		if (!gisdigit((unsigned char)*cp)) {
 			numeric = 0;
 			break;
 		}
@@ -1198,7 +1198,7 @@ static int evalExpr(ej_t *ep, char_t *lhs, int rel, char_t *rhs)
 
 	if (numeric) {
 		for (cp = rhs; *cp; cp++) {
-			if (!gisdigit((int)*cp)) {
+			if (!gisdigit((unsigned char)*cp)) {
 				numeric = 0;
 				break;
 			}

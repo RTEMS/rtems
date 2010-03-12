@@ -281,7 +281,7 @@ static int dsnprintf(char_t **s, int size, char_t *fmt, va_list arg, int msize)
 				}
 				c = *fmt++;
 			} else {
-				for ( ; gisdigit((int)c); c = *fmt++) {
+				for ( ; gisdigit((unsigned char)c); c = *fmt++) {
 					width = width * 10 + (c - '0');
 				}
 			}
@@ -292,7 +292,7 @@ static int dsnprintf(char_t **s, int size, char_t *fmt, va_list arg, int msize)
 					prec = va_arg(arg, int);
 					c = *fmt++;
 				} else {
-					for (prec = 0; gisdigit((int)c); c = *fmt++) {
+					for (prec = 0; gisdigit((unsigned char)c); c = *fmt++) {
 						prec = prec * 10 + (c - '0');
 					}
 				}

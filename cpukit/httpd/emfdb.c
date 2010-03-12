@@ -980,7 +980,7 @@ char_t *dbGetTableName(int did, int tid)
 
 static char_t *trim(char_t *str)
 {
-	while (isspace((int)*str)) {
+	while (isspace((unsigned char)*str)) {
 		str++;
 	}
 	return str;

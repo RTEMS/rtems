@@ -158,9 +158,9 @@ rtems_str2ifmedia (const char *str, int phy)
         return 0;
       if (!strncmp (chpt, "ase", 3))
         chpt += 3;
-      if (toupper ((int)*chpt++) != 'T')
+      if (toupper ((unsigned char)*chpt++) != 'T')
         return 0;
-      if (IFM_100_TX == sub && toupper ((int)*chpt++) != 'X')
+      if (IFM_100_TX == sub && toupper ((unsigned char)*chpt++) != 'X')
         return 0;
     }
   }

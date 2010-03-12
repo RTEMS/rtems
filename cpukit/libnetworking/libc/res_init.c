@@ -340,7 +340,7 @@ res_init(void)
 			    break;
 			net = cp;
 			while (*cp && !ISSORTMASK(*cp) && *cp != ';' &&
-			       isascii((int)*cp) && !isspace((int)*cp))
+			       isascii((unsigned char)*cp) && !isspace((unsigned char)*cp))
 				cp++;
 			n = *cp;
 			*cp = 0;
@@ -350,7 +350,7 @@ res_init(void)
 				*cp++ = n;
 				net = cp;
 				while (*cp && *cp != ';' &&
-					isascii((int)*cp) && !isspace((int)*cp))
+					isascii((unsigned char)*cp) && !isspace((unsigned char)*cp))
 				    cp++;
 				n = *cp;
 				*cp = 0;

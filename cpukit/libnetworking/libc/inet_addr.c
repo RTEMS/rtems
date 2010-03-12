@@ -102,7 +102,7 @@ inet_aton(
 		 * Values are specified as for C:
 		 * 0x=hex, 0=octal, isdigit=decimal.
 		 */
-		if (!isdigit((int)c))
+		if (!isdigit((unsigned char)c))
 			return (0);
 		val = 0; base = 10;
 		if (c == '0') {
@@ -113,12 +113,12 @@ inet_aton(
 				base = 8;
 		}
 		for (;;) {
-			if (isascii((int)c) && isdigit((int)c)) {
+			if (isascii((unsigned char)c) && isdigit((unsigned char)c)) {
 				val = (val * base) + (c - '0');
 				c = *++cp;
-			} else if (base == 16 && isascii((int)c) && isxdigit((int)c)) {
+			} else if (base == 16 && isascii((unsigned char)c) && isxdigit((unsigned char)c)) {
 				val = (val << 4) |
-					(c + 10 - (islower((int)c) ? 'a' : 'A'));
+					(c + 10 - (islower((unsigned char)c) ? 'a' : 'A'));
 				c = *++cp;
 			} else
 				break;
@@ -140,7 +140,7 @@ inet_aton(
 	/*
 	 * Check for trailing characters.
 	 */
-	if (c != '\0' && (!isascii((int)c) || !isspace((int)c)))
+	if (c != '\0' && (!isascii((unsigned char)c) || !isspace((unsigned char)c)))
 		return (0);
 	/*
 	 * Concoct the address according to

@@ -1,3 +1,22 @@
+2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ftpd/ftpd.c, httpd/asp.c, httpd/ejparse.c, httpd/emfdb.c,
+	httpd/misc.c, httpd/um.c, httpd/webs.c, httpd/websuemf.c,
+	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_format.c,
+	libfs/src/dosfs/msdos_misc.c, libfs/src/nfsclient/src/nfs.c,
+	libmisc/capture/capture-cli.c, libmisc/monitor/mon-network.c,
+	libmisc/shell/hexdump-odsyntax.c, libmisc/shell/main_ifconfig.c,
+	libmisc/shell/shell.c, libmisc/shell/shell_makeargs.c,
+	libmisc/uuid/parse.c, libnetworking/libc/gethostbydns.c,
+	libnetworking/libc/gethostbyht.c, libnetworking/libc/gethostnamadr.c,
+	libnetworking/libc/getnetnamadr.c, libnetworking/libc/inet_addr.c,
+	libnetworking/libc/inet_network.c, libnetworking/libc/res_debug.c,
+	libnetworking/libc/res_init.c, libnetworking/libc/res_query.c,
+	libnetworking/rtems/rtems_mii_ioctl.c,
+	score/src/objectgetnameasstring.c: Readdress use of ctype methods per
+	recommendation from D.J. Delorie on the newlib mailing list. We
+	should pass an unsigned char into these methods.
+
 2010-03-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libfs/src/dosfs/msdos_misc.c: Do not overwrite errno in case

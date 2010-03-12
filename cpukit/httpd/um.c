@@ -1419,7 +1419,7 @@ static bool_t umCheckName(char_t *name)
 
 	if (name && *name) {
 		while (*name) {
-			if (gisspace((int)*name)) {
+			if (gisspace((unsigned char)*name)) {
 				return FALSE;
 			}
 

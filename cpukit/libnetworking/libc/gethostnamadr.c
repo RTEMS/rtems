@@ -102,7 +102,7 @@ init_services(void)
 			if (cp == NULL)
 				continue;
 			do {
-				if (isalpha((int)cp[0])) {
+				if (isalpha((unsigned char)cp[0])) {
 					service_order[cc] = get_service_name(cp);
 					if(service_order[cc] != SERVICE_NONE)
 						cc++;

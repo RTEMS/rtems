@@ -3262,7 +3262,7 @@ char									*dev =  0;
 		host++;
 	}
 
-	if (isdigit((int)*host)) {
+	if (isdigit((unsigned char)*host)) {
 		/* avoid using gethostbyname */
 		sprintf(dev,"%s:%s",uidhost,path);
 	} else {
