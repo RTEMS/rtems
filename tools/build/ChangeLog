@@ -1,3 +1,9 @@
+2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* eolstrip.c: Readdress use of ctype methods per recommendation from
+	D.J. Delorie on the newlib mailing list. We should pass an unsigned
+	char into these methods.
+
 2007-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Rename bin2c to rtems-bin2c.

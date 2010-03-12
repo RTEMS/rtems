@@ -197,7 +197,7 @@ process(char *arg)
     if ( buffer[ length ] != '\n' )
       error(ERR_ERRNO|ERR_FATAL, "Line %d too long in %s\n", line_number, arg);
 
-    while ( isspace( (int) buffer[ length ] ) )
+    while ( isspace( (unsigned char) buffer[ length ] ) )
       buffer[ length-- ] = '\0';
 
     if ( test_only ) {
