@@ -1,5 +1,15 @@
 2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libblock/src/ide_part_table.c: Functionality of
+	rtems_ide_part_table_get() and rtems_ide_part_table_free() was needed
+	internally but those routines are deprecated from the public API. So
+	move their contents to private static routines. Using the private
+	routines in this file avoids deprecation warnings and leaves
+	functional, although deprecated, versions for potential use by
+	applications.
+
+2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* ftpd/ftpd.c, httpd/asp.c, httpd/ejparse.c, httpd/emfdb.c,
 	httpd/misc.c, httpd/um.c, httpd/webs.c, httpd/websuemf.c,
 	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_format.c,
