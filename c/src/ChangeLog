@@ -1,3 +1,9 @@
+2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/network/i82586.c: Readdress use of ctype methods per
+	recommendation from D.J. Delorie on the newlib mailing list. We
+	should pass an unsigned char into these methods.
+
 2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/ide/ide_controller.c: Fix warnings for uninitialized
