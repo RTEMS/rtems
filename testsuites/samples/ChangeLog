@@ -1,3 +1,7 @@
+2010-03-12	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* fileio/init.c: Remove deprecation warnings.
+
 2010-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/init.c: Fix warnings for ctype methods.

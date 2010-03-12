@@ -32,7 +32,7 @@
 #include <rtems/error.h>
 #include <rtems/dosfs.h>
 #include <ctype.h>
-#include <rtems/ide_part_table.h>
+#include <rtems/bdpart.h>
 #include <rtems/libcsupport.h>
 #include <rtems/fsmount.h>
 
@@ -100,9 +100,9 @@ fstab_t fs_table[] = {
 #ifdef USE_SHELL
 #include <rtems/shell.h>
 
-void writeFile(
+static void writeFile(
   const char *name,
-  int         mode,
+  mode_t      mode,
   const char *contents
 )
 {
@@ -123,7 +123,7 @@ void writeFile(
 #define writeScript( _name, _contents ) \
         writeFile( _name, 0777, _contents )
 
-void fileio_start_shell(void)
+static void fileio_start_shell(void)
 {
   int sc;
 
@@ -197,14 +197,14 @@ void fileio_start_shell(void)
 }
 #endif /* USE_SHELL */
 
-void fileio_print_free_heap(void)
+static void fileio_print_free_heap(void)
 {
   printf("--- unused dynamic memory: %lu bytes ---\n",
 	 (unsigned long) malloc_free_space());
 }
 
 
-void fileio_part_table_initialize(void)
+static void fileio_part_table_initialize(void)
 {
   char devname[64];
   rtems_status_code rc;
@@ -222,12 +222,12 @@ void fileio_part_table_initialize(void)
   /*
    * call function
    */
-  rc = rtems_ide_part_table_initialize(devname);
+  rc = rtems_bdpart_register_from_disk(devname);
   printf("result = %d\n",rc);
   fileio_print_free_heap();
 }
 
-void fileio_fsmount(void)
+static void fileio_fsmount(void)
 {
   rtems_status_code rc;
 
@@ -245,7 +245,7 @@ void fileio_fsmount(void)
   fileio_print_free_heap();
 }
 
-void fileio_list_file(void)
+static void fileio_list_file(void)
 {
   char fname[1024];
   char *buf_ptr = NULL;
@@ -286,7 +286,7 @@ void fileio_list_file(void)
     do {
       n = read(fd,buf_ptr,buf_size);
       if (n > 0) {
-	write(1,buf_ptr,n);
+	write(1,buf_ptr,(size_t) n);
 	flen += n;
       }
     } while (n > 0);
@@ -312,7 +312,7 @@ void fileio_list_file(void)
 /*
  * convert a size string (like 34K or 12M) to actual byte count
  */
-bool fileio_str2size(const char *str,uint32_t   *res_ptr)
+static bool fileio_str2size(const char *str,uint32_t   *res_ptr)
 {
   bool failed = false;
   unsigned long size;
@@ -337,7 +337,7 @@ bool fileio_str2size(const char *str,uint32_t   *res_ptr)
   return failed;
 }
 
-void fileio_write_file(void)
+static void fileio_write_file(void)
 {
   char fname[1024];
   char tmp_str[32];
@@ -467,8 +467,8 @@ void fileio_write_file(void)
 	  bufptr + (buf_size-bytes_to_copy),
 		  MIN(bytes_to_copy,file_size-curr_pos));
 	if (n > 0) {
-	  bytes_to_copy -= n;
-	  curr_pos      += n;
+	  bytes_to_copy -= (size_t) n;
+	  curr_pos      += (size_t) n;
 	}
       } while ((bytes_to_copy > 0)  && (n > 0));
     } while ((file_size > curr_pos) && (n > 0));
@@ -501,7 +501,7 @@ void fileio_write_file(void)
   fileio_print_free_heap();
 }
 
-void fileio_read_file(void)
+static void fileio_read_file(void)
 {
   char fname[1024];
   char tmp_str[32];
@@ -586,7 +586,7 @@ void fileio_read_file(void)
 	       bufptr,
 	       buf_size);
       if (n > 0) {
-	curr_pos      += n;
+	curr_pos      += (size_t) n;
       }
     } while (n > 0);
     rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &curr_tick);
@@ -621,7 +621,7 @@ void fileio_read_file(void)
 
 }
 
-void fileio_menu (void)
+static void fileio_menu (void)
 {
   char inbuf[10];
 
@@ -675,12 +675,10 @@ void fileio_menu (void)
   exit (0);
 }
 
-int menu_tid;
-
 /*
  * RTEMS File Menu Task
  */
-rtems_task
+static rtems_task
 fileio_task (rtems_task_argument ignored)
 {
   fileio_menu();
@@ -716,7 +714,7 @@ Init (rtems_task_argument ignored)
  *  RTEMS Shell Configuration -- Add a command and an alias for it
  */
 
-int main_usercmd(int argc, char **argv)
+static int main_usercmd(int argc, char **argv)
 {
   int i;
   printf( "UserCommand: argc=%d\n", argc );
@@ -725,7 +723,7 @@ int main_usercmd(int argc, char **argv)
   return 0;
 }
 
-rtems_shell_cmd_t Shell_USERCMD_Command = {
+static rtems_shell_cmd_t Shell_USERCMD_Command = {
   "usercmd",                                       /* name */
   "usercmd n1 [n2 [n3...]]     # echo arguments",  /* usage */
   "user",                                          /* topic */
@@ -734,7 +732,7 @@ rtems_shell_cmd_t Shell_USERCMD_Command = {
   NULL                                             /* next */
 };
 
-rtems_shell_alias_t Shell_USERECHO_Alias = {
+static rtems_shell_alias_t Shell_USERECHO_Alias = {
   "usercmd",                 /* command */
   "userecho"                 /* alias */
 };
