@@ -48,13 +48,13 @@ extern "C" {
   static void lpc_eth_config_module_enable(void)
   {
     lpc24xx_module_enable(LPC24XX_MODULE_ETHERNET, LPC24XX_MODULE_PCLK_DEFAULT);
-    lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 0);
+    lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 1);
   }
 #else
   static void lpc_eth_config_module_enable(void)
   {
     lpc24xx_module_enable(LPC24XX_MODULE_ETHERNET, LPC24XX_MODULE_PCLK_DEFAULT);
-    lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 1);
+    lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 0);
   }
 #endif
 
