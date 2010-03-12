@@ -1,3 +1,8 @@
+2010-03-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/dosfs/msdos_misc.c: Do not overwrite errno in case
+	fat_file_write() returns with an error status.
+
 2010-03-11	Ken Peters <kptrs@yahoo.com>
 
 	PR 1456/cpukit

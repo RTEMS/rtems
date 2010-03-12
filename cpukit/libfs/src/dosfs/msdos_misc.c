@@ -1447,7 +1447,9 @@ int msdos_find_name_in_fat_file(
 #if MSDOS_FIND_PRINT
             printf ("MSFS:[9.4] clear write: %d\n", ret);
 #endif
-            if (ret != bts2rd)
+            if (ret == -1)
+              return ret;
+            else if (ret != bts2rd)
               rtems_set_errno_and_return_minus_one(EIO);
           }
         }
@@ -1556,7 +1558,9 @@ int msdos_find_name_in_fat_file(
         ret = fat_file_write(mt_entry, fat_fd,
                              (empty_space_offset * bts2rd) + empty_space_entry,
                              length, fs_info->cl_buf + empty_space_entry);
-        if (ret != length)
+        if (ret == -1)
+            return ret;
+        else if (ret != length)
             rtems_set_errno_and_return_minus_one(EIO);
 
         empty_space_offset++;
