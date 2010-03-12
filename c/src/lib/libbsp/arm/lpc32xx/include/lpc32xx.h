@@ -91,5 +91,16 @@
 #define LPC32XX_UART_LOOP (*(volatile uint32_t *) 0x40054008)
 #define LPC32XX_SW_INT (*(volatile uint32_t *) 0x400040a8)
 #define LPC32XX_MAC_CLK_CTRL (*(volatile uint32_t *) 0x40004090)
+#define LPC32XX_USB_CTRL (*(volatile uint32_t *) 0x40004064)
+#define LPC32XX_USB_DIV (*(volatile uint32_t *) 0x4000401c)
+#define LPC32XX_OTG_CLK_CTRL (*(volatile uint32_t *) 0x31020ff4)
+#define LPC32XX_OTG_CLK_STAT (*(volatile uint32_t *) 0x31020ff8)
+#define LPC32XX_OTG_STAT_CTRL (*(volatile uint32_t *) 0x31020110)
+#define LPC32XX_I2C_RX (*(volatile uint32_t *) 0x31020300)
+#define LPC32XX_I2C_TX (*(volatile uint32_t *) 0x31020300)
+#define LPC32XX_I2C_STS (*(volatile uint32_t *) 0x31020304)
+#define LPC32XX_I2C_CTL (*(volatile uint32_t *) 0x31020308)
+#define LPC32XX_I2C_CLKHI (*(volatile uint32_t *) 0x3102030c)
+#define LPC32XX_I2C_CLKLO (*(volatile uint32_t *) 0x31020310)
 
 #endif /* LIBBSP_ARM_LPC32XX_LPC32XX_H */

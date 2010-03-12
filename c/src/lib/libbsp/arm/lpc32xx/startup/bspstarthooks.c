@@ -27,6 +27,14 @@
 #include <bsp/mmu.h>
 #include <bsp/linker-symbols.h>
 
+#define LPC32XX_DISABLE_READ_WRITE_DATA_CACHE
+
+#ifdef LPC32XX_DISABLE_READ_WRITE_DATA_CACHE
+  #define LPC32XX_MMU_READ_WRITE_DATA LPC32XX_MMU_READ_WRITE
+#else
+  #define LPC32XX_MMU_READ_WRITE_DATA LPC32XX_MMU_READ_WRITE_CACHED
+#endif
+
 #define BSP_START_SECTION __attribute__((section(".bsp_start")))
 #define BSP_START_DATA_SECTION __attribute__((section(".bsp_start_data")))
 
@@ -65,23 +73,23 @@ static const BSP_START_DATA_SECTION lpc32xx_mmu_config
   }, {
     .begin = (uint32_t) bsp_section_rodata_begin,
     .end = (uint32_t) bsp_section_rodata_end,
-    .flags = LPC32XX_MMU_READ_ONLY_CACHED
+    .flags = LPC32XX_MMU_READ_WRITE_CACHED
   }, {
     .begin = (uint32_t) bsp_section_data_begin,
     .end = (uint32_t) bsp_section_data_end,
-    .flags = LPC32XX_MMU_READ_WRITE
+    .flags = LPC32XX_MMU_READ_WRITE_DATA
   }, {
     .begin = (uint32_t) bsp_section_fast_begin,
     .end = (uint32_t) bsp_section_fast_end,
-    .flags = LPC32XX_MMU_READ_ONLY_CACHED
+    .flags = LPC32XX_MMU_READ_WRITE_CACHED
   }, {
     .begin = (uint32_t) bsp_section_bss_begin,
     .end = (uint32_t) bsp_section_bss_end,
-    .flags = LPC32XX_MMU_READ_WRITE
+    .flags = LPC32XX_MMU_READ_WRITE_DATA
   }, {
     .begin = (uint32_t) bsp_section_work_begin,
     .end = (uint32_t) bsp_section_work_end,
-    .flags = LPC32XX_MMU_READ_WRITE_CACHED
+    .flags = LPC32XX_MMU_READ_WRITE_DATA
   }, {
     .begin = (uint32_t) bsp_section_stack_begin,
     .end = (uint32_t) bsp_section_stack_end,

@@ -1,3 +1,8 @@
+2010-03-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* README, include/lpc32xx.h, irq/irq.c, startup/bspstarthooks.c:
+	Changes throughout.
+
 2010-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/lpc32xx_phycore.cfg: Remove -W* flags.

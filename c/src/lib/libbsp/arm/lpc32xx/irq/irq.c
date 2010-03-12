@@ -122,7 +122,7 @@ static inline void lpc32xx_irq_clear_bit_in_field(unsigned index, lpc32xx_irq_fi
 {
   LPC32XX_IRQ_BIT_OPS_DEFINE;
 
-  fields->fields_table [module] &= ~bit;
+  fields->fields_table [module] &= ~(1U << bit);
 }
 
 static inline unsigned lpc32xx_irq_get_index(uint32_t val)
