@@ -86,8 +86,8 @@ void change_name(
   else {
     printf( "(" );
     for (c=newName ; *c ; ) {
-       if (isprint((int)*c)) printf( "%c", *c );
-       else                  printf( "0x%02x", *c );
+       if (isprint((unsigned char)*c)) printf( "%c", *c );
+       else                            printf( "0x%02x", *c );
        c++;
        if ( *c )
          printf( "-" );

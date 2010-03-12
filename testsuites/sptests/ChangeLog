@@ -1,3 +1,9 @@
+2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp43/init.c: Readdress use of ctype methods per recommendation from
+	D.J. Delorie on the newlib mailing list. We should pass an unsigned
+	char into these methods.
+
 2010-03-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add new fatal error for configuring
