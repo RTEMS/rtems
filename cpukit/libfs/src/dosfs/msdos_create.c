@@ -85,7 +85,7 @@ msdos_creat_node(
     if ( time_ret == -1 )
         return -1;
 
-    msdos_date_unix2dos(time_ret, &time_val, &date);
+    msdos_date_unix2dos(time_ret, &date, &time_val);
     *MSDOS_DIR_WRITE_TIME(new_node) = CT_LE_W(time_val);
     *MSDOS_DIR_WRITE_DATE(new_node) = CT_LE_W(date);
 
