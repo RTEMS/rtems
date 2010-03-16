@@ -40,12 +40,14 @@ int rtems_shell_make_args(
       break;
 
     if ( *ch == '"' ) {
-      argv_p[ argc++ ] = ++ch;
-      while ( ( *ch == '\0' ) && ( *ch != '"' ) ) ch++;
+      argv_p[ argc ] = ++ch;
+      while ( ( *ch != '\0' ) && ( *ch != '"' ) ) ch++;
     } else {
-      argv_p[ argc++ ] = ch;
-      while ( ( *ch == '\0' ) && ( !isspace((unsigned char)*ch) ) ) ch++;
+      argv_p[ argc ] = ch;
+      while ( ( *ch != '\0' ) && ( !isspace((unsigned char)*ch) ) ) ch++;
     }
+
+    argc++;
 
     if ( *ch == '\0' )
       break;

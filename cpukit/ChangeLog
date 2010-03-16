@@ -1,3 +1,8 @@
+2010-03-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/shell_makeargs.c: Fix bugs introduced by patch
+	attempting to add quoted arguments.
+
 2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libblock/src/ide_part_table.c: Functionality of
