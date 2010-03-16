@@ -1332,7 +1332,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_FEC_TFWR_X_WMRK_128			(0x00000002)
 #define MCF5282_FEC_TFWR_X_WMRK_192			(0x00000003)
 
-#define MCF5282_FEC_EMRBR_R_BUF_SIZE(x)		(((x)&7F)<<4)
+#define MCF5282_FEC_EMRBR_R_BUF_SIZE(x)		(((x)&0x7F)<<4)
 
 #define MCF5282_FEC_TxBD_R					0x8000
 #define MCF5282_FEC_TxBD_BUSY				0x4000
@@ -2394,7 +2394,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_CFM_CFMUSTAT_ACCERR			(0x10)
 #define MCF5282_CFM_CFMUSTAT_BLANK 			(0x04)
 
-#define MCF5282_CFM_CFMCMD_CMD(x)			(((x)&7F))
+#define MCF5282_CFM_CFMCMD_CMD(x)			(((x)&0x7F))
 
 /********************************************************************/
 
