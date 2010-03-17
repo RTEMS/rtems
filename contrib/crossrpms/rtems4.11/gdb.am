@@ -1,0 +1,31 @@
+EXTRA_DIST += gdb-sources.add
+
+GDB_OPTS =
+
+GDB_SUBPACKAGES = $(top_srcdir)/common/common.add
+GDB_SUBPACKAGES += $(top_srcdir)/gdb/gdb.add
+GDB_SUBPACKAGES += $(top_srcdir)/gdb/prep.add
+GDB_SUBPACKAGES += $(top_srcdir)/gdb/build.add
+GDB_SUBPACKAGES += $(top_srcdir)/gdb/install.add
+GDB_SUBPACKAGES += $(top_srcdir)/gdb/rpm-install.add
+GDB_SUBPACKAGES += $(top_srcdir)/common/clean.add
+GDB_SUBPACKAGES += $(top_srcdir)/gdb/target-gdb.add
+GDB_SUBPACKAGES += $(top_srcdir)/gdb/base-gdb.add
+
+$(TARGET)-gdb.spec.in: $(GDB_SUBPACKAGES) Makefile.am $(srcdir)/gdb-sources.add $(srcdir)/../gdb.am
+	cat $(GDB_SUBPACKAGES) | sed \
+	  -e "/[@]SOURCES[@]/r $(srcdir)/gdb-sources.add" \
+	  -e "/[@]SOURCES[@]/d" \
+	  -e "s/[@]GDB_VERS[@]/$(GDB_VERS)/g" \
+	  -e "s/[@]GDB_PKGVERS[@]/$(GDB_PKGVERS)/g" \
+	  -e "s/[@]GDB_RPMREL[@]/$(GDB_RPMREL)%{?dist}/g" \
+	  -e "/--with-sysroot/d" \
+	  | $(MKSPEC0) > $(TARGET)-gdb.spec.in
+CLEANFILES += $(TARGET)-gdb.spec.in
+
+@rpmprefix@$(TARGET)-gdb.spec: $(TARGET)-gdb.spec.in
+	$(MKSPEC) $(TARGET)-gdb.spec.in | $(SPECSTRIP) $(GDB_OPTS) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-gdb.spec
+noinst_DATA += @rpmprefix@$(TARGET)-gdb.spec
+
+EXTRA_DIST += $(GDB_SUBPACKAGES)

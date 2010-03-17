@@ -1,0 +1,2 @@
+echo "RTEMS gcc-%{gcc_version}-@GCC_RPMREL@/newlib-%{newlib_version}-@NEWLIB_RPMREL@" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+

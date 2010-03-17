@@ -1,0 +1,47 @@
+EXTRA_DIST += $(srcdir)/../gcc-prep.add
+EXTRA_DIST += $(srcdir)/gcc-sources.add
+
+GCC_OPTS = --languages=c --newlib
+
+GCC_SUBPACKAGES = $(top_srcdir)/common/common.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/gccnewlib.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/prep.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/build.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/install.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
+GCC_SUBPACKAGES += $(top_srcdir)/common/clean.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-gcc.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/base-gcc.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-c++.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-gfortran.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/base-gfortran.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-objc.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-newlib.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/base-newlib.add
+
+$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add $(srcdir)/../gcc-prep.add $(srcdir)/../gcc.am
+	cat $(GCC_SUBPACKAGES) \
+	  | sed \
+	  -e "/[@]SOURCES[@]/r $(srcdir)/gcc-sources.add" \
+	  -e "/[@]SOURCES[@]/d" \
+	  -e "/[@]PREP[@]/r $(srcdir)/../gcc-prep.add" \
+	  -e "/[@]PREP[@]/d" \
+	  | sed \
+	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
+	  -e "s/[@]GCC_PKGVERS[@]/$(GCC_PKGVERS)/g" \
+	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)%{?dist}/g" \
+	  -e "s/[@]NEWLIB_VERS[@]/$(NEWLIB_VERS)/g" \
+	  -e "s/[@]NEWLIB_PKGVERS[@]/$(NEWLIB_PKGVERS)/g" \
+	  -e "s/[@]NEWLIB_RPMREL[@]/$(NEWLIB_RPMREL)%{?dist}/g" \
+	  -e "/--with-sysroot/d" \
+	  -e "/[@]tool_target[@]-sys-root/d" \
+	  -e "/[@]tool_target[@]-w32api-sys-root/d" \
+	  | $(MKSPEC0) > $(TARGET)-gcc.spec.in
+CLEANFILES += $(TARGET)-gcc.spec.in
+
+@rpmprefix@$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
+	$(MKSPEC) $(TARGET)-gcc.spec.in | $(SPECSTRIP) $(GCC_OPTS) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-gcc.spec
+noinst_DATA += @rpmprefix@$(TARGET)-gcc.spec
+
+EXTRA_DIST += $(GCC_SUBPACKAGES)
