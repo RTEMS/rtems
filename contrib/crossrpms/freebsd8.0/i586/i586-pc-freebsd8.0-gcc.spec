@@ -41,7 +41,7 @@ Summary:      	i586-pc-freebsd8.0 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20091021.1%{?dist}
+Release:      	0.20010317.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -65,6 +65,17 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 %endif
 %endif
 
+%if "%{gcc_version}" >= "4.3.3"
+%define _cloog_minvers 0.15
+%endif
+
+%if %{defined _cloog_minvers}
+%{?fc11:BuildRequires: cloog-ppl-devel >= %_cloog_minvers}
+%{?fc12:BuildRequires: cloog-ppl-devel >= %_cloog_minvers}
+%{?fc13:BuildRequires: cloog-ppl-devel >= %_cloog_minvers}
+%{?suse11_2:BuildRequires: cloog-devel >= %_cloog_minvers, ppl-devel}
+%{?suse11_1:BuildRequires: cloog-devel >= %_cloog_minvers, ppl-devel}
+%endif
 
 %if "%{gcc_version}" >= "4.4.0"
 %define _mpfr_minvers	2.3.2
@@ -83,9 +94,9 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 
 %if %{defined _mpfr_minvers}
 # FIXME: This is an ugly cludge
-%{?fc10:%global mpfr_provided 2.3.2}
 %{?fc11:%global mpfr_provided 2.4.1}
 %{?fc12:%global mpfr_provided 2.4.1}
+%{?fc13:%global mpfr_provided 2.4.1}
 %{?suse11_0:%global mpfr_provided 2.3.1}
 %{?suse11_1:%global mpfr_provided 2.3.2}
 %{?suse11_2:%global mpfr_provided 2.4.1}
@@ -499,7 +510,7 @@ Version:        %{gcc_rpmvers}
 License:	GPL
 
 %description -n i586-pc-freebsd8.0-gcc-libstdc++
-%{_summary}
+%{summary}
 
 
 %files -n i586-pc-freebsd8.0-gcc-c++
@@ -561,7 +572,7 @@ Version:        %{gcc_rpmvers}
 License:	GPL
 
 %description -n i586-pc-freebsd8.0-gcc-libgfortran
-%{_summary}
+%{summary}
 
 %files -n i586-pc-freebsd8.0-gcc-libgfortran -f build/files.gfortran
 %defattr(-,root,root)
