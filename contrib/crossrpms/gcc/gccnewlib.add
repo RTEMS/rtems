@@ -28,6 +28,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global mpc_version	0.8.1
 %global mpfr_version	2.4.1
 %global gmp_version	0.4.3
+%global libelf_version  0.8.13
 
 %if "%{gcc_version}" >= "4.3.0"
 %define _gmp_minvers		4.1
