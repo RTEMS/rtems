@@ -24,6 +24,11 @@ BuildRequires:  %{_host_rpmprefix}gcc
 
 %bcond_with lto
 
+# versions of libraries, we conditionally bundle if necessary
+%global mpc_version	0.8.1
+%global mpfr_version	2.4.1
+%global gmp_version	0.4.3
+
 %if "%{gcc_version}" >= "4.3.0"
 %define _gmp_minvers		4.1
 %else
@@ -55,16 +60,13 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 
 %if "%{gcc_version}" >= "4.4.0"
 %define _mpfr_minvers	2.3.2
-%define mpfr_version	2.4.1
 %else
 %if "%{gcc_version}" >= "4.3.0"
 %define _mpfr_minvers	2.3.1
-%define mpfr_version	2.3.2
 %else
 %if "%{gcc_version}" >= "4.2.0"
 %if %build_fortran
 %define _mpfr_minvers	2.2.1
-%define mpfr_version	2.3.2
 %endif
 %endif
 %endif
