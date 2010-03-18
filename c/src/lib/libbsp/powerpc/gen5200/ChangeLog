@@ -1,3 +1,9 @@
+2010-03-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1497/bsps
+	* startup/bspclean.c: Do not enable interrupts while waiting for board
+	to reset.
+
 2008-03-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmds.brs5l, startup/linkcmds.icecube,
