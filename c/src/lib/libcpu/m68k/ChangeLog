@@ -1,6 +1,6 @@
 2010-03-16      Eric Norum <wenorum@lbl.gov>
 
-    * mcf5282/include/mcf5282.h: Fix hex constants.
+	* mcf5282/include/mcf5282.h: Fix hex constants.
 
 2009-09-10	Till Straumann <strauman@slac.stanford.edu>
 
