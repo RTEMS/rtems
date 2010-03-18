@@ -46,6 +46,29 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 %endif
 %endif
 
+%if "%{gcc_version}" >= "4.5.0"
+%define _mpc_minvers 0.8
+%endif
+
+%if %{defined _mpc_minvers}
+%{?fc12:%global mpc_provided 0.8}
+%{?fc13:%global mpc_provided 0.8.1}
+%endif
+
+%if %{defined mpc_provided}
+%if "%{mpc_provided}" < "%{_mpc_minvers}"
+%define _build_mpc 1
+%else
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}mpc-devel >= %{_mpc_minvers}
+%else
+BuildRequires: libmpc-devel >= %{_mpc_minvers}
+%endif
+%endif
+%else
+%define _build_mpc 1
+%endif
+
 %if "%{gcc_version}" >= "4.3.3"
 %define _cloog_minvers 0.15
 %endif
@@ -128,8 +151,12 @@ Requires:	@rpmprefix@@tool_target@-gcc-libgcc = %{gcc_rpmvers}-%{release}
 Requires:	@rpmprefix@@tool_target@-newlib = %{newlib_version}-@NEWLIB_RPMREL@
 %endif
 
+%if "%{gcc_version}" >= "4.5.0"
+BuildRequires:  zlib-devel
+%else
 %if %build_gcj
 BuildRequires:	zlib-devel
+%endif
 %endif
 %if %build_gnat
 # Building gnat requires gnat
@@ -151,6 +178,10 @@ Source61:    http://www.multiprecision.org/mpc/download/mpc-%{mpc_version}.tar.g
 
 %if 0%{?_build_gmp}
 Source62:    ftp://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
+%endif
+
+%if 0%{_build_libelf}
+Source63:    http://www.mr511.de/software/libelf-%{libelf_version}.tar.gz
 %endif
 
 %description
