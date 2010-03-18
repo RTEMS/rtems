@@ -137,8 +137,16 @@ BuildRequires:	@rpmprefix@@tool_target@-newlib < %{newlib_version}-@NEWLIB_RPMRE
 
 @SOURCES@
 
-%if "%{gcc_version}" >= "4.3.0"
+%if 0%{?_build_mpfr}
 Source60:    http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+%endif
+
+%if 0%{?_build_mpc}
+Source61:    http://www.multiprecision.org/mpc/download/mpc-%{mpc_version}.tar.gz
+%endif
+
+%if 0%{?_build_gmp}
+Source62:    ftp://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 %endif
 
 %description
