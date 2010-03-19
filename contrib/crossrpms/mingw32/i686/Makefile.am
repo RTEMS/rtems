@@ -8,6 +8,10 @@ GMP_VERS = 4.3.2
 GMP_RPMREL = 0.20100319.1%{?dist}
 include ../gmp.am
 
+MPC_VERS = 0.8.1
+MPC_RPMREL = 0.20100319.1%{?dist}
+include ../mpc.am
+
 MPFR_VERS = 2.4.1
 MPFR_RPMREL = 0.20100319.1%{?dist}
 include ../mpfr.am
