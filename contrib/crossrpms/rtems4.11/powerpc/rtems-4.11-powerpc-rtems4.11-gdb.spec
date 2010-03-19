@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 7.0.90
-%define gdb_rpmvers %{expand:%(echo 7.0.90 | tr - _)} 
+%define gdb_version 7.1
+%define gdb_rpmvers %{expand:%(echo 7.1 | tr - _)} 
 
 Name:		rtems-4.11-powerpc-rtems4.11-gdb
 Summary:	Gdb for target powerpc-rtems4.11
@@ -126,9 +126,9 @@ BuildRequires:	texinfo >= 4.2
 
 Requires:	rtems-4.11-gdb-common
 
-%if "%{gdb_version}" == "7.0.90"
-Source0: ftp://sourceware.org/pub/gdb/snapshots/branch/gdb-7.0.90.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-7.0.90-rtems4.10-20100225.diff
+%if "%{gdb_version}" == "7.1"
+Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.1.tar.bz2
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-7.1-rtems4.10-20100319.diff
 %endif
 
 %if "%{gdb_version}" == "7.0.1"
