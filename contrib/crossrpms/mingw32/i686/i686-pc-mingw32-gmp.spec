@@ -30,12 +30,12 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gmp_version 4.2.4
-%define gmp_rpmvers %{expand:%(echo 4.2.4 | tr - _)} 
+%define gmp_version 4.3.2
+%define gmp_rpmvers %{expand:%(echo 4.3.2 | tr - _)} 
 %define debug_package %{nil}
 
 Name:         i686-pc-mingw32-gmp
-Release:      0.20090717.1%{?dist}
+Release:      0.20100319.1%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -121,7 +121,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{gmp_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-mingw32/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-mingw32/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-mingw32/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{gmp_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{gmp_rpmvers}/find-provides
@@ -129,7 +129,7 @@ chmod +x %{_builddir}/%{name}-%{gmp_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{gmp_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-mingw32/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-mingw32/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-mingw32/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{gmp_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gmp_rpmvers}/find-requires

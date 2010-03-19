@@ -4,8 +4,8 @@ TARGET = i686-pc-mingw32
 
 include $(top_srcdir)/mkspec.am
 
-GMP_VERS = 4.2.4
-GMP_RPMREL = 0.20090717.1%{?dist}
+GMP_VERS = 4.3.2
+GMP_RPMREL = 0.20100319.1%{?dist}
 include ../gmp.am
 
 MPFR_VERS = 2.3.1
