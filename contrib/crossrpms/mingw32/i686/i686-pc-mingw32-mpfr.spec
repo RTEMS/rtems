@@ -30,12 +30,12 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define mpfr_version 2.3.1
-%define mpfr_rpmvers %{expand:%(echo 2.3.1 | tr - _)} 
+%define mpfr_version 2.4.1
+%define mpfr_rpmvers %{expand:%(echo 2.4.1 | tr - _)} 
 %define debug_package %{nil}
 
 Name:         i686-pc-mingw32-mpfr
-Release:      0.20090717.1%{?dist}
+Release:      0.20100319.1%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -124,7 +124,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{mpfr_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-mingw32/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-mingw32/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-mingw32/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{mpfr_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{mpfr_rpmvers}/find-provides
@@ -132,7 +132,7 @@ chmod +x %{_builddir}/%{name}-%{mpfr_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{mpfr_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-mingw32/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-mingw32/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/i686-pc-mingw32/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{mpfr_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{mpfr_rpmvers}/find-requires
