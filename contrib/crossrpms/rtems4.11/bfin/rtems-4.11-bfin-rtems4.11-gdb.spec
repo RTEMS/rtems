@@ -60,33 +60,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  %{_host_rpmprefix}gcc
 
 %define build_sim --enable-sim
-%if "%{_build}" != "%{_host}"
-# psim doesn't support Cdn-X
-%if "bfin-rtems4.11" == "powerpc-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%endif
 
-%ifos mingw mingw32
-# Mingw lacks functions required by the simulator
-%if "bfin-rtems4.11" == "sparc-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%if "bfin-rtems4.11" == "h8300-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%if "%{gdb_version}" >= "6.8.50"
-%if "bfin-rtems4.11" == "m32c-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%endif
-%if "bfin-rtems4.11" == "lm32-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%if "bfin-rtems4.11" == "mipstx39-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%endif
 
 %if "%{gdb_version}" >= "6.6"
 # suse
