@@ -127,9 +127,9 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %endif
 
 %if 0%{?mingw32}
-%global mpc_provided %{nil}
-%global mpfr_provided %{nil}
-%global gmp_provided %{nil}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.2
 %endif
 
 %if "%{gcc_version}" >= "4.2.0"
@@ -229,6 +229,9 @@ Requires:	rtems-4.11-m68k-rtems4.11-newlib = %{newlib_version}-1%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}zlib-devel
+%endif
 %else
 %endif
 
@@ -663,11 +666,7 @@ libgcc m68k-rtems4.11-gcc.
 %dir %{_gcclibdir}/gcc/m68k-rtems4.11/%{gcc_version}/include
 
 %if "%{gcc_version}" > "4.0.3"
-%if "m68k-rtems4.11" != "bfin-rtems4.10"
-%if "m68k-rtems4.11" != "avr-rtems4.10"
 %dir %{_gcclibdir}/gcc/m68k-rtems4.11/%{gcc_version}/include/ssp
-%endif
-%endif
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
