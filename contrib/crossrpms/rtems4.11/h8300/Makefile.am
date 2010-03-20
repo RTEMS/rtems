@@ -1,5 +1,6 @@
 # $Id$
 
+rtems_api = 4.11
 TARGET = h8300-rtems4.11
 
 include $(top_srcdir)/mkspec.am

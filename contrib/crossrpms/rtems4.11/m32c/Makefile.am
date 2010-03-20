@@ -1,5 +1,6 @@
 # $Id$
 
+rtems_api = 4.11
 TARGET = m32c-rtems4.11
 
 include $(top_srcdir)/mkspec.am
