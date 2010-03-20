@@ -6,7 +6,7 @@
 # Usage: specstrip < infile > outfile
 
 
-# Copyright (C) 2005,2006	Ralf Corsépius, Ulm, Germany,
+# Copyright (C) 2005,2006,2010	Ralf Corsépius, Ulm, Germany,
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -166,8 +166,27 @@ foreach (@buffer0)
 my @buffer3;
 foreach my $i ( @buffer2 )
 {
-#  print STDERR $i->{state}, $i->{line}, "\n";
+  print STDERR $i->{state}, $i->{line}, "\n" if $verbose > 1;
   if ( $i->{state} =~ m/($ppat)/ ) {
+  } elsif ( $i->{state} =~ m/.*<"([a-zA-Z_0-9\.\-]+)" (!=|==) "([a-zA-Z_0-9\.\-]+)">.*/ ) {
+  # Filter out constant conditionals
+    if ( "$2" eq "==" ) {
+      if ( "$1" eq "$3" ) {
+        if ( $i->{line} =~ m/^%(if|else|endif).*$/ ) {
+        } else {
+          push @buffer3, $i->{line}, "\n";
+        }
+      }
+    } elsif ( "$2" eq "!=" ){
+      if ( "$1" ne "$3" ) {
+        if ( $i->{line} =~ m/^%(if|else|endif).*$/ ) {
+        } else {
+          push @buffer3, $i->{line}, "\n";
+        }
+      }
+    } else {
+      die "invalid condition: $i->{state}";
+    }
   } else {
     push @buffer3, $i->{line}, "\n"
   }
