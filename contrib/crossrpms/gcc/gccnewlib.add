@@ -29,100 +29,144 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
 %global mpfr_version	2.4.1
-%global gmp_version	0.4.3
+%global gmp_version	4.3.2
 %global libelf_version  0.8.13
 
-%if "%{gcc_version}" >= "4.3.0"
-%define _gmp_minvers		4.1
-%else
+# versions of libraries these distros are known to ship
+%if 0%{?fc13}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?fc12}
+%global mpc_provided 0.8
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?fc11}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.2.4
+%endif
+
+%if 0%{?rhel5}
+%global mpc_provided %{nil}
+%global mpfr_provided %{nil}
+%global gmp_provided 4.1.4
+%endif
+
+%if 0%{?suse11_0}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.3.1
+%global gmp_provided 4.2.2
+%endif
+
+%if 0%{?suse11_1}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.3.2
+%global gmp_provided 4.2.3
+%endif
+
+%if 0%{?suse11_2}
+%global mpc_provided 0.7
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?cygwin}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?mingw32}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.2
+%endif
+
 %if "%{gcc_version}" >= "4.2.0"
 %if %build_fortran
-%define _gmp_minvers		4.1
-%endif
-%endif
-%endif
-
-%if %{defined _gmp_minvers}
-BuildRequires: gmp-devel >= %{_gmp_minvers}
-%if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
+%define gmp_required		4.1
+%define mpfr_required		2.2.1
 %endif
 %endif
 
-%if "%{gcc_version}" >= "4.5.0"
-%define _mpc_minvers 0.8
-%endif
-
-%if %{defined _mpc_minvers}
-%{?fc12:%global mpc_provided 0.8}
-%{?fc13:%global mpc_provided 0.8.1}
-%endif
-
-%if %{defined mpc_provided}
-%if "%{mpc_provided}" < "%{_mpc_minvers}"
-%define _build_mpc 1
-%else
-%if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}mpc-devel >= %{_mpc_minvers}
-%else
-BuildRequires: libmpc-devel >= %{_mpc_minvers}
-%endif
-%endif
-%else
-%define _build_mpc 1
+%if "%{gcc_version}" >= "4.3.0"
+%define gmp_required		4.1
+%define mpfr_required		2.3.1
 %endif
 
 %if "%{gcc_version}" >= "4.3.3"
-%define _cloog_minvers 0.15
-%endif
-
-%if %{defined _cloog_minvers}
-%{?fc11:BuildRequires: cloog-ppl-devel >= %_cloog_minvers}
-%{?fc12:BuildRequires: cloog-ppl-devel >= %_cloog_minvers}
-%{?fc13:BuildRequires: cloog-ppl-devel >= %_cloog_minvers}
-%{?suse11_2:BuildRequires: cloog-devel >= %_cloog_minvers, ppl-devel}
-%{?suse11_1:BuildRequires: cloog-devel >= %_cloog_minvers, ppl-devel}
+%define cloog_required 		0.15
 %endif
 
 %if "%{gcc_version}" >= "4.4.0"
-%define _mpfr_minvers	2.3.2
-%else
-%if "%{gcc_version}" >= "4.3.0"
-%define _mpfr_minvers	2.3.1
-%else
-%if "%{gcc_version}" >= "4.2.0"
-%if %build_fortran
-%define _mpfr_minvers	2.2.1
+%define mpfr_required		2.3.2
 %endif
-%endif
+
+%if "%{gcc_version}" >= "4.5.0"
+%define mpc_required 		0.8
+%if %{with lto}
+%define libelf_required 	0.8.12
 %endif
 %endif
 
-%if %{defined _mpfr_minvers}
-# FIXME: This is an ugly cludge
-%{?fc11:%global mpfr_provided 2.4.1}
-%{?fc12:%global mpfr_provided 2.4.1}
-%{?fc13:%global mpfr_provided 2.4.1}
-%{?suse11_0:%global mpfr_provided 2.3.1}
-%{?suse11_1:%global mpfr_provided 2.3.2}
-%{?suse11_2:%global mpfr_provided 2.4.1}
-%{?cygwin:%global mpfr_provided 2.4.1}
-%{?mingw32:%global mpfr_provided %{nil}}
-
-%if %{defined mpfr_provided}
-%if "%{mpfr_provided}" < "%{_mpfr_minvers}"
-%define _build_mpfr 1
-%else
+%if %{defined mpc_required}
+%if "%{mpc_provided}" >= "%{mpc_required}"
+%{?fedora:BuildRequires: libmpc-devel >= %{mpc_required}}
+%{?suse:BuildRequires: mpc-devel >= %{mpc_required}}
 %if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{_mpfr_minvers}
-%else
-BuildRequires: mpfr-devel >= %{_mpfr_minvers}
+BuildRequires:  %{_host_rpmprefix}mpc-devel >= %{mpc_required}
 %endif
+%else
+%define _build_mpc 1
+%endif
+%endif
+
+%if %{defined gmp_required}
+%if "%{gmp_provided}" >= "%{gmp_required}"
+BuildRequires: gmp-devel >= %{gmp_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{gmp_required}
+%endif
+%else
+%define _build_gmp 1
+%endif
+%endif
+
+%if %{defined libelf_required}
+%if "%{libelf_provided}" >= "%{libelf_required}"
+BuildRequires: libelf-devel >= %{libelf_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
+%endif
+%else
+%define _build_libelf 1
+%endif
+%endif
+
+
+%if %{defined cloog_required}
+%{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
+%{?suse11_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
+%endif
+
+
+%if %{defined mpfr_required}
+%if "%{mpfr_provided}" >= "%{mpfr_required}"
+BuildRequires: mpfr-devel >= %{mpfr_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{mpfr_required}
 %endif
 %else
 %define _build_mpfr 1
 %endif
-
 %endif
 
 %if "%{_build}" != "%{_host}"
