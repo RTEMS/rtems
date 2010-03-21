@@ -280,7 +280,9 @@ Cross gcc for avr-rtems4.11.
 %setup -c -T -n %{name}-%{version}
 
 %setup -q -T -D -n %{name}-%{version} -a0
-%{?PATCH0:%patch0 -p0}
+cd gcc-%{gcc_pkgvers}
+%{?PATCH0:%patch0 -p1}
+cd ..
 
 
 

@@ -46,7 +46,7 @@
 %endif
 
 
-%define gcc_pkgvers 4.5-20100311
+%define gcc_pkgvers 4.5-20100318
 %define gcc_version 4.5.0
 %define gcc_rpmvers %{expand:%(echo "4.5.0" | tr - _ )}
 
@@ -291,10 +291,14 @@ Cross gcc for sparc-rtems4.11.
 %setup -c -T -n %{name}-%{version}
 
 %setup -q -T -D -n %{name}-%{version} -a0
-%{?PATCH0:%patch0 -p0}
+cd gcc-%{gcc_pkgvers}
+%{?PATCH0:%patch0 -p1}
+cd ..
 
 %setup -q -T -D -n %{name}-%{version} -a1
-%{?PATCH1:%patch1 -p0}
+cd gcc-%{gcc_pkgvers}
+%{?PATCH1:%patch1 -p1}
+cd ..
 
 
 
