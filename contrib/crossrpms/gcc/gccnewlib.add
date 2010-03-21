@@ -156,6 +156,9 @@ Requires:	@rpmprefix@@tool_target@-newlib = %{newlib_version}-@NEWLIB_RPMREL@
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}zlib-devel
+%endif
 %else
 %if %build_gcj
 BuildRequires:	zlib-devel
