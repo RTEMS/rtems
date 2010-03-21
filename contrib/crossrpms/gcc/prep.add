@@ -63,6 +63,13 @@ cd ..
   ln -s ../gmp-%{gmp_version} gcc-%{gcc_pkgvers}/gmp
 %endif
 
+%if 0%{?_build_libelf}
+%setup -q -T -D -n %{name}-%{version} -a63
+%{?PATCH63:%patch63 -p1}
+  # Build libelf one-tree style
+  ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
+%endif
+
 @PREP@
 
   # Fix timestamps

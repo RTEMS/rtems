@@ -183,7 +183,7 @@ Source61:    http://www.multiprecision.org/mpc/download/mpc-%{mpc_version}.tar.g
 Source62:    ftp://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 %endif
 
-%if 0%{_build_libelf}
+%if 0%{?_build_libelf}
 Source63:    http://www.mr511.de/software/libelf-%{libelf_version}.tar.gz
 %endif
 
