@@ -24,6 +24,8 @@ BuildRequires:  %{_host_rpmprefix}gcc
 
 %bcond_with lto
 
+%bcond_with pygdb
+
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
 %global mpfr_version	2.4.1

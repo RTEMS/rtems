@@ -66,6 +66,13 @@
     rmdir ${RPM_BUILD_ROOT}%{_prefix}/@tool_target@/include/bits
   fi
 
+  # gcc >= 4.5.0: installs weird libstdc++ python bindings.
+%if ! %{with pygdb}
+  if test -d ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python; then
+    rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python/libstdcxx
+  fi
+%endif
+
   # Collect multilib subdirectories
   multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
@@ -123,6 +130,7 @@
     *jc1) ;;
     *jvgenmain) ;;
     */libgfortran*.*) echo "$i" >> build/files.gfortran ;;
+    %{!?with_pygdb:*/libstdc++*gdb.py*) rm ${RPM_BUILD_ROOT}/$i ;;} # ignore for now
     */libstdc++.*) echo "$i" >> build/files.g++ ;;
     */libsupc++.*) echo "$i" >> build/files.g++ ;;
     *) echo "$i" >> build/files.gcc ;;
