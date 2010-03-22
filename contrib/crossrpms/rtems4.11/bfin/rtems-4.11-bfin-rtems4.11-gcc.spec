@@ -67,9 +67,16 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
+# FIXME: Disable lto for now, to avoid dependencies on libelf
 %bcond_with lto
 
+# FIXME: Disamble python gdb scripts
+# ATM, no idea how to package them
 %bcond_with pygdb
+
+# FIXME: Disable GCC-plugin
+# Bug in gcc-4.5-20100318, doesn't build them on x86_84 hosts.
+%bcond_with plugin
 
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
@@ -382,6 +389,7 @@ echo "RTEMS gcc-%{gcc_version}-3%{?dist}/newlib-%{newlib_version}-3%{?dist}" > g
     --enable-version-specific-runtime-libs \
     --enable-threads \
     %{?with_lto:--enable-lto}%{!?with_lto:--disable-lto} \
+    %{?with_plugin:--enable-plugin}%{!?with_plugin:--disable-plugin} \
     --enable-newlib-io-c99-formats \
     --enable-languages="$languages" $optargs
 
