@@ -22,9 +22,16 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
+# FIXME: Disable lto for now, to avoid dependencies on libelf
 %bcond_with lto
 
+# FIXME: Disamble python gdb scripts
+# ATM, no idea how to package them
 %bcond_with pygdb
+
+# FIXME: Disable GCC-plugin
+# Bug in gcc-4.5-20100318, doesn't build them on x86_84 hosts.
+%bcond_with plugin
 
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
