@@ -155,7 +155,7 @@ void bsp_start(void)
 
   cpu_init();
 
-  bsp_clicks_per_usec    = (IPB_CLOCK/1000000);
+  bsp_clicks_per_usec    = (XLB_CLOCK/4000000);
 
   /*
    * Enable instruction and data caches. Do not force writethrough mode.

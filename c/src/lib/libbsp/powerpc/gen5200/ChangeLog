@@ -1,3 +1,8 @@
+2010-03-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* clock/*, startup/bspstart.c, Makefile.am: switch this BSP to use
+	decrementer as system clock source
+
 2010-03-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1497/bsps
