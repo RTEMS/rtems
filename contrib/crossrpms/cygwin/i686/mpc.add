@@ -16,6 +16,7 @@ Source0:	ftp://cygwin.com/pub/cygwin/release/mpclib/mpclib-%{mpc_version}.tar.bz
 Source1:	ftp://cygwin.com/pub/cygwin/release/mpclib/libmpc1/libmpc1-%{mpc_version}.tar.bz2
 Source2:	ftp://cygwin.com/pub/cygwin/release/mpclib/libmpc-devel/libmpc-devel-%{mpc_version}.tar.bz2
 
+Provides:       @rpmprefix@@tool_target@-mpc-devel = %{version}-%{release}
 Provides:	@rpmprefix@@tool_target@-libmpc = %{version}-%{release}
 Provides:       @rpmprefix@@tool_target@-libmpc-devel = %{version}-%{release}
 
