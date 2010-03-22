@@ -40,11 +40,10 @@ unsigned int sleep(
 {
   rtems_status_code status;
   rtems_interval    ticks_per_second;
-  rtems_interval    ticks;
 
   ticks_per_second = rtems_clock_get_ticks_per_second() * seconds;
 
-  status = rtems_task_wake_after( ticks );
+  status = rtems_task_wake_after( ticks_per_second );
 
   /*
    *  Returns the "unslept" amount of time.  In RTEMS signals are not

@@ -1,3 +1,7 @@
+2010-03-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/sleep_noposix.c: Fix warning and bug.
+
 2010-03-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/shell_makeargs.c: Fix bugs introduced by patch
