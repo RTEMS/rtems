@@ -406,7 +406,7 @@ rtems_rfs_buffer_setblksize (rtems_rfs_file_system* fs, size_t size)
   int rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_SETBLKSIZE))
-    printf ("rtems-rfs: buffer-setblksize: block size: %lu\n", size);
+    printf ("rtems-rfs: buffer-setblksize: block size: %zu\n", size);
 
   rc = rtems_rfs_buffers_release (fs);
   if ((rc > 0) && rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_SETBLKSIZE))

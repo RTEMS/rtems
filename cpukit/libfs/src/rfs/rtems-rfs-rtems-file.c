@@ -117,7 +117,7 @@ rtems_rfs_rtems_file_read (rtems_libio_t* iop,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_READ))
-    printf("rtems-rfs: file-read: handle:%p count:%ld\n", file, count);
+    printf("rtems-rfs: file-read: handle:%p count:%zd\n", file, count);
 
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
 
@@ -182,7 +182,7 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_WRITE))
-    printf("rtems-rfs: file-write: handle:%p count:%ld\n", file, count);
+    printf("rtems-rfs: file-write: handle:%p count:%zd\n", file, count);
 
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
 

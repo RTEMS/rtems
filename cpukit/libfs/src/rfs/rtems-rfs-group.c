@@ -42,7 +42,7 @@ rtems_rfs_group_open (rtems_rfs_file_system* fs,
     size = rtems_rfs_fs_blocks (fs) - base;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_OPEN))
-    printf ("rtems-rfs: group-open: base=%ld, blocks=%ld inodes=%ld\n",
+    printf ("rtems-rfs: group-open: base=%ld, blocks=%zd inodes=%zd\n",
             base, size, inodes);
 
   group->base = base;

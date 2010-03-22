@@ -411,7 +411,7 @@ rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
   int b;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_GROW))
-    printf ("rtems-rfs: block-map-grow: entry: blocks=%ld count=%lu\n",
+    printf ("rtems-rfs: block-map-grow: entry: blocks=%zd count=%lu\n",
             blocks, map->size.count);
             
   if ((map->size.count + blocks) >= rtems_rfs_fs_max_block_map_blocks (fs))
@@ -653,7 +653,7 @@ rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
                             size_t                 blocks)
 {
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_SHRINK))
-    printf ("rtems-rfs: block-map-shrink: entry: blocks=%ld count=%lu\n",
+    printf ("rtems-rfs: block-map-shrink: entry: blocks=%zd count=%lu\n",
             blocks, map->size.count);
             
   if (map->size.count == 0)

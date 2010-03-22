@@ -120,8 +120,8 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
 #if 0
   printf ("            device: %08lx\n", rtems_rfs_fs_device (fs));
 #endif
-  printf ("            blocks: %lu\n",  rtems_rfs_fs_blocks (fs));
-  printf ("        block size: %lu\n",  rtems_rfs_fs_block_size (fs));
+  printf ("            blocks: %zu\n",  rtems_rfs_fs_blocks (fs));
+  printf ("        block size: %zu\n",  rtems_rfs_fs_block_size (fs));
   printf ("              size: %llu\n", rtems_rfs_fs_size (fs));
   printf ("  media block size: %lu\n",  rtems_rfs_fs_media_block_size (fs));
   printf ("        media size: %llu\n", rtems_rfs_fs_media_size (fs));
@@ -129,12 +129,12 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
   printf ("        bad blocks: %lu\n",  fs->bad_blocks);
   printf ("  max. name length: %lu\n",  rtems_rfs_fs_max_name (fs));
   printf ("            groups: %d\n",   fs->group_count);
-  printf ("      group blocks: %ld\n",  fs->group_blocks);
-  printf ("      group inodes: %ld\n",  fs->group_inodes);
-  printf ("  inodes per block: %ld\n",  fs->inodes_per_block);
-  printf ("  blocks per block: %ld\n",  fs->blocks_per_block);
-  printf ("     singly blocks: %ld\n",  fs->block_map_singly_blocks);
-  printf ("    doublly blocks: %ld\n",  fs->block_map_doubly_blocks);
+  printf ("      group blocks: %zd\n",  fs->group_blocks);
+  printf ("      group inodes: %zd\n",  fs->group_inodes);
+  printf ("  inodes per block: %zd\n",  fs->inodes_per_block);
+  printf ("  blocks per block: %zd\n",  fs->blocks_per_block);
+  printf ("     singly blocks: %zd\n",  fs->block_map_singly_blocks);
+  printf ("    doublly blocks: %zd\n",  fs->block_map_doubly_blocks);
   printf (" max. held buffers: %ld\n",  fs->max_held_buffers);
 
   rtems_rfs_shell_lock_rfs (fs);
@@ -146,9 +146,9 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
   bpcent = (blocks * 1000) / rtems_rfs_fs_blocks (fs);
   ipcent = (inodes * 1000) / rtems_rfs_fs_inodes (fs);
   
-  printf ("       blocks used: %ld (%d.%d%%)\n",
+  printf ("       blocks used: %zd (%d.%d%%)\n",
           blocks, bpcent / 10, bpcent % 10);
-  printf ("       inodes used: %ld (%d.%d%%)\n",
+  printf ("       inodes used: %zd (%d.%d%%)\n",
           inodes, ipcent / 10, ipcent % 10);
   
   return 0;
@@ -364,7 +364,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
 
       if (!error_check_only || error)
       {
-        printf (" %5lu: pos=%06lu:%04lx %c ",
+        printf (" %5lu: pos=%06lu:%04zx %c ",
                 ino, rtems_rfs_buffer_bnum (&inode.buffer),
                 inode.offset * RTEMS_RFS_INODE_SIZE,
                 allocated ? 'A' : 'F');
@@ -571,7 +571,7 @@ rtems_rfs_shell_group (rtems_rfs_file_system* fs, int argc, char *argv[])
     size_t           inodes;
     blocks = group->size - rtems_rfs_bitmap_map_free (&group->block_bitmap);
     inodes = fs->group_inodes - rtems_rfs_bitmap_map_free (&group->inode_bitmap);
-    printf (" %4d: base=%-7lu size=%-6lu blocks=%-5lu (%3lu%%) inode=%-5lu (%3lu%%)\n",
+    printf (" %4d: base=%-7lu size=%-6zu blocks=%-5zu (%3zu%%) inode=%-5zu (%3zu%%)\n",
             g, group->base, group->size,
             blocks, (blocks * 100)  / group->size,
             inodes, (inodes * 100) / fs->group_inodes);

@@ -83,7 +83,7 @@ rtems_rfs_bitmap_ut_alloc_seq_test (rtems_rfs_bitmap_control* control,
   for (i = 0; i < size; i++)
     rtems_rfs_bitmap_map_clear (control, bit + i);
   
-  printf (" %2d. Cleared bits (%ld, %ld] (%ld)\n",
+  printf (" %2d. Cleared bits (%ld, %ld] (%zd)\n",
           test, bit, bit + size - 1, size);
   
   for (i = 0; i < rtems_rfs_bitmap_element_bits (); i++)
@@ -120,7 +120,7 @@ rtems_rfs_bitmap_ut_alloc_seq_test (rtems_rfs_bitmap_control* control,
     }
   }
 
-  printf (" %2d. Alloc'ed all bits (%ld, %ld] (%ld)\n",
+  printf (" %2d. Alloc'ed all bits (%ld, %ld] (%zd)\n",
           test, bit, bit + size - 1, size);
   
   return true;
@@ -176,7 +176,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   handle.buffer = &buffer;
   handle.bnum = 1;
   
-  printf ("\nRFS Bitmap Test : size = %ld (%ld)\n",
+  printf ("\nRFS Bitmap Test : size = %zd (%zd)\n",
           size, rtems_rfs_bitmap_elements (size));
   rc = rtems_rfs_bitmap_open (&control, &fs, &handle, size, 1); 
   if (rc > 0)
@@ -208,7 +208,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   
   rc = rtems_rfs_bitmap_map_alloc (&control, size - 1, &result, &bit);
   result = result && (bit == (size - 1));
-  printf ("  4. Find bit (size - 1) with seed = (size - 1) (%ld): %s (%s): bit = %ld\n",
+  printf ("  4. Find bit (size - 1) with seed = (size - 1) (%zd): %s (%s): bit = %ld\n",
           size - 1, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -223,7 +223,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
   
   rc = rtems_rfs_bitmap_map_test (&control, size - 1, &result);
-  printf ("  6. Test bit (size - 1) (%ld): %s (%s)\n",
+  printf ("  6. Test bit (size - 1) (%zd): %s (%s)\n",
           size - 1, result ? "pass" : "FAIL", strerror (rc));
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
   
@@ -270,7 +270,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
   rc = rtems_rfs_bitmap_map_clear (&control, size - 1);
-  printf (" 14. Clear bit (size - 1) (%ld): %s (%s)\n",
+  printf (" 14. Clear bit (size - 1) (%zd): %s (%s)\n",
           size - 1, rc == 0 ? "pass" : "FAIL", strerror (rc));
   rtems_rfs_exit_on_error (rc, false, &control, buffer.buffer);
 
@@ -286,18 +286,18 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   
   rc = rtems_rfs_bitmap_map_alloc (&control, size / 2, &result, &bit);
   result = result && (bit == 0);
-  printf (" 17. Find bit with seed = (size / 2) (%ld): %s (%s): bit = %ld\n",
+  printf (" 17. Find bit with seed = (size / 2) (%zd): %s (%s): bit = %ld\n",
           size / 2, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
   rc = rtems_rfs_bitmap_map_clear (&control, size - 1);
-  printf (" 18. Clear bit (size - 1) (%ld): %s, (%s)\n",
+  printf (" 18. Clear bit (size - 1) (%zd): %s, (%s)\n",
           size - 1, rc == 0 ? "pass" : "FAIL", strerror (rc));
   rtems_rfs_exit_on_error (rc, false, &control, buffer.buffer);
   
   rc = rtems_rfs_bitmap_map_alloc (&control, size / 2, &result, &bit);
   result = result && (bit == (size - 1));
-  printf (" 19. Find bit with seed = (size / 2) (%ld): %s (%s): bit = %ld\n",
+  printf (" 19. Find bit with seed = (size / 2) (%zd): %s (%s): bit = %ld\n",
           size / 2, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -307,17 +307,17 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   
   rc = rtems_rfs_bitmap_map_alloc (&control, (size / 2) - 1, &result, &bit);
   result = result && (bit == 0);
-  printf (" 21. Find bit with seed = ((size / 2) - 1) (%ld): %s (%s): bit = %ld\n",
+  printf (" 21. Find bit with seed = ((size / 2) - 1) (%zd): %s (%s): bit = %ld\n",
           (size / 2) - 1, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
   rc = rtems_rfs_bitmap_map_clear (&control, size - 1);
-  printf (" 22. Clear bit (size - 1) (%ld): %s (%s)\n",
+  printf (" 22. Clear bit (size - 1) (%zd): %s (%s)\n",
           size - 1, rc == 0 ? "pass" : "FAIL", strerror (rc));
   
   rc = rtems_rfs_bitmap_map_alloc (&control, (size / 2) - 1, &result, &bit);
   result = result && (bit == (size - 1));
-  printf (" 23. Find bit with seed = ((size / 2) - 1) (%ld): %s (%s): bit = %ld\n",
+  printf (" 23. Find bit with seed = ((size / 2) - 1) (%zd): %s (%s): bit = %ld\n",
           (size / 2) - 1, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -358,13 +358,13 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   
   clear = rtems_rfs_bitmap_map_free (&control);
   result = clear == (last_bit - first_bit);
-  printf (" 27. Check free count is %ld: %ld: %s (%s)\n",
+  printf (" 27. Check free count is %zd: %ld: %s (%s)\n",
           clear, last_bit - first_bit,
           result ? "pass" : "FAIL", strerror (rc));
 
   rc = rtems_rfs_bitmap_create_search (&control);
   result = clear == rtems_rfs_bitmap_map_free (&control);
-  printf (" 28. Create search check free count is %ld: %ld: %s (%s)\n",
+  printf (" 28. Create search check free count is %zd: %zd: %s (%s)\n",
           clear, rtems_rfs_bitmap_map_free (&control),
           result ? "pass" : "FAIL", strerror (rc));
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
@@ -379,7 +379,7 @@ rtems_rfs_bitmap_unit_test (void)
   printf ("RTEMS File System Bitmap Unit Test\n");
   printf (" Bit set value       : %d\n", RTEMS_RFS_BITMAP_BIT_SET);
   printf (" Bit clear value     : %d\n", RTEMS_RFS_BITMAP_BIT_CLEAR);
-  printf (" Num bit per element : %ld\n", rtems_rfs_bitmap_element_bits ());
+  printf (" Num bit per element : %zd\n", rtems_rfs_bitmap_element_bits ());
 
   srand (0x23984237);
   

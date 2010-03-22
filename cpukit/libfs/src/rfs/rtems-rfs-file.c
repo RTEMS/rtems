@@ -285,7 +285,7 @@ rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
   *available = size - rtems_rfs_file_block_offset (handle);
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
-    printf ("rtems-rfs: file-io: start: available=%lu (%lu)\n",
+    printf ("rtems-rfs: file-io: start: available=%zu (%zu)\n",
             *available, size);
     
   return 0;
@@ -302,7 +302,7 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
   int  rc = 0;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
-    printf ("rtems-rfs: file-io:   end: %s size=%lu\n",
+    printf ("rtems-rfs: file-io:   end: %s size=%zu\n",
             read ? "read" : "write", size);
   
   if (rtems_rfs_buffer_handle_has_block (&handle->buffer))
@@ -313,8 +313,9 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
                                           rtems_rfs_file_buffer (handle));
     if (rc > 0)
     {
-      printf ("rtems-rfs: file-io:   end: error on release: %s size=%lu: %d: %s\n",
-              read ? "read" : "write", size, rc, strerror (rc));
+      printf (
+        "rtems-rfs: file-io:   end: error on release: %s size=%zu: %d: %s\n",
+        read ? "read" : "write", size, rc, strerror (rc));
       
       return rc;
     }

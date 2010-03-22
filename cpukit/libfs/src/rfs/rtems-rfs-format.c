@@ -115,7 +115,7 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
   
   if ((fs->block_size % rtems_rfs_fs_media_block_size (fs)) != 0)
   {
-    printf ("block size (%ld) is not a multiple of media block size (%ld)\n",
+    printf ("block size (%zd) is not a multiple of media block size (%ld)\n",
             fs->block_size, rtems_rfs_fs_media_block_size (fs));
     return false;
   }
@@ -214,7 +214,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
     group_size = rtems_rfs_fs_blocks (fs) - group_base;
 
   if (verbose)
-    printf ("\rrtems-rfs: format: group %3d: base = %ld, size = %ld",
+    printf ("\rrtems-rfs: format: group %3d: base = %ld, size = %zd",
             group, group_base, group_size);
 
   /*
@@ -581,20 +581,20 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
             rtems_rfs_fs_media_block_size (&fs));
     printf ("rtems-rfs: format: size = %llu\n",
             rtems_rfs_fs_size (&fs));
-    printf ("rtems-rfs: format: blocks = %lu\n",
+    printf ("rtems-rfs: format: blocks = %zu\n",
             rtems_rfs_fs_blocks (&fs));
-    printf ("rtems-rfs: format: block size = %lu\n",
+    printf ("rtems-rfs: format: block size = %zu\n",
             rtems_rfs_fs_block_size (&fs));
     printf ("rtems-rfs: format: bits per block = %u\n",
             rtems_rfs_bits_per_block (&fs));
-    printf ("rtems-rfs: format: inode size = %lu\n", RTEMS_RFS_INODE_SIZE);
-    printf ("rtems-rfs: format: inodes = %lu (%d.%d%%)\n",
+    printf ("rtems-rfs: format: inode size = %zu\n", RTEMS_RFS_INODE_SIZE);
+    printf ("rtems-rfs: format: inodes = %zu (%d.%d%%)\n",
             fs.group_inodes * fs.group_count,
             rtems_rfs_inode_overhead (&fs) / 10,
             rtems_rfs_inode_overhead (&fs) % 10);
     printf ("rtems-rfs: format: groups = %u\n", fs.group_count);
-    printf ("rtems-rfs: format: group blocks = %lu\n", fs.group_blocks);
-    printf ("rtems-rfs: format: group inodes = %lu\n", fs.group_inodes);
+    printf ("rtems-rfs: format: group blocks = %zu\n", fs.group_blocks);
+    printf ("rtems-rfs: format: group inodes = %zu\n", fs.group_inodes);
   }
 
   rc = rtems_rfs_buffer_setblksize (&fs, rtems_rfs_fs_block_size (&fs));

@@ -228,7 +228,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
             rtems_rfs_inode_ino (dir));
     for (c = 0; c < length; c++)
       printf ("%c", name[c]);
-    printf (", len=%ld\n", length);
+    printf (", len=%zd\n", length);
   }
         
   rc = rtems_rfs_block_map_open (fs, dir, &map);
@@ -612,7 +612,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
     *length += rtems_rfs_fs_block_size (fs) - map.bpos.boff;
     
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
-      printf ("rtems-rfs: dir-read: next block: off:%ld length:%ld\n",
+      printf ("rtems-rfs: dir-read: next block: off:%ld length:%zd\n",
               (uint32_t) offset, *length);
       
     rc = rtems_rfs_block_map_next_block (fs, &map, &block);
