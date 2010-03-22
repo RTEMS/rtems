@@ -121,7 +121,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %endif
 
 %if 0%{?cygwin}
-%global mpc_provided %{nil}
+%global mpc_provided 0.8
 %global mpfr_provided 2.4.1
 %global gmp_provided 4.3.1
 %endif
@@ -157,6 +157,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 
 %if %{defined mpc_required}
 %if "%{mpc_provided}" >= "%{mpc_required}"
+%{?cygwin:BuildRequires: libmpc-devel >= %{mpc_required}}
 %{?fedora:BuildRequires: libmpc-devel >= %{mpc_required}}
 %{?suse:BuildRequires: mpc-devel >= %{mpc_required}}
 %if "%{_build}" != "%{_host}"
