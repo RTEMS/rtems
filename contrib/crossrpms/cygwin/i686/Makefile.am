@@ -45,7 +45,7 @@ GMP_RPMREL = 0.20100204.0%{?dist}
 include ../gmp.am
 
 MPC_VERS = 0.8-1
-MPC_RPMREL = 0.20100222.0%{?dist}
+MPC_RPMREL = 0.20100322.0%{?dist}
 include ../mpc.am
 
 MPFR_VERS = 2.4.1-4
