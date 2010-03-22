@@ -44,6 +44,10 @@ GMP_VERS = 4.3.1-3
 GMP_RPMREL = 0.20100204.0%{?dist}
 include ../gmp.am
 
+MPC_VERS = 0.8-1
+MPC_RPMREL = 0.20100222.0%{?dist}
+include ../mpc.am
+
 MPFR_VERS = 2.4.1-4
 MPFR_RPMREL = 0.20100204.0%{?dist}
 include ../mpfr.am
@@ -56,9 +60,9 @@ BINUTILS_RPMREL = 0.20100204.0
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
-GCC_VERS = 3.4.4
+GCC_VERS = 4.3.4
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20090907.0
+GCC_RPMREL = 0.20100204.0
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx
 GCC_OPTS += --disable-infos
