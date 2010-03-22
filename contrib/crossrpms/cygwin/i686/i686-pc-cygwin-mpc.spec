@@ -34,7 +34,7 @@
 %define mpc_rpmvers %{expand:%(echo 0.8-1 | tr - _)} 
 
 Name:         i686-pc-cygwin-mpc
-Release:      0.20100222.0%{?dist}
+Release:      0.20100322.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -48,6 +48,7 @@ Source0:	ftp://cygwin.com/pub/cygwin/release/mpclib/mpclib-%{mpc_version}.tar.bz
 Source1:	ftp://cygwin.com/pub/cygwin/release/mpclib/libmpc1/libmpc1-%{mpc_version}.tar.bz2
 Source2:	ftp://cygwin.com/pub/cygwin/release/mpclib/libmpc-devel/libmpc-devel-%{mpc_version}.tar.bz2
 
+Provides:       i686-pc-cygwin-mpc-devel = %{version}-%{release}
 Provides:	i686-pc-cygwin-libmpc = %{version}-%{release}
 Provides:       i686-pc-cygwin-libmpc-devel = %{version}-%{release}
 
