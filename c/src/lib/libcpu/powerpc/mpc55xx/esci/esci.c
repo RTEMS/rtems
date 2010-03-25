@@ -253,12 +253,13 @@ static int mpc55xx_esci_termios_poll_read( int minor)
 /**
  * @brief Writes @a n characters from @a out to port @a minor.
  *
- * @return Returns 0 on success or -1 otherwise.
+ * @return Returns number of chars sent on success or -1 otherwise.
  */
-static int mpc55xx_esci_termios_poll_write( int minor, const char *out, int n)
+static int mpc55xx_esci_termios_poll_write( int minor, const char *out, 
+					    size_t n)
 {
 	mpc55xx_esci_driver_entry *e = &mpc55xx_esci_driver_table [minor];
-	int i = 0;
+	size_t i = 0;
 
 	/* Check minor number */
 	if (MPC55XX_ESCI_IS_MINOR_INVALD( minor)) {
@@ -270,18 +271,18 @@ static int mpc55xx_esci_termios_poll_write( int minor, const char *out, int n)
 		mpc55xx_esci_write_char( e, out [i]);
 	}
 
-	return 0;
+	return n;
 }
 
 /**
  * @brief Writes one character from @a out to port @a minor.
  *
- * @return Returns always 0.
+ * @return (always 0).
  *
  * @note The buffer @a out has to provide at least one character.
  * This function assumes that the transmit data register is empty.
  */
-static int mpc55xx_esci_termios_write( int minor, const char *out, int n)
+static int mpc55xx_esci_termios_write( int minor, const char *out, size_t n)
 {
 	mpc55xx_esci_driver_entry *e = &mpc55xx_esci_driver_table [minor];
 
@@ -531,7 +532,6 @@ rtems_device_driver console_initialize( rtems_device_major_number major, rtems_d
 rtems_device_driver console_open( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	int rv = 0;
 	mpc55xx_esci_driver_entry *e = &mpc55xx_esci_driver_table [minor];
 
 	/* Check minor number */

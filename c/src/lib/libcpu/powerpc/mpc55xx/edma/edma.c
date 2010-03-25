@@ -158,7 +158,7 @@ void mpc55xx_edma_enable_error_interrupts( unsigned channel, bool enable)
 	}
 }
 
-rtems_status_code mpc55xx_edma_init()
+rtems_status_code mpc55xx_edma_init(void)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 
@@ -170,7 +170,7 @@ rtems_status_code mpc55xx_edma_init()
 	EDMA.CR.B.ERGA = 1;
 
 	/* Clear TCDs */
-	memset( &EDMA.TCD [0], 0, sizeof( EDMA.TCD));
+	memset( (void *)&EDMA.TCD [0], 0, sizeof( EDMA.TCD));
 
 	/* Error interrupt handlers */
 	sc = mpc55xx_interrupt_handler_install(

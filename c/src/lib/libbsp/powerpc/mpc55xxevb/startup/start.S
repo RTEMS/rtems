@@ -18,11 +18,6 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-
 /**
  * @defgroup mpc55xx_asm Assembler files
  *
@@ -34,13 +29,14 @@
 
 .section ".entry", "ax"
 PUBLIC_VAR (start)
-start:
+.globl  fmpll_syncr_vals
+bam_rchw:
 /*
  * BAM
  */
 
 	/* BAM: RCHW */
-	.int 0x5a0000
+	.int 0x005a0000
 
 	/* BAM: Address of start instruction */
 	.int 0x8
@@ -48,7 +44,7 @@ start:
 /*
  * Enable time base
  */
-
+start:	
 	li r0, 0
 	mtspr TBWU, r0
 	mtspr TBWL, r0
@@ -60,6 +56,7 @@ start:
  * System clock
  */
 
+	LWI r3,fmpll_syncr_vals
 	bl SYM (mpc55xx_fmpll_reset_config)
 
 /*
@@ -122,7 +119,7 @@ start:
 	tlbwe
 
 /*
- * Zero RAM
+ * Zero RAM (needed to get proper ECC)
  */
 
 	/* Addresses */

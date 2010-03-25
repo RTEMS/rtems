@@ -6,7 +6,11 @@
  * @brief Register definitions for the MPC55XX microcontroller family
  *
  * This file is based on the mpc5566.h header file provided by Freescale Semiconductor, INC.
+ * with some added fields/structures/definitions for MPC5510
  */
+
+/* to get the chip derivate... */
+#include <bspopts.h>
 
 /*
  * Copyright (c) 2008
@@ -344,7 +348,7 @@ extern "C" {
 /*                     MODULE : FMPLL                                       */
 /****************************************************************************/
     struct FMPLL_tag {
-        union {
+        union SYNCR_tag {
             uint32_t R;
             struct {
                 uint32_t:1;
@@ -362,7 +366,7 @@ extern "C" {
                 uint32_t DEPTH:2;
                 uint32_t EXP:10;
             } B;
-        } SYNCR;
+        } SYNCR; /* not present on MPC551x */
 
         union {
             uint32_t R;
@@ -380,6 +384,36 @@ extern "C" {
                 uint32_t CALPASS:1;
             } B;
         } SYNSR;
+
+        union ESYNCR1_tag {
+            uint32_t R;
+            struct  {
+                uint32_t:1;
+                uint32_t CLKCFG:3;
+                uint32_t:8;
+                uint32_t EPREDIV:4;
+                uint32_t :8;
+                uint32_t EMFD:8;
+            } B;
+        } ESYNCR1; /* present on MPC551x */
+
+        union ESYNCR2_tag{
+            uint32_t R;
+            struct {
+                uint32_t:8;
+                uint32_t LOCEN:1;
+                uint32_t LOLRE:1;
+                uint32_t LOCRE:1;
+                uint32_t LOLIRQ:1;
+                uint32_t LOCIRQ:1;
+                uint32_t:1;
+                uint32_t ERATE:2;
+                uint32_t:5;
+                uint32_t DEPTH:3;
+                uint32_t:2;
+                uint32_t ERFD:6;
+            } B;
+        } ESYNCR2; /* present on MPC551x */
 
     };
 /****************************************************************************/
@@ -4353,11 +4387,60 @@ extern "C" {
         .MAS6 = { .R = 0 }
     };
 
+#if ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517))
+/* Define memories */
+
+#define SRAM_START  0x40000000
+#define SRAM_SIZE      0x14000
+#define SRAM_END    (SRAM_START+SRAM_SIZE-1)
+
+#define FLASH_START 0x00000000
+#define FLASH_SIZE    0x180000
+#define FLASH_END   (FLASH_START+FLASH_SIZE-1)
+
+/* Define instances of modules */
+#define EDMA      (*(volatile struct EDMA_tag *)      0xFFF44000)
+#define INTC      (*(volatile struct INTC_tag *)      0xFFF48000)
+
+#define EQADC     (*(volatile struct EQADC_tag *)     0xFFF80000)
+#define SOFTMLB   (*(volatile struct SOFTMLB_tag *)   0xFFF84000)
+#define I2C_A     (*(volatile struct I2C_tag *)       0xFFF88000)
+
+#define DSPI_A    (*(volatile struct DSPI_tag *)      0xFFF90000)
+#define DSPI_B    (*(volatile struct DSPI_tag *)      0xFFF94000)
+#define DSPI_C    (*(volatile struct DSPI_tag *)      0xFFF98000)
+#define DSPI_D    (*(volatile struct DSPI_tag *)      0xFFF9C000)
+
+#define ESCI_A    (*(volatile struct ESCI_tag *)      0xFFFA0000)
+#define ESCI_B    (*(volatile struct ESCI_tag *)      0xFFFA4000)
+#define ESCI_C    (*(volatile struct ESCI_tag *)      0xFFFA8000)
+#define ESCI_D    (*(volatile struct ESCI_tag *)      0xFFFAC000)
+#define ESCI_E    (*(volatile struct ESCI_tag *)      0xFFFB0000)
+#define ESCI_F    (*(volatile struct ESCI_tag *)      0xFFFB4000)
+#define ESCI_G    (*(volatile struct ESCI_tag *)      0xFFFB8000)
+#define ESCI_H    (*(volatile struct ESCI_tag *)      0xFFFBC000)
+
+#define CAN_A     (*(volatile struct FLEXCAN2_tag *)  0xFFFC0000)
+#define CAN_B     (*(volatile struct FLEXCAN2_tag *)  0xFFFC4000)
+#define CAN_C     (*(volatile struct FLEXCAN2_tag *)  0xFFFC8000)
+#define CAN_D     (*(volatile struct FLEXCAN2_tag *)  0xFFFCC000)
+#define CAN_D     (*(volatile struct FLEXCAN2_tag *)  0xFFFD0000)
+#define CAN_D     (*(volatile struct FLEXCAN2_tag *)  0xFFFD4000)
+
+#define EMIOS     (*(volatile struct EMIOS_tag *)     0xFFFE4000)
+#define SIU       (*(volatile struct SIU_tag *)       0xFFFE8000)
+#define CRP       (*(volatile struct CRP_tag *)       0xFFFEC000)
+
+#define FMPLL     (*(volatile struct FMPLL_tag *)     0xFFFF0000)
+#define EBI       (*(volatile struct EBI_tag *)       0xFFFF4000)
+#define FLASH     (*(volatile struct FLASH_tag *)     0xFFFF8000)
+
+#else /* ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517)) */
 /* Define memories */
 
 #define SRAM_START  0x40000000
 #define SRAM_SIZE      0x20000
-#define SRAM_END    0x4001FFFF
+#define SRAM_END    (SRAM_START+SRAM_SIZE-1)
 
 #define FLASH_START         0x0
 #define FLASH_SIZE      0x300000
@@ -4400,6 +4483,7 @@ extern "C" {
 #define CAN_D     (*(volatile struct FLEXCAN2_tag *)  0xFFFCC000)
 
 #define FEC     (*(volatile struct FEC_tag *)  0xFFF4C000)
+#endif
 
 #define MPC55XX_ZERO_FLAGS { .R = 0 }
 

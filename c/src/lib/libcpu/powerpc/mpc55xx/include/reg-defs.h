@@ -24,6 +24,16 @@
 /*
  * Register addresses
  */
+#if ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517))
+
+#define FMPLL_SYNSR   0xFFFF0004
+#define FMPLL_ESYNCR1 0xFFFF0008
+#define FMPLL_ESYNCR2 0xFFFF000C
+#define FLASH_BIUCR   0xFFFF801C
+#define SIU_ECCR      0xFFFE8984
+#define SIU_SRCR      0xFFFE8010
+
+#else /* ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517))*/
 
 #define FMPLL_SYNCR 0xC3F80000
 #define FMPLL_SYNSR 0xC3F80004
@@ -31,6 +41,7 @@
 #define SIU_ECCR 0xC3F90984
 #define SIU_SRCR 0xC3F90010
 
+#endif /*((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517))*/
 /*
  * Special purpose registers
  */

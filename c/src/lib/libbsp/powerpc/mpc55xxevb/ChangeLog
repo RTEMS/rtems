@@ -1,3 +1,9 @@
+2010-03-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, confiugre.ac, include/bsp.h, startup/bspstart.c,
+	startup/start.S:
+	add support for GW_LCFM mpc551x based system
+
 2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am: Update for exception support changes.

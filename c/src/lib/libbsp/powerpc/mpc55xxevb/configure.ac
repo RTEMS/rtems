@@ -28,21 +28,51 @@ RTEMS_BSPOPTS_HELP([UARTS_USE_TERMIOS],
 [Define to 1 if you want termios support for every port.
  Termios support is independent of the choice of UART I/O mode.])
 
-RTEMS_BSPOPTS_SET([CONSOLE_MINOR],[*],[MPC55XX_ESCI_A_MINOR])
+RTEMS_BSPOPTS_SET([CONSOLE_MINOR],[GWLCFM],[MPC55XX_ESCI_A_MINOR])
+RTEMS_BSPOPTS_SET([CONSOLE_MINOR],[*]     ,[MPC55XX_ESCI_A_MINOR])
 RTEMS_BSPOPTS_HELP([CONSOLE_MINOR],
 [Must be defined to be one of MPC55XX_ESCI_A_MINOR or MPC55XX_ESCI_B_MINOR.  Determines which
  device will be registered as /dev/console.])
 
-RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[*],[0])
+RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[GWLCFM],[1])
+RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[*]     ,[0])
 RTEMS_BSPOPTS_HELP([UARTS_IO_MODE],
 [Define to 1 if you want interrupt-driven I/O for the SCI ports.])
 
-RTEMS_BSPOPTS_SET([PRINTK_MINOR],[*],[MPC55XX_ESCI_B_MINOR])
+RTEMS_BSPOPTS_SET([PRINTK_MINOR],[GWLCFM],[MPC55XX_ESCI_A_MINOR])
+RTEMS_BSPOPTS_SET([PRINTK_MINOR],[*]     ,[MPC55XX_ESCI_B_MINOR])
 RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
 [Must be defined to be one of MPC55XX_ESCI_A_MINOR or MPC55XX_ESCI_B_MINOR.  Determines which
  device is used for output by printk().  The printk port always uses polled
  I/O.  Don't open the printk port from RTEMS unless also using polled I/O
  for the SCI ports.])
+
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_REF_CLOCK],[GWLCFM],[40000000])
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_REF_CLOCK],[*]     ,[8000000])
+RTEMS_BSPOPTS_HELP([MPC55XX_FMPLL_REF_CLOCK],
+[Must be defined to be the external reference clock (in Hz) 
+ for clock generation])
+
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_CLK_OUT],[GWLCFM],[66000000])
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_CLK_OUT],[*]     ,[128000000])
+RTEMS_BSPOPTS_HELP([MPC55XX_FMPLL_REF_CLOCK],
+[Must be defined to be the PLL output clock (in Hz) for clock generation])
+
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_PREDIV],[GWLCFM],[10])
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_PREDIV],[*]     ,[1])
+RTEMS_BSPOPTS_HELP([MPC55XX_FMPLL_PREDIV],
+[Must be defined to be the PLL predivider factor for clock generation])
+
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_MFD],[GWLCFM],[99])
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_MFD],[*]     ,[12])
+RTEMS_BSPOPTS_HELP([MPC55XX_FMPLL_MFD],
+[Must be defined to be the PLL multiplication factor for clock generation])
+
+RTEMS_BSPOPTS_SET([MPC55XX_CHIP_DERIVATE],[*]         ,[5554])
+RTEMS_BSPOPTS_SET([MPC55XX_CHIP_DERIVATE],[MPC5566EVB],[5566])
+RTEMS_BSPOPTS_SET([MPC55XX_CHIP_DERIVATE],[GWLCFM]    ,[5516])
+RTEMS_BSPOPTS_HELP([MPC55XX_CHIP_DERIVATE],
+[specifies the chip derivate in use (e.g. 5554 for MPC5554)])
 
 AC_CONFIG_FILES([Makefile
 include/bspopts.h])
