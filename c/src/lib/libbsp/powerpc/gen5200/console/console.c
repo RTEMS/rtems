@@ -115,7 +115,7 @@
 #define PSC5_MINOR      4
 #define PSC6_MINOR      5
 
-uint32_t mpc5200_uart_avail_mask = GEN5200_UART_AVAIL_MASK;
+uint32_t mpc5200_uart_avail_mask = BSP_UART_AVAIL_MASK;
 
 #if defined(UARTS_USE_TERMIOS_INT)
   uint8_t psc_minor_to_irqname[NUM_PORTS] = {

@@ -182,10 +182,10 @@ start:
    	LWI	r31, MBAR			/* set r31 to current MBAR */
 	/* init GPIOPCR */
 	lwz	r29,GPIOPCR(r31)
-	LWI	r30, GPIOPCR_INITMASK
+	LWI	r30, BSP_GPIOPCR_INITMASK
 	not	r30,r30
 	and	r29,r29,r30
-	LWI	r30, GPIOPCR_INITVAL
+	LWI	r30, BSP_GPIOPCR_INITVAL
 	or	r29,r29,r30
 	stw	r29, GPIOPCR(r31)
 
@@ -237,7 +237,7 @@ start:
 	stw	r30, CSBOOTROM(r31)	 	/* Set CSBOOTROM */
 
 
-#endif
+#endif /* BRS5L */
 
 
 	/* FIXME: map BOOT ROM into final location with CS0 registers */
@@ -397,7 +397,7 @@ skip_ROM_start:
 
         bl      clr_mem				/* Clear onchip SRAM */
 
-#endif /* defined(BRS5L) */
+#endif /* defined(NEED_LOW_LEVEL_INIT) */
 /* clear .bss section (unique for ROM startup) */
 	LWI	r30, bsp_section_bss_start	/* get start address of bss section */
         LWI	r29, bsp_section_bss_size  	/* get size of bss section */
@@ -425,13 +425,13 @@ skip_ROM_start:
 
         bl      SYM (boot_card)			/* Call the first C routine */
 
-#if defined(BRS5L)
 twiddle:
 	b	twiddle				/* We don't expect to return from boot_card but if we do */
 						/* wait here for watchdog to kick us into hard reset     */
 
+#if defined(NEED_LOW_LEVEL_INIT)
 SDRAM_init:
-#if defined (BRS5L)
+#if defined(BRS5L)
       /* set GPIO_WKUP7 pin low for 66MHz buffering */
       /* or high for 133MHz registered buffering    */
 	LWI	r30, 0x80000000
@@ -458,17 +458,11 @@ SDRAM_init:
 	stw	r29,GPIOPCR(r31)
 
 #endif
-#if 0
-	LWI	r30, 0xC2222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x2 */
-	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */
-						/* Refr.2No-Read delay=0x06, Write latency=0x0 */
-#else
 	/* See Erratum 342/339 in MPC5200_Errata_L25R_3_June.pdf:	*/
 	/* set 5 delays to their maximum to support two banks           */
 	LWI	r30, 0xCC222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x2 */
 	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */
 						/* Refr.2No-Read delay=0x06, Write latency=0x0 */
-#endif
 
 	LWI	r30, 0xCCC70004			/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */
 	stw	r30, CFG2(r31)			/* Burst Read2Write delay=0xB, Burst length=0x7, Read Tap=0x4 */
@@ -559,7 +553,7 @@ copy_image_byte:
 
 copy_image_end:
 	blr
-#endif /* defined(BRS5L) */
+#endif /* defined(NEED_LOW_LEVEL_INIT) */
 
 FID_DCache:
 	mflr	r26
@@ -642,11 +636,6 @@ FPU_init:
 
 	SETBITS r30, r29, MSR_FP
 	mtmsr	r30				/* enable FPU and FPU exceptions */
-
-#if 0
-	LA	r29, bsp_ram_start
-	stw	r29, 0x0(r29)
-#endif
 
 	lfd 	f0, 0(r29)
 	fmr 	f1, f0

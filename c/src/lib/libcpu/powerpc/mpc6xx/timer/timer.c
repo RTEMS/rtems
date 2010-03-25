@@ -1,6 +1,6 @@
 /*  timer.c
  *
- *  This file implements a benchmark timer using the General Purpose Timer.
+ *  This file implements a benchmark timer using the PPC Timebase
  *
  *  Notes: NONE
  *

@@ -416,6 +416,7 @@ include_mpc55xx_HEADERS = mpc55xx/include/regs.h \
 	mpc55xx/include/emios.h \
 	mpc55xx/include/mpc55xx.h \
 	mpc55xx/include/esci.h \
+	mpc55xx/include/siu.h \
 	mpc55xx/include/watchdog.h
 
 include_bsp_HEADERS += mpc55xx/include/irq.h
@@ -424,6 +425,12 @@ include_bsp_HEADERS += mpc55xx/include/irq.h
 noinst_PROGRAMS += mpc55xx/irq.rel
 mpc55xx_irq_rel_SOURCES = mpc55xx/irq/irq.c
 mpc55xx_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# mpc6xx/timer
+noinst_PROGRAMS += mpc55xx/timer.rel
+mpc55xx_timer_rel_SOURCES = mpc6xx/timer/timer.c
+mpc55xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc55xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # FEC
 noinst_PROGRAMS += mpc55xx/fec.rel
@@ -439,6 +446,11 @@ mpc55xx_edma_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_PROGRAMS += mpc55xx/emios.rel
 mpc55xx_emios_rel_SOURCES = mpc55xx/emios/emios.c
 mpc55xx_emios_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# SIU
+noinst_PROGRAMS += mpc55xx/siu.rel
+mpc55xx_siu_rel_SOURCES = mpc55xx/siu/siu.c
+mpc55xx_siu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # eSCI
 noinst_PROGRAMS += mpc55xx/esci.rel

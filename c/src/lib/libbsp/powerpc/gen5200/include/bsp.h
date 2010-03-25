@@ -71,39 +71,22 @@ LINKER_SYMBOL(MBAR);
  */
 #if defined(PM520_ZE30)
 #define PM520
-#define GPIOPCR_INITMASK 0x337F3F77
-#define GPIOPCR_INITVAL  0x01552114
-/* we have PSC1/4/5/6 */
-/* #define GEN5200_UART_AVAIL_MASK 0x39 */
-#define GEN5200_UART_AVAIL_MASK 0x39
 #endif
 /*
  * for PM520 mdule on a CR825 carrier
  */
 #if defined(PM520_CR825)
 #define PM520
-#define GPIOPCR_INITMASK 0x330F0F77
-#define GPIOPCR_INITVAL  0x01050444
-/* we have PSC1/2/3*/
-#define GEN5200_UART_AVAIL_MASK 0x07
 #endif
 
 #if defined(BRS5L)
 /*
  * IMD Custom Board BRS5L
  */
-#define GPIOPCR_INITMASK 0xb30F0F77
-#define GPIOPCR_INITVAL  0x91050444
-/* we have PSC1/2/3 */
-#define GEN5200_UART_AVAIL_MASK 0x07
-
-/* we need the low level initialization in start.S*/
-#define NEED_LOW_LEVEL_INIT
 
 #define HAS_NVRAM_93CXX
-#elif defined (PM520)
 
-#define HAS_UBOOT
+#elif defined (PM520)
 
 #elif defined (icecube)
 /*
@@ -112,15 +95,6 @@ LINKER_SYMBOL(MBAR);
  *     Freescape MPC5200LITE
  *     Embedded Planet EP5200
  */
-
-#define HAS_UBOOT
-
-/* These are copied from PM520 but seem to work so OK */
-#define GPIOPCR_INITMASK 0x330F0F77
-#define GPIOPCR_INITVAL  0x01050444
-
-/* we only have PSC1 */
-#define GEN5200_UART_AVAIL_MASK 0x01
 
 #else
 #error "board type not defined"
@@ -147,6 +121,12 @@ extern "C" {
 #include <u-boot.h>
 
 extern bd_t bsp_uboot_board_info;
+#else
+
+/* we need the low level initialization in start.S*/
+#define NEED_LOW_LEVEL_INIT
+
+
 #endif
 
 /*

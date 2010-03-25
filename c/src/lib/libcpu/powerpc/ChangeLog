@@ -1,3 +1,15 @@
+2010-03-25      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, mpc55xx/include/siu.h, mpc55xx/siu/siu.c:
+	add generic SIU support
+	add timer support, on timebase
+	* mpc55xx/edma/edma.c: fix init call to be prototype
+	* mpc55xx/esci/esci.c: adapted to new prototype for *_write function
+	* mpc55xx/include/reg-defs.h, mpc55xx/include/regs.h,
+	mpc55xx/misc/fmpll.S:
+	add support for mpc551x registers
+	* mpc6xx/timer/timer.c: fix typo
+
 2009-12-17      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* mpc5xx/irq/irq.c: removed warning
