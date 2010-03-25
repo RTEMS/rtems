@@ -78,7 +78,7 @@ static inline void bsp_interrupt_set_initialized(void)
 }
 
 static inline bool bsp_interrupt_is_empty_handler_entry(
-  bsp_interrupt_handler_entry *e
+  const bsp_interrupt_handler_entry *e
 )
 {
   return e->handler == bsp_interrupt_handler_empty;
