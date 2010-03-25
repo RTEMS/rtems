@@ -1,3 +1,6 @@
+2010-03-25      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+	* aclocal.m4: add "gwlcfm" bsp
+
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* shared/console/uart.c, shared/console/uart.h: adapted to new
