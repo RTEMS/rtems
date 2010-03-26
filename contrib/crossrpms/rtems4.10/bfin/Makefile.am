@@ -24,9 +24,3 @@ GDB_PKGVERS = $(GDB_VERS)
 GDB_RPMREL = 11
 include ../gdb.am
 GDB_OPTS += --disable-infos
-
-CPUKIT_VERS = 4.9.99.0
-CPUKIT_PKGVERS = $(CPUKIT_VERS)-20090206-2
-CPUKIT_RPMREL = 1
-include ../cpukit.am
-CPUKIT_OPTS +=
