@@ -1,3 +1,7 @@
+2010-03-26	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/dosfs/msdos_misc.c: Part fix to PR1491.
+
 2010-03-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libfs/src/rfs/rtems-rfs-bitmaps-ut.c,

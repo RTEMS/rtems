@@ -110,35 +110,32 @@ msdos_short_name_hex(char* sfn, int num)
 static msdos_name_type_t
 msdos_name_type(const char *name, int name_len)
 {
-    bool dot = false;
     bool lowercase = false;
     bool uppercase = false;
-    int  dot_at = 0;
+    int  dot_at = -1;
     int  count = 0;
 
     while (*name && (count < name_len))
     {
+        bool is_dot = *name == '.';
         msdos_name_type_t type = msdos_is_valid_name_char(*name);
 
         if ((type == MSDOS_NAME_INVALID) || (type == MSDOS_NAME_LONG))
             return type;
 
-        if (dot)
+        if (dot_at >= 0)
         {
-            if ((*name == '.') || ((count - dot_at) > 3))
+            if (is_dot || ((count - dot_at) > 3))
                 return MSDOS_NAME_LONG;
         }
         else
         {
-            if (count >= 8)
+            if (count == 8 && !is_dot)
                 return MSDOS_NAME_LONG;
         }
 
-        if (*name == '.')
-        {
-            dot = true;
+        if (is_dot)
             dot_at = count;
-        }
         else if ((*name >= 'A') && (*name <= 'Z'))
             uppercase = true;
         else if ((*name >= 'a') && (*name <= 'z'))
@@ -194,10 +191,10 @@ msdos_long_to_short(const char *lfn, int lfn_len, char* sfn, int sfn_len)
      * Filenames with only blanks and dots are not allowed!
      */
     for (i = 0; i < lfn_len; i++)
-        if ((lfn[i] != ' ') && (lfn[i] == '.'))
+        if ((lfn[i] != ' ') && (lfn[i] != '.'))
             break;
 
-    if (i > lfn_len)
+    if (i == lfn_len)
         return MSDOS_NAME_INVALID;
 
     /*
@@ -238,6 +235,9 @@ msdos_get_token(const char  *path,
     *ret_token = NULL;
     *ret_token_len = 0;
 
+    if (pathlen == 0)
+        return MSDOS_NO_MORE_PATH;
+    
     /*
      *  Check for a separator.
      */
