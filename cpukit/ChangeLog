@@ -1,3 +1,17 @@
+2010-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/shell/dd-args.c, libmisc/shell/dd-conv.c,
+	libmisc/shell/dd-conv_tab.c, libmisc/shell/dd-misc.c,
+	libmisc/shell/dd-position.c, libmisc/shell/fdisk.c,
+	libmisc/shell/fts.c, libmisc/shell/hexdump-conv.c,
+	libmisc/shell/hexdump-display.c, libmisc/shell/hexdump-odsyntax.c,
+	libmisc/shell/hexdump-parse.c, libmisc/shell/hexsyntax.c,
+	libmisc/shell/login_check.c, libmisc/shell/login_prompt.c,
+	libmisc/shell/main_dd.c, libmisc/shell/main_hexdump.c,
+	libmisc/shell/main_ln.c, libmisc/shell/main_mknod.c,
+	libmisc/shell/main_rtc.c, libmisc/shell/mknod-pack_dev.c:
+	Add HAVE_CONFIG_H support to let files receive configure defines.
+
 2010-03-26	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/dosfs/msdos_misc.c: Part fix to PR1491.
