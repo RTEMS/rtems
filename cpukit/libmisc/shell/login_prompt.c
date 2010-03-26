@@ -66,6 +66,10 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>

@@ -31,6 +31,10 @@
  * SUCH DAMAGE.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifndef lint
 #if 0
 static char sccsid[] = "@(#)conv_tab.c	8.1 (Berkeley) 5/31/93";
