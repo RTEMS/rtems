@@ -1,5 +1,12 @@
 2010-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/hexdump-display.c, libmisc/shell/hexdump-parse.c,
+	libmisc/shell/hexsyntax.c, libmisc/shell/main_hexdump.c,
+	libmisc/shell/main_rm.c: 
+	Add HAVE_STRINGS_H for better POSIX compliance.
+
+2010-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* shttpd/auth.c, shttpd/io_emb.c, shttpd/mime_type.c,
 	shttpd/shttpd.c: Add HAVE_STRINGS_H for better POSIX compliance.
 
