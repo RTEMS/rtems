@@ -1,5 +1,10 @@
 2010-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shttpd/auth.c, shttpd/io_emb.c, shttpd/mime_type.c,
+	shttpd/shttpd.c: Add HAVE_STRINGS_H for better POSIX compliance.
+
+2010-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/dd-args.c, libmisc/shell/dd-conv.c,
 	libmisc/shell/dd-conv_tab.c, libmisc/shell/dd-misc.c,
 	libmisc/shell/dd-position.c, libmisc/shell/fdisk.c,
