@@ -10,6 +10,10 @@
 
 #include "defs.h"
 
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
+
 static const struct mime_type default_mime_types[] = {
 	{"html",	4,	"text/html"			},
 	{"htm",		3,	"text/html"			},

@@ -10,6 +10,10 @@
 
 #include "defs.h"
 
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
+
 #if defined(EMBEDDED)
 const char *
 shttpd_version(void)

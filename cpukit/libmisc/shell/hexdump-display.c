@@ -56,6 +56,9 @@ __FBSDID("$FreeBSD: src/usr.bin/hexdump/display.c,v 1.22 2004/08/04 02:47:32 tjr
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
 #include <unistd.h>
 #include "hexdump.h"
 

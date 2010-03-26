@@ -10,6 +10,10 @@
 
 #include "defs.h"
 
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
+
 #if !defined(NO_AUTH)
 /*
  * Stringify binary data. Output buffer must be twice as big as input,

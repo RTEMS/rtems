@@ -15,6 +15,10 @@
 
 #include "defs.h"
 
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
+
 time_t		current_time;	/* Current UTC time		*/
 int		tz_offset;	/* Time zone offset from UTC	*/
 
