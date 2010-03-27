@@ -42,12 +42,13 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/wkspace.h>
-
-
-
 
 /*
 ** Exception stack frame pointer used in cpu_asm to pass the exception stack frame

@@ -1,3 +1,7 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c, cpu_asm.S: Add include of config.h
+
 2009-09-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/cpu.h: Define CPU_STRUCTURE_ALIGNMENT to be on a 4 byte

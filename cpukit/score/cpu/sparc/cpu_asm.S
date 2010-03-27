@@ -21,6 +21,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/asm.h>
 
 #if (SPARC_HAS_FPU == 1)

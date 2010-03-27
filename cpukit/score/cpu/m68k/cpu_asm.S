@@ -14,6 +14,10 @@
  */
 
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/asm.h>
 
 /*  void _CPU_Context_switch( run_context, heir_context )

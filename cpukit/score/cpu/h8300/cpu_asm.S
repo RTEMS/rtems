@@ -14,6 +14,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 
 ;.equ	RUNCONTEXT_ARG,	 er0
 ;.equ	HEIRCONTEXT_ARG, er1

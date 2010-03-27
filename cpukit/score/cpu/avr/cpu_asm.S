@@ -21,6 +21,11 @@
  *  and cpu.h should not be included in a "real" cpu_asm file.  An
  *  implementation in assembly should include "cpu_asm.h>
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <avr/io.h>
 #include <avr/sfr_defs.h>
 #include <rtems/asm.h>
