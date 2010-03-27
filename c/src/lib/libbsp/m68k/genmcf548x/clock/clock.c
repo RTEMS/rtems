@@ -95,7 +95,10 @@
     rtems_interrupt_disable( level );					\
     MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK54);		\
     rtems_interrupt_enable( level );					\
-    MCF548X_SLT_SLTCNT0 = get_CPU_clock_speed()/100;			\
+    MCF548X_SLT_SLTCNT0 = get_CPU_clock_speed()				\
+      / 1000								\
+      * rtems_configuration_get_microseconds_per_tick()			\
+      / 1000;								\
     MCF548X_SLT_SCR0 |= (MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN | MCF548X_SLT_SCR_IEN); \
   } while (0)
 
