@@ -1,5 +1,14 @@
 2010-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/gethostbydns.c, libnetworking/libc/gethostbyht.c,
+	libnetworking/libc/gethostnamadr.c, libnetworking/libc/getnetbyht.c,
+	libnetworking/libc/linkaddr.c, libnetworking/libc/ns_print.c,
+	libnetworking/libc/res_debug.c, libnetworking/libc/res_query.c,
+	libnetworking/libc/res_send.c, libnetworking/libc/res_update.c:
+	Add HAVE_STRINGS_H for better POSIX compliance.
+
+2010-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/monitor/mon-command.c: 
 	Add HAVE_CONFIG_H support to let files receive configure defines.
 
