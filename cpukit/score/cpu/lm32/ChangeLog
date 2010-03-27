@@ -1,3 +1,7 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c, cpu_asm.S, irq.c: Add include of config.h
+
 2010-03-02	Michael Walle <michael@walle.cc>
 
 	* cpu.c: Provide body for CPU specific Idle thread. This halts on qemu

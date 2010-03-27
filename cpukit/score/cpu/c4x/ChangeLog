@@ -1,3 +1,7 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c, cpu_asm.S, irq.c: Add include of config.h
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c: Change prototype of IDLE thread to consistently return void *

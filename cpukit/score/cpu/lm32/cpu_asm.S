@@ -17,6 +17,10 @@
  *  Michael Walle <michael@walle.cc>, 2009
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/asm.h>
 #include <rtems/score/cpu_asm.h>
 
