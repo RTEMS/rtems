@@ -63,6 +63,7 @@ extern "C" {
 #include <bsp/vectors.h>
 
 /* miscellaneous stuff assumed to exist */
+extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
 /* Network Defines */
 #if 1 /* EB/doe changes */

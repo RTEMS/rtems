@@ -71,7 +71,6 @@ rtems_isr_entry set_vector(                    /* returns old vector */
 
 /* Defined in bspstart.c */
 extern uint32_t bsp_clicks_per_usec;
-extern bool bsp_timer_internal_clock;
 
 /*
  * These are set by clock driver during its init

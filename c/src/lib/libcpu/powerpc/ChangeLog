@@ -1,6 +1,12 @@
 2010-03-27      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* mpc83xx/gtm/gtm.c: code changes to remove warnings
+	* ppc403/clock/clock.c, ppc403/clock/clock_4xx.c: code changes to
+	remove warnings
+
+2010-03-27      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc83xx/gtm/gtm.c, mpc5xx/timer/timer.c,
+	mpc5xx/vectors/vector_init.c: code changes to remove warnings
 
 2010-03-25      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 

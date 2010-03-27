@@ -1,3 +1,8 @@
+2010-03-27	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* startup/start.S: remove bootcard calling warning
+	* startup/tm27supp.c: removed some warnings
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/ss555.cfg: Remove RTEMS_BSP_FAMILY.
