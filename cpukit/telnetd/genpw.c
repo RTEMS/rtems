@@ -1,7 +1,3 @@
-#include <crypt.h>
-#include <stdio.h>
-#include <unistd.h>
-
 /*
  * Authorship
  * ----------
@@ -46,6 +42,15 @@
  *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <crypt.h>
+#include <stdio.h>
+#include <unistd.h>
+
 static void
 usage(char *nm)
 {

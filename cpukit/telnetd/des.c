@@ -58,6 +58,10 @@
  *	alignment).
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define __FORCE_GLIBC
 #include <sys/cdefs.h>
 #include <sys/types.h>

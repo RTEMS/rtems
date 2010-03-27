@@ -1,3 +1,8 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libgnat/ada_intrsupp.c, telnetd/check_passwd.c, telnetd/des.c,
+	telnetd/genpw.c: Add include of config.h
+
 2010-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/termios_baud2index.c,
