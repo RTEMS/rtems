@@ -31,11 +31,12 @@
  */
 /**@{*/
 
+#include <stddef.h> /* for size_t */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <string.h>
 
 /**
  *  @brief Obtain Pointer to BSP Boot Command String
