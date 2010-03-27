@@ -1,6 +1,7 @@
 2010-03-27	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* network/smsc9218i.c tests/tests.c: Removed warnings
+	* clock/clock-config.c: remove warning
 
 2010-03-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 

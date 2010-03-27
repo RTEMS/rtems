@@ -43,7 +43,8 @@ rtems_isr Clock_isr( rtems_vector_number vector);
     EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CSR.R = csr.R; \
  } while (0)
 
-static void mpc55xx_clock_handler_install( void)
+static void mpc55xx_clock_handler_install( rtems_isr_entry isr, 
+					   rtems_isr_entry *old_isr)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
@@ -52,9 +53,10 @@ static void mpc55xx_clock_handler_install( void)
     "clock",
     RTEMS_INTERRUPT_UNIQUE,
     MPC55XX_INTC_MIN_PRIORITY,
-    (rtems_interrupt_handler) Clock_isr,
+    (rtems_interrupt_handler) isr,
     NULL
   );
+ *old_isr = NULL;
   RTEMS_CHECK_SC_VOID( sc, "install clock interrupt handler");
 }
 
@@ -139,7 +141,7 @@ static uint32_t mpc55xx_clock_nanoseconds_since_last_tick( void)
 #define Clock_driver_support_initialize_hardware() mpc55xx_clock_initialize()
 
 #define Clock_driver_support_install_isr( isr, old_isr) \
-  mpc55xx_clock_handler_install()
+  mpc55xx_clock_handler_install(isr,&old_isr)
 
 #define Clock_driver_support_shutdown_hardware() mpc55xx_clock_cleanup()
 
