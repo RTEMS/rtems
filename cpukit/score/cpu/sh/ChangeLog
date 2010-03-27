@@ -1,3 +1,7 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* context.c, cpu.c: Add include of config.h
+
 2009-02-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/sh.h: SH2E and SH3E have a DSP rather than an FPU. They
