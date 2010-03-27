@@ -9,6 +9,10 @@
  * RTEMS File Systems Directory Hash function.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/rfs/rtems-rfs-dir-hash.h>
 
 #ifdef __rtems__

@@ -18,6 +18,10 @@
  * block that reside after the bitmaps in the group.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/rfs/rtems-rfs-block.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>
 #include <rtems/rfs/rtems-rfs-inode.h>

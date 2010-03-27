@@ -17,6 +17,10 @@
  * These functions manage files.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/rfs/rtems-rfs-block-pos.h>
 #include <rtems/rfs/rtems-rfs-file.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>

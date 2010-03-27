@@ -15,6 +15,10 @@
  * RTEMS File Systems Trace Support
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <string.h>
 #include <rtems/rfs/rtems-rfs-trace.h>
 

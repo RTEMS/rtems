@@ -20,6 +20,10 @@
  * search bits can checked in a test.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /**
  * Set to 1 to enable warnings when developing.
  */

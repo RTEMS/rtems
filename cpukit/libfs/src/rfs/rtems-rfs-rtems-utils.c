@@ -15,6 +15,10 @@
  * Set of utility functions to support RTEMS RFS on RTEMS.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>

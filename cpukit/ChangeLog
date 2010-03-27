@@ -1,3 +1,32 @@
+2010-03-27	Chris Johns <chrisj@rtems.org>
+
+	libfs/src/nfsclient/src/cexphelp.c,
+	libfs/src/nfsclient/src/dirutils.c,
+	libfs/src/nfsclient/src/nfs.modini.c,
+	libfs/src/nfsclient/src/nfsTest.c,
+	libfs/src/nfsclient/src/rpcio.c,
+	libfs/src/nfsclient/src/rpcio.modini.c,
+	libfs/src/nfsclient/src/sock_mbuf.c,
+	libfs/src/nfsclient/src/xdr_mbuf.c,
+	libfs/src/rfs/rtems-rfs-bitmaps-ut.c,
+	libfs/src/rfs/rtems-rfs-bitmaps.c,
+	libfs/src/rfs/rtems-rfs-block.c,
+	libfs/src/rfs/rtems-rfs-buffer-bdbuf.c,
+	libfs/src/rfs/rtems-rfs-buffer-devio.c,
+	libfs/src/rfs/rtems-rfs-buffer.c,
+	libfs/src/rfs/rtems-rfs-dir-hash.c, libfs/src/rfs/rtems-rfs-dir.c,
+	libfs/src/rfs/rtems-rfs-file-system.c,
+	libfs/src/rfs/rtems-rfs-file.c, libfs/src/rfs/rtems-rfs-format.c,
+	libfs/src/rfs/rtems-rfs-group.c, libfs/src/rfs/rtems-rfs-inode.c,
+	libfs/src/rfs/rtems-rfs-link.c, libfs/src/rfs/rtems-rfs-mutex.c,
+	libfs/src/rfs/rtems-rfs-rtems-dev.c,
+	libfs/src/rfs/rtems-rfs-rtems-dir.c,
+	libfs/src/rfs/rtems-rfs-rtems-file.c,
+	libfs/src/rfs/rtems-rfs-rtems-utils.c,
+	libfs/src/rfs/rtems-rfs-rtems.c, libfs/src/rfs/rtems-rfs-shell.c,
+	libfs/src/rfs/rtems-rfs-trace.c: Add HAVE_CONFIG_H support to let
+	files receive configure defines.
+
 2010-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/libc/gethostbydns.c, libnetworking/libc/gethostbyht.c,

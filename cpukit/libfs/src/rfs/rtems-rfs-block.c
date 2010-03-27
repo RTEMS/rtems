@@ -34,6 +34,10 @@
  * speeds up the search for a free block by a factor of 32.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/rfs/rtems-rfs-block.h>
 #include <rtems/rfs/rtems-rfs-data.h>
 #include <rtems/rfs/rtems-rfs-group.h>

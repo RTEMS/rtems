@@ -49,6 +49,10 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifdef __vxworks
 #include <vxWorks.h>
 #endif

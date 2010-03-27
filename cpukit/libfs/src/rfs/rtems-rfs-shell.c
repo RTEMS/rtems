@@ -15,6 +15,10 @@
  * RTEMS File Systems Shell Commands Support
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <string.h>
 
 #include <rtems/rfs/rtems-rfs-block.h>

@@ -17,6 +17,10 @@
  * Open the file system by reading the superblock and then the group data.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/rfs/rtems-rfs-data.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>
 #include <rtems/rfs/rtems-rfs-inode.h>

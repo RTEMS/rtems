@@ -18,6 +18,10 @@
  * RFS file nodes.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/rfs/rtems-rfs-file.h>
 #include "rtems-rfs-rtems.h"
 
