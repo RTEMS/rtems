@@ -1,3 +1,8 @@
+2010-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/monitor/mon-command.c: 
+	Add HAVE_CONFIG_H support to let files receive configure defines.
+
 2010-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/shell/hexdump-display.c, libmisc/shell/hexdump-parse.c,
