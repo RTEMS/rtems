@@ -6,15 +6,15 @@
 
 #include <bsp.h>
 
-void tm27On()
+void tm27On(void)
 {
 }
 
-void tm27Off()
+void tm27Off(void)
 {
 }
 
-int tm27IsOn()
+int tm27IsOn(void)
 {
   return 1;
 }
