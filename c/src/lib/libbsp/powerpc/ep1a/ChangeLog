@@ -1,5 +1,9 @@
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
+	* start/start.S: removed obsolete bootcard calling warning
+
+2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
 	* console/mc68360_scc.c: adapted to new prototype for *_write
 	function
 

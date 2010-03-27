@@ -21,11 +21,12 @@
 #include <stdio.h>
 
 #include <rtems/irq.h>
-
 #include <mpc55xx/regs.h>
 #include <mpc55xx/mpc55xx.h>
 #include <mpc55xx/dspi.h>
 #include <mpc55xx/edma.h>
+
+#include <bsp/irq-generic.h>
 
 #include <libchip/spi-sd-card.h>
 
@@ -37,6 +38,8 @@
 #include <libcpu/powerpc-utility.h>
 
 #include <rtems/status-checks.h>
+
+#undef USE_DSPI_READER_WRITER
 
 static rtems_driver_address_table test_mpc55xx_drv_ops = {
 	initialization_entry : NULL,
@@ -74,6 +77,7 @@ static unsigned char test_mpc55xx_dspi_writer_inbuf [MPC55XX_TEST_DSPI_BUFSIZE_C
 
 static unsigned char test_mpc55xx_dspi_reader_inbuf [MPC55XX_TEST_DSPI_BUFSIZE_CACHE_PROOF] __attribute__ ((aligned (32)));
 
+#if defined(USE_DSPI_READER_WRITER)
 static rtems_task test_mpc55xx_dspi_writer( rtems_task_argument arg)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -200,6 +204,7 @@ static rtems_task test_mpc55xx_dspi_reader( rtems_task_argument arg)
 	sc = rtems_task_delete( RTEMS_SELF);
 	RTEMS_CHECK_SC_TASK( sc, "rtems_task_delete");
 }
+#endif /* defined(USE_DSPI_READER_WRITER) */
 
 rtems_task test_sd_card( rtems_task_argument arg);
 
@@ -284,7 +289,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 	);
 	RTEMS_CHECK_SC( sc, "rtems_semaphore_create");
 
-	#if 0
+#if defined(USE_DSPI_READER_WRITER)
 	rtems_id writer_task_id;
 	rtems_id reader_task_id;
 
@@ -311,7 +316,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 	RTEMS_CHECK_SC( sc, "rtems_task_start");
 	sc = rtems_task_start( reader_task_id, test_mpc55xx_dspi_reader, 0);
 	RTEMS_CHECK_SC( sc, "rtems_task_start");
-	#endif
+#endif
 
 	rtems_id sd_card_task_id;
 	sc = rtems_task_create(

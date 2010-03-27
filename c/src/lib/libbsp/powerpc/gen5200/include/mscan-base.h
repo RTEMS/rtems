@@ -264,9 +264,9 @@ void mscan_sleep_mode_enter( mscan *m);
 
 void mscan_sleep_mode_leave( mscan *m);
 
-uint8_t *mscan_id_acceptance_register( mscan *m, unsigned i);
+volatile uint8_t *mscan_id_acceptance_register( mscan *m, unsigned i);
 
-uint8_t *mscan_id_mask_register( mscan *m, unsigned i);
+volatile uint8_t *mscan_id_mask_register( mscan *m, unsigned i);
 
 unsigned mscan_filter_number( mscan *m);
 

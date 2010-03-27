@@ -2571,7 +2571,7 @@ em_initialize_transmit_unit(struct adapter * adapter)
 	E1000_WRITE_REG(&adapter->hw, TDT, 0);
 
 
-	HW_DEBUGOUT2("Base = %x, Length = %x\n", 
+	HW_DEBUGOUT2("Base = %" PRIx32 ", Length = %" PRIx32 "\n", 
 		     E1000_READ_REG(&adapter->hw, TDBAL),
 		     E1000_READ_REG(&adapter->hw, TDLEN));
 

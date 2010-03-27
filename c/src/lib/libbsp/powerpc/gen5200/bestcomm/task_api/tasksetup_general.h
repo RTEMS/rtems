@@ -255,8 +255,10 @@ TaskId TASKSETUP_NAME(TASK_API            *TaskAPI,
                       TaskSetupParamSet_t *TaskSetupParams)
 {
 	TaskId TaskNum;
+#if ((MAX_BD>0)||(DEBUG_BESTCOMM_API>0))
 	uint32 Status = 0;
-#if ((INCR_TYPE_SRC!=0)||(INCR_TYPE_DST!=0)||(DEBUG_BESTCOMM_API>0))
+#endif
+#if ((MAX_BD>0)&&((INCR_TYPE_SRC!=0)||(INCR_TYPE_DST!=0))||(DEBUG_BESTCOMM_API>0))
 	uint8  NumPtr = 0;
 #endif
 #if (INITIATOR_DATA<0)	/* runtime configurable */

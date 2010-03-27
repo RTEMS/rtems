@@ -811,7 +811,7 @@ gfe_ifwatchdog(struct ifnet *ifp)
 		uint32_t curtxdnum = (bus_space_read_4(sc->sc_gt_memt, sc->sc_gt_memh, txq->txq_ectdp) - txq->txq_desc_busaddr) / sizeof(txq->txq_descs[0]);
 		GE_TXDPOSTSYNC(sc, txq, txq->txq_fi);
 		GE_TXDPOSTSYNC(sc, txq, curtxdnum);
-		printf(" (fi=%d(%#x),lo=%d,cur=%" PRId32 "(%#x),icm=%#x) ",
+		printf(" (fi=%d(%#" PRIx32 "),lo=%d,cur=%" PRIx32 "(%#" PRIx32 "),icm=%#" PRIx32 ") ",
 		    txq->txq_fi, txq->txq_descs[txq->txq_fi].ed_cmdsts,
 		    txq->txq_lo, curtxdnum, txq->txq_descs[curtxdnum].ed_cmdsts,
 		    GE_READ(sc, EICR));
@@ -1758,7 +1758,7 @@ gfe_tx_enqueue(struct gfe_softc *sc, enum gfe_txprio txprio)
 	 */
 	d = NEXT_TXD(l);
 
-	out_be32(&d->ed_cmdsts,0);
+	out_be32((unsigned int*)&d->ed_cmdsts,0);
 
 	GE_TXDPRESYNC(sc, txq, d - txq->txq_descs);
 
@@ -2270,12 +2270,12 @@ gfe_whack(struct gfe_softc *sc, enum gfe_whack_op op)
 #endif
 		/* FALLTHROUGH */
 	case GE_WHACK_CHANGE:
-		GE_DPRINTF(sc, ("(pcr=%#x,imr=%#x)",
+		GE_DPRINTF(sc, ("(pcr=%#" PRIx32 ",imr=%#" PRIx32 ")",
 		    GE_READ(sc, EPCR), GE_READ(sc, EIMR)));
 		GE_WRITE(sc, EPCR, sc->sc_pcr | ETH_EPCR_EN);
 		GE_WRITE(sc, EIMR, sc->sc_intrmask);
 		gfe_ifstart(&sc->sc_ec.ec_if);
-		GE_DPRINTF(sc, ("(ectdp0=%#x, ectdp1=%#x)",
+		GE_DPRINTF(sc, ("(ectdp0=%#" PRIx32 ", ectdp1=%#" PRIx32 ")",
 		    GE_READ(sc, ECTDP0), GE_READ(sc, ECTDP1)));
 		GE_FUNC_EXIT(sc, "");
 		return error;

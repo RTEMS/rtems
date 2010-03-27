@@ -48,6 +48,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/utility.h>
+#include <libcpu/powerpc-utility.h>
 #include <bsp/smsc9218i.h>
 
 #include <rtems/status-checks.h>
@@ -293,6 +294,7 @@ static void smsc9218i_enable_promiscous_mode(
   smsc9218i_mac_write(regs, SMSC9218I_MAC_CR, mac_cr);
 }
 
+#if defined(DEBUG)
 static void smsc9218i_register_dump(volatile smsc9218i_registers *regs)
 {
   uint32_t reg = 0;
@@ -402,6 +404,7 @@ static void smsc9218i_register_dump(volatile smsc9218i_registers *regs)
   printf("phy: imr: 0x%08" PRIx32 "\n", smsc9218i_phy_read(regs, SMSC9218I_PHY_IMR));
   printf("phy: physcsr: 0x%08" PRIx32 "\n", smsc9218i_phy_read(regs, SMSC9218I_PHY_PHYSCSR));
 }
+#endif
 
 static void smsc9218i_interrupt_handler(void *arg)
 {
@@ -725,6 +728,7 @@ cleanup:
   (void) rtems_task_delete(RTEMS_SELF);
 }
 
+#if defined(DEBUG)
 static void smsc9218i_transmit_job_dump(
   smsc9218i_transmit_job_control *jc,
   const char *msg
@@ -783,6 +787,7 @@ static void smsc9218i_transmit_job_dump(
     out
   );
 }
+#endif /* defined(DEBUG) */
 
 static struct mbuf *smsc9218i_next_transmit_fragment(
   struct ifnet *ifp,
@@ -1250,6 +1255,7 @@ cleanup:
   (void) rtems_task_delete(RTEMS_SELF);
 }
 
+#if defined(DEBUG)
 static void smsc9218i_test_macros(void)
 {
   unsigned i = 0;
@@ -1288,6 +1294,7 @@ static void smsc9218i_test_macros(void)
     printf("[%i] get field 16: %u\n", r, i);
   }
 }
+#endif
 
 static void smsc9218i_set_mac_address(
   volatile smsc9218i_registers *regs,
@@ -1449,8 +1456,10 @@ static void smsc9218i_interface_init(void *arg)
     rtems_bsp_delay(200);
     smsc9218i_reset_signal(true);
 
+#if defined(DEBUG)
     /* Register dump */
     smsc9218i_register_dump(regs);
+#endif
 
     /* Set hardware configuration */
     regs->hw_cfg = SMSC9218I_HW_CFG_MBO | SMSC9218I_HW_CFG_TX_FIF_SZ(5);

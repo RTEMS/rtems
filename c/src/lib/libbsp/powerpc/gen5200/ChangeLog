@@ -1,3 +1,9 @@
+2010-03-27	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* bestcomm/task_api/tasksetup_general.h,
+	gen5200/include/mscan-base.h, gen5200/mscan/mscan-base.c,
+	gen5200/irq/irq.c: Removed warnings
+
 2010-03-25      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* configure.ac, include/bsp.h, console/console.c, start/start.S:

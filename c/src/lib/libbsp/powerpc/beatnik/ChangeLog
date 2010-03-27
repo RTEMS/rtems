@@ -1,3 +1,7 @@
+2010-03-27	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* network/if_gfe/if_gme.c, network/if_em/if_em.c: Removed warnings
+
 2010-02-09  Till Straumann <strauman@slac.stanford.edu>
 
 	* network/if_mve/mv643xx_eth.c: Fixed alignment attribute
