@@ -21,5 +21,5 @@
 const uint8_t *uboot_environment      = (const char *)0xfff40000;
 
 /* Length of area reserved for U-Boot environment variables */
-const size_t  *uboot_environment_size = 0x10000;
+const size_t  uboot_environment_size = 0x10000;
 #endif

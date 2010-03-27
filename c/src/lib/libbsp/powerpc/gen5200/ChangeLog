@@ -2,7 +2,7 @@
 
 	* bestcomm/task_api/tasksetup_general.h,
 	gen5200/include/mscan-base.h, gen5200/mscan/mscan-base.c,
-	gen5200/irq/irq.c: Removed warnings
+	gen5200/irq/irq.c, startup/uboot_support.c: Removed warnings
 
 2010-03-25      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
