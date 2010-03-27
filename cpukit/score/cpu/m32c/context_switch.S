@@ -11,6 +11,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define ARG_EXECUTING 8
 #define ARG_HEIR      12
 

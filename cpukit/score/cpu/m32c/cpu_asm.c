@@ -25,6 +25,10 @@
  *  implementation in assembly should include "cpu_asm.h>
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 

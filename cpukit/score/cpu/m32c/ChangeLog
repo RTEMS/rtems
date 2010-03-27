@@ -1,3 +1,8 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* context_init.c, context_switch.S, cpu.c, cpu_asm.c, varvects.S: Add
+	include of config.h
+
 2009-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/cpu.h: Make heap alignment 4 which is greater than
