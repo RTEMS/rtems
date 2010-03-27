@@ -37,11 +37,6 @@
 
 #include <rtems/asm.h>
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these errors.
-
 /*
  *  The virtex ELF link scripts support three special sections:
  *    .entry    The actual entry point
