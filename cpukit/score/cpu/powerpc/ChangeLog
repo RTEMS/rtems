@@ -1,3 +1,7 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c: Add include of config.h
+
 2009-12-01	Till Straumann <strauman@slac.stanford.edu>
 
 	* score/cpu/powerpc/rtems/score/cpu.h: Added space for non-

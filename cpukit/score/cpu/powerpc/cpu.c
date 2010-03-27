@@ -10,3 +10,8 @@
  * For now, this file is just a stub to work around
  * structural deficiencies of the powerpc port.
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
