@@ -25,6 +25,10 @@
  * The exchange area is only accessed if INT is disabled.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/asm.h>
 
 #define EXCHANGE_LR r4

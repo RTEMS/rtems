@@ -1,3 +1,8 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* arm_exc_abort.S, arm_exc_handler_high.c, arm_exc_handler_low.S,
+	arm_exc_interrupt.S, cpu.c, cpu_asm.S: Add include of config.h
+
 2010-01-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* arm_exc_abort.S: New file.
