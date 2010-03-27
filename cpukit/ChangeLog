@@ -1,5 +1,14 @@
 2010-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/bspcmdline/bspcmdline.h: Minimize includes.
+	* libmisc/bspcmdline/bspcmdline_get.c,
+	libmisc/bspcmdline/bspcmdline_getparam.c,
+	libmisc/bspcmdline/bspcmdline_getparamraw.c,
+	libmisc/bspcmdline/bspcmdline_getparamrhs.c:
+	Add HAVE_CONFIG_H support to let files receive configure defines.
+
+2010-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/uuid/clear.c, libmisc/uuid/compare.c,
 	libmisc/uuid/copy.c, libmisc/uuid/isnull.c,
 	libmisc/uuid/pack.c, libmisc/uuid/parse.c,
