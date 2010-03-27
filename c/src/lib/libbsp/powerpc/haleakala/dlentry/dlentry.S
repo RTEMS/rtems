@@ -40,11 +40,6 @@
  *  Id: dlentry.S,v 1.2 2000/08/02 16:30:57 joel Exp
  */
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-
 #include <rtems/asm.h>
 
 /*
