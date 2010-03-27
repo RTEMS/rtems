@@ -10,8 +10,8 @@
  *  Based on earlier version:
  *
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
- *			 written by Alain Schaefer <alain.schaefer@easc.ch>
- *					and Antonio Giovanini <antonio@atos.com.br>
+ *             written by Alain Schaefer <alain.schaefer@easc.ch>
+ *                     and Antonio Giovanini <antonio@atos.com.br>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -20,6 +20,9 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <rtems/asm.h>
 #include <rtems/score/cpu_asm.h>
