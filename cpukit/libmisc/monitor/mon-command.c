@@ -18,6 +18,10 @@
  * covered by GPL, only the RTEMS license.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <string.h>
 #include <stdio.h>
 
