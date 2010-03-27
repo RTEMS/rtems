@@ -9,6 +9,12 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <string.h>
+
 #include <rtems/bspcmdline.h>
 
 const char *rtems_bsp_cmdline_get_param_rhs(

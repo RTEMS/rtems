@@ -9,9 +9,11 @@
  *  $Id$
  */
 
-#include <rtems/bspcmdline.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <stdio.h>
+#include <rtems/bspcmdline.h>
 
 static void copy_string(
   const char *start,
@@ -63,5 +65,3 @@ const char *rtems_bsp_cmdline_get_param(
 
   return value;
 }
-
-

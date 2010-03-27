@@ -9,6 +9,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/bspcmdline.h>
 
 extern const char *bsp_boot_cmdline;
