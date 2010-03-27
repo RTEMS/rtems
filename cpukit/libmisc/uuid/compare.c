@@ -34,10 +34,12 @@
  * %End-Header%
  */
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 
-#include "uuidP.h"
 #include <string.h>
+#include "uuidP.h"
 
 #define UUCMP(u1,u2) if (u1 != u2) return((u1 < u2) ? -1 : 1);
 

@@ -34,7 +34,9 @@
  * %End-Header%
  */
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0500
