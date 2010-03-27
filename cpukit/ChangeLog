@@ -1,3 +1,8 @@
+2010-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/monitor/mon-symbols.c:
+	Add HAVE_STRINGS_H for better POSIX compliance.
+
 2010-03-27	Chris Johns <chrisj@rtems.org>
 
 	libfs/src/nfsclient/src/cexphelp.c,
