@@ -1,3 +1,8 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* context_init.c, context_switch.S, cpu.c, cpu_asm.c: Add include of
+	config.h
+
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Eliminate _CPU_Thread_dispatch_pointer and
