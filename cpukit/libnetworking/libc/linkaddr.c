@@ -41,6 +41,9 @@
 #include <sys/socket.h>
 #include <net/if_dl.h>
 #include <string.h>
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
 
 /* States*/
 #define NAMING	0

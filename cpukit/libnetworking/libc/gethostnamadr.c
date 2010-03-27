@@ -36,6 +36,9 @@
 #include <ctype.h>
 #include <errno.h>
 #include <string.h>
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
 #include <arpa/nameser.h>		/* XXX hack for _res */
 #include <resolv.h>			/* XXX hack for _res */
 

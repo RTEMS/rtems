@@ -32,6 +32,9 @@
 #include <errno.h>
 #include <resolv.h>
 #include <string.h>
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
 #include <ctype.h>
 
 #define SPRINTF(x) ((size_t)sprintf x)
