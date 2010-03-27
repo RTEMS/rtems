@@ -30,12 +30,10 @@
 		return RTEMS_INVALID_NUMBER; \
 	}
 
-#define MPC83XX_GTM_VARIABLES( timer) \
-	int module = (timer) / 4; \
-	int module_timer = (timer) % 4; \
-	int high = module_timer / 2; \
-	int low = module_timer % 2; \
-	rtems_interrupt_level level;
+#define GTM_MODULE(timer)       ((timer)/4)
+#define GTM_MODULE_TIMER(timer) ((timer)%4)
+#define GTM_HIGH(timer)         (GTM_MODULE_TIMER(timer)/2)
+#define GTM_LOW(timer)          (GTM_MODULE_TIMER(timer)%2)
 
 #define MPC83XX_GTM_CLOCK_MASK MPC83XX_GTM_CLOCK_EXTERN
 
@@ -46,21 +44,23 @@ static const uint8_t mpc83xx_gmt_interrupt_priority_table [MPC83XX_GTM_NUMBER] =
 rtems_status_code mpc83xx_gtm_initialize( int timer, int clock)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
+	rtems_interrupt_level level;
 
-	MPC83XX_GTM_VARIABLES( timer);
-
-	unsigned mask = 0xfU << (low * 4);
-	unsigned flags = 0x3U << (low * 4);
+	unsigned mask = 0xfU << (GTM_LOW(timer) * 4);
+	unsigned flags = 0x3U << (GTM_LOW(timer) * 4);
 	uint8_t reg = 0;
 
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
 	rtems_interrupt_disable( level);
 
-	reg = mpc83xx.gtm [module].gtcfr [high].reg;
-	mpc83xx.gtm [module].gtcfr [high].reg = (uint8_t) ((reg & ~mask) | flags);
+	reg = mpc83xx.gtm [GTM_MODULE(timer)].gtcfr [GTM_HIGH(timer)].reg;
+	mpc83xx.gtm [GTM_MODULE(timer)].gtcfr [GTM_HIGH(timer)].reg = 
+	  (uint8_t) ((reg & ~mask) | flags);
 
-	mpc83xx.gtm [module].gt_tim_regs [high].gtmdr [low] = 0;
+	mpc83xx.gtm [GTM_MODULE(timer)]
+	  .gt_tim_regs [GTM_HIGH(timer)]
+	  .gtmdr [GTM_LOW(timer)] = 0;
 
 	rtems_interrupt_enable( level);
 
@@ -81,16 +81,19 @@ rtems_status_code mpc83xx_gtm_initialize( int timer, int clock)
 
 rtems_status_code mpc83xx_gtm_enable_restart( int timer, bool enable)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
+	rtems_interrupt_level level;
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
 	rtems_interrupt_disable( level);
 
 	if (enable) {
-		mpc83xx.gtm [module].gt_tim_regs [high].gtmdr [low] |= 0x0008;
+		mpc83xx.gtm [GTM_MODULE(timer)]
+		  .gt_tim_regs [GTM_HIGH(timer)]
+		  .gtmdr [GTM_LOW(timer)] |= 0x0008;
 	} else {
-		mpc83xx.gtm [module].gt_tim_regs [high].gtmdr [low] &= ~0x0008;
+		mpc83xx.gtm [GTM_MODULE(timer)]
+		  .gt_tim_regs [GTM_HIGH(timer)]
+		  .gtmdr [GTM_LOW(timer)] &= ~0x0008;
 	}
 
 	rtems_interrupt_enable( level);
@@ -100,8 +103,7 @@ rtems_status_code mpc83xx_gtm_enable_restart( int timer, bool enable)
 
 rtems_status_code mpc83xx_gtm_set_clock( int timer, int clock)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
+	rtems_interrupt_level level;
 	uint16_t reg = 0;
 
 	MPC83XX_GTM_CHECK_INDEX( timer);
@@ -112,8 +114,12 @@ rtems_status_code mpc83xx_gtm_set_clock( int timer, int clock)
 
 	rtems_interrupt_disable( level);
 
-	reg = mpc83xx.gtm [module].gt_tim_regs [high].gtmdr [low];
-	mpc83xx.gtm [module].gt_tim_regs [high].gtmdr [low] = (reg & ~MPC83XX_GTM_CLOCK_MASK) | clock;
+	reg = mpc83xx.gtm [GTM_MODULE(timer)]
+	  .gt_tim_regs [GTM_HIGH(timer)]
+	  .gtmdr [GTM_LOW(timer)];
+	mpc83xx.gtm [GTM_MODULE(timer)]
+	  .gt_tim_regs [GTM_HIGH(timer)]
+	  .gtmdr [GTM_LOW(timer)] = (reg & ~MPC83XX_GTM_CLOCK_MASK) | clock;
 
 	rtems_interrupt_enable( level);
 
@@ -122,25 +128,25 @@ rtems_status_code mpc83xx_gtm_set_clock( int timer, int clock)
 
 rtems_status_code mpc83xx_gtm_get_clock( int timer, int *clock)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	*clock = mpc83xx.gtm [module].gt_tim_regs [high].gtmdr [low] & MPC83XX_GTM_CLOCK_MASK;
+	*clock = mpc83xx.gtm [GTM_MODULE(timer)]
+	  .gt_tim_regs [GTM_HIGH(timer)]
+	  .gtmdr [GTM_LOW(timer)] & MPC83XX_GTM_CLOCK_MASK;
 
 	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code mpc83xx_gtm_start( int timer)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
-	uint8_t flags = 0x2 << (low * 4);
+	rtems_interrupt_level level;
+	uint8_t flags = 0x2 << (GTM_LOW(timer) * 4);
 
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
 	rtems_interrupt_disable( level);
-	mpc83xx.gtm [module].gtcfr [high].reg &= ~flags;
+	mpc83xx.gtm [GTM_MODULE(timer)]
+.gtcfr [GTM_HIGH(timer)].reg &= ~flags;
 	rtems_interrupt_enable( level);
 
 	return RTEMS_SUCCESSFUL;
@@ -148,14 +154,13 @@ rtems_status_code mpc83xx_gtm_start( int timer)
 
 rtems_status_code mpc83xx_gtm_stop( int timer)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
-	uint8_t flags = 0x2 << (low * 4);
+	rtems_interrupt_level level;
+	uint8_t flags = 0x2 << (GTM_LOW(timer) * 4);
 
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
 	rtems_interrupt_disable( level);
-	mpc83xx.gtm [module].gtcfr [high].reg |= flags;
+	mpc83xx.gtm [GTM_MODULE(timer)].gtcfr [GTM_HIGH(timer)].reg |= flags;
 	rtems_interrupt_enable( level);
 
 	return RTEMS_SUCCESSFUL;
@@ -163,66 +168,54 @@ rtems_status_code mpc83xx_gtm_stop( int timer)
 
 rtems_status_code mpc83xx_gtm_set_value( int timer, uint16_t value)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	mpc83xx.gtm [module].gt_tim_regs [high].gtcnr [low] = value;
+	mpc83xx.gtm [GTM_MODULE(timer)].gt_tim_regs [GTM_HIGH(timer)].gtcnr [GTM_LOW(timer)] = value;
 
 	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code mpc83xx_gtm_get_value( int timer, uint16_t *value)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	*value = mpc83xx.gtm [module].gt_tim_regs [high].gtcnr [low];
+	*value = mpc83xx.gtm [GTM_MODULE(timer)].gt_tim_regs [GTM_HIGH(timer)].gtcnr [GTM_LOW(timer)];
 
 	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code mpc83xx_gtm_set_reference( int timer, uint16_t reference)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	mpc83xx.gtm [module].gt_tim_regs [high].gtrfr [low] = reference;
+	mpc83xx.gtm [GTM_MODULE(timer)].gt_tim_regs [GTM_HIGH(timer)].gtrfr [GTM_LOW(timer)] = reference;
 
 	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code mpc83xx_gtm_get_reference( int timer, uint16_t *reference)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	*reference = mpc83xx.gtm [module].gt_tim_regs [high].gtrfr [low];
+	*reference = mpc83xx.gtm [GTM_MODULE(timer)].gt_tim_regs [GTM_HIGH(timer)].gtrfr [GTM_LOW(timer)];
 
 	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code mpc83xx_gtm_set_prescale( int timer, uint8_t prescale)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	mpc83xx.gtm [module].gtpsr [module_timer] = prescale;
+	mpc83xx.gtm [GTM_MODULE(timer)].gtpsr [GTM_MODULE_TIMER(timer)] = prescale;
 
 	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code mpc83xx_gtm_get_prescale( int timer, uint8_t *prescale)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	*prescale = mpc83xx.gtm [module].gtpsr [module_timer];
+	*prescale = mpc83xx.gtm [GTM_MODULE(timer)].gtpsr [GTM_MODULE_TIMER(timer)];
 
 	return RTEMS_SUCCESSFUL;
 }
@@ -238,12 +231,11 @@ rtems_status_code mpc83xx_gtm_interrupt_get_vector( int timer, rtems_vector_numb
 
 rtems_status_code mpc83xx_gtm_interrupt_enable( int timer)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
+	rtems_interrupt_level level;
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
 	rtems_interrupt_disable( level);
-	mpc83xx.gtm [module].gt_tim_regs [high].gtmdr [low] |= 0x0010;
+	mpc83xx.gtm [GTM_MODULE(timer)].gt_tim_regs [GTM_HIGH(timer)].gtmdr [GTM_LOW(timer)] |= 0x0010;
 	rtems_interrupt_enable( level);
 
 	return RTEMS_SUCCESSFUL;
@@ -251,12 +243,11 @@ rtems_status_code mpc83xx_gtm_interrupt_enable( int timer)
 
 rtems_status_code mpc83xx_gtm_interrupt_disable( int timer)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
+	rtems_interrupt_level level;
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
 	rtems_interrupt_disable( level);
-	mpc83xx.gtm [module].gt_tim_regs [high].gtmdr [low] &= ~0x0010;
+	mpc83xx.gtm [GTM_MODULE(timer)].gt_tim_regs [GTM_HIGH(timer)].gtmdr [GTM_LOW(timer)] &= ~0x0010;
 	rtems_interrupt_enable( level);
 
 	return RTEMS_SUCCESSFUL;
@@ -264,11 +255,9 @@ rtems_status_code mpc83xx_gtm_interrupt_disable( int timer)
 
 rtems_status_code mpc83xx_gtm_interrupt_clear( int timer)
 {
-	MPC83XX_GTM_VARIABLES( timer);
-
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	mpc83xx.gtm [module].gtevr [module_timer] = 0x0002;
+	mpc83xx.gtm [GTM_MODULE(timer)].gtevr [GTM_MODULE_TIMER(timer)] = 0x0002;
 
 	return RTEMS_SUCCESSFUL;
 }
