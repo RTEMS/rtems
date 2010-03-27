@@ -406,7 +406,7 @@ static int BSP_irq_handle_at_ipic( unsigned excNum)
 	int32_t vecnum;
 	mpc83xx_ipic_mask_t mask_save;
 	const mpc83xx_ipic_mask_t *mask_ptr;
-	uint32_t msr;
+	uint32_t msr = 0;
 	rtems_interrupt_level level;
 
 	/* Get vector number */

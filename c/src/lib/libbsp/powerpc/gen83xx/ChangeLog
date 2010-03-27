@@ -1,6 +1,6 @@
 2009-11-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* start/start.S: call to boot_card checked, removed warning 
+	* start/start.S, irq/irq.c: call to boot_card checked, removed warning
 
 2009-10-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
