@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems.h>
 #include <rtems/system.h>
 #include <rtems/score/types.h>

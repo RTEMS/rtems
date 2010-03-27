@@ -1,3 +1,7 @@
+2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c, cpu_asm.S, sse_test.c: Add include of config.h
+
 2009-11-09	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1469/cpukit
