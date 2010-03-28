@@ -37,6 +37,11 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_run.c,v 1.10 1999/08/28 00:
  * This is the rpc server side idle loop
  * Wait for input, call server program.
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rpc/rpc.h>
 #include <stdio.h>
 #include <sys/errno.h>

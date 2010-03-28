@@ -41,6 +41,11 @@
  * subtract seconds before Jan 1, 1970 to get
  * what unix uses.
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

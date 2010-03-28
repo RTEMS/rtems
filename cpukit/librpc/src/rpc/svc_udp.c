@@ -41,6 +41,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_udp.c,v 1.13 2000/01/27 23:
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

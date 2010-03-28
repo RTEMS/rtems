@@ -40,6 +40,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/rpc_callmsg.c,v 1.9 1999/08/28 
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/param.h>
 #include <stdlib.h>
 #include <string.h>

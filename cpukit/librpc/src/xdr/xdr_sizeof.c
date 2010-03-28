@@ -35,6 +35,10 @@
  * when serialized using XDR.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 #include <sys/types.h>

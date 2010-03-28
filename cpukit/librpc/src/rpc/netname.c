@@ -39,6 +39,10 @@ static char sccsid[] = "@(#)netname.c 1.8 91/03/11 Copyr 1986 Sun Micro";
  * the sun NIS domain architecture.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/param.h>
 #include <rpc/rpc.h>
 #include <rpc/rpc_com.h>

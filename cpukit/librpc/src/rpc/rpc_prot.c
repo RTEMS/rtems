@@ -46,6 +46,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/rpc_prot.c,v 1.8 1999/08/28 00:
  * routines are also in this program.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/param.h>
 
 #include <rpc/rpc.h>

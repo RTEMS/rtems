@@ -42,6 +42,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_array.c,v 1.8 1999/08/28 00
  * arrays.  See xdr.h for more info on the interface to xdr.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

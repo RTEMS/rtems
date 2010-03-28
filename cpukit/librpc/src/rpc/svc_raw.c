@@ -42,6 +42,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_raw.c,v 1.7 1999/08/28 00:0
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rpc/rpc.h>
 #include <stdlib.h>
 

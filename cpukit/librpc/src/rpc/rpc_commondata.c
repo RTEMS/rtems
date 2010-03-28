@@ -32,6 +32,10 @@
 static char *rcsid = "$FreeBSD: src/lib/libc/rpc/rpc_commondata.c,v 1.7 1999/08/28 00:00:45 peter Exp $";
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rpc/rpc.h>
 /*
  * This file should only contain common data (global data) that is exported

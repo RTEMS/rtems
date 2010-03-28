@@ -27,6 +27,10 @@
  * Mountain View, California  94043
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rpc/rpc.h>
 #include <rpc/pmap_prot.h>
 #include <stdio.h>

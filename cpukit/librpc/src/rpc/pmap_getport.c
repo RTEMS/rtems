@@ -40,6 +40,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_getport.c,v 1.10 2000/01/2
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rpc/rpc.h>
 #include <rpc/pmap_prot.h>
 #include <rpc/pmap_clnt.h>

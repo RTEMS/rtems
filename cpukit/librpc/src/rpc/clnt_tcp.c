@@ -52,6 +52,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_tcp.c,v 1.14 2000/01/27 23
  * Now go hang yourself.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

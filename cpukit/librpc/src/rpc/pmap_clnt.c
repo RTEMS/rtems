@@ -40,6 +40,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_clnt.c,v 1.11 2000/01/27 2
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>

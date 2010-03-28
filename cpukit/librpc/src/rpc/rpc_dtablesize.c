@@ -33,6 +33,10 @@
 static char *rcsid = "$FreeBSD: src/lib/libc/rpc/rpc_dtablesize.c,v 1.10 1999/08/28 00:00:45 peter Exp $";
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/types.h>
 #include <unistd.h>
 

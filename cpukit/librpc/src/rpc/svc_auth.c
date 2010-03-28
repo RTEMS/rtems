@@ -46,6 +46,10 @@ static const char rcsid[] =
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifdef _KERNEL
 #include <sys/param.h>
 #include <rpc/types.h>

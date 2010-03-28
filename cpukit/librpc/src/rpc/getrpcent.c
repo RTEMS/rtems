@@ -37,6 +37,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/getrpcent.c,v 1.10 1999/08/28 0
  * Copyright (c) 1984 by Sun Microsystems, Inc.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

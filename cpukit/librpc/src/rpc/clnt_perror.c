@@ -39,6 +39,11 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_perror.c,v 1.11 1999/08/28
  * Copyright (C) 1984, Sun Microsystems, Inc.
  *
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

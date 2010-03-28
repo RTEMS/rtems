@@ -43,6 +43,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr.c,v 1.9 1999/08/28 00:02:55
  * xdr.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

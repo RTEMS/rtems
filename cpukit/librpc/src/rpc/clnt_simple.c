@@ -40,6 +40,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_simple.c,v 1.12 2000/01/27
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/param.h>
 #include <stdio.h>
 #include <stdlib.h>
