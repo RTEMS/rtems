@@ -1,5 +1,20 @@
 2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/stringto/stringto_template.h: Reorder includes.
+	* libmisc/stringto/stringtodouble.c,
+	libmisc/stringto/stringtofloat.c,
+	libmisc/stringto/stringtoint.c,
+	libmisc/stringto/stringtolong.c,
+	libmisc/stringto/stringtolonglong.c, 
+	libmisc/stringto/stringtopointer.c
+	libmisc/stringto/stringtounsignedchar.c
+	libmisc/stringto/stringtounsignedint.c
+	libmisc/stringto/stringtounsignedlong.c
+	libmisc/stringto/stringtounsignedlonglong.c:
+	Add HAVE_CONFIG_H support to let files receive configure defines.
+
+2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/libc/getnetnamadr.c,
 	librpc/src/rpc/svc.c:
 	Add HAVE_STRINGS_H for better POSIX compliance.
