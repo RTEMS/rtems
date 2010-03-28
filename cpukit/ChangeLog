@@ -1,5 +1,11 @@
 2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/src/bdpart.c, libblock/src/ramdisk-config.c,
+	libblock/src/ramdisk-driver.c, libblock/src/ramdisk-init.c:
+	Add HAVE_CONFIG_H support to let files receive configure defines.
+
+2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* librpc/src/xdr/xdr.c, librpc/src/xdr/xdr_array.c,
 	librpc/src/xdr/xdr_float.c, librpc/src/xdr/xdr_mem.c,
 	librpc/src/xdr/xdr_rec.c, librpc/src/xdr/xdr_reference.c,
