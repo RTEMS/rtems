@@ -2,6 +2,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <netdb.h>
 #include <string.h>
 #include <sys/types.h>

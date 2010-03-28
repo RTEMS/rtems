@@ -30,6 +30,10 @@
  * $FreeBSD: src/sys/net/radix.c,v 1.36 2004/04/21 15:27:36 luigi Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*
  * Routines to build and maintain radix trees for routing lookups.
  */

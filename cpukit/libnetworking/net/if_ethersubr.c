@@ -34,6 +34,10 @@
  * $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "opt_atalk.h"
 #include "opt_inet.h"
 #include "opt_inet6.h"

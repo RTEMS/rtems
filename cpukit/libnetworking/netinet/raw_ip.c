@@ -33,6 +33,10 @@
 /*
  *	$Id$
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
  
 #include "opt_inet6.h"
 #include "opt_ipsec.h"

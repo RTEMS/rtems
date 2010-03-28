@@ -77,6 +77,10 @@
 
 /* $Id$ */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "opt_inet.h"
 #include "opt_ipx.h"
 #include "opt_mac.h"

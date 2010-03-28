@@ -33,6 +33,10 @@
  *	$Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/param.h>
 #include <rtems/bsd/sys/queue.h>
 #include <sys/malloc.h>

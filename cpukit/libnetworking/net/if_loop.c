@@ -34,6 +34,10 @@
  * $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*
  * Loopback interface driver for protocol testing and timing.
  */

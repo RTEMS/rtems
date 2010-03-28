@@ -31,6 +31,10 @@
  *	$ANA: ip_input.c,v 1.5 1996/09/18 14:34:59 wollman Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define	_IP_VHL
 
 #include "opt_ipfw.h"

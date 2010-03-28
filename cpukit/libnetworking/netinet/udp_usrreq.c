@@ -30,6 +30,10 @@
  * $FreeBSD: src/sys/netinet/udp_usrreq.c,v 1.170 2004/11/08 14:44:53 phk Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/param.h>
 #include <rtems/bsd/sys/queue.h>
 #include <sys/systm.h>

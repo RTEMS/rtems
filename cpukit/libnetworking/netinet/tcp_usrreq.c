@@ -34,6 +34,10 @@
  *	$Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "opt_tcpdebug.h"
 
 #include <sys/param.h>

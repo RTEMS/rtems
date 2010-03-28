@@ -40,6 +40,10 @@
  *	add "inuse/lock" bit (or ref. count) along with valid bit
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "opt_inet.h"
 
 #include <sys/param.h>

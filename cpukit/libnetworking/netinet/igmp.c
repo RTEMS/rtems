@@ -45,6 +45,10 @@
  * MULTICAST Revision: 3.5.1.4
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/param.h>
 #include <sys/systm.h>
 #include <sys/mbuf.h>

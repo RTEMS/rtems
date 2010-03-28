@@ -19,6 +19,10 @@
  * Implement IP packet firewall
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifndef IPFIREWALL_MODULE
 #include "opt_ipfw.h"
 #endif

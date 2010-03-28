@@ -27,6 +27,10 @@
 **   -- You can print out the digest using MDprint(&MD)
 */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /* Implementation notes:
 ** This implementation assumes that ints are 32-bit quantities.
 */

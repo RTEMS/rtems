@@ -29,6 +29,10 @@
  * try-and-error for region size.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/bsd/sys/cdefs.h>
 
 #include <sys/types.h>

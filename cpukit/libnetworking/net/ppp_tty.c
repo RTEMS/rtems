@@ -76,6 +76,10 @@
 
 /* $Id$ */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "opt_ppp.h"		/* XXX for ppp_defs.h */
 
 #if NPPP > 0

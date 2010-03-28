@@ -12,6 +12,10 @@
  * $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "opt_mrouting.h"
 
 #include <sys/param.h>

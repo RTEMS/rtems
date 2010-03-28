@@ -34,6 +34,10 @@
  *	$Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define _IP_VHL
 
 #include <sys/param.h>

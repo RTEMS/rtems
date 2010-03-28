@@ -25,6 +25,10 @@
  *	BSDI Id: if_indextoname.c,v 2.3 2000/04/17 22:38:05 dab Exp
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/bsd/sys/cdefs.h>
 
 #include <sys/types.h>
