@@ -9,12 +9,12 @@
  *  $Id$
  */
 
-#include <rtems/stringto.h>
-
 #include <errno.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <stdbool.h>
+
+#include <rtems/stringto.h>
 
 /*
  *  If we are doing floating point conversion, then we need math.h
