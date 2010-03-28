@@ -1,5 +1,10 @@
 2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/pipe/pipe.c:
+	Add HAVE_CONFIG_H support to let files receive configure defines.
+
+2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libblock/src/bdpart.c, libblock/src/ramdisk-config.c,
 	libblock/src/ramdisk-driver.c, libblock/src/ramdisk-init.c:
 	Add HAVE_CONFIG_H support to let files receive configure defines.
