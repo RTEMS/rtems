@@ -9,6 +9,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*
  *  Instantiate an error checking wrapper for strtoul (unsigned int)
  */
