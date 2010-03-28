@@ -1,5 +1,15 @@
 2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if.c, libnetworking/net/if_ethersubr.c,
+	libnetworking/net/if_loop.c, libnetworking/net/if_ppp.c,
+	libnetworking/net/ppp_tty.c, libnetworking/net/radix.c,
+	libnetworking/net/raw_cb.c, libnetworking/net/raw_usrreq.c,
+	libnetworking/net/route.c, libnetworking/net/rtsock.c,
+	libnetworking/net/slcompress.c:
+	Add HAVE_CONFIG_H support to let files receive configure defines.
+
+2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/if_ether.c, libnetworking/netinet/igmp.c,
 	libnetworking/netinet/in.c, libnetworking/netinet/in_cksum.c,
 	libnetworking/netinet/in_pcb.c, libnetworking/netinet/in_proto.c,
