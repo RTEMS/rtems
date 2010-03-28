@@ -1,5 +1,10 @@
 2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/Makefile.am: Add stringto/stringto_template.h to
+	libstringto_a_SOURCES.
+
+2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/pipe/pipe.c:
 	Add HAVE_CONFIG_H support to let files receive configure defines.
 
