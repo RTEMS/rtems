@@ -1,5 +1,12 @@
 2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/getifaddrs.c,
+	* libnetworking/libc/if_indextoname.c,
+	libnetworking/libc/if_nameindex.c:
+	Add HAVE_CONFIG_H support to let files receive configure defines.
+
+2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmd/md4.c, libmd/md5.c:
 	Add HAVE_CONFIG_H support to let files receive configure defines.
 
