@@ -1,5 +1,11 @@
 2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/getnetnamadr.c,
+	librpc/src/rpc/svc.c:
+	Add HAVE_STRINGS_H for better POSIX compliance.
+
+2010-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/net/if.c, libnetworking/net/if_ethersubr.c,
 	libnetworking/net/if_loop.c, libnetworking/net/if_ppp.c,
 	libnetworking/net/ppp_tty.c, libnetworking/net/radix.c,
