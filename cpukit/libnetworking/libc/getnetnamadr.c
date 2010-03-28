@@ -36,6 +36,9 @@
 #include <ctype.h>
 #include <errno.h>
 #include <string.h>
+#ifdef HAVE_STRINGS_H
+#include <strings.h> /* for strcasecmp */
+#endif
 
 #ifndef _PATH_NETCONF
 #define _PATH_NETCONF	"/etc/host.conf"
