@@ -13,6 +13,10 @@
  * @(#) $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /* FIXME: How to set this define? */
 #if !defined(RTEMS_RAMDISK_TRACE)
     #define RTEMS_RAMDISK_TRACE 0
