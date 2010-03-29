@@ -1,7 +1,28 @@
 diff -Naur newlib-1.18.0.orig/newlib/ChangeLog.rtems newlib-1.18.0-rtems4.10-20100328/newlib/ChangeLog.rtems
 --- newlib-1.18.0.orig/newlib/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/ChangeLog.rtems	2010-03-29 04:36:54.000000000 +0200
-@@ -0,0 +1,171 @@
++++ newlib-1.18.0-rtems4.10-20100328/newlib/ChangeLog.rtems	2010-03-29 05:31:42.000000000 +0200
+@@ -0,0 +1,192 @@
++2010-03-25	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/include/strings.h: New (split-out from string.h).
++	* libc/include/string.h: Remove bcmp, bcopy, bzero, ffs, index, rindex,
++	strcasecmp, strncasecmp (Moved to strings.h).
++	Remove strcmpi, stricmp, strncmpi, strnicmp.
++	* libc/misc/ffs.c: Use <strings.h> instead of <string.h>.
++	* libc/string/bcmp.c: Use <strings.h> instead of <string.h>.
++	* libc/string/bzero.c: Use <strings.h> instead of <string.h>.
++	* libc/string/rindex.c: Use <strings.h> instead of <string.h>.
++	* libc/string/strcasecmp.c: Use <strings.h> instead of <string.h>.
++	* libc/string/strcasecmp.c: Use <strings.h> instead of <string.h>.
++
++2010-03-23	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/sys/rtems/machine/_types.h: Add i386 to 64bit off_t targets.
++
++2010-03-10	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/posix/telldir.c: Adopt newlib-cvs's telldir.c
++
 +2010-02-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 +
 +	* libc/sys/rtems/machine/_types.h: Use __int64_t for _off_t, fpos_t for 
@@ -175,7 +196,7 @@ diff -Naur newlib-1.18.0.orig/newlib/ChangeLog.rtems newlib-1.18.0-rtems4.10-201
 +
 diff -Naur newlib-1.18.0.orig/newlib/libc/include/inttypes.h newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/inttypes.h
 --- newlib-1.18.0.orig/newlib/libc/include/inttypes.h	2009-01-19 23:02:06.000000000 +0100
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/inttypes.h	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/inttypes.h	2010-03-29 05:26:16.000000000 +0200
 @@ -242,6 +242,20 @@
  #define SCNxMAX		__SCNMAX(x)
  
@@ -207,7 +228,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/include/inttypes.h newlib-1.18.0-rtems
  #define PRIiPTR		__PRIPTR(i)
 diff -Naur newlib-1.18.0.orig/newlib/libc/include/machine/_default_types.h newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/machine/_default_types.h
 --- newlib-1.18.0.orig/newlib/libc/include/machine/_default_types.h	2008-06-12 00:14:54.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/machine/_default_types.h	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/machine/_default_types.h	2010-03-29 05:26:16.000000000 +0200
 @@ -54,14 +54,14 @@
  #endif
  #endif
@@ -248,7 +269,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/include/sched.h newlib-1.18.0-rtems4.1
 -#endif /* _SCHED_H_ */
 diff -Naur newlib-1.18.0.orig/newlib/libc/include/stdint.h newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/stdint.h
 --- newlib-1.18.0.orig/newlib/libc/include/stdint.h	2009-04-24 23:55:07.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/stdint.h	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/stdint.h	2010-03-29 05:26:16.000000000 +0200
 @@ -33,7 +33,7 @@
  /* Check if "long" is 64bit or 32bit wide */
  #if __STDINT_EXP(LONG_MAX) > 0x7fffffff
@@ -318,7 +339,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/include/stdint.h newlib-1.18.0-rtems4.
  
 diff -Naur newlib-1.18.0.orig/newlib/libc/include/string.h newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/string.h
 --- newlib-1.18.0.orig/newlib/libc/include/string.h	2008-06-18 17:27:27.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/string.h	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/string.h	2010-03-29 05:26:16.000000000 +0200
 @@ -49,18 +49,11 @@
  #ifndef __STRICT_ANSI__
  char 	*_EXFUN(strtok_r,(char *, const char *, char **));
@@ -369,7 +390,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/include/string.h newlib-1.18.0-rtems4.
  #include <sys/string.h>
 diff -Naur newlib-1.18.0.orig/newlib/libc/include/strings.h newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/strings.h
 --- newlib-1.18.0.orig/newlib/libc/include/strings.h	1970-01-01 01:00:00.000000000 +0100
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/strings.h	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/include/strings.h	2010-03-29 05:26:16.000000000 +0200
 @@ -0,0 +1,44 @@
 +/*
 + * strings.h
@@ -417,7 +438,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/include/strings.h newlib-1.18.0-rtems4
 +#endif /* _STRINGS_H_ */
 diff -Naur newlib-1.18.0.orig/newlib/libc/machine/powerpc/Makefile.am newlib-1.18.0-rtems4.10-20100328/newlib/libc/machine/powerpc/Makefile.am
 --- newlib-1.18.0.orig/newlib/libc/machine/powerpc/Makefile.am	2007-05-24 19:33:35.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/machine/powerpc/Makefile.am	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/machine/powerpc/Makefile.am	2010-03-29 05:26:16.000000000 +0200
 @@ -10,7 +10,7 @@
  
  AM_CFLAGS = -I $(srcdir)/../../stdio -I $(srcdir)/../../stdlib
@@ -429,7 +450,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/machine/powerpc/Makefile.am newlib-1.1
  lib_a_LIBADD = @extra_objs@
 diff -Naur newlib-1.18.0.orig/newlib/libc/machine/powerpc/Makefile.in newlib-1.18.0-rtems4.10-20100328/newlib/libc/machine/powerpc/Makefile.in
 --- newlib-1.18.0.orig/newlib/libc/machine/powerpc/Makefile.in	2009-10-21 00:44:03.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/machine/powerpc/Makefile.in	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/machine/powerpc/Makefile.in	2010-03-29 05:26:16.000000000 +0200
 @@ -51,7 +51,7 @@
  LIBRARIES = $(noinst_LIBRARIES)
  ARFLAGS = cru
@@ -518,7 +539,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/machine/powerpc/times.c newlib-1.18.0-
 -}
 diff -Naur newlib-1.18.0.orig/newlib/libc/misc/ffs.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/misc/ffs.c
 --- newlib-1.18.0.orig/newlib/libc/misc/ffs.c	2003-06-06 21:57:51.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/misc/ffs.c	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/misc/ffs.c	2010-03-29 05:26:16.000000000 +0200
 @@ -24,7 +24,7 @@
  
  No supporting OS subroutines are required.  */
@@ -530,8 +551,17 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/misc/ffs.c newlib-1.18.0-rtems4.10-201
  _DEFUN(ffs, (word),
 diff -Naur newlib-1.18.0.orig/newlib/libc/posix/telldir.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/posix/telldir.c
 --- newlib-1.18.0.orig/newlib/libc/posix/telldir.c	2008-11-27 22:01:40.000000000 +0100
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/posix/telldir.c	2010-03-29 04:36:54.000000000 +0200
-@@ -119,7 +119,6 @@
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/posix/telldir.c	2010-03-29 05:28:31.000000000 +0200
+@@ -67,7 +67,7 @@
+ #define	NDIRHASH	32	/* Num of hash lists, must be a power of 2 */
+ #define	LOCHASH(i)	((i)&(NDIRHASH-1))
+ 
+-static long	dd_loccnt;	/* Index of entry for sequential readdir's */
++static long	dd_loccnt = 1;	/* Index of entry for sequential readdir's */
+ static struct	ddloc *dd_hash[NDIRHASH];   /* Hash list heads for ddlocs */
+ __LOCK_INIT(static, dd_hash_lock);
+ 
+@@ -119,40 +119,46 @@
  	register struct ddloc *lp;
  	register struct ddloc **prevlp;
  	struct dirent *dp;
@@ -539,7 +569,71 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/posix/telldir.c newlib-1.18.0-rtems4.1
  
  #ifdef HAVE_DD_LOCK
  	__lock_acquire(dd_hash_lock);
-@@ -169,26 +168,26 @@
+ #endif
+-	prevlp = &dd_hash[LOCHASH(loc)];
+-	lp = *prevlp;
+-	while (lp != NULL) {
+-		if (lp->loc_index == loc)
+-			break;
+-		prevlp = &lp->loc_next;
+-		lp = lp->loc_next;
+-	}
+-	if (lp == NULL) {
++	if (loc != 0) {
++		prevlp = &dd_hash[LOCHASH(loc)];
++		lp = *prevlp;
++		while (lp != NULL) {
++			if (lp->loc_index == loc)
++				break;
++			prevlp = &lp->loc_next;
++			lp = lp->loc_next;
++		}
++		if (lp == NULL) {
+ #ifdef HAVE_DD_LOCK
+-		__lock_release(dd_hash_lock);
++			__lock_release(dd_hash_lock);
+ #endif
+-		return;
+-	}
+-	if (lp->loc_loc == dirp->dd_loc && lp->loc_seek == dirp->dd_seek)
+-		goto found;
+-	(void) lseek(dirp->dd_fd, lp->loc_seek, 0);
+-	dirp->dd_seek = lp->loc_seek;
+-	dirp->dd_loc = 0;
+-	while (dirp->dd_loc < lp->loc_loc) {
+-		dp = readdir(dirp);
+-		if (dp == NULL)
+-			break;
+-	}
++			return;
++		}
++		if (lp->loc_loc == dirp->dd_loc && lp->loc_seek == dirp->dd_seek)
++			goto found;
++		(void) lseek(dirp->dd_fd, lp->loc_seek, 0);
++		dirp->dd_seek = lp->loc_seek;
++		dirp->dd_loc = 0;
++		while (dirp->dd_loc < lp->loc_loc) {
++			dp = readdir(dirp);
++			if (dp == NULL)
++				break;
++		}
+ found:
+ #ifdef SINGLEUSE
+-	*prevlp = lp->loc_next;
+-	free((caddr_t)lp);
++		*prevlp = lp->loc_next;
++		free((caddr_t)lp);
+ #endif
++	} else {
++		// loc 0 means rewinding
++		(void) lseek(dirp->dd_fd, 0, 0);
++		dirp->dd_seek = 0;
++		dirp->dd_loc = 0;
++	}
+ #ifdef HAVE_DD_LOCK
+ 	__lock_release(dd_hash_lock);
+ #endif
+@@ -169,26 +175,26 @@
  	__lock_acquire(dd_hash_lock);
  #endif
  	for (i = 0; i < NDIRHASH; ++i) {
@@ -579,7 +673,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/posix/telldir.c newlib-1.18.0-rtems4.1
  	__lock_release(dd_hash_lock);
 diff -Naur newlib-1.18.0.orig/newlib/libc/search/db_local.h newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/db_local.h
 --- newlib-1.18.0.orig/newlib/libc/search/db_local.h	2002-06-25 01:05:08.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/db_local.h	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/db_local.h	2010-03-29 05:26:16.000000000 +0200
 @@ -102,11 +102,11 @@
  typedef struct __db {
  	DBTYPE type;			/* Underlying db type. */
@@ -599,7 +693,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/search/db_local.h newlib-1.18.0-rtems4
  } DB;
 diff -Naur newlib-1.18.0.orig/newlib/libc/search/extern.h newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/extern.h
 --- newlib-1.18.0.orig/newlib/libc/search/extern.h	2002-06-20 21:51:31.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/extern.h	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/extern.h	2010-03-29 05:26:16.000000000 +0200
 @@ -43,7 +43,7 @@
  int	 __big_split(HTAB *, BUFHEAD *, BUFHEAD *, BUFHEAD *,
  		int, __uint32_t, SPLIT_RETURN *);
@@ -611,7 +705,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/search/extern.h newlib-1.18.0-rtems4.1
  int	 __expand_table(HTAB *);
 diff -Naur newlib-1.18.0.orig/newlib/libc/search/hash_buf.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/hash_buf.c
 --- newlib-1.18.0.orig/newlib/libc/search/hash_buf.c	2004-05-26 19:57:10.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/hash_buf.c	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/hash_buf.c	2010-03-29 05:26:16.000000000 +0200
 @@ -118,7 +118,7 @@
  	int newpage;	/* If prev_bp set, indicates a new overflow page. */
  {
@@ -632,7 +726,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/search/hash_buf.c newlib-1.18.0-rtems4
  	int npages;
 diff -Naur newlib-1.18.0.orig/newlib/libc/search/hash.h newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/hash.h
 --- newlib-1.18.0.orig/newlib/libc/search/hash.h	2008-07-02 20:38:45.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/hash.h	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/search/hash.h	2010-03-29 05:26:16.000000000 +0200
 @@ -82,7 +82,7 @@
  
  /* Hash Table Information */
@@ -653,7 +747,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/search/hash.h newlib-1.18.0-rtems4.10-
  	int		h_charkey;	/* value of hash(CHARKEY) */
 diff -Naur newlib-1.18.0.orig/newlib/libc/string/bcmp.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/bcmp.c
 --- newlib-1.18.0.orig/newlib/libc/string/bcmp.c	2005-10-28 23:21:07.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/bcmp.c	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/bcmp.c	2010-03-29 05:26:16.000000000 +0200
 @@ -6,11 +6,11 @@
  	bcmp
  
@@ -679,7 +773,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/string/bcmp.c newlib-1.18.0-rtems4.10-
  _DEFUN (bcmp, (m1, m2, n),
 diff -Naur newlib-1.18.0.orig/newlib/libc/string/bcopy.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/bcopy.c
 --- newlib-1.18.0.orig/newlib/libc/string/bcopy.c	2002-05-23 20:46:04.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/bcopy.c	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/bcopy.c	2010-03-29 05:26:16.000000000 +0200
 @@ -3,7 +3,7 @@
  	<<bcopy>>---copy memory regions
  
@@ -700,7 +794,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/string/bcopy.c newlib-1.18.0-rtems4.10
  _DEFUN (bcopy, (b1, b2, length),
 diff -Naur newlib-1.18.0.orig/newlib/libc/string/bzero.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/bzero.c
 --- newlib-1.18.0.orig/newlib/libc/string/bzero.c	2002-05-23 20:46:04.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/bzero.c	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/bzero.c	2010-03-29 05:26:16.000000000 +0200
 @@ -6,11 +6,11 @@
  	bzero
  
@@ -726,7 +820,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/string/bzero.c newlib-1.18.0-rtems4.10
  _DEFUN (bzero, (b, length),
 diff -Naur newlib-1.18.0.orig/newlib/libc/string/index.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/index.c
 --- newlib-1.18.0.orig/newlib/libc/string/index.c	2000-02-17 20:39:48.000000000 +0100
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/index.c	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/index.c	2010-03-29 05:26:16.000000000 +0200
 @@ -10,7 +10,7 @@
  	char * index(const char *<[string]>, int <[c]>);
  
@@ -747,7 +841,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/string/index.c newlib-1.18.0-rtems4.10
  _DEFUN (index, (s, c),
 diff -Naur newlib-1.18.0.orig/newlib/libc/string/rindex.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/rindex.c
 --- newlib-1.18.0.orig/newlib/libc/string/rindex.c	2000-02-17 20:39:48.000000000 +0100
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/rindex.c	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/rindex.c	2010-03-29 05:26:16.000000000 +0200
 @@ -10,7 +10,7 @@
  	char * rindex(const char *<[string]>, int <[c]>);
  
@@ -768,7 +862,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/string/rindex.c newlib-1.18.0-rtems4.1
  _DEFUN (rindex, (s, c),
 diff -Naur newlib-1.18.0.orig/newlib/libc/string/strcasecmp.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/strcasecmp.c
 --- newlib-1.18.0.orig/newlib/libc/string/strcasecmp.c	2009-04-23 20:11:22.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/strcasecmp.c	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/strcasecmp.c	2010-03-29 05:26:16.000000000 +0200
 @@ -38,7 +38,7 @@
  	strcasecmp
  */
@@ -780,7 +874,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/string/strcasecmp.c newlib-1.18.0-rtem
  int
 diff -Naur newlib-1.18.0.orig/newlib/libc/string/strncasecmp.c newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/strncasecmp.c
 --- newlib-1.18.0.orig/newlib/libc/string/strncasecmp.c	2009-04-23 20:11:22.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/strncasecmp.c	2010-03-29 04:37:05.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/string/strncasecmp.c	2010-03-29 05:26:16.000000000 +0200
 @@ -6,11 +6,11 @@
  	strncasecmp
  
@@ -806,7 +900,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/string/strncasecmp.c newlib-1.18.0-rte
  int 
 diff -Naur newlib-1.18.0.orig/newlib/libc/sys/rtems/machine/_types.h newlib-1.18.0-rtems4.10-20100328/newlib/libc/sys/rtems/machine/_types.h
 --- newlib-1.18.0.orig/newlib/libc/sys/rtems/machine/_types.h	2009-12-17 17:10:41.000000000 +0100
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/sys/rtems/machine/_types.h	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libc/sys/rtems/machine/_types.h	2010-03-29 05:26:16.000000000 +0200
 @@ -31,4 +31,22 @@
  
  typedef __int32_t blksize_t;
@@ -832,7 +926,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/sys/rtems/machine/_types.h newlib-1.18
  #endif
 diff -Naur newlib-1.18.0.orig/newlib/libm/common/modfl.c newlib-1.18.0-rtems4.10-20100328/newlib/libm/common/modfl.c
 --- newlib-1.18.0.orig/newlib/libm/common/modfl.c	2009-04-18 00:15:43.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libm/common/modfl.c	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libm/common/modfl.c	2010-03-29 05:26:16.000000000 +0200
 @@ -36,7 +36,7 @@
  long double
  modfl (long double x, long double *iptr)
@@ -844,7 +938,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libm/common/modfl.c newlib-1.18.0-rtems4.10
  
 diff -Naur newlib-1.18.0.orig/newlib/libm/common/sf_llrint.c newlib-1.18.0-rtems4.10-20100328/newlib/libm/common/sf_llrint.c
 --- newlib-1.18.0.orig/newlib/libm/common/sf_llrint.c	2009-04-03 19:39:24.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libm/common/sf_llrint.c	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libm/common/sf_llrint.c	2010-03-29 05:26:16.000000000 +0200
 @@ -71,7 +71,7 @@
            GET_FLOAT_WORD (i0, t);
            /* Detect the all-zeros representation of plus and
@@ -856,7 +950,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libm/common/sf_llrint.c newlib-1.18.0-rtems
            i0 &= 0x7fffff;
 diff -Naur newlib-1.18.0.orig/newlib/libm/common/sf_round.c newlib-1.18.0-rtems4.10-20100328/newlib/libm/common/sf_round.c
 --- newlib-1.18.0.orig/newlib/libm/common/sf_round.c	2005-02-24 20:02:35.000000000 +0100
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/libm/common/sf_round.c	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/libm/common/sf_round.c	2010-03-29 05:26:16.000000000 +0200
 @@ -38,7 +38,7 @@
            w &= 0x80000000;
            if (exponent_less_127 == -1)
@@ -868,7 +962,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libm/common/sf_round.c newlib-1.18.0-rtems4
          {
 diff -Naur newlib-1.18.0.orig/newlib/Makefile.am newlib-1.18.0-rtems4.10-20100328/newlib/Makefile.am
 --- newlib-1.18.0.orig/newlib/Makefile.am	2009-08-18 23:48:05.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/Makefile.am	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/Makefile.am	2010-03-29 05:26:16.000000000 +0200
 @@ -81,7 +81,7 @@
  	libc.a
  endif
@@ -880,7 +974,7 @@ diff -Naur newlib-1.18.0.orig/newlib/Makefile.am newlib-1.18.0-rtems4.10-2010032
  
 diff -Naur newlib-1.18.0.orig/newlib/Makefile.in newlib-1.18.0-rtems4.10-20100328/newlib/Makefile.in
 --- newlib-1.18.0.orig/newlib/Makefile.in	2009-10-21 00:43:45.000000000 +0200
-+++ newlib-1.18.0-rtems4.10-20100328/newlib/Makefile.in	2010-03-29 04:36:54.000000000 +0200
++++ newlib-1.18.0-rtems4.10-20100328/newlib/Makefile.in	2010-03-29 05:26:16.000000000 +0200
 @@ -122,7 +122,7 @@
  	install-pdf-recursive install-ps-recursive install-recursive \
  	installcheck-recursive installdirs-recursive pdf-recursive \
