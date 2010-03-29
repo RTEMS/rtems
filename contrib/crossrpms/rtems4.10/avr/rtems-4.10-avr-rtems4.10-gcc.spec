@@ -58,7 +58,7 @@ Summary:      	avr-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	6%{?dist}
+Release:      	7%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -67,70 +67,154 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
-%if "%{gcc_version}" >= "4.3.0"
-%define _gmp_minvers		4.1
-%else
-%if "%{gcc_version}" >= "4.2.0"
-%endif
+# FIXME: Disable lto for now, to avoid dependencies on libelf
+%bcond_with lto
+
+# FIXME: Disamble python gdb scripts
+# ATM, no idea how to package them
+%bcond_with pygdb
+
+# FIXME: Disable GCC-plugin
+# Bug in gcc-4.5-20100318, doesn't build them on x86_84 hosts.
+%bcond_with plugin
+
+# versions of libraries, we conditionally bundle if necessary
+%global mpc_version	0.8.1
+%global mpfr_version	2.4.1
+%global gmp_version	4.3.2
+%global libelf_version  0.8.13
+
+# versions of libraries these distros are known to ship
+%if 0%{?fc13}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
 %endif
 
-%if %{defined _gmp_minvers}
-BuildRequires: gmp-devel >= %{_gmp_minvers}
-%if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
+%if 0%{?fc12}
+%global mpc_provided 0.8
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
 %endif
+
+%if 0%{?fc11}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.2.4
+%endif
+
+%if 0%{?rhel5}
+%global mpc_provided %{nil}
+%global mpfr_provided %{nil}
+%global gmp_provided 4.1.4
+%endif
+
+%if 0%{?suse11_0}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.3.1
+%global gmp_provided 4.2.2
+%endif
+
+%if 0%{?suse11_1}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.3.2
+%global gmp_provided 4.2.3
+%endif
+
+%if 0%{?suse11_2}
+%global mpc_provided 0.7
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?cygwin}
+%global mpc_provided 0.8
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?mingw32}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.2
+%endif
+
+%if "%{gcc_version}" >= "4.2.0"
+%endif
+
+%if "%{gcc_version}" >= "4.3.0"
+%define gmp_required		4.1
+%define mpfr_required		2.3.1
 %endif
 
 %if "%{gcc_version}" >= "4.3.3"
-%define _cloog_minvers 0.15
-%endif
-
-%if %{defined _cloog_minvers}
-%{?fc11:BuildRequires: cloog-ppl-devel >= %_cloog_minvers}
-%{?fc12:BuildRequires: cloog-ppl-devel >= %_cloog_minvers}
-%{?fc13:BuildRequires: cloog-ppl-devel >= %_cloog_minvers}
-%{?suse11_2:BuildRequires: cloog-devel >= %_cloog_minvers, ppl-devel}
-%{?suse11_1:BuildRequires: cloog-devel >= %_cloog_minvers, ppl-devel}
+%define cloog_required 		0.15
 %endif
 
 %if "%{gcc_version}" >= "4.4.0"
-%define _mpfr_minvers	2.3.2
-%define mpfr_version	2.4.1
-%else
-%if "%{gcc_version}" >= "4.3.0"
-%define _mpfr_minvers	2.3.1
-%define mpfr_version	2.3.2
-%else
-%if "%{gcc_version}" >= "4.2.0"
+%define mpfr_required		2.3.2
 %endif
+
+%if "%{gcc_version}" >= "4.5.0"
+%define mpc_required 		0.8
+%if %{with lto}
+%define libelf_required 	0.8.12
 %endif
 %endif
 
-%if %{defined _mpfr_minvers}
-# FIXME: This is an ugly cludge
-%{?fc11:%global mpfr_provided 2.4.1}
-%{?fc12:%global mpfr_provided 2.4.1}
-%{?fc13:%global mpfr_provided 2.4.1}
-%{?suse11_0:%global mpfr_provided 2.3.1}
-%{?suse11_1:%global mpfr_provided 2.3.2}
-%{?suse11_2:%global mpfr_provided 2.4.1}
-%{?cygwin:%global mpfr_provided 2.4.1}
-%{?mingw32:%global mpfr_provided %{nil}}
-
-%if %{defined mpfr_provided}
-%if "%{mpfr_provided}" < "%{_mpfr_minvers}"
-%define _build_mpfr 1
-%else
+%if %{defined mpc_required}
+%if "%{mpc_provided}" >= "%{mpc_required}"
+%{?fedora:BuildRequires: libmpc-devel >= %{mpc_required}}
+%{?suse:BuildRequires: mpc-devel >= %{mpc_required}}
 %if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{_mpfr_minvers}
-%else
-BuildRequires: mpfr-devel >= %{_mpfr_minvers}
+BuildRequires:  %{_host_rpmprefix}mpc-devel >= %{mpc_required}
 %endif
+%else
+%define _build_mpc 1
+%endif
+%endif
+
+%if %{defined gmp_required}
+%if "%{gmp_provided}" >= "%{gmp_required}"
+BuildRequires: gmp-devel >= %{gmp_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{gmp_required}
+%endif
+%else
+%define _build_gmp 1
+%endif
+%endif
+
+%if %{defined libelf_required}
+%if "%{libelf_provided}" >= "%{libelf_required}"
+BuildRequires: libelf-devel >= %{libelf_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
+%endif
+%else
+%define _build_libelf 1
+%endif
+%endif
+
+
+%if %{defined cloog_required}
+%{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
+%{?suse11_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
+%endif
+
+
+%if %{defined mpfr_required}
+%if "%{mpfr_provided}" >= "%{mpfr_required}"
+BuildRequires: mpfr-devel >= %{mpfr_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{mpfr_required}
 %endif
 %else
 %define _build_mpfr 1
 %endif
-
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -148,10 +232,17 @@ BuildRequires:	rtems-4.10-avr-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-avr-rtems4.10-binutils
 Requires:	rtems-4.10-avr-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-7%{?dist}
+Requires:	rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-8%{?dist}
 
+%if "%{gcc_version}" >= "4.5.0"
+BuildRequires:  zlib-devel
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}zlib-devel
+%endif
+%else
+%endif
 
-%define _gcclibdir %{_prefix}/lib
+%global _gcclibdir %{_prefix}/lib
 
 %if "%{gcc_version}" == "4.4.3"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -165,12 +256,24 @@ Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.4.2-rtems4.10-200
 
 %if "%{newlib_version}" == "1.18.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20100310.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20100328.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
-%if "%{gcc_version}" >= "4.3.0"
+%if 0%{?_build_mpfr}
 Source60:    http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+%endif
+
+%if 0%{?_build_mpc}
+Source61:    http://www.multiprecision.org/mpc/download/mpc-%{mpc_version}.tar.gz
+%endif
+
+%if 0%{?_build_gmp}
+Source62:    ftp://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
+%endif
+
+%if 0%{?_build_libelf}
+Source63:    http://www.mr511.de/software/libelf-%{libelf_version}.tar.gz
 %endif
 
 %description
@@ -180,7 +283,9 @@ Cross gcc for avr-rtems4.10.
 %setup -c -T -n %{name}-%{version}
 
 %setup -q -T -D -n %{name}-%{version} -a0
-%{?PATCH0:%patch0 -p0}
+cd gcc-%{gcc_pkgvers}
+%{?PATCH0:%patch0 -p1}
+cd ..
 
 
 
@@ -201,7 +306,28 @@ cd ..
   ln -s ../mpfr-%{mpfr_version} gcc-%{gcc_pkgvers}/mpfr
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-6%{?dist}/newlib-%{newlib_version}-7%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+%if 0%{?_build_mpc}
+%setup -q -T -D -n %{name}-%{version} -a61
+%{?PATCH61:%patch61 -p1}
+  # Build mpc one-tree style
+  ln -s ../mpc-%{mpc_version} gcc-%{gcc_pkgvers}/mpc
+%endif
+
+%if 0%{?_build_gmp}
+%setup -q -T -D -n %{name}-%{version} -a62
+%{?PATCH62:%patch62 -p1}
+  # Build gmp one-tree style
+  ln -s ../gmp-%{gmp_version} gcc-%{gcc_pkgvers}/gmp
+%endif
+
+%if 0%{?_build_libelf}
+%setup -q -T -D -n %{name}-%{version} -a63
+%{?PATCH63:%patch63 -p1}
+  # Build libelf one-tree style
+  ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
+%endif
+
+echo "RTEMS gcc-%{gcc_version}-7%{?dist}/newlib-%{newlib_version}-8%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -242,6 +368,8 @@ echo "RTEMS gcc-%{gcc_version}-6%{?dist}/newlib-%{newlib_version}-7%{?dist}" > g
     --disable-win32-registry \
     --enable-version-specific-runtime-libs \
     --enable-threads \
+    %{?with_lto:--enable-lto}%{!?with_lto:--disable-lto} \
+    %{?with_plugin:--enable-plugin}%{!?with_plugin:--disable-plugin} \
     --enable-newlib-io-c99-formats \
     --enable-languages="$languages" $optargs
 
@@ -308,6 +436,13 @@ echo "RTEMS gcc-%{gcc_version}-6%{?dist}/newlib-%{newlib_version}-7%{?dist}" > g
     rmdir ${RPM_BUILD_ROOT}%{_prefix}/avr-rtems4.10/include/bits
   fi
 
+  # gcc >= 4.5.0: installs weird libstdc++ python bindings.
+%if ! %{with pygdb}
+  if test -d ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python; then
+    rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python/libstdcxx
+  fi
+%endif
+
   # Collect multilib subdirectories
   multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
@@ -363,6 +498,8 @@ echo "RTEMS gcc-%{gcc_version}-6%{?dist}/newlib-%{newlib_version}-7%{?dist}" > g
     *jc1) ;;
     *jvgenmain) ;;
     */libgfortran*.*) echo "$i" >> build/files.gfortran ;;
+    %{!?with_pygdb:*/libstdc++*gdb.py*) rm ${RPM_BUILD_ROOT}/$i ;;} # ignore for now
+    %{?with_pygdb:*/libstdc++*gdb.py*) >> build/files.g++ ;;}
     */libstdc++.*) echo "$i" >> build/files.g++ ;;
     */libsupc++.*) echo "$i" >> build/files.g++ ;;
     *) echo "$i" >> build/files.gcc ;;
@@ -459,7 +596,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-avr-rtems4.10-binutils
-# Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-7%{?dist}
+# Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-8%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -477,7 +614,7 @@ Summary:        libgcc for avr-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-7%{?dist}
+Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-8%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-avr-rtems4.10-gcc-libgcc
@@ -507,7 +644,10 @@ libgcc avr-rtems4.10-gcc.
 %dir %{_libexecdir}/gcc/avr-rtems4.10/%{gcc_version}
 %{_libexecdir}/gcc/avr-rtems4.10/%{gcc_version}/cc1%{_exeext}
 %{_libexecdir}/gcc/avr-rtems4.10/%{gcc_version}/collect2%{_exeext}
-
+%if "%{gcc_version}" >= "4.5.0"
+%{?with_lto:%{_libexecdir}/gcc/avr-rtems4.10/%{gcc_version}/lto%{_exeext}}
+%{_libexecdir}/gcc/avr-rtems4.10/%{gcc_version}/lto-wrapper%{_exeext}
+%endif
 
 %files -n rtems-4.10-avr-rtems4.10-gcc-libgcc -f build/files.gcc
 %defattr(-,root,root)
@@ -519,11 +659,6 @@ libgcc avr-rtems4.10-gcc.
 %dir %{_gcclibdir}/gcc/avr-rtems4.10/%{gcc_version}/include
 
 %if "%{gcc_version}" > "4.0.3"
-%if "avr-rtems4.10" != "bfin-rtems4.10"
-%if "avr-rtems4.10" != "avr-rtems4.10"
-%dir %{_gcclibdir}/gcc/avr-rtems4.10/%{gcc_version}/include/ssp
-%endif
-%endif
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
@@ -592,7 +727,7 @@ Summary:      	C Library (newlib) for avr-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        7%{?dist}
+Release:        8%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -613,7 +748,7 @@ Newlib C Library for avr-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        7%{?dist}
+Release:        8%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 

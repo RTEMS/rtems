@@ -52,7 +52,7 @@ Name:		rtems-4.10-sh-rtems4.10-gdb
 Summary:	Gdb for target sh-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -60,33 +60,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  %{_host_rpmprefix}gcc
 
 %define build_sim --enable-sim
-%if "%{_build}" != "%{_host}"
-# psim doesn't support Cdn-X
-%if "sh-rtems4.10" == "powerpc-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%endif
 
-%ifos mingw mingw32
-# Mingw lacks functions required by the simulator
-%if "sh-rtems4.10" == "sparc-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%if "sh-rtems4.10" == "h8300-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%if "%{gdb_version}" >= "6.8.50"
-%if "sh-rtems4.10" == "m32c-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%endif
-%if "sh-rtems4.10" == "lm32-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%if "sh-rtems4.10" == "mipstx39-rtems4.10"
-%define build_sim --disable-sim
-%endif
-%endif
 
 %if "%{gdb_version}" >= "6.6"
 # suse
