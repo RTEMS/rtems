@@ -1,3 +1,5 @@
+#include <bsp.h>
+#if !BSP_SMALL_MEMORY
 /*
  *  $Id$
  *
@@ -2304,3 +2306,4 @@ History ()
 
     msglist (hist);
 }
+#endif /* BSP_SMALL_MEMORY */

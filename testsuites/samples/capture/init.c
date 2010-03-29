@@ -36,6 +36,9 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+#if BSP_SMALL_MEMORY
+  printf("NO Capture Engine. MEMORY TOO SMALL");
+#else
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
   rtems_event_set     out;
@@ -59,13 +62,5 @@ rtems_task Init(
   setup_tasks_to_watch ();
 
   rtems_task_delete (RTEMS_SELF);
-
-  printf( "\nblocking main\n" );
-
-  rtems_event_receive (RTEMS_EVENT_1, RTEMS_WAIT | RTEMS_EVENT_ANY,
-                       0, &out);
-
-  printf( "\n*** END OF UNLIMITED TASK TEST ***\n" );
-  exit( 0 );
+#endif
 }
-
