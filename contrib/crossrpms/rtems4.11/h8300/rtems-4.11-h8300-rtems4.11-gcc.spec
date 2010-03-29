@@ -46,9 +46,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.5-20100318
-%define gcc_version 4.5.0
-%define gcc_rpmvers %{expand:%(echo "4.5.0" | tr - _ )}
+%define gcc_pkgvers 4.4.3
+%define gcc_version 4.4.3
+%define gcc_rpmvers %{expand:%(echo "4.4.3" | tr - _ )}
 
 %define newlib_pkgvers		1.18.0
 %define newlib_version		1.18.0
@@ -246,7 +246,7 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 
 %if "%{gcc_version}" == "4.5.0"
 Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5-20100311-rtems4.11-20100317.diff
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5-20100325-rtems4.11-20100326.diff
 %endif
 %if "%{gcc_version}" == "4.4.3"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -271,7 +271,7 @@ Source1:        ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgve
 
 %if "%{newlib_version}" == "1.18.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20100310.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20100328.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
