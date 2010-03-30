@@ -1,3 +1,7 @@
+2010-03-30	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/dosfs/msdos_misc.c: Fix PR1491.
+	
 2010-03-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/isrthreaddispatch.c: Add include of config.h

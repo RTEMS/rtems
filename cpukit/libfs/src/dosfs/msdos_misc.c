@@ -22,6 +22,9 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <string.h>
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
 #include <assert.h>
 #include <rtems/libio_.h>
 
@@ -107,6 +110,7 @@ msdos_short_name_hex(char* sfn, int num)
  *     true the name is long, else the name is short.
  *
  */
+#define MSDOS_NAME_TYPE_PRINT 0
 static msdos_name_type_t
 msdos_name_type(const char *name, int name_len)
 {
@@ -120,18 +124,34 @@ msdos_name_type(const char *name, int name_len)
         bool is_dot = *name == '.';
         msdos_name_type_t type = msdos_is_valid_name_char(*name);
 
+#if MSDOS_NAME_TYPE_PRINT
+        printf ("MSDOS_NAME_TYPE: c:%02x type:%d\n", *name, type);
+#endif
+        
         if ((type == MSDOS_NAME_INVALID) || (type == MSDOS_NAME_LONG))
             return type;
 
         if (dot_at >= 0)
         {
             if (is_dot || ((count - dot_at) > 3))
+            {
+#if MSDOS_NAME_TYPE_PRINT
+                printf ("MSDOS_NAME_TYPE: LONG[1]: is_dot:%d, at:%d cnt\n",
+                        is_dot, dot_at, count);
+#endif
                 return MSDOS_NAME_LONG;
+            }
         }
         else
         {
             if (count == 8 && !is_dot)
+            {
+#if MSDOS_NAME_TYPE_PRINT
+                printf ("MSDOS_NAME_TYPE: LONG[2]: is_dot:%d, at:%d cnt\n",
+                        is_dot, dot_at, count);
+#endif
                 return MSDOS_NAME_LONG;
+            }
         }
 
         if (is_dot)
@@ -146,8 +166,16 @@ msdos_name_type(const char *name, int name_len)
     }
 
     if (lowercase && uppercase)
+    {
+#if MSDOS_NAME_TYPE_PRINT
+        printf ("MSDOS_NAME_TYPE: LONG[3]\n");
+#endif
         return MSDOS_NAME_LONG;
-
+    }
+    
+#if MSDOS_NAME_TYPE_PRINT
+    printf ("MSDOS_NAME_TYPE: SHORT[1]\n");
+#endif
     return MSDOS_NAME_SHORT;
 }
 
@@ -161,6 +189,7 @@ msdos_name_type(const char *name, int name_len)
  *     true the name is long, else the name is short.
  *
  */
+#define MSDOS_L2S_PRINT 0
 msdos_name_type_t
 msdos_long_to_short(const char *lfn, int lfn_len, char* sfn, int sfn_len)
 {
@@ -178,12 +207,18 @@ msdos_long_to_short(const char *lfn, int lfn_len, char* sfn, int sfn_len)
     if ((lfn[0] == '.') && (lfn_len == 1))
     {
         sfn[0] = '.';
+#if MSDOS_L2S_PRINT
+        printf ("MSDOS_L2S: SHORT[1]: lfn:'%s' SFN:'%s'\n", lfn, sfn);
+#endif
         return MSDOS_NAME_SHORT;
     }
 
     if ((lfn[0] == '.') && (lfn[1] == '.') && (lfn_len == 2))
     {
         sfn[0] = sfn[1] = '.';
+#if MSDOS_L2S_PRINT
+        printf ("MSDOS_L2S: SHORT[2]: lfn:'%s' SFN:'%s'\n", lfn, sfn);
+#endif
         return MSDOS_NAME_SHORT;
     }
 
@@ -195,7 +230,12 @@ msdos_long_to_short(const char *lfn, int lfn_len, char* sfn, int sfn_len)
             break;
 
     if (i == lfn_len)
+    {
+#if MSDOS_L2S_PRINT
+        printf ("MSDOS_L2S: INVALID[1]: lfn:'%s' SFN:'%s'\n", lfn, sfn);
+#endif
         return MSDOS_NAME_INVALID;
+    }
 
     /*
      * Is this a short name ?
@@ -204,10 +244,18 @@ msdos_long_to_short(const char *lfn, int lfn_len, char* sfn, int sfn_len)
     type = msdos_name_type (lfn, lfn_len);
 
     if (type == MSDOS_NAME_INVALID)
+    {
+#if MSDOS_L2S_PRINT
+        printf ("MSDOS_L2S: INVALID[2]: lfn:'%s' SFN:'%s'\n", lfn, sfn);
+#endif
         return MSDOS_NAME_INVALID;
+    }
 
     msdos_filename_unix2dos (lfn, lfn_len, sfn);
 
+#if MSDOS_L2S_PRINT
+    printf ("MSDOS_L2S: TYPE:%d lfn:'%s' SFN:'%s'\n", type, lfn, sfn);
+#endif
     return type;
 }
 
@@ -989,7 +1037,7 @@ int msdos_find_name_in_fat_file(
     fat_pos_t        lfn_start;
     bool             lfn_matched = false;
     uint8_t          lfn_checksum = 0;
-    int              lfn_entries = 0;
+    int              lfn_entries;
     int              lfn_entry = 0;
     uint32_t         empty_space_offset = 0;
     uint32_t         empty_space_entry = 0;
@@ -1005,11 +1053,17 @@ int msdos_find_name_in_fat_file(
     lfn_start.cln = lfn_start.ofs = FAT_FILE_SHORT_NAME;
 
     /*
-     * If the file name is long how many short directory
-     * entries are needed ?
+     * Set the number of short entries needed to store the LFN. If the name
+     * is short still check for possible long entries with the short name.
+     *
+     * In PR1491 we need to have a LFN for a short file name entry. To
+     * test this make this test always fail, ie add "0 &&".
      */
-    if (name_type == MSDOS_NAME_LONG)
-        lfn_entries = ((name_len - 1) + MSDOS_LFN_LEN_PER_ENTRY) / MSDOS_LFN_LEN_PER_ENTRY;
+    if (create_node && (name_type == MSDOS_NAME_SHORT))
+      lfn_entries = 0;
+    else
+      lfn_entries =
+        ((name_len - 1) + MSDOS_LFN_LEN_PER_ENTRY) / MSDOS_LFN_LEN_PER_ENTRY;
 
     if (FAT_FD_OF_ROOT_DIR(fat_fd) &&
         (fs_info->fat.vol.type & (FAT_FAT12 | FAT_FAT16)))
@@ -1020,8 +1074,9 @@ int msdos_find_name_in_fat_file(
     entries_per_block = bts2rd / MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE;
 
 #if MSDOS_FIND_PRINT
-    printf ("MSFS:[1] cn:%i ebp:%li bts2rd:%li lfne:%d nl:%i n:%s\n",
-            create_node, entries_per_block, bts2rd, lfn_entries, name_len, name);
+    printf ("MSFS:[1] nt:%d, cn:%i ebp:%li bts2rd:%li lfne:%d nl:%i n:%s\n",
+            name_type, create_node, entries_per_block, bts2rd,
+            lfn_entries, name_len, name);
 #endif
     /*
      * Scan the directory seeing if the file is present. While
@@ -1146,7 +1201,7 @@ int msdos_find_name_in_fat_file(
                     int   i;
 #if MSDOS_FIND_PRINT
                     printf ("MSFS:[4.2] lfn:%c entry:%i checksum:%i\n",
-                            lfn_start.cln == FAT_FILE_SHORT_NAME ? 't' : 'f',
+                            lfn_start.cln == FAT_FILE_SHORT_NAME ? 'f' : 't',
                             *MSDOS_DIR_ENTRY_TYPE(entry) & MSDOS_LAST_LONG_ENTRY_MASK,
                             *MSDOS_DIR_LFN_CHECKSUM(entry));
 #endif
@@ -1263,6 +1318,9 @@ int msdos_find_name_in_fat_file(
                 }
                 else
                 {
+#if MSDOS_FIND_PRINT
+                    printf ("MSFS:[9.1] SFN entry, lfn_matched:%i\n", lfn_matched);
+#endif
                     /*
                      * SFN entry found.
                      *
@@ -1282,6 +1340,10 @@ int msdos_find_name_in_fat_file(
 
                         if (lfn_entry || (lfn_checksum != cs))
                             lfn_matched = false;
+#if MSDOS_FIND_PRINT
+                        printf ("MSFS:[9.2] checksum, lfn_matched:%i, lfn_entry:%i, lfn_checksum:%02x/%02x\n",
+                                lfn_matched, lfn_entry, lfn_checksum, cs);
+#endif
                     }
 
                     /*
@@ -1298,6 +1360,9 @@ int msdos_find_name_in_fat_file(
                                  MSDOS_DIR_NAME(name_dir_entry),
                                  MSDOS_SHORT_NAME_LEN) == 0)))
                     {
+#if MSDOS_FIND_PRINT
+                        printf ("MSFS:[9.3] SNF found\n");
+#endif
                         /*
                          * We get the entry we looked for - fill the position
                          * structure and the 32 bytes of the short entry
@@ -1359,13 +1424,15 @@ int msdos_find_name_in_fat_file(
     lfn_checksum = 0;
     if (name_type == MSDOS_NAME_LONG)
     {
-        uint8_t* p = (uint8_t*) MSDOS_DIR_NAME(name_dir_entry);
-        int      i;
         int      slot = (((empty_space_offset * bts2rd) + empty_space_entry) /
                          MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE) + lfn_entries + 1;
-
         msdos_short_name_hex(MSDOS_DIR_NAME(name_dir_entry), slot);
+    }
 
+    if (lfn_entries)
+    {
+        uint8_t* p = (uint8_t*) MSDOS_DIR_NAME(name_dir_entry);
+        int      i;
         for (i = 0; i < 11; i++, p++)
             lfn_checksum =
                 ((lfn_checksum & 1) ? 0x80 : 0) + (lfn_checksum >> 1) + *p;
