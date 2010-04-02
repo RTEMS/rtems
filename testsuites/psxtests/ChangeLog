@@ -1,3 +1,11 @@
+2010-04-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psxhdrs/proc01.c, psxhdrs/proc02.c, psxhdrs/proc07.c,
+	psxhdrs/proc08.c, psxhdrs/proc09.c, psxhdrs/proc10.c,
+	psxhdrs/proc11.c, psxhdrs/proc12.c, psxhdrs/proc13.c,
+	psxhdrs/proc14.c, psxhdrs/signal20.c, psxhdrs/signal21.c:
+	#include <unistd.h>.
+
 2009-12-28	Shrikant Gaikwad <n3oo3n@gmail.com>
 
 	* psx13/test.c, psx13/psx13.scn Added new routine PipeTestNull()
