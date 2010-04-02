@@ -15,6 +15,7 @@
 #include "config.h"
 #endif
 
+#include <unistd.h> /* getpid */
 #include <sched.h>
 #include <errno.h>
 

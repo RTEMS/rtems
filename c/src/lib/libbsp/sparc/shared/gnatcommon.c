@@ -5,6 +5,8 @@
  *
  */
 
+#include <unistd.h> /* getpid */
+
 #include <bsp.h>
 #include <rtems/bspIo.h>
 #include <signal.h>
