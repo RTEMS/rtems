@@ -50,6 +50,8 @@
 
 /* This driver uses the file-system interface to the i2c bus */
 
+#include <unistd.h> /* write, read, close */
+
 #include <rtems.h>
 #include <rtems/rtc.h>
 #include <libchip/rtc.h>
