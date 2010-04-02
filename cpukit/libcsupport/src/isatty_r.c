@@ -21,6 +21,7 @@
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE__ISATTY_R)
 
+#include <unistd.h>
 #include <reent.h>
 #include <sys/stat.h>
 

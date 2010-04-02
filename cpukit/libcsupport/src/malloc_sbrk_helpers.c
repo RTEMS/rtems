@@ -15,6 +15,8 @@
 #include "config.h"
 #endif
 
+#include <unistd.h> /* sbrk */
+
 #include <rtems.h>
 #include <rtems/malloc.h>
 #include "malloc_p.h"
