@@ -12,7 +12,7 @@
  *  $Id$
  */
 
-#include <signal.h>
+#include <unistd.h>
 
 void test( void );
 

@@ -13,6 +13,7 @@
  */
 
 #include <sys/types.h>
+#include <unistd.h>
 #include <limits.h>   /* for LOGIN_NAME_MAX */
 
 void test( void );
