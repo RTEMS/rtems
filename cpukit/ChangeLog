@@ -1,3 +1,7 @@
+2010-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/src/sched_rr_get_interval.c: #include <unistd.h>.
+
 2010-03-30	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/dosfs/msdos_misc.c: Fix PR1491.
