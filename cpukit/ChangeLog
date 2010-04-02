@@ -1,5 +1,7 @@
 2010-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/isatty_r.c, libcsupport/src/malloc_sbrk_helpers.c:
+	#include <unistd.h>.
 	* posix/src/sched_rr_get_interval.c: #include <unistd.h>.
 
 2010-03-30	Chris Johns <chrisj@rtems.org>
