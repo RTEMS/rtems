@@ -37,6 +37,8 @@
 #ifndef _SYS_SELECT_H_
 #define	_SYS_SELECT_H_
 
+#include <sys/time.h> /* struct timeval */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
