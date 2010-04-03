@@ -28,10 +28,6 @@ $(PROJECT_INCLUDE)/rtems/posix/sigset.h: include/rtems/posix/sigset.h $(PROJECT_
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/sigset.h
 
 if HAS_PTHREADS
-$(PROJECT_INCLUDE)/sched.h: include/sched.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sched.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sched.h
-
 $(PROJECT_INCLUDE)/aio.h: include/aio.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/aio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/aio.h
