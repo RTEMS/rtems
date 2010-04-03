@@ -1,3 +1,8 @@
+2010-04-03	Joel Sherrill <joel.sherrill@oarcorp.org>
+
+	* posix/src/psxtransschedparam.c, posix/src/pthread.c,
+	posix/src/pthreadcreate.c: Reflect POSIX sched_parm changes.
+
 2010-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shttpd/auth.c, shttpd/config.c, shttpd/io_cgi.c,
