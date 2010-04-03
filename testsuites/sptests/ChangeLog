@@ -1,3 +1,7 @@
+2010-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp62/init.c, sp65/init.c: #include <unistd.h>.
+
 2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp43/init.c: Readdress use of ctype methods per recommendation from
