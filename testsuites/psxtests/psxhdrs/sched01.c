@@ -34,11 +34,11 @@ void test( void )
 
   param.sched_priority = 0;
 #ifdef _POSIX_SPORADIC_SERVER
-  param.ss_low_priority = 0;
-  param.ss_replenish_period.tv_sec = 0;
-  param.ss_replenish_period.tv_nsec = 0;
-  param.ss_initial_budget.tv_sec = 0;
-  param.ss_initial_budget.tv_nsec = 0;
+  param.sched_ss_low_priority = 0;
+  param.sched_ss_repl_period.tv_sec = 0;
+  param.sched_ss_repl_period.tv_nsec = 0;
+  param.sched_ss_init_budget.tv_sec = 0;
+  param.sched_ss_init_budget.tv_nsec = 0;
 #endif
 
   result = sched_setparam( pid, &param );

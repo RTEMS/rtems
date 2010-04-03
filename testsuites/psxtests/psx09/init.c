@@ -31,13 +31,14 @@ void print_schedparam(
 {
   printf( "%ssched priority      = %d\n", prefix, schedparam->sched_priority );
 #if defined(_POSIX_SPORADIC_SERVER)
-  printf( "%sss_low_priority     = %d\n", prefix, schedparam->ss_low_priority );
-  printf( "%sss_replenish_period = (%ld, %ld)\n", prefix,
-     schedparam->ss_replenish_period.tv_sec,
-     schedparam->ss_replenish_period.tv_nsec );
-  printf( "%sss_initial_budget = (%ld, %ld)\n", prefix,
-     schedparam->ss_initial_budget.tv_sec,
-     schedparam->ss_initial_budget.tv_nsec );
+  printf( "%ssched_ss_low_priority     = %d\n",
+      prefix, schedparam->sched_ss_low_priority );
+  printf( "%ssched_ss_repl_period = (%ld, %ld)\n", prefix,
+     schedparam->sched_ss_repl_period.tv_sec,
+     schedparam->sched_ss_repl_period.tv_nsec );
+  printf( "%ssched_ss_init_budget = (%ld, %ld)\n", prefix,
+     schedparam->sched_ss_init_budget.tv_sec,
+     schedparam->sched_ss_init_budget.tv_nsec );
 #else
   printf( "%s_POSIX_SPORADIC_SERVER is not defined\n" );
 #endif
@@ -78,13 +79,13 @@ void *POSIX_Init(
   sprintf( buffer, " - current priority = %d", priority );
   print_current_time( "Init: ", buffer );
 
-  schedparam.ss_replenish_period.tv_sec = 0;
-  schedparam.ss_replenish_period.tv_nsec = 500000000;  /* 1/2 second */
-  schedparam.ss_initial_budget.tv_sec = 0;
-  schedparam.ss_initial_budget.tv_nsec = 250000000;    /* 1/4 second */
+  schedparam.sched_ss_repl_period.tv_sec = 0;
+  schedparam.sched_ss_repl_period.tv_nsec = 500000000;  /* 1/2 second */
+  schedparam.sched_ss_init_budget.tv_sec = 0;
+  schedparam.sched_ss_init_budget.tv_nsec = 250000000;    /* 1/4 second */
 
   schedparam.sched_priority = sched_get_priority_max(SCHED_SPORADIC);
-  schedparam.ss_low_priority = sched_get_priority_max(SCHED_SPORADIC) - 2;
+  schedparam.sched_ss_low_priority = sched_get_priority_max(SCHED_SPORADIC) - 2;
 
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
@@ -118,17 +119,17 @@ void *POSIX_Init(
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
   rtems_test_assert(  !status );
 
-  schedparam.ss_replenish_period.tv_sec = 0;
-  schedparam.ss_replenish_period.tv_nsec = 500000000;  /* 1/2 second */
-  schedparam.ss_initial_budget.tv_sec = 0;
-  schedparam.ss_initial_budget.tv_nsec = 250000000;    /* 1/4 second */
+  schedparam.sched_ss_repl_period.tv_sec = 0;
+  schedparam.sched_ss_repl_period.tv_nsec = 500000000;  /* 1/2 second */
+  schedparam.sched_ss_init_budget.tv_sec = 0;
+  schedparam.sched_ss_init_budget.tv_nsec = 250000000;    /* 1/4 second */
 
   HIGH_PRIORITY = sched_get_priority_max( SCHED_SPORADIC );
   MEDIUM_PRIORITY = sched_get_priority_max( SCHED_SPORADIC ) - 2;
   LOW_PRIORITY = sched_get_priority_max( SCHED_SPORADIC ) - 4;
 
   schedparam.sched_priority = HIGH_PRIORITY;
-  schedparam.ss_low_priority = LOW_PRIORITY;
+  schedparam.sched_ss_low_priority = LOW_PRIORITY;
 
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
