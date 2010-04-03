@@ -10,6 +10,8 @@
 
 #include "defs.h"
 
+#include <unistd.h>
+
 static int
 write_cgi(struct stream *stream, const void *buf, size_t len)
 {

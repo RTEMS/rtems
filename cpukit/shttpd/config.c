@@ -10,6 +10,8 @@
 
 #include "defs.h"
 
+#include <unistd.h>
+
 /*
  * Configuration parameters setters
  */

@@ -10,6 +10,8 @@
 
 #include "defs.h"
 
+#include <unistd.h>
+
 static int
 read_socket(struct stream *stream, void *buf, size_t len)
 {
