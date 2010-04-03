@@ -1,3 +1,9 @@
+2010-04-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psx07/init.c, psx09/init.c, psx12/init.c, psxhdrs/pthread11.c,
+	psxhdrs/pthread22.c, psxhdrs/sched01.c, psxhdrs/sched03.c:
+	Reflect POSIX changes to sched_param.
+
 2010-04-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psxhdrs/proc01.c, psxhdrs/proc02.c, psxhdrs/proc07.c,
