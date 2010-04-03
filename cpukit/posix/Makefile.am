@@ -26,7 +26,7 @@ include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
 if HAS_PTHREADS
 # include
 
-include_HEADERS = include/sched.h include/aio.h include/mqueue.h \
+include_HEADERS = include/aio.h include/mqueue.h \
     include/semaphore.h include/devctl.h
 
 # include/rtems/posix
