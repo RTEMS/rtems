@@ -10,6 +10,7 @@
  */
 
 #include <tmacros.h>
+#include <unistd.h>
 
 #if defined(INHERIT_CEILING)
   #define TEST_NAME                "66"

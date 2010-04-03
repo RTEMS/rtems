@@ -10,6 +10,7 @@
  */
 
 #include <tmacros.h>
+#include <unistd.h>
 
 rtems_id      Region;
 uint32_t      Region_Memory[256] CPU_STRUCTURE_ALIGNMENT;
