@@ -1,3 +1,9 @@
+2010-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shttpd/auth.c, shttpd/config.c, shttpd/io_cgi.c,
+	shttpd/io_file.c, shttpd/io_socket.c, shttpd/shttpd.c:
+	#include <unistd.h>.
+
 2010-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/select.h: #include <sys/time.h>.
