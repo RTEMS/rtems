@@ -226,7 +226,7 @@ int pthread_create(
   if ( schedpolicy == SCHED_SPORADIC ) {
     _Watchdog_Insert_ticks(
       &api->Sporadic_timer,
-      _Timespec_To_ticks( &api->schedparam.ss_replenish_period )
+      _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period )
     );
   }
 

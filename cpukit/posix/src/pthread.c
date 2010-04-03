@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -48,9 +48,9 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
   SCHED_FIFO,                 /* schedpolicy */
   {                           /* schedparam */
     2,                        /* sched_priority */
-    0,                        /* ss_low_priority */
-    { 0L, 0 },                /* ss_replenish_period */
-    { 0L, 0 }                 /* ss_initial_budget */
+    0,                        /* sched_ss_low_priority */
+    { 0L, 0 },                /* sched_ss_repl_period */
+    { 0L, 0 }                 /* sched_ss_init_budget */
   },
   PTHREAD_CREATE_JOINABLE,    /* detachstate */
   1                           /* cputime_clock_allowed */
@@ -74,11 +74,11 @@ void _POSIX_Threads_Sporadic_budget_TSR(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   /* ticks is guaranteed to be at least one */
-  ticks = _Timespec_To_ticks( &api->schedparam.ss_initial_budget );
+  ticks = _Timespec_To_ticks( &api->schedparam.sched_ss_init_budget );
 
   the_thread->cpu_time_budget = ticks;
 
-  new_priority = _POSIX_Priority_To_core( api->ss_high_priority );
+  new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
   the_thread->real_priority = new_priority;
 
   /*
@@ -101,7 +101,7 @@ void _POSIX_Threads_Sporadic_budget_TSR(
   }
 
   /* ticks is guaranteed to be at least one */
-  ticks = _Timespec_To_ticks( &api->schedparam.ss_replenish_period );
+  ticks = _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period );
 
   _Watchdog_Insert_ticks( &api->Sporadic_timer, ticks );
 }
@@ -124,7 +124,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
    */
   the_thread->cpu_time_budget = 0xFFFFFFFF; /* XXX should be based on MAX_U32 */
 
-  new_priority = _POSIX_Priority_To_core( api->schedparam.ss_low_priority );
+  new_priority = _POSIX_Priority_To_core(api->schedparam.sched_ss_low_priority);
   the_thread->real_priority = new_priority;
 
   /*
@@ -137,7 +137,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
   if ( the_thread->resource_count == 0 ) {
     /*
      *  Make sure we are actually lowering it. If they have lowered it
-     *  to logically lower than ss_low_priority, then we do not want to
+     *  to logically lower than sched_ss_low_priority, then we do not want to
      *  change it.
      */
     if ( the_thread->current_priority < new_priority ) {

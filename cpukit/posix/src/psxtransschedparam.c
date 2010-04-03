@@ -49,19 +49,19 @@ int _POSIX_Thread_Translate_sched_param(
   }
 
   if ( policy == SCHED_SPORADIC ) {
-    if ( (param->ss_replenish_period.tv_sec == 0) &&
-         (param->ss_replenish_period.tv_nsec == 0) )
+    if ( (param->sched_ss_repl_period.tv_sec == 0) &&
+         (param->sched_ss_repl_period.tv_nsec == 0) )
       return EINVAL;
 
-    if ( (param->ss_initial_budget.tv_sec == 0) &&
-         (param->ss_initial_budget.tv_nsec == 0) )
+    if ( (param->sched_ss_init_budget.tv_sec == 0) &&
+         (param->sched_ss_init_budget.tv_nsec == 0) )
       return EINVAL;
 
-    if ( _Timespec_To_ticks( &param->ss_replenish_period ) <
-	 _Timespec_To_ticks( &param->ss_initial_budget ) )
+    if ( _Timespec_To_ticks( &param->sched_ss_repl_period ) <
+	 _Timespec_To_ticks( &param->sched_ss_init_budget ) )
       return EINVAL;
 
-    if ( !_POSIX_Priority_Is_valid( param->ss_low_priority ) )
+    if ( !_POSIX_Priority_Is_valid( param->sched_ss_low_priority ) )
       return EINVAL;
 
     *budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
