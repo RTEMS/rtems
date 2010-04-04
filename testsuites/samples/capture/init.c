@@ -41,7 +41,6 @@ rtems_task Init(
 #else
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
-  rtems_event_set     out;
 
   /* lower the task priority to allow created tasks to execute */
 
