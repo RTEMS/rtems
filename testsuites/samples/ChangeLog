@@ -1,3 +1,7 @@
+2010-04-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* capture/init.c: Remove unused variable "out".
+
 2010-03-29	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* capture/init.c, capture/test1.c, paramoia/init.c,
