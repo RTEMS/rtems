@@ -19,6 +19,7 @@
 #include "config.h"
 #endif
 
+#include <unistd.h> /* close */
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
