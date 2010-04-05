@@ -52,6 +52,22 @@ $(PROJECT_INCLUDE)/mcf5223x/mcf5223x.h: mcf5223x/include/mcf5223x.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5223x/mcf5223x.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5223x/mcf5223x.h
 endif
+if mcf5225x
+$(PROJECT_INCLUDE)/mcf5225x/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf5225x
+	@: > $(PROJECT_INCLUDE)/mcf5225x/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5225x/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mcf5225x/mcf5225x.h: mcf5225x/include/mcf5225x.h $(PROJECT_INCLUDE)/mcf5225x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5225x/mcf5225x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5225x/mcf5225x.h
+
+if HAS_NETWORKING
+$(PROJECT_INCLUDE)/mcf5225x/fec.h: mcf5225x/include/fec.h $(PROJECT_INCLUDE)/mcf5225x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5225x/fec.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5225x/fec.h
+endif ## HAS_NETWORKING
+endif
 if mcf5235
 $(PROJECT_INCLUDE)/mcf5235/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf5235

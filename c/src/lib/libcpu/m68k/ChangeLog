@@ -1,3 +1,9 @@
+2010-04-05	Thomas Znidar <t.znidar@embed-it.com>
+
+	* Makefile.am, configure.ac, preinstall.am: Add mcf5225x support.
+	* mcf5225x/include/fec.h, mcf5225x/include/mcf5225x.h,
+	mcf5225x/network/fec.c: New files.
+
 2010-03-16      Eric Norum <wenorum@lbl.gov>
 
     * mcf5282/include/mcf5282.h: Fix hex constants.

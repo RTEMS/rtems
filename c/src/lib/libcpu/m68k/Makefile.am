@@ -116,6 +116,16 @@ mcf5223x_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mcf5223x_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if mcf5225x
+## mcf5225x/include
+include_mcf5225xdir = $(includedir)/mcf5225x
+include_mcf5225x_HEADERS = mcf5225x/include/mcf5225x.h
+# Network
+if HAS_NETWORKING
+include_mcf5225x_HEADERS += mcf5225x/include/fec.h
+endif ## HAS_NETWORKING
+endif
+
 if mcf5235
 ## mcf5235/include
 include_mcf5235dir = $(includedir)/mcf5235
