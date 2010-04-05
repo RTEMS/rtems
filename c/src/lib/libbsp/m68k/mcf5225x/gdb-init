@@ -1,0 +1,48 @@
+#
+# Show the exception stack frame.
+#
+define show-exception-sframe
+ set $frsr = *(unsigned short *)((unsigned long)$sp + 2)
+ set $frpc = *(unsigned long *)((unsigned long)$sp + 4)
+ set $frfvo = *(unsigned short *)((unsigned long)$sp + 0)
+ set $frcode = $frfvo >> 12
+ set $frvect = ($frfvo & 0xFFF) >> 2
+ set $frstatus = ((($frfvo >> 10) & 3) << 2) | ($frfvo & 3)
+ printf "EXCEPTION -- SR:0x%X  PC:0x%X  FRAME:0x%x  VECTOR:%d  STATUS:%d\n", $frsr, $frpc, $frcode, $frvect, $frstatus
+ if $frstatus == 4
+  printf " Fault Type: Error on instruction fetch"
+ end
+ if $frstatus == 8
+  printf " Fault Type: Error on operand write"
+ end
+ if $frstatus == 12
+  printf " Fault Type: Error on operand read"
+ end
+ if $frstatus == 9
+  printf " Fault Type: Attempted write to write-protected space"
+ end
+end
+
+# Add -v and -d flags for bdm info
+# Add -B flags to utilize hardware breakpoints when they are availiable
+
+#target remote | m68k-bdm-gdbserver pipe /dev/bdmcf0
+target remote | m68k-bdm-gdbserver pipe /dev/tblcf2 -B
+#monitor set remote-debug 1
+
+monitor bdm-reset
+
+# Set VBR to the beginning of what will be SRAM
+monitor bdm-ctl-set 0x0801 0x20000000
+
+# Set RAMBAR1
+monitor bdm-ctl-set 0x0C05 0x20000021
+
+# Set FLASHBAR
+monitor bdm-ctl-set 0x0C04 0x00000061
+
+# Enable PST[3:0] signals
+set *((char*) 0x40100074) = 0x0F
+
+# Add the load when debugging from ram which won't happen with rtems!
+#load

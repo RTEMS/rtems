@@ -1,0 +1,11 @@
+2010-04-05	Thomas Znidar <t.znidar@embed-it.com>
+
+	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac, gdb-init,
+	preinstall.am, clock/clock.c, console/console.c, console/debugio.c,
+	include/bsp.h, include/tm27.h, make/custom/mcf5225x.cfg,
+	start/start.S, startup/bspclean.c, startup/bspstart.c,
+	startup/init5225x.c, startup/linkcmds, timer/timer.c: New files.
+
+Thomas Znidar <t.znidar@embed-it.com>
+
+
