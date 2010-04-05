@@ -375,6 +375,7 @@ void    rtems_monitor_pause_cmd(int, char **, const rtems_monitor_command_arg_t*
 void    rtems_monitor_fatal_cmd(int, char **, const rtems_monitor_command_arg_t*, bool);
 void    rtems_monitor_continue_cmd(int, char **, const rtems_monitor_command_arg_t*, bool);
 void    rtems_monitor_debugger_cmd(int, char **, const rtems_monitor_command_arg_t*, bool);
+void    rtems_monitor_reset_cmd(int, char **, rtems_monitor_command_arg_t*, bool);
 void    rtems_monitor_node_cmd(int, char **, const rtems_monitor_command_arg_t*, bool);
 void    rtems_monitor_symbols_loadup(void);
 int     rtems_monitor_insert_cmd(rtems_monitor_command_entry_t *);

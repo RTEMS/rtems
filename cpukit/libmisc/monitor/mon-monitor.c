@@ -229,6 +229,13 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { .status_code = RTEMS_SUCCESSFUL },		/* exit value */
       &rtems_monitor_commands[20],
     },
+		 { "reset",
+      "(SW)Resets the System.",
+      0,
+      rtems_monitor_reset_cmd,
+      { 0 },
+      &rtems_monitor_commands[21],
+    },
 #ifdef RTEMS_POSIX_API
     { "pthread",
       "Display information about the specified pthreads. "
@@ -237,11 +244,11 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_PTHREAD },
-      &rtems_monitor_commands[21],
+      &rtems_monitor_commands[22],
     },
-  #define RTEMS_MONITOR_DEBUGGER_NEXT 22
+  #define RTEMS_MONITOR_DEBUGGER_NEXT 23
 #else
-  #define RTEMS_MONITOR_DEBUGGER_NEXT 21
+  #define RTEMS_MONITOR_DEBUGGER_NEXT 22
 #endif
 #ifdef CPU_INVOKE_DEBUGGER
     { "debugger",
@@ -283,6 +290,17 @@ rtems_monitor_suspend(rtems_interval timeout)
                                  timeout,
                                  &event_set);
     return status;
+}
+
+void __attribute__((weak))
+rtems_monitor_reset_cmd(
+												int argc,
+    										char **argv,
+    										rtems_monitor_command_arg_t* command_arg,
+												bool verbose
+)
+{
+
 }
 
 void
