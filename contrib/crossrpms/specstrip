@@ -166,30 +166,86 @@ foreach (@buffer0)
 my @buffer3;
 foreach my $i ( @buffer2 )
 {
-  print STDERR $i->{state}, $i->{line}, "\n" if $verbose > 1;
+  print STDERR "STATE:", $i->{state}, " LINE:", $i->{line}, "\n" if $verbose > 1;
   if ( $i->{state} =~ m/($ppat)/ ) {
-  } elsif ( $i->{state} =~ m/.*<"([a-zA-Z_0-9\.\-]+)" (!=|==) "([a-zA-Z_0-9\.\-]+)">.*/ ) {
-  # Filter out constant conditionals
-    if ( "$2" eq "==" ) {
-      if ( "$1" eq "$3" ) {
-        if ( $i->{line} =~ m/^%(if|else|endif).*$/ ) {
-        } else {
-          push @buffer3, $i->{line}, "\n";
-        }
-      }
-    } elsif ( "$2" eq "!=" ){
-      if ( "$1" ne "$3" ) {
-        if ( $i->{line} =~ m/^%(if|else|endif).*$/ ) {
-        } else {
-          push @buffer3, $i->{line}, "\n";
-        }
-      }
-    } else {
-      die "invalid condition: $i->{state}";
-    }
   } else {
-    push @buffer3, $i->{line}, "\n"
+          push @buffer3, $i->{line};
   }
 }
 
-print STDOUT @buffer3;
+#foreach my $line ( @buffer3 )
+#{
+#  print STDERR "L:<$line>\n";
+#}
+
+my @buffer4;
+@condstack = ();
+push @condstack, "<>";
+foreach my $line ( @buffer3 )
+{
+#  print STDERR "READ:{", $line, "}\n";
+  if ( $line =~/^%if\s+"([a-zA-Z_0-9\.\-]+)"\s+==\s+"([a-zA-Z_0-9\.\-]+)"\s*$/ )
+  {
+    if ( "$1" eq "$2" ) {
+      push @condstack,"<TRUE:$1 == $2>";
+    } else {
+      push @condstack,"<FALSE:$1 == $2>";
+    }
+  } elsif ( $line =~/^%if\s+"([a-zA-Z_0-9\.\-]+)"\s+!=\s+"([a-zA-Z_0-9\.\-]+)"\s*$/ )
+  {
+    if ( "$1" ne "$2" ) {
+      push @condstack,"<TRUE:$1 != $2>";
+    } else {
+      push @condstack,"<FALSE:$1 != $2>";
+    }
+  } elsif ( $line =~/^%if\s+(.*)\s*$/ )
+  {
+    my $exp = $1;
+    if ( $condstack[$#condstack] =~ m/<FALSE:.*\s*>$/ ) {
+      push @condstack,"<FALSE:$exp>";
+    } else {
+      push @condstack,"<IFOT:$exp>";
+      push @buffer4, "$line\n";
+    }
+  } elsif ( $line =~/^%if((os|narch)\s+.*)\s*$/ )
+  {
+    my $exp = $1;
+    if ( $condstack[$#condstack] =~ m/<FALSE:(.*)\s*>$/ ) {
+      push @condstack,"<FALSE:$exp>";
+    } else {
+      push @condstack,"<IFOT:$exp>";
+      push @buffer4, "$line\n";
+    }
+  } elsif ( $line =~ /^%else\s*$/ ) {
+    if ( $condstack[$#condstack] =~ m/<TRUE:(.*)\s*>$/ ) {
+      $condstack[$#condstack] = "<FALSE:$1>";
+    } elsif ( $condstack[$#condstack] =~ m/<FALSE:(.*)\s*>$/ ) {
+      $condstack[$#condstack] = "<TRUE:$1>";
+    } else {
+      push @buffer4, "$line\n";
+    }
+  } elsif ( $line =~ /^%endif\s*$/ ) {
+
+    if ( $condstack[$#condstack] =~ m/<TRUE:.*>$/ ) {
+#    print STDERR "ENDIF: TRUE\n";
+    } elsif ( $condstack[$#condstack] =~ m/<FALSE:.*>$/ ) {
+#    print STDERR "ENDIF: FALSE\n";
+    } else {
+      push @buffer4, "%endif\n";
+    }
+#    print STDERR "POP: $line\n";
+    pop @condstack;
+  } else {
+#  print STDERR "CATCH $condstack[$#condstack]:$line\n";
+    if ( $condstack[$#condstack] =~ m/<TRUE:.*>$/ ) {
+      push @buffer4, "$line\n";
+    } elsif ( $condstack[$#condstack] =~ m/<FALSE:.*>$/ ) {
+    } else {
+      push @buffer4, "$line\n";
+    }
+  }
+
+#  print STDERR @condstack, "LINE: $line\n";
+}
+
+print STDOUT @buffer4;
