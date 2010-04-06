@@ -52,7 +52,7 @@ Name:		rtems-4.10-powerpc-rtems4.10-gdb
 Summary:	Gdb for target powerpc-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -61,8 +61,10 @@ BuildRequires:  %{_host_rpmprefix}gcc
 
 %define build_sim --enable-sim
 
+%if "%{_build}" != "%{_host}"
 # psim doesn't support Cdn-X
 %define build_sim --disable-sim
+%endif
 
 %if "%{gdb_version}" >= "6.6"
 # suse
