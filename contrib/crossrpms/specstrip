@@ -77,11 +77,6 @@ foreach ( split(/,/,join(',',@languages)) ){
   $langs{$_} = 1;
 }
 
-my @condstack ;
-my @actionstack ;
-
-push @condstack,'<>';
-
 my @npatterns = (
   "(\"%\{_prefix\}\" (!=|==) \"/usr\")",
 
@@ -121,6 +116,11 @@ if ( $verbose > 1 ) {
 my @buffer0 = <> ;
 
 my @buffer2 ;
+
+my @condstack ;
+
+@condstack = ();
+push @condstack,'<>';
 foreach (@buffer0)
 {
    chomp $_;
