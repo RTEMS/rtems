@@ -52,7 +52,7 @@ Name:		rtems-4.11-lm32-rtems4.11-gdb
 Summary:	Gdb for target lm32-rtems4.11
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -61,8 +61,10 @@ BuildRequires:  %{_host_rpmprefix}gcc
 
 %define build_sim --enable-sim
 
+%ifos mingw mingw32
 # Mingw lacks functions required by the lm32 simulator
 %define build_sim --disable-sim
+%endif
 
 %if "%{gdb_version}" >= "6.6"
 # suse
