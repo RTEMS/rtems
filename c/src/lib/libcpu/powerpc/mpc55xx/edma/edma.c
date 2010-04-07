@@ -31,13 +31,17 @@
 
 #include <rtems/status-checks.h>
 
-#define MPC55XX_EDMA_CHANNEL_NUMBER 64U
+#if   ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517))
+#define MPC55XX_EDMA_CHANNEL_COUNT 16U
+#else /* ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517)) */
+#define MPC55XX_EDMA_CHANNEL_COUNT 64U
+#endif /* ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517)) */
 
-#define MPC55XX_EDMA_INVALID_CHANNEL MPC55XX_EDMA_CHANNEL_NUMBER
+#define MPC55XX_EDMA_INVALID_CHANNEL MPC55XX_EDMA_CHANNEL_COUNT
 
-#define MPC55XX_EDMA_IS_CHANNEL_INVALID( i) ((unsigned) (i) >= MPC55XX_EDMA_CHANNEL_NUMBER)
+#define MPC55XX_EDMA_IS_CHANNEL_INVALID( i) ((unsigned) (i) >= MPC55XX_EDMA_CHANNEL_COUNT)
 
-#define MPC55XX_EDMA_IS_CHANNEL_VALID( i) ((unsigned) (i) < MPC55XX_EDMA_CHANNEL_NUMBER)
+#define MPC55XX_EDMA_IS_CHANNEL_VALID( i) ((unsigned) (i) < MPC55XX_EDMA_CHANNEL_COUNT)
 
 #define MPC55XX_EDMA_IRQ_PRIORITY MPC55XX_INTC_DEFAULT_PRIORITY
 
@@ -78,7 +82,7 @@ static void mpc55xx_edma_interrupt_error_handler( void *arg)
 	do {
 		error_channels_update = 0;
 
-		for (i = 0; i < MPC55XX_EDMA_CHANNEL_NUMBER; ++i) {
+		for (i = 0; i < MPC55XX_EDMA_CHANNEL_COUNT; ++i) {
 			uint64_t channel_flags = 0;
 			unsigned minor_link = i;
 			unsigned major_link = i;
@@ -125,7 +129,7 @@ static void mpc55xx_edma_interrupt_error_handler( void *arg)
 	}
 
 	/* Clear the error interrupt requests */
-	for (i = 0; i < MPC55XX_EDMA_CHANNEL_NUMBER; ++i) {
+	for (i = 0; i < MPC55XX_EDMA_CHANNEL_COUNT; ++i) {
 		if (IS_FLAG_SET( error_channels, MPC55XX_EDMA_CHANNEL_FLAG( i))) {
 			EDMA.CER.R = (uint8_t) i;
 		}
@@ -170,7 +174,8 @@ rtems_status_code mpc55xx_edma_init(void)
 	EDMA.CR.B.ERGA = 1;
 
 	/* Clear TCDs */
-	memset( (void *)&EDMA.TCD [0], 0, sizeof( EDMA.TCD));
+	memset( (void *)&EDMA.TCD [0], 0, 
+		MPC55XX_EDMA_CHANNEL_COUNT * sizeof( EDMA.TCD[0]));
 
 	/* Error interrupt handlers */
 	sc = mpc55xx_interrupt_handler_install(
@@ -182,6 +187,8 @@ rtems_status_code mpc55xx_edma_init(void)
 		NULL
 	);
 	RTEMS_CHECK_SC( sc, "install low error interrupt handler");
+
+#if defined(MPC55XX_IRQ_EDMA_ERROR_HIGH)
 	sc = mpc55xx_interrupt_handler_install(
 		MPC55XX_IRQ_EDMA_ERROR_HIGH,
 		"eDMA Error (High)",
@@ -191,6 +198,7 @@ rtems_status_code mpc55xx_edma_init(void)
 		NULL
 	);
 	RTEMS_CHECK_SC( sc, "install high error interrupt handler");
+#endif /* defined(MPC55XX_IRQ_EDMA_ERROR_HIGH) */
 
 	return RTEMS_SUCCESSFUL;
 }

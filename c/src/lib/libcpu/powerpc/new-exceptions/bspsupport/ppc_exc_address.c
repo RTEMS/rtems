@@ -66,6 +66,10 @@ void *ppc_exc_vector_address(unsigned vector)
   }
 
   if (ppc_cpu_has_ivpr_and_ivor()) {
+    /*
+     * XXX: this directly matches the vector offsets in a e200z1, 
+     * which has hardwired IVORs (IVOR0=0,IVOR1=0x10,IVOR2=0x20...) 
+     */
     vector_offset >>= 4;
   }
 

@@ -66,26 +66,28 @@ static void ppc_exc_initialize_e200(void)
   /* Interupt vector prefix register */
   MTIVPR(ppc_exc_vector_base);
 
-  /* Interupt vector offset register */
-  MTIVOR(0,  0); /* Critical input */
-  MTIVOR(1,  ppc_exc_vector_address( ASM_MACH_VECTOR));
-  MTIVOR(2,  ppc_exc_vector_address( ASM_PROT_VECTOR));
-  MTIVOR(3,  ppc_exc_vector_address( ASM_ISI_VECTOR));
-  MTIVOR(4,  ppc_exc_vector_address( ASM_EXT_VECTOR));
-  MTIVOR(5,  ppc_exc_vector_address( ASM_ALIGN_VECTOR));
-  MTIVOR(6,  ppc_exc_vector_address( ASM_PROG_VECTOR));
-  MTIVOR(7,  ppc_exc_vector_address( ASM_FLOAT_VECTOR));
-  MTIVOR(8,  ppc_exc_vector_address( ASM_SYS_VECTOR));
-  MTIVOR(9,  0); /* APU unavailable */
-  MTIVOR(10, ppc_exc_vector_address( ASM_BOOKE_DEC_VECTOR));
-  MTIVOR(11, ppc_exc_vector_address( ASM_BOOKE_FIT_VECTOR));
-  MTIVOR(12, ppc_exc_vector_address( ASM_BOOKE_WDOG_VECTOR));
-  MTIVOR(13, ppc_exc_vector_address( ASM_BOOKE_ITLBMISS_VECTOR));
-  MTIVOR(14, ppc_exc_vector_address( ASM_BOOKE_DTLBMISS_VECTOR));
-  MTIVOR(15, ppc_exc_vector_address( ASM_TRACE_VECTOR));
-  MTIVOR(32, ppc_exc_vector_address( ASM_E200_SPE_UNAVAILABLE_VECTOR));
-  MTIVOR(33, ppc_exc_vector_address( ASM_E200_SPE_DATA_VECTOR));
-  MTIVOR(34, ppc_exc_vector_address( ASM_E200_SPE_ROUND_VECTOR));
+  if (ppc_cpu_has_ivor()) {
+    /* Interupt vector offset register */
+    MTIVOR(0,  0); /* Critical input */
+    MTIVOR(1,  ppc_exc_vector_address( ASM_MACH_VECTOR));
+    MTIVOR(2,  ppc_exc_vector_address( ASM_PROT_VECTOR));
+    MTIVOR(3,  ppc_exc_vector_address( ASM_ISI_VECTOR));
+    MTIVOR(4,  ppc_exc_vector_address( ASM_EXT_VECTOR));
+    MTIVOR(5,  ppc_exc_vector_address( ASM_ALIGN_VECTOR));
+    MTIVOR(6,  ppc_exc_vector_address( ASM_PROG_VECTOR));
+    MTIVOR(7,  ppc_exc_vector_address( ASM_FLOAT_VECTOR));
+    MTIVOR(8,  ppc_exc_vector_address( ASM_SYS_VECTOR));
+    MTIVOR(9,  0); /* APU unavailable */
+    MTIVOR(10, ppc_exc_vector_address( ASM_BOOKE_DEC_VECTOR));
+    MTIVOR(11, ppc_exc_vector_address( ASM_BOOKE_FIT_VECTOR));
+    MTIVOR(12, ppc_exc_vector_address( ASM_BOOKE_WDOG_VECTOR));
+    MTIVOR(13, ppc_exc_vector_address( ASM_BOOKE_ITLBMISS_VECTOR));
+    MTIVOR(14, ppc_exc_vector_address( ASM_BOOKE_DTLBMISS_VECTOR));
+    MTIVOR(15, ppc_exc_vector_address( ASM_TRACE_VECTOR));
+    MTIVOR(32, ppc_exc_vector_address( ASM_E200_SPE_UNAVAILABLE_VECTOR));
+    MTIVOR(33, ppc_exc_vector_address( ASM_E200_SPE_DATA_VECTOR));
+    MTIVOR(34, ppc_exc_vector_address( ASM_E200_SPE_ROUND_VECTOR));
+  }
 }
 
 rtems_status_code ppc_exc_initialize(
@@ -140,7 +142,8 @@ rtems_status_code ppc_exc_initialize(
   ppc_exc_msr_bits |= MSR_VE;
 #endif
  
-  if (ppc_cpu_is(PPC_e200z6)) {
+  if (ppc_cpu_is(PPC_e200z1) || 
+      ppc_cpu_is(PPC_e200z6)) {
     ppc_exc_initialize_e200();
   } else if (ppc_cpu_is_bookE() == PPC_BOOKE_STD || ppc_cpu_is_bookE() == PPC_BOOKE_E500) {
     ppc_exc_initialize_e500();

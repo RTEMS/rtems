@@ -19,9 +19,38 @@
  */
 
 #include <libcpu/powerpc-utility.h>
+#include <bspopts.h>
 
 .section ".text"
 
+/**
+ * @fn int mpc55xx_copy_8( const void *src, void *dest, size_t n)
+ *
+ * @brief Copy @a n bytes from @a src to @a dest with 8 byte reads and writes.
+ *
+ * The memory areas should not overlap.  The addresses @a src and @a dest have
+ * to be aligned on 8 byte boundaries.  The size @a n must be evenly divisible by 8.
+ * The SPE operations @b evxor, @b evlddx and @b evstddx will be used.
+ */
+#if       ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))
+GLOBAL_FUNCTION mpc55xx_copy_8
+#endif /* ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517)) */
+GLOBAL_FUNCTION mpc55xx_copy_4
+	/* Loop counter = data size / 4 */
+	srwi. r5, r5, 2
+	beqlr
+	mtctr r5
+	xor   r5,r5,r5
+copy_data4:
+	lwzx  r6, r5, r3
+	stwx  r6, r5, r4
+	addi r5, r5, 4
+	bdnz copy_data4
+
+	/* Return */
+	blr
+
+#if  !((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))
 /**
  * @fn int mpc55xx_copy_8( const void *src, void *dest, size_t n)
  *
@@ -48,7 +77,51 @@ copy_data:
 
 	/* Return */
 	blr
+#endif /*!((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))*/
 
+/**
+ * @fn int mpc55xx_zero_4( void *dest, size_t n)
+ *
+ * @brief Zero all @a n bytes starting at @a dest with 4 byte writes.
+ *
+ * The address @a dest has to be aligned on 4 byte boundaries.  The size @a n
+ * must be evenly divisible by 4.  No SPE operations are used.
+ */
+#if       ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))
+GLOBAL_FUNCTION mpc55xx_zero_32
+GLOBAL_FUNCTION mpc55xx_zero_8
+#endif /* ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517)) */
+GLOBAL_FUNCTION mpc55xx_zero_4
+	/* Create zero */
+	xor r0, r0, r0
+
+	/* Loop counter for the first bytes up to 16 bytes */
+	rlwinm. r9, r4, 29, 30, 31
+	beq zero_more4
+	mtctr r9
+	xor   r5,r5,r5
+
+zero_data4:
+	stwx r0, r5, r3
+	addi r5, r5, 4
+	bdnz zero_data4
+
+zero_more4:
+	/* More than 16 bytes? */
+	srwi. r9, r4, 4
+	beqlr
+	mtctr r9
+
+zero_big_data4:
+	stw r0,  0(r3)
+	stw r0,  4(r3)
+	stw r0,  8(r3)
+	stw r0, 12(r3)
+	addi r3, r3, 16
+	bdnz zero_big_data4
+	/* Return */
+	blr
+#if      !((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))
 /**
  * @fn int mpc55xx_zero_8( void *dest, size_t n)
  *
@@ -95,7 +168,6 @@ zero_big_data:
 	evstddx r0, r3, r8
 	addi r8, r8, 32
 	bdnz zero_big_data
-
 	/* Return */
 	blr
 
@@ -148,3 +220,4 @@ zero_big_line:
 
 	/* Return */
 	blr
+#endif  /*  !((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517)) */

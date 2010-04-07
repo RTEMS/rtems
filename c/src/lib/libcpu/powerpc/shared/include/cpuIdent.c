@@ -35,7 +35,8 @@ ppc_feature_t      current_ppc_features = {
   .has_8_bats = 0,
   .has_epic = 0,
   .has_shadowed_gprs = 0,
-  .has_ivpr_and_ivor = 0
+  .has_ivpr = 0,
+  .has_ivor = 0
 };
 
 char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
@@ -62,6 +63,8 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_8245:		return "MPC8245";
     case PPC_8540:		return "MPC8540";
     case PPC_PSIM:		return "PSIM";
+    case PPC_e200z0:		return "e200z0";
+    case PPC_e200z1:		return "e200z1";
     case PPC_e200z6:		return "e200z6";
     default:
       printk("Unknown CPU value of 0x%x. Please add it to "
@@ -102,6 +105,8 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_8245:
     case PPC_PSIM:
     case PPC_8540:
+    case PPC_e200z0:
+    case PPC_e200z1:
     case PPC_e200z6:
     case PPC_e300c1:
     case PPC_e300c2:
@@ -158,6 +163,8 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
 		current_ppc_features.is_bookE			= PPC_BOOKE_405;
 	break;
   	case PPC_8540:
+  	case PPC_e200z0:
+  	case PPC_e200z1:
   	case PPC_e200z6:
 		current_ppc_features.is_bookE			= PPC_BOOKE_E500;
 	default:
@@ -185,8 +192,14 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
   }
 
 	switch (current_ppc_cpu) {
+		case PPC_e200z0:
+		case PPC_e200z1:
+			current_ppc_features.has_ivpr = 1;
+			current_ppc_features.has_hwivor = 1;
+			break;
 		case PPC_e200z6:
-			current_ppc_features.has_ivpr_and_ivor = 1;
+			current_ppc_features.has_ivpr = 1;
+			current_ppc_features.has_ivor = 1;
 			break;
 		default:
 			break;

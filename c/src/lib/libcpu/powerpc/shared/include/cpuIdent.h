@@ -55,8 +55,10 @@ typedef enum
   PPC_e300c1  = 0x8083, /* e300c1  core, in MPC83xx*/
   PPC_e300c2  = 0x8084, /* e300c2  core */
   PPC_e300c3  = 0x8085, /* e300c3  core */
-  PPC_e200z6 = 0x8115,
-  PPC_PSIM = 0xfffe,  /* GDB PowerPC simulator -- fake version */
+  PPC_e200z0  = 0x8171,
+  PPC_e200z1  = 0x8144,
+  PPC_e200z6  = 0x8115,
+  PPC_PSIM    = 0xfffe,  /* GDB PowerPC simulator -- fake version */
   PPC_UNKNOWN = 0xffff
 } ppc_cpu_id_t;
 
@@ -79,7 +81,9 @@ typedef struct {
 	unsigned has_8_bats			: 1;
 	unsigned has_epic           : 1;
 	unsigned has_shadowed_gprs  : 1;
-	unsigned has_ivpr_and_ivor  : 1;
+	unsigned has_ivpr           : 1;
+	unsigned has_ivor           : 1;
+	unsigned has_hwivor         : 1;
 } ppc_feature_t;
 
 extern ppc_feature_t   current_ppc_features;
@@ -108,9 +112,16 @@ _PPC_FEAT_DECL(is_60x)
 _PPC_FEAT_DECL(has_8_bats)
 _PPC_FEAT_DECL(has_epic)
 _PPC_FEAT_DECL(has_shadowed_gprs)
-_PPC_FEAT_DECL(has_ivpr_and_ivor)
+_PPC_FEAT_DECL(has_ivpr)
+_PPC_FEAT_DECL(has_ivor)
+_PPC_FEAT_DECL(has_hwivor)
 
 #undef _PPC_FEAT_DECL
+
+static inline unsigned ppc_cpu_has_ivpr_and_ivor() { \
+  return ppc_cpu_has_ivpr() 
+    && (ppc_cpu_has_ivor() || ppc_cpu_has_hwivor());
+}
 
 static inline ppc_cpu_id_t ppc_cpu_current(void)
 {

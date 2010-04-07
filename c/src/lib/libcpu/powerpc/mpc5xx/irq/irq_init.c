@@ -38,12 +38,12 @@ static void nop_func(){}
 /*
  * default isOn function
  */
-static int not_connected() {return 0;}
+static int not_connected(void) {return 0;}
 
 /*
  * default possible isOn function
  */
-static int connected() {return 1;}
+static int connected(void) {return 1;}
 
 static rtems_irq_connect_data     	rtemsIrq[CPU_IRQ_COUNT];
 static rtems_irq_global_settings     	initial_config;
@@ -76,7 +76,7 @@ static rtems_irq_prio irqPrioTable[CPU_IRQ_COUNT]={
   0
 };
 
-void CPU_USIU_irq_init()
+void CPU_USIU_irq_init(void)
 {
   /*
    * In theory we should initialize two registers at least : SIMASK and

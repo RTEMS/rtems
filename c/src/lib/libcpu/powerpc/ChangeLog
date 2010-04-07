@@ -1,3 +1,15 @@
+2010-04-07      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc55xx/edma/edma.c, mpc55xx/esci/esci.c, mpc55xx/include/irq.h,
+	mpc55xx/include/reg-defs.h, mpc55xx/include/regs.h,
+	mpc55xx/misc/copy.S, mpc55xx/misc/fmpll.S, mpc5xx/irq/irq_init.c,
+	mpc5xx/vectors/vectors_init.c,
+	new-exceptions/bspsupport/ppc_exc_address.c,
+	new-exceptions/bspsupport/ppc_exc_categories.c,
+	new-exceptions/bspsupport/ppc_exc_initialize.c,
+	shared/include/cpuIdent.c, shared/include/cpuIdent.h: adapted for
+	GW_LCFM support
+
 2010-03-27      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* ppc403/clock/clock.c, ppc403/clock/clock_4xx.c: code changes to

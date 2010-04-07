@@ -53,14 +53,27 @@ GLOBAL_FUNCTION mpc55xx_fmpll_reset_config
 	 */
 	LA r4, FMPLL_ESYNCR2
 
-	DO_SETTING 0(r3)
+	lwz r5, 0(r3)
+	stw r5, 0(r4)
+	msync
 
 	lwz r5, 8(r3)
 	stw r5, (FMPLL_ESYNCR1-FMPLL_ESYNCR2)(r4)	
 	msync
+	bl mpc55xx_fmpll_wait_for_lock
 
 	DO_SETTING 4(r3)
 
+	/*
+	 * switch to PLL clock in SIU
+	 */
+	LA r4, SIU_SYSCLK
+	lwz r5, 0(r4)
+	LWI r6, ~SIU_SYSCLK_SYSCLKSEL_MASK
+	and r5, r5, r6
+	LWI r6, SIU_SYSCLK_SYSCLKSEL_PLL
+	or  r5, r5, r6
+	stw r5, 0(r4)
 #else
 	/*
 	 * for MPC5566: pass in ptr to array with:
@@ -72,7 +85,7 @@ GLOBAL_FUNCTION mpc55xx_fmpll_reset_config
 
 	DO_SETTING 0(r3)
 	DO_SETTING 4(r3)
-#endif
+
 	/* Enable loss-of-clock and loss-of-lock IRQs */
 	lwz r5, 0(r4)
 	LWI r6, FMPLL_SYNCR_LOCIRQ | FMPLL_SYNCR_LOLIRQ
@@ -82,6 +95,7 @@ GLOBAL_FUNCTION mpc55xx_fmpll_reset_config
 	LWI r6, ~FMPLL_SYNCR_LOCRE & ~FMPLL_SYNCR_LOLRE
 	and r5, r5, r6
 	stw r5, 0(r4)
+#endif
 
 	/* Restore link register and return */
 	mtlr r9
@@ -124,20 +138,20 @@ GLOBAL_FUNCTION mpc55xx_get_system_clock
 	rlwinm r5, r3,16, 28, 31
 
 	/* MFD */
-	rlwinm r6, r3,32, 24, 31
+	rlwinm r6, r3,0, 24, 31
 
 	LA r4, FMPLL_ESYNCR2
 	lwz r3, 0(r4)
 	/* ERFD */
-	rlwinm r7, r3,32, 26, 31
+	rlwinm r7, r3,0, 26, 31
 
 	LWI r8, MPC55XX_FMPLL_REF_CLOCK
 	addi r5, r5, 1
 	addi r6, r6,16
 	addi r7, r7, 1
-	mullw r6, r6, r8
-	divw r3, r6, r5
-	divw r3, r3, r7
+	divw r3, r8, r5  /* REF_CLOCK/PREDIV */
+	mullw r3, r6, r3 /* REF_CLOCK/PREDIV*MFD */
+	divw r3, r3, r7  /* REF_CLOCK/PREDIV*MFD/RFD */
 	
 #else
 	LA r4, FMPLL_SYNCR

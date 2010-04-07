@@ -426,7 +426,8 @@ extern "C" {
                 uint32_t BA:17;
                   uint32_t:3;
                 uint32_t PS:1;
-                  uint32_t:4;
+                  uint32_t:3;
+	        uint32_t AD_MUX:1; /* only MPC551x */
                 uint32_t BL:1;
                 uint32_t WEBS:1;
                 uint32_t TBDIP:1;
@@ -493,7 +494,9 @@ extern "C" {
                 uint32_t EARP:2;
                   uint32_t:4;
                 uint32_t MDIS:1;
-                  uint32_t:5;
+                  uint32_t:3;
+	        uint32_t D16_32:1; /* only for MPC551x */
+                uint32_t ADMUX:1;  /* only for MPC551x */
                 uint32_t DBM:1;
             } B;
         } MCR;
@@ -4424,8 +4427,8 @@ extern "C" {
 #define CAN_B     (*(volatile struct FLEXCAN2_tag *)  0xFFFC4000)
 #define CAN_C     (*(volatile struct FLEXCAN2_tag *)  0xFFFC8000)
 #define CAN_D     (*(volatile struct FLEXCAN2_tag *)  0xFFFCC000)
-#define CAN_D     (*(volatile struct FLEXCAN2_tag *)  0xFFFD0000)
-#define CAN_D     (*(volatile struct FLEXCAN2_tag *)  0xFFFD4000)
+#define CAN_E     (*(volatile struct FLEXCAN2_tag *)  0xFFFD0000)
+#define CAN_F     (*(volatile struct FLEXCAN2_tag *)  0xFFFD4000)
 
 #define EMIOS     (*(volatile struct EMIOS_tag *)     0xFFFE4000)
 #define SIU       (*(volatile struct SIU_tag *)       0xFFFE8000)

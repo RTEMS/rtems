@@ -398,12 +398,12 @@ static int mpc55xx_esci_termios_set_attributes( int minor, const struct termios 
 		return RTEMS_IO_ERROR;
 	}
 
-	/* Set control registers */
-	regs->CR1.R = cr1.R;
-	regs->CR2.R = cr2.R;
-
 	/* Disable LIN */
 	regs->LCR.R = 0;
+
+	/* Set control registers */
+	regs->CR2.R = cr2.R;
+	regs->CR1.R = cr1.R;
 
 	return RTEMS_SUCCESSFUL;
 }
