@@ -32,9 +32,9 @@
  * to be aligned on 8 byte boundaries.  The size @a n must be evenly divisible by 8.
  * The SPE operations @b evxor, @b evlddx and @b evstddx will be used.
  */
-#if       ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))
+#if       ((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517))
 GLOBAL_FUNCTION mpc55xx_copy_8
-#endif /* ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517)) */
+#endif /* ((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517)) */
 GLOBAL_FUNCTION mpc55xx_copy_4
 	/* Loop counter = data size / 4 */
 	srwi. r5, r5, 2
@@ -50,7 +50,7 @@ copy_data4:
 	/* Return */
 	blr
 
-#if  !((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))
+#if  !((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517))
 /**
  * @fn int mpc55xx_copy_8( const void *src, void *dest, size_t n)
  *
@@ -77,7 +77,7 @@ copy_data:
 
 	/* Return */
 	blr
-#endif /*!((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))*/
+#endif /*!((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517))*/
 
 /**
  * @fn int mpc55xx_zero_4( void *dest, size_t n)
@@ -87,10 +87,10 @@ copy_data:
  * The address @a dest has to be aligned on 4 byte boundaries.  The size @a n
  * must be evenly divisible by 4.  No SPE operations are used.
  */
-#if       ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))
+#if       ((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517))
 GLOBAL_FUNCTION mpc55xx_zero_32
 GLOBAL_FUNCTION mpc55xx_zero_8
-#endif /* ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517)) */
+#endif /* ((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517)) */
 GLOBAL_FUNCTION mpc55xx_zero_4
 	/* Create zero */
 	xor r0, r0, r0
@@ -121,7 +121,7 @@ zero_big_data4:
 	bdnz zero_big_data4
 	/* Return */
 	blr
-#if      !((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))
+#if      !((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517))
 /**
  * @fn int mpc55xx_zero_8( void *dest, size_t n)
  *
@@ -220,4 +220,4 @@ zero_big_line:
 
 	/* Return */
 	blr
-#endif  /*  !((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517)) */
+#endif  /*  !((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517)) */

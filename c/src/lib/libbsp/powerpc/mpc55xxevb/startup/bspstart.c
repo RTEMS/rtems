@@ -92,7 +92,7 @@ void bsp_predriver_hook()
 	}
 }
 
-#if ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517))
+#if ((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517))
 /*
  * define init values for FMPLL ESYNCRx
  * (used in start.S/fmpll.S)
@@ -136,7 +136,7 @@ const struct fmpll_syncr_vals_t {
     }
   };
 
-#else /* ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517)) */
+#else /* ((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517)) */
 
 const struct fmpll_syncr_vals_t {
   union SYNCR_tag syncr_temp;
@@ -157,7 +157,7 @@ const struct fmpll_syncr_vals_t {
     }
   };
 
-#endif /* ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517)) */
+#endif /* ((MPC55XX_CHIP_TYPE>=5510) && (MPC55XX_CHIP_TYPE<=5517)) */
 
 #if defined(BOARD_GWLCFM)
 static const mpc55xx_siu_pcr_entry_t siu_pcr_list[] = {

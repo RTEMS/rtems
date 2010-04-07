@@ -1,3 +1,8 @@
+2010-04-07      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* configure.ac, startup/bspstart.c:
+	renamed MPC55XX_CHIP_DERIVATE to MPC55XX_CHIP_TYPE
+
 2010-04-07	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 	* Makefile.am, configure.ac, preinstall.am, clock/clock-config.c,
 	make/custom/gwlcfm.cfg, make/custom/mpc5566evb.cfg,

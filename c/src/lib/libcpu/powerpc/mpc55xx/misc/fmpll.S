@@ -44,7 +44,7 @@ GLOBAL_FUNCTION mpc55xx_fmpll_reset_config
 	/* Save link register */
 	mflr r9
 
-#if ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517))
+#if ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517))
 	/*
 	 * for MPC5510: pass in ptr to array with:
 	 * off 0:  temp setting for ESYNCR2
@@ -131,7 +131,7 @@ fmpll_continue:
  * @brief Returns the system clock.
  */
 GLOBAL_FUNCTION mpc55xx_get_system_clock
-#if ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517))
+#if ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517))
 	LA r4, FMPLL_ESYNCR1
 	lwz r3, 0(r4)
 	/* EPREDIV */

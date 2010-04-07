@@ -1,5 +1,14 @@
 2010-04-07      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
+	* shared/include/cpuIdent.c, shared/include/cpuIdent.h: skip
+	version nibble when detecting e200 processor version
+	* mpc55xx/edma/edma.c, mpc55xx/include/irq.h,
+	mpc55xx/include/reg-defs.h, mpc55xx/include/regs.h,
+	mpc55xx/misc/copy.S, mpc55xx/misc/fmpll.S:
+	renamed MPC55XX_CHIP_DERIVATE to MPC55XX_CHIP_TYPE
+
+2010-04-07      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
 	* mpc55xx/edma/edma.c, mpc55xx/esci/esci.c, mpc55xx/include/irq.h,
 	mpc55xx/include/reg-defs.h, mpc55xx/include/regs.h,
 	mpc55xx/misc/copy.S, mpc55xx/misc/fmpll.S, mpc5xx/irq/irq_init.c,

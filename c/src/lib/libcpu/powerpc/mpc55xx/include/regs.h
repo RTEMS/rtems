@@ -4390,7 +4390,7 @@ extern "C" {
         .MAS6 = { .R = 0 }
     };
 
-#if ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517))
+#if ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517))
 /* Define memories */
 
 #define SRAM_START  0x40000000
@@ -4438,7 +4438,7 @@ extern "C" {
 #define EBI       (*(volatile struct EBI_tag *)       0xFFFF4000)
 #define FLASH     (*(volatile struct FLASH_tag *)     0xFFFF8000)
 
-#else /* ((MPC55XX_CHIP_DERIVATE >= 5510) && (MPC55XX_CHIP_DERIVATE <= 5517)) */
+#else /* ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517)) */
 /* Define memories */
 
 #define SRAM_START  0x40000000
