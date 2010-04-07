@@ -1,3 +1,8 @@
+2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/uart.c: Eliminate warnings.
+	* start/start.S: Verify boot_card() is passed NULL.
+
 2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/uart.c: Let _BSP_poll_char return int.
