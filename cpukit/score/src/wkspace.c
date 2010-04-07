@@ -19,7 +19,6 @@
 #include <rtems/config.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/interr.h>
-#include <rtems/config.h>
 
 #include <string.h>  /* for memset */
 

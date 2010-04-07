@@ -1,5 +1,9 @@
 2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/wkspace.c: Remove duplicate include.
+
+2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/monitor/mon-monitor.c, libmisc/monitor/monitor.h: Add const
 	to fix warning. Spacing.
 
