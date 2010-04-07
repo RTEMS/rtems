@@ -1,3 +1,8 @@
+2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/ide/ata.c: Use correct macro from RTEMS to determine whether
+	simple or PIC interrupt model.
+
 2010-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/rtc/ds1375.c: #include <unistd.h>.
