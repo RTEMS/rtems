@@ -75,18 +75,41 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
 
 ppc_cpu_id_t get_ppc_cpu_type(void)
 {
+  /*
+   * cpu types listed here have the lowermost nibble as a version identifier
+   * we will tweak them to the starndard version
+   */
+  const uint32_t ppc_cpu_id_version_nibble[] = {
+    PPC_e200z6,
+    PPC_e200z0,
+    PPC_e200z1};
+
   unsigned int pvr;
+  int i;
 
   if ( PPC_UNKNOWN != current_ppc_cpu )
   	return current_ppc_cpu;
 
   pvr = (_read_PVR() >> 16);
+  /*
+   * apply tweaks to ignore version
+   */
+  for (i = 0;
+       i < (sizeof(ppc_cpu_id_version_nibble)
+	    /sizeof(ppc_cpu_id_version_nibble[0]));
+       i++) {
+    if ((pvr & 0xfff0) == (ppc_cpu_id_version_nibble[i] & 0xfff0)) {
+      pvr = ppc_cpu_id_version_nibble[i];
+      break;
+    }
+  }
+
   current_ppc_cpu = (ppc_cpu_id_t) pvr;
 
   switch (pvr) {
     case PPC_405:
-	case PPC_405GP:
-	case PPC_405EX:
+    case PPC_405GP:
+    case PPC_405EX:
     case PPC_601:
     case PPC_5XX:
     case PPC_603:
