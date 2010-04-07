@@ -149,6 +149,7 @@ extern "C" {
   #define RTEMS_COMPILER_DEPRECATED_ATTRIBUTE
 #endif
 
+#ifndef ASM
 #ifdef RTEMS_POSIX_API
 /** The following is used by the POSIX implementation to catch bad paths.  */
 int POSIX_NOT_IMPLEMENTED( void );
@@ -164,6 +165,7 @@ int POSIX_NOT_IMPLEMENTED( void );
 typedef void * proc_ptr;
 
 #include <stddef.h>
+#endif
 
 #if !defined( TRUE ) || (TRUE != 1)
 /**  Boolean constant TRUE */
@@ -177,9 +179,12 @@ typedef void * proc_ptr;
 #define FALSE     (0)
 #endif
 
+#ifndef ASM
 #include <stdint.h>
+#endif
 #include <rtems/score/cpu.h>        /* processor specific information */
 
+#ifndef ASM
 /**
  *  This macro is used to obtain the offset of a field in a structure.
  */
@@ -200,6 +205,7 @@ extern const char _Copyright_Notice[];
 
 /** This macro defines the maximum length of a Classic API name. */
 #define RTEMS_MAXIMUM_NAME_LENGTH sizeof(rtems_name)
+#endif
 
 #ifdef __cplusplus
 }
