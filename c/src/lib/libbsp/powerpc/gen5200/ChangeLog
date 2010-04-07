@@ -1,3 +1,7 @@
+2010-04-07	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* start/start.S: fix sdram timing for MPC5200B chips
+
 2010-03-27	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* bestcomm/task_api/tasksetup_general.h,
