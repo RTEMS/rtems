@@ -1,3 +1,7 @@
+2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* arm_exc_abort.S: Fix warnings about TRUE/FALSE not defined.
+
 2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* arm_exc_abort.S, arm_exc_handler_high.c, arm_exc_handler_low.S,

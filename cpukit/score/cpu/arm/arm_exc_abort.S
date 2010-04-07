@@ -24,7 +24,7 @@
 #endif
 
 #include <rtems/asm.h>
-#include <rtems/score/cpu.h>
+#include <rtems/system.h>
 
 .extern rtems_fatal_error_occurred
 
