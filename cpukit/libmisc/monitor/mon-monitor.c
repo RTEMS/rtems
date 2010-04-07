@@ -229,7 +229,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { .status_code = RTEMS_SUCCESSFUL },		/* exit value */
       &rtems_monitor_commands[20],
     },
-		 { "reset",
+    { "reset",
       "(SW)Resets the System.",
       0,
       rtems_monitor_reset_cmd,
@@ -294,10 +294,10 @@ rtems_monitor_suspend(rtems_interval timeout)
 
 void __attribute__((weak))
 rtems_monitor_reset_cmd(
-												int argc,
-    										char **argv,
-    										rtems_monitor_command_arg_t* command_arg,
-												bool verbose
+  int argc,
+  char **argv,
+  const rtems_monitor_command_arg_t* command_arg,
+  bool verbose
 )
 {
 
