@@ -202,8 +202,6 @@ _start:
 	blx	r3			@ jump to user code
 
 	mov	r0, #0		@ command line
-
-
 	ldr	r3, =boot_card
 	blx	r3			@ jump to user code
 

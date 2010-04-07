@@ -1,3 +1,7 @@
+2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* start/start.S: Verify boot_card() is passed a NULL.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/gumstix.cfg: Remove RTEMS_BSP_FAMILY.

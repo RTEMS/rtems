@@ -103,6 +103,7 @@ _bss_init:
 
 
         /* Now we are prepared to start the BSP's C code */
+        mov     r0, #0
         bl      boot_card
 
         /*

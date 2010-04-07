@@ -3,11 +3,6 @@
  *  provided by Herman ...XXX
  */
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-
 	; .file	"crt0.s"
 	.ref	_c_int00
 	.global	start

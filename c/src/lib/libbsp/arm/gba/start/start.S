@@ -50,11 +50,6 @@
  * INABILITY TO USE THIS CODE.
  *****************************************************************************/
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-
 #define __asm__
 #include <rtems/asm.h>
 #include <asm_macros.h>
@@ -283,16 +278,17 @@
 
 /* Enter the C code.  If it returns, then restart */
     STATIC_THUMB_FUNCTION(_gba_call_arm_boot_card)
-        adr     r0, .Larm
-        bx      r0
+        adr     r1, .Larm
+        bx      r1
         .arm
     .Larm:
-        ldr     r0, =boot_card
-        bl      SYM(_gba_call_via_r0)
+        ldr     r1, =boot_card
+        mov     r0, #0
+        bl      SYM(_gba_call_via_r1)
 
         ldr     r0, =SYM(_gba_reset)
-    SYM(_gba_call_via_r0):
-        bx      r0
+    SYM(_gba_call_via_r1):
+        bx      r1
 
 /* GBA Reset  */
     PUBLIC_ARM_FUNCTION(_gba_reset)

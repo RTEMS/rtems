@@ -1,3 +1,7 @@
+2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* start/start.S: Verify boot_card() is passed a NULL.
+
 2009-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c: Let nds_getch return "int". Remove casts.

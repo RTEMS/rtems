@@ -309,6 +309,7 @@ __change_mode:
 #endif
 #endif
 
+        mov     r0, #0
 	bl	FUNCTION (boot_card)
 
 	bl	FUNCTION (bsp_cleanup)		/* Should not return.  */

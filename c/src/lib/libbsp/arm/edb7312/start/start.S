@@ -14,11 +14,6 @@
  *  $Id$
 */
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-
 /* Some standard definitions...*/
 
 .equ Mode_USR,        	     0x10
@@ -163,7 +158,8 @@ init2 :
 
 /* --- Now we enter the C code */
 
-    bl	boot_card
+	mov     r0, #0
+	bl	boot_card
 
 	ldmia	sp!, {r4-r12, lr}
 	mov	sp, r12

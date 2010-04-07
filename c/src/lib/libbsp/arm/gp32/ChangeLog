@@ -1,3 +1,7 @@
+2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* start/start.S: Verify boot_card() is passed a NULL.
+
 2010-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* smc/smc.c: Replace EBADRQC with EINVAL.
