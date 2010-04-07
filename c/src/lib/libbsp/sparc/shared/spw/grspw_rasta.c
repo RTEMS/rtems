@@ -70,7 +70,9 @@ static inline unsigned int memarea_to_hw(unsigned int addr) {
 
 void (*grspw_rasta_int_reg)(void *handler, int irq, void *arg) = 0;
 
+#ifdef GRSPW_STATIC_MEM
 static int grspw_rasta_calc_memoffs(int maxcores, int corenum, unsigned int *mem_base, unsigned int *mem_end, unsigned int *bdtable_base);
+#endif
 
 int grspw_rasta_interrupt_handler(unsigned int status);
 

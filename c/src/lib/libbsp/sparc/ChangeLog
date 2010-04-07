@@ -1,3 +1,9 @@
+2010-04-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/spw/grspw_rasta.c: Guard prototype of 
+	grspw_rasta_calc_memoffs in #ifdef GRSPW_STATIC_MEM to avoid
+	warning.
+
 2010-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/gnatcommon.c: #include <unistd.h>.
