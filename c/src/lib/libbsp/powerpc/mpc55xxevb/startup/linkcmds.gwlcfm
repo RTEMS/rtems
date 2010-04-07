@@ -1,0 +1,31 @@
+MEMORY
+{
+	ROM (RX)  : ORIGIN = 0x0, LENGTH = 1536M
+	RAM (AIW) : ORIGIN = 0x40000000, LENGTH = 80K
+	RAM_EXT   : ORIGIN = 0x20000000, LENGTH = 512K
+	NIRVANA   : ORIGIN = 0x0, LENGTH = 0
+}
+
+bsp_ram_start = ORIGIN (RAM);
+bsp_ram_end = ORIGIN (RAM) + LENGTH (RAM);
+bsp_ram_size = LENGTH (RAM);
+
+bsp_rom_start = ORIGIN (ROM);
+bsp_rom_end = ORIGIN (ROM) + LENGTH (ROM);
+bsp_rom_size = LENGTH (ROM);
+
+bsp_external_ram_start = ORIGIN (RAM_EXT);
+bsp_external_ram_end = ORIGIN (RAM_EXT) + LENGTH (RAM_EXT);
+bsp_external_ram_size = LENGTH (RAM_EXT);
+
+bsp_section_align = 32;
+
+REGION_ALIAS ("REGION_TEXT",      ROM);
+REGION_ALIAS ("REGION_VECTORS",   RAM);
+REGION_ALIAS ("REGION_DATA",      RAM);
+REGION_ALIAS ("REGION_BSS",       RAM_EXT);
+
+INCLUDE linkcmds.base
+
+bsp_workspace_start = bsp_section_bss_end;
+

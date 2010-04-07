@@ -26,7 +26,8 @@
 
 #include <libcpu/powerpc-utility.h>
 #include <mpc55xx/reg-defs.h>
-
+#include <bspopts.h>
+	
 .section ".entry", "ax"
 PUBLIC_VAR (start)
 .globl  fmpll_syncr_vals
@@ -82,8 +83,10 @@ start:
 	/* Config internal flash */
 	bl SYM (mpc55xx_flash_config)
 
+#if DATA_CACHE_ENABLE || INSTRUCTION_CACHE_ENABLE
 	/* FIXME: Config cache */
 	bl config_cache
+#endif /* DATA_CACHE_ENABLE || INSTRUCTION_CACHE_ENABLE */
 
 /*
  * TODO, FIXME: Enable cache in the MMU for the SRAM
@@ -127,11 +130,11 @@ start:
 	LA r4, bsp_ram_end
 
 	/* Assert: Proper alignment of destination start */
-	andi. r6, r3, 0x37
+	andi. r6, r3, 0x3f
 	bne twiddle
 
 	/* Assert: Proper alignment of destination end */
-	andi. r6, r4, 0x37
+	andi. r6, r4, 0x3f
 	bne twiddle
 
 	/* Data size = destination end - destination start */
@@ -181,14 +184,6 @@ start:
 /*
  * Prepare high level initialization
  */
-	LA r3, bsp_ram_start
-	LA r4, ppc_exc_vector_base
-	stw r3, 0(r4)
-
-	/* Set global BSP clock speed variable */
-	bl SYM (mpc55xx_get_system_clock)
-	LA r4, bsp_clock_speed
-	stw r3, 0(r4)
 
 	/* Create NULL */
 	li r0, 0

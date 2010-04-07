@@ -23,7 +23,8 @@ libbspstart_a_SOURCES += ../shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 # Link commands
-dist_project_lib_DATA += startup/linkcmds startup/linkcmds.memory
+dist_project_lib_DATA += startup/linkcmds.gwlcfm  startup/linkcmds.mpc5566evb \
+	startup/linkcmds.base	
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =

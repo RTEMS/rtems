@@ -159,7 +159,7 @@ const struct fmpll_syncr_vals_t {
 
 #endif /* ((MPC55XX_CHIP_DERIVATE>=5510) && (MPC55XX_CHIP_DERIVATE<=5517)) */
 
-#if defined(GWLCFM)
+#if defined(BOARD_GWLCFM)
 static const mpc55xx_siu_pcr_entry_t siu_pcr_list[] = {
   {  0,16,{.B.PA = 1,           .B.WPE = 0}}, /* PA[ 0..15] analog input */
   { 16, 4,{.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PB[ 0.. 4] LED/CAN_STBN out */
@@ -195,15 +195,19 @@ static const mpc55xx_siu_pcr_entry_t siu_pcr_list[] = {
   { 58, 4,{.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PD[10..13] LS_CAN_EN/LED out*/
   { 62, 4,{.B.PA = 0,.B.IBE = 1,.B.WPE = 0}}, /* PD[14..15] USB_FLGA/B    in */
 
-  { 64, 3,{.B.PA = 3,.B.IBE = 1,.B.WPE = 0}}, /* PE[ 0.. 2] MLBCLK/SI/DI  in */
-  { 67, 2,{.B.PA = 3,.B.OBE = 1,.B.WPE = 0}}, /* PE[ 3.. 4] MLBSO/DO      out*/
-  { 69, 1,{.B.PA = 3,.B.IBE = 1,.B.WPE = 0}}, /* PE[ 5.. 5] MLBSLOT       in */
-  { 70, 1,{.B.PA = 1,.B.OBE = 1,.B.WPE = 0}}, /* PE[ 6.. 6] CLKOUT        out*/
-  { 80, 1,{.B.PA = 1,.B.OBE = 1,.B.WPE = 0}}, /* PF[ 0.. 0] RD_WR         out*/
-  { 81, 1,{.B.PA = 0,.B.IBE = 1,.B.WPE = 0}}, /* PF[ 1.. 1] (nc)          in */
-  { 82,14,{.B.PA = 1,.B.OBE = 1,.B.WPE = 0}}, /* PF[ 2..14] ADDR/CS/...   out*/
-  { 96,16,{.B.PA = 1,.B.IBE = 1,.B.OBE = 1,.B.WPE = 0}}, 
-  /* PG[ 0..15] AD16..31   in/out*/
+  { 64, 3,{.B.PA = 3,.B.SRC = 1,.B.WPE = 0}}, /* PE[ 0.. 2] MLBCLK/SI/DI  in */
+  { 67, 2,{.B.PA = 3,.B.SRC = 1,.B.WPE = 0}}, /* PE[ 3.. 4] MLBSO/DO      out*/
+  { 69, 1,{.B.PA = 3,.B.SRC = 1,.B.WPE = 0}}, /* PE[ 5.. 5] MLBSLOT       in */
+  { 70, 1,{.B.PA = 1,.B.SRC = 3,.B.WPE = 0}}, /* PE[ 6.. 6] CLKOUT        out*/
+
+  { 80, 1,{.B.PA = 1,.B.SRC = 1,.B.WPE = 0}}, /* PF[ 0.. 0] RD_WR         out*/
+  { 81, 1,{.B.PA = 0,.B.SRC = 0,.B.WPE = 0}}, /* PF[ 1.. 1] (nc)          in */
+  { 82, 8,{.B.PA = 2,.B.SRC = 1,.B.WPE = 0}}, /* PF[ 2..11] ADDR[8..15]   out*/
+  { 90, 2,{.B.PA = 1,.B.SRC = 1,.B.WPE = 0}}, /* PF[ 2..11] CS[0..1]      out*/
+  { 92, 1,{.B.PA = 3,.B.SRC = 3,.B.WPE = 0}}, /* PF[    12] ALE           out*/
+  { 93, 3,{.B.PA = 1,.B.SRC = 1,.B.WPE = 0}}, /* PF[13..15] OE/WE         out*/
+
+  { 96,16,{.B.PA = 1,.B.SRC = 1,.B.WPE = 0}}, /* PG[ 0..15] AD16..31   in/out*/
 
   {112, 3,{.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PH[ 0.. 2] LED_EXT1-3.   out*/
   {115, 1,{.B.PA = 3,.B.OBE = 1,.B.WPE = 0}}, /* PH[ 3.. 3] CS2_ETH       out*/
@@ -228,7 +232,7 @@ static const mpc55xx_siu_pcr_entry_t siu_pcr_list[] = {
 
   {0,0}
 };
-#endif /* GWLCFM */
+#endif /* BOARD_GWLCFM */
 
 static void mpc55xx_ebi_init(void)
 {
@@ -240,6 +244,71 @@ static void mpc55xx_ebi_init(void)
 	 */
 	mpc55xx_siu_pcr_init(&SIU,
 			     siu_pcr_list);
+
+#if defined(BOARD_GWLCFM)
+	/*
+	 * init EBI for Muxed AD bus
+	 */
+	EBI.MCR.B.DBM = 1;
+	EBI.MCR.B.ADMUX = 1; /* use multiplexed bus */
+	EBI.MCR.B.D16_32 = 1; /* use lower AD bus    */
+
+	SIU.ECCR.B.EBDF = 3;  /* use CLK/4 as bus clock */
+
+	/* External SRAM (16 bit, 2 wait states, 512kB, no burst) */
+
+	cs.BR.B.BA = 0;
+	cs.BR.B.PS = 1;
+	cs.BR.B.AD_MUX = 1;
+	cs.BR.B.WEBS = 1;
+	cs.BR.B.TBDIP = 0;
+	cs.BR.B.BI = 1; 
+	cs.BR.B.V = 1;
+
+	cs.OR.B.AM = 0x1fff0;
+	cs.OR.B.SCY = 0;
+	cs.OR.B.BSCY = 0;
+
+	EBI.CS [0] = cs;
+
+	/* External Ethernet Controller (3 wait states, 64kB) */
+
+	mmu.MAS0.B.ESEL = 5;
+	mmu.MAS1.B.VALID = 1;
+	mmu.MAS1.B.IPROT = 1;
+	mmu.MAS1.B.TSIZ = 1;
+	mmu.MAS2.B.EPN = 0x3fff8;
+	mmu.MAS2.B.I = 1;
+	mmu.MAS2.B.G = 1;
+	mmu.MAS3.B.RPN = 0x3fff8;
+	mmu.MAS3.B.UW = 1;
+	mmu.MAS3.B.SW = 1;
+	mmu.MAS3.B.UR = 1;
+	mmu.MAS3.B.SR = 1;
+
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS0, mmu.MAS0.R);
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS1, mmu.MAS1.R);
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS2, mmu.MAS2.R);
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS3, mmu.MAS3.R);
+
+	asm volatile ("tlbwe");
+
+	cs.BR.B.BA = 0x7fff;
+	cs.BR.B.PS = 1;
+	cs.BR.B.BL = 0;
+	cs.BR.B.AD_MUX = 1;
+	cs.BR.B.WEBS = 0;
+	cs.BR.B.TBDIP = 0;
+	cs.BR.B.BI = 1;
+	cs.BR.B.V = 1;
+
+	cs.OR.B.AM = 0x1ffff;
+	cs.OR.B.SCY = 1;
+	cs.OR.B.BSCY = 0;
+
+	EBI.CS [3] = cs;
+#else /* defined(BOARD_GWLCFM) */
+	
 	/* External SRAM (2 wait states, 512kB, 4 word burst) */
 
 	cs.BR.B.BA = 0;
@@ -291,11 +360,18 @@ static void mpc55xx_ebi_init(void)
 	cs.OR.B.BSCY = 0;
 
 	EBI.CS [3] = cs;
+#endif /* defined(BOARD_GWLCFM) */
 }
 
 /**
  * @brief Start BSP.
  */
+LINKER_SYMBOL(bsp_section_bss_start);
+LINKER_SYMBOL(bsp_section_bss_end);
+LINKER_SYMBOL(bsp_section_sbss_start);
+LINKER_SYMBOL(bsp_section_sbss_end);
+LINKER_SYMBOL(bsp_section_vector_start);
+
 void bsp_start(void)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -304,6 +380,20 @@ void bsp_start(void)
 
 	uintptr_t interrupt_stack_start = (uintptr_t)bsp_ram_end - 2 * MPC55XX_INTERRUPT_STACK_SIZE;
 	uint32_t interrupt_stack_size = MPC55XX_INTERRUPT_STACK_SIZE;
+
+
+	/* Initialize External Bus Interface */
+	mpc55xx_ebi_init();
+
+	/*
+	 * make sure BSS/SBSS is cleared
+	 */
+	memset(bsp_section_bss_start,0,
+	       bsp_section_bss_end-bsp_section_bss_start);
+	memset(bsp_section_sbss_start,0,
+	       bsp_section_sbss_end-bsp_section_sbss_start);
+
+	ppc_exc_vector_base = bsp_section_vector_start;
 
 	RTEMS_DEBUG_PRINT( "BSP start ...\n");
 
@@ -326,8 +416,10 @@ void bsp_start(void)
 	/* Time reference value */
 	bsp_clicks_per_usec = bsp_clock_speed / 1000000;
 
-	/* Initialize External Bus Interface */
-	mpc55xx_ebi_init();
+	/*
+	 * determine clock speed
+	 */
+	bsp_clock_speed = mpc55xx_get_system_clock();
 
 	/* Initialize exceptions */
 	RTEMS_DEBUG_PRINT( "Initialize exceptions ...\n");
@@ -354,9 +446,8 @@ void bsp_start(void)
 	/* Initialize eMIOS */
 	mpc55xx_emios_initialize( 1);
 
-	return;
+	mpc55xx_emios_set_global_prescaler(MPC55XX_EMIOS_PRESCALER);
 
-	/* TODO */
 	/*
 	* Enable instruction and data caches. Do not force writethrough mode.
 	*/

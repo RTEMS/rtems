@@ -103,7 +103,7 @@ static void mpc55xx_clock_initialize( void)
   regs->ALTCADR.R = 0;
 
   /* Set control register */
-  ccr.B.MODE = MPC55XX_EMIOS_MODE_MC_UP_INT_CLK;
+  ccr.B.MODE = MPC55XX_EMIOS_MODE_MCB_UP_INT_CLK;
   ccr.B.UCPREN = 1;
   ccr.B.FEN = 1;
   ccr.B.FREN = 1;

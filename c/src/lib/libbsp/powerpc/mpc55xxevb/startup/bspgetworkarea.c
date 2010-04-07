@@ -25,11 +25,9 @@
 #define MPC55XX_INTERRUPT_STACK_SIZE 0x1000
 
 /* Symbols defined in linker command file */
-LINKER_SYMBOL(bsp_ram_start);
-LINKER_SYMBOL(bsp_ram_end);
-LINKER_SYMBOL(bsp_external_ram_start);
-LINKER_SYMBOL(bsp_external_ram_size);
-LINKER_SYMBOL(bsp_section_bss_end);
+LINKER_SYMBOL(bsp_workspace_start);
+LINKER_SYMBOL(bsp_workspace_end);
+LINKER_SYMBOL(bsp_external_ram_end);
 
 void bsp_get_work_area(
   void      **work_area_start,
@@ -38,9 +36,11 @@ void bsp_get_work_area(
   uintptr_t  *heap_size
 )
 {
-  *work_area_start = bsp_section_bss_end;
-  *work_area_size = bsp_ram_end - 2 *
-        MPC55XX_INTERRUPT_STACK_SIZE - bsp_section_bss_end;
-  *heap_start = bsp_external_ram_start;
-  *heap_size = (uintptr_t) bsp_external_ram_size;
+  size_t free_ram_size;
+  *work_area_start = bsp_workspace_start;
+
+  free_ram_size = (uint8_t *)bsp_external_ram_end - (uint8_t *)*work_area_start;
+  *work_area_size = (free_ram_size / 2);
+  *heap_start = (void *)((uint8_t *)*work_area_start + *work_area_size);
+  *heap_size = (free_ram_size / 2);
 }
