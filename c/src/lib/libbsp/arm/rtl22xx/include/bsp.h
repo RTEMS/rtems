@@ -85,7 +85,11 @@ extern "C" {
 #define Fcclk   (Fosc << 2)       //system freq 2^n time of  Fosc(1~32) <=60MHZ
 #define Fcco    (Fcclk <<2)       //CCO freq 2,4,8,16 time of Fcclk 156MHz~320MHz
 #define Fpclk   (Fcclk >>2) * 1   //VPB freq only(Fcclk / 4) 1~4
-#define M       Fcclk / Fosc
+/* This was M.  That is a BAD BAD public constant.  I renamed it to
+ * JOEL_M so it wouldn't conflict with user code.  If you can find
+ * a better name, fix this.  But nothing I found uses it.
+ */
+#define JOEL_M       Fcclk / Fosc
 #define P_min   Fcco_MIN / (2*Fcclk) + 1;
 #define P_max   Fcco_MAX / (2*Fcclk);
 

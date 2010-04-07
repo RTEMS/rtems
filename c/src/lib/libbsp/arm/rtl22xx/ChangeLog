@@ -1,3 +1,10 @@
+2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: Rename poorly named define "M" to "JOEL_M" since
+	I can't find it used anywhere.  When code breaks, someone will
+	suggest a better name.  But "M" conflicted with user code.
+	* start/start.S: Verify boot_card() is passed a NULL.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/rtl22xx.cfg: Remove RTEMS_BSP_FAMILY.
