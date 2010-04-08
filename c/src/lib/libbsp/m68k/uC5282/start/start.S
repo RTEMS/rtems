@@ -384,12 +384,12 @@ ZEROLOOPTEST:
     clrl    d0          | Pass in null to all boot_card() params
     movel   d0,a7@-         | command line
     jsr SYM(boot_card)      | Call C boot_card function to startup RTEMS
-        movel   a7@+,d0
+    movel   a7@+,d0
 MULTI_TASK_EXIT:
-        nop
-        nop
-        trap    #14
-        bra     MULTI_TASK_EXIT
+    nop
+    nop
+    trap    #14
+    bra     MULTI_TASK_EXIT
 
 
 END_CODE

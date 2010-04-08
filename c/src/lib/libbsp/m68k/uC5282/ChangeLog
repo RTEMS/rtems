@@ -1,3 +1,7 @@
+2010-04-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* start/start.S: Spacing.
+
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* console/console.c: adapted to new prototype for *_write
