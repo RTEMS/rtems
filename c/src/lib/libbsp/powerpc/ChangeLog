@@ -1,3 +1,6 @@
+2010-04-08      Eric Norum <wenorum@lbl.gov>
+    * shared/motorola/vpd.c: add include to pick up read()/close() prototypes.
+
 2010-03-27      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 	* shared/startup/bspstart.c, shared/startup/pgtbl_setup.c: fix
 	prototypes
