@@ -1,3 +1,8 @@
+2010-04-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libchip/ide/ata.c: Change missed use of ATA_USE_OLD_EXCEPTIONS to
+	CPU_SIMPLE_VECTORED_INTERRUPTS.
+
 2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/ide/ata.c: Use correct macro from RTEMS to determine whether

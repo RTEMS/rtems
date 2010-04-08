@@ -1153,7 +1153,7 @@ rtems_ata_initialize(rtems_device_major_number major,
     for (i = 0; i < (2 * IDE_CTRL_MAX_MINOR_NUMBER); i++)
         ata_devs[i].device = ATA_UNDEFINED_VALUE;
 
-#if defined(ATA_USE_OLD_EXCEPTIONS)
+#if defined(CPU_SIMPLE_VECTORED_INTERRUPTS)
     /* prepare ATA driver for handling  interrupt driven devices */
     for (i = 0; i < ATA_MAX_RTEMS_INT_VEC_NUMBER; i++)
         rtems_chain_initialize_empty(&ata_int_vec[i]);
