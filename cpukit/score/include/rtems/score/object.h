@@ -40,6 +40,14 @@ extern "C" {
  */
 
 /**
+ * @defgroup ScoreCPU CPU Architecture Support
+ *
+ * @ingroup Score
+ *
+ * @brief Provides CPU architecture dependent services.
+ */
+
+/**
  *  The following type defines the control block used to manage
  *  object names.
  */

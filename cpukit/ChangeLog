@@ -1,3 +1,7 @@
+2010-04-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/include/rtems/score/object.h: Documentation.
+
 2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/wkspace.c: Remove duplicate include.

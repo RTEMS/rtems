@@ -1,7 +1,9 @@
 /**
  * @file
  *
- * ARM support code.
+ * @ingroup ScoreCPU
+ *
+ * @brief ARM architecture support implementation.
  */
 
 /*

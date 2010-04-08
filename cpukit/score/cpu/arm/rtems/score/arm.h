@@ -1,5 +1,9 @@
 /**
- * @file rtems/score/arm.h
+ * @file
+ *
+ * @ingroup ScoreCPU
+ *
+ * @brief ARM assembler support API.
  */
 
 /*
@@ -23,6 +27,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @addtogroup ScoreCPU
+ *
+ * @{
+ */
 
 /*
  *  This file contains the information required to build
@@ -78,6 +88,8 @@ extern "C" {
  */
 
 #define CPU_NAME "ARM"
+
+/** @} */
 
 #ifdef __cplusplus
 }

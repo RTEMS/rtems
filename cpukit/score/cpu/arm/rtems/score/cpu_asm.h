@@ -1,5 +1,9 @@
 /**
- * @file rtems/score/cpu_asm.h
+ * @file
+ *
+ * @ingroup ScoreCPU
+ *
+ * @brief ARM assembler support API.
  */
 
 /*

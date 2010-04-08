@@ -1,5 +1,9 @@
 /**
- * @file rtems/score/cpu.h
+ * @file
+ *
+ * @ingroup ScoreCPU
+ *
+ * @brief ARM architecture support API.
  */
 
 /*
@@ -45,6 +49,16 @@
   #define FALSE 0
 #endif
 
+/**
+ * @defgroup ScoreCPUARM ARM Specific Support
+ *
+ * @ingroup ScoreCPU
+ *
+ * @brief ARM specific support.
+ *
+ * @{
+ */
+
 #ifdef __thumb__
   #define ARM_SWITCH_REGISTERS uint32_t arm_switch_reg
   #define ARM_SWITCH_TO_ARM ".align 2\nbx pc\n.arm\n"
@@ -58,6 +72,12 @@
   #define ARM_SWITCH_OUTPUT
   #define ARM_SWITCH_ADDITIONAL_OUTPUT
 #endif
+
+/**
+ * @name Program Status Register
+ *
+ * @{
+ */
 
 #define ARM_PSR_N (1 << 31)
 #define ARM_PSR_Z (1 << 30)
@@ -81,6 +101,16 @@
 #define ARM_PSR_M_ABT 0x17
 #define ARM_PSR_M_UND 0x1b
 #define ARM_PSR_M_SYS 0x1f
+
+/** @} */
+
+/** @} */
+
+/**
+ * @addtogroup ScoreCPU
+ *
+ * @{
+ */
 
 /* If someone uses THUMB we assume she wants minimal code size */
 #ifdef __thumb__
@@ -183,23 +213,19 @@
 
 #define CPU_ENABLE_C_ISR_DISPATCH_IMPLEMENTATION TRUE
 
+/** @} */
+
 #ifndef ASM
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef enum {
-  ARM_EXCEPTION_RESET = 0,
-  ARM_EXCEPTION_UNDEF = 1,
-  ARM_EXCEPTION_SWI = 2,
-  ARM_EXCEPTION_PREF_ABORT = 3,
-  ARM_EXCEPTION_DATA_ABORT = 4,
-  ARM_EXCEPTION_RESERVED = 5,
-  ARM_EXCEPTION_IRQ = 6,
-  ARM_EXCEPTION_FIQ = 7,
-  MAX_EXCEPTIONS = 8
-} Arm_symbolic_exception_name;
+/**
+ * @addtogroup ScoreCPU
+ *
+ * @{
+ */
 
 typedef struct {
   uint32_t register_cpsr;
@@ -216,23 +242,13 @@ typedef struct {
   uint32_t register_pc;
 } Context_Control;
 
-/* XXX This is out of date */
-typedef struct {
-  uint32_t register_r0;
-  uint32_t register_r1;
-  uint32_t register_r2;
-  uint32_t register_r3;
-  uint32_t register_ip;
-  uint32_t register_lr;
-} CPU_Exception_frame;
-
-typedef CPU_Exception_frame CPU_Interrupt_frame;
-
 typedef struct {
   /* Not supported */
 } Context_Control_fp;
 
 SCORE_EXTERN Context_Control_fp _CPU_Null_fp_context;
+
+extern uint32_t arm_cpu_mode;
 
 static inline uint32_t arm_interrupt_disable( void )
 {
@@ -277,40 +293,6 @@ static inline void arm_interrupt_flash( uint32_t level )
     : [arm_switch_reg] "=&r" (arm_switch_reg)
     : [level] "r" (level)
   );
-}
-
-static inline uint32_t arm_status_irq_enable( void )
-{
-  uint32_t arm_switch_reg;
-  uint32_t psr;
-
-  RTEMS_COMPILER_MEMORY_BARRIER();
-
-  asm volatile (
-    ARM_SWITCH_TO_ARM
-    "mrs %[psr], cpsr\n"
-    "bic %[arm_switch_reg], %[psr], #0x80\n"
-    "msr cpsr, %[arm_switch_reg]\n"
-    ARM_SWITCH_BACK
-    : [arm_switch_reg] "=&r" (arm_switch_reg), [psr] "=&r" (psr)
-  );
-
-  return psr;
-}
-
-static inline void arm_status_restore( uint32_t psr )
-{
-  ARM_SWITCH_REGISTERS;
-
-  asm volatile (
-    ARM_SWITCH_TO_ARM
-    "msr cpsr, %[psr]\n"
-    ARM_SWITCH_BACK
-    : ARM_SWITCH_OUTPUT
-    : [psr] "r" (psr)
-  );
-
-  RTEMS_COMPILER_MEMORY_BARRIER();
 }
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
@@ -413,9 +395,13 @@ static inline uint16_t CPU_swap_u16( uint16_t value )
   return (uint16_t) (((value & 0xffU) << 8) | ((value >> 8) & 0xffU));
 }
 
-/* XXX */
+/** @} */
 
-extern uint32_t arm_cpu_mode;
+/**
+ * @addtogroup ScoreCPUARM
+ *
+ * @{
+ */
 
 typedef struct {
   uint32_t r0;
@@ -439,6 +425,52 @@ typedef struct {
 
 typedef void arm_exc_abort_handler( arm_cpu_context *context );
 
+typedef enum {
+  ARM_EXCEPTION_RESET = 0,
+  ARM_EXCEPTION_UNDEF = 1,
+  ARM_EXCEPTION_SWI = 2,
+  ARM_EXCEPTION_PREF_ABORT = 3,
+  ARM_EXCEPTION_DATA_ABORT = 4,
+  ARM_EXCEPTION_RESERVED = 5,
+  ARM_EXCEPTION_IRQ = 6,
+  ARM_EXCEPTION_FIQ = 7,
+  MAX_EXCEPTIONS = 8
+} Arm_symbolic_exception_name;
+
+static inline uint32_t arm_status_irq_enable( void )
+{
+  uint32_t arm_switch_reg;
+  uint32_t psr;
+
+  RTEMS_COMPILER_MEMORY_BARRIER();
+
+  asm volatile (
+    ARM_SWITCH_TO_ARM
+    "mrs %[psr], cpsr\n"
+    "bic %[arm_switch_reg], %[psr], #0x80\n"
+    "msr cpsr, %[arm_switch_reg]\n"
+    ARM_SWITCH_BACK
+    : [arm_switch_reg] "=&r" (arm_switch_reg), [psr] "=&r" (psr)
+  );
+
+  return psr;
+}
+
+static inline void arm_status_restore( uint32_t psr )
+{
+  ARM_SWITCH_REGISTERS;
+
+  asm volatile (
+    ARM_SWITCH_TO_ARM
+    "msr cpsr, %[psr]\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [psr] "r" (psr)
+  );
+
+  RTEMS_COMPILER_MEMORY_BARRIER();
+}
+
 void arm_exc_data_abort_set_handler( arm_exc_abort_handler handler );
 
 void arm_exc_data_abort( void );
@@ -452,6 +484,20 @@ void bsp_interrupt_dispatch( void );
 void arm_exc_interrupt( void );
 
 void arm_exc_undefined( void );
+
+/** @} */
+
+/* XXX This is out of date */
+typedef struct {
+  uint32_t register_r0;
+  uint32_t register_r1;
+  uint32_t register_r2;
+  uint32_t register_r3;
+  uint32_t register_ip;
+  uint32_t register_lr;
+} CPU_Exception_frame;
+
+typedef CPU_Exception_frame CPU_Interrupt_frame;
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,12 @@
 /**
- * @file rtems/asm.h
+ * @file
  *
+ * @ingroup ScoreCPU
+ *
+ * @brief ARM assembler support API.
+ */
+
+/*
  *  This include file attempts to address the problems
  *  caused by incompatible flavors of assemblers and
  *  toolsets.  It primarily addresses variations in the
@@ -41,6 +47,16 @@
 #endif
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/arm.h>
+
+/**
+ * @defgroup ScoreCPUARMASM ARM Assembler Support
+ *
+ * @ingroup ScoreCPU
+ *
+ * @brief ARM assembler support.
+ *
+ * @{
+ */
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the
@@ -156,5 +172,7 @@
 .thumb
 #endif /* __thumb__ */
 .endm
+
+/** @} */
 
 #endif /* _RTEMS_ASM_H */

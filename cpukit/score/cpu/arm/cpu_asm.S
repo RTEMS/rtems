@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup ScoreCPU
+ *
+ * @brief ARM architecture support implementation.
+ */
+
 /*
  *  $Id$
  *

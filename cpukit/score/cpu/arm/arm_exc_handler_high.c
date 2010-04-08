@@ -1,7 +1,9 @@
 /**
  * @file
  *
- * ARM exception support code.
+ * @ingroup ScoreCPU
+ *
+ * @brief ARM exception support implementation.
  */
 
 /*
