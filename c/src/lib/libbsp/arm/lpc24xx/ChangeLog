@@ -1,3 +1,7 @@
+2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* make/custom/lpc24xx.inc: removed over-paranoid warning switches
+
 2010-04-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, configure.ac, include/lpc24xx.h, irq/irq.c,
