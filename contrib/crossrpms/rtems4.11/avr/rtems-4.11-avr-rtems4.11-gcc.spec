@@ -46,9 +46,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.4.3
-%define gcc_version 4.4.3
-%define gcc_rpmvers %{expand:%(echo "4.4.3" | tr - _ )}
+%define gcc_pkgvers 4.5.0-RC-20100406
+%define gcc_version 4.5.0
+%define gcc_rpmvers %{expand:%(echo "4.5.0" | tr - _ )}
 
 %define newlib_pkgvers		1.18.0
 %define newlib_version		1.18.0
@@ -58,7 +58,7 @@ Summary:      	avr-rtems4.11 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	4%{?dist}
+Release:      	5%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -232,7 +232,7 @@ BuildRequires:	rtems-4.11-avr-rtems4.11-binutils
 Requires:	rtems-4.11-gcc-common
 Requires:	rtems-4.11-avr-rtems4.11-binutils
 Requires:	rtems-4.11-avr-rtems4.11-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.11-avr-rtems4.11-newlib = %{newlib_version}-4%{?dist}
+Requires:	rtems-4.11-avr-rtems4.11-newlib = %{newlib_version}-5%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -331,7 +331,7 @@ cd ..
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-4%{?dist}/newlib-%{newlib_version}-4%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-5%{?dist}/newlib-%{newlib_version}-5%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -600,7 +600,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.11-avr-rtems4.11-binutils
-# Requires:       rtems-4.11-avr-rtems4.11-newlib = %{newlib_version}-4%{?dist}
+# Requires:       rtems-4.11-avr-rtems4.11-newlib = %{newlib_version}-5%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -618,7 +618,7 @@ Summary:        libgcc for avr-rtems4.11-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.11-avr-rtems4.11-newlib = %{newlib_version}-4%{?dist}
+Requires:       rtems-4.11-avr-rtems4.11-newlib = %{newlib_version}-5%{?dist}
 License:	GPL
 
 %description -n rtems-4.11-avr-rtems4.11-gcc-libgcc
@@ -731,7 +731,7 @@ Summary:      	C Library (newlib) for avr-rtems4.11
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        4%{?dist}
+Release:        5%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.11-newlib-common
@@ -752,7 +752,7 @@ Newlib C Library for avr-rtems4.11.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        4%{?dist}
+Release:        5%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
