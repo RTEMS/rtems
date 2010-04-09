@@ -1,16 +1,117 @@
 /* irq.h
  *
- *  Note: This file will not be compiled, it just a place holder by now
+ *  Common file, merged from s3c2400/irq/irq.h and s3c2410/irq/irq.h
  */
 
 #ifndef _IRQ_H_
 #define _IRQ_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-// This file is a place holder
-// The real irq.h preinstalled is s3c2410/irq/irq.h and s3c2410/irq/irq.h
-// change/refer to this files
-// TODO: clean irq.h in ARM BSP. there is lots of duplicated codes in cpu_name/irq/irq.h with cpukit/include/rtems/irq.h
-//
+/*
+ * Include some preprocessor value also used by assember code
+ */
+
+#include <rtems/irq.h>
+#include <rtems.h>
+#include <s3c24xx.h>
+
+extern void default_int_handler(rtems_irq_hdl_param unused);
+/*-------------------------------------------------------------------------+
+| Constants
++--------------------------------------------------------------------------*/
+
+#ifdef CPU_S3C2400
+  /* possible interrupt sources */
+#define BSP_EINT0             0
+#define BSP_EINT1             1
+#define BSP_EINT2             2
+#define BSP_EINT3             3
+#define BSP_EINT4             4
+#define BSP_EINT5             5
+#define BSP_EINT6             6
+#define BSP_EINT7             7
+#define BSP_INT_TICK          8
+#define BSP_INT_WDT           9
+#define BSP_INT_TIMER0       10
+#define BSP_INT_TIMER1       11
+#define BSP_INT_TIMER2       12
+#define BSP_INT_TIMER3       13
+#define BSP_INT_TIMER4       14
+#define BSP_INT_UERR01       15
+#define _res0                16
+#define BSP_INT_DMA0         17
+#define BSP_INT_DMA1         18
+#define BSP_INT_DMA2         19
+#define BSP_INT_DMA3         20
+#define BSP_INT_MMC          21
+#define BSP_INT_SPI          22
+#define BSP_INT_URXD0        23
+#define BSP_INT_URXD1        24
+#define BSP_INT_USBD         25
+#define BSP_INT_USBH         26
+#define BSP_INT_IIC          27
+#define BSP_INT_UTXD0        28
+#define BSP_INT_UTXD1        29
+#define BSP_INT_RTC          30
+#define BSP_INT_ADC          31
+#define BSP_MAX_INT          32
+
+#elif defined CPU_S3C2410
+  /* possible interrupt sources */
+#define BSP_EINT0             0
+#define BSP_EINT1             1
+#define BSP_EINT2             2
+#define BSP_EINT3             3
+#define BSP_EINT4_7           4
+#define BSP_EINT8_23          5
+#define BSP_nBATT_FLT         7
+#define BSP_INT_TICK          8
+#define BSP_INT_WDT           9
+#define BSP_INT_TIMER0       10
+#define BSP_INT_TIMER1       11
+#define BSP_INT_TIMER2       12
+#define BSP_INT_TIMER3       13
+#define BSP_INT_TIMER4       14
+#define BSP_INT_UART2        15
+#define BSP_INT_LCD          16
+#define BSP_INT_DMA0         17
+#define BSP_INT_DMA1         18
+#define BSP_INT_DMA2         19
+#define BSP_INT_DMA3         20
+#define BSP_INT_SDI          21
+#define BSP_INT_SPI0         22
+#define BSP_INT_UART1        23
+#define BSP_INT_USBD         25
+#define BSP_INT_USBH         26
+#define BSP_INT_IIC          27
+#define BSP_INT_UART0        28
+#define BSP_INT_SPI1         29
+#define BSP_INT_RTC          30
+#define BSP_INT_ADC          31
+#define BSP_MAX_INT          32
+#endif
+
+extern void *bsp_vector_table;
+#define VECTOR_TABLE &bsp_vector_table
+
+/*-------------------------------------------------------------------------+
+| Function Prototypes.
++--------------------------------------------------------------------------*/
+/*
+ * ------------------ RTEMS Single Irq Handler Mngt Routines ----------------
+ */
+
+/*
+ * function to initialize the interrupt for a specific BSP
+ */
+void BSP_rtems_irq_mngt_init();
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _IRQ_H_ */
 /* end of include file */

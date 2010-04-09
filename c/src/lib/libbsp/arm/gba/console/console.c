@@ -49,7 +49,7 @@ static int gba_pollRead(int minor)
  *  @return character code
  *
  */
-static int gba_write(int minor, const char *buf, int len)
+static ssize_t gba_write(int minor, const char *buf, size_t len)
 {
   int i;
 

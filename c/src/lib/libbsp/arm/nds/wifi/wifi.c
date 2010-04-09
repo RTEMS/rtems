@@ -31,7 +31,7 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-#include <irq.h>
+#include <rtems/irq.h>
 
 #include <nds.h>
 #include <dswifi9.h>

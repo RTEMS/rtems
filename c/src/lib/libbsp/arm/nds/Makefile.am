@@ -88,8 +88,6 @@ block_rel_SOURCES = block/block.c
 block_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include -DNDS -I$(srcdir)/libfat/source/disc_io
 block_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-include_HEADERS += irq/irq.h
-
 noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = irq/irq.c
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include

@@ -17,8 +17,6 @@
 #include <bsp.h>
 #include <ep7312.h>
 
-extern void default_int_handler(void);
-
 void BSP_rtems_irq_mngt_init(void)
 {
 	long int_stat;

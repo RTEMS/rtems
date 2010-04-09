@@ -78,10 +78,6 @@ $(PROJECT_INCLUDE)/nds/sound.h: sound/sound.h $(PROJECT_INCLUDE)/nds/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nds/sound.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nds/sound.h
 
-$(PROJECT_INCLUDE)/irq.h: irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
-
 $(PROJECT_INCLUDE)/libnds/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/libnds
 	@: > $(PROJECT_INCLUDE)/libnds/$(dirstamp)

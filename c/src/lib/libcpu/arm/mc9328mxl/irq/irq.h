@@ -31,7 +31,7 @@ extern "C" {
 #include <rtems.h>
 #include <mc9328mxl.h>
 
-extern void default_int_handler();
+extern void default_int_handler(rtems_irq_hdl_param);
 /***********************************************************************
  * Constants
  **********************************************************************/
@@ -115,8 +115,7 @@ extern mc9328mxl_irq_info_t bsp_vector_table[BSP_MAX_INT];
 /*
  * function to initialize the interrupt for a specific BSP
  */
-void BSP_rtems_irq_mngt_init();
-
+void BSP_rtems_irq_mngt_init(void);
 
 #endif /* __asm__ */
 

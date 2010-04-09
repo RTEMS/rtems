@@ -1,3 +1,8 @@
+2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* startup/bspstart.c, network/network.c: make irq data types
+	consistent
+
 2009-12-08	Fernando Nicodemos <fgnicodemos@terra.com.br>
 
 	* console/font8x16.h, console/sed1356.c: Fix typos.

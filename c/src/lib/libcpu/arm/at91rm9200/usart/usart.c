@@ -257,6 +257,7 @@ static int usart_set_attributes(int minor, const struct termios *t)
 
   usart->mr = mode;
   usart->brgr = brgr;
+  return 0;
 }
 
 /*

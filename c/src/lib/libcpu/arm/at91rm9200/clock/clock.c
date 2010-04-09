@@ -66,15 +66,17 @@ rtems_isr Clock_isr(rtems_vector_number vector);
 /* Replace the first value with the clock's interrupt name. */
 rtems_irq_connect_data clock_isr_data = {AT91RM9200_INT_SYSIRQ,
                                          (rtems_irq_hdl)Clock_isr,
+					 NULL,
                                          clock_isr_on,
                                          clock_isr_off,
-                                         clock_isr_is_on,
-                                         3,     /* unused for ARM cpus */
-                                         0 };   /* unused for ARM cpus */
+                                         clock_isr_is_on};
 
 
 #define Clock_driver_support_install_isr( _new, _old ) \
-  BSP_install_rtems_irq_handler(&clock_isr_data)
+  do {                                                 \
+      (_old) = NULL;                                   \
+      BSP_install_rtems_irq_handler(&clock_isr_data);  \
+  } while(0)
 
 uint16_t st_pimr_value;
 void Clock_driver_support_initialize_hardware(void)

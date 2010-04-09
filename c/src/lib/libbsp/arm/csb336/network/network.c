@@ -49,7 +49,7 @@ static int enet_isr_is_on(const rtems_irq_connect_data *irq);
 /* Replace the first value with the clock's interrupt name. */
 rtems_irq_connect_data mc9328mxl_enet_isr_data = {
     .name    = BSP_INT_GPIO_PORTA,
-    .hdl     = (rtems_irq_hdl)enet_isr,
+    .hdl     = enet_isr,
     .handle  = (void *)BSP_INT_GPIO_PORTA,
     .on      = enet_isr_on,
     .off     = enet_isr_off,

@@ -1,3 +1,9 @@
+2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, clock/clock.c, fb/fb.c, irq/irq.c, sound/sound.c,
+	startup/bspstart.c, touchscreen/touchscreen.c, wifi/wifi.c: make
+	irq data types consistent
+
 2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* start/start.S: Verify boot_card() is passed a NULL.

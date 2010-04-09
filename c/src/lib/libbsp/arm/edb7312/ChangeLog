@@ -1,3 +1,9 @@
+2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* clock/clockdrv.c, irq/bsp_irq_init.c, irq/irq.h
+	startup/bspstart.c, network/network.c: make irq data types
+	consistent
+
 2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* start/start.S: Verify boot_card() is passed a NULL.

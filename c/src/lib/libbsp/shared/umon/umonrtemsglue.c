@@ -20,7 +20,7 @@ static int rtems_umon_connected = 0;
 
 void rtems_umon_connect(void)
 {
-  void *moncomptr;
+  int(*moncomptr)(int,void *,void *,void *);
 
   if ( rtems_umon_connected )
     return;
@@ -29,7 +29,7 @@ void rtems_umon_connect(void)
 
   moncomptr = rtems_bsp_get_umon_monptr();
   monConnect(
-    (int(*)())(*(unsigned long *)moncomptr),      /* monitor base */
+    moncomptr,                                    /* monitor base */
     (void *)0,                                    /* lock */
     (void *)0                                     /* unlock */
   );

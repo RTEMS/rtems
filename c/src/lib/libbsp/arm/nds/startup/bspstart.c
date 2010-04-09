@@ -15,6 +15,7 @@
 #include <bsp/bootcard.h>
 #include <nds.h>
 
+extern void BSP_rtems_irq_mngt_init (void);
 /*
  * start the platform.
  */

@@ -25,11 +25,12 @@ extern "C" {
 /*
  * Include some preprocessor value also used by assember code
  */
-
+#include <rtems/irq.h>
 #include <rtems.h>
 #include <lpc22xx.h>
 
-extern void default_int_handler();
+extern void default_int_handler(rtems_irq_hdl_param unused);
+
 /***********************************************************************
  * Constants
  **********************************************************************/
@@ -78,63 +79,14 @@ extern void default_int_handler();
 #define FIQ_ISR_ADDR                        (*(u_long *)0x0000003CL)
 
 
-typedef unsigned char  rtems_irq_level;
-typedef unsigned char  rtems_irq_trigger;
-
-typedef unsigned int rtems_irq_number;
-struct  __rtems_irq_connect_data__;     /* forward declaratiuon */
-
-typedef void (*rtems_irq_hdl)       (void);
-typedef void (*rtems_irq_enable)    (const struct __rtems_irq_connect_data__*);
-typedef void (*rtems_irq_disable)   (const struct __rtems_irq_connect_data__*);
-typedef int  (*rtems_irq_is_enabled)(const struct __rtems_irq_connect_data__*);
-
 //extern rtems_irq_hdl bsp_vector_table[BSP_MAX_INT];
 #define VECTOR_TABLE VICVectAddrBase
 
-typedef struct __rtems_irq_connect_data__ {
-    /* IRQ line */
-    rtems_irq_number              name;
-
-    /* Handler */
-    rtems_irq_hdl                 hdl;
-
-    /* function for enabling interrupts at device level. */
-    rtems_irq_enable              on;
-
-    /* function for disabling interrupts at device level. */
-    rtems_irq_disable             off;
-
-    /* Function to test if interrupt is enabled */
-    rtems_irq_is_enabled        isOn;
-
-    /* priority level of interrupt */
-    rtems_irq_level               irqLevel;
-
-    /* Trigger method (rising/falling edge or high/low level) */
-    rtems_irq_trigger             irqTrigger;
-} rtems_irq_connect_data;
 
 /*
  * function to initialize the interrupt for a specific BSP
  */
-void BSP_rtems_irq_mngt_init();
-
-
-/*
- * function to connect a particular irq handler.
- */
-int BSP_install_rtems_irq_handler       (const rtems_irq_connect_data*);
-
-/*
- * function to get the current RTEMS irq handler for ptr->name.
- */
-int BSP_get_current_rtems_irq_handler   (rtems_irq_connect_data* ptr);
-
-/*
- * function to disconnect the RTEMS irq handler for ptr->name.
- */
-int BSP_remove_rtems_irq_handler        (const rtems_irq_connect_data*);
+void BSP_rtems_irq_mngt_init(void);
 
 #endif /* __asm__ */
 

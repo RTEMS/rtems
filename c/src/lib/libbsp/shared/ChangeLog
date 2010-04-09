@@ -1,3 +1,7 @@
+2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* umon/umonrtemsglue.c: change type to avoid warning
+
 2010-03-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* src/irq-generic.c: fix warning

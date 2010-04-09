@@ -31,11 +31,10 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq);
 
 rtems_irq_connect_data clock_isr_data = {BSP_IRQ_TIMER3,
                                         (rtems_irq_hdl)Clock_isr,
+					 NULL,
                                          clock_isr_on,
                                          clock_isr_off,
-                                         clock_isr_is_on,
-                                         0,
-                                         0 };
+                                         clock_isr_is_on};
 
 #define CLOCK_VECTOR  0
 
@@ -44,6 +43,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_IRQ_TIMER3,
 #define Clock_driver_support_install_isr( _new, _old )  \
   do {                                                  \
         BSP_install_rtems_irq_handler(&clock_isr_data); \
+	_old = NULL;					\
      } while(0)
 
 #define Clock_driver_support_shutdown_hardware()        \

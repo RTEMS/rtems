@@ -84,7 +84,7 @@
   /* RTEMS event used to start transmit daemon. */
   #define START_TRANSMIT_EVENT    RTEMS_EVENT_2
 
-rtems_isr at91rm9200_emac_isr(rtems_vector_number vector);
+static void at91rm9200_emac_isr (rtems_irq_hdl_param unused);
 static void at91rm9200_emac_isr_on(const rtems_irq_connect_data *unused);
 static void at91rm9200_emac_isr_off(const rtems_irq_connect_data *unused);
 static int at91rm9200_emac_isr_is_on(const rtems_irq_connect_data *irq);
@@ -92,12 +92,12 @@ static int at91rm9200_emac_isr_is_on(const rtems_irq_connect_data *irq);
 /* Replace the first value with the clock's interrupt name. */
 rtems_irq_connect_data at91rm9200_emac_isr_data = {
     AT91RM9200_INT_EMAC,
-    (rtems_irq_hdl)at91rm9200_emac_isr,
+    at91rm9200_emac_isr,
+    NULL,
     at91rm9200_emac_isr_on,
     at91rm9200_emac_isr_off,
-    at91rm9200_emac_isr_is_on,
-    3,    /* unused for ARM */
-    0 };  /* unused for ARM */
+    at91rm9200_emac_isr_is_on
+};
 
 
 /* use the values defined in linkcmds for our use of SRAM */
@@ -847,7 +847,7 @@ at91rm9200_emac_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 }
 
 /* interrupt handler */
-rtems_isr at91rm9200_emac_isr (rtems_vector_number v)
+static void at91rm9200_emac_isr (rtems_irq_hdl_param unused)
 {
     unsigned long status32;
 

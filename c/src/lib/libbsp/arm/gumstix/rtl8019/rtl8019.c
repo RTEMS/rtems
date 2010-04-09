@@ -352,12 +352,10 @@ ne_check_status (struct ne_softc *sc, int from_irq_handler)
 /* Handle an NE2000 interrupt.  */
 
 static void
-ne_interrupt_handler (uint32_t cdata)
+ne_interrupt_handler (rtems_irq_hdl_param handle)
 {
-  rtems_vector_number v = (rtems_vector_number) cdata;
-  struct ne_softc *sc;
+  struct ne_softc *sc = handle;
 
-  sc = ne_device_for_irno (v);
   if (sc == NULL)
     return;
 
@@ -502,15 +500,16 @@ ne_init_hardware (struct ne_softc *sc)
 /* Set up interrupts.
 */
 static void
-ne_init_irq_handler(int irno)
+ne_init_irq_handler(ne_softc *sc)
 {
   rtems_irq_connect_data irq;
 
 #ifdef DEBUG_NE
   printk("ne_init_irq_handler(%d)\n", irno);
 #endif
-  irq.name = irno;
+  irq.name = sc->irno;
   irq.hdl = ne_interrupt_handler;
+  irq.handle = sc;
   irq.on = ne_interrupt_on;
   irq.off = ne_interrupt_off;
   irq.isOn = ne_interrupt_is_on;
@@ -976,7 +975,7 @@ ne_init (void *arg)
     sc->rx_daemon_tid = rtems_bsdnet_newproc ("SCrx", 4096, ne_rx_daemon, sc);
 
     /* install rtems irq handler */
-    ne_init_irq_handler(sc->irno);
+    ne_init_irq_handler(sc);
   }
 
   ifp->if_flags |= IFF_RUNNING;

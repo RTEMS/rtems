@@ -35,7 +35,7 @@ extern  void _irq_max_vector;
  *  @param  None
  *  @return None
  */
-void default_int_handler(void)
+void default_int_handler(rtems_irq_hdl_param unused)
 {
     printk("raw_idt_notify has been called \n");
 }

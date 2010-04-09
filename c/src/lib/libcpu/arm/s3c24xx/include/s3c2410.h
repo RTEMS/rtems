@@ -7,6 +7,9 @@
 
 #ifndef S3C2410_H_
 #define S3C2410_H_
+
+/* to be used in assembly code */
+#define rINTOFFSET_ADDR 0x4A000014
 /* Memory control */
 #define rBWSCON         (*(volatile unsigned *)0x48000000)
 #define rBANKCON0       (*(volatile unsigned *)0x48000004)
@@ -576,7 +579,7 @@
                  rINTPND;\
                  }
 /* Wait until rINTPND is changed for the case that the ISR is very short. */
-#ifndef __asm__
+#ifndef ASM
 /* Typedefs */
 typedef union {
   struct _reg {
@@ -802,7 +805,7 @@ typedef union {
   } reg;
   unsigned long all;
 } IISSFIF;
-#endif //__asm__
+#endif //ASM
 
 #define LCD_WIDTH 240
 #define LCD_HEIGHT 320

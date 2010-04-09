@@ -1,3 +1,9 @@
+2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* shared/irq/irq_init.c, shared/lpc/clock/lpc-clock-config.c,
+	shared/lpc/network/lpc-ethernet.c, shared/start/start.S: make
+	irq data types consistent
+
 2010-04-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/lpc/include/lpc-dma.h: New file.

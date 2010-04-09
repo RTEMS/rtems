@@ -1,3 +1,25 @@
+2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* configure.ac, Makefile.am, at91rm9200/clock/clock.c,
+	at91rm9200/irq/bsp_irq_init.c,
+	at91rm9200/irq/irq.h, at91rm9200/usart/usart.c,
+	lpc22xx/clock/clockdrv.c, lpc22xx/irq/bsp_irq_init.c,
+	lpc22xx/irq/irq.h, mc9328mxl/irq/bsp_irq_init.c,
+	mc9328mxl/irq/irq.h libcpu/arm/pxa255/clock/clock.c,
+	pxa255/irq/bsp_irq_init.c, pxa255/irq/irq.h,
+	s3c24xx/clock/clockdrv.c, s3c24xx/irq/bsp_irq_init.c,
+	s3c24xx/irq/irq.h: changes to consolidate s3c24xx support and to
+	make irq system warning-free
+	* s3c2400/clock/clockdrv.c, s3c2400/clock/support.c,
+	s3c2400/include/s3c2400.h, s3c2400/irq/bsp_irq_asm.S,
+	s3c2400/irq/bsp_irq_init.c, s3c2400/irq/irq.c
+	libcpu/arm/s3c2400/irq/irq.h, s3c2400/timer/timer.c,
+	s3c2410/include/s3c2410.h, s3c2410/irq/bsp_irq_asm.S,
+	s3c2410/irq/irq.h: removed after merge into s3c24xx
+
+	* s3c24xx/include/s3c2400.h, s3c24xx/include/s3c2410.h,
+	s3c24xx/rq/bsp_irq_asm.S: moved from s3c2400 or s3c2410 tree
+
 2010-04-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/arm-cp15.h: Documentation.  Fixed mask defines.

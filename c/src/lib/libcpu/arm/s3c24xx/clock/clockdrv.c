@@ -26,11 +26,11 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq);
 /* Replace the first value with the clock's interrupt name. */
 rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER4,
                                          (rtems_irq_hdl)Clock_isr,
+					 NULL,
                                          clock_isr_on,
                                          clock_isr_off,
-                                         clock_isr_is_on,
-                                         3,     /* unused for ARM cpus */
-                                         0 };   /* unused for ARM cpus */
+                                         clock_isr_is_on
+};
 
 /* If you follow the code, this is never used, so any value
  * should work

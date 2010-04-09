@@ -16,6 +16,8 @@
 #include <mc9328mxl.h>
 
 extern void rtems_irq_mngt_init(void);
+extern void rtems_exception_init_mngt(void);
+
 extern void mmu_set_cpu_async_mode(void);
 
 /*

@@ -467,7 +467,8 @@ static bool lpc_eth_add_new_mbuf(
       | ETH_RX_CTRL_INTERRUPT;
 
     /* Cache flush of descriptor  */
-    rtems_cache_flush_multiple_data_lines(&desc [i], sizeof(desc [0]));
+    rtems_cache_flush_multiple_data_lines((void *)&desc [i], 
+					  sizeof(desc [0]));
 
     /* Add mbuf to table */
     mbufs [i] = m;
@@ -580,10 +581,10 @@ static void lpc_eth_receive_task(void *arg)
         struct mbuf *m = mbufs [receive_index];
 
         /* Fragment status */
-        rtems_cache_invalidate_multiple_data_lines(
-          &status [receive_index],
-          sizeof(status [0])
-        );
+        rtems_cache_invalidate_multiple_data_lines
+	  ((void *)&status [receive_index],
+	   sizeof(status [0])
+	   );
         stat = status [receive_index].info;
 
         /* Remove mbuf from table */
@@ -908,10 +909,10 @@ static void lpc_eth_transmit_task(void *arg)
           );
           desc [produce_index].start = mtod(m, uint32_t);
           desc [produce_index].control = ctrl;
-          rtems_cache_flush_multiple_data_lines(
-            &desc [produce_index],
-            sizeof(desc [0])
-          );
+          rtems_cache_flush_multiple_data_lines
+	    ((void *)&desc [produce_index],
+	     sizeof(desc [0])
+	     );
           mbufs [produce_index] = m;
 
           LPC_ETH_PRINTF(
@@ -966,7 +967,7 @@ static void lpc_eth_transmit_task(void *arg)
 
           if ((ctrl & ETH_TX_CTRL_LAST) != 0) {
             /* Finalize descriptor */
-            desc [produce_index].control = ctrl & ~ETH_TX_CTRL_SIZE_MASK
+            desc [produce_index].control = (ctrl & ~ETH_TX_CTRL_SIZE_MASK)
               | (new_frame_length - 1);
 
             LPC_ETH_PRINTF(
@@ -982,10 +983,10 @@ static void lpc_eth_transmit_task(void *arg)
             );
 
             /* Cache flush of descriptor  */
-            rtems_cache_flush_multiple_data_lines(
-              &desc [produce_index],
-              sizeof(desc [0])
-            );
+            rtems_cache_flush_multiple_data_lines
+	      ((void *)&desc [produce_index],
+	       sizeof(desc [0])
+	       );
 
             /* Next produce index */
             produce_index = p;

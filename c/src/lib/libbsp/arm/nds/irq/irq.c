@@ -12,7 +12,7 @@
  */
 
 #include <bsp.h>
-#include "irq.h"
+#include <rtems/irq.h>
 #include <nds.h>
 
 /*
@@ -55,7 +55,10 @@ BSP_install_rtems_irq_handler (const rtems_irq_connect_data * irq)
 
   rtems_interrupt_disable (level);
 
-  irqSet (irq->name, irq->hdl);
+  /*
+   * FIXME: irq_hdl will probably not be called with its parameter
+   */
+  irqSet (irq->name, (VoidFunctionPointer)irq->hdl);
 
   if (irq->on != NULL)
     irq->on (irq);

@@ -17,7 +17,7 @@
 #include <sys/types.h>
 
 #include <bsp.h>
-#include "../irq/irq.h"
+#include <rtems/irq.h>
 #include <rtems/libio.h>
 #include <nds.h>
 

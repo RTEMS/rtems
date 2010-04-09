@@ -1,3 +1,8 @@
+2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* network/network.c, startup/bspstart.c: make
+	irq data types consistent
+
 2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Rename poorly named define "M" to "JOEL_M" since

@@ -13,7 +13,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include "../irq/irq.h"
+#include <rtems/irq.h>
 #include <nds.h>
 
 #define CLOCK_VECTOR  IRQ_TIMER0
@@ -34,8 +34,7 @@ static rtems_irq_connect_data clock_isr_data = {
   NULL,
   NULL,
   NULL,
-  0,
-  0
+  NULL
 };
 
 void update_touchscreen (void);
@@ -52,12 +51,11 @@ void update_touchscreen (void);
  * install isr for clock driver.
  */
 
-void
-Clock_driver_support_install_isr (rtems_isr_entry new, rtems_isr_entry old)
-{
-  BSP_install_rtems_irq_handler (&clock_isr_data);
-}
-
+#define Clock_driver_support_install_isr( _new, _old ) \
+  do {						       \
+    _old = NULL;				       \
+    BSP_install_rtems_irq_handler(&clock_isr_data);    \
+  } while (0)
 /*
  * disable clock.
  */

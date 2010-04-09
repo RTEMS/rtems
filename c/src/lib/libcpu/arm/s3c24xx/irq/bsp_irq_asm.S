@@ -6,6 +6,8 @@
  *  CopyRight (C) 2000 Canon Research France SA.
  *  Emmanuel Raguet,  mailto:raguet@crf.canon.fr
  *
+ * merged to common file for s32400 and s32410 by Thomas Doerfler, embedded brains
+ *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -13,7 +15,7 @@
  *  $Id$
  */
 
-#define __asm__
+#include <s3c24xx.h>
 
 /*
  * Function to obtain, execute an IT handler and acknowledge the IT
@@ -23,7 +25,7 @@
 
 bsp_interrupt_dispatch :
 
-        ldr     r0, =0x4A000014 /* Read rINTOFFSET */
+        ldr     r0, =rINTOFFSET_ADDR /* Read rINTOFFSET */
         ldr     r1, [r0]
 
         ldr     r0, =bsp_vector_table

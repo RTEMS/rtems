@@ -18,6 +18,7 @@
  * Function prototypes
  */
 extern void rtems_irq_mngt_init(void);
+extern void rtems_exception_init_mngt(void);
 
 /*
  * NAME: bsp_start_default - BSP initialization function

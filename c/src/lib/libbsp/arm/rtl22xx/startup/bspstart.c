@@ -17,6 +17,7 @@
  * Function prototypes
  */
 extern void rtems_irq_mngt_init(void);
+extern void rtems_exception_init_mngt(void);
 extern void  UART0_Ini(void);
 extern void printi(unsigned long);
 

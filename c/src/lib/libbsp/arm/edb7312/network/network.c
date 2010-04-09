@@ -7,20 +7,19 @@
 unsigned int bsp_cs8900_io_base = 0;
 unsigned int bsp_cs8900_memory_base = 0;
 cs8900_device *g_cs;
-rtems_isr cs8900_isr(rtems_vector_number v);
+void cs8900_isr(rtems_irq_hdl_param unused);
 rtems_irq_connect_data cs8900_isr_data = {BSP_EINT3,
-                                         (rtems_irq_hdl)cs8900_isr,
-                                         NULL,
-                                         NULL,
-                                         NULL,
-                                         0,
-                                         0 };
+					  cs8900_isr,
+					  NULL,
+					  NULL,
+					  NULL,
+					  NULL};
 
 char g_enetbuf[1520];
 
-rtems_isr cs8900_isr(rtems_vector_number v)
+void cs8900_isr(rtems_irq_hdl_param unused)
 {
-    cs8900_interrupt(v, g_cs);
+    cs8900_interrupt(BSP_EINT3, g_cs);
 }
 
 /* cs8900_io_set_reg - set one of the I/O addressed registers */

@@ -44,9 +44,9 @@ libbsp_a_SOURCES += ../shared/abort/abort.c
 libbsp_a_SOURCES += smc/smc.c smc/smc.h
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel
+    ../../../libcpu/@RTEMS_CPU@/s3c24xx/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/s3c24xx/timer.rel \
+    ../../../libcpu/@RTEMS_CPU@/s3c24xx/irq.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

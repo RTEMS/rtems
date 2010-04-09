@@ -22,6 +22,7 @@
  * External Prototypes
  */
 extern void rtems_irq_mngt_init(void);
+extern void rtems_exception_init_mngt(void);
 
 /*
  *  BSP specific Idle task
