@@ -1,3 +1,21 @@
+2010-04-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/lpc/include/lpc-dma.h: New file.
+	* shared/lpc/clock/lpc-clock-config.c, shared/lpc/include/lpc-timer.h,
+	shared/lpc/network/lpc-ethernet.c: Documentation.
+	* shared/start/start.S: Do not require ARM mode for start hooks.
+
+2010-01-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/lpc/network/lpc-ethernet.c: New file.
+	* shared/abort/abort.c, shared/abort/simple_abort.c: Use new mode
+	switch macros.
+	* shared/start/start.S: Fixed mode switching function calls.  Use
+	standard PSR defines.
+	* shared/startup/linkcmds.base, shared/include/linker-symbols.h: Added
+	.vbarrier and .robarrier output sections. Added defines for output
+	section end alignment.  Renamed undefined mode stack defines.
+
 2009-12-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/linker-symbols.h: C++ compatibility.

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc
+ * @ingroup lpc_clock
  *
  * @brief Clock driver configuration.
  */

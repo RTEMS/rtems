@@ -140,16 +140,27 @@ start:
 	/*
 	 * Branch to start hook 0.
 	 *
-	 * This code up to the start hook 0 may run with an address offset so
-	 * it must be position independent.  After the start hook 0 it is
-	 * assumed that the code can run at its intended position.  The link
-	 * register will be loaded with the absolute address.
+	 * The previous code and parts of the start hook 0 may run with an
+	 * address offset.  This implies that only branches relative to the
+	 * program counter are allowed.  After the start hook 0 it is assumed
+	 * that the code can run at its intended position.  Thus the link
+	 * register will be loaded with the absolute address.  In THUMB mode
+	 * the start hook 0 must be within a 2kByte range due to the branch
+	 * instruction limitation.
 	 */
 
 	ldr	lr, =bsp_start_hook_0_done
+#ifdef __thumb__
+	orr	lr, #1
+#endif
+
+	SWITCH_FROM_ARM_TO_THUMB	r0
+
 	b	bsp_start_hook_0
 
 bsp_start_hook_0_done:
+
+	SWITCH_FROM_THUMB_TO_ARM
 
 	/*
 	 * Initialize the exception vectors.  This includes the exceptions
@@ -163,10 +174,10 @@ bsp_start_hook_0_done:
 	ldmia	r1!, {r2-r9}
 	stmia	r0!, {r2-r9}
 
+	SWITCH_FROM_ARM_TO_THUMB	r0
+
 	/* Branch to start hook 1 */
 	bl	bsp_start_hook_1
-
-	SWITCH_FROM_ARM_TO_THUMB	r0
 
 	/* Branch to boot card */
 	mov	r0, #0

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc
+ * @ingroup lpc_timer
  *
  * @brief Timer API.
  */
@@ -28,6 +28,22 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup lpc_timer Timer Support
+ *
+ * @ingroup lpc
+ *
+ * @brief Timer support.
+ *
+ * @{
+ */
+
+/**
+ * @name Interrupt Register Defines
+ *
+ * @{
+ */
+
 #define LPC_TIMER_IR_MR0 0x1U
 #define LPC_TIMER_IR_MR1 0x2U
 #define LPC_TIMER_IR_MR2 0x4U
@@ -38,8 +54,24 @@ extern "C" {
 #define LPC_TIMER_IR_CR3 0x80U
 #define LPC_TIMER_IR_ALL 0xffU
 
+/** @} */
+
+/**
+ * @name Timer Control Register Defines
+ *
+ * @{
+ */
+
 #define LPC_TIMER_TCR_EN 0x1U
 #define LPC_TIMER_TCR_RST 0x2U
+
+/** @} */
+
+/**
+ * @name Match Control Register Defines
+ *
+ * @{
+ */
 
 #define LPC_TIMER_MCR_MR0_INTR 0x1U
 #define LPC_TIMER_MCR_MR0_RST 0x2U
@@ -54,6 +86,14 @@ extern "C" {
 #define LPC_TIMER_MCR_MR3_RST 0x400U
 #define LPC_TIMER_MCR_MR3_STOP 0x800U
 
+/** @} */
+
+/**
+ * @name Capture Control Register Defines
+ *
+ * @{
+ */
+
 #define LPC_TIMER_CCR_CAP0_RE 0x1U
 #define LPC_TIMER_CCR_CAP0_FE 0x2U
 #define LPC_TIMER_CCR_CAP0_INTR 0x4U
@@ -67,6 +107,14 @@ extern "C" {
 #define LPC_TIMER_CCR_CAP3_FE 0x400U
 #define LPC_TIMER_CCR_CAP3_INTR 0x800U
 
+/** @} */
+
+/**
+ * @name External Match Register Defines
+ *
+ * @{
+ */
+
 #define LPC_TIMER_EMR_EM0_RE 0x1U
 #define LPC_TIMER_EMR_EM1_FE 0x2U
 #define LPC_TIMER_EMR_EM2_INTR 0x4U
@@ -76,6 +124,11 @@ extern "C" {
 #define LPC_TIMER_EMR_EMC2_RE 0x40U
 #define LPC_TIMER_EMR_EMC3_FE 0x80U
 
+/** @} */
+
+/**
+ * @brief Timer control block.
+ */
 typedef struct {
   uint32_t ir;
   uint32_t tcr;
@@ -95,6 +148,8 @@ typedef struct {
   uint32_t emr;
   uint32_t ctcr;
 } lpc_timer;
+
+/** @} */
 
 #ifdef __cplusplus
 }
