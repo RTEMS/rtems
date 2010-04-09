@@ -89,7 +89,7 @@ disk_unlock(void)
 }
 
 static rtems_disk_device *
-get_disk_entry(dev_t dev)
+get_disk_entry(dev_t dev, bool lookup_only)
 {
   rtems_device_major_number major = 0;
   rtems_device_minor_number minor = 0;
@@ -102,11 +102,15 @@ get_disk_entry(dev_t dev)
     if (minor < dtab->size && dtab->minor != NULL) {
       rtems_disk_device *dd = dtab->minor [minor];
 
-      if (dd != NULL && !dd->deleted) {
-        ++dd->uses;
-
-        return dd;
+      if (dd != NULL && !lookup_only) {
+        if (!dd->deleted) {
+          ++dd->uses;
+        } else {
+          dd = NULL;
+        }
       }
+
+      return dd;
     }
   }
 
@@ -288,11 +292,8 @@ rtems_status_code rtems_disk_create_log(
     return sc;
   }
 
-  physical_disk = get_disk_entry(phys);
+  physical_disk = get_disk_entry(phys, true);
   if (physical_disk == NULL || !is_physical_disk(physical_disk)) {
-    if (physical_disk != NULL) {
-      --physical_disk->uses;
-    }
     disk_unlock();
 
     return RTEMS_INVALID_ID;
@@ -303,7 +304,6 @@ rtems_status_code rtems_disk_create_log(
       || end_block <= begin_block
       || end_block > physical_disk->size
   ) {
-    --physical_disk->uses;
     disk_unlock();
 
     return RTEMS_INVALID_NUMBER;
@@ -311,7 +311,6 @@ rtems_status_code rtems_disk_create_log(
 
   sc = create_disk(dev, name, &dd);
   if (sc != RTEMS_SUCCESSFUL) {
-    --physical_disk->uses;
     disk_unlock();
 
     return sc;
@@ -323,6 +322,8 @@ rtems_status_code rtems_disk_create_log(
   dd->block_size = dd->media_block_size = physical_disk->block_size;
   dd->ioctl = physical_disk->ioctl;
   dd->driver_data = physical_disk->driver_data;
+
+  ++physical_disk->uses;
 
   disk_unlock();
 
@@ -398,14 +399,13 @@ rtems_disk_delete(dev_t dev)
     return sc;
   }
 
-  dd = get_disk_entry(dev);
+  dd = get_disk_entry(dev, true);
   if (dd == NULL) {
     disk_unlock();
 
     return RTEMS_INVALID_ID;
   }
 
-  --dd->uses;
   dd->deleted = true;
   rtems_disk_cleanup(dd);
 
@@ -424,14 +424,14 @@ rtems_disk_obtain(dev_t dev)
   rtems_interrupt_disable(level);
   if (!diskdevs_protected) {
     /* Frequent and quickest case */
-    dd = get_disk_entry(dev);
+    dd = get_disk_entry(dev, false);
     rtems_interrupt_enable(level);
   } else {
     rtems_interrupt_enable(level);
 
     sc = disk_lock();
     if (sc == RTEMS_SUCCESSFUL) {
-      dd = get_disk_entry(dev);
+      dd = get_disk_entry(dev, false);
       disk_unlock();
     }
   }
