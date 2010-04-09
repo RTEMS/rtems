@@ -35,7 +35,7 @@ typedef struct _console_fns {
   int     (*deviceFirstOpen)(int major, int minor, void *arg);
   int     (*deviceLastClose)(int major, int minor, void *arg);
   int     (*deviceRead)(int minor);
-  int     (*deviceWrite)(int minor, const char *buf, int len);
+  ssize_t (*deviceWrite)(int minor, const char *buf, size_t len);
   void    (*deviceInitialize)(int minor);
   void    (*deviceWritePolled)(int minor, char cChar);
   int     (*deviceSetAttributes)(int minor, const struct termios *t);

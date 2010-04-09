@@ -279,16 +279,16 @@ MC68681_STATIC void mc68681_write_polled(
 
 MC68681_STATIC void mc68681_initialize_interrupts(int minor);
 
-MC68681_STATIC int mc68681_write_support_int(
+MC68681_STATIC ssize_t mc68681_write_support_int(
   int   minor,
   const char *buf,
-  int   len
+  size_t len
 );
 
-MC68681_STATIC int mc68681_write_support_polled(
+MC68681_STATIC ssize_t mc68681_write_support_polled(
   int   minor,
   const char *buf,
-  int   len
+  size_t   len
   );
 
 MC68681_STATIC int mc68681_inbyte_nonblocking_polled(

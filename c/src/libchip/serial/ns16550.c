@@ -531,10 +531,10 @@ NS16550_STATIC void ns16550_process( int minor)
  *
  * Returns always zero.
  */
-NS16550_STATIC int ns16550_write_support_int(
+NS16550_STATIC ssize_t ns16550_write_support_int(
   int minor,
   const char *buf,
-  int len
+  size_t len
 )
 {
   console_tbl *c = &Console_Port_Tbl [minor];
@@ -659,10 +659,10 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
  *
  */
 
-NS16550_STATIC int ns16550_write_support_polled(
+NS16550_STATIC ssize_t ns16550_write_support_polled(
   int         minor,
   const char *buf,
-  int         len
+  size_t      len
 )
 {
   int nwrite = 0;

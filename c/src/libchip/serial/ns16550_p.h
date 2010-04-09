@@ -171,16 +171,16 @@ NS16550_STATIC int ns16550_negate_DTR(
 
 NS16550_STATIC void ns16550_initialize_interrupts(int minor);
 
-NS16550_STATIC int ns16550_write_support_int(
+NS16550_STATIC ssize_t ns16550_write_support_int(
   int   minor,
   const char *buf,
-  int   len
+  size_t len
 );
 
-NS16550_STATIC int ns16550_write_support_polled(
+NS16550_STATIC ssize_t ns16550_write_support_polled(
   int   minor,
   const char *buf,
-  int   len
+  size_t len
   );
 
 NS16550_STATIC int ns16550_inbyte_nonblocking_polled(

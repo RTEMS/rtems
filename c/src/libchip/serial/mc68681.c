@@ -448,10 +448,10 @@ MC68681_STATIC void mc68681_initialize_interrupts(int minor)
  *  Console Termios output entry point when using interrupt driven output.
  */
 
-MC68681_STATIC int mc68681_write_support_int(
+MC68681_STATIC ssize_t mc68681_write_support_int(
   int         minor,
   const char *buf,
-  int         len
+  size_t      len
 )
 {
   uint32_t        Irql;
@@ -481,7 +481,7 @@ MC68681_STATIC int mc68681_write_support_int(
     (*setReg)(pMC68681_port, MC68681_TX_BUFFER, *buf);
   rtems_interrupt_enable(Irql);
 
-  return 1;
+  return 0;
 }
 
 /*
@@ -491,10 +491,10 @@ MC68681_STATIC int mc68681_write_support_int(
  *
  */
 
-MC68681_STATIC int mc68681_write_support_polled(
+MC68681_STATIC ssize_t mc68681_write_support_polled(
   int         minor,
   const char *buf,
-  int         len
+  size_t      len
 )
 {
   int nwrite = 0;

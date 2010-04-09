@@ -381,16 +381,16 @@ Z85C30_STATIC int z85c30_negate_DTR(
 
 Z85C30_STATIC void z85c30_initialize_interrupts(int minor);
 
-Z85C30_STATIC int z85c30_write_support_int(
+Z85C30_STATIC ssize_t z85c30_write_support_int(
   int   minor,
   const char *buf,
-  int   len
+  size_t len
 );
 
-Z85C30_STATIC int z85c30_write_support_polled(
+Z85C30_STATIC ssize_t z85c30_write_support_polled(
   int   minor,
   const char *buf,
-  int   len
+  size_t len
 );
 
 Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(

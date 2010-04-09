@@ -743,10 +743,10 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
  *
  */
 
-Z85C30_STATIC int z85c30_write_support_int(
+Z85C30_STATIC ssize_t z85c30_write_support_int(
   int   minor,
   const char *buf,
-  int   len)
+  size_t len)
 {
   uint32_t       Irql;
   uint32_t       ulCtrlPort;
@@ -778,7 +778,7 @@ Z85C30_STATIC int z85c30_write_support_int(
     (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR8, *buf);
   rtems_interrupt_enable(Irql);
 
-  return 1;
+  return 0;
 }
 
 /*
@@ -820,10 +820,10 @@ Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
  *
  */
 
-Z85C30_STATIC int z85c30_write_support_polled(
+Z85C30_STATIC ssize_t z85c30_write_support_polled(
   int   minor,
   const char *buf,
-  int   len)
+  size_t len)
 {
   int nwrite=0;
 

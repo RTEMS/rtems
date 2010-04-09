@@ -1,3 +1,10 @@
+2010-04-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libchip/serial/serial.h, serial/mc68681.c, serial/mc68681_p.h,
+	serial/ns16550.c, serial/ns16550_p.h, serial/serial.h,
+	serial/z85c30.c, serial/z85c30_p.h: adapt _write_ functions to new
+	prototype
+
 2010-04-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libchip/ide/ata.c: Change missed use of ATA_USE_OLD_EXCEPTIONS to
