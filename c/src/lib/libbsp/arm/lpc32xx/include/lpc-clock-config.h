@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc32xx
+ * @ingroup lpc_clock
  *
  * @brief Clock driver configuration.
  */
@@ -30,6 +30,16 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @defgroup lpc_clock Clock Support
+ *
+ * @ingroup lpc
+ *
+ * @brief Clock support.
+ *
+ * @{
+ */
+
 #define LPC_CLOCK_INTERRUPT LPC32XX_IRQ_TIMER_0
 
 #define LPC_CLOCK_TIMER_BASE LPC32XX_BASE_TIMER_0
@@ -37,6 +47,8 @@ extern "C" {
 #define LPC_CLOCK_REFERENCE LPC32XX_PERIPH_CLK
 
 #define LPC_CLOCK_MODULE_ENABLE()
+
+/** @} */
 
 #ifdef __cplusplus
 }

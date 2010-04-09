@@ -86,7 +86,6 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/bsplibc.c \
 	../../shared/bsppost.c \
 	../../shared/bsppredriverhook.c \
-	../../shared/bsppretaskinghook.c \
 	../../shared/gnatinstallhandler.c \
 	../../shared/sbrk.c \
 	../../shared/src/stackalloc.c \
@@ -135,13 +134,8 @@ libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c \
 	../../../libcpu/arm/shared/cache/cache_.h
 libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
 
-# Start hooks (FIXME: This is brittle.)
+# Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
-libbsp_a-bspstarthooks.o: startup/bspstarthooks.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libbsp_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS:-mthumb=) \
-	-MT libbsp_a-bspstarthooks.o -MD -MP -MF $(DEPDIR)/libbsp_a-bspstarthooks.Tpo -c -o libbsp_a-bspstarthooks.o \
-	`test -f 'startup/bspstarthooks.c' || echo '$(srcdir)/'`startup/bspstarthooks.c
-	$(am__mv) $(DEPDIR)/libbsp_a-bspstarthooks.Tpo $(DEPDIR)/libbsp_a-bspstarthooks.Po
 
 ###############################################################################
 #                  Network                                                    #

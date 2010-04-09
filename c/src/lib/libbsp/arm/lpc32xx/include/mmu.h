@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc32xx
+ * @ingroup lpc32xx_mmu
  *
  * @brief MMU API.
  */
@@ -28,6 +28,16 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @defgroup lpc32xx_mmu MMU Support
+ *
+ * @ingroup lpc32xx
+ *
+ * @brief MMU support.
+ *
+ * @{
+ */
+
 #define LPC32XX_MMU_CLIENT_DOMAIN 15U
 
 #define LPC32XX_MMU_READ_ONLY \
@@ -44,6 +54,8 @@ extern "C" {
 
 #define LPC32XX_MMU_READ_WRITE_CACHED \
   (LPC32XX_MMU_READ_WRITE | ARM_MMU_SECT_C | ARM_MMU_SECT_B)
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -43,18 +43,39 @@
 #define CONSOLE_FDR (*(volatile uint32_t *) (LPC32XX_BASE_UART_5 + 0x28))
 #define CONSOLE_TER (*(volatile uint32_t *) (LPC32XX_BASE_UART_5 + 0x30))
 
+static void lpc32xx_timer_initialize(void)
+{
+  volatile lpc_timer *timer = LPC32XX_STANDARD_TIMER;
+
+  LPC32XX_TIMCLK_CTRL1 = (1U << 2) | (1U << 3);
+
+  timer->tcr = LPC_TIMER_TCR_RST;
+  timer->ctcr = 0x0;
+  timer->pr = 0x0;
+  timer->ir = 0xff;
+  timer->mcr = 0x0;
+  timer->ccr = 0x0;
+  timer->tcr = LPC_TIMER_TCR_EN;
+}
+
 void bsp_start(void)
 {
+  uint32_t uartclk_ctrl = 0;
+
   #ifdef LPC32XX_CONFIG_U3CLK
+    uartclk_ctrl |= 1U << 0;
     LPC32XX_U3CLK = LPC32XX_CONFIG_U3CLK;
   #endif
   #ifdef LPC32XX_CONFIG_U4CLK
+    uartclk_ctrl |= 1U << 1;
     LPC32XX_U4CLK = LPC32XX_CONFIG_U4CLK;
   #endif
   #ifdef LPC32XX_CONFIG_U5CLK
+    uartclk_ctrl |= 1U << 2;
     LPC32XX_U5CLK = LPC32XX_CONFIG_U5CLK;
   #endif
   #ifdef LPC32XX_CONFIG_U6CLK
+    uartclk_ctrl |= 1U << 3;
     LPC32XX_U6CLK = LPC32XX_CONFIG_U6CLK;
   #endif
 
@@ -62,6 +83,7 @@ void bsp_start(void)
     LPC32XX_UART_CLKMODE = LPC32XX_CONFIG_UART_CLKMODE;
   #endif
 
+  LPC32XX_UARTCLK_CTRL = uartclk_ctrl;
   LPC32XX_UART_CTRL = 0x0;
   LPC32XX_UART_LOOP = 0x0;
 
@@ -74,28 +96,16 @@ void bsp_start(void)
   CONSOLE_LCR = 0x3;
   CONSOLE_FCR = 0x7;
 
-#if 0
-  /* FIXME */
-  printk("LPC32XX_U3CLK %08x\n", LPC32XX_U3CLK);
-  printk("LPC32XX_U4CLK %08x\n", LPC32XX_U4CLK);
-  printk("LPC32XX_U5CLK %08x\n", LPC32XX_U5CLK);
-  printk("LPC32XX_U6CLK %08x\n", LPC32XX_U6CLK);
-  printk("LPC32XX_IRDACLK %08x\n", LPC32XX_IRDACLK);
-  printk("LPC32XX_UART_CTRL %08x\n", LPC32XX_UART_CTRL);
-  printk("LPC32XX_UART_CLKMODE %08x\n", LPC32XX_UART_CLKMODE);
-  printk("LPC32XX_UART_LOOP %08x\n", LPC32XX_UART_LOOP);
-#endif
-
-  /* Interrupts */
   if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
     _CPU_Fatal_halt(0xe);
   }
 
-  /* Task stacks */
   bsp_stack_initialize(
     bsp_section_stack_begin,
     (uintptr_t) bsp_section_stack_size
   );
+
+  lpc32xx_timer_initialize();
 }
 
 #define UART_LSR_THRE 0x00000020U

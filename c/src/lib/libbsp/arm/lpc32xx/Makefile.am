@@ -37,6 +37,7 @@ include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/linker-symbols.h
 include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-timer.h
+include_bsp_HEADERS += ../shared/lpc/include/lpc-dma.h
 include_bsp_HEADERS += include/irq-config.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/mmu.h
@@ -99,7 +100,8 @@ libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
 
 # Console
 libbsp_a_SOURCES += ../../shared/console.c \
-	console/console-config.c
+	console/console-config.c \
+	console/hsu.c
 
 # Clock
 libbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c \
@@ -121,13 +123,8 @@ libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c \
 	../../../libcpu/arm/shared/cache/cache_.h
 libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
 
-# Start hooks (FIXME: This is brittle.)
+# Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
-libbsp_a-bspstarthooks.o: startup/bspstarthooks.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libbsp_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS:-mthumb=) \
-	-MT libbsp_a-bspstarthooks.o -MD -MP -MF $(DEPDIR)/libbsp_a-bspstarthooks.Tpo -c -o libbsp_a-bspstarthooks.o \
-	`test -f 'startup/bspstarthooks.c' || echo '$(srcdir)/'`startup/bspstarthooks.c
-	$(am__mv) $(DEPDIR)/libbsp_a-bspstarthooks.Tpo $(DEPDIR)/libbsp_a-bspstarthooks.Po
 
 ###############################################################################
 #                  Network                                                    #

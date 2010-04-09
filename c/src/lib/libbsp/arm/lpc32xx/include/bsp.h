@@ -28,6 +28,9 @@
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
+#include <bsp/lpc32xx.h>
+#include <bsp/lpc-timer.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -88,7 +91,24 @@ int lpc_eth_attach_detach(
  */
 void *lpc32xx_idle(uintptr_t ignored);
 
+#define LPC32XX_STANDARD_TIMER ((volatile lpc_timer *) LPC32XX_BASE_TIMER_1)
+
+static inline unsigned lpc32xx_timer(void)
+{
+  volatile lpc_timer *timer = LPC32XX_STANDARD_TIMER;
+
+  return timer->tc;
+}
+
 /** @} */
+
+/**
+ * @defgroup lpc LPC Support
+ *
+ * @ingroup lpc32xx
+ *
+ * @brief LPC support package.
+ */
 
 #endif /* ASM */
 

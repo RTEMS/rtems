@@ -30,6 +30,36 @@
 #include <bsp/stackalloc.h>
 #include <bsp/system-clocks.h>
 
+#ifdef LPC24XX_HEAP_EXTEND
+  LINKER_SYMBOL(lpc24xx_region_heap_0_begin);
+  LINKER_SYMBOL(lpc24xx_region_heap_0_size);
+  LINKER_SYMBOL(lpc24xx_region_heap_0_end);
+
+  LINKER_SYMBOL(lpc24xx_region_heap_1_begin);
+  LINKER_SYMBOL(lpc24xx_region_heap_1_size);
+  LINKER_SYMBOL(lpc24xx_region_heap_1_end);
+
+  extern Heap_Control *RTEMS_Malloc_Heap;
+#endif
+
+void bsp_pretasking_hook(void)
+{
+  #ifdef LPC24XX_HEAP_EXTEND
+    _Heap_Extend(
+      RTEMS_Malloc_Heap,
+      lpc24xx_region_heap_0_begin,
+      (uintptr_t) lpc24xx_region_heap_0_size,
+      NULL
+    );
+    _Heap_Extend(
+      RTEMS_Malloc_Heap,
+      lpc24xx_region_heap_1_begin,
+      (uintptr_t) lpc24xx_region_heap_1_size,
+      NULL
+    );
+  #endif
+}
+
 void bsp_start(void)
 {
   /* Initialize Timer 1 */

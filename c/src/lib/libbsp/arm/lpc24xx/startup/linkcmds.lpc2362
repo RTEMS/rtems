@@ -48,12 +48,20 @@ REGION_ALIAS ("REGION_TEXT", ROM_INT);
 REGION_ALIAS ("REGION_TEXT_LOAD", ROM_INT);
 REGION_ALIAS ("REGION_RODATA", ROM_INT);
 REGION_ALIAS ("REGION_RODATA_LOAD", ROM_INT);
-REGION_ALIAS ("REGION_DATA", RAM_ETH);
+REGION_ALIAS ("REGION_DATA", RAM_INT);
 REGION_ALIAS ("REGION_DATA_LOAD", ROM_INT);
 REGION_ALIAS ("REGION_FAST", RAM_INT);
 REGION_ALIAS ("REGION_FAST_LOAD", ROM_INT);
-REGION_ALIAS ("REGION_BSS", RAM_ETH);
+REGION_ALIAS ("REGION_BSS", RAM_INT);
 REGION_ALIAS ("REGION_WORK", RAM_INT);
 REGION_ALIAS ("REGION_STACK", RAM_INT);
+
+lpc24xx_region_heap_0_begin = ORIGIN (RAM_ETH);
+lpc24xx_region_heap_0_size = LENGTH (RAM_ETH);
+lpc24xx_region_heap_0_end = lpc24xx_region_heap_0_begin + lpc24xx_region_heap_0_size;
+
+lpc24xx_region_heap_1_begin = ORIGIN (RAM_USB);
+lpc24xx_region_heap_1_size = LENGTH (RAM_USB);
+lpc24xx_region_heap_1_end = lpc24xx_region_heap_1_begin + lpc24xx_region_heap_1_size;
 
 INCLUDE linkcmds.base

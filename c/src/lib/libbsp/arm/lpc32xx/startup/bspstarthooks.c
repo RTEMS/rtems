@@ -27,12 +27,18 @@
 #include <bsp/mmu.h>
 #include <bsp/linker-symbols.h>
 
-#define LPC32XX_DISABLE_READ_WRITE_DATA_CACHE
-
 #ifdef LPC32XX_DISABLE_READ_WRITE_DATA_CACHE
   #define LPC32XX_MMU_READ_WRITE_DATA LPC32XX_MMU_READ_WRITE
 #else
   #define LPC32XX_MMU_READ_WRITE_DATA LPC32XX_MMU_READ_WRITE_CACHED
+#endif
+
+#ifdef LPC32XX_DISABLE_READ_ONLY_PROTECTION
+  #define LPC32XX_MMU_READ_ONLY_DATA LPC32XX_MMU_READ_WRITE_CACHED
+  #define LPC32XX_MMU_CODE LPC32XX_MMU_READ_WRITE_CACHED
+#else
+  #define LPC32XX_MMU_READ_ONLY_DATA LPC32XX_MMU_READ_ONLY_CACHED
+  #define LPC32XX_MMU_CODE LPC32XX_MMU_READ_ONLY_CACHED
 #endif
 
 #define BSP_START_SECTION __attribute__((section(".bsp_start")))
@@ -61,7 +67,7 @@ static const BSP_START_DATA_SECTION lpc32xx_mmu_config
   {
     .begin = (uint32_t) bsp_section_start_begin,
     .end = (uint32_t) bsp_section_start_end,
-    .flags = LPC32XX_MMU_READ_WRITE_CACHED
+    .flags = LPC32XX_MMU_CODE
   }, {
     .begin = (uint32_t) bsp_section_vector_begin,
     .end = (uint32_t) bsp_section_vector_end,
@@ -69,11 +75,11 @@ static const BSP_START_DATA_SECTION lpc32xx_mmu_config
   }, {
     .begin = (uint32_t) bsp_section_text_begin,
     .end = (uint32_t) bsp_section_text_end,
-    .flags = LPC32XX_MMU_READ_WRITE_CACHED
+    .flags = LPC32XX_MMU_CODE
   }, {
     .begin = (uint32_t) bsp_section_rodata_begin,
     .end = (uint32_t) bsp_section_rodata_end,
-    .flags = LPC32XX_MMU_READ_WRITE_CACHED
+    .flags = LPC32XX_MMU_READ_ONLY_DATA
   }, {
     .begin = (uint32_t) bsp_section_data_begin,
     .end = (uint32_t) bsp_section_data_end,
@@ -81,7 +87,7 @@ static const BSP_START_DATA_SECTION lpc32xx_mmu_config
   }, {
     .begin = (uint32_t) bsp_section_fast_begin,
     .end = (uint32_t) bsp_section_fast_end,
-    .flags = LPC32XX_MMU_READ_WRITE_CACHED
+    .flags = LPC32XX_MMU_CODE
   }, {
     .begin = (uint32_t) bsp_section_bss_begin,
     .end = (uint32_t) bsp_section_bss_end,
@@ -93,7 +99,7 @@ static const BSP_START_DATA_SECTION lpc32xx_mmu_config
   }, {
     .begin = (uint32_t) bsp_section_stack_begin,
     .end = (uint32_t) bsp_section_stack_end,
-    .flags = LPC32XX_MMU_READ_WRITE_CACHED
+    .flags = LPC32XX_MMU_READ_WRITE_DATA
   }, {
     .begin = 0x0U,
     .end = 0x100000U,
@@ -177,7 +183,7 @@ void BSP_START_SECTION bsp_start_hook_1(void)
 
   /* Copy .text section */
   arm_cp15_instruction_cache_invalidate();
-  bsp_start_memcpy_arm(
+  bsp_start_memcpy(
     (int *) bsp_section_text_begin,
     (const int *) bsp_section_text_load_begin,
     (size_t) bsp_section_text_size
@@ -185,7 +191,7 @@ void BSP_START_SECTION bsp_start_hook_1(void)
 
   /* Copy .rodata section */
   arm_cp15_instruction_cache_invalidate();
-  bsp_start_memcpy_arm(
+  bsp_start_memcpy(
     (int *) bsp_section_rodata_begin,
     (const int *) bsp_section_rodata_load_begin,
     (size_t) bsp_section_rodata_size
@@ -193,7 +199,7 @@ void BSP_START_SECTION bsp_start_hook_1(void)
 
   /* Copy .data section */
   arm_cp15_instruction_cache_invalidate();
-  bsp_start_memcpy_arm(
+  bsp_start_memcpy(
     (int *) bsp_section_data_begin,
     (const int *) bsp_section_data_load_begin,
     (size_t) bsp_section_data_size
@@ -201,7 +207,7 @@ void BSP_START_SECTION bsp_start_hook_1(void)
 
   /* Copy .fast section */
   arm_cp15_instruction_cache_invalidate();
-  bsp_start_memcpy_arm(
+  bsp_start_memcpy(
     (int *) bsp_section_fast_begin,
     (const int *) bsp_section_fast_load_begin,
     (size_t) bsp_section_fast_size

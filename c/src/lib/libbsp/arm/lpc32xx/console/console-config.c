@@ -26,6 +26,8 @@
 #include <bsp/lpc32xx.h>
 #include <bsp/irq.h>
 
+extern console_fns lpc32xx_hsu_fns;
+
 static uint8_t lpc32xx_uart_get_register(uint32_t addr, uint8_t i)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
@@ -127,6 +129,69 @@ console_tbl Console_Port_Tbl [] = {
       .setData = NULL,
       .ulClock = 16,
       .ulIntVector = LPC32XX_IRQ_UART_6
+    },
+  #endif
+  #ifdef LPC32XX_UART_1_BAUD
+    {
+      .sDeviceName = "/dev/ttyS1",
+      .deviceType = SERIAL_CUSTOM,
+      .pDeviceFns = &lpc32xx_hsu_fns,
+      .deviceProbe = NULL,
+      .pDeviceFlow = NULL,
+      .ulMargin = 16,
+      .ulHysteresis = 8,
+      .pDeviceParams = (void *) LPC32XX_UART_1_BAUD,
+      .ulCtrlPort1 = LPC32XX_BASE_UART_1,
+      .ulCtrlPort2 = 0,
+      .ulDataPort = 0,
+      .getRegister = NULL,
+      .setRegister = NULL,
+      .getData = NULL,
+      .setData = NULL,
+      .ulClock = 16,
+      .ulIntVector = LPC32XX_IRQ_UART_1
+    },
+  #endif
+  #ifdef LPC32XX_UART_2_BAUD
+    {
+      .sDeviceName = "/dev/ttyS2",
+      .deviceType = SERIAL_CUSTOM,
+      .pDeviceFns = &lpc32xx_hsu_fns,
+      .deviceProbe = NULL,
+      .pDeviceFlow = NULL,
+      .ulMargin = 16,
+      .ulHysteresis = 8,
+      .pDeviceParams = (void *) LPC32XX_UART_2_BAUD,
+      .ulCtrlPort1 = LPC32XX_BASE_UART_2,
+      .ulCtrlPort2 = 0,
+      .ulDataPort = 0,
+      .getRegister = NULL,
+      .setRegister = NULL,
+      .getData = NULL,
+      .setData = NULL,
+      .ulClock = 16,
+      .ulIntVector = LPC32XX_IRQ_UART_2
+    },
+  #endif
+  #ifdef LPC32XX_UART_7_BAUD
+    {
+      .sDeviceName = "/dev/ttyS7",
+      .deviceType = SERIAL_CUSTOM,
+      .pDeviceFns = &lpc32xx_hsu_fns,
+      .deviceProbe = NULL,
+      .pDeviceFlow = NULL,
+      .ulMargin = 16,
+      .ulHysteresis = 8,
+      .pDeviceParams = (void *) LPC32XX_UART_7_BAUD,
+      .ulCtrlPort1 = LPC32XX_BASE_UART_7,
+      .ulCtrlPort2 = 0,
+      .ulDataPort = 0,
+      .getRegister = NULL,
+      .setRegister = NULL,
+      .getData = NULL,
+      .setData = NULL,
+      .ulClock = 16,
+      .ulIntVector = LPC32XX_IRQ_UART_7
     },
   #endif
 };

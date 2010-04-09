@@ -28,6 +28,10 @@
 
 #define BSP_START_SECTION __attribute__((section(".bsp_start")))
 
+#if defined(LPC24XX_EMC_MICRON) || defined(LPC24XX_EMC_NUMONYX)
+  #define LPC24XX_EMC_INIT
+#endif
+
 #ifdef LPC24XX_EMC_MICRON
   static void BSP_START_SECTION lpc24xx_ram_test_32(void)
   {
@@ -114,15 +118,17 @@ static void BSP_START_SECTION lpc24xx_init_emc_0(void)
     numonyx.waitrun = 0xf;
   #endif
 
-  /* Set pin functions for EMC */
-  PINSEL5 = (PINSEL5 & 0xf000f000) | 0x05550555;
-  PINSEL6 = 0x55555555;
-  PINSEL8 = 0x55555555;
-  PINSEL9 = (PINSEL9 & 0x0f000000) | 0x50555555;
+  #ifdef LPC24XX_EMC_INIT
+    /* Set pin functions for EMC */
+    PINSEL5 = (PINSEL5 & 0xf000f000) | 0x05550555;
+    PINSEL6 = 0x55555555;
+    PINSEL8 = 0x55555555;
+    PINSEL9 = (PINSEL9 & 0x0f000000) | 0x50555555;
+  #endif
 
   #ifdef LPC24XX_EMC_NUMONYX
     /* Static Memory 1 settings */
-    bsp_start_memcpy_arm(
+    bsp_start_memcpy(
       (int *) EMC_STA_BASE_1,
       (const int *) &numonyx,
       sizeof(numonyx)
@@ -135,8 +141,10 @@ static void BSP_START_SECTION lpc24xx_init_emc_0(void)
  */
 static void BSP_START_SECTION lpc24xx_init_emc_1(void)
 {
-  /* Use normal memory map */
-  EMC_CTRL = CLEAR_FLAG(EMC_CTRL, 0x2);
+  #ifdef LPC24XX_EMC_INIT
+    /* Use normal memory map */
+    EMC_CTRL = CLEAR_FLAG(EMC_CTRL, 0x2);
+  #endif
 
   #ifdef LPC24XX_EMC_MICRON
     /* Check if we need to initialize it */
@@ -326,7 +334,13 @@ static void BSP_START_SECTION lpc24xx_init_pll(void)
   }
 
   /* Set PLL */
-  lpc24xx_set_pll(1, 0, 11, 3);
+  #if LPC24XX_OSCILLATOR_MAIN == 12000000U
+    lpc24xx_set_pll(1, 0, 11, 3);
+  #elif LPC24XX_OSCILLATOR_MAIN == 3686400U
+    lpc24xx_set_pll(1, 0, 47, 5);
+  #else
+    #error "unexpected main oscillator frequency"
+  #endif
 }
 
 static void BSP_START_SECTION lpc24xx_clear_bss(void)
@@ -355,9 +369,18 @@ void BSP_START_SECTION bsp_start_hook_1(void)
   /* Re-map interrupt vectors to internal RAM */
   MEMMAP = SET_MEMMAP_MAP(MEMMAP, 2);
 
-  /* Set memory accelerator module (MAM) */
+  /* Fully enable memory accelerator module functions (MAM) */
   MAMCR = 0;
-  MAMTIM = 4;
+  #if LPC24XX_CCLK <= 20000000U
+    MAMTIM = 0x1;
+  #elif LPC24XX_CCLK <= 40000000U
+    MAMTIM = 0x2;
+  #elif LPC24XX_CCLK <= 60000000U
+    MAMTIM = 0x3;
+  #else
+    MAMTIM = 0x4;
+  #endif
+  MAMCR = 0x2;
 
   /* Enable fast IO for ports 0 and 1 */
   SCS = SET_FLAG(SCS, 0x1);
@@ -377,29 +400,52 @@ void BSP_START_SECTION bsp_start_hook_1(void)
   /* Initialize EMC hook 1 */
   lpc24xx_init_emc_1();
 
+  #ifdef LPC24XX_STOP_GPDMA
+    if ((PCONP & PCONP_GPDMA) != 0) {
+      GPDMA_CONFIG = 0;
+      PCONP &= ~PCONP_GPDMA;
+    }
+  #endif
+
+  #ifdef LPC24XX_STOP_ETHERNET
+    if ((PCONP & PCONP_ETHERNET) != 0) {
+      MAC_COMMAND = 0x38;
+      MAC_MAC1 = 0xcf00;
+      MAC_MAC1 = 0;
+      PCONP &= ~PCONP_ETHERNET;
+    }
+  #endif
+
+  #ifdef LPC24XX_STOP_USB
+    if ((PCONP & PCONP_USB) != 0) {
+      OTG_CLK_CTRL = 0;
+      PCONP &= ~PCONP_USB;
+    }
+  #endif
+
   /* Copy .text section */
-  bsp_start_memcpy_arm(
+  bsp_start_memcpy(
     (int *) bsp_section_text_begin,
     (const int *) bsp_section_text_load_begin,
     (size_t) bsp_section_text_size
   );
 
   /* Copy .rodata section */
-  bsp_start_memcpy_arm(
+  bsp_start_memcpy(
     (int *) bsp_section_rodata_begin,
     (const int *) bsp_section_rodata_load_begin,
     (size_t) bsp_section_rodata_size
   );
 
   /* Copy .data section */
-  bsp_start_memcpy_arm(
+  bsp_start_memcpy(
     (int *) bsp_section_data_begin,
     (const int *) bsp_section_data_load_begin,
     (size_t) bsp_section_data_size
   );
 
   /* Copy .fast section */
-  bsp_start_memcpy_arm(
+  bsp_start_memcpy(
     (int *) bsp_section_fast_begin,
     (const int *) bsp_section_fast_load_begin,
     (size_t) bsp_section_fast_size

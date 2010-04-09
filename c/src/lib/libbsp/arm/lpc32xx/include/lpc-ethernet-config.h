@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc32xx
+ * @ingroup lpc_eth
  *
  * @brief Ethernet driver configuration.
  */
@@ -34,6 +34,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup lpc_eth Ethernet Support
+ *
+ * @ingroup lpc
+ *
+ * @brief Ethernet support.
+ *
+ * @{
+ */
 
 #define LPC_ETH_CONFIG_INTERRUPT LPC32XX_IRQ_ETHERNET
 
@@ -73,6 +83,8 @@ static void lpc_eth_config_free_table_area(char *table_area)
   /* FIXME: Type */
   free(table_area, (int) 0xdeadbeef);
 }
+
+/** @} */
 
 #ifdef __cplusplus
 }

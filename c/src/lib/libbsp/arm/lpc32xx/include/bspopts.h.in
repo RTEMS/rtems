@@ -33,6 +33,12 @@
 /* clock mode configuration for UARTs */
 #undef LPC32XX_CONFIG_UART_CLKMODE
 
+/* disable MMU protection of read-only sections */
+#undef LPC32XX_DISABLE_READ_ONLY_PROTECTION
+
+/* disable cache for read-write data sections */
+#undef LPC32XX_DISABLE_READ_WRITE_DATA_CACHE
+
 /* enable RMII for Ethernet */
 #undef LPC32XX_ETHERNET_RMII
 
@@ -47,6 +53,15 @@
 
 /* peripheral clock in Hz */
 #undef LPC32XX_PERIPH_CLK
+
+/* baud for UART 1 */
+#undef LPC32XX_UART_1_BAUD
+
+/* baud for UART 2 */
+#undef LPC32XX_UART_2_BAUD
+
+/* baud for UART 7 */
+#undef LPC32XX_UART_7_BAUD
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT

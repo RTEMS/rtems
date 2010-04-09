@@ -1970,6 +1970,12 @@ typedef struct {
 
 #define LPC24XX_FIO ((volatile lpc24xx_fio *) FIO_BASE_ADDR)
 
+/* PCONP */
+
+#define PCONP_GPDMA (1U << 29)
+#define PCONP_ETHERNET (1U << 30)
+#define PCONP_USB (1U << 31)
+
 /** @} */
 
 #endif /* LIBBSP_ARM_LPC24XX_LPC24XX_H */
