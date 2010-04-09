@@ -1,3 +1,7 @@
+2010-04-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/arm-cp15.h: Documentation.  Fixed mask defines.
+
 2010-03-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/cache.h: Fixed _CPU_cache_disable_data().
