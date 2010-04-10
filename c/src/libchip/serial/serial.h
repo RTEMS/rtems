@@ -20,6 +20,10 @@
 #include <stdbool.h>
 #include <termios.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  *  Types for get and set register routines
  */
@@ -149,5 +153,8 @@ extern console_tbl  Console_Port_Tbl[];
 extern console_data Console_Port_Data[];
 extern unsigned long  Console_Port_Count;
 
+#ifdef __cplusplus
+}
 #endif
-/* end of include file */
+
+#endif
