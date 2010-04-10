@@ -1,3 +1,7 @@
+2010-04-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/serial/serial.h: Add extern "C".
+
 2010-04-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* libchip/serial/serial.h, serial/mc68681.c, serial/mc68681_p.h,
