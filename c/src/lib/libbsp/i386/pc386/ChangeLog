@@ -1,3 +1,10 @@
+2010-04-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* make/custom/pc386.cfg: EXEEXT is not defined in application Makefile
+	support. All other BSPs just use .exe directly on objcopy commands.
+	This makes it consistent and allows external examples (network demos,
+	examples-v2, etc to link.
+
 2010-03-26	Chris Johns <chrisj@rtems.org>
 
 	* make/custom/pc386.cfg: Revert the PR1495 change.
