@@ -1,3 +1,8 @@
+2010-04-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/stackchk/check.c: Remove bogus casts.
+	Use PRIxPTR to printk pointers.
+
 2010-04-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/src/blkdev.c: Fixed disk delete.

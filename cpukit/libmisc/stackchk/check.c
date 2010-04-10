@@ -218,36 +218,35 @@ void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
   char name [32];
 
   printk("BLOWN STACK!!!\n");
-  printk("task control block: 0x%08lx\n", (unsigned long) running);
+  printk("task control block: 0x%08" PRIxPTR "\n", running);
   printk("task ID: 0x%08lx\n", (unsigned long) running->Object.id);
   printk(
-    "task name: 0x%08lx\n",
-    (unsigned long) running->Object.name.name_u32
+    "task name: 0x%08" PRIx32 "\n",
+    running->Object.name.name_u32
   );
   printk(
     "task name string: %s\n",
     rtems_object_get_name(running->Object.id, sizeof(name), name)
   );
   printk(
-    "task stack area (%lu Bytes): 0x%08lx .. 0x%08lx\n",
+    "task stack area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR "\n",
     (unsigned long) stack->size,
-    (unsigned long) stack->area,
-    (unsigned long) ((char *) stack->area + stack->size)
+    stack->area,
+    ((char *) stack->area + stack->size)
   );
   if (!pattern_ok) {
     printk(
-      "damaged pattern area (%lu Bytes): 0x%08lx .. 0x%08lx\n",
+      "damaged pattern area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR "\n",
       (unsigned long) PATTERN_SIZE_BYTES,
-      (unsigned long) pattern_area,
-      (unsigned long) (pattern_area + PATTERN_SIZE_BYTES)
+      pattern_area,
+      (pattern_area + PATTERN_SIZE_BYTES)
     );
   }
 
   #if defined(RTEMS_MULTIPROCESSING)
     if (rtems_configuration_get_user_multiprocessing_table()) {
       printk(
-        "node: 0x%08lx\n",
-	(unsigned long)
+        "node: 0x%08" PRIxPTR "\n",
           rtems_configuration_get_user_multiprocessing_table()->node
       );
     }
