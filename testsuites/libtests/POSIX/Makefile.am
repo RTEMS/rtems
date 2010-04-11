@@ -14,6 +14,9 @@ dup2_SOURCES = dup2.c
 check_PROGRAMS += fcntl
 fcntl_SOURCES = fcntl.c
 
+check_PROGRAMS += flockfile
+flockfile_SOURCES = flockfile.c
+
 check_PROGRAMS += fork
 fork_SOURCES = fork.c
 
@@ -22,6 +25,12 @@ free_SOURCES = free.c
 
 check_PROGRAMS += fstat
 fstat_SOURCES = fstat.c
+
+check_PROGRAMS += ftrylockfile
+ftrylockfile_SOURCES = ftrylockfile.c
+
+check_PROGRAMS += funlockfile
+funlockfile_SOURCES = funlockfile.c
 
 # FIXME: BSD-proprietary
 # check_PROGRAMS += getdents
