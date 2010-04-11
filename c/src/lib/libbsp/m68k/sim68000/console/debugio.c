@@ -14,6 +14,8 @@
  *  $Id$
  */
 
+#include <unistd.h> /* write */
+
 #include <bsp.h>
 #include <rtems/bspIo.h>
 
