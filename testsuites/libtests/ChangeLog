@@ -1,3 +1,8 @@
+2010-04-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* POSIX/flockfile.c, POSIX/funlockfile.c, POSIX/ftrylockfile.c: New.
+	* POSIX/Makefile.am: Add flockfile, funlockfile, ftrylockfile.
+
 2010-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* block10/.cvsignore: New file.
