@@ -242,6 +242,10 @@ AC_CHECK_HEADERS([sys/queue.h],[NEED_SYS_QUEUE_H=no],[NEED_SYS_QUEUE_H=yes])
 # configuration-time diagnostics and are not really used.
 AC_CHECK_DECLS([_POSIX_LOGIN_NAME_MAX],,,[#include <limits.h>])
 AC_CHECK_DECLS([CHAR_BIT],,,[#include <limits.h>])
+# FIXME: Mandatory in SUSv4, optional in SUSv3. 
+#   Not implemented in GCC/newlib, so far.
+AC_CHECK_DECLS([WORD_BIT],,,[#include <limits.h>])
+AC_CHECK_DECLS([LONG_BIT],,,[#include <limits.h>])
 
 ## BSD-ism, excluded from POSIX, but available on most platforms
 AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
