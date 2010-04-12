@@ -66,7 +66,7 @@ AC_CHECK_FUNCS([ttyname getcwd])
 # </FIXME>
 
 ## Check if the installed toolchain has these headers
-AC_CHECK_HEADERS([tar.h errno.h])
+AC_CHECK_HEADERS([tar.h errno.h sched.h])
 
 ## error out if libc doesn't provide stdint.h
 AS_IF([test x"${ac_cv_header_stdint_h}" != xyes],
@@ -79,6 +79,10 @@ AS_IF([test x"${ac_cv_header_inttypes_h}" != xyes],
 ## error out if libc doesn't provide errno.h
 AS_IF([test x"${ac_cv_header_errno_h}" != xyes],
 [AC_MSG_ERROR([Required header errno.h not found])])
+
+## error out if libc doesn't provide sched.h
+AS_IF([test x"${ac_cv_header_sched_h}" != xyes],
+[AC_MSG_ERROR([Required header sched.h not found])])
 
 AC_HEADER_STDBOOL
 AS_IF([test x"${ac_cv_header_stdbool_h}" != xyes],

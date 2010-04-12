@@ -1,5 +1,6 @@
 2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Check for sched.h.
 	* configure.ac: Check for WORD_BIT, LONG_BIT.
 	* configure.ac: Check for flockfile, funlockfile, ftrylockfile.
 
