@@ -1,5 +1,9 @@
 2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/monitor/mon-symbols.c: 16bit target fixes.
+
+2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/lib/ftpfs.c: 16bit target fixes:
 	Use ioctl_command_t as arg to rtems_ftpfs_do_ioctl.
 	Explicitly cast to uint32_t in char[] to uint32_t
