@@ -79,7 +79,7 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
       (RTEMS_RFS_VERSION * RTEMS_RFS_VERSION_MASK))
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_OPEN))
-      printf ("rtems-rfs: read-superblock: incompatible version: %08x (%08x)\n",
+      printf ("rtems-rfs: read-superblock: incompatible version: %08lx (%08x)\n",
               read_sb (RTEMS_RFS_SB_OFFSET_VERSION), RTEMS_RFS_VERSION_MASK);
     rtems_rfs_buffer_handle_close (fs, &handle);
     return EIO;
@@ -88,7 +88,7 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
   if (read_sb (RTEMS_RFS_SB_OFFSET_INODE_SIZE) != RTEMS_RFS_INODE_SIZE)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_OPEN))
-      printf ("rtems-rfs: read-superblock: inode size mismatch: fs:%d target:%d\n",
+      printf ("rtems-rfs: read-superblock: inode size mismatch: fs:%ld target:%d\n",
               read_sb (RTEMS_RFS_SB_OFFSET_VERSION), RTEMS_RFS_VERSION_MASK);
     rtems_rfs_buffer_handle_close (fs, &handle);
     return EIO;

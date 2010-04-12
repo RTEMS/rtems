@@ -1,3 +1,14 @@
+2010-04-12	Chris Johns <chrisj@rtems.org>
+
+	libfs/src/rfs/rtems-rfs-buffer-bdbuf.c,
+	libfs/src/rfs/rtems-rfs-buffer.c, libfs/src/rfs/rtems-rfs-data.h,
+	libfs/src/rfs/rtems-rfs-dir.c,
+	libfs/src/rfs/rtems-rfs-file-system.c,
+	libfs/src/rfs/rtems-rfs-format.c, libfs/src/rfs/rtems-rfs-inode.h,
+	libfs/src/rfs/rtems-rfs-rtems.c, libfs/src/rfs/rtems-rfs-rtems.h,
+	libfs/src/rfs/rtems-rfs-shell.c: Fix for PR1502. Clean up problems
+	on 16bit targets.
+
 2010-04-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/stackchk/check.c: Remove bogus casts.

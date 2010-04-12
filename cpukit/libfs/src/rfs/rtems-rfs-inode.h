@@ -339,7 +339,7 @@ static inline void
 rtems_rfs_inode_set_uid_gid (rtems_rfs_inode_handle* handle,
                              uint16_t uid, uint16_t gid)
 {
-  rtems_rfs_write_u32 (&handle->node->owner, (gid << 16) | uid);
+  rtems_rfs_write_u32 (&handle->node->owner, (((uint32_t) gid) << 16) | uid);
   rtems_rfs_buffer_mark_dirty (&handle->buffer);
 }
 

@@ -67,7 +67,7 @@ rtems_rfs_buffer_bdbuf_release (rtems_rfs_buffer* buffer,
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_RELEASE))
     printf ("rtems-rfs: bdbuf-release: block=%lu bdbuf=%lu %s\n",
-            (rtems_rfs_buffer_block) buffer->user,
+            (rtems_rfs_buffer_block) ((intptr_t) buffer->user),
             buffer->block, modified ? "(modified)" : "");
 
   if (modified)

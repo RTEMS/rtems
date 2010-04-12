@@ -51,12 +51,13 @@ rtems_rfs_scan_chain (rtems_chain_control*   chain,
     buffer = (rtems_rfs_buffer*) node;
 
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CHAINS))
-      printf ("%lu ", (rtems_rfs_buffer_block) buffer->user);
+      printf ("%lu ", (rtems_rfs_buffer_block) ((intptr_t)(buffer->user)));
 
-    if (((rtems_rfs_buffer_block) buffer->user) == block)
+    if (((rtems_rfs_buffer_block) ((intptr_t)(buffer->user))) == block)
     {
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CHAINS))
-        printf (": found block=%lu\n", (rtems_rfs_buffer_block) buffer->user);
+        printf (": found block=%lu\n",
+                (rtems_rfs_buffer_block) ((intptr_t)(buffer->user)));
 
       (*count)--;
       rtems_chain_extract (node);
@@ -182,7 +183,7 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
   rtems_chain_append (&fs->buffers, rtems_rfs_buffer_link (handle));
   fs->buffers_count++;
   
-  handle->buffer->user = (void*) block;
+  handle->buffer->user = (void*) ((intptr_t) block);
   handle->bnum = block;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_REQUEST))

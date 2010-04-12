@@ -158,7 +158,7 @@ typedef struct rtems_rfs_rtems_private
  * @param _ino The ino to set in the path location.
  */
 #define rtems_rfs_rtems_set_pathloc_ino(_loc, _ino) \
-  (_loc)->node_access = (void*)(_ino)
+  (_loc)->node_access = (void*)((intptr_t)(_ino))
 
 /**
  * Get the inode number (ino) given a path location.
@@ -176,7 +176,7 @@ typedef struct rtems_rfs_rtems_private
  * @param _doff The doff to set in the path location.
  */
 #define rtems_rfs_rtems_set_pathloc_doff(_loc, _doff) \
-  (_loc)->node_access_2 = (void*)(_doff)
+  (_loc)->node_access_2 = (void*)((intptr_t)(_doff))
 
 /**
  * Get the directory offset (doff) given a path location.

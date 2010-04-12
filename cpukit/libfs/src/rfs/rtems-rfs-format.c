@@ -33,7 +33,7 @@
 /**
  * Return the number of gigabytes.
  */
-#define GIGS(_g) ((_g) * 1024 * 1024)
+#define GIGS(_g) (((uint64_t)(_g)) * 1024 * 1024)
 
 /**
  * Return the number of bits that fit in the block size.

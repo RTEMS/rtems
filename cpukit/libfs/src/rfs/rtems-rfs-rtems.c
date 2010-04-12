@@ -813,7 +813,7 @@ rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FCHMOD))
     printf ("rtems-rfs-rtems: fchmod: in: ino:%ld mode:%06o\n",
-            ino, mode);
+            ino, (unsigned int) mode);
   
   rtems_rfs_rtems_lock (fs);
   

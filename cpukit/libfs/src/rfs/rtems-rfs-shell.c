@@ -499,7 +499,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
     
     length = elength - RTEMS_RFS_DIR_ENTRY_SIZE;
     
-    printf (" %5d: %04x inode=%-6u hash=%08x name[%03u]=",
+    printf (" %5d: %04x inode=%-6lu hash=%08lx name[%03u]=",
             entry, b,
             rtems_rfs_dir_entry_ino (data),
             rtems_rfs_dir_entry_hash (data),

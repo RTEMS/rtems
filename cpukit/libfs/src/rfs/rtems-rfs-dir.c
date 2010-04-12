@@ -161,7 +161,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
         {
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO_CHECK))
             printf ("rtems-rfs: dir-lookup-ino: " \
-                    "checking entry for ino %ld: off=%04lx length:%d ino:%d\n",
+                    "checking entry for ino %ld: off=%04lx length:%d ino:%ld\n",
                     rtems_rfs_inode_ino (inode), map.bpos.boff,
                     elength, rtems_rfs_dir_entry_ino (entry));
 
@@ -609,7 +609,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
         printf ("rtems-rfs: dir-read: found off:%Ld ino:%ld name=%s\n",
-                dirent->d_off, dirent->d_ino, dirent->d_name);
+                (uint64_t) dirent->d_off, dirent->d_ino, dirent->d_name);
       break;
     }
 
