@@ -1,3 +1,7 @@
+2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for flockfile, funlockfile, ftrylockfile.
+
 2010-04-12	Chris Johns <chrisj@rtems.org>
 
 	libfs/src/rfs/rtems-rfs-buffer-bdbuf.c,
