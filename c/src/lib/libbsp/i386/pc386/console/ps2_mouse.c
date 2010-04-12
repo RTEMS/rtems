@@ -588,7 +588,7 @@ static int paux_last_close(int major, int minor, void *arg)
  * termios framework whenever the "ECHO" feature is on.
  * It does nothing write now.
  */
-static int write_aux_echo( int minor, const char * buffer, int count )
+static ssize_t write_aux_echo( int minor, const char * buffer, size_t count )
 {
    return 0;
 }

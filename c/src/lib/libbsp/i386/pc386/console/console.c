@@ -116,17 +116,17 @@ isr_is_on(const rtems_irq_connect_data *irq)
 
 extern int  rtems_kbpoll( void );
 
-static int
-ibmpc_console_write(int minor, const char *buf, int len)
+static ssize_t
+ibmpc_console_write(int minor, const char *buf, size_t len)
 {
-  int count;
+  size_t count;
   for (count = 0; count < len; count++)
   {
     _IBMPC_outch( buf[ count ] );
     if( buf[ count ] == '\n')
       _IBMPC_outch( '\r' );            /* LF = LF + CR */
   }
-  return 0;
+  return count;
 }
 
 int kbd_poll_read( int minor )

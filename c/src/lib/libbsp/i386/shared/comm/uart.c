@@ -571,8 +571,8 @@ BSP_uart_termios_read_com2(int uart)
   return ( EOF );
 }
 
-int
-BSP_uart_termios_write_com1(int minor, const char *buf, int len)
+ssize_t
+BSP_uart_termios_write_com1(int minor, const char *buf, size_t len)
 {
   assert(buf != NULL);
 
@@ -602,11 +602,11 @@ BSP_uart_termios_write_com1(int minor, const char *buf, int len)
     uwrite(BSP_UART_COM1, IER, uart_data[BSP_UART_COM1].ier);
   }
 
-  return 0;
+  return 1;
 }
 
-int
-BSP_uart_termios_write_com2(int minor, const char *buf, int len)
+ssize_t
+BSP_uart_termios_write_com2(int minor, const char *buf, size_t len)
 {
   assert(buf != NULL);
 
@@ -636,7 +636,7 @@ BSP_uart_termios_write_com2(int minor, const char *buf, int len)
     uwrite(BSP_UART_COM2, IER, uart_data[BSP_UART_COM2].ier);
   }
 
-  return 0;
+  return 1;
 }
 
 void
