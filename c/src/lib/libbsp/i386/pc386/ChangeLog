@@ -1,3 +1,8 @@
+2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c, console/ps2_mouse.c: Reflect termios API
+	changes.
+
 2010-04-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* make/custom/pc386.cfg: EXEEXT is not defined in application Makefile
