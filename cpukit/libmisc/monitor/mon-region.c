@@ -61,7 +61,7 @@ rtems_monitor_region_dump(
     length += rtems_monitor_pad(18, length);
     length += rtems_monitor_dump_attributes(monitor_region->attribute);
     length += rtems_monitor_pad(30, length);
-    length += rtems_monitor_dump_hex((uint32_t)monitor_region->start_addr);
+    length += rtems_monitor_dump_addr(monitor_region->start_addr);
     length += rtems_monitor_pad(40, length);
     length += rtems_monitor_dump_hex(monitor_region->length);
     length += rtems_monitor_pad(50, length);
