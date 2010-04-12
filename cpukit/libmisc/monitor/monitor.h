@@ -406,6 +406,7 @@ void       rtems_monitor_separator(void);
 uint32_t   rtems_monitor_pad(uint32_t   dest_col, uint32_t   curr_col);
 int        rtems_monitor_dump_decimal(uint32_t   num);
 int        rtems_monitor_dump_hex(uint32_t   num);
+int        rtems_monitor_dump_addr(void *addr);
 int        rtems_monitor_dump_id(rtems_id id);
 int        rtems_monitor_dump_name(rtems_id id);
 int        rtems_monitor_dump_priority(rtems_task_priority priority);

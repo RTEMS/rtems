@@ -49,6 +49,12 @@ rtems_monitor_dump_decimal(uint32_t   num)
 }
 
 int
+rtems_monitor_dump_addr(void *addr)
+{
+    return fprintf(stdout,"0x%p", addr);
+}
+
+int
 rtems_monitor_dump_hex(uint32_t   num)
 {
     return fprintf(stdout,"0x%" PRIx32, num);
