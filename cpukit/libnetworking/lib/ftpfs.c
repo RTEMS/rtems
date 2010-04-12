@@ -159,7 +159,7 @@ rtems_status_code rtems_ftpfs_mount( const char *mount_point)
 
 static rtems_status_code rtems_ftpfs_do_ioctl(
   const char *mount_point,
-  int req,
+  ioctl_command_t req,
   ...
 )
 {
@@ -926,8 +926,8 @@ static int rtems_ftpfs_open_data_connection_passive(
   if (reply != RTEMS_FTPFS_REPLY_2) {
     return ENOTSUP;
   }
-  data_address = (uint32_t) ((pe.data [0] << 24) + (pe.data [1] << 16)
-    + (pe.data [2] << 8) + pe.data [3]);
+  data_address = ((uint32_t)(pe.data [0]) << 24) + ((uint32_t)(pe.data [1]) << 16)
+    + ((uint32_t)(pe.data [2]) << 8) + ((uint32_t)(pe.data [3]));
   data_port = (uint16_t) ((pe.data [4] << 8) + pe.data [5]);
   rtems_ftpfs_create_address( &sa, htonl( data_address), htons( data_port));
   DEBUG_PRINTF(
