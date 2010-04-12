@@ -1,5 +1,11 @@
 2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/monitor/mon-part.c, libmisc/monitor/mon-region.c:
+	Use rtems_monitor_dump_addr instead of rtems_monitor_dump_hex
+	to print addresses.
+
+2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/monitor/mon-prmisc.c, libmisc/monitor/monitor.h:
 	Add rtems_monitor_dump_addr().
 	* libmisc/monitor/mon-symbols.c: 16bit target fixes.
