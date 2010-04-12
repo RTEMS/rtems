@@ -1,5 +1,10 @@
 2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/include/rtems/system.h: Let RTEMS_offsetof return uintptr_t
+	instead of uint32_t (16bit target compatibility).
+
+2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/monitor/mon-part.c, libmisc/monitor/mon-region.c:
 	Use rtems_monitor_dump_addr instead of rtems_monitor_dump_hex
 	to print addresses.
