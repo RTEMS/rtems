@@ -634,8 +634,7 @@ rtems_device_driver console_close(rtems_device_major_number major,
   return (rtems_termios_close(arg));
 }
 
-/******************
-*********************************************************
+/***************************************************************************
    Function : console_read
 
    Description : Read from the device via termios
