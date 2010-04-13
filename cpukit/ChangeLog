@@ -1,5 +1,10 @@
 2010-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/fts.c (fts_pow2): Rebase fts_pow2 on
+	SIZEOF_SIZE_T * CHAR_BIT.
+
+2010-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/gcc-sanity.m4: Add RTEMS_CHECK_GCC_PRINTF_LD_OFF_T, 
 	RTEMS_CHECK_GCC_PRINTF_LLD_OFF_T.
 

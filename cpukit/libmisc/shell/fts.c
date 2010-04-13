@@ -49,6 +49,7 @@ __RCSID("$NetBSD: fts.c,v 1.40 2009/11/02 17:17:34 stacktic Exp $");
 #ifndef __rtems__
 #include "namespace.h"
 #endif
+#include <limits.h>
 #include <sys/param.h>
 #include <sys/stat.h>
 
@@ -1115,11 +1116,13 @@ fts_pow2(size_t x)
 	x |= x>>2;
 	x |= x>>4;
 	x |= x>>8;
+#if (SIZEOF_SIZE_T * CHAR_BIT) > 16
 	x |= x>>16;
-#if LONG_BIT > 32
+#endif
+#if (SIZEOF_SIZE_T * CHAR_BIT) > 32
 	x |= x>>32;
 #endif
-#if LONG_BIT > 64
+#if (SIZEOF_SIZE_T * CHAR_BIT) > 64
 	x |= x>>64;
 #endif
 	x++;
