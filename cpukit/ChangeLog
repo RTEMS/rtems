@@ -1,5 +1,10 @@
 2010-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/gcc-sanity.m4: Add RTEMS_CHECK_GCC_PRINTF_LD_OFF_T, 
+	RTEMS_CHECK_GCC_PRINTF_LLD_OFF_T.
+
+2010-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* shttpd/io_dir.c: Cast consts to size_t (Avoid overflows on implicit 
 	const casts on 16bit targets).
 
