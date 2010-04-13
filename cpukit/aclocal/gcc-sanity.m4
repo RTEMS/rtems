@@ -79,10 +79,36 @@ AC_DEFUN([RTEMS_CHECK_GCC_PRINTF_ZD_SSIZE_T],[
     ])
 ])
 
+AC_DEFUN([RTEMS_CHECK_GCC_PRINTF_LD_OFF_T],[
+  _RTEMS_GCC_WARNING(
+    [if printf("%ld", off_t) works],
+    [rtems_cv_PRINTF_LD_OFF_T],[
+       #include <sys/types.h>
+       #include <stdio.h>
+    ],[
+      off_t off = 1;
+      printf("%ld\n", off);
+    ])
+])
+
+AC_DEFUN([RTEMS_CHECK_GCC_PRINTF_LLD_OFF_T],[
+  _RTEMS_GCC_WARNING(
+    [if printf("%lld", off_t) works],
+    [rtems_cv_PRINTF_LLD_OFF_T],[
+       #include <sys/types.h>
+       #include <stdio.h>
+    ],[
+      off_t off = 1;
+      printf("%lld\n", off);
+    ])
+])
+
 AC_DEFUN([RTEMS_CHECK_GCC_SANITY],[
 RTEMS_CHECK_GCC_PRIxPTR
 RTEMS_CHECK_GCC_PRIuPTR
 RTEMS_CHECK_GCC_PRIdPTR
 RTEMS_CHECK_GCC_PRINTF_ZU_SIZE_T
 RTEMS_CHECK_GCC_PRINTF_ZD_SSIZE_T
+RTEMS_CHECK_GCC_PRINTF_LD_OFF_T
+RTEMS_CHECK_GCC_PRINTF_LLD_OFF_T
 ])
