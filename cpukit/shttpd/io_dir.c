@@ -79,7 +79,7 @@ read_dir(struct stream *stream, void *buf, size_t len)
 			if (st.st_size < 1024)
 				(void) my_snprintf(size, sizeof(size),
 				    "%lu", (unsigned long) st.st_size);
-			else if (st.st_size < 1024 * 1024)
+			else if (st.st_size < ((size_t)1024 * (size_t)1024))
 				(void) my_snprintf(size, sizeof(size), "%luk",
 				    (unsigned long) (st.st_size >> 10)  + 1);
 			else

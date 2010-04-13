@@ -1,3 +1,8 @@
+2010-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shttpd/io_dir.c: Cast consts to size_t (Avoid overflows on implicit 
+	const casts on 16bit targets).
+
 2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/system.h: Let RTEMS_offsetof return uintptr_t
