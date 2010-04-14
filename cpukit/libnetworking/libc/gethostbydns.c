@@ -393,7 +393,7 @@ gethostanswer(
 				buflen -= nn;
 			}
 
-			bp += sizeof(align) - ((u_long)bp % sizeof(align));
+			bp += sizeof(align) - ((uintptr_t)bp % sizeof(align));
 
 			if (bp + n >= &hostbuf[sizeof hostbuf]) {
 				debugprintf("size (%d) too big\n", n);
