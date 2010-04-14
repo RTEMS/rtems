@@ -1,3 +1,8 @@
+2010-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/sysctl.h: Change sysctl_oid->arg2 into int32_t
+	for 16bit target compliance.
+
 2010-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/shell/fts.c (fts_pow2): Rebase fts_pow2 on
