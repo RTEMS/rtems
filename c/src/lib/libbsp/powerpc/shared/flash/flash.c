@@ -81,6 +81,7 @@
 #include "flashPgmPvt.h"
 #endif
 
+#include <unistd.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <ctype.h>

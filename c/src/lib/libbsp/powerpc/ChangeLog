@@ -1,11 +1,18 @@
+2010-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/flash/flash.c: Include <unistd.h>.
+
 2010-04-08      Eric Norum <wenorum@lbl.gov>
-    * shared/motorola/vpd.c: add include to pick up read()/close() prototypes.
+
+	* shared/motorola/vpd.c: add include to pick up read()/close() prototypes.
 
 2010-03-27      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
 	* shared/startup/bspstart.c, shared/startup/pgtbl_setup.c: fix
 	prototypes
 
 2010-03-25      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
 	* aclocal.m4: add "gwlcfm" bsp
 
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
