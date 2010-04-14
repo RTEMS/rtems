@@ -1,3 +1,7 @@
+2010-04-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/uart.c: Reflect termios API changes.
+
 2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* clock/clockdrv.c, irq/bsp_irq_init.c, irq/irq.h

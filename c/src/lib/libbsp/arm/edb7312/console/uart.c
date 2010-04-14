@@ -26,7 +26,7 @@ int     uart_poll_read(int minor);
 static int     uart_first_open(int major, int minor, void *arg);
 static int     uart_last_close(int major, int minor, void *arg);
 static int     uart_read(int minor);
-static int     uart_write(int minor, const char *buf, int len);
+static ssize_t uart_write(int minor, const char *buf, size_t len);
 static void    uart_init(int minor);
 static void    uart_write_polled(int minor, char c);
 static int     uart_set_attributes(int minor, const struct termios *t);
@@ -107,12 +107,12 @@ int uart_poll_read(int minor)
     return c;
 }
 
-static int uart_write(int minor, const char *buf, int len)
+static ssize_t uart_write(int minor, const char *buf, size_t len)
 {
     volatile uint32_t   *data_reg;
     volatile uint32_t   *ctrl_reg1;
     volatile uint32_t   *ctrl_reg2;
-    int i;
+    size_t i;
     char c;
 
     data_reg = (uint32_t*)Console_Port_Tbl[minor].ulDataPort;
@@ -129,7 +129,7 @@ static int uart_write(int minor, const char *buf, int len)
         *data_reg = c;
     }
 
-    return 1;
+    return len;
 }
 
 static void uart_init(int minor)
