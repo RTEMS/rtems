@@ -1,5 +1,7 @@
 2010-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/mbuf.h: Use uintptr_t instead of u_long
+	for 16bit target compliance.
 	* libnetworking/libc/gethostbydns.c: Use uintptr_t instead of u_long
 	for 16bit target compliance.
 	* libnetworking/sys/sysctl.h: Change sysctl_oid->arg2 into int32_t
