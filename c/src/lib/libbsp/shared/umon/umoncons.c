@@ -22,7 +22,7 @@
 static int     umoncons_first_open(int major, int minor, void *arg);
 static int     umoncons_last_close(int major, int minor, void *arg);
 static int     umoncons_read(int minor);
-static int     umoncons_write(int minor, const char *buf, int len);
+static ssize_t umoncons_write(int minor, const char *buf, size_t len);
 static void    umoncons_init(int minor);
 static void    umoncons_write_polled(int minor, char c);
 static int     umoncons_set_attributes(int minor, const struct termios *t);
@@ -86,14 +86,14 @@ static int umoncons_read(int minor)
  *
  * return 1 on success, -1 on error
 */
-static int umoncons_write(int minor, const char *buf, int len)
+static ssize_t umoncons_write(int minor, const char *buf, size_t len)
 {
-  int i;
+  size_t i;
 
   for ( i=0 ; i<len ; i++ )
     mon_putchar( buf[i] );
 
-  return 1;
+  return len;
 }
 
 
