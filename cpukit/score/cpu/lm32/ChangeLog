@@ -1,3 +1,7 @@
+2010-04-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/cpu.h: Make _gp global.
+
 2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, cpu_asm.S, irq.c: Add include of config.h
