@@ -16,8 +16,8 @@ BINUTILS_RPMREL = 0.20100305.1
 include ../binutils.am
 BINUTILS_OPTS +=
 
-GCC_VERS = 4.4.2
+GCC_VERS = 4.5.0
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20100317.1
+GCC_RPMREL = 0.20100415.1
 include ../gcc.am
 GCC_OPTS += --languages=cxx,fortran,objc

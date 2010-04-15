@@ -49,9 +49,6 @@ BuildRequires:	%{_host_rpmprefix}gcc
 # Bug in bfd: Doesn't build without texinfo installed
 BuildRequires:	texinfo >= 4.2
 %else
-%if "i586-pc-freebsd6.4" == "i686-pc-cygwin"
-BuildRequires:	texinfo >= 4.2
-%endif
 %endif
 BuildRequires:	flex
 BuildRequires:	bison
