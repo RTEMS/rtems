@@ -37,7 +37,7 @@
 %define __debug_install_post %{nil}
 
 Name:		i586-pc-freebsd7.2
-Release:	0.20090827.1%{?dist}
+Release:	0.20091130.1%{?dist}
 License:	FreeBSD
 Group:		Development/Tools
 
