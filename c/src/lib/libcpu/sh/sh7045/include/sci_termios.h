@@ -27,16 +27,16 @@ void sh_sci_initialize_interrupts(int minor);
 
 void sh_sci_init(int minor);
 
-int sh_sci_write_support_int(
+ssize_t sh_sci_write_support_int(
     int         minor,
     const char *buf,
-    int         len
+    size_t      len
 );
 
-int sh_sci_write_support_polled(
+ssize_t sh_sci_write_support_polled(
   int         minor,
   const char *buf,
-  int         len
+  size_t      len
 );
 
 void sh_sci_write_polled(

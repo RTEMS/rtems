@@ -541,9 +541,9 @@ static int _sh_sci_poll_read(int minor)
 /*
  * Termios polled write
  */
-static int _sh_sci_poll_write(int minor, const uint8_t *buf, int len)
+static ssize_t _sh_sci_poll_write(int minor, const char *buf, size_t len)
 {
-    int count;
+    size_t count;
 
     for (count = 0; count < len; count++)
         outbyte( minor, buf[count] );
