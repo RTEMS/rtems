@@ -87,6 +87,16 @@ isnew:
 	popfl
 	incl SYM(have_cpuid)	/* we have CPUID instruction */
 
+	/*
+	 * Addressable Processor Ids
+	 *
+	 * CPUID.(EAX=4, ECX=0):EAX[31:26] + 1 = Y)
+	 */
+	movl $4, eax
+	movl $0, ecx
+	cpuid
+	movl eax,SYM(x86_capability_cores)
+
 	/* use it to get :
 	 *	processor type,
 	 *	processor model,
@@ -95,6 +105,7 @@ isnew:
 	 */
 	movl $1, eax
 	cpuid
+	movl ebx,SYM(x86_capability_ebx) /* store ebx feature info */
 	movl ecx,SYM(x86_capability_x) /* store ecx feature flags */
 
 	movb al, cl		/* save reg for future use */
@@ -235,7 +246,9 @@ BEGIN_DATA
 	PUBLIC(x86_model)
 	PUBLIC(x86_mask)
 	PUBLIC(x86_capability)
+	PUBLIC(x86_capability_ebx)
 	PUBLIC(x86_capability_x)
+	PUBLIC(x86_capability_cores)
 	PUBLIC(x86_vendor_id)
 	PUBLIC(hard_math)
 
@@ -249,7 +262,11 @@ SYM(x86_mask):
 	.byte 0
 SYM(x86_capability):
 	.long 0
+SYM(x86_capability_ebx):
+	.long 0
 SYM(x86_capability_x):
+	.long 0
+SYM(x86_capability_cores):
 	.long 0
 SYM(x86_vendor_id):
 	.zero 13

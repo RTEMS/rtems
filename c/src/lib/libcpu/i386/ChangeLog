@@ -1,3 +1,8 @@
+2010-04-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpuModel.S, cpuModel.h, displayCpu.c: Update to include more reserved
+	bits and pick out a bit more information.
+
 2009-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* page.c: Use bsp_mem_size.
