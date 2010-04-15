@@ -1,3 +1,8 @@
+2010-04-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sh7045/include/sci_termios.h, sh7045/sci/sci.c,
+	sh7045/sci/sci_termios.c: Reflect termios API changes.
+
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sh7750/score/ispsh7750.c, shgdb/score/ispshgdb.c: Fine tune
