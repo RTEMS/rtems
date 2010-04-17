@@ -255,16 +255,6 @@ __CPU_Context_switch:
 	[p0++] = fp;
 	[p0++] = sp;
 
-	/* save length registers */
-	r0 = l0;
-	[p0++] = r0;
-	r0 = l1;
-	[p0++] = r0;
-	r0 = l2;
-	[p0++] = r0;
-	r0 = l3;
-	[p0++] = r0;
-
 	/* save rets */
 	r0 = rets;
 	[p0++] = r0;
@@ -289,16 +279,6 @@ restore:
 	p5 = [p0++];
 	fp = [p0++];
 	sp = [p0++];
-
-	/* restore length registers */
-	r0 = [p0++];
-	l0 = r0;
-	r0 = [p0++];
-	l1 = r0;
-	r0 = [p0++];
-	l2 = r0;
-	r0 = [p0++];
-	l3 = r0;
 
 	/* restore rets */
 	r0 = [p0++];

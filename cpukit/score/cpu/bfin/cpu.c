@@ -192,15 +192,10 @@ void _CPU_Context_Initialize(
     uint32_t     stack_high;  /* highest "stack aligned" address */
     stack_high = ((uint32_t)(stack_base) + size);
 
-    the_context->register_sp = stack_high;
+    /* blackfin abi requires caller to reserve 12 bytes on stack */
+    the_context->register_sp = stack_high - 12;
     the_context->register_rets = (uint32_t) entry_point;
     the_context->imask = new_level ? 0 : 0xffff;
-
-    /* Blackfin C ABI requires L regs to be 0 upon func entry. */
-    the_context->register_l0 = 0;
-    the_context->register_l1 = 0;
-    the_context->register_l2 = 0;
-    the_context->register_l3 = 0;
 }
 
 

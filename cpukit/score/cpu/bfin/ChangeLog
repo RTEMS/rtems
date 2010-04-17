@@ -1,3 +1,9 @@
+2010-04-17	Allan Hessenflow <allanh@kallisti.com>
+
+	* cpu.c, cpu_asm.S, rtems/score/cpu.h: Fine tune registers saved in the
+	context. The sp and imask registers need to be saved. Also allocated
+	12 bytes on the stack at thread entry as the abi requires that.
+
 2010-04-17	Mike Frysinger <vapier.adi@gmail.com>
 
 	* cpu.c: Blackfin ABI requires L registers to be 0 upon function entry.

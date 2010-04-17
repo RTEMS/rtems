@@ -481,11 +481,6 @@ typedef struct {
     uint32_t   register_fp;
     uint32_t   register_sp;
 
-    uint32_t   register_l0;
-    uint32_t   register_l1;
-    uint32_t   register_l2;
-    uint32_t   register_l3;
-
     uint32_t   register_rets;
 
     uint32_t   imask;
