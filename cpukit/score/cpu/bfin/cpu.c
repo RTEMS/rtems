@@ -195,6 +195,12 @@ void _CPU_Context_Initialize(
     the_context->register_sp = stack_high;
     the_context->register_rets = (uint32_t) entry_point;
     the_context->imask = new_level ? 0 : 0xffff;
+
+    /* Blackfin C ABI requires L regs to be 0 upon func entry. */
+    the_context->register_l0 = 0;
+    the_context->register_l1 = 0;
+    the_context->register_l2 = 0;
+    the_context->register_l3 = 0;
 }
 
 
