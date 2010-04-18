@@ -1,3 +1,7 @@
+2010-04-18	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* .cvsignore, include/.cvsignore: New files.
+
 2010-04-05	Thomas Znidar <t.znidar@embed-it.com>
 
 	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac, gdb-init,
