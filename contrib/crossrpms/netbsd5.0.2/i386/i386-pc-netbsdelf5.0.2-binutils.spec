@@ -38,7 +38,7 @@ Name:		i386-pc-netbsdelf5.0.2-binutils
 Summary:	Binutils for target i386-pc-netbsdelf5.0.2
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20100305.1%{?dist}
+Release:	0.20100419.0%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

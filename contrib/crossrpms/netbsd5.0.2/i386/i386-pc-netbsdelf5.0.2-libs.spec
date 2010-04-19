@@ -37,7 +37,7 @@
 %define __debug_install_post %{nil}
 
 Name:		i386-pc-netbsdelf5.0.2
-Release:	0.20100416.0%{?dist}
+Release:	0.20100419.0%{?dist}
 License:	NetBSD
 Group:		Development/Tools
 
