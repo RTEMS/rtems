@@ -1,3 +1,4 @@
 # $Id$
 
-SUBDIRS = i386
+SUBDIRS = i386 amd64
+
