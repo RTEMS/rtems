@@ -41,7 +41,7 @@ Summary:      	amd64-pc-netbsdelf5.0.2 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20100419.0%{?dist}
+Release:      	0.20100419.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

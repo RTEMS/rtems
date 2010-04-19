@@ -41,7 +41,7 @@ Summary:      	i386-pc-netbsdelf5.0.2 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20100419.0%{?dist}
+Release:      	0.20100419.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -231,7 +231,7 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 
 Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 %if "%{gcc_version}" == "4.5.0"
-Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.0-rtems4.11-20100418.diff
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.0-rtems4.11-20100419.diff
 %endif
 %{?_without_sources:NoSource:	0}
 

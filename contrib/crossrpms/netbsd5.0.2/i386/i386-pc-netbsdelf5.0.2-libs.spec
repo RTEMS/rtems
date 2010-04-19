@@ -37,7 +37,7 @@
 %define __debug_install_post %{nil}
 
 Name:		i386-pc-netbsdelf5.0.2
-Release:	0.20100419.0%{?dist}
+Release:	0.20100419.1%{?dist}
 License:	NetBSD
 Group:		Development/Tools
 
@@ -47,8 +47,8 @@ BuildArch:	noarch
 Version:      	%netbsd_rpmvers
 Summary:      	i386-pc-netbsdelf5.0.2 Libraries
 
-Source0:	ftp://ftp.netbsd.org/pub/NetBSD/NetBSD-5.0.1/i386/binary/sets/base.tgz
-Source1:	ftp://ftp.netbsd.org/pub/NetBSD/NetBSD-5.0.1/i386/binary/sets/comp.tgz
+Source0:	ftp://ftp.netbsd.org/pub/NetBSD/NetBSD-5.0.2/i386/binary/sets/base.tgz
+Source1:	ftp://ftp.netbsd.org/pub/NetBSD/NetBSD-5.0.2/i386/binary/sets/comp.tgz
 
 %description
 i386-pc-netbsdelf5.0.2 libraries.

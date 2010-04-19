@@ -5,7 +5,7 @@ TARGET = i386-pc-netbsdelf5.0.2
 include $(top_srcdir)/mkspec.am
 
 NETBSD_VERS = 5.0.2
-NETBSD_RPMREL = 0.20100419.0
+NETBSD_RPMREL = 0.20100419.1
 EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
 include ../libs.am

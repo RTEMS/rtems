@@ -15,8 +15,8 @@ BuildArch:	noarch
 Version:      	%netbsd_rpmvers
 Summary:      	@tool_target@ Libraries
 
-Source0:	ftp://ftp.netbsd.org/pub/NetBSD/NetBSD-5.0.1/amd64/binary/sets/base.tgz
-Source1:	ftp://ftp.netbsd.org/pub/NetBSD/NetBSD-5.0.1/amd64/binary/sets/comp.tgz
+Source0:	ftp://ftp.netbsd.org/pub/NetBSD/NetBSD-5.0.2/amd64/binary/sets/base.tgz
+Source1:	ftp://ftp.netbsd.org/pub/NetBSD/NetBSD-5.0.2/amd64/binary/sets/comp.tgz
 
 %description
 @tool_target@ libraries.
