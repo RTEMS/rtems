@@ -383,10 +383,10 @@ vectorIDLoop:
 	[--sp] = r3;
 	[--sp] = p3;
 	[--sp] = p2;
-	[--sp] = lt1;
-	[--sp] = lt0;
 	[--sp] = lc1;
 	[--sp] = lc0;
+	[--sp] = lt1;
+	[--sp] = lt0;
 	[--sp] = lb1;
 	[--sp] = lb0;
 	[--sp] = i3;
@@ -406,8 +406,13 @@ vectorIDLoop:
 	[--sp] = b1;
 	[--sp] = b0;
 	[--sp] = rets;
-	r1 = fp; /* is this really what should be passed here? */
 	/* call user isr; r0 = vector number, r1 = frame pointer */
+	r1 = fp; /* is this really what should be passed here? */
+	r2 = 0;
+	l0 = r2;
+	l1 = r2;
+	l2 = r2;
+	l3 = r2;
 	sp += -12; /* bizarre abi... */
 	call (p0);
 	sp += 12;
@@ -430,10 +435,10 @@ vectorIDLoop:
 	i3 = [sp++];
 	lb0 = [sp++];
 	lb1 = [sp++];
-	lc0 = [sp++];
-	lc1 = [sp++];
 	lt0 = [sp++];
 	lt1 = [sp++];
+	lc0 = [sp++];
+	lc1 = [sp++];
 	p2 = [sp++];
 	p3 = [sp++];
 	r3 = [sp++];
@@ -515,10 +520,10 @@ __ISR15_Handler:
 	[--sp] = p2;
 	[--sp] = p1;
 	[--sp] = p0;
-	[--sp] = lt1;
-	[--sp] = lt0;
 	[--sp] = lc1;
 	[--sp] = lc0;
+	[--sp] = lt1;
+	[--sp] = lt0;
 	[--sp] = lb1;
 	[--sp] = lb0;
 	[--sp] = i3;
@@ -537,6 +542,11 @@ __ISR15_Handler:
 	[--sp] = b2;
 	[--sp] = b1;
 	[--sp] = b0;
+	r2 = 0;
+	l0 = r2;
+	l1 = r2;
+	l2 = r2;
+	l3 = r2;
 	sp += -12; /* bizarre abi... */
 	call __Thread_Dispatch;
 	sp += 12;
@@ -558,10 +568,10 @@ __ISR15_Handler:
 	i3 = [sp++];
 	lb0 = [sp++];
 	lb1 = [sp++];
-	lc0 = [sp++];
-	lc1 = [sp++];
 	lt0 = [sp++];
 	lt1 = [sp++];
+	lc0 = [sp++];
+	lc1 = [sp++];
 	p0 = [sp++];
 	p1 = [sp++];
 	p2 = [sp++];

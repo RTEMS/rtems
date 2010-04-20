@@ -1,3 +1,10 @@
+2010-04-20	Allan Hessenflow <allanh@kallisti.com>
+
+	* cpu_asm.S: L0-L3 were part of the interrupt context, but as
+	Mike Frysinger noted they were not being zeroed before calling
+	the C handlers. A patch that corrects this, as well as improving
+	some of the push/pop order to avoid stalls.
+
 2010-04-17	Allan Hessenflow <allanh@kallisti.com>
 
 	* cpu.c, cpu_asm.S, rtems/score/cpu.h: Fine tune registers saved in the
