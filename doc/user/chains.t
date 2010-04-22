@@ -180,14 +180,15 @@ void foobar (const char*          match,
   while (!@value{DIRPREFIX}chain_is_tail (chain, node))
   @{
     bar = (foo*) node;
+    rtems_chain_node* next_node = node->next;
 
     if (strcmp (match, bar->data) == 0)
     @{
-      @value{DIRPREFIX}chain_node* next_node = node->next;
       @value{DIRPREFIX}chain_extract (node);
       @value{DIRPREFIX}chain_append (out, node);
-      node = next_node; 
     @}
+
+    node = next_node; 
   @}
 @}
 @end example

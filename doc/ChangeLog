@@ -1,3 +1,7 @@
+2010-04-22	Alin Rus <alin.codejunkie@gmail.com>
+
+	* user/chain.t: Fixed the example from PR 1504.
+
 2010-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/conf.t: CONFIGURE_DISABLE_CLASSIC_NOTEPADS is typo of
