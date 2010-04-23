@@ -1,3 +1,7 @@
+2010-04-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* texi2www/texi2www: Add some new texinfo commands.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

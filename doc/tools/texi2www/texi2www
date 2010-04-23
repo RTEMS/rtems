@@ -1130,6 +1130,7 @@ sub initialize_tables
     # expansion). 
     %atxy_2_zyz= (
         'b',         'STRONG',
+	'caption',   "<STRONG>,CENTER,</STRONG>",
 	'cite',      'CITE',
 	'code',      "CODE",
 	'dfn',       'EM',
@@ -1174,6 +1175,7 @@ sub initialize_tables
 	'pxref',    'Xsee ',
 	'href',     'X',
 	'uref',     'X',
+	'url',      'X',
 	'email',    'X',
 	'inforef',  'XSee ',
     );
