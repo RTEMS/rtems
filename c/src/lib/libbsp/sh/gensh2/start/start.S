@@ -32,10 +32,6 @@
 
 #include <rtems/asm.h>
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning Please check and remove these warnings.
-
 	BEGIN_CODE
 	PUBLIC(start)
 
