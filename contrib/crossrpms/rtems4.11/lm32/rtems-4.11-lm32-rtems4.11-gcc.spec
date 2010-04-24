@@ -70,7 +70,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # FIXME: Disable lto for now, to avoid dependencies on libelf
 %bcond_with lto
 
-# FIXME: Disamble python gdb scripts
+# FIXME: Disable python gdb scripts
 # ATM, no idea how to package them
 %bcond_with pygdb
 
@@ -103,13 +103,14 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global gmp_provided 4.2.4
 %endif
 
-%if 0%{?rhel6}
+%if 0%{?el6}
 %global mpc_provided %{nil}
-%global mpfr_provided 2.4.1
+# el6 beta ships mpfr but mpfr-devel is missing
+%global mpfr_provided %{nil}
 %global gmp_provided 4.3.1
 %endif
 
-%if 0%{?rhel5}
+%if 0%{?el5}
 %global mpc_provided %{nil}
 %global mpfr_provided %{nil}
 %global gmp_provided 4.1.4
@@ -207,7 +208,7 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
-%{?rhel6:BuildRequires: cloog-ppl-devel >= %cloog_required}
+# el6 ships cloog-ppl, but cloog-ppl-devel is missing
 %{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
@@ -278,7 +279,7 @@ Source1:        ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgve
 
 %if "%{newlib_version}" == "1.18.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.18.0-rtems4.11-20100423.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20100402.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
