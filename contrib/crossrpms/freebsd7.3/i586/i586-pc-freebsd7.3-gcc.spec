@@ -163,6 +163,7 @@ BuildRequires:  %{_host_rpmprefix}mpc-devel >= %{mpc_required}
 %endif
 %else
 %define _build_mpc 1
+%define gmp_required 		4.2
 %endif
 %endif
 
