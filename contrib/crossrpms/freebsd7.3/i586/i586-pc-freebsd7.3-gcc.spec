@@ -41,7 +41,7 @@ Summary:      	i586-pc-freebsd7.3 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20100416.1%{?dist}
+Release:      	0.20100424.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,7 +53,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # FIXME: Disable lto for now, to avoid dependencies on libelf
 %bcond_with lto
 
-# FIXME: Disamble python gdb scripts
+# FIXME: Disable python gdb scripts
 # ATM, no idea how to package them
 %bcond_with pygdb
 
@@ -86,7 +86,14 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global gmp_provided 4.2.4
 %endif
 
-%if 0%{?rhel5}
+%if 0%{?el6}
+%global mpc_provided %{nil}
+# el6 beta ships mpfr but mpfr-devel is missing
+%global mpfr_provided %{nil}
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?el5}
 %global mpc_provided %{nil}
 %global mpfr_provided %{nil}
 %global gmp_provided 4.1.4
@@ -186,6 +193,7 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
+# el6 ships cloog-ppl, but cloog-ppl-devel is missing
 %{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
