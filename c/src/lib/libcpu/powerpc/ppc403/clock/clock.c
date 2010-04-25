@@ -50,17 +50,11 @@
 
 #include <bsp.h>
 
-#ifdef BSP_PPC403_CLOCK_HOOK_EXCEPTION
 #include <bsp/vectors.h>
-#define PPC_HAS_CLASSIC_EXCEPTIONS FALSE
-#else
-#if !defined(ppc405)
-#define PPC_HAS_CLASSIC_EXCEPTIONS TRUE
-#else
-#define PPC_HAS_CLASSIC_EXCEPTIONS FALSE
 #include <bsp/irq.h>
-#endif
-#endif
+
+extern uint32_t bsp_clicks_per_usec;
+extern bool bsp_timer_internal_clock;
 
 volatile uint32_t   Clock_driver_ticks;
 static uint32_t   pit_value, tick_time;
@@ -73,13 +67,6 @@ rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
 );
-
-/*
- * These are set by clock driver during its init
- */
-
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
 
 static inline uint32_t   get_itimer(void)
 {
@@ -98,13 +85,7 @@ static inline uint32_t   get_itimer(void)
  *  ISR Handler
  */
 
-#if PPC_HAS_CLASSIC_EXCEPTIONS
-rtems_isr Clock_isr(rtems_vector_number vector)
-#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
-int  Clock_isr(struct _BSP_Exception_frame *f, unsigned int vector)
-#else
 void Clock_isr(void* handle)
-#endif
 {
     uint32_t   clicks_til_next_interrupt;
 #if defined(BSP_PPC403_CLOCK_ISR_IRQ_LEVEL)
@@ -173,13 +154,8 @@ void Clock_isr(void* handle)
 #if defined(BSP_PPC403_CLOCK_ISR_IRQ_LEVEL)
 	_ISR_Set_level(l_orig)
 #endif
-
-#if defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
-	return 0;
-#endif
 }
 
-#if !PPC_HAS_CLASSIC_EXCEPTIONS && !defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
 int ClockIsOn(const rtems_irq_connect_data* unused)
 {
     register uint32_t   tcr;
@@ -188,15 +164,10 @@ int ClockIsOn(const rtems_irq_connect_data* unused)
 
     return (tcr & 0x04000000) != 0;
 }
-#endif
 
 void ClockOff(
-#if PPC_HAS_CLASSIC_EXCEPTIONS || defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
-	      void
-#else
 	      const rtems_irq_connect_data* unused
-#endif
-	      )
+)
 {
     register uint32_t   tcr;
 
@@ -208,17 +179,11 @@ void ClockOff(
 }
 
 void ClockOn(
-#if PPC_HAS_CLASSIC_EXCEPTIONS || defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
-	      void
-#else
 	      const rtems_irq_connect_data* unused
-#endif
-	      )
+)
 {
     uint32_t   iocr;
     register uint32_t   tcr;
-    extern uint32_t bsp_clicks_per_usec;
-    extern bool bsp_timer_internal_clock;
 #ifdef ppc403
     uint32_t   pvr;
 #endif /* ppc403 */
@@ -292,15 +257,11 @@ void ClockOn(
 
 
 void Install_clock(
-#if PPC_HAS_CLASSIC_EXCEPTIONS
-		   rtems_isr_entry clock_isr
-#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
-           ppc_exc_handler_t clock_isr
-#else
-		   void (*clock_isr)(void *)
-#endif
-		   )
+  void (*clock_isr)(void *)
+)
 {
+   rtems_irq_connect_data clockIrqConnData;
+
 #ifdef ppc403
     uint32_t   pvr;
 #endif /* ppc403 */
@@ -315,20 +276,6 @@ void Install_clock(
      * interrupt overhead
      */
 
-#if PPC_HAS_CLASSIC_EXCEPTIONS
- {
-    rtems_isr_entry previous_isr;
-    rtems_interrupt_catch(clock_isr, PPC_IRQ_PIT, &previous_isr);
-    ClockOn();
- }
-#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
- {
- 	ppc_exc_set_handler( BSP_PPC403_CLOCK_HOOK_EXCEPTION, clock_isr );
-    ClockOn();
- }
-#else
- {
-   rtems_irq_connect_data clockIrqConnData;
    clockIrqConnData.on   = ClockOn;
    clockIrqConnData.off  = ClockOff;
    clockIrqConnData.isOn = ClockIsOn;
@@ -338,61 +285,39 @@ void Install_clock(
      printk("Unable to connect Clock Irq handler\n");
      rtems_fatal_error_occurred(1);
    }
- }
-#endif
-    atexit(Clock_exit);
+
+   atexit(Clock_exit);
 }
 
 void
 ReInstall_clock(
-#if PPC_HAS_CLASSIC_EXCEPTIONS
-		rtems_isr_entry new_clock_isr
-#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
-		ppc_exc_handler_t clock_isr
-#else
-		void (*new_clock_isr)(void *)
-#endif
+  void (*new_clock_isr)(void *)
 )
 {
   uint32_t   isrlevel = 0;
+  rtems_irq_connect_data clockIrqConnData;
 
   rtems_interrupt_disable(isrlevel);
 
-#if PPC_HAS_CLASSIC_EXCEPTIONS
- {
-   rtems_isr_entry previous_isr;
-   rtems_interrupt_catch(new_clock_isr, PPC_IRQ_PIT, &previous_isr);
-   ClockOn();
- }
-#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
- {
- 	ppc_exc_set_handler( BSP_PPC403_CLOCK_HOOK_EXCEPTION, clock_isr );
-    ClockOn();
- }
-#else
-  {
-    rtems_irq_connect_data clockIrqConnData;
 
-    clockIrqConnData.name = BSP_PIT;
-    if (!BSP_get_current_rtems_irq_handler(&clockIrqConnData)) {
-      printk("Unable to stop system clock\n");
-      rtems_fatal_error_occurred(1);
-    }
-
-    BSP_remove_rtems_irq_handler (&clockIrqConnData);
-
-    clockIrqConnData.on   = ClockOn;
-    clockIrqConnData.off  = ClockOff;
-    clockIrqConnData.isOn = ClockIsOn;
-    clockIrqConnData.name = BSP_PIT;
-    clockIrqConnData.hdl  = new_clock_isr;
-
-    if (!BSP_install_rtems_irq_handler (&clockIrqConnData)) {
-      printk("Unable to connect Clock Irq handler\n");
-      rtems_fatal_error_occurred(1);
-    }
+  clockIrqConnData.name = BSP_PIT;
+  if (!BSP_get_current_rtems_irq_handler(&clockIrqConnData)) {
+    printk("Unable to stop system clock\n");
+    rtems_fatal_error_occurred(1);
   }
-#endif
+
+  BSP_remove_rtems_irq_handler (&clockIrqConnData);
+
+  clockIrqConnData.on   = ClockOn;
+  clockIrqConnData.off  = ClockOff;
+  clockIrqConnData.isOn = ClockIsOn;
+  clockIrqConnData.name = BSP_PIT;
+  clockIrqConnData.hdl  = new_clock_isr;
+
+  if (!BSP_install_rtems_irq_handler (&clockIrqConnData)) {
+    printk("Unable to connect Clock Irq handler\n");
+    rtems_fatal_error_occurred(1);
+  }
 
   rtems_interrupt_enable(isrlevel);
 }
@@ -408,26 +333,15 @@ ReInstall_clock(
 
 void Clock_exit(void)
 {
-#if PPC_HAS_CLASSIC_EXCEPTIONS
-  ClockOff();
+  rtems_irq_connect_data clockIrqConnData;
 
-  (void) set_vector(0, PPC_IRQ_PIT, 1);
-#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
-  ClockOff();
-  ppc_exc_set_handler( BSP_PPC403_CLOCK_HOOK_EXCEPTION, 0 );
-#else
- {
-    rtems_irq_connect_data clockIrqConnData;
+  clockIrqConnData.name = BSP_PIT;
+  if (!BSP_get_current_rtems_irq_handler(&clockIrqConnData)) {
+    printk("Unable to stop system clock\n");
+    rtems_fatal_error_occurred(1);
+  }
 
-    clockIrqConnData.name = BSP_PIT;
-    if (!BSP_get_current_rtems_irq_handler(&clockIrqConnData)) {
-      printk("Unable to stop system clock\n");
-      rtems_fatal_error_occurred(1);
-    }
-
-    BSP_remove_rtems_irq_handler (&clockIrqConnData);
- }
-#endif
+  BSP_remove_rtems_irq_handler (&clockIrqConnData);
 }
 
 rtems_device_driver Clock_initialize(
@@ -437,13 +351,6 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
-
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
 }

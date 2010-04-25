@@ -218,8 +218,8 @@ tty0PollRead (int minor)
 }
 
 
-static int
-tty0PollWrite(int minor,const char *buf,int len)
+static ssize_t
+tty0PollWrite(int minor, const char *buf, size_t len)
 {
 
   while (len-- > 0) {
@@ -232,7 +232,7 @@ tty0PollWrite(int minor,const char *buf,int len)
 
 /* ================ Termios support  =================*/
 
-static int tty0InterruptWrite (int minor, const char *buf, int len)
+static ssize_t tty0InterruptWrite (int minor, const char *buf, size_t len)
 {
 
   if(len <= 0)
@@ -350,8 +350,6 @@ tty0Initialize(void)
   rtems_isr_entry previous_isr; /* this is a dummy */
   unsigned char _ier;
   unsigned char _tmp;
-  extern uint32_t bsp_serial_rate;
-  extern bool bsp_serial_external_clock;
 
   /*
    * Initialise the serial tty0port

@@ -184,6 +184,9 @@ static const pasync port = (pasync)(0xEF600300   + (USE_UART*0x100));	/* 0xEF600
 static void *spittyp;         /* handle for termios */
 int ppc403_spi_interrupt = 0; /* do not use interrupts... */
 
+extern uint32_t bsp_serial_per_sec;
+extern uint32_t bsp_serial_rate;
+extern bool bsp_serial_external_clock;
 
 static int spiBaudRound(double x)
 {
@@ -194,7 +197,6 @@ void
 spiBaudSet(uint32_t   baudrate)
 {
   uint32_t   tmp;
-  extern uint32_t bsp_serial_per_sec;
 
   tmp = spiBaudRound( (double)bsp_serial_per_sec / (baudrate * 16) );
 
@@ -254,8 +256,8 @@ spiPollRead (int minor)
 }
 
 
-static int
-spiPollWrite(int minor,const char *buf,int len)
+static ssize_t
+spiPollWrite(int minor, const char *buf, size_t len)
 {
 
   while (len-- > 0) {
@@ -294,7 +296,7 @@ spiStopRemoteTx (int minor)
   return 0;
 }
 
-static int InterruptWrite (int minor, const char *buf, int len)
+static ssize_t InterruptWrite (int minor, const char *buf, size_t len)
 {
   port->IER |= IER_XMT;     /* always enable tx interrupt */
   port->THR = *buf; 	    /* write char to send         */
@@ -332,7 +334,6 @@ static rtems_isr serial_ISR(rtems_vector_number v)
 void
 spiDeInit(void)
 {
-  extern uint32_t bsp_serial_rate;
   /*
    * disable interrupts for serial port
    * set it to state to work with polling boot monitor, if any...
@@ -357,8 +358,6 @@ spiInitialize(void)
   register unsigned tmp;
   rtems_isr_entry previous_isr; /* this is a dummy */
   unsigned char _ier;
-  extern bool bsp_serial_external_clock;
-  extern uint32_t bsp_serial_rate;
 
   /*
    * Initialise the serial port

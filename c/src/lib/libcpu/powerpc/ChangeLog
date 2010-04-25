@@ -1,3 +1,9 @@
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* ppc403/clock/clock.c, ppc403/console/console405.c,
+	ppc403/tty_drv/tty_drv.c: Remove warnings and simple vectored
+	interrupt support.
+
 2010-04-07      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* shared/include/cpuIdent.c, shared/include/cpuIdent.h: skip
