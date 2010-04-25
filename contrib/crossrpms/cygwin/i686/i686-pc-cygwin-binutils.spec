@@ -38,7 +38,7 @@ Name:		i686-pc-cygwin-binutils
 Summary:	Binutils for target i686-pc-cygwin
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20100204.0%{?dist}
+Release:	0.20100425.0%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -49,9 +49,7 @@ BuildRequires:	%{_host_rpmprefix}gcc
 # Bug in bfd: Doesn't build without texinfo installed
 BuildRequires:	texinfo >= 4.2
 %else
-%if "i686-pc-cygwin" == "i686-pc-cygwin"
 BuildRequires:	texinfo >= 4.2
-%endif
 %endif
 BuildRequires:	flex
 BuildRequires:	bison
