@@ -857,8 +857,8 @@ void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
            (uintptr_t)(_stack_base) + (_size) - CPU_STACK_ALIGNMENT; \
         uintptr_t  _intlvl = _isr & 0xff; \
   	_stack_tmp &= ~(CPU_STACK_ALIGNMENT - 1); \
-  	(_the_context)->sp = _stack_tmp; \
-  	(_the_context)->fp = _stack_tmp; \
+  	(_the_context)->sp = (__MIPS_REGISTER_TYPE) _stack_tmp; \
+  	(_the_context)->fp = (__MIPS_REGISTER_TYPE) _stack_tmp; \
 	(_the_context)->ra = (__MIPS_REGISTER_TYPE)_entry_point; \
 	(_the_context)->c0_sr = ((_intlvl==0)?(mips_interrupt_mask() | 0x300 | _INTON): \
 		( ((_intlvl<<9) & mips_interrupt_mask()) | 0x300 | ((_intlvl & 1)?_INTON:0)) ) | \

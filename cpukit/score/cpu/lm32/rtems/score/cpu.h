@@ -846,10 +846,10 @@ extern char _gp[];
                                  _isr, _entry_point, _is_fp ) \
    do { \
      uint32_t _stack = (uint32_t)(_stack_base) + (_size) - 4; \
-     (_the_context)->gp = (void *)_gp; \
-     (_the_context)->fp = (void *)_stack; \
-     (_the_context)->sp = (void *)_stack; \
-     (_the_context)->ra = (void *)(_entry_point); \
+     (_the_context)->gp = (uint32_t)_gp; \
+     (_the_context)->fp = (uint32_t)_stack; \
+     (_the_context)->sp = (uint32_t)_stack; \
+     (_the_context)->ra = (uint32_t)(_entry_point); \
    } while ( 0 )
 
 /**
