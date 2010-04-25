@@ -56,7 +56,7 @@ include ../mpfr.am
 # Check bfd/configure for the real version number
 BINUTILS_VERS = 2.19.51-1
 BINUTILS_PKGVERS = 2.19.51-1
-BINUTILS_RPMREL = 0.20100204.0
+BINUTILS_RPMREL = 0.20100425.0
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
