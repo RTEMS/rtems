@@ -27,6 +27,8 @@
 
 SPR_RW(SPRG1)
 
+int bsp_interrupt_initialize(void);
+
 /*
  *  Driver configuration parameters
  */

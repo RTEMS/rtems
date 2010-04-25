@@ -149,6 +149,10 @@ static uint32_t   upmaTable[64] = {
 #endif
 };
 
+#if ( !defined(EPPCBUG_VECTORS) )
+  extern uint32_t   simask_copy;
+#endif
+
 /*
  *  Initialize MBX8xx
  */
@@ -158,7 +162,6 @@ void _InitMBX8xx (void)
   uint32_t i;
 #endif
   register uint32_t   r1;
-  extern uint32_t   simask_copy;
 
   /*
    *  Initialize the Debug Enable Register (DER) to an appropriate

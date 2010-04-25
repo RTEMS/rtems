@@ -93,6 +93,9 @@ static void serial_putchar(const char c);
 
 BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
+extern volatile m8xx_t m8xx;
+extern struct rtems_termios_tty *ttyp[];
+
 /*
  * _EPPCBug_pollRead
  *
@@ -111,8 +114,6 @@ static int _EPPCBug_pollRead(
   int minor
 )
 {
-  extern volatile m8xx_t m8xx;
-
   char c;
   volatile int simask;		/* We must read and write m8xx.simask */
   int retval;
@@ -220,8 +221,6 @@ static ssize_t _EPPCBug_pollWrite(
   size_t len
 )
 {
-  extern volatile m8xx_t m8xx;
-
   volatile int simask;
   int i;
   ISR_Level level;
@@ -875,7 +874,6 @@ rtems_device_driver console_open(
 {
 #if NVRAM_CONFIGURE == 1
   /* Used to track termios private data for callbacks */
-  extern struct rtems_termios_tty *ttyp[];
   rtems_libio_open_close_args_t *args = arg;
   static const rtems_termios_callbacks sccEPPCBugCallbacks = {
     NULL,                       	/* firstOpen */

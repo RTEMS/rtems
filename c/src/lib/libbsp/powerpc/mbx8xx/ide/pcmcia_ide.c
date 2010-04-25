@@ -219,7 +219,7 @@ void mbx8xx_pcmciaide_read_block
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int minor,
- uint16_t   block_size,
+ uint32_t   block_size,
  rtems_blkdev_sg_buffer *bufs,
  uint32_t   *cbuf,
  uint32_t   *pos
@@ -276,7 +276,7 @@ void mbx8xx_pcmciaide_write_block
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int minor,
- uint16_t   block_size,
+ uint32_t   block_size,
  rtems_blkdev_sg_buffer *bufs,
  uint32_t   *cbuf,
  uint32_t   *pos
