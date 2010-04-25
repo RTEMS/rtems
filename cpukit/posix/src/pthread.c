@@ -48,12 +48,17 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
   SCHED_FIFO,                 /* schedpolicy */
   {                           /* schedparam */
     2,                        /* sched_priority */
-    0,                        /* sched_ss_low_priority */
-    { 0L, 0 },                /* sched_ss_repl_period */
-    { 0L, 0 }                 /* sched_ss_init_budget */
+    #if defined(_POSIX_SPORADIC_SERVER) || \
+        defined(_POSIX_THREAD_SPORADIC_SERVER)
+      0,                        /* sched_ss_low_priority */
+      { 0L, 0 },                /* sched_ss_repl_period */
+      { 0L, 0 }                 /* sched_ss_init_budget */
+    #endif
   },
+  #if defined(_POSIX_THREAD_CPUTIME)
+    1,                        /* cputime_clock_allowed */
+  #endif
   PTHREAD_CREATE_JOINABLE,    /* detachstate */
-  1                           /* cputime_clock_allowed */
 };
 
 /*

@@ -1,5 +1,11 @@
 2010-04-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/src/pthread.c: Make default pthread_attr_t match the
+	conditionals in the version in newlib. This way it will always be
+	right.
+
+2010-04-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/readv.c: Check for < 0 on iov_len, not <= 0. A
 	readv() with all iov_len equal to 0 should have no effect.
 
