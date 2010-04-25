@@ -1,3 +1,8 @@
+2010-04-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/readv.c: Check for < 0 on iov_len, not <= 0. A
+	readv() with all iov_len equal to 0 should have no effect.
+
 2010-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/mbuf.h: Use uintptr_t instead of u_long

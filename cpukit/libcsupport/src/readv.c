@@ -74,7 +74,7 @@ ssize_t readv(
     if ( !iov[v].iov_base )
       rtems_set_errno_and_return_minus_one( EINVAL );
 
-    if ( iov[v].iov_len <= 0 )
+    if ( iov[v].iov_len < 0 )
       rtems_set_errno_and_return_minus_one( EINVAL );
 
     /* check for wrap */
