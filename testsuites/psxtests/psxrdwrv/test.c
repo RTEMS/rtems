@@ -316,11 +316,11 @@ int doErrorTest(void)
 
   /*  writev --  iov_len total overflows */
   vec[0].iov_base = vec;
-  vec[0].iov_len = SSIZE_MAX;
+  vec[0].iov_len = SIZE_MAX;
   vec[1].iov_base = vec;
-  vec[1].iov_len = SSIZE_MAX;
+  vec[1].iov_len = SIZE_MAX;
   vec[2].iov_base = vec;
-  vec[2].iov_len = SSIZE_MAX;
+  vec[2].iov_len = SIZE_MAX;
   puts("writev iov_len total overflows -- EINVAL");
   rc = writev(fd, vec, 3);
   if ( (rc != -1) || (errno != EINVAL) ) {
@@ -331,9 +331,9 @@ int doErrorTest(void)
 
   /*  readv --  iov_len total overflows */
   vec[0].iov_base = vec;
-  vec[0].iov_len = SSIZE_MAX;
+  vec[0].iov_len = SIZE_MAX;
   vec[1].iov_base = vec;
-  vec[1].iov_len = SSIZE_MAX;
+  vec[1].iov_len = SIZE_MAX;
   puts("readv iov_len total overflows -- EINVAL");
   rc = readv(fd, vec, 2);
   if ( (rc != -1) || (errno != EINVAL) ) {
