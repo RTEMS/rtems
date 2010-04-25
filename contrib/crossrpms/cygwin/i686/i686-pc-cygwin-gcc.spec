@@ -41,7 +41,7 @@ Summary:      	i686-pc-cygwin gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20090907.0%{?dist}
+Release:      	0.20100225.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -50,59 +50,163 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
-%if "%{gcc_version}" >= "4.3.0"
-%define _gmp_minvers		4.1
-%else
+# FIXME: Disable lto for now, to avoid dependencies on libelf
+%bcond_with lto
+
+# FIXME: Disable python gdb scripts
+# ATM, no idea how to package them
+%bcond_with pygdb
+
+# FIXME: Disable GCC-plugin
+# Bug in gcc-4.5-20100318, doesn't build them on x86_84 hosts.
+%bcond_with plugin
+
+# versions of libraries, we conditionally bundle if necessary
+%global mpc_version	0.8.1
+%global mpfr_version	2.4.1
+%global gmp_version	4.3.2
+%global libelf_version  0.8.13
+
+# versions of libraries these distros are known to ship
+%if 0%{?fc13}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?fc12}
+%global mpc_provided 0.8
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?fc11}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.2.4
+%endif
+
+%if 0%{?el6}
+%global mpc_provided %{nil}
+# el6 beta ships mpfr but mpfr-devel is missing
+%global mpfr_provided %{nil}
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?el5}
+%global mpc_provided %{nil}
+%global mpfr_provided %{nil}
+%global gmp_provided 4.1.4
+%endif
+
+%if 0%{?suse11_0}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.3.1
+%global gmp_provided 4.2.2
+%endif
+
+%if 0%{?suse11_1}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.3.2
+%global gmp_provided 4.2.3
+%endif
+
+%if 0%{?suse11_2}
+%global mpc_provided 0.7
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?cygwin}
+%global mpc_provided 0.8
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?mingw32}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.2
+%endif
+
 %if "%{gcc_version}" >= "4.2.0"
 %endif
+
+%if "%{gcc_version}" >= "4.3.0"
+%define gmp_required		4.1
+%define mpfr_required		2.3.1
 %endif
 
-%if %{defined _gmp_minvers}
-BuildRequires: gmp-devel >= %{_gmp_minvers}
-%if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
+%if "%{gcc_version}" >= "4.3.3"
+%define cloog_required 		0.15
 %endif
-%endif
-
 
 %if "%{gcc_version}" >= "4.4.0"
-%define _mpfr_minvers	2.3.2
-%define mpfr_version	2.4.1
-%else
-%if "%{gcc_version}" >= "4.3.0"
-%define _mpfr_minvers	2.3.1
-%define mpfr_version	2.3.2
-%else
-%if "%{gcc_version}" >= "4.2.0"
+%define mpfr_required		2.3.2
 %endif
+
+%if "%{gcc_version}" >= "4.5.0"
+%define mpc_required 		0.8
+%if %{with lto}
+%define libelf_required 	0.8.12
 %endif
 %endif
 
-%if %{defined _mpfr_minvers}
-# FIXME: This is an ugly cludge
-%{?fc10:%global mpfr_provided 2.3.2}
-%{?fc11:%global mpfr_provided 2.4.1}
-%{?fc12:%global mpfr_provided 2.4.1}
-%{?suse11_0:%global mpfr_provided 2.3.1}
-%{?suse11_1:%global mpfr_provided 2.3.2}
-%{?suse11_2:%global mpfr_provided 2.4.1}
-%{?cygwin:%global mpfr_provided 2.4.1}
-%{?mingw32:%global mpfr_provided %{nil}}
-
-%if %{defined mpfr_provided}
-%if "%{mpfr_provided}" < "%{_mpfr_minvers}"
-%define _build_mpfr 1
-%else
+%if %{defined mpc_required}
+%if "%{mpc_provided}" >= "%{mpc_required}"
+%{?fedora:BuildRequires: libmpc-devel >= %{mpc_required}}
+%{?suse:BuildRequires: mpc-devel >= %{mpc_required}}
 %if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{_mpfr_minvers}
-%else
-BuildRequires: mpfr-devel >= %{_mpfr_minvers}
+BuildRequires:  %{_host_rpmprefix}mpc-devel >= %{mpc_required}
 %endif
+%else
+%define _build_mpc 1
+%define gmp_required 		4.2
+%endif
+%endif
+
+%if %{defined gmp_required}
+%if "%{gmp_provided}" >= "%{gmp_required}"
+BuildRequires: gmp-devel >= %{gmp_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{gmp_required}
+%endif
+%else
+%define _build_gmp 1
+%endif
+%endif
+
+%if %{defined libelf_required}
+%if "%{libelf_provided}" >= "%{libelf_required}"
+BuildRequires: libelf-devel >= %{libelf_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
+%endif
+%else
+%define _build_libelf 1
+%endif
+%endif
+
+
+%if %{defined cloog_required}
+%{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
+# el6 ships cloog-ppl, but cloog-ppl-devel is missing
+%{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
+%{?suse11_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
+%endif
+
+
+%if %{defined mpfr_required}
+%if "%{mpfr_provided}" >= "%{mpfr_required}"
+BuildRequires: mpfr-devel >= %{mpfr_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{mpfr_required}
 %endif
 %else
 %define _build_mpfr 1
 %endif
-
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -123,8 +227,15 @@ Requires:	i686-pc-cygwin-sys-root
 Requires:	i686-pc-cygwin-w32api
 Requires:	i686-pc-cygwin-gcc-libgcc = %{gcc_rpmvers}-%{release}
 
+%if "%{gcc_version}" >= "4.5.0"
+BuildRequires:  zlib-devel
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}zlib-devel
+%endif
+%else
+%endif
 
-%define _gcclibdir %{_prefix}/lib
+%global _gcclibdir %{_prefix}/lib
 
 Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:	0}
@@ -133,13 +244,35 @@ Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-g++-%{gcc_pkgvers}.ta
 %{?_without_sources:NoSource:	1}
 
 
-# Cygwin patch from
-# ftp://cygwin.com/pub/cygwin/release/gcc/gcc-core/gcc-core-3.4.4-3-src.tar.bz2
-Source70: gcc-3.4.4-3.patch
+%if "%{gcc_version}" == "3.4.4"
+# Cygwin patch extracted from
+# ftp://sourceware.org/pub/cygwin/release/gcc/gcc-3.4.4-3-src.tar.bz2
+Patch70: gcc-3.4.4-3.patch
 
+Patch71: cygwin-gcc-3.4.4-3.diff
+%endif
+%if "%{gcc_version}" == "4.3.4"
+# Cygwin patch extracted from
+# ftp://sourceware.org/pub/cygwin/release/gcc4/gcc4-4.3.4-3-src.tar.bz2
+Patch70: gcc4-4.3.4-3.src.patch
 
-%if "%{gcc_version}" >= "4.3.0"
+Patch71: cygwin-gcc4-4.3.4-3.diff
+%endif
+
+%if 0%{?_build_mpfr}
 Source60:    http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+%endif
+
+%if 0%{?_build_mpc}
+Source61:    http://www.multiprecision.org/mpc/download/mpc-%{mpc_version}.tar.gz
+%endif
+
+%if 0%{?_build_gmp}
+Source62:    ftp://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
+%endif
+
+%if 0%{?_build_libelf}
+Source63:    http://www.mr511.de/software/libelf-%{libelf_version}.tar.gz
 %endif
 
 %description
@@ -149,10 +282,14 @@ Cross gcc for i686-pc-cygwin.
 %setup -c -T -n %{name}-%{version}
 
 %setup -q -T -D -n %{name}-%{version} -a0
-%{?PATCH0:%patch0 -p0}
+cd gcc-%{gcc_pkgvers}
+%{?PATCH0:%patch0 -p1}
+cd ..
 
 %setup -q -T -D -n %{name}-%{version} -a1
-%{?PATCH1:%patch1 -p0}
+cd gcc-%{gcc_pkgvers}
+%{?PATCH1:%patch1 -p1}
+cd ..
 
 
 
@@ -166,9 +303,35 @@ Cross gcc for i686-pc-cygwin.
   ln -s ../mpfr-%{mpfr_version} gcc-%{gcc_pkgvers}/mpfr
 %endif
 
+%if 0%{?_build_mpc}
+%setup -q -T -D -n %{name}-%{version} -a61
+%{?PATCH61:%patch61 -p1}
+  # Build mpc one-tree style
+  ln -s ../mpc-%{mpc_version} gcc-%{gcc_pkgvers}/mpc
+%endif
+
+%if 0%{?_build_gmp}
+%setup -q -T -D -n %{name}-%{version} -a62
+%{?PATCH62:%patch62 -p1}
+  # Build gmp one-tree style
+  ln -s ../gmp-%{gmp_version} gcc-%{gcc_pkgvers}/gmp
+%endif
+
+%if 0%{?_build_libelf}
+%setup -q -T -D -n %{name}-%{version} -a63
+%{?PATCH63:%patch63 -p1}
+  # Build libelf one-tree style
+  ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
+%endif
+
 # cygwin patches can't be directly applied through rpm
 cd gcc-%{gcc_pkgvers}
-patch -p1 -t < %{SOURCE70} || true
+%if "%{gcc_version}" < "4.0"
+patch -p1 -t < %{PATCH70} || true
+%else
+patch -p2 -t < %{PATCH70} || true
+%endif
+%{?PATCH71:patch -p1 < %{PATCH71}}
 cd ..
 
   # Fix timestamps
@@ -210,6 +373,8 @@ cd ..
     --enable-version-specific-runtime-libs \
     --enable-threads \
     --with-sysroot=%{_exec_prefix}/i686-pc-cygwin/sys-root \
+    %{?with_lto:--enable-lto}%{!?with_lto:--disable-lto} \
+    %{?with_plugin:--enable-plugin}%{!?with_plugin:--disable-plugin} \
     --enable-languages="$languages" $optargs
 
 %if "%_host" != "%_build"
@@ -272,6 +437,13 @@ cd ..
     rmdir ${RPM_BUILD_ROOT}%{_prefix}/i686-pc-cygwin/include/bits
   fi
 
+  # gcc >= 4.5.0: installs weird libstdc++ python bindings.
+%if ! %{with pygdb}
+  if test -d ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python; then
+    rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python/libstdcxx
+  fi
+%endif
+
   # Collect multilib subdirectories
   multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
@@ -317,6 +489,8 @@ cd ..
     *jc1) ;;
     *jvgenmain) ;;
     */libgfortran*.*) echo "$i" >> build/files.gfortran ;;
+    %{!?with_pygdb:*/libstdc++*gdb.py*) rm ${RPM_BUILD_ROOT}/$i ;;} # ignore for now
+    %{?with_pygdb:*/libstdc++*gdb.py*) >> build/files.g++ ;;}
     */libstdc++.*) echo "$i" >> build/files.g++ ;;
     */libsupc++.*) echo "$i" >> build/files.g++ ;;
     *) echo "$i" >> build/files.gcc ;;
@@ -447,7 +621,10 @@ libgcc i686-pc-cygwin-gcc.
 %dir %{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}
 %{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/cc1%{_exeext}
 %{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/collect2%{_exeext}
-
+%if "%{gcc_version}" >= "4.5.0"
+%{?with_lto:%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/lto%{_exeext}}
+%{_libexecdir}/gcc/i686-pc-cygwin/%{gcc_version}/lto-wrapper%{_exeext}
+%endif
 
 %files -n i686-pc-cygwin-gcc-libgcc -f build/files.gcc
 %defattr(-,root,root)
@@ -457,11 +634,7 @@ libgcc i686-pc-cygwin-gcc.
 %dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include
 
 %if "%{gcc_version}" > "4.0.3"
-%if "i686-pc-cygwin" != "bfin-rtems4.10"
-%if "i686-pc-cygwin" != "avr-rtems4.10"
 %dir %{_gcclibdir}/gcc/i686-pc-cygwin/%{gcc_version}/include/ssp
-%endif
-%endif
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
@@ -496,7 +669,7 @@ Version:        %{gcc_rpmvers}
 License:	GPL
 
 %description -n i686-pc-cygwin-gcc-libstdc++
-%{_summary}
+%{summary}
 
 
 %files -n i686-pc-cygwin-gcc-c++
