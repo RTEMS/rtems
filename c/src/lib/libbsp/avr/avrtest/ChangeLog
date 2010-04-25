@@ -1,3 +1,7 @@
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* bsp_specs: Remove warning on __start not found.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/avrtest.cfg: Remove RTEMS_BSP_FAMILY.

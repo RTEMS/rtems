@@ -4,7 +4,7 @@
 
 *startfile:
 %{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: start.o%s -e __start}}
+%{!nostdlib: %{qrtems: start.o%s -e __init}}
 
 *endfile:
 %{!qrtems: %(old_endfile)} \
