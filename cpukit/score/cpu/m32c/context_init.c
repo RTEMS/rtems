@@ -63,11 +63,11 @@ void _CPU_Context_Initialize(
   frame->a1 =0xa1a2a3a4;
   frame->r0r2 = 0;
   frame->r1r3 = 0;
-  frame->frameLow = ((uint32_t)frame)  & 0xffff;
-  frame->frameHigh = ((uint32_t)frame >> 16) & 0xffff;
-  frame->startLow = ((uint32_t)entry_point) & 0xffff;
-  frame->startHigh = ((uint32_t)entry_point >> 16) & 0xffff;
+  frame->frameLow  = (uint16_t) (((uint32_t)frame)  & 0xffff);
+  frame->frameHigh = (uint16_t) (((uint32_t)frame >> 16) & 0xffff);
+  frame->startLow  = (uint16_t) (((uint32_t)entry_point) & 0xffff);
+  frame->startHigh = (uint16_t) (((uint32_t)entry_point >> 16) & 0xffff);
 
-  the_context->sp = (uint32_t)frame;
-  the_context->fb = (uint32_t)&frame->frameLow;
+  the_context->sp = (uintptr_t)frame;
+  the_context->fb = (uintptr_t)&frame->frameLow;
 }

@@ -1,3 +1,7 @@
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* context_init.c: Eliminate warnings.
+
 2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* context_init.c, context_switch.S, cpu.c, cpu_asm.c, varvects.S: Add
