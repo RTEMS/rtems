@@ -2,7 +2,7 @@
  *
  *  This include file contains all console driver definations
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,7 +35,6 @@ extern "C" {
  */
 
 #if (HAS_PMC_PSC8)
-#warning "HAS_PMC_PSC8 is Defined"
 #define NUM_Z85C30_CHIPS_ON_MEZZANINE  4
 #else
 #define NUM_Z85C30_CHIPS_ON_MEZZANINE  0
