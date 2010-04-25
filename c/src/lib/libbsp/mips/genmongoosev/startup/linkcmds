@@ -156,7 +156,7 @@ SECTIONS
   } >ram   
 
 
-  .bss : 
+  .bss (NOLOAD): 
   {
     _bss_start = . ;
     *(.bss .bss.* .gnu.linkonce.b.*)

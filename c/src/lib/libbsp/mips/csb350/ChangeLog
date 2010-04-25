@@ -1,5 +1,9 @@
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* startup/linkcmds: Add NOLOAD to .bss to eliminate warnings.
+
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* bsp_specs: Remove extra } to eliminate warning.
 
 2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>

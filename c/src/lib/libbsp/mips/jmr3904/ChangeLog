@@ -1,3 +1,7 @@
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/linkcmds: Add NOLOAD to .bss to eliminate warnings.
+
 2009-11-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clock/clockdrv.c: Split hardware initialization code into
