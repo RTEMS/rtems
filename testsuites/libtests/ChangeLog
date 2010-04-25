@@ -1,3 +1,7 @@
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* bspcmdline01/init.c: Fix assert conditional.
+
 2010-04-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* POSIX/flockfile.c, POSIX/funlockfile.c, POSIX/ftrylockfile.c: New.

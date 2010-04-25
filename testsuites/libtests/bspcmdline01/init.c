@@ -51,7 +51,7 @@ void test_errors(void)
   bsp_boot_cmdline = "edit";
   puts ( "rtems_bsp_cmdline_get_param - bsp_boot_cmdline = edit name = edit -no error" );
   p = rtems_bsp_cmdline_get_param("edit", result, 5);
-  rtems_test_assert( p == NULL );
+  rtems_test_assert( p != NULL );
 }
 
 void test_search(
