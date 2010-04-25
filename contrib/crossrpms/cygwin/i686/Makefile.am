@@ -60,9 +60,9 @@ BINUTILS_RPMREL = 0.20100204.0
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
-GCC_VERS = 4.3.4
+GCC_VERS = 3.4.4
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20100204.0
+GCC_RPMREL = 0.20100225.0
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx
 GCC_OPTS += --disable-infos
