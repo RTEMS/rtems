@@ -1,3 +1,10 @@
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libchip/rtc/ds1375-rtc.h, libchip/rtc/ds1375.c,
+	libchip/rtc/icm7170.c, libchip/rtc/icm7170_reg.c,
+	libchip/rtc/m48t08_reg.c, libchip/rtc/rtc.h: Use uintptr_t instead of
+	uint32_t.
+
 2010-04-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/serial/serial.h: Add extern "C".

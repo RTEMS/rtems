@@ -31,7 +31,7 @@
  */
 
 uint32_t   _ICM7170_NAME(icm7170_get_register)(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum
 )
 {
@@ -47,7 +47,7 @@ uint32_t   _ICM7170_NAME(icm7170_get_register)(
  */
 
 void  _ICM7170_NAME(icm7170_set_register)(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum,
   uint32_t    ucData
 )

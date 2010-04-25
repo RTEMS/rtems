@@ -397,7 +397,7 @@ rtems_time_of_day rt;
 
 
 uint32_t
-rtc_ds1375_get_register( uint32_t port, uint8_t reg )
+rtc_ds1375_get_register( uintptr_t port, uint8_t reg )
 {
 int      fd;
 uint8_t  v;
@@ -415,7 +415,7 @@ uint32_t rval = -1;
 }
 
 void
-rtc_ds1375_set_register( uint32_t port, uint8_t reg, uint32_t value )
+rtc_ds1375_set_register( uintptr_t port, uint8_t reg, uint32_t value )
 {
 int     fd;
 uint8_t v = value;
@@ -454,7 +454,7 @@ bool rtc_ds1375_device_probe(
 }
 
 rtc_fns rtc_ds1375_fns = {
-  deviceInitialize:  ds1375_initialize,
+  deviceInitialize: ds1375_initialize,
   deviceGetTime:    ds1375_get_time,
   deviceSetTime:    ds1375_set_time,
 };
