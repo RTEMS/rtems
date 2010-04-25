@@ -32,7 +32,17 @@ Source5:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-objc-%{gcc_pkgvers}.ta
 %{?_without_sources:NoSource:	5}
 %endif
 
-# Cygwin patch from
-# ftp://cygwin.com/pub/cygwin/release/gcc/gcc-core/gcc-core-3.4.4-3-src.tar.bz2
-Source70: gcc-3.4.4-3.patch
+%if "%{gcc_version}" == "3.4.4"
+# Cygwin patch extracted from
+# ftp://sourceware.org/pub/cygwin/release/gcc/gcc-3.4.4-3-src.tar.bz2
+Patch70: gcc-3.4.4-3.patch
 
+Patch71: cygwin-gcc-3.4.4-3.diff
+%endif
+%if "%{gcc_version}" == "4.3.4"
+# Cygwin patch extracted from
+# ftp://sourceware.org/pub/cygwin/release/gcc4/gcc4-4.3.4-3-src.tar.bz2
+Patch70: gcc4-4.3.4-3.src.patch
+
+Patch71: cygwin-gcc4-4.3.4-3.diff
+%endif
