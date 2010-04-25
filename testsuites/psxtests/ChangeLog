@@ -1,3 +1,9 @@
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* psxreaddir/psxreaddir.scn, psxreaddir/test.c: Do not test for
+	rewinddir(NULL) since we are now using newlib's implementation and it
+	does not check for NULL. This causes a fault on some targets.
+
 2010-04-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psx07/init.c, psx09/init.c, psx12/init.c, psxhdrs/pthread11.c,

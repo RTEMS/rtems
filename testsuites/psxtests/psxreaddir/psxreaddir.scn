@@ -170,7 +170,6 @@ d                           8     1072    268   0x010c
 e                           9     1340    268   0x010c
 f                          10     1608    268   0x010c
 many                       16     1876    268   0x010c
-Send rewinddir a NULL pointer
 Seek directory
 telldir() should report only sizeof(struct dirent) increments
 in position. Sizeof(struct dirent): 268

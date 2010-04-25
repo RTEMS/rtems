@@ -409,9 +409,11 @@ int main(
   rewinddir( directory );
   printdir(directory);
 
-/* Don't know how to check this one automatically. */
+#if 0
+  /* Newlib's implementation does not check for NULL */
   printf( "Send rewinddir a NULL pointer\n");
   rewinddir( NULL );
+#endif
 
   printf( "\nSeek directory\n" );
   printf( "telldir() should report only sizeof(struct dirent) increments \n" );
