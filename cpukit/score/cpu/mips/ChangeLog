@@ -1,5 +1,10 @@
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* cpu.c, rtems/score/cpu.h: Move _CPU_Context_Initialize() to cpu.c so
+	it is easier to make warning free.
+
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* rtems/score/cpu.h: Remove warning in _CPU_Context_Initialize.
 
 2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>

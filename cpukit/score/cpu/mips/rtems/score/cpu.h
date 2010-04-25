@@ -416,7 +416,7 @@ typedef struct {
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->sp
+  (uintptr_t) (_context)->sp
 
 /* WARNING: If this structure is modified, the constants in cpu.h
  *          must also be updated.
@@ -851,20 +851,15 @@ void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
 #define _EXTRABITS      0  /* make sure we're in user mode on MIPS1 processors */
 #endif /* __mips == 1 */
 
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, _isr, _entry_point, _is_fp ) \
-  { \
- 	uintptr_t  _stack_tmp = \
-           (uintptr_t)(_stack_base) + (_size) - CPU_STACK_ALIGNMENT; \
-        uintptr_t  _intlvl = _isr & 0xff; \
-  	_stack_tmp &= ~(CPU_STACK_ALIGNMENT - 1); \
-  	(_the_context)->sp = (__MIPS_REGISTER_TYPE) _stack_tmp; \
-  	(_the_context)->fp = (__MIPS_REGISTER_TYPE) _stack_tmp; \
-	(_the_context)->ra = (__MIPS_REGISTER_TYPE)_entry_point; \
-	(_the_context)->c0_sr = ((_intlvl==0)?(mips_interrupt_mask() | 0x300 | _INTON): \
-		( ((_intlvl<<9) & mips_interrupt_mask()) | 0x300 | ((_intlvl & 1)?_INTON:0)) ) | \
-				SR_CU0 | ((_is_fp)?SR_CU1:0) | _EXTRABITS; \
-  }
 
+void _CPU_Context_Initialize(
+  Context_Control  *the_context,
+  uintptr_t        *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
+  void             *entry_point,
+  bool              is_fp
+);
 
 
 /*
