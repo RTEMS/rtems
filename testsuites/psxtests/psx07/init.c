@@ -583,7 +583,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setinheritsched - EXPLICIT - SUCCESSFUL" );
   status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   schedparam.sched_ss_repl_period.tv_sec = 3;
   schedparam.sched_ss_repl_period.tv_nsec = 3;

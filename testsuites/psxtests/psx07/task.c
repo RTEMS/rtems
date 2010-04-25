@@ -40,6 +40,11 @@ void *Task_2(
   time_t now, start;
 
   /*
+   * sleep long enough to let the init thread join with us.
+   */
+  usleep(10000);
+
+  /*
    *  Change our priority so we are running at a logically higher
    *  priority than our "ss_high_priority".  This should result in
    *  our replenishment period not touching our priority.
