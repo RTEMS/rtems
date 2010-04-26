@@ -69,8 +69,8 @@ BSP_polling_getchar_function_type BSP_poll_char = nds_getch;
  * console write operation.
  */
 
-static int
-nds_write (int minor, const char *buf, int len)
+static ssize_t
+nds_write (int minor, const char *buf, size_t len)
 {
   int count;
 
