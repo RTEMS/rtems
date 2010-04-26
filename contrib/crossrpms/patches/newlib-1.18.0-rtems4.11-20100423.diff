@@ -1092,7 +1092,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/string/strncasecmp.c newlib-1.18.0-rte
  int 
 diff -Naur newlib-1.18.0.orig/newlib/libc/sys/rtems/machine/_types.h newlib-1.18.0-rtems4.11-20100423/newlib/libc/sys/rtems/machine/_types.h
 --- newlib-1.18.0.orig/newlib/libc/sys/rtems/machine/_types.h	2009-12-17 17:10:41.000000000 +0100
-+++ newlib-1.18.0-rtems4.11-20100423/newlib/libc/sys/rtems/machine/_types.h	2010-04-15 17:40:44.000000000 +0200
++++ newlib-1.18.0-rtems4.11-20100423/newlib/libc/sys/rtems/machine/_types.h	2010-04-24 04:37:28.000000000 +0200
 @@ -31,4 +31,25 @@
  
  typedef __int32_t blksize_t;
@@ -1115,7 +1115,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/sys/rtems/machine/_types.h newlib-1.18
 +#define __fpos_t_defined 1
 +#endif
 +
-+#define __uint32_t _mode_t
++typedef __uint32_t _mode_t;
 +#define __mode_t_defined 1
 +
  #endif
