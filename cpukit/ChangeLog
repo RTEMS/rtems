@@ -1,5 +1,9 @@
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* libfs/src/rfs/rtems-rfs-bitmaps-ut.c: Fix warning.
+
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* libmisc/stringto/stringto_template.h: Remove warning.
 
 2010-04-25	Joel Sherrill <joel.sherrill@oarcorp.com>
