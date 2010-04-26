@@ -15,9 +15,6 @@ Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar
 %if "%{gcc_version}" == "4.4.3" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
-%if "%{gcc_version}" == "4.4.2" 
-Source1:        ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
-%endif
 %{?_without_sources:NoSource:	1}
 
 %endif
