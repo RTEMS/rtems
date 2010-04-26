@@ -58,7 +58,7 @@ Summary:      	m32c-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	9%{?dist}
+Release:      	10%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -70,7 +70,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # FIXME: Disable lto for now, to avoid dependencies on libelf
 %bcond_with lto
 
-# FIXME: Disamble python gdb scripts
+# FIXME: Disable python gdb scripts
 # ATM, no idea how to package them
 %bcond_with pygdb
 
@@ -103,7 +103,14 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global gmp_provided 4.2.4
 %endif
 
-%if 0%{?rhel5}
+%if 0%{?el6}
+%global mpc_provided %{nil}
+# el6 beta ships mpfr but mpfr-devel is missing
+%global mpfr_provided %{nil}
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?el5}
 %global mpc_provided %{nil}
 %global mpfr_provided %{nil}
 %global gmp_provided 4.1.4
@@ -171,6 +178,7 @@ BuildRequires:  %{_host_rpmprefix}mpc-devel >= %{mpc_required}
 %endif
 %else
 %define _build_mpc 1
+%define gmp_required 		4.2
 %endif
 %endif
 
@@ -201,6 +209,7 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
+# el6 ships cloog-ppl, but cloog-ppl-devel is missing
 %{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
@@ -232,7 +241,7 @@ BuildRequires:	rtems-4.10-m32c-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-m32c-rtems4.10-binutils
 Requires:	rtems-4.10-m32c-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-10%{?dist}
+Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-11%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -327,7 +336,7 @@ cd ..
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-9%{?dist}/newlib-%{newlib_version}-10%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-10%{?dist}/newlib-%{newlib_version}-11%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -596,7 +605,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-m32c-rtems4.10-binutils
-# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-10%{?dist}
+# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-11%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -614,7 +623,7 @@ Summary:        libgcc for m32c-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-10%{?dist}
+Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-11%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-m32c-rtems4.10-gcc-libgcc
@@ -728,7 +737,7 @@ Summary:      	C Library (newlib) for m32c-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        10%{?dist}
+Release:        11%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -749,7 +758,7 @@ Newlib C Library for m32c-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        10%{?dist}
+Release:        11%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
