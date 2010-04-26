@@ -621,7 +621,7 @@ diff -Naur newlib-1.18.0.orig/newlib/libc/include/sys/types.h newlib-1.18.0-rtem
  
 -#ifndef __CYGWIN__
 +#if defined(__rtems__)
-+typedef _mode_t mode_t
++typedef _mode_t mode_t;
 +#endif
 +
 +#if !defined(__CYGWIN__) && !defined(__rtems__)
