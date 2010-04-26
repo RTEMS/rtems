@@ -1,3 +1,7 @@
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/bspstart.c: Fix warning.
+
 2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* Makefile.am, clock/clock.c, fb/fb.c, irq/irq.c, sound/sound.c,

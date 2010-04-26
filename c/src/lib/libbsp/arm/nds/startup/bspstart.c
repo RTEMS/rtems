@@ -50,11 +50,12 @@ void bsp_start (void)
  * reset bss area.
  */
 
+extern uint8_t __bss_start;
+extern uint8_t __bss_end;
+
 void
 bss_reset (void)
 {
-  extern uint8_t __bss_start;
-  extern uint8_t __bss_end;
 
   memset (&__bss_start, 0, (uint32_t) & __bss_end - (uint32_t) & __bss_start);
 }
