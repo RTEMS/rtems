@@ -127,7 +127,11 @@ rtems_status_code STRING_TO_NAME (
       return RTEMS_INVALID_NUMBER;
   #endif
 
-  *n = (STRING_TO_TYPE) result;
+  #if defined(STRING_TO_POINTER)
+    *n = (STRING_TO_TYPE) (uintptr_t)result;
+  #else
+    *n = (STRING_TO_TYPE) result;
+  #endif
   return RTEMS_SUCCESSFUL;
 }
 
