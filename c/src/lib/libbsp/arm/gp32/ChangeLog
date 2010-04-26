@@ -1,3 +1,7 @@
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* console/uart.c: Fix warnings.
+
 2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* Makefile.am, startup/bspstart.c: make irq data types consistent,
