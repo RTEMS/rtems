@@ -831,7 +831,7 @@ enet_stats(struct mcf5282_enet_struct *sc)
         else {
             fixed = 1;
             speed = sc->mii_cr & 0x2000 ? 100 : 10;
-            full = sc->mii_cr & 0x100 ? "full" : "half";
+            full = sc->mii_cr & 0x100 ? 1 : 0;
         }
         printf("Link %s %d Mb/s, %s-duplex.\n",
                                             fixed ? "fixed" : "auto-negotiate",
@@ -872,7 +872,7 @@ enet_stats(struct mcf5282_enet_struct *sc)
 }
 
 static int
-fec_ioctl(struct ifnet *ifp, int command, caddr_t data)
+fec_ioctl(struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
     struct mcf5282_enet_struct *sc = ifp->if_softc;
     int error = 0;
@@ -925,7 +925,7 @@ rtems_fec_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching )
     int mtu;
     int unitNumber;
     char *unitName;
-    unsigned char *hwaddr;
+    const unsigned char *hwaddr;
     const char *env;
 
     /*

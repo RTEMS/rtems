@@ -1,3 +1,8 @@
+2010-04-26  Eric Norum <norume@aps.anl.gov>
+
+    * startup/bspstart.c: Clean up some warnings.
+    * network/network.c: Fix up full/half duplex printout and some warnings.
+
 2010-04-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* start/start.S: Spacing.

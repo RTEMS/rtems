@@ -21,6 +21,7 @@
 #include <bsp.h>
 #include <rtems/error.h>
 #include <errno.h>
+#include <stdio.h>
 
 /*
  * Location of 'VME' access
@@ -184,7 +185,7 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
 #endif
 }
 
-extern void bsp_fake_syscall(void);
+extern void bsp_fake_syscall(int);
 
 /*
  * The Arcturus boot ROM prints exception information improperly
