@@ -106,6 +106,8 @@ struct scc_softc {
 };
 static struct scc_softc scc_softc[NSCCDRIVER];
 
+extern void *_RomBase;	/* From linkcmds */
+
 /*
  * SCC1 interrupt handler
  */
@@ -998,7 +1000,6 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int attaching)
 		 *
 		 * See start360/start360.s.
 		 */
-		extern void *_RomBase;	/* From linkcmds */
 		const unsigned long *ExceptionVectors;
 		const unsigned char *entryPoint;
 
