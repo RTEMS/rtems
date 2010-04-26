@@ -28,11 +28,10 @@ extern "C" {
  *  Types for get and set register routines
  */
 
-typedef uint8_t   (*getRegister_f)(uint32_t   port, uint8_t   register);
-typedef void      (*setRegister_f)(
-                            uint32_t   port, uint8_t   reg, uint8_t   value);
-typedef uint8_t   (*getData_f)(uint32_t   port);
-typedef void      (*setData_f)(uint32_t   port, uint8_t   value);
+typedef uint8_t   (*getRegister_f)(uintptr_t port, uint8_t reg);
+typedef void      (*setRegister_f)(uintptr_t port, uint8_t reg, uint8_t  value);
+typedef uint8_t   (*getData_f)(uintptr_t port);
+typedef void      (*setData_f)(uintptr_t port, uint8_t value);
 
 typedef struct _console_fns {
   bool    (*deviceProbe)(int minor);

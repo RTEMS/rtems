@@ -92,8 +92,8 @@ Z85C30_STATIC void z85c30_initialize_port(
   int minor
 )
 {
-  uint32_t        ulCtrlPort;
-  uint32_t        ulBaudDivisor;
+  uintptr_t       ulCtrlPort;
+  uintptr_t       ulBaudDivisor;
   setRegister_f   setReg;
 
   ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -138,7 +138,7 @@ Z85C30_STATIC void z85c30_initialize_port(
 
   ulBaudDivisor = Z85C30_Baud(
     (uint32_t) Console_Port_Tbl[minor].ulClock,
-    (uint32_t) Console_Port_Tbl[minor].pDeviceParams
+    (uint32_t) ((uintptr_t)Console_Port_Tbl[minor].pDeviceParams)
   );
 
   /*
@@ -253,7 +253,7 @@ Z85C30_STATIC int z85c30_close(
 
 Z85C30_STATIC void z85c30_init(int minor)
 {
-  uint32_t         ulCtrlPort;
+  uintptr_t        ulCtrlPort;
   uint8_t          dummy;
   z85c30_context  *pz85c30Context;
   setRegister_f    setReg;
@@ -430,7 +430,7 @@ Z85C30_STATIC int z85c30_set_attributes(
   const struct termios *t
 )
 {
-  uint32_t               ulCtrlPort;
+  uintptr_t              ulCtrlPort;
   uint32_t               ulBaudDivisor;
   uint32_t               wr3;
   uint32_t               wr4;

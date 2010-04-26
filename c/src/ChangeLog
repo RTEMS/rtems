@@ -1,5 +1,12 @@
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* libchip/serial/mc68681.c, libchip/serial/mc68681_reg.c,
+	libchip/serial/ns16550.c, libchip/serial/serial.h,
+	libchip/serial/z85c30.c, libchip/serial/z85c30_reg.c: Use uintptr_t
+	or intptr_t instead of uint32_t or int32_t.
+
+2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* libchip/rtc/ds1375-rtc.h, libchip/rtc/ds1375.c,
 	libchip/rtc/icm7170.c, libchip/rtc/icm7170_reg.c,
 	libchip/rtc/m48t08_reg.c, libchip/rtc/rtc.h: Use uintptr_t instead of

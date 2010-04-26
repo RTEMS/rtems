@@ -592,7 +592,8 @@ MC68681_STATIC int mc68681_baud_rate(
 
   baud_requested = rtems_termios_baud_to_index( baud_requested );
 
-  baud_tbl = (mc68681_baud_table_t *) Console_Port_Tbl[minor].ulClock;
+  baud_tbl = (mc68681_baud_table_t *)
+     ((uintptr_t)Console_Port_Tbl[minor].ulClock);
   if (!baud_tbl)
     rtems_fatal_error_occurred(RTEMS_INVALID_ADDRESS);
 

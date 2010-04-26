@@ -95,7 +95,7 @@ console_fns ns16550_fns_polled = {
 
 NS16550_STATIC void ns16550_init(int minor)
 {
-  uint32_t                pNS16550;
+  uintptr_t               pNS16550;
   uint8_t                 ucTrash;
   uint8_t                 ucDataByte;
   uint32_t                ulBaudDivisor;
@@ -129,7 +129,7 @@ NS16550_STATIC void ns16550_init(int minor)
 
   ulBaudDivisor = NS16550_Baud(
     (uint32_t) Console_Port_Tbl[minor].ulClock,
-    (uint32_t) Console_Port_Tbl[minor].pDeviceParams
+    (uint32_t) ((uintptr_t)Console_Port_Tbl[minor].pDeviceParams)
   );
   ucDataByte = SP_LINE_DLAB;
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
@@ -183,7 +183,7 @@ NS16550_STATIC int ns16550_open(
   }
 
   /* Set initial baud */
-  rtems_termios_set_initial_baud( tty, (int32_t) c->pDeviceParams);
+  rtems_termios_set_initial_baud( tty, (intptr_t) c->pDeviceParams);
 
   if (c->pDeviceFns->deviceOutputUsesInterrupts) {
     ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
@@ -217,10 +217,10 @@ NS16550_STATIC int ns16550_close(
 /**
  * @brief Polled write for NS16550.
  */
-NS16550_STATIC void ns16550_write_polled( int minor, char out)
+NS16550_STATIC void ns16550_write_polled(int minor, char out)
 {
   console_tbl *c = &Console_Port_Tbl [minor];
-  uint32_t port = c->ulCtrlPort1;
+  uintptr_t port = c->ulCtrlPort1;
   getRegister_f get = c->getRegister;
   setRegister_f set = c->setRegister;
   uint32_t status = 0;

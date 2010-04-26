@@ -27,7 +27,7 @@
  */
 
 uint8_t   _Z85C30_NAME(z85c30_get_register)(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum
 )
 {
@@ -53,7 +53,7 @@ uint8_t   _Z85C30_NAME(z85c30_get_register)(
  */
 
 void _Z85C30_NAME(z85c30_set_register)(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum,
   uint8_t     ucData
 )

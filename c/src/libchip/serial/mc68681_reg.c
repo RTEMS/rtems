@@ -31,7 +31,7 @@
  */
 
 uint8_t   _MC68681_NAME(mc68681_get_register)(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum
 )
 {
@@ -47,7 +47,7 @@ uint8_t   _MC68681_NAME(mc68681_get_register)(
  */
 
 void  _MC68681_NAME(mc68681_set_register)(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum,
   uint8_t     ucData
 )
