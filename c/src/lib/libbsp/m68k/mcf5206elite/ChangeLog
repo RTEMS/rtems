@@ -1,3 +1,7 @@
+2010-04-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/init5206e.c: Remove warnings.
+
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* console/console.c: adapted to new prototype for *_write

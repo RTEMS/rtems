@@ -33,21 +33,7 @@
 #include "mcf5206/mcf5206e.h"
 
 extern void CopyDataClearBSSAndStart(unsigned long ramsize);
-
-#define m68k_set_cacr( _cacr ) \
-  asm volatile ( "movec %0,%%cacr\n\t" \
-                 "nop\n" \
-                 : : "d" (_cacr) )
-
-#define m68k_set_acr0( _acr0 ) \
-  asm volatile (  "movec %0,%%acr0\n\t" \
-                  "nop\n\t" \
-                  : : "d" (_acr0) )
-
-#define m68k_set_acr1( _acr1 ) \
-  asm volatile (  "movec %0,%%acr1\n\t" \
-                  "nop\n\t" \
-                  : : "d" (_acr1) )
+extern void INTERRUPT_VECTOR(void);
 
 #define m68k_set_srambar( _rambar0 ) \
   asm volatile (  "movec %0,%%rambar0\n\t" \
@@ -201,7 +187,6 @@ Init5206e(void)
                              MCF5206E_CSCR_RD;
 
     {
-        extern void INTERRUPT_VECTOR(void);
         uint32_t         *inttab = (uint32_t*)&INTERRUPT_VECTOR;
         uint32_t         *intvec = (uint32_t*)BSP_MEM_ADDR_ESRAM;
         register int i;
