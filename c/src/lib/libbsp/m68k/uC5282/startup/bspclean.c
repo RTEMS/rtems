@@ -19,6 +19,8 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 
+extern void bsp_reset(int);
+
 void bsp_cleanup( void )
 {
     bsp_reset(0);

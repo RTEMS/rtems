@@ -1,3 +1,8 @@
+2010-04-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* network/network.c, startup/bspclean.c, startup/init5282.c: Remove
+	warnings.
+
 2010-04-26  Eric Norum <norume@aps.anl.gov>
 
     * startup/bspstart.c: Clean up some warnings.

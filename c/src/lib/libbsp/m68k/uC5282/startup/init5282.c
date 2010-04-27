@@ -23,10 +23,10 @@
 #define m68k_set_acr0(_acr0) asm volatile ("movec %0,%%acr0" : : "d" (_acr0))
 #define m68k_set_acr1(_acr1) asm volatile ("movec %0,%%acr1" : : "d" (_acr1))
 
+ extern void CopyDataClearBSSAndStart (void);
+
 void Init5282 (void)
 {
-    extern void CopyDataClearBSSAndStart (void);
-
     /*
      * Copy data, clear BSS and call boot_card()
      */

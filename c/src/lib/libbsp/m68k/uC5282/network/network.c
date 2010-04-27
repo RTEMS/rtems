@@ -197,10 +197,10 @@ mcf5282_mii_interrupt_handler( rtems_vector_number v )
  * Ensure 128-bit (16-byte) alignment
  * Allow some space at the beginning for other diagnostic counters
  */
+extern char __SRAMBASE[];
 static mcf5282BufferDescriptor_t *
 mcf5282_bd_allocate(unsigned int count)
 {
-    extern char __SRAMBASE[];
     static mcf5282BufferDescriptor_t *bdp = (mcf5282BufferDescriptor_t *)(__SRAMBASE+16);
     mcf5282BufferDescriptor_t *p = bdp;
 
@@ -758,63 +758,63 @@ static void
 enet_stats(struct mcf5282_enet_struct *sc)
 {
     printf("  Rx Interrupts:%-10lu",   sc->rxInterrupts);
-    printf("Rx Packet Count:%-10lu",   MCF5282_FEC_RMON_R_PACKETS);
-    printf("   Rx Broadcast:%-10lu\n", MCF5282_FEC_RMON_R_BC_PKT);
-    printf("   Rx Multicast:%-10lu",   MCF5282_FEC_RMON_R_MC_PKT);
-    printf("CRC/Align error:%-10lu",   MCF5282_FEC_RMON_R_CRC_ALIGN);
-    printf("   Rx Undersize:%-10lu\n", MCF5282_FEC_RMON_R_UNDERSIZE);
-    printf("    Rx Oversize:%-10lu",   MCF5282_FEC_RMON_R_OVERSIZE);
-    printf("    Rx Fragment:%-10lu",   MCF5282_FEC_RMON_R_FRAG);
-    printf("      Rx Jabber:%-10lu\n", MCF5282_FEC_RMON_R_JAB);
-    printf("          Rx 64:%-10lu",   MCF5282_FEC_RMON_R_P64);
-    printf("      Rx 65-127:%-10lu",   MCF5282_FEC_RMON_R_P65T0127);
-    printf("     Rx 128-255:%-10lu\n", MCF5282_FEC_RMON_R_P128TO255);
-    printf("     Rx 256-511:%-10lu",   MCF5282_FEC_RMON_R_P256TO511);
-    printf("    Rx 511-1023:%-10lu",   MCF5282_FEC_RMON_R_P512TO1023);
-    printf("   Rx 1024-2047:%-10lu\n", MCF5282_FEC_RMON_R_P1024TO2047);
-    printf("      Rx >=2048:%-10lu",   MCF5282_FEC_RMON_R_GTE2048);
-    printf("      Rx Octets:%-10lu",   MCF5282_FEC_RMON_R_OCTETS);
-    printf("     Rx Dropped:%-10lu\n", MCF5282_FEC_IEEE_R_DROP);
-    printf("    Rx frame OK:%-10lu",   MCF5282_FEC_IEEE_R_FRAME_OK);
-    printf("   Rx CRC error:%-10lu",   MCF5282_FEC_IEEE_R_CRC);
-    printf(" Rx Align error:%-10lu\n", MCF5282_FEC_IEEE_R_ALIGN);
-    printf("  FIFO Overflow:%-10lu",   MCF5282_FEC_IEEE_R_MACERR);
-    printf("Rx Pause Frames:%-10lu",   MCF5282_FEC_IEEE_R_FDXFC);
-    printf("   Rx Octets OK:%-10lu\n", MCF5282_FEC_IEEE_R_OCTETS_OK);
+    printf("Rx Packet Count:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_PACKETS);
+    printf("   Rx Broadcast:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_R_BC_PKT);
+    printf("   Rx Multicast:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_MC_PKT);
+    printf("CRC/Align error:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_CRC_ALIGN);
+    printf("   Rx Undersize:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_R_UNDERSIZE);
+    printf("    Rx Oversize:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_OVERSIZE);
+    printf("    Rx Fragment:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_FRAG);
+    printf("      Rx Jabber:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_R_JAB);
+    printf("          Rx 64:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_P64);
+    printf("      Rx 65-127:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_P65T0127);
+    printf("     Rx 128-255:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_R_P128TO255);
+    printf("     Rx 256-511:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_P256TO511);
+    printf("    Rx 511-1023:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_P512TO1023);
+    printf("   Rx 1024-2047:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_R_P1024TO2047);
+    printf("      Rx >=2048:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_GTE2048);
+    printf("      Rx Octets:%-10lu",   (uint32_t) MCF5282_FEC_RMON_R_OCTETS);
+    printf("     Rx Dropped:%-10lu\n", (uint32_t) MCF5282_FEC_IEEE_R_DROP);
+    printf("    Rx frame OK:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_R_FRAME_OK);
+    printf("   Rx CRC error:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_R_CRC);
+    printf(" Rx Align error:%-10lu\n", (uint32_t) MCF5282_FEC_IEEE_R_ALIGN);
+    printf("  FIFO Overflow:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_R_MACERR);
+    printf("Rx Pause Frames:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_R_FDXFC);
+    printf("   Rx Octets OK:%-10lu\n", (uint32_t) MCF5282_FEC_IEEE_R_OCTETS_OK);
     printf("  Tx Interrupts:%-10lu",   sc->txInterrupts);
     printf("Tx Output Waits:%-10lu",   sc->txRawWait);
     printf("Tx mbuf realign:%-10lu\n", sc->txRealign);
     printf("Tx realign drop:%-10lu",   sc->txRealignDrop);
-    printf(" Tx Unaccounted:%-10lu",   MCF5282_FEC_RMON_T_DROP);
-    printf("Tx Packet Count:%-10lu\n", MCF5282_FEC_RMON_T_PACKETS);
-    printf("   Tx Broadcast:%-10lu",   MCF5282_FEC_RMON_T_BC_PKT);
-    printf("   Tx Multicast:%-10lu",   MCF5282_FEC_RMON_T_MC_PKT);
-    printf("CRC/Align error:%-10lu\n", MCF5282_FEC_RMON_T_CRC_ALIGN);
-    printf("   Tx Undersize:%-10lu",   MCF5282_FEC_RMON_T_UNDERSIZE);
-    printf("    Tx Oversize:%-10lu",   MCF5282_FEC_RMON_T_OVERSIZE);
-    printf("    Tx Fragment:%-10lu\n", MCF5282_FEC_RMON_T_FRAG);
-    printf("      Tx Jabber:%-10lu",   MCF5282_FEC_RMON_T_JAB);
-    printf("  Tx Collisions:%-10lu",   MCF5282_FEC_RMON_T_COL);
-    printf("          Tx 64:%-10lu\n", MCF5282_FEC_RMON_T_P64);
-    printf("      Tx 65-127:%-10lu",   MCF5282_FEC_RMON_T_P65TO127);
-    printf("     Tx 128-255:%-10lu",   MCF5282_FEC_RMON_T_P128TO255);
-    printf("     Tx 256-511:%-10lu\n", MCF5282_FEC_RMON_T_P256TO511);
-    printf("    Tx 511-1023:%-10lu",   MCF5282_FEC_RMON_T_P512TO1023);
-    printf("   Tx 1024-2047:%-10lu",   MCF5282_FEC_RMON_T_P1024TO2047);
-    printf("      Tx >=2048:%-10lu\n", MCF5282_FEC_RMON_T_P_GTE2048);
-    printf("      Tx Octets:%-10lu",   MCF5282_FEC_RMON_T_OCTETS);
-    printf("     Tx Dropped:%-10lu",   MCF5282_FEC_IEEE_T_DROP);
-    printf("    Tx Frame OK:%-10lu\n", MCF5282_FEC_IEEE_T_FRAME_OK);
-    printf(" Tx 1 Collision:%-10lu",   MCF5282_FEC_IEEE_T_1COL);
-    printf("Tx >1 Collision:%-10lu",   MCF5282_FEC_IEEE_T_MCOL);
-    printf("    Tx Deferred:%-10lu\n", MCF5282_FEC_IEEE_T_DEF);
-    printf(" Late Collision:%-10lu",   MCF5282_FEC_IEEE_T_LCOL);
-    printf(" Excessive Coll:%-10lu",   MCF5282_FEC_IEEE_T_EXCOL);
-    printf("  FIFO Underrun:%-10lu\n", MCF5282_FEC_IEEE_T_MACERR);
-    printf("  Carrier Error:%-10lu",   MCF5282_FEC_IEEE_T_CSERR);
-    printf("   Tx SQE Error:%-10lu",   MCF5282_FEC_IEEE_T_SQE);
-    printf("Tx Pause Frames:%-10lu\n", MCF5282_FEC_IEEE_T_FDXFC);
-    printf("   Tx Octets OK:%-10lu",   MCF5282_FEC_IEEE_T_OCTETS_OK);
+    printf(" Tx Unaccounted:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_DROP);
+    printf("Tx Packet Count:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_T_PACKETS);
+    printf("   Tx Broadcast:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_BC_PKT);
+    printf("   Tx Multicast:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_MC_PKT);
+    printf("CRC/Align error:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_T_CRC_ALIGN);
+    printf("   Tx Undersize:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_UNDERSIZE);
+    printf("    Tx Oversize:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_OVERSIZE);
+    printf("    Tx Fragment:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_T_FRAG);
+    printf("      Tx Jabber:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_JAB);
+    printf("  Tx Collisions:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_COL);
+    printf("          Tx 64:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_T_P64);
+    printf("      Tx 65-127:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_P65TO127);
+    printf("     Tx 128-255:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_P128TO255);
+    printf("     Tx 256-511:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_T_P256TO511);
+    printf("    Tx 511-1023:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_P512TO1023);
+    printf("   Tx 1024-2047:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_P1024TO2047);
+    printf("      Tx >=2048:%-10lu\n", (uint32_t) MCF5282_FEC_RMON_T_P_GTE2048);
+    printf("      Tx Octets:%-10lu",   (uint32_t) MCF5282_FEC_RMON_T_OCTETS);
+    printf("     Tx Dropped:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_T_DROP);
+    printf("    Tx Frame OK:%-10lu\n", (uint32_t) MCF5282_FEC_IEEE_T_FRAME_OK);
+    printf(" Tx 1 Collision:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_T_1COL);
+    printf("Tx >1 Collision:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_T_MCOL);
+    printf("    Tx Deferred:%-10lu\n", (uint32_t) MCF5282_FEC_IEEE_T_DEF);
+    printf(" Late Collision:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_T_LCOL);
+    printf(" Excessive Coll:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_T_EXCOL);
+    printf("  FIFO Underrun:%-10lu\n", (uint32_t) MCF5282_FEC_IEEE_T_MACERR);
+    printf("  Carrier Error:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_T_CSERR);
+    printf("   Tx SQE Error:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_T_SQE);
+    printf("Tx Pause Frames:%-10lu\n", (uint32_t) MCF5282_FEC_IEEE_T_FDXFC);
+    printf("   Tx Octets OK:%-10lu",   (uint32_t) MCF5282_FEC_IEEE_T_OCTETS_OK);
     printf(" MII interrupts:%-10lu\n", sc->miiInterrupts);
     if ((sc->mii_sr2 & 0x400) == 0) {
         printf("LINK DOWN!\n");
@@ -838,15 +838,15 @@ enet_stats(struct mcf5282_enet_struct *sc)
                                             speed,
                                             full ? "full" : "half");
     }
-    printf(" EIR:%8.8lx  ",  MCF5282_FEC_EIR);
-    printf("EIMR:%8.8lx  ",  MCF5282_FEC_EIMR);
-    printf("RDAR:%8.8lx  ",  MCF5282_FEC_RDAR);
-    printf("TDAR:%8.8lx\n",  MCF5282_FEC_TDAR);
-    printf(" ECR:%8.8lx  ",  MCF5282_FEC_ECR);
-    printf(" RCR:%8.8lx  ",  MCF5282_FEC_RCR);
-    printf(" TCR:%8.8lx\n",  MCF5282_FEC_TCR);
-    printf("FRBR:%8.8lx  ",  MCF5282_FEC_FRBR);
-    printf("FRSR:%8.8lx\n",  MCF5282_FEC_FRSR);
+    printf(" EIR:%8.8lx  ",  (uint32_t) MCF5282_FEC_EIR);
+    printf("EIMR:%8.8lx  ",  (uint32_t) MCF5282_FEC_EIMR);
+    printf("RDAR:%8.8lx  ",  (uint32_t) MCF5282_FEC_RDAR);
+    printf("TDAR:%8.8lx\n",  (uint32_t) MCF5282_FEC_TDAR);
+    printf(" ECR:%8.8lx  ",  (uint32_t) MCF5282_FEC_ECR);
+    printf(" RCR:%8.8lx  ",  (uint32_t) MCF5282_FEC_RCR);
+    printf(" TCR:%8.8lx\n",  (uint32_t) MCF5282_FEC_TCR);
+    printf("FRBR:%8.8lx  ",  (uint32_t) MCF5282_FEC_FRBR);
+    printf("FRSR:%8.8lx\n",  (uint32_t) MCF5282_FEC_FRSR);
     if (sc->txBdActiveCount != 0) {
         int i, n;
         /*
