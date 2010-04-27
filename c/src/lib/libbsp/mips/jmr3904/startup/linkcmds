@@ -130,8 +130,7 @@ SECTIONS
     *(.sbss*)
     *(.scommon)
   }
-
-  .bss (NOLOAD): {
+  .bss : {
     _bss_start = . ;
     *(.bss*)
     *(COMMON)

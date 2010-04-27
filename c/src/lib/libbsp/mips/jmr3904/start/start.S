@@ -124,7 +124,7 @@ _start_in_ram:
 	nop
 3:
 	LA (gp, _gp)				# set the global data pointer
-	.end _start
+	.end _start_in_ram
 
 /*
  * zero out the bss section.
