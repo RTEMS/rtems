@@ -156,11 +156,10 @@ SECTIONS
   } >ram   
 
 
-  .bss (NOLOAD): 
+  .bss : 
   {
     _bss_start = . ;
     *(.bss .bss.* .gnu.linkonce.b.*)
-    *(.reginfo)
     *(COMMON)
     . = ALIGN (64);
     _stack_limit = .;

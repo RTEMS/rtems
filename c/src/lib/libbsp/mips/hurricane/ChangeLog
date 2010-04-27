@@ -1,3 +1,8 @@
+2010-04-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/linkcmds: Revert previous change. Remove .reginfo from .bss
+	section where it was present.
+
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* startup/linkcmds: Add NOLOAD to .bss to eliminate warnings.

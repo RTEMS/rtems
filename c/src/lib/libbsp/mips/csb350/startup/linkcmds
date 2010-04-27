@@ -19,6 +19,7 @@ RamSize = _sdram_size;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x4000;
 
+
 MEMORY
 {
    ram      : ORIGIN = 0x80400000, LENGTH = 12M
@@ -157,11 +158,11 @@ SECTIONS
     *(.scommon)
   } >ram   
 
-  .bss (NOLOAD): 
+
+  .bss : 
   {
     _bss_start = . ;
     *(.bss .bss.* .gnu.linkonce.b.*)
-    *(.reginfo)
     *(COMMON)
     . = ALIGN (64);
     _stack_limit = .;

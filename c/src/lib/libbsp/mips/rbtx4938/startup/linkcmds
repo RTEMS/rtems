@@ -137,11 +137,9 @@ SECTIONS
     *(.sbss)
     *(.scommon)
   }
-
-  .bss (NOLOAD): {
+  .bss : {
     _bss_start = . ;
     *(.bss)
-    *(.reginfo)
     *(COMMON)
     . = ALIGN (64);
     _stack_limit = .;
