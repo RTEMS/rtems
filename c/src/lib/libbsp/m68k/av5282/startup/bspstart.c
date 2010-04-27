@@ -35,7 +35,6 @@
 /*
  * CPU-space access
  */
-#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr\n\tnop" : : "d" (_cacr))
 #define m68k_set_acr0(_acr0) asm volatile ("movec %0,%%acr0" : : "d" (_acr0))
 #define m68k_set_acr1(_acr1) asm volatile ("movec %0,%%acr1" : : "d" (_acr1))
 

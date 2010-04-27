@@ -1,3 +1,8 @@
+2010-04-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* network/network.c, startup/bspstart.c: Remove warnings. hwaddr
+	handling changed to avoid use of unitialized variable.
+
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* console/console.c: adapted to new prototype for *_write
