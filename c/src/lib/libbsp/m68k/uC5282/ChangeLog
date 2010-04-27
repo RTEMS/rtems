@@ -1,5 +1,9 @@
 2010-04-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* network/network.c: Remove warnings.
+
+2010-04-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* network/network.c, startup/bspclean.c, startup/init5282.c: Remove
 	warnings.
 
