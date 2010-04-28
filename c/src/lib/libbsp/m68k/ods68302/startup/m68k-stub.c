@@ -1030,13 +1030,13 @@ void initializeRemcomErrorFrame()
     lastFrame->previous = lastFrame;
 }
 
+extern void _debug_level7(void);
+extern void remcomHandler(void);
+
 /* this function is used to set up exception handlers for tracing and
    breakpoints */
 void set_debug_traps()
 {
-  extern void _debug_level7(void);
-  extern void remcomHandler(void);
-
   int exception;
 
   initializeRemcomErrorFrame();
