@@ -1,5 +1,9 @@
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* timer/timer.c: Remove warnings.
+
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* console/leds.c, timer/timer.c: Remove warnings.
 
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
