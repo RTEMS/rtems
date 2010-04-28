@@ -440,6 +440,8 @@ MG5UART_STATIC void mg5uart_write_polled(
  */
 
 
+extern void mips_default_isr(int vector);
+
 #define __ISR(_TYPE, _OFFSET) \
   MG5UART_STATIC void mg5uart_process_isr_ ## _TYPE ( \
     int  minor \
@@ -450,8 +452,7 @@ MG5UART_STATIC void mg5uart_write_polled(
   ) \
   { \
     int   minor; \
-    extern void mips_default_isr(int vector); \
-   \
+    \
     for(minor=0 ; minor<Console_Port_Count ; minor++) { \
       if( Console_Port_Tbl[minor].deviceType == SERIAL_MG5UART && \
           vector == Console_Port_Tbl[minor].ulIntVector + _OFFSET ) { \
@@ -467,9 +468,6 @@ __ISR(rx_overrun_error, MG5UART_IRQ_RX_OVERRUN_ERROR)
 __ISR(tx_empty, MG5UART_IRQ_TX_EMPTY)
 __ISR(tx_ready, MG5UART_IRQ_TX_READY)
 __ISR(rx_ready, MG5UART_IRQ_RX_READY)
-
-
-
 
 
 MG5UART_STATIC void mg5uart_process_isr_rx_error(
@@ -679,10 +677,10 @@ MG5UART_STATIC int mg5uart_write_support_int(
  *
  */
 
-MG5UART_STATIC int mg5uart_write_support_polled(
+MG5UART_STATIC ssize_t mg5uart_write_support_polled(
   int         minor,
   const char *buf,
-  int         len
+  size_t      len
 )
 {
   int nwrite = 0;

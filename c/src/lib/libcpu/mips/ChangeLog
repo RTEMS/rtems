@@ -1,3 +1,7 @@
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* mongoosev/duart/mg5uart.c: Remove warnings.
+
 2009-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add shared/interrupts/isr_entries.h.
