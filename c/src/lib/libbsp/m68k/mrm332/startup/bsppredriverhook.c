@@ -16,6 +16,7 @@
 
 #include <bsp.h>
 
+extern void Spurious_Initialize(void);
 
 /*
  *  Call Spurious_Initialize in bsp_predriver_hook because
@@ -23,6 +24,5 @@
  */
 void bsp_predriver_hook(void)
 {
-  extern void Spurious_Initialize(void);
   Spurious_Initialize();
 }

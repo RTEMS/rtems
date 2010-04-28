@@ -16,9 +16,7 @@ extern void bsp_spurious_initialize(void);
 
 void bsp_predriver_hook(void)
 {
-  #if defined(mcpu32)
-    #warning "do something about vectors!!!"
-  #endif
+  /* on CPU32: do something about vectors!!! */
 
   bsp_spurious_initialize();
 }

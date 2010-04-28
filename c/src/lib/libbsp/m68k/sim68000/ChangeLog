@@ -1,3 +1,7 @@
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/bsppredriverhook.c: Remove warnings.
+
 2010-04-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/debugio.c: Include <unistd.h>.
