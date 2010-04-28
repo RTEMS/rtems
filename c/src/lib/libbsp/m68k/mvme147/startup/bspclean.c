@@ -1,7 +1,7 @@
 /*
  *  This routine returns control to 147Bug.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,10 +19,10 @@
 #include <bsp.h>
 #include <rtems/clockdrv.h>
 
+extern void start( void  );
+
 void bsp_return_to_monitor_trap(void)
 {
-  extern void start( void  );
-
   register volatile void *start_addr;
 
   m68k_set_vbr( 0 );                /* restore 147Bug vectors */
