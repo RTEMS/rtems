@@ -110,7 +110,6 @@
 
 #if defined(__PPC__)
   	#define DRIVER_SUPPORTED
-	#warning The if_dc driver is untested on the PPC platform !!!
 #endif
 
 #include <bsp.h>

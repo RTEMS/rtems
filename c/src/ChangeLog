@@ -1,3 +1,7 @@
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libchip/network/if_dc.c: Remove warnings.
+
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libchip/serial/mc68681.c, libchip/serial/mc68681_reg.c,
