@@ -145,6 +145,8 @@ extern "C" {
 
 #define MAX_BOARD_IRQS                 SCORE603E_IRQ19
 
+extern void BSP_rtems_irq_mng_init(unsigned cpuId);
+
 #ifdef __cplusplus
 }
 #endif

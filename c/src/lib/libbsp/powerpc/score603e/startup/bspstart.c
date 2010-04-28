@@ -5,7 +5,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,7 @@
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
+#include <bsp/irq.h>
 
 #define DEBUG 0
 
@@ -158,11 +159,9 @@ void initialize_PMC(void) {
 void bsp_start( void )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  unsigned char        *work_space_start;
   unsigned int         msr_value = 0x0000;
   uintptr_t            intrStackStart;
   uintptr_t            intrStackSize;
-  volatile uint32_t    *ptr;
   ppc_cpu_id_t         myCpu;
   ppc_cpu_revision_t   myCpuRevision;
 
@@ -197,9 +196,8 @@ void bsp_start( void )
     intrStackStart, intrStackSize, BSP_heap_start
   );
 
-  BSP_mem_size = RamSize;
-  printk("BSP_mem_size: 0x%x\n", BSP_mem_size );
-
+  BSP_mem_size = (uint32_t) RamSize;
+  printk("BSP_mem_size: %p\n", RamSize );
 
   /*
    * Initialize default raw exception handlers.

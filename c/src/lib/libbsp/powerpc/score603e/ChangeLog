@@ -1,3 +1,7 @@
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* irq/irq.h, startup/bspstart.c: Remove warnings.
+
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* console/consolebsp.h: Remove extraneous #warning.
