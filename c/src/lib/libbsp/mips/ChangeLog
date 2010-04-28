@@ -1,3 +1,7 @@
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* shared/gdbstub/mips-stub.c: Remove warnings.
+
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/gdbstub/mips-stub.c: Add missing prototypes.
