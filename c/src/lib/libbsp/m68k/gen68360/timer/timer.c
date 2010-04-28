@@ -72,7 +72,10 @@ benchmark_timer_initialize (void)
 int
 benchmark_timer_read (void)
 {
-	return *(uint32_t*)&m360.tcn1;
+	unsigned short val;
+
+	val = m360.tcn1;
+	return val;
 }
 
 void
