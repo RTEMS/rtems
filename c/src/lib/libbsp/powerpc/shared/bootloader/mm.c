@@ -46,6 +46,9 @@
 #include <libcpu/page.h>
 #include <limits.h>
 
+extern void (tlb_handlers)(void);
+extern void (_handler_glue)(void);
+
 /* We use our own kind of simple memory areas for the loader, but
  * we want to avoid potential clashes with kernel includes.
  * Here a map maps contiguous areas from base to end,
@@ -706,8 +709,6 @@ void mm_init(u_long image_size)
 	u_long lowpage=ULONG_MAX, highpage;
 	struct _mm_private *mm = (struct _mm_private *) bd->mm_private;
 	RESIDUAL * res=bd->residual;
-	extern void (tlb_handlers)(void);
-	extern void (_handler_glue)(void);
 	int i;
 	map *p;
 

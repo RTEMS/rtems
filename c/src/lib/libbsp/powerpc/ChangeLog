@@ -1,3 +1,9 @@
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* shared/bootloader/em86.c, shared/bootloader/mm.c,
+	shared/console/polled_io.c, shared/irq/irq_init.c,
+	shared/startup/bspstart.c: Remove warnings.
+
 2010-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/flash/flash.c: Include <unistd.h>.

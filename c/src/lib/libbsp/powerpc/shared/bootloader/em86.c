@@ -177,7 +177,8 @@ int bios86pci(x86 * p) {
 		  AH=pcibios_write_config_word(BH, BL, reg, ld_le16(&CX));
 		  break;
 		case 13:      /* write_config_dword */
-		  AH=pcibios_write_config_dword(BH, BL, reg, ld_le32(&ECX));
+		  AH=pcibios_write_config_dword(
+			BH, BL, reg, ld_le32((uint32_t *)&ECX));
 		  break;
 		default:
 		  printf("Unimplemented or illegal PCI service call #%d!\n",
@@ -207,7 +208,7 @@ unsigned pop2(x86 *p) {
 
 int int10h(x86 * p) { /* Process BIOS video interrupt */
   	unsigned vector;
-	vector=ld_le32((unsigned *)p->vbase+0x10);
+	vector=ld_le32((uint32_t *)p->vbase+0x10);
 	if (((vector&0xffff0000)>>16)==0xc000) {
 		push2(p, p->eflags);
 		push2(p, p->cs);
@@ -528,7 +529,7 @@ void em86_main(struct pci_dev *dev){
 	*(u_int *)(p->ssbase+ld_le16(&SP)) = UINT_MAX;
 
 	/* Interrupt for BIOS EGA services is 0xf000:0xf065 (int 0x10) */
-	st_le32((u_int *)p->vbase + 0x10, 0xf000f065);
+	st_le32((uint32_t *)p->vbase + 0x10, 0xf000f065);
 
 	/* Enable the ROM, read it and disable it immediately */
 	pci_bootloader_read_config_dword(dev, PCI_ROM_ADDRESS, &saved_rom);

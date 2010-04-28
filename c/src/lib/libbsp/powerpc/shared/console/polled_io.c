@@ -1094,7 +1094,7 @@ int k_vsprintf(char *buf, const char *fmt, va_list args)
 					n = (short) n;
 				else
 				  	n = (unsigned short) n;
-			} else if (! flags & LONG) {
+			} else if (!(flags & LONG)) {
 				/* Here the compiler correctly removes this
 				 * do nothing code on 32 bit PPC.
 				 */
