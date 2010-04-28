@@ -1,3 +1,7 @@
+2010-04-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxfile01/test.c: Add check for errno on chdir(NULL).
+
 2010-04-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxrdwrv/test.c: Use SIZE_MAX not SSIZE_MAX.

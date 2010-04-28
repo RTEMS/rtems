@@ -10,7 +10,7 @@
  *    /dev
  *    /dev/XXX   [where XXX includes at least console]
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -220,6 +220,7 @@ int main(
   /* test rtems_filesystem_evaluate_path by sending NULL path */
   status = chdir( NULL );
   rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EFAULT );
 
   /*
    *  Now switch gears and exercise rmdir().
