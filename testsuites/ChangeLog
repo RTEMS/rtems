@@ -1,3 +1,8 @@
+2010-04-22	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* support/include/tmacros.h: Changed check_dispatch_disable_level() to
+	treat all non-zero values of _Thread_Dispatch_disable_level equally.
+
 2009-12-08	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* support/include/test_support.h, support/include/tmacros.h,
