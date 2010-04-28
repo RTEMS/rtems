@@ -15,12 +15,13 @@
 #include <rtems.h>
 #include <bsp.h>
 
+extern void _CopyDataClearBSSAndStart (void);
+
 /*
  * Initialize MC68340
  */
 void _Init68340 (void)
 {
-	extern void _CopyDataClearBSSAndStart (void);
 	m68k_isr_entry *vbr;
 	int i;
 
