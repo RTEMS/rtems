@@ -22,12 +22,12 @@
  * do need to initialize the SDRAM.
  */
 
-
 extern uint32_t MCF5235_BSP_START_FROM_FLASH;
+extern void CopyDataClearBSSAndStart (void);
+extern void INTERRUPT_VECTOR(void);
 
 void Init5235 (void)
 {
-    extern void CopyDataClearBSSAndStart (void);
     int x;
     volatile int temp = 0;
     int *address_of_MCF5235_BSP_START_FROM_FLASH;
@@ -78,7 +78,6 @@ void Init5235 (void)
 
     /* Copy the interrupt vector table to address 0x0 in SDRAM */
     {
-        extern void INTERRUPT_VECTOR(void);
         uint32_t *inttab = (uint32_t *)&INTERRUPT_VECTOR;
         uint32_t *intvec = (uint32_t *)0x0;
         register int i;
