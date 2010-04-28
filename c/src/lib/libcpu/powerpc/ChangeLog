@@ -1,3 +1,8 @@
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* mpc5xx/clock/clock.c, mpc5xx/console-generic/console-generic.c,
+	mpc5xx/irq/irq_init.c, mpc5xx/timer/timer.c: Remove warnings.
+
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* ppc403/clock/clock.c, ppc403/console/console405.c,

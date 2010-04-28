@@ -23,40 +23,55 @@
 #include <mpc5xx.h>
 #include <libcpu/vectors.h>
 #include <libcpu/raw_exception.h>
-#include <libcpu/irq.h>
-
+#include <bsp/irq.h>
 
 extern rtems_exception_handler_t dispatch_irq_handler;
 
 volatile unsigned int ppc_cached_irq_mask;
 
 /*
- * default on/off function
+ * default methods
  */
-static void nop_func(){}
+static void nop_hdl(rtems_irq_hdl_param ignored)
+{
+}
 
-/*
- * default isOn function
- */
-static int not_connected(void) {return 0;}
+static void nop_irq_enable(const struct __rtems_irq_connect_data__*ignored)
+{
+}
 
-/*
- * default possible isOn function
- */
-static int connected(void) {return 1;}
+static void nop_raw_enable(
+  const struct __rtems_raw_except_connect_data__*ignored
+)
+{
+}
 
-static rtems_irq_connect_data     	rtemsIrq[CPU_IRQ_COUNT];
-static rtems_irq_global_settings     	initial_config;
-static rtems_irq_connect_data     	defaultIrq = {
-  /* vector,	 hdl		,handle		, on		, off		, isOn */
-  0, 		 nop_func	,NULL		, nop_func	, nop_func	, not_connected
+static int irq_is_connected(const struct __rtems_irq_connect_data__*ignored)
+{
+  return 0;
+}
+
+static int raw_is_connected(const struct __rtems_raw_except_connect_data__*ignored)
+{
+  return 0;
+}
+
+static rtems_irq_connect_data     rtemsIrq[CPU_IRQ_COUNT];
+static rtems_irq_global_settings  initial_config;
+static rtems_irq_connect_data     defaultIrq = {
+  0,                /* vector */
+  nop_hdl,          /* hdl */
+  NULL,             /* handle */
+  nop_irq_enable,   /* on */
+  nop_irq_enable,   /* off */
+  irq_is_connected  /* isOn */
 };
 
 static rtems_irq_prio irqPrioTable[CPU_IRQ_COUNT]={
   /*
    * actual priorities for interrupt :
-   *	0   means that only current interrupt is masked
-   *	255 means all other interrupts are masked
+   *   0   means that only current interrupt is masked
+   *   255 means all other interrupts are masked
    */
   /*
    * USIU interrupts.
@@ -118,11 +133,11 @@ void CPU_rtems_irq_mng_init(unsigned cpuId)
     /*
      * Init initial Interrupt management config
      */
-    initial_config.irqNb 	= CPU_IRQ_COUNT;
+    initial_config.irqNb        = CPU_IRQ_COUNT;
     initial_config.defaultEntry = defaultIrq;
-    initial_config.irqHdlTbl	= rtemsIrq;
-    initial_config.irqBase	= CPU_ASM_IRQ_VECTOR_BASE;
-    initial_config.irqPrioTbl	= irqPrioTable;
+    initial_config.irqHdlTbl    = rtemsIrq;
+    initial_config.irqBase      = CPU_ASM_IRQ_VECTOR_BASE;
+    initial_config.irqPrioTbl   = irqPrioTable;
 
     if (!CPU_rtems_irq_mngt_set(&initial_config)) {
       /*
@@ -135,17 +150,17 @@ void CPU_rtems_irq_mng_init(unsigned cpuId)
    * We must connect the raw irq handler for the two
    * expected interrupt sources : decrementer and external interrupts.
    */
-    vectorDesc.exceptIndex 	=	ASM_DEC_VECTOR;
-    vectorDesc.hdl.vector	=	ASM_DEC_VECTOR;
-    vectorDesc.hdl.raw_hdl	=	dispatch_irq_handler;
-    vectorDesc.on		=	nop_func;
-    vectorDesc.off		=	nop_func;
-    vectorDesc.isOn		=	connected;
+    vectorDesc.exceptIndex = ASM_DEC_VECTOR;
+    vectorDesc.hdl.vector  = ASM_DEC_VECTOR;
+    vectorDesc.hdl.raw_hdl = dispatch_irq_handler;
+    vectorDesc.on          = nop_raw_enable;
+    vectorDesc.off         = nop_raw_enable;
+    vectorDesc.isOn        = raw_is_connected;
     if (!mpc5xx_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
     }
-    vectorDesc.exceptIndex	=	ASM_EXT_VECTOR;
-    vectorDesc.hdl.vector	=	ASM_EXT_VECTOR;
+    vectorDesc.exceptIndex = ASM_EXT_VECTOR;
+    vectorDesc.hdl.vector  = ASM_EXT_VECTOR;
     if (!mpc5xx_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS external raw exception\n");
     }

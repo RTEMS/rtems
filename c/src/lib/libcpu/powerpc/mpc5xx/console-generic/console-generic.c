@@ -49,7 +49,7 @@
 #include <rtems/bspIo.h>   /* for printk */
 #include <mpc5xx.h>
 #include <mpc5xx/console.h>
-#include <libcpu/irq.h>
+#include <bsp/irq.h>
 
 
 /*
@@ -84,6 +84,8 @@ static struct termios default_termios = {
   { 0 }					/* control characters */
 };
 
+
+extern uint32_t bsp_clock_speed;
 
 /*
  * Termios callback functions
@@ -187,33 +189,10 @@ m5xx_uart_setAttributes(
     return RTEMS_INVALID_NUMBER;
 
   /* Baud rate */
-  switch (t->c_cflag & CBAUD) {
-    default:      baud = -1;      break;
-    case B50:     baud = 50;      break;
-    case B75:     baud = 75;      break;
-    case B110:    baud = 110;     break;
-    case B134:    baud = 134;     break;
-    case B150:    baud = 150;     break;
-    case B200:    baud = 200;     break;
-    case B300:    baud = 300;     break;
-    case B600:    baud = 600;     break;
-    case B1200:   baud = 1200;    break;
-    case B1800:   baud = 1800;    break;
-    case B2400:   baud = 2400;    break;
-    case B4800:   baud = 4800;    break;
-    case B9600:   baud = 9600;    break;
-    case B19200:  baud = 19200;   break;
-    case B38400:  baud = 38400;   break;
-    case B57600:  baud = 57600;   break;
-    case B115200: baud = 115200;  break;
-    case B230400: baud = 230400;  break;
-    case B460800: baud = 460800;  break;
-  }
+  baud = rtems_termios_baud_to_number( t->c_cflag & CBAUD );
   if (baud > 0) {
-    extern uint32_t bsp_clock_speed;
     sccr0 &= ~QSMCM_SCI_BAUD(-1);
-    sccr0 |=
-      QSMCM_SCI_BAUD((bsp_clock_speed + (16 * baud)) / (32 * baud));
+    sccr0 |= QSMCM_SCI_BAUD((bsp_clock_speed + (16 * baud)) / (32 * baud));
   }
 
   /* Number of data bits -- not available with MPC5xx SCI */
