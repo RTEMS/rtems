@@ -1,13 +1,12 @@
 /*
  *  This routine returns control to 162Bug.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
  *
  *  Modifications of respective RTEMS file: COPYRIGHT (c) 1994.
  *  EISCAT Scientific Association. M.Savitski
@@ -24,10 +23,10 @@
 #include <rtems/zilog/z8036.h>
 #include <page_table.h>
 
+extern void start( void  );
+
 void bsp_return_to_monitor_trap(void)
 {
-  extern void start( void  );
-
   page_table_teardown();
 
   lcsr->intr_ena = 0;               /* disable interrupts */
