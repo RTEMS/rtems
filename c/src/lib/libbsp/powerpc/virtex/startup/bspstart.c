@@ -86,6 +86,8 @@ uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
+extern unsigned char IntrStack_start[];
+extern unsigned char IntrStack_end[];
 
 /*      Initialize whatever libc we are using
  *      called from postdriver hook
@@ -105,8 +107,6 @@ void bsp_XAssertHandler(const char* file, int line) {
 void bsp_start( void )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  extern unsigned char IntrStack_start[];
-  extern unsigned char IntrStack_end[];
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
 
