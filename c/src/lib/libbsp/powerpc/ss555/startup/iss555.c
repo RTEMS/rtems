@@ -26,6 +26,8 @@ SPR_RW(MI_GRA);
 SPR_RW(L2U_GRA);
 SPR_RW(BBCMCR);
 
+extern char int_ram_top[];		/* top of internal ram */
+
 /*
  *  Initialize SS555
  */
@@ -94,8 +96,6 @@ void _InitSS555 (void)
    * extend the internal RAM.  If booting from external RAM, leave it at
    * zero but set it up appropriately.
    */
-  extern char int_ram_top[];		/* top of internal ram */
-
   usiu.memc[0]._or =
       USIU_MEMC_OR_512K			/* bank size */
     | USIU_MEMC_OR_SCY(0)		/* wait states in first beat of burst */

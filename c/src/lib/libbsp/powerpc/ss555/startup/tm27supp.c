@@ -6,24 +6,11 @@
 
 #include <bsp.h>
 
-void tm27On(void)
-{
-}
-
-void tm27Off(void)
-{
-}
-
-int tm27IsOn(void)
-{
-  return 1;
-}
-
 rtems_irq_connect_data tm27IrqData = {
   CPU_USIU_EXT_IRQ_7,
   (rtems_irq_hdl)0,
-  (rtems_irq_enable)tm27On,
-  (rtems_irq_disable)tm27Off,
-  (rtems_irq_is_enabled)tm27IsOn
+  NULL,
+  NULL,
+  NULL
 };
 
