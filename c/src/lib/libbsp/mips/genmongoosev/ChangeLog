@@ -1,3 +1,7 @@
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/linkcmds: Needed to be assigned to a memory region.
+
 2010-04-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/linkcmds: Revert previous change. Remove .reginfo from .bss
