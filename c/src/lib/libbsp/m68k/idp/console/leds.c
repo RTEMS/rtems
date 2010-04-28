@@ -63,6 +63,8 @@ clear_leds ( )
     *leds = 0xFF;
 }
 
+void rtems_bsp_delay( int );
+
 /*
  * zylons -- draw a rotating pattern. NOTE: this function never returns.
  */
@@ -71,7 +73,6 @@ zylons()
 {
   unsigned char *leds 	= (unsigned char *)LED_ADDR;
   unsigned char curled = 0xfe;
-  void rtems_bsp_delay( int );
 
   while (1)
     {
