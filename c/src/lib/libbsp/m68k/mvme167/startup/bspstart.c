@@ -5,7 +5,7 @@
  *  CPU dependent initialization has been performed before any of these are
  *  invoked.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,9 @@
 
 /* XXX If RTEMS let the BSP replace the default fatal error handler... */
 rtems_extensions_table user_extension_table;
+
+void M68KFPSPInstallExceptionHandlers (void);
+extern m68k_isr_entry  M68Kvec[];
 
 /*
  *  bsp_start()
@@ -54,9 +57,6 @@ rtems_extensions_table user_extension_table;
  */
 void bsp_start( void )
 {
-  void M68KFPSPInstallExceptionHandlers (void);
-  extern m68k_isr_entry  M68Kvec[];
-
   m68k_isr_entry *rom_monitor_vector_table;
   int index;
 

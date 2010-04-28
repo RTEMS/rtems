@@ -3,7 +3,7 @@
  *  These routines return control to 167Bug after a normal exit from the
  *  application.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,6 +20,9 @@
 #include <bsp.h>
 #include <page_table.h>
 
+extern void start( void );
+extern void page_table_teardown( void );
+
 /*
  *  bsp_return_to_monitor_trap
  *
@@ -34,9 +37,6 @@
  */
 static void bsp_return_to_monitor_trap( void )
 {
-  extern void start( void );
-  extern void page_table_teardown( void );
-
   register volatile void *start_addr;
 
   page_table_teardown();
