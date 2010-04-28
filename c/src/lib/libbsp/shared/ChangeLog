@@ -1,3 +1,7 @@
+2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* gdbstub/rtems-stub-glue.c: Remove warnings.
+
 2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* umon/umonrtemsglue.c: change type to avoid warning

@@ -283,7 +283,6 @@ int rtems_gdb_stub_get_thread_info(
    int first_posix_id, first_rtems_id;
    Objects_Information *obj_info;
    Thread_Control *th;
-   uint32_t   name;
    char tmp_buf[20];
 
    ASSERT(info != NULL);
