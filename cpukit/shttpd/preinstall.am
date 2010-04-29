@@ -23,7 +23,7 @@ $(PROJECT_LIB)/$(dirstamp):
 	@: > $(PROJECT_LIB)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
-if LIBNETWORKING
+if LIBSHTTPD
 $(PROJECT_INCLUDE)/shttpd/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/shttpd
 	@: > $(PROJECT_INCLUDE)/shttpd/$(dirstamp)
