@@ -2,11 +2,13 @@
 ## $Id$
 ##
 
+## DEPRECATED, don't use.
+
 include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -DWEBS -DUEMF
 
-if LIBNETWORKING
+if LIBHTTPD
 ## Always install this header file.  Both webservers use it.
 include_HEADERS = rtems_webserver.h
 
