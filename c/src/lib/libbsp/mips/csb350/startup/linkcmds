@@ -37,6 +37,7 @@ SECTIONS
       *(.gnu.linkonce.t*)
       *(.mips16.fn.*)
       *(.mips16.call.*)
+      *(.reginfo*)
       PROVIDE (__runtime_reloc_start = .);
       *(.rel.sdata)
       *(.rel.dyn)
