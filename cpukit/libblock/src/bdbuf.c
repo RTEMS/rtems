@@ -2269,6 +2269,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
 {
   rtems_chain_node *node;
   static rtems_disk_device null_disk = {
+    .phys_dev = &null_disk,
     .capabilities = 0,
     .ioctl = rtems_bdbuf_null_disk_ioctl
   };

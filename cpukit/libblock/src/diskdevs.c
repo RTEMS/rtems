@@ -475,7 +475,7 @@ rtems_disk_next(dev_t dev)
     dtab = disktab + major;
     while (true)
     {
-        if ((dtab == NULL) || (minor > dtab->size))
+        if ((dtab == NULL) || (minor >= dtab->size))
         {
              major++; minor = 0;
              if (major >= disktab_size)
