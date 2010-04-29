@@ -1,5 +1,6 @@
 2010-04-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/enable-itron.m4: Cosmetics.
 	* httpd/Makefile.am: Use LIBHTTPD.
 	* shttpd/Makefile.am: Use LIBSHTTPD.
 	* configure.ac: Add RTEMS_ENABLE_SHTTPD, RTEMS_ENABLE_HTTPD.

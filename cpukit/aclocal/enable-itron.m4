@@ -2,8 +2,8 @@ dnl $Id$
 
 AC_DEFUN([RTEMS_ENABLE_ITRON],
 [
-AC_ARG_ENABLE(itron,
-AS_HELP_STRING(--enable-itron,enable itron interface),
+AC_ARG_ENABLE([itron],
+AS_HELP_STRING([--enable-itron],[enable itron interface (DEPRECATED)]),
 [case "${enableval}" in 
   yes) RTEMS_HAS_ITRON_API=yes ;;
   no) RTEMS_HAS_ITRON_API=no ;;
