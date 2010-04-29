@@ -1,5 +1,9 @@
 2010-04-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/enable-httpd.m4, aclocal/enable-shttpd.m4: New.
+
+2010-04-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/libc/map_v4v6.c: Use uintptr_t instead of u_long for
 	better 16bit target compliance.
 
