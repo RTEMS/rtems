@@ -1,3 +1,7 @@
+2010-04-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* include/bsp.h: Add BSP_SMALL_MEMORY.
+
 2010-04-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* start/start.S: Verify boot_card is invoked properly with argc, argv.
