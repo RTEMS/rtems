@@ -281,10 +281,10 @@ clnt_broadcast(
 	struct rpc_msg msg;
 	struct timeval t, tv;
 	char outbuf[MAX_BROADCAST_SIZE], inbuf[UDPMSGSIZE];
-	static u_int32_t disrupt;
+	static uintptr_t disrupt;
 
 	if (disrupt == 0)
-		disrupt = (u_int32_t)(long)resultsp;
+		disrupt = (uintptr_t) resultsp;
 
 	/*
 	 * initialization: create a socket, a broadcast address, and
