@@ -1,3 +1,8 @@
+2010-04-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/libc/map_v4v6.c: Use uintptr_t instead of u_long for
+	better 16bit target compliance.
+
 2010-04-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/chdir.c: Check for NULL pointer.

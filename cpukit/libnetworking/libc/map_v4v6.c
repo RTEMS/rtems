@@ -108,7 +108,7 @@ _map_v4v6_hostent(
 	hp->h_addrtype = AF_INET6;
 	hp->h_length = IN6ADDRSZ;
 	for (ap = hp->h_addr_list; *ap; ap++) {
-		int i = sizeof(align) - ((u_long)*bpp % sizeof(align));
+		int i = sizeof(align) - ((uintptr_t)*bpp % sizeof(align));
 
 		if (*lenp < (i + IN6ADDRSZ)) {
 			/* Out of memory.  Truncate address list here.  XXX */
