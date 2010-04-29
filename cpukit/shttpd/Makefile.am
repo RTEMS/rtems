@@ -1,6 +1,8 @@
+# DEPRECATED, don't use.
+
 include $(top_srcdir)/automake/compile.am
 
-if LIBNETWORKING
+if LIBSHTTPD
 include_shttpddir = $(includedir)/shttpd
 
 project_lib_LIBRARIES = libshttpd.a
