@@ -1,5 +1,7 @@
 2010-04-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add RTEMS_ENABLE_SHTTPD, RTEMS_ENABLE_HTTPD.
+	Introduce AM_CONDITIONALS LIBHTTPD, LIBSHTTPD.
 	* aclocal/enable-httpd.m4, aclocal/enable-shttpd.m4: New.
 
 2010-04-29	Ralf Corsépius <ralf.corsepius@rtems.org>
