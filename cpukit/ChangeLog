@@ -1,5 +1,10 @@
 2010-04-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/rpc/clnt_udp.c, librpc/src/xdr/xdr_mem.c:
+	Use [u]intptr_t instead of [u_]long for better 16bit compliance.
+
+2010-04-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/enable-itron.m4, aclocal/check-itron.m4: Replace
 	RTEMS_HAS_ITRON_API with enable_itron.
 	* librpc/src/rpc/pmap_rmt.c: Use uintptr_t for better 16bit

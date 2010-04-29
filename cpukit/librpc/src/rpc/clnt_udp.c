@@ -123,10 +123,10 @@ clntudp_bufcreate(
 	register struct cu_data *cu = NULL;
 	struct timeval now;
 	struct rpc_msg call_msg;
-	static u_int32_t disrupt;
+	static uintptr_t disrupt;
 
 	if (disrupt == 0)
-		disrupt = (u_int32_t)(long)raddr;
+		disrupt = (uintptr_t)raddr;
 
 	cl = (CLIENT *)mem_alloc(sizeof(CLIENT));
 	if (cl == NULL) {
