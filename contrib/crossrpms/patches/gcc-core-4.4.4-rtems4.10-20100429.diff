@@ -1,0 +1,4541 @@
+diff -Naur gcc-4.4.4.orig/ChangeLog.rtems gcc-4.4.4/ChangeLog.rtems
+--- gcc-4.4.4.orig/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/ChangeLog.rtems	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,4 @@
++		Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* configure, configure.ac (skipdirs): Add target-libiberty.
++
+diff -Naur gcc-4.4.4.orig/configure gcc-4.4.4/configure
+--- gcc-4.4.4.orig/configure	2009-04-25 06:10:29.000000000 +0200
++++ gcc-4.4.4/configure	2010-04-29 14:16:33.000000000 +0200
+@@ -2267,6 +2267,7 @@
+     noconfigdirs="$noconfigdirs target-newlib target-libiberty target-libgloss ${libgcj} target-libmudflap"
+     ;;
+   *-*-rtems*)
++    skipdirs="$skipdirs target-libiberty"
+     noconfigdirs="$noconfigdirs target-libgloss ${libgcj}"
+     ;;
+     # The tpf target doesn't support gdb yet.
+@@ -6259,7 +6260,7 @@
+        # to it.  This is right: we don't want to search that directory
+        # for binaries, but we want the header files in there, so add
+        # them explicitly.
+-       FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -isystem $$r/$(HOST_SUBDIR)/gcc/include'
++       FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -isystem $$r/$(HOST_SUBDIR)/gcc/include -isystem $$r/$(HOST_SUBDIR)/gcc/include-fixed'
+ 
+        # Someone might think of using the pre-installed headers on
+        # Canadian crosses, in case the installed compiler is not fully
+diff -Naur gcc-4.4.4.orig/configure.ac gcc-4.4.4/configure.ac
+--- gcc-4.4.4.orig/configure.ac	2009-04-25 06:10:29.000000000 +0200
++++ gcc-4.4.4/configure.ac	2010-04-29 14:16:33.000000000 +0200
+@@ -502,6 +502,7 @@
+     noconfigdirs="$noconfigdirs target-newlib target-libiberty target-libgloss ${libgcj} target-libmudflap"
+     ;;
+   *-*-rtems*)
++    skipdirs="$skipdirs target-libiberty"
+     noconfigdirs="$noconfigdirs target-libgloss ${libgcj}"
+     ;;
+     # The tpf target doesn't support gdb yet.
+@@ -2560,7 +2561,7 @@
+        # to it.  This is right: we don't want to search that directory
+        # for binaries, but we want the header files in there, so add
+        # them explicitly.
+-       FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -isystem $$r/$(HOST_SUBDIR)/gcc/include'
++       FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -isystem $$r/$(HOST_SUBDIR)/gcc/include -isystem $$r/$(HOST_SUBDIR)/gcc/include-fixed'
+ 
+        # Someone might think of using the pre-installed headers on
+        # Canadian crosses, in case the installed compiler is not fully
+diff -Naur gcc-4.4.4.orig/gcc/ChangeLog.rtems gcc-4.4.4/gcc/ChangeLog.rtems
+--- gcc-4.4.4.orig/gcc/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/ChangeLog.rtems	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,49 @@
++2010-03-15	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	Patch from Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>:
++	* config/arm/rtems-elf.h, config/arm/t-rtems: Add optional support
++	for vfp FPU model
++
++2010-02-10	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* config/rtems.h: Abandon -qrtems_debug.
++
++2009-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* config/avr/avr.h (LINK_SPEC): Pass -m avrN to ld for -mmcu=avrN.
++
++2009-11-04	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* config/m32c/rtems.h, config/m68k/rtemself.h,
++	config/m68k/rtemself.h, config/sh/rtemself.h,
++	config/sparc/rtemself.h: Undef WCHAR_TYPE_SIZE, WCHAR_TYPE. 
++	(Resets WCHAR_TYPE's to defaults. Prevents broken GCC tm_files 
++	to interfere and cause wchar_t/wint_t incompatibilities).
++
++2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* config/avr/t-rtems: Don't build _exit.
++
++		Jon Beniston <jon@beniston.com>
++
++	* config/lm32/arithmetic.c, config/lm32/crti.S, 
++	config/lm32/crtn.S, config/lm32/lib1funcs.S,
++	config/lm32/lm32.c, config/lm32/lm32.h,
++	config/lm32/lm32.md, config/lm32/lm32.opt,
++	config/lm32/lm32-protos.h, config/lm32/predicates.md,
++	config/lm32/rtems.h, config/lm32/sfp-machine.h,
++	config/lm32/t-fprules-softfp, config/lm32/t-lm32,
++	config/lm32/uclinux-elf.h: New (lm32 port).
++	* config.gcc: Add lm32* targets.
++	* doc/contrib.texi, doc/invoke.texi: Add lm32.
++
++		Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* config/rs6000/rtems.h: Support for custom RTEMS multilibs.
++	Support TARGET_E500.
++	* config/rs6000/t-rtems: Custom RTEMS multilibs. 
++
++		Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* config/mips/elf.h: Remove NO_IMPLICIT_EXTERN_C.
++	
+\ No newline at end of file
+diff -Naur gcc-4.4.4.orig/gcc/config/arm/rtems-elf.h gcc-4.4.4/gcc/config/arm/rtems-elf.h
+--- gcc-4.4.4.orig/gcc/config/arm/rtems-elf.h	2009-03-25 13:54:16.000000000 +0100
++++ gcc-4.4.4/gcc/config/arm/rtems-elf.h	2010-04-29 14:16:33.000000000 +0200
+@@ -36,7 +36,7 @@
+  */
+ #undef SUBTARGET_EXTRA_ASM_SPEC
+ #define SUBTARGET_EXTRA_ASM_SPEC "\
+-  %{!mhard-float: %{!msoft-float:-mfpu=softfpa}}"
++  %{!mhard-float: %{!mfpu=vfp: %{!msoft-float:-mfpu=softfpa}}}"
+ 
+ /*
+  *  The default includes --start-group and --end-group which conflicts
+diff -Naur gcc-4.4.4.orig/gcc/config/arm/t-rtems gcc-4.4.4/gcc/config/arm/t-rtems
+--- gcc-4.4.4.orig/gcc/config/arm/t-rtems	2004-11-23 06:30:32.000000000 +0100
++++ gcc-4.4.4/gcc/config/arm/t-rtems	2010-04-29 14:16:33.000000000 +0200
+@@ -5,6 +5,41 @@
+ MULTILIB_EXCEPTIONS  = 
+ MULTILIB_MATCHES     = marm=mno-thumb
+ 
+-MULTILIB_OPTIONS    += msoft-float/mhard-float
+-MULTILIB_DIRNAMES   += soft fpu
+-MULTILIB_EXCEPTIONS += *mthumb/*mhard-float*
++MULTILIB_OPTIONS    += mhard-float/mfloat-abi=softfp
++MULTILIB_DIRNAMES   += fpu softfp
++MULTILIB_EXCEPTIONS += *mthumb*/*mhard-float* *mthumb*/*mfloat-abi=softfp*
++MULTILIB_MATCHES     =
++
++MULTILIB_OPTIONS    += mfpu=vfp
++MULTILIB_DIRNAMES   += vfp
++MULTILIB_EXCEPTIONS += *mhard-float*/*mfpu=vfp* *marm*/*mfloat-abi=softfp*/*mfpu=fpa*
++MULTILIB_EXCLUSIONS += !mthumb/mfloat-abi=softfp/!mfpu=vfp
++
++# default float model is fpa, so don't create a explicit copy of it
++MULTILIB_EXCEPTIONS += *marm*/*mfpa*
++
++# permutations of the options which are useful (+) or make no sense (-),
++# defaults are in brackets:
++# + (arm/soft/fpa)
++# + (arm/soft)/vfp
++# - (arm)/softfp(/fpa)
++# + (arm)/softfp/vfp
++# + (arm)/hard-float(/fpa)
++# - (arm)/hard-float/vfp
++# + thumb/(soft/fpa)
++# + thumb/(soft/)vfp
++# - thumb/softfp/fpa
++# - thumb/softfp/vfp
++# - thumb/hard-float/fpa
++# - thumb/hard-float/vfp
++
++# subdirs to be used for multilibs and their respective options:
++#/thumb/vfp  -> thumb/soft/vfp
++#/thumb/fpa  -> thumb/soft/fpa
++#/thumb      -> thumb/soft/fpa
++#/vfp        -> arm/soft/vfp
++#/softfp/vfp -> arm/softfp/cfp
++#/fpu/fpa    -> arm/hard/fpa
++#/fpu        -> arm/hard/fpa
++#/fpa        -> arm/soft/fpa
++#.           -> arm/soft/fpa
+diff -Naur gcc-4.4.4.orig/gcc/config/avr/avr.h gcc-4.4.4/gcc/config/avr/avr.h
+--- gcc-4.4.4.orig/gcc/config/avr/avr.h	2009-03-28 22:09:50.000000000 +0100
++++ gcc-4.4.4/gcc/config/avr/avr.h	2010-04-29 14:16:33.000000000 +0200
+@@ -811,12 +811,15 @@
+                                mmcu=at90can64*|\
+                                mmcu=at90usb64*:--pmem-wrap-around=64k}}}\
+ %{!mmcu*: -m avr2}\
+-%{mmcu=at90s1200|\
++%{mmcu=avr1|\
++  mmcu=at90s1200|\
+   mmcu=attiny11|\
+   mmcu=attiny12|\
+   mmcu=attiny15|\
+   mmcu=attiny28: -m avr1}\
+-%{mmcu=attiny22|\
++%{mmcu=avr2|\
++  mmcu=avr25|\
++  mmcu=attiny22|\
+   mmcu=attiny26|\
+   mmcu=at90s2*|\
+   mmcu=at90s4*|\
+@@ -831,14 +834,18 @@
+   mmcu=attiny261|\
+   mmcu=attiny4*|\
+   mmcu=attiny8*: -m avr2}\
+-%{mmcu=atmega103|\
++%{mmcu=avr3|\
++  mmcu=avr31|\
++  mmcu=avr35|\
++  mmcu=atmega103|\
+   mmcu=at43*|\
+   mmcu=at76*|\
+   mmcu=at90usb82|\
+   mmcu=at90usb162|\
+   mmcu=attiny16*|\
+   mmcu=attiny32*: -m avr3}\
+-%{mmcu=atmega8*|\
++%{mmcu=avr4|\
++  mmcu=atmega8*|\
+   mmcu=atmega4*|\
+   mmcu=at90pwm1|\
+   mmcu=at90pwm2|\
+@@ -846,7 +853,9 @@
+   mmcu=at90pwm3|\
+   mmcu=at90pwm3b|\
+   mmcu=at90pwm81: -m avr4}\
+-%{mmcu=atmega16*|\
++%{mmcu=avr5|\
++  mmcu=avr51|\
++  mmcu=atmega16*|\
+   mmcu=atmega32*|\
+   mmcu=atmega406|\
+   mmcu=atmega64*|\
+@@ -860,7 +869,8 @@
+   mmcu=at94k|\
+   mmcu=m3000*|\
+   mmcu=m3001*: -m avr5}\
+-%{mmcu=atmega256*:-m avr6}\
++%{mmcu=avr6|\
++  mmcu=atmega256*:-m avr6}\
+ %{mmcu=atmega324*|\
+   mmcu=atmega325*|\
+   mmcu=atmega328p|\
+diff -Naur gcc-4.4.4.orig/gcc/config/avr/t-rtems gcc-4.4.4/gcc/config/avr/t-rtems
+--- gcc-4.4.4.orig/gcc/config/avr/t-rtems	2004-11-23 04:44:03.000000000 +0100
++++ gcc-4.4.4/gcc/config/avr/t-rtems	2010-04-29 14:16:33.000000000 +0200
+@@ -1,3 +1,4 @@
+ # Multilibs for avr RTEMS targets.
+ 
+-# ATM, this is just a stub
++# RTEMS uses _exit from newlib
++LIB1ASMFUNCS := $(filter-out _exit,$(LIB1ASMFUNCS))
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/arithmetic.c gcc-4.4.4/gcc/config/lm32/arithmetic.c
+--- gcc-4.4.4.orig/gcc/config/lm32/arithmetic.c	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/arithmetic.c	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,305 @@
++/* Fixed-point arithmetic for Lattice Mico32.
++   Contributed by Jon Beniston <jon@beniston.com> 
++   
++   Copyright (C) 2008 Free Software Foundation, Inc.
++
++   This file is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as published by the
++   Free Software Foundation; either version 2, or (at your option) any
++   later version.
++
++   In addition to the permissions in the GNU General Public License, the
++   Free Software Foundation gives you unlimited permission to link the
++   compiled version of this file into combinations with other programs,
++   and to distribute those combinations without any restriction coming
++   from the use of this file.  (The General Public License restrictions
++   do apply in other respects; for example, they cover modification of
++   the file, and distribution when not linked into a combine
++   executable.)
++
++   This file is distributed in the hope that it will be useful, but
++   WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program; see the file COPYING.  If not, write to
++   the Free Software Foundation, 51 Franklin Street, Fifth Floor,
++   Boston, MA 02110-1301, USA.  */
++
++typedef unsigned long UQItype __attribute__ ((mode (QI)));
++typedef	long SItype __attribute__ ((mode (SI)));
++typedef unsigned long USItype __attribute__ ((mode (SI)));
++
++/* Prototypes */
++
++USItype __mulsi3 (USItype a, USItype b);
++
++USItype __udivmodsi4 (USItype num, USItype den, int modwanted);
++SItype __divsi3 (SItype a, SItype b);
++SItype __modsi3 (SItype a, SItype b);
++USItype __udivsi3 (USItype a, USItype b);
++USItype __umodsi3 (USItype a, USItype b);
++
++SItype __ashlsi3 (SItype a, SItype b);
++SItype __ashrsi3 (SItype a, SItype b);
++USItype __lshrsi3 (USItype a, USItype b);
++
++/* Multiplication */
++
++#ifdef L_mulsi3
++USItype 
++__mulsi3 (USItype a, USItype b)
++{
++  USItype result;
++    
++  result = 0;
++
++  if (a==0)
++    return 0;
++
++  while (b!=0)
++    {
++      if (b & 1)
++        result += a;
++      a <<= 1;
++      b >>= 1;
++    }
++       
++  return result;    
++}
++#endif
++
++/* Division */
++
++#ifdef L_udivmodsi4
++USItype
++__udivmodsi4 (USItype num, USItype den, int modwanted)
++{
++  USItype bit = 1;
++  USItype res = 0;
++
++  while (den < num && bit && !(den & (1L<<31)))
++    {
++      den <<=1;
++      bit <<=1;
++    }
++  while (bit)
++    {
++      if (num >= den)
++	{
++	  num -= den;
++	  res |= bit;
++	}
++      bit >>=1;
++      den >>=1;
++    }
++  if (modwanted) 
++    return num;
++  return res;
++}
++#endif
++
++#ifdef L_divsi3
++
++static const UQItype __divsi3_table[] = {
++  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 4, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 5, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 6, 3, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 7, 3, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 8, 4, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
++  0, 9, 4, 3, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
++  0, 10, 5, 3, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
++  0, 11, 5, 3, 2, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
++  0, 12, 6, 4, 3, 2, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0,
++  0, 13, 6, 4, 3, 2, 2, 1, 1, 1, 1, 1, 1, 1, 0, 0,
++  0, 14, 7, 4, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 0,
++  0, 15, 7, 5, 3, 3, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1,
++};
++
++SItype
++__divsi3 (SItype a, SItype b)
++{
++  int neg = 0;
++  SItype res;
++  int cfg;
++
++  if (b == 0) 
++    {
++      /* Raise divide by zero exception */
++      int eba;
++      __asm__ __volatile__ ("rcsr %0, EBA" : "=r" (eba));
++      eba += 32 * 5;
++      __asm__ __volatile__ ("mv ea, ra");
++      __asm__ __volatile__ ("b %0" : : "r" (eba)); 
++    }
++
++  if (((USItype)(a | b)) < 16)
++    {
++      res = __divsi3_table[(a << 4) + b];
++    } 
++  else
++    {
++
++      if (a < 0)
++        {
++          a = -a;
++          neg = !neg;
++        }
++    
++      if (b < 0)
++        {
++          b = -b;
++          neg = !neg;
++        }
++    
++      __asm__ ("rcsr %0, CFG" : "=r" (cfg));
++      if (cfg & 2)
++        __asm__ ("divu %0, %1, %2" : "=r" (res) : "r" (a), "r" (b));
++      else 
++        res = __udivmodsi4 (a, b, 0);
++    
++      if (neg)
++        res = -res;
++    }
++
++  return res;
++}
++#endif
++
++#ifdef L_modsi3
++SItype
++__modsi3 (SItype a, SItype b)
++{
++  int neg = 0;
++  SItype res;
++  int cfg;
++  
++  if (b == 0) 
++    {
++      /* Raise divide by zero exception */
++      int eba, sr;
++      /* Save interrupt enable */
++      __asm__ __volatile__ ("rcsr %0, IE" : "=r" (sr));
++      sr = (sr & 1) << 1;
++      __asm__ __volatile__ ("wcsr IE, %0" : : "r" (sr));
++      /* Branch to exception handler */
++      __asm__ __volatile__ ("rcsr %0, EBA" : "=r" (eba));
++      eba += 32 * 5;
++      __asm__ __volatile__ ("mv ea, ra");
++      __asm__ __volatile__ ("b %0" : : "r" (eba)); 
++    }
++  
++  if (a < 0)
++    {
++      a = -a;
++      neg = 1;
++    }
++
++  if (b < 0)
++    b = -b;
++
++  __asm__ ("rcsr %0, CFG" : "=r" (cfg));
++  if (cfg & 2)
++    __asm__ ("modu %0, %1, %2" : "=r" (res) : "r" (a), "r" (b));
++  else 
++    res = __udivmodsi4 (a, b, 1);
++
++  if (neg)
++    res = -res;
++
++  return res;
++}
++#endif
++
++#ifdef L_udivsi3
++USItype
++__udivsi3 (USItype a, USItype b)
++{
++  if (b == 0) 
++    {
++      /* Raise divide by zero exception */
++      int eba, sr;
++      /* Save interrupt enable */
++      __asm__ __volatile__ ("rcsr %0, IE" : "=r" (sr));
++      sr = (sr & 1) << 1;
++      __asm__ __volatile__ ("wcsr IE, %0" : : "r" (sr));
++      /* Branch to exception handler */
++      __asm__ __volatile__ ("rcsr %0, EBA" : "=r" (eba));
++      eba += 32 * 5;
++      __asm__ __volatile__ ("mv ea, ra");
++      __asm__ __volatile__ ("b %0" : : "r" (eba)); 
++    }
++  
++  return __udivmodsi4 (a, b, 0);
++}
++#endif
++
++#ifdef L_umodsi3
++USItype
++__umodsi3 (USItype a, USItype b)
++{
++  if (b == 0) 
++    {
++      /* Raise divide by zero exception */
++      int eba, sr;
++      /* Save interrupt enable */
++      __asm__ __volatile__ ("rcsr %0, IE" : "=r" (sr));
++      sr = (sr & 1) << 1;
++      __asm__ __volatile__ ("wcsr IE, %0" : : "r" (sr));
++      /* Branch to exception handler */
++      __asm__ __volatile__ ("rcsr %0, EBA" : "=r" (eba));
++      eba += 32 * 5;
++      __asm__ __volatile__ ("mv ea, ra");
++      __asm__ __volatile__ ("b %0" : : "r" (eba)); 
++    }
++  
++  return __udivmodsi4 (a, b, 1);
++}
++#endif
++
++#if 0
++
++/* Shifts - Optimized versions implemented in assembly. Use these if code space is preferred to performance.  */
++
++#ifdef L_ashlsi3
++SItype 
++__ashlsi3 (SItype a, SItype b)
++{
++  int i;
++  
++  for (i = (b & 0x1f); i > 0; --i)
++    a += a;
++  return a;
++}
++#endif
++
++#ifdef L_ashrsi3
++SItype
++__ashrsi3 (SItype a, SItype b)
++{
++  int i;
++  
++  for (i = (b & 0x1f); i > 0; --i)
++    __asm__ ("sri      %0, %0, 1" : "=r" (a) : "0" (a));
++  return a;
++}
++#endif
++
++#ifdef L_lshrsi3
++USItype
++__lshrsi3 (USItype a, USItype b)
++{
++  int i;
++  
++  for (i = (b & 0x1f); i > 0; --i)
++    __asm__ ("srui     %0, %0, 1" : "=r" (a) : "0" (a));
++  return a;
++}
++#endif
++
++#endif 
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/crti.S gcc-4.4.4/gcc/config/lm32/crti.S
+--- gcc-4.4.4.orig/gcc/config/lm32/crti.S	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/crti.S	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,45 @@
++# crti.S for Lattice Mico32 
++# Contributed by Jon Beniston <jon@beniston.com>
++#
++# Copyright (C) 2008 Free Software Foundation, Inc. 
++#
++# This file is free software; you can redistribute it and/or modify it
++# under the terms of the GNU General Public License as published by the
++# Free Software Foundation; either version 2, or (at your option) any
++# later version.
++#
++# In addition to the permissions in the GNU General Public License, the
++# Free Software Foundation gives you unlimited permission to link the
++# compiled version of this file into combinations with other programs,
++# and to distribute those combinations without any restriction coming
++# from the use of this file.  (The General Public License restrictions
++# do apply in other respects; for example, they cover modification of
++# the file, and distribution when not linked into a combine
++# executable.)
++#
++# This file is distributed in the hope that it will be useful, but
++# WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++# General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; see the file COPYING.  If not, write to
++# the Free Software Foundation, 51 Franklin Street, Fifth Floor,
++# Boston, MA 02110-1301, USA.  
++# 
++
++        .section .init
++        .global _init
++        .type _init,@function
++        .align 4
++_init:
++        addi    sp, sp, -4        
++        sw      (sp+4), ra
++
++        .section .fini
++        .global _fini
++        .type _fini,@function
++        .align 4
++_fini:        
++        addi    sp, sp, -4        
++        sw      (sp+4), ra
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/crtn.S gcc-4.4.4/gcc/config/lm32/crtn.S
+--- gcc-4.4.4.orig/gcc/config/lm32/crtn.S	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/crtn.S	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,42 @@
++# crtn.S for Lattice Mico32
++# Contributed by Jon Beniston <jon@beniston.com>
++#
++# Copyright (C) 2008 Free Software Foundation, Inc. 
++#
++# This file is free software; you can redistribute it and/or modify it
++# under the terms of the GNU General Public License as published by the
++# Free Software Foundation; either version 2, or (at your option) any
++# later version.
++#
++# In addition to the permissions in the GNU General Public License, the
++# Free Software Foundation gives you unlimited permission to link the
++# compiled version of this file into combinations with other programs,
++# and to distribute those combinations without any restriction coming
++# from the use of this file.  (The General Public License restrictions
++# do apply in other respects; for example, they cover modification of
++# the file, and distribution when not linked into a combine
++# executable.)
++#
++# This file is distributed in the hope that it will be useful, but
++# WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++# General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; see the file COPYING.  If not, write to
++# the Free Software Foundation, 51 Franklin Street, Fifth Floor,
++# Boston, MA 02110-1301, USA.  
++# 
++
++        .section .init
++        
++        lw      ra, (sp+4)
++        addi    sp, sp, 4
++        ret
++                
++        .section .fini
++        
++        lw      ra, (sp+4)
++        addi    sp, sp, 4
++        ret
++        
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/lib1funcs.S gcc-4.4.4/gcc/config/lm32/lib1funcs.S
+--- gcc-4.4.4.orig/gcc/config/lm32/lib1funcs.S	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/lib1funcs.S	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,429 @@
++# lib1funcs.S for Lattice Mico32 
++# Contributed by Jon Beniston <jon@beniston.com>
++#
++# Copyright (C) 2008 Free Software Foundation, Inc. 
++#
++# This file is free software; you can redistribute it and/or modify it
++# under the terms of the GNU General Public License as published by the
++# Free Software Foundation; either version 2, or (at your option) any
++# later version.
++#
++# In addition to the permissions in the GNU General Public License, the
++# Free Software Foundation gives you unlimited permission to link the
++# compiled version of this file into combinations with other programs,
++# and to distribute those combinations without any restriction coming
++# from the use of this file.  (The General Public License restrictions
++# do apply in other respects; for example, they cover modification of
++# the file, and distribution when not linked into a combine
++# executable.)
++#
++# This file is distributed in the hope that it will be useful, but
++# WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++# General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; see the file COPYING.  If not, write to
++# the Free Software Foundation, 51 Franklin Street, Fifth Floor,
++# Boston, MA 02110-1301, USA.  
++# 
++
++/* Arithmetic left shift */
++        
++        .text
++
++        .global __ashlsi3
++        .type __ashlsi3,@function
++        .align 4
++        
++__ashlsi3:
++        /* Only use 5 LSBs, as that's all the h/w shifter uses */
++        andi    r2, r2, 0x1f
++        /* Get address of offset into unrolled shift loop to jump to */
++#ifdef __PIC__
++        orhi    r3, r0, gotoffhi16(__ashlsi3_table)
++        addi    r3, r3, gotofflo16(__ashlsi3_table)
++        add     r3, r3, gp
++#else
++        mvhi    r3, hi(__ashlsi3_table)
++        ori     r3, r3, lo(__ashlsi3_table)
++#endif
++        add     r2, r2, r2
++        add     r2, r2, r2
++        add     r3, r3, r2
++        lw      r3, (r3+0)
++        b       r3        
++        
++__ashlsi3_31:
++        add     r1, r1, r1
++__ashlsi3_30:
++        add     r1, r1, r1
++__ashlsi3_29:
++        add     r1, r1, r1
++__ashlsi3_28:
++        add     r1, r1, r1
++__ashlsi3_27:
++        add     r1, r1, r1
++__ashlsi3_26:
++        add     r1, r1, r1
++__ashlsi3_25:
++        add     r1, r1, r1
++__ashlsi3_24:
++        add     r1, r1, r1
++__ashlsi3_23:
++        add     r1, r1, r1
++__ashlsi3_22:
++        add     r1, r1, r1
++__ashlsi3_21:
++        add     r1, r1, r1
++__ashlsi3_20:
++        add     r1, r1, r1
++__ashlsi3_19:
++        add     r1, r1, r1
++__ashlsi3_18:
++        add     r1, r1, r1
++__ashlsi3_17:
++        add     r1, r1, r1
++__ashlsi3_16:
++        add     r1, r1, r1
++__ashlsi3_15:
++        add     r1, r1, r1
++__ashlsi3_14:
++        add     r1, r1, r1
++__ashlsi3_13:
++        add     r1, r1, r1
++__ashlsi3_12:
++        add     r1, r1, r1
++__ashlsi3_11:
++        add     r1, r1, r1
++__ashlsi3_10:
++        add     r1, r1, r1
++__ashlsi3_9:
++        add     r1, r1, r1
++__ashlsi3_8:
++        add     r1, r1, r1
++__ashlsi3_7:
++        add     r1, r1, r1
++__ashlsi3_6:
++        add     r1, r1, r1
++__ashlsi3_5:
++        add     r1, r1, r1
++__ashlsi3_4:
++        add     r1, r1, r1
++__ashlsi3_3:
++        add     r1, r1, r1
++__ashlsi3_2:
++        add     r1, r1, r1
++__ashlsi3_1:
++        add     r1, r1, r1
++__ashlsi3_0:
++        ret
++        
++#ifdef __PIC__
++        .section .data
++#else
++        .section .rodata
++#endif        
++
++        .align 4
++
++__ashlsi3_table:
++        .word   __ashlsi3_0
++        .word   __ashlsi3_1
++        .word   __ashlsi3_2
++        .word   __ashlsi3_3
++        .word   __ashlsi3_4
++        .word   __ashlsi3_5
++        .word   __ashlsi3_6
++        .word   __ashlsi3_7
++        .word   __ashlsi3_8
++        .word   __ashlsi3_9
++        .word   __ashlsi3_10
++        .word   __ashlsi3_11
++        .word   __ashlsi3_12
++        .word   __ashlsi3_13
++        .word   __ashlsi3_14
++        .word   __ashlsi3_15
++        .word   __ashlsi3_16
++        .word   __ashlsi3_17
++        .word   __ashlsi3_18
++        .word   __ashlsi3_19
++        .word   __ashlsi3_20
++        .word   __ashlsi3_21
++        .word   __ashlsi3_22
++        .word   __ashlsi3_23
++        .word   __ashlsi3_24
++        .word   __ashlsi3_25
++        .word   __ashlsi3_26
++        .word   __ashlsi3_27
++        .word   __ashlsi3_28
++        .word   __ashlsi3_29
++        .word   __ashlsi3_30
++        .word   __ashlsi3_31
++        
++/* Logical right shift */
++        
++        .text
++        
++        .global __lshrsi3
++        .type __lshrsi3,@function
++        .align 4
++        
++__lshrsi3:
++        /* Only use 5 LSBs, as that's all the h/w shifter uses */
++        andi    r2, r2, 0x1f
++        /* Get address of offset into unrolled shift loop to jump to */
++#ifdef __PIC__
++        orhi    r3, r0, gotoffhi16(__lshrsi3_table)        
++        addi    r3, r3, gotofflo16(__lshrsi3_table)
++        add     r3, r3, gp
++#else
++        mvhi    r3, hi(__lshrsi3_table)
++        ori     r3, r3, lo(__lshrsi3_table)
++#endif
++        add     r2, r2, r2
++        add     r2, r2, r2
++        add     r3, r3, r2
++        lw      r3, (r3+0)
++        b       r3        
++        
++__lshrsi3_31:        
++        srui    r1, r1, 1
++__lshrsi3_30:        
++        srui    r1, r1, 1
++__lshrsi3_29:        
++        srui    r1, r1, 1
++__lshrsi3_28:        
++        srui    r1, r1, 1
++__lshrsi3_27:        
++        srui    r1, r1, 1
++__lshrsi3_26:        
++        srui    r1, r1, 1
++__lshrsi3_25:        
++        srui    r1, r1, 1
++__lshrsi3_24:        
++        srui    r1, r1, 1
++__lshrsi3_23:        
++        srui    r1, r1, 1
++__lshrsi3_22:        
++        srui    r1, r1, 1
++__lshrsi3_21:        
++        srui    r1, r1, 1
++__lshrsi3_20:        
++        srui    r1, r1, 1
++__lshrsi3_19:        
++        srui    r1, r1, 1
++__lshrsi3_18:        
++        srui    r1, r1, 1
++__lshrsi3_17:        
++        srui    r1, r1, 1
++__lshrsi3_16:        
++        srui    r1, r1, 1
++__lshrsi3_15:        
++        srui    r1, r1, 1
++__lshrsi3_14:        
++        srui    r1, r1, 1
++__lshrsi3_13:        
++        srui    r1, r1, 1
++__lshrsi3_12:        
++        srui    r1, r1, 1
++__lshrsi3_11:        
++        srui    r1, r1, 1
++__lshrsi3_10:        
++        srui    r1, r1, 1
++__lshrsi3_9:        
++        srui    r1, r1, 1
++__lshrsi3_8:        
++        srui    r1, r1, 1
++__lshrsi3_7:        
++        srui    r1, r1, 1
++__lshrsi3_6:        
++        srui    r1, r1, 1
++__lshrsi3_5:        
++        srui    r1, r1, 1
++__lshrsi3_4:        
++        srui    r1, r1, 1
++__lshrsi3_3:        
++        srui    r1, r1, 1
++__lshrsi3_2:        
++        srui    r1, r1, 1
++__lshrsi3_1:        
++        srui    r1, r1, 1
++__lshrsi3_0:        
++        ret
++        
++#ifdef __PIC__
++        .section .data
++#else
++        .section .rodata
++#endif        
++
++        .align 4
++
++__lshrsi3_table:        
++        .word   __lshrsi3_0        
++        .word   __lshrsi3_1        
++        .word   __lshrsi3_2        
++        .word   __lshrsi3_3        
++        .word   __lshrsi3_4        
++        .word   __lshrsi3_5        
++        .word   __lshrsi3_6        
++        .word   __lshrsi3_7        
++        .word   __lshrsi3_8        
++        .word   __lshrsi3_9        
++        .word   __lshrsi3_10        
++        .word   __lshrsi3_11        
++        .word   __lshrsi3_12        
++        .word   __lshrsi3_13        
++        .word   __lshrsi3_14        
++        .word   __lshrsi3_15        
++        .word   __lshrsi3_16        
++        .word   __lshrsi3_17        
++        .word   __lshrsi3_18        
++        .word   __lshrsi3_19        
++        .word   __lshrsi3_20        
++        .word   __lshrsi3_21        
++        .word   __lshrsi3_22        
++        .word   __lshrsi3_23        
++        .word   __lshrsi3_24        
++        .word   __lshrsi3_25        
++        .word   __lshrsi3_26        
++        .word   __lshrsi3_27        
++        .word   __lshrsi3_28
++        .word   __lshrsi3_29        
++        .word   __lshrsi3_30        
++        .word   __lshrsi3_31        
++        
++/* Arithmetic right shift */
++
++        .text
++        
++        .global __ashrsi3
++        .type __ashrsi3,@function
++        .align 4
++        
++__ashrsi3:
++        /* Only use 5 LSBs, as that's all the h/w shifter uses */
++        andi    r2, r2, 0x1f
++        /* Get address of offset into unrolled shift loop to jump to */
++#ifdef __PIC__
++        orhi    r3, r0, gotoffhi16(__ashrsi3_table)
++        addi    r3, r3, gotofflo16(__ashrsi3_table)
++        add     r3, r3, gp
++#else
++        mvhi    r3, hi(__ashrsi3_table)
++        ori     r3, r3, lo(__ashrsi3_table)
++#endif
++        add     r2, r2, r2
++        add     r2, r2, r2
++        add     r3, r3, r2
++        lw      r3, (r3+0)
++        b       r3        
++        
++__ashrsi3_31:
++        sri     r1, r1, 1
++__ashrsi3_30:
++        sri     r1, r1, 1
++__ashrsi3_29:
++        sri     r1, r1, 1
++__ashrsi3_28:
++        sri     r1, r1, 1
++__ashrsi3_27:
++        sri     r1, r1, 1
++__ashrsi3_26:
++        sri     r1, r1, 1
++__ashrsi3_25:
++        sri     r1, r1, 1
++__ashrsi3_24:
++        sri     r1, r1, 1
++__ashrsi3_23:
++        sri     r1, r1, 1
++__ashrsi3_22:
++        sri     r1, r1, 1
++__ashrsi3_21:
++        sri     r1, r1, 1
++__ashrsi3_20:
++        sri     r1, r1, 1
++__ashrsi3_19:
++        sri     r1, r1, 1
++__ashrsi3_18:
++        sri     r1, r1, 1
++__ashrsi3_17:
++        sri     r1, r1, 1
++__ashrsi3_16:
++        sri     r1, r1, 1
++__ashrsi3_15:
++        sri     r1, r1, 1
++__ashrsi3_14:
++        sri     r1, r1, 1
++__ashrsi3_13:
++        sri     r1, r1, 1
++__ashrsi3_12:
++        sri     r1, r1, 1
++__ashrsi3_11:
++        sri     r1, r1, 1
++__ashrsi3_10:
++        sri     r1, r1, 1
++__ashrsi3_9:
++        sri     r1, r1, 1
++__ashrsi3_8:
++        sri     r1, r1, 1
++__ashrsi3_7:
++        sri     r1, r1, 1
++__ashrsi3_6:
++        sri     r1, r1, 1
++__ashrsi3_5:
++        sri     r1, r1, 1
++__ashrsi3_4:
++        sri     r1, r1, 1
++__ashrsi3_3:
++        sri     r1, r1, 1
++__ashrsi3_2:
++        sri     r1, r1, 1
++__ashrsi3_1:
++        sri     r1, r1, 1
++__ashrsi3_0:
++        ret
++        
++#ifdef __PIC__
++        .section .data
++#else
++        .section .rodata
++#endif        
++
++        .align 4
++
++__ashrsi3_table:
++        .word   __ashrsi3_0
++        .word   __ashrsi3_1
++        .word   __ashrsi3_2
++        .word   __ashrsi3_3
++        .word   __ashrsi3_4
++        .word   __ashrsi3_5
++        .word   __ashrsi3_6
++        .word   __ashrsi3_7
++        .word   __ashrsi3_8
++        .word   __ashrsi3_9
++        .word   __ashrsi3_10
++        .word   __ashrsi3_11
++        .word   __ashrsi3_12
++        .word   __ashrsi3_13
++        .word   __ashrsi3_14
++        .word   __ashrsi3_15
++        .word   __ashrsi3_16
++        .word   __ashrsi3_17
++        .word   __ashrsi3_18
++        .word   __ashrsi3_19
++        .word   __ashrsi3_20
++        .word   __ashrsi3_21
++        .word   __ashrsi3_22
++        .word   __ashrsi3_23
++        .word   __ashrsi3_24
++        .word   __ashrsi3_25
++        .word   __ashrsi3_26
++        .word   __ashrsi3_27
++        .word   __ashrsi3_28
++        .word   __ashrsi3_29
++        .word   __ashrsi3_30
++        .word   __ashrsi3_31
++        
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/lm32.c gcc-4.4.4/gcc/config/lm32/lm32.c
+--- gcc-4.4.4.orig/gcc/config/lm32/lm32.c	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/lm32.c	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,869 @@
++/* Subroutines used for code generation on the Lattice Mico32 architecture.
++   Contributed by Jon Beniston <jon@beniston.com>
++
++   Copyright (C) 2008 Free Software Foundation, Inc.
++
++   This file is part of GCC.
++
++   GCC is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as published
++   by the Free Software Foundation; either version 3, or (at your
++   option) any later version.
++
++   GCC is distributed in the hope that it will be useful, but WITHOUT
++   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++   License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with GCC; see the file COPYING3.  If not see
++   <http://www.gnu.org/licenses/>.  */
++
++#include "config.h"
++#include "system.h"
++#include "coretypes.h"
++#include "tm.h"
++#include "rtl.h"
++#include "regs.h"
++#include "hard-reg-set.h"
++#include "basic-block.h"
++#include "real.h"
++#include "insn-config.h"
++#include "conditions.h"
++#include "insn-flags.h"
++#include "insn-attr.h"
++#include "insn-codes.h"
++#include "recog.h"
++#include "output.h"
++#include "tree.h"
++#include "expr.h"
++#include "flags.h"
++#include "reload.h"
++#include "tm_p.h"
++#include "function.h"
++#include "toplev.h"
++#include "optabs.h"
++#include "libfuncs.h"
++#include "ggc.h"
++#include "target.h"
++#include "target-def.h"
++#include "langhooks.h"
++#include "tm-constrs.h"
++#include "df.h"
++
++struct lm32_frame_info
++{
++  HOST_WIDE_INT total_size;      /* number of bytes that the entire frame takes up.  */
++  HOST_WIDE_INT callee_size;     /* number of bytes to save callee save registers  */
++  HOST_WIDE_INT pretend_size;    /* number of bytes we push and pretend caller did.  */
++  HOST_WIDE_INT args_size;       /* number of bytes that outgoing arguments take up.  */
++  HOST_WIDE_INT locals_size;     /* number of bytes that local variables take up.  */
++  unsigned int reg_save_mask;   /* mask of saved registers.  */
++};
++
++/* Prototypes for static functions */
++static rtx emit_add (rtx dest, rtx src0, rtx src1);
++static void expand_save_restore (struct lm32_frame_info *info, int op);
++static void abort_with_insn (rtx insn, const char *reason);
++static void stack_adjust (HOST_WIDE_INT amount);
++static bool lm32_in_small_data_p (const_tree);
++static void lm32_setup_incoming_varargs (CUMULATIVE_ARGS *cum, enum machine_mode mode, 
++                             tree type, int *pretend_size, int no_rtl);
++
++/* Detemines if given constant can be used as a displacement */
++#define OFFSET_INT(X)  (((X) > -32768) && ((X) < 32768))
++
++#undef TARGET_ADDRESS_COST
++#define TARGET_ADDRESS_COST hook_int_rtx_bool_0
++#undef TARGET_IN_SMALL_DATA_P
++#define TARGET_IN_SMALL_DATA_P lm32_in_small_data_p
++#undef TARGET_PROMOTE_FUNCTION_ARGS
++#define TARGET_PROMOTE_FUNCTION_ARGS hook_bool_const_tree_true
++#undef TARGET_PROMOTE_FUNCTION_RETURN
++#define TARGET_PROMOTE_FUNCTION_RETURN hook_bool_const_tree_true
++#undef TARGET_SETUP_INCOMING_VARARGS
++#define TARGET_SETUP_INCOMING_VARARGS lm32_setup_incoming_varargs
++#undef TARGET_PROMOTE_PROTOTYPES
++#define TARGET_PROMOTE_PROTOTYPES hook_bool_const_tree_true
++
++struct gcc_target targetm = TARGET_INITIALIZER;
++
++/* Current frame information calculated by lm32_compute_frame_size.  */
++static struct lm32_frame_info current_frame_info;
++
++rtx lm32_compare_op0;
++rtx lm32_compare_op1;
++
++/* Return non-zero if the specified return type should be returned in memory */
++int
++lm32_return_in_memory (tree type)
++{
++  HOST_WIDE_INT size;
++
++  if (!AGGREGATE_TYPE_P (type))
++    {
++      /* All simple types are returned in registers.  */
++      return 0;
++    }
++
++  size = int_size_in_bytes (type);
++  if (size >=0 && size <= UNITS_PER_WORD)
++    {
++      /* If it can fit in one register */
++      return 0;
++    }
++  
++  return 1;
++}
++ 
++/* Determine if given constant can be used as a register displacement */
++int
++const_ok_for_base_offset (rtx op, enum machine_mode mode ATTRIBUTE_UNUSED)
++{
++  int val;
++
++  val = INTVAL (op);
++  return OFFSET_INT (val);
++}
++
++/* Generate an emit a word sized add instruction */
++static rtx
++emit_add (rtx dest, rtx src0, rtx src1)
++{
++  rtx insn;
++  insn = emit_insn (gen_addsi3 (dest, src0, src1));
++  return insn;
++}
++
++/* Generate the code to compare (and possibly branch) two integer values
++   TEST_CODE is the comparison code we are trying to emulate 
++     (or implement directly)
++   RESULT is where to store the result of the comparison, 
++     or null to emit a branch
++   CMP0 CMP1 are the two comparison operands
++   DESTINATION is the destination of the branch, or null to only compare
++   */
++
++void
++gen_int_relational (enum rtx_code code, /* relational test (EQ, etc) */
++		    rtx result,		/* result to store comp. or 0 if branch */
++		    rtx cmp0,		/* first operand to compare */
++		    rtx cmp1,		/* second operand to compare */
++		    rtx destination)	/* destination of the branch, or 0 if compare */
++{
++  enum machine_mode mode;
++  int branch_p;
++
++  mode = GET_MODE (cmp0);
++  if (mode == VOIDmode)
++    mode = GET_MODE (cmp1);
++
++  /* Is this a branch or compare */
++  branch_p = (destination != 0);
++
++  /* Instruction set doesn't support LE or LT, so swap operands and use GE, GT */
++  switch (code)
++    {
++      case LE: 
++      case LT: 
++      case LEU: 
++      case LTU:
++        code = swap_condition (code);
++        rtx temp = cmp0;
++        cmp0 = cmp1;
++        cmp1 = temp;       
++        break;
++      default:
++        break;  
++    }
++    
++  if (branch_p)
++    {
++      rtx insn;
++      
++      /* Operands must be in registers */
++      if (!register_operand (cmp0, mode)) 
++        cmp0 = force_reg (mode, cmp0);
++      if (!register_operand (cmp1, mode)) 
++        cmp1 = force_reg (mode, cmp1);
++
++      /* Generate conditional branch instruction */           
++      rtx cond = gen_rtx_fmt_ee (code, mode, cmp0, cmp1);
++      rtx label = gen_rtx_LABEL_REF (VOIDmode, destination);
++      insn = gen_rtx_SET (VOIDmode, pc_rtx,
++            gen_rtx_IF_THEN_ELSE (VOIDmode,
++      			    cond, label, pc_rtx));
++      emit_jump_insn (insn);
++    }
++  else
++    {    
++      /* We can't have const_ints in cmp0, other than 0 */
++      if ((GET_CODE (cmp0) == CONST_INT) && (INTVAL (cmp0) != 0)) 
++        cmp0 = force_reg (mode, cmp0);
++    
++      /* If the comparison is against an int not in legal range
++         move it into a register */
++      if (GET_CODE (cmp1) == CONST_INT)
++        {
++          HOST_WIDE_INT value = INTVAL (cmp1);
++          switch (code) 
++            {
++              case EQ: case NE: case LE: case LT: case GE: case GT: 
++                if (!MEDIUM_INT(value))
++                  cmp1 = force_reg (mode, cmp1);
++                break;
++              case LEU: case LTU: case GEU: case GTU:
++                if (!MEDIUM_UINT(value))
++                  cmp1 = force_reg (mode, cmp1);
++                break;
++              default:
++                abort ();
++            }    
++        }
++    
++      /* Generate compare instruction */
++      emit_move_insn (result, gen_rtx_fmt_ee (code, mode, cmp0, cmp1));
++    }
++}
++
++/* Generate and emit RTL to save or restore callee save registers */
++static void
++expand_save_restore (struct lm32_frame_info *info, int op)
++{
++  unsigned int reg_save_mask = info->reg_save_mask;
++  int regno;
++  HOST_WIDE_INT offset;
++  rtx insn;
++
++  /* Callee saves are below locals and above outgoing arguments */
++  offset = info->args_size + info->callee_size;
++  for (regno = 0; regno <= 31; regno++)
++    {
++      if ((reg_save_mask & (1 << regno)) != 0)
++        {
++          if (op == 0)
++            {
++              insn = emit_move_insn (gen_rtx_MEM (word_mode, 
++                                                  gen_rtx_PLUS (Pmode,
++                                                                stack_pointer_rtx,
++                                                                GEN_INT (offset))), 
++                                     gen_rtx_REG (word_mode, regno));
++            }
++          else
++            {
++              insn = emit_move_insn (gen_rtx_REG (word_mode, regno),
++                                     gen_rtx_MEM (word_mode, 
++                                                  gen_rtx_PLUS (Pmode,
++                                                                stack_pointer_rtx,
++                                                                GEN_INT (offset))));
++            }
++
++	  /* only prologue instructions which set the sp fp or save a
++	     register should be marked as frame related */
++          if (op==0)
++	    RTX_FRAME_RELATED_P (insn) = 1;
++          offset -= UNITS_PER_WORD;
++        }
++    }
++}
++
++static void 
++stack_adjust (HOST_WIDE_INT amount)
++{
++  rtx insn;
++  
++  if (!MEDIUM_INT (amount))
++    {
++      /* r10 is caller saved so it can be used as a temp reg */
++      rtx r10;
++      r10 = gen_rtx_REG (word_mode, 10);  
++      insn = emit_move_insn (r10, GEN_INT (amount));
++      if (amount < 0)
++	RTX_FRAME_RELATED_P (insn) = 1;
++      insn = emit_add (stack_pointer_rtx, stack_pointer_rtx, r10);
++      if (amount < 0)
++	RTX_FRAME_RELATED_P (insn) = 1;
++    }
++  else
++    {
++      insn = emit_add (stack_pointer_rtx,
++                       stack_pointer_rtx,
++                       GEN_INT (amount));
++      if (amount < 0)
++	RTX_FRAME_RELATED_P (insn) = 1;
++    }
++}
++
++
++/* Create and emit instructions for a functions prologue */
++void
++lm32_expand_prologue (void)
++{
++  rtx insn;
++    
++  lm32_compute_frame_size (get_frame_size ());
++        
++  if (current_frame_info.total_size > 0)
++    {
++      /* Add space on stack new frame  */
++      stack_adjust (-current_frame_info.total_size);
++                                
++      /* Save callee save registers */
++      if (current_frame_info.reg_save_mask != 0)
++        expand_save_restore (&current_frame_info, 0);
++        
++      /* Setup frame pointer if it's needed */                
++      if (frame_pointer_needed == 1)
++        {
++          /* Load offset - Don't use total_size, as that includes pretend_size, which isn't part of this frame? */
++          insn = emit_move_insn (frame_pointer_rtx, GEN_INT (  current_frame_info.args_size 
++                                                             + current_frame_info.callee_size 
++                                                             + current_frame_info.locals_size));
++          RTX_FRAME_RELATED_P (insn) = 1;
++          
++          /* Add in sp */
++          insn = emit_add (frame_pointer_rtx, 
++                           frame_pointer_rtx,
++                           stack_pointer_rtx);
++          RTX_FRAME_RELATED_P (insn) = 1;
++        }  
++                
++      /* Prevent prologue from being scheduled into function body */
++      emit_insn (gen_blockage ());        
++    }
++}
++
++/* Create an emit instructions for a functions epilogue */
++void
++lm32_expand_epilogue (void)
++{
++  rtx ra_rtx = gen_rtx_REG (Pmode, RA_REGNUM);
++    
++  lm32_compute_frame_size (get_frame_size ());
++
++  if (current_frame_info.total_size > 0)
++    {       
++      /* Prevent stack code from being reordered */
++      emit_insn (gen_blockage ());             
++           
++      /* Restore callee save registers */
++      if (current_frame_info.reg_save_mask != 0)
++        expand_save_restore (&current_frame_info, 1);         
++      
++      /* Deallocate stack */
++      stack_adjust (current_frame_info.total_size);
++
++      /* Return to calling function */
++      emit_jump_insn (gen_return_internalsi (ra_rtx));                    
++    }
++  else
++    {
++      /* Return to calling function */
++      emit_jump_insn (gen_return_internalsi (ra_rtx));
++    }    
++}
++
++/* Return the bytes needed to compute the frame pointer from the current
++   stack pointer. */
++HOST_WIDE_INT
++lm32_compute_frame_size (int size)
++{
++  int regno;
++  HOST_WIDE_INT total_size, locals_size, args_size, pretend_size, callee_size;
++  unsigned int reg_save_mask;
++
++  locals_size = size;
++  args_size = crtl->outgoing_args_size;
++  pretend_size = crtl->args.pretend_args_size;
++  callee_size = 0;
++  reg_save_mask = 0;
++    
++  /* Build mask that actually determines which regsiters we save
++     and calculate size required to store them in the stack. */
++  for (regno = 1; regno < SP_REGNUM; regno++)
++    {
++      if (df_regs_ever_live_p(regno) && !call_used_regs[regno])
++        {
++          reg_save_mask |= 1 << regno;
++          callee_size += UNITS_PER_WORD;
++        }
++    }
++  if (df_regs_ever_live_p(RA_REGNUM) || !current_function_is_leaf || !optimize)
++    {
++      reg_save_mask |= 1 << RA_REGNUM;       
++      callee_size += UNITS_PER_WORD;
++    }
++  if (!(reg_save_mask & (1 << FP_REGNUM)) && frame_pointer_needed)
++    {
++      reg_save_mask |= 1 << FP_REGNUM;       
++      callee_size += UNITS_PER_WORD;
++    }
++
++  /* Compute total frame size */
++  total_size = pretend_size + args_size + locals_size + callee_size;
++     
++  /* Align frame to appropriate boundary */
++  total_size = (total_size+3) & ~3;
++  
++  /* Save computed information.  */
++  current_frame_info.total_size = total_size;
++  current_frame_info.callee_size = callee_size;
++  current_frame_info.pretend_size = pretend_size;
++  current_frame_info.locals_size = locals_size;
++  current_frame_info.args_size = args_size;
++  current_frame_info.reg_save_mask = reg_save_mask;
++
++  return total_size;
++}
++
++void
++lm32_print_operand (FILE *file, rtx op, int letter)
++{
++  register enum rtx_code code;
++
++  if (! op)
++    {
++      error ("PRINT_OPERAND null pointer");
++      abort ();
++    }
++
++  code = GET_CODE (op);
++
++  if (code == SIGN_EXTEND)
++    op = XEXP (op, 0), code = GET_CODE (op);
++  else if (code == REG || code == SUBREG)
++    {
++      int regnum;
++
++      if (code == REG)
++        regnum = REGNO (op);
++      else
++        regnum = true_regnum (op);
++
++     if (   (letter == 'H' && !WORDS_BIG_ENDIAN) 
++         || (letter == 'L' && WORDS_BIG_ENDIAN))
++         {
++         abort();
++            regnum++;
++            }
++
++      fprintf (file, "%s", reg_names[regnum]);
++    }
++  else if (code == MEM) 
++      output_address (XEXP (op, 0));
++  else if (letter == 'z' && GET_CODE (op) == CONST_INT && INTVAL (op) == 0)
++    fprintf (file, "%s", reg_names[0]);
++  else if (GET_CODE (op) == CONST_DOUBLE) 
++    {
++      if ((CONST_DOUBLE_LOW (op) != 0) || (CONST_DOUBLE_HIGH (op) != 0))
++        output_operand_lossage ("Only 0.0 can be loaded as an immediate");
++      else
++        fprintf (file, "0");
++    }        
++  else if (code == EQ)
++    fprintf (file, "e  ");  
++  else if (code == NE)
++    fprintf (file, "ne ");        
++  else if (code == GT)
++    fprintf (file, "g  ");    
++  else if (code == GTU)
++    fprintf (file, "gu ");    
++  else if (code == LT)
++    fprintf (file, "l  ");        
++  else if (code == LTU)
++    fprintf (file, "lu ");        
++  else if (code == GE)
++    fprintf (file, "ge ");        
++  else if (code == GEU)
++    fprintf (file, "geu");        
++  else if (code == LE)
++    fprintf (file, "le ");        
++  else if (code == LEU)
++    fprintf (file, "leu");                  
++  else
++    output_addr_const (file, op);
++}
++
++/* A C compound statement to output to stdio stream STREAM the
++   assembler syntax for an instruction operand that is a memory
++   reference whose address is ADDR.  ADDR is an RTL expression.
++
++   On some machines, the syntax for a symbolic address depends on
++   the section that the address refers to.  On these machines,
++   define the macro `ENCODE_SECTION_INFO' to store the information
++   into the `symbol_ref', and then check for it here.  */
++
++void
++lm32_print_operand_address (FILE *file, rtx addr)
++{
++  switch (GET_CODE (addr))
++    {
++    case REG:
++      fprintf (file, "(%s+0)", reg_names [REGNO (addr)]);
++      break;
++
++    case MEM:
++      output_address (XEXP (addr, 0));
++      break;
++
++    case PLUS:
++      {
++        rtx arg0 = XEXP (addr, 0);
++        rtx arg1 = XEXP (addr, 1);
++              
++        if (GET_CODE (arg0) == REG && CONSTANT_P (arg1))
++          {
++            if (GET_CODE(arg1) == CONST_INT)
++              fprintf (file, "(%s+%ld)", reg_names [REGNO (arg0)], INTVAL (arg1));
++            else
++              {
++                fprintf (file, "(%s+", reg_names [REGNO (arg0)]);
++                output_addr_const (file, arg1);
++                fprintf (file, ")");
++              }
++          }
++        else if (CONSTANT_P (arg0) && CONSTANT_P (arg1))
++          output_addr_const (file, addr);
++        else
++          abort_with_insn (addr, "bad operand");
++      }
++      break;
++    
++    case SYMBOL_REF:
++      if (SYMBOL_REF_SMALL_P (addr)) 
++        {        
++          fprintf (file, "gp(");
++          output_addr_const (file, addr);
++          fprintf (file, ")");
++        } 
++      else
++        abort_with_insn (addr, "can't use non gp relative absolute address");
++      break;      
++        
++    default:
++      abort_with_insn (addr, "invalid addressing mode");
++      break;
++    }
++}
++
++/* Determine where to put an argument to a function.
++   Value is zero to push the argument on the stack,
++   or a hard register in which to store the argument.
++
++   MODE is the argument's machine mode.
++   TYPE is the data type of the argument (as a tree).
++    This is null for libcalls where that information may
++    not be available.
++   CUM is a variable of type CUMULATIVE_ARGS which gives info about
++    the preceding args and about the function being called.
++   NAMED is nonzero if this argument is a named parameter
++    (otherwise it is an extra parameter matching an ellipsis).  */
++
++rtx
++lm32_function_arg (CUMULATIVE_ARGS cum, enum machine_mode mode, 
++                   tree type, int named)
++{        
++  if (mode == VOIDmode)
++    /* Compute operand 2 of the call insn.  */
++    return GEN_INT (0);
++
++  if (targetm.calls.must_pass_in_stack (mode, type))
++    return NULL_RTX;
++    
++  if (!named  || (cum + LM32_NUM_REGS2(mode, type) > LM32_NUM_ARG_REGS))
++    return NULL_RTX;
++
++  return gen_rtx_REG (mode, cum + LM32_FIRST_ARG_REG);
++}
++
++HOST_WIDE_INT
++lm32_compute_initial_elimination_offset (int from, int to)
++{
++  HOST_WIDE_INT offset = 0;
++  
++  switch (from)
++    {
++    /*case FRAME_POINTER_REGNUM: - Same as ARG_POINTER_REGNUM */
++    case ARG_POINTER_REGNUM:
++      switch (to)
++        {
++        case FRAME_POINTER_REGNUM:
++          offset = 0;
++          break;
++        case STACK_POINTER_REGNUM:
++          offset = lm32_compute_frame_size (get_frame_size ()) - current_frame_info.pretend_size;
++          break;
++        default:
++          abort ();
++        }
++      break;
++    default:
++      abort ();
++    }
++    
++  return offset;    
++}
++
++static void
++lm32_setup_incoming_varargs (CUMULATIVE_ARGS *cum, enum machine_mode mode, 
++                             tree type, int *pretend_size, int no_rtl)
++{
++  int first_anon_arg;
++  tree fntype;
++  int stdarg_p;
++  
++  fntype = TREE_TYPE (current_function_decl);
++  stdarg_p = (TYPE_ARG_TYPES (fntype) != 0
++	      && (TREE_VALUE (tree_last (TYPE_ARG_TYPES (fntype)))
++		  != void_type_node));
++   
++  if (stdarg_p)
++    first_anon_arg = *cum + LM32_FIRST_ARG_REG;
++  else
++    {
++      /* this is the common case, we have been passed details setup
++         for the last named argument, we want to skip over the
++         registers, if any used in passing this named paramter in
++         order to determine which is the first registers used to pass
++         anonymous arguments */
++      int size;
++
++      if (mode==BLKmode)
++        size = int_size_in_bytes (type);
++      else
++        size = GET_MODE_SIZE (mode);
++      
++      first_anon_arg = *cum + LM32_FIRST_ARG_REG + ((size + UNITS_PER_WORD - 1) / UNITS_PER_WORD);
++    }
++
++  if ((first_anon_arg < (LM32_FIRST_ARG_REG + LM32_NUM_ARG_REGS)) && !no_rtl)
++    {
++      int first_reg_offset = first_anon_arg;
++      int size = LM32_FIRST_ARG_REG + LM32_NUM_ARG_REGS - first_anon_arg;
++      rtx regblock;
++
++      regblock = gen_rtx_MEM (BLKmode,
++                              plus_constant (arg_pointer_rtx, 
++                                             FIRST_PARM_OFFSET (0)));
++      move_block_from_reg (first_reg_offset, regblock, size);
++
++      *pretend_size = size * UNITS_PER_WORD;
++    }
++}
++
++/* Abort after printing out a specific insn.  */
++static void
++abort_with_insn (rtx insn, const char *reason)
++{
++  error (reason);
++  debug_rtx (insn);
++  abort ();
++}
++
++/* Override command line options */
++void 
++lm32_override_options (void)
++{          
++  /* We must have sign-extend enabled if barrel-shift isn't */
++  if (!MASK_BARREL_SHIFT_ENABLED)
++    {
++      warning (0, "neither -mbarrel-shift-enabled nor -msign-extend-enabled specified. Assuming -msign-extend-enabled");
++      target_flags |= MASK_SIGN_EXTEND_ENABLED;
++    }
++}
++
++/* Return nonzero if this function is known to have a null epilogue.
++   This allows the optimizer to omit jumps to jumps if no stack
++   was created.  */
++int 
++lm32_can_use_return (void)
++{
++  if (!reload_completed) 
++    return 0;
++  
++  if (df_regs_ever_live_p(RA_REGNUM) || crtl->profile)
++    return 0;
++    
++  if (lm32_compute_frame_size (get_frame_size ()) != 0)
++    return 0;
++    
++  return 1;
++}
++
++/* Support function to determine the return address of the function
++   'count' frames back up the stack. */
++rtx 
++lm32_return_addr_rtx (int count, rtx frame)
++{
++  rtx r;
++  if (count == 0)
++    {
++      /* *mjs* This test originally used leaf_function_p (), we now use
++	 the regs_ever_live test which I *think* is more accurate. */
++      if (!df_regs_ever_live_p(RA_REGNUM))
++	{
++	  r = gen_rtx_REG (Pmode, RA_REGNUM);
++	}
++      else
++	{
++	  r = gen_rtx_MEM (Pmode, 
++			   gen_rtx_PLUS (Pmode, frame,
++					 GEN_INT(- 2 * UNITS_PER_WORD)));
++	  set_mem_alias_set (r, get_frame_alias_set ());
++	}
++    }
++  else if (flag_omit_frame_pointer)
++    r = NULL_RTX;
++  else
++    {
++      r = gen_rtx_MEM (Pmode, 
++		       gen_rtx_PLUS (Pmode, frame,
++				     GEN_INT(- 2 * UNITS_PER_WORD)));
++      set_mem_alias_set (r, get_frame_alias_set ());
++    }
++  return r;
++}
++
++/* Return true if EXP should be placed in the small data section.  */
++
++static bool
++lm32_in_small_data_p (const_tree exp)
++{
++  /* We want to merge strings, so we never consider them small data.  */
++  if (TREE_CODE (exp) == STRING_CST)
++    return false;
++
++  /* Functions are never in the small data area.  Duh.  */
++  if (TREE_CODE (exp) == FUNCTION_DECL)
++    return false;
++
++  if (TREE_CODE (exp) == VAR_DECL && DECL_SECTION_NAME (exp))
++    {
++      const char *section = TREE_STRING_POINTER (DECL_SECTION_NAME (exp));
++      if (strcmp (section, ".sdata") == 0
++	  || strcmp (section, ".sbss") == 0)
++	return true;
++    }
++  else
++    {
++      HOST_WIDE_INT size = int_size_in_bytes (TREE_TYPE (exp));
++
++      /* If this is an incomplete type with size 0, then we can't put it
++	 in sdata because it might be too big when completed.  */
++      if (size > 0 && (unsigned HOST_WIDE_INT) size <= g_switch_value)
++	return true;
++    }
++
++  return false;
++}
++
++/* Emit straight-line code to move LENGTH bytes from SRC to DEST.
++   Assume that the areas do not overlap.  */
++
++static void
++lm32_block_move_inline (rtx dest, rtx src, HOST_WIDE_INT length, HOST_WIDE_INT alignment)
++{
++  HOST_WIDE_INT offset, delta;
++  unsigned HOST_WIDE_INT bits;
++  int i;
++  enum machine_mode mode;
++  rtx *regs;
++
++  /* Work out how many bits to move at a time.  */
++  switch (alignment)
++    {
++      case 1:
++        bits = 8;
++        break;
++      case 2:
++        bits = 16;
++        break;
++      case 4:
++        bits = 32;
++        break;
++      default: 
++        abort ();
++    }
++
++  mode = mode_for_size (bits, MODE_INT, 0);
++  delta = bits / BITS_PER_UNIT;
++
++  /* Allocate a buffer for the temporary registers.  */
++  regs = alloca (sizeof (rtx) * length / delta);
++
++  /* Load as many BITS-sized chunks as possible.  */
++  for (offset = 0, i = 0; offset + delta <= length; offset += delta, i++)
++    {
++      regs[i] = gen_reg_rtx (mode);
++      emit_move_insn (regs[i], adjust_address (src, mode, offset));
++    }
++
++  /* Copy the chunks to the destination.  */
++  for (offset = 0, i = 0; offset + delta <= length; offset += delta, i++)
++    emit_move_insn (adjust_address (dest, mode, offset), regs[i]);
++
++  /* Mop up any left-over bytes.  */
++  if (offset < length)
++    {
++      src = adjust_address (src, BLKmode, offset);
++      dest = adjust_address (dest, BLKmode, offset);
++      move_by_pieces (dest, src, length - offset,
++		      MIN (MEM_ALIGN (src), MEM_ALIGN (dest)), 0);
++    }
++}
++
++/* Expand string/block move operations.
++
++   operands[0] is the pointer to the destination.
++   operands[1] is the pointer to the source.
++   operands[2] is the number of bytes to move.
++   operands[3] is the alignment.  */
++
++int
++lm32_expand_block_move (rtx *operands)
++{
++  if ((GET_CODE (operands[2]) == CONST_INT) && (INTVAL (operands[2]) <= 32))
++    {
++      lm32_block_move_inline (operands[0], operands[1], INTVAL (operands[2]), INTVAL (operands[3]));
++      return 1;
++    }
++  return 0;
++}
++
++/* Return TRUE if X references a SYMBOL_REF or LABEL_REF whose symbol
++   isn't protected by a PIC unspec.  */
++int
++nonpic_symbol_mentioned_p (rtx x)
++{
++  register const char *fmt;
++  register int i;
++
++  if (GET_CODE (x) == SYMBOL_REF || GET_CODE (x) == LABEL_REF
++      || GET_CODE (x) == PC)
++    return 1;
++
++  /* We don't want to look into the possible MEM location of a
++     CONST_DOUBLE, since we're not going to use it, in general.  */
++  if (GET_CODE (x) == CONST_DOUBLE)
++    return 0;
++
++  if (GET_CODE (x) == UNSPEC)
++    return 0;
++
++  fmt = GET_RTX_FORMAT (GET_CODE (x));
++  for (i = GET_RTX_LENGTH (GET_CODE (x)) - 1; i >= 0; i--)
++    {
++      if (fmt[i] == 'E')
++	{
++	  register int j;
++
++	  for (j = XVECLEN (x, i) - 1; j >= 0; j--)
++	    if (nonpic_symbol_mentioned_p (XVECEXP (x, i, j)))
++	      return 1;
++	}
++      else if (fmt[i] == 'e' && nonpic_symbol_mentioned_p (XEXP (x, i)))
++	return 1;
++    }
++
++  return 0;
++}
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/lm32.h gcc-4.4.4/gcc/config/lm32/lm32.h
+--- gcc-4.4.4.orig/gcc/config/lm32/lm32.h	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/lm32.h	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,657 @@
++/* Definitions of target machine for GNU compiler, Lattice Mico32 architecture.
++   Contributed by Jon Beniston <jon@beniston.com>
++
++   Copyright (C) 2008 Free Software Foundation, Inc.
++
++   This file is part of GCC.
++
++   GCC is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as published
++   by the Free Software Foundation; either version 3, or (at your
++   option) any later version.
++
++   GCC is distributed in the hope that it will be useful, but WITHOUT
++   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++   License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with GCC; see the file COPYING3.  If not see
++   <http://www.gnu.org/licenses/>.  */
++
++/*-------------------------------*/
++/* Run-time Target Specification */
++/*-------------------------------*/
++
++/* Print subsidiary information on the compiler version in use.  */
++#ifndef TARGET_VERSION
++#define TARGET_VERSION fprintf (stderr, " (LatticeMico32)")
++#endif
++
++/* Target CPU builtins.  */
++#define TARGET_CPU_CPP_BUILTINS()               \
++  do                                            \
++    {                                           \
++      builtin_define ("__lm32__");              \
++      builtin_define_std ("lm32");              \
++      builtin_assert ("cpu=lm32");              \
++      builtin_assert ("machine=lm32");          \
++    }                                           \
++  while (0)
++
++#define CPP_SPEC "\
++%{mmultiply-enabled:-D__multiply_enabled__} \
++%{mdivide-enabled:-D__divide_enabled__} \
++%{mbarrel-shift-enabled:-D__barrel_shift_enabled__} \
++%{msign-extend-enabled:-D__sign_extend_enabled__} \
++%{muser-enabled:-D__user_enabled__} \
++"
++
++#undef  ASM_SPEC
++#define ASM_SPEC "\
++%{mmultiply-enabled} \
++%{mdivide-enabled} \
++%{mbarrel-shift-enabled} \
++%{msign-extend-enabled} \
++%{muser-extend-enabled} \
++%{v} \
++"
++
++/* Let link script define all link options. 
++   Default to using simulator link script.  */
++
++#undef  STARTFILE_SPEC
++#define STARTFILE_SPEC ""
++#undef  ENDFILE_SPEC
++#define ENDFILE_SPEC ""
++#undef  LIB_SPEC
++#define LIB_SPEC "%{!T*:-T sim.ld}"
++
++#define OVERRIDE_OPTIONS lm32_override_options()
++
++extern int target_flags;
++
++/* Add -G xx support.  */
++
++#undef  SWITCH_TAKES_ARG
++#define SWITCH_TAKES_ARG(CHAR) \
++(DEFAULT_SWITCH_TAKES_ARG (CHAR) || (CHAR) == 'G')
++
++#undef  CC1_SPEC
++#define CC1_SPEC "%{G*}"
++
++extern struct rtx_def *lm32_compare_op0;
++extern struct rtx_def *lm32_compare_op1;
++
++/*---------------------------------*/
++/* Target machine storage layout.  */
++/*---------------------------------*/
++
++#define BITS_BIG_ENDIAN 0
++#define BYTES_BIG_ENDIAN 1
++#define WORDS_BIG_ENDIAN 1
++#define LIBGCC2_WORDS_BIG_ENDIAN 1
++
++#define BITS_PER_UNIT 8
++#define BITS_PER_WORD 32
++#define UNITS_PER_WORD 4
++
++#define POINTER_SIZE 32
++
++#define PROMOTE_MODE(MODE,UNSIGNEDP,TYPE)               \
++do {                                                    \
++  if (GET_MODE_CLASS (MODE) == MODE_INT                 \
++      && GET_MODE_SIZE (MODE) < UNITS_PER_WORD)         \
++    (MODE) = word_mode;                                 \
++} while (0)
++
++#define PARM_BOUNDARY 32
++
++#define STACK_BOUNDARY 32
++
++#define BIGGEST_ALIGNMENT 64
++
++#define FUNCTION_BOUNDARY  32
++
++#define EMPTY_FIELD_BOUNDARY 32
++
++#define STRICT_ALIGNMENT 1
++
++#define TARGET_FLOAT_FORMAT IEEE_FLOAT_FORMAT
++
++/* Make strings word-aligned so strcpy from constants will be faster.  */
++#define CONSTANT_ALIGNMENT(EXP, ALIGN)  \
++  (TREE_CODE (EXP) == STRING_CST	\
++   && (ALIGN) < BITS_PER_WORD ? BITS_PER_WORD : (ALIGN))
++
++/* Make arrays and structures word-aligned to allow faster copying etc.  */
++#define DATA_ALIGNMENT(TYPE, ALIGN)					\
++  ((((ALIGN) < BITS_PER_WORD)						\
++    && (TREE_CODE (TYPE) == ARRAY_TYPE					\
++	|| TREE_CODE (TYPE) == UNION_TYPE				\
++	|| TREE_CODE (TYPE) == RECORD_TYPE)) ? BITS_PER_WORD : (ALIGN))
++
++/* We need this for the same reason as DATA_ALIGNMENT, namely to cause
++   character arrays to be word-aligned so that `strcpy' calls that copy
++   constants to character arrays can be done inline, and 'strcmp' can be
++   optimised to use word loads. */
++#define LOCAL_ALIGNMENT(TYPE, ALIGN) \
++  DATA_ALIGNMENT (TYPE, ALIGN)
++   
++/*----------------------------------------*/
++/* Layout of source language data types.  */
++/*----------------------------------------*/
++
++#define INT_TYPE_SIZE		    32
++#define SHORT_TYPE_SIZE		    16
++#define LONG_TYPE_SIZE		    32
++#define LONG_LONG_TYPE_SIZE	    64
++
++#define FLOAT_TYPE_SIZE		    32
++#define DOUBLE_TYPE_SIZE	    64
++#define LONG_DOUBLE_TYPE_SIZE       64
++
++#define DEFAULT_SIGNED_CHAR         0
++
++#define SIZE_TYPE "unsigned int"
++
++#define PTRDIFF_TYPE "int"
++
++/*---------------------------*/
++/* Standard register usage.  */
++/*---------------------------*/
++
++#define FIRST_PSEUDO_REGISTER  32
++
++#define RV_REGNUM   1
++#define GP_REGNUM   26
++#define FP_REGNUM   27
++#define SP_REGNUM   28
++#define RA_REGNUM   29
++
++#define G_REG_P(X)      ((X)<32)
++#define PSEUDO_REG_P(X) ((X)>=FIRST_PSEUDO_REGISTER)
++
++#define FIXED_REGISTERS   \
++{ 1, 0, 0, 0, 0, 0, 0, 0, \
++  0, 0, 0, 0, 0, 0, 0, 0, \
++  0, 0, 0, 0, 0, 0, 0, 0, \
++  0, 0, 1, 0, 1, 0, 1, 1}
++
++#define CALL_USED_REGISTERS \
++{ 1, 1, 1, 1, 1, 1, 1, 1,   \
++  1, 1, 1, 0, 0, 0, 0, 0,   \
++  0, 0, 0, 0, 0, 0, 0, 0,   \
++  0, 0, 1, 0, 1, 0, 1, 1}
++  
++#define HARD_REGNO_NREGS(REGNO, MODE)                                   \
++    ((GET_MODE_SIZE (MODE) + UNITS_PER_WORD - 1) / UNITS_PER_WORD)      
++
++#define HARD_REGNO_MODE_OK(REGNO, MODE) G_REG_P(REGNO)
++
++#define MODES_TIEABLE_P(MODE1, MODE2)           \
++(      GET_MODE_CLASS (MODE1) == MODE_INT		\
++    && GET_MODE_CLASS (MODE2) == MODE_INT		\
++    && GET_MODE_SIZE (MODE1) <= UNITS_PER_WORD	\
++    && GET_MODE_SIZE (MODE2) <= UNITS_PER_WORD)
++
++#define AVOID_CCMODE_COPIES
++
++/*----------------------------------*/
++/* Register classes and constants.  */
++/*----------------------------------*/
++
++enum reg_class {
++  NO_REGS, 
++  GENERAL_REGS,
++  ALL_REGS,
++  LIM_REG_CLASSES
++};
++
++#define N_REG_CLASSES (int) LIM_REG_CLASSES
++
++#define REG_CLASS_NAMES { "NO_REGS", "GENERAL_REGS", "ALL_REGS" }
++
++#define REG_CLASS_CONTENTS      \
++{ {0x00000000},                 \
++  {0xffffffff},                 \
++  {0xffffffff}                  \
++}
++
++#define REGNO_REG_CLASS(REGNO) \
++    (G_REG_P(REGNO) ? GENERAL_REGS : NO_REGS)
++    
++#define CLASS_MAX_NREGS(CLASS, MODE) \
++    ((GET_MODE_SIZE (MODE) + UNITS_PER_WORD - 1) / UNITS_PER_WORD)      
++    
++#define INDEX_REG_CLASS NO_REGS
++
++#define BASE_REG_CLASS GENERAL_REGS
++
++#define REG_CLASS_FROM_LETTER(C) NO_REGS
++
++#ifdef REG_OK_STRICT
++#define REGNO_OK_FOR_BASE_P(REGNO) 					\
++(G_REG_P (REGNO) || G_REG_P (reg_renumber[REGNO]))
++#else
++#define REGNO_OK_FOR_BASE_P(REGNO) 					\
++(G_REG_P (REGNO) || PSEUDO_REG_P (REGNO))
++#endif
++
++#define REGNO_OK_FOR_INDEX_P(REGNO) 0
++
++#define PREFERRED_RELOAD_CLASS(X,CLASS) (CLASS)
++
++/* The letters I, J, K, L, M, N, O, P in a register constraint string
++   can be used to stand for particular ranges of immediate operands.
++   This macro defines what the ranges are.
++   C is the letter, and VALUE is a constant value.
++   Return 1 if VALUE is in the range specified by C.  
++   
++   Lattice usage:
++   
++   J - 0
++   K - 16-bit signed
++   L - 16-bit unsigned
++   M - 32-bit signed 
++   */
++#define MEDIUM_INT(X)  ((((HOST_WIDE_INT)(X)) >= -32768) && (((HOST_WIDE_INT)(X)) < 32768))
++#define MEDIUM_UINT(X) (((unsigned HOST_WIDE_INT)(X)) < 65536)
++#define LARGE_INT(X)                                    \
++((X) >= (-(HOST_WIDE_INT) 0x7fffffff - 1)               \
++ && (X) <= (unsigned HOST_WIDE_INT) 0xffffffff)
++ 
++#define CONST_OK_FOR_LETTER_P(VALUE, C)                 \
++(  (C) == 'J' ? (VALUE) == 0                            \
++ : (C) == 'K' ? MEDIUM_INT (VALUE)                      \
++ : (C) == 'L' ? MEDIUM_UINT (VALUE)                     \
++ : (C) == 'M' ? LARGE_INT (VALUE)                       \
++ : 0                                                    \
++)
++
++#define CONST_DOUBLE_OK_FOR_LETTER_P(VALUE, C)  0
++
++/*----------------------------------------*/
++/* Stack Layout and Calling Conventions.  */
++/*----------------------------------------*/
++
++#define STACK_GROWS_DOWNWARD 1
++
++#define FRAME_GROWS_DOWNWARD 1
++
++#define STACK_POINTER_OFFSET (UNITS_PER_WORD)
++
++#define STARTING_FRAME_OFFSET (UNITS_PER_WORD)
++
++#define FIRST_PARM_OFFSET(FNDECL) (UNITS_PER_WORD)
++
++#define STACK_POINTER_REGNUM SP_REGNUM
++
++#define FRAME_POINTER_REGNUM FP_REGNUM
++
++#define ARG_POINTER_REGNUM FRAME_POINTER_REGNUM
++
++#define FRAME_POINTER_REQUIRED (cfun->calls_alloca) 
++
++#define RETURN_ADDR_RTX(count, frame)                               \
++  lm32_return_addr_rtx (count, frame)
++
++/* FIXME! */
++#define STATIC_CHAIN_REGNUM 3
++
++#define ELIMINABLE_REGS \
++{{ FRAME_POINTER_REGNUM, STACK_POINTER_REGNUM },        \
++ { ARG_POINTER_REGNUM, STACK_POINTER_REGNUM },          \
++}
++
++#define CAN_ELIMINATE(FROM, TO)						    \
++   (((TO) == STACK_POINTER_REGNUM && frame_pointer_needed) ? 0 : 1)
++
++#define INITIAL_ELIMINATION_OFFSET(FROM, TO, OFFSET)    \
++  (OFFSET) = lm32_compute_initial_elimination_offset (FROM, TO)
++
++/*-----------------------------*/
++/* Function argument passing.  */
++/*-----------------------------*/
++
++#define ACCUMULATE_OUTGOING_ARGS 1
++
++#define RETURN_POPS_ARGS(DECL, FUNTYPE, SIZE) 0
++
++/*--------------------------------*/
++/* Passing Arguments in Registers */
++/*--------------------------------*/
++
++/* The first argument register */
++#define LM32_FIRST_ARG_REG 1
++
++/* The number of (integer) argument register available.  */
++#define LM32_NUM_ARG_REGS 8
++
++#define FUNCTION_ARG(CUM, MODE, TYPE, NAMED) \
++  lm32_function_arg ((CUM), (MODE), (TYPE), (NAMED))
++
++#define CUMULATIVE_ARGS int
++
++#define INIT_CUMULATIVE_ARGS(CUM,FNTYPE,LIBNAME,INDIRECT,N_NAMED_ARGS) \
++  (CUM) = 0
++
++#define FUNCTION_ARG_ADVANCE(CUM, MODE, TYPE, NAMED) \
++  (CUM) += LM32_NUM_REGS2 (MODE, TYPE)
++
++#define FUNCTION_ARG_REGNO_P(r)	(((r) >= 1) && ((r) <= LM32_NUM_ARG_REGS))
++
++/*--------------------*/
++/* Function results.  */
++/*--------------------*/
++
++#define FUNCTION_VALUE(VALTYPE, FUNC)                                   \
++   gen_rtx_REG ((INTEGRAL_TYPE_P (VALTYPE)                              \
++                 && TYPE_PRECISION (VALTYPE) < BITS_PER_WORD)           \
++	            ? word_mode                                         \
++	            : TYPE_MODE (VALTYPE),				                    \
++	            RV_REGNUM)
++
++#define LIBCALL_VALUE(MODE) gen_rtx_REG (MODE, RV_REGNUM)
++
++#define FUNCTION_VALUE_REGNO_P(N) ((N) == RV_REGNUM)
++
++#define RETURN_IN_MEMORY(TYPE) lm32_return_in_memory (TYPE)
++
++#define DEFAULT_PCC_STRUCT_RETURN 0
++
++/* Convert from bytes to ints.  */
++#define LM32_NUM_INTS(X) (((X) + UNITS_PER_WORD - 1) / UNITS_PER_WORD)
++
++/* The number of (integer) registers required to hold a quantity of
++   type MODE.  */
++#define LM32_NUM_REGS(MODE) LM32_NUM_INTS (GET_MODE_SIZE (MODE))
++
++/* The number of (integer) registers required to hold a quantity of
++   TYPE MODE.  */
++#define LM32_NUM_REGS2(MODE, TYPE)                       \
++  LM32_NUM_INTS ((MODE) == BLKmode ?                     \
++  int_size_in_bytes (TYPE) : GET_MODE_SIZE (MODE))
++
++#define STRUCT_VALUE 0
++
++/*---------------------------*/
++/* Function entry and exit.  */
++/*---------------------------*/
++
++/*-------------*/
++/* Profiling.  */
++/*-------------*/
++
++#define FUNCTION_PROFILER(FILE, LABELNO)
++
++/*---------------*/
++/* Trampolines.  */
++/*---------------*/
++
++#define INITIALIZE_TRAMPOLINE	
++#define TRAMPOLINE_SIZE		0
++
++/*---------------------*/ 
++/*  Addressing Modes.  */
++/*---------------------*/ 
++
++#define CONSTANT_ADDRESS_P(X)						\
++  ((GET_CODE (X) == LABEL_REF || GET_CODE (X) == SYMBOL_REF		\
++    || GET_CODE (X) == CONST_INT || GET_CODE (X) == HIGH		\
++    || (GET_CODE (X) == CONST)))
++
++#define MAX_REGS_PER_ADDRESS 1
++
++#ifdef REG_OK_STRICT
++#define REG_OK_FOR_FRAME_PTR_P(X) (REGNO (X) == FRAME_POINTER_REGNUM)
++#else
++#define REG_OK_FOR_FRAME_PTR_P(X) (REGNO (X) == FRAME_POINTER_REGNUM)
++#endif
++
++#define RTX_OK_FOR_BASE_P(X)                    (REG_P (X) && REG_OK_FOR_BASE_P (X))
++#define RTX_OK_FOR_STACK_P(X)                   (REG_P (X) && (REGNO (X) == STACK_POINTER_REGNUM))
++#define CONST_OK_FOR_BASE_OFFSET(X, MODE)       const_ok_for_base_offset ((X), (MODE))
++               
++#define LEGITIMATE_BASE_INDEX_P(ADDR, MODE)                     \
++(   GET_CODE (ADDR)==PLUS                                       \
++ && RTX_OK_FOR_BASE_P (XEXP (ADDR, 0))                          \
++ && GET_CODE (XEXP (ADDR, 1)) == CONST_INT                      \
++ && CONST_OK_FOR_BASE_OFFSET (XEXP ((ADDR), 1), (MODE)))        
++
++#define LEGITIMATE_GPREL_P(ADDR)                                \
++(   GET_CODE (ADDR) == SYMBOL_REF                               \
++ && SYMBOL_REF_SMALL_P (ADDR))
++ 
++#ifdef REG_OK_STRICT
++#define REG_OK_FOR_BASE_P(X) (G_REG_P (REGNO (X)))
++#else
++#define REG_OK_FOR_BASE_P(X) (G_REG_P (REGNO (X)) || PSEUDO_REG_P (REGNO (X)))
++#endif
++
++#ifdef REG_OK_STRICT
++#define REG_OK_FOR_INDEX_P(X) (G_REG_P (REGNO (X)))
++#else
++#define REG_OK_FOR_INDEX_P(X) (G_REG_P (REGNO (X)) || PSEUDO_REG_P (REGNO (X)))
++#endif
++
++#define GO_IF_LEGITIMATE_ADDRESS(m,x,l)	                                                                                             \
++{                                                                                                                                    \
++  if (RTX_OK_FOR_BASE_P (x)) goto l;                            /* (rM) */                                                      \
++  else if (LEGITIMATE_BASE_INDEX_P (x, m)) goto l;              /* (rM)+literal) */                                            \
++  else if (LEGITIMATE_GPREL_P (x)) goto l;                                                                                      \
++}
++
++#define ARM_LEGITIMIZE_ADDRESS(X, OLDX, MODE, WIN)	     \
++do {							     \
++  if (flag_pic)                                              \
++    X = lm32_legitimize_pic_address (OLDX, MODE, NULL_RTX);  \
++} while (0)
++
++#define GO_IF_MODE_DEPENDENT_ADDRESS(ADDR, LABEL) 			\
++  if (GET_CODE (ADDR) == PLUS) goto LABEL;		      		\
++
++#define LEGITIMATE_CONSTANT_P(X) 1
++
++/*-------------------------*/
++/* Condition Code Status.  */
++/*-------------------------*/
++
++#define REVERSIBLE_CC_MODE(MODE) 1
++
++/*---------*/
++/* Costs.  */
++/*---------*/
++
++#define SLOW_BYTE_ACCESS 1
++
++#define NO_FUNCTION_CSE
++
++#define BRANCH_COST(speed_p, predictable_p) 4
++
++#define MOVE_RATIO(speed) (speed ? 24 : 3)
++
++/*------------*/
++/* Sections.  */
++/*------------*/
++
++#define TEXT_SECTION_ASM_OP             "\t.section\t.text"
++#define DATA_SECTION_ASM_OP             "\t.section\t.data"
++#define SDATA_SECTION_ASM_OP            "\t.section\t.sdata,\"aw\""
++#define BSS_SECTION_ASM_OP              "\t.section\t.bss"
++#define SBSS_SECTION_ASM_OP             "\t.section\t.sbss,\"aw\""
++
++/*-------*/
++/* PIC.  */
++/*-------*/
++
++#define PIC_OFFSET_TABLE_REGNUM (flag_pic ? GP_REGNUM : INVALID_REGNUM)
++
++#define JUMP_TABLES_IN_TEXT_SECTION (flag_pic)
++
++#define LEGITIMATE_PIC_OPERAND_P(X)                                    \
++	(!(nonpic_symbol_mentioned_p (X)))
++
++/*-------------*/
++/* Assembler.  */
++/*-------------*/
++
++#define ASM_COMMENT_START "#"
++
++#define ASM_APP_ON "#APP\n"
++
++#define ASM_APP_OFF "#NO_APP\n"
++
++#define ASM_OUTPUT_DEF(FILE,LABEL1,LABEL2)				\
++ do {									\
++	fputc ( '\t', FILE);						\
++	assemble_name (FILE, LABEL1);					\
++	fputs ( " = ", FILE);						\
++	assemble_name (FILE, LABEL2);					\
++	fputc ( '\n', FILE);						\
++ } while (0)
++
++/* Override default implementation in elfos.h to support -G.  */
++#undef  ASM_OUTPUT_ALIGNED_LOCAL
++#define ASM_OUTPUT_ALIGNED_LOCAL(FILE, NAME, SIZE, ALIGN)		\
++do {									\
++  if ((SIZE) <= g_switch_value)						\
++    switch_to_section (sbss_section);					\
++  else									\
++    switch_to_section (bss_section);					\
++  ASM_OUTPUT_TYPE_DIRECTIVE (FILE, NAME, "object");			\
++  if (!flag_inhibit_size_directive)					\
++    ASM_OUTPUT_SIZE_DIRECTIVE (FILE, NAME, SIZE);			\
++  ASM_OUTPUT_ALIGN ((FILE), exact_log2((ALIGN) / BITS_PER_UNIT));	\
++  ASM_OUTPUT_LABEL(FILE, NAME);						\
++  ASM_OUTPUT_SKIP((FILE), (SIZE) ? (SIZE) : 1);				\
++} while (0)
++
++/* Override default implementation in elfos.h to support -G.  */
++#undef  ASM_OUTPUT_ALIGNED_COMMON
++#define ASM_OUTPUT_ALIGNED_COMMON(FILE, NAME, SIZE, ALIGN)		\
++do 									\
++{									\
++  if ((SIZE) <= g_switch_value)						\
++    {									\
++      switch_to_section (sbss_section);					\
++      (*targetm.asm_out.globalize_label) (FILE, NAME);			\
++      ASM_OUTPUT_TYPE_DIRECTIVE (FILE, NAME, "object");			\
++      if (!flag_inhibit_size_directive)					\
++	ASM_OUTPUT_SIZE_DIRECTIVE (FILE, NAME, SIZE);			\
++      ASM_OUTPUT_ALIGN ((FILE), exact_log2((ALIGN) / BITS_PER_UNIT));	\
++      ASM_OUTPUT_LABEL(FILE, NAME);					\
++      ASM_OUTPUT_SKIP((FILE), (SIZE) ? (SIZE) : 1);			\
++    }									\
++  else									\
++    {									\
++      switch_to_section (bss_section);					\
++      fprintf ((FILE), "%s", COMMON_ASM_OP);				\
++      assemble_name ((FILE), (NAME));					\
++      fprintf ((FILE), ","HOST_WIDE_INT_PRINT_UNSIGNED",%u\n", (SIZE), (ALIGN) / BITS_PER_UNIT);	\
++    }									\
++}									\
++while (0)
++
++#define ASM_OUTPUT_LABEL(FILE, NAME) \
++  do { assemble_name (FILE, NAME); fputs (":\n", FILE); } while (0)
++
++#define ASM_OUTPUT_LABELREF(FILE,NAME)	\
++  do {					\
++    const char *xname = (NAME);		\
++    if (xname[0] == '@')		\
++      xname += 1;			\
++    if (xname[0] == '*')		\
++      xname += 1;			\
++    fputs (xname, FILE);		\
++  } while (0)
++
++#define ASM_OUTPUT_SYMBOL_REF(STREAM, SYMBOL)				\
++  do {									                    \
++    assemble_name (STREAM, XSTR (SYMBOL, 0));				\
++  } while (0)
++
++#define GLOBAL_ASM_OP "\t.global\t"
++
++#define REGISTER_NAMES 					 \
++{                                                        \
++ "r0",  "r1",  "r2",  "r3",  "r4",  "r5",  "r6",  "r7",	 \
++ "r8",  "r9",  "r10", "r11", "r12", "r13", "r14", "r15", \
++ "r16", "r17", "r18", "r19", "r20", "r21", "r22", "r23", \
++ "r24", "r25",  "gp",  "fp",  "sp",  "ra",  "ea",  "ba"}
++
++#define PRINT_OPERAND_PUNCT_VALID_P(CHAR) \
++  (((CHAR) == '&') || ((CHAR) == '@') || ((CHAR) == '*'))
++
++#define PRINT_OPERAND(FILE, X, CODE)                    \
++  lm32_print_operand (FILE, X, CODE)
++
++#define PRINT_OPERAND_ADDRESS(FILE, ADDR) 				\
++  lm32_print_operand_address (FILE, ADDR)
++
++#ifndef LOCAL_LABEL_PREFIX
++#define LOCAL_LABEL_PREFIX	"."
++#endif
++
++#define ASM_OUTPUT_ALIGN(FILE,LOG) 					\
++  do { if ((LOG) != 0) fprintf (FILE, "\t.align %d\n", (1 << (LOG))); } while (0)
++
++#define ASM_OUTPUT_ADDR_VEC_ELT(FILE, VALUE)                    \
++do {                                                            \
++  char label[64];                                               \
++  ASM_GENERATE_INTERNAL_LABEL (label, "L", VALUE);              \
++  fprintf (FILE, "\n\t.word\t");                                \
++  assemble_name (FILE, label);                                  \
++  fprintf (FILE, "\n");                                         \
++} while (0)
++
++#define ASM_OUTPUT_ADDR_DIFF_ELT(FILE, BODY, VALUE, REL)        \
++do {                                                            \
++  char label[64];                                               \
++  fprintf (FILE, "\t.word\t(");                                 \
++  ASM_GENERATE_INTERNAL_LABEL (label, "L", VALUE);		\
++  assemble_name (FILE, label);                                  \
++  fprintf (FILE, "-");                                          \
++  ASM_GENERATE_INTERNAL_LABEL (label, "L", REL);                \
++  assemble_name (FILE, label);                                  \
++  fprintf (FILE, ")\n");                                        \
++} while (0)
++
++/*-------------*/
++/* Debugging.  */
++/*-------------*/
++
++#define DBX_REGISTER_NUMBER(REGNO) (REGNO) 
++
++#define CAN_DEBUG_WITHOUT_FP
++     
++#define DEFAULT_GDB_EXTENSIONS 1
++
++/*--------*/
++/* Misc.  */
++/*--------*/
++
++#define CASE_VECTOR_MODE Pmode
++
++#define WORD_REGISTER_OPERATIONS
++
++#define LOAD_EXTEND_OP(MODE) ZERO_EXTEND
++
++#define SHORT_IMMEDIATES_SIGN_EXTEND
++
++#define MOVE_MAX        UNITS_PER_WORD
++#define MAX_MOVE_MAX    4
++
++#define SHIFT_COUNT_TRUNCATED 1
++
++#define TRULY_NOOP_TRUNCATION(OUTPREC, INPREC) 1
++
++#define Pmode SImode
++
++#define FUNCTION_MODE SImode
++
++#ifndef NO_IMPLICIT_EXTERN_C
++#define NO_IMPLICIT_EXTERN_C
++#endif
++
++#define STORE_FLAG_VALUE 1
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/lm32.md gcc-4.4.4/gcc/config/lm32/lm32.md
+--- gcc-4.4.4.orig/gcc/config/lm32/lm32.md	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/lm32.md	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,1233 @@
++;; Machine description of the Lattice Mico32 architecture for GNU C compiler.
++;; Contributed by Jon Beniston <jon@beniston.com>
++
++;; This file is part of GCC.
++
++;; GCC is free software; you can redistribute it and/or modify it
++;; under the terms of the GNU General Public License as published
++;; by the Free Software Foundation; either version 3, or (at your
++;; option) any later version.
++
++;; GCC is distributed in the hope that it will be useful, but WITHOUT
++;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++;; License for more details.
++
++;; You should have received a copy of the GNU General Public License
++;; along with GCC; see the file COPYING3.  If not see
++;; <http://www.gnu.org/licenses/>.  
++
++;; Include predicate definitions
++(include "predicates.md")
++
++;; Register numbers
++(define_constants
++  [(RA_REGNUM           29)		; return address register.
++  ]
++)
++
++;; LM32 specific volatile operations
++(define_constants
++  [(UNSPECV_BLOCKAGE    1)]     ; use to prevent scheduler from optimising accross bounaries
++)
++
++;; LM32 specific operations
++(define_constants
++  [(UNSPEC_GOT          2)
++   (UNSPEC_GOTOFF_HI16  3)
++   (UNSPEC_GOTOFF_LO16  4)]     
++)
++
++;; --------------------------------- 
++;;      instruction types
++;; ---------------------------------
++
++(define_attr "type"
++  "unknown,load,store,arith,compare,shift,multiply,divide,call,icall,ubranch,uibranch,cbranch"
++  (const_string "unknown"))
++  
++;; ---------------------------------
++;;      instruction lengths
++;; ---------------------------------
++  
++; All instructions are 4 bytes
++; Except for branches that are out of range, and have to be implemented
++; as two instructions
++(define_attr "length" "" 
++        (cond [
++                (eq_attr "type" "cbranch")
++                (if_then_else
++                        (lt (abs (minus (match_dup 2) (pc)))
++                                (const_int 32768)
++                        )
++                        (const_int 4)
++                        (const_int 8)               
++                )
++              ] 
++        (const_int 4))
++)
++                    
++;; ---------------------------------
++;;           scheduling 
++;; ---------------------------------
++
++(define_automaton "lm32")
++
++(define_cpu_unit "x" "lm32")
++(define_cpu_unit "m" "lm32")
++(define_cpu_unit "w" "lm32")
++
++(define_insn_reservation "singlecycle" 1
++  (eq_attr "type" "store,arith,call,icall,ubranch,uibranch,cbranch")
++ "x")
++
++(define_insn_reservation "twocycle" 2
++  (eq_attr "type" "compare,shift,divide")
++ "x,m") 
++
++(define_insn_reservation "threecycle" 3
++  (eq_attr "type" "load,multiply")
++ "x,m,w")
++
++;; ---------------------------------
++;;               mov 
++;; ---------------------------------
++
++(define_expand "movqi"
++  [(set (match_operand:QI 0 "general_operand" "")
++        (match_operand:QI 1 "general_operand" ""))]
++  ""
++  "
++{
++  if (can_create_pseudo_p ())
++    {
++      if (GET_CODE (operand0) == MEM)
++        {
++          /* Source operand for store must be in a register */
++          operands[1] = force_reg (QImode, operands[1]);
++        }
++    }
++  if (   GET_CODE (operands[1]) == CONST_INT 
++      && GET_CODE (operands[0]) == REG)
++    {
++      operands[0] = gen_rtx_SUBREG (SImode, operands[0], 0);
++      emit_insn (gen_movsi (operands[0], operands[1]));
++      DONE;
++    }
++}")
++
++(define_expand "movhi"
++  [(set (match_operand:HI 0 "general_operand" "")
++        (match_operand:HI 1 "general_operand" ""))]
++  ""
++  "
++{
++  if (can_create_pseudo_p ())
++    {
++      if (GET_CODE (operands[0]) == MEM)
++        {
++          /* Source operand for store must be in a register */
++          operands[1] = force_reg (HImode, operands[1]);
++        }
++    }
++  if (GET_CODE (operands[1]) == CONST_INT)
++    {
++      operands[0] = gen_rtx_SUBREG (SImode, operands[0], 0);          
++      if (MEDIUM_INT (INTVAL (operands[1])))      
++        emit_insn (gen_movsi_kimm (operands[0], operands[1]));
++      else if (MEDIUM_UINT (INTVAL (operands[1])))   
++        emit_insn (gen_movsi_limm (operands[0], operands[1]));
++      else
++        {
++          emit_insn (gen_movsi_imm_hi (operands[0], GEN_INT (INTVAL (operands[1]))));
++          emit_insn (gen_movsi_imm_lo (operands[0], operands[0], GEN_INT (INTVAL (operands[1]))));
++        }
++      DONE;
++    }
++}")
++
++(define_expand "movsi"
++  [(set (match_operand:SI 0 "general_operand" "")
++        (match_operand:SI 1 "general_operand" ""))]
++  ""
++  "
++{
++  if (can_create_pseudo_p ())
++    {
++      if (GET_CODE (operands[0]) == MEM 
++	  || (GET_CODE (operands[0]) == SUBREG 
++	      && GET_CODE (SUBREG_REG (operands[0])) == MEM))
++        {
++          /* Source operand for store must be in a register */
++          operands[1] = force_reg (SImode, operands[1]);
++        }
++    }
++
++  if (flag_pic && symbolic_operand (operands[1], SImode)) 
++    {
++      if (GET_CODE (operands[1]) == LABEL_REF
++          || (GET_CODE (operands[1]) == SYMBOL_REF 
++              && SYMBOL_REF_LOCAL_P (operands[1])
++              && !SYMBOL_REF_WEAK (operands[1])))
++        {
++          emit_insn (gen_movsi_gotoff_hi16 (operands[0], operands[1]));
++          emit_insn (gen_addsi3 (operands[0], operands[0], pic_offset_table_rtx));
++          emit_insn (gen_movsi_gotoff_lo16 (operands[0], operands[0], operands[1]));
++        } 
++      else 
++        {
++          emit_insn (gen_movsi_got (operands[0], operands[1]));
++        }
++      crtl->uses_pic_offset_table = 1;
++      DONE;
++    }
++  else if (flag_pic && GET_CODE (operands[1]) == CONST) 
++    {
++      rtx op = XEXP (operands[1], 0);
++      if (GET_CODE (op) == PLUS)
++        {
++          rtx arg0 = XEXP (op, 0);
++          rtx arg1 = XEXP (op, 1);
++          if (GET_CODE (arg0) == LABEL_REF
++              || (GET_CODE (arg0) == SYMBOL_REF 
++                  && SYMBOL_REF_LOCAL_P (arg0)
++                  && !SYMBOL_REF_WEAK (arg0)))
++            {
++              emit_insn (gen_movsi_gotoff_hi16 (operands[0], arg0));
++              emit_insn (gen_addsi3 (operands[0], operands[0], pic_offset_table_rtx));
++              emit_insn (gen_movsi_gotoff_lo16 (operands[0], operands[0], arg0));
++            } 
++          else 
++            {
++              emit_insn (gen_movsi_got (operands[0], arg0));
++            }
++          emit_insn (gen_addsi3 (operands[0], operands[0], arg1));
++          crtl->uses_pic_offset_table = 1;
++          DONE;
++        }     
++    }
++  else if (!flag_pic && (   GET_CODE (operands[1]) == SYMBOL_REF
++                         && SYMBOL_REF_SMALL_P (operands[1])
++                        ) 
++          ) 
++    {
++      emit_insn (gen_movsi_reloc_gprel (operands[0], operands[1]));
++      DONE;
++    }
++  else if (!flag_pic && (   GET_CODE (operands[1]) == LABEL_REF
++                         || GET_CODE (operands[1]) == SYMBOL_REF
++                         || GET_CODE (operands[1]) == CONST                         
++                        )
++          )
++    {
++      emit_insn (gen_movsi_reloc_hi (operands[0], operands[1]));
++      emit_insn (gen_movsi_reloc_lo (operands[0], operands[0], operands[1]));
++      DONE;
++    }
++  else if (GET_CODE (operands[1]) == CONST_INT)
++    {
++      if (MEDIUM_INT (INTVAL (operands[1])))      
++        emit_insn (gen_movsi_kimm (operands[0], operands[1]));
++      else if (MEDIUM_UINT (INTVAL (operands[1])))   
++        emit_insn (gen_movsi_limm (operands[0], operands[1]));
++      else
++        {
++          emit_insn (gen_movsi_imm_hi (operands[0], GEN_INT (INTVAL (operands[1]))));
++          emit_insn (gen_movsi_imm_lo (operands[0], operands[0], GEN_INT (INTVAL (operands[1]))));
++        }
++      DONE;
++    }    
++}")
++
++;;(define_expand "movmemsi"
++;;  [(parallel [(set (match_operand:BLK 0 "general_operand" "")
++;;		   (match_operand:BLK 1 "general_operand" ""))
++;;	      (use (match_operand:SI 2 "" ""))
++;;	      (use (match_operand:SI 3 "const_int_operand" ""))])]
++;;  ""
++;;{
++;;  if (!lm32_expand_block_move (operands))
++;;    FAIL;
++;;  DONE;
++;;})
++
++;; ---------------------------------
++;;        load/stores/moves 
++;; ---------------------------------
++
++(define_insn "movsi_kimm"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (match_operand:SI 1 "constant_K_operand" "K"))]
++  ""
++  "addi     %0, r0, %1"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "movsi_limm"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (match_operand:SI 1 "constant_L_operand" "L"))]
++  ""
++  "ori      %0, r0, %1"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "movsi_imm_hi"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (high:SI (match_operand:SI 1 "immediate_operand" "i")))]
++  ""
++  "orhi     %0, r0, hi(%1)"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "movsi_imm_lo"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (lo_sum:SI (match_operand:SI 1 "register_operand" "0")
++                   (match_operand:SI 2 "immediate_operand" "i")))]
++  ""
++  "ori      %0, %0, lo(%2)"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "movsi_reloc_gprel"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (match_operand:SI 1 "reloc_operand" "i"))]
++  "GET_CODE (operands[1]) == SYMBOL_REF && SYMBOL_REF_SMALL_P (operands[1])"
++  "mva      %0, gp(%1)"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "movsi_got"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (unspec:SI [(match_operand 1 "" "")] UNSPEC_GOT))]
++  "flag_pic"
++  "lw       %0, (gp+got(%1))"
++  [(set_attr "type" "load")]
++)
++
++(define_insn "movsi_gotoff_hi16"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (unspec:SI [(match_operand 1 "" "")] UNSPEC_GOTOFF_HI16))]
++  "flag_pic"
++  "orhi     %0, r0, gotoffhi16(%1)"
++  [(set_attr "type" "load")]
++)
++
++(define_insn "movsi_gotoff_lo16"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (unspec:SI [(plus:SI (match_operand:SI 1 "register_operand" "0")
++                             (match_operand 2 "" ""))] UNSPEC_GOTOFF_LO16))]        
++  "flag_pic"
++  "addi     %0, %1, gotofflo16(%2)"
++  [(set_attr "type" "arith")]
++)
++  
++(define_insn "movsi_reloc_hi"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (high:SI (match_operand:SI 1 "reloc_operand" "i")))]
++  "!flag_pic"
++  "orhi     %0, r0, hi(%1)"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "movsi_reloc_lo"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (lo_sum:SI (match_operand:SI 1 "register_operand" "0")
++                   (match_operand:SI 2 "reloc_operand" "i")))]
++  "!flag_pic"
++  "ori      %0, %0, lo(%2)"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "*movqi_insn"
++  [(set (match_operand:QI 0 "register_or_memory_operand" "=r,r,m")
++        (match_operand:QI 1 "register_or_memory_operand" "m,r,r"))]
++  ""
++  "@
++   lbu      %0, %1
++   or       %0, %1, r0
++   sb       %0, %1"
++  [(set_attr "type" "load,arith,store")]   
++)
++   
++(define_insn "*movhi_insn"
++  [(set (match_operand:HI 0 "register_or_memory_operand" "=r,r,m")
++        (match_operand:HI 1 "register_or_memory_operand" "m,r,r"))]
++  ""
++  "@
++   lhu      %0, %1
++   or       %0, %1, r0
++   sh       %0, %1"
++  [(set_attr "type" "load,arith,store")]   
++)
++
++(define_insn "*movsi_insn"
++  [(set (match_operand:SI 0 "register_or_memory_operand" "=r,r,m")
++        (match_operand:SI 1 "register_or_memory_operand" "m,r,r"))]
++  ""
++  "@
++   lw       %0, %1
++   or       %0, %1, r0
++   sw       %0, %1"
++  [(set_attr "type" "load,arith,store")]   
++)
++
++;; ---------------------------------
++;;      sign and zero extension 
++;; ---------------------------------
++
++(define_insn "*extendqihi2"
++  [(set (match_operand:HI 0 "register_operand" "=r,r")
++        (sign_extend:HI (match_operand:QI 1 "register_or_memory_operand" "m,r")))]
++  "TARGET_SIGN_EXTEND_ENABLED || (GET_CODE (operands[1]) != REG)"
++  "@
++   lb       %0, %1
++   sextb    %0, %1"
++  [(set_attr "type" "load,arith")]
++)
++
++(define_insn "zero_extendqihi2"
++  [(set (match_operand:HI 0 "register_operand" "=r,r")
++        (zero_extend:HI (match_operand:QI 1 "register_or_memory_operand" "m,r")))]
++  ""
++  "@
++   lbu      %0, %1
++   andi     %0, %1, 0xff"
++  [(set_attr "type" "load,arith")]  
++)
++
++(define_insn "*extendqisi2"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (sign_extend:SI (match_operand:QI 1 "register_or_memory_operand" "m,r")))]
++  "TARGET_SIGN_EXTEND_ENABLED || (GET_CODE (operands[1]) != REG)"
++  "@
++   lb       %0, %1
++   sextb    %0, %1"
++  [(set_attr "type" "load,arith")]
++)
++
++(define_insn "zero_extendqisi2"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++	    (zero_extend:SI (match_operand:QI 1 "register_or_memory_operand" "m,r")))]
++  ""
++  "@
++   lbu      %0, %1
++   andi     %0, %1, 0xff"
++  [(set_attr "type" "load,arith")]  
++)
++
++(define_insn "*extendhisi2"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (sign_extend:SI (match_operand:HI 1 "register_or_memory_operand" "m,r")))]
++  "TARGET_SIGN_EXTEND_ENABLED || (GET_CODE (operands[1]) != REG)"
++  "@
++   lh       %0, %1
++   sexth    %0, %1"
++  [(set_attr "type" "load,arith")]
++)
++
++(define_insn "zero_extendhisi2"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (zero_extend:SI (match_operand:HI 1 "register_or_memory_operand" "m,r")))]
++  ""
++  "@
++   lhu      %0, %1
++   andi     %0, %1, 0xffff"
++  [(set_attr "type" "load,arith")]  
++)
++
++;; ---------------------------------
++;;             compare 
++;; ---------------------------------
++
++(define_expand "cmpsi"
++  [(set (cc0)
++   (compare:CC (match_operand:SI 0 "register_operand" "")
++               (match_operand:SI 1 "register_or_K_operand" "")))]
++  ""
++  "
++{
++  lm32_compare_op0 = operands[0];
++  lm32_compare_op1 = operands[1];
++  DONE;
++}")
++
++
++(define_expand "tstsi"
++  [(set (cc0)
++   (match_operand:SI 0 "register_operand" ""))]
++  ""
++  "
++{
++  lm32_compare_op0 = operands[0];
++  lm32_compare_op1 = const0_rtx;
++  DONE;
++}")
++
++(define_expand "seq"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(eq:SI (match_dup 1)
++	       (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (EQ, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++(define_insn "*seq"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (eq:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++               (match_operand:SI 2 "register_or_K_operand" "r,K")))]
++  ""
++  "@
++   cmpe     %0, %z1, %2
++   cmpei    %0, %z1, %2"
++  [(set_attr "type" "compare")]
++)
++
++(define_expand "sne"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(ne:SI (match_dup 1)
++	       (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (NE, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++(define_insn "*sne"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (ne:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++               (match_operand:SI 2 "register_or_K_operand" "r,K")))]
++  ""
++  "@
++   cmpne    %0, %z1, %2
++   cmpnei   %0, %z1, %2"
++  [(set_attr "type" "compare")]
++)
++
++(define_expand "sgt"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(gt:SI (match_dup 1)
++	       (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (GT, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++(define_insn "*sgt"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (gt:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++               (match_operand:SI 2 "register_or_K_operand" "r,K")))]
++  ""
++  "@
++   cmpg     %0, %z1, %2
++   cmpgi    %0, %z1, %2"
++  [(set_attr "type" "compare")]
++)
++
++(define_expand "slt"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(lt:SI (match_dup 1)
++	       (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (LT, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++(define_expand "sge"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(ge:SI (match_dup 1)
++	       (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (GE, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++(define_insn "*sge"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (ge:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++               (match_operand:SI 2 "register_or_K_operand" "r,K")))]
++  ""
++  "@
++   cmpge    %0, %z1, %2
++   cmpgei   %0, %z1, %2"
++  [(set_attr "type" "compare")]
++)
++
++(define_expand "sle"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(le:SI (match_dup 1)
++	       (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (LE, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++(define_expand "sgtu"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(gtu:SI (match_dup 1)
++	        (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (GTU, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++(define_insn "*sgtu"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (gtu:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                (match_operand:SI 2 "register_or_K_operand" "r,L")))]
++  ""
++  "@
++   cmpgu    %0, %z1, %2
++   cmpgui   %0, %z1, %2"
++  [(set_attr "type" "compare")]
++)
++
++(define_expand "sltu"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(ltu:SI (match_dup 1)
++	        (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (LTU, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++(define_expand "sgeu"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(geu:SI (match_dup 1)
++	        (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (GEU, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++(define_insn "*sgeu"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (geu:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                (match_operand:SI 2 "register_or_K_operand" "r,L")))]
++  ""
++  "@
++   cmpgeu   %0, %z1, %2
++   cmpgeui  %0, %z1, %2"
++  [(set_attr "type" "compare")]
++)
++
++(define_expand "sleu"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++	(leu:SI (match_dup 1)
++	        (match_dup 2)))]
++  ""
++{
++  operands[1] = lm32_compare_op0;
++  operands[2] = lm32_compare_op1;
++  gen_int_relational (LEU, operands[0], operands[1], operands[2], NULL_RTX);
++  DONE;
++})
++
++;; ---------------------------------
++;;       unconditional branch
++;; ---------------------------------
++
++(define_insn "jump"
++  [(set (pc) (label_ref (match_operand 0 "" "")))]
++  ""
++  "bi       %0"
++  [(set_attr "type" "ubranch")]
++)
++
++(define_expand "indirect_jump"
++  [(set (pc) (match_operand 0 "register_operand" ""))]
++  ""
++  "
++{
++  emit_jump_insn (gen_indirect_jumpsi (operands[0]));
++  DONE;
++}")
++
++(define_insn "indirect_jumpsi"
++  [(set (pc) (match_operand:SI 0 "register_operand" "r"))]
++  ""
++  "b        %0"
++  [(set_attr "type" "uibranch")]
++)
++
++;; ---------------------------------
++;;        conditional branch
++;; ---------------------------------
++
++(define_expand "beq"
++  [(set (pc)
++   (if_then_else (eq:CC (cc0)
++                        (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{   
++  gen_int_relational (EQ, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_expand "bne"
++  [(set (pc)
++   (if_then_else (ne:CC (cc0)
++                        (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{ 
++  gen_int_relational (NE, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_expand "bgt"
++  [(set (pc)
++   (if_then_else (gt:CC (cc0)
++                        (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{ 
++  gen_int_relational (GT, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_expand "bge"
++  [(set (pc)
++   (if_then_else (ge:CC (cc0)
++                        (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{ 
++  gen_int_relational (GE, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_expand "ble"
++  [(set (pc)
++   (if_then_else (le:CC (cc0)
++                        (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{ 
++  gen_int_relational (LE, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_expand "blt"
++  [(set (pc)
++   (if_then_else (lt:CC (cc0)
++                        (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{ 
++  gen_int_relational (LT, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_expand "bgtu"
++  [(set (pc)
++   (if_then_else (gtu:CC (cc0)
++                         (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{ 
++  gen_int_relational (GTU, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_expand "bgeu"
++  [(set (pc)
++   (if_then_else (geu:CC (cc0)
++                         (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{ 
++  gen_int_relational (GEU, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_expand "bleu"
++  [(set (pc)
++   (if_then_else (leu:CC (cc0)
++                         (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{ 
++  gen_int_relational (LEU, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_expand "bltu"
++  [(set (pc)
++   (if_then_else (ltu:CC (cc0)
++                         (const_int 0))
++                 (label_ref (match_operand 0 "" ""))
++                 (pc)))]
++  ""
++  "
++{ 
++  gen_int_relational (LTU, NULL_RTX, lm32_compare_op0, lm32_compare_op1, operands[0]);
++  DONE;
++}")
++
++(define_insn "*beq"
++  [(set (pc)
++        (if_then_else (eq:SI (match_operand:SI 0 "register_or_zero_operand" "rJ")
++                             (match_operand:SI 1 "register_or_zero_operand" "rJ"))
++                      (label_ref (match_operand 2 "" ""))
++                      (pc)))]
++  ""
++{
++  return get_attr_length (insn) == 4
++        ? "be     %z0,%z1,%2"
++        : "bne    %z0,%z1,8\n\tbi     %2";
++}  
++  [(set_attr "type" "cbranch")])
++
++(define_insn "*bne"
++  [(set (pc)
++        (if_then_else (ne:SI (match_operand:SI 0 "register_or_zero_operand" "rJ")
++                             (match_operand:SI 1 "register_or_zero_operand" "rJ"))
++                      (label_ref (match_operand 2 "" ""))
++                      (pc)))]
++  ""
++{
++  return get_attr_length (insn) == 4
++        ? "bne    %z0,%z1,%2"
++        : "be     %z0,%z1,8\n\tbi     %2";
++}  
++  [(set_attr "type" "cbranch")])
++
++(define_insn "*bgt"
++  [(set (pc)
++        (if_then_else (gt:SI (match_operand:SI 0 "register_or_zero_operand" "rJ")
++                             (match_operand:SI 1 "register_or_zero_operand" "rJ"))
++                      (label_ref (match_operand 2 "" ""))
++                      (pc)))]
++  ""
++{
++  return get_attr_length (insn) == 4
++        ? "bg     %z0,%z1,%2"
++        : "bge    %z1,%z0,8\n\tbi     %2";
++}  
++  [(set_attr "type" "cbranch")])
++
++(define_insn "*bge"
++  [(set (pc)
++        (if_then_else (ge:SI (match_operand:SI 0 "register_or_zero_operand" "rJ")
++                             (match_operand:SI 1 "register_or_zero_operand" "rJ"))
++                      (label_ref (match_operand 2 "" ""))
++                      (pc)))]
++  ""
++{
++  return get_attr_length (insn) == 4
++        ? "bge    %z0,%z1,%2"
++        : "bg     %z1,%z0,8\n\tbi     %2";
++}  
++  [(set_attr "type" "cbranch")])
++
++(define_insn "*bgtu"
++  [(set (pc)
++        (if_then_else (gtu:SI (match_operand:SI 0 "register_or_zero_operand" "rJ")
++                              (match_operand:SI 1 "register_or_zero_operand" "rJ"))
++                      (label_ref (match_operand 2 "" ""))
++                      (pc)))]
++  ""
++{
++  return get_attr_length (insn) == 4
++        ? "bgu    %z0,%z1,%2"
++        : "bgeu   %z1,%z0,8\n\tbi     %2";
++}  
++  [(set_attr "type" "cbranch")])
++
++(define_insn "*bgeu"
++  [(set (pc)
++        (if_then_else (geu:SI (match_operand:SI 0 "register_or_zero_operand" "rJ")
++                              (match_operand:SI 1 "register_or_zero_operand" "rJ"))
++                      (label_ref (match_operand 2 "" ""))
++                      (pc)))]
++  ""
++{
++  return get_attr_length (insn) == 4
++        ? "bgeu   %z0,%z1,%2"
++        : "bgu    %z1,%z0,8\n\tbi     %2";
++}  
++  [(set_attr "type" "cbranch")])
++
++;; ---------------------------------
++;;               call 
++;; ---------------------------------
++
++(define_expand "call"
++  [(parallel [(call (match_operand 0 "memory_operand" "m")
++                    (match_operand 1 "" ""))
++              (clobber (reg:SI RA_REGNUM))
++             ])]
++  ""
++  "
++{
++  rtx addr = XEXP (operands[0], 0);
++  if (!CONSTANT_ADDRESS_P (addr))
++    {
++      emit_call_insn (gen_call_via_regsi (addr, operands[1]));
++      DONE;
++    }
++}")
++
++(define_insn "call_via_regsi"
++  [(call (mem:SI (match_operand:SI 0 "register_operand" "r"))
++         (match_operand 1 "" ""))
++   (clobber (reg:SI RA_REGNUM))]
++  ""
++  "call     %0"
++  [(set_attr "type" "icall")]  
++)
++
++(define_insn "*call_via_labelsi"
++  [(call (mem:SI (match_operand:SI 0 "symbolic_operand" "X"))
++         (match_operand 1 "" ""))
++   (clobber (reg:SI RA_REGNUM))]
++  ""
++  "calli    %0"
++  [(set_attr "type" "call")]  
++)
++
++(define_expand "call_value"
++  [(parallel [(set (match_operand 0 "register_operand" "=r")
++                   (call (match_operand 1 "memory_operand" "m")
++                         (match_operand 2 "" "")))
++              (clobber (reg:SI RA_REGNUM))
++             ])]
++  ""
++  "
++{
++  rtx addr = XEXP (operands[1], 0);
++  if (!CONSTANT_ADDRESS_P (addr))
++    {
++      emit_call_insn (gen_call_value_via_regsi (operands[0], addr, operands[2]));
++      DONE;
++    }
++}")
++
++(define_insn "call_value_via_regsi"
++  [(set (match_operand 0 "register_operand" "=r")
++        (call (mem:SI (match_operand:SI 1 "register_operand" "r"))
++              (match_operand 2 "" "")))
++   (clobber (reg:SI RA_REGNUM))]
++  ""
++  "call      %1"
++  [(set_attr "type" "icall")]  
++)
++
++(define_insn "*call_value_via_labelsi"
++  [(set (match_operand 0 "register_operand" "=r")
++        (call (mem:SI (match_operand:SI 1 "symbolic_operand" "X"))
++              (match_operand 2 "" "")))
++   (clobber (reg:SI RA_REGNUM))]
++  ""
++  "calli    %1"
++  [(set_attr "type" "call")]  
++)
++
++(define_insn "return_internalsi"
++  [(use (match_operand:SI 0 "register_operand" "r"))
++   (return)]
++  ""
++  "b        %0"
++  [(set_attr "type" "uibranch")]  
++)
++
++(define_insn "return"
++  [(return)]
++  "lm32_can_use_return ()"
++  "ret"
++  [(set_attr "type" "uibranch")]  
++) 
++
++;; ---------------------------------
++;;       switch/case statements 
++;; ---------------------------------
++  
++(define_expand "tablejump"
++  [(set (pc) (match_operand 0 "register_operand" ""))
++   (use (label_ref (match_operand 1 "" "")))]
++  ""
++  "
++{
++  rtx target = operands[0];
++  if (flag_pic)
++    {
++      /* For PIC, the table entry is relative to the start of the table.  */
++      rtx label = gen_reg_rtx (SImode);
++      target = gen_reg_rtx (SImode);
++      emit_move_insn (label, gen_rtx_LABEL_REF (SImode, operands[1]));
++      emit_insn (gen_addsi3 (target, operands[0], label));
++    }
++  emit_jump_insn (gen_tablejumpsi (target, operands[1]));
++  DONE;
++}")
++
++(define_insn "tablejumpsi"
++  [(set (pc) (match_operand:SI 0 "register_operand" "r"))
++   (use (label_ref (match_operand 1 "" "")))]
++  ""
++  "b        %0"
++  [(set_attr "type" "ubranch")]  
++)
++
++;; ---------------------------------
++;;            arithmetic 
++;; ---------------------------------
++
++(define_insn "addsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (plus:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                 (match_operand:SI 2 "register_or_K_operand" "r,K")))]
++  ""
++  "@
++   add      %0, %z1, %2
++   addi     %0, %z1, %2"
++  [(set_attr "type" "arith")]  
++)
++
++(define_insn "subsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (minus:SI (match_operand:SI 1 "register_or_zero_operand" "rJ")
++                  (match_operand:SI 2 "register_or_zero_operand" "rJ")))]
++  ""
++  "sub      %0, %z1, %z2"
++  [(set_attr "type" "arith")]  
++)
++
++(define_insn "mulsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (mult:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                 (match_operand:SI 2 "register_or_K_operand" "r,K")))]
++  "TARGET_MULTIPLY_ENABLED"
++  "@
++   mul      %0, %z1, %2
++   muli     %0, %z1, %2"
++  [(set_attr "type" "multiply")]
++)
++
++(define_insn "udivsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (udiv:SI (match_operand:SI 1 "register_or_zero_operand" "rJ")
++                 (match_operand:SI 2 "register_operand" "r")))]
++  "TARGET_DIVIDE_ENABLED"
++  "divu     %0, %z1, %2"
++  [(set_attr "type" "divide")]
++)
++
++(define_insn "umodsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (umod:SI (match_operand:SI 1 "register_or_zero_operand" "rJ")
++                 (match_operand:SI 2 "register_operand" "r")))]
++  "TARGET_DIVIDE_ENABLED"
++  "modu     %0, %z1, %2"
++  [(set_attr "type" "divide")]
++)
++
++;; ---------------------------------
++;;      negation and inversion 
++;; ---------------------------------
++               
++(define_insn "negsi2"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (neg:SI (match_operand:SI 1 "register_or_zero_operand" "rJ")))]
++  ""
++  "sub      %0, r0, %z1"
++  [(set_attr "type" "arith")]
++)      
++
++(define_insn "one_cmplsi2"
++  [(set (match_operand:SI 0 "register_operand" "=r")
++        (not:SI (match_operand:SI 1 "register_or_zero_operand" "rJ")))]
++  ""
++  "not      %0, %z1"
++  [(set_attr "type" "arith")]
++)
++
++;; ---------------------------------
++;;             logical 
++;; ---------------------------------
++
++(define_insn "andsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (and:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                (match_operand:SI 2 "register_or_L_operand" "r,L")))]
++  ""
++  "@
++   and      %0, %z1, %2
++   andi     %0, %z1, %2"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "iorsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (ior:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                (match_operand:SI 2 "register_or_L_operand" "r,L")))]
++  ""
++  "@
++   or       %0, %z1, %2
++   ori      %0, %z1, %2"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "xorsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (xor:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                (match_operand:SI 2 "register_or_L_operand" "r,L")))]
++  ""
++  "@
++   xor      %0, %z1, %2
++   xori     %0, %z1, %2"
++  [(set_attr "type" "arith")]
++)
++
++(define_insn "*norsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++	(not:SI (ior:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++			(match_operand:SI 2 "register_or_L_operand" "r,L"))))]
++  ""
++  "@ 
++   nor      %0, %z1, %2
++   nori     %0, %z1, %2"     		
++  [(set_attr "type" "arith")]
++)                
++
++(define_insn "*xnorsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++	(not:SI (xor:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++			(match_operand:SI 2 "register_or_L_operand" "r,L"))))]
++  ""
++  "@
++   xnor     %0, %z1, %2
++   xnori    %0, %z1, %2"     		
++  [(set_attr "type" "arith")]
++)                
++
++;; ---------------------------------
++;;              shifts 
++;; ---------------------------------
++
++(define_insn "ashlsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (ashift:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                   (match_operand:SI 2 "register_or_L_operand" "r,L")))]
++  "TARGET_BARREL_SHIFT_ENABLED"
++  "@ 
++   sl       %0, %z1, %2
++   sli      %0, %z1, %2"
++  [(set_attr "type" "shift")]
++)
++
++(define_insn "ashrsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (ashiftrt:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                     (match_operand:SI 2 "register_or_L_operand" "r,L")))]
++  "TARGET_BARREL_SHIFT_ENABLED"
++  "@
++   sr       %0, %z1, %2
++   sri      %0, %z1, %2"
++  [(set_attr "type" "shift")]
++)
++
++(define_insn "lshrsi3"
++  [(set (match_operand:SI 0 "register_operand" "=r,r")
++        (lshiftrt:SI (match_operand:SI 1 "register_or_zero_operand" "rJ,rJ")
++                     (match_operand:SI 2 "register_or_L_operand" "r,L")))]
++  "TARGET_BARREL_SHIFT_ENABLED"
++  "@ 
++   sru      %0, %z1, %2
++   srui     %0, %z1, %2"
++  [(set_attr "type" "shift")]   
++)
++
++;; ---------------------------------
++;;     function entry / exit 
++;; ---------------------------------
++
++(define_expand "prologue"
++  [(const_int 1)]
++  ""
++  "
++{
++  lm32_expand_prologue ();
++  DONE;
++}")
++
++(define_expand "epilogue"
++  [(return)]
++  ""
++  "
++{
++  lm32_expand_epilogue ();
++  DONE;
++}")
++
++;; ---------------------------------
++;;              nop 
++;; ---------------------------------
++
++(define_insn "nop"  
++  [(const_int 0)]
++  ""
++  "nop"
++  [(set_attr "type" "arith")]
++)
++
++;; ---------------------------------
++;;             blockage 
++;; ---------------------------------
++
++;; used to stop the scheduler from 
++;; scheduling code across certain boundaries
++
++(define_insn "blockage"
++  [(unspec_volatile [(const_int 0)] UNSPECV_BLOCKAGE)]
++  ""
++  ""
++  [(set_attr "length" "0")]
++)
++
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/lm32.opt gcc-4.4.4/gcc/config/lm32/lm32.opt
+--- gcc-4.4.4.orig/gcc/config/lm32/lm32.opt	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/lm32.opt	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,40 @@
++; Options for the Lattice Mico32 port of the compiler.
++; Contributed by Jon Beniston <jon@beniston.com>
++;
++; Copyright (C) 2008 Free Software Foundation, Inc.
++;
++; This file is part of GCC.
++;
++; GCC is free software; you can redistribute it and/or modify it
++; under the terms of the GNU General Public License as published
++; by the Free Software Foundation; either version 3, or (at your
++; option) any later version.
++;
++; GCC is distributed in the hope that it will be useful, but WITHOUT
++; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++; License for more details.
++; 
++; You should have received a copy of the GNU General Public License
++; along with GCC; see the file COPYING3.  If not see
++;  <http://www.gnu.org/licenses/>.  
++   
++mmultiply-enabled
++Target Report Mask(MULTIPLY_ENABLED)
++Enable multiply instructions
++
++mdivide-enabled
++Target Report Mask(DIVIDE_ENABLED)
++Enable divide and modulus instructions
++
++mbarrel-shift-enabled
++Target Report Mask(BARREL_SHIFT_ENABLED)
++Enable barrel shift instructions
++
++msign-extend-enabled
++Target Report Mask(SIGN_EXTEND_ENABLED)
++Enable sign extend instructions
++
++muser-enabled
++Target Report Mask(USER_ENABLED)
++Enable user-defined instructions
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/lm32-protos.h gcc-4.4.4/gcc/config/lm32/lm32-protos.h
+--- gcc-4.4.4.orig/gcc/config/lm32/lm32-protos.h	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/lm32-protos.h	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,52 @@
++/* Prototypes of target machine functions, Lattice Mico32 architecture.
++   Contributed by Jon Beniston <jon@beniston.com>
++
++   Copyright (C) 2008 Free Software Foundation, Inc.
++
++   This file is part of GCC.
++
++   GCC is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as published
++   by the Free Software Foundation; either version 3, or (at your
++   option) any later version.
++
++   GCC is distributed in the hope that it will be useful, but WITHOUT
++   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++   License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with GCC; see the file COPYING3.  If not see
++   <http://www.gnu.org/licenses/>.  */
++
++extern int lm32_return_in_memory (tree type);
++extern void lm32_declare_object (FILE *stream, char *name, char *init_string, 
++                                 char *final_string, int size);
++extern int symbolic_operand (rtx op, enum machine_mode mode ATTRIBUTE_UNUSED);
++extern int register_or_zero_operand (rtx op, enum machine_mode mode);
++extern int register_or_K_operand (rtx op, enum machine_mode mode);
++extern int constant_K_operand (rtx op, enum machine_mode mode ATTRIBUTE_UNUSED);
++extern int register_or_L_operand (rtx op, enum machine_mode mode);
++extern int constant_L_operand (rtx op, enum machine_mode mode ATTRIBUTE_UNUSED);
++extern int register_or_memory_operand (rtx op, enum machine_mode mode);
++extern int register_operand (rtx op, enum machine_mode mode);
++extern int const_ok_for_base_offset (rtx op, enum machine_mode mode);
++extern void lm32_expand_prologue (void);
++extern void lm32_expand_epilogue (void);
++extern HOST_WIDE_INT lm32_compute_frame_size (int size);
++extern void lm32_print_operand (FILE *file, rtx op, int letter);
++extern void lm32_print_operand_address (FILE *file, rtx addr);
++extern rtx lm32_function_arg (CUMULATIVE_ARGS cum, enum machine_mode mode,
++                              tree type, int named);
++extern void lm32_override_options (void);
++extern HOST_WIDE_INT lm32_compute_initial_elimination_offset (int from, 
++                                                             int to);
++extern int lm32_can_use_return (void);
++extern rtx lm32_return_addr_rtx (int count, rtx frame);
++#ifdef RTX_CODE
++extern void gen_int_relational (enum rtx_code code, rtx result, rtx cmp0, 
++                                rtx cmp1, rtx destination);
++#endif
++extern int lm32_expand_block_move (rtx *);
++extern int nonpic_symbol_mentioned_p (rtx);
++extern rtx lm32_legitimize_pic_address (rtx, enum machine_mode, rtx);
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/predicates.md gcc-4.4.4/gcc/config/lm32/predicates.md
+--- gcc-4.4.4.orig/gcc/config/lm32/predicates.md	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/predicates.md	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,58 @@
++;; Predicate definitions for Lattice Mico32.
++;; Contributed by Jon Beniston <jon@beniston.com>
++;;
++;; Copyright (C) 2008 Free Software Foundation, Inc.
++;;
++;; This file is part of GCC.
++;;
++;; GCC is free software; you can redistribute it and/or modify it
++;; under the terms of the GNU General Public License as published
++;; by the Free Software Foundation; either version 3, or (at your
++;; option) any later version.
++;;
++;; GCC is distributed in the hope that it will be useful, but WITHOUT
++;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++;; License for more details.
++;; 
++;; You should have received a copy of the GNU General Public License
++;; along with GCC; see the file COPYING3.  If not see
++;;  <http://www.gnu.org/licenses/>.  
++
++(define_predicate "const0_operand"
++  (and (match_code "const_int,const_double,const_vector")
++       (match_test "op == CONST0_RTX (GET_MODE (op))")))
++
++(define_predicate "constant_K_operand"
++  (and (match_code "const_int")
++       (match_test "MEDIUM_INT (INTVAL (op))")))
++       
++(define_predicate "constant_L_operand"
++  (and (match_code "const_int")
++       (match_test "MEDIUM_UINT (INTVAL (op))")))
++
++(define_predicate "register_or_zero_operand"
++  (ior (match_operand 0 "register_operand")
++       (match_operand 0 "const0_operand")))
++
++(define_predicate "register_or_memory_operand"
++  (ior (match_operand 0 "register_operand")
++       (match_operand 0 "memory_operand")))
++       
++(define_predicate "register_or_K_operand"
++  (ior (match_operand 0 "register_operand")
++       (match_operand 0 "constant_K_operand")))
++         
++(define_predicate "register_or_L_operand"
++  (ior (match_operand 0 "register_operand")
++       (match_operand 0 "constant_L_operand")))
++
++(define_predicate "reloc_operand"
++  (ior (ior (match_code "label_ref")
++            (match_code "symbol_ref"))
++       (match_code "const")))
++
++(define_predicate "symbolic_operand"
++  (ior (match_code "label_ref")
++       (match_code "symbol_ref")))
++       
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/rtems.h gcc-4.4.4/gcc/config/lm32/rtems.h
+--- gcc-4.4.4.orig/gcc/config/lm32/rtems.h	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/rtems.h	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,32 @@
++/* Definitions for rtems targeting a lm32 using ELF.
++   Copyright (C) 2009, Free Software Foundation, Inc.
++
++This file is part of GCC.
++
++GCC is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 3, or (at your option)
++any later version.
++
++GCC is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with GCC; see the file COPYING3.  If not see
++<http://www.gnu.org/licenses/>.  */
++
++/* Target OS builtins.  */
++#undef TARGET_OS_CPP_BUILTINS
++#define TARGET_OS_CPP_BUILTINS()		\
++  do						\
++    {						\
++	builtin_define ("__rtems__");		\
++	builtin_define ("__USE_INIT_FINI__");	\
++	builtin_assert ("system=rtems");	\
++    }						\
++  while (0)
++
++/* Use the default */
++#undef LINK_GCC_C_SEQUENCE_SPEC
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/sfp-machine.h gcc-4.4.4/gcc/config/lm32/sfp-machine.h
+--- gcc-4.4.4.orig/gcc/config/lm32/sfp-machine.h	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/sfp-machine.h	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,51 @@
++#define _FP_W_TYPE_SIZE		32
++#define _FP_W_TYPE		unsigned long
++#define _FP_WS_TYPE		signed long
++#define _FP_I_TYPE		long
++
++#define _FP_MUL_MEAT_S(R,X,Y)				\
++  _FP_MUL_MEAT_1_wide(_FP_WFRACBITS_S,R,X,Y,umul_ppmm)
++#define _FP_MUL_MEAT_D(R,X,Y)				\
++  _FP_MUL_MEAT_2_wide(_FP_WFRACBITS_D,R,X,Y,umul_ppmm)
++#define _FP_MUL_MEAT_Q(R,X,Y)				\
++  _FP_MUL_MEAT_4_wide(_FP_WFRACBITS_Q,R,X,Y,umul_ppmm)
++
++#define _FP_DIV_MEAT_S(R,X,Y)	_FP_DIV_MEAT_1_loop(S,R,X,Y)
++#define _FP_DIV_MEAT_D(R,X,Y)	_FP_DIV_MEAT_2_udiv(D,R,X,Y)
++#define _FP_DIV_MEAT_Q(R,X,Y)	_FP_DIV_MEAT_4_udiv(Q,R,X,Y)
++
++#define _FP_NANFRAC_S		((_FP_QNANBIT_S << 1) - 1)
++#define _FP_NANFRAC_D		((_FP_QNANBIT_D << 1) - 1), -1
++#define _FP_NANFRAC_Q		((_FP_QNANBIT_Q << 1) - 1), -1, -1, -1
++#define _FP_NANSIGN_S		0
++#define _FP_NANSIGN_D		0
++#define _FP_NANSIGN_Q		0
++
++#define _FP_KEEPNANFRACP 1
++
++/* Someone please check this.  */
++#define _FP_CHOOSENAN(fs, wc, R, X, Y, OP)			\
++  do {								\
++    if ((_FP_FRAC_HIGH_RAW_##fs(X) & _FP_QNANBIT_##fs)		\
++	&& !(_FP_FRAC_HIGH_RAW_##fs(Y) & _FP_QNANBIT_##fs))	\
++      {								\
++	R##_s = Y##_s;						\
++	_FP_FRAC_COPY_##wc(R,Y);				\
++      }								\
++    else							\
++      {								\
++	R##_s = X##_s;						\
++	_FP_FRAC_COPY_##wc(R,X);				\
++      }								\
++    R##_c = FP_CLS_NAN;						\
++  } while (0)
++
++#define	__LITTLE_ENDIAN	1234
++#define	__BIG_ENDIAN	4321
++
++#define __BYTE_ORDER __BIG_ENDIAN
++
++/* Define ALIASNAME as a strong alias for NAME.  */
++# define strong_alias(name, aliasname) _strong_alias(name, aliasname)
++# define _strong_alias(name, aliasname) \
++  extern __typeof (name) aliasname __attribute__ ((alias (#name)));
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/t-fprules-softfp gcc-4.4.4/gcc/config/lm32/t-fprules-softfp
+--- gcc-4.4.4.orig/gcc/config/lm32/t-fprules-softfp	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/t-fprules-softfp	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,5 @@
++softfp_float_modes := sf df
++softfp_int_modes := si di
++softfp_extensions := sfdf
++softfp_truncations := dfsf
++softfp_machine_header := lm32/sfp-machine.h
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/t-lm32 gcc-4.4.4/gcc/config/lm32/t-lm32
+--- gcc-4.4.4.orig/gcc/config/lm32/t-lm32	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/t-lm32	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,19 @@
++LIB1ASMSRC = lm32/lib1funcs.S
++LIB1ASMFUNCS = _ashlsi3 _ashrsi3 _lshrsi3
++
++LM32_LIB1CSRC = $(srcdir)/config/lm32/arithmetic.c
++LIB2FUNCS_EXTRA = _mulsi3.c \
++                  _udivmodsi4.c _divsi3.c _modsi3.c _udivsi3.c _umodsi3.c 
++# Size optimised versions: _ashlsi3.c _ashrsi3.c _lshrsi3.c 
++	          	          
++# The fixed-point arithmetic code is in one file
++# similar to libgcc2.c (or the old libgcc1.c).  We need to
++# "split it up" with one file per define.
++$(LIB2FUNCS_EXTRA): $(LM32_LIB1CSRC)
++	name=`echo $@ | sed -e 's,.*/,,' | sed -e 's,.c$$,,'`; \
++	echo "#define L$$name" > tmp-$@ \
++	&& echo '#include "$<"' >> tmp-$@ \
++	&& mv -f tmp-$@ $@
++
++MULTILIB_OPTIONS = mmultiply-enabled mbarrel-shift-enabled 
++# Don't bother building multilib with mdivide-enabled, not much of a gain
+diff -Naur gcc-4.4.4.orig/gcc/config/lm32/uclinux-elf.h gcc-4.4.4/gcc/config/lm32/uclinux-elf.h
+--- gcc-4.4.4.orig/gcc/config/lm32/uclinux-elf.h	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/gcc/config/lm32/uclinux-elf.h	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,85 @@
++/* Definitions for LM32 running Linux-based GNU systems using ELF
++   Copyright (C) 1993, 1994, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
++   2008 Free Software Foundation, Inc.
++   Contributed by Philip Blundell <philb@gnu.org>
++
++   This file is part of GCC.
++
++   GCC is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as published
++   by the Free Software Foundation; either version 3, or (at your
++   option) any later version.
++
++   GCC is distributed in the hope that it will be useful, but WITHOUT
++   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++   License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with GCC; see the file COPYING3.  If not see
++   <http://www.gnu.org/licenses/>.  */
++
++/* elfos.h should have already been included.  Now just override
++   any conflicting definitions and add any extras.  */
++
++/* Run-time Target Specification.  */
++#undef  TARGET_VERSION
++#define TARGET_VERSION  fputs (" (LM32 GNU/Linux with ELF)", stderr);
++
++/* Do not assume anything about header files.  */
++#undef NO_IMPLICIT_EXTERN_C
++#define NO_IMPLICIT_EXTERN_C
++
++/* The GNU C++ standard library requires that these macros be defined.  */
++#undef CPLUSPLUS_CPP_SPEC
++#define CPLUSPLUS_CPP_SPEC "-D_GNU_SOURCE %(cpp)"
++
++/* Now we define the strings used to build the spec file.  */
++#undef  LIB_SPEC
++#define LIB_SPEC \
++  "%{pthread:-lpthread} \
++   %{shared:-lc} \
++   %{!shared:-lc} "
++
++#define LIBGCC_SPEC "-lgcc"
++
++/* Provide a STARTFILE_SPEC appropriate for GNU/Linux.  Here we add
++   the GNU/Linux magical crtbegin.o file (see crtstuff.c) which
++   provides part of the support for getting C++ file-scope static
++   object constructed before entering `main'.  */
++
++#undef  STARTFILE_SPEC
++#define STARTFILE_SPEC \
++  "%{!shared: \
++     %{pg:gcrt1.o%s} %{!pg:%{p:gcrt1.o%s} \
++                       %{!p:%{profile:gcrt1.o%s} \
++                         %{!profile:crt1.o%s}}}} \
++   crti.o%s %{!shared:crtbegin.o%s} %{shared:crtbeginS.o%s}"
++
++/* Provide a ENDFILE_SPEC appropriate for GNU/Linux.  Here we tack on
++   the GNU/Linux magical crtend.o file (see crtstuff.c) which
++   provides part of the support for getting C++ file-scope static
++   object constructed before entering `main', followed by a normal
++   GNU/Linux "finalizer" file, `crtn.o'.  */
++
++#undef  ENDFILE_SPEC
++#define ENDFILE_SPEC \
++  "%{!shared:crtend.o%s} %{shared:crtendS.o%s} crtn.o%s"
++
++#undef  LINK_SPEC
++#define LINK_SPEC "%{h*} %{version:-v} \
++   %{b} %{Wl,*:%*} \
++   %{static:-Bstatic} \
++   %{shared:-shared} \
++   %{symbolic:-Bsymbolic} \
++   %{rdynamic:-export-dynamic} \
++   %{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}"
++
++#define TARGET_OS_CPP_BUILTINS() LINUX_TARGET_OS_CPP_BUILTINS()
++
++#define LINK_GCC_C_SEQUENCE_SPEC \
++  "%{static:--start-group} %G %L %{static:--end-group}%{!static:%G}"
++
++#undef  CC1_SPEC
++#define CC1_SPEC "%{G*} %{!fno-PIC:-fPIC}"
++
+diff -Naur gcc-4.4.4.orig/gcc/config/m32c/rtems.h gcc-4.4.4/gcc/config/m32c/rtems.h
+--- gcc-4.4.4.orig/gcc/config/m32c/rtems.h	2008-12-01 17:34:42.000000000 +0100
++++ gcc-4.4.4/gcc/config/m32c/rtems.h	2010-04-29 14:16:33.000000000 +0200
+@@ -29,5 +29,9 @@
+     }						\
+   while (0)
+ 
+-/* Use the default */
++/* Use the defaults */
+ #undef LINK_GCC_C_SEQUENCE_SPEC
++
++#undef WCHAR_TYPE
++
++#undef WCHAR_TYPE_SIZE
+diff -Naur gcc-4.4.4.orig/gcc/config/m68k/rtemself.h gcc-4.4.4/gcc/config/m68k/rtemself.h
+--- gcc-4.4.4.orig/gcc/config/m68k/rtemself.h	2007-08-02 12:49:31.000000000 +0200
++++ gcc-4.4.4/gcc/config/m68k/rtemself.h	2010-04-29 14:16:33.000000000 +0200
+@@ -31,3 +31,8 @@
+ 	builtin_assert ("system=rtems");	\
+     }						\
+   while (0)
++
++/* Use the defaults */
++#undef WCHAR_TYPE
++
++#undef WCHAR_TYPE_SIZE
+diff -Naur gcc-4.4.4.orig/gcc/config/mips/elf.h gcc-4.4.4/gcc/config/mips/elf.h
+--- gcc-4.4.4.orig/gcc/config/mips/elf.h	2007-08-02 12:49:31.000000000 +0200
++++ gcc-4.4.4/gcc/config/mips/elf.h	2010-04-29 14:16:33.000000000 +0200
+@@ -48,6 +48,4 @@
+ #undef  ENDFILE_SPEC
+ #define ENDFILE_SPEC "crtend%O%s crtn%O%s"
+ 
+-#define NO_IMPLICIT_EXTERN_C 1
+-
+ #define HANDLE_PRAGMA_PACK_PUSH_POP 1
+diff -Naur gcc-4.4.4.orig/gcc/config/rs6000/rtems.h gcc-4.4.4/gcc/config/rs6000/rtems.h
+--- gcc-4.4.4.orig/gcc/config/rs6000/rtems.h	2007-08-02 12:49:31.000000000 +0200
++++ gcc-4.4.4/gcc/config/rs6000/rtems.h	2010-04-29 14:16:33.000000000 +0200
+@@ -49,8 +49,22 @@
+ %{mcpu=604:  %{!Dppc*: %{!Dmpc*: -Dmpc604}  } } \
+ %{mcpu=750:  %{!Dppc*: %{!Dmpc*: -Dmpc750}  } } \
+ %{mcpu=821:  %{!Dppc*: %{!Dmpc*: -Dmpc821}  } } \
+-%{mcpu=860:  %{!Dppc*: %{!Dmpc*: -Dmpc860}  } }" 
++%{mcpu=860:  %{!Dppc*: %{!Dmpc*: -Dmpc860}  } } \
++%{mcpu=8540: %{!Dppc*: %{!Dmpc*: -Dppc8540}  } }" 
+ 
+ #undef  SUBSUBTARGET_EXTRA_SPECS
+ #define SUBSUBTARGET_EXTRA_SPECS \
+   { "cpp_os_rtems",		CPP_OS_RTEMS_SPEC }
++
++#undef SUBSUBTARGET_OVERRIDE_OPTIONS
++#define SUBSUBTARGET_OVERRIDE_OPTIONS		\
++  do {						\
++    if (TARGET_E500)				\
++      {						\
++	rs6000_float_gprs = 1;			\
++      }						\
++  } while(0)
++
++#undef WCHAR_TYPE
++
++#undef WCHAR_TYPE_SIZE
+diff -Naur gcc-4.4.4.orig/gcc/config/rs6000/t-rtems gcc-4.4.4/gcc/config/rs6000/t-rtems
+--- gcc-4.4.4.orig/gcc/config/rs6000/t-rtems	2009-03-25 13:54:16.000000000 +0100
++++ gcc-4.4.4/gcc/config/rs6000/t-rtems	2010-04-29 14:16:33.000000000 +0200
+@@ -1,12 +1,12 @@
+ # Multilibs for powerpc RTEMS targets.
+ 
+ MULTILIB_OPTIONS	= \
+-mcpu=403/mcpu=505/mcpu=601/mcpu=603e/mcpu=604/mcpu=860/mcpu=7400 \
++mcpu=403/mcpu=505/mcpu=601/mcpu=603e/mcpu=604/mcpu=860/mcpu=7400/mcpu=8540 \
+ Dmpc8260 \
+ msoft-float
+ 
+ MULTILIB_DIRNAMES	= \
+-m403 m505 m601 m603e m604 m860 m7400 \
++m403 m505 m601 m603e m604 m860 m7400 m8540 \
+ mpc8260 \
+ nof
+ 
+@@ -29,6 +29,10 @@
+ # Map 750 to .
+ MULTILIB_MATCHES	+= mcpu?750=
+ 
++# Map e500, 8548 to 8540
++MULTILIB_MATCHES	+= mcpu?8540=mcpu?e500
++MULTILIB_MATCHES	+= mcpu?8540=mcpu?8548
++
+ # Soft-float only, default implies msoft-float
+ # NOTE: Must match with MULTILIB_MATCHES_FLOAT and MULTILIB_MATCHES
+ MULTILIB_SOFTFLOAT_ONLY = \
+@@ -62,3 +66,4 @@
+ MULTILIB_EXCEPTIONS += *mcpu=750/Dmpc*
+ MULTILIB_EXCEPTIONS += *mcpu=860/Dmpc*
+ MULTILIB_EXCEPTIONS += *mcpu=7400/Dmpc*
++MULTILIB_EXCEPTIONS += *mcpu=8540/Dmpc*
+diff -Naur gcc-4.4.4.orig/gcc/config/rtems.h gcc-4.4.4/gcc/config/rtems.h
+--- gcc-4.4.4.orig/gcc/config/rtems.h	2007-08-02 12:49:31.000000000 +0200
++++ gcc-4.4.4/gcc/config/rtems.h	2010-04-29 14:16:33.000000000 +0200
+@@ -38,6 +38,5 @@
+ #undef LIB_SPEC
+ #define LIB_SPEC "%{!qrtems: " STD_LIB_SPEC "} " \
+ "%{!nostdlib: %{qrtems: --start-group \
+- %{!qrtems_debug: -lrtemsbsp -lrtemscpu} \
+- %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
++ -lrtemsbsp -lrtemscpu \
+  -lc -lgcc --end-group %{!qnolinkcmds: -T linkcmds%s}}}"
+diff -Naur gcc-4.4.4.orig/gcc/config/sh/rtemself.h gcc-4.4.4/gcc/config/sh/rtemself.h
+--- gcc-4.4.4.orig/gcc/config/sh/rtemself.h	2007-08-02 12:49:31.000000000 +0200
++++ gcc-4.4.4/gcc/config/sh/rtemself.h	2010-04-29 14:16:33.000000000 +0200
+@@ -24,3 +24,8 @@
+   builtin_define( "__rtems__" );		\
+   builtin_assert( "system=rtems" );		\
+ } while (0)
++
++/* Use the defaults */
++#undef WCHAR_TYPE
++
++#undef WCHAR_TYPE_SIZE
+diff -Naur gcc-4.4.4.orig/gcc/config/sparc/rtemself.h gcc-4.4.4/gcc/config/sparc/rtemself.h
+--- gcc-4.4.4.orig/gcc/config/sparc/rtemself.h	2007-08-02 12:49:31.000000000 +0200
++++ gcc-4.4.4/gcc/config/sparc/rtemself.h	2010-04-29 14:16:33.000000000 +0200
+@@ -29,5 +29,9 @@
+     }						\
+   while (0)
+ 
+-/* Use the default */
++/* Use the defaults */
+ #undef LINK_GCC_C_SEQUENCE_SPEC
++
++#undef WCHAR_TYPE
++
++#undef WCHAR_TYPE_SIZE
+diff -Naur gcc-4.4.4.orig/gcc/config.gcc gcc-4.4.4/gcc/config.gcc
+--- gcc-4.4.4.orig/gcc/config.gcc	2010-02-18 05:24:04.000000000 +0100
++++ gcc-4.4.4/gcc/config.gcc	2010-04-29 14:16:33.000000000 +0200
+@@ -1364,6 +1364,23 @@
+         out_file=iq2000/iq2000.c
+         md_file=iq2000/iq2000.md
+         ;;
++lm32-*-elf*)
++	tm_file="dbxelf.h elfos.h ${tm_file}"
++	tmake_file="lm32/t-lm32"
++	tmake_file="${tmake_file} lm32/t-fprules-softfp soft-fp/t-softfp"
++        ;;
++lm32-*-rtems*)
++	tm_file="dbxelf.h elfos.h ${tm_file} lm32/rtems.h rtems.h"
++	tmake_file="lm32/t-lm32"
++	tmake_file="${tmake_file} lm32/t-fprules-softfp soft-fp/t-softfp"
++	tmake_file="${tmake_file} t-rtems"
++	extra_parts="crtbegin.o crtend.o crti.o crtn.o"
++        ;;
++lm32-*-uclinux*)
++	tm_file="dbxelf.h elfos.h ${tm_file} linux.h lm32/uclinux-elf.h"
++	tmake_file="lm32/t-lm32"
++	tmake_file="${tmake_file} lm32/t-fprules-softfp soft-fp/t-softfp"
++        ;;
+ m32r-*-elf*)
+ 	tm_file="dbxelf.h elfos.h svr4.h ${tm_file}"
+ 	extra_parts="crtinit.o crtfini.o"
+diff -Naur gcc-4.4.4.orig/gcc/doc/contrib.texi gcc-4.4.4/gcc/doc/contrib.texi
+--- gcc-4.4.4.orig/gcc/doc/contrib.texi	2009-02-20 16:20:38.000000000 +0100
++++ gcc-4.4.4/gcc/doc/contrib.texi	2010-04-29 14:16:33.000000000 +0200
+@@ -55,7 +55,7 @@
+ Wolfgang Bangerth for processing tons of bug reports.
+ 
+ @item
+-Jon Beniston for his Microsoft Windows port of Java.
++Jon Beniston for his Microsoft Windows port of Java and port to Lattice Mico32.
+ 
+ @item
+ Daniel Berlin for better DWARF2 support, faster/better optimizations,
+diff -Naur gcc-4.4.4.orig/gcc/doc/install.texi gcc-4.4.4/gcc/doc/install.texi
+--- gcc-4.4.4.orig/gcc/doc/install.texi	2009-09-12 20:57:06.000000000 +0200
++++ gcc-4.4.4/gcc/doc/install.texi	2010-04-29 14:16:33.000000000 +0200
+@@ -2658,6 +2658,10 @@
+ @item
+ @uref{#iq2000-x-elf,,iq2000-*-elf}
+ @item
++@uref{#lm32-x-elf,,lm32-*-elf}
++@item
++@uref{#lm32-x-uclinux,,lm32-*-uclinux}
++@item
+ @uref{#m32c-x-elf,,m32c-*-elf}
+ @item
+ @uref{#m32r-x-elf,,m32r-*-elf}
+@@ -3450,6 +3454,20 @@
+ @html
+ <hr />
+ @end html
++@heading @anchor{lm32-x-elf}lm32-*-elf
++Lattice Mico32 processor.
++This configuration is intended for embedded systems.
++
++@html
++<hr />
++@end html
++@heading @anchor{lm32-x-uclinux}lm32-*-uclinux
++Lattice Mico32 processor.
++This configuration is intended for embedded systems running uClinux.
++
++@html
++<hr />
++@end html
+ @heading @anchor{m32c-x-elf}m32c-*-elf
+ Renesas M32C processor.
+ This configuration is intended for embedded systems.
+diff -Naur gcc-4.4.4.orig/gcc/doc/invoke.texi gcc-4.4.4/gcc/doc/invoke.texi
+--- gcc-4.4.4.orig/gcc/doc/invoke.texi	2010-04-08 12:46:46.000000000 +0200
++++ gcc-4.4.4/gcc/doc/invoke.texi	2010-04-29 14:16:33.000000000 +0200
+@@ -606,6 +606,10 @@
+ -mno-sched-prefer-non-control-spec-insns @gol
+ -mno-sched-count-spec-in-critical-path}
+ 
++@emph{LM32 Options}
++@gccoptlist{-mbarrel-shift-enabled -mdivide-enabled -mmultiply-enabled @gol
++-msign-extend-enabled -muser-enabled}
++
+ @emph{M32R/D Options}
+ @gccoptlist{-m32r2 -m32rx -m32r @gol
+ -mdebug @gol
+@@ -8857,6 +8861,7 @@
+ * i386 and x86-64 Options::
+ * i386 and x86-64 Windows Options::
+ * IA-64 Options::
++* LM32 Options::
+ * M32C Options::
+ * M32R/D Options::
+ * M680x0 Options::
+@@ -11841,6 +11846,35 @@
+ 
+ @end table
+ 
++@node LM32 Options
++@subsection LM32 Options
++@cindex LM32 options
++
++These @option{-m} options are defined for the Lattice Mico32 architecture:
++
++@table @gcctabopt
++@item -mbarrel-shift-enabled
++@opindex mbarrel-shift-enabled
++Enable barrel-shift instructions.
++
++@item -mdivide-enabled
++@opindex mdivide-enabled
++Enable divide and modulus instructions.
++
++@item -mmultiply-enabled
++@opindex multiply-enabled
++Enable multiply instructions.
++
++@item -msign-extend-enabled
++@opindex msign-extend-enabled
++Enable sign extend instructions.
++
++@item -muser-enabled
++@opindex muser-enabled
++Enable user-defined instructions.
++
++@end table
++
+ @node M32R/D Options
+ @subsection M32R/D Options
+ @cindex M32R/D options
+diff -Naur gcc-4.4.4.orig/libgcc/ChangeLog.rtems gcc-4.4.4/libgcc/ChangeLog.rtems
+--- gcc-4.4.4.orig/libgcc/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/libgcc/ChangeLog.rtems	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,5 @@
++		Jon Beniston <jon@beniston.com>
++
++	* libgcc/config/lm32/t-elf, libgcc/config/lm32/t-uclinux,
++	libgcc/config/lm32/t-uclinux: New (lm32 port).
++	* libgcc/config.host: Add lm32* targets.
+diff -Naur gcc-4.4.4.orig/libgcc/config/lm32/t-elf gcc-4.4.4/libgcc/config/lm32/t-elf
+--- gcc-4.4.4.orig/libgcc/config/lm32/t-elf	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/libgcc/config/lm32/t-elf	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,12 @@
++# Assemble startup files.
++
++$(T)crti.o: $(gcc_srcdir)/config/lm32/crti.S $(GCC_PASSES)
++	$(GCC_FOR_TARGET) $(GCC_CFLAGS) $(MULTILIB_CFLAGS) $(INCLUDES) \
++	-c -o $(T)crti.o -x assembler-with-cpp $(gcc_srcdir)/config/lm32/crti.S
++
++$(T)crtn.o: $(gcc_srcdir)/config/lm32/crtn.S $(GCC_PASSES)
++	$(GCC_FOR_TARGET) $(GCC_CFLAGS) $(MULTILIB_CFLAGS) $(INCLUDES) \
++	-c -o $(T)crtn.o -x assembler-with-cpp $(gcc_srcdir)/config/lm32/crtn.S
++
++CRTSTUFF_T_CFLAGS = -G 0
++TARGET_LIBGCC2_CFLAGS = -G 0
+diff -Naur gcc-4.4.4.orig/libgcc/config/lm32/t-uclinux gcc-4.4.4/libgcc/config/lm32/t-uclinux
+--- gcc-4.4.4.orig/libgcc/config/lm32/t-uclinux	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.4.4/libgcc/config/lm32/t-uclinux	2010-04-29 14:16:33.000000000 +0200
+@@ -0,0 +1,2 @@
++CRTSTUFF_T_CFLAGS = -fPIC
++TARGET_LIBGCC2_CFLAGS = -fPIC
+diff -Naur gcc-4.4.4.orig/libgcc/config.host gcc-4.4.4/libgcc/config.host
+--- gcc-4.4.4.orig/libgcc/config.host	2009-04-17 13:58:41.000000000 +0200
++++ gcc-4.4.4/libgcc/config.host	2010-04-29 14:16:33.000000000 +0200
+@@ -95,6 +95,9 @@
+ hppa*-*-*)
+ 	cpu_type=pa
+ 	;;
++lm32*-*-*)
++	cpu_type=lm32
++	;;
+ m32r*-*-*)
+         cpu_type=m32r
+         ;;
+@@ -355,6 +358,14 @@
+ 	;;
+ iq2000*-*-elf*)
+         ;;
++lm32-*-elf* | lm32-*-rtems*)
++	extra_parts="crtbegin.o crtend.o crti.o crtn.o"
++	tmake_file="lm32/t-elf"
++	;;
++lm32-*-uclinux*)
++	extra_parts="crtbegin.o crtend.o crtbeginS.o crtendS.o crtbeginT.o"
++	tmake_file="lm32/t-uclinux"
++	;;	
+ m32r-*-elf*|m32r-*-rtems*)
+  	;;
+ m32rle-*-elf*)
