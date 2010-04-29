@@ -1,6 +1,6 @@
 2010-04-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-	PR1507
+	PR 1507/filesystem
 	* libblock/src/bdbuf.c: Avoid NULL pointer access.
 
 	* libblock/src/diskdevs.c: Fixed bounds check in rtems_disk_next().
