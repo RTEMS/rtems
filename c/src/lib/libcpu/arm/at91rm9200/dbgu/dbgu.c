@@ -32,7 +32,7 @@ volatile int dbg_dly;
 static int     dbgu_first_open(int major, int minor, void *arg);
 static int     dbgu_last_close(int major, int minor, void *arg);
 static int     dbgu_read(int minor);
-static int     dbgu_write(int minor, const char *buf, int len);
+static ssize_t dbgu_write(int minor, const char *buf, size_t len);
 static void    dbgu_init(int minor);
 static void    dbgu_write_polled(int minor, char c);
 static int     dbgu_set_attributes(int minor, const struct termios *t);
@@ -111,7 +111,7 @@ static int dbgu_read(int minor)
  *
  * return 1 on success, -1 on error
  */
-static int dbgu_write(int minor, const char *buf, int len)
+static ssize_t dbgu_write(int minor, const char *buf, size_t len)
 {
     int i, x;
     char c;

@@ -1,5 +1,10 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* at91rm9200/dbgu/dbgu.c, at91rm9200/usart/usart.c,
+	pxa255/ffuart/ffuart.c: Fixed warnings due to Termios API change.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* at91rm9200/irq/irq.c, at91rm9200/irq/irq.h, lpc22xx/irq/irq.c,
 	lpc22xx/irq/irq.h, mc9328mxl/irq/irq.c, mc9328mxl/irq/irq.h,
 	pxa255/irq/irq.c, pxa255/irq/irq.h, s3c24xx/irq/irq.c,
