@@ -26,6 +26,7 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libchip/serial.h>
 
+#define BSP_FEATURE_IRQ_EXTENSION
 
 /* What is the input clock freq in hertz? */
 #define BSP_MAIN_FREQ 3686400      /* 3.6864 MHz */

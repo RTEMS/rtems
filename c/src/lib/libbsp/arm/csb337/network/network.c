@@ -35,7 +35,7 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-#include <irq.h>
+#include <bsp/irq.h>
 #include <bspopts.h>
 
 /* enable debugging of the PHY code */
