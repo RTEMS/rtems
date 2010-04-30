@@ -11,7 +11,7 @@
  */
 
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include "wd80x3.h"
 
 #include <stdio.h>

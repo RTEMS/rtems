@@ -9,13 +9,13 @@
  */
 
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 #include <rtems/libcsupport.h>
 #include <rtems/libio.h>
 #include <pxa255.h>
 
 /* Function prototypes */
 void rtems_exception_init_mngt(void);
-void  rtems_irq_mngt_init(void);
 
 /*
  *
@@ -36,7 +36,9 @@ void bsp_start_default( void )
   /* disable interrupts */
   XSCALE_INT_ICMR = 0x0;
   rtems_exception_init_mngt();
-  rtems_irq_mngt_init();
+  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
+    _CPU_Fatal_halt(0xe);
+  }
 } /* bsp_start */
 
 /*
