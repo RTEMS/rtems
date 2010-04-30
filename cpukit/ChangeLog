@@ -1,5 +1,11 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libnetworking/lib/ftpfs.c: Format changes.  Fixed pathname
+	allocation in rtems_ftpfs_eval_path().  Send QUIT command during
+	file close.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libfs/src/dosfs/msdos_format.c: Added missing va_end().
 
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
