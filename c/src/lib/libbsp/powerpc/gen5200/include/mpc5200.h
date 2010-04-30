@@ -68,6 +68,9 @@
 #ifndef ASM
 #include <rtems.h>
 
+/* You can directly use the bit value from the MPC5200B User's Manual */
+#define MPC5200_BIT32(bit) (((uint32_t) 1) << (31 - (bit)))
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -496,13 +499,60 @@ typedef struct mpc5200_ {
   #define GPIO_PCR_PSC2                   0x00000070
   #define GPIO_PCR_PSC1                   0x00000007
 
+  #define GPIO_S_PIN_IR_USB_CLK MPC5200_BIT32(2)
+  #define GPIO_S_PIN_IRDA_TX MPC5200_BIT32(3)
+  #define GPIO_S_PIN_ETH_11 MPC5200_BIT32(4)
+  #define GPIO_S_PIN_ETH_10 MPC5200_BIT32(5)
+  #define GPIO_S_PIN_ETH_9 MPC5200_BIT32(6)
+  #define GPIO_S_PIN_ETH_8 MPC5200_BIT32(7)
+  #define GPIO_S_PIN_USB1_8 MPC5200_BIT32(12)
+  #define GPIO_S_PIN_USB1_7 MPC5200_BIT32(13)
+  #define GPIO_S_PIN_USB1_6 MPC5200_BIT32(14)
+  #define GPIO_S_PIN_USB1_0 MPC5200_BIT32(15)
+  #define GPIO_S_PIN_PSC3_7 MPC5200_BIT32(18)
+  #define GPIO_S_PIN_PSC3_6 MPC5200_BIT32(19)
+  #define GPIO_S_PIN_PSC3_3 MPC5200_BIT32(20)
+  #define GPIO_S_PIN_PSC3_2 MPC5200_BIT32(21)
+  #define GPIO_S_PIN_PSC3_1 MPC5200_BIT32(22)
+  #define GPIO_S_PIN_PSC3_0 MPC5200_BIT32(23)
+  #define GPIO_S_PIN_PSC2_3 MPC5200_BIT32(24)
+  #define GPIO_S_PIN_PSC2_2 MPC5200_BIT32(25)
+  #define GPIO_S_PIN_PSC2_1 MPC5200_BIT32(26)
+  #define GPIO_S_PIN_PSC2_0 MPC5200_BIT32(27)
+  #define GPIO_S_PIN_PSC1_3 MPC5200_BIT32(28)
+  #define GPIO_S_PIN_PSC1_2 MPC5200_BIT32(29)
+  #define GPIO_S_PIN_PSC1_1 MPC5200_BIT32(30)
+  #define GPIO_S_PIN_PSC1_0 MPC5200_BIT32(31)
+
   volatile uint32_t gpiosen;      /* + 0x04 */
   volatile uint32_t gpiosod;      /* + 0x08 */
   volatile uint32_t gpiosdd;      /* + 0x0C */
   volatile uint32_t gpiosdo;      /* + 0x10 */
   volatile uint32_t gpiosdi;      /* + 0x14 */
+
+  #define GPIO_O_PIN_ETH_7 MPC5200_BIT32(0)
+  #define GPIO_O_PIN_ETH_6 MPC5200_BIT32(1)
+  #define GPIO_O_PIN_ETH_5 MPC5200_BIT32(2)
+  #define GPIO_O_PIN_ETH_4 MPC5200_BIT32(3)
+  #define GPIO_O_PIN_ETH_3 MPC5200_BIT32(4)
+  #define GPIO_O_PIN_ETH_2 MPC5200_BIT32(5)
+  #define GPIO_O_PIN_ETH_1 MPC5200_BIT32(6)
+  #define GPIO_O_PIN_ETH_0 MPC5200_BIT32(7)
+  #define GPIO_O_PIN_I2C_3 MPC5200_BIT32(13)
+  #define GPIO_O_PIN_I2C_0 MPC5200_BIT32(14)
+  #define GPIO_O_PIN_I2C_1 MPC5200_BIT32(15)
+
   volatile uint32_t gpiooe;     /* + 0x18 */
   volatile uint32_t gpioodo;      /* + 0x1C */
+
+  #define GPIO_I_PIN_ETH_16 MPC5200_BIT32(0)
+  #define GPIO_I_PIN_ETH_15 MPC5200_BIT32(1)
+  #define GPIO_I_PIN_ETH_14 MPC5200_BIT32(2)
+  #define GPIO_I_PIN_ETH_13 MPC5200_BIT32(3)
+  #define GPIO_I_PIN_USB1_9 MPC5200_BIT32(4)
+  #define GPIO_I_PIN_PSC3_8 MPC5200_BIT32(5)
+  #define GPIO_I_PIN_PSC3_5 MPC5200_BIT32(6)
+  #define GPIO_I_PIN_PSC3_4 MPC5200_BIT32(7)
 
   volatile uint32_t gpiosie;      /* + 0x20 */
   #define GPIO_SIE_SINT_7_ETH_16_PIN 0x80000000
@@ -590,6 +640,16 @@ typedef struct mpc5200_ {
   /*
    * GPIO wakeup registers (MBAR + 0xC00)
    */
+
+  #define GPIO_W_PIN_GPIO_WKUP_7 MPC5200_BIT32(0)
+  #define GPIO_W_PIN_GPIO_WKUP_6 MPC5200_BIT32(1)
+  #define GPIO_W_PIN_PSC6_1 MPC5200_BIT32(2)
+  #define GPIO_W_PIN_PSC6_0 MPC5200_BIT32(3)
+  #define GPIO_W_PIN_ETH_17 MPC5200_BIT32(4)
+  #define GPIO_W_PIN_PSC3_9 MPC5200_BIT32(5)
+  #define GPIO_W_PIN_PSC2_4 MPC5200_BIT32(6)
+  #define GPIO_W_PIN_PSC1_4 MPC5200_BIT32(7)
+
   volatile uint32_t gpiowe;     /* + 0x00 */
   volatile uint32_t gpiowod;    /* + 0x04 */
   volatile uint32_t gpiowdd;    /* + 0x08 */

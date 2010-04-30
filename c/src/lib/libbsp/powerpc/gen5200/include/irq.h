@@ -4,7 +4,7 @@
 | Partially based on the code references which are named below.   |
 | Adaptions, modifications, enhancements and any recent parts of  |
 | the code are:                                                   |
-|                    Copyright (c) 2005                           |
+|                    Copyright (c) 2005, 2010                     |
 |                    Embedded Brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
 |                    D-82178 Puchheim                             |
@@ -205,6 +205,10 @@ typedef enum {
 
 #define BSP_CRIT_IRQ_PRIO_LEVELS	  		  4
 #define BSP_PERIODIC_TIMER                    BSP_SIU_IRQ_TMR6
+
+#define BSP_INTERRUPT_VECTOR_MIN BSP_LOWEST_OFFSET
+
+#define BSP_INTERRUPT_VECTOR_MAX BSP_MAX_OFFSET
 
 #endif
 

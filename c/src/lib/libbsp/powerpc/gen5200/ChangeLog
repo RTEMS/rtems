@@ -1,3 +1,11 @@
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/irq-config.h: Removed file.
+	* Makefile.am, preinstall.am: Reflect change above.  Added interrupt
+	support modules.
+	* include/irq.h: Moved defines from 'include/irq-config.h'.
+	* include/mpc5200.h: Added GPIO PIN defines.
+
 2010-04-07	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* start/start.S: fix sdram timing for MPC5200B chips

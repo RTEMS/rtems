@@ -71,7 +71,7 @@ libbsp_a_SOURCES += i2c/i2c.c i2c/i2cdrv.c i2c/mpc5200mbus.c i2c/mpc5200mbus.h
 libbsp_a_SOURCES += ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
 
 include_bsp_HEADERS = ../../shared/include/irq-generic.h \
-	include/irq-config.h \
+	../../shared/include/irq-info.h \
 	include/irq.h \
 	include/i2cdrv.h \
 	include/i2c.h \
@@ -82,10 +82,12 @@ include_bsp_HEADERS = ../../shared/include/irq-generic.h \
 
 # irq
 libbsp_a_SOURCES += include/irq.h \
-	include/irq-config.h \
 	irq/irq.c \
 	../../shared/src/irq-generic.c \
-	../../shared/src/irq-legacy.c
+	../../shared/src/irq-legacy.c \
+	../../shared/src/irq-info.c \
+	../../shared/src/irq-shell.c \
+	../../shared/src/irq-server.c
 
 # mscan
 libbsp_a_SOURCES += mscan/mscan.c mscan/mscan-base.c mscan/mscan.h mscan/mscan_int.h
