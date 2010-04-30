@@ -1,5 +1,9 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libfs/src/dosfs/msdos_format.c: Added missing va_end().
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libblock/src/bdpart.c: Removed file.
 	* libblock/src/bdpart-create.c, libblock/src/bdpart-dump.c,
 	libblock/src/bdpart-mount.c, libblock/src/bdpart-read.c,

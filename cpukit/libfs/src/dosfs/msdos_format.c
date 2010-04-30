@@ -81,6 +81,7 @@ msdos_format_printf (const msdos_format_request_param_t *rqdata,
     vfprintf (stdout, format, args);
     fflush (stdout);
   }
+  va_end (args);
 }
 
 /*=========================================================================*\
