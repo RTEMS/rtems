@@ -1,3 +1,7 @@
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/nds.cfg: Use VFP floating point model.
+
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* console/console.c: Fix warnings.
