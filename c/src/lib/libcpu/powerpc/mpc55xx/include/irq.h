@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008
+ * Copyright (c) 2008, 2010
  * Embedded Brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -158,6 +158,27 @@ rtems_status_code mpc55xx_intc_set_priority( rtems_vector_number vector, unsigne
 rtems_status_code mpc55xx_intc_raise_software_irq( rtems_vector_number vector);
 
 rtems_status_code mpc55xx_intc_clear_software_irq( rtems_vector_number vector);
+
+/**
+ * @addtogroup bsp_interrupt
+ *
+ * @{
+ */
+
+#define BSP_INTERRUPT_VECTOR_MIN 0
+
+#define BSP_INTERRUPT_VECTOR_MAX 328
+
+#define BSP_INTERRUPT_USE_INDEX_TABLE
+
+#define BSP_INTERRUPT_NO_HEAP_USAGE
+
+#ifdef BSP_INTERRUPT_USE_INDEX_TABLE
+  #define BSP_INTERRUPT_HANDLER_TABLE_SIZE 63
+  typedef uint8_t bsp_interrupt_handler_index_type;
+#endif
+
+/** @} */
 
 #ifdef __cplusplus
 };

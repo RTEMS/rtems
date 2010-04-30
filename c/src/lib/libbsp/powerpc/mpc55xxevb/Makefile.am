@@ -36,7 +36,6 @@ include_HEADERS += ../../shared/include/tm27.h
 nodist_include_HEADERS = include/bspopts.h ../../shared/tod.h \
     ../../shared/include/coverhd.h
 include_bsp_HEADERS = include/mpc55xxevb.h \
-    include/irq-config.h \
     include/smsc9218i.h \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h \
