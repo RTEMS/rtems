@@ -27,7 +27,6 @@ include_HEADERS += include/coverhd.h
 
 include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
     ../../i386/shared/irq/irq_asm.h \
-    ../../i386/shared/irq/irq-config.h \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h
 

@@ -1,3 +1,8 @@
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am, preinstall.am: Update for generic interrupt support
+	changes.
+
 2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c: Eliminate casts.

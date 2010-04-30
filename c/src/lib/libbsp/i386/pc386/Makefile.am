@@ -28,7 +28,6 @@ SUBDIRS = . tools
 
 include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
     ../../i386/shared/irq/irq_asm.h ../../i386/shared/comm/tty_drv.h \
-    ../../i386/shared/irq/irq-config.h \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h
 

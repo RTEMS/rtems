@@ -65,10 +65,6 @@ $(PROJECT_INCLUDE)/bsp/irq_asm.h: ../../i386/shared/irq/irq_asm.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_asm.h
 
-$(PROJECT_INCLUDE)/bsp/irq-config.h: ../../i386/shared/irq/irq-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-config.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-config.h
-
 $(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
