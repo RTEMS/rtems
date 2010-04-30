@@ -22,7 +22,6 @@ noinst_PROGRAMS =
 include_HEADERS += include/coverhd.h
 include_bsp_HEADERS = include/mbx.h include/commproc.h include/8xx_immap.h \
 	irq/irq.h \
-	include/irq-config.h \
 	../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h
 

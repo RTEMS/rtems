@@ -21,7 +21,7 @@ noinst_PROGRAMS =
 
 include_HEADERS += include/coverhd.h
 include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
-    include/irq.h include/irq-config.h \
+    include/irq.h \
     ../../shared/include/irq-generic.h \
     spi/spi.h
 
@@ -42,8 +42,7 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # irq
-libbsp_a_SOURCES += include/irq-config.h \
-	irq/irq.c \
+libbsp_a_SOURCES += irq/irq.c \
 	../../shared/src/irq-generic.c \
 	../../shared/src/irq-legacy.c
 

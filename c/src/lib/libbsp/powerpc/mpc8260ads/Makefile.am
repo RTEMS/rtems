@@ -37,7 +37,6 @@ libbsp_a_SOURCES += ../shared/clock/clock.c
 libbsp_a_SOURCES += console/console.c
 
 include_bsp_HEADERS = irq/irq.h \
-	include/irq-config.h \
 	../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h
 

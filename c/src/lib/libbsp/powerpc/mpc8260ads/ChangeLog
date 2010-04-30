@@ -1,3 +1,9 @@
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/irq-config.h: Removed file.
+	* Makefile.am, preinstall.am: Reflect change above.
+	* include/irq.h: Moved defines from 'include/irq-config.h'.
+
 2009-11-03	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* start/start.S: checked and removed boot_card warning
