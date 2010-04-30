@@ -14,7 +14,7 @@
 #include <rtems.h>
 #include <ep7312.h>
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 
 #if ON_SKYEYE==1
   #define CLOCK_DRIVER_USE_FAST_IDLE

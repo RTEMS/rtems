@@ -1,6 +1,8 @@
 /*
  * Cirrus EP7312 Intererrupt handler
  *
+ * Copyright (c) 2010 embedded brains GmbH.
+ *
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
  *
  * Copyright (c) 2002 by Charlie Steader <charlies@poliac.com>
@@ -13,141 +15,171 @@
  *
  *  $Id$
 */
+
 #include <bsp.h>
-#include <irq.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/apiext.h>
+#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
+
 #include <ep7312.h>
 
-/*
- * This function check that the value given for the irq line
- * is valid.
- */
-
-static int isValidInterrupt(int irq)
+void edb7312_interrupt_dispatch(rtems_vector_number vector)
 {
-  if ( (irq < 0) || (irq > BSP_MAX_INT))
-    return 0;
-  return 1;
+  bsp_interrupt_handler_dispatch(vector);
 }
 
-/*
- * -------------------- RTEMS Single Irq Handler Mngt Routines ----------------
- */
-
-int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
+rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-    rtems_irq_hdl *HdlTable;
-    rtems_interrupt_level level;
-
-    if (!isValidInterrupt(irq->name)) {
-      return 0;
-    }
-    /*
-     * Check if default handler is actually connected. If not issue an error.
-     */
-    HdlTable = (rtems_irq_hdl *) VECTOR_TABLE;
-    if (*(HdlTable + irq->name) != default_int_handler) {
-      return 0;
-    }
-
-    rtems_interrupt_disable(level);
-
-    /*
-     * store the new handler
-     */
-    *(HdlTable + irq->name) = irq->hdl;
-
-    /*
-     * unmask interrupt
-     */
-    if(irq->name >= BSP_EXTFIQ && irq->name <= BSP_SSEOTI)
+    if(vector >= BSP_EXTFIQ && vector <= BSP_SSEOTI)
     {
         /* interrupt managed by INTMR1 and INTSR1 */
-        *EP7312_INTMR1 |= (1 << irq->name);
+        *EP7312_INTMR1 |= (1 << vector);
     }
-    else if(irq->name >= BSP_KBDINT && irq->name <= BSP_SS2TX)
+    else if(vector >= BSP_KBDINT && vector <= BSP_SS2TX)
     {
         /* interrupt managed by INTMR2 and INTSR2 */
-        *EP7312_INTMR2 |= (1 << (irq->name - 16));
+        *EP7312_INTMR2 |= (1 << (vector - 16));
     }
-    else if(irq->name >= BSP_UTXINT2 && irq->name <= BSP_URXINT2)
+    else if(vector >= BSP_UTXINT2 && vector <= BSP_URXINT2)
     {
         /* interrupt managed by INTMR2 and INTSR2 */
-        *EP7312_INTMR2 |= (1 << (irq->name - 7));
+        *EP7312_INTMR2 |= (1 << (vector - 7));
     }
-    else if(irq->name == BSP_DAIINT)
+    else if(vector == BSP_DAIINT)
     {
         /* interrupt managed by INTMR3 and INTSR3 */
-        *EP7312_INTMR3 |= (1 << (irq->name - 21));
+        *EP7312_INTMR3 |= (1 << (vector - 21));
     }
 
-    /*
-     * Enable interrupt on device
-     */
-    if(irq->on)
-    {
-    	irq->on(irq);
-    }
-
-    rtems_interrupt_enable(level);
-
-    return 1;
+  return RTEMS_SUCCESSFUL;
 }
 
-int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-    rtems_irq_hdl *HdlTable;
-    rtems_interrupt_level level;
-
-    if (!isValidInterrupt(irq->name)) {
-      return 0;
-    }
-    /*
-     * Check if the handler is actually connected. If not issue an error.
-     */
-    HdlTable = (rtems_irq_hdl *) VECTOR_TABLE;
-    if (*(HdlTable + irq->name) != irq->hdl) {
-      return 0;
-    }
-    rtems_interrupt_disable(level);
-
-    /*
-     * mask interrupt
-     */
-    if(irq->name >= BSP_EXTFIQ && irq->name <= BSP_SSEOTI)
+    if(vector >= BSP_EXTFIQ && vector <= BSP_SSEOTI)
     {
         /* interrupt managed by INTMR1 and INTSR1 */
-        *EP7312_INTMR1 &= ~(1 << irq->name);
+        *EP7312_INTMR1 &= ~(1 << vector);
     }
-    else if(irq->name >= BSP_KBDINT && irq->name <= BSP_SS2TX)
+    else if(vector >= BSP_KBDINT && vector <= BSP_SS2TX)
     {
         /* interrupt managed by INTMR2 and INTSR2 */
-        *EP7312_INTMR2 &= ~(1 << (irq->name - 16));
+        *EP7312_INTMR2 &= ~(1 << (vector - 16));
     }
-    else if(irq->name >= BSP_UTXINT2 && irq->name <= BSP_URXINT2)
+    else if(vector >= BSP_UTXINT2 && vector <= BSP_URXINT2)
     {
         /* interrupt managed by INTMR2 and INTSR2 */
-        *EP7312_INTMR2 &= ~(1 << (irq->name - 7));
+        *EP7312_INTMR2 &= ~(1 << (vector - 7));
     }
-    else if(irq->name == BSP_DAIINT)
+    else if(vector == BSP_DAIINT)
     {
         /* interrupt managed by INTMR3 and INTSR3 */
-        *EP7312_INTMR3 &= ~(1 << (irq->name - 21));
+        *EP7312_INTMR3 &= ~(1 << (vector - 21));
     }
 
-    /*
-     * Disable interrupt on device
-     */
-    if(irq->off)
-        irq->off(irq);
+  return RTEMS_SUCCESSFUL;
+}
 
-    /*
-     * restore the default irq value
-     */
-    *(HdlTable + irq->name) = default_int_handler;
+rtems_status_code bsp_interrupt_facility_initialize(void)
+{
+  uint32_t int_stat = 0;
 
-    rtems_interrupt_enable(level);
+  /* mask all interrupts */
+  *EP7312_INTMR1 = 0x0;
+  *EP7312_INTMR2 = 0x0;
+  *EP7312_INTMR3 = 0x0;
+  
+  /* clear all pending interrupt status' */
+  int_stat = *EP7312_INTSR1;
+  if(int_stat & EP7312_INTR1_EXTFIQ)
+  {
+  }
+  if(int_stat & EP7312_INTR1_BLINT)
+  {
+      *EP7312_BLEOI = 0xFFFFFFFF;
+  }
+  if(int_stat & EP7312_INTR1_WEINT)
+  {
+      *EP7312_TEOI = 0xFFFFFFFF;
+  }
+  if(int_stat & EP7312_INTR1_MCINT)
+  {
+  }
+  if(int_stat & EP7312_INTR1_CSINT)
+  {
+      *EP7312_COEOI = 0xFFFFFFFF;
+  }
+  if(int_stat & EP7312_INTR1_EINT1)
+  {
+  }
+  if(int_stat & EP7312_INTR1_EINT2)
+  {
+  }
+  if(int_stat & EP7312_INTR1_EINT3)
+  {
+  }
+  if(int_stat & EP7312_INTR1_TC1OI)
+  {
+      *EP7312_TC1EOI = 0xFFFFFFFF;
+  }
+  if(int_stat & EP7312_INTR1_TC2OI)
+  {
+      *EP7312_TC2EOI = 0xFFFFFFFF;
+  }
+  if(int_stat & EP7312_INTR1_RTCMI)
+  {
+      *EP7312_RTCEOI = 0xFFFFFFFF;
+  }
+  if(int_stat & EP7312_INTR1_TINT)
+  {
+      *EP7312_TEOI = 0xFFFFFFFF;
+  }
+  if(int_stat & EP7312_INTR1_URXINT1)
+  {
+  }
+  if(int_stat & EP7312_INTR1_UTXINT1)
+  {
+  }
+  if(int_stat & EP7312_INTR1_UMSINT)
+  {
+      *EP7312_UMSEOI = 0xFFFFFFFF;
+  }
+  if(int_stat & EP7312_INTR1_SSEOTI)
+  {
+      *EP7312_SYNCIO;
+  }
+  int_stat = *EP7312_INTSR1;
+  
+  int_stat = *EP7312_INTSR2;
+  if(int_stat & EP7312_INTR2_KBDINT)
+  {
+      *EP7312_KBDEOI = 0xFFFFFFFF;
+  }
+  if(int_stat & EP7312_INTR2_SS2RX)
+  {
+  }
+  if(int_stat & EP7312_INTR2_SS2TX)
+  {
+  }
+  if(int_stat & EP7312_INTR2_URXINT2)
+  {
+  }
+  if(int_stat & EP7312_INTR2_UTXINT2)
+  {
+  }
+  int_stat = *EP7312_INTSR2;
+  
+  int_stat = *EP7312_INTSR3;
+  if(int_stat & EP7312_INTR2_DAIINT)
+  {
+  }
+  int_stat = *EP7312_INTSR3;
 
-    return 1;
+  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
+
+  return RTEMS_SUCCESSFUL;
+}
+
+void bsp_interrupt_handler_default(rtems_vector_number vector)
+{
+  printk("spurious interrupt: %u\n", vector);
 }

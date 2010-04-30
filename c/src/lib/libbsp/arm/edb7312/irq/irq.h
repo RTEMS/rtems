@@ -1,6 +1,8 @@
 /*
  * Cirrus EP7312 Intererrupt handler
  *
+ * Copyright (c) 2010 embedded brains GmbH.
+ *
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
  *
  * Copyright (c) 2002 by Charlie Steader <charlies@poliac.com>
@@ -17,29 +19,14 @@
 #ifndef __IRQ_H__
 #define __IRQ_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-  /* define that can be useful (the values are just examples) */
-#define VECTOR_TABLE	 0x40
-
 #ifndef __asm__
 
-/*
- * Include some preprocessor value also used by assember code
- */
-
-#include <rtems/irq.h>
 #include <rtems.h>
+#include <rtems/irq.h>
+#include <rtems/irq-extension.h>
 
-extern void default_int_handler(rtems_irq_hdl_param unused);
-/*-------------------------------------------------------------------------+
-| Constants
-+--------------------------------------------------------------------------*/
+#endif /* __asm__ */
 
-  /* enum of the possible interrupt sources */
-typedef unsigned int rtems_irq_number;
   /* int interrupt status/mask register 1 */
 #define BSP_EXTFIQ     0
 #define BSP_BLINT      1
@@ -67,23 +54,8 @@ typedef unsigned int rtems_irq_number;
 #define BSP_DAIINT    21
 #define BSP_MAX_INT   22
 
-/*-------------------------------------------------------------------------+
-| Function Prototypes.
-+--------------------------------------------------------------------------*/
-/*
- * ------------------- RTEMS Single Irq Handler Mngt Routines ----------------
- */
+#define BSP_INTERRUPT_VECTOR_MIN 0
 
-/*
- * function to initialize the interrupt for a specific BSP
- */
-void BSP_rtems_irq_mngt_init();
-
-
-#endif /* __asm__ */
-
-#ifdef __cplusplus
-}
-#endif
+#define BSP_INTERRUPT_VECTOR_MAX (BSP_MAX_INT - 1)
 
 #endif /* __IRQ_H__ */

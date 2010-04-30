@@ -25,6 +25,8 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 /*
  *  Define the interrupt mechanism for Time Test 27
  *

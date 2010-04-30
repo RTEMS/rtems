@@ -1,6 +1,6 @@
 #include <rtems.h>
 #include <sys/mbuf.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <libchip/cs8900.h>
 
 #define CS8900_BASE 0x20000300

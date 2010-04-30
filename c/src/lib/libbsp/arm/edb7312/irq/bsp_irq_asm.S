@@ -16,7 +16,7 @@
 #define __asm__
 #include "irq.h"
 
-#define VECTOR_TABLE 0x40
+	.extern edb7312_interrupt_dispatch
 
 /*
  * Function to obtain, execute an IT handler and acknowledge the IT
@@ -45,7 +45,7 @@ check_dai:
   and   r6, r4, r5 /* only look at interrupts which are enabled */
   tst   r6, #0x0001
   beq   check_extfiq
-  ldr	r0, =(VECTOR_TABLE + (4 * 21)) /* load the vector number */
+  mov   r0, #BSP_DAIINT
   b     get_handler
 
 /*
@@ -57,7 +57,7 @@ check_extfiq:
   and   r6, r4, r5 /* only look at interrupts which are enabled */
   tst   r6, #0x0001
   beq   check_bl
-  ldr	r0, =(VECTOR_TABLE + (4 * 0)) /* load the vector number */
+  mov   r0, #BSP_EXTFIQ
   b     get_handler
 
 check_bl:
@@ -69,7 +69,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0002
   beq   check_we
-  ldr	r0, =(VECTOR_TABLE + (4 * 1)) /* load the vector number */
+  mov   r0, #BSP_BLINT
   b     get_handler
 
 check_we:
@@ -81,7 +81,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0004
   beq   check_mc
-  ldr	r0, =(VECTOR_TABLE + (4 * 2)) /* load the vector number */
+  mov   r0, #BSP_WEINT
   b     get_handler
 
 check_mc:
@@ -93,7 +93,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0008
   beq   check_cs
-  ldr	r0, =(VECTOR_TABLE + (4 * 3)) /* load the vector number */
+  mov   r0, #BSP_MCINT
   b     get_handler
 
 check_cs:
@@ -105,7 +105,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0010
   beq   check_e1
-  ldr	r0, =(VECTOR_TABLE + (4 * 4)) /* load the vector number */
+  mov   r0, #BSP_CSINT
   b     get_handler
 
 check_e1:
@@ -117,7 +117,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0020
   beq   check_e2
-  ldr	r0, =(VECTOR_TABLE + (4 * 5)) /* load the vector number */
+  mov   r0, #BSP_EINT1
   b     get_handler
 
 check_e2:
@@ -129,7 +129,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0040
   beq   check_e3
-  ldr	r0, =(VECTOR_TABLE + (4 * 6)) /* load the vector number */
+  mov   r0, #BSP_EINT2
   b     get_handler
 
 check_e3:
@@ -141,7 +141,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0080
   beq   check_tc1
-  ldr	r0, =(VECTOR_TABLE + (4 * 7)) /* load the vector number */
+  mov   r0, #BSP_EINT3
   b     get_handler
 
 check_tc1:
@@ -153,7 +153,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0100
   beq   check_tc2
-  ldr	r0, =(VECTOR_TABLE + (4 * 8)) /* load the vector number */
+  mov   r0, #BSP_TC1OI
   b     get_handler
 
 check_tc2:
@@ -165,7 +165,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0200
   beq   check_rtc
-  ldr	r0, =(VECTOR_TABLE + (4 * 9)) /* load the vector number */
+  mov   r0, #BSP_TC2OI
   b     get_handler
 
 check_rtc:
@@ -177,7 +177,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0400
   beq   check_tick
-  ldr	r0, =(VECTOR_TABLE + (4 * 10)) /* load the vector number */
+  mov   r0, #BSP_RTCMI
   b     get_handler
 
 check_tick:
@@ -189,7 +189,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0800
   beq   check_utx1
-  ldr	r0, =(VECTOR_TABLE + (4 * 11)) /* load the vector number */
+  mov   r0, #BSP_TINT
   b     get_handler
 
 check_utx1:
@@ -201,7 +201,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x1000
   beq   check_urx1
-  ldr	r0, =(VECTOR_TABLE + (4 * 12)) /* load the vector number */
+  mov   r0, #BSP_UTXINT1
   b     get_handler
 
 check_urx1:
@@ -213,7 +213,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x2000
   beq   check_ums
-  ldr	r0, =(VECTOR_TABLE + (4 * 13)) /* load the vector number */
+  mov   r0, #BSP_URXINT1
   b     get_handler
 
 check_ums:
@@ -225,7 +225,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x4000
   beq   check_sse
-  ldr	r0, =(VECTOR_TABLE + (4 * 14)) /* load the vector number */
+  mov   r0, #BSP_UMSINT
   b     get_handler
 
 check_sse:
@@ -237,7 +237,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x8000
   beq   check_kbd
-  ldr	r0, =(VECTOR_TABLE + (4 * 15)) /* load the vector number */
+  mov   r0, #BSP_SSEOTI
   b     get_handler
 
 /*
@@ -249,7 +249,7 @@ check_kbd:
   and   r6, r4, r5 /* only look at interrupts which are enabled */
   tst   r6, #0x0001
   beq   check_ss2rx
-  ldr	r0, =(VECTOR_TABLE + (4 * 16)) /* load the vector number */
+  mov   r0, #BSP_KBDINT
   b     get_handler
 
 check_ss2rx:
@@ -261,7 +261,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0002
   beq   check_ss2tx
-  ldr	r0, =(VECTOR_TABLE + (4 * 17)) /* load the vector number */
+  mov   r0, #BSP_SS2RX
   b     get_handler
 
 check_ss2tx:
@@ -273,7 +273,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x0004
   beq   check_utx2
-  ldr	r0, =(VECTOR_TABLE + (4 * 18)) /* load the vector number */
+  mov   r0, #BSP_SS2TX
   b     get_handler
 
 check_utx2:
@@ -285,7 +285,7 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x1000
   beq   check_urx2
-  ldr	r0, =(VECTOR_TABLE + (4 * 19)) /* load the vector number */
+  mov   r0, #BSP_UTXINT2
   b     get_handler
 
 check_urx2:
@@ -297,14 +297,12 @@ MUST REMEMBER TO UNCOMMENT IF THIS HANDLER MOVES
 #endif
   tst   r6, #0x2000
   beq   IRQ_NoInterrupt
-  ldr	r0, =(VECTOR_TABLE + (4 * 20)) /* load the vector number */
+  mov   r0, #BSP_URXINT2
   b     get_handler
 
 get_handler:
 
   ldmia	  sp!,{r4, r5, r6}
-
-  ldr	r0, [r0]		/* extract the IT handler @ */
 
   /*
    * re-enable interrupts at processor level as the current
@@ -316,12 +314,8 @@ get_handler:
   msr	cpsr, r1
 */
 
-  stmdb	  sp!,{lr}
-  ldr     lr, =IRQ_return         /* prepare the return from handler  */
-
-  mov     pc, r0			/* EXECUTE INT HANDLER */
-
-IRQ_return:
+  stmdb sp!,{lr}
+  bl    edb7312_interrupt_dispatch
   ldmia sp!,{lr}
 
 IRQ_NoInterrupt:
