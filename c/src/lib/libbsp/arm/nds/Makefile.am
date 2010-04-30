@@ -187,8 +187,8 @@ libnds7_rel_SOURCES =   libnds/source/common/biosCalls.S		\
 			libnds/source/arm7/touch.c			\
 			libnds/source/arm7/userSettings.c
 libnds7_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM7 -I$(srcdir)/libnds/include
-libnds7_rel_CFLAGS = -mcpu=arm7tdmi -msoft-float
-libnds7_rel_CCASFLAGS = -mcpu=arm7tdmi -msoft-float
+libnds7_rel_CFLAGS = -mcpu=arm7tdmi -mfpu=vfp -mfloat-abi=soft
+libnds7_rel_CCASFLAGS = -mcpu=arm7tdmi -mfpu=vfp -mfloat-abi=soft
 libnds7_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
@@ -197,8 +197,8 @@ noinst_PROGRAMS += dswifi7.rel
 dswifi7_rel_SOURCES =  	dswifi/arm7/source/wifi_arm7.c			\
 			dswifi/common/source/spinlock.S
 dswifi7_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM7 -I$(srcdir)/dswifi/include -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/common/source
-dswifi7_rel_CFLAGS = -mcpu=arm7tdmi -msoft-float
-dswifi7_rel_CCASFLAGS = -mcpu=arm7tdmi -msoft-float
+dswifi7_rel_CFLAGS = -mcpu=arm7tdmi -mfpu=vfp -mfloat-abi=soft
+dswifi7_rel_CCASFLAGS = -mcpu=arm7tdmi -mfpu=vfp -mfloat-abi=soft
 dswifi7_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
@@ -247,11 +247,11 @@ include_libndsnds7_HEADERS =	libnds/include/nds/arm7/serial.h	\
 EXTRA_DIST = coproc/coproc.S coproc/coproc.c
 if HAS_NETWORKING
 coproc.bin: coproc/coproc.S coproc/coproc.c libnds7.rel dswifi7.rel
-	@CC@ -o coproc.elf -mcpu=arm7tdmi -msoft-float -O2 -DARM7 -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/include -DENABLE_WIFI -T $(srcdir)/coproc/coproc.ld $^ -lc
+	@CC@ -o coproc.elf -mcpu=arm7tdmi -mfpu=vfp -mfloat-abi=soft -O2 -DARM7 -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/include -DENABLE_WIFI -T $(srcdir)/coproc/coproc.ld $^ -lc
 	$(OBJCOPY) -O binary coproc.elf coproc.bin
 else
 coproc.bin: coproc/coproc.S coproc/coproc.c libnds7.rel
-	@CC@ -o coproc.elf -mcpu=arm7tdmi -msoft-float -O2 -DARM7 -I$(srcdir)/libnds/include -T $(srcdir)/coproc/coproc.ld $^ -lc
+	@CC@ -o coproc.elf -mcpu=arm7tdmi -mfpu=vfp -mfloat-abi=soft -O2 -DARM7 -I$(srcdir)/libnds/include -T $(srcdir)/coproc/coproc.ld $^ -lc
 	$(OBJCOPY) -O binary coproc.elf coproc.bin
 endif
 project_lib_DATA += coproc.bin

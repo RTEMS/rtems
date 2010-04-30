@@ -27,7 +27,7 @@ DATA		:=
 ARCH	:=	-mthumb-interwork
 
 CFLAGS	:=	-g -Wall -O2\
-			-mcpu=arm7tdmi -mtune=arm7tdmi -fomit-frame-pointer\
+			-mcpu=arm7tdmi -mtune=arm7tdmi -mfpu=vfp -mfloat-abi=soft -fomit-frame-pointer\
 			-ffast-math \
 			$(ARCH)
 
