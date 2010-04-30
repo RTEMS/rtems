@@ -30,6 +30,8 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 /** Define operation count for Tests */
 #define OPERATION_COUNT 10
 

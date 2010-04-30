@@ -20,12 +20,10 @@
 
 #include <stdio.h>
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 #include <rtems/bspIo.h>
 #include <gba.h>
 #include <conio.h>
-
-/* External Prototypes */
-extern void rtems_irq_mngt_init(void);
 
 /** Chip registers */
 volatile unsigned int *Regs = (unsigned int *)GBA_IO_REGS_ADDR;
@@ -50,7 +48,9 @@ void bsp_start_default( void )
   /* rtems_exception_init_mngt(); */
 
   /* Init rtems interrupt management */
-  rtems_irq_mngt_init();
+  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
+    _CPU_Fatal_halt(0xe);
+  }
 }
 
 /**

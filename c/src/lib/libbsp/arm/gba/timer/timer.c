@@ -29,7 +29,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <gba.h>
 
 /*

@@ -18,6 +18,8 @@ include_HEADERS += include/conio.h
 include_HEADERS += ../../shared/include/tm27.h
 include_HEADERS += include/gba.h
 
+include_bsp_HEADERS =
+
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
@@ -48,10 +50,16 @@ libbsp_a_SOURCES += console/conio.c console/console.c \
 # timer
 libbsp_a_SOURCES += timer/timer.c
 
-include_HEADERS += irq/irq.h
 # irq
-libbsp_a_SOURCES += irq/irq.c irq/bsp_irq_init.c irq/irq_init.c \
-    irq/bsp_irq_asm.S irq/irq_asm.S
+include_bsp_HEADERS += ../../shared/include/irq-generic.h \
+	../../shared/include/irq-info.h \
+	irq/irq.h
+libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
+	../../shared/src/irq-legacy.c \
+	../../shared/src/irq-info.c \
+	../../shared/src/irq-shell.c \
+	../../shared/src/irq-server.c \
+	irq/irq.c
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

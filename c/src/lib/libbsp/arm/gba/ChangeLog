@@ -1,5 +1,19 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* irq/irq_asm.S, irq/irq_init.c, irq/bsp_irq_asm.S,
+	irq/bsp_irq_init.c: Removed files.
+	* Makefile.am, preinstall.am: Reflect changes above.  Added generic
+	interrupt support modules.
+	* irq/irq.h, irq/irq.c: The previous interrupt warning fix changed the
+	interrupt handler API.  To fix this problem the generic interrupt
+	support framework will be used now.  This eliminates a lot of copy and
+	paste code.  The interrupt header file is now <bsp/irq.h>.
+	* include/bsp.h: Define BSP_FEATURE_IRQ_EXTENSION.
+	* start/start.S, startup/bspstart.c, clock/clockdrv.c,
+	console/console.c, timer/timer.c: Interrupt support changes.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* make/custom/gba.cfg: Use VFP floating point model.
 
 2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>

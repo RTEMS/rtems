@@ -24,7 +24,7 @@
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
 #include <termios.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <gba.h>
 #include <conio.h>
 
