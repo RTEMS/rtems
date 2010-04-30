@@ -1,3 +1,8 @@
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/irq/irq-config.h: Removed file.
+	* shared/irq/irq.h: Moved defines from 'shared/irq/irq-config.h'.
+
 2010-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/comm/uart.c, shared/comm/uart.h: Reflect termios API

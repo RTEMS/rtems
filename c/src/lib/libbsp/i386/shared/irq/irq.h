@@ -57,6 +57,9 @@ extern "C" {
 #define BSP_RT_TIMER1	      	8
 #define BSP_RT_TIMER3		10
 
+#define BSP_INTERRUPT_VECTOR_MIN BSP_LOWEST_OFFSET
+#define BSP_INTERRUPT_VECTOR_MAX BSP_MAX_OFFSET
+
 /*
  * Type definition for RTEMS managed interrupts
  */
