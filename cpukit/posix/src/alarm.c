@@ -22,8 +22,6 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/psignal.h>
 
-Watchdog_Control _POSIX_signals_Alarm_timer;
-
 /*PAGE
  *
  *  _POSIX_signals_Alarm_TSR

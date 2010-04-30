@@ -23,8 +23,6 @@
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/time.h>
 
-Watchdog_Control _POSIX_signals_Ualarm_timer;
-
 /*PAGE
  *
  *  _POSIX_signals_Ualarm_TSR
