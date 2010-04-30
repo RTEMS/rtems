@@ -1,5 +1,9 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* Makefile.am, preinstall.am: Added generic interrupt support modules.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* make/custom/smdk2410.cfg: Use VFP floating point model.
 
 2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
