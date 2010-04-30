@@ -64,7 +64,6 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c \
 libbsp_a_SOURCES += ../shared/clock/clock.c
 
 include_bsp_HEADERS = include/irq.h \
-	include/irq-config.h \
 	../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h \
 	include/hwreg_vals.h \

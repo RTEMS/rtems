@@ -1,7 +1,7 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC83xx BSP                              |
 +-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
+|                    Copyright (c) 2007, 2010                     |
 |                    Embedded Brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
 |                    D-82178 Puchheim                             |
@@ -128,6 +128,10 @@ extern "C" {
 
     BSP_IPIC_IRQ_LAST     = BSP_IPIC_IRQ_MAX_OFFSET,
   } rtems_irq_symbolic_name;
+
+#define BSP_INTERRUPT_VECTOR_MIN BSP_LOWEST_OFFSET
+
+#define BSP_INTERRUPT_VECTOR_MAX BSP_MAX_OFFSET
 
 rtems_status_code mpc83xx_ipic_set_mask( rtems_vector_number vector, rtems_vector_number mask_vector, bool mask);
 
