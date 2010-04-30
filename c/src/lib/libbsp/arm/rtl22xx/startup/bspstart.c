@@ -11,12 +11,12 @@
  */
 
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 #include <lpc22xx.h>
 
 /*
  * Function prototypes
  */
-extern void rtems_irq_mngt_init(void);
 extern void rtems_exception_init_mngt(void);
 extern void  UART0_Ini(void);
 extern void printi(unsigned long);
@@ -77,15 +77,6 @@ void bsp_start_default( void )
   // MAMTIM = 3;
   //MAMCR = 2;
 
-  /* init VIC */
-  VICIntEnClr = 0xffffffff;
-  VICVectAddr = 0;
-  VICIntSelect = 0;
-
-  /* disable interrupts */
-  /* Setup interrupt controller.*/
-  VICProtection = 0;
-
   UART0_Ini();
 
   /*
@@ -96,7 +87,9 @@ void bsp_start_default( void )
   /*
    * Init rtems interrupt management
    */
-  rtems_irq_mngt_init();
+  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
+    _CPU_Fatal_halt(0xe);
+  }
 } /* bsp_start */
 
 /*

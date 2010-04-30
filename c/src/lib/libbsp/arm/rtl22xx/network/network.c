@@ -1,7 +1,7 @@
 /*Note: this file is copy from 7312 BSP, and untested yet*/
 #include <rtems.h>
 #include <sys/mbuf.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <libchip/cs8900.h>
 
 #define CS8900_BASE 0x20000300
@@ -10,7 +10,7 @@ unsigned int bsp_cs8900_memory_base = 0;
 cs8900_device *g_cs;
 void cs8900_isr(rtems_irq_hdl_param unused);
 rtems_irq_connect_data cs8900_isr_data = {LPC22xx_INTERRUPT_EINT2,
-                                         (rtems_irq_hdl)cs8900_isr,
+                                         cs8900_isr,
 					  NULL,
 					  NULL,
 					  NULL,

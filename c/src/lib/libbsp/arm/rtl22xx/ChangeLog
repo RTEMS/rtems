@@ -1,5 +1,12 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* Makefile.am, preinstall.am: Added generic interrupt support modules.
+	* include/bsp.h: Define BSP_FEATURE_IRQ_EXTENSION.
+	* startup/bspstart.c, network/network.c: Interrupt support changes.
+	* console/uart.c: Fixed warnings.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* make/custom/rtl22xx.cfg: Use VFP floating point model.
 
 2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>

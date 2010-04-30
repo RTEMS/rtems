@@ -25,6 +25,7 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
+#define BSP_FEATURE_IRQ_EXTENSION
 
 #define CONFIG_ARM_CLK 60000000L
 /* cclk=cco/(2*P) */

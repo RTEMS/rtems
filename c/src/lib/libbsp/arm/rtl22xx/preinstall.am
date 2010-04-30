@@ -69,3 +69,11 @@ $(PROJECT_INCLUDE)/uart.h: ../../arm/shared/comm/uart.h $(PROJECT_INCLUDE)/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/uart.h
 
+$(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
+
+$(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
+
