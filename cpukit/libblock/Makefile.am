@@ -13,7 +13,13 @@ libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/flashdisk.c \
     src/ide_part_table.c \
     src/nvdisk.c \
     src/nvdisk-sram.c \
-    src/bdpart.c \
+    src/bdpart-create.c \
+    src/bdpart-dump.c \
+    src/bdpart-mount.c \
+    src/bdpart-read.c \
+    src/bdpart-register.c \
+    src/bdpart-sort.c \
+    src/bdpart-write.c \
     include/rtems/bdbuf.h include/rtems/blkdev.h \
     include/rtems/diskdevs.h include/rtems/flashdisk.h \
     include/rtems/ramdisk.h include/rtems/nvdisk.h include/rtems/nvdisk-sram.h \

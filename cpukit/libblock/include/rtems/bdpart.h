@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009
+ * Copyright (c) 2009, 2010
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -354,6 +354,50 @@ bool rtems_bdpart_to_mbr_partition_type(
 );
 
 /** @} */
+
+#define RTEMS_BDPART_MBR_CYLINDER_SIZE 63
+
+#define RTEMS_BDPART_NUMBER_SIZE 4
+
+#define RTEMS_BDPART_BLOCK_SIZE 512
+
+#define RTEMS_BDPART_MBR_TABLE_ENTRY_SIZE 16
+
+#define RTEMS_BDPART_MBR_OFFSET_TABLE_0 446
+
+#define RTEMS_BDPART_MBR_OFFSET_TABLE_1 \
+  (RTEMS_BDPART_MBR_OFFSET_TABLE_0 + RTEMS_BDPART_MBR_TABLE_ENTRY_SIZE)
+
+#define RTEMS_BDPART_MBR_OFFSET_DISK_ID 440
+
+#define RTEMS_BDPART_MBR_OFFSET_SIGNATURE_0 510
+
+#define RTEMS_BDPART_MBR_OFFSET_SIGNATURE_1 511
+
+#define RTEMS_BDPART_MBR_SIGNATURE_0 0x55U
+
+#define RTEMS_BDPART_MBR_SIGNATURE_1 0xaaU
+
+#define RTEMS_BDPART_MBR_OFFSET_BEGIN 8
+
+#define RTEMS_BDPART_MBR_OFFSET_SIZE 12
+
+#define RTEMS_BDPART_MBR_OFFSET_TYPE 4
+
+#define RTEMS_BDPART_MBR_OFFSET_FLAGS 0
+
+static inline uint8_t rtems_bdpart_mbr_partition_type(
+  const uuid_t type
+)
+{
+  return type [0];
+}
+
+rtems_status_code rtems_bdpart_get_disk_data(
+  const char *disk_name,
+  dev_t *disk,
+  rtems_blkdev_bnum *disk_end
+);
 
 #ifdef __cplusplus
 }
