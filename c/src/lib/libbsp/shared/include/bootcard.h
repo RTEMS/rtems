@@ -117,7 +117,7 @@ void bsp_get_work_area(
  * - bsp_postdriver_hook()
  * - rtems_initialize_start_multitasking()
  *   - 1st task executes C++ global constructors
- *   - .... appplication runs ...
+ *   - .... application runs ...
  *   - exit
  * - back to here eventually
  * - bsp_cleanup()
