@@ -15,9 +15,6 @@ EXTRA_DIST =
 EXTRA_DIST += shared/comm/uart.h
 EXTRA_DIST += shared/comm/uart.c
 
-# irq
-EXTRA_DIST += shared/irq/irq_init.c
-
 # abort
 EXTRA_DIST += shared/abort/simple_abort.c
 

@@ -1,3 +1,8 @@
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/irq_init.c: Removed file.
+	* Makefile.am: Reflect change above.
+
 2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* shared/irq/irq_init.c, shared/lpc/clock/lpc-clock-config.c,
