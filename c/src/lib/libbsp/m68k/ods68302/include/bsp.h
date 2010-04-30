@@ -2,9 +2,7 @@
  *
  *  This include file contains all board IO definitions.
  *
- *  XXX : put yours in here
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,6 +21,7 @@ extern "C" {
 
 #include <bspopts.h>
 
+#define BSP_SMALL_MEMORY 1
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
