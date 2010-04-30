@@ -15,13 +15,13 @@
  */
 
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 #include <rtems/bspIo.h>
 #include <s3c24xx.h>
 
 /*
  * External Prototypes
  */
-extern void rtems_irq_mngt_init(void);
 extern void rtems_exception_init_mngt(void);
 
 /*
@@ -94,7 +94,9 @@ void bsp_start_default( void )
   /*
    * Init rtems interrupt management
    */
-  rtems_irq_mngt_init();
+  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
+    _CPU_Fatal_halt(0xe);
+  }
 }
 
 /*

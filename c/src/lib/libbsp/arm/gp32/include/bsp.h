@@ -30,6 +30,8 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <s3c24xx.h>
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 #define gp32_initButtons() {rPBCON=0x0;}
 #define gp32_getButtons() \
     ( (((~rPEDAT >> 6) & 0x3 )<<8) | (((~rPBDAT >> 8) & 0xFF)<<0) )
