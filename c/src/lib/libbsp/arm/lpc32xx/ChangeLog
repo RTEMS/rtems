@@ -1,5 +1,11 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* include/irq-config.h: Removed file.
+	* Makefile.am, preinstall.am: Reflect change above.
+	* irq/irq.c: Removed superfluous parameter checks.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* make/custom/lpc32xx_phycore.cfg: Use VFP floating point model.
 
 2010-04-09	Sebastian Huber <sebastian.huber@embedded-brains.de>

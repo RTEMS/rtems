@@ -68,18 +68,14 @@ void bsp_interrupt_dispatch(void)
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  if (lpc24xx_irq_is_valid(vector)) {
-    VICIntEnable = 1U << vector;
-  }
+  VICIntEnable = 1U << vector;
 
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  if (lpc24xx_irq_is_valid(vector)) {
-    VICIntEnClear = 1U << vector;
-  }
+  VICIntEnClear = 1U << vector;
 
   return RTEMS_SUCCESSFUL;
 }
