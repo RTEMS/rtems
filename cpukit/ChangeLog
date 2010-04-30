@@ -1,5 +1,9 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* sapi/inline/rtems/chain.inl: Added missing functions.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* posix/src/alarm.c, posix/src/psignal.c, posix/src/ualarm.c:
 	Moved watchdog control objects to reduce dependencies.
 
