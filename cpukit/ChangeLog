@@ -1,5 +1,13 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/include/rtems/libio_.h, libcsupport/src/envlock.c,
+	libcsupport/src/libio.c: Added and use rtems_libio_lock() and
+	rtems_libio_unlock().  Cleaned up includes and declarations.  Do not
+	use RTEMS_NO_PRIORITY for unused ceiling priority in
+	rtems_semaphore_create().
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libnetworking/lib/ftpfs.c: Format changes.  Fixed pathname
 	allocation in rtems_ftpfs_eval_path().  Send QUIT command during
 	file close.

@@ -17,14 +17,15 @@
 #include "config.h"
 #endif
 
-#include <rtems/libio_.h>               /* libio_.h pulls in rtems */
-#include <rtems.h>
-#include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-#include <stdio.h>                      /* O_RDONLY, et.al. */
-#include <fcntl.h>                      /* O_RDONLY, et.al. */
-#include <assert.h>
-#include <errno.h>
+#include <rtems.h>
+#include <rtems/libio_.h>
+#include <rtems/assoc.h>
 
 /* define this to alias O_NDELAY to  O_NONBLOCK, i.e.,
  * O_NDELAY is accepted on input but fcntl(F_GETFL) returns
@@ -39,22 +40,6 @@
  * does (silently) ignore the operation.
  */
 #undef ACCEPT_O_NDELAY_ALIAS
-
-#include <errno.h>
-#include <string.h>                     /* strcmp */
-#include <unistd.h>
-#include <stdlib.h>                     /* calloc() */
-
-#include <rtems/libio.h>                /* libio.h not pulled in by rtems */
-
-/*
- *  File descriptor Table Information
- */
-
-extern uint32_t       rtems_libio_number_iops;
-extern rtems_id       rtems_libio_semaphore;
-extern rtems_libio_t *rtems_libio_iops;
-extern rtems_libio_t *rtems_libio_iop_freelist;
 
 /*
  *  rtems_libio_fcntl_flags
@@ -151,14 +136,14 @@ rtems_libio_t *rtems_libio_allocate( void )
   rtems_status_code rc;
   rtems_id sema;
 
-  rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_libio_lock();
 
   if (rtems_libio_iop_freelist) {
     rc = rtems_semaphore_create(
       RTEMS_LIBIO_IOP_SEM(rtems_libio_iop_freelist - rtems_libio_iops),
       1,
       RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-      RTEMS_NO_PRIORITY,
+      0,
       &sema
     );
     if (rc != RTEMS_SUCCESSFUL)
@@ -176,7 +161,7 @@ failed:
   iop = 0;
 
 done:
-  rtems_semaphore_release( rtems_libio_semaphore );
+  rtems_libio_unlock();
   return iop;
 }
 
@@ -191,7 +176,7 @@ void rtems_libio_free(
   rtems_libio_t *iop
 )
 {
-  rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_libio_lock();
 
     if (iop->sem)
       rtems_semaphore_delete(iop->sem);
@@ -200,7 +185,7 @@ void rtems_libio_free(
     iop->data1 = rtems_libio_iop_freelist;
     rtems_libio_iop_freelist = iop;
 
-  rtems_semaphore_release(rtems_libio_semaphore);
+  rtems_libio_unlock();
 }
 
 /*
@@ -222,7 +207,7 @@ int rtems_libio_is_open_files_in_fs(
   int                result = 0;
   uint32_t           i;
 
-  rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_libio_lock();
 
   /*
    *  Look for any active file descriptor entry.
@@ -244,7 +229,7 @@ int rtems_libio_is_open_files_in_fs(
     }
   }
 
-  rtems_semaphore_release( rtems_libio_semaphore );
+  rtems_libio_unlock();
 
   return result;
 }
@@ -266,7 +251,7 @@ int rtems_libio_is_file_open(
   int                result=0;
   uint32_t           i;
 
-  rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_libio_lock();
 
   /*
    *  Look for any active file descriptor entry.
@@ -287,7 +272,7 @@ int rtems_libio_is_file_open(
     }
   }
 
-  rtems_semaphore_release( rtems_libio_semaphore );
+  rtems_libio_unlock();
 
   return result;
 }
