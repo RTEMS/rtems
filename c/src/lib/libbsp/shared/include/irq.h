@@ -9,7 +9,7 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008, 2009
+ * Copyright (c) 2008, 2009, 2010
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim

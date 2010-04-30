@@ -9,7 +9,7 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008, 2009
+ * Copyright (c) 2008, 2009, 2010
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -28,7 +28,7 @@
 
 #include <rtems/irq-extension.h>
 
-#include <bsp/irq-config.h>
+#include <bsp/irq.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -86,30 +86,30 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
  *
  * The BSP interrupt support manages a sequence of interrupt vector numbers
  * ranging from @ref BSP_INTERRUPT_VECTOR_MIN to @ref BSP_INTERRUPT_VECTOR_MAX
- * including the end points.  It provides methods to @ref
- * bsp_interrupt_handler_install() "install", @ref
- * bsp_interrupt_handler_remove() "remove" and @ref
- * bsp_interrupt_handler_dispatch() "dispatch" interrupt handlers for each
+ * including the end points.  It provides methods to
+ * @ref bsp_interrupt_handler_install() "install",
+ * @ref bsp_interrupt_handler_remove() "remove" and
+ * @ref bsp_interrupt_handler_dispatch() "dispatch" interrupt handlers for each
  * vector number.  It implements parts of the RTEMS interrupt manager.
  *
  * The entry points to a list of interrupt handlers are stored in a table
  * (= handler table).
  *
- * You have to configure the BSP interrupt support in the bsp/irq-config.h file
- * for each BSP.  For a minimum configuration you have to provide @ref
- * BSP_INTERRUPT_VECTOR_MIN and @ref BSP_INTERRUPT_VECTOR_MAX.
+ * You have to configure the BSP interrupt support in the <bsp/irq.h> file
+ * for each BSP.  For a minimum configuration you have to provide
+ * @ref BSP_INTERRUPT_VECTOR_MIN and @ref BSP_INTERRUPT_VECTOR_MAX.
  *
- * For boards with small memory requirements you can define @ref
- * BSP_INTERRUPT_USE_INDEX_TABLE.  With an enabled index table the handler
+ * For boards with small memory requirements you can define
+ * @ref BSP_INTERRUPT_USE_INDEX_TABLE.  With an enabled index table the handler
  * table will be accessed via a small index table.  You can define the size of
  * the handler table with @ref BSP_INTERRUPT_HANDLER_TABLE_SIZE.  You must
- * provide a data type for the index table (@ref
- * bsp_interrupt_handler_index_type).  It must be an integer type big enough to
- * index the complete handler table.
+ * provide a data type for the index table
+ * (@ref bsp_interrupt_handler_index_type).  It must be an integer type big
+ * enough to index the complete handler table.
  *
- * Normally new list entries are allocated from the heap.  You may define @ref
- * BSP_INTERRUPT_NO_HEAP_USAGE, if you do not want to use the heap.  For this
- * option you have to define @ref BSP_INTERRUPT_USE_INDEX_TABLE as well.
+ * Normally new list entries are allocated from the heap.  You may define
+ * @ref BSP_INTERRUPT_NO_HEAP_USAGE, if you do not want to use the heap.  For
+ * this option you have to define @ref BSP_INTERRUPT_USE_INDEX_TABLE as well.
  *
  * You have to provide some special routines in your BSP (follow the links for
  * the details):
@@ -182,9 +182,9 @@ rtems_status_code bsp_interrupt_facility_initialize(void);
  *
  * This function shall enable the vector at the corresponding facility (in most
  * cases the interrupt controller).  It will be called then the first handler
- * is installed for the vector in bsp_interrupt_handler_install().  For a
- * vector out of range this function shall do nothing except returning
- * RTEMS_SUCCESSFUL.
+ * is installed for the vector in bsp_interrupt_handler_install().  It is
+ * guaranteed that the vector number is within the BSP_INTERRUPT_VECTOR_MIN and
+ * BSP_INTERRUPT_VECTOR_MAX range.
  *
  * @note You must not install or remove an interrupt handler in this function.
  * This may result in a deadlock.
@@ -198,9 +198,9 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector);
  *
  * This function shall disable the vector at the corresponding facility (in
  * most cases the interrupt controller).  It will be called then the last
- * handler is removed for the vector in bsp_interrupt_handler_remove().  For a
- * vector out of range this function shall do nothing except returning
- * RTEMS_SUCCESSFUL.
+ * handler is removed for the vector in bsp_interrupt_handler_remove().  It is
+ * guaranteed that the vector number is within the BSP_INTERRUPT_VECTOR_MIN and
+ * BSP_INTERRUPT_VECTOR_MAX range.
  *
  * @note You must not install or remove an interrupt handler in this function.
  * This may result in a deadlock.

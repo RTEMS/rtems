@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008, 2009
+ * Copyright (c) 2008, 2009, 2010
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -21,11 +21,8 @@
 
 #include <inttypes.h>
 
-#include <rtems/irq.h>
-
 #include <bsp/irq-generic.h>
 #include <bsp/irq-info.h>
-#include <bsp/irq-config.h>
 
 typedef struct {
   void *context;

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009
+ * Copyright (c) 2009, 2010
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -21,68 +21,89 @@
 
 #include <stdlib.h>
 
+#include <rtems.h>
+#include <rtems/chain.h>
+
 #include <bsp/irq-generic.h>
 
+#define BSP_INTERRUPT_EVENT RTEMS_EVENT_13
+
 typedef struct bsp_interrupt_server_entry {
+  rtems_chain_node node;
   rtems_vector_number vector;
   rtems_interrupt_handler handler;
   void *arg;
-  struct bsp_interrupt_server_entry *volatile next;
 } bsp_interrupt_server_entry;
 
-static rtems_id bsp_interrupt_server_semaphore = RTEMS_ID_NONE;
+static rtems_id bsp_interrupt_server_id = RTEMS_ID_NONE;
 
-/* LIFO list head */
-static bsp_interrupt_server_entry *volatile
-bsp_interrupt_server_list_head = NULL;
+static RTEMS_CHAIN_DEFINE_EMPTY(bsp_interrupt_server_chain);
 
 static rtems_status_code bsp_interrupt_server_is_initialized(void)
 {
-  if (bsp_interrupt_server_semaphore != RTEMS_ID_NONE) {
+  if (bsp_interrupt_server_id != RTEMS_ID_NONE) {
     return RTEMS_SUCCESSFUL;
   } else {
     return RTEMS_INCORRECT_STATE;
   }
 }
 
+static unsigned bsp_interrupt_server_errors;
+
 static void bsp_interrupt_server_trigger(void *arg)
 {
   bsp_interrupt_server_entry *e = arg;
-  rtems_interrupt_level level;
 
   bsp_interrupt_vector_disable(e->vector);
 
-  /* Add interrupt server entry to the list */
+  if (e->node.next == NULL) {
+    rtems_chain_append(&bsp_interrupt_server_chain, &e->node);
+  } else {
+    ++bsp_interrupt_server_errors;
+  }
+
+  rtems_event_send(bsp_interrupt_server_id, BSP_INTERRUPT_EVENT);
+}
+
+static bsp_interrupt_server_entry *bsp_interrupt_server_get_entry(void)
+{
+  rtems_interrupt_level level;
+  bsp_interrupt_server_entry *e;
+
   rtems_interrupt_disable(level);
-  e->next = bsp_interrupt_server_list_head;
-  bsp_interrupt_server_list_head = e;
+  e = (bsp_interrupt_server_entry *)
+    rtems_chain_get_unprotected(&bsp_interrupt_server_chain);
+  if (e != NULL) {
+    e->node.next = NULL;
+  }
   rtems_interrupt_enable(level);
 
-  rtems_semaphore_release(bsp_interrupt_server_semaphore);
+  return e;
 }
 
 static void bsp_interrupt_server_task(rtems_task_argument arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_id sema = bsp_interrupt_server_semaphore;
-  rtems_interrupt_level level;
-  bsp_interrupt_server_entry *e = NULL;
 
   while (true) {
-    sc = rtems_semaphore_obtain(sema, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_event_set events = 0;
+    bsp_interrupt_server_entry *e = NULL;
+
+    sc = rtems_event_receive(
+      BSP_INTERRUPT_EVENT,
+      RTEMS_EVENT_ALL | RTEMS_WAIT,
+      RTEMS_NO_TIMEOUT,
+      &events
+    );
     if (sc != RTEMS_SUCCESSFUL) {
       break;
     }
 
-    /* Fetch next interrupt server entry from the list */
-    rtems_interrupt_disable(level);
-    e = bsp_interrupt_server_list_head;
-    bsp_interrupt_server_list_head = e->next;
-    rtems_interrupt_enable(level);
+    while ((e = bsp_interrupt_server_get_entry()) != NULL) {
+      (*e->handler)(e->arg);
 
-    (*e->handler)(e->arg);
-
-    bsp_interrupt_vector_enable(e->vector);
+      bsp_interrupt_vector_enable(e->vector);
+    }
   }
 
   rtems_task_delete(RTEMS_SELF);
@@ -137,7 +158,7 @@ rtems_status_code rtems_interrupt_server_handler_install(
     return RTEMS_NOT_IMPLEMENTED;
   }
 
-  e = malloc(sizeof(bsp_interrupt_server_entry));
+  e = calloc(1, sizeof(*e));
   if (e == NULL) {
     return RTEMS_NO_MEMORY;
   }
@@ -220,23 +241,9 @@ rtems_status_code rtems_interrupt_server_initialize(
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_id sema_id = RTEMS_ID_NONE;
-  rtems_id task_id = RTEMS_ID_NONE;
-  rtems_interrupt_level level;
 
   if (server != NULL) {
     return RTEMS_NOT_IMPLEMENTED;
-  }
-
-  sc = rtems_semaphore_create(
-    rtems_build_name('I', 'R', 'Q', 'S'),
-    0,
-    RTEMS_LOCAL | RTEMS_FIFO | RTEMS_COUNTING_SEMAPHORE,
-    0,
-    &sema_id
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
   }
 
   sc = rtems_task_create(
@@ -245,42 +252,23 @@ rtems_status_code rtems_interrupt_server_initialize(
     stack_size,
     modes,
     attributes,
-    &task_id
+    &bsp_interrupt_server_id
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_semaphore_delete(sema_id);
-
-    return sc;
-  }
-
-  /* Initialize global data (this must be done before the task starts) */
-  rtems_interrupt_disable(level);
-  if (bsp_interrupt_server_semaphore == RTEMS_ID_NONE) {
-    bsp_interrupt_server_semaphore = sema_id;
-    sc = RTEMS_SUCCESSFUL;
-  } else {
-    sc = RTEMS_INCORRECT_STATE;
-  }
-  rtems_interrupt_enable(level);
-  if (sc != RTEMS_SUCCESSFUL) {
-    rtems_semaphore_delete(sema_id);
-    rtems_task_delete(task_id);
-
-    return sc;
+    return RTEMS_TOO_MANY;
   }
 
   sc = rtems_task_start(
-    task_id,
+    bsp_interrupt_server_id,
     bsp_interrupt_server_task,
     0
   );
   if (sc != RTEMS_SUCCESSFUL) {
     /* In this case we could also panic */
-    bsp_interrupt_server_semaphore = RTEMS_ID_NONE;
-    rtems_semaphore_delete(sema_id);
-    rtems_task_delete(task_id);
+    rtems_task_delete(bsp_interrupt_server_id);
+    bsp_interrupt_server_id = RTEMS_ID_NONE;
 
-    return sc;
+    return RTEMS_TOO_MANY;
   }
 
   return RTEMS_SUCCESSFUL;

@@ -1,5 +1,15 @@
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* include/irq-config.h: Removed file.
+	* include/irq.h: New file (renamed from 'include/irq-config.h').
+	* include/irq-generic.h, src/irq-info.c: Include <bsp/irq.h> instead
+	of <bsp/irq-config.h>.
+	* src/irq-server.c: Use events instead of semaphore.  Added error
+	counter for multiple chain appends.  Added error counter to detect
+	erroneous interrupt events.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* include/bootcard.h: Documentation.
 
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
