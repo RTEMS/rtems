@@ -13,6 +13,8 @@ dist_project_lib_DATA = bsp_specs
 include_HEADERS = include/bsp.h
 include_HEADERS += ../../shared/include/tm27.h
 
+include_bsp_HEADERS =
+
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
@@ -39,6 +41,14 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
 libbsp_a_SOURCES += console/uart.c
 # abort
 libbsp_a_SOURCES += ../shared/abort/abort.c
+# IRQ
+include_bsp_HEADERS += ../../shared/include/irq-generic.h \
+	../../shared/include/irq-info.h
+libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
+	../../shared/src/irq-legacy.c \
+	../../shared/src/irq-info.c \
+	../../shared/src/irq-shell.c \
+	../../shared/src/irq-server.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__

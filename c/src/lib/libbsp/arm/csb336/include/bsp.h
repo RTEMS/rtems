@@ -27,6 +27,8 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <mc9328mxl.h>
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 /* What is the input clock freq in hertz? */
 #define BSP_OSC_FREQ  16000000    /* 16 MHz oscillator */
 #define BSP_XTAL_FREQ 32768       /* 32.768 KHz crystal */

@@ -33,7 +33,7 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-#include <irq.h>
+#include <bsp/irq.h>
 
 /*  RTEMS event used by interrupt handler to start receive daemon. */
 #define START_RECEIVE_EVENT  RTEMS_EVENT_1

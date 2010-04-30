@@ -17,7 +17,7 @@
 #include <rtems/bspIo.h>
 #include <termios.h>
 #include <rtems/irq.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <mc9328mxl.h>
 
 
