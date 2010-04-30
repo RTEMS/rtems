@@ -1,26 +1,21 @@
 /* irq.h
  *
+ *  Copyright (c) 2010 embedded brains GmbH.
+ *
+ *  CopyRight (C) 2000 Canon Research France SA.
+ *  Emmanuel Raguet,  mailto:raguet@crf.canon.fr
+ *
  *  Common file, merged from s3c2400/irq/irq.h and s3c2410/irq/irq.h
  */
 
 #ifndef _IRQ_H_
 #define _IRQ_H_
-#ifdef __cplusplus
-extern "C" {
-#endif
 
-/*
- * Include some preprocessor value also used by assember code
- */
-
-#include <rtems/irq.h>
 #include <rtems.h>
-#include <s3c24xx.h>
+#include <rtems/irq.h>
+#include <rtems/irq-extension.h>
 
-extern void default_int_handler(rtems_irq_hdl_param unused);
-/*-------------------------------------------------------------------------+
-| Constants
-+--------------------------------------------------------------------------*/
+#include <s3c24xx.h>
 
 #ifdef CPU_S3C2400
   /* possible interrupt sources */
@@ -93,25 +88,9 @@ extern void default_int_handler(rtems_irq_hdl_param unused);
 #define BSP_MAX_INT          32
 #endif
 
-extern void *bsp_vector_table;
-#define VECTOR_TABLE &bsp_vector_table
+#define BSP_INTERRUPT_VECTOR_MIN 0
 
-/*-------------------------------------------------------------------------+
-| Function Prototypes.
-+--------------------------------------------------------------------------*/
-/*
- * ------------------ RTEMS Single Irq Handler Mngt Routines ----------------
- */
-
-/*
- * function to initialize the interrupt for a specific BSP
- */
-void BSP_rtems_irq_mngt_init();
-
-
-#ifdef __cplusplus
-}
-#endif
+#define BSP_INTERRUPT_VECTOR_MAX (BSP_MAX_INT - 1)
 
 #endif /* _IRQ_H_ */
 /* end of include file */

@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <at91rm9200.h>
 #include <at91rm9200_pmc.h>
 

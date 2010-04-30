@@ -13,7 +13,7 @@
  *  $Id$
 */
 #include <rtems.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <bsp.h>
 #include <s3c24xx.h>
 

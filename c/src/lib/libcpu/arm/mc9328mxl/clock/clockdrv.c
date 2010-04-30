@@ -17,7 +17,7 @@
 */
 #include <rtems.h>
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <mc9328mxl.h>
 #include <rtems/bspIo.h>  /* for printk */
 

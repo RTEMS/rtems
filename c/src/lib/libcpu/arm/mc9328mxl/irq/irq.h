@@ -1,6 +1,8 @@
 /*
  * Interrupt handler Header file
  *
+ * Copyright (c) 2010 embedded brains GmbH.
+ *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
  *
  *  The license and distribution terms for this file may be
@@ -15,26 +17,13 @@
 #ifndef __IRQ_H__
 #define __IRQ_H__
 
-#include <rtems/irq.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-  /* define that can be useful (the values are just examples) */
 #ifndef __asm__
 
-/*
- * Include some preprocessor value also used by assember code
- */
-
 #include <rtems.h>
-#include <mc9328mxl.h>
+#include <rtems/irq.h>
+#include <rtems/irq-extension.h>
 
-extern void default_int_handler(rtems_irq_hdl_param);
-/***********************************************************************
- * Constants
- **********************************************************************/
+#endif /* __asm__ */
 
 /* possible interrupt sources on the MC9328MXL */
 #define BSP_INT_UART3_PFERR       0
@@ -103,24 +92,8 @@ extern void default_int_handler(rtems_irq_hdl_param);
 #define BSP_INT_WDT              63
 #define BSP_MAX_INT              64
 
-typedef struct {
-    rtems_irq_hdl       vector;
-    rtems_irq_hdl_param data;
-} mc9328mxl_irq_info_t;
+#define BSP_INTERRUPT_VECTOR_MIN 0
 
-
-
-extern mc9328mxl_irq_info_t bsp_vector_table[BSP_MAX_INT];
-
-/*
- * function to initialize the interrupt for a specific BSP
- */
-void BSP_rtems_irq_mngt_init(void);
-
-#endif /* __asm__ */
-
-#ifdef __cplusplus
-}
-#endif
+#define BSP_INTERRUPT_VECTOR_MAX (BSP_MAX_INT - 1)
 
 #endif /* __IRQ_H__ */

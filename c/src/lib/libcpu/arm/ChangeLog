@@ -1,3 +1,20 @@
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* at91rm9200/irq/irq.c, at91rm9200/irq/irq.h, lpc22xx/irq/irq.c,
+	lpc22xx/irq/irq.h, mc9328mxl/irq/irq.c, mc9328mxl/irq/irq.h,
+	pxa255/irq/irq.c, pxa255/irq/irq.h, s3c24xx/irq/irq.c,
+	s3c24xx/irq/irq.h: The previous interrupt warning fix changed the
+	interrupt handler API.  To fix this problem the generic interrupt
+	support framework will be used now.  This eliminates a lot of copy and
+	paste code.  The interrupt header file is now <bsp/irq.h>.
+	* at91rm9200/clock/clock.c, lpc22xx/clock/clockdrv.c,
+	mc9328mxl/clock/clockdrv.c, pxa255/clock/clock.c,
+	s3c24xx/clock/clockdrv.c: Include <bsp/irq.h> instead of <irq.h>.
+	* at91rm9200/irq/bsp_irq_asm.S, at91rm9200/irq/bsp_irq_init.c,
+	mc9328mxl/irq/bsp_irq_asm.S, mc9328mxl/irq/bsp_irq_init.c,
+	s3c24xx/irq/bsp_irq_asm.S, s3c24xx/irq/bsp_irq_init.c: Removed files.
+	* Makefile.am, preinstall.am: Reflect changes above.
+
 2010-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* configure.ac, Makefile.am, at91rm9200/clock/clock.c,

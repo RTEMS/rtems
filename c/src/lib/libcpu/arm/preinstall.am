@@ -18,12 +18,17 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-if shared
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
+if shared
 $(PROJECT_INCLUDE)/libcpu/mmu.h: shared/include/mmu.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h
@@ -41,9 +46,9 @@ $(PROJECT_INCLUDE)/ffuart.h: pxa255/include/ffuart.h $(PROJECT_INCLUDE)/$(dirsta
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ffuart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ffuart.h
 
-$(PROJECT_INCLUDE)/irq.h: pxa255/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+$(PROJECT_INCLUDE)/bsp/irq.h: pxa255/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif
 if at91rm9200
 $(PROJECT_INCLUDE)/at91rm9200.h: at91rm9200/include/at91rm9200.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -78,18 +83,18 @@ $(PROJECT_INCLUDE)/at91rm9200_usart.h: at91rm9200/include/at91rm9200_usart.h $(P
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_usart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_usart.h
 
-$(PROJECT_INCLUDE)/irq.h: at91rm9200/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+$(PROJECT_INCLUDE)/bsp/irq.h: at91rm9200/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif
 if mc9328mxl
 $(PROJECT_INCLUDE)/mc9328mxl.h: mc9328mxl/include/mc9328mxl.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mc9328mxl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mc9328mxl.h
 
-$(PROJECT_INCLUDE)/irq.h: mc9328mxl/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+$(PROJECT_INCLUDE)/bsp/irq.h: mc9328mxl/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif
 if s3c24xx
 $(PROJECT_INCLUDE)/s3c24xx.h: s3c24xx/include/s3c24xx.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -104,16 +109,16 @@ $(PROJECT_INCLUDE)/s3c2410.h: s3c24xx/include/s3c2410.h $(PROJECT_INCLUDE)/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/s3c2410.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/s3c2410.h
 
-$(PROJECT_INCLUDE)/irq.h: s3c24xx/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+$(PROJECT_INCLUDE)/bsp/irq.h: s3c24xx/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif
 if lpc22xx
 $(PROJECT_INCLUDE)/lpc22xx.h: lpc22xx/include/lpc22xx.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/lpc22xx.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/lpc22xx.h
 
-$(PROJECT_INCLUDE)/irq.h: lpc22xx/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+$(PROJECT_INCLUDE)/bsp/irq.h: lpc22xx/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif

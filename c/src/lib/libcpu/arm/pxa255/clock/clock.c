@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <bspopts.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <pxa255.h>
 
 #if ON_SKYEYE==1

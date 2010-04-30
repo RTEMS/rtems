@@ -16,7 +16,7 @@
 */
 #include <rtems.h>
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <lpc22xx.h>
 #include <rtems/bspIo.h>  /* for printk */
 

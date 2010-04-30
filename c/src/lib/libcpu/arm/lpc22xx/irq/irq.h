@@ -1,6 +1,8 @@
 /*
  * Interrupt handler Header file
  *
+ * Copyright (c) 2010 embedded brains GmbH.
+ *
  * Copyright (c) 2006 by Ray <rayx.cn@gmail.com> to support LPC ARM
  *
  *  The license and distribution terms for this file may be
@@ -15,25 +17,13 @@
 #ifndef __IRQ_H__
 #define __IRQ_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-  /* define that can be useful (the values are just examples) */
 #ifndef __asm__
 
-/*
- * Include some preprocessor value also used by assember code
- */
-#include <rtems/irq.h>
 #include <rtems.h>
-#include <lpc22xx.h>
+#include <rtems/irq.h>
+#include <rtems/irq-extension.h>
 
-extern void default_int_handler(rtems_irq_hdl_param unused);
-
-/***********************************************************************
- * Constants
- **********************************************************************/
+#endif /* __asm__ */
 
 /* possible interrupt sources on the LPC22xx */
 #define LPC22xx_INTERRUPT_WDINT	 0	/* Watchdog int. 0 */
@@ -67,6 +57,10 @@ extern void default_int_handler(rtems_irq_hdl_param unused);
 #define LPC22xx_INTERRUPT_CAN4RX 27	/* CAN2 Rx interrupt */
 #define BSP_MAX_INT              28
 
+#define BSP_INTERRUPT_VECTOR_MIN 0
+
+#define BSP_INTERRUPT_VECTOR_MAX (BSP_MAX_INT - 1)
+
 #define UNDEFINED_INSTRUCTION_VECTOR_ADDR   (*(u_long *)0x00000004L)
 #define SOFTWARE_INTERRUPT_VECTOR_ADDR      (*(u_long *)0x00000008L)
 #define PREFETCH_ABORT_VECTOR_ADDR          (*(u_long *)0x0000000CL)
@@ -77,21 +71,5 @@ extern void default_int_handler(rtems_irq_hdl_param unused);
 #define DATA_ABORT_ISR_ADDR                 (*(u_long *)0x00000030L)
 #define IRQ_ISR_ADDR                        (*(u_long *)0x00000038L)
 #define FIQ_ISR_ADDR                        (*(u_long *)0x0000003CL)
-
-
-//extern rtems_irq_hdl bsp_vector_table[BSP_MAX_INT];
-#define VECTOR_TABLE VICVectAddrBase
-
-
-/*
- * function to initialize the interrupt for a specific BSP
- */
-void BSP_rtems_irq_mngt_init(void);
-
-#endif /* __asm__ */
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __IRQ_H__ */

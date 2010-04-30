@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2010 embedded brains GmbH.
+ *
  * PXA255 Interrupt handler by Yang Xi <hiyangxi@gmail.com>
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
  *
@@ -8,108 +10,49 @@
  *
  *  $Id$
  */
+
 #include <bsp.h>
-#include <irq.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/apiext.h>
+#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
+
 #include <pxa255.h>
 
-/*
- * This function check that the value given for the irq line
- * is valid.
- */
-static int isValidInterrupt(int irq)
+void bsp_interrupt_dispatch(void)
 {
-    if ( (irq < 0) || (irq >= PRIMARY_IRQS)) {
-        return 0;
-    }
-    return 1;
+  rtems_vector_number vector = 31 - __builtin_clz(XSCALE_INT_ICIP);
+
+  bsp_interrupt_handler_dispatch(vector);
 }
 
-/*
- * Installs the interrupt handler.
- */
-int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
+rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-    rtems_interrupt_level level;
+  XSCALE_INT_ICMR |= 1 << vector;
 
-    if (!isValidInterrupt(irq->name)) {
-        return 0;
-    }
-
-    /*
-     * Check if default handler is actually connected. If not, issue
-     * an error. Note: irq->name is a number corresponding to the
-     * interrupt number .  We
-     * convert it to a long word offset to get source's vector register
-     */
-        if (IRQ_table[irq->name] != dummy_handler) {
-        return 0;
-	}
-
-    _CPU_ISR_Disable(level);
-
-    /*
-     * store the new handler
-     */
-    IRQ_table[irq->name] = irq->hdl;
-
-    /*
-     * unmask interrupt
-     */
-    XSCALE_INT_ICMR = XSCALE_INT_ICMR | 1 << irq->name;
-
-
-
-    /*
-     * Enable interrupt on device
-     */
-    if(irq->on) {
-        irq->on(irq);
-    }
-
-    _CPU_ISR_Enable(level);
-
-    return 1;
+  return RTEMS_SUCCESSFUL;
 }
 
-/*
- * Remove and interrupt handler
- */
-int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-    rtems_interrupt_level level;
+  XSCALE_INT_ICMR  &= ~(1 << vector);
 
-    if (!isValidInterrupt(irq->name)) {
-        return 0;
-    }
+  return RTEMS_SUCCESSFUL;
+}
 
-    /*
-     * Check if the handler is actually connected. If not, issue an error.
-     */
-    if (IRQ_table[irq->name] != irq->hdl) {
-      return 0;
-    }
-    _CPU_ISR_Disable(level);
+rtems_status_code bsp_interrupt_facility_initialize(void)
+{
+  /* disable all interrupts */
+  XSCALE_INT_ICMR = 0x0;
 
-    /*
-     * mask interrupt
-     */
-    XSCALE_INT_ICMR  =  XSCALE_INT_ICMR  & (~(1 << irq->name));
+  /* Direct the interrupt to IRQ*/
+  XSCALE_INT_ICLR = 0x0;
 
-    /*
-     * Disable interrupt on device
-     */
-    if(irq->off) {
-        irq->off(irq);
-    }
+  /* Install the IRQ exception handler */
+  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
 
-    /*
-     * restore the default irq value
-     */
-    IRQ_table[irq->name] = dummy_handler;
+  return RTEMS_SUCCESSFUL;
+}
 
-    _CPU_ISR_Enable(level);
-
-    return 1;
+void bsp_interrupt_handler_default(rtems_vector_number vector)
+{
+  printk("spurious interrupt: %u\n", vector);
 }

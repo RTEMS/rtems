@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2010 embedded brains GmbH.
+ *
  * Interrupt handler Header file for PXA By Yang Xi <hiyangxi@gmail.com>
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
  *
@@ -12,30 +14,18 @@
 #ifndef __IRQ_H__
 #define __IRQ_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifndef __asm__
 
-/*
- * Include some preprocessor value also used by assember code
- */
-
-#include <rtems/irq.h>
 #include <rtems.h>
+#include <rtems/irq.h>
+#include <rtems/irq-extension.h>
+
 #include <pxa255.h>
 
-extern void default_int_handler(rtems_irq_hdl_param unused);
-extern void (*IRQ_table[PRIMARY_IRQS])(rtems_irq_hdl_param param);
-extern void dummy_handler(rtems_irq_hdl_param unused);
+#define BSP_INTERRUPT_VECTOR_MIN 0
 
-extern void BSP_rtems_irq_mngt_init(void);
+#define BSP_INTERRUPT_VECTOR_MAX (PRIMARY_IRQS - 1)
 
 #endif /* __asm__ */
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __IRQ_H__ */

@@ -10,11 +10,16 @@ EXTRA_DIST =
 
 noinst_PROGRAMS =
 
-## shared/include
-if shared
+include_bspdir = $(includedir)/bsp
 include_libcpudir = $(includedir)/libcpu
 
-include_libcpu_HEADERS = shared/include/mmu.h
+include_bsp_HEADERS =
+include_libcpu_HEADERS =
+
+## shared/include
+if shared
+
+include_libcpu_HEADERS += shared/include/mmu.h
 include_libcpu_HEADERS += shared/include/arm-cp15.h
 
 ## shared/arm920
@@ -52,10 +57,9 @@ pxa255_pmc_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pxa255_pmc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## pxa255/interrupt
-include_HEADERS += pxa255/irq/irq.h
+include_bsp_HEADERS += pxa255/irq/irq.h
 noinst_PROGRAMS += pxa255/irq.rel
-pxa255_irq_rel_SOURCES = pxa255/irq/irq.c pxa255/irq/bsp_irq_init.c \
-    ../../libbsp/arm/shared/irq/irq_init.c pxa255/irq/bsp_irq_asm.S \
+pxa255_irq_rel_SOURCES = pxa255/irq/irq.c \
     pxa255/irq/irq.h
 pxa255_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pxa255_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -98,11 +102,10 @@ at91rm9200_pmc_rel_CPPFLAGS = $(AM_CPPFLAGS)
 at91rm9200_pmc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## at91rm9200/interrupt
-include_HEADERS += at91rm9200/irq/irq.h
+include_bsp_HEADERS += at91rm9200/irq/irq.h
 
 noinst_PROGRAMS += at91rm9200/irq.rel
-at91rm9200_irq_rel_SOURCES = at91rm9200/irq/irq.c at91rm9200/irq/bsp_irq_init.c \
-    ../../libbsp/arm/shared/irq/irq_init.c at91rm9200/irq/bsp_irq_asm.S \
+at91rm9200_irq_rel_SOURCES = at91rm9200/irq/irq.c \
     at91rm9200/irq/irq.h
 at91rm9200_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 at91rm9200_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -124,11 +127,10 @@ mc9328mxl_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mc9328mxl_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## mc9328mxl/interrupt
-include_HEADERS += mc9328mxl/irq/irq.h
+include_bsp_HEADERS += mc9328mxl/irq/irq.h
 
 noinst_PROGRAMS += mc9328mxl/irq.rel
-mc9328mxl_irq_rel_SOURCES = mc9328mxl/irq/irq.c mc9328mxl/irq/bsp_irq_init.c \
-    ../../libbsp/arm/shared/irq/irq_init.c mc9328mxl/irq/bsp_irq_asm.S \
+mc9328mxl_irq_rel_SOURCES = mc9328mxl/irq/irq.c \
     mc9328mxl/irq/irq.h
 mc9328mxl_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mc9328mxl_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -150,11 +152,10 @@ s3c24xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 s3c24xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## s3c24xx/interrupt
-include_HEADERS += s3c24xx/irq/irq.h
+include_bsp_HEADERS += s3c24xx/irq/irq.h
 
 noinst_PROGRAMS += s3c24xx/irq.rel
-s3c24xx_irq_rel_SOURCES = s3c24xx/irq/irq.c s3c24xx/irq/bsp_irq_init.c \
-    ../../libbsp/arm/shared/irq/irq_init.c s3c24xx/irq/bsp_irq_asm.S \
+s3c24xx_irq_rel_SOURCES = s3c24xx/irq/irq.c \
     s3c24xx/irq/irq.h
 s3c24xx_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 s3c24xx_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -176,11 +177,10 @@ lpc22xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 lpc22xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## lpc22xx/interrupt
-include_HEADERS += lpc22xx/irq/irq.h
+include_bsp_HEADERS += lpc22xx/irq/irq.h
 
 noinst_PROGRAMS += lpc22xx/irq.rel
-lpc22xx_irq_rel_SOURCES = lpc22xx/irq/irq.c lpc22xx/irq/bsp_irq_init.c \
-    ../../libbsp/arm/shared/irq/irq_init.c lpc22xx/irq/bsp_irq_asm.S \
+lpc22xx_irq_rel_SOURCES = lpc22xx/irq/irq.c \
     lpc22xx/irq/irq.h
 lpc22xx_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 lpc22xx_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

@@ -1,6 +1,8 @@
 /*
  * Atmel AT91RM9200 Interrupt handler
  *
+ * Copyright (c) 2010 embedded brains GmbH.
+ *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
  *
  *  The license and distribution terms for this file may be
@@ -10,106 +12,47 @@
  *
  *  $Id$
  */
+
 #include <bsp.h>
-#include <irq.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/apiext.h>
+#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
+
 #include <at91rm9200.h>
 
-/*
- * This function check that the value given for the irq line
- * is valid.
- */
-static int isValidInterrupt(int irq)
+void bsp_interrupt_dispatch(void)
 {
-    if ( (irq < 0) || (irq >= AT91RM9200_MAX_INT)) {
-        return 0;
-    }
-    return 1;
+  rtems_vector_number vector = AIC_CTL_REG(AIC_ISR);
+
+  bsp_interrupt_handler_dispatch(vector);
+
+  AIC_CTL_REG(AIC_EOICR) = 0;
 }
 
-/*
- * Installs the interrupt handler.
- */
-int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
+rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-    rtems_interrupt_level level;
+  AIC_CTL_REG(AIC_IECR) = 1 << vector;
 
-    if (!isValidInterrupt(irq->name)) {
-        return 0;
-    }
-
-    /*
-     * Check if default handler is actually connected. If not, issue
-     * an error. Note: irq->name is a number corresponding to the
-     * sources PID (see the at91rm9200_pid for this mapping).  We
-     * convert it to a long word offset to get source's vector register
-     */
-    if (AIC_SVR_REG(irq->name * 4) != (uint32_t) default_int_handler) {
-        return 0;
-    }
-
-    rtems_interrupt_disable(level);
-
-    /*
-     * store the new handler
-     */
-    AIC_SVR_REG(irq->name * 4) = (uint32_t) irq->hdl;
-
-    /*
-     * unmask interrupt
-     */
-    AIC_CTL_REG(AIC_IECR) = 1 << irq->name;
-
-    /*
-     * Enable interrupt on device
-     */
-    if(irq->on) {
-        irq->on(irq);
-    }
-
-    rtems_interrupt_enable(level);
-
-    return 1;
+  return RTEMS_SUCCESSFUL;
 }
 
-/*
- * Remove and interrupt handler
- */
-int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-    rtems_interrupt_level level;
+  AIC_CTL_REG(AIC_IDCR) = 1 << vector;
 
-    if (!isValidInterrupt(irq->name)) {
-        return 0;
-    }
+  return RTEMS_SUCCESSFUL;
+}
 
-    /*
-     * Check if the handler is actually connected. If not, issue an error.
-     */
-    if (AIC_SVR_REG(irq->name * 4) != (uint32_t) irq->hdl) {
-      return 0;
-    }
-    rtems_interrupt_disable(level);
+rtems_status_code bsp_interrupt_facility_initialize(void)
+{
+  /* disable all interrupts */
+  AIC_CTL_REG(AIC_IDCR) = 0xffffffff;
 
-    /*
-     * mask interrupt
-     */
-    AIC_CTL_REG(AIC_IDCR) = 1 << irq->name;
+  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
 
-    /*
-     * Disable interrupt on device
-     */
-    if(irq->off) {
-        irq->off(irq);
-    }
+  return RTEMS_SUCCESSFUL;
+}
 
-    /*
-     * restore the default irq value
-     */
-    AIC_SVR_REG(irq->name * 4) = (uint32_t) default_int_handler;
-
-    rtems_interrupt_enable(level);
-
-    return 1;
+void bsp_interrupt_handler_default(rtems_vector_number vector)
+{
+  printk("spurious interrupt: %u\n", vector);
 }
