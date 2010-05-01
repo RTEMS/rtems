@@ -270,9 +270,9 @@ AM_CONDITIONAL(HAS_PTHREADS,test x"$rtems_cv_HAS_POSIX_API" = x"yes")
 AM_CONDITIONAL(LIBITRON,test x"$rtems_cv_HAS_ITRON_API" = x"yes")
 AM_CONDITIONAL(LIBNETWORKING,test x"$rtems_cv_HAS_NETWORKING" = x"yes")
 AM_CONDITIONAL([LIBHTTPD],[test x"$rtems_cv_HAS_NETWORKING" = xyes \
-test x"$enable_httpd" = xyes])
+&& test x"$enable_httpd" = xyes])
 AM_CONDITIONAL([LIBSHTTPD],[test x"$rtems_cv_HAS_NETWORKING" = xyes \
-test x"$enable_shttpd" = xyes])
+&& test x"$enable_shttpd" = xyes])
 
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
 AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
