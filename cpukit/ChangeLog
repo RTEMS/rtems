@@ -1,3 +1,10 @@
+2010-05-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/Makefile.am: Add libcsupport/src/flockfile.c,
+	libcsupport/src/ftrylockfile.c, libcsupport/src/funlockfile.c.
+	* libcsupport/src/flockfile.c, libcsupport/src/ftrylockfile.c,
+	libcsupport/src/funlockfile.c: New (stub functions).
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/rtems/libio_.h, libcsupport/src/envlock.c,
