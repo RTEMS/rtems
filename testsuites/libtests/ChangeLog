@@ -1,3 +1,7 @@
+2010-05-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Move POSIX in front of other tests.
+
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* bspcmdline01/init.c: Fix assert conditional.
