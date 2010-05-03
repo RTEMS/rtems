@@ -191,7 +191,7 @@ struct ne_ring
 
 /* Forward declarations to avoid warnings */
 
-static void ne_init_irq_handler (int irno);
+static void ne_init_irq_handler (struct ne_softc *sc);
 static void ne_stop (struct ne_softc *sc);
 static void ne_stop_hardware (struct ne_softc *sc);
 static void ne_init (void *arg);
@@ -201,24 +201,6 @@ static void ne_reset(struct ne_softc *sc);
 #ifdef DEBUG_NE
 static void ne_dump(struct ne_softc *sc);
 #endif
-
-/* Find the NE2000 device which is attached at a particular interrupt
-   vector.  */
-
-static struct ne_softc *
-ne_device_for_irno (int irno)
-{
-  int i;
-
-  for (i = 0; i < NNEDRIVER; ++i)
-    {
-      if (ne_softc[i].irno == irno
-          && ne_softc[i].arpcom.ac_if.if_softc != NULL)
-        return &ne_softc[i];
-    }
-
-  return NULL;
-}
 
 /* Read data from an NE2000 device.  Read LEN bytes at ADDR, storing
    them into P.  */
@@ -372,12 +354,11 @@ ne_interrupt_handler (rtems_irq_hdl_param handle)
 static void
 ne_interrupt_on (const rtems_irq_connect_data *irq)
 {
-  struct ne_softc *sc;
+  struct ne_softc *sc = irq->handle;
 
 #ifdef DEBUG_NE
   printk ("ne_interrupt_on()\n");
 #endif
-  sc = ne_device_for_irno (irq->name);
   if (sc != NULL)
     outport_byte (sc->port + IMR, NE_INTERRUPTS);
 }
@@ -387,12 +368,11 @@ ne_interrupt_on (const rtems_irq_connect_data *irq)
 static void
 ne_interrupt_off (const rtems_irq_connect_data *irq)
 {
-  struct ne_softc *sc;
+  struct ne_softc *sc = irq->handle;
 
 #ifdef DEBUG_NE
   printk ("ne_interrupt_off()\n");
 #endif
-  sc = ne_device_for_irno (irq->name);
   if (sc != NULL)
     outport_byte (sc->port + IMR, 0);
 }
@@ -404,12 +384,11 @@ ne_interrupt_off (const rtems_irq_connect_data *irq)
 static int
 ne_interrupt_is_on (const rtems_irq_connect_data *irq)
 {
-  struct ne_softc *sc;
+  struct ne_softc *sc = irq->handle;
   unsigned char imr;
 #ifdef DEBUG_NE
   printk("ne_interrupt_is_on()\n");
 #endif
-  sc = ne_device_for_irno(irq->name);
   if(sc != NULL){
     /*Read IMR in Page2*/
     outport_byte (sc->port + CMDR, MSK_PG2 | MSK_RD2 | MSK_STP);
@@ -500,12 +479,12 @@ ne_init_hardware (struct ne_softc *sc)
 /* Set up interrupts.
 */
 static void
-ne_init_irq_handler(ne_softc *sc)
+ne_init_irq_handler(struct ne_softc *sc)
 {
   rtems_irq_connect_data irq;
 
 #ifdef DEBUG_NE
-  printk("ne_init_irq_handler(%d)\n", irno);
+  printk("ne_init_irq_handler(%d)\n", sc->irno);
 #endif
   irq.name = sc->irno;
   irq.hdl = ne_interrupt_handler;
