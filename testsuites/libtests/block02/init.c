@@ -185,7 +185,6 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_MAXIMUM_TASKS 5
 #define CONFIGURE_MAXIMUM_DRIVERS 3
-#define CONFIGURE_MAXIMUM_SEMAPHORES 5
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

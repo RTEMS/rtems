@@ -1,3 +1,9 @@
+2010-05-03	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* block01/init.c, block02/init.c, block03/init.c, block04/init.c,
+	block05/init.c, block06/init.c, block07/init.c, block09/init.c,
+	block10/init.c: Changed CONFIGURE_MAXIMUM_SEMAPHORES defines.
+
 2010-05-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Move POSIX in front of other tests.
