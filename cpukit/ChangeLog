@@ -1,3 +1,10 @@
+2010-05-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sapi/include/confdefs.h: New define CONFIGURE_SEMAPHORES for the
+	overall count of required semaphores.  New define
+	CONFIGURE_LIBBLOCK_SEMAPHORES for the count of required disk and bdbuf
+	semaphores.
+
 2010-05-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add missing "&&".
