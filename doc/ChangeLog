@@ -1,3 +1,8 @@
+2010-05-05	Alin Rus <alin.codejunkie@gmail.com>
+
+	PR 1510/doc
+	* user/chains.t: Fix code example.
+
 2010-04-22	Alin Rus <alin.codejunkie@gmail.com>
 
 	* user/chain.t: Fixed the example from PR 1504.
