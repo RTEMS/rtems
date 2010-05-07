@@ -156,6 +156,7 @@ crt0:
         scall
     #else
 	# on qemu-lm32
+	#define	SYS_CTRL_REG 0xffff0000
 	mvhi	r7, hi(SYS_CTRL_REG)
 	ori	r7, r7, lo(SYS_CTRL_REG)
 	sw	(r7+0), r0

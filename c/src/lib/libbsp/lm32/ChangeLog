@@ -1,3 +1,7 @@
+2010-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/start/start.S: Finish merging change.
+
 2010-05-07	Michael Walle <michael@walle.cc>
 
 	* shared/start/start.S: Add support for qemu-system-lm32 shutdown
