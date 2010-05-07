@@ -1,3 +1,8 @@
+2010-05-07	Arnout Vandecappelle <arnout@mind.be>
+
+	PR 1511/networking
+	* ftpd/ftpd.c: Abort RETR for directories.
+
 2010-05-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sapi/include/confdefs.h: New define CONFIGURE_SEMAPHORES for the

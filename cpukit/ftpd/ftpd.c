@@ -795,6 +795,7 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
   int                 s = -1;
   int                 fd = -1;
   char                buf[FTPD_DATASIZE];
+  struct stat         stat_buf;
   int                 res = 0;
 
   if(!can_read())
@@ -806,6 +807,14 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
   if (0 > (fd = open(filename, O_RDONLY)))
   {
     send_reply(info, 550, "Error opening file.");
+    return;
+  }
+
+  if (fstat(fd, &stat_buf) == 0 && S_ISDIR(stat_buf.st_mode))
+  {
+    if (-1 != fd)
+      close(fd);
+    send_reply(info, 550, "Is a directory.");
     return;
   }
 
