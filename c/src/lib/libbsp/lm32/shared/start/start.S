@@ -150,10 +150,16 @@ crt0:
 	call	r7
 	# boot_card returns when RTEMS is shutdown
 #if ON_SIMULATOR
+    #if defined(ON_GDB_SIM)
 	#define	SYS_exit	1
-
         mvi     r8, SYS_exit
         scall
+    #else
+	# on qemu-lm32
+	mvhi	r7, hi(SYS_CTRL_REG)
+	ori	r7, r7, lo(SYS_CTRL_REG)
+	sw	(r7+0), r0
+    #endif
 #endif
 
 .dead_end:

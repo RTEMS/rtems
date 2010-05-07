@@ -1,3 +1,8 @@
+2010-05-07	Michael Walle <michael@walle.cc>
+
+	* shared/start/start.S: Add support for qemu-system-lm32 shutdown
+	device.
+
 2009-11-25	Michael Walle <michael@walle.cc>
 
 	* shared/gdbstub/lm32-stub.c: Fix wrong computation of negative branch
