@@ -43,7 +43,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # console
-libbsp_a_SOURCES += console/console.c
+libbsp_a_SOURCES += console/erc32_console.c ../../shared/console.c
 # debugio
 libbsp_a_SOURCES += console/debugputs.c
 # clock

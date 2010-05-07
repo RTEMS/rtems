@@ -1,3 +1,11 @@
+2010-04-27	Tiemen Schut <T.Schut@sron.nl>
+
+	PR 1506/bsps
+	* console/console.c: Removed.
+	* console/erc32_console.c: New file.  Use shared console driver.
+	Make sure interrupt support works.  PPPD confirmed on sis.
+	* Makefile.am: Reflect changes above.
+
 2009-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c:
