@@ -1,3 +1,8 @@
+2010-05-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1512/doc
+	* shell/general.t: Add setenv, getenv, and unsetenv.
+
 2010-05-05	Alin Rus <alin.codejunkie@gmail.com>
 
 	PR 1510/doc

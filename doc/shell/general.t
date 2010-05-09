@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2008.
+@c  COPYRIGHT (c) 1988-2010.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -21,6 +21,9 @@ The RTEMS shell has the following general commands:
 @item @code{id} - show uid gid euid and egid
 @item @code{tty} - show ttyname
 @item @code{whoami} - print effective user id
+@item @code{getenv} - print environment variable
+@item @code{setenv} - set environment variable
+@item @code{unsetenv} - unset environment variable
 @item @code{logoff} - logoff from the system
 @item @code{exit} - alias for logoff command
 
@@ -617,6 +620,222 @@ following prototype:
 
 @example
 extern rtems_shell_cmd_t rtems_shell_WHOAMI_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection getenv - print environment variable
+
+@pgindex getenv
+
+@subheading SYNOPSYS:
+
+@example
+getenv variable
+@end example
+
+@subheading DESCRIPTION:
+
+This command is used to display the value of a @code{variable} in the set
+of environment variables.
+
+@subheading EXIT STATUS:
+
+This command will return 1 and print a diagnostic message if
+a failure occurs.
+
+@subheading NOTES:
+
+The entire RTEMS application shares a single set of environment variables.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{getenv}:
+
+@example
+SHLL [/] $ getenv BASEPATH
+/mnt/hda1
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_GETENV
+@findex CONFIGURE_SHELL_COMMAND_GETENV
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_GETENV} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_GETENV} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_getenv
+
+The @code{getenv} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_getenv(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{getenv} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_GETENV_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection setenv - set environment variable
+
+@pgindex setenv
+
+@subheading SYNOPSYS:
+
+@example
+setenv variable [value]
+@end example
+
+@subheading DESCRIPTION:
+
+This command is used to add a new @code{variable} to the set of environment
+variables or to modify the variable of an already existing @code{variable}.
+If the @code{value} is not provided, the @code{variable} will be set to the
+empty string.
+
+@subheading EXIT STATUS:
+
+This command will return 1 and print a diagnostic message if
+a failure occurs.
+
+@subheading NOTES:
+
+The entire RTEMS application shares a single set of environment variables.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{setenv}:
+
+@example
+SHLL [/] $ setenv BASEPATH /mnt/hda1
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_SETENV
+@findex CONFIGURE_SHELL_COMMAND_SETENV
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_SETENV} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_SETENV} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_setenv
+
+The @code{setenv} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_setenv(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{setenv} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_SETENV_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection unsetenv - unset environment variable
+
+@pgindex unsetenv
+
+@subheading SYNOPSYS:
+
+@example
+unsetenv variable
+@end example
+
+@subheading DESCRIPTION:
+
+This command is remove to a @code{variable} from the set of environment
+variables.
+
+@subheading EXIT STATUS:
+
+This command will return 1 and print a diagnostic message if
+a failure occurs.
+
+@subheading NOTES:
+
+The entire RTEMS application shares a single set of environment variables.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{unsetenv}:
+
+@example
+SHLL [/] $ unsetenv BASEPATH
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_UNSETENV
+@findex CONFIGURE_SHELL_COMMAND_UNSETENV
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_UNSETENV} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_UNSETENV} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_unsetenv
+
+The @code{unsetenv} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_unsetenv(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{unsetenv} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_UNSETENV_Command;
 @end example
 
 @c
