@@ -1,3 +1,7 @@
+2010-05-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* timer/timer.c: Now runs on 486 and below again. Reformatted.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am: Update for generic interrupt support
