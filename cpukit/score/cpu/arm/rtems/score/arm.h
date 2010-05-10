@@ -79,7 +79,7 @@ extern "C" {
 #define ARM_HAS_FPU     0
 #else
 #define ARM_HAS_FPU	1
-# error "FPU-support not yet implemented for the arm"
+#warning "FPU-support not yet implemented for the arm"
 #endif
 
 

@@ -1,3 +1,8 @@
+2010-05-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* rtems/score/arm.h: Make it a warning not error that the FPU multilib
+	is not supported yet.
+
 2010-04-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* arm_exc_abort.S, arm_exc_handler_high.c, arm_exc_handler_low.S,
