@@ -83,7 +83,7 @@
 
 #define BTCNT           _SFR_IO8(0x20)
 
-/*
+/* 
 NOTE: EEPROM name's changed to have D in front on them, per datasheet, but
 you may want to remove the leading D.
 */

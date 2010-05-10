@@ -53,7 +53,7 @@
 #  define _AVR_IOXXX_H_ "iocanxx.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif
+#endif 
 
 /* I/O registers and bit definitions. */
 
@@ -952,9 +952,9 @@
 #define    ADPS0        0
 /* End Register Bits */
 
-/*
-   The ADHSM bit has been removed from all documentation,
-   as being not needed at all since the comparator has proven
+/* 
+   The ADHSM bit has been removed from all documentation, 
+   as being not needed at all since the comparator has proven 
    to be fast enough even without feeding it more power.
 */
 

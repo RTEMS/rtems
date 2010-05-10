@@ -40,20 +40,20 @@
 
 \code #include <avr/power.h>\endcode
 
-Many AVRs contain a Power Reduction Register (PRR) or Registers (PRRx) that
-allow you to reduce power consumption by disabling or enabling various on-board
+Many AVRs contain a Power Reduction Register (PRR) or Registers (PRRx) that 
+allow you to reduce power consumption by disabling or enabling various on-board 
 peripherals as needed.
 
 There are many macros in this header file that provide an easy interface
 to enable or disable on-board peripherals to reduce power. See the table below.
 
 \note Not all AVR devices have a Power Reduction Register (for example
-the ATmega128). On those devices without a Power Reduction Register, these
+the ATmega128). On those devices without a Power Reduction Register, these 
 macros are not available.
 
 \note Not all AVR devices contain the same peripherals (for example, the LCD
-interface), or they will be named differently (for example, USART and
-USART0). Please consult your device's datasheet, or the header file, to
+interface), or they will be named differently (for example, USART and 
+USART0). Please consult your device's datasheet, or the header file, to 
 find out which macros are applicable to your device.
 
 */
@@ -347,10 +347,15 @@ find out which macros are applicable to your device.
 || defined(__AVR_ATxmega32D4__) \
 || defined(__AVR_ATxmega64A1__) \
 || defined(__AVR_ATxmega64A3__) \
+|| defined(__AVR_ATxmega64D3__) \
 || defined(__AVR_ATxmega128A1__) \
 || defined(__AVR_ATxmega128A3__) \
+|| defined(__AVR_ATxmega128D3__) \
+|| defined(__AVR_ATxmega192A3__) \
+|| defined(__AVR_ATxmega192D3__) \
+|| defined(__AVR_ATxmega256D3__) \
 || defined(__AVR_ATxmega256A3__) \
-|| defined(__AVR_ATxmega256A3b__)
+|| defined(__AVR_ATxmega256A3B__)
 
 /*
 #define power_aes_enable()  (PR_PR &= (uint8_t)~(PR_AES_bm))
@@ -477,7 +482,7 @@ do { \
 || defined(__AVR_ATmega1280__) \
 || defined(__AVR_ATmega1281__) \
 || defined(__AVR_ATmega2560__) \
-|| defined(__AVR_ATmega2561__)
+|| defined(__AVR_ATmega2561__) 
 
 #define power_adc_enable()      (PRR0 &= (uint8_t)~(1 << PRADC))
 #define power_adc_disable()     (PRR0 |= (uint8_t)(1 << PRADC))
@@ -625,7 +630,7 @@ do{ \
 
 
 #elif defined(__AVR_ATmega32U4__) \
-defined(__AVR_ATmega16U4__)
+|| defined(__AVR_ATmega16U4__)
 
 
 #define power_adc_enable()      (PRR0 &= (uint8_t)~(1 << PRADC))
@@ -806,11 +811,16 @@ do{ \
 
 
 #elif defined(__AVR_ATmega165__) \
+|| defined(__AVR_ATmega165A__) \
 || defined(__AVR_ATmega165P__) \
 || defined(__AVR_ATmega325__) \
 || defined(__AVR_ATmega3250__) \
 || defined(__AVR_ATmega645__) \
-|| defined(__AVR_ATmega6450__)
+|| defined(__AVR_ATmega645A__) \
+|| defined(__AVR_ATmega645P__) \
+|| defined(__AVR_ATmega6450__) \
+|| defined(__AVR_ATmega6450A__) \
+|| defined(__AVR_ATmega6450P__)
 
 #define power_adc_enable()      (PRR &= (uint8_t)~(1 << PRADC))
 #define power_adc_disable()     (PRR |= (uint8_t)(1 << PRADC))
@@ -829,13 +839,20 @@ do{ \
 
 
 #elif defined(__AVR_ATmega169__) \
+|| defined(__AVR_ATmega169A__) \
 || defined(__AVR_ATmega169P__) \
+|| defined(__AVR_ATmega169PA__) \
 || defined(__AVR_ATmega329__) \
 || defined(__AVR_ATmega329P__) \
+|| defined(__AVR_ATmega329PA__) \
 || defined(__AVR_ATmega3290__) \
 || defined(__AVR_ATmega3290P__) \
 || defined(__AVR_ATmega649__) \
-|| defined(__AVR_ATmega6490__)
+|| defined(__AVR_ATmega649A__) \
+|| defined(__AVR_ATmega649P__) \
+|| defined(__AVR_ATmega6490__) \
+|| defined(__AVR_ATmega6490A__) \
+|| defined(__AVR_ATmega6490P__)
 
 #define power_adc_enable()      (PRR &= (uint8_t)~(1 << PRADC))
 #define power_adc_disable()     (PRR |= (uint8_t)(1 << PRADC))
@@ -856,8 +873,11 @@ do{ \
 #define power_all_disable()     (PRR |= (uint8_t)((1<<PRADC)|(1<<PRSPI)|(1<<PRUSART0)|(1<<PRTIM1)|(1<<PRLCD)))
 
 
-#elif defined(__AVR_ATmega164P__) \
-|| defined(__AVR_ATmega324P__)
+#elif defined(__AVR_ATmega164A__) \
+|| defined(__AVR_ATmega164P__) \
+|| defined(__AVR_ATmega324A__) \
+|| defined(__AVR_ATmega324P__) \
+|| defined(__AVR_ATmega324PA__)
 
 #define power_adc_enable()      (PRR0 &= (uint8_t)~(1 << PRADC))
 #define power_adc_disable()     (PRR0 |= (uint8_t)(1 << PRADC))
@@ -888,6 +908,7 @@ do{ \
 
 
 #elif defined(__AVR_ATmega644__) \
+|| defined(__AVR_ATmega644A__) \
 || defined(__AVR_ATmega644P__)
 
 #define power_adc_enable()      (PRR0 &= (uint8_t)~(1 << PRADC))
@@ -935,11 +956,16 @@ do{ \
 
 
 #elif defined(__AVR_ATmega48__) \
+|| defined(__AVR_ATmega48A__) \
 || defined(__AVR_ATmega48P__) \
 || defined(__AVR_ATmega88__) \
+|| defined(__AVR_ATmega88A__) \
 || defined(__AVR_ATmega88P__) \
+|| defined(__AVR_ATmega88PA__) \
 || defined(__AVR_ATmega168__) \
+|| defined(__AVR_ATmega168A__) \
 || defined(__AVR_ATmega168P__) \
+|| defined(__AVR_ATmega328__) \
 || defined(__AVR_ATmega328P__) \
 || defined(__AVR_ATtiny48__) \
 || defined(__AVR_ATtiny88__)
@@ -970,14 +996,19 @@ do{ \
 
 
 #elif defined(__AVR_ATtiny24__) \
+|| defined(__AVR_ATtiny24A__) \
 || defined(__AVR_ATtiny44__) \
+|| defined(__AVR_ATtiny44A__) \
 || defined(__AVR_ATtiny84__) \
 || defined(__AVR_ATtiny25__) \
 || defined(__AVR_ATtiny45__) \
 || defined(__AVR_ATtiny85__) \
 || defined(__AVR_ATtiny261__) \
+|| defined(__AVR_ATtiny261A__) \
 || defined(__AVR_ATtiny461__) \
+|| defined(__AVR_ATtiny461A__) \
 || defined(__AVR_ATtiny861__) \
+|| defined(__AVR_ATtiny861A__) \
 || defined(__AVR_ATtiny43U__)
 
 #define power_adc_enable()      (PRR &= (uint8_t)~(1 << PRADC))
@@ -1124,8 +1155,10 @@ do{ \
 
 
 #elif defined(__AVR_AT90USB82__) \
-|| defined(__AVR_AT90USB162__)
-
+|| defined(__AVR_AT90USB162__) \
+|| defined(__AVR_ATmega8U2__) \
+|| defined(__AVR_ATmega16U2__) \
+|| defined(__AVR_ATmega32U2__)
 
 #define power_spi_enable()      (PRR0 &= (uint8_t)~(1 << PRSPI))
 #define power_spi_disable()     (PRR0 |= (uint8_t)(1 << PRSPI))
@@ -1134,7 +1167,7 @@ do{ \
 #define power_timer0_disable()  (PRR0 |= (uint8_t)(1 << PRTIM0))
 
 #define power_timer1_enable()   (PRR0 &= (uint8_t)~(1 << PRTIM1))
-#define power_timer2_disable()  (PRR0 |= (uint8_t)(1 << PRTIM1))
+#define power_timer1_disable()  (PRR0 |= (uint8_t)(1 << PRTIM1))
 
 #define power_usb_enable()      (PRR1 &= (uint8_t)~(1 << PRUSB))
 #define power_usb_disable()     (PRR1 |= (uint8_t)(1 << PRUSB))
@@ -1205,21 +1238,22 @@ do{ \
     PRR1 |= (uint8_t)((1<<PRUSBH)|(1<<PRUSB)|(1<<PRHSSPI)|(1<<PRSCI)|(1<<PRAES)|(1<<PRKB)); \
 }while(0)
 
+
+#elif defined(__AVR_ATtiny13A__)
+
+#define power_adc_enable()   (PRR &= (uint8_t)~(1 << PRADC))
+#define power_adc_disable()  (PRR |= (uint8_t)(1 << PRADC))
+
+#define power_timer0_enable()   (PRR &= (uint8_t)~(1 << PRTIM0))
+#define power_timer0_disable()  (PRR |= (uint8_t)(1 << PRTIM0))
+
+#define power_all_enable()      (PRR &= (uint8_t)~((1<<PRADC)|(1<<PRTIM0)))
+#define power_all_disable()     (PRR |= (uint8_t)((1<<PRADC)|(1<<PRTIM0)))
+
 #endif
 
 
-#if defined(__AVR_ATmega640__) \
-|| defined(__AVR_ATmega1280__) \
-|| defined(__AVR_ATmega1281__) \
-|| defined(__AVR_ATmega2560__) \
-|| defined(__AVR_ATmega2561__) \
-|| defined(__AVR_AT90USB646__) \
-|| defined(__AVR_AT90USB647__) \
-|| defined(__AVR_AT90USB82__) \
-|| defined(__AVR_AT90USB1286__) \
-|| defined(__AVR_AT90USB1287__) \
-|| defined(__AVR_AT90USB162__) \
-|| defined(__AVR_AT90CAN32__) \
+#if defined(__AVR_AT90CAN32__) \
 || defined(__AVR_AT90CAN64__) \
 || defined(__AVR_AT90CAN128__) \
 || defined(__AVR_AT90PWM1__) \
@@ -1229,38 +1263,69 @@ do{ \
 || defined(__AVR_AT90PWM3B__) \
 || defined(__AVR_AT90PWM216__) \
 || defined(__AVR_AT90PWM316__) \
-|| defined(__AVR_ATmega32M1__) \
+|| defined(__AVR_AT90SCR100__) \
+|| defined(__AVR_AT90USB646__) \
+|| defined(__AVR_AT90USB647__) \
+|| defined(__AVR_AT90USB82__) \
+|| defined(__AVR_AT90USB1286__) \
+|| defined(__AVR_AT90USB1287__) \
+|| defined(__AVR_AT90USB162__) \
+|| defined(__AVR_ATmega1280__) \
+|| defined(__AVR_ATmega1281__) \
+|| defined(__AVR_ATmega128RFA1__) \
 || defined(__AVR_ATmega1284P__) \
 || defined(__AVR_ATmega162__) \
+|| defined(__AVR_ATmega164A__) \
+|| defined(__AVR_ATmega164P__) \
 || defined(__AVR_ATmega165__) \
+|| defined(__AVR_ATmega165A__) \
 || defined(__AVR_ATmega165P__) \
-|| defined(__AVR_ATmega325__) \
-|| defined(__AVR_ATmega3250__) \
-|| defined(__AVR_ATmega32HVB__) \
-|| defined(__AVR_ATmega645__) \
-|| defined(__AVR_ATmega6450__) \
-|| defined(__AVR_ATmega169__) \
-|| defined(__AVR_ATmega169P__) \
-|| defined(__AVR_ATmega329__) \
-|| defined(__AVR_ATmega3290__) \
-|| defined(__AVR_ATmega649__) \
-|| defined(__AVR_ATmega6490__) \
-|| defined(__AVR_ATmega48__) \
-|| defined(__AVR_ATmega48P__) \
-|| defined(__AVR_ATmega88__) \
-|| defined(__AVR_ATmega88P__) \
 || defined(__AVR_ATmega168__) \
 || defined(__AVR_ATmega168P__) \
-|| defined(__AVR_ATmega328P__) \
-|| defined(__AVR_ATmega164P__) \
+|| defined(__AVR_ATmega169__) \
+|| defined(__AVR_ATmega169A__) \
+|| defined(__AVR_ATmega169P__) \
+|| defined(__AVR_ATmega169PA__) \
+|| defined(__AVR_ATmega16U4__) \
+|| defined(__AVR_ATmega2560__) \
+|| defined(__AVR_ATmega2561__) \
+|| defined(__AVR_ATmega324A__) \
 || defined(__AVR_ATmega324P__) \
+|| defined(__AVR_ATmega325__) \
+|| defined(__AVR_ATmega3250__) \
+|| defined(__AVR_ATmega328P__) \
+|| defined(__AVR_ATmega329__) \
+|| defined(__AVR_ATmega329P__) \
+|| defined(__AVR_ATmega329PA__) \
+|| defined(__AVR_ATmega3290__) \
+|| defined(__AVR_ATmega32C1__) \
+|| defined(__AVR_ATmega32HVB__) \
+|| defined(__AVR_ATmega32M1__) \
+|| defined(__AVR_ATmega32U4__) \
+|| defined(__AVR_ATmega32U6__) \
+|| defined(__AVR_ATmega48__) \
+|| defined(__AVR_ATmega48P__) \
+|| defined(__AVR_ATmega640__) \
+|| defined(__AVR_ATmega649P__) \
 || defined(__AVR_ATmega644__) \
+|| defined(__AVR_ATmega644A__) \
 || defined(__AVR_ATmega644P__) \
+|| defined(__AVR_ATmega644PA__) \
+|| defined(__AVR_ATmega645__) \
+|| defined(__AVR_ATmega645A__) \
+|| defined(__AVR_ATmega645P__) \
+|| defined(__AVR_ATmega6450__) \
+|| defined(__AVR_ATmega6450A__) \
+|| defined(__AVR_ATmega6450P__) \
+|| defined(__AVR_ATmega649__) \
+|| defined(__AVR_ATmega649A__) \
+|| defined(__AVR_ATmega6490__) \
+|| defined(__AVR_ATmega6490A__) \
+|| defined(__AVR_ATmega6490P__) \
+|| defined(__AVR_ATmega88__) \
+|| defined(__AVR_ATmega88P__) \
 || defined(__AVR_ATtiny48__) \
 || defined(__AVR_ATtiny167__) \
-|| defined(__AVR_ATmega32U4__) \
-|| defined(__AVR_ATmega32C1__) \
-|| defined(__AVR_AT90SCR100__) \
 || defined(__DOXYGEN__)
 
 
@@ -1277,7 +1342,7 @@ without a Clock Prescale Register, these macros are not available.
 
 
 /** \addtogroup avr_power
-\code
+\code 
 typedef enum
 {
     clock_div_1 = 0,
@@ -1288,7 +1353,8 @@ typedef enum
     clock_div_32 = 5,
     clock_div_64 = 6,
     clock_div_128 = 7,
-    clock_div_256 = 8
+    clock_div_256 = 8,
+    clock_div_1_rc = 15, // ATmega128RFA1 only
 } clock_div_t;
 \endcode
 Clock prescaler setting enumerations.
@@ -1304,29 +1370,38 @@ typedef enum
     clock_div_32 = 5,
     clock_div_64 = 6,
     clock_div_128 = 7,
-    clock_div_256 = 8
+    clock_div_256 = 8,
+#if defined(__AVR_ATmega128RFA1__)
+    clock_div_1_rc = 15,
+#endif
 } clock_div_t;
 
 
+static __inline__ void clock_prescale_set(clock_div_t) __attribute__((__always_inline__));
+
 /** \addtogroup avr_power
 \code clock_prescale_set(x) \endcode
-Set the clock prescaler register select bits, selecting a system clock division setting. They type of x is clock_div_t.
 
+Set the clock prescaler register select bits, selecting a system clock
+division setting. This function is inlined, even if compiler
+optimizations are disabled.
+
+The type of x is clock_div_t.
 */
-#define clock_prescale_set(x) \
-{ \
-        uint8_t tmp = _BV(CLKPCE); \
-        __asm__ __volatile__ ( \
-                "in __tmp_reg__,__SREG__" "\n\t" \
-                "cli" "\n\t" \
-                "sts %1, %0" "\n\t" \
-                "sts %1, %2" "\n\t" \
-                "out __SREG__, __tmp_reg__" \
-                : /* no outputs */ \
-                : "d" (tmp), \
-                  "M" (_SFR_MEM_ADDR(CLKPR)), \
-                  "d" (x) \
-                : "r0"); \
+void clock_prescale_set(clock_div_t __x)
+{
+    uint8_t __tmp = _BV(CLKPCE);
+    __asm__ __volatile__ (
+        "in __tmp_reg__,__SREG__" "\n\t"
+        "cli" "\n\t"
+        "sts %1, %0" "\n\t"
+        "sts %1, %2" "\n\t"
+        "out __SREG__, __tmp_reg__"
+        : /* no outputs */
+        : "d" (__tmp),
+          "M" (_SFR_MEM_ADDR(CLKPR)),
+          "d" (__x)
+        : "r0");
 }
 
 /** \addtogroup avr_power
@@ -1338,15 +1413,22 @@ Gets and returns the clock prescaler register setting. The return type is clock_
 
 
 #elif defined(__AVR_ATtiny24__) \
+|| defined(__AVR_ATtiny24A__) \
 || defined(__AVR_ATtiny44__) \
+|| defined(__AVR_ATtiny44A__) \
 || defined(__AVR_ATtiny84__) \
 || defined(__AVR_ATtiny25__) \
 || defined(__AVR_ATtiny45__) \
 || defined(__AVR_ATtiny85__) \
+|| defined(__AVR_ATtiny261A__) \
 || defined(__AVR_ATtiny261__) \
 || defined(__AVR_ATtiny461__) \
+|| defined(__AVR_ATtiny461A__) \
 || defined(__AVR_ATtiny861__) \
+|| defined(__AVR_ATtiny861A__) \
 || defined(__AVR_ATtiny2313__) \
+|| defined(__AVR_ATtiny2313A__) \
+|| defined(__AVR_ATtiny4313__) \
 || defined(__AVR_ATtiny13__) \
 || defined(__AVR_ATtiny13A__) \
 || defined(__AVR_ATtiny43U__) \
@@ -1365,20 +1447,20 @@ typedef enum
 } clock_div_t;
 
 
-#define clock_prescale_set(x) \
-{ \
-        uint8_t tmp = _BV(CLKPCE); \
-        __asm__ __volatile__ ( \
-                "in __tmp_reg__,__SREG__" "\n\t" \
-                "cli" "\n\t" \
-                "out %1, %0" "\n\t" \
-                "out %1, %2" "\n\t" \
-                "out __SREG__, __tmp_reg__" \
-                : /* no outputs */ \
-                : "d" (tmp), \
-                  "I" (_SFR_IO_ADDR(CLKPR)), \
-                  "d" (x) \
-                : "r0"); \
+void clock_prescale_set(clock_div_t __x)
+{
+    uint8_t __tmp = _BV(CLKPCE);
+    __asm__ __volatile__ (
+        "in __tmp_reg__,__SREG__" "\n\t"
+        "cli" "\n\t"
+        "out %1, %0" "\n\t"
+        "out %1, %2" "\n\t"
+        "out __SREG__, __tmp_reg__"
+        : /* no outputs */
+        : "d" (__tmp),
+          "I" (_SFR_IO_ADDR(CLKPR)),
+          "d" (__x)
+        : "r0");
 }
 
 

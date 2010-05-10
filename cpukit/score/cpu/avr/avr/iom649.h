@@ -1,5 +1,5 @@
 /* Copyright (c) 2004 Eric B. Weddington
-   Copyright (c) 2005,2006 Anatoly Sokolov
+   Copyright (c) 2005,2006 Anatoly Sokolov 
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,7 @@
 #  define _AVR_IOXXX_H_ "iom649.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif
+#endif 
 
 /* Registers and associated bit numbers */
 
@@ -980,7 +980,7 @@
 /* Lock Bits */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
-#define __BOOT_LOCK_BITS_1_EXIST
+#define __BOOT_LOCK_BITS_1_EXIST 
 
 
 /* Signature */

@@ -26,7 +26,7 @@
   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE.
+  POSSIBILITY OF SUCH DAMAGE. 
 */
 
 /* $Id$ */
@@ -43,7 +43,7 @@
 #  define _AVR_IOXXX_H_ "iom32u4.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif
+#endif 
 
 
 #ifndef _AVR_IOM32U4_H_
@@ -633,9 +633,9 @@
 #define ICNC1 7
 
 #define TCCR1C _SFR_MEM8(0x82)
-#define FOC1C 5
-#define FOC1B 6
-#define FOC1A 7
+#define FOC1C 5 
+#define FOC1B 6 
+#define FOC1A 7 
 
 #define TCNT1 _SFR_MEM16(0x84)
 
@@ -1448,7 +1448,7 @@
 #define XRAMSIZE     (0x10000)
 #define XRAMEND      (XRAMSIZE - 1)
 #define E2END        (0x3FF)
-#define E2PAGESIZE   (4)
+#define E2PAGESIZE   (4) 
 #define FLASHEND     (0x7FFF)
 
 
@@ -1490,7 +1490,7 @@
 /* Lock Bits */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
-#define __BOOT_LOCK_BITS_1_EXIST
+#define __BOOT_LOCK_BITS_1_EXIST 
 
 
 

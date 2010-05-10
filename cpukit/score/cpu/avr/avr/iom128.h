@@ -31,7 +31,7 @@
 
 /* $Id$ */
 
-/* avr/iom128.h - defines for ATmega128
+/* avr/iom128.h - defines for ATmega128 
 
    As of 2002-08-27:
    - This should be up to date with data sheet 2467E-AVR-05/02 */
@@ -49,7 +49,7 @@
 #  define _AVR_IOXXX_H_ "iom128.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif
+#endif 
 
 /* I/O registers */
 
@@ -794,9 +794,9 @@
 #define    WDP1         1
 #define    WDP0         0
 
-/*
-   The ADHSM bit has been removed from all documentation,
-   as being not needed at all since the comparator has proven
+/* 
+   The ADHSM bit has been removed from all documentation, 
+   as being not needed at all since the comparator has proven 
    to be fast enough even without feeding it more power.
 */
 
@@ -966,7 +966,7 @@
 #define    PINA5        5
 #define    PINA4        4
 #define    PINA3        3
-#define    PINA2        2
+#define    PINA2        2 
 #define    PINA1        1
 #define    PINA0        0
 
@@ -996,7 +996,7 @@
 #define    PINB5        5
 #define    PINB4        4
 #define    PINB3        3
-#define    PINB2        2
+#define    PINB2        2 
 #define    PINB1        1
 #define    PINB0        0
 
@@ -1026,7 +1026,7 @@
 #define    PINC5        5
 #define    PINC4        4
 #define    PINC3        3
-#define    PINC2        2
+#define    PINC2        2 
 #define    PINC1        1
 #define    PINC0        0
 
@@ -1056,7 +1056,7 @@
 #define    PIND5        5
 #define    PIND4        4
 #define    PIND3        3
-#define    PIND2        2
+#define    PIND2        2 
 #define    PIND1        1
 #define    PIND0        0
 
@@ -1086,7 +1086,7 @@
 #define    PINE5        5
 #define    PINE4        4
 #define    PINE3        3
-#define    PINE2        2
+#define    PINE2        2 
 #define    PINE1        1
 #define    PINE0        0
 
@@ -1116,7 +1116,7 @@
 #define    PINF5        5
 #define    PINF4        4
 #define    PINF3        3
-#define    PINF2        2
+#define    PINF2        2 
 #define    PINF1        1
 #define    PINF0        0
 
@@ -1137,7 +1137,7 @@
 /* Port G Input Pins - PING */
 #define    PING4        4
 #define    PING3        3
-#define    PING2        2
+#define    PING2        2 
 #define    PING1        1
 #define    PING0        0
 
@@ -1191,7 +1191,7 @@
 /* Lock Bits */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
-#define __BOOT_LOCK_BITS_1_EXIST
+#define __BOOT_LOCK_BITS_1_EXIST 
 
 
 /* Signature */

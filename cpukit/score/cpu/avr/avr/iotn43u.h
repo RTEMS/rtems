@@ -26,7 +26,7 @@
   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE.
+  POSSIBILITY OF SUCH DAMAGE. 
 */
 
 /* $Id$ */
@@ -43,7 +43,7 @@
 #  define _AVR_IOXXX_H_ "iotn43u.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif
+#endif 
 
 
 #ifndef _AVR_IOTN43U_H_
@@ -555,7 +555,7 @@
 #define FUSE_SPIEN       (unsigned char)~_BV(5)
 #define FUSE_DWEN        (unsigned char)~_BV(6)
 #define FUSE_RSTDISBL    (unsigned char)~_BV(7)
-#define HFUSE_DEFAULT (FUSE_SPIEN)
+#define HFUSE_DEFAULT (FUSE_SPIEN)    
 
 /* Extended Fuse Byte */
 #define FUSE_SELFPRGEN   (unsigned char)~_BV(0)

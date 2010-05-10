@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 #include <rtems/score/avr.h>            /* pick up machine definitions */
-#include <avr/io.h>
+#include <avr/common.h>
 #ifndef ASM
 #include <rtems/score/types.h>
 #endif
@@ -639,10 +639,10 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  */
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
-  { \
-    	(_isr_cookie) = SREG;   /* do something to prevent warnings */ \
-	asm volatile ("cli"::);  \
-}
+  do { \
+    	(_isr_cookie) = SREG; \
+	asm volatile ("cli"::); \
+  } while (0)
 
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
@@ -655,10 +655,10 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  */
 
 #define _CPU_ISR_Enable( _isr_cookie )  \
-  { \
+  do { \
 	SREG  = _isr_cookie; \
 	asm volatile ("sei"::); \
-  }
+  } while (0)
 
 /*
  *  This temporarily restores the interrupt to _level before immediately
@@ -672,12 +672,12 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  */
 
 #define _CPU_ISR_Flash( _isr_cookie ) \
-  { \
+  do { \
 	SREG=(_isr_cookie); \
 	asm volatile("sei"::); \
 	(_isr_cookie) = SREG; \
 	asm volatile("cli"::); \
-  }
+  } while (0)
 
 /*
  *  Map interrupt level in task mode onto the hardware that the CPU

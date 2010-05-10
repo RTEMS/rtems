@@ -42,7 +42,7 @@
 #  define _AVR_IOXXX_H_ "iox32a4.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif
+#endif 
 
 
 #ifndef _AVR_ATxmega32A4_H_
@@ -92,7 +92,7 @@ typedef volatile uint32_t register32_t;
 #undef _WORDREGISTER
 #endif
 #define _WORDREGISTER(regname)   \
-    union \
+    __extension__ union \
     { \
         register16_t regname; \
         struct \
@@ -106,7 +106,7 @@ typedef volatile uint32_t register32_t;
 #undef _DWORDREGISTER
 #endif
 #define _DWORDREGISTER(regname)  \
-    union \
+   __extension__  union \
     { \
         register32_t regname; \
         struct \
@@ -926,7 +926,7 @@ typedef struct NVM_PROD_SIGNATURES_struct
     register8_t TEMPSENSE0;  /* Temperature Sensor Calibration Byte 0 */
     register8_t TEMPSENSE1;  /* Temperature Sensor Calibration Byte 0 */
     register8_t DACAOFFCAL;  /* DACA Calibration Byte 0 */
-    register8_t DACACAINCAL;  /* DACA Calibration Byte 1 */
+    register8_t DACAGAINCAL;  /* DACA Calibration Byte 1 */
     register8_t DACBOFFCAL;  /* DACB Calibration Byte 0 */
     register8_t DACBGAINCAL;  /* DACB Calibration Byte 1 */
     register8_t reserved_0x34;
@@ -6252,21 +6252,21 @@ IO Module Instances. Mapped to memory.
 
 // Generic Port Pins
 
-#define PIN0_bm 0x01
+#define PIN0_bm 0x01 
 #define PIN0_bp 0
 #define PIN1_bm 0x02
 #define PIN1_bp 1
-#define PIN2_bm 0x04
+#define PIN2_bm 0x04 
 #define PIN2_bp 2
-#define PIN3_bm 0x08
+#define PIN3_bm 0x08 
 #define PIN3_bp 3
-#define PIN4_bm 0x10
+#define PIN4_bm 0x10 
 #define PIN4_bp 4
-#define PIN5_bm 0x20
+#define PIN5_bm 0x20 
 #define PIN5_bp 5
-#define PIN6_bm 0x40
+#define PIN6_bm 0x40 
 #define PIN6_bp 6
-#define PIN7_bm 0x80
+#define PIN7_bm 0x80 
 #define PIN7_bp 7
 
 
@@ -6582,49 +6582,49 @@ IO Module Instances. Mapped to memory.
 #define FUSE_MEMORY_SIZE 6
 
 /* Fuse Byte 0 */
-#define FUSE_USERID0  ~_BV(0)  /* User ID Bit 0 */
-#define FUSE_USERID1  ~_BV(1)  /* User ID Bit 1 */
-#define FUSE_USERID2  ~_BV(2)  /* User ID Bit 2 */
-#define FUSE_USERID3  ~_BV(3)  /* User ID Bit 3 */
-#define FUSE_USERID4  ~_BV(4)  /* User ID Bit 4 */
-#define FUSE_USERID5  ~_BV(5)  /* User ID Bit 5 */
-#define FUSE_USERID6  ~_BV(6)  /* User ID Bit 6 */
-#define FUSE_USERID7  ~_BV(7)  /* User ID Bit 7 */
+#define FUSE_USERID0  (unsigned char)~_BV(0)  /* User ID Bit 0 */
+#define FUSE_USERID1  (unsigned char)~_BV(1)  /* User ID Bit 1 */
+#define FUSE_USERID2  (unsigned char)~_BV(2)  /* User ID Bit 2 */
+#define FUSE_USERID3  (unsigned char)~_BV(3)  /* User ID Bit 3 */
+#define FUSE_USERID4  (unsigned char)~_BV(4)  /* User ID Bit 4 */
+#define FUSE_USERID5  (unsigned char)~_BV(5)  /* User ID Bit 5 */
+#define FUSE_USERID6  (unsigned char)~_BV(6)  /* User ID Bit 6 */
+#define FUSE_USERID7  (unsigned char)~_BV(7)  /* User ID Bit 7 */
 #define FUSE0_DEFAULT  (0xFF)
 
 /* Fuse Byte 1 */
-#define FUSE_WDP0  ~_BV(0)  /* Watchdog Timeout Period Bit 0 */
-#define FUSE_WDP1  ~_BV(1)  /* Watchdog Timeout Period Bit 1 */
-#define FUSE_WDP2  ~_BV(2)  /* Watchdog Timeout Period Bit 2 */
-#define FUSE_WDP3  ~_BV(3)  /* Watchdog Timeout Period Bit 3 */
-#define FUSE_WDWP0  ~_BV(4)  /* Watchdog Window Timeout Period Bit 0 */
-#define FUSE_WDWP1  ~_BV(5)  /* Watchdog Window Timeout Period Bit 1 */
-#define FUSE_WDWP2  ~_BV(6)  /* Watchdog Window Timeout Period Bit 2 */
-#define FUSE_WDWP3  ~_BV(7)  /* Watchdog Window Timeout Period Bit 3 */
+#define FUSE_WDP0  (unsigned char)~_BV(0)  /* Watchdog Timeout Period Bit 0 */
+#define FUSE_WDP1  (unsigned char)~_BV(1)  /* Watchdog Timeout Period Bit 1 */
+#define FUSE_WDP2  (unsigned char)~_BV(2)  /* Watchdog Timeout Period Bit 2 */
+#define FUSE_WDP3  (unsigned char)~_BV(3)  /* Watchdog Timeout Period Bit 3 */
+#define FUSE_WDWP0  (unsigned char)~_BV(4)  /* Watchdog Window Timeout Period Bit 0 */
+#define FUSE_WDWP1  (unsigned char)~_BV(5)  /* Watchdog Window Timeout Period Bit 1 */
+#define FUSE_WDWP2  (unsigned char)~_BV(6)  /* Watchdog Window Timeout Period Bit 2 */
+#define FUSE_WDWP3  (unsigned char)~_BV(7)  /* Watchdog Window Timeout Period Bit 3 */
 #define FUSE1_DEFAULT  (0xFF)
 
 /* Fuse Byte 2 */
-#define FUSE_BODPD0  ~_BV(0)  /* BOD Operation in Power-Down Mode Bit 0 */
-#define FUSE_BODPD1  ~_BV(1)  /* BOD Operation in Power-Down Mode Bit 1 */
-#define FUSE_BOOTRST  ~_BV(6)  /* Boot Loader Section Reset Vector */
-#define FUSE_DVSDON  ~_BV(7)  /* Spike Detector Enable */
+#define FUSE_BODPD0  (unsigned char)~_BV(0)  /* BOD Operation in Power-Down Mode Bit 0 */
+#define FUSE_BODPD1  (unsigned char)~_BV(1)  /* BOD Operation in Power-Down Mode Bit 1 */
+#define FUSE_BOOTRST  (unsigned char)~_BV(6)  /* Boot Loader Section Reset Vector */
+#define FUSE_DVSDON  (unsigned char)~_BV(7)  /* Spike Detector Enable */
 #define FUSE2_DEFAULT  (0xFF)
 
 /* Fuse Byte 3 Reserved */
 
 /* Fuse Byte 4 */
-#define FUSE_WDLOCK  ~_BV(1)  /* Watchdog Timer Lock */
-#define FUSE_SUT0  ~_BV(2)  /* Start-up Time Bit 0 */
-#define FUSE_SUT1  ~_BV(3)  /* Start-up Time Bit 1 */
+#define FUSE_WDLOCK  (unsigned char)~_BV(1)  /* Watchdog Timer Lock */
+#define FUSE_SUT0  (unsigned char)~_BV(2)  /* Start-up Time Bit 0 */
+#define FUSE_SUT1  (unsigned char)~_BV(3)  /* Start-up Time Bit 1 */
 #define FUSE4_DEFAULT  (0xFF)
 
 /* Fuse Byte 5 */
-#define FUSE_BODLVL0  ~_BV(0)  /* Brown Out Detection Voltage Level Bit 0 */
-#define FUSE_BODLVL1  ~_BV(1)  /* Brown Out Detection Voltage Level Bit 1 */
-#define FUSE_BODLVL2  ~_BV(2)  /* Brown Out Detection Voltage Level Bit 2 */
-#define FUSE_EESAVE  ~_BV(3)  /* Preserve EEPROM Through Chip Erase */
-#define FUSE_BODACT0  ~_BV(4)  /* BOD Operation in Active Mode Bit 0 */
-#define FUSE_BODACT1  ~_BV(5)  /* BOD Operation in Active Mode Bit 1 */
+#define FUSE_BODLVL0  (unsigned char)~_BV(0)  /* Brown Out Detection Voltage Level Bit 0 */
+#define FUSE_BODLVL1  (unsigned char)~_BV(1)  /* Brown Out Detection Voltage Level Bit 1 */
+#define FUSE_BODLVL2  (unsigned char)~_BV(2)  /* Brown Out Detection Voltage Level Bit 2 */
+#define FUSE_EESAVE  (unsigned char)~_BV(3)  /* Preserve EEPROM Through Chip Erase */
+#define FUSE_BODACT0  (unsigned char)~_BV(4)  /* BOD Operation in Active Mode Bit 0 */
+#define FUSE_BODACT1  (unsigned char)~_BV(5)  /* BOD Operation in Active Mode Bit 1 */
 #define FUSE5_DEFAULT  (0xFF)
 
 

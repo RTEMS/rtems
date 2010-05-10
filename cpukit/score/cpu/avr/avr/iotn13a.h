@@ -42,7 +42,7 @@
 #  define _AVR_IOXXX_H_ "iotn13a.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif
+#endif 
 
 
 #ifndef _AVR_ATTINY13A_H_
@@ -187,8 +187,7 @@
 
 #define PRR _SFR_IO8(0x25)
 #define PRADC 0
-#define PRSPI 1
-#define PRTIM0 2
+#define PRTIM0 1
 
 #define CLKPR _SFR_IO8(0x26)
 #define CLKPS0 0

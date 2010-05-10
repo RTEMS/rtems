@@ -84,7 +84,7 @@
     \endcode
 
     Saving the value of MCUSR in \c mcusr_mirror is only needed if the
-    application later wants to examine the reset source, but in particular,
+    application later wants to examine the reset source, but in particular, 
     clearing the watchdog reset flag before disabling the
     watchdog is required, according to the datasheet.
 */
@@ -93,7 +93,7 @@
    \ingroup avr_watchdog
    Reset the watchdog timer.  When the watchdog timer is enabled,
    a call to this instruction is required before the timer expires,
-   otherwise a watchdog-initiated device reset will occur.
+   otherwise a watchdog-initiated device reset will occur. 
 */
 
 #define wdt_reset() __asm__ __volatile__ ("wdr")
@@ -122,8 +122,8 @@
    \ingroup avr_watchdog
    Enable the watchdog timer, configuring it for expiry after
    \c timeout (which is a combination of the \c WDP0 through
-   \c WDP2 bits to write into the \c WDTCR register; For those devices
-   that have a \c WDTCSR register, it uses the combination of the \c WDP0
+   \c WDP2 bits to write into the \c WDTCR register; For those devices 
+   that have a \c WDTCSR register, it uses the combination of the \c WDP0 
    through \c WDP3 bits).
 
    See also the symbolic constants \c WDTO_15MS et al.
@@ -136,9 +136,14 @@
 || defined(__AVR_ATxmega32D4__) \
 || defined(__AVR_ATxmega64A1__) \
 || defined(__AVR_ATxmega64A3__) \
+|| defined(__AVR_ATxmega64D3__) \
 || defined(__AVR_ATxmega128A1__) \
 || defined(__AVR_ATxmega128A3__) \
+|| defined(__AVR_ATxmega128D3__) \
+|| defined(__AVR_ATxmega192A3__) \
+|| defined(__AVR_ATxmega192D3__) \
 || defined(__AVR_ATxmega256A3__) \
+|| defined(__AVR_ATxmega256D3__) \
 || defined(__AVR_ATxmega256A3B__)
 
 /*
@@ -183,47 +188,75 @@ __asm__ __volatile__ ( \
 || defined(__AVR_ATmega1284P__) \
 || defined(__AVR_ATmega128RFA1__) \
 || defined(__AVR_ATmega164__) \
+|| defined(__AVR_ATmega164A__) \
 || defined(__AVR_ATmega164P__) \
 || defined(__AVR_ATmega165__) \
+|| defined(__AVR_ATmega165A__) \
 || defined(__AVR_ATmega165P__) \
 || defined(__AVR_ATmega168__) \
+|| defined(__AVR_ATmega168A__) \
 || defined(__AVR_ATmega168P__) \
 || defined(__AVR_ATmega169__) \
+|| defined(__AVR_ATmega169A__) \
 || defined(__AVR_ATmega169P__) \
+|| defined(__AVR_ATmega169PA__) \
 || defined(__AVR_ATmega16HVA__) \
+|| defined(__AVR_ATmega16HVA2__) \
+|| defined(__AVR_ATmega16HVB__) \
 || defined(__AVR_ATmega16M1__) \
+|| defined(__AVR_ATmega16U2__) \
 || defined(__AVR_ATmega16U4__) \
 || defined(__AVR_ATmega2560__) \
 || defined(__AVR_ATmega2561__) \
 || defined(__AVR_ATmega324__) \
+|| defined(__AVR_ATmega324A__) \
 || defined(__AVR_ATmega324P__) \
+|| defined(__AVR_ATmega324PA__) \
 || defined(__AVR_ATmega325__) \
 || defined(__AVR_ATmega3250__) \
+|| defined(__AVR_ATmega328__) \
 || defined(__AVR_ATmega328P__) \
 || defined(__AVR_ATmega329__) \
 || defined(__AVR_ATmega329P__) \
+|| defined(__AVR_ATmega329PA__) \
 || defined(__AVR_ATmega3290__) \
 || defined(__AVR_ATmega3290P__) \
 || defined(__AVR_ATmega32C1__) \
 || defined(__AVR_ATmega32HVB__) \
 || defined(__AVR_ATmega32M1__) \
+|| defined(__AVR_ATmega32U2__) \
 || defined(__AVR_ATmega32U4__) \
 || defined(__AVR_ATmega32U6__) \
 || defined(__AVR_ATmega406__) \
 || defined(__AVR_ATmega48__) \
+|| defined(__AVR_ATmega48A__) \
 || defined(__AVR_ATmega48P__) \
 || defined(__AVR_ATmega640__) \
 || defined(__AVR_ATmega644__) \
+|| defined(__AVR_ATmega644A__) \
 || defined(__AVR_ATmega644P__) \
+|| defined(__AVR_ATmega644PA__) \
 || defined(__AVR_ATmega645__) \
+|| defined(__AVR_ATmega645A__) \
+|| defined(__AVR_ATmega645P__) \
 || defined(__AVR_ATmega6450__) \
+|| defined(__AVR_ATmega6450A__) \
+|| defined(__AVR_ATmega6450P__) \
 || defined(__AVR_ATmega649__) \
+|| defined(__AVR_ATmega649A__) \
 || defined(__AVR_ATmega6490__) \
+|| defined(__AVR_ATmega6490A__) \
+|| defined(__AVR_ATmega6490P__) \
+|| defined(__AVR_ATmega649P__) \
 || defined(__AVR_ATmega64C1__) \
+|| defined(__AVR_ATmega64HVE__) \
 || defined(__AVR_ATmega64M1__) \
-|| defined(__AVR_ATmega8HVA__) \
 || defined(__AVR_ATmega88__) \
+|| defined(__AVR_ATmega88A__) \
 || defined(__AVR_ATmega88P__) \
+|| defined(__AVR_ATmega88PA__) \
+|| defined(__AVR_ATmega8HVA__) \
+|| defined(__AVR_ATmega8U2__) \
 || defined(__AVR_ATtiny48__) \
 || defined(__AVR_ATtiny88__) \
 || defined(__AVR_ATtiny87__) \
@@ -232,7 +265,7 @@ __asm__ __volatile__ ( \
 || defined(__AVR_ATA6289__)
 
 /* Use STS instruction. */
-
+ 
 #define wdt_enable(value)   \
 __asm__ __volatile__ (  \
     "in __tmp_reg__,__SREG__" "\n\t"    \
@@ -263,8 +296,8 @@ __asm__ __volatile__ (  \
 )
 
 
-
-#else
+    
+#else  
 
 /* Use OUT instruction. */
 
@@ -286,8 +319,8 @@ __asm__ __volatile__ (  \
 
 /**
    \ingroup avr_watchdog
-   Disable the watchdog timer, if possible.  This attempts to turn off the
-   Enable bit in the watchdog control register. See the datasheet for
+   Disable the watchdog timer, if possible.  This attempts to turn off the 
+   Enable bit in the watchdog control register. See the datasheet for 
    details.
 */
 #define wdt_disable() \
@@ -362,11 +395,11 @@ __asm__ __volatile__ (  \
 
 /** \ingroup avr_watchdog
     See \c WDT0_15MS
-    Note: This is only available on the
-    ATtiny2313,
-    ATtiny24, ATtiny44, ATtiny84,
-    ATtiny25, ATtiny45, ATtiny85,
-    ATtiny261, ATtiny461, ATtiny861,
+    Note: This is only available on the 
+    ATtiny2313, 
+    ATtiny24, ATtiny44, ATtiny84, 
+    ATtiny25, ATtiny45, ATtiny85, 
+    ATtiny261, ATtiny461, ATtiny861, 
     ATmega48, ATmega88, ATmega168,
     ATmega48P, ATmega88P, ATmega168P, ATmega328P,
     ATmega164P, ATmega324P, ATmega644P, ATmega644,
@@ -383,11 +416,11 @@ __asm__ __volatile__ (  \
 
 /** \ingroup avr_watchdog
     See \c WDT0_15MS
-    Note: This is only available on the
-    ATtiny2313,
-    ATtiny24, ATtiny44, ATtiny84,
-    ATtiny25, ATtiny45, ATtiny85,
-    ATtiny261, ATtiny461, ATtiny861,
+    Note: This is only available on the 
+    ATtiny2313, 
+    ATtiny24, ATtiny44, ATtiny84, 
+    ATtiny25, ATtiny45, ATtiny85, 
+    ATtiny261, ATtiny461, ATtiny861, 
     ATmega48, ATmega88, ATmega168,
     ATmega48P, ATmega88P, ATmega168P, ATmega328P,
     ATmega164P, ATmega324P, ATmega644P, ATmega644,
@@ -403,6 +436,6 @@ __asm__ __volatile__ (  \
 #define WDTO_8S     9
 
 #endif  /* defined(__DOXYGEN__) || defined(WDP3) */
-
+   
 
 #endif /* _AVR_WDT_H_ */

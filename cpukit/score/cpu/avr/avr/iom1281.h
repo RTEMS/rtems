@@ -1,4 +1,4 @@
-/* Copyright (c) 2005 Anatoly Sokolov
+/* Copyright (c) 2005 Anatoly Sokolov 
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -82,7 +82,7 @@
 /* Lock Bits */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
-#define __BOOT_LOCK_BITS_1_EXIST
+#define __BOOT_LOCK_BITS_1_EXIST 
 
 
 /* Signature */

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002, 2003, 2004, 2005, 2006, 2007  Eric B. Weddington
+/* Copyright (c) 2002,2003,2004,2005,2006,2007,2008,2009  Eric B. Weddington
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -43,8 +43,8 @@
     macros are designed to work with all sizes of flash memory.
 
     Global interrupts are not automatically disabled for these macros. It
-    is left up to the programmer to do this. See the code example below.
-    Also see the processor datasheet for caveats on having global interrupts
+    is left up to the programmer to do this. See the code example below. 
+    Also see the processor datasheet for caveats on having global interrupts 
     enabled during writing of the Flash.
 
     \note Not all AVR processors provide bootloader support. See your
@@ -62,7 +62,7 @@
     #include <inttypes.h>
     #include <avr/interrupt.h>
     #include <avr/pgmspace.h>
-
+    
     void boot_program_page (uint32_t page, uint8_t *buf)
     {
         uint16_t i;
@@ -72,7 +72,7 @@
 
         sreg = SREG;
         cli();
-
+    
         eeprom_busy_wait ();
 
         boot_page_erase (page);
@@ -84,7 +84,7 @@
 
             uint16_t w = *buf++;
             w += (*buf++) << 8;
-
+        
             boot_page_fill (page + i, w);
         }
 
@@ -195,7 +195,11 @@
 #define __BOOT_PAGE_WRITE         (_BV(__SPM_ENABLE) | _BV(PGWRT))
 #define __BOOT_PAGE_FILL          _BV(__SPM_ENABLE)
 #define __BOOT_RWW_ENABLE         (_BV(__SPM_ENABLE) | _BV(__COMMON_ASRE))
+#if defined(BLBSET)
 #define __BOOT_LOCK_BITS_SET      (_BV(__SPM_ENABLE) | _BV(BLBSET))
+#elif defined(RFLB)  /* Some devices have RFLB defined instead of BLBSET. */
+#define __BOOT_LOCK_BITS_SET      (_BV(__SPM_ENABLE) | _BV(RFLB))
+#endif
 
 #define __boot_page_fill_normal(address, data)   \
 (__extension__({                                 \
@@ -207,9 +211,9 @@
         "clr  r1\n\t"                            \
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
-          "r" ((uint8_t)__BOOT_PAGE_FILL),       \
-          "z" ((uint16_t)address),               \
-          "r" ((uint16_t)data)                   \
+          "r" ((uint8_t)(__BOOT_PAGE_FILL)),     \
+          "z" ((uint16_t)(address)),             \
+          "r" ((uint16_t)(data))                 \
         : "r0"                                   \
     );                                           \
 }))
@@ -226,9 +230,9 @@
         "clr  r1\n\t"                            \
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
-          "r" ((uint8_t)__BOOT_PAGE_FILL),       \
-          "z" ((uint16_t)address),               \
-          "r" ((uint16_t)data)                   \
+          "r" ((uint8_t)(__BOOT_PAGE_FILL)),     \
+          "z" ((uint16_t)(address)),             \
+          "r" ((uint16_t)(data))                 \
         : "r0"                                   \
     );                                           \
 }))
@@ -246,9 +250,9 @@
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
           "i" (_SFR_MEM_ADDR(RAMPZ)),            \
-          "r" ((uint8_t)__BOOT_PAGE_FILL),       \
-          "r" ((uint32_t)address),               \
-          "r" ((uint16_t)data)                   \
+          "r" ((uint8_t)(__BOOT_PAGE_FILL)),     \
+          "r" ((uint32_t)(address)),             \
+          "r" ((uint16_t)(data))                 \
         : "r0", "r30", "r31"                     \
     );                                           \
 }))
@@ -261,8 +265,8 @@
         "spm\n\t"                                \
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
-          "r" ((uint8_t)__BOOT_PAGE_ERASE),      \
-          "z" ((uint16_t)address)                \
+          "r" ((uint8_t)(__BOOT_PAGE_ERASE)),    \
+          "z" ((uint16_t)(address))              \
     );                                           \
 }))
 
@@ -276,8 +280,8 @@
         "nop\n\t"                                \
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
-          "r" ((uint8_t)__BOOT_PAGE_ERASE),      \
-          "z" ((uint16_t)address)                \
+          "r" ((uint8_t)(__BOOT_PAGE_ERASE)),    \
+          "z" ((uint16_t)(address))              \
     );                                           \
 }))
 
@@ -292,8 +296,8 @@
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
           "i" (_SFR_MEM_ADDR(RAMPZ)),            \
-          "r" ((uint8_t)__BOOT_PAGE_ERASE),      \
-          "r" ((uint32_t)address)                \
+          "r" ((uint8_t)(__BOOT_PAGE_ERASE)),    \
+          "r" ((uint32_t)(address))              \
         : "r30", "r31"                           \
     );                                           \
 }))
@@ -306,8 +310,8 @@
         "spm\n\t"                                \
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
-          "r" ((uint8_t)__BOOT_PAGE_WRITE),      \
-          "z" ((uint16_t)address)                \
+          "r" ((uint8_t)(__BOOT_PAGE_WRITE)),    \
+          "z" ((uint16_t)(address))              \
     );                                           \
 }))
 
@@ -321,8 +325,8 @@
         "nop\n\t"                                \
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
-          "r" ((uint8_t)__BOOT_PAGE_WRITE),      \
-          "z" ((uint16_t)address)                \
+          "r" ((uint8_t)(__BOOT_PAGE_WRITE)),    \
+          "z" ((uint16_t)(address))              \
     );                                           \
 }))
 
@@ -337,8 +341,8 @@
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
           "i" (_SFR_MEM_ADDR(RAMPZ)),            \
-          "r" ((uint8_t)__BOOT_PAGE_WRITE),      \
-          "r" ((uint32_t)address)                \
+          "r" ((uint8_t)(__BOOT_PAGE_WRITE)),    \
+          "r" ((uint32_t)(address))              \
         : "r30", "r31"                           \
     );                                           \
 }))
@@ -351,7 +355,7 @@
         "spm\n\t"                                \
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
-          "r" ((uint8_t)__BOOT_RWW_ENABLE)       \
+          "r" ((uint8_t)(__BOOT_RWW_ENABLE))     \
     );                                           \
 }))
 
@@ -365,7 +369,7 @@
         "nop\n\t"                                \
         :                                        \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),        \
-          "r" ((uint8_t)__BOOT_RWW_ENABLE)       \
+          "r" ((uint8_t)(__BOOT_RWW_ENABLE))     \
     );                                           \
 }))
 
@@ -379,11 +383,11 @@
 
      If bits 5..2 in R0 are cleared (zero), the corresponding Boot Lock bit
      will be programmed if an SPM instruction is executed within four cycles
-     after BLBSET and SPMEN (or SELFPRGEN) are set in SPMCR. The Z-pointer is
-     don't care during this operation, but for future compatibility it is
-     recommended to load the Z-pointer with $0001 (same as used for reading the
-     Lock bits). For future compatibility It is also recommended to set bits 7,
-     6, 1, and 0 in R0 to 1 when writing the Lock bits. When programming the
+     after BLBSET and SPMEN (or SELFPRGEN) are set in SPMCR. The Z-pointer is 
+     don't care during this operation, but for future compatibility it is 
+     recommended to load the Z-pointer with $0001 (same as used for reading the 
+     Lock bits). For future compatibility It is also recommended to set bits 7, 
+     6, 1, and 0 in R0 to 1 when writing the Lock bits. When programming the 
      Lock bits the entire Flash can be read during the operation. */
 
 #define __boot_lock_bits_set(lock_bits)                    \
@@ -398,7 +402,7 @@
         "spm\n\t"                                          \
         :                                                  \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),                  \
-          "r" ((uint8_t)__BOOT_LOCK_BITS_SET),             \
+          "r" ((uint8_t)(__BOOT_LOCK_BITS_SET)),           \
           "r" (value)                                      \
         : "r0", "r30", "r31"                               \
     );                                                     \
@@ -418,7 +422,7 @@
         "nop\n\t"                                          \
         :                                                  \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),                  \
-          "r" ((uint8_t)__BOOT_LOCK_BITS_SET),             \
+          "r" ((uint8_t)(__BOOT_LOCK_BITS_SET)),           \
           "r" (value)                                      \
         : "r0", "r30", "r31"                               \
     );                                                     \
@@ -427,8 +431,8 @@
 /*
    Reading lock and fuse bits:
 
-     Similarly to writing the lock bits above, set BLBSET and SPMEN (or
-     SELFPRGEN) bits in __SPMREG, and then (within four clock cycles) issue an
+     Similarly to writing the lock bits above, set BLBSET and SPMEN (or 
+     SELFPRGEN) bits in __SPMREG, and then (within four clock cycles) issue an 
      LPM instruction.
 
      Z address:       contents:
@@ -481,15 +485,12 @@
     uint8_t __result;                                      \
     __asm__ __volatile__                                   \
     (                                                      \
-        "ldi r30, %3\n\t"                                  \
-        "ldi r31, 0\n\t"                                   \
         "sts %1, %2\n\t"                                   \
         "lpm %0, Z\n\t"                                    \
         : "=r" (__result)                                  \
         : "i" (_SFR_MEM_ADDR(__SPM_REG)),                  \
-          "r" ((uint8_t)__BOOT_LOCK_BITS_SET),             \
-          "M" (address)                                    \
-        : "r0", "r30", "r31"                               \
+          "r" ((uint8_t)(__BOOT_LOCK_BITS_SET)),           \
+          "z" ((uint16_t)(address))                        \
     );                                                     \
     __result;                                              \
 }))
@@ -508,31 +509,30 @@
 #define __BOOT_SIGROW_READ (_BV(__SPM_ENABLE) | _BV(SIGRD))
 
 #define boot_signature_byte_get(addr) \
-(__extension__({		      \
-      uint16_t __addr16 = (uint16_t)(addr);	\
-      uint8_t __result;				\
-      __asm__ __volatile__			\
-      (						\
-	"sts %1, %2\n\t"			\
-	"lpm %0, Z" "\n\t"			\
-	: "=r" (__result)			\
-	: "i" (_SFR_MEM_ADDR(__SPM_REG)),	\
-	  "r" ((uint8_t) __BOOT_SIGROW_READ),	\
-	  "z" (__addr16)			\
-      );					\
-      __result;					\
+(__extension__({                      \
+      uint8_t __result;                         \
+      __asm__ __volatile__                      \
+      (                                         \
+        "sts %1, %2\n\t"                        \
+        "lpm %0, Z" "\n\t"                      \
+        : "=r" (__result)                       \
+        : "i" (_SFR_MEM_ADDR(__SPM_REG)),       \
+          "r" ((uint8_t)(__BOOT_SIGROW_READ)),  \
+          "z" ((uint16_t)(addr))                \
+      );                                        \
+      __result;                                 \
 }))
 
 /** \ingroup avr_boot
     \def boot_page_fill(address, data)
 
-    Fill the bootloader temporary page buffer for flash
-    address with data word.
+    Fill the bootloader temporary page buffer for flash 
+    address with data word. 
 
-    \note The address is a byte address. The data is a word. The AVR
+    \note The address is a byte address. The data is a word. The AVR 
     writes data to the buffer a word at a time, but addresses the buffer
     per byte! So, increment your address by 2 between calls, and send 2
-    data bytes in a word format! The LSB of the data is written to the lower
+    data bytes in a word format! The LSB of the data is written to the lower 
     address; the MSB of the data is written to the higher address.*/
 
 /** \ingroup avr_boot
@@ -545,9 +545,9 @@
 /** \ingroup avr_boot
     \def boot_page_write(address)
 
-    Write the bootloader temporary page buffer
+    Write the bootloader temporary page buffer 
     to flash page that contains address.
-
+    
     \note address is a byte address in flash, not a word address. */
 
 /** \ingroup avr_boot
@@ -582,7 +582,7 @@
    instruction sequences after LPM.
 
    FLASHEND is defined in the ioXXXX.h file.
-   USHRT_MAX is defined in <limits.h>. */
+   USHRT_MAX is defined in <limits.h>. */ 
 
 #if defined(__AVR_ATmega161__) || defined(__AVR_ATmega163__) \
     || defined(__AVR_ATmega323__)

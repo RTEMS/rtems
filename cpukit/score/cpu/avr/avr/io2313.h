@@ -45,7 +45,7 @@
 #  define _AVR_IOXXX_H_ "io2313.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif
+#endif 
 
 /* I/O registers */
 
@@ -190,48 +190,48 @@
 
 /*
  *  The Register Bit names are represented by their bit number (0-7).
- */
-
+ */     
+ 
 /* General Interrupt MaSK register */
 #define    INT1    7
 #define    INT0    6
-
+ 
 /* General Interrupt Flag Register */
 #define    INTF1   7
 #define    INTF0   6
-
-/* Timer/Counter Interrupt MaSK register */
+ 
+/* Timer/Counter Interrupt MaSK register */                 
 #define    TOIE1   7
 #define    OCIE1A  6
-#define    TICIE   3 /* old name */
+#define    TICIE   3 /* old name */ 
 #define    TICIE1  3
 #define    TOIE0   1
-
-/* Timer/Counter Interrupt Flag register */
+ 
+/* Timer/Counter Interrupt Flag register */                   
 #define    TOV1    7
 #define    OCF1A   6
 #define    ICF1    3
 #define    TOV0    1
-
-/* MCU general Control Register */
+ 
+/* MCU general Control Register */ 
 #define    SE      5
 #define    SM      4
 #define    ISC11   3
 #define    ISC10   2
 #define    ISC01   1
 #define    ISC00   0
-
+ 
 /* Timer/Counter 0 Control Register */
 #define    CS02    2
 #define    CS01    1
 #define    CS00    0
-
+ 
 /* Timer/Counter 1 Control Register */
 #define    COM1A1  7
 #define    COM1A0  6
 #define    PWM11   1
 #define    PWM10   0
-
+ 
 /* Timer/Counter 1 Control and Status Register */
 #define    ICNC1   7
 #define    ICES1   6
@@ -239,20 +239,20 @@
 #define    CS12    2
 #define    CS11    1
 #define    CS10    0
-
+                        
 /* Watchdog Timer Control Register */
 #define    WDTOE   4
 #define    WDE     3
 #define    WDP2    2
 #define    WDP1    1
 #define    WDP0    0
-
+ 
 /* EEPROM Control Register */
 #define    EEMWE   2
 #define    EEWE    1
 #define    EERE    0
-
-/* Data Register, Port B */
+ 
+/* Data Register, Port B */  
 #define    PB7     7
 #define    PB6     6
 #define    PB5     5
@@ -261,7 +261,7 @@
 #define    PB2     2
 #define    PB1     1
 #define    PB0     0
-
+ 
 /* Data Direction Register, Port B */
 #define    DDB7    7
 #define    DDB6    6
@@ -271,7 +271,7 @@
 #define    DDB2    2
 #define    DDB1    1
 #define    DDB0    0
-
+ 
 /* Input Pins, Port B */
 #define    PINB7   7
 #define    PINB6   6
@@ -281,7 +281,7 @@
 #define    PINB2   2
 #define    PINB1   1
 #define    PINB0   0
-
+ 
 /* Data Register, Port D */
 #define    PD6     6
 #define    PD5     5
@@ -290,7 +290,7 @@
 #define    PD2     2
 #define    PD1     1
 #define    PD0     0
-
+ 
 /* Data Direction Register, Port D */
 #define    DDD6    6
 #define    DDD5    5
@@ -299,7 +299,7 @@
 #define    DDD2    2
 #define    DDD1    1
 #define    DDD0    0
-
+ 
 /* Input Pins, Port D */
 #define    PIND6   6
 #define    PIND5   5
@@ -308,14 +308,14 @@
 #define    PIND2   2
 #define    PIND1   1
 #define    PIND0   0
-
+ 
 /* UART Status Register */
 #define    RXC     7
 #define    TXC     6
 #define    UDRE    5
 #define    FE      4
 #define    DOR     3
-
+ 
 /* UART Control Register */
 #define    RXCIE   7
 #define    TXCIE   6
@@ -325,8 +325,8 @@
 #define    CHR9    2
 #define    RXB8    1
 #define    TXB8    0
-
-/* Analog Comparator Control and Status Register */
+       
+/* Analog Comparator Control and Status Register */ 
 #define    ACD     7
 #define    ACO     5
 #define    ACI     4
@@ -340,8 +340,8 @@
 #define    EEMWE   2
 #define    EEWE    1
 #define    EERE    0
-
-/* Constants */
+       
+/* Constants */ 
 #define    RAMEND     0xDF
 #define    XRAMEND    RAMEND
 #define    E2END      0x7F

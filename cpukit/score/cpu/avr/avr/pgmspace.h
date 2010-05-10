@@ -403,7 +403,7 @@ typedef uint64_t  prog_uint64_t PROGMEM;
 
 /** \ingroup avr_pgmspace
     \def pgm_read_byte_near(address_short)
-    Read a byte from the program space with a 16-bit (near) address.
+    Read a byte from the program space with a 16-bit (near) address. 
     \note The address is a byte address.
     The address is in the program space. */
 
@@ -411,16 +411,16 @@ typedef uint64_t  prog_uint64_t PROGMEM;
 
 /** \ingroup avr_pgmspace
     \def pgm_read_word_near(address_short)
-    Read a word from the program space with a 16-bit (near) address.
-    \note The address is a byte address.
+    Read a word from the program space with a 16-bit (near) address. 
+    \note The address is a byte address. 
     The address is in the program space. */
 
 #define pgm_read_word_near(address_short) __LPM_word((uint16_t)(address_short))
 
 /** \ingroup avr_pgmspace
     \def pgm_read_dword_near(address_short)
-    Read a double word from the program space with a 16-bit (near) address.
-    \note The address is a byte address.
+    Read a double word from the program space with a 16-bit (near) address. 
+    \note The address is a byte address. 
     The address is in the program space. */
 
 #define pgm_read_dword_near(address_short) \
@@ -428,8 +428,8 @@ typedef uint64_t  prog_uint64_t PROGMEM;
 
 /** \ingroup avr_pgmspace
     \def pgm_read_float_near(address_short)
-    Read a float from the program space with a 16-bit (near) address.
-    \note The address is a byte address.
+    Read a float from the program space with a 16-bit (near) address. 
+    \note The address is a byte address. 
     The address is in the program space. */
 
 #define pgm_read_float_near(address_short) \
@@ -719,10 +719,10 @@ typedef uint64_t  prog_uint64_t PROGMEM;
     __result;                             \
 }))
 
-/*
-Check for architectures that implement RAMPD (avrxmega3, avrxmega5,
+/* 
+Check for architectures that implement RAMPD (avrxmega3, avrxmega5, 
 avrxmega7) as they need to save/restore RAMPZ for ELPM macros so it does
-not interfere with data accesses.
+not interfere with data accesses. 
 */
 #if defined (__AVR_HAVE_RAMPD__)
 
@@ -754,16 +754,16 @@ not interfere with data accesses.
 
 /** \ingroup avr_pgmspace
     \def pgm_read_byte_far(address_long)
-    Read a byte from the program space with a 32-bit (far) address.
+    Read a byte from the program space with a 32-bit (far) address. 
 
-    \note The address is a byte address.
+    \note The address is a byte address. 
     The address is in the program space. */
 
 #define pgm_read_byte_far(address_long)  __ELPM((uint32_t)(address_long))
 
 /** \ingroup avr_pgmspace
     \def pgm_read_word_far(address_long)
-    Read a word from the program space with a 32-bit (far) address.
+    Read a word from the program space with a 32-bit (far) address. 
 
     \note The address is a byte address.
     The address is in the program space. */
@@ -772,7 +772,7 @@ not interfere with data accesses.
 
 /** \ingroup avr_pgmspace
     \def pgm_read_dword_far(address_long)
-    Read a double word from the program space with a 32-bit (far) address.
+    Read a double word from the program space with a 32-bit (far) address. 
 
     \note The address is a byte address.
     The address is in the program space. */
@@ -781,7 +781,7 @@ not interfere with data accesses.
 
 /** \ingroup avr_pgmspace
     \def pgm_read_float_far(address_long)
-    Read a float from the program space with a 32-bit (far) address.
+    Read a float from the program space with a 32-bit (far) address. 
 
     \note The address is a byte address.
     The address is in the program space. */
@@ -792,36 +792,36 @@ not interfere with data accesses.
 
 /** \ingroup avr_pgmspace
     \def pgm_read_byte(address_short)
-    Read a byte from the program space with a 16-bit (near) address.
+    Read a byte from the program space with a 16-bit (near) address. 
 
-    \note The address is a byte address.
+    \note The address is a byte address. 
     The address is in the program space. */
 
 #define pgm_read_byte(address_short)    pgm_read_byte_near(address_short)
 
 /** \ingroup avr_pgmspace
     \def pgm_read_word(address_short)
-    Read a word from the program space with a 16-bit (near) address.
+    Read a word from the program space with a 16-bit (near) address. 
 
-    \note The address is a byte address.
+    \note The address is a byte address. 
     The address is in the program space. */
 
 #define pgm_read_word(address_short)    pgm_read_word_near(address_short)
 
 /** \ingroup avr_pgmspace
     \def pgm_read_dword(address_short)
-    Read a double word from the program space with a 16-bit (near) address.
+    Read a double word from the program space with a 16-bit (near) address. 
 
-    \note The address is a byte address.
+    \note The address is a byte address. 
     The address is in the program space. */
 
 #define pgm_read_dword(address_short)   pgm_read_dword_near(address_short)
 
 /** \ingroup avr_pgmspace
     \def pgm_read_float(address_short)
-    Read a float from the program space with a 16-bit (near) address.
+    Read a float from the program space with a 16-bit (near) address. 
 
-    \note The address is a byte address.
+    \note The address is a byte address. 
     The address is in the program space. */
 
 #define pgm_read_float(address_short)   pgm_read_float_near(address_short)
@@ -847,6 +847,7 @@ not interfere with data accesses.
 
 extern PGM_VOID_P memchr_P(PGM_VOID_P, int __val, size_t __len) __ATTR_CONST__;
 extern int memcmp_P(const void *, PGM_VOID_P, size_t) __ATTR_PURE__;
+extern void *memccpy_P(void *, PGM_VOID_P, int __val, size_t);
 extern void *memcpy_P(void *, PGM_VOID_P, size_t);
 extern void *memmem_P(const void *, size_t, PGM_VOID_P, size_t) __ATTR_PURE__;
 extern PGM_VOID_P memrchr_P(PGM_VOID_P, int __val, size_t __len) __ATTR_CONST__;
@@ -871,6 +872,8 @@ extern PGM_P strrchr_P(PGM_P, int __val) __ATTR_CONST__;
 extern char *strsep_P(char **__sp, PGM_P __delim);
 extern size_t strspn_P(const char *__s, PGM_P __accept) __ATTR_PURE__;
 extern char *strstr_P(const char *, PGM_P) __ATTR_PURE__;
+extern char *strtok_P(char *__s, PGM_P __delim);
+extern char *strtok_rP(char *__s, PGM_P __delim, char **__last);
 
 #ifdef __cplusplus
 }

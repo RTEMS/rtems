@@ -142,7 +142,7 @@
      Created by Marek Michalkiewicz <marekm@linux.org.pl>
  */
 
-#include <avr/io.h>
+#include <avr/common.h>
 
 /* if not defined, assume old version with underscores */
 #ifndef __USER_LABEL_PREFIX__

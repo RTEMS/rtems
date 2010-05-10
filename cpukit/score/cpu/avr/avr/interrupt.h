@@ -42,16 +42,16 @@
 #define __STRINGIFY(x) #x
 #endif /* !defined(__DOXYGEN__) */
 
-/**
-\file
-\@{
+/** 
+\file 
+\@{ 
 */
 
 
 /** \name Global manipulation of the interrupt flag
 
     The global interrupt flag is maintained in the I bit of the status
-    register (SREG).
+    register (SREG). 
 */
 
 #if defined(__DOXYGEN__)
@@ -209,7 +209,7 @@
     }
 
     ISR_ALIAS(INT1_vect, INT0_vect);
-    \endcode
+    \endcode 
 */
 #  define ISR_ALIAS(vector, target_vector)
 #else /* real code */

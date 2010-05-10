@@ -36,9 +36,9 @@
 
 #include <avr/sfr_defs.h>
 
-/*
-This purpose of this header is to define registers that have not been
-previously defined in the individual device IO header files, and to define
+/* 
+This purpose of this header is to define registers that have not been 
+previously defined in the individual device IO header files, and to define 
 other symbols that are common across AVR device families.
 
 This file is designed to be included in <avr/io.h> after the individual
@@ -48,7 +48,7 @@ device IO header files, and after <avr/sfr_defs.h>
 
 /*------------ Registers Not Previously Defined ------------*/
 
-/*
+/* 
 These are registers that are not previously defined in the individual
 IO header files, OR they are defined here because they are used in parts of
 avr-libc even if a device is not selected but a general architecture has
@@ -59,7 +59,7 @@ been selected.
 /*
 Stack pointer register.
 
-AVR architecture 1 has no RAM, thus no stack pointer.
+AVR architecture 1 has no RAM, thus no stack pointer. 
 
 All other architectures do have a stack pointer.  Some devices have only
 less than 256 bytes of possible RAM locations (128 Bytes of SRAM
@@ -76,7 +76,7 @@ for them.
 #  ifndef SP
 #    define SP _SFR_MEM16(0x3D)
 #  endif
-#elif __AVR_ARCH__ != 1
+#elif __AVR_ARCH__ != 1 
 #  ifndef SPL
 #    define SPL _SFR_IO8(0x3D)
 #  endif
@@ -193,7 +193,7 @@ keep the EEPROM-related definitions here.
 
 /*------------ Common Symbols ------------*/
 
-/*
+/* 
 Generic definitions for registers that are common across multiple AVR devices
 and families.
 */
