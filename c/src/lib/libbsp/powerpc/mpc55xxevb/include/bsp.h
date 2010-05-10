@@ -35,6 +35,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define BSP_SMALL_MEMORY 1
+
 #ifndef ASM
 
 /** @brief System clock frequency */
