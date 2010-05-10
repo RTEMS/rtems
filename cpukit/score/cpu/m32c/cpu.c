@@ -32,7 +32,9 @@
 
 void _CPU_Initialize(void)
 {
-  asm volatile( "ldc    #__var_vects,intb" );
+  #if !defined(__r8c_cpu__)
+    asm volatile( "ldc    #__var_vects,intb" );
+  #endif
 }
 
 /*
@@ -70,7 +72,11 @@ void _CPU_ISR_install_raw_handler(
    *  This is where we install the interrupt handler into the "raw" interrupt
    *  table used by the CPU to dispatch interrupt handlers.
    */
+#if defined(__r8c_cpu__)
+  #warning "_CPU_ISR_install_raw_handler not implemented on R8C"
+#else
   _set_var_vect(new_handler,vector);
+#endif
 }
 
 /*PAGE

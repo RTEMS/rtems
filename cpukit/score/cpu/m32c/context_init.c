@@ -31,8 +31,13 @@ typedef struct {
   uint16_t zero;
 } Starting_Frame;
 
-#define _get_sb( _sb ) \
-  asm volatile( "stc sb, %0" : "=r" (_sb))
+#if defined(__r8c_cpu__)
+  #warning "_get_sb: not implemented on R8C"
+  #define _get_sb( _sb )
+#else
+  #define _get_sb( _sb ) \
+    asm volatile( "stc sb, %0" : "=r" (_sb))
+#endif
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
@@ -63,11 +68,14 @@ void _CPU_Context_Initialize(
   frame->a1 =0xa1a2a3a4;
   frame->r0r2 = 0;
   frame->r1r3 = 0;
+#if defined(__r8c_cpu__)
+  #warning "not implemented on R8C"
+#else
   frame->frameLow  = (uint16_t) (((uint32_t)frame)  & 0xffff);
   frame->frameHigh = (uint16_t) (((uint32_t)frame >> 16) & 0xffff);
   frame->startLow  = (uint16_t) (((uint32_t)entry_point) & 0xffff);
   frame->startHigh = (uint16_t) (((uint32_t)entry_point >> 16) & 0xffff);
-
+#endif
   the_context->sp = (uintptr_t)frame;
   the_context->fb = (uintptr_t)&frame->frameLow;
 }

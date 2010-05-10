@@ -31,6 +31,9 @@ __CPU_Context_switch:
 	pushc	flg
 	pushc	sb
 
+#if defined(__r8c_cpu__)
+  #warning "not implemented on R8C"
+#else
 	mov.l	ARG_EXECUTING[fb],a0	; a0 = executing
 	stc  	fb,a1
 	mov.l	a1,CTXT_FB[a0]		; save fb
@@ -44,6 +47,7 @@ restore:
 	ldc  	a1,sp			; restore sp
 	mov.l	CTXT_FB[a0],a1
 	ldc  	a1,fb			; restore fb
+#endif
 	popc	sb
 	popc	flg
 	popm 	a0,a1,r0,r1,r2,r3
@@ -56,5 +60,9 @@ restore:
 	.type	__CPU_Context_Restart_self, @function
 __CPU_Context_Restart_self:
 	enter	#0
+#if defined(__r8c_cpu__)
+  #warning "__CPU_Context_Restart_self: not implemented on R8C"
+#else
 	mov.l	ARG_RESTART[fb],a0	; a0 = heir
 	jmp.s	restore
+#endif
