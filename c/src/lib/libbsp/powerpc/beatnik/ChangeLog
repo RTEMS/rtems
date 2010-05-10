@@ -1,3 +1,8 @@
+2010-05-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* include/bsp.h: Do not include <bsp/bsp_bsdnet_attach.h> if networkign
+	disabled.
+
 2010-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* network/support/bsp_attach.c: Include <unistd.h>.

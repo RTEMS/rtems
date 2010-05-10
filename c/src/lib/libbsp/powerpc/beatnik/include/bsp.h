@@ -153,7 +153,9 @@ int
 BSP_i2c_initialize();
 
 /* Networking; */
+#if defined(RTEMS_NETWORKING)
 #include <bsp/bsp_bsdnet_attach.h>
+#endif
 
 /* NOT FOR PUBLIC USE BELOW HERE */
 #define BSP_PCI_HOSE0_MEM_BASE		0x80000000	/* must be aligned to size */
