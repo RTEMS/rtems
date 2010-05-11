@@ -1,3 +1,8 @@
+2010-05-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/bsp-alias.m4: Change quoting to work-round
+	http://www.freebsd.org/cgi/query-pr.cgi?pr=146378.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libchip/network/if_dc.c: Remove warnings.
