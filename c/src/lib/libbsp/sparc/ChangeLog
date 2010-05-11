@@ -1,3 +1,7 @@
+2010-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/startup/linkcmds.base: New file.
+
 2010-04-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/spw/grspw_rasta.c: Guard prototype of 
