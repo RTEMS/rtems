@@ -26,6 +26,7 @@ The RTEMS shell has the following general commands:
 @item @code{unsetenv} - unset environment variable
 @item @code{logoff} - logoff from the system
 @item @code{exit} - alias for logoff command
+@item @code{rtc} - RTC driver configuration
 
 @end itemize
 
@@ -956,3 +957,30 @@ This command is always present and cannot be disabled.
 The @code{exit} is implemented directly in the shell interpreter.
 There is no C routine associated with it.
 
+@c
+@c
+@c
+@page
+@subsection rtc - RTC driver configuration
+
+@pgindex rtc
+
+@subheading SYNOPSYS:
+
+@example
+rtc
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_RTC
+@findex CONFIGURE_SHELL_COMMAND_RTC
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_RTC} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_RTC} when all
+shell commands have been configured.

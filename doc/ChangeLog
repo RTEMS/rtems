@@ -1,3 +1,9 @@
+2010-05-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1512/doc
+	* shell/general.t: Add rtc.
+	* shell/file.t: Add fdisk.
+
 2010-05-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1512/doc

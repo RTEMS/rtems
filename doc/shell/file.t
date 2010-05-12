@@ -29,6 +29,7 @@ The RTEMS shell has the following file and directory commands:
 @item @code{mount} - mount disk
 @item @code{unmount} - unmount disk
 @item @code{blksync} - sync the block driver
+@item @code{fdisk} - format disks
 @item @code{dir} - alias for ls
 @item @code{cd} - alias for chdir
 
@@ -1312,6 +1313,34 @@ following prototype:
 @example
 extern rtems_shell_cmd_t rtems_shell_BLKSYNC_Command;
 @end example
+
+@c
+@c
+@c
+@page
+@subsection fdisk - format disk
+
+@pgindex fdisk
+
+@subheading SYNOPSYS:
+
+@example
+fdisk
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_FDISK
+@findex CONFIGURE_SHELL_COMMAND_FDISK
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_FDISK} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_FDISK} when all
+shell commands have been configured.
 
 @c
 @c
