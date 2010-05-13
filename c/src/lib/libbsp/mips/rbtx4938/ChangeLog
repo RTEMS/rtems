@@ -1,5 +1,12 @@
 2010-05-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, preinstall.am: Many files were duplicated across MIPS
+	BSPs. Now those which were directly copied are shared.
+	* liblnk/lnklib.S, liblnk/pmon.S, liblnk/regs.h, startup/idtmem.S,
+	startup/idttlb.S: Removed.
+
+2010-05-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am: rbtx4925 and rbtx4938 had copies of the same file with
 	only minor differences. Both now use shared/irq/exception.S
 	* startup/exception.S: Removed.
