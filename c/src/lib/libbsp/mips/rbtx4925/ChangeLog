@@ -1,3 +1,9 @@
+2010-05-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: rbtx4925 and rbtx4938 had copies of the same file with
+	only minor differences. Both now use shared/irq/exception.S
+	* startup/exception.S: Removed.
+
 2010-04-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/linkcmds: Revert previous change. Remove .reginfo from .bss

@@ -37,7 +37,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
     startup/inittlb.c \
-    startup/idtmem.S startup/idttlb.S startup/exception.S
+    startup/idtmem.S startup/idttlb.S ../shared/irq/exception.S
 
 # clock
 noinst_PROGRAMS += clock.rel
