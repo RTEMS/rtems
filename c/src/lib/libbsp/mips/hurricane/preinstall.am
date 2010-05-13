@@ -49,6 +49,10 @@ $(PROJECT_INCLUDE)/usc.h: include/usc.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/usc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/usc.h
 
+$(PROJECT_INCLUDE)/bsp/regs.h: ../shared/liblnk/regs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/regs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/regs.h
+
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h

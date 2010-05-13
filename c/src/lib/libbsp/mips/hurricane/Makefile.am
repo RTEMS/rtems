@@ -13,6 +13,7 @@ dist_project_lib_DATA = bsp_specs
 include_HEADERS = include/bsp.h
 include_HEADERS += ../../shared/include/tm27.h
 include_HEADERS += include/usc.h
+include_bsp_HEADERS = ../shared/liblnk/regs.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
@@ -36,14 +37,15 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
-    startup/inittlb.c startup/idtmem.S startup/idttlb.S \
-    ../shared/startup/exception.S startup/usc.S
+    startup/inittlb.c ../shared/startup/idtmem.S ../shared/startup/idttlb.S \
+    ../shared/irq/exception.S startup/usc.S
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # console
 libbsp_a_SOURCES += console/console.c
 # liblnk
-libbsp_a_SOURCES += liblnk/lnklib.S liblnk/pmon.S liblnk/regs.h
+libbsp_a_SOURCES += ../shared/liblnk/lnklib.S ../shared/liblnk/pmon.S \
+    ../shared/liblnk/regs.h
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
