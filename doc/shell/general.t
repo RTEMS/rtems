@@ -24,9 +24,10 @@ The RTEMS shell has the following general commands:
 @item @code{getenv} - print environment variable
 @item @code{setenv} - set environment variable
 @item @code{unsetenv} - unset environment variable
+@item @code{time} - time command execution
 @item @code{logoff} - logoff from the system
-@item @code{exit} - alias for logoff command
 @item @code{rtc} - RTC driver configuration
+@item @code{exit} - alias for logoff command
 
 @end itemize
 
@@ -843,6 +844,76 @@ extern rtems_shell_cmd_t rtems_shell_UNSETENV_Command;
 @c
 @c
 @page
+@subsection time - time command execution
+
+@pgindex time
+
+@subheading SYNOPSYS:
+
+@example
+time command [argument ...]
+@end example
+
+@subheading DESCRIPTION:
+
+The time command executes and times a command.  After the command
+finishes, time writes the total time elapsed.  Times are reported in
+seconds.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+None.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{time}:
+
+@example
+SHLL [/] $ time cp -r /nfs/directory /c
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_TIME
+@findex CONFIGURE_SHELL_COMMAND_TIME
+
+This command is included in the default shell command set.  When
+building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_TIME} to have this command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_TIME} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_time
+
+The @code{time} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_time(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{time} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_TIME_Command;
+@end example
+
+@c
+@c
+@c
+@page
 @subsection logoff - logoff from the system
 
 @pgindex logoff
@@ -916,6 +987,34 @@ extern rtems_shell_cmd_t rtems_shell_LOGOFF_Command;
 @c
 @c
 @page
+@subsection rtc - RTC driver configuration
+
+@pgindex rtc
+
+@subheading SYNOPSYS:
+
+@example
+rtc
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_RTC
+@findex CONFIGURE_SHELL_COMMAND_RTC
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_RTC} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_RTC} when all
+shell commands have been configured.
+
+@c
+@c
+@c
+@page
 @subsection exit - exit the shell
 
 @pgindex exit
@@ -956,31 +1055,3 @@ This command is always present and cannot be disabled.
 
 The @code{exit} is implemented directly in the shell interpreter.
 There is no C routine associated with it.
-
-@c
-@c
-@c
-@page
-@subsection rtc - RTC driver configuration
-
-@pgindex rtc
-
-@subheading SYNOPSYS:
-
-@example
-rtc
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_RTC
-@findex CONFIGURE_SHELL_COMMAND_RTC
-
-This command is included in the default shell command set.  
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_RTC} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_RTC} when all
-shell commands have been configured.

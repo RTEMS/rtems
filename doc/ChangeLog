@@ -1,3 +1,8 @@
+2010-05-13	Chris Johns <chrisj@rtems.org>
+
+	* shell/file.t: Add dd, debugrfs, hexdump, ln, mknod, mkrfs, mv.
+	* shell/general.t: Add time.
+	
 2010-05-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1512/doc
