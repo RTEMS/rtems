@@ -12,6 +12,7 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += ../../shared/include/tm27.h
+include_bsp_HEADERS = ../shared/liblnk/regs.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
@@ -36,8 +37,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c startup/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
-    startup/inittlb.c \
-    startup/idtmem.S startup/idttlb.S ../shared/irq/exception.S
+    startup/inittlb.c ../shared/startup/idttlb.S \
+    ../shared/startup/idtmem.S ../shared/irq/exception.S
 
 # clock
 noinst_PROGRAMS += clock.rel
@@ -49,7 +50,8 @@ clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 libbsp_a_SOURCES += console/console-io.c
 
 # liblnk
-libbsp_a_SOURCES += liblnk/lnklib.S liblnk/pmon.S liblnk/regs.h
+libbsp_a_SOURCES += ../shared/liblnk/lnklib.S ../shared/liblnk/pmon.S \
+    ../shared/liblnk/regs.h
 
 libbsp_a_LIBADD = \
     clock.rel \
