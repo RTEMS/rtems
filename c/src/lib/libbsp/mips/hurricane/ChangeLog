@@ -1,5 +1,11 @@
 2010-05-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: rbtx4925, rbtx4938, and hurricane had very
+	similar versions of exception. Now all use shared/irq/exception.S
+	* startup/exception.S: Removed.
+
+2010-05-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* startup/exception.S: Minor changes to make more similar to the shared
 	version.
 

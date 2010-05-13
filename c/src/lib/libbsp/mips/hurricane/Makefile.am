@@ -36,8 +36,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
-    startup/inittlb.c \
-    startup/idtmem.S startup/idttlb.S startup/exception.S
+    startup/inittlb.c startup/idtmem.S startup/idttlb.S \
+    ../shared/startup/exception.S startup/usc.S
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # console
