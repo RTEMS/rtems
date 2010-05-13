@@ -23,7 +23,7 @@
  *
  *  Derived from c/src/exec/score/cpu/no_cpu/cpu_asm.s:
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,20 +32,14 @@
  *
  *  $Id$
  */
-/* @(#)exception.S       7/27/04     1.00 */
 
+#include <bspopts.h>
+#include <rtems/asm.h>
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>
-
-
-#define FRAME(name,frm_reg,offset,ret_reg)      \
-        .globl  name;                           \
-        .ent    name;                           \
-name:;                                          \
-        .frame  frm_reg,offset,ret_reg
-#define ENDFRAME(name)                          \
-        .end name
-
+#if BSP_HAS_USC320
+  #include <usc.h>
+#endif
 
 #if __mips == 3
 /* 64 bit register operations */
@@ -148,7 +142,6 @@ FRAME(bsp_ISR_Handler,sp,0,ra)
 	ori	k0,k0,0xf500
 	sw	k1,(k0)
 #endif
-
 	mfc0 k0,C0_CAUSE	/* Determine if an interrupt generated this exception */
 	nop
 	and k1,k0,CAUSE_EXCMASK
@@ -163,8 +156,13 @@ _chk_int:
 	mfc0 k1,C0_SR
 	nop
 	and k0,k1
+#if HAS_RM52xx
+	and k0,CAUSE_IPMASK
+#elif HAS_TX49xx
 	and k0,(SR_IBIT1 | SR_IBIT2 | SR_IBIT3)
-	beq k0,zero,_ISR_Handler_quick_exit /* external interrupt not enabled, ignore */
+#endif
+	/* external interrupt not enabled, ignore */
+	beq k0,zero,_ISR_Handler_quick_exit
 	nop
 
 /* For debugging interrupts, clear EXL to allow breakpoints */
@@ -250,17 +248,20 @@ _chk_int:
         add	t1,t1,1
         sw	t1,_Thread_Dispatch_disable_level
 
-
-	/* DEBUG - Add the following code to disable interrupts and clear EXL in status register, this will
-		allow memory exceptions to occur while servicing the current interrupt */
+	/* DEBUG - Add the following code to disable interrupts and clear
+	 *	   EXL in status register, this will allow memory
+	 *         exceptions to occur while servicing the current interrupt
+	 */
 #if 0
-	li t0,~CAUSE_IP2_MASK	/* Disable interrupts from internal interrupt controller */
+	/* Disable interrupts from internal interrupt controller */
+	li t0,~CAUSE_IP2_MASK
 	mfc0 t1,C0_SR
 	nop
 	and t1,t0
 	mtc0 t1,C0_SR
 	nop
-	li t0,~SR_EXL		/* Clear EXL in status register to allow memory exceptions to occur */
+	/* Clear EXL in status register to allow memory exceptions to occur */
+	li t0,~SR_EXL
 	mfc0 t1,C0_SR
 	nop
 	and t1,t0
@@ -284,7 +285,8 @@ _chk_int:
 	or t1,t0
 	mtc0 t1,C0_SR
 	nop
-	li t0,CAUSE_IP2_MASK	/* Enable interrupts from internal interrupt controller */
+	/* Enable interrupts from internal interrupt controller */
+	li t0,CAUSE_IP2_MASK
 	mfc0 t1,C0_SR
 	nop
 	or t1,t0
@@ -386,7 +388,6 @@ _ISR_Handler_cleanup:
 	mtc0    t0, C0_SR
 	NOP
 
-
   /*
    *  prepare to get out of interrupt
    *  return from interrupt  (maybe to _ISR_Dispatch)
@@ -437,6 +438,39 @@ _ISR_Handler_quick_exit:
 	nop
 
 
+#if BSP_HAS_USC320
+	/* Interrupts from USC320 are serviced here */
+	.global	USC_isr
+	.extern	Clock_isr
+USC_isr:
+	/* check if it's a USC320 heartbeat interrupt */
+        la      k0,INT_STAT	/* read INT_STAT register */
+        lw      k0,(k0)
+        nop			/* reading from external device	*/
+        sll     k0,(31-21)	/* test bit 21 (HBI) */
+
+        bgez	k0,USC_isr2	/* branch if not a heartbeat interrupt */
+	NOP
+
+	/* clear the heartbeat interrupt */
+	la      k0,INT_STAT
+	li      t0,HBI_MASK
+	sw      t0,(k0)
+	/* wait for interrupt to clear */
+USC_isr1:
+	la      k0,INT_STAT	/* read INT_STAT register */
+	lw      k0,(k0)
+	nop			/* reading from external device */
+        sll     k0,(31-21)	/* test bit 21 (HBI) */
+        bltz    k0,USC_isr1   	/* branch if bit set */
+        nop
+	j	Clock_isr	/* Jump to clock isr */
+	nop
+USC_isr2:
+	j	ra		/* no serviceable interrupt, return without doing anything */
+	nop
+#endif
+
 #if 0
 	.global	int7_isr
 	.extern	Interrupt_7_isr
@@ -467,7 +501,7 @@ ENDFRAME(bsp_ISR_Handler)
 FRAME(_BRK_Handler,sp,0,ra)
 	.set noreorder
 
-#ifdef USC
+#if BSP_HAS_USC320
 	la	k0,INT_CFG3	/* Disable heartbeat interrupt in USC320, it interferes with PMON exception handler */
 	lw	k1,(k0)
 	li	k0,~HBI_MASK
