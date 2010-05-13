@@ -135,7 +135,7 @@ void _ISR_Handler()
    *
    */
 #endif
-FRAME(hurricane_ISR_Handler,sp,0,ra)
+FRAME(bsp_ISR_Handler,sp,0,ra)
 	.set noreorder
 
 	mfc0 k0,C0_CAUSE	/* Determine if an interrupt generated this exception */
@@ -143,7 +143,7 @@ FRAME(hurricane_ISR_Handler,sp,0,ra)
 	and k1,k0,CAUSE_EXCMASK
 	beq k1,zero,_chk_int	/* If so, branch to service here */
 	nop
-1:	la  k0,_int_esr_link	/* Otherwise, jump to next exception handler in PMON exception chain */
+	la  k0,_int_esr_link	/* Otherwise, jump to next exception handler in PMON exception chain */
 	lw  k0,(k0)
 	lw  k0,4(k0)
 	j   k0
@@ -438,7 +438,7 @@ USC_isr2:
 
        .set    reorder
 
-ENDFRAME(hurricane_ISR_Handler)
+ENDFRAME(bsp_ISR_Handler)
 
 
 FRAME(_BRK_Handler,sp,0,ra)
@@ -675,7 +675,7 @@ k1tmp:	.word	0	/* Temporary strage for K1 during interrupt service */
 	.global	_int_esr_link
 _int_esr_link:
 	.word	0
-	.word	hurricane_ISR_Handler
+	.word	bsp_ISR_Handler
 
 	/* Break exception service routine link */
 	.global	_brk_esr_link
