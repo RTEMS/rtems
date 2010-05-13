@@ -1,3 +1,8 @@
+2010-05-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am, start/start.S: Many files were duplicated
+	across MIPS BSPs. Now those which were directly copied are shared.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* startup/linkcmds: Needed to be assigned to a memory region.
