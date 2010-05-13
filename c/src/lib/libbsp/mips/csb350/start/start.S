@@ -13,7 +13,7 @@
  */
 
 #include <rtems/asm.h>
-#include "regs.h"
+#include <bsp/regs.h>
 
 	.text
 	.align	2

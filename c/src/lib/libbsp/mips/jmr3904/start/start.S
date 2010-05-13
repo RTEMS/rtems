@@ -18,7 +18,7 @@
  */
 
 #include <rtems/asm.h>
-#include "regs.h"
+#include <bsp/regs.h>
 
 #ifdef __mips16
 /* This file contains 32 bit assembly code.  */
