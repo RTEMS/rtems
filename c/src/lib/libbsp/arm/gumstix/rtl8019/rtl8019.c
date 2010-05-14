@@ -494,7 +494,7 @@ ne_init_irq_handler(struct ne_softc *sc)
   irq.isOn = ne_interrupt_is_on;
 
   if (!BSP_install_rtems_irq_handler (&irq))
-    rtems_panic ("Can't attach NE interrupt handler for irq %d\n", irno);
+    rtems_panic ("Can't attach NE interrupt handler for irq %d\n", sc->irno);
 }
 
 /* The NE2000 packet receive daemon.  This task is started when the
