@@ -12,7 +12,6 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
-include_HEADERS += include/tm27.h
 include_bsp_HEADERS = ../shared/liblnk/regs.h
 
 nodist_include_HEADERS = include/bspopts.h
