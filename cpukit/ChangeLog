@@ -1,3 +1,7 @@
+2010-05-14	Chris Johns <chrisj@rtems.org>
+
+	* libblock/src/flashdisk.c: Clean up on initialisation errors.
+	
 2010-05-07	Arnout Vandecappelle <arnout@mind.be>
 
 	PR 1511/networking

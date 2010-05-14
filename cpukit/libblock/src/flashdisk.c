@@ -2478,24 +2478,6 @@ rtems_fdisk_initialize (rtems_device_major_number major,
       blocks += rtems_fdisk_blocks_in_device (&c->devices[device],
                                               c->block_size);
 
-    sc = rtems_disk_create_phys(dev, c->block_size,
-                                blocks - fd->unavail_blocks,
-                                rtems_fdisk_ioctl, NULL, name);
-    if (sc != RTEMS_SUCCESSFUL)
-    {
-      rtems_fdisk_error ("disk create phy failed");
-      return sc;
-    }
-
-    sc = rtems_semaphore_create (rtems_build_name ('F', 'D', 'S', 'K'), 1,
-                                 RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE |
-                                 RTEMS_INHERIT_PRIORITY, 0, &fd->lock);
-    if (sc != RTEMS_SUCCESSFUL)
-    {
-      rtems_fdisk_error ("disk lock create failed");
-      return sc;
-    }
-
     /*
      * One copy buffer of a page size.
      */
@@ -2513,6 +2495,32 @@ rtems_fdisk_initialize (rtems_device_major_number major,
     if (!fd->devices)
       return RTEMS_NO_MEMORY;
 
+    sc = rtems_semaphore_create (rtems_build_name ('F', 'D', 'S', 'K'), 1,
+                                 RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE |
+                                 RTEMS_INHERIT_PRIORITY, 0, &fd->lock);
+    if (sc != RTEMS_SUCCESSFUL)
+    {
+      rtems_fdisk_error ("disk lock create failed");
+      free (fd->copy_buffer);
+      free (fd->blocks);
+      free (fd->devices);
+      return sc;
+    }
+
+    sc = rtems_disk_create_phys(dev, c->block_size,
+                                blocks - fd->unavail_blocks,
+                                rtems_fdisk_ioctl, NULL, name);
+    if (sc != RTEMS_SUCCESSFUL)
+    {
+      rtems_semaphore_delete (fd->lock);
+      rtems_disk_delete (dev);
+      free (fd->copy_buffer);
+      free (fd->blocks);
+      free (fd->devices);
+      rtems_fdisk_error ("disk create phy failed");
+      return sc;
+    }
+
     for (device = 0; device < c->device_count; device++)
     {
       rtems_fdisk_segment_ctl* sc;
@@ -2524,8 +2532,15 @@ rtems_fdisk_initialize (rtems_device_major_number major,
       fd->devices[device].segments = calloc (segment_count,
                                              sizeof (rtems_fdisk_segment_ctl));
       if (!fd->devices[device].segments)
+      {
+        rtems_disk_delete (dev);
+        rtems_semaphore_delete (fd->lock);
+        free (fd->copy_buffer);
+        free (fd->blocks);
+        free (fd->devices);
         return RTEMS_NO_MEMORY;
-
+      }
+      
       sc = fd->devices[device].segments;
 
       for (segment = 0; segment < c->devices[device].segment_count; segment++)
@@ -2552,13 +2567,27 @@ rtems_fdisk_initialize (rtems_device_major_number major,
 
     ret = rtems_fdisk_recover_block_mappings (fd);
     if (ret)
+    {
+      rtems_disk_delete (dev);
+      rtems_semaphore_delete (fd->lock);
+      free (fd->copy_buffer);
+      free (fd->blocks);
+      free (fd->devices);
       rtems_fdisk_error ("recovery of disk failed: %s (%d)",
                          strerror (ret), ret);
-
+    }
+    
     ret = rtems_fdisk_compact (fd);
     if (ret)
+    {
+      rtems_disk_delete (dev);
+      rtems_semaphore_delete (fd->lock);
+      free (fd->copy_buffer);
+      free (fd->blocks);
+      free (fd->devices);
       rtems_fdisk_error ("compacting of disk failed: %s (%d)",
                          strerror (ret), ret);
+    }
   }
 
   rtems_flashdisk_count = rtems_flashdisk_configuration_size;
