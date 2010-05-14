@@ -61,9 +61,9 @@ void rtems_libio_init( void )
             rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
 
         iop = rtems_libio_iop_freelist = rtems_libio_iops;
-	for (i = 0 ; (i + 1) < rtems_libio_number_iops ; i++, iop++)
-		iop->data1 = iop + 1;
-	iop->data1 = NULL;
+        for (i = 0 ; (i + 1) < rtems_libio_number_iops ; i++, iop++)
+          iop->data1 = iop + 1;
+        iop->data1 = NULL;
     }
 
   /*
