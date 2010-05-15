@@ -1,3 +1,7 @@
+2010-05-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/syscalls.c: Rename to avoid conflict with newlib.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* make/custom/arm920.cfg: Use VFP floating point model.
