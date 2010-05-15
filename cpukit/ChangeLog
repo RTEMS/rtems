@@ -1,3 +1,8 @@
+2010-05-15	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_stat.c: PR1419. Return a device for the IMFS.
+
 2010-05-14	Chris Johns <chrisj@rtems.org>
 
 	* libblock/src/flashdisk.c: Clean up on initialisation errors.

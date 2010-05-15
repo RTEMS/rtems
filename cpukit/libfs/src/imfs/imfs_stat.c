@@ -27,6 +27,7 @@ int IMFS_stat(
   struct stat                      *buf
 )
 {
+  IMFS_fs_info_t *fs_info;
   IMFS_jnode_t   *the_jnode;
   IMFS_device_t  *io;
 
@@ -58,6 +59,14 @@ int IMFS_stat(
       break;
   }
 
+  /*
+   * The device number of the IMFS is the major number and the minor is the
+   * instance.
+   */
+  fs_info = loc->mt_entry->fs_info;
+  buf->st_dev =
+    rtems_filesystem_make_dev_t( IMFS_DEVICE_MAJOR_NUMBER, fs_info->instance );
+  
   buf->st_mode  = the_jnode->st_mode;
   buf->st_nlink = the_jnode->st_nlink;
   buf->st_ino   = the_jnode->st_ino;

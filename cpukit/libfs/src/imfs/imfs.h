@@ -156,6 +156,12 @@ typedef union {
 } IMFS_types_union;
 
 /*
+ * Major device number for the IMFS. This is not a real device number because
+ * the IMFS is just a file system and does not have a driver.
+ */
+#define IMFS_DEVICE_MAJOR_NUMBER (0xfffe)
+
+/*
  *  Maximum length of a "basename" of an IMFS file/node.
  */
 
@@ -213,6 +219,7 @@ struct IMFS_jnode_tt {
   } while (0)
 
 typedef struct {
+  int                                     instance;
   ino_t                                   ino_count;
   const rtems_filesystem_file_handlers_r *memfile_handlers;
   const rtems_filesystem_file_handlers_r *directory_handlers;
