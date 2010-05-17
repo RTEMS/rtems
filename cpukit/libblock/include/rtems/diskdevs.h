@@ -323,10 +323,12 @@ rtems_status_code rtems_disk_io_done(void);
  * one to start the search.
  *
  * @code
- * rtems_disk_device *dd = rtems_disk_next((dev_t) -1);
+ * rtems_status_code sc = RTEMS_SUCCESSFUL;
+ * rtems_disk_device *dd = (dev_t) -1;
  *
- * while (dd != NULL) {
- *   dd = rtems_disk_next(dd->dev);
+ * while (sc == RTEMS_SUCCESSFUL && (dd = rtems_disk_next(dev)) != NULL) {
+ *   dev = rtems_disk_get_device_identifier(dd);
+ *   sc = rtems_disk_release(dd);
  * }
  * @endcode
  */

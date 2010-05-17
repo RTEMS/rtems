@@ -1,3 +1,10 @@
+2010-05-17	Oleg Kravtsov <Oleg.Kravtsov@oktetlabs.ru>
+
+	PR 1449/cpukit
+	* libblock/src/diskdevs.c: rtems_disk_next() will now implicitly
+	obtain the returned disk.
+	* libblock/include/rtems/diskdevs.h: Documentation.
+
 2010-05-15	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/imfs.h,
