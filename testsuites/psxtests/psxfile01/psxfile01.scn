@@ -1,8 +1,7 @@
-NOTE: If you get the following assertion, then your target does not
-have enough memory in the heap used by malloc to allocate all the
-files used during this test:
+Could not open '/dev/kqemu' - QEMU acceleration layer not activated: No such file or directory
+Initialized console on port COM1 9600-8-N-1
 
-assertion "memory" failed: file "...../c/src/lib/libc/memfile.c", line 340
+
 
 *** FILE TEST 1 ***
 *************** Dump of Entire IMFS ***************
@@ -13,13 +12,15 @@ assertion "memory" failed: file "...../c/src/lib/libc/memfile.c", line 340
 stat of /dev/console
 ....st_dev     (0x0:0x0)
 ....st_ino     3  may vary by small amount
-....mode  = 00020771
+....mode  = 00020755
 ....nlink = 1
 ....uid = 0
 ....gid = 0
 ....atime = Fri Jan  1 00:00:00 1988
 ....mtime = Fri Jan  1 00:00:00 1988
 ....ctime = Fri Jan  1 00:00:00 1988
+....st_blksize 0
+....st_blocks  0
 
 mkdir /dev/tty
 
@@ -54,11 +55,39 @@ tcdrain /tmp/john
 mknod /tmp/joel
 (0)the first write!!!
 
+rename /tmp/joel to /tmp/drjoel
+rename /tmp/drjoel to /tmp/joel
+rename /tmp/drjoel to /tmp/joel - Should result in an error since old path is not valid
+rename /tmp/joel to /tmp/drjoel/joel - Should result in an error since new path is not valid
+changing dir to /tmp
+rename joel to drjoel
+rename drjoel to joel
+creating directory /imfs
+creating directory /imfs/hidden_on_mount
+mounting filesystem with IMFS_ops at /imfs
+creating directory /imfs/test (on newly mounted filesystem)
+attempt to rename directory joel to /imfs/test/joel - should fail with EXDEV
+changing dir to /
+attempt to rename across filesystem, with old path having a parent node
+attempt to rename tmp/joel to /imfs/test/joel
+Unmounting /imfs
+Mounting filesystem @ /imfs with no support for evalformake
+change directory to /imfs
+exercise _rename_r, with target on /imfs - expected ENOTSUP
+attempt to rename /tmp/joel to joel
+change directory to /
+Mounting filesystem @ /imfs with no support for rename
+creating directory /imfs/test
+creating directory /imfs/test/old_dir
+changing to /
+attempt to rename imfs/old_dir to imfs/new_dir
+unmounting /imfs
+End of _rename_r tests
 (10)the first write!!!
 
-stat( /tmp/joel ) returned
+stat( /tmp/joel ) returned 
 ....st_dev     (0x0:0x0)
-....st_ino     10  may vary by small amount
+....st_ino     12  may vary by small amount
 ....mode  = 00100700
 ....nlink = 1
 ....uid = 0
@@ -66,6 +95,8 @@ stat( /tmp/joel ) returned
 ....atime = Sat Dec 31 09:00:00 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
+....st_blksize 0
+....st_blocks  0
 unlink /tmp/joel
 unlink /tmp/joel
 mknod /tmp/joel
@@ -85,10 +116,11 @@ mknod /tmp/joel
 
 (513)the first write!!!
 
-(139743)
-stat( /tmp/joel ) returned
+Skipping maximum file size test since max_size is 4329344 bytes
+That is likely to be bigger than the available RAM on many targets.
+stat( /tmp/joel ) returned 
 ....st_dev     (0x0:0x0)
-....st_ino     11  may vary by small amount
+....st_ino     13  may vary by small amount
 ....mode  = 00100700
 ....nlink = 1
 ....uid = 0
@@ -96,17 +128,21 @@ stat( /tmp/joel ) returned
 ....atime = Sat Dec 31 09:00:00 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
+....st_blksize 0
+....st_blocks  0
 stat of /tmp/j
 stat(/tmp/j) returned -1 (errno=2)
 ....st_dev     (0x0:0x0)
 ....st_ino     3  may vary by small amount
-....mode  = 00020771
+....mode  = 00020755
 ....nlink = 1
 ....uid = 0
 ....gid = 0
 ....atime = Fri Jan  1 00:00:00 1988
 ....mtime = Fri Jan  1 00:00:00 1988
 ....ctime = Fri Jan  1 00:00:00 1988
+....st_blksize 0
+....st_blocks  0
 fopen of /tmp/j
 fprintf to /tmp/j
 (1) 26 characters written to the file
@@ -115,34 +151,38 @@ fprintf to /tmp/j
 (4) 26 characters written to the file
 (5) 26 characters written to the file
 ....st_dev     (0x0:0x0)
-....st_ino     12  may vary by small amount
-....mode  = 00100660
+....st_ino     14  may vary by small amount
+....mode  = 00100644
 ....nlink = 1
 ....uid = 0
 ....gid = 0
 ....atime = Sat Dec 31 09:00:00 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
+....st_blksize 0
+....st_blocks  0
 This is call 1 to fprintf
 This is call 2 to fprintf
 This is call 3 to fprintf
 This is call 4 to fprintf
 This is call 5 to fprintf
 ....st_dev     (0x0:0x0)
-....st_ino     12  may vary by small amount
-....mode  = 00100660
+....st_ino     14  may vary by small amount
+....mode  = 00100644
 ....nlink = 1
 ....uid = 0
 ....gid = 0
 ....atime = Sat Dec 31 09:00:01 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
+....st_blksize 0
+....st_blocks  0
 *************** Dump of Entire IMFS ***************
 /
 ....dev/
 ........console (device 0, 0)
 ........tty/
-............S3 (device 255, 128)
+............S3 (device 128, 255)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
@@ -150,25 +190,29 @@ This is call 5 to fprintf
 ........my_dir/
 ........tom (file 0)
 ........john (file 0)
-........joel (file 279487)
+........joel (file 533)
 ........j (file 130)
+....imfs/
+........hidden_on_mount/
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 40
 ....st_dev     (0x0:0x0)
-....st_ino     12  may vary by small amount
-....mode  = 00100660
+....st_ino     14  may vary by small amount
+....mode  = 00100644
 ....nlink = 1
 ....uid = 0
 ....gid = 0
 ....atime = Sat Dec 31 09:00:02 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
+....st_blksize 0
+....st_blocks  0
 *************** Dump of Entire IMFS ***************
 /
 ....dev/
 ........console (device 0, 0)
 ........tty/
-............S3 (device 255, 128)
+............S3 (device 128, 255)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
@@ -177,6 +221,8 @@ truncate /tmp/j to length of 40
 ........tom (file 0)
 ........john (file 0)
 ........j (file 40)
+....imfs/
+........hidden_on_mount/
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 0
 truncate /tmp to length of 0 should fail with EISDIR
@@ -187,7 +233,7 @@ truncate /tmp to length of 0 should fail with EISDIR
 ....dev/
 ........console (device 0, 0)
 ........tty/
-............S3 (device 255, 128)
+............S3 (device 128, 255)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
@@ -196,6 +242,8 @@ truncate /tmp to length of 0 should fail with EISDIR
 ........tom (file 0)
 ........john (file 0)
 ........j (file 0)
+....imfs/
+........hidden_on_mount/
 ***************       End of Dump        ***************
 Writing First File
 Writing Second File
@@ -204,5 +252,5 @@ this is a test line
 
 (0)this is a test line
 this is a test line
-*** END OF FILE TEST 1 ***
 
+*** END OF FILE TEST 1 ***
