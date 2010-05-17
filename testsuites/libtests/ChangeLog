@@ -1,3 +1,11 @@
+2010-05-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1433/cpukit
+	* block08/bdbuf_tests.c: Enabled tests 1.1, 1.2 and 1.3.
+	* block08/bdbuf_test1_1.c, block08/bdbuf_test1_2.c,
+	block08/bdbuf_test1_3.c: Use RTEMS_IO_ERROR instead of
+	RTEMS_NO_MEMORY.
+
 2010-05-03	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* block01/init.c, block02/init.c, block03/init.c, block04/init.c,

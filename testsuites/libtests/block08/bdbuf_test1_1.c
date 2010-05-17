@@ -77,10 +77,10 @@ bdbuf_test1_1_main()
      * Check that rtems_bdbuf_read() returns status obtained
      * from device driver via asynchonous notification.
      * On this step device driver returns 0 from ioctl() call,
-     * but notification callback is called with RTEMS_NO_MEMORY status.
+     * but notification callback is called with RTEMS_IO_ERROR status.
      */
     WAIT_DRV_MSG(&msg);
-    SEND_DRV_MSG(0, 0, RTEMS_NO_MEMORY, EFAULT);
+    SEND_DRV_MSG(0, 0, RTEMS_IO_ERROR, EFAULT);
 
     WAIT_THREAD_SYNC(1);
     TEST_CHECK_RESULT("6");
@@ -130,11 +130,11 @@ bdbuf_test1_1_thread1(rtems_task_argument arg)
 
     /*
      * Step 5-6:
-     * Read operation fails with RTEMS_NO_MEMORY code.
+     * Read operation fails with RTEMS_IO_ERROR code.
      * The function shall not update user pointer.
      */
     rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd2);
-    if (rc != RTEMS_NO_MEMORY || bd2 != NULL)
+    if (rc != RTEMS_IO_ERROR || bd2 != NULL)
     {
         TEST_FAILED();
     }

@@ -24,11 +24,9 @@
 struct bdbuf_test_descr {
     void (* main)(void);
 } bdbuf_tests[] = {
-#if 0
     { bdbuf_test1_1_main },
     { bdbuf_test1_2_main },
     { bdbuf_test1_3_main },
-#endif
     { bdbuf_test1_4_main },
     { bdbuf_test1_5_main },
     

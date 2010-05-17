@@ -69,7 +69,7 @@ bdbuf_test1_2_main()
      * Step 3:
      * Unblock thread #1 by reporting data transfer result.
      */
-    SEND_DRV_MSG(0, 0, RTEMS_NO_MEMORY, EFAULT);
+    SEND_DRV_MSG(0, 0, RTEMS_IO_ERROR, EFAULT);
 
     /*
      * Wait for sync from thread #1.
@@ -91,7 +91,7 @@ bdbuf_test1_2_main()
      * Step 5:
      * Report an error again from the driver.
      */
-    SEND_DRV_MSG(0, 0, RTEMS_NO_MEMORY, EFAULT);
+    SEND_DRV_MSG(0, 0, RTEMS_IO_ERROR, EFAULT);
 
     /*
      * Wait for sync from thread #2.
@@ -119,7 +119,7 @@ bdbuf_test1_2_thread1(rtems_task_argument arg)
      * result this call will return an error.
      */
     rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
-    if (rc != RTEMS_NO_MEMORY || bd != NULL)
+    if (rc != RTEMS_IO_ERROR || bd != NULL)
     {
         TEST_FAILED();
     }
@@ -146,10 +146,10 @@ bdbuf_test1_2_thread2(rtems_task_argument arg)
      * Due to the fact that thread #1 failed to read required block
      * number, bdbuf library should ask for re-read data again.
      * But main test task will agin tell device driver to return
-     * RTEMS_NO_MEMORY data transfer result.
+     * RTEMS_IO_ERROR data transfer result.
      */
     rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
-    if (rc != RTEMS_NO_MEMORY || bd != NULL)
+    if (rc != RTEMS_IO_ERROR || bd != NULL)
     {
         TEST_FAILED();
     }
