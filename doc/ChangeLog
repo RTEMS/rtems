@@ -1,3 +1,9 @@
+2010-05-18	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1520/doc
+	* user/part.t: Partition create discussion said it returned the number
+	of buffers created but it does not.
+
 2010-05-18	Alin Rus <alin.codejunkie@gmail.com>
 
 	PR 1519/doc
