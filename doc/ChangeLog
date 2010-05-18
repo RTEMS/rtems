@@ -1,3 +1,8 @@
+2010-05-18	Alin Rus <alin.codejunkie@gmail.com>
+
+	PR 1519/doc
+	* user/chains.t: Fix typo in Chain_Control example.
+
 2010-05-13	Chris Johns <chrisj@rtems.org>
 
 	* shell/file.t: Add dd, debugrfs, hexdump, ln, mknod, mkrfs, mv.

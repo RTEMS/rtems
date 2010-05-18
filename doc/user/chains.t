@@ -96,7 +96,7 @@ node.
 
 @example
        Control
-        next ------------------------->
+        first ------------------------>
         permanent_null <--------------- NODE
         last ------------------------->
 @end example
