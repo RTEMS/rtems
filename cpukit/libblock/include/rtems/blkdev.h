@@ -42,21 +42,16 @@ extern "C" {
 
 /**
  * Block device request type.
+ *
+ * @warning The sync request is an IO one and only used from the cache. Use the
+ *          Block IO when operating at the device level. We need a sync request
+ *          to avoid requests looping for ever.
  */
 typedef enum rtems_blkdev_request_op {
   RTEMS_BLKDEV_REQ_READ,       /**< Read the requested blocks of data. */
   RTEMS_BLKDEV_REQ_WRITE,      /**< Write the requested blocks of data. */
-  RTEMS_BLKDEV_CAPABILITIES    /**< Return the driver capabilities set. */
+  RTEMS_BLKDEV_REQ_SYNC        /**< Sync any data with the media. */
 } rtems_blkdev_request_op;
-
-/**
- * Only consecutive multi-sector buffer requests are supported.
- *
- * This option means the cache will only supply multiple buffers that are
- * inorder so the ATA multi-sector command for example can be used. This is a
- * hack to work around the current ATA driver.
- */
-#define RTEMS_BLKDEV_CAP_MULTISECTOR_CONT (1 << 0)
 
 /**
  * @brief Block device request done callback function type.
@@ -147,7 +142,7 @@ typedef struct rtems_blkdev_request {
 /**
  * The start block in a request.
  *
- * Only valid if the driver has returned the @ref RTEMS_BLKDEV_CAPABILITIES of
+ * Only valid if the driver has returned the @ref RTEMS_BLKIO_CAPABILITIES of
  * @ref RTEMS_BLKDEV_CAP_MULTISECTOR_CONT.
  */
 #define RTEMS_BLKDEV_START_BLOCK(req) (req->bufs[0].block)
@@ -165,8 +160,24 @@ typedef struct rtems_blkdev_request {
 #define RTEMS_BLKIO_GETSIZE         _IOR('B', 5, rtems_blkdev_bnum)
 #define RTEMS_BLKIO_SYNCDEV         _IO('B', 6)
 #define RTEMS_BLKIO_DELETED         _IO('B', 7)
+#define RTEMS_BLKIO_CAPABILITIES    _IO('B', 8)
 
 /** @} */
+
+/**
+ * Only consecutive multi-sector buffer requests are supported.
+ *
+ * This option means the cache will only supply multiple buffers that are
+ * inorder so the ATA multi-sector command for example can be used. This is a
+ * hack to work around the current ATA driver.
+ */
+#define RTEMS_BLKDEV_CAP_MULTISECTOR_CONT (1 << 0)
+
+/**
+ * The driver will accept a sync call. A sync call is made to a driver
+ * after a bdbuf cache sync has finished.
+ */
+#define RTEMS_BLKDEV_CAP_SYNC (1 << 1)
 
 /**
  * The device driver interface conventions suppose that a driver may contain an

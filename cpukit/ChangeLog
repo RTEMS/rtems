@@ -1,3 +1,11 @@
+2010-05-18	Chris Johns <chrisj@rtems.org>
+
+	* libblock/src/diskdevs.c, libblock/include/rtems/blkdev.h,
+	libblock/src/bdbuf.c: PR 1448/filesystem.
+
+	* libblock/include/rtems/blkdev.h, libblock/src/bdbuf.c: PR
+	1514/filesystem.
+	
 2010-05-17	Oleg Kravtsov <Oleg.Kravtsov@oktetlabs.ru>
 
 	PR 1449/cpukit

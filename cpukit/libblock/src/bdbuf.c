@@ -60,6 +60,7 @@ typedef struct rtems_bdbuf_swapout_transfer
 {
   rtems_chain_control   bds;         /**< The transfer list of BDs. */
   dev_t                 dev;         /**< The device the transfer is for. */
+  bool                  syncing;     /**< The data is a sync'ing. */
   rtems_blkdev_request* write_req;   /**< The write request array. */
   uint32_t              bufs_per_bd; /**< Number of buffers per bd. */
 } rtems_bdbuf_swapout_transfer;
@@ -74,7 +75,7 @@ typedef struct rtems_bdbuf_swapout_worker
                                           * idle. */
   rtems_id                     id;       /**< The id of the task so we can wake
                                           * it. */
-  volatile bool                enabled;  /**< The worked is enabled. */
+  volatile bool                enabled;  /**< The worker is enabled. */
   rtems_bdbuf_swapout_transfer transfer; /**< The transfer data for this
                                           * thread. */
 } rtems_bdbuf_swapout_worker;
@@ -1319,9 +1320,9 @@ rtems_bdbuf_init (void)
   if (bdbuf_cache.initialised)
   {
     rtems_bdbuf_restore_preemption (prev_mode);
-
     return RTEMS_RESOURCE_IN_USE;
   }
+
   memset(&bdbuf_cache, 0, sizeof(bdbuf_cache));
   bdbuf_cache.initialised = true;
   rtems_bdbuf_restore_preemption (prev_mode);
@@ -2042,7 +2043,7 @@ rtems_bdbuf_read (dev_t                dev,
 #define bdbuf_alloc(size) __builtin_alloca (size)
 
   req = bdbuf_alloc (sizeof (rtems_blkdev_request) +
-                     sizeof ( rtems_blkdev_sg_buffer) *
+                     sizeof (rtems_blkdev_sg_buffer) *
                       (bdbuf_config.max_read_ahead_blocks + 1));
 
   if (rtems_bdbuf_tracer)
@@ -2260,7 +2261,7 @@ rtems_bdbuf_null_disk_ioctl (rtems_disk_device *dd, uint32_t req, void *arg)
 /**
  * Swapout transfer to the driver. The driver will break this I/O into groups
  * of consecutive write requests is multiple consecutive buffers are required
- * by the driver.
+ * by the driver. The cache is not locked.
  *
  * @param transfer The transfer transaction.
  */
@@ -2373,7 +2374,20 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
     }
 
     if (dd != &null_disk)
+    {
+      /*
+       * If sync'ing and the deivce is capability of handling a sync IO control
+       * call perform the call.
+       */
+      if (transfer->syncing &&
+          (dd->phys_dev->capabilities & RTEMS_BLKDEV_CAP_SYNC))
+      {
+        /* int result = */ dd->ioctl (dd->phys_dev, RTEMS_BLKDEV_REQ_SYNC, NULL);
+        /* How should the error be handled ? */
+      }
+      
       rtems_disk_release (dd);
+    }
   }
 }
 
@@ -2401,20 +2415,31 @@ rtems_bdbuf_swapout_modified_processing (dev_t*               dev,
   if (!rtems_chain_is_empty (chain))
   {
     rtems_chain_node* node = rtems_chain_head (chain);
+    bool              sync_all;
+    
     node = node->next;
 
+    /*
+     * A sync active with no valid dev means sync all.
+     */
+    if (sync_active && (*dev == BDBUF_INVALID_DEV))
+      sync_all = true;
+    else
+      sync_all = false;
+    
     while (!rtems_chain_is_tail (chain, node))
     {
       rtems_bdbuf_buffer* bd = (rtems_bdbuf_buffer*) node;
 
       /*
        * Check if the buffer's hold timer has reached 0. If a sync is active
-       * or someone waits for a buffer force all the timers to 0.
+       * or someone waits for a buffer written force all the timers to 0.
        *
        * @note Lots of sync requests will skew this timer. It should be based
        *       on TOD to be accurate. Does it matter ?
        */
-      if (sync_active || rtems_bdbuf_has_buffer_waiters ())
+      if (sync_all || (sync_active && (*dev == bd->dev))
+          || rtems_bdbuf_has_buffer_waiters ())
         bd->hold_timer = 0;
 
       if (bd->hold_timer)
@@ -2515,11 +2540,11 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
   /*
    * If a sync is active do not use a worker because the current code does not
    * cleaning up after. We need to know the buffers have been written when
-   * syncing to the release sync lock and currently worker threads do not
-   * return to here. We do not know the worker is the last in a sequence of
-   * sync writes until after we have it running so we do not know to tell it to
-   * release the lock. The simplest solution is to get the main swap out task
-   * perform all sync operations.
+   * syncing to release sync lock and currently worker threads do not return to
+   * here. We do not know the worker is the last in a sequence of sync writes
+   * until after we have it running so we do not know to tell it to release the
+   * lock. The simplest solution is to get the main swap out task perform all
+   * sync operations.
    */
   if (bdbuf_cache.sync_active)
     worker = NULL;
@@ -2533,7 +2558,8 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
 
   rtems_chain_initialize_empty (&transfer->bds);
   transfer->dev = BDBUF_INVALID_DEV;
-
+  transfer->syncing = bdbuf_cache.sync_active;
+  
   /*
    * When the sync is for a device limit the sync to that device. If the sync
    * is for a buffer handle process the devices in the order on the sync
@@ -2541,7 +2567,7 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
    */
   if (bdbuf_cache.sync_active)
     transfer->dev = bdbuf_cache.sync_device;
-
+    
   /*
    * If we have any buffers in the sync queue move them to the modified
    * list. The first sync buffer will select the device we use.
@@ -2753,6 +2779,7 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
   transfer.write_req = rtems_bdbuf_swapout_writereq_alloc ();
   rtems_chain_initialize_empty (&transfer.bds);
   transfer.dev = BDBUF_INVALID_DEV;
+  transfer.syncing = false;
 
   /*
    * Localise the period.

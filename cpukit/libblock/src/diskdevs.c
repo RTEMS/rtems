@@ -259,7 +259,7 @@ rtems_status_code rtems_disk_create_phys(
   dd->ioctl = handler;
   dd->driver_data = driver_data;
 
-  if ((*handler)(dd, RTEMS_BLKDEV_CAPABILITIES, &dd->capabilities) < 0) {
+  if ((*handler)(dd, RTEMS_BLKIO_CAPABILITIES, &dd->capabilities) < 0) {
     dd->capabilities = 0;
   }
 
