@@ -1019,7 +1019,7 @@ ata_ioctl(rtems_disk_device *dd, uint32_t cmd, void *argp)
             status = ata_non_data_request(device, cmd, argp);
             break;
 
-        case RTEMS_BLKDEV_CAPABILITIES:
+        case RTEMS_BLKIO_CAPABILITIES:
             *((uint32_t*) argp)  = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
             status = RTEMS_SUCCESSFUL;
             break;

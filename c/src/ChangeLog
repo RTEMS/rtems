@@ -1,3 +1,8 @@
+2010-05-18	Chris Johns <chrisj@rtems.org>
+
+	* libchip/i2c/spi-sd-card.c, libchip/ide/ata.c: PR
+	1448/filesystem.
+
 2010-05-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/bsp-alias.m4: Change quoting to work-round

@@ -1134,7 +1134,7 @@ static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
                                 errno = EINVAL;
 				return -1;
 		}
-	} else if (req == RTEMS_BLKDEV_CAPABILITIES) {
+	} else if (req == RTEMS_BLKIO_CAPABILITIES) {
 		*(uint32_t *) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
 		return 0;
 	} else {
