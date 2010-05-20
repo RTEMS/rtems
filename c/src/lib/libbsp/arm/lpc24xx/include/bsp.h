@@ -87,6 +87,8 @@ int lpc_eth_attach_detach(
  */
 void *bsp_idle_thread(uintptr_t ignored);
 
+#define BSP_CONSOLE_UART_BASE 0xe000c000
+
 /** @} */
 
 #endif /* ASM */

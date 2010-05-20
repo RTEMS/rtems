@@ -32,6 +32,7 @@ include_bsp_HEADERS += ../../shared/include/utility.h
 include_bsp_HEADERS += ../../shared/include/irq-generic.h
 include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
+include_bsp_HEADERS += ../../shared/include/uart-output-char.h
 include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/linker-symbols.h
 include_bsp_HEADERS += ../shared/include/start.h
@@ -88,6 +89,7 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/gnatinstallhandler.c \
 	../../shared/sbrk.c \
 	../../shared/src/stackalloc.c \
+	../../shared/src/uart-output-char.c \
 	../shared/abort/simple_abort.c
 
 # Startup

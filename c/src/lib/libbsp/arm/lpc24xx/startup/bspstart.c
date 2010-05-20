@@ -29,6 +29,7 @@
 #include <bsp/lpc24xx.h>
 #include <bsp/stackalloc.h>
 #include <bsp/system-clocks.h>
+#include <bsp/uart-output-char.h>
 
 #ifdef LPC24XX_HEAP_EXTEND
   LINKER_SYMBOL(lpc24xx_region_heap_0_begin);
@@ -72,13 +73,7 @@ void bsp_start(void)
   #ifdef LPC24XX_CONFIG_CONSOLE
     lpc24xx_module_enable(LPC24XX_MODULE_UART_0, LPC24XX_MODULE_CCLK);
     lpc24xx_io_config(LPC24XX_MODULE_UART_0, LPC24XX_CONFIG_CONSOLE);
-    U0LCR = 0;
-    U0IER = 0;
-    U0LCR = 0x80;
-    U0DLL = lpc24xx_cclk() / 16 / LPC24XX_UART_BAUD;
-    U0DLM = 0;
-    U0LCR = 0x03;
-    U0FCR = 0x07;
+    BSP_CONSOLE_UART_INIT(lpc24xx_cclk() / 16 / LPC24XX_UART_BAUD);
   #endif
 
   /* Interrupts */
@@ -111,22 +106,3 @@ void bsp_start(void)
     lpc24xx_io_config(LPC24XX_MODULE_UART_3, LPC24XX_CONFIG_UART_3);
   #endif
 }
-
-#define ULSR_THRE 0x00000020U
-
-static void lpc24xx_BSP_output_char(char c)
-{
-  while (IS_FLAG_CLEARED(U0LSR, ULSR_THRE)) {
-    /* Wait */
-  }
-  U0THR = c;
-
-  if (c == '\n') {
-    while (IS_FLAG_CLEARED(U0LSR, ULSR_THRE)) {
-      /* Wait */
-    }
-    U0THR = '\r';
-  }
-}
-
-BSP_output_char_function_type BSP_output_char = lpc24xx_BSP_output_char;

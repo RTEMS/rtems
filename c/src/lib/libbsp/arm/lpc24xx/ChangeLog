@@ -1,5 +1,10 @@
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* Makefile.am, preinstall.am, include/bsp.h, startup/bspstart.c: Use
+	shared output character implementation.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* make/custom/lpc24xx.inc: Workaround for GCC bug 38644.
 
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
