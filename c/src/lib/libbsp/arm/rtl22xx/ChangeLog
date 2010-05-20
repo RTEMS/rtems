@@ -1,3 +1,7 @@
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/rtl22xx_t.cfg: Workaround for GCC bug 38644.
+
 2010-04-30	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* include/bsp.h: Add BSP_SMALL_MEMORY.
