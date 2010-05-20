@@ -1,3 +1,7 @@
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/dswifi/arm9/makefile: Workaround for GCC bug 38644.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* make/custom/nds.cfg, Makefile.am, dswifi/arm7/makefile: Use VFP
