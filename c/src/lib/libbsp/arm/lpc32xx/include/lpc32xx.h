@@ -22,6 +22,8 @@
 #ifndef LIBBSP_ARM_LPC32XX_LPC32XX_H
 #define LIBBSP_ARM_LPC32XX_LPC32XX_H
 
+#include <stdint.h>
+
 /**
  * @defgroup lpc32xx_reg Register Definitions
  *

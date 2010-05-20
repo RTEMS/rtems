@@ -1,5 +1,14 @@
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* make/custom/lpc32xx.inc, make/custom/lpc32xx_mzx_boot_int.cfg,
+	startup/linkcmds.lpc32xx_mzx_boot_int: New files.
+	* Makefile.am, configure.ac, preinstall.am, include/bsp.h,
+	include/bspopts.h.in, include/lpc32xx.h, irq/irq.c,
+	make/custom/lpc32xx_phycore.cfg, startup/bspstart.c,
+	startup/bspstarthooks.c: Changes throughout.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* make/custom/lpc32xx_phycore.cfg: Workaround for GCC bug 38644.
 
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>

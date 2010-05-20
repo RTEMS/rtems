@@ -1,0 +1,57 @@
+/**
+ * @file
+ *
+ * @ingroup lpc32xx_linker_boot
+ *
+ * @brief Memory map.
+ */
+
+/**
+ * @defgroup lpc32xx_linker_boot Boot Memory Map
+ *
+ * @ingroup bsp_linker
+ *
+ * @brief Boot memory map.
+ *
+ * <table>
+ *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
+ *   <tr><td>RAM_INT</td><td>0x08000000</td><td>256k</td></tr>
+ * </table>
+ *
+ * <table>
+ *   <tr><th>Section Name</th><th>Section Runtime Region</th><th>Section Load Region</th></tr>
+ *   <tr><td>.start</td><td>RAM_INT</td><td></td></tr>
+ *   <tr><td>.vector</td><td>RAM_INT</td><td></td></tr>
+ *   <tr><td>.text</td><td>RAM_INT</td><td>RAM_INT</td></tr>
+ *   <tr><td>.rodata</td><td>RAM_INT</td><td>RAM_INT</td></tr>
+ *   <tr><td>.data</td><td>RAM_INT</td><td>RAM_INT</td></tr>
+ *   <tr><td>.fast</td><td>RAM_INT</td><td>RAM_INT</td></tr>
+ *   <tr><td>.bss</td><td>RAM_INT</td><td></td></tr>
+ *   <tr><td>.work</td><td>RAM_INT</td><td></td></tr>
+ *   <tr><td>.stack</td><td>RAM_INT</td><td></td></tr>
+ * </table>
+ */
+
+MEMORY {
+        RAM_INT (AIW) : ORIGIN = 0x08000000, LENGTH = 256k
+        NIRVANA : ORIGIN = 0, LENGTH = 0
+}
+
+REGION_ALIAS ("REGION_START", RAM_INT);
+REGION_ALIAS ("REGION_VECTOR", RAM_INT);
+REGION_ALIAS ("REGION_TEXT", RAM_INT);
+REGION_ALIAS ("REGION_TEXT_LOAD", RAM_INT);
+REGION_ALIAS ("REGION_RODATA", RAM_INT);
+REGION_ALIAS ("REGION_RODATA_LOAD", RAM_INT);
+REGION_ALIAS ("REGION_DATA", RAM_INT);
+REGION_ALIAS ("REGION_DATA_LOAD", RAM_INT);
+REGION_ALIAS ("REGION_FAST", RAM_INT);
+REGION_ALIAS ("REGION_FAST_LOAD", RAM_INT);
+REGION_ALIAS ("REGION_BSS", RAM_INT);
+REGION_ALIAS ("REGION_WORK", RAM_INT);
+REGION_ALIAS ("REGION_STACK", RAM_INT);
+
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
+bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
+
+INCLUDE linkcmds.base

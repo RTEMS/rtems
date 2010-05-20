@@ -33,6 +33,9 @@
 /* clock mode configuration for UARTs */
 #undef LPC32XX_CONFIG_UART_CLKMODE
 
+/* disable MMU */
+#undef LPC32XX_DISABLE_MMU
+
 /* disable MMU protection of read-only sections */
 #undef LPC32XX_DISABLE_READ_ONLY_PROTECTION
 

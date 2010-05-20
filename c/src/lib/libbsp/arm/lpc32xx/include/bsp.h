@@ -100,6 +100,8 @@ static inline unsigned lpc32xx_timer(void)
   return timer->tc;
 }
 
+#define BSP_CONSOLE_UART_BASE 0x40090000
+
 /** @} */
 
 /**
