@@ -87,7 +87,7 @@ static void lpc24xx_ssp_handler(void *arg)
   uint32_t mis = regs->mis;
   uint32_t icr = 0;
 
-  if (IS_FLAG_SET(mis, SSP_MIS_RORRIS)) {
+  if ((mis & SSP_MIS_RORRIS) != 0) {
     /* TODO */
     printk("%s: Receiver overrun!\n", __func__);
     icr |= SSP_ICR_RORRIS;
@@ -105,7 +105,7 @@ static void lpc24xx_ssp_dma_handler(void *arg)
   int rv = 0;
 
   /* Return if we are not in a transfer status */
-  if (IS_FLAG_CLEARED(status, LPC24XX_SSP_DMA_TRANSFER_FLAG)) {
+  if ((status & LPC24XX_SSP_DMA_TRANSFER_FLAG) == 0) {
     return;
   }
 
@@ -121,25 +121,25 @@ static void lpc24xx_ssp_dma_handler(void *arg)
   if (err == 0) {
     switch (status) {
       case LPC24XX_SSP_DMA_WAIT:
-        if (ARE_FLAGS_SET(tc, GPDMA_STATUS_CH_0 | GPDMA_STATUS_CH_1)) {
+        if ((tc & (GPDMA_STATUS_CH_0 | GPDMA_STATUS_CH_1)) != 0) {
           status = LPC24XX_SSP_DMA_DONE;
-        } else if (IS_FLAG_SET(tc, GPDMA_STATUS_CH_0)) {
+        } else if ((tc & GPDMA_STATUS_CH_0) != 0) {
           status = LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_1;
-        } else if (IS_FLAG_SET(tc, GPDMA_STATUS_CH_1)) {
+        } else if ((tc & GPDMA_STATUS_CH_1) != 0) {
           status = LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_0;
         }
         break;
       case LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_0:
-        if (IS_FLAG_SET(tc, GPDMA_STATUS_CH_1)) {
+        if ((tc & GPDMA_STATUS_CH_1) != 0) {
           status = LPC24XX_SSP_DMA_ERROR;
-        } else if (IS_FLAG_SET(tc, GPDMA_STATUS_CH_0)) {
+        } else if ((tc & GPDMA_STATUS_CH_0) != 0) {
           status = LPC24XX_SSP_DMA_DONE;
         }
         break;
       case LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_1:
-        if (IS_FLAG_SET(tc, GPDMA_STATUS_CH_0)) {
+        if ((tc & GPDMA_STATUS_CH_0) != 0) {
           status = LPC24XX_SSP_DMA_ERROR;
-        } else if (IS_FLAG_SET(tc, GPDMA_STATUS_CH_1)) {
+        } else if ((tc & GPDMA_STATUS_CH_1) != 0) {
           status = LPC24XX_SSP_DMA_DONE;
         }
         break;
@@ -363,7 +363,7 @@ static int lpc24xx_ssp_set_transfer_mode(
 
   e->idle_char = mode->idle_char;
 
-  while (IS_FLAG_CLEARED(regs->sr, SSP_SR_TFE)) {
+  while ((regs->sr & SSP_SR_TFE) == 0) {
     /* Wait */
   }
 
@@ -426,14 +426,14 @@ static int lpc24xx_ssp_read_write(
     m = w - r;
 
     /* Write */
-    if (IS_FLAG_SET(sr, SSP_SR_TNF) && m < LPC24XX_SSP_FIFO_SIZE) {
+    if ((sr & SSP_SR_TNF) != 0 && m < LPC24XX_SSP_FIFO_SIZE) {
       regs->dr = *out;
       ++w;
       out += dw;
     }
 
     /* Read */
-    if (IS_FLAG_SET(sr, SSP_SR_RNE)) {
+    if ((sr & SSP_SR_RNE) != 0) {
       *in = (unsigned char) regs->dr;
       ++r;
       in += dr;
@@ -448,7 +448,7 @@ static int lpc24xx_ssp_read_write(
     /* Wait */
     do {
       sr = regs->sr;
-    } while (IS_FLAG_CLEARED(sr, SSP_SR_RNE));
+    } while ((sr & SSP_SR_RNE) == 0);
 
     /* Read */
     *in = (unsigned char) regs->dr;

@@ -1168,6 +1168,12 @@ Reset, and Code Security/Debugging */
 
 /* Register Fields */
 
+#define GET_FIELD( val, mask, shift) \
+  (((val) & (mask)) >> (shift))
+
+#define SET_FIELD( val, field, mask, shift) \
+  (((val) & ~(mask)) | (((field) << (shift)) & (mask)))
+
 /* CLKSRCSEL */
 
 #define CLKSRCSEL_CLKSRC_MASK 0x00000003U

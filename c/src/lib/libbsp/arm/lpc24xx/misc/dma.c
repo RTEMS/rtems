@@ -85,15 +85,15 @@ void lpc24xx_dma_channel_disable(unsigned channel, bool force)
 
     if (!force) {
       /* Halt */
-      ch->cfg = SET_FLAG(cfg, GPDMA_CH_CFG_HALT);
+      ch->cfg |= GPDMA_CH_CFG_HALT;
 
       /* Wait for inactive */
       do {
         cfg = ch->cfg;
-      } while (IS_FLAG_SET(cfg, GPDMA_CH_CFG_ACTIVE));
+      } while ((cfg & GPDMA_CH_CFG_ACTIVE) != 0);
     }
 
     /* Disable */
-    ch->cfg = CLEAR_FLAG(cfg, GPDMA_CH_CFG_EN);
+    ch->cfg &= ~GPDMA_CH_CFG_EN;
   }
 }

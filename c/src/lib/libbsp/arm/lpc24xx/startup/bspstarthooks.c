@@ -143,12 +143,12 @@ static void BSP_START_SECTION lpc24xx_init_emc_1(void)
 {
   #ifdef LPC24XX_EMC_INIT
     /* Use normal memory map */
-    EMC_CTRL = CLEAR_FLAG(EMC_CTRL, 0x2);
+    EMC_CTRL &= ~0x2;
   #endif
 
   #ifdef LPC24XX_EMC_MICRON
     /* Check if we need to initialize it */
-    if (IS_FLAG_CLEARED(EMC_DYN_CFG0, 0x00080000)) {
+    if ((EMC_DYN_CFG0 & 0x00080000) == 0) {
       /*
        * The buffer enable bit is not set.  Now we assume that the controller
        * is not properly initialized.
@@ -278,10 +278,10 @@ static void BSP_START_SECTION lpc24xx_set_pll(
   uint32_t pllcfg = SET_PLLCFG_NSEL(0, nsel) | SET_PLLCFG_MSEL(0, msel);
   uint32_t clksrcsel = SET_CLKSRCSEL_CLKSRC(0, clksrc);
   uint32_t cclkcfg = SET_CCLKCFG_CCLKSEL(0, cclksel | 1);
-  bool pll_enabled = IS_FLAG_SET(pllstat, PLLSTAT_PLLE);
+  bool pll_enabled = (pllstat & PLLSTAT_PLLE) != 0;
 
   /* Disconnect PLL if necessary */
-  if (IS_FLAG_SET(pllstat, PLLSTAT_PLLC)) {
+  if ((pllstat & PLLSTAT_PLLC) != 0) {
     if (pll_enabled) {
       /* Check if we run already with the desired settings */
       if (PLLCFG == pllcfg && CLKSRCSEL == clksrcsel && CCLKCFG == cclkcfg) {
@@ -312,7 +312,7 @@ static void BSP_START_SECTION lpc24xx_set_pll(
   lpc24xx_pll_config(PLLCON_PLLE);
 
   /* Wait for lock */
-  while (IS_FLAG_CLEARED(PLLSTAT, PLLSTAT_PLOCK)) {
+  while ((PLLSTAT & PLLSTAT_PLOCK) == 0) {
     /* Wait */
   }
 
@@ -326,9 +326,9 @@ static void BSP_START_SECTION lpc24xx_set_pll(
 static void BSP_START_SECTION lpc24xx_init_pll(void)
 {
   /* Enable main oscillator */
-  if (IS_FLAG_CLEARED(SCS, 0x40)) {
-    SCS = SET_FLAG(SCS, 0x20);
-    while (IS_FLAG_CLEARED(SCS, 0x40)) {
+  if ((SCS & 0x40) == 0) {
+    SCS |= 0x20;
+    while ((SCS & 0x40) == 0) {
       /* Wait */
     }
   }
@@ -383,7 +383,7 @@ void BSP_START_SECTION bsp_start_hook_1(void)
   MAMCR = 0x2;
 
   /* Enable fast IO for ports 0 and 1 */
-  SCS = SET_FLAG(SCS, 0x1);
+  SCS |= 0x1;
 
   /* Set fast IO */
   FIO0DIR = 0;

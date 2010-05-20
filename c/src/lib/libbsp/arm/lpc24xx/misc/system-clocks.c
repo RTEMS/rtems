@@ -93,7 +93,7 @@ unsigned lpc24xx_pllclk(void)
   }
 
   /* Get PLL output frequency */
-  if (IS_FLAG_SET(PLLSTAT, PLLSTAT_PLLC)) {
+  if ((PLLSTAT & PLLSTAT_PLLC) != 0) {
     uint32_t pllcfg = PLLCFG;
     unsigned n = GET_PLLCFG_NSEL(pllcfg) + 1;
     unsigned m = GET_PLLCFG_MSEL(pllcfg) + 1;

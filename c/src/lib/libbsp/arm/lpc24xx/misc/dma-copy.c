@@ -38,16 +38,16 @@ static void lpc24xx_dma_copy_handler(void *arg)
   GPDMA_INT_ERR_CLR = err;
 
   /* Check channel 0 */
-  if (IS_FLAG_SET(tc, GPDMA_STATUS_CH_0)) {
+  if ((tc & GPDMA_STATUS_CH_0) != 0) {
     rtems_semaphore_release(lpc24xx_dma_sema_table [0]);
   }
-  lpc24xx_dma_status_table [0] = IS_FLAG_CLEARED(err, GPDMA_STATUS_CH_0);
+  lpc24xx_dma_status_table [0] = (err & GPDMA_STATUS_CH_0) == 0;
 
   /* Check channel 1 */
-  if (IS_FLAG_SET(tc, GPDMA_STATUS_CH_1)) {
+  if ((tc & GPDMA_STATUS_CH_1) != 0) {
     rtems_semaphore_release(lpc24xx_dma_sema_table [1]);
   }
-  lpc24xx_dma_status_table [1] = IS_FLAG_CLEARED(err, GPDMA_STATUS_CH_1);
+  lpc24xx_dma_status_table [1] = (err & GPDMA_STATUS_CH_1) == 0;
 }
 
 rtems_status_code lpc24xx_dma_copy_initialize(void)
