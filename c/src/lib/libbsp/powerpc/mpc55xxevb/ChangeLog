@@ -1,3 +1,7 @@
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* network/smsc9218i.c: Removed superfluous macros.
+
 2010-05-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* include/bsp.h: Add BSP_SMALL_MEMORY.

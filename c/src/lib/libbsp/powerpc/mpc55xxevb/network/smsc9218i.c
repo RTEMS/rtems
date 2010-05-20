@@ -197,7 +197,7 @@ static smsc9218i_driver_entry smsc9218i_driver_data = {
 
 static void smsc9218i_mac_wait(volatile smsc9218i_registers *regs)
 {
-  while (IS_FLAG_SET(regs->mac_csr_cmd, SMSC9218I_MAC_CSR_CMD_BUSY)) {
+  while ((regs->mac_csr_cmd & SMSC9218I_MAC_CSR_CMD_BUSY) != 0) {
     /* Wait */
   }
 }
@@ -238,7 +238,7 @@ static void smsc9218i_phy_wait(volatile smsc9218i_registers *regs)
 
   do {
     mac_mii_acc = smsc9218i_mac_read(regs, SMSC9218I_MAC_MII_ACC);
-  } while (IS_FLAG_SET(mac_mii_acc, SMSC9218I_MAC_MII_ACC_BUSY));
+  } while ((mac_mii_acc & SMSC9218I_MAC_MII_ACC_BUSY) != 0);
 }
 
 static void smsc9218i_phy_write(
@@ -286,9 +286,9 @@ static void smsc9218i_enable_promiscous_mode(
   uint32_t mac_cr = smsc9218i_mac_read(regs, SMSC9218I_MAC_CR);
 
   if (enable) {
-    mac_cr = SET_FLAGS(mac_cr, flags);
+    mac_cr |= flags;
   } else {
-    mac_cr = CLEAR_FLAGS(mac_cr, flags);
+    mac_cr &= ~flags;
   }
 
   smsc9218i_mac_write(regs, SMSC9218I_MAC_CR, mac_cr);
@@ -436,15 +436,15 @@ static void smsc9218i_interrupt_handler(void *arg)
   regs->int_sts = int_sts;
 
   /* Check receive interrupts */
-  if (IS_FLAG_SET(int_sts, SMSC9218I_INT_STS_RSFL)) {
-    int_en = CLEAR_FLAG(int_en, SMSC9218I_INT_EN_RSFL);
+  if ((int_sts & SMSC9218I_INT_STS_RSFL) != 0) {
+    int_en &= ~SMSC9218I_INT_EN_RSFL;
     re = SMSC9218I_EVENT_RX;
   }
 
   /* Check PHY interrupts */
-  if (IS_FLAG_SET(int_sts, SMSC9218I_INT_STS_PHY)) {
-    int_en = CLEAR_FLAG(int_en, SMSC9218I_INT_EN_PHY);
-    re = SET_FLAG(re, SMSC9218I_EVENT_PHY);
+  if ((int_sts & SMSC9218I_INT_STS_PHY) != 0) {
+    int_en &= ~SMSC9218I_INT_EN_PHY;
+    re |= SMSC9218I_EVENT_PHY;
   }
 
   /* Send events to receive task */
@@ -455,8 +455,8 @@ static void smsc9218i_interrupt_handler(void *arg)
   }
 
   /* Check transmit interrupts */
-  if (IS_FLAG_SET(int_sts, SMSC9218I_INT_STS_TDFA)) {
-    int_en = CLEAR_FLAG(int_en, SMSC9218I_INT_EN_TDFA);
+  if ((int_sts & SMSC9218I_INT_STS_TDFA) != 0) {
+    int_en &= ~SMSC9218I_INT_EN_TDFA;
     te = SMSC9218I_EVENT_TX;
   }
 
@@ -481,7 +481,7 @@ static void smsc9218i_enable_receive_interrupts(
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
-  regs->int_en = SET_FLAG(regs->int_en, SMSC9218I_INT_EN_RSFL);
+  regs->int_en |= SMSC9218I_INT_EN_RSFL;
   rtems_interrupt_enable(level);
 }
 
@@ -492,7 +492,7 @@ static void smsc9218i_enable_transmit_interrupts(
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
-  regs->int_en = SET_FLAG(regs->int_en, SMSC9218I_INT_EN_TDFA);
+  regs->int_en |= SMSC9218I_INT_EN_TDFA;
   rtems_interrupt_enable(level);
 }
 
@@ -503,7 +503,7 @@ static void smsc9218i_enable_phy_interrupts(
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
-  regs->int_en = SET_FLAG(regs->int_en, SMSC9218I_INT_EN_PHY);
+  regs->int_en |= SMSC9218I_INT_EN_PHY;
   rtems_interrupt_enable(level);
 }
 
@@ -515,7 +515,7 @@ static struct mbuf *smsc9218i_new_mbuf(struct ifnet *ifp, bool wait)
   MGETHDR(m, mw, MT_DATA);
   if (m != NULL) {
     MCLGET(m, mw);
-    if (IS_FLAG_SET(m->m_flags, M_EXT)) {
+    if ((m->m_flags & M_EXT) != 0) {
       /* Set receive interface */
       m->m_pkthdr.rcvif = ifp;
 
@@ -591,7 +591,7 @@ static void smsc9218i_receive_task(void *arg)
     );
     RTEMS_CLEANUP_SC(sc, cleanup, "wait for events");
 
-    if (IS_FLAG_SET(events, SMSC9218I_EVENT_PHY)) {
+    if ((events & SMSC9218I_EVENT_PHY) != 0) {
       uint32_t phy_isr = smsc9218i_phy_read(regs, SMSC9218I_PHY_ISR);
 
       /* TODO */
@@ -630,7 +630,7 @@ static void smsc9218i_receive_task(void *arg)
         SMSC9218I_RX_FIFO_INF_GET_DUSED(rx_fifo_inf)
       );
 
-      if (IS_FLAG_CLEARED(rx_fifo_status, SMSC9218I_RX_STS_ERROR)) {
+      if ((rx_fifo_status & SMSC9218I_RX_STS_ERROR) == 0) {
         struct mbuf *m = smsc9218i_new_mbuf(ifp, true);
         struct ether_header *eh = (struct ether_header *)
           (mtod(m, char *) + SMSC9218I_RX_DATA_OFFSET);
@@ -660,7 +660,7 @@ static void smsc9218i_receive_task(void *arg)
         );
         RTEMS_CHECK_SC_TASK(sc, "wait for eDMA events");
 
-        if (IS_FLAG_CLEARED(events, SMSC9218I_EVENT_EDMA_ERROR)) {
+        if ((events & SMSC9218I_EVENT_EDMA_ERROR) == 0) {
           /* Hand over */
           ether_input(ifp, eh, m);
 
@@ -676,13 +676,13 @@ static void smsc9218i_receive_task(void *arg)
         SMSC9218I_PRINTF("rx: error\n");
 
         /* Update error counters */
-        if (IS_FLAG_SET(rx_fifo_status, SMSC9218I_RX_STS_ERROR_TOO_LONG)) {
+        if ((rx_fifo_status & SMSC9218I_RX_STS_ERROR_TOO_LONG) != 0) {
           ++e->receive_too_long_errors;
         }
-        if (IS_FLAG_SET(rx_fifo_status, SMSC9218I_RX_STS_ERROR_COLLISION)) {
+        if ((rx_fifo_status & SMSC9218I_RX_STS_ERROR_COLLISION) != 0) {
           ++e->receive_collision_errors;
         }
-        if (IS_FLAG_SET(rx_fifo_status, SMSC9218I_RX_STS_ERROR_CRC)) {
+        if ((rx_fifo_status & SMSC9218I_RX_STS_ERROR_CRC) != 0) {
           ++e->receive_crc_errors;
         }
 
@@ -691,7 +691,7 @@ static void smsc9218i_receive_task(void *arg)
           /* Fast forward */
           regs->rx_dp_ctl = SMSC9218I_RX_DP_CTRL_FFWD;
 
-          while (IS_FLAG_SET(regs->rx_dp_ctl, SMSC9218I_RX_DP_CTRL_FFWD)) {
+          while ((regs->rx_dp_ctl & SMSC9218I_RX_DP_CTRL_FFWD) != 0) {
             /* Wait */
           }
         } else {
@@ -869,7 +869,7 @@ static struct mbuf *smsc9218i_next_transmit_fragment(
       jc->next_fragment = NULL;
 
       /* Interface is now inactive */
-      ifp->if_flags = CLEAR_FLAG(ifp->if_flags, IFF_OACTIVE);
+      ifp->if_flags &= ~IFF_OACTIVE;
 
       /* Transmit task may wait for events */
       jc->done = true;
@@ -1085,7 +1085,7 @@ static void smsc9218i_transmit_finish_jobs(
   for (s = 0; s < status_used; ++s) {
     uint32_t tx_fifo_status = regs->tx_fifo_status;
 
-    if (IS_FLAG_CLEARED(tx_fifo_status, SMSC9218I_TX_STS_ERROR)) {
+    if ((tx_fifo_status & SMSC9218I_TX_STS_ERROR) == 0) {
       ++e->transmitted_frames;
     } else {
       ++e->transmit_errors;
@@ -1099,7 +1099,7 @@ static void smsc9218i_transmit_finish_jobs(
   }
 
   if (
-    IS_ANY_FLAG_SET(events, SMSC9218I_EVENT_EDMA | SMSC9218I_EVENT_EDMA_ERROR)
+    (events & (SMSC9218I_EVENT_EDMA | SMSC9218I_EVENT_EDMA_ERROR)) != 0
       && n > 0
   ) {
     unsigned c = jc->empty_index;
@@ -1109,7 +1109,7 @@ static void smsc9218i_transmit_finish_jobs(
       smsc9218i_transmit_job_dump(jc, "finish");
     #endif
 
-    if (IS_FLAG_SET(events, SMSC9218I_EVENT_EDMA_ERROR)) {
+    if ((events & SMSC9218I_EVENT_EDMA_ERROR) != 0) {
       ++e->transmit_edma_errors;
     }
 
@@ -1508,11 +1508,11 @@ static void smsc9218i_interface_init(void *arg)
     /* Enable promiscous mode */
     smsc9218i_enable_promiscous_mode(
       regs,
-      IS_FLAG_SET(ifp->if_flags, IFF_PROMISC)
+      (ifp->if_flags & IFF_PROMISC) != 0
     );
 
     /* Set interface to running state */
-    ifp->if_flags = SET_FLAG(ifp->if_flags, IFF_RUNNING);
+    ifp->if_flags |= IFF_RUNNING;
 
     /* Change state */
     e->state = SMSC9218I_RUNNING;
@@ -1557,7 +1557,7 @@ static int smsc9218i_interface_ioctl(
         /* TODO: off */
       }
       if (ifp->if_flags & IFF_UP) {
-        ifp->if_flags = SET_FLAG(ifp->if_flags, IFF_RUNNING);
+        ifp->if_flags |= IFF_RUNNING;
         /* TODO: init */
       }
       break;
@@ -1578,7 +1578,7 @@ static void smsc9218i_interface_start(struct ifnet *ifp)
   smsc9218i_driver_entry *e = (smsc9218i_driver_entry *) ifp->if_softc;
 
   /* Interface is now active */
-  ifp->if_flags = SET_FLAG(ifp->if_flags, IFF_OACTIVE);
+  ifp->if_flags |= IFF_OACTIVE;
 
   sc = rtems_event_send(e->transmit_task, SMSC9218I_EVENT_TX_START);
   RTEMS_SYSLOG_ERROR_SC(sc, "send transmit start event");
