@@ -24,6 +24,10 @@
 
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /**
  * @defgroup bsp_start System Start
  *
@@ -33,6 +37,10 @@
  *
  * @{
  */
+
+#define BSP_START_SECTION __attribute__((section(".bsp_start")))
+
+#define BSP_START_DATA_SECTION __attribute__((section(".bsp_start_data")))
 
 /**
 * @brief System start entry.
@@ -70,5 +78,9 @@ void bsp_start_memcpy(int *dest, const int *src, size_t n);
 void bsp_start_memcpy_arm(int *dest, const int *src, size_t n);
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBBSP_ARM_SHARED_START_H */

@@ -26,8 +26,6 @@
 #include <bsp/lpc24xx.h>
 #include <bsp/linker-symbols.h>
 
-#define BSP_START_SECTION __attribute__((section(".bsp_start")))
-
 #if defined(LPC24XX_EMC_MICRON) || defined(LPC24XX_EMC_NUMONYX)
   #define LPC24XX_EMC_INIT
 #endif
@@ -143,7 +141,7 @@ static void BSP_START_SECTION lpc24xx_init_emc_1(void)
 {
   #ifdef LPC24XX_EMC_INIT
     /* Use normal memory map */
-    EMC_CTRL &= ~0x2;
+    EMC_CTRL &= ~0x2U;
   #endif
 
   #ifdef LPC24XX_EMC_MICRON

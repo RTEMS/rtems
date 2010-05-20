@@ -1,5 +1,15 @@
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* startup/bspstarthooks.c: Removed start section attribute defines.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lpc24xx.h, misc/dma-copy.c, misc/dma.c,
+	misc/system-clocks.c, ssp/ssp.c, startup/bspstarthooks.c: Removed
+	superfluous macros.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* Makefile.am, preinstall.am, include/bsp.h, startup/bspstart.c: Use
 	shared output character implementation.
 

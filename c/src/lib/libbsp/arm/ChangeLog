@@ -1,3 +1,7 @@
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/start.h: Define start section attributes.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/irq_init.c: Removed file.
