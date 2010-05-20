@@ -1,3 +1,7 @@
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/uart-output-char.h, src/uart-output-char.c: New files.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/irq-config.h: Removed file.
