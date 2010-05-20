@@ -182,8 +182,32 @@ static void BSP_START_SECTION lpc32xx_mmu_and_cache_setup(void)
   #endif
 }
 
+#if LPC32XX_OSCILLATOR_MAIN != 13000000U
+  #error "unexpected main oscillator frequency"
+#endif
+
+static void BSP_START_SECTION lpc32xx_pll_setup(void)
+{
+  uint32_t pwr_ctrl = LPC32XX_PWR_CTRL;
+
+  if ((pwr_ctrl & PWR_NORMAL_RUN_MODE) == 0) {
+    /* Enable HCLK PLL */
+    LPC32XX_HCLKPLL_CTRL = HCLK_PLL_POWER | HCLK_PLL_DIRECT | HCLK_PLL_M(16 - 1);
+    while ((LPC32XX_HCLKPLL_CTRL & HCLK_PLL_LOCK) == 0) {
+      /* Wait */
+    }
+
+    /* Setup HCLK divider */
+    LPC32XX_HCLKDIV_CTRL = HCLK_DIV_HCLK(2 - 1) | HCLK_DIV_PERIPH_CLK(16 - 1);
+
+    /* Enable HCLK PLL output */
+    LPC32XX_PWR_CTRL = pwr_ctrl | PWR_NORMAL_RUN_MODE;
+  }
+}
+
 void BSP_START_SECTION bsp_start_hook_0(void)
 {
+  lpc32xx_pll_setup();
   lpc32xx_mmu_and_cache_setup();
 }
 

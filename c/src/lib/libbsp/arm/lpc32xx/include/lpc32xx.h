@@ -24,6 +24,8 @@
 
 #include <stdint.h>
 
+#include <bsp/utility.h>
+
 /**
  * @defgroup lpc32xx_reg Register Definitions
  *
@@ -197,6 +199,54 @@
 #define LPC32XX_P3_OUTP_SET (*(volatile uint32_t *) 0x40028004)
 #define LPC32XX_P3_OUTP_CLR (*(volatile uint32_t *) 0x40028008)
 #define LPC32XX_P3_OUTP_STATE (*(volatile uint32_t *) 0x4002800c)
+
+/** @} */
+
+/**
+ * @name Power Control Register (PWR_CTRL)
+ *
+ * @{
+ */
+
+#define PWR_STOP BIT32(0)
+#define PWR_HIGHCORE_ALWAYS BIT32(1)
+#define PWR_NORMAL_RUN_MODE BIT32(2)
+#define PWR_SYSCLKEN_ALWAYS BIT32(3)
+#define PWR_SYSCLKEN_HIGH BIT32(4)
+#define PWR_HIGHCORE_HIGH BIT32(5)
+#define PWR_SDRAM_AUTO_REFRESH BIT32(7)
+#define PWR_UPDATE_EMCSREFREQ BIT32(8)
+#define PWR_EMCSREFREQ BIT32(9)
+#define PWR_HCLK_USES_PERIPH_CLK BIT32(10)
+
+/** @} */
+
+/**
+ * @name HCLK PLL Control Register (HCLKPLL_CTRL)
+ *
+ * @{
+ */
+
+#define HCLK_PLL_LOCK BIT32(0)
+#define HCLK_PLL_M(val) FIELD32(val, 1, 8)
+#define HCLK_PLL_N(val) FIELD32(val, 9, 2)
+#define HCLK_PLL_P(val) FIELD32(val, 11, 2)
+#define HCLK_PLL_FBD_FCLKOUT BIT32(13)
+#define HCLK_PLL_DIRECT BIT32(14)
+#define HCLK_PLL_BYPASS BIT32(15)
+#define HCLK_PLL_POWER BIT32(16)
+
+/** @} */
+
+/**
+ * @name HCLK Divider Control Register (HCLKDIV_CTRL)
+ *
+ * @{
+ */
+
+#define HCLK_DIV_HCLK(val) FIELD32(val, 0, 2)
+#define HCLK_DIV_PERIPH_CLK(val) FIELD32(val, 2, 5)
+#define HCLK_DIV_DDRAM_CLK(val) FIELD32(val, 7, 2)
 
 /** @} */
 

@@ -1,5 +1,10 @@
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* configure.ac: Fixed BSP option.
+	* include/lpc32xx.h, startup/bspstarthooks.c: Added PLL setup.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* startup/bspstarthooks.c: Removed start section attribute defines.
 
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
