@@ -42,9 +42,6 @@
   #define LPC32XX_MMU_CODE LPC32XX_MMU_READ_ONLY_CACHED
 #endif
 
-#define BSP_START_SECTION __attribute__((section(".bsp_start")))
-#define BSP_START_DATA_SECTION __attribute__((section(".bsp_start_data")))
-
 static void BSP_START_SECTION lpc32xx_clear_bss(void)
 {
   const int *end = (const int *) bsp_section_bss_end;

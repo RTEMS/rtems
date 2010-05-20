@@ -1,5 +1,9 @@
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* startup/bspstarthooks.c: Removed start section attribute defines.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* make/custom/lpc32xx.inc, make/custom/lpc32xx_mzx_boot_int.cfg,
 	startup/linkcmds.lpc32xx_mzx_boot_int: New files.
 	* Makefile.am, configure.ac, preinstall.am, include/bsp.h,
