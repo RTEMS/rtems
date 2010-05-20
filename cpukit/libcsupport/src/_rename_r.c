@@ -70,7 +70,7 @@ int _rename_r(
   if ( result != 0 ) {
     if ( free_old_parentloc )
       rtems_filesystem_freenode( &old_parent_loc );
-    rtems_set_errno_and_return_minus_one( result );
+    return -1;
   }
   
   /*
@@ -92,7 +92,7 @@ int _rename_r(
     if ( free_old_parentloc )
       rtems_filesystem_freenode( &old_parent_loc );
     rtems_filesystem_freenode( &old_loc );
-    rtems_set_errno_and_return_minus_one( result );
+    return -1;
   }
 
   /*
