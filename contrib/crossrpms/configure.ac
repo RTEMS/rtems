@@ -41,6 +41,7 @@ all )
       targets="$targets $a-$o"
   done
   for d in freebsd*/*/Makefile.am \
+    netbsd*/*/Makefile.am \
     cygwin*/*/Makefile.am \
     mingw*/*/Makefile.am; \
   do
@@ -201,6 +202,7 @@ AC_CONFIG_FILES([rtems4.11/mipstx39/Makefile])
 AC_CONFIG_FILES([rtems4.11/powerpc/Makefile])
 AC_CONFIG_FILES([rtems4.11/sh/Makefile])
 AC_CONFIG_FILES([rtems4.11/sparc/Makefile])
+AC_CONFIG_FILES([rtems4.11/sparc64/Makefile])
 
 AC_CONFIG_FILES([autotools/Makefile])
 
