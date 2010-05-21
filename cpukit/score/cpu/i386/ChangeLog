@@ -1,3 +1,8 @@
+2010-05-21	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	* rtems/score/registers.h: Remove structs with bit-fields. Add a mask
+	for cr3 page directory.
+
 2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, cpu_asm.S, sse_test.c: Add include of config.h
