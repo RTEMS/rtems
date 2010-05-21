@@ -229,8 +229,8 @@
 
 #define HCLK_PLL_LOCK BIT32(0)
 #define HCLK_PLL_M(val) FIELD32(val, 1, 8)
-#define HCLK_PLL_N(val) FIELD32(val, 9, 2)
-#define HCLK_PLL_P(val) FIELD32(val, 11, 2)
+#define HCLK_PLL_N(val) FIELD32(val, 9, 10)
+#define HCLK_PLL_P(val) FIELD32(val, 11, 12)
 #define HCLK_PLL_FBD_FCLKOUT BIT32(13)
 #define HCLK_PLL_DIRECT BIT32(14)
 #define HCLK_PLL_BYPASS BIT32(15)
@@ -244,9 +244,9 @@
  * @{
  */
 
-#define HCLK_DIV_HCLK(val) FIELD32(val, 0, 2)
-#define HCLK_DIV_PERIPH_CLK(val) FIELD32(val, 2, 5)
-#define HCLK_DIV_DDRAM_CLK(val) FIELD32(val, 7, 2)
+#define HCLK_DIV_HCLK(val) FIELD32(val, 0, 1)
+#define HCLK_DIV_PERIPH_CLK(val) FIELD32(val, 2, 6)
+#define HCLK_DIV_DDRAM_CLK(val) FIELD32(val, 7, 8)
 
 /** @} */
 

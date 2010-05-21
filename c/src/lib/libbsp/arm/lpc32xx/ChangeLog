@@ -1,3 +1,7 @@
+2010-05-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lpc32xx.h: Update for utility macro changes.
+
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac: Fixed BSP option.
