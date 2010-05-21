@@ -1,3 +1,8 @@
+2010-05-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/utility.h: Macros use now first and last bit values instead
+	of shift and length parameters.
+
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/utility.h: Removed superfluous macros.
