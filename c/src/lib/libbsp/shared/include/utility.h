@@ -31,10 +31,10 @@
   ((BIT32((last_bit) - (first_bit) + 1) - (uint32_t) 1) << (first_bit))
 
 #define FIELD32(val, first_bit, last_bit) \
-  (((uint32_t) (val) << (first_bit)) & MASK32(first_bit, last_bit)) 
+  (((uint32_t) (val) << (first_bit)) & MASK32(first_bit, last_bit))
 
 #define GETFIELD32(reg, first_bit, last_bit) \
-  (((reg) & MASK32(first_bit, last_bit)) >> (first_bit)) 
+  (((reg) & MASK32(first_bit, last_bit)) >> (first_bit))
 
 #define SETFIELD32(reg, val, first_bit, last_bit) \
   (((reg) & ~MASK32(first_bit, last_bit)) | FIELD32(val, first_bit, last_bit))
