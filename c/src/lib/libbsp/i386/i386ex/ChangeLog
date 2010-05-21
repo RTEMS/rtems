@@ -1,3 +1,7 @@
+2010-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Add bspreset.c
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am: Update for generic interrupt support
