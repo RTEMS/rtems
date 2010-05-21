@@ -43,12 +43,12 @@ extern uint32_t   bsp_mem_size;
  */
 void _CPU_disable_paging(void)
 {
-  cr0 regCr0;
+  unsigned int regCr0;
 
   rtems_cache_flush_entire_data();
-  regCr0.i = i386_get_cr0();
-  regCr0.cr0.paging = 0;
-  i386_set_cr0( regCr0.i );
+  regCr0 = i386_get_cr0();
+  regCr0 &= ~(CR0_PAGING);
+  i386_set_cr0( regCr0 );
 }
 
 /*
@@ -56,11 +56,11 @@ void _CPU_disable_paging(void)
  */
 void _CPU_enable_paging(void)
 {
-  cr0 regCr0;
+  unsigned int regCr0;
 
-  regCr0.i = i386_get_cr0();
-  regCr0.cr0.paging = 1;
-  i386_set_cr0( regCr0.i );
+  regCr0 = i386_get_cr0();
+  regCr0 |= CR0_PAGING;
+  i386_set_cr0( regCr0 );
   rtems_cache_flush_entire_data();
 }
 
@@ -74,7 +74,7 @@ int init_paging(void)
   int nbPages;
   int nbInitPages;
   char *Tables;
-  cr3 regCr3;
+  unsigned int regCr3;
   page_table *pageTable;
   unsigned int physPage;
   int nbTables=0;
@@ -135,11 +135,12 @@ int init_paging(void)
     nbInitPages++;
   }
 
-  regCr3.cr3.page_write_transparent = 0;
-  regCr3.cr3.page_cache_disable     = 0;
-  regCr3.cr3.page_directory_base    = (unsigned int)pageDirectory >> 12;
+  regCr3 &= ~(CR3_PAGE_WRITE_THROUGH);
+  regCr3 &= ~(CR3_PAGE_CACHE_DISABLE);
+  /*regCr3.cr3.page_directory_base    = (unsigned int)pageDirectory >> 12;*/
+  regCr3 = (unsigned int)pageDirectory & CR3_PAGE_DIRECTORY_MASK;
 
-  i386_set_cr3( regCr3.i );
+  i386_set_cr3( regCr3 );
 
   _CPU_enable_cache();
   _CPU_enable_paging();
@@ -152,10 +153,10 @@ int init_paging(void)
  */
 int  _CPU_is_cache_enabled(void)
 {
-  cr0 regCr0;
+  unsigned int regCr0;
 
-  regCr0.i = i386_get_cr0();
-  return( ~(regCr0.cr0.page_level_cache_disable) );
+  regCr0 = i386_get_cr0();
+  return( ~(regCr0 & CR0_PAGE_LEVEL_CACHE_DISABLE) );
 }
 
 /*
@@ -163,10 +164,10 @@ int  _CPU_is_cache_enabled(void)
  */
 int  _CPU_is_paging_enabled(void)
 {
-  cr0 regCr0;
+  unsigned int regCr0;
 
-  regCr0.i = i386_get_cr0();
-  return(regCr0.cr0.paging);
+  regCr0 = i386_get_cr0();
+  return(regCr0 & CR0_PAGING);
 }
 
 
@@ -454,21 +455,21 @@ int _CPU_change_memory_mapping_attribute(
 int  _CPU_display_memory_attribute(void)
 {
   unsigned int dirCount, pageCount;
-  cr0 regCr0;
+  unsigned int regCr0;
   page_table *localPageTable;
   unsigned int prevCache;
   unsigned int prevPresent;
   unsigned int maxPage;
   unsigned char pagingWasEnabled;
 
-  regCr0.i = i386_get_cr0();
+  regCr0 = i386_get_cr0();
 
   printk("\n\n********* MEMORY CACHE CONFIGURATION *****\n");
 
-  printk("CR0 -> paging           : %s\n",(regCr0.cr0.paging ? "ENABLE ":"DISABLE"));
-  printk("       page-level cache : %s\n\n",(regCr0.cr0.page_level_cache_disable ? "DISABLE":"ENABLE"));
+  printk("CR0 -> paging           : %s\n",((regCr0 & CR0_PAGING) ? "ENABLE ":"DISABLE"));
+  printk("       page-level cache : %s\n\n",((regCr0 & CR0_PAGE_LEVEL_CACHE_DISABLE) ? "DISABLE":"ENABLE"));
 
-  if (regCr0.cr0.paging == 0)
+  if ((regCr0 & CR0_PAGING) == 0)
     return 0;
 
   prevPresent = 0;

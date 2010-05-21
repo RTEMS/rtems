@@ -1,3 +1,8 @@
+2010-05-21	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	* cache.c, page.c: Use masks and shift operations instead of
+	bit-fields.
+
 2010-04-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpuModel.S, cpuModel.h, displayCpu.c: Update to include more reserved

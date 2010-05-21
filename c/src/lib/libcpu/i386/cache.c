@@ -9,12 +9,12 @@
 #include "cache_.h"
 
 void _CPU_disable_cache(void) {
-  cr0 regCr0;
+  unsigned int regCr0;
 
-  regCr0.i = i386_get_cr0();
-  regCr0.cr0.page_level_cache_disable = 1;
-  regCr0.cr0.no_write_through = 1;
-  i386_set_cr0( regCr0.i );
+  regCr0 = i386_get_cr0();
+  regCr0 |= CR0_PAGE_LEVEL_CACHE_DISABLE;
+  regCr0 |= CR0_NO_WRITE_THROUGH;
+  i386_set_cr0( regCr0 );
   rtems_cache_flush_entire_data();
 }
 
@@ -23,12 +23,12 @@ void _CPU_disable_cache(void) {
  */
 
 void _CPU_enable_cache(void) {
-  cr0 regCr0;
+  unsigned int regCr0;
 
-  regCr0.i = i386_get_cr0();
-  regCr0.cr0.page_level_cache_disable = 0;
-  regCr0.cr0.no_write_through = 0;
-  i386_set_cr0( regCr0.i );
+  regCr0 = i386_get_cr0();
+  regCr0 &= ~(CR0_PAGE_LEVEL_CACHE_DISABLE);
+  regCr0 &= ~(CR0_NO_WRITE_THROUGH);
+  i386_set_cr0( regCr0 );
   /*rtems_cache_flush_entire_data();*/
 }
 
