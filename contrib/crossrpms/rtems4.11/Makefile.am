@@ -15,3 +15,5 @@ SUBDIRS += mipstx39
 SUBDIRS += powerpc
 SUBDIRS += sh
 SUBDIRS += sparc
+
+SUBDIRS += sparc64
