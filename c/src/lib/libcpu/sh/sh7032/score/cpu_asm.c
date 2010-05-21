@@ -45,7 +45,7 @@
 /* from cpu_isps.c */
 extern proc_ptr         _Hardware_isr_Table[];
 
-#if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
+#if (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   unsigned long    *_old_stack_ptr;
 #endif
 
@@ -76,18 +76,18 @@ unsigned int sh_set_irq_priority(
   /*
    * first check for valid interrupt
    */
-  if(( irq > 113) || (_Hardware_isr_Table[irq] == _dummy_isp))
+  if (( irq > 113) || (_Hardware_isr_Table[irq] == _dummy_isp))
     return -1;
   /*
    * check for valid irq priority
    */
-  if( prio > 15 )
+  if ( prio > 15 )
     return -1;
 
   /*
    * look up appropriate interrupt priority register
    */
-  if( irq > 71)
+  if ( irq > 71)
     {
       irq = irq - 72;
       shiftcount = 12 - ((irq & ~0x03) % 16);
@@ -103,7 +103,7 @@ unsigned int sh_set_irq_priority(
   else
     {
       shiftcount = 12 - 4 * ( irq % 4);
-      if( irq > 67)
+      if ( irq > 67)
 	prioreg = INTC_IPRB;
       else
 	prioreg = INTC_IPRA;
@@ -136,8 +136,8 @@ void __ISR_Handler( uint32_t   vector)
 
   _Thread_Dispatch_disable_level++;
 
-#if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
-  if( _ISR_Nest_level == 0 )
+#if (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
+  if ( _ISR_Nest_level == 0 )
     {
       /* Install irq stack */
       _old_stack_ptr = stack_ptr;
@@ -151,7 +151,7 @@ void __ISR_Handler( uint32_t   vector)
   _ISR_Enable( level );
 
   /* call isp */
-  if( _ISR_Vector_table[ vector])
+  if ( _ISR_Vector_table[ vector])
     (*_ISR_Vector_table[ vector ])( vector );
 
   _ISR_Disable( level );
@@ -160,9 +160,9 @@ void __ISR_Handler( uint32_t   vector)
 
   _ISR_Nest_level--;
 
-#if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
+#if(CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
 
-  if( _ISR_Nest_level == 0 )
+  if ( _ISR_Nest_level == 0 )
     /* restore old stack pointer */
     stack_ptr = _old_stack_ptr;
 #endif

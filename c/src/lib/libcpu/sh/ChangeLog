@@ -1,3 +1,8 @@
+2010-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sh7032/score/cpu_asm.c, sh7045/score/cpu_asm.c,
+	sh7750/score/cpu_asm.c, shgdb/score/cpu_asm.c: Spacing.
+
 2010-04-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sh7045/include/sci_termios.h, sh7045/sci/sci.c,
