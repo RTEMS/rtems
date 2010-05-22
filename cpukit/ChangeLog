@@ -1,5 +1,10 @@
 2010-05-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-bitmaps-ut.c: Use "16 bit int" arg 
+	in call to srand if "32 bit int" doesn't fit into "int".
+
+2010-05-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libblock/src/flashdisk.c, libblock/src/nvdisk.c:
 	Cast argp to uintptr_t temporary instead of uint32_t temporary
 	(Avoid incompatible pointer casts on 16bit targets).

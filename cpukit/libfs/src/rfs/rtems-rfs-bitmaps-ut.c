@@ -385,7 +385,11 @@ rtems_rfs_bitmap_unit_test (void)
   printf (" Bit clear value     : %d\n", RTEMS_RFS_BITMAP_BIT_CLEAR);
   printf (" Num bit per element : %zd\n", rtems_rfs_bitmap_element_bits ());
 
-  srand (0x23984237UL);
+#if INT_MAX >= 0x23984237
+  srand (0x23984237);
+#else
+  srand (0x2398);
+#endif
   
   rtems_rfs_bitmap_ut_test_bitmap (2048);
   rtems_rfs_bitmap_ut_test_bitmap (420);
