@@ -59,6 +59,7 @@ __RCSID("$NetBSD: fts.c,v 1.40 2009/11/02 17:17:34 stacktic Exp $");
 #include <fcntl.h>
 #include <fts.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -1055,7 +1056,7 @@ fts_alloc(FTS *sp, const char *name, size_t namelen)
 
 	if (!ISSET(FTS_NOSTAT))
 		p->fts_statp = (__fts_stat_t *)ALIGN(
-		    (unsigned long)(p->fts_name + namelen + 2));
+		    (uintptr_t)(p->fts_name + namelen + 2));
 #else
 	if ((p = malloc(sizeof(FTSENT) + namelen)) == NULL)
 		return (NULL);

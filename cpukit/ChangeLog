@@ -1,5 +1,9 @@
 2010-05-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/fts.c: Cast to uintptr_t instead of long for better
+	16bit target compliance.
+
+2010-05-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 	* libfs/src/rfs/rtems-rfs-bitmaps-ut.c: Use "16 bit int" arg 
 	in call to srand if "32 bit int" doesn't fit into "int".
 
