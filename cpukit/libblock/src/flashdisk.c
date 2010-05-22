@@ -2401,7 +2401,7 @@ rtems_fdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
         break;
 
       case RTEMS_FDISK_IOCTL_INFO_LEVEL:
-        rtems_flashdisks[minor].info_level = (uint32_t) argp;
+        rtems_flashdisks[minor].info_level = (uintptr_t) argp;
         break;
 
       case RTEMS_FDISK_IOCTL_PRINT_STATUS:

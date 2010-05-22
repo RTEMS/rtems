@@ -1,5 +1,11 @@
 2010-05-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/src/flashdisk.c, libblock/src/nvdisk.c:
+	Cast argp to uintptr_t temporary instead of uint32_t temporary
+	(Avoid incompatible pointer casts on 16bit targets).
+
+2010-05-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* automake/compile.am: (Temporarily) Add -Werror=overflow,
 	-Werror=pointer-to-int-cast, -Werror=int-to-pointer-cast.
 

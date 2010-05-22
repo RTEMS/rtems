@@ -731,7 +731,7 @@ rtems_nvdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
         break;
 
       case RTEMS_NVDISK_IOCTL_INFO_LEVEL:
-        rtems_nvdisks[minor].info_level = (uint32_t) argp;
+        rtems_nvdisks[minor].info_level = (uintptr_t) argp;
         break;
 
       default:
