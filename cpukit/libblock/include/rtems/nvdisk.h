@@ -99,8 +99,8 @@ typedef struct rtems_nvdisk_driver_handlers
    * @retval 0 No error.
    * @retval EIO The read did not complete.
    */
-  int (*read) (uint32_t device, uint32_t flags, uint32_t base,
-               uint32_t offset, void* buffer, uint32_t size);
+  int (*read) (uint32_t device, uint32_t flags, void* base,
+               uint32_t offset, void* buffer, size_t size);
 
   /**
    * Write data from the buffer to the device. Return an errno
@@ -115,8 +115,8 @@ typedef struct rtems_nvdisk_driver_handlers
    * @retval 0 No error.
    * @retval EIO The write did not complete or verify.
    */
-  int (*write) (uint32_t device, uint32_t flags, uint32_t base,
-                uint32_t offset, const void* buffer, uint32_t size);
+  int (*write) (uint32_t device, uint32_t flags, void* base,
+                uint32_t offset, const void* buffer, size_t size);
 
   /**
    * Verify data in the buffer to the data in the device. Return an
@@ -131,8 +131,8 @@ typedef struct rtems_nvdisk_driver_handlers
    * @retval 0 No error.
    * @retval EIO The data did not verify.
    */
-  int (*verify) (uint32_t device, uint32_t flags, uint32_t base,
-                 uint32_t offset, const void* buffer, uint32_t size);
+  int (*verify) (uint32_t device, uint32_t flags, void* base,
+                 uint32_t offset, const void* buffer, size_t size);
 
 } rtems_nvdisk_driver_handlers;
 
@@ -148,7 +148,7 @@ typedef struct rtems_nvdisk_driver_handlers
 typedef struct rtems_nvdisk_device_desc
 {
   uint32_t                            flags;  /**< Private user flags. */
-  uint32_t                            base;   /**< Base address of the device. */
+  void*                               base;   /**< Base address of the device. */
   uint32_t                            size;   /**< Size of the device. */
   const rtems_nvdisk_driver_handlers* nv_ops; /**< Device handlers. */
 } rtems_nvdisk_device_desc;

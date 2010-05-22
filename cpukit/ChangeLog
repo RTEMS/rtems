@@ -1,5 +1,11 @@
 2010-05-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/include/rtems/nvdisk.h, libblock/src/nvdisk-sram.c:
+	Use pointer arithmetic instead of int32_t arithmetic for 16bit
+	compatibility.
+
+2010-05-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/fts.c: Cast to uintptr_t instead of long for better
 	16bit target compliance.
 
