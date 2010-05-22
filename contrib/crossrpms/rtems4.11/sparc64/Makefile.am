@@ -11,14 +11,14 @@ BINUTILS_RPMREL = 2
 include ../binutils.am
 BINUTILS_OPTS +=
 
-#GCC_VERS = 4.5.0
-#GCC_PKGVERS = $(GCC_VERS)
-#GCC_RPMREL = 0
-#NEWLIB_VERS = 1.18.0
-#NEWLIB_PKGVERS = $(NEWLIB_VERS)
-#NEWLIB_RPMREL = `expr $(GCC_RPMREL)`
-#include ../gcc.am
-#GCC_OPTS += --languages=cxx
+GCC_VERS = 4.5.0
+GCC_PKGVERS = $(GCC_VERS)
+GCC_RPMREL = 11
+NEWLIB_VERS = 1.18.0
+NEWLIB_PKGVERS = $(NEWLIB_VERS)
+NEWLIB_RPMREL = `expr $(GCC_RPMREL)`
+include ../gcc.am
+GCC_OPTS += --languages=cxx
 
 #GDB_VERS = 7.1
 #GDB_PKGVERS = $(GDB_VERS)
