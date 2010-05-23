@@ -146,7 +146,9 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 )
 {
+#if defined(__sh1__) || defined(__sh2__)
    proc_ptr ignored ;
+#endif
    *old_handler = _ISR_Vector_table[ vector ];
 
  /*

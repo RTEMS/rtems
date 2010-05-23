@@ -1,3 +1,7 @@
+2010-05-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* cpu.c: Warning removal.
+
 2010-03-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* context.c, cpu.c: Add include of config.h
