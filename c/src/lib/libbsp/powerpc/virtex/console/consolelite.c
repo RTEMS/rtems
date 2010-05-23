@@ -180,10 +180,10 @@ int xlite_read_polled (int minor )
 
 
 
-int xlite_write_buffer_polled(
+ssize_t xlite_write_buffer_polled(
   int         minor,
   const char *buf,
-  int         len
+  size_t      len
 )
 {
    uint32_t base = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -356,9 +356,9 @@ void outputChar(char ch)
    xlite_write_char_polled( 0, ch );
 }
 
-char inputChar(void)
+int inputChar(void)
 {
-   return (char)xlite_read_polled(0);
+   return xlite_read_polled(0);
 }
 
 BSP_output_char_function_type BSP_output_char = outputChar;

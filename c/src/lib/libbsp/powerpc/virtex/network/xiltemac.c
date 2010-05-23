@@ -908,7 +908,7 @@ int32_t xilTemac_driver_attach(struct rtems_bsdnet_ifconfig* aBsdConfig, int aDu
 
    xilTemac->iIsPresent = 1;
 
-   snprintf( xilTemac->iUnitName, MAX_UNIT_BYTES, "%s%d", unitName, unit );
+   snprintf( xilTemac->iUnitName, MAX_UNIT_BYTES, "%s%" PRId32, unitName, unit );
 
    xilTemac->iIfp        = &(xilTemac->iArpcom.ac_if);
    ifp                  = &(xilTemac->iArpcom.ac_if);

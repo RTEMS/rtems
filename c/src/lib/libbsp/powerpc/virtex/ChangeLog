@@ -1,3 +1,8 @@
+2010-05-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/consolelite.c, network/xiltemac.c:
+	Reflect prototypes having changed (Warning removal).
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* network/xiltemac.c, startup/bspstart.c: Remove warnings.
