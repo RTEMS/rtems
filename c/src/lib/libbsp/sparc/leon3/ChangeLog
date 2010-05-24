@@ -1,3 +1,10 @@
+2010-05-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, amba/amba.c, console/console.c, console/debugputs.c,
+	startup/bspstart.c: Rework initialization order so AMBA bus is
+	scanned earlier. This lets us look for UARTs earlier and support
+	printk as early as bsp_start() returning.
+
 2010-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/linkcmds: Include basic linker command file and define only

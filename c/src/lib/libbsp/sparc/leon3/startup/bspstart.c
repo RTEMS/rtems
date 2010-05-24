@@ -27,6 +27,8 @@
  */
 int CPU_SPARC_HAS_SNOOPING;
 
+extern void amba_initialize(void);
+
 /*
  * set_snooping
  *
@@ -54,4 +56,7 @@ static inline int set_snooping(void)
 void bsp_start( void )
 {
   CPU_SPARC_HAS_SNOOPING = set_snooping();
+
+  /* Find UARTs */
+  amba_initialize();
 }

@@ -24,9 +24,9 @@ volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;
 int LEON3_Cpu_Index = 0;
 
 /*
- *  bsp_predriver_hook
+ *  amba_initialize
  *
- *  BSP predriver hook.  Called just before drivers are initialized.
+ *  Must be called just before drivers are initialized.
  *  Used to scan system bus. Probes for AHB masters, AHB slaves and
  *  APB slaves. Addresses to configuration areas of the AHB masters,
  *  AHB slaves, APB slaves and APB master are storeds in
@@ -43,8 +43,9 @@ asm(" .text  \n"
 
 
 extern rtems_configuration_table Configuration;
+extern int scan_uarts(void);
 
-void bsp_predriver_hook(void)
+void amba_initialize(void)
 {
   int i;
   amba_apb_device dev;
@@ -71,4 +72,6 @@ void bsp_predriver_hook(void)
     LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) dev.start;
   }
 
+  /* find UARTS */
+  scan_uarts();
 }

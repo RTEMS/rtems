@@ -76,26 +76,7 @@ ssize_t console_write_support (int minor, const char *buf, size_t len)
  *
  */
 int uarts = 0;
-static int isinit = 0;
 volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
-
-int scan_uarts(void) {
-  int i;
-  amba_apb_device apbuarts[LEON3_APBUARTS];
-
-  if (isinit == 0) {
-    i = 0;
-    uarts = 0;
-
-    uarts = amba_find_apbslvs(
-      &amba_conf, VENDOR_GAISLER, GAISLER_APBUART, apbuarts, LEON3_APBUARTS);
-    for(i=0; i<uarts; i++) {
-      LEON3_Console_Uart[i] = (volatile LEON3_UART_Regs_Map *)apbuarts[i].start;
-    }
-    isinit = 1;
-  }
-  return uarts;
-}
 
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
@@ -109,10 +90,7 @@ rtems_device_driver console_initialize(
 
   rtems_termios_initialize();
 
-  /* Find UARTs */
-  scan_uarts();
-
-  /* default to zero and override if multiprocessing */
+  /* default console to zero and override if multiprocessing */
   uart0 = 0;
   #if defined(RTEMS_MULTIPROCESSING)
     if (rtems_configuration_get_user_multiprocessing_table() != NULL)
@@ -120,21 +98,17 @@ rtems_device_driver console_initialize(
   #endif
 
   /*  Register Device Names */
-
-  if (uarts && (uart0 < uarts))
-  {
+  if (uarts && (uart0 < uarts)) {
     status = rtems_io_register_name( "/dev/console", major, 0 );
     if (status != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred(status);
 
     strcpy(console_name,"/dev/console_a");
-    for (i = uart0+1; i < uarts; i++)
-    {
+    for (i = uart0+1; i < uarts; i++) {
       console_name[13]++;
       status = rtems_io_register_name( console_name, major, i);
     }
   }
-
 
   /*
    *  Initialize Hardware if ONLY CPU or first CPU in MP system
