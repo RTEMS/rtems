@@ -25,7 +25,6 @@
 #include <string.h>
 
 #include <bsp/irq.h>
-#include <bsp/utility.h>
 
 #define RTEMS_STATUS_CHECKS_USE_PRINTK
 
@@ -99,15 +98,15 @@ static void mpc55xx_edma_interrupt_error_handler( void *arg)
 			channel_flags = MPC55XX_EDMA_CHANNEL_FLAG( i) | MPC55XX_EDMA_CHANNEL_FLAG( minor_link) | MPC55XX_EDMA_CHANNEL_FLAG( major_link);
 
 			/* Any errors in these channels? */
-			if (IS_ANY_FLAG_SET( error_channels, channel_flags)) {
+			if ( error_channels & channel_flags ) {
 				/* Get new error channels */
 				uint64_t update = (error_channels & channel_flags) ^ channel_flags;
 
 				/* Update error channels */
-				error_channels = SET_FLAGS( error_channels, channel_flags);
+				error_channels |= channel_flags;
 
 				/* Contribute to the update of this round */
-				error_channels_update = SET_FLAGS( error_channels_update, update);
+				error_channels_update |=  update;
 			}
 		}
 	} while (error_channels_update != 0);
@@ -118,7 +117,7 @@ static void mpc55xx_edma_interrupt_error_handler( void *arg)
 	while (!rtems_chain_is_tail( chain, node)) {
 		mpc55xx_edma_channel_entry *e = (mpc55xx_edma_channel_entry *) node;
 
-		if (IS_FLAG_SET( error_channels, MPC55XX_EDMA_CHANNEL_FLAG( e->channel))) {
+		if ( error_channels & MPC55XX_EDMA_CHANNEL_FLAG( e->channel)) {
 			mpc55xx_edma_enable_hardware_requests( e->channel, false);
 
 			/* Notify user */
@@ -130,7 +129,7 @@ static void mpc55xx_edma_interrupt_error_handler( void *arg)
 
 	/* Clear the error interrupt requests */
 	for (i = 0; i < MPC55XX_EDMA_CHANNEL_COUNT; ++i) {
-		if (IS_FLAG_SET( error_channels, MPC55XX_EDMA_CHANNEL_FLAG( i))) {
+		if ( error_channels & MPC55XX_EDMA_CHANNEL_FLAG( i)) {
 			EDMA.CER.R = (uint8_t) i;
 		}
 	}
@@ -216,13 +215,13 @@ rtems_status_code mpc55xx_edma_obtain_channel( mpc55xx_edma_channel_entry *e)
 	/* Test and set channel occupation flag */
 	rtems_interrupt_disable( level);
 	channel_occupation = mpc55xx_edma_channel_occupation;
-	if (IS_FLAG_CLEARED( channel_occupation, MPC55XX_EDMA_CHANNEL_FLAG( e->channel))) {
-		mpc55xx_edma_channel_occupation = SET_FLAG( channel_occupation, MPC55XX_EDMA_CHANNEL_FLAG( e->channel));
+	if ( (channel_occupation & MPC55XX_EDMA_CHANNEL_FLAG( e->channel)) == 0 ) {
+		mpc55xx_edma_channel_occupation = channel_occupation | MPC55XX_EDMA_CHANNEL_FLAG( e->channel);
 	}
 	rtems_interrupt_enable( level);
 
 	/* Check channel occupation flag */
-	if (IS_FLAG_SET( channel_occupation, MPC55XX_EDMA_CHANNEL_FLAG( e->channel))) {
+	if ( channel_occupation & MPC55XX_EDMA_CHANNEL_FLAG( e->channel)) {
 		return RTEMS_RESOURCE_IN_USE;
 	}
 
@@ -253,7 +252,7 @@ rtems_status_code mpc55xx_edma_release_channel( mpc55xx_edma_channel_entry *e)
 
 	/* Clear channel occupation flag */
 	rtems_interrupt_disable( level);
-	mpc55xx_edma_channel_occupation = CLEAR_FLAG( mpc55xx_edma_channel_occupation, MPC55XX_EDMA_CHANNEL_FLAG( e->channel));
+	mpc55xx_edma_channel_occupation &= ~MPC55XX_EDMA_CHANNEL_FLAG( e->channel);
 	rtems_interrupt_enable( level);
 
 	/* Disable hardware requests */

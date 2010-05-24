@@ -1,3 +1,8 @@
+2010-05-24	Peter Dufault <dufault@hda.com>
+
+	PR 1530/bsps
+	* mpc55xx/edma/edma.c: Eliminate use of recently removed macros.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* mpc55xx/include/irq.h: Move defines from
