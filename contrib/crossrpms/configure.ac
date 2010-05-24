@@ -166,10 +166,11 @@ AC_CONFIG_FILES([freebsd7.3/i586/Makefile])
 
 AC_CONFIG_FILES([freebsd8.0/Makefile])
 AC_CONFIG_FILES([freebsd8.0/i586/Makefile])
+AC_CONFIG_FILES([freebsd8.0/x86_64/Makefile])
 
 AC_CONFIG_FILES([netbsd5.0.2/Makefile])
 AC_CONFIG_FILES([netbsd5.0.2/i386/Makefile])
-AC_CONFIG_FILES([netbsd5.0.2/amd64/Makefile])
+AC_CONFIG_FILES([netbsd5.0.2/x86_64/Makefile])
 
 AC_CONFIG_FILES([rtems4.10/Makefile])
 AC_CONFIG_FILES([rtems4.10/arm/Makefile])
