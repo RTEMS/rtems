@@ -50,6 +50,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/rpc_prot.c,v 1.8 1999/08/28 00:
 #include "config.h"
 #endif
 
+#include <assert.h>
 #include <sys/param.h>
 
 #include <rpc/rpc.h>
@@ -71,6 +72,9 @@ xdr_opaque_auth(
 	struct opaque_auth *ap)
 {
 
+	assert(xdrs != NULL);
+	assert(ap != NULL);
+
 	if (xdr_enum(xdrs, &(ap->oa_flavor)))
 		return (xdr_bytes(xdrs, &ap->oa_base,
 			&ap->oa_length, MAX_AUTH_BYTES));
@@ -85,6 +89,10 @@ xdr_des_block(
 	XDR *xdrs,
 	des_block *blkp)
 {
+
+	assert(xdrs != NULL);
+	assert(blkp != NULL);
+
 	return (xdr_opaque(xdrs, (caddr_t)blkp, sizeof(des_block)));
 }
 
@@ -118,7 +126,6 @@ xdr_accepted_reply(
 	case SYSTEM_ERR:
 	case PROC_UNAVAIL:
 	case PROG_UNAVAIL:
-/*	default: */
 		break;
 	}
 	return (TRUE);  /* TRUE => open ended set of problems */
@@ -203,6 +210,8 @@ accepted(
 	struct rpc_err *error)
 {
 
+	assert(error != NULL);
+
 	switch (acpt_stat) {
 
 	case PROG_UNAVAIL:
@@ -231,8 +240,8 @@ accepted(
 	}
 	/* something's wrong, but we don't know what ... */
 	error->re_status = RPC_FAILED;
-	error->re_lb.s1 = (long)MSG_ACCEPTED;
-	error->re_lb.s2 = (long)acpt_stat;
+	error->re_lb.s1 = (int32_t)MSG_ACCEPTED;
+	error->re_lb.s2 = (int32_t)acpt_stat;
 }
 
 static void
@@ -241,22 +250,21 @@ rejected(
 	struct rpc_err *error)
 {
 
-	switch (rjct_stat) {
+	assert(error != NULL);
 
-	case RPC_VERSMISMATCH:
+	switch (rjct_stat) {
+	case RPC_MISMATCH:
 		error->re_status = RPC_VERSMISMATCH;
 		return;
 
 	case AUTH_ERROR:
 		error->re_status = RPC_AUTHERROR;
 		return;
-	default:
-		break;
 	}
 	/* something's wrong, but we don't know what ... */
 	error->re_status = RPC_FAILED;
-	error->re_lb.s1 = (long)MSG_DENIED;
-	error->re_lb.s2 = (long)rjct_stat;
+	error->re_lb.s1 = (int32_t)MSG_DENIED;
+	error->re_lb.s2 = (int32_t)rjct_stat;
 }
 
 /*
@@ -267,6 +275,9 @@ _seterr_reply(
 	struct rpc_msg *msg,
 	struct rpc_err *error)
 {
+
+	assert(msg != NULL);
+	assert(error != NULL);
 
 	/* optimized for normal, SUCCESSful case */
 	switch (msg->rm_reply.rp_stat) {
@@ -285,7 +296,7 @@ _seterr_reply(
 
 	default:
 		error->re_status = RPC_FAILED;
-		error->re_lb.s1 = (long)(msg->rm_reply.rp_stat);
+		error->re_lb.s1 = (int32_t)(msg->rm_reply.rp_stat);
 		break;
 	}
 	switch (error->re_status) {
