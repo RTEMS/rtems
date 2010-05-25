@@ -1,3 +1,7 @@
+2010-05-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac, include/bspopts.h.in: Added BSP_SMALL_MEMORY option.
+
 2010-05-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/lpc32xx.h: Update for utility macro changes.

@@ -12,6 +12,9 @@
 /* If defined, reset the board when the application exits. */
 #undef BSP_RESET_BOARD_AT_EXIT
 
+/* disable testsuite samples with high memory demands */
+#undef BSP_SMALL_MEMORY
+
 /* reset vector address for BSP start */
 #undef BSP_START_RESET_VECTOR
 
