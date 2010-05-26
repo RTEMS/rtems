@@ -90,14 +90,17 @@ static struct clnt_ops tcp_ops = {
 
 struct ct_data {
 	int		ct_sock;
-	bool_t		ct_closeit;
-	struct timeval	ct_wait;
+	bool_t		ct_closeit;	/* close it on destroy */
+	struct timeval	ct_wait;	/* wait interval in milliseconds */
 	bool_t          ct_waitset;       /* wait set by clnt_control? */
 	struct sockaddr_in ct_addr;
 	struct rpc_err	ct_error;
-	char		ct_mcall[MCALL_MSG_SIZE];	/* marshalled callmsg */
+	union {
+		char	ct_mcallc[MCALL_MSG_SIZE];	/* marshalled callmsg */
+		u_int32_t ct_mcalli;
+	} ct_u;
 	u_int		ct_mpos;			/* pos after marshal */
-	XDR		ct_xdrs;
+	XDR		ct_xdrs;	/* XDR stream */
 };
 
 /*
@@ -124,7 +127,7 @@ clnttcp_create(
 	u_int recvsz)
 {
 	CLIENT *h;
-	register struct ct_data *ct = NULL;
+	struct ct_data *ct = NULL;	/* client handle */
 	struct timeval now;
 	struct rpc_msg call_msg;
 	static uintptr_t disrupt;
@@ -139,7 +142,7 @@ clnttcp_create(
 		rpc_createerr.cf_error.re_errno = errno;
 		goto fooy;
 	}
-	ct = (struct ct_data *)mem_alloc(sizeof(*ct));
+	ct = (struct ct_data *)mem_alloc(sizeof (*ct));
 	if (ct == NULL) {
 		(void)fprintf(stderr, "clnttcp_create: out of memory\n");
 		rpc_createerr.cf_stat = RPC_SYSTEMERROR;
@@ -201,7 +204,7 @@ clnttcp_create(
 	/*
 	 * pre-serialize the static part of the call msg and stash it away
 	 */
-	xdrmem_create(&(ct->ct_xdrs), ct->ct_mcall, MCALL_MSG_SIZE,
+	xdrmem_create(&(ct->ct_xdrs), ct->ct_u.ct_mcallc, MCALL_MSG_SIZE,
 	    XDR_ENCODE);
 	if (! xdr_callhdr(&(ct->ct_xdrs), &call_msg)) {
 		if (ct->ct_closeit) {
@@ -244,12 +247,12 @@ clnttcp_call(
 	caddr_t results_ptr,
 	struct timeval timeout)
 {
-	register struct ct_data *ct = (struct ct_data *) h->cl_private;
-	register XDR *xdrs = &(ct->ct_xdrs);
+	struct ct_data *ct = (struct ct_data *) h->cl_private;
+	XDR *xdrs = &(ct->ct_xdrs);
 	struct rpc_msg reply_msg;
-	u_long x_id;
-	u_int32_t *msg_x_id = (u_int32_t *)(ct->ct_mcall);	/* yuk */
-	register bool_t shipnow;
+	u_int32_t x_id;
+	u_int32_t *msg_x_id = &ct->ct_u.ct_mcalli;	/* yuk */
+	bool_t shipnow;
 	int refreshes = 2;
 
 	if (!ct->ct_waitset) {
@@ -264,7 +267,7 @@ call_again:
 	xdrs->x_op = XDR_ENCODE;
 	ct->ct_error.re_status = RPC_SUCCESS;
 	x_id = ntohl(--(*msg_x_id));
-	if ((! XDR_PUTBYTES(xdrs, ct->ct_mcall, ct->ct_mpos)) ||
+	if ((! XDR_PUTBYTES(xdrs, ct->ct_u.ct_mcallc, ct->ct_mpos)) ||
 	    (! XDR_PUTLONG(xdrs, (long *)&proc)) ||
 	    (! AUTH_MARSHALL(h->cl_auth, xdrs)) ||
 	    (! (*xdr_args)(xdrs, args_ptr))) {
@@ -273,10 +276,12 @@ call_again:
 		(void)xdrrec_endofrecord(xdrs, TRUE);
 		return (ct->ct_error.re_status);
 	}
-	if (! xdrrec_endofrecord(xdrs, shipnow))
+	if (! xdrrec_endofrecord(xdrs, shipnow)) {
 		return (ct->ct_error.re_status = RPC_CANTSEND);
-	if (! shipnow)
+	}
+	if (! shipnow) {
 		return (RPC_SUCCESS);
+	}
 	/*
 	 * Hack to provide rpc-based message passing
 	 */
@@ -292,7 +297,7 @@ call_again:
 	while (TRUE) {
 		reply_msg.acpted_rply.ar_verf = _null_auth;
 		reply_msg.acpted_rply.ar_results.where = NULL;
-		reply_msg.acpted_rply.ar_results.proc = (xdrproc_t) xdr_void;
+		reply_msg.acpted_rply.ar_results.proc = (xdrproc_t)xdr_void;
 		if (! xdrrec_skiprecord(xdrs))
 			return (ct->ct_error.re_status);
 		/* now decode and validate the response header */
@@ -336,9 +341,9 @@ clnttcp_geterr(
 	CLIENT *h,
 	struct rpc_err *errp)
 {
-	register struct ct_data *ct =
-	    (struct ct_data *) h->cl_private;
+	struct ct_data *ct;
 
+	ct = (struct ct_data *) h->cl_private;
 	*errp = ct->ct_error;
 }
 
@@ -348,9 +353,12 @@ clnttcp_freeres(
 	xdrproc_t xdr_res,
 	caddr_t res_ptr)
 {
-	register struct ct_data *ct = (struct ct_data *)cl->cl_private;
-	register XDR *xdrs = &(ct->ct_xdrs);
+	struct ct_data *ct;
+	XDR *xdrs;
 
+	ct = (struct ct_data *)cl->cl_private;
+	xdrs = &(ct->ct_xdrs);
+	
 	xdrs->x_op = XDR_FREE;
 	return ((*xdr_res)(xdrs, res_ptr));
 }
@@ -367,9 +375,11 @@ clnttcp_control(
 	int request,
 	char *info)
 {
-	register struct ct_data *ct = (struct ct_data *)cl->cl_private;
-	register struct timeval *tv;
+	struct ct_data *ct;
+	struct timeval *tv;
 	socklen_t len;
+	
+	ct = (struct ct_data *)cl->cl_private;
 
 	switch (request) {
 	case CLSET_FD_CLOSE:
@@ -404,18 +414,20 @@ clnttcp_control(
 	case CLGET_XID:
 		/*
 		 * use the knowledge that xid is the
-		 * first element in the call structure *.
+		 * first element in the call structure
 		 * This will get the xid of the PREVIOUS call
 		 */
 		if (info == NULL)
 			return(FALSE);
-		*(u_long *)info = ntohl(*(u_long *)ct->ct_mcall);
+		*(u_int32_t *)info =
+			ntohl(*(u_int32_t *)&ct->ct_u.ct_mcalli);
 		break;
 	case CLSET_XID:
 		/* This will set the xid of the NEXT call */
 		if (info == NULL)
 			return(FALSE);
-		*(u_long *)ct->ct_mcall =  htonl(*(u_long *)info - 1);
+		*(u_int32_t *)&ct->ct_u.ct_mcalli =
+			htonl(*((u_int32_t *)info) + 1);
 		/* decrement by 1 as clnttcp_call() increments once */
 	case CLGET_VERS:
 		/*
@@ -426,38 +438,44 @@ clnttcp_control(
 		 */
 		if (info == NULL)
 			return(FALSE);
-		*(u_long *)info = ntohl(*(u_long *)(ct->ct_mcall +
+		*(u_int32_t *)info =
+			ntohl(*(u_int32_t *)(ct->ct_u.ct_mcallc +
 						4 * BYTES_PER_XDR_UNIT));
 		break;
 	case CLSET_VERS:
 		if (info == NULL)
 			return(FALSE);
-		*(u_long *)(ct->ct_mcall + 4 * BYTES_PER_XDR_UNIT)
-				= htonl(*(u_long *)info);
+		*(u_int32_t *)(ct->ct_u.ct_mcallc +
+			4 * BYTES_PER_XDR_UNIT) =
+			htonl(*(u_int32_t *)info);
 		break;
+
 	case CLGET_PROG:
 		/*
 		 * This RELIES on the information that, in the call body,
-		 * the program number field is the  field from the
+		 * the program number field is the fourth field from the
 		 * begining of the RPC header. MUST be changed if the
 		 * call_struct is changed
 		 */
 		if (info == NULL)
 			return(FALSE);
-		*(u_long *)info = ntohl(*(u_long *)(ct->ct_mcall +
+		*(u_int32_t *)info = ntohl(*(u_int32_t *)(ct->ct_u.ct_mcallc +
 						3 * BYTES_PER_XDR_UNIT));
 		break;
+
 	case CLSET_PROG:
 		if (info == NULL)
 			return(FALSE);
-		*(u_long *)(ct->ct_mcall + 3 * BYTES_PER_XDR_UNIT)
-				= htonl(*(u_long *)info);
+		*(u_int32_t *)(ct->ct_u.ct_mcallc + 3 * BYTES_PER_XDR_UNIT)
+				= htonl(*(u_int32_t *)info);
 		break;
+
 	case CLGET_LOCAL_ADDR:
 		len = sizeof(struct sockaddr);
 		if (getsockname(ct->ct_sock, (struct sockaddr *)info, &len) <0)
 			return(FALSE);
 		break;
+
 	case CLGET_RETRY_TIMEOUT:
 	case CLSET_RETRY_TIMEOUT:
 	case CLGET_SVC_ADDR:
@@ -475,15 +493,15 @@ static void
 clnttcp_destroy(
 	CLIENT *h)
 {
-	register struct ct_data *ct =
+	struct ct_data *ct =
 	    (struct ct_data *) h->cl_private;
 
 	if (ct->ct_closeit) {
 		(void)_RPC_close(ct->ct_sock);
 	}
 	XDR_DESTROY(&(ct->ct_xdrs));
-	mem_free((caddr_t)ct, sizeof(struct ct_data));
-	mem_free((caddr_t)h, sizeof(CLIENT));
+	mem_free(ct, sizeof(struct ct_data));
+	mem_free(h, sizeof(CLIENT));
 }
 
 /*
@@ -574,7 +592,7 @@ writetcp(
 	int len)
 {
 	struct ct_data *ct = (struct ct_data *) _ct;
-	register int i, cnt;
+	int i, cnt;
 
 	for (cnt = len; cnt > 0; cnt -= i, buf += i) {
 		if ((i = _RPC_write(ct->ct_sock, buf, cnt)) == -1) {
