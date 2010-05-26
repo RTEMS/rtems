@@ -1,5 +1,9 @@
 2010-05-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/rpc/clnt_udp.c: Cosmetics from freebsd.
+
+2010-05-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* librpc/src/rpc/clnt_tcp.c: Partial merger from freebsd
 	(Fix strict-aliasing).
 

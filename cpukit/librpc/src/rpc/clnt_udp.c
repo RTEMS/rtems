@@ -79,17 +79,17 @@ static struct clnt_ops udp_ops = {
  */
 struct cu_data {
 	int		   cu_sock;
-	bool_t		   cu_closeit;
+	bool_t			cu_closeit;	/* opened by library */
 	struct sockaddr_in cu_raddr;
 	int		   cu_rlen;
-	struct timeval	   cu_wait;
-	struct timeval     cu_total;
+	struct timeval		cu_wait;	/* retransmit interval */
+	struct timeval		cu_total;	/* total time for the call */
 	struct rpc_err	   cu_error;
 	XDR		   cu_outxdrs;
 	u_int		   cu_xdrpos;
-	u_int		   cu_sendsz;
+	u_int			cu_sendsz;	/* send size */
 	char		   *cu_outbuf;
-	u_int		   cu_recvsz;
+	u_int			cu_recvsz;	/* recv size */
 	char		   cu_inbuf[1];
 };
 
@@ -119,8 +119,8 @@ clntudp_bufcreate(
 	u_int sendsz,
 	u_int recvsz)
 {
-	CLIENT *cl;
-	register struct cu_data *cu = NULL;
+	CLIENT *cl = NULL;		/* client handle */
+	struct cu_data *cu = NULL;	/* private data */
 	struct timeval now;
 	struct rpc_msg call_msg;
 	static uintptr_t disrupt;
@@ -137,7 +137,7 @@ clntudp_bufcreate(
 	}
 	sendsz = ((sendsz + 3) / 4) * 4;
 	recvsz = ((recvsz + 3) / 4) * 4;
-	cu = (struct cu_data *)mem_alloc(sizeof(*cu) + sendsz + recvsz);
+	cu = mem_alloc(sizeof (*cu) + sendsz + recvsz);
 	if (cu == NULL) {
 		(void) fprintf(stderr, "clntudp_create: out of memory\n");
 		rpc_createerr.cf_stat = RPC_SYSTEMERROR;
@@ -226,10 +226,10 @@ clntudp_call(
 	caddr_t		resultsp,	/* pointer to results */
 	struct timeval	utimeout )	/* seconds to wait before giving up */
 {
-	register struct cu_data *cu = (struct cu_data *)cl->cl_private;
-	register XDR *xdrs;
-	register int outlen;
-	register int inlen;
+	struct cu_data *cu = (struct cu_data *)cl->cl_private;
+	XDR *xdrs;
+	size_t outlen = 0;
+	int inlen;
 	socklen_t fromlen;
 	fd_set *fds, readfds;
 	struct sockaddr_in from;
@@ -273,7 +273,7 @@ call_again:
 			free(fds);
 		return (cu->cu_error.re_status = RPC_CANTENCODEARGS);
 	}
-	outlen = (int)XDR_GETPOS(xdrs);
+	outlen = (size_t)XDR_GETPOS(xdrs);
 
 send_again:
 	if (sendto(cu->cu_sock, cu->cu_outbuf, outlen, 0,
@@ -413,7 +413,7 @@ clntudp_geterr(
 	CLIENT *cl,
 	struct rpc_err *errp)
 {
-	register struct cu_data *cu = (struct cu_data *)cl->cl_private;
+	struct cu_data *cu = (struct cu_data *)cl->cl_private;
 
 	*errp = cu->cu_error;
 }
@@ -425,8 +425,8 @@ clntudp_freeres(
 	xdrproc_t xdr_res,
 	caddr_t res_ptr)
 {
-	register struct cu_data *cu = (struct cu_data *)cl->cl_private;
-	register XDR *xdrs = &(cu->cu_outxdrs);
+	struct cu_data *cu = (struct cu_data *)cl->cl_private;
+	XDR *xdrs = &(cu->cu_outxdrs);
 
 	xdrs->x_op = XDR_FREE;
 	return ((*xdr_res)(xdrs, res_ptr));
@@ -444,8 +444,8 @@ clntudp_control(
 	int request,
 	char *info)
 {
-	register struct cu_data *cu = (struct cu_data *)cl->cl_private;
-	register struct timeval *tv;
+	struct cu_data *cu = (struct cu_data *)cl->cl_private;
+	struct timeval *tv;
 	socklen_t len;
 
 	switch (request) {
@@ -526,7 +526,7 @@ clntudp_control(
 	case CLGET_PROG:
 		/*
 		 * This RELIES on the information that, in the call body,
-		 * the program number field is the  field from the
+		 * the program number field is the fourth field from the
 		 * begining of the RPC header. MUST be changed if the
 		 * call_struct is changed
 		 */
@@ -560,12 +560,12 @@ static void
 clntudp_destroy(
 	CLIENT *cl)
 {
-	register struct cu_data *cu = (struct cu_data *)cl->cl_private;
+	struct cu_data *cu = (struct cu_data *)cl->cl_private;
 
 	if (cu->cu_closeit) {
 		(void)_RPC_close(cu->cu_sock);
 	}
 	XDR_DESTROY(&(cu->cu_outxdrs));
-	mem_free((caddr_t)cu, (sizeof(*cu) + cu->cu_sendsz + cu->cu_recvsz));
-	mem_free((caddr_t)cl, sizeof(CLIENT));
+	mem_free(cu, (sizeof (*cu) + cu->cu_sendsz + cu->cu_recvsz));
+	mem_free(cl, sizeof (CLIENT));
 }
