@@ -41,7 +41,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_raw.c,v 1.10 1999/08/28 00
  * Memory based rpc for simple testing and timing.
  * Interface to create an rpc client and server in the same process.
  * This lets us similate rpc and get round trip overhead, without
- * any interference from the kernal.
+ * any interference from the kernel.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -61,7 +61,10 @@ struct clnt_raw_private {
 	CLIENT	client_object;
 	XDR	xdr_stream;
 	char	_raw_buf[UDPMSGSIZE];
-	char	mashl_callmsg[MCALL_MSG_SIZE];
+	union {
+	    struct rpc_msg	mashl_rpcmsg;
+	    char 		mashl_callmsg[MCALL_MSG_SIZE];
+	} u;
 	u_int	mcnt;
 };
 #define clntraw_private (rtems_rpc_task_variables->clnt_raw_private)
@@ -90,7 +93,7 @@ clntraw_create(
 	u_long prog,
 	u_long vers )
 {
-	register struct clnt_raw_private *clp = clntraw_private;
+	struct clnt_raw_private *clp = clntraw_private;
 	struct rpc_msg call_msg;
 	XDR *xdrs = &clp->xdr_stream;
 	CLIENT	*client = &clp->client_object;
@@ -108,7 +111,7 @@ clntraw_create(
 	call_msg.rm_call.cb_rpcvers = RPC_MSG_VERSION;
 	call_msg.rm_call.cb_prog = prog;
 	call_msg.rm_call.cb_vers = vers;
-	xdrmem_create(xdrs, clp->mashl_callmsg, MCALL_MSG_SIZE, XDR_ENCODE);
+	xdrmem_create(xdrs, clp->u.mashl_callmsg, MCALL_MSG_SIZE, XDR_ENCODE);
 	if (! xdr_callhdr(xdrs, &call_msg)) {
 		perror("clnt_raw.c - Fatal header serialization error.");
 	}
@@ -138,8 +141,8 @@ clntraw_call(
 	caddr_t resultsp,
 	struct timeval timeout )
 {
-	register struct clnt_raw_private *clp = clntraw_private;
-	register XDR *xdrs = &clp->xdr_stream;
+	struct clnt_raw_private *clp = clntraw_private;
+	XDR *xdrs = &clp->xdr_stream;
 	struct rpc_msg msg;
 	enum clnt_stat status;
 	struct rpc_err error;
@@ -152,8 +155,8 @@ call_again:
 	 */
 	xdrs->x_op = XDR_ENCODE;
 	XDR_SETPOS(xdrs, 0);
-	((struct rpc_msg *)clp->mashl_callmsg)->rm_xid ++ ;
-	if ((! XDR_PUTBYTES(xdrs, clp->mashl_callmsg, clp->mcnt)) ||
+	clp->u.mashl_rpcmsg.rm_xid ++ ;
+	if ((! XDR_PUTBYTES(xdrs, clp->u.mashl_callmsg, clp->mcnt)) ||
 	    (! XDR_PUTLONG(xdrs, (long *)&proc)) ||
 	    (! AUTH_MARSHALL(h->cl_auth, xdrs)) ||
 	    (! (*xargs)(xdrs, argsp))) {
@@ -215,8 +218,8 @@ clntraw_freeres(
 	xdrproc_t xdr_res,
 	caddr_t res_ptr )
 {
-	register struct clnt_raw_private *clp = clntraw_private;
-	register XDR *xdrs = &clp->xdr_stream;
+	struct clnt_raw_private *clp = clntraw_private;
+	XDR *xdrs = &clp->xdr_stream;
 	bool_t rval;
 
 	if (clp == 0)
