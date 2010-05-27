@@ -384,16 +384,16 @@ typedef struct serporidok {
 			sattr		attributes;
 		}					sattrarg;
 		struct {
-			u_int 		offset;
-			u_int		count;
-			u_int		totalcount;
+			uint32_t	offset;
+			uint32_t	count;
+			uint32_t	totalcount;
 		}					readarg;
 		struct {
-			u_int		beginoffset;
-			u_int		offset;
-			u_int		totalcount;
+			uint32_t	beginoffset;
+			uint32_t	offset;
+			uint32_t	totalcount;
 			struct {
-				u_int data_len;
+				uint32_t data_len;
 				char* data_val;
 			}			data;
 		}					writearg;
@@ -415,7 +415,7 @@ typedef struct serporidok {
 		}					symlinkarg;
 		struct {
 			nfscookie	cookie;
-			u_int		count;
+			uint32_t	count;
 		}					readdirarg;
 	}							arg_u;
 } serporidok;
@@ -2599,7 +2599,7 @@ Nfs		nfs  = node->nfs;
 
 	SERP_ARGS(node).readarg.offset		= iop->offset;
 	SERP_ARGS(node).readarg.count	  	= count;
-	SERP_ARGS(node).readarg.totalcount	= 0xdeadbeef;
+	SERP_ARGS(node).readarg.totalcount	= UINT32_C(0xdeadbeef);
 
 	rr.readres_u.reply.data.data_val	= buffer;
 
@@ -2702,7 +2702,7 @@ int			e;
 		count = NFS_MAXDATA;
 
 
-	SERP_ARGS(node).writearg.beginoffset   = 0xdeadbeef;
+	SERP_ARGS(node).writearg.beginoffset   = UINT32_C(0xdeadbeef);
 	if ( LIBIO_FLAGS_APPEND & iop->flags ) {
 		if ( updateAttr(node, 0) ) {
 			return -1;
@@ -2711,7 +2711,7 @@ int			e;
 	} else {
 		SERP_ARGS(node).writearg.offset	  	   = iop->offset;
 	}
-	SERP_ARGS(node).writearg.totalcount	   = 0xdeadbeef;
+	SERP_ARGS(node).writearg.totalcount	   = UINT32_C(0xdeadbeef);
 	SERP_ARGS(node).writearg.data.data_len = count;
 	SERP_ARGS(node).writearg.data.data_val = (void*)buffer;
 
