@@ -246,7 +246,7 @@ int rtems_libio_is_file_open(
 
 int rtems_filesystem_evaluate_relative_path(
   const char                        *pathname,
-  int                                pathnamelen,
+  size_t                             pathnamelen,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc,
   int                                follow_link
@@ -254,7 +254,7 @@ int rtems_filesystem_evaluate_relative_path(
 
 int rtems_filesystem_evaluate_path(
   const char                        *pathname,
-  int                                pathnamelen,
+  size_t                             pathnamelen,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc,
   int                                follow_link
