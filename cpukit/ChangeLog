@@ -1,5 +1,7 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/gethostnamadr.c:
+	Try to make crazy address arithmetic more portable.
 	* libfs/src/nfsclient/src/xdr_mbuf.c:
 	Use void* arithmetic instead of u_long arithmetic.
 	* libnetworking/netinet/raw_ip.c,
