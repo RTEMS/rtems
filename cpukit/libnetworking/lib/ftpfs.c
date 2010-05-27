@@ -1196,7 +1196,7 @@ static int rtems_ftpfs_ftruncate(rtems_libio_t *iop, rtems_off64_t count)
 
 static int rtems_ftpfs_eval_path(
   const char *pathname,
-  int pathnamelen,
+  size_t pathnamelen,
   int flags,
   rtems_filesystem_location_info_t *pathloc
 )

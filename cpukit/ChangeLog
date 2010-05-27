@@ -1,5 +1,7 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	*  libnetworking/lib/ftpfs.c, libnetworking/lib/tftpDriver.c:
+	Use size_t instead of int for pathnamelen.
 	* libfs/src/rfs/rtems-rfs-rtems.c:
 	Use size_t instead of int for pathlen.
 	Use %zi to print pathlen.
