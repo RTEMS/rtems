@@ -1,5 +1,8 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-rtems.c:
+	Use size_t instead of int for pathlen.
+	Use %zi to print pathlen.
 	* libcsupport/include/rtems/libio.h:
 	Use size_t instead of int for pathnamelen.
 	* libcsupport/include/rtems/libio_.h, libcsupport/src/eval.c:

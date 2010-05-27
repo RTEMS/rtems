@@ -58,7 +58,7 @@
  */
 int
 rtems_rfs_rtems_eval_path (const char*                       path,
-                           int                               pathlen,
+                           size_t                            pathlen,
                            int                               flags,
                            rtems_filesystem_location_info_t* pathloc)
 {
@@ -72,7 +72,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PATH))
-    printf ("rtems-rfs-rtems: eval-path: in: path:%s pathlen:%i ino:%ld\n",
+    printf ("rtems-rfs-rtems: eval-path: in: path:%s pathlen:%zi ino:%ld\n",
             path, pathlen, ino);
   
   /*
