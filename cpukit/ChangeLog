@@ -1,5 +1,11 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_mii_ioctl.h, 
+	libnetworking/rtems/rtems_mii_ioctl_kern.c:
+	Use uint32_t instead of int as ioctl cmd arg.
+
+2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	*  libnetworking/lib/ftpfs.c, libnetworking/lib/tftpDriver.c:
 	Use size_t instead of int for pathnamelen.
 	* libfs/src/rfs/rtems-rfs-rtems.c:

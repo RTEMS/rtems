@@ -84,12 +84,12 @@
 #endif
 
 int
-rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
+rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, uint32_t cmd,
                  int *media)
 {
   uint32_t bmcr, bmsr, aner, bmcr2 = 0, bmsr2 = 0, anar, lpar;
   int phy = IFM_INST (*media);
-  unsigned tmp;
+  uint32_t tmp;
   int subtype = 0, options = 0;
 
   switch (cmd) {

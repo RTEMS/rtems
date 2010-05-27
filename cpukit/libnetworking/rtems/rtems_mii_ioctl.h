@@ -92,7 +92,7 @@ struct rtems_mdio_info {
  *
  */
 int
-rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
+rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, uint32_t cmd,
                  int *media);
 
 #endif
