@@ -1,5 +1,7 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_eval.c:
+	Use size_t instead of int for pathnamelen.
 	* libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_eval.c:
 	Use size_t instead of int for pathnamelen.
 	* libfs/src/devfs/devfs.h, libfs/src/devfs/devfs_eval.c:

@@ -487,7 +487,7 @@ int IMFS_evaluate_for_make(
 
 int IMFS_eval_path(
   const char                        *pathname,     /* IN     */
-  int                                pathnamelen,  /* IN     */
+  size_t                             pathnamelen,  /* IN     */
   int                                flags,        /* IN     */
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 )
