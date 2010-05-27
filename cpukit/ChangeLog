@@ -1,5 +1,9 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/nfs.c: Introduce union nfs_evalpath_arg.
+
+2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* librpc/src/rpc/clnt_tcp.c, librpc/src/rpc/clnt_udp.c:
 	Revert to using u_long instead of rpcprog_t, rpcvers_t 
 	to stay bug-ward compatible to freebsd.

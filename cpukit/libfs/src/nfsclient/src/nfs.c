@@ -1353,10 +1353,15 @@ struct rtems_filesystem_location_info_tt
  *
  */
 
+union nfs_evalpath_arg {
+    int i;
+    const char **c;
+  };
+
 STATIC int nfs_do_evalpath(
 	const char                        *pathname,      /* IN     */
 	int                                pathnamelen,   /* IN     */
-	void                              *arg,
+	union nfs_evalpath_arg		  *arg,
 	rtems_filesystem_location_info_t  *pathloc,       /* IN/OUT */
 	int								  forMake
 )
@@ -1510,9 +1515,9 @@ unsigned long	niu,siu;
 #endif
 
 			if (forMake)
-				rval = pathloc->ops->evalformake_h(part, pathloc, (const char**)arg);
+				rval = pathloc->ops->evalformake_h(part, pathloc, arg->c);
 			else
-				rval = pathloc->ops->evalpath_h(part, strlen(part), (int)arg, pathloc);
+				rval = pathloc->ops->evalpath_h(part, strlen(part), arg->i, pathloc);
 
 			free(p);
 			return rval;
@@ -1669,17 +1674,22 @@ static int nfs_evalformake(
 	const char                      **pname       /* OUT    */
 )
 {
-	return nfs_do_evalpath(path, strlen(path), (void*)pname, pathloc, 1 /*forMake*/);
+	union nfs_evalpath_arg args;
+	args.c = pname;
+	                
+	return nfs_do_evalpath(path, strlen(path), &args, pathloc, 1 /*forMake*/);
 }
 
 static int nfs_evalpath(
 	const char						 *path,		  /* IN */
-	int								 pathlen,		  /* IN */
-	int								 flags,		  /* IN */
+	size_t							 pathlen,		  /* IN */
+	int							 flags,		  /* IN */
 	rtems_filesystem_location_info_t *pathloc    /* IN/OUT */
 )
 {
-	return nfs_do_evalpath(path, pathlen, (void*)flags, pathloc, 0 /*not forMake*/);
+	union nfs_evalpath_arg args;
+	args.i = flags;
+	return nfs_do_evalpath(path, pathlen, &args, pathloc, 0 /*not forMake*/);
 }
 
 
