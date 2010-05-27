@@ -102,14 +102,14 @@ enum xdr_op {
  */
 typedef struct __rpc_xdr {
 	enum xdr_op	x_op;		/* operation; fast additional param */
-	struct xdr_ops {
+	const struct xdr_ops {
 		/* get a long from underlying stream */
 		bool_t	(*x_getlong)(struct __rpc_xdr *, long *);
-		/* put a long to underlying stream */
+		/* put a long to " */
 		bool_t	(*x_putlong)(struct __rpc_xdr *, const long *);
-		/* get some bytes from underlying stream */
+		/* get some bytes from " */
 		bool_t	(*x_getbytes)(struct __rpc_xdr *, char *, u_int);
-		/* put some bytes to underlying stream */
+		/* put some bytes to " */
 		bool_t	(*x_putbytes)(struct __rpc_xdr *, const char *, u_int);
 		/* returns bytes off from beginning */
 		u_int	(*x_getpostn)(struct __rpc_xdr *);
