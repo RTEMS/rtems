@@ -72,7 +72,7 @@ msdos_set_handlers(rtems_filesystem_location_info_t *loc)
 int
 msdos_eval_path(
     const char                        *pathname,
-    int                                pathnamelen,
+    size_t                             pathnamelen,
     int                                flags,
     rtems_filesystem_location_info_t  *pathloc
     )

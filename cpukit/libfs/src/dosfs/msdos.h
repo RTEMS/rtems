@@ -229,7 +229,7 @@ int msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
 
 int msdos_eval_path(
   const char                       *pathname,    /* IN */
-  int                               pathnamelen, /* IN */
+  size_t                            pathnamelen, /* IN */
   int                               flags,       /* IN */
   rtems_filesystem_location_info_t *pathloc      /* IN/OUT */
 );
