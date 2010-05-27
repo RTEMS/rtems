@@ -1,5 +1,10 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/rpcio.c, libfs/src/nfsclient/src/rpcio.h:
+	Use rpcprog_t for "program args", use rpcvers_t for "version args".
+
+2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* librpc/src/rpc/rtems_portmapper.c: Reflect changes to librpc.
 
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>

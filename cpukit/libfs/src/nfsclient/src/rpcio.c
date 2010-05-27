@@ -485,10 +485,10 @@ bool_t rval;
 enum clnt_stat
 rpcUdpServerCreate(
 	struct sockaddr_in	*paddr,
-	int					prog,
-	int					vers,
-	u_long				uid,
-	u_long				gid,
+	rpcprog_t		prog,
+	rpcvers_t		vers,
+	u_long			uid,
+	u_long			gid,
 	RpcUdpServer		*psrv
 	)
 {
@@ -1019,12 +1019,12 @@ rpcUdpCleanup(void)
  */
 enum clnt_stat
 rpcUdpClntCreate(
-		struct sockaddr_in *psaddr,
-		int					prog,
-		int					vers,
-		u_long				uid,
-		u_long				gid,
-		RpcUdpClnt			*pclnt
+		struct sockaddr_in	*psaddr,
+		rpcprog_t		prog,
+		rpcvers_t		vers,
+		u_long			uid,
+		u_long			gid,
+		RpcUdpClnt		*pclnt
 )
 {
 RpcUdpXact		x;
@@ -1513,7 +1513,7 @@ rtems_status_code	status;
 
 RpcUdpXactPool
 rpcUdpXactPoolCreate(
-	int prog, 		int version,
+	rpcprog_t prog, 		rpcvers_t version,
 	int xactsize,	int poolsize)
 {
 RpcUdpXactPool	rval = MY_MALLOC(sizeof(*rval));
