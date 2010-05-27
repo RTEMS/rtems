@@ -176,7 +176,7 @@ typedef int (*rtems_filesystem_mknod_t)(
 
 typedef int (*rtems_filesystem_evalpath_t)(
   const char                        *pathname,      /* IN     */
-  int                                pathnamelen,   /* IN     */
+  size_t                             pathnamelen,   /* IN     */
   int                                flags,         /* IN     */
   rtems_filesystem_location_info_t  *pathloc        /* IN/OUT */
 );

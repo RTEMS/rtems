@@ -1,5 +1,7 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/rtems/libio.h:
+	Use size_t instead of int for pathnamelen.
 	* libcsupport/include/rtems/libio_.h, libcsupport/src/eval.c:
 	Use size_t instead of int for pathnamelen.
 	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_eval.c:
