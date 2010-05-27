@@ -1,5 +1,7 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/devfs/devfs.h, libfs/src/devfs/devfs_eval.c:
+	Use size_t instead of int for pathlen.
 	* libfs/src/nfsclient/src/nfs.c: 
 	Use uint32_t instead of u_int_t for readarg and writearg.
 

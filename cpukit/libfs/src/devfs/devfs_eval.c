@@ -17,7 +17,7 @@
 
 int devFS_evaluate_path(
   const char                        *pathname,
-  int                                pathnamelen,
+  size_t                             pathnamelen,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc
 )
