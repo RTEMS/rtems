@@ -1,5 +1,7 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/xdr_mbuf.c:
+	Use void* arithmetic instead of u_long arithmetic.
 	* libnetworking/netinet/raw_ip.c,
 	libnetworking/netinet/udp_usrreq.c:
 	Cast mbufs to uintptr_t instead of u_long.

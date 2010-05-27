@@ -455,7 +455,7 @@ struct mbuf *m   = mbp->mcurrent;
 u_int       rval = mbp->pos;
 
 	if (m) {
-		rval += (u_long)xdrs->x_private - mtod(m, u_long);
+		rval += xdrs->x_private - mtod(m, void*);
 	}
 #else
 struct mbuf *m;
