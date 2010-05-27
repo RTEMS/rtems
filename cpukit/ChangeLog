@@ -1,5 +1,9 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/xdr/xdr_mem.c: Cosmetics from freebsd.
+
+2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/nfsclient/src/rpcio.c: 
 	Cast pointers to uintptr_t instead of long.
 	xids are uint32_t not u_long.
