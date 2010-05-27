@@ -288,7 +288,7 @@ typedef struct RpcUdpServerRec_ {
 } RpcUdpServerRec;
 
 typedef union  RpcBufU_ {
-		u_long				xid;
+		uint32_t			xid;
 		char				buf[1];
 } RpcBufU, *RpcBuf;
 
@@ -687,9 +687,9 @@ register int	i,j;
 			return 0;
 		}
 		/* pick a free table slot and initialize the XID */
-		rval->obuf.xid = time(0) ^ (unsigned long)rval;
+		rval->obuf.xid = time(0) ^ (uintptr_t)rval;
 		MU_LOCK(hlock);
-		rval->obuf.xid = (xidHashSeed++ ^ ((unsigned long)rval>>10)) & XACT_HASH_MSK;
+		rval->obuf.xid = (xidHashSeed++ ^ ((uintptr_t)rval>>10)) & XACT_HASH_MSK;
 		i=j=(rval->obuf.xid & XACT_HASH_MSK);
 		if (msgQ) {
 			/* if there's no message queue, refuse to

@@ -1,5 +1,8 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/rpcio.c: 
+	Cast pointers to uintptr_t instead of long.
+	xids are uint32_t not u_long.
 	* libfs/src/nfsclient/src/nfs.c (NFS_MAKE_DEV_T_INO_HACK,
 	NFS_MAKE_DEV_T): Cast "id"'s to rtems_device_minor_number.
 
