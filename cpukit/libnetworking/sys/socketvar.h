@@ -90,8 +90,8 @@ struct socket {
 		struct	selinfo sb_sel;	/* process selecting read/write */
 		short	sb_flags;	/* flags, see below */
 		int	sb_timeo;	/* timeout for read/write */
-		void	(*sb_wakeup)(struct socket *, caddr_t);
-		caddr_t	sb_wakeuparg;	/* arg for above */
+		void	(*sb_wakeup)(struct socket *, void *);
+		void 	*sb_wakeuparg;	/* arg for above */
 	} so_rcv, so_snd;
 #define	SB_MAX		(256L*1024L)	/* default for max chars in sockbuf */
 #define	SB_LOCK		0x01		/* lock on data queue */

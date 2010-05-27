@@ -1,5 +1,7 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/socketvar.h (struct sockbuf):
+	Use void* instead of caddr_t.
 	* libfs/src/nfsclient/src/rpcio.c: 
 	Use address to rpciod in calls to rxWakeupCB.
 	* libnetworking/sys/socket.h (struct sockwakeup):
