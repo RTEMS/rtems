@@ -66,19 +66,21 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_getmaps.c,v 1.11 2000/01/2
 struct pmaplist *
 pmap_getmaps(struct sockaddr_in *address)
 {
-	struct pmaplist *head = (struct pmaplist *)NULL;
+	struct pmaplist *head = NULL;
 	int socket = -1;
 	struct timeval minutetimeout;
-	register CLIENT *client;
+	CLIENT *client;
 
 	minutetimeout.tv_sec = 60;
 	minutetimeout.tv_usec = 0;
 	address->sin_port = htons(PMAPPORT);
 	client = clnttcp_create(address, PMAPPROG,
 	    PMAPVERS, &socket, 50, 500);
-	if (client != (CLIENT *)NULL) {
-		if (CLNT_CALL(client, PMAPPROC_DUMP, xdr_void, NULL, xdr_pmaplist,
-		    &head, minutetimeout) != RPC_SUCCESS) {
+	if (client != NULL) {
+		if (CLNT_CALL(client, (rpcproc_t)PMAPPROC_DUMP, 
+		    (xdrproc_t)xdr_void, NULL,
+		    (xdrproc_t)xdr_pmaplist, &head, minutetimeout) !=
+		    RPC_SUCCESS) {
 			clnt_perror(client, "pmap_getmaps rpc problem");
 		}
 		CLNT_DESTROY(client);

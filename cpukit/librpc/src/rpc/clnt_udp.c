@@ -58,10 +58,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_udp.c,v 1.15 2000/01/27 23
 /*
  * UDP bases client side rpc operations
  */
-static enum clnt_stat	clntudp_call(CLIENT *, u_long, xdrproc_t, caddr_t, xdrproc_t, caddr_t, struct timeval);
+static enum clnt_stat	clntudp_call(CLIENT *, rpcproc_t, xdrproc_t, void*, xdrproc_t, void*, struct timeval);
 static void		clntudp_abort(void);
 static void		clntudp_geterr(CLIENT *, struct rpc_err*);
-static bool_t		clntudp_freeres(CLIENT *, xdrproc_t, caddr_t);
+static bool_t		clntudp_freeres(CLIENT *, xdrproc_t, void*);
 static bool_t           clntudp_control(CLIENT *, int, char *);
 static void		clntudp_destroy(CLIENT *);
 
@@ -112,8 +112,8 @@ struct cu_data {
 CLIENT *
 clntudp_bufcreate(
 	struct sockaddr_in *raddr,
-	u_long program,
-	u_long version,
+	rpcprog_t program,		/* program number */
+	rpcvers_t version,		/* version number */
 	struct timeval wait,
 	int *sockp,
 	u_int sendsz,
@@ -206,8 +206,8 @@ fooy:
 CLIENT *
 clntudp_create(
 	struct sockaddr_in *raddr,
-	u_long program,
-	u_long version,
+	rpcprog_t program,		/* program number */
+	rpcvers_t version,		/* version number */
 	struct timeval wait,
 	int *sockp)
 {
@@ -219,11 +219,11 @@ clntudp_create(
 static enum clnt_stat
 clntudp_call(
 	CLIENT	*cl,			/* client handle */
-	u_long		proc,		/* procedure number */
+	rpcproc_t	proc,		/* procedure number */
 	xdrproc_t	xargs,		/* xdr routine for args */
-	caddr_t		argsp, 		/* pointer to args */
+	void		*argsp,		/* pointer to args */
 	xdrproc_t	xresults,	/* xdr routine for results */
-	caddr_t		resultsp,	/* pointer to results */
+	void		*resultsp,	/* pointer to results */
 	struct timeval	utimeout )	/* seconds to wait before giving up */
 {
 	struct cu_data *cu = (struct cu_data *)cl->cl_private;
@@ -423,7 +423,7 @@ static bool_t
 clntudp_freeres(
 	CLIENT *cl,
 	xdrproc_t xdr_res,
-	caddr_t res_ptr)
+	void *res_ptr)
 {
 	struct cu_data *cu = (struct cu_data *)cl->cl_private;
 	XDR *xdrs = &(cu->cu_outxdrs);

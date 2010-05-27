@@ -72,10 +72,10 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_tcp.c,v 1.14 2000/01/27 23
 static int	readtcp(char *, char*, int);
 static int	writetcp(char *, char*, int);
 
-static enum clnt_stat	clnttcp_call(CLIENT *, u_long, xdrproc_t, caddr_t, xdrproc_t, caddr_t, struct timeval);
+static enum clnt_stat	clnttcp_call(CLIENT *, rpcproc_t, xdrproc_t, void*, xdrproc_t, void*, struct timeval);
 static void		clnttcp_abort(void);
 static void		clnttcp_geterr(CLIENT *, struct rpc_err*);
-static bool_t		clnttcp_freeres(CLIENT *, xdrproc_t, caddr_t);
+static bool_t		clnttcp_freeres(CLIENT *, xdrproc_t, void*);
 static bool_t           clnttcp_control(CLIENT *, int, char *);
 static void		clnttcp_destroy(CLIENT *);
 
@@ -120,8 +120,8 @@ struct ct_data {
 CLIENT *
 clnttcp_create(
 	struct sockaddr_in *raddr,
-	u_long prog,
-	u_long vers,
+	rpcprog_t prog,		/* program number */
+	rpcvers_t vers,		/* version number */
 	int *sockp,
 	u_int sendsz,
 	u_int recvsz)
@@ -240,11 +240,11 @@ fooy:
 static enum clnt_stat
 clnttcp_call(
 	CLIENT *h,
-	u_long proc,
+	rpcproc_t proc,
 	xdrproc_t xdr_args,
-	caddr_t args_ptr,
+	void *args_ptr,
 	xdrproc_t xdr_results,
-	caddr_t results_ptr,
+	void *results_ptr,
 	struct timeval timeout)
 {
 	struct ct_data *ct = (struct ct_data *) h->cl_private;
@@ -351,7 +351,7 @@ static bool_t
 clnttcp_freeres(
 	CLIENT *cl,
 	xdrproc_t xdr_res,
-	caddr_t res_ptr)
+	void *res_ptr)
 {
 	struct ct_data *ct;
 	XDR *xdrs;

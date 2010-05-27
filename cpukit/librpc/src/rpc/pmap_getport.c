@@ -52,8 +52,8 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_getport.c,v 1.10 2000/01/2
 #include <net/if.h>
 #include <unistd.h>
 
-static struct timeval timeout = { 5, 0 };
-static struct timeval tottimeout = { 60, 0 };
+static const struct timeval timeout = { 5, 0 };
+static const struct timeval tottimeout = { 60, 0 };
 
 /*
  * Find the mapped port for program,version.
@@ -69,19 +69,21 @@ pmap_getport(
 {
 	u_short port = 0;
 	int socket = -1;
-	register CLIENT *client;
+	CLIENT *client;
 	struct pmap parms;
 
 	address->sin_port = htons(PMAPPORT);
 	client = clntudp_bufcreate(address, PMAPPROG,
 	    PMAPVERS, timeout, &socket, RPCSMALLMSGSIZE, RPCSMALLMSGSIZE);
-	if (client != (CLIENT *)NULL) {
+	if (client != NULL) {
 		parms.pm_prog = program;
 		parms.pm_vers = version;
 		parms.pm_prot = protocol;
 		parms.pm_port = 0;  /* not needed or used */
-		if (CLNT_CALL(client, PMAPPROC_GETPORT, xdr_pmap, &parms,
-		    xdr_u_short, &port, tottimeout) != RPC_SUCCESS){
+		if (CLNT_CALL(client, (rpcproc_t)PMAPPROC_GETPORT,
+		    (xdrproc_t)xdr_pmap,
+		    &parms, (xdrproc_t)xdr_u_short, &port, tottimeout) !=
+		    RPC_SUCCESS){
 			rpc_createerr.cf_stat = RPC_PMAPFAILURE;
 			clnt_geterr(client, &rpc_createerr.cf_error);
 		} else if (port == 0) {

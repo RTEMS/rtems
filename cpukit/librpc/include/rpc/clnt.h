@@ -101,8 +101,8 @@ typedef struct __rpc_client {
 	struct clnt_ops {
 		/* call remote procedure */
 		enum clnt_stat	(*cl_call)(struct __rpc_client *,
-				    u_long, xdrproc_t, caddr_t, xdrproc_t,
-				        caddr_t, struct timeval);
+				    rpcproc_t, xdrproc_t, void *, xdrproc_t,
+				        void *, struct timeval);
 		/* abort a call */
 		void		(*cl_abort)(void);
 		/* get specific error code */
@@ -110,7 +110,7 @@ typedef struct __rpc_client {
 					struct rpc_err *);
 		/* frees results */
 		bool_t		(*cl_freeres)(struct __rpc_client *,
-					xdrproc_t, caddr_t);
+					xdrproc_t, void *);
 		/* destroy this structure */
 		void		(*cl_destroy)(struct __rpc_client *);
 		/* the ioctl() of rpc */
@@ -133,19 +133,19 @@ typedef struct __rpc_client {
  * enum clnt_stat
  * CLNT_CALL(rh, proc, xargs, argsp, xres, resp, timeout)
  * 	CLIENT *rh;
- *	u_long proc;
+ *	rpcproc_t proc;
  *	xdrproc_t xargs;
- *	caddr_t argsp;
+ *	void *argsp;
  *	xdrproc_t xres;
- *	caddr_t resp;
+ *	void *resp;
  *	struct timeval timeout;
  */
 #define	CLNT_CALL(rh, proc, xargs, argsp, xres, resp, secs)	\
-	((*(rh)->cl_ops->cl_call)(rh, proc, (xdrproc_t)xargs, (caddr_t)argsp, \
-		(xdrproc_t) xres, (caddr_t)resp, secs))
+	((*(rh)->cl_ops->cl_call)(rh, proc, xargs, \
+		argsp, xres, resp, secs))
 #define	clnt_call(rh, proc, xargs, argsp, xres, resp, secs)	\
-	((*(rh)->cl_ops->cl_call)(rh, proc, (xdrproc_t) xargs, (caddr_t)argsp, \
-		(xdrproc_t) xres, (caddr_t)resp, secs))
+	((*(rh)->cl_ops->cl_call)(rh, proc, xargs, \
+		argsp, xres, resp, secs))
 
 /*
  * void
@@ -169,10 +169,10 @@ typedef struct __rpc_client {
  * CLNT_FREERES(rh, xres, resp);
  * 	CLIENT *rh;
  *	xdrproc_t xres;
- *	caddr_t resp;
+ *	void *resp;
  */
-#define	CLNT_FREERES(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,(xdrproc_t)xres,resp))
-#define	clnt_freeres(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,(xdrproc_t)xres,resp))
+#define	CLNT_FREERES(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,xres,resp))
+#define	clnt_freeres(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,xres,resp))
 
 /*
  * bool_t
@@ -256,17 +256,11 @@ typedef struct __rpc_client {
 /*
  * Generic client creation routine. Supported protocols are "udp", "tcp"
  * and "unix".
- * CLIENT *
- * clnt_create(host, prog, vers, prot);
- *	char *host; 	-- hostname
- *	u_long prog;	-- program number
- *	u_long vers;	-- version number
- *	char *prot;	-- protocol
  */
 __BEGIN_DECLS
-extern CLIENT *clnt_create(char *, u_long, u_long, char *);
+extern CLIENT *clnt_create(const char *, const rpcprog_t, const rpcvers_t,
+	const char *);
 __END_DECLS
-
 
 /*
  * Added for compatibility to old rpc 4.0. Obsoleted by clnt_vc_create().

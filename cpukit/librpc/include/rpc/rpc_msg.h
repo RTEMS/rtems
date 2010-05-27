@@ -92,8 +92,8 @@ struct accepted_reply {
 	enum accept_stat	ar_stat;
 	union {
 		struct {
-			u_int32_t	low;
-			u_int32_t	high;
+			rpcvers_t low;
+			rpcvers_t high;
 		} AR_versions;
 		struct {
 			caddr_t	where;
@@ -112,8 +112,8 @@ struct rejected_reply {
 	enum reject_stat rj_stat;
 	union {
 		struct {
-			u_int32_t low;
-			u_int32_t high;
+			rpcvers_t low;
+			rpcvers_t high;
 		} RJ_versions;
 		enum auth_stat RJ_why;  /* why authentication did not work */
 	} ru;
@@ -138,10 +138,10 @@ struct reply_body {
  * Body of an rpc request call.
  */
 struct call_body {
-	u_int32_t cb_rpcvers;	/* must be equal to two */
-	u_int32_t cb_prog;
-	u_int32_t cb_vers;
-	u_int32_t cb_proc;
+	rpcvers_t cb_rpcvers;	/* must be equal to two */
+	rpcprog_t cb_prog;
+	rpcvers_t cb_vers;
+	rpcproc_t cb_proc;
 	struct opaque_auth cb_cred;
 	struct opaque_auth cb_verf; /* protocol specific - provided by client */
 };

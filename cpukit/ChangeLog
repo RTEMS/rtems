@@ -1,5 +1,14 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/clnt.h, librpc/include/rpc/rpc_msg.h,
+	librpc/src/rpc/clnt_generic.c, librpc/src/rpc/clnt_raw.c,
+	librpc/src/rpc/clnt_tcp.c, librpc/src/rpc/clnt_udp.c,
+	librpc/src/rpc/pmap_clnt.c, librpc/src/rpc/pmap_getmaps.c
+	librpc/src/rpc/pmap_getport.c:
+	Partial merger from freebsd (portability fixes).
+
+2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/sys/socketvar.h (struct sockbuf):
 	Use void* instead of caddr_t.
 	* libfs/src/nfsclient/src/rpcio.c: 
