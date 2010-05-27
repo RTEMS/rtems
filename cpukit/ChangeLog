@@ -1,5 +1,7 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/rpcio.c: 
+	Use address to rpciod in calls to rxWakeupCB.
 	* libnetworking/sys/socket.h (struct sockwakeup):
 	Use void* instead of caddr_t.
 	* librpc/include/rpc/xdr.h: Cosmetics from freebsd.

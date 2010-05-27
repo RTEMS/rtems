@@ -921,9 +921,10 @@ rtems_event_set		gotEvents;
  * be more efficient
  */
 static void
-rxWakeupCB(struct socket *sock, caddr_t arg)
+rxWakeupCB(struct socket *sock, void *arg)
 {
-rtems_event_send((rtems_id)arg, RPCIOD_RX_EVENT);
+  rtems_id *rpciod = (rtems_id*) arg;
+  rtems_event_send(*rpciod, RPCIOD_RX_EVENT);
 }
 
 int
@@ -966,7 +967,7 @@ struct sockwakeup	wkup;
 			assert( status == RTEMS_SUCCESSFUL );
 
 			wkup.sw_pfn = rxWakeupCB;
-			wkup.sw_arg = (caddr_t)rpciod;
+			wkup.sw_arg = &rpciod;
 			assert( 0==setsockopt(ourSock, SOL_SOCKET, SO_RCVWAKEUP, &wkup, sizeof(wkup)) );
 			status = rtems_message_queue_create(
 											rtems_build_name('R','P','C','q'),
