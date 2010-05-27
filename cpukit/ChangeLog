@@ -1,5 +1,10 @@
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/nfs.c (NFS_MAKE_DEV_T_INO_HACK,
+	NFS_MAKE_DEV_T): Cast "id"'s to rtems_device_minor_number.
+
+2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/nfsclient/src/rpcio.c, libfs/src/nfsclient/src/rpcio.h:
 	Use rpcprog_t for "program args", use rpcvers_t for "version args".
 

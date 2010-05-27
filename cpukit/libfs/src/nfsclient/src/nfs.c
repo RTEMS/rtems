@@ -157,14 +157,14 @@ static struct timeval _nfscalltimeout = { 10, 0 };	/* {secs, us } */
 
 #define	NFS_MAKE_DEV_T_INO_HACK(node) \
 		rtems_filesystem_make_dev_t( NFS_MAJOR, \
-			(((node)->nfs->id)<<16) | (SERP_ATTR((node)).fileid >> 16) )
+			(((rtems_device_minor_number)((node)->nfs->id))<<16) | (((rtems_device_minor_number)SERP_ATTR((node)).fileid) >> 16) )
 
 /* use our 'nfs id' and the server's fsid for the minor device number
  * this should be fairly unique
  */
 #define	NFS_MAKE_DEV_T(node) \
 		rtems_filesystem_make_dev_t( NFS_MAJOR, \
-			(((node)->nfs->id)<<16) | (SERP_ATTR((node)).fsid & ((1<<16)-1)) )
+			(((rtems_device_minor_number)((node)->nfs->id))<<16) | (SERP_ATTR((node)).fsid & (((rtems_device_minor_number)1<<16)-1)) )
 
 #define  DIRENT_HEADER_SIZE ( sizeof(struct dirent) - \
 			sizeof( ((struct dirent *)0)->d_name ) )
