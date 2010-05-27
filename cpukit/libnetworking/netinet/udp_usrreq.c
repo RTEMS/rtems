@@ -594,7 +594,7 @@ udp_usrreq(struct socket *so, int req, struct mbuf *m, struct mbuf *addr,
 	int s;
 
 	if (req == PRU_CONTROL)
-		return (in_control(so, (u_long)m, (caddr_t)addr,
+		return (in_control(so, (uintptr_t)m, (caddr_t)addr,
 			(struct ifnet *)control));
 	if (inp == NULL && req != PRU_ATTACH) {
 		error = EINVAL;

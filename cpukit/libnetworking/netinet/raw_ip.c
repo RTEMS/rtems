@@ -336,7 +336,7 @@ rip_usrreq(struct socket *so, int req, struct mbuf *m, struct mbuf *nam,
 	int s;
 
 	if (req == PRU_CONTROL)
-		return (in_control(so, (u_long)m, (caddr_t)nam,
+		return (in_control(so, (uintptr_t)m, (caddr_t)nam,
 			(struct ifnet *)control));
 
 	switch (req) {
