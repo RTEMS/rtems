@@ -120,8 +120,8 @@ struct ct_data {
 CLIENT *
 clnttcp_create(
 	struct sockaddr_in *raddr,
-	rpcprog_t prog,		/* program number */
-	rpcvers_t vers,		/* version number */
+	u_long prog,		/* program number */
+	u_long vers,		/* version number */
 	int *sockp,
 	u_int sendsz,
 	u_int recvsz)

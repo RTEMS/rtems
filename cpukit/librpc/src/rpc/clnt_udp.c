@@ -112,8 +112,8 @@ struct cu_data {
 CLIENT *
 clntudp_bufcreate(
 	struct sockaddr_in *raddr,
-	rpcprog_t program,		/* program number */
-	rpcvers_t version,		/* version number */
+	u_long program,		/* program number */
+	u_long version,		/* version number */
 	struct timeval wait,
 	int *sockp,
 	u_int sendsz,
@@ -206,8 +206,8 @@ fooy:
 CLIENT *
 clntudp_create(
 	struct sockaddr_in *raddr,
-	rpcprog_t program,		/* program number */
-	rpcvers_t version,		/* version number */
+	u_long program,		/* program number */
+	u_long version,		/* version number */
 	struct timeval wait,
 	int *sockp)
 {
