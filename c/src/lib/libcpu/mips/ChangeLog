@@ -1,3 +1,10 @@
+2010-05-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* au1x00/include/au1x00.h: Add prototypes for
+	mips_default_isr, assert_sw_irq, negate_sw_irq.
+	* au1x00/vectorisrs/vectorisrs.c: Remove prototype of
+	mips_default_isr.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* mongoosev/duart/mg5uart.c: Remove warnings.

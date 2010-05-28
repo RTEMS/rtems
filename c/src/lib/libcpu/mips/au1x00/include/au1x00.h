@@ -517,4 +517,13 @@ void static inline au_sync(void)
 	__asm__ volatile ("sync");
 }
 
+
+extern void mips_default_isr( int vector );
+
+/* Generate a software interrupt */
+extern int assert_sw_irq(uint32_t irqnum);
+
+/* Clear a software interrupt */
+extern int negate_sw_irq(uint32_t irqnum);
+
 #endif

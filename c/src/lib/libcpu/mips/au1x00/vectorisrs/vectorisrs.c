@@ -16,7 +16,6 @@
 #include <stdlib.h>
 #include <libcpu/au1x00.h>
 
-void mips_default_isr( int vector );
 static void call_vectored_isr(CPU_Interrupt_frame *, uint32_t , void *);
 
 #define CALL_ISR(_vector,_frame) \
