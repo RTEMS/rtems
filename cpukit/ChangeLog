@@ -1,3 +1,7 @@
+2010-05-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-rtems.c: Use size_t for node_len.
+
 2010-05-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/libc/gethostnamadr.c:

@@ -67,7 +67,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
   rtems_rfs_ino          ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
   uint32_t               doff = 0;
   const char*            node;
-  int                    node_len;
+  size_t                 node_len;
   int                    stripped;
   int                    rc;
 
@@ -120,7 +120,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
     node_len = 0;
     while (!rtems_filesystem_is_separator (*path) &&
            (*path != '\0') && pathlen &&
-           (node_len < (rtems_rfs_fs_max_name (fs) - 1)))
+           (node_len + 1 < rtems_rfs_fs_max_name (fs)))
     {
       path++;
       pathlen--;
@@ -159,7 +159,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
       if (ino == RTEMS_RFS_ROOT_INO)
       {
         if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PATH))
-          printf("rtems-rfs-rtems: eval-path: crossmount: path:%s (%d)\n",
+          printf("rtems-rfs-rtems: eval-path: crossmount: path:%s (%zd)\n",
                  path - node_len, pathlen + node_len);
         rtems_rfs_inode_close (fs, &inode);
         rtems_rfs_rtems_unlock (fs);
