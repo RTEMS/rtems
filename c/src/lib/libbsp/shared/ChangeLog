@@ -1,3 +1,8 @@
+2010-05-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* umon/tfsDriver.c:
+	Use size_t instead of int for pathnamelen.
+
 2010-05-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/utility.h: Macros use now first and last bit values instead
