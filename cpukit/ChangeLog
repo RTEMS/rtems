@@ -1,5 +1,11 @@
 2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	PR 1531/newlib:
+	* libmisc/shell/fts.c:
+	Add local copy of ALIGN().
+
+2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/net/if.c:
 	Use uintptr_t and void* in _offsetof().
 	* libnetworking/netinet/raw_ip.c:

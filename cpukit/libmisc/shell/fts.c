@@ -87,6 +87,10 @@ static int	 fts_safe_changedir(const FTS *, const FTSENT *, int,
 
 #if defined(ALIGNBYTES) && defined(ALIGN)
 #define	FTS_ALLOC_ALIGNED	1
+/* FIXME: Redefine because some versions of 
+ * RTEMS newlib and the BSDs ship a broken ALIGN */
+#undef ALIGN
+#define ALIGN(p)	(((uintptr_t)(p) + ALIGNBYTES) & ~ALIGNBYTES)
 #else
 #undef	FTS_ALLOC_ALIGNED
 #endif
@@ -1055,8 +1059,7 @@ fts_alloc(FTS *sp, const char *name, size_t namelen)
 		return (NULL);
 
 	if (!ISSET(FTS_NOSTAT))
-		p->fts_statp = (__fts_stat_t *)ALIGN(
-		    (uintptr_t)(p->fts_name + namelen + 2));
+		p->fts_statp = (__fts_stat_t *)ALIGN(p->fts_name + namelen + 2);
 #else
 	if ((p = malloc(sizeof(FTSENT) + namelen)) == NULL)
 		return (NULL);
