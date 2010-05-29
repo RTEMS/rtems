@@ -1,5 +1,7 @@
 2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/xdr_mbuf.c (xdrmbuf_setup):
+	Cast addr to uintptr_t instead of size_t.
 	* librpc/src/xdr/xdr_mem.c (xdr_memcreate): 
 	Cast addr to uintptr_t instead of size_t.
 	* libfs/src/nfsclient/src/dirutils.c: Add PRIomode_t, PRIdoff_t.

@@ -147,7 +147,7 @@ MBPrivate	mbp = (MBPrivate)xdrs->x_base;
 		mbp->mcurrent    = m;
 		xdrs->x_private  = mtod(m,caddr_t);
 		xdrs->x_handy    = m->m_len;
-		xdrs->x_ops      = ((size_t)xdrs->x_private & (sizeof(int32_t) - 1))
+		xdrs->x_ops      = ((uintptr_t)xdrs->x_private & (sizeof(int32_t) - 1))
 								? &xdrmbuf_ops_unaligned : &xdrmbuf_ops_aligned;
 }
 
