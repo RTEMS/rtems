@@ -357,7 +357,7 @@ rip_usrreq(struct socket *so, int req, struct mbuf *m, struct mbuf *nam,
 		if (error)
 			break;
 		inp = (struct inpcb *)so->so_pcb;
-		inp->inp_ip_p = (int)nam;
+		inp->inp_ip_p = (uintptr_t)nam;
 		break;
 
 	case PRU_DISCONNECT:
