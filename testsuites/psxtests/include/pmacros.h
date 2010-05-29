@@ -93,6 +93,14 @@
 
 #define empty_line() puts( "" )
 
+#if SIZEOF_OFF_T == 8
+#define PRIdoff_t PRIo64
+#elif SIZEOF_OFF_T == 4
+#define PRIdoff_t PRIo32
+#else
+#error "unsupported size of off_t"
+#endif
+
 #endif
 
 /* end of file */

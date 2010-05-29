@@ -53,6 +53,9 @@ AC_CHECK_DECLS([adjtime],[],[],[[#include <sys/time.h>]])
 # RTEMS provides a stub, despite newlib doesn't have sys/mman.h
 AC_CHECK_DECLS([mprotect],[],[],[[#include <sys/mman.h>]])
 
+# FIXME: We should get rid of this. It's a cludge.
+AC_CHECK_SIZEOF([off_t])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 psx01/Makefile
