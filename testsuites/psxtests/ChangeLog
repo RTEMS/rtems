@@ -1,3 +1,8 @@
+2010-05-29	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add AC_CHECK_SIZEOF(off_t).
+	* include/pmacros.h: Add PRIdoff_t.
+
 2010-05-17	Bharath Suri <bharath.s.jois@gmail.com>
 
 	* psxfile01/test.c, psxfile01/psxfile01.scn: This file now
