@@ -1,3 +1,9 @@
+2010-05-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1538/libcpu
+	* Makefile.am: Use shared stub implementation of cache.c (no_cache.c).
+	* shared/cache/cache.c: Removed.
+
 2006-12-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add RTEMS_AMPOLISH3.
