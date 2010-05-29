@@ -1,5 +1,7 @@
 2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/xdr/xdr_mem.c (xdr_memcreate): 
+	Cast addr to uintptr_t instead of size_t.
 	* libfs/src/nfsclient/src/dirutils.c: Add PRIomode_t, PRIdoff_t.
 	* configure.ac: Add AC_CHECK_SIZEOF(mode_t), AC_CHECK_SIZEOF(off_t).
 

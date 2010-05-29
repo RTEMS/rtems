@@ -94,13 +94,13 @@ static struct	xdr_ops xdrmem_ops_unaligned = {
 void
 xdrmem_create(
 	XDR *xdrs,
-	caddr_t addr,
+	char * addr,
 	u_int size,
 	enum xdr_op op)
 {
 
 	xdrs->x_op = op;
-	xdrs->x_ops = ((size_t)addr & (sizeof(int32_t) - 1))
+	xdrs->x_ops = ((uintptr_t)addr & (sizeof(int32_t) - 1))
 		? &xdrmem_ops_unaligned : &xdrmem_ops_aligned;
 	xdrs->x_private = xdrs->x_base = addr;
 	xdrs->x_handy = size;
