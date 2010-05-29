@@ -1,3 +1,7 @@
+2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* support/include/tmacros.h: Remove PRIdoff_t.
+
 2010-04-22	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* support/include/tmacros.h: Changed check_dispatch_disable_level() to
