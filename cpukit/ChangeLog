@@ -1,3 +1,8 @@
+2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/nfsclient/src/dirutils.c: Add PRIomode_t, PRIdoff_t.
+	* configure.ac: Add AC_CHECK_SIZEOF(mode_t), AC_CHECK_SIZEOF(off_t).
+
 2010-05-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-rtems.c: Use size_t for node_len.

@@ -66,6 +66,24 @@
 #include <stdlib.h>
 #include <limits.h> /* PATH_MAX */
 
+#include <inttypes.h> /* PRI* */
+
+#if SIZEOF_MODE_T == 8
+#define PRIomode_t PRIo64
+#elif SIZEOF_MODE_T == 4
+#define PRIomode_t PRIo32
+#else
+#error "unsupport size of mode_t"
+#endif
+
+#if SIZEOF_OFF_T == 8
+#define PRIdoff_t PRIo64
+#elif SIZEOF_OFF_T == 4
+#define PRIdoff_t PRIo32
+#else
+#error "unsupported size of off_t"
+#endif
+
 #ifdef HAVE_CEXP
 #include <cexpHelp.h>
 #endif
@@ -109,7 +127,7 @@ char *t;
 						t = "@"; break;
 	}
 
-	printf("%10li, %10lib, %5i.%-5i 0%04o %s%s\n",
+	printf("%10li, %10" PRIdoff_t "b, %5i.%-5i 0%04" PRIomode_t " %s%s\n",
 				buf->st_ino,
 				buf->st_size,
 				buf->st_uid,
