@@ -1,3 +1,7 @@
+2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* irq.c: Change _exception_stack_frame into void*.
+
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* rtems/score/cpu.h: Remove warning in _CPU_Context_Initialize.

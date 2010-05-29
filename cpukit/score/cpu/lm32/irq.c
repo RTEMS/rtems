@@ -32,7 +32,7 @@
   unsigned long    *_old_stack_ptr;
 #endif
 
-unsigned long *_exception_stack_frame;
+void *_exception_stack_frame;
 
 register unsigned long  *stack_ptr asm("sp");
 
