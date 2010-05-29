@@ -381,7 +381,7 @@ int gethostbyname_r(const char*      name,
   strcpy(buf,name);
 
   result->h_addr_list=(char**)(buf+strlen(name)+1);
-  result->h_addr_list+=sizeof(char*)-((size_t)(result->h_addr_list)&(sizeof(char*)-1));
+  result->h_addr_list+=sizeof(char*)-((uintptr_t)(result->h_addr_list)&(sizeof(char*)-1));
   result->h_addr_list[0]=(char*)&result->h_addr_list[2];
   if (inet_pton(AF_INET,name,result->h_addr_list[0])) {
     result->h_addrtype=AF_INET;
