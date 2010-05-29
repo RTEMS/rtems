@@ -134,7 +134,7 @@ if_attach(struct ifnet *ifp)
 	 * create a Link Level name for this device
 	 */
 	namelen = sprintf(workbuf, "%s%d", ifp->if_name, ifp->if_unit);
-#define _offsetof(t, m) ((int)((caddr_t)&((t *)0)->m))
+#define _offsetof(t, m) ((uintptr_t)((void*)&((t *)0)->m))
 	masklen = _offsetof(struct sockaddr_dl, sdl_data[0]) + namelen;
 	socksize = masklen + ifp->if_addrlen;
 #define ROUNDUP(a) (1 + (((a) - 1) | (sizeof(long) - 1)))
