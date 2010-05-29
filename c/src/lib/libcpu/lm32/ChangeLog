@@ -1,3 +1,8 @@
+2010-05-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1537/libcpu
+	* shared/cache/cache.c: Removed.
+
 2008-12-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* .cvsignore: New file.
