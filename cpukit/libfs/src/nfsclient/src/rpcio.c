@@ -391,8 +391,10 @@ static rtems_id			rpciod  = 0;		/* task id of the RPC daemon                 */
 static rtems_id			msgQ    = 0;		/* message queue where the daemon picks up
 											 * requests
 											 */
+#ifndef NDEBUG
 static rtems_id			llock	= 0;		/* MUTEX protecting the server list */
 static rtems_id			hlock	= 0;		/* MUTEX protecting the hash table and the list of servers */
+#endif
 static rtems_id			fini	= 0;		/* a synchronization semaphore we use during
 											 * module cleanup / driver unloading
 											 */
