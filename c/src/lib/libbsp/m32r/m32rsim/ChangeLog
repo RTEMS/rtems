@@ -1,3 +1,7 @@
+2010-05-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* start/start.S: Pass 0/NULL for argc/argv.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/m32rsim.cfg: Remove RTEMS_BSP_FAMILY.
