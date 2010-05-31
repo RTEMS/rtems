@@ -1,5 +1,7 @@
 2010-05-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/network/cs8900.c:
+	Misc. changes to make code 16bit-target compliant.
 	* libchip/network/i82586.c:
 	Use int32_t instead of int for 16bit-target compliance.
 	* libchip/network/open_eth.c: 

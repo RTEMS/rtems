@@ -65,16 +65,17 @@ io_pp_get_reg_16 (cs8900_device *cs, unsigned short reg)
   return data;
 }
 
-static inline unsigned long
-io_pp_get_reg_32 (cs8900_device *cs, unsigned short reg)
+static inline uint32_t
+io_pp_get_reg_32 (cs8900_device *cs, uint16_t reg)
 {
   rtems_interrupt_level level;
-  unsigned long         data;
+  uint32_t data;
   rtems_interrupt_disable (level);
   cs8900_io_set_reg (cs, CS8900_IO_PACKET_PAGE_PTR,
                      0x3000 | CS8900_PPP_AUTO_INCREMENT | reg);
-  data =  ((cs8900_io_get_reg (cs, CS8900_IO_PP_DATA_PORT0) << 16) |
-           cs8900_io_get_reg (cs, CS8900_IO_PP_DATA_PORT1));
+  data = cs8900_io_get_reg (cs, CS8900_IO_PP_DATA_PORT0);
+  data <<= 16;
+  data |= cs8900_io_get_reg (cs, CS8900_IO_PP_DATA_PORT1);
   rtems_interrupt_enable (level);
   return data;
 }
