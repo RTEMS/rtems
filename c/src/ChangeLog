@@ -1,3 +1,8 @@
+2010-05-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/network/open_eth.c: 
+	Misc. changes to make code 16bit-target compliant.
+
 2010-05-18	Chris Johns <chrisj@rtems.org>
 
 	* libchip/i2c/spi-sd-card.c, libchip/ide/ata.c: PR

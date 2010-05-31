@@ -313,8 +313,17 @@ open_eth_initialize_hardware (struct open_eth_softc *sc)
     /* set ethernet address.  */
 
     regs->mac_addr1 = sc->arpcom.ac_enaddr[0] << 8 | sc->arpcom.ac_enaddr[1];
-    regs->mac_addr0 = sc->arpcom.ac_enaddr[2] << 24 | sc->arpcom.ac_enaddr[3] << 16 |
-	sc->arpcom.ac_enaddr[4] << 8 | sc->arpcom.ac_enaddr[5];
+
+    uint32_t mac_addr0;
+    mac_addr0 = sc->arpcom.ac_enaddr[2];
+    mac_addr0 <<= 8;
+    mac_addr0 |= sc->arpcom.ac_enaddr[3];
+    mac_addr0 <<= 8;
+    mac_addr0 |= sc->arpcom.ac_enaddr[4];
+    mac_addr0 <<= 8;
+    mac_addr0 |= sc->arpcom.ac_enaddr[5];
+    
+    regs->mac_addr0 = mac_addr0;
 
     /* install interrupt vector */
     set_vector (open_eth_interrupt_handler, sc->vector, 1);
@@ -347,7 +356,9 @@ open_eth_rxDaemon (void *arg)
     struct open_eth_softc *dp = (struct open_eth_softc *) &oc;
     struct ifnet *ifp = &dp->arpcom.ac_if;
     struct mbuf *m;
-    unsigned int len, len_status, bad;
+    unsigned int len;
+    uint32_t len_status;
+    unsigned int bad;
     rtems_event_set events;
 
 
@@ -437,7 +448,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
     struct open_eth_softc *dp = ifp->if_softc;
     unsigned char *temp;
     struct mbuf *n;
-    unsigned int len, len_status;
+    uint32_t len, len_status;
 
     if (inside) printf ("error: sendpacket re-entered!!\n");
     inside = 1;
