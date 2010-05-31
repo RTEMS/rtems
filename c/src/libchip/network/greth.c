@@ -169,7 +169,7 @@ static char *almalloc(int sz)
 {
         char *tmp;
         tmp = calloc(1,2*sz);
-        tmp = (char *) (((int)tmp+sz) & ~(sz -1));
+        tmp = (char *) (((uintptr_t)tmp+sz) & ~(sz -1));
         return(tmp);
 }
 
@@ -416,8 +416,8 @@ auto_neg_done:
     sc->tx_dptr = 0;
     sc->tx_cnt = 0;
     sc->rx_ptr = 0;
-    regs->txdesc = (int) sc->txdesc;
-    regs->rxdesc = (int) sc->rxdesc;
+    regs->txdesc = (uintptr_t) sc->txdesc;
+    regs->rxdesc = (uintptr_t) sc->rxdesc;
 
     sc->rxmbuf = calloc(sc->rxbufs, sizeof(*sc->rxmbuf));
     sc->txmbuf = calloc(sc->txbufs, sizeof(*sc->txmbuf));
@@ -452,9 +452,16 @@ auto_neg_done:
     /* set ethernet address.  */
     regs->mac_addr_msb =
       sc->arpcom.ac_enaddr[0] << 8 | sc->arpcom.ac_enaddr[1];
-    regs->mac_addr_lsb =
-      sc->arpcom.ac_enaddr[2] << 24 | sc->arpcom.ac_enaddr[3] << 16 |
-      sc->arpcom.ac_enaddr[4] << 8 | sc->arpcom.ac_enaddr[5];
+
+    uint32_t mac_addr_lsb;
+    mac_addr_lsb = sc->arpcom.ac_enaddr[2];
+    mac_addr_lsb <<= 8;
+    mac_addr_lsb |= sc->arpcom.ac_enaddr[3];
+    mac_addr_lsb <<= 8;
+    mac_addr_lsb |= sc->arpcom.ac_enaddr[4];
+    mac_addr_lsb <<= 8;
+    mac_addr_lsb |= sc->arpcom.ac_enaddr[5];
+    regs->mac_addr_lsb = mac_addr_lsb;
 
     /* install interrupt vector */
     set_vector(greth_interrupt_handler, sc->vector, 1);

@@ -1,5 +1,10 @@
 2010-05-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/network/greth.c: Misc. hacks to allow compilation on 
+	16bit targets.
+
+2010-05-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1531/newlib
 	* libchip/network/i82586.c:
 	Add local copy of ALIGN().
