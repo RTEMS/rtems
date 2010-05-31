@@ -173,6 +173,15 @@ Mode of operation:
 #include "i82586reg.h"
 #include "i82586var.h"
 
+#if defined(ALIGNBYTES) && defined(ALIGN)
+/* FIXME: Redefine because some versions of 
+ * RTEMS newlib and the BSDs ship a broken ALIGN */
+#undef ALIGN
+#define ALIGN(p)	(((uintptr_t)(p) + ALIGNBYTES) & ~ALIGNBYTES)
+#else
+#define ALIGN(p)	(p)
+#endif
+
 /*
  * A global way to change all async cmd requests at once. For RTEMS and running
  * as tasks I wanted to see if the tx race condition is effected by this.
