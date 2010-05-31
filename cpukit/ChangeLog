@@ -1,3 +1,7 @@
+2010-05-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/include/rtems/libio.h: Remove if 0 section. Formatting.
+
 2010-05-31	Chris Johns <chrisj@rtems.org>
 
 	* libcsupport/Makefile.am: Add mount-mgr.c.
