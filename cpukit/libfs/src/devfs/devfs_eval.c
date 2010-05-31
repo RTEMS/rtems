@@ -15,6 +15,20 @@
 #include <assert.h>
 #include "devfs.h"
 
+/**
+ *  The following defines the device-only filesystem operating
+ *  handlers.
+ */
+
+extern rtems_filesystem_operations_table devFS_ops;
+
+/**
+ *  The following defines the device-only filesystem operating
+ *  handlers.
+ */
+
+extern rtems_filesystem_file_handlers_r  devFS_file_handlers;
+
 int devFS_evaluate_path(
   const char                        *pathname,
   size_t                             pathnamelen,

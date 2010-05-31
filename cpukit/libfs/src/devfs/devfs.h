@@ -50,22 +50,6 @@ extern int rtems_deviceio_errno(rtems_status_code code);
 
 extern uint32_t rtems_device_table_size;
 
-
-/**
- *  The following defines the device-only filesystem operating
- *  handlers.
- */
-
-extern rtems_filesystem_operations_table devFS_ops;
-
-/**
- *  The following defines the device-only filesystem operating
- *  handlers.
- */
-
-extern rtems_filesystem_file_handlers_r  devFS_file_handlers;
-
-
 /**
  *  This handler maps open operation to rtems_io_open.
  *  @param iop This is the RTEMS's internal representation of file.
@@ -257,14 +241,16 @@ extern int devFS_mknod(
  *  initializing it to a known state, and set device file operation
  *  handlers. After this, the device-only filesytem is ready for use
  *
- *  @param  temp_mt_entry
+ *  @param  mt_entry The filesystem mount table entry.
+ *  @param  data Filesystem specific data.
  *  @retval upon success, this routine returns 0; otherwise it returns
  *  -1 and errno is set to proper value. The only error is when malloc
  *  failed, and errno is set to NOMEM.
  */
 
 extern int devFS_initialize(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void                           *data
 );
 
 

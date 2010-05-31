@@ -99,16 +99,6 @@ typedef enum {
 extern const rtems_filesystem_operations_table rtems_ftpfs_ops;
 
 /**
- * Creates the mount point @a mount_point and mounts the FTP file system.
- *
- * If @a mount_point is @c NULL the default mount point
- * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
- *
- * It is mounted with read and write access.
- */
-rtems_status_code rtems_ftpfs_mount( const char *mount_point);
-
-/**
  * Returns in @a verbose if the verbose mode is enabled or disabled for the
  * file system at @a mount_point.
  *
@@ -160,15 +150,12 @@ rtems_status_code rtems_ftpfs_set_timeout(
 
 /**
  * Creates the default mount point @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT and
- * mounts the FTP file system.
+ * mounts the FTP file system. Do not call directly, use mount.xs
  *
  * It is mounted with read and write access.
- *
- * On success, zero is returned.  On error, -1 is returned.
- *
- * @deprecated Use rtems_ftpfs_mount() instead.
  */
-int rtems_bsdnet_initialize_ftp_filesystem( void);
+int rtems_ftpfs_initialize(rtems_filesystem_mount_table_entry_t *e,
+                           const void                           *d);
 
 #ifdef __cplusplus
 }

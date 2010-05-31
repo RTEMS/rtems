@@ -130,6 +130,8 @@ static int rtems_ftpfs_set_connection_timeout(
   return 0;
 }
 
+#if 0
+CCJ_REMOVE_MOUNT
 rtems_status_code rtems_ftpfs_mount(const char *mount_point)
 {
   int rv = 0;
@@ -156,6 +158,7 @@ rtems_status_code rtems_ftpfs_mount(const char *mount_point)
 
   return RTEMS_SUCCESSFUL;
 }
+#endif
 
 static rtems_status_code rtems_ftpfs_do_ioctl(
   const char *mount_point,
@@ -232,19 +235,6 @@ rtems_status_code rtems_ftpfs_set_timeout(
     RTEMS_FTPFS_IOCTL_SET_TIMEOUT,
     timeout
   );
-}
-
-int rtems_bsdnet_initialize_ftp_filesystem(void)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-
-  sc = rtems_ftpfs_mount(NULL);
-
-  if (sc == RTEMS_SUCCESSFUL) {
-    return 0;
-  } else {
-    return -1;
-  }
 }
 
 typedef void (*rtems_ftpfs_reply_parser)(
@@ -1232,8 +1222,9 @@ static rtems_filesystem_node_types_t rtems_ftpfs_node_type(
   return RTEMS_FILESYSTEM_MEMORY_FILE;
 }
 
-static int rtems_ftpfs_mount_me(
-  rtems_filesystem_mount_table_entry_t *e
+int rtems_ftpfs_initialize(
+  rtems_filesystem_mount_table_entry_t *e,
+  const void                           *d
 )
 {
   rtems_ftpfs_mount_entry *me = malloc(sizeof(rtems_ftpfs_mount_entry));
@@ -1337,7 +1328,7 @@ const rtems_filesystem_operations_table rtems_ftpfs_ops = {
   .chown_h = NULL,
   .freenod_h = rtems_ftpfs_free_node,
   .mount_h = NULL,
-  .fsmount_me_h = rtems_ftpfs_mount_me,
+  .fsmount_me_h = rtems_ftpfs_initialize,
   .unmount_h = NULL,
   .fsunmount_me_h = rtems_ftpfs_unmount_me,
   .utime_h = NULL,

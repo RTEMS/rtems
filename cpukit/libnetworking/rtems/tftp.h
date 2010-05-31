@@ -20,7 +20,8 @@
  * To open `/bootfiles/image' on `hostname' for reading:
  *         fd = open ("/TFTP/hostname/bootfiles/image", O_RDONLY);
  *
- * The `hostname' must be four dot-separated decimal values.
+ * The 'TFTP' is the mount path and the `hostname' must be four dot-separated
+ * decimal values.
  */
 
 #ifndef _RTEMS_TFTP_H
@@ -31,6 +32,11 @@ extern "C" {
 #endif
 
 #include <rtems/libio.h>
+
+/*
+ * Filesystem Mount table entry.
+ */
+int rtems_tftpfs_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
 
 /*
  * Filesystem initialization routine

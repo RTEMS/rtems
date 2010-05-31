@@ -76,7 +76,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_id.c shell/main_logoff.c shell/main_ln.c shell/main_ls.c \
     shell/main_mallocinfo.c shell/main_mdump.c shell/main_medit.c \
     shell/main_mfill.c shell/main_mkdir.c shell/main_mount.c \
-    shell/main_mount_msdos.c shell/main_mmove.c shell/main_msdosfmt.c \
+    shell/main_mmove.c shell/main_msdosfmt.c \
     shell/main_mv.c shell/main_mwdump.c shell/main_perioduse.c \
     shell/main_pwd.c shell/main_rm.c shell/main_rmdir.c shell/main_sleep.c \
     shell/main_stackuse.c shell/main_tty.c shell/main_umask.c \
@@ -95,14 +95,13 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/dd-misc.c shell/dd-position.c \
     shell/main_hexdump.c shell/hexdump-conv.c shell/hexdump-display.c \
     shell/hexdump-odsyntax.c shell/hexdump-parse.c shell/hexsyntax.c \
-    shell/main_time.c shell/main_mknod.c  shell/main_mount_rfs.c \
+    shell/main_time.c shell/main_mknod.c \
     shell/main_setenv.c shell/main_getenv.c shell/main_unsetenv.c \
     shell/main_mkrfs.c shell/main_debugrfs.c
 
 if LIBNETWORKING
-libshell_a_SOURCES += shell/main_mount_ftp.c shell/main_mount_tftp.c \
-    shell/main_ifconfig.c shell/main_route.c shell/main_netstats.c \
-    shell/main_mount_nfs.c
+libshell_a_SOURCES += \
+    shell/main_ifconfig.c shell/main_route.c shell/main_netstats.c
 endif
 endif
 

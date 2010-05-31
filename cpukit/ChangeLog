@@ -1,3 +1,53 @@
+2010-05-31	Chris Johns <chrisj@rtems.org>
+
+	* libcsupport/Makefile.am: Add mount-mgr.c.
+	* libcsupport/src/mount-mgr.c: New.
+	* include/rtems/fs.h: Added rtems_filesystem_location_mount.
+	* libcsupport/include/rtems/libio.h, libcsupport/src/mount.c: New
+	mount interface. It is similar to Linux.
+	* libcsupport/include/rtems/libio_.h: Remove the
+	init_fs_mount_table call.
+	* libcsupport/src/base_fs.c: Remove init_fs_mount_table_call. Use
+	the new mount call. Remove setting the root node in the global
+	pathloc. Mount does this now.
+	* libcsupport/src/privateenv.c: Remove the hack to set the root
+	mount table entry in the environment.
+	* libcsupport/src/unmount.cL Free the target string.
+	* libblock/src/bdpart-mount.c: New mount API.
+	
+	* libfs/src/devfs/devfs.h, libfs/src/devfs/devfs_init.c,
+	libfs/src/dosfs/dosfs.h, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_init.c, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_eval.c, libfs/src/imfs/imfs_init.c,
+	libfs/src/imfs/miniimfs_init.c,
+	libfs/src/nfsclient/src/librtemsNfs.h,
+	libfs/src/rfs/rtems-rfs-rtems.c, libfs/src/rfs/rtems-rfs.h,
+	libnetworking/lib/ftpfs.c, libnetworking/rtems/ftpfs.h,
+	libnetworking/rtems/tftp.h: New mount_h API.
+	
+	* libfs/src/devfs/devfs_eval.c: Local include of extern ops.
+	* libfs/src/nfsclient/src/nfs.c: New mount API. Removed the mount
+	me call and fixed the initialisation to happen when mounting.
+	
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Remove mount
+	filesystem files.
+
+	* libmisc/fsmount/fsmount.c, libmisc/fsmount/fsmount.h: Updated to
+	the new mount table values.
+	
+	* libmisc/shell/main_mount_ftp.c,
+	libmisc/shell/main_mount_msdos.c, libmisc/shell/main_mount_rfs.c,
+	libmisc/shell/main_mount_tftp.c: Removed.
+
+	* libmisc/shell/main_mount.c: Use the new mount API. Also access
+	the file system table for the file system types.
+
+	* libnetworking/lib/tftpDriver.c: Updated to the new mount
+	API. Fixed to allow mounting from any mount point. Also can now
+	have more than file system mounted.
+	
+	* sapi/include/confdefs.h: Add file system configuration support.
+
 2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1531/newlib:

@@ -92,17 +92,6 @@ extern rtems_shell_alias_t rtems_shell_EXIT_Alias;
 extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
 
 /*
- *  Externs for mount command helpers
- */
-extern rtems_shell_filesystems_t rtems_shell_Mount_RFS;
-extern rtems_shell_filesystems_t rtems_shell_Mount_MSDOS;
-extern rtems_shell_filesystems_t rtems_shell_Mount_TFTP;
-extern rtems_shell_filesystems_t rtems_shell_Mount_FTP;
-extern rtems_shell_filesystems_t rtems_shell_Mount_NFS;
-
-extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
-
-/*
  *  If we are configured to alias a command, then make sure the underlying
  *  command is configured.
  */
@@ -443,34 +432,6 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
     #endif
     NULL
   };
-
-  /*
-   * The mount command's support file system types.
-   */
-  #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
-       !defined(CONFIGURE_SHELL_COMMAND_NO_MOUNT)) || \
-       defined(CONFIGURE_SHELL_COMMAND_MOUNT)
-    rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[] = {
-      #if defined(CONFIGURE_SHELL_MOUNT_RFS)
-        &rtems_shell_Mount_RFS,
-      #endif
-      #if defined(CONFIGURE_SHELL_MOUNT_MSDOS)
-        &rtems_shell_Mount_MSDOS,
-      #endif
-      #if RTEMS_NETWORKING
-        #if defined(CONFIGURE_SHELL_MOUNT_TFTP)
-          &rtems_shell_Mount_TFTP,
-        #endif
-        #if defined(CONFIGURE_SHELL_MOUNT_FTP)
-          &rtems_shell_Mount_FTP,
-        #endif
-        #if defined(CONFIGURE_SHELL_MOUNT_NFS)
-          &rtems_shell_Mount_NFS,
-        #endif
-      #endif
-      NULL
-    };
-  #endif
 
 #endif
 

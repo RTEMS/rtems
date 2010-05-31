@@ -70,6 +70,10 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* RPCIO driver interface.
  * If you need RPCIO for other purposes than NFS
  * you may want to include <rpcio.h>
@@ -82,7 +86,9 @@
  */
 extern rtems_task_priority rpciodPriority;
 
-/* Initialize the driver
+/* Initialize the driver.
+ *
+ * Note, called in nfsfs initialise when mount is called.
  *
  * RETURNS: 0 on success, -1 on failure
  */
@@ -102,6 +108,8 @@ rpcUdpCleanup(void);
  *
  * NOTE: The RPCIO driver must have been initialized prior to
  *       calling this.
+ *
+ * Note, called in nfsfs initialise when mount is called with defaults.
  *
  * ARGS:	depth of the small and big
  * 			transaction pools, i.e. how
@@ -131,22 +139,12 @@ nfsCleanup(void);
 int
 nfsMountsShow(FILE *f);
 
-/* convenience wrapper
- *
- * NOTE: this routine calls NON-REENTRANT
- *       gethostbyname() if the host is
- *       not in 'dot' notation.
+/*
+ * Filesystem mount table mount handler. Do not call, use the mount call.
  */
-int
-nfsMount(char *uidhost, char *path, char *mntpoint);
-
-/* Alternatively, a pointer to the filesystem operations
- * table can be supplied to the native RTEMS (NON-POSIX!)
- * 'mount()' call.
- * Supply a "<host.in.ip.dot.notation>:<path>" string
- * for 'device' argument to 'mount()'.
- */
-extern struct _rtems_filesystem_operations_table nfs_fs_ops;
+int 
+rtems_nfsfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
+                       const void                           *data);
 
 /* A utility routine to find the path leading to a
  * rtems_filesystem_location_info_t node.
@@ -174,4 +172,9 @@ nfsSetTimeout(uint32_t timeout_ms);
 /* Read current timeout (in milliseconds) */
 uint32_t
 nfsGetTimeout(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

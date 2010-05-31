@@ -90,24 +90,24 @@ typedef enum {
  */
 typedef struct {
   /**
-   * Device file path.
+   * Source for the mount.
    */
-  const char *dev;
+  const char *source;
 
   /**
-   * Mount point path.
+   * Target for the mount.
    */
-  const char *mount_point;
+  const char *target;
 
   /**
    * File system operations.
    */
-  const rtems_filesystem_operations_table *fs_ops;
+  const char *type;
 
   /**
    * File system mount options.
    */
-  rtems_filesystem_options_t mount_options;
+  rtems_filesystem_options_t options;
 
   /**
    * Report @ref rtems_fstab_conditions "condition flags".
@@ -128,7 +128,7 @@ typedef struct {
  *
  * @see rtems_fsmount().
  */
-int rtems_fsmount_create_mount_point( const char *mount_point);
+int rtems_fsmount_create_mount_point(const char *mount_point);
 
 /**
  * Mounts the file systems listed in the file system mount table @a fstab of
@@ -160,23 +160,22 @@ int rtems_fsmount_create_mount_point( const char *mount_point);
  *
  * #include <rtems.h>
  * #include <rtems/bdpart.h>
- * #include <rtems/dosfs.h>
  * #include <rtems/error.h>
  * #include <rtems/fsmount.h>
  *
  * static const rtems_fstab_entry fstab [] = {
  *   {
- *     .dev = "/dev/sd-card-a",
- *     .mount_point = "/mnt",
- *     .fs_ops = &msdos_ops,
- *     .mount_options = RTEMS_FILESYSTEM_READ_WRITE,
+ *     .source = "/dev/sd-card-a",
+ *     .target = "/mnt",
+ *     .type = "dosfs",
+ *     .options = RTEMS_FILESYSTEM_READ_WRITE,
  *     .report_reasons = RTEMS_FSTAB_ANY,
  *     .abort_reasons = RTEMS_FSTAB_OK
  *   }, {
- *     .dev = "/dev/sd-card-a1",
- *     .mount_point = "/mnt",
- *     .fs_ops = &msdos_ops,
- *     .mount_options = RTEMS_FILESYSTEM_READ_WRITE,
+ *     .source = "/dev/sd-card-a1",
+ *     .target = "/mnt",
+ *     .type = "dosfs",
+ *     .options = RTEMS_FILESYSTEM_READ_WRITE,
  *     .report_reasons = RTEMS_FSTAB_ANY,
  *     .abort_reasons = RTEMS_FSTAB_NONE
  *   }

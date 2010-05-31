@@ -271,8 +271,6 @@ int rtems_filesystem_prefix_separators(
 
 void rtems_filesystem_initialize(void);
 
-int init_fs_mount_table(void);
-
 #ifdef __cplusplus
 }
 #endif

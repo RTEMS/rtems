@@ -36,7 +36,6 @@
 void rtems_filesystem_initialize( void )
 {
   int                                   status;
-  rtems_filesystem_mount_table_entry_t *entry;
   const rtems_filesystem_mount_table_t *mt;
   rtems_filesystem_location_info_t      loc;
 
@@ -45,9 +44,6 @@ void rtems_filesystem_initialize( void )
    */
 
   rtems_filesystem_umask = 022;
-
-
-  init_fs_mount_table();
 
   /*
    *  mount the first filesystem.
@@ -58,8 +54,7 @@ void rtems_filesystem_initialize( void )
 
   mt = &rtems_filesystem_mount_table[0];
 
-  status = mount(
-     &entry, mt->fs_ops, mt->fsoptions, mt->device, mt->mount_point );
+  status = mount( mt->device, mt->mount_point, mt->type, mt->fsoptions, NULL );
 
   if ( status == -1 )
     rtems_fatal_error_occurred( 0xABCD0002 );
@@ -86,7 +81,6 @@ void rtems_filesystem_initialize( void )
    *
    *       Till Straumann, 10/25/2002
    */
-  rtems_filesystem_root        = entry->mt_fs_root;
   /* Clone the root pathloc */
   rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);
   rtems_filesystem_root        = loc;

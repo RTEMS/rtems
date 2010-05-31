@@ -1,5 +1,5 @@
 /*
- *  Instantatiate a private user environment for the calling thread.
+ *  Instantiate a private user environment for the calling thread.
  *
  *  Submitted by: fernando.ruiz@ctv.es (correo@fernando-ruiz.com)
  *
@@ -23,12 +23,6 @@
 #include <rtems/chain.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
-
-extern rtems_chain_control rtems_filesystem_mount_table_control;
-
-#define THE_ROOT_FS_LOC \
-	(((rtems_filesystem_mount_table_entry_t*)\
-	   rtems_filesystem_mount_table_control.first)->mt_fs_root)
 
 /* cleanup a user environment
  * NOTE: this must be called with
@@ -82,13 +76,11 @@ rtems_status_code rtems_libio_set_private_env(void) {
   *rtems_current_user_env = rtems_global_user_env; /* get the global values*/
   rtems_current_user_env->task_id=task_id;         /* mark the local values*/
 
-  /* get a clean root */
-  rtems_filesystem_root    = THE_ROOT_FS_LOC;
-
   /* Clone the pathlocs. In contrast to most other
    * code we must _not_ free the original locs because
    * what we are trying to do here is forking off
-   * clones.
+   * clones. The reason is a pathloc can be allocated by the
+   * file system and needs to be freed when deleting the environment.
    */
 
   rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);

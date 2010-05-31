@@ -59,7 +59,8 @@ rtems_filesystem_file_handlers_r devFS_file_handlers =
 
 
 int devFS_initialize(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry
+  rtems_filesystem_mount_table_entry_t *temp_mt_entry,
+  const void                           *data
 )
 {
   rtems_device_name_t  *device_name_table;

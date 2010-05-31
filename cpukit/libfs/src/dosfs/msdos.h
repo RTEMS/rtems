@@ -223,8 +223,6 @@ typedef enum msdos_token_types_e
 #define MSDOS_DPS512_NUM    16
 
 /* Prototypes */
-int msdos_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
-
 int msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
 
 int msdos_eval_path(

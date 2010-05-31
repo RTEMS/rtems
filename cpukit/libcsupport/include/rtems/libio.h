@@ -209,23 +209,24 @@ typedef int (*rtems_filesystem_freenode_t)(
 );
 
 typedef int (* rtems_filesystem_mount_t ) (
-   rtems_filesystem_mount_table_entry_t *mt_entry     /* in */
+   rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
 );
 
 typedef int (* rtems_filesystem_fsmount_me_t )(
-   rtems_filesystem_mount_table_entry_t *mt_entry
+  rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */
+  const void                           *data          /* IN */
 );
 
 typedef int (* rtems_filesystem_unmount_t ) (
-   rtems_filesystem_mount_table_entry_t *mt_entry     /* in */
+  rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
 );
 
 typedef int (* rtems_filesystem_fsunmount_me_t ) (
-   rtems_filesystem_mount_table_entry_t *mt_entry    /* in */
+   rtems_filesystem_mount_table_entry_t *mt_entry    /* IN */
 );
 
 typedef rtems_filesystem_node_types_t (* rtems_filesystem_node_type_t) (
-  rtems_filesystem_location_info_t    *pathloc      /* in */
+  rtems_filesystem_location_info_t    *pathloc      /* IN */
 );
 
 typedef int (* rtems_filesystem_utime_t)(
@@ -291,6 +292,62 @@ struct _rtems_filesystem_operations_table {
     rtems_filesystem_statvfs_t       statvfs_h;
 };
 
+/*
+ * File system table used by mount to manage file systems.
+ */
+typedef struct _rtems_filesystem_table {
+  const char                    *type;
+  rtems_filesystem_fsmount_me_t  mount_h;
+} rtems_filesystem_table_t;
+
+/*
+ * File system table runtime loaded nodes.
+ */
+typedef struct _rtems_filesystem_table_node {
+  rtems_chain_node         node;
+  rtems_filesystem_table_t entry;
+} rtems_filesystem_table_node_t;
+
+/*
+ * Get the first entry in the filesystem table.
+ */
+const rtems_filesystem_table_t* rtems_filesystem_table_first( void );
+
+/*
+ * Get the next entry in the file system table.
+ */
+const rtems_filesystem_table_t* 
+rtems_filesystem_table_next( rtems_filesystem_table_t *entry );
+
+/*
+ * Get the first entry in the mount table.
+ */
+rtems_filesystem_mount_table_entry_t*
+rtems_filesystem_mounts_first( void );
+
+/*
+ * Get the next entry in the mount table.
+ */
+rtems_filesystem_mount_table_entry_t*
+rtems_filesystem_mounts_next( rtems_filesystem_mount_table_entry_t *entry );
+
+/*
+ * Register a file system.
+ */
+int
+rtems_filesystem_register(
+  const char                    *type,
+  rtems_filesystem_fsmount_me_t  mount_h
+);
+
+/*
+ * Unregister a file system.
+ */
+int
+rtems_filesystem_unregister(
+  const char *type
+);
+
 #if 0
 /* Now in exec/include/rtems/fs.h */
 
@@ -313,19 +370,24 @@ struct rtems_filesystem_location_info_tt
  */
 
 typedef struct {
-  int    link_max;
-  int    max_canon;
-  int    max_input;
-  int    name_max;
-  int    path_max;
-  int    pipe_buf;
-  int    posix_async_io;
-  int    posix_chown_restrictions;
-  int    posix_no_trunc;
-  int    posix_prio_io;
-  int    posix_sync_io;
-  int    posix_vdisable;
+  int    link_max;                 /* count */
+  int    max_canon;                /* max formatted input line size */
+  int    max_input;                /* max input line size */
+  int    name_max;                 /* max name length */
+  int    path_max;                 /* max path */
+  int    pipe_buf;                 /* pipe buffer size */
+  int    posix_async_io;           /* async IO supported on fs, 0=no, 1=yes */
+  int    posix_chown_restrictions; /* can chown: 0=no, 1=yes */
+  int    posix_no_trunc;           /* error on names > max name, 0=no, 1=yes */
+  int    posix_prio_io;            /* priority IO, 0=no, 1=yes */
+  int    posix_sync_io;            /* file can be sync'ed, 0=no, 1=yes */
+  int    posix_vdisable;           /* special char processing, 0=no, 1=yes */
 } rtems_filesystem_limits_and_options_t;
+
+/*
+ * Default pathconf settings. Override in a filesystem.
+ */
+extern const rtems_filesystem_limits_and_options_t rtems_filesystem_default_pathconf;
 
 /*
  * Structure for a mount table entry.
@@ -341,6 +403,16 @@ struct rtems_filesystem_mount_table_entry_tt {
   rtems_filesystem_limits_and_options_t  pathconf_limits_and_options;
 
   /*
+   * The target or mount point of the file system.
+   */
+  const char                            *target;
+
+  /*
+   * The type of filesystem or the name of the filesystem.
+   */
+  const char                            *type;
+
+  /*
    *  When someone adds a mounted filesystem on a real device,
    *  this will need to be used.
    *
@@ -349,6 +421,26 @@ struct rtems_filesystem_mount_table_entry_tt {
    */
   char                                  *dev;
 };
+
+/**
+ * The pathconf setting for a file system.
+ */
+#define rtems_filesystem_pathconf(_mte) ((_mte)->pathconf_limits_and_options)
+
+/**
+ * The type of file system. Its name.
+ */
+#define rtems_filesystem_type(_mte) ((_mte)->type)
+
+/**
+ * The mount point of a file system.
+ */
+#define rtems_filesystem_mount_point(_mte) ((_mte)->target)
+
+/**
+ * The device entry of a file system.
+ */
+#define rtems_filesystem_mount_device(_mte) ((_mte)->dev)
 
 /*
  *  Valid RTEMS file systems options
@@ -637,11 +729,11 @@ int unmount(
 );
 
 int mount(
-  rtems_filesystem_mount_table_entry_t    **mt_entry,
-  const rtems_filesystem_operations_table  *fs_ops,
-  rtems_filesystem_options_t                fsoptions,
-  const char                               *device,
-  const char                               *mount_point
+  const char                 *source,
+  const char                 *target,
+  const char                 *filesystemtype,
+  rtems_filesystem_options_t options,
+  const void                 *data
 );
 
 /*
@@ -649,7 +741,7 @@ int mount(
  */
 
 typedef struct {
-  const rtems_filesystem_operations_table *fs_ops;
+  const char                              *type;
   rtems_filesystem_options_t               fsoptions;
   const char                              *device;
   const char                              *mount_point;

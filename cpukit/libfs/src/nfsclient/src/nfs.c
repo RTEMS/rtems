@@ -4,6 +4,8 @@
 
 /* Author: Till Straumann <strauman@slac.stanford.edu> 2002 */
 
+/* Hacked on by others. */
+
 /*
  * Authorship
  * ----------
@@ -1193,8 +1195,7 @@ updateAttr(NfsNode node, int force)
 }
 
 /*
- * IP address helper. Note that we avoid
- * gethostbyname() since it's not reentrant.
+ * IP address helper.
  *
  * initialize a sockaddr_in from a
  * [<uid>'.'<gid>'@']<host>':'<path>" string and let
@@ -1211,7 +1212,8 @@ buildIpAddr(u_long *puid, u_long *pgid,
 			char **pHost, struct sockaddr_in *psa,
 			char **pPath)
 {
-char	host[30];
+struct hostent *h;
+char	host[64];
 char	*chpt = *pPath;
 char	*path;
 int		len;
@@ -1238,7 +1240,7 @@ int		len;
 
 	/* split the device name which is in the form
 	 *
-	 * <host_ip> ':' <path>
+	 * <host> ':' <path>
 	 *
 	 * into its components using a local buffer
 	 */
@@ -1254,10 +1256,18 @@ int		len;
 	strncpy(host, chpt, len);
 	host[len]=0;
 
-	if ( ! inet_pton(AF_INET, host, &psa->sin_addr) ) {
-		errno = ENXIO;
+  /* BEGIN OF NON-THREAD SAFE REGION */
+
+	h = gethostbyname(host);
+
+	if ( !h ) {
+		errno = EINVAL;
 		return -1;
 	}
+
+	memcpy(&psa->sin_addr, h->h_addr, sizeof (struct in_addr));
+  
+  /* END OF NON-THREAD SAFE REGION */
 
 	psa->sin_family = AF_INET;
 	psa->sin_port   = 0;
@@ -1898,9 +1908,9 @@ struct rtems_filesystem_mount_table_entry_tt {
 #endif
 
 
-/* This op is called as the last step of mounting this FS */
-STATIC int nfs_fsmount_me(
-	rtems_filesystem_mount_table_entry_t *mt_entry
+int rtems_nfsfs_initialize(
+	rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void                           *data
 )
 {
 char				*host;
@@ -1917,10 +1927,19 @@ RpcUdpServer		nfsServer = 0;
 int					e         = -1;
 char				*path     = mt_entry->dev;
 
+  if (rpcUdpInit () < 0) {
+    fprintf (stderr, "error: initialising RPC\n");
+    return -1;
+  }
+  
+	nfsInit(0, 0);
 
+#if 0
+	printf("Trying to mount %s on %s\n",path,mntpoint);
+#endif
+  
 	if ( buildIpAddr(&uid, &gid, &host, &saddr, &path) )
 		return -1;
-
 
 #ifdef NFS_V2_PORT
 	/* if the portmapper fails, retry a fixed port */
@@ -2460,7 +2479,7 @@ struct _rtems_filesystem_operations_table nfs_fs_ops = {
 		nfs_chown,			/* OPTIONAL; may be NULL */
 		nfs_freenode,		/* OPTIONAL; may be NULL; (release node_access) */
 		nfs_mount,			/* OPTIONAL; may be NULL */
-		nfs_fsmount_me,		/* OPTIONAL; may be NULL -- but this makes NO SENSE */
+		rtems_nfsfs_initialize,		/* OPTIONAL; may be NULL -- not used anymore */
 		nfs_unmount,		/* OPTIONAL; may be NULL */
 		nfs_fsunmount_me,	/* OPTIONAL; may be NULL */
 		nfs_utime,			/* OPTIONAL; may be NULL */
@@ -3228,6 +3247,8 @@ Nfs		nfs;
 	return 0;
 }
 
+#if 0
+CCJ_REMOVE_MOUNT
 /* convenience wrapper
  *
  * NOTE: this routine calls NON-REENTRANT
@@ -3237,7 +3258,6 @@ Nfs		nfs;
 int
 nfsMount(char *uidhost, char *path, char *mntpoint)
 {
-rtems_filesystem_mount_table_entry_t	*mtab;
 struct stat								st;
 int										devl;
 char									*host;
@@ -3310,11 +3330,11 @@ char									*dev =  0;
 
 	printf("Trying to mount %s on %s\n",dev,mntpoint);
 
-	if (mount(&mtab,
-			  &nfs_fs_ops,
-			  RTEMS_FILESYSTEM_READ_WRITE,
-			  dev,
-			  mntpoint)) {
+	if (mount(dev,
+			  mntpoint,
+			  "nfs",
+ 			  RTEMS_FILESYSTEM_READ_WRITE,
+ 			  NULL)) {
 		perror("nfsMount - mount");
 		goto cleanup;
 	}
@@ -3325,6 +3345,7 @@ cleanup:
 	free(dev);
 	return rval;
 }
+#endif
 
 /* HERE COMES A REALLY UGLY HACK */
 

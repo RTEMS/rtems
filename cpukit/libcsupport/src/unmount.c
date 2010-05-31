@@ -213,6 +213,7 @@ int unmount(
    */
 
   rtems_filesystem_freenode( fs_mount_loc );
+  free( (void*) mt_entry->target );
   free( mt_entry );
 
   return 0;

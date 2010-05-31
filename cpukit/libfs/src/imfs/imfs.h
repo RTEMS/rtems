@@ -255,11 +255,13 @@ extern const rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
  */
 
 extern int IMFS_initialize(
-   rtems_filesystem_mount_table_entry_t *mt_entry
+   rtems_filesystem_mount_table_entry_t *mt_entry,
+   const void                           *data
 );
 
 extern int miniIMFS_initialize(
-   rtems_filesystem_mount_table_entry_t *mt_entry
+   rtems_filesystem_mount_table_entry_t *mt_entry,
+   const void                           *data
 );
 
 extern int IMFS_initialize_support(

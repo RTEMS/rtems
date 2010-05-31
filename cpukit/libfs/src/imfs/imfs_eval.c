@@ -490,7 +490,7 @@ int IMFS_eval_path(
   size_t                             pathnamelen,  /* IN     */
   int                                flags,        /* IN     */
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
-)
+                   )
 {
   int                                 i = 0;
   int                                 len;
@@ -531,40 +531,40 @@ int IMFS_eval_path(
     if ( type != IMFS_NO_MORE_PATH )
       if ( node->type == IMFS_DIRECTORY )
         if ( !IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_SEARCH ) )
-           rtems_set_errno_and_return_minus_one( EACCES );
+          rtems_set_errno_and_return_minus_one( EACCES );
 
     node = pathloc->node_access;
 
     switch( type ) {
       case IMFS_UP_DIR:
-       /*
-        *  Am I at the root of all filesystems? (chroot'ed?)
-	*/
+        /*
+         *  Am I at the root of all filesystems? (chroot'ed?)
+         */
 
-       if ( pathloc->node_access == rtems_filesystem_root.node_access )
-         break;       /* Throw out the .. in this case */
+        if ( pathloc->node_access == rtems_filesystem_root.node_access )
+          break;       /* Throw out the .. in this case */
 
-	/*
-	 *  Am I at the root of this mounted filesystem?
-	 */
+        /*
+         *  Am I at the root of this mounted filesystem?
+         */
 
         if (pathloc->node_access ==
             pathloc->mt_entry->mt_fs_root.node_access) {
 
           /*
-	   *  Am I at the root of all filesystems?
-	   */
+           *  Am I at the root of all filesystems?
+           */
 
           if ( pathloc->node_access == rtems_filesystem_root.node_access ) {
             break;       /* Throw out the .. in this case */
-	  } else {
+          } else {
             newloc = pathloc->mt_entry->mt_point_node;
             *pathloc = newloc;
             return (*pathloc->ops->evalpath_h)(&(pathname[i-len]),
                                                pathnamelen+len,
                                                flags,pathloc);
-	  }
-	} else {
+          }
+        } else {
 
           if ( !node->Parent )
             rtems_set_errno_and_return_minus_one( ENOENT );
@@ -572,17 +572,17 @@ int IMFS_eval_path(
           node = node->Parent;
           pathloc->node_access = node;
 
-	}
+        }
 
         pathloc->node_access = node;
         break;
 
       case IMFS_NAME:
-	/*
-	 *  If we are at a link follow it.
-	 */
+        /*
+         *  If we are at a link follow it.
+         */
 
-	if ( node->type == IMFS_HARD_LINK ) {
+        if ( node->type == IMFS_HARD_LINK ) {
 
           IMFS_evaluate_hard_link( pathloc, 0 );
 
@@ -590,26 +590,26 @@ int IMFS_eval_path(
           if ( !node )
             rtems_set_errno_and_return_minus_one( ENOTDIR );
 
-	} else if ( node->type == IMFS_SYM_LINK ) {
+        } else if ( node->type == IMFS_SYM_LINK ) {
 
           result = IMFS_evaluate_sym_link( pathloc, 0 );
 
           node = pathloc->node_access;
           if ( result == -1 )
             return -1;
-	}
+        }
 
-       /*
-        *  Only a directory can be decended into.
-        */
+        /*
+         *  Only a directory can be decended into.
+         */
 
-       if ( node->type != IMFS_DIRECTORY )
+        if ( node->type != IMFS_DIRECTORY )
           rtems_set_errno_and_return_minus_one( ENOTDIR );
 
-	/*
-	 *  If we are at a node that is a mount point. Set loc to the
-	 *  new fs root node and let them finish evaluating the path.
-	 */
+        /*
+         *  If we are at a node that is a mount point. Set loc to the
+         *  new fs root node and let them finish evaluating the path.
+         */
 
         if ( node->info.directory.mt_fs != NULL ) {
           newloc   = node->info.directory.mt_fs->mt_fs_root;
@@ -617,19 +617,19 @@ int IMFS_eval_path(
           return (*pathloc->ops->evalpath_h)( &pathname[i-len],
                                               pathnamelen+len,
                                               flags, pathloc );
-	}
+        }
 
-	/*
-	 *  Otherwise find the token name in the present location.
-	 */
+        /*
+         *  Otherwise find the token name in the present location.
+         */
 
         node = IMFS_find_match_in_dir( node, token );
         if ( !node )
           rtems_set_errno_and_return_minus_one( ENOENT );
 
-	/*
-	 *  Set the node access to the point we have found.
-	 */
+        /*
+         *  Set the node access to the point we have found.
+         */
 
         pathloc->node_access = node;
         break;

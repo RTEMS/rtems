@@ -16,6 +16,7 @@
 #endif
 
 #include <rtems/libio_.h>
+#include "dosfs.h"
 #include "msdos.h"
 
 const rtems_filesystem_operations_table  msdos_ops = {
@@ -28,7 +29,7 @@ const rtems_filesystem_operations_table  msdos_ops = {
   .chown_h        =  NULL,
   .freenod_h      =  msdos_free_node_info,
   .mount_h        =  NULL,
-  .fsmount_me_h   =  msdos_initialize,
+  .fsmount_me_h   =  rtems_dosfs_initialize,
   .unmount_h      =  NULL,
   .fsunmount_me_h =  msdos_shut_down,
   .utime_h        =  NULL,
@@ -50,11 +51,12 @@ const rtems_filesystem_operations_table  msdos_ops = {
  *     RC_OK on success, or -1 if error occured (errno set apropriately).
  *
  */
-int msdos_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry)
+int rtems_dosfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
+                           const void                           *data)
 {
     int rc;
 
-    rc = msdos_initialize_support(temp_mt_entry,
+    rc = msdos_initialize_support(mt_entry,
                                   &msdos_ops,
                                   &msdos_file_handlers,
                                   &msdos_dir_handlers);

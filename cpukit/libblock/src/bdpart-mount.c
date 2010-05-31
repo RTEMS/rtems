@@ -29,7 +29,6 @@
 
 #include <rtems.h>
 #include <rtems/bdpart.h>
-#include <rtems/dosfs.h>
 #include <rtems/fsmount.h>
 
 rtems_status_code rtems_bdpart_mount(
@@ -99,11 +98,11 @@ rtems_status_code rtems_bdpart_mount(
 
     /* Mount */
     rv = mount(
-      NULL,
-      &msdos_ops,
-      0,
       logical_disk_name,
-      mount_point
+      mount_point,
+      "msdos",
+      0,
+      NULL
     );
     if (rv != 0) {
       rmdir( mount_point);

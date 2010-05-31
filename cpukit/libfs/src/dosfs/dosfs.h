@@ -25,7 +25,8 @@
 extern "C" {
 #endif
 
-extern rtems_filesystem_operations_table  msdos_ops;
+int rtems_dosfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
+                           const void                           *data);
 
 #define MSDOS_FMT_FATANY 0
 #define MSDOS_FMT_FAT12  1

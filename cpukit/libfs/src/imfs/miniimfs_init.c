@@ -59,7 +59,8 @@ const rtems_filesystem_operations_table  miniIMFS_ops = {
  */
 
 int miniIMFS_initialize(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry
+  rtems_filesystem_mount_table_entry_t *temp_mt_entry,
+  const void                           *data
 )
 {
     return IMFS_initialize_support(

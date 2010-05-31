@@ -120,7 +120,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
     node_len = 0;
     while (!rtems_filesystem_is_separator (*path) &&
            (*path != '\0') && pathlen &&
-           (node_len + 1 < rtems_rfs_fs_max_name (fs)))
+           ((node_len + 1) < rtems_rfs_fs_max_name (fs)))
     {
       path++;
       pathlen--;
@@ -1214,7 +1214,8 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_link_handlers =
  * Forward decl for the ops table.
  */
 
-int rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t *mt_entry);
+int rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t *mt_entry,
+                                const void                           *data);
 int rtems_rfs_rtems_shutdown (rtems_filesystem_mount_table_entry_t *mt_entry);
 
 /**
@@ -1247,7 +1248,8 @@ const rtems_filesystem_operations_table rtems_rfs_ops =
  */
 
 int
-rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry)
+rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
+                            const void*                           data)
 {
   rtems_rfs_rtems_private* rtems;
   rtems_rfs_file_system*   fs;

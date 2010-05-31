@@ -52,6 +52,11 @@ struct rtems_filesystem_location_info_tt
    rtems_filesystem_mount_table_entry_t    *mt_entry;
 };
 
+/*
+ * Return the mount table entry for a path location.
+ */
+#define rtems_filesystem_location_mount(_pl) ((_pl)->mt_entry)
+
 #ifdef __cplusplus
 }
 #endif
