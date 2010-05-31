@@ -101,26 +101,27 @@ rtems_filesystem_limits_and_options_t rtems_tfs_limits_and_options = {
 };
 
 static int rtems_tfs_mount_me(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void                           *data
 )
 {
   rtems_status_code  sc;
 
-  temp_mt_entry->mt_fs_root.handlers = &rtems_tfs_handlers;
-  temp_mt_entry->mt_fs_root.ops      = &rtems_tfs_ops;
+  mt_entry->mt_fs_root.handlers = &rtems_tfs_handlers;
+  mt_entry->mt_fs_root.ops      = &rtems_tfs_ops;
 
   /* We have no TFS specific data to maintain.  This filesystem
    * may only be mounted once. And we maintain no real filesystem
    * nodes, so there is no real root.
    */
 
-  temp_mt_entry->fs_info                = NULL;
-  temp_mt_entry->mt_fs_root.node_access = ROOT_NODE_ACCESS;
+  mt_entry->fs_info                = NULL;
+  mt_entry->mt_fs_root.node_access = ROOT_NODE_ACCESS;
 
   /* These need to be looked at for full POSIX semantics.
    */
 
-  temp_mt_entry->pathconf_limits_and_options = rtems_tfs_limits_and_options;
+  mt_entry->pathconf_limits_and_options = rtems_tfs_limits_and_options;
 
 
   /*  Now allocate a semaphore for mutual exclusion.
@@ -150,8 +151,7 @@ int rtems_initialize_tfs_filesystem(
   const char *path
 )
 {
-  int                                   status;
-  rtems_filesystem_mount_table_entry_t *entry;
+  int status;
 
   if (!path) {
     printk( "TFS: No mount point specified\n" );
@@ -166,10 +166,12 @@ int rtems_initialize_tfs_filesystem(
     return status;
   }
 
-  status = mount( &entry, &rtems_tfs_ops, RTEMS_FILESYSTEM_READ_WRITE,
-            NULL, TFS_PATHNAME_PREFIX);
+  if (rtems_filesystem_register( "tfs", rtems_tfs_mount_me ) < 0)
+    return -1;
+  
+  status = mount( "umon", TFS_PATHNAME_PREFIX, "tfs", RTEMS_FILESYSTEM_READ_WRITE, NULL);
 
-  if (status) {
+  if (status < 0) {
     printk( "TFS: Unable to mount on %s\n", TFS_PATHNAME_PREFIX );
     perror("TFS mount failed");
   }
