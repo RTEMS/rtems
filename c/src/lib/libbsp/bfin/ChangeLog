@@ -1,3 +1,7 @@
+2010-05-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* shared/start/start.S: Pass 0/NULL for argc/argv.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* shared/start/start.S: Update for boot_card command line change.

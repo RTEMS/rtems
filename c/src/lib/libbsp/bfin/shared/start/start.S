@@ -4,10 +4,6 @@
 
 #include <bspopts.h>
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning Please check and remove these warnings.
-
 #ifndef LO
 #define LO(con32) ((con32) & 0xFFFF)
 #endif
@@ -90,6 +86,9 @@ __start:
     loop1:     b[p0] = r0;
     loop2:  p0 +=1;
 
+    /* call boot_card( 0, 0 ) */
+    r0 = 0;
+    r1 = 0;
     p0.l = _boot_card;
     p0.h = _boot_card;
 
