@@ -186,7 +186,8 @@ xdrmbuf_create(XDR *xdrs, struct mbuf *mbuf, enum xdr_op op)
 MBPrivate mbp;
 
 	xdrs->x_op = op;
-	assert( mbp = (MBPrivate)my_malloc(sizeof(*mbp)) );
+	mbp = (MBPrivate)my_malloc(sizeof(*mbp));
+	assert( mbp );
 	xdrs->x_base  = (caddr_t) mbp;
 
 	mbp->mchain   = mbuf;
