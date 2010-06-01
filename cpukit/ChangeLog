@@ -1,5 +1,6 @@
 2010-06-01 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/print-ls.c: Remove (long) cast of st_ino.
 	* libcsupport/include/rtems/libio.h, libcsupport/src/mount-mgr.c:
 	Add missing 'const'.
 	* libfs/src/nfsclient/src/xdr_mbuf.c: Warning removal.
