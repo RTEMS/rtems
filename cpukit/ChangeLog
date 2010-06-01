@@ -52,6 +52,10 @@
 	
 	* sapi/include/confdefs.h: Add file system configuration support.
 
+2010-05-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/nfsclient/src/rpcio.c: Warning removal.
+
 2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1531/newlib:
