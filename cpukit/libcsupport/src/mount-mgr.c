@@ -65,7 +65,7 @@ rtems_filesystem_table_first(
  */
 const rtems_filesystem_table_t*
 rtems_filesystem_table_next(
-  rtems_filesystem_table_t *entry
+  const rtems_filesystem_table_t *entry
 )
 {
   const rtems_filesystem_table_t* fs;

@@ -314,7 +314,7 @@ const rtems_filesystem_table_t* rtems_filesystem_table_first( void );
  * Get the next entry in the file system table.
  */
 const rtems_filesystem_table_t* 
-rtems_filesystem_table_next( rtems_filesystem_table_t *entry );
+rtems_filesystem_table_next( const rtems_filesystem_table_t *entry );
 
 /*
  * Get the first entry in the mount table.

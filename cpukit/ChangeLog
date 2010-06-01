@@ -1,5 +1,7 @@
 2010-06-01 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/rtems/libio.h, libcsupport/src/mount-mgr.c:
+	Add missing 'const'.
 	* libfs/src/nfsclient/src/xdr_mbuf.c: Warning removal.
 
 2010-05-31	Joel Sherrill <joel.sherrill@oarcorp.com>
