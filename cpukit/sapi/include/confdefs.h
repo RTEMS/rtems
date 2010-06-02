@@ -72,7 +72,6 @@ extern rtems_configuration_table        Configuration;
   #define CONFIGURE_NEWLIB_EXTENSION 0
 #endif
 
-
 #include <rtems/libio.h>
 
 #ifdef CONFIGURE_INIT
@@ -230,12 +229,16 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   /*
    * If disabling the file system undef everything. If DEVFS as the base
    * filesystem undefine all other filesystems because you cannot mount other
-   * filesystems.
+   * filesystems. Same for miniIMFS.
    */
   #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM) || \
-      defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+      defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM) || \
+      defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
     #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
       #undef CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
+      #undef CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+    #elif defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+      #undef CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
     #endif
     #undef CONFIGURE_FILESYSTEM_miniIMFS
     #undef CONFIGURE_FILESYSTEM_IMFS
@@ -251,9 +254,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    * If the base filesystem is DEVFS define it else define IMFS.
    * We will have either DEVFS or IMFS defined after this.
    */
-  #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM) && \
-      !defined(CONFIGURE_FILESYSTEM_DEVFS)
+  #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
     #define CONFIGURE_FILESYSTEM_DEVFS
+  #elif defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
+    #define CONFIGURE_FILESYSTEM_miniIMFS
   #elif !defined(CONFIGURE_FILESYSTEM_IMFS)
     #define CONFIGURE_FILESYSTEM_IMFS
   #endif
@@ -275,10 +279,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK \
                     IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK
 #endif
-
-#ifdef CONFIGURE_INIT
-  int imfs_rq_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
-#endif /* CONFIGURE_INIT */
 
 /**
  *  This defines the miniIMFS file system table entry.
@@ -357,7 +357,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   /*
    *  DEVFS variables.
    */
-  #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM) && !defined(RTEMS_COVERAGE)
+  #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM) && \
+      !defined(RTEMS_COVERAGE)
     #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #elif defined(CONFIGURE_FILESYSTEM_DEVFS)
     #ifndef CONFIGURE_MAXIMUM_DEVICES
@@ -375,6 +376,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #endif
 
+  #if defined(CONFIGURE_FILESYSTEM_IMFS) || \
+      defined(CONFIGURE_FILESYSTEM_miniIMFS)
+    int imfs_rq_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
+  #endif
+
   /**
    * Table termination record.
    */
@@ -383,7 +389,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   /**
    * The default file system table. Must be terminated with the NULL entry if
    * you provide your own.
+   *
+   * The extern is needed to stop the table being removed by the optimizer.
    */
+  extern const rtems_filesystem_table_t configuration_filesystem_table[];
   #ifndef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
     const rtems_filesystem_table_t configuration_filesystem_table[] = {
       #if defined(CONFIGURE_FILESYSTEM_miniIMFS) && \
@@ -428,7 +437,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  NOTE: When building for coverage, we need this variable all the time.
    */
   #if !defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM) || \
-       defined(RTEMS_COVERAGE)
+      defined(RTEMS_COVERAGE)
     #if defined(CONFIGURE_PIPES_ENABLED)
       bool rtems_pipe_configured = true;
     #else

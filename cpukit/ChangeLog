@@ -1,3 +1,9 @@
+2010-06-01 	Chris Johns <chrisj@rtems.org>
+
+	* libcsupport/include/rtems/libio.h: Make the struct name the same
+	as the typedef.
+	* sapi/include/confdefs.h: Fixes for use in C++.
+
 2010-06-01 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/shell/print-ls.c: Remove (long) cast of st_ino.
