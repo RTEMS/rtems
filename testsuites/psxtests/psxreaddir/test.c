@@ -183,8 +183,7 @@ int compare_descending( const struct dirent **a, const struct dirent **b )
 
 void test_across_mount(void)
 {
-  rtems_filesystem_mount_table_entry_t *mt_entry;
-  int                                  status;
+  int status;
 
   /*
    * Verify Readdir works correctly over mount points.
@@ -196,15 +195,12 @@ void test_across_mount(void)
   complete_printdir("/imfs" );
   printf("Attempting to mount IMFS file system at /imfs \n");
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
+    "null",
+    "/imfs",
+    "imfs",
      RTEMS_FILESYSTEM_READ_WRITE,
-     NULL,
-     "/imfs" );
+     NULL );
   rtems_test_assert( status == 0 );
-  if( mt_entry == NULL ){
-     printf(" NULL mount table entry was returned\n");
-  }
   printf( "create /imfs/testdir and /imfs/testdir/testsubdir\n");
 
   status = mkdir( "/imfs/testdir", 0777 );

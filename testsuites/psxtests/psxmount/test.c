@@ -35,7 +35,6 @@
 #include <errno.h>
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <rtems/imfs.h>
 #include <pmacros.h>
 
 extern rtems_filesystem_location_info_t rtems_filesystem_current;
@@ -96,7 +95,6 @@ int main(
   int fd;
   int status;
   struct stat statbuf;
-  rtems_filesystem_mount_table_entry_t *mt_entry;
   static char mount_point_string[25] = { "/c/z/my_mount_point" };
 
 
@@ -157,18 +155,13 @@ int main(
 
   printf("Attempting to mount IMFS file system at /c/z/my_mount_point \n");
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     RTEMS_FILESYSTEM_READ_WRITE,
-     NULL,
-     mount_point_string );
+    "null",
+    mount_point_string,
+    "imfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL );
   rtems_test_assert(  status == 0 );
-  if( mt_entry == NULL ){
-     printf(" NULL mount table entry was returned\n");
-  }
-  else {
-     printf("2nd file system successfully mounted at /c/z/my_mount_point \n");
-  }
+  printf("2nd file system successfully mounted at /c/z/my_mount_point \n");
 
   /*
    * Change directory to the mount point and create a group of files under
@@ -218,11 +211,11 @@ int main(
 
   printf("Mount a NULL file system and verify EINVAL\n");
   status = mount(
-   &mt_entry,
-   NULL,
-   RTEMS_FILESYSTEM_READ_WRITE,
-   NULL,
-   mount_point_string );
+    "null",
+    mount_point_string,
+    "nofound",
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL );
   rtems_test_assert(  status == -1 );
   rtems_test_assert(  errno == EINVAL );
 
@@ -232,11 +225,11 @@ int main(
 
   printf("mount with option of -62 should fail with EINVAL\n");
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     -62,
-     NULL,
-     "/c/y/my_mount_point" );
+    "null",
+    "/c/y/my_mount_point",
+    "imfs",
+    -62,
+    NULL );
   rtems_test_assert(  status == -1 );
   rtems_test_assert(  errno == EINVAL );
 
@@ -246,18 +239,13 @@ int main(
 
   printf("Mount a Read Only filesystem at /c/y/my_mount_point \n");
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     RTEMS_FILESYSTEM_READ_ONLY,
-     NULL,
-     "/c/y/my_mount_point" );
+    "null",
+    "/c/y/my_mount_point",
+    "imfs",
+    RTEMS_FILESYSTEM_READ_ONLY,
+    NULL );
   rtems_test_assert(  status == 0 );
-  if( mt_entry == NULL ){
-     printf(" NULL mount table entry was returned\n");
-  }
-  else {
-     printf("Read only file system successfully mounted at /c/y/my_mount_point \n");
-  }
+  printf("Read only file system successfully mounted at /c/y/my_mount_point \n");
 
   /*
    * Create a directory that passes through the read only file system.
@@ -277,11 +265,11 @@ int main(
 
   printf("Verify a mount point returns EBUSY for another mount\n");
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
+    "null",
+    "/c/y/my_mount_point",
+    "imfs",
      RTEMS_FILESYSTEM_READ_ONLY,
-     NULL,
-     "/c/y/my_mount_point" );
+     NULL );
   rtems_test_assert(  status == -1 );
   rtems_test_assert(  errno == EBUSY);
 
@@ -291,11 +279,11 @@ int main(
 
   printf("Mount on a file should fail with ENOTDIR\n");
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     RTEMS_FILESYSTEM_READ_ONLY,
-     NULL,
-     "/b/my_file" );
+    "null",
+    "/b/my_file",
+    "imfs",
+    RTEMS_FILESYSTEM_READ_ONLY,
+    NULL );
   rtems_test_assert(  status == -1 );
   rtems_test_assert(  errno == ENOTDIR );
 
@@ -343,11 +331,11 @@ int main(
 
   printf("Mount /c/y/my_mount_point\n");
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     RTEMS_FILESYSTEM_READ_ONLY,
-     NULL,
-     "/c/y/my_mount_point" );
+    "null",
+    "/c/y/my_mount_point",
+    "imfs",
+    RTEMS_FILESYSTEM_READ_ONLY,
+    NULL );
   rtems_test_assert(  status == 0 );
 
   /*
@@ -392,11 +380,11 @@ int main(
 
   printf("Mount a file system at /c/y/my_mount_point/my_dir\n");
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
+     "null",
+     "/c/y/my_mount_point/my_dir",
+     "imfs",
      RTEMS_FILESYSTEM_READ_WRITE,
-     NULL,
-     "/c/y/my_mount_point/my_dir");
+     NULL );
   rtems_test_assert(  status == 0 );
 
   printf("unmount /c/y/my_mount_point should fail with EBUSY\n");

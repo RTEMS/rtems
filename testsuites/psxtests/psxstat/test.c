@@ -468,7 +468,6 @@ void Cause_faults(void)
   int                                   fd;
   int                                   status;
   char                                  longer_name[100];
-  rtems_filesystem_mount_table_entry_t *mt_entry;
 
   /*
    * Verify chmod with an invalid type.
@@ -650,11 +649,11 @@ void Cause_faults(void)
 
   printf("Attempting to mount IMFS file system at /dir1/my_mount_point \n");
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
+    "null",
+    "/my_mount_point/dir1/my_mount_point",
+    "imfs",
      RTEMS_FILESYSTEM_READ_WRITE,
-     NULL,
-     "/my_mount_point/dir1/my_mount_point" );
+     NULL );
   rtems_test_assert( status == 0 );
 
   printf("rmdir /dir1/my_mount_point should fail with EBUSY\n");
@@ -730,9 +729,8 @@ int main(
 )
 #endif
 {
-  rtems_status_code                    status;
-  rtems_time_of_day                    time;
-  rtems_filesystem_mount_table_entry_t *mt_entry;
+  rtems_status_code status;
+  rtems_time_of_day time;
 
   puts( "\n\n*** STAT TEST 01 ***" );
 
@@ -749,11 +747,11 @@ int main(
   status = mkdir("/my_mount_point",  S_IRWXU );
   rtems_test_assert( status == 0 );
   status = mount(
-     &mt_entry,
-     &IMFS_ops,
+    "null",
+    "my_mount_point",
+    "imfs",
      RTEMS_FILESYSTEM_READ_WRITE,
-     NULL,
-     "my_mount_point" );
+     NULL );
   rtems_test_assert( status == 0 );
   status = chdir( "/my_mount_point" );
   rtems_test_assert( status == 0 );

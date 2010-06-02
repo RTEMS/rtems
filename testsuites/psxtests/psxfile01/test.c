@@ -40,6 +40,7 @@ void test_case_reopen_append(void);
 char test_write_buffer[ 1024 ];
 rtems_filesystem_operations_table  IMFS_ops_no_evalformake;
 rtems_filesystem_operations_table  IMFS_ops_no_rename;
+
 /*
  *  File test support routines.
  */
@@ -118,11 +119,12 @@ void stat_a_file(
 }
 
 int no_evalformake_IMFS_initialize(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void                           *data
 )
 {
    return IMFS_initialize_support(
-     temp_mt_entry,
+     mt_entry,
      &IMFS_ops_no_evalformake,
      &IMFS_memfile_handlers,
      &IMFS_directory_handlers
@@ -130,11 +132,12 @@ int no_evalformake_IMFS_initialize(
 }
 
 int no_rename_IMFS_initialize(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void                           *data
 )
 {
    return IMFS_initialize_support(
-     temp_mt_entry,
+     mt_entry,
      &IMFS_ops_no_rename,
      &IMFS_memfile_handlers,
      &IMFS_directory_handlers
@@ -170,7 +173,6 @@ int main(
   time_t            ctime2;
   rtems_status_code rtems_status;
   rtems_time_of_day time;
-  rtems_filesystem_mount_table_entry_t *mt_entry;
 
   IMFS_ops_no_evalformake = IMFS_ops;
   IMFS_ops_no_rename = IMFS_ops;
@@ -181,7 +183,14 @@ int main(
   IMFS_ops_no_rename.fsmount_me_h = no_rename_IMFS_initialize;
   IMFS_ops_no_rename.rename_h = NULL;
 
-
+  puts( "register no eval-for-make filesystem" );
+  status = rtems_filesystem_register( "nefm", no_evalformake_IMFS_initialize );
+  rtems_test_assert( status == 0 );
+  
+  puts( "register no rename filesystem" );
+  status = rtems_filesystem_register( "nren", no_rename_IMFS_initialize );
+  rtems_test_assert( status == 0 );
+  
   printf( "\n\n*** FILE TEST 1 ***\n" );
 
   /*
@@ -418,11 +427,8 @@ since new path is not valid");
   rtems_test_assert(status == 0);
 
   puts("mounting filesystem with IMFS_ops at /imfs");
-  status = mount(&mt_entry, &IMFS_ops, 
-		 RTEMS_FILESYSTEM_READ_WRITE, 
-		 NULL, "/imfs");
+  status = mount("null", "/imfs", "imfs", RTEMS_FILESYSTEM_READ_WRITE, NULL);
   rtems_test_assert(status == 0);
-  rtems_test_assert(mt_entry != NULL);
   puts("creating directory /imfs/test (on newly mounted filesystem)");
   status = mkdir("/imfs/test", 0777);
   rtems_test_assert(status == 0);
@@ -448,11 +454,8 @@ since new path is not valid");
 
   puts("Mounting filesystem @ /imfs with no support for evalformake");
   
-  status = mount(&mt_entry, &IMFS_ops_no_evalformake, 
-		 RTEMS_FILESYSTEM_READ_WRITE, 
-		 NULL, "/imfs");
+  status = mount("null", "/imfs", "nefm", RTEMS_FILESYSTEM_READ_WRITE, NULL);
   rtems_test_assert(status == 0);
-  rtems_test_assert(mt_entry != NULL);
 
   puts("change directory to /imfs");
   status = chdir("/imfs");
@@ -473,11 +476,8 @@ since new path is not valid");
 
 
   puts("Mounting filesystem @ /imfs with no support for rename");
-  status = mount(&mt_entry, &IMFS_ops_no_rename, 
-		 RTEMS_FILESYSTEM_READ_WRITE, 
-		 NULL, "/imfs");
+  status = mount("null", "/imfs", "nren", RTEMS_FILESYSTEM_READ_WRITE, NULL);
   rtems_test_assert(status == 0);
-  rtems_test_assert(mt_entry != NULL);
 
   puts("creating directory /imfs/test");
   status = mkdir("/imfs/test", 0777);
