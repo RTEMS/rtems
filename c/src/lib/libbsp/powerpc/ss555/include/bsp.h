@@ -75,6 +75,11 @@ typedef struct cpld_ {
 
 extern volatile cpld_t cpld;              /* defined in linkcmds */
 
+/* clock/p_clock.c */
+extern int BSP_disconnect_clock_handler (void);
+
+extern int BSP_connect_clock_handler (rtems_irq_hdl hdl);
+
 #ifdef __cplusplus
 }
 #endif

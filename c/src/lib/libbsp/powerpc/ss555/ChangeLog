@@ -1,3 +1,8 @@
+2010-06-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/bsp.h: Add prototypes for BSP_disconnect_clock_handler, 
+	BSP_connect_clock_handler.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* irq/irq.h, startup/iss555.c, startup/tm27supp.c: Remove warnings.
