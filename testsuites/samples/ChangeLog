@@ -1,5 +1,9 @@
 2010-06-02 	Chris Johns <chrisj@rtems.org>
 
+	* iostream/init.cc: Remove the hack.
+
+2010-06-02 	Chris Johns <chrisj@rtems.org>
+
 	* fileio/init.c: Update to new mount API.
 	* iostream/init.cc: Hack to work around confdefs.h in C++.
 	* iostream/system.h: Add comment about base miniIMFS.
