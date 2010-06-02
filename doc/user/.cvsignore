@@ -51,6 +51,7 @@ rtemspie.pdf
 rtmon.texi
 schedule.texi
 sem.texi
+semaphore_attributes.pdf
 signal.texi
 stackchk.texi
 stamp-vti

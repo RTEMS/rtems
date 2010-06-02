@@ -1,3 +1,7 @@
+2010-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/.cvsignore: Add semaphore_attributes.pdf.
+
 2010-05-18	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1520/doc
