@@ -44,50 +44,50 @@
  */
 fstab_t fs_table[] = {
   {
-    "/dev/hda1","/mnt/hda1",
-    &msdos_ops, RTEMS_FILESYSTEM_READ_WRITE,
+    "/dev/hda1","/mnt/hda1", "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
     FSMOUNT_MNT_OK | FSMOUNT_MNTPNT_CRTERR | FSMOUNT_MNT_FAILED,
     0
   },
   {
-    "/dev/hda2","/mnt/hda2",
-    &msdos_ops, RTEMS_FILESYSTEM_READ_WRITE,
+    "/dev/hda2","/mnt/hda2", "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
     FSMOUNT_MNT_OK | FSMOUNT_MNTPNT_CRTERR | FSMOUNT_MNT_FAILED,
     0
   },
   {
-    "/dev/hda3","/mnt/hda3",
-    &msdos_ops, RTEMS_FILESYSTEM_READ_WRITE,
+    "/dev/hda3","/mnt/hda3", "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
     FSMOUNT_MNT_OK | FSMOUNT_MNTPNT_CRTERR | FSMOUNT_MNT_FAILED,
     0
   },
   {
-    "/dev/hda4","/mnt/hda4",
-    &msdos_ops, RTEMS_FILESYSTEM_READ_WRITE,
+    "/dev/hda4","/mnt/hda4", "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
     FSMOUNT_MNT_OK | FSMOUNT_MNTPNT_CRTERR | FSMOUNT_MNT_FAILED,
     0
   },
   {
-    "/dev/hdc1","/mnt/hdc1",
-    &msdos_ops, RTEMS_FILESYSTEM_READ_WRITE,
+    "/dev/hdc1","/mnt/hdc1", "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
     FSMOUNT_MNT_OK | FSMOUNT_MNTPNT_CRTERR | FSMOUNT_MNT_FAILED,
     0
   },
   {
-    "/dev/hdc2","/mnt/hdc2",
-    &msdos_ops, RTEMS_FILESYSTEM_READ_WRITE,
+    "/dev/hdc2","/mnt/hdc2", "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
     FSMOUNT_MNT_OK | FSMOUNT_MNTPNT_CRTERR | FSMOUNT_MNT_FAILED,
     0
   },
   {
-    "/dev/hdc3","/mnt/hdc3",
-    &msdos_ops, RTEMS_FILESYSTEM_READ_WRITE,
+    "/dev/hdc3","/mnt/hdc3", "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
     FSMOUNT_MNT_OK | FSMOUNT_MNTPNT_CRTERR | FSMOUNT_MNT_FAILED,
     0
   },
   {
-    "/dev/hdc4","/mnt/hdc4",
-    &msdos_ops, RTEMS_FILESYSTEM_READ_WRITE,
+    "/dev/hdc4","/mnt/hdc4", "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
     FSMOUNT_MNT_OK | FSMOUNT_MNTPNT_CRTERR | FSMOUNT_MNT_FAILED,
     0
   }
@@ -321,13 +321,13 @@ static bool fileio_str2size(const char *str,uint32_t   *res_ptr)
   if (1 > sscanf(str,"%lu%c",&size,&suffix)) {
     failed = true;
   }
-  else if (toupper(suffix) == 'K') {
+  else if (toupper((int)suffix) == 'K') {
     size *= 1024;
   }
-  else if (toupper(suffix) == 'M') {
+  else if (toupper((int)suffix) == 'M') {
     size *= 1024UL*1024UL;
   }
-  else if (isalpha(suffix)) {
+  else if (isalpha((int)suffix)) {
     failed = true;
   }
 
@@ -743,6 +743,8 @@ static rtems_shell_alias_t Shell_USERECHO_Alias = {
 #define CONFIGURE_SHELL_COMMANDS_INIT
 #define CONFIGURE_SHELL_COMMANDS_ALL
 #define CONFIGURE_SHELL_MOUNT_MSDOS
+#define CONFIGURE_SHELL_MOUNT_RFS
+#define CONFIGURE_SHELL_DEBUGRFS
 
 #include <rtems/shellconfig.h>
 #endif

@@ -20,8 +20,11 @@
  *  $Id$
  */
 
+extern "C" {
+
 #define CONFIGURE_INIT
 #include "system.h"
+}
 
 #if BSP_SMALL_MEMORY
 #include <stdio.h>
@@ -30,6 +33,7 @@
 #endif
 
 #include <stdlib.h>
+
 
 rtems_task Init(
   rtems_task_argument ignored
