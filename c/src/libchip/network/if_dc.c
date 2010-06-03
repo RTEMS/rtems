@@ -151,11 +151,7 @@
 #include <vm/vm.h>              /* for vtophys */
 
 
-#if defined(__i386__)
-#define vtophys(p)  (u_int32_t)(p)
-#else
-#define vtophys(p)  vtophys(p)
-#endif
+#define vtophys(p)  (uintptr_t)(p)
 
 /*
 #include <net/if_arp.h>

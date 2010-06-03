@@ -1,3 +1,7 @@
+2010-06-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libchip/network/if_dc.c: Fix warning.
+
 2010-05-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/greth.c: Misc. hacks to allow compilation on 
