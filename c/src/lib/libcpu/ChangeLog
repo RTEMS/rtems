@@ -1,3 +1,8 @@
+2010-06-03	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* m68k/mcf5282/include/mcf5282.h: backport from V1.5 of
+	corrections for indexing multiple identical resources
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* arm/at91rm9200/timer/timer.c, arm/lpc22xx/timer/timer.c,
