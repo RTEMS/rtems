@@ -1,3 +1,7 @@
+2010-06-03	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* startup/sd-card-init.c: fix bug in mount table
+
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* network/smsc9218i.c: Removed superfluous macros.
