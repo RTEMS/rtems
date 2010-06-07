@@ -217,23 +217,23 @@ static bool _Heap_Walk_check_control(
     return false;
   }
 
-  if ( first_block->prev_size != page_size ) {
-    (*printer)(
-      source,
-      true,
-      "first block: prev size %u != page size %u\n",
-      first_block->prev_size,
-      page_size
-    );
-
-    return false;
-  }
-
   if ( _Heap_Is_free( last_block ) ) {
     (*printer)(
       source,
       true,
       "last block: is free\n"
+    );
+
+    return false;
+  }
+
+  if (
+    _Heap_Block_at( last_block, _Heap_Block_size( last_block ) ) != first_block
+  ) {
+    (*printer)(
+      source,
+      true,
+      "last block: next block is not the first block\n"
     );
 
     return false;
@@ -260,15 +260,16 @@ static bool _Heap_Walk_check_free_block(
   (*printer)(
     source,
     false,
-    "block 0x%08x: prev 0x%08x%s, next 0x%08x%s\n",
+    "block 0x%08x: size %u, prev 0x%08x%s, next 0x%08x%s\n",
     block,
+    block_size,
     block->prev,
     block->prev == first_free_block ?
-      " (= first)"
+      " (= first free)"
         : (block->prev == free_list_head ? " (= head)" : ""),
     block->next,
     block->next == last_free_block ?
-      " (= last)"
+      " (= last free)"
         : (block->next == free_list_tail ? " (= tail)" : "")
   );
 
@@ -319,8 +320,9 @@ bool _Heap_Walk(
 {
   uintptr_t const page_size = heap->page_size;
   uintptr_t const min_block_size = heap->min_block_size;
+  Heap_Block *const first_block = heap->first_block;
   Heap_Block *const last_block = heap->last_block;
-  Heap_Block *block = heap->first_block;
+  Heap_Block *block = first_block;
   Heap_Walk_printer printer = dump ?
     _Heap_Walk_print : _Heap_Walk_print_nothing;
 
@@ -332,14 +334,68 @@ bool _Heap_Walk(
     return false;
   }
 
-  while ( block != last_block ) {
+  do {
     uintptr_t const block_begin = (uintptr_t) block;
     uintptr_t const block_size = _Heap_Block_size( block );
     bool const prev_used = _Heap_Is_prev_used( block );
     Heap_Block *const next_block = _Heap_Block_at( block, block_size );
     uintptr_t const next_block_begin = (uintptr_t) next_block;
+    bool const is_not_last_block = block != last_block;
 
-    if ( prev_used ) {
+    if ( !_Heap_Is_block_in_heap( heap, next_block ) ) {
+      (*printer)(
+        source,
+        true,
+        "block 0x%08x: next block 0x%08x not in heap\n",
+        block,
+        next_block
+      );
+
+      return false;
+    }
+
+    if ( !_Heap_Is_aligned( block_size, page_size ) && is_not_last_block ) {
+      (*printer)(
+        source,
+        true,
+        "block 0x%08x: block size %u not page aligned\n",
+        block,
+        block_size
+      );
+
+      return false;
+    }
+
+    if ( block_size < min_block_size && is_not_last_block ) {
+      (*printer)(
+        source,
+        true,
+        "block 0x%08x: size %u < min block size %u\n",
+        block,
+        block_size,
+        min_block_size
+      );
+
+      return false;
+    }
+
+    if ( next_block_begin <= block_begin && is_not_last_block ) {
+      (*printer)(
+        source,
+        true,
+        "block 0x%08x: next block 0x%08x is not a successor\n",
+        block,
+        next_block
+      );
+
+      return false;
+    }
+
+    if ( !_Heap_Is_prev_used( next_block ) ) {
+      if ( !_Heap_Walk_check_free_block( source, printer, heap, block ) ) {
+        return false;
+      }
+    } else if (prev_used) {
       (*printer)(
         source,
         false,
@@ -358,63 +414,8 @@ bool _Heap_Walk(
       );
     }
 
-    if ( !_Heap_Is_block_in_heap( heap, next_block ) ) {
-      (*printer)(
-        source,
-        true,
-        "block 0x%08x: next block 0x%08x not in heap\n",
-        block,
-        next_block
-      );
-
-      return false;
-    }
-
-    if ( !_Heap_Is_aligned( block_size, page_size ) ) {
-      (*printer)(
-        source,
-        true,
-        "block 0x%08x: block size %u not page aligned\n",
-        block,
-        block_size
-      );
-
-      return false;
-    }
-
-    if ( block_size < min_block_size ) {
-      (*printer)(
-        source,
-        true,
-        "block 0x%08x: size %u < min block size %u\n",
-        block,
-        block_size,
-        min_block_size
-      );
-
-      return false;
-    }
-
-    if ( next_block_begin <= block_begin ) {
-      (*printer)(
-        source,
-        true,
-        "block 0x%08x: next block 0x%08x is not a successor\n",
-        block,
-        next_block
-      );
-
-      return false;
-    }
-
-    if ( !_Heap_Is_prev_used( next_block ) ) {
-      if ( !_Heap_Walk_check_free_block( source, printer, heap, block ) ) {
-        return false;
-      }
-    }
-
     block = next_block;
-  }
+  } while ( block != first_block );
 
   return true;
 }

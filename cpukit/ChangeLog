@@ -1,3 +1,22 @@
+2010-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/include/rtems/score/heap.h: Declare
+	_Heap_Get_first_and_last_block().  Removed Heap_Extend_status.
+	Changed return type of _Heap_Extend() to bool.
+	* score/inline/rtems/score/heap.inl: Define
+	_Heap_Set_last_block_size().
+	* score/src/heap.c: Define and use _Heap_Get_first_and_last_block().
+	* score/src/heapgetinfo.c: Removed assert statements.  Do not count
+	the last block.  This ensures that all size values are an integral
+	multiple of the page size which is consistent with the other
+	statistics.
+	* score/src/heapextend.c: Implemented support for scattered heap
+	areas.
+	* score/src/heapwalk.c: Dump also last block.  Changes for new first
+	and last block values.
+	* ./score/src/pheapextend.c, rtems/src/regionextend.c: Update for
+	_Heap_Extend() changes.
+
 2010-06-03	Chris Johns <chrisj@rtems.org>
 
 	* sapi/include/confdefs.h: PR 1543. Make default file system when

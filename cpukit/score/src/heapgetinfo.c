@@ -21,6 +21,8 @@
 #include "config.h"
 #endif
 
+#include <string.h>
+
 #include <rtems/system.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
@@ -33,15 +35,7 @@ void _Heap_Get_information(
   Heap_Block *the_block = the_heap->first_block;
   Heap_Block *const end = the_heap->last_block;
 
-  _HAssert(the_block->prev_size == the_heap->page_size);
-  _HAssert(_Heap_Is_prev_used(the_block));
-
-  the_info->Free.number  = 0;
-  the_info->Free.total   = 0;
-  the_info->Free.largest = 0;
-  the_info->Used.number  = 0;
-  the_info->Used.total   = 0;
-  the_info->Used.largest = 0;
+  memset(the_info, 0, sizeof(*the_info));
 
   while ( the_block != end ) {
     uintptr_t const     the_size = _Heap_Block_size(the_block);
@@ -60,11 +54,4 @@ void _Heap_Get_information(
 
     the_block = next_block;
   }
-
-  /*
-   *  Handle the last dummy block. Don't consider this block to be
-   *  "used" as client never allocated it. Make 'Used.total' contain this
-   *  blocks' overhead though.
-   */
-  the_info->Used.total += HEAP_BLOCK_HEADER_SIZE;
 }

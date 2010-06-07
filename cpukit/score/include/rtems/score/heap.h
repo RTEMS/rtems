@@ -92,7 +92,10 @@ extern "C" {
  *   <tr><td>heap->area_begin</td><td colspan=2>heap area begin address</td></tr>
  *   <tr>
  *     <td>first_block->prev_size</td>
- *     <td colspan=2>page size (the value is arbitrary)</td>
+ *     <td colspan=2>
+ *       subordinate heap area end address (this will be used to maintain a
+ *       linked list of scattered heap areas)
+ *     </td>
  *   </tr>
  *   <tr>
  *     <td>first_block->size</td>
@@ -311,15 +314,6 @@ typedef struct {
 } Heap_Information_block;
 
 /**
- * @brief See _Heap_Extend().
- */
-typedef enum {
-  HEAP_EXTEND_SUCCESSFUL,
-  HEAP_EXTEND_ERROR,
-  HEAP_EXTEND_NOT_IMPLEMENTED
-} Heap_Extend_status;
-
-/**
  * @brief See _Heap_Resize_block().
  */
 typedef enum {
@@ -327,6 +321,29 @@ typedef enum {
   HEAP_RESIZE_UNSATISFIED,
   HEAP_RESIZE_FATAL_ERROR
 } Heap_Resize_status;
+
+/**
+ * @brief Gets the first and last block for the heap area with begin
+ * @a heap_area_begin and size @a heap_area_size.
+ *
+ * A page size of @a page_size and minimal block size of @a min_block_size will
+ * be used for calculation.
+ *
+ * Nothing will be written to this area.
+ *
+ * In case of success the pointers to the first and last block will be returned
+ * via @a first_block_ptr and @a last_block_ptr.
+ *
+ * Returns @c true if the area is big enough, and @c false otherwise.
+ */
+bool _Heap_Get_first_and_last_block(
+  uintptr_t heap_area_begin,
+  uintptr_t heap_area_size,
+  uintptr_t page_size,
+  uintptr_t min_block_size,
+  Heap_Block **first_block_ptr,
+  Heap_Block **last_block_ptr
+);
 
 /**
  * @brief Initializes the heap control block @a heap to manage the area
@@ -350,11 +367,15 @@ uintptr_t _Heap_Initialize(
  * starting at @a area_begin of size @a area_size bytes.
  *
  * The extended space available for allocation will be returned in
- * @a amount_extended.
+ * @a amount_extended.  This pointer may be @c NULL.
  *
- * The memory area must start at the end of the currently used memory area.
+ * The memory area must be big enough to contain some maintainance blocks.  It
+ * must not overlap parts of the current heap areas.  Disconnected subordinate
+ * heap areas will lead to used blocks which cover the gaps. 
+ *
+ * Returns @c true in case of success, and @c false otherwise.
  */
-Heap_Extend_status _Heap_Extend(
+bool _Heap_Extend(
   Heap_Control *heap,
   void *area_begin,
   uintptr_t area_size,
@@ -368,7 +389,7 @@ Heap_Extend_status _Heap_Extend(
  * memory area will begin at an address aligned by this value.
  *
  * If the boundary parameter @a boundary is not equal to zero, the allocated
- * memory area will fulfill a boundary constraint.  The boudnary value
+ * memory area will fulfill a boundary constraint.  The boundary value
  * specifies the set of addresses which are aligned by the boundary value.  The
  * interior of the allocated memory area will not contain an element of this
  * set.  The begin or end address of the area may be a member of the set.

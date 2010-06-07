@@ -30,12 +30,12 @@ bool _Protected_heap_Extend(
   uintptr_t     size
 )
 {
-  Heap_Extend_status status;
-  uintptr_t           amount_extended;
+  bool      extend_ok;
+  uintptr_t amount_extended;
 
   _RTEMS_Lock_allocator();
-    status = _Heap_Extend(the_heap, starting_address, size, &amount_extended);
+    extend_ok = _Heap_Extend(the_heap, starting_address, size, &amount_extended);
   _RTEMS_Unlock_allocator();
-  return (status == HEAP_EXTEND_SUCCESSFUL);
+  return extend_ok;
 }
 

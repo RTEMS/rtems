@@ -10,7 +10,7 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2009 embedded brains GmbH.
+ *  Copyright (c) 2009, 2010 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -123,6 +123,43 @@ static uint32_t instance = 0;
  *
  */
 
+bool _Heap_Get_first_and_last_block(
+  uintptr_t heap_area_begin,
+  uintptr_t heap_area_size,
+  uintptr_t page_size,
+  uintptr_t min_block_size,
+  Heap_Block **first_block_ptr,
+  Heap_Block **last_block_ptr
+)
+{
+  uintptr_t const heap_area_end = heap_area_begin + heap_area_size;
+  uintptr_t const alloc_area_begin =
+    _Heap_Align_up( heap_area_begin + HEAP_BLOCK_HEADER_SIZE, page_size );
+  uintptr_t const first_block_begin =
+    alloc_area_begin - HEAP_BLOCK_HEADER_SIZE;
+  uintptr_t const overhead =
+    HEAP_BLOCK_HEADER_SIZE + (first_block_begin - heap_area_begin);
+  uintptr_t const first_block_size =
+    _Heap_Align_down( heap_area_size - overhead, page_size );
+  Heap_Block *const first_block = (Heap_Block *) first_block_begin;
+  Heap_Block *const last_block =
+    _Heap_Block_at( first_block, first_block_size );
+
+  if (
+    heap_area_end < heap_area_begin
+      || heap_area_size <= overhead
+      || first_block_size < min_block_size
+  ) {
+    /* Invalid area or area too small */
+    return false;
+  }
+
+  *first_block_ptr = first_block;
+  *last_block_ptr = last_block;
+
+  return true;
+}
+
 uintptr_t _Heap_Initialize(
   Heap_Control *heap,
   void *heap_area_begin_ptr,
@@ -133,12 +170,11 @@ uintptr_t _Heap_Initialize(
   Heap_Statistics *const stats = &heap->stats;
   uintptr_t const heap_area_begin = (uintptr_t) heap_area_begin_ptr;
   uintptr_t const heap_area_end = heap_area_begin + heap_area_size;
-  uintptr_t alloc_area_begin = heap_area_begin + HEAP_BLOCK_HEADER_SIZE;
-  uintptr_t alloc_area_size = 0;
   uintptr_t first_block_begin = 0;
   uintptr_t first_block_size = 0;
+  uintptr_t last_block_begin = 0;
   uintptr_t min_block_size = 0;
-  uintptr_t overhead = 0;
+  bool area_ok = false;
   Heap_Block *first_block = NULL;
   Heap_Block *last_block = NULL;
 
@@ -154,40 +190,27 @@ uintptr_t _Heap_Initialize(
   }
   min_block_size = _Heap_Align_up( sizeof( Heap_Block ), page_size );
 
-  alloc_area_begin = _Heap_Align_up( alloc_area_begin, page_size );
-  first_block_begin = alloc_area_begin - HEAP_BLOCK_HEADER_SIZE;
-  overhead = HEAP_BLOCK_HEADER_SIZE + (first_block_begin - heap_area_begin);
-  first_block_size = heap_area_size - overhead;
-  first_block_size = _Heap_Align_down ( first_block_size, page_size );
-  alloc_area_size = first_block_size - HEAP_BLOCK_HEADER_SIZE;
-
-  if (
-    heap_area_end < heap_area_begin
-      || heap_area_size <= overhead
-      || first_block_size < min_block_size
-  ) {
-    /* Invalid area or area too small */
+  area_ok = _Heap_Get_first_and_last_block(
+    heap_area_begin,
+    heap_area_size,
+    page_size,
+    min_block_size,
+    &first_block,
+    &last_block
+  );
+  if ( !area_ok ) {
     return 0;
   }
 
+  first_block_begin = (uintptr_t) first_block;
+  last_block_begin = (uintptr_t) last_block;
+  first_block_size = last_block_begin - first_block_begin;
+
   /* First block */
-  first_block = (Heap_Block *) first_block_begin;
-  first_block->prev_size = page_size;
+  first_block->prev_size = heap_area_end;
   first_block->size_and_flag = first_block_size | HEAP_PREV_BLOCK_USED;
   first_block->next = _Heap_Free_list_tail( heap );
   first_block->prev = _Heap_Free_list_head( heap );
-
-  /*
-   * Last block.
-   *
-   * The next block of the last block is the first block.  Since the first
-   * block indicates that the previous block is used, this ensures that the
-   * last block appears as used for the _Heap_Is_used() and _Heap_Is_free()
-   * functions.
-   */
-  last_block = _Heap_Block_at( first_block, first_block_size );
-  last_block->prev_size = first_block_size;
-  last_block->size_and_flag = first_block_begin - (uintptr_t) last_block;
 
   /* Heap control */
   heap->page_size = page_size;
@@ -198,6 +221,11 @@ uintptr_t _Heap_Initialize(
   heap->last_block = last_block;
   _Heap_Free_list_head( heap )->next = first_block;
   _Heap_Free_list_tail( heap )->prev = first_block;
+
+  /* Last block */
+  last_block->prev_size = first_block_size;
+  last_block->size_and_flag = 0;
+  _Heap_Set_last_block_size( heap );
 
   /* Statistics */
   stats->size = first_block_size;
@@ -222,7 +250,7 @@ uintptr_t _Heap_Initialize(
     _Heap_Is_aligned( _Heap_Alloc_area_of_block( last_block ), page_size )
   );
 
-  return alloc_area_size;
+  return first_block_size;
 }
 
 void _Heap_Block_split(
