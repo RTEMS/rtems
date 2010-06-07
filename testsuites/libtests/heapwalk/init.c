@@ -127,11 +127,6 @@ static void test_check_control(void)
   TestHeap.first_block->size_and_flag &= ~HEAP_PREV_BLOCK_USED;
   test_call_heap_walk( false );
 
-  puts( "\tset the previous block size of the first block to an invalid value" );
-  test_heap_init_custom();
-  TestHeap.first_block->prev_size = 0;
-  test_call_heap_walk( false );
-
   puts( "\tset invalid next block for last block" );
   test_heap_init_custom();
   TestHeap.last_block->size_and_flag = 0;

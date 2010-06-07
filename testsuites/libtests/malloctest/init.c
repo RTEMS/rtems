@@ -925,23 +925,41 @@ static void test_heap_resize_block(void)
   test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_SUCCESSFUL );
 }
 
+static void test_heap_assert(bool ret, bool expected)
+{
+  rtems_test_assert( ret == expected );
+  rtems_test_assert( _Heap_Walk( &TestHeap, 0, false ) );
+}
+
 static void test_heap_extend(void)
 {
-  bool      ret;
+  bool ret = false;
 
-  /*
-   * Easier to hit extend with a dedicated heap.
-   *
-   */
-  _Heap_Initialize( &TestHeap, TestHeapMemory, 512, 0 );
+  _Heap_Initialize( &TestHeap, TestHeapMemory + 768, 256, 0 );
 
-  puts( "heap extend - bad address" );
-  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory - 512, 512 );
-  rtems_test_assert( ret == false );
+  puts( "heap extend - link below" );
+  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 0, 256 );
+  test_heap_assert( ret, true );
 
-  puts( "heap extend - OK" );
-  ret = _Protected_heap_Extend( &TestHeap, &TestHeapMemory[ 512 ], 512 );
-  rtems_test_assert( ret == true );
+  puts( "heap extend - merge below" );
+  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 512, 256 );
+  test_heap_assert( ret, true );
+
+  puts( "heap extend - merge above" );
+  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 1024, 256 );
+  test_heap_assert( ret, true );
+
+  puts( "heap extend - link above" );
+  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 1536, 256 );
+  test_heap_assert( ret, true );
+
+  puts( "heap extend - area too small" );
+  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 2048, 0 );
+  test_heap_assert( ret, false );
+
+  puts( "heap extend - invalid area" );
+  ret = _Protected_heap_Extend( &TestHeap, (void *) -1, 2 );
+  test_heap_assert( ret, false );
 }
 
 static void test_heap_info(void)

@@ -1,3 +1,7 @@
+2010-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* heapwalk/init.c, malloctest/init.c: Update for heap extend changes.
+
 2010-05-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1433/cpukit
