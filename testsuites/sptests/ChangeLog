@@ -1,3 +1,7 @@
+2010-06-07	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* sp09/screen12.c: Update for heap extend changes.
+
 2010-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp62/init.c, sp65/init.c: #include <unistd.h>.

@@ -486,47 +486,4 @@ void Screen12()
     "rtems_region_extend with illegal starting address"
   );
   puts( "TA1 - rtems_region_extend - within heap - RTEMS_INVALID_ADDRESS" );
-
-  status = rtems_region_extend(
-    Region_id[ 1 ],
-    Region_bad_area,
-    128
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_NOT_IMPLEMENTED,
-    "rtems_region_extend with unsupported starting address"
-  );
-  puts(
-    "TA1 - rtems_region_extend - non-contiguous lower - RTEMS_NOT_IMPLEMENTED"
-  );
-
-  status = rtems_region_extend(
-    Region_id[ 1 ],
-    &Region_good_area[ REGION_START_OFFSET - REGION_LENGTH ],
-    128
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_NOT_IMPLEMENTED,
-    "rtems_region_extend with unsupported starting address"
-  );
-  puts(
-    "TA1 - rtems_region_extend - contiguous lower - RTEMS_NOT_IMPLEMENTED"
-  );
-
-  status = rtems_region_extend(
-    Region_id[ 1 ],
-    &Region_good_area[ REGION_START_OFFSET + REGION_LENGTH + 16 ],
-    128
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_NOT_IMPLEMENTED,
-    "rtems_region_extend with unsupported starting address"
-  );
-  puts(
-    "TA1 - rtems_region_extend - non-contiguous higher - RTEMS_NOT_IMPLEMENTED"
-  );
-
 }
