@@ -10,6 +10,8 @@
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2010 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -24,6 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <rtems/chain.h>
+#include <rtems/seterr.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
@@ -34,20 +37,9 @@
 #include <rtems/libio_.h>
 
 /*
- * External defined by confdefs.h or the user.
- */
-extern const rtems_filesystem_table_t configuration_filesystem_table[];
-
-/*
- * Points to a list of filesystems added at runtime.
- */
-rtems_chain_control *rtems_filesystem_table;
-
-/*
  * Mount table list.
  */
-rtems_chain_control rtems_filesystem_mount_table_control;
-bool                rtems_filesystem_mount_table_control_init;
+RTEMS_CHAIN_DEFINE_EMPTY(rtems_filesystem_mount_table_control);
 
 /*
  * Default pathconfs.
@@ -79,25 +71,62 @@ const rtems_filesystem_limits_and_options_t rtems_filesystem_default_pathconf = 
  */
 
 static bool Is_node_fs_root(
-  rtems_filesystem_location_info_t  *loc
+  rtems_filesystem_location_info_t *loc
 )
 {
-  rtems_chain_node                     *the_node;
-  rtems_filesystem_mount_table_entry_t *the_mount_entry;
+  rtems_chain_node *node = NULL;
 
   /*
    * For each mount table entry
    */
-  if ( rtems_filesystem_mount_table_control_init ) {
-    for ( the_node = rtems_chain_first( &rtems_filesystem_mount_table_control );
-          !rtems_chain_is_tail( &rtems_filesystem_mount_table_control, the_node );
-          the_node = rtems_chain_next( the_node ) ) {
-      the_mount_entry = (rtems_filesystem_mount_table_entry_t *) the_node;
-      if ( the_mount_entry->mt_fs_root.node_access  == loc->node_access )
-        return true;
-    }
+  for ( node = rtems_chain_first( &rtems_filesystem_mount_table_control );
+        !rtems_chain_is_tail( &rtems_filesystem_mount_table_control, node );
+        node = rtems_chain_next( node ) ) {
+    rtems_filesystem_mount_table_entry_t *mount_table_entry =
+      (rtems_filesystem_mount_table_entry_t *) node;
+
+    if ( mount_table_entry->mt_fs_root.node_access == loc->node_access )
+      return true;
   }
+
   return false;
+}
+
+static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
+  const char *source,
+  const char *target,
+  const char *filesystemtype,
+  size_t *target_length_ptr
+)
+{
+  const char *target_str = target ? target : "/";
+  size_t filesystemtype_size = strlen( filesystemtype ) + 1;
+  size_t source_size = source ? strlen( source ) + 1 : 0;
+  size_t target_length = strlen( target_str );
+  size_t size = sizeof( rtems_filesystem_mount_table_entry_t )
+    + filesystemtype_size + source_size + target_length + 1;
+  rtems_filesystem_mount_table_entry_t *mt_entry = calloc( 1, size );
+
+  if ( mt_entry ) {
+    char *str = (char *) mt_entry + sizeof( *mt_entry );
+
+    mt_entry->type = str;
+    strcpy( str, filesystemtype );
+
+    if ( source ) {
+      str += filesystemtype_size;
+      mt_entry->dev = str;
+      strcpy( str, source );
+    }
+
+    str += source_size;
+    mt_entry->target = str;
+    strcpy( str, target );
+  }
+
+  *target_length_ptr = target_length;
+
+  return mt_entry;
 }
 
 /*
@@ -121,114 +150,54 @@ int mount(
   const char                 *filesystemtype,
   rtems_filesystem_options_t options,
   const void                 *data
-          )
+)
 {
-  const rtems_filesystem_table_t       *entry;
+  rtems_filesystem_fsmount_me_t mount_h = NULL;
   rtems_filesystem_location_info_t      loc;
   rtems_filesystem_mount_table_entry_t *mt_entry = NULL;
   rtems_filesystem_location_info_t     *loc_to_free = NULL;
-  size_t size;
-
-  /*
-   * If mount is ever called we allocate the mount table control structure.
-   */
-  if ( !rtems_filesystem_mount_table_control_init ) {
-    rtems_filesystem_mount_table_control_init = true;
-    rtems_chain_initialize_empty ( &rtems_filesystem_mount_table_control );
-  }
+  bool has_target = target != NULL;
+  size_t target_length = 0;
 
   /*
    *  Are the file system options valid?
    */
 
   if ( options != RTEMS_FILESYSTEM_READ_ONLY &&
-       options != RTEMS_FILESYSTEM_READ_WRITE ) {
-    errno = EINVAL;
-    return -1;
-  }
+       options != RTEMS_FILESYSTEM_READ_WRITE )
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   /*
-   * Check the type.
+   *  Get mount handler
    */
-  if (!filesystemtype) {
-    errno = EINVAL;
-    return -1;
-  }
+  mount_h = rtems_filesystem_get_mount_handler( filesystemtype );
+  if ( !mount_h )
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
-  if (strlen(filesystemtype) >= 128) {
-    errno = EINVAL;
-    return -1;
-  }
-    
-  /*
-   * Check the configuration table filesystems then check any runtime added
-   * file systems.
-   */
-  entry = &configuration_filesystem_table[0];
-  while (entry->type) {
-    if (strcmp (filesystemtype, entry->type) == 0)
-      break;
-    ++entry;
-  }
-  
-  if (!entry->type) {
-    entry = NULL;
-    if (rtems_filesystem_table) {
-      rtems_chain_node *the_node;
-      for (the_node = rtems_chain_first(rtems_filesystem_table);
-           !rtems_chain_is_tail(rtems_filesystem_table, the_node);
-           the_node = rtems_chain_next(the_node)) {
-        entry = &(((rtems_filesystem_table_node_t*) the_node)->entry);
-        if (strcmp (filesystemtype, entry->type) == 0)
-          break;
-        entry = NULL;
-      }
-    }
-  }
-
-  if (!entry)
-  {
-    errno = EINVAL;
-    return -1;
-  }
-  
   /*
    * Allocate a mount table entry
    */
+  mt_entry = alloc_mount_table_entry(
+    source,
+    target,
+    filesystemtype,
+    &target_length
+  );
+  if ( !mt_entry )
+    rtems_set_errno_and_return_minus_one( ENOMEM );
 
-  size = sizeof(rtems_filesystem_mount_table_entry_t);
-  if ( source )
-    size += strlen( source ) + 1;
-   
-  mt_entry = malloc( size );
-  if ( !mt_entry ) {
-    errno = ENOMEM;
-    return -1;
-  }
-
-  memset( mt_entry, 0, size );
-   
   mt_entry->mt_fs_root.mt_entry = mt_entry;
-  mt_entry->type = entry->type;
   mt_entry->options = options;
   mt_entry->pathconf_limits_and_options = rtems_filesystem_default_pathconf;
-   
-  if ( source ) {
-    mt_entry->dev =
-      (char *)mt_entry + sizeof( rtems_filesystem_mount_table_entry_t );
-    strcpy( mt_entry->dev, source );
-  } else
-    mt_entry->dev = 0;
 
   /*
    *  The mount_point should be a directory with read/write/execute
    *  permissions in the existing tree.
    */
 
-  if ( target ) {
-
+  if ( has_target ) {
     if ( rtems_filesystem_evaluate_path(
-           target, strlen( target ), RTEMS_LIBIO_PERMS_RWX, &loc, true ) == -1 )
+           target, target_length, RTEMS_LIBIO_PERMS_RWX, &loc, true ) == -1 )
       goto cleanup_and_bail;
 
     loc_to_free = &loc;
@@ -272,7 +241,7 @@ int mount(
     mt_entry->mt_point_node.handlers = loc.handlers;
     mt_entry->mt_point_node.ops = loc.ops;
     mt_entry->mt_point_node.mt_entry = loc.mt_entry;
-      
+
     /*
      *  This link to the parent is only done when we are dealing with system
      *  below the base file system
@@ -286,10 +255,7 @@ int mount(
     if ( loc.ops->mount_h( mt_entry ) ) {
       goto cleanup_and_bail;
     }
-
-    mt_entry->target = strdup( target );
   } else {
-
     /*
      * Do we already have a base file system ?
      */
@@ -297,26 +263,15 @@ int mount(
       errno = EINVAL;
       goto cleanup_and_bail;
     }
-    
+
     /*
      *  This is a mount of the base file system --> The
-     *  mt_point_node.node_access will be set to null to indicate that this
+     *  mt_point_node.node_access will be left to null to indicate that this
      *  is the root of the entire file system.
      */
-
-    mt_entry->mt_fs_root.node_access = NULL;
-    mt_entry->mt_fs_root.handlers = NULL;
-    mt_entry->mt_fs_root.ops = NULL;
-
-    mt_entry->mt_point_node.node_access = NULL;
-    mt_entry->mt_point_node.handlers = NULL;
-    mt_entry->mt_point_node.ops = NULL;
-    mt_entry->mt_point_node.mt_entry = NULL;
-
-    mt_entry->target = "/";
   }
 
-  if ( entry->mount_h( mt_entry, data ) ) {
+  if ( (*mount_h)( mt_entry, data ) ) {
     /*
      * Try to undo the mount operation
      */
@@ -332,14 +287,13 @@ int mount(
   rtems_chain_append( &rtems_filesystem_mount_table_control,
                       &mt_entry->Node );
 
-  if ( !target )
+  if ( !has_target )
     rtems_filesystem_root = mt_entry->mt_fs_root;
 
   return 0;
 
 cleanup_and_bail:
 
-  free( (void*) mt_entry->target );
   free( mt_entry );
 
   if ( loc_to_free )
@@ -348,3 +302,33 @@ cleanup_and_bail:
   return -1;
 }
 
+/*
+ * Get the first entry in the mount table.
+ */
+rtems_filesystem_mount_table_entry_t *
+rtems_filesystem_mounts_first(
+  void
+)
+{
+  rtems_filesystem_mount_table_entry_t *entry = NULL;
+
+  if ( !rtems_chain_is_empty( &rtems_filesystem_mount_table_control ) )
+    entry = (rtems_filesystem_mount_table_entry_t *)
+      rtems_chain_first( &rtems_filesystem_mount_table_control );
+
+  return entry;
+}
+
+/*
+ * Get the next entry in the mount table.
+ */
+rtems_filesystem_mount_table_entry_t *
+rtems_filesystem_mounts_next(
+  rtems_filesystem_mount_table_entry_t *entry
+)
+{
+  if ( !entry )
+    return NULL;
+  return (rtems_filesystem_mount_table_entry_t *)
+    rtems_chain_next( &entry->Node );
+}

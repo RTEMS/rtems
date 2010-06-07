@@ -289,32 +289,51 @@ struct _rtems_filesystem_operations_table {
     rtems_filesystem_statvfs_t       statvfs_h;
 };
 
-/*
- * File system table used by mount to manage file systems.
+/**
+ * @brief File system table entry.
  */
 typedef struct rtems_filesystem_table_t {
   const char                    *type;
   rtems_filesystem_fsmount_me_t  mount_h;
 } rtems_filesystem_table_t;
 
-/*
- * File system table runtime loaded nodes.
+/**
+ * @brief Static table of file systems.
+ *
+ * Externally defined by confdefs.h or the user.
  */
-typedef struct rtems_filesystem_table_node_t {
-  rtems_chain_node         node;
-  rtems_filesystem_table_t entry;
-} rtems_filesystem_table_node_t;
+extern const rtems_filesystem_table_t rtems_filesystem_table [];
 
-/*
- * Get the first entry in the filesystem table.
+/**
+ * @brief Per file system table entry routine type.
+ *
+ * Return @c true to continue the iteration, and @c false to stop.
  */
-const rtems_filesystem_table_t* rtems_filesystem_table_first( void );
+typedef bool (*rtems_per_filesystem_routine)(
+  const rtems_filesystem_table_t *entry,
+  void *arg
+);
 
-/*
- * Get the next entry in the file system table.
+/**
+ * @brief Iterates over the file system table.
+ *
+ * For each file system table entry the @a routine will be called with the
+ * table entry and the @a routine_arg parameter.
  */
-const rtems_filesystem_table_t* 
-rtems_filesystem_table_next( const rtems_filesystem_table_t *entry );
+void
+rtems_filesystem_iterate(
+  rtems_per_filesystem_routine routine,
+  void *routine_arg
+);
+
+/**
+ * @brief Returns the file system mount handler associated with the @a type, or
+ * @c NULL if no such association exists.
+ */
+rtems_filesystem_fsmount_me_t
+rtems_filesystem_get_mount_handler(
+  const char *type
+);
 
 /*
  * Get the first entry in the mount table.

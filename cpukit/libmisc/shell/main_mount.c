@@ -27,6 +27,13 @@
 #include <rtems/libio.h>
 #include "internal.h"
 
+static bool print_filesystem(const rtems_filesystem_table_t *entry, void *arg)
+{
+  printf("%s ", entry->type);
+
+  return true;
+}
+
 int rtems_shell_main_mount(
   int   argc,
   char *argv[]
@@ -55,13 +62,8 @@ int rtems_shell_main_mount(
       } else if (argv[arg][1] == 'r') {
         options = RTEMS_FILESYSTEM_READ_ONLY;
       } else if (argv[arg][1] == 'L') {
-        const rtems_filesystem_table_t* fs;
-        fs = rtems_filesystem_table_first();
         printf ("File systems: ");
-        while (fs) {
-          printf ("%s ", fs->type);
-          fs = rtems_filesystem_table_next(fs);
-        }
+        rtems_filesystem_iterate(print_filesystem, NULL);
         printf ("\n");
         return 0;
       } else if (argv[arg][1] == 'o') {

@@ -389,12 +389,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   /**
    * The default file system table. Must be terminated with the NULL entry if
    * you provide your own.
-   *
-   * The extern is needed to stop the table being removed by the optimizer.
    */
-  extern const rtems_filesystem_table_t configuration_filesystem_table[];
   #ifndef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
-    const rtems_filesystem_table_t configuration_filesystem_table[] = {
+    const rtems_filesystem_table_t rtems_filesystem_table[] = {
       #if defined(CONFIGURE_FILESYSTEM_miniIMFS) && \
           defined(CONFIGURE_FILESYSTEM_ENTRY_miniIMFS)
         CONFIGURE_FILESYSTEM_ENTRY_miniIMFS,

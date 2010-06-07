@@ -40,6 +40,11 @@ extern rtems_id                          rtems_libio_semaphore;
 extern const rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers;
 
 /*
+ * Mount table list.
+ */
+extern rtems_chain_control rtems_filesystem_mount_table_control;
+
+/*
  *  File descriptor Table Information
  */
 
