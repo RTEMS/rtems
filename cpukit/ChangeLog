@@ -1,3 +1,19 @@
+2010-06-07	Bharath Suri <bharath.s.jois@gmail.com>
+
+	* libcsupport/include/rtems/libio_.h: Removed macros
+	rtems_filesystem_is_separator
+	rtems_filesystem_get_start_loc
+	rtems_filesystem_get_sym_start_loc
+	and added them as files under libcsupport/src/
+
+	* libcsupport/src/: Added new files
+	libcsupport/src/sup_fs_get_start_loc.c
+	libcsupport/src/sup_fs_get_sym_start_loc.c
+	libcsupport/src/sup_fs_is_separator.c
+
+	* libcsupport/Makefile.am: Changes to accommodate new
+	files under libcsupport/src/
+
 2010-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/include/rtems/score/heap.h: Declare
