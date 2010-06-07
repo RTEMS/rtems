@@ -1,3 +1,8 @@
+2010-06-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/version.m4: Bump RTEMS_API to 4.11.
+	Bump _RTEMS_VERSION to 4.10.99.0.
+
 2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* support/include/tmacros.h: Remove PRIdoff_t.
