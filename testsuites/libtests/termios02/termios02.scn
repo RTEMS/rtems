@@ -3,4 +3,25 @@ tcdrain(12) - EBADF
 tcdrain(stdin) - OK
 tcdrain(stdout) - OK
 tcdrain(stderr) - OK
+
+tcflow(stdin, TCOOFF) - ENOTSUP
+tcflow(stdin, TCOON) - ENOTSUP
+tcflow(stdin, TCIOFF) - ENOTSUP
+tcflow(stdin, TCION) - ENOTSUP
+tcflow(stdin, 22) - EINVAL
+
+tcflush(stdin, TCIFLUSH) - ENOTSUP
+tcflush(stdin, TCOFLUSH) - ENOTSUP
+tcflush(stdin, TCIOFLUSH) - ENOTSUP
+tcflush(stdin, 22) - EINVAL
+
+tcgetpgrp( 1 ) - OK
+tcsetpgrp( 1, 3 ) - OK
+
+tcsendbreak( 1, 0 ) - OK
+
+ctermid( NULL ) - OK
+ctermid ==> /dev/console
+ctermid( term_name ) - OK
+ctermid ==> /dev/console
 *** END OF TERMIOS 02 TEST ***

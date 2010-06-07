@@ -196,5 +196,87 @@ tcsetattr(TCSANOW, 2 bits) - OK
 set_attributes - B38400 8-NONE-2
 tcsetattr(TCSADRAIN, 2 bits) - OK
 set_attributes - B38400 8-NONE-2
+cfsetospeed(BAD BAUD) - EINVAL
+cfsetospeed(B0) - OK
+cfgetospeed(B0) - OK
+cfsetospeed(B50) - OK
+cfgetospeed(B50) - OK
+cfsetospeed(B75) - OK
+cfgetospeed(B75) - OK
+cfsetospeed(B110) - OK
+cfgetospeed(B110) - OK
+cfsetospeed(B134) - OK
+cfgetospeed(B134) - OK
+cfsetospeed(B150) - OK
+cfgetospeed(B150) - OK
+cfsetospeed(B200) - OK
+cfgetospeed(B200) - OK
+cfsetospeed(B300) - OK
+cfgetospeed(B300) - OK
+cfsetospeed(B600) - OK
+cfgetospeed(B600) - OK
+cfsetospeed(B1200) - OK
+cfgetospeed(B1200) - OK
+cfsetospeed(B1800) - OK
+cfgetospeed(B1800) - OK
+cfsetospeed(B2400) - OK
+cfgetospeed(B2400) - OK
+cfsetospeed(B4800) - OK
+cfgetospeed(B4800) - OK
+cfsetospeed(B9600) - OK
+cfgetospeed(B9600) - OK
+cfsetospeed(B19200) - OK
+cfgetospeed(B19200) - OK
+cfsetospeed(B38400) - OK
+cfgetospeed(B38400) - OK
+cfsetospeed(B57600) - OK
+cfgetospeed(B57600) - OK
+cfsetospeed(B115200) - OK
+cfgetospeed(B115200) - OK
+cfsetospeed(B230400) - OK
+cfgetospeed(B230400) - OK
+cfsetospeed(B460800) - OK
+cfgetospeed(B460800) - OK
+cfsetispeed(BAD BAUD) - EINVAL
+cfsetispeed(B0) - OK
+cfgetispeed(B0) - OK
+cfsetispeed(B50) - OK
+cfgetispeed(B50) - OK
+cfsetispeed(B75) - OK
+cfgetispeed(B75) - OK
+cfsetispeed(B110) - OK
+cfgetispeed(B110) - OK
+cfsetispeed(B134) - OK
+cfgetispeed(B134) - OK
+cfsetispeed(B150) - OK
+cfgetispeed(B150) - OK
+cfsetispeed(B200) - OK
+cfgetispeed(B200) - OK
+cfsetispeed(B300) - OK
+cfgetispeed(B300) - OK
+cfsetispeed(B600) - OK
+cfgetispeed(B600) - OK
+cfsetispeed(B1200) - OK
+cfgetispeed(B1200) - OK
+cfsetispeed(B1800) - OK
+cfgetispeed(B1800) - OK
+cfsetispeed(B2400) - OK
+cfgetispeed(B2400) - OK
+cfsetispeed(B4800) - OK
+cfgetispeed(B4800) - OK
+cfsetispeed(B9600) - OK
+cfgetispeed(B9600) - OK
+cfsetispeed(B19200) - OK
+cfgetispeed(B19200) - OK
+cfsetispeed(B38400) - OK
+cfgetispeed(B38400) - OK
+cfsetispeed(B57600) - OK
+cfgetispeed(B57600) - OK
+cfsetispeed(B115200) - OK
+cfgetispeed(B115200) - OK
+cfsetispeed(B230400) - OK
+cfgetispeed(B230400) - OK
+cfsetispeed(B460800) - OK
+cfgetispeed(B460800) - OK
 Init - close - /dev/test - OK
 *** END OF TEST TERMIOS 01 ***

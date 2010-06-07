@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -12,33 +12,119 @@
 #include "tmacros.h"
 #include <termios.h>
 #include <errno.h>
+#include <unistd.h>
 
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
   int sc;
+  pid_t pid;
+  char *term_name_p;
+  char term_name[32];
 
-  printf( "\n\n*** TERMIOS 02 TEST ***\n" );
+  puts( "\n\n*** TERMIOS 02 TEST ***" );
 
-  printf( "tcdrain(12) - EBADF\n" );
+  puts( "tcdrain(12) - EBADF" );
   sc = tcdrain(12);
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EBADF );
 
-  printf( "tcdrain(stdin) - OK\n" );
+  puts( "tcdrain(stdin) - OK" );
   sc = tcdrain(0);
   rtems_test_assert( !sc );
 
-  printf( "tcdrain(stdout) - OK\n" );
+  puts( "tcdrain(stdout) - OK" );
   tcdrain(1);
   rtems_test_assert( !sc );
 
-  printf( "tcdrain(stderr) - OK\n" );
+  puts( "tcdrain(stderr) - OK" );
   tcdrain(2);
   rtems_test_assert( !sc );
 
-  printf( "*** END OF TERMIOS 02 TEST ***\n" );
+  puts( "" ); 
+
+  /***** TEST TCFLOW *****/
+  puts( "tcflow(stdin, TCOOFF) - ENOTSUP" );
+  sc = tcflow( 0, TCOOFF );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno = ENOTSUP );
+
+  puts( "tcflow(stdin, TCOON) - ENOTSUP" );
+  sc = tcflow( 0, TCOON );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno = ENOTSUP );
+
+  puts( "tcflow(stdin, TCIOFF) - ENOTSUP" );
+  sc = tcflow( 0, TCIOFF );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno = ENOTSUP );
+
+  puts( "tcflow(stdin, TCION) - ENOTSUP" );
+  sc = tcflow( 0, TCION );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno = ENOTSUP );
+
+  puts( "tcflow(stdin, 22) - EINVAL" );
+  sc = tcflow( 0, 22 );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno = EINVAL );
+
+  puts( "" ); 
+
+  /***** TEST TCFLUSH *****/
+  puts( "tcflush(stdin, TCIFLUSH) - ENOTSUP" );
+  sc = tcflush( 0, TCIFLUSH );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno = ENOTSUP );
+
+  puts( "tcflush(stdin, TCOFLUSH) - ENOTSUP" );
+  sc = tcflush( 0, TCOFLUSH );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno = ENOTSUP );
+
+  puts( "tcflush(stdin, TCIOFLUSH) - ENOTSUP" );
+  sc = tcflush( 0, TCIOFLUSH );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno = ENOTSUP );
+
+  puts( "tcflush(stdin, 22) - EINVAL" );
+  sc = tcflush( 0, 22 );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno = EINVAL );
+
+  puts( "" );
+
+  /***** TEST TCGETPGRP *****/
+  puts( "tcgetpgrp( 1 ) - OK" );
+  pid = tcgetpgrp(1);
+  rtems_test_assert( pid == getpid() );
+
+  puts( "tcsetpgrp( 1, 3 ) - OK" );
+  sc = tcsetpgrp( 1, 3 );
+  rtems_test_assert( !sc );
+
+  puts( "" );
+
+  /***** TEST TCSENDBREAK *****/
+  puts( "tcsendbreak( 1, 0 ) - OK" );
+  sc = tcsendbreak( 1, 0 );
+  rtems_test_assert( !sc );
+
+  puts( "" );
+
+  /***** TEST CTERMID *****/
+  puts( "ctermid( NULL ) - OK" );
+  term_name_p = ctermid( NULL );
+  rtems_test_assert( term_name_p );
+  printf( "ctermid ==> %s\n", term_name_p );
+
+  puts( "ctermid( term_name ) - OK" );
+  term_name_p = ctermid( term_name );
+  rtems_test_assert( term_name_p == term_name );
+  printf( "ctermid ==> %s\n", term_name_p );
+
+  puts( "*** END OF TERMIOS 02 TEST ***" );
   exit( 0 );
 }
 

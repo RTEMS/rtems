@@ -135,14 +135,17 @@ void test_termios_baud2index(void)
   rtems_test_assert( i == -1 );
 
   if ( i != -1 )
-  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
-    printf( "termios_baud_to_index(B%" PRIdrtems_termios_baud_t ") - OK\n", baud_table[i].baud );
-    index = rtems_termios_baud_to_index( baud_table[i].constant );
-    if ( index != i ) {
-      printf( "ERROR - returned %d should be %d\n", index, i );
-      rtems_test_exit(0);
+    for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+      printf(
+        "termios_baud_to_index(B%" PRIdrtems_termios_baud_t ") - OK\n",
+        baud_table[i].baud
+      );
+      index = rtems_termios_baud_to_index( baud_table[i].constant );
+      if ( index != i ) {
+        printf( "ERROR - returned %d should be %d\n", index, i );
+        rtems_test_exit(0);
+      }
     }
-  }
 }
 
 /*
@@ -377,6 +380,71 @@ void test_termios_set_stop_bits(
   }
 }
 
+void test_termios_cfoutspeed(void)
+{
+  int i;
+  int sc;
+  speed_t speed;
+  struct termios term;
+  tcflag_t        bad;
+
+  bad = CBAUD << 1;
+  memset( &term, '\0', sizeof(term) );
+  puts( "cfsetospeed(BAD BAUD) - EINVAL" );
+  sc = cfsetospeed( &term, bad );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+    memset( &term, '\0', sizeof(term) );
+    printf(
+      "cfsetospeed(B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
+    sc = cfsetospeed( &term, baud_table[i].constant );
+    rtems_test_assert( !sc );
+    printf(
+      "cfgetospeed(B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
+    speed = cfgetospeed( &term );
+    rtems_test_assert( speed == baud_table[i].constant );
+  }
+}
+
+void test_termios_cfinspeed(void)
+{
+  int             i;
+  int             sc;
+  speed_t         speed;
+  struct termios  term;
+  tcflag_t        bad;
+
+  bad = CBAUD << 1;
+  memset( &term, '\0', sizeof(term) );
+  puts( "cfsetispeed(BAD BAUD) - EINVAL" );
+  sc = cfsetispeed( &term, bad );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+    memset( &term, '\0', sizeof(term) );
+    printf(
+      "cfsetispeed(B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
+    sc = cfsetispeed( &term, baud_table[i].constant );
+    rtems_test_assert( !sc );
+
+    printf(
+      "cfgetispeed(B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
+    speed = cfgetispeed( &term );
+    rtems_test_assert( speed == baud_table[i].constant );
+  }
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
@@ -480,6 +548,10 @@ rtems_task Init(
   }
 
   test_termios_set_stop_bits(test);
+
+  test_termios_cfoutspeed();
+
+  test_termios_cfinspeed();
 
   puts( "Init - close - " TERMIOS_TEST_DRIVER_DEVICE_NAME " - OK" );
   rc = close( test );
