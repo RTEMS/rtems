@@ -13,7 +13,6 @@ DIST_SUBDIRS += freebsd8.0
 DIST_SUBDIRS += mingw32
 DIST_SUBDIRS += netbsd5.0.2
 DIST_SUBDIRS += solaris2.7
-DIST_SUBDIRS += rtems4.10
 DIST_SUBDIRS += rtems4.11
 
 DIST_SUBDIRS += autotools
