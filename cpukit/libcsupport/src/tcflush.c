@@ -1,7 +1,7 @@
 /*
  *  tcflush() - POSIX 1003.1b 7.2.2 - Line Control Functions
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,12 +24,26 @@
 #include <termios.h>
 /* #include <sys/ioctl.h> */
 
+#include <rtems/seterr.h>
 #include <rtems/libio.h>
 
 int tcflush (
   int fd __attribute__((unused)),
-  int queue __attribute__((unused)) )
+  int queue
+)
 {
+  switch (queue) {
+    case TCIFLUSH:
+    case TCOFLUSH:
+    case TCIOFLUSH:
+    default:
+      rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  /* fd is not validated */
+
+  /* When this is supported, implement it here */
+  rtems_set_errno_and_return_minus_one( ENOTSUP );
   return 0;
 }
 

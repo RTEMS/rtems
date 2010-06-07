@@ -1,3 +1,9 @@
+2010-06-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/tcflow.c, libcsupport/src/tcflush.c: Add switches
+	to detect bad input.
+	* libcsupport/src/tcsetpgrp.c: Fix typo.
+
 2010-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/rtems/libio_.h: Declare
