@@ -2,8 +2,8 @@
 
 m4_define([RTEMS_API],[4.10])
 
-AC_PREREQ(2.61)
-AC_INIT([crossrpms],[0.20091130.2],[http://www.rtems.org/bugzilla])
+AC_PREREQ(2.65)
+AC_INIT([crossrpms],[0.20100607.0],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -11,7 +11,7 @@ AC_CANONICAL_HOST
 
 AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
-AM_INIT_AUTOMAKE([1.9])
+AM_INIT_AUTOMAKE([1.11.1])
 
 AC_ARG_ENABLE([targets],
   AS_HELP_STRING([--enable-targets=<targets>],[build for targets <targets>]),
@@ -149,29 +149,6 @@ AC_SUBST(rtems_api,RTEMS_API)
 
 AC_CONFIG_FILES([Makefile])
 
-AC_CONFIG_FILES([cygwin/Makefile])
-AC_CONFIG_FILES([cygwin/i686/Makefile])
-
-AC_CONFIG_FILES([mingw32/Makefile])
-AC_CONFIG_FILES([mingw32/i686/Makefile])
-
-AC_CONFIG_FILES([solaris2.7/Makefile])
-AC_CONFIG_FILES([solaris2.7/sparc/Makefile])
-
-AC_CONFIG_FILES([freebsd6.4/Makefile])
-AC_CONFIG_FILES([freebsd6.4/i586/Makefile])
-
-AC_CONFIG_FILES([freebsd7.3/Makefile])
-AC_CONFIG_FILES([freebsd7.3/i586/Makefile])
-
-AC_CONFIG_FILES([freebsd8.0/Makefile])
-AC_CONFIG_FILES([freebsd8.0/i586/Makefile])
-AC_CONFIG_FILES([freebsd8.0/x86_64/Makefile])
-
-AC_CONFIG_FILES([netbsd5.0.2/Makefile])
-AC_CONFIG_FILES([netbsd5.0.2/i386/Makefile])
-AC_CONFIG_FILES([netbsd5.0.2/x86_64/Makefile])
-
 AC_CONFIG_FILES([rtems4.10/Makefile])
 AC_CONFIG_FILES([rtems4.10/arm/Makefile])
 AC_CONFIG_FILES([rtems4.10/avr/Makefile])
@@ -187,23 +164,6 @@ AC_CONFIG_FILES([rtems4.10/mipstx39/Makefile])
 AC_CONFIG_FILES([rtems4.10/powerpc/Makefile])
 AC_CONFIG_FILES([rtems4.10/sh/Makefile])
 AC_CONFIG_FILES([rtems4.10/sparc/Makefile])
-
-AC_CONFIG_FILES([rtems4.11/Makefile])
-AC_CONFIG_FILES([rtems4.11/arm/Makefile])
-AC_CONFIG_FILES([rtems4.11/avr/Makefile])
-AC_CONFIG_FILES([rtems4.11/bfin/Makefile])
-AC_CONFIG_FILES([rtems4.11/h8300/Makefile])
-AC_CONFIG_FILES([rtems4.11/i386/Makefile])
-AC_CONFIG_FILES([rtems4.11/lm32/Makefile])
-AC_CONFIG_FILES([rtems4.11/m32c/Makefile])
-AC_CONFIG_FILES([rtems4.11/m32r/Makefile])
-AC_CONFIG_FILES([rtems4.11/m68k/Makefile])
-AC_CONFIG_FILES([rtems4.11/mips/Makefile])
-AC_CONFIG_FILES([rtems4.11/mipstx39/Makefile])
-AC_CONFIG_FILES([rtems4.11/powerpc/Makefile])
-AC_CONFIG_FILES([rtems4.11/sh/Makefile])
-AC_CONFIG_FILES([rtems4.11/sparc/Makefile])
-AC_CONFIG_FILES([rtems4.11/sparc64/Makefile])
 
 AC_CONFIG_FILES([autotools/Makefile])
 
