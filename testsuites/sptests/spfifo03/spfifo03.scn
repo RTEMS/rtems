@@ -1,0 +1,32 @@
+Could not open '/dev/kqemu' - QEMU acceleration layer not activated: No such file or directory
+Initialized console on port COM1 9600-8-N-1
+
+
+
+*** FIFO / PIPE OPEN TEST - 3 ***
+
+
+Configuration: Pipes configured, but number of barriers configured = 1
+Required number of barriers = 2
+
+
+Creating directory /tmp
+
+
+Creating fifo /tmp/fifo
+
+
+Attempt to open the fifo file
+
+Must result in failure since 
+number of barriers = 1 => not all resources
+were acquired
+
+
+Remove the entry /tmp/fifo01
+
+
+Remove directory /tmp
+
+
+*** END OF FIFO / PIPE OPEN TEST - 3 ***

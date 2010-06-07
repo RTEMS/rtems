@@ -1,3 +1,15 @@
+2010-06-07	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR PR1542
+	* Makefile.am, configure.ac: Coverage improvement: fifo_open.
+	* spfifo01/spfifo01.doc, spfifo01/spfifo01.scn, spfifo01/test.c,
+	spfifo02/Makefile.am, spfifo02/main.c, spfifo02/spfifo02.doc,
+	spfifo02/spfifo02.scn, spfifo02/test.c, spfifo03/Makefile.am,
+	spfifo03/main.c, spfifo03/spfifo03.doc, spfifo03/spfifo03.scn,
+	spfifo03/test.c, spfifo04/Makefile.am, spfifo04/main.c,
+	spfifo04/spfifo04.doc, spfifo04/spfifo04.scn, spfifo04/test.c: New
+	files.
+
 2010-06-07	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* sp09/screen12.c: Update for heap extend changes.
