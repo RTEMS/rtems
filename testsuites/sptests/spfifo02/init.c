@@ -1,13 +1,5 @@
-/*  test_main
- *
- *  This routine serves as a test routine.
- *  Exercises the fifo_open
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,7 +10,10 @@
  */
 
 /* Includes */
+#include <bsp.h>
+#include <tmacros.h>
 
+/* Includes */
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -26,7 +21,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include <tmacros.h>
 #include <rtems.h>
 #include <rtems/libio.h>
 
@@ -37,9 +31,10 @@ void test_main(void)
   int status = -1;
   int fd = 0;
 
-  puts("\n\n*** FIFO / PIPE OPEN TEST - 1 ***");
+  puts("\n\n*** FIFO / PIPE OPEN TEST - 2 ***");
   puts(
-"\n\nConfiguration: Pipes not enabled"
+"\n\nConfiguration: Pipes configured, \
+but number of barriers configured = 0"
        );
 
   puts("\n\nCreating directory /tmp");
@@ -52,8 +47,9 @@ void test_main(void)
 
   puts("\n\nAttempt to open the fifo file\n");
   puts(
-       "Must result in failure since \
-pipes are not enabled in the configuration"
+"Must result in failure since \n\
+number of barriers = 0 => not all resources\n\
+were acquired"
        );
 
   fd = open("/tmp/fifo01", O_RDONLY);
@@ -68,6 +64,29 @@ pipes are not enabled in the configuration"
   status = rmdir("/tmp");
   rtems_test_assert(status == 0);
 
-  puts("\n\n*** END OF FIFO / PIPE OPEN TEST - 1 ***");
+  puts("\n\n*** END OF FIFO / PIPE OPEN TEST - 2 ***");
 }
   
+rtems_task Init(
+  rtems_task_argument not_used
+)
+{
+  test_main();
+  rtems_test_exit(0);
+}
+
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 6
+
+#define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_PIPES_ENABLED
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+
+/* end of file */

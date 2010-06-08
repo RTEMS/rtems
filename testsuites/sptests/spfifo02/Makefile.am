@@ -5,7 +5,7 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = spfifo02
-spfifo02_SOURCES = main.c test.c
+spfifo02_SOURCES = init.c
 
 dist_rtems_tests_DATA = spfifo02.scn
 dist_rtems_tests_DATA += spfifo02.doc
