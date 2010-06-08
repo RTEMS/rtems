@@ -127,7 +127,8 @@ int no_evalformake_IMFS_initialize(
      mt_entry,
      &IMFS_ops_no_evalformake,
      &IMFS_memfile_handlers,
-     &IMFS_directory_handlers
+     &IMFS_directory_handlers,
+     &IMFS_fifo_handlers
    );
 }
 
@@ -140,7 +141,8 @@ int no_rename_IMFS_initialize(
      mt_entry,
      &IMFS_ops_no_rename,
      &IMFS_memfile_handlers,
-     &IMFS_directory_handlers
+     &IMFS_directory_handlers,
+     &IMFS_fifo_handlers
    );
 }
 

@@ -1,3 +1,7 @@
+2010-06-08	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* psxfile01/test.c: Update for IMFS API changes.
+
 2010-06-02 	Chris Johns <chrisj@rtems.org>
 
 	* psxfile01/test.c, psxmount/test.c, psxreaddir/test.c,
