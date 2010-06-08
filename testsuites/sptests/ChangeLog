@@ -1,3 +1,8 @@
+2010-06-08	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* spmkdir/.cvsignore, spmkdir/Makefile.am, spmkdir/init.c,
+	spmkdir/spmkdir.doc, spmkdir/spmkdir.scn: New files.
+
 2010-06-07	Bharath Suri <bharath.s.jois@gmail.com>
 
 	* spfifo01/main.c: New file.

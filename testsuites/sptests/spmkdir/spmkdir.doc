@@ -1,0 +1,7 @@
+# $Id$
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: spmkdir
+
+directives: rtems_mkdir
