@@ -34,10 +34,8 @@ int devFS_close(
     np->minor,
     (void *) &args
   );
-  if ( status ) {
-    return rtems_deviceio_errno(status);
-  }
-  return 0;
+
+  return rtems_deviceio_errno(status);
 }
 
 

@@ -20,15 +20,9 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
-#include <errno.h>
+#include <rtems/devfs.h>
 
 #include "imfs.h"
-
-/*
- * Convert RTEMS status to a UNIX errno
- */
-extern int rtems_deviceio_errno(rtems_status_code code);
 
 /*
  *  device_open
@@ -58,10 +52,8 @@ int device_open(
     the_jnode->info.device.minor,
     (void *) &args
   );
-  if ( status )
-    return rtems_deviceio_errno(status);
 
-  return 0;
+  return rtems_deviceio_errno( status );
 }
 
 /*
@@ -89,10 +81,8 @@ int device_close(
     the_jnode->info.device.minor,
     (void *) &args
   );
-  if ( status ) {
-    return rtems_deviceio_errno(status);
-  }
-  return 0;
+
+  return rtems_deviceio_errno( status );
 }
 
 /*

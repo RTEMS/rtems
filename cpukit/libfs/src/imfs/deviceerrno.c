@@ -18,40 +18,53 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <rtems/libio.h>
-#include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
 #include <errno.h>
 
-/*
- * Convert RTEMS status to a UNIX errno
- */
+#include <rtems.h>
+#include <rtems/libio.h>
 
-const rtems_assoc_t errno_assoc[] = {
-    { "OK",                 RTEMS_SUCCESSFUL,                0 },
-    { "BUSY",               RTEMS_RESOURCE_IN_USE,           EBUSY },
-    { "INVALID NAME",       RTEMS_INVALID_NAME,              EINVAL },
-    { "NOT IMPLEMENTED",    RTEMS_NOT_IMPLEMENTED,           ENOSYS },
-    { "TIMEOUT",            RTEMS_TIMEOUT,                   ETIMEDOUT },
-    { "NO MEMORY",          RTEMS_NO_MEMORY,                 ENOMEM },
-    { "NO DEVICE",          RTEMS_UNSATISFIED,               ENODEV },
-    { "INVALID NUMBER",     RTEMS_INVALID_NUMBER,            EBADF},
-    { "NOT RESOURCE OWNER", RTEMS_NOT_OWNER_OF_RESOURCE,     EPERM},
-    { "IO ERROR",           RTEMS_IO_ERROR,                  EIO},
-    { 0, 0, 0 },
+static const int status_code_to_errno [RTEMS_STATUS_CODES_LAST + 1] = {
+  [RTEMS_SUCCESSFUL]               = 0,
+  [RTEMS_TASK_EXITTED]             = EIO,
+  [RTEMS_MP_NOT_CONFIGURED]        = EIO,
+  [RTEMS_INVALID_NAME]             = EINVAL,
+  [RTEMS_INVALID_ID]               = EIO,
+  [RTEMS_TOO_MANY]                 = EIO,
+  [RTEMS_TIMEOUT]                  = ETIMEDOUT,
+  [RTEMS_OBJECT_WAS_DELETED]       = EIO,
+  [RTEMS_INVALID_SIZE]             = EIO,
+  [RTEMS_INVALID_ADDRESS]          = EIO,
+  [RTEMS_INVALID_NUMBER]           = EBADF,
+  [RTEMS_NOT_DEFINED]              = EIO,
+  [RTEMS_RESOURCE_IN_USE]          = EBUSY,
+  [RTEMS_UNSATISFIED]              = ENODEV,
+  [RTEMS_INCORRECT_STATE]          = EIO,
+  [RTEMS_ALREADY_SUSPENDED]        = EIO,
+  [RTEMS_ILLEGAL_ON_SELF]          = EIO,
+  [RTEMS_ILLEGAL_ON_REMOTE_OBJECT] = EIO,
+  [RTEMS_CALLED_FROM_ISR]          = EIO,
+  [RTEMS_INVALID_PRIORITY]         = EIO,
+  [RTEMS_NOT_OWNER_OF_RESOURCE]    = EPERM,
+  [RTEMS_NOT_IMPLEMENTED]          = ENOSYS,
+  [RTEMS_INTERNAL_ERROR]           = EIO,
+  [RTEMS_NO_MEMORY]                = ENOMEM,
+  [RTEMS_IO_ERROR]                 = EIO,
+  [RTEMS_PROXY_BLOCKING]           = EIO
 };
 
-int
-rtems_deviceio_errno(rtems_status_code code)
+int rtems_deviceio_errno(rtems_status_code sc)
 {
-    int rc;
+  if (sc == RTEMS_SUCCESSFUL) {
+    return 0;
+  } else {
+    int eno = EINVAL;
 
-    if ((rc = rtems_assoc_remote_by_local(errno_assoc, (uint32_t  ) code)))
-    {
-        errno = rc;
-        return -1;
+    if ((unsigned) sc <= RTEMS_STATUS_CODES_LAST) {
+      eno = status_code_to_errno [sc];
     }
+
+    errno = eno;
+
     return -1;
+  }
 }
-
-

@@ -83,10 +83,8 @@ rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
   args.mode  = mode;
 
   status = rtems_io_open (major, minor, (void *) &args);
-  if (status)
-    return rtems_deviceio_errno(status);
 
-  return 0;
+  return rtems_deviceio_errno (status);
 }
 
 /**
@@ -112,10 +110,8 @@ rtems_rfs_rtems_device_close (rtems_libio_t* iop)
   args.mode  = 0;
 
   status = rtems_io_close (major, minor, (void *) &args);
-  if (status)
-    return rtems_deviceio_errno (status);
 
-  return 0;
+  return rtems_deviceio_errno (status);
 }
 
 /**
