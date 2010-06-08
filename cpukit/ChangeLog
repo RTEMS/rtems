@@ -1,5 +1,10 @@
 2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libfs/src/imfs/imfs_creat.c: Reject creation of FIFOs if support is
+	disabled.
+
+2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1524/filesystem
 	* libcsupport/src/rtems_mkdir.c: New file.
 	* libcsupport/src/Makefile.am: Reflect change above.

@@ -45,6 +45,16 @@ IMFS_jnode_t *IMFS_create_node(
   if ( parent_loc == NULL )
     return NULL;
 
+  parent = parent_loc->node_access;
+  fs_info = parent_loc->mt_entry->fs_info;
+
+  /*
+   *  Reject creation of FIFOs if support is disabled.
+   */
+  if ( type == IMFS_FIFO &&
+       fs_info->fifo_handlers == &rtems_filesystem_null_handlers )
+    return NULL;
+
   /*
    *  Allocate filesystem node and fill in basic information
    */
@@ -96,8 +106,6 @@ IMFS_jnode_t *IMFS_create_node(
   /*
    *  This node MUST have a parent, so put it in that directory list.
    */
-  parent       = parent_loc->node_access;
-  fs_info      = parent_loc->mt_entry->fs_info;
 
   node->Parent = parent;
   node->st_ino = ++fs_info->ino_count;
