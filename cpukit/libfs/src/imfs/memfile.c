@@ -73,8 +73,6 @@ ssize_t IMFS_memfile_write(  /* cannot be static as used in imfs_fchmod.c */
    unsigned int           length
 );
 
-int  memfile_check_rmnod( IMFS_jnode_t *the_jnode );
-
 void *memfile_alloc_block(void);
 
 void memfile_free_block(
@@ -141,7 +139,8 @@ int memfile_close(
   if (iop->flags & LIBIO_FLAGS_APPEND)
     iop->offset = the_jnode->info.file.size;
 
-  memfile_check_rmnod( the_jnode );
+  IMFS_check_node_remove( the_jnode );
+
   return 0;
 }
 
@@ -1096,68 +1095,4 @@ fflush(stdout);
 #endif
   free(memory);
   memfile_blocks_allocated--;
-}
-
-
-/*
- *  memfile_rmnod
- *
- *  This routine is available from the optable to remove a node
- *  from the IMFS file system.
- */
-
-int memfile_rmnod(
-  rtems_filesystem_location_info_t  *parent_pathloc,  /* IN */
-  rtems_filesystem_location_info_t  *pathloc          /* IN */
-)
-{
-  IMFS_jnode_t *the_jnode;
-
-  the_jnode = (IMFS_jnode_t *) pathloc->node_access;
-
-  /*
-   * Take the node out of the parent's chain that contains this node
-   */
-
-  if ( the_jnode->Parent != NULL ) {
-    rtems_chain_extract( (rtems_chain_node *) the_jnode );
-    the_jnode->Parent = NULL;
-  }
-
-  /*
-   * Decrement the link counter and see if we can free the space.
-   */
-
-  the_jnode->st_nlink--;
-  IMFS_update_ctime( the_jnode );
-
-  return memfile_check_rmnod( the_jnode );
-}
-
-
-int  memfile_check_rmnod( IMFS_jnode_t *the_jnode ){
-
-  /*
-   * The file cannot be open and the link must be less than 1 to free.
-   */
-
-  if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
-
-    /*
-     * Is the rtems_filesystem_current is this node?
-     */
-
-    if ( rtems_filesystem_current.node_access == the_jnode )
-       rtems_filesystem_current.node_access = NULL;
-
-    /*
-     * Free memory associated with a memory file.
-     */
-    if (the_jnode->type != IMFS_LINEAR_FILE)
-      IMFS_memfile_remove( the_jnode );
-
-    free( the_jnode );
-  }
-
-  return 0;
 }

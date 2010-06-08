@@ -470,11 +470,6 @@ extern rtems_off64_t memfile_lseek(
   int                   whence      /* IN  */
 );
 
-extern int memfile_rmnod(
-  rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
-  rtems_filesystem_location_info_t  *pathloc         /* IN */
-);
-
 extern int device_open(
   rtems_libio_t *iop,            /* IN  */
   const char    *pathname,       /* IN  */
@@ -552,6 +547,14 @@ extern int IMFS_fdatasync(
 extern int IMFS_fcntl(
   int            cmd,
   rtems_libio_t *iop
+);
+
+extern void IMFS_create_orphan(
+  IMFS_jnode_t *jnode
+);
+
+extern void IMFS_check_node_remove(
+  IMFS_jnode_t *jnode
 );
 
 extern int IMFS_rmnod(

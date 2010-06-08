@@ -53,11 +53,9 @@ int IMFS_fifo_close(
 
   int err = pipe_release(&JNODE2PIPE(jnode), iop);
 
-  if (! err) {
+  if (err == 0) {
     iop->flags &= ~LIBIO_FLAGS_OPEN;
-    /* Free jnode if file is already unlinked and no one opens it */
-    if (! rtems_libio_is_file_open(jnode) && jnode->st_nlink < 1)
-      free(jnode);
+    IMFS_check_node_remove(jnode);
   }
 
   IMFS_FIFO_RETURN(err);

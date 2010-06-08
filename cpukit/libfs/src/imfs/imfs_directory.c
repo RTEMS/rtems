@@ -311,42 +311,8 @@ int imfs_dir_rmnod(
    if ( the_jnode->info.directory.mt_fs != NULL )
      rtems_set_errno_and_return_minus_one( EBUSY );
 
-  /*
-   * Take the node out of the parent's chain that contains this node
-   */
-
-  if ( the_jnode->Parent != NULL ) {
-    rtems_chain_extract( (rtems_chain_node *) the_jnode );
-    the_jnode->Parent = NULL;
-  }
-
-  /*
-   * Decrement the link counter and see if we can free the space.
-   */
-
-  the_jnode->st_nlink--;
-  IMFS_update_ctime( the_jnode );
-
-  /*
-   * The file cannot be open and the link must be less than 1 to free.
-   */
-
-  if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
-
-    /*
-     * Is the rtems_filesystem_current is this node?
-     */
-
-    if ( rtems_filesystem_current.node_access == pathloc->node_access )
-       rtems_filesystem_current.node_access = NULL;
-
-    /*
-     * Free memory associated with a memory file.
-     */
-
-    free( the_jnode );
-  }
+  IMFS_create_orphan( the_jnode );
+  IMFS_check_node_remove( the_jnode );
 
   return 0;
-
 }
