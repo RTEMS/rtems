@@ -1,5 +1,9 @@
 2010-06-08	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
+	* spfifo01/init.c, spfifo01/spfifo01.scn: Update for IMFS API changes.
+
+2010-06-08	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
 	* spmkdir/.cvsignore, spmkdir/Makefile.am, spmkdir/init.c,
 	spmkdir/spmkdir.doc, spmkdir/spmkdir.scn: New files.
 	* Makefile.am, configure.ac: Reflect changes above.

@@ -9,74 +9,40 @@
  *  $Id$
  */
 
-/* Includes */
-#include <bsp.h>
-#include <tmacros.h>
-#include <stdio.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
+#include <stdio.h>
 
-#include <rtems.h>
-#include <rtems/libio.h>
+#include "tmacros.h"
 
+#define FIFO_PATH "/fifo01"
 
-void test_main(void)
+static void test_main(void)
 {
-
   int status = -1;
-  int fd = 0;
 
   puts("\n\n*** FIFO / PIPE OPEN TEST - 1 ***");
+
   puts(
-"\n\nConfiguration: Pipes not enabled"
-       );
+    "Configuration: Pipes disabled.\n"
+    "Creating named fifo '" FIFO_PATH "'.\n"
+    "Must result in failure since pipes are disabled in the configuration."
+  );
+  status = mkfifo(FIFO_PATH, 0777);
+  rtems_test_assert(status == -1);
 
-  puts("\n\nCreating directory /tmp");
-  status = mkdir("/tmp", 0777);
-  rtems_test_assert(status == 0);
-
-  puts("\n\nCreating fifo /tmp/fifo");
-  status = mkfifo("/tmp/fifo01", 0777);
-  rtems_test_assert(status == 0);
-
-  puts("\n\nAttempt to open the fifo file\n");
-  puts(
-       "Must result in failure since \
-pipes are not enabled in the configuration"
-       );
-
-  fd = open("/tmp/fifo01", O_RDONLY);
-  rtems_test_assert(fd == -1);
-  rtems_test_assert(errno == EINTR); // Should this
-                                     // be ENOMEM?
-  puts("\n\nRemove the entry /tmp/fifo01");
-  status = unlink("/tmp/fifo01");
-  rtems_test_assert(status == 0);
-
-  puts("\n\nRemove directory /tmp");
-  status = rmdir("/tmp");
-  rtems_test_assert(status == 0);
-
-  puts("\n\n*** END OF FIFO / PIPE OPEN TEST - 1 ***");
+  puts("*** END OF FIFO / PIPE OPEN TEST - 1 ***");
 }
-  
 
-rtems_task Init(
-  rtems_task_argument not_used
-)
+rtems_task Init(rtems_task_argument not_used)
 {
   test_main();
   rtems_test_exit(0);
 }
 
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 6
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 
@@ -85,5 +51,3 @@ rtems_task Init(
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-
-/* end of file */
