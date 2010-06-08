@@ -2,6 +2,7 @@
 
 	* spmkdir/.cvsignore, spmkdir/Makefile.am, spmkdir/init.c,
 	spmkdir/spmkdir.doc, spmkdir/spmkdir.scn: New files.
+	* Makefile.am, configure.ac: Reflect changes above.
 
 2010-06-07	Bharath Suri <bharath.s.jois@gmail.com>
 
