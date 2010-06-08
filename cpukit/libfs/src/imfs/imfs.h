@@ -223,6 +223,7 @@ typedef struct {
   ino_t                                   ino_count;
   const rtems_filesystem_file_handlers_r *memfile_handlers;
   const rtems_filesystem_file_handlers_r *directory_handlers;
+  const rtems_filesystem_file_handlers_r *fifo_handlers;
 } IMFS_fs_info_t;
 
 /*
@@ -247,7 +248,6 @@ extern const rtems_filesystem_file_handlers_r       IMFS_link_handlers;
 extern const rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
 extern const rtems_filesystem_file_handlers_r       IMFS_fifo_handlers;
 extern const rtems_filesystem_operations_table      IMFS_ops;
-extern const rtems_filesystem_operations_table      miniIMFS_ops;
 extern const rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
 
 /*
@@ -259,6 +259,11 @@ extern int IMFS_initialize(
    const void                           *data
 );
 
+extern int fifoIMFS_initialize(
+  rtems_filesystem_mount_table_entry_t  *mt_entry,
+  const void                            *data
+);
+
 extern int miniIMFS_initialize(
    rtems_filesystem_mount_table_entry_t *mt_entry,
    const void                           *data
@@ -268,7 +273,8 @@ extern int IMFS_initialize_support(
    rtems_filesystem_mount_table_entry_t       *mt_entry,
    const rtems_filesystem_operations_table    *op_table,
    const rtems_filesystem_file_handlers_r     *memfile_handlers,
-   const rtems_filesystem_file_handlers_r     *directory_handlers
+   const rtems_filesystem_file_handlers_r     *directory_handlers,
+   const rtems_filesystem_file_handlers_r     *fifo_handlers
 );
 
 extern int IMFS_fsunmount(

@@ -293,7 +293,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */ 
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_IMFS) && \
     defined(CONFIGURE_FILESYSTEM_IMFS)
-#define CONFIGURE_FILESYSTEM_ENTRY_IMFS { "imfs", IMFS_initialize }
+  #if defined(CONFIGURE_PIPES_ENABLED)
+    #define CONFIGURE_FILESYSTEM_ENTRY_IMFS { "imfs", fifoIMFS_initialize }
+  #else
+    #define CONFIGURE_FILESYSTEM_ENTRY_IMFS { "imfs", IMFS_initialize }
+  #endif
 #endif
 
 /**
@@ -426,20 +430,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       #endif
       CONFIGURE_FILESYSTEM_NULL
     };
-  #endif
-
-  /**
-   *  This disables the inclusion of pipe support in the full IMFS.
-   *
-   *  NOTE: When building for coverage, we need this variable all the time.
-   */
-  #if !defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM) || \
-      defined(RTEMS_COVERAGE)
-    #if defined(CONFIGURE_PIPES_ENABLED)
-      bool rtems_pipe_configured = true;
-    #else
-      bool rtems_pipe_configured = false;
-    #endif
   #endif
 
   #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE

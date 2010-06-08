@@ -109,11 +109,6 @@ extern int pipe_lseek(
   rtems_libio_t  *iop
 );
 
-/*
- * Initialization of FIFO/pipe module.
- */
-extern void rtems_pipe_initialize (void);
-
 #ifdef __cplusplus
 }
 #endif

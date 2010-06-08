@@ -20,7 +20,8 @@
 #include <rtems/seterr.h>
 
 /* Incremental number added to names of anonymous pipe files */
-uint16_t rtems_pipe_no = 0;
+/* FIXME: This approach is questionable */
+static uint16_t rtems_pipe_no = 0;
 
 /*
  * Called by pipe() to create an anonymous pipe.
@@ -33,6 +34,7 @@ int pipe_create(
   rtems_libio_t *iop;
   int err = 0;
   /* Create /tmp if not exists */
+  /* FIXME: We should use a general mkdir function for this */
   if (rtems_filesystem_evaluate_path("/tmp", 3, RTEMS_LIBIO_PERMS_RWX, &loc, TRUE)
       != 0) {
     if (errno != ENOENT)

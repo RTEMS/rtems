@@ -1,5 +1,16 @@
 2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libfs/src/imfs/fifoimfs_init.c: New file.
+	* libfs/Makefile.am: Reflect change above.
+	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_init.c, libfs/src/imfs/imfs_initsupp.c,
+	libfs/src/imfs/miniimfs_init.c, libfs/src/pipe/fifo.c,
+	libfs/src/pipe/pipe.c, libfs/src/pipe/pipe.h: Pipe support is now
+	link-time optional.
+	* sapi/include/confdefs.h: Reflect changes above.
+
+2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_rmnod.c: Added and use
 	IMFS_create_orphan() and IMFS_check_node_remove().
 	* libfs/src/imfs/deviceio.c, libfs/src/imfs/imfs_directory.c,

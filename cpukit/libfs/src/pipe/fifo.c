@@ -21,6 +21,10 @@
 
 #include <errno.h>
 #include <stdlib.h>
+
+#include <rtems.h>
+#include <rtems/libio_.h>
+
 #include "pipe.h"
 
 
@@ -29,9 +33,7 @@
 #define LIBIO_ACCMODE(_iop) ((_iop)->flags & LIBIO_FLAGS_READ_WRITE)
 #define LIBIO_NODELAY(_iop) ((_iop)->flags & LIBIO_FLAGS_NO_DELAY)
 
-extern uint16_t rtems_pipe_no;
-static rtems_id rtems_pipe_semaphore = 0;
-extern bool rtems_pipe_configured;
+static rtems_id pipe_semaphore = RTEMS_ID_NONE;
 
 
 #define PIPE_EMPTY(_pipe) (_pipe->Length == 0)
@@ -82,7 +84,7 @@ static void pipe_interruptible(pipe_control_t *pipe)
 
 /*
  * Alloc pipe control structure, buffer, and resources.
- * Called with rtems_pipe_semaphore held.
+ * Called with pipe_semaphore held.
  */
 static int pipe_alloc(
   pipe_control_t **pipep
@@ -139,7 +141,7 @@ err_buf:
   return err;
 }
 
-/* Called with rtems_pipe_semaphore held. */
+/* Called with pipe_semaphore held. */
 static inline void pipe_free(
   pipe_control_t *pipe
 )
@@ -149,6 +151,48 @@ static inline void pipe_free(
   rtems_semaphore_delete(pipe->Semaphore);
   free(pipe->Buffer);
   free(pipe);
+}
+
+static rtems_status_code pipe_lock(void)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  if (pipe_semaphore == RTEMS_ID_NONE) {
+    rtems_libio_lock();
+
+    if (pipe_semaphore == RTEMS_ID_NONE) {
+      sc = rtems_semaphore_create(
+        rtems_build_name('P', 'I', 'P', 'E'),
+        1,
+        RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+        RTEMS_NO_PRIORITY,
+        &pipe_semaphore
+      );
+    }
+
+    rtems_libio_unlock();
+  }
+
+  if (sc == RTEMS_SUCCESSFUL) {
+    sc = rtems_semaphore_obtain(pipe_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  }
+
+  if (sc == RTEMS_SUCCESSFUL) {
+    return 0;
+  } else {
+    return -EINTR;
+  }
+}
+
+static void pipe_unlock(void)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  sc = rtems_semaphore_release(pipe_semaphore);
+  if (sc != RTEMS_SUCCESSFUL) {
+    /* FIXME */
+    rtems_fatal_error_occurred(0xdeadbeef);
+  }
 }
 
 /*
@@ -163,9 +207,9 @@ static int pipe_new(
   pipe_control_t *pipe;
   int err = 0;
 
-  if (rtems_semaphore_obtain(rtems_pipe_semaphore,
-        RTEMS_WAIT, RTEMS_NO_TIMEOUT) != RTEMS_SUCCESSFUL)
-    return -EINTR;
+  err = pipe_lock();
+  if (err)
+    return err;
 
   pipe = *pipep;
   if (pipe == NULL) {
@@ -185,7 +229,7 @@ static int pipe_new(
   }
 
 out:
-  rtems_semaphore_release(rtems_pipe_semaphore);
+  pipe_unlock();
   return err;
 }
 
@@ -204,23 +248,22 @@ int pipe_release(
   uint32_t mode;
 
   rtems_status_code sc;
-  sc = rtems_semaphore_obtain(pipe->Semaphore,
-                              RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  /* WARN pipe not released! */
-  if(sc != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred(sc);
+
+  if (pipe_lock())
+    /* WARN pipe not freed and pipep not set to NULL! */
+    /* FIXME */
+    rtems_fatal_error_occurred(0xdeadbeef);
+
+  if (!PIPE_LOCK(pipe))
+    /* WARN pipe not released! */
+    /* FIXME */
+    rtems_fatal_error_occurred(0xdeadbeef);
 
   mode = LIBIO_ACCMODE(iop);
   if (mode & LIBIO_FLAGS_READ)
      pipe->Readers --;
   if (mode & LIBIO_FLAGS_WRITE)
      pipe->Writers --;
-
-  sc = rtems_semaphore_obtain(rtems_pipe_semaphore,
-                              RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  /* WARN pipe not freed and pipep not set to NULL! */
-  if(sc != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred(sc);
 
   PIPE_UNLOCK(pipe);
 
@@ -239,7 +282,7 @@ int pipe_release(
   else if (pipe->Writers == 0 && mode != LIBIO_FLAGS_READ)
     PIPE_WAKEUPREADERS(pipe);
 
-  rtems_semaphore_release(rtems_pipe_semaphore);
+  pipe_unlock();
 
 #if 0
   if (! delfile)
@@ -538,28 +581,4 @@ int pipe_lseek(
 {
   /* Seek on pipe is not supported */
   return -ESPIPE;
-}
-
-/*
- * Initialization of FIFO/pipe module.
- */
-void rtems_pipe_initialize (void)
-{
-  if (!rtems_pipe_configured)
-    return;
-
-  if (rtems_pipe_semaphore)
-    return;
-
-  rtems_status_code sc;
-  sc = rtems_semaphore_create(
-        rtems_build_name ('P', 'I', 'P', 'E'), 1,
-        RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-        RTEMS_NO_PRIORITY, &rtems_pipe_semaphore);
-  if (sc != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred (sc);
-
-  rtems_interval now;
-  now = rtems_clock_get_ticks_since_boot();
-  rtems_pipe_no = now;
 }

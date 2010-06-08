@@ -3,29 +3,29 @@
  *
  * @ingroup LibFSIMFS
  *
- * @brief IMFS initialization.
+ * @brief IMFS without fifo support initialization.
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2010
+ * embedded brains GmbH
+ * Obere Lagerstr. 30
+ * D-82178 Puchheim
+ * Germany
+ * <rtems@embedded-brains.de>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <rtems/libio_.h>
-
 #include "imfs.h"
 
-const rtems_filesystem_operations_table IMFS_ops = {
+static const rtems_filesystem_operations_table fifoIMFS_ops = {
   .evalpath_h = IMFS_eval_path,
   .evalformake_h = IMFS_evaluate_for_make,
   .link_h = IMFS_link,
@@ -35,7 +35,7 @@ const rtems_filesystem_operations_table IMFS_ops = {
   .chown_h = IMFS_chown,
   .freenod_h = IMFS_freenodinfo,
   .mount_h = IMFS_mount,
-  .fsmount_me_h = IMFS_initialize,
+  .fsmount_me_h = fifoIMFS_initialize,
   .unmount_h = IMFS_unmount,
   .fsunmount_me_h = IMFS_fsunmount,
   .utime_h = IMFS_utime,
@@ -46,16 +46,16 @@ const rtems_filesystem_operations_table IMFS_ops = {
   .statvfs_h = NULL
 };
 
-int IMFS_initialize(
+int fifoIMFS_initialize(
   rtems_filesystem_mount_table_entry_t *mt_entry,
-  const void                           *data
+  const void *data
 )
 {
   return IMFS_initialize_support(
     mt_entry,
-    &IMFS_ops,
+    &fifoIMFS_ops,
     &IMFS_memfile_handlers,
     &IMFS_directory_handlers,
-    &rtems_filesystem_null_handlers  /* for fifos */
+    &IMFS_fifo_handlers
   );
 }

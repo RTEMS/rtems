@@ -31,7 +31,7 @@ libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_debug.c src/imfs/imfs_rmnod.c src/imfs/imfs_symlink.c \
     src/imfs/imfs_readlink.c src/imfs/imfs_fdatasync.c src/imfs/imfs_fcntl.c \
     src/imfs/ioman.c src/imfs/miniimfs_init.c src/imfs/imfs_load_tar.c \
-    src/imfs/imfs_rename.c src/imfs/imfs.h \
+    src/imfs/imfs_rename.c src/imfs/fifoimfs_init.c src/imfs/imfs.h \
     src/imfs/deviceerrno.c \
     src/devfs/devfs_init.c src/devfs/devfs_eval.c src/devfs/devfs_mknod.c \
     src/devfs/devfs_show.c src/devfs/devfs_node_type.c \

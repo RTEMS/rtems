@@ -58,7 +58,7 @@ int IMFS_Set_handlers(
       loc->handlers = fs_info->memfile_handlers;
       break;
     case IMFS_FIFO:
-      loc->handlers = &IMFS_fifo_handlers;
+      loc->handlers = fs_info->fifo_handlers;
       break;
   }
 

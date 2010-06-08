@@ -66,7 +66,8 @@ int IMFS_initialize_support(
   rtems_filesystem_mount_table_entry_t        *temp_mt_entry,
    const rtems_filesystem_operations_table    *op_table,
    const rtems_filesystem_file_handlers_r     *memfile_handlers,
-   const rtems_filesystem_file_handlers_r     *directory_handlers
+   const rtems_filesystem_file_handlers_r     *directory_handlers,
+   const rtems_filesystem_file_handlers_r     *fifo_handlers
 )
 {
   static int                             imfs_instance;
@@ -108,12 +109,10 @@ int IMFS_initialize_support(
   fs_info->ino_count             = 1;
   fs_info->memfile_handlers      = memfile_handlers;
   fs_info->directory_handlers    = directory_handlers;
+  fs_info->fifo_handlers         = fifo_handlers;
 
   jnode = temp_mt_entry->mt_fs_root.node_access;
   jnode->st_ino = fs_info->ino_count;
-
-  /* Initialize POSIX FIFO/pipe module */
-  rtems_pipe_initialize();
 
   return 0;
 }
