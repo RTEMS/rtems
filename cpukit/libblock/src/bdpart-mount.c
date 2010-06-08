@@ -29,7 +29,7 @@
 
 #include <rtems.h>
 #include <rtems/bdpart.h>
-#include <rtems/fsmount.h>
+#include <rtems/libio.h>
 
 rtems_status_code rtems_bdpart_mount(
   const char *disk_name,
@@ -90,7 +90,7 @@ rtems_status_code rtems_bdpart_mount(
 
     /* Create mount point */
     strncpy( mount_marker, logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE);
-    rv = rtems_fsmount_create_mount_point( mount_point);
+    rv = rtems_mkdir( mount_point, S_IRWXU | S_IRWXG | S_IRWXO);
     if (rv != 0) {
       esc = RTEMS_IO_ERROR;
       goto cleanup;

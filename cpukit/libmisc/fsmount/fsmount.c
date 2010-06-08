@@ -34,83 +34,11 @@
 
 #include <rtems.h>
 #include <rtems/fsmount.h>
+#include <rtems/libio.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <rtems/imfs.h>
-#include <sys/stat.h>
-
-/*=========================================================================*\
-| Function:                                                                 |
-\*-------------------------------------------------------------------------*/
-int rtems_fsmount_create_mount_point
-(
-/*-------------------------------------------------------------------------*\
-| Purpose:                                                                  |
-|  This function will create the mount point given                          |
-+---------------------------------------------------------------------------+
-| Input Parameters:                                                         |
-\*-------------------------------------------------------------------------*/
- const char *mount_point
- )
-/*-------------------------------------------------------------------------*\
-| Return Value:                                                             |
-|    0, if success, -1 and errno if failed                                  |
-\*=========================================================================*/
-{
-  int rc = 0;
-  char *tok_buffer = NULL;
-  char *token = NULL;
-  int    token_len;
-  size_t total_len;
-  IMFS_token_types token_type;
-  struct stat file_info;
-  /*
-   * allocate temp memory to rebuild path name
-   */
-  tok_buffer = calloc(strlen(mount_point)+1,sizeof(char));
-  if ( !tok_buffer )
-    return -1;
-  token = tok_buffer;
-  total_len = 0;
-  do {
-    /*
-     * scan through given string, one segment at a time
-     */
-    token_type = IMFS_get_token(
-      mount_point+total_len,
-      strlen(mount_point+total_len),
-      token,
-      &token_len
-    );
-    total_len += token_len;
-    strncpy(tok_buffer,mount_point,total_len);
-    tok_buffer[total_len] = '\0';
-
-    if ((token_type != IMFS_NO_MORE_PATH) &&
-	(token_type != IMFS_CURRENT_DIR)  &&
-	(token_type != IMFS_INVALID_TOKEN)) {
-      /*
-       * check, whether segment exists
-       */
-      if (0 != stat(tok_buffer,&file_info)) {
-	/*
-	 * if not, create directory
-	 */
-	rc = mknod(tok_buffer,S_IRWXU | S_IRWXG | S_IRWXO | S_IFDIR,0);
-      }
-    }
-  } while ((rc == 0) &&
-	   (token_type != IMFS_NO_MORE_PATH) &&
-	   (token_type != IMFS_INVALID_TOKEN));
-
-  /*
-   * return token buffer to heap. Verified to be non-NULL when calloc'ed.
-   */
-  free(tok_buffer);
-  return rc;
-}
 
 /*=========================================================================*\
 | Function:                                                                 |
@@ -148,7 +76,7 @@ int rtems_fsmount
      * create mount point
      */
     if (tmp_rc == 0) {
-      tmp_rc = rtems_fsmount_create_mount_point(fstab_ptr->target);
+      tmp_rc = rtems_mkdir(fstab_ptr->target, S_IRWXU | S_IRWXG | S_IRWXO);
       if (tmp_rc != 0) {
         if (0 != (fstab_ptr->report_reasons & FSMOUNT_MNTPNT_CRTERR)) {
           fprintf(stdout,"fsmount: creation of mount point \"%s\" failed: %s\n",

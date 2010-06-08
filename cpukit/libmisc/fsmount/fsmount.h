@@ -121,24 +121,14 @@ typedef struct {
 } rtems_fstab_entry;
 
 /**
- * Creates the mount point with path @a mount_point.
- *
- * On success, zero is returned.  On error, -1 is returned, and @c errno is set
- * appropriately.
- *
- * @see rtems_fsmount().
- */
-int rtems_fsmount_create_mount_point(const char *mount_point);
-
-/**
  * Mounts the file systems listed in the file system mount table @a fstab of
  * size @a size.
  *
  * Each file system will be mounted according to its table entry parameters.
  * In case of an abort condition the corresponding table index will be reported
  * in @a abort_index.  The pointer @a abort_index may be @c NULL.  The mount
- * point paths will be created with rtems_fsmount_create_mount_point() and need
- * not exist beforehand.
+ * point paths will be created with rtems_mkdir() and need not exist
+ * beforehand.
  *
  * On success, zero is returned.  On error, -1 is returned, and @c errno is set
  * appropriately.

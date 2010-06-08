@@ -31,13 +31,6 @@ extern "C" {
 #include <rtems.h>
 
 /*
- *  Builds the complete path, like "mkdir -p".
- */
-
-int
-rtems_rootfs_mkdir (const char *path, mode_t omode);
-
-/*
  *  Appends the lines to the a file. Create the file
  *  and builds the path if it does not exist.
  */

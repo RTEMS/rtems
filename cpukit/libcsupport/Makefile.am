@@ -46,7 +46,7 @@ ASSOCIATION_C_FILES = src/assoclocalbyname.c \
 BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
     src/mount-mgr.c src/libio_init.c \
     src/libio_sockets.c src/eval.c src/fs_null_handlers.c src/privateenv.c \
-    src/open_dev_console.c src/__usrenv.c
+    src/open_dev_console.c src/__usrenv.c src/rtems_mkdir.c
 
 TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
     src/cfsetospeed.c src/tcgetattr.c src/tcsetattr.c src/tcdrain.c \
