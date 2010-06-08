@@ -229,15 +229,28 @@ rtems_test_pause();
   fatal_directive_status(
     status,
     RTEMS_UNSATISFIED,
-    "rtems_task_get_segment with no memory left"
+    "rtems_region_get_segment with no memory left"
   );
-  puts( "TA1 - rtems_task_get_segment - RTEMS_UNSATISFIED" );
+  puts( "TA1 - rtems_region_get_segment - RTEMS_UNSATISFIED" );
 
-  puts( "TA1 - rtems_region_extend - extend region 4 by 4K" );
+  puts( "TA1 - rtems_region_extend - extend region 4 by 1" );
   status = rtems_region_extend(
     Region_id[ 4 ],
     &Area_4[4096],
-    4096
+    1
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_extend with too small memory area"
+  );
+  puts( "TA1 - rtems_region_extend - RTEMS_INVALID_ADDRESS" );
+
+  puts( "TA1 - rtems_region_extend - extend region 4 by 4K - 1" );
+  status = rtems_region_extend(
+    Region_id[ 4 ],
+    (char *) &Area_4[4096] + 1,
+    4096 - 1
   );
   directive_failed( status, "rtems_region_extend" );
 

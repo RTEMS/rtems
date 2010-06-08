@@ -1,3 +1,7 @@
+2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sp16/task1.c: Update for heap extend changes.
+
 2010-06-08	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* spfifo01/init.c, spfifo01/spfifo01.scn: Update for IMFS API changes.
