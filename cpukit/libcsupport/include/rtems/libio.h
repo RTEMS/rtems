@@ -1,15 +1,12 @@
 /**
- * @file rtems/libio.h
+ * @file
+ *
+ * @ingroup LibIO
+ *
+ * @brief Basic IO API.
  */
 
 /*
- *  System call and file system interface definition
- *
- *  General purpose communication channel for RTEMS to allow UNIX/POSIX
- *  system call behavior under RTEMS.  Initially this supported only
- *  IO to devices but has since been enhanced to support networking
- *  and support for mounted file systems.
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,41 +20,63 @@
 #ifndef _RTEMS_RTEMS_LIBIO_H
 #define _RTEMS_RTEMS_LIBIO_H
 
-#include <rtems.h>
-#include <rtems/chain.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/statvfs.h>
 
-/*
- *  Define data types which must be constructed using forward references.
- */
+#include <unistd.h>
+#include <termios.h>
 
+#include <rtems.h>
 #include <rtems/fs.h>
+#include <rtems/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- * A 64bit file offset for internal use by RTEMS. Based on the newlib type.
+/**
+ * @defgroup LibIO IO Library
+ *
+ * @brief Provides system call and file system interface definitions.
+ *
+ * General purpose communication channel for RTEMS to allow UNIX/POSIX
+ * system call behavior under RTEMS.  Initially this supported only
+ * IO to devices but has since been enhanced to support networking
+ * and support for mounted file systems.
+ *
+ * @{
+ */
+
+/**
+ * @brief A 64-bit file offset for internal use by RTEMS. Based on the Newlib
+ * type.
  */
 typedef _off64_t rtems_off64_t;
 
-/*
- * Valid RTEMS file types.
+/**
+ * @name File system node types.
+ *
+ * @{
  */
+
 #define RTEMS_FILESYSTEM_DIRECTORY   1
 #define RTEMS_FILESYSTEM_DEVICE      2
 #define RTEMS_FILESYSTEM_HARD_LINK   3
 #define RTEMS_FILESYSTEM_SYM_LINK    4
 #define RTEMS_FILESYSTEM_MEMORY_FILE 5
+
+/** @} */
+
 typedef int rtems_filesystem_node_types_t;
 
-/*
- *  File Handler Operations Table
+/**
+ * @name File System Node Operations
+ *
+ * @{
  */
+
 typedef int (*rtems_filesystem_open_t)(
   rtems_libio_t *iop,
   const char    *pathname,
@@ -131,6 +150,11 @@ typedef int (*rtems_filesystem_rmnod_t)(
  rtems_filesystem_location_info_t      *pathloc       /* IN */
 );
 
+/** @} */
+
+/**
+ * @brief File system node operations table.
+ */
 struct _rtems_filesystem_file_handlers_r {
     rtems_filesystem_open_t         open_h;
     rtems_filesystem_close_t        close_h;
@@ -148,8 +172,10 @@ struct _rtems_filesystem_file_handlers_r {
     rtems_filesystem_rmnod_t        rmnod_h;
 };
 
-/*
- *  File System Operations Table
+/**
+ * @name File System Operations
+ *
+ * @{
  */
 
 /*
@@ -261,12 +287,10 @@ typedef int (*rtems_filesystem_statvfs_t)(
  struct statvfs                    *buf      /* OUT */
 );
 
-/*
- * operations table that must be defined for every file system.
- */
+/** @} */
 
-/*
- * File system types
+/**
+ * @brief File system operations table.
  */
 struct _rtems_filesystem_operations_table {
     rtems_filesystem_evalpath_t      evalpath_h;
@@ -307,7 +331,10 @@ extern const rtems_filesystem_table_t rtems_filesystem_table [];
 /**
  * @brief Per file system table entry routine type.
  *
- * Return @c true to continue the iteration, and @c false to stop.
+ * @see rtems_filesystem_iterate().
+ *
+ * @retval true Continue the iteration.
+ * @retval false Stop the iteration.
  */
 typedef bool (*rtems_per_filesystem_routine)(
   const rtems_filesystem_table_t *entry,
@@ -327,7 +354,9 @@ rtems_filesystem_iterate(
 );
 
 /**
- * @brief Returns the file system mount handler associated with the @a type, or
+ * @brief Gets the mount handler for the file system @a type.
+ *
+ * @return The file system mount handler associated with the @a type, or
  * @c NULL if no such association exists.
  */
 rtems_filesystem_fsmount_me_t
@@ -364,9 +393,9 @@ rtems_filesystem_unregister(
   const char *type
 );
 
-/*
- *  Structure used to contain file system specific information which
- *  is required to support fpathconf().
+/**
+ * @brief Contain file system specific information which is required to support
+ * fpathconf().
  */
 typedef struct {
   int    link_max;                 /* count */
@@ -383,15 +412,16 @@ typedef struct {
   int    posix_vdisable;           /* special char processing, 0=no, 1=yes */
 } rtems_filesystem_limits_and_options_t;
 
-/*
- * Default pathconf settings. Override in a filesystem.
+/**
+ * @brief Default pathconf settings.
+ *
+ * Override in a filesystem.
  */
 extern const rtems_filesystem_limits_and_options_t rtems_filesystem_default_pathconf;
 
-/*
- * Structure for a mount table entry.
+/**
+ * @brief Mount table entry.
  */
-
 struct rtems_filesystem_mount_table_entry_tt {
   rtems_chain_node                       Node;
   rtems_filesystem_location_info_t       mt_point_node;
@@ -422,27 +452,27 @@ struct rtems_filesystem_mount_table_entry_tt {
 };
 
 /**
- * The pathconf setting for a file system.
+ * @brief The pathconf setting for a file system.
  */
 #define rtems_filesystem_pathconf(_mte) ((_mte)->pathconf_limits_and_options)
 
 /**
- * The type of file system. Its name.
+ * @brief The type of file system. Its name.
  */
 #define rtems_filesystem_type(_mte) ((_mte)->type)
 
 /**
- * The mount point of a file system.
+ * @brief The mount point of a file system.
  */
 #define rtems_filesystem_mount_point(_mte) ((_mte)->target)
 
 /**
- * The device entry of a file system.
+ * @brief The device entry of a file system.
  */
 #define rtems_filesystem_mount_device(_mte) ((_mte)->dev)
 
-/*
- *  Valid RTEMS file systems options
+/**
+ * @brief File systems options.
  */
 typedef enum {
   RTEMS_FILESYSTEM_READ_ONLY,
@@ -450,12 +480,13 @@ typedef enum {
   RTEMS_FILESYSTEM_BAD_OPTIONS
 } rtems_filesystem_options_t;
 
-
-/*
- *  An open file data structure, indexed by 'fd'
- *  TODO:
- *     should really have a separate per/file data structure that this
- *     points to (eg: size, offset, driver, pathname should be in that)
+/**
+ * @brief An open file data structure.
+ *
+ * It will be indexed by 'fd'.
+ *
+ * @todo Should really have a separate per/file data structure that this points
+ * to (eg: size, offset, driver, pathname should be in that)
  */
 struct rtems_libio_tt {
   rtems_driver_name_t                    *driver;
@@ -470,10 +501,11 @@ struct rtems_libio_tt {
   const rtems_filesystem_file_handlers_r *handlers;  /* type specific handlers */
 };
 
-/*
- *  param block for read/write
- *  Note: it must include 'offset' instead of using iop's offset since
- *        we can have multiple outstanding i/o's on a device.
+/**
+ * @brief Paramameter block for read/write.
+ *
+ * It must include 'offset' instead of using iop's offset since we can have
+ * multiple outstanding i/o's on a device.
  */
 typedef struct {
   rtems_libio_t          *iop;
@@ -484,8 +516,8 @@ typedef struct {
   uint32_t                bytes_moved;
 } rtems_libio_rw_args_t;
 
-/*
- *  param block for open/close
+/**
+ * @brief Parameter block for open/close.
  */
 typedef struct {
   rtems_libio_t          *iop;
@@ -493,8 +525,8 @@ typedef struct {
   uint32_t                mode;
 } rtems_libio_open_close_args_t;
 
-/*
- *  param block for ioctl
+/**
+ * @brief Parameter block for ioctl.
  */
 typedef struct {
   rtems_libio_t          *iop;
@@ -503,9 +535,12 @@ typedef struct {
   uint32_t                ioctl_return;
 } rtems_libio_ioctl_args_t;
 
-/*
- *  Values for 'flag'
+/**
+ * @name Flag Values
+ *
+ * @{
  */
+
 #define LIBIO_FLAGS_NO_DELAY      0x0001  /* return immediately if no data */
 #define LIBIO_FLAGS_READ          0x0002  /* reading */
 #define LIBIO_FLAGS_WRITE         0x0004  /* writing */
@@ -515,10 +550,14 @@ typedef struct {
 #define LIBIO_FLAGS_CLOSE_ON_EXEC 0x0800  /* close on process exec() */
 #define LIBIO_FLAGS_READ_WRITE    (LIBIO_FLAGS_READ | LIBIO_FLAGS_WRITE)
 
+/** @} */
+
 void rtems_libio_init(void);
 
-/*
- *  External I/O handlers
+/**
+ * @name External I/O Handlers
+ *
+ * @{
  */
 
 typedef int (*rtems_libio_open_t)(
@@ -555,6 +594,14 @@ typedef rtems_off64_t (*rtems_libio_lseek_t)(
   int           whence
 );
 
+/** @} */
+
+/**
+ * @name Permission Macros
+ *
+ * @{
+ */
+
 /*
  *  The following macros are used to build up the permissions sets
  *  used to check permissions.  These are similar in style to the
@@ -567,11 +614,7 @@ typedef rtems_off64_t (*rtems_libio_lseek_t)(
 #define RTEMS_LIBIO_PERMS_SEARCH RTEMS_LIBIO_PERMS_EXEC
 #define RTEMS_LIBIO_PERMS_RWX    S_IRWXO
 
-/*
- *  Macros
- */
-
-#include <unistd.h>
+/** @} */
 
 union __rtems_dev_t {
   dev_t device;
@@ -632,72 +675,6 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
 
 void rtems_filesystem_initialize( void );
 
-/*
- * Callbacks from TERMIOS routines to device-dependent code
- */
-#include <termios.h>
-
-typedef struct rtems_termios_callbacks {
-  int    (*firstOpen)(int major, int minor, void *arg);
-  int    (*lastClose)(int major, int minor, void *arg);
-  int    (*pollRead)(int minor);
-  ssize_t (*write)(int minor, const char *buf, size_t len);
-  int    (*setAttributes)(int minor, const struct termios *t);
-  int    (*stopRemoteTx)(int minor);
-  int    (*startRemoteTx)(int minor);
-  int    outputUsesInterrupts;
-} rtems_termios_callbacks;
-
-/*
- *  Device-independent TERMIOS routines
- */
-void rtems_termios_initialize (void);
-
-/*
- * CCJ: Change before opening a tty. Newer code from Eric is coming
- * so extra work to handle an open tty is not worth it. If the tty
- * is open, close then open it again.
- */
-rtems_status_code rtems_termios_bufsize (
-  int cbufsize,     /* cooked buffer size */
-  int raw_input,    /* raw input buffer size */
-  int raw_output    /* raw output buffer size */
-);
-
-rtems_status_code rtems_termios_open (
-  rtems_device_major_number      major,
-  rtems_device_minor_number      minor,
-  void                          *arg,
-  const rtems_termios_callbacks *callbacks
-);
-
-rtems_status_code rtems_termios_close(
-  void *arg
-);
-
-rtems_status_code rtems_termios_read(
-  void *arg
-);
-
-rtems_status_code rtems_termios_write(
-  void *arg
-);
-
-rtems_status_code rtems_termios_ioctl(
-  void *arg
-);
-
-int rtems_termios_enqueue_raw_characters(
-  void *ttyp,
-  char *buf,
-  int   len
-);
-
-int rtems_termios_dequeue_characters(
-  void *ttyp,
-  int   len
-);
-
 int unmount(
   const char *mount_path
 );
@@ -745,6 +722,78 @@ extern  rtems_fs_init_functions_t    rtems_fs_init_helper;
  * @retval -1 An error occured.  @c errno indicates the error.
  */
 extern int rtems_mkdir(const char *path, mode_t mode);
+
+/** @} */
+
+/**
+ * @defgroup Termios Termios
+ *
+ * @ingroup LibIO
+ *
+ * @brief Termios
+ *
+ * @{
+ */
+
+typedef struct rtems_termios_callbacks {
+  int    (*firstOpen)(int major, int minor, void *arg);
+  int    (*lastClose)(int major, int minor, void *arg);
+  int    (*pollRead)(int minor);
+  ssize_t (*write)(int minor, const char *buf, size_t len);
+  int    (*setAttributes)(int minor, const struct termios *t);
+  int    (*stopRemoteTx)(int minor);
+  int    (*startRemoteTx)(int minor);
+  int    outputUsesInterrupts;
+} rtems_termios_callbacks;
+
+void rtems_termios_initialize (void);
+
+/*
+ * CCJ: Change before opening a tty. Newer code from Eric is coming
+ * so extra work to handle an open tty is not worth it. If the tty
+ * is open, close then open it again.
+ */
+rtems_status_code rtems_termios_bufsize (
+  int cbufsize,     /* cooked buffer size */
+  int raw_input,    /* raw input buffer size */
+  int raw_output    /* raw output buffer size */
+);
+
+rtems_status_code rtems_termios_open (
+  rtems_device_major_number      major,
+  rtems_device_minor_number      minor,
+  void                          *arg,
+  const rtems_termios_callbacks *callbacks
+);
+
+rtems_status_code rtems_termios_close(
+  void *arg
+);
+
+rtems_status_code rtems_termios_read(
+  void *arg
+);
+
+rtems_status_code rtems_termios_write(
+  void *arg
+);
+
+rtems_status_code rtems_termios_ioctl(
+  void *arg
+);
+
+int rtems_termios_enqueue_raw_characters(
+  void *ttyp,
+  char *buf,
+  int   len
+);
+
+int rtems_termios_dequeue_characters(
+  void *ttyp,
+  int   len
+);
+
+/** @} */
 
 #ifdef __cplusplus
 }

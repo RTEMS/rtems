@@ -1,5 +1,9 @@
 2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/include/rtems/libio.h: Documentation.
+
+2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libfs/src/imfs/imfs_creat.c: Reject creation of FIFOs if support is
 	disabled.
 
