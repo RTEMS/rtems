@@ -1,5 +1,9 @@
 2010-06-07	Bharath Suri <bharath.s.jois@gmail.com>
 
+	* spfifo01/main.c: New file.
+
+2010-06-07	Bharath Suri <bharath.s.jois@gmail.com>
+
 	PR PR1542
 	* Makefile.am, configure.ac: Coverage improvement: fifo_open.
 	* spfifo01/spfifo01.doc, spfifo01/spfifo01.scn, spfifo01/test.c,
