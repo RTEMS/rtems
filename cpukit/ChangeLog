@@ -1,5 +1,10 @@
 2010-06-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove nios2 (unsupported, no toolchain).
+	* score/cpu/Makefile.am: Remove nios2 (unsupported, no toolchain).
+
+2010-06-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove c4x (dead port).
 	* score/cpu/Makefile.am: Remove c4x (dead port).
 

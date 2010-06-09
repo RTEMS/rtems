@@ -320,7 +320,6 @@ score/cpu/m68k/Makefile
 score/cpu/m32c/Makefile
 score/cpu/m32r/Makefile
 score/cpu/mips/Makefile
-score/cpu/nios2/Makefile
 score/cpu/powerpc/Makefile
 score/cpu/sh/Makefile
 score/cpu/sparc/Makefile
