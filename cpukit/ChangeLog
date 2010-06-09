@@ -1,3 +1,7 @@
+2010-06-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/cpu/Makefile.am: Remove c4x (dead port).
+
 2010-06-03	Chris Johns <chrisj@rtems.org>
 
 	* sapi/include/confdefs.h: PR 1543. Make default file system when
