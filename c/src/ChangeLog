@@ -1,3 +1,7 @@
+2010-06-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/rtems-cpu-subdirs.m4: Remove nios2.
+
 2010-06-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libchip/network/if_dc.c: Fix warning.
