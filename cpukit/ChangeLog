@@ -1,5 +1,10 @@
 2010-06-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libnetworking/rtems/ftpfs.h, libnetworking/lib/ftpfs.c:  Added
+	rtems_ftpfs_mount() again.  Documentation.
+
+2010-06-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libcsupport/include/rtems/libio.h, sapi/include/confdefs.h: Added
 	and use defines for file system types.
 

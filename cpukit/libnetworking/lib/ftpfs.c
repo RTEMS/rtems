@@ -99,6 +99,8 @@ typedef struct {
   struct timeval timeout;
 } rtems_ftpfs_mount_entry;
 
+static const rtems_filesystem_operations_table rtems_ftpfs_ops;
+
 static const rtems_filesystem_file_handlers_r rtems_ftpfs_handlers;
 
 static const rtems_filesystem_file_handlers_r rtems_ftpfs_root_handlers;
@@ -130,8 +132,6 @@ static int rtems_ftpfs_set_connection_timeout(
   return 0;
 }
 
-#if 0
-CCJ_REMOVE_MOUNT
 rtems_status_code rtems_ftpfs_mount(const char *mount_point)
 {
   int rv = 0;
@@ -140,17 +140,17 @@ rtems_status_code rtems_ftpfs_mount(const char *mount_point)
     mount_point = RTEMS_FTPFS_MOUNT_POINT_DEFAULT;
   }
 
-  rv = mkdir(mount_point, S_IRWXU | S_IRWXG | S_IRWXO);
+  rv = rtems_mkdir(mount_point, S_IRWXU | S_IRWXG | S_IRWXO);
   if (rv != 0) {
     return RTEMS_IO_ERROR;
   }
 
   rv = mount(
     NULL,
-    &rtems_ftpfs_ops,
+    mount_point,
+    RTEMS_FILESYSTEM_TYPE_FTPFS,
     RTEMS_FILESYSTEM_READ_WRITE,
-    NULL,
-    mount_point
+    NULL
   );
   if (rv != 0) {
     return RTEMS_IO_ERROR;
@@ -158,7 +158,6 @@ rtems_status_code rtems_ftpfs_mount(const char *mount_point)
 
   return RTEMS_SUCCESSFUL;
 }
-#endif
 
 static rtems_status_code rtems_ftpfs_do_ioctl(
   const char *mount_point,
@@ -1318,7 +1317,7 @@ static int rtems_ftpfs_fstat(
   return 0;
 }
 
-const rtems_filesystem_operations_table rtems_ftpfs_ops = {
+static const rtems_filesystem_operations_table rtems_ftpfs_ops = {
   .evalpath_h = rtems_ftpfs_eval_path,
   .evalformake_h = NULL,
   .link_h = NULL,
