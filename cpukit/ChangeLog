@@ -1,3 +1,7 @@
+2010-06-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/mount.c: Fixed NULL pointer access.
+
 2010-06-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am, configure.ac: Remove support for shttpd.
