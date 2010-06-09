@@ -52,7 +52,7 @@ Name:		rtems-4.11-lm32-rtems4.11-gdb
 Summary:	Gdb for target lm32-rtems4.11
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -106,12 +106,7 @@ Requires:	rtems-4.11-gdb-common
 
 %if "%{gdb_version}" == "7.1"
 Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.1.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-7.1-rtems4.10-20100319.diff
-%endif
-
-%if "%{gdb_version}" == "7.0.1"
-Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20091222.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.1-rtems4.11-20100609.diff
 %endif
 
 %description
