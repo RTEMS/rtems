@@ -254,7 +254,7 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 
 %if "%{gcc_version}" == "4.5.0"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.0-rtems4.11-20100526.diff
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.0-rtems4.11-20100609.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
