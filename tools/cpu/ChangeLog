@@ -2,7 +2,7 @@
 
 	* configure.ac: Remove nios2 (unsupported, no toolchain).
 
-y2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
 
