@@ -1,3 +1,8 @@
+2010-06-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am, configure.ac: Remove support for httpd (GoAhead).
+	* aclocal/enable-httpd.m4: Remove.
+
 2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/rtems/libio.h: Documentation.

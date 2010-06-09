@@ -20,7 +20,6 @@ SUBDIRS += wrapup
 SUBDIRS += zlib
 
 # applications
-SUBDIRS += httpd
 SUBDIRS += ftpd
 SUBDIRS += telnetd
 SUBDIRS += pppd
