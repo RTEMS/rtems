@@ -1,5 +1,10 @@
 2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libnetworking/rtems/ftpfs.h, libnetworking/lib/ftpfs.c:  Removed
+	rtems_ftpfs_mount().
+
+2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libcsupport/src/mount-mktgt.c: New file.
 	* libcsupport/Makefile.am: Reflect change above.
 	* libcsupport/include/rtems/libio.h: Declare

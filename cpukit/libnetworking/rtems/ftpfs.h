@@ -49,8 +49,12 @@ extern "C" {
  * @brief The FTP file system (FTP client) can be used to transfer files from
  * or to remote hosts.
  *
- * You can mount the FTP file system with a call to rtems_ftpfs_mount().
- * Alternatively you can use mount() directly.
+ * You can mount the FTP file system with a call to mount() or
+ * mount_and_make_target_path() with the @ref RTEMS_FILESYSTEM_TYPE_FTPFS file
+ * system type.
+ *
+ * You have to add @ref CONFIGURE_FILESYSTEM_FTPFS to your application
+ * configuration.
  *
  * You can open files either read-only or write-only.  A seek is not allowed.
  * A close terminates the control and data connections.
@@ -91,17 +95,6 @@ typedef enum {
   RTEMS_FTPFS_IOCTL_GET_TIMEOUT = _IOR( 'd', 2, struct timeval *),
   RTEMS_FTPFS_IOCTL_SET_TIMEOUT = _IOW( 'd', 2, struct timeval *)
 } rtems_ftpfs_ioctl_numbers;
-
-/**
- * @brief Creates the mount point @a mount_point and mounts the FTP file
- * system.
- * 	 
- * If @a mount_point is @c NULL the default mount point 	 
- * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used. 	 
- * 	 
- * It is mounted with read and write access. 	 
- */ 	 
-rtems_status_code rtems_ftpfs_mount( const char *mount_point);
 
 /**
  * @brief Returns in @a verbose if the verbose mode is enabled or disabled for
@@ -155,7 +148,7 @@ rtems_status_code rtems_ftpfs_set_timeout(
 /** @} */
 
 /**
- * Do not call directly, use rtems_ftpfs_mount() or mount().
+ * @brief Do not call directly, use mount().
  */
 int rtems_ftpfs_initialize(
   rtems_filesystem_mount_table_entry_t *mt_entry,

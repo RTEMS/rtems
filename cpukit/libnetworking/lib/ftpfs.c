@@ -132,33 +132,6 @@ static int rtems_ftpfs_set_connection_timeout(
   return 0;
 }
 
-rtems_status_code rtems_ftpfs_mount(const char *mount_point)
-{
-  int rv = 0;
-
-  if (mount_point == NULL) {
-    mount_point = RTEMS_FTPFS_MOUNT_POINT_DEFAULT;
-  }
-
-  rv = rtems_mkdir(mount_point, S_IRWXU | S_IRWXG | S_IRWXO);
-  if (rv != 0) {
-    return RTEMS_IO_ERROR;
-  }
-
-  rv = mount(
-    NULL,
-    mount_point,
-    RTEMS_FILESYSTEM_TYPE_FTPFS,
-    RTEMS_FILESYSTEM_READ_WRITE,
-    NULL
-  );
-  if (rv != 0) {
-    return RTEMS_IO_ERROR;
-  }
-
-  return RTEMS_SUCCESSFUL;
-}
-
 static rtems_status_code rtems_ftpfs_do_ioctl(
   const char *mount_point,
   ioctl_command_t req,
