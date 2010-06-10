@@ -1,5 +1,10 @@
 2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/src/unmount.c: Removed obsolete declarations.  Fixed
+	invalid memory free.
+
+2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libnetworking/rtems/ftpfs.h, libnetworking/lib/ftpfs.c:  Removed
 	rtems_ftpfs_mount().
 
