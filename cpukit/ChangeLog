@@ -1,3 +1,10 @@
+2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/mount-mktgt.c: New file.
+	* libcsupport/Makefile.am: Reflect change above.
+	* libcsupport/include/rtems/libio.h: Declare
+	mount_and_make_target_path().
+
 2010-06-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/rtems/ftpfs.h, libnetworking/lib/ftpfs.c:  Added
