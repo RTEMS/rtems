@@ -174,6 +174,27 @@ static ssize_t erc32_console_write_support_int(int minor, const char *buf, size_
   return 0;
 }
 
+static void erc32_console_isr_error(
+  rtems_vector_number vector
+)
+{
+  int UStat;
+
+  UStat = ERC32_MEC.UART_Status;
+
+  if (UStat & ERC32_MEC_UART_STATUS_ERRA) {
+    ERC32_MEC.UART_Status = ERC32_MEC_UART_STATUS_CLRA;
+    ERC32_MEC.Control = ERC32_MEC.Control;
+  }
+
+  if (UStat & ERC32_MEC_UART_STATUS_ERRB) {
+    ERC32_MEC.UART_Status = ERC32_MEC_UART_STATUS_CLRB;
+    ERC32_MEC.Control = ERC32_MEC.Control;
+  }
+
+  ERC32_Clear_interrupt( ERC32_INTERRUPT_UART_ERROR );
+}
+
 static void erc32_console_isr_a(
   rtems_vector_number vector
 )
@@ -304,5 +325,10 @@ static void erc32_console_initialize(
   #if (CONSOLE_USE_INTERRUPTS)
     set_vector(erc32_console_isr_a, CONSOLE_UART_A_TRAP, 1);
     set_vector(erc32_console_isr_b, CONSOLE_UART_B_TRAP, 1);
+    set_vector(erc32_console_isr_error, CONSOLE_UART_ERROR_TRAP, 1);
   #endif
+
+   /* Clear any previous error flags */
+   ERC32_MEC.UART_Status = ERC32_MEC_UART_STATUS_CLRA;
+   ERC32_MEC.UART_Status = ERC32_MEC_UART_STATUS_CLRB;
 }
