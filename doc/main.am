@@ -1,5 +1,6 @@
-
+if USE_HTML
 html_projectdir = $(htmldir)/$(PROJECT)
+endif
 
 TEXI2WWW_ARGS=\
 -I $(srcdir) -I $(top_srcdir) -I $(top_builddir) \
