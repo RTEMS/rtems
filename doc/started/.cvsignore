@@ -13,7 +13,6 @@ require.texi
 rtems_footer.html
 rtems_header.html
 sample.texi
-stamp-vti
 started
 started-?
 started.aux
@@ -32,4 +31,3 @@ started.tp
 started.vr
 tversions.sed
 tversions.texi
-version.texi

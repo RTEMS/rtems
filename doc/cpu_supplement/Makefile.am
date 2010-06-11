@@ -7,7 +7,6 @@
 #
 
 PROJECT = cpu_supplement
-EDITION = 1
 
 include $(top_srcdir)/project.am
 

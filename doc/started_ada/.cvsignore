@@ -10,7 +10,6 @@ require.texi
 rtems_footer.html
 rtems_header.html
 sample.texi
-stamp-vti
 started_ada
 started_ada.aux
 started_ada.cp
@@ -26,4 +25,3 @@ started_ada.ps
 started_ada.toc
 started_ada.tp
 started_ada.vr
-version.texi

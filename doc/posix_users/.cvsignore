@@ -43,9 +43,7 @@ rtems_header.html
 sched.texi
 semaphores.texi
 signal.texi
-stamp-vti
 status.texi
 systemdb.texi
 thread.texi
 timer.texi
-version.texi

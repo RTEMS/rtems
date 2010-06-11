@@ -27,10 +27,8 @@ shell.ps
 shell.toc
 shell.tp
 shell.vr
-stamp-vti
 Makefile
 Makefile.in
 mdate-sh
 rtems_footer.html
 rtems_header.html
-version.texi

@@ -27,7 +27,5 @@ mounting.texi
 patheval.texi
 rtems_footer.html
 rtems_header.html
-stamp-vti
 syscalls.texi
 tftp.texi
-version.texi

@@ -38,8 +38,6 @@ rtc.texi
 rtems_footer.html
 rtems_header.html
 shmsupp.texi
-stamp-vti
 support.texi
 target.texi
 timer.texi
-version.texi

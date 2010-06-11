@@ -31,9 +31,7 @@ rendezvous.texi
 rtems_footer.html
 rtems_header.html
 semaphore.texi
-stamp-vti
 status.texi
 tasksync.texi
 task.texi
 time.texi
-version.texi
