@@ -1,5 +1,25 @@
 2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* ada_user/stamp-vti, ada_user/version.texi,
+	bsp_howto/stamp-vti, bsp_howto/version.texi,
+	cpu_supplement/stamp-vti, cpu_supplement/version.texi,
+	develenv/stamp-vti, develenv/version.texi,
+	filesystem/stamp-vti, filesystem/version.texi,
+	itron3.0/stamp-vti, itron3.0/version.texi,
+	networking/stamp-vti, networking/version.texi,
+	new_chapters/stamp-vti, new_chapters/version.texi,
+	porting/stamp-vti, porting/version.texi,
+	posix1003.1/stamp-vti, posix1003.1/version.texi,
+	posix_users/stamp-vti, posix_users/version.texi,
+	relnotes/stamp-vti, relnotes/version.texi,
+	shell/stamp-vti, shell/version.texi,
+	started/stamp-vti, started/version.texi,
+	started_ada/stamp-vti, started_ada/version.texi,
+	user/stamp-vti, user/version.texi:
+	New.
+
+2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* ada_user/Makefile.am, bsp_howto/Makefile.am,
 	cpu_supplement/Makefile.am, develenv/Makefile.am,
 	filesystem/Makefile.am, itron3.0/Makefile.am,
