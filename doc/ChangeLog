@@ -1,3 +1,9 @@
+2010-05-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* cpu_supplement/Makefile.am, cpu_supplement/cpu_supplement.texi:
+	Remove tic4x.
+	* cpu_supplement/tic4x.t: Remove.
+
 2010-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/.cvsignore: Add semaphore_attributes.pdf.
