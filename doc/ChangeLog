@@ -1,5 +1,6 @@
 2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Don't install html_imagesdir unconditionally.
 	* main.am: Don't install html_projectdir unconditionally.
 	* cpu_supplement/Makefile.am: Include main.am.
 
