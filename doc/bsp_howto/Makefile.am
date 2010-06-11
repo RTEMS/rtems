@@ -7,7 +7,6 @@
 #
 
 PROJECT = bsp_howto
-EDITION = 1
 
 include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
