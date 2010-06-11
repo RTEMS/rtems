@@ -1,3 +1,15 @@
+2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ada_user/Makefile.am, bsp_howto/Makefile.am,
+	cpu_supplement/Makefile.am, develenv/Makefile.am,
+	filesystem/Makefile.am, itron3.0/Makefile.am,
+	networking/Makefile.am, new_chapters/Makefile.am,
+	porting/Makefile.am, posix1003.1/Makefile.am,
+	posix_users/Makefile.am, relnotes/Makefile.am,
+	shell/Makefile.am, started/Makefile.am,
+	started_ada/Makefile.am, user/Makefile.am:
+	Remove EDITION (Unused).
+
 2010-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/.cvsignore: Add semaphore_attributes.pdf.
