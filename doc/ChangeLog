@@ -1,5 +1,9 @@
 2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* cpu_supplement/Makefile.am: Include main.am.
+
+2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* ada_user/stamp-vti, ada_user/version.texi,
 	bsp_howto/stamp-vti, bsp_howto/version.texi,
 	cpu_supplement/stamp-vti, cpu_supplement/version.texi,

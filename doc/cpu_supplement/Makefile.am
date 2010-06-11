@@ -9,17 +9,10 @@
 PROJECT = cpu_supplement
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 REPLACE2 = $(PERL) $(top_srcdir)/tools/word-replace2
 
-html_projectdir = $(htmldir)/$(PROJECT)
-
-TEXI2WWW_ARGS=\
--I $(srcdir) -I $(top_srcdir) -I $(top_builddir) \
--dirfile ../index.html \
--header rtems_header.html \
--footer rtems_footer.html \
--icons ../images
 GENERATED_FILES = general.texi arm.texi avr.texi bfin.texi i386.texi lm32.texi \
     m68k.texi mips.texi powerpc.texi sh.texi sparc.texi tic4x.texi
 
