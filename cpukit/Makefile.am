@@ -177,6 +177,9 @@ include_rtems_HEADERS += libmisc/untar/untar.h
 ## fsmount
 include_rtems_HEADERS += libmisc/fsmount/fsmount.h
 
+## HACK: doxygen filter.
+EXTRA_DIST = doxy-filter
+
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

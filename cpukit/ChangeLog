@@ -1,5 +1,12 @@
 2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Doxygen.in: Update.
+	Misc. fixes.
+	* doxy-filter: New (Copy of ../tools/build/doxy-filter).
+	* Makefile.am: Add doxy-filter.
+
+2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove c4x.
 	* score/cpu/Makefile.am: Remove c4x.
 
