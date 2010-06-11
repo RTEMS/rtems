@@ -20,7 +20,9 @@ EXTRA_DIST = HELP.html rtems_header.html.in rtems_footer.html.in
 EXTRA_DIST += common/cpright.texi common/setup.texi \
     common/treedef.tex common/rtems.texi.in
 
+if USE_HTML
 html_imagesdir = $(htmldir)/images
+endif
 
 HTML_IMAGES = images/dir-arrow.gif images/dvi.gif images/missing-arrow.gif \
     images/next-arrow.gif images/oaronly.jpg images/pdf.gif images/pdf1.gif \
