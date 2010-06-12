@@ -58,7 +58,7 @@ rtems_status_code rtems_task_set_priority(
 )
 {
   register Thread_Control *the_thread;
-  Objects_Locations               location;
+  Objects_Locations        location;
 
   if ( new_priority != RTEMS_CURRENT_PRIORITY &&
        !_RTEMS_tasks_Priority_is_valid( new_priority ) )

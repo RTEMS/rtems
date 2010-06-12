@@ -1,3 +1,9 @@
+2010-06-12	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/pipe/fifo.c: Remove unused variable to fix warning.
+	* libnetworking/rtems/mkrootfs.c: Add include to fix warning.
+	* rtems/src/tasksetpriority.c: Fix spacing.
+
 2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/inline/rtems/rtems/status.inl: Fix broken doxygen comment.

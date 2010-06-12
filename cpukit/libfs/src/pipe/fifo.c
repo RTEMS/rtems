@@ -247,8 +247,6 @@ int pipe_release(
   pipe_control_t *pipe = *pipep;
   uint32_t mode;
 
-  rtems_status_code sc;
-
   if (pipe_lock())
     /* WARN pipe not freed and pipep not set to NULL! */
     /* FIXME */
