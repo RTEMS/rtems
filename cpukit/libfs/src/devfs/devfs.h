@@ -267,7 +267,6 @@ extern int devFS_initialize(
  *  This routine is intended for debugging, and can be used by shell
  *  program to provide user with the system information.
  *
- *  @param  none
  *  @retval 0
  */
 

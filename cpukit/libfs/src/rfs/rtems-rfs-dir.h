@@ -83,7 +83,7 @@
  * Set the hash of the entry.
  *
  * @param _e Pointer to the directory entry.
- * @aparam _h The hash.
+ * @param _h The hash.
  */
 #define rtems_rfs_dir_set_entry_hash(_e, _h) \
   rtems_rfs_write_u32 (_e + RTEMS_RFS_DIR_ENTRY_HASH, _h)
@@ -138,7 +138,7 @@
  */
 int rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
                               rtems_rfs_inode_handle* inode,
-                              const char*             path,
+                              const char*             name,
                               int                     length,
                               rtems_rfs_ino*          ino,
                               uint32_t*               offset);
@@ -150,7 +150,7 @@ int rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
  * @param fs The file system data.
  * @param dir Pointer to the directory inode the entry is to be added too.
  * @param name The name of the entry to be added.
- * @param length The length of the name excluding a terminating \0.
+ * @param length The length of the name excluding a terminating 0.
  * @param ino The ino of the entry.
  * @return int The error number (errno). No error if 0.
  */

@@ -1,3 +1,10 @@
+2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/devfs/devfs.h, libfs/src/rfs/rtems-rfs-block-pos.h,
+	libfs/src/rfs/rtems-rfs-block.h, libfs/src/rfs/rtems-rfs-dir.h,
+	libfs/src/rfs/rtems-rfs-group.h, libfs/src/rfs/rtems-rfs-inode.h:
+	Fix broken doxygen commands.
+
 2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Doxygen.in: Update.

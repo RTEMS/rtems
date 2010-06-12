@@ -201,7 +201,7 @@ typedef struct rtems_rfs_block_map_t
  * so a seek of offset 0 will return the first block.
  *
  * @param fs The file system data.
- * @prarm inode The inode the map belongs to.
+ * @param inode The inode the map belongs to.
  * @param map The map that is opened.
  * @return int The error number (errno). No error if 0.
  */
