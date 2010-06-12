@@ -1,5 +1,9 @@
 2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/inline/rtems/rtems/status.inl: Fix broken doxygen comment.
+
+2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/include/rtems/score/timestamp.h,
 	score/include/rtems/score/timestamp64.h,
 	score/include/rtems/score/watchdog.h:
