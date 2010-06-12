@@ -226,7 +226,7 @@ void _Watchdog_Adjust (
  *  @a direction for @a units_arg ticks.
  *
  *  @param[in] header is the watchdog chain to adjust
- *  @param[in] units is the number of units to adjust @a header
+ *  @param[in] units_arg is the number of units to adjust @a header
  *  @param[in] to_fire is a pointer to an initialized Chain_Control to which
  *             all watchdog instances that are to be fired will be placed.
  *
@@ -291,7 +291,7 @@ void _Watchdog_Report(
  *
  *  @param[in] name is a string to prefix the line with.  If NULL,
  *             nothing is printed.
- *  @param[in] watch is the watchdog chain to be printed.
+ *  @param[in] header is the watchdog chain to be printed.
  *
  *  @note This is a debug routine.  It uses printk() and prudence should
  *        exercised when using it.  It also disables interrupts so the

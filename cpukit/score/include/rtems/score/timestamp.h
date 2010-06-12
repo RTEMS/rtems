@@ -297,8 +297,8 @@ extern "C" {
  *  This routine converts the @a _ticks value to the corresponding
  *  timestamp format @a _time.
  *
- *  @param[in] time points to the timestamp format time result
- *  @param[in] ticks points to the number of ticks to be filled in
+ *  @param[in] _time points to the timestamp format time result
+ *  @param[in] _ticks points to the number of ticks to be filled in
  */
 #if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
   #define _Timestamp_From_ticks( _ticks, _time ) \
