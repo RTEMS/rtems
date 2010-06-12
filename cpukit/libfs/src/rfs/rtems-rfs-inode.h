@@ -576,7 +576,7 @@ int rtems_rfs_inode_free (rtems_rfs_file_system* fs,
  * the supporting calls.
  *
  * @param fs The file system.
- * @parma ino The inode number.
+ * @param ino The inode number.
  * @param handle The handle to the inode we are opening.
  * @param load If true load the inode into memory from the media.
  * @return int The error number (errno). No error if 0.
@@ -682,7 +682,7 @@ int rtems_rfs_inode_time_stamp_now (rtems_rfs_inode_handle* handle,
  * Calculate the size of data attached to the inode.
  *
  * @param fs The file system data.
- * @oaram handle The inode handle.
+ * @param handle The inode handle.
  * @return rtems_rfs_pos The data size in bytes in the block map attched to the
  *                       inode.
  */
