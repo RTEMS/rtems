@@ -1,5 +1,9 @@
 2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/inline/rtems/rtems/status.inl: Fix broken doxygen comment.
+
+2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Doxygen.in: Activate INCLUDE_GRAPH and 
 	INCLUDED_BY_GRAPH.
 
