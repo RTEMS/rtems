@@ -749,7 +749,7 @@ typedef void (*rtems_fs_init_functions_t)(void);
 extern  rtems_fs_init_functions_t    rtems_fs_init_helper;
 
 /**
- * @brief Creates a directory and all its parrent directories according to
+ * @brief Creates a directory and all its parent directories according to
  * @a path.
  *
  * The @a mode value selects the access permissions of the directory.
