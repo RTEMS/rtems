@@ -1,5 +1,12 @@
 2010-06-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* include/rtems/tar.h, libcsupport/include/tar.h: Remove.
+	* configure.ac: Require toolchain to provide tar.h.
+	* libfs/src/imfs/imfs_load_tar.c, libmisc/untar/untar.h:
+	Use <tar.h> instead of <rtems/tar.h>.
+
+2010-06-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/rtems/libio.h: Fix typo in doxygen comment.
 
 2010-06-12	Joel Sherrill <joel.sherrilL@OARcorp.com>

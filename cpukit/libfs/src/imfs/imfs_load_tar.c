@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <tar.h>
 
 #include <string.h>
 
@@ -31,7 +32,6 @@
 #include <rtems/libio_.h>
 #include <rtems/imfs.h>
 #include <rtems/untar.h>
-#include <rtems/tar.h>
 
 /*
  * TAR file format:

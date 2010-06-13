@@ -12,7 +12,7 @@
 #define _RTEMS_UNTAR_H
 
 #include <stddef.h>
-#include <rtems/tar.h>
+#include <tar.h>
 
 #ifdef __cplusplus
 extern "C" {
