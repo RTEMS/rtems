@@ -86,6 +86,10 @@ AS_IF([test x"${ac_cv_header_errno_h}" != xyes],
 AS_IF([test x"${ac_cv_header_sched_h}" != xyes],
 [AC_MSG_ERROR([Required header sched.h not found])])
 
+## error out if libc doesn't provide tar.h
+AS_IF([test x"${ac_cv_header_tar_h}" != xyes],
+[AC_MSG_ERROR([Required header tar.h not found])])
+
 AC_HEADER_STDBOOL
 AS_IF([test x"${ac_cv_header_stdbool_h}" != xyes],
 [AC_MSG_ERROR([No sufficient stdbool.h found])])
@@ -113,10 +117,6 @@ RTEMS_CHECK_MULTIPROCESSING
 RTEMS_CHECK_POSIX_API
 RTEMS_CHECK_ITRON_API
 RTEMS_CHECK_NETWORKING
-
-AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
-[RTEMS_USES_TAR_H=yes],
-[RTEMS_USES_TAR_H=$ac_cv_header_tar_h])
 
 rtems_major=`echo _RTEMS_VERSION | sed "s/\..*//"`
 rtems_minor=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/\..*//"`
@@ -153,11 +153,6 @@ RTEMS_CPUOPT([RTEMS_NETWORKING],
   [test x"$rtems_cv_HAS_NETWORKING" = xyes],
   [1],
   [if networking is enabled])
-
-RTEMS_CPUOPT([RTEMS_USES_TAR_H],
-  [test x"${RTEMS_USES_TAR_H}" = x"yes"],
-  [1],
-  [if RTEMS uses tar.h])
 
 RTEMS_CPUOPT([RTEMS_VERSION],
   [true],
