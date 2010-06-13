@@ -135,10 +135,6 @@ $(PROJECT_INCLUDE)/rtems/concat.h: include/rtems/concat.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/concat.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/concat.h
 
-$(PROJECT_INCLUDE)/rtems/tar.h: include/rtems/tar.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tar.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/tar.h
-
 $(PROJECT_INCLUDE)/rtems/status-checks.h: include/rtems/status-checks.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/status-checks.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/status-checks.h
