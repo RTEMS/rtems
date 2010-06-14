@@ -1,5 +1,6 @@
 2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/rtems/posix/threadsup.h: Add extern "C".
 	* libnetworking/netinet/in_pcb.c:
 	Eliminate "ushort".
 	* libfs/src/pipe/fifo.c, libfs/src/pipe/pipe.h:
