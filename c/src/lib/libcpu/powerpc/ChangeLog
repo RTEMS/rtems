@@ -1,3 +1,7 @@
+2010-06-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* Makefile.am: Formatting.
+
 2010-05-24	Peter Dufault <dufault@hda.com>
 
 	PR 1530/bsps
