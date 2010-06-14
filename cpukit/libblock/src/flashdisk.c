@@ -2575,6 +2575,7 @@ rtems_fdisk_initialize (rtems_device_major_number major,
       free (fd->devices);
       rtems_fdisk_error ("recovery of disk failed: %s (%d)",
                          strerror (ret), ret);
+      return ret;
     }
     
     ret = rtems_fdisk_compact (fd);
@@ -2587,6 +2588,7 @@ rtems_fdisk_initialize (rtems_device_major_number major,
       free (fd->devices);
       rtems_fdisk_error ("compacting of disk failed: %s (%d)",
                          strerror (ret), ret);
+      return ret;
     }
   }
 
