@@ -1,5 +1,9 @@
 2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Doxygen.in: Use @PERL@ instead of hard-coded /usr/bin/perl.
+
+2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems/mkrootfs.h,
 	posix/include/rtems/posix/pthread.h,
 	score/include/rtems/score/coresem.h,
