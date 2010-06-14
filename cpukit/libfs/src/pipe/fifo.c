@@ -269,7 +269,7 @@ int fifo_open(
 )
 {
   pipe_control_t *pipe;
-  uint prevCounter;
+  unsigned int prevCounter;
   int err;
 
   err = pipe_new(pipep);
@@ -518,7 +518,7 @@ int pipe_ioctl(
       return -EINTR;
 
     /* Return length of pipe */
-    *(uint *)buffer = pipe->Length;
+    *(unsigned int *)buffer = pipe->Length;
     PIPE_UNLOCK(pipe);
     return 0;
   }
