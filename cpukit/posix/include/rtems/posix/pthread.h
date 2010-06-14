@@ -20,13 +20,13 @@
 #ifndef _RTEMS_POSIX_PTHREAD_H
 #define _RTEMS_POSIX_PTHREAD_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
  *  The following sets the minimum stack size for POSIX threads.
  */

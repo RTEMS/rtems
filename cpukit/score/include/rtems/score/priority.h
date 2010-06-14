@@ -36,14 +36,14 @@
  */
 /**@{*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
  * Processor specific information.
  */
 #include <rtems/score/cpu.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  The following type defines the control block used to manage
