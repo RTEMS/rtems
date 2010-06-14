@@ -1,3 +1,7 @@
+2010-06-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/bspstart.c: Formatting.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/irq-config.h: Removed file.

@@ -66,6 +66,7 @@ void bsp_start_default( void )
    * Init rtems interrupt management
    */
   rtems_irq_mngt_init();
+
   /*
    * Init rtems exceptions management
    */
@@ -79,7 +80,7 @@ void bsp_start_default( void )
       printk("PCI bus: could not initialize PCI BIOS interface\n");
   }
 
-  bsp_ide_cmdline_init ();
+  bsp_ide_cmdline_init();
 
 } /* bsp_start */
 

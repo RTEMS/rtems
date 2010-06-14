@@ -206,14 +206,14 @@ void bsp_start(void)
   /*
    *  initialize the device driver parameters
    */
-  bsp_clicks_per_usec 	   = 10;  /* for 40MHz extclk */
-  bsp_serial_per_sec  	   = 40000000;
+  bsp_clicks_per_usec 	     = 10;  /* for 40MHz extclk */
+  bsp_serial_per_sec  	     = 40000000;
   bsp_serial_external_clock  = 0;
-  bsp_serial_xon_xoff 	   = 0;
-  bsp_serial_cts_rts 	   = 0;
-  bsp_serial_rate 	   = 9600;
+  bsp_serial_xon_xoff 	     = 0;
+  bsp_serial_cts_rts 	     = 0;
+  bsp_serial_rate 	     = 9600;
   bsp_timer_average_overhead = 3;
-  bsp_timer_least_valid 	   = 3;
+  bsp_timer_least_valid    = 3;
   bsp_clock_speed 	   = 40000000;
 
 #ifdef REV_0_2
