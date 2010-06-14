@@ -1,3 +1,7 @@
+2010-06-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/bspclean.c: Spelling.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* startup/bspclean.c, timer/timer.c: Remove warnings.

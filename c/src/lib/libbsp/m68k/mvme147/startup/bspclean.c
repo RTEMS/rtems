@@ -40,5 +40,5 @@ void bsp_cleanup( void )
    pcc->timer2_int_control = 0; /* Disable Timer 2 */
 
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
-   asm volatile( "trap #13" );  /* insures SUPV mode */
+   asm volatile( "trap #13" );  /* ensures SUPV mode */
 }
