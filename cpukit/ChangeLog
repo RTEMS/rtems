@@ -1,3 +1,10 @@
+2010-06-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1553/filesystem
+	Coverity Id 37
+	* libblock/src/flashdisk.c: Fix two paths which should have returned an
+	error but did not have the return statement.
+
 2010-06-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libmd/md5.h: Define MD5_DIGEST_SIZE.
