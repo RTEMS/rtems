@@ -1,5 +1,9 @@
 2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmd/md5.h: Revert Sebastian's patch.
+
+2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/rtems/libio_.h: Fix broken doxygen
 	meta comment.
 
