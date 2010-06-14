@@ -29,14 +29,14 @@
  */
 /**@{*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #if defined(RTEMS_POSIX_API) || defined(RTEMS_ITRON_API)
   #define RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY

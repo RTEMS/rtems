@@ -24,11 +24,11 @@
 #ifndef _RTEMS_MKROOTFS_H
 #define _RTEMS_MKROOTFS_H
 
+#include <rtems.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems.h>
 
 /*
  *  Appends the lines to the a file. Create the file

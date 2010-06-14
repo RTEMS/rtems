@@ -27,15 +27,15 @@
  */
 /**@{*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/score/tqdata.h>
 
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  Constant for indefinite wait.

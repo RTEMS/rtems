@@ -38,11 +38,11 @@
  */
 /**@{*/
 
+#include <rtems/score/timespec.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/timespec.h>
 
 /*
  *  NOTE: Eventually each port should select what it should use!!!
