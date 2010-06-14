@@ -1,3 +1,8 @@
+2010-06-14	Arnout Vandecappelle <arnout@mind.be>
+
+	PR 1557/misc
+	* libchip/i2c/spi-sd-card.c: Fixed low capacity special case.
+
 2010-06-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-cpu-subdirs.m4: Remove nios2.
