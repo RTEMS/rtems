@@ -1,5 +1,9 @@
 2010-06-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libmd/md5.h: Define MD5_DIGEST_SIZE.
+
+2010-06-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1555/cpukit
 	* Makefile.am, preinstall.am: Install md4.h and md5.h headers.
 
