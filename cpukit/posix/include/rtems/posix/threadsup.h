@@ -20,6 +20,10 @@
 #include <rtems/score/coresem.h>
 #include <rtems/score/tqdata.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*!
  *  This defines the POSIX API support structure associated with
  *  each thread in a system with POSIX configured.
@@ -82,6 +86,10 @@ void _POSIX_Thread_Exit(
   Thread_Control *the_thread,
   void           *value_ptr
 );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */
