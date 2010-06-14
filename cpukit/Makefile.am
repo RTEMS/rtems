@@ -50,7 +50,9 @@ if NEWLIB
 include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
 
-include_HEADERS += libnetworking/memory.h
+include_HEADERS += libnetworking/memory.h \
+    libmd/md4.h \
+    libmd/md5.h
 
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h \
     libcsupport/include/sys/filio.h libcsupport/include/sys/ioctl.h \

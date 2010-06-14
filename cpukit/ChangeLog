@@ -1,5 +1,10 @@
 2010-06-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1555/cpukit
+	* Makefile.am, preinstall.am: Install md4.h and md5.h headers.
+
+2010-06-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* sapi/include/confdefs.h: Do not define a filesystem if
 	CONFIGURE_APPLICATION_DISABLE_FILESYSTEM is defined.
 
