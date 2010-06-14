@@ -914,6 +914,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		 */
 		e->block_size_shift = 9;
 		e->block_size = 512;
+		e->block_number *= 2;
 	}
 
 	/* Set read block size */
