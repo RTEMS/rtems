@@ -1,3 +1,8 @@
+2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/pipe/fifo.c, libfs/src/pipe/pipe.h:
+	Eliminate "uint".
+
 2010-06-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/rtems/tar.h, libcsupport/include/tar.h: Remove.

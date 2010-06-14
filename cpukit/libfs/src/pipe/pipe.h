@@ -22,15 +22,15 @@ extern "C" {
 /* Control block to manage each pipe */
 typedef struct pipe_control {
   char *Buffer;
-  uint Size;
-  uint Start;
-  uint Length;
-  uint Readers;
-  uint Writers;
-  uint waitingReaders;
-  uint waitingWriters;
-  uint readerCounter;     /* incremental counters */
-  uint writerCounter;     /* for differentiation of successive opens */
+  unsigned int Size;
+  unsigned int Start;
+  unsigned int Length;
+  unsigned int Readers;
+  unsigned int Writers;
+  unsigned int waitingReaders;
+  unsigned int waitingWriters;
+  unsigned int readerCounter;     /* incremental counters */
+  unsigned int writerCounter;     /* for differentiation of successive opens */
   rtems_id Semaphore;
   rtems_id readBarrier;   /* wait queues */
   rtems_id writeBarrier;
