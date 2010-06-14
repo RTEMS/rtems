@@ -1,5 +1,7 @@
 2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/in_pcb.c:
+	Eliminate "ushort".
 	* libfs/src/pipe/fifo.c, libfs/src/pipe/pipe.h:
 	Eliminate "uint".
 
