@@ -254,12 +254,14 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    * If the base filesystem is DEVFS define it else define IMFS.
    * We will have either DEVFS or IMFS defined after this.
    */
-  #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
-    #define CONFIGURE_FILESYSTEM_DEVFS
-  #elif defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
-    #define CONFIGURE_FILESYSTEM_miniIMFS
-  #elif !defined(CONFIGURE_FILESYSTEM_IMFS)
-    #define CONFIGURE_FILESYSTEM_IMFS
+  #if !defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
+    #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+      #define CONFIGURE_FILESYSTEM_DEVFS
+    #elif defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
+      #define CONFIGURE_FILESYSTEM_miniIMFS
+    #elif !defined(CONFIGURE_FILESYSTEM_IMFS)
+      #define CONFIGURE_FILESYSTEM_IMFS
+    #endif
   #endif
 
 #endif

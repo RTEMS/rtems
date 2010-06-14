@@ -1,3 +1,8 @@
+2010-06-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sapi/include/confdefs.h: Do not define a filesystem if
+	CONFIGURE_APPLICATION_DISABLE_FILESYSTEM is defined.
+
 2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Doxygen.in: Use @PERL@ instead of hard-coded /usr/bin/perl.
