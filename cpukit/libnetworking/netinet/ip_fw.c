@@ -78,7 +78,8 @@ SYSCTL_INT(_net_inet_ip_fw, OID_AUTO, verbose_limit, CTLFLAG_RW, &fw_verbose_lim
 
 #define dprintf(a)	if (!fw_debug); else printf a
 
-#define print_ip(a)	 printf("%ld.%ld.%ld.%ld",(ntohl(a.s_addr)>>24)&0xFF,\
+#define print_ip(a)	 printf("%"PRId32".%"PRId32".%"PRId32".%"PRId32,\
+				 		  (ntohl(a.s_addr)>>24)&0xFF,\
 				 		  (ntohl(a.s_addr)>>16)&0xFF,\
 						  (ntohl(a.s_addr)>>8)&0xFF,\
 						  (ntohl(a.s_addr))&0xFF);

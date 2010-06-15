@@ -1188,7 +1188,7 @@ ip_srcroute(void)
 	*(mtod(m, struct in_addr *)) = *p--;
 #ifdef DIAGNOSTIC
 	if (ipprintfs)
-		printf(" hops %lx", ntohl(mtod(m, struct in_addr *)->s_addr));
+		printf(" hops %"PRIx32, ntohl(mtod(m, struct in_addr *)->s_addr));
 #endif
 
 	/*
@@ -1208,7 +1208,7 @@ ip_srcroute(void)
 	while (p >= ip_srcrt.route) {
 #ifdef DIAGNOSTIC
 		if (ipprintfs)
-			printf(" %lx", ntohl(q->s_addr));
+			printf(" %"PRIx32, ntohl(q->s_addr));
 #endif
 		*q++ = *p--;
 	}
@@ -1218,7 +1218,7 @@ ip_srcroute(void)
 	*q = ip_srcrt.dst;
 #ifdef DIAGNOSTIC
 	if (ipprintfs)
-		printf(" %lx\n", ntohl(q->s_addr));
+		printf(" %"PRIx32"\n", ntohl(q->s_addr));
 #endif
 	return (m);
 }
@@ -1294,7 +1294,7 @@ ip_forward(struct mbuf *m, int srcrt)
 	dest = 0;
 #ifdef DIAGNOSTIC
 	if (ipprintfs)
-		printf("forward: src %lx dst %lx ttl %x\n",
+		printf("forward: src %"PRIx32" dst %"PRIx32" ttl %x\n",
 			ip->ip_src.s_addr, ip->ip_dst.s_addr, ip->ip_ttl);
 #endif
 
