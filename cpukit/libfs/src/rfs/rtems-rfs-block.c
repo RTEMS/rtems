@@ -38,6 +38,8 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
+
 #include <rtems/rfs/rtems-rfs-block.h>
 #include <rtems/rfs/rtems-rfs-data.h>
 #include <rtems/rfs/rtems-rfs-group.h>
@@ -224,8 +226,8 @@ rtems_rfs_block_find_indirect (rtems_rfs_file_system*   fs,
   if (*result >= rtems_rfs_fs_blocks (fs))
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_FIND))
-      printf ("rtems-rfs: block-find: invalid block in table:" \
-              " block=%ld, indirect=%ld/%d\n", *result, block, offset);
+      printf ("rtems-rfs: block-find: invalid block in table:"
+              " block=%" PRId32 ", indirect=%" PRId32 "/%d\n", *result, block, offset);
     *result = 0;
     rc = EIO;
   }
@@ -394,7 +396,7 @@ rtems_rfs_block_map_indirect_alloc (rtems_rfs_file_system*   fs,
   {
     int b;
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_GROW))
-      printf ("rtems-rfs: block-map-grow: upping: block-count=%ld\n",
+      printf ("rtems-rfs: block-map-grow: upping: block-count=%" PRId32 "\n",
               map->size.count);
     for (b = 0; b < RTEMS_RFS_INODE_BLOCKS; b++)
       rtems_rfs_block_set_number (buffer, b, map->blocks[b]);
@@ -415,9 +417,9 @@ rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
   int b;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_GROW))
-    printf ("rtems-rfs: block-map-grow: entry: blocks=%zd count=%lu\n",
+    printf ("rtems-rfs: block-map-grow: entry: blocks=%zd count=%" PRIu32 "\n",
             blocks, map->size.count);
-            
+
   if ((map->size.count + blocks) >= rtems_rfs_fs_max_block_map_blocks (fs))
     return EFBIG;
 
@@ -657,7 +659,7 @@ rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
                             size_t                 blocks)
 {
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_SHRINK))
-    printf ("rtems-rfs: block-map-shrink: entry: blocks=%zd count=%lu\n",
+    printf ("rtems-rfs: block-map-shrink: entry: blocks=%zd count=%" PRIu32 "\n",
             blocks, map->size.count);
             
   if (map->size.count == 0)
