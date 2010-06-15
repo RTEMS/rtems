@@ -1,5 +1,10 @@
 2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/rtems/posix/pthread.h: Remove stray comment.
+	Work-around doxygen comment bug.
+
+2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/ip_fw.c, libnetworking/netinet/ip_input.c:
 	Misc. 64bit-compatibility fixes.
 
