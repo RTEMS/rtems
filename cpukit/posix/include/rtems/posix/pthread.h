@@ -128,10 +128,17 @@ void _POSIX_Threads_Sporadic_budget_callout(
 /**
  *  _POSIX_Threads_Sporadic_budget_TSR
  *
- *  This routine supports the sporadic scheduling algorithm.
+ *  This routine supports the sporadic scheduling algorithm.  It
+ *  is scheduled to be executed at the end of each replenishment
+ *  period.  In sporadic scheduling a thread will execute at a
+ *  high priority for a user specified amount of CPU time.  When
+ *  it exceeds that amount of CPU time, its priority is automatically
+ *  lowered. This TSR is executed when it is time to replenish
+ *  the thread's processor budget and raise its priority.
  *
- *  @param[in] id
- *  @param[in] argument
+ *  @param[in] id is ignored
+ *  @param[in] argument is a pointer to the Thread_Control structure
+ *             for the thread being replenished.
  */
 void _POSIX_Threads_Sporadic_budget_TSR(
   Objects_Id      id,

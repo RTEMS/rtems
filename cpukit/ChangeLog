@@ -1,3 +1,7 @@
+2010-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/include/rtems/posix/pthread.h: Improve comments.
+
 2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-file-system.h: Remove bogus typecast.
