@@ -87,7 +87,6 @@ restore:
 .set NEWCONTEXT_ARG,   4                   /* context to restore argument */
 
 SYM (_CPU_Context_restore):
-
         movl      NEWCONTEXT_ARG(esp),eax  /* eax = running threads context */
         jmp       restore
 
