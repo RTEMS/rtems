@@ -29,6 +29,16 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
+
+#if SIZEOF_OFF_T == 8
+#define PRIdoff_t PRIo64
+#elif SIZEOF_OFF_T == 4
+#define PRIdoff_t PRIo32
+#else
+#error "unsupported size of off_t"
+#endif
+
 #include <rtems/rfs/rtems-rfs-block.h>
 #include <rtems/rfs/rtems-rfs-buffer.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>
@@ -58,7 +68,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
   {
     int c;
-    printf ("rtems-rfs: dir-lookup-ino: lookup ino: root=%ld, path=",
+    printf ("rtems-rfs: dir-lookup-ino: lookup ino: root=%" PRId32 ", path=",
             inode->ino);
     for (c = 0; c < length; c++)
       printf ("%c", name[c]);
@@ -72,7 +82,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
   if (rc > 0)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
-      printf ("rtems-rfs: dir-lookup-ino: map open failed for ino %lu: %d: %s",
+      printf ("rtems-rfs: dir-lookup-ino: map open failed for ino %" PRIu32 ": %d: %s",
               rtems_rfs_inode_ino (inode), rc, strerror (rc));
     return rc;
   }
@@ -81,7 +91,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
   if (rc > 0)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
-      printf ("rtems-rfs: dir-lookup-ino: handle open failed for ino %lu: %d: %s",
+      printf ("rtems-rfs: dir-lookup-ino: handle open failed for ino %" PRIu32 ": %d: %s",
               rtems_rfs_inode_ino (inode), rc, strerror (rc));
     rtems_rfs_block_map_close (fs, &map);
     return rc;
@@ -121,7 +131,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
       if (rc > 0)
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
-          printf ("rtems-rfs: dir-lookup-ino: block read, ino=%lu block=%ld: %d: %s\n",
+          printf ("rtems-rfs: dir-lookup-ino: block read, ino=%" PRIu32 " block=%" PRId32 ": %d: %s\n",
                   rtems_rfs_inode_ino (inode), block, rc, strerror (rc));
         break;
       }
@@ -150,8 +160,8 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
         if (rtems_rfs_dir_entry_valid (fs, elength, *ino))
         {
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
-            printf ("rtems-rfs: dir-lookup-ino: " \
-                    "bad length or ino for ino %lu: %u/%ld @ %04lx\n",
+            printf ("rtems-rfs: dir-lookup-ino: "
+                    "bad length or ino for ino %" PRIu32 ": %u/%" PRId32 " @ %04" PRIx32 "\n",
                     rtems_rfs_inode_ino (inode), elength, *ino, map.bpos.boff);
           rc = EIO;
           break;
@@ -160,8 +170,8 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
         if (ehash == hash)
         {
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO_CHECK))
-            printf ("rtems-rfs: dir-lookup-ino: " \
-                    "checking entry for ino %ld: off=%04lx length:%d ino:%ld\n",
+            printf ("rtems-rfs: dir-lookup-ino: "
+                    "checking entry for ino %" PRId32 ": off=%04" PRIx32 " length:%d ino:%" PRId32 "\n",
                     rtems_rfs_inode_ino (inode), map.bpos.boff,
                     elength, rtems_rfs_dir_entry_ino (entry));
 
@@ -170,8 +180,8 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
             *offset = rtems_rfs_block_map_pos (fs, &map);
             
             if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO_FOUND))
-              printf ("rtems-rfs: dir-lookup-ino: " \
-                      "entry found in ino %lu, ino=%lu offset=%lu\n",
+              printf ("rtems-rfs: dir-lookup-ino: "
+                      "entry found in ino %" PRIu32 ", ino=%" PRIu32 " offset=%" PRIu32 "\n",
                       rtems_rfs_inode_ino (inode), *ino, *offset);
 
             rtems_rfs_buffer_handle_close (fs, &entries);
@@ -190,8 +200,8 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
         if ((rc > 0) && (rc != ENXIO))
         {
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
-            printf ("rtems-rfs: dir-lookup-ino: " \
-                    "block map next block failed in ino %lu: %d: %s\n",
+            printf ("rtems-rfs: dir-lookup-ino: "
+                    "block map next block failed in ino %" PRIu32 ": %d: %s\n",
                     rtems_rfs_inode_ino (inode), rc, strerror (rc));
         }
         if (rc == ENXIO)
@@ -203,7 +213,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
     {
       rc = EIO;
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
-        printf ("rtems-rfs: dir-lookup-ino: block is 0 in ino %lu: %d: %s\n",
+        printf ("rtems-rfs: dir-lookup-ino: block is 0 in ino %" PRIu32 ": %d: %s\n",
                 rtems_rfs_inode_ino (inode), rc, strerror (rc));
     }
   }
@@ -228,7 +238,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_ADD_ENTRY))
   {
     int c;
-    printf ("rtems-rfs: dir-add-entry: dir=%ld, name=",
+    printf ("rtems-rfs: dir-add-entry: dir=%" PRId32 ", name=",
             rtems_rfs_inode_ino (dir));
     for (c = 0; c < length; c++)
       printf ("%c", name[c]);
@@ -269,8 +279,8 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
       if (rc != ENXIO)
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_ADD_ENTRY))
-          printf ("rtems-rfs: dir-add-entry: " \
-                  "block map find failed for ino %lu: %d: %s\n",
+          printf ("rtems-rfs: dir-add-entry: "
+                  "block map find failed for ino %" PRIu32 ": %d: %s\n",
                   rtems_rfs_inode_ino (dir), rc, strerror (rc));
         break;
       }
@@ -282,8 +292,8 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
       if (rc > 0)
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_ADD_ENTRY))
-          printf ("rtems-rfs: dir-add-entry: " \
-                  "block map grow failed for ino %lu: %d: %s\n",
+          printf ("rtems-rfs: dir-add-entry: "
+                  "block map grow failed for ino %" PRIu32 ": %d: %s\n",
                   rtems_rfs_inode_ino (dir), rc, strerror (rc));
         break;
       }
@@ -297,8 +307,8 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
     if (rc > 0)
     {
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_ADD_ENTRY))
-        printf ("rtems-rfs: dir-add-entry: " \
-                "block buffer req failed for ino %lu: %d: %s\n",
+        printf ("rtems-rfs: dir-add-entry: "
+                "block buffer req failed for ino %" PRIu32 ": %d: %s\n",
                 rtems_rfs_inode_ino (dir), rc, strerror (rc));
       break;
     }
@@ -342,8 +352,8 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
       if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_ADD_ENTRY))
-          printf ("rtems-rfs: dir-add-entry: " \
-                  "bad length or ino for ino %lu: %u/%ld @ %04x\n",
+          printf ("rtems-rfs: dir-add-entry: "
+                  "bad length or ino for ino %" PRIu32 ": %u/%" PRId32 " @ %04x\n",
                   rtems_rfs_inode_ino (dir), elength, eino, offset);
         rtems_rfs_buffer_handle_close (fs, &buffer);
         rtems_rfs_block_map_close (fs, &map);
@@ -373,9 +383,9 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
   int                     rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
-    printf ("rtems-rfs: dir-del-entry: dir=%ld, entry=%ld offset=%lu\n",
+    printf ("rtems-rfs: dir-del-entry: dir=%" PRId32 ", entry=%" PRId32 " offset=%" PRIu32 "\n",
             rtems_rfs_inode_ino (dir), ino, offset);
-        
+
   rc = rtems_rfs_block_map_open (fs, dir, &map);
   if (rc > 0)
     return rc;
@@ -410,8 +420,8 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
     if (rc > 0)
     {
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
-        printf ("rtems-rfs: dir-del-entry: " \
-                "block buffer req failed for ino %lu: %d: %s\n",
+        printf ("rtems-rfs: dir-del-entry: "
+                "block buffer req failed for ino %" PRIu32 ": %d: %s\n",
                 rtems_rfs_inode_ino (dir), rc, strerror (rc));
       break;
     }
@@ -433,13 +443,13 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
       if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
-          printf ("rtems-rfs: dir-del-entry: " \
-                  "bad length or ino for ino %lu: %u/%ld @ %04x\n",
+          printf ("rtems-rfs: dir-del-entry: "
+                  "bad length or ino for ino %" PRIu32 ": %u/%" PRId32 " @ %04x\n",
                   rtems_rfs_inode_ino (dir), elength, eino, offset);
         rc = EIO;
         break;
       }
-        
+
       if (ino == rtems_rfs_dir_entry_ino (entry))
       {
         uint32_t remaining;
@@ -457,8 +467,8 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
         elength = rtems_rfs_dir_entry_length (entry);
 
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
-          printf ("rtems-rfs: dir-del-entry: " \
-                  "last block free for ino %lu: elength=%i offset=%d last=%s\n",
+          printf ("rtems-rfs: dir-del-entry: "
+                  "last block free for ino %" PRIu32 ": elength=%i offset=%d last=%s\n",
                   ino, elength, offset,
                   rtems_rfs_block_map_last (&map) ? "yes" : "no");
 
@@ -469,8 +479,8 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
           if (rc > 0)
           {
             if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
-              printf ("rtems-rfs: dir-del-entry: " \
-                      "block map shrink failed for ino %lu: %d: %s\n",
+              printf ("rtems-rfs: dir-del-entry: "
+                      "block map shrink failed for ino %" PRIu32 ": %d: %s\n",
                       rtems_rfs_inode_ino (dir), rc, strerror (rc));
           }
         }
@@ -517,7 +527,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
   int                     rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
-    printf ("rtems-rfs: dir-read: dir=%ld offset=%Ld\n",
+    printf ("rtems-rfs: dir-read: dir=%" PRId32 " offset=%" PRId64 "\n",
             rtems_rfs_inode_ino (dir), offset);
 
   *length = 0;
@@ -577,8 +587,8 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
-          printf ("rtems-rfs: dir-read: " \
-                  "bad length or ino for ino %lu: %u/%ld @ %04lx\n",
+          printf ("rtems-rfs: dir-read: "
+                  "bad length or ino for ino %" PRIu32 ": %u/%" PRId32 " @ %04" PRIx32 "\n",
                   rtems_rfs_inode_ino (dir), elength, eino, map.bpos.boff);
         rc = EIO;
         break;
@@ -608,16 +618,16 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       dirent->d_namlen = elength;
       
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
-        printf ("rtems-rfs: dir-read: found off:%Ld ino:%ld name=%s\n",
-                (uint64_t) dirent->d_off, dirent->d_ino, dirent->d_name);
+        printf ("rtems-rfs: dir-read: found off:%" PRIdoff_t " ino:%ld name=%s\n",
+                dirent->d_off, dirent->d_ino, dirent->d_name);
       break;
     }
 
     *length += rtems_rfs_fs_block_size (fs) - map.bpos.boff;
     
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
-      printf ("rtems-rfs: dir-read: next block: off:%ld length:%zd\n",
-              (uint32_t) offset, *length);
+      printf ("rtems-rfs: dir-read: next block: off:%" PRId64 " length:%zd\n",
+              offset, *length);
       
     rc = rtems_rfs_block_map_next_block (fs, &map, &block);
     if (rc == ENXIO)
@@ -640,7 +650,7 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
   int                     rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
-    printf ("rtems-rfs: dir-empty: dir=%ld\n", rtems_rfs_inode_ino (dir));
+    printf ("rtems-rfs: dir-empty: dir=%" PRId32 "\n", rtems_rfs_inode_ino (dir));
 
   empty = true;
   
@@ -692,8 +702,8 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
       if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_EMPTY))
-          printf ("rtems-rfs: dir-empty: " \
-                  "bad length or ino for ino %lu: %u/%ld @ %04x\n",
+          printf ("rtems-rfs: dir-empty: "
+                  "bad length or ino for ino %" PRIu32 ": %u/%" PRIu32 " @ %04x\n",
                   rtems_rfs_inode_ino (dir), elength, eino, offset);
         rc = EIO;
         break;

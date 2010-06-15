@@ -1,5 +1,12 @@
 2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-dir.c: Various 64bit compatibility fixes.
+	Add PRIdoff_t.
+	Remove stray "\"s.
+	* libfs/src/rfs/rtems-rfs-link.c: Various 64bit compatibility fixes.
+
+2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/rfs/rtems-rfs-file-system.h: Remove bogus typecast.
 	* libfs/src/rfs/rtems-rfs-block.c, libfs/src/rfs/rtems-rfs-buffer.c,
 	libnetworking/nfs/bootp_subr.c: Misc. 64bit-compatibility fixes.
