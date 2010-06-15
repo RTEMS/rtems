@@ -20,6 +20,7 @@ DIST_SUBDIRS += no_cpu
 DIST_SUBDIRS += powerpc
 DIST_SUBDIRS += sh
 DIST_SUBDIRS += sparc
+DIST_SUBDIRS += sparc64
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

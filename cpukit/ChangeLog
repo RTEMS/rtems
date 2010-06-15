@@ -1,5 +1,10 @@
 2010-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1561/cpukit
+	* configure.ac, score/cpu/Makefile.am: Merge SPARC64 port.
+
+2010-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/src/psignal.c: Formatting.
 
 2010-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
