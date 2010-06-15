@@ -2,8 +2,7 @@
  * @file rtems/posix/pthread.h
  */
 
-/*  rtems/posix/pthread.h
- *
+/*
  *  This include file contains all the private support information for
  *  POSIX threads.
  *
@@ -131,7 +130,8 @@ void _POSIX_Threads_Sporadic_budget_callout(
  *
  *  This routine supports the sporadic scheduling algorithm.
  *
- *  @param[in] the_thread is the thread whose budget has been exceeded.
+ *  @param[in] id
+ *  @param[in] argument
  */
 void _POSIX_Threads_Sporadic_budget_TSR(
   Objects_Id      id,
