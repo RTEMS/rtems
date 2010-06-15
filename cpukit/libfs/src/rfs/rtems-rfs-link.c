@@ -22,6 +22,8 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
+
 #include <rtems/rfs/rtems-rfs-block.h>
 #include <rtems/rfs/rtems-rfs-buffer.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>
@@ -46,10 +48,10 @@ rtems_rfs_link (rtems_rfs_file_system* fs,
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_LINK))
   {
     int c;
-    printf ("rtems-rfs: link: parent(%lu) -> ", parent);
+    printf ("rtems-rfs: link: parent(%" PRIu32 ") -> ", parent);
     for (c = 0; c < length; c++)
       printf ("%c", name[c]);
-    printf ("(%lu)\n", target);
+    printf ("(%" PRIu32 ")\n", target);
   }
 
   rc = rtems_rfs_inode_open (fs, target, &target_inode, true);
@@ -118,7 +120,7 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
   int                    rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_UNLINK))
-    printf ("rtems-rfs: unlink: parent(%lu) -X-> (%lu)\n", parent, target);
+    printf ("rtems-rfs: unlink: parent(%" PRIu32 ") -X-> (%" PRIu32 ")\n", parent, target);
 
   rc = rtems_rfs_inode_open (fs, target, &target_inode, true);
   if (rc)
@@ -179,7 +181,7 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
   links = rtems_rfs_inode_get_links (&target_inode);
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_UNLINK))
-    printf ("rtems-rfs: unlink: target:%lu links:%u\n", target, links);
+    printf ("rtems-rfs: unlink: target:%" PRIu32 " links:%u\n", target, links);
 
   if (links > 1)
   {
@@ -258,7 +260,7 @@ rtems_rfs_symlink (rtems_rfs_file_system* fs,
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_SYMLINK))
   {
     int c;
-    printf ("rtems-rfs: symlink: parent:%lu name:", parent);
+    printf ("rtems-rfs: symlink: parent:%" PRIu32 " name:", parent);
     for (c = 0; c < length; c++)
       printf ("%c", name[c]);
     printf (" link:");
@@ -367,7 +369,7 @@ rtems_rfs_symlink_read (rtems_rfs_file_system* fs,
   int                    rc;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_SYMLINK_READ))
-    printf ("rtems-rfs: symlink-read: link:%lu\n", link);
+    printf ("rtems-rfs: symlink-read: link:%" PRIu32 "\n", link);
 
   rc = rtems_rfs_inode_open (fs, link, &inode, true);
   if (rc)
