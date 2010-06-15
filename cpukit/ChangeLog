@@ -1,5 +1,6 @@
 2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-file-system.h: Remove bogus typecast.
 	* libfs/src/rfs/rtems-rfs-block.c, libfs/src/rfs/rtems-rfs-buffer.c,
 	libnetworking/nfs/bootp_subr.c: Misc. 64bit-compatibility fixes.
 	* posix/include/rtems/posix/pthread.h: Remove stray comment.
