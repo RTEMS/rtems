@@ -308,7 +308,7 @@ struct rtems_rfs_file_system_t
  *
  * @param _fs Pointer to the file system.
  */
-#define rtems_rfs_fs_size(_fs) (((uint64_t) rtems_rfs_fs_blocks (_fs)) * \
+#define rtems_rfs_fs_size(_fs) (rtems_rfs_fs_blocks (_fs) * \
                                 rtems_rfs_fs_block_size (_fs))
 
 /**
