@@ -464,7 +464,7 @@ bootpc_call(
 	} /* send/receive a number of times then return an error */
 	{
 		uint32_t addr = ntohl(sin->sin_addr.s_addr);
-        printf("BOOTP timeout for server %lu.%lu.%lu.%lu\n",
+        printf("BOOTP timeout for server %"PRIu32".%"PRIu32".%"PRIu32".%"PRIu32"\n",
                (addr >> 24) & 0xff, (addr >> 16) & 0xff,
                (addr >> 8) & 0xff, addr & 0xff);
 	}

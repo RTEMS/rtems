@@ -20,6 +20,7 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
 #include <errno.h>
 
 #include <rtems/rfs/rtems-rfs-buffer.h>
@@ -44,7 +45,7 @@ rtems_rfs_scan_chain (rtems_chain_control*   chain,
   node = rtems_chain_last (chain);
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CHAINS))
-    printf ("rtems-rfs: buffer-scan: count=%lu, block=%lu: ", *count, block);
+    printf ("rtems-rfs: buffer-scan: count=%" PRIu32 ", block=%" PRIu32 ": ", *count, block);
 
   while (!rtems_chain_is_head (chain, node))
   {
@@ -105,7 +106,7 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
   }
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_REQUEST))
-    printf ("rtems-rfs: buffer-request: block=%lu\n", block);
+    printf ("rtems-rfs: buffer-request: block=%" PRIu32 "\n", block);
 
   /*
    * First check to see if the buffer has already been requested and is
