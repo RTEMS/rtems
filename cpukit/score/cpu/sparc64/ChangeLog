@@ -1,0 +1,31 @@
+2010-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1561/cpukit
+	* .cvsignore, ChangeLog, Makefile.am, Makefile.in, README, context.S,
+	cpu.c, preinstall.am, rtems/asm.h, rtems/score/cpu.h,
+	rtems/score/sparc64.h, rtems/score/types.h: New files.
+
+2010-05-10  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* README: Explain separation of score between here and libcpu.
+
+2010-05-03  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* rtems/score/cpu.h, context.S, cpu.c: Remove privileged
+	registers from context.
+
+2010-05-03  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* cpu.c: Remove interrupt handling code.  Moved to libcpu.
+
+2010-05-03  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* context.S: renamed cpu_asm.S to context.S
+
+2010-05-02  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* cpu_asm.S: Remove interrupt handling code.  Moved to libcpu.
+
+2009-10-19	Eugen Leontie <eugen@gwu.edu>
+
+	Added sparc64 architecture
