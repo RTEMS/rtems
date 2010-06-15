@@ -121,7 +121,7 @@ void _POSIX_signals_Post_switch_extension(
    */
   #if defined(RTEMS_DEBUG)
     if ( !api )
-    return;
+      return;
   #endif
 
   /*
