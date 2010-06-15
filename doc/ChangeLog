@@ -1,3 +1,10 @@
+2010-06-15	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1565/cpukit
+	* cpu_supplement/Makefile.am, cpu_supplement/cpu_supplement.texi: Merge
+	SPARC64 port.
+	* cpu_supplement/sparc64.t: New file.
+
 2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Don't install html_imagesdir unconditionally.
