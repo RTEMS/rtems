@@ -47,6 +47,8 @@ __RCSID("$NetBSD: print.c,v 1.40 2004/11/17 17:00:00 mycroft Exp $");
 #endif /* not lint */
 #endif
 
+#include <inttypes.h>
+
 #include <rtems.h>
 #include <rtems/libio.h>
 
@@ -147,7 +149,7 @@ printlong(rtems_shell_ls_globals* globals, DISPLAY *dp)
 		if (f_flags)
 			(void)printf("%-*s ", dp->s_flags, np->flags);
 		if (S_ISCHR(sp->st_mode) || S_ISBLK(sp->st_mode))
-			(void)printf("%*lu, %*lu ",
+			(void)printf("%*"PRIu32", %*"PRIu32" ",
 			    dp->s_major, major(sp->st_rdev), dp->s_minor,
 			    minor(sp->st_rdev));
 		else

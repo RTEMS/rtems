@@ -1,3 +1,9 @@
+2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/shell/print-ls.c, libmisc/shell/main_msdosfmt.c:
+	Include <inttypes.h>.
+	Misc. 64bit-compatibility fixes.
+
 2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmd/md5.h: Revert Sebastian's patch.
