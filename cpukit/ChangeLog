@@ -1,3 +1,10 @@
+2010-06-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/objectallocate.c: Add conditionally compiled debug code to
+	printk a message when an object allocation error occurs. This should
+	be helpful in identifying when a ported package required more
+	resources.
+
 2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-inode.c: Various 64bit fixes.

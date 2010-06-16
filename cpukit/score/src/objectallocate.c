@@ -28,6 +28,12 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
+/* #define RTEMS_DEBUG_OBJECT_ALLOCATION */
+
+#if defined(RTEMS_DEBUG_OBJECT_ALLOCATION)
+#include <rtems/bspIo.h>
+#endif
+
 /*PAGE
  *
  *  _Objects_Allocate
@@ -81,6 +87,16 @@ Objects_Control *_Objects_Allocate(
       information->inactive--;
     }
   }
+
+#if defined(RTEMS_DEBUG_OBJECT_ALLOCATION)
+  if ( !the_object ) {
+    printk(
+      "OBJECT ALLOCATION FAILURE! API/Class %d/%d\n",
+      information->the_api,
+      information->the_class
+    );
+  }
+#endif
 
   return the_object;
 }
