@@ -1,3 +1,8 @@
+2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1556/cpukit
+	* libfs/src/rfs/rtems-rfs-shell.c: Remove rtems_rfs_shell_cmd_t.
+
 2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1566/filesystem
