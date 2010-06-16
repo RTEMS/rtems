@@ -21,6 +21,8 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
+
 #include <rtems/rfs/rtems-rfs-block-pos.h>
 #include <rtems/rfs/rtems-rfs-file.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>
@@ -37,7 +39,7 @@ rtems_rfs_file_open (rtems_rfs_file_system*  fs,
   int                    rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_OPEN))
-    printf ("rtems-rfs: file-open: ino=%ld\n", ino);
+    printf ("rtems-rfs: file-open: ino=%" PRId32 "\n", ino);
             
   *file = NULL;
 
@@ -71,7 +73,7 @@ rtems_rfs_file_open (rtems_rfs_file_system*  fs,
   {
     shared->references++;
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_OPEN))
-      printf ("rtems-rfs: file-open: ino=%ld shared\n", ino);
+      printf ("rtems-rfs: file-open: ino=%" PRId32 " shared\n", ino);
   }
   else
   {
@@ -127,7 +129,7 @@ rtems_rfs_file_open (rtems_rfs_file_system*  fs,
     rtems_rfs_inode_unload (fs, &shared->inode, false);
 
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_OPEN))
-      printf ("rtems-rfs: file-open: ino=%ld share created\n", ino);
+      printf ("rtems-rfs: file-open: ino=%" PRId32 " share created\n", ino);
   }
 
   handle->flags  = flags;
@@ -148,7 +150,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
   rrc = 0;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_CLOSE))
-    printf ("rtems-rfs: file-close: entry: ino=%ld\n",
+    printf ("rtems-rfs: file-close: entry: ino=%" PRId32 "\n",
             handle->shared->inode.ino);
 
   if (handle->shared->references > 0)
@@ -172,7 +174,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
     if (rc > 0)
     {
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_CLOSE))
-        printf ("rtems-rfs: file-close: map close error: ino=%ld: %d: %s\n",
+        printf ("rtems-rfs: file-close: map close error: ino=%" PRId32 ": %d: %s\n",
                 handle->shared->inode.ino, rc, strerror (rc));
       if (rrc == 0)
         rrc = rc;
@@ -182,7 +184,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
     if (rc > 0)
     {
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_CLOSE))
-        printf ("rtems-rfs: file-close: inode close error: ino=%ld: %d: %s\n",
+        printf ("rtems-rfs: file-close: inode close error: ino=%" PRId32 ": %d: %s\n",
                 handle->shared->inode.ino, rc, strerror (rc));
       if (rrc == 0)
         rrc = rc;
@@ -215,7 +217,7 @@ rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
   size_t size;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
-    printf ("rtems-rfs: file-io: start: %s pos=%lu:%lu\n",
+    printf ("rtems-rfs: file-io: start: %s pos=%" PRIu32 ":%" PRIu32 "\n",
             read ? "read" : "write",  handle->bpos.bno, handle->bpos.boff);
   
   if (!rtems_rfs_buffer_handle_has_block (&handle->buffer))
@@ -269,7 +271,7 @@ rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
     }
     
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
-      printf ("rtems-rfs: file-io: start: block=%lu request-read=%s\n",
+      printf ("rtems-rfs: file-io: start: block=%" PRIu32 " request-read=%s\n",
               block, request_read ? "yes" : "no");
     
     rc = rtems_rfs_buffer_handle_request (rtems_rfs_file_fs (handle),
@@ -360,7 +362,7 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
   length = rtems_rfs_file_update_length (handle) && length;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
-    printf ("rtems-rfs: file-io:   end: pos=%lu:%lu %c %c %c\n",
+    printf ("rtems-rfs: file-io:   end: pos=%" PRIu32 ":%" PRIu32 " %c %c %c\n",
             handle->bpos.bno, handle->bpos.boff,
             atime ? 'A' : '-', mtime ? 'M' : '-', length ? 'L' : '-');
   
@@ -399,7 +401,7 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
                      rtems_rfs_pos*         new_pos)
 {
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
-    printf ("rtems-rfs: file-seek: new=%Lu\n", pos);
+    printf ("rtems-rfs: file-seek: new=%" PRIu64 "\n", pos);
   
   /*
    * This call only sets the position if it is in a valid part of the file. The
@@ -429,7 +431,7 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
   int                  rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
-    printf ("rtems-rfs: file-set-size: size=%Lu\n", new_size);
+    printf ("rtems-rfs: file-set-size: size=%" PRIu64 "\n", new_size);
 
   /*
    * Short cut for the common truncate on open call.
