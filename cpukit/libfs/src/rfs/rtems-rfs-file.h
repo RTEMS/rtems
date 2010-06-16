@@ -33,7 +33,7 @@
  * the inode is not thrashed yet we meet the requirements of the POSIX
  * standard. The stat call needs to check the shared file data.
  */
-typedef struct rtems_rfs_file_shared_t
+typedef struct _rtems_rfs_file_shared
 {
   /**
    * The shared parts are maintained as a list.
@@ -175,7 +175,7 @@ rtems_rfs_file_shared_get_size (rtems_rfs_file_system* fs,
 /**
  * File data used to managed an open file.
  */
-typedef struct rtems_rfs_file_handle_t
+typedef struct _rtems_rfs_file_handle
 {
   /**
    * Special flags that can be controlled by the fctrl call.

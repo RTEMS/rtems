@@ -60,7 +60,7 @@ int rtems_rfs_buffer_bdbuf_release (rtems_rfs_buffer* handle,
                                     bool              modified);
 #else /* Device I/O */
 typedef uint32_t rtems_rfs_buffer_block;
-typedef struct rtems_rfs_buffer_t
+typedef struct _rtems_rfs_buffer
 {
   rtems_chain_node       link;
   rtems_rfs_buffer_block user;
