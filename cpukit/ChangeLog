@@ -1,5 +1,13 @@
 2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	PR 1566/filesystem
+	* libnetworking/rtems/mkrootfs.c,  libnetworking/rtems/mkrootfs.h:
+	Let rtems_rootfs_append_host_rec take an in_addr_t as first arg.
+	* libnetworking/rtems/rtems_dhcp.c, libnetworking/nfs/bootp_subr.c:
+	Reflect changes above.
+
+2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/rfs/rtems-rfs-dir.c: Various 64bit compatibility fixes.
 	Add PRIdoff_t.
 	Remove stray "\"s.
