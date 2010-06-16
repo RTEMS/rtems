@@ -1,3 +1,7 @@
+2010-06-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* cpu_asm.S: Use SYM macro to be consistent with other ports.
+
 2010-04-20	Allan Hessenflow <allanh@kallisti.com>
 
 	* cpu_asm.S: L0-L3 were part of the interrupt context, but as

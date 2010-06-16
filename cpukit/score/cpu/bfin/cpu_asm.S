@@ -35,8 +35,8 @@
 
 #if 0
 /* some debug routines */
-	.globl __CPU_write_char;
-__CPU_write_char:
+	.globl SYM(_CPU_write_char);
+SYM(_CPU_write_char):
 	p0.h = 0xffc0;
 	p0.l = 0x0400;
 txWaitLoop:
@@ -46,112 +46,112 @@ txWaitLoop:
 	w[p0 + 0x00] = r0;
 	rts;
 
-	.globl __CPU_write_crlf;
-__CPU_write_crlf:
+	.globl SYM(_CPU_write_crlf);
+SYM(_CPU_write_crlf):
 	r0 = '\r';
 	[--sp] = rets;
-	call __CPU_write_char;
+	call SYM(_CPU_write_char);
 	rets = [sp++];
 	r0 = '\n';
-	jump __CPU_write_char;
+	jump SYM(_CPU_write_char);
 
-__CPU_write_space:
+SYM(_CPU_write_space):
 	r0 = ' ';
-	jump __CPU_write_char;
+	jump SYM(_CPU_write_char);
 
-	.globl __CPU_write_nybble;
-__CPU_write_nybble:
+	.globl SYM(_CPU_write_nybble);
+SYM(_CPU_write_nybble:)
 	r1 = 0x0f;
 	r0 = r0 & r1;
 	r0 += '0';
 	r1 = '9';
 	cc = r0 <= r1;
-	if cc jump __CPU_write_char;
+	if cc jump SYM(_CPU_write_char);
 	r0 += 'a' - '0' - 10;
-	jump __CPU_write_char;
+	jump SYM(_CPU_write_char);
 
-	.globl __CPU_write_byte;
-__CPU_write_byte:
+	.globl SYM(_CPU_write_byte);
+SYM(_CPU_write_byte):
 	[--sp] = r0;
 	[--sp] = rets;
 	r0 >>= 4;
-	call __CPU_write_nybble;
+	call SYM(_CPU_write_nybble);
 	rets = [sp++];
 	r0 = [sp++];
-	jump __CPU_write_nybble;
+	jump SYM(_CPU_write_nybble);
 
-__CPU_write_chawmp:
+SYM(_CPU_write_chawmp):
 	[--sp] = r0;
 	[--sp] = rets;
 	r0 >>= 8;
-	call __CPU_write_byte;
+	call SYM(_CPU_write_byte);
 	rets = [sp++];
 	r0 = [sp++];
-	jump __CPU_write_byte;
+	jump SYM(_CPU_write_byte);
 
-__CPU_write_gawble:
+SYM(_CPU_write_gawble):
 	[--sp] = r0;
 	[--sp] = rets;
 	r0 >>= 16;
-	call __CPU_write_chawmp;
+	call SYM(_CPU_write_chawmp);
 	rets = [sp++];
 	r0 = [sp++];
-	jump __CPU_write_chawmp;
+	jump SYM(_CPU_write_chawmp);
 
-__CPU_dump_registers:
+SYM(_CPU_dump_registers):
 	[--sp] = rets;
 	[--sp] = r0;
 	[--sp] = r1;
 	[--sp] = p0;
 	r0 = [sp + 8];
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = [sp + 4];
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = r2;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = r3;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = r4;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = r5;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = r6;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = r7;
-	call __CPU_write_gawble;
-	call __CPU_write_crlf;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_crlf);
 	r0 = [sp];
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = p1;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = p2;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = p3;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = p4;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = p5;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = fp;
-	call __CPU_write_gawble;
-	call __CPU_write_space;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_space);
 	r0 = sp;
 	r0 += 16;
-	call __CPU_write_gawble;
-	call __CPU_write_crlf;
+	call SYM(_CPU_write_gawble);
+	call SYM(_CPU_write_crlf);
 
 	p0 = [sp++];
 	r1 = [sp++];
@@ -159,65 +159,65 @@ __CPU_dump_registers:
 	rets = [sp++];
 	rts;
 
-	.globl __CPU_Exception_handler;
-__CPU_Exception_handler:
+	.globl SYM(_CPU_Exception_handler);
+SYM(_CPU_Exception_handler):
 	usp = sp;
 	sp.h = 0xffb0;
 	sp.l = 0x1000;
 	[--sp] = (r7:0,p5:0);
 
 	r0 = 'x';
-	call __CPU_write_char;
+	call SYM(_CPU_write_char);
 	jump hcf;
 
 
-	.globl __CPU_Emulation_handler;
-__CPU_Emulation_handler:
+	.globl SYM(_CPU_Emulation_handler);
+SYM(_CPU_Emulation_handler):
 	usp = sp;
 	sp.h = 0xffb0;
 	sp.l = 0x1000;
 	[--sp] = (r7:0,p5:0);
 
 	r0 = 'e';
-	call __CPU_write_char;
+	call SYM(_CPU_write_char);
 	jump hcf;
 
-	.globl __CPU_Reset_handler;
-__CPU_Reset_handler:
+	.globl SYM(_CPU_Reset_handler);
+SYM(_CPU_Reset_handler):
 	usp = sp;
 	sp.h = 0xffb0;
 	sp.l = 0x1000;
 	[--sp] = (r7:0,p5:0);
 
 	r0 = 'r';
-	call __CPU_write_char;
+	call SYM(_CPU_write_char);
 	jump hcf;
 
-	.globl __CPU_NMI_handler;
-__CPU_NMI_handler:
+	.globl SYM(_CPU_NMI_handler);
+SYM(_CPU_NMI_handler):
 	usp = sp;
 	sp.h = 0xffb0;
 	sp.l = 0x1000;
 	[--sp] = (r7:0,p5:0);
 
 	r0 = 'n';
-	call __CPU_write_char;
+	call SYM(_CPU_write_char);
 	jump hcf;
 
-	.globl __CPU_Unhandled_Interrupt_handler;
-__CPU_Unhandled_Interrupt_handler:
+	.globl SYM(_CPU_Unhandled_Interrupt_handler);
+SYM(_CPU_Unhandled_Interrupt_handler):
 	usp = sp;
 	sp.h = 0xffb0;
 	sp.l = 0x1000;
 	[--sp] = (r7:0,p5:0);
 
-	call __CPU_write_crlf;
+	call SYM(_CPU_write_crlf);
 	r0 = 'i';
-	call __CPU_write_char;
+	call SYM(_CPU_write_char);
 	p0.h = HI(IPEND);
 	p0.l = LO(IPEND);
 	r0 = [p0];
-	call __CPU_write_chawmp;
+	call SYM(_CPU_write_chawmp);
 	jump hcf;
 
 hcf:
@@ -239,8 +239,8 @@ hcf:
 
 /* make sure this sequence stays in sync with the definition for
    Context_Control in rtems/score/cpu.h */
-	.globl __CPU_Context_switch
-__CPU_Context_switch:
+	.globl SYM(_CPU_Context_switch)
+SYM(_CPU_Context_switch):
 	/* Start saving context R0 = current, R1=heir */
 	p0 = r0;
 	[p0++] = r4;
@@ -306,19 +306,19 @@ restore:
  *  none
  *
  */
-	.globl __CPU_Context_restore
-__CPU_Context_restore:
+	.globl SYM(_CPU_Context_restore)
+SYM(_CPU_Context_restore):
 	p0 = r0;
 	jump restore;
 
 
-	.globl __ISR_Handler
-	.extern __CPU_Interrupt_stack_high;
-	.extern __ISR_Nest_level
-	.extern __Thread_Dispatch_disable_level
-	.extern __Context_Switch_necessary
-	.extern __ISR_Signals_to_thread_executing
-__ISR_Handler:
+	.globl SYM(_ISR_Handler)
+	.extern SYM(_CPU_Interrupt_stack_high)
+	.extern SYM(_ISR_Nest_level)
+	.extern SYM(_Thread_Dispatch_disable_level)
+	.extern SYM(_Context_Switch_necessary)
+	.extern SYM(_ISR_Signals_to_thread_executing)
+SYM(_ISR_Handler):
 	/* all interrupts are disabled at this point */
 	/* the following few items are pushed onto the task stack for at
 	   most one interrupt; nested interrupts will be using the interrupt
@@ -328,8 +328,8 @@ __ISR_Handler:
 	[--sp] = p0;
 	[--sp] = r1;
 	[--sp] = r0;
-	p0.h = __ISR_Nest_level;
-	p0.l = __ISR_Nest_level;
+	p0.h = SYM(_ISR_Nest_level);
+	p0.l = SYM(_ISR_Nest_level);
 	r0 = [p0];
 	r0 += 1;
 	[p0] = r0;
@@ -337,14 +337,14 @@ __ISR_Handler:
 	if !cc jump noStackSwitch;
 	/* setup interrupt stack */
 	r0 = sp;
-	p0.h = __CPU_Interrupt_stack_high;
-	p0.l = __CPU_Interrupt_stack_high;
+	p0.h = SYM(_CPU_Interrupt_stack_high);
+	p0.l = SYM(_CPU_Interrupt_stack_high);
 	sp = [p0];
 	[--sp] = r0;
 noStackSwitch:
 	/* disable thread dispatch */
-	p0.h = __Thread_Dispatch_disable_level;
-	p0.l = __Thread_Dispatch_disable_level;
+	p0.h = SYM(_Thread_Dispatch_disable_level);
+	p0.l = SYM(_Thread_Dispatch_disable_level);
 	r0 = [p0];
 	r0 += 1;
 	[p0] = r0;
@@ -365,8 +365,8 @@ vectorIDLoop:
 	if !cc jump vectorIDLoop;
 
 	[--sp] = r2;
-	p0.h = __ISR_Vector_table;
-	p0.l = __ISR_Vector_table;
+	p0.h = SYM(_ISR_Vector_table);
+	p0.l = SYM(_ISR_Vector_table);
 	r2 = [p0];
 	r1 = r0 << 2;
 	r1 = r1 + r2;
@@ -452,8 +452,8 @@ noHandler:
 	/* this disables interrupts again */
 	reti = [sp++];
 
-	p0.h = __ISR_Nest_level;
-	p0.l = __ISR_Nest_level;
+	p0.h = SYM(_ISR_Nest_level);
+	p0.l = SYM(_ISR_Nest_level);
 	r0 = [p0];
 	r0 += -1;
 	[p0] = r0;
@@ -464,8 +464,8 @@ noStackRestore:
 
 	/* check this stuff to ensure context_switch_necessary and
 	   isr_signals_to_thread_executing are being handled appropriately. */
-	p0.h = __Thread_Dispatch_disable_level;
-	p0.l = __Thread_Dispatch_disable_level;
+	p0.h = SYM(_Thread_Dispatch_disable_level);
+	p0.l = SYM(_Thread_Dispatch_disable_level);
 	r0 = [p0];
 	r0 += -1;
 	[p0] = r0;
@@ -473,12 +473,12 @@ noStackRestore:
 	if !cc jump noDispatch
 
 	/* do thread dispatch if necessary */
-	p0.h = __Context_Switch_necessary;
-	p0.l = __Context_Switch_necessary;
+	p0.h = SYM(_Context_Switch_necessary);
+	p0.l = SYM(_Context_Switch_necessary);
 	r0 = B[p0] (Z);
 	cc = r0 == 0;
-	p0.h = __ISR_Signals_to_thread_executing;
-	p0.l = __ISR_Signals_to_thread_executing;
+	p0.h = SYM(_ISR_Signals_to_thread_executing);
+	p0.l = SYM(_ISR_Signals_to_thread_executing);
 	if !cc jump doDispatch
 	r0 = B[p0] (Z);
 	cc = r0 == 0;
@@ -502,9 +502,8 @@ noDispatch:
    safely call _Thread_Dispatch, and do an "rti" to get back to the
    original interrupted function.  this does require self-nesting to be
    enabled; the maximum nest depth is the number of tasks. */
-	.global __ISR15_Handler
-	.extern __Thread_Dispatch
-__ISR15_Handler:
+	.global SYM(_ISR15_Handler)
+SYM(_ISR15_Handler):
 	[--sp] = reti;
 	[--sp] = rets;
 	[--sp] = astat;
@@ -548,7 +547,7 @@ __ISR15_Handler:
 	l2 = r2;
 	l3 = r2;
 	sp += -12; /* bizarre abi... */
-	call __Thread_Dispatch;
+	call SYM(_Thread_Dispatch);
 	sp += 12;
 	b0 = [sp++];
 	b1 = [sp++];
