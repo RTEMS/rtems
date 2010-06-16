@@ -1,5 +1,10 @@
 2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-buffer-bdbuf.c:
+	Various 64bit fixes.
+
+2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1556/cpukit
 	* libfs/src/rfs/rtems-rfs-bitmaps.h,
 	libfs/src/rfs/rtems-rfs-block-pos.h,
