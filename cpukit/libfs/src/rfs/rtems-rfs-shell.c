@@ -42,7 +42,7 @@ typedef int (*rtems_rfs_shell_handler) (rtems_rfs_file_system* fs, int argc, cha
 /**
  * Table of handlers we parse to invoke the command.
  */
-typedef struct rtems_rfs_shell_cmd_t
+typedef struct
 {
   const char*             name;
   rtems_rfs_shell_handler handler;
