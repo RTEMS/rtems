@@ -22,6 +22,8 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
+
 #include <rtems/rfs/rtems-rfs-block.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>
 #include <rtems/rfs/rtems-rfs-inode.h>
@@ -60,7 +62,7 @@ rtems_rfs_inode_open (rtems_rfs_file_system*  fs,
   int rc;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_OPEN))
-    printf ("rtems-rfs: inode-open: ino: %lu\n", ino);
+    printf ("rtems-rfs: inode-open: ino: %" PRIu32 "\n", ino);
 
   if (ino == RTEMS_RFS_EMPTY_INO)
     return EINVAL;
@@ -93,7 +95,7 @@ rtems_rfs_inode_close (rtems_rfs_file_system*  fs,
   int rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_CLOSE))
-    printf ("rtems-rfs: inode-close: ino: %lu\n", handle->ino);
+    printf ("rtems-rfs: inode-close: ino: %" PRIu32 "\n", handle->ino);
 
   rc = rtems_rfs_inode_unload (fs, handle, true);
 
@@ -114,7 +116,7 @@ rtems_rfs_inode_load (rtems_rfs_file_system*  fs,
                       rtems_rfs_inode_handle* handle)
 {
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_LOAD))
-    printf ("rtems-rfs: inode-load: ino=%lu loads=%i loaded=%s\n",
+    printf ("rtems-rfs: inode-load: ino=%" PRIu32 " loads=%i loaded=%s\n",
             handle->ino, handle->loads,
             rtems_rfs_inode_is_loaded (handle) ? "yes" : "no");
 
@@ -148,7 +150,7 @@ rtems_rfs_inode_unload (rtems_rfs_file_system*  fs,
   int rc = 0;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_UNLOAD))
-    printf ("rtems-rfs: inode-unload: ino=%lu loads=%i loaded=%s\n",
+    printf ("rtems-rfs: inode-unload: ino=%" PRIu32 " loads=%i loaded=%s\n",
             handle->ino, handle->loads,
             rtems_rfs_inode_is_loaded (handle) ? "yes" : "no");
   
@@ -203,7 +205,7 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
       type = "file";
     else if (RTEMS_RFS_S_ISLNK (mode))
       type = "link";
-    printf("rtems-rfs: inode-create: parent:%lu name:", parent);
+    printf("rtems-rfs: inode-create: parent:%" PRIu32 " name:", parent);
     for (c = 0; c < length; c++)
       printf ("%c", name[c]);
     printf (" type:%s mode:%04x (%03o)\n", type, mode, mode & ((1 << 10) - 1));
