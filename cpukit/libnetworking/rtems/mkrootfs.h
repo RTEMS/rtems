@@ -53,7 +53,7 @@ rtems_rootfs_file_append (const char *file,
  */
 
 int
-rtems_rootfs_append_host_rec (unsigned long cip,
+rtems_rootfs_append_host_rec (in_addr_t cip,
                               const char    *cname,
                               const char    *dname);
 

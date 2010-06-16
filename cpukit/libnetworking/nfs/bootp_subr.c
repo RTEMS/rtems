@@ -1153,7 +1153,7 @@ bootpc_init(bool update_files, bool forever)
       dn = "mydomain";
     if (!hn)
       hn = "me";
-    rtems_rootfs_append_host_rec(*((unsigned long*) &myaddr.sin_addr), hn, dn);
+    rtems_rootfs_append_host_rec(myaddr.sin_addr.s_addr, hn, dn);
 
     /*
      * Should the given domainname be used here ?
@@ -1163,12 +1163,12 @@ bootpc_init(bool update_files, bool forever)
         hn = rtems_bsdnet_bootp_server_name;
       else
         hn = "bootps";
-      rtems_rootfs_append_host_rec(*((unsigned long *) &rtems_bsdnet_bootp_server_address),
+      rtems_rootfs_append_host_rec(rtems_bsdnet_bootp_server_address.s_addr,
                                    hn, dn);
     }
 
     if (dhcp_gotlogserver) {
-      rtems_rootfs_append_host_rec(*((unsigned long *) &rtems_bsdnet_log_host_address),
+      rtems_rootfs_append_host_rec(rtems_bsdnet_log_host_address.s_addr,
                                    "logs", dn);
     }
 
