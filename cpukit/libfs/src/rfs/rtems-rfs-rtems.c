@@ -19,7 +19,16 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
 #include <stdlib.h>
+
+#if SIZEOF_MODE_T == 8
+#define PRIomode_t PRIo64
+#elif SIZEOF_MODE_T == 4
+#define PRIomode_t PRIo32
+#else
+#error "unsupport size of mode_t"
+#endif
 
 #include <rtems/rfs/rtems-rfs-file.h>
 #include <rtems/rfs/rtems-rfs-dir.h>
@@ -72,7 +81,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PATH))
-    printf ("rtems-rfs-rtems: eval-path: in: path:%s pathlen:%zi ino:%ld\n",
+    printf ("rtems-rfs-rtems: eval-path: in: path:%s pathlen:%zi ino:%" PRId32 "\n",
             path, pathlen, ino);
   
   /*
@@ -179,7 +188,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
         return rtems_rfs_rtems_error ("eval_path: read parent inode", rc);
       }
       if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PATH))
-        printf("rtems-rfs-rtems: eval-path: parent: ino:%ld\n", ino);
+        printf("rtems-rfs-rtems: eval-path: parent: ino:%" PRId32 "\n", ino);
     }
     else
     {
@@ -197,7 +206,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
         return ((errno = rc) == 0) ? 0 : -1;
       }    
       if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PATH))
-        printf("rtems-rfs-rtems: eval-path: down: path:%s ino:%ld\n", node, ino);
+        printf("rtems-rfs-rtems: eval-path: down: path:%s ino:%" PRId32 "\n", node, ino);
     }
 
     rc = rtems_rfs_inode_close (fs, &inode);
@@ -218,7 +227,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
   rtems_rfs_rtems_unlock (fs);
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PATH))
-    printf("rtems-rfs-rtems: eval-path: ino:%ld\n", ino);
+    printf("rtems-rfs-rtems: eval-path: ino:%" PRId32 "\n", ino);
 
   return rc;
 }
@@ -250,7 +259,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_FOR_MAKE))
-    printf ("rtems-rfs-rtems: eval-for-make: path:%s ino:%ld\n", path, ino);
+    printf ("rtems-rfs-rtems: eval-for-make: path:%s ino:%" PRId32 "\n", path, ino);
   
   *name = path + strlen (path);
 
@@ -377,7 +386,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
         return rtems_rfs_rtems_error ("eval_for_make: read parent inode", rc);
       }
       if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_FOR_MAKE))
-        printf ("rtems-rfs-rtems: eval-for-make: parent: ino:%ld\n", ino);
+        printf ("rtems-rfs-rtems: eval-for-make: parent: ino:%" PRId32 "\n", ino);
     }
     else
     {
@@ -393,7 +402,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
         return rtems_rfs_rtems_error ("eval_for_make: reading inode", rc);
       }
       if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_FOR_MAKE))
-        printf("rtems-rfs-rtems: eval-for-make: down: path:%s ino:%ld\n",
+        printf("rtems-rfs-rtems: eval-for-make: down: path:%s ino:%" PRId32 "\n",
                node, ino);
     }
 
@@ -448,7 +457,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
   rc = rtems_rfs_rtems_set_handlers (pathloc, &inode) ? 0 : EIO;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_FOR_MAKE))
-    printf("rtems-rfs-rtems: eval-for-make: parent ino:%ld name:%s\n",
+    printf("rtems-rfs-rtems: eval-for-make: parent ino:%" PRId32 " name:%s\n",
            ino, *name);
 
   rtems_rfs_inode_close (fs, &inode);
@@ -477,7 +486,7 @@ rtems_rfs_rtems_link (rtems_filesystem_location_info_t* to_loc,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_LINK))
-    printf ("rtems-rfs-rtems: link: in: parent:%ld target:%ld\n",
+    printf ("rtems-rfs-rtems: link: in: parent:%" PRId32 " target:%" PRId32 "\n",
             parent, target);
   
   rtems_rfs_rtems_lock (fs);
@@ -515,7 +524,7 @@ rtems_rfs_rtems_unlink (rtems_filesystem_location_info_t* parent_loc,
   rtems_rfs_rtems_lock (fs);
   
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_UNLINK))
-    printf("rtems-rfs-rtems: unlink: parent:%ld doff:%lu ino:%ld\n",
+    printf("rtems-rfs-rtems: unlink: parent:%" PRId32 " doff:%" PRIu32 " ino:%" PRId32 "\n",
            parent, doff, ino);
   
   rc = rtems_rfs_unlink (fs, parent, ino, doff, rtems_rfs_unlink_dir_denied);
@@ -611,7 +620,7 @@ rtems_rfs_rtems_chown (rtems_filesystem_location_info_t *pathloc,
   int                    rc;
   
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_CHOWN))
-    printf ("rtems-rfs-rtems: chown: in: ino:%ld uid:%d gid:%d\n",
+    printf ("rtems-rfs-rtems: chown: in: ino:%" PRId32 " uid:%d gid:%d\n",
             ino, owner, group);
   
   rtems_rfs_rtems_lock (fs);
@@ -775,7 +784,7 @@ rtems_rfs_rtems_readlink (rtems_filesystem_location_info_t* pathloc,
   int                     rc;
   
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_READLINK))
-    printf ("rtems-rfs-rtems: readlink: in: ino:%ld\n", ino);
+    printf ("rtems-rfs-rtems: readlink: in: ino:%" PRId32 "\n", ino);
   
   rtems_rfs_rtems_lock (fs);
   
@@ -812,8 +821,8 @@ rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
   int                     rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FCHMOD))
-    printf ("rtems-rfs-rtems: fchmod: in: ino:%ld mode:%06o\n",
-            ino, (unsigned int) mode);
+    printf ("rtems-rfs-rtems: fchmod: in: ino:%" PRId32 " mode:%06" PRIomode_t "\n",
+            ino, mode);
   
   rtems_rfs_rtems_lock (fs);
   
@@ -892,7 +901,7 @@ rtems_rfs_rtems_stat (rtems_filesystem_location_info_t* pathloc,
   int                     rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_STAT))
-    printf ("rtems-rfs-rtems: stat: in: ino:%ld\n", ino);
+    printf ("rtems-rfs-rtems: stat: in: ino:%" PRId32 "\n", ino);
 
   rtems_rfs_rtems_lock (fs);
   
@@ -1060,7 +1069,7 @@ rtems_rfs_rtems_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_RMNOD))
-    printf ("rtems-rfs: rmnod: parent:%ld doff:%lu, ino:%ld\n",
+    printf ("rtems-rfs: rmnod: parent:%" PRId32 " doff:%" PRIu32 ", ino:%" PRId32 "\n",
             parent, doff, ino);
 
   rtems_rfs_rtems_lock (fs);
@@ -1124,7 +1133,7 @@ rtems_rfs_rtems_rename(rtems_filesystem_location_info_t* old_parent_loc,
   doff = rtems_rfs_rtems_get_pathloc_doff (old_loc);
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_RENAME))
-    printf ("rtems-rfs: rename: ino:%ld doff:%lu, new parent:%ld new name:%s\n",
+    printf ("rtems-rfs: rename: ino:%" PRId32 " doff:%" PRIu32 ", new parent:%" PRId32 " new name:%s\n",
             ino, doff, new_parent, new_name);
 
   rtems_rfs_rtems_lock (fs);
