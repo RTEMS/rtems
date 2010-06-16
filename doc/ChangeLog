@@ -1,3 +1,8 @@
+2010-06-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1568/doc
+	* user/intr.t: Fix list of services callable from ISR.
+
 2010-06-15	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1565/cpukit
