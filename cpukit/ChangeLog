@@ -1,5 +1,7 @@
 2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-rtems.c: Various 64bit fixes.
+	Add PRIomode_t.
 	* libfs/src/rfs/rtems-rfs-buffer-bdbuf.c:
 	Various 64bit fixes.
 
