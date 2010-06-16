@@ -1,3 +1,7 @@
+2010-06-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu_asm.S: Remove trailing tabs.
+
 2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Move _CPU_Context_Initialize() to cpu.c so

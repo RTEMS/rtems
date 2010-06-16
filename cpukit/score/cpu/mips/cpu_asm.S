@@ -70,15 +70,15 @@
 #else
 #endif
 
-/*		
+/*
 #if ( CPU_HARDWARE_FP == TRUE )
 #warning CPU_HARDWARE_FP == TRUE
 #else
 #warning CPU_HARDWARE_FP != TRUE
 #endif
 */
-	
-		
+
+
 /* enable debugging shadow writes to misc ram, this is a vestigal
 * Mongoose-ism debug tool- but may be handy in the future so we
 * left it in...
@@ -88,7 +88,7 @@
 /* #define INSTRUMENT_EXECUTING_THREAD */
 
 
-	
+
 /*  Ifdefs prevent the duplication of code for MIPS ISA Level 3 ( R4xxx )
  *  and MIPS ISA Level 1 (R3xxx).
  */
@@ -141,7 +141,7 @@
 #define ISR_VEC_SIZE	4
 #define EXCP_STACK_SIZE (NREGS*R_SZ)
 
-	
+
 #ifdef __GNUC__
 #define ASM_EXTERN(x,size) .extern x,size
 #else
@@ -198,11 +198,11 @@
 #define FP31_OFFSET 31
 #define FPCS_OFFSET 32
 
-	
+
 ASM_EXTERN(__exceptionStackFrame, SZ_INT)
 
-	
-		
+
+
 /*
  *  _CPU_Context_save_fp_context
  *
@@ -232,7 +232,7 @@ FRAME(_CPU_Context_save_fp,sp,0,ra)
 	** integer task is switching out with a FP task switching in.
 	*/
 	mfc0	t0,C0_SR
-	li	t2,SR_CU1	
+	li	t2,SR_CU1
 	move	t1,t0
 	or	t0,t2		/* turn on the fpu */
 #if (__mips == 3) || (__mips == 32)
@@ -241,21 +241,21 @@ FRAME(_CPU_Context_save_fp,sp,0,ra)
 	li	t2,SR_IEC
 #endif
 	not	t2
-	and	t0,t2		/* turn off interrupts */	
+	and	t0,t2		/* turn off interrupts */
 	mtc0	t0,C0_SR
-	
+
 	lw	a1,(a0)		/* get address of context storage area */
 	move	t0,ra
 	jal	_CPU_Context_save_fp_from_exception
 	NOP
-	
+
 	/*
 	** Reassert the task's state because we've not saved it yet.
 	*/
 	mtc0	t1,C0_SR
 	j	t0
 	NOP
-	
+
 	.globl _CPU_Context_save_fp_from_exception
 _CPU_Context_save_fp_from_exception:
         STREGC1 $f0,FP0_OFFSET*F_SZ(a1)
@@ -324,14 +324,14 @@ ENDFRAME(_CPU_Context_save_fp)
 FRAME(_CPU_Context_restore_fp,sp,0,ra)
         .set noat
         .set noreorder
-	
+
 	/*
 	** Make sure the FPU is on before we retrieve state.  This code
 	** is here because the FPU context switch might occur when an
 	** integer task is switching out with a FP task switching in.
 	*/
 	mfc0	t0,C0_SR
-	li	t2,SR_CU1	
+	li	t2,SR_CU1
 	move	t1,t0
 	or	t0,t2		/* turn on the fpu */
 #if (__mips == 3) || (__mips == 32)
@@ -340,9 +340,9 @@ FRAME(_CPU_Context_restore_fp,sp,0,ra)
 	li	t2,SR_IEC
 #endif
 	not	t2
-	and	t0,t2		/* turn off interrupts */	
+	and	t0,t2		/* turn off interrupts */
 	mtc0	t0,C0_SR
-	
+
 	lw	a1,(a0)		/* get address of context storage area */
 	move	t0,ra
 	jal	_CPU_Context_restore_fp_from_exception
@@ -355,7 +355,7 @@ FRAME(_CPU_Context_restore_fp,sp,0,ra)
 	mtc0	t1,C0_SR
 	j	t0
 	NOP
-	
+
 	.globl _CPU_Context_restore_fp_from_exception
 _CPU_Context_restore_fp_from_exception:
         LDREGC1 $f0,FP0_OFFSET*F_SZ(a1)
@@ -442,7 +442,7 @@ FRAME(_CPU_Context_switch,sp,0,ra)
         STREG s6,S6_OFFSET*R_SZ(a0)
         STREG s7,S7_OFFSET*R_SZ(a0)
 
-	
+
 	/*
 	** this code grabs the userspace EPC if we're dispatching from
 	** an interrupt frame or supplies the address of the dispatch
@@ -453,7 +453,7 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 	** the interrupt handler and is cleared immediately when this
 	** routine gets it.
 	*/
-	
+
 	la	t0,__exceptionStackFrame	/* see if we're coming in from an exception */
 	LDREG	t1, (t0)
 	NOP
@@ -464,11 +464,11 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 	LDREG	t0,R_EPC*R_SZ(t1)		/* get the userspace EPC from the frame */
 	b	2f
 	NOP
-		
+
 1:	la      t0,_Thread_Dispatch		/* if ==0, we're switched out */
 
 2:	STREG   t0,C0_EPC_OFFSET*R_SZ(a0)
-	
+
 
 _CPU_Context_switch_restore:
 	LDREG ra,RA_OFFSET*R_SZ(a1)		/* restore context */
@@ -484,7 +484,7 @@ _CPU_Context_switch_restore:
         LDREG s7,S7_OFFSET*R_SZ(a1)
 
         LDREG t0, C0_SR_OFFSET*R_SZ(a1)
-	
+
 /*	NOP */
 /*#if (__mips == 3) || (__mips == 32) */
 /*        andi  t0,SR_EXL */
@@ -550,20 +550,20 @@ _CPU_Context_switch_restore:
 	or	t2,SR_IEC + SR_IEP + SR_IEO
 #endif
 	and	t0,t2		/* keep only the per-task bits */
-		
+
 	mfc0	t1,C0_SR	/* grab the current SR */
-	not	t2		
+	not	t2
 	and	t1,t2		/* mask off the old task's per-task bits */
 	or	t1,t0		/* or in the new task's bits */
         mtc0	t1,C0_SR	/* and load the new SR */
 	NOP
-	
+
 /* _CPU_Context_1: */
         j	ra
         NOP
 ENDFRAME(_CPU_Context_switch)
 
-	
+
 /*
  *  _CPU_Context_restore
  *
@@ -585,18 +585,18 @@ FRAME(_CPU_Context_restore,sp,0,ra)
 
 ENDFRAME(_CPU_Context_restore)
 
-	
+
 ASM_EXTERN(_ISR_Nest_level,4)
 ASM_EXTERN(_Thread_Dispatch_disable_level,4)
 ASM_EXTERN(_Context_Switch_necessary,1)
 ASM_EXTERN(_ISR_Signals_to_thread_executing,1)
 ASM_EXTERN(_Thread_Executing,4)
-	
+
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 
 
-	
+
 
 
 /*  void _DBG_Handler()
@@ -621,7 +621,7 @@ ENDFRAME(_DBG_Handler)
 
 
 
-	
+
 /*  void __ISR_Handler()
  *
  *  This routine provides the RTEMS interrupt management.
@@ -681,7 +681,7 @@ FRAME(_ISR_Handler,sp,0,ra)
         STREG gp, R_GP*R_SZ(sp)
         STREG t0, R_MDHI*R_SZ(sp)
         STREG fp, R_FP*R_SZ(sp)
-	
+
         .set noat
         STREG AT, R_AT*R_SZ(sp)
         .set at
@@ -720,7 +720,7 @@ _ISR_Handler_Exception:
         STREG    t0,R_CAUSE*R_SZ(sp)
 
         STREG	 sp, R_SP*R_SZ(sp)
-	
+
         STREG    s0,R_S0*R_SZ(sp)     /* save s0 - s7 */
         STREG    s1,R_S1*R_SZ(sp)
         STREG    s2,R_S2*R_SZ(sp)
@@ -736,14 +736,14 @@ _ISR_Handler_Exception:
 	mfc0	 t0,C0_TAR
 #endif
         MFCO     t1,C0_BADVADDR
-	
+
 #if __mips == 1
         STREG	 t0,R_TAR*R_SZ(sp)
 #else
 	NOP
 #endif
         STREG    t1,R_BADVADDR*R_SZ(sp)
-	
+
 #if ( CPU_HARDWARE_FP == TRUE )
         mfc0     t0,C0_SR                 /* FPU is enabled, save state */
 	NOP
@@ -762,12 +762,12 @@ _ISR_Handler_Exception:
 
 1:
 #endif
-	
+
 	move	 a0,sp
         jal	 mips_vector_exceptions
 	NOP
 
-	
+
 	/*
 	** Note, if the exception vector returns, rely on it to have
 	** adjusted EPC so we will return to some correct address.  If
@@ -781,7 +781,7 @@ _ISR_Handler_Exception:
 	** exception routine to properly adjust EPC, so the code below
 	** may be helpful for doing just that.
 	*/
-	
+
 /* *********************************************************************
 ** this code follows the R3000's exception return logic, but is not
 ** needed because the gdb stub does it for us.  It might be useful
@@ -797,13 +797,13 @@ _ISR_Handler_Exception:
 	AND	t4,t1,t3
 	beqz	t4,excnodelay
 	NOP
-	
+
 	* it did, now see if the branch occured or not *
 	li	t3,CAUSE_BT
 	AND	t4,t1,t3
 	beqz	t4,excnobranch
 	NOP
-	
+
 	* branch was taken, we resume at the branch target *
 	LDREG	t0, R_TAR*R_SZ(sp)
 	j	excreturn
@@ -812,30 +812,30 @@ _ISR_Handler_Exception:
 excnobranch:
 	ADDU	t0,R_SZ
 
-excnodelay:	
+excnodelay:
 	ADDU	t0,R_SZ
-		
-excreturn:	
+
+excreturn:
 	STREG	t0, R_EPC*R_SZ(sp)
 	NOP
 ********************************************************************* */
-	
+
 
  /* if we're returning into mips_break, move to the next instruction */
-	
+
         LDREG	t0,R_EPC*R_SZ(sp)
 	la	t1,mips_break
 	xor	t2,t0,t1
 	bnez	t2,3f
-	
+
 	addu	t0,R_SZ
 	STREG	t0,R_EPC*R_SZ(sp)
 	NOP
-3:	
+3:
 
-	
-	
-		
+
+
+
 #if ( CPU_HARDWARE_FP == TRUE )
         mfc0     t0,C0_SR               /* FPU is enabled, restore state */
 	NOP
@@ -885,11 +885,11 @@ _ISR_Handler_1:
         /* external interrupt not enabled, ignore */
         /* but if it's not an exception or an interrupt, */
         /* Then where did it come from??? */
-	
+
 	beq      t0,zero,_ISR_Handler_exit
 	NOP
 
-	
+
   /*
    *  save some or all context on stack
    *  may need to save some special interrupt information for exit
@@ -975,8 +975,8 @@ _ISR_Handler_1:
         beq	t0,zero,_ISR_Handler_exit
         NOP
 
-	
-	
+
+
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,_Thread_Executing
 	NOP
@@ -992,12 +992,12 @@ _ISR_Handler_1:
 
         mfc0    t0, C0_SR
 #if __mips == 1
-	
+
 	li	t1,SR_IEC
 	or	t0, t1
-	
+
 #elif (__mips == 3) || (__mips == 32)
-	
+
 	/*
 	** clear XL and set IE so we can get interrupts.
 	*/
@@ -1005,7 +1005,7 @@ _ISR_Handler_1:
 	not	t1
 	and	t0,t1
 	or	t0, SR_IE
-	
+
 #endif
         mtc0    t0, C0_SR
 	NOP
@@ -1013,7 +1013,7 @@ _ISR_Handler_1:
 	/* save off our stack frame so the context switcher can get to it */
 	la	t0,__exceptionStackFrame
 	STREG	sp,(t0)
-					
+
         jal     _Thread_Dispatch
         NOP
 
@@ -1034,7 +1034,7 @@ _ISR_Handler_1:
 #if __mips == 1
 
 	/* ints off, current & prev kernel mode on (kernel mode enabled is bit clear..argh!) */
-	li	t1,SR_IEC | SR_KUP | SR_KUC	
+	li	t1,SR_IEC | SR_KUP | SR_KUC
 	not	t1
 	and	t0, t1
         mtc0    t0, C0_SR
@@ -1048,7 +1048,7 @@ _ISR_Handler_1:
         and  t0,t1
         mtc0 t0,C0_SR
   	NOP
-  	
+  
  	/* apply task's SR with EXL set so the eret will return properly */
  	or	t0, SR_EXL | SR_IE
  	mtc0    t0, C0_SR
@@ -1059,7 +1059,7 @@ _ISR_Handler_1:
 	NOP
  	MTCO	t0, C0_EPC
  	NOP
- 	
+ 
 #endif
 
 
@@ -1073,7 +1073,7 @@ _ISR_Handler_1:
 	sw	t0,0x8001FFF8
 #endif
 
-	
+
   /*
    *  prepare to get out of interrupt
    *  return from interrupt  (maybe to _ISR_Dispatch)
@@ -1091,7 +1091,7 @@ _ISR_Handler_exit:
 **
 */
 	/* restore context from stack */
-	
+
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,_Thread_Executing
 	NOP
@@ -1121,11 +1121,11 @@ _ISR_Handler_exit:
         LDREG a3, R_A3*R_SZ(sp)
         LDREG v1, R_V1*R_SZ(sp)
         LDREG v0, R_V0*R_SZ(sp)
-	
+
 #if __mips == 1
 	LDREG     k1, R_EPC*R_SZ(sp)
 #endif
-		
+
 	.set noat
         LDREG     AT, R_AT*R_SZ(sp)
         .set at
@@ -1144,8 +1144,6 @@ _ISR_Handler_exit:
 ENDFRAME(_ISR_Handler)
 
 
-
-	
 FRAME(mips_break,sp,0,ra)
         .set noreorder
 	break	0x0	/* this statement must be first in this function, assumed so by mips-stub.c */
