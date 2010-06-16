@@ -20,6 +20,7 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
 #include <errno.h>
 
 #include <rtems/rfs/rtems-rfs-buffer.h>
@@ -66,8 +67,8 @@ rtems_rfs_buffer_bdbuf_release (rtems_rfs_buffer* buffer,
   int               rc = 0;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_RELEASE))
-    printf ("rtems-rfs: bdbuf-release: block=%lu bdbuf=%lu %s\n",
-            (rtems_rfs_buffer_block) ((intptr_t) buffer->user),
+    printf ("rtems-rfs: bdbuf-release: block=%" PRIuPTR " bdbuf=%" PRIu32 " %s\n",
+            ((intptr_t) buffer->user),
             buffer->block, modified ? "(modified)" : "");
 
   if (modified)
