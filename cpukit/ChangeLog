@@ -1,5 +1,6 @@
 2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-inode.c: Various 64bit fixes.
 	* libfs/src/rfs/rtems-rfs-rtems.c: Various 64bit fixes.
 	Add PRIomode_t.
 	* libfs/src/rfs/rtems-rfs-buffer-bdbuf.c:
