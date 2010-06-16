@@ -34,7 +34,7 @@ extern "C" {
  * RFS File System Configuration data used to format the file system. For
  * default values leave the field set to 0.
  */
-typedef struct rtems_rfs_format_config_t
+typedef struct _rtems_rfs_format_config
 {
   /**
    * The size of a block.

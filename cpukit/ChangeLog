@@ -1,6 +1,16 @@
 2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1556/cpukit
+	* libfs/src/rfs/rtems-rfs-bitmaps.h,
+	libfs/src/rfs/rtems-rfs-block-pos.h,
+	libfs/src/rfs/rtems-rfs-buffer.h,
+	libfs/src/rfs/rtems-rfs-file-system-fwd.h,
+	libfs/src/rfs/rtems-rfs-file-system.h,
+	libfs/src/rfs/rtems-rfs-file.h,
+	libfs/src/rfs/rtems-rfs-format.h,
+	libfs/src/rfs/rtems-rfs-group.h,
+	libfs/src/rfs/rtems-rfs-inode.h:
+	Rename "struct rtems_rfs_*_t" into "struct _rtems_rfs_*".
 	* libfs/src/rfs/rtems-rfs-shell.c: Remove rtems_rfs_shell_cmd_t.
 
 2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>

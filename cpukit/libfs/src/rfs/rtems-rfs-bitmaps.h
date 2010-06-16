@@ -99,7 +99,7 @@ typedef rtems_rfs_bitmap_element* rtems_rfs_bitmap_map;
 /**
  * The bitmap control is a simple way to manage the various parts of a bitmap.
  */
-struct rtems_rfs_bitmap_control_t
+typedef struct _rtems_rfs_bitmap_control
 {
   rtems_rfs_buffer_handle* buffer;      //< Handle the to buffer with the bit
                                         //map.
@@ -110,9 +110,7 @@ struct rtems_rfs_bitmap_control_t
   size_t                   free;        //< Number of bits in the map that are
                                         //free (clear).
   rtems_rfs_bitmap_map     search_bits; //< The search bit map memory.
-};
-
-typedef struct rtems_rfs_bitmap_control_t rtems_rfs_bitmap_control;
+} rtems_rfs_bitmap_control;
 
 /**
  * Return the number of bits for the number of bytes provided.

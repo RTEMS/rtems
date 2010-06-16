@@ -21,7 +21,7 @@
 /**
  * Forward reference to the file system data.
  */
-struct rtems_rfs_file_system_t;
-typedef struct rtems_rfs_file_system_t rtems_rfs_file_system;
+struct _rtems_rfs_file_system;
+typedef struct _rtems_rfs_file_system rtems_rfs_file_system;
 
 #endif

@@ -111,7 +111,7 @@ typedef int64_t rtems_rfs_pos_rel;
 /**
  * RFS File System data.
  */
-struct rtems_rfs_file_system_t
+struct _rtems_rfs_file_system
 {
   /**
    * Flags to control the file system. Some can be controlled via the ioctl.

@@ -95,7 +95,7 @@ typedef uint32_t rtems_rfs_inode_block;
 /**
  * The inode.
  */
-typedef struct rtems_rfs_inode_t
+typedef struct _rtems_rfs_inode
 {
   /**
    * The number of links to the inode.
@@ -176,7 +176,7 @@ typedef struct rtems_rfs_inode_t
 /**
  * RFS Inode Handle.
  */
-typedef struct rtems_rfs_inode_handle_t
+typedef struct _rtems_rfs_inode_handle
 {
   /**
    * Handles can be linked as a list for easy processing.
