@@ -86,7 +86,7 @@
  *  @li 2,684,354,560 bytes for a 2048 byte block size, and
  *  @li 21,474,836,480 bytes for a 4096 byte block size.
  */
-typedef struct rtems_rfs_block_map_t
+typedef struct rtems_rfs_block_map_s
 {
   /**
    * Is the map dirty ?
