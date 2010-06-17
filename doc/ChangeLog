@@ -1,3 +1,17 @@
+2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, index.html.in, develenv/direct.t,
+	posix_users/gen_size_report, started/nextstep.t,
+	started_ada/buildada.t, user/conf.t, user/object.t: Remove ITRON API.
+	* itron3.0/.cvsignore, itron3.0/Makefile.am, itron3.0/config.t,
+	itron3.0/eventflags.t, itron3.0/fixedblock.t, itron3.0/gen_all,
+	itron3.0/gen_section, itron3.0/gen_status_shell,
+	itron3.0/interrupt.t, itron3.0/itron.texi, itron3.0/mailbox.t,
+	itron3.0/memorypool.t, itron3.0/msgbuffer.t, itron3.0/network.t,
+	itron3.0/preface.texi, itron3.0/rendezvous.t, itron3.0/semaphore.t,
+	itron3.0/stamp-vti, itron3.0/status.t, itron3.0/task.t,
+	itron3.0/tasksync.t, itron3.0/time.t, itron3.0/version.texi: Removed.
+
 2010-06-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1568/doc

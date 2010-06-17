@@ -44,7 +44,7 @@ RTEMS are:
 @subsection APIs
 
 RTEMS implements multiple APIs including an Internal API,
-the Classic API, the POSIX API, and the uITRON API.  These
+the Classic API, and the POSIX API.  These
 APIs share the common foundation of SuperCore objects and
 thus share object management code. This includes a common
 scheme for object Ids and for managing object names whether

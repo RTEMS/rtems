@@ -190,24 +190,4 @@ do
   per_manager $i exec/posix/src lib/libc libm_extract
 done
 
-# Grab the size of the ITRON API
-cd ${docdir}/itron3.0
-echo
-echo "=============================================================="
-echo "=============================================================="
-echo "====                                                      ===="
-echo "====           ITRON 3.0 API SIZE INFORMATION             ===="
-echo "====                                                      ===="
-echo "=============================================================="
-echo "=============================================================="
-echo
-if [ -r ${objdir}/../../../${bsp}/lib/libitron.a ] ; then
-  for i in *.t
-  do
-    per_manager $i exec/itron/src
-  done
-else
-  echo "ITRON API not configured."
-fi
-
 

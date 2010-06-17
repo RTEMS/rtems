@@ -764,115 +764,6 @@ value is twice the configured minimum stack size.
 
 @end itemize
 
-@subsection ITRON API Configuration
-
-The parameters in this section are used to configure resources
-for the RTEMS ITRON API.  They are only relevant if the POSIX API
-is enabled at configure time using the @code{--enable-itron} option.
-
-@itemize @bullet
-@findex CONFIGURE_MAXIMUM_ITRON_TASKS
-@item @code{CONFIGURE_MAXIMUM_ITRON_TASKS}
-is the maximum number of
-ITRON API tasks that can be concurrently active.
-The default is 0.
-
-@findex CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
-@item @code{CONFIGURE_MAXIMUM_ITRON_SEMAPHORES}
-is the maximum number of
-ITRON API semaphores that can be concurrently active.
-The default is 0.
-
-@findex CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS
-@item @code{CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS}
-is the maximum number of
-ITRON API eventflags that can be concurrently active.
-The default is 0.
-
-@findex CONFIGURE_MAXIMUM_ITRON_MAILBOXES
-@item @code{CONFIGURE_MAXIMUM_ITRON_MAILBOXES}
-is the maximum number of
-ITRON API mailboxes that can be concurrently active.
-The default is 0.
-
-@findex CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS
-@item @code{CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS}
-is the maximum number of
-ITRON API message buffers that can be concurrently active.
-The default is 0.
-
-@findex CONFIGURE_MAXIMUM_ITRON_PORTS
-@item @code{CONFIGURE_MAXIMUM_ITRON_PORTS}
-is the maximum number of
-ITRON API ports that can be concurrently active.
-The default is 0.
-
-@findex CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS
-@item @code{CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS}
-is the maximum number of
-ITRON API memory pools that can be concurrently active.
-The default is 0.
-
-@findex CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS
-@item @code{CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS}
-is the maximum number of
-ITRON API fixed memory pools that can be concurrently active.
-The default is 0.
-
-@end itemize
-
-@subsection ITRON Initialization Task Table Configuration
-
-The @code{rtems/confdefs.h} configuration system can automatically
-generate an ITRON Initialization Tasks Table named
-@code{ITRON_Initialization_tasks} with a single entry.  The following
-parameters control the generation of that table.
-
-@itemize @bullet
-@findex CONFIGURE_ITRON_INIT_TASK_TABLE
-@item @code{CONFIGURE_ITRON_INIT_TASK_TABLE} is defined
-if the user wishes to use a ITRON API Initialization
-Tasks Table.  The application may choose to use the initialization
-tasks or threads table from another API.  By default, this
-field is not defined as the user MUST select their own
-API for initialization tasks.
-
-@findex CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE
-@item @code{CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE}
-is defined if the user wishes to define their own ITRON API Initialization
-Tasks Table.  This table should be named @code{ITRON_Initialization_tasks}.
-By default, this is not defined.
-
-@findex CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT
-@item @code{CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT}
-is the entry point (a.k.a. function name)
-of the single initialization task defined by the
-ITRON API Initialization Tasks Table.  By default
-the value is @code{ITRON_Init}.
-
-@findex CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES
-@item @code{CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES}
-is the attribute set
-of the single initialization task defined by the
-ITRON API Initialization Tasks Table.  By default
-the value is @code{TA_HLNG}.
-
-@findex CONFIGURE_ITRON_INIT_TASK_PRIORITY
-@item @code{CONFIGURE_ITRON_INIT_TASK_PRIORITY}
-is the initial priority
-of the single initialization task defined by the
-ITRON API Initialization Tasks Table.  By default
-the value is @code{1} which is the highest priority
-in the ITRON API.
-
-@findex CONFIGURE_ITRON_INIT_TASK_STACK_SIZE
-@item @code{CONFIGURE_ITRON_INIT_TASK_STACK_SIZE}
-is the stack size of the single initialization task defined by the
-ITRON API Initialization Tasks Table.  By default
-value is the configured minimum stack size.
-
-@end itemize
-
 @subsection Ada Tasks
 
 This section defines the system configuration parameters supported
@@ -941,7 +832,6 @@ typedef struct @{
 #endif
   rtems_api_configuration_table  *RTEMS_api_configuration;
   posix_api_configuration_table  *POSIX_api_configuration;
-  itron_api_configuration        *ITRON_api_configuration;
 @} rtems_configuration_table;
 @end group
 @end example

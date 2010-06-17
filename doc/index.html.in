@@ -40,16 +40,6 @@
                RTEMS POSIX API User's Guide</A>
             </LI>
 
-        <LI><A HREF="../pdf/itron.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/itron.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/itron.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="itron/index.html">
-               RTEMS ITRON 3.0 API User's Guide</A>
-            </LI>
-
         <LI><A HREF="../pdf/networking.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/networking.ps">

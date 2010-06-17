@@ -206,7 +206,6 @@ networking/Makefile
 posix_users/Makefile
 posix1003.1/Makefile
 filesystem/Makefile
-itron3.0/Makefile
 ada_user/Makefile
 started_ada/Makefile
 relnotes/Makefile

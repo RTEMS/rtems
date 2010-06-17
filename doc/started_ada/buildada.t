@@ -492,11 +492,6 @@ This corresponds to the
 
 This must be enabled to support the GNAT/RTEMS run-time.
 
-@item ENABLE_RTEMS_ITRON
-is set to "yes" if you want to enable the RTEMS ITRON API support.
-This corresponds to the
-@code{configure} option @code{--enable-itron}.
-
 @item ENABLE_RTEMS_MP
 is set to "yes" if you want to enable the RTEMS multiprocessing
 support.  This feature is not supported by all RTEMS BSPs and

@@ -404,10 +404,6 @@ This directory contains header files which are private to
 RTEMS and not considered to be owned by any other component
 in the CPU Kit.
 
-@item $@{RTEMS_ROOT@}/cpukit/itron/
-This directory contains the implementation of the 
-ITRON API.
-
 @item $@{RTEMS_ROOT@}/cpukit/libblock/
 This directory contains support code for using 
 Block Devices such as hard drives, floppies, and
@@ -476,8 +472,8 @@ initialization, shutdown, and IO services.
 @item $@{RTEMS_ROOT@}/cpukit/score/
 This directory contains the "SuperCore" of RTEMS.
 All APIs are implemented in terms of SuperCore services.
-For example, Classic API tasks, POSIX threads, and ITRON
-tasks are all implemented in terms of SuperCore threads.
+For example, Classic API tasks and POSIX threads
+are all implemented in terms of SuperCore threads.
 This provides a common infrastructure and a high degree
 of interoperability between the APIs.  For example, 
 services from all APIs may be used by any task/thread
@@ -529,10 +525,6 @@ they may be located:
 
 @table @code
 
-@item $@{RTEMS_ROOT@}/testsuites/itrontests/
-This directory contains the test suite for the 
-RTEMS ITRON API.
-
 @item $@{RTEMS_ROOT@}/testsuites/libtests/
 This directory contains the test suite for the
 various RTEMS support components.
@@ -564,15 +556,11 @@ executive code.  With the addition of multiple APIs,
 this is no longer the case as some SuperCore functionality
 is not available through the Classic API.  Thus
 some functionality in the SuperCore is only covered
-by tests in the POSIX API and ITRON API Test Suites.
+by tests in the POSIX API Test Suites.
 
 @item $@{RTEMS_ROOT@}/testsuites/support/
 This directory contains support software and header files
 for the various test suites.
-
-@item $@{RTEMS_ROOT@}/testsuites/tmitrontests/
-This directory contains the timing test suite for
-the RTEMS ITRON API.
 
 @item $@{RTEMS_ROOT@}/testsuites/tmtests/
 This directory contains the timing test suite for
@@ -650,10 +638,6 @@ information required by those implementing filesystems.
 @item $@{RTEMS_ROOT@}/doc/images/
 This directory contains the source code for the graphics
 used in the HTML version of the RTEMS Documentation.
-
-@item $@{RTEMS_ROOT@}/doc/itron3.0/
-This directory contains the source code for the 
-@cite{RTEMS ITRON 3.0 API User's Guide}.
 
 @item $@{RTEMS_ROOT@}/doc/networking/
 This directory contains the source code for the 
