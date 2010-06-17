@@ -15,7 +15,6 @@ AM_MAINTAINER_MODE
 RTEMS_ENABLE_MULTILIB
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
-RTEMS_ENABLE_ITRON
 RTEMS_ENABLE_RTEMS_DEBUG
 RTEMS_ENABLE_NETWORKING
 
@@ -113,7 +112,6 @@ AC_CHECK_HEADER([pthread.h],[
 
 RTEMS_CHECK_MULTIPROCESSING
 RTEMS_CHECK_POSIX_API
-RTEMS_CHECK_ITRON_API
 RTEMS_CHECK_NETWORKING
 
 rtems_major=`echo _RTEMS_VERSION | sed "s/\..*//"`
@@ -126,11 +124,6 @@ RTEMS_CPUOPT([RTEMS_DEBUG],
   [test x"${enable_rtems_debug}" = x"yes"],
   [1],
   [if RTEMS_DEBUG is enabled])
-
-RTEMS_CPUOPT([RTEMS_ITRON_API],
-  [test x"$rtems_cv_HAS_ITRON_API" = x"yes"],
-  [1],
-  [if itron api is supported])
 
 RTEMS_CPUOPT([RTEMS_MULTIPROCESSING],
   [test x"$enable_multiprocessing" = xyes],
@@ -266,7 +259,6 @@ AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 AM_CONDITIONAL(HAS_MP,test x"$enable_multiprocessing" = x"yes" )
 
 AM_CONDITIONAL(HAS_PTHREADS,test x"$rtems_cv_HAS_POSIX_API" = x"yes")
-AM_CONDITIONAL(LIBITRON,test x"$rtems_cv_HAS_ITRON_API" = x"yes")
 AM_CONDITIONAL(LIBNETWORKING,test x"$rtems_cv_HAS_NETWORKING" = x"yes")
 
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
@@ -316,7 +308,6 @@ score/cpu/sparc/Makefile
 score/cpu/sparc64/Makefile
 score/cpu/no_cpu/Makefile
 posix/Makefile
-itron/Makefile
 libblock/Makefile
 libfs/Makefile
 libfs/src/nfsclient/Makefile
