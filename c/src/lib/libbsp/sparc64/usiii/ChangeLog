@@ -1,0 +1,35 @@
+2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
+	preinstall.am, include/bsp.h, include/tm27.h, make/custom/usiii.cfg,
+	start/bspinit.S: New files.
+
+2010-06-05  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* make/custom/usiii.cfg: Moved sun4u.cfg to usiii.cfg
+
+2010-06-05  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* README: New file.
+
+2010-06-05  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* Makefile.am: Use ../shared/console driver.
+
+2010-05-15  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* Makefile.am: update to new ../helenos directory layout
+
+2010-05-13  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* start/bspinit.S: New file.
+	* start/bspinit.S: Call memcpy to copy OFW's trap table.
+
+2010-05-10  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* configure.ac Makefile.am bsp_specs include/bsp.h make/custom/sun4u.cfg: 
+		New files. Copied from sun4v.cfg.
+
+2010-05-10  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* ChangeLog: New file.
