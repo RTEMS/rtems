@@ -19,6 +19,7 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
 #include <string.h>
 
 #include <rtems/rfs/rtems-rfs-block.h>
@@ -120,18 +121,18 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
   int    ipcent;
 
   printf ("RFS Filesystem Data\n");
-  printf ("             flags: %08lx\n", fs->flags);
+  printf ("             flags: %08" PRIx32 "\n", fs->flags);
 #if 0
   printf ("            device: %08lx\n", rtems_rfs_fs_device (fs));
 #endif
   printf ("            blocks: %zu\n",  rtems_rfs_fs_blocks (fs));
   printf ("        block size: %zu\n",  rtems_rfs_fs_block_size (fs));
-  printf ("              size: %llu\n", rtems_rfs_fs_size (fs));
-  printf ("  media block size: %lu\n",  rtems_rfs_fs_media_block_size (fs));
-  printf ("        media size: %llu\n", rtems_rfs_fs_media_size (fs));
-  printf ("            inodes: %lu\n",  rtems_rfs_fs_inodes (fs));
-  printf ("        bad blocks: %lu\n",  fs->bad_blocks);
-  printf ("  max. name length: %lu\n",  rtems_rfs_fs_max_name (fs));
+  printf ("              size: %" PRIu64 "\n",  rtems_rfs_fs_size (fs));
+  printf ("  media block size: %" PRIu32 "\n",  rtems_rfs_fs_media_block_size (fs));
+  printf ("        media size: %" PRIu64 "\n", rtems_rfs_fs_media_size (fs));
+  printf ("            inodes: %" PRIu32 "\n",  rtems_rfs_fs_inodes (fs));
+  printf ("        bad blocks: %" PRIu32 "\n",  fs->bad_blocks);
+  printf ("  max. name length: %" PRIu32 "\n",  rtems_rfs_fs_max_name (fs));
   printf ("            groups: %d\n",   fs->group_count);
   printf ("      group blocks: %zd\n",  fs->group_blocks);
   printf ("      group inodes: %zd\n",  fs->group_inodes);
@@ -139,7 +140,7 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
   printf ("  blocks per block: %zd\n",  fs->blocks_per_block);
   printf ("     singly blocks: %zd\n",  fs->block_map_singly_blocks);
   printf ("    doublly blocks: %zd\n",  fs->block_map_doubly_blocks);
-  printf (" max. held buffers: %ld\n",  fs->max_held_buffers);
+  printf (" max. held buffers: %" PRId32 "\n",  fs->max_held_buffers);
 
   rtems_rfs_shell_lock_rfs (fs);
 
@@ -182,18 +183,18 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
   if (rc > 0)
   {
     rtems_rfs_shell_unlock_rfs (fs);
-    printf ("error: testing block state: block=%lu: (%d) %s\n",
+    printf ("error: testing block state: block=%" PRIu32 ": (%d) %s\n",
             block, rc, strerror (rc));
     return 1;
   }
 
-  printf (" %5lu: block %s\n", block, state ? "allocated" : "free");
+  printf (" %5" PRIu32 ": block %s\n", block, state ? "allocated" : "free");
     
   rc = rtems_rfs_buffer_handle_open (fs, &buffer);
   if (rc > 0)
   {
     rtems_rfs_shell_unlock_rfs (fs);
-    printf ("error: opening buffer handle: block=%lu: (%d) %s\n",
+    printf ("error: opening buffer handle: block=%" PRIu32 ": (%d) %s\n",
             block, rc, strerror (rc));
     return 1;
   }
@@ -203,7 +204,7 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
   {
     rtems_rfs_buffer_handle_close (fs, &buffer);
     rtems_rfs_shell_unlock_rfs (fs);
-    printf ("error: requesting buffer handle: block=%lu: (%d) %s\n",
+    printf ("error: requesting buffer handle: block=%" PRIu32 ": (%d) %s\n",
             block, rc, strerror (rc));
     return 1;
   }
@@ -230,7 +231,7 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
   if (rc > 0)
   {
     rtems_rfs_shell_unlock_rfs (fs);
-    printf ("error: closing buffer handle: block=%lu: (%d) %s\n",
+    printf ("error: closing buffer handle: block=%" PRIu32 ": (%d) %s\n",
             block, rc, strerror (rc));
     return 1;
   }
@@ -304,7 +305,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
   if ((start < 0) || (end < 0) ||
       (start >= total) || (end >= total))
   {
-    printf ("error: inode out of range (0->%ld).\n", total - 1);
+    printf ("error: inode out of range (0->%" PRId32 ").\n", total - 1);
     return 1;
   }
 
@@ -319,7 +320,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
     if (rc > 0)
     {
       rtems_rfs_shell_unlock_rfs (fs);
-      printf ("error: testing inode state: ino=%lu: (%d) %s\n",
+      printf ("error: testing inode state: ino=%" PRIu32 ": (%d) %s\n",
               ino, rc, strerror (rc));
       return 1;
     }
@@ -333,7 +334,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
       if (rc > 0)
       {
         rtems_rfs_shell_unlock_rfs (fs);
-        printf ("error: opening inode handle: ino=%lu: (%d) %s\n",
+        printf ("error: opening inode handle: ino=%" PRIu32 ": (%d) %s\n",
                 ino, rc, strerror (rc));
         return 1;
       }
@@ -368,7 +369,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
 
       if (!error_check_only || error)
       {
-        printf (" %5lu: pos=%06lu:%04zx %c ",
+        printf (" %5" PRIu32 ": pos=%06" PRIu32 ":%04zx %c ",
                 ino, rtems_rfs_buffer_bnum (&inode.buffer),
                 inode.offset * RTEMS_RFS_INODE_SIZE,
                 allocated ? 'A' : 'F');
@@ -389,14 +390,14 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
             type = "REG";
           else if (RTEMS_RFS_S_ISLNK (mode))
             type = "LNK";
-          printf ("links=%03i mode=%04x (%s/%03o) bo=%04u bc=%04lu b=[",
+          printf ("links=%03i mode=%04x (%s/%03o) bo=%04u bc=%04" PRIu32 " b=[",
                   rtems_rfs_inode_get_links (&inode),
                   mode, type, mode & ((1 << 10) - 1),
                   rtems_rfs_inode_get_block_offset (&inode),
                   rtems_rfs_inode_get_block_count (&inode));
           for (b = 0; b < (RTEMS_RFS_INODE_BLOCKS - 1); b++)
-            printf ("%lu ", rtems_rfs_inode_get_block (&inode, b));
-          printf ("%lu]\n", rtems_rfs_inode_get_block (&inode, b));
+            printf ("%" PRIu32 " ", rtems_rfs_inode_get_block (&inode, b));
+          printf ("%" PRIu32 "]\n", rtems_rfs_inode_get_block (&inode, b));
         }
       }
       
@@ -404,7 +405,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
       if (rc > 0)
       {
         rtems_rfs_shell_unlock_rfs (fs);
-        printf ("error: closing inode handle: ino=%lu: (%d) %s\n",
+        printf ("error: closing inode handle: ino=%" PRIu32 ": (%d) %s\n",
                 ino, rc, strerror (rc));
         return 1;
       }
@@ -441,18 +442,18 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
   if (rc > 0)
   {
     rtems_rfs_shell_unlock_rfs (fs);
-    printf ("error: testing block state: block=%lu: (%d) %s\n",
+    printf ("error: testing block state: block=%" PRIu32 ": (%d) %s\n",
             block, rc, strerror (rc));
     return 1;
   }
 
-  printf (" %5lu: block %s\n", block, state ? "allocated" : "free");
+  printf (" %5" PRIu32 ": block %s\n", block, state ? "allocated" : "free");
 
   rc = rtems_rfs_buffer_handle_open (fs, &buffer);
   if (rc > 0)
   {
     rtems_rfs_shell_unlock_rfs (fs);
-    printf ("error: opening buffer handle: block=%lu: (%d) %s\n",
+    printf ("error: opening buffer handle: block=%" PRIu32 ": (%d) %s\n",
             block, rc, strerror (rc));
     return 1;
   }
@@ -462,7 +463,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
   {
     rtems_rfs_buffer_handle_close (fs, &buffer);
     rtems_rfs_shell_unlock_rfs (fs);
-    printf ("error: requesting buffer handle: block=%lu: (%d) %s\n",
+    printf ("error: requesting buffer handle: block=%" PRIu32 ": (%d) %s\n",
             block, rc, strerror (rc));
     return 1;
   }
@@ -493,13 +494,13 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
     
     if ((eino < RTEMS_RFS_ROOT_INO) || (eino >= rtems_rfs_fs_inodes (fs)))
     {
-      printf (" %5d: entry ino appears corrupt: ino=%ld\n", entry, eino);
+      printf (" %5d: entry ino appears corrupt: ino=%" PRId32 "\n", entry, eino);
       break;
     }
     
     length = elength - RTEMS_RFS_DIR_ENTRY_SIZE;
     
-    printf (" %5d: %04x inode=%-6lu hash=%08lx name[%03u]=",
+    printf (" %5d: %04x inode=%-6" PRIu32 " hash=%08" PRIx32 " name[%03u]=",
             entry, b,
             rtems_rfs_dir_entry_ino (data),
             rtems_rfs_dir_entry_hash (data),
@@ -523,7 +524,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
   if (rc > 0)
   {
     rtems_rfs_shell_unlock_rfs (fs);
-    printf ("error: closing buffer handle: block=%lu: (%d) %s\n",
+    printf ("error: closing buffer handle: block=%" PRIu32 ": (%d) %s\n",
             block, rc, strerror (rc));
     return 1;
   }
@@ -575,7 +576,7 @@ rtems_rfs_shell_group (rtems_rfs_file_system* fs, int argc, char *argv[])
     size_t           inodes;
     blocks = group->size - rtems_rfs_bitmap_map_free (&group->block_bitmap);
     inodes = fs->group_inodes - rtems_rfs_bitmap_map_free (&group->inode_bitmap);
-    printf (" %4d: base=%-7lu size=%-6zu blocks=%-5zu (%3zu%%) inode=%-5zu (%3zu%%)\n",
+    printf (" %4d: base=%-7" PRIu32 " size=%-6zu blocks=%-5zu (%3zu%%) inode=%-5zu (%3zu%%)\n",
             g, group->base, group->size,
             blocks, (blocks * 100)  / group->size,
             inodes, (inodes * 100) / fs->group_inodes);
