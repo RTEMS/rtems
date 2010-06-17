@@ -52,13 +52,13 @@ rtems_rfs_scan_chain (rtems_chain_control*   chain,
     buffer = (rtems_rfs_buffer*) node;
 
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CHAINS))
-      printf ("%lu ", (rtems_rfs_buffer_block) ((intptr_t)(buffer->user)));
+      printf ("%" PRIuPTR " ", ((intptr_t) buffer->user));
 
     if (((rtems_rfs_buffer_block) ((intptr_t)(buffer->user))) == block)
     {
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CHAINS))
-        printf (": found block=%lu\n",
-                (rtems_rfs_buffer_block) ((intptr_t)(buffer->user)));
+        printf (": found block=%" PRIuPTR "\n",
+                ((intptr_t)(buffer->user)));
 
       (*count)--;
       rtems_chain_extract (node);
@@ -95,7 +95,7 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
       return 0;
 
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_REQUEST))
-      printf ("rtems-rfs: buffer-request: handle has buffer: %lu\n",
+      printf ("rtems-rfs: buffer-request: handle has buffer: %" PRIu32 "\n",
               rtems_rfs_buffer_bnum (handle));
 
     rc = rtems_rfs_buffer_handle_release (fs, handle);
@@ -171,7 +171,7 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
     if (rc > 0)
     {
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_REQUEST))
-        printf ("rtems-rfs: buffer-request: block=%lu: bdbuf-%s: %d: %s\n",
+        printf ("rtems-rfs: buffer-request: block=%" PRIu32 ": bdbuf-%s: %d: %s\n",
                 block, read ? "read" : "get", rc, strerror (rc));
       return rc;
     }
@@ -188,7 +188,7 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
   handle->bnum = block;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_REQUEST))
-    printf ("rtems-rfs: buffer-request: block=%lu bdbuf-%s=%lu refs=%d\n",
+    printf ("rtems-rfs: buffer-request: block=%" PRIu32 " bdbuf-%s=%" PRIu32 " refs=%d\n",
             block, read ? "read" : "get", handle->buffer->block,
             handle->buffer->references);
   
@@ -204,7 +204,7 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
   if (rtems_rfs_buffer_handle_has_block (handle))
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_RELEASE))
-      printf ("rtems-rfs: buffer-release: block=%lu %s refs=%d %s\n",
+      printf ("rtems-rfs: buffer-release: block=%" PRIu32 " %s refs=%d %s\n",
               rtems_rfs_buffer_bnum (handle),
               rtems_rfs_buffer_dirty (handle) ? "(dirty)" : "",
               rtems_rfs_buffer_refs (handle),
@@ -242,8 +242,8 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
           bool              modified;
         
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_RELEASE))
-            printf ("rtems-rfs: buffer-release: local cache overflow:" \
-                    " %lu\n", fs->release_count + fs->release_modified_count);
+            printf ("rtems-rfs: buffer-release: local cache overflow:"
+                    " %" PRIu32 "\n", fs->release_count + fs->release_modified_count);
         
           if (fs->release_count > fs->release_modified_count)
           {
@@ -330,7 +330,7 @@ rtems_rfs_buffer_open (const char* name, rtems_rfs_file_system* fs)
 #endif
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_SYNC))
-    printf ("rtems-rfs: buffer-open: blks=%ld, blk-size=%ld\n",
+    printf ("rtems-rfs: buffer-open: blks=%" PRId32 ", blk-size=%" PRId32 "\n",
             rtems_rfs_fs_media_blocks (fs),
             rtems_rfs_fs_media_block_size (fs));
   
@@ -442,7 +442,7 @@ rtems_rfs_release_chain (rtems_chain_control* chain,
   int               rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CHAINS))
-    printf ("rtems-rfs: release-chain: count=%lu\n", *count);
+    printf ("rtems-rfs: release-chain: count=%" PRIu32 "\n", *count);
 
   while (!rtems_chain_is_empty (chain))
   {
@@ -465,8 +465,8 @@ rtems_rfs_buffers_release (rtems_rfs_file_system* fs)
   int rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_RELEASE))
-    printf ("rtems-rfs: buffers-release: active:%lu " \
-            "release:%lu release-modified:%lu\n",
+    printf ("rtems-rfs: buffers-release: active:%" PRIu32 " "
+            "release:%" PRIu32 " release-modified:%" PRIu32 "\n",
             fs->buffers_count, fs->release_count, fs->release_modified_count);
 
   rc = rtems_rfs_release_chain (&fs->release,
