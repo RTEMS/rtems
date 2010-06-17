@@ -22,10 +22,6 @@ if LIBGNAT
 TMP_LIBS += ../libgnat/libgnat.a
 endif
 
-if LIBITRON
-TMP_LIBS += ../itron/libitron.a
-endif
-
 TMP_LIBS += ../libcsupport/libcsupport.a
 TMP_LIBS += ../libblock/libblock.a
 if LIBDOSFS

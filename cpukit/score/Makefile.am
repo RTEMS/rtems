@@ -132,11 +132,6 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
     src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c \
     src/objectnamespaceremove.c
 
-## OBJECT_C_FILES only used by ITRON API
-if LIBITRON
-libscore_a_SOURCES += src/objectallocatebyindex.c src/objectgetbyindex.c
-endif
-
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocate.c \
     src/pheapextend.c src/pheapfree.c src/pheapgetsize.c \
@@ -155,11 +150,6 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadstartmultitasking.c src/threadsuspend.c \
     src/threadtickletimeslice.c src/threadyieldprocessor.c \
     src/iterateoverthreads.c src/threadblockingoperationcancel.c
-
-## THREAD_C_FILES only used by ITRON API
-if LIBITRON
-libscore_a_SOURCES += src/threadrotatequeue.c
-endif
 
 ## THREADQ_C_FILES
 libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
