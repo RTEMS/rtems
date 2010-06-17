@@ -1,0 +1,55 @@
+2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* .cvsignore, ChangeLog, Makefile.am, configure.ac, preinstall.am,
+	shared/cache/cache.c, shared/cache/cache_.h,
+	shared/interrupts/installisrentries.c, shared/score/cpu.c,
+	shared/score/interrupt.S, shared/syscall/sparc64-syscall.S,
+	shared/syscall/sparc64-syscall.h: New files.
+
+2010-05-13  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* sun4u/syscall/sparc-syscall.S: disable/enable interrupts directly.
+
+2010-05-10  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* shared/score/cpu.c, Makefile.am: Moved cpu.c from sun4v/score
+	* configure.ac: m5sim is no longer part of shared. sun4u option added.
+
+2010-05-10  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* sun4u/: New model specific subdir.
+	* sun4u/score/, sun4u/syscall/: Copied from sun4v.
+
+2010-05-03  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* m5sim/syscall/sparc-syscall.h, m5sim/syscall/sparc-syscall.S:
+	Renamed files from syscall.h and syscall.S
+
+2010-05-03  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* sun4v/syscall/syscall.S: Explicitly enable IE bit when using
+	SYS_irqset.
+	* m5sim/score/cpu.c: install raw handler and isr get level are nops
+
+2010-05-02  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* m5sim/score m5sim/syscall: new subdirs
+	* m5sim/syscall/syscall.h m5sim/syscall/syscall.S: New files.
+
+2010-05-02  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* sun4v/score/cpu_asm.S: Remove context switch code.
+
+2010-05-02  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* shared/, shared/cache, shared/interrupts: Moved cache and
+	interrupts into shared folder.
+
+2010-05-02  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* sun4v, sun4v/score/cpu_asm.S, sun4v/score/cpu.c: Copied from
+	score/cpu/sparc64
+
+2010-05-02  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	* ChangeLog: New file.
