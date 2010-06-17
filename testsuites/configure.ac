@@ -23,7 +23,6 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_PROG_CC
 
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
-RTEMS_CHECK_CPUOPTS([RTEMS_ITRON_API])
 RTEMS_CHECK_CPUOPTS([RTEMS_MULTIPROCESSING])
 RTEMS_CHECK_CPUOPTS([RTEMS_NETWORKING])
 
@@ -39,14 +38,8 @@ if test "$enable_tests" = "yes"; then
   if test "$rtems_cv_RTEMS_MULTIPROCESSING" = "yes"; then
     AC_CONFIG_SUBDIRS(mptests)
   fi
-  if test "$rtems_cv_RTEMS_ITRON_API" = "yes"; then
-    AC_CONFIG_SUBDIRS(itrontests)
-  fi
   # Now do performance tests
   AC_CONFIG_SUBDIRS(tmtests)
-  if test "$rtems_cv_RTEMS_ITRON_API" = "yes"; then
-    AC_CONFIG_SUBDIRS(tmitrontests)
-  fi
 fi
 
 # Explicitly list all Makefiles here
