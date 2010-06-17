@@ -99,12 +99,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 
 /*
- *  When building for coverage, we always need a mount table
+ *  If the application disables the filesystem, they will not need
+ *  a mount table, so do not produce one.
  */
-#if !defined(RTEMS_COVERAGE)
-  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    #define CONFIGURE_HAS_OWN_MOUNT_TABLE
-  #endif
+#ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+  #define CONFIGURE_HAS_OWN_MOUNT_TABLE
 #endif
 
 /**
@@ -372,8 +371,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   /*
    *  DEVFS variables.
    */
-  #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM) && \
-      !defined(RTEMS_COVERAGE)
+  #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
     #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #elif defined(CONFIGURE_FILESYSTEM_DEVFS)
     #ifndef CONFIGURE_MAXIMUM_DEVICES
@@ -384,9 +382,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #define CONFIGURE_MEMORY_FOR_DEVFS \
       _Configure_Object_RAM(CONFIGURE_MAXIMUM_DEVICES, \
          sizeof (rtems_device_name_t))
-  #elif defined(RTEMS_COVERAGE)
-    uint32_t rtems_device_table_size = 0;
-    #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #else
     #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #endif

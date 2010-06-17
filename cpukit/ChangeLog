@@ -1,3 +1,7 @@
+2010-06-17	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* sapi/include/confdefs.h: Remove RTEMS_COVERAGE conditionals whi.
+
 2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/include/rtems/score/object.h,
