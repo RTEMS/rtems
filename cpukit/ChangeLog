@@ -1,3 +1,7 @@
+2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Remove ITRON configuration parameters.
+
 2010-06-17	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* sapi/include/confdefs.h: Remove RTEMS_COVERAGE conditionals.

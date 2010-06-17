@@ -58,9 +58,6 @@ extern rtems_configuration_table        Configuration;
 #ifdef RTEMS_POSIX_API
   extern posix_api_configuration_table    Configuration_POSIX_API;
 #endif
-#ifdef RTEMS_ITRON_API
-  extern itron_api_configuration_table    Configuration_ITRON_API;
-#endif
 
 /**
  *  This macro determines whether the RTEMS reentrancy support for
@@ -1504,175 +1501,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_ADA_TASKS_STACK        0
 #endif
 
-/*
- *  ITRON API Configuration Parameters
- */
-
-#ifdef RTEMS_ITRON_API
-
-  #include <rtems/itron.h>
-  #include <rtems/itron/config.h>
-  #include <rtems/itron/eventflags.h>
-  #include <rtems/itron/fmempool.h>
-  #include <rtems/itron/mbox.h>
-  #include <rtems/itron/msgbuffer.h>
-  #include <rtems/itron/port.h>
-  #include <rtems/itron/semaphore.h>
-  #include <rtems/itron/task.h>
-  #include <rtems/itron/vmempool.h>
-
-  #ifndef CONFIGURE_MAXIMUM_ITRON_TASKS
-    #define CONFIGURE_MAXIMUM_ITRON_TASKS      0
-  #endif
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API 0
-
-  #ifndef CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
-    #define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES                 0
-    #define CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES(_semaphores) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES(_semaphores) \
-      _Configure_Object_RAM(_semaphores, sizeof(ITRON_Semaphore_Control))
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS
-    #define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS                 0
-    #define CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS(_eventflags) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS(_eventflags) \
-      _Configure_Object_RAM(_eventflags, sizeof(ITRON_Eventflags_Control))
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_ITRON_MAILBOXES
-    #define CONFIGURE_MAXIMUM_ITRON_MAILBOXES                0
-    #define CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES(_mailboxes) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES(_mailboxes) \
-      _Configure_Object_RAM(_mailboxes, sizeof(ITRON_Mailbox_Control))
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS
-    #define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS                      0
-    #define CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(_message_buffers) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(_message_buffers) \
-      _Configure_Object_RAM(_message_buffers, \
-        sizeof(ITRON_Message_buffer_Control))
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_ITRON_PORTS
-    #define CONFIGURE_MAXIMUM_ITRON_PORTS            0
-    #define CONFIGURE_MEMORY_FOR_ITRON_PORTS(_ports) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_ITRON_PORTS(_ports) \
-      _Configure_Object_RAM(_ports, sizeof(ITRON_Port_Control))
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS
-    #define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS            0
-    #define CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(_pools) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(_pools) \
-      _Configure_Object_RAM( _pools, sizeof(ITRON_Variable_memory_pool_Control))
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS
-    #define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS            0
-    #define CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(_pools) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(_pools) \
-      _Configure_Object_RAM(_pools, sizeof(ITRON_Fixed_memory_pool_Control))
-  #endif
-
-  #ifdef CONFIGURE_ITRON_INIT_TASK_TABLE
-
-    #ifdef CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE
-
-      /*
-       *  The user is defining their own table information and setting the
-       *  appropriate variables for the ITRON Initialization Task Table.
-       */
-
-    #else
-
-      #ifndef CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT
-        #define CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT   ITRON_Init
-      #endif
-
-      #ifndef CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES
-        #define CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES    TA_HLNG
-      #endif
-
-      #ifndef CONFIGURE_ITRON_INIT_TASK_PRIORITY
-        #define CONFIGURE_ITRON_INIT_TASK_PRIORITY      1
-      #endif
-
-      #ifndef CONFIGURE_ITRON_INIT_TASK_STACK_SIZE
-        #define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE \
-                CONFIGURE_MINIMUM_TASK_STACK_SIZE
-      #endif
-
-      #ifdef CONFIGURE_INIT
-        itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
-          { 1,                                    /* ID */
-            { (VP) 0,                                /* exinfo */
-              CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES,  /* task attributes */
-              CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT, /* task start address */
-              CONFIGURE_ITRON_INIT_TASK_PRIORITY,    /* initial task priority */
-              CONFIGURE_ITRON_INIT_TASK_STACK_SIZE   /* stack size */
-            }
-          }
-        };
-      #endif
-
-      #define CONFIGURE_ITRON_INIT_TASK_TABLE_NAME ITRON_Initialization_tasks
-
-      #define CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE \
-        sizeof(CONFIGURE_ITRON_INIT_TASK_TABLE_NAME) / \
-            sizeof(itron_initialization_tasks_table)
-
-    #endif    /* CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE */
-
-  #else     /* CONFIGURE_ITRON_INIT_TASK_TABLE */
-
-    #define CONFIGURE_ITRON_INIT_TASK_TABLE_NAME NULL
-    #define CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE 0
-    #define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE 0
-
-  #endif
-
-  #define CONFIGURE_MEMORY_FOR_ITRON \
-    ( CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES( \
-          CONFIGURE_MAXIMUM_ITRON_SEMAPHORES ) + \
-      CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS( \
-          CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS ) + \
-      CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES( \
-          CONFIGURE_MAXIMUM_ITRON_MAILBOXES ) + \
-      CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS( \
-          CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS ) + \
-      CONFIGURE_MEMORY_FOR_ITRON_PORTS( \
-          CONFIGURE_MAXIMUM_ITRON_PORTS ) + \
-      CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS( \
-          CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS ) + \
-      CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS( \
-          CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS ) + \
-      CONFIGURE_ITRON_INIT_TASK_STACK_SIZE \
-     )
-
-#else
-
-  #define CONFIGURE_MAXIMUM_ITRON_TASKS               0
-  #define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES          0
-  #define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS          0
-  #define CONFIGURE_MAXIMUM_ITRON_MAILBOXES           0
-  #define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS     0
-  #define CONFIGURE_MAXIMUM_ITRON_PORTS               0
-  #define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS        0
-  #define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS  0
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API     0
-  #define CONFIGURE_MEMORY_FOR_ITRON                  0
-
-#endif    /* RTEMS_ITRON_API */
-
 /**
  *  This macro specifies the amount of memory to be reserved for the
  *  Newlib C Library reentrancy structure -- if we are using newlib.
@@ -1707,8 +1535,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    (_Configure_From_workspace(CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
     CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API + \
     CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB + \
-    CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API + \
-    CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API))  + \
+    CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API))  + \
   _Configure_From_workspace( \
     _Configure_Max_Objects(_number_FP_tasks) * CONTEXT_FP_SIZE) + \
   _Configure_From_workspace( \
@@ -1860,25 +1687,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This accounts for any extra memory required by the ITRON API
- *  Initialization Task.
- */
-#if defined(RTEMS_ITRON_API) && \
-    (CONFIGURE_ITRON_INIT_TASK_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
-  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART \
-      (CONFIGURE_ITRON_INIT_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)
-#else
-  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART 0
-#endif
-
-/**
  *  This macro provides a summation of the various initialization task
  *  and thread stack requirements.
  */
 #define CONFIGURE_INITIALIZATION_THREADS_STACKS \
     (CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART + \
-    CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART + \
-    CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART)
+    CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART)
 
 /**
  *  This macro provides a summation of the various task and thread
@@ -1886,9 +1700,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #define CONFIGURE_TOTAL_TASKS_AND_THREADS \
    (CONFIGURE_MAXIMUM_TASKS + \
-    CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS + \
-    CONFIGURE_MAXIMUM_ITRON_TASKS \
-   )
+    CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS)
 
 /**
  *  This macro reserves the memory required by the statically configured
@@ -1936,7 +1748,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     uint32_t FP_OVERHEAD;
     uint32_t CLASSIC;
     uint32_t POSIX;
-    uint32_t ITRON;
 
     /* System overhead pieces */
     uint32_t INTERRUPT_VECTOR_TABLE;
@@ -1969,16 +1780,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     uint32_t POSIX_SPINLOCKS;
     uint32_t POSIX_RWLOCKS;
 #endif
-#ifdef RTEMS_ITRON_API
-    /* ITRON API Pieces */
-    uint32_t ITRON_SEMAPHORES;
-    uint32_t ITRON_EVENTFLAGS;
-    uint32_t ITRON_MAILBOXES;
-    uint32_t ITRON_MESSAGE_BUFFERS;
-    uint32_t ITRON_PORTS;
-    uint32_t ITRON_MEMORY_POOLS;
-    uint32_t ITRON_FIXED_MEMORY_POOLS;
-#endif
   } Configuration_Debug_t;
 
   Configuration_Debug_t Configuration_Memory_Debug = {
@@ -1990,7 +1791,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_MEMORY_FOR_TASKS(0, 1),
     CONFIGURE_MEMORY_FOR_CLASSIC,
     CONFIGURE_MEMORY_FOR_POSIX,
-    CONFIGURE_MEMORY_FOR_ITRON,
 
     /* System overhead pieces */
     CONFIGURE_INTERRUPT_VECTOR_TABLE,
@@ -2027,20 +1827,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( CONFIGURE_MAXIMUM_POSIX_RWLOCKS ),
     CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ),
 #endif
-
-#ifdef RTEMS_ITRON_API
-    /* ITRON API Pieces */
-    CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES( CONFIGURE_MAXIMUM_ITRON_SEMAPHORES ),
-    CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS( CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS ),
-    CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES( CONFIGURE_MAXIMUM_ITRON_MAILBOXES ),
-    CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(
-        CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS ),
-    CONFIGURE_MEMORY_FOR_ITRON_PORTS( CONFIGURE_MAXIMUM_ITRON_PORTS ),
-    CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(
-        CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS ),
-    CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(
-        CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS ),
-#endif
   };
 #endif
 
@@ -2056,7 +1842,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    CONFIGURE_MEMORY_FOR_CLASSIC + \
    CONFIGURE_MEMORY_FOR_POSIX + \
    (CONFIGURE_MAXIMUM_POSIX_THREADS * CONFIGURE_MINIMUM_TASK_STACK_SIZE ) + \
-   CONFIGURE_MEMORY_FOR_ITRON + \
    CONFIGURE_INITIALIZATION_THREADS_STACKS + \
    CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
    CONFIGURE_MEMORY_FOR_MP + \
@@ -2106,24 +1891,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       CONFIGURE_MAXIMUM_POSIX_SPINLOCKS,
       CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
       CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
-    };
-  #endif
-
-  #ifdef RTEMS_ITRON_API
-    /**
-     *  This is the ITRON API Configuration Table.
-     */
-    itron_api_configuration_table Configuration_ITRON_API = {
-      CONFIGURE_MAXIMUM_ITRON_TASKS,
-      CONFIGURE_MAXIMUM_ITRON_SEMAPHORES,
-      CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS,
-      CONFIGURE_MAXIMUM_ITRON_MAILBOXES,
-      CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS,
-      CONFIGURE_MAXIMUM_ITRON_PORTS,
-      CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS,
-      CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS,
-      CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE,
-      CONFIGURE_ITRON_INIT_TASK_TABLE_NAME
     };
   #endif
 
@@ -2208,23 +1975,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
-/*
- *  If the user has configured a set of ITRON Initialization Tasks,
- *  then we need to install the code that runs that loop.
- */
-#ifdef RTEMS_ITRON_API
-  #ifdef CONFIGURE_INIT
-    #if defined(CONFIGURE_ITRON_INIT_TASK_TABLE) || \
-        defined(CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE)
-      void _ITRON_Task_Initialize_user_tasks_body(void);
-      void (*_ITRON_Initialize_user_tasks_p)(void) =
-                _ITRON_Task_Initialize_user_tasks_body;
-    #else
-      void (*_ITRON_Initialize_user_tasks_p)(void) = NULL;
-    #endif
-  #endif
-#endif
-
 #ifdef __cplusplus
 }
 #endif
@@ -2249,8 +1999,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #if !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION)
   #if (CONFIGURE_MAXIMUM_TASKS == 0) && \
       (CONFIGURE_MAXIMUM_POSIX_THREADS == 0) && \
-      (CONFIGURE_MAXIMUM_ADA_TASKS == 0) &&  \
-      (CONFIGURE_MAXIMUM_ITRON_TASKS == 0)
+      (CONFIGURE_MAXIMUM_ADA_TASKS == 0)
     #error "CONFIGURATION ERROR: No tasks or threads configured!!"
   #endif
 #endif
@@ -2261,7 +2010,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #if !defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) && \
     !defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) && \
-    !defined(CONFIGURE_ITRON_INIT_TASK_TABLE) && \
     !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION)
 #error "CONFIGURATION ERROR: No initialization tasks or threads configured!!"
 #endif
@@ -2294,24 +2042,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
        (CONFIGURE_MAXIMUM_POSIX_RWLOCKS != 0) || \
       defined(CONFIGURE_POSIX_INIT_THREAD_TABLE))
   #error "CONFIGURATION ERROR: POSIX API support not configured!!"
-  #endif
-#endif
-
-/*
- *  If an attempt was made to configure ITRON objects and
- *  the ITRON API was not configured into RTEMS, error out.
- */
-#if !defined(RTEMS_ITRON_API)
-  #if ((CONFIGURE_MAXIMUM_ITRON_TASKS != 0) || \
-       (CONFIGURE_MAXIMUM_ITRON_SEMAPHORES != 0) || \
-       (CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS != 0) || \
-       (CONFIGURE_MAXIMUM_ITRON_MAILBOXES != 0) || \
-       (CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS != 0) || \
-       (CONFIGURE_MAXIMUM_ITRON_PORTS != 0) || \
-       (CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS != 0) || \
-       (CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS != 0) || \
-      defined(CONFIGURE_ITRON_INIT_TASK_TABLE))
-  #error "CONFIGURATION ERROR: ITRON API support not configured!!"
   #endif
 #endif
 
