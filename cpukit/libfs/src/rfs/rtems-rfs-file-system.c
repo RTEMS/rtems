@@ -28,6 +28,22 @@
 #include <rtems/rfs/rtems-rfs-inode.h>
 #include <rtems/rfs/rtems-rfs-trace.h>
 
+uint64_t
+rtems_rfs_fs_size (rtems_rfs_file_system* fs)
+{
+  uint64_t blocks = rtems_rfs_fs_blocks (fs);
+  uint64_t block_size = rtems_rfs_fs_block_size (fs);
+  return blocks * block_size;
+}
+
+uint64_t
+rtems_rfs_fs_media_size (rtems_rfs_file_system* fs)
+{
+  uint64_t media_blocks = (uint64_t) rtems_rfs_fs_media_blocks (fs);
+  uint64_t media_block_size = (uint64_t) rtems_rfs_fs_media_block_size (fs);
+  return media_blocks * media_block_size;
+}
+
 static int
 rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
 {

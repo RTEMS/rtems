@@ -1,3 +1,9 @@
+2010-06-18	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-file-system.h,
+	libfs/src/rfs/rtems-rfs-file-system.c: Move questionable macros to
+	C functions.
+
 2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h: Remove ITRON configuration parameters.
