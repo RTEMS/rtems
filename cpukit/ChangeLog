@@ -1,5 +1,6 @@
 2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-file-system.c: Various 64bit fixes.
 	* libfs/src/rfs/rtems-rfs-rtems-file.c: Various 64bit fixes.
 	* libfs/src/rfs/rtems-rfs-buffer.c: Various 64bit fixes.
 	* libfs/src/rfs/rtems-rfs-shell.c: Various 64bit fixes.
