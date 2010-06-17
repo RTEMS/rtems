@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 #include <rtems/rfs/rtems-rfs-bitmaps.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>
@@ -44,7 +45,7 @@ rtems_rfs_bitmap_ut_test_range (rtems_rfs_bitmap_control* control,
     int rc = rtems_rfs_bitmap_map_test (control, bit + count, &result);
     if (rc > 0)
     {
-      printf (" %2d. Test bit %ld in range (%ld,%ld] is %s: ",
+      printf (" %2d. Test bit %" PRId32 " in range (%" PRId32 ",%ld] is %s: ",
             test, bit + count, bit, bit + size - 1, !set ? "set" : "clear");
       printf ("FAIL (%s)\n", strerror (rc));
       return false;
@@ -53,14 +54,14 @@ rtems_rfs_bitmap_ut_test_range (rtems_rfs_bitmap_control* control,
       result = !result;
     if (!result)
     {
-      printf (" %2d. Test bit %ld in range (%ld,%ld] is %s: ",
+      printf (" %2d. Test bit %" PRId32 " in range (%" PRId32 ",%ld] is %s: ",
               test, bit + count, bit, bit + size - 1, !set ? "set" : "clear");
       printf (" %s\n", !result ? "pass" : "FAIL");
       return false;
     }
   }
   
-  printf (" %2d. Test bit range (%ld,%ld] all %s: pass\n",
+  printf (" %2d. Test bit range (%" PRId32 ",%ld] all %s: pass\n",
           test, bit, bit + size - 1, set ? "set" : "clear");
 
   return true;
@@ -87,7 +88,7 @@ rtems_rfs_bitmap_ut_alloc_seq_test (rtems_rfs_bitmap_control* control,
   for (i = 0; i < size; i++)
     rtems_rfs_bitmap_map_clear (control, bit + i);
   
-  printf (" %2d. Cleared bits (%ld, %ld] (%zd)\n",
+  printf (" %2d. Cleared bits (%" PRId32 ", %ld] (%zd)\n",
           test, bit, bit + size - 1, size);
   
   for (i = 0; i < rtems_rfs_bitmap_element_bits (); i++)
@@ -100,7 +101,7 @@ rtems_rfs_bitmap_ut_alloc_seq_test (rtems_rfs_bitmap_control* control,
     }
     if (state)
     {
-      printf (" %2d. Cleared bit still set: bit = %ld\n", test, bit + i);
+      printf (" %2d. Cleared bit still set: bit = %" PRId32 "\n", test, bit + i);
       return false;
     }
   }
@@ -118,13 +119,13 @@ rtems_rfs_bitmap_ut_alloc_seq_test (rtems_rfs_bitmap_control* control,
     }
     if (!result)
     {
-      printf (" %2d. Find bit with seed = %ld: %s: bit = %ld\n",
+      printf (" %2d. Find bit with seed = %" PRId32 ": %s: bit = %" PRId32 "\n",
               test, seed, result ? "pass" : "FAIL", bit);
       return false;
     }
   }
 
-  printf (" %2d. Alloc'ed all bits (%ld, %ld] (%zd)\n",
+  printf (" %2d. Alloc'ed all bits (%" PRId32 ", %ld] (%zd)\n",
           test, bit, bit + size - 1, size);
   
   return true;
@@ -206,13 +207,13 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
 
   rc = rtems_rfs_bitmap_map_alloc (&control, 0, &result, &bit);
   result = result && (bit == 0);
-  printf ("  3. Find bit 0 with seed = 0: %s (%s): bit = %ld\n",
+  printf ("  3. Find bit 0 with seed = 0: %s (%s): bit = %" PRId32 "\n",
           result ? "pass" : "FAIL", strerror (rc),  bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
   
   rc = rtems_rfs_bitmap_map_alloc (&control, size - 1, &result, &bit);
   result = result && (bit == (size - 1));
-  printf ("  4. Find bit (size - 1) with seed = (size - 1) (%zd): %s (%s): bit = %ld\n",
+  printf ("  4. Find bit (size - 1) with seed = (size - 1) (%zd): %s (%s): bit = %" PRId32 "\n",
           size - 1, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -245,20 +246,20 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   bit = rand () % size;
   
   rc = rtems_rfs_bitmap_map_clear (&control, bit);
-  printf ("  9. Clear bit %ld: %s (%s)\n",
+  printf ("  9. Clear bit %" PRId32 ": %s (%s)\n",
           bit, rc == 0 ? "PASS" : "FAIL", strerror (rc));
   rtems_rfs_exit_on_error (rc, false, &control, buffer.buffer);
 
   last_bit = bit;
   rc = rtems_rfs_bitmap_map_alloc (&control, 0, &result, &bit);
   result = result && (bit == last_bit);
-  printf (" 10. Find bit with seed = 0: %s (%s): bit = %ld\n",
+  printf (" 10. Find bit with seed = 0: %s (%s): bit = %" PRId32 "\n",
           result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
   
   rc = rtems_rfs_bitmap_map_alloc (&control, 0, &result, &bit);
   result = !result || (bit != last_bit);
-  printf (" 11. Fail to find bit with seed = 0: %s (%s): bit = %ld\n",
+  printf (" 11. Fail to find bit with seed = 0: %s (%s): bit = %" PRId32 "\n",
           result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
   
@@ -269,7 +270,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   
   rc = rtems_rfs_bitmap_map_alloc (&control, size - 1, &result, &bit);
   result = result && (bit == 0);
-  printf (" 13. Find bit with seed = (size - 1): %s (%s): bit = %ld\n",
+  printf (" 13. Find bit with seed = (size - 1): %s (%s): bit = %" PRId32 "\n",
           result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -280,7 +281,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
 
   rc = rtems_rfs_bitmap_map_alloc (&control, 0, &result, &bit);
   result = result && (bit == (size - 1));
-  printf (" 15. Find bit with seed = 0: %s (%s): bit = %ld\n",
+  printf (" 15. Find bit with seed = 0: %s (%s): bit = %" PRId32 "\n",
           result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -290,7 +291,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   
   rc = rtems_rfs_bitmap_map_alloc (&control, size / 2, &result, &bit);
   result = result && (bit == 0);
-  printf (" 17. Find bit with seed = (size / 2) (%zd): %s (%s): bit = %ld\n",
+  printf (" 17. Find bit with seed = (size / 2) (%zd): %s (%s): bit = %" PRId32 "\n",
           size / 2, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -301,7 +302,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   
   rc = rtems_rfs_bitmap_map_alloc (&control, size / 2, &result, &bit);
   result = result && (bit == (size - 1));
-  printf (" 19. Find bit with seed = (size / 2) (%zd): %s (%s): bit = %ld\n",
+  printf (" 19. Find bit with seed = (size / 2) (%zd): %s (%s): bit = %" PRId32 "\n",
           size / 2, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -311,7 +312,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   
   rc = rtems_rfs_bitmap_map_alloc (&control, (size / 2) - 1, &result, &bit);
   result = result && (bit == 0);
-  printf (" 21. Find bit with seed = ((size / 2) - 1) (%zd): %s (%s): bit = %ld\n",
+  printf (" 21. Find bit with seed = ((size / 2) - 1) (%zd): %s (%s): bit = %" PRId32 "\n",
           (size / 2) - 1, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -321,7 +322,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   
   rc = rtems_rfs_bitmap_map_alloc (&control, (size / 2) - 1, &result, &bit);
   result = result && (bit == (size - 1));
-  printf (" 23. Find bit with seed = ((size / 2) - 1) (%zd): %s (%s): bit = %ld\n",
+  printf (" 23. Find bit with seed = ((size / 2) - 1) (%zd): %s (%s): bit = %" PRId32 "\n",
           (size / 2) - 1, result ? "pass" : "FAIL", strerror (rc), bit);
   rtems_rfs_exit_on_error (rc, !result, &control, buffer.buffer);
 
@@ -351,18 +352,18 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
     rc = rtems_rfs_bitmap_map_clear (&control, bit);
     if (rc > 0)
     {
-      printf (" 26. Clear bit %ld: %s (%s)\n",
+      printf (" 26. Clear bit %" PRId32 ": %s (%s)\n",
               bit, rc == 0 ? "PASS" : "FAIL", strerror (rc));
       rtems_rfs_exit_on_error (rc, false, &control, buffer.buffer);
     }
   }
   
-  printf (" 26. Clear bit (%ld, %ld]: %s (%s)\n",
+  printf (" 26. Clear bit (%" PRId32 ", %" PRId32 "]: %s (%s)\n",
           first_bit, last_bit, rc == 0 ? "PASS" : "FAIL", strerror (rc));
   
   clear = rtems_rfs_bitmap_map_free (&control);
   result = clear == (last_bit - first_bit);
-  printf (" 27. Check free count is %zd: %ld: %s (%s)\n",
+  printf (" 27. Check free count is %zd: %" PRId32 ": %s (%s)\n",
           clear, last_bit - first_bit,
           result ? "pass" : "FAIL", strerror (rc));
 
