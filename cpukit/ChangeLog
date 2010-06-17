@@ -1,3 +1,9 @@
+2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/object.h,
+	score/include/rtems/score/thread.h: Remove prototypes for ITRON
+	only methods removed by Ralf.
+
 2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* itron/Makefile.am, itron/preinstall.am

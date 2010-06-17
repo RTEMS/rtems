@@ -698,15 +698,6 @@ void _Thread_Tickle_timeslice( void );
 void _Thread_Yield_processor( void );
 
 /**
- *  This routine is invoked to rotate the ready queue for the
- *  given priority.  It can be used to yeild the processor
- *  by rotating the executing threads ready queue.
- */
-void _Thread_Rotate_Ready_Queue(
-  Priority_Control  priority
-);
-
-/**
  *  This routine initializes the context of the_thread to its
  *  appropriate starting state.
  */
