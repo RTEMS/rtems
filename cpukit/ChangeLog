@@ -1,5 +1,14 @@
 2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* wrapup/Makefile.am, score/Makefile.am: Remove LIBITRON.
+	* score/src/objectallocatebyindex.c, score/src/objectgetbyindex.c,
+ 	score/src/threadrotatequeue.c: Remove.
+	* Makefile.am: Remove itron.
+	* configure.ac: Remove itron.
+	* aclocal/check-itron.m4, aclocal/enable-itron.m4: Remove.
+
+2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/rfs/rtems-rfs-file-system.h: Revert previous change.
 	Force RTEMS_RFS_VERSION_MASK to be 32bit.
 	* libfs/src/rfs/rtems-rfs-rtems-dir.c: Various 64bit fixes.
