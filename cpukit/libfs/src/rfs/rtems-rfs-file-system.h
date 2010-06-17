@@ -46,7 +46,7 @@
  * RFS Version Number Mask. The mask determines which bits of the version
  * number indicate compatility issues.
  */
-#define RTEMS_RFS_VERSION_MASK (0x00000000)
+#define RTEMS_RFS_VERSION_MASK INT32_C(0x00000000)
 
 /**
  * The root inode number. Do not use 0 as this has special meaning in some Unix
@@ -308,7 +308,7 @@ struct _rtems_rfs_file_system
  *
  * @param _fs Pointer to the file system.
  */
-#define rtems_rfs_fs_size(_fs) (rtems_rfs_fs_blocks (_fs) * \
+#define rtems_rfs_fs_size(_fs) (((uint64_t) rtems_rfs_fs_blocks (_fs)) * \
                                 rtems_rfs_fs_block_size (_fs))
 
 /**

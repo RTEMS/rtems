@@ -1,5 +1,7 @@
 2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-file-system.h: Revert previous change.
+	Force RTEMS_RFS_VERSION_MASK to be 32bit.
 	* libfs/src/rfs/rtems-rfs-rtems-dir.c: Various 64bit fixes.
 	* libfs/src/rfs/rtems-rfs-format.c: Various 64bit fixes.
 	* libfs/src/rfs/rtems-rfs-file-system.c: Various 64bit fixes.
