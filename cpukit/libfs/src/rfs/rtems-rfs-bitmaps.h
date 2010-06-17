@@ -99,7 +99,7 @@ typedef rtems_rfs_bitmap_element* rtems_rfs_bitmap_map;
 /**
  * The bitmap control is a simple way to manage the various parts of a bitmap.
  */
-typedef struct _rtems_rfs_bitmap_control
+typedef struct rtems_rfs_bitmap_control_s
 {
   rtems_rfs_buffer_handle* buffer;      //< Handle the to buffer with the bit
                                         //map.

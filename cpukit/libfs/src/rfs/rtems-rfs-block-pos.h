@@ -47,7 +47,7 @@ typedef uint32_t rtems_rfs_block_off;
  * block field can be used hold a block number for the position as a look up
  * cache.
  */
-typedef struct _rtems_rfs_block_pos
+typedef struct rtems_rfs_block_pos_s
 {
   /**
    * The block index in the map. Range is from 0 to the maps block count minus
@@ -110,8 +110,8 @@ void rtems_rfs_block_get_bpos (rtems_rfs_file_system*  fs,
  * @param bpos Pointer to the block position to fill in.
  * @return rtems_rfs_pos The absolute offset.
  */
-rtems_rfs_pos rtems_rfs_block_get_pos (rtems_rfs_file_system*  fs,
-                                       rtems_rfs_block_pos*    bpos);
+rtems_rfs_pos rtems_rfs_block_get_pos (rtems_rfs_file_system* fs,
+                                       rtems_rfs_block_pos*   bpos);
 
 /**
  * Add the relative position to the block position. The relative position is
@@ -136,7 +136,7 @@ rtems_rfs_block_add_pos (rtems_rfs_file_system*  fs,
  * A block size is the number of blocks less one plus the offset where the
  * offset must be less than the block size.
  */
-typedef struct _rtems_rfs_block_size
+typedef struct rtems_rfs_block_size_s
 {
   /**
    * The count of blocks in a map. A 0 means no blocks and a zero length and
