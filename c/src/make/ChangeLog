@@ -1,3 +1,9 @@
+2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.inc.in, bsp.cfg.in, configure.ac, target.cfg.in:
+	Remove itron.
+	* aclocal/check-itron.m4, aclocal/enable-itron.m4: Remove.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp.mak: Remove RTEMS_BSP_FAMILY.
