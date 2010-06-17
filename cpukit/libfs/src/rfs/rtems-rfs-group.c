@@ -22,6 +22,8 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
+
 #include <rtems/rfs/rtems-rfs-file-system.h>
 #include <rtems/rfs/rtems-rfs-group.h>
 
@@ -46,7 +48,7 @@ rtems_rfs_group_open (rtems_rfs_file_system* fs,
     size = rtems_rfs_fs_blocks (fs) - base;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_OPEN))
-    printf ("rtems-rfs: group-open: base=%ld, blocks=%zd inodes=%zd\n",
+    printf ("rtems-rfs: group-open: base=%" PRId32 ", blocks=%zd inodes=%zd\n",
             base, size, inodes);
 
   group->base = base;
@@ -114,7 +116,7 @@ rtems_rfs_group_close (rtems_rfs_file_system* fs, rtems_rfs_group* group)
   int rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_CLOSE))
-    printf ("rtems-rfs: group-close: base=%ld\n", group->base);
+    printf ("rtems-rfs: group-close: base=%" PRId32 "\n", group->base);
 
   /*
    * We need to close as much as possible and also return any error if one
@@ -216,7 +218,7 @@ rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
       else
         *result = rtems_rfs_group_block (&fs->groups[group], bit);
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_BITMAPS))
-        printf ("rtems-rfs: group-bitmap-alloc: %s allocated: %ld\n",
+        printf ("rtems-rfs: group-bitmap-alloc: %s allocated: %" PRId32 "\n",
                 inode ? "inode" : "block", *result);
       return 0;
     }
@@ -245,7 +247,7 @@ rtems_rfs_group_bitmap_free (rtems_rfs_file_system* fs,
   int                       rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_BITMAPS))
-    printf ("rtems-rfs: group-bitmap-free: %s free: %ld\n",
+    printf ("rtems-rfs: group-bitmap-free: %s free: %" PRId32 "\n",
             inode ? "inode" : "block", no);
 
   if (inode)
@@ -287,7 +289,7 @@ rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
   int                       rc;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_BITMAPS))
-    printf ("rtems-rfs: group-bitmap-test: %s test: %ld\n",
+    printf ("rtems-rfs: group-bitmap-test: %s test: %" PRId32 "\n",
             inode ? "inode" : "block", no);
 
   if (inode)
