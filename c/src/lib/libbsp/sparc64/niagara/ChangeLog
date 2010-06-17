@@ -1,5 +1,9 @@
 2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* .cvsignore, include/.cvsignore: New files.
+
+2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
 	preinstall.am, include/bsp.h, include/tm27.h,
 	make/custom/niagara.cfg, start/bspinit.S: New files.
