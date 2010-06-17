@@ -1,5 +1,9 @@
 2010-06-18	Chris Johns <chrisj@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-file-block.c: Clean up uint64_t maths.
+
+2010-06-18	Chris Johns <chrisj@rtems.org>
+
 	* libfs/src/rfs/rtems-rfs-file-system.h,
 	libfs/src/rfs/rtems-rfs-file-system.c: Move questionable macros to
 	C functions.
