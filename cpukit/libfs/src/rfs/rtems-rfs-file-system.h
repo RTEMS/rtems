@@ -304,14 +304,6 @@ struct _rtems_rfs_file_system
 #define rtems_rfs_fs_block_size(_fs) ((_fs)->block_size)
 
 /**
- * The size of the disk in bytes.
- *
- * @param _fs Pointer to the file system.
- */
-#define rtems_rfs_fs_size(_fs) (((uint64_t) rtems_rfs_fs_blocks (_fs)) * \
-                                rtems_rfs_fs_block_size (_fs))
-
-/**
  * The number of inodes.
  *
  * @param _fs Pointer to the file system.
@@ -354,14 +346,6 @@ struct _rtems_rfs_file_system
 #endif
 
 /**
- * The size of the disk in bytes.
- *
- * @param _fs Pointer to the file system.
- */
-#define rtems_rfs_fs_media_size(_fs) (((uint64_t) rtems_rfs_fs_media_blocks (_fs)) * \
-                                      rtems_rfs_fs_media_block_size (_fs))
-
-/**
  * The maximum length of a name supported by the file system.
  */
 #define rtems_rfs_fs_max_name(_fs) ((_fs)->max_name_length)
@@ -377,6 +361,22 @@ struct _rtems_rfs_file_system
  * Return the user pointer.
  */
 #define rtems_rfs_fs_user(_fs) ((_fs)->user)
+
+/**
+ * Return the size of the disk in bytes.
+ *
+ * @param fs Pointer to the file system.
+ * @return uint64_t The size of the disk in bytes.
+ */
+uint64_t rtems_rfs_fs_size(rtems_rfs_file_system* fs);
+
+/**
+ * The size of the disk in bytes calculated from the media parameters..
+ *
+ * @param fs Pointer to the file system.
+ * @return uint64_t The size of the disk in bytes.
+ */
+uint64_t rtems_rfs_fs_media_size (rtems_rfs_file_system* fs);
 
 /**
  * Open the file system given a file path.

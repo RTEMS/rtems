@@ -88,13 +88,15 @@ rtems_rfs_block_get_size (rtems_rfs_file_system* fs,
                           rtems_rfs_block_size*  size)
 {
   uint32_t offset;
+  uint64_t block_size;
   if (size->count == 0)
     return 0;
   if (size->offset == 0)
     offset = rtems_rfs_fs_block_size (fs);
   else
     offset = size->offset;
-  return (((uint64_t) (size->count - 1)) * rtems_rfs_fs_block_size (fs)) + offset;
+  block_size = rtems_rfs_fs_block_size (fs);
+  return (((uint64_t) (size->count - 1)) * block_size) + offset;
 }
 
 int
