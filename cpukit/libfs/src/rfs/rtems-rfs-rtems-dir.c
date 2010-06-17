@@ -19,6 +19,8 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -201,7 +203,7 @@ rtems_rfs_rtems_dir_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_DIR_RMNOD))
-    printf ("rtems-rfs: dir-rmnod: parent:%ld doff:%lu, ino:%ld\n",
+    printf ("rtems-rfs: dir-rmnod: parent:%" PRId32 " doff:%" PRIu32 ", ino:%" PRId32 "\n",
             parent, doff, ino);
 
   if (ino == RTEMS_RFS_ROOT_INO)

@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <inttypes.h>
 
 #include <rtems/rfs/rtems-rfs-data.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>
@@ -119,7 +120,7 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
   
   if ((fs->block_size % rtems_rfs_fs_media_block_size (fs)) != 0)
   {
-    printf ("block size (%zd) is not a multiple of media block size (%ld)\n",
+    printf ("block size (%zd) is not a multiple of media block size (%" PRId32 ")\n",
             fs->block_size, rtems_rfs_fs_media_block_size (fs));
     return false;
   }
@@ -218,7 +219,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
     group_size = rtems_rfs_fs_blocks (fs) - group_base;
 
   if (verbose)
-    printf ("\rrtems-rfs: format: group %3d: base = %ld, size = %zd",
+    printf ("\rrtems-rfs: format: group %3d: base = %" PRId32 ", size = %zd",
             group, group_base, group_size);
 
   /*
@@ -364,7 +365,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
       if (rc > 0)
       {
         rtems_rfs_buffer_handle_close (fs, &handle);
-        printf ("\nrtems-rfs: write-group: group %3d: block %ld request failed: %d: %s\n",
+        printf ("\nrtems-rfs: write-group: group %3d: block %" PRId32 " request failed: %d: %s\n",
                 group, group_base + b + RTEMS_RFS_GROUP_INODE_BLOCK,
                 rc, strerror (rc));
         return false;
@@ -484,7 +485,7 @@ rtems_rfs_write_root_dir (const char* name)
 
   if (ino != RTEMS_RFS_ROOT_INO)
   {
-    printf ("rtems-rfs: format: allocated inode not root ino: %ld\n", ino);
+    printf ("rtems-rfs: format: allocated inode not root ino: %" PRId32 "\n", ino);
     rtems_rfs_fs_close (fs);
     return rc;
   }
@@ -564,7 +565,7 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
    */
   if (rtems_rfs_fs_media_block_size (&fs) == 0)
   {
-    printf ("rtems-rfs: media block is invalid: %lu\n",
+    printf ("rtems-rfs: media block is invalid: %" PRIu32 "\n",
             rtems_rfs_fs_media_block_size (&fs));
     return -1;
   }
@@ -577,13 +578,13 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
 
   if (config->verbose)
   {
-    printf ("rtems-rfs: format: media size = %llu\n",
+    printf ("rtems-rfs: format: media size = %" PRIu64 "\n",
             rtems_rfs_fs_media_size (&fs));
-    printf ("rtems-rfs: format: media blocks = %ld\n",
+    printf ("rtems-rfs: format: media blocks = %" PRIu32 "\n",
             rtems_rfs_fs_media_blocks (&fs));
-    printf ("rtems-rfs: format: media block size = %lu\n",
+    printf ("rtems-rfs: format: media block size = %" PRIu32 "\n",
             rtems_rfs_fs_media_block_size (&fs));
-    printf ("rtems-rfs: format: size = %llu\n",
+    printf ("rtems-rfs: format: size = %" PRIu64 "\n",
             rtems_rfs_fs_size (&fs));
     printf ("rtems-rfs: format: blocks = %zu\n",
             rtems_rfs_fs_blocks (&fs));
