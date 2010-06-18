@@ -1,3 +1,11 @@
+2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/src/threadsuspend.c, score/src/threadresume.c,
+	score/src/threadreset.c, score/src/threadinitialize.c,
+	score/src/apiext.c, score/include/rtems/score/thread.h,
+	score/include/rtems/score/coresem.h:
+	Remove RTEMS_ITRON_API conditional blocks.
+
 2010-06-18	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-file-block.c: Clean up uint64_t maths.
