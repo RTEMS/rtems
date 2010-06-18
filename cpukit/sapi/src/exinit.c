@@ -55,9 +55,6 @@
 #ifdef RTEMS_POSIX_API
   #include <rtems/posix/posixapi.h>
 #endif
-#ifdef RTEMS_ITRON_API
-  #include <rtems/itron/itronapi.h>
-#endif
 
 Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
@@ -148,10 +145,6 @@ void rtems_initialize_data_structures(void)
 
   #ifdef RTEMS_POSIX_API
     _POSIX_API_Initialize();
-  #endif
-
-  #ifdef RTEMS_ITRON_API
-    _ITRON_API_Initialize();
   #endif
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
