@@ -27,8 +27,6 @@ unsigned int _Objects_API_maximum_class(
       return OBJECTS_RTEMS_CLASSES_LAST;
     case OBJECTS_POSIX_API:
       return OBJECTS_POSIX_CLASSES_LAST;
-    case OBJECTS_ITRON_API:
-      return OBJECTS_ITRON_CLASSES_LAST;
     case OBJECTS_NO_API:
     default:
       break;

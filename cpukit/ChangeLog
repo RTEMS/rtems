@@ -1,5 +1,6 @@
 2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/src/objectapimaximumclass.c: Remove OBJECTS_ITRON_API.
 	* score/include/rtems/system.h: Remove ITRON_EXTERN.
 	* score/src/apiext.c: Remove comment referring to ITRON.
 	* score/include/rtems/score/object.h: Remove Objects_ITRON_API.
