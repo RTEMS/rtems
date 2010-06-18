@@ -27,7 +27,7 @@
  */
 /**@{*/
 
-#if defined(RTEMS_POSIX_API) || defined(RTEMS_ITRON_API)
+#if defined(RTEMS_POSIX_API)
   #define RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE
 #endif
 

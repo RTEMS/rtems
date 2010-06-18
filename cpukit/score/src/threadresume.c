@@ -62,18 +62,6 @@ void _Thread_Resume(
 
   _ISR_Disable( level );
 
-  #if defined(RTEMS_ITRON_API)
-    if ( force == true )
-      the_thread->suspend_count = 0;
-    else
-      the_thread->suspend_count--;
-
-    if ( the_thread->suspend_count > 0 ) {
-      _ISR_Enable( level );
-      return;
-    }
-  #endif
-
   current_state = the_thread->current_state;
   if ( current_state & STATES_SUSPENDED ) {
     current_state =

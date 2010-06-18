@@ -110,9 +110,6 @@ void _API_extensions_Run_postswitch( void )
      *  Currently the ITRON API is the only API which does not
      *  provide this hook.
      */
-#if defined(RTEMS_ITRON_API)
-    if ( the_extension->postswitch_hook )
-#endif
       (*the_extension->postswitch_hook)( _Thread_Executing );
   }
 }
