@@ -22,5 +22,5 @@
 #undef rtems_object_id_api_maximum
 int rtems_object_id_api_maximum(void)
 {
-  return OBJECTS_ITRON_API;
+  return OBJECTS_APIS_LAST;
 }
