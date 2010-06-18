@@ -1,5 +1,6 @@
 2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* core/include/rtems/score/object.h: Remove Objects_ITRON_API.
 	* rtems/src/rtemsobjectgetapiclassname.c,
 	sapi/include/rtems/config.h, sapi/src/exinit.c:
 	Remove RTEMS_ITRON_API conditional blocks.
