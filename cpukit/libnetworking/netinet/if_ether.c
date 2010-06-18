@@ -111,7 +111,7 @@ SYSCTL_INT(_net_link_ether_inet, OID_AUTO, proxyall, CTLFLAG_RW,
 	   &arp_proxyall, 0, "");
 
 static void	arp_rtrequest(int, struct rtentry *, struct sockaddr *);
-static void	arprequest(struct arpcom *, u_long *, u_long *, u_char *);
+static void	arprequest(struct arpcom *, struct in_addr *, struct in_addr *, u_char *);
 void	arpintr(void);
 static void	arptfree(struct llinfo_arp *);
 static void	arptimer(void *);
@@ -189,8 +189,8 @@ arp_rtrequest(int req, struct rtentry *rt, struct sockaddr *sa)
 		/* Announce a new entry if requested. */
 		if (rt->rt_flags & RTF_ANNOUNCE)
 			arprequest((struct arpcom *)rt->rt_ifp,
-			    &SIN(rt_key(rt))->sin_addr.s_addr,
-			    &SIN(rt_key(rt))->sin_addr.s_addr,
+			    &SIN(rt_key(rt))->sin_addr,
+			    &SIN(rt_key(rt))->sin_addr,
 			    (u_char *)LLADDR(SDL(gate)));
 		/*FALLTHROUGH*/
 	case RTM_RESOLVE:
@@ -278,7 +278,7 @@ arp_rtrequest(int req, struct rtentry *rt, struct sockaddr *sa)
  *	- arp header source ethernet address
  */
 static void
-arprequest(struct arpcom *ac, u_long *sip, u_long *tip, u_char *enaddr)
+arprequest(struct arpcom *ac, struct in_addr *sip, struct in_addr *tip, u_char *enaddr)
 {
 	struct mbuf *m;
 	struct ether_header *eh;
@@ -375,8 +375,8 @@ arpresolve(
 			rt->rt_expire = rtems_bsdnet_seconds_since_boot();
 			if (la->la_asked++ < arp_maxtries)
 			    arprequest(ac,
-			        &(SIN(rt->rt_ifa->ifa_addr)->sin_addr.s_addr),
-				&(SIN(dst)->sin_addr.s_addr),
+			        &(SIN(rt->rt_ifa->ifa_addr)->sin_addr),
+				&(SIN(dst)->sin_addr),
 				ac->ac_enaddr);
 			else {
 				rt->rt_flags |= RTF_REJECT;
@@ -635,8 +635,8 @@ void
 arp_ifinit(struct arpcom *ac, struct ifaddr *ifa)
 {
 	if (ntohl(IA_SIN(ifa)->sin_addr.s_addr) != INADDR_ANY)
-		arprequest(ac, &(IA_SIN(ifa)->sin_addr.s_addr),
-			       &(IA_SIN(ifa)->sin_addr.s_addr), ac->ac_enaddr);
+		arprequest(ac, &(IA_SIN(ifa)->sin_addr),
+			       &(IA_SIN(ifa)->sin_addr), ac->ac_enaddr);
 	ifa->ifa_rtrequest = arp_rtrequest;
 	ifa->ifa_flags |= RTF_CLONING;
 }
