@@ -222,12 +222,11 @@ typedef enum {
   OBJECTS_NO_API       = 0,
   OBJECTS_INTERNAL_API = 1,
   OBJECTS_CLASSIC_API  = 2,
-  OBJECTS_POSIX_API    = 3,
-  OBJECTS_ITRON_API    = 4
+  OBJECTS_POSIX_API    = 3
 } Objects_APIs;
 
 /** This macro is used to generically specify the last API index. */
-#define OBJECTS_APIS_LAST OBJECTS_ITRON_API
+#define OBJECTS_APIS_LAST OBJECTS_POSIX_API
 
 /**
  *  This enumerated type is used in the class field of the object ID
