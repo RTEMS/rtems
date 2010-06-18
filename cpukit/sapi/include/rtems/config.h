@@ -39,7 +39,7 @@ extern "C" {
 
 /*
  *  This is kind of kludgy but it allows targets to totally ignore the
- *  optional APIs like POSIX and ITRON safely.
+ *  optional APIs like POSIX safely.
  */
 
 #ifdef RTEMS_POSIX_API
@@ -264,9 +264,6 @@ extern rtems_configuration_table    Configuration;
 
 #define rtems_configuration_get_posix_api_configuration() \
         (&Configuration_POSIX_API)
-
-#define rtems_configuration_get_itron_api_configuration() \
-        (&Configuration_ITRON_API)
 
 #ifdef __cplusplus
 }
