@@ -240,7 +240,7 @@ rtems_status_code rtems_object_set_name(
  *  @note A body is also provided.
  */
 #define rtems_object_id_api_maximum() \
-  OBJECTS_ITRON_API
+  OBJECTS_APIS_LAST
 
 /**
  *  @brief Get Lowest Valid Class Value
