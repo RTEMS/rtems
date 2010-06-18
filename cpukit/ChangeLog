@@ -1,5 +1,6 @@
 2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/mkrootfs.h: doxygen cosmetics.
 	* libnetworking/netinet/if_ether.c: Misc. 64bit fixes from FreeBSD.
 	* libfs/src/nfsclient/src/rpcio.c: Misc. 64bit fixes.
 
