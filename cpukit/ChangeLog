@@ -1,5 +1,8 @@
 2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/rtemsobjectgetapiclassname.c,
+	sapi/include/rtems/config.h, sapi/src/exinit.c:
+	Remove RTEMS_ITRON_API conditional blocks.
 	* sapi/Makefile.am: Remove src/itronapi.c.
 	* sapi/src/itronapi.c: Remove.
 	* score/src/threadsuspend.c, score/src/threadresume.c,
