@@ -1,5 +1,6 @@
 2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/rtemsobjectgetapiname.c: Remove ITRON.
 	* sapi/include/rtems/config.h: Remove ITRON.
 	* score/src/objectapimaximumclass.c: Remove OBJECTS_ITRON_API.
 	* score/include/rtems/system.h: Remove ITRON_EXTERN.
