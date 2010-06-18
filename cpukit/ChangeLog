@@ -1,5 +1,7 @@
 2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sapi/Makefile.am: Remove src/itronapi.c.
+	* sapi/src/itronapi.c: Remove.
 	* score/src/threadsuspend.c, score/src/threadresume.c,
 	score/src/threadreset.c, score/src/threadinitialize.c,
 	score/src/apiext.c, score/include/rtems/score/thread.h,
