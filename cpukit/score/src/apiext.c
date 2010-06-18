@@ -106,11 +106,7 @@ void _API_extensions_Run_postswitch( void )
 
     the_extension = (API_extensions_Control *) the_node;
 
-    /*
-     *  Currently the ITRON API is the only API which does not
-     *  provide this hook.
-     */
-      (*the_extension->postswitch_hook)( _Thread_Executing );
+    (*the_extension->postswitch_hook)( _Thread_Executing );
   }
 }
 
