@@ -1,3 +1,10 @@
+2010-06-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add sp70 to test slot
+	reclamation and reuse for unlimited object configuration.
+	* sp70/.cvsignore, sp70/Makefile.am, sp70/init.c, sp70/sp70.doc,
+	sp70/sp70.scn: New files.
+
 2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sp16/task1.c: Update for heap extend changes.
