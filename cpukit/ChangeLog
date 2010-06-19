@@ -1,3 +1,8 @@
+2010-06-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* sapi/include/confdefs.h: Add CONFIGURE_MAXIMUM_FIFOS to account for
+	resources per FIFO instance.
+
 2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/rtems/mkrootfs.h: doxygen cosmetics.
