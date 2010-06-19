@@ -1,5 +1,10 @@
 2010-06-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp09/screen01.c, sp09/sp09.scn, sp43/init.c, sp43/sp43.scn,
+	spfatal_support/init.c: Remove references to ITRON constants.
+
+2010-06-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add sp70 to test slot
 	reclamation and reuse for unlimited object configuration.
 	* sp70/.cvsignore, sp70/Makefile.am, sp70/init.c, sp70/sp70.doc,

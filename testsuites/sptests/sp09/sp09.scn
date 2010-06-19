@@ -8,8 +8,6 @@ TA1 - rtems_task_get_note - RTEMS_INVALID_ADDRESS
 TA1 - rtems_task_get_note - RTEMS_INVALID_NUMBER
 TA1 - rtems_task_get_note - RTEMS_INVALID_ID
 TA1 - rtems_task_get_note - RTEMS_INVALID_ID
-TA1 - rtems_task_get_note - RTEMS_INVALID_ID (no tasks in API)
-TA1 - rtems_object_get_classic_name - bad ID
 TA1 - rtems_task_ident - RTEMS_INVALID_ADDRESS
 TA1 - rtems_task_ident - current task RTEMS_SUCCESSFUL
 TA1 - rtems_task_ident - global RTEMS_INVALID_NAME
