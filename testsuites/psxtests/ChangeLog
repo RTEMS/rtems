@@ -1,3 +1,7 @@
+2010-06-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxfatal_support/init.c: Remove references to ITRON constants.
+
 2010-06-08	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* psxfile01/test.c: Update for IMFS API changes.

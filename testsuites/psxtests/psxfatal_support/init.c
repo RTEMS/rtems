@@ -37,7 +37,6 @@ char *Sources[] = {
   "INTERNAL_ERROR_CORE",
   "INTERNAL_ERROR_RTEMS_API",
   "INTERNAL_ERROR_POSIX_API",
-  "INTERNAL_ERROR_ITRON_API"
 };
 
 char *Errors_Rtems[] = {
@@ -112,7 +111,7 @@ void Put_Error( uint32_t source, uint32_t error )
 
 void Put_Source( uint32_t source )
 {
-  if ( source > INTERNAL_ERROR_ITRON_API )
+  if ( source > INTERNAL_ERROR_POSIX_API )
     printk("Unknown Source (%d)", source);
   else
     printk( Sources[ source ] );
