@@ -19,7 +19,7 @@ SUBDIRS = \
     spstkalloc spthreadq01 spwatchdog spwkspace \
     spfatal01 spfatal02 spfatal03 spfatal04 spfatal05 spfatal06 spfatal07 \
     spfatal08 spfatal09 spfatal10 spfatal11 spfatal12 spfatal13 \
-    spfifo01 spfifo02 spfifo03 spfifo04 \
+    spfifo01 spfifo02 spfifo03 spfifo04 spfifo08 \
     spintrcritical01 spintrcritical02 spintrcritical03 spintrcritical04 \
     spintrcritical05 spintrcritical06 spintrcritical07 spintrcritical08 \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \
