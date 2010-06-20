@@ -1,5 +1,10 @@
 2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* spfifo02/init.c, spfifo03/init.c, spfifo04/init.c: Configure pipes
+	used.
+
+2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: New test for error cases in FIFO creation.
 	* spfifo08/.cvsignore, spfifo08/Makefile.am, spfifo08/init.c,
 	spfifo08/spfifo08.doc, spfifo08/spfifo08.scn: New files.

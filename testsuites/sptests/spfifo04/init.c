@@ -125,8 +125,8 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_PIPES_ENABLED
+#define CONFIGURE_MAXIMUM_PIPES 1
 #define CONFIGURE_INIT
-#define CONFIGURE_MAXIMUM_BARRIERS               2
 
 #include <rtems/confdefs.h>
 
