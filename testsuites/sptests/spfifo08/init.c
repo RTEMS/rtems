@@ -15,6 +15,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <errno.h>
 
 #define MAXIMUM 10
@@ -31,6 +32,7 @@ void create_all_barriers(void)
 
   BarrierCount = 0;
 
+  memset( Barriers, 0, sizeof(Barriers) );
   for ( i=0 ; i<MAXIMUM ; i++ ) {
     status = rtems_barrier_create(
       rtems_build_name( 'B', 'A', 'R', 0x30+i ),
@@ -39,7 +41,7 @@ void create_all_barriers(void)
       &Barriers[i]
     );
     if ( status == RTEMS_TOO_MANY ) {
-      printf( "%d Barriers created\n", BarrierCount );
+      printf( "%d Barriers created\n", BarrierCount+1 );
       return;
     } 
 
@@ -64,7 +66,7 @@ void create_all_semaphores(void)
       &Semaphores[i]
     );
     if ( status == RTEMS_TOO_MANY ) {
-      printf( "%d Semaphores created\n", SemaphoreCount );
+      printf( "%d Semaphores created\n", SemaphoreCount+1 );
       return;
     } 
 
@@ -77,7 +79,9 @@ void delete_barrier(void)
 {
   rtems_status_code status;
   
-  puts( "Deleting a barrier" );
+  BarrierCount--;
+  printf( "Deleting barrier id=0x%08x\n",
+    (unsigned int)Barriers[BarrierCount] );
   status = rtems_barrier_delete( Barriers[BarrierCount] );
   directive_failed( status, "barrier delete" );
 }
@@ -86,7 +90,9 @@ void delete_semaphore(void)
 {
   rtems_status_code status;
   
-  puts( "Deleting a semaphore" );
+  SemaphoreCount--;
+  printf( "Deleting semaphore id=0x%08x\n",
+    (unsigned int) Semaphores[SemaphoreCount] );
   status = rtems_semaphore_delete( Semaphores[SemaphoreCount] );
   directive_failed( status, "semaphore delete" );
 }
@@ -107,7 +113,7 @@ void open_fifo(int expected)
   printf( "status=%d errno=%d/(%s)\n", fd, errno, strerror(errno) );
   if ( expected ) {
     rtems_test_assert(fd == -1);
-    rtems_test_assert(errno == expected);
+    rtems_test_assert(errno == expected); 
   } else {
     rtems_test_assert(fd != -1);
     close( fd );
@@ -129,18 +135,29 @@ rtems_task Init(
   puts( "Creating FIFO" );
   create_fifo();
   
-  puts( "Opening FIFO.. expect ENOMEM (barrier - case 1)" );
-  open_fifo(ENOMEM);
+  puts( "Opening FIFO.. expect ENFILE (barrier - case 1)" );
+  open_fifo(ENFILE); /* XXX ENOMEM */
 
   delete_barrier();
-  puts( "Opening FIFO.. expect ENOMEM (barrier - case 2)" );
-  open_fifo(ENOMEM);
+  puts( "Opening FIFO.. expect ENFILE (barrier - case 2)" );
+  open_fifo(ENFILE); /* XXX ENOMEM */
 
   delete_barrier();
-  puts( "Opening FIFO.. expect ENOMEM (semaphore - case 1)" );
+  puts( "Opening FIFO.. expect ENFILE (semaphore - case 1)" );
+  open_fifo(ENFILE); /* XXX ENOMEM */
 
-  open_fifo(0);
+  delete_semaphore();
+  puts( "Opening FIFO.. expect ERROR ???" );
+  open_fifo(EINTR); /* XXX ENOMEM */
+
+  delete_semaphore();
+  puts( "Opening FIFO.. expect ENOSPC???" );
+  open_fifo(ENOMEM);
   
+  delete_semaphore();
+  puts( "Opening FIFO.. expect OK???" );
+  open_fifo(0);
+
   puts( "*** END OF TEST FIFO 08 ***" );
 
   rtems_test_exit(0);

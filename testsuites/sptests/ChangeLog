@@ -1,5 +1,10 @@
 2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* spfifo08/init.c: Catch more cases but discussion on errors and proper
+	behaviour remain.
+
+2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* spfifo02/init.c, spfifo03/init.c, spfifo04/init.c: Configure pipes
 	used.
 
