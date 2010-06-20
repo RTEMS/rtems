@@ -1,3 +1,8 @@
+2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Add parameters for FIFOs and pipes since
+	they are distinct to the user.
+
 2010-06-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* sapi/include/confdefs.h: Add CONFIGURE_MAXIMUM_FIFOS to account for

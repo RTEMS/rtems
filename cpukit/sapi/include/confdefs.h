@@ -288,11 +288,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  It should be called FIFOs not pipes
+ *  Internall it is called FIFOs not pipes
  */
 #if defined(CONFIGURE_PIPES_ENABLED)
   #define CONFIGURE_FIFOS_ENABLED
-  #warning "Use CONFIGURE_FIFOS_ENABLED not CONFIGURE_PIPES_ENABLED"
 #endif
 
 /**
@@ -313,11 +312,19 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  This sets up the resources for the PIPES/FIFOs
  */
 #if defined(CONFIGURE_FIFOS_ENABLED)
-  #if !defined(CONFIGURE_MAXIMUM_FIFOS)
-    #error "FIFOs enabled but no FIFOs configured."
+  #if !defined(CONFIGURE_MAXIMUM_FIFOS) && !defined(CONFIGURE_MAXIMUM_PIPES)
+     #error "No FIFOs or PIPES configured"
   #endif
-  #define CONFIGURE_BARRIERS_FOR_FIFOS   (2 * CONFIGURE_MAXIMUM_FIFOS)
-  #define CONFIGURE_SEMAPHORES_FOR_FIFOS (1 + CONFIGURE_MAXIMUM_FIFOS)
+  #if !defined(CONFIGURE_MAXIMUM_FIFOS)
+    #define CONFIGURE_MAXIMUM_FIFOS 0
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_PIPES)
+    #define CONFIGURE_MAXIMUM_PIPES 0
+  #endif
+  #define CONFIGURE_BARRIERS_FOR_FIFOS \
+    (2 * (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
+  #define CONFIGURE_SEMAPHORES_FOR_FIFOS \
+    (1 + (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
 #else
   #define CONFIGURE_BARRIERS_FOR_FIFOS   0
   #define CONFIGURE_SEMAPHORES_FOR_FIFOS 0
