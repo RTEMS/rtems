@@ -1,3 +1,8 @@
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/keycreate.c, posix/src/killinfo.c: Remove more ITRON
+	references.
+
 2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1581/cpukit

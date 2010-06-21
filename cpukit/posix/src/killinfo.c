@@ -184,7 +184,7 @@ int killinfo(
   for (the_api = OBJECTS_CLASSIC_API; the_api <= OBJECTS_APIS_LAST; the_api++) {
 
     /*
-     *  This can occur when no one is interested and ITRON is not configured.
+     *  This can occur when no one is interested and an API is not configured.
      */
     if ( !_Objects_Information_table[ the_api ] )
       continue;
