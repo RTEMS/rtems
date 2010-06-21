@@ -309,6 +309,45 @@ static inline uint32_t sd_card_max_access_time( const uint8_t *csd, uint32_t tra
 /** @} */
 
 /**
+ * @name CRC functions
+ *
+ * Based on http://en.wikipedia.org/wiki/Computation_of_CRC
+ *
+ * @{
+ */
+
+uint8_t sd_card_compute_crc7 (uint8_t *data, size_t len)
+{
+	uint8_t e, f, crc;
+	size_t i;
+
+	crc = 0;
+	for (i = 0; i < len; i++) {
+		e   = crc ^ data[i];
+		f   = e ^ (e >> 4) ^ (e >> 7);
+		crc = (f << 1) ^ (f << 4);
+	}
+	return crc >> 1;
+}
+
+uint16_t sd_card_compute_crc16 (uint8_t *data, size_t len)
+{
+	uint8_t s, t;
+	uint16_t crc;
+	size_t i;
+
+	crc = 0;
+	for (i = 0; i < len; i++) {
+		s = data[i] ^ (crc >> 8);
+		t = s ^ (s >> 4);
+		crc = (crc << 8) ^ t ^ (t << 5) ^ (t << 12);
+	}
+	return crc;
+}
+
+/** @} */
+
+/**
  * @name Communication Functions
  * @{
  */
@@ -354,6 +393,7 @@ static int sd_card_send_command( sd_card_driver_entry *e, uint32_t command, uint
 		.byte_cnt = SD_CARD_COMMAND_SIZE
 	};
 	int r = 0;
+	uint8_t crc7;
 
 	SD_CARD_INVALIDATE_RESPONSE_INDEX( e);
 
@@ -364,6 +404,8 @@ static int sd_card_send_command( sd_card_driver_entry *e, uint32_t command, uint
 	/* Write command and read response */
 	SD_CARD_COMMAND_SET_COMMAND( e->command, command);
 	SD_CARD_COMMAND_SET_ARGUMENT( e->command, argument);
+	crc7 = sd_card_compute_crc7( e->command + 1, 5);
+	SD_CARD_COMMAND_SET_CRC7( e->command, crc7);
 	rv = rtems_libi2c_ioctl( e->bus, RTEMS_LIBI2C_IOCTL_READ_WRITE, &rw);
 	RTEMS_CHECK_RV( rv, "Write command and read response");
 
@@ -404,6 +446,7 @@ sd_card_send_command_error:
 static int sd_card_send_register_command( sd_card_driver_entry *e, uint32_t command, uint32_t argument, uint32_t *reg)
 {
 	int rv = 0;
+	uint8_t crc7;
 
 	rv = sd_card_send_command( e, command, argument);
 	RTEMS_CHECK_RV( rv, "Send command");
@@ -414,6 +457,12 @@ static int sd_card_send_register_command( sd_card_driver_entry *e, uint32_t comm
 		 * more sophisticated response query.
 		 */
 		RTEMS_SYSLOG_ERROR( "Unexpected response position\n");
+		return -RTEMS_IO_ERROR;
+	}
+
+	crc7 = sd_card_compute_crc7( e->response + e->response_index, 5);
+	if (crc7 != SD_CARD_COMMAND_GET_CRC7( e->response + e->response_index)) {
+		RTEMS_SYSLOG_ERROR( "CRC check failed on register command\n");
 		return -RTEMS_IO_ERROR;
 	}
 
@@ -471,6 +520,9 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
 	/* Data input index */
 	int i = 0;
 
+	/* CRC check of data */
+	uint16_t crc16;
+
 	SD_CARD_INVALIDATE_RESPONSE_INDEX( e);
 
 	while (true) {
@@ -527,13 +579,21 @@ sd_card_read_start:
 	rv = sd_card_query( e, e->response, 3);
 	RTEMS_CHECK_RV( rv, "Read CRC 16");
 
+	crc16 = sd_card_compute_crc16 (in, n);
+	if ((e->response[0] != ((crc16 >> 8) & 0xff)) ||
+	    (e->response[1] != (crc16 & 0xff))) {
+		RTEMS_SYSLOG_ERROR( "CRC check failed on read\n");
+		return -RTEMS_IO_ERROR;
+	}
+
 	return i;
 }
 
 static int sd_card_write( sd_card_driver_entry *e, uint8_t start_token, uint8_t *out, int n)
 {
 	int rv = 0;
-	uint8_t crc16 [2] = { 0, 0 };
+	uint8_t crc16_bytes [2] = { 0, 0 };
+	uint16_t crc16;
 
 	/* Data output index */
 	int o = 0;
@@ -551,7 +611,10 @@ static int sd_card_write( sd_card_driver_entry *e, uint8_t start_token, uint8_t 
 	RTEMS_CHECK_RV( o, "Write data");
 
 	/* Write CRC 16 */
-	rv = rtems_libi2c_write_bytes( e->bus, crc16, 2);
+	crc16 = sd_card_compute_crc16(out, n);
+	crc16_bytes[0] = (crc16>>8) & 0xff;
+	crc16_bytes[1] = (crc16) & 0xff;
+	rv = rtems_libi2c_write_bytes( e->bus, crc16_bytes, 2);
 	RTEMS_CHECK_RV( rv, "Write CRC 16");
 
 	/* Read data response */
@@ -605,6 +668,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	uint32_t write_block_size = 0;
 	uint8_t csd_structure = 0;
 	uint64_t capacity = 0;
+	uint8_t crc7;
 
 	/* Assume first that we have a SD card and not a MMC card */
 	bool assume_sd = true;
@@ -671,12 +735,8 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	 * getting the High Capacity Support flag HCS and checks that the
 	 * voltage is right.  Some MMCs accept this command but will still fail
 	 * on ACMD41.  SD 1.x cards will fails this command and do not support
-	 * HCS (> 2G capacity).  SD spec requires the correct CRC7 be sent even
-	 * when in SPI mode.  So this will just change the default CRC7 and
-	 * keep it there for all subsequent commands (which just require a do
-	 * not care CRC byte).
+	 * HCS (> 2G capacity).
 	 */
-	SD_CARD_COMMAND_SET_CRC7( e->command, 0x43U);
 	rv = sd_card_send_register_command( e, SD_CARD_CMD_SEND_IF_COND, if_cond_reg, &if_cond_reg);
 
 	/*
@@ -840,6 +900,9 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		RTEMS_SYSLOG( "Product serial number    : %" PRIu32 "\n", SD_CARD_CID_GET_PSN( block));
 		RTEMS_SYSLOG( "Manufacturing date       : %" PRIu8 "\n", SD_CARD_CID_GET_MDT( block));
 		RTEMS_SYSLOG( "7-bit CRC checksum       : %" PRIu8 "\n",  SD_CARD_CID_GET_CRC7( block));
+		crc7 = sd_card_compute_crc7( block, 15);
+		if (crc7 != SD_CARD_CID_GET_CRC7( block))
+			RTEMS_SYSLOG( "  Failed! (computed %02" PRIx8 ")\n", crc7);
 	}
 
 	/* Card Specific Data */
@@ -850,6 +913,13 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, block, SD_CARD_CSD_SIZE);
 	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Read: SD_CARD_CMD_SEND_CSD");
 
+	crc7 = sd_card_compute_crc7( block, 15);
+	if (crc7 != SD_CARD_CID_GET_CRC7( block)) {
+		RTEMS_SYSLOG( "SD_CARD_CMD_SEND_CSD CRC failed\n");
+		sc = RTEMS_IO_ERROR;
+		goto sd_card_driver_init_cleanup;
+	}
+	
 	/* CSD Structure */
 	csd_structure = SD_CARD_CSD_GET_CSD_STRUCTURE( block);
 
