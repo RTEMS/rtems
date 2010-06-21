@@ -1,5 +1,9 @@
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp43/init.c: Remove more ITRON references.
+
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp09/screen01.c: Fix warning.
 
 2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -336,10 +336,6 @@ rtems_task Init(
      rtems_object_get_api_name(OBJECTS_INTERNAL_API) );
   printf( "rtems_object_get_api_name(CLASSIC_API) = %s\n",
      rtems_object_get_api_name(OBJECTS_CLASSIC_API) );
-#if 0
-  printf( "rtems_object_get_api_name(ITRON_API) = %s\n",
-     rtems_object_get_api_name(OBJECTS_ITRON_API) );
-#endif
 
   printf( "rtems_object_get_api_class_name(0, RTEMS_TASKS) = %s\n",
     rtems_object_get_api_class_name( 0, OBJECTS_RTEMS_TASKS ) );
