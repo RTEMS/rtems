@@ -24,7 +24,6 @@ RTEMS-specific option are supported:
 
       --disable-rtems-inlines
       --disable-posix
-      --disable-itron
       --disable-networking
       --enable-cxx
       --enable-bare-cpu-model=<MODEL>
@@ -46,9 +45,6 @@ Some APIs may not support macro versions of their inline routines.]
 
 By default, the RTEMS POSIX 1003.1b interface is built for targets that support
 it. It can be disabled with the --disable-posix option.
-
-By default, the RTEMS uITRON interface is built for targets that support
-it. It can be disabled with the --disable-itron option.
 
 By default, the RTEMS networking support is built for targets which
 support it.  It can be specifically disabled for those targets

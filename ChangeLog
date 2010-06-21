@@ -1,3 +1,7 @@
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.maint, README.configure: Remove more ITRON references.
+
 2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/enable-itron.m4: Remove.
