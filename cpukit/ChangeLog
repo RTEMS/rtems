@@ -1,3 +1,9 @@
+2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1581/cpukit
+	* libcsupport/include/rtems/malloc.h, sapi/include/confdefs.h: Remove
+	extra * on function pointer declaration.
+
 2010-06-21	Peter Dufault <dufault@hda.com>
 
 	PR 1570/cpukit
