@@ -1,3 +1,7 @@
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* README: Remove more ITRON references.
+
 2010-04-05	Thomas Znidar <t.znidar@embed-it.com>
 
 	* configure.ac: Add mcf5225x BSP.

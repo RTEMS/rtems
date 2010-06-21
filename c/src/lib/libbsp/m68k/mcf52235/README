@@ -18,9 +18,7 @@ Currently this BSP must be configured with most RTEMS features turned
 off as RAM usage is too high.
 
 Configure as follows:
-configure --target=m68k-rtems4.9 --enable-rtemsbsp=mcf52235 \
-          --disable-networking --disable-posix --disable-itron --disable-cxx \
-          --disable-tests
+configure --target=m68k-rtems4.XXX --enable-rtemsbsp=mcf52235 \
 
 To get the tests to compile (but not run) change the linkcmds to specify
 a larger sram memory region (256K works).  This of course will let you 

@@ -1,3 +1,7 @@
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* README: Remove more ITRON references.
+
 2010-05-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* include/bsp.h: Add BSP_SMALL_MEMORY.
