@@ -1,3 +1,7 @@
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen01.c: Fix warning.
+
 2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spfifo08/init.c: Catch more cases but discussion on errors and proper
