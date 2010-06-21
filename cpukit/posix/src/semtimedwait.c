@@ -76,10 +76,10 @@ int sem_timedwait(
   if ( !do_wait && (lock_status == EBUSY) ) {
     switch (lock_status) {
       case POSIX_ABSOLUTE_TIMEOUT_INVALID:
-        return EINVAL;
+        rtems_set_errno_and_return_minus_one( EINVAL );
       case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
       case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-        return ETIMEDOUT;
+        rtems_set_errno_and_return_minus_one( ETIMEDOUT );
       case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
         break;
     }
