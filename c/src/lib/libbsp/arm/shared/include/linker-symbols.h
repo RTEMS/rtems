@@ -102,6 +102,10 @@ LINKER_SYMBOL(bsp_section_stack_begin)
 LINKER_SYMBOL(bsp_section_stack_end)
 LINKER_SYMBOL(bsp_section_stack_size)
 
+LINKER_SYMBOL(bsp_vector_table_begin)
+LINKER_SYMBOL(bsp_vector_table_end)
+LINKER_SYMBOL(bsp_vector_table_size)
+
 /** @} */
 
 #ifdef __cplusplus

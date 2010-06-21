@@ -1,3 +1,9 @@
+2010-06-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/start/start.S, shared/startup/linkcmds.base,
+	shared/include/linker-symbols.h: Added and use bsp_vector_table_begin,
+	bsp_vector_table_size and bsp_vector_table_end.
+
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/start.h: Define start section attributes.

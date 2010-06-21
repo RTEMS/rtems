@@ -168,7 +168,7 @@ bsp_start_hook_0_done:
 	 * vectors and the pointers to the default exception handlers.
 	 */
 
-	ldr	r0, =bsp_section_vector_begin
+	ldr	r0, =bsp_vector_table_begin
 	adr	r1, vector_block
 	ldmia	r1!, {r2-r9}
 	stmia	r0!, {r2-r9}
