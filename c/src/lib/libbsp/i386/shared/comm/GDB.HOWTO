@@ -49,8 +49,6 @@ d) This is all you need to do for the target.
 
 =========================== example cmds ==============================
 /usr1/rtems/work/rtems/cpukit/ada
-/usr1/rtems/work/rtems/cpukit/itron/inline/rtems/itron
-/usr1/rtems/work/rtems/cpukit/itron/src
 /usr1/rtems/work/rtems/cpukit/libblock/src
 /usr1/rtems/work/rtems/cpukit/libcsupport/src
 /usr1/rtems/work/rtems/cpukit/libfs/src/dosfs

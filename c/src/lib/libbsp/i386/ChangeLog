@@ -1,3 +1,7 @@
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/comm/GDB.HOWTO: Remove more ITRON references.
+
 2010-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/irq/irq_asm.S: Fix capitalization.
