@@ -1,3 +1,7 @@
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* capture/capture.doc: Remove more ITRON references.
+
 2010-06-02 	Chris Johns <chrisj@rtems.org>
 
 	* iostream/init.cc: Remove the hack.

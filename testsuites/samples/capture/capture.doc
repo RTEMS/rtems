@@ -42,9 +42,9 @@ RTEMS is configured using the shell MSYS with this command:
  $ mkdir pc586
  $ cd pc586
  $ /c/rtems/src/rtems-4.7.0/configure --target=i386-rtems4.8 \
-           --enable-network --enable-posix --enable-itron \
+           --enable-network --enable-posix --enable-cxx\ 
            --enable-tests=samples --enable-maintainer-mode \
-           --enable-cxx --enable-rtems-bsp=pc586
+           --enable-rtemsbsp=pc586
  $ make all
 
 If you wish to use the Windows Command prompt open an RTEMS Command prompt
@@ -55,7 +55,7 @@ shell commands become:
  RTEMS(i386) C:\rtems\src> mkdir pc586
  RTEMS(i386) C:\rtems\src> cd pc586 
  RTEMS(i386) C:\rtems\src\pc586> sh /c/rtems/src/rtems-4.7.0/configure
- --target=i386-rtems4.7 --enable-network --enable-posix --enable-itron
+ --target=i386-rtems4.7 --enable-network --enable-posix
  --enable-tests=samples --enable-maintainer-mode --enable-cxx
  --enable-rtems-bsp=pc586
  RTEMS(i386) C:\rtems\src\pc586> make all
