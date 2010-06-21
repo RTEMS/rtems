@@ -95,11 +95,6 @@ const char *err = 0;
 		/* could use strerror but I'd rather avoid using this here */
 	break;
 
-  	case INTERNAL_ERROR_ITRON_API:
-		printk(" ITRON API\n");
-		/* conversion to string not implemented */
-	break;
-
 	default:
 		printk("  UNKNOWN (0x%x)\n",THESRC);
 	break;

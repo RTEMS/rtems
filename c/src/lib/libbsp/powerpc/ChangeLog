@@ -1,3 +1,8 @@
+2010-06-21	Peter Dufault <dufault@hda.com>
+
+	PR 1583/bsps
+	* shared/startup/panic.c: Remove reference to ITRON.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* shared/bootloader/em86.c, shared/bootloader/mm.c,
