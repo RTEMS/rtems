@@ -1,3 +1,10 @@
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: New test for barrier create, ident, and
+	delete.
+	* tm30/.cvsignore, tm30/Makefile.am, tm30/init.c, tm30/tm30.doc: New
+	files.
+
 2009-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tm20/task1.c: Use rtems_test_assert() consistently instead of system

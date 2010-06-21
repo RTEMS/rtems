@@ -61,5 +61,6 @@ tm26/Makefile
 tm27/Makefile
 tm28/Makefile
 tm29/Makefile
+tm30/Makefile
 ])
 AC_OUTPUT
