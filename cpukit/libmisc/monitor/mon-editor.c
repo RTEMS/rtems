@@ -428,7 +428,7 @@ rtems_monitor_line_editor (
               if ((pos < end) && (end < RTEMS_COMMAND_BUFFER_SIZE))
               {
                 int ch, bs;
-                for (ch = end + 1; ch > pos; ch--)
+                for (ch = end; ch > pos; ch--)
                   buffer[ch] = buffer[ch - 1];
                 fprintf(stdout,buffer + pos);
                 for (bs = 0; bs < (end - pos + 1); bs++)
