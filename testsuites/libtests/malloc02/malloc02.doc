@@ -22,3 +22,4 @@ concepts:
 
 + adding to the deferred free operation chain
 + processing the deferred free operation chain
++ enable the malloc dirty option

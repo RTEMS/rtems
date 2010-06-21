@@ -53,19 +53,10 @@ rtems_task Init(
   status = rtems_timer_fire_after( timer, 10, test_operation_from_isr, NULL );
   directive_failed( status, "timer_fire_after failed" );
 
-  /* XXX pick a delay method */
-#if 0
+  /* delay to let timer fire */
   status = rtems_task_wake_after( 20 );
-#else
-  {
-    rtems_interval        start;
-    rtems_interval        now;
-    start = rtems_clock_get_ticks_since_boot();
-    do {
-      now = rtems_clock_get_ticks_since_boot();
-    } while ( (now-start) < 100 );
-  }
-#endif
+  directive_failed( status, "timer_wake_after failed" );
+
   if ( !operation_performed_from_tsr ) {
     puts( "Operation from ISR did not get processed\n" );
     rtems_test_exit( 0 );
@@ -84,8 +75,9 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_MALLOC_DIRTY
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS             1
 #define CONFIGURE_MAXIMUM_TIMERS            1
 
