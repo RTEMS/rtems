@@ -71,7 +71,7 @@ tests="$args"
 if [ ! "$tests" ]
 then
      cd $logdir
-     set -- `ls -1 sp* mp??_? psx* itron* mp*_?_g 2>/dev/null | grep -v info`
+     set -- `ls -1 sp* mp??_? psx* mp*_?_g 2>/dev/null | grep -v info`
      cd ..
      tests="$*"
 fi
@@ -97,8 +97,6 @@ do
            tmp_scn_file=sptests/$t.scn;;
        psx*)
            tmp_scn_file=psxtests/$t.scn;;
-       itron*)
-           tmp_scn_file=itrontests/$t.scn;;
        *)
            fatal "unknown test $t";;
    esac
