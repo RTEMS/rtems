@@ -47,6 +47,7 @@ bspcmdline01/Makefile
 cpuuse/Makefile
 heapwalk/Makefile
 malloctest/Makefile
+malloc02/Makefile
 monitor/Makefile
 monitor02/Makefile
 putenvtest/Makefile
