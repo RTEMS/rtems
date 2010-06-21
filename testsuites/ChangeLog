@@ -1,3 +1,10 @@
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* support/include/test_support.h, support/src/tmtests_empty_function.c:
+	Add helper so it is easier to write a basic repeated operation
+	tmtest.
+	* support/src/tmtests_support.c: New file.
+
 2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove itron.

@@ -20,3 +20,10 @@ rtems_status_code benchmark_timer_empty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
+
+void benchmark_timer_empty_operation(
+  int    iteration,
+  void  *argument
+)
+{
+}

@@ -46,6 +46,31 @@ void rtems_test_spin_for_ticks(int ticks);
  */
 void rtems_test_spin_until_next_tick( void );
 
+/*********************************************************************/
+/*********************************************************************/
+/**************              TMTEST SUPPORT             **************/
+/*********************************************************************/
+/*********************************************************************/
+
+/*
+ *  Type of method used for timing operations
+ */
+typedef void (*rtems_time_test_method_t)(
+  int    iteration,
+  void  *argument
+);
+
+/*
+ *  Obtain baseline timing information for benchmark tests.
+ */
+void rtems_time_test_measure_operation(
+  const char               *description,
+  rtems_time_test_method_t  operation,
+  void                     *argument,
+  int                       iterations,
+  int                       overhead
+);
+
 #ifdef __cplusplus
 };
 #endif
