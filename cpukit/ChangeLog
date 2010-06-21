@@ -1,3 +1,9 @@
+2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1554/cpukit
+	Coverity Id 17
+	* libi2c/libi2c.c: Fix memory leak on error.
+
 2010-03-17	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/dosfs/msdos_create.c: Fix the date/time call order to
