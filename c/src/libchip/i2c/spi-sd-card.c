@@ -461,7 +461,8 @@ static int sd_card_send_register_command( sd_card_driver_entry *e, uint32_t comm
 	}
 
 	crc7 = sd_card_compute_crc7( e->response + e->response_index, 5);
-	if (crc7 != SD_CARD_COMMAND_GET_CRC7( e->response + e->response_index)) {
+	if (crc7 != SD_CARD_COMMAND_GET_CRC7( e->response + e->response_index) &&
+		SD_CARD_COMMAND_GET_CRC7( e->response + e->response_index) != 0x7f) {
 		RTEMS_SYSLOG_ERROR( "CRC check failed on register command\n");
 		return -RTEMS_IO_ERROR;
 	}
@@ -751,6 +752,9 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	} else {
 		cmd_arg = SD_CARD_FLAG_HCS;
 	}
+
+	/* Enable CRC */
+	sd_card_send_command( e, SD_CARD_CMD_CRC_ON_OFF, 1);
 
 	/* Initialize card */
 	while (true) {

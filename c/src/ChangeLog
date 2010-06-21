@@ -1,5 +1,10 @@
 2010-06-21	Arnout Vandecappelle <arnout@mind.be>
 
+	PR 1576/misc
+	* libchip/i2c/spi-sd-card.c: Enable CRC checks.
+
+2010-06-21	Arnout Vandecappelle <arnout@mind.be>
+
 	PR 1569/misc
 	* libchip/i2c/spi-sd-card.c: Added CRC checks.
 
