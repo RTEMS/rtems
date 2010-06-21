@@ -1,5 +1,12 @@
 2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	PR 1554/cpukit
+	Coverity Id 17
+	* libi2c/libi2c.c, score/src/objectextendinformation.c: Fix memory leak
+	on error.
+
+2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	PR 1559/misc
 	Coverity Id 16
 	* libmisc/monitor/mon-editor.c: Fix buffer overflow.

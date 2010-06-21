@@ -389,17 +389,23 @@ rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus)
   char tmp, *chpt;
   struct stat sbuf;
 
-  strcpy (nmcpy, name ? name : "/dev/i2c");
+  if (nmcpy == NULL) {
+    safe_printf ( DRVNM "No memory\n");
+    return -RTEMS_NO_MEMORY;
+  }
 
+  strcpy (nmcpy, name ? name : "/dev/i2c");
 
   /* check */
   if ('/' != *nmcpy) {
     safe_printf ( DRVNM "Bad name: must be an absolute path starting with '/'\n");
+    free( nmcpy );
     return -RTEMS_INVALID_NAME;
   }
   /* file must not exist */
   if (!stat (nmcpy, &sbuf)) {
     safe_printf ( DRVNM "Bad name: file exists already\n");
+    free( nmcpy );
     return -RTEMS_INVALID_NAME;
   }
 
@@ -412,6 +418,7 @@ rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus)
   if (i) {
     safe_printf ( DRVNM "Get %s status failed: %s\n",
              nmcpy, strerror(errno));
+    free( nmcpy );
     return -RTEMS_INVALID_NAME;
   }
   /* should be a directory since name terminates in '/' */
@@ -419,11 +426,13 @@ rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus)
 
   if (libmutex == RTEMS_ID_NONE) {
     safe_printf ( DRVNM "Library not initialized\n");
+    free( nmcpy );
     return -RTEMS_NOT_DEFINED;
   }
 
   if (bus == NULL || bus->size < sizeof (*bus)) {
     safe_printf ( DRVNM "No bus-ops or size too small -- misconfiguration?\n");
+    free( nmcpy );
     return -RTEMS_NOT_CONFIGURED;
   }
 
