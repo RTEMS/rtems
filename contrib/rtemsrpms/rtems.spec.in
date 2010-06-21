@@ -76,7 +76,6 @@ RTEMS Libraries for %{rtems_target}.
     --disable-multiprocessing \
     --enable-cxx \
     --enable-rdbg \
-    --enable-itron \
     --enable-posix \
     --enable-networking \
     --enable-tests=samples \
