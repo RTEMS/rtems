@@ -1,5 +1,9 @@
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: spfatal20 not ready.
+
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add new tests to generate fatal errors in
 	rtems_termios_open().
 	* spfatal16/.cvsignore, spfatal16/Makefile.am, spfatal16/spfatal16.doc,
