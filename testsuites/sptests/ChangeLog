@@ -1,3 +1,12 @@
+2010-06-22	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add new test to exercise path where using
+	unlimited object support you are about to allocate more objects than
+	can be represented in the Id. This test will NOT pass on targets with
+	insufficient RAM.
+	* sp71/.cvsignore, sp71/Makefile.am, sp71/init.c, sp71/sp71.doc,
+	sp71/sp71.scn: New files.
+
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: spfatal20 not ready.

@@ -1,0 +1,4 @@
+*** TEST 71 ***
+64000 ports created using 8000 per allocation -- need 65535
+Test case hit
+*** END OF TEST 71 ***
