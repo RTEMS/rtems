@@ -1,5 +1,18 @@
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Add new tests to generate fatal errors in
+	rtems_termios_open().
+	* spfatal16/.cvsignore, spfatal16/Makefile.am, spfatal16/spfatal16.doc,
+	spfatal16/spfatal16.scn, spfatal16/testcase.h, spfatal17/.cvsignore,
+	spfatal17/Makefile.am, spfatal17/spfatal17.doc,
+	spfatal17/spfatal17.scn, spfatal17/testcase.h, spfatal18/.cvsignore,
+	spfatal18/Makefile.am, spfatal18/spfatal18.doc,
+	spfatal18/spfatal18.scn, spfatal18/testcase.h, spfatal19/.cvsignore,
+	spfatal19/Makefile.am, spfatal19/spfatal19.doc,
+	spfatal19/spfatal19.scn, spfatal19/testcase.h: New files.
+
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, spfatal_support/init.c,
 	spfatal_support/system.h: Add new tests to generate fatal errors in
 	open_dev_console().
