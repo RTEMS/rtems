@@ -48,6 +48,7 @@ cpuuse/Makefile
 heapwalk/Makefile
 malloctest/Makefile
 malloc02/Makefile
+malloc03/Makefile
 monitor/Makefile
 monitor02/Makefile
 putenvtest/Makefile

@@ -1,0 +1,4 @@
+*** TEST MALLOC03 ***
+Attempt to free stack memory
+Program heap: free of bad pointer 2E2F0 -- range 2EA60 - 1000000 
+*** END OF TEST MALLOC03 ***
