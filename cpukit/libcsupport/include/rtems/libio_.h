@@ -148,13 +148,7 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
  *  Macro to free a node.
  */
 
-#define rtems_filesystem_freenode( _node ) \
-  do { \
-    if ( (_node)->ops )\
-      if ( (_node)->ops->freenod_h ) \
-        (*(_node)->ops->freenod_h)( (_node) ); \
-  } while (0)
-
+void rtems_filesystem_freenode( rtems_filesystem_location_info_t*  node );
 
 /*
  *  External structures

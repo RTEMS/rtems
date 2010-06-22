@@ -1,5 +1,11 @@
 2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
+	* libcsupport/Makefile.am, libcsupport/include/rtems/libio_.h: Moved
+	method to free a node from a define to an external method.
+	* libcsupport/src/freenode.c: New file.
+
+2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
 	* posix/src/nanosleep.c, posix/src/timersettime.c: Removed redundent
 	code and cleaned up error checking code.
 
