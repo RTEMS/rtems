@@ -373,6 +373,10 @@ static int sd_card_wait( sd_card_driver_entry *e)
 	   don't know if it is a write or read, assume write.
 	   FIXME should actually look at R2W_FACTOR for non-HC cards. */
 	int retries = e->n_ac_max * 25 / 10;
+	/* n_ac_max/100 is supposed to be the average waiting time. To
+	   approximate this, we start with waiting n_ac_max/250 and
+	   gradually increase the waiting time. */
+	int wait_time_bytes = (retries + 149) / 150;
 	while (e->busy) {
 		/* Query busy tokens */
 		rv = sd_card_query( e, e->response, n);
@@ -389,11 +393,16 @@ static int sd_card_wait( sd_card_driver_entry *e)
 		if (retries <= 0) {
 			return -RTEMS_TIMEOUT;
 		}
-		n = SD_CARD_COMMAND_SIZE;
 
 		if (e->schedule_if_busy) {
-			/* Invoke the scheduler */
-			rtems_task_wake_after( RTEMS_YIELD_PROCESSOR);
+			uint64_t wait_time_us = wait_time_bytes;
+			wait_time_us *= 8000000;
+			wait_time_us /= e->transfer_mode.baudrate;
+			rtems_task_wake_after( RTEMS_MICROSECONDS_TO_TICKS(wait_time_us));
+			retries -= wait_time_bytes;
+			wait_time_bytes = wait_time_bytes * 15 / 10;
+		} else {
+			n = SD_CARD_COMMAND_SIZE;
 		}
 	}
 	return 0;

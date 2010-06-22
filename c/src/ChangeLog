@@ -1,5 +1,11 @@
 2010-06-22	Arnout Vandecappelle <arnout@mind.be>
 
+	PR 1579/misc
+	* libchip/i2c/spi-sd-card.c: Gradually increasing sleep times when
+	waiting for write to finish.
+
+2010-06-22	Arnout Vandecappelle <arnout@mind.be>
+
 	PR 1567/misc
 	* libchip/i2c/spi-sd-card.h, libchip/i2c/spi-sd-card.c: Fixed
 	timeouts.
