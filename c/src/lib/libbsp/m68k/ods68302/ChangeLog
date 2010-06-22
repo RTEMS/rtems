@@ -1,3 +1,7 @@
+2010-06-22	Chris Johns <chrisj@rtems.org>
+
+	* startup/m68k-stub.c: PR 1539. Fix buffer overrun.
+	
 2010-04-30	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* include/bsp.h: Add BSP_SMALL_MEMORY.
