@@ -137,6 +137,12 @@ void test_adjtime(void)
   sc = adjtime( &delta, NULL );
   rtems_test_assert(  sc == 0 );
 
+  puts( "adjtime - delta of one second forward, olddelta=NULL" );
+  delta.tv_sec = 1;
+  delta.tv_usec = 0;
+  sc = adjtime( &delta, NULL );
+  rtems_test_assert(  sc == 0 );
+
   puts( "adjtime - delta of one second forward" );
   delta.tv_sec = 1;
   delta.tv_usec = 0;

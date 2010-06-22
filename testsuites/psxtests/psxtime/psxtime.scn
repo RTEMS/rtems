@@ -4,6 +4,7 @@ adjtime - NULL delta - EINVAL
 adjtime - delta out of range - EINVAL
 adjtime - delta too small - do nothing
 adjtime - delta too small - do nothing, olddelta=NULL
+adjtime - delta of one second forward, olddelta=NULL
 adjtime - delta of one second forward
 adjtime - delta of almost two seconds forward
 adjtime - delta of almost one second forward which bumps second
