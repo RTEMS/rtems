@@ -112,13 +112,13 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
     char *str = (char *) mt_entry + sizeof( *mt_entry );
 
     strcpy( str, filesystemtype );
-    str += filesystemtype_size;
     mt_entry->type = str;
+    str += filesystemtype_size;
 
     if ( source_or_null != NULL ) {
       strcpy( str, source_or_null );
-      str += source_size;
       mt_entry->dev = str;
+      str += source_size;
     }
 
     strcpy( str, target );
