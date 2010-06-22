@@ -1,3 +1,8 @@
+2010-06-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/mount.c: Fixed string assignment in mount entry
+	allocation.
+
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/keycreate.c, posix/src/killinfo.c: Remove more ITRON
