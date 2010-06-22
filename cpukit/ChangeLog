@@ -1,3 +1,8 @@
+2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* posix/src/nanosleep.c, posix/src/timersettime.c: Removed redundent
+	code and cleaned up error checking code.
+
 2010-06-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/src/mount.c: Fixed string assignment in mount entry

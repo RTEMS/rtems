@@ -42,12 +42,14 @@ int timer_settime(
   if ( !value )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  /* First, it verifies if the structure "value" is correct */
-  if ( ( value->it_value.tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) ||
-       ( value->it_value.tv_nsec < 0 ) ||
-       ( value->it_interval.tv_nsec >= TOD_NANOSECONDS_PER_SECOND) ||
-       ( value->it_interval.tv_nsec < 0 )) {
-    /* The number of nanoseconds is not correct */
+  /* 
+   * First, it verifies if the structure "value" is correct   
+   * if the number of nanoseconds is not correct return EINVAL
+   */
+  if ( !_Timespec_Is_valid( &(value->it_value) ) ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  if ( !_Timespec_Is_valid( &(value->it_interval) ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
