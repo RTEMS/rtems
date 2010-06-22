@@ -1086,11 +1086,25 @@ rtems_task Init(
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
+  /*
+   * Verify case where block is too large to calloc.
+   */
   p1 = calloc( 1, SIZE_MAX );
   if (p1) {
     printf("ERROR on attempt to calloc SIZE_MAX block expected failure.");
     free( p1 );
   }
+
+  /*
+   * Verify error case where malloc of size 0.
+   */
+  p1 = malloc( 0 );
+  if (p1) {
+    printf("ERROR on attempt to malloc size 0 block expected failure.");
+    free( p1 );
+  }
+
+
 
   test_heap_initialize();
   test_heap_block_allocate();
