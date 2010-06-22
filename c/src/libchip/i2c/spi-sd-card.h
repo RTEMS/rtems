@@ -52,7 +52,8 @@ extern "C" {
 	SD_CARD_IDLE_TOKEN \
 }
 
-#define SD_CARD_N_AC_MAX_DEFAULT 8
+/* Default speed = 400kbps, default timeout = 100ms, n_ac_max is in bytes */
+#define SD_CARD_N_AC_MAX_DEFAULT 5000
 
 typedef struct {
 	const char *device_name;

@@ -1,3 +1,9 @@
+2010-06-22	Arnout Vandecappelle <arnout@mind.be>
+
+	PR 1567/misc
+	* libchip/i2c/spi-sd-card.h, libchip/i2c/spi-sd-card.c: Fixed
+	timeouts.
+
 2010-06-21	Arnout Vandecappelle <arnout@mind.be>
 
 	PR 1576/misc

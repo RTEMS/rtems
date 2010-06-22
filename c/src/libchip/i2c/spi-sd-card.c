@@ -301,9 +301,16 @@ static inline uint32_t sd_card_access_time( const uint8_t *csd)
 static inline uint32_t sd_card_max_access_time( const uint8_t *csd, uint32_t transfer_speed)
 {
 	uint64_t ac = sd_card_access_time( csd);
+	uint32_t ac_100ms = transfer_speed / 80;
 	uint32_t n = SD_CARD_CSD_GET_NSAC( csd) * 100;
-	ac = (ac * transfer_speed) / 8000000000ULL;
-	return n + (uint32_t) ac;
+	/* ac is in ns, transfer_speed in bps, max_access_time in bytes.
+	   max_access_time is 100 times typical access time (taac+nsac) */
+	ac = ac * transfer_speed / 80000000;
+	ac = ac + 100*n;
+	if ((uint32_t)ac > ac_100ms)
+		return ac_100ms;
+	else
+		return (uint32_t)ac;
 }
 
 /** @} */
@@ -362,6 +369,10 @@ static int sd_card_wait( sd_card_driver_entry *e)
 	int rv = 0;
 	int r = 0;
 	int n = 2;
+	/* For writes, the timeout is 2.5 times that of reads; since we
+	   don't know if it is a write or read, assume write.
+	   FIXME should actually look at R2W_FACTOR for non-HC cards. */
+	int retries = e->n_ac_max * 25 / 10;
 	while (e->busy) {
 		/* Query busy tokens */
 		rv = sd_card_query( e, e->response, n);
@@ -373,6 +384,10 @@ static int sd_card_wait( sd_card_driver_entry *e)
 				e->busy = false;
 				return 0;
 			}
+		}
+		retries -= n;
+		if (retries <= 0) {
+			return -RTEMS_TIMEOUT;
 		}
 		n = SD_CARD_COMMAND_SIZE;
 
@@ -957,6 +972,9 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		capacity = (c_size + 1) * 512 * 1024;
 		read_block_size = 512;
 		write_block_size = 512;
+
+		/* Timeout is fixed at 100ms in CSD Version 2.0 */
+		e->n_ac_max = transfer_speed / 80;
 	} else {
 		RTEMS_DO_CLEANUP_SC( RTEMS_IO_ERROR, sc, sd_card_driver_init_cleanup, "Unexpected CSD Structure number");
 	}
@@ -967,6 +985,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		RTEMS_SYSLOG( "CSD structure            : %" PRIu8 "\n", SD_CARD_CSD_GET_CSD_STRUCTURE( block));
 		RTEMS_SYSLOG( "Spec version             : %" PRIu8 "\n", SD_CARD_CSD_GET_SPEC_VERS( block));
 		RTEMS_SYSLOG( "Access time [ns]         : %" PRIu32 "\n", sd_card_access_time( block));
+		RTEMS_SYSLOG( "Access time [N]          : %" PRIu32 "\n", SD_CARD_CSD_GET_NSAC( block)*100);
 		RTEMS_SYSLOG( "Max access time [N]      : %" PRIu32 "\n", e->n_ac_max);
 		RTEMS_SYSLOG( "Max read block size [B]  : %" PRIu32 "\n", read_block_size);
 		RTEMS_SYSLOG( "Max write block size [B] : %" PRIu32 "\n", write_block_size);
@@ -1206,14 +1225,14 @@ static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
 			case RTEMS_BLKDEV_REQ_WRITE:
 				return sd_card_disk_block_write( e, r);
 			default:
-                                errno = EINVAL;
+				errno = EINVAL;
 				return -1;
 		}
 	} else if (req == RTEMS_BLKIO_CAPABILITIES) {
 		*(uint32_t *) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
 		return 0;
 	} else {
-                errno = EINVAL;
+		errno = EINVAL;
 		return -1;
 	}
 }
