@@ -1,3 +1,7 @@
+2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* malloctest/init.c: Added test to check failure branch on calloc.
+
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloc02/init.c, malloc02/malloc02.doc: Enable malloc dirty helper.

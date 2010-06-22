@@ -1076,6 +1076,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  void             *p1;
   rtems_time_of_day time;
   rtems_status_code status;
 
@@ -1084,6 +1085,12 @@ rtems_task Init(
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
+
+  p1 = calloc( 1, SIZE_MAX );
+  if (p1) {
+    printf("ERROR on attempt to calloc SIZE_MAX block expected failure.");
+    free( p1 );
+  }
 
   test_heap_initialize();
   test_heap_block_allocate();
