@@ -1,0 +1,5 @@
+*** TEST FATAL 15 ***
+Fatal error (fail to open stderr) NOT hit
+[joel@localhost spfatal15]$ make clean all >/dev/null && sis -i *.exe
+sparc-rtems4.11-run is /opt/rtems-4.11/bin/sparc-rtems4.11-run
+Fatal error (fail to open stderr) hit

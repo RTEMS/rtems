@@ -45,6 +45,15 @@ void force_error(void);
 
 /* need some prototypes for test cases */
 
+rtems_device_driver consume_semaphores_initialize(
+  rtems_device_major_number major __attribute__((unused)),
+  rtems_device_minor_number minor __attribute__((unused)),
+  void *pargp __attribute__((unused))
+);
+
+#define CONSUME_SEMAPHORE_DRIVERS \
+  { consume_semaphores_initialize, NULL, NULL, NULL, NULL, NULL }
+
 #include "testcase.h"
 
 /* configuration information */

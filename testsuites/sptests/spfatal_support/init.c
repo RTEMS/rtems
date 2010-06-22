@@ -102,7 +102,7 @@ void Put_Error( uint32_t source, uint32_t error )
   }
   else if (source == INTERNAL_ERROR_RTEMS_API ){
     if (error >  RTEMS_NOT_IMPLEMENTED )
-      printk("Unknown Internal Rtems Error (%d)", error);
+      printk("Unknown Internal Rtems Error (0x%08x)", error);
     else
       printk( Errors_Rtems[ error ] );
   }
