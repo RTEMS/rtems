@@ -1,3 +1,8 @@
+2010-06-22	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* stackchk/blow.c, stackchk/stackchk.scn: Print a stack check report
+	before blowing stack.
+
 2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* Makefile.am, configure.ac: Added test that attempts to free stack

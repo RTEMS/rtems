@@ -5,6 +5,13 @@ TA3  - rtems_clock_get_tod - 09:00:00   12/31/1988
 TA1  - rtems_clock_get_tod - 09:00:05   12/31/1988
 TA1  - rtems_clock_get_tod - 09:00:10   12/31/1988
 TA2  - rtems_clock_get_tod - 09:00:10   12/31/1988
+Stack usage by thread
+    ID      NAME    LOW          HIGH     CURRENT     AVAILABLE     USED
+0x09010001  IDLE 0002022AE0 - 0002023AEF 00020238B0      4096        592
+0x0A010002  TA1  0002025630 - 000202863F 0002028420     12288       2752
+0x0A010003  TA2  0002028BD8 - 000202BBE7 000202B9C0     12288       2856
+0x0A010004  TA3  000202C180 - 000202F18F 000202EF70     12288       2752
+0xFFFFFFFF  INTR 0002020200 - 00020211FF 0000000000      4080        792
 TA1  - rtems_clock_get_tod - 09:00:15   12/31/1988
 BLOWN STACK!!!
 task control block: 0x????????

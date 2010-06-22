@@ -14,6 +14,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/stackchk.h>
 
 void b(void) {}
 
@@ -28,22 +29,22 @@ b();
    *  does not cause problems :)
    */
 
- area = (unsigned char *)_Thread_Executing->Start.Initial_stack.area;
+  area = (unsigned char *)_Thread_Executing->Start.Initial_stack.area;
 
- /* Look in the stack checker implementation for this magic offset */
- low  = (volatile uint32_t   *) (area + sizeof(Heap_Block) - HEAP_BLOCK_HEADER_SIZE);
- high = (volatile uint32_t   *)
-            (area + _Thread_Executing->Start.Initial_stack.size - 16);
+  /* Look in the stack checker implementation for this magic offset */
+  low  = (volatile uint32_t *) \
+     (area + sizeof(Heap_Block) - HEAP_BLOCK_HEADER_SIZE);
+  high = (volatile uint32_t *)
+             (area + _Thread_Executing->Start.Initial_stack.size - 16);
 
+  low[0] = 0x11111111;
+  low[1] = 0x22222222;
+  low[2] = 0x33333333;
+  low[3] = 0x44444444;
 
- low[0] = 0x11111111;
- low[1] = 0x22222222;
- low[2] = 0x33333333;
- low[3] = 0x44444444;
-
- high[0] = 0x55555555;
- high[1] = 0x66666666;
- high[2] = 0x77777777;
- high[3] = 0x88888888;
-
+  high[0] = 0x55555555;
+  high[1] = 0x66666666;
+  high[2] = 0x77777777;
+  high[3] = 0x88888888;
+  rtems_stack_checker_report_usage();
 }
