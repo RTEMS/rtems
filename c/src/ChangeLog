@@ -1,5 +1,11 @@
 2010-06-22	Arnout Vandecappelle <arnout@mind.be>
 
+	PR 1580/misc
+	* libchip/i2c/spi-sd-card.c: Use bigger chunks and yield processor
+	while waiting for read data.
+
+2010-06-22	Arnout Vandecappelle <arnout@mind.be>
+
 	PR 1579/misc
 	* libchip/i2c/spi-sd-card.c: Gradually increasing sleep times when
 	waiting for write to finish.

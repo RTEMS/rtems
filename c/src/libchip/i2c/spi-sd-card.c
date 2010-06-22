@@ -374,7 +374,7 @@ static int sd_card_wait( sd_card_driver_entry *e)
 	   FIXME should actually look at R2W_FACTOR for non-HC cards. */
 	int retries = e->n_ac_max * 25 / 10;
 	/* n_ac_max/100 is supposed to be the average waiting time. To
-	   approximate this, we start with waiting n_ac_max/250 and
+	   approximate this, we start with waiting n_ac_max/150 and
 	   gradually increase the waiting time. */
 	int wait_time_bytes = (retries + 149) / 150;
 	while (e->busy) {
@@ -530,17 +530,14 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
 {
 	int rv = 0;
 
-	/* Access time idle tokens */
-	uint32_t n_ac = 1;
-
 	/* Discard command response */
 	int r = e->response_index + 1;
 
-	/* Minimum token number before data start */
-	int next_response_size = 2;
-
 	/* Standard response size */
 	int response_size = SD_CARD_COMMAND_SIZE;
+
+	/* Where the response is stored */
+	uint8_t *response = e->response;
 
 	/* Data input index */
 	int i = 0;
@@ -548,39 +545,50 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
 	/* CRC check of data */
 	uint16_t crc16;
 
+	/* Maximum number of tokens to read. */
+	int retries = e->n_ac_max;
+
 	SD_CARD_INVALIDATE_RESPONSE_INDEX( e);
 
 	while (true) {
 		RTEMS_DEBUG_PRINT( "Search from %u to %u\n", r, response_size - 1);
 
 		/* Search the data start token in in current response buffer */
+		retries -= (response_size - r);
 		while (r < response_size) {
-			RTEMS_DEBUG_PRINT( "Token [%02u]: 0x%02x\n", r, e->response [r]);
-			if (n_ac > e->n_ac_max) {
-				RTEMS_SYSLOG_ERROR( "Timeout\n");
-				return -RTEMS_IO_ERROR;
-			} else if (e->response [r] == start_token) {
+			RTEMS_DEBUG_PRINT( "Token [%02u]: 0x%02x\n", r, response [r]);
+			if (response [r] == start_token) {
 				/* Discard data start token */
 				++r;
 				goto sd_card_read_start;
-			} else if (SD_CARD_IS_DATA_ERROR( e->response [r])) {
-				RTEMS_SYSLOG_ERROR( "Data error token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
+			} else if (SD_CARD_IS_DATA_ERROR( response [r])) {
+				RTEMS_SYSLOG_ERROR( "Data error token [%02i]: 0x%02" PRIx8 "\n", r, response [r]);
 				return -RTEMS_IO_ERROR;
-			} else if (e->response [r] != SD_CARD_IDLE_TOKEN) {
-				RTEMS_SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
+			} else if (response [r] != SD_CARD_IDLE_TOKEN) {
+				RTEMS_SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, response [r]);
 				return -RTEMS_IO_ERROR;
 			}
-			++n_ac;
 			++r;
 		}
 
-		/* Query more */
-		rv = sd_card_query( e, e->response, next_response_size);
-		RTEMS_CHECK_RV( rv, "Query data start token");
+		if (retries <= 0) {
+			RTEMS_SYSLOG_ERROR( "Timeout\n");
+			return -RTEMS_IO_ERROR;
+		}
 
-		/* Set standard query size */
-		response_size = next_response_size;
-		next_response_size = SD_CARD_COMMAND_SIZE;
+		if (e->schedule_if_busy)
+			rtems_task_wake_after( RTEMS_YIELD_PROCESSOR);
+
+		/* Query more.  We typically have to wait between 10 and 100
+		   bytes.  To reduce overhead, read the response in chunks of
+		   50 bytes - this doesn't introduce too much copy overhead
+		   but does allow SPI DMA transfers to work efficiently. */
+		response = in;
+		response_size = 50;
+		if (response_size > n)
+			response_size = n;
+		rv = sd_card_query( e, response, response_size);
+		RTEMS_CHECK_RV( rv, "Query data start token");
 
 		/* Reset start position */
 		r = 0;
@@ -590,7 +598,7 @@ sd_card_read_start:
 
 	/* Read data */
 	while (r < response_size && i < n) {
-		in [i++] = e->response [r++];
+		in [i++] = response [r++];
 	}
 
 	/* Read more data? */
