@@ -1,3 +1,7 @@
+2010-06-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* psxfile02/psxfile02.doc: Filled in documentation information.
+
 2010-06-23	Jennifer Averett <Jennifer Averett@OARcorp.com>
 
 	* Makefile.am, configure.ac: Added test case for calls that check for

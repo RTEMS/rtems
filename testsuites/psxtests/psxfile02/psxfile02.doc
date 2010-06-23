@@ -15,8 +15,21 @@ test set name:  psxfile02
 
 directives:
 
-  XXX list them
+  mkdir
+  open
+  close
+  ftruncate
+  _fcntl_r
+  fdatasync
+  fstat
+  fsync
+  ioctl
+  _lseek_r 
+  readv
+  writev
+  write
 
 concepts:
 
-+ XXX list them
++ Verify failure when a previously opened, but now closed file descriptor is passed in.
+
