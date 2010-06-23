@@ -102,7 +102,6 @@ static int pipe_alloc(
   if (! pipe->Buffer)
     goto err_buf;
 
-  err = -EINTR;
   if (rtems_barrier_create(
         rtems_build_name ('P', 'I', 'r', c),
         RTEMS_BARRIER_MANUAL_RELEASE, 0,
