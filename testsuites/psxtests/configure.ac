@@ -96,7 +96,6 @@ psxitimer/Makefile
 psxkey01/Makefile
 psxkey02/Makefile
 psxkey03/Makefile
-psxload01/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
 psxmsgq02/Makefile
