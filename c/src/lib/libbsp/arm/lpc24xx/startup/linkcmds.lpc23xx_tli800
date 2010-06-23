@@ -1,29 +1,31 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_linker_lpc2362
+ * @ingroup lpc24xx_linker_lpc23xx_tli800
  *
  * @brief Memory map.
  */
 
 /**
- * @defgroup lpc24xx_linker_lpc2362 LPC2362 Memory Map
+ * @defgroup lpc24xx_linker_lpc23xx_tli800 TLI800 Memory Map
  *
  * @ingroup bsp_linker
  *
- * @brief LPC2362 memory map.
+ * @brief TLI800 memory map.
  *
  * <table>
  *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
  *   <tr><td>RAM_INT</td><td>0x40000000</td><td>32k</td></tr>
  *   <tr><td>RAM_USB</td><td>0x7fd00000</td><td>8k</td></tr>
  *   <tr><td>RAM_ETH</td><td>0x7fe00000</td><td>16k</td></tr>
- *   <tr><td>ROM_INT</td><td>0x00000000</td><td>128k</td></tr>
+ *   <tr><td>ROM_BOOT</td><td>0x00000000</td><td>4k</td></tr>
+ *   <tr><td>ROM_CFG</td><td>0x00001000</td><td>4k</td></tr>
+ *   <tr><td>ROM_INT</td><td>0x00002000</td><td>120k</td></tr>
  * </table>
  *
  * <table>
  *   <tr><th>Section Name</th><th>Section Runtime Region</th><th>Section Load Region</th></tr>
- *   <tr><td>.start</td><td>ROM_INT</td><td></td></tr>
+ *   <tr><td>.start</td><td>ROM_BOOT</td><td></td></tr>
  *   <tr><td>.text</td><td>ROM_INT</td><td>ROM_INT</td></tr>
  *   <tr><td>.rodata</td><td>ROM_INT</td><td>ROM_INT</td></tr>
  *   <tr><td>.data</td><td>RAM_INT</td><td>ROM_INT</td></tr>
@@ -38,11 +40,13 @@ MEMORY {
         RAM_INT (AIW) : ORIGIN = 0x40000000, LENGTH = 32k
         RAM_USB (AIW) : ORIGIN = 0x7fd00000, LENGTH = 8k
         RAM_ETH (AIW) : ORIGIN = 0x7fe00000, LENGTH = 16k
-        ROM_INT (RX)  : ORIGIN = 0x00000000, LENGTH = 128k
+        ROM_BOOT (RX) : ORIGIN = 0x00000000, LENGTH = 4k
+        ROM_CFG (RX)  : ORIGIN = 0x00001000, LENGTH = 4k
+        ROM_INT (RX)  : ORIGIN = 0x00002000, LENGTH = 120k
         NIRVANA : ORIGIN = 0, LENGTH = 0
 }
 
-REGION_ALIAS ("REGION_START", ROM_INT);
+REGION_ALIAS ("REGION_START", ROM_BOOT);
 REGION_ALIAS ("REGION_VECTOR", RAM_INT);
 REGION_ALIAS ("REGION_TEXT", ROM_INT);
 REGION_ALIAS ("REGION_TEXT_LOAD", ROM_INT);

@@ -1,3 +1,11 @@
+2010-06-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/lpc23xx_tli800.cfg, startup/linkcmds.lpc23xx_tli800: New
+	files.
+	* Makefile.am, configure.ac: Reflect changes above.
+	* startup/linkcmds.lpc2362: Typos.
+	* README: Documentation.
+
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/bspstarthooks.c: Removed start section attribute defines.

@@ -44,3 +44,8 @@ Application Board: NCS (Nurse Control Station)
 	Ext. Flash: 1MByte, 16 bit wide
 	Console:    UART, 115200 Baud
 	Network:    100Base-T
+
+Application Board: TLI800
+	TLI800 is a network node using four serial ports produced by Thorn
+	Security Limited.  It is used by Tyco Safty Products for a fire control
+	network.
