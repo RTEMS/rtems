@@ -24,6 +24,8 @@ OUTPUT_ARCH (arm)
 
 ENTRY (start)
 
+bsp_vector_table_size = 64;
+
 /*
  * BSP: Global symbols that may be defined externally
  */
@@ -58,8 +60,6 @@ bsp_stack_svc_size = ALIGN (bsp_stack_svc_size, bsp_stack_align);
 bsp_stack_und_size = DEFINED (bsp_stack_und_size) ? bsp_stack_und_size : 128;
 bsp_stack_und_size = ALIGN (bsp_stack_und_size, bsp_stack_align);
 
-bsp_vector_table_size = DEFINED (bsp_vector_table_size) ? bsp_vector_table_size : 64;
-
 SECTIONS {
 	.start : {
 		/*
@@ -93,7 +93,7 @@ SECTIONS {
 		 * BSP: Reserve space for the the exception vector table and
 		 * the pointers to the default exceptions handlers.
 		 */
-		. = . + bsp_vector_table_size;
+		. = . + DEFINED (bsp_vector_table_in_start_section) ? 0 : bsp_vector_table_size;
 
 		/*
 		 * BSP: Reserve space for mode stacks
@@ -136,12 +136,12 @@ SECTIONS {
 
 	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
 
-	bsp_vector_table_begin = bsp_vector_table_size != 0 ? bsp_section_vector_begin : bsp_section_start_begin;
+	bsp_vector_table_begin = DEFINED (bsp_vector_table_in_start_section) ? bsp_section_start_begin : bsp_section_vector_begin;
 	bsp_vector_table_end = bsp_vector_table_begin + bsp_vector_table_size;
 
 	.vbarrier : {
 		. = ALIGN (bsp_section_vbarrier_align);
-        } > REGION_VECTOR
+	} > REGION_VECTOR
 
 	.text : {
 		/*
@@ -234,7 +234,7 @@ SECTIONS {
 
 	.robarrier : {
 		. = ALIGN (bsp_section_robarrier_align);
-        } > REGION_RODATA
+	} > REGION_RODATA
 
 	.data : {
 		/*
