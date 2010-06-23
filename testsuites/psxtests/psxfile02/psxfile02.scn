@@ -1,0 +1,26 @@
+*** PSXFILE02 TEST  ***
+mkdir /tmp
+open /tmp/j
+open returned file descriptor 3
+close /tmp/j
+ftruncate an unopened file
+9: Bad file number
+_fcntl_r unopened file
+9: Bad file number
+fdatasync unopened file
+9: Bad file number
+fstat unopened file
+9: Bad file number
+fsync unopened file
+9: Bad file number
+ioctl unopened file
+9: Bad file number
+_lseek_r unopened file
+9: Bad file number
+readv unopened file
+9: Bad file number
+writev unopened file
+9: Bad file number
+write unopened file
+9: Bad file number
+*** END OF PSXFILE02 TEST  ***

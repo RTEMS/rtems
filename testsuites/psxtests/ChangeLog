@@ -1,3 +1,10 @@
+2010-06-23	Jennifer Averett <Jennifer Averett@OARcorp.com>
+
+	* Makefile.am, configure.ac: Added test case for calls that check for
+	an unopened file descriptor.
+	* psxfile02/.cvsignore, psxfile02/Makefile.am, psxfile02/init.c,
+	psxfile02/psxfile02.doc, psxfile02/psxfile02.scn: New files.
+
 2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* psxtime/psxtime.scn, psxtime/test.c: Add a normal case with second

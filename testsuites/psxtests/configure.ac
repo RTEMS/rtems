@@ -87,6 +87,7 @@ psxenosys/Makefile
 psxfatal01/Makefile
 psxfatal02/Makefile
 psxfile01/Makefile
+psxfile02/Makefile
 psxhdrs/Makefile
 psxintrcritical01/Makefile
 psxitimer/Makefile
