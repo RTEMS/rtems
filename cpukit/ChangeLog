@@ -1,3 +1,7 @@
+2010-06-23	Chris Johns <chrisj@rtems.org>
+
+	* rtems/Makefile.am: Remove the stray 'c' file.
+
 2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1581/cpukit
