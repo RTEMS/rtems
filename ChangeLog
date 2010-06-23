@@ -1,3 +1,7 @@
+2010-06-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: autoconf >= 2.65, automake >= 1.11.
+
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.maint, README.configure: Remove more ITRON references.
