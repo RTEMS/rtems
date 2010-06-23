@@ -1,5 +1,17 @@
 2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* block01/Makefile.am, block02/Makefile.am, block03/Makefile.am,
+	block04/Makefile.am, block05/Makefile.am, block06/Makefile.am,
+	block07/Makefile.am, block08/Makefile.am, block09/Makefile.am,
+	block10/Makefile.am, bspcmdline01/Makefile.am, cpuuse/Makefile.am,
+	heapwalk/Makefile.am, malloctest/Makefile.am, monitor/Makefile.am,
+	monitor02/Makefile.am, putenvtest/Makefile.am, rtems++/Makefile.am,
+	rtmonuse/Makefile.am, stackchk/Makefile.am, stackchk01/Makefile.am,
+	stringto01/Makefile.am, termios/Makefile.am, termios01/Makefile.am,
+	termios02/Makefile.am: Revert.
+
+2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* termios01/termios01.scn: Fix bug so existing test code for
 	rtems_termios_baud_to_index() is executed.
 
