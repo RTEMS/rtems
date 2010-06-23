@@ -1,5 +1,34 @@
 2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,
+	psx04/Makefile.am, psx05/Makefile.am, psx06/Makefile.am,
+	psx07/Makefile.am, psx08/Makefile.am, psx09/Makefile.am,
+	psx10/Makefile.am, psx11/Makefile.am, psx12/Makefile.am,
+	psx13/Makefile.am, psx14/Makefile.am, psxalarm01/Makefile.am,
+	psxautoinit01/Makefile.am, psxautoinit02/Makefile.am,
+	psxbarrier01/Makefile.am, psxcancel/Makefile.am,
+	psxcancel01/Makefile.am, psxchroot01/Makefile.am,
+	psxcleanup/Makefile.am, psxcleanup01/Makefile.am,
+	psxclock/Makefile.am, psxcond01/Makefile.am, psxenosys/Makefile.am,
+	psxfatal01/Makefile.am, psxfatal02/Makefile.am,
+	psxfile01/Makefile.am, psxintrcritical01/Makefile.am,
+	psxitimer/Makefile.am, psxkey01/Makefile.am, psxkey02/Makefile.am,
+	psxkey03/Makefile.am, psxmount/Makefile.am, psxmsgq01/Makefile.am,
+	psxmsgq02/Makefile.am, psxmsgq03/Makefile.am, psxmsgq04/Makefile.am,
+	psxmutexattr01/Makefile.am, psxobj01/Makefile.am,
+	psxpasswd01/Makefile.am, psxrdwrv/Makefile.am,
+	psxreaddir/Makefile.am, psxrwlock01/Makefile.am,
+	psxsem01/Makefile.am, psxsignal01/Makefile.am,
+	psxsignal02/Makefile.am, psxsignal03/Makefile.am,
+	psxsignal04/Makefile.am, psxsignal05/Makefile.am,
+	psxspin01/Makefile.am, psxspin02/Makefile.am, psxstack01/Makefile.am,
+	psxstat/Makefile.am, psxsysconf/Makefile.am, psxtime/Makefile.am,
+	psxtimer01/Makefile.am, psxtimer02/Makefile.am,
+	psxualarm/Makefile.am, psxusleep/Makefile.am: Revert accidentally
+	committed patch.
+
+2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* Makefile.am, configure.ac, psx01/Makefile.am, psx02/Makefile.am,
 	psx03/Makefile.am, psx04/Makefile.am, psx05/Makefile.am,
 	psx06/Makefile.am, psx07/Makefile.am, psx08/Makefile.am,
