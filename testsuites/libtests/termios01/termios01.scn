@@ -3,6 +3,26 @@
 Test termios_baud2index...
 termios_baud_to_index(-2) - NOT OK
 termios_baud_to_index(572) - NOT OK
+termios_baud_to_index(B0) - OK
+termios_baud_to_index(B50) - OK
+termios_baud_to_index(B75) - OK
+termios_baud_to_index(B110) - OK
+termios_baud_to_index(B134) - OK
+termios_baud_to_index(B150) - OK
+termios_baud_to_index(B200) - OK
+termios_baud_to_index(B300) - OK
+termios_baud_to_index(B600) - OK
+termios_baud_to_index(B1200) - OK
+termios_baud_to_index(B1800) - OK
+termios_baud_to_index(B2400) - OK
+termios_baud_to_index(B4800) - OK
+termios_baud_to_index(B9600) - OK
+termios_baud_to_index(B19200) - OK
+termios_baud_to_index(B38400) - OK
+termios_baud_to_index(B57600) - OK
+termios_baud_to_index(B115200) - OK
+termios_baud_to_index(B230400) - OK
+termios_baud_to_index(B460800) - OK
 
 Test termios_baud2number...
 termios_baud_to_number(-2) - NOT OK
