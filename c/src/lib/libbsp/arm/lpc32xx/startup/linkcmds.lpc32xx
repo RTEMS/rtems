@@ -1,0 +1,17 @@
+/**
+ * @file
+ *
+ * @ingroup lpc32xx_linker
+ *
+ * @brief Linker support.
+ */
+
+lpc32xx_translation_table_base = ORIGIN (RAM_MMU);
+
+lpc32xx = 0x20020000;
+
+lpc32xx_magic_zero_begin = 0x05000000;
+lpc32xx_magic_zero_end = 0x07000000;
+lpc32xx_magic_zero_size = lpc32xx_magic_zero_end - lpc32xx_magic_zero_end;
+
+INCLUDE linkcmds.base

@@ -27,21 +27,6 @@
 #include <bsp/stackalloc.h>
 #include <bsp/lpc32xx.h>
 
-static void lpc32xx_timer_initialize(void)
-{
-  volatile lpc_timer *timer = LPC32XX_STANDARD_TIMER;
-
-  LPC32XX_TIMCLK_CTRL1 = (1U << 2) | (1U << 3);
-
-  timer->tcr = LPC_TIMER_TCR_RST;
-  timer->ctcr = 0x0;
-  timer->pr = 0x0;
-  timer->ir = 0xff;
-  timer->mcr = 0x0;
-  timer->ccr = 0x0;
-  timer->tcr = LPC_TIMER_TCR_EN;
-}
-
 void bsp_start(void)
 {
   if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
@@ -52,6 +37,4 @@ void bsp_start(void)
     bsp_section_stack_begin,
     (uintptr_t) bsp_section_stack_size
   );
-
-  lpc32xx_timer_initialize();
 }

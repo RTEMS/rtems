@@ -42,7 +42,9 @@
   #define LPC32XX_MMU_CODE LPC32XX_MMU_READ_ONLY_CACHED
 #endif
 
-static void BSP_START_SECTION lpc32xx_clear_bss(void)
+LINKER_SYMBOL(lpc32xx_translation_table_base);
+
+static void BSP_START_SECTION clear_bss(void)
 {
   const int *end = (const int *) bsp_section_bss_end;
   int *out = (int *) bsp_section_bss_begin;
@@ -115,10 +117,14 @@ static void BSP_START_SECTION lpc32xx_clear_bss(void)
       .begin = 0x40000000U,
       .end = 0x40100000U,
       .flags = LPC32XX_MMU_READ_WRITE
+    }, {
+      .begin = (uint32_t) lpc32xx_magic_zero_begin,
+      .end = (uint32_t) lpc32xx_magic_zero_end,
+      .flags = LPC32XX_MMU_READ_WRITE_DATA
     }
   };
 
-  static void BSP_START_SECTION lpc32xx_mmu_set_entries(
+  static void BSP_START_SECTION set_translation_table_entries(
     uint32_t *ttb,
     const lpc32xx_mmu_config *config
   )
@@ -136,11 +142,11 @@ static void BSP_START_SECTION lpc32xx_clear_bss(void)
   }
 
   static void BSP_START_SECTION
-    lpc32xx_setup_translation_table_and_enable_mmu(uint32_t ctrl)
+    setup_translation_table_and_enable_mmu(uint32_t ctrl)
   {
     uint32_t const dac =
       ARM_CP15_DAC_DOMAIN(LPC32XX_MMU_CLIENT_DOMAIN, ARM_CP15_DAC_CLIENT);
-    uint32_t *const ttb = (uint32_t *) bsp_section_work_end;
+    uint32_t *const ttb = (uint32_t *) lpc32xx_translation_table_base;
     size_t const config_entry_count =
       sizeof(lpc32xx_mmu_config_table) / sizeof(lpc32xx_mmu_config_table [0]);
     size_t i = 0;
@@ -154,7 +160,7 @@ static void BSP_START_SECTION lpc32xx_clear_bss(void)
     }
 
     for (i = 0; i < config_entry_count; ++i) {
-      lpc32xx_mmu_set_entries(ttb, &lpc32xx_mmu_config_table [i]);
+      set_translation_table_entries(ttb, &lpc32xx_mmu_config_table [i]);
     }
 
     /* Enable MMU and cache */
@@ -163,7 +169,7 @@ static void BSP_START_SECTION lpc32xx_clear_bss(void)
   }
 #endif
 
-static void BSP_START_SECTION lpc32xx_mmu_and_cache_setup(void)
+static void BSP_START_SECTION setup_mmu_and_cache(void)
 {
   uint32_t ctrl = 0;
 
@@ -178,7 +184,7 @@ static void BSP_START_SECTION lpc32xx_mmu_and_cache_setup(void)
   arm_cp15_tlb_invalidate();
 
   #ifndef LPC32XX_DISABLE_MMU
-    lpc32xx_setup_translation_table_and_enable_mmu(ctrl);
+    setup_translation_table_and_enable_mmu(ctrl);
   #endif
 }
 
@@ -186,7 +192,7 @@ static void BSP_START_SECTION lpc32xx_mmu_and_cache_setup(void)
   #error "unexpected main oscillator frequency"
 #endif
 
-static void BSP_START_SECTION lpc32xx_pll_setup(void)
+static void BSP_START_SECTION setup_pll(void)
 {
   uint32_t pwr_ctrl = LPC32XX_PWR_CTRL;
 
@@ -207,11 +213,11 @@ static void BSP_START_SECTION lpc32xx_pll_setup(void)
 
 void BSP_START_SECTION bsp_start_hook_0(void)
 {
-  lpc32xx_pll_setup();
-  lpc32xx_mmu_and_cache_setup();
+  setup_pll();
+  setup_mmu_and_cache();
 }
 
-static void BSP_START_SECTION bsp_start_config_uarts(void)
+static void BSP_START_SECTION setup_uarts(void)
 {
   uint32_t uartclk_ctrl = 0;
 
@@ -246,9 +252,25 @@ static void BSP_START_SECTION bsp_start_config_uarts(void)
   #endif
 }
 
+static void BSP_START_SECTION setup_timer(void)
+{
+  volatile lpc_timer *timer = LPC32XX_STANDARD_TIMER;
+
+  LPC32XX_TIMCLK_CTRL1 = (1U << 2) | (1U << 3);
+
+  timer->tcr = LPC_TIMER_TCR_RST;
+  timer->ctcr = 0x0;
+  timer->pr = 0x0;
+  timer->ir = 0xff;
+  timer->mcr = 0x0;
+  timer->ccr = 0x0;
+  timer->tcr = LPC_TIMER_TCR_EN;
+}
+
 void BSP_START_SECTION bsp_start_hook_1(void)
 {
-  bsp_start_config_uarts();
+  setup_uarts();
+  setup_timer();
 
   /* Copy .text section */
   arm_cp15_instruction_cache_invalidate();
@@ -283,7 +305,7 @@ void BSP_START_SECTION bsp_start_hook_1(void)
   );
 
   /* Clear .bss section */
-  lpc32xx_clear_bss();
+  clear_bss();
 
   /* At this point we can use objects outside the .start section */
 }

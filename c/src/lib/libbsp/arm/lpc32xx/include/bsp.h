@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009
+ * Copyright (c) 2009, 2010
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -29,7 +29,6 @@
 #include <rtems/clockdrv.h>
 
 #include <bsp/lpc32xx.h>
-#include <bsp/lpc-timer.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -91,7 +90,7 @@ int lpc_eth_attach_detach(
  */
 void *lpc32xx_idle(uintptr_t ignored);
 
-#define LPC32XX_STANDARD_TIMER ((volatile lpc_timer *) LPC32XX_BASE_TIMER_1)
+#define LPC32XX_STANDARD_TIMER (&lpc32xx.timer_1)
 
 static inline unsigned lpc32xx_timer(void)
 {
@@ -100,7 +99,41 @@ static inline unsigned lpc32xx_timer(void)
   return timer->tc;
 }
 
-#define BSP_CONSOLE_UART_BASE 0x40090000
+static inline void lpc32xx_micro_seconds_delay(unsigned us)
+{
+  unsigned start = lpc32xx_timer();
+  unsigned end = start + us * (LPC32XX_PERIPH_CLK / 1000000);
+  unsigned now = 0;
+
+  do {
+    now = lpc32xx_timer();
+  } while (now < end);
+}
+
+void lpc32xx_restart(void *addr);
+
+#define BSP_CONSOLE_UART_BASE LPC32XX_BASE_UART_5
+
+/**
+ * @brief Begin of magic zero area.
+ *
+ * A read from this area returns zero.  Writes have no effect.
+ */
+extern uint32_t lpc32xx_magic_zero_begin [];
+
+/**
+ * @brief End of magic zero area.
+ *
+ * A read from this area returns zero.  Writes have no effect.
+ */
+extern uint32_t lpc32xx_magic_zero_end [];
+
+/**
+ * @brief Size of magic zero area.
+ *
+ * A read from this area returns zero.  Writes have no effect.
+ */
+extern uint32_t lpc32xx_magic_zero_size [];
 
 /** @} */
 

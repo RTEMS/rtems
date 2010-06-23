@@ -44,6 +44,10 @@ include_bsp_HEADERS += include/mmu.h
 include_bsp_HEADERS += include/lpc32xx.h
 include_bsp_HEADERS += include/lpc-clock-config.h
 include_bsp_HEADERS += include/lpc-ethernet-config.h
+include_bsp_HEADERS += include/nand-mlc.h
+include_bsp_HEADERS += include/boot.h
+include_bsp_HEADERS += include/i2c.h
+include_bsp_HEADERS += include/emc.h
 
 include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/cache.h \
 	../../../libcpu/arm/shared/include/arm-cp15.h
@@ -59,10 +63,13 @@ libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
+project_lib_DATA += startup/linkcmds.lpc32xx
 project_lib_DATA += ../shared/startup/linkcmds.base
 
 EXTRA_DIST = startup/linkcmds.lpc32xx_phycore \
-	startup/linkcmds.lpc32xx_mzx_boot_int
+	startup/linkcmds.lpc32xx_mzx_stage_1 \
+	startup/linkcmds.lpc32xx_mzx_stage_2 \
+	startup/linkcmds.lpc32xx_mzx
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -113,8 +120,15 @@ libbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c \
 libbsp_a_SOURCES += ../../shared/tod.c \
 	rtc/rtc-config.c
 
-# Timer
-libbsp_a_SOURCES += misc/timer.c
+# Misc
+libbsp_a_SOURCES += misc/timer.c \
+	misc/nand-mlc.c \
+	misc/nand-mlc-read-blocks.c \
+	misc/nand-mlc-write-blocks.c \
+	misc/restart.c \
+	misc/boot.c \
+	misc/emc.c \
+	misc/i2c.c
 
 # SSP
 

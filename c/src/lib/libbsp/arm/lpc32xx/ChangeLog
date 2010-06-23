@@ -1,3 +1,20 @@
+2010-06-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/lpc32xx_mzx_boot_int.cfg,
+	startup/linkcmds.lpc32xx_mzx_boot_int: Removed files.
+	* include/boot.h, include/emc.h, include/i2c.h, include/nand-mlc.h,
+	make/custom/lpc32xx_mzx.cfg, make/custom/lpc32xx_mzx_stage_1.cfg,
+	make/custom/lpc32xx_mzx_stage_2.cfg, misc/boot.c, misc/emc.c,
+	misc/i2c.c, misc/nand-mlc.c, misc/nand-mlc-read-blocks.c,
+	misc/nand-mlc-write-blocks.c, misc/restart.c,
+	startup/linkcmds.lpc32xx, startup/linkcmds.lpc32xx_mzx,
+	startup/linkcmds.lpc32xx_mzx_stage_1,
+	startup/linkcmds.lpc32xx_mzx_stage_2: New files.
+	* configure.ac, Makefile.am, preinstall.am: Reflect changes above.
+	* include/bsp.h, include/lpc32xx.h, irq/irq.c, rtc/rtc-config.c,
+	startup/bspstart.c, startup/bspstarthooks.c,
+	startup/linkcmds.lpc32xx_phycore: Changes throughout.
+
 2010-05-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac, include/bspopts.h.in: Added BSP_SMALL_MEMORY option.

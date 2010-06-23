@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009
+ * Copyright (c) 2009, 2010
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -25,6 +25,7 @@
 #include <stdint.h>
 
 #include <bsp/utility.h>
+#include <bsp/lpc-timer.h>
 
 /**
  * @defgroup lpc32xx_reg Register Definitions
@@ -164,41 +165,9 @@
 #define LPC32XX_KEYCLK_CTRL (*(volatile uint32_t *) 0x400040b0)
 #define LPC32XX_PWMCLK_CTRL (*(volatile uint32_t *) 0x400040b8)
 #define LPC32XX_UARTCLK_CTRL (*(volatile uint32_t *) 0x400040e4)
-#define LPC32XX_POS0_IRAM_CTRl (*(volatile uint32_t *) 0x40004110)
-#define LPC32XX_POS1_IRAM_CTRl (*(volatile uint32_t *) 0x40004114)
-
-/** @} */
-
-/**
- * @name GPIO Registers
- *
- * @{
- */
-
-#define LPC32XX_P0_INP_STATE (*(volatile uint32_t *) 0x40028040)
-#define LPC32XX_P0_OUTP_SET (*(volatile uint32_t *) 0x40028044)
-#define LPC32XX_P0_OUTP_CLR (*(volatile uint32_t *) 0x40028048)
-#define LPC32XX_P0_DIR_SET (*(volatile uint32_t *) 0x40028050)
-#define LPC32XX_P0_DIR_CLR (*(volatile uint32_t *) 0x40028054)
-#define LPC32XX_P0_DIR_STATE (*(volatile uint32_t *) 0x40028058)
-#define LPC32XX_P0_OUTP_STATE (*(volatile uint32_t *) 0x4002804c)
-#define LPC32XX_P1_INP_STATE (*(volatile uint32_t *) 0x40028060)
-#define LPC32XX_P1_OUTP_SET (*(volatile uint32_t *) 0x40028064)
-#define LPC32XX_P1_OUTP_CLR (*(volatile uint32_t *) 0x40028068)
-#define LPC32XX_P1_DIR_SET (*(volatile uint32_t *) 0x40028070)
-#define LPC32XX_P1_DIR_CLR (*(volatile uint32_t *) 0x40028074)
-#define LPC32XX_P1_DIR_STATE (*(volatile uint32_t *) 0x40028078)
-#define LPC32XX_P1_OUTP_STATE (*(volatile uint32_t *) 0x4002806c)
-#define LPC32XX_P2_INP_STATE (*(volatile uint32_t *) 0x4002801c)
-#define LPC32XX_P2_OUTP_SET (*(volatile uint32_t *) 0x40028020)
-#define LPC32XX_P2_OUTP_CLR (*(volatile uint32_t *) 0x40028024)
-#define LPC32XX_P2_DIR_SET (*(volatile uint32_t *) 0x40028010)
-#define LPC32XX_P2_DIR_CLR (*(volatile uint32_t *) 0x40028014)
-#define LPC32XX_P2_DIR_STATE (*(volatile uint32_t *) 0x40028018)
-#define LPC32XX_P3_INP_STATE (*(volatile uint32_t *) 0x40028000)
-#define LPC32XX_P3_OUTP_SET (*(volatile uint32_t *) 0x40028004)
-#define LPC32XX_P3_OUTP_CLR (*(volatile uint32_t *) 0x40028008)
-#define LPC32XX_P3_OUTP_STATE (*(volatile uint32_t *) 0x4002800c)
+#define LPC32XX_POS0_IRAM_CTRL (*(volatile uint32_t *) 0x40004110)
+#define LPC32XX_POS1_IRAM_CTRL (*(volatile uint32_t *) 0x40004114)
+#define LPC32XX_SDRAMCLK_CTRL (*(volatile uint32_t *) 0x40004068)
 
 /** @} */
 
@@ -249,6 +218,321 @@
 #define HCLK_DIV_DDRAM_CLK(val) FIELD32(val, 7, 8)
 
 /** @} */
+
+#define LPC32XX_RESERVED(a, b, s) (((b) - (a) - sizeof(s)) / 4)
+
+typedef struct {
+} lpc32xx_nand_slc;
+
+typedef struct {
+} lpc32xx_ssp;
+
+typedef struct {
+} lpc32xx_spi;
+
+typedef struct {
+} lpc32xx_i2s;
+
+typedef struct {
+} lpc32xx_sd_card;
+
+typedef struct {
+} lpc32xx_dma;
+
+typedef struct {
+} lpc32xx_usb;
+
+typedef struct {
+} lpc32xx_lcd;
+
+typedef struct {
+} lpc32xx_etb;
+
+typedef struct {
+} lpc32xx_syscon;
+
+typedef struct {
+} lpc32xx_uart_ctrl;
+
+typedef struct {
+} lpc32xx_uart;
+
+typedef struct {
+} lpc32xx_ms_timer;
+
+typedef struct {
+} lpc32xx_hs_timer;
+
+typedef struct {
+} lpc32xx_wdg_timer;
+
+typedef struct {
+} lpc32xx_debug;
+
+typedef struct {
+} lpc32xx_adc;
+
+typedef struct {
+} lpc32xx_keyscan;
+
+typedef struct {
+} lpc32xx_pwm;
+
+typedef struct {
+} lpc32xx_mcpwm;
+
+typedef struct {
+} lpc32xx_eth;
+
+typedef struct {
+  uint32_t er;
+  uint32_t rsr;
+  uint32_t sr;
+  uint32_t apr;
+  uint32_t atr;
+  uint32_t itr;
+} lpc32xx_irq;
+
+typedef struct {
+  uint32_t p3_inp_state;
+  uint32_t p3_outp_set;
+  uint32_t p3_outp_clr;
+  uint32_t p3_outp_state;
+  uint32_t p2_dir_set;
+  uint32_t p2_dir_clr;
+  uint32_t p2_dir_state;
+  uint32_t p2_inp_state;
+  uint32_t p2_outp_set;
+  uint32_t p2_outp_clr;
+  uint32_t reserved_0 [6];
+  uint32_t p0_inp_state;
+  uint32_t p0_outp_set;
+  uint32_t p0_outp_clr;
+  uint32_t p0_outp_state;
+  uint32_t p0_dir_set;
+  uint32_t p0_dir_clr;
+  uint32_t p0_dir_state;
+  uint32_t reserved_1 [1];
+  uint32_t p1_inp_state;
+  uint32_t p1_outp_set;
+  uint32_t p1_outp_clr;
+  uint32_t p1_outp_state;
+  uint32_t p1_dir_set;
+  uint32_t p1_dir_clr;
+  uint32_t p1_dir_state;
+} lpc32xx_gpio;
+
+typedef struct {
+  uint32_t rx_or_tx;
+  uint32_t stat;
+  uint32_t ctrl;
+  uint32_t clk_hi;
+  uint32_t clk_lo;
+  uint32_t adr;
+  uint32_t rxfl;
+  uint32_t txfl;
+  uint32_t rxb;
+  uint32_t txb;
+  uint32_t s_tx;
+  uint32_t s_txfl;
+} lpc32xx_i2c;
+
+typedef struct {
+  uint32_t ucount;
+  uint32_t dcount;
+  uint32_t match0;
+  uint32_t match1;
+  uint32_t ctrl;
+  uint32_t intstat;
+  uint32_t key;
+  uint32_t sram [32];
+} lpc32xx_rtc;
+
+#define EMC_DYN_CHIP_COUNT 2
+
+#define EMC_STATIC_CHIP_COUNT 4
+
+typedef struct {
+  uint32_t config;
+  uint32_t rascas;
+  uint32_t reserved_0 [6];
+} lpc32xx_emc_dynamic;
+
+typedef struct {
+  uint32_t config;
+  uint32_t waitwen;
+  uint32_t waitoen;
+  uint32_t waitrd;
+  uint32_t waitpage;
+  uint32_t waitwr;
+  uint32_t waitturn;
+  uint32_t reserved_0 [1];
+} lpc32xx_emc_static;
+
+typedef struct {
+  uint32_t control;
+  uint32_t status;
+  uint32_t timeout;
+  uint32_t reserved_0 [5];
+} lpc32xx_emc_ahb;
+
+typedef struct {
+  uint32_t control;
+  uint32_t status;
+  uint32_t config;
+  uint32_t reserved_0 [5];
+  uint32_t dynamiccontrol;
+  uint32_t dynamicrefresh;
+  uint32_t dynamicreadconfig;
+  uint32_t reserved_1;
+  uint32_t dynamictrp;
+  uint32_t dynamictras;
+  uint32_t dynamictsrex;
+  uint32_t reserved_2 [2];
+  uint32_t dynamictwr;
+  uint32_t dynamictrc;
+  uint32_t dynamictrfc;
+  uint32_t dynamictxsr;
+  uint32_t dynamictrrd;
+  uint32_t dynamictmrd;
+  uint32_t dynamictcdlr;
+  uint32_t reserved_3 [8];
+  uint32_t staticextendedwait;
+  uint32_t reserved_4 [31];
+  lpc32xx_emc_dynamic dynamic [EMC_DYN_CHIP_COUNT];
+  uint32_t reserved_5 [48];
+  lpc32xx_emc_static emcstatic [EMC_STATIC_CHIP_COUNT];
+  uint32_t reserved_6 [96];
+  lpc32xx_emc_ahb ahb [5];
+} lpc32xx_emc;
+
+typedef struct {
+  union {
+    uint32_t w32;
+    uint16_t w16;
+    uint8_t w8;
+  } buff;
+  uint32_t reserved_0 [8191];
+  union {
+    uint32_t w32;
+    uint16_t w16;
+    uint8_t w8;
+  } data;
+  uint32_t reserved_1 [8191];
+  uint32_t cmd;
+  uint32_t addr;
+  uint32_t ecc_enc;
+  uint32_t ecc_dec;
+  uint32_t ecc_auto_enc;
+  uint32_t ecc_auto_dec;
+  uint32_t rpr;
+  uint32_t wpr;
+  uint32_t rubp;
+  uint32_t robp;
+  uint32_t sw_wp_add_low;
+  uint32_t sw_wp_add_hig;
+  uint32_t icr;
+  uint32_t time;
+  uint32_t irq_mr;
+  uint32_t irq_sr;
+  uint32_t lock_pr;
+  uint32_t isr;
+  uint32_t ceh;
+} lpc32xx_nand_mlc;
+
+typedef struct {
+  lpc32xx_nand_slc nand_slc;
+  uint32_t reserved_0 [LPC32XX_RESERVED(0x20020000, 0x20084000, lpc32xx_nand_slc)];
+  lpc32xx_ssp ssp_0;
+  uint32_t reserved_1 [LPC32XX_RESERVED(0x20084000, 0x20088000, lpc32xx_ssp)]; 
+  lpc32xx_spi spi_1;
+  uint32_t reserved_2 [LPC32XX_RESERVED(0x20088000, 0x2008c000, lpc32xx_spi)];
+  lpc32xx_ssp ssp_1;
+  uint32_t reserved_3 [LPC32XX_RESERVED(0x2008c000, 0x20090000, lpc32xx_ssp)];
+  lpc32xx_spi spi_2;
+  uint32_t reserved_4 [LPC32XX_RESERVED(0x20090000, 0x20094000, lpc32xx_spi)];
+  lpc32xx_i2s i2s_0;
+  uint32_t reserved_5 [LPC32XX_RESERVED(0x20094000, 0x20098000, lpc32xx_i2s)];
+  lpc32xx_sd_card sd_card;
+  uint32_t reserved_6 [LPC32XX_RESERVED(0x20098000, 0x2009c000, lpc32xx_sd_card)];
+  lpc32xx_i2s i2s_1;
+  uint32_t reserved_7 [LPC32XX_RESERVED(0x2009c000, 0x200a8000, lpc32xx_i2s)];
+  lpc32xx_nand_mlc nand_mlc;
+  uint32_t reserved_8 [LPC32XX_RESERVED(0x200a8000, 0x31000000, lpc32xx_nand_mlc)];
+  lpc32xx_dma dma;
+  uint32_t reserved_9 [LPC32XX_RESERVED(0x31000000, 0x31020000, lpc32xx_dma)];
+  lpc32xx_usb usb;
+  uint32_t reserved_10 [LPC32XX_RESERVED(0x31020000, 0x31040000, lpc32xx_usb)];
+  lpc32xx_lcd lcd;
+  uint32_t reserved_11 [LPC32XX_RESERVED(0x31040000, 0x31060000, lpc32xx_lcd)];
+  lpc32xx_eth eth;
+  uint32_t reserved_12 [LPC32XX_RESERVED(0x31060000, 0x31080000, lpc32xx_eth)];
+  lpc32xx_emc emc;
+  uint32_t reserved_13 [LPC32XX_RESERVED(0x31080000, 0x310c0000, lpc32xx_emc)];
+  lpc32xx_etb etb;
+  uint32_t reserved_14 [LPC32XX_RESERVED(0x310c0000, 0x40004000, lpc32xx_etb)];
+  lpc32xx_syscon syscon;
+  uint32_t reserved_15 [LPC32XX_RESERVED(0x40004000, 0x40008000, lpc32xx_syscon)];
+  lpc32xx_irq mic;
+  uint32_t reserved_16 [LPC32XX_RESERVED(0x40008000, 0x4000c000, lpc32xx_irq)];
+  lpc32xx_irq sic_1;
+  uint32_t reserved_17 [LPC32XX_RESERVED(0x4000c000, 0x40010000, lpc32xx_irq)];
+  lpc32xx_irq sic_2;
+  uint32_t reserved_18 [LPC32XX_RESERVED(0x40010000, 0x40014000, lpc32xx_irq)];
+  lpc32xx_uart uart_1;
+  uint32_t reserved_19 [LPC32XX_RESERVED(0x40014000, 0x40018000, lpc32xx_uart)];
+  lpc32xx_uart uart_2;
+  uint32_t reserved_20 [LPC32XX_RESERVED(0x40018000, 0x4001c000, lpc32xx_uart)];
+  lpc32xx_uart uart_7;
+  uint32_t reserved_21 [LPC32XX_RESERVED(0x4001c000, 0x40024000, lpc32xx_uart)];
+  lpc32xx_rtc rtc;
+  uint32_t reserved_22 [LPC32XX_RESERVED(0x40024000, 0x40028000, lpc32xx_rtc)];
+  lpc32xx_gpio gpio;
+  uint32_t reserved_23 [LPC32XX_RESERVED(0x40028000, 0x4002c000, lpc32xx_gpio)];
+  lpc_timer timer_4;
+  uint32_t reserved_24 [LPC32XX_RESERVED(0x4002c000, 0x40030000, lpc_timer)];
+  lpc_timer timer_5;
+  uint32_t reserved_25 [LPC32XX_RESERVED(0x40030000, 0x40034000, lpc_timer)];
+  lpc32xx_ms_timer ms_timer;
+  uint32_t reserved_26 [LPC32XX_RESERVED(0x40034000, 0x40038000, lpc32xx_ms_timer)];
+  lpc32xx_hs_timer hs_timer;
+  uint32_t reserved_27 [LPC32XX_RESERVED(0x40038000, 0x4003c000, lpc32xx_hs_timer)];
+  lpc32xx_wdg_timer wdg_timer;
+  uint32_t reserved_28 [LPC32XX_RESERVED(0x4003c000, 0x40040000, lpc32xx_wdg_timer)];
+  lpc32xx_debug debug;
+  uint32_t reserved_29 [LPC32XX_RESERVED(0x40040000, 0x40044000, lpc32xx_debug)];
+  lpc_timer timer_0;
+  uint32_t reserved_30 [LPC32XX_RESERVED(0x40044000, 0x40048000, lpc_timer)];
+  lpc32xx_adc adc;
+  uint32_t reserved_31 [LPC32XX_RESERVED(0x40048000, 0x4004c000, lpc32xx_adc)];
+  lpc_timer timer_1;
+  uint32_t reserved_32 [LPC32XX_RESERVED(0x4004c000, 0x40050000, lpc_timer)];
+  lpc32xx_keyscan keyscan;
+  uint32_t reserved_33 [LPC32XX_RESERVED(0x40050000, 0x40054000, lpc32xx_keyscan)];
+  lpc32xx_uart_ctrl uart_ctrl;
+  uint32_t reserved_34 [LPC32XX_RESERVED(0x40054000, 0x40058000, lpc32xx_uart_ctrl)];
+  lpc_timer timer_2;
+  uint32_t reserved_35 [LPC32XX_RESERVED(0x40058000, 0x4005c000, lpc_timer)];
+  lpc32xx_pwm pwm_1_and_pwm_2;
+  uint32_t reserved_36 [LPC32XX_RESERVED(0x4005c000, 0x40060000, lpc32xx_pwm)];
+  lpc_timer timer3;
+  uint32_t reserved_37 [LPC32XX_RESERVED(0x40060000, 0x40080000, lpc_timer)];
+  lpc32xx_uart uart_3;
+  uint32_t reserved_38 [LPC32XX_RESERVED(0x40080000, 0x40088000, lpc32xx_uart)];
+  lpc32xx_uart uart_4;
+  uint32_t reserved_39 [LPC32XX_RESERVED(0x40088000, 0x40090000, lpc32xx_uart)];
+  lpc32xx_uart uart_5;
+  uint32_t reserved_40 [LPC32XX_RESERVED(0x40090000, 0x40098000, lpc32xx_uart)];
+  lpc32xx_uart uart_6;
+  uint32_t reserved_41 [LPC32XX_RESERVED(0x40098000, 0x400a0000, lpc32xx_uart)];
+  lpc32xx_i2c i2c_1;
+  uint32_t reserved_42 [LPC32XX_RESERVED(0x400a0000, 0x400a8000, lpc32xx_i2c)];
+  lpc32xx_i2c i2c_2;
+  uint32_t reserved_43 [LPC32XX_RESERVED(0x400a8000, 0x400e8000, lpc32xx_i2c)];
+  lpc32xx_mcpwm mcpwm;
+} lpc32xx_registers;
+
+extern volatile lpc32xx_registers lpc32xx;
 
 /** @} */
 

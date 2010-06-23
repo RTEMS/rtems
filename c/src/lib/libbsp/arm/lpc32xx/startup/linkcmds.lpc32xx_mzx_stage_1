@@ -1,21 +1,23 @@
 /**
  * @file
  *
- * @ingroup lpc32xx_linker_boot
+ * @ingroup lpc32xx_linker_mzx_stage_1
  *
  * @brief Memory map.
  */
 
 /**
- * @defgroup lpc32xx_linker_boot Boot Memory Map
+ * @defgroup lpc32xx_linker_mzx_stage_1 MZX Stage-1 Program Memory Map
  *
  * @ingroup bsp_linker
  *
- * @brief Boot memory map.
+ * @brief MZX stage-1 program memory map.
  *
  * <table>
  *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
- *   <tr><td>RAM_INT</td><td>0x08000000</td><td>256k</td></tr>
+ *   <tr><td>RAM_INT</td><td>0x08000000</td><td>232k</td></tr>
+ *   <tr><td>RAM_MMU</td><td>0x0803a000</td><td>16k</td></tr>
+ *   <tr><td>RAM_VEC</td><td>0x0803d000</td><td>8k</td></tr>
  * </table>
  *
  * <table>
@@ -33,12 +35,14 @@
  */
 
 MEMORY {
-        RAM_INT (AIW) : ORIGIN = 0x08000000, LENGTH = 256k
+        RAM_INT (AIW) : ORIGIN = 0x08000000, LENGTH = 232k
+        RAM_VEC (AIW) : ORIGIN = 0x0803a000, LENGTH = 8k
+        RAM_MMU (AIW) : ORIGIN = 0x0803c000, LENGTH = 16k
         NIRVANA : ORIGIN = 0, LENGTH = 0
 }
 
 REGION_ALIAS ("REGION_START", RAM_INT);
-REGION_ALIAS ("REGION_VECTOR", RAM_INT);
+REGION_ALIAS ("REGION_VECTOR", RAM_VEC);
 REGION_ALIAS ("REGION_TEXT", RAM_INT);
 REGION_ALIAS ("REGION_TEXT_LOAD", RAM_INT);
 REGION_ALIAS ("REGION_RODATA", RAM_INT);
@@ -51,7 +55,8 @@ REGION_ALIAS ("REGION_BSS", RAM_INT);
 REGION_ALIAS ("REGION_WORK", RAM_INT);
 REGION_ALIAS ("REGION_STACK", RAM_INT);
 
-bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
-bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
+bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 7296;
 
-INCLUDE linkcmds.base
+bsp_vector_table_in_start_section = 1;
+
+INCLUDE linkcmds.lpc32xx

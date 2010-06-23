@@ -122,6 +122,22 @@ $(PROJECT_INCLUDE)/bsp/lpc-ethernet-config.h: include/lpc-ethernet-config.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-ethernet-config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-ethernet-config.h
 
+$(PROJECT_INCLUDE)/bsp/nand-mlc.h: include/nand-mlc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/nand-mlc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/nand-mlc.h
+
+$(PROJECT_INCLUDE)/bsp/boot.h: include/boot.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/boot.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/boot.h
+
+$(PROJECT_INCLUDE)/bsp/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h
+
+$(PROJECT_INCLUDE)/bsp/emc.h: include/emc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/emc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/emc.h
+
 $(PROJECT_INCLUDE)/libcpu/cache.h: ../../../libcpu/arm/shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
@@ -137,6 +153,10 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+
+$(PROJECT_LIB)/linkcmds.lpc32xx: startup/linkcmds.lpc32xx $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.lpc32xx
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.lpc32xx
 
 $(PROJECT_LIB)/linkcmds.base: ../shared/startup/linkcmds.base $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.base

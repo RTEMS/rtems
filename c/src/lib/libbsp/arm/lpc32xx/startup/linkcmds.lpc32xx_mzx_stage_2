@@ -1,24 +1,23 @@
 /**
  * @file
  *
- * @ingroup lpc32xx_linker_phycore
+ * @ingroup lpc32xx_linker_mzx_stage_2
  *
  * @brief Memory map.
  */
 
 /**
- * @defgroup lpc32xx_linker_phycore phyCORE-LPC3250 Memory Map
+ * @defgroup lpc32xx_linker_mzx_stage_2 MZX Stage-2 Program Memory Map
  *
  * @ingroup bsp_linker
  *
- * @brief phyCORE-LPC3250 memory map.
+ * @brief MZX stage-2 program memory map.
  *
  * <table>
  *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
  *   <tr><td>RAM_INT</td><td>0x08000000</td><td>256k</td></tr>
- *   <tr><td>RAM_MMU</td><td>0x80000000</td><td>16k</td></tr>
- *   <tr><td>RAM_EXT</td><td>0x80004000</td><td>64M - 16k</td></tr>
- *   <tr><td>ROM_EXT</td><td>0xe0000000</td><td>2M</td></tr>
+ *   <tr><td>RAM_MMU</td><td>0x81c00000</td><td>16k</td></tr>
+ *   <tr><td>RAM_EXT</td><td>0x81c04000</td><td>4M - 16k</td></tr>
  * </table>
  *
  * <table>
@@ -37,9 +36,8 @@
 
 MEMORY {
         RAM_INT (AIW) : ORIGIN = 0x08000000, LENGTH = 256k
-        RAM_MMU (AIW) : ORIGIN = 0x80000000, LENGTH = 16k /* SDRAM on DYCS0 */
-        RAM_EXT (AIW) : ORIGIN = 0x80004000, LENGTH = 64M - 16k /* SDRAM on DYCS0 */
-        ROM_EXT (RX) : ORIGIN = 0xe0000000, LENGTH = 2M /* NOR flash on CS0 */
+        RAM_MMU (AIW) : ORIGIN = 0x81c00000, LENGTH = 16k /* SDRAM on DYCS0 */
+        RAM_EXT (AIW) : ORIGIN = 0x81c04000, LENGTH = 4M - 16k /* SDRAM on DYCS0 */
         NIRVANA : ORIGIN = 0, LENGTH = 0
 }
 
@@ -57,9 +55,6 @@ REGION_ALIAS ("REGION_BSS", RAM_EXT);
 REGION_ALIAS ("REGION_WORK", RAM_EXT);
 REGION_ALIAS ("REGION_STACK", RAM_INT);
 
-bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
-bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
-
-bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1M;
+bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 8192;
 
 INCLUDE linkcmds.lpc32xx
