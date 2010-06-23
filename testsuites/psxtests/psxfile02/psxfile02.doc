@@ -31,5 +31,8 @@ directives:
 
 concepts:
 
-+ Verify failure when a previously opened, but now closed file descriptor is passed in.
++ Verify failure when a previously opened, but now closed file
+descriptor is used.
++ Verify failure when an out of range file descriptor (above the
+number configured) is used.
 

@@ -22,6 +22,8 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
+RTEMS_OBJECT_FORMAT
+
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
@@ -94,6 +96,7 @@ psxitimer/Makefile
 psxkey01/Makefile
 psxkey02/Makefile
 psxkey03/Makefile
+psxload01/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
 psxmsgq02/Makefile

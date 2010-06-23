@@ -10,8 +10,8 @@ SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
     psx10 psx11 psx12 psx13 psx14 psxalarm01 \
     psxautoinit01 psxautoinit02 psxbarrier01 \
     psxcancel psxcancel01 psxcleanup psxcleanup01 \
-    psxcond01 psxenosys psxkey01 psxkey02 \
-    psxkey03 psxitimer psxmsgq01 psxmsgq02 psxmsgq03 psxmsgq04 \
+    psxcond01 psxenosys psxkey01 psxkey02 psxkey03 psxload01 \
+    psxitimer psxmsgq01 psxmsgq02 psxmsgq03 psxmsgq04 \
     psxmutexattr01 psxobj01 psxrwlock01 psxsem01 psxsignal01 psxsignal02 \
     psxsignal03 psxsignal04 psxsignal05 psxspin01 psxspin02 psxsysconf \
     psxtime psxtimer01 psxtimer02 psxualarm psxusleep psxfatal01 psxfatal02 \

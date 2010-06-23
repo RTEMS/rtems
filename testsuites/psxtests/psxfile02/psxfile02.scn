@@ -23,4 +23,25 @@ writev unopened file
 9: Bad file number
 write unopened file
 9: Bad file number
+
+ftruncate a too large file descriptor
+9: Bad file number
+_fcntl_r a too large file descriptor
+9: Bad file number
+fdatasync a too large file descriptor
+9: Bad file number
+fstat a too large file descriptor
+9: Bad file number
+fsync a too large file descriptor
+9: Bad file number
+ioctl a too large file descriptor
+9: Bad file number
+_lseek_r a too large file descriptor
+9: Bad file number
+readv a too large file descriptor
+9: Bad file number
+writev a too large file descriptor
+9: Bad file number
+write a too large file descriptor
+9: Bad file number
 *** END OF PSXFILE02 TEST  ***
