@@ -1,3 +1,7 @@
+2010-06-23      Chris Johns <chrisj@rtems.org>
+
+	* rtems/Makefile.am: Remove the stray 'c' file. 
+
 2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* libcsupport/Makefile.am, libcsupport/include/rtems/libio_.h: Moved

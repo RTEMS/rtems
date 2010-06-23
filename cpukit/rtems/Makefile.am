@@ -102,7 +102,7 @@ librtems_a_SOURCES += src/rtemstimer.c src/timercancel.c src/timercreate.c \
 librtems_a_SOURCES += src/msg.c src/msgqallocate.c src/msgqbroadcast.c \
     src/msgqcreate.c src/msgqdelete.c src/msgqflush.c \
     src/msgqgetnumberpending.c src/msgqident.c src/msgqreceive.c \
-    src/msgqsend.c c src/msgqtranslatereturncode.c src/msgqurgent.c \
+    src/msgqsend.c src/msgqtranslatereturncode.c src/msgqurgent.c \
     src/msgdata.c
 
 ## SEMAPHORE_C_FILES
