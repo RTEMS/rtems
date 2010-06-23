@@ -134,18 +134,17 @@ void test_termios_baud2index(void)
   i = rtems_termios_baud_to_index( -2 );
   rtems_test_assert( i == -1 );
 
-  if ( i != -1 )
-    for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
-      printf(
-        "termios_baud_to_index(B%" PRIdrtems_termios_baud_t ") - OK\n",
-        baud_table[i].baud
-      );
-      index = rtems_termios_baud_to_index( baud_table[i].constant );
-      if ( index != i ) {
-        printf( "ERROR - returned %d should be %d\n", index, i );
-        rtems_test_exit(0);
-      }
+  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+    printf(
+      "termios_baud_to_index(B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
+    index = rtems_termios_baud_to_index( baud_table[i].constant );
+    if ( index != i ) {
+      printf( "ERROR - returned %d should be %d\n", index, i );
+      rtems_test_exit(0);
     }
+  }
 }
 
 /*
