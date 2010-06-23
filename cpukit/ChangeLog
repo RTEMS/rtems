@@ -1,3 +1,8 @@
+2010-06-23	Chris Johns <chrisj@rtems.org>
+
+	PR 1577/filesystem
+	* libfs/src/pipe/fifo.c: Fixed the error codes returned on open.
+
 2010-06-23      Chris Johns <chrisj@rtems.org>
 
 	* rtems/Makefile.am: Remove the stray 'c' file. 
