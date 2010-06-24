@@ -596,6 +596,7 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
   #if defined(RTEMS_DEBUG)
     assert( the_jnode );
     assert( the_jnode->type == IMFS_MEMORY_FILE ||
+       the_jnode->type != IMFS_LINEAR_FILE );
     assert( dest );
   #endif
   if ( !the_jnode )

@@ -1,5 +1,9 @@
 2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* libfs/src/imfs/memfile.c: Fix assert.
+
+2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* libcsupport/src/read.c, libcsupport/src/write.c: read(2) and write(2)
 	should return 0 when passed a count of 0 after verifying other
 	possible errors.
