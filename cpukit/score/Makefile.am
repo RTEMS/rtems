@@ -141,7 +141,7 @@ libscore_a_SOURCES += src/pheapallocate.c \
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadclearstate.c src/threadclose.c src/threadcreateidle.c \
-    src/threaddelayended.c src/threaddispatch.c src/threadevaluatemode.c \
+    src/threaddelayended.c src/threaddispatch.c \
     src/threadget.c src/threadhandler.c src/threadinitialize.c \
     src/threadloadenv.c src/threadready.c src/threadreset.c \
     src/threadrestart.c src/threadresume.c src/threadsetpriority.c \

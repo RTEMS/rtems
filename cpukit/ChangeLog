@@ -1,3 +1,11 @@
+2010-06-24	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1589/cpukit
+	* score/Makefile.am, score/include/rtems/score/thread.h,
+	score/inline/rtems/score/thread.inl: Make _Thread_Evaluate_mode() an
+	inline method. It is only used in one place and relatively simple.
+	* score/src/threadevaluatemode.c: Removed.
+
 2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libfs/src/imfs/memfile.c: Fix assert.

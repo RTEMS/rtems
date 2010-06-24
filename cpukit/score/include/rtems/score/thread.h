@@ -749,14 +749,6 @@ void _Thread_Resume(
   bool              force
 );
 
-/**
- *  This routine evaluates the current scheduling information for the
- *  system and determines if a context switch is required.  This
- *  is usually called after changing an execution mode such as preemptability
- *  for a thread.
- */
-bool _Thread_Evaluate_mode( void );
-
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 /**
  *  This routine is the body of the system idle thread.
