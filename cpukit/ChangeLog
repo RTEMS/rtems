@@ -1,3 +1,9 @@
+2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1587/filesystem
+	Coverity Id 35
+	* libfs/src/rfs/rtems-rfs-shell.c: Address possible NULL dereference.
+
 2010-06-23      Chris Johns <chrisj@rtems.org>
 
 	PR 1577/filesystem
