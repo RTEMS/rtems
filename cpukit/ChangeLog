@@ -1,3 +1,11 @@
+2010-06-24	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1542/filesystem
+	PR 1585/filesystem
+	* libfs/src/pipe/fifo.c: pipe_control_t was not deallocated if
+	fifo_open() was attempted with (O_WRONLY|O_NONBLOCK).
+	Mutex was locked too many times on this path and we needed an unlock.
+
 2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1587/filesystem
