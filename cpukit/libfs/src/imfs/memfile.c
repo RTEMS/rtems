@@ -23,7 +23,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 #include <errno.h>
 
 #include <rtems.h>
@@ -301,11 +300,13 @@ MEMFILE_STATIC int IMFS_memfile_extend(
    *  Perform internal consistency checks
    */
 
-  assert( the_jnode );
+  #if defined(RTEMS_DEBUG)
+    assert( the_jnode );
+    assert( the_jnode->type == IMFS_MEMORY_FILE );
+  #endif
   if ( !the_jnode )
     rtems_set_errno_and_return_minus_one( EIO );
 
-  assert( the_jnode->type == IMFS_MEMORY_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE )
     rtems_set_errno_and_return_minus_one( EIO );
 
@@ -357,11 +358,13 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
   block_p  memory;
   block_p *block_entry_ptr;
 
-  assert( the_jnode );
+  #if defined(RTEMS_DEBUG)
+    assert( the_jnode );
+    assert( the_jnode->type == IMFS_MEMORY_FILE );
+  #endif
   if ( !the_jnode )
     rtems_set_errno_and_return_minus_one( EIO );
 
-  assert( the_jnode->type == IMFS_MEMORY_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE )
     rtems_set_errno_and_return_minus_one( EIO );
 
@@ -402,7 +405,9 @@ MEMFILE_STATIC int IMFS_memfile_remove_block(
   block_p  ptr;
 
   block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
-  assert( block_ptr );
+  #if defined(RTEMS_DEBUG)
+    assert( block_ptr );
+  #endif
   if ( block_ptr ) {
     ptr = *block_ptr;
     *block_ptr = 0;
@@ -431,7 +436,9 @@ void memfile_free_blocks_in_table(
    *  Perform internal consistency checks
    */
 
-  assert( block_table );
+  #if defined(RTEMS_DEBUG)
+    assert( block_table );
+  #endif
   if ( !block_table )
     return;
 
@@ -490,11 +497,13 @@ int IMFS_memfile_remove(
    *  Perform internal consistency checks
    */
 
-  assert( the_jnode );
+  #if defined(RTEMS_DEBUG)
+    assert( the_jnode );
+    assert( the_jnode->type == IMFS_MEMORY_FILE );
+  #endif
   if ( !the_jnode )
     rtems_set_errno_and_return_minus_one( EIO );
 
-  assert( the_jnode->type == IMFS_MEMORY_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE )
     rtems_set_errno_and_return_minus_one( EIO );
 
@@ -584,12 +593,14 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
    *  Perform internal consistency checks
    */
 
-  assert( the_jnode );
+  #if defined(RTEMS_DEBUG)
+    assert( the_jnode );
+    assert( the_jnode->type == IMFS_MEMORY_FILE ||
+    assert( dest );
+  #endif
   if ( !the_jnode )
     rtems_set_errno_and_return_minus_one( EIO );
 
-  assert( the_jnode->type == IMFS_MEMORY_FILE ||
-          the_jnode->type == IMFS_LINEAR_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE &&
        the_jnode->type != IMFS_LINEAR_FILE )
     rtems_set_errno_and_return_minus_one( EIO );
@@ -598,7 +609,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
    *  Error checks on arguments
    */
 
-  assert( dest );
   if ( !dest )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
@@ -658,7 +668,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
     if ( to_copy > my_length )
       to_copy = my_length;
     block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
-    assert( block_ptr );
     if ( !block_ptr )
       return copied;
     memcpy( dest, &(*block_ptr)[ start_offset ], to_copy );
@@ -675,7 +684,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
   to_copy = IMFS_MEMFILE_BYTES_PER_BLOCK;
   while ( my_length >= IMFS_MEMFILE_BYTES_PER_BLOCK ) {
     block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
-    assert( block_ptr );
     if ( !block_ptr )
       return copied;
     memcpy( dest, &(*block_ptr)[ 0 ], to_copy );
@@ -689,11 +697,12 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
    *  Phase 3: possibly the first part of one block
    */
 
-  assert( my_length < IMFS_MEMFILE_BYTES_PER_BLOCK );
+  #if defined(RTEMS_DEBUG)
+    assert( my_length < IMFS_MEMFILE_BYTES_PER_BLOCK );
+  #endif
 
   if ( my_length ) {
     block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
-    assert( block_ptr );
     if ( !block_ptr )
       return copied;
     memcpy( dest, &(*block_ptr)[ 0 ], my_length );
@@ -735,11 +744,14 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
    *  Perform internal consistency checks
    */
 
-  assert( the_jnode );
+  #if defined(RTEMS_DEBUG)
+    assert( source );
+    assert( the_jnode );
+    assert( the_jnode->type == IMFS_MEMORY_FILE );
+  #endif
   if ( !the_jnode )
     rtems_set_errno_and_return_minus_one( EIO );
 
-  assert( the_jnode->type == IMFS_MEMORY_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE )
     rtems_set_errno_and_return_minus_one( EIO );
 
@@ -747,7 +759,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
    *  Error check arguments
    */
 
-  assert( source );
   if ( !source )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
@@ -792,12 +803,19 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
     if ( to_copy > my_length )
       to_copy = my_length;
     block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
-    assert( block_ptr );
     if ( !block_ptr )
       return copied;
-#if 0
-fprintf(stdout, "write %d at %d in %d: %*s\n", to_copy, start_offset, block, to_copy, src );
-#endif
+    #if 0
+      fprintf(
+        stderr,
+        "write %d at %d in %d: %*s\n",
+        to_copy,
+        start_offset,
+        block,
+        to_copy,
+        src
+      );
+    #endif
     memcpy( &(*block_ptr)[ start_offset ], src, to_copy );
     src += to_copy;
     block++;
@@ -812,12 +830,11 @@ fprintf(stdout, "write %d at %d in %d: %*s\n", to_copy, start_offset, block, to_
   to_copy = IMFS_MEMFILE_BYTES_PER_BLOCK;
   while ( my_length >= IMFS_MEMFILE_BYTES_PER_BLOCK ) {
     block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
-    assert( block_ptr );
     if ( !block_ptr )
       return copied;
-#if 0
-fprintf(stdout, "write %d in %d: %*s\n", to_copy, block, to_copy, src );
-#endif
+    #if 0
+      fprintf(stdout, "write %d in %d: %*s\n", to_copy, block, to_copy, src );
+    #endif
     memcpy( &(*block_ptr)[ 0 ], src, to_copy );
     src += to_copy;
     block++;
@@ -829,17 +846,18 @@ fprintf(stdout, "write %d in %d: %*s\n", to_copy, block, to_copy, src );
    *  Phase 3: possibly the first part of one block
    */
 
-  assert( my_length < IMFS_MEMFILE_BYTES_PER_BLOCK );
+  #if defined(RTEMS_DEBUG)
+    assert( my_length < IMFS_MEMFILE_BYTES_PER_BLOCK );
+  #endif
 
   to_copy = my_length;
   if ( my_length ) {
     block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
-    assert( block_ptr );
     if ( !block_ptr )
       return copied;
-#if 0
-fprintf(stdout, "write %d in %d: %*s\n", to_copy, block, to_copy, src );
-#endif
+    #if 0
+    fprintf(stdout, "write %d in %d: %*s\n", to_copy, block, to_copy, src );
+    #endif
     memcpy( &(*block_ptr)[ 0 ], src, my_length );
     my_length = 0;
     copied += to_copy;
@@ -900,11 +918,13 @@ block_p *IMFS_memfile_get_block_pointer(
    *  Perform internal consistency checks
    */
 
-  assert( the_jnode );
+  #if defined(RTEMS_DEBUG)
+    assert( the_jnode );
+    assert( the_jnode->type == IMFS_MEMORY_FILE );
+  #endif
   if ( !the_jnode )
     return NULL;
 
-  assert( the_jnode->type == IMFS_MEMORY_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE )
     return NULL;
 
@@ -917,10 +937,6 @@ block_p *IMFS_memfile_get_block_pointer(
    */
 
   if ( my_block <= LAST_INDIRECT ) {
-#if 0
-fprintf(stdout, "(s %d) ", block );
-fflush(stdout);
-#endif
     p = info->indirect;
 
     if ( malloc_it ) {

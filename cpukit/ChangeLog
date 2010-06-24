@@ -1,3 +1,12 @@
+2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_debug.c,
+	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_fsunmount.c, libfs/src/imfs/imfs_getchild.c,
+	libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/ioman.c,
+	libfs/src/imfs/memfile.c: Evaluate all assert calls in IMFS. Either
+	made them conditional on RTEMS_DEBUG or eliminated them.
+
 2010-06-24	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1590/cpukit

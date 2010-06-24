@@ -15,7 +15,9 @@
 #include "config.h"
 #endif
 
-#include <assert.h>
+#if defined(RTEMS_DEBUG)
+  #include <assert.h>
+#endif
 #include <string.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -53,7 +55,9 @@ void IMFS_print_jnode(
   IMFS_jnode_t *the_jnode
 )
 {
-  assert( the_jnode );
+  #if defined(RTEMS_DEBUG)
+    assert( the_jnode );
+  #endif
 
   fprintf(stdout, "%s", the_jnode->name );
   switch( the_jnode->type ) {
@@ -90,23 +94,19 @@ void IMFS_print_jnode(
 
     case IMFS_HARD_LINK:
       fprintf(stdout, " links not printed\n" );
-      assert(0);
-      break;
+      return;
 
     case IMFS_SYM_LINK:
       fprintf(stdout, " links not printed\n" );
-      assert(0);
-      break;
+      return;
 
     case IMFS_FIFO:
       fprintf(stdout, " FIFO not printed\n" );
-      assert(0);
-      break;
+      return;
 
     default:
       fprintf(stdout, " bad type %d\n", the_jnode->type );
-      assert(0);
-      break;
+      return;
   }
   puts("");
 }
@@ -129,11 +129,11 @@ void IMFS_dump_directory(
   IMFS_jnode_t         *the_jnode;
   int                   i;
 
-  assert( the_directory );
-
-  assert( level >= 0 );
-
-  assert( the_directory->type == IMFS_DIRECTORY );
+  #if defined(RTEMS_DEBUG)
+    assert( the_directory );
+    assert( level >= 0 );
+    assert( the_directory->type == IMFS_DIRECTORY );
+  #endif
 
   the_chain = &the_directory->info.directory.Entries;
 

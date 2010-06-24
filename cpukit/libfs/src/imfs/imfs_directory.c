@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <assert.h>
 #include <dirent.h>
 
 #include "imfs.h"
@@ -179,7 +178,7 @@ int imfs_dir_close(
  *                directory
  *     SEEK_CUR - offset is used as the relative byte offset from the current
  *                directory position index held in the iop structure
- *     SEEK_END - N/A --> This will cause an assert.
+ *     SEEK_END - N/A --> This will cause an EINVAL to be returned.
  */
 
 rtems_off64_t imfs_dir_lseek(

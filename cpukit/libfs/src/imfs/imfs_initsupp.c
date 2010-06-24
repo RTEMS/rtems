@@ -20,8 +20,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include <assert.h>
-
 #include "imfs.h"
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>

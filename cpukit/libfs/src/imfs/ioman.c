@@ -22,8 +22,6 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <assert.h>
-
 #include <rtems.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>

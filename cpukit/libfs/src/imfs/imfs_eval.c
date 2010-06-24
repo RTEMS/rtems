@@ -21,7 +21,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include "imfs.h"
 #include <rtems/libio_.h>
@@ -83,7 +82,6 @@ int IMFS_evaluate_permission(
   int           flags_to_test;
 
   if ( !rtems_libio_is_valid_perms( flags ) ) {
-    assert( 0 );
     rtems_set_errno_and_return_minus_one( EIO );
   }
 
@@ -501,7 +499,6 @@ int IMFS_eval_path(
   int                                 result;
 
   if ( !rtems_libio_is_valid_perms( flags ) ) {
-    assert( 0 );
     rtems_set_errno_and_return_minus_one( EIO );
   }
 

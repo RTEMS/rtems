@@ -17,7 +17,9 @@
 #include "config.h"
 #endif
 
-#include <assert.h>
+#if defined(RTEMS_DEBUG)
+  #include <assert.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include "imfs.h"
@@ -99,8 +101,10 @@ IMFS_jnode_t *IMFS_create_node(
       break;
 
     default:
-      assert(0);
-      break;
+      #if defined(RTEMS_DEBUG)
+        assert(0);
+      #endif
+      return;
   }
 
   /*

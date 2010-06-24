@@ -17,8 +17,10 @@
 #include "config.h"
 #endif
 
+#if defined(RTEMS_DEBUG)
+  #include <assert.h>
+#endif
 #include <errno.h>
-#include <assert.h>
 #include <string.h>
 #include "imfs.h"
 
@@ -39,11 +41,13 @@ IMFS_jnode_t *IMFS_find_match_in_dir(
    *  the IMFS code.
    */
 
-  assert( directory );
+  #if defined(RTEMS_DEBUG)
+    assert( directory );
+    assert( name );
+  #endif
   if ( !name )
     return 0;
 
-  assert( name );
   if ( !directory )
     return 0;
 
