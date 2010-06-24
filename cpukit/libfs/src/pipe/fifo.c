@@ -104,6 +104,8 @@ static int pipe_alloc(
   if (! pipe->Buffer)
     goto err_buf;
 
+  err = -ENOMEM;
+
   if (rtems_barrier_create(
         rtems_build_name ('P', 'I', 'r', c),
         RTEMS_BARRIER_MANUAL_RELEASE, 0,
@@ -342,14 +344,16 @@ int fifo_open(
       break;
 
     case LIBIO_FLAGS_WRITE:
+      pipe->writerCounter ++;
+
+      if (pipe->Writers ++ == 0)
+        PIPE_WAKEUPREADERS(pipe);
+
       if (pipe->Readers == 0 && LIBIO_NODELAY(iop)) {
+	PIPE_UNLOCK(pipe);
         err = -ENXIO;
         goto out_error;
       }
-
-      pipe->writerCounter ++;
-      if (pipe->Writers ++ == 0)
-        PIPE_WAKEUPREADERS(pipe);
 
       if (pipe->Readers == 0) {
         prevCounter = pipe->readerCounter;
