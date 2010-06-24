@@ -1,3 +1,19 @@
+2010-06-24	Bharath Suri <bharath.s.jois@gmail.com>
+
+	* Makefile.am, configure.ac: Removed some fifo tests.
+	* spfifo01/Makefile.am, spfifo01/init.c: Minor changes to avoid
+	excessive new lines in the output.
+
+	spfifo02/Makefile.am, spfifo02/init.c, spfifo02/spfifo02.doc,
+	spfifo02/spfifo02.scn, spfifo03/Makefile.am: Merge from spfifo08.
+	Also added a few more cases, mostly from spfifo04/init.c.
+	* spfifo03/init.c, spfifo03/spfifo03.doc, spfifo03/spfifo03.scn: 
+	Previously was spfifo06. Configure parameter for pipes is used now.
+	* spfifo04/.cvsignore, spfifo04/Makefile.am, spfifo04/init.c,
+	spfifo04/spfifo04.doc, spfifo04/spfifo04.scn, spfifo08/.cvsignore,
+	spfifo08/Makefile.am, spfifo08/init.c, spfifo08/spfifo08.doc,
+	spfifo08/spfifo08.scn: Removed.
+
 2010-06-22	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am, configure.ac: Add new test to exercise path where using

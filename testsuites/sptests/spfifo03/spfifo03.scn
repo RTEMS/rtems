@@ -1,32 +1,41 @@
-Could not open '/dev/kqemu' - QEMU acceleration layer not activated: No such file or directory
 Initialized console on port COM1 9600-8-N-1
 
 
 
-*** FIFO / PIPE OPEN TEST - 3 ***
+*** FIFO / PIPE OPEN TEST - 6 ***
 
 
-Configuration: Pipes configured, but number of barriers configured = 1
-Required number of barriers = 2
+Creating a task name and a task
 
 
-Creating directory /tmp
+creating directory /tmp
 
 
-Creating fifo /tmp/fifo
+creating fifo file /tmp/fifo01
 
 
-Attempt to open the fifo file
-
-Must result in failure since 
-number of barriers = 1 => not all resources
-were acquired
+Starting the read task
 
 
-Remove the entry /tmp/fifo01
+Writer opening file(1)
 
 
-Remove directory /tmp
+Read task activated, sleeping to block the writer
 
 
-*** END OF FIFO / PIPE OPEN TEST - 3 ***
+Now, reader opening file(1)
+
+
+@ sender: 
+
+@ receiver (being a unblocked reader): Got 
+
+Reader opening file(2)
+
+
+Writer opening file(2)
+
+
+@ sender: SendBuffer2
+
+*** END OF FIFO / PIPE OPEN TEST - 6 ***

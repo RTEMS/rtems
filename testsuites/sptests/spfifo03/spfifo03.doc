@@ -1,8 +1,8 @@
 #
 #  $Id$
 #
-#  COPYRIGHT (c) 2010
-#  Bharath Suri<bharath.s.jois@gmail.com>.
+#  COPYRIGHT (c) 1989-1999.
+#  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
 #  found in the file LICENSE in this distribution or at
@@ -13,9 +13,15 @@ This file describes the directives and concepts tested by this test set.
 
 Configuration:
 
-Pipes enabled. Maximum number of barriers is set to 1.
+- Pipes enabled
+- Resources available >= Resources required
+  - Semaphores, pipes, barriers etc.
 
-Expected:
+Coverage concepts:
 
-Pipe requires 2 barriers to be created. With max number of barriers
-set to 1, fifo_open fails with EINTR
+- Main task also acts as the write task
+- Main task creates another task: for reading
+- Write task is responsible for writing to the pipe and the read task
+  reads from the pipe
+- The pipe is opened twice, such that the write task blocks on open 
+  once and the read task blocks on open the 2nd time

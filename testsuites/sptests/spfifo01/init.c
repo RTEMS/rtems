@@ -23,7 +23,7 @@ static void test_main(void)
   puts("\n\n*** FIFO / PIPE OPEN TEST - 1 ***");
 
   puts(
-    "Configuration: Pipes disabled.\n"
+    "\nConfiguration: Pipes disabled.\n"
     "Creating named fifo '" FIFO_PATH "'.\n"
     "Must result in failure since pipes are disabled in the configuration."
   );
