@@ -41,10 +41,12 @@ ssize_t write(
   rtems_libio_check_count( count );
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
+  if ( count == 0 )
+    return 0;
+
   /*
    *  Now process the write() request.
    */
-
   if ( !iop->handlers->write_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 

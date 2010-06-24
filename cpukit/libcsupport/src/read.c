@@ -34,10 +34,12 @@ ssize_t read(
   rtems_libio_check_count( count );
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ );
 
+  if ( count == 0 )
+    return 0;
+
   /*
    *  Now process the read().
    */
-
   if ( !iop->handlers->read_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 
