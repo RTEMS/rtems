@@ -672,16 +672,6 @@ void _Thread_Set_transient(
 );
 
 /**
- *  This routine is invoked upon expiration of the currently
- *  executing thread's timeslice.  If no other thread's are ready
- *  at the priority of the currently executing thread, then the
- *  executing thread's timeslice is reset.  Otherwise, the
- *  currently executing thread is placed at the rear of the
- *  FIFO for this priority and a new heir is selected.
- */
-void _Thread_Reset_timeslice( void );
-
-/**
  *  This routine is invoked as part of processing each clock tick.
  *  It is responsible for determining if the current thread allows
  *  timeslicing and, if so, when its timeslice expires.

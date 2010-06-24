@@ -1,3 +1,12 @@
+2010-06-24	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1590/cpukit
+	* score/Makefile.am, score/include/rtems/score/thread.h,
+	score/src/threadtickletimeslice.c: Remove _Thread_Reset_timeslice and
+	replaces its single use with a call to the functionally equivalent
+	_Thread_Yield_processor().
+	* score/src/threadresettimeslice.c: Removed.
+
 2010-06-24	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1542/filesystem
