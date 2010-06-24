@@ -1,5 +1,9 @@
 2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* libfs/src/imfs/imfs_creat.c: Fix warning.
+
+2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_debug.c,
 	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_eval.c,
 	libfs/src/imfs/imfs_fsunmount.c, libfs/src/imfs/imfs_getchild.c,

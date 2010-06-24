@@ -104,7 +104,7 @@ IMFS_jnode_t *IMFS_create_node(
       #if defined(RTEMS_DEBUG)
         assert(0);
       #endif
-      return;
+      break;
   }
 
   /*
