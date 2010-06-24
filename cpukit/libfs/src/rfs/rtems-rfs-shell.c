@@ -738,6 +738,11 @@ rtems_shell_rfs_format (int argc, char* argv[])
     }
   }
 
+  if (!driver) {
+    printf ("error: no driver name provided\n");
+    return 1;
+  }
+
   if (rtems_rfs_format (driver, &config) < 0)
   {
     printf ("error: format of %s failed: %s\n",
