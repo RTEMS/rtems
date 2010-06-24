@@ -1236,15 +1236,26 @@ static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
 		rtems_device_minor_number minor = rtems_disk_get_minor_number( dd);
 		sd_card_driver_entry *e = &sd_card_driver_table [minor];
 		rtems_blkdev_request *r = (rtems_blkdev_request *) arg;
+		int (*f)( sd_card_driver_entry *, rtems_blkdev_request *);
+		uint32_t retries = e->retries;
+		int result;
+
 		switch (r->req) {
 			case RTEMS_BLKDEV_REQ_READ:
-				return sd_card_disk_block_read( e, r);
+				f = sd_card_disk_block_read;
+				break;
 			case RTEMS_BLKDEV_REQ_WRITE:
-				return sd_card_disk_block_write( e, r);
+				f = sd_card_disk_block_write;
+				break;
 			default:
 				errno = EINVAL;
 				return -1;
 		}
+		do {
+			result = f( e, r);
+		} while (retries-- > 0 && result != 0);
+		return result;
+
 	} else if (req == RTEMS_BLKIO_CAPABILITIES) {
 		*(uint32_t *) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
 		return 0;
@@ -1265,9 +1276,12 @@ static rtems_status_code sd_card_disk_init( rtems_device_major_number major, rte
 	for (minor = 0; minor < sd_card_driver_table_size; ++minor) {
 		sd_card_driver_entry *e = &sd_card_driver_table [minor];
 		dev_t dev = rtems_filesystem_make_dev_t( major, minor);
+		uint32_t retries = e->retries;
 
 		/* Initialize SD Card */
-		sc = sd_card_init( e);
+		do {
+			sc = sd_card_init( e);
+		} while (retries-- > 0 && sc != RTEMS_SUCCESSFUL);
 		RTEMS_CHECK_SC( sc, "Initialize SD Card");
 
 		/* Create disk device */

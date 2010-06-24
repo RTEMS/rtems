@@ -1,3 +1,9 @@
+2010-06-24	Arnout Vandecappelle <arnout@mind.be>
+
+	PR 1586/misc
+	* libchip/i2c/spi-sd-card.h, libchip/i2c/spi-sd-card.c: Add retries to
+	SD card accesses.
+
 2010-06-22	Arnout Vandecappelle <arnout@mind.be>
 
 	PR 1580/misc

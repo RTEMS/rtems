@@ -69,6 +69,7 @@ typedef struct {
 	bool busy;
 	bool verbose;
 	bool schedule_if_busy;
+	uint32_t retries;
 } sd_card_driver_entry;
 
 extern sd_card_driver_entry sd_card_driver_table [];
