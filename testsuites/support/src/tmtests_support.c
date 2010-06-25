@@ -27,9 +27,9 @@ void rtems_time_test_measure_operation(
   int                       overhead
 )
 {
-  int i;
-  int loop_overhead;
-  int end_time;
+  int  i;
+  long loop_overhead;
+  int  end_time;
 
   benchmark_timer_initialize();
     for (i=0 ; i<iterations ; i++ ) {
