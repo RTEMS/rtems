@@ -50,7 +50,7 @@ extern "C" {
  */
 
 /**
- * @brief A 64-bit file offset for internal use by RTEMS. Based on the Newlib
+ * A 64-bit file offset for internal use by RTEMS. Based on the Newlib
  * type.
  */
 typedef _off64_t rtems_off64_t;
@@ -77,6 +77,10 @@ typedef int rtems_filesystem_node_types_t;
  * @{
  */
 
+/**
+ *  This type defines the interface to the open(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_open_t)(
   rtems_libio_t *iop,
   const char    *pathname,
@@ -84,62 +88,110 @@ typedef int (*rtems_filesystem_open_t)(
   uint32_t       mode
 );
 
+/**
+ *  This type defines the interface to the close(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_close_t)(
   rtems_libio_t *iop
 );
 
+/**
+ *  This type defines the interface to the read(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef ssize_t (*rtems_filesystem_read_t)(
   rtems_libio_t *iop,
   void          *buffer,
   size_t         count
 );
 
+/**
+ *  This type defines the interface to the write(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef ssize_t (*rtems_filesystem_write_t)(
   rtems_libio_t *iop,
   const void    *buffer,
   size_t         count
 );
 
+/**
+ *  This type defines the interface to the ioctl(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_ioctl_t)(
   rtems_libio_t *iop,
   uint32_t       command,
   void          *buffer
 );
 
+/**
+ *  This type defines the interface to the lseek(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef rtems_off64_t (*rtems_filesystem_lseek_t)(
   rtems_libio_t *iop,
   rtems_off64_t  length,
   int            whence
 );
 
+/**
+ *  This type defines the interface to the fstat(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_fstat_t)(
   rtems_filesystem_location_info_t *loc,
   struct stat                      *buf
 );
 
+/**
+ *  This type defines the interface to the fchmod(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_fchmod_t)(
   rtems_filesystem_location_info_t *loc,
   mode_t                            mode
 );
 
+/**
+ *  This type defines the interface to the ftruncate(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_ftruncate_t)(
   rtems_libio_t *iop,
   rtems_off64_t  length
 );
 
+/**
+ *  This type defines the interface to the fpathconf(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_fpathconf_t)(
   rtems_libio_t *iop,
   int name
 );
 
+/**
+ *  This type defines the interface to the fsync(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_fsync_t)(
   rtems_libio_t *iop
 );
 
+/**
+ *  This type defines the interface to the fdatasync(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_fdatasync_t)(
   rtems_libio_t *iop
 );
 
+/**
+ *  This type defines the interface to the fnctl(2) system call 
+ *  support which is provided by a file system implementation.
+ */
 typedef int (*rtems_filesystem_fcntl_t)(
   int            cmd,
   rtems_libio_t *iop
@@ -156,21 +208,269 @@ typedef int (*rtems_filesystem_rmnod_t)(
  * @brief File system node operations table.
  */
 struct _rtems_filesystem_file_handlers_r {
-    rtems_filesystem_open_t         open_h;
-    rtems_filesystem_close_t        close_h;
-    rtems_filesystem_read_t         read_h;
-    rtems_filesystem_write_t        write_h;
-    rtems_filesystem_ioctl_t        ioctl_h;
-    rtems_filesystem_lseek_t        lseek_h;
-    rtems_filesystem_fstat_t        fstat_h;
-    rtems_filesystem_fchmod_t       fchmod_h;
-    rtems_filesystem_ftruncate_t    ftruncate_h;
-    rtems_filesystem_fpathconf_t    fpathconf_h;
-    rtems_filesystem_fsync_t        fsync_h;
-    rtems_filesystem_fdatasync_t    fdatasync_h;
-    rtems_filesystem_fcntl_t        fcntl_h;
-    rtems_filesystem_rmnod_t        rmnod_h;
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the open(2) system call 
+   *
+   *  @note This method must have a filesystem specific implementation.
+   *
+   *  @note There is no default implementation.
+   */
+  rtems_filesystem_open_t         open_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the close(2) system call 
+   *
+   *  @note This method is REQUIRED by all file systems.
+   *
+   *  @note There is no default implementation.
+   */
+  rtems_filesystem_close_t        close_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the read(2) system call 
+   *
+   *  @note This method must have a filesystem specific implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_read_t         read_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the write(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_write_t        write_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the ioctl(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_ioctl_t        ioctl_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the lseek(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_lseek_t        lseek_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the fstat(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_fstat_t        fstat_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the fchmod(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_fchmod_t       fchmod_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the ftruncate(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_ftruncate_t    ftruncate_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the fpathconf(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_fpathconf_t    fpathconf_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the fsync(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_fsync_t        fsync_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the fdatasync(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_fdatasync_t    fdatasync_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the fcntl(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_fcntl_t        fcntl_h;
+
+  /**
+   *  This field points to the file system specific implementation
+   *  of the support routine for the rmnod(2) system call 
+   *
+   *  @note This method may use a default implementation.
+   *
+   *  @note The default implementation returns -1 and sets
+   *  errno to ENOTSUP.
+   */
+  rtems_filesystem_rmnod_t        rmnod_h;
 };
+
+/**
+ *  This method defines the interface to the default read(2) 
+ *  system call support which is provided by a file system 
+ *  implementation.
+ */
+size_t rtems_filesystem_default_read(
+  rtems_libio_t *iop,
+  void          *buffer,
+  size_t         count
+);
+
+/**
+ *  This method defines the interface to the default write(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+ssize_t rtems_filesystem_default_write(
+  rtems_libio_t *iop,
+  const void    *buffer,
+  size_t         count
+);
+
+/**
+ *  This method defines the interface to the default ioctl(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+int rtems_filesystem_default_ioctl(
+  rtems_libio_t *iop,
+  uint32_t       command,
+  void          *buffer
+);
+
+/**
+ *  This method defines the interface to the default lseek(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+rtems_off64_t rtems_filesystem_default_lseek(
+  rtems_libio_t *iop,
+  rtems_off64_t  length,
+  int            whence
+);
+
+/**
+ *  This method defines the interface to the default fstat(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+int rtems_filesystem_default_fstat(
+  rtems_filesystem_location_info_t *loc,
+  struct stat                      *buf
+);
+
+/**
+ *  This method defines the interface to the default fchmod(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+int rtems_filesystem_default_fchmod(
+  rtems_filesystem_location_info_t *loc,
+  mode_t                            mode
+);
+
+/**
+ *  This method defines the interface to the default ftruncate(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+int rtems_filesystem_default_ftruncate(
+  rtems_libio_t *iop,
+  rtems_off64_t  length
+);
+
+/**
+ *  This method defines the interface to the default fpathconf(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+int rtems_filesystem_default_fpathconf(
+  rtems_libio_t *iop,
+  int name
+);
+
+/**
+ *  This method defines the interface to the default fsync(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+int rtems_filesystem_default_fsync(
+  rtems_libio_t *iop
+);
+
+/**
+ *  This method defines the interface to the default fdatasync(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+int rtems_filesystem_default_fdatasync(
+  rtems_libio_t *iop
+);
+
+/**
+ *  This method defines the interface to the default fnctl(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+int rtems_filesystem_default_fcntl(
+  int            cmd,
+  rtems_libio_t *iop
+);
+
+/**
+ *  This method defines the interface to the default rmnod(2) system call 
+ *  support which is provided by a file system implementation.
+ */
+int rtems_filesystem_default_rmnod(
+ rtems_filesystem_location_info_t      *parent_loc,   /* IN */
+ rtems_filesystem_location_info_t      *pathloc       /* IN */
+);
 
 /**
  * @name File System Operations
@@ -178,12 +478,14 @@ struct _rtems_filesystem_file_handlers_r {
  * @{
  */
 
-/*
- *  XXX
- *  This routine does not allocate any space and rtems_filesystem_freenode_t
- *  is not called by the generic after calling this routine.
- *  ie. node_access does not have to contain valid data when the
- *      routine returns.
+/**
+ *  This type defines the interface to the mknod(2) system call 
+ *  support which is provided by a file system implementation.
+ *  
+ *  @note This routine does not allocate any space and 
+ *  rtems_filesystem_freenode_t is not called by the generic 
+ *  after calling this routine. ie. node_access does not have 
+ *  to contain valid data when the routine returns.
  */
 typedef int (*rtems_filesystem_mknod_t)(
    const char                        *path,       /* IN */
@@ -192,11 +494,14 @@ typedef int (*rtems_filesystem_mknod_t)(
    rtems_filesystem_location_info_t  *pathloc     /* IN/OUT */
 );
 
-/*
- *  rtems_filesystem_freenode_t must be called by the generic after
- *  calling this routine
+/**
+ *  This type defines the interface that allows the  
+ *  file system implementation to parse a path and 
+ *  allocate any memory necessary for tracking purposes.
+ *
+ *  @note rtems_filesystem_freenode_t must be called by 
+ *  the generic after calling this routine
  */
-
 typedef int (*rtems_filesystem_evalpath_t)(
   const char                        *pathname,      /* IN     */
   size_t                             pathnamelen,   /* IN     */
@@ -204,77 +509,145 @@ typedef int (*rtems_filesystem_evalpath_t)(
   rtems_filesystem_location_info_t  *pathloc        /* IN/OUT */
 );
 
+/**
+ *  This type defines the interface that allows the  
+ *  file system implementation to parse a path with the
+ *  intent of creating a new node and to  
+ *  allocate any memory necessary for tracking purposes.
+ *
+ *  @note rtems_filesystem_freenode_t must be called by 
+ *  the generic after calling this routine
+ */
 typedef int (*rtems_filesystem_evalmake_t)(
    const char                       *path,       /* IN */
    rtems_filesystem_location_info_t *pathloc,    /* IN/OUT */
    const char                      **name        /* OUT    */
 );
 
+/**
+ *  This type defines the interface to the link(2) system call 
+ *  support which is provided by a file system implementation.
+ */  
 typedef int (*rtems_filesystem_link_t)(
- rtems_filesystem_location_info_t  *to_loc,      /* IN */
- rtems_filesystem_location_info_t  *parent_loc,  /* IN */
- const char                        *name         /* IN */
+  rtems_filesystem_location_info_t  *to_loc,      /* IN */
+  rtems_filesystem_location_info_t  *parent_loc,  /* IN */
+  const char                        *name         /* IN */
 );
 
+/**
+ *  This type defines the interface to the unlink(2) system call 
+ *  support which is provided by a file system implementation.
+ */ 
 typedef int (*rtems_filesystem_unlink_t)(
- rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
- rtems_filesystem_location_info_t  *pathloc         /* IN */
+  rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
+  rtems_filesystem_location_info_t  *pathloc         /* IN */
 );
 
+/**
+ *  This type defines the interface to the chown(2) system call 
+ *  support which is provided by a file system implementation.
+ */ 
 typedef int (*rtems_filesystem_chown_t)(
- rtems_filesystem_location_info_t  *pathloc,       /* IN */
- uid_t                              owner,         /* IN */
- gid_t                              group          /* IN */
+  rtems_filesystem_location_info_t  *pathloc,       /* IN */
+  uid_t                              owner,         /* IN */
+  gid_t                              group          /* IN */
 );
 
+/**
+ *  This type defines the interface to the freenod(2) system call 
+ *  support which is provided by a file system implementation.
+ */ 
 typedef int (*rtems_filesystem_freenode_t)(
  rtems_filesystem_location_info_t      *pathloc       /* IN */
 );
 
+/**
+ *  This type defines the interface that allows the implemented
+ *  filesystem ot mount another filesystem at the given location.
+ */ 
 typedef int (* rtems_filesystem_mount_t ) (
    rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
 );
 
+/**
+ *  This type defines the interface that allows a file system 
+ *  implementation to do any necessary work that is needed when
+ *  it is being mounted.
+ */  
 typedef int (* rtems_filesystem_fsmount_me_t )(
   rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */
   const void                           *data          /* IN */
 );
 
+/**
+ *  This type defines the interface allow the filesystem to
+ *  unmount a filesystem that was mounted at one of its node
+ *  locations.
+ */ 
 typedef int (* rtems_filesystem_unmount_t ) (
   rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
 );
 
+/**
+ *  This type defines the interface that allows a file system 
+ *  implementation to do any necessary work that is needed when
+ *  it is being unmounted.
+ */ 
 typedef int (* rtems_filesystem_fsunmount_me_t ) (
    rtems_filesystem_mount_table_entry_t *mt_entry    /* IN */
 );
 
+/**
+ *  This type defines the interface that will return the 
+ *  type of a filesystem implementations node.
+ */ 
 typedef rtems_filesystem_node_types_t (* rtems_filesystem_node_type_t) (
   rtems_filesystem_location_info_t    *pathloc      /* IN */
 );
 
+/**
+ *  This type defines the interface to the time(2) system call 
+ *  support which is provided by a file system implementation.
+ */ 
 typedef int (* rtems_filesystem_utime_t)(
   rtems_filesystem_location_info_t  *pathloc,       /* IN */
   time_t                             actime,        /* IN */
   time_t                             modtime        /* IN */
 );
 
+/**
+ *  This type defines the interface to the link(2) system call 
+ *  support which is provided by a file system implementation.
+ */ 
 typedef int (*rtems_filesystem_evaluate_link_t)(
   rtems_filesystem_location_info_t *pathloc,     /* IN/OUT */
   int                               flags        /* IN     */
 );
 
+/**
+ *  This type defines the interface to the symlink(2) system call 
+ *  support which is provided by a file system implementation.
+ */ 
 typedef int (*rtems_filesystem_symlink_t)(
  rtems_filesystem_location_info_t  *loc,         /* IN */
  const char                        *link_name,   /* IN */
  const char                        *node_name
 );
 
+/**
+ *  This type defines the interface to the readlink(2) system call 
+ *  support which is provided by a file system implementation.
+ */ 
 typedef int (*rtems_filesystem_readlink_t)(
  rtems_filesystem_location_info_t  *loc,     /* IN  */
  char                              *buf,     /* OUT */
  size_t                            bufsize
 );
 
+/**
+ *  This type defines the interface to the name(2) system call 
+ *  support which is provided by a file system implementation.
+ */ 
 typedef int (*rtems_filesystem_rename_t)(
  rtems_filesystem_location_info_t  *old_parent_loc,  /* IN */
  rtems_filesystem_location_info_t  *old_loc,         /* IN */
@@ -282,6 +655,10 @@ typedef int (*rtems_filesystem_rename_t)(
  const char                        *name             /* IN */
 );
 
+/**
+ *  This type defines the interface to the statvfs(2) system call 
+ *  support which is provided by a file system implementation.
+ */ 
 typedef int (*rtems_filesystem_statvfs_t)(
  rtems_filesystem_location_info_t  *loc,     /* IN  */
  struct statvfs                    *buf      /* OUT */
@@ -293,25 +670,341 @@ typedef int (*rtems_filesystem_statvfs_t)(
  * @brief File system operations table.
  */
 struct _rtems_filesystem_operations_table {
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine that evaluates a character path and
+     *  returns the node assocated with the last node in the path. 
+     *
+     *  @note This method must have a filesystem specific implementation.
+     *
+     *  @note There is no default implementation.
+     */
     rtems_filesystem_evalpath_t      evalpath_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine that evaluates a character path and
+     *  returns the node assocated with next to the last node in 
+     *  the path.  The last node will be the new node to be created.
+     *
+     *  @note This method must have a filesystem specific implementation.
+     *
+     *  @note There is no default implementation.
+     */
     rtems_filesystem_evalmake_t      evalformake_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the link(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_link_t          link_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the unlink(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_unlink_t        unlink_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of a method that returns the node type of the given node. 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_node_type_t     node_type_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the link(2) system call 
+     *
+     *  @note This method may use a mknod implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_mknod_t         mknod_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the link(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_chown_t         chown_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the freenod(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_freenode_t      freenod_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the mount(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_mount_t         mount_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the fsmount(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_fsmount_me_t    fsmount_me_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the unmount(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_unmount_t       unmount_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the fsunmount(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_fsunmount_me_t  fsunmount_me_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the utime(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_utime_t         utime_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the eval_link(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_evaluate_link_t eval_link_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the sumlink(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_symlink_t       symlink_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the readlink(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_readlink_t      readlink_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the rename(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_rename_t        rename_h;
+
+    /**
+     *  This field points to the file system specific implementation
+     *  of the support routine for the statvfs(2) system call 
+     *
+     *  @note This method may use a default implementation.
+     *
+     *  @note The default implementation returns -1 and sets
+     *  errno to ENOTSUP.
+     */
     rtems_filesystem_statvfs_t       statvfs_h;
 };
+
+/*
+ * @brief Default filesystem evalpath
+ */
+
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a link command.
+ */
+int rtems_filesystem_default_link(
+ rtems_filesystem_location_info_t  *to_loc,      /* IN */
+ rtems_filesystem_location_info_t  *parent_loc,  /* IN */
+ const char                        *name         /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a unlink command.
+ */
+int rtems_filesystem_default_unlink(
+ rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
+ rtems_filesystem_location_info_t  *pathloc         /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a chown command.
+ */
+int rtems_filesystem_default_chown(
+ rtems_filesystem_location_info_t  *pathloc,       /* IN */
+ uid_t                              owner,         /* IN */
+ gid_t                              group          /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a freenode command.
+ */
+int rtems_filesystem_default_freenode(
+ rtems_filesystem_location_info_t      *pathloc       /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a mount command.
+ */
+int rtems_filesystem_default_mount (
+   rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a fsmount command.
+ */
+int rtems_filesystem_default_fsmount(
+  rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */
+  const void                           *data          /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a unmount command.
+ */
+int rtems_filesystem_default_unmount(
+  rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a fsunmount command.
+ */
+int rtems_filesystem_default_fsunmount(
+   rtems_filesystem_mount_table_entry_t *mt_entry    /* IN */
+);
+
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a utime command.
+ */
+int rtems_filesystem_default_utime(
+  rtems_filesystem_location_info_t  *pathloc,       /* IN */
+  time_t                             actime,        /* IN */
+  time_t                             modtime        /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a link command.
+ */
+int rtems_filesystem_default_evaluate_link(
+  rtems_filesystem_location_info_t *pathloc,     /* IN/OUT */
+  int                               flags        /* IN     */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a symlink command.
+ */
+int rtems_filesystem_default_symlink(
+ rtems_filesystem_location_info_t  *loc,         /* IN */
+ const char                        *link_name,   /* IN */
+ const char                        *node_name
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a readlink command.
+ */
+int rtems_filesystem_default_readlink(
+ rtems_filesystem_location_info_t  *loc,     /* IN  */
+ char                              *buf,     /* OUT */
+ size_t                            bufsize
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a rename command.
+ */
+int rtems_filesystem_default_rename(
+ rtems_filesystem_location_info_t  *old_parent_loc,  /* IN */
+ rtems_filesystem_location_info_t  *old_loc,         /* IN */
+ rtems_filesystem_location_info_t  *new_parent_loc,  /* IN */
+ const char                        *name             /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of a statvfs command.
+ */
+int rtems_filesystem_default_statvfs(
+ rtems_filesystem_location_info_t  *loc,     /* IN  */
+ struct statvfs                    *buf      /* OUT */
+);
 
 /**
  * @brief File system table entry.

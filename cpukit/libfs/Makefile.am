@@ -14,8 +14,22 @@ DIST_SUBDIRS = $(SUBDIRS)
 
 EXTRA_DIST = README
 
-noinst_LIBRARIES = libimfs.a
+noinst_LIBRARIES = libdefaultfs.a
+libdefaultfs_a_SOURCES = \
+    src/defaults/default_chown.c src/defaults/default_fdatasync.c  \
+    src/defaults/default_fsync.c src/defaults/default_lseek.c \
+    src/defaults/default_rename.c src/defaults/default_unlink.c \
+    src/defaults/default_evalpath.c src/defaults/default_freenode.c \
+    src/defaults/default_ftruncate.c src/defaults/default_mount.c \
+    src/defaults/default_rmnod.c src/defaults/default_utime.c \
+    src/defaults/default_fchmod.c src/defaults/default_fsmount.c \
+    src/defaults/default_ioctl.c src/defaults/default_read.c \
+    src/defaults/default_statvfs.c  src/defaults/default_write.c \
+    src/defaults/default_fcntl.c src/defaults/default_fstat.c \
+    src/defaults/default_link.c src/defaults/default_readlink.c \
+    src/defaults/default_symlink.c
 
+noinst_LIBRARIES += libimfs.a
 libimfs_a_SOURCES =
 
 libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \

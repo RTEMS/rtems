@@ -1,3 +1,31 @@
+2010-06-25	Jennifer Averett <Jennifer.Averett@OARcorp.com
+
+	* libcsupport/include/rtems/libio.h, libfs/Makefile.am: Added default
+	filesystem handlers.
+	* libfs/src/defaults/default_chown.c,
+	libfs/src/defaults/default_evalpath.c,
+	libfs/src/defaults/default_fchmod.c,
+	libfs/src/defaults/default_fcntl.c,
+	libfs/src/defaults/default_fdatasync.c,
+	libfs/src/defaults/default_freenode.c,
+	libfs/src/defaults/default_fsmount.c,
+	libfs/src/defaults/default_fstat.c,
+	libfs/src/defaults/default_fsync.c,
+	libfs/src/defaults/default_ftruncate.c,
+	libfs/src/defaults/default_ioctl.c,
+	libfs/src/defaults/default_link.c,
+	libfs/src/defaults/default_lseek.c,
+	libfs/src/defaults/default_mount.c,
+	libfs/src/defaults/default_read.c,
+	libfs/src/defaults/default_readlink.c,
+	libfs/src/defaults/default_rename.c,
+	libfs/src/defaults/default_rmnod.c,
+	libfs/src/defaults/default_statvfs.c,
+	libfs/src/defaults/default_symlink.c,
+	libfs/src/defaults/default_unlink.c,
+	libfs/src/defaults/default_utime.c,
+	libfs/src/defaults/default_write.c: New files.
+
 2010-06-24	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1589/cpukit
