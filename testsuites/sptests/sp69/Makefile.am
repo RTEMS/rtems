@@ -5,7 +5,7 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = sp69
-sp69_SOURCES = init.c
+sp69_SOURCES = init.c ../../support/src/spin.c
 
 dist_rtems_tests_DATA = sp69.scn
 dist_rtems_tests_DATA += sp69.doc

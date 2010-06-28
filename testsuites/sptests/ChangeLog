@@ -1,3 +1,7 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp69/Makefile.am: Really needs spin.c
+
 2010-06-26	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1592/testing
