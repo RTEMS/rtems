@@ -1,5 +1,10 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp69/Makefile.am, sp71/Makefile.am, spfifo02/Makefile.am: Tests do
+	not need spin.c
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp70/Makefile.am: Tests do not need spin.c
 
 2010-06-24	Bharath Suri <bharath.s.jois@gmail.com>
