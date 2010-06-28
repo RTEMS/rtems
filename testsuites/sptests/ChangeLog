@@ -1,3 +1,12 @@
+2010-06-26	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1592/testing
+	* Makefile.am, configure.ac: Changes to incorporate sperror01,
+	sperror02, sperror03
+	* sperror01/init.c, sperror02/init.c: New tests to exercise
+	rtems_error routine
+	* sperror03/init.c: New test to exercise rtems_panic routine
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp69/Makefile.am, sp71/Makefile.am, spfifo02/Makefile.am: Tests do

@@ -17,6 +17,7 @@ SUBDIRS = \
     sp70 sp71 \
     spchain spclockget spcoverage spobjgetnext spnotepad01 spprintk spsize \
     spstkalloc spthreadq01 spwatchdog spwkspace \
+    sperror01 sperror02 sperror03 \
     spfatal01 spfatal02 spfatal03 spfatal04 spfatal05 spfatal06 spfatal07 \
     spfatal08 spfatal09 spfatal10 spfatal11 spfatal12 spfatal13 spfatal14 \
     spfatal15 spfatal16 spfatal17 spfatal18 spfatal19 \

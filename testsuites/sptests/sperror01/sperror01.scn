@@ -1,0 +1,9 @@
+*** TEST Tests for error reporting routines - 01 ***
+Dummy: Resources unavailable (unknown errno=-1)
+Dummy: Resources unavailable (status: could not get enough memory) (errno: Not enough space)
+Dummy: causing panic.. will print test end message, then...
+       print various error messages
+Dummy: Resources unavailable
+*** END OF TEST Tests for error reporting routines - 01 ***
+ (status: could not get enough memory)
+fatal error, exiting

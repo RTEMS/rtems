@@ -1,0 +1,5 @@
+*** TEST Tests for error reporting routines - 02 ***
+Dummy: Resources unavailable
+*** END OF TEST Tests for error reporting routines - 02 ***
+ (status: could not get enough memory)
+fatal error, aborting
