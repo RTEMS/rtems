@@ -1,3 +1,10 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add test to exercise IMFS behaviour with
+	files of maximum sizes.
+	* psximfs01/.cvsignore, psximfs01/Makefile.am, psximfs01/init.c,
+	psximfs01/psximfs01.doc, psximfs01/psximfs01.scn: New files.
+
 2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am, configure.ac: Revert accidentally committed patch.

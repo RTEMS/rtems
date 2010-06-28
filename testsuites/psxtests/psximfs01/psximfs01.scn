@@ -1,0 +1,16 @@
+*** TEST IMFS 01 ***
+open(biggie) - OK 
+write(biggie) - OK 
+Total written = 1280
+close(biggie) - OK 
+
+open(biggie) - OK 
+read(biggie) - OK 
+File correctly read until ENOSPC returned
+
+close(biggie) - OK 
+open(biggie) - OK 
+Seek to end .. returned 1280
+lseek/ftruncate loop..
+close(biggie) - OK 
+*** END OF TEST IMFS 01 ***
