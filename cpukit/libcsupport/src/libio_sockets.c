@@ -20,6 +20,7 @@
 #include <rtems.h>
 
 #include <errno.h>
+#include <rtems/seterr.h>
 
 /*
  * Convert an RTEMS file descriptor to a BSD socket pointer.

@@ -1,5 +1,10 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/libio_sockets.c: Use
+	rtems_set_errno_and_return_minus_one() where it was missed before.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/__brk.c, libcsupport/src/__gettod.c,
 	libcsupport/src/__times.c, libcsupport/src/fchdir.c,
 	libcsupport/src/ftrylockfile.c, libcsupport/src/getpwent.c,
