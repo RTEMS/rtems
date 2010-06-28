@@ -1,3 +1,9 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/include/rtems/error.h, libcsupport/src/error.c: Clean up
+	so rtems_panic() can be a noreturn method. This eliminates some
+	unreachable and thus untestable code.
+
 2010-06-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libcsupport/src/termios.c: Formatting.

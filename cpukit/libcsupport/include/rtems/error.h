@@ -34,22 +34,19 @@ typedef Internal_errors_t rtems_error_code_t;
 #define RTEMS_ERROR_ABORT  (0x10000000) /* err is fatal; panic */
 #endif
 
-#define RTEMS_ERROR_MASK  (RTEMS_ERROR_ERRNO | RTEMS_ERROR_ABORT | \
-                             RTEMS_ERROR_PANIC) /* all */
+#define RTEMS_ERROR_MASK \
+  (RTEMS_ERROR_ERRNO | RTEMS_ERROR_ABORT | RTEMS_ERROR_PANIC) /* all */
 
 const char *rtems_status_text(rtems_status_code);
-int   rtems_error(rtems_error_code_t error_code, const char *printf_format, ...);
-#ifdef __GNUC__
-void  rtems_panic(const char *printf_format, ...);
-/*
- *  We should be able to use this attribute but gcc complains that
- *  rtems_panic does in fact return. :(
- *
- *      __attribute__ ((__noreturn__));
- */
-#else
-void  rtems_panic(const char *printf_format, ...);
-#endif
+int   rtems_error(
+  rtems_error_code_t error_code,
+  const char *printf_format,
+  ...
+);
+void rtems_panic(
+  const char *printf_format,
+  ...
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 extern int rtems_panic_in_progress;
 
