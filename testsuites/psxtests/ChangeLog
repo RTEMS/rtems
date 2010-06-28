@@ -1,5 +1,10 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxtime/psxtime.scn, psxtime/test.c: Add test for passing a null
+	pointer.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* configure.ac: Remove reference to RTEMS_OBJECT_FORMAT.
 
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>

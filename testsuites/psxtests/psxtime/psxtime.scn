@@ -1,4 +1,5 @@
 *** POSIX TIME OF DAY TEST ***
+gettimeofday( NULL, NULL ) - EFAULT
 rtems_clock_set          12:45:00   01/01/1988
 adjtime - NULL delta - EINVAL
 adjtime - delta out of range - EINVAL
