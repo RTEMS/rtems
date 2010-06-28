@@ -1,3 +1,7 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/dumpbuf/dumpbuf.c, libmisc/dumpbuf/dumpbuf.h: Add const.
+
 2010-06-25	Jennifer Averett <Jennifer.Averett@OARcorp.com
 
 	* libcsupport/include/rtems/libio.h, libfs/Makefile.am: Added default

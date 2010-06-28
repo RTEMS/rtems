@@ -27,8 +27,8 @@ extern "C" {
  *  @param[in] length is the length of the buffer
  */
 void rtems_print_buffer(
-  unsigned char *buffer,
-  int            length
+  const unsigned char *buffer,
+  int                  length
 );
 
 #ifdef __cplusplus

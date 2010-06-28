@@ -24,13 +24,13 @@
  */
 
 static inline void Dump_Line(
-  unsigned char *buffer,
-  int            length
+  const unsigned char *buffer,
+  int                  length
 );
 
 void rtems_print_buffer(
-  unsigned char *buffer,
-  int            length
+  const unsigned char *buffer,
+  int                  length
 )
 {
 
@@ -50,8 +50,8 @@ void rtems_print_buffer(
 }
 
 static inline void Dump_Line(
-  unsigned char *buffer,
-  int            length
+  const unsigned char *buffer,
+  int                  length
 )
 {
 
