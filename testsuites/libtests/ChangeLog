@@ -1,5 +1,10 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Revert changes related to uncommitted test
+	under development.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, malloctest/init.c, termios03/init.c,
 	termios03/termios03.scn: Handle some of the VKILL and VERASE cases.
 
