@@ -5,7 +5,7 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = malloc03
-malloc03_SOURCES = init.c ../../support/src/spin.c
+malloc03_SOURCES = init.c
 
 dist_rtems_tests_DATA = malloc03.scn
 dist_rtems_tests_DATA += malloc03.doc
