@@ -79,7 +79,7 @@ int fchdir(
   if (rtems_filesystem_evaluate_path(".", 1, 0, &loc, 0)) {
     /* cloning failed; restore original and bail out */
     rtems_filesystem_current = saved;
-	return -1;
+    return -1;
   }
   /* release the old one */
   rtems_filesystem_freenode( &saved );

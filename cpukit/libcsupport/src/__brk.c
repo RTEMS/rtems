@@ -20,12 +20,12 @@
 #if defined(RTEMS_NEWLIB) && !defined(HAVE___BRK)
 
 #include <errno.h>
+#include <rtems/seterr.h>
 
 int __brk(
   const void *endds __attribute__((unused))
 )
 {
-  errno = EINVAL;
-  return -1;
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }
 #endif

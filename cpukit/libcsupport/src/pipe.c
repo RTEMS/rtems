@@ -17,6 +17,7 @@
 
 #include <errno.h>
 #include <sys/types.h>
+#include <rtems/seterr.h>
 
 extern int pipe_create(int filsdes[2]);
 
@@ -24,9 +25,8 @@ int pipe(
   int filsdes[2]
 )
 {
-  if (filsdes == NULL) {
-    errno = EFAULT;
-    return -1;
-  }
+  if (filsdes == NULL)
+    rtems_set_errno_and_return_minus_one( EFAULT );
+
   return pipe_create(filsdes);
 }

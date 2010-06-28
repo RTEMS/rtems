@@ -1,5 +1,14 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/__brk.c, libcsupport/src/__gettod.c,
+	libcsupport/src/__times.c, libcsupport/src/fchdir.c,
+	libcsupport/src/ftrylockfile.c, libcsupport/src/getpwent.c,
+	libcsupport/src/gxx_wrappers.c, libcsupport/src/libio_sockets.c,
+	libcsupport/src/pipe.c: Use rtems_set_errno_and_return_minus_one()
+	where it was missed before.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/include/rtems/error.h, libcsupport/src/error.c: Clean up
 	so rtems_panic() can be a noreturn method. This eliminates some
 	unreachable and thus untestable code.

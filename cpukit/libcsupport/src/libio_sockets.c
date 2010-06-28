@@ -62,10 +62,9 @@ int rtems_bsdnet_makeFdForSocket(
   int fd;
 
   iop = rtems_libio_allocate();
-  if (iop == 0) {
-      errno = ENFILE;
-      return -1;
-  }
+  if (iop == 0)
+      rtems_set_errno_and_return_minus_one( ENFILE );
+
   fd = iop - rtems_libio_iops;
   iop->flags |= LIBIO_FLAGS_WRITE | LIBIO_FLAGS_READ;
   iop->data0 = fd;

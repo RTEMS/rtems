@@ -24,6 +24,7 @@
 #include <ctype.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 /*
  * Static, thread-unsafe, buffers
@@ -188,31 +189,28 @@ static int getpw_r(
 
   init_etc_passwd_group();
 
-  if ((fp = fopen("/etc/passwd", "r")) == NULL) {
-    errno = EINVAL;
-    return -1;
-  }
+  if ((fp = fopen("/etc/passwd", "r")) == NULL)
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
   for(;;) {
-    if (!scanpw(fp, pwd, buffer, bufsize)) {
-      errno = EINVAL;
-      fclose(fp);
-      return -1;
-    }
+    if (!scanpw(fp, pwd, buffer, bufsize))
+      goto error_einval;
+
     if (name) {
       match = (strcmp(pwd->pw_name, name) == 0);
-    }
-    else {
+    } else {
       match = (pwd->pw_uid == uid);
     }
+
     if (match) {
       fclose(fp);
       *result = pwd;
       return 0;
     }
   }
+error_einval:
   fclose(fp);
-  errno = EINVAL;
-  return -1;
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }
 
 int getpwnam_r(
@@ -347,31 +345,28 @@ static int getgr_r(
 
   init_etc_passwd_group();
 
-  if ((fp = fopen("/etc/group", "r")) == NULL) {
-    errno = EINVAL;
-    return -1;
-  }
+  if ((fp = fopen("/etc/group", "r")) == NULL)
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
   for(;;) {
-    if (!scangr(fp, grp, buffer, bufsize)) {
-      errno = EINVAL;
-      fclose(fp);
-      return -1;
-    }
+    if (!scangr(fp, grp, buffer, bufsize))
+      goto error_einval;
+
     if (name) {
       match = (strcmp(grp->gr_name, name) == 0);
-    }
-    else {
+    } else {
       match = (grp->gr_gid == gid);
     }
+
     if (match) {
       fclose(fp);
       *result = grp;
       return 0;
     }
   }
+error_einval:
   fclose(fp);
-  errno = EINVAL;
-  return -1;
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }
 
 int getgrnam_r(

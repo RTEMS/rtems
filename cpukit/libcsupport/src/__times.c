@@ -22,6 +22,7 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <assert.h>
+#include <rtems/seterr.h>
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timestamp.h>
 #endif
@@ -32,10 +33,8 @@ clock_t _times(
 {
   rtems_interval ticks;
 
-  if ( !ptms ) {
-    errno = EFAULT;
-    return -1;
-  }
+  if ( !ptms )
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
   /*
    *  This call does not depend on TOD being initialized and can't fail.
