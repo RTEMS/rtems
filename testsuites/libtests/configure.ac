@@ -62,6 +62,7 @@ termios01/Makefile
 termios02/Makefile
 termios03/Makefile
 termios04/Makefile
+termios05/Makefile
 tztest/Makefile
 POSIX/Makefile
 ])

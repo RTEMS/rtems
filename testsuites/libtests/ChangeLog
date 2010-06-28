@@ -1,5 +1,10 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac, malloctest/init.c, termios03/init.c,
+	termios03/termios03.scn: Handle some of the VKILL and VERASE cases.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add new test to exercise termios RX and TX
 	interrupt driven IO support.
 	* termios04/.cvsignore, termios04/Makefile.am, termios04/init.c,

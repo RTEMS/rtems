@@ -51,5 +51,50 @@ Read 10 bytes from read(2)
 Echoed 11 characters
 61 62 63 64 65 66 67 68 2e 0d 0a                |abcdefgh...     |
 Changing c_iflag to: Disable to lower case mapping on input
-close(/dev/test) - OK 
+
+Reading (expected):
+54 65 73 74 69 6e 67 20 56 45 52 41 53 45 7f 2e |Testing VERASE..|
+Read 15 bytes from read(2)
+54 65 73 74 69 6e 67 20 56 45 52 41 53 2e 0a    |Testing VERAS.. |
+Echoed 20 characters
+54 65 73 74 69 6e 67 20 56 45 52 41 53 45 08 20 |Testing VERASE. |
+08 2e 0d 0a                                     |....            |
+
+Reading (expected):
+54 65 73 74 69 6e 67 20 56 4b 49 4c 4c 15 2e    |Testing VKILL.. |
+Read 2 bytes from read(2)
+2e 0a                                           |..              |
+Echoed 55 characters
+54 65 73 74 69 6e 67 20 56 4b 49 4c 4c 08 20 08 |Testing VKILL. .|
+08 20 08 08 20 08 08 20 08 08 20 08 08 20 08 08 |. .. .. .. .. ..|
+20 08 08 20 08 08 20 08 08 20 08 08 20 08 08 20 | .. .. .. .. .. |
+08 08 20 08 2e 0d 0a
+
+Reading (expected):
+7f 54 65 73 74 69 6e 67 20 56 45 52 41 53 45 20 |.Testing VERASE |
+69 6e 20 63 6f 6c 75 6d 6e 20 31 2e             |in column 1.    |
+Read 28 bytes from read(2)
+54 65 73 74 69 6e 67 20 56 45 52 41 53 45 20 69 |Testing VERASE i|
+6e 20 63 6f 6c 75 6d 6e 20 31 2e 0a             |n column 1..    |
+Echoed 29 characters
+54 65 73 74 69 6e 67 20 56 45 52 41 53 45 20 69 |Testing VERASE i|
+6e 20 63 6f 6c 75 6d 6e 20 31 2e 0d 0a          |n column 1...   |
+
+Reading (expected):
+09 20 74 61 62 20 09 54 65 73 74 69 6e 67 20 56 |. tab .Testing V|
+4b 49 4c 4c 20 61 66 74 65 72 20 74 61 62 2e 15 |KILL after tab..|
+Read 1 bytes from read(2)
+0a                                              |.               |
+Echoed 140 characters
+20 20 20 20 20 20 20 20 20 74 61 62 20 20 20 20 |         tab    |
+54 65 73 74 69 6e 67 20 56 4b 49 4c 4c 20 61 66 |Testing VKILL af|
+74 65 72 20 74 61 62 2e 08 20 08 08 20 08 08 20 |ter tab.. .. .. |
+08 08 20 08 08 20 08 08 20 08 08 20 08 08 20 08 |.. .. .. .. .. .|
+08 20 08 08 20 08 08 20 08 08 20 08 08 20 08 08 |. .. .. .. .. ..|
+20 08 08 20 08 08 20 08 08 20 08 08 20 08 08 20 | .. .. .. .. .. |
+08 08 20 08 08 20 08 08 20 08 08 20 08 08 20 08 |.. .. .. .. .. .|
+08 08 08 08 20 08 08 20 08 08 20 08 08 20 08 08 |.... .. .. .. ..|
+20 08 08 08 08 08 08 08 08 08 0d 0a             | ...........    |
+
+close(/dev/test) - OK
 *** END OF TEST TERMIOS03 ***

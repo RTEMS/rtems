@@ -103,6 +103,10 @@ const char ExpectedInput_2[] = "1235\b456.\n";
 const char ExpectedInput_3[] = "tab\ttab.\n";
 const char ExpectedInput_4[] = "cr\r.";
 const char ExpectedInput_5[] = "aBcDeFgH.\n";
+const char ExpectedInput_6[] = "Testing VERASE\177.\n";
+const char ExpectedInput_7[] = "Testing VKILL\025.\n";
+const char ExpectedInput_8[] = "\177Testing VERASE in column 1.\n";
+const char ExpectedInput_9[] = "\t tab \tTesting VKILL after tab.\025\n";
 
 rtems_task Init(
   rtems_task_argument argument
@@ -125,6 +129,12 @@ rtems_task Init(
   read_helper( Test_fd, ExpectedInput_5 );
   change_iflag( "Disable to lower case mapping on input", IUCLC, 0 );
 
+  read_helper( Test_fd, ExpectedInput_6 );
+  read_helper( Test_fd, ExpectedInput_7 );
+  read_helper( Test_fd, ExpectedInput_8 );
+  read_helper( Test_fd, ExpectedInput_9 );
+
+  puts( "" );
   close_it();
 
   puts( "*** END OF TEST TERMIOS03 ***" );

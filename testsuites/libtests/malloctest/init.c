@@ -1045,20 +1045,13 @@ static void test_posix_memalign(void)
   sc = posix_memalign( &p1, 2, 8 );
   fatal_posix_service_status( sc, EINVAL, "posix_memalign alignment of 2" );
 
-  if ( sizeof(int) == 4 )
-    maximumShift = 31;
-  else if ( sizeof(int) == 2 )
-    maximumShift = 15;
-  else {
-    printf( "Unsupported int size == %zu\n", sizeof(int) );
-    rtems_test_exit(0);
-  }
-  for ( i=2 ; i<maximumShift ; i++ ) {
-    printf( "posix_memalign - alignment of %" PRId32 " -- OK\n",
-      (int32_t) 1 << i );
-    sc = posix_memalign( &p1, 1 << i, 8 );
+  maximumShift = (sizeof(size_t) * CHAR_BIT) - 1;
+  for ( i=sizeof(void *) ; i<maximumShift ; i++ ) {
+    size_t alignment = 1 << i;
+    printf( "posix_memalign - alignment of %zd -- OK\n", alignment);
+    sc = posix_memalign( &p1, alignment, 8 );
     if ( sc == ENOMEM ) {
-      printf( "posix_memalign - ran out of memory trying %d\n", 1<<i );
+      printf( "posix_memalign - ran out of memory trying %zd\n", alignment );
       break;
     }
     posix_service_failed( sc, "posix_memalign alignment OK" );
@@ -1066,8 +1059,8 @@ static void test_posix_memalign(void)
     free( p1 );
   }
   for ( ; i<maximumShift ; i++ ) {
-    printf( "posix_memalign - alignment of %" PRId32 " -- SKIPPED\n",
-      (int32_t) 1 << i );
+    size_t alignment = 1 << i;
+    printf( "posix_memalign - alignment of %zd -- SKIPPED\n", alignment);
   }
 
 }
