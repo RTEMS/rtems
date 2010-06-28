@@ -15,8 +15,10 @@ test set name:  termios03
 
 directives:
 
-  + various termios services
+  + termios services for polled mode
+  + termios canonical input and output processing options
 
 concepts:
 
 + exercise termios polled support for input and output
++ exercise canonical IO processing options 

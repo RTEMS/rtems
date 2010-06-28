@@ -20,6 +20,13 @@
 extern "C" {
 #endif
 
+void termios_test_driver_set_rx(
+  const void *p,
+  size_t      len
+);
+
+void termios_test_driver_dump_tx(const char *c);
+
 /**
  *  This macro defines the standard name for the Termios Test device
  *  that is available to applications.

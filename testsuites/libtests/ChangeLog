@@ -1,5 +1,11 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* termios03/init.c, termios03/termios03.doc, termios03/termios03.scn,
+	termios03/termios_testdriver_polled.c,
+	termios03/termios_testdriver_polled.h: Add more test cases.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* malloc02/Makefile.am, malloc03/Makefile.am: Tests do not need spin.c
 
 2010-06-25	Joel Sherrill <joel.sherrill@oarcorp.com>

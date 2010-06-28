@@ -16,12 +16,44 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <rtems/termiostypes.h>
+#include <rtems/dumpbuf.h>
 #include "termios_testdriver_polled.h"
-#include <unistd.h>
+
+#define TX_MAX 1024
+uint8_t Tx_Buffer[TX_MAX];
+int     Tx_Index = 0;
+
+void termios_test_driver_dump_tx(const char *c)
+{
+  printf( "%s %d characters\n", c, Tx_Index );
+  rtems_print_buffer( Tx_Buffer, Tx_Index );
+  Tx_Index = 0;
+}
+  
+const uint8_t *Rx_Buffer;
+int            Rx_Index;
+int            Rx_Length;
+bool           Rx_FirstTime = true;
+
+void termios_test_driver_set_rx(
+  const void *p,
+  size_t      len
+)
+{
+  Rx_Buffer = p;
+  Rx_Length = len;
+  Rx_Index  = 0;
+}
 
 int termios_test_driver_inbyte_nonblocking( int port )
 {
-  return -1;
+  if ( Rx_FirstTime == true ) {
+    Rx_FirstTime = false;
+    return -1;
+  }
+  if ( Rx_Index >= Rx_Length )
+    return -1;
+  return Rx_Buffer[ Rx_Index++ ];
 }
 
 void termios_test_driver_outbyte_polled(
@@ -29,7 +61,7 @@ void termios_test_driver_outbyte_polled(
   char ch
 )
 {
-  write( 2, &ch, 1 );
+  Tx_Buffer[Tx_Index++] = (uint8_t) ch;
 }
 
 ssize_t termios_test_driver_write_support (int minor, const char *buf, size_t len)
