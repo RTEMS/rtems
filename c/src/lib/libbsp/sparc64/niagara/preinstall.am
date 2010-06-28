@@ -110,14 +110,6 @@ $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 
-$(PROJECT_LIB)/asm.$(OBJEXT): asm.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/asm.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/asm.$(OBJEXT)
-
-$(PROJECT_LIB)/bspinit.$(OBJEXT): bspinit.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/bspinit.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/bspinit.$(OBJEXT)
-
 $(PROJECT_LIB)/linkcmds: ../shared/startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
