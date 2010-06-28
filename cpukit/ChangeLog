@@ -1,3 +1,7 @@
+2010-06-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libcsupport/src/termios.c: Formatting.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/dumpbuf/dumpbuf.c, libmisc/dumpbuf/dumpbuf.h: Add const.
