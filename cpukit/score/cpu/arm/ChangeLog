@@ -1,3 +1,10 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1573/cpukit
+	* arm_exc_interrupt.S: Add a per cpu data structure which contains the
+	information required by RTEMS for each CPU core. This encapsulates
+	information such as thread executing, heir, idle and dispatch needed.
+
 2010-05-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* rtems/score/arm.h: Make it a warning not error that the FPU multilib

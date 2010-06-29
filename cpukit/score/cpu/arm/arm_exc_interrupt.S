@@ -30,6 +30,7 @@
 #endif
 
 #include <rtems/asm.h>
+#include <rtems/score/percpu.h>
 
 #define EXCHANGE_LR r4
 #define EXCHANGE_SPSR r5
@@ -42,9 +43,6 @@
 #define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, r12}
 #define CONTEXT_SIZE 28
 
-.extern _ISR_Nest_level
-.extern _ISR_Signals_to_thread_executing
-.extern _ISR_Thread_dispatch
 .extern _Thread_Dispatch_disable_level
 
 .extern bsp_interrupt_dispatch
@@ -81,7 +79,7 @@ arm_exc_interrupt:
 	ldmia	r1, EXCHANGE_LIST
 
 	/* Get interrupt nest level */
-	ldr	r0, =_ISR_Nest_level
+	ldr	r0, =ISR_NEST_LEVEL
 	ldr	r2, [r0]
 
 	/* Switch stack if necessary and save original stack pointer */
@@ -105,7 +103,7 @@ arm_exc_interrupt:
 	bl	bsp_interrupt_dispatch
 
 	/* Decrement interrupt nest and thread dispatch disable level */
-	ldr	r0, =_ISR_Nest_level
+	ldr	r0, =ISR_NEST_LEVEL
 	ldr	r1, =_Thread_Dispatch_disable_level
 	ldr	r2, [r0]
 	ldr	r3, [r1]
@@ -124,13 +122,7 @@ arm_exc_interrupt:
 	bne	thread_dispatch_done
 
 	/* Check context switch necessary */
-	ldr	r0, =_Context_Switch_necessary
-	ldrb	r1, [r0]
-	ldr	r0, =_ISR_Signals_to_thread_executing
-	cmp	r1, #0
-	bne	do_thread_dispatch
-
-	/* Check ISR signals to thread executing */
+	ldr	r0, =DISPATCH_NEEDED
 	ldrb	r1, [r0]
 	cmp	r1, #0
 	beq	thread_dispatch_done
@@ -141,9 +133,6 @@ arm_exc_interrupt:
 #endif /* __thumb__ */
 
 do_thread_dispatch:
-
-	/* Clear ISR signals to thread executing */
-	strb	r3, [r0]
 
 	/* Thread dispatch */
 	bl	_Thread_Dispatch
