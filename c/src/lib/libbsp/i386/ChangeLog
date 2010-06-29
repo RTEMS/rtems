@@ -1,3 +1,11 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1573/cpukit
+	* shared/irq/irq.c, shared/irq/irq_asm.S: Add a per cpu data structure
+	which contains the information required by RTEMS for each CPU core.
+	This encapsulates information such as thread executing, heir, idle
+	and dispatch needed.
+
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/comm/GDB.HOWTO: Remove more ITRON references.

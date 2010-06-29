@@ -249,22 +249,3 @@ void C_dispatch_isr(int vector)
   irq_count[vector]++;
   bsp_interrupt_handler_dispatch(vector);
 }
-
-void _ThreadProcessSignalsFromIrq (void)
-{
-  /*
-   * Process pending signals that have not already been
-   * processed by _Thread_Displatch. This happens quite
-   * unfrequently : the ISR must have posted an action
-   * to the current running thread.
-   */
-  if ( _Thread_Do_post_task_switch_extension ||
-       _Thread_Executing->do_post_task_switch_extension ) {
-    _Thread_Executing->do_post_task_switch_extension = false;
-    _API_extensions_Run_postswitch();
-  }
-  /*
-   * I plan to process other thread related events here.
-   * This will include DEBUG session requested from keyboard...
-   */
-}

@@ -12,8 +12,10 @@
  */
 
 #include <rtems/asm.h>
+#include <bspopts.h>
 #include <bsp/irq_asm.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/percpu.h>
 
 #ifndef CPU_STACK_ALIGNMENT
 #error "Missing header? CPU_STACK_ALIGNMENT is not defined here"
@@ -22,13 +24,14 @@
 /* Stack frame we use for intermediate storage               */
 #define ARG_OFF	0
 #define MSK_OFF 4
-#define EBP_OFF 8        /* code restoring ebp/esp relies on */
-#define ESP_OFF 12       /* esp being on top of ebp!         */
+#define EBX_OFF 8        /* ebx                              */
+#define EBP_OFF 12       /* code restoring ebp/esp relies on */
+#define ESP_OFF 16       /* esp being on top of ebp!         */
 #ifdef __SSE__
-#define FRM_SIZ (16+512)
-#define SSE_OFF 16
+#define FRM_SIZ (20+512)
+#define SSE_OFF 20
 #else
-#define FRM_SIZ 16
+#define FRM_SIZ 20
 #endif
 
 	BEGIN_CODE
@@ -64,14 +67,16 @@ SYM (_ISR_Handler):
 
 	/*
 	 * Establish an aligned stack frame
-	 *   original-sp
-	 *   saved-bp
-	 *   saved-irq-mask
-	 *   vector-arg-to-C_dispatch_isr   <- aligned SP
+	 *   original sp
+         *   saved ebx
+	 *   saved ebp
+	 *   saved irq mask
+	 *   vector arg to C_dispatch_isr   <- aligned SP
 	 */
 	movl      esp, eax
 	subl      $FRM_SIZ, esp
 	andl      $ - CPU_STACK_ALIGNMENT, esp
+	movl      ebx, EBX_OFF(esp)
 	movl      eax, ESP_OFF(esp)
 	movl      ebp, EBP_OFF(esp)
 
@@ -82,8 +87,7 @@ SYM (_ISR_Handler):
 	 */
 
 	/* We save SSE here (on the task stack) because we possibly
-	 * call other C-code (besides the ISR, namely _Thread_Dispatch()
-	 * or _ThreadProcessSignalsFromIrq()).
+	 * call other C-code (besides the ISR, namely _Thread_Dispatch())
 	 */
     /*  don't wait here; a possible exception condition will eventually be
      *  detected when the task resumes control and executes a FP instruction
@@ -95,13 +99,16 @@ SYM (_ISR_Handler):
 	ldmxcsr ARG_OFF(esp)            /* clean-slate MXCSR              */
 #endif
 
+        /* Do not disable any 8259 interrupts if this isn't from one */
+	cmp       ecx, 16               /* is this a PIC IRQ? */
+	jge       .check_stack_switch
 
 	/*
 	 * acknowledge the interrupt
-	 *
 	 */
-	movw      SYM (i8259s_cache), ax /* move current i8259 interrupt mask in ax */
+	movw      SYM (i8259s_cache), ax /* save current i8259 interrupt mask */
 	movl      eax, MSK_OFF(esp)      /* save in stack frame */
+
 	/*
 	 * compute the new PIC mask:
 	 *
@@ -129,11 +136,17 @@ SYM (_ISR_Handler):
 	 *  Now switch stacks if necessary
 	 */
 
+PUBLIC (ISR_STOP)
+ISR_STOP:
 .check_stack_switch:
 	movl      esp, ebp                  /* ebp = previous stack pointer */
-	cmpl      $0, SYM (_ISR_Nest_level) /* is this the outermost interrupt? */
+
+	movl      $SYM(rtems_per_cpu_info), ebx
+
+	/* is this the outermost interrupt? */
+	cmpl      $0, PER_CPU_ISR_NEST_LEVEL(ebx)
 	jne       nested                    /* No, then continue */
-	movl      SYM (_CPU_Interrupt_stack_high), esp
+	movl      PER_CPU_INTERRUPT_STACK_HIGH(ebx), esp
 
 	/*
 	 *  We want to insure that the old stack pointer is in ebp
@@ -142,7 +155,7 @@ SYM (_ISR_Handler):
 	 */
 
 nested:
-	incl      SYM (_ISR_Nest_level)     /* one nest level deeper */
+	incl      PER_CPU_ISR_NEST_LEVEL(ebx)  /* one nest level deeper */
 	incl      SYM (_Thread_Dispatch_disable_level) /* disable multitasking */
 
 	/*
@@ -151,7 +164,7 @@ nested:
 	 */
 	sti
 
-    /*
+	/*
 	 *  ECX is preloaded with the vector number; store as arg
 	 *  on top of stack. Note that _CPU_Interrupt_stack_high
 	 *  was adjusted in _CPU_Interrupt_stack_setup() (score/rtems/cpu.h)
@@ -166,6 +179,8 @@ nested:
 	 */
 	cli
 
+	movl      ARG_OFF(esp), ecx     /* grab vector arg from stack */
+
 	/*
 	 * Restore stack. This moves back to the task stack
 	 * when all interrupts are unnested.
@@ -175,13 +190,18 @@ nested:
 	/*
 	 * restore the original i8259 masks
 	 */
+        /* Do not touch 8259 interrupts if this isn't from one */
+	cmp       ecx, 16               /* is this a PIC IRQ? */
+	jge       .dont_restore_i8259
+
 	movl      MSK_OFF(esp), eax
 	movw      ax, SYM (i8259s_cache)
 	outb	  $PIC_MASTER_IMR_IO_PORT
 	movb	  ah, al
 	outb	  $PIC_SLAVE_IMR_IO_PORT
 
-	decl      SYM (_ISR_Nest_level)     /* one less ISR nest level */
+.dont_restore_i8259:
+	decl      PER_CPU_ISR_NEST_LEVEL(ebx)  /* one less ISR nest level */
 	                                    /* If interrupts are nested, */
 	                                    /*   then dispatching is disabled */
 
@@ -190,26 +210,10 @@ nested:
 	                                    /* Is dispatch disabled */
 	jne       .exit                     /* Yes, then exit */
 
-	cmpb      $0, SYM (_Context_Switch_necessary)
+	cmpb      $0, PER_CPU_DISPATCH_NEEDED(ebx)
 	                                    /* Is task switch necessary? */
 	jne       .schedule                 /* Yes, then call the scheduler */
-
-	cmpb      $0, SYM (_ISR_Signals_to_thread_executing)
-	                                    /* signals sent to Run_thread */
-	                                    /*   while in interrupt handler? */
-	je        .exit                     /* No, exit */
-
-.bframe:
-	movb      $0, SYM (_ISR_Signals_to_thread_executing)
-	/*
-	 * This code is the less critical path. In order to have a single
-	 * Thread Context, we take the same frame than the one pushed on
-	 * exceptions. This makes sense because Signal is a software
-	 * exception.
-	 */
-	call      _ThreadProcessSignalsFromIrq
-
-	jmp       .exit
+	jmp       .exit                     /* No, exit */
 
 .schedule:
 	/*
@@ -229,10 +233,12 @@ nested:
 	fxrstor   SSE_OFF(esp)
 #endif
 
-	/* restore ebp and original esp */
-	addl      $EBP_OFF, esp
+	/* restore ebx, ebp and original esp */
+	addl      $EBX_OFF, esp
+	popl      ebx
 	popl      ebp
 	popl      esp
+
 	/*
 	 * BEGINNING OF DE-ESTABLISH SEGMENTS
 	 *
@@ -277,6 +283,7 @@ DISTINCT_INTERRUPT_ENTRY(12)
 DISTINCT_INTERRUPT_ENTRY(13)
 DISTINCT_INTERRUPT_ENTRY(14)
 DISTINCT_INTERRUPT_ENTRY(15)
+DISTINCT_INTERRUPT_ENTRY(16)
 
 	/*
 	 * routine used to initialize the IDT by default
