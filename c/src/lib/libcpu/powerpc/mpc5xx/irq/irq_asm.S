@@ -26,6 +26,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/percpu.h>
 #include <libcpu/vectors.h>
 #include <libcpu/raw_exception.h>
 
@@ -118,8 +119,8 @@ SYM (dispatch_irq_handler):
 	/*
 	 * Retrieve current nesting level from _ISR_Nest_level
 	 */
-	lis		r7, _ISR_Nest_level@ha
-	lwz		r3, _ISR_Nest_level@l(r7)
+	lis		r7, ISR_NEST_LEVEL@ha
+	lwz		r3, ISR_NEST_LEVEL@l(r7)
 
 	/*
 	 * Check if stack switch is necessary
@@ -141,7 +142,7 @@ nested:
 	lwz	r6, _Thread_Dispatch_disable_level@l(r15)
 
 	/* store new nesting level in _ISR_Nest_level */
-	stw	r3, _ISR_Nest_level@l(r7)
+	stw	r3, ISR_NEST_LEVEL@l(r7)
 
 	addi	r6, r6, 1
 
@@ -170,8 +171,8 @@ nested:
 	 * value as an easy exit condition because if interrupt nesting level > 1
 	 * then _Thread_Dispatch_disable_level > 1
 	 */
-	lis		r7, _ISR_Nest_level@ha
-	lwz		r4, _ISR_Nest_level@l(r7)
+	lis		r7, ISR_NEST_LEVEL@ha
+	lwz		r4, ISR_NEST_LEVEL@l(r7)
 
 	/*
 	 * start decrementing _Thread_Dispatch_disable_level
@@ -181,7 +182,7 @@ nested:
 	addi	r4, r4, -1	/* Continue decrementing nesting level */
 	addi	r3, r3, -1	/* Continue decrementing _Thread_Dispatch_disable_level */
 
-	stw	r4, _ISR_Nest_level@l(r7) /* End decrementing nesting level */
+	stw	r4, ISR_NEST_LEVEL@l(r7) /* End decrementing nesting level */
 	stw	r3,_Thread_Dispatch_disable_level@l(r15) /* End decrementing _Thread_Dispatch_disable_level */
 
 	cmpwi	r3, 0
@@ -199,21 +200,13 @@ nested:
 	 * Interrupt are still disabled. Time to check if scheduler request to
 	 * do something with the current thread...
 	 */
-	addis	r4, 0, _Context_Switch_necessary@ha
-	lbz	r5, _Context_Switch_necessary@l(r4)
+	addis	r4, 0, DISPATCH_NEEDED@ha
+	lbz	r5, DISPATCH_NEEDED@l(r4)
 	cmpwi	r5, 0
-	bne	switch
-
-	addis	r6, 0, _ISR_Signals_to_thread_executing@ha
-	lbz	r7, _ISR_Signals_to_thread_executing@l(r6)
-	cmpwi	r7, 0
-	li	r8, 0
 	beq	easy_exit
 
-	stb	r8, _ISR_Signals_to_thread_executing@l(r6)
-
 	/*
-	 * going to call _ThreadProcessSignalsFromIrq
+	 * going to call _Thread_Dispatch
 	 * Push a complete exception like frame...
 	 */
 	stmw	r16, GPR16_OFFSET(r1)
@@ -232,7 +225,7 @@ nested:
 	/*
 	 * Call High Level signal handling code
 	 */
-	bl	_ThreadProcessSignalsFromIrq
+	bl	_Thread_Dispatch
 
 	/*
 	 * start restoring exception like frame
@@ -271,9 +264,6 @@ nested:
 	SYNC
 	rfi
 
-
-switch:
-	bl	SYM (_Thread_Dispatch)
 
 easy_exit:
 	/*

@@ -13,6 +13,10 @@
  */
 
 /* Load macro definitions */
+#include <rtems/asm.h>
+#include <rtems/system.h>
+#include <rtems/score/percpu.h>
+
 #include "ppc_exc_asm_macros.h"
 
 /******************************************************/

@@ -422,11 +422,12 @@ wrap_no_save_frame_register_\_FLVR:
 	 */
 
 	/* Increment ISR nest level and thread dispatch disable level */
-	lwz	SCRATCH_REGISTER_0, _ISR_Nest_level@sdarel(r13)
+	lis	SCRATCH_REGISTER_2, ISR_NEST_LEVEL@ha
+	lwz	SCRATCH_REGISTER_0, ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
 	lwz	SCRATCH_REGISTER_1, _Thread_Dispatch_disable_level@sdarel(r13)
 	addi	SCRATCH_REGISTER_0, SCRATCH_REGISTER_0, 1
 	addi	SCRATCH_REGISTER_1, SCRATCH_REGISTER_1, 1
-	stw	SCRATCH_REGISTER_0, _ISR_Nest_level@sdarel(r13)
+	stw	SCRATCH_REGISTER_0, ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
 	stw	SCRATCH_REGISTER_1, _Thread_Dispatch_disable_level@sdarel(r13)
 
 	/*
@@ -612,11 +613,12 @@ wrap_handler_done_\_FLVR:
 	 */
 
 	/* Decrement ISR nest level and thread dispatch disable level */
-	lwz	SCRATCH_REGISTER_0, _ISR_Nest_level@sdarel(r13)
+	lis	SCRATCH_REGISTER_2, ISR_NEST_LEVEL@ha
+	lwz	SCRATCH_REGISTER_0, ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
 	lwz	SCRATCH_REGISTER_1, _Thread_Dispatch_disable_level@sdarel(r13)
 	subi	SCRATCH_REGISTER_0, SCRATCH_REGISTER_0, 1
 	subic.	SCRATCH_REGISTER_1, SCRATCH_REGISTER_1, 1
-	stw	SCRATCH_REGISTER_0, _ISR_Nest_level@sdarel(r13)
+	stw	SCRATCH_REGISTER_0, ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
 	stw	SCRATCH_REGISTER_1, _Thread_Dispatch_disable_level@sdarel(r13)
 
 	/* Branch to skip thread dispatching */

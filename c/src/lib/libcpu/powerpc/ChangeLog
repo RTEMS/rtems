@@ -1,3 +1,14 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1573/cpukit
+	* mpc5xx/irq/irq.c, mpc5xx/irq/irq_asm.S,
+	new-exceptions/bspsupport/ppc_exc.S,
+	new-exceptions/bspsupport/ppc_exc_asm_macros.h,
+	new-exceptions/bspsupport/ppc_exc_hdl.c: Add a per cpu data structure
+	which contains the information required by RTEMS for each CPU core.
+	This encapsulates information such as thread executing, heir, idle
+	and dispatch needed.
+
 2010-06-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am: Formatting.
