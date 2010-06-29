@@ -37,7 +37,6 @@
  *  Indicate we are in an assembly file and get the basic CPU definitions.
  */
 
-#define ASM
 #include <rtems/score/h8300.h>
 
 /*
@@ -116,5 +115,3 @@
 #define EXTERN(sym) .globl SYM (sym)
 
 #endif
-
-	asm( \".h8300h\" );

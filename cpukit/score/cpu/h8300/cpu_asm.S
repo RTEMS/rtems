@@ -18,6 +18,8 @@
 #include "config.h"
 #endif
 
+#include <rtems/asm.h>
+#include <rtems/score/percpu.h>
 
 ;.equ	RUNCONTEXT_ARG,	 er0
 ;.equ	HEIRCONTEXT_ARG, er1
@@ -51,9 +53,9 @@
 
 	.align 2
 
-	.global	__CPU_Context_switch
+	.global	SYM(_CPU_Context_switch)
 
-__CPU_Context_switch:
+SYM(_CPU_Context_switch):
 	/* Save Context */
 #if defined(__H8300H__) || defined(__H8300S__) || defined(__H8300SX__)
 	stc.w	ccr,@(0:16,er0)
@@ -80,9 +82,9 @@ restore:
 
 	.align 2
 
-	.global	__CPU_Context_restore
+	.global	SYM(_CPU_Context_restore)
 
-__CPU_Context_restore:
+SYM(_CPU_Context_restore):
 	
 #if defined(__H8300H__) || defined(__H8300S__) || defined(__H8300SX__)
 	mov.l	er0,er1
@@ -100,13 +102,11 @@ __CPU_Context_restore:
 	
 */
 	.align 2
-	.global	__ISR_Handler
-	.extern	__ISR_Nest_level
-	.extern	__Vector_table
-	.extern	__Context_switch_necessary
+	.global	SYM(_ISR_Handler)
+	.extern	SYM(_Vector_table)
 
 	
-__ISR_Handler:
+SYM(_ISR_Handler):
 #if defined(__H8300H__) || defined(__H8300S__) || defined(__H8300SX__)
 	mov.l	er1,@-er7
 	mov.l	er2,@-er7
@@ -118,24 +118,24 @@ __ISR_Handler:
 /*  Set IRQ Stack */
 	orc		#0xc0,ccr
 	mov.l	er7,er6		; save stack pointer
-	mov.l	@__ISR_Nest_level,er1
+	mov.l	@ISR_NEST_LEVEL,er1
 	bne		nested
-	mov.l	@__CPU_Interrupt_stack_high,er7
+	mov.l	@INTERRUPT_STACK_HIGH,er7
 	
 nested:
 	mov.l	er6,@-er7	; save sp so pop regardless of nest level
 	
 ;; Inc  system counters
-	mov.l	@__ISR_Nest_level,er1
+	mov.l	@ISR_NEST_LEVEL,er1
 	inc.l	#1,er1
-	mov.l	er1,@__ISR_Nest_level
-	mov.l	@__Thread_Dispatch_disable_level,er1
+	mov.l	er1,@ISR_NEST_LEVEL
+	mov.l	@SYM(_Thread_Dispatch_disable_level),er1
 	inc.l	#1,er1
-	mov.l	er1,@__Thread_Dispatch_disable_level
+	mov.l	er1,@SYM(_Thread_Dispatch_disable_level)
 	
 /* Vector to ISR */
 
-	mov.l	@__ISR_Vector_table,er1
+	mov.l	@SYM(_ISR_Vector_table),er1
 	mov		er0,er2	; copy vector
 	shll.l	er2
 	shll.l	er2		; vector = vector * 4 (sizeof(int))
@@ -144,34 +144,28 @@ nested:
 	jsr		@er1	; er0 = arg1 =vector
 	
 	orc		#0xc0,ccr
-	mov.l	@__ISR_Nest_level,er1
+	mov.l	@ISR_NEST_LEVEL,er1
 	dec.l	#1,er1
-	mov.l	er1,@__ISR_Nest_level
-	mov.l	@__Thread_Dispatch_disable_level,er1
+	mov.l	er1,@ISR_NEST_LEVEL
+	mov.l	@SYM(_Thread_Dispatch_disable_level),er1
 	dec.l	#1,er1
-	mov.l	er1,@__Thread_Dispatch_disable_level
-	bne		exit
+	mov.l	er1,@SYM(_Thread_Dispatch_disable_level)
+	bne	exit
 	
-	mov.b	@__Context_Switch_necessary,er1
-	bne		bframe		; If yes then dispatch next task
-	
-	mov.b	@__ISR_Signals_to_thread_executing,er1
-	beq		exit		; If no signals waiting
+	mov.b	@DISPATCH_NEEDED,er1
+	beq	exit		; If no then exit
 
 	/* Context switch here through ISR_Dispatch */
-	
 bframe:
-	orc		#0xc0,ccr
+	orc	#0xc0,ccr
 /*	Pop Stack	*/
-	mov		@er7+,er6
-	mov		er6,er7
-	mov.l	#0,er2
-	mov.l	er2,@__ISR_Signals_to_thread_executing
+	mov	@er7+,er6
+	mov	er6,er7
 
 	/* Set up IRQ stack frame and dispatch to _ISR_Dispatch */
 	
 	mov.l	#0xc0000000,er2		/* Disable IRQ */
-	or.l	#_ISR_Dispatch,er2
+	or.l	#SYM(_ISR_Dispatch),er2
 	mov.l	er2,@-er7
 	rte
 
@@ -200,12 +194,12 @@ exit:
 */
 
 	.align 2
-	.global _ISR_Dispatch
+	.global SYM(_ISR_Dispatch)
 
-_ISR_Dispatch:
+SYM(_ISR_Dispatch):
 	
 #if defined(__H8300H__) || defined(__H8300S__) || defined(__H8300SX__)
-	jsr		@__Thread_Dispatch
+	jsr		@SYM(_Thread_Dispatch)
 	mov		@er7+,er6
 	mov		@er7+,er5
 	mov		@er7+,er4
@@ -218,14 +212,14 @@ _ISR_Dispatch:
 	
 
 	.align 2
-	.global __CPU_Context_save_fp
+	.global SYM(_CPU_Context_save_fp)
 
-__CPU_Context_save_fp:
+SYM(_CPU_Context_save_fp):
 	rts
 
 
 	.align 2
-	.global __CPU_Context_restore_fp
+	.global SYM(_CPU_Context_restore_fp)
 
-__CPU_Context_restore_fp:
+SYM(_CPU_Context_restore_fp):
 	rts
