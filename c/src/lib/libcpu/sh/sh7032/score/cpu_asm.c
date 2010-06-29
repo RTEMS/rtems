@@ -173,12 +173,10 @@ void __ISR_Handler( uint32_t   vector)
     return;
 
   if ( _Thread_Dispatch_disable_level ) {
-    _ISR_Signals_to_thread_executing = FALSE;
     return;
   }
 
-  if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing ) {
-    _ISR_Signals_to_thread_executing = FALSE;
+  if ( _Context_Switch_necessary ) {
     _Thread_Dispatch();
   }
 }
