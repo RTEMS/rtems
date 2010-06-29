@@ -171,8 +171,8 @@ typedef struct tftpfs_info_s {
  */
 
 typedef const char *tftp_node;
-extern rtems_filesystem_operations_table  rtems_tftp_ops;
-extern rtems_filesystem_file_handlers_r   rtems_tftp_handlers;
+static const rtems_filesystem_operations_table  rtems_tftp_ops;
+static const rtems_filesystem_file_handlers_r   rtems_tftp_handlers;
 
 int rtems_tftpfs_initialize(
   rtems_filesystem_mount_table_entry_t *mt_entry,
@@ -1082,7 +1082,7 @@ static int rtems_tftp_free_node_info(
 }
 
 
-rtems_filesystem_operations_table  rtems_tftp_ops = {
+static const rtems_filesystem_operations_table  rtems_tftp_ops = {
     rtems_tftp_eval_path,            /* eval_path */
     rtems_tftp_evaluate_for_make,    /* evaluate_for_make */
     NULL,                            /* link */
@@ -1101,7 +1101,7 @@ rtems_filesystem_operations_table  rtems_tftp_ops = {
     NULL,                            /* readlin */
 };
 
-rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
+static const rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
     rtems_tftp_open,      /* open */
     rtems_tftp_close,     /* close */
     rtems_tftp_read,      /* read */

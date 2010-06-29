@@ -1,3 +1,10 @@
+2010-06-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/lib/tftpDriver.c: rtems_tftp_ops and
+	rtems_tftp_handlers are now const and static.
+	* libnetworking/rtems/tftp.h: Removed
+	rtems_bsdnet_initialize_tftp_filesystem and rtems_tftp_ops.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libfs/src/defaults/default_chown.c,
