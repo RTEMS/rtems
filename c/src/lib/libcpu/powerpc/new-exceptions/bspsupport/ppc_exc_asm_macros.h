@@ -12,6 +12,7 @@
  * reintroduce such statements.
  */
 
+#include <bspopts.h>
 #include <bsp/vectors.h>
 
 #define LT(cr) ((cr)*4+0)
