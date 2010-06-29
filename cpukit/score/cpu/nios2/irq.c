@@ -64,28 +64,21 @@ void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
 
   _ISR_Nest_level--;
 
-  if( _ISR_Nest_level == 0)
-  {
+  if( _ISR_Nest_level == 0) {
 #if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
     stack_ptr = _old_stack_ptr;
 #endif
 
     if( _Thread_Dispatch_disable_level == 0 )
     {
-      if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing )
-      {
-        _ISR_Signals_to_thread_executing = FALSE;
+      if ( _Context_Switch_necessary ) {
         _CPU_ISR_Enable( level );
         _Thread_Dispatch();
         /* may have switched to another task and not return here immed. */
         _CPU_ISR_Disable( level ); /* Keep _pairs_ of Enable/Disable */
       }
     }
-    else
-    {
-      _ISR_Signals_to_thread_executing = FALSE;
-    };
-  };
+  }
 
   _CPU_ISR_Enable( level );
 }
