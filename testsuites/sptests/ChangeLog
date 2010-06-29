@@ -1,5 +1,12 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1573/cpukit
+	* spsize/size.c: Add a per cpu data structure which contains the
+	information required by RTEMS for each CPU core. This encapsulates
+	information such as thread executing, heir, idle and dispatch needed.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp69/Makefile.am: Really needs spin.c
 
 2010-06-26	Bharath Suri <bharath.s.jois@gmail.com>
