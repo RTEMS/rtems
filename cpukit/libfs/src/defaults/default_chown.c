@@ -11,6 +11,7 @@
 
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int rtems_filesystem_default_chown_t(
  rtems_filesystem_location_info_t  *pathloc,       /* IN */

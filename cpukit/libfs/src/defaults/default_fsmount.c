@@ -11,6 +11,7 @@
 
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int rtems_filesystem_default_fsmount_t(
   rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */

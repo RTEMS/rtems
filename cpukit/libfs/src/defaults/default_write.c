@@ -11,6 +11,7 @@
 
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 ssize_t rtems_filesystem_default_write(
   rtems_libio_t *iop,

@@ -11,6 +11,7 @@
 
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 rtems_off64_t rtems_filesystem_default_lseek(
   rtems_libio_t *iop,

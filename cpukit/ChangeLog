@@ -1,5 +1,31 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libfs/src/defaults/default_chown.c,
+	libfs/src/defaults/default_evalpath.c,
+	libfs/src/defaults/default_fchmod.c,
+	libfs/src/defaults/default_fcntl.c,
+	libfs/src/defaults/default_fdatasync.c,
+	libfs/src/defaults/default_freenode.c,
+	libfs/src/defaults/default_fsmount.c,
+	libfs/src/defaults/default_fstat.c,
+	libfs/src/defaults/default_fsync.c,
+	libfs/src/defaults/default_ftruncate.c,
+	libfs/src/defaults/default_ioctl.c,
+	libfs/src/defaults/default_link.c,
+	libfs/src/defaults/default_lseek.c,
+	libfs/src/defaults/default_mount.c,
+	libfs/src/defaults/default_read.c,
+	libfs/src/defaults/default_readlink.c,
+	libfs/src/defaults/default_rename.c,
+	libfs/src/defaults/default_rmnod.c,
+	libfs/src/defaults/default_statvfs.c,
+	libfs/src/defaults/default_symlink.c,
+	libfs/src/defaults/default_unlink.c,
+	libfs/src/defaults/default_utime.c,
+	libfs/src/defaults/default_write.c: Add include of rtems/seterr.h
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1573/cpukit
 	* configure.ac, posix/src/killinfo.c,
 	posix/src/psignalclearprocesssignals.c,
