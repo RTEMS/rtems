@@ -1,3 +1,7 @@
+2010-06-29	Joel Sherrill <Joel.Sherrill@OARcorp.com>
+
+	* configure.ac: Added AC_CHECK_SIZEOF macro.
+
 2010-02-09	Till Straumann <strauman@slac.stanford.edu>
 
 	* network/tsec.c: Added code to restart halted DMA

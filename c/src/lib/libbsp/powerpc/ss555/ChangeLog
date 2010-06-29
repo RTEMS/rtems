@@ -1,3 +1,7 @@
+2010-06-29	Joel Sherrill <Joel.Sherrill@OARcorp.com>
+
+	* configure.ac: Added AC_CHECK_SIZEOF macro.
+
 2010-06-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: Add prototypes for BSP_disconnect_clock_handler, 

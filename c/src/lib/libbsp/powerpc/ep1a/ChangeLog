@@ -1,3 +1,7 @@
+2010-06-29	Joel Sherrill <Joel.Sherrill@OARcorp.com>
+
+	* configure.ac: Added AC_CHECK_SIZEOF macro.
+
 2009-12-16      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* start/start.S: removed obsolete bootcard calling warning

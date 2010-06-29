@@ -1,3 +1,7 @@
+2010-06-29	Joel Sherrill <Joel.Sherrill@OARcorp.com>
+
+	* configure.ac: Added AC_CHECK_SIZEOF macro.
+
 2009-12-01	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, start/start.S: Added AltiVec support
