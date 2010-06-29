@@ -1,3 +1,8 @@
+2010-06-29	Jennifer.Averett <Jennifer.Averett@OARcorp.com>
+
+	* umon/tfsDriver.c: Changed NULL methods in filesystem tables to be
+	default methods.
+
 2010-05-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* umon/tfsDriver.c:
