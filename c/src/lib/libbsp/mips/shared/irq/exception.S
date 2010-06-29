@@ -35,6 +35,7 @@
 
 #include <bspopts.h>
 #include <rtems/asm.h>
+#include <rtems/score/percpu.h>
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>
 #if BSP_HAS_USC320
@@ -88,9 +89,7 @@
 #endif
 
 
-EXTERN(_ISR_Nest_level, 4)
 EXTERN(_Thread_Dispatch_disable_level,4)
-EXTERN(_Context_Switch_necessary,1)
 EXTERN(_ISR_Signals_to_thread_executing,1)
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
@@ -236,10 +235,10 @@ _chk_int:
   /*
    *  _ISR_Nest_level++;
    */
-        lw	t0,_ISR_Nest_level
+        lw	t0,ISR_NEST_LEVEL
 	NOP
         add	t0,t0,1
-        sw	t0,_ISR_Nest_level
+        sw	t0,ISR_NEST_LEVEL
   /*
    *  _Thread_Dispatch_disable_level++;
    */
@@ -299,10 +298,10 @@ _ISR_Handler_cleanup:
   /*
    *  --_ISR_Nest_level;
    */
-        lw	t2,_ISR_Nest_level
+        lw	t2,ISR_NEST_LEVEL
 	NOP
         add	t2,t2,-1
-        sw	t2,_ISR_Nest_level
+        sw	t2,ISR_NEST_LEVEL
   /*
    *  --_Thread_Dispatch_disable_level;
    */
@@ -324,13 +323,12 @@ _ISR_Handler_cleanup:
    *    restore stack
    *  #endif
    *
-   *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
+   *  if ( !_Context_Switch_necessary )
    *    goto the label "exit interrupt (simple case)"
    */
-        lb	t0,_Context_Switch_necessary
-        lb	t1,_ISR_Signals_to_thread_executing
+        lb	t0,DISPATCH_NEEDED
 	NOP
-        or 	t0,t0,t1
+        or 	t0,t0,t0
         beq	t0,zero,_ISR_Handler_exit
         NOP
 
