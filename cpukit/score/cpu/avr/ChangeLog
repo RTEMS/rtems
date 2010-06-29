@@ -1,3 +1,11 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1573/cpukit
+	* cpu_asm.S, rtems/score/cpu.h: Add a per cpu data structure which
+	contains the information required by RTEMS for each CPU core. This
+	encapsulates information such as thread executing, heir, idle and
+	dispatch needed.
+
 2010-05-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am, cpu_asm.S, avr/boot.h, avr/common.h, avr/crc16.h,

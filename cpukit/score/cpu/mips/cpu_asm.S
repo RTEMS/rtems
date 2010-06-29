@@ -57,6 +57,7 @@
 #include <rtems/asm.h>
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>
+#include <rtems/score/percpu.h>
 
 #define ASSEMBLY_ONLY
 #include <rtems/score/cpu.h>
@@ -200,8 +201,6 @@
 
 
 ASM_EXTERN(__exceptionStackFrame, SZ_INT)
-
-
 
 /*
  *  _CPU_Context_save_fp_context
@@ -585,19 +584,11 @@ FRAME(_CPU_Context_restore,sp,0,ra)
 
 ENDFRAME(_CPU_Context_restore)
 
-
-ASM_EXTERN(_ISR_Nest_level,4)
 ASM_EXTERN(_Thread_Dispatch_disable_level,4)
-ASM_EXTERN(_Context_Switch_necessary,1)
-ASM_EXTERN(_ISR_Signals_to_thread_executing,1)
 ASM_EXTERN(_Thread_Executing,4)
 
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
-
-
-
-
 
 /*  void _DBG_Handler()
  *
@@ -606,10 +597,7 @@ ASM_EXTERN(_Thread_Executing,4)
  *  while optional, is best located here because its intrinsically
  *  associated with exceptions in general & thus tied pretty
  *  closely to _ISR_Handler.
- *
  */
-
-
 FRAME(_DBG_Handler,sp,0,ra)
         .set noreorder
 	la	k0,_ISR_Handler
@@ -617,10 +605,6 @@ FRAME(_DBG_Handler,sp,0,ra)
 	NOP
 	.set reorder
 ENDFRAME(_DBG_Handler)
-
-
-
-
 
 /*  void __ISR_Handler()
  *
@@ -693,7 +677,7 @@ FRAME(_ISR_Handler,sp,0,ra)
 
 
 #ifdef INSTRUMENT_EXECUTING_THREAD
-	lw t2, _Thread_Executing
+	lw t2, THREAD_EXECUTING
 	NOP
 	sw t2, 0x8001FFF0
 #endif
@@ -904,10 +888,10 @@ _ISR_Handler_1:
   /*
    *  _ISR_Nest_level++;
    */
-        lw	t0,_ISR_Nest_level
+        lw	t0,ISR_NEST_LEVEL
 	NOP
         add	t0,t0,1
-        sw	t0,_ISR_Nest_level
+        sw	t0,ISR_NEST_LEVEL
   /*
    *  _Thread_Dispatch_disable_level++;
    */
@@ -940,10 +924,10 @@ _ISR_Handler_1:
   /*
    *  --_ISR_Nest_level;
    */
-        lw	t2,_ISR_Nest_level
+        lw	t2,ISR_NEST_LEVEL
 	NOP
         add	t2,t2,-1
-        sw	t2,_ISR_Nest_level
+        sw	t2,ISR_NEST_LEVEL
   /*
    *  --_Thread_Dispatch_disable_level;
    */
@@ -965,20 +949,19 @@ _ISR_Handler_1:
    *    restore stack
    *  #endif
    *
-   *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
+   *  if !_Context_Switch_necessary 
    *    goto the label "exit interrupt (simple case)"
    */
-        lbu	t0,_Context_Switch_necessary
-        lbu	t1,_ISR_Signals_to_thread_executing
+        lbu	t0,DISPATCH_NEEDED
 	NOP
-        or	t0,t0,t1
+        or	t0,t0,t0
         beq	t0,zero,_ISR_Handler_exit
         NOP
 
 
 
 #ifdef INSTRUMENT_EXECUTING_THREAD
-	lw	t0,_Thread_Executing
+	lw	t0,THREAD_EXECUTING
 	NOP
 	sw	t0,0x8001FFF4
 #endif
@@ -1068,7 +1051,7 @@ _ISR_Handler_1:
 
 
 #ifdef INSTRUMENT_EXECUTING_THREAD
-	lw	t0,_Thread_Executing
+	lw	t0,THREAD_EXECUTING
 	NOP
 	sw	t0,0x8001FFF8
 #endif
@@ -1093,7 +1076,7 @@ _ISR_Handler_exit:
 	/* restore context from stack */
 
 #ifdef INSTRUMENT_EXECUTING_THREAD
-	lw	t0,_Thread_Executing
+	lw	t0,THREAD_EXECUTING
 	NOP
 	sw	t0, 0x8001FFFC
 #endif

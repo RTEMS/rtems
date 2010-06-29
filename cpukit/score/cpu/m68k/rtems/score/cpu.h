@@ -308,9 +308,6 @@ typedef struct {
 
 /* variables */
 
-SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
-SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
-
 extern void*                     _VBR;
 
 #if ( M68K_HAS_VBR == 0 )

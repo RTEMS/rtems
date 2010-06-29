@@ -28,6 +28,7 @@
 #include <rtems/score/cpu_asm.h>
 #include <rtems/score/bfin.h>
 #include <rtems/bfin/bfin.h>
+#include <rtems/score/percpu.h>
 
 #define LO(con32) ((con32) & 0xFFFF)
 #define HI(con32) (((con32) >> 16) & 0xFFFF)
@@ -313,12 +314,8 @@ SYM(_CPU_Context_restore):
 
 
 	.globl SYM(_ISR_Handler)
-	.extern SYM(_CPU_Interrupt_stack_high)
-	.extern SYM(_ISR_Nest_level)
-	.extern SYM(_Thread_Dispatch_disable_level)
-	.extern SYM(_Context_Switch_necessary)
-	.extern SYM(_ISR_Signals_to_thread_executing)
 SYM(_ISR_Handler):
+	.extern SYM(_Thread_Dispatch_disable_level)
 	/* all interrupts are disabled at this point */
 	/* the following few items are pushed onto the task stack for at
 	   most one interrupt; nested interrupts will be using the interrupt
@@ -328,8 +325,8 @@ SYM(_ISR_Handler):
 	[--sp] = p0;
 	[--sp] = r1;
 	[--sp] = r0;
-	p0.h = SYM(_ISR_Nest_level);
-	p0.l = SYM(_ISR_Nest_level);
+	p0.h = ISR_NEST_LEVEL;
+	p0.l = ISR_NEST_LEVEL;
 	r0 = [p0];
 	r0 += 1;
 	[p0] = r0;
@@ -337,8 +334,8 @@ SYM(_ISR_Handler):
 	if !cc jump noStackSwitch;
 	/* setup interrupt stack */
 	r0 = sp;
-	p0.h = SYM(_CPU_Interrupt_stack_high);
-	p0.l = SYM(_CPU_Interrupt_stack_high);
+	p0.h = INTERRUPT_STACK_HIGH;
+	p0.l = INTERRUPT_STACK_HIGH;
 	sp = [p0];
 	[--sp] = r0;
 noStackSwitch:
@@ -452,8 +449,8 @@ noHandler:
 	/* this disables interrupts again */
 	reti = [sp++];
 
-	p0.h = SYM(_ISR_Nest_level);
-	p0.l = SYM(_ISR_Nest_level);
+	p0.h = ISR_NEST_LEVEL;
+	p0.l = ISR_NEST_LEVEL;
 	r0 = [p0];
 	r0 += -1;
 	[p0] = r0;
@@ -473,13 +470,8 @@ noStackRestore:
 	if !cc jump noDispatch
 
 	/* do thread dispatch if necessary */
-	p0.h = SYM(_Context_Switch_necessary);
-	p0.l = SYM(_Context_Switch_necessary);
-	r0 = B[p0] (Z);
-	cc = r0 == 0;
-	p0.h = SYM(_ISR_Signals_to_thread_executing);
-	p0.l = SYM(_ISR_Signals_to_thread_executing);
-	if !cc jump doDispatch
+	p0.h = DISPATCH_NEEDED;
+	p0.l = DISPATCH_NEEDED;
 	r0 = B[p0] (Z);
 	cc = r0 == 0;
 	if cc jump noDispatch

@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/asm.h>
+#include <rtems/score/percpu.h>
 
 /*  void _CPU_Context_switch( run_context, heir_context )
  *
@@ -263,8 +264,8 @@ SYM (_ISR_Handler):
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
         | Make a0 point just above interrupt stack
-        movel   _CPU_Interrupt_stack_high,a0
-        cmpl    _CPU_Interrupt_stack_low,a7  | stack below interrupt stack?
+        movel   INTERRUPT_STACK_HIGH,a0
+        cmpl    INTERRUPT_STACK_LOW,a7  | stack below interrupt stack?
         bcs.b   1f                      | yes, switch to interrupt stack
         cmpl    a0,a7                   | stack above interrupt stack?
         bcs.b   2f                      | no, do not switch stacks
@@ -276,7 +277,7 @@ SYM (_ISR_Handler):
 2:
 #endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
 
-        addql   #1,SYM(_ISR_Nest_level) | one nest level deeper
+        addql   #1,ISR_NEST_LEVEL        | one nest level deeper
 
         movel   SYM (_ISR_Vector_table),a0 | a0= base of RTEMS table
 #if ( M68K_HAS_PREINDEXING == 1 )
@@ -290,10 +291,10 @@ SYM (_ISR_Handler):
         movel   d0,a7@-                  | push vector number
         jbsr    a0@                      | invoke the user ISR
         addql   #4,a7                    | remove vector number
-        subql   #1,SYM(_ISR_Nest_level)  | Reduce interrupt-nesting count
+        subql   #1,ISR_NEST_LEVEL        | Reduce interrupt-nesting count
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
-        movel   _CPU_Interrupt_stack_high,a0
+        movel   INTERRUPT_STACK_HIGH,a0
         subql   #4,a0
         cmpl    a0,a7                   | At top of interrupt stack?
         bne.b   1f                      | No, do not restore task stack pointer
@@ -322,16 +323,11 @@ SYM (_ISR_Handler):
         beq.b   exit
   #endif
 #endif
-        tstb    SYM (_Context_Switch_necessary)
+        tstb    DISPATCH_NEEDED
                                          | Is thread switch necessary?
-        bne.b   bframe                   | Yes, invoke dispatcher
-
-        tstb    SYM (_ISR_Signals_to_thread_executing)
-                                         | signals sent to Run_thread
-                                         |   while in interrupt handler?
         beq.b   exit                     | No, then exit
 
-bframe: clrb    SYM (_ISR_Signals_to_thread_executing)
+bframe: 
                                          | If sent, will be processed
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movec   msp,a0                   | a0 = master stack pointer

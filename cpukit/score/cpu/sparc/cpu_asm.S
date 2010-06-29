@@ -4,7 +4,7 @@
  *  in an specific CPU port of RTEMS.  These algorithms must be implemented
  *  in assembly language.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,6 +26,7 @@
 #endif
 
 #include <rtems/asm.h>
+#include <rtems/system.h>
 
 #if (SPARC_HAS_FPU == 1)
 
@@ -471,7 +472,7 @@ save_isf:
          *  Register usage for this section:
          *
          *    l4 = _Thread_Dispatch_disable_level pointer
-         *    l5 = _ISR_Nest_level pointer
+         *    l5 = per cpu info pointer
          *    l6 = _Thread_Dispatch_disable_level value
          *    l7 = _ISR_Nest_level value
          *
@@ -481,14 +482,17 @@ save_isf:
 
         sethi    %hi(SYM(_Thread_Dispatch_disable_level)), %l4
         ld       [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))], %l6
-        sethi    %hi(SYM(_ISR_Nest_level)), %l5
-        ld       [%l5 + %lo(SYM(_ISR_Nest_level))], %l7
+
+        sethi    %hi(_Per_CPU_Information), %l5
+        add      %l5, %lo(_Per_CPU_Information), %l5
+
+	ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
 
         add      %l6, 1, %l6
         st       %l6, [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))]
 
         add      %l7, 1, %l7
-        st       %l7, [%l5 + %lo(SYM(_ISR_Nest_level))]
+        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
 
         /*
          *  If ISR nest level was zero (now 1), then switch stack.
@@ -498,8 +502,8 @@ save_isf:
         subcc    %l7, 1, %l7             ! outermost interrupt handler?
         bnz      dont_switch_stacks      ! No, then do not switch stacks
 
-        sethi    %hi(SYM(_CPU_Interrupt_stack_high)), %g4
-        ld       [%g4 + %lo(SYM(_CPU_Interrupt_stack_high))], %sp
+        nop
+	ld       [%l5 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
 
 dont_switch_stacks:
         /*
@@ -644,7 +648,7 @@ dont_fix_pil2:
         sub      %l6, 1, %l6
         st       %l6, [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))]
 
-        st       %l7, [%l5 + %lo(SYM(_ISR_Nest_level))]
+        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
 
         /*
          *  If dispatching is disabled (includes nested interrupt case),
@@ -660,8 +664,7 @@ dont_fix_pil2:
         ld       [%l6 + %lo(SYM(_CPU_ISR_Dispatch_disable))], %l7
         orcc     %l7, %g0, %g0   ! Is this thread already doing an ISR?
         bnz      simple_return   ! Yes, then do a "simple" exit
-        ! NOTE: Use the delay slot
-        sethi    %hi(SYM(_Context_Switch_necessary)), %l4
+        nop
 
 
         /*
@@ -669,27 +672,11 @@ dont_fix_pil2:
          *  return to the interrupt dispatcher.
          */
 
-        ldub     [%l4 + %lo(SYM(_Context_Switch_necessary))], %l5
+        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l5
 
         orcc     %l5, %g0, %g0   ! Is thread switch necessary?
-        bnz      SYM(_ISR_Dispatch) ! yes, then invoke the dispatcher
-        ! NOTE: Use the delay slot
-        sethi    %hi(SYM(_ISR_Signals_to_thread_executing)), %l6
-
-        /*
-         *  Finally, check to see if signals were sent to the currently
-         *  executing task.  If so, we need to invoke the interrupt dispatcher.
-         */
-
-        ldub     [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))], %l7
-
-        orcc     %l7, %g0, %g0   ! Were signals sent to the currently
-                                 !   executing thread?
-        bz       simple_return   ! yes, then invoke the dispatcher
-                                 ! use the delay slot to clear the signals
-                                 !   to the currently executing task flag
-        st       %g0, [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))]
-
+        bz       simple_return   ! no, then do a simple return
+        nop
 
         /*
          *  Invoke interrupt dispatcher.
@@ -737,28 +724,14 @@ isr_dispatch:
          *  _Thread_Dispatch before leaving this ISR Dispatch context.
          */
 
-        sethi    %hi(SYM(_Context_Switch_necessary)), %l4
-        ldub     [%l4 + %lo(SYM(_Context_Switch_necessary))], %l5
+        sethi    %hi(_Per_CPU_Information), %l5
+        add      %l5, %lo(_Per_CPU_Information), %l5
 
-        ! NOTE: Use some of delay slot to start loading this
-        sethi    %hi(SYM(_ISR_Signals_to_thread_executing)), %l6
-        ldub     [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))], %l7
+        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l7
 
-        orcc     %l5, %g0, %g0   ! Is thread switch necessary?
-        bnz      dispatchAgain   ! yes, then invoke the dispatcher AGAIN
-        ! NOTE: Use the delay slot to catch the orcc below
-
-        /*
-         *  Finally, check to see if signals were sent to the currently
-         *  executing task.  If so, we need to invoke the interrupt dispatcher.
-         */
-
-        ! NOTE: Delay slots above were used to perform the load AND
-        !       this orcc falls into the delay slot for bnz above
-        orcc     %l7, %g0, %g0   ! Were signals sent to the currently
-                                 !   executing thread?
+        orcc     %l7, %g0, %g0    ! Is thread switch necesary?
         bz       allow_nest_again ! No, then clear out and return
-        ! NOTE: use the delay slot from the bz to load 3 into %g1
+        nop
 
         ! Yes, then invoke the dispatcher
 dispatchAgain:
