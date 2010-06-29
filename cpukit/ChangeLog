@@ -1,3 +1,9 @@
+2010-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac, score/include/rtems/score/percpu.h: Add
+	__RTEMS_SIZEOF_VOID_P__ to cpuopts.h so percpu.h has this information
+	available during build and after installation.
+
 2010-06-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/lib/tftpDriver.c: rtems_tftp_ops and

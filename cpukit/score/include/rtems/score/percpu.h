@@ -97,8 +97,8 @@ typedef struct {
    *  we need to have places in the per cpu table to hold them.
    */
   #define PER_CPU_INTERRUPT_STACK_LOW   0
-  #define PER_CPU_INTERRUPT_STACK_HIGH  (1 * SIZEOF_VOID_P)
-  #define PER_CPU_END_STACK             (2 * SIZEOF_VOID_P)
+  #define PER_CPU_INTERRUPT_STACK_HIGH  (1 * __RTEMS_SIZEOF_VOID_P__)
+  #define PER_CPU_END_STACK             (2 * __RTEMS_SIZEOF_VOID_P__)
 #else
   /*
    *  Otherwise, there are no interrupt stack addresses in the per CPU table.
@@ -109,15 +109,21 @@ typedef struct {
 /*
  *  These are the offsets of the required elements in the per CPU table.
  */
-#define PER_CPU_ISR_NEST_LEVEL   PER_CPU_END_STACK + 0
-#define PER_CPU_EXECUTING        PER_CPU_END_STACK + (1 * SIZEOF_VOID_P)
-#define PER_CPU_HEIR             PER_CPU_END_STACK + (2 * SIZEOF_VOID_P)
-#define PER_CPU_IDLE             PER_CPU_END_STACK + (3 * SIZEOF_VOID_P)
-#define PER_CPU_DISPATCH_NEEDED  PER_CPU_END_STACK + (4 * SIZEOF_VOID_P)
+#define PER_CPU_ISR_NEST_LEVEL \
+          PER_CPU_END_STACK + 0
+#define PER_CPU_EXECUTING \
+          PER_CPU_END_STACK + (1 * __RTEMS_SIZEOF_VOID_P__)
+#define PER_CPU_HEIR \
+          PER_CPU_END_STACK + (2 * __RTEMS_SIZEOF_VOID_P__)
+#define PER_CPU_IDLE \
+          PER_CPU_END_STACK + (3 * __RTEMS_SIZEOF_VOID_P__)
+#define PER_CPU_DISPATCH_NEEDED \
+	  PER_CPU_END_STACK + (4 * __RTEMS_SIZEOF_VOID_P__)
+
 #define ISR_NEST_LEVEL \
-    (SYM(_Per_CPU_Information) + PER_CPU_ISR_NEST_LEVEL)
+         (SYM(_Per_CPU_Information) + PER_CPU_ISR_NEST_LEVEL)
 #define DISPATCH_NEEDED \
-    (SYM(_Per_CPU_Information) + PER_CPU_DISPATCH_NEEDED)
+	 (SYM(_Per_CPU_Information) + PER_CPU_DISPATCH_NEEDED)
 
 /*
  * Do not define these offsets if they are not in the table.

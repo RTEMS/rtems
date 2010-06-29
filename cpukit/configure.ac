@@ -118,6 +118,10 @@ rtems_major=`echo _RTEMS_VERSION | sed "s/\..*//"`
 rtems_minor=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/\..*//"`
 rtems_revision=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/[[0-9]][[0-9]]*\.//;s/\..*//"`
 
+## This is needed to generate the field offsets of the per CPU 
+## data structure so they can be accessed from assembly code.
+AC_CHECK_SIZEOF([void *])
+
 _RTEMS_CPUOPT_INIT
 
 RTEMS_CPUOPT([RTEMS_DEBUG],
@@ -195,6 +199,14 @@ RTEMS_CPUOPT([__RTEMS_ADA__],
   [1],
   [Define to 1 if ada/gnat bindings are built-in])
 
+## Then we propagate a private copy of the value into cpuopts.h
+## so it is always available to the RTEMS header files.
+
+RTEMS_CPUOPT([__RTEMS_SIZEOF_VOID_P__],
+  [true],
+  [$ac_cv_sizeof_void_p],
+  [Size of a void * pointer])
+
 RTEMS_CPUOPT([__RTEMS_MAJOR__],
   [true],
   [$rtems_major],
@@ -250,10 +262,6 @@ AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
 
 ## Check if libc provides BSD's strlcpy/strlcat
 AC_CHECK_FUNCS(strlcpy strlcat)
-
-## This is needed to generate the field offsets of the per CPU 
-## data structure so they can be accessed from assembly code.
-AC_CHECK_SIZEOF([void *])
 
 # ... far too many conditionals ...
 AM_CONDITIONAL(LIBRPC,[test x"$rtems_cv_HAS_NETWORKING" = x"yes"])
