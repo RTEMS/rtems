@@ -15,10 +15,6 @@ RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-## This is needed to generate the field offsets of the per CPU 
-## data structure so they can be accessed from assembly code.
-AC_CHECK_SIZEOF([void *])
-
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
 # Explicitly list all Makefiles here

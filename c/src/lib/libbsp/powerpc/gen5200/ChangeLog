@@ -1,3 +1,7 @@
+2010-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac: Remove AC_CHECK_SIZEOF([void *]).
+
 2010-06-29	Joel Sherrill <Joel.Sherrill@OARcorp.com>
 
 	* configure.ac: Added AC_CHECK_SIZEOF macro.
