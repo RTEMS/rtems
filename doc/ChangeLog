@@ -1,3 +1,10 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1573/cpukit
+	* porting/interrupts.t: Add a per cpu data structure which contains the
+	information required by RTEMS for each CPU core. This encapsulates
+	information such as thread executing, heir, idle and dispatch needed.
+
 2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, index.html.in, develenv/direct.t,
