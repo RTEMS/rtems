@@ -141,7 +141,7 @@ ISR_STOP:
 .check_stack_switch:
 	movl      esp, ebp                  /* ebp = previous stack pointer */
 
-	movl      $SYM(rtems_per_cpu_info), ebx
+	movl      $SYM(_Per_CPU_Information), ebx
 
 	/* is this the outermost interrupt? */
 	cmpl      $0, PER_CPU_ISR_NEST_LEVEL(ebx)

@@ -1,3 +1,7 @@
+2010-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/irq/irq_asm.S: Rename rtems_per_cpu_info.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1573/cpukit
