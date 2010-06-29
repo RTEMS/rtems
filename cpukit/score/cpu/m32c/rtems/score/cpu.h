@@ -522,20 +522,6 @@ typedef struct {
  *  XXX document implementation including references if appropriate
  */
 
-/**
- *  @ingroup CPUInterrupt
- *  This variable points to the lowest physical address of the interrupt
- *  stack.
- */
-SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
-
-/**
- *  @ingroup CPUInterrupt
- *  This variable points to the lowest physical address of the interrupt
- *  stack.
- */
-SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
-
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  *
