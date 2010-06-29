@@ -13,11 +13,9 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_evalpath(
-  const char                        *pathname,      /* IN     */
-  size_t                             pathnamelen,   /* IN     */
-  int                                flags,         /* IN     */
-  rtems_filesystem_location_info_t  *pathloc        /* IN/OUT */
+int rtems_filesystem_default_evaluate_link(
+  rtems_filesystem_location_info_t *pathloc,     /* IN/OUT */
+  int                               flags        /* IN     */
 )
 {
   pathloc = NULL;

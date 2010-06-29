@@ -43,7 +43,7 @@ const rtems_filesystem_operations_table IMFS_ops = {
   .symlink_h = IMFS_symlink,
   .readlink_h = IMFS_readlink,
   .rename_h = IMFS_rename,
-  .statvfs_h = NULL
+  .statvfs_h = rtems_filesystem_default_statvfs
 };
 
 int IMFS_initialize(

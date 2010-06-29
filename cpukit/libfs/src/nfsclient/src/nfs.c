@@ -2472,21 +2472,23 @@ cleanup:
 struct _rtems_filesystem_operations_table nfs_fs_ops = {
 		nfs_evalpath,		/* MANDATORY */
 		nfs_evalformake,	/* MANDATORY; may set errno=ENOSYS and return -1 */
-		nfs_link,			/* OPTIONAL; may be NULL */
-		nfs_unlink,			/* OPTIONAL; may be NULL */
-		nfs_node_type,		/* OPTIONAL; may be NULL; BUG in mount - no test!! */
-		nfs_mknod,			/* OPTIONAL; may be NULL */
-		nfs_chown,			/* OPTIONAL; may be NULL */
-		nfs_freenode,		/* OPTIONAL; may be NULL; (release node_access) */
-		nfs_mount,			/* OPTIONAL; may be NULL */
-		rtems_nfsfs_initialize,		/* OPTIONAL; may be NULL -- not used anymore */
-		nfs_unmount,		/* OPTIONAL; may be NULL */
-		nfs_fsunmount_me,	/* OPTIONAL; may be NULL */
-		nfs_utime,			/* OPTIONAL; may be NULL */
-		nfs_eval_link,		/* OPTIONAL; may be NULL */
-		nfs_symlink,		/* OPTIONAL; may be NULL */
-		nfs_readlink,		/* OPTIONAL; may be NULL */
-		NULL				/* OPTIONAL; may be NULL */
+		nfs_link,			/* OPTIONAL; may be defaulted */
+		nfs_unlink,			/* OPTIONAL; may be defaulted */
+		nfs_node_type,		/* OPTIONAL; may be defaulted; BUG in mount - no test!! */
+		nfs_mknod,			/* OPTIONAL; may be defaulted */
+		nfs_chown,			/* OPTIONAL; may be defaulted */
+		nfs_freenode,		/* OPTIONAL; may be defaulted; (release node_access) */
+		nfs_mount,			/* OPTIONAL; may be defaulted */
+		rtems_nfsfs_initialize,		/* OPTIONAL; may be defaulted -- not used anymore */
+		nfs_unmount,		/* OPTIONAL; may be defaulted */
+		nfs_fsunmount_me,	/* OPTIONAL; may be defaulted */
+		nfs_utime,			/* OPTIONAL; may be defaulted */
+		nfs_eval_link,		/* OPTIONAL; may be defaulted */
+		nfs_symlink,		/* OPTIONAL; may be defaulted */
+		nfs_readlink,		/* OPTIONAL; may be defaulted */
+		rtems_filesystem_default_rename,	/* OPTIONAL; may be defaulted */
+                rtems_filesystem_default_statvfs	/* OPTIONAL; may be defaulted */
+
 };
 
 /*****************************************
@@ -3125,58 +3127,58 @@ static int nfs_dir_rmnod(
 /* the file handlers table */
 static
 struct _rtems_filesystem_file_handlers_r nfs_file_file_handlers = {
-		nfs_file_open,			/* OPTIONAL; may be NULL */
-		nfs_file_close,			/* OPTIONAL; may be NULL */
-		nfs_file_read,			/* OPTIONAL; may be NULL */
-		nfs_file_write,			/* OPTIONAL; may be NULL */
-		nfs_file_ioctl,			/* OPTIONAL; may be NULL */
-		nfs_file_lseek,			/* OPTIONAL; may be NULL */
-		nfs_fstat,				/* OPTIONAL; may be NULL */
-		nfs_fchmod,				/* OPTIONAL; may be NULL */
-		nfs_file_ftruncate,		/* OPTIONAL; may be NULL */
-		nfs_file_fpathconf,		/* OPTIONAL; may be NULL - UNUSED */
-		nfs_file_fsync,			/* OPTIONAL; may be NULL */
-		nfs_file_fdatasync,		/* OPTIONAL; may be NULL */
-		nfs_file_fcntl,			/* OPTIONAL; may be NULL */
-		nfs_unlink,				/* OPTIONAL; may be NULL */
+		nfs_file_open,			/* OPTIONAL; may be defaulted */
+		nfs_file_close,			/* OPTIONAL; may be defaulted */
+		nfs_file_read,			/* OPTIONAL; may be defaulted */
+		nfs_file_write,			/* OPTIONAL; may be defaulted */
+		nfs_file_ioctl,			/* OPTIONAL; may be defaulted */
+		nfs_file_lseek,			/* OPTIONAL; may be defaulted */
+		nfs_fstat,				/* OPTIONAL; may be defaulted */
+		nfs_fchmod,				/* OPTIONAL; may be defaulted */
+		nfs_file_ftruncate,		/* OPTIONAL; may be defaulted */
+		nfs_file_fpathconf,		/* OPTIONAL; may be defaulted - UNUSED */
+		nfs_file_fsync,			/* OPTIONAL; may be defaulted */
+		nfs_file_fdatasync,		/* OPTIONAL; may be defaulted */
+		nfs_file_fcntl,			/* OPTIONAL; may be defaulted */
+		nfs_unlink,				/* OPTIONAL; may be defaulted */
 };
 
 /* the directory handlers table */
 static
 struct _rtems_filesystem_file_handlers_r nfs_dir_file_handlers = {
-		nfs_dir_open,			/* OPTIONAL; may be NULL */
-		nfs_dir_close,			/* OPTIONAL; may be NULL */
-		nfs_dir_read,			/* OPTIONAL; may be NULL */
-		nfs_dir_write,			/* OPTIONAL; may be NULL */
-		nfs_dir_ioctl,			/* OPTIONAL; may be NULL */
-		nfs_dir_lseek,			/* OPTIONAL; may be NULL */
-		nfs_fstat,				/* OPTIONAL; may be NULL */
-		nfs_fchmod,				/* OPTIONAL; may be NULL */
-		nfs_dir_ftruncate,		/* OPTIONAL; may be NULL */
-		nfs_dir_fpathconf,		/* OPTIONAL; may be NULL - UNUSED */
-		nfs_dir_fsync,			/* OPTIONAL; may be NULL */
-		nfs_dir_fdatasync,		/* OPTIONAL; may be NULL */
-		nfs_dir_fcntl,			/* OPTIONAL; may be NULL */
-		nfs_dir_rmnod,				/* OPTIONAL; may be NULL */
+		nfs_dir_open,			/* OPTIONAL; may be defaulted */
+		nfs_dir_close,			/* OPTIONAL; may be defaulted */
+		nfs_dir_read,			/* OPTIONAL; may be defaulted */
+		nfs_dir_write,			/* OPTIONAL; may be defaulted */
+		nfs_dir_ioctl,			/* OPTIONAL; may be defaulted */
+		nfs_dir_lseek,			/* OPTIONAL; may be defaulted */
+		nfs_fstat,				/* OPTIONAL; may be defaulted */
+		nfs_fchmod,				/* OPTIONAL; may be defaulted */
+		nfs_dir_ftruncate,		/* OPTIONAL; may be defaulted */
+		nfs_dir_fpathconf,		/* OPTIONAL; may be defaulted - UNUSED */
+		nfs_dir_fsync,			/* OPTIONAL; may be defaulted */
+		nfs_dir_fdatasync,		/* OPTIONAL; may be defaulted */
+		nfs_dir_fcntl,			/* OPTIONAL; may be defaulted */
+		nfs_dir_rmnod,				/* OPTIONAL; may be defaulted */
 };
 
 /* the link handlers table */
 static
 struct _rtems_filesystem_file_handlers_r nfs_link_file_handlers = {
-		nfs_link_open,			/* OPTIONAL; may be NULL */
-		nfs_link_close,			/* OPTIONAL; may be NULL */
-		nfs_link_read,			/* OPTIONAL; may be NULL */
-		nfs_link_write,			/* OPTIONAL; may be NULL */
-		nfs_link_ioctl,			/* OPTIONAL; may be NULL */
-		nfs_link_lseek,			/* OPTIONAL; may be NULL */
-		nfs_fstat,				/* OPTIONAL; may be NULL */
-		nfs_fchmod,				/* OPTIONAL; may be NULL */
-		nfs_link_ftruncate,		/* OPTIONAL; may be NULL */
-		nfs_link_fpathconf,		/* OPTIONAL; may be NULL - UNUSED */
-		nfs_link_fsync,			/* OPTIONAL; may be NULL */
-		nfs_link_fdatasync,		/* OPTIONAL; may be NULL */
-		nfs_link_fcntl,			/* OPTIONAL; may be NULL */
-		nfs_unlink,				/* OPTIONAL; may be NULL */
+		nfs_link_open,			/* OPTIONAL; may be defaulted */
+		nfs_link_close,			/* OPTIONAL; may be defaulted */
+		nfs_link_read,			/* OPTIONAL; may be defaulted */
+		nfs_link_write,			/* OPTIONAL; may be defaulted */
+		nfs_link_ioctl,			/* OPTIONAL; may be defaulted */
+		nfs_link_lseek,			/* OPTIONAL; may be defaulted */
+		nfs_fstat,				/* OPTIONAL; may be defaulted */
+		nfs_fchmod,				/* OPTIONAL; may be defaulted */
+		nfs_link_ftruncate,		/* OPTIONAL; may be defaulted */
+		nfs_link_fpathconf,		/* OPTIONAL; may be defaulted - UNUSED */
+		nfs_link_fsync,			/* OPTIONAL; may be defaulted */
+		nfs_link_fdatasync,		/* OPTIONAL; may be defaulted */
+		nfs_link_fcntl,			/* OPTIONAL; may be defaulted */
+		nfs_unlink,				/* OPTIONAL; may be defaulted */
 };
 
 /* we need a dummy driver entry table to get a

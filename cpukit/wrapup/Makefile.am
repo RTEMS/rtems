@@ -27,6 +27,7 @@ TMP_LIBS += ../libblock/libblock.a
 if LIBDOSFS
 TMP_LIBS += ../libfs/libdosfs.a
 endif
+TMP_LIBS += ../libfs/libdefaultfs.a
 TMP_LIBS += ../libfs/libimfs.a
 TMP_LIBS += ../libfs/librfs.a
 

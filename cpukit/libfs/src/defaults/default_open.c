@@ -13,14 +13,12 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_evalpath(
-  const char                        *pathname,      /* IN     */
-  size_t                             pathnamelen,   /* IN     */
-  int                                flags,         /* IN     */
-  rtems_filesystem_location_info_t  *pathloc        /* IN/OUT */
+int rtems_filesystem_default_open(
+  rtems_libio_t *iop,
+  const char    *pathname,
+  uint32_t       flag,
+  uint32_t       mode
 )
 {
-  pathloc = NULL;
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
-

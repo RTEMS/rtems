@@ -13,7 +13,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_rename_t(
+int rtems_filesystem_default_rename(
  rtems_filesystem_location_info_t  *old_parent_loc,  /* IN */
  rtems_filesystem_location_info_t  *old_loc,         /* IN */
  rtems_filesystem_location_info_t  *new_parent_loc,  /* IN */

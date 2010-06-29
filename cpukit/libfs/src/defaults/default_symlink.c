@@ -13,7 +13,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_symlink_t(
+int rtems_filesystem_default_symlink(
  rtems_filesystem_location_info_t  *loc,         /* IN */
  const char                        *link_name,   /* IN */
  const char                        *node_name

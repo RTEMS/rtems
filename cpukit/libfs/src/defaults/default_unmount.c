@@ -13,10 +13,9 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_statvfs(
- rtems_filesystem_location_info_t  *loc,     /* IN  */
- struct statvfs                    *buf      /* OUT */
+int rtems_filesystem_default_unmount(
+  rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  return 0;
 }

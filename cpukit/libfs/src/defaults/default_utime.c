@@ -13,7 +13,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_utime_t(
+int rtems_filesystem_default_utime(
   rtems_filesystem_location_info_t  *pathloc,       /* IN */
   time_t                             actime,        /* IN */
   time_t                             modtime        /* IN */

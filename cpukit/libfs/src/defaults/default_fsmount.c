@@ -13,7 +13,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_fsmount_t(
+int rtems_filesystem_default_fsmount(
   rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */
   const void                           *data          /* IN */
 )

@@ -360,6 +360,27 @@ struct _rtems_filesystem_file_handlers_r {
    */
   rtems_filesystem_rmnod_t        rmnod_h;
 };
+/**
+ *  This method defines the interface to the default open(2) 
+ *  system call support which is provided by a file system 
+ *  implementation.
+ */
+int rtems_filesystem_default_open(
+  rtems_libio_t *iop,
+  const char    *pathname,
+  uint32_t       flag,
+  uint32_t       mode
+);
+
+/**
+ *  This method defines the interface to the default close(2) 
+ *  system call support which is provided by a file system 
+ *  implementation.
+ */
+int rtems_filesystem_default_close(
+  rtems_libio_t *iop
+);
+
 
 /**
  *  This method defines the interface to the default read(2) 

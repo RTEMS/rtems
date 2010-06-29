@@ -13,7 +13,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_freenode_t(
+int rtems_filesystem_default_freenode(
  rtems_filesystem_location_info_t      *pathloc       /* IN */
 )
 {

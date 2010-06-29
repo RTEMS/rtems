@@ -22,22 +22,22 @@
 const rtems_filesystem_operations_table  msdos_ops = {
   .evalpath_h     =  msdos_eval_path,
   .evalformake_h  =  msdos_eval4make,
-  .link_h         =  NULL,
+  .link_h         =  rtems_filesystem_default_link,
   .unlink_h       =  msdos_file_rmnod,
   .node_type_h    =  msdos_node_type,
   .mknod_h        =  msdos_mknod,
-  .chown_h        =  NULL,
+  .chown_h        =  rtems_filesystem_default_chown,
   .freenod_h      =  msdos_free_node_info,
-  .mount_h        =  NULL,
+  .mount_h        =  rtems_filesystem_default_mount,
   .fsmount_me_h   =  rtems_dosfs_initialize,
-  .unmount_h      =  NULL,
+  .unmount_h      =  rtems_filesystem_default_unmount,
   .fsunmount_me_h =  msdos_shut_down,
-  .utime_h        =  NULL,
-  .eval_link_h    =  NULL,
-  .symlink_h      =  NULL,
-  .readlink_h     =  NULL,
+  .utime_h        =  rtems_filesystem_default_utime,
+  .eval_link_h    =  rtems_filesystem_default_evaluate_link,
+  .symlink_h      =  rtems_filesystem_default_symlink,
+  .readlink_h     =  rtems_filesystem_default_readlink,
   .rename_h       =  msdos_rename,
-  .statvfs_h      =  NULL
+  .statvfs_h      =  rtems_filesystem_default_statvfs
 };
 
 /* msdos_initialize --

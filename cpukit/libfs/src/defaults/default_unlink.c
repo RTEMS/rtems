@@ -13,7 +13,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_unlink_t(
+int rtems_filesystem_default_unlink(
  rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
  rtems_filesystem_location_info_t  *pathloc         /* IN */
 )

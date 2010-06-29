@@ -20,21 +20,22 @@ rtems_filesystem_operations_table devFS_ops =
 {
     devFS_evaluate_path,
     devFS_evaluate_for_make,
-    NULL,
-    NULL,
+    rtems_filesystem_default_link,
+    rtems_filesystem_default_unlink,
     devFS_node_type,
     devFS_mknod,
-    NULL,
-    NULL,
-    NULL,
+    rtems_filesystem_default_chown,
+    rtems_filesystem_default_freenode,
+    rtems_filesystem_default_mount,
     devFS_initialize,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
+    rtems_filesystem_default_unmount,
+    rtems_filesystem_default_fsunmount,
+    rtems_filesystem_default_utime,
+    rtems_filesystem_default_evaluate_link,
+    rtems_filesystem_default_symlink,
+    rtems_filesystem_default_readlink,
+    rtems_filesystem_default_rename,
+    rtems_filesystem_default_statvfs 
 };
 
 
@@ -45,15 +46,15 @@ rtems_filesystem_file_handlers_r devFS_file_handlers =
     devFS_read,
     devFS_write,
     devFS_ioctl,
-    NULL,
+    rtems_filesystem_default_lseek,
     devFS_stat,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
+    rtems_filesystem_default_fchmod,
+    rtems_filesystem_default_ftruncate,
+    rtems_filesystem_default_fpathconf,
+    rtems_filesystem_default_fsync,
+    rtems_filesystem_default_fdatasync,
+    rtems_filesystem_default_fcntl,
+    rtems_filesystem_default_rmnod
 };
 
 

@@ -13,7 +13,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_chown_t(
+int rtems_filesystem_default_chown(
  rtems_filesystem_location_info_t  *pathloc,       /* IN */
  uid_t                              owner,         /* IN */
  gid_t                              group          /* IN */

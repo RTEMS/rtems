@@ -1203,19 +1203,19 @@ rtems_rfs_rtems_statvfs (rtems_filesystem_location_info_t* pathloc,
  */
 const rtems_filesystem_file_handlers_r rtems_rfs_rtems_link_handlers =
 {
-  .open_h      = NULL,
-  .close_h     = NULL,
-  .read_h      = NULL,
-  .write_h     = NULL,
-  .ioctl_h     = NULL,
-  .lseek_h     = NULL,
+  .open_h      = rtems_filesystem_default_open,
+  .close_h     = rtems_filesystem_default_close,
+  .read_h      = rtems_filesystem_default_read,
+  .write_h     = rtems_filesystem_default_write,
+  .ioctl_h     = rtems_filesystem_default_ioctl,
+  .lseek_h     = rtems_filesystem_default_lseek,
   .fstat_h     = rtems_rfs_rtems_stat,
-  .fchmod_h    = NULL,
-  .ftruncate_h = NULL,
-  .fpathconf_h = NULL,
-  .fsync_h     = NULL,
-  .fdatasync_h = NULL,
-  .fcntl_h     = NULL,
+  .fchmod_h    = rtems_filesystem_default_fchmod,
+  .ftruncate_h = rtems_filesystem_default_ftruncate,
+  .fpathconf_h = rtems_filesystem_default_fpathconf,
+  .fsync_h     = rtems_filesystem_default_fsync,
+  .fdatasync_h = rtems_filesystem_default_fdatasync,
+  .fcntl_h     = rtems_filesystem_default_fcntl,
   .rmnod_h     = rtems_rfs_rtems_rmnod
 };
 
@@ -1240,12 +1240,12 @@ const rtems_filesystem_operations_table rtems_rfs_ops =
   .mknod_h        = rtems_rfs_rtems_mknod,
   .chown_h        = rtems_rfs_rtems_chown,
   .freenod_h      = rtems_rfs_rtems_freenodinfo,
-  .mount_h        = NULL,
+  .mount_h        = rtems_filesystem_default_mount,
   .fsmount_me_h   = rtems_rfs_rtems_initialise,
-  .unmount_h      = NULL,
+  .unmount_h      = rtems_filesystem_default_unmount,
   .fsunmount_me_h = rtems_rfs_rtems_shutdown,
   .utime_h        = rtems_rfs_rtems_utime,
-  .eval_link_h    = NULL, /* never called cause we lie in the node type */
+  .eval_link_h    = rtems_filesystem_default_evaluate_link, /* never called cause we lie in the node type */
   .symlink_h      = rtems_rfs_rtems_symlink,
   .readlink_h     = rtems_rfs_rtems_readlink,
   .rename_h       = rtems_rfs_rtems_rename,
