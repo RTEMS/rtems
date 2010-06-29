@@ -26,6 +26,7 @@
  */
 
 #include <rtems/asm.h>
+#include <rtems/score/percpu.h>
 
 
 /* 
@@ -178,7 +179,7 @@ PUBLIC(_ISR_Handler)
 
   setx  SYM(_Thread_Dispatch_disable_level), %o5, %g3
   lduw  [%g3], %g5
-  setx  SYM(_ISR_Nest_level), %o5, %g6
+  setx  ISR_NEST_LEVEL, %o5, %g6
   lduw  [%g6], %g4
 
   add      %g5, 1, %g5
@@ -345,7 +346,7 @@ PUBLIC(_ISR_Handler)
     bnz      simple_return   ! Yes, then do a "simple" exit
     nop
 
-    setx    SYM(_Context_Switch_necessary), %o5, %g7
+    setx    DISPATCH_NEEDED, %o5, %g7
 
 
     /*
@@ -358,21 +359,6 @@ PUBLIC(_ISR_Handler)
     orcc     %o5, %g0, %g0   ! Is thread switch necessary?
     bnz      SYM(_ISR_Dispatch) ! yes, then invoke the dispatcher
     nop
-
-    /*
-     *  Finally, check to see if signals were sent to the currently
-     *  executing task.  If so, we need to invoke the interrupt dispatcher.
-     */
-    setx    SYM(_ISR_Signals_to_thread_executing), %o5, %g5
-    ldub    [%g5], %o5
-
-    orcc    %o5, %g0, %g0   ! Were signals sent to the currently
-    !   executing thread?
-    bz      simple_return   ! yes, then invoke the dispatcher
-    ! use the delay slot to clear the signals
-    !   to the currently executing task flag
-    stb     %g0, [%g5]
-
 
     /*
      *  Invoke interrupt dispatcher.
@@ -408,31 +394,15 @@ PUBLIC(_ISR_Dispatch)
    *  _Thread_Dispatch before leaving this ISR Dispatch context.
    */
 
-  setx     SYM(_Context_Switch_necessary), %o5, %o1
+  setx     DISPATCH_NEEDED, %o5, %o1
   ldub     [%o1], %o2
 
-  ! NOTE: Use some of delay slot to start loading this
-  setx     SYM(_ISR_Signals_to_thread_executing), %o5, %o1
-  ldub     [%o1], %o3
-
   orcc     %o2, %g0, %g0   ! Is thread switch necessary?
-  bnz      dispatchAgain   ! yes, then invoke the dispatcher AGAIN
-  ! NOTE: Use the delay slot to catch the orcc below
-
-  /*
-   *  Finally, check to see if signals were sent to the currently
-   *  executing task.  If so, we need to invoke the interrupt dispatcher.
-   */
-
-  ! NOTE: Delay slots above were used to perform the load AND
-  !       this orcc falls into the delay slot for bnz above
-  orcc     %o3, %g0, %g0   ! Were signals sent to the currently
-  !   executing thread?
   bz       allow_nest_again ! No, then clear out and return
   nop
 
   ! Yes, then invoke the dispatcher
-  dispatchAgain:
+dispatchAgain:
   mov      3, %g4        ! syscall (enable interrupts)
   ta       0             ! syscall (enable interrupts)
   ba       isr_dispatch
