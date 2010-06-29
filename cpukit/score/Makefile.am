@@ -24,15 +24,15 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/coremutex.h include/rtems/score/coresem.h \
     include/rtems/score/heap.h include/rtems/score/protectedheap.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
-    include/rtems/score/object.h include/rtems/score/priority.h \
-    include/rtems/score/stack.h include/rtems/score/states.h \
-    include/rtems/score/sysstate.h include/rtems/score/thread.h \
-    include/rtems/score/threadq.h include/rtems/score/threadsync.h \
-    include/rtems/score/timespec.h include/rtems/score/timestamp.h \
-    include/rtems/score/timestamp64.h include/rtems/score/tod.h \
-    include/rtems/score/tqdata.h include/rtems/score/userext.h \
-    include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
-    include/rtems/score/cpuopts.h
+    include/rtems/score/object.h include/rtems/score/percpu.h \
+    include/rtems/score/priority.h include/rtems/score/stack.h \
+    include/rtems/score/states.h include/rtems/score/sysstate.h \
+    include/rtems/score/thread.h include/rtems/score/threadq.h \
+    include/rtems/score/threadsync.h include/rtems/score/timespec.h \
+    include/rtems/score/timestamp.h include/rtems/score/timestamp64.h \
+    include/rtems/score/tod.h include/rtems/score/tqdata.h \
+    include/rtems/score/userext.h include/rtems/score/watchdog.h \
+    include/rtems/score/wkspace.h include/rtems/score/cpuopts.h
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h \
@@ -100,6 +100,9 @@ libscore_a_SOURCES += src/coremsg.c src/coremsgbroadcast.c \
 libscore_a_SOURCES += src/coremutex.c src/coremutexflush.c \
     src/coremutexseize.c src/coremutexsurrender.c \
     src/coremutexseizeintr.c
+
+## CORE_PERCPU_C_FILES
+libscore_a_SOURCES += src/percpu.c
 
 ## CORE_RWLOCK_C_FILES
 if HAS_PTHREADS

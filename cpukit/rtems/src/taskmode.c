@@ -117,7 +117,6 @@ rtems_status_code rtems_task_mode(
       _ASR_Swap_signals( asr );
       if ( _ASR_Are_signals_pending( asr ) ) {
         needs_asr_dispatching = true;
-        executing->do_post_task_switch_extension = true;
       }
     }
   }

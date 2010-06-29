@@ -53,8 +53,6 @@ void _POSIX_signals_Clear_process_signals(
     }
     if ( clear_signal ) {
       _POSIX_signals_Pending &= ~mask;
-      if ( !_POSIX_signals_Pending )
-	_Thread_Do_post_task_switch_extension--;
     }
   _ISR_Enable( level );
 }

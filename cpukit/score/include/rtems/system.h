@@ -169,6 +169,7 @@ typedef void * proc_ptr;
 #include <stdint.h>
 #endif
 #include <rtems/score/cpu.h>        /* processor specific information */
+#include <rtems/score/percpu.h>
 
 #ifndef ASM
 /**

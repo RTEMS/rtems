@@ -58,8 +58,6 @@ void _Thread_Load_environment(
 #endif
     is_fp = false;
 
-
-  the_thread->do_post_task_switch_extension = false;
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
   the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
   the_thread->budget_callout   = the_thread->Start.budget_callout;

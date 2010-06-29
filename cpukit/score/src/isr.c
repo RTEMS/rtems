@@ -34,8 +34,6 @@
 
 void _ISR_Handler_initialization( void )
 {
-  _ISR_Signals_to_thread_executing = false;
-
   _ISR_Nest_level = 0;
 
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
@@ -63,6 +61,9 @@ void _ISR_Handler_initialization( void )
     _CPU_Interrupt_stack_low,
     Configuration.interrupt_stack_size
   );
+
+  _CPU_Interrupt_stack_high = (void *)
+    ((uintptr_t) _CPU_Interrupt_stack_high & ~CPU_STACK_ALIGNMENT);
 
   /* Interrupt stack might have to be aligned and/or setup
    * in a specific way.

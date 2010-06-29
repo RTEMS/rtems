@@ -76,8 +76,6 @@ void _Thread_Handler_initialization(void)
   _Thread_Allocated_fp      = NULL;
 #endif
 
-  _Thread_Do_post_task_switch_extension = 0;
-
   _Thread_Maximum_extensions = maximum_extensions;
 
   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;

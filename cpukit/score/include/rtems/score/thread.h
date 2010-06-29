@@ -24,6 +24,13 @@
  *
  *  This handler encapsulates functionality related to the management of
  *  threads.  This includes the creation, deletion, and scheduling of threads.
+ *
+ *  The following variables are maintained as part of the per cpu data
+ *  structure.
+ *
+ *  + Idle thread pointer
+ *  + Executing thread pointer
+ *  + Heir thread pointer
  */
 /**@{*/
 
@@ -55,6 +62,7 @@ extern "C" {
   typedef uint32_t Thread_CPU_usage_t;
 #endif
 
+#include <rtems/score/percpu.h>
 #include <rtems/score/context.h>
 #include <rtems/score/cpu.h>
 #if defined(RTEMS_MULTIPROCESSING)
@@ -146,10 +154,6 @@ typedef enum {
     THREAD_CPU_BUDGET_ALGORITHM_CALLOUT
   #endif
 }  Thread_CPU_budget_algorithms;
-
-/** This type defines the Thread Control Block structure.
- */
-typedef struct Thread_Control_struct Thread_Control;
 
 /**  This defines thes the entry point for the thread specific timeslice
  *   budget management algorithm.
@@ -363,10 +367,6 @@ struct Thread_Control_struct {
   /** This field is true if the thread is offered globally */
   bool                                  is_global;
 #endif
-  /** This field is is true if the post task context switch should be
-   *  executed for this thread at the next context switch.
-   */
-  bool                                  do_post_task_switch_extension;
   /** This field is true if the thread is preemptible. */
   bool                                  is_preemptible;
 #if __RTEMS_ADA__
@@ -427,12 +427,6 @@ SCORE_EXTERN void *rtems_ada_self;
 SCORE_EXTERN Objects_Information _Thread_Internal_information;
 
 /**
- *  The following define the thread control pointers used to access
- *  and manipulate the idle thread.
- */
-SCORE_EXTERN Thread_Control *_Thread_Idle;
-
-/**
  *  The following context area contains the context of the "thread"
  *  which invoked the start multitasking routine.  This context is
  *  restored as the last action of the stop multitasking routine.  Thus
@@ -447,12 +441,6 @@ SCORE_EXTERN Context_Control _Thread_BSP_context;
  *  moments.
  */
 SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
-
-/**
- *  If this is non-zero, then the post-task switch extension
- *  is run regardless of the state of the per thread flag.
- */
-SCORE_EXTERN uint32_t   _Thread_Do_post_task_switch_extension;
 
 /**
  *  The following holds how many user extensions are in the system.  This
@@ -471,20 +459,6 @@ SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
  *  set of ready threads.
  */
 SCORE_EXTERN Chain_Control *_Thread_Ready_chain;
-
-/**
- *  The following points to the thread which is currently executing.
- *  This thread is implicitly manipulated by numerous directives.
- */
-SCORE_EXTERN Thread_Control *_Thread_Executing;
-
-/**
- *  The following points to the highest priority ready thread
- *  in the system.  Unless the current thread is not preemptibl,
- *  then this thread will be context switched to when the next
- *  dispatch occurs.
- */
-SCORE_EXTERN Thread_Control *_Thread_Heir;
 
 /**
  *  The following points to the thread whose floating point

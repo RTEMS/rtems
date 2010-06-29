@@ -251,6 +251,9 @@ AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
 ## Check if libc provides BSD's strlcpy/strlcat
 AC_CHECK_FUNCS(strlcpy strlcat)
 
+## This is needed to generate the field offsets of the per CPU 
+## data structure so they can be accessed from assembly code.
+AC_CHECK_SIZEOF([void *])
 
 # ... far too many conditionals ...
 AM_CONDITIONAL(LIBRPC,[test x"$rtems_cv_HAS_NETWORKING" = x"yes"])

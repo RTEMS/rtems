@@ -98,8 +98,6 @@ bool _POSIX_signals_Unblock_thread(
      *    + Any other combination, do nothing.
      */
 
-    the_thread->do_post_task_switch_extension = true;
-
     if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
       the_thread->Wait.return_code = EINTR;
       /*
@@ -120,7 +118,7 @@ bool _POSIX_signals_Unblock_thread(
 	  }
     } else if ( the_thread->current_state == STATES_READY ) {
       if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
-	_ISR_Signals_to_thread_executing = true;
+	_Context_Switch_necessary = true;
     }
   }
   return false;

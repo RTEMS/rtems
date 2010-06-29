@@ -33,15 +33,6 @@ void _ISR_Thread_dispatch( void )
 {
   if ( _Context_Switch_necessary ) {
     _Thread_Dispatch();
-  } else if ( _ISR_Signals_to_thread_executing ) {
-    _ISR_Signals_to_thread_executing = false;
-    if (
-      _Thread_Do_post_task_switch_extension
-        || _Thread_Executing->do_post_task_switch_extension
-    ) {
-      _Thread_Executing->do_post_task_switch_extension = false;
-      _API_extensions_Run_postswitch();
-    }
   }
 }
 

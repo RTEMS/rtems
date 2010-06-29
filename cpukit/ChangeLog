@@ -1,5 +1,24 @@
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1573/cpukit
+	* configure.ac, posix/src/killinfo.c,
+	posix/src/psignalclearprocesssignals.c,
+	posix/src/psignalsetprocesssignals.c,
+	posix/src/psignalunblockthread.c, posix/src/pthreadcreate.c,
+	posix/src/pthreadkill.c, posix/src/pthreadsigmask.c,
+	rtems/src/signalsend.c, rtems/src/taskmode.c, score/Makefile.am,
+	score/preinstall.am, score/include/rtems/system.h,
+	score/include/rtems/score/context.h, score/include/rtems/score/isr.h,
+	score/include/rtems/score/thread.h, score/src/isr.c,
+	score/src/isrthreaddispatch.c, score/src/thread.c,
+	score/src/threaddispatch.c, score/src/threadloadenv.c: Add a per cpu
+	data structure which contains the information required by RTEMS for
+	each CPU core. This encapsulates information such as thread
+	executing, heir, idle and dispatch needed.
+	* score/include/rtems/score/percpu.h, score/src/percpu.c: New files.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/libio_sockets.c: Use
 	rtems_set_errno_and_return_minus_one() where it was missed before.
 

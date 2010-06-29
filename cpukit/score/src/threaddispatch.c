@@ -94,12 +94,26 @@ void _Thread_Dispatch( void )
     _Thread_Dispatch_disable_level = 1;
     _Context_Switch_necessary = false;
     _Thread_Executing = heir;
+
+    /*
+     *  When the heir and executing are the same, then we are being
+     *  requested to do the post switch dispatching.  This is normally
+     *  done to dispatch signals.
+     */
+    if ( heir == executing )
+      goto post_switch;
+
+    /*
+     *  Since heir and executing are not the same, we need to do a real
+     *  context switch.
+     */
 #if __RTEMS_ADA__
     executing->rtems_ada_self = rtems_ada_self;
     rtems_ada_self = heir->rtems_ada_self;
 #endif
     if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
       heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
+
     _ISR_Enable( level );
 
     #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
@@ -170,14 +184,10 @@ void _Thread_Dispatch( void )
     _ISR_Disable( level );
   }
 
+post_switch:
   _Thread_Dispatch_disable_level = 0;
 
   _ISR_Enable( level );
 
-  if ( _Thread_Do_post_task_switch_extension ||
-       executing->do_post_task_switch_extension ) {
-    executing->do_post_task_switch_extension = false;
-    _API_extensions_Run_postswitch();
-  }
-
+  _API_extensions_Run_postswitch();
 }
