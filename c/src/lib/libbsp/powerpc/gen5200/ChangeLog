@@ -1,3 +1,9 @@
+2010-06-30	Peter Dufault <dufault@hda.com>
+
+	PR 1588/cpukit
+	* start/start.S: Renamed defines SR0 .. SR15 in
+	PPC_SR0 ..  PPC_SR15.
+
 2010-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Remove AC_CHECK_SIZEOF([void *]).

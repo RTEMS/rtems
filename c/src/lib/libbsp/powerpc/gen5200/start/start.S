@@ -757,21 +757,21 @@ SPRG_init:					/* initialize registers */
 	mtspr	IMISS, r30
 	mtspr	ICMP, r30
 	mtspr	RPA, r30
-	mtsr	SR0, r30
-	mtsr	SR1, r30
-	mtsr	SR2, r30
-	mtsr	SR3, r30
-	mtsr	SR4, r30
-	mtsr	SR5, r30
-	mtsr	SR6, r30
-	mtsr	SR7, r30
-	mtsr	SR8, r30
-	mtsr	SR9, r30
-	mtsr	SR10, r30
-	mtsr	SR12, r30
-	mtsr	SR13, r30
-	mtsr	SR14, r30
-	mtsr	SR15, r30
+	mtsr	PPC_SR0, r30
+	mtsr	PPC_SR1, r30
+	mtsr	PPC_SR2, r30
+	mtsr	PPC_SR3, r30
+	mtsr	PPC_SR4, r30
+	mtsr	PPC_SR5, r30
+	mtsr	PPC_SR6, r30
+	mtsr	PPC_SR7, r30
+	mtsr	PPC_SR8, r30
+	mtsr	PPC_SR9, r30
+	mtsr	PPC_SR10, r30
+	mtsr	PPC_SR12, r30
+	mtsr	PPC_SR13, r30
+	mtsr	PPC_SR14, r30
+	mtsr	PPC_SR15, r30
 
 
 
