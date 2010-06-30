@@ -1,3 +1,13 @@
+2010-06-30	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1472/cpukit
+	* libcsupport/Makefile.am, libcsupport/include/rtems/malloc.h,
+	libcsupport/src/free.c, libcsupport/src/malloc.c,
+	libcsupport/src/malloc_initialize.c, libcsupport/src/realloc.c,
+	libcsupport/src/rtems_memalign.c: Remove malloc boundary code. It has
+	not been used since before 4.6 and is bitrotted.
+	* libcsupport/src/malloc_boundary.c: Removed.
+
 2010-06-30	Jennifer.Averett <Jennifer.Averett@OARcorp.com>
 
 	* libcsupport/include/rtems/libio.h, libfs/Makefile.am: Added

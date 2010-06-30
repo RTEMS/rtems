@@ -45,24 +45,13 @@ int rtems_memalign(
     return EINVAL;
 
   /*
-   *
    *  If some free's have been deferred, then do them now.
    */
   malloc_deferred_frees_process();
 
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    /*
-     *  If the support for a boundary area at the end of the heap
-     *  block allocated is turned on, then adjust the size.
-     */
-    if (rtems_malloc_boundary_helpers)
-      size += (*rtems_malloc_boundary_helpers->overhead)();
-  #endif
-
   /*
    *  Perform the aligned allocation requested
    */
-
   return_this = _Protected_heap_Allocate_aligned(
     RTEMS_Malloc_Heap,
     size,

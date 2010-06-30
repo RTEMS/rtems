@@ -27,7 +27,6 @@ void *realloc(
 {
   uintptr_t old_size;
   char    *new_area;
-  uintptr_t resize;
 
   MSBUMP(realloc_calls, 1);
 
@@ -60,23 +59,9 @@ void *realloc(
   }
 
   /*
-   *  If block boundary integrity checking is enabled, then
-   *  we need to account for the boundary memory again.
+   *  Now resize it.
    */
-  resize = size;
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    if (rtems_malloc_boundary_helpers)
-      resize += (*rtems_malloc_boundary_helpers->overhead)();
-  #endif
-
-  if ( _Protected_heap_Resize_block( RTEMS_Malloc_Heap, ptr, resize ) ) {
-    #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-      /*
-       *  Successful resize.  Update the boundary on the same block.
-       */
-      if (rtems_malloc_boundary_helpers)
-        (*rtems_malloc_boundary_helpers->at_realloc)(ptr, resize);
-    #endif
+  if ( _Protected_heap_Resize_block( RTEMS_Malloc_Heap, ptr, size ) ) {
     return ptr;
   }
 

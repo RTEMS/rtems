@@ -55,15 +55,6 @@ void *malloc(
     _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false );
   #endif
 
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    /*
-     *  If the support for a boundary area at the end of the heap
-     *  block allocated is turned on, then adjust the size.
-     */
-    if (rtems_malloc_boundary_helpers)
-      size += (*rtems_malloc_boundary_helpers->overhead)();
-  #endif
-
   /*
    * Try to give a segment in the current heap if there is not
    * enough space then try to grow the heap.
@@ -92,14 +83,6 @@ void *malloc(
    */
   if ( rtems_malloc_statistics_helpers )
     (*rtems_malloc_statistics_helpers->at_malloc)(return_this);
-
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    /*
-     * If configured, set the boundary area
-     */
-    if (rtems_malloc_boundary_helpers)
-      (*rtems_malloc_boundary_helpers->at_malloc)(return_this, size);
-  #endif
 
   return return_this;
 }

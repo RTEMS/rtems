@@ -43,15 +43,6 @@ void RTEMS_Malloc_Initialize(
   size_t sbrk_amount
 )
 {
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    /*
-     *  If configured, initialize the boundary support
-     */
-    if ( rtems_malloc_boundary_helpers != NULL ) {
-      (*rtems_malloc_boundary_helpers->initialize)();
-    }
-  #endif
-
   /*
    *  If configured, initialize the statistics support
    */

@@ -56,20 +56,6 @@ extern rtems_malloc_statistics_functions_t
 extern rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers;
 
 /*
- *  Malloc boundary support plugin
- */
-typedef struct {
-  void     (*initialize)(void);
-  uint32_t (*overhead)(void);
-  void     (*at_malloc)(void *, size_t);
-  void     (*at_free)(void *);
-  void     (*at_realloc)(void *, size_t);
-} rtems_malloc_boundary_functions_t;
-
-extern rtems_malloc_boundary_functions_t rtems_malloc_boundary_helpers_table;
-extern rtems_malloc_boundary_functions_t *rtems_malloc_boundary_helpers;
-
-/*
  *  Malloc Heap Extension (sbrk) plugin
  */
 typedef struct {

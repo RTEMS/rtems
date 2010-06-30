@@ -89,10 +89,9 @@ MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
     src/_realloc_r.c src/__brk.c src/__sbrk.c src/mallocfreespace.c \
     src/mallocinfo.c src/malloc_walk.c src/malloc_get_statistics.c \
     src/malloc_report_statistics.c src/malloc_report_statistics_plugin.c \
-    src/malloc_statistics_helpers.c src/malloc_boundary.c \
-    src/posix_memalign.c src/rtems_memalign.c src/malloc_deferred.c \
-    src/malloc_sbrk_helpers.c src/malloc_dirtier.c src/malloc_p.h \
-    src/rtems_malloc.c
+    src/malloc_statistics_helpers.c src/posix_memalign.c \
+    src/rtems_memalign.c src/malloc_deferred.c src/malloc_sbrk_helpers.c \
+    src/malloc_dirtier.c src/malloc_p.h src/rtems_malloc.c
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 

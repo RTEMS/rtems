@@ -35,20 +35,11 @@ void free(
   /*
    *  Do not attempt to free memory if in a critical section or ISR.
    */
-
   if ( _System_state_Is_up(_System_state_Get()) &&
        !malloc_is_system_state_OK() ) {
       malloc_deferred_free(ptr);
       return;
   }
-
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    /*
-     *  If configured, check the boundary area
-     */
-    if ( rtems_malloc_boundary_helpers )
-      (*rtems_malloc_boundary_helpers->at_free)(ptr);
-  #endif
 
   /*
    *  If configured, update the statistics
