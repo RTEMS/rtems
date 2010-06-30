@@ -705,7 +705,7 @@ rtems_filesystem_operations_table  rtems_tfs_ops = {
   rtems_filesystem_default_link,          /* link */
   rtems_filesystem_default_unlink,        /* unlink */
   rtems_tfs_node_type,                    /* node_type */
-  devFS_mknod,                            /* mknod */
+  rtems_filesystem_default_mknod,         /* mknod */
   rtems_filesystem_default_chown,         /* chown */
   rtems_tfs_free_node_info,               /* freenodinfo */
   rtems_filesystem_default_mount,         /* mount */
