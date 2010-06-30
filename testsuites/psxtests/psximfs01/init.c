@@ -97,7 +97,7 @@ void read_helper(void)
     }
     fprintf(
       stderr,
-      "ERROR - at offset %zd - returned %zd and error=%s\n",
+      "ERROR - at offset %d - returned %zd and error=%s\n",
       i,
       sc,
       strerror( errno )

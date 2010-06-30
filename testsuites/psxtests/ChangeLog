@@ -1,3 +1,7 @@
+2010-06-30	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* psximfs01/init.c: Fix warning introduced.
+
 2010-06-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1595/tests
