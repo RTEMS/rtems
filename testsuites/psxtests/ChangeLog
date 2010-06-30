@@ -1,3 +1,8 @@
+2010-06-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1595/tests
+	* psximfs01/init.c: Fix warnings.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxtime/psxtime.scn, psxtime/test.c: Add test for passing a null

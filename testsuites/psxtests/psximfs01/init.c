@@ -52,7 +52,7 @@ void write_helper(void)
     written = write( TestFd, Buffer, sizeof(Buffer) );
     if ( written == -1 ) {
       if ( errno == ENOSPC ) {
-        printf( "Total written = %d\n", TotalWritten );
+        printf( "Total written = %zd\n", TotalWritten );
         return;
       }
       fprintf(
@@ -97,7 +97,7 @@ void read_helper(void)
     }
     fprintf(
       stderr,
-      "ERROR - at offset %d - returned %d and error=%s\n",
+      "ERROR - at offset %zd - returned %zd and error=%s\n",
       i,
       sc,
       strerror( errno )
