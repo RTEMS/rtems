@@ -271,22 +271,22 @@ lidate */
 #define THRM3_E   (1<<(31-31))
 
 /* Segment Registers */
-#define SR0	0
-#define SR1	1
-#define SR2	2
-#define SR3	3
-#define SR4	4
-#define SR5	5
-#define SR6	6
-#define SR7	7
-#define SR8	8
-#define SR9	9
-#define SR10	10
-#define SR11	11
-#define SR12	12
-#define SR13	13
-#define SR14	14
-#define SR15	15
+#define PPC_SR0	0
+#define PPC_SR1	1
+#define PPC_SR2	2
+#define PPC_SR3	3
+#define PPC_SR4	4
+#define PPC_SR5	5
+#define PPC_SR6	6
+#define PPC_SR7	7
+#define PPC_SR8	8
+#define PPC_SR9	9
+#define PPC_SR10	10
+#define PPC_SR11	11
+#define PPC_SR12	12
+#define PPC_SR13	13
+#define PPC_SR14	14
+#define PPC_SR15	15
 
 #define BOOKE_DECAR	54
 
