@@ -716,9 +716,8 @@ rtems_filesystem_operations_table  rtems_tfs_ops = {
   rtems_filesystem_default_evaluate_link, /* evaluate_link */
   rtems_filesystem_default_symlink,       /* symlink */
   rtems_filesystem_default_readlink,      /* readlin */
-  rtems_filesystem_default_rename,
-  rtems_filesystem_default_statvfs 
-}
+  rtems_filesystem_default_rename,        /* rename */
+  rtems_filesystem_default_statvfs        /* statvfs */
 };
 
 rtems_filesystem_file_handlers_r rtems_tfs_handlers = {

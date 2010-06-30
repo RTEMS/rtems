@@ -1,3 +1,7 @@
+2010-06-30	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* umon/tfsDriver.c: Remove extra brace.
+
 2010-06-30	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* umon/tfsDriver.c: Corrected filesystem mknod entry to call the
