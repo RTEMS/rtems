@@ -918,6 +918,17 @@ int rtems_filesystem_default_unlink(
 
 /**
  * @brief Provides a defualt routine for filesystem
+ * implementation to create a new node.
+ */
+int rtems_filesystem_default_mknod(
+   const char                        *path,       /* IN */
+   mode_t                             mode,       /* IN */
+   dev_t                              dev,        /* IN */
+   rtems_filesystem_location_info_t  *pathloc     /* IN/OUT */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
  * implementation of a chown command.
  */
 int rtems_filesystem_default_chown(

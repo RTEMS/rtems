@@ -1,3 +1,9 @@
+2010-06-30	Jennifer.Averett <Jennifer.Averett@OARcorp.com>
+
+	* libcsupport/include/rtems/libio.h, libfs/Makefile.am: Added
+	filesystem default mknod method.
+	* libfs/src/defaults/default_mknod.c: New file.
+
 2010-06-29	Jennifer.Averett <Jennifer.Averett@OARcorp.com>
 
 	* libcsupport/include/rtems/libio.h, libfs/Makefile.am,

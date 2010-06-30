@@ -30,7 +30,7 @@ libdefaultfs_a_SOURCES = \
     src/defaults/default_write.c src/defaults/default_fpathconf.c \
     src/defaults/default_unmount.c src/defaults/default_evaluate_link.c \
     src/defaults/default_open.c src/defaults/default_close.c \
-    src/defaults/default_fsunmount.c
+    src/defaults/default_fsunmount.c src/defaults/default_mknod.c
 
 noinst_LIBRARIES += libimfs.a
 libimfs_a_SOURCES =
