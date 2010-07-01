@@ -79,13 +79,6 @@ int _rename_r(
 
   rtems_filesystem_get_start_loc( new, &i, &new_parent_loc );
 
-  if ( !new_parent_loc.ops->evalformake_h ) {
-    if ( free_old_parentloc )
-      rtems_filesystem_freenode( &old_parent_loc );
-    rtems_filesystem_freenode( &old_loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   result = (*new_parent_loc.ops->evalformake_h)( &new[i], &new_parent_loc, &name );
   if ( result != 0 ) {
     rtems_filesystem_freenode( &new_parent_loc );
@@ -108,14 +101,6 @@ int _rename_r(
     rtems_set_errno_and_return_minus_one( EXDEV );
   }
 
-  if ( !new_parent_loc.ops->rename_h ) {
-    rtems_filesystem_freenode( &new_parent_loc );
-    if ( free_old_parentloc )
-      rtems_filesystem_freenode( &old_parent_loc );
-    rtems_filesystem_freenode( &old_loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   result = (*new_parent_loc.ops->rename_h)( &old_parent_loc, &old_loc, &new_parent_loc, name );
 
   rtems_filesystem_freenode( &new_parent_loc );
@@ -125,18 +110,4 @@ int _rename_r(
 
   return result;
 }
-
-#if 0
-  struct stat sb;
-  int s;
-
-  s = stat( old, &sb);
-  if ( s < 0 )
-    return s;
-  s = link( old, new );
-  if ( s < 0 )
-    return s;
-  return S_ISDIR(sb.st_mode) ? rmdir( old ) : unlink( old );
-#endif
-                                            
 #endif

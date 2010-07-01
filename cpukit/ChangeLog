@@ -1,3 +1,10 @@
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/_rename_r.c, libcsupport/src/getdents.c,
+	libcsupport/src/unlink.c, libcsupport/src/utime.c,
+	libcsupport/src/writev.c: Remove remaining checks for missing
+	handlers.
+
 2010-07-01	Vinu Rajashekhar <vinutheraj@gmail.com>
 
 	PR 1597/cpukit

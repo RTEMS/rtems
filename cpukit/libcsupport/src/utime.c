@@ -34,11 +34,6 @@ int utime(
   if ( rtems_filesystem_evaluate_path( path, strlen( path ), 0x00, &temp_loc, true ) )
     return -1;
 
-  if ( !temp_loc.ops->utime_h ){
-    rtems_filesystem_freenode( &temp_loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   if ( times == NULL ) {
     now.actime = now.modtime = time( NULL );
     times = &now;

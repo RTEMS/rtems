@@ -55,9 +55,6 @@ ssize_t writev(
   if ( iovcnt > IOV_MAX )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  if ( !iop->handlers->write_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   /*
    *  OpenGroup says that you are supposed to return EINVAL if the
    *  sum of the iov_len values in the iov array would overflow a

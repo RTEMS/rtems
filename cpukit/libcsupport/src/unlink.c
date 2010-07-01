@@ -74,13 +74,6 @@ int unlink(
     rtems_set_errno_and_return_minus_one( EISDIR );
   }
 
-  if ( !loc.ops->unlink_h ) {
-    rtems_filesystem_freenode( &loc );
-    if ( free_parentloc )
-      rtems_filesystem_freenode( &parentloc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   result = (*loc.ops->unlink_h)( &parentloc, &loc );
 
   rtems_filesystem_freenode( &loc );
