@@ -74,14 +74,6 @@ int rmdir(
   /*
    * Verify you can remove this node as a directory.
    */
-
-  if ( !loc.ops->node_type_h ){
-    rtems_filesystem_freenode( &loc );
-    if ( free_parentloc )
-      rtems_filesystem_freenode( &parentloc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ){
     rtems_filesystem_freenode( &loc );
     if ( free_parentloc )
@@ -92,13 +84,6 @@ int rmdir(
   /*
    * Use the filesystems rmnod to remove the node.
    */
-
-  if ( !loc.handlers->rmnod_h ){
-    rtems_filesystem_freenode( &loc );
-    if ( free_parentloc )
-      rtems_filesystem_freenode( &parentloc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
 
   result =  (*loc.handlers->rmnod_h)( &parentloc, &loc );
 

@@ -38,8 +38,5 @@ int fchown(
 
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
-  if ( !iop->pathinfo.ops->chown_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   return (*iop->pathinfo.ops->chown_h)( &iop->pathinfo, owner, group );
 }

@@ -16,7 +16,5 @@
 
 void rtems_filesystem_freenode( rtems_filesystem_location_info_t *_node )
 {
-  if ( _node->ops )
-    if ( _node->ops->freenod_h )
-      _node->ops->freenod_h(_node );
+  _node->ops->freenod_h(_node );
 }

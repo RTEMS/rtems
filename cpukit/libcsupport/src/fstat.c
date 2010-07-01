@@ -44,12 +44,6 @@ int fstat(
   rtems_libio_check_fd( fd );
   rtems_libio_check_is_open(iop);
 
-  if ( !iop->handlers )
-    rtems_set_errno_and_return_minus_one( EBADF );
-
-  if ( !iop->handlers->fstat_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   /*
    *  Zero out the stat structure so the various support
    *  versions of stat don't have to.

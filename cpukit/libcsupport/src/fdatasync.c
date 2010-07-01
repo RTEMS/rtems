@@ -35,8 +35,5 @@ int fdatasync(
    *  Now process the fdatasync().
    */
 
-  if ( !iop->handlers->fdatasync_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   return (*iop->handlers->fdatasync_h)( iop );
 }

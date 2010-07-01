@@ -1,3 +1,24 @@
+2010-07-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* libcsupport/src/chdir.c, libcsupport/src/chmod.c,
+	libcsupport/src/chown.c, libcsupport/src/close.c,
+	libcsupport/src/eval.c, libcsupport/src/fchdir.c,
+	libcsupport/src/fchmod.c, libcsupport/src/fchown.c,
+	libcsupport/src/fcntl.c, libcsupport/src/fdatasync.c,
+	libcsupport/src/freenode.c, libcsupport/src/fstat.c,
+	libcsupport/src/fsync.c, libcsupport/src/ftruncate.c,
+	libcsupport/src/ioctl.c, libcsupport/src/link.c,
+	libcsupport/src/lseek.c, libcsupport/src/mknod.c,
+	libcsupport/src/mount.c, libcsupport/src/open.c,
+	libcsupport/src/read.c, libcsupport/src/readlink.c,
+	libcsupport/src/readv.c, libcsupport/src/rmdir.c,
+	libcsupport/src/stat.c, libcsupport/src/statvfs.c,
+	libcsupport/src/symlink.c, libcsupport/src/unlink.c,
+	libcsupport/src/unmount.c, libcsupport/src/write.c: Removed
+	filesystem checks for NULL methods checks from the main posix
+	rountines. These are now required to have at a miminum default
+	routines in the tables.
+
 2010-07-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/rtems/libio_.h: Removed

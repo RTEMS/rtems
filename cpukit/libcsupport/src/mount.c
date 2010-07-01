@@ -176,15 +176,6 @@ int mount(
     loc_to_free = &loc;
 
     /*
-     * Test for node_type_h
-     */
-
-    if (!loc.ops->node_type_h) {
-      errno =  ENOTSUP;
-      goto cleanup_and_bail;
-    }
-
-    /*
      *  Test to see if it is a directory
      */
 
@@ -220,11 +211,6 @@ int mount(
      *  below the base file system
      */
 
-    if ( !loc.ops->mount_h ){
-      errno = ENOTSUP;
-      goto cleanup_and_bail;
-    }
-
     if ( loc.ops->mount_h( mt_entry ) ) {
       goto cleanup_and_bail;
     }
@@ -248,9 +234,7 @@ int mount(
     /*
      * Try to undo the mount operation
      */
-    if ( loc.ops->unmount_h ) {
-      loc.ops->unmount_h( mt_entry );
-    }
+    loc.ops->unmount_h( mt_entry );
     goto cleanup_and_bail;
   }
 

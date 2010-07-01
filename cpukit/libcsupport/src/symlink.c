@@ -30,18 +30,9 @@ int symlink(
 
   rtems_filesystem_get_start_loc( sympath, &i, &loc );
 
-  if ( !loc.ops->evalformake_h ) {
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   result = (*loc.ops->evalformake_h)( &sympath[i], &loc, &name_start );
   if ( result != 0 )
     return -1;
-
-  if ( !loc.ops->symlink_h ) {
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
 
   result = (*loc.ops->symlink_h)( &loc, actualpath, name_start);
 

@@ -67,13 +67,6 @@ int unlink(
     return -1;
   }
 
-  if ( !loc.ops->node_type_h ) {
-    rtems_filesystem_freenode( &loc );
-    if ( free_parentloc )
-      rtems_filesystem_freenode( &parentloc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   if (  (*loc.ops->node_type_h)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY ) {
     rtems_filesystem_freenode( &loc );
     if ( free_parentloc )

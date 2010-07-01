@@ -35,19 +35,9 @@ ssize_t readlink(
   if ( result != 0 )
      return -1;
 
-  if ( !loc.ops->node_type_h ){
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_SYM_LINK ){
     rtems_filesystem_freenode( &loc );
     rtems_set_errno_and_return_minus_one( EINVAL );
-  }
-
-  if ( !loc.ops->readlink_h ){
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result =  (*loc.ops->readlink_h)( &loc, buf, bufsize );

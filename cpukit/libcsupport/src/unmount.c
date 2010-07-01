@@ -88,17 +88,6 @@ int unmount(
   rtems_filesystem_freenode( &loc );
 
   /*
-   * Verify Unmount is supported by both filesystems.
-   */
-
-  if ( !fs_mount_loc->ops->unmount_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
-  if ( !fs_root_loc->ops->fsunmount_me_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
-
-  /*
    *  Verify the current node is not in this filesystem.
    *  XXX - Joel I have a question here wasn't code added
    *        that made the current node thread based instead

@@ -45,10 +45,6 @@ int mknod(
 
   rtems_filesystem_get_start_loc( pathname, &i, &temp_loc );
 
-  if ( !temp_loc.ops->evalformake_h ) {
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   result = (*temp_loc.ops->evalformake_h)(
     &pathname[i],
     &temp_loc,
@@ -56,11 +52,6 @@ int mknod(
   );
   if ( result != 0 )
     return -1;
-
-  if ( !temp_loc.ops->mknod_h ) {
-    rtems_filesystem_freenode( &temp_loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
 
   result =  (*temp_loc.ops->mknod_h)( name_start, mode, dev, &temp_loc );
 

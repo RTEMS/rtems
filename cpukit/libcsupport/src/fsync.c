@@ -35,11 +35,5 @@ int fsync(
    *  Now process the fsync().
    */
 
-  if ( !iop->handlers )
-    rtems_set_errno_and_return_minus_one( EBADF );
-
-  if ( !iop->handlers->fsync_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   return (*iop->handlers->fsync_h)( iop );
 }

@@ -158,11 +158,6 @@ int open(
   iop->flags     |= rtems_libio_fcntl_flags( flags );
   iop->pathinfo   = loc;
 
-  if ( !iop->handlers || !iop->handlers->open_h ) {
-    rc = ENOTSUP;
-    goto done;
-  }
-
   rc = (*iop->handlers->open_h)( iop, pathname, flags, mode );
   if ( rc ) {
     rc = errno;

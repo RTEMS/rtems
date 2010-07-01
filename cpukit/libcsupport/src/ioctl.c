@@ -47,13 +47,6 @@ int ioctl(
   /*
    *  Now process the ioctl().
    */
-
-  if ( !iop->handlers )
-    rtems_set_errno_and_return_minus_one( EBADF );
-
-  if ( !iop->handlers->ioctl_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   rc = (*iop->handlers->ioctl_h)( iop, command, buffer );
 
   return rc;

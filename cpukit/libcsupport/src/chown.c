@@ -36,11 +36,6 @@ int chown(
   if ( rtems_filesystem_evaluate_path( path, strlen( path ), 0x00, &loc, true ) )
     return -1;
 
-  if ( !loc.ops->chown_h ) {
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   result = (*loc.ops->chown_h)( &loc, owner, group );
 
   rtems_filesystem_freenode( &loc );

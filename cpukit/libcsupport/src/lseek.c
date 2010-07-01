@@ -35,13 +35,6 @@ off_t lseek(
   rtems_libio_check_is_open(iop);
 
   /*
-   *  Check as many errors as possible before touching iop->offset.
-   */
-
-  if ( !iop->handlers->lseek_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
-  /*
    *  Now process the lseek().
    */
 

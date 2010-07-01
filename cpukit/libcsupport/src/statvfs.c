@@ -42,9 +42,6 @@ statvfs (const char *path, struct statvfs *sb)
   mt_entry      = loc.mt_entry;
   fs_mount_root = &mt_entry->mt_fs_root;
 
-  if ( !fs_mount_root->ops->statvfs_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   memset (sb, 0, sizeof (struct statvfs));
 
   result = ( fs_mount_root->ops->statvfs_h )( fs_mount_root, sb );

@@ -40,9 +40,6 @@ ssize_t read(
   /*
    *  Now process the read().
    */
-  if ( !iop->handlers->read_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   rc = (*iop->handlers->read_h)( iop, buffer, count );
 
   if ( rc > 0 )

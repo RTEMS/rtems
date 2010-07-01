@@ -62,11 +62,6 @@ int _STAT_NAME(
   if ( status != 0 )
     return -1;
 
-  if ( !loc.handlers->fstat_h ){
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   /*
    *  Zero out the stat structure so the various support
    *  versions of stat don't have to.
