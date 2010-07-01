@@ -207,6 +207,21 @@
 	* configure.ac: Remove c4x (dead port).
 	* score/cpu/Makefile.am: Remove c4x (dead port).
 
+2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/include/rtems/libio.h: Documentation.
+
+2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1524/filesystem
+	* libcsupport/src/rtems_mkdir.c: New file.
+	* libcsupport/src/Makefile.am: Reflect change above.
+	* libcsupport/include/rtems/libio.h: Added rtems_mkdir().
+	* libmisc/fsmount/fsmount.h, libmisc/fsmount/fsmount.c,
+	libblock/src/bdpart-mount.c, libnetworking/rtems/mkrootfs.h,
+	libnetworking/rtems/mkrootfs.c: Use rtems_mkdir().  Removed
+	rtems_fsmount_create_mount_point() and rtems_rootfs_mkdir().
+
 2010-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/rtems/libio_.h: Declare
