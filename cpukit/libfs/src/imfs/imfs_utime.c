@@ -36,6 +36,7 @@ int IMFS_utime(
 
   the_jnode->stat_atime = actime;
   the_jnode->stat_mtime = modtime;
+  the_jnode->stat_ctime = time( NULL );
 
   return 0;
 }

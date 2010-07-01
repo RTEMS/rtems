@@ -29,6 +29,7 @@ int utime(
 {
   rtems_filesystem_location_info_t   temp_loc;
   int                                result;
+  struct utimbuf                     now;
 
   if ( rtems_filesystem_evaluate_path( path, strlen( path ), 0x00, &temp_loc, true ) )
     return -1;
@@ -36,6 +37,11 @@ int utime(
   if ( !temp_loc.ops->utime_h ){
     rtems_filesystem_freenode( &temp_loc );
     rtems_set_errno_and_return_minus_one( ENOTSUP );
+  }
+
+  if ( times == NULL ) {
+    now.actime = now.modtime = time( NULL );
+    times = &now;
   }
 
   result = (*temp_loc.ops->utime_h)( &temp_loc, times->actime, times->modtime );

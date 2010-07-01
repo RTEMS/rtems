@@ -1,3 +1,11 @@
+2010-07-01	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	PR 1529/cpukit
+	* utime.c: Change file access time and modified time to
+	current time if pointer to struct utimbuf is NULL.
+	* imfs_utime.c: Upon successful completion, imfs_utime() marks
+	the time of the last file status change, st_ctime, to be updated.
+
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/rtems_memalign.c, score/include/rtems/score/heap.h:
