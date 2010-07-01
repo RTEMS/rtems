@@ -2,6 +2,9 @@
  *  This test exercises stat() via fstat() and generates as many of the
  *  path evaluation cases as possible.
  *
+ *  This test also exercises lstat() and lchown() when symlinks are
+ *  involved.
+ *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -164,11 +167,12 @@ char *Good_relative_paths[] = {
 };
 
 /*
- *  Do a stat on a single file and report the status.
+ *  Do a stat/lstat on a single file and report the status.
  */
 
-void stat_a_file(
-  const char *file
+void stat_a_file_helper(
+  const char *file,
+  int         follow_link
 )
 {
   int         status;
@@ -181,10 +185,15 @@ void stat_a_file(
 
   rtems_test_assert( file );
 
-  printf( "stat( %s ) returned ", file );
-  fflush( stdout );
-
-  status = stat( file, &statbuf );
+  if ( follow_link ) {
+    printf( "stat( %s ) returned ", file );
+    fflush( stdout );
+    status = stat( file, &statbuf );
+  } else {
+    printf( "lstat( %s ) returned ", file );
+    fflush( stdout );
+    status = lstat( file, &statbuf );
+  }
 
   if ( status == -1 ) {
     printf( ": %s\n", strerror( errno ) );
@@ -211,6 +220,26 @@ void stat_a_file(
 }
 
 /*
+ *  Do a stat on a single file and report the status.
+*/
+void stat_a_file(
+  const char *file
+)
+{
+  stat_a_file_helper( file, true );
+}
+
+/*
+ *  Do a lstat on a single file and report the status.
+ */
+void lstat_a_file(
+  const char *file
+)
+{
+  stat_a_file_helper( file, false );
+}
+
+/*
  *  stat() multiple files at a time
  */
 
@@ -228,10 +257,11 @@ void stat_multiple_files(
 }
 
 /*
- *  chown() multiple files at a time
+ *  chown()/lchown() multiple files at a time
  */
-void chown_multiple_files(
-  char **files
+void chown_multiple_files_helper(
+  char **files,
+  int    follow_link
 )
 {
   int    i;
@@ -244,18 +274,46 @@ void chown_multiple_files(
   i = 0;
   while ( files[i] ) {
     printf("Change group of %s\n", files[i]);
-    chown( files[i], st_uid, (st_gid+1) );
-    stat_a_file( files[i] );
+    if ( follow_link ) {
+      chown( files[i], st_uid, (st_gid+1) );
+      stat_a_file( files[i] );
+    } else {
+      lchown( files[i], st_uid, (st_gid+1) );
+      lstat_a_file( files[i] );
+    }
 
     printf("Change owner of %s\n", files[i]);
-    chown( files[i], (st_uid+1), st_gid );
-    stat_a_file( files[i] );
+    if ( follow_link ) {
+      chown( files[i], (st_uid+1), st_gid );
+      stat_a_file( files[i] );
+    } else {
+      lchown( files[i], (st_uid+1), st_gid );
+      lstat_a_file( files[i] );
+    }
     i++;
   }
 
 }
 
+/*
+ *  chown() multiple files at a time
+ */
+void chown_multiple_files(
+  char **files
+)
+{
+  chown_multiple_files_helper( files, true );
+}
 
+/*
+ *  lchown() multiple files at a time
+ */
+void lchown_multiple_files(
+  char **files
+)
+{
+  chown_multiple_files_helper( files, false );
+}
 
 /*
  *  mknod() multiple files at a time
@@ -377,7 +435,7 @@ void make_a_symlink(
 
 void make_multiple_symlinks(void)
 {
- int  status;
+ int  status, i;
 
  make_a_symlink( Files[0],             SymLinks[0] );
  make_a_symlink( Directories[0],       SymLinks[1] );
@@ -386,11 +444,10 @@ void make_multiple_symlinks(void)
  make_a_symlink( SymLinks[1],          SymLinks[4] );
  make_a_symlink( "//my_mount_point/links","/my_mount_point/symlinks/links" );
 
- stat_a_file( SymLinks[0] );
- stat_a_file( SymLinks[1] );
- stat_a_file( SymLinks[2] );
- stat_a_file( SymLinks[3] );
- stat_a_file( SymLinks[4] );
+ for (i = 0; i < 5; i++) {
+   stat_a_file( SymLinks[i] );
+   lstat_a_file( SymLinks[i] );
+ }
 
  status = symlink(  "//links", "bob/frank" );
  rtems_test_assert (status == -1);
@@ -433,6 +490,7 @@ void make_many_symlinks(
   for (i=1; i < link_count; i++) {
     sprintf( name1, "%d", i );
     stat_a_file( name1 );
+    lstat_a_file( name1 );
   }
 
 }
@@ -840,6 +898,9 @@ int main(
 
   status = rtems_task_wake_after( TIMEOUT_VALUE );
   chown_multiple_files( Links_to_Dirs );
+
+  status = rtems_task_wake_after( TIMEOUT_VALUE );
+  lchown_multiple_files( SymLinks );
 
   puts( "\n\n*** END OF STAT TEST 01 ***" );
   rtems_test_exit(0);

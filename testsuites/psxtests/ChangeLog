@@ -1,3 +1,9 @@
+2010-07-01	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	PR 1597/cpukit
+	* psx13/psx13.scn, psx13/test.c, psxstat/psxstat.scn,
+	psxstat/test.c: Add lchown() and utimes().
+
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add tests for file lock stubs as well as

@@ -14,6 +14,7 @@
  *     pipe         - test implemented
  *     umask        - test implemented
  *     utime        - test implemented
+ *     utimes       - test implemented
  *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -44,6 +45,7 @@ int Dup2Test(void);
 int FDataSyncTest(void);
 int UMaskTest(void);
 int UTimeTest(void);
+int UTimesTest(void);
 int PipeTest(void);
 int PipeTestNull(void);
 int PathConfTest(void);
@@ -427,6 +429,66 @@ int UTimeTest (void)
 }
 
 /* ---------------------------------------------------------------
+ * UTimesTest function
+ *
+ * Hits the utimes code. Does NOT test the functionality of the underlying utime
+ * entry in the IMFS op table.
+ *
+ * arguments: none
+ * assumptions: utimes function available.
+ * actions: set utimes for an invalid filename.
+ *          set utimes for a valid filename.
+ *
+ * returns: TRUE if time on valid file is set correctly and utimes failed on
+ *          an invalid filename.
+ *          FALSE otherwise.
+ *
+ * ---------------------------------------------------------------
+ */
+
+int UTimesTest (void)
+{
+  int error = 0, retval = FALSE;
+  struct timeval time[2];
+  struct stat fstat;
+
+  /* First, an invalid filename. */
+  error = utimes("!This is an =invalid p@thname!!! :)", NULL);
+
+  if (error == -1)
+    retval = TRUE;
+  else
+    retval = FALSE;
+
+  /* Now, the success test. */
+  if (retval == TRUE) {
+
+    time[0].tv_sec = 12345;
+    time[1].tv_sec = 54321;
+
+    error = utimes("testfile1.tst", &time);
+
+    if (error == 0) {
+
+      /* But, did it set the time? */
+      stat ("testfile1.tst", &fstat);
+
+      if ((fstat.st_atime == 12345) && (fstat.st_mtime == 54321 ))
+	retval = TRUE;
+      else
+	retval = FALSE;
+    }
+
+    else
+      retval = FALSE;
+  }
+
+  /* assert (retval == TRUE);*/
+
+  return (retval);
+}
+
+/* ---------------------------------------------------------------
  * PipeTest function
  *
  * Hits the pipe code.
@@ -659,6 +721,12 @@ int main(
 
    printf ("Testing utime().......... ");
     if (UTimeTest() == TRUE)
+      printf ("Success.\n");
+    else
+      printf ("Failed!!!\n");
+
+   printf ("Testing utimes().......... ");
+    if (UTimesTest() == TRUE)
       printf ("Success.\n");
     else
       printf ("Failed!!!\n");

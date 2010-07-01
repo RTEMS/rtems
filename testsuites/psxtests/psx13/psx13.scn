@@ -7,6 +7,7 @@ Testing dup2()........... Success.
 Testing fdatasync()...... Success.
 Testing umask().......... Success.
 Testing utime().......... Success.
+Testing utimes().......... Success.
 Testing pipe()........... Success.
 Testing pipe() with NULL........... Failed!!!
 Testing fsync().......... Success.

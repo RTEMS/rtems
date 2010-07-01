@@ -1,5 +1,5 @@
 *** STAT TEST 01 ***
---->Current Time:  - rtems_clock_get - 09:00:00   12/31/1988
+--->Current Time:  - rtems_clock_get_tod - 09:00:00   12/31/1988
 Making directory /my_mount_point/dir1
 Making directory /my_mount_point/dir2
 Making directory /my_mount_point/dir3
@@ -60,8 +60,10 @@ stat( /my_mount_point/dev ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:00 1988
+...st_blksize 0
+...st_blocks  0
 stat( ////my_mount_point/dir1/\//file1\\// ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     b
 ...st_mode    100004
 ...st_nlink   3
@@ -72,8 +74,10 @@ stat( ////my_mount_point/dir1/\//file1\\// ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir1/\\/file2 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     c
 ...st_mode    100004
 ...st_nlink   3
@@ -84,8 +88,10 @@ stat( /my_mount_point/dir1/\\/file2 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir1/file3/////\\\ ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     d
 ...st_mode    100004
 ...st_nlink   3
@@ -96,8 +102,10 @@ stat( /my_mount_point/dir1/file3/////\\\ ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir1/file4 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     e
 ...st_mode    100004
 ...st_nlink   3
@@ -108,8 +116,10 @@ stat( /my_mount_point/dir1/file4 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir1/dir1/file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     f
 ...st_mode    100004
 ...st_nlink   3
@@ -120,8 +130,10 @@ stat( /my_mount_point/dir1/dir1/file1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir1/dir1/ file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     10
 ...st_mode    100004
 ...st_nlink   3
@@ -132,6 +144,8 @@ stat( /my_mount_point/dir1/dir1/ file1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     3
@@ -140,10 +154,12 @@ stat( /my_mount_point/dir1 ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    1608
+...st_size    3140
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir2//////\ ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     4
@@ -156,6 +172,8 @@ stat( /my_mount_point/dir2//////\ ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir3 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     5
@@ -168,6 +186,8 @@ stat( /my_mount_point/dir3 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir4 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     6
@@ -180,6 +200,8 @@ stat( /my_mount_point/dir4 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir1/dir1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     7
@@ -188,10 +210,12 @@ stat( /my_mount_point/dir1/dir1 ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    536
+...st_size    1040
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/dir1/ dir1///\\ ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     8
@@ -204,6 +228,8 @@ stat( /my_mount_point/dir1/ dir1///\\ ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/\/\/\/\/\/\/links\/\/\/\/\/\ ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     9
@@ -212,10 +238,12 @@ stat( /my_mount_point/\/\/\/\/\/\/links\/\/\/\/\/\ ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    6968
+...st_size    15640
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 
 Doing the stat() on all the good relative paths
 stat( dev ) returned 
@@ -230,8 +258,10 @@ stat( dev ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:00 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir1/\//file1\\// ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     b
 ...st_mode    100004
 ...st_nlink   3
@@ -242,8 +272,10 @@ stat( dir1/\//file1\\// ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir1/\\/file2 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     c
 ...st_mode    100004
 ...st_nlink   3
@@ -254,8 +286,10 @@ stat( dir1/\\/file2 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir1/file3/////\\\ ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     d
 ...st_mode    100004
 ...st_nlink   3
@@ -266,8 +300,10 @@ stat( dir1/file3/////\\\ ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir1/file4 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     e
 ...st_mode    100004
 ...st_nlink   3
@@ -278,8 +314,10 @@ stat( dir1/file4 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir1/dir1/file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     f
 ...st_mode    100004
 ...st_nlink   3
@@ -290,8 +328,10 @@ stat( dir1/dir1/file1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir1/dir1/ file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     10
 ...st_mode    100004
 ...st_nlink   3
@@ -302,6 +342,8 @@ stat( dir1/dir1/ file1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     3
@@ -310,10 +352,12 @@ stat( dir1 ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    1608
+...st_size    3140
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir2//////\ ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     4
@@ -326,6 +370,8 @@ stat( dir2//////\ ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir3 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     5
@@ -338,6 +384,8 @@ stat( dir3 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir4 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     6
@@ -350,6 +398,8 @@ stat( dir4 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir1/dir1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     7
@@ -358,10 +408,12 @@ stat( dir1/dir1 ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    536
+...st_size    1040
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( dir1/ dir1///\\ ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     8
@@ -374,8 +426,10 @@ stat( dir1/ dir1///\\ ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( main.c ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     11
 ...st_mode    100004
 ...st_nlink   1
@@ -386,6 +440,8 @@ stat( main.c ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:00 1988
+...st_blksize 0
+...st_blocks  0
 
 chdir to dev
 
@@ -416,10 +472,12 @@ stat( dir1/dir1/../../links/dir1 ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    1608
+...st_size    3140
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir2 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     4
@@ -432,6 +490,8 @@ stat( links/dir2 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir3 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     5
@@ -444,6 +504,8 @@ stat( links/dir3 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir4 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     6
@@ -456,6 +518,8 @@ stat( links/dir4 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir1_dir1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     7
@@ -464,10 +528,12 @@ stat( links/dir1_dir1 ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    536
+...st_size    1040
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir1_ dir1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     8
@@ -480,6 +546,8 @@ stat( links/dir1_ dir1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/../links/../links/links ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     9
@@ -488,12 +556,14 @@ stat( links/../links/../links/links ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    6968
+...st_size    15640
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir1_file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     b
 ...st_mode    100004
 ...st_nlink   3
@@ -504,8 +574,10 @@ stat( links/dir1_file1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir1_file2 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     c
 ...st_mode    100004
 ...st_nlink   3
@@ -516,8 +588,10 @@ stat( links/dir1_file2 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir1_file3 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     d
 ...st_mode    100004
 ...st_nlink   3
@@ -528,8 +602,10 @@ stat( links/dir1_file3 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir1_file4 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     e
 ...st_mode    100004
 ...st_nlink   3
@@ -540,8 +616,10 @@ stat( links/dir1_file4 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir1_dir1_f1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     f
 ...st_mode    100004
 ...st_nlink   3
@@ -552,8 +630,10 @@ stat( links/dir1_dir1_f1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/dir1_dir1 f1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     10
 ...st_mode    100004
 ...st_nlink   3
@@ -564,6 +644,8 @@ stat( links/dir1_dir1 f1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links/links/links/links_dir1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     3
@@ -572,10 +654,12 @@ stat( links/links/links/links_dir1 ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    1608
+...st_size    3140
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links//links_dir2 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     4
@@ -588,6 +672,8 @@ stat( links//links_dir2 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links//links_dir3 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     5
@@ -600,6 +686,8 @@ stat( links//links_dir3 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links//links_dir4 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     6
@@ -612,6 +700,8 @@ stat( links//links_dir4 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links//links_dir1_d1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     7
@@ -620,10 +710,12 @@ stat( links//links_dir1_d1 ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    536
+...st_size    1040
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links//links_dir1 d1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     8
@@ -636,6 +728,8 @@ stat( links//links_dir1 d1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links//links_links ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     9
@@ -644,12 +738,14 @@ stat( links//links_links ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    6968
+...st_size    15640
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
 stat( links///links_d1_file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     b
 ...st_mode    100004
 ...st_nlink   3
@@ -660,8 +756,10 @@ stat( links///links_d1_file1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links///links_d1_file2 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     c
 ...st_mode    100004
 ...st_nlink   3
@@ -672,8 +770,10 @@ stat( links///links_d1_file2 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links///links_d1_file3 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     d
 ...st_mode    100004
 ...st_nlink   3
@@ -684,8 +784,10 @@ stat( links///links_d1_file3 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links///links_d1_file4 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     e
 ...st_mode    100004
 ...st_nlink   3
@@ -696,8 +798,10 @@ stat( links///links_d1_file4 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links///links_d1_d1_f1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     f
 ...st_mode    100004
 ...st_nlink   3
@@ -708,8 +812,10 @@ stat( links///links_d1_d1_f1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 stat( links///links_r1_d1 f1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     10
 ...st_mode    100004
 ...st_nlink   3
@@ -720,6 +826,8 @@ stat( links///links_r1_d1 f1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
 chmod of /my_mount_point/dir1/dir1 to Read/Write
 
 Doing the stat() on all the bad paths
@@ -744,7 +852,7 @@ Verify with readlink
 Making file /my_mount_point/symlinks/links
 Verify with readlink
 stat( /my_mount_point/symlinks/a_file_symlink ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     b
 ...st_mode    100004
 ...st_nlink   3
@@ -755,6 +863,22 @@ stat( /my_mount_point/symlinks/a_file_symlink ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:10 1988
+...st_blksize 0
+...st_blocks  0
+lstat( /my_mount_point/symlinks/a_file_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2c
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/symlinks/a_dir_symlink ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     3
@@ -763,10 +887,26 @@ stat( /my_mount_point/symlinks/a_dir_symlink ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    1876
+...st_size    3560
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
+lstat( /my_mount_point/symlinks/a_dir_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2d
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/symlinks/a_link_symlink ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     3
@@ -775,11 +915,41 @@ stat( /my_mount_point/symlinks/a_link_symlink ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    1876
+...st_size    3560
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
+lstat( /my_mount_point/symlinks/a_link_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2e
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( ../symlinks/no_file ) returned : No such file or directory
+lstat( ../symlinks/no_file ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2f
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( /my_mount_point/symlinks/a_dir_symlink/a_file_symlink ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     3
@@ -788,10 +958,26 @@ stat( /my_mount_point/symlinks/a_dir_symlink/a_file_symlink ) returned
 ...st_uid     0
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    1876
+...st_size    3560
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:05 1988
+...st_blksize 0
+...st_blocks  0
+lstat( /my_mount_point/symlinks/a_dir_symlink/a_file_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     30
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 Making file 1
 Verify with readlink
 Making file 2
@@ -811,14 +997,140 @@ Verify with readlink
 Making file 9
 Verify with readlink
 stat( 1 ) returned : No such file or directory
+lstat( 1 ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     32
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( 2 ) returned : No such file or directory
+lstat( 2 ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     33
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( 3 ) returned : No such file or directory
+lstat( 3 ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     34
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( 4 ) returned : No such file or directory
+lstat( 4 ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     35
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( 5 ) returned : No such file or directory
+lstat( 5 ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     36
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( 6 ) returned : Too many symbolic links
+lstat( 6 ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     37
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( 7 ) returned : Too many symbolic links
+lstat( 7 ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     38
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( 8 ) returned : Too many symbolic links
+lstat( 8 ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     39
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 stat( 9 ) returned : Too many symbolic links
+lstat( 9 ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     3a
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:15 1988
+...st_blksize 0
+...st_blocks  0
 chdir to a file should fail with ENOTDIR
 Verify RWX permission on /my_mount_point/dir1 via access
 chmod of /my_mount_point/dir1 to Read/Write
@@ -855,6 +1167,8 @@ stat( links/dir1_ dir1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:20 1988
+...st_blksize 0
+...st_blocks  0
 stat( links//links_dir1 d1 ) returned 
 ...st_dev     (0x0:0x0)
 ...st_ino     8
@@ -867,6 +1181,8 @@ stat( links//links_dir1 d1 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:20 1988
+...st_blksize 0
+...st_blocks  0
 Chdir to links/dir1_ dir1
 Chdir to .. should fail with ENOENT
 mkdir ../t should fail with ENOENT
@@ -897,7 +1213,7 @@ pass fstat a null pointer should fail with EFAULT
 chdir to /my_mount_point 
 Change group of /////my_mount_point/dir1/\//file1\\//
 stat( /////my_mount_point/dir1/\//file1\\// ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     b
 ...st_mode    100011
 ...st_nlink   3
@@ -908,9 +1224,11 @@ stat( /////my_mount_point/dir1/\//file1\\// ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of /////my_mount_point/dir1/\//file1\\//
 stat( /////my_mount_point/dir1/\//file1\\// ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     b
 ...st_mode    100011
 ...st_nlink   3
@@ -921,9 +1239,11 @@ stat( /////my_mount_point/dir1/\//file1\\// ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change group of /my_mount_point/dir1/file2
 stat( /my_mount_point/dir1/file2 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     c
 ...st_mode    100004
 ...st_nlink   3
@@ -934,9 +1254,11 @@ stat( /my_mount_point/dir1/file2 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of /my_mount_point/dir1/file2
 stat( /my_mount_point/dir1/file2 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     c
 ...st_mode    100004
 ...st_nlink   3
@@ -947,9 +1269,11 @@ stat( /my_mount_point/dir1/file2 ) returned
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
 ...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change group of /my_mount_point/dir1/file3
 stat( /my_mount_point/dir1/file3 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     d
 ...st_mode    100004
 ...st_nlink   3
@@ -959,10 +1283,12 @@ stat( /my_mount_point/dir1/file3 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of /my_mount_point/dir1/file3
 stat( /my_mount_point/dir1/file3 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     d
 ...st_mode    100004
 ...st_nlink   3
@@ -972,10 +1298,12 @@ stat( /my_mount_point/dir1/file3 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change group of /my_mount_point/dir1/file4
 stat( /my_mount_point/dir1/file4 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     e
 ...st_mode    100004
 ...st_nlink   3
@@ -985,10 +1313,12 @@ stat( /my_mount_point/dir1/file4 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of /my_mount_point/dir1/file4
 stat( /my_mount_point/dir1/file4 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     e
 ...st_mode    100004
 ...st_nlink   3
@@ -998,10 +1328,12 @@ stat( /my_mount_point/dir1/file4 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change group of /my_mount_point/dir1/dir1/file1
 stat( /my_mount_point/dir1/dir1/file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     f
 ...st_mode    100004
 ...st_nlink   3
@@ -1011,10 +1343,12 @@ stat( /my_mount_point/dir1/dir1/file1 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of /my_mount_point/dir1/dir1/file1
 stat( /my_mount_point/dir1/dir1/file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     f
 ...st_mode    100004
 ...st_nlink   3
@@ -1024,10 +1358,12 @@ stat( /my_mount_point/dir1/dir1/file1 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change group of ../../..//my_mount_point/dir1/./././dir1/ file1
 stat( ../../..//my_mount_point/dir1/./././dir1/ file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     10
 ...st_mode    100004
 ...st_nlink   3
@@ -1037,10 +1373,12 @@ stat( ../../..//my_mount_point/dir1/./././dir1/ file1 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of ../../..//my_mount_point/dir1/./././dir1/ file1
 stat( ../../..//my_mount_point/dir1/./././dir1/ file1 ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     10
 ...st_mode    100004
 ...st_nlink   3
@@ -1050,10 +1388,12 @@ stat( ../../..//my_mount_point/dir1/./././dir1/ file1 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change group of main.c
 stat( main.c ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     11
 ...st_mode    100004
 ...st_nlink   1
@@ -1063,10 +1403,12 @@ stat( main.c ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of main.c
 stat( main.c ) returned 
-...st_dev     (0x0:0x0)
+...st_dev     (0xfffe:0x1)
 ...st_ino     11
 ...st_mode    100004
 ...st_nlink   1
@@ -1076,7 +1418,9 @@ stat( main.c ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:26 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
+...st_blksize 0
+...st_blocks  0
 Change group of dir1/dir1/../../links/dir1
 stat( dir1/dir1/../../links/dir1 ) returned 
 ...st_dev     (0x0:0x0)
@@ -1086,10 +1430,12 @@ stat( dir1/dir1/../../links/dir1 ) returned
 ...st_uid     0
 ...st_gid     1
 ...st_rdev    (0x0:0x0)
-...st_size    1876
+...st_size    3560
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of dir1/dir1/../../links/dir1
 stat( dir1/dir1/../../links/dir1 ) returned : Permission denied
 Change group of links/dir2
@@ -1104,7 +1450,9 @@ stat( links/dir2 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of links/dir2
 stat( links/dir2 ) returned 
 ...st_dev     (0x0:0x0)
@@ -1117,7 +1465,9 @@ stat( links/dir2 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change group of links/dir3
 stat( links/dir3 ) returned 
 ...st_dev     (0x0:0x0)
@@ -1130,7 +1480,9 @@ stat( links/dir3 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of links/dir3
 stat( links/dir3 ) returned 
 ...st_dev     (0x0:0x0)
@@ -1143,7 +1495,9 @@ stat( links/dir3 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change group of links/dir4
 stat( links/dir4 ) returned 
 ...st_dev     (0x0:0x0)
@@ -1156,7 +1510,9 @@ stat( links/dir4 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of links/dir4
 stat( links/dir4 ) returned 
 ...st_dev     (0x0:0x0)
@@ -1169,7 +1525,9 @@ stat( links/dir4 ) returned
 ...st_size    0
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change group of links/dir1_dir1
 stat( links/dir1_dir1 ) returned 
 ...st_dev     (0x0:0x0)
@@ -1179,10 +1537,12 @@ stat( links/dir1_dir1 ) returned
 ...st_uid     0
 ...st_gid     1
 ...st_rdev    (0x0:0x0)
-...st_size    536
+...st_size    1040
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of links/dir1_dir1
 stat( links/dir1_dir1 ) returned 
 ...st_dev     (0x0:0x0)
@@ -1192,10 +1552,12 @@ stat( links/dir1_dir1 ) returned
 ...st_uid     1
 ...st_gid     0
 ...st_rdev    (0x0:0x0)
-...st_size    536
+...st_size    1040
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change group of links/dir1_ dir1
 stat( links/dir1_ dir1 ) returned : No such file or directory
 Change owner of links/dir1_ dir1
@@ -1209,12 +1571,138 @@ stat( links/../links/../links/links ) returned
 ...st_uid     0
 ...st_gid     1
 ...st_rdev    (0x0:0x0)
-...st_size    8844
+...st_size    21420
 ...st_atime   Sat Dec 31 09:00:00 1988
 ...st_mtime   Sat Dec 31 09:00:00 1988
-...st_ctime   Sat Dec 31 09:00:31 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
+...st_blksize 0
+...st_blocks  0
 Change owner of links/../links/../links/links
 stat( links/../links/../links/links ) returned : Permission denied
+Change group of /my_mount_point/symlinks/a_file_symlink
+lstat( /my_mount_point/symlinks/a_file_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2c
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:35 1988
+...st_blksize 0
+...st_blocks  0
+Change owner of /my_mount_point/symlinks/a_file_symlink
+lstat( /my_mount_point/symlinks/a_file_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2c
+...st_mode    120755
+...st_nlink   1
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:35 1988
+...st_blksize 0
+...st_blocks  0
+Change group of /my_mount_point/symlinks/a_dir_symlink
+lstat( /my_mount_point/symlinks/a_dir_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2d
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:35 1988
+...st_blksize 0
+...st_blocks  0
+Change owner of /my_mount_point/symlinks/a_dir_symlink
+lstat( /my_mount_point/symlinks/a_dir_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2d
+...st_mode    120755
+...st_nlink   1
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:35 1988
+...st_blksize 0
+...st_blocks  0
+Change group of /my_mount_point/symlinks/a_link_symlink
+lstat( /my_mount_point/symlinks/a_link_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2e
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:35 1988
+...st_blksize 0
+...st_blocks  0
+Change owner of /my_mount_point/symlinks/a_link_symlink
+lstat( /my_mount_point/symlinks/a_link_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     2e
+...st_mode    120755
+...st_nlink   1
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:35 1988
+...st_blksize 0
+...st_blocks  0
+Change group of ../symlinks/no_file
+lstat( ../symlinks/no_file ) returned : No such file or directory
+Change owner of ../symlinks/no_file
+lstat( ../symlinks/no_file ) returned : No such file or directory
+Change group of /my_mount_point/symlinks/a_dir_symlink/a_file_symlink
+lstat( /my_mount_point/symlinks/a_dir_symlink/a_file_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     30
+...st_mode    120755
+...st_nlink   1
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:35 1988
+...st_blksize 0
+...st_blocks  0
+Change owner of /my_mount_point/symlinks/a_dir_symlink/a_file_symlink
+lstat( /my_mount_point/symlinks/a_dir_symlink/a_file_symlink ) returned 
+...st_dev     (0xfffe:0x1)
+...st_ino     30
+...st_mode    120755
+...st_nlink   1
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:15 1988
+...st_mtime   Sat Dec 31 09:00:15 1988
+...st_ctime   Sat Dec 31 09:00:35 1988
+...st_blksize 0
+...st_blocks  0
 
 
 *** END OF STAT TEST 01 ***
