@@ -1,0 +1,59 @@
+*** TEST TERMIOS05 ***
+open(/dev/test) - OK 
+Writing: This is test output.
+Transmitted 20 characters
+54 68 69 73 20 69 73 20 74 65 73 74 20 6f 75 74 |This is test out|
+70 75 74 2e                                     |put.            |
+
+Reading (expected):
+54 65 73 74 20 69 6e 70 75 74 20 74 68 69 73 20 |Test input this |
+69 73 2e                                        |is.             |
+Read 20 bytes from read(2)
+54 65 73 74 20 69 6e 70 75 74 20 74 68 69 73 20 |Test input this |
+69 73 2e 0a                                     |is..            |
+Echoed 23 characters
+0d 0a 54 65 73 74 20 69 6e 70 75 74 20 74 68 69 |..Test input thi|
+73 20 69 73 2e 0d 0a                            |s is...         |
+
+Reading (expected):
+31 32 33 35 08 34 35 36 2e                      |1235.456.       |
+Read 10 bytes from read(2)
+31 32 33 35 08 34 35 36 2e 0a                   |1235.456..      |
+Echoed 24 characters
+31 00 00 00 00 00 00 00 00 00 00 00 54 68 69 73 |1...........This|
+20 69 73 20 74 65 73 74                         | is test        |
+
+Reading (expected):
+74 61 62 09 74 61 62 2e                         |tab.tab.        |
+Read 9 bytes from read(2)
+74 61 62 09 74 61 62 2e 0a                      |tab.tab..       |
+Echoed 25 characters
+20 6f 75 74 70 75 74 2e 0d 0a 54 65 73 74 20 69 | output...Test i|
+6e 70 75 74 20 74 68 69 73                      |nput this       |
+
+Reading (expected):
+63 72 0d                                        |cr.             |
+Read 3 bytes from read(2)
+63 72 0a                                        |cr.             |
+Echoed 22 characters
+20 69 73 2e 0d 0a 31 32 33 35 5e 48 34 35 36 2e | is...1235^H456.|
+0d 0a 74 61 62 20                               |..tab           |
+
+Reading (expected):
+61 42 63 44 65 46 67 48 2e                      |aBcDeFgH.       |
+Read 11 bytes from read(2)
+2e 61 42 63 44 65 46 67 48 2e 0a                |.aBcDeFgH..     |
+Echoed 25 characters
+20 20 20 20 74 61 62 2e 0d 0a 63 72 0d 0a 2e 61 |    tab...cr...a|
+42 63 44 65 46 67 48 2e 0d                      |BcDeFgH..       |
+Changing c_iflag to: Enable to lower case mapping on input
+
+Reading (expected):
+61 42 63 44 65 46 67 48 2e                      |aBcDeFgH.       |
+Read 10 bytes from read(2)
+61 62 63 64 65 66 67 68 2e 0a                   |abcdefgh..      |
+Echoed 12 characters
+0a 61 62 63 64 65 66 67 68 2e 0d 0a             |.abcdefgh...    |
+Changing c_iflag to: Disable to lower case mapping on input
+close(/dev/test) - OK 
+*** END OF TEST TERMIOS05 ***
