@@ -31,6 +31,10 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
+#if defined(RTEMS_DEBUG)
+  #include <assert.h>
+#endif
+
 #define MEMFILE_STATIC
 
 /*
