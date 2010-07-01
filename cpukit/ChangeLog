@@ -197,6 +197,37 @@
 	libfs/src/rfs/rtems-rfs-group.h, libfs/src/rfs/rtems-rfs-inode.h:
 	Fix broken doxygen commands.
 
+2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/unmount.c: Removed obsolete declarations.  Fixed
+	invalid memory free.
+
+2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/rtems/ftpfs.h, libnetworking/lib/ftpfs.c:  Removed
+	rtems_ftpfs_mount().
+
+2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/mount-mktgt.c: New file.
+	* libcsupport/Makefile.am: Reflect change above.
+	* libcsupport/include/rtems/libio.h: Declare
+	mount_and_make_target_path().
+
+2010-06-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/rtems/ftpfs.h, libnetworking/lib/ftpfs.c:  Added
+	rtems_ftpfs_mount() again.  Documentation.
+
+2010-06-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/include/rtems/libio.h, sapi/include/confdefs.h: Added
+	and use defines for file system types.
+
+2010-06-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/mount.c: Fixed NULL pointer access.
+
 2010-06-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove nios2 (unsupported, no toolchain).

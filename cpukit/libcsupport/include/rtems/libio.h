@@ -56,7 +56,7 @@ extern "C" {
 typedef _off64_t rtems_off64_t;
 
 /**
- * @name File system node types.
+ * @name File System Node Types
  *
  * @{
  */
@@ -669,6 +669,23 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
 #define rtems_libio_is_valid_perms( _perm )     \
  (~ ((~RTEMS_LIBIO_PERMS_RWX) & _perm ))
 
+/**
+ * @name File System Types
+ *
+ * @{
+ */
+
+#define RTEMS_FILESYSTEM_TYPE_IMFS "imfs"
+#define RTEMS_FILESYSTEM_TYPE_MINIIMFS "mimfs"
+#define RTEMS_FILESYSTEM_TYPE_DEVFS "devfs"
+#define RTEMS_FILESYSTEM_TYPE_FTPFS "ftpfs"
+#define RTEMS_FILESYSTEM_TYPE_TFTPFS "tftpfs"
+#define RTEMS_FILESYSTEM_TYPE_NFS "nfs"
+#define RTEMS_FILESYSTEM_TYPE_DOSFS "dosfs"
+#define RTEMS_FILESYSTEM_TYPE_RFS "rfs"
+
+/** @} */
+
 /*
  *  Prototypes for filesystem
  */
@@ -680,6 +697,25 @@ int unmount(
 );
 
 int mount(
+  const char                 *source,
+  const char                 *target,
+  const char                 *filesystemtype,
+  rtems_filesystem_options_t options,
+  const void                 *data
+);
+
+/**
+ * @brief Mounts a file system and makes the @a target path.
+ *
+ * The @a target path will be created with rtems_mkdir() and must not be
+ * @c NULL.
+ *
+ * @see mount().
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The @c errno indicates the error.
+ */
+int mount_and_make_target_path(
   const char                 *source,
   const char                 *target,
   const char                 *filesystemtype,
@@ -719,7 +755,7 @@ extern  rtems_fs_init_functions_t    rtems_fs_init_helper;
  * The @a mode value selects the access permissions of the directory.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  @c errno indicates the error.
+ * @retval -1 An error occured.  The @c errno indicates the error.
  */
 extern int rtems_mkdir(const char *path, mode_t mode);
 

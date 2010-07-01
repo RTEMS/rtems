@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * File Transfer Protocol file system (FTP client).
+ * @brief File Transfer Protocol file system (FTP client).
  */
 
 /*
@@ -46,12 +46,15 @@ extern "C" {
 /**
  * @defgroup rtems_ftpfs File Transfer Protocol File System
  *
- * The FTP file system (FTP client) can be used to transfer files from or to
- * remote hosts.
+ * @brief The FTP file system (FTP client) can be used to transfer files from
+ * or to remote hosts.
  *
- * You can mount the FTP file system with a call to rtems_ftpfs_mount().
- * Alternatively you can use mount() with the @ref rtems_ftpfs_ops operations
- * table.
+ * You can mount the FTP file system with a call to mount() or
+ * mount_and_make_target_path() with the @ref RTEMS_FILESYSTEM_TYPE_FTPFS file
+ * system type.
+ *
+ * You have to add @ref CONFIGURE_FILESYSTEM_FTPFS to your application
+ * configuration.
  *
  * You can open files either read-only or write-only.  A seek is not allowed.
  * A close terminates the control and data connections.
@@ -74,17 +77,17 @@ extern "C" {
  */
 
 /**
- * Well-known port number for FTP control connection.
+ * @brief Well-known port number for FTP control connection.
  */
 #define RTEMS_FTPFS_CTRL_PORT 21
 
 /**
- * Default mount point for FTP file system.
+ * @brief Default mount point for FTP file system.
  */
 #define RTEMS_FTPFS_MOUNT_POINT_DEFAULT "/FTP"
 
 /**
- * FTP file system IO control requests.
+ * @brief FTP file system IO control requests.
  */
 typedef enum {
   RTEMS_FTPFS_IOCTL_GET_VERBOSE = _IOR( 'd', 1, bool *),
@@ -94,13 +97,8 @@ typedef enum {
 } rtems_ftpfs_ioctl_numbers;
 
 /**
- * FTP file system operations table.
- */
-extern const rtems_filesystem_operations_table rtems_ftpfs_ops;
-
-/**
- * Returns in @a verbose if the verbose mode is enabled or disabled for the
- * file system at @a mount_point.
+ * @brief Returns in @a verbose if the verbose mode is enabled or disabled for
+ * the file system at @a mount_point.
  *
  * If @a mount_point is @c NULL the default mount point
  * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
@@ -108,7 +106,7 @@ extern const rtems_filesystem_operations_table rtems_ftpfs_ops;
 rtems_status_code rtems_ftpfs_get_verbose( const char *mount_point, bool *verbose);
 
 /**
- * Enables or disables the verbose mode if @a verbose is @c true or
+ * @brief Enables or disables the verbose mode if @a verbose is @c true or
  * @c false respectively for the file system at @a mount_point.
  *
  * In the enabled verbose mode the commands and replies of the FTP control
@@ -120,8 +118,8 @@ rtems_status_code rtems_ftpfs_get_verbose( const char *mount_point, bool *verbos
 rtems_status_code rtems_ftpfs_set_verbose( const char *mount_point, bool verbose);
 
 /**
- * Returns the current timeout value in @a timeout for the file system at
- * @a mount_point.
+ * @brief Returns the current timeout value in @a timeout for the file system
+ * at @a mount_point.
  *
  * If @a mount_point is @c NULL the default mount point
  * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
@@ -132,7 +130,8 @@ rtems_status_code rtems_ftpfs_get_timeout(
 );
 
 /**
- * Sets the timeout value to @a timeout for the file system at @a mount_point.
+ * @brief Sets the timeout value to @a timeout for the file system at
+ * @a mount_point.
  *
  * The timeout value will be used during connection establishment of active
  * data connections.  It will be also used for send and receive operations on
@@ -149,13 +148,12 @@ rtems_status_code rtems_ftpfs_set_timeout(
 /** @} */
 
 /**
- * Creates the default mount point @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT and
- * mounts the FTP file system. Do not call directly, use mount.xs
- *
- * It is mounted with read and write access.
+ * @brief Do not call directly, use mount().
  */
-int rtems_ftpfs_initialize(rtems_filesystem_mount_table_entry_t *e,
-                           const void                           *d);
+int rtems_ftpfs_initialize(
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void *data
+);
 
 #ifdef __cplusplus
 }

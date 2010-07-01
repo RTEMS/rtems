@@ -284,7 +284,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */ 
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_miniIMFS) && \
     defined(CONFIGURE_FILESYSTEM_miniIMFS)
-#define CONFIGURE_FILESYSTEM_ENTRY_miniIMFS { "mimfs", miniIMFS_initialize }
+  #define CONFIGURE_FILESYSTEM_ENTRY_miniIMFS \
+    { RTEMS_FILESYSTEM_TYPE_MINIIMFS, miniIMFS_initialize }
 #endif
 
 /**
@@ -301,7 +302,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_DEVFS) && \
     defined(CONFIGURE_FILESYSTEM_DEVFS)
 #include <rtems/devfs.h>
-#define CONFIGURE_FILESYSTEM_ENTRY_DEVFS { "devfs", devFS_initialize }
+  #define CONFIGURE_FILESYSTEM_ENTRY_DEVFS \
+    { RTEMS_FILESYSTEM_TYPE_DEVFS, devFS_initialize }
 #endif
 
 #ifdef RTEMS_NETWORKING
@@ -311,7 +313,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_FTPFS) && \
       defined(CONFIGURE_FILESYSTEM_FTPFS) 
     #include <rtems/ftpfs.h>
-    #define CONFIGURE_FILESYSTEM_ENTRY_FTPFS { "ftpfs", rtems_ftpfs_initialize }
+    #define CONFIGURE_FILESYSTEM_ENTRY_FTPFS \
+      { RTEMS_FILESYSTEM_TYPE_FTPFS, rtems_ftpfs_initialize }
   #endif
 
   /**
@@ -320,7 +323,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_TFTPFS) && \
       defined(CONFIGURE_FILESYSTEM_TFTPFS)
     #include <rtems/tftp.h>
-    #define CONFIGURE_FILESYSTEM_ENTRY_TFTPFS { "tftpfs", rtems_tftpfs_initialize }
+    #define CONFIGURE_FILESYSTEM_ENTRY_TFTPFS \
+      { RTEMS_FILESYSTEM_TYPE_TFTPFS, rtems_tftpfs_initialize }
   #endif
 
   /**
@@ -329,7 +333,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_NFSFS) && \
       defined(CONFIGURE_FILESYSTEM_NFSFS)
     #include <librtemsNfs.h>
-    #define CONFIGURE_FILESYSTEM_ENTRY_NFSFS { "nfs", rtems_nfsfs_initialize }
+    #define CONFIGURE_FILESYSTEM_ENTRY_NFSFS \
+      { RTEMS_FILESYSTEM_TYPE_NFS, rtems_nfsfs_initialize }
   #endif
 #endif
 
@@ -339,7 +344,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_DOSFS) && \
     defined(CONFIGURE_FILESYSTEM_DOSFS)
   #include <rtems/dosfs.h>
-  #define CONFIGURE_FILESYSTEM_ENTRY_DOSFS { "dosfs", rtems_dosfs_initialize }
+  #define CONFIGURE_FILESYSTEM_ENTRY_DOSFS \
+    { RTEMS_FILESYSTEM_TYPE_DOSFS, rtems_dosfs_initialize }
 #endif
 
 /**
@@ -348,7 +354,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_RFS) && \
     defined(CONFIGURE_FILESYSTEM_RFS)
   #include <rtems/rtems-rfs.h>
-  #define CONFIGURE_FILESYSTEM_ENTRY_RFS { "rfs", rtems_rfs_rtems_initialise }
+  #define CONFIGURE_FILESYSTEM_ENTRY_RFS \
+    { RTEMS_FILESYSTEM_TYPE_RFS, rtems_rfs_rtems_initialise }
 #endif
 
 #ifdef CONFIGURE_INIT
@@ -440,11 +447,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
     const rtems_filesystem_mount_table_t configuration_mount_table = {
       #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
-        "devfs",
+        RTEMS_FILESYSTEM_TYPE_DEVFS,
       #elif defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
-        "mimfs",
+        RTEMS_FILESYSTEM_TYPE_MINIIMFS,
       #else  /* using IMFS as base filesystem */
-        "imfs",
+        RTEMS_FILESYSTEM_TYPE_IMFS,
       #endif
       RTEMS_FILESYSTEM_READ_WRITE,
       NULL,

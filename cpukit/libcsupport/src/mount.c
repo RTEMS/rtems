@@ -93,30 +93,31 @@ static bool Is_node_fs_root(
 }
 
 static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
-  const char *source,
-  const char *target,
+  const char *source_or_null,
+  const char *target_or_null,
   const char *filesystemtype,
   size_t *target_length_ptr
 )
 {
-  const char *target_str = target ? target : "/";
+  const char *target = target_or_null != NULL ? target_or_null : "/";
   size_t filesystemtype_size = strlen( filesystemtype ) + 1;
-  size_t source_size = source ? strlen( source ) + 1 : 0;
-  size_t target_length = strlen( target_str );
+  size_t source_size = source_or_null != NULL ?
+    strlen( source_or_null ) + 1 : 0;
+  size_t target_length = strlen( target );
   size_t size = sizeof( rtems_filesystem_mount_table_entry_t )
     + filesystemtype_size + source_size + target_length + 1;
   rtems_filesystem_mount_table_entry_t *mt_entry = calloc( 1, size );
 
-  if ( mt_entry ) {
+  if ( mt_entry != NULL ) {
     char *str = (char *) mt_entry + sizeof( *mt_entry );
 
     mt_entry->type = str;
     strcpy( str, filesystemtype );
 
-    if ( source ) {
+    if ( source_or_null != NULL ) {
       str += filesystemtype_size;
       mt_entry->dev = str;
-      strcpy( str, source );
+      strcpy( str, source_or_null );
     }
 
     str += source_size;
