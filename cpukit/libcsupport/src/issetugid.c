@@ -1,5 +1,5 @@
 /*
- * Dummy version of BSD routine
+ *  Dummy version of BSD routine
  *
  *  $Id$
  */
@@ -9,9 +9,8 @@
 #endif
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE_ISSETUGID)
-int
-issetugid (void)
+int issetugid (void)
 {
-	return 0;
+  return 0;
 }
 #endif
