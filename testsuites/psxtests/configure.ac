@@ -88,7 +88,9 @@ psxfatal01/Makefile
 psxfatal02/Makefile
 psxfile01/Makefile
 psxfile02/Makefile
+psxfilelock01/Makefile
 psxhdrs/Makefile
+psxid01/Makefile
 psximfs01/Makefile
 psxintrcritical01/Makefile
 psxitimer/Makefile

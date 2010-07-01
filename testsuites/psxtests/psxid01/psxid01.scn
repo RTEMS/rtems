@@ -1,0 +1,20 @@
+*** TEST ID 01 ***
+getegid = 0
+getgid = 0
+setgid(5)
+getegid = 0
+getgid = 5
+setpgid(getpid(), 10) - ENOSYS
+
+geteuid = 0
+getuid = 0
+setuid(5)
+geteuid = 0
+getuid = 5
+
+getpid = 1
+__getpid = 1
+getppid = 0
+setsid - EPERM
+
+*** END OF TEST ID 01 ***

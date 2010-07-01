@@ -1,3 +1,13 @@
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add tests for file lock stubs as well as
+	various POSIX methods that access UID, PID, and GID.
+	* psxfilelock01/.cvsignore, psxfilelock01/Makefile.am,
+	psxfilelock01/init.c, psxfilelock01/psxfilelock01.doc,
+	psxfilelock01/psxfilelock01.scn, psxid01/.cvsignore,
+	psxid01/Makefile.am, psxid01/init.c, psxid01/psxid01.doc,
+	psxid01/psxid01.scn: New files.
+
 2010-06-30	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* psximfs01/init.c: Fix warning introduced.

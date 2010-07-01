@@ -1,0 +1,7 @@
+*** TEST FILE LOCK 01 ***
+Open /testfile
+flockfile /testfile
+ftrylockfile /testfile
+flockfile /testfile
+funlockfile /testfile
+*** END OF TEST FILE LOCK 01 ***
