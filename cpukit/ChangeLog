@@ -1,3 +1,8 @@
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/rtems_memalign.c, score/include/rtems/score/heap.h:
+	Remove stray references to malloc boundary.
+
 2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1594/filesystem

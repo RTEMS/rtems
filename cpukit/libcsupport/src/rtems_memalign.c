@@ -66,14 +66,6 @@ int rtems_memalign(
   if ( rtems_malloc_statistics_helpers )
     (*rtems_malloc_statistics_helpers->at_malloc)(pointer);
 
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    /*
-     * If configured, set the boundary area
-     */
-    if (rtems_malloc_boundary_helpers)
-      (*rtems_malloc_boundary_helpers->at_malloc)(return_this, size);
-  #endif
-
   *pointer = return_this;
   return 0;
 }

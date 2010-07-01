@@ -539,7 +539,6 @@ Heap_Block *_Heap_Block_allocate(
 
 #ifdef RTEMS_DEBUG
   #define RTEMS_HEAP_DEBUG
-  #define RTEMS_MALLOC_BOUNDARY_HELPERS
 #endif
 
 #ifdef RTEMS_HEAP_DEBUG
