@@ -1,6 +1,4 @@
-Could not open '/dev/kqemu' - QEMU acceleration layer not activated: No such file or directory
-Initialized console on port COM1 9600-8-N-1
-
+sparc-rtems4.11-run is /opt/rtems-4.11/bin/sparc-rtems4.11-run
 
 
 *** FILE TEST 1 ***
@@ -8,9 +6,10 @@ Initialized console on port COM1 9600-8-N-1
 /
 ....dev/
 ........console (device 0, 0)
+........console_b (device 0, 1)
 ***************       End of Dump        ***************
 stat of /dev/console
-....st_dev     (0x0:0x0)
+....st_dev     (0xfffe:0x0)
 ....st_ino     3  may vary by small amount
 ....mode  = 00020755
 ....nlink = 1
@@ -70,24 +69,12 @@ attempt to rename directory joel to /imfs/test/joel - should fail with EXDEV
 changing dir to /
 attempt to rename across filesystem, with old path having a parent node
 attempt to rename tmp/joel to /imfs/test/joel
-Unmounting /imfs
-Mounting filesystem @ /imfs with no support for evalformake
-change directory to /imfs
-exercise _rename_r, with target on /imfs - expected ENOTSUP
-attempt to rename /tmp/joel to joel
-change directory to /
-Mounting filesystem @ /imfs with no support for rename
-creating directory /imfs/test
-creating directory /imfs/test/old_dir
-changing to /
-attempt to rename imfs/old_dir to imfs/new_dir
-unmounting /imfs
 End of _rename_r tests
 (10)the first write!!!
 
 stat( /tmp/joel ) returned 
-....st_dev     (0x0:0x0)
-....st_ino     12  may vary by small amount
+....st_dev     (0xfffe:0x0)
+....st_ino     13  may vary by small amount
 ....mode  = 00100700
 ....nlink = 1
 ....uid = 0
@@ -119,8 +106,8 @@ mknod /tmp/joel
 Skipping maximum file size test since max_size is 4329344 bytes
 That is likely to be bigger than the available RAM on many targets.
 stat( /tmp/joel ) returned 
-....st_dev     (0x0:0x0)
-....st_ino     13  may vary by small amount
+....st_dev     (0xfffe:0x0)
+....st_ino     14  may vary by small amount
 ....mode  = 00100700
 ....nlink = 1
 ....uid = 0
@@ -132,7 +119,7 @@ stat( /tmp/joel ) returned
 ....st_blocks  0
 stat of /tmp/j
 stat(/tmp/j) returned -1 (errno=2)
-....st_dev     (0x0:0x0)
+....st_dev     (0xfffe:0x0)
 ....st_ino     3  may vary by small amount
 ....mode  = 00020755
 ....nlink = 1
@@ -150,8 +137,8 @@ fprintf to /tmp/j
 (3) 26 characters written to the file
 (4) 26 characters written to the file
 (5) 26 characters written to the file
-....st_dev     (0x0:0x0)
-....st_ino     14  may vary by small amount
+....st_dev     (0xfffe:0x0)
+....st_ino     15  may vary by small amount
 ....mode  = 00100644
 ....nlink = 1
 ....uid = 0
@@ -166,8 +153,8 @@ This is call 2 to fprintf
 This is call 3 to fprintf
 This is call 4 to fprintf
 This is call 5 to fprintf
-....st_dev     (0x0:0x0)
-....st_ino     14  may vary by small amount
+....st_dev     (0xfffe:0x0)
+....st_ino     15  may vary by small amount
 ....mode  = 00100644
 ....nlink = 1
 ....uid = 0
@@ -181,8 +168,9 @@ This is call 5 to fprintf
 /
 ....dev/
 ........console (device 0, 0)
+........console_b (device 0, 1)
 ........tty/
-............S3 (device 128, 255)
+............S3 (device 255, 128)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
@@ -196,8 +184,8 @@ This is call 5 to fprintf
 ........hidden_on_mount/
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 40
-....st_dev     (0x0:0x0)
-....st_ino     14  may vary by small amount
+....st_dev     (0xfffe:0x0)
+....st_ino     15  may vary by small amount
 ....mode  = 00100644
 ....nlink = 1
 ....uid = 0
@@ -211,8 +199,9 @@ truncate /tmp/j to length of 40
 /
 ....dev/
 ........console (device 0, 0)
+........console_b (device 0, 1)
 ........tty/
-............S3 (device 128, 255)
+............S3 (device 255, 128)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
@@ -232,8 +221,9 @@ truncate /tmp to length of 0 should fail with EISDIR
 /
 ....dev/
 ........console (device 0, 0)
+........console_b (device 0, 1)
 ........tty/
-............S3 (device 128, 255)
+............S3 (device 255, 128)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)

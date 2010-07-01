@@ -118,35 +118,6 @@ void stat_a_file(
 
 }
 
-int no_evalformake_IMFS_initialize(
-  rtems_filesystem_mount_table_entry_t *mt_entry,
-  const void                           *data
-)
-{
-   return IMFS_initialize_support(
-     mt_entry,
-     &IMFS_ops_no_evalformake,
-     &IMFS_memfile_handlers,
-     &IMFS_directory_handlers,
-     &IMFS_fifo_handlers
-   );
-}
-
-int no_rename_IMFS_initialize(
-  rtems_filesystem_mount_table_entry_t *mt_entry,
-  const void                           *data
-)
-{
-   return IMFS_initialize_support(
-     mt_entry,
-     &IMFS_ops_no_rename,
-     &IMFS_memfile_handlers,
-     &IMFS_directory_handlers,
-     &IMFS_fifo_handlers
-   );
-}
-
-
 /*
  *  Main entry point of the test
  */
@@ -176,23 +147,6 @@ int main(
   rtems_status_code rtems_status;
   rtems_time_of_day time;
 
-  IMFS_ops_no_evalformake = IMFS_ops;
-  IMFS_ops_no_rename = IMFS_ops;
-
-  IMFS_ops_no_evalformake.fsmount_me_h = no_evalformake_IMFS_initialize;
-  IMFS_ops_no_evalformake.evalformake_h = NULL;
-
-  IMFS_ops_no_rename.fsmount_me_h = no_rename_IMFS_initialize;
-  IMFS_ops_no_rename.rename_h = NULL;
-
-  puts( "register no eval-for-make filesystem" );
-  status = rtems_filesystem_register( "nefm", no_evalformake_IMFS_initialize );
-  rtems_test_assert( status == 0 );
-  
-  puts( "register no rename filesystem" );
-  status = rtems_filesystem_register( "nren", no_rename_IMFS_initialize );
-  rtems_test_assert( status == 0 );
-  
   printf( "\n\n*** FILE TEST 1 ***\n" );
 
   /*
@@ -449,57 +403,6 @@ since new path is not valid");
   status = _rename_r(NULL, "tmp/joel", "/imfs/test/joel");
   rtems_test_assert(status == -1);
   rtems_test_assert(errno == EXDEV);
-
-  puts("Unmounting /imfs");
-  status = unmount("/imfs");
-  rtems_test_assert(status == 0);
-
-  puts("Mounting filesystem @ /imfs with no support for evalformake");
-  
-  status = mount("null", "/imfs", "nefm", RTEMS_FILESYSTEM_READ_WRITE, NULL);
-  rtems_test_assert(status == 0);
-
-  puts("change directory to /imfs");
-  status = chdir("/imfs");
-  rtems_test_assert(status == 0);
-
-  puts("exercise _rename_r, with target on /imfs - expected ENOTSUP");
-  puts("attempt to rename /tmp/joel to joel");
-  status = _rename_r(NULL, "/tmp/joel", "joel");
-  rtems_test_assert(status == -1);
-  rtems_test_assert(errno == ENOTSUP);
-
-  puts("change directory to /");
-  status = chdir("/");
-  rtems_test_assert(status == 0);
-  
-  status = unmount("/imfs");
-  rtems_test_assert(status == 0);
-
-
-  puts("Mounting filesystem @ /imfs with no support for rename");
-  status = mount("null", "/imfs", "nren", RTEMS_FILESYSTEM_READ_WRITE, NULL);
-  rtems_test_assert(status == 0);
-
-  puts("creating directory /imfs/test");
-  status = mkdir("/imfs/test", 0777);
-  rtems_test_assert(status == 0);
-
-  puts("creating directory /imfs/test/old_dir");
-  status = mkdir("/imfs/test/old_dir", 0777);
-  rtems_test_assert(status == 0);
-
-  puts("changing to /");
-  status = chdir("/");
-  
-  puts("attempt to rename imfs/old_dir to imfs/new_dir");
-  status = _rename_r(NULL, "imfs/test/old_dir", "imfs/test/new_dir");
-  rtems_test_assert(status == -1);
-  rtems_test_assert(errno == ENOTSUP);
-
-  puts("unmounting /imfs");
-  status = unmount("/imfs");
-  rtems_test_assert(status == 0);
 
   puts("End of _rename_r tests");
 
