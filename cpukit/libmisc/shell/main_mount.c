@@ -31,7 +31,7 @@ static bool print_filesystem(const rtems_filesystem_table_t *entry, void *arg)
 {
   printf("%s ", entry->type);
 
-  return true;
+  return false;
 }
 
 int rtems_shell_main_mount(

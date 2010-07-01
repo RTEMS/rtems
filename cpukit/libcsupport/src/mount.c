@@ -36,10 +36,7 @@
 
 #include <rtems/libio_.h>
 
-/*
- * Mount table list.
- */
-RTEMS_CHAIN_DEFINE_EMPTY(rtems_filesystem_mount_table_control);
+static RTEMS_CHAIN_DEFINE_EMPTY(mount_chain);
 
 /*
  * Default pathconfs.
@@ -59,37 +56,12 @@ const rtems_filesystem_limits_and_options_t rtems_filesystem_default_pathconf = 
    0     /* posix_vdisable: special char processing, 0=no, 1=yes */
 };
 
-/*
- *  Is_node_fs_root
- *
- *  This routine will run through the entries that currently exist in the
- *  mount table chain. For each entry in the mount table chain it will
- *  compare the mount tables root node to the node describing the selected
- *  mount point. If any match is found true is returned else false is
- *  returned.
- *
- */
-
-static bool Is_node_fs_root(
-  rtems_filesystem_location_info_t *loc
+static bool is_node_fs_root(
+  const rtems_filesystem_mount_table_entry_t *mt_entry,
+  void *arg
 )
 {
-  rtems_chain_node *node = NULL;
-
-  /*
-   * For each mount table entry
-   */
-  for ( node = rtems_chain_first( &rtems_filesystem_mount_table_control );
-        !rtems_chain_is_tail( &rtems_filesystem_mount_table_control, node );
-        node = rtems_chain_next( node ) ) {
-    rtems_filesystem_mount_table_entry_t *mount_table_entry =
-      (rtems_filesystem_mount_table_entry_t *) node;
-
-    if ( mount_table_entry->mt_fs_root.node_access == loc->node_access )
-      return true;
-  }
-
-  return false;
+  return arg == mt_entry->mt_fs_root.node_access;
 }
 
 static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
@@ -225,7 +197,7 @@ int mount(
      *  You can only mount one file system onto a single mount point.
      */
 
-    if ( Is_node_fs_root(  &loc ) ){
+    if ( rtems_filesystem_mount_iterate( is_node_fs_root, loc.node_access ) ) {
       errno = EBUSY;
       goto cleanup_and_bail;
     }
@@ -260,7 +232,7 @@ int mount(
     /*
      * Do we already have a base file system ?
      */
-    if ( !rtems_chain_is_empty( &rtems_filesystem_mount_table_control ) ) {
+    if ( !rtems_chain_is_empty( &mount_chain ) ) {
       errno = EINVAL;
       goto cleanup_and_bail;
     }
@@ -285,8 +257,9 @@ int mount(
   /*
    *  Add the mount table entry to the mount table chain
    */
-  rtems_chain_append( &rtems_filesystem_mount_table_control,
-                      &mt_entry->Node );
+  rtems_libio_lock();
+  rtems_chain_append( &mount_chain, &mt_entry->Node );
+  rtems_libio_unlock();
 
   if ( !has_target )
     rtems_filesystem_root = mt_entry->mt_fs_root;
@@ -303,33 +276,26 @@ cleanup_and_bail:
   return -1;
 }
 
-/*
- * Get the first entry in the mount table.
- */
-rtems_filesystem_mount_table_entry_t *
-rtems_filesystem_mounts_first(
-  void
+bool rtems_filesystem_mount_iterate(
+  rtems_per_filesystem_mount_routine routine,
+  void *routine_arg
 )
 {
-  rtems_filesystem_mount_table_entry_t *entry = NULL;
+  rtems_chain_node *node = NULL;
+  bool stop = false;
 
-  if ( !rtems_chain_is_empty( &rtems_filesystem_mount_table_control ) )
-    entry = (rtems_filesystem_mount_table_entry_t *)
-      rtems_chain_first( &rtems_filesystem_mount_table_control );
+  rtems_libio_lock();
+  for (
+    node = rtems_chain_first( &mount_chain );
+    !rtems_chain_is_tail( &mount_chain, node ) && !stop;
+    node = rtems_chain_next( node )
+  ) {
+    const rtems_filesystem_mount_table_entry_t *mt_entry =
+      (rtems_filesystem_mount_table_entry_t *) node;
 
-  return entry;
-}
+    stop = (*routine)( mt_entry, routine_arg );
+  }
+  rtems_libio_unlock();
 
-/*
- * Get the next entry in the mount table.
- */
-rtems_filesystem_mount_table_entry_t *
-rtems_filesystem_mounts_next(
-  rtems_filesystem_mount_table_entry_t *entry
-)
-{
-  if ( !entry )
-    return NULL;
-  return (rtems_filesystem_mount_table_entry_t *)
-    rtems_chain_next( &entry->Node );
+  return stop;
 }
