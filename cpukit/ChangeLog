@@ -1,5 +1,12 @@
 2010-07-01	Vinu Rajashekhar <vinutheraj@gmail.com>
 
+	PR 1597/cpukit
+	* libcsupport/Makefile.am, libcsupport/src/chown.c: Add lchown() and
+	utimes().
+	* libcsupport/src/lchown.c, libcsupport/src/utimes.c: New files.
+
+2010-07-01	Vinu Rajashekhar <vinutheraj@gmail.com>
+
 	PR 1529/cpukit
 	* utime.c: Change file access time and modified time to
 	current time if pointer to struct utimbuf is NULL.
