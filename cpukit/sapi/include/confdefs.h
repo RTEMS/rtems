@@ -185,12 +185,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *     Add file filesystems to the default filesystem table.
  *
  *   List of available file systems. You can define as many as you like:
- *     CONFIGURE_FILESYSTEM_miniIMFS - MiniIMFS, use DEVFS now
+ *     CONFIGURE_FILESYSTEM_MINIIMFS - MiniIMFS, use DEVFS now
  *     CONFIGURE_FILESYSTEM_IMFS     - In Memory File System (IMFS)
  *     CONFIGURE_FILESYSTEM_DEVFS    - Device File System (DSVFS)
  *     CONFIGURE_FILESYSTEM_TFTPFS   - TFTP File System, networking enabled
  *     CONFIGURE_FILESYSTEM_FTPFS    - FTP File System, networking enabled
- *     CONFIGURE_FILESYSTEM_NFSFS    - Network File System, networking enabled
+ *     CONFIGURE_FILESYSTEM_NFS      - Network File System, networking enabled
  *     CONFIGURE_FILESYSTEM_DOSFS    - DOS File System, uses libblock
  *     CONFIGURE_FILESYSTEM_RFS      - RTEMS File System (RFS), uses libblock
  *
@@ -212,12 +212,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    * been disabled.
    */
   #ifdef CONFIGURE_FILESYSTEM_ALL
-    #define CONFIGURE_FILESYSTEM_miniIMFS
+    #define CONFIGURE_FILESYSTEM_MINIIMFS
     #define CONFIGURE_FILESYSTEM_IMFS
     #define CONFIGURE_FILESYSTEM_DEVFS
     #define CONFIGURE_FILESYSTEM_TFTPFS
     #define CONFIGURE_FILESYSTEM_FTPFS
-    #define CONFIGURE_FILESYSTEM_NFSFS
+    #define CONFIGURE_FILESYSTEM_NFS
     #define CONFIGURE_FILESYSTEM_DOSFS
     #define CONFIGURE_FILESYSTEM_RFS
   #endif
@@ -236,12 +236,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #elif defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
       #undef CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
     #endif
-    #undef CONFIGURE_FILESYSTEM_miniIMFS
+    #undef CONFIGURE_FILESYSTEM_MINIIMFS
     #undef CONFIGURE_FILESYSTEM_IMFS
     #undef CONFIGURE_FILESYSTEM_DEVFS
     #undef CONFIGURE_FILESYSTEM_TFTPFS
     #undef CONFIGURE_FILESYSTEM_FTPFS
-    #undef CONFIGURE_FILESYSTEM_NFSFS
+    #undef CONFIGURE_FILESYSTEM_NFS
     #undef CONFIGURE_FILESYSTEM_DOSFS
     #undef CONFIGURE_FILESYSTEM_RFS
   #endif
@@ -254,7 +254,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
       #define CONFIGURE_FILESYSTEM_DEVFS
     #elif defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
-      #define CONFIGURE_FILESYSTEM_miniIMFS
+      #define CONFIGURE_FILESYSTEM_MINIIMFS
     #elif !defined(CONFIGURE_FILESYSTEM_IMFS)
       #define CONFIGURE_FILESYSTEM_IMFS
     #endif
@@ -282,7 +282,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  This defines the miniIMFS file system table entry.
  */ 
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_miniIMFS) && \
-    defined(CONFIGURE_FILESYSTEM_miniIMFS)
+    defined(CONFIGURE_FILESYSTEM_MINIIMFS)
   #define CONFIGURE_FILESYSTEM_ENTRY_miniIMFS \
     { RTEMS_FILESYSTEM_TYPE_MINIIMFS, miniIMFS_initialize }
 #endif
@@ -362,13 +362,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 
   /**
-   * NFSFS
+   * NFS
    */ 
-  #if !defined(CONFIGURE_FILESYSTEM_ENTRY_NFSFS) && \
-      defined(CONFIGURE_FILESYSTEM_NFSFS)
+  #if !defined(CONFIGURE_FILESYSTEM_ENTRY_NFS) && \
+      defined(CONFIGURE_FILESYSTEM_NFS)
     #include <librtemsNfs.h>
-    #define CONFIGURE_FILESYSTEM_ENTRY_NFSFS \
-      { RTEMS_FILESYSTEM_TYPE_NFS, rtems_nfsfs_initialize }
+    #define CONFIGURE_FILESYSTEM_ENTRY_NFS \
+      { RTEMS_FILESYSTEM_TYPE_NFS, rtems_nfs_initialize }
   #endif
 #endif
 
@@ -413,7 +413,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 
   #if defined(CONFIGURE_FILESYSTEM_IMFS) || \
-      defined(CONFIGURE_FILESYSTEM_miniIMFS)
+      defined(CONFIGURE_FILESYSTEM_MINIIMFS)
     int imfs_rq_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
   #endif
 
@@ -428,7 +428,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    */
   #ifndef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
     const rtems_filesystem_table_t rtems_filesystem_table[] = {
-      #if defined(CONFIGURE_FILESYSTEM_miniIMFS) && \
+      #if defined(CONFIGURE_FILESYSTEM_MINIIMFS) && \
           defined(CONFIGURE_FILESYSTEM_ENTRY_miniIMFS)
         CONFIGURE_FILESYSTEM_ENTRY_miniIMFS,
       #endif
@@ -448,9 +448,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
           defined(CONFIGURE_FILESYSTEM_ENTRY_FTPFS)
         CONFIGURE_FILESYSTEM_ENTRY_FTPFS,
       #endif
-      #if defined(CONFIGURE_FILESYSTEM_NFSFS) && \
-          defined(CONFIGURE_FILESYSTEM_ENTRY_NFSFS)
-        CONFIGURE_FILESYSTEM_ENTRY_NFSFS,
+      #if defined(CONFIGURE_FILESYSTEM_NFS) && \
+          defined(CONFIGURE_FILESYSTEM_ENTRY_NFS)
+        CONFIGURE_FILESYSTEM_ENTRY_NFS,
       #endif
       #if defined(CONFIGURE_FILESYSTEM_DOSFS) && \
           defined(CONFIGURE_FILESYSTEM_ENTRY_DOSFS)
