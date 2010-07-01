@@ -19,15 +19,23 @@
 #include <rtems/dumpbuf.h>
 #include "termios_testdriver_intr.h"
 
-rtems_id Timer;
+rtems_id Rx_Timer;
+rtems_id Tx_Timer;
 
 #define TX_MAX 1024
-uint8_t Tx_Buffer[TX_MAX];
-int     Tx_Index = 0;
+uint8_t                   Tx_Buffer[TX_MAX];
+int                       Tx_Index = 0;
 struct rtems_termios_tty *Ttyp;
+
+void termios_test_driver_wait_for_tx_to_complete(void)
+{
+  rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
+}
 
 void termios_test_driver_dump_tx(const char *c)
 {
+  termios_test_driver_wait_for_tx_to_complete();
+
   printf( "%s %d characters\n", c, Tx_Index );
   rtems_print_buffer( Tx_Buffer, Tx_Index );
   Tx_Index = 0;
@@ -38,6 +46,19 @@ int            Rx_Index = 0;
 int            Rx_Length = 0;
 bool           Rx_FirstTime = true;
 bool           Rx_EnqueueNow = false;
+
+#if defined(TASK_DRIVEN)
+  int termios_test_driver_inbyte_nonblocking( int port )
+  {
+    if ( Rx_FirstTime == true ) {
+      Rx_FirstTime = false;
+      return -1;
+    }
+    if ( Rx_Index >= Rx_Length )
+      return -1;
+    return Rx_Buffer[ Rx_Index++ ];
+  }
+#endif
 
 rtems_timer_service_routine Rx_ISR(
   rtems_id  ignored_id,
@@ -51,8 +72,21 @@ rtems_timer_service_routine Rx_ISR(
 
   ch = Rx_Buffer[ Rx_Index++ ];
   rtems_termios_enqueue_raw_characters (Ttyp, (char *)&ch, 1);
+  #if defined(TASK_DRIVEN)
+    rtems_termios_rxirq_occured(Ttyp);
+  #endif
 
-  (void) rtems_timer_fire_after( Timer, 10, Rx_ISR, NULL );
+  (void) rtems_timer_fire_after( Rx_Timer, 10, Rx_ISR, NULL );
+}
+
+rtems_timer_service_routine Tx_ISR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+)
+{
+  rtems_termios_dequeue_characters (Ttyp, 1);
+
+  (void) rtems_timer_fire_after( Tx_Timer, 10, Tx_ISR, NULL );
 }
 
 void termios_test_driver_set_rx_enqueue_now(
@@ -72,7 +106,7 @@ void termios_test_driver_set_rx(
   Rx_Index  = 0;
 
   if ( Rx_EnqueueNow == false) {
-    (void) rtems_timer_fire_after( Timer, 10, Rx_ISR, NULL );
+    (void) rtems_timer_fire_after( Rx_Timer, 10, Rx_ISR, NULL );
     return;
   }
 
@@ -89,12 +123,9 @@ ssize_t termios_test_driver_write_helper(
   size_t      len
 )
 {
-  size_t  i;
-
-  for (i=0 ; i<len ; i++ )
-    Tx_Buffer[Tx_Index++] = (uint8_t) buf[i];
-
-  return len;
+  Tx_Buffer[Tx_Index++] = buf[0];
+  (void) rtems_timer_fire_after( Tx_Timer, 10, Tx_ISR, NULL );
+  return 1;
 }
 
 /*
@@ -126,7 +157,11 @@ rtems_device_driver termios_test_driver_initialize(
    */
   (void) rtems_io_register_name( TERMIOS_TEST_DRIVER_DEVICE_NAME, major, 0 );
 
-  status = rtems_timer_create( rtems_build_name('T', 'M', '0', '1'), &Timer );
+  status = rtems_timer_create(rtems_build_name('T', 'M', 'R', 'X'), &Rx_Timer);
+  if ( status )
+    rtems_fatal_error_occurred(1);;
+
+  status = rtems_timer_create(rtems_build_name('T', 'M', 'T', 'X'), &Tx_Timer);
   if ( status )
     rtems_fatal_error_occurred(1);;
 
@@ -144,12 +179,20 @@ rtems_device_driver termios_test_driver_open(
   static const rtems_termios_callbacks Callbacks = {
     NULL,                                    /* firstOpen */
     NULL,                                    /* lastClose */
-    NULL,                                    /* pollRead */
+    #if defined(TASK_DRIVEN)
+      termios_test_driver_inbyte_nonblocking,/* pollRead */
+    #else
+      NULL,                                  /* pollRead */
+    #endif
     termios_test_driver_write_helper,        /* write */
     termios_test_driver_set_attributes,      /* setAttributes */
     NULL,                                    /* stopRemoteTx */
     NULL,                                    /* startRemoteTx */
-    0                                        /* outputUsesInterrupts */
+    #if defined(TASK_DRIVEN)
+      TERMIOS_TASK_DRIVEN                    /* outputUsesInterrupts */
+    #else
+      0                                      /* outputUsesInterrupts */
+    #endif
   };
 
   if ( minor > 2 ) {
