@@ -207,6 +207,42 @@
 	* configure.ac: Remove c4x (dead port).
 	* score/cpu/Makefile.am: Remove c4x (dead port).
 
+2010-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/include/rtems/libio_.h: Declare
+	rtems_filesystem_mount_table_control.
+	* libcsupport/include/rtems/libio.h: Removed
+	rtems_filesystem_table_first(), rtems_filesystem_table_next() and
+	rtems_filesystem_table_node_t declarations.  Declare
+	rtems_per_filesystem_routine, rtems_filesystem_iterate() and
+	rtems_filesystem_get_mount_handler().
+	* libcsupport/src/mount.c: Added rtems_filesystem_mounts_first() and
+	rtems_filesystem_mounts_next().  Simplify mount().  Removed
+	rtems_filesystem_mount_table_control_init.  Use
+	rtems_filesystem_get_mount_handler().
+	* libcsupport/src/mount-mgr.c: Removed rtems_filesystem_mounts_first() and
+	rtems_filesystem_mounts_next().  Added rtems_filesystem_iterate() and
+	rtems_filesystem_get_mount_handler().  Use rtems_libio_lock() and
+	rtems_libio_unlock();
+	* sapi/include/confdefs.h, libmisc/shell/main_mount.c: Update for
+	mount API changes.
+
+2010-06-07	Bharath Suri <bharath.s.jois@gmail.com>
+
+	* libcsupport/include/rtems/libio_.h: Removed macros
+	rtems_filesystem_is_separator
+	rtems_filesystem_get_start_loc
+	rtems_filesystem_get_sym_start_loc
+	and added them as files under libcsupport/src/
+
+	* libcsupport/src/: Added new files
+	libcsupport/src/sup_fs_get_start_loc.c
+	libcsupport/src/sup_fs_get_sym_start_loc.c
+	libcsupport/src/sup_fs_is_separator.c
+
+	* libcsupport/Makefile.am: Changes to accommodate new
+	files under libcsupport/src/
+
 2010-06-03	Chris Johns <chrisj@rtems.org>
 
 	* sapi/include/confdefs.h: PR 1543. Make default file system when

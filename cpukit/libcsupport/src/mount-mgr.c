@@ -6,6 +6,8 @@
  *
  *  COPYRIGHT (c) Chris Johns <chrisj@rtems.org> 2010.
  *
+ *  Copyright (c) 2010 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -30,158 +32,139 @@
 
 #include <rtems/libio_.h>
 
-/*
- * External defined by confdefs.h or the user.
- */
-extern const rtems_filesystem_table_t configuration_filesystem_table[];
+typedef struct {
+  rtems_chain_node node;
+  rtems_filesystem_table_t entry;
+} filesystem_node;
 
-/*
- * Points to a list of filesystems added at runtime.
- */
-extern rtems_chain_control *rtems_filesystem_table;
+RTEMS_CHAIN_DEFINE_EMPTY(filesystem_chain);
 
-/*
- * Mount table list.
- */
-extern rtems_chain_control rtems_filesystem_mount_table_control;
-extern bool                rtems_filesystem_mount_table_control_init;
-
-/*
- * Get the first entry in the filesystem table.
- */
-const rtems_filesystem_table_t*
-rtems_filesystem_table_first(
-  void
+void
+rtems_filesystem_iterate(
+  rtems_per_filesystem_routine routine,
+  void *routine_arg
 )
 {
-  /*
-   * We can assume this because it is the root file system.
-   */
-  return &configuration_filesystem_table[0];
-}
+  const rtems_filesystem_table_t *table_entry = &rtems_filesystem_table [0];
+  rtems_chain_node *node = NULL;
 
-/*
- * Get the next entry in the file system table.
- */
-const rtems_filesystem_table_t*
-rtems_filesystem_table_next(
-  const rtems_filesystem_table_t *entry
-)
-{
-  const rtems_filesystem_table_t* fs;
+  while ( table_entry->type ) {
+    if ( !(*routine)( table_entry, routine_arg ) ) {
+      break;
+    }
 
-  fs = rtems_filesystem_table_first( );
-  
-  while ( fs->type && ( fs != entry ) )
-    ++fs;
-  
-  if ( fs->type ) {
-    ++fs;
-    if ( fs->type )
-      return fs;
+    ++table_entry;
   }
 
-  if ( rtems_filesystem_table ) {
-    rtems_chain_node* node;
-    for (node = rtems_chain_first( rtems_filesystem_table );
-         !rtems_chain_is_tail( rtems_filesystem_table, node);
-         node = rtems_chain_next( node )) {
-      rtems_filesystem_table_node_t* tnode;
-      tnode = (rtems_filesystem_table_node_t*) node;
-      if ( entry == &tnode->entry ) {
-        node = rtems_chain_next( node );
-        if ( !rtems_chain_is_tail( rtems_filesystem_table, node ) ) {
-          tnode = (rtems_filesystem_table_node_t*) node;
-          return &tnode->entry;
-        }
-      }
+  rtems_libio_lock();
+  for (
+    node = rtems_chain_first( &filesystem_chain );
+    !rtems_chain_is_tail( &filesystem_chain, node );
+    node = rtems_chain_next( node )
+  ) {
+    const filesystem_node *fsn = (filesystem_node *) node;
+
+    if ( !(*routine)( &fsn->entry, routine_arg ) ) {
+      break;
     }
   }
-  
-  return NULL;
+  rtems_libio_unlock();
 }
 
-/*
- * Get the first entry in the mount table.
- */
-rtems_filesystem_mount_table_entry_t*
-rtems_filesystem_mounts_first(
-  void
-)
+typedef struct {
+  const char *type;
+  rtems_filesystem_fsmount_me_t mount_h;
+} find_arg;
+
+static bool find_handler(const rtems_filesystem_table_t *entry, void *arg)
 {
-  rtems_filesystem_mount_table_entry_t* entry = NULL;
-  if ( rtems_filesystem_mount_table_control_init ) {
-    if ( !rtems_chain_is_empty( &rtems_filesystem_mount_table_control ) )
-      entry = (rtems_filesystem_mount_table_entry_t*)
-        rtems_chain_first( &rtems_filesystem_mount_table_control );
+  find_arg *fa = arg;
+
+  if ( strcmp( entry->type, fa->type ) != 0 ) {
+    return true;
+  } else {
+    fa->mount_h = entry->mount_h;
+
+    return true;
   }
-  return entry;
 }
 
-/*
- * Get the next entry in the mount table.
- */
-rtems_filesystem_mount_table_entry_t*
-rtems_filesystem_mounts_next(
-  rtems_filesystem_mount_table_entry_t *entry
+rtems_filesystem_fsmount_me_t
+rtems_filesystem_get_mount_handler(
+  const char *type
 )
 {
-  if ( !rtems_filesystem_mount_table_control_init || !entry )
-    return NULL;
-  return (rtems_filesystem_mount_table_entry_t*) rtems_chain_next( &entry->Node );
+  find_arg fa = {
+    .type = type,
+    .mount_h = NULL
+  };
+
+  if ( type != NULL ) {
+    rtems_filesystem_iterate( find_handler, &fa );
+  }
+
+  return fa.mount_h;
 }
 
-/*
- * Register a file system.
- */
 int
 rtems_filesystem_register(
   const char                    *type,
   rtems_filesystem_fsmount_me_t  mount_h
 )
 {
-  rtems_filesystem_table_node_t *fs;
-  if ( !rtems_filesystem_table ) {
-    rtems_filesystem_table = malloc( sizeof( rtems_chain_control ) );
-    if ( !rtems_filesystem_table )
-      rtems_set_errno_and_return_minus_one( ENOMEM );
-    rtems_chain_initialize_empty ( rtems_filesystem_table );
+  size_t fsn_size = sizeof( filesystem_node ) + strlen(type) + 1;
+  filesystem_node *fsn = malloc( fsn_size );
+  char *type_storage = (char *) fsn + sizeof( filesystem_node );
+
+  if ( fsn == NULL )
+    rtems_set_errno_and_return_minus_one( ENOMEM );
+
+  strcpy(type_storage, type);
+  fsn->entry.type = type_storage;
+  fsn->entry.mount_h = mount_h;
+
+  rtems_libio_lock();
+  if ( rtems_filesystem_get_mount_handler( type ) == NULL ) {
+    rtems_chain_append( &filesystem_chain, &fsn->node );
+  } else {
+    rtems_libio_unlock();
+    free( fsn );
+
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
-  fs = malloc( sizeof( rtems_filesystem_table_node_t ) );
-  if ( !fs )
-    rtems_set_errno_and_return_minus_one( ENOMEM );
-  fs->entry.type = strdup( type );
-  if ( !fs->entry.type ) {
-    free( fs );
-    rtems_set_errno_and_return_minus_one( ENOMEM );
-  }    
-  fs->entry.mount_h = mount_h;
-  rtems_chain_append( rtems_filesystem_table, &fs->node );
+  rtems_libio_unlock();
+
   return 0;
 }
 
-/*
- * Unregister a file system.
- */
 int
 rtems_filesystem_unregister(
   const char *type
 )
 {
-  if ( rtems_filesystem_table ) {
-    rtems_chain_node *node;
-    for (node = rtems_chain_first( rtems_filesystem_table );
-         !rtems_chain_is_tail( rtems_filesystem_table, node );
-         node = rtems_chain_next( node ) ) {
-      rtems_filesystem_table_node_t *fs;
-      fs = (rtems_filesystem_table_node_t*) node;
-      if ( strcmp( fs->entry.type, type ) == 0 ) {
-        rtems_chain_extract( node );
-        free( (void*) fs->entry.type );
-        free( fs );
-        return 0;
-      }
+  rtems_chain_node *node = NULL;
+
+  if ( type == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  rtems_libio_lock();
+  for (
+    node = rtems_chain_first( &filesystem_chain );
+    !rtems_chain_is_tail( &filesystem_chain, node );
+    node = rtems_chain_next( node )
+  ) {
+    filesystem_node *fsn = (filesystem_node *) node;
+
+    if ( strcmp( fsn->entry.type, type ) == 0 ) {
+      rtems_chain_extract( node );
+      free( fsn );
+      rtems_libio_unlock();
+
+      return 0;
     }
   }
+  rtems_libio_unlock();
+
   rtems_set_errno_and_return_minus_one( ENOENT );
 }

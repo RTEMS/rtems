@@ -1,4 +1,4 @@
-/**
+/*
  * @file rtems/libio_.h
  */
 
@@ -38,6 +38,11 @@ extern "C" {
 
 extern rtems_id                          rtems_libio_semaphore;
 extern const rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers;
+
+/*
+ * Mount table list.
+ */
+extern rtems_chain_control rtems_filesystem_mount_table_control;
 
 /*
  *  File descriptor Table Information
@@ -90,7 +95,7 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
 
 #define rtems_libio_check_fd(_fd) \
   do {                                                     \
-      if ((uint32_t) (_fd) >= rtems_libio_number_iops) { \
+      if ((uint32_t) (_fd) >= rtems_libio_number_iops) {   \
           errno = EBADF;                                   \
           return -1;                                       \
       }                                                    \
@@ -129,12 +134,12 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
  *  Macro to check if a file descriptor is open for this operation.
  */
 
-#define rtems_libio_check_permissions(_iop, _flag)    \
-  do {                                                \
-      if (((_iop)->flags & (_flag)) == 0) {           \
+#define rtems_libio_check_permissions(_iop, _flag)          \
+  do {                                                      \
+      if (((_iop)->flags & (_flag)) == 0) {                 \
             rtems_set_errno_and_return_minus_one( EINVAL ); \
-            return -1;                                \
-      }                                               \
+            return -1;                                      \
+      }                                                     \
   } while (0)
 
 /*
@@ -148,44 +153,6 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
     if ( (_node)->ops )\
       if ( (_node)->ops->freenod_h ) \
         (*(_node)->ops->freenod_h)( (_node) ); \
-  } while (0)
-
-/*
- *  rtems_filesystem_is_separator
- *
- *  Macro to determine if a character is a path name separator.
- *
- *  NOTE:  This macro handles MS-DOS and UNIX style names.
- */
-
-#define rtems_filesystem_is_separator( _ch ) \
-   ( ((_ch) == '/') || ((_ch) == '\\') || ((_ch) == '\0'))
-
-/*
- *  rtems_filesystem_get_start_loc
- *
- *  Macro to determine if path is absolute or relative.
- */
-
-#define rtems_filesystem_get_start_loc( _path, _index, _loc )  \
-  do {                                                         \
-    if ( rtems_filesystem_is_separator( (_path)[ 0 ] ) ) {     \
-      *(_loc) = rtems_filesystem_root;                         \
-      *(_index) = 1;                                           \
-    } else {                                                   \
-      *(_loc) = rtems_filesystem_current;                      \
-      *(_index) = 0;                                           \
-    }                                                          \
-  } while (0)
-
-#define rtems_filesystem_get_sym_start_loc( _path, _index, _loc )  \
-  do {                                                         \
-    if ( rtems_filesystem_is_separator( (_path)[ 0 ] ) ) {     \
-      *(_loc) = rtems_filesystem_root;                         \
-      *(_index) = 1;                                           \
-    } else {                                                   \
-      *(_index) = 0;                                           \
-    }                                                          \
   } while (0)
 
 
@@ -270,6 +237,18 @@ int rtems_filesystem_prefix_separators(
 );
 
 void rtems_filesystem_initialize(void);
+
+int init_fs_mount_table(void);
+
+int rtems_filesystem_is_separator(char ch);
+
+void rtems_filesystem_get_start_loc(const char *path,
+				    int *index,
+				    rtems_filesystem_location_info_t *loc);
+
+void rtems_filesystem_get_sym_start_loc(const char *path,
+					int *index,
+					rtems_filesystem_location_info_t *loc);
 
 #ifdef __cplusplus
 }
