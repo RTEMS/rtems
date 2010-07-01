@@ -42,11 +42,11 @@
 
 static volatile bool obtain_try;
 static volatile bool obtain_done;
-static volatile bool release_happend;
-static volatile bool interrupt_happend;
-static volatile bool delayed_happend;
-static volatile bool server_triggered_happend;
-static volatile bool interrupt_triggered_happend;
+static volatile bool release_happened;
+static volatile bool interrupt_happened;
+static volatile bool delayed_happened;
+static volatile bool server_triggered_happened;
+static volatile bool interrupt_triggered_happened;
 
 static rtems_id timer [TIMER_COUNT];
 
@@ -96,11 +96,11 @@ static void obtain_callback(rtems_id timer_id, void *arg)
   assert_time(T1);
 
   rtems_test_assert(
-    !release_happend
-      && !interrupt_happend
-      && !delayed_happend
-      && !interrupt_triggered_happend
-      && !server_triggered_happend
+    !release_happened
+      && !interrupt_happened
+      && !delayed_happened
+      && !interrupt_triggered_happened
+      && !server_triggered_happened
   );
 
   obtain_try = true;
@@ -147,10 +147,10 @@ static void release_callback(rtems_id timer_id, void *arg)
 
   rtems_test_assert(
     obtain_try
-      && interrupt_happend
-      && !delayed_happend
-      && !interrupt_triggered_happend
-      && !server_triggered_happend
+      && interrupt_happened
+      && !delayed_happened
+      && !interrupt_triggered_happened
+      && !server_triggered_happened
   );
 
   switch (resource_type) {
@@ -178,7 +178,7 @@ static void release_callback(rtems_id timer_id, void *arg)
   }
   directive_failed_with_level(sc, "release", 1);
 
-  release_happend = true;
+  release_happened = true;
 }
 
 static void interrupt_triggered_callback(rtems_id timer_id, void *arg)
@@ -191,12 +191,12 @@ static void interrupt_triggered_callback(rtems_id timer_id, void *arg)
 
   rtems_test_assert(
     obtain_done
-      && release_happend
-      && interrupt_happend
-      && !server_triggered_happend
+      && release_happened
+      && interrupt_happened
+      && !server_triggered_happened
   );
 
-  interrupt_triggered_happend = true;
+  interrupt_triggered_happened = true;
 }
 
 static void interrupt_callback(rtems_id timer_id, void *arg)
@@ -208,10 +208,10 @@ static void interrupt_callback(rtems_id timer_id, void *arg)
   rtems_test_assert(
     obtain_try
       && !obtain_done
-      && !release_happend
-      && !delayed_happend
-      && !interrupt_triggered_happend
-      && !server_triggered_happend
+      && !release_happened
+      && !delayed_happened
+      && !interrupt_triggered_happened
+      && !server_triggered_happened
   );
 
   sc = rtems_timer_server_fire_after(
@@ -222,7 +222,7 @@ static void interrupt_callback(rtems_id timer_id, void *arg)
   );
   directive_failed_with_level(sc, "rtems_timer_server_fire_after", -1);
 
-  interrupt_happend = true;
+  interrupt_happened = true;
 }
 
 static void server_triggered_callback(rtems_id timer_id, void *arg)
@@ -231,13 +231,13 @@ static void server_triggered_callback(rtems_id timer_id, void *arg)
 
   rtems_test_assert(
     obtain_done
-      && release_happend
-      && interrupt_happend
-      && delayed_happend
-      && interrupt_triggered_happend
+      && release_happened
+      && interrupt_happened
+      && delayed_happened
+      && interrupt_triggered_happened
   );
 
-  server_triggered_happend = true;
+  server_triggered_happened = true;
 }
 
 static void delayed_callback(rtems_id timer_id, void *arg)
@@ -248,9 +248,9 @@ static void delayed_callback(rtems_id timer_id, void *arg)
 
   rtems_test_assert(
     obtain_done
-      && release_happend
-      && interrupt_happend
-      && !server_triggered_happend
+      && release_happened
+      && interrupt_happened
+      && !server_triggered_happened
   );
 
   sc = rtems_timer_server_fire_after(
@@ -261,7 +261,7 @@ static void delayed_callback(rtems_id timer_id, void *arg)
   );
   directive_failed(sc, "rtems_timer_server_fire_after");
 
-  delayed_happend = true;
+  delayed_happened = true;
 }
 
 static void test_reset(void)
@@ -270,11 +270,11 @@ static void test_reset(void)
 
   obtain_try = false;
   obtain_done = false;
-  release_happend = false;
-  interrupt_happend = false;
-  delayed_happend = false;
-  interrupt_triggered_happend = false;
-  server_triggered_happend = false;
+  release_happened = false;
+  interrupt_happened = false;
+  delayed_happened = false;
+  interrupt_triggered_happened = false;
+  server_triggered_happened = false;
 
   /* Synchronize with tick */
   sc = rtems_task_wake_after(1);
@@ -338,16 +338,16 @@ static void test_case(enum resource_type rt)
 
     rtems_test_assert(
       obtain_try
-        && interrupt_happend
-        && !delayed_happend
-        && !interrupt_triggered_happend
-        && !server_triggered_happend
+        && interrupt_happened
+        && !delayed_happened
+        && !interrupt_triggered_happened
+        && !server_triggered_happened
     );
 
     sc = rtems_region_return_segment(region, region_item);
     directive_failed(sc, "rtems_region_return_segment");
 
-    release_happend = true;
+    release_happened = true;
 
     sc = rtems_task_wake_after(T6 - T4);
     directive_failed(sc, "task_wake_after");
@@ -357,18 +357,18 @@ static void test_case(enum resource_type rt)
 
   rtems_test_assert(
     obtain_done
-      && interrupt_happend
-      && release_happend
-      && delayed_happend
-      && interrupt_triggered_happend
-      && server_triggered_happend
+      && interrupt_happened
+      && release_happened
+      && delayed_happened
+      && interrupt_triggered_happened
+      && server_triggered_happened
   );
 }
 
 rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  char region_area [128];
+  char region_area [128] CPU_STRUCTURE_ALIGNMENT;
   enum resource_type rt = SEMAPHORE;
   void *new_region_item = NULL;
   size_t i = 0;

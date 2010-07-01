@@ -1,3 +1,7 @@
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp68/init.c: Add alignment to region_area. Fix spelling.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1573/cpukit
