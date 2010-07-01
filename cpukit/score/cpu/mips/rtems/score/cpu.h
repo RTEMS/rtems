@@ -387,7 +387,7 @@ extern "C" {
  *  a debugger such as gdb.  But that is another problem.
  */
 
-#ifndef ASSEMBLY_ONLY
+#ifndef ASM
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
 #if (__mips == 1) || (__mips == 32)

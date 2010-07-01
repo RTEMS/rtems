@@ -1,3 +1,10 @@
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/asm.h, rtems/score/cpu.h: cpu.h defines were not available to
+	assembly programs. This resulted in percpu.h (when included from
+	assembly) not being able to detect that the MIPS does not have a
+	dedicated software managed interrupt stack.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1573/cpukit
