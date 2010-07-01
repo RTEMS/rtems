@@ -28,22 +28,22 @@
 static const rtems_filesystem_operations_table miniIMFS_ops = {
   .evalpath_h = IMFS_eval_path,
   .evalformake_h = IMFS_evaluate_for_make,
-  .link_h = NULL,
-  .unlink_h = NULL,
+  .link_h = rtems_filesystem_default_link,
+  .unlink_h = rtems_filesystem_default_unlink,
   .node_type_h = IMFS_node_type,
   .mknod_h = IMFS_mknod,
-  .chown_h = NULL,
-  .freenod_h = NULL,
+  .chown_h = rtems_filesystem_default_chown,
+  .freenod_h = rtems_filesystem_default_freenode,
   .mount_h = IMFS_mount,
   .fsmount_me_h = miniIMFS_initialize,
-  .unmount_h = NULL,
-  .fsunmount_me_h = NULL,
-  .utime_h = NULL,
-  .eval_link_h = NULL,
-  .symlink_h = NULL,
-  .readlink_h = NULL,
-  .rename_h = NULL,
-  .statvfs_h = NULL
+  .unmount_h = rtems_filesystem_default_unmount,
+  .fsunmount_me_h = rtems_filesystem_default_unmount,
+  .utime_h = rtems_filesystem_default_utime,
+  .eval_link_h = rtems_filesystem_default_evaluate_link,
+  .symlink_h = rtems_filesystem_default_symlink,
+  .readlink_h = rtems_filesystem_default_readlink,
+  .rename_h = rtems_filesystem_default_rename,
+  .statvfs_h = rtems_filesystem_default_statvfs
 };
 
 int miniIMFS_initialize(

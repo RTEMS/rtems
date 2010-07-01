@@ -22,15 +22,15 @@ const rtems_filesystem_file_handlers_r msdos_dir_handlers = {
     msdos_dir_open,
     msdos_dir_close,
     msdos_dir_read,
-    NULL,             /* msdos_dir_write */
-    NULL,             /* msdos_dir_ioctl */
+    rtems_filesystem_default_write,
+    rtems_filesystem_default_ioctl,
     msdos_dir_lseek,
     msdos_dir_stat,
     msdos_dir_chmod,
-    NULL,             /* msdos_dir_ftruncate */
-    NULL,
+    rtems_filesystem_default_ftruncate,
+    rtems_filesystem_default_fpathconf,
     msdos_dir_sync,
     msdos_dir_sync,
-    NULL,                 /* msdos_dir_fcntl */
+    rtems_filesystem_default_fcntl,
     msdos_dir_rmnod
 };

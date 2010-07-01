@@ -1,3 +1,16 @@
+2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/dosfs/msdos_handlers_dir.c,
+	libfs/src/dosfs/msdos_handlers_file.c, libfs/src/imfs/imfs_fifo.c,
+	libfs/src/imfs/imfs_handlers_device.c,
+	libfs/src/imfs/imfs_handlers_directory.c,
+	libfs/src/imfs/imfs_handlers_link.c,
+	libfs/src/imfs/imfs_handlers_memfile.c,
+	libfs/src/imfs/miniimfs_init.c, libfs/src/rfs/rtems-rfs-rtems-dev.c,
+	libfs/src/rfs/rtems-rfs-rtems-dir.c,
+	libfs/src/rfs/rtems-rfs-rtems-file.c: Turn NULLs into default
+	handlers.
+
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/_rename_r.c, libcsupport/src/getdents.c,

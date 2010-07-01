@@ -33,9 +33,9 @@ const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   IMFS_stat,
   IMFS_fchmod,
   device_ftruncate,
-  NULL,   /* fpathconf */
-  NULL,   /* fsync */
-  NULL,   /* fdatasync */
-  NULL,   /* fcntl */
+  rtems_filesystem_default_fpathconf,
+  rtems_filesystem_default_fsync,
+  rtems_filesystem_default_fdatasync,
+  rtems_filesystem_default_fcntl,
   IMFS_rmnod
 };

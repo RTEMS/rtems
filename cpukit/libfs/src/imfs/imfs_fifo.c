@@ -140,10 +140,10 @@ const rtems_filesystem_file_handlers_r IMFS_fifo_handlers = {
   IMFS_fifo_lseek,
   IMFS_stat,
   IMFS_fchmod,
-  NULL,    /* ftruncate */
-  NULL,    /* fpathconf */
-  NULL,    /* fsync */
-  NULL,    /* fdatasync */
+  rtems_filesystem_default_ftruncate,
+  rtems_filesystem_default_fpathconf,
+  rtems_filesystem_default_fsync,
+  rtems_filesystem_default_fdatasync,
   IMFS_fcntl,
   IMFS_rmnod,
 };
