@@ -1,0 +1,26 @@
+*** TEST GXX 01 ***
+rtems_gxx_mutex_init() - OK
+rtems_gxx_mutex_trylock() - OK
+rtems_gxx_mutex_unlock() - OK
+rtems_gxx_mutex_lock() - OK
+rtems_gxx_mutex_unlock() - OK
+
+rtems_gxx_recursive_mutex_init() - OK
+rtems_gxx_recursive_mutex_trylock() - OK
+rtems_gxx_recursive_mutex_trylock() - Nest
+rtems_gxx_recursive_mutex_unlock() - Unnest
+rtems_gxx_recursive_mutex_unlock() - OK
+rtems_gxx_recursive_mutex_lock() - OK
+rtems_gxx_recursive_mutex_unlock() - OK
+
+Call once method the first time
+Running once method
+Call once method the second time
+
+rtems_gxx_key_create(&key, NULL) - OK
+rtems_gxx_key_delete(key) - OK
+rtems_gxx_key_create(&key, key_dtor) - OK
+rtems_gxx_setspecific() - OK
+rtems_gxx_petspecific() - OK
+rtems_gxx_key_delete(key) - OK
+*** END OF TEST GXX 01 ***

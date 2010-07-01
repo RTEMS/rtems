@@ -1,5 +1,11 @@
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Add test for GCC C++ library helpers.
+	* gxx01/.cvsignore, gxx01/Makefile.am, gxx01/gxx01.doc,
+	gxx01/gxx01.scn, gxx01/gxx_wrappers.h, gxx01/init.c: New files.
+
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* termios04/termios_testdriver_intr.c: Task driven IO now works.
 
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>

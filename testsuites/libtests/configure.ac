@@ -45,6 +45,7 @@ block09/Makefile
 block10/Makefile
 bspcmdline01/Makefile
 cpuuse/Makefile
+gxx01/Makefile
 heapwalk/Makefile
 malloctest/Makefile
 malloc02/Makefile
