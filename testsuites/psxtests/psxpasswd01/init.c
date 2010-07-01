@@ -60,18 +60,99 @@ rtems_task Init(
   struct passwd *pw;
   struct group  *gr;
 
-  puts( "*** PASSWORD/GROUP TEST ***" );
+  puts( "*** PASSWORD/GROUP TEST - 01 ***" );
+
+  /* getpwent */
+  puts( "Init - getpwent() -- OK, result should be NULL" );
+  pw = getpwent();
+  rtems_test_assert( !pw );
+
+  /* getgrent */
+  puts( "Init - getgrent() -- OK, result should be NULL" );
+  gr = getgrent();
+  rtems_test_assert( !gr );
+
+  /* setpwent */
+
+  puts( "Init - setpwent() -- OK" );
+  setpwent();
+
+  /* setgrent */
+
+  puts( "Init - setgrent() -- OK" );
+  setgrent();
+
+  /* getpwent */
+
+  puts( "Init - getpwent() (1) -- OK" );
+  pw = getpwent();
+  rtems_test_assert( pw );
+  print_passwd( pw );
+
+  puts( "Init - getpwent() (2) -- OK" );
+  pw = getpwent();
+  rtems_test_assert( pw );
+  print_passwd( pw );
+
+  puts( "Init - getpwent() (3) -- OK" );
+  pw = getpwent();
+  rtems_test_assert( pw );
+  print_passwd( pw );
+
+  puts( "Init - getpwent() (4) -- result should be NULL" );
+  pw = getpwent();
+  rtems_test_assert( !pw );
+
+  /* getgrent */
+
+  puts( "Init - getgrent() (1) -- OK" );
+  gr = getgrent();
+  rtems_test_assert( gr );
+  print_group( gr );
+
+  puts( "Init - getgrent() (2) -- OK" );
+  gr = getgrent();
+  rtems_test_assert( gr );
+  print_group( gr );
+
+  puts( "Init - getgrent() (3) -- OK" );
+  gr = getgrent();
+  rtems_test_assert( gr );
+  print_group( gr );
+
+  puts( "Init - getgrent() (4) -- result should be NULL" );
+  gr = getgrent();
+  rtems_test_assert( !gr );
 
   /* getpwnam */
   puts( "Init - getpwnam(\"root\") -- OK" );
-  pw = getpwnam("root");
+  pw = getpwnam( "root" );
   rtems_test_assert( pw );
   print_passwd( pw );
 
   puts( "Init - getpwnam(\"rtems\") -- OK" );
-  pw = getpwnam("rtems");
+  pw = getpwnam( "rtems" );
   rtems_test_assert( pw );
   print_passwd( pw );
+
+  puts( "Init - getpwnam(\"suser\") -- result should be NULL" );
+  pw = getpwnam( "suser" );
+  rtems_test_assert( !pw );
+
+  /* getpwuid */
+  puts( "Init - getpwuid(0) -- OK" );
+  pw = getpwuid( 0 );
+  rtems_test_assert( pw );
+  print_passwd( pw );
+
+  puts( "Init - getpwuid(1) -- OK" );
+  pw = getpwuid( 1 );
+  rtems_test_assert( pw );
+  print_passwd( pw );
+
+  puts( "Init - getpwuid(4) -- result should be NULL" );
+  pw = getpwuid( 4 );
+  rtems_test_assert( !pw );
 
   /* getgrnam */
   puts( "Init - getgrnam(\"root\") -- OK" );
@@ -84,7 +165,30 @@ rtems_task Init(
   rtems_test_assert( gr );
   print_group( gr );
 
-  puts( "*** END OF PASSWORD/GROUP TEST ***" );
+  /* getgrgid */
+  puts( "Init - getgrgid(0) -- OK" );
+  gr = getgrgid(0);
+  rtems_test_assert( gr );
+  print_group( gr );
+
+  puts( "Init - getgrgid(1) -- OK" );
+  gr = getgrgid(1);
+  rtems_test_assert( gr );
+  print_group( gr );
+
+  puts( "Init - getgrgid(4) -- result should be NULL");
+  gr = getgrgid( 4 );
+  rtems_test_assert( !gr );
+
+  /* endpwent */
+  puts( "Init - endpwent() -- OK" );
+  endpwent();
+
+  /* endgrent */
+  puts( "Init - endgrent() -- OK" );
+  endgrent();
+
+  puts( "*** END OF PASSWORD/GROUP TEST - 01 ***" );
   rtems_test_exit( 0 );
 }
 

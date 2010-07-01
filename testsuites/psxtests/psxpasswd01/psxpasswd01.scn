@@ -1,4 +1,48 @@
-*** PASSWORD/GROUP TEST ***
+Initialized console on port COM1 9600-8-N-1
+
+*** PASSWORD/GROUP TEST - 01 ***
+Init - getpwent() -- OK, result should be NULL
+Init - getgrent() -- OK, result should be NULL
+Init - setpwent() -- OK
+Init - setgrent() -- OK
+Init - getpwent() (1) -- OK
+  username: root
+  user password: *
+  user ID: 0
+  group ID: 0
+  real name: 
+  home directory: /
+  shell program: /bin/sh
+Init - getpwent() (2) -- OK
+  username: rtems
+  user password: *
+  user ID: 1
+  group ID: 1
+  real name: 
+  home directory: /
+  shell program: /bin/sh
+Init - getpwent() (3) -- OK
+  username: tty
+  user password: !
+  user ID: 2
+  group ID: 2
+  real name: 
+  home directory: /
+  shell program: /bin/false
+Init - getpwent() (4) -- result should be NULL
+Init - getgrent() (1) -- OK
+  group name: root
+  group  password: x
+  group  ID: 0
+Init - getgrent() (2) -- OK
+  group name: rtems
+  group  password: x
+  group  ID: 1
+Init - getgrent() (3) -- OK
+  group name: tty
+  group  password: x
+  group  ID: 2
+Init - getgrent() (4) -- result should be NULL
 Init - getpwnam("root") -- OK
   username: root
   user password: *
@@ -15,7 +59,24 @@ Init - getpwnam("rtems") -- OK
   real name: 
   home directory: /
   shell program: /bin/sh
-
+Init - getpwnam("suser") -- result should be NULL
+Init - getpwuid(0) -- OK
+  username: root
+  user password: *
+  user ID: 0
+  group ID: 0
+  real name: 
+  home directory: /
+  shell program: /bin/sh
+Init - getpwuid(1) -- OK
+  username: rtems
+  user password: *
+  user ID: 1
+  group ID: 1
+  real name: 
+  home directory: /
+  shell program: /bin/sh
+Init - getpwuid(4) -- result should be NULL
 Init - getgrnam("root") -- OK
   group name: root
   group  password: x
@@ -24,5 +85,15 @@ Init - getgrnam("rtems") -- OK
   group name: rtems
   group  password: x
   group  ID: 1
-*** END OF PASSWORD/GROUP TEST ***
-
+Init - getgrgid(0) -- OK
+  group name: root
+  group  password: x
+  group  ID: 0
+Init - getgrgid(1) -- OK
+  group name: rtems
+  group  password: x
+  group  ID: 1
+Init - getgrgid(4) -- result should be NULL
+Init - endpwent() -- OK
+Init - endgrent() -- OK
+*** END OF PASSWORD/GROUP TEST - 01 ***

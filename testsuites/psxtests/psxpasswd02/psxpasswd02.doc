@@ -1,7 +1,7 @@
 #
 #  $Id$
 #
-#  COPYRIGHT (c) 1989-2009.
+#  COPYRIGHT (c) 1989-2010.
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -14,22 +14,13 @@ This file describes the directives and concepts tested by this test set.
 test set name:  POSIX PASSWD/GROUP TEST
 
 directives:
-  getpwnam
-  getpwuid
-  getpwnam_r
-  getpwuid_r
-  getpwent
-  setpwent
-  endpwent
 
-  getgrnam
-  getgrgid
-  getgrnam_r
-  getgrgid_r
-  getgrent
-  setgrent
-  endgrent
++ setpwent
++ setgrent
++ getpwnam
++ endpwent
++ endgrent
 
 concepts:
 
-+ Fully exercise services related to /etc/passwd and /etc/group.
++ Exercise error paths in /etc/passwd and /etc/group.

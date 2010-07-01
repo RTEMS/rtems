@@ -20,7 +20,7 @@ endif
 
 ## File IO tests
 SUBDIRS += psxfile01 psxfile02 psxfilelock01 psxid01 psximfs01 psxreaddir \
-    psxstat psxmount psx13 psxchroot01 psxpasswd01
+    psxstat psxmount psx13 psxchroot01 psxpasswd01 psxpasswd02
 
 ## Until sys/uio.h is moved to libcsupport, we have to have networking
 ## enabled to support readv and writev.  Hopefully this is a temporary

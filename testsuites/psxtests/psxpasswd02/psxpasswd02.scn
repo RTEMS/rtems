@@ -1,0 +1,24 @@
+*** PASSWORD/GROUP TEST - 02 ***
+Init - Creating /etc
+Init - Creating /etc/passwd
+Init - Creating /etc/group
+Init - setpwent() -- OK
+Init - setpwent() -- OK
+Init - setgrent() -- OK
+Init - setgrent() -- OK
+Init - getpwnam("root") -- expected EINVAL
+Init - getpwnam("root") -- expected EINVAL
+Init - getpwnam("root") -- expected EINVAL
+Init - getgrent() -- OK
+  group name: admin
+  group  password: 
+  group  ID: 1
+Init - endpwent() -- OK
+Init - endpwent() -- OK
+Init - endgrent() -- OK
+Init - endgrent() -- OK
+Removing /etc/passwd
+Removing /etc/group
+Init - getpwnam("root") -- expected EINVAL
+Init - getgrnam("root") -- expected EINVAL
+*** END OF PASSWORD/GROUP TEST - 02 ***

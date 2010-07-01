@@ -1,3 +1,13 @@
+2010-07-01	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1598/testing
+	* Makefile.am, configure.ac, psxpasswd01/init.c,
+	psxpasswd01/psxpasswd01.doc, psxpasswd01/psxpasswd01.scn: Add testing
+	for POSIX user database (e.g. /etc/group and /etc/passwd) access
+	routines which are implemented in libcsupport/src/getpwent.c.
+	* psxpasswd02/.cvsignore, psxpasswd02/Makefile.am, psxpasswd02/init.c,
+	psxpasswd02/psxpasswd02.doc, psxpasswd02/psxpasswd02.scn: New files.
+
 2010-07-01	Vinu Rajashekhar <vinutheraj@gmail.com>
 
 	PR 1597/cpukit
