@@ -1908,8 +1908,8 @@ struct rtems_filesystem_mount_table_entry_tt {
 #endif
 
 
-int rtems_nfsfs_initialize(
-	rtems_filesystem_mount_table_entry_t *mt_entry,
+int rtems_nfs_initialize(
+  rtems_filesystem_mount_table_entry_t *mt_entry,
   const void                           *data
 )
 {
@@ -2479,7 +2479,7 @@ struct _rtems_filesystem_operations_table nfs_fs_ops = {
 		nfs_chown,			/* OPTIONAL; may be NULL */
 		nfs_freenode,		/* OPTIONAL; may be NULL; (release node_access) */
 		nfs_mount,			/* OPTIONAL; may be NULL */
-		rtems_nfsfs_initialize,		/* OPTIONAL; may be NULL -- not used anymore */
+		rtems_nfs_initialize,		/* OPTIONAL; may be NULL -- not used anymore */
 		nfs_unmount,		/* OPTIONAL; may be NULL */
 		nfs_fsunmount_me,	/* OPTIONAL; may be NULL */
 		nfs_utime,			/* OPTIONAL; may be NULL */

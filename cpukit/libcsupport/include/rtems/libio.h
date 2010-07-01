@@ -314,46 +314,6 @@ struct _rtems_filesystem_operations_table {
 };
 
 /**
- * @brief File system table entry.
- */
-typedef struct rtems_filesystem_table_t {
-  const char                    *type;
-  rtems_filesystem_fsmount_me_t  mount_h;
-} rtems_filesystem_table_t;
-
-/**
- * @brief Static table of file systems.
- *
- * Externally defined by confdefs.h or the user.
- */
-extern const rtems_filesystem_table_t rtems_filesystem_table [];
-
-/**
- * @brief Per file system table entry routine type.
- *
- * @see rtems_filesystem_iterate().
- *
- * @retval true Continue the iteration.
- * @retval false Stop the iteration.
- */
-typedef bool (*rtems_per_filesystem_routine)(
-  const rtems_filesystem_table_t *entry,
-  void *arg
-);
-
-/**
- * @brief Iterates over the file system table.
- *
- * For each file system table entry the @a routine will be called with the
- * table entry and the @a routine_arg parameter.
- */
-void
-rtems_filesystem_iterate(
-  rtems_per_filesystem_routine routine,
-  void *routine_arg
-);
-
-/**
  * @brief Gets the mount handler for the file system @a type.
  *
  * @return The file system mount handler associated with the @a type, or
@@ -361,35 +321,6 @@ rtems_filesystem_iterate(
  */
 rtems_filesystem_fsmount_me_t
 rtems_filesystem_get_mount_handler(
-  const char *type
-);
-
-/*
- * Get the first entry in the mount table.
- */
-rtems_filesystem_mount_table_entry_t*
-rtems_filesystem_mounts_first( void );
-
-/*
- * Get the next entry in the mount table.
- */
-rtems_filesystem_mount_table_entry_t*
-rtems_filesystem_mounts_next( rtems_filesystem_mount_table_entry_t *entry );
-
-/*
- * Register a file system.
- */
-int
-rtems_filesystem_register(
-  const char                    *type,
-  rtems_filesystem_fsmount_me_t  mount_h
-);
-
-/*
- * Unregister a file system.
- */
-int
-rtems_filesystem_unregister(
   const char *type
 );
 
@@ -418,67 +349,6 @@ typedef struct {
  * Override in a filesystem.
  */
 extern const rtems_filesystem_limits_and_options_t rtems_filesystem_default_pathconf;
-
-/**
- * @brief Mount table entry.
- */
-struct rtems_filesystem_mount_table_entry_tt {
-  rtems_chain_node                       Node;
-  rtems_filesystem_location_info_t       mt_point_node;
-  rtems_filesystem_location_info_t       mt_fs_root;
-  int                                    options;
-  void                                  *fs_info;
-
-  rtems_filesystem_limits_and_options_t  pathconf_limits_and_options;
-
-  /*
-   * The target or mount point of the file system.
-   */
-  const char                            *target;
-
-  /*
-   * The type of filesystem or the name of the filesystem.
-   */
-  const char                            *type;
-
-  /*
-   *  When someone adds a mounted filesystem on a real device,
-   *  this will need to be used.
-   *
-   *  The lower layers can manage how this is managed. Leave as a
-   *  string.
-   */
-  char                                  *dev;
-};
-
-/**
- * @brief The pathconf setting for a file system.
- */
-#define rtems_filesystem_pathconf(_mte) ((_mte)->pathconf_limits_and_options)
-
-/**
- * @brief The type of file system. Its name.
- */
-#define rtems_filesystem_type(_mte) ((_mte)->type)
-
-/**
- * @brief The mount point of a file system.
- */
-#define rtems_filesystem_mount_point(_mte) ((_mte)->target)
-
-/**
- * @brief The device entry of a file system.
- */
-#define rtems_filesystem_mount_device(_mte) ((_mte)->dev)
-
-/**
- * @brief File systems options.
- */
-typedef enum {
-  RTEMS_FILESYSTEM_READ_ONLY,
-  RTEMS_FILESYSTEM_READ_WRITE,
-  RTEMS_FILESYSTEM_BAD_OPTIONS
-} rtems_filesystem_options_t;
 
 /**
  * @brief An open file data structure.
@@ -669,6 +539,46 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
 #define rtems_libio_is_valid_perms( _perm )     \
  (~ ((~RTEMS_LIBIO_PERMS_RWX) & _perm ))
 
+/*
+ *  Prototypes for filesystem
+ */
+
+void rtems_filesystem_initialize( void );
+
+typedef void (*rtems_libio_init_functions_t)(void);
+extern  rtems_libio_init_functions_t rtems_libio_init_helper;
+
+void    open_dev_console(void);
+
+typedef void (*rtems_libio_supp_functions_t)(void);
+extern  rtems_libio_supp_functions_t rtems_libio_supp_helper;
+
+typedef void (*rtems_fs_init_functions_t)(void);
+extern  rtems_fs_init_functions_t    rtems_fs_init_helper;
+
+/**
+ * @brief Creates a directory and all its parent directories according to
+ * @a path.
+ *
+ * The @a mode value selects the access permissions of the directory.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The @c errno indicates the error.
+ */
+extern int rtems_mkdir(const char *path, mode_t mode);
+
+/** @} */
+
+/**
+ * @defgroup FileSystemTypesAndMount File System Types and Mount
+ *
+ * @ingroup LibIO
+ *
+ * @brief File system types and mount.
+ *
+ * @{
+ */
+
 /**
  * @name File System Types
  *
@@ -686,16 +596,132 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
 
 /** @} */
 
-/*
- *  Prototypes for filesystem
+/**
+ * @brief Mount table entry.
  */
+struct rtems_filesystem_mount_table_entry_tt {
+  rtems_chain_node                       Node;
+  rtems_filesystem_location_info_t       mt_point_node;
+  rtems_filesystem_location_info_t       mt_fs_root;
+  int                                    options;
+  void                                  *fs_info;
 
-void rtems_filesystem_initialize( void );
+  rtems_filesystem_limits_and_options_t  pathconf_limits_and_options;
 
+  /*
+   * The target or mount point of the file system.
+   */
+  const char                            *target;
+
+  /*
+   * The type of filesystem or the name of the filesystem.
+   */
+  const char                            *type;
+
+  /*
+   *  When someone adds a mounted filesystem on a real device,
+   *  this will need to be used.
+   *
+   *  The lower layers can manage how this is managed. Leave as a
+   *  string.
+   */
+  char                                  *dev;
+};
+
+/**
+ * @brief File system options.
+ */
+typedef enum {
+  RTEMS_FILESYSTEM_READ_ONLY,
+  RTEMS_FILESYSTEM_READ_WRITE,
+  RTEMS_FILESYSTEM_BAD_OPTIONS
+} rtems_filesystem_options_t;
+
+/**
+ * @brief File system table entry.
+ */
+typedef struct rtems_filesystem_table_t {
+  const char                    *type;
+  rtems_filesystem_fsmount_me_t  mount_h;
+} rtems_filesystem_table_t;
+
+/**
+ * @brief Static table of file systems.
+ *
+ * Externally defined by confdefs.h or the user.
+ */
+extern const rtems_filesystem_table_t rtems_filesystem_table [];
+
+/**
+ * @brief Registers a file system @a type.
+ *
+ * The @a mount_h handler will be used to mount a file system of this @a type.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The @c errno indicates the error.
+ */
+int rtems_filesystem_register(
+  const char                    *type,
+  rtems_filesystem_fsmount_me_t  mount_h
+);
+
+/**
+ * @brief Unregisters a file system @a type.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The @c errno indicates the error.
+ */
+int rtems_filesystem_unregister(
+  const char *type
+);
+
+/**
+ * @brief Unmounts the file system at @a mount_path.
+ *
+ * @todo Due to file system implementation shortcomings it is possible to
+ * unmount file systems in use.  This likely leads to heap corruption.  Unmount
+ * only file systems which are not in use by the application.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The @c errno indicates the error.
+ */
 int unmount(
   const char *mount_path
 );
 
+/**
+ * @brief Mounts a file system at @a target.
+ *
+ * The @a source may be a path to the corresponding device file, or @c NULL.
+ * The @a target path must lead to an existing directory, or @c NULL.  In case
+ * @a target is @c NULL, the root file system will be mounted.  The @a data
+ * parameter will be forwarded to the file system initialization handler.  The
+ * file system type is selected by @a filesystemtype and may be one of
+ * - RTEMS_FILESYSTEM_TYPE_DEVFS,
+ * - RTEMS_FILESYSTEM_TYPE_DOSFS,
+ * - RTEMS_FILESYSTEM_TYPE_FTPFS,
+ * - RTEMS_FILESYSTEM_TYPE_IMFS,
+ * - RTEMS_FILESYSTEM_TYPE_MINIIMFS,
+ * - RTEMS_FILESYSTEM_TYPE_NFS,
+ * - RTEMS_FILESYSTEM_TYPE_RFS, or
+ * - RTEMS_FILESYSTEM_TYPE_TFTPFS.
+ *
+ * Only configured or registered file system types are available.  You can add
+ * file system types to your application configuration with
+ * - CONFIGURE_FILESYSTEM_DEVFS,
+ * - CONFIGURE_FILESYSTEM_DOSFS,
+ * - CONFIGURE_FILESYSTEM_FTPFS,
+ * - CONFIGURE_FILESYSTEM_IMFS,
+ * - CONFIGURE_FILESYSTEM_MINIIMFS,
+ * - CONFIGURE_FILESYSTEM_NFS,
+ * - CONFIGURE_FILESYSTEM_RFS, and
+ * - CONFIGURE_FILESYSTEM_TFTPFS.
+ *
+ * @see rtems_filesystem_register() and mount_and_make_target_path().
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The @c errno indicates the error.
+ */
 int mount(
   const char                 *source,
   const char                 *target,
@@ -723,10 +749,72 @@ int mount_and_make_target_path(
   const void                 *data
 );
 
-/*
- *  Boot Time Mount Table Structure
+/**
+ * @brief Per file system type routine.
+ *
+ * @see rtems_filesystem_iterate().
+ *
+ * @retval true Stop the iteration.
+ * @retval false Continue the iteration.
  */
+typedef bool (*rtems_per_filesystem_routine)(
+  const rtems_filesystem_table_t *fs_entry,
+  void *arg
+);
 
+/**
+ * @brief Iterates over all file system types.
+ *
+ * For each file system type the @a routine will be called with the entry and
+ * the @a routine_arg parameter.
+ *
+ * Do not register or unregister file system types in @a routine.
+ *
+ * The iteration is protected by the IO library mutex.
+ *
+ * @retval true Iteration stopped due to @a routine return status.
+ * @retval false Iteration through all entries.
+ */
+bool rtems_filesystem_iterate(
+  rtems_per_filesystem_routine routine,
+  void *routine_arg
+);
+
+/**
+ * @brief Per file system mount routine.
+ *
+ * @see rtems_filesystem_mount_iterate().
+ *
+ * @retval true Stop the iteration.
+ * @retval false Continue the iteration.
+ */
+typedef bool (*rtems_per_filesystem_mount_routine)(
+  const rtems_filesystem_mount_table_entry_t *mt_entry,
+  void *arg
+);
+
+/**
+ * @brief Iterates over all file system mounts.
+ *
+ * For each file system mount the @a routine will be called with the entry and
+ * the @a routine_arg parameter.
+ *
+ * Do not mount or unmount file systems in @a routine.
+ *
+ * The iteration is protected by the IO library mutex.
+ *
+ * @retval true Iteration stopped due to @a routine return status.
+ * @retval false Iteration through all entries.
+ */
+bool
+rtems_filesystem_mount_iterate(
+  rtems_per_filesystem_mount_routine routine,
+  void *routine_arg
+);
+
+/**
+ * @brief Boot time mount table entry.
+ */
 typedef struct {
   const char                              *type;
   rtems_filesystem_options_t               fsoptions;
@@ -736,17 +824,6 @@ typedef struct {
 
 extern const rtems_filesystem_mount_table_t *rtems_filesystem_mount_table;
 extern const int                             rtems_filesystem_mount_table_size;
-
-typedef void (*rtems_libio_init_functions_t)(void);
-extern  rtems_libio_init_functions_t rtems_libio_init_helper;
-
-void    open_dev_console(void);
-
-typedef void (*rtems_libio_supp_functions_t)(void);
-extern  rtems_libio_supp_functions_t rtems_libio_supp_helper;
-
-typedef void (*rtems_fs_init_functions_t)(void);
-extern  rtems_fs_init_functions_t    rtems_fs_init_helper;
 
 /**
  * @brief Creates a directory and all its parrent directories according to
@@ -830,6 +907,26 @@ int rtems_termios_dequeue_characters(
 );
 
 /** @} */
+
+/**
+ * @brief The pathconf setting for a file system.
+ */
+#define rtems_filesystem_pathconf(_mte) ((_mte)->pathconf_limits_and_options)
+
+/**
+ * @brief The type of file system. Its name.
+ */
+#define rtems_filesystem_type(_mte) ((_mte)->type)
+
+/**
+ * @brief The mount point of a file system.
+ */
+#define rtems_filesystem_mount_point(_mte) ((_mte)->target)
+
+/**
+ * @brief The device entry of a file system.
+ */
+#define rtems_filesystem_mount_device(_mte) ((_mte)->dev)
 
 #ifdef __cplusplus
 }

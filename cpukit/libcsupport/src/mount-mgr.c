@@ -37,38 +37,37 @@ typedef struct {
   rtems_filesystem_table_t entry;
 } filesystem_node;
 
-RTEMS_CHAIN_DEFINE_EMPTY(filesystem_chain);
+static RTEMS_CHAIN_DEFINE_EMPTY(filesystem_chain);
 
-void
-rtems_filesystem_iterate(
+bool rtems_filesystem_iterate(
   rtems_per_filesystem_routine routine,
   void *routine_arg
 )
 {
   const rtems_filesystem_table_t *table_entry = &rtems_filesystem_table [0];
   rtems_chain_node *node = NULL;
+  bool stop = false;
 
-  while ( table_entry->type ) {
-    if ( !(*routine)( table_entry, routine_arg ) ) {
-      break;
-    }
-
+  while ( table_entry->type && !stop ) {
+    stop = (*routine)( table_entry, routine_arg );
     ++table_entry;
   }
 
-  rtems_libio_lock();
-  for (
-    node = rtems_chain_first( &filesystem_chain );
-    !rtems_chain_is_tail( &filesystem_chain, node );
-    node = rtems_chain_next( node )
-  ) {
-    const filesystem_node *fsn = (filesystem_node *) node;
+  if ( !stop ) {
+    rtems_libio_lock();
+    for (
+      node = rtems_chain_first( &filesystem_chain );
+      !rtems_chain_is_tail( &filesystem_chain, node ) && !stop;
+      node = rtems_chain_next( node )
+    ) {
+      const filesystem_node *fsn = (filesystem_node *) node;
 
-    if ( !(*routine)( &fsn->entry, routine_arg ) ) {
-      break;
+      stop = (*routine)( &fsn->entry, routine_arg );
     }
+    rtems_libio_unlock();
   }
-  rtems_libio_unlock();
+
+  return stop;
 }
 
 typedef struct {
@@ -81,7 +80,7 @@ static bool find_handler(const rtems_filesystem_table_t *entry, void *arg)
   find_arg *fa = arg;
 
   if ( strcmp( entry->type, fa->type ) != 0 ) {
-    return true;
+    return false;
   } else {
     fa->mount_h = entry->mount_h;
 

@@ -143,8 +143,8 @@ nfsMountsShow(FILE *f);
  * Filesystem mount table mount handler. Do not call, use the mount call.
  */
 int 
-rtems_nfsfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
-                       const void                           *data);
+rtems_nfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
+                     const void                           *data);
 
 /* A utility routine to find the path leading to a
  * rtems_filesystem_location_info_t node.

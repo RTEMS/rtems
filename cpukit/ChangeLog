@@ -1,3 +1,23 @@
+2010-07-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/include/rtems/libio_.h: Removed
+	rtems_filesystem_mount_table_control.
+	* libcsupport/include/rtems/libio.h, libcsupport/src/mount-mgr.c,
+	libcsupport/src/mount.c libcsupport/src/statvfs.c,
+	libcsupport/src/unmount.c, libmisc/shell/main_mount.c: Documentation.
+	Removed rtems_filesystem_mounts_first() and
+	rtems_filesystem_mounts_next().  Added
+	rtems_filesystem_mount_iterate().  Changed return type of
+	rtems_filesystem_iterate().  Removed rtems_filesystem_nodes_equal().
+
+2010-07-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/nfsclient/src/nfs.c, libfs/src/nfsclient/src/nfs.c,
+	libfs/src/nfsclient/src/librtemsNfs.h: Renamed
+	rtems_nfsfs_initialize() in rtems_nfs_initialize().
+	* sapi/include/confdefs.h: Reflect changes above.  Renamed
+	*_miniIMFS in *_MINIIMFS.  Renamed *_NFSFS in *_NFS.
+
 2010-06-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/lib/tftpDriver.c: rtems_tftp_ops and

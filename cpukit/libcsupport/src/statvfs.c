@@ -21,11 +21,6 @@
 
 #include <sys/statvfs.h>
 
-/*
- *  Data structures and routines private to mount/unmount pair.
- */
-extern rtems_chain_control rtems_filesystem_mount_table_control;
-
 int
 statvfs (const char *path, struct statvfs *sb)
 {
