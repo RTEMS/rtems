@@ -466,7 +466,7 @@ int UTimesTest (void)
     time[0].tv_sec = 12345;
     time[1].tv_sec = 54321;
 
-    error = utimes("testfile1.tst", &time);
+    error = utimes("testfile1.tst", (struct timeval *)&time);
 
     if (error == 0) {
 

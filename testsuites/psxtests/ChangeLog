@@ -1,5 +1,9 @@
 2010-07-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psx13/test.c: Fix warning.
+
+2010-07-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psxfile01/test_cat.c: Does not need posix specific macros.
 
 2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
