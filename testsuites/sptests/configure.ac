@@ -125,6 +125,7 @@ spfatal19/Makefile
 spfifo01/Makefile
 spfifo02/Makefile
 spfifo03/Makefile
+spfifo04/Makefile
 spintrcritical01/Makefile
 spintrcritical02/Makefile
 spintrcritical03/Makefile

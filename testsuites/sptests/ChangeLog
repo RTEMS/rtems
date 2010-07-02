@@ -1,3 +1,11 @@
+2010-07-02	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1600/testing
+	* spfifo04/init.c, spfifo04/spfifo04.doc, spfifo04/spfifo04.scn,
+	spfifo04/Makefile.am: New files to improve coverage on fifo/pipe
+	routines
+	* Makefile.am, configure.ac: Add new test.
+
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp68/init.c: Add alignment to region_area. Fix spelling.

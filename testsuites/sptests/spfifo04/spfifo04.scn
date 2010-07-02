@@ -1,0 +1,13 @@
+*** TEST PIPE/FIFO - 04 ***
+Init - Creating /fifo
+Init - Opening /fifo in readonly, non-blocking mode
+Init - Attempt to lseek on fifo -- Expected ESPIPE
+Init - ioctl: FIONBIO -- Expected EFAULT
+Init - ioctl: FIONBIO -- OK
+Init - ioctl: FIONBIO -- OK
+Init - ioctl: Dummy Command -- Expected EINVAL
+Init - ioctl: FIONREAD -- Expected EFAULT
+Init - ioctl: FIONREAD -- OK
+Init - closing /fifo
+Init - removing /fifo
+*** END OF TEST PIPE/FIFO - 04 ***
