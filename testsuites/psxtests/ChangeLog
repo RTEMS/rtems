@@ -1,3 +1,7 @@
+2010-07-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxfile01/test_cat.c: Does not need posix specific macros.
+
 2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* psxfile01/Makefile.am, psxfile01/psxfile01.scn, psxfile01/test.c:

@@ -23,7 +23,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <pmacros.h>
+#include <tmacros.h>
 
 /*
  *  test_cat routine
