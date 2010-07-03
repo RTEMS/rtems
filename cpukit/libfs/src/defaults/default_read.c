@@ -13,7 +13,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-size_t rtems_filesystem_default_read(
+ssize_t rtems_filesystem_default_read(
   rtems_libio_t *iop,
   void          *buffer,
   size_t         count

@@ -773,7 +773,7 @@ rtems_rfs_rtems_symlink (rtems_filesystem_location_info_t* parent_loc,
  * @return int
  */
 
-int
+ssize_t
 rtems_rfs_rtems_readlink (rtems_filesystem_location_info_t* pathloc,
                           char*                             buf,
                           size_t                            bufsize)

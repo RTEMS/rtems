@@ -13,7 +13,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_readlink(
+ssize_t rtems_filesystem_default_readlink(
  rtems_filesystem_location_info_t  *loc,     /* IN  */
  char                              *buf,     /* OUT */
  size_t                            bufsize

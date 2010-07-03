@@ -387,7 +387,7 @@ int rtems_filesystem_default_close(
  *  system call support which is provided by a file system 
  *  implementation.
  */
-size_t rtems_filesystem_default_read(
+ssize_t rtems_filesystem_default_read(
   rtems_libio_t *iop,
   void          *buffer,
   size_t         count
@@ -659,10 +659,10 @@ typedef int (*rtems_filesystem_symlink_t)(
  *  This type defines the interface to the readlink(2) system call 
  *  support which is provided by a file system implementation.
  */ 
-typedef int (*rtems_filesystem_readlink_t)(
+typedef ssize_t (*rtems_filesystem_readlink_t)(
  rtems_filesystem_location_info_t  *loc,     /* IN  */
  char                              *buf,     /* OUT */
- size_t                            bufsize
+ size_t                             bufsize
 );
 
 /**
@@ -1012,10 +1012,10 @@ int rtems_filesystem_default_symlink(
  * @brief Provides a defualt routine for filesystem
  * implementation of a readlink command.
  */
-int rtems_filesystem_default_readlink(
+ssize_t rtems_filesystem_default_readlink(
  rtems_filesystem_location_info_t  *loc,     /* IN  */
  char                              *buf,     /* OUT */
- size_t                            bufsize
+ size_t                             bufsize
 );
 
 /**
@@ -1165,16 +1165,16 @@ typedef int (*rtems_libio_close_t)(
   int  fd
 );
 
-typedef int (*rtems_libio_read_t)(
+typedef ssize_t (*rtems_libio_read_t)(
   int         fd,
   void       *buffer,
-  uint32_t    count
+  size_t    count
 );
 
-typedef int (*rtems_libio_write_t)(
+typedef ssize_t (*rtems_libio_write_t)(
   int         fd,
   const void *buffer,
-  uint32_t    count
+  size_t      count
 );
 
 typedef int (*rtems_libio_ioctl_t)(

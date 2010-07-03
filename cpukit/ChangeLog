@@ -1,3 +1,10 @@
+2010-07-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/include/rtems/libio.h, libfs/src/defaults/default_read.c,
+	libfs/src/defaults/default_readlink.c,
+	libfs/src/rfs/rtems-rfs-rtems.c: Correct types and prototypes to
+	eliminate warnings.
+
 2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libfs/src/dosfs/msdos_handlers_dir.c,
