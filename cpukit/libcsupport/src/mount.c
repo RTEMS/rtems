@@ -7,7 +7,7 @@
  *  XXX make sure no optional ops you are using are NULL
  *  XXX unmount should be required.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Copyright (c) 2010 embedded brains GmbH.
@@ -32,7 +32,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include <rtems/libio_.h>
 

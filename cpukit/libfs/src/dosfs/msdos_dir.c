@@ -17,7 +17,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <assert.h>
 #include <errno.h>
 #include <rtems/libio_.h>
 #include <sys/types.h>

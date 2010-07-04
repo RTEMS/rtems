@@ -1,3 +1,19 @@
+2010-07-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libblock/include/rtems/ide_part_table.h, libblock/src/bdbuf.c,
+	libcsupport/src/__times.c, libcsupport/src/libio_init.c,
+	libcsupport/src/mallocfreespace.c, libcsupport/src/mount-mgr.c,
+	libcsupport/src/mount.c, libcsupport/src/rewinddir.c,
+	libcsupport/src/seekdir.c, libcsupport/src/telldir.c,
+	libcsupport/src/unmount.c, libfs/src/dosfs/fat.c,
+	libfs/src/dosfs/fat_fat_operations.c, libfs/src/dosfs/msdos_create.c,
+	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_eval.c,
+	libfs/src/dosfs/msdos_file.c, libfs/src/dosfs/msdos_format.c,
+	libfs/src/dosfs/msdos_fsunmount.c, libfs/src/dosfs/msdos_initsupp.c,
+	libfs/src/dosfs/msdos_rename.c, libmisc/cpuuse/cpuusagereport.c,
+	libmisc/shell/vis.c, libmisc/stackchk/check.c, sapi/src/posixapi.c,
+	telnetd/telnetd.c: Remove include of assert.h when it is not needed.
+
 2010-07-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/include/rtems/libio.h, libfs/src/defaults/default_read.c,

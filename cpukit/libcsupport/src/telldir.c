@@ -1,7 +1,7 @@
 /*
  *  telldir() - XXX
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,7 +17,6 @@
 #ifndef HAVE_TELLDIR
 
 #include <sys/param.h>
-#include <assert.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -41,9 +40,8 @@ long telldir(
    */
 
   iop = rtems_libio_iop( dirp->dd_fd );
-
-  if (iop == NULL)
-     assert(0);
+  if ( !iop )
+    rtems_set_errno_and_return_minus_one( EBADF );
 
   return (long)( iop->offset );
 }

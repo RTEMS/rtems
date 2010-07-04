@@ -77,7 +77,6 @@ __RCSID("$NetBSD: vis.c,v 1.33 2005/05/28 13:11:14 lukem Exp $");
 
 #include <sys/types.h>
 
-#include <assert.h>
 #include <vis.h>
 #include <stdlib.h>
 

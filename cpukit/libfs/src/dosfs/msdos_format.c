@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <assert.h>
 
 #include <rtems/libio_.h>
 

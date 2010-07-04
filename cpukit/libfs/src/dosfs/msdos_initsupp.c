@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <assert.h>
 #include <rtems.h>
 #include <rtems/libio_.h>
 

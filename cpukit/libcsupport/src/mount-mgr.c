@@ -28,7 +28,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include <rtems/libio_.h>
 

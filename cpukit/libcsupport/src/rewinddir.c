@@ -1,7 +1,7 @@
 /*
  *  rewinddir() - POSIX 1003.1b - XXX
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,7 +17,6 @@
 #ifndef HAVE_REWINDDIR
 
 #include <sys/types.h>
-#include <assert.h>
 #include <dirent.h>
 #include <stdio.h>
 #include <errno.h>

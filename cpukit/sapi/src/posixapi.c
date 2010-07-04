@@ -3,7 +3,7 @@
  *
  *  NOTE:
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,8 +16,6 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#include <assert.h>
 
 /*
  *  POSIX_API_INIT is defined so all of the POSIX API

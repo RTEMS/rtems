@@ -33,7 +33,6 @@
  */
 #define DONT_USE_FATAL_EXTENSION
 
-#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 

@@ -15,7 +15,6 @@
 #endif
 
 #include <stdlib.h>
-#include <assert.h>
 #include <errno.h>
 
 #include <rtems.h>

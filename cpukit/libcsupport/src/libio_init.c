@@ -3,7 +3,7 @@
  *  table of integer style file descriptors used by the low level
  *  POSIX system calls like open(), read, fstat(), etc.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,6 @@
 
 #include <stdio.h>                      /* O_RDONLY, et.al. */
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
-#include <assert.h>
 #include <errno.h>
 
 #include <errno.h>

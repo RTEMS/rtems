@@ -21,7 +21,6 @@
 #ifndef _RTEMS_IDE_PART_TABLE_H
 #define _RTEMS_IDE_PART_TABLE_H
 
-#include <assert.h>
 #include <rtems/chain.h>
 #include <stdio.h>
 #include <stdlib.h>
