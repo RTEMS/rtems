@@ -20,7 +20,10 @@ getpgrp - return local node - OK
 getpgrp returned 1
 getgroups - return 0 - OK
 
-getlogin() -- 
+setuid(5)
+getlogin() -- ()
+setuid(0)
+getlogin() -- (root)
 getlogin_r(NULL, LOGIN_NAME_MAX) -- EFAULT
 getlogin_r(buffer, 0) -- ERANGE
 *** END OF TEST ID 01 ***

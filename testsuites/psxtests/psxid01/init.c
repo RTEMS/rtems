@@ -106,7 +106,15 @@ void test_getlogin(void)
   int sc;
   char ch;
 
-  printf( "getlogin() -- %s\n", getlogin() );
+  puts( "setuid(5)" );
+  sc = setuid(5);
+  rtems_test_assert( sc == 0 );
+  printf( "getlogin() -- (%s)\n", getlogin() );
+
+  puts( "setuid(0)" );
+  sc = setuid(0);
+  rtems_test_assert( sc == 0 );
+  printf( "getlogin() -- (%s)\n", getlogin() );
 
   puts( "getlogin_r(NULL, LOGIN_NAME_MAX) -- EFAULT" );
   sc = getlogin_r( NULL, LOGIN_NAME_MAX );
@@ -146,7 +154,9 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS                  1
+/* so we can write /etc/passwd and /etc/group */
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
