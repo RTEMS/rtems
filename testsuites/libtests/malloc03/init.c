@@ -17,11 +17,10 @@ rtems_task Init(
 )
 {
   void *p1;
-  unsigned int val = 999;
 
   puts( "\n\n*** TEST MALLOC03 ***" );
 
-  p1 = &val;
+  p1 = __builtin_frame_address(0);
   printf("Attempt to free stack memory\n");
   free( p1 );
 

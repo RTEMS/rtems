@@ -1,3 +1,10 @@
+2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, malloc03/init.c: Add test for PPPDDISC.
+	* termios06/.cvsignore, termios06/Makefile.am, termios06/init.c,
+	termios06/termios06.doc, termios06/termios06.scn,
+	termios06/test_pppd.c: New files.
+
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add test for GCC C++ library helpers.

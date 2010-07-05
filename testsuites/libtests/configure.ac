@@ -58,12 +58,15 @@ rtmonuse/Makefile
 stackchk/Makefile
 stackchk01/Makefile
 stringto01/Makefile
+tar01/Makefile
+tar02/Makefile
 termios/Makefile
 termios01/Makefile
 termios02/Makefile
 termios03/Makefile
 termios04/Makefile
 termios05/Makefile
+termios06/Makefile
 tztest/Makefile
 POSIX/Makefile
 ])
