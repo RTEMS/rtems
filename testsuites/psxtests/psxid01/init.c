@@ -90,6 +90,33 @@ void test_pid(void)
 
   sc = issetugid();
   rtems_test_assert( sc == 0 );
+
+  puts( "getpgrp - return local node - OK" );
+  pid = getpgrp();
+  printf( "getpgrp returned %d\n", pid ); 
+
+  puts( "getgroups - return 0 - OK" );
+  sc = getgroups( 0, NULL );
+  rtems_test_assert( sc == 0 );
+  
+}
+
+void test_getlogin(void)
+{
+  int sc;
+  char ch;
+
+  printf( "getlogin() -- %s\n", getlogin() );
+
+  puts( "getlogin_r(NULL, LOGIN_NAME_MAX) -- EFAULT" );
+  sc = getlogin_r( NULL, LOGIN_NAME_MAX );
+  rtems_test_assert( sc == EFAULT );
+
+  puts( "getlogin_r(buffer, 0) -- ERANGE" );
+  sc = getlogin_r( &ch, 0 );
+  rtems_test_assert( sc == ERANGE );
+
+  
 }
 
 rtems_task Init(
@@ -106,6 +133,8 @@ rtems_task Init(
 
   test_pid();
   puts( "" );
+
+  test_getlogin();
 
   puts( "*** END OF TEST ID 01 ***" );
 

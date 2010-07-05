@@ -16,5 +16,11 @@ getpid = 1
 __getpid = 1
 getppid = 0
 setsid - EPERM
+getpgrp - return local node - OK
+getpgrp returned 1
+getgroups - return 0 - OK
 
+getlogin() -- 
+getlogin_r(NULL, LOGIN_NAME_MAX) -- EFAULT
+getlogin_r(buffer, 0) -- ERANGE
 *** END OF TEST ID 01 ***

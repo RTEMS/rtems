@@ -28,6 +28,10 @@ directives:
   __getpid
   getppid
   setsid
+  getpgrp
+  getgroups
+  getlogin
+  getlogin_r
 
 concepts:
 

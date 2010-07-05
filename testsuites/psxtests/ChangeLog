@@ -1,3 +1,8 @@
+2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxid01/init.c, psxid01/psxid01.doc, psxid01/psxid01.scn: Add test
+	cases.
+
 2010-07-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psx13/test.c: Fix warning.
