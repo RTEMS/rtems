@@ -1,3 +1,8 @@
+2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/getlogin.c: Formatting.  Add EFAULT.
+	* libcsupport/src/termios.c: Formatting.
+
 2010-07-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libblock/include/rtems/ide_part_table.h, libblock/src/bdbuf.c,
