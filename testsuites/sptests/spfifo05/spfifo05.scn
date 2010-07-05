@@ -1,0 +1,36 @@
+*** FIFO / PIPE TESTS - 5 ***
+Init - Creating fifo file /fifo
+Init - starting the read task
+Init - waiting at a barrier
+read_task - opening /fifo in non-blocking mode
+read_task - attempt to read with number of writers = 0
+read_task - releasing the write task
+read_task - waiting at a barrier
+Init - opening the fifo in write only mode -- OK
+Init - writing to /fifo
+Init - releasing the read_task
+Init - waiting at a barrier
+read_task - attempting to read from the fifo -- Expect EAGAIN
+read_task - closing /fifo
+read_task - opening /fifo in read-only mode
+read_task - releasing the write task
+read_task - reading from /fifo - OKInit - writing to /fifo - OK
+
+Init - writing to /fifo - OK
+read_task - reading from /fifo - OK
+read_task - waiting at a barrierInit - releasing the read_task
+
+Init - waiting at a barrier
+read_task - reading from /fifo - OK
+read_task - releasing the write task
+read_task - waiting at a barrier
+Init - converting the write-mode to non-block
+Init - writing to /fifo - OK
+Init - writing to /fifo - Expect EAGAIN
+Init - releasing the read_task
+Init - waiting at a barrier
+read_task - releasing the write task
+Init - writing to /fifo - Expect EPIPE
+Removing the fifo
+*** END OF FIFO / PIPE OPEN TEST - 6 ***
+

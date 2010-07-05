@@ -1,3 +1,10 @@
+2010-07-05	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1600/testing
+	* spfifo05/init.c, spfifo05/spfifo05.doc, spfifo05/spfifo05.scn,
+	spfifo05/Makefile.am: New tests for pipe/fifo routines.
+	* Makefile.am, configure.ac: Add new test.
+
 2010-07-02	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1600/testing
