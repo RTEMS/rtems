@@ -1,3 +1,9 @@
+2010-07-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* sp21/Makefile.am, sp21/init.c, sp21/sp21.scn: Add
+	rtems_io_lookup_name() and simplify test.
+	* sp21/system.h, sp21/task1.c: Removed.
+
 2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add new fatal error test for termios
