@@ -28,6 +28,7 @@ rtems_task Init(
 )
 {
   clock_t    start;
+  clock_t    end;
   clock_t    now;
   clock_t    sc;
   clock_t    difference;
