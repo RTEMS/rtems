@@ -1,5 +1,9 @@
 2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* malloctest/system.h: Enable malloc statistics.
+
+2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: tar01 and tar02 not merged yet.
 
 2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
