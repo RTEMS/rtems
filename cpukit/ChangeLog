@@ -1,3 +1,10 @@
+2010-07-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/src/isrthreaddispatch.c: Removed file.
+	* score/Makefile.am: Reflect change above.
+	* score/include/rtems/score/isr.h: Removed _ISR_Thread_dispatch()
+	declaration.
+
 2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/getrusage.c: Formatting.

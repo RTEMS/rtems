@@ -198,7 +198,7 @@ libscore_a_SOURCES += src/userextaddset.c \
 ## STD_C_FILES
 libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
     src/chainextract.c src/chainget.c src/chaininsert.c \
-    src/interr.c src/isr.c src/isrthreaddispatch.c src/wkspace.c
+    src/interr.c src/isr.c src/wkspace.c
 
 EXTRA_DIST = src/Unlimited.txt
 
