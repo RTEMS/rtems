@@ -19,4 +19,15 @@ static inline uint32_t   ld_le32(volatile uint32_t   *addr)
   return(*addr);
 }
 
+static inline void st_le16(volatile uint16_t   *addr, uint16_t   value)
+{
+  *(addr)=value ;
+}
+
+static inline uint16_t   ld_le16(volatile uint16_t   *addr)
+{
+  return(*addr);
+}
+
+
 #endif
