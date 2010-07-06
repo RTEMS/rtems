@@ -187,11 +187,15 @@ void do_test_io_lookup_name(void)
   rtems_status_code    sc;
   rtems_driver_name_t  info;
 
-  puts( "rtems_io_lookup_name( \"\", &info )" );
+  puts( "rtems_io_lookup_name( \"\", &info ) - RTEMS_UNSATISFIED" );
   sc = rtems_io_lookup_name( "", &info );
   fatal_directive_status( sc, RTEMS_UNSATISFIED, "lookup empty string" );
   
-  puts( "rtems_io_lookup_name( \"/dev/null\", &info )" );
+  puts( "rtems_io_lookup_name( \"/dev\", &info ) - RTEMS_UNSATISFIED" );
+  sc = rtems_io_lookup_name( "/dev", &info );
+  fatal_directive_status( sc, RTEMS_UNSATISFIED, "lookup empty string" );
+
+  puts( "rtems_io_lookup_name( \"/dev/null\", &info ) - RTEMS_SUCCESSFUL" );
   sc = rtems_io_lookup_name( "/dev/null", &info );
   directive_failed( sc, "lookup /dev/null" );
 }

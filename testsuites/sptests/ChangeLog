@@ -1,5 +1,10 @@
 2010-07-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* sp21/init.c, sp21/sp21.scn: Tidy up with one last case to get 100%
+	coverage of rtems_io_lookup_name().
+
+2010-07-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* sp21/Makefile.am, sp21/init.c, sp21/sp21.scn: Add
 	rtems_io_lookup_name() and simplify test.
 	* sp21/system.h, sp21/task1.c: Removed.
