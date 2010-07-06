@@ -1,5 +1,9 @@
 2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: tar01 and tar02 not merged yet.
+
+2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, malloc03/init.c: Add test for PPPDDISC.
 	* termios06/.cvsignore, termios06/Makefile.am, termios06/init.c,
 	termios06/termios06.doc, termios06/termios06.scn,
