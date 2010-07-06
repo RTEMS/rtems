@@ -3,6 +3,9 @@ open(/dev/test) - OK
 ioctl - TIOCGETD - OK
 ioctl - TIOCSETD - OK
 pppopen called
+ioctl - TIOCSETD - OK
+pppclose called
+pppopen called
 write(PPPD TEST) - OK 
 pppwrite called - 10 bytes
 50 50 50 44 20 54 45 53 54 00                   |PPPD TEST.      |
@@ -13,7 +16,8 @@ pppioctl called
 Reading (expected):
 54 68 69 73 20 69 73 20 74 65 73 74 20 50 50 50 |This is test PPP|
 20 69 6e 70 75 74                               | input          |
-pppread calledpppinput called - with (T)
+pppread called
+pppinput called - with (T)
 pppinput called - with (h)
 pppinput called - with (i)
 pppinput called - with (s)

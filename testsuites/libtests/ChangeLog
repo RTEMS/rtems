@@ -1,3 +1,8 @@
+2010-07-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* termios06/init.c, termios06/termios06.scn: Add a couple more PPPDISC
+	cases. Coverage of these paths is near complete.
+
 2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloctest/system.h: Enable malloc statistics.

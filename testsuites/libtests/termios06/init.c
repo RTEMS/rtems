@@ -46,6 +46,10 @@ void set_discipline(void)
   puts( "ioctl - TIOCSETD - OK" );
   sc = ioctl(Test_fd, TIOCSETD, &pppdisc);
   rtems_test_assert( sc == 0 );
+
+  puts( "ioctl - TIOCSETD - OK" );
+  sc = ioctl(Test_fd, TIOCSETD, &pppdisc);
+  rtems_test_assert( sc == 0 );
 }
 
 void ioctl_it(void)
