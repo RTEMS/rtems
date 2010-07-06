@@ -1,0 +1,7 @@
+*** TEST TIMES 01 ***
+times( NULL ) -- EFAULT
+_times_r( NULL, NULL ) -- EFAULT
+_times( &start_tm ) -- OK
+_times( &end_tm ) -- OK
+Check various values
+*** END OF TEST TIMES 01 ***

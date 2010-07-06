@@ -1,0 +1,7 @@
+*** TEST GETRUSAGE 01 ***
+getrusage( RUSAGE_SELF, NULL ) -- EFAULT
+getrusage( RUSAGE_CHILDREN, &usage ) -- ENOSYS
+getrusage( 77, &usage ) -- EINVAL
+Consume CPU long enough to have non-zero usage
+getrusage( RUSAGE_SELF, &usage ) -- EINVAL
+*** END OF TEST GETRUSAGE 01 ***

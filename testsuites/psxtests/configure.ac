@@ -89,6 +89,7 @@ psxfatal02/Makefile
 psxfile01/Makefile
 psxfile02/Makefile
 psxfilelock01/Makefile
+psxgetrusage01/Makefile
 psxhdrs/Makefile
 psxid01/Makefile
 psximfs01/Makefile
@@ -123,6 +124,7 @@ psxsysconf/Makefile
 psxtime/Makefile
 psxtimer01/Makefile
 psxtimer02/Makefile
+psxtimes01/Makefile
 psxualarm/Makefile
 psxusleep/Makefile
 ])
