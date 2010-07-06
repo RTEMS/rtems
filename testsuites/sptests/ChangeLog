@@ -1,3 +1,10 @@
+2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add new fatal error test for termios
+	initialize.
+	* spfatal20/.cvsignore, spfatal20/Makefile.am, spfatal20/spfatal20.doc,
+	spfatal20/spfatal20.scn, spfatal20/testcase.h: New files.
+
 2010-07-05	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1600/testing
