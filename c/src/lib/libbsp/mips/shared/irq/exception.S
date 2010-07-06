@@ -90,7 +90,6 @@
 
 
 EXTERN(_Thread_Dispatch_disable_level,4)
-EXTERN(_ISR_Signals_to_thread_executing,1)
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 

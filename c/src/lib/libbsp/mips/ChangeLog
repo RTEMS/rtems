@@ -1,3 +1,8 @@
+2010-07-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/irq/exception.S: Removed _ISR_Signals_to_thread_executing
+	declaration.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1573/cpukit
