@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -43,9 +43,12 @@ int getrusage(int who, struct rusage *usage)
     usage->ru_stime = rtime;
 
     return 0;
-  } else if (who == RUSAGE_CHILDREN) {
+  }
+
+  if (who == RUSAGE_CHILDREN) {
     rtems_set_errno_and_return_minus_one( ENOSYS );
   }
+
   rtems_set_errno_and_return_minus_one( EINVAL );
 }
 
