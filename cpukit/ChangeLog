@@ -1,3 +1,7 @@
+2010-07-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/imfs/ioman.c: Remove unneeded operation check.
+
 2010-07-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/src/isrthreaddispatch.c: Removed file.
