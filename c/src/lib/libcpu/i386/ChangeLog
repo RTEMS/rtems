@@ -1,3 +1,7 @@
+2009-10-28  Till Straumann <strauman@slac.stanford.edu>
+
+	* byteorder.h: added ld_le16, st_le16.
+
 2010-05-21	Vinu Rajashekhar <vinutheraj@gmail.com>
 
 	* cache.c, page.c: Use masks and shift operations instead of
