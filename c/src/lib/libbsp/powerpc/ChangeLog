@@ -1,3 +1,9 @@
+2010-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1606/cpukit
+	* shared/startup/panic.c: Remove
+	INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS since it is not generated.
+
 2010-06-21	Peter Dufault <dufault@hda.com>
 
 	PR 1583/bsps
