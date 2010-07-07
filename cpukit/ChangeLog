@@ -1,5 +1,9 @@
 2010-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/open.c: Formatting and improve comment.
+
+2010-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1606/cpukit
 	* score/include/rtems/score/interr.h: Remove
 	INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS since it is not generated.

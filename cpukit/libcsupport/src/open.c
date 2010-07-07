@@ -1,7 +1,7 @@
 /*
  *  open() - POSIX 1003.1 5.3.1 - Open a File
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -72,11 +72,9 @@ int open(
   rtems_filesystem_location_info_t   *loc_to_free = NULL;
   int                                 eval_flags;
 
-
   /*
    * Set the Evaluation flags
    */
-
   eval_flags = 0;
   status = flags + 1;
   if ( ( status & _FREAD ) == _FREAD )
@@ -109,7 +107,6 @@ int open(
   /*
    *  See if the file exists.
    */
-
   status = rtems_filesystem_evaluate_path(
     pathname, strlen( pathname ), eval_flags, &loc, true );
 
@@ -132,8 +129,13 @@ int open(
       goto done;
     }
 
-    /* Sanity check to see if the file name exists after the mknod() */
-    status = rtems_filesystem_evaluate_path( pathname, strlen( pathname ), 0x0, &loc, true );
+    /*
+     * After we do the mknod(), we have to evaluate the path to get the
+     * "loc" structure needed to actually have the file itself open.
+     * So we created it, and then we need to have "look it up."
+     */
+    status = rtems_filesystem_evaluate_path(
+      pathname, strlen( pathname ), 0x0, &loc, true );
     if ( status != 0 ) {   /* The file did not exist */
       rc = EACCES;
       goto done;
@@ -152,7 +154,6 @@ int open(
    *  Fill in the file control block based on the loc structure
    *  returned by successful path evaluation.
    */
-
   iop->handlers   = loc.handlers;
   iop->file_info  = loc.node_access;
   iop->flags     |= rtems_libio_fcntl_flags( flags );
@@ -167,7 +168,6 @@ int open(
   /*
    *  Optionally truncate the file.
    */
-
   if ( (flags & O_TRUNC) == O_TRUNC ) {
     rc = ftruncate( iop - rtems_libio_iops, 0 );
     if ( rc ) {
@@ -182,7 +182,6 @@ int open(
   /*
    *  Single exit and clean up path.
    */
-
 done:
   va_end(ap);
 
