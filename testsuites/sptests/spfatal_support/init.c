@@ -149,6 +149,14 @@ void Fatal_extension(
     printk( ")\n" );
   }
 
-  /* return and let the CPU halt */
+  if (
+    source == FATAL_ERROR_EXPECTED_SOURCE
+      && is_internal == FATAL_ERROR_EXPECTED_IS_INTERNAL
+      && error == FATAL_ERROR_EXPECTED_ERROR
+  ) {
+    printk( "*** END OF TEST ***\n" );
+  }
+
+  _Thread_Stop_multitasking();
 }
 

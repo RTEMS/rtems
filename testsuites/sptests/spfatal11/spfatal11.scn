@@ -1,5 +1,4 @@
 *** TEST FATAL 11 ***
-asserting with non-NULL strings...
-assertion "forced" failed: file "../../../../../../../rtems/c/src/../../testsuites/sptests/spfatal11/testcase.h", line 21
+assertion "forced" failed: file "testsuites/sptests/spfatal11/testcase.h", line 23
 Fatal error (asserting with non-NULL strings...) hit
-
+*** END OF TEST ***

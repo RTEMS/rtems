@@ -36,15 +36,15 @@ void force_error(void)
     &mutex
   );
   directive_failed( status, "rtems_semaphore_create of S0");
-  puts("Create semaphore S0");
+  printk("Create semaphore S0\n");
 
-  puts("Obtain semaphore in dispatching critical section");
+  printk("Obtain semaphore in dispatching critical section\n");
   _Thread_Disable_dispatch();
   status = rtems_semaphore_obtain( mutex, RTEMS_DEFAULT_OPTIONS, 0 );
   /* !!! SHOULD NOT RETURN FROM THE ABOVE CALL */
 
   _Thread_Enable_dispatch();
-  puts("ERROR -- Obtain semaphore should not have returned");
+  printk("ERROR -- Obtain semaphore should not have returned\n");
 
   /* we will not run this far */
 }

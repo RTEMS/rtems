@@ -1,3 +1,5 @@
 *** TEST FATAL 3 ***
 Create semaphore S0
 Obtain semaphore in dispatching critical section
+Fatal error (Core Mutex obtain in critical section) hit
+*** END OF TEST ***

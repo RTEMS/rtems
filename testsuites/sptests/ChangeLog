@@ -1,3 +1,24 @@
+2010-07-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spfatal09/.cvsignore, spfatal09/Makefile.am,
+	spfatal09/spfatal09.doc, spfatal09/spfatal09.scn,
+	spfatal09/testcase.h: Removed files.
+	* Makefile.am, configure.ac: Reflect changes above.
+	* spfatal_support/init.c: Print end of test message in case of
+	success.  Stop multitasking in the fatal error extension.
+	* spfatal03/testcase.h, spfatal07/testcase.h: Use printk() instead of
+	puts().
+	* spfatal01/spfatal01.scn, spfatal02/spfatal02.scn,
+	spfatal03/spfatal03.scn, spfatal04/spfatal04.scn,
+	spfatal05/spfatal05.scn, spfatal06/spfatal06.scn,
+	spfatal07/spfatal07.scn, spfatal08/spfatal08.scn,
+	spfatal10/spfatal10.scn, spfatal11/spfatal11.scn,
+	spfatal12/spfatal12.scn, spfatal13/spfatal13.scn,
+	spfatal14/spfatal14.scn, spfatal15/spfatal15.scn,
+	spfatal16/spfatal16.scn, spfatal17/spfatal17.scn,
+	spfatal18/spfatal18.scn, spfatal19/spfatal19.scn,
+	spfatal20/spfatal20.scn: Update.
+
 2010-07-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* sp21/init.c, sp21/sp21.scn: Tidy up with one last case to get 100%

@@ -1,3 +1,4 @@
 *** TEST FATAL 10 ***
-assertion "forced" failed: file "../../../../../../../rtems/c/src/../../testsuites/sptests/spfatal10/testcase.h", line 20, function: Init
+assertion "forced" failed: file "testsuites/sptests/spfatal10/testcase.h", line 23, function: Init
 Fatal error (asserting with non-NULL strings...) hit
+*** END OF TEST ***

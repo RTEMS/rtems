@@ -44,9 +44,9 @@ void force_error()
     Configuration.interrupt_stack_size = (STACK_MINIMUM_SIZE-1);
     rtems_initialize_data_structures();
   #else
-    puts(
+    printk(
       "WARNING - Test not applicable on this target architecture.\n"
-      "WARNING - Only applicable when CPU_ALLOCATE_INTERRUPT_STACK == TRUE."
+      "WARNING - Only applicable when CPU_ALLOCATE_INTERRUPT_STACK == TRUE.\n"
     );
     rtems_test_exit(0);
   #endif
