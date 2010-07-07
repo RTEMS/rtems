@@ -1,3 +1,9 @@
+2010-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1606/cpukit
+	* psxfatal_support/init.c: Remove
+	INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS since it is not generated.
+
 2010-07-07	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* psxfatal_support/init.c: Print end of test message in case of
