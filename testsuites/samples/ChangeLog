@@ -1,3 +1,8 @@
+2010-07-07	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* minimum/init.c: Use fatal error extension to prevent infinite
+	runtime.
+
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* capture/capture.doc: Remove more ITRON references.

@@ -10,7 +10,10 @@
  *  $Id$
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+
 #include <bsp.h>
+#include <rtems/score/thread.h>
 
 rtems_task Init(
   rtems_task_argument ignored
@@ -24,6 +27,21 @@ rtems_task Init(
 }
 
 /* configuration information */
+
+/*
+ * This fatal extension adds some bytes to the absolute minimum, but it
+ * prevents the _CPU_Fatal_halt().
+ */
+static void Fatal_extension(
+  uint32_t source,
+  bool is_internal,
+  uint32_t error
+)
+{
+  _Thread_Stop_multitasking();
+}
+
+#define CONFIGURE_INITIAL_EXTENSIONS { .fatal = Fatal_extension }
 
 /*
  * This application has no device drivers.
