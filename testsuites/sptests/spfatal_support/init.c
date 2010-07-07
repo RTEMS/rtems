@@ -1,17 +1,5 @@
-/*  Init
- *
- *  This routine is the initialization task for this test program.
- *  It is a user initialization task and has the responsibility for creating
- *  and starting the tasks that make up the test.  If the time of day
- *  clock is required for the test, it should also be set to a known
- *  value by this function.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -72,7 +60,6 @@ char *Errors_Rtems[] = {
 char *Errors_Core[] = {
   "INTERNAL_ERROR_NO_CONFIGURATION_TABLE",
   "INTERNAL_ERROR_NO_CPU_TABLE",
-  "INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS",
   "INTERNAL_ERROR_TOO_LITTLE_WORKSPACE",
   "INTERNAL_ERROR_WORKSPACE_ALLOCATION",
   "INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL",
