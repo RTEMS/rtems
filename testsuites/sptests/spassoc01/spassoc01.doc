@@ -1,0 +1,39 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2010.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spassoc01
+
+directives:
+
++ rtems_assoc_local_by_name
++ rtems_assoc_local_by_remote_bitfield
++ rtems_assoc_local_by_remote
+
++ rtems_assoc_name_by_local_bitfield
++ rtems_assoc_name_by_local
++ rtems_assoc_name_by_remote_bitfield
++ rtems_assoc_name_by_remote
++ rtems_assoc_name_bad
+
++ rtems_assoc_ptr_by_local
++ rtems_assoc_ptr_by_remote
++ rtems_assoc_ptr_by_name
+
++ rtems_assoc_remote_by_local_bitfield
++ rtems_assoc_remote_by_local
++ rtems_assoc_remote_by_name
+
+concepts:
+
++ exercise the rtems_assoc* routines completely, including all the
+possible branching

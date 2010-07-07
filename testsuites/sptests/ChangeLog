@@ -1,3 +1,11 @@
+2010-07-07	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1603/testing
+	* spassoc01/init.c, spassoc01/Makefile.am,
+	spassoc01/spassoc01.doc, spassoc01/spassoc01.scn: Added new test.
+	* Makefile.am, configure.ac: Added new test spassoc01 for
+	rtems_assoc routines.
+
 2010-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1606/cpukit

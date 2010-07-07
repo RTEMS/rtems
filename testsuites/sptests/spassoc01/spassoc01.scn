@@ -1,0 +1,38 @@
+*** TEST ASSOC ROUTINES - 1 ***
+Init - get local by name -- OK
+Init - get local by name -- expect 0
+Init - get local by remote bitfield -- OK
+Init - get local by remote bitfield -- expect 0
+Init - get local by remote -- OK
+Init - get local by remote -- expect 0
+Init - get name by local bitfield -- OK
+Init - get name by local bitfield -- OK
+Init - get name by local bitfield -- expect""
+Init - get name by local -- OK
+Init - get name by local -- using bad value
+<assocnamebad.c: : BAD NAME>
+Init - get name by remote bitfield -- OK
+Init - get name by remote bitfield -- OK
+Init - get name by remote bitfield -- expect""
+Init - get name by remote -- OK
+Init - get name by remote -- using bad value
+<assocnamebad.c: : BAD NAME>
+Init - get ptr by local -- OK
+Init - get ptr by local -- expect NULL
+Init - get ptr by remote -- OK
+Init - get ptr by remote -- expect NULL
+Init - get ptr by name -- OK
+Init - get ptr by name -- expect NULL
+Init - get remote by local bitfield -- OK
+Init - get remote by local bitfield -- expect 0
+Init - get remote by local -- OK
+Init - get remote by local -- expect 0
+Init - get remote by name -- OK
+Init - get remote by name -- expect 0
+Init - get ptr by name -- expect (default)
+Init - get ptr by local -- expect (default)
+Init - get ptr by remote -- expect (default)
+Init - get ptr by name -- expect NULL
+Init - get ptr by local -- expect NULL
+Init - get ptr by remote -- expect NULL
+*** END OF TEST ASSOC ROUTINES - 1 ***
