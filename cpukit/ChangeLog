@@ -1,3 +1,9 @@
+2010-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1606/cpukit
+	* score/include/rtems/score/interr.h: Remove
+	INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS since it is not generated.
+
 2010-07-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libfs/src/imfs/ioman.c: Remove unneeded operation check.
