@@ -329,6 +329,18 @@ int main(
   status = tcdrain( fd );
   rtems_test_assert( status == 0 );
 
+  /* 
+   * Open a file in read-only mode and try to truncate
+   */
+
+  puts( "Attempt to create a file, open in read-only mode and truncate it" );
+  fd = open( "/tmp/bha", O_CREAT | O_RDONLY | O_TRUNC, S_IRUSR );
+  rtems_test_assert( fd == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  status = unlink( "/tmp/bha" );
+  rtems_test_assert( status == 0 );
+
   /*
    *  Test simple write to a file at offset 0
    */

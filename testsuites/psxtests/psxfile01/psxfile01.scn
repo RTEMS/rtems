@@ -1,12 +1,9 @@
-sparc-rtems4.11-run is /opt/rtems-4.11/bin/sparc-rtems4.11-run
-
 
 *** FILE TEST 1 ***
 *************** Dump of Entire IMFS ***************
 /
 ....dev/
 ........console (device 0, 0)
-........console_b (device 0, 1)
 ***************       End of Dump        ***************
 stat of /dev/console
 ....st_dev     (0xfffe:0x0)
@@ -51,6 +48,7 @@ create and close /tmp/tom
 Attempt to recreate /tmp/tom
 create /tmp/john
 tcdrain /tmp/john
+Attempt to create a file, open in read-only mode and truncate it
 mknod /tmp/joel
 (0)the first write!!!
 
@@ -168,9 +166,8 @@ This is call 5 to fprintf
 /
 ....dev/
 ........console (device 0, 0)
-........console_b (device 0, 1)
 ........tty/
-............S3 (device 255, 128)
+............S3 (device 128, 255)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
@@ -199,9 +196,8 @@ truncate /tmp/j to length of 40
 /
 ....dev/
 ........console (device 0, 0)
-........console_b (device 0, 1)
 ........tty/
-............S3 (device 255, 128)
+............S3 (device 128, 255)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
@@ -221,9 +217,8 @@ truncate /tmp to length of 0 should fail with EISDIR
 /
 ....dev/
 ........console (device 0, 0)
-........console_b (device 0, 1)
 ........tty/
-............S3 (device 255, 128)
+............S3 (device 128, 255)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
