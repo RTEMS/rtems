@@ -50,6 +50,7 @@ heapwalk/Makefile
 malloctest/Makefile
 malloc02/Makefile
 malloc03/Makefile
+malloc04/Makefile
 monitor/Makefile
 monitor02/Makefile
 putenvtest/Makefile

@@ -1,3 +1,10 @@
+2010-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add test for exercising sbrk() extension
+	to Malloc Family.
+	* malloc04/.cvsignore, malloc04/Makefile.am, malloc04/init.c,
+	malloc04/malloc04.doc, malloc04/malloc04.scn: New files.
+
 2010-07-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* termios06/init.c, termios06/termios06.scn: Add a couple more PPPDISC
