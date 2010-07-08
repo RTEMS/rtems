@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define srcvers	2.65
-%define rpmvers %{expand:%(echo "2.65" | tr - _ )}
+%define srcvers	2.66
+%define rpmvers %{expand:%(echo "2.66" | tr - _ )}
 
 %define name			rtems-4.11-autoconf
 
@@ -70,6 +70,11 @@ Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
 Source0: ftp://ftp.gnu.org/gnu/autoconf/autoconf-%{srcvers}.tar.bz2
+# Fedora's patch to fix
+# http://lists.gnu.org/archive/html/autoconf/2010-07/msg00004.html
+# http://lists.gnu.org/archive/html/bug-autoconf/2010-07/msg00012.html
+Patch0: autoconf-2.66-611661.patch
+
 
 
 %description
@@ -110,6 +115,13 @@ chmod +x %{__perl_requires}
 ./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir} \
   --bindir=%{_bindir} --datadir=%{_datadir}
 make
+
+%check
+%if "%{_build}" == "%{_host}"
+# test 193 fails sporadically
+# test 199 fails deterministically
+make check TESTSUITEFLAGS='-192 194-198 200-'
+%endif
 
 %install
 rm -rf "${RPM_BUILD_ROOT}"
