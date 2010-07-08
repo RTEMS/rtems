@@ -1,0 +1,45 @@
+diff -up autoconf-2.66/lib/autoconf/status.m4.611661 autoconf-2.66/lib/autoconf/status.m4
+--- autoconf-2.66/lib/autoconf/status.m4.611661	2010-07-06 08:32:47.000000000 +0200
++++ autoconf-2.66/lib/autoconf/status.m4	2010-07-06 08:33:24.000000000 +0200
+@@ -1102,7 +1102,7 @@ AC_DEFUN([AC_CONFIG_SUBDIRS],
+   _AC_CONFIG_COMPUTE_DEST(], [))])]dnl
+ [m4_append([_AC_LIST_SUBDIRS], [$1], [
+ ])]dnl
+-[AS_LITERAL_WORD_IF([$1], [],
++[AS_LITERAL_IF([$1], [],
+ 	       [AC_DIAGNOSE([syntax], [$0: you should use literals])])]dnl
+ [AC_SUBST([subdirs], ["$subdirs m4_normalize([$1])"])])
+ 
+diff -up autoconf-2.66/lib/autoconf/types.m4.611661 autoconf-2.66/lib/autoconf/types.m4
+--- autoconf-2.66/lib/autoconf/types.m4.611661	2010-07-06 08:31:36.000000000 +0200
++++ autoconf-2.66/lib/autoconf/types.m4	2010-07-06 08:32:29.000000000 +0200
+@@ -763,7 +763,7 @@ Remove this warning and the `AC_CACHE_CH
+ # AC_CHECK_SIZEOF(TYPE, [IGNORED], [INCLUDES = DEFAULT-INCLUDES])
+ # ---------------------------------------------------------------
+ AC_DEFUN([AC_CHECK_SIZEOF],
+-[AS_LITERAL_IF([$1], [],
++[AS_LITERAL_IF(m4_translit([[$1]], [*], [p]), [],
+ 	       [m4_fatal([$0: requires literal arguments])])]dnl
+ [# The cast to long int works around a bug in the HP C Compiler
+ # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
+diff -up autoconf-2.66/lib/m4sugar/m4sh.m4.611661 autoconf-2.66/lib/m4sugar/m4sh.m4
+--- autoconf-2.66/lib/m4sugar/m4sh.m4.611661	2010-07-06 08:37:32.000000000 +0200
++++ autoconf-2.66/lib/m4sugar/m4sh.m4	2010-07-06 08:38:53.000000000 +0200
+@@ -1779,7 +1779,7 @@ m4_defun_init([AS_TR_SH],
+ [_$0(m4_expand([$1]))])
+ 
+ m4_define([_AS_TR_SH],
+-[_AS_LITERAL_IF([$1], [	 ][
++[_AS_LITERAL_IF([$1], [*+][     ][
+ ])([], [$0_INDIR], [$0_LITERAL])([$1])])
+ 
+ m4_define([_AS_TR_SH_LITERAL],
+@@ -1812,7 +1812,7 @@ m4_defun_init([AS_TR_CPP],
+ [_$0(m4_expand([$1]))])
+ 
+ m4_define([_AS_TR_CPP],
+-[_AS_LITERAL_IF([$1], [	 ][
++[_AS_LITERAL_IF([$1], [*][      ][
+ ])([], [$0_INDIR], [$0_LITERAL])([$1])])
+ 
+ m4_define([_AS_TR_CPP_LITERAL],
