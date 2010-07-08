@@ -1,0 +1,4 @@
+*** TEST FATAL 9 ***
+Fatal error (Bad heap address to malloc) hit
+*** END OF TEST ***
+

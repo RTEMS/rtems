@@ -1,3 +1,10 @@
+2010-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Readd spfatal09 as a malloc initialization
+	fatal error.
+	* spfatal09/.cvsignore, spfatal09/Makefile.am, spfatal09/spfatal09.doc,
+	spfatal09/spfatal09.scn, spfatal09/testcase.h: New files.
+
 2010-07-07	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1603/testing
