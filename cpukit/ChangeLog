@@ -1,3 +1,8 @@
+2010-07-09	Bharath Suri <bharath.s.jois@gmail.com>
+
+	* libfs/src/pipe/pipe.c: Check for err before setting the errno
+	and returning -1 to the caller.
+
 2010-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/malloc_initialize.c: Clean up sbrk path now that a

@@ -72,7 +72,8 @@ int pipe_create(
     }
   unlink(fifopath);
   }
-
-  rtems_set_errno_and_return_minus_one(err);
+  if(err != 0)
+    rtems_set_errno_and_return_minus_one(err);
+  return 0;
 }
 
