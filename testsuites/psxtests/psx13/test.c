@@ -11,7 +11,6 @@
  *     fsync        - test implemented
  *     pathconf     - test implemented
  *     fpathconf    - test implemented
- *     pipe         - test implemented
  *     umask        - test implemented
  *     utime        - test implemented
  *     utimes       - test implemented
@@ -46,8 +45,6 @@ int FDataSyncTest(void);
 int UMaskTest(void);
 int UTimeTest(void);
 int UTimesTest(void);
-int PipeTest(void);
-int PipeTestNull(void);
 int PathConfTest(void);
 int FPathConfTest(void);
 int FSyncTest(void);
@@ -489,52 +486,6 @@ int UTimesTest (void)
 }
 
 /* ---------------------------------------------------------------
- * PipeTest function
- *
- * Hits the pipe code.
- *
- * arguments: none
- * assumptions: pipe function available.
- * actions: call pipe.
- *
- * returns: TRUE if pipe returns ENOSYS,
- *          FALSE otherwise.
- *
- * ---------------------------------------------------------------
- */
-
-int PipeTest (void)
-{
-  int error = 0, retval = FALSE;
-  int fd[2];
-
-  error = pipe(fd);
-
-  if ((error == -1) && (errno == ENOSYS))
-    retval = TRUE;
-  else
-    retval = FALSE;
-
-  /* assert (retval == TRUE);*/
-
-  return(retval);
-}
-
-int PipeTestNull (void)
-{
-  int error = 0, retval = FALSE;
-
-  error = pipe(NULL);
-
-  if ((error == -1) && (errno == ENOSYS))
-    retval = TRUE;
-  else
-    retval = FALSE;
-
-  return(retval);
-}
-
-/* ---------------------------------------------------------------
  * PathConfTest function
  *
  * Hits the pathconf code.
@@ -727,18 +678,6 @@ int main(
 
    printf ("Testing utimes().......... ");
     if (UTimesTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-   printf ("Testing pipe()........... ");
-    if (PipeTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-   printf ("Testing pipe() with NULL........... ");
-    if (PipeTestNull() == TRUE)
       printf ("Success.\n");
     else
       printf ("Failed!!!\n");

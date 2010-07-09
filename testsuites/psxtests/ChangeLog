@@ -1,3 +1,13 @@
+2010-07-09	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1610/testing
+	* psx13/test.c, psx13/psx13.scn: Remove the test cases which
+	exercise pipe. These are new a new test under psxpipe01/
+	* psxpipe01/init.c, psxpipe01/Makefile.am,
+	psxpipe01/psxpipe01.scn, psxpipe01/psxpipe01.doc: Added new test.
+	* Makefile.am, configure.ac: Changes due to addition of new test:
+	psxpipe01.
+
 2010-07-08	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1608/testing

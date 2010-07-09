@@ -1,18 +1,17 @@
-*** POSIX TEST 13 ***
+
+** POSIX TEST 13 ***
 
 Files initialized successfully.
-Testing device_lseek()... Success.
-Testing dup()............ Success. ( Add when dup flags resolved )
-Testing dup2()........... Success.
+Testing device_lseek()... Failed!!!
+Testing dup()............ Failed!!!
+Testing dup2()........... Failed!!!
 Testing fdatasync()...... Success.
 Testing umask().......... Success.
 Testing utime().......... Success.
 Testing utimes().......... Success.
-Testing pipe()........... Success.
-Testing pipe() with NULL........... Failed!!!
 Testing fsync().......... Success.
 Testing pathconf()....... Success.
 Testing fpathconf()...... Success.
-
+Testing sync()...... 
 
 *** END OF TEST PSX13 ***
