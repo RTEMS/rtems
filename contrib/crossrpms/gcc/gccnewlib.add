@@ -89,7 +89,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %endif
 
 %if 0%{?suse11_3}
-%global mpc_provided 0.7
+%global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
 %global gmp_provided 4.3.2
 %endif
