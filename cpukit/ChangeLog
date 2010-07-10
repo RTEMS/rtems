@@ -1,3 +1,7 @@
+2010-07-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/__times.c: Formatting.
+
 2010-07-09	Bharath Suri <bharath.s.jois@gmail.com>
 
 	* libfs/src/pipe/pipe.c: Check for err before setting the errno

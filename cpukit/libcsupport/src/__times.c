@@ -79,7 +79,7 @@ clock_t _times(
   ptms->tms_cstime = 0;
 
   return ticks;
-}
+} 
 
 /*
  *  times()
