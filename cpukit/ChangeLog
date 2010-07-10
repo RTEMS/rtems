@@ -1,5 +1,10 @@
 2010-07-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* libcsupport/Makefile.am: Do not build libio_sockets.c if networking
+	is not enabled.
+
+2010-07-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* libcsupport/Makefile.am: Remove these files as they are uused.
 	* libcsupport/src/__brk.c, libcsupport/src/__sbrk.c: Removed.
 
