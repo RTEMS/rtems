@@ -1,3 +1,8 @@
+2010-07-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libcsupport/Makefile.am: Remove these files as they are uused.
+	* libcsupport/src/__brk.c, libcsupport/src/__sbrk.c: Removed.
+
 2010-07-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/__times.c: Formatting.
