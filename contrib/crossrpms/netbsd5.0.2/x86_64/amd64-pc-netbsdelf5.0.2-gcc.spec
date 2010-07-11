@@ -41,7 +41,7 @@ Summary:      	amd64-pc-netbsdelf5.0.2 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20100609.0%{?dist}
+Release:      	0.20100711.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -114,6 +114,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global mpc_provided 0.7
 %global mpfr_provided 2.4.1
 %global gmp_provided 4.3.1
+%endif
+
+%if 0%{?suse11_3}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.2
+%global gmp_provided 4.3.2
 %endif
 
 %if 0%{?cygwin}
@@ -194,6 +200,7 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
