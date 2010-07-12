@@ -765,18 +765,18 @@ rtems_bsdnet_fstat (rtems_filesystem_location_info_t *loc, struct stat *sp)
 }
 
 static const rtems_filesystem_file_handlers_r socket_handlers = {
-	NULL,			/* open */
-	rtems_bsdnet_close,	/* close */
-	rtems_bsdnet_read,	/* read */
-	rtems_bsdnet_write,	/* write */
-	rtems_bsdnet_ioctl,	/* ioctl */
-	NULL,			/* lseek */
-	rtems_bsdnet_fstat,	/* fstat */
-	NULL,			/* fchmod */
-	NULL,			/* ftruncate */
-	NULL,			/* fpathconf */
-	NULL,			/* fsync */
-	NULL,			/* fdatasync */
-	rtems_bsdnet_fcntl,	/* fcntl */
-	0			/* rmnod */
+	rtems_filesystem_default_open,		/* open */
+	rtems_bsdnet_close,			/* close */
+	rtems_bsdnet_read,			/* read */
+	rtems_bsdnet_write,			/* write */
+	rtems_bsdnet_ioctl,			/* ioctl */
+	rtems_filesystem_default_lseek,		/* lseek */
+	rtems_bsdnet_fstat,			/* fstat */
+	rtems_filesystem_default_fstat,		/* fchmod */
+	rtems_filesystem_default_ftruncate,	/* ftruncate */
+	rtems_filesystem_default_fpathconf,	/* fpathconf */
+	rtems_filesystem_default_fsync,		/* fsync */
+	rtems_filesystem_default_fdatasync,	/* fdatasync */
+	rtems_bsdnet_fcntl,			/* fcntl */
+	rtems_filesystem_default_rmnod		/* rmnod */
 };

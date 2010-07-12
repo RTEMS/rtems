@@ -1,3 +1,8 @@
+2010-07-12	Jennifer Averett
+
+	* libnetworking/rtems/rtems_syscall.c: Replaced null socket handlers
+	with default handlers. Null handlers are no longer allowed.
+
 2010-07-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libcsupport/Makefile.am: Do not build libio_sockets.c if networking
