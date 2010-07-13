@@ -86,6 +86,7 @@ psxcond01/Makefile
 psxenosys/Makefile
 psxfatal01/Makefile
 psxfatal02/Makefile
+psxfchx01/Makefile
 psxfile01/Makefile
 psxfile02/Makefile
 psxfilelock01/Makefile

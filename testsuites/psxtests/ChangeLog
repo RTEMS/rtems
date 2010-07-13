@@ -1,3 +1,13 @@
+2010-07-12	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1613/testing
+	* psxfchx01/init.c, psxfchx01/Makefile.am, psxfchx01/.cvsignore,
+	psxfchx01/psxfchx01.doc, psxfchx01/psxfchx01.scn: New
+	tests. Improves coverage of fchdir, fchmod, fchown directives.
+	* configure.ac, Makefile.am: Changes to accommodate new test.
+	* psxstat/test.c, psxstat/psxstat.scn: Added new test case to test
+	statvfs routine under libcsupport.
+
 2010-07-09	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1610/testing

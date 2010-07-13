@@ -1,0 +1,45 @@
+*** TEST Posix file op tests - 01 ***
+Init - fchdir tests
+Init - Attempt fchdir with bad file descriptor - expect EBADF
+Init - Attempt fchdir with bad file descriptor - expect EBADF
+Init - opening /newfile in write-mode -- OK
+Init - fchdir on the file descriptor - expect EINVAL
+ Init - closing /newfile -- OK
+Init - removing /newfile -- OK
+Init - opening /newfile in read-mode -- OK
+Init - fchdir on the file descriptor - expect ENOTDIR
+Init - closing and removing /newfile -- OK
+Init - create directory  /tmp - RWX permissions -- OK
+Init - open the /tmp, get the file descriptor -- OK
+Init - fchdir on the file descriptor -- OK
+Init - close the file descriptor -- OK
+Init - remove directory /tmp -- OK
+Init - creating directory /tmp - read permission -- OK
+Init - open the /tmp, get the file descriptor -- OK
+Init - attempt fchdir on the file descriptor -- expect EACCES
+Init - close the file descriptor -- OK
+Init - remove directory /tmp -- OK
+End of fchdir tests
+
+Init - fchmod tests
+Init - fchmod, with a bad file descriptor - expect EBADF
+Init - fchmod, with an unopened file descriptor - expect EBADF
+Init - open new file: /newfile in read-only mode -- OK
+Init - fchmod, with the opened file descriptor - expect EINVAL
+ Init - close and remove /newfile
+Init - open new file: /newfile in read-write mode -- OK
+Init - fchmod, with the opened file descriptor -- OK
+ Init - close and remove /newfile -- OK
+End of fchmod tests
+
+Init - fchown tests
+Init - fchown, with a bad file descriptor - expect EBADF
+Init - fchown, with an unopened file descriptor - expect EBADF
+Init - open new file: /newfile in read-only mode -- OK
+Init - fchown, with the opened file descriptor - expect EINVAL
+ Init - close and remove /newfile
+Init - open new file: /newfile in read-write mode -- OK
+Init - fchown, with the opened file descriptor -- OK
+ Init - close and remove /newfile -- OK
+End of fchown tests
+*** END OF TEST Posix file op tests - 01 ***

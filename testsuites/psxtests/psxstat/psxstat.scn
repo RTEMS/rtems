@@ -1,3 +1,4 @@
+
 *** STAT TEST 01 ***
 --->Current Time:  - rtems_clock_get_tod - 09:00:00   12/31/1988
 Making directory /my_mount_point/dir1
@@ -1703,6 +1704,10 @@ lstat( /my_mount_point/symlinks/a_dir_symlink/a_file_symlink ) returned
 ...st_ctime   Sat Dec 31 09:00:35 1988
 ...st_blksize 0
 ...st_blocks  0
+statvfs, with invalid path - expect EFAULT
+create /tmp -- OK
+statvfs, with valid path - expect ENOTSUP
+statvfs tested!
 
 
 *** END OF STAT TEST 01 ***
