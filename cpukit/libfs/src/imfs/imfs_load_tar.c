@@ -108,7 +108,8 @@ int rtems_tarfs_load(
    if (status != 0)
       return -1;
 
-   if (root_loc.ops != &IMFS_ops)
+   if (root_loc.ops != &IMFS_ops
+       && root_loc.ops != &fifoIMFS_ops)
       return -1;
 
    /*

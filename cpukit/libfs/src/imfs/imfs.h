@@ -248,6 +248,7 @@ extern const rtems_filesystem_file_handlers_r       IMFS_link_handlers;
 extern const rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
 extern const rtems_filesystem_file_handlers_r       IMFS_fifo_handlers;
 extern const rtems_filesystem_operations_table      IMFS_ops;
+extern const rtems_filesystem_operations_table      fifoIMFS_ops;
 extern const rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
 
 /*

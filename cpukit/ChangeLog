@@ -1,3 +1,10 @@
+2010-07-13	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	PR 1614/filesystem
+	* libfs/src/imfs/fifoimfs_init.c, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_load_tar.c: Fix rtems_tarfs_load to work with
+	pipe filesystem.
+
 2010-07-12	Jennifer Averett
 
 	* libnetworking/rtems/rtems_syscall.c: Replaced null socket handlers
