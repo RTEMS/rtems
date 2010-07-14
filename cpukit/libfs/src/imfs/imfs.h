@@ -355,10 +355,6 @@ extern int IMFS_chown(
   gid_t                              group         /* IN */
 );
 
-extern int IMFS_freenodinfo(
-  rtems_filesystem_location_info_t  *pathloc       /* IN */
-);
-
 extern int IMFS_mknod(
   const char                        *path,         /* IN */
   mode_t                             mode,         /* IN */
@@ -394,10 +390,6 @@ extern int IMFS_mount(
 
 extern int IMFS_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
-);
-
-extern int IMFS_freenod(
-  rtems_filesystem_location_info_t  *node         /* IN/OUT */
 );
 
 extern int IMFS_memfile_remove(

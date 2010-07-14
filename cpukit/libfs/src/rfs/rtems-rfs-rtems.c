@@ -662,20 +662,6 @@ rtems_rfs_rtems_chown (rtems_filesystem_location_info_t *pathloc,
 }
 
 /**
- * This routine is the RFS free node handler for the file system operations
- * table. The RFS does not need to free anything.
- *
- * @param pathloc
- * @retval 0 Always returned.
- */
-
-int
-rtems_rfs_rtems_freenodinfo (rtems_filesystem_location_info_t* pathloc)
-{
-  return 0;
-}
-
-/**
  * This routine is the implementation of the utime() system call for the
  * RFS.
  *
@@ -1239,7 +1225,7 @@ const rtems_filesystem_operations_table rtems_rfs_ops =
   .node_type_h    = rtems_rfs_rtems_node_type,
   .mknod_h        = rtems_rfs_rtems_mknod,
   .chown_h        = rtems_rfs_rtems_chown,
-  .freenod_h      = rtems_rfs_rtems_freenodinfo,
+  .freenod_h      = rtems_filesystem_default_freenode,
   .mount_h        = rtems_filesystem_default_mount,
   .fsmount_me_h   = rtems_rfs_rtems_initialise,
   .unmount_h      = rtems_filesystem_default_unmount,

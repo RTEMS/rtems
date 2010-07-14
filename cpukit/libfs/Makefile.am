@@ -35,29 +35,31 @@ libdefaultfs_a_SOURCES = \
 noinst_LIBRARIES += libimfs.a
 libimfs_a_SOURCES =
 
-libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
-    src/imfs/imfs_creat.c src/imfs/imfs_directory.c src/imfs/imfs_eval.c \
-    src/imfs/imfs_free.c src/imfs/imfs_fsunmount.c src/imfs/imfs_gtkn.c \
-    src/imfs/imfs_init.c src/imfs/imfs_initsupp.c src/imfs/imfs_link.c \
-    src/imfs/imfs_mknod.c src/imfs/imfs_mount.c src/imfs/imfs_fchmod.c \
-    src/imfs/imfs_unlink.c src/imfs/imfs_unmount.c src/imfs/imfs_utime.c \
-    src/imfs/imfs_ntype.c src/imfs/imfs_stat.c src/imfs/imfs_getchild.c \
-    src/imfs/memfile.c src/imfs/imfs_fifo.c src/imfs/deviceio.c \
-    src/imfs/imfs_handlers_device.c src/imfs/imfs_handlers_directory.c \
-    src/imfs/imfs_handlers_link.c src/imfs/imfs_handlers_memfile.c \
-    src/imfs/imfs_debug.c src/imfs/imfs_rmnod.c src/imfs/imfs_symlink.c \
-    src/imfs/imfs_readlink.c src/imfs/imfs_fdatasync.c src/imfs/imfs_fcntl.c \
-    src/imfs/ioman.c src/imfs/miniimfs_init.c src/imfs/imfs_load_tar.c \
-    src/imfs/imfs_rename.c src/imfs/fifoimfs_init.c src/imfs/imfs.h \
-    src/imfs/deviceerrno.c \
-    src/devfs/devfs_init.c src/devfs/devfs_eval.c src/devfs/devfs_mknod.c \
-    src/devfs/devfs_show.c src/devfs/devfs_node_type.c \
-    src/devfs/devopen.c src/devfs/devread.c src/devfs/devwrite.c \
-    src/devfs/devclose.c src/devfs/devioctl.c src/devfs/devstat.c \
-    src/devfs/devfs.h
+libimfs_a_SOURCES += src/imfs/deviceerrno.c src/imfs/deviceio.c \
+    src/imfs/fifoimfs_init.c src/imfs/imfs_chown.c src/imfs/imfs_config.c \
+    src/imfs/imfs_creat.c src/imfs/imfs_debug.c src/imfs/imfs_directory.c \
+    src/imfs/imfs_eval.c src/imfs/imfs_fchmod.c src/imfs/imfs_fcntl.c \
+    src/imfs/imfs_fdatasync.c src/imfs/imfs_fifo.c \
+    src/imfs/imfs_fsunmount.c src/imfs/imfs_getchild.c \
+    src/imfs/imfs_gtkn.c src/imfs/imfs_handlers_device.c \
+    src/imfs/imfs_handlers_directory.c src/imfs/imfs_handlers_link.c \
+    src/imfs/imfs_handlers_memfile.c src/imfs/imfs_init.c \
+    src/imfs/imfs_initsupp.c src/imfs/imfs_link.c src/imfs/imfs_load_tar.c \
+    src/imfs/imfs_mknod.c src/imfs/imfs_mount.c src/imfs/imfs_ntype.c \
+    src/imfs/imfs_readlink.c src/imfs/imfs_rename.c src/imfs/imfs_rmnod.c \
+    src/imfs/imfs_stat.c src/imfs/imfs_symlink.c src/imfs/imfs_unlink.c \
+    src/imfs/imfs_unmount.c src/imfs/imfs_utime.c src/imfs/ioman.c \
+    src/imfs/memfile.c src/imfs/miniimfs_init.c src/imfs/imfs.h
 
 # POSIX FIFO/pipe
 libimfs_a_SOURCES += src/pipe/fifo.c src/pipe/pipe.c src/pipe/pipe.h
+
+noinst_LIBRARIES += libdevfs.a
+libdevfs_a_SOURCES = src/devfs/devfs_init.c src/devfs/devfs_eval.c \
+    src/devfs/devfs_mknod.c src/devfs/devfs_show.c \
+    src/devfs/devfs_node_type.c src/devfs/devopen.c src/devfs/devread.c \
+    src/devfs/devwrite.c src/devfs/devclose.c src/devfs/devioctl.c \
+    src/devfs/devstat.c src/devfs/devfs.h
 
 # dosfs
 if LIBDOSFS

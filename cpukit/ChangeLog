@@ -1,5 +1,14 @@
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libfs/Makefile.am: Remove reference to imfs_free.c,
+	wrapup/Makefile.am: Split devfs into its own library.
+	* libfs/src/imfs/fifoimfs_init.c, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_init.c, libfs/src/rfs/rtems-rfs-rtems.c:
+	Use default freenode implementation.
+	* libfs/src/imfs/imfs_free.c: Removed.
+
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1612/networking
 	* ChangeLog, libcsupport/src/libio_sockets.c: Sockets need to have
 	handlers in place. Null is no longer allowed.
