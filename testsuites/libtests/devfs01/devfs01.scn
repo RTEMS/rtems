@@ -1,0 +1,7 @@
+*** TEST DEVFS01 ***
+devFS_Show - OK
+/dev/console_b 0 1
+/dev/console 0 0
+devFS_Show - no device table - EFAULT
+devFS_Show - devices - OK
+*** END OF TEST DEVFS01 ***

@@ -1,5 +1,11 @@
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Add new test to exercise devFS_Show().
+	* devfs01/.cvsignore, devfs01/Makefile.am, devfs01/devfs01.doc,
+	devfs01/devfs01.scn, devfs01/init.c: New files.
+
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add new test to exercise
 	malloc_get_statistics().
 	* malloc05/.cvsignore, malloc05/Makefile.am, malloc05/init.c,
