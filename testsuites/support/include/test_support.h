@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,13 +17,22 @@ extern "C" {
 #endif
 
 /*
- *  Allocate a number of small blocks from the heap
+ *  Allocate a number of small blocks from the workspace
  *  until the largest free block of memory available is
  *  smaller than smallest.
  *
  *  NOTE: The memory CANNOT be freed.
  */
 void Allocate_majority_of_workspace( int smallest );
+
+/*
+ *  Allocate a number of small blocks from the heap
+ *  until the largest free block of memory available is
+ *  smaller than smallest.
+ *
+ *  NOTE: The memory CANNOT be freed.
+ */
+void Allocate_majority_of_heap( int smallest );
 
 /*
  *  Return a pointer to the POSIX name that is slightly

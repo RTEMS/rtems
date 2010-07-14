@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <tmacros.h>
 #include "test_support.h"
+#include <rtems/libcsupport.h>
 
 static char  Too_Long_Name[PATH_MAX + 2];
 static char  Longest_Name[PATH_MAX + 1];
@@ -56,5 +57,21 @@ void Allocate_majority_of_workspace( int smallest )
       perror("Unable to allocate from workspace");
     result = rtems_workspace_get_information( &info );
   } while ( info.Free.largest >= smallest );
+
+}
+
+void Allocate_majority_of_heap( int smallest )
+{
+  size_t    size;
+  void     *temp;
+
+  puts("Allocate_majority_of_heap: ");
+  size = malloc_free_space();
+  do {
+    temp = malloc( size-16 );
+    if (!temp)
+      perror("Unable to allocate from workspace");
+    size = malloc_free_space();
+  } while ( size >= smallest );
 
 }
