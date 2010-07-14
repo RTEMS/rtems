@@ -1,3 +1,9 @@
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1612/networking
+	* ChangeLog, libcsupport/src/libio_sockets.c: Sockets need to have
+	handlers in place. Null is no longer allowed.
+
 2010-07-13	Vinu Rajashekhar <vinutheraj@gmail.com>
 
 	PR 1614/filesystem
@@ -5,8 +11,9 @@
 	libfs/src/imfs/imfs_load_tar.c: Fix rtems_tarfs_load to work with
 	pipe filesystem.
 
-2010-07-12	Jennifer Averett
+2010-07-12	Jennifer Averett <jennifer.averett@oarcorp.com>
 
+	PR 1612/networking
 	* libnetworking/rtems/rtems_syscall.c: Replaced null socket handlers
 	with default handlers. Null handlers are no longer allowed.
 
