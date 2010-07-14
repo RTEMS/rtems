@@ -1,5 +1,11 @@
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1535/tests
+	* malloc04/init.c, malloc04/malloc04.scn: Address issues in test. A mix
+	of work by Ralf and Joel.
+
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* termios01/init.c, termios01/termios01.scn: Fully exercise tcsetattr.
 
 2010-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>

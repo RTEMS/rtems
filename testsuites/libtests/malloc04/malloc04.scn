@@ -3,6 +3,9 @@ Initialize heap with some memory
 sbrk(128)
 sbrk(128)
 sbrk(64)
+Initialize heap with some memory - return address out of heap
+sbrk(128)
+sbrk(-128)
 Initialize heap with some unaligned memory
 sbrk(128)
 sbrk(128)

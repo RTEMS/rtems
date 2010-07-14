@@ -13,6 +13,7 @@
 #include "test_support.h"
 #include <rtems/libcsupport.h>
 #include <rtems/malloc.h>
+#include <errno.h>
 
 char Malloc_Heap[ 128 ] CPU_STRUCTURE_ALIGNMENT;
 int sbrk_count;
@@ -25,12 +26,15 @@ extern rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers;
 extern rtems_malloc_sbrk_functions_t  rtems_malloc_sbrk_helpers_table;
 
 size_t offset;
+
 void * sbrk(ptrdiff_t incr)
 {
   void *p = (void *) -1;
 
   printf( "sbrk(%td)\n", incr );
-  if ( offset + incr < sizeof(Malloc_Heap) ) {
+  if ( sbrk_count == -1 ) {
+    p = (void *) (NULL - 2);
+  } else if ( offset + incr < sizeof(Malloc_Heap) ) {
      p = &Malloc_Heap[ offset ];
      offset += incr;
   } else {
@@ -67,6 +71,16 @@ rtems_task Init(
   p3 = malloc(48);
   p4 = malloc(48);
   
+  puts( "Initialize heap with some memory - return address out of heap" );
+  RTEMS_Malloc_Initialize( &Malloc_Heap[1], 64, 64 );
+  offset     = 64;
+  sbrk_count = -1;
+  p1 = malloc( 127 );
+  rtems_test_assert( p1 == (void *) NULL );
+  rtems_test_assert( errno == ENOMEM );
+  
+
+  RTEMS_Malloc_Initialize( Malloc_Heap, 64, 64 );
   puts( "Initialize heap with some unaligned memory" );
   offset     = 65;
   sbrk_count = 0;
@@ -100,7 +114,6 @@ rtems_task Init(
   /* Restore information on real heap */
   *RTEMS_Malloc_Heap = Heap_Holder;
   rtems_malloc_sbrk_helpers = NULL;
-
 
   puts( "*** END OF TEST MALLOC 04 ***" );
 
