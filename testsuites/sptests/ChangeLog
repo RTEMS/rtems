@@ -1,5 +1,10 @@
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* spprintk/init.c, spprintk/spprintk.doc, spprintk/spprintk.scn: Clean
+	up and add test of getchark().
+
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* spfatal21/Makefile.am: Fix typo.
 
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -1,6 +1,3 @@
-sparc-rtems4.10-run is /opt/rtems-4.10/bin/sparc-rtems4.10-run
-
-
 *** TEST PRINTK ***
 This is a test of putk
 
@@ -28,4 +25,7 @@ bad format -- %lq in parentheses (q)
 %-12s of joel -- (joel                )
 %-4s of joel -- (joel)
 %c of X -- (X)
+
+getchark - NULL getchar method - return -1
+getchark - test getchar method - returns 0x35
 *** END OF TEST PRINTK ***

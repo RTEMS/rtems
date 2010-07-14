@@ -15,8 +15,14 @@ test set name:  spprintk
 
 directives:
 
+  putk
   printk
+  getchark
 
 concepts:
 
++ Ensure that putk() is fully exercised and operates as expected.
+
 + Ensure that printk() is fully exercised and operates as expected.
+
++ Ensure that getchark() is fully exercised and operates as expected.

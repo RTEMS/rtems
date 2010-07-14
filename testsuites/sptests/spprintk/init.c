@@ -1,7 +1,7 @@
 /*
- *  Exercise Printk
+ *  Exercise putk, printk, and getchark
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -12,15 +12,41 @@
  */
 
 #include <tmacros.h>
+#include <rtems/bspIo.h>
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+int test_getchar(void)
 {
-  printk( "\n\n*** TEST PRINTK ***\n" );
+  return 0x35;
+}
 
-  putk( "This is a test of putk\n" );
+void do_getchark(void)
+{
+  int                                sc;
+  BSP_polling_getchar_function_type  poll_char;
 
+  poll_char = BSP_poll_char;
+
+  BSP_poll_char = NULL;
+  
+  putk( "getchark - NULL getchar method - return -1" );
+  sc = getchark();
+  rtems_test_assert( sc == -1 );
+
+  putk( "getchark - test getchar method - returns 0x35" );
+  BSP_poll_char = test_getchar;
+  sc = getchark();
+  rtems_test_assert( sc == 0x35 );
+
+  BSP_poll_char = poll_char;
+}
+
+void do_putk(void)
+{
+  putk( "This is a test of putk" );
+}
+
+void do_printk(void)
+{
   printk( "bad format -- %%q in parentheses (%q)\n" );
 
   printk( "bad format -- %%lq in parentheses (%lq)\n", 0x1234 );
@@ -52,7 +78,21 @@ rtems_task Init(
   printk( "%%-12s of joel -- (%-20s)\n", "joel" );
   printk( "%%-4s of joel -- (%-4s)\n", "joel" );
   printk( "%%c of X -- (%c)\n", 'X' );
+}
 
+rtems_task Init(
+  rtems_task_argument argument
+)
+{
+  printk( "\n\n*** TEST PRINTK ***\n" );
+
+  do_putk();
+  putk("");
+
+  do_printk();
+  putk("");
+
+  do_getchark();
 
   printk( "*** END OF TEST PRINTK ***\n" );
   rtems_test_exit( 0 );
