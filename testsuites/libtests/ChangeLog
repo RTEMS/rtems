@@ -1,5 +1,12 @@
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Add new test to exercise
+	malloc_get_statistics().
+	* malloc05/.cvsignore, malloc05/Makefile.am, malloc05/init.c,
+	malloc05/malloc05.doc, malloc05/malloc05.scn: New files.
+
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1535/tests
 	* malloc04/init.c, malloc04/malloc04.scn: Address issues in test. A mix
 	of work by Ralf and Joel.

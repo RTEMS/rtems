@@ -1,0 +1,4 @@
+*** TEST MALLOC05 ***
+malloc_get_statistics( NULL ) - returns -1
+malloc_get_statistics( &stats ) - returns -0
+*** END OF TEST MALLOC05 ***
