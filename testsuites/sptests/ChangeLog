@@ -1,5 +1,9 @@
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* spfatal21/Makefile.am: Fix typo.
+
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add tests for sbrk fatal error case and
 	libio initialization fatal error case.
 	* spfatal21/.cvsignore, spfatal21/Makefile.am, spfatal21/spfatal21.doc,

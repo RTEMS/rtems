@@ -15,10 +15,10 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spfatal21_OBJECTS) $(spfatal22_LDADD)
+LINK_OBJS = $(spfatal21_OBJECTS) $(spfatal21_LDADD)
 LINK_LIBS = $(spfatal21_LDLIBS)
 
-spfatal21$(EXEEXT): $(spfatal22_OBJECTS) $(spfatal22_DEPENDENCIES)
+spfatal21$(EXEEXT): $(spfatal21_OBJECTS) $(spfatal21_DEPENDENCIES)
 	@rm -f spfatal21$(EXEEXT)
 	$(make-exe)
 
