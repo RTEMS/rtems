@@ -1,3 +1,15 @@
+2010-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spintrcritical06/init.c: Switch semaphore obtain timeouts of
+	variants.  Cleanup.
+	* spintrcritical05/spintrcritical05.scn,
+	spintrcritical06/spintrcritical06.scn,
+	spintrcritical07/spintrcritical07.scn,
+	spintrcritical11/spintrcritical11.scn,
+	spintrcritical12/spintrcritical12.scn,
+	spintrcritical13/spintrcritical13.scn,
+	spintrcritical14/spintrcritical14.scn: Update.
+
 2010-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Readd spfatal09 as a malloc initialization

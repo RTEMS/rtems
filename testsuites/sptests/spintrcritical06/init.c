@@ -22,39 +22,22 @@
 
   #define INIT_PRIORITY      2
   #define BLOCKER_PRIORITY   1
-  #define SEMAPHORE_OBTAIN_TIMEOUT 0
+  #define SEMAPHORE_OBTAIN_TIMEOUT 2
 
 #elif defined(PRIORITY_NO_TIMEOUT_REVERSE)
   #define TEST_NAME          "07"
   #define TEST_STRING        "Priority/Restart Search Task (Backward)"
   #define INIT_PRIORITY      126
   #define BLOCKER_PRIORITY   127
-  #define SEMAPHORE_OBTAIN_TIMEOUT 2
+  #define SEMAPHORE_OBTAIN_TIMEOUT 0
 
 #else
 
   #error "Test Mode not defined"
 #endif
 
-rtems_id Main_task;
 rtems_id Secondary_task_id;
 rtems_id Semaphore;
-
-Thread_blocking_operation_States getState(void)
-{
-  Objects_Locations  location;
-  Semaphore_Control *sem;
-
-  sem = (Semaphore_Control *)_Objects_Get(
-    &_Semaphore_Information, Semaphore, &location );
-  if ( location != OBJECTS_LOCAL ) {
-    puts( "Bad object lookup" );
-    rtems_test_exit(0);
-  }
-  _Thread_Unnest_dispatch();
-
-  return sem->Core_control.semaphore.Wait_queue.sync_state;
-}
 
 rtems_timer_service_routine test_release_from_isr(
   rtems_id  timer,
@@ -68,17 +51,16 @@ rtems_task Secondary_task(
   rtems_task_argument arg
 )
 {
-  rtems_status_code     status;
-
   if ( arg )
     (void) rtems_semaphore_flush( Semaphore );
 
-  status = rtems_semaphore_obtain(
+  (void) rtems_semaphore_obtain(
     Semaphore,
     RTEMS_DEFAULT_OPTIONS,
-    SEMAPHORE_OBTAIN_TIMEOUT
+    RTEMS_NO_TIMEOUT
   );
-  directive_failed( status, "rtems_semaphore_obtain" );
+
+  rtems_test_assert(0);
 }
 
 rtems_task Init(
@@ -101,8 +83,6 @@ rtems_task Init(
     &Semaphore
   );
   directive_failed( status, "rtems_semaphore_create of SM1" );
-
-  Main_task = rtems_task_self();
 
   status = rtems_task_create(
     rtems_build_name( 'B', 'L', 'C', 'K' ),
