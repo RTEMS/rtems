@@ -1,0 +1,4 @@
+*** TEST FATAL FATAL 22 ***
+Allocate_majority_of_heap: 
+Fatal error (libio init out of memory) hit
+*** END OF TEST ***

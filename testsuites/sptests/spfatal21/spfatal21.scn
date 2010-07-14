@@ -1,0 +1,3 @@
+*** TEST FATAL FATAL 21 ***
+Fatal error (sbrk during init fails) hit
+*** END OF TEST ***

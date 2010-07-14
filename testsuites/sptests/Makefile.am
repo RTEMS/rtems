@@ -21,14 +21,15 @@ SUBDIRS = \
     sperror01 sperror02 sperror03 \
     spfatal01 spfatal02 spfatal03 spfatal04 spfatal05 spfatal06 spfatal07 \
     spfatal08 spfatal09 spfatal10 spfatal11 spfatal12 spfatal13 spfatal14 \
-    spfatal15 spfatal16 spfatal17 spfatal18 spfatal19 spfatal20 \
+    spfatal15 spfatal16 spfatal17 spfatal18 spfatal19 spfatal20 spfatal21 \
+    spfatal22 \
     spfifo01 spfifo02 spfifo03 spfifo04 spfifo05 \
     spintrcritical01 spintrcritical02 spintrcritical03 spintrcritical04 \
     spintrcritical05 spintrcritical06 spintrcritical07 spintrcritical08 \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \
     spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16 \
     spintrcritical17 spmkdir
- 
+
 DIST_SUBDIRS = $(SUBDIRS) spfatal_support spintrcritical_support
 EXTRA_DIST = spfatal_support/init.c spfatal_support/system.h
 

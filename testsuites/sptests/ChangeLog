@@ -1,3 +1,12 @@
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add tests for sbrk fatal error case and
+	libio initialization fatal error case.
+	* spfatal21/.cvsignore, spfatal21/Makefile.am, spfatal21/spfatal21.doc,
+	spfatal21/spfatal21.scn, spfatal21/testcase.h, spfatal22/.cvsignore,
+	spfatal22/Makefile.am, spfatal22/spfatal22.doc,
+	spfatal22/spfatal22.scn, spfatal22/testcase.h: New files.
+
 2010-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spintrcritical06/init.c: Switch semaphore obtain timeouts of
