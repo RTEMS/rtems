@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -122,10 +122,7 @@ void test_termios_baud2index(void)
   int i;
   int index;
 
-  puts(
-    "\n"
-    "Test termios_baud2index..."
-  );
+  puts( "Test termios_baud2index..." );
   puts( "termios_baud_to_index(-2) - NOT OK" );
   i = rtems_termios_baud_to_index( -2 );
   rtems_test_assert( i == -1 );
@@ -168,7 +165,10 @@ void test_termios_baud2number(void)
   rtems_test_assert( i == -1 );
 
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
-    printf( "termios_baud_to_number(B%" PRIdrtems_termios_baud_t ") - OK\n", baud_table[i].baud );
+    printf(
+      "termios_baud_to_number(B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
     number = rtems_termios_baud_to_number( baud_table[i].constant );
     if ( number != baud_table[i].baud ) {
       printf(
@@ -202,7 +202,10 @@ void test_termios_number_to_baud(void)
   rtems_test_assert( i == -1 );
 
   for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
-    printf( "termios_number_to_baud(B%" PRIdrtems_termios_baud_t ") - OK\n", baud_table[i].baud );
+    printf(
+      "termios_number_to_baud(B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
     termios_baud = rtems_termios_number_to_baud( baud_table[i].baud );
     if ( termios_baud != baud_table[i].constant ) {
       printf(
@@ -237,14 +240,20 @@ void test_termios_set_baud(
     attr.c_cflag &= ~CBAUD;
     attr.c_cflag |= baud_table[i].constant;
 
-    printf( "tcsetattr(TCSANOW, B%" PRIdrtems_termios_baud_t ") - OK\n", baud_table[i].baud );
+    printf(
+      "tcsetattr(TCSANOW, B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
     sc = tcsetattr( test, TCSANOW, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
     }
 
-    printf( "tcsetattr(TCSADRAIN, B%" PRIdrtems_termios_baud_t ") - OK\n", baud_table[i].baud );
+    printf(
+      "tcsetattr(TCSADRAIN, B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
     sc = tcsetattr( test, TCSANOW, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
@@ -452,6 +461,7 @@ rtems_task Init(
   rtems_status_code         sc;
   rtems_device_major_number registered;
   int                       test;
+  struct termios            t;
 
   puts( "\n\n*** TEST TERMIOS 01 ***" );
 
@@ -459,6 +469,24 @@ rtems_task Init(
   test_termios_baud2number();
   test_termios_number_to_baud();
 
+  /*
+   * tcsetattr - ERROR invalid operation
+   */
+  puts( "tcsetattr - invalid operation - ENOTSUP" );
+  rc = tcsetattr( 0, 0x12345, &t );
+  rtems_test_assert( rc == -1 );
+  rtems_test_assert( errno == ENOTSUP );
+  
+  /*
+   * tcsetattr - TCSADRAIN
+   */
+  puts( "\ntcsetattr - drain - OK" );
+  rc = tcsetattr( 1, TCSADRAIN, &t );
+  rtems_test_assert( rc == 0 );
+  
+  /*
+   * Register a driver
+   */
   puts(
     "\n"
     "Init - rtems_io_register_driver - Termios Test Driver - OK"

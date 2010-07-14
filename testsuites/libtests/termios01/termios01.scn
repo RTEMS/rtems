@@ -1,5 +1,4 @@
 *** TEST TERMIOS 01 ***
-
 Test termios_baud2index...
 termios_baud_to_index(-2) - NOT OK
 termios_baud_to_index(572) - NOT OK
@@ -33,7 +32,7 @@ termios_baud_to_number(B75) - OK
 termios_baud_to_number(B110) - OK
 termios_baud_to_number(B134) - OK
 termios_baud_to_number(B150) - OK
-termios_baud_to_number(B200) - OK
+termios_baud_to_number(B200) - O
 termios_baud_to_number(B300) - OK
 termios_baud_to_number(B600) - OK
 termios_baud_to_number(B1200) - OK
@@ -71,6 +70,9 @@ termios_number_to_baud(B57600) - OK
 termios_number_to_baud(B115200) - OK
 termios_number_to_baud(B230400) - OK
 termios_number_to_baud(B460800) - OK
+tcsetattr - invalid operation - ENOTSUP
+
+tcsetattr - drain - OK
 
 Init - rtems_io_register_driver - Termios Test Driver - OK
 Termios_test_driver - rtems_io_register /dev/test - OK

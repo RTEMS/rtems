@@ -1,3 +1,7 @@
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* termios01/init.c, termios01/termios01.scn: Fully exercise tcsetattr.
+
 2010-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add test for exercising sbrk() extension
