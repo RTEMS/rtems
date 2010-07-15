@@ -1,3 +1,7 @@
+2010-07-16	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* psxstat/test.c: Avoid NULL pointer access.
+
 2010-07-12	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1613/testing

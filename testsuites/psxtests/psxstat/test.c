@@ -780,10 +780,10 @@ void test_statvfs( void )
   int status = 0;
   struct statvfs stat;
 
-  puts( "statvfs, with invalid path - expect EFAULT" );
-  status = statvfs( NULL , &stat );
+  puts( "statvfs, with invalid path - expect ENOTSUP" );
+  status = statvfs( "" , &stat );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
+  rtems_test_assert( errno == ENOTSUP );
 
   puts( "create /tmp -- OK" );
   status = mkdir( "/tmp", 0777 );
