@@ -12,7 +12,7 @@
 
 #include "devfs.h"
 
-int devFS_node_type(
+rtems_filesystem_node_types_t devFS_node_type(
   rtems_filesystem_location_info_t  *pathloc
 )
 {

@@ -1,5 +1,10 @@
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libfs/src/devfs/devfs.h, libfs/src/devfs/devfs_node_type.c: Fixed
+	devFS_node_type() prototype.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* score/include/rtems/seterr.h: Include <errno.h>.
 
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
