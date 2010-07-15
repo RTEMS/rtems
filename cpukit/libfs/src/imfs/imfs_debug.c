@@ -32,20 +32,6 @@
 #include <rtems/libio_.h>
 
 /*
- *  IMFS_types
- *
- *  Printable names for each of the IMFS file system types.
- */
-
-char *IMFS_types[ IMFS_NUMBER_OF_TYPES ] = {
-  "directory",
-  "device",
-  "link",
-  "memory file",
-  "linear file"
-};
-
-/*
  *  IMFS_print_jnode
  *
  *  This routine prints the contents of the specified jnode.

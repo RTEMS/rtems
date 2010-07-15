@@ -1,5 +1,11 @@
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libfs/src/imfs/imfs.h: Changed IMFS_jnode_types_t to an enum.
+	Removed IMFS_NUMBER_OF_TYPES define.
+	* libfs/src/imfs/imfs_debug.c: Removed IMFS_types.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libcsupport/include/rtems/libio_.h: Removed rtems_filesystem_null_handlers.
 	* libcsupport/src/fs_null_handlers.c: Removed file.
 	* libcsupport/Makefile.am: Reflect change above.
