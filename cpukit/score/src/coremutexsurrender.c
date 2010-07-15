@@ -27,6 +27,51 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
+  static inline void _CORE_mutex_Push_priority(
+    CORE_mutex_Control *mutex,
+    Thread_Control *thread
+  )
+  {
+    _Chain_Prepend_unprotected(
+      &thread->lock_mutex,
+      &mutex->queue.lock_queue
+    );
+    mutex->queue.priority_before = thread->current_priority;
+  }
+
+  static inline CORE_mutex_Status _CORE_mutex_Pop_priority(
+    CORE_mutex_Control *mutex,
+    Thread_Control *holder
+  )
+  {
+    /*
+     *  Check whether the holder release the mutex in LIFO order if not return
+     *  error code.
+     */
+    if ( _Chain_First( holder->lock_mutex ) != &mutex->queue.lock_queue ) {
+      mutex->nest_count++;
+
+      return CORE_MUTEX_RELEASE_NOT_ORDER;
+    }
+
+    /*
+     *  This pops the first node from the list.
+     */
+    _Chain_Get_first_unprotected( &holder->lock_mutex );
+
+    if ( mutex->queue.priority_before != holder->current_priority )
+      _Thread_Change_priority( holder, mutex->queue.priority_before, true );
+
+    return CORE_MUTEX_STATUS_SUCCESSFUL;
+  }
+#else
+  #define _CORE_mutex_Push_priority( mutex, thread ) ((void) 0)
+
+  #define _CORE_mutex_Pop_priority( mutex, thread ) \
+    CORE_MUTEX_STATUS_SUCCESSFUL
+#endif
+
 /*
  *  _CORE_mutex_Surrender
  *
@@ -59,10 +104,8 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 {
   Thread_Control *the_thread;
   Thread_Control *holder;
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
-  Chain_Node *first_node;
-#endif
-  holder    = the_mutex->holder;
+
+  holder = the_mutex->holder;
 
   /*
    *  The following code allows a thread (or ISR) other than the thread
@@ -112,37 +155,27 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  blocked thread.
    */
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
-       _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ){
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
-    /*Check whether the holder release the mutex in LIFO order
-      if not return error code*/
-    if(holder->lock_mutex.first != &the_mutex->queue.lock_queue){
-      the_mutex->nest_count++;
-      return CORE_MUTEX_RELEASE_NOT_ORDER;
-    }
-    first_node = _Chain_Get_first_unprotected(&holder->lock_mutex);
-#endif
-    holder->resource_count--;
-  }
-  the_mutex->holder    = NULL;
-  the_mutex->holder_id = 0;
-
-  /*
-   *  Whether or not someone is waiting for the mutex, an
-   *  inherited priority must be lowered if this is the last
-   *  mutex (i.e. resource) this task has.
-   */
-  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
        _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
-    if(the_mutex->queue.priority_before != holder->current_priority)
-      _Thread_Change_priority(holder,the_mutex->queue.priority_before,true);
-#endif
+    CORE_mutex_Status pop_status =
+      _CORE_mutex_Pop_priority( the_mutex, holder );
+
+    if ( pop_status != CORE_MUTEX_STATUS_SUCCESSFUL )
+      return pop_status;
+
+    holder->resource_count--;
+
+    /*
+     *  Whether or not someone is waiting for the mutex, an
+     *  inherited priority must be lowered if this is the last
+     *  mutex (i.e. resource) this task has.
+     */
     if ( holder->resource_count == 0 &&
          holder->real_priority != holder->current_priority ) {
       _Thread_Change_priority( holder, holder->real_priority, true );
     }
   }
+  the_mutex->holder    = NULL;
+  the_mutex->holder_id = 0;
 
   /*
    *  Now we check if another thread was waiting for this mutex.  If so,
@@ -172,17 +205,11 @@ CORE_mutex_Status _CORE_mutex_Surrender(
         case CORE_MUTEX_DISCIPLINES_PRIORITY:
           break;
         case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
-	  _Chain_Prepend_unprotected(&the_thread->lock_mutex,&the_mutex->queue.lock_queue);
-	  the_mutex->queue.priority_before = the_thread->current_priority;
-#endif
+          _CORE_mutex_Push_priority( the_mutex, the_thread );
           the_thread->resource_count++;
           break;
         case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
-	  _Chain_Prepend_unprotected(&the_thread->lock_mutex,&the_mutex->queue.lock_queue);
-	  the_mutex->queue.priority_before = the_thread->current_priority;
-#endif
+          _CORE_mutex_Push_priority( the_mutex, the_thread );
           the_thread->resource_count++;
           if (the_mutex->Attributes.priority_ceiling <
               the_thread->current_priority){

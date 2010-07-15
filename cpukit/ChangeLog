@@ -1,3 +1,9 @@
+2010-07-15	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	PR 1607/cpukit
+	* score/src/coremutexsurrender.c: Clean up and split out helper
+	routines.
+
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libfs/src/imfs/imfs.h: Changed IMFS_jnode_types_t to an enum.
