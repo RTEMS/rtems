@@ -1,3 +1,19 @@
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/include/rtems/libio.h: Changed
+	rtems_filesystem_node_types_t to an enum.  Declare
+	rtems_filesystem_handlers_default,
+	rtems_filesystem_operations_default,
+	rtems_filesystem_default_evalpath(),
+	rtems_filesystem_default_evalformake, and
+	rtems_filesystem_default_node_type().
+	* libfs/src/dosfs/msdos.h: Fixed msdos_node_type() prototype.
+	* libfs/src/defaults/default_evalformake.c,
+	libfs/src/defaults/default_handlers.c,
+	libfs/src/defaults/default_node_type.c,
+	libfs/src/defaults/default_ops.c: New files.
+	* libfs/Makefile.am: Reflect changes above.
+
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libnetworking/rtems/rtems_syscall.c: Fix warning.

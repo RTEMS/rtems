@@ -242,7 +242,7 @@ int msdos_unlink(rtems_filesystem_location_info_t *pathloc /* IN */);
 
 int msdos_free_node_info(rtems_filesystem_location_info_t *pathloc /* IN */);
 
-int msdos_node_type(rtems_filesystem_location_info_t    *pathloc);
+rtems_filesystem_node_types_t msdos_node_type(rtems_filesystem_location_info_t    *pathloc);
 
 int msdos_mknod(
   const char                       *path,   /* IN */
