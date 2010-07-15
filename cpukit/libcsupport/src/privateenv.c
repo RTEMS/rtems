@@ -3,7 +3,7 @@
  *
  *  Submitted by: fernando.ruiz@ctv.es (correo@fernando-ruiz.com)
  *
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,7 +17,7 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>	/* free */
+#include <stdlib.h> /* free */
 
 #include <rtems.h>
 #include <rtems/chain.h>
@@ -33,28 +33,29 @@ free_user_env(void *venv)
 {
   rtems_user_env_t *env = (rtems_user_env_t*) venv ;
 
-	if (env != &rtems_global_user_env
+ if (env != &rtems_global_user_env
 #ifdef HAVE_USERENV_REFCNT
-		&& --env->refcnt <= 0
+  && --env->refcnt <= 0
 #endif
-		) {
-		rtems_filesystem_freenode( &env->current_directory);
-		rtems_filesystem_freenode( &env->root_directory);
-		free(env);
-	}
+  ) {
+  rtems_filesystem_freenode( &env->current_directory);
+  rtems_filesystem_freenode( &env->root_directory);
+  free(env);
+ }
 }
 
-rtems_status_code rtems_libio_set_private_env(void) {
-  rtems_status_code 					sc;
-  rtems_id          					task_id;
-  rtems_filesystem_location_info_t		loc;
+rtems_status_code rtems_libio_set_private_env(void)
+{
+  rtems_status_code      sc;
+  rtems_id               task_id;
+  rtems_filesystem_location_info_t  loc;
 
   sc=rtems_task_ident(RTEMS_SELF,0,&task_id);
   if (sc != RTEMS_SUCCESSFUL) return sc;
 
   /* Only for the first time a malloc is necesary */
   if (rtems_current_user_env==&rtems_global_user_env) {
-   rtems_user_env_t	*tmp = malloc(sizeof(rtems_user_env_t));
+   rtems_user_env_t *tmp = malloc(sizeof(rtems_user_env_t));
    if (!tmp)
      return RTEMS_NO_MEMORY;
 
@@ -62,16 +63,20 @@ rtems_status_code rtems_libio_set_private_env(void) {
    tmp->refcnt = 1;
 #endif
 
-   sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_user_env,(void(*)(void *))free_user_env);
+   sc = rtems_task_variable_add(
+    RTEMS_SELF,
+    (void*)&rtems_current_user_env,
+    (void(*)(void *))free_user_env
+   );
    if (sc != RTEMS_SUCCESSFUL) {
-	 /* don't use free_user_env because the pathlocs are
-	  * not initialized yet
-	  */
+    /* don't use free_user_env because the pathlocs are
+     * not initialized yet
+     */
      free(tmp);
      return sc;
    }
    rtems_current_user_env = tmp;
-  };
+  }
 
   *rtems_current_user_env = rtems_global_user_env; /* get the global values*/
   rtems_current_user_env->task_id=task_id;         /* mark the local values*/
@@ -111,7 +116,8 @@ rtems_status_code rtems_libio_set_private_env(void) {
  */
 
 #ifndef HAVE_USERENV_REFCNT
-rtems_status_code rtems_libio_share_private_env(rtems_id task_id) {
+rtems_status_code rtems_libio_share_private_env(rtems_id task_id)
+{
   rtems_status_code  sc;
   rtems_user_env_t * shared_user_env;
   rtems_id           current_task_id;
@@ -121,20 +127,21 @@ rtems_status_code rtems_libio_share_private_env(rtems_id task_id) {
 
   if (rtems_current_user_env->task_id==current_task_id) {
    /* kill the current user env & task_var*/
-	rtems_user_env_t 	*tmp = rtems_current_user_env;
+   rtems_user_env_t  *tmp = rtems_current_user_env;
    sc = rtems_task_variable_delete(RTEMS_SELF,(void*)&rtems_current_user_env);
    if (sc != RTEMS_SUCCESSFUL) return sc;
    free_user_env(tmp);
-  };
+  } else {
+    sc = rtems_task_variable_get(
+      task_id,(void*)&rtems_current_user_env, (void*)&shared_user_env );
+    if (sc != RTEMS_SUCCESSFUL)
+      goto bailout;
+  }
 
   /* AT THIS POINT, rtems_current_user_env is DANGLING */
 
-  sc = rtems_task_variable_get(task_id,(void*)&rtems_current_user_env,
-		                       (void*)&shared_user_env       );
-  if (sc != RTEMS_SUCCESSFUL)
-    goto bailout;
-
-  sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_user_env,free_user_env);
+  sc = rtems_task_variable_add(
+    RTEMS_SELF,(void*)&rtems_current_user_env,free_user_env);
   if (sc != RTEMS_SUCCESSFUL)
     goto bailout;
 
