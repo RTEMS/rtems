@@ -1,5 +1,9 @@
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* score/include/rtems/seterr.h: Include <errno.h>.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libcsupport/include/rtems/libio.h: Changed
 	rtems_filesystem_node_types_t to an enum.  Declare
 	rtems_filesystem_handlers_default,

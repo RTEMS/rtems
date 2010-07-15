@@ -19,6 +19,8 @@
 #ifndef _RTEMS_SETERR_H
 #define _RTEMS_SETERR_H
 
+#include <errno.h>
+
 /**
  *  This is a helper macro which will set the variable errno and return
  *  -1 to the caller.  This pattern is common to many POSIX methods.
