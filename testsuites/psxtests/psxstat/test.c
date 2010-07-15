@@ -5,7 +5,7 @@
  *  This test also exercises lstat() and lchown() when symlinks are
  *  involved.
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include <reent.h>
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/imfs.h>
@@ -31,6 +32,7 @@
 #define MAXSYMLINK 5   /* There needs to be a better way of getting this. */
 #define TIMEOUT_VALUE  ( 5 * rtems_clock_get_ticks_per_second() )
 
+int _lstat_r(struct _reent *, const char *, struct stat *);
 
 /*
  *  List of files which should exist.
@@ -926,6 +928,16 @@ int main(
   lchown_multiple_files( SymLinks );
 
   test_statvfs();
+
+  puts( "Exercise the reentrant version - _stat_r - expect EFAULT" );
+  status = _stat_r( NULL, NULL, NULL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EFAULT );
+
+  puts( "Exercise the reentrant version - _lstat_r - expect EFAULT" );
+  status = _lstat_r( NULL, NULL, NULL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EFAULT );
 
   puts( "\n\n*** END OF STAT TEST 01 ***" );
   rtems_test_exit(0);

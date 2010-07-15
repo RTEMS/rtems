@@ -1708,6 +1708,8 @@ statvfs, with invalid path - expect EFAULT
 create /tmp -- OK
 statvfs, with valid path - expect ENOTSUP
 statvfs tested!
+Exercise the reentrant version - _stat_r - expect EFAULT
+Exercise the reentrant version - _lstat_r - expect EFAULT
 
 
 *** END OF STAT TEST 01 ***

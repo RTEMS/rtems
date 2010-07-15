@@ -1,3 +1,13 @@
+2010-07-15	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1617/testing
+	* psxfile01/test.c, psxfile01/psxfile01.scn: Added new cases to
+	exercise_link_r and _unlink_r
+	* psxstat/test.c, psxstat/psxstat.scn: Added new cases to exercise
+	_lstat_r and _stat_r.
+	* psxtime/test.c, psxtime/psxtime.scn: Added new cases to exercise
+	_gettimeofday.
+
 2010-07-16	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* psxstat/test.c: Avoid NULL pointer access.

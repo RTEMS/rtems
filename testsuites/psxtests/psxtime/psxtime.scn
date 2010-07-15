@@ -1,5 +1,7 @@
+
 *** POSIX TIME OF DAY TEST ***
 gettimeofday( NULL, NULL ) - EFAULT
+_gettimeofday( NULL, NULL ) - EFAULT
 rtems_clock_set          12:45:00   01/01/1988
 adjtime - NULL delta - EINVAL
 adjtime - delta out of range - EINVAL
@@ -9,7 +11,7 @@ adjtime - delta of one second forward, olddelta=NULL
 adjtime - delta of one second forward
 adjtime - delta of almost two seconds forward
 adjtime - delta of almost one second forward which bumps second
-rtems_clock_get_tod          12:45:04   01/01/1988
+rtems_clock_get_tod          12:45:05   01/01/1988
 rtems_clock_set          12:45:00   01/01/1988
 rtems_clock_get_tod          12:45:00   01/01/1988
 gettimeofday: Fri Jan  1 12:45:00 1988

@@ -27,6 +27,8 @@
 extern int adjtime(const struct timeval *delta, struct timeval *olddelta);
 #endif
 
+extern int _gettimeofday(struct timeval *__p, void *__tz);
+
 void test_adjtime(void);
 void check_a_tod(
   rtems_time_of_day *the_tod
@@ -199,6 +201,11 @@ int main(
 
   puts( "gettimeofday( NULL, NULL ) - EFAULT" );
   sc = gettimeofday( NULL, NULL );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EFAULT );
+
+  puts( "_gettimeofday( NULL, NULL ) - EFAULT" );
+  sc = _gettimeofday( NULL, NULL );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EFAULT );
 

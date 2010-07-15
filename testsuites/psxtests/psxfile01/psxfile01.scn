@@ -1,4 +1,3 @@
-
 *** FILE TEST 1 ***
 *************** Dump of Entire IMFS ***************
 /
@@ -49,6 +48,8 @@ Attempt to recreate /tmp/tom
 create /tmp/john
 tcdrain /tmp/john
 Attempt to create a file, open in read-only mode and truncate it
+Exercise the reentrant version _link_r -- Expect EFAULT
+Unlink /tmp/bha using the reentrant version -- OK
 mknod /tmp/joel
 (0)the first write!!!
 
