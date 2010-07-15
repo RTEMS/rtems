@@ -56,6 +56,6 @@ int IMFS_initialize(
     &IMFS_ops,
     &IMFS_memfile_handlers,
     &IMFS_directory_handlers,
-    &rtems_filesystem_null_handlers  /* for fifos */
+    &rtems_filesystem_handlers_default  /* for fifos */
   );
 }

@@ -1083,37 +1083,37 @@ static int rtems_tftp_free_node_info(
 
 
 static const rtems_filesystem_operations_table  rtems_tftp_ops = {
-    rtems_tftp_eval_path,            /* eval_path */
-    rtems_tftp_evaluate_for_make,    /* evaluate_for_make */
-    NULL,                            /* link */
-    NULL,                            /* unlink */
-    rtems_tftp_node_type,            /* node_type */
-    NULL,                            /* mknod */
-    NULL,                            /* chown */
-    rtems_tftp_free_node_info,       /* freenodinfo */
-    NULL,                            /* mount */
-    rtems_tftpfs_initialize,         /* initialize */
-    NULL,                            /* unmount */
-    rtems_tftpfs_shutdown,           /* fsunmount */
-    NULL,                            /* utime, */
-    NULL,                            /* evaluate_link */
-    NULL,                            /* symlink */
-    NULL,                            /* readlin */
+    .evalpath_h = rtems_tftp_eval_path,
+    .evalformake_h = rtems_tftp_evaluate_for_make,
+    .link_h = rtems_filesystem_default_link,
+    .unlink_h = rtems_filesystem_default_unlink,
+    .node_type_h = rtems_tftp_node_type,
+    .mknod_h = rtems_filesystem_default_mknod,
+    .chown_h = rtems_filesystem_default_chown,
+    .freenod_h = rtems_tftp_free_node_info,
+    .mount_h = rtems_filesystem_default_mount,
+    .fsmount_me_h = rtems_tftpfs_initialize,
+    .unmount_h = rtems_filesystem_default_unmount,
+    .fsunmount_me_h = rtems_tftpfs_shutdown,
+    .utime_h = rtems_filesystem_default_utime,
+    .eval_link_h = rtems_filesystem_default_evaluate_link,
+    .symlink_h = rtems_filesystem_default_symlink,
+    .readlink_h = rtems_filesystem_default_readlink
 };
 
 static const rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
-    rtems_tftp_open,      /* open */
-    rtems_tftp_close,     /* close */
-    rtems_tftp_read,      /* read */
-    rtems_tftp_write,     /* write */
-    NULL,                 /* ioctl */
-    NULL,                 /* lseek */
-    NULL,                 /* fstat */
-    NULL,                 /* fchmod */
-    rtems_tftp_ftruncate, /* ftruncate */
-    NULL,                 /* fpathconf */
-    NULL,                 /* fsync */
-    NULL,                 /* fdatasync */
-    NULL,                 /* fcntl */
-    NULL                  /* rmnod */
+   .open_h = rtems_tftp_open,
+   .close_h = rtems_tftp_close,
+   .read_h = rtems_tftp_read,
+   .write_h = rtems_tftp_write,
+   .ioctl_h = rtems_filesystem_default_ioctl,
+   .lseek_h = rtems_filesystem_default_lseek,
+   .fstat_h = rtems_filesystem_default_fstat,
+   .fchmod_h = rtems_filesystem_default_fchmod,
+   .ftruncate_h = rtems_tftp_ftruncate,
+   .fpathconf_h = rtems_filesystem_default_fpathconf,
+   .fsync_h = rtems_filesystem_default_fsync,
+   .fdatasync_h = rtems_filesystem_default_fdatasync,
+   .fcntl_h = rtems_filesystem_default_fcntl,
+   .rmnod_h = rtems_filesystem_default_rmnod
 };

@@ -1,5 +1,17 @@
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/include/rtems/libio_.h: Removed rtems_filesystem_null_handlers.
+	* libcsupport/src/fs_null_handlers.c: Removed file.
+	* libcsupport/Makefile.am: Reflect change above.
+	* libfs/src/nfsclient/src/nfs.c, libfs/src/imfs/imfs_creat.c,
+	libfs/src/imfs/imfs_init.c, libfs/src/imfs/miniimfs_init.c: Use
+	rtems_filesystem_handlers_default instead of
+	rtems_filesystem_null_handlers.
+	* libnetworking/lib/ftpfs.c, libnetworking/lib/tftpDriver.c:
+	Initialize handler and operations table with proper defaults.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libcsupport/include/rtems/libio.h: Removed file_info and handlers
 	fields in rtems_libio_t.
 	* libcsupport/src/close.c, libcsupport/src/fcntl.c,

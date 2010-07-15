@@ -54,8 +54,8 @@ int miniIMFS_initialize(
   return IMFS_initialize_support(
     mt_entry,
     &miniIMFS_ops,
-    &rtems_filesystem_null_handlers, /* for memfiles */
-    &rtems_filesystem_null_handlers, /* for directories */
-    &rtems_filesystem_null_handlers  /* for fifos */
+    &rtems_filesystem_handlers_default, /* for memfiles */
+    &rtems_filesystem_handlers_default, /* for directories */
+    &rtems_filesystem_handlers_default  /* for fifos */
   );
 }

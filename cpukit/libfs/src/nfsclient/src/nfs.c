@@ -1616,7 +1616,7 @@ unsigned long	niu,siu;
 			case NFDIR:	pathloc->handlers = &nfs_dir_file_handlers;  break;
 			case NFREG:	pathloc->handlers = &nfs_file_file_handlers; break;
 			case NFLNK: pathloc->handlers = &nfs_link_file_handlers; break;
-			default: 	pathloc->handlers = &rtems_filesystem_null_handlers; break;
+			default: 	pathloc->handlers = &rtems_filesystem_handlers_default; break;
 		}
 		pathloc->node_access = node;
 

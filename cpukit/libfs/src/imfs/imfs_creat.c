@@ -54,7 +54,7 @@ IMFS_jnode_t *IMFS_create_node(
    *  Reject creation of FIFOs if support is disabled.
    */
   if ( type == IMFS_FIFO &&
-       fs_info->fifo_handlers == &rtems_filesystem_null_handlers )
+       fs_info->fifo_handlers == &rtems_filesystem_handlers_default )
     return NULL;
 
   /*
