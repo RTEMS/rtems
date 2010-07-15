@@ -112,6 +112,8 @@ static void test_realloc(void)
    *  Realloc with a bad pointer to force a point
    */
   p4 = realloc( test_realloc, 32 );
+
+  p4 = _realloc_r( NULL, NULL, 1 );
 }
 
 #define TEST_HEAP_SIZE 2048
