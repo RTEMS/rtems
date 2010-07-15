@@ -47,7 +47,7 @@ msdos_file_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
@@ -88,7 +88,7 @@ msdos_file_close(rtems_libio_t *iop)
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
@@ -148,7 +148,7 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, size_t count)
     ssize_t            ret = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
@@ -181,7 +181,7 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
     ssize_t            ret = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
@@ -228,7 +228,7 @@ msdos_file_lseek(rtems_libio_t *iop, rtems_off64_t offset, int whence)
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     uint32_t           real_size = 0;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
@@ -306,7 +306,7 @@ msdos_file_ftruncate(rtems_libio_t *iop, rtems_off64_t length)
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
 
     if (length >= fat_fd->fat_file_size)
         return RC_OK;
@@ -349,7 +349,7 @@ msdos_file_sync(rtems_libio_t *iop)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
@@ -409,7 +409,7 @@ msdos_file_datasync(rtems_libio_t *iop)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,

@@ -98,7 +98,7 @@ int memfile_open(
 {
   IMFS_jnode_t  *the_jnode;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   /*
    * Perform 'copy on write' for linear files
@@ -137,7 +137,7 @@ int memfile_close(
 {
   IMFS_jnode_t   *the_jnode;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   if (iop->flags & LIBIO_FLAGS_APPEND)
     iop->offset = the_jnode->info.file.size;
@@ -161,7 +161,7 @@ ssize_t memfile_read(
 {
   IMFS_jnode_t   *the_jnode;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   return IMFS_memfile_read( the_jnode, iop->offset, buffer, count );
 }
@@ -181,7 +181,7 @@ ssize_t memfile_write(
   IMFS_jnode_t   *the_jnode;
   ssize_t         status;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   status = IMFS_memfile_write( the_jnode, iop->offset, buffer, count );
   iop->size = the_jnode->info.file.size;
@@ -205,7 +205,7 @@ int memfile_ioctl(
 {
   IMFS_jnode_t   *the_jnode;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   return 0;
 }
@@ -224,7 +224,7 @@ rtems_off64_t memfile_lseek(
 {
   IMFS_jnode_t   *the_jnode;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   if (the_jnode->type == IMFS_LINEAR_FILE) {
     if (iop->offset > the_jnode->info.linearfile.size)
@@ -258,7 +258,7 @@ int memfile_ftruncate(
 {
   IMFS_jnode_t   *the_jnode;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   /*
    *  POSIX 1003.1b does not specify what happens if you truncate a file

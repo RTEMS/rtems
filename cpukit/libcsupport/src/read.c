@@ -40,7 +40,7 @@ ssize_t read(
   /*
    *  Now process the read().
    */
-  rc = (*iop->handlers->read_h)( iop, buffer, count );
+  rc = (*iop->pathinfo.handlers->read_h)( iop, buffer, count );
 
   if ( rc > 0 )
     iop->offset += rc;

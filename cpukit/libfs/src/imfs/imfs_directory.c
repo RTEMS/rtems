@@ -47,7 +47,7 @@ int imfs_dir_open(
   IMFS_jnode_t      *the_jnode;
 
   /* Is the node a directory ? */
-  the_jnode = (IMFS_jnode_t *) iop->file_info;
+  the_jnode = (IMFS_jnode_t *) iop->pathinfo.node_access;
 
   if ( the_jnode->type != IMFS_DIRECTORY )
      return -1;      /* It wasn't a directory --> return error */
@@ -90,7 +90,7 @@ ssize_t imfs_dir_read(
    int                  last_entry;
    struct dirent        tmp_dirent;
 
-   the_jnode = (IMFS_jnode_t *)iop->file_info;
+   the_jnode = (IMFS_jnode_t *)iop->pathinfo.node_access;
    the_chain = &the_jnode->info.directory.Entries;
 
    if ( rtems_chain_is_empty( the_chain ) )

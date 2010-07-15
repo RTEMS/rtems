@@ -1,5 +1,26 @@
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/include/rtems/libio.h: Removed file_info and handlers
+	fields in rtems_libio_t.
+	* libcsupport/src/close.c, libcsupport/src/fcntl.c,
+	libcsupport/src/fdatasync.c, libcsupport/src/fstat.c,
+	libcsupport/src/fsync.c, libcsupport/src/ftruncate.c,
+	libcsupport/src/getdents.c, libcsupport/src/ioctl.c,
+	libcsupport/src/libio_sockets.c, libcsupport/src/lseek.c,
+	libcsupport/src/open.c, libcsupport/src/read.c,
+	libcsupport/src/readv.c, libcsupport/src/write.c,
+	libcsupport/src/writev.c, libfs/src/devfs/devclose.c,
+	libfs/src/devfs/devioctl.c, libfs/src/devfs/devopen.c,
+	libfs/src/devfs/devread.c, libfs/src/devfs/devwrite.c
+	libfs/src/dosfs/msdos_dir.c libfs/src/dosfs/msdos_file.c
+	libfs/src/imfs/deviceio.c libfs/src/imfs/imfs_directory.c
+	libfs/src/imfs/imfs_fifo.c libfs/src/imfs/memfile.c
+	libfs/src/nfsclient/src/nfs.c libfs/src/rfs/rtems-rfs-rtems-file.c
+	libfs/src/rfs/rtems-rfs-rtems.h libnetworking/lib/ftpfs.c: Reflect
+	changes above.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libfs/src/devfs/devfs.h, libfs/src/devfs/devfs_node_type.c: Fixed
 	devFS_node_type() prototype.
 

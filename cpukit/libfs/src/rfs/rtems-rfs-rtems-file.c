@@ -70,7 +70,7 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN))
     printf("rtems-rfs: file-open: handle:%p\n", file);
   
-  iop->file_info = file;
+  iop->pathinfo.node_access = file;
   
   rtems_rfs_rtems_unlock (fs);
   return 0;
@@ -86,7 +86,7 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
 static int
 rtems_rfs_rtems_file_close (rtems_libio_t* iop)
 {
-  rtems_rfs_file_handle* file = iop->file_info;
+  rtems_rfs_file_handle* file = iop->pathinfo.node_access;
   rtems_rfs_file_system* fs = rtems_rfs_file_fs (file);
   int                    rc;
 
@@ -116,7 +116,7 @@ rtems_rfs_rtems_file_read (rtems_libio_t* iop,
                            void*          buffer,
                            size_t         count)
 {
-  rtems_rfs_file_handle* file = iop->file_info;
+  rtems_rfs_file_handle* file = iop->pathinfo.node_access;
   rtems_rfs_pos          pos;
   uint8_t*               data = buffer;
   ssize_t                read = 0;
@@ -181,7 +181,7 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
                             const void*    buffer,
                             size_t         count)
 {
-  rtems_rfs_file_handle* file = iop->file_info;
+  rtems_rfs_file_handle* file = iop->pathinfo.node_access;
   rtems_rfs_pos          pos;
   const uint8_t*         data = buffer;
   ssize_t                write = 0;
@@ -271,7 +271,7 @@ rtems_rfs_rtems_file_lseek (rtems_libio_t* iop,
                             rtems_off64_t  offset,
                             int            whence)
 {
-  rtems_rfs_file_handle* file = iop->file_info;
+  rtems_rfs_file_handle* file = iop->pathinfo.node_access;
   rtems_rfs_pos          pos;
   int                    rc;
 
@@ -305,7 +305,7 @@ int
 rtems_rfs_rtems_file_ftruncate (rtems_libio_t* iop,
                                 rtems_off64_t  length)
 {
-  rtems_rfs_file_handle* file = iop->file_info;
+  rtems_rfs_file_handle* file = iop->pathinfo.node_access;
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_FTRUNC))

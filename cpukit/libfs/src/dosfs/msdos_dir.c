@@ -51,7 +51,7 @@ msdos_dir_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
@@ -86,7 +86,7 @@ msdos_dir_close(rtems_libio_t *iop)
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
@@ -201,7 +201,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     fat_file_fd_t     *tmp_fat_fd = NULL;
     struct dirent      tmp_dirent;
     uint32_t           start = 0;
@@ -591,7 +591,7 @@ msdos_dir_sync(rtems_libio_t *iop)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    fat_file_fd_t     *fat_fd = iop->file_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,

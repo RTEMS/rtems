@@ -50,7 +50,7 @@ int fstat(
    */
   memset( sbuf, 0, sizeof(struct stat) );
 
-  return (*iop->handlers->fstat_h)( &iop->pathinfo, sbuf );
+  return (*iop->pathinfo.handlers->fstat_h)( &iop->pathinfo, sbuf );
 }
 
 /*

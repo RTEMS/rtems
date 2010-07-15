@@ -62,8 +62,6 @@ static int vfcntl(
         }
       }
 
-      diop->handlers   = iop->handlers;
-      diop->file_info  = iop->file_info;
       diop->flags      = iop->flags;
       diop->pathinfo   = iop->pathinfo;
       ret = (int) (diop - rtems_libio_iops);
@@ -140,7 +138,7 @@ static int vfcntl(
    */
 
   if (ret >= 0) {
-    int err = (*iop->handlers->fcntl_h)( cmd, iop );
+    int err = (*iop->pathinfo.handlers->fcntl_h)( cmd, iop );
     if (err) {
       errno = err;
       ret = -1;

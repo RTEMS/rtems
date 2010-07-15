@@ -154,12 +154,10 @@ int open(
    *  Fill in the file control block based on the loc structure
    *  returned by successful path evaluation.
    */
-  iop->handlers   = loc.handlers;
-  iop->file_info  = loc.node_access;
   iop->flags     |= rtems_libio_fcntl_flags( flags );
   iop->pathinfo   = loc;
 
-  rc = (*iop->handlers->open_h)( iop, pathname, flags, mode );
+  rc = (*iop->pathinfo.handlers->open_h)( iop, pathname, flags, mode );
   if ( rc ) {
     rc = errno;
     goto done;

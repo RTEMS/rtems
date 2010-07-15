@@ -194,7 +194,7 @@ typedef struct rtems_rfs_rtems_private
  * @return
  */
 #define rtems_rfs_rtems_get_iop_ino(_iop) \
-  ((intptr_t)(_iop)->file_info)
+  ((intptr_t)(_iop)->pathinfo.node_access)
 
 /**
  * Create the name of the handler's table given the type of handlers.

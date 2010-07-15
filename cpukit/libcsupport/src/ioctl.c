@@ -47,7 +47,7 @@ int ioctl(
   /*
    *  Now process the ioctl().
    */
-  rc = (*iop->handlers->ioctl_h)( iop, command, buffer );
+  rc = (*iop->pathinfo.handlers->ioctl_h)( iop, command, buffer );
 
   return rc;
 }

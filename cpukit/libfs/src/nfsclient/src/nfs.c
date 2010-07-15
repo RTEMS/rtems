@@ -2515,23 +2515,6 @@ struct _rtems_filesystem_operations_table nfs_fs_ops = {
 		  'nfs_xxx'.
  *****************************************/
 
-
-#if 0
-/* from rtems/libio.h for convenience */
-struct rtems_libio_tt {
-		rtems_driver_name_t              *driver;
-		off_t                             size;      /* size of file */
-		off_t                             offset;    /* current offset into file */
-		uint32_t                          flags;
-		rtems_filesystem_location_info_t  pathinfo;
-		Objects_Id                        sem;
-		uint32_t                          data0;     /* private to "driver" */
-		void                             *data1;     /* ... */
-		void                             *file_info; /* used by file handlers */
-		rtems_filesystem_file_handlers_r *handlers;  /* type specific handlers */
-};
-#endif
-
 /* stateless NFS protocol makes this trivial */
 static int nfs_file_open(
 	rtems_libio_t *iop,
@@ -2540,14 +2523,13 @@ static int nfs_file_open(
 	uint32_t      mode
 )
 {
-	iop->file_info = 0;
 	return 0;
 }
 
 /* reading directories is not stateless; we must
  * remember the last 'read' position, i.e.
  * the server 'cookie'. We do manage this information
- * attached to the iop->file_info.
+ * attached to the pathinfo.node_access_2.
  */
 static int nfs_dir_open(
 	rtems_libio_t *iop,
@@ -2560,11 +2542,11 @@ NfsNode		node = iop->pathinfo.node_access;
 DirInfo		di;
 
 	/* create a readdirargs object and copy the file handle;
-	 * attach to the file_info.
+	 * attach to the pathinfo.node_access_2
 	 */
 
 	di = (DirInfo) malloc(sizeof(*di));
-	iop->file_info = di;
+	iop->pathinfo.node_access_2 = di;
 
 	if ( !di  ) {
 		errno = ENOMEM;
@@ -2598,8 +2580,8 @@ static int nfs_dir_close(
 	rtems_libio_t *iop
 )
 {
-	free(iop->file_info);
-	iop->file_info = 0;
+	free(iop->pathinfo.node_access_2);
+	iop->pathinfo.node_access_2 = 0;
 	return 0;
 }
 
@@ -2656,7 +2638,7 @@ static ssize_t nfs_dir_read(
 	size_t        count
 )
 {
-DirInfo			di     = iop->file_info;
+DirInfo			di     = iop->pathinfo.node_access_2;
 RpcUdpServer	server = ((Nfs)iop->pathinfo.mt_entry->fs_info)->server;
 
 	if ( di->eofreached )
@@ -2814,7 +2796,7 @@ static rtems_off64_t nfs_dir_lseek(
 	int            whence
 )
 {
-DirInfo di = iop->file_info;
+DirInfo di = iop->pathinfo.node_access_2;
 
 	/* we don't support anything other than
 	 * rewinding

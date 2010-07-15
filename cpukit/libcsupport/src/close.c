@@ -29,7 +29,7 @@ int close(
   rtems_libio_check_is_open(iop);
 
   rc = RTEMS_SUCCESSFUL;
-  rc = (*iop->handlers->close_h)( iop );
+  rc = (*iop->pathinfo.handlers->close_h)( iop );
 
   rtems_filesystem_freenode( &iop->pathinfo );
   rtems_libio_free( iop );

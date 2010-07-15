@@ -1119,8 +1119,6 @@ struct rtems_libio_tt {
   rtems_id                                sem;
   uint32_t                                data0;     /* private to "driver" */
   void                                   *data1;     /* ... */
-  void                                   *file_info; /* used by file handlers */
-  const rtems_filesystem_file_handlers_r *handlers;  /* type specific handlers */
 };
 
 /**

@@ -958,7 +958,7 @@ static int rtems_ftpfs_open(
     ? "STOR "
     : "RETR ";
   uint32_t client_address = 0;
-  char *location = iop->file_info;
+  char *location = iop->pathinfo.node_access;
 
   /* Invalidate data handle */
   iop->data1 = NULL;
@@ -982,7 +982,7 @@ static int rtems_ftpfs_open(
        * This is an access to the root node that will be used for file system
        * option settings.
        */
-      iop->handlers = &rtems_ftpfs_root_handlers;
+      iop->pathinfo.handlers = &rtems_ftpfs_root_handlers;
 
       return 0;
     } else {
@@ -1166,7 +1166,7 @@ static int rtems_ftpfs_eval_path(
   /*
    * The caller of this routine has striped off the mount prefix from the path.
    * We need to store this path here or otherwise we would have to do this job
-   * again.  The path is used in rtems_ftpfs_open() via iop->file_info.
+   * again.  The path is used in rtems_ftpfs_open() via iop->pathinfo.node_access.
    */
   char *pathname_dup = malloc(pathnamelen + 1);
 

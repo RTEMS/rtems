@@ -97,7 +97,11 @@ ssize_t readv(
    *  Now process the readv().
    */
   for ( total=0, v=0 ; v < iovcnt ; v++ ) {
-    bytes = (*iop->handlers->read_h)( iop, iov[v].iov_base, iov[v].iov_len );
+    bytes = (*iop->pathinfo.handlers->read_h)(
+      iop,
+      iov[v].iov_base,
+      iov[v].iov_len
+    );
 
     if ( bytes < 0 )
       return -1;

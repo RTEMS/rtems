@@ -51,5 +51,5 @@ int getdents(
    *  Return the number of bytes that were actually transfered as a result
    *  of the read attempt.
    */
-  return (*iop->handlers->read_h)( iop, dd_buf, dd_len  );
+  return (*iop->pathinfo.handlers->read_h)( iop, dd_buf, dd_len  );
 }

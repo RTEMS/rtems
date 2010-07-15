@@ -47,5 +47,5 @@ int ftruncate(
 
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
-  return (*iop->handlers->ftruncate_h)( iop, length );
+  return (*iop->pathinfo.handlers->ftruncate_h)( iop, length );
 }

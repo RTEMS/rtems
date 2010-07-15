@@ -25,7 +25,7 @@ ssize_t devFS_write(
   rtems_status_code       status;
   rtems_device_name_t    *np;
 
-  np           = (rtems_device_name_t *)iop->file_info;
+  np           = (rtems_device_name_t *)iop->pathinfo.node_access;
 
   args.iop         = iop;
   args.offset      = iop->offset;

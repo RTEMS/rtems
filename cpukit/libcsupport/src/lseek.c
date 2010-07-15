@@ -61,7 +61,7 @@ off_t lseek(
    *  new offset.
    */
 
-  status = (*iop->handlers->lseek_h)( iop, offset, whence );
+  status = (*iop->pathinfo.handlers->lseek_h)( iop, offset, whence );
   if ( status == (off_t) -1 )
     iop->offset = old_offset;
 

@@ -35,5 +35,5 @@ int fsync(
    *  Now process the fsync().
    */
 
-  return (*iop->handlers->fsync_h)( iop );
+  return (*iop->pathinfo.handlers->fsync_h)( iop );
 }

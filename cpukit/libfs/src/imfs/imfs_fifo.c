@@ -22,7 +22,7 @@
 
 #define JNODE2PIPE(_jnode)  ( (_jnode)->info.fifo.pipe )
 
-#define LIBIO2PIPE(_iop)  ( JNODE2PIPE((IMFS_jnode_t *)(_iop)->file_info) )
+#define LIBIO2PIPE(_iop)  ( JNODE2PIPE((IMFS_jnode_t *)(_iop)->pathinfo.node_access) )
 
 /* Set errno and return -1 if error, else return _err */
 #define IMFS_FIFO_RETURN(_err) \
@@ -39,7 +39,7 @@ int IMFS_fifo_open(
   uint32_t       mode
 )
 {
-  IMFS_jnode_t *jnode = iop->file_info;
+  IMFS_jnode_t *jnode = iop->pathinfo.node_access;
 
   int err = fifo_open(&JNODE2PIPE(jnode), iop);
   IMFS_FIFO_RETURN(err);
@@ -49,7 +49,7 @@ int IMFS_fifo_close(
   rtems_libio_t *iop
 )
 {
-  IMFS_jnode_t *jnode = iop->file_info;
+  IMFS_jnode_t *jnode = iop->pathinfo.node_access;
 
   int err = pipe_release(&JNODE2PIPE(jnode), iop);
 
@@ -67,7 +67,7 @@ ssize_t IMFS_fifo_read(
   size_t         count
 )
 {
-  IMFS_jnode_t *jnode = iop->file_info;
+  IMFS_jnode_t *jnode = iop->pathinfo.node_access;
 
   int err = pipe_read(JNODE2PIPE(jnode), buffer, count, iop);
   if (err > 0)
@@ -82,7 +82,7 @@ ssize_t IMFS_fifo_write(
   size_t         count
 )
 {
-  IMFS_jnode_t *jnode = iop->file_info;
+  IMFS_jnode_t *jnode = iop->pathinfo.node_access;
 
   int err = pipe_write(JNODE2PIPE(jnode), buffer, count, iop);
   if (err > 0) {

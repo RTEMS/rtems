@@ -104,7 +104,11 @@ ssize_t writev(
     if ( iov[v].iov_len == 0 )
       continue;
 
-    bytes = (*iop->handlers->write_h)( iop, iov[v].iov_base, iov[v].iov_len );
+    bytes = (*iop->pathinfo.handlers->write_h)(
+      iop,
+      iov[v].iov_base,
+      iov[v].iov_len
+    );
 
     if ( bytes < 0 )
       return -1;

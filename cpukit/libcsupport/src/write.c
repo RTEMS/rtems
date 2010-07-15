@@ -47,7 +47,7 @@ ssize_t write(
   /*
    *  Now process the write() request.
    */
-  rc = (*iop->handlers->write_h)( iop, buffer, count );
+  rc = (*iop->pathinfo.handlers->write_h)( iop, buffer, count );
 
   if ( rc > 0 )
     iop->offset += rc;
