@@ -149,6 +149,7 @@ spintrcritical15/Makefile
 spintrcritical16/Makefile
 spintrcritical17/Makefile
 spmkdir/Makefile
+spmountmgr01/Makefile
 spnotepad01/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile

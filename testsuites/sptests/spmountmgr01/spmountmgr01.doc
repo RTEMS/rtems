@@ -1,0 +1,25 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2010.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spmountmgr01
+
+directives:
+
++ rtems_filesystem_register
++ rtems_filesystem_unregister
+
+concepts:
+
++ Exercise the routines of mount-mgr.c under libcsupport.
++ These routines are mostly to register / unregister new filesytem
+  for later use.
