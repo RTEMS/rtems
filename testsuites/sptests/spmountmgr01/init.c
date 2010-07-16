@@ -50,6 +50,27 @@ rtems_task Init(
   status = rtems_filesystem_register( "fs", fs_mount );
   rtems_test_assert( status == 0 );
 
+  puts( "Init - attempt to make target(NULL) and mount - expect EINVAL" );
+  status = mount_and_make_target_path(
+	     NULL,
+	     NULL,
+	     "fs",
+	     0,
+	     NULL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  puts( "Init - attempt to make target and mount - expect EINVAL" );
+  status = mount_and_make_target_path(
+	     NULL,
+	     "/tmp",
+	     "fs",
+	     2,
+	     NULL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+	     
   puts( "Init - register filesystem fs - expect EINVAL" );
   status = rtems_filesystem_register( "fs", fs_mount );
   rtems_test_assert( status == -1 );

@@ -1,8 +1,11 @@
+
 *** TEST MOUNT MANAGER ROUTINE - 01 ***
 Init - allocating most of heap -- OK
 Init - attempt to register filesystem fs - expect ENOMEM
 Init - freeing allocated memory -- OK
 Init - register filesystem fs -- OK
+Init - attempt to make target(NULL) and mount - expect EINVAL
+Init - attempt to make target and mount - expect EINVAL
 Init - register filesystem fs - expect EINVAL
 Init - register filesystem bfs -- OK
 Init - register filesystem bfs - expect EINVAL

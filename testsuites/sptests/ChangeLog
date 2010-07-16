@@ -1,3 +1,10 @@
+2010-07-16	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1617/testing
+	* spmountmgr01/init.c, spmountmgr01/spmountmgr01.scn,
+	spmountmgr01/spmountmgr01.doc: Added cases to exercise
+	mount-mktgt.c.
+
 2010-07-15	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1617/testing

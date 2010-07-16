@@ -17,9 +17,13 @@ directives:
 
 + rtems_filesystem_register
 + rtems_filesystem_unregister
++ mount_and_make_target_path
 
 concepts:
 
-+ Exercise the routines of mount-mgr.c under libcsupport.
-+ These routines are mostly to register / unregister new filesytem
++ Exercise the routines of mount-mgr.c and mount-mktgt.c under libcsupport.
++ The routines in mount-mgr.c are mostly to register / unregister new filesytem
   for later use.
++ The routines in mount-mktgt.c are used to mount a filesystem at a
+target path. If the target path does not exist, it is created and then
+the mount is processed
