@@ -1,5 +1,17 @@
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* score/include/rtems/score/basedefs.h: New file.
+	* score/Makefile.am, score/preinstall.am: Reflect change above.
+	* score/include/rtems/score/percpu.h: Include <rtems/score/cpu.h>.
+	* score/include/rtems/system.h: Moved definition of SCORE_EXTERN,
+	SAPI_EXTERN, RTEMS_EXTERN, POSIX_EXTERN, RTEMS_INLINE_ROUTINE,
+	RTEMS_COMPILER_MEMORY_BARRIER, RTEMS_COMPILER_NO_RETURN_ATTRIBUTE,
+	RTEMS_COMPILER_DEPRECATED_ATTRIBUTE, TRUE, and FALSE to
+	<rtems/score/basedefs.h>.
+	Removed include of <rtems/score/cpu.h>, <stdint.h> and <stddef.h>.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libmd/md4.c: Removed definition of TRUE and FALSE.
 
 2010-07-15	Joel Sherrill <joel.sherrill@oarcorp.com>

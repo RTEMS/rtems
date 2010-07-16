@@ -167,6 +167,10 @@ $(PROJECT_INCLUDE)/rtems/score/cpuopts.h: include/rtems/score/cpuopts.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpuopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuopts.h
 
+$(PROJECT_INCLUDE)/rtems/score/basedefs.h: include/rtems/score/basedefs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/basedefs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/basedefs.h
+
 if HAS_PTHREADS
 $(PROJECT_INCLUDE)/rtems/score/corespinlock.h: include/rtems/score/corespinlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corespinlock.h

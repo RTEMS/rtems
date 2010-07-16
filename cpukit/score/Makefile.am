@@ -32,7 +32,8 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/timestamp.h include/rtems/score/timestamp64.h \
     include/rtems/score/tod.h include/rtems/score/tqdata.h \
     include/rtems/score/userext.h include/rtems/score/watchdog.h \
-    include/rtems/score/wkspace.h include/rtems/score/cpuopts.h
+    include/rtems/score/wkspace.h include/rtems/score/cpuopts.h \
+    include/rtems/score/basedefs.h
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h \

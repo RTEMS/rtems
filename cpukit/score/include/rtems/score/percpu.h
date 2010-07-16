@@ -19,6 +19,8 @@
 #ifndef _RTEMS_PERCPU_H
 #define _RTEMS_PERCPU_H
 
+#include <rtems/score/cpu.h>
+
 #ifdef ASM
   #include <rtems/asm.h>
 #endif
