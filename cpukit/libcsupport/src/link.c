@@ -51,7 +51,7 @@ int link(
   result = (*parent_loc.ops->evalformake_h)( &new[i], &parent_loc, &name_start );
   if ( result != 0 ) {
     rtems_filesystem_freenode( &existing_loc );
-    rtems_set_errno_and_return_minus_one( result );
+    return -1;
   }
 
   /*

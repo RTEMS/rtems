@@ -1,5 +1,9 @@
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/src/link.c: Do not overwrite errno with return status.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* score/include/rtems/score/basedefs.h: New file.
 	* score/Makefile.am, score/preinstall.am: Reflect change above.
 	* score/include/rtems/score/percpu.h: Include <rtems/score/cpu.h>.
