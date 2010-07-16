@@ -15,7 +15,7 @@
  *  implementation of this appears to seek to the ((off/DIRENT_SIZE) + 1)
  *  record where DIRENT_SIZE seems to be 12 bytes.
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,6 +34,7 @@
 #include <rtems/libio.h>
 #include <rtems/userenv.h>
 #include <pmacros.h>
+#include <rtems/score/heap.h>
 
 void touch( char *file )
 {
@@ -63,6 +64,8 @@ int fileexists( char *file )
 }
 
 #if defined(__rtems__)
+extern Heap_Control  *RTEMS_Malloc_Heap;
+
 int test_main(void)
 #else
 int main(
@@ -72,13 +75,16 @@ int main(
 #endif
 {
   int status;
-
+  void *alloc_ptr = (void *)0;
+  Heap_Information_block Info;
 /*
  *  This test is the C equivalent of this sequence.
 #mkdir /one
 #mkdir /one/one
 #touch /one/one.test
 #touch /one/two/two.test
+# an error case to ENOTSUP from chroot
+# chroot
 #chroot /one
 #if !fileexists(/one/one.test) echo "SUCCESSFUL"
 #if fileexists(/two/two.test) echo "SUCCESSFUL"
@@ -101,8 +107,25 @@ int main(
   touch( "/one/one.test" );
   touch( "/one/two/two.test" );
 
+  puts( "allocate most of memory - attempt to fail chroot - expect ENOTSUP" );
+  _Heap_Get_information(RTEMS_Malloc_Heap, &Info);
+  alloc_ptr = malloc( Info.Free.largest - 4 );
+  rtems_test_assert( alloc_ptr != NULL );
+
   status = chroot( "/one" );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOTSUP );
+
+  puts( "freeing the allocated memory" );
+  free( alloc_ptr );
+
+  puts( "chroot with bad path - expect EFAULT" );
+  status = chroot( NULL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EFAULT );
+
+  status = chroot( "/one" );
+  rtems_test_assert( status == 0 );
 
   status = fileexists( "/one/one.test" );
   printf( "%s on /one/one.test\n", (!status) ? "SUCCESS" : "FAILURE" );

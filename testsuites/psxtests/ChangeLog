@@ -1,3 +1,9 @@
+2010-07-17	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1622/testing
+	* psxchroot01/test.c, psxchroot01/psxchroot01.scn: Added two test
+	cases to completely cover chroot().
+
 2010-07-16	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* psxfile01/test.c: Avoid NULL pointer access.

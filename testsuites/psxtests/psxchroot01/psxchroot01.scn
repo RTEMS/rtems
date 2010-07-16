@@ -1,6 +1,8 @@
 
-
 *** CHROOT01 TEST ***
+allocate most of memory - attempt to fail chroot - expect ENOTSUP
+freeing the allocated memory
+chroot with bad path - expect EFAULT
 SUCCESS on /one/one.test
 SUCCESS on /two/two.test
 Reset the private environment
