@@ -339,10 +339,10 @@ int main(
   rtems_test_assert( fd == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  puts( "Exercise the reentrant version _link_r -- Expect EFAULT" );
-  status = _link_r( NULL, NULL, NULL );
+  puts( "Exercise the reentrant version _link_r -- Expect EEXIST" );
+  status = _link_r( NULL, "", "" );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
+  rtems_test_assert( errno == EEXIST );
 
   puts( "Unlink /tmp/bha using the reentrant version -- OK" );
   status = _unlink_r( NULL, "/tmp/bha" );
