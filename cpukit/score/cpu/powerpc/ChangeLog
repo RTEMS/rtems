@@ -1,3 +1,11 @@
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/new-exceptions/cpu.h: Removed file.
+	* Makefile.am, preinstall.am: Reflect change above.
+	* rtems/score/cpu.h: Include <rtems/score/types.h> first.  Added
+	contents of <rtems/new-exceptions/cpu.h>.
+	* rtems/score/types.h: Use <rtems/score/basedefs.h> header file.
+
 2010-06-30	Peter Dufault <dufault@hda.com>
 
 	PR 1588/cpukit

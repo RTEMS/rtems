@@ -36,10 +36,9 @@
 #ifndef _RTEMS_SCORE_TYPES_H
 #define _RTEMS_SCORE_TYPES_H
 
-#ifndef ASM
+#include <rtems/score/basedefs.h>
 
-#include <stdbool.h>
-#include <stdint.h>
+#ifndef ASM
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,12 +49,6 @@ extern "C" {
  */
 typedef uint32_t     Priority_Bit_map_control;
 typedef void ppc_isr;
-
-#ifdef RTEMS_DEPRECATED_TYPES
-typedef bool	boolean;     		/* Boolean value   */
-typedef float	single_precision;	/* single precision float */
-typedef double	double_precision;	/* double precision float */
-#endif
 
 #ifdef __cplusplus
 }

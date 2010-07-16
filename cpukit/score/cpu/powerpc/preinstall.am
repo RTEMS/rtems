@@ -39,15 +39,6 @@ $(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/r
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 
-$(PROJECT_INCLUDE)/rtems/new-exceptions/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/new-exceptions
-	@: > $(PROJECT_INCLUDE)/rtems/new-exceptions/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/new-exceptions/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems/new-exceptions/cpu.h: rtems/new-exceptions/cpu.h $(PROJECT_INCLUDE)/rtems/new-exceptions/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/new-exceptions/cpu.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/new-exceptions/cpu.h
-
 $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/powerpc
 	@: > $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
