@@ -35,9 +35,6 @@
 ** This implementation assumes that ints are 32-bit quantities.
 */
 
-#define TRUE  1
-#define FALSE 0
-
 /* Compile-time includes
 */
 #include <stdio.h>

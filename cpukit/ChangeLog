@@ -1,3 +1,7 @@
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmd/md4.c: Removed definition of TRUE and FALSE.
+
 2010-07-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/privateenv.c: Fix bug.
