@@ -23,11 +23,9 @@
 extern "C" {
 #endif
 
-#include <rtems/score/avr.h>            /* pick up machine definitions */
-#include <avr/common.h>
-#ifndef ASM
 #include <rtems/score/types.h>
-#endif
+#include <rtems/score/avr.h>
+#include <avr/common.h>
 
 /* conditional compilation parameters */
 

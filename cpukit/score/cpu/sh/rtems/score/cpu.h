@@ -33,13 +33,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/sh.h>              /* pick up machine definitions */
-#ifndef ASM
 #include <rtems/score/types.h>
-#endif
-#if 0 && defined(__SH4__)
-#include <rtems/score/sh4_regs.h>
-#endif
+#include <rtems/score/sh.h>
 
 /* conditional compilation parameters */
 

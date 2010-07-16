@@ -36,10 +36,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/nios2.h>            /* pick up machine definitions */
-#ifndef ASM
 #include <rtems/score/types.h>
-#endif
+#include <rtems/score/nios2.h>
 
 /* conditional compilation parameters */
 

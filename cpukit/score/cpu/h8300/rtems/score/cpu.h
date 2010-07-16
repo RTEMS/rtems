@@ -23,10 +23,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/h8300.h>               /* pick up machine definitions */
-#ifndef ASM
 #include <rtems/score/types.h>
-#endif
+#include <rtems/score/h8300.h>
 
 #include <rtems/bspIo.h>	/* printk */
 

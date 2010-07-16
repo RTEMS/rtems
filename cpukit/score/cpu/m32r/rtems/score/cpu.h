@@ -37,10 +37,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/m32r.h>            /* pick up machine definitions */
-#ifndef ASM
 #include <rtems/score/types.h>
-#endif
+#include <rtems/score/m32r.h>
 
 /* conditional compilation parameters */
 

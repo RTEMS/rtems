@@ -43,18 +43,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/mips.h>       /* pick up machine definitions */
-#ifndef ASM
 #include <rtems/score/types.h>
-#endif
-
-#ifndef TRUE
-#define TRUE 1
-#endif
-#ifndef FALSE
-#define FALSE 0
-#endif
-
+#include <rtems/score/mips.h>
 
 /* conditional compilation parameters */
 

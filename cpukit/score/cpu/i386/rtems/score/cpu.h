@@ -27,10 +27,10 @@
 extern "C" {
 #endif
 
-#include <rtems/score/i386.h>              /* pick up machine definitions */
+#include <rtems/score/types.h>
+#include <rtems/score/i386.h>
 
 #ifndef ASM
-#include <rtems/score/types.h>
 #include <rtems/score/interrupts.h>	/* formerly in libcpu/cpu.h> */
 #include <rtems/score/registers.h>	/* formerly part of libcpu */
 #endif

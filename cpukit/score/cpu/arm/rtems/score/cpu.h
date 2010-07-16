@@ -33,21 +33,8 @@
 #ifndef _RTEMS_SCORE_CPU_H
 #define _RTEMS_SCORE_CPU_H
 
+#include <rtems/score/types.h>
 #include <rtems/score/arm.h>
-
-#ifndef ASM
-  #include <rtems/score/types.h>
-#endif
-
-#ifndef TRUE
-  #warning "TRUE not defined"
-  #define TRUE 1
-#endif
-
-#ifndef FALSE
-  #warning "FALSE not defined"
-  #define FALSE 0
-#endif
 
 /**
  * @defgroup ScoreCPUARM ARM Specific Support

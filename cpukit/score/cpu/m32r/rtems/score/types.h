@@ -19,10 +19,9 @@
 #ifndef _RTEMS_SCORE_TYPES_H
 #define _RTEMS_SCORE_TYPES_H
 
-#ifndef ASM
+#include <rtems/score/basedefs.h>
 
-#include <stdbool.h>
-#include <stdint.h>
+#ifndef ASM
 
 #ifdef __cplusplus
 extern "C" {

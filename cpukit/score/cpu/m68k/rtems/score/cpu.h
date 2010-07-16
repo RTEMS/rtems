@@ -23,14 +23,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/m68k.h>              /* pick up machine definitions */
-#ifndef ASM
-  #include <rtems/score/types.h>
-#else
-  /* FIXME */
-  #define TRUE 1
-  #define FALSE 0
-#endif
+#include <rtems/score/types.h>
+#include <rtems/score/m68k.h>
 
 /* conditional compilation parameters */
 

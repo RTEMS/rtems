@@ -1,3 +1,8 @@
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/score/cpu.h: Include <rtems/score/types.h> first.
+	* rtems/score/types.h: Use <rtems/score/basedefs.h> header file.
+
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/asm.h, rtems/score/cpu.h: cpu.h defines were not available to
