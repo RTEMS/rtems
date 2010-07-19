@@ -1,5 +1,14 @@
 2010-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac, termios06/init.c: Add initial tests for
+	XON/XOFF and VMIN/VMAX cases.
+	* termios07/.cvsignore, termios07/Makefile.am, termios07/init.c,
+	termios07/termios07.doc, termios07/termios07.scn,
+	termios08/.cvsignore, termios08/Makefile.am, termios08/init.c,
+	termios08/termios08.doc, termios08/termios08.scn: New files.
+
+2010-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add tar test for error cases.
 	* tar03/.cvsignore, tar03/Makefile.am, tar03/init.c, tar03/tar03.doc,
 	tar03/tar03.scn: New files.

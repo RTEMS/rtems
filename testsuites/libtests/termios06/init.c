@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <rtems/dumpbuf.h>
+#include <rtems/termiostypes.h>
 
 void pppasyncattach(void);
 void ppp_test_driver_set_rx( const char *expected, size_t len );
@@ -32,6 +33,39 @@ void open_it(void)
   puts( "open(" TERMIOS_TEST_DRIVER_DEVICE_NAME ") - OK " );
   Test_fd = open( TERMIOS_TEST_DRIVER_DEVICE_NAME, O_RDWR );
   rtems_test_assert( Test_fd != -1 );
+}
+
+void Rx_Wake(
+  struct termios *tty,
+  void           *arg
+)
+{
+  printk( "Rx_Wake - invoked\n" );
+}
+
+void Tx_Wake(
+  struct termios *tty,
+  void           *arg
+)
+{
+  printk( "Tx_Wake - invoked\n" );
+}
+
+struct ttywakeup RxWake = { Rx_Wake, NULL };
+struct ttywakeup TxWake = { Tx_Wake, NULL };
+
+void set_wakeups(void)
+{
+  int sc;
+
+  puts( "ioctl - RTEMS_IO_SNDWAKEUP - OK" );
+  sc = ioctl( Test_fd, RTEMS_IO_SNDWAKEUP, &TxWake );
+  rtems_test_assert( sc == 0 );
+
+  puts( "ioctl - RTEMS_IO_RCVWAKEUP - OK" );
+  sc = ioctl( Test_fd, RTEMS_IO_RCVWAKEUP, &RxWake );
+  rtems_test_assert( sc == 0 );
+
 }
 
 void set_discipline(void)
@@ -116,6 +150,7 @@ rtems_task Init(
 
   pppasyncattach();
   open_it();
+  set_wakeups();
   set_discipline();
   write_it();
   ioctl_it();
