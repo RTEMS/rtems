@@ -1,5 +1,11 @@
 2010-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Add tar test for error cases.
+	* tar03/.cvsignore, tar03/Makefile.am, tar03/init.c, tar03/tar03.doc,
+	tar03/tar03.scn: New files.
+
+2010-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* stringto01/init.c, stringto01/stringto01.scn,
 	stringto01/stringto_test_template.h: Attempt to pick up a few more
 	error paths.

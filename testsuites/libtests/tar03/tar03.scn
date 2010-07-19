@@ -1,0 +1,4 @@
+*** TEST TAR03 ***
+Loading tarfs image at non-root - ERROR
+Loading tarfs image with miniIMFS as root filesystem - ERROR
+*** END OF TEST TAR03 ***
