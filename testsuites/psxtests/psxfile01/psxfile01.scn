@@ -1,3 +1,4 @@
+
 *** FILE TEST 1 ***
 *************** Dump of Entire IMFS ***************
 /
@@ -30,6 +31,8 @@ mkdir tmp
 rmdir /usr
 rmdir /dev
 rmdir /fred
+rmdir /tmp/bha
+unlink /dev/tty
 mknod /dev/test_console
 mknod /dev/tty/S3
 mknod /etc/passwd
@@ -48,8 +51,17 @@ Attempt to recreate /tmp/tom
 create /tmp/john
 tcdrain /tmp/john
 Attempt to create a file, open in read-only mode and truncate it
-Exercise the reentrant version _link_r -- Expect EFAULT
+Exercise the reentrant version _link_r -- Expect ENOENT
 Unlink /tmp/bha using the reentrant version -- OK
+mknod with bad type - expect EINVAL
+open /tmp/bha in write only mode -- OK
+attempt to read from /tmp/bha - expect EINVAL
+closing and unlinking /tmp/bha
+open /tmp/bha in read only mode -- OK
+attempt to read from /tmp/bha - expect EINVAL
+closing and unlinking /tmp/bha
+attempt to read from an unopened filedes - expect EBADF
+attempt to write to an unopened filedes - expect EBADF
 mknod /tmp/joel
 (0)the first write!!!
 
@@ -73,7 +85,7 @@ End of _rename_r tests
 
 stat( /tmp/joel ) returned 
 ....st_dev     (0xfffe:0x0)
-....st_ino     13  may vary by small amount
+....st_ino     15  may vary by small amount
 ....mode  = 00100700
 ....nlink = 1
 ....uid = 0
@@ -106,7 +118,7 @@ Skipping maximum file size test since max_size is 4329344 bytes
 That is likely to be bigger than the available RAM on many targets.
 stat( /tmp/joel ) returned 
 ....st_dev     (0xfffe:0x0)
-....st_ino     14  may vary by small amount
+....st_ino     16  may vary by small amount
 ....mode  = 00100700
 ....nlink = 1
 ....uid = 0
@@ -137,7 +149,7 @@ fprintf to /tmp/j
 (4) 26 characters written to the file
 (5) 26 characters written to the file
 ....st_dev     (0xfffe:0x0)
-....st_ino     15  may vary by small amount
+....st_ino     17  may vary by small amount
 ....mode  = 00100644
 ....nlink = 1
 ....uid = 0
@@ -153,7 +165,7 @@ This is call 3 to fprintf
 This is call 4 to fprintf
 This is call 5 to fprintf
 ....st_dev     (0xfffe:0x0)
-....st_ino     15  may vary by small amount
+....st_ino     17  may vary by small amount
 ....mode  = 00100644
 ....nlink = 1
 ....uid = 0
@@ -183,7 +195,7 @@ This is call 5 to fprintf
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 40
 ....st_dev     (0xfffe:0x0)
-....st_ino     15  may vary by small amount
+....st_ino     17  may vary by small amount
 ....mode  = 00100644
 ....nlink = 1
 ....uid = 0

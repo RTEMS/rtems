@@ -1,3 +1,14 @@
+2010-07-19	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1623/testing
+	* psx13/test.c, psx13/psx13.scn: New cases to improve coverage of
+	utime() and fpathconf().
+	* psxfile01/test.c, psxfile01/psxfile01.scn: New cases to improve
+	coverage of rmdir(), unlink(), mknod(), link(), open(), read(),
+	write().
+	* psxstat/test.c, psxstat/psxstat.scn: New case to improve
+	coverage of readlink().
+
 2010-07-17	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1622/testing

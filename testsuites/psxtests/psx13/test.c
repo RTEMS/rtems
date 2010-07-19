@@ -415,9 +415,11 @@ int UTimeTest (void)
       else
 	retval = FALSE;
     }
-
     else
       retval = FALSE;
+
+    error = utime("testfile1.tst", NULL );
+    retval &= (error == 0) ? TRUE : FALSE;
   }
 
   /* assert (retval == TRUE);*/
@@ -562,6 +564,12 @@ int FPathConfTest (void)
     error = fpathconf(fd, _PC_PRIO_IO);
     error = fpathconf(fd, _PC_SYNC_IO);
     error = fpathconf(fd, 255);
+
+    close(fd);
+
+    fd = open("testfile1.tst", O_WRONLY);
+    
+    error = fpathconf(fd, _PC_LINK_MAX);
 
     retval = TRUE;
   }

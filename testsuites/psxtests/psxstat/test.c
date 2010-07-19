@@ -939,6 +939,11 @@ int main(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EFAULT );
 
+  puts( "Try readlink with a bad buffer - expect EFAULT" );
+  status = readlink( "/tmp", NULL, 0 );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EFAULT );
+
   puts( "\n\n*** END OF STAT TEST 01 ***" );
   rtems_test_exit(0);
 }

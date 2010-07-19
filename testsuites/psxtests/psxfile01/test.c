@@ -244,6 +244,16 @@ int main(
   rtems_test_assert (status == -1);
   rtems_test_assert( errno == ENOENT );
 
+  puts( "rmdir /tmp/bha" );
+  status = rmdir( "/tmp/bha" );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOENT );
+
+  puts( "unlink /dev/tty" );
+  status = unlink( "/dev/tty" );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EISDIR );
+
   puts( "mknod /dev/test_console" );
   status = mknod( "/dev/test_console", S_IFCHR, 0LL );
   rtems_test_assert( !status );
@@ -339,14 +349,68 @@ int main(
   rtems_test_assert( fd == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  puts( "Exercise the reentrant version _link_r -- Expect EEXIST" );
-  status = _link_r( NULL, "", "" );
+  puts( "Exercise the reentrant version _link_r -- Expect ENOENT" );
+  status = _link_r( NULL, "/tmp/notexist", "/tmp/cannotexist" );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EEXIST );
+  rtems_test_assert( errno == ENOENT );
 
   puts( "Unlink /tmp/bha using the reentrant version -- OK" );
   status = _unlink_r( NULL, "/tmp/bha" );
   rtems_test_assert( status == 0 );
+
+  /*
+   * Simple test case for mknod
+   */
+
+  puts( "mknod with bad type - expect EINVAL" );
+  status = mknod( "/tmp/bha", 0, 0LL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* 
+   * Read from filedes opened for write
+   */
+
+  puts( "open /tmp/bha in write only mode -- OK" );
+  fd = open( "/tmp/bha", O_CREAT | O_WRONLY, S_IRWXU|S_IRWXG|S_IRWXO );
+  rtems_test_assert( fd != -1 );
+  
+  puts( "attempt to read from /tmp/bha - expect EINVAL" );
+  status = read( fd, buffer, 10 );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  puts( "closing and unlinking /tmp/bha" );
+  status = close( fd );
+  status |= unlink( "/tmp/bha" );
+  rtems_test_assert( status == 0 );
+
+  puts( "open /tmp/bha in read only mode -- OK" );
+  fd = open( "/tmp/bha", O_CREAT | O_RDONLY, S_IRWXU|S_IRWXG|S_IRWXO );
+  rtems_test_assert( fd != -1 );
+  
+  puts( "attempt to read from /tmp/bha - expect EINVAL" );
+  status = write( fd, buffer, 10 );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  puts( "closing and unlinking /tmp/bha" );
+  status = close( fd );
+  status |= unlink( "/tmp/bha" );
+  rtems_test_assert( status == 0 );
+
+  /* 
+   * Read/write from an unopened filedes
+   */
+  puts( "attempt to read from an unopened filedes - expect EBADF" );
+  status = read( 5, buffer, 10 );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EBADF );
+
+  puts( "attempt to write to an unopened filedes - expect EBADF" );
+  status = write( 5, buffer, 10 );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EBADF );
 
   /*
    *  Test simple write to a file at offset 0
