@@ -1,3 +1,9 @@
+2010-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* stringto01/init.c, stringto01/stringto01.scn,
+	stringto01/stringto_test_template.h: Attempt to pick up a few more
+	error paths.
+
 2010-07-15	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1617/testing

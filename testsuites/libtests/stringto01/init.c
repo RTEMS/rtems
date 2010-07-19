@@ -11,8 +11,13 @@
 
 #include "tmacros.h"
 #include <rtems/stringto.h>
+#include <limits.h>
+#include <math.h>
 
 #include <stdio.h>
+
+#define __STRING(x)     #x              /* stringify without expanding x */
+#define __XSTRING(x)    __STRING(x)     /* expand x, then stringify */
 
 /* Test pointer conversions */
 #define TEST_STRING_TO_TYPE          void *
@@ -33,6 +38,8 @@
 
 /* Test integer conversions */
 #define TEST_STRING_TO_TYPE          int
+#define STRING_TO_MAX                LONG_MAX
+#define STRING_TO_MAX_STRING         __XSTRING(LONG_MAX)
 #define TEST_STRING_TO_NAME          test_rtems_string_to_int
 #define STRING_TO_NAME_METHOD        rtems_string_to_int
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_int"
@@ -51,6 +58,8 @@
 
 /* Test long conversions */
 #define TEST_STRING_TO_TYPE          long
+#define STRING_TO_MAX                LONG_MAX
+#define STRING_TO_MAX_STRING         __XSTRING(LONG_MAX)
 #define TEST_STRING_TO_NAME          test_rtems_string_to_long
 #define STRING_TO_NAME_METHOD        rtems_string_to_long
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_long"
@@ -70,6 +79,8 @@
 
 /* Test long long conversions */
 #define TEST_STRING_TO_TYPE          long long
+#define STRING_TO_MAX                LONG_LONG_MAX
+#define STRING_TO_MAX_STRING         __XSTRING(LONG_LONG_MAX)
 #define TEST_STRING_TO_NAME          test_rtems_string_to_long_long
 #define STRING_TO_NAME_METHOD        rtems_string_to_long_long
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_long_long"

@@ -58,6 +58,24 @@ void TEST_STRING_TO_NAME(void)
   rtems_test_assert( status == RTEMS_SUCCESSFUL );
   rtems_test_assert( value == (TEST_STRING_TO_TYPE)GOOD_VALUE );
 
+  #if defined(STRING_TO_MAX)
+    /* Basic conversion works for return value */
+    endptr = NULL;
+    puts(
+      STRING_TO_NAME_METHOD_STRING " - MAXIMUM VALUE"
+      " w/endptr return value - RTEMS_SUCCESSFUL"
+    );
+    #if defined(STRING_TO_INTEGER)
+      status = STRING_TO_NAME_METHOD(
+        STRING_TO_MAX_STRING, &value, &endptr, 10 );
+    #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
+      status = STRING_TO_NAME_METHOD( STRING_TO_MAX_STRING, &value, &endptr );
+    #endif
+    rtems_test_assert( status == RTEMS_SUCCESSFUL );
+    rtems_test_assert( endptr );
+    rtems_test_assert( value == (TEST_STRING_TO_TYPE)STRING_TO_MAX );
+  #endif
+
   /* Basic conversion works for return value */
   endptr = NULL;
   puts(
@@ -145,6 +163,8 @@ void TEST_STRING_TO_NAME(void)
 #undef STRING_TO_INTEGER
 #undef STRING_TO_POINTER
 #undef STRING_TO_FLOAT
+#undef STRING_TO_MAX
+#undef STRING_TO_MAX_STRING
 #undef GOOD_VALUE
 #undef GOOD_VALUE_STRING
 #undef BAD_VALUE_STRING
