@@ -251,7 +251,8 @@ uint32_t benchmark_timer_read(void)
 
 void Timer_exit(void)
 {
-  return (*Timer_exit_function)();
+  if ( Timer_exit_function )
+    return (*Timer_exit_function)();
 }
 
 /*
