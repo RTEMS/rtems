@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2010.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  devfs04
+
+directives:
+
++ devFS_read
++ devFS_write
+
+concepts:
+
++ Custom driver for a device /dev/test lets us exercise the error
+paths in the read / write routines for devFS. These are invoked using
+the system calls read() and write().
+

@@ -1,3 +1,14 @@
+2010-07-22	Bharath Suri <bharath.s.jois@gmail.com>
+
+	* devfs02/init.c, devfs02/devfs02.doc, devfs02/devfs02.scn,
+	devfs02/Makefile.am: New tests added
+	* devfs03/init.c, devfs03/devfs03.doc, devfs03/devfs03.scn,
+	devfs03/Makefile.am: New tests added
+	* devfs04/init.c, devfs04/devfs04.doc, devfs04/devfs04.scn,
+	devfs04/Makefile.am: New tests added
+	* Makefile.am, configure.ac: Changes to accommodate the above
+	newly added tests.
+
 2010-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, termios06/init.c: Add initial tests for

@@ -1,0 +1,13 @@
+*** TEST DEVFS02 ***
+Init - attempt to create a fifo - expect EINVAL
+Init - set the device name table to NULL
+ Init - attempt to create a node - expect EFAULT
+Init - attempt to stat a node - expect EFAULT
+Init - attempt to open a node
+Init - restore the device name table
+Init - set device table size to zero
+Init - attempt to create a node - expect ENOMEM
+Init - restore device table size
+Init - attempt to create /node -- OK
+Init - attempt to create /node - expect EEXIST
+*** END OF TEST DEVFS02 ***

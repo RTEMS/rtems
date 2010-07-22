@@ -1,0 +1,6 @@
+*** TEST DEVFS03 ***
+Init - attempt to create /dir01 -- OK
+Init - allocating most of workspace memory
+Init - mount a new fs at /dir01 - expect ENOMEM
+Init - freeing the workspace memory
+*** END OF TEST DEVFS03 ***
