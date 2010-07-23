@@ -1,3 +1,9 @@
+2010-07-23	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	* start/start.S: Replace the call to _return_to_monitor by
+	hlt instruction.
+	* startup/ldsegs.S: Remove the _return_to_monitor function.
+
 2010-07-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* timer/timer.c: Do not do the indirect call if NULL.

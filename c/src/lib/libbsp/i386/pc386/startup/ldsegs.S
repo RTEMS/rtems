@@ -158,23 +158,6 @@ next_step:
 	jmp	SYM (_establish_stack)	# return to the bsp entry code
 
 /*-------------------------------------------------------------------------+
-|         Function: _return_to_monitor
-|      Description: Return to board's monitor (we have none so simply restart).
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Nothing.
-+--------------------------------------------------------------------------*/
-
-	.p2align 4
-
-        PUBLIC (_return_to_monitor)
-SYM (_return_to_monitor):
-
-	call	SYM (Timer_exit)
-	call	SYM (Clock_exit)
-	jmp	SYM (start)
-
-/*-------------------------------------------------------------------------+
 |         Function: _default_int_handler
 |      Description: default interrupt handler
 | Global Variables: None.

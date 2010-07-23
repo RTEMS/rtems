@@ -266,12 +266,8 @@ SYM (zero_bss):
 	movl	$SYM(_boot_multiboot_cmdline), (esp)
 	call	SYM (boot_card)
 
-/*---------------------------------------------------------------------+
-| Clean up - we do not know anything about it, so we will
-| jump to BSP specific code to do cleanup
-+---------------------------------------------------------------------*/
-
-	jmp	SYM (_return_to_monitor)
+	cli	# stops interrupts from being processed after hlt!
+	hlt	# shutdown
 
 #ifdef __SSE__
 SYM(_sse_panic):
