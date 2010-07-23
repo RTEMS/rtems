@@ -1,3 +1,8 @@
+2010-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1627/testing
+	* libfs/src/devfs/devstat.c:
+
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/src/link.c: Do not overwrite errno with return status.
