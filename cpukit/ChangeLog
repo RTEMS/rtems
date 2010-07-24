@@ -1,3 +1,10 @@
+2010-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/Makefile.am, libcsupport/src/termios_baud2num.c,
+	libcsupport/src/termios_num2baud.c: Use RTEMS associations to
+	simplify code and make easier for coverage.
+	* libcsupport/src/termios_baudtable.c: New file.
+
 2010-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1627/testing
