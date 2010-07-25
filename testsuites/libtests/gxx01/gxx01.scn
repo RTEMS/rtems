@@ -30,6 +30,7 @@ rtems_gxx_key_delete(key_for_testing) - OK
 rtems_gxx_key_dtor(&key) - OK
 
 rtems_gxx_mutex_init() until exhausted and panic
+rtems_gxx_mutex_init() panic AFTER printing EOF message
 rtems_gxx_mutex_init
-fatal error, exiting
 *** END OF TEST GXX 01 ***
+fatal error, exiting

@@ -164,20 +164,14 @@ void test_key(void)
   rtems_test_assert( key == NULL );
 }
 
-void _exit(int status) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
-
-void _exit(int status)
-{
-  puts( "*** END OF TEST GXX 01 ***" );
-
-  rtems_shutdown_executive(0);
-}
-
 void test_out_of_mutexes(void)
 {
    __gthread_mutex_t mutex;
 
   puts( "rtems_gxx_mutex_init() until exhausted and panic" );
+  puts( "rtems_gxx_mutex_init() panic AFTER printing EOF message" );
+  puts( "*** END OF TEST GXX 01 ***" );
+
   while (1) {
     rtems_gxx_mutex_init(&mutex);
     rtems_test_assert( mutex != 0 );
