@@ -155,6 +155,13 @@ void test_key(void)
   sc = rtems_gxx_key_delete((__gthread_key_t) &key_for_testing);
   rtems_test_assert( sc == 0 );
   rtems_test_assert( key_for_testing == NULL );
+
+
+  key = (void *)0x1234;
+  puts( "rtems_gxx_key_dtor(&key) - OK" );
+  sc = rtems_gxx_key_dtor((__gthread_key_t) &key, key_dtor);
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( key == NULL );
 }
 
 void _exit(int status) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;

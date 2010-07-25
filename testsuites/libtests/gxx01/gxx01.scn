@@ -27,6 +27,7 @@ rtems_gxx_getspecific(key) already existing - OK
 rtems_gxx_key_delete(key) - OK
 rtems_gxx_getspecific(key_for_testing) non-existent - OK
 rtems_gxx_key_delete(key_for_testing) - OK
+rtems_gxx_key_dtor(&key) - OK
 
 rtems_gxx_mutex_init() until exhausted and panic
 rtems_gxx_mutex_init

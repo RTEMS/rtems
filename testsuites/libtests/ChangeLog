@@ -1,5 +1,9 @@
 2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* gxx01/gxx01.scn, gxx01/init.c: Add test f0r rtems_gxx_key_dtor().
+
+2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* gxx01/gxx01.scn, gxx01/init.c: Add more testcases.
 
 2010-07-22	Bharath Suri <bharath.s.jois@gmail.com>
