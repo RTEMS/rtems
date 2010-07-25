@@ -122,9 +122,10 @@ int rtems_gxx_key_delete (__gthread_key_t key)
   status = rtems_task_variable_delete( RTEMS_SELF, (void **)key );
   if ( status == RTEMS_SUCCESSFUL ) {
     /* Hmm - hopefully all tasks using this key have gone away... */
-    if ( key ) free( (void *)key );
+    if ( key ) free( *(void **)key );
     return 0;
   }
+  key = NULL;
   return 0;
 }
 

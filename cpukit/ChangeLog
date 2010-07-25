@@ -1,3 +1,8 @@
+2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/gxx_wrappers.c: Free contents of key not key itself.
+	Kye pointer will never be malloc'ed.
+
 2010-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/Makefile.am, libcsupport/src/termios_baud2num.c,
