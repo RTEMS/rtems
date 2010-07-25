@@ -46,6 +46,14 @@ void test_recursive_mutex(void)
   puts( "rtems_gxx_recursive_mutex_unlock() - OK" );
   sc = rtems_gxx_recursive_mutex_unlock(&mutex);
   rtems_test_assert( sc == 0 );
+
+  puts( "rtems_gxx_mutex_destroy(mutex) - OK" );
+  sc = rtems_gxx_mutex_destroy(&mutex);
+  rtems_test_assert( sc == 0 );
+
+  puts( "rtems_gxx_mutex_destroy(mutex) - NOT OK" );
+  sc = rtems_gxx_mutex_destroy(&mutex);
+  rtems_test_assert( sc == -1 );
 }
 
 void test_mutex(void)
@@ -97,6 +105,7 @@ void test_once(void)
 }
 
 volatile bool key_dtor_ran;
+void *key_for_testing;
 
 void key_dtor(void *ptr)
 {
@@ -125,7 +134,7 @@ void test_key(void)
   sc = rtems_gxx_setspecific(key, (void *)0x1234);
   rtems_test_assert( sc == 0 );
 
-  puts( "rtems_gxx_petspecific() - OK" );
+  puts( "rtems_gxx_getspecific(key) already existing - OK" );
   p = rtems_gxx_getspecific(key);
   rtems_test_assert( p == (void *)0x1234 );
 
@@ -134,12 +143,38 @@ void test_key(void)
   rtems_test_assert( sc == 0 );
   rtems_test_assert( key_dtor_ran == true );
 
-#if 0
+  puts( "rtems_gxx_getspecific(key_for_testing) non-existent - OK" );
+  p = rtems_gxx_getspecific((__gthread_key_t) &key_for_testing);
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( key_for_testing == NULL );
 
-void *rtems_gxx_getspecific(__gthread_key_t key);
+  key_for_testing = malloc(4);
+  rtems_test_assert( key_for_testing != NULL );
+  
+  puts( "rtems_gxx_key_delete(key_for_testing) - OK" );
+  sc = rtems_gxx_key_delete((__gthread_key_t) &key_for_testing);
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( key_for_testing == NULL );
+}
 
-int rtems_gxx_setspecific(__gthread_key_t key, const void *ptr);
-#endif
+void _exit(int status) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
+void _exit(int status)
+{
+  puts( "*** END OF TEST GXX 01 ***" );
+
+  rtems_shutdown_executive(0);
+}
+
+void test_out_of_mutexes(void)
+{
+   __gthread_mutex_t mutex;
+
+  puts( "rtems_gxx_mutex_init() until exhausted and panic" );
+  while (1) {
+    rtems_gxx_mutex_init(&mutex);
+    rtems_test_assert( mutex != 0 );
+  }
 }
 
 rtems_task Init(
@@ -158,10 +193,11 @@ rtems_task Init(
   puts( "" );
 
   test_key();
+  puts( "" );
 
-  puts( "*** END OF TEST GXX 01 ***" );
+  test_out_of_mutexes();
 
-  rtems_test_exit(0);
+  /* does not return */
 }
 
 /* configuration information */

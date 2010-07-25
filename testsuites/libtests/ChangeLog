@@ -1,3 +1,7 @@
+2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* gxx01/gxx01.scn, gxx01/init.c: Add more testcases.
+
 2010-07-22	Bharath Suri <bharath.s.jois@gmail.com>
 
 	* devfs02/init.c, devfs02/devfs02.doc, devfs02/devfs02.scn,
