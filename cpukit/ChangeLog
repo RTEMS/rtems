@@ -1,5 +1,10 @@
 2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/rtems/init.h: Mark rtems_shutdown_executive as a
+	noreturn method.
+
+2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/gxx_wrappers.c: Free contents of key not key itself.
 	Kye pointer will never be malloc'ed.
 

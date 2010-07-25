@@ -90,7 +90,7 @@ void rtems_initialize_start_multitasking(void);
  */
 void rtems_shutdown_executive(
   uint32_t   result
-);
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #ifdef __cplusplus
 }
