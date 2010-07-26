@@ -223,27 +223,27 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 
   /*
-   * If disabling the file system undef everything. If DEVFS as the base
-   * filesystem undefine all other filesystems because you cannot mount other
-   * filesystems. Same for miniIMFS.
+   * If disabling the file system, give a compile error if the user has
+   * configured other filesystem parameters.
    */
-  #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM) || \
-      defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM) || \
-      defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
-    #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
-      #undef CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
-      #undef CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
-    #elif defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
-      #undef CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
-    #endif
-    #undef CONFIGURE_FILESYSTEM_MINIIMFS
-    #undef CONFIGURE_FILESYSTEM_IMFS
-    #undef CONFIGURE_FILESYSTEM_DEVFS
-    #undef CONFIGURE_FILESYSTEM_TFTPFS
-    #undef CONFIGURE_FILESYSTEM_FTPFS
-    #undef CONFIGURE_FILESYSTEM_NFS
-    #undef CONFIGURE_FILESYSTEM_DOSFS
-    #undef CONFIGURE_FILESYSTEM_RFS
+  #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
+     #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM) || \
+	 defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
+       #error "Filesystem disabled but a base filesystem configured."
+     #endif
+
+    #if defined(CONFIGURE_FILESYSTEM_MINIIMFS) || \
+        defined(CONFIGURE_FILESYSTEM_IMFS) || \
+        defined(CONFIGURE_FILESYSTEM_DEVFS) || \
+        defined(CONFIGURE_FILESYSTEM_TFTPFS) || \
+        defined(CONFIGURE_FILESYSTEM_FTPFS) || \
+        defined(CONFIGURE_FILESYSTEM_NFS) || \
+        defined(CONFIGURE_FILESYSTEM_DOSFS) || \
+        defined(CONFIGURE_FILESYSTEM_RFS)
+        #error "Configured filessystems but root filesystem was not IMFS!"
+        #error "Filesystems coule be disabled, DEVFS is root, or"
+        #error "  miniIMFS is root!"
+     #endif 
   #endif
 
   /*
