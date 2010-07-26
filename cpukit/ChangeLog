@@ -1,5 +1,9 @@
 2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/confdefs.h: Spelling.
+
+2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/privateenv.c, libmisc/cpuuse/cpuusagereport.c,
 	posix/Makefile.am, posix/include/rtems/posix/key.h,
 	posix/src/keycreate.c, posix/src/keydelete.c,

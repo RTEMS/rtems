@@ -240,8 +240,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
         defined(CONFIGURE_FILESYSTEM_NFS) || \
         defined(CONFIGURE_FILESYSTEM_DOSFS) || \
         defined(CONFIGURE_FILESYSTEM_RFS)
-        #error "Configured filessystems but root filesystem was not IMFS!"
-        #error "Filesystems coule be disabled, DEVFS is root, or"
+        #error "Configured filesystems but root filesystem was not IMFS!"
+        #error "Filesystems could be disabled, DEVFS is root, or"
         #error "  miniIMFS is root!"
      #endif 
   #endif
