@@ -1,3 +1,8 @@
+2010-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* rtems/src/ratemonperiod.c: Use if not switch since all cases of enum
+	are not valid and switch was generating dead code.
+
 2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/rtems/init.h: Mark rtems_shutdown_executive as a
