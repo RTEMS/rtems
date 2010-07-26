@@ -106,11 +106,10 @@ int rtems_tarfs_load(
       0
    );
    if (status != 0)
-      return -1;
+     return -1;
 
-   if (root_loc.ops != &IMFS_ops
-       && root_loc.ops != &fifoIMFS_ops)
-      return -1;
+   if (root_loc.ops != &IMFS_ops && root_loc.ops != &fifoIMFS_ops)
+     return -1;
 
    /*
     * Create an IMFS node structure pointing to tar image memory.

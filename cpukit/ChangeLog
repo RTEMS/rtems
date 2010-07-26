@@ -1,5 +1,9 @@
 2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libfs/src/imfs/imfs_load_tar.c: Formatting.
+
+2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/confdefs.h: Do not cover up user configuation mistakes
 	on filesystems -- cite them as errors.
 
