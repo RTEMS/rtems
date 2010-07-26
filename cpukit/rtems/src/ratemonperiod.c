@@ -137,7 +137,7 @@ void _Rate_monotonic_Initiate_statistics(
        *  context switch.
        */
       _Timespec_Subtract(
-	&_Thread_Time_of_last_context_switch, &uptime, &ran
+        &_Thread_Time_of_last_context_switch, &uptime, &ran
       );
 
       _Timespec_Add_to( &the_period->cpu_usage_period_initiated, &ran );
@@ -343,19 +343,19 @@ rtems_status_code rtems_rate_monotonic_period(
       }
 
       if ( the_period->state == RATE_MONOTONIC_EXPIRED ) {
-	/*
-	 *  Update statistics from the concluding period
-	 */
-	_Rate_monotonic_Update_statistics( the_period );
+        /*
+         *  Update statistics from the concluding period
+         */
+        _Rate_monotonic_Update_statistics( the_period );
 
-	_ISR_Enable( level );
+        _ISR_Enable( level );
 
-	the_period->state = RATE_MONOTONIC_ACTIVE;
-	the_period->next_length = length;
+        the_period->state = RATE_MONOTONIC_ACTIVE;
+        the_period->next_length = length;
 
-	_Watchdog_Insert_ticks( &the_period->Timer, length );
-	_Thread_Enable_dispatch();
-	return RTEMS_TIMEOUT;
+        _Watchdog_Insert_ticks( &the_period->Timer, length );
+        _Thread_Enable_dispatch();
+        return RTEMS_TIMEOUT;
       }
 
       /*
