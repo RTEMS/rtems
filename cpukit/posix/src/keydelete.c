@@ -23,18 +23,15 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>
 
-/*PAGE
- *
+/*
  *  17.1.3 Thread-Specific Data Key Deletion, P1003.1c/Draft 10, p. 167
  */
-
 int pthread_key_delete(
   pthread_key_t  key
 )
 {
-  register POSIX_Keys_Control *the_key;
-  Objects_Locations            location;
-  uint32_t                     the_api;
+  POSIX_Keys_Control *the_key;
+  Objects_Locations   location;
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
@@ -42,15 +39,12 @@ int pthread_key_delete(
     case OBJECTS_LOCAL:
       _Objects_Close( &_POSIX_Keys_Information, &the_key->Object );
 
-      for ( the_api = 1; the_api <= OBJECTS_APIS_LAST; the_api++ )
-        if ( the_key->Values[ the_api ] )
-          _Workspace_Free( the_key->Values[ the_api ] );
+      _POSIX_Keys_Free_memory( the_key );
 
       /*
        *  NOTE:  The destructor is not called and it is the responsibility
        *         of the application to free the memory.
        */
-
       _POSIX_Keys_Free( the_key );
       _Thread_Enable_dispatch();
       return 0;

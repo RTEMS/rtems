@@ -1,5 +1,15 @@
 2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/privateenv.c, libmisc/cpuuse/cpuusagereport.c,
+	posix/Makefile.am, posix/include/rtems/posix/key.h,
+	posix/src/keycreate.c, posix/src/keydelete.c,
+	score/src/iterateoverthreads.c: Since removing ITRON, the loop over
+	all APIs for tasks has a path that cannot be reached. Either modify
+	the code or mark tests for NULL as RTEMS_DEBUG.
+	* posix/src/keyfreememory.c: New file.
+
+2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/imfs/imfs_load_tar.c: Formatting.
 
 2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>

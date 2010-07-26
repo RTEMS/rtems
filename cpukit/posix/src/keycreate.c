@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,8 +23,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>
 
-/*PAGE
- *
+/*
  *  17.1.1 Thread-Specific Data Key Create, P1003.1c/Draft 10, p. 163
  */
 
@@ -56,52 +55,45 @@ int pthread_key_create(
    *
    *  NOTE: Currently RTEMS Classic API tasks are always enabled.
    */
+  for ( the_api = 1; the_api <= OBJECTS_APIS_LAST; the_api++ ) {
+    the_key->Values[ the_api ] = NULL;
 
-  for ( the_api = 1;
-        the_api <= OBJECTS_APIS_LAST;
-        the_api++ ) {
+    #if defined(RTEMS_DEBUG)
+      /*
+       *  Since the removal of ITRON, this cannot occur.
+       */
+      if ( !_Objects_Information_table[ api_index ] )
+	continue;
 
-    if ( _Objects_Information_table[ the_api ] ) {
-      #if defined(RTEMS_DEBUG)
-        /*
-         * Currently all managers are installed if the API is installed.
-         * This would be a horrible implementation error.
-         */
-        if (_Objects_Information_table[ the_api ][ 1 ] == NULL )
-          _Internal_error_Occurred(
-            INTERNAL_ERROR_CORE,
-            true,
-            INTERNAL_ERROR_IMPLEMENTATION_KEY_CREATE_INCONSISTENCY
-          );
-      #endif
-      bytes_to_allocate = sizeof( void * ) *
-        (_Objects_Information_table[ the_api ][ 1 ]->maximum + 1);
-      table = _Workspace_Allocate( bytes_to_allocate );
-      if ( !table ) {
-        for ( --the_api;
-              the_api >= 1;
-              the_api-- )
-          _Workspace_Free( the_key->Values[ the_api ] );
+      /*
+       * Currently all managers are installed if the API is installed.
+       * This would be a horrible implementation error.
+       */
+      if (_Objects_Information_table[ the_api ][ 1 ] == NULL )
+	_Internal_error_Occurred(
+	  INTERNAL_ERROR_CORE,
+	  true,
+	  INTERNAL_ERROR_IMPLEMENTATION_KEY_CREATE_INCONSISTENCY
+	);
+    #endif
 
-        _POSIX_Keys_Free( the_key );
-        _Thread_Enable_dispatch();
-        return ENOMEM;
-      }
+    bytes_to_allocate = sizeof( void * ) *
+      (_Objects_Information_table[ the_api ][ 1 ]->maximum + 1);
+    table = _Workspace_Allocate( bytes_to_allocate );
+    if ( !table ) {
+      _POSIX_Keys_Free_memory( the_key );
 
-      the_key->Values[ the_api ] = table;
-      memset( table, '\0', bytes_to_allocate );
-    } else {
-      the_key->Values[ the_api ] = NULL;
+      _POSIX_Keys_Free( the_key );
+      _Thread_Enable_dispatch();
+      return ENOMEM;
     }
 
-
+    the_key->Values[ the_api ] = table;
+    memset( table, '\0', bytes_to_allocate );
   }
 
   _Objects_Open_u32( &_POSIX_Keys_Information, &the_key->Object, 0 );
-
   *key = the_key->Object.id;
-
   _Thread_Enable_dispatch();
-
   return 0;
 }

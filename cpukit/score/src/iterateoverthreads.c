@@ -5,7 +5,7 @@
  *    for all threads
  *         invoke specified function
  *
- *  COPYRIGHT (c) 1989-2003.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,8 +33,13 @@ void rtems_iterate_over_all_threads(rtems_per_thread_routine routine)
     return;
 
   for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
-    if ( !_Objects_Information_table[ api_index ] )
-      continue;
+    /*
+     *  Since the removal of ITRON, this cannot occur.
+     */
+    #if defined(RTEMS_DEBUG)
+      if ( !_Objects_Information_table[ api_index ] )
+	continue;
+    #endif
 
     information = _Objects_Information_table[ api_index ][ 1 ];
     if ( !information )

@@ -7,7 +7,7 @@
  *  This include file contains all the private support information for
  *  POSIX key.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -66,6 +66,17 @@ void _POSIX_Key_Manager_initialization(void);
  */
 void _POSIX_Keys_Run_destructors(
   Thread_Control *thread
+);
+
+/**
+ *  @brief Free Key Memory
+ *
+ *  This memory frees the key table memory associated with @a the_key.
+ *
+ *  @param[in] the_key is the POSIX key to free the table memory of.
+ */
+void _POSIX_Keys_Free_memory(
+  POSIX_Keys_Control *the_key
 );
 
 /**
