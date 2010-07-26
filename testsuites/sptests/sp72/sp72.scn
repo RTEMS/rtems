@@ -1,0 +1,5 @@
+*** TEST SP72 ***
+Init - sleep 1 second
+Task - rtems_semaphore_obtain - wait w/timeout 
+Init - rtems_task_delete - to extract priority w/timeout
+*** END OF TEST SP72 ***

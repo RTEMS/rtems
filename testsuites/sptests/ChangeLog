@@ -1,3 +1,10 @@
+2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add test to extract a task blocked with
+	timeout on a priority ordered thread queue.
+	* sp72/.cvsignore, sp72/Makefile.am, sp72/init.c, sp72/sp72.doc,
+	sp72/sp72.scn: New files.
+
 2010-07-16	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1617/testing
