@@ -458,6 +458,8 @@ extern "C" {
  *  XXX document implementation including references if appropriate
  */
 
+#ifndef ASM
+
 /**
  *  @ingroup CPUContext Management
  *  This defines the minimal set of integer and processor state registers
@@ -564,6 +566,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *  XXX document implementation including references if appropriate
  */
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
+
+#endif /* ASM */
 
 /**
  *  Amount of extra stack (above minimum stack size) required by
@@ -766,6 +770,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
     __asm__ __volatile__ ( "sti %0; csync" : : "d"(_new_level ? 0 : 0xffff) ); \
   }
 
+#ifndef ASM
 
 /**
  *  @ingroup CPUInterrupt
@@ -1249,6 +1254,8 @@ static inline uint32_t CPU_swap_u32(
  */
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
+
+#endif /* ASM */
 
 #ifdef __cplusplus
 }

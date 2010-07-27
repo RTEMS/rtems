@@ -1,3 +1,7 @@
+2010-07-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/score/cpu.h: Assembler compatibility fixes.
+
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/cpu.h: Include <rtems/score/types.h> first.
