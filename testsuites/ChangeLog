@@ -1,3 +1,8 @@
+2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1532/testing
+	* aclocal/project-root.m4: Add initial tests for untar capabilities.
+
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* support/include/test_support.h, support/src/test_support.c: Add
