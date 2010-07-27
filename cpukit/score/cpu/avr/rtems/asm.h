@@ -95,15 +95,6 @@
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
 
-
-
-
-
-
-
-#endif
-
-
 /* Copyright (c) 2002, 2005, 2006, 2007 Marek Michalkiewicz
    Copyright (c) 2006 Dmitry Xmelkov
    All rights reserved.
@@ -469,4 +460,4 @@
 #endif
 	.endm
 
-
+#endif /* _RTEMS_ASM_H */

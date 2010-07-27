@@ -382,6 +382,8 @@ extern "C" {
 
 /* may need to put some structures here.  */
 
+#ifndef ASM
+
 /*
  * Contexts
  *
@@ -452,6 +454,8 @@ typedef struct {
  */
 
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
+
+#endif /* ASM */
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
@@ -677,6 +681,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define _CPU_ISR_Set_level( new_level ) \
   { \
   }
+
+#ifndef ASM
 
 uint32_t   _CPU_ISR_Get_level( void );
 
@@ -1146,6 +1152,8 @@ static inline uint32_t CPU_swap_u32(
 
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
+
+#endif /* ASM */
 
 #ifdef __cplusplus
 }
