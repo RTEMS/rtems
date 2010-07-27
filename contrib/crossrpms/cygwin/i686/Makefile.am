@@ -4,8 +4,8 @@ TARGET = i686-pc-cygwin
 
 include $(top_srcdir)/mkspec.am
 
-CYGWIN_VERS = 1.7.1-1
-CYGWIN_RPMREL = 0.20100204.0%{?dist}
+CYGWIN_VERS = 1.7.5-1
+CYGWIN_RPMREL = 0.20100726.0%{?dist}
 include ../cygwin.am
 
 CLOOG_PPL_VERS = 0.15.7-1
@@ -32,8 +32,8 @@ TERMCAP_VERS = 20050421-1
 TERMCAP_RPMREL = 0.20090827.0%{?dist}
 include ../termcap.am
 
-TERMINFO_VERS = 5.7_20091114-13
-TERMINFO_RPMREL = 0.20100204.0%{?dist}
+TERMINFO_VERS = 5.7_20091114-14
+TERMINFO_RPMREL = 0.20100726.0%{?dist}
 include ../terminfo.am
 
 ZLIB_VERS = 1.2.3-10
