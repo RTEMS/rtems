@@ -51,7 +51,9 @@ int sigsuspend(
    * sigtimedwait() returns the signal number while sigsuspend()
    * is supposed to return -1 and EINTR when a signal is caught.
    */
-  assert ( status != -1 );
+  #if defined(RTEMS_DEBUG)
+    assert( status != -1 );
+  #endif
 
   rtems_set_errno_and_return_minus_one( EINTR );
 }
