@@ -17,6 +17,7 @@ directives:
 
 + devFS_read
 + devFS_write
++ null_initialize
 
 concepts:
 
@@ -24,3 +25,5 @@ concepts:
 paths in the read / write routines for devFS. These are invoked using
 the system calls read() and write().
 
++ The write call is forwarded to null_write, thus exercising
+null_write too.

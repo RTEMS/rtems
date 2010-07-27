@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "test_driver.h"
+#include <rtems/devnull.h>
 
 rtems_task Init(
   rtems_task_argument argument
@@ -60,8 +61,10 @@ rtems_task Init(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOSYS );
 
-  puts( "*** END OF TEST DEVFS04 ***" );
+  status = mknod( "/dev/null", 0777 | S_IFCHR, 0LL );
+  rtems_test_assert( status == 0 );
 
+  puts( "*** END OF TEST DEVFS04 ***" );
   rtems_test_exit(0);
 }
 

@@ -17,7 +17,7 @@
 #include <rtems.h>
 #include "test_driver.h"
 #include <rtems/libio.h>
-
+#include <rtems/devnull.h>
 /* 
  * The test driver routines are mostly derived from the null driver routines.
  */
@@ -158,7 +158,7 @@ rtems_device_driver testDriver_write(
 
   if ( rw_args ) {
     if( rw_args->count == 5 )
-      rw_args->bytes_moved = rw_args->count;
+      return null_write( 0, 0, pargp );
     else {
       rw_args->bytes_moved = 0;
       return RTEMS_NOT_IMPLEMENTED;
