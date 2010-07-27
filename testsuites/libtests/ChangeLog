@@ -1,3 +1,9 @@
+2010-07-27	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1632/testing
+	* devfs04/init.c, devfs04/test_driver.c: Added cases to exercise
+	null_initialize() and null_write().
+
 2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* gxx01/gxx01.scn, gxx01/init.c: Remove local _exit().
