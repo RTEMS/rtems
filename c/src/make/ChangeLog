@@ -1,3 +1,9 @@
+2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1532/testing
+	* host.cfg.in: Add initial tests for untar capabilities. This required
+	BIN2C.
+
 2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.inc.in, bsp.cfg.in, configure.ac, target.cfg.in:
