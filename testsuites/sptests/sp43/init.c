@@ -473,6 +473,24 @@ rtems_task Init(
   );
   fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_semaphore_obtain" );
 
+  /*
+   * Invalid POSIX API pointer on get name
+   */
+  {
+    void *tmp;
+    tmp = _Objects_Information_table[OBJECTS_POSIX_API];
+    _Objects_Information_table[OBJECTS_POSIX_API] = NULL;
+
+    puts( "rtems_object_get_classic_name - bad API pointer - INVALID_ID" );
+    sc = rtems_object_get_classic_name(
+      rtems_build_id( OBJECTS_POSIX_API, OBJECTS_POSIX_THREADS, 1, 1 ),
+      &tmpName
+    );
+    fatal_directive_status( sc, RTEMS_INVALID_ID, "object_get_classic_name" );
+
+    _Objects_Information_table[OBJECTS_POSIX_API] = tmp;
+  }
+
   puts( "*** END OF TEST 43 ***" );
   rtems_test_exit( 0 );
 }

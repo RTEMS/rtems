@@ -1,5 +1,10 @@
 2010-07-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* sp43/init.c, sp43/sp43.scn: Add code to exercise case where an API
+	pointer is NULL when getting an object name.
+
+2010-07-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* sp11/sp11.scn, sp11/task1.c: Add test case for receiving all events
 	no wait but the condition is only partially satisfied.
 

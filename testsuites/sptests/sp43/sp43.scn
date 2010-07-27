@@ -85,4 +85,5 @@ rtems_task_set_priority - clobber internal thread class info
 rtems_task_set_priority - use valid Idle thread id again
 rtems_task_set_priority - restore internal thread class info
 rtems_semaphore_obtain - good but uncreated ID - INVALID_ID - OK
+rtems_object_get_classic_name - bad API pointer - INVALID_ID
 *** END OF TEST 43 ***
