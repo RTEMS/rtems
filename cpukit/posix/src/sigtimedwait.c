@@ -26,7 +26,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/score/isr.h>
 
-int _POSIX_signals_Get_highest(
+int _POSIX_signals_Get_lowest(
   sigset_t   set
 )
 {
@@ -115,7 +115,7 @@ int sigtimedwait(
   _ISR_Disable( level );
   if ( *set & api->signals_pending ) {
     /* XXX real info later */
-    the_info->si_signo = _POSIX_signals_Get_highest( api->signals_pending );
+    the_info->si_signo = _POSIX_signals_Get_lowest( api->signals_pending );
     _POSIX_signals_Clear_signals(
       api,
       the_info->si_signo,
@@ -133,7 +133,7 @@ int sigtimedwait(
   /* Process pending signals? */
 
   if ( *set & _POSIX_signals_Pending ) {
-    signo = _POSIX_signals_Get_highest( _POSIX_signals_Pending );
+    signo = _POSIX_signals_Get_lowest( _POSIX_signals_Pending );
     _POSIX_signals_Clear_signals( api, signo, the_info, true, false );
     _ISR_Enable( level );
 
@@ -161,6 +161,17 @@ int sigtimedwait(
    */
 
   _POSIX_signals_Clear_signals( api, the_info->si_signo, the_info, false, false );
-  errno = _Thread_Executing->Wait.return_code;
+
+  /* Set errno only if return code is not EINTR or
+   * if EINTR was caused by a signal being caught, which
+   * was not in our set.
+   */
+
+  if ( (_Thread_Executing->Wait.return_code != EINTR)
+       || !(*set & signo_to_mask( the_info->si_signo )) ) {
+    errno = _Thread_Executing->Wait.return_code;
+    return -1;
+  }
+
   return the_info->si_signo;
 }

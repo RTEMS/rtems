@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <pthread.h>
 #include <signal.h>
+#include <string.h>
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
@@ -46,6 +47,7 @@ bool    _POSIX_signals_Check_signal(
 {
   siginfo_t                   siginfo_struct;
   sigset_t                    saved_signals_blocked;
+  Thread_Wait_information     stored_thread_wait_information;
 
   if ( ! _POSIX_signals_Clear_signals( api, signo, &siginfo_struct,
                                        is_global, true ) )
@@ -73,6 +75,14 @@ bool    _POSIX_signals_Check_signal(
   api->signals_blocked |= _POSIX_signals_Vectors[ signo ].sa_mask;
 
   /*
+   *  We have to save the blocking information of the current wait queue
+   *  because the signal handler may subsequently go on and put the thread
+   *  on a wait queue, for its own purposes.
+   */
+  memcpy( &stored_thread_wait_information, &_Thread_Executing->Wait,
+          sizeof( Thread_Wait_information ));
+
+  /*
    *  Here, the signal handler function executes
    */
   switch ( _POSIX_signals_Vectors[ signo ].sa_flags ) {
@@ -87,6 +97,12 @@ bool    _POSIX_signals_Check_signal(
       (*_POSIX_signals_Vectors[ signo ].sa_handler)( signo );
       break;
   }
+
+  /*
+   *  Restore the blocking information
+   */
+  memcpy( &_Thread_Executing->Wait, &stored_thread_wait_information,
+          sizeof( Thread_Wait_information ));
 
   /*
    *  Restore the previous set of blocked signals
