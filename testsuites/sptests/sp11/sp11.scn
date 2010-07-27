@@ -71,4 +71,6 @@ TA1 - set time forwards (leave a timer)
 TA1 - RTEMS_EVENT_10 received
 TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 100 ticks
 TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 200 ticks
+TA1 - rtems_event_send - send RTEMS_EVENT_4 to self
+TA1 - rtems_event_receive - RTEMS_EVENT_4 AND RTEMS_EVENT_5 - UNSATISFIED
 *** END OF TEST 11 ***

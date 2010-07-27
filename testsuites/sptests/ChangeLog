@@ -1,3 +1,8 @@
+2010-07-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* sp11/sp11.scn, sp11/task1.c: Add test case for receiving all events
+	no wait but the condition is only partially satisfied.
+
 2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add test to extract a task blocked with
