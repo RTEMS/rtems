@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define terminfo_version 5.7_20091114-13
-%define terminfo_rpmvers %{expand:%(echo 5.7_20091114-13 | tr - _)} 
+%define terminfo_version 5.7_20091114-14
+%define terminfo_rpmvers %{expand:%(echo 5.7_20091114-14 | tr - _)} 
 
 Name:         i686-pc-cygwin-terminfo
-Release:      0.20100204.0%{?dist}
+Release:      0.20100726.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
