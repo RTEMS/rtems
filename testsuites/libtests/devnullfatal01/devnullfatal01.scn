@@ -1,0 +1,3 @@
+*** TEST FATAL /DEV/NULL FATAL 01 ***
+Fatal error (/dev/null already registered) hit
+*** END OF TEST ***

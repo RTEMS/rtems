@@ -1,3 +1,13 @@
+2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1632/testing
+	* Makefile.am, configure.ac: Make dedicated fatal error test for
+	/dev/null already registered. Using code from Bharath in new test
+	framework.
+	* devnullfatal01/.cvsignore, devnullfatal01/Makefile.am,
+	devnullfatal01/devnullfatal01.doc, devnullfatal01/devnullfatal01.scn,
+	devnullfatal01/testcase.h: New files.
+
 2010-07-27	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1632/testing

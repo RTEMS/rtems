@@ -49,6 +49,7 @@ devfs01/Makefile
 devfs02/Makefile
 devfs03/Makefile
 devfs04/Makefile
+devnullfatal01/Makefile
 gxx01/Makefile
 heapwalk/Makefile
 malloctest/Makefile
