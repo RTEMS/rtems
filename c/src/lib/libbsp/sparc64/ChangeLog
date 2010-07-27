@@ -1,3 +1,8 @@
+2010-07-27  Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1634/bsps
+	* shared/console/conscfg.c: Add BSP_poll_char.
+
 2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* .cvsignore: New file.

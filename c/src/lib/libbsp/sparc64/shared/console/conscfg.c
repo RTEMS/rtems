@@ -113,3 +113,14 @@ static void bsp_out_char (char c)
 
 BSP_output_char_function_type BSP_output_char = bsp_out_char;
 
+static int bsp_in_char( void ){
+	int tmp;
+	ofw_read( &tmp, 1 ); /* blocks */
+	if( tmp != 0 ) {
+		return tmp>>24;
+	}
+	return -1;
+}
+
+BSP_polling_getchar_function_type BSP_poll_char = bsp_in_char;
+
