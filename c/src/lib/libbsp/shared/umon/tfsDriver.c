@@ -466,7 +466,7 @@ static int rtems_tfs_open_worker(
     tip->tfd = tfd;
     tip->buf = buf;
     strcpy(tip->name,pathcopy);
-    iop->data0 = (void *)tfdidx;
+    iop->data0 = (uint32_t)tfdidx;
     return(0);
   } else {
     printk("%s: %s\n",pathcopy,
