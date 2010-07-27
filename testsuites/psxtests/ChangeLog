@@ -1,3 +1,9 @@
+2010-07-27	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	PR 1629/cpukit
+	* psx04/init.c: sigsuspend() was not completely following the POSIX
+	specification.
+
 2010-07-19	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1623/testing

@@ -414,6 +414,9 @@ void *POSIX_Init(
 
   /* Suspend for signal that has already be sent */
 
+  status = sigemptyset( &mask );
+  rtems_test_assert(  !status );
+
   puts( "Init: sigsuspend for any signal" );
   status = sigsuspend( &mask );
   rtems_test_assert(  status );
