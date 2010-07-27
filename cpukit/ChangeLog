@@ -1,5 +1,11 @@
 2010-07-27	Vinu Rajashekhar <vinutheraj@gmail.com>
 
+	PR 1629/cpukit
+	* posix/src/sigsuspend.c: sigsuspend() was not completely following the
+	POSIX specification.
+
+2010-07-27	Vinu Rajashekhar <vinutheraj@gmail.com>
+
 	PR 1630/cpukit
 	* posix/src/psignalchecksignal.c, posix/src/sigtimedwait.c:
 	sigtimedwait() was not completely following the POSIX specification.
