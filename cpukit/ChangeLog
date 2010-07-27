@@ -1,5 +1,9 @@
 2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/src/keycreate.c: Fix typo.
+
+2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/imfs/imfs_load_tar.c, libmisc/untar/untar.c: Now supports
 	both pax and GNU tar created tar files.
 

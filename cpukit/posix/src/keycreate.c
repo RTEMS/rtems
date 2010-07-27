@@ -62,7 +62,7 @@ int pthread_key_create(
       /*
        *  Since the removal of ITRON, this cannot occur.
        */
-      if ( !_Objects_Information_table[ api_index ] )
+      if ( !_Objects_Information_table[ the_api ] )
 	continue;
 
       /*
