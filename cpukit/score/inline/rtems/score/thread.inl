@@ -337,15 +337,20 @@ RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
  *  system and determines if a context switch is required.  This
  *  is usually called after changing an execution mode such as preemptability
  *  for a thread.
+ *
+ *  @param[in] are_signals_pending specifies whether or not the API
+ *             level signals are pending and a dispatch is needed.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Evaluate_mode( void )
+RTEMS_INLINE_ROUTINE bool _Thread_Evaluate_is_dispatch_needed(
+  bool are_signals_pending
+)
 {
   Thread_Control     *executing;
 
   executing = _Thread_Executing;
 
-  if ( !_States_Is_ready( executing->current_state ) ||
-       ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) ) {
+  if ( are_signals_pending ||
+       (!_Thread_Is_heir( executing ) && executing->is_preemptible) ) {
     _Context_Switch_necessary = true;
     return true;
   }

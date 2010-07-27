@@ -1,8 +1,7 @@
 /*
- *  RTEMS Task Manager
+ *  RTEMS Task Manager - Change Task Mode
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,8 +31,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_mode
  *
  *  This directive enables and disables several modes of
@@ -84,7 +82,6 @@ rtems_status_code rtems_task_mode(
   /*
    *  These are generic thread scheduling characteristics.
    */
-
   if ( mask & RTEMS_PREEMPT_MASK )
     executing->is_preemptible = _Modes_Is_preempt(mode_set) ? true : false;
 
@@ -99,14 +96,12 @@ rtems_status_code rtems_task_mode(
   /*
    *  Set the new interrupt level
    */
-
   if ( mask & RTEMS_INTERRUPT_MASK )
     _Modes_Set_interrupt_level( mode_set );
 
   /*
    *  This is specific to the RTEMS API
    */
-
   is_asr_enabled = false;
   needs_asr_dispatching = false;
 
@@ -121,9 +116,10 @@ rtems_status_code rtems_task_mode(
     }
   }
 
-  if ( _System_state_Is_up( _System_state_Get() ) )
-    if ( _Thread_Evaluate_mode() || needs_asr_dispatching )
+  if ( _System_state_Is_up( _System_state_Get() ) ) {
+     if (_Thread_Evaluate_is_dispatch_needed( needs_asr_dispatching ) )
       _Thread_Dispatch();
+  }
 
   return RTEMS_SUCCESSFUL;
 }

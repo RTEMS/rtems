@@ -1,3 +1,9 @@
+2010-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* rtems/src/taskmode.c, score/inline/rtems/score/thread.inl: Rework a
+	bit to eliminate unreachable path for task blocked while calling
+	rtems_task_mode() on itself.
+
 2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h: Spelling.
