@@ -25,8 +25,9 @@ extern "C" {
 
 #include <rtems/score/types.h>
 #include <rtems/score/h8300.h>
-
-#include <rtems/bspIo.h>	/* printk */
+#ifndef ASM
+  #include <rtems/bspIo.h>
+#endif
 
 /* conditional compilation parameters */
 
@@ -388,7 +389,7 @@ extern "C" {
  *  XXX
  */
 
-
+#ifndef ASM
 
 #define nogap __attribute__ ((packed))
 
@@ -451,6 +452,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  */
 
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
+
+#endif /* ASM */
 
 /*
  *  Amount of extra stack (above minimum stack size) required by
@@ -700,6 +703,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
     if ( _new_level ) asm volatile ( "orc #0x80,ccr\n" ); \
     else              asm volatile ( "andc #0x7f,ccr\n" ); \
   }
+
+#ifndef ASM
 
 uint32_t   _CPU_ISR_Get_level( void );
 
@@ -1131,6 +1136,8 @@ extern void H8BD_Install_IRQ(
   uint32_t  	vector,
   proc_ptr	new_handler,
   proc_ptr	*old_handler );
+
+#endif /* ASM */
 
 #ifdef __cplusplus
 }
