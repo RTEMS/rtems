@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define cygwin_version 1.7.1-1
-%define cygwin_rpmvers %{expand:%(echo 1.7.1-1 | tr - _)} 
+%define cygwin_version 1.7.5-1
+%define cygwin_rpmvers %{expand:%(echo 1.7.5-1 | tr - _)} 
 
 Name:         i686-pc-cygwin
-Release:      0.20100204.0%{?dist}
+Release:      0.20100726.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
