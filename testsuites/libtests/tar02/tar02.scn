@@ -1,0 +1,8 @@
+*** TAR02 TEST ***
+Loading tarfs image ... successful
+========= /home/test_file =========
+(0)This is a test of loading an RTEMS filesystem from an
+initial tar image.
+
+*** Skipping symlink -- NOT CURRENTLY SUPPORTED ***
+*** END OF TAR02 TEST ***

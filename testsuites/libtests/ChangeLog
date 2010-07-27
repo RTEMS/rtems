@@ -1,3 +1,11 @@
+2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1532/testing
+	* Makefile.am, configure.ac: Add initial tests for untar capabilities.
+	* tar01/.cvsignore, tar01/Makefile.am, tar01/init.c, tar01/tar01.doc,
+	tar01/tar01.scn, tar02/.cvsignore, tar02/Makefile.am, tar02/init.c,
+	tar02/tar02.doc, tar02/tar02.scn: New files.
+
 2010-07-27	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1631/testing

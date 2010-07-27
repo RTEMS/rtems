@@ -1,0 +1,22 @@
+*** TAR01 TEST ***
+Untaring from memory - successful
+========= /home/test_file =========
+(0)This is a test of loading an RTEMS filesystem from an
+initial tar image.
+
+========= /symlink =========
+(0)This is a test of loading an RTEMS filesystem from an
+initial tar image.
+
+
+Copy tar image to test.tar
+Untaring from file - successful
+========= /dest/home/test_file =========
+(0)This is a test of loading an RTEMS filesystem from an
+initial tar image.
+
+========= /dest/symlink =========
+(0)This is a test of loading an RTEMS filesystem from an
+initial tar image.
+
+*** END OF TAR01 TEST ***

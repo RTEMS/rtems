@@ -14,7 +14,7 @@ SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
     termios06 termios07 termios08 \
     rtems++ tztest block01 block02 block03 block04 block05 block06 block07 \
     block08 block09 block10 stringto01 \
-    tar03
+    tar01 tar02 tar03
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am
