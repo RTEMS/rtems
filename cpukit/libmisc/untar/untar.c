@@ -39,7 +39,8 @@
  *   148      8 bytes  Header checksum (in octal ascii)
  *   156      1 bytes  Link flag
  *   157    100 bytes  Linkname ('\0' terminated, 99 maxmum length)
- *   257      8 bytes  Magic ("ustar  \0")
+ *   257      8 bytes  Magic PAX ("ustar\0" + 2 bytes padding)
+ *   257      8 bytes  Magic GNU tar ("ustar  \0")
  *   265     32 bytes  User name ('\0' terminated, 31 maxmum length)
  *   297     32 bytes  Group name ('\0' terminated, 31 maxmum length)
  *   329      8 bytes  Major device ID (in octal ascii)
@@ -143,7 +144,7 @@ Untar_FromMemory(
       /* Read the header */
       bufr = &tar_ptr[ptr];
       ptr += 512;
-      if (strncmp(&bufr[257], "ustar  ", 7))
+      if (strncmp(&bufr[257], "ustar", 5))
       {
          retval = UNTAR_SUCCESSFUL;
          break;
@@ -283,7 +284,7 @@ Untar_FromFile(
          break;
       }
 
-      if (strncmp(&bufr[257], "ustar  ", 7))
+      if (strncmp(&bufr[257], "ustar", 5))
       {
          break;
       }
