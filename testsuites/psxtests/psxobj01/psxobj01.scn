@@ -2,4 +2,6 @@
 INIT - _Objects_Name_to_id_string - NULL name
 INIT - _Objects_Name_to_id_string - NULL ID
 INIT - _Objects_Name_to_id_string - name of non-existent object
+INIT - _Objects_Set_name fails - out of memory
+Allocate_majority_of_workspace: 
 *** END OF POSIX OBJECT TEST 1 ***

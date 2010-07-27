@@ -5,7 +5,7 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = psxobj01
-psxobj01_SOURCES = init.c
+psxobj01_SOURCES = init.c ../../support/src/test_support.c
 
 dist_rtems_tests_DATA = psxobj01.scn
 dist_rtems_tests_DATA += psxobj01.doc
