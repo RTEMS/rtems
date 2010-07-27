@@ -1,0 +1,6 @@
+*** TEST GXX 02 ***
+Init - allocating most of workspace memory
+rtems_gxx_getspecific() - panic and exit
+*** END OF TEST GXX 02 ***
+rtems_gxx_getspecific
+fatal error, exiting

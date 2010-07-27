@@ -1,3 +1,10 @@
+2010-07-27	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1631/testing
+	* gxx02/init.c, gxx02/gxx02.scn, gxx02/gxx02.doc,
+	gxx02/Makefile.am, gxx02/gxx_wrappers.h: New test added
+	* Makefile.am, configure.ac: Changes to accommodate new tests
+
 2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1632/testing
