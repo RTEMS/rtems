@@ -101,21 +101,17 @@ bool _POSIX_signals_Unblock_thread(
     if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
       the_thread->Wait.return_code = EINTR;
       /*
-       *  At this time, there is no RTEMS API object which lets a task
-       *  block on a thread queue and be interruptible by a POSIX signal.
-       *  If an object class with that requirement is ever added, enable
-       *  this code.
+       *  In pthread_cond_wait, a thread will be blocking on a thread
+       *  queue, but is also interruptible by a POSIX signal.
        */
-      #if 0
 	if ( _States_Is_waiting_on_thread_queue(the_thread->current_state) )
 	  _Thread_queue_Extract_with_proxy( the_thread );
-	else
-      #endif
-	  if ( _States_Is_delaying(the_thread->current_state) ){
+	else if ( _States_Is_delaying(the_thread->current_state) ){
 	    if ( _Watchdog_Is_active( &the_thread->Timer ) )
 	      (void) _Watchdog_Remove( &the_thread->Timer );
 	    _Thread_Unblock( the_thread );
 	  }
+
     } else if ( the_thread->current_state == STATES_READY ) {
       if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
 	_Context_Switch_necessary = true;

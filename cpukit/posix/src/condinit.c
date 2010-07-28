@@ -44,7 +44,6 @@ int pthread_cond_init(
   /*
    *  Be careful about attributes when global!!!
    */
-
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
     return EINVAL;
 
@@ -64,11 +63,10 @@ int pthread_cond_init(
 
   the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
 
-/* XXX some more initialization might need to go here */
   _Thread_queue_Initialize(
     &the_cond->Wait_queue,
     THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_CONDITION_VARIABLE,
+    STATES_WAITING_FOR_CONDITION_VARIABLE | STATES_INTERRUPTIBLE_BY_SIGNAL,
     ETIMEDOUT
   );
 

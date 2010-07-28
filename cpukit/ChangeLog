@@ -1,3 +1,9 @@
+2010-07-28	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	* posix/src/condinit.c, posix/src/condwaitsupp.c,
+	posix/src/psignalunblockthread.c: Clean up some signal interruption
+	code.
+
 2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/keycreate.c: Fix typo.

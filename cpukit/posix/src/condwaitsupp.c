@@ -85,9 +85,16 @@ int _POSIX_Condition_variables_Wait_support(
          *  _Thread_queue_Enqueue.
          */
 
+        /*
+         *  If the thread is interrupted, while in the thread queue, by
+         *  a POSIX signal, then pthread_cond_wait returns spuriously,
+         *  according to the POSIX standard. It means that pthread_cond_wait
+         *  returns a success status, except for the fact that it was not
+         *  woken up a pthread_cond_signal or a pthread_cond_broadcast.
+         */
         status = _Thread_Executing->Wait.return_code;
-        if ( status && status != ETIMEDOUT )
-          return status;
+        if ( status == EINTR )
+          status = 0;
 
       } else {
         _Thread_Enable_dispatch();
