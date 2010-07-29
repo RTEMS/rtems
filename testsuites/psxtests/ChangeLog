@@ -1,3 +1,10 @@
+2010-07-29	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1633/testing
+	* psximfs01/init.c, psximfs01/psximfs01.scn,
+	psximfs01/psximfs01.doc: New cases to exercise
+	IMFS_memfile_remove.
+
 2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxobj01/Makefile.am, psxobj01/init.c, psxobj01/psxobj01.scn: Add

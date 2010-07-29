@@ -21,6 +21,7 @@ directives:
   + write
   + lseek
   + ftruncate
+  + unlink
 
 concepts:
 
@@ -33,3 +34,5 @@ ensures the maximum file size is relatively small.
 
 + This should exercise much of the singly, doubly and triply indirect
 block management code in the IMFS.
+
++ Exercise unlink, and hence IMFS_memfile_remove

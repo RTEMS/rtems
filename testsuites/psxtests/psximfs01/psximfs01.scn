@@ -12,5 +12,8 @@ close(biggie) - OK
 open(biggie) - OK 
 Seek to end .. returned 1280
 lseek/ftruncate loop..
+Seek to end .. returned 1
+lseek/ftruncate loop..
 close(biggie) - OK 
+unlink(biggie) - OK
 *** END OF TEST IMFS 01 ***
