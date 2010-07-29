@@ -4,7 +4,7 @@
 
 rtems_tests_PROGRAMS = tar02
 tar02_SOURCES = init.c ../../psxtests/psxfile01/test_cat.c \
-  initial_filesystem_tar.c
+  initial_filesystem_tar.c initial_filesystem_tar.h
 
 dist_rtems_tests_DATA = tar02.scn
 
@@ -19,12 +19,9 @@ AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 LINK_OBJS = $(tar02_OBJECTS) $(tar02_LDADD)
 LINK_LIBS = $(tar02_LDLIBS)
 
-tar02$(EXEEXT): stamp-filesystem stamp-initial-fs-source $(tar02_OBJECTS) \
-    $(tar02_DEPENDENCIES)
+tar02$(EXEEXT): $(tar02_OBJECTS) $(tar02_DEPENDENCIES)
 	@rm -f tar02$(EXEEXT)
 	$(make-exe)
-
-init.o: init.c stamp-initial-fs-source
 
 initial_filesystem_tar.c: stamp-initial-fs-source
 

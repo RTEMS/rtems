@@ -1,5 +1,9 @@
 2010-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* tar01/Makefile.am, tar02/Makefile.am: Misc. fixes.
+
+2010-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* tar01/Makefile.am, tar03/Makefile.am: Remove MANAGERS.
 
 2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
