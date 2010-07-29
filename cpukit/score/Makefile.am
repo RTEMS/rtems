@@ -25,15 +25,15 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/heap.h include/rtems/score/protectedheap.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
-    include/rtems/score/priority.h include/rtems/score/stack.h \
-    include/rtems/score/states.h include/rtems/score/sysstate.h \
-    include/rtems/score/thread.h include/rtems/score/threadq.h \
-    include/rtems/score/threadsync.h include/rtems/score/timespec.h \
-    include/rtems/score/timestamp.h include/rtems/score/timestamp64.h \
-    include/rtems/score/tod.h include/rtems/score/tqdata.h \
-    include/rtems/score/userext.h include/rtems/score/watchdog.h \
-    include/rtems/score/wkspace.h include/rtems/score/cpuopts.h \
-    include/rtems/score/basedefs.h
+    include/rtems/score/priority.h include/rtems/score/prioritybitmap.h \
+    include/rtems/score/stack.h include/rtems/score/states.h \
+    include/rtems/score/sysstate.h include/rtems/score/thread.h \
+    include/rtems/score/threadq.h include/rtems/score/threadsync.h \
+    include/rtems/score/timespec.h include/rtems/score/timestamp.h \
+    include/rtems/score/timestamp64.h include/rtems/score/tod.h \
+    include/rtems/score/tqdata.h include/rtems/score/userext.h \
+    include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
+    include/rtems/score/cpuopts.h include/rtems/score/basedefs.h
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h \
@@ -53,11 +53,12 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/coremsg.inl inline/rtems/score/coremutex.inl \
     inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
-    inline/rtems/score/priority.inl inline/rtems/score/stack.inl \
-    inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
-    inline/rtems/score/thread.inl inline/rtems/score/threadq.inl \
-    inline/rtems/score/tod.inl inline/rtems/score/tqdata.inl \
-    inline/rtems/score/watchdog.inl inline/rtems/score/wkspace.inl
+    inline/rtems/score/priority.inl inline/rtems/score/prioritybitmap.inl \
+    inline/rtems/score/stack.inl inline/rtems/score/states.inl \
+    inline/rtems/score/sysstate.inl inline/rtems/score/thread.inl \
+    inline/rtems/score/threadq.inl inline/rtems/score/tod.inl \
+    inline/rtems/score/tqdata.inl inline/rtems/score/watchdog.inl \
+    inline/rtems/score/wkspace.inl
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += inline/rtems/score/corespinlock.inl \

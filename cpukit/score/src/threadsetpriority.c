@@ -52,5 +52,8 @@ void _Thread_Set_priority(
   the_thread->current_priority = new_priority;
   the_thread->ready            = &_Thread_Ready_chain[ new_priority ];
 
-  _Priority_Initialize_information( &the_thread->Priority_map, new_priority );
+  _Priority_bit_map_Initialize_information( 
+      &the_thread->Priority_map, 
+      new_priority 
+  );
 }

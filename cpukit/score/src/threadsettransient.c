@@ -66,7 +66,7 @@ void _Thread_Set_transient(
     if ( _Chain_Has_only_one_node( ready ) ) {
 
       _Chain_Initialize_empty( ready );
-      _Priority_Remove_from_bit_map( &the_thread->Priority_map );
+      _Priority_bit_map_Remove( &the_thread->Priority_map );
 
     } else
       _Chain_Extract_unprotected( &the_thread->Object.Node );

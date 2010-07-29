@@ -70,6 +70,7 @@ extern "C" {
 #endif
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/tod.h>
@@ -392,7 +393,7 @@ struct Thread_Control_struct {
   /** This field points to the Ready FIFO for this priority. */
   Chain_Control                        *ready;
   /** This field contains precalculated priority map indices. */
-  Priority_Information                  Priority_map;
+  Priority_bit_map_Information          Priority_map;
   /** This field contains information about the starting state of
    *  this thread.
    */

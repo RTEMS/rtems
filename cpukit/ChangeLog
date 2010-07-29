@@ -1,3 +1,26 @@
+2010-07-29	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1635/cpukit
+	* sapi/src/exinit.c, score/Makefile.am, score/preinstall.am,
+	score/include/rtems/score/bitfield.h,
+	score/include/rtems/score/priority.h,
+	score/include/rtems/score/thread.h,
+	score/inline/rtems/score/priority.inl,
+	score/inline/rtems/score/thread.inl,
+	score/src/threadchangepriority.c, score/src/threadclearstate.c,
+	score/src/threadready.c, score/src/threadresume.c,
+	score/src/threadsetpriority.c, score/src/threadsetstate.c,
+	score/src/threadsettransient.c, score/src/threadsuspend.c:
+	Refactoring of priority handling, to isolate the bitmap
+	implementation of priorities in the supercore so that priority
+	management is a little more modular. This change is in anticipation
+	of scheduler implementations that can select how they manage tracking
+	priority levels / finding the highest priority ready task. Note that
+	most of the changes here are simple renaming, to clarify the use of
+	the bitmap-based priority management.
+	* score/include/rtems/score/prioritybitmap.h,
+	score/inline/rtems/score/prioritybitmap.inl: New files.
+
 2010-07-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* posix/src/psignalunblockthread.c: Clean up and simplify.

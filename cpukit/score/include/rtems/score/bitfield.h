@@ -90,9 +90,9 @@ const unsigned char __log2table[256] = {
     register const unsigned char *__p = __log2table; \
     \
     if ( __value < 0x100 ) \
-      (_bit_number) = (Priority_Bit_map_control)( __p[ __value ] + 8 );  \
+      (_bit_number) = (Priority_bit_map_Control)( __p[ __value ] + 8 );  \
     else \
-      (_bit_number) = (Priority_Bit_map_control)( __p[ __value >> 8 ] ); \
+      (_bit_number) = (Priority_bit_map_Control)( __p[ __value >> 8 ] ); \
   }
 #endif
 

@@ -61,7 +61,7 @@ void _Thread_Ready(
 
   the_thread->current_state = STATES_READY;
 
-  _Priority_Add_to_bit_map( &the_thread->Priority_map );
+  _Priority_bit_map_Add( &the_thread->Priority_map );
 
   _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
 

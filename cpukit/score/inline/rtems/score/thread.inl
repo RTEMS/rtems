@@ -127,7 +127,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Restart_self( void )
 RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
 {
   _Thread_Heir = (Thread_Control *)
-    _Thread_Ready_chain[ _Priority_Get_highest() ].first;
+    _Thread_Ready_chain[ _Priority_bit_map_Get_highest() ].first;
 }
 
 /**
