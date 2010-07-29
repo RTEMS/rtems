@@ -23,11 +23,13 @@ tar01$(EXEEXT): $(tar01_OBJECTS) $(tar01_DEPENDENCIES)
 	@rm -f tar01$(EXEEXT)
 	$(make-exe)
 
+init.o: init.c initial_filesystem_tar.h
+
 initial_filesystem_tar.c: stamp-initial-fs-source
 
 initial_filesystem_tar.h: stamp-initial-fs-source
 
-stamp-initial-fs-source: initial_filesystem.tar
+stamp-initial-fs-source: stamp-fs-tar
 	$(BIN2C) initial_filesystem.tar initial_filesystem_tar
 	touch stamp-initial-fs-source
 
@@ -39,10 +41,11 @@ stamp-filesystem:
 	cd initial_fs && ln -s home/test_file symlink
 	touch stamp-filesystem
 
-initial_filesystem.tar: stamp-filesystem
+stamp-fs-tar: stamp-filesystem
 	cd initial_fs ; pax -w -f ../initial_filesystem.tar home symlink
+	touch stamp-fs-tar
 
-CLEANFILES = initial_fs initial_filesystem* stamp-filesystem \
-	    stamp-initial-fs-source
+CLEANFILES = initial_filesystem* stamp-filesystem \
+	    stamp-fs-tar stamp-initial-fs-source
 
 include $(top_srcdir)/../automake/local.am

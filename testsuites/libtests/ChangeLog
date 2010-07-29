@@ -1,3 +1,8 @@
+2010-07-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* tar01/Makefile.am, tar02/Makefile.am: Fix dependencies for parallel
+	build.
+
 2010-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* tar01/Makefile.am, tar02/Makefile.am: Replace mkdir cascade
