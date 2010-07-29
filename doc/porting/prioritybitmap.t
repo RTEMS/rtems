@@ -44,7 +44,7 @@ indicates whether or not there is a ready to execute task
 at the priority.
 
  
-@section _Priority_Bit_map_control Type
+@section _Priority_bit_map_Control Type
 
 The @code{_Priority_Bit_map_Control} type is the fundamental data type of the
 priority bit map array used to determine which priorities have ready
@@ -59,7 +59,7 @@ instruction.
 
 The _CPU_Bitfield_Find_first_bit routine sets _output to the bit number of
 the first bit set in @code{_value}.  @code{_value} is of CPU dependent type
-@code{Priority_Bit_map_control}.  A stub version of this routine is as follows:
+@code{Priority_bit_map_Control}.  A stub version of this routine is as follows:
 
 @example
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
