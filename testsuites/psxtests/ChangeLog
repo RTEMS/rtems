@@ -1,5 +1,13 @@
 2010-07-29	Bharath Suri <bharath.s.jois@gmail.com>
 
+	PR 1642/testing
+	* psximfs02/init.c, psximfs02/psximfs02.scn,
+	psximfs02/psximfs02.doc, psximfs02/Makefile.am: New test added.
+	* configure.ac, Makefile.am: Changes to accommodate psximfs02
+	test.
+
+2010-07-29	Bharath Suri <bharath.s.jois@gmail.com>
+
 	PR 1633/testing
 	* psximfs01/init.c, psximfs01/psximfs01.scn,
 	psximfs01/psximfs01.doc: New cases to exercise

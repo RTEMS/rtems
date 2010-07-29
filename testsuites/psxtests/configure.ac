@@ -94,6 +94,7 @@ psxgetrusage01/Makefile
 psxhdrs/Makefile
 psxid01/Makefile
 psximfs01/Makefile
+psximfs02/Makefile
 psxintrcritical01/Makefile
 psxitimer/Makefile
 psxkey01/Makefile

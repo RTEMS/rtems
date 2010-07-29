@@ -1,0 +1,37 @@
+*** TEST IMFS 02 ***
+Creating directory /dir00
+Creating directory /dir00/dir01
+Changing directory to /dir00
+Creating link dir01-link0 for dir01
+
+Creating link dir01-link1 for dir01-link0
+
+Creating link dir01-link2 for dir01-link1
+
+Creating link dir01-link3 for dir01-link2
+
+Creating link dir01-link4 for dir01-link3
+
+Creating link dir01-link5 for dir01-link4
+
+Creating link dir01-link6 for dir01-link5
+
+Creating link dir01-link7 for dir01-link6
+Link creation failed
+Creating a regular node /node, RDONLY
+Creating link /node-link for /node
+Opening /node-link in WRONLY mode -- expect EACCES
+Creating a symlink /node-slink for /node
+Opening /node-slink in WRONLY mode -- expect EACCES
+Allocate most of heap
+Attempt to mount a fs at /dir01 -- expect ENOMEM
+Freeing allocated memory
+Allocate most of heap
+Changing directory to /
+Attempt to create /node-link-2 for /node -- expect ENOMEM
+Attempt to create /node-slink-2 for /node -- expect ENOMEM
+Freeing allocated memory
+Allocate most of heap
+Attempt to create /node-slink-2 for /node -- expect ENOMEM
+Attempt to stat a hardlink -- expect ENOTSUP
+*** END OF TEST IMFS 02 ***
