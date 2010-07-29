@@ -956,7 +956,7 @@ extern char _gp[];
  *  @ingroup CPUBitfield
  *  This routine sets @a _output to the bit number of the first bit
  *  set in @a _value.  @a _value is of CPU dependent type
- *  @a Priority_Bit_map_control.  This type may be either 16 or 32 bits
+ *  @a Priority_bit_map_Control.  This type may be either 16 or 32 bits
  *  wide although only the 16 least significant bits will be used.
  *
  *  There are a number of variables in using a "find first bit" type

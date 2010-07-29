@@ -682,7 +682,7 @@ SCORE_EXTERN void _CPU_Context_Initialize(
 
 /*
  *  This routine sets _output to the bit number of the first bit
- *  set in _value.  _value is of CPU dependent type Priority_Bit_map_control.
+ *  set in _value.  _value is of CPU dependent type Priority_bit_map_Control.
  *  This type may be either 16 or 32 bits wide although only the 16
  *  least significant bits will be used.
  *

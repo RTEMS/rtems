@@ -31,7 +31,7 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-typedef uint16_t Priority_Bit_map_control;
+typedef uint16_t Priority_bit_map_Control;
 typedef void nios2_isr;
 typedef void ( *nios2_isr_entry )( void );
 

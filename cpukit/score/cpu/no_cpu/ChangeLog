@@ -1,3 +1,14 @@
+2010-07-29	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1635/cpukit
+	* rtems/score/cpu.h, rtems/score/types.h: Refactoring of priority
+	handling, to isolate the bitmap implementation of priorities in the
+	supercore so that priority management is a little more modular. This
+	change is in anticipation of scheduler implementations that can
+	select how they manage tracking priority levels / finding the highest
+	priority ready task. Note that most of the changes here are simple
+	renaming, to clarify the use of the bitmap-based priority management.
+
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/cpu.h: Include <rtems/score/types.h> first.

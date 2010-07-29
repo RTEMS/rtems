@@ -47,7 +47,7 @@ extern "C" {
 /*
  *  This section defines the basic types for this processor.
  */
-typedef uint32_t     Priority_Bit_map_control;
+typedef uint32_t     Priority_bit_map_Control;
 typedef void ppc_isr;
 
 #ifdef __cplusplus
