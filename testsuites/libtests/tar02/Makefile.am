@@ -33,8 +33,7 @@ stamp-initial-fs-source: initial_filesystem.tar
 
 stamp-filesystem:
 	rm -rf initial_fs
-	mkdir initial_fs
-	mkdir initial_fs/home
+	$(MKDIR_P) initial_fs/home
 	(echo "This is a test of loading an RTEMS filesystem from an" ; \
 	echo "initial tar image.") >initial_fs/home/test_file
 	cd initial_fs && ln -s home/test_file symlink

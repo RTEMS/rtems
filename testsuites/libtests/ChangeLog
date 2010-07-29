@@ -1,5 +1,10 @@
 2010-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* tar01/Makefile.am, tar02/Makefile.am: Replace mkdir cascade
+	with $(MKDIR_P).
+
+2010-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* tar01/Makefile.am, tar02/Makefile.am: Misc. fixes.
 
 2010-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
