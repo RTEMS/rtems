@@ -1,3 +1,7 @@
+2010-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems-bin2c.c: Add -C and -H options.
+
 2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* eolstrip.c: Readdress use of ctype methods per recommendation from

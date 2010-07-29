@@ -38,6 +38,8 @@ int useconst = 1;
 int usestatic = 0;
 int verbose = 0;
 int zeroterminated = 0;
+int createC = 1;
+int createH = 1;
 
 int myfgetc(FILE *f)
 {
@@ -91,18 +93,23 @@ void process(const char *ifname, const char *ofname)
     fprintf(stderr, "cannot open %s for reading\n", ifname);
     exit(1);
   }
+  
+  if ( createC ) {
   ocfile = fopen(ocname, "wb");
   if (ocfile == NULL) {
     fprintf(stderr, "cannot open %s for writing\n", ocname);
     exit(1);
   }
-
+  }
+  
+  if ( createH ) {
   ohfile = fopen(ohname, "wb");
   if (ohfile == NULL) {
     fprintf(stderr, "cannot open %s for writing\n", ohname);
     exit(1);
   }
-
+  }
+  
   /* find basename */
   if ((cp = strrchr(ifname, '/')) != NULL)
     ++cp;
@@ -117,6 +124,7 @@ void process(const char *ifname, const char *ofname)
     if (!isalnum(*p))
       *p = '_';
 
+  if ( createC ) {
   /* print C file header */
   fprintf(
     ocfile,
@@ -161,11 +169,13 @@ void process(const char *ifname, const char *ofname)
     buf,
     buf
   );
-
+  } /* createC */
+  
   /*****************************************************************/
   /******                    END OF C FILE                     *****/
   /*****************************************************************/
 
+  if ( createH ) {
   /* print H file header */
   fprintf(
     ohfile,
@@ -208,21 +218,22 @@ void process(const char *ifname, const char *ofname)
     "\n"
     "#endif\n"
   );
-
+  } /* createH */
+  
   /*****************************************************************/
   /******                    END OF H FILE                     *****/
   /*****************************************************************/
 
   fclose(ifile);
-  fclose(ocfile);
-  fclose(ohfile);
+  if ( createC ) { fclose(ocfile); }
+  if ( createH ) { fclose(ohfile); }
 }
 
 void usage(void)
 {
   fprintf(
      stderr,
-     "usage: bin2c [-csvz] <input_file> <output_file>\n"
+     "usage: bin2c [-csvzCH] <input_file> <output_file>\n"
      "  <input_file> is the binary file to convert\n"
      "  <output_file> should not have a .c or .h extension\n"
      "\n"
@@ -230,6 +241,8 @@ void usage(void)
      "  -s - do use static in declaration\n"
      "  -v - verbose\n"
      "  -z - add zero terminator\n"
+     "  -H - create c-header only\n"
+     "  -C - create c-source file only\n"
     );
   exit(1);
 }
@@ -251,6 +264,16 @@ int main(int argc, char **argv)
       ++argv;
     } else if (!strcmp(argv[1], "-z")) {
       zeroterminated = 1;
+      --argc;
+      ++argv;
+    } else if (!strcmp(argv[1], "-C")) {
+      createH = 0;
+      createC = 1;
+      --argc;
+      ++argv;
+    } else if (!strcmp(argv[1], "-H")) {
+      createC = 0;
+      createH = 1;
       --argc;
       ++argv;
     } else {
