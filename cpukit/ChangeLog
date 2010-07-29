@@ -1,3 +1,7 @@
+2010-07-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* posix/src/psignalunblockthread.c: Clean up and simplify.
+
 2010-07-28	Vinu Rajashekhar <vinutheraj@gmail.com>
 
 	* posix/src/condinit.c, posix/src/condwaitsupp.c,

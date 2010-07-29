@@ -98,7 +98,7 @@ bool _POSIX_signals_Unblock_thread(
      *    + Any other combination, do nothing.
      */
 
-    if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
+    if ( _States_Is_interruptible_by_signal( the_thread->current_state ) ) {
       the_thread->Wait.return_code = EINTR;
       /*
        *  In pthread_cond_wait, a thread will be blocking on a thread
@@ -106,9 +106,8 @@ bool _POSIX_signals_Unblock_thread(
        */
 	if ( _States_Is_waiting_on_thread_queue(the_thread->current_state) )
 	  _Thread_queue_Extract_with_proxy( the_thread );
-	else if ( _States_Is_delaying(the_thread->current_state) ){
-	    if ( _Watchdog_Is_active( &the_thread->Timer ) )
-	      (void) _Watchdog_Remove( &the_thread->Timer );
+	else if ( _States_Is_delaying(the_thread->current_state) ) {
+	    (void) _Watchdog_Remove( &the_thread->Timer );
 	    _Thread_Unblock( the_thread );
 	  }
 
