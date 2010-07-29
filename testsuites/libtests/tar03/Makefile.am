@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
-
 rtems_tests_PROGRAMS = tar03
 tar03_SOURCES = init.c
 

@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
-
 rtems_tests_PROGRAMS = tar01
 tar01_SOURCES = init.c ../../psxtests/psxfile01/test_cat.c \
   initial_filesystem_tar.c
