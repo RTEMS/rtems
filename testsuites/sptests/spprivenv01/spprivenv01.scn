@@ -1,0 +1,17 @@
+*** TEST USER ENVIRONMENT ROUTINE - 01 ***
+Init - allocating most of heap -- OK
+Init - attempt to reset env - expect RTEMS_NO_MEMORY
+Init - freeing the allocated memory
+Init - allocating most of workspace memory
+Init - attempt to reset env - expect RTEMS_NO_MEMORY
+Init - freeing the workspace memory
+Init - creating a task name and a task -- OK
+Init - starting the task_routine, to set its private environment
+Init - attempt to share the env with another task -- Expect error
+task_routine - setting up a private environment
+Init - attempt to share the env with another task -- OK
+Init - Get current task id
+Init - Attempt to reset current task's environment
+Init - attempt to share the env with another task -- OK
+Init - attempt to share with self -- OK
+*** END OF TEST USER ENVIRONMENT ROUTINE - 01 ***

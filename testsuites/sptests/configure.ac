@@ -154,6 +154,7 @@ spmountmgr01/Makefile
 spnotepad01/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
+spprivenv01/Makefile
 spsize/Makefile
 spstkalloc/Makefile
 spthreadq01/Makefile
