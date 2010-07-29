@@ -31,7 +31,7 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-typedef uint16_t Priority_Bit_map_control;
+typedef uint16_t Priority_bit_map_Control;
 typedef void i386_isr;
 typedef i386_isr ( *i386_isr_entry )( void );
 
