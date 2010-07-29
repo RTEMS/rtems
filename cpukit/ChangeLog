@@ -1,3 +1,9 @@
+2010-07-29	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1620/cpukit
+	* libcsupport/src/privateenv.c: Significant clean up and rework to
+	improve testability.
+
 2010-07-29	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1635/cpukit

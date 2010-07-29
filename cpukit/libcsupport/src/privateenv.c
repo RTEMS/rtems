@@ -46,15 +46,27 @@ free_user_env(void *venv)
 
 rtems_status_code rtems_libio_set_private_env(void)
 {
-  rtems_status_code      sc;
-  rtems_id               task_id;
+  rtems_status_code                 sc;
+  rtems_id                          task_id;
   rtems_filesystem_location_info_t  loc;
 
-  sc=rtems_task_ident(RTEMS_SELF,0,&task_id);
-  if (sc != RTEMS_SUCCESSFUL) return sc;
+  task_id = rtems_task_self();
 
-  /* Only for the first time a malloc is necesary */
-  if (rtems_current_user_env==&rtems_global_user_env) {
+  /* 
+   * Malloc is necessary whenever the current task does not
+   * have its own environment in place. This could be:
+   * a) it never had one
+   * OR
+   * b) it shared another task's environment
+   */
+
+  /* 
+   * Bharath: I'm not sure if the check can be reduced to
+   * if( rtems_current_user_env->task_id != task_id ) {
+   */
+
+  if (rtems_current_user_env==&rtems_global_user_env || 
+      rtems_current_user_env->task_id != task_id ) {
    rtems_user_env_t *tmp = malloc(sizeof(rtems_user_env_t));
    if (!tmp)
      return RTEMS_NO_MEMORY;
@@ -115,34 +127,53 @@ rtems_status_code rtems_libio_set_private_env(void)
  *     while changing any of those (chdir(), chroot()).
  */
 
-#ifndef HAVE_USERENV_REFCNT
 rtems_status_code rtems_libio_share_private_env(rtems_id task_id)
 {
   rtems_status_code  sc;
   rtems_user_env_t * shared_user_env;
   rtems_id           current_task_id;
 
+  /* 
+   * get current task id 
+   */
   current_task_id = rtems_task_self();
 
-  if (rtems_current_user_env->task_id==current_task_id) {
-   /* kill the current user env & task_var*/
-   rtems_user_env_t  *tmp = rtems_current_user_env;
-   sc = rtems_task_variable_delete(RTEMS_SELF,(void*)&rtems_current_user_env);
-   if (sc != RTEMS_SUCCESSFUL) return sc;
-   free_user_env(tmp);
-  } else {
-    sc = rtems_task_variable_get(
-      task_id,(void*)&rtems_current_user_env, (void*)&shared_user_env );
+  /*
+   * If this was an attempt to share the task with self,
+   * if somebody wanted to do it... Lets tell them, its shared
+   */
+
+  if( task_id == current_task_id )
+    return RTEMS_SUCCESSFUL;
+  /* 
+   * Try to get the requested user environment 
+   */
+  sc = rtems_task_variable_get(
+	 task_id,
+	 (void*)&rtems_current_user_env, 
+	 (void*)&shared_user_env );
+
+  /* 
+   * If it was not successful, return the error code 
+   */
     if (sc != RTEMS_SUCCESSFUL)
-      goto bailout;
+      return sc;
+
+    /* 
+     * If we are here, we have the required environment to be
+     * shared with the current task
+    */
+
+    /*
+     * If we have a current environment in place, we need to 
+     * free it, since we will be sharing the variable with the
+     * shared_user_env
+     */
+
+  if (rtems_current_user_env->task_id==current_task_id) {
+    rtems_user_env_t  *tmp = rtems_current_user_env;
+    free_user_env( tmp );
   }
-
-  /* AT THIS POINT, rtems_current_user_env is DANGLING */
-
-  sc = rtems_task_variable_add(
-    RTEMS_SELF,(void*)&rtems_current_user_env,free_user_env);
-  if (sc != RTEMS_SUCCESSFUL)
-    goto bailout;
 
   /* the current_user_env is the same pointer that remote env */
   rtems_current_user_env = shared_user_env;
@@ -153,10 +184,4 @@ rtems_status_code rtems_libio_share_private_env(rtems_id task_id)
 #endif
 
   return RTEMS_SUCCESSFUL;
-
-bailout:
-  /* fallback to the global env */
-  rtems_current_user_env = &rtems_global_user_env;
-  return sc;
 }
-#endif
