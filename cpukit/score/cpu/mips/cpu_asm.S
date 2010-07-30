@@ -949,7 +949,7 @@ _ISR_Handler_1:
    *    restore stack
    *  #endif
    *
-   *  if !_Context_Switch_necessary 
+   *  if !_Thread_Dispatch_necessary 
    *    goto the label "exit interrupt (simple case)"
    */
         lbu	t0,DISPATCH_NEEDED
