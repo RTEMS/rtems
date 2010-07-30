@@ -41,7 +41,7 @@ initial_filesystem.tar:
 	(echo "This is a test of loading an RTEMS filesystem from an" ; \
 	echo "initial tar image.") >initial_fs/home/test_file
 	(cd initial_fs; \
-	$(LN_S) home/test_file symlink
+	$(LN_S) home/test_file symlink; \
 	$(PAX) -w -f ../initial_filesystem.tar home symlink)
 CLEANFILES += initial_filesystem.tar
 
