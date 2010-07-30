@@ -7,6 +7,8 @@ CLEANFILES =
 rtems_tests_PROGRAMS = tar01
 tar01_SOURCES = init.c ../../psxtests/psxfile01/test_cat.c \
   initial_filesystem_tar.c initial_filesystem_tar.h
+  
+BUILT_SOURCES = initial_filesystem_tar.c initial_filesystem_tar.h
 
 dist_rtems_tests_DATA = tar01.scn
 
