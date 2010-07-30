@@ -70,8 +70,12 @@ void process(const char *ifname, const char *ofname)
 
   strncpy( obasename, ofname, PATH_MAX );
   len = strlen( obasename );
-  if ( obasename[len-2] == '.' && obasename[len-1] == 'c' )
-    obasename[len-2] = '\0';
+  if ( len >= 2 ) {
+    if ( obasename[len-2] == '.' ) {
+      if ( (obasename[len-1] == 'c') || (obasename[len-1] == 'h') )
+        obasename[len-2] = '\0';
+    }
+  }
 
   sprintf( ocname, "%s.c", obasename );
   sprintf( ohname, "%s.h", obasename );

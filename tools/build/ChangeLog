@@ -1,5 +1,10 @@
 2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems-bin2c.c: Fix memory leak in '.c' suffix strip.
+	Also strip '.h' suffix.
+
+2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems-bin2c.c: Make -v (verbose) working.
 
 2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
