@@ -1,5 +1,8 @@
 2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add AC_PROG_LN_S.
+	Add AC_PATH_PROG([PAX]).
+	Add AM_CONDITIONAL(TARTESTS).
 	* tar01/Makefile.am, tar02/Makefile.am:
 	Eliminate stamp-filesystem.
 
