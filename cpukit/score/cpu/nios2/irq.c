@@ -71,7 +71,7 @@ void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
 
     if( _Thread_Dispatch_disable_level == 0 )
     {
-      if ( _Context_Switch_necessary ) {
+      if ( _Thread_Dispatch_necessary ) {
         _CPU_ISR_Enable( level );
         _Thread_Dispatch();
         /* may have switched to another task and not return here immed. */

@@ -1,3 +1,9 @@
+2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1599/cpukit
+	* irq.c: Rename _Context_Switch_necessary to _Thread_Dispatch_necessary
+	to more properly reflect the intent.
+
 2010-07-29	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1635/cpukit
