@@ -1,5 +1,9 @@
 2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* tar01/Makefile.am, tar02/Makefile.am: Apply TARTESTS.
+
+2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* tar01/Makefile.am:
 	Apply $LN_S, $PAX. Use subshell for tarball creation.
 	Don't add initial_fs to CLEANFILES.

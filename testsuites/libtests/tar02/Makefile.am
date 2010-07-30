@@ -4,6 +4,7 @@
 
 CLEANFILES =
 
+if TARTESTS
 rtems_tests_PROGRAMS = tar02
 tar02_SOURCES = init.c ../../psxtests/psxfile01/test_cat.c \
   initial_filesystem_tar.c initial_filesystem_tar.h
@@ -11,11 +12,13 @@ tar02_SOURCES = init.c ../../psxtests/psxfile01/test_cat.c \
 BUILT_SOURCES = initial_filesystem_tar.c initial_filesystem_tar.h
 
 dist_rtems_tests_DATA = tar02.scn
+endif
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
+if TARTESTS
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
@@ -44,5 +47,6 @@ initial_filesystem.tar:
 	$(LN_S) home/test_file symlink; \
 	$(PAX) -w -f ../initial_filesystem.tar home symlink)
 CLEANFILES += initial_filesystem.tar
+endif TARTESTS
 
 include $(top_srcdir)/../automake/local.am
