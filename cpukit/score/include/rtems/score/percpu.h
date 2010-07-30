@@ -85,7 +85,7 @@ typedef struct {
   Thread_Control *idle;
 
   /** This is set to true when this CPU needs to run the dispatcher. */
-  volatile bool dispatch_needed;
+  volatile bool dispatch_necessary;
 
 } Per_CPU_Control;
 #endif
@@ -160,7 +160,7 @@ extern Per_CPU_Control _Per_CPU_Information;
 #define _ISR_Nest_level           _Per_CPU_Information.isr_nest_level
 #define _CPU_Interrupt_stack_low  _Per_CPU_Information.interrupt_stack_low
 #define _CPU_Interrupt_stack_high _Per_CPU_Information.interrupt_stack_high
-#define _Context_Switch_necessary _Per_CPU_Information.dispatch_needed
+#define _Thread_Dispatch_necessary _Per_CPU_Information.dispatch_necessary
 
 #endif  /* ASM */
 

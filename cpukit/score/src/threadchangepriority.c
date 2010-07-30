@@ -137,6 +137,6 @@ void _Thread_Change_priority(
 
   if ( !_Thread_Is_executing_also_the_heir() &&
        _Thread_Executing->is_preemptible )
-    _Context_Switch_necessary = true;
+    _Thread_Dispatch_necessary = true;
   _ISR_Enable( level );
 }

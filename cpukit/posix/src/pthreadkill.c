@@ -64,7 +64,7 @@ int pthread_kill(
         (void) _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
 
         if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
-	  _Context_Switch_necessary = true;
+	  _Thread_Dispatch_necessary = true;
       }
       _Thread_Enable_dispatch();
       return 0;

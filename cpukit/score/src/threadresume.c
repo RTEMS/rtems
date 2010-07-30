@@ -79,7 +79,7 @@ void _Thread_Resume(
         _Thread_Heir = the_thread;
         if ( _Thread_Executing->is_preemptible ||
              the_thread->current_priority == 0 )
-          _Context_Switch_necessary = true;
+          _Thread_Dispatch_necessary = true;
       }
     }
   }

@@ -1,3 +1,16 @@
+2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1599/cpukit
+	* posix/src/psignalunblockthread.c, posix/src/pthreadkill.c,
+	rtems/src/signalsend.c, score/include/rtems/score/percpu.h,
+	score/inline/rtems/score/thread.inl, score/src/thread.c,
+	score/src/threadchangepriority.c, score/src/threadclearstate.c,
+	score/src/threaddispatch.c, score/src/threadready.c,
+	score/src/threadresume.c, score/src/threadsetstate.c,
+	score/src/threadstartmultitasking.c, score/src/threadsuspend.c,
+	score/src/threadyieldprocessor.c: Rename _Context_Switch_necessary to
+	_Thread_Dispatch_necessary to more properly reflect the intent.
+
 2010-07-30	Vinu Rajashekhar <vinutheraj@gmail.com>
 
 	* sapi/include/confdefs.h: Add configuration macros for Go

@@ -65,7 +65,7 @@ rtems_status_code rtems_signal_send(
           _ASR_Post_signals( signal_set, &asr->signals_posted );
 
           if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
-            _Context_Switch_necessary = true;
+            _Thread_Dispatch_necessary = true;
         } else {
           _ASR_Post_signals( signal_set, &asr->signals_pending );
         }

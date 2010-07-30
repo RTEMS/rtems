@@ -258,7 +258,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_dispatching_enabled( void )
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_context_switch_necessary( void )
 {
-  return ( _Context_Switch_necessary );
+  return ( _Thread_Dispatch_necessary );
 }
 
 /**
@@ -351,7 +351,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Evaluate_is_dispatch_needed(
 
   if ( are_signals_pending ||
        (!_Thread_Is_heir( executing ) && executing->is_preemptible) ) {
-    _Context_Switch_necessary = true;
+    _Thread_Dispatch_necessary = true;
     return true;
   }
 

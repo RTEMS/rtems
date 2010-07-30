@@ -69,7 +69,7 @@ void _Thread_Handler_initialization(void)
       INTERNAL_ERROR_BAD_STACK_HOOK
     );
 
-  _Context_Switch_necessary = false;
+  _Thread_Dispatch_necessary = false;
   _Thread_Executing         = NULL;
   _Thread_Heir              = NULL;
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
