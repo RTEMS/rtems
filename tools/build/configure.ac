@@ -13,8 +13,8 @@ AM_INIT_AUTOMAKE([no-define foreign 1.10])
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
-AC_CHECK_HEADERS([getopt.h])
-AC_CHECK_FUNCS(strerror strtol)
+AC_CHECK_HEADERS([getopt.h libgen.h])
+AC_CHECK_FUNCS(strerror strtol basename)
 
 RTEMS_PATH_KSH
 

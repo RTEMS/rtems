@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <libgen.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX 1024
@@ -111,15 +112,10 @@ void process(const char *ifname, const char *ofname)
   }
   
   /* find basename */
-  if ((cp = strrchr(ifname, '/')) != NULL)
-    ++cp;
-  else {
-    if ((cp = strrchr(ifname, '\\')) != NULL)
-      ++cp;
-    else
-      cp = ifname;
-  }
-  strcpy(buf, cp);
+  char *ifbasename = strdup(ifname);
+  ifbasename = basename(ifbasename);
+  
+  strcpy(buf, ifbasename);
   for (p = buf; *p != '\0'; ++p)
     if (!isalnum(*p))
       *p = '_';
@@ -136,7 +132,7 @@ void process(const char *ifname, const char *ofname)
     "\n"
     "#include <sys/types.h>\n"
     "\n",
-    ifname
+    ifbasename
   );
 
   /* print structure */
@@ -190,7 +186,7 @@ void process(const char *ifname, const char *ofname)
     "\n"
     "#include <sys/types.h>\n"
     "\n",
-    obasename,  /* header */
+    ifbasename,  /* header */
     obasename,  /* ifndef */
     obasename   /* define */
   );
