@@ -32,14 +32,12 @@ int fstat(
   /*
    *  Check to see if we were passed a valid pointer.
    */
-
   if ( !sbuf )
     rtems_set_errno_and_return_minus_one( EFAULT );
 
   /*
    *  Now process the stat() request.
    */
-
   iop = rtems_libio_iop( fd );
   rtems_libio_check_fd( fd );
   rtems_libio_check_is_open(iop);

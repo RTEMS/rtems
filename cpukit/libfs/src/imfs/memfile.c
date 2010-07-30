@@ -31,16 +31,11 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-#if defined(RTEMS_DEBUG)
-  #include <assert.h>
-#endif
-
 #define MEMFILE_STATIC
 
 /*
  *  Prototypes of private routines
  */
-
 MEMFILE_STATIC int IMFS_memfile_extend(
    IMFS_jnode_t  *the_jnode,
    off_t          new_length
@@ -88,7 +83,6 @@ void memfile_free_block(
  *  This routine processes the open() system call.  Note that there is
  *  nothing special to be done at open() time.
  */
-
 int memfile_open(
   rtems_libio_t *iop,
   const char    *pathname,
@@ -130,7 +124,6 @@ int memfile_open(
  *  This routine processes the close() system call.  Note that there is
  *  nothing to flush or memory to free at this point.
  */
-
 int memfile_close(
   rtems_libio_t *iop
 )
@@ -152,7 +145,6 @@ int memfile_close(
  *
  *  This routine processes the read() system call.
  */
-
 ssize_t memfile_read(
   rtems_libio_t *iop,
   void          *buffer,
@@ -171,7 +163,6 @@ ssize_t memfile_read(
  *
  *  This routine processes the write() system call.
  */
-
 ssize_t memfile_write(
   rtems_libio_t *iop,
   const void    *buffer,
@@ -196,7 +187,6 @@ ssize_t memfile_write(
  *
  *  NOTE:  No ioctl()'s are supported for in-memory files.
  */
-
 int memfile_ioctl(
   rtems_libio_t *iop,
   uint32_t       command,
@@ -215,7 +205,6 @@ int memfile_ioctl(
  *
  *  This routine processes the lseek() system call.
  */
-
 rtems_off64_t memfile_lseek(
   rtems_libio_t   *iop,
   rtems_off64_t    offset,
@@ -250,7 +239,6 @@ rtems_off64_t memfile_lseek(
  *
  *  This routine processes the ftruncate() system call.
  */
-
 int memfile_ftruncate(
   rtems_libio_t        *iop,
   rtems_off64_t         length
@@ -274,7 +262,6 @@ int memfile_ftruncate(
    *  deleted.  So we leave the previously allocated blocks in place for
    *  future use and just set the length.
    */
-
   the_jnode->info.file.size = length;
   iop->size = the_jnode->info.file.size;
 
@@ -290,7 +277,6 @@ int memfile_ftruncate(
  *  specified.  If necessary, it will allocate memory blocks to
  *  extend the file.
  */
-
 MEMFILE_STATIC int IMFS_memfile_extend(
    IMFS_jnode_t  *the_jnode,
    off_t          new_length
@@ -303,38 +289,34 @@ MEMFILE_STATIC int IMFS_memfile_extend(
   /*
    *  Perform internal consistency checks
    */
+  IMFS_assert( the_jnode );
+    IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
 
-  #if defined(RTEMS_DEBUG)
-    assert( the_jnode );
-    assert( the_jnode->type == IMFS_MEMORY_FILE );
-  #endif
-  if ( !the_jnode )
-    rtems_set_errno_and_return_minus_one( EIO );
-
-  if ( the_jnode->type != IMFS_MEMORY_FILE )
-    rtems_set_errno_and_return_minus_one( EIO );
-
+  /*
+   *  Verify new file size is supported
+   */
   if ( new_length >= IMFS_MEMFILE_MAXIMUM_SIZE )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
+  /*
+   *  Verify new file size is actually larger than current size
+   */
   if ( new_length <= the_jnode->info.file.size )
     return 0;
 
   /*
    *  Calculate the number of range of blocks to allocate
    */
-
   new_blocks = new_length / IMFS_MEMFILE_BYTES_PER_BLOCK;
   old_blocks = the_jnode->info.file.size / IMFS_MEMFILE_BYTES_PER_BLOCK;
 
   /*
    *  Now allocate each of those blocks.
    */
-
   for ( block=old_blocks ; block<=new_blocks ; block++ ) {
     if ( IMFS_memfile_addblock( the_jnode, block ) ) {
        for ( ; block>=old_blocks ; block-- ) {
-          IMFS_memfile_remove_block( the_jnode, block );
+         IMFS_memfile_remove_block( the_jnode, block );
        }
        rtems_set_errno_and_return_minus_one( ENOSPC );
     }
@@ -343,7 +325,6 @@ MEMFILE_STATIC int IMFS_memfile_extend(
   /*
    *  Set the new length of the file.
    */
-
   the_jnode->info.file.size = new_length;
   return 0;
 }
@@ -353,7 +334,6 @@ MEMFILE_STATIC int IMFS_memfile_extend(
  *
  *  This routine adds a single block to the specified in-memory file.
  */
-
 MEMFILE_STATIC int IMFS_memfile_addblock(
    IMFS_jnode_t  *the_jnode,
    unsigned int   block
@@ -362,30 +342,24 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
   block_p  memory;
   block_p *block_entry_ptr;
 
-  #if defined(RTEMS_DEBUG)
-    assert( the_jnode );
-    assert( the_jnode->type == IMFS_MEMORY_FILE );
-  #endif
-  if ( !the_jnode )
-    rtems_set_errno_and_return_minus_one( EIO );
+  IMFS_assert( the_jnode );
+  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
 
-  if ( the_jnode->type != IMFS_MEMORY_FILE )
-    rtems_set_errno_and_return_minus_one( EIO );
-
+  /*
+   * Obtain the pointer for the specified block number
+   */
   block_entry_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 1 );
   if ( *block_entry_ptr )
     return 0;
 
-#if 0
-  fprintf(stdout, "%d %p", block, block_entry_ptr );
-    fflush(stdout);
-#endif
-
+  /*
+   *  There is no memory for this block number so allocate it.
+   */
   memory = memfile_alloc_block();
   if ( !memory )
     return 1;
-  *block_entry_ptr = memory;
 
+  *block_entry_ptr = memory;
   return 0;
 }
 
@@ -399,7 +373,6 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
  *         block from the middle of a file would be exceptionally
  *         dangerous and the results unpredictable.
  */
-
 MEMFILE_STATIC int IMFS_memfile_remove_block(
    IMFS_jnode_t  *the_jnode,
    unsigned int   block
@@ -409,14 +382,11 @@ MEMFILE_STATIC int IMFS_memfile_remove_block(
   block_p  ptr;
 
   block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
-  #if defined(RTEMS_DEBUG)
-    assert( block_ptr );
-  #endif
-  if ( block_ptr ) {
-    ptr = *block_ptr;
-    *block_ptr = 0;
-    memfile_free_block( ptr );
-  }
+  IMFS_assert( block_ptr );
+
+  ptr = *block_ptr;
+  *block_ptr = 0;
+  memfile_free_block( ptr );
 
   return 1;
 }
@@ -427,7 +397,6 @@ MEMFILE_STATIC int IMFS_memfile_remove_block(
  *  This is a support routine for IMFS_memfile_remove.  It frees all the
  *  blocks in one of the indirection tables.
  */
-
 void memfile_free_blocks_in_table(
   block_p **block_table,
   int       entries
@@ -439,17 +408,11 @@ void memfile_free_blocks_in_table(
   /*
    *  Perform internal consistency checks
    */
-
-  #if defined(RTEMS_DEBUG)
-    assert( block_table );
-  #endif
-  if ( !block_table )
-    return;
+  IMFS_assert( block_table );
 
   /*
    *  Now go through all the slots in the table and free the memory.
    */
-
   b = *block_table;
 
   for ( i=0 ; i<entries ; i++ ) {
@@ -463,7 +426,6 @@ void memfile_free_blocks_in_table(
    *  Now that all the blocks in the block table are free, we can
    *  free the block table itself.
    */
-
   memfile_free_block( *block_table );
   *block_table = 0;
 }
@@ -486,7 +448,6 @@ void memfile_free_blocks_in_table(
  *         Regardless until the IMFS implementation is proven, it
  *         is better to stick to simple, easy to understand algorithms.
  */
-
 int IMFS_memfile_remove(
  IMFS_jnode_t  *the_jnode
 )
@@ -500,22 +461,13 @@ int IMFS_memfile_remove(
   /*
    *  Perform internal consistency checks
    */
-
-  #if defined(RTEMS_DEBUG)
-    assert( the_jnode );
-    assert( the_jnode->type == IMFS_MEMORY_FILE );
-  #endif
-  if ( !the_jnode )
-    rtems_set_errno_and_return_minus_one( EIO );
-
-  if ( the_jnode->type != IMFS_MEMORY_FILE )
-    rtems_set_errno_and_return_minus_one( EIO );
+  IMFS_assert( the_jnode );
+  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
 
   /*
    *  Eventually this could be set smarter at each call to
    *  memfile_free_blocks_in_table to greatly speed this up.
    */
-
   to_free = IMFS_MEMFILE_BLOCK_SLOTS;
 
   /*
@@ -524,7 +476,6 @@ int IMFS_memfile_remove(
    *    + doubly indirect
    *    + triply indirect
    */
-
   info = &the_jnode->info.file;
 
   if ( info->indirect ) {
@@ -532,7 +483,6 @@ int IMFS_memfile_remove(
   }
 
   if ( info->doubly_indirect ) {
-
     for ( i=0 ; i<IMFS_MEMFILE_BLOCK_SLOTS ; i++ ) {
       if ( info->doubly_indirect[i] ) {
         memfile_free_blocks_in_table(
@@ -574,7 +524,6 @@ int IMFS_memfile_remove(
  *  reading the data between offset and the end of the file (truncated
  *  read).
  */
-
 MEMFILE_STATIC ssize_t IMFS_memfile_read(
    IMFS_jnode_t    *the_jnode,
    off_t            start,
@@ -596,39 +545,17 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
   /*
    *  Perform internal consistency checks
    */
-
-  #if defined(RTEMS_DEBUG)
-    assert( the_jnode );
-    assert( the_jnode->type == IMFS_MEMORY_FILE ||
+  IMFS_assert( the_jnode );
+  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE ||
        the_jnode->type != IMFS_LINEAR_FILE );
-    assert( dest );
-  #endif
-  if ( !the_jnode )
-    rtems_set_errno_and_return_minus_one( EIO );
-
-  if ( the_jnode->type != IMFS_MEMORY_FILE &&
-       the_jnode->type != IMFS_LINEAR_FILE )
-    rtems_set_errno_and_return_minus_one( EIO );
-
-  /*
-   *  Error checks on arguments
-   */
-
-  if ( !dest )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
-  /*
-   *  If there is nothing to read, then quick exit.
-   */
-
-  my_length = length;
-  if ( !my_length )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  IMFS_assert( dest );
 
   /*
    *  Linear files (as created from a tar file are easier to handle
    *  than block files).
    */
+  my_length = length;
+
   if (the_jnode->type == IMFS_LINEAR_FILE) {
     unsigned char  *file_ptr;
 
@@ -648,7 +575,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
    *  If the last byte we are supposed to read is past the end of this
    *  in memory file, then shorten the length to read.
    */
-
   last_byte = start + length;
   if ( last_byte > the_jnode->info.file.size )
     my_length = the_jnode->info.file.size - start;
@@ -665,7 +591,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
   /*
    *  Phase 1: possibly the last part of one block
    */
-
   start_offset = start % IMFS_MEMFILE_BYTES_PER_BLOCK;
   block = start / IMFS_MEMFILE_BYTES_PER_BLOCK;
   if ( start_offset )  {
@@ -685,7 +610,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
   /*
    *  Phase 2: all of zero of more blocks
    */
-
   to_copy = IMFS_MEMFILE_BYTES_PER_BLOCK;
   while ( my_length >= IMFS_MEMFILE_BYTES_PER_BLOCK ) {
     block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
@@ -701,10 +625,7 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
   /*
    *  Phase 3: possibly the first part of one block
    */
-
-  #if defined(RTEMS_DEBUG)
-    assert( my_length < IMFS_MEMFILE_BYTES_PER_BLOCK );
-  #endif
+  IMFS_assert( my_length < IMFS_MEMFILE_BYTES_PER_BLOCK );
 
   if ( my_length ) {
     block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
@@ -725,7 +646,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
  *  This routine writes the specified data buffer into the in memory
  *  file pointed to by the_jnode.  The file is extended as needed.
  */
-
 MEMFILE_STATIC ssize_t IMFS_memfile_write(
    IMFS_jnode_t          *the_jnode,
    off_t                  start,
@@ -748,40 +668,17 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
   /*
    *  Perform internal consistency checks
    */
-
-  #if defined(RTEMS_DEBUG)
-    assert( source );
-    assert( the_jnode );
-    assert( the_jnode->type == IMFS_MEMORY_FILE );
-  #endif
-  if ( !the_jnode )
-    rtems_set_errno_and_return_minus_one( EIO );
-
-  if ( the_jnode->type != IMFS_MEMORY_FILE )
-    rtems_set_errno_and_return_minus_one( EIO );
-
-  /*
-   *  Error check arguments
-   */
-
-  if ( !source )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
-
-  /*
-   *  If there is nothing to write, then quick exit.
-   */
+  IMFS_assert( source );
+  IMFS_assert( the_jnode );
+  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
 
   my_length = length;
-  if ( !my_length )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
   /*
    *  If the last byte we are supposed to write is past the end of this
    *  in memory file, then extend the length.
    */
 
-  last_byte = start + length;
+  last_byte = start + my_length;
   if ( last_byte > the_jnode->info.file.size ) {
     status = IMFS_memfile_extend( the_jnode, last_byte );
     if ( status )
@@ -800,7 +697,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
   /*
    *  Phase 1: possibly the last part of one block
    */
-
   start_offset = start % IMFS_MEMFILE_BYTES_PER_BLOCK;
   block = start / IMFS_MEMFILE_BYTES_PER_BLOCK;
   if ( start_offset )  {
@@ -850,10 +746,7 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
   /*
    *  Phase 3: possibly the first part of one block
    */
-
-  #if defined(RTEMS_DEBUG)
-    assert( my_length < IMFS_MEMFILE_BYTES_PER_BLOCK );
-  #endif
+  IMFS_assert( my_length < IMFS_MEMFILE_BYTES_PER_BLOCK );
 
   to_copy = my_length;
   if ( my_length ) {
@@ -880,7 +773,6 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
  *  number.  If that block has not been allocated and "malloc_it" is
  *  TRUE, then the block is allocated.  Otherwise, it is an error.
  */
-
 #if 0
 block_p *IMFS_memfile_get_block_pointer_DEBUG(
    IMFS_jnode_t   *the_jnode,
@@ -922,25 +814,15 @@ block_p *IMFS_memfile_get_block_pointer(
   /*
    *  Perform internal consistency checks
    */
-
-  #if defined(RTEMS_DEBUG)
-    assert( the_jnode );
-    assert( the_jnode->type == IMFS_MEMORY_FILE );
-  #endif
-  if ( !the_jnode )
-    return NULL;
-
-  if ( the_jnode->type != IMFS_MEMORY_FILE )
-    return NULL;
+  IMFS_assert( the_jnode );
+  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
 
   info = &the_jnode->info.file;
-
   my_block = block;
 
   /*
    *  Is the block number in the simple indirect portion?
    */
-
   if ( my_block <= LAST_INDIRECT ) {
     p = info->indirect;
 
@@ -966,11 +848,6 @@ block_p *IMFS_memfile_get_block_pointer(
    */
 
   if ( my_block <= LAST_DOUBLY_INDIRECT ) {
-#if 0
-fprintf(stdout, "(d %d) ", block );
-fflush(stdout);
-#endif
-
     my_block -= FIRST_DOUBLY_INDIRECT;
 
     singly = my_block % IMFS_MEMFILE_BLOCK_SLOTS;
@@ -1004,22 +881,12 @@ fflush(stdout);
     if ( !p )
       return 0;
 
-#if 0
-fprintf(stdout, "(d %d %d %d %d %p %p) ", block, my_block, doubly,
-                                       singly, p, &p[singly] );
-fflush(stdout);
-#endif
     return (block_p *)&p[ singly ];
   }
 
-#if 0
-fprintf(stdout, "(t %d) ", block );
-fflush(stdout);
-#endif
   /*
    *  Is the block number in the triply indirect portion?
    */
-
   if ( my_block <= LAST_TRIPLY_INDIRECT ) {
     my_block -= FIRST_TRIPLY_INDIRECT;
 
@@ -1059,10 +926,6 @@ fflush(stdout);
     if ( !p )
       return 0;
 
-#if 0
-fprintf(stdout, "(t %d %d %d %d %d) ", block, my_block, triply, doubly, singly );
-fflush(stdout);
-#endif
     p1 = (block_p *) p[ triply ];
     if ( !p1 )
       return 0;
@@ -1077,7 +940,6 @@ fflush(stdout);
   /*
    *  This means the requested block number is out of range.
    */
-
   return 0;
 }
 
@@ -1086,7 +948,6 @@ fflush(stdout);
  *
  *  Allocate a block for an in-memory file.
  */
-
 int memfile_blocks_allocated = 0;
 
 void *memfile_alloc_block(void)
@@ -1105,15 +966,10 @@ void *memfile_alloc_block(void)
  *
  *  Free a block from an in-memory file.
  */
-
 void memfile_free_block(
   void *memory
 )
 {
-#if 0
-fprintf(stdout, "(d %p) ", memory );
-fflush(stdout);
-#endif
   free(memory);
   memfile_blocks_allocated--;
 }

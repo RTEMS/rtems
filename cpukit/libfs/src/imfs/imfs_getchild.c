@@ -17,9 +17,6 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_DEBUG)
-  #include <assert.h>
-#endif
 #include <errno.h>
 #include <string.h>
 #include "imfs.h"
@@ -40,16 +37,8 @@ IMFS_jnode_t *IMFS_find_match_in_dir(
    *  Check for fatal errors.  A NULL directory show a problem in the
    *  the IMFS code.
    */
-
-  #if defined(RTEMS_DEBUG)
-    assert( directory );
-    assert( name );
-  #endif
-  if ( !name )
-    return 0;
-
-  if ( !directory )
-    return 0;
+  IMFS_assert( directory );
+  IMFS_assert( name );
 
   /*
    *  Check for "." and ".."

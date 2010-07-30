@@ -15,9 +15,6 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_DEBUG)
-  #include <assert.h>
-#endif
 #include <string.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -36,14 +33,11 @@
  *
  *  This routine prints the contents of the specified jnode.
  */
-
 void IMFS_print_jnode(
   IMFS_jnode_t *the_jnode
 )
 {
-  #if defined(RTEMS_DEBUG)
-    assert( the_jnode );
-  #endif
+  IMFS_assert( the_jnode );
 
   fprintf(stdout, "%s", the_jnode->name );
   switch( the_jnode->type ) {
@@ -104,7 +98,6 @@ void IMFS_print_jnode(
  *  directory is encountered, then this routine will recurse to process
  *  the subdirectory.
  */
-
 void IMFS_dump_directory(
   IMFS_jnode_t  *the_directory,
   int            level
@@ -115,11 +108,9 @@ void IMFS_dump_directory(
   IMFS_jnode_t         *the_jnode;
   int                   i;
 
-  #if defined(RTEMS_DEBUG)
-    assert( the_directory );
-    assert( level >= 0 );
-    assert( the_directory->type == IMFS_DIRECTORY );
-  #endif
+  IMFS_assert( the_directory );
+  IMFS_assert( level >= 0 );
+  IMFS_assert( the_directory->type == IMFS_DIRECTORY );
 
   the_chain = &the_directory->info.directory.Entries;
 
@@ -152,7 +143,7 @@ void IMFS_dump( void )
   fprintf(stdout, "*************** Dump of Entire IMFS ***************\n" );
   fprintf(stdout, "/\n" );
   IMFS_dump_directory( rtems_filesystem_root.node_access, 0 );
-  fprintf(stdout, "***************       End of Dump        ***************\n" );
+  fprintf(stdout, "***************      End of Dump       ***************\n" );
 }
 
 /*
@@ -162,7 +153,6 @@ void IMFS_dump( void )
  *  using the IMFS memory file type.
  *
  */
-
 int IMFS_memfile_maximum_size( void )
 {
   return IMFS_MEMFILE_MAXIMUM_SIZE;

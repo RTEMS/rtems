@@ -560,6 +560,17 @@ extern int IMFS_rmnod(
   rtems_filesystem_location_info_t  *pathloc         /* IN */
 );
 
+/*
+ *  Turn on IMFS assertions when RTEMS_DEBUG is defined.
+ */
+#ifdef RTEMS_DEBUG
+  #include <assert.h>
+
+  #define IMFS_assert(_x) assert(_X)
+#else
+  #define IMFS_assert(_x)
+#endif
+
 #ifdef __cplusplus
 }
 #endif

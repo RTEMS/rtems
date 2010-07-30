@@ -1,3 +1,11 @@
+2010-07-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/fstat.c, libcsupport/src/rmdir.c,
+	libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_creat.c,
+	libfs/src/imfs/imfs_debug.c, libfs/src/imfs/imfs_getchild.c,
+	libfs/src/imfs/memfile.c: Add IMFS_assert. Clean up and remove all
+	checks which are redundant with system call layer. Formatting.
+
 2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1599/cpukit
