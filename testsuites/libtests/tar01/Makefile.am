@@ -2,6 +2,8 @@
 ## $Id$
 ##
 
+CLEANFILES =
+
 rtems_tests_PROGRAMS = tar01
 tar01_SOURCES = init.c ../../psxtests/psxfile01/test_cat.c \
   initial_filesystem_tar.c initial_filesystem_tar.h
@@ -23,15 +25,13 @@ tar01$(EXEEXT): $(tar01_OBJECTS) $(tar01_DEPENDENCIES)
 	@rm -f tar01$(EXEEXT)
 	$(make-exe)
 
-init.o: init.c initial_filesystem_tar.h
+initial_filesystem_tar.c: initial_filesystem.tar
+	$(BIN2C) -C initial_filesystem.tar initial_filesystem_tar
+CLEANFILES += initial_filesystem_tar.c
 
-initial_filesystem_tar.c: stamp-initial-fs-source
-
-initial_filesystem_tar.h: stamp-initial-fs-source
-
-stamp-initial-fs-source: stamp-fs-tar
-	$(BIN2C) initial_filesystem.tar initial_filesystem_tar
-	touch stamp-initial-fs-source
+initial_filesystem_tar.h: initial_filesystem.tar
+	$(BIN2C) -H initial_filesystem.tar initial_filesystem_tar
+CLEANFILES += initial_filesystem_tar.h
 
 stamp-filesystem:
 	rm -rf initial_fs
@@ -40,12 +40,12 @@ stamp-filesystem:
 	echo "initial tar image.") >initial_fs/home/test_file
 	cd initial_fs && ln -s home/test_file symlink
 	touch stamp-filesystem
+CLEANFILES += stamp-filesystem
 
-stamp-fs-tar: stamp-filesystem
+initial_filesystem.tar: stamp-filesystem
 	cd initial_fs ; pax -w -f ../initial_filesystem.tar home symlink
-	touch stamp-fs-tar
+CLEANFILES += initial_filesystem.tar
 
-CLEANFILES = initial_filesystem* stamp-filesystem \
-	    stamp-fs-tar stamp-initial-fs-source
+CLEANFILES += initial_fs
 
 include $(top_srcdir)/../automake/local.am
