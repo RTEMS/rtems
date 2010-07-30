@@ -172,7 +172,7 @@ rtems_task Task_1(
 
   _Thread_Heir = (rtems_tcb *) _Thread_Ready_chain[LOW_PRIORITY].last;
 
-  _Context_Switch_necessary = 1;
+  _Thread_Dispatch_necessary = 1;
 
   Interrupt_occurred = 0;
   benchmark_timer_initialize();
@@ -229,7 +229,7 @@ rtems_task Task_2(
 
   _Thread_Heir = (rtems_tcb *) _Thread_Ready_chain[LOW_PRIORITY].first;
 
-  _Context_Switch_necessary = 1;
+  _Thread_Dispatch_necessary = 1;
 
   _Thread_Dispatch();
 

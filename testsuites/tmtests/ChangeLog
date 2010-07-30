@@ -1,3 +1,9 @@
+2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1599/cpukit
+	* tm26/task1.c, tm27/task1.c: Rename _Context_Switch_necessary to
+	_Thread_Dispatch_necessary to more properly reflect the intent.
+
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: New test for barrier create, ident, and
