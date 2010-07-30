@@ -1,6 +1,11 @@
 2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* tar01/Makefile.am, tar02/Makefile.am:
+	Eliminate stamp-filesystem.
+
+2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tar01/Makefile.am, tar02/Makefile.am:
 	Add BUILT_SOURCES.
 
 2010-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>

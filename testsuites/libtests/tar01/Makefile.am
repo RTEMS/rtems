@@ -35,16 +35,12 @@ initial_filesystem_tar.h: initial_filesystem.tar
 	$(BIN2C) -H initial_filesystem.tar initial_filesystem_tar
 CLEANFILES += initial_filesystem_tar.h
 
-stamp-filesystem:
+initial_filesystem.tar:
 	rm -rf initial_fs
 	$(MKDIR_P) initial_fs/home
 	(echo "This is a test of loading an RTEMS filesystem from an" ; \
 	echo "initial tar image.") >initial_fs/home/test_file
 	cd initial_fs && ln -s home/test_file symlink
-	touch stamp-filesystem
-CLEANFILES += stamp-filesystem
-
-initial_filesystem.tar: stamp-filesystem
 	cd initial_fs ; pax -w -f ../initial_filesystem.tar home symlink
 CLEANFILES += initial_filesystem.tar
 
