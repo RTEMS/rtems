@@ -255,7 +255,7 @@ int main(int argc, char **argv)
       --argc;
       ++argv;
     } else if (!strcmp(argv[1], "-v")) {
-      usestatic = 1;
+      verbose = 1;
       --argc;
       ++argv;
     } else if (!strcmp(argv[1], "-z")) {

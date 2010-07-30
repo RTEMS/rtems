@@ -1,5 +1,9 @@
 2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems-bin2c.c: Make -v (verbose) working.
+
+2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Check for libgen.h, basename.
 	* rtems-bin2c.c: Use basename(3) instead of strrchr cascade.
 	Introduce ifbasename. Use ifbasename in generated files.
