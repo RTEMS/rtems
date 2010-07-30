@@ -1,3 +1,11 @@
+2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1599/cpukit
+	* sh7032/score/cpu_asm.c, sh7045/score/cpu_asm.c,
+	sh7750/score/cpu_asm.c, shgdb/score/cpu_asm.c: Rename
+	_Context_Switch_necessary to _Thread_Dispatch_necessary to more
+	properly reflect the intent.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1573/cpukit
