@@ -1,3 +1,10 @@
+2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1599/cpukit
+	* new-exceptions/bspsupport/ppc_exc_hdl.c: Rename
+	_Context_Switch_necessary to _Thread_Dispatch_necessary to more
+	properly reflect the intent.
+
 2010-06-29	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* new-exceptions/bspsupport/ppc_exc_asm_macros.h: Added include of
