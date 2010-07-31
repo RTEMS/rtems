@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-CLEANFILES =
-
 if TARTESTS
 rtems_tests_PROGRAMS = tar01
 tar01_SOURCES = init.c ../../psxtests/psxfile01/test_cat.c \
@@ -48,5 +46,8 @@ initial_filesystem.tar:
 	$(PAX) -w -f ../initial_filesystem.tar home symlink)
 CLEANFILES += initial_filesystem.tar
 endif TARTESTS
+
+clean-local:
+	-rm -rf initial_fs
 
 include $(top_srcdir)/../automake/local.am
