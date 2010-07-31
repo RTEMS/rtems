@@ -17,6 +17,4 @@ AM_CPPFLAGS =
 AM_CFLAGS =
 AM_CXXFLAGS =
 
-clean-local:
-	$(RM) *.num *.nxe *.elf *.srec* *.bin *.bt *.ralf
-
+CLEANFILES = *.num *.nxe *.elf *.srec* *.bin *.bt *.ralf

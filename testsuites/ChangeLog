@@ -1,3 +1,8 @@
+2010-07-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* automake/compile.am: Remove clean-local:.
+	Use CLEANFILES for cleaning up make-exe by-products.
+
 2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1532/testing
