@@ -46,7 +46,7 @@
 %endif
 
 
-%define gcc_pkgvers 4.5.1-RC-20100722
+%define gcc_pkgvers 4.5.1
 %define gcc_version 4.5.1
 %define gcc_rpmvers %{expand:%(echo "4.5.1" | tr - _ )}
 
