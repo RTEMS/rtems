@@ -1,3 +1,11 @@
+2010-07-30	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1645/cpukit
+	* libcsupport/src/getuid.c: Moved setuid() routine to its own
+	file.
+	* libcsupport/src/setuid.c: New file with setuid() routine.
+	* libcsupport/src/seteuid.c: New file with seteuid() routine.
+
 2010-07-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/fstat.c, libcsupport/src/rmdir.c,
