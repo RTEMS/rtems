@@ -54,6 +54,7 @@ devfs02/Makefile
 devfs03/Makefile
 devfs04/Makefile
 devnullfatal01/Makefile
+dumpbuf01/Makefile
 gxx01/Makefile
 gxx02/Makefile
 heapwalk/Makefile

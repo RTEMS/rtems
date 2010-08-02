@@ -1,5 +1,11 @@
 2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Add test for rtems_print_buffer().
+	* dumpbuf01/.cvsignore, dumpbuf01/Makefile.am, dumpbuf01/dumpbuf01.doc,
+	dumpbuf01/dumpbuf01.scn, dumpbuf01/init.c: New files.
+
+2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* bspcmdline01/bspcmdline01.scn, bspcmdline01/init.c: Add test cases to
 	improve coverage.
 
