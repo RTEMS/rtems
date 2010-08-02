@@ -1,5 +1,11 @@
 2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/stackchk/check.c: If this port does not allocate the
+	interrupt stack, then it must always be a thread stack. Do not
+	include code to print the interrupt stack information.
+
+2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/base_fs.c, libcsupport/src/rtems_mkdir.c: Formatting.
 
 2010-07-30	Bharath Suri <bharath.s.jois@gmail.com>
