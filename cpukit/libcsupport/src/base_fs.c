@@ -48,14 +48,12 @@ void rtems_filesystem_initialize( void )
   /*
    *  mount the first filesystem.
    */
-
   if ( rtems_filesystem_mount_table_size == 0 )
     rtems_fatal_error_occurred( 0xABCD0001 );
 
   mt = &rtems_filesystem_mount_table[0];
 
   status = mount( mt->device, mt->mount_point, mt->type, mt->fsoptions, NULL );
-
   if ( status == -1 )
     rtems_fatal_error_occurred( 0xABCD0002 );
 

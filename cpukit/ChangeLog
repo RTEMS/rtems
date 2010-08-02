@@ -1,3 +1,7 @@
+2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/base_fs.c, libcsupport/src/rtems_mkdir.c: Formatting.
+
 2010-07-30	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1645/cpukit
