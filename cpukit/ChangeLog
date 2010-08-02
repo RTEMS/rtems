@@ -1,5 +1,12 @@
 2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_mknod.c, libfs/src/imfs/imfs_readlink.c,
+	libfs/src/pipe/fifo.c: Clean up for coverage improvements and
+	formatting.
+
+2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/stackchk/check.c: If this port does not allocate the
 	interrupt stack, then it must always be a thread stack. Do not
 	include code to print the interrupt stack information.

@@ -34,8 +34,7 @@ int IMFS_readlink(
 
   node = loc->node_access;
 
-  if ( node->type != IMFS_SYM_LINK )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  IMFS_assert( node->type == IMFS_SYM_LINK );
 
   for( i=0; ((i<bufsize) && (node->info.sym_link.name[i] != '\0')); i++ )
     buf[i] = node->info.sym_link.name[i];

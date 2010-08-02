@@ -53,12 +53,10 @@ int IMFS_mknod(
   else if ( S_ISBLK(mode) || S_ISCHR(mode) ) {
     type = IMFS_DEVICE;
     rtems_filesystem_split_dev_t( dev, info.device.major, info.device.minor );
-  }
-  else if (S_ISFIFO(mode))
+  } else if (S_ISFIFO(mode))
     type = IMFS_FIFO;
-  else  {
-    rtems_set_errno_and_return_minus_one( EINVAL );
-  }
+  else 
+    IMFS_assert( 0 );
 
   /*
    *  Allocate and fill in an IMFS jnode
@@ -70,14 +68,7 @@ int IMFS_mknod(
    *        existed.  The result was simpler code which should not have
    *        this path. 
    */
-  new_node = IMFS_create_node(
-    pathloc,
-    type,
-    new_name,
-    mode,
-    &info
-  );
-
+  new_node = IMFS_create_node( pathloc, type, new_name, mode, &info );
   if ( !new_node )
     rtems_set_errno_and_return_minus_one( ENOMEM );
 

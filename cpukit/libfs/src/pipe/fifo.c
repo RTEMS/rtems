@@ -190,10 +190,11 @@ static void pipe_unlock(void)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   sc = rtems_semaphore_release(pipe_semaphore);
-  if (sc != RTEMS_SUCCESSFUL) {
-    /* FIXME */
-    rtems_fatal_error_occurred(0xdeadbeef);
-  }
+  #ifdef RTEMS_DEBUG
+    if (sc != RTEMS_SUCCESSFUL) {
+      rtems_fatal_error_occurred(0xdeadbeef);
+    }
+  #endif
 }
 
 /*
@@ -248,15 +249,15 @@ int pipe_release(
   pipe_control_t *pipe = *pipep;
   uint32_t mode;
 
-  if (pipe_lock())
+  #if defined(RTEMS_DEBUG)
     /* WARN pipe not freed and pipep not set to NULL! */
-    /* FIXME */
-    rtems_fatal_error_occurred(0xdeadbeef);
+    if (pipe_lock())
+      rtems_fatal_error_occurred(0xdeadbeef);
 
-  if (!PIPE_LOCK(pipe))
     /* WARN pipe not released! */
-    /* FIXME */
-    rtems_fatal_error_occurred(0xdeadbeef);
+    if (!PIPE_LOCK(pipe))
+      rtems_fatal_error_occurred(0xdeadbeef);
+  #endif
 
   mode = LIBIO_ACCMODE(iop);
   if (mode & LIBIO_FLAGS_READ)

@@ -70,7 +70,6 @@ int IMFS_Set_handlers(
  *  The following routine evaluates that we have permission
  *  to do flags on the node.
  */
-
 int IMFS_evaluate_permission(
   rtems_filesystem_location_info_t  *node,
   int                                flags
@@ -136,14 +135,11 @@ int IMFS_evaluate_hard_link(
   /*
    * Check for things that should never happen.
    */
-
-  if ( jnode->type != IMFS_HARD_LINK )
-    rtems_fatal_error_occurred (0xABCD0000);
+  IMFS_assert( jnode->type == IMFS_HARD_LINK );
 
   /*
    * Set the hard link value and the handlers.
    */
-
   node->node_access = jnode->info.hard_link.link_node;
 
   IMFS_Set_handlers( node );
@@ -177,19 +173,13 @@ int IMFS_evaluate_sym_link(
   /*
    * Check for things that should never happen.
    */
-
-  if ( jnode->type != IMFS_SYM_LINK )
-    rtems_fatal_error_occurred (0xABCD0000);
-
-  if ( !jnode->Parent )
-    rtems_fatal_error_occurred( 0xBAD00000 );
-
+  IMFS_assert( jnode->type == IMFS_SYM_LINK )
+  IMFS_assert( jnode->Parent )
 
   /*
    * Move the node_access to either the symbolic links parent or
    * root depending on the symbolic links path.
    */
-
   node->node_access = jnode->Parent;
 
   rtems_filesystem_get_sym_start_loc(
@@ -201,7 +191,6 @@ int IMFS_evaluate_sym_link(
   /*
    * Use eval path to evaluate the path of the symbolic link.
    */
-
   result = IMFS_eval_path(
     &jnode->info.sym_link.name[i],
     strlen( &jnode->info.sym_link.name[i] ),
@@ -214,7 +203,6 @@ int IMFS_evaluate_sym_link(
   /*
    * Verify we have the correct permissions for this node.
    */
-
   if ( !IMFS_evaluate_permission( node, flags ) )
     rtems_set_errno_and_return_minus_one( EACCES );
 
@@ -226,7 +214,6 @@ int IMFS_evaluate_sym_link(
  *
  *  The following routine returns the real node pointed to by a link.
  */
-
 int IMFS_evaluate_link(
   rtems_filesystem_location_info_t  *node,   /* IN/OUT */
   int                                flags   /* IN     */
@@ -578,19 +565,23 @@ int IMFS_eval_path(
         /*
          *  If we are at a link follow it.
          */
-
         if ( node->type == IMFS_HARD_LINK ) {
-
           IMFS_evaluate_hard_link( pathloc, 0 );
-
           node = pathloc->node_access;
-          if ( !node )
-            rtems_set_errno_and_return_minus_one( ENOTDIR );
+       
+          /*
+	   * It would be a design error if we evaluated the link and
+	   * was broken.
+	   */
+          IMFS_assert( node );
 
         } else if ( node->type == IMFS_SYM_LINK ) {
-
           result = IMFS_evaluate_sym_link( pathloc, 0 );
 
+          /*
+           *  In contrast to a hard link, it is possible to have a broken
+           *  symbolic link.
+           */
           node = pathloc->node_access;
           if ( result == -1 )
             return -1;
@@ -599,7 +590,6 @@ int IMFS_eval_path(
         /*
          *  Only a directory can be decended into.
          */
-
         if ( node->type != IMFS_DIRECTORY )
           rtems_set_errno_and_return_minus_one( ENOTDIR );
 
@@ -607,7 +597,6 @@ int IMFS_eval_path(
          *  If we are at a node that is a mount point. Set loc to the
          *  new fs root node and let them finish evaluating the path.
          */
-
         if ( node->info.directory.mt_fs != NULL ) {
           newloc   = node->info.directory.mt_fs->mt_fs_root;
           *pathloc = newloc;
@@ -619,7 +608,6 @@ int IMFS_eval_path(
         /*
          *  Otherwise find the token name in the present location.
          */
-
         node = IMFS_find_match_in_dir( node, token );
         if ( !node )
           rtems_set_errno_and_return_minus_one( ENOENT );
