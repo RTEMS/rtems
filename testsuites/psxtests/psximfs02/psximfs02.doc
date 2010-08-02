@@ -22,6 +22,9 @@ directives:
   + symlink
   + mount
   + lstat
+  + IMFS_dump
+  + chmod
+  + chown
 
 concepts:
 

@@ -20,7 +20,7 @@
 #include <rtems/libio.h>
 
 extern Heap_Control  *RTEMS_Malloc_Heap;
-
+void IMFS_dump( void );
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -129,11 +129,38 @@ rtems_task Init(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOMEM );
 
+  puts( "Freeing allocated memory" );
+  free( alloc_ptr );
+
   puts( "Attempt to stat a hardlink -- expect ENOTSUP" );
   status = lstat( "/node-link", &stat_buf );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOTSUP );
 
+  puts( "Changing euid to 10" );
+  status = seteuid( 10 );
+  rtems_test_assert( status == 0 );
+
+  puts( "Attempt chmod on /node -- expect EPERM" );
+  status = chmod( "/node", S_IRUSR );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EPERM );
+
+  puts( "Attempt chown on /node -- expect EPERM" );
+  status = chown( "/node", 10, 10 );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EPERM );
+
+  puts( "Changing euid back to 0 [root]" );
+  status = seteuid( 0 );
+  rtems_test_assert( status == 0 );
+
+  puts( "Creating a fifo -- OK" );
+  status = mkfifo( "/fifo", S_IRWXU );
+  rtems_test_assert( status == 0 );
+
+  IMFS_dump();
+  
   puts( "*** END OF TEST IMFS 02 ***" );
   rtems_test_exit(0);
 }
@@ -148,6 +175,9 @@ rtems_task Init(
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
+
+#define CONFIGURE_FIFOS_ENABLED
+#define CONFIGURE_MAXIMUM_FIFOS 1
 
 #include <rtems/confdefs.h>
 /* end of file */

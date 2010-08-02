@@ -33,5 +33,29 @@ Attempt to create /node-slink-2 for /node -- expect ENOMEM
 Freeing allocated memory
 Allocate most of heap
 Attempt to create /node-slink-2 for /node -- expect ENOMEM
+Freeing allocated memory
 Attempt to stat a hardlink -- expect ENOTSUP
+Changing euid to 10
+Attempt chmod on /node -- expect EPERM
+Attempt chown on /node -- expect EPERM
+Changing euid back to 0 [root]
+Creating a fifo -- OK
+*************** Dump of Entire IMFS ***************
+/
+....dev/
+........console (device 0, 0)
+....dir00/
+........dir01/
+........dir01-link0 links not printed
+........dir01-link1 links not printed
+........dir01-link2 links not printed
+........dir01-link3 links not printed
+........dir01-link4 links not printed
+........dir01-link5 links not printed
+........dir01-link6 links not printed
+....node (file 0)
+....node-link links not printed
+....node-slink links not printed
+....fifo FIFO not printed
+***************       End of Dump        ***************
 *** END OF TEST IMFS 02 ***
