@@ -9,6 +9,8 @@ rtems_bsp_cmdline_get_param_raw - name=NULL - returns NULL
 rtems_bsp_cmdline_get_param - bsp_boot_cmdline=NULL - returns NULL
 rtems_bsp_cmdline_get_param_raw - bsp_boot_cmdline=NULL - returns NULL
 rtems_bsp_cmdline_get_param - bsp_boot_cmdline = edit name = edit -no error
+rtems_bsp_cmdline_get_param - too short buffer
+rtems_bsp_cmdline_get_param_rhs - short match
 
 Testing for param=(--arg)
   Command Line : (--arg=)
