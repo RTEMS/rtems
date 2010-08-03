@@ -1,3 +1,7 @@
+2010-08-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* console/debugio.c: Add BSP_poll_char.
+
 2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* README: Remove more ITRON references.

@@ -28,5 +28,6 @@ static void _BSP_null_char(char c)
   rtems_interrupt_enable(level);
 }
 
-BSP_output_char_function_type BSP_output_char = _BSP_null_char;
+BSP_output_char_function_type     BSP_output_char = _BSP_null_char;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
