@@ -457,3 +457,6 @@ preempted.
 Returning a buffer to a global partition which does
 not reside on the local node will generate a request telling the
 remote node to return the buffer to the specified partition.
+
+Returning a buffer multiple times is an error.  It will corrupt the internal
+state of the partition.
