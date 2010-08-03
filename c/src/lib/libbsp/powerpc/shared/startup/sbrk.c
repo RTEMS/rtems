@@ -7,13 +7,13 @@
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2002,
- * 	   Stanford Linear Accelerator Center, Stanford University.
+ *        Stanford Linear Accelerator Center, Stanford University.
  *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
- * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
+ *        under Contract DE-AC03-76SFO0515 with the Department of Energy.
  *
  * Government disclaimer of liability
  * ----------------------------------
@@ -100,40 +100,45 @@ uintptr_t _bsp_sbrk_init(
     /* clip at LIMIT_32M */
     rval = remaining_start + remaining_size - LIMIT_32M;
     *heap_size_p = LIMIT_32M - remaining_start;
-	remaining_start = LIMIT_32M;
-	remaining_size  = rval;
+    remaining_start = LIMIT_32M;
+    remaining_size  = rval;
   }
 
   if ( 0 != &BSP_sbrk_policy ) {
-  	switch ( BSP_sbrk_policy ) {
-		case (uint32_t)(-1):
-			*heap_size_p    += rval;
-			remaining_start  = heap_start + *heap_size_p;
-			remaining_size   = 0;
-			/* return a nonzero sbrk_amount because the libsupport code
-			 * at some point divides by this number prior to trying an
-			 * sbrk() which will fail.
-			 */
-			rval = 1;
-		break;
+    switch ( BSP_sbrk_policy ) {
+      case (uint32_t)(-1):
+	*heap_size_p    += rval;
+	remaining_start  = heap_start + *heap_size_p;
+	remaining_size   = 0;
+	/* return a nonzero sbrk_amount because the libsupport code
+	 * at some point divides by this number prior to trying an
+	 * sbrk() which will fail.
+	 */
+	rval = 1;
+	break;
 
-		case 0:
-			remaining_size = 0;
-			/* see above for why we return 1 */
-			rval = 1;
-		break;
+      case 0:
+	remaining_size = 0;
+	/* see above for why we return 1 */
+	rval = 1;
+	break;
 
-		default:
-			if ( rval > BSP_sbrk_policy )
-				rval = BSP_sbrk_policy;
-		break;
-	}
+      default:
+	if ( rval > BSP_sbrk_policy )
+	    rval = BSP_sbrk_policy;
+	break;
+    }
   }
 
   return rval;
 }
 
-void * sbrk(ptrdiff_t incr)
+/*
+ * This is just so the sbrk test can force its magic. All normal applications
+ * should just use the default implementation in this file.
+ */
+void *sbrk(ptrdiff_t incr) __attribute__ (( weak, alias("bsp_sbrk") ));
+void *bsp_sbrk(ptrdiff_t incr)
 {
   void *rval=(void*)-1;
 
@@ -145,8 +150,8 @@ void * sbrk(ptrdiff_t incr)
   } else {
     errno = ENOMEM;
   }
-#ifdef DEBUG
-  printk("************* SBRK 0x%08x (ret 0x%08x) **********\n", incr, rval);
-#endif
+  #ifdef DEBUG
+    printk("************* SBRK 0x%08x (ret 0x%08x) **********\n", incr, rval);
+  #endif
   return rval;
 }

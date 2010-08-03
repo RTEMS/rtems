@@ -1,3 +1,8 @@
+2010-08-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* shared/startup/sbrk.c: Make bsp's sbrk a weak reference so that the
+	test of having sbrk() support in malloc can link.
+
 2010-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1606/cpukit
