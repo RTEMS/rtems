@@ -1,5 +1,9 @@
 2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-func.m4: New.
+
+2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Add checks for [get|set][e][uid,gid] family of
 	functions.
 
