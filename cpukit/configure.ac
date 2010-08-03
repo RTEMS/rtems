@@ -55,10 +55,21 @@ AC_CHECK_FUNCS([creat])
 AC_CHECK_FUNCS([__assert])
 AC_CHECK_FUNCS([execl execlp execle execv execvp execve])
 AC_CHECK_FUNCS([regcomp regexec regerror regfree])
-# Mandated by POSIX but not present in newlib
+
+# Mandated by POSIX, decls not present in some versions of newlib
 AC_CHECK_DECLS([flockfile],[AC_CHECK_FUNCS([flockfile])],,[#include <stdio.h>])
 AC_CHECK_DECLS([funlockfile],[AC_CHECK_FUNCS([funlockfile])],,[#include <stdio.h>])
 AC_CHECK_DECLS([ftrylockfile],[AC_CHECK_FUNCS([ftrylockfile])],,[#include <stdio.h>])
+
+# Mandated by POSIX, decls not present in some versions of newlib
+AC_CHECK_DECLS([seteuid],[AC_CHECK_FUNCS([seteuid])],,[#include <unistd.h>])
+AC_CHECK_DECLS([setegid],[AC_CHECK_FUNCS([setegid])],,[#include <unistd.h>])
+AC_CHECK_DECLS([setuid],[AC_CHECK_FUNCS([setuid])],,[#include <unistd.h>])
+AC_CHECK_DECLS([setgid],[AC_CHECK_FUNCS([setgid])],,[#include <unistd.h>])
+AC_CHECK_DECLS([geteuid],[AC_CHECK_FUNCS([geteuid])],,[#include <unistd.h>])
+AC_CHECK_DECLS([getegid],[AC_CHECK_FUNCS([getegid])],,[#include <unistd.h>])
+AC_CHECK_DECLS([getuid],[AC_CHECK_FUNCS([getuid])],,[#include <unistd.h>])
+AC_CHECK_DECLS([getgid],[AC_CHECK_FUNCS([getgid])],,[#include <unistd.h>])
 
 # Newlib's unix/ directory
 AC_CHECK_FUNCS([ttyname getcwd])
