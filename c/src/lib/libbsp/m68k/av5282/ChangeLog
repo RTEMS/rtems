@@ -1,3 +1,7 @@
+2010-08-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* console/console.c: Add BSP_poll_char. Reformat.
+
 2010-04-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* network/network.c, startup/bspstart.c: Remove warnings. hwaddr
