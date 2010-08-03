@@ -1,3 +1,7 @@
+2010-08-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* shared/bspgetworkarea.c: Formatting.
+
 2010-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/startup/linkcmds.base: New file.
