@@ -1,3 +1,10 @@
+2010-08-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1649/cpukit
+	* libcsupport/Makefile.am, libcsupport/src/getgid.c: Make sure all get
+	and set gid and egid routines are present and in their own files.
+	* libcsupport/src/setegid.c, libcsupport/src/setgid.c: New files.
+
 2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Apply RTEMS_CHECK_FUNC for set/get*id family of
