@@ -159,7 +159,8 @@ DirectUARTWrite(const char c)
 }
 
 /* We will provide our own printk output function as it may get used early */
-BSP_output_char_function_type BSP_output_char = DirectUARTWrite;
+BSP_output_char_function_type     BSP_output_char = DirectUARTWrite;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 /*===================================================================*/
 
