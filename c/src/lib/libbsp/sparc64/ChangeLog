@@ -1,3 +1,7 @@
+2010-08-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* shared/startup/linkcmds: Add .gcc_except_table*.
+
 2010-07-27  Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1634/bsps

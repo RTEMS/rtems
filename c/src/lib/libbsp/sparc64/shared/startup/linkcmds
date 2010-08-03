@@ -108,6 +108,7 @@ SECTIONS
     . = ALIGN (16);
 
     *(.gnu.linkonce.t*)
+    *(.gcc_except_table*)
 
     /*
      * C++ constructors
