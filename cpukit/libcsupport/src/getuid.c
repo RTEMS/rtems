@@ -13,9 +13,7 @@
 #include "config.h"
 #endif
 
-#include <limits.h>
-#include <string.h>
-#include <sys/types.h>
+#include <unistd.h>
 
 #include <rtems/userenv.h>
 

@@ -6,9 +6,7 @@
 #include "config.h"
 #endif
 
-#include <limits.h>
-#include <string.h>
-#include <sys/types.h>
+#include <unistd.h>
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
