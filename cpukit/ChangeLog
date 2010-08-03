@@ -1,3 +1,11 @@
+2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/getegid.c, libcsupport/src/geteuid.c,
+	libcsupport/src/getpid.c, libcsupport/src/getppid.c,
+	libcsupport/src/getuid.c, libcsupport/src/setegid.c,
+	libcsupport/src/seteuid.c, libcsupport/src/setsid.c
+	libcsupport/src/setuid.c: Remove redundant includes.
+
 2010-08-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1649/cpukit
