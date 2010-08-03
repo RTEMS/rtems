@@ -1,5 +1,7 @@
 2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Apply RTEMS_CHECK_FUNC for set/get*id family of
+	functions. Extend set/get*id family of checks.
 	* aclocal/check-func.m4: New.
 
 2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
