@@ -160,7 +160,8 @@ ssize_t _167Bug_pollWrite( int minor, const char *buf, size_t len );
 
 /* Printk function */
 static void _BSP_output_char( char c );
-BSP_output_char_function_type BSP_output_char = _BSP_output_char;
+BSP_output_char_function_type     BSP_output_char = _BSP_output_char;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 /* '\r' character in memory. This used to live on
  * the stack but storing the '\r' character is

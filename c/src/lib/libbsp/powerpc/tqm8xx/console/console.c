@@ -856,7 +856,8 @@ static void console_debug_putc_onlcr(const char c)
   }
 }
 
-BSP_output_char_function_type BSP_output_char = console_debug_putc_onlcr;
+BSP_output_char_function_type     BSP_output_char = console_debug_putc_onlcr;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 
 /*

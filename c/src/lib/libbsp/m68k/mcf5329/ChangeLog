@@ -1,3 +1,7 @@
+2010-08-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* console/console.c: Add BSP_poll_char.
+
 2010-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c: Fix broken comment formatting.
