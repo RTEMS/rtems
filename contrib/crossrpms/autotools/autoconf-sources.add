@@ -1,8 +1,9 @@
 Source0: ftp://ftp.gnu.org/gnu/autoconf/autoconf-%{srcvers}.tar.bz2
+%if "%{srcvers}" == "2.66"
 # Fedora's patch to fix
 # http://lists.gnu.org/archive/html/autoconf/2010-07/msg00004.html
 # http://lists.gnu.org/archive/html/bug-autoconf/2010-07/msg00012.html
 Patch0: autoconf-2.66-611661.diff
-
+%endif
 
 

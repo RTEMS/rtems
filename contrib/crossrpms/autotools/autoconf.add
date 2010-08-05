@@ -69,11 +69,19 @@ make
 
 %check
 %if "%{_build}" == "%{_host}"
+%if "%{srcvers}" <= "2.66"
 # test 193 fails sporadically
 # test 199 fails deterministically
 make check TESTSUITEFLAGS='-192 194-198 200-'
+%else
+%if "%{srcvers}" <= "2.67"
+# test 199 fails deterministically
+make check TESTSUITEFLAGS='-198 200-'
+%else
+make check
 %endif
-
+%endif
+%endif
 %install
 rm -rf "${RPM_BUILD_ROOT}"
 make DESTDIR=${RPM_BUILD_ROOT} install
