@@ -1,9 +1,16 @@
+2010-08-06	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	PR 1652/GCC:
+	* psxpipe01/init.c: Expand incomplete initializers triggering
+	powerpc-gcc -msdata breakdown.
+
 2010-07-30	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1642/testing
 	* psximfs02/init.c, psximfs02/psximfs02.scn,
 	psximfs02/psximfs02.doc: Added test cases to exercise chmod(),
 	chown() and routines in imfs_debug.c.
+
 2010-07-29	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1642/testing
