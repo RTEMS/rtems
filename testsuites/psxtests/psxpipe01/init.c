@@ -25,8 +25,8 @@ rtems_task Init(
   rtems_task_argument not_used
 )
 {
-  int fd[2] = {0};
-  int dummy_fd[2] = {0};
+  int fd[2] = {0,0};
+  int dummy_fd[2] = {0,0};
   int status = 0;
   void *alloc_ptr = (void *)0;
   Heap_Information_block Info;
