@@ -15,7 +15,7 @@ GNATCOMPILE = $(GNATMAKE) \
     $(GCCSPECS) \
 $(AM_LDFLAGS) $(LDFLAGS) init.o
 
-CLEANFILES = *.ali *.o b~*.adb b~*.ads
+CLEANFILES += *.ali *.o b~*.adb b~*.ads
 
 #%.o: %.c
 #	$(CC) $(CFLAGS) -I@srcdir@ -c $< -o $@

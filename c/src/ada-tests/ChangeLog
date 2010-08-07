@@ -1,3 +1,8 @@
+2010-08-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1655/testing:
+	* ada.am: Reflect changes to testsuites/automake/compile.am.
+
 2009-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mptests/mp01/node1/mp01_node1.adb, mptests/mp01/node2/mp01_node2.adb,
