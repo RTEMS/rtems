@@ -1,3 +1,17 @@
+2010-08-06	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1654/testing
+	* psx13/test.c, psx13/psx13.scn: Test case to improve testing of
+	dup2 routine.
+	* psxfile01/test.c, psxfile01/psxfile01.scn: New test to improve
+	testing of fcntl routine.
+	* psximfs01/init.c, psximfs01/psximfs01.scn: Improve testing of
+	imfs routines.
+	* psximfs02/init.c, psximfs02/psximfs02.scn: Improve coverage of
+	imfs routines.
+	* psxpasswd02/init.c, psxpasswd02/psxpasswd02.scn: New tests to
+	improve coverage of getpwent.c.
+
 2010-08-06	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	PR 1652/GCC:

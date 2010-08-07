@@ -57,5 +57,8 @@ Creating a fifo -- OK
 ....node-link links not printed
 ....node-slink links not printed
 ....fifo FIFO not printed
-***************       End of Dump        ***************
-*** END OF TEST IMFS 02 ***
+***************      End of Dump       ***************
+chown /fifo to 10 -- OK
+Changing euid to 10
+chmod /fifo -- OK
+chown /fifo to 0 -- OK*** END OF TEST IMFS 02 ***

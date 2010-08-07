@@ -147,7 +147,6 @@ void extend_helper(void)
 
   position = lseek( TestFd, 0, SEEK_END );
   printf( "Seek to end .. returned %d\n", (int) position );
-  rtems_test_assert( position == 1 );
 
   /* 
    * test case to ftruncate a file to a length > its size 
@@ -179,6 +178,7 @@ void extend_helper(void)
 	  rc,
 	  strerror( errno )
         );
+	break;
       }
       else {
 	break;
@@ -216,6 +216,8 @@ rtems_task Init(
   int i;
   void *alloc_ptr = (void *)0;
   Heap_Information_block Info;
+  int position = 0;
+  int status = 0;
 
   puts( "\n\n*** TEST IMFS 01 ***" );
 
@@ -247,6 +249,12 @@ rtems_task Init(
    * free the allocated heap memory
    */
   free(alloc_ptr);
+
+  extend_helper();
+  position = lseek( TestFd , 0, SEEK_END );
+  status = lseek( TestFd, position+2, SEEK_SET );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOSPC );
 
   close_it();
   unlink_it();

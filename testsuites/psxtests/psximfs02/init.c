@@ -161,6 +161,22 @@ rtems_task Init(
 
   IMFS_dump();
   
+  puts( "chown /fifo to 10 -- OK" );
+  status = chown( "/fifo", 10, 10 );
+  rtems_test_assert( status == 0 );
+
+  puts( "Changing euid to 10" );
+  status = seteuid( 10 );
+  rtems_test_assert( status == 0 );
+
+  puts( "chmod /fifo -- OK" );
+  status = chmod( "/fifo", S_IRWXU );
+  rtems_test_assert( status == 0 );
+
+  printk( "chown /fifo to %o -- OK", 0 );
+  status = chown( "/fifo", 0, 0 );
+  rtems_test_assert( status == 0 );
+
   puts( "*** END OF TEST IMFS 02 ***" );
   rtems_test_exit(0);
 }

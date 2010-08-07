@@ -1,10 +1,9 @@
-
 *** FILE TEST 1 ***
 *************** Dump of Entire IMFS ***************
 /
 ....dev/
 ........console (device 0, 0)
-***************       End of Dump        ***************
+***************      End of Dump       ***************
 stat of /dev/console
 ....st_dev     (0xfffe:0x0)
 ....st_ino     3  may vary by small amount
@@ -55,6 +54,7 @@ Exercise the reentrant version _link_r -- Expect ENOENT
 Unlink /tmp/bha using the reentrant version -- OK
 mknod with bad type - expect EINVAL
 open /tmp/bha in write only mode -- OK
+attempt fcntl on opened file -- OK
 attempt to read from /tmp/bha - expect EINVAL
 closing and unlinking /tmp/bha
 open /tmp/bha in read only mode -- OK
@@ -192,7 +192,7 @@ This is call 5 to fprintf
 ........j (file 130)
 ....imfs/
 ........hidden_on_mount/
-***************       End of Dump        ***************
+***************      End of Dump       ***************
 truncate /tmp/j to length of 40
 ....st_dev     (0xfffe:0x0)
 ....st_ino     17  may vary by small amount
@@ -221,7 +221,7 @@ truncate /tmp/j to length of 40
 ........j (file 40)
 ....imfs/
 ........hidden_on_mount/
-***************       End of Dump        ***************
+***************      End of Dump       ***************
 truncate /tmp/j to length of 0
 truncate /tmp to length of 0 should fail with EISDIR
 
@@ -242,7 +242,7 @@ truncate /tmp to length of 0 should fail with EISDIR
 ........j (file 0)
 ....imfs/
 ........hidden_on_mount/
-***************       End of Dump        ***************
+***************      End of Dump       ***************
 Writing First File
 Writing Second File
 (0)this is a test line

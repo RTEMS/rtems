@@ -374,7 +374,11 @@ int main(
   puts( "open /tmp/bha in write only mode -- OK" );
   fd = open( "/tmp/bha", O_CREAT | O_WRONLY, S_IRWXU|S_IRWXG|S_IRWXO );
   rtems_test_assert( fd != -1 );
-  
+
+  puts( "attempt fcntl on opened file -- OK" );
+  status = fcntl( fd, F_SETFD, 0 );
+  rtems_test_assert( status == 0 );
+
   puts( "attempt to read from /tmp/bha - expect EINVAL" );
   status = read( fd, buffer, 10 );
   rtems_test_assert( status == -1 );

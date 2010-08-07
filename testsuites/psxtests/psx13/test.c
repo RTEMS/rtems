@@ -142,7 +142,7 @@ int DeviceLSeekTest (void)
   else
     retval = FALSE;
 
-  /* assert (retval == TRUE);*/
+  close( fd );  /* assert (retval == TRUE);*/
 
   return (retval);
 }
@@ -187,6 +187,8 @@ int DupTest(void)
   else
     retval = FALSE;
 
+  close( fd1 );
+  close( fd2 );
   /* assert (retval == TRUE);*/
 
   return (retval);
@@ -257,7 +259,7 @@ int Dup2Test(void)
   }
 
   close (fd1);
-
+  close (fd2);
   /* assert (retval == TRUE);*/
 
   return (retval);
