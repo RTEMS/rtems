@@ -1,3 +1,12 @@
+2010-08-06	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1654/testing
+	* deviceio01/init.c, deviceio01/deviceio01.doc,
+	deviceio01/deviceio01.scn, deviceio01/test_driver.c,
+	deviceio01/test_driver.h, deviceio01/Makefile.am: New test added.
+	* Makefile.am, configure.ac: Changes to added above test.
+	* tar02/init.c, tar02/tar02.scn: New test case added: IMFS_dump().
+
 2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add test for rtems_print_buffer().

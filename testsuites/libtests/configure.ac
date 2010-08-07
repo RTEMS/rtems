@@ -53,6 +53,7 @@ devfs01/Makefile
 devfs02/Makefile
 devfs03/Makefile
 devfs04/Makefile
+deviceio01/Makefile
 devnullfatal01/Makefile
 dumpbuf01/Makefile
 gxx01/Makefile

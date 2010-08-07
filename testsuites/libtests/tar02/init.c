@@ -63,6 +63,7 @@ rtems_task Init(
   printf( "\n\n*** TAR02 TEST ***\n" );
 
   test_tarfs_load();
+  IMFS_dump();
 
   printf( "*** END OF TAR02 TEST ***\n" );
   exit( 0 );

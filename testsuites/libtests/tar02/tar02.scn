@@ -5,4 +5,11 @@ Loading tarfs image ... successful
 initial tar image.
 
 *** Skipping symlink -- NOT CURRENTLY SUPPORTED ***
+*************** Dump of Entire IMFS ***************
+/
+....dev/
+........console (device 0, 0)
+....home/
+........test_file (file 73 0x12022c)
+***************      End of Dump       ***************
 *** END OF TAR02 TEST ***

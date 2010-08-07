@@ -1,0 +1,7 @@
+*** TEST DEVICEIO - 01 ***
+Init - attempt to open the /dev/test WR mode -- OK
+Init - attempt to write to /dev/test - expect ENOSYS
+Init - attempt to open the /dev/test RD mode -- OK
+Init - attempt to read from /dev/test - expect ENOSYS
+Init - attempt ioctl on the device - expect ENOSYS
+*** END OF TEST DEVICEIO - 01 ***
