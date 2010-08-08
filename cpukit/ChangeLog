@@ -1,3 +1,7 @@
+2010-08-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/imfs/imfs.h: Fix typo.
+
 2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/getegid.c, libcsupport/src/geteuid.c,

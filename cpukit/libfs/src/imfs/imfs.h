@@ -566,7 +566,7 @@ extern int IMFS_rmnod(
 #ifdef RTEMS_DEBUG
   #include <assert.h>
 
-  #define IMFS_assert(_x) assert(_X)
+  #define IMFS_assert(_x) assert(_x)
 #else
   #define IMFS_assert(_x)
 #endif
