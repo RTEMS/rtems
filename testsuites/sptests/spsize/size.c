@@ -389,8 +389,6 @@ uninitialized =
 
 /*wkspace.h*/   (sizeof _Workspace_Area);
 
-uninitialized = 0;
-
 #ifndef unix  /* make sure this is not a native compile */
 
 #ifdef __i386__
