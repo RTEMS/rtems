@@ -469,21 +469,9 @@ rtems_task Init(
   test_termios_baud2number();
   test_termios_number_to_baud();
 
-  /*
-   * tcsetattr - ERROR invalid operation
-   */
-  puts( "tcsetattr - invalid operation - ENOTSUP" );
-  rc = tcsetattr( 0, 0x12345, &t );
-  rtems_test_assert( rc == -1 );
-  rtems_test_assert( errno == ENOTSUP );
-  
-  /*
-   * tcsetattr - TCSADRAIN
-   */
-  puts( "\ntcsetattr - drain - OK" );
-  rc = tcsetattr( 1, TCSADRAIN, &t );
-  rtems_test_assert( rc == 0 );
-  
+  sc = rtems_termios_bufsize( 256, 138, 64 );
+  directive_failed( sc, "rtems_termios_bufsize" );
+
   /*
    * Register a driver
    */
@@ -504,6 +492,21 @@ rtems_task Init(
     printf( "ERROR - baud opening test device (%d)\n", test );
     rtems_test_exit(0);
   }
+
+  /*
+   * tcsetattr - ERROR invalid operation
+   */
+  puts( "tcsetattr - invalid operation - ENOTSUP" );
+  rc = tcsetattr( test, 0x12345, &t );
+  rtems_test_assert( rc == -1 );
+  rtems_test_assert( errno == ENOTSUP );
+  
+  /*
+   * tcsetattr - TCSADRAIN
+   */
+  puts( "\ntcsetattr - drain - OK" );
+  rc = tcsetattr( test, TCSADRAIN, &t );
+  rtems_test_assert( rc == 0 );
 
   test_termios_set_baud(test);
 
@@ -588,6 +591,22 @@ rtems_task Init(
     rtems_test_exit(0);
   }
 
+  /*
+  TODO: This must be enabled, but is facing a strange problem 
+  where the code dies off at rtems_termios_open.
+  */
+
+  /*
+  puts( "Multiple open of the device" );
+  for( ; index < 26; ++index ) {
+    printf( "...%d ", index );
+    test = open( TERMIOS_TEST_DRIVER_DEVICE_NAME, O_RDWR );
+    rtems_test_assert( test != -1 );
+    rc = close( test );
+    rtems_test_assert( rc == 0 );
+  }
+  puts( "" );
+  */
   puts( "*** END OF TEST TERMIOS 01 ***" );
   rtems_test_exit(0);
 }
