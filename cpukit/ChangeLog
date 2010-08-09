@@ -1,5 +1,11 @@
 2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1615/cpukit
+	* posix/src/keyrundestructors.c: Improved POSIX compliance.  Now we may
+	have an unlimited number of iterations.
+
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* sapi/inline/rtems/chain.inl: Added
 	rtems_chain_extract_unprotected().
 
