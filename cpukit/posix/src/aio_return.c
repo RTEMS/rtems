@@ -22,7 +22,7 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 
-int aio_return(
+ssize_t aio_return(
   const struct aiocb  *aiocbp __attribute__((unused))
 )
 {

@@ -1,3 +1,8 @@
+2010-08-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/aio.h, posix/src/aio_return.c:
+	Let aio_return return ssize_t (Mandated by POSIX).
+
 2010-08-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libfs/src/imfs/imfs.h: Fix typo.
