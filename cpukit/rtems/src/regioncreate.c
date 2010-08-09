@@ -68,9 +68,6 @@ rtems_status_code rtems_region_create(
   if ( !id )
     return RTEMS_INVALID_ADDRESS;
 
-  if ( !_Addresses_Is_aligned( starting_address ) )
-    return RTEMS_INVALID_ADDRESS;
-
   _RTEMS_Lock_allocator();                      /* to prevent deletion */
 
     the_region = _Region_Allocate();
