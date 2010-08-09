@@ -162,7 +162,11 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
  *  @note On a single processor configuration, this always returns true.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
+#if defined(RTEMS_MULTIPROCESSING)
   Objects_Id id
+#else
+  Objects_Id id __attribute__((unused))
+#endif
 )
 {
 #if defined(RTEMS_MULTIPROCESSING)
