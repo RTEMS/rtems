@@ -242,7 +242,6 @@ TA1 - rtems_partition_return_buffer - RTEMS_INVALID_ADDRESS - not on boundary
 <pause - screen 12>
 TA1 - rtems_region_create - RTEMS_INVALID_NAME
 TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
-TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
 TA1 - rtems_region_create - RTEMS_INVALID_SIZE
 TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
 TA1 - rtems_region_create - RTEMS_SUCCESSFUL
@@ -279,9 +278,6 @@ TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS - SKIPPED
 TA1 - rtems_debug_enable - RTEMS_DEBUG_REGION
 TA1 - rtems_region_extend - RTEMS_INVALID_ID
 TA1 - rtems_region_extend - within heap - RTEMS_INVALID_ADDRESS
-TA1 - rtems_region_extend - non-contiguous lower - RTEMS_NOT_IMPLEMENTED
-TA1 - rtems_region_extend - contiguous lower - RTEMS_NOT_IMPLEMENTED
-TA1 - rtems_region_extend - non-contiguous higher - RTEMS_NOT_IMPLEMENTED
 <pause - screen 13>
 TA1 - rtems_io_close - RTEMS_INVALID_NUMBER
 TA1 - rtems_io_control - RTEMS_INVALID_NUMBER

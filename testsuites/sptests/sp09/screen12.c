@@ -62,33 +62,12 @@ void Screen12()
   );
   puts( "TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS" );
 
-#if defined(_C3x) || defined(_C4x)
-  puts( "TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS - SKIPPED" );
-#else
-  status = rtems_region_create(
-    Region_name[ 1 ],
-    Region_bad_area,
-    0x40,
-    32,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &Junk_id
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_ADDRESS,
-    "rtems_region_create with illegal address"
-  );
-  puts( "TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS" );
-#endif
-
-#if defined(_C3x) || defined(_C4x)
-  puts( "TA1 - rtems_region_create - RTEMS_INVALID_SIZE - SKIPPED" );
-#else
+  /* Invalid size */
   status = rtems_region_create(
     Region_name[ 1 ],
     Region_good_area,
-    34,
-    34,
+    0,
+    0,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
   );
@@ -98,7 +77,6 @@ void Screen12()
     "rtems_region_create with illegal size"
   );
   puts( "TA1 - rtems_region_create - RTEMS_INVALID_SIZE" );
-#endif
 
   /* Check NULL id error case */
   status = rtems_region_create(

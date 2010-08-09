@@ -1,3 +1,8 @@
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sp09/screen12.c: Update for rtems_region_create() changes.
+	* sp09/sp09.scn: Update.
+
 2010-08-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1647/testing
