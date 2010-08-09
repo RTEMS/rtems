@@ -366,6 +366,21 @@ RTEMS_INLINE_ROUTINE void rtems_chain_extract(
 }
 
 /**
+ *  @brief Extract the specified node from a chain (unprotected).
+ *
+ *  This routine extracts @a the_node from the chain on which it resides.
+ *
+ *  @note It does NOT disable interrupts to ensure the atomicity of the
+ *  append operation.
+ */
+RTEMS_INLINE_ROUTINE void rtems_chain_extract_unprotected(
+  rtems_chain_node *the_node
+)
+{
+  _Chain_Extract_unprotected( the_node );
+}
+
+/**
  *  @brief Obtain the first node on a chain
  *
  *  This function removes the first node from @a the_chain and returns
