@@ -66,7 +66,6 @@ rtems_task Init(
   int status = -1;
   char str[100] = {0};
   int max_int = INT_MAX;
-  int limit_value = 0;
 
   FILE *fp = NULL;
 
