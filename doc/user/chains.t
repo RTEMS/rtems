@@ -34,8 +34,11 @@ provided by RTEMS is:
 @item @code{@value{DIRPREFIX}chain_is_head} - Is the node the head ?
 @item @code{@value{DIRPREFIX}chain_is_tail} - Is the node the tail ?
 @item @code{@value{DIRPREFIX}chain_extract} - Extract the node from the chain
+@item @code{@value{DIRPREFIX}chain_extract_unprotected} - Extract the node from the chain (unprotected)
 @item @code{@value{DIRPREFIX}chain_get} - Return the first node on the chain
+@item @code{@value{DIRPREFIX}chain_get_unprotected} - Return the first node on the chain (unprotected)
 @item @code{@value{DIRPREFIX}chain_insert} - Insert the node into the chain
+@item @code{@value{DIRPREFIX}chain_insert_unprotected} - Insert the node into the chain (unprotected)
 @item @code{@value{DIRPREFIX}chain_append} - Append the node to chain
 @item @code{@value{DIRPREFIX}chain_append_unprotected} - Append the node to chain (unprotected)
 @item @code{@value{DIRPREFIX}chain_prepend} - Prepend the node to the end of the chain
@@ -588,6 +591,9 @@ This routine extracts the node from the chain on which it resides.
 Interrupts are disabled while extracting the node to ensure the
 atomicity of the operation.
 
+Use @code{@value{DIRPREFIX}chain_extract_unprotected()} to avoid disabling of
+interrupts.
+
 @c
 @c
 @c
@@ -623,6 +629,9 @@ pointer to that node.  If the chain is empty, then NULL is returned.
 Interrupts are disabled while obtaining the node to ensure the
 atomicity of the operation.
 
+Use @code{@value{DIRPREFIX}chain_get_unprotected()} to avoid disabling of
+interrupts.
+
 @c
 @c
 @c
@@ -657,6 +666,9 @@ specified node.
 Interrupts are disabled during the insert to ensure the atomicity of
 the operation.
 
+Use @code{@value{DIRPREFIX}chain_insert_unprotected()} to avoid disabling of
+interrupts.
+
 @c
 @c
 @c
@@ -690,38 +702,8 @@ This routine appends a node to the end of a chain.
 Interrupts are disabled during the append to ensure the atomicity of
 the operation.
 
-@c
-@c
-@c
-@page
-@subsection Append a Node (unprotected)
-
-@cindex chain append a node unprotected
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@findex @value{DIRPREFIX}chain_append_unprotected
-@example
-void @value{DIRPREFIX}chain_append_unprotected(
-  @value{DIRPREFIX}chain_control *the_chain,
-  @value{DIRPREFIX}chain_node    *the_node
-);
-@end example
-@end ifset
-
-@subheading RETURNS
-
-Returns nothing.
-
-@subheading DESCRIPTION:
-
-This routine appends a node to the end of a chain.
-
-@subheading NOTES:
-
-Interrupts are NOT disabled during the append to ensure the atomicity of
-the operation.
+Use @code{@value{DIRPREFIX}chain_append_unprotected()} to avoid disabling of
+interrupts.
 
 @c
 @c
@@ -756,35 +738,5 @@ This routine prepends a node to the front of the chain.
 Interrupts are disabled during the prepend to ensure the atomicity of
 the operation.
 
-@c
-@c
-@c
-@page
-@subsection Prepend a Node (unprotected)
-
-@cindex prepend node
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@findex @value{DIRPREFIX}chain_prepend_unprotected
-@example
-void @value{DIRPREFIX}chain_prepend_unprotected(
-  @value{DIRPREFIX}chain_control *the_chain,
-  @value{DIRPREFIX}chain_node    *the_node
-);
-@end example
-@end ifset
-
-@subheading RETURNS
-
-Returns nothing.
-
-@subheading DESCRIPTION:
-
-This routine prepends a node to the front of the chain.
-
-@subheading NOTES:
-
-Interrupts are NOT disabled during the prepend to ensure the atomicity of
-the operation.
+Use @code{@value{DIRPREFIX}chain_prepend_unprotected()} to avoid disabling of
+interrupts.
