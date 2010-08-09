@@ -16,11 +16,11 @@
 #ifndef _AIO_H
 #define _AIO_H
 
+#include <unistd.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <unistd.h>
 
 #if defined(_POSIX_ASYNCHRONOUS_IO)
 
@@ -109,7 +109,7 @@ int aio_error(
  *        P1003.1b-1993, p. 162
  */
 
-int aio_return(
+ssize_t aio_return(
   const struct aiocb  *aiocbp
 );
 
