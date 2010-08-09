@@ -11,10 +11,8 @@
 
 #include <tmacros.h>
 #include "test_support.h"
-#include <rtems/score/heap.h>
 #include <rtems/libio_.h>
-
-extern Heap_Control  *RTEMS_Malloc_Heap;
+#include <rtems/libcsupport.h>
 
 rtems_task task_routine( rtems_task_argument not_used )
 {
@@ -35,16 +33,15 @@ rtems_task Init(
   int sc = 0;
   bool status = 0;
   void *alloc_ptr = (void *)0;
-  Heap_Information_block Info;
   rtems_id current_task_id;
   rtems_id task_id;
   rtems_name another_task_name;
-
+  Heap_Information_block  Info;
+  
   puts( "\n\n*** TEST USER ENVIRONMENT ROUTINE - 01 ***" );
 
   puts( "Init - allocating most of heap -- OK" );
-  _Heap_Get_information(RTEMS_Malloc_Heap, &Info);
-  alloc_ptr = malloc( Info.Free.largest - 4 );
+  alloc_ptr = malloc( malloc_free_space() - 4 );
   rtems_test_assert( alloc_ptr != NULL );
 
   puts( "Init - attempt to reset env - expect RTEMS_NO_MEMORY" );

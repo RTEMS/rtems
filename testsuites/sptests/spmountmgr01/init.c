@@ -11,11 +11,9 @@
 
 #include <tmacros.h>
 #include "test_support.h"
-#include <rtems/score/heap.h>
 #include <errno.h>
 #include <rtems/libio_.h>
-
-extern Heap_Control  *RTEMS_Malloc_Heap;
+#include <rtems/libcsupport.h>
 
 int fs_mount( rtems_filesystem_mount_table_entry_t *mt_entry,
 	      const void                           *data )
@@ -29,13 +27,11 @@ rtems_task Init(
 {
   int status = 0;
   void *alloc_ptr = (void *)0;
-  Heap_Information_block Info;
  
   puts( "\n\n*** TEST MOUNT MANAGER ROUTINE - 01 ***" );
 
   puts( "Init - allocating most of heap -- OK" );
-  _Heap_Get_information(RTEMS_Malloc_Heap, &Info);
-  alloc_ptr = malloc( Info.Free.largest - 4 );
+  alloc_ptr = malloc( malloc_free_space() - 4 );
   rtems_test_assert( alloc_ptr != NULL );
 
   puts( "Init - attempt to register filesystem fs - expect ENOMEM" );
