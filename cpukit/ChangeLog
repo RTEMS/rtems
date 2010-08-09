@@ -1,5 +1,10 @@
 2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* rtems/include/rtems.h, rtems/mainpage.h,
+	rtems/include/rtems/rtems/types.h: Documentation.
+
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1604/cpukit
 	* rtems/src/regioncreate.c: Removed superfluous parameter check.
 

@@ -69,16 +69,17 @@ typedef boolean          rtems_boolean;
 #endif
 
 /**
- * @brief Classic API object name Type.
+ * @brief Classic API @ref ClassicRTEMSSubSecObjectNames "object name" type.
  *
- * Contains the name of a Classic API object. It is an unsigned 32 bit integer
+ * Contains the name of a Classic API object. It is an unsigned 32-bit integer
  * which can be treated as a numeric value or initialized using
  * rtems_build_name() to contain four ASCII characters.
  */
 typedef uint32_t         rtems_name;
 
 /**
- * @brief Used to manage and manipulate RTEMS object identifier.
+ * @brief Used to manage and manipulate
+ * @ref ClassicRTEMSSubSecObjectIdentifiers "RTEMS object identifiers".
  */
 typedef Objects_Id       rtems_id;
 
@@ -116,7 +117,8 @@ typedef CPU_Interrupt_frame        rtems_interrupt_frame;
 typedef Heap_Information_block region_information_block;
 
 /**
- * @brief Used to manage and manipulate intervals specified by clock ticks.
+ * @brief Used to manage and manipulate intervals specified by
+ * @ref ClassicRTEMSSecTime "clock ticks".
  */
 typedef Watchdog_Interval rtems_interval;
 
@@ -133,7 +135,8 @@ typedef Watchdog_Interval rtems_interval;
 #endif
 
 /**
- * @brief Data structure to manage and manipulate calendar time.
+ * @brief Data structure to manage and manipulate calendar
+ * @ref ClassicRTEMSSecTime "time".
  */
 typedef struct {
   /**
