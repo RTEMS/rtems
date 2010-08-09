@@ -34,7 +34,7 @@
 #include <rtems/libio.h>
 #include <rtems/userenv.h>
 #include <pmacros.h>
-#include <rtems/score/heap.h>
+#include <rtems/libcsupport.h>
 
 void touch( char *file )
 {
@@ -64,8 +64,6 @@ int fileexists( char *file )
 }
 
 #if defined(__rtems__)
-extern Heap_Control  *RTEMS_Malloc_Heap;
-
 int test_main(void)
 #else
 int main(
@@ -76,7 +74,6 @@ int main(
 {
   int status;
   void *alloc_ptr = (void *)0;
-  Heap_Information_block Info;
 /*
  *  This test is the C equivalent of this sequence.
 #mkdir /one
@@ -108,8 +105,7 @@ int main(
   touch( "/one/two/two.test" );
 
   puts( "allocate most of memory - attempt to fail chroot - expect ENOTSUP" );
-  _Heap_Get_information(RTEMS_Malloc_Heap, &Info);
-  alloc_ptr = malloc( Info.Free.largest - 4 );
+  alloc_ptr = malloc( malloc_free_space() - 4 );
   rtems_test_assert( alloc_ptr != NULL );
 
   status = chroot( "/one" );

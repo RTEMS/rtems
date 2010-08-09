@@ -18,8 +18,8 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <rtems/libio.h>
+#include <rtems/libcsupport.h>
 
-extern Heap_Control  *RTEMS_Malloc_Heap;
 void IMFS_dump( void );
 rtems_task Init(
   rtems_task_argument argument
@@ -85,8 +85,7 @@ rtems_task Init(
   rtems_test_assert( errno == EACCES );
 
   puts( "Allocate most of heap" );
-  _Heap_Get_information( RTEMS_Malloc_Heap, &Info );
-  alloc_ptr = malloc( Info.Free.largest - 150 );
+  alloc_ptr = malloc( malloc_free_space() - 150 );
 
   puts( "Attempt to mount a fs at /dir01 -- expect ENOMEM" );
   status = mount( NULL,
@@ -101,8 +100,7 @@ rtems_task Init(
   free( alloc_ptr );
 
   puts( "Allocate most of heap" );
-  _Heap_Get_information( RTEMS_Malloc_Heap, &Info );
-  alloc_ptr = malloc( Info.Free.largest - 4 );
+  alloc_ptr = malloc( malloc_free_space() - 4 );
 
   puts( "Changing directory to /" );
   status = chdir( "/" );

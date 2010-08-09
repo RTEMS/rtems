@@ -17,6 +17,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <rtems/libcsupport.h>
 
 int TestFd;
 uint8_t Buffer[256];
@@ -207,15 +208,12 @@ void unlink_it(void)
   rtems_test_assert( rc == 0 );
 }
 
-extern Heap_Control  *RTEMS_Malloc_Heap;
-
 rtems_task Init(
   rtems_task_argument argument
 )
 {
   int i;
   void *alloc_ptr = (void *)0;
-  Heap_Information_block Info;
   int position = 0;
   int status = 0;
 
@@ -240,8 +238,7 @@ rtems_task Init(
   /*
    * Allocate the heap, so that extend cannot be successful
    */
-  _Heap_Get_information( RTEMS_Malloc_Heap, &Info );
-  alloc_ptr = malloc( Info.Free.largest-4 );
+  alloc_ptr = malloc( malloc_free_space() - 4 );
 
   extend_helper();
 

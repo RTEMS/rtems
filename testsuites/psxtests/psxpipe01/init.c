@@ -16,10 +16,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
-
-#include <rtems/score/heap.h>
-
-extern Heap_Control  *RTEMS_Malloc_Heap;
+#include <rtems/libcsupport.h>
 
 rtems_task Init(
   rtems_task_argument not_used
@@ -29,7 +26,6 @@ rtems_task Init(
   int dummy_fd[2] = {0,0};
   int status = 0;
   void *alloc_ptr = (void *)0;
-  Heap_Information_block Info;
 
   puts( "*** TEST POSIX PIPE CREATION - 01 ***" );
 
@@ -54,8 +50,7 @@ rtems_task Init(
   status |= close( fd[1] );
   rtems_test_assert( status == 0 );
 
-  _Heap_Get_information(RTEMS_Malloc_Heap, &Info);
-  alloc_ptr = malloc(Info.Free.largest-4);
+  alloc_ptr = malloc( malloc_free_space() - 4 );
 
   /* case where mkfifo fails */
   puts( "Init - attempt to create pipe -- expect ENOMEM" );
