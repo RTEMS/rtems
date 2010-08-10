@@ -462,6 +462,7 @@ rtems_task Init(
   rtems_device_major_number registered;
   int                       test;
   struct termios            t;
+  int index = 0;
 
   puts( "\n\n*** TEST TERMIOS 01 ***" );
 
@@ -591,22 +592,16 @@ rtems_task Init(
     rtems_test_exit(0);
   }
 
-  /*
-  TODO: This must be enabled, but is facing a strange problem 
-  where the code dies off at rtems_termios_open.
-  */
 
-  /*
   puts( "Multiple open of the device" );
   for( ; index < 26; ++index ) {
-    printf( "...%d ", index );
     test = open( TERMIOS_TEST_DRIVER_DEVICE_NAME, O_RDWR );
     rtems_test_assert( test != -1 );
     rc = close( test );
     rtems_test_assert( rc == 0 );
   }
   puts( "" );
-  */
+
   puts( "*** END OF TEST TERMIOS 01 ***" );
   rtems_test_exit(0);
 }

@@ -1,3 +1,9 @@
+2010-08-10	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1661/testing
+	* termios01/init.c, termios01/termios01.scn: Added a test case to
+	hit a case in rtems_termios_read.
+
 2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1664/testing

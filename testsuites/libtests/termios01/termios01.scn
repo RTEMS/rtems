@@ -302,4 +302,58 @@ cfgetispeed(B230400) - OK
 cfsetispeed(B460800) - OK
 cfgetispeed(B460800) - OK
 Init - close - /dev/test - OK
+Multiple open of the device
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+Termios_test_driver - rtems_set_initial_baud - bad baud - OK
+Termios_test_driver - rtems_set_initial_baud - 38400 - OK
+
 *** END OF TEST TERMIOS 01 ***
