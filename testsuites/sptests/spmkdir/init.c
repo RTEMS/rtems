@@ -64,6 +64,12 @@ static rtems_task Init(rtems_task_argument argument)
   test_mkdir("a/b/c/4", S_IRWXO, 0);
   test_mkdir("a/b", omode, 0);
   test_mkdir("a", omode, 0);
+  test_mkdir("a/b/x", S_IRUSR, 0);
+  test_mkdir("a/b/x/y", S_IRUSR, -1);
+  
+  rv = mknod("a/n", S_IRWXU | S_IFREG, 0LL);
+
+  test_mkdir("a/n/b", S_IRUSR, -1);
 
   rv = open ("b", O_CREAT | O_RDONLY, omode);
   rtems_test_assert(rv >= 0);
