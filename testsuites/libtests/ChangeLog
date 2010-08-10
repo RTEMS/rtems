@@ -1,3 +1,9 @@
+2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1661/testing
+	* malloc04/init.c: Add public methods to get/set malloc heap pointer so
+	the tests do not have to peer behind the API.
+
 2010-08-09	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1661/testing
