@@ -476,7 +476,7 @@ void _Objects_Shrink_information(
 void _Objects_Initialize_information (
   Objects_Information *information,
   Objects_APIs         the_api,
-  uint32_t             the_class,
+  uint16_t             the_class,
   uint32_t             maximum,
   uint16_t             size,
   bool                 is_string,
@@ -754,7 +754,7 @@ Objects_Control *_Objects_Get_next(
  */
 Objects_Information *_Objects_Get_information(
   Objects_APIs   the_api,
-  uint32_t       the_class
+  uint16_t       the_class
 );
 
 /**

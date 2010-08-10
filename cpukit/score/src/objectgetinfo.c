@@ -20,7 +20,7 @@
 
 Objects_Information *_Objects_Get_information(
   Objects_APIs   the_api,
-  uint32_t       the_class
+  uint16_t       the_class
 )
 {
   Objects_Information *info;

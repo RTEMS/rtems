@@ -48,7 +48,10 @@ static int IMFS_determine_bytes_per_block(
   for (bit_mask = 16; !is_valid && (bit_mask <= 512); bit_mask <<= 1) {
     if (bit_mask == requested_bytes_per_block) {
       is_valid = true;
+      break;
     }
+    if(bit_mask > requested_bytes_per_block)
+      break;
   }
   *dest_bytes_per_block = ((is_valid)
 			   ? requested_bytes_per_block

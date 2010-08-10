@@ -241,7 +241,7 @@ out:
  * *pipep points to pipe control structure. When the last user releases pipe,
  * it will be set to NULL.
  */
-int pipe_release(
+void pipe_release(
   pipe_control_t **pipep,
   rtems_libio_t *iop
 )
@@ -286,17 +286,16 @@ int pipe_release(
 
 #if 0
   if (! delfile)
-    return 0;
+    return;
   if (iop->pathinfo.ops->unlink_h == NULL)
-    return 0;
+    return;
 
   /* This is safe for IMFS, but how about other FSes? */
   iop->flags &= ~LIBIO_FLAGS_OPEN;
   if(iop->pathinfo.ops->unlink_h(&iop->pathinfo))
-    return -errno;
+    return;
 #endif
 
-  return 0;
 }
 
 /*

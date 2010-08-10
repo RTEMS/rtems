@@ -49,15 +49,14 @@ int IMFS_fifo_close(
   rtems_libio_t *iop
 )
 {
+  int err = 0;
   IMFS_jnode_t *jnode = iop->pathinfo.node_access;
 
-  int err = pipe_release(&JNODE2PIPE(jnode), iop);
+  pipe_release(&JNODE2PIPE(jnode), iop);
 
-  if (err == 0) {
-    iop->flags &= ~LIBIO_FLAGS_OPEN;
-    IMFS_check_node_remove(jnode);
-  }
-
+  iop->flags &= ~LIBIO_FLAGS_OPEN;
+  IMFS_check_node_remove(jnode);
+  
   IMFS_FIFO_RETURN(err);
 }
 

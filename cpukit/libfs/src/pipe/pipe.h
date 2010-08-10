@@ -52,7 +52,7 @@ extern int pipe_create(
  * *pipep points to pipe control structure. When the last user releases pipe,
  * it will be set to NULL.
  */
-extern int pipe_release(
+extern void pipe_release(
   pipe_control_t **pipep,
   rtems_libio_t *iop
 );
