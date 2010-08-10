@@ -1,3 +1,12 @@
+2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1661/testing
+	* libcsupport/Makefile.am, libcsupport/include/rtems/libcsupport.h: Add
+	public methods to get/set malloc heap pointer so the tests do not
+	have to peer behind the API.
+	* libcsupport/src/mallocgetheapptr.c,
+	libcsupport/src/mallocsetheapptr.c: New files.
+
 2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/inline/rtems/score/object.inl: Use attribute unused in
