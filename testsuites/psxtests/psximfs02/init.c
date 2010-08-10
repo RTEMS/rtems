@@ -27,7 +27,6 @@ rtems_task Init(
 {
   int status = 0;
   void *alloc_ptr = (void *)0;
-  Heap_Information_block Info;
   char linkname_n[20] = {0};
   char linkname_p[20] = {0};
   int i;
@@ -120,7 +119,7 @@ rtems_task Init(
   free( alloc_ptr );
 
   puts( "Allocate most of heap" );
-  alloc_ptr = malloc( Info.Free.largest - 40 );
+  alloc_ptr = malloc( malloc_free_space() - 40 );
 
   puts( "Attempt to create /node-slink-2 for /node -- expect ENOMEM" );
   status = symlink( "/node", "node-slink-2" );
