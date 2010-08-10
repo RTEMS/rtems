@@ -497,7 +497,7 @@ rtems_task Init(
    * tcsetattr - ERROR invalid operation
    */
   puts( "tcsetattr - invalid operation - ENOTSUP" );
-  rc = tcsetattr( test, 0x12345, &t );
+  rc = tcsetattr( test, INT_MAX, &t );
   rtems_test_assert( rc == -1 );
   rtems_test_assert( errno == ENOTSUP );
   

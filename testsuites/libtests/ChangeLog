@@ -1,5 +1,11 @@
 2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1664/testing
+	* termios01/init.c: Use INT_MAX instead of hard-coded number for error
+	case to avoid warning on 16-bit targets.
+
+2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1661/testing
 	* malloc04/init.c: Add public methods to get/set malloc heap pointer so
 	the tests do not have to peer behind the API.
