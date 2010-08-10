@@ -86,7 +86,6 @@ sp57/Makefile
 sp58/Makefile
 sp59/Makefile
 sp60/Makefile
-sp61/Makefile
 sp62/Makefile
 sp63/Makefile
 sp64/Makefile
@@ -127,6 +126,7 @@ spfatal19/Makefile
 spfatal20/Makefile
 spfatal21/Makefile
 spfatal22/Makefile
+spfatal23/Makefile
 spfifo01/Makefile
 spfifo02/Makefile
 spfifo03/Makefile

@@ -1,3 +1,13 @@
+2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1658/cpukit
+	* Makefile.am, configure.ac: If the system is not up, consider it a
+	fatal error. This eliminated sp61 and added spfatal23.
+	* spfatal23/.cvsignore, spfatal23/Makefile.am, spfatal23/spfatal23.doc,
+	spfatal23/spfatal23.scn, spfatal23/testcase.h: New files.
+	* sp61/.cvsignore, sp61/Makefile.am, sp61/init.c, sp61/sp61.doc,
+	sp61/sp61.scn: Removed.
+
 2010-08-10	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1663/testing
