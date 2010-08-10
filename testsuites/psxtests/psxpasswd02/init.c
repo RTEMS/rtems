@@ -152,6 +152,23 @@ rtems_task Init(
   rtems_test_assert( !pw ); 
   rtems_test_assert( errno == EINVAL );
 
+  fp = fopen( "/etc/passwd", "w" );
+  rtems_test_assert( fp != NULL );
+  fprintf( fp, "\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    :x:999999999999:1:dummy::/:/bin/sh\n" );
+  fclose( fp );
+
+  puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
+  pw = getpwnam( "root" );
+  rtems_test_assert( !pw ); 
+  rtems_test_assert( errno == EINVAL );
+
   puts( "Init - getgrent() -- OK" );
   gr = getgrent();
   rtems_test_assert( gr != NULL );

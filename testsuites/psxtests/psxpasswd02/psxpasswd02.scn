@@ -11,6 +11,7 @@ Init - getpwnam("root") -- expected EINVAL
 Init - getpwnam("root") -- expected EINVAL
 Init - getpwnam("root") -- expected EINVAL
 Init - getpwnam("root") -- expected EINVAL
+Init - getpwnam("root") -- expected EINVAL
 Init - getgrent() -- OK
   group name: admin
   group  password: 

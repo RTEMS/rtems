@@ -1,3 +1,9 @@
+2010-08-10	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1598/testing
+	* psxpasswd02/init.c, psxpasswd02/psxpasswd02.scn: New test case
+	added to improve coverage of getpwent.c.
+
 2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1665/testing
