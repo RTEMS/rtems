@@ -58,7 +58,7 @@ Summary:      	arm-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	2%{?dist}
+Release:      	3%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -85,6 +85,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
+%if 0%{?fc14}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.2
+%global gmp_provided 4.3.1
+%endif
+
 %if 0%{?fc13}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
@@ -214,6 +220,7 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
@@ -247,7 +254,7 @@ BuildRequires:	rtems-4.10-arm-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-arm-rtems4.10-binutils
 Requires:	rtems-4.10-arm-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-13%{?dist}
+Requires:	rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-14%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -272,12 +279,12 @@ Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar
 
 %if "%{newlib_version}" == "1.18.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20100426.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20100810.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
 %if 0%{?_build_mpfr}
-Source60:    http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+Source60:    http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
 %endif
 
 %if 0%{?_build_mpc}
@@ -347,7 +354,7 @@ cd ..
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-2%{?dist}/newlib-%{newlib_version}-13%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-3%{?dist}/newlib-%{newlib_version}-14%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -617,7 +624,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-arm-rtems4.10-binutils
-# Requires:       rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-13%{?dist}
+# Requires:       rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-14%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -635,7 +642,7 @@ Summary:        libgcc for arm-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-13%{?dist}
+Requires:       rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-14%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-arm-rtems4.10-gcc-libgcc
@@ -809,7 +816,7 @@ Summary:      	C Library (newlib) for arm-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        13%{?dist}
+Release:        14%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -830,7 +837,7 @@ Newlib C Library for arm-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        13%{?dist}
+Release:        14%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
