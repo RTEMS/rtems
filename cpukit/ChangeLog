@@ -1,3 +1,9 @@
+2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1658/cpukit
+	* sapi/src/exshutdown.c, score/include/rtems/score/interr.h: If the
+	system is not up, consider it a fatal error.
+
 2010-08-09	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1662/filesystem

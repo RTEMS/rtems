@@ -18,6 +18,7 @@
 #include <rtems/system.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
 
 /*
  *  rtems_shutdown_executive
@@ -35,8 +36,14 @@ void rtems_shutdown_executive(
    uint32_t   result
 )
 {
-  if ( !_System_state_Is_shutdown( _System_state_Get() ) ) {
+  if ( _System_state_Is_up( _System_state_Get() ) ) {
     _System_state_Set( SYSTEM_STATE_SHUTDOWN );
     _Thread_Stop_multitasking();
   }
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_CORE,
+    true,
+    INTERNAL_ERROR_SHUTDOWN_WHEN_NOT_UP
+  );
+
 }
