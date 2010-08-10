@@ -1,5 +1,11 @@
 2010-08-09	Bharath Suri <bharath.s.jois@gmail.com>
 
+	PR 1662/filesystem
+	* libcsupport/src/termios.c: osem is now released before attempt
+	to delete in rtems_termios_close.
+
+2010-08-09	Bharath Suri <bharath.s.jois@gmail.com>
+
 	PR 1660/filesystem
 	* libfs/src/pipe/fifo.c, libfs/src/pipe/pipe.h: Changed
 	int pipe_release to void pipe_release.

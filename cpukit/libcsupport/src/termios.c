@@ -382,6 +382,7 @@ rtems_termios_close (void *arg)
         rtems_fatal_error_occurred (sc);
       }
       drainOutput (tty);
+      rtems_semaphore_release (tty->osem);
     }
 
     if (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN) {
