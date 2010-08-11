@@ -42,7 +42,7 @@
 /*
  * Include the executive's configuration
  */
-#include <rtems/score/cpuopts.h>
+#include <rtems.h>
 #include <rtems/score/apimutex.h>
 
 #ifdef __cplusplus
