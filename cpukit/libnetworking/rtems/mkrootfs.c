@@ -41,6 +41,7 @@
 #include <arpa/inet.h>
 
 #include <rtems/mkrootfs.h>
+#include <rtems/libio.h>
 
 /*
  * A table a list of names and their modes.
