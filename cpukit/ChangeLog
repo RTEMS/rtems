@@ -1,4 +1,4 @@
-2010-09-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+2010-08-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sapi/include/confdefs.h: Include <rtems.h> to resolve all
 	dependencies.
