@@ -41,7 +41,7 @@ Summary:      	i586-pc-freebsd7.3 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20100711.0%{?dist}
+Release:      	0.20100812.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -68,6 +68,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
+%if 0%{?fc14}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.2
+%global gmp_provided 4.3.1
+%endif
+
 %if 0%{?fc13}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
@@ -199,6 +205,7 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
@@ -257,7 +264,7 @@ Source5:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-objc-%{gcc_pkgvers}.ta
 %{?_without_sources:NoSource:	5}
 
 %if 0%{?_build_mpfr}
-Source60:    http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+Source60:    http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
 %endif
 
 %if 0%{?_build_mpc}
