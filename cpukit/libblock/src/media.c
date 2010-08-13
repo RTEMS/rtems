@@ -144,7 +144,7 @@ rtems_status_code rtems_media_listener_remove(
     listener_item *item = find_listener(listener, listener_arg);
 
     if (item != NULL) {
-      rtems_chain_extract(&item->node);
+      rtems_chain_extract_unprotected(&item->node);
       free(item);
     } else {
       sc = RTEMS_INVALID_ID;
