@@ -52,7 +52,7 @@ Name:		rtems-4.10-m68k-rtems4.10-gdb
 Summary:	Gdb for target m68k-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	4%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -102,7 +102,7 @@ Requires:	rtems-4.10-gdb-common
 
 %if "%{gdb_version}" == "7.1"
 Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.1.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-7.1-rtems4.10-20100319.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-7.1-rtems4.10-20100812.diff
 %endif
 
 %if "%{gdb_version}" == "7.0.1"
