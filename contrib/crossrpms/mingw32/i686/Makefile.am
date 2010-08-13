@@ -12,8 +12,8 @@ MPC_VERS = 0.8.1
 MPC_RPMREL = 0.20100319.1%{?dist}
 include ../mpc.am
 
-MPFR_VERS = 2.4.1
-MPFR_RPMREL = 0.20100319.1%{?dist}
+MPFR_VERS = 2.4.2
+MPFR_RPMREL = 0.20100813.1%{?dist}
 include ../mpfr.am
 
 @rpmprefix@$(TARGET)-binutils-helper.spec: $(TARGET)-binutils-helper.spec.in  

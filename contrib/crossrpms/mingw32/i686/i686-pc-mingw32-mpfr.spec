@@ -30,12 +30,12 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define mpfr_version 2.4.1
-%define mpfr_rpmvers %{expand:%(echo 2.4.1 | tr - _)} 
+%define mpfr_version 2.4.2
+%define mpfr_rpmvers %{expand:%(echo 2.4.2 | tr - _)} 
 %define debug_package %{nil}
 
 Name:         i686-pc-mingw32-mpfr
-Release:      0.20100319.1%{?dist}
+Release:      0.20100813.1%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -45,7 +45,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Version:      	%mpfr_rpmvers
 Summary:      	MinGW MPFR Libraries
 
-Source0:	http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+Source0:	http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
 
 Provides:	i686-pc-mingw32-mpfr-devel = %{version}-%{release}
 
