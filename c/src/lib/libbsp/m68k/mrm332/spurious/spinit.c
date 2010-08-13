@@ -17,6 +17,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <stdio.h>
 
 const char * const _Spurious_Error_[] = {"Reset","Bus Error","Address Error",

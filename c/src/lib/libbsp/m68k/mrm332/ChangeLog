@@ -1,3 +1,7 @@
+2010-08-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spurious/spinit.c: Add include of bootcard.h to fix warning.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* startup/bsppredriverhook.c: Remove warnings.
