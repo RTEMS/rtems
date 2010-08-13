@@ -173,8 +173,8 @@ int IMFS_evaluate_sym_link(
   /*
    * Check for things that should never happen.
    */
-  IMFS_assert( jnode->type == IMFS_SYM_LINK )
-  IMFS_assert( jnode->Parent )
+  IMFS_assert( jnode->type == IMFS_SYM_LINK );
+  IMFS_assert( jnode->Parent );
 
   /*
    * Move the node_access to either the symbolic links parent or
