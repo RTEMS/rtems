@@ -20,6 +20,11 @@ libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/flashdisk.c \
     src/bdpart-register.c \
     src/bdpart-sort.c \
     src/bdpart-write.c \
+    src/media-path.c \
+    src/media.c \
+    src/media-server.c \
+    src/media-desc.c \
+    src/media-dev-ident.c \
     include/rtems/bdbuf.h include/rtems/blkdev.h \
     include/rtems/diskdevs.h include/rtems/flashdisk.h \
     include/rtems/ramdisk.h include/rtems/nvdisk.h include/rtems/nvdisk-sram.h \

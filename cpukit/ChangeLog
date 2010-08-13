@@ -1,3 +1,11 @@
+2010-08-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/media.h, libblock/src/media-desc.c,
+	libblock/src/media-dev-ident.c, libblock/src/media-path.c,
+	libblock/src/media-server.c, libblock/src/media.c: New files.
+	* Makefile.am, preinstall.am, libblock/Makefile.am: Reflect changes
+	above.
+
 2010-08-13	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/imfs/imfs_eval.c: Add the missing ';' for the debug

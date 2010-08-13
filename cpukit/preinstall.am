@@ -289,6 +289,10 @@ $(PROJECT_INCLUDE)/rtems/bdpart.h: libblock/include/rtems/bdpart.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bdpart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bdpart.h
 
+$(PROJECT_INCLUDE)/rtems/media.h: libblock/include/rtems/media.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/media.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/media.h
+
 if LIBNETWORKING
 $(PROJECT_INCLUDE)/rtems/ftpd.h: ftpd/ftpd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ftpd.h
