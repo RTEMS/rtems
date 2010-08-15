@@ -1,3 +1,7 @@
+2010-08-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/syscalls.c:
+
 2010-05-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* startup/syscalls.c: Rename to avoid conflict with newlib.

@@ -760,6 +760,7 @@ _clock (void)
   return timeval;
 }
 
+#if !defined(__rtems__)
 /* Return a clock that ticks at 100Hz.  */
 clock_t
 _times (struct tms * tp)
@@ -776,6 +777,7 @@ _times (struct tms * tp)
 
   return timeval;
 };
+#endif
 
 
 int
