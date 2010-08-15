@@ -690,3 +690,4 @@ static void mpc55xx_esci_output_char_init( char c)
 /** @} */
 
 BSP_output_char_function_type BSP_output_char = mpc55xx_esci_output_char_init;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
