@@ -1,8 +1,8 @@
 diff -Naur gcc-4.5.1.orig/ChangeLog.rtems gcc-4.5.1/ChangeLog.rtems
 --- gcc-4.5.1.orig/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
-+++ gcc-4.5.1/ChangeLog.rtems	2010-07-26 07:24:37.185492535 +0200
++++ gcc-4.5.1/ChangeLog.rtems	2010-08-15 08:23:10.822094246 +0200
 @@ -0,0 +1,4 @@
-+		Ralf Corsépius <ralf.corsepius@rtems.org>
++2008-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 +
 +	* configure, configure.ac (skipdirs): Add target-libiberty.
 +
@@ -50,63 +50,6 @@ diff -Naur gcc-4.5.1.orig/gcc/ChangeLog.rtems gcc-4.5.1/gcc/ChangeLog.rtems
 --- gcc-4.5.1.orig/gcc/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
 +++ gcc-4.5.1/gcc/ChangeLog.rtems	2010-07-26 07:27:00.919492271 +0200
 @@ -0,0 +1,47 @@
-+2010-05-19  Joel Sherrill <joel.sherrill@oarcorp.com>
-+
-+    	* config.gcc (sparc64-*-rtems*): New target.
-+	* config/sparc/sp64-rtemself.h: New file.
-+
-+2010-04-19	Ralf Corsépius <ralf.corsepius@rtems.org>
-+
-+	* ginclude/stddef.h: Define _MACHINE_ANSI_H_ if _X86_64_ANSI_H_ is 
-+	defined (Used by amd64-*-netbsdelf5.*).
-+
-+2010-04-18	Ralf Corsépius <ralf.corsepius@rtems.org>
-+
-+	* ginclude/stddef.h: Define _MACHINE_ANSI_H_ if _I386_ANSI_H_ is 
-+	defined (Used by i386-*-netbsdelf5.*).
-+
-+2010-03-15	Ralf Corsépius <ralf.corsepius@rtems.org>
-+
-+	Patch from Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>:
-+	* config/arm/rtems-elf.h, config/arm/t-rtems: Add optional support
-+	for vfp FPU model
-+
-+2009-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
-+
-+	* config/avr/avr.h (LINK_SPEC): Pass -m avrN to ld for -mmcu=avrN.
-+
-+2009-11-04	Ralf Corsépius <ralf.corsepius@rtems.org>
-+
-+	* config/m32c/rtems.h, config/m68k/rtemself.h,
-+	config/m68k/rtemself.h, config/sh/rtemself.h,
-+	config/sparc/rtemself.h: Undef WCHAR_TYPE_SIZE, WCHAR_TYPE. 
-+	(Resets WCHAR_TYPE's to defaults. Prevents broken GCC tm_files 
-+	to interfere and cause wchar_t/wint_t incompatibilities).
-+
-+2009-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
-+
-+	* config/avr/t-rtems: Don't build _exit.
-+
-+		Ralf Corsépius <ralf.corsepius@rtems.org>
-+
-+	* config/rs6000/rtems.h: Support for custom RTEMS multilibs.
-+	Support TARGET_E500.
-+	* config/rs6000/t-rtems: Custom RTEMS multilibs. 
-+
-+		Ralf Corsépius <ralf.corsepius@rtems.org>
-+
-+	* config/mips/elf.h: Remove NO_IMPLICIT_EXTERN_C.
-+	
-diff -Naur gcc-4.5.1.orig/gcc/ChangeLog.rtems~ gcc-4.5.1/gcc/ChangeLog.rtems~
---- gcc-4.5.1.orig/gcc/ChangeLog.rtems~	1970-01-01 01:00:00.000000000 +0100
-+++ gcc-4.5.1/gcc/ChangeLog.rtems~	2010-07-26 07:25:40.000000000 +0200
-@@ -0,0 +1,53 @@
-+2010-05-25  Jon Beniston <jon@beniston.com>
-+
-+	http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43726
-+	* config/lm32/lm32.h: Remove GO_IF_MODE_DEPENDENT_ADDRESS.
-+	(http://gcc.gnu.org/bugzilla/attachment.cgi?id=20747)
-+
 +2010-05-19  Joel Sherrill <joel.sherrill@oarcorp.com>
 +
 +    	* config.gcc (sparc64-*-rtems*): New target.
@@ -420,14 +363,6 @@ diff -Naur gcc-4.5.1.orig/gcc/ginclude/stddef.h gcc-4.5.1/gcc/ginclude/stddef.h
  /* On FreeBSD 5, machine/ansi.h does not exist anymore... */
  #if defined (__FreeBSD__) && (__FreeBSD__ >= 5)
  #include <sys/_types.h>
-diff -Naur gcc-4.5.1.orig/gcc-4.5.0/ChangeLog.rtems gcc-4.5.1/gcc-4.5.0/ChangeLog.rtems
---- gcc-4.5.1.orig/gcc-4.5.0/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
-+++ gcc-4.5.1/gcc-4.5.0/ChangeLog.rtems	2010-07-26 07:24:33.512492820 +0200
-@@ -0,0 +1,4 @@
-+		Ralf Corsépius <ralf.corsepius@rtems.org>
-+
-+	* configure, configure.ac (skipdirs): Add target-libiberty.
-+
 diff -Naur gcc-4.5.1.orig/libgcc/ChangeLog.rtems gcc-4.5.1/libgcc/ChangeLog.rtems
 --- gcc-4.5.1.orig/libgcc/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
 +++ gcc-4.5.1/libgcc/ChangeLog.rtems	2010-07-26 07:25:40.174617369 +0200
