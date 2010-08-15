@@ -1,3 +1,7 @@
+2010-08-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* at91rm9200/dbgu/dbgu.c, pxa255/ffuart/ffuart.c: Add BSP_poll_char.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* at91rm9200/dbgu/dbgu.c, at91rm9200/usart/usart.c,
