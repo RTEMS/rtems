@@ -1,6 +1,8 @@
 2010-08-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
-	* startup/syscalls.c:
+	* startup/syscalls.c: ifdef out _times since it conflicts with
+	RTEMS internal one.  Besides we only use the simulator syscalls
+	for console IO.
 
 2010-05-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
