@@ -48,7 +48,8 @@ void  pfree(void *);
 #endif
 
 #ifndef __BOOT__
-BSP_output_char_function_type	BSP_output_char = debug_putc_onlcr;
+BSP_output_char_function_type     BSP_output_char = debug_putc_onlcr;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 #endif
 
 #ifdef USE_KBD_SUPPORT
