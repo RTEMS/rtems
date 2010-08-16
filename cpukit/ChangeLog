@@ -1,3 +1,8 @@
+2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
+
+	* posix/include/aio.h: Extend struct aiocb.
+	* posix/include/rtems/posix/aio_misc.h: New.
+
 2010-08-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/src/media.c: Use unprotected chain extract.
