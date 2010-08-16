@@ -72,6 +72,8 @@ psx11/Makefile
 psx12/Makefile
 psx13/Makefile
 psx14/Makefile
+psxaio01/Makefile
+psxaio02/Makefile
 psxalarm01/Makefile
 psxautoinit01/Makefile
 psxautoinit02/Makefile

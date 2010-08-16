@@ -1,3 +1,11 @@
+2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
+
+	* Makefile.am, configure.ac: Add psxaio01/, psxaio02/.
+	* psxaio01/Makefile.am, psxaio01/init.c, psxaio01/psxaio01.scn,
+	psxaio01/system.h: New. 
+	* psxaio02/Makefile.am, psxaio02/init.c, psxaio02/psxaio02.scn,
+	psxaio02/system.h: New.
+
 2010-08-10	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1598/testing
