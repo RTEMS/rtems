@@ -24,12 +24,11 @@ include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
 
 if HAS_PTHREADS
 # include
-
 include_HEADERS = include/aio.h include/mqueue.h \
     include/semaphore.h include/devctl.h
 
 # include/rtems/posix
-
+include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
 
 include_rtems_posix_HEADERS += include/rtems/posix/cancel.h \
     include/rtems/posix/cond.h include/rtems/posix/config.h \

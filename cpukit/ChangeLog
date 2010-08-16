@@ -1,3 +1,7 @@
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/Makefile.am: Add include/rtems/posix/aio_misc.h.
+
 2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
 
 	* posix/include/aio.h: Extend struct aiocb.
