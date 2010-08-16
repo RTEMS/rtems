@@ -2,14 +2,14 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.60)
+AC_PREREQ(2.67)
 AC_INIT([rtems-c-src-tests-samples],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([hello])
 RTEMS_TOP([../..],[..])
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.10])
+AM_INIT_AUTOMAKE([no-define foreign 1.11.1])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_CXX
@@ -54,9 +54,6 @@ AS_IF([test $HAS_CPLUSPLUS = yes],[
 AM_CONDITIONAL([CXXTESTS],[test $CXXTESTS = "yes"])
 AM_CONDITIONAL(NETTESTS,test "$rtems_cv_RTEMS_NETWORKING" = "yes")
 AM_CONDITIONAL(MPTESTS,test "$rtems_cv_RTEMS_MULTIPROCESSING" = "yes")
-
-#FIXME: We should use a feature based check
-AM_CONDITIONAL(LIBCHIP,[test "$RTEMS_BSP_FAMILY" != "posix"])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

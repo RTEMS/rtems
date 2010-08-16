@@ -1,3 +1,9 @@
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* fileio/Makefile.am: Remove AM_CONDITIONAL(LIBCHIP).
+	* configure.ac: Remove AM_CONDITIONAL(LIBCHIP).
+	Force autoconf-2.67, automake-1.11.1.
+
 2010-07-07	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* minimum/init.c: Use fatal error extension to prevent infinite
