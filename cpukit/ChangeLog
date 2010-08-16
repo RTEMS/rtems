@@ -1,3 +1,10 @@
+2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
+
+	* posix/src/aio_misc.c: New.
+	* posix/src/aio_error.c, posix/src/aio_read.c,
+	* posix/src/aio_return.c, posix/src/aio_write.c:
+	New implementation.
+
 2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/Makefile.am: Add include/rtems/posix/aio_misc.h.

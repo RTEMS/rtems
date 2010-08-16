@@ -1,15 +1,11 @@
 /*
- *  6.7.6 Retrieve Return Status of Asynchronous I/O Operation,
- *        P1003.1b-1993, p. 162
+ * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
+ * 
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  *
- *  COPYRIGHT (c) 1989-2007.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
+ * $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -22,9 +18,20 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 
-ssize_t aio_return(
-  const struct aiocb  *aiocbp __attribute__((unused))
-)
+/*
+ *  aio_return
+ *
+ * Retrieve return status of an asynchronous I/O operation
+ *
+ *  Input parameters:
+ *        aiocbp - asynchronous I/O control block
+ *
+ *  Output parameters:
+ *        aiocbp->return_value
+ */
+
+ssize_t
+aio_return (const struct aiocb *aiocbp)
 {
-  rtems_set_errno_and_return_minus_one( ENOSYS );
+  return aiocbp->return_value;
 }
