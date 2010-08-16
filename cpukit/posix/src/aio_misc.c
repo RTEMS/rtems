@@ -28,7 +28,7 @@ static void *rtems_aio_handle (void *arg);
  *        NONE
  *
  *  Output parameters: 
- *        0    -    if initialization succeded
+ *        0    -    if initialization succeeded
  */
 
 int
@@ -63,11 +63,9 @@ rtems_aio_init (void)
 
   aio_request_queue.active_threads = 0;
   aio_request_queue.idle_threads = 0;
-  aio_request_queue.size = 0;
   aio_request_queue.initialized = AIO_QUEUE_INITIALIZED;
 
   return result;
-
 }
 
 /* 

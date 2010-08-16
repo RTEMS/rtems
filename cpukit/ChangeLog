@@ -1,3 +1,14 @@
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/rtems/posix/aio_misc.h: Remove
+	rtems_aio_queue_s.size (Unused).
+	* posix/src/aio_misc.c: Remove aio_request_queue.size.
+	Cosmetics.
+
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/Makefile.am: Reflect aio-changes.
+
 2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
 
 	* posix/src/aio_misc.c: New.

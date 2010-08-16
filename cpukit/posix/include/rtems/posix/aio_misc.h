@@ -57,7 +57,6 @@ extern "C"
     rtems_chain_control work_req; /* chains being worked by active threads */
     rtems_chain_control idle_req; /* fd chains waiting to be processed */
     unsigned int initialized;     /* specific value if queue is initialized */
-    int size;
     int active_threads;           /* the number of active threads */
     int idle_threads;             /* number of idle threads */
 
