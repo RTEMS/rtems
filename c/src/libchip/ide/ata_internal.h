@@ -25,6 +25,10 @@
 #include <rtems/blkdev.h>
 #include <rtems/diskdevs.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Conversion from and to little-endian byte order. (no-op on i386/i486)
  *
@@ -319,5 +323,9 @@ void ata_process_request_on_init_phase(
   rtems_device_minor_number ctrl_minor,
   ata_req_t *areq
 );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __ATA_INTERNAL_H__ */

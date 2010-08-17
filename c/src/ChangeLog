@@ -1,5 +1,9 @@
 2010-08-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libchip/ide/ata_internal.h: C++ compatibility.
+
+2010-08-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libchip/Makefile.am, libchip/preinstall.am: Install
 	<libchip/ata_internal.h>.
 
