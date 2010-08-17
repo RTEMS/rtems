@@ -57,6 +57,10 @@ $(PROJECT_INCLUDE)/libchip/ide_ctrl_io.h: ide/ide_ctrl_io.h $(PROJECT_INCLUDE)/l
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ide_ctrl_io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ide_ctrl_io.h
 
+$(PROJECT_INCLUDE)/libchip/ata_internal.h: ide/ata_internal.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ata_internal.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ata_internal.h
+
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/libchip/cs8900.h: network/cs8900.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/cs8900.h

@@ -1,5 +1,10 @@
 2010-08-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libchip/Makefile.am, libchip/preinstall.am: Install
+	<libchip/ata_internal.h>.
+
+2010-08-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libchip/ide/ata_util.c: New file.
 	* libchip/Makefile.am: Reflect change from above.
 	* libchip/ide/ata.c: Moved ata_breq_init(), ata_identify_device(), and
