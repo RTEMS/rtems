@@ -30,7 +30,8 @@ include_libchip_HEADERS += ide/ata.h ide/ide_ctrl_cfg.h ide/ide_ctrl.h \
     ide/ide_ctrl_io.h
 
 noinst_LIBRARIES += libide.a
-libide_a_SOURCES = ide/ata.c ide/ide_controller.c ide/ata_internal.h
+libide_a_SOURCES = ide/ata.c ide/ata_util.c ide/ide_controller.c \
+    ide/ata_internal.h
 libide_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # network
