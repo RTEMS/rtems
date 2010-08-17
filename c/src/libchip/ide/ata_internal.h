@@ -300,4 +300,24 @@ typedef struct ata_ide_ctrl_s {
     rtems_chain_control reqs; /* requests chain */
 } ata_ide_ctrl_t;
 
+/* Block device request with a single buffer provided */
+typedef struct blkdev_request1 {
+    rtems_blkdev_request   req;
+    rtems_blkdev_sg_buffer sg[1];
+} blkdev_request1;
+
+void ata_breq_init(blkdev_request1 *breq, uint16_t *sector_buffer);
+
+rtems_status_code ata_identify_device(
+  rtems_device_minor_number ctrl_minor,
+  int dev,
+  uint16_t *sector_buffer,
+  ata_dev_t *device_entry
+);
+
+void ata_process_request_on_init_phase(
+  rtems_device_minor_number ctrl_minor,
+  ata_req_t *areq
+);
+
 #endif /* __ATA_INTERNAL_H__ */

@@ -118,13 +118,6 @@ typedef bool preemption_key;
 /* FIXME: case if ATA device is FLASH device need more attention */
 #undef ATA_DEV_IS_FLASH_DISK
 
-/* Block device request with a single buffer provided */
-typedef struct blkdev_request1 {
-    rtems_blkdev_request   req;
-    rtems_blkdev_sg_buffer sg[1];
-} blkdev_request1;
-
-
 /* Array indexed by controllers minor number */
 static ata_ide_ctrl_t ata_ide_ctrls[IDE_CTRL_MAX_MINOR_NUMBER];
 
@@ -150,10 +143,6 @@ static rtems_chain_control ata_int_vec[ATA_MAX_RTEMS_INT_VEC_NUMBER + 1];
 
 static void
 ata_process_request(rtems_device_minor_number ctrl_minor);
-
-static void
-ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
-                                  ata_req_t                 *areq);
 
 static void
 ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
@@ -1037,6 +1026,97 @@ ata_ioctl(rtems_disk_device *dd, uint32_t cmd, void *argp)
     return 0;
 }
 
+static void ata_execute_device_diagnostic(
+  rtems_device_minor_number ctrl_minor,
+  uint16_t *sector_buffer
+)
+{
+#if ATA_EXEC_DEVICE_DIAGNOSTIC
+  ata_req_t areq;
+  blkdev_request1 breq;
+
+  ata_breq_init(&breq, sector_buffer);
+
+  /*
+   * Issue EXECUTE DEVICE DIAGNOSTIC ATA command for explore is
+   * there any ATA device on the controller.
+   *
+   * This command may fail and it assumes we have a master device and may
+   * be a slave device. I think the identify command will handle
+   * detection better than this method.
+   */
+  memset(&areq, 0, sizeof(ata_req_t));
+  areq.type = ATA_COMMAND_TYPE_NON_DATA;
+  areq.regs.to_write = ATA_REGISTERS_VALUE(IDE_REGISTER_COMMAND);
+  areq.regs.regs[IDE_REGISTER_COMMAND] =
+                            ATA_COMMAND_EXECUTE_DEVICE_DIAGNOSTIC;
+  areq.regs.to_read = ATA_REGISTERS_VALUE(IDE_REGISTER_ERROR);
+
+  areq.breq = (rtems_blkdev_request *)&breq;
+
+  /*
+   * Process the request. Special processing of requests on
+   * initialization phase is needed because at this moment there
+   * is no multitasking enviroment
+   */
+  ata_process_request_on_init_phase(ctrl_minor, &areq);
+
+  /*
+   * check status of I/O operation
+   */
+  if (breq.req.status == RTEMS_SUCCESSFUL)
+  {
+    /* disassemble returned diagnostic codes */
+    if (areq.info == ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT)
+    {
+      printk("ATA: ctrl:%d: primary, secondary\n", ctrl_minor);
+      ATA_DEV_INFO(ctrl_minor,0).present = true;
+      ATA_DEV_INFO(ctrl_minor,1).present = true;
+    }
+    else if (areq.info == ATA_DEV0_PASSED_DEV1_FAILED)
+    {
+      printk("ATA: ctrl:%d: primary\n", ctrl_minor);
+      ATA_DEV_INFO(ctrl_minor,0).present = true;
+      ATA_DEV_INFO(ctrl_minor,1).present = false;
+    }
+    else if (areq.info < ATA_DEV1_PASSED_DEV0_FAILED)
+    {
+      printk("ATA: ctrl:%d: secondary\n", ctrl_minor);
+      ATA_DEV_INFO(ctrl_minor,0).present = false;
+      ATA_DEV_INFO(ctrl_minor,1).present = true;
+    }
+    else
+    {
+      printk("ATA: ctrl:%d: none\n", ctrl_minor);
+      ATA_DEV_INFO(ctrl_minor, 0).present = false;
+      ATA_DEV_INFO(ctrl_minor, 1).present = false;
+    }
+
+    /* refine the returned codes */
+    if (ATA_DEV_INFO(ctrl_minor, 1).present)
+    {
+      uint16_t ec = 0;
+      ide_controller_read_register(ctrl_minor, IDE_REGISTER_ERROR, &ec);
+      if (ec & ATA_DEV1_PASSED_DEV0_FAILED)
+      {
+        printk("ATA: ctrl:%d: secondary inforced\n", ctrl_minor);
+        ATA_DEV_INFO(ctrl_minor, 1).present = true;
+      }
+      else
+      {
+        printk("ATA: ctrl:%d: secondary removed\n", ctrl_minor);
+        ATA_DEV_INFO(ctrl_minor, 1).present = false;
+      }
+    }
+  }
+  else
+#endif
+  {
+    ATA_DEV_INFO(ctrl_minor, 0).present = true;
+    ATA_DEV_INFO(ctrl_minor,1).present = true;
+  }
+}
+
 /*
  * ata_initialize --
  *     Initializes all ATA devices found on initialized IDE controllers.
@@ -1057,13 +1137,8 @@ rtems_ata_initialize(rtems_device_major_number major,
 {
     uint32_t           ctrl_minor;
     rtems_status_code  status;
-    ata_req_t          areq;
-    blkdev_request1    breq;
-    uint8_t            i, dev = 0;
     uint16_t          *buffer;
-#if ATA_EXEC_DEVICE_DIAGNOSTIC
-    uint16_t           ec;
-#endif
+    int                i, dev = 0;
     char               name[ATA_MAX_NAME_LENGTH];
     dev_t              device;
     ata_int_st_t      *int_st;
@@ -1169,12 +1244,6 @@ rtems_ata_initialize(rtems_device_major_number major,
      * requests should be formed; ATA requests contain block device request,
      * so form block device request first
      */
-    memset(&breq, 0, sizeof(blkdev_request1));
-    breq.req.req_done = NULL;
-    breq.req.done_arg = &breq;
-    breq.req.bufnum = 1;
-    breq.req.bufs[0].length = ATA_SECTOR_SIZE;
-    breq.req.bufs[0].buffer = buffer;
 
     /*
      * for each presented IDE controller execute EXECUTE DEVICE DIAGNOSTIC
@@ -1267,160 +1336,30 @@ rtems_ata_initialize(rtems_device_major_number major,
                                           IDE_REGISTER_DEVICE_CONTROL_nIEN);
         }
 
-#if ATA_EXEC_DEVICE_DIAGNOSTIC
-        /*
-         * Issue EXECUTE DEVICE DIAGNOSTIC ATA command for explore is
-         * there any ATA device on the controller.
-         *
-         * This command may fail and it assumes we have a master device and may
-         * be a slave device. I think the identify command will handle
-         * detection better than this method.
-         */
-        memset(&areq, 0, sizeof(ata_req_t));
-        areq.type = ATA_COMMAND_TYPE_NON_DATA;
-        areq.regs.to_write = ATA_REGISTERS_VALUE(IDE_REGISTER_COMMAND);
-        areq.regs.regs[IDE_REGISTER_COMMAND] =
-                                  ATA_COMMAND_EXECUTE_DEVICE_DIAGNOSTIC;
-        areq.regs.to_read = ATA_REGISTERS_VALUE(IDE_REGISTER_ERROR);
-
-        areq.breq = (rtems_blkdev_request *)&breq;
-
-        /*
-         * Process the request. Special processing of requests on
-         * initialization phase is needed because at this moment there
-         * is no multitasking enviroment
-         */
-        ata_process_request_on_init_phase(ctrl_minor, &areq);
-
-        /*
-         * check status of I/O operation
-         */
-        if (breq.req.status == RTEMS_SUCCESSFUL)
-        {
-          /* disassemble returned diagnostic codes */
-          if (areq.info == ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT)
-          {
-            printk("ATA: ctrl:%d: primary, secondary\n", ctrl_minor);
-            ATA_DEV_INFO(ctrl_minor,0).present = true;
-            ATA_DEV_INFO(ctrl_minor,1).present = true;
-          }
-          else if (areq.info == ATA_DEV0_PASSED_DEV1_FAILED)
-          {
-            printk("ATA: ctrl:%d: primary\n", ctrl_minor);
-            ATA_DEV_INFO(ctrl_minor,0).present = true;
-            ATA_DEV_INFO(ctrl_minor,1).present = false;
-          }
-          else if (areq.info < ATA_DEV1_PASSED_DEV0_FAILED)
-          {
-            printk("ATA: ctrl:%d: secondary\n", ctrl_minor);
-            ATA_DEV_INFO(ctrl_minor,0).present = false;
-            ATA_DEV_INFO(ctrl_minor,1).present = true;
-          }
-          else
-          {
-            printk("ATA: ctrl:%d: none\n", ctrl_minor);
-            ATA_DEV_INFO(ctrl_minor, 0).present = false;
-            ATA_DEV_INFO(ctrl_minor, 1).present = false;
-          }
-
-          /* refine the returned codes */
-          if (ATA_DEV_INFO(ctrl_minor, 1).present)
-          {
-            ide_controller_read_register(ctrl_minor, IDE_REGISTER_ERROR, &ec);
-            if (ec & ATA_DEV1_PASSED_DEV0_FAILED)
-            {
-              printk("ATA: ctrl:%d: secondary inforced\n", ctrl_minor);
-              ATA_DEV_INFO(ctrl_minor, 1).present = true;
-            }
-            else
-            {
-              printk("ATA: ctrl:%d: secondary removed\n", ctrl_minor);
-              ATA_DEV_INFO(ctrl_minor, 1).present = false;
-            }
-          }
-        }
-        else
-#endif
-        {
-          ATA_DEV_INFO(ctrl_minor, 0).present = true;
-          ATA_DEV_INFO(ctrl_minor,1).present = true;
-        }
+        ata_execute_device_diagnostic(ctrl_minor, buffer);
 
         /* for each found ATA device obtain it configuration */
         for (dev = 0; dev < 2; dev++)
         if (ATA_DEV_INFO(ctrl_minor, dev).present)
         {
-            /*
-             * Issue DEVICE IDENTIFY ATA command and get device
-             * configuration
-             */
-            memset(&areq, 0, sizeof(ata_req_t));
-            areq.type = ATA_COMMAND_TYPE_PIO_IN;
-            areq.regs.to_write = ATA_REGISTERS_VALUE(IDE_REGISTER_COMMAND);
-            areq.regs.regs[IDE_REGISTER_COMMAND] =
-                                              ATA_COMMAND_IDENTIFY_DEVICE;
-            areq.regs.to_read = ATA_REGISTERS_VALUE(IDE_REGISTER_STATUS);
-            areq.breq = (rtems_blkdev_request *)&breq;
+            status = ata_identify_device(
+               ctrl_minor,
+               dev,
+               buffer,
+               &ATA_DEV_INFO(ctrl_minor, dev));
+            if (status != RTEMS_SUCCESSFUL)
+               continue;
 
-            areq.cnt = breq.req.bufnum;
+	    /*
+	     * choose most appropriate ATA device data I/O speed supported
+	     * by the controller
+	     */
+	    status = ide_controller_config_io_speed(
+               ctrl_minor,
+               ATA_DEV_INFO(ctrl_minor, dev).modes_available);
+	    if (status != RTEMS_SUCCESSFUL)
+               continue;
 
-            areq.regs.regs[IDE_REGISTER_DEVICE_HEAD] |=
-                                    (dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS);
-
-            /*
-             * Process the request. Special processing of requests on
-             * initialization phase is needed because at this moment there
-             * is no multitasking enviroment
-             */
-            ata_process_request_on_init_phase(ctrl_minor, &areq);
-
-            /* check status of I/O operation */
-            if (breq.req.status != RTEMS_SUCCESSFUL)
-                continue;
-
-            /*
-             * Parse returned device configuration and fill in ATA internal
-             * device info structure
-             */
-            ATA_DEV_INFO(ctrl_minor, dev).cylinders =
-                CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_CURR_LOG_CLNDS]);
-            ATA_DEV_INFO(ctrl_minor, dev).heads =
-                CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_CURR_LOG_HEADS]);
-            ATA_DEV_INFO(ctrl_minor, dev).sectors =
-                CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_CURR_LOG_SECS]);
-            ATA_DEV_INFO(ctrl_minor, dev).lba_sectors =
-                CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS1]);
-            ATA_DEV_INFO(ctrl_minor, dev).lba_sectors <<= 16;
-            ATA_DEV_INFO(ctrl_minor, dev).lba_sectors += CF_LE_W(buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS0]);
-            ATA_DEV_INFO(ctrl_minor, dev).lba_avaible =
-                (CF_LE_W(buffer[ATA_IDENT_WORD_CAPABILITIES]) >> 9) & 0x1;
-
-            if ((CF_LE_W(buffer[ATA_IDENT_WORD_FIELD_VALIDITY]) &
-                 ATA_IDENT_BIT_VALID) == 0) {
-	      /* no "supported modes" info -> use default */
-	      ATA_DEV_INFO(ctrl_minor, dev).mode_active = ATA_MODES_PIO3;
-	    }
-	    else {
-	      ATA_DEV_INFO(ctrl_minor, dev).modes_available =
-		((CF_LE_W(buffer[64]) & 0x1) ? ATA_MODES_PIO3 : 0) |
-		((CF_LE_W(buffer[64]) & 0x2) ? ATA_MODES_PIO4 : 0) |
-		((CF_LE_W(buffer[63]) & 0x1) ? ATA_MODES_DMA0 : 0) |
-		((CF_LE_W(buffer[63]) & 0x2) ?
-		 ATA_MODES_DMA0 | ATA_MODES_DMA1 : 0) |
-		((CF_LE_W(buffer[63]) & 0x4) ?
-		 ATA_MODES_DMA0 | ATA_MODES_DMA1 | ATA_MODES_DMA2 : 0);
-	      if (ATA_DEV_INFO(ctrl_minor, dev).modes_available == 0)
-                continue;
-	      /*
-	       * choose most appropriate ATA device data I/O speed supported
-	       * by the controller
-	       */
-	      status = ide_controller_config_io_speed(
-                ctrl_minor,
-                ATA_DEV_INFO(ctrl_minor, dev).modes_available);
-	      if (status != RTEMS_SUCCESSFUL)
-                continue;
-	    }
             /*
              * Ok, let register new ATA device in the system
              */
@@ -1473,7 +1412,7 @@ rtems_ata_initialize(rtems_device_major_number major,
  * RETURNS:
  *     NONE
  */
-static void
+void
 ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
                                   ata_req_t                 *areq)
 {
@@ -1570,4 +1509,90 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
             areq->breq->status = RTEMS_IO_ERROR;
             break;
     }
+}
+
+void ata_breq_init(blkdev_request1 *breq, uint16_t *sector_buffer)
+{
+  memset(breq, 0, sizeof(*breq));
+
+  breq->req.done_arg = breq;
+  breq->req.bufnum = 1;
+  breq->req.bufs [0].length = ATA_SECTOR_SIZE;
+  breq->req.bufs [0].buffer = sector_buffer;
+}
+
+rtems_status_code ata_identify_device(
+  rtems_device_minor_number ctrl_minor,
+  int dev,
+  uint16_t *sector_buffer,
+  ata_dev_t *device_entry
+)
+{
+  ata_req_t areq;
+  blkdev_request1 breq;
+
+  ata_breq_init(&breq, sector_buffer);
+
+  /*
+   * Issue DEVICE IDENTIFY ATA command and get device
+   * configuration
+   */
+  memset(&areq, 0, sizeof(ata_req_t));
+  areq.type = ATA_COMMAND_TYPE_PIO_IN;
+  areq.regs.to_write = ATA_REGISTERS_VALUE(IDE_REGISTER_COMMAND);
+  areq.regs.regs [IDE_REGISTER_COMMAND] = ATA_COMMAND_IDENTIFY_DEVICE;
+  areq.regs.to_read = ATA_REGISTERS_VALUE(IDE_REGISTER_STATUS);
+  areq.breq = (rtems_blkdev_request *)&breq;
+  areq.cnt = breq.req.bufnum;
+  areq.regs.regs [IDE_REGISTER_DEVICE_HEAD] |=
+    dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS;
+
+  /*
+   * Process the request. Special processing of requests on
+   * initialization phase is needed because at this moment there
+   * is no multitasking enviroment
+   */
+  ata_process_request_on_init_phase(ctrl_minor, &areq);
+
+  /* check status of I/O operation */
+  if (breq.req.status != RTEMS_SUCCESSFUL) {
+    return RTEMS_IO_ERROR;
+  }
+
+  /*
+   * Parse returned device configuration and fill in ATA internal
+   * device info structure
+   */
+  device_entry->cylinders =
+      CF_LE_W(sector_buffer[ATA_IDENT_WORD_NUM_OF_CURR_LOG_CLNDS]);
+  device_entry->heads =
+      CF_LE_W(sector_buffer[ATA_IDENT_WORD_NUM_OF_CURR_LOG_HEADS]);
+  device_entry->sectors =
+      CF_LE_W(sector_buffer[ATA_IDENT_WORD_NUM_OF_CURR_LOG_SECS]);
+  device_entry->lba_sectors =
+      CF_LE_W(sector_buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS1]);
+  device_entry->lba_sectors <<= 16;
+  device_entry->lba_sectors += CF_LE_W(sector_buffer[ATA_IDENT_WORD_NUM_OF_USR_SECS0]);
+  device_entry->lba_avaible =
+      (CF_LE_W(sector_buffer[ATA_IDENT_WORD_CAPABILITIES]) >> 9) & 0x1;
+
+  if ((CF_LE_W(sector_buffer[ATA_IDENT_WORD_FIELD_VALIDITY]) &
+       ATA_IDENT_BIT_VALID) == 0) {
+    /* no "supported modes" info -> use default */
+    device_entry->mode_active = ATA_MODES_PIO3;
+  } else {
+    device_entry->modes_available =
+      ((CF_LE_W(sector_buffer[64]) & 0x1) ? ATA_MODES_PIO3 : 0) |
+      ((CF_LE_W(sector_buffer[64]) & 0x2) ? ATA_MODES_PIO4 : 0) |
+      ((CF_LE_W(sector_buffer[63]) & 0x1) ? ATA_MODES_DMA0 : 0) |
+      ((CF_LE_W(sector_buffer[63]) & 0x2) ?
+       ATA_MODES_DMA0 | ATA_MODES_DMA1 : 0) |
+      ((CF_LE_W(sector_buffer[63]) & 0x4) ?
+       ATA_MODES_DMA0 | ATA_MODES_DMA1 | ATA_MODES_DMA2 : 0);
+    if (device_entry->modes_available == 0) {
+      return RTEMS_IO_ERROR;
+    }
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
