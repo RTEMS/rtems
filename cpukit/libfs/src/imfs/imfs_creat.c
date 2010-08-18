@@ -76,12 +76,11 @@ IMFS_jnode_t *IMFS_create_node(
   } else if ( type == IMFS_LINEAR_FILE ) {
     node->info.linearfile.size      = 0;
     node->info.linearfile.direct    = 0;
-    if ( type == IMFS_MEMORY_FILE ) {
+  } else if ( type == IMFS_MEMORY_FILE ) {
       node->info.file.size            = 0;
       node->info.file.indirect        = 0;
       node->info.file.doubly_indirect = 0;
       node->info.file.triply_indirect = 0;
-    }
   } else if ( type == IMFS_FIFO ) {
     node->info.fifo.pipe = NULL;
   } else {

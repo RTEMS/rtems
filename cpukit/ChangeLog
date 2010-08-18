@@ -1,3 +1,9 @@
+2010-08-18	Chris Johns <chrisj@rtems.org>
+
+	PR 1677/filesystem
+	* libfs/src/imfs/imfs_creat.c: Fix creating of a file. Lost in the
+	change from a switch statement.
+
 2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/include/rtems/posix/aio_misc.h: Remove
