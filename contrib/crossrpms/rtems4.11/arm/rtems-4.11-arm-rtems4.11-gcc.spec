@@ -58,7 +58,7 @@ Summary:      	arm-rtems4.11 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	4%{?dist}
+Release:      	5%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -77,6 +77,10 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # FIXME: Disable GCC-plugin
 # Bug in gcc-4.5-20100318, doesn't build them on x86_84 hosts.
 %bcond_with plugin
+
+# EXPERIMENTAL: Use gcc's stdint.h instead of newlib's
+# Should be applicable to gcc >= 4.5.0
+%bcond_with gcc_stdint
 
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
@@ -254,7 +258,7 @@ BuildRequires:	rtems-4.11-arm-rtems4.11-binutils
 Requires:	rtems-4.11-gcc-common
 Requires:	rtems-4.11-arm-rtems4.11-binutils
 Requires:	rtems-4.11-arm-rtems4.11-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-19%{?dist}
+Requires:	rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-20%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -268,7 +272,7 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 
 %if "%{gcc_version}" == "4.5.1"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.1-rtems4.11-20100726.diff
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.1-rtems4.11-20100818.diff
 %endif
 %if "%{gcc_version}" == "4.5.0"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -326,12 +330,19 @@ cd ..
 
 
 
+%if %{with gcc_stdint}
+sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/use_gcc_stdint=provide/}' gcc-%{gcc_pkgvers}/gcc/config.gcc
+%endif
+
 %setup -q -T -D -n %{name}-%{version} -a50
 cd newlib-%{newlib_version}
 %{?PATCH50:%patch50 -p1}
 cd ..
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
+%if %{with gcc_stdint}
+rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
+%endif
 
 %if 0%{?_build_mpfr}
 %setup -q -T -D -n %{name}-%{version} -a60
@@ -361,7 +372,7 @@ cd ..
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-4%{?dist}/newlib-%{newlib_version}-19%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-5%{?dist}/newlib-%{newlib_version}-20%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -631,7 +642,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.11-arm-rtems4.11-binutils
-# Requires:       rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-19%{?dist}
+# Requires:       rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-20%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -649,7 +660,7 @@ Summary:        libgcc for arm-rtems4.11-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-19%{?dist}
+Requires:       rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-20%{?dist}
 License:	GPL
 
 %description -n rtems-4.11-arm-rtems4.11-gcc-libgcc
@@ -823,7 +834,7 @@ Summary:      	C Library (newlib) for arm-rtems4.11
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        19%{?dist}
+Release:        20%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.11-newlib-common
@@ -844,7 +855,7 @@ Newlib C Library for arm-rtems4.11.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        19%{?dist}
+Release:        20%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
