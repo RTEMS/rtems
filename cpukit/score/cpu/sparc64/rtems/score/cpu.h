@@ -570,10 +570,10 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
  *  The SPARC supports a software based interrupt stack and these
  *  are required.
  */
-
+/*
 SCORE_EXTERN void *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void *_CPU_Interrupt_stack_high;
-
+*/
 /*
  *  This flag is context switched with each thread.  It indicates
  *  that THIS thread has an _ISR_Dispatch stack frame on its stack.
