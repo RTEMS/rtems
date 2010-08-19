@@ -1,9 +1,5 @@
 *** POSIX TEST -- ENOSYS ***
-aio_read -- ENOSYS
-aio_write -- ENOSYS
 lio_listio -- ENOSYS
-aio_error -- ENOSYS
-aio_return -- ENOSYS
 aio_cancel -- ENOSYS
 aio_suspend -- ENOSYS
 aio_fsync -- ENOSYS

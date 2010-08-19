@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,24 +52,8 @@ void *POSIX_Init(
 
   puts( "\n\n*** POSIX TEST -- ENOSYS ***" );
 
-  puts( "aio_read -- ENOSYS" );
-  sc = aio_read( NULL );
-  check_enosys( sc );
-
-  puts( "aio_write -- ENOSYS" );
-  sc = aio_write( NULL );
-  check_enosys( sc );
-
   puts( "lio_listio -- ENOSYS" );
   sc = lio_listio( 0, NULL, 0, NULL );
-  check_enosys( sc );
-
-  puts( "aio_error -- ENOSYS" );
-  sc = aio_error( NULL );
-  check_enosys( sc );
-
-  puts( "aio_return -- ENOSYS" );
-  sc = aio_return( NULL );
   check_enosys( sc );
 
   puts( "aio_cancel -- ENOSYS" );

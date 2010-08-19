@@ -1,5 +1,10 @@
 2010-08-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* psxenosys/init.c, psxenosys/psxenosys.scn: Update to reflect AIO
+	submission.
+
+2010-08-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* psxaio01/.cvsignore, psxaio02/.cvsignore: New files.
 
 2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
