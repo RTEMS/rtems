@@ -1,3 +1,11 @@
+2010-08-19	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1680/cpukit
+	* score/src/isr.c: Correct initialization of _CPU_Interrupt_stack_high
+	to properly do the alignment. This most likely only would have caused
+	a propblem on CPUs where the stack grows down and have strict
+	alignment.
+
 2010-08-18	Chris Johns <chrisj@rtems.org>
 
 	PR 1677/filesystem

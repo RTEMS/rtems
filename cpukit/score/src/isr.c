@@ -63,7 +63,7 @@ void _ISR_Handler_initialization( void )
   );
 
   _CPU_Interrupt_stack_high = (void *)
-    ((uintptr_t) _CPU_Interrupt_stack_high & ~CPU_STACK_ALIGNMENT);
+    ((uintptr_t) _CPU_Interrupt_stack_high & ~(CPU_STACK_ALIGNMENT - 1));
 
   /* Interrupt stack might have to be aligned and/or setup
    * in a specific way.
