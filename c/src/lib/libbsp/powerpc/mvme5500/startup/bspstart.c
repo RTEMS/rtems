@@ -58,7 +58,8 @@
 extern uint32_t probeMemoryEnd(void); /* from shared/startup/probeMemoryEnd.c */
 
 
-BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
+BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 extern void _return_to_ppcbug(void);
 extern unsigned long __rtems_end[];
