@@ -68,6 +68,9 @@ extern "C" {
 }
 #endif
 
+#define lm32_read_interrupts( _ip) \
+  asm volatile ("rcsr %0, ip":"=r"(_ip));
+
 #define lm32_disable_interrupts( _level ) \
   do { register uint32_t ie; \
     asm volatile ("rcsr %0,ie":"=r"(ie)); \

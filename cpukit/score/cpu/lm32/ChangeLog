@@ -1,3 +1,7 @@
+2010-08-20	<yann.sionneau@telecom-sudparis.eu>
+
+	* rtems/score/lm32.h: Add lm32_read_interrupts().
+
 2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1599/cpukit
