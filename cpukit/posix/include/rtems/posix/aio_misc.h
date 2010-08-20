@@ -27,7 +27,7 @@ extern "C"
 #endif
 
   /* Actual request being processed */
-  typedef struct rtems_aio_request_s
+  typedef struct
   {
     int policy;                 /* If _POSIX_PRIORITIZED_IO and 
 		                   _POSIX_PRIORITY_SCHEDULING are defined */ 
@@ -37,7 +37,7 @@ extern "C"
     struct aiocb *aiocbp;       /* aio control block */
   } rtems_aio_request;
 
-  typedef struct rtems_aio_request_chain_s
+  typedef struct
   {
     int fildes;                 /* file descriptor to be processed */  
     int new_fd;                 /* if this is a newly created chain */
@@ -48,7 +48,7 @@ extern "C"
 
   } rtems_aio_request_chain;
 
-  typedef struct rtems_aio_queue_s
+  typedef struct
   {
     pthread_mutex_t mutex;
     pthread_cond_t new_req;
