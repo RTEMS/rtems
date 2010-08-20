@@ -1,3 +1,11 @@
+2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
+
+	* posix/include/aio.h: Add LIO_SYNC.
+	* posix/include/rtems/posix/aio_misc.h: Add aio_request_queue,
+	Cosmetics.
+	* posix/src/aio_cancel.c, posix/src/aio_fsync.c, posix/src/aio_misc.c:
+	Rework.
+
 2010-08-19	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1680/cpukit

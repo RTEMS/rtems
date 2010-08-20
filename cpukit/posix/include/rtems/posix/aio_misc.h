@@ -62,6 +62,8 @@ extern "C"
 
   } rtems_aio_queue;
 
+rtems_aio_queue aio_request_queue;
+
 #define AIO_QUEUE_INITIALIZED 0xB00B
 
 #ifndef AIO_MAX_THREADS
@@ -72,11 +74,17 @@ extern "C"
 #define AIO_MAX_QUEUE_SIZE 30
 #endif
 
-extern int rtems_aio_init (void);
-extern int rtems_aio_enqueue (rtems_aio_request * req);
-extern rtems_aio_request_chain *rtems_aio_search_fd (rtems_chain_control *
-                                                       chain, int fildes,
-                                                       int create);
+int rtems_aio_init (void);
+int rtems_aio_enqueue (rtems_aio_request *req);
+rtems_aio_request_chain *rtems_aio_search_fd 
+(
+  rtems_chain_control *chain,
+  int fildes,
+  int create
+);
+void rtems_aio_remove_fd (rtems_aio_request_chain *r_chain);
+int rtems_aio_remove_req (rtems_chain_control *chain,
+				 struct aiocb *aiocbp);
 
 #ifdef RTEMS_DEBUG
 #include <assert.h>

@@ -1,14 +1,11 @@
 /*
- *  6.7.7 Cancel Asynchronous I/O Operation, P1003.1b-1993, p. 163
+ * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
+ * 
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  *
- *  COPYRIGHT (c) 1989-2007.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
+ * $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -16,15 +13,112 @@
 #endif
 
 #include <aio.h>
+#include <rtems/posix/aio_misc.h>
 #include <errno.h>
-
+#include <stdlib.h>
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 
-int aio_cancel(
-  int            filedes __attribute__((unused)),
-  struct aiocb  *aiocbp __attribute__((unused))
-)
+/* 
+ *  aio_cancel
+ *
+ * Cancel an asynchronous I/O request
+ *
+ *  Input parameters:
+ *        fildes - file descriptor
+ *        aiocbp - asynchronous I/O control block
+ *
+ *  Output parameters: 
+ *        AIO_CANCELED    - if the requested operation(s)
+ *                          were canceled
+ *        AIO_NOTCANCELED - if at least one of the requested
+ *                          operation(s) cannot be canceled
+ */
+
+
+int aio_cancel(int fildes, struct aiocb  *aiocbp)
 {
-  rtems_set_errno_and_return_minus_one( ENOSYS );
+  rtems_aio_request_chain *r_chain;
+  int result;
+  
+  pthread_mutex_lock (&aio_request_queue.mutex);
+
+  if (aiocbp == NULL)
+    {
+      if (fcntl (fildes, F_GETFL) < 0)
+	rtems_set_errno_and_return_minus_one (EBADF);
+      
+      r_chain = rtems_aio_search_fd (&aio_request_queue.work_req,
+				     fildes,
+				     0);
+      if (r_chain == NULL)
+	{
+	  if (!rtems_chain_is_empty (&aio_request_queue.idle_req))
+	    {
+	      r_chain = rtems_aio_search_fd (&aio_request_queue.idle_req,
+					     fildes,
+					     0);
+	      if (r_chain == NULL)
+		return AIO_ALLDONE;
+
+	      rtems_chain_extract (&r_chain->next_fd);	
+	      rtems_aio_remove_fd (r_chain);
+	      pthread_mutex_destroy (&r_chain->mutex);
+	      pthread_cond_destroy (&r_chain->mutex);
+	      free (r_chain);
+
+	      pthread_mutex_unlock (&aio_request_queue.mutex);
+	      return AIO_CANCELED;
+	    }
+
+	  pthread_mutex_unlock (&aio_request_queue.mutex);
+	  return AIO_ALLDONE;
+	}
+
+      pthread_mutex_lock (&r_chain->mutex);
+      rtems_chain_extract (&r_chain->next_fd);
+      rtems_aio_remove_fd (r_chain);
+      pthread_mutex_unlock (&r_chain->mutex);
+      pthread_mutex_unlock (&aio_request_queue.mutex);
+      return AIO_CANCELED;
+    }
+  else 
+    {
+      if (aiocbp->aio_fildes != fildes)
+	{
+	  pthread_mutex_unlock (&aio_request_queue.mutex);
+	  rtems_set_errno_and_return_minus_one (EINVAL);
+	}
+      
+      r_chain = rtems_aio_search_fd (&aio_request_queue.work_req,
+				     fildes,
+				     0);
+      if (r_chain == NULL)
+	if (!rtems_chain_is_empty (&aio_request_queue.idle_req))
+	  {
+	    r_chain = rtems_aio_search_fd (&aio_request_queue.idle_req,
+					   fildes,
+					   0);
+	    if (r_chain == NULL)
+	      { 
+		pthread_mutex_unlock (&aio_request_queue.mutex);
+		rtems_set_errno_and_return_minus_one (EINVAL);
+	      }      
+
+	    result = rtems_aio_remove_req (&r_chain->next_fd, aiocbp);
+	    pthread_mutex_unlock (&aio_request_queue.mutex);
+	    return result;
+
+	  }
+      
+      pthread_mutex_lock (&r_chain->mutex);
+      result = rtems_aio_remove_req (&r_chain->next_fd, aiocbp);
+      pthread_mutex_unlock (&r_chain->mutex);
+      pthread_mutex_unlock (&aio_request_queue.mutex);
+      return result;
+   
+    }
+  
+  return AIO_ALLDONE;
+  
 }

@@ -10,12 +10,9 @@
 
 #include <pthread.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <time.h>
 #include <rtems/posix/aio_misc.h>
-
-
-
-rtems_aio_queue aio_request_queue;
 
 static void *rtems_aio_handle (void *arg);
 
@@ -90,7 +87,7 @@ rtems_aio_init (void)
  */
 
 rtems_aio_request_chain *
-rtems_aio_search_fd (rtems_chain_control * chain, int fildes, int create)
+rtems_aio_search_fd (rtems_chain_control *chain, int fildes, int create)
 {
   rtems_aio_request_chain *r_chain;
   rtems_chain_node *node;
@@ -138,7 +135,7 @@ rtems_aio_search_fd (rtems_chain_control * chain, int fildes, int create)
  */
 
 void
-rtems_aio_insert_prio (rtems_chain_control * chain, rtems_aio_request * req)
+rtems_aio_insert_prio (rtems_chain_control *chain, rtems_aio_request *req)
 {
   rtems_chain_node *node;
 
@@ -248,7 +245,7 @@ int rtems_aio_remove_req (rtems_chain_control *chain, struct aiocb *aiocbp)
  */
 
 int
-rtems_aio_enqueue (rtems_aio_request * req)
+rtems_aio_enqueue (rtems_aio_request *req)
 {
 
   rtems_aio_request_chain *r_chain;
@@ -266,9 +263,6 @@ rtems_aio_enqueue (rtems_aio_request * req)
     return result;
   }
 
-  /* used to check if we can create more threads */
-  int chain_type;
-
   /* _POSIX_PRIORITIZED_IO and _POSIX_PRIORITY_SCHEDULING are defined, 
      we can use aio_reqprio to lower the priority of the request */
   pthread_getschedparam (pthread_self(), &policy, &param);
@@ -279,81 +273,69 @@ rtems_aio_enqueue (rtems_aio_request * req)
   req->aiocbp->error_code = EINPROGRESS;
   req->aiocbp->return_value = 0;
 
-  if (AIO_MAX_THREADS >
-      (aio_request_queue.active_threads + aio_request_queue.idle_threads)) {
-    chain_type = 0;
-    chain = &aio_request_queue.work_req;
-  } else {
-    chain = &aio_request_queue.idle_req;
-    chain_type = 1;
-  }
-
-  /* we still have empty places on the active_threads chain */
-  if (chain_type == 0) {
-    r_chain = rtems_aio_search_fd (chain, req->aiocbp->aio_fildes, 1);
-
-    if (r_chain->new_fd == 1) {
-      rtems_chain_prepend (&r_chain->perfd, &req->next_prio);
-      r_chain->new_fd = 0;
-      pthread_mutex_init (&r_chain->mutex, NULL);
-      pthread_cond_init (&r_chain->cond, NULL);
-
-      /* if there are idle threads and this is a new fd chain
-         there's no need to create another thread */ 	 
-      if (aio_request_queue.idle_threads > 0) {
-        result = pthread_cond_signal (&aio_request_queue.new_req);
-        if (result != 0) {
-          pthread_mutex_unlock (&aio_request_queue.mutex);
-          return result;
-        }
-      } else {
-
-	/* if this is a new fd chain and no threads are idle create
-	   new thread */
-        AIO_printf ("New thread");
-        result = pthread_create (&thid, &aio_request_queue.attr,
-                                 rtems_aio_handle, (void *) r_chain);
-        if (result != 0) {
-          pthread_mutex_unlock (&aio_request_queue.mutex);
-          return result;
-        }
-        ++aio_request_queue.active_threads;
+  if ((aio_request_queue.idle_threads == 0) &&
+      aio_request_queue.active_threads < AIO_MAX_THREADS)
+    /* we still have empty places on the active_threads chain */
+    {
+      chain = &aio_request_queue.work_req;
+      r_chain = rtems_aio_search_fd (chain, req->aiocbp->aio_fildes, 1);
+      
+      if (r_chain->new_fd == 1) {
+	rtems_chain_prepend (&r_chain->perfd, &req->next_prio);
+	r_chain->new_fd = 0;
+	pthread_mutex_init (&r_chain->mutex, NULL);
+	pthread_cond_init (&r_chain->cond, NULL);
+	
+	AIO_printf ("New thread");
+	result = pthread_create (&thid, &aio_request_queue.attr,
+				 rtems_aio_handle, (void *) r_chain);
+	if (result != 0) {
+	  pthread_mutex_unlock (&aio_request_queue.mutex);
+	  return result;
+	}
+	++aio_request_queue.active_threads;
       }
-    } else {
-      /* put request in the fd chain it belongs to */
-      pthread_mutex_lock (&r_chain->mutex);
-      rtems_aio_insert_prio (&r_chain->perfd, req);
-      pthread_cond_signal (&r_chain->cond);
-      pthread_mutex_unlock (&r_chain->mutex);
-    }
-  } else {
-    /* the maximum number of threads has been already created
-       even though some of them might be idle.
-       The request belongs to one of the active fd chain */
-    r_chain = rtems_aio_search_fd (&aio_request_queue.work_req,
-                                   req->aiocbp->aio_fildes, 0);
-    if (r_chain != NULL)
-      {
+      else {
+	/* put request in the fd chain it belongs to */
 	pthread_mutex_lock (&r_chain->mutex);
 	rtems_aio_insert_prio (&r_chain->perfd, req);
 	pthread_cond_signal (&r_chain->cond);
 	pthread_mutex_unlock (&r_chain->mutex);
-      
-      } else {
-      
-      /* or to the idle chain */
-      r_chain = rtems_aio_search_fd (chain, req->aiocbp->aio_fildes, 1);
-      
-      if (r_chain->new_fd == 1) {
-	/* If this is a new fd chain we signal the idle threads that
-	   might be waiting for requests */
-        rtems_chain_prepend (&r_chain->perfd, &req->next_prio);
-	pthread_cond_signal (&aio_request_queue.new_req);
-      } else
-	/* just insert the request in the existing fd chain */
-        rtems_aio_insert_prio (&r_chain->perfd, req);
+      }
     }
-  }
+  else 
+    {
+      /* the maximum number of threads has been already created
+	 even though some of them might be idle.
+	 The request belongs to one of the active fd chain */
+      r_chain = rtems_aio_search_fd (&aio_request_queue.work_req,
+				     req->aiocbp->aio_fildes, 0);
+      if (r_chain != NULL)
+	{
+	  pthread_mutex_lock (&r_chain->mutex);
+	  rtems_aio_insert_prio (&r_chain->perfd, req);
+	  pthread_cond_signal (&r_chain->cond);
+	  pthread_mutex_unlock (&r_chain->mutex);
+	    
+	} else {
+      
+	/* or to the idle chain */
+	chain = &aio_request_queue.idle_req;
+	r_chain = rtems_aio_search_fd (chain, req->aiocbp->aio_fildes, 1);
+      
+	if (r_chain->new_fd == 1) {
+	  /* If this is a new fd chain we signal the idle threads that
+	     might be waiting for requests */
+	  rtems_chain_prepend (&r_chain->perfd, &req->next_prio);
+	  r_chain->new_fd = 0;
+	  pthread_mutex_init (&r_chain->mutex, NULL);
+	  pthread_cond_init (&r_chain->cond, NULL);
+	  pthread_cond_signal (&aio_request_queue.new_req);
+	} else
+	  /* just insert the request in the existing fd chain */
+	  rtems_aio_insert_prio (&r_chain->perfd, req);
+      }
+    }
 
   pthread_mutex_unlock (&aio_request_queue.mutex);
   return 0;
@@ -428,6 +410,10 @@ rtems_aio_handle (void *arg)
                          (void *) req->aiocbp->aio_buf,
                          req->aiocbp->aio_nbytes, req->aiocbp->aio_offset);
         break;
+        
+      case LIO_SYNC:
+      	result = fsync (req->aiocbp->aio_fildes);
+      	break;
 
       default:
         result = -1;

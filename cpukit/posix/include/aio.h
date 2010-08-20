@@ -54,6 +54,7 @@ extern "C" {
 #define LIO_READ        2 /* request a read() */
 #define LIO_WRITE       3 /* request a write() */
 #define LIO_NOP         4 /* no transfer is requested */
+#define LIO_SYNC	5 /* needed by aio_fsync() */
 
 /*
  *  6.7.1.1 Asynchronous I/O Control Block, P1003.1b-1993, p. 151
