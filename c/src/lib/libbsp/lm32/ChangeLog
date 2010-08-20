@@ -1,3 +1,8 @@
+2010-08-20	<yann.sionneau@telecom-sudparis.eu>
+
+	* acinclude.m4, configure.ac: Add Milkymist BSP developed as part of
+	GSOC 2010.
+
 2010-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/start/start.S: Finish merging change.
