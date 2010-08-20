@@ -1,5 +1,10 @@
 2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/aio.h: Separate LIO-modes from LIO-opcodes (From
+	freebsd).
+
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* sapi/include/rtems/chain.h: Move extern "C".
 
 2010-08-16	Alin Rus <alin.codejunkie@gmail.com>

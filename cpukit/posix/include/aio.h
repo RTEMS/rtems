@@ -46,15 +46,22 @@ extern "C" {
 
 /* lio_listio() options */
 
+/*
+ * LIO modes
+ */
 #define LIO_WAIT        0 /* calling process is to suspend until the */
                           /*   operation is complete */
 #define LIO_NOWAIT      1 /* calling process is to continue execution while */
                           /*   the operation is performed and no notification */
                           /*   shall be given when the operation is completed */
-#define LIO_READ        2 /* request a read() */
-#define LIO_WRITE       3 /* request a write() */
-#define LIO_NOP         4 /* no transfer is requested */
-#define LIO_SYNC	5 /* needed by aio_fsync() */
+
+/*
+ * LIO opcodes
+ */
+#define LIO_NOP         0 /* no transfer is requested */
+#define LIO_READ        1 /* request a read() */
+#define LIO_WRITE       2 /* request a write() */
+#define LIO_SYNC        3 /* needed by aio_fsync() */
 
 /*
  *  6.7.1.1 Asynchronous I/O Control Block, P1003.1b-1993, p. 151
