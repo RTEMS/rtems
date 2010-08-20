@@ -22,12 +22,12 @@
 #ifndef _RTEMS_CHAIN_H
 #define _RTEMS_CHAIN_H
 
+#include <rtems/system.h>
+#include <rtems/score/chain.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
 
 /**
  * @typedef rtems_chain_node

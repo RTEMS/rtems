@@ -1,3 +1,7 @@
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sapi/include/rtems/chain.h: Move extern "C".
+
 2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
 
 	* posix/include/aio.h: Add LIO_SYNC.
