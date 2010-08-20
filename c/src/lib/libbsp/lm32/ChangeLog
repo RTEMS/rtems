@@ -1,5 +1,16 @@
 2010-08-20	<yann.sionneau@telecom-sudparis.eu>
 
+	* shared/milkymist_ac97/ac97.c, shared/milkymist_clock/ckinit.c,
+	shared/milkymist_clock/clock.h, shared/milkymist_console/console.c,
+	shared/milkymist_console/uart.c, shared/milkymist_console/uart.h,
+	shared/milkymist_framebuffer/framebuffer.c,
+	shared/milkymist_gpio/gpio.c, shared/milkymist_networking/mm_crc32.c,
+	shared/milkymist_networking/network.c,
+	shared/milkymist_networking/network.h,
+	shared/milkymist_timer/timer.c: New files.
+
+2010-08-20	<yann.sionneau@telecom-sudparis.eu>
+
 	* acinclude.m4, configure.ac: Add Milkymist BSP developed as part of
 	GSOC 2010.
 
