@@ -1,0 +1,21 @@
+#
+# $Id$
+#
+
+This is a BSP written by Yann Sionneau <yann.sionneau@telecom-sudparis.eu>
+as part of Google Summer of Code 2010.
+
+This is a BSP to make RTEMS run on Milkymist One board using Milkymist SoC
+
+It provides driver for timer, uart, ethernet, framebuffer so far.
+
+Milkymist SoC is running @ 83 MHz with 128 MB of 32-bit DDR400 SDRAM
+The SoC is based on a XC6SLX45 Spartan-6 FPGA running 
+the LatticeMico32 softcore.
+
+More informations available at : http://www.milkymist.org/
+
+Information about the porting can be found in Yann Sionneau's blog
+at http://sionneau.net/
+
+Milkymist is a project leaded by Sebastien Bourdeauducq (aka lekernel)
