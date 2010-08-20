@@ -1,3 +1,7 @@
+2010-08-20	<yann.sionneau@telecom-sudparis.eu>
+
+	* libmisc/fb/fb.h: Add constants for buffer modes.
+
 2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/include/rtems/posix/aio_misc.h: Add decl for aio_request_queue.
