@@ -268,6 +268,6 @@ debug_putc_onlcr(const char c)
   for (i=0;i<0x0fff;i++);
 }
 
-BSP_output_char_function_type   BSP_output_char = debug_putc_onlcr;
-/* const char arg to be compatible with BSP_output_char decl. */
+BSP_output_char_function_type     BSP_output_char = debug_putc_onlcr;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
