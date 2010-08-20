@@ -62,7 +62,7 @@ extern "C"
 
   } rtems_aio_queue;
 
-rtems_aio_queue aio_request_queue;
+extern rtems_aio_queue aio_request_queue;
 
 #define AIO_QUEUE_INITIALIZED 0xB00B
 

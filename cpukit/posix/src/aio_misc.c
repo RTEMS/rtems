@@ -16,6 +16,8 @@
 
 static void *rtems_aio_handle (void *arg);
 
+rtems_aio_queue aio_request_queue;
+
 /* 
  *  rtems_aio_init
  *

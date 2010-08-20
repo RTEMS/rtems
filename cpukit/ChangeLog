@@ -1,5 +1,10 @@
 2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/rtems/posix/aio_misc.h: Add decl for aio_request_queue.
+	* posix/src/aio_misc.c: Add aio_request_queue.
+
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/include/rtems/posix/aio_misc.h: Remove rtems_aio_request_s,
 	rtems_aio_request_chain_s, rtems_aio_queue_s;
 	* posix/include/aio.h: Separate LIO-modes from LIO-opcodes (From
