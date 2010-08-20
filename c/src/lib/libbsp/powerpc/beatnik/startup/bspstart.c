@@ -54,7 +54,8 @@
 
 #define SHOW_MORE_INIT_SETTINGS
 
-BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
+BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 extern char *BSP_build_date;
 extern void bsp_cleanup(void);
