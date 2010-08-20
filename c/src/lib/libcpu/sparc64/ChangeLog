@@ -1,3 +1,12 @@
+2010-08-20	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1681/cpukit
+	* shared/score/interrupt.S: With the percpu patch, ASM uses
+	INTERRUPT_STACK_HIGH instead of _CPU_Interrupt_stack_high. The
+	sparc64 was still using the old variable, which was declared in its
+	cpu.h file. This patch to comment out the declaration and switch to
+	using INTERRUPT_STACK_HIGH.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1573/cpukit

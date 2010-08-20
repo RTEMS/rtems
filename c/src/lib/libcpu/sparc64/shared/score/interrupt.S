@@ -195,7 +195,7 @@ PUBLIC(_ISR_Handler)
   subcc    %g4, 1, %g4             ! outermost interrupt handler?
   bnz      dont_switch_stacks      ! No, then do not switch stacks
 
-  setx  SYM(_CPU_Interrupt_stack_high), %o5, %g1
+  setx  SYM(INTERRUPT_STACK_HIGH), %o5, %g1
   ldx  [%g1], %sp
 
   /*
