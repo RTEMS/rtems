@@ -82,7 +82,6 @@ int open(
   if ( ( status & _FWRITE ) == _FWRITE )
     eval_flags |= RTEMS_LIBIO_PERMS_WRITE;
 
-
   va_start(ap, flags);
 
   mode = va_arg( ap, int );
