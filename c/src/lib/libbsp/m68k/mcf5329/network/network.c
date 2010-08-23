@@ -121,13 +121,14 @@ static rtems_isr mcf5329_fec_tx_interrupt_handler(rtems_vector_number v)
   rtems_event_send(enet_driver[0].txDaemonTid, TX_INTERRUPT_EVENT);
 }
 
+extern char _CoreSRamBase[];
+
 /*
  * Allocate buffer descriptors from (non-cached) on-chip static RAM
  * Ensure 128-bit (16-byte) alignment
  */
 static mcf5329BufferDescriptor_t *mcf5329_bd_allocate(unsigned int count)
 {
-  extern char _CoreSRamBase[];
   static mcf5329BufferDescriptor_t *bdp =
     (mcf5329BufferDescriptor_t *) _CoreSRamBase;
   mcf5329BufferDescriptor_t *p = bdp;
