@@ -1,7 +1,7 @@
 /*
  *  read() - POSIX 1003.1b 6.4.1 - Read From a File
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,9 +33,6 @@ ssize_t read(
   rtems_libio_check_buffer( buffer );
   rtems_libio_check_count( count );
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ );
-
-  if ( count == 0 )
-    return 0;
 
   /*
    *  Now process the read().

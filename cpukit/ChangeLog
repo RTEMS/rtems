@@ -1,5 +1,10 @@
 2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/read.c, libcsupport/src/write.c: Remove redundant
+	check for 0 size request.
+
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/open.c: Spacing.
 
 2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>

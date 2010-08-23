@@ -1,7 +1,7 @@
 /*
  *  write() - POSIX 1003.1b 6.4.2 - Write to a File
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -40,9 +40,6 @@ ssize_t write(
   rtems_libio_check_buffer( buffer );
   rtems_libio_check_count( count );
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
-
-  if ( count == 0 )
-    return 0;
 
   /*
    *  Now process the write() request.
