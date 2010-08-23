@@ -49,5 +49,6 @@ int ioctl(
    */
   rc = (*iop->pathinfo.handlers->ioctl_h)( iop, command, buffer );
 
+  va_end( ap );
   return rc;
 }

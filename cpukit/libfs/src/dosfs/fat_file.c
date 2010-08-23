@@ -692,7 +692,7 @@ fat_file_ioctl(
 
             /* sanity check */
             if ( pos >= fat_fd->fat_file_size ) {
-                va_end();
+                va_end(ap);
                 rtems_set_errno_and_return_minus_one( EIO );
             }
 

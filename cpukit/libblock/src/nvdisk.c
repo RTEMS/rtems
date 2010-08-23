@@ -175,6 +175,7 @@ rtems_nvdisk_printf (const rtems_nvdisk* nvd, const char *format, ...)
     ret =  vfprintf (stdout, format, args);
     fprintf (stdout, "\n");
     fflush (stdout);
+    va_end (args);
   }
   return ret;
 }
@@ -199,6 +200,7 @@ rtems_nvdisk_info (const rtems_nvdisk* nvd, const char *format, ...)
     ret =  vfprintf (stdout, format, args);
     fprintf (stdout, "\n");
     fflush (stdout);
+    va_end (args);
   }
   return ret;
 }
@@ -223,6 +225,7 @@ rtems_nvdisk_warning (const rtems_nvdisk* nvd, const char *format, ...)
     ret =  vfprintf (stdout, format, args);
     fprintf (stdout, "\n");
     fflush (stdout);
+    va_end (args);
   }
   return ret;
 }
@@ -245,6 +248,7 @@ rtems_nvdisk_error (const char *format, ...)
   ret =  vfprintf (stderr, format, args);
   fprintf (stderr, "\n");
   fflush (stderr);
+  va_end (args);
   return ret;
 }
 

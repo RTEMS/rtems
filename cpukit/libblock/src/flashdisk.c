@@ -344,6 +344,7 @@ rtems_fdisk_printf (const rtems_flashdisk* fd, const char *format, ...)
     ret =  vfprintf (stdout, format, args);
     fprintf (stdout, "\n");
     fflush (stdout);
+    va_end (args);
   }
   return ret;
 }
@@ -368,6 +369,7 @@ rtems_fdisk_info (const rtems_flashdisk* fd, const char *format, ...)
     ret =  vfprintf (stdout, format, args);
     fprintf (stdout, "\n");
     fflush (stdout);
+    va_end (args);
   }
   return ret;
 }
@@ -392,6 +394,7 @@ rtems_fdisk_warning (const rtems_flashdisk* fd, const char *format, ...)
     ret =  vfprintf (stdout, format, args);
     fprintf (stdout, "\n");
     fflush (stdout);
+    va_end (args);
   }
   return ret;
 }
@@ -414,6 +417,7 @@ rtems_fdisk_error (const char *format, ...)
   ret =  vfprintf (stderr, format, args);
   fprintf (stderr, "\n");
   fflush (stderr);
+  va_end (args);
   return ret;
 }
 
@@ -432,6 +436,7 @@ rtems_fdisk_abort (const char *format, ...)
   vfprintf (stderr, format, args);
   fprintf (stderr, "\n");
   fflush (stderr);
+  va_end (args);
   exit (1);
 }
 
