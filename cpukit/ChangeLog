@@ -1,5 +1,9 @@
 2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libi2c/libi2c.c: Fix typo in va_end().
+
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libblock/src/flashdisk.c, libblock/src/nvdisk.c,
 	libcsupport/src/ioctl.c, libfs/src/dosfs/fat_file.c: Add va_end().
 

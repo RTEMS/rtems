@@ -603,8 +603,10 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
     break;
 
   case RTEMS_LIBI2C_IOCTL_START_TFM_READ_WRITE:
-    if (not_started (busno))
+    if (not_started (busno)) {
+      va_end(ap);
       return -RTEMS_NOT_OWNER_OF_RESOURCE;
+    }
 
     /*
      * address device, then set transfer mode and perform read_write transfer
@@ -642,7 +644,8 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
     sc = bush->ops->ioctl (bush, cmd, args);
     break;
   }
-    return sc;
+  va_end(ap);
+  return sc;
 }
 
 static int
