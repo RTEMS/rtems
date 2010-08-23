@@ -46,6 +46,7 @@
 #include <rtems/powerpc/powerpc.h>
 
 #include <rtems/bspIo.h>
+#include <bsp/irq.h>
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
 

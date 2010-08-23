@@ -187,6 +187,9 @@ extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 }
 #endif
 
+/* Now that we have defined some basics, include the generic support */
+#include <bsp/irq-generic.h>
+
 #endif
 
 #endif

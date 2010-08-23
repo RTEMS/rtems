@@ -1,3 +1,7 @@
+2010-08-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* irq/irq.h, startup/bspstart.c: Add includes to resolve warnings.
+
 2010-08-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* console/console.c: Add BSP_poll_char.
