@@ -1,3 +1,13 @@
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	CID 99
+	CID 100
+	CID 101
+	CID 102
+	* libfs/src/dosfs/fat_file.c, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_misc.c: Resolve invalid use of const identified
+	by Coverity scanner.
+
 2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1673/cpukit

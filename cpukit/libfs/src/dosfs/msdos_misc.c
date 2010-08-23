@@ -40,8 +40,8 @@
 /*
  * External strings. Saves spave this way.
  */
-const char const* MSDOS_DOT_NAME    = ".          ";
-const char const* MSDOS_DOTDOT_NAME = "..         ";
+const char *const MSDOS_DOT_NAME    = ".          ";
+const char *const MSDOS_DOTDOT_NAME = "..         ";
 
 /* msdos_is_valid_name_char --
  *     Routine to check the character in a file or directory name.
