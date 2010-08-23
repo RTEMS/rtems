@@ -125,10 +125,11 @@ mcf5235_fec_tx_interrupt_handler( rtems_vector_number v )
  * Allocate buffer descriptors from (non-cached) on-chip static RAM
  * Ensure 128-bit (16-byte) alignment
  */
+extern char __SRAMBASE[];
+
 static mcf5235BufferDescriptor_t *
 mcf5235_bd_allocate(unsigned int count)
 {
-    extern char __SRAMBASE[];
     static mcf5235BufferDescriptor_t *bdp = (mcf5235BufferDescriptor_t *)__SRAMBASE;
     mcf5235BufferDescriptor_t *p = bdp;
 
