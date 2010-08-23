@@ -11,7 +11,7 @@
 
 #include <tmacros.h>
 #include "test_support.h"
-#include "gxx_wrappers.h"
+#include <rtems/gxx_wrappers.h>
 
 void test_recursive_mutex(void)
 {
@@ -164,20 +164,6 @@ void test_key(void)
   rtems_test_assert( key == NULL );
 }
 
-void test_out_of_mutexes(void)
-{
-   __gthread_mutex_t mutex;
-
-  puts( "rtems_gxx_mutex_init() until exhausted and panic" );
-  puts( "rtems_gxx_mutex_init() panic AFTER printing EOF message" );
-  puts( "*** END OF TEST GXX 01 ***" );
-
-  while (1) {
-    rtems_gxx_mutex_init(&mutex);
-    rtems_test_assert( mutex != 0 );
-  }
-}
-
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -196,9 +182,9 @@ rtems_task Init(
   test_key();
   puts( "" );
 
-  test_out_of_mutexes();
+  puts( "*** END OF TEST GXX 01 ***" );
 
-  /* does not return */
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */

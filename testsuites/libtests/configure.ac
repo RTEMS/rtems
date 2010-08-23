@@ -57,7 +57,6 @@ deviceio01/Makefile
 devnullfatal01/Makefile
 dumpbuf01/Makefile
 gxx01/Makefile
-gxx02/Makefile
 heapwalk/Makefile
 malloctest/Makefile
 malloc02/Makefile

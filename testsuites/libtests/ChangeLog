@@ -1,3 +1,10 @@
+2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* gxx01/gxx_wrappers.h, gxx02/.cvsignore, gxx02/Makefile.am,
+	gxx02/gxx02.doc, gxx02/gxx02.scn, gxx02/init.c: Removed files.
+	* Makefile.am, configure.ac: Reflect changes above.
+	* gxx01/init.c: Removed fatal error test case.
+
 2010-08-10	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1661/testing
