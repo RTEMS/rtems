@@ -1,3 +1,15 @@
+2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1671/cpukit
+	* libcsupport/include/rtems/gxx_wrappers.h: New file.
+	* libcsupport/Makefile.am, libcsupport/preinstall.am: Reflect change
+	above.
+	* libcsupport/src/gxx_wrappers.c: Include <rtems/gxx_wrappers.h>.  Use
+	_Internal_error_Occurred() instead of rtems_panic().
+	* score/include/rtems/score/interr.h: Added
+	INTERNAL_ERROR_GXX_KEY_ADD_FAILED and
+	INTERNAL_ERROR_GXX_MUTEX_INIT_FAILED.
+
 2010-08-20	<yann.sionneau@telecom-sudparis.eu>
 
 	* libmisc/fb/fb.h: Add constants for buffer modes.

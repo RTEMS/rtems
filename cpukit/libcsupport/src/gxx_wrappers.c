@@ -25,31 +25,14 @@
 #include "config.h"
 #endif
 
+#include <rtems/gxx_wrappers.h>
+
 #include <stdlib.h>
-#include <stdio.h>
 
 #include <rtems.h>
-#include <rtems/system.h>
-#include <rtems/error.h>
-#include <rtems/rtems/tasks.h>
 
 /* uncomment this if you need to debug this interface */
 /*#define DEBUG_GXX_WRAPPERS 1*/
-
-/*
- * These typedefs should match with the ones defined in the file
- * gcc/gthr-rtems.h in the gcc distribution.
- * FIXME: T.S, 2007/01/31: -> gcc/gthr-rtems.h still declares
- *                            void * __gthread_key_t;
- */
-typedef struct __gthread_key_ {
-  void *val;             /* this is switched with the task      */
-  void (*dtor)(void*);   /* this remains in place for all tasks */
-} __gthread_key, *__gthread_key_t;
-
-typedef int   __gthread_once_t;
-typedef void *__gthread_mutex_t;
-typedef void *__gthread_recursive_mutex_t;
 
 int rtems_gxx_once(__gthread_once_t *once, void (*func) (void))
 {
@@ -145,7 +128,11 @@ void *rtems_gxx_getspecific(__gthread_key_t key)
      */
     status = rtems_task_variable_add( RTEMS_SELF, (void **)key, key->dtor );
     if ( status != RTEMS_SUCCESSFUL ) {
-       rtems_panic ("rtems_gxx_getspecific");
+      _Internal_error_Occurred(
+        INTERNAL_ERROR_CORE,
+        true,
+        INTERNAL_ERROR_GXX_KEY_ADD_FAILED
+      );
     }
     key->val = (void *)0;
   }
@@ -212,7 +199,11 @@ void rtems_gxx_mutex_init (__gthread_mutex_t *mutex)
         status
       );
     #endif
-    rtems_panic ("rtems_gxx_mutex_init");
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      true,
+      INTERNAL_ERROR_GXX_MUTEX_INIT_FAILED
+    );
   }
   #ifdef DEBUG_GXX_WRAPPERS
     printk( "gxx_wrappers: mutex init complete =%X\n", *mutex );

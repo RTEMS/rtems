@@ -23,7 +23,8 @@ include_rtems_motorola_HEADERS = include/motorola/mc68230.h \
 ## rtems
 include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
     include/rtems/libcsupport.h include/rtems/libio.h include/rtems/libio_.h \
-    include/rtems/malloc.h include/rtems/termiostypes.h
+    include/rtems/malloc.h include/rtems/termiostypes.h \
+    include/rtems/gxx_wrappers.h
 
 ## zilog
 
