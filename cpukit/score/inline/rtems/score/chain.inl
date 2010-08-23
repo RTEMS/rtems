@@ -1,15 +1,14 @@
 /**
- *  @file  rtems/score/chain.inl
+ * @file
  *
- *  This include file contains the bodies of the routines which are
- *  associated with doubly linked chains and inlined.
+ * @ingroup ScoreChain
  *
- *  @note  The routines in this file are ordered from simple
- *         to complex.  No other Chain Handler routine is referenced
- *         unless it has already been defined.
+ * @brief Chain Handler API.
  */
 
 /*
+ *  Copyright (c) 2010 embedded brains GmbH.
+ *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -479,6 +478,99 @@ RTEMS_INLINE_ROUTINE void _Chain_Prepend(
 )
 {
   _Chain_Insert(_Chain_Head(the_chain), the_node);
+}
+
+/**
+ * @brief Append a node and check if the chain was empty before (unprotected).
+ *
+ * This routine appends the_node onto the end of the_chain.
+ *
+ * @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_node is the node to be appended.
+ *
+ * @note It does NOT disable interrupts to ensure the atomicity of the
+ *       append operation.
+ *
+ * @retval true The chain was empty before.
+ * @retval false The chain contained at least one node before.
+ */
+RTEMS_INLINE_ROUTINE bool _Chain_Append_with_empty_check_unprotected(
+  Chain_Control *the_chain,
+  Chain_Node    *the_node
+)
+{
+  bool was_empty = _Chain_Is_empty( the_chain );
+
+  _Chain_Append_unprotected( the_chain, the_node );
+
+  return was_empty;
+}
+
+/**
+ * @brief Prepend a node and check if the chain was empty before (unprotected).
+ *
+ * This routine prepends the_node onto the front of the_chain.
+ *
+ * @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_node is the node to be prepended.
+ *
+ * @note It does NOT disable interrupts to ensure the atomicity of the
+ *       prepend operation.
+ *
+ * @retval true The chain was empty before.
+ * @retval false The chain contained at least one node before.
+ */
+RTEMS_INLINE_ROUTINE bool _Chain_Prepend_with_empty_check_unprotected(
+  Chain_Control *the_chain,
+  Chain_Node    *the_node
+)
+{
+  bool was_empty = _Chain_Is_empty( the_chain );
+
+  _Chain_Prepend_unprotected( the_chain, the_node );
+
+  return was_empty;
+}
+
+/**
+ * @brief Get the first node and check if the chain is empty afterwards
+ * (unprotected).
+ *
+ * This function removes the first node from the_chain and returns
+ * a pointer to that node in @a the_node.  If the_chain is empty, then NULL is
+ * returned.
+ *
+ * @param[in] the_chain is the chain to attempt to get the first node from.
+ * @param[out] the_node is the first node on the chain or NULL if the chain is
+ * empty.
+ *
+ * @note It does NOT disable interrupts to ensure the atomicity of the
+ *       get operation.
+ *
+ * @retval true The chain is empty now.
+ * @retval false The chain contains at least one node now.
+ */
+RTEMS_INLINE_ROUTINE bool _Chain_Get_with_empty_check_unprotected(
+  Chain_Control *the_chain,
+  Chain_Node **the_node
+)
+{
+  bool is_empty_now = true;
+  Chain_Node *first = the_chain->first;
+
+  if ( first != _Chain_Tail( the_chain ) ) {
+    Chain_Node *new_first = first->next;
+
+    the_chain->first = new_first;
+    new_first->previous = _Chain_Head( the_chain );
+
+    *the_node = first;
+
+    is_empty_now = new_first == _Chain_Tail( the_chain );
+  } else
+    *the_node = NULL;
+
+  return is_empty_now;
 }
 
 /**@}*/

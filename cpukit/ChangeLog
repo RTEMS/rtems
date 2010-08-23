@@ -1,5 +1,19 @@
 2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1673/cpukit
+	* score/src/chainappendempty.c, score/src/chaingetempty.c,
+	score/src/chainprependempty.c: New files.
+	* score/Makefile.am: Reflect changes above.
+	* score/include/rtems/score/chain.h: Declare
+	_Chain_Append_with_empty_check(), _Chain_Prepend_with_empty_check(),
+	and _Chain_Get_with_empty_check().
+	* score/inline/rtems/score/chain.inl: Define
+	_Chain_Append_with_empty_check_unprotected(),
+	_Chain_Prepend_with_empty_check_unprotected(), and
+	_Chain_Get_with_empty_check_unprotected().
+
+2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1671/cpukit
 	* libcsupport/include/rtems/gxx_wrappers.h: New file.
 	* libcsupport/Makefile.am, libcsupport/preinstall.am: Reflect change
