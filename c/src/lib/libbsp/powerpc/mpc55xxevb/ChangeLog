@@ -1,3 +1,8 @@
+2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* test/tests.c: Removed file.
+	* startup/bspstart.c: Fixed warnings.
+
 2010-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Remove AC_CHECK_SIZEOF([void *]).

@@ -57,8 +57,8 @@ libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
     ../../shared/src/irq-info.c \
     ../../shared/src/irq-shell.c
 
-# tests
-libbsp_a_SOURCES += tests/tests.c startup/sd-card-init.c
+# Misc
+libbsp_a_SOURCES += startup/sd-card-init.c
 
 # bsp_i2c
 libbsp_a_SOURCES += i2c/i2c_init.c

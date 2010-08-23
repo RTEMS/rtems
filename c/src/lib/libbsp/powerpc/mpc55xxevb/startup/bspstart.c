@@ -393,7 +393,7 @@ void bsp_start(void)
 	memset(bsp_section_sbss_start,0,
 	       bsp_section_sbss_end-bsp_section_sbss_start);
 
-	ppc_exc_vector_base = bsp_section_vector_start;
+	ppc_exc_vector_base = (uint32_t) bsp_section_vector_start;
 
 	RTEMS_DEBUG_PRINT( "BSP start ...\n");
 
