@@ -127,6 +127,8 @@ spfatal20/Makefile
 spfatal21/Makefile
 spfatal22/Makefile
 spfatal23/Makefile
+spfatal24/Makefile
+spfatal25/Makefile
 spfifo01/Makefile
 spfifo02/Makefile
 spfifo03/Makefile

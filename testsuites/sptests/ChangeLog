@@ -1,3 +1,12 @@
+2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spfatal24/.cvsignore, spfatal24/Makefile.am,
+	spfatal24/spfatal24.doc, spfatal24/spfatal24.scn,
+	spfatal24/testcase.h, spfatal25/.cvsignore, spfatal25/Makefile.am,
+	spfatal25/spfatal25.doc, spfatal25/spfatal25.scn,
+	spfatal25/testcase.h: New files.
+	* Makefile.am, configure.ac: Reflect changes above.
+
 2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1658/cpukit
