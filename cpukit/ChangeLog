@@ -1,5 +1,17 @@
 2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+
+	CID 79/DEADCODE
+	CID 78/DEADCODE
+	CID 77/DEADCODE
+	CID 76/DEADCODE
+	* posix/src/condtimedwait.c, posix/src/mutextimedlock.c,
+	posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,
+	posix/src/semtimedwait.c: Resolve various dead code issues identified
+	by Coverity scanner.
+
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	CID 99
 	CID 100
 	CID 101

@@ -39,8 +39,9 @@ int pthread_cond_timedwait(
   const struct timespec *abstime
 )
 {
-  Watchdog_Interval ticks;
-  bool              already_timedout;
+  Watchdog_Interval                            ticks;
+  bool                                         already_timedout;
+  POSIX_Absolute_timeout_conversion_results_t  status;
 
   /*
    *  POSIX requires that blocking calls with timeouts that take
@@ -51,18 +52,14 @@ int pthread_cond_timedwait(
    *  then we do a polling operation and convert the UNSATISFIED
    *  status into the appropriate error.
    */
-  switch ( _POSIX_Absolute_timeout_to_ticks(abstime, &ticks) ) {
-    case POSIX_ABSOLUTE_TIMEOUT_INVALID:
-      return EINVAL;
-    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-    case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-      already_timedout = true;
-      break;
-    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
-    default:  /* only to silence warnings */
-      already_timedout = false;
-      break;
-  }
+  already_timedout = false;
+  status = _POSIX_Absolute_timeout_to_ticks(abstime, &ticks);
+  if ( status == POSIX_ABSOLUTE_TIMEOUT_INVALID )
+    return EINVAL;
+
+  if ( status == POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
+       status == POSIX_ABSOLUTE_TIMEOUT_IS_NOW )
+    already_timedout = true;
 
   return _POSIX_Condition_variables_Wait_support(
     cond,

@@ -82,15 +82,11 @@ int pthread_rwlock_timedwrlock(
       _Thread_Enable_dispatch();
       if ( !do_wait &&
            (_Thread_Executing->Wait.return_code == CORE_RWLOCK_UNAVAILABLE) ) {
-	switch (status) {
-	  case POSIX_ABSOLUTE_TIMEOUT_INVALID:
-	    return EINVAL;
-	  case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-	  case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-	    return ETIMEDOUT;
-	  case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
-	    break;
-	}
+	if ( status == POSIX_ABSOLUTE_TIMEOUT_INVALID )
+	  return EINVAL;
+	if ( status == POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
+	     status == POSIX_ABSOLUTE_TIMEOUT_IS_NOW )
+	  return ETIMEDOUT;
       }
 
       return _POSIX_RWLock_Translate_core_RWLock_return_code(
