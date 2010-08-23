@@ -1,3 +1,7 @@
+2010-08-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/bspstart.c: Add include to fix warning.
+
 2010-05-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, preinstall.am: Many files were duplicated across MIPS

@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include <bsp.h>
+#include <libcpu/isr_entries.h>
 
 uint32_t bsp_clicks_per_microsecond;
 
