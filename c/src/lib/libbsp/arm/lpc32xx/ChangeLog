@@ -1,3 +1,7 @@
+2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console/hsu.c: Fixed warnings.
+
 2010-06-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* make/custom/lpc32xx_mzx_boot_int.cfg,

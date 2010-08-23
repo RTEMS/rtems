@@ -75,15 +75,15 @@ static int lpc32xx_hsu_first_open(int major, int minor, void *arg)
   return 0;
 }
 
-static int lpc32xx_hsu_write(int minor, const char *buf, int len)
+static ssize_t lpc32xx_hsu_write(int minor, const char *buf, size_t len)
 {
   console_tbl *ct = &Console_Port_Tbl [minor];
   console_data *cd = &Console_Port_Data [minor];
   volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
-  int tx_level = (hsu->level & HSU_LEVEL_TX_MASK) >> HSU_LEVEL_TX_SHIFT;
-  int tx_free = HSU_FIFO_SIZE - tx_level;
-  int i = 0;
-  int out = len > tx_free ? tx_free : len;
+  size_t tx_level = (hsu->level & HSU_LEVEL_TX_MASK) >> HSU_LEVEL_TX_SHIFT;
+  size_t tx_free = HSU_FIFO_SIZE - tx_level;
+  size_t i = 0;
+  size_t out = len > tx_free ? tx_free : len;
 
   for (i = 0; i < out; ++i) {
     hsu->fifo = buf [i];
