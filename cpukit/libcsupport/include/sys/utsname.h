@@ -10,9 +10,6 @@
 extern "C" {
 #endif
 
-#include <sys/times.h>
-#include <sys/types.h>
-
 /*
  *  4.4.1 Get System Name (Table 4-1), P1003.1b-1993, p. 90
  *
@@ -22,14 +19,22 @@ extern "C" {
  *         Internet hostnames.
  */
 
+#ifdef _KERNEL
+#define SYS_NMLN        32              /* uname(2) for the FreeBSD 1.1 ABI. */
+#endif
+
+#ifndef SYS_NMLN
+#define SYS_NMLN        32		/* User can override. */
+#endif
+
 struct utsname {
-  char sysname[ 32 ];  /* Name of this implementation of the operating system */
-  char nodename[ 32 ]; /* Name of this node within an implementation */
-                       /*   specified communication network */
-  char release[ 32 ];  /* Current release level of this implementation */
-  char version[ 32 ];  /* Current version level of this release */
-  char machine[ 32 ];  /* Name of the hardware type on which the system */
-                       /*   is running */
+  char sysname[SYS_NMLN];  /* Name of this implementation of the operating system */
+  char nodename[SYS_NMLN]; /* Name of this node within an implementation */
+                           /*   specified communication network */
+  char release[SYS_NMLN];  /* Current release level of this implementation */
+  char version[SYS_NMLN];  /* Current version level of this release */
+  char machine[SYS_NMLN];  /* Name of the hardware type on which the system */
+                           /*   is running */
 };
 
 /*
@@ -38,14 +43,6 @@ struct utsname {
 
 int uname(
   struct utsname *name
-);
-
-/*
- *  4.5.2 Get Process Times, P1003.1b-1993, p. 92
- */
-
-clock_t times(
-  struct tms   *buffer
 );
 
 #ifdef __cplusplus
