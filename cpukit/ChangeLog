@@ -1,5 +1,6 @@
 2010-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/aio_read.c: aio_nbytes is always >= 0.
 	* posix/src/aio_write.c: aio_nbytes is always >= 0.
 	Fix typo in comment.
 

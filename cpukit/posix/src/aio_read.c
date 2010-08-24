@@ -51,7 +51,7 @@ aio_read (struct aiocb *aiocbp)
   if (aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX)
     rtems_aio_set_errno_return_minus_one (EINVAL, aiocbp);
   
-  if (aiocbp->aio_offset < 0 || aiocbp->aio_nbytes < 0)
+  if (aiocbp->aio_offset < 0)
     rtems_aio_set_errno_return_minus_one (EINVAL, aiocbp);
 
   req = malloc (sizeof (rtems_aio_request));
