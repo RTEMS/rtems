@@ -1,5 +1,10 @@
 2010-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/aio_write.c: aio_nbytes is always >= 0.
+	Fix typo in comment.
+
+2010-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/sys/utsname.h: Remove times().
 	Remove unnecessary includes.
 	Introduce SYS_NMLN (From freebsd).

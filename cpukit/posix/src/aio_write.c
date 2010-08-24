@@ -30,7 +30,7 @@
  *        aiocbp - asynchronous I/O control block
  *
  *  Output parameters:
- *        -1 - request could not pe enqueued
+ *        -1 - request could not be enqueued
  *           - FD not opened for write
  *           - invalid aio_reqprio or aio_offset or
  *             aio_nbytes
@@ -51,7 +51,7 @@ aio_write (struct aiocb *aiocbp)
   if (aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX)
     rtems_aio_set_errno_return_minus_one (EINVAL, aiocbp);
 
-  if (aiocbp->aio_offset < 0 || aiocbp->aio_nbytes < 0)
+  if (aiocbp->aio_offset < 0)
     rtems_aio_set_errno_return_minus_one (EINVAL, aiocbp);
 
   req = malloc (sizeof (rtems_aio_request));
