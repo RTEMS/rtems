@@ -1,5 +1,6 @@
 2010-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/aio_cancel.c: Spray pthread_mutex_unlocks.
 	* posix/src/aio_read.c: aio_nbytes is always >= 0.
 	* posix/src/aio_write.c: aio_nbytes is always >= 0.
 	Fix typo in comment.
@@ -30,7 +31,6 @@
 	libcsupport/src/ioctl.c, libfs/src/dosfs/fat_file.c: Add va_end().
 
 2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
-
 
 	CID 79/DEADCODE
 	CID 78/DEADCODE

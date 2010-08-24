@@ -45,9 +45,11 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
 
   if (aiocbp == NULL)
     {
-      if (fcntl (fildes, F_GETFL) < 0)
+      if (fcntl (fildes, F_GETFL) < 0) {
+        pthread_mutex_unlock(&aio_request_queue.mutex);
 	rtems_set_errno_and_return_minus_one (EBADF);
-      
+      }
+
       r_chain = rtems_aio_search_fd (&aio_request_queue.work_req,
 				     fildes,
 				     0);
@@ -58,8 +60,10 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
 	      r_chain = rtems_aio_search_fd (&aio_request_queue.idle_req,
 					     fildes,
 					     0);
-	      if (r_chain == NULL)
+	      if (r_chain == NULL) {
+	        pthread_mutex_unlock(&aio_request_queue.mutex);
 		return AIO_ALLDONE;
+              }
 
 	      rtems_chain_extract (&r_chain->next_fd);	
 	      rtems_aio_remove_fd (r_chain);
@@ -84,8 +88,7 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
     }
   else 
     {
-      if (aiocbp->aio_fildes != fildes)
-	{
+      if (aiocbp->aio_fildes != fildes) {
 	  pthread_mutex_unlock (&aio_request_queue.mutex);
 	  rtems_set_errno_and_return_minus_one (EINVAL);
 	}
@@ -120,5 +123,4 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
     }
   
   return AIO_ALLDONE;
-  
 }
