@@ -1,3 +1,7 @@
+2010-08-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* startup/init68360.c: Fix type punning warning.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* startup/init68360.c, timer/timer.c: Remove warnings.
