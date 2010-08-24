@@ -1,14 +1,14 @@
 /**
- * @file rtems/chain.h
+ * @file
  *
- *  This include file contains all the constants and structures associated
- *  with the Chain API in RTEMS. The chain is a double linked list that
- *  is part of the Super Core. This is the published interface to that
- *  code.
+ * @ingroup ClassicChains
  *
+ * @brief Chain API.
  */
 
 /*
+ *  Copyright (c) 2010 embedded brains GmbH.
+ *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,23 +24,24 @@
 
 #include <rtems/system.h>
 #include <rtems/score/chain.h>
+#include <rtems/rtems/event.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * @typedef rtems_chain_node
+ * @defgroup ClassicChains Chains
  *
- * A node that can be manipulated in the chain.
+ * @ingroup ClassicRTEMS
+ *
+ * @brief Chain API.
+ *
+ * @{
  */
+
 typedef Chain_Node rtems_chain_node;
 
-/**
- * @typedef rtems_chain_control
- *
- * The chain's control anchors the chain.
- */
 typedef Chain_Control rtems_chain_control;
 
 /**
@@ -55,7 +56,81 @@ typedef Chain_Control rtems_chain_control;
 #define RTEMS_CHAIN_DEFINE_EMPTY(name) \
   CHAIN_DEFINE_EMPTY(name)
 
+/** @} */
+
 #include <rtems/chain.inl>
+
+/**
+ * @addtogroup ClassicChains
+ *
+ * @{
+ */
+
+/**
+ * @brief Appends the @a node to the @a chain and sends the @a events to the
+ * @a task if the @a chain was empty before the append.
+ *
+ * @see rtems_chain_append_with_empty_check() and rtems_event_send().
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID No such task.
+ */
+rtems_status_code rtems_chain_append_with_notification(
+  rtems_chain_control *chain,
+  rtems_chain_node *node,
+  rtems_id task,
+  rtems_event_set events
+);
+
+/**
+ * @brief Prepends the @a node to the @a chain and sends the @a events to the
+ * @a task if the @a chain was empty before the prepend.
+ *
+ * @see rtems_chain_prepend_with_empty_check() and rtems_event_send().
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID No such task.
+ */
+rtems_status_code rtems_chain_prepend_with_notification(
+  rtems_chain_control *chain,
+  rtems_chain_node *node,
+  rtems_id task,
+  rtems_event_set events
+);
+
+/**
+ * @brief Gets the first @a node of the @a chain and sends the @a events to the
+ * @a task if the @a chain is empty after the get.
+ *
+ * @see rtems_chain_get_with_empty_check() and rtems_event_send().
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID No such task.
+ */
+rtems_status_code rtems_chain_get_with_notification(
+  rtems_chain_control *chain,
+  rtems_id task,
+  rtems_event_set events,
+  rtems_chain_node **node
+);
+
+/**
+ * @brief Gets the first @a node of the @a chain and sends the @a events to the
+ * @a task if the @a chain is empty afterwards.
+ *
+ * @see rtems_chain_get() and rtems_event_receive().
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_TIMEOUT Timeout.
+ */
+rtems_status_code rtems_chain_get_with_wait(
+  rtems_chain_control *chain,
+  rtems_event_set events,
+  rtems_interval timeout,
+  rtems_chain_node **node
+);
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -1,22 +1,14 @@
 /**
- * @file rtems/chain.inl
+ * @file
  *
- *  This include file contains all the constants and structures associated
- *  with the Chain API in RTEMS. The chain is a double linked list that
- *  is part of the Super Core. This is the published interface to that
- *  code.
+ * @ingroup ClassicChains
  *
- *  Iterate the node of a chain can be performed with the following code:
- *
- *     rtems_chain_control* cc = &object->pending;
- *     rtems_chain_node*    cn = cc->first;
- *     while (!rtems_chain_is_tail (cc, cn))
- *     {
- *       cn = cn->next;
- *     }
+ * @brief Chain API.
  */
  
 /*
+ *  Copyright (c) 2010 embedded brains GmbH.
+ *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -35,6 +27,12 @@
 #define _RTEMS_CHAIN_INL
 
 #include <rtems/score/chain.inl>
+
+/**
+ * @addtogroup ClassicChains
+ *
+ * @{
+ */
 
 /**
  *  @brief Initialize a Chain Header
@@ -504,6 +502,60 @@ RTEMS_INLINE_ROUTINE void rtems_chain_prepend_unprotected(
 {
   _Chain_Prepend_unprotected( the_chain, the_node );
 }
+
+/**
+ * @brief Checks if the @a chain is empty and appends the @a node.
+ *
+ * Interrupts are disabled to ensure the atomicity of the operation.
+ *
+ * @retval true The chain was empty before the append.
+ * @retval false The chain contained at least one node before the append.
+ */
+RTEMS_INLINE_ROUTINE bool rtems_chain_append_with_empty_check(
+  rtems_chain_control *chain,
+  rtems_chain_node *node
+)
+{
+  return _Chain_Append_with_empty_check( chain, node );
+}
+
+/**
+ * @brief Checks if the @a chain is empty and prepends the @a node.
+ *
+ * Interrupts are disabled to ensure the atomicity of the operation.
+ *
+ * @retval true The chain was empty before the prepend.
+ * @retval false The chain contained at least one node before the prepend.
+ */
+RTEMS_INLINE_ROUTINE bool rtems_chain_prepend_with_empty_check(
+  rtems_chain_control *chain,
+  rtems_chain_node *node
+)
+{
+  return _Chain_Prepend_with_empty_check( chain, node );
+}
+
+/**
+ * @brief Tries to get the first @a node and check if the @a chain is empty
+ * afterwards.
+ *
+ * This function removes the first node from the @a chain and returns a pointer
+ * to that node in @a node.  If the @a chain is empty, then @c NULL is returned.
+ *
+ * Interrupts are disabled to ensure the atomicity of the operation.
+ *
+ * @retval true The chain is empty after the node removal.
+ * @retval false The chain contained at least one node after the node removal.
+ */
+RTEMS_INLINE_ROUTINE bool rtems_chain_get_with_empty_check(
+  rtems_chain_control *chain,
+  rtems_chain_node **node
+)
+{
+  return _Chain_Get_with_empty_check( chain, node );
+}
+
+/** @} */
 
 #endif
 /* end of include file */

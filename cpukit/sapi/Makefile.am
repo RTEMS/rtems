@@ -27,7 +27,9 @@ libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
     src/exshutdown.c src/io.c src/ioclose.c src/iocontrol.c src/iodata.c \
     src/ioinitialize.c src/ioopen.c src/ioread.c src/ioregisterdriver.c \
     src/iounregisterdriver.c src/iowrite.c src/posixapi.c  \
-    src/rtemsapi.c src/extensiondata.c src/getversionstring.c
+    src/rtemsapi.c src/extensiondata.c src/getversionstring.c \
+    src/chainappendnotify.c src/chaingetnotify.c src/chaingetwait.c \
+    src/chainprependnotify.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am
