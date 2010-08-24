@@ -1,3 +1,8 @@
+2010-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spchain/init.c, spchain/spchain.doc, spchain/spchain.scn: New test
+	cases.
+
 2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spfatal24/.cvsignore, spfatal24/Makefile.am,

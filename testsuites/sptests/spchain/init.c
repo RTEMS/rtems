@@ -12,10 +12,100 @@
 #include <tmacros.h>
 #include <rtems/chain.h>
 
+#define EVENT RTEMS_EVENT_13
+#define TIMEOUT 1
+
 typedef struct {
   rtems_chain_node Node;
   int              id;
 } test_node;
+
+static void test_chain_get_with_wait(void)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_chain_control chain;
+  rtems_chain_node *p = (rtems_chain_node *) 1;
+
+  puts( "INIT - Verify rtems_chain_get_with_wait" );
+  rtems_chain_initialize_empty( &chain );
+  sc = rtems_chain_get_with_wait( &chain, EVENT, TIMEOUT, &p );
+  rtems_test_assert( sc == RTEMS_TIMEOUT );
+  rtems_test_assert( p == NULL );
+}
+
+static void test_chain_with_notification(void)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_chain_control chain;
+  rtems_chain_node a;
+  rtems_chain_node *p = (rtems_chain_node *) 1;
+  rtems_event_set out = 0;
+
+  puts( "INIT - Verify rtems_chain_append_with_notification" );
+  rtems_chain_initialize_empty( &chain );
+  sc = rtems_chain_append_with_notification( &chain, &a, rtems_task_self(), EVENT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  sc = rtems_chain_get_with_wait( &chain, EVENT, TIMEOUT, &p );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( p == &a );
+
+  puts( "INIT - Verify rtems_chain_prepend_with_notification" );
+  rtems_chain_initialize_empty( &chain );
+  sc = rtems_chain_prepend_with_notification( &chain, &a, rtems_task_self(), EVENT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  sc = rtems_chain_get_with_wait( &chain, EVENT, TIMEOUT, &p );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( p == &a );
+
+  puts( "INIT - Verify rtems_chain_get_with_notification" );
+  rtems_chain_initialize_empty( &chain );
+  rtems_chain_append( &chain, &a );
+  sc = rtems_chain_get_with_notification( &chain, rtems_task_self(), EVENT, &p );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( p == &a );
+  sc = rtems_event_receive(
+    EVENT,
+    RTEMS_EVENT_ALL | RTEMS_WAIT,
+    TIMEOUT,
+    &out
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( out == EVENT );
+}
+
+static void test_chain_with_empty_check(void)
+{
+  rtems_chain_control chain;
+  rtems_chain_node a;
+  rtems_chain_node b;
+  rtems_chain_node *p;
+  bool empty;
+
+  puts( "INIT - Verify rtems_chain_append_with_empty_check" );
+  rtems_chain_initialize_empty( &chain );
+  empty = rtems_chain_append_with_empty_check( &chain, &a );
+  rtems_test_assert( empty );
+  empty = rtems_chain_append_with_empty_check( &chain, &a );
+  rtems_test_assert( !empty );
+
+  puts( "INIT - Verify rtems_chain_prepend_with_empty_check" );
+  rtems_chain_initialize_empty( &chain );
+  empty = rtems_chain_prepend_with_empty_check( &chain, &a );
+  rtems_test_assert( empty );
+  empty = rtems_chain_prepend_with_empty_check( &chain, &a );
+  rtems_test_assert( !empty );
+
+  puts( "INIT - Verify rtems_chain_get_with_empty_check" );
+  rtems_chain_initialize_empty( &chain );
+  rtems_chain_append( &chain, &a );
+  rtems_chain_append( &chain, &b );
+  empty = rtems_chain_get_with_empty_check( &chain, &p );
+  rtems_test_assert( !empty );
+  rtems_test_assert( p == &a );
+  empty = rtems_chain_get_with_empty_check( &chain, &p );
+  rtems_test_assert( empty );
+  rtems_test_assert( p == &b );
+}
 
 rtems_task Init(
   rtems_task_argument ignored
@@ -52,6 +142,10 @@ rtems_task Init(
      }
   }
 
+  test_chain_with_empty_check();
+  test_chain_with_notification();
+  test_chain_get_with_wait();
+
   puts( "*** END OF RTEMS CHAIN API TEST ***" );
   rtems_test_exit(0);
 }
@@ -59,7 +153,7 @@ rtems_task Init(
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 1
