@@ -1,3 +1,9 @@
+2010-08-25	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1689/bsps
+	* shared/flash/intelFlash.c: Scale erase timeout by actual
+	system clock rate rather than assuming a fixed value.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* shared/bootloader/em86.c, shared/bootloader/mm.c,

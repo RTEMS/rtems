@@ -56,15 +56,19 @@
  */
 #ifdef TESTING
 
-#define TIMEOUT_US	100000
-#define rtems_task_wake_after(args...) do {} while (0)
+#define TIMEOUT_US       100000
+#define rtems_task_wake_after(t) sleep(t)
+#define CLOCKRATE_GET(p) (*(p)=1)
 
 #else
 
 #include <rtems.h>
-#define TIMEOUT_US			1000
+#define TIMEOUT_US       1000
+#define CLOCKRATE_GET(p) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, p )
 
 #endif
+
+#define ERASE_TIMEOUT_S 2
 
 #include <stdio.h>
 #include <inttypes.h>
@@ -321,14 +325,19 @@ uint32_t sta;
 STATIC int
 flash_erase_block_intel(struct bankdesc *b, uint32_t addr)
 {
-uint32_t sta;
-int i;
+uint32_t       sta;
+int            i;
+rtems_interval p;
+
 	if ( (sta = flash_check_ready_intel(b, addr)) )
 		return sta;
 
 	(void)BSP_flashReadRaw(F_CMD_WR_ERA, addr);
 	(void)BSP_flashReadRaw(F_CMD_WR_CMD, addr);
-	i = 50;
+
+	CLOCKRATE_GET( &p );
+	i = p * ERASE_TIMEOUT_S;
+
 	while ( STA_RDYRDY != (STA_RDYRDY & (sta = BSP_flashReadRaw(F_CMD_RD_STA, addr))) && --i > 0 ) {
 		rtems_task_wake_after(1);
 	}
