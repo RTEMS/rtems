@@ -1,0 +1,29 @@
+# 
+# Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+# 
+#  embedded brains GmbH
+#  Obere Lagerstr. 30
+#  82178 Puchheim
+#  Germany
+#  <rtems@embedded-brains.de>
+# 
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.com/license/LICENSE.
+#
+# $Id$
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: spheapprot
+
+directives:
+
+  _Heap_Initialize
+  _Heap_Allocate_aligned_with_boundary
+  _Heap_Free
+
+concepts:
+
++ Check if heap protection works.
