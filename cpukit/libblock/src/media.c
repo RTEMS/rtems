@@ -244,7 +244,7 @@ static void create_item(
 
     item->parent = parent;
     item->disk_path = (char *) item + sizeof(*item);
-    strcpy(item->disk_path, disk_path);
+    memcpy(item->disk_path, disk_path, disk_path_size);
     rtems_chain_append(&media_item_chain, &item->node);
   }
 }

@@ -1,5 +1,10 @@
 2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	CID 114/SECURE_CODING
+	* libblock/src/media.c: Avoid strcpy().
+
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	CID 113/SECURE_CODING
 	* libblock/src/media-path.c: Avoid strcpy().  Style.  Use assert() to
 	avoid dead code.
