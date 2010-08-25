@@ -1,3 +1,7 @@
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* malloctest/init.c: Update for heap API changes.
+
 2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* gxx01/gxx_wrappers.h, gxx02/.cvsignore, gxx02/Makefile.am,

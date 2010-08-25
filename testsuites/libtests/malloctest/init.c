@@ -235,7 +235,7 @@ static void test_check_alloc(
       _Heap_Is_aligned( block_size, page_size )
     );
 
-    rtems_test_assert( alloc_end <= block_end + HEAP_BLOCK_SIZE_OFFSET );
+    rtems_test_assert( alloc_end <= block_end + HEAP_ALLOC_BONUS );
     rtems_test_assert( alloc_area_begin > block_begin );
     rtems_test_assert( alloc_area_offset < page_size );
 
@@ -772,7 +772,7 @@ static void test_heap_do_block_allocate( int variant, void *p2 )
 
   puts( "\tallocate block full space");
   alloc_begin = alloc_box_begin;
-  alloc_size = alloc_box_size + HEAP_BLOCK_SIZE_OFFSET
+  alloc_size = alloc_box_size + HEAP_ALLOC_BONUS
     - HEAP_BLOCK_HEADER_SIZE;
   test_block_alloc( variant, 1, alloc_begin, alloc_size );
 
@@ -783,7 +783,7 @@ static void test_heap_do_block_allocate( int variant, void *p2 )
 
   puts( "\tallocate block at the end");
   alloc_begin = alloc_box_end - TEST_DEFAULT_PAGE_SIZE;
-  alloc_size = TEST_DEFAULT_PAGE_SIZE + HEAP_BLOCK_SIZE_OFFSET
+  alloc_size = TEST_DEFAULT_PAGE_SIZE + HEAP_ALLOC_BONUS
     - HEAP_BLOCK_HEADER_SIZE;
   test_block_alloc( variant, 3, alloc_begin, alloc_size );
 }
