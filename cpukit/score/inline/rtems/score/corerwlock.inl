@@ -31,6 +31,19 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
+/**
+ *
+ *  This method is used to initialize core rwlock attributes.
+ *
+ *  @param[in] the_attributes pointer to the attributes to initialize.
+ */
+RTEMS_INLINE_ROUTINE void _CORE_RWLock_Initialize_attributes(
+  CORE_RWLock_Attributes *the_attributes
+)
+{
+  the_attributes->XXX = 0;
+}
+
 
 /**@}*/
 

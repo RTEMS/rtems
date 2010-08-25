@@ -1,3 +1,13 @@
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	Coverity Id 164/UNINIT
+	Coverity Id 165/UNINIT
+	* posix/src/prwlockinit.c, posix/src/pspininit.c,
+	score/include/rtems/score/corespinlock.h,
+	score/inline/rtems/score/corerwlock.inl,
+	score/inline/rtems/score/corespinlock.inl: Add initialization helpers
+	for score rwlock and spinlock. Use them from POSIX.
+
 2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/src/free.c, libcsupport/src/malloc.c,

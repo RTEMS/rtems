@@ -30,6 +30,19 @@
 
 /**
  *
+ *  This method is used to initialize core spinlock attributes.
+ *
+ *  @param[in] the_attributes pointer to the attributes to initialize.
+ */
+RTEMS_INLINE_ROUTINE void _CORE_spinlock_Initialize_attributes(
+  CORE_spinlock_Attributes *the_attributes
+)
+{
+  the_attributes->XXX = 0;
+}
+
+/**
+ *
  *  This method is used to determine if the spinlock is available or not.
  *
  *  @param[in] the_spinlock will be checked

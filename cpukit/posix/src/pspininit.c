@@ -65,6 +65,8 @@ int pthread_spin_init(
     return EAGAIN;
   }
 
+  _CORE_spinlock_Initialize_attributes( &attributes );
+
   _CORE_spinlock_Initialize( &the_spinlock->Spinlock, &attributes );
 
   _Objects_Open_u32( &_POSIX_Spinlock_Information, &the_spinlock->Object, 0 );

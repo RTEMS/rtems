@@ -78,8 +78,10 @@ int pthread_rwlock_init(
 
   /*
    * Convert from POSIX attributes to Core RWLock attributes
+   * 
+   * NOTE: Currently there are no core rwlock attributes
    */
-  /*  Currently there are no core rwlock attributes */
+  _CORE_RWLock_Initialize_attributes( &the_attributes );
 
   /*
    * Enter dispatching critical section to allocate and initialize RWLock

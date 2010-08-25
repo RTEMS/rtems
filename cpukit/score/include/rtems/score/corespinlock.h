@@ -32,7 +32,6 @@ extern "C" {
 #endif
 
 #include <rtems/score/thread.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/priority.h>
 
 /**
