@@ -1,5 +1,10 @@
 2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 163
+	* libmisc/stackchk/check.c: Adjust conditional compilation.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 164/UNINIT
 	Coverity Id 165/UNINIT
 	* posix/src/prwlockinit.c, posix/src/pspininit.c,
