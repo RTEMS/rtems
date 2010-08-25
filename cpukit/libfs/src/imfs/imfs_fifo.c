@@ -143,6 +143,6 @@ const rtems_filesystem_file_handlers_r IMFS_fifo_handlers = {
   rtems_filesystem_default_fpathconf,
   rtems_filesystem_default_fsync,
   rtems_filesystem_default_fdatasync,
-  IMFS_fcntl,
+  rtems_filesystem_default_fcntl,
   IMFS_rmnod,
 };

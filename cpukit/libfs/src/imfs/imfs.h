@@ -542,11 +542,6 @@ extern int IMFS_fdatasync(
   rtems_libio_t *iop
 );
 
-extern int IMFS_fcntl(
-  int            cmd,
-  rtems_libio_t *iop
-);
-
 extern void IMFS_create_orphan(
   IMFS_jnode_t *jnode
 );

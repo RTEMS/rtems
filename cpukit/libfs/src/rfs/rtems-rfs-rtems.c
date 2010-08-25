@@ -853,21 +853,6 @@ rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
 }
 
 /**
- * The following routine does a fcntl on an node.
- *
- * @param cmd
- * @param iop
- * @return int
- */
-
-int
-rtems_rfs_rtems_fcntl (int            cmd,
-                       rtems_libio_t* iop)
-{
-  return 0;
-}
-
-/**
  * The following routine does a stat on a node.
  *
  * @param pathloc

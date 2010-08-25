@@ -1861,53 +1861,6 @@ Nfs	nfs    = ((NfsNode)pathloc->node_access)->nfs;
  * rather than by recursion.
  */
 
-#ifdef DECLARE_BODY
-/* This routine is called when they try to mount something
- * on top of THIS filesystem, i.e. if one of our directories
- * is used as a mount point
- */
-static int nfs_mount(
-	rtems_filesystem_mount_table_entry_t *mt_entry     /* in */
-)DECLARE_BODY
-#else
-#define nfs_mount 0
-#endif
-
-#ifdef DECLARE_BODY
-/* This op is called when they try to unmount a FS
- * from a mountpoint managed by THIS FS.
- */
-static int nfs_unmount(
-	rtems_filesystem_mount_table_entry_t *mt_entry     /* in */
-)DECLARE_BODY
-#else
-#define nfs_unmount 0
-#endif
-
-#if 0
-
-/* for reference (libio.h) */
-
-struct rtems_filesystem_mount_table_entry_tt {
-  rtems_chain_node                       Node;
-  rtems_filesystem_location_info_t       mt_point_node;
-  rtems_filesystem_location_info_t       mt_fs_root;
-  int                                    options;
-  void                                  *fs_info;
-
-  rtems_filesystem_limits_and_options_t  pathconf_limits_and_options;
-
-  /*
-   *  When someone adds a mounted filesystem on a real device,
-   *  this will need to be used.
-   *
-   *  The best option long term for this is probably an open file descriptor.
-   */
-  char                                  *dev;
-};
-#endif
-
-
 int rtems_nfs_initialize(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const void                           *data
@@ -2478,9 +2431,9 @@ struct _rtems_filesystem_operations_table nfs_fs_ops = {
 		nfs_mknod,			/* OPTIONAL; may be defaulted */
 		nfs_chown,			/* OPTIONAL; may be defaulted */
 		nfs_freenode,		/* OPTIONAL; may be defaulted; (release node_access) */
-		nfs_mount,			/* OPTIONAL; may be defaulted */
+		rtems_filesystem_default_mount,
 		rtems_nfs_initialize,		/* OPTIONAL; may be defaulted -- not used anymore */
-		nfs_unmount,		/* OPTIONAL; may be defaulted */
+		rtems_filesystem_default_unmount,
 		nfs_fsunmount_me,	/* OPTIONAL; may be defaulted */
 		nfs_utime,			/* OPTIONAL; may be defaulted */
 		nfs_eval_link,		/* OPTIONAL; may be defaulted */
@@ -2567,8 +2520,6 @@ DirInfo		di;
 	return 0;
 }
 
-#define nfs_link_open 0
-
 static int nfs_file_close(
 	rtems_libio_t *iop
 )
@@ -2584,8 +2535,6 @@ static int nfs_dir_close(
 	iop->pathinfo.node_access_2 = 0;
 	return 0;
 }
-
-#define nfs_link_close 0
 
 static ssize_t nfs_file_read(
 	rtems_libio_t *iop,
@@ -2689,8 +2638,6 @@ RpcUdpServer	server = ((Nfs)iop->pathinfo.mt_entry->fs_info)->server;
 	return (char*)di->ptr - (char*)buffer;
 }
 
-#define nfs_link_read 0
-
 static ssize_t nfs_file_write(
 	rtems_libio_t *iop,
 	const void    *buffer,
@@ -2740,22 +2687,6 @@ int			e;
 
 	return count;
 }
-
-#define nfs_dir_write  0
-#define nfs_link_write 0
-
-/* IOCTL is unneeded/unsupported */
-#ifdef DECLARE_BODY
-static int nfs_file_ioctl(
-	rtems_libio_t *iop,
-	uint32_t      command,
-	void          *buffer
-)DECLARE_BODY
-#else
-#define nfs_file_ioctl 0
-#define nfs_dir_ioctl 0
-#define nfs_link_ioctl 0
-#endif
 
 static rtems_off64_t nfs_file_lseek(
 	rtems_libio_t *iop,
@@ -2815,8 +2746,6 @@ DirInfo di = iop->pathinfo.node_access_2;
 
 	return iop->offset;
 }
-
-#define nfs_link_lseek 0
 
 #if 0	/* structure types for reference */
 struct fattr {
@@ -3044,55 +2973,6 @@ sattr					arg;
 					 SATTR_SIZE);
 }
 
-#define nfs_dir_ftruncate 0
-#define nfs_link_ftruncate 0
-
-/* not implemented */
-#ifdef DECLARE_BODY
-static int nfs_file_fpathconf(
-	rtems_libio_t *iop,
-	int name
-)DECLARE_BODY
-#else
-#define nfs_file_fpathconf 0
-#define nfs_dir_fpathconf 0
-#define nfs_link_fpathconf 0
-#endif
-
-/* unused */
-#ifdef DECLARE_BODY
-static int nfs_file_fsync(
-	rtems_libio_t *iop
-)DECLARE_BODY
-#else
-#define nfs_file_fsync 0
-#define nfs_dir_fsync 0
-#define nfs_link_fsync 0
-#endif
-
-/* unused */
-#ifdef DECLARE_BODY
-static int nfs_file_fdatasync(
-	rtems_libio_t *iop
-)DECLARE_BODY
-#else
-#define nfs_file_fdatasync 0
-#define nfs_dir_fdatasync 0
-#define nfs_link_fdatasync 0
-#endif
-
-/* unused */
-#ifdef DECLARE_BODY
-static int nfs_file_fcntl(
-	int            cmd,
-	rtems_libio_t *iop
-)DECLARE_BODY
-#else
-#define nfs_file_fcntl 0
-#define nfs_dir_fcntl 0
-#define nfs_link_fcntl 0
-#endif
-
 /* files and symlinks are removed
  * by the common nfs_unlink() routine.
  * NFS has a different NFSPROC_RMDIR
@@ -3113,15 +2993,15 @@ struct _rtems_filesystem_file_handlers_r nfs_file_file_handlers = {
 		nfs_file_close,			/* OPTIONAL; may be defaulted */
 		nfs_file_read,			/* OPTIONAL; may be defaulted */
 		nfs_file_write,			/* OPTIONAL; may be defaulted */
-		nfs_file_ioctl,			/* OPTIONAL; may be defaulted */
+		rtems_filesystem_default_ioctl,
 		nfs_file_lseek,			/* OPTIONAL; may be defaulted */
 		nfs_fstat,				/* OPTIONAL; may be defaulted */
 		nfs_fchmod,				/* OPTIONAL; may be defaulted */
 		nfs_file_ftruncate,		/* OPTIONAL; may be defaulted */
-		nfs_file_fpathconf,		/* OPTIONAL; may be defaulted - UNUSED */
-		nfs_file_fsync,			/* OPTIONAL; may be defaulted */
-		nfs_file_fdatasync,		/* OPTIONAL; may be defaulted */
-		nfs_file_fcntl,			/* OPTIONAL; may be defaulted */
+		rtems_filesystem_default_fpathconf,
+		rtems_filesystem_default_fsync,
+		rtems_filesystem_default_fdatasync,
+		rtems_filesystem_default_fcntl,
 		nfs_unlink,				/* OPTIONAL; may be defaulted */
 };
 
@@ -3131,35 +3011,35 @@ struct _rtems_filesystem_file_handlers_r nfs_dir_file_handlers = {
 		nfs_dir_open,			/* OPTIONAL; may be defaulted */
 		nfs_dir_close,			/* OPTIONAL; may be defaulted */
 		nfs_dir_read,			/* OPTIONAL; may be defaulted */
-		nfs_dir_write,			/* OPTIONAL; may be defaulted */
-		nfs_dir_ioctl,			/* OPTIONAL; may be defaulted */
+		rtems_filesystem_default_write,
+		rtems_filesystem_default_ioctl,
 		nfs_dir_lseek,			/* OPTIONAL; may be defaulted */
 		nfs_fstat,				/* OPTIONAL; may be defaulted */
 		nfs_fchmod,				/* OPTIONAL; may be defaulted */
-		nfs_dir_ftruncate,		/* OPTIONAL; may be defaulted */
-		nfs_dir_fpathconf,		/* OPTIONAL; may be defaulted - UNUSED */
-		nfs_dir_fsync,			/* OPTIONAL; may be defaulted */
-		nfs_dir_fdatasync,		/* OPTIONAL; may be defaulted */
-		nfs_dir_fcntl,			/* OPTIONAL; may be defaulted */
+		rtems_filesystem_default_ftruncate,
+		rtems_filesystem_default_fpathconf,
+		rtems_filesystem_default_fsync,
+		rtems_filesystem_default_fdatasync,
+		rtems_filesystem_default_fcntl,
 		nfs_dir_rmnod,				/* OPTIONAL; may be defaulted */
 };
 
 /* the link handlers table */
 static
 struct _rtems_filesystem_file_handlers_r nfs_link_file_handlers = {
-		nfs_link_open,			/* OPTIONAL; may be defaulted */
-		nfs_link_close,			/* OPTIONAL; may be defaulted */
-		nfs_link_read,			/* OPTIONAL; may be defaulted */
-		nfs_link_write,			/* OPTIONAL; may be defaulted */
-		nfs_link_ioctl,			/* OPTIONAL; may be defaulted */
-		nfs_link_lseek,			/* OPTIONAL; may be defaulted */
+		rtems_filesystem_default_open,
+		rtems_filesystem_default_close,
+		rtems_filesystem_default_read,
+		rtems_filesystem_default_write,
+		rtems_filesystem_default_ioctl,
+		rtems_filesystem_default_lseek,
 		nfs_fstat,				/* OPTIONAL; may be defaulted */
 		nfs_fchmod,				/* OPTIONAL; may be defaulted */
-		nfs_link_ftruncate,		/* OPTIONAL; may be defaulted */
-		nfs_link_fpathconf,		/* OPTIONAL; may be defaulted - UNUSED */
-		nfs_link_fsync,			/* OPTIONAL; may be defaulted */
-		nfs_link_fdatasync,		/* OPTIONAL; may be defaulted */
-		nfs_link_fcntl,			/* OPTIONAL; may be defaulted */
+		rtems_filesystem_default_ftruncate,
+		rtems_filesystem_default_fpathconf,
+		rtems_filesystem_default_fsync,
+		rtems_filesystem_default_fdatasync,
+		rtems_filesystem_default_fcntl,
 		nfs_unlink,				/* OPTIONAL; may be defaulted */
 };
 

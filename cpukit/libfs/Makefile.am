@@ -40,7 +40,7 @@ libimfs_a_SOURCES =
 libimfs_a_SOURCES += src/imfs/deviceerrno.c src/imfs/deviceio.c \
     src/imfs/fifoimfs_init.c src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_creat.c src/imfs/imfs_debug.c src/imfs/imfs_directory.c \
-    src/imfs/imfs_eval.c src/imfs/imfs_fchmod.c src/imfs/imfs_fcntl.c \
+    src/imfs/imfs_eval.c src/imfs/imfs_fchmod.c \
     src/imfs/imfs_fdatasync.c src/imfs/imfs_fifo.c \
     src/imfs/imfs_fsunmount.c src/imfs/imfs_getchild.c \
     src/imfs/imfs_gtkn.c src/imfs/imfs_handlers_device.c \

@@ -341,6 +341,6 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_file_handlers = {
   .fpathconf_h = rtems_filesystem_default_fpathconf,
   .fsync_h     = rtems_rfs_rtems_fdatasync,
   .fdatasync_h = rtems_rfs_rtems_fdatasync,
-  .fcntl_h     = rtems_rfs_rtems_fcntl,
+  .fcntl_h     = rtems_filesystem_default_fcntl,
   .rmnod_h     = rtems_rfs_rtems_rmnod
 };

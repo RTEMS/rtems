@@ -18,5 +18,5 @@ int rtems_filesystem_default_fcntl(
   rtems_libio_t *iop
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  return 0;
 }
