@@ -20,8 +20,15 @@
 #ifndef _RTEMS_SCORE_HEAP_H
 #define _RTEMS_SCORE_HEAP_H
 
+#include <rtems/system.h>
+#include <rtems/score/thread.h>
+
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#ifdef RTEMS_DEBUG
+  #define HEAP_PROTECTION
 #endif
 
 /**
@@ -125,27 +132,76 @@ extern "C" {
  * @{
  */
 
+typedef struct Heap_Control Heap_Control;
+
+typedef struct Heap_Block Heap_Block;
+
+#ifndef HEAP_PROTECTION
+  #define HEAP_PROTECTION_HEADER_SIZE 0
+#else
+  #define HEAP_PROTECTOR_COUNT 2
+
+  #define HEAP_BEGIN_PROTECTOR_0 ((uintptr_t) 0xfd75a98f)
+  #define HEAP_BEGIN_PROTECTOR_1 ((uintptr_t) 0xbfa1f177)
+  #define HEAP_END_PROTECTOR_0 ((uintptr_t) 0xd6b8855e)
+  #define HEAP_END_PROTECTOR_1 ((uintptr_t) 0x13a44a5b)
+
+  #define HEAP_FREE_PATTERN ((uintptr_t) 0xe7093cdf)
+
+  #define HEAP_PROTECTION_OBOLUS ((Heap_Block *) 1)
+
+  typedef void (*_Heap_Protection_handler)(
+     Heap_Control *heap,
+     Heap_Block *block
+  );
+
+  typedef struct {
+    _Heap_Protection_handler block_initialize;
+    _Heap_Protection_handler block_check;
+    _Heap_Protection_handler block_error;
+    void *handler_data;
+    Heap_Block *first_delayed_free_block;
+    Heap_Block *last_delayed_free_block;
+    uintptr_t delayed_free_block_count;
+  } Heap_Protection;
+
+  typedef struct {
+    uintptr_t protector [HEAP_PROTECTOR_COUNT];
+    Heap_Block *next_delayed_free_block;
+    Thread_Control *task;
+    void *tag;
+  } Heap_Protection_block_begin;
+
+  typedef struct {
+    uintptr_t protector [HEAP_PROTECTOR_COUNT];
+  } Heap_Protection_block_end;
+
+  #define HEAP_PROTECTION_HEADER_SIZE \
+    (sizeof(Heap_Protection_block_begin) + sizeof(Heap_Protection_block_end))
+#endif
+
 /**
  * @brief See also @ref Heap_Block.size_and_flag.
  */
 #define HEAP_PREV_BLOCK_USED ((uintptr_t) 1)
 
 /**
- * @brief Offset from the block begin up to the block size field
- * (@ref Heap_Block.size_and_flag).
+ * @brief Size of the part at the block begin which may be used for allocation
+ * in charge of the previous block.
  */
-#define HEAP_BLOCK_SIZE_OFFSET sizeof(uintptr_t)
+#define HEAP_ALLOC_BONUS sizeof(uintptr_t)
 
 /**
  * @brief The block header consists of the two size fields
  * (@ref Heap_Block.prev_size and @ref Heap_Block.size_and_flag).
  */
-#define HEAP_BLOCK_HEADER_SIZE (sizeof(uintptr_t) * 2)
+#define HEAP_BLOCK_HEADER_SIZE \
+  (2 * sizeof(uintptr_t) + HEAP_PROTECTION_HEADER_SIZE)
 
 /**
  * @brief Description for free or used blocks.
  */
-typedef struct Heap_Block {
+struct Heap_Block {
   /**
    * @brief Size of the previous block or part of the allocated area of the
    * previous block.
@@ -160,6 +216,10 @@ typedef struct Heap_Block {
    * for allocation.
    */
   uintptr_t prev_size;
+
+  #ifdef HEAP_PROTECTION
+    Heap_Protection_block_begin Protection_begin;
+  #endif
 
   /**
    * @brief Contains the size of the current block and a flag which indicates
@@ -176,6 +236,10 @@ typedef struct Heap_Block {
    */
   uintptr_t size_and_flag;
 
+  #ifdef HEAP_PROTECTION
+    Heap_Protection_block_end Protection_end;
+  #endif
+
   /**
    * @brief Pointer to the next free block or part of the allocated area.
    *
@@ -185,7 +249,7 @@ typedef struct Heap_Block {
    * This field is only valid if the block is free and thus part of the free
    * block list.
    */
-  struct Heap_Block *next;
+  Heap_Block *next;
 
   /**
    * @brief Pointer to the previous free block or part of the allocated area.
@@ -193,8 +257,8 @@ typedef struct Heap_Block {
    * This field is only valid if the block is free and thus part of the free
    * block list.
    */
-  struct Heap_Block *prev;
-} Heap_Block;
+  Heap_Block *prev;
+};
 
 /**
  * @brief Run-time heap statistics.
@@ -274,7 +338,7 @@ typedef struct {
 /**
  * @brief Control block used to manage a heap.
  */
-typedef struct {
+struct Heap_Control {
   Heap_Block free_list;
   uintptr_t page_size;
   uintptr_t min_block_size;
@@ -283,7 +347,10 @@ typedef struct {
   Heap_Block *first_block;
   Heap_Block *last_block;
   Heap_Statistics stats;
-} Heap_Control;
+  #ifdef HEAP_PROTECTION
+    Heap_Protection Protection;
+  #endif
+};
 
 /**
  * @brief Information about blocks.
@@ -534,6 +601,36 @@ Heap_Block *_Heap_Block_allocate(
   uintptr_t alloc_begin,
   uintptr_t alloc_size
 );
+
+#ifndef HEAP_PROTECTION
+  #define _Heap_Protection_block_initialize( heap, block ) ((void) 0)
+  #define _Heap_Protection_block_check( heap, block ) ((void) 0)
+  #define _Heap_Protection_block_error( heap, block ) ((void) 0)
+#else
+  static inline void _Heap_Protection_block_initialize(
+    Heap_Control *heap,
+    Heap_Block *block
+  )
+  {
+    (*heap->Protection.block_initialize)( heap, block );
+  }
+
+  static inline void _Heap_Protection_block_check(
+    Heap_Control *heap,
+    Heap_Block *block
+  )
+  {
+    (*heap->Protection.block_check)( heap, block );
+  }
+
+  static inline void _Heap_Protection_block_error(
+    Heap_Control *heap,
+    Heap_Block *block
+  )
+  {
+    (*heap->Protection.block_error)( heap, block );
+  }
+#endif
 
 /** @} */
 

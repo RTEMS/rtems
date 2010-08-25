@@ -23,8 +23,11 @@
 #include "config.h"
 #endif
 
+#include <string.h>
+
 #include <rtems/system.h>
 #include <rtems/score/heap.h>
+#include <rtems/score/interr.h>
 
 #if CPU_ALIGNMENT == 0 || CPU_ALIGNMENT % 2 != 0
   #error "invalid CPU_ALIGNMENT value"
@@ -123,6 +126,46 @@ static uint32_t instance = 0;
  *
  */
 
+#ifdef HEAP_PROTECTION
+  static void _Heap_Protection_block_initialize_default(
+    Heap_Control *heap,
+    Heap_Block *block
+  )
+  {
+    block->Protection_begin.protector [0] = HEAP_BEGIN_PROTECTOR_0;
+    block->Protection_begin.protector [1] = HEAP_BEGIN_PROTECTOR_1;
+    block->Protection_begin.next_delayed_free_block = NULL;
+    block->Protection_begin.task = _Thread_Executing;
+    block->Protection_begin.tag = NULL;
+    block->Protection_end.protector [0] = HEAP_END_PROTECTOR_0;
+    block->Protection_end.protector [1] = HEAP_END_PROTECTOR_1;
+  }
+
+  static void _Heap_Protection_block_check_default(
+    Heap_Control *heap,
+    Heap_Block *block
+  )
+  {
+    if (
+      block->Protection_begin.protector [0] != HEAP_BEGIN_PROTECTOR_0
+        || block->Protection_begin.protector [1] != HEAP_BEGIN_PROTECTOR_1
+        || block->Protection_end.protector [0] != HEAP_END_PROTECTOR_0
+        || block->Protection_end.protector [1] != HEAP_END_PROTECTOR_1
+    ) {
+      _Heap_Protection_block_error( heap, block );
+    }
+  }
+
+  static void _Heap_Protection_block_error_default(
+    Heap_Control *heap,
+    Heap_Block *block
+  )
+  {
+    /* FIXME */
+    _Internal_error_Occurred( 0xdeadbeef, false, 0xdeadbeef );
+  }
+#endif
+
 bool _Heap_Get_first_and_last_block(
   uintptr_t heap_area_begin,
   uintptr_t heap_area_size,
@@ -202,6 +245,14 @@ uintptr_t _Heap_Initialize(
     return 0;
   }
 
+  memset(heap, 0, sizeof(*heap));
+
+  #ifdef HEAP_PROTECTION
+    heap->Protection.block_initialize = _Heap_Protection_block_initialize_default;
+    heap->Protection.block_check = _Heap_Protection_block_check_default;
+    heap->Protection.block_error = _Heap_Protection_block_error_default;
+  #endif
+
   first_block_begin = (uintptr_t) first_block;
   last_block_begin = (uintptr_t) last_block;
   first_block_size = last_block_begin - first_block_begin;
@@ -211,6 +262,7 @@ uintptr_t _Heap_Initialize(
   first_block->size_and_flag = first_block_size | HEAP_PREV_BLOCK_USED;
   first_block->next = _Heap_Free_list_tail( heap );
   first_block->prev = _Heap_Free_list_head( heap );
+  _Heap_Protection_block_initialize( heap, first_block );
 
   /* Heap control */
   heap->page_size = page_size;
@@ -226,6 +278,7 @@ uintptr_t _Heap_Initialize(
   last_block->prev_size = first_block_size;
   last_block->size_and_flag = 0;
   _Heap_Set_last_block_size( heap );
+  _Heap_Protection_block_initialize( heap, last_block );
 
   /* Statistics */
   stats->size = first_block_size;
@@ -233,12 +286,6 @@ uintptr_t _Heap_Initialize(
   stats->min_free_size = first_block_size;
   stats->free_blocks = 1;
   stats->max_free_blocks = 1;
-  stats->used_blocks = 0;
-  stats->max_search = 0;
-  stats->allocs = 0;
-  stats->searches = 0;
-  stats->frees = 0;
-  stats->resizes = 0;
   stats->instance = instance++;
 
   _HAssert( _Heap_Is_aligned( heap->page_size, CPU_ALIGNMENT ) );
@@ -253,7 +300,7 @@ uintptr_t _Heap_Initialize(
   return first_block_size;
 }
 
-void _Heap_Block_split(
+static void _Heap_Block_split(
   Heap_Control *heap,
   Heap_Block *block,
   Heap_Block *free_list_anchor,
@@ -272,13 +319,13 @@ void _Heap_Block_split(
     _Heap_Max( alloc_size, min_alloc_size ) + HEAP_BLOCK_HEADER_SIZE;
   uintptr_t const used_block_size = _Heap_Align_up( used_size, page_size );
 
-  uintptr_t const free_size = block_size + HEAP_BLOCK_SIZE_OFFSET - used_size;
-  uintptr_t const free_size_limit = min_block_size + HEAP_BLOCK_SIZE_OFFSET;
+  uintptr_t const free_size = block_size + HEAP_ALLOC_BONUS - used_size;
+  uintptr_t const free_size_limit = min_block_size + HEAP_ALLOC_BONUS;
 
   Heap_Block *next_block = _Heap_Block_at( block, block_size );
 
-  _HAssert( used_size <= block_size + HEAP_BLOCK_SIZE_OFFSET );
-  _HAssert( used_size + free_size == block_size + HEAP_BLOCK_SIZE_OFFSET );
+  _HAssert( used_size <= block_size + HEAP_ALLOC_BONUS );
+  _HAssert( used_size + free_size == block_size + HEAP_ALLOC_BONUS );
 
   if ( free_size >= free_size_limit ) {
     Heap_Block *const free_block = _Heap_Block_at( block, used_block_size );
@@ -310,6 +357,8 @@ void _Heap_Block_split(
 
     next_block->prev_size = free_block_size;
     next_block->size_and_flag &= ~HEAP_PREV_BLOCK_USED;
+
+    _Heap_Protection_block_initialize( heap, free_block );
   } else {
     next_block->size_and_flag |= HEAP_PREV_BLOCK_USED;
   }
@@ -433,6 +482,8 @@ Heap_Block *_Heap_Block_allocate(
   if ( stats->min_free_size > stats->free_size ) {
     stats->min_free_size = stats->free_size;
   }
+
+  _Heap_Protection_block_initialize( heap, block );
 
   return block;
 }

@@ -27,6 +27,47 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
 
+#ifndef HEAP_PROTECTION
+  #define _Heap_Protection_free_delayed_blocks( heap, alloc_begin ) false
+#else
+  static bool _Heap_Protection_free_delayed_blocks(
+    Heap_Control *heap,
+    uintptr_t alloc_begin
+  )
+  {
+    bool search_again = false;
+    uintptr_t const blocks_to_free_count =
+      (heap->Protection.delayed_free_block_count + 1) / 2;
+
+    if ( alloc_begin == 0 && blocks_to_free_count > 0 ) {
+      Heap_Block *block_to_free = heap->Protection.first_delayed_free_block;
+      uintptr_t count = 0;
+
+      for ( count = 0; count < blocks_to_free_count; ++count ) {
+        Heap_Block *next_block_to_free =
+          block_to_free->Protection_begin.next_delayed_free_block;
+
+        block_to_free->Protection_begin.next_delayed_free_block =
+          HEAP_PROTECTION_OBOLUS;
+
+        _Heap_Free(
+          heap,
+          (void *) _Heap_Alloc_area_of_block( block_to_free )
+        );
+
+        block_to_free = next_block_to_free;
+      }
+
+      heap->Protection.delayed_free_block_count -= blocks_to_free_count;
+      heap->Protection.first_delayed_free_block = block_to_free;
+
+      search_again = true;
+    }
+
+    return search_again;
+  }
+#endif
+
 #ifdef RTEMS_HEAP_DEBUG
   static void _Heap_Check_allocation(
     const Heap_Control *heap,
@@ -58,7 +99,7 @@
       _Heap_Is_aligned( block_size, page_size )
     );
 
-    _HAssert( alloc_end <= block_end + HEAP_BLOCK_SIZE_OFFSET );
+    _HAssert( alloc_end <= block_end + HEAP_ALLOC_BONUS );
     _HAssert( alloc_area_begin == block_begin + HEAP_BLOCK_HEADER_SIZE);
     _HAssert( alloc_area_offset < page_size );
 
@@ -99,7 +140,7 @@ static uintptr_t _Heap_Check_block(
   uintptr_t const alloc_begin_ceiling = block_end - min_block_size
     + HEAP_BLOCK_HEADER_SIZE + page_size - 1;
 
-  uintptr_t alloc_end = block_end + HEAP_BLOCK_SIZE_OFFSET;
+  uintptr_t alloc_end = block_end + HEAP_ALLOC_BONUS;
   uintptr_t alloc_begin = alloc_end - alloc_size;
 
   alloc_begin = _Heap_Align_down( alloc_begin, alignment );
@@ -149,13 +190,13 @@ void *_Heap_Allocate_aligned_with_boundary(
 )
 {
   Heap_Statistics *const stats = &heap->stats;
-  Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
-  Heap_Block *block = _Heap_Free_list_first( heap );
   uintptr_t const block_size_floor = alloc_size + HEAP_BLOCK_HEADER_SIZE
-    - HEAP_BLOCK_SIZE_OFFSET;
+    - HEAP_ALLOC_BONUS;
   uintptr_t const page_size = heap->page_size;
+  Heap_Block *block = NULL;
   uintptr_t alloc_begin = 0;
   uint32_t search_count = 0;
+  bool search_again = false;
 
   if ( block_size_floor < alloc_size ) {
     /* Integer overflow occured */
@@ -172,40 +213,50 @@ void *_Heap_Allocate_aligned_with_boundary(
     }
   }
 
-  while ( block != free_list_tail ) {
-    _HAssert( _Heap_Is_prev_used( block ) );
+  do {
+    Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
 
-    /* Statistics */
-    ++search_count;
+    block = _Heap_Free_list_first( heap );
+    while ( block != free_list_tail ) {
+      _HAssert( _Heap_Is_prev_used( block ) );
 
-    /*
-     * The HEAP_PREV_BLOCK_USED flag is always set in the block size_and_flag
-     * field.  Thus the value is about one unit larger than the real block
-     * size.  The greater than operator takes this into account.
-     */
-    if ( block->size_and_flag > block_size_floor ) {
-      if ( alignment == 0 ) {
-        alloc_begin = _Heap_Alloc_area_of_block( block );
-      } else {
-        alloc_begin = _Heap_Check_block(
-          heap,
-          block,
-          alloc_size,
-          alignment,
-          boundary
-        );
+      _Heap_Protection_block_check( heap, block );
+
+      /*
+       * The HEAP_PREV_BLOCK_USED flag is always set in the block size_and_flag
+       * field.  Thus the value is about one unit larger than the real block
+       * size.  The greater than operator takes this into account.
+       */
+      if ( block->size_and_flag > block_size_floor ) {
+        if ( alignment == 0 ) {
+          alloc_begin = _Heap_Alloc_area_of_block( block );
+        } else {
+          alloc_begin = _Heap_Check_block(
+            heap,
+            block,
+            alloc_size,
+            alignment,
+            boundary
+          );
+        }
       }
+
+      /* Statistics */
+      ++search_count;
+
+      if ( alloc_begin != 0 ) {
+        break;
+      }
+
+      block = block->next;
     }
 
-    if ( alloc_begin != 0 ) {
-      break;
-    }
-
-    block = block->next;
-  }
+    search_again = _Heap_Protection_free_delayed_blocks( heap, alloc_begin );
+  } while ( search_again );
 
   if ( alloc_begin != 0 ) {
     /* Statistics */
+    ++stats->allocs;
     stats->searches += search_count;
 
     block = _Heap_Block_allocate( heap, block, alloc_begin, alloc_size );

@@ -1,5 +1,14 @@
 2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1672/cpukit
+	* score/include/rtems/score/heap.h, score/src/heap.c,
+	score/src/heapallocate.c, score/src/heapextend.c,
+	score/src/heapfree.c, score/src/heapresizeblock.c,
+	score/src/heapsizeofuserarea.c: Added heap protection in case
+	RTEMS_DEBUG is defined.
+	
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libfs/src/imfs/imfs_fcntl.c: Removed file.
 	* libfs/Makefile.am: Reflect change from above.
 	* libfs/src/defaults/default_fcntl.c: Return 0 instead of -1 and errno.

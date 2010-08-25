@@ -51,7 +51,7 @@ bool _Heap_Size_of_alloc_area(
     return false;
   }
 
-  *alloc_size = (uintptr_t) next_block + HEAP_BLOCK_SIZE_OFFSET - alloc_begin;
+  *alloc_size = (uintptr_t) next_block + HEAP_ALLOC_BONUS - alloc_begin;
 
   return true;
 }
