@@ -28,10 +28,6 @@ void free(
   if ( !ptr )
     return;
 
-  #if defined(RTEMS_HEAP_DEBUG)
-    _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false );
-  #endif
-
   /*
    *  Do not attempt to free memory if in a critical section or ISR.
    */

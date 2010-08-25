@@ -1,5 +1,11 @@
 2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/src/free.c, libcsupport/src/malloc.c,
+	libcsupport/src/malloc_initialize.c: Remove heap walks in case
+	RTEMS_DEBUG is defined.
+
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1672/cpukit
 	* score/include/rtems/score/heap.h, score/src/heap.c,
 	score/src/heapallocate.c, score/src/heapextend.c,

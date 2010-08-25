@@ -49,13 +49,6 @@ void *malloc(
     return NULL;
 
   /*
-   *  Walk the heap and verify its integrity
-   */
-  #if defined(RTEMS_HEAP_DEBUG)
-    _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false );
-  #endif
-
-  /*
    * Try to give a segment in the current heap if there is not
    * enough space then try to grow the heap.
    * If this fails then return a NULL pointer.
