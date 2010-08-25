@@ -1,5 +1,11 @@
 2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 125
+	Coverity Id 126
+	* libi2c/libi2c.c: Use strncpy and snprintf.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/src/coremsginsert.c: Fix typo.
 
 2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
