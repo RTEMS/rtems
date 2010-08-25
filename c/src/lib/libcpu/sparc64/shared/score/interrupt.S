@@ -357,7 +357,7 @@ PUBLIC(_ISR_Handler)
     ldub     [%g7], %o5
 
     orcc     %o5, %g0, %g0   ! Is thread switch necessary?
-    bnz      SYM(_ISR_Dispatch) ! yes, then invoke the dispatcher
+    bz       simple_return   ! no, then do a simple return. otherwise fallthru
     nop
 
     /*
@@ -502,16 +502,16 @@ dispatchAgain:
   ldx     [%sp + STACK_BIAS + ISF_G6_OFFSET], %g6    ! restore g6
   ldx     [%sp + STACK_BIAS + ISF_G7_OFFSET], %g7    ! restore g7
 
-
-
+  ! Assume the interrupted context is in TL 0 with GL 0 / normal globals.
+  ! When tstate is restored at done/retry, the interrupted context is restored.
   ! return to TL[1], GL[1], and restore TSTATE, TPC, and TNPC
   wrpr  %g0, 1, %tl
 
   ! return to GL=1 or AG
 #if defined(SUN4U)
-    rdpr  %pstate, %g1
-    andn  %g1, SPARC_PSTATE_AG_MASK, %g1
-    wrpr  %g1, %g0, %pstate                 ! go to regular global
+    rdpr  %pstate, %o1
+    or  %o1, SPARC_PSTATE_AG_MASK, %o1
+    wrpr  %o1, %g0, %pstate                 ! go to AG.
 #elif defined(SUN4V)
   wrpr  %g0, 1, %gl
 #endif
