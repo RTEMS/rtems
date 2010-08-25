@@ -60,7 +60,7 @@ void _CORE_message_queue_Insert_message(
     bool    notify = false;
     #define SET_NOTIFY() \
       do { \
-        if ( the_message_queue->number_of_pending_messages == 0 )
+        if ( the_message_queue->number_of_pending_messages == 0 ) \
           notify = true; \
       } while (0)
   #else

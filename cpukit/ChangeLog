@@ -1,5 +1,9 @@
 2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/coremsginsert.c: Fix typo.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 148/STRAY_SEMICOLON
 	* score/src/coremsginsert.c: Slightly modify macro.
 
