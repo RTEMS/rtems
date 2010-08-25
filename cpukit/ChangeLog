@@ -1,5 +1,10 @@
 2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libblock/include/rtems/media.h, libblock/src/media-server.c: Use
+	chains instead of a message queue.
+
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	CID 114/SECURE_CODING
 	* libblock/src/media.c: Avoid strcpy().
 

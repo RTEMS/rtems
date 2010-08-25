@@ -387,9 +387,6 @@ rtems_status_code rtems_media_post_event(
  * It creates a server task with the @a priority, @a stack_size, @a modes, and
  * @a attributes parameters.
  *
- * A message queue will be used for communication with the server task which
- * may buffer up to @a message_count messages.
- *
  * Calling this function more than once will have no effects.  There is no
  * protection against concurrent access.
  *
@@ -400,8 +397,7 @@ rtems_status_code rtems_media_server_initialize(
   rtems_task_priority priority,
   size_t stack_size,
   rtems_mode modes,
-  rtems_attribute attributes,
-  uint32_t message_count
+  rtems_attribute attributes
 );
 
 /**
@@ -410,8 +406,8 @@ rtems_status_code rtems_media_server_initialize(
  * @see See rtems_media_post_event().
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_UNSATISFIED Message queue is full.
- * @retval RTEMS_NO_MEMORY Not enough memory for the message.
+ * @retval RTEMS_NO_MEMORY Not enough resources to notify the media server.
+ * @retval RTEMS_NOT_CONFIGURED Media server is not initialized.
  */
 rtems_status_code rtems_media_server_post_event(
   rtems_media_event event,
