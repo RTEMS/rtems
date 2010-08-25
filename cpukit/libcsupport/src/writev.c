@@ -73,10 +73,11 @@ ssize_t writev(
   all_zeros = true;
   for ( old=0, total=0, v=0 ; v < iovcnt ; v++ ) {
 
-    if ( !iov[v].iov_base )
-      rtems_set_errno_and_return_minus_one( EINVAL );
-
-    if ( iov[v].iov_len < 0 )
+    /*
+     *  iov[v].iov_len cannot be less than 0 because size_t is unsigned.
+     *  So we only check for zero.
+     */
+    if ( iov[v].iov_base == 0 )
       rtems_set_errno_and_return_minus_one( EINVAL );
 
     if ( iov[v].iov_len )

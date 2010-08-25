@@ -1,5 +1,12 @@
 2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 93/NO_EFFECT
+	Coverity Id 94/NO_EFFECT
+	* libcsupport/src/readv.c, libcsupport/src/writev.c: size_t is unsigned
+	so it is useless to check for < 0.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 125
 	Coverity Id 126
 	* libi2c/libi2c.c: Use strncpy and snprintf.
