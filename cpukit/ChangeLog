@@ -1,5 +1,11 @@
 2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	Coverity Id 169
+	* libmisc/stackchk/check.c: Readd line accidentally deleted between
+	1.67 and 1.68.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	Coverity Id 163
 	* libmisc/stackchk/check.c: Adjust conditional compilation.
 

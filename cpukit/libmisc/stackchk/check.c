@@ -142,6 +142,7 @@ void Stack_check_Initialize( void )
     0xDEADF00D, 0x600D0D06   /* DEAD FOOD but GOOD DOG */
   };
 
+  if ( Stack_check_Initialized )
     return;
 
   /*
