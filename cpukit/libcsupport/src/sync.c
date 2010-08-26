@@ -47,6 +47,11 @@ static void sync_wrapper(FILE *f)
 {
   int fn = fileno(f);
 
+  /*
+   *  We are explicitly NOT checking the return values as it does not
+   *  matter if they succeed.  We are just making a best faith attempt
+   *  at both and trusting that we were passed a good FILE pointer.
+   */
   fsync(fn);
   fdatasync(fn);
 }
