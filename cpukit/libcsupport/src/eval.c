@@ -3,7 +3,7 @@
  *
  *  Routine to seed the evaluate path routine.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,15 +32,17 @@ int rtems_filesystem_evaluate_relative_path(
   int                           result;
   rtems_filesystem_node_types_t type;
 
-  /*
-   * Verify Input parameters.
-   */
+  #if defined(RTEMS_DEBUG)
+    /*
+     * Verify Input parameters that should never be bad unless someone
+     * is implementing a new filesystem and has bugs.
+     */
+    if ( !pathname )
+      rtems_set_errno_and_return_minus_one( EFAULT );
 
-  if ( !pathname )
-    rtems_set_errno_and_return_minus_one( EFAULT );
-
-  if ( !pathloc )
-    rtems_set_errno_and_return_minus_one( EIO );       /* should never happen */
+    if ( !pathloc )
+      rtems_set_errno_and_return_minus_one( EIO );
+  #endif
 
   result = (*pathloc->ops->evalpath_h)( pathname, pathnamelen, flags, pathloc );
 
@@ -87,15 +89,17 @@ int rtems_filesystem_evaluate_path(
 {
   int                           i = 0;
 
-  /*
-   * Verify Input parameters.
-   */
+  #if defined(RTEMS_DEBUG)
+    /*
+     * Verify Input parameters that should never be bad unless someone
+     * is implementing a new filesystem and has bugs.
+     */
+    if ( !pathname )
+      rtems_set_errno_and_return_minus_one( EFAULT );
 
-  if ( !pathname )
-    rtems_set_errno_and_return_minus_one( EFAULT );
-
-  if ( !pathloc )
-    rtems_set_errno_and_return_minus_one( EIO );       /* should never happen */
+    if ( !pathloc )
+      rtems_set_errno_and_return_minus_one( EIO );
+  #endif
 
   /*
    * Evaluate the path using the optable evalpath.

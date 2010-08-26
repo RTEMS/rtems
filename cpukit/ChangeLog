@@ -1,3 +1,8 @@
+2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/eval.c: Make some filesystem implementation
+	correctness checks conditional on RTEMS_DEBUG.
+
 2010-08-26	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/defaults/default_evaluate_link.c: Remove assignment.
