@@ -1,3 +1,9 @@
+2010-08-26	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1663/testing
+	* spmkdir/init.c, spmkdir/spmkdir.scn: Added some test outputs to
+	the test.
+
 2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spheapprot/.cvsignore, spheapprot/Makefile.am,

@@ -1,2 +1,19 @@
 *** TEST SPMKDIR ***
+rtems_mkdir a - OK
+rtems_mkdir a/b - OK
+rtems_mkdir a/b/c/d/e/f/g/h/i - OK
+rtems_mkdir a/b/c - OK
+rtems_mkdir a/b/c/1 - OK
+rtems_mkdir a/b/c/2 - OK
+rtems_mkdir a/b/c/3 - OK
+rtems_mkdir a/b/c/4 - OK
+rtems_mkdir a/b - OK
+rtems_mkdir a - OK
+rtems_mkdir a/b/x - OK
+rtems_mkdir a/b/x/y - expect failure
+mknod regular file a/n - OK
+rtems_mkdir a/n/b - expect failure
+Create node b and open in RDONLY mode - OK
+Closing b - OK
+rtems_mkdir b - expect failure
 *** END OF TEST SPMKDIR ***
