@@ -1,0 +1,47 @@
+diff -Naur binutils-2.20.1.orig/bfd/ChangeLog.rtems binutils-2.20.1/bfd/ChangeLog.rtems
+--- binutils-2.20.1.orig/bfd/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
++++ binutils-2.20.1/bfd/ChangeLog.rtems	2010-08-26 05:03:08.221352824 +0200
+@@ -0,0 +1,6 @@
++2010-08-25  H.J. Lu  <hongjiu.lu@intel.com>
++ 
++	PR ld/11939
++	* elflink.c (elf_link_add_object_symbols): Don't set
++	unique_global for non-ELF hash link table.
++
+diff -Naur binutils-2.20.1.orig/bfd/elflink.c binutils-2.20.1/bfd/elflink.c
+--- binutils-2.20.1.orig/bfd/elflink.c	2009-09-10 13:47:12.000000000 +0200
++++ binutils-2.20.1/bfd/elflink.c	2010-08-26 05:03:08.225352726 +0200
+@@ -4154,7 +4154,8 @@
+ 	h = (struct elf_link_hash_entry *) h->root.u.i.link;
+ 
+       *sym_hash = h;
+-      h->unique_global = (flags & BSF_GNU_UNIQUE) != 0;
++      if (is_elf_hash_table (htab))
++	h->unique_global = (flags & BSF_GNU_UNIQUE) != 0;
+ 
+       new_weakdef = FALSE;
+       if (dynamic
+diff -Naur binutils-2.20.1.orig/bfd/Makefile.am binutils-2.20.1/bfd/Makefile.am
+--- binutils-2.20.1.orig/bfd/Makefile.am	2010-03-03 14:31:55.000000000 +0100
++++ binutils-2.20.1/bfd/Makefile.am	2010-08-26 05:02:54.181352514 +0200
+@@ -4,7 +4,7 @@
+ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ 
+ # Uncomment the following line when doing a release.
+-# RELEASE=y
++RELEASE=y
+ 
+ INCDIR = $(srcdir)/../include
+ CSEARCH = -I. -I$(srcdir) -I$(INCDIR)
+diff -Naur binutils-2.20.1.orig/bfd/Makefile.in binutils-2.20.1/bfd/Makefile.in
+--- binutils-2.20.1.orig/bfd/Makefile.in	2010-03-03 14:59:15.000000000 +0100
++++ binutils-2.20.1/bfd/Makefile.in	2010-08-26 05:02:54.181352514 +0200
+@@ -317,7 +317,7 @@
+ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ 
+ # Uncomment the following line when doing a release.
+-# RELEASE=y
++RELEASE = y
+ INCDIR = $(srcdir)/../include
+ CSEARCH = -I. -I$(srcdir) -I$(INCDIR)
+ SUBDIRS = doc po
