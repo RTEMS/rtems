@@ -1,3 +1,8 @@
+2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxenosys/init.c, psxenosys/psxenosys.scn: Update to reflect some of
+	aio being implemented.
+
 2010-08-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* psxenosys/init.c, psxenosys/psxenosys.scn: Update to reflect AIO

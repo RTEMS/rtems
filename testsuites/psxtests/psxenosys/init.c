@@ -56,16 +56,8 @@ void *POSIX_Init(
   sc = lio_listio( 0, NULL, 0, NULL );
   check_enosys( sc );
 
-  puts( "aio_cancel -- ENOSYS" );
-  sc = aio_cancel( 0, NULL );
-  check_enosys( sc );
-
   puts( "aio_suspend -- ENOSYS" );
   sc = aio_suspend( NULL, 0, NULL );
-  check_enosys( sc );
-
-  puts( "aio_fsync -- ENOSYS" );
-  sc = aio_fsync( 0, NULL );
   check_enosys( sc );
 
   puts( "clock_getcpuclockid -- ENOSYS" );
