@@ -158,18 +158,24 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
 
   if (handle->shared->references == 0)
   {
-    /*
-     * @todo This could be clever and only update if different.
-     */
-    rtems_rfs_inode_set_atime (&handle->shared->inode,
-                               handle->shared->atime);
-    rtems_rfs_inode_set_mtime (&handle->shared->inode,
-                               handle->shared->mtime);
-    rtems_rfs_inode_set_ctime (&handle->shared->inode,
-                               handle->shared->ctime);
-    handle->shared->map.size.count = handle->shared->size.count;
-    handle->shared->map.size.offset = handle->shared->size.offset;
+    if (!rtems_rfs_inode_is_loaded (&handle->shared->inode))
+      rrc = rtems_rfs_inode_load (fs, &handle->shared->inode);
 
+    if (rrc == 0)
+    {
+      /*
+       * @todo This could be clever and only update if different.
+       */
+      rtems_rfs_inode_set_atime (&handle->shared->inode,
+                                 handle->shared->atime);
+      rtems_rfs_inode_set_mtime (&handle->shared->inode,
+                                 handle->shared->mtime);
+      rtems_rfs_inode_set_ctime (&handle->shared->inode,
+                                 handle->shared->ctime);
+      handle->shared->map.size.count = handle->shared->size.count;
+      handle->shared->map.size.offset = handle->shared->size.offset;
+    }
+    
     rc = rtems_rfs_block_map_close (fs, &handle->shared->map);
     if (rc > 0)
     {
