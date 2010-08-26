@@ -538,6 +538,7 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
   
   memset (&fs, 0, sizeof (rtems_rfs_file_system));
 
+  rtems_chain_initialize_empty (&fs.buffers);
   rtems_chain_initialize_empty (&fs.release);
   rtems_chain_initialize_empty (&fs.release_modified);
   rtems_chain_initialize_empty (&fs.file_shares);

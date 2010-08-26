@@ -1,3 +1,12 @@
+2010-08-26	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/defaults/default_evaluate_link.c: Remove assignment.
+
+	* libfs/src/rfs/rtems-rfs-file.c: Check then load the inode is not
+	present on the close.
+	
+	* libfs/src/rfs/rtems-rfs-format.c: Initialise the buffer chain.
+	
 2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	Coverity Id 93/NO_EFFECT
