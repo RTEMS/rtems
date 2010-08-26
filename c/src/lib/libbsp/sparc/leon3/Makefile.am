@@ -41,7 +41,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bootcard.c startup/bspstart.c \
     ../../sparc/shared/bsppretaskinghook.c ../../shared/bsppredriverhook.c \
     ../../sparc/shared/bspgetworkarea.c ../../shared/sbrk.c startup/setvec.c \
-    startup/spurious.c startup/bspidle.S
+    startup/spurious.c startup/bspidle.S \
+    ../../shared/bspinit.c
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # amba

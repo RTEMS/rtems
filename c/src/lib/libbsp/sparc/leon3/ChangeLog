@@ -1,3 +1,7 @@
+2010-08-26	Chris Johns <chrisj@rtems.org>
+
+	* Makefile.am: Add bspinit.c from the shared BSP files.
+
 2010-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Remove AC_CHECK_SIZEOF([void *]).
