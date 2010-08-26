@@ -1,5 +1,10 @@
 2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/monitor/mon-symbols.c: Fix length of buffer passed to
+	strncpy() so there is room for a NULL terminator.
+
+2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/eval.c: Make some filesystem implementation
 	correctness checks conditional on RTEMS_DEBUG.
 
