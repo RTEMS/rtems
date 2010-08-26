@@ -53,7 +53,7 @@ Name:		rtems-4.11-powerpc-rtems4.11-binutils
 Summary:	Binutils for target powerpc-rtems4.11
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -74,7 +74,7 @@ BuildRequires:	bison
 Requires:	rtems-4.11-binutils-common
 
 Source0: ftp://ftp.gnu.org/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.20.1-rtems4.11-20100521.diff
+Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/binutils-2.20.1-rtems4.11-20100826.diff
 
 %description
 Cross binutils for target powerpc-rtems4.11
