@@ -1,5 +1,12 @@
 2010-08-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/ctermid.c: Add comment explaining that this use of
+	strcpy() is a potential buffer overrun but because the API does not
+	provide a way to know the length of the user provided buffer, there
+	is nothing we can do about it.
+
+2010-08-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/main_date.c: Use snprintf() not sprintf().
 
 2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>

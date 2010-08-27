@@ -30,6 +30,11 @@ char *ctermid(
   if ( !s )
     return ctermid_name;
 
+  /*
+   *  We have no way of knowing the length of the user provided buffer.
+   *  It may not be large enough but there is no way to know that. :(
+   *  So this is a potential buffer owerrun that we can do nothing about.
+   */
   strcpy( s, ctermid_name );
   return s;
 }
