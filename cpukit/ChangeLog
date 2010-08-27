@@ -1,3 +1,10 @@
+2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1692/filesystem
+	* libcsupport/include/rtems/libio.h, libfs/src/devfs/devfs_eval.c,
+	libfs/src/imfs/imfs_eval.c: Fix implementation and use of
+	rtems_libio_is_valid_perms().
+
 2010-08-26      Chris Johns <chrisj@rtems.org>
 
         * libfs/src/rfs/rtems-rfs-file.c: Check then load the inode is not
