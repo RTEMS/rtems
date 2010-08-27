@@ -110,14 +110,15 @@ rtems_filesystem_register(
   rtems_filesystem_fsmount_me_t  mount_h
 )
 {
-  size_t fsn_size = sizeof( filesystem_node ) + strlen(type) + 1;
+  size_t type_size = strlen(type) + 1;
+  size_t fsn_size = sizeof( filesystem_node ) + type_size;
   filesystem_node *fsn = malloc( fsn_size );
-  char *type_storage = (char *) fsn + sizeof( filesystem_node );
+  char *type_storage = (char *) fsn + sizeof( *fsn );
 
   if ( fsn == NULL )
     rtems_set_errno_and_return_minus_one( ENOMEM );
 
-  strcpy(type_storage, type);
+  memcpy(type_storage, type, type_size);
   fsn->entry.type = type_storage;
   fsn->entry.mount_h = mount_h;
 

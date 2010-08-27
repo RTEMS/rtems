@@ -1,6 +1,7 @@
 2010-08-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-	* libcsupport/src/mount.c: Avoid strcpy().
+	* libcsupport/src/mount.c, libcsupport/src/mount-mgr.c: Avoid
+	strcpy().
 
 2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
