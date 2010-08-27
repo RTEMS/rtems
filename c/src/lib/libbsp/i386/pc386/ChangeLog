@@ -1,3 +1,8 @@
+2010-08-27	Chris Johns <chrisj@rtems.org>
+
+	* console/console.c: Add baudrate support to the --console command
+	line option. You can now do '--console=com1,115200'.
+
 2010-07-23	Vinu Rajashekhar <vinutheraj@gmail.com>
 
 	* start/start.S: Replace the call to _return_to_monitor by

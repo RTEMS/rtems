@@ -68,7 +68,7 @@ int BSPConsolePort = BSP_CONSOLE_PORT_CONSOLE;
 int BSPPrintkPort  = BSP_CONSOLE_PORT_CONSOLE;
 #endif
 
-int BSPBaseBaud    = 115200;
+int BSPBaseBaud    = 9600;
 
 extern BSP_polling_getchar_function_type BSP_poll_char;
 extern int getch( void );
@@ -151,31 +151,51 @@ BSP_runtime_console_select(int *, int *) __attribute__((weak));
 void
 BSP_console_select(void)
 {
-  const char* mode;
+  const char* opt;
 
   /*
-   * Check the command line for the type of mode
-   * the console is.
+   * Check the command line for the type of mode the console is.
    */
-  mode = bsp_cmdline_arg ("--console=");
+  opt = bsp_cmdline_arg ("--console=");
 
-  if (mode)
+  if (opt)
   {
-    mode += sizeof ("--console=") - 1;
-    if (strncmp (mode, "console", sizeof ("console") - 1) == 0)
+    const char* comma;
+    
+    opt += sizeof ("--console=") - 1;
+    if (strncmp (opt, "console", sizeof ("console") - 1) == 0)
     {
       BSPConsolePort = BSP_CONSOLE_PORT_CONSOLE;
       BSPPrintkPort  = BSP_CONSOLE_PORT_CONSOLE;
     }
-    else if (strncmp (mode, "com1", sizeof ("com1") - 1) == 0)
+    else if (strncmp (opt, "com1", sizeof ("com1") - 1) == 0)
     {
       BSPConsolePort = BSP_UART_COM1;
       BSPPrintkPort  = BSP_UART_COM1;
     }
-    else if (strncmp (mode, "com2", sizeof ("com2") - 1) == 0)
+    else if (strncmp (opt, "com2", sizeof ("com2") - 1) == 0)
     {
       BSPConsolePort = BSP_UART_COM2;
       BSPPrintkPort  = BSP_UART_COM2;
+    }
+
+    comma = strchr (opt, ',');
+
+    if (comma)
+    {
+      comma += 1;
+      if (strncmp (opt, "115200", sizeof ("115200") - 1) == 0)
+        BSPBaseBaud = 115200;
+      else if (strncmp (opt, "57600", sizeof ("57600") - 1) == 0)
+        BSPBaseBaud = 57600;
+      else if (strncmp (opt, "38400", sizeof ("38400") - 1) == 0)
+        BSPBaseBaud = 38400;
+      else if (strncmp (opt, "19200", sizeof ("19200") - 1) == 0)
+        BSPBaseBaud = 19200;
+      else if (strncmp (opt, "9600", sizeof ("9600") - 1) == 0)
+        BSPBaseBaud = 9600;
+      else if (strncmp (opt, "4800", sizeof ("4800") - 1) == 0)
+        BSPBaseBaud = 9600;
     }
   }
 
@@ -267,8 +287,8 @@ console_initialize(rtems_device_major_number major,
       /*
        * Do device-specific initialization
        */
-      /* 9600-8-N-1 */
-      BSP_uart_init(BSPConsolePort, 9600, CHR_8_BITS, 0, 0, 0);
+      /* BSPBaseBaud-8-N-1 */
+      BSP_uart_init(BSPConsolePort, BSPBaseBaud, CHR_8_BITS, 0, 0, 0);
 
       /* Set interrupt handler */
       if(BSPConsolePort == BSP_UART_COM1)
@@ -301,11 +321,11 @@ console_initialize(rtems_device_major_number major,
 
       if(BSPConsolePort == BSP_UART_COM1)
 	{
-	  printk("Initialized console on port COM1 9600-8-N-1\n\n");
+	  printk("Initialized console on port COM1 %d-8-N-1\n\n", BSPBaseBaud);
 	}
       else
 	{
-	  printk("Initialized console on port COM2 9600-8-N-1\n\n");
+	  printk("Initialized console on port COM2 %d-8-N-1\n\n", BSPBaseBaud);
 	}
   }
 
@@ -489,7 +509,7 @@ conSetAttr(int minor, const struct termios *t)
 
   baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
   if ( baud > 115200 )
-    rtems_fatal_error_occurred (RTEMS_INTERNAL_ERROR);
+    return RTEMS_INVALID_NUMBER;
 
   if (t->c_cflag & PARENB) {
     /* Parity is enabled */
