@@ -1,5 +1,11 @@
 2010-08-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libfs/src/defaults/default_evalpath.c,
+	libfs/src/defaults/default_evaluate_link.c: Removed superfluous
+	assignment.
+
+2010-08-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libcsupport/src/mount.c, libcsupport/src/mount-mgr.c: Avoid
 	strcpy().
 

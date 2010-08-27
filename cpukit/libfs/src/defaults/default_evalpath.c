@@ -20,7 +20,6 @@ int rtems_filesystem_default_evalpath(
   rtems_filesystem_location_info_t  *pathloc        /* IN/OUT */
 )
 {
-  pathloc = NULL;
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
 
