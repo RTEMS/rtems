@@ -1,3 +1,7 @@
+2010-08-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/main_date.c: Use snprintf() not sprintf().
+
 2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1693/filesystem

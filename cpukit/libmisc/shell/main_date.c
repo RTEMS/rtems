@@ -52,7 +52,7 @@ int rtems_shell_main_date(
     struct timespec timesp;
     char *result;
 
-    sprintf( buf, "%s %s", argv[1], argv[2] );
+    snprintf( buf, sizeof(buf), "%s %s", argv[1], argv[2] );
     result = strptime(
       buf,
       "%Y-%m-%d %T",
