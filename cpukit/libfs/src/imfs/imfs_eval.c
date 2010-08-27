@@ -79,10 +79,8 @@ int IMFS_evaluate_permission(
   IMFS_jnode_t *jnode;
   int           flags_to_test;
 
-  if ( !rtems_libio_is_valid_perms( flags ) ) {
-    assert( 0 );
-    rtems_set_errno_and_return_minus_one( EIO );
-  }
+  if ( !rtems_libio_is_valid_perms( flags ) )
+    rtems_set_errno_and_return_minus_one( EPERM );
 
   jnode = node->node_access;
 
