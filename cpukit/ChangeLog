@@ -1,3 +1,7 @@
+2010-08-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/mount.c: Avoid strcpy().
+
 2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/sync.c: Add comment explaining why the return value
