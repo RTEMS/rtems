@@ -1287,7 +1287,7 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
  * Verifies that the permission flag is valid.
  */
 #define rtems_libio_is_valid_perms( _perm )     \
- (~ ((~RTEMS_LIBIO_PERMS_RWX) & _perm ))
+ (((~RTEMS_LIBIO_PERMS_RWX) & _perm ) == 0)
 
 /*
  *  Prototypes for filesystem
