@@ -1048,7 +1048,7 @@ fflush(stdout);
       return 0;
 
     p2 = (block_p *)p1[ doubly ];
-    if ( !p )
+    if ( !p2 )
       return 0;
 
     return (block_p *)&p2[ singly ];

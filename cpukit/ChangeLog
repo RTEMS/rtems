@@ -1,5 +1,11 @@
 2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	PR 1693/filesystem
+	* libfs/src/imfs/memfile.c: IMFS_memfile_get_block_pointer() was
+	checking incorrect pointer and thus had dead code.
+
+2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	PR 1692/filesystem
 	* libcsupport/include/rtems/libio.h, libfs/src/devfs/devfs_eval.c,
 	libfs/src/imfs/imfs_eval.c: Fix implementation and use of
