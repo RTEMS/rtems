@@ -1,3 +1,9 @@
+2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1692/filesystem
+	* libcsupport/include/rtems/libio.h, libfs/src/imfs/imfs_eval.c: Fix
+	implementation and use of rtems_libio_is_valid_perms().
+
 2010-06-21	Peter Dufault <dufault@hda.com>
 
 	PR 1570/cpukit
