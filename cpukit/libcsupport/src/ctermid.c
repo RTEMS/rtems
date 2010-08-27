@@ -1,7 +1,7 @@
 /*
  *  ctermid() - POSIX 1003.1b 4.7.1 - Generate Terminal Pathname
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
