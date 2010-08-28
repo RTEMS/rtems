@@ -1,3 +1,9 @@
+2010-08-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1694/shell
+	* libmisc/shell/main_setenv.c: Address memory leak identified by
+	Coverity.
+
 2010-08-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libfs/src/pipe/pipe.c: Remove unreachable line flagged by Coverity as
