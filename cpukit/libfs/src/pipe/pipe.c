@@ -48,7 +48,6 @@ int pipe_create(
     }
     /* Just try once... */
     return -1;
-    sprintf(fifopath + 10, "%04x", rtems_pipe_no ++);
   }
 
   /* Non-blocking open to avoid waiting for writers */

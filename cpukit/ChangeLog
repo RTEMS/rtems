@@ -1,3 +1,8 @@
+2010-08-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/pipe/pipe.c: Remove unreachable line flagged by Coverity as
+	dead code.
+
 2010-08-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/ctermid.c: Add comment explaining that this use of
