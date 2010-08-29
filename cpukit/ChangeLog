@@ -1,5 +1,11 @@
 2010-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* libcsupport/src/privateenv.c: Add macro to test status when
+	RTEMS_DEBUG is enabled. Note than evaluation of root directory should
+	always work.
+
+2010-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* libcsupport/src/getlogin.c: Modify to use strncpy() on all paths.
 
 2010-08-28	Joel Sherrill <joel.sherrill@oarcorp.com>

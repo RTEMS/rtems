@@ -24,6 +24,13 @@
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
 
+#if defined(RTEMS_DEBUG)
+   #define CHECK_STATUS(_x) assert((_x) == )
+   #include <assert.h>
+#else
+   #define CHECK_STATUS(_x) _x
+#endif
+
 /* cleanup a user environment
  * NOTE: this must be called with
  *       thread dispatching disabled!
@@ -33,15 +40,15 @@ free_user_env(void *venv)
 {
   rtems_user_env_t *env = (rtems_user_env_t*) venv ;
 
- if (env != &rtems_global_user_env
-#ifdef HAVE_USERENV_REFCNT
-  && --env->refcnt <= 0
-#endif
+  if (env != &rtems_global_user_env
+  #ifdef HAVE_USERENV_REFCNT
+      && --env->refcnt <= 0
+  #endif
   ) {
-  rtems_filesystem_freenode( &env->current_directory);
-  rtems_filesystem_freenode( &env->root_directory);
-  free(env);
- }
+    rtems_filesystem_freenode( &env->current_directory);
+    rtems_filesystem_freenode( &env->root_directory);
+    free(env);
+  }
 }
 
 rtems_status_code rtems_libio_set_private_env(void)
@@ -67,50 +74,53 @@ rtems_status_code rtems_libio_set_private_env(void)
 
   if (rtems_current_user_env==&rtems_global_user_env || 
       rtems_current_user_env->task_id != task_id ) {
-   rtems_user_env_t *tmp = malloc(sizeof(rtems_user_env_t));
-   if (!tmp)
-     return RTEMS_NO_MEMORY;
+    rtems_user_env_t *tmp = malloc(sizeof(rtems_user_env_t));
+    if (!tmp)
+      return RTEMS_NO_MEMORY;
 
-#ifdef HAVE_USERENV_REFCNT
-   tmp->refcnt = 1;
-#endif
+    #ifdef HAVE_USERENV_REFCNT
+      tmp->refcnt = 1;
+    #endif
 
-   sc = rtems_task_variable_add(
-    RTEMS_SELF,
-    (void*)&rtems_current_user_env,
-    (void(*)(void *))free_user_env
-   );
-   if (sc != RTEMS_SUCCESSFUL) {
-    /* don't use free_user_env because the pathlocs are
-     * not initialized yet
-     */
-     free(tmp);
-     return sc;
-   }
-   rtems_current_user_env = tmp;
+    sc = rtems_task_variable_add(
+      RTEMS_SELF,
+      (void*)&rtems_current_user_env,
+      (void(*)(void *))free_user_env
+    );
+    if (sc != RTEMS_SUCCESSFUL) {
+      /* don't use free_user_env because the pathlocs are
+       * not initialized yet
+       */
+       free(tmp);
+       return sc;
+     }
+     rtems_current_user_env = tmp;
   }
 
   *rtems_current_user_env = rtems_global_user_env; /* get the global values*/
   rtems_current_user_env->task_id=task_id;         /* mark the local values*/
 
-  /* Clone the pathlocs. In contrast to most other
-   * code we must _not_ free the original locs because
-   * what we are trying to do here is forking off
-   * clones. The reason is a pathloc can be allocated by the
-   * file system and needs to be freed when deleting the environment.
+  /*  Clone the pathlocs. In contrast to most other code we must _not_
+   *  free the original locs because what we are trying to do here is forking
+   *  off clones. The reason is a pathloc can be allocated by the file system
+   *  and needs to be freed when deleting the environment.
+   *
+   *  NOTE: Evaluation should always work so only check status when debug
+   *        is enabled.
    */
 
-  rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);
+  CHECK_STATUS( rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0) );
   rtems_filesystem_root    = loc;
-  rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);
+
+  CHECK_STATUS( rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0) );
   rtems_filesystem_current = loc;
 
   return RTEMS_SUCCESSFUL;
 }
 
 /*
- *  Share a same private environment beetween two task:
- *   Task_id (remote) and RTEMS_SELF(current).
+ *  Share the same private environment between two tasks:
+ *      Task_id (remote) and RTEMS_SELF(current).
  */
 
 /* NOTE:
