@@ -265,7 +265,7 @@ int killinfo(
        *  If the interested thread is ready, don't think about changing.
        */
 
-      if ( !_States_Is_ready( interested->current_state ) ) {
+      if ( interested && !_States_Is_ready( interested->current_state ) ) {
         /* preferred ready over blocked */
         DEBUG_STEP("5");
         if ( _States_Is_ready( the_thread->current_state ) ) {
