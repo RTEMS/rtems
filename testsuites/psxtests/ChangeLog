@@ -1,3 +1,8 @@
+2010-08-30	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psxenosys/init.c, psxenosys/psxenosys.doc,
+	psxenosys/psxenosys.scn: Remove devctl.
+
 2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxenosys/init.c, psxenosys/psxenosys.scn: Update to reflect some of
