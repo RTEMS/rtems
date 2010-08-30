@@ -1,5 +1,11 @@
 2010-08-30	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
+	* configure.ac: AC_CHECK_DECLS([seteuid]).
+	* psximfs02/init.c: Provide decl for seteuid if not provided by
+	libc.
+
+2010-08-30	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
 	* psxenosys/init.c, psxenosys/psxenosys.doc,
 	psxenosys/psxenosys.scn: Remove devctl.
 
