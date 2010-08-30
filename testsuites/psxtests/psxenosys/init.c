@@ -23,7 +23,6 @@
 
 #include <aio.h>
 #include <time.h>
-#include <devctl.h>
 #include <unistd.h>
 #include <sched.h>
 
@@ -70,10 +69,6 @@ void *POSIX_Init(
 
   puts( "clock_setenable_attr -- ENOSYS" );
   sc = clock_setenable_attr( 0, 0 );
-  check_enosys( sc );
-
-  puts( "devctl -- ENOSYS" );
-  sc = devctl( 0, NULL, 0, NULL );
   check_enosys( sc );
 
   puts( "execl -- ENOSYS" );

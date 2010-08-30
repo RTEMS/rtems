@@ -4,7 +4,6 @@ aio_suspend -- ENOSYS
 clock_getcpuclockid -- ENOSYS
 clock_getenable_attr -- ENOSYS
 clock_setenable_attr -- ENOSYS
-devctl -- ENOSYS
 execl -- ENOSYS
 execle -- ENOSYS
 execlp -- ENOSYS
