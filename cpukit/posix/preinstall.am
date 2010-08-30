@@ -40,10 +40,6 @@ $(PROJECT_INCLUDE)/semaphore.h: include/semaphore.h $(PROJECT_INCLUDE)/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/semaphore.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/semaphore.h
 
-$(PROJECT_INCLUDE)/devctl.h: include/devctl.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/devctl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/devctl.h
-
 $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h: include/rtems/posix/aio_misc.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h
