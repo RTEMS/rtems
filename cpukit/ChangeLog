@@ -1,3 +1,8 @@
+2010-08-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/devctl.h, posix/src/devctl.c: Remove.
+	* posix/Makefile.am: Remove devctl.
+
 2010-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* posix/src/killinfo.c: Ensure interested is non-NULL before using it.
