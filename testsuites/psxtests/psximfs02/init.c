@@ -20,6 +20,10 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 
+#if !HAVE_DECL_SETEUID
+extern int seteuid(uid_t euid);
+#endif
+
 void IMFS_dump( void );
 rtems_task Init(
   rtems_task_argument argument

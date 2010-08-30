@@ -53,6 +53,10 @@ AC_CHECK_DECLS([adjtime],[],[],[[#include <sys/time.h>]])
 # RTEMS provides a stub, despite newlib doesn't have sys/mman.h
 AC_CHECK_DECLS([mprotect],[],[],[[#include <sys/mman.h>]])
 
+# FIXME: IEEE Std 1003.1-2008 mandates seteuid in unistd.h
+# RTEMS provides it, despite newlib doesn't declare it.
+AC_CHECK_DECLS([seteuid],[],[],[#include <unistd.h>])
+
 # FIXME: We should get rid of this. It's a cludge.
 AC_CHECK_SIZEOF([off_t])
 
