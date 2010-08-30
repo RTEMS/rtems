@@ -25,7 +25,7 @@ include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
 if HAS_PTHREADS
 # include
 include_HEADERS = include/aio.h include/mqueue.h \
-    include/semaphore.h include/devctl.h
+    include/semaphore.h
 
 # include/rtems/posix
 include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
@@ -52,9 +52,6 @@ include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl \
 libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \
     src/aio_read.c src/aio_return.c src/aio_suspend.c src/aio_write.c \
     src/lio_listio.c src/aio_misc.c
-
-# These are really in the stand but not really functional
-libposix_a_SOURCES += src/devctl.c
 
 ## ENOSYS_C_FILES
 libposix_a_SOURCES += src/_execve.c src/execl.c src/execle.c src/execlp.c \
