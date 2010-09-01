@@ -1,7 +1,9 @@
 /*
+ * ++Copyright++ 1983, 1993
+ * -
  * Copyright (c) 1983, 1993
- *	The Regents of the University of California.  All rights reserved.
- *
+ *    The Regents of the University of California.  All rights reserved.
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -10,14 +12,10 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
- * 4. Neither the name of the University nor the names of its contributors
+ * 3. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -31,7 +29,7 @@
  * SUCH DAMAGE.
  * -
  * Portions Copyright (c) 1993 by Digital Equipment Corporation.
- *
+ * 
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies, and that
@@ -47,10 +45,14 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
  * SOFTWARE.
- *
+ * -
+ * --Copyright--
+ */
+
+/*%
  *	@(#)inet.h	8.1 (Berkeley) 6/2/93
- *	From: Id: inet.h,v 8.5 1997/01/29 08:48:09 vixie Exp $
- * $FreeBSD: src/include/arpa/inet.h,v 1.25 2002/08/21 16:19:56 mike Exp $
+ *	$Id$
+ * $FreeBSD: src/include/arpa/inet.h,v 1.33 2010/07/06 03:48:46 maxim Exp $
  */
 
 /*
@@ -60,10 +62,13 @@
 #ifndef _ARPA_INET_H_
 #define	_ARPA_INET_H_
 
-/* External definitions for functions in inet(3), addr2ascii(3) */
+/* External definitions for functions in inet(3). */
 
 #include <rtems/bsd/sys/cdefs.h>
 #include <rtems/bsdnet/_types.h>
+
+/* Required for byteorder(3) functions. */
+#include <rtems/endian.h>
 
 #define	INET_ADDRSTRLEN		16
 #define	INET6_ADDRSTRLEN	46
@@ -97,20 +102,23 @@ struct in_addr {
 #if !defined(__rtems__)	/* RTEMS -- Why rename these? */
 /* XXX all new diversions!! argh!! */
 #if __BSD_VISIBLE
-#define	inet_addr	__inet_addr
-#define	inet_aton	__inet_aton
-#define	inet_lnaof	__inet_lnaof
-#define	inet_makeaddr	__inet_makeaddr
-#define	inet_neta	__inet_neta
-#define	inet_netof	__inet_netof
-#define	inet_network	__inet_network
-#define	inet_net_ntop	__inet_net_ntop
-#define	inet_net_pton	__inet_net_pton
-#define	inet_ntoa	__inet_ntoa
-#define	inet_pton	__inet_pton
-#define	inet_ntop	__inet_ntop
-#define	inet_nsap_addr	__inet_nsap_addr
-#define	inet_nsap_ntoa	__inet_nsap_ntoa
+#define	inet_addr		__inet_addr
+#define	inet_aton		__inet_aton
+#define	inet_lnaof		__inet_lnaof
+#define	inet_makeaddr		__inet_makeaddr
+#define	inet_neta		__inet_neta
+#define	inet_netof		__inet_netof
+#define	inet_network		__inet_network
+#define	inet_net_ntop		__inet_net_ntop
+#define	inet_net_pton		__inet_net_pton
+#define	inet_cidr_ntop		__inet_cidr_ntop
+#define	inet_cidr_pton		__inet_cidr_pton
+#define	inet_ntoa		__inet_ntoa
+#define	inet_ntoa_r		__inet_ntoa_r
+#define	inet_pton		__inet_pton
+#define	inet_ntop		__inet_ntop
+#define	inet_nsap_addr		__inet_nsap_addr
+#define	inet_nsap_ntoa		__inet_nsap_ntoa
 #endif /* __BSD_VISIBLE */
 #endif /* __rtems__ */
 
@@ -119,11 +127,9 @@ in_addr_t	 inet_addr(const char *);
 char		*inet_ntoa(struct in_addr);
 const char	*inet_ntop(int, const void * __restrict, char * __restrict,
 		    socklen_t);
-int              inet_pton(int, const char * __restrict, void * __restrict);
+int		 inet_pton(int, const char * __restrict, void * __restrict);
 
 #if __BSD_VISIBLE
-int		 ascii2addr(int, const char *, void *);
-char		*addr2ascii(int, const void *, int, char *);
 int		 inet_aton(const char *, struct in_addr *);
 in_addr_t	 inet_lnaof(struct in_addr);
 struct in_addr	 inet_makeaddr(in_addr_t, in_addr_t);
