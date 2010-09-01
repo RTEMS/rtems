@@ -1,3 +1,8 @@
+2010-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* POSIX/Makefile.am: Add htonl.
+	* POSIX/htonl.c: New.
+
 2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* malloctest/init.c: Update for heap API changes.
