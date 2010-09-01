@@ -1,3 +1,10 @@
+2010-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/libc/addr2ascii.c,
+	libnetworking/libc/ascii2addr.c,
+	libnetworking/libc/addr2ascii.3: Remove.
+	* libnetworking/Makefile.am: Reflect changes above.
+
 2010-08-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/include/devctl.h, posix/src/devctl.c: Remove.
