@@ -156,7 +156,7 @@ libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(libc_CPPFLAGS)
 
 include_HEADERS += ifaddrs.h
 
-libc_a_SOURCES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
+libc_a_SOURCES = libc/base64.c \
     libc/gethostbydns.c libc/gethostbyht.c libc/gethostbynis.c \
     libc/gethostnamadr.c libc/getnetbydns.c libc/getnetbyht.c \
     libc/getnetbynis.c libc/getnetnamadr.c libc/getproto.c \
@@ -181,7 +181,7 @@ UNUSED_FILES += libc/ether_addr.c libc/gethostname.c libc/inet_neta.c \
     libc/inet_net_ntop.c libc/inet_net_pton.c libc/ns_addr.c \
     libc/ns_ntoa.c
 
-libc_mans = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
+libc_mans = libc/byteorder.3 libc/ethers.3 \
     libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
     libc/getservent.3 libc/inet.3 libc/linkaddr.3 libc/ns.3 \
     libc/rcmd.3 libc/resolver.3
