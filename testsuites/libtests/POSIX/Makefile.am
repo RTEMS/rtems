@@ -52,6 +52,9 @@ getuid_SOURCES = getuid.c
 # check_PROGRAMS += issetugid
 # issetugid_SOURCES = issetugid.c
 
+check_PROGRAMS += htonl
+htonl_SOURCES = htonl.c
+
 check_PROGRAMS += lseek
 lseek_SOURCES = lseek.c
 
