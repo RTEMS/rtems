@@ -45,14 +45,14 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 7.1
-%define gdb_rpmvers %{expand:%(echo 7.1 | tr - _)} 
+%define gdb_version 7.2
+%define gdb_rpmvers %{expand:%(echo 7.2 | tr - _)} 
 
 Name:		rtems-4.11-mips-rtems4.11-gdb
 Summary:	Gdb for target mips-rtems4.11
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	4%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -100,6 +100,10 @@ BuildRequires:	texinfo >= 4.2
 
 Requires:	rtems-4.11-gdb-common
 
+%if "%{gdb_version}" == "7.2"
+Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.2.tar.bz2
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.2-rtems4.11-20100903.diff
+%endif
 %if "%{gdb_version}" == "7.1"
 Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.1.tar.bz2
 Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.1-rtems4.11-20100812.diff
