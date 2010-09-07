@@ -50,23 +50,19 @@
 %define amvers  1.11
 
 %define name			rtems-4.11-automake
-%define requirements		rtems-4.11-autoconf >= 2.60
+%define requirements		rtems-4.11-autoconf >= 2.61
 
 Name:		%{name}
 URL:		http://sources.redhat.com/automake
 License:	GPL
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 BuildRequires:  %{requirements} perl
-%if "%{version}" < "1.11"
-# automake >= 1.11 ships man-pages
-BuildRequires:  help2man
-%endif
 Requires:     	%{requirements}
 Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
@@ -105,9 +101,16 @@ chmod +x %{__perl_requires}
 
 %build
 PATH=%{_bindir}:$PATH
+case %_host in
+*-mingw32)
+# MinGW ships obsolete perl-5.6.1, which doesn't support threads
+  echo am_cv_prog_PERL_ithreads=no > config.cache
+  ;;
+esac
+
 # Don't use %%configure, it replaces config.sub/config.guess with the 
 # outdated versions bundled with rpm.
-./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir} \
+./configure -C --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir} \
   --bindir=%{_bindir} --datadir=%{_datadir} \
   --docdir=%{_datadir}/automake-%{amvers}/doc
 make
@@ -115,18 +118,6 @@ make
 %install
 rm -rf "$RPM_BUILD_ROOT"
 make DESTDIR=${RPM_BUILD_ROOT} install
-
-%if "%{version}" < "1.11"
-# automake >= 1.11 ships man-pages
-install -m 755 -d $RPM_BUILD_ROOT/%{_mandir}/man1
-for i in $RPM_BUILD_ROOT%{_bindir}/aclocal \
-  $RPM_BUILD_ROOT%{_bindir}/automake ; 
-do
-  perllibdir=$RPM_BUILD_ROOT/%{_datadir}/automake-%{amvers} \
-  help2man $i > `basename $i`.1
-  install -m 644 `basename $i`.1 $RPM_BUILD_ROOT/%{_mandir}/man1
-done
-%endif
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/aclocal
 echo "/usr/share/aclocal" > $RPM_BUILD_ROOT%{_datadir}/aclocal/dirlist
