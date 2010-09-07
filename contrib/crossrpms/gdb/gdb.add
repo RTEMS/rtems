@@ -18,6 +18,8 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %if "%{_build}" != "%{_host}"
 # psim doesn't support Cdn-X
 %define build_sim --disable-sim
+%else
+%define build_sim --enable-sim --enable-sim-trace
 %endif
 %endif
 %if "@tool_target@" == "sparc-rtems@rtems_api@"
