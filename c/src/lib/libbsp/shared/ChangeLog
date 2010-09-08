@@ -1,3 +1,7 @@
+2010-09-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/utility.h: More macros.  Changed casts.
+
 2010-08-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* src/uart-output-char.c: Add BSP_poll_char.
