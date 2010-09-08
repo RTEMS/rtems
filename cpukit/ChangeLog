@@ -1,3 +1,9 @@
+2010-09-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add checks for pthread_attr_getguardsize,
+	pthread_attr_setguardsize, pthread_attr_setstack,
+	pthread_attr_getstack.
+
 2010-09-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1698/cpukit
