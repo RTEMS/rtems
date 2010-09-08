@@ -240,4 +240,16 @@ foreach my $line ( @buffer3 )
 #  print STDERR @condstack, "LINE: $line\n";
 }
 
-print STDOUT @buffer4;
+print STDERR @buffer4 if $verbose > 2;
+
+foreach my $line (@buffer4) {
+  if ( $line =~ /^(<.*>):(.*)$/ ) {
+    if ( $1 =~ m/.*<FALSE:.*$/ ) {
+    } else {
+      print STDOUT "$2\n";
+    }
+  } else {
+    die "Unexpected value: $line\n";
+  }
+}
+
