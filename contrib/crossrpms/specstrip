@@ -202,19 +202,19 @@ foreach my $line ( @buffer3 )
   {
     my $exp = $1;
     push @condstack,"<IFOT:$exp>";
-    push @buffer4, "$line\n";
+    push @buffer4, "@condstack:$line\n";
   } elsif ( $line =~/^%if((os|narch)\s+.*)\s*$/ )
   {
     my $exp = $1;
     push @condstack,"<IFOT:$exp>";
-    push @buffer4, "$line\n";
+    push @buffer4, "@condstack:$line\n";
   } elsif ( $line =~ /^%else\s*$/ ) {
     if ( $condstack[$#condstack] =~ m/<TRUE:(.*)\s*>$/ ) {
       $condstack[$#condstack] = "<FALSE:$1>";
     } elsif ( $condstack[$#condstack] =~ m/<FALSE:(.*)\s*>$/ ) {
       $condstack[$#condstack] = "<TRUE:$1>";
     } else {
-      push @buffer4, "$line\n";
+      push @buffer4, "@condstack:$line\n";
     }
   } elsif ( $line =~ /^%endif\s*$/ ) {
 
@@ -230,10 +230,10 @@ foreach my $line ( @buffer3 )
   } else {
 #  print STDERR "CATCH $condstack[$#condstack]:$line\n";
     if ( $condstack[$#condstack] =~ m/<TRUE:.*>$/ ) {
-      push @buffer4, "$line\n";
+      push @buffer4, "@condstack:$line\n";
     } elsif ( $condstack[$#condstack] =~ m/<FALSE:.*>$/ ) {
     } else {
-      push @buffer4, "$line\n";
+      push @buffer4, "@condstack:$line\n";
     }
   }
 
