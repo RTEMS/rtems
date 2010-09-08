@@ -223,7 +223,7 @@ foreach my $line ( @buffer3 )
     } elsif ( $condstack[$#condstack] =~ m/<FALSE:.*>$/ ) {
 #    print STDERR "ENDIF: FALSE\n";
     } else {
-      push @buffer4, "%endif\n";
+      push @buffer4, "@condstack:$line\n";
     }
 #    print STDERR "POP: $line\n";
     pop @condstack;
