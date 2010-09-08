@@ -21,15 +21,7 @@
 
 #include <rtems.h>
 #include <rtems/chain.h>
-#include <rtems/libio.h>
 #include <rtems/libio_.h>
-
-#if defined(RTEMS_DEBUG)
-   #define CHECK_STATUS(_x) assert((_x) == )
-   #include <assert.h>
-#else
-   #define CHECK_STATUS(_x) _x
-#endif
 
 /* cleanup a user environment
  * NOTE: this must be called with
@@ -53,11 +45,20 @@ free_user_env(void *venv)
 
 rtems_status_code rtems_libio_set_private_env(void)
 {
-  rtems_status_code                 sc;
-  rtems_id                          task_id;
-  rtems_filesystem_location_info_t  loc;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_id task_id = rtems_task_self();
+  rtems_filesystem_location_info_t root_loc;
+  rtems_filesystem_location_info_t current_loc;
+  rtems_user_env_t *new_env = NULL;
+  int rv = 0;
 
-  task_id = rtems_task_self();
+  rv = rtems_filesystem_evaluate_path("/", 1, 0, &root_loc, 0);
+  if (rv != 0)
+    goto error_0;
+
+  rv = rtems_filesystem_evaluate_path("/", 1, 0, &current_loc, 0);
+  if (rv != 0)
+    goto error_1;
 
   /* 
    * Malloc is necessary whenever the current task does not
@@ -72,14 +73,16 @@ rtems_status_code rtems_libio_set_private_env(void)
    * if( rtems_current_user_env->task_id != task_id ) {
    */
 
-  if (rtems_current_user_env==&rtems_global_user_env || 
-      rtems_current_user_env->task_id != task_id ) {
-    rtems_user_env_t *tmp = malloc(sizeof(rtems_user_env_t));
-    if (!tmp)
-      return RTEMS_NO_MEMORY;
+  if (
+    rtems_current_user_env == &rtems_global_user_env
+      || rtems_current_user_env->task_id != task_id
+  ) {
+    new_env = malloc(sizeof(rtems_user_env_t));
+    if (new_env == NULL)
+      goto error_2;
 
     #ifdef HAVE_USERENV_REFCNT
-      tmp->refcnt = 1;
+      new_env->refcnt = 1;
     #endif
 
     sc = rtems_task_variable_add(
@@ -87,35 +90,39 @@ rtems_status_code rtems_libio_set_private_env(void)
       (void*)&rtems_current_user_env,
       (void(*)(void *))free_user_env
     );
-    if (sc != RTEMS_SUCCESSFUL) {
-      /* don't use free_user_env because the pathlocs are
-       * not initialized yet
-       */
-       free(tmp);
-       return sc;
-     }
-     rtems_current_user_env = tmp;
+    if (sc != RTEMS_SUCCESSFUL)
+      goto error_3;
+
+    rtems_current_user_env = new_env;
   }
 
-  *rtems_current_user_env = rtems_global_user_env; /* get the global values*/
-  rtems_current_user_env->task_id=task_id;         /* mark the local values*/
+  /* Inherit the global values */
+  *rtems_current_user_env = rtems_global_user_env;
 
-  /*  Clone the pathlocs. In contrast to most other code we must _not_
-   *  free the original locs because what we are trying to do here is forking
-   *  off clones. The reason is a pathloc can be allocated by the file system
-   *  and needs to be freed when deleting the environment.
-   *
-   *  NOTE: Evaluation should always work so only check status when debug
-   *        is enabled.
+  rtems_current_user_env->task_id = task_id;
+
+  /*
+   * Clone the pathlocs. In contrast to most other code we must _not_ free the
+   * original locs because what we are trying to do here is forking off clones.
+   * The reason is a pathloc can be allocated by the file system and needs to
+   * be freed when deleting the environment.
    */
-
-  CHECK_STATUS( rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0) );
-  rtems_filesystem_root    = loc;
-
-  CHECK_STATUS( rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0) );
-  rtems_filesystem_current = loc;
+  rtems_filesystem_root = root_loc;
+  rtems_filesystem_current = current_loc;
 
   return RTEMS_SUCCESSFUL;
+
+error_3:
+  free(new_env);
+
+error_2:
+  rtems_filesystem_freenode(&current_loc);
+
+error_1:
+  rtems_filesystem_freenode(&root_loc);
+
+error_0:
+  return RTEMS_NO_MEMORY;
 }
 
 /*

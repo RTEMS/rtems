@@ -1,3 +1,9 @@
+2010-09-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1698/cpukit
+	* libcsupport/src/privateenv.c: Check return values of
+	rtems_filesystem_evaluate_path().
+
 2010-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1696/networking:
