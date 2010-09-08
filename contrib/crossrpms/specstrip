@@ -201,21 +201,13 @@ foreach my $line ( @buffer3 )
   } elsif ( $line =~/^%if\s+(.*)\s*$/ )
   {
     my $exp = $1;
-    if ( $condstack[$#condstack] =~ m/<FALSE:.*\s*>$/ ) {
-      push @condstack,"<FALSE:$exp>";
-    } else {
-      push @condstack,"<IFOT:$exp>";
-      push @buffer4, "$line\n";
-    }
+    push @condstack,"<IFOT:$exp>";
+    push @buffer4, "$line\n";
   } elsif ( $line =~/^%if((os|narch)\s+.*)\s*$/ )
   {
     my $exp = $1;
-    if ( $condstack[$#condstack] =~ m/<FALSE:(.*)\s*>$/ ) {
-      push @condstack,"<FALSE:$exp>";
-    } else {
-      push @condstack,"<IFOT:$exp>";
-      push @buffer4, "$line\n";
-    }
+    push @condstack,"<IFOT:$exp>";
+    push @buffer4, "$line\n";
   } elsif ( $line =~ /^%else\s*$/ ) {
     if ( $condstack[$#condstack] =~ m/<TRUE:(.*)\s*>$/ ) {
       $condstack[$#condstack] = "<FALSE:$1>";
