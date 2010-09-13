@@ -1,3 +1,7 @@
+2010-09-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmd/md5.h: C++ compatibility.
+
 2010-09-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add checks for pthread_attr_getguardsize,

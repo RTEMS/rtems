@@ -41,6 +41,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /* typedef a 32-bit type */
 typedef uint32_t UINT4;
 
@@ -55,6 +59,10 @@ typedef struct {
 void MD5Init (MD5_CTX *);
 void MD5Update (MD5_CTX *, const unsigned char *, unsigned int);
 void MD5Final (unsigned char [16], MD5_CTX *);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #define __MD5_INCLUDE__
 #endif /* __MD5_INCLUDE__ */
