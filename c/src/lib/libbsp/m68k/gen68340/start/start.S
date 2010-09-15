@@ -809,7 +809,7 @@ _BCCfill_loop:
 	subq.l 	#1,crt0_temp
 	bne 	_BCCfill_loop
 
-	*-------------------------------------------------*/
+	/*-------------------------------------------------*/
 _dont_fill:
 	move.b	crt0_csswitch,_AsteccCsSwitch
 	move.b	crt0_buswidth,_AsteccBusWidth

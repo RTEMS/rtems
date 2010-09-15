@@ -1,3 +1,7 @@
+2010-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* start/start.S: Fix mismatched comment.
+
 2010-04-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* console/m340uart.c, startup/init68340.c: Remove warnings.
