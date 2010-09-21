@@ -107,12 +107,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global gmp_provided 4.3.1
 %endif
 
-%if 0%{?fc11}
-%global mpc_provided %{nil}
-%global mpfr_provided 2.4.1
-%global gmp_provided 4.2.4
-%endif
-
 %if 0%{?el6}
 %global mpc_provided %{nil}
 %global mpfr_provided 2.4.1
@@ -705,7 +699,6 @@ libgcc bfin-rtems4.11-gcc.
 %dir %{_gcclibdir}/gcc/bfin-rtems4.11/%{gcc_version}/include
 
 %if "%{gcc_version}" > "4.0.3"
-%dir %{_gcclibdir}/gcc/bfin-rtems4.11/%{gcc_version}/include/ssp
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
