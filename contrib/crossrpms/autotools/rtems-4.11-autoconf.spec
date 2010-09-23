@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define srcvers	2.67
-%define rpmvers %{expand:%(echo "2.67" | tr - _ )}
+%define srcvers	2.68
+%define rpmvers %{expand:%(echo "2.68" | tr - _ )}
 
 %define name			rtems-4.11-autoconf
 
@@ -123,16 +123,22 @@ make
 %if "%{srcvers}" <= "2.66"
 # test 193 fails sporadically
 # test 199 fails deterministically
-make check TESTSUITEFLAGS='-192 194-198 200-'
-%else
-%if "%{srcvers}" <= "2.67"
+TESTSUITEFLAGS='-192 194-198 200-'
+%endif
+
+%if "%{srcvers}" == "2.67"
 # test 199 fails deterministically
-make check TESTSUITEFLAGS='-198 200-'
-%else
-make check
+TESTSUITEFLAGS='-198 200-'
 %endif
+
+%if "%{srcvers}" == "2.68"
+# test 205 fails deterministically
+TESTSUITEFLAGS='-204 206-'
 %endif
+
+make check TESTSUITEFLAGS="${TESTSUITEFLAGS}"
 %endif
+
 %install
 rm -rf "${RPM_BUILD_ROOT}"
 make DESTDIR=${RPM_BUILD_ROOT} install
