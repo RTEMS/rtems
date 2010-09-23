@@ -1,3 +1,7 @@
+2010-09-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/check-cpuopts.m4: Add AC_LANG_SOURCE.
+
 2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* aclocal/canonical-target-name.m4: Remove TI C4x and NIOS2 ports from
