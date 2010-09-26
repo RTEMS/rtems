@@ -693,7 +693,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_STACK_ALIGNMENT        0
+#define CPU_STACK_ALIGNMENT        4
 
 /*
  *  ISR handler macros
