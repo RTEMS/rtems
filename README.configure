@@ -26,8 +26,6 @@ RTEMS-specific option are supported:
       --disable-posix
       --disable-networking
       --enable-cxx
-      --enable-bare-cpu-model=<MODEL>
-      --enable-bare-cpu-cflags=<FLAGS>
       --enable-multiprocessing
       --enable-rtemsbsp="bsp1 bsp2 ..."
       --enable-tests
@@ -100,7 +98,6 @@ The following targets are supported:
       powerpc-rtems4.10
       sh-rtems4.10
       sparc-rtems4.10
-      bare                    see notes
 
 The cross-compiler is set to $(target)-gcc by default.
 
@@ -158,16 +155,12 @@ following:
 
 The following bsps are supported:
 
-host-based	: posix (on Linux, FreeBSD, Cygwin, Solaris, and HPUX)
-
 arm             : csb336 csb337 edb7312 gba gp32 nds rtl22x rtl22xx_t
                   smdk2410
 
 avr:            : avrtest
 
 bfin            : eZKit533 bf537Stamp
-
-c4x             : c3xsim c4xsim
 
 h8300           : h8sim
 
@@ -210,12 +203,6 @@ powerpc		: brs5l ep1a gen5200 gen83xx haleakala hsc_cm01 icecube
 sh              : gensh1 gensh2 gensh4 simsh1 simsh2 simsh4
 
 sparc 		: erc32 sis leon2 leon3
-
-any             : bare
-
-The following ports were considered obsoleted after the 4.6 releases
-and were removed: a29k, hppa, i960, mips64orion, and or32.
-
 
 5. Makefile structure
 =====================
