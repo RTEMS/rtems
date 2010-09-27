@@ -1,3 +1,8 @@
+2010-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/defaults/default_close.c: Return 0 instead of an error
+	status.
+
 2010-09-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libmd/md5.h: C++ compatibility.

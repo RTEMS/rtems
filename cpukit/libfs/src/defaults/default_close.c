@@ -10,12 +10,10 @@
  */
 
 #include <rtems/libio.h>
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 int rtems_filesystem_default_close(
   rtems_libio_t *iop
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  return 0;
 }
