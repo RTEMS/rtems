@@ -11,12 +11,10 @@ tools in the Cygnus one-tree structure. Using autoconf also means
 that RTEMS now can be built in a separate build directory.
 
 To re-generate auto*tool generated files (configure, Makefile.in etc),
-autoconf-2.59 and automake-1.8 are required.
+autoconf-2.68 and automake-1.11.1 are required.
 
 2. Installation
 ===============
-
-2.1 Standalone build
 
 To configure RTEMS for a specific target, run configure in the build
 directory. In addition to the standard configure options, the following
@@ -82,8 +80,6 @@ within a target architecture.  Remember that the target specifies the
 CPU family while the BSP specifies the precise board you will be using. 
 The following targets are supported:
 
-      (none)	will build the host-based version on Linux, Solaris and HPUX.
-
       arm-rtems4.10
       avr-rtems4.10
       bfin-rtems4.10
@@ -109,7 +105,7 @@ Installation is done under $(prefix)/rtems.
 
 As an example, to build and install the mvme136 and mvme162 bsps for m68k do:
 
-      (path_to_rtems_src)/configure --target=m68k-rtems
+      (path_to_rtems_src)/configure --target=m68k-rtems4.11
 
       make RTEMS_BSP="mvme136 mvme162"
       
@@ -120,19 +116,6 @@ The sample tests are built by 'make all' when configured with
 test suite.
 
 Documentation is built separately from the source code.
-
-2.2 Target Dependent Notes
-
-bare:
-
-1.  See the README in the bare bsp source directory. This should
-    contain all info you need.
-2.  The bare bsp source contains a script to show how to build it.
-3.  The configure flags must be used to get the bare bsp to work.
-    The --enable-bare-cpu-model and --enable-bare-cpu-cflags are the
-    only pieces of information. The module is usually a gcc module
-    such as m68302 or mcpu32. The flags are passed directly to gcc.
-    Use "" if more than one option is specified.
 
 3. To use the installed RTEMS library
 =====================================
@@ -230,13 +213,6 @@ Please refer to the BSP and Device Driver Guide.
 ========================
 
 All gnu-based bsps have been built on Linux. 
-
-The native (posix) ports have been built and run only on Linux.
-
-The following configurations have NOT been tested:
-
-    + Anything on Nextstep, HPUX and Irix.
-    + The C4x and OR32 ports (requires specially patched toolchain)
 
 8. Prerequisites
 ================

@@ -1,3 +1,7 @@
+2010-09-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* README.configure: Further cleanup.
+
 2010-09-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* README.configure: Remove the most obsolete parts.
