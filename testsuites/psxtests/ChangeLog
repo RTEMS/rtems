@@ -1,3 +1,9 @@
+2010-09-28	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* psx15/.cvsignore, psx15/Makefile.am, psx15/init.c, psx15/psx15.scn:
+	New files.
+	* Makefile.am, configure.ac: Reflect changes above.
+
 2010-08-30	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* configure.ac: AC_CHECK_DECLS([seteuid]).
