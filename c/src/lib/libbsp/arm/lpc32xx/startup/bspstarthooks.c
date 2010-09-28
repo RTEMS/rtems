@@ -217,6 +217,40 @@ void BSP_START_SECTION bsp_start_hook_0(void)
   setup_mmu_and_cache();
 }
 
+static void BSP_START_SECTION stop_dma_activities(void)
+{
+  #ifdef LPC32XX_STOP_GPDMA
+    if ((LPC32XX_DMACLK_CTRL & 0x1) != 0) {
+      if ((lpc32xx.dma.cfg & LPC_DMA_CFG_EN) != 0) {
+        int i = 0;
+
+        for (i = 0; i < 8; ++i) {
+          lpc32xx.dma.channels [i].cfg = 0;
+        }
+
+        lpc32xx.dma.cfg &= ~LPC_DMA_CFG_EN;
+      }
+      LPC32XX_DMACLK_CTRL = 0;
+    }
+  #endif
+
+  #ifdef LPC32XX_STOP_ETHERNET
+    if ((LPC32XX_MAC_CLK_CTRL & 0x7) == 0x7) {
+      lpc32xx.eth.command = 0x38;
+      lpc32xx.eth.mac1 = 0xcf00;
+      lpc32xx.eth.mac1 = 0;
+      LPC32XX_MAC_CLK_CTRL = 0;
+    }
+  #endif
+
+  #ifdef LPC32XX_STOP_USB
+    if ((LPC32XX_USB_CTRL & 0x010e8000) != 0) {
+      LPC32XX_OTG_CLK_CTRL = 0;
+      LPC32XX_USB_CTRL = 0x80000;
+    }
+  #endif
+}
+
 static void BSP_START_SECTION setup_uarts(void)
 {
   uint32_t uartclk_ctrl = 0;
@@ -269,6 +303,7 @@ static void BSP_START_SECTION setup_timer(void)
 
 void BSP_START_SECTION bsp_start_hook_1(void)
 {
+  stop_dma_activities();
   setup_uarts();
   setup_timer();
 

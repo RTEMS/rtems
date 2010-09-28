@@ -128,6 +128,7 @@ libbsp_a_SOURCES += misc/timer.c \
 	misc/restart.c \
 	misc/boot.c \
 	misc/emc.c \
+	misc/mmu.c \
 	misc/i2c.c
 
 # SSP

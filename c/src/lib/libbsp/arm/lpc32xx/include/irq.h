@@ -28,6 +28,10 @@
 #include <rtems/irq.h>
 #include <rtems/irq-extension.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /**
  * @addtogroup bsp_interrupt
  *
@@ -161,6 +165,10 @@ lpc32xx_irq_activation_type lpc32xx_irq_get_activation_type(rtems_vector_number 
 void lpc32xx_set_exception_handler(Arm_symbolic_exception_name exception, void (*handler)(void));
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* ASM */
 

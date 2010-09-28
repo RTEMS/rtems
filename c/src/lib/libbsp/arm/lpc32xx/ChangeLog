@@ -1,3 +1,11 @@
+2010-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* misc/mmu.c: New file.
+	* Makefile.am: Reflect change above.
+	* configure.ac, include/bspopts.h.in, include/irq.h,
+	include/lpc32xx.h, include/mmu.h, misc/emc.c, misc/restart.c,
+	startup/bspstarthooks.c: Changes throughout.
+
 2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* console/hsu.c: Fixed warnings.

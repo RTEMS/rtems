@@ -3,7 +3,7 @@
  *
  * @ingroup lpc32xx_mmu
  *
- * @brief MMU API.
+ * @brief MMU support API.
  */
 
 /*
@@ -54,6 +54,12 @@ extern "C" {
 
 #define LPC32XX_MMU_READ_WRITE_CACHED \
   (LPC32XX_MMU_READ_WRITE | ARM_MMU_SECT_C | ARM_MMU_SECT_B)
+
+void lpc32xx_set_translation_table_entries(
+  void *begin,
+  void *end,
+  uint32_t section_flags
+);
 
 /** @} */
 

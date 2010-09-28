@@ -26,6 +26,7 @@
 
 #include <bsp/utility.h>
 #include <bsp/lpc-timer.h>
+#include <bsp/lpc-dma.h>
 
 /**
  * @defgroup lpc32xx_reg Register Definitions
@@ -237,9 +238,6 @@ typedef struct {
 } lpc32xx_sd_card;
 
 typedef struct {
-} lpc32xx_dma;
-
-typedef struct {
 } lpc32xx_usb;
 
 typedef struct {
@@ -282,6 +280,58 @@ typedef struct {
 } lpc32xx_mcpwm;
 
 typedef struct {
+  uint32_t mac1;
+  uint32_t mac2;
+  uint32_t ipgt;
+  uint32_t ipgr;
+  uint32_t clrt;
+  uint32_t maxf;
+  uint32_t supp;
+  uint32_t test;
+  uint32_t mcfg;
+  uint32_t mcmd;
+  uint32_t madr;
+  uint32_t mwtd;
+  uint32_t mrdd;
+  uint32_t mind;
+  uint32_t reserved_0 [2];
+  uint32_t sa0;
+  uint32_t sa1;
+  uint32_t sa2;
+  uint32_t reserved_1 [45];
+  uint32_t command;
+  uint32_t status;
+  uint32_t rxdescriptor;
+  uint32_t rxstatus;
+  uint32_t rxdescriptornum;
+  uint32_t rxproduceindex;
+  uint32_t rxconsumeindex;
+  uint32_t txdescriptor;
+  uint32_t txstatus;
+  uint32_t txdescriptornum;
+  uint32_t txproduceindex;
+  uint32_t txconsumeindex;
+  uint32_t reserved_2 [10];
+  uint32_t tsv0;
+  uint32_t tsv1;
+  uint32_t rsv;
+  uint32_t reserved_3 [3];
+  uint32_t flowcontrolcnt;
+  uint32_t flowcontrolsts;
+  uint32_t reserved_4 [34];
+  uint32_t rxfilterctrl;
+  uint32_t rxfilterwolsts;
+  uint32_t rxfilterwolclr;
+  uint32_t reserved_5 [1];
+  uint32_t hashfilterl;
+  uint32_t hashfilterh;
+  uint32_t reserved_6 [882];
+  uint32_t intstatus;
+  uint32_t intenable;
+  uint32_t intclear;
+  uint32_t intset;
+  uint32_t reserved_7 [1];
+  uint32_t powerdown;
 } lpc32xx_eth;
 
 typedef struct {
@@ -459,8 +509,8 @@ typedef struct {
   uint32_t reserved_7 [LPC32XX_RESERVED(0x2009c000, 0x200a8000, lpc32xx_i2s)];
   lpc32xx_nand_mlc nand_mlc;
   uint32_t reserved_8 [LPC32XX_RESERVED(0x200a8000, 0x31000000, lpc32xx_nand_mlc)];
-  lpc32xx_dma dma;
-  uint32_t reserved_9 [LPC32XX_RESERVED(0x31000000, 0x31020000, lpc32xx_dma)];
+  lpc_dma dma;
+  uint32_t reserved_9 [LPC32XX_RESERVED(0x31000000, 0x31020000, lpc_dma)];
   lpc32xx_usb usb;
   uint32_t reserved_10 [LPC32XX_RESERVED(0x31020000, 0x31040000, lpc32xx_usb)];
   lpc32xx_lcd lcd;

@@ -31,12 +31,6 @@ void lpc32xx_restart(void *addr)
   rtems_interrupt_level level;
   uint32_t ctrl = 0;
 
-  /* FIXME: DMA shutdown */
-
-  /* FIXME: USB shutdown */
-
-  /* FIXME: Ethernet interface reset */
-
   rtems_interrupt_disable(level);
 
   arm_cp15_data_cache_test_and_clean();

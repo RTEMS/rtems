@@ -26,22 +26,6 @@
 
 static volatile lpc32xx_emc *const emc = &lpc32xx.emc;
 
-static void set_translation_table_entries(
-  uint32_t begin,
-  uint32_t size
-)
-{
-  uint32_t end = begin + size;
-  uint32_t *ttb = arm_cp15_get_translation_table_base();
-  uint32_t i = ARM_MMU_SECT_GET_INDEX(begin);
-  uint32_t iend = ARM_MMU_SECT_GET_INDEX(ARM_MMU_SECT_MVA_ALIGN_UP(end));
-
-  while (i < iend) {
-    ttb [i] = (i << ARM_MMU_SECT_BASE_SHIFT) | LPC32XX_MMU_READ_WRITE;
-    ++i;
-  }
-}
-
 static void dynamic_init(const lpc32xx_emc_dynamic_config *cfg)
 {
   uint32_t chip_begin = LPC32XX_BASE_EMC_DYCS_0;
@@ -89,11 +73,15 @@ static void dynamic_init(const lpc32xx_emc_dynamic_config *cfg)
   /* Set modes */
   for (i = 0; i < EMC_DYN_CHIP_COUNT; ++i) {
     if (cfg->chip [i].size != 0) {
-      set_translation_table_entries(chip_begin, cfg->chip [i].size);
+      lpc32xx_set_translation_table_entries(
+        (void *) chip_begin,
+        (void *) (chip_begin + cfg->chip [i].size),
+        LPC32XX_MMU_READ_WRITE
+      );
       emc->dynamiccontrol = dynamiccontrol | EMC_DYN_CTRL_I_MODE;
-      *(volatile uint32_t *)(LPC32XX_BASE_EMC_DYCS_0 + cfg->chip [i].mode);
+      *(volatile uint32_t *)(chip_begin + cfg->chip [i].mode);
       emc->dynamiccontrol = dynamiccontrol | EMC_DYN_CTRL_I_MODE;
-      *(volatile uint32_t *)(LPC32XX_BASE_EMC_DYCS_0 + cfg->chip [i].extmode);
+      *(volatile uint32_t *)(chip_begin + cfg->chip [i].extmode);
     }
     chip_begin += 0x20000000;
   }

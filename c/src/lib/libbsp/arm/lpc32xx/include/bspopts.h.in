@@ -60,6 +60,15 @@
 /* peripheral clock in Hz */
 #undef LPC32XX_PERIPH_CLK
 
+/* stop Ethernet controller at start-up to avoid DMA interference */
+#undef LPC32XX_STOP_ETHERNET
+
+/* stop general purpose DMA at start-up to avoid DMA interference */
+#undef LPC32XX_STOP_GPDMA
+
+/* stop USB controller at start-up to avoid DMA interference */
+#undef LPC32XX_STOP_USB
+
 /* baud for UART 1 */
 #undef LPC32XX_UART_1_BAUD
 
