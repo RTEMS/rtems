@@ -117,12 +117,10 @@ void _POSIX_signals_Post_switch_extension(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   /*
-   * api cannot be NULL or we would not have registered this API extension.
+   * api may be NULL in case of a thread close in progress
    */
-  #if defined(RTEMS_DEBUG)
-    if ( !api )
-      return;
-  #endif
+  if ( !api )
+    return;
 
   /*
    *  If we invoke any user code, there is the possibility that
