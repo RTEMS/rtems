@@ -50,13 +50,15 @@
 
 %define name			rtems-4.11-autoconf
 
+# --with alltests	enable all tests
+%bcond_with		alltests
 
 Name:		%{name}
 License:	GPL
 URL:		http://www.gnu.org/software/autoconf
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -136,7 +138,7 @@ TESTSUITEFLAGS='-198 200-'
 TESTSUITEFLAGS='-204 206-'
 %endif
 
-make check TESTSUITEFLAGS="${TESTSUITEFLAGS}"
+make check %{!?with_alltests:TESTSUITEFLAGS="${TESTSUITEFLAGS}"}
 %endif
 
 %install
