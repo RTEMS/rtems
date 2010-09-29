@@ -1,3 +1,7 @@
+2010-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove -Wno-unused-variable.
+
 2010-08-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1682/bsps

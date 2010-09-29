@@ -189,7 +189,7 @@ noinst_PROGRAMS += network_if_gfe_tmp.rel
 network_if_gfe_tmp_rel_SOURCES = network/if_gfe/if_gfe.c network/if_gfe/if_gfe_rtems.c
 network_if_gfe_tmp_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     -I$(srcdir)/network/porting -I$(srcdir)/network/if_gfe
-network_if_gfe_tmp_rel_CFLAGS   =  -Wno-unused-variable $(AM_CFLAGS)
+network_if_gfe_tmp_rel_CFLAGS   = $(AM_CFLAGS)
 network_if_gfe_tmp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # remove all unneccessary global symbols to avoid name clashes
@@ -208,7 +208,7 @@ network_if_em_tmp_rel_SOURCES = network/if_em/if_em.c \
     network/if_em/if_em_rtems.c
 network_if_em_tmp_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     -I$(srcdir)/network/porting -I$(srcdir)/network/if_em
-network_if_em_tmp_rel_CFLAGS   =  -Wno-unused-variable $(AM_CFLAGS)
+network_if_em_tmp_rel_CFLAGS   = $(AM_CFLAGS)
 network_if_em_tmp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 network_if_em.rel: network_if_em_tmp.rel
