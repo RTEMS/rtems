@@ -1,5 +1,6 @@
 2010-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am: Remove non release-suitable warning flags.
 	* aclocal/prog-cc.m4: Remove non release-suitable warning flags.
 
 2010-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
