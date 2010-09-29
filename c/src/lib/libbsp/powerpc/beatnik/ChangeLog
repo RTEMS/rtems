@@ -1,3 +1,7 @@
+2010-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove -Wno-unused-variable.
+
 2010-05-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* include/bsp.h: Do not include <bsp/bsp_bsdnet_attach.h> if networkign
