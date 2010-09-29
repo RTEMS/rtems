@@ -7,6 +7,8 @@
 %define name			autoconf
 %endif
 
+# --with alltests	enable all tests
+%bcond_with		alltests
 
 Name:		%{name}
 License:	GPL
@@ -85,7 +87,7 @@ TESTSUITEFLAGS='-198 200-'
 TESTSUITEFLAGS='-204 206-'
 %endif
 
-make check TESTSUITEFLAGS="${TESTSUITEFLAGS}"
+make check %{!?with_alltests:TESTSUITEFLAGS="${TESTSUITEFLAGS}"}
 %endif
 
 %install
