@@ -1,3 +1,8 @@
+2010-10-01	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for pthread_attr_{get,set}cputime instead of 
+	pthread_pthread_attr_{get,set}cputime (Typo).
+
 2010-09-28	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* psx15/.cvsignore, psx15/Makefile.am, psx15/init.c, psx15/psx15.scn:
