@@ -39,11 +39,11 @@ AC_CHECK_DECLS([pthread_atfork],[],[],[[#include <pthread.h>]])
 
 # FIXME: RTEMS presumes pthread_attr_getcputime to be IEEE Std 1003.1
 # Likely an anachronism in RTEMS.
-AC_CHECK_DECLS([pthread_pthread_attr_getcputime],[],[],[[#include <pthread.h>]])
+AC_CHECK_DECLS([pthread_attr_getcputime],[],[],[[#include <pthread.h>]])
 
 # FIXME: RTEMS presumes pthread_attr_setcputime to be IEEE Std 1003.1
 # Likely an anachronism in RTEMS.
-AC_CHECK_DECLS([pthread_pthread_attr_setcputime],[],[],[[#include <pthread.h>]])
+AC_CHECK_DECLS([pthread_attr_setcputime],[],[],[[#include <pthread.h>]])
 
 # FIXME: adjtime is a non-standardized BSD/Linux extension
 # RTEMS should not rely on adjtime
