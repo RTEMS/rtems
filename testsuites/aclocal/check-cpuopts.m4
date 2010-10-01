@@ -18,9 +18,9 @@ AC_CACHE_CHECK(
 #ifndef $1
 choke me
 #endif
-    ],
+    ])],
     [rtems_cv_$1=yes],
     [rtems_cv_$1=no])
-  ])])
+  ])
 CPPFLAGS="$sav_CPPFLAGS"
 ])
