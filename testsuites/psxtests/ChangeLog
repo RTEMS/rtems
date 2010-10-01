@@ -1,3 +1,8 @@
+2010-10-01	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for pthread_attr_{get,set}cputime instead of 
+	pthread_pthread_attr_{get,set}cputime (Typo).
+
 2010-06-02 	Chris Johns <chrisj@rtems.org>
 
 	* psxfile01/test.c, psxmount/test.c, psxreaddir/test.c,
