@@ -1,3 +1,8 @@
+2010-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1708/build:
+	* aclocal/check-cpuopts.m4: Fix m4-quoting.
+
 2010-09-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/check-cpuopts.m4: Add AC_LANG_SOURCE.
