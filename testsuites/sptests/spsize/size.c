@@ -466,7 +466,7 @@ puts( "" );
 
 printf( "\n" );
 printf( "RTEMS uninitialized data consumes %d bytes\n", uninitialized );
-printf( "RTEMS intialized data consumes %d bytes\n", initialized );
+printf( "RTEMS initialized data consumes %d bytes\n", initialized );
 
 }
 

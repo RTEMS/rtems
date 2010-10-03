@@ -1,3 +1,7 @@
+2010-10-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* spsize/size.c: Fix typo.
+
 2010-08-26	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1663/testing
