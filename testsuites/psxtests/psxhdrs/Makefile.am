@@ -14,6 +14,7 @@ lib_a_SOURCES = clock01.c clock02.c clock03.c clock04.c clock05.c clock06.c \
     pthread19.c pthread20.c pthread21.c pthread22.c pthread23.c pthread24.c \
     pthread25.c pthread26.c pthread27.c pthread28.c pthread29.c pthread30.c \
     pthread31.c pthread32.c pthread33.c pthread34.c pthread35.c pthread36.c \
+    pthread37.c pthread38.c pthread39.c pthread40.c \
     proc01.c proc02.c proc03.c proc04.c proc05.c proc06.c proc07.c proc08.c \
     proc09.c proc10.c proc11.c proc12.c proc13.c proc14.c sched01.c \
     sched02.c sched03.c sched04.c sched05.c sched06.c sched07.c sched08.c \

@@ -1,3 +1,12 @@
+2010-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, psx07/init.c, psx07/psx07.scn,
+	psxhdrs/Makefile.am, psxstack01/init.c: Add pthread_attr_getstack,
+	pthread_attr_setstack, pthread_attr_getguardsize, and
+	pthread_attr_setguardsize.
+	* psxstack02/.cvsignore, psxstack02/Makefile.am, psxstack02/init.c,
+	psxstack02/psxstack02.doc, psxstack02/psxstack02.scn: New files.
+
 2010-10-01	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Check for pthread_attr_{get,set}cputime instead of 

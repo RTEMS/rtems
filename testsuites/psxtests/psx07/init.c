@@ -63,6 +63,7 @@ void *POSIX_Init(
   int                 inheritsched;
   int                 schedpolicy;
   size_t              stacksize;
+  size_t              guardsize;
   void               *stackaddr;
   int                 detachstate;
   struct sched_param  schedparam;
@@ -127,10 +128,12 @@ void *POSIX_Init(
   status = pthread_attr_init( &attr );
   posix_service_failed( status, "pthread_attr_init");
 
+#if HAVE_DECL_PTHREAD_ATTR_SETSTACKADDR
   attr.stacksize = rtems_configuration_get_work_space_size() * 10;
   puts( "Init - pthread_create - EAGAIN (stacksize too large)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   fatal_directive_check_status_only( status, EAGAIN, "stacksize too large" );
+#endif
 
   status = pthread_attr_init( &attr );
   posix_service_failed( status, "pthread_attr_init");
@@ -373,7 +376,6 @@ void *POSIX_Init(
     printf( "Init - current stack size attribute is OK\n" );
 
   /* exercise get and set stack address */
-
   empty_line();
 
   puts( "Init - pthread_attr_setstackaddr - EINVAL (NULL attr)" );
@@ -381,14 +383,14 @@ void *POSIX_Init(
   fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
 
   puts( "Init - pthread_attr_setstackaddr - EINVAL (not initialized attr)" );
-  status =
-     pthread_attr_setstackaddr( &destroyed_attr, NULL );
+  status = pthread_attr_setstackaddr( &destroyed_attr, NULL );
   fatal_directive_check_status_only( status, EINVAL, "not initialized attr" );
 
   puts( "Init - pthread_attr_setstackaddr - SUCCESSFUL" );
   status = pthread_attr_setstackaddr( &attr, 0 );
   posix_service_failed( status, "");
 
+  /* get stack addr */
   puts( "Init - pthread_attr_getstackaddr - EINVAL (NULL attr)" );
   status = pthread_attr_getstackaddr( NULL, &stackaddr );
   fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
@@ -406,8 +408,89 @@ void *POSIX_Init(
   posix_service_failed( status, "pthread_attr_getstackaddr");
   printf( "Init - current stack address attribute = %p\n", stackaddr );
 
-  /* exercise get and set detach state */
+  /* exercise get and set stack (as pair) */
+  empty_line();
 
+#if HAVE_DECL_PTHREAD_ATTR_SETSTACK
+  puts( "Init - pthread_attr_setstack- EINVAL (NULL attr)" );
+  status = pthread_attr_setstack( NULL, &stackaddr, 1024 );
+  fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
+
+  puts( "Init - pthread_attr_setstack- EINVAL (destroyed attr)" );
+  status = pthread_attr_setstack( &destroyed_attr, &stackaddr, 1024 );
+  fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
+
+  puts( "Init - pthread_attr_setstack- SUCCESSFUL (< min stack)" );
+  status = pthread_attr_setstack( &attr, stackaddr, 0 );
+  posix_service_failed( status, "OK");
+
+  puts( "Init - pthread_attr_setstack- SUCCESSFUL (big stack)" );
+  status = pthread_attr_setstack( &attr, stackaddr, STACK_MINIMUM_SIZE * 2 );
+  posix_service_failed( status, "OK");
+#endif
+
+#if HAVE_DECL_PTHREAD_ATTR_GETSTACK
+  puts( "Init - pthread_attr_getstack- EINVAL (NULL attr)" );
+  status = pthread_attr_getstack( NULL, &stackaddr, &stacksize );
+  fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
+
+  puts( "Init - pthread_attr_getstack- EINVAL (destroyed attr)" );
+  status = pthread_attr_getstack( &destroyed_attr, &stackaddr, &stacksize );
+  fatal_directive_check_status_only( status, EINVAL, "&destroyed attr" );
+
+  puts( "Init - pthread_attr_getstack- EINVAL (NULL stack)" );
+  status = pthread_attr_getstack( &attr, NULL, &stacksize );
+  fatal_directive_check_status_only( status, EINVAL, "&NULL stack" );
+
+  puts( "Init - pthread_attr_getstack- EINVAL (NULL stacksize)" );
+  status = pthread_attr_getstack( &attr, &stackaddr, NULL );
+  fatal_directive_check_status_only( status, EINVAL, "&NULL size" );
+
+  puts( "Init - pthread_attr_getstack- SUCCESSFUL" );
+  status = pthread_attr_getstack( &attr, &stackaddr, &stacksize );
+  posix_service_failed( status, "pthread_attr_getstack");
+#endif
+
+  /* exercise get and set detach state */
+  empty_line();
+
+#if HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE
+  puts( "Init - pthread_attr_setguardsize - EINVAL (NULL attr)" );
+  status = pthread_attr_setguardsize( NULL, 0 );
+  fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
+
+  puts( "Init - pthread_attr_setguardsize - EINVAL (not initialized attr)" );
+  status = pthread_attr_setguardsize( &destroyed_attr, 0 );
+  fatal_directive_check_status_only( status, EINVAL, "not initialized attr" );
+
+  puts( "Init - pthread_attr_setguardsize - SUCCESSFUL (low guardsize)" );
+  status = pthread_attr_setguardsize( &attr, 0 );
+  posix_service_failed( status, "pthread_attr_setguardsize");
+
+  puts( "Init - pthread_attr_setguardsize - SUCCESSFUL (high guardsize)" );
+  status = pthread_attr_setguardsize( &attr, STACK_MINIMUM_SIZE * 2 );
+  posix_service_failed( status, "");
+#endif
+
+#if HAVE_DECL_PTHREAD_ATTR_GETGUARDSIZE
+  puts( "Init - pthread_attr_getguardsize - EINVAL (NULL attr)" );
+  status = pthread_attr_getguardsize( NULL, &guardsize );
+  fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
+
+  puts( "Init - pthread_attr_getguardsize - EINVAL (NULL guardsize)" );
+  status = pthread_attr_getguardsize( &attr, NULL );
+  fatal_directive_check_status_only( status, EINVAL, "NULL guardsize" );
+
+  puts( "Init - pthread_attr_getguardsize - EINVAL (not initialized attr)" );
+  status = pthread_attr_getguardsize( &destroyed_attr, &guardsize );
+  fatal_directive_check_status_only( status, EINVAL, "not initialized attr" );
+
+  puts( "Init - pthread_attr_getguardsize - SUCCESSFUL" );
+  status = pthread_attr_getguardsize( &attr, &guardsize );
+  posix_service_failed( status, "pthread_attr_getguardsize");
+#endif
+
+  /* exercise get and set detach state */
   empty_line();
 
   puts( "Init - pthread_attr_setdetachstate - EINVAL (NULL attr)" );

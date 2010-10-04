@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -10,7 +10,9 @@
  */
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-#include <pmacros.h>
+#include <tmacros.h>
+#include "test_support.h"
+
 #include <errno.h>
 #include <pthread.h>
 #include <sched.h>
@@ -43,15 +45,16 @@ void *Test_Thread(void *arg)
 }
 
 void *POSIX_Init(
-  void *argument
+  rtems_task_argument argument
 )
 {
+#if HAVE_DECL_PTHREAD_ATTR_SETSTACK
   int                 sc;
   pthread_t           id;
   pthread_attr_t      attr;
   struct timespec     delay_request;
 
-  puts( "\n\n*** POSIX STACK ATTRIBUTE TEST 01 ***" );
+  puts( "\n\n*** POSIX STACK ATTRIBUTE TEST 02  ***" );
 
   puts( "Init - Allocate stack from heap" );
   Stack_Low = malloc(PTHREAD_MINIMUM_STACK_SIZE);
@@ -62,10 +65,7 @@ void *POSIX_Init(
   sc = pthread_attr_init( &attr );
   rtems_test_assert(  !sc );
 
-  sc = pthread_attr_setstackaddr( &attr, Stack_Low );
-  rtems_test_assert(  !sc );
-
-  sc = pthread_attr_setstacksize( &attr, PTHREAD_MINIMUM_STACK_SIZE );
+  sc = pthread_attr_setstack( &attr, Stack_Low, PTHREAD_MINIMUM_STACK_SIZE );
   rtems_test_assert(  !sc );
 
   /* create threads */
@@ -76,12 +76,14 @@ void *POSIX_Init(
   delay_request.tv_sec = 0;
   delay_request.tv_nsec = 5 * 100000000;
   sc = nanosleep( &delay_request, NULL );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
+#else
+  puts( "pthread_set_stack not supported - SKIPPING TEST CASE" );
+#endif
+  
+  puts( "*** END OF POSIX STACK ATTRIBUTE TEST 02  ***" );
 
-  puts( "*** END OF POSIX STACK ATTRIBUTE TEST 01 ***" );
   rtems_test_exit(0);
-
-  return NULL; /* just so the compiler thinks we returned something */
 }
 
 /* configuration information */
@@ -95,3 +97,4 @@ void *POSIX_Init(
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
+/* end of file */

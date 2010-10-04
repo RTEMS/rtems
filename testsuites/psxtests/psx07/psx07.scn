@@ -71,6 +71,25 @@ Init - pthread_attr_getstackaddr - EINVAL (not initialized attr)
 Init - pthread_attr_getstackaddr - SUCCESSFUL
 Init - current stack address attribute = 0x0
 
+Init - pthread_attr_setstack- EINVAL (NULL attr)
+Init - pthread_attr_setstack- EINVAL (destroyed attr)
+Init - pthread_attr_setstack- SUCCESSFUL (< min stack)
+Init - pthread_attr_setstack- SUCCESSFUL (big stack)
+Init - pthread_attr_getstack- EINVAL (NULL attr)
+Init - pthread_attr_getstack- EINVAL (destroyed attr)
+Init - pthread_attr_getstack- EINVAL (NULL stack)
+Init - pthread_attr_getstack- EINVAL (NULL stacksize)
+Init - pthread_attr_getstack- SUCCESSFUL
+
+Init - pthread_attr_setguardsize - EINVAL (NULL attr)
+Init - pthread_attr_setguardsize - EINVAL (not initialized attr)
+Init - pthread_attr_setguardsize - SUCCESSFUL (low guardsize)
+Init - pthread_attr_setguardsize - SUCCESSFUL (high guardsize)
+Init - pthread_attr_getguardsize - EINVAL (NULL attr)
+Init - pthread_attr_getguardsize - EINVAL (NULL guardsize)
+Init - pthread_attr_getguardsize - EINVAL (not initialized attr)
+Init - pthread_attr_getguardsize - SUCCESSFUL
+
 Init - pthread_attr_setdetachstate - EINVAL (NULL attr)
 Init - pthread_attr_setdetachstate - EINVAL (not initialized attr)
 Init - pthread_attr_setdetachstate - EINVAL (invalid detachstate)
@@ -83,9 +102,9 @@ Init - current detach state attribute = 1
 
 Init - pthread_attr_getschedparam - SUCCESSFUL
 Init - sched priority      = 2
-Init - ss_low_priority     = 0
-Init - ss_replenish_period = (0, 0)
-Init - ss_initial_budget = (0, 0)
+Init - sched_ss_low_priority     = 0
+Init - sched_ss_replenish_period = (0, 0)
+Init - sched_sched_ss_initial_budget = (0, 0)
 Init - pthread_attr_setschedparam - EINVAL (NULL attr)
 Init - pthread_attr_setschedparam - EINVAL (not initialized attr)
 Init - pthread_attr_setschedparam - EINVAL (NULL schedparam)
@@ -100,9 +119,9 @@ Init - pthread_getschedparam - ESRCH (bad thread)
 Init - pthread_getschedparam - SUCCESSFUL
 Init - policy = 1
 Init - sched priority      = 2
-Init - ss_low_priority     = 0
-Init - ss_replenish_period = (0, 0)
-Init - ss_initial_budget = (0, 0)
+Init - sched_ss_low_priority     = 0
+Init - sched_ss_replenish_period = (0, 0)
+Init - sched_sched_ss_initial_budget = (0, 0)
 
 Init - pthread_setschedparam - EINVAL (NULL schedparam)
 Init - pthread_setschedparam - EINVAL (invalid priority)

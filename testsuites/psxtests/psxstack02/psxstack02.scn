@@ -1,0 +1,7 @@
+*** POSIX STACK ATTRIBUTE TEST 02  ***
+Init - Allocate stack from heap
+Init - Initialize thread attribute for user provided stack
+Init - let other thread run
+Test_Thread - running on user provided stack - OK
+Test_Thread - delete self
+*** END OF POSIX STACK ATTRIBUTE TEST 02  ***
