@@ -55,6 +55,9 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
       { 0L, 0 }                 /* sched_ss_init_budget */
     #endif
   },
+  #if HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE
+    0,                        /* guardsize */
+  #endif
   #if defined(_POSIX_THREAD_CPUTIME)
     1,                        /* cputime_clock_allowed */
   #endif

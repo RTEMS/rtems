@@ -351,6 +351,7 @@ libcsupport/Makefile
 libnetworking/Makefile
 librpc/Makefile
 libmisc/Makefile
+libdbm/Makefile
 libi2c/Makefile
 libmd/Makefile
 zlib/Makefile

@@ -1,3 +1,10 @@
+2010-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, posix/Makefile.am, posix/src/pthread.c:
+	* posix/src/pthreadattrgetguardsize.c, posix/src/pthreadattrgetstack.c,
+	posix/src/pthreadattrsetguardsize.c, posix/src/pthreadattrsetstack.c:
+	New files.
+
 2010-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* posix/src/psignal.c: Fixed NULL pointer access.

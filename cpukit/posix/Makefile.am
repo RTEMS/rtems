@@ -111,20 +111,24 @@ libposix_a_SOURCES += src/mutexattrdestroy.c src/mutexattrgetprioceiling.c \
     src/mutextranslatereturncode.c src/mutextrylock.c src/mutexunlock.c
 
 ## PTHREAD_C_FILES
-libposix_a_SOURCES += src/pthread.c src/pthreadsetcputime.c \
-    src/pthreadgetcputime.c src/pthreadgetcpuclockid.c src/pthreadonce.c \
-    src/pthreadequal.c src/pthreadself.c src/pthreadexit.c \
-    src/pthreaddetach.c src/pthreadjoin.c src/pthreadcreate.c \
-    src/pthreadattrsetdetachstate.c src/pthreadattrgetdetachstate.c \
-    src/pthreadattrgetstackaddr.c src/pthreadattrsetstackaddr.c \
-    src/pthreadattrgetstacksize.c src/pthreadattrsetstacksize.c \
-    src/pthreadattrinit.c src/pthreadattrdestroy.c \
-    src/pthreadsetschedparam.c src/pthreadgetschedparam.c \
-    src/pthreadattrsetschedparam.c src/pthreadattrgetschedparam.c \
-    src/pthreadattrgetschedpolicy.c src/pthreadattrsetschedpolicy.c \
-    src/pthreadattrgetinheritsched.c src/pthreadattrsetinheritsched.c \
-    src/pthreadattrgetscope.c src/pthreadattrsetscope.c \
-    src/pthreadinitthreads.c src/psxtransschedparam.c
+libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
+    src/pthreadattrgetdetachstate.c src/pthreadattrgetinheritsched.c \
+    src/pthreadattrgetschedparam.c src/pthreadattrgetschedpolicy.c \
+    src/pthreadattrgetscope.c src/pthreadattrgetstackaddr.c \
+    src/pthreadattrgetstack.c src/pthreadattrgetstacksize.c \
+    src/pthreadattrinit.c src/pthreadattrsetdetachstate.c \
+    src/pthreadattrsetguardsize.c src/pthreadattrsetinheritsched.c \
+    src/pthreadattrsetschedparam.c src/pthreadattrsetschedpolicy.c \
+    src/pthreadattrsetscope.c src/pthreadattrsetstackaddr.c \
+    src/pthreadattrsetstack.c src/pthreadattrsetstacksize.c \
+    src/pthreadattrgetguardsize.c src/pthread.c \
+    src/pthreadcreate.c src/pthreaddetach.c src/pthreadequal.c \
+    src/pthreadexit.c src/pthreadgetcpuclockid.c \
+    src/pthreadgetcputime.c src/pthreadgetschedparam.c \
+    src/pthreadinitthreads.c src/pthreadjoin.c src/pthreadkill.c \
+    src/pthreadonce.c src/pthreadself.c src/pthreadsetcputime.c \
+    src/pthreadsetschedparam.c src/pthreadsigmask.c \
+    src/psxpriorityisvalid.c src/psxtransschedparam.c
 
 ## PSIGNAL_C_FILES
 libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
