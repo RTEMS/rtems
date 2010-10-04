@@ -1,3 +1,7 @@
+2010-10-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* spfifo03/spfifo03.scn: Replace file.
+
 2010-10-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* spsize/size.c: Fix typo.

@@ -1,41 +1,18 @@
-Initialized console on port COM1 9600-8-N-1
-
-
-
 *** FIFO / PIPE OPEN TEST - 6 ***
-
-
 Creating a task name and a task
-
-
 creating directory /tmp
-
-
 creating fifo file /tmp/fifo01
-
-
 Starting the read task
-
-
+Read task activated, waiting till writer opens
 Writer opening file(1)
-
-
-Read task activated, sleeping to block the writer
-
-
 Now, reader opening file(1)
-
-
-@ sender: 
-
-@ receiver (being a unblocked reader): Got 
-
+@ sender: SendBuffer1
+@ receiver (being a unblocked reader): Got SendBuffer1
 Reader opening file(2)
-
-
 Writer opening file(2)
-
-
 @ sender: SendBuffer2
-
+@ receiver (being a blocked reader): Got SendBuffer2
+Reader done!
+Removing the fifo
+Removing /tmp
 *** END OF FIFO / PIPE OPEN TEST - 6 ***
