@@ -1,5 +1,10 @@
 2010-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxhdrs/pthread37.c, psxhdrs/pthread38.c, psxhdrs/pthread39.c,
+	psxhdrs/pthread40.c: New files.
+
+2010-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, psx07/init.c, psx07/psx07.scn,
 	psxhdrs/Makefile.am, psxstack01/init.c: Add pthread_attr_getstack,
 	pthread_attr_setstack, pthread_attr_getguardsize, and
