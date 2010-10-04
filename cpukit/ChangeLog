@@ -1,5 +1,10 @@
 2010-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Revert accident commit adding libdbm to
+	build.
+
+2010-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, posix/Makefile.am, posix/src/pthread.c:
 	Add pthread_attr_getstack, pthread_attr_setstack,
 	pthread_attr_getguardsize, and pthread_attr_setguardsize.

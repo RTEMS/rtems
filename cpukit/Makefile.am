@@ -15,7 +15,6 @@ SUBDIRS += libi2c
 SUBDIRS += libmisc
 SUBDIRS += libmd
 SUBDIRS += libgnat
-SUBDIRS += libdbm
 SUBDIRS += wrapup
 
 SUBDIRS += zlib
