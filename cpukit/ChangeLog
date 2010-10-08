@@ -1,3 +1,8 @@
+2010-10-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/check-func.m4: Linearize checks.
+	Add missing $2 to AC_CHECK_DECL.
+
 2010-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Revert accident commit adding libdbm to
