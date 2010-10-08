@@ -63,7 +63,9 @@ void *POSIX_Init(
   int                 inheritsched;
   int                 schedpolicy;
   size_t              stacksize;
+#if HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE
   size_t              guardsize;
+#endif
   void               *stackaddr;
   int                 detachstate;
   struct sched_param  schedparam;
