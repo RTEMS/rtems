@@ -1,3 +1,8 @@
+2010-10-08	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psx07/init.c: Add HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE guard around
+	guardsize.
+
 2010-10-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxhdrs/pthread37.c, psxhdrs/pthread38.c, psxhdrs/pthread39.c,
