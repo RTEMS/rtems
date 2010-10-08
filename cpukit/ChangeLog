@@ -1,5 +1,7 @@
 2010-10-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: pthread_attr* functions are in <pthread.h>, not in
+	<pthreads.h>.
 	* aclocal/check-func.m4: Linearize checks.
 	Add missing $2 to AC_CHECK_DECL.
 

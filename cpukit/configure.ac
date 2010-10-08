@@ -79,10 +79,10 @@ RTEMS_CHECK_FUNC([setpgrp],[#include <unistd.h>])
 RTEMS_CHECK_FUNC([getpgrp],[#include <unistd.h>])
 
 # pthread-functions not declared in some versions of newlib.
-RTEMS_CHECK_FUNC([pthread_attr_getguardsize],[#include <pthreads.h>])
-RTEMS_CHECK_FUNC([pthread_attr_setguardsize],[#include <pthreads.h>])
-RTEMS_CHECK_FUNC([pthread_attr_setstack],[#include <pthreads.h>])
-RTEMS_CHECK_FUNC([pthread_attr_getstack],[#include <pthreads.h>])
+RTEMS_CHECK_FUNC([pthread_attr_getguardsize],[#include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_attr_setguardsize],[#include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_attr_setstack],[#include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_attr_getstack],[#include <pthread.h>])
 
 # Newlib's unix/ directory
 AC_CHECK_FUNCS([ttyname getcwd])
