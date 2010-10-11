@@ -28,7 +28,9 @@
 /**
  * Is tracing enabled ?
  */
+#if !defined (RTEMS_RFS_TRACE)
 #define RTEMS_RFS_TRACE 1
+#endif
 
 /**
  * The type of the mask.
@@ -62,21 +64,22 @@ typedef uint64_t rtems_rfs_trace_mask;
 #define RTEMS_RFS_TRACE_INODE_LOAD             (1ULL << 20)
 #define RTEMS_RFS_TRACE_INODE_UNLOAD           (1ULL << 21)
 #define RTEMS_RFS_TRACE_INODE_CREATE           (1ULL << 22)
-#define RTEMS_RFS_TRACE_LINK                   (1ULL << 23)
-#define RTEMS_RFS_TRACE_UNLINK                 (1ULL << 24)
-#define RTEMS_RFS_TRACE_DIR_LOOKUP_INO         (1ULL << 25)
-#define RTEMS_RFS_TRACE_DIR_LOOKUP_INO_CHECK   (1ULL << 26)
-#define RTEMS_RFS_TRACE_DIR_LOOKUP_INO_FOUND   (1ULL << 27)
-#define RTEMS_RFS_TRACE_DIR_ADD_ENTRY          (1ULL << 28)
-#define RTEMS_RFS_TRACE_DIR_DEL_ENTRY          (1ULL << 29)
-#define RTEMS_RFS_TRACE_DIR_READ               (1ULL << 30)
-#define RTEMS_RFS_TRACE_DIR_EMPTY              (1ULL << 31)
-#define RTEMS_RFS_TRACE_SYMLINK                (1ULL << 32)
-#define RTEMS_RFS_TRACE_SYMLINK_READ           (1ULL << 33)
-#define RTEMS_RFS_TRACE_FILE_OPEN              (1ULL << 34)
-#define RTEMS_RFS_TRACE_FILE_CLOSE             (1ULL << 35)
-#define RTEMS_RFS_TRACE_FILE_IO                (1ULL << 36)
-#define RTEMS_RFS_TRACE_FILE_SET               (1ULL << 37)
+#define RTEMS_RFS_TRACE_INODE_DELETE           (1ULL << 23)
+#define RTEMS_RFS_TRACE_LINK                   (1ULL << 24)
+#define RTEMS_RFS_TRACE_UNLINK                 (1ULL << 25)
+#define RTEMS_RFS_TRACE_DIR_LOOKUP_INO         (1ULL << 26)
+#define RTEMS_RFS_TRACE_DIR_LOOKUP_INO_CHECK   (1ULL << 27)
+#define RTEMS_RFS_TRACE_DIR_LOOKUP_INO_FOUND   (1ULL << 28)
+#define RTEMS_RFS_TRACE_DIR_ADD_ENTRY          (1ULL << 29)
+#define RTEMS_RFS_TRACE_DIR_DEL_ENTRY          (1ULL << 30)
+#define RTEMS_RFS_TRACE_DIR_READ               (1ULL << 31)
+#define RTEMS_RFS_TRACE_DIR_EMPTY              (1ULL << 32)
+#define RTEMS_RFS_TRACE_SYMLINK                (1ULL << 33)
+#define RTEMS_RFS_TRACE_SYMLINK_READ           (1ULL << 34)
+#define RTEMS_RFS_TRACE_FILE_OPEN              (1ULL << 35)
+#define RTEMS_RFS_TRACE_FILE_CLOSE             (1ULL << 36)
+#define RTEMS_RFS_TRACE_FILE_IO                (1ULL << 37)
+#define RTEMS_RFS_TRACE_FILE_SET               (1ULL << 38)
 
 /**
  * Call to check if this part is bring traced. If RTEMS_RFS_TRACE is defined to

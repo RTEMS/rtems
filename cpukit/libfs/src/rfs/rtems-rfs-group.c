@@ -46,6 +46,15 @@ rtems_rfs_group_open (rtems_rfs_file_system* fs,
 
   if ((base + size) >= rtems_rfs_fs_blocks (fs))
     size = rtems_rfs_fs_blocks (fs) - base;
+
+  /*
+   * Limit the inodes to the same size as the blocks. This is what the
+   * format does and if this is not done the accounting of inodes does
+   * not work. If we are so pushed for inodes that this makes a difference
+   * the format configuration needs reviewing.
+   */
+  if (inodes > size)
+    inodes = size;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_OPEN))
     printf ("rtems-rfs: group-open: base=%" PRId32 ", blocks=%zd inodes=%zd\n",

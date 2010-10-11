@@ -296,6 +296,12 @@ rtems_rfs_inode_delete (rtems_rfs_file_system*  fs,
                         rtems_rfs_inode_handle* handle)
 {
   int rc = 0;
+  
+  if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_DELETE))
+    printf("rtems-rfs: inode-delete: ino:%" PRIu32 " loaded:%s\n",
+           rtems_rfs_inode_ino (handle),
+           rtems_rfs_inode_is_loaded (handle) ? "yes" : "no");
+
   if (rtems_rfs_inode_is_loaded (handle))
   {
     rtems_rfs_block_map map;

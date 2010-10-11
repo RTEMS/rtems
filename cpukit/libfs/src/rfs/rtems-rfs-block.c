@@ -58,20 +58,7 @@ rtems_rfs_pos
 rtems_rfs_block_get_pos (rtems_rfs_file_system* fs,
                          rtems_rfs_block_pos*   bpos)
 {
-#if 0
-  rtems_rfs_pos pos = 0;
-  if (bpos->bno)
-  {
-    pos = bpos->boff;
-    if (pos == 0)
-      pos = rtems_rfs_fs_block_size (fs);
-    pos += (bpos->bno - 1) * rtems_rfs_fs_block_size (fs);
-  }
-#else
-  rtems_rfs_pos pos;
-  pos = (bpos->bno * rtems_rfs_fs_block_size (fs)) + bpos->boff;
-#endif
-  return pos;
+  return (bpos->bno * rtems_rfs_fs_block_size (fs)) + bpos->boff;
 }
 
 void
@@ -639,8 +626,6 @@ rtems_rfs_block_map_indirect_shrink (rtems_rfs_file_system*   fs,
       int b;
       for (b = 0; b < RTEMS_RFS_INODE_BLOCKS; b++)
         map->blocks[b] = rtems_rfs_block_get_number (buffer, b);
-
-      rtems_rfs_buffer_handle_reset (buffer);
     }
     else
     {

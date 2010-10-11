@@ -620,10 +620,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       if (remaining <= RTEMS_RFS_DIR_ENTRY_SIZE)
         *length += remaining;
       
-      if (elength < RTEMS_RFS_DIR_ENTRY_SIZE)
-        elength = 0;
-      else
-        elength -= RTEMS_RFS_DIR_ENTRY_SIZE;
+      elength -= RTEMS_RFS_DIR_ENTRY_SIZE;
       if (elength > NAME_MAX)
         elength = NAME_MAX;
       

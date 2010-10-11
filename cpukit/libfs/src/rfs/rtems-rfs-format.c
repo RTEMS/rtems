@@ -84,8 +84,7 @@ rtems_rfs_inode_overhead (rtems_rfs_file_system* fs)
                                   rtems_rfs_fs_block_size (fs));
   bits_per_block = rtems_rfs_bits_per_block (fs);
   /*
-   * There could be more bits that there are blocks, eg 512K disk with 512
-   * blocks.
+   * There could be more bits than blocks, eg 512K disk with 512 blocks.
    */
   if (bits_per_block > (rtems_rfs_fs_blocks (fs) - RTEMS_RFS_SUPERBLOCK_SIZE))
     bits_per_block = rtems_rfs_fs_blocks (fs) - RTEMS_RFS_SUPERBLOCK_SIZE;
@@ -353,7 +352,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
   rtems_rfs_buffer_mark_dirty (&handle);
 
   /*
-   * Initialise the inode tables if rerquired to do so.
+   * Initialise the inode tables if required to do so.
    */
   if (initialise_inodes)
   {

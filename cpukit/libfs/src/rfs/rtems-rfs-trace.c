@@ -78,6 +78,7 @@ rtems_rfs_trace_shell_command (int argc, char *argv[])
     "inode-load",
     "inode-unload",
     "inode-create",
+    "inode-delete",
     "link",
     "unlink",
     "dir-lookup-ino",
