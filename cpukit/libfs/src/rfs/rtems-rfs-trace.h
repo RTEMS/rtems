@@ -29,7 +29,7 @@
  * Is tracing enabled ?
  */
 #if !defined (RTEMS_RFS_TRACE)
-#define RTEMS_RFS_TRACE 1
+#define RTEMS_RFS_TRACE 0
 #endif
 
 /**
