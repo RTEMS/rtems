@@ -28,7 +28,7 @@
 /**
  * Is tracing enabled ?
  */
-#define RTEMS_RFS_TRACE 0
+#define RTEMS_RFS_TRACE 1
 
 /**
  * The type of the mask.

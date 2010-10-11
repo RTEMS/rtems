@@ -1,3 +1,29 @@
+2010-10-11      Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-trace.c,
+	libfs/src/rfs/rtems-rfs-trace.h: Add inode-delete.
+	* libfs/src/rfs/rtems-rfs-shell.c: Fix formatting.
+	* libfs/src/rfs/rtems-rfs-rtems-dir.c: Use ssize_t. Fix
+	spelling.
+	* libfs/src/rfs/rtems-rfs-block.c: Fix
+	rtems_rfs_block_get_bpos to
+	return the position correctly. A bpos does not have any
+	special
+	processing. Do no reset the buffer handle when shrinking
+	indirectly.
+	* libfs/src/rfs/rtems-rfs-inode.c: Add trace.
+	* libfs/src/rfs/rtems-rfs-format.c: Fix comments.
+	* libfs/src/rfs/rtems-rfs-group.c: Limit the inodes to the
+	blocks
+	in a group so the accounting works.
+	* libfs/src/rfs/rtems-rfs-dir.c: PR 1705. Fix handling the
+	offsets
+	when deleting an entry.
+	* libfs/src/rfs/rtems-rfs-buffer.h: Remove
+	rtems_rfs_buffer_handle_reset. It is not needed and dangerous.
+	* cpukit/libmisc/untar/untar.c: Merge 4.11 pax fix. This fix also
+	supports MacOS's tar.
+	
 2010-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* automake/compile.am: Remove non release-suitable warning flags.

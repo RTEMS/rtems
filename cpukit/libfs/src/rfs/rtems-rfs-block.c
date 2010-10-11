@@ -46,18 +46,19 @@
 #include <rtems/rfs/rtems-rfs-inode.h>
 
 void
-rtems_rfs_block_get_bpos (rtems_rfs_file_system*  fs,
-                          rtems_rfs_pos           pos,
-                          rtems_rfs_block_pos*    bpos)
+rtems_rfs_block_get_bpos (rtems_rfs_file_system* fs,
+                          rtems_rfs_pos          pos,
+                          rtems_rfs_block_pos*   bpos)
 {
   bpos->bno  = pos / rtems_rfs_fs_block_size (fs);
   bpos->boff = pos % rtems_rfs_fs_block_size (fs);
 }
 
 rtems_rfs_pos
-rtems_rfs_block_get_pos (rtems_rfs_file_system*  fs,
-                         rtems_rfs_block_pos*    bpos)
+rtems_rfs_block_get_pos (rtems_rfs_file_system* fs,
+                         rtems_rfs_block_pos*   bpos)
 {
+#if 0
   rtems_rfs_pos pos = 0;
   if (bpos->bno)
   {
@@ -66,13 +67,17 @@ rtems_rfs_block_get_pos (rtems_rfs_file_system*  fs,
       pos = rtems_rfs_fs_block_size (fs);
     pos += (bpos->bno - 1) * rtems_rfs_fs_block_size (fs);
   }
+#else
+  rtems_rfs_pos pos;
+  pos = (bpos->bno * rtems_rfs_fs_block_size (fs)) + bpos->boff;
+#endif
   return pos;
 }
 
 void
-rtems_rfs_block_get_block_size (rtems_rfs_file_system*  fs,
-                                rtems_rfs_pos           pos,
-                                rtems_rfs_block_size*   size)
+rtems_rfs_block_get_block_size (rtems_rfs_file_system* fs,
+                                rtems_rfs_pos          pos,
+                                rtems_rfs_block_size*  size)
 {
   if (pos == 0)
     rtems_rfs_block_set_size_zero (size);
