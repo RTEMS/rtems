@@ -1,3 +1,7 @@
+2010-10-11	Chris Johns <chrisj@rtems.org>
+
+	* console/console.c: Fix the baudrate command line support.
+	
 2010-08-27	Chris Johns <chrisj@rtems.org>
 
 	* console/console.c: Add baudrate support to the --console command

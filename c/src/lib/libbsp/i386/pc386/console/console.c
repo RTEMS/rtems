@@ -68,7 +68,8 @@ int BSPConsolePort = BSP_CONSOLE_PORT_CONSOLE;
 int BSPPrintkPort  = BSP_CONSOLE_PORT_CONSOLE;
 #endif
 
-int BSPBaseBaud    = 9600;
+int BSPBaseBaud    = 115200;
+int BSPCmdBaud     = 9600;
 
 extern BSP_polling_getchar_function_type BSP_poll_char;
 extern int getch( void );
@@ -185,17 +186,17 @@ BSP_console_select(void)
     {
       comma += 1;
       if (strncmp (opt, "115200", sizeof ("115200") - 1) == 0)
-        BSPBaseBaud = 115200;
+        BSPCmdBaud = 115200;
       else if (strncmp (opt, "57600", sizeof ("57600") - 1) == 0)
-        BSPBaseBaud = 57600;
+        BSPCmdBaud = 57600;
       else if (strncmp (opt, "38400", sizeof ("38400") - 1) == 0)
-        BSPBaseBaud = 38400;
+        BSPCmdBaud = 38400;
       else if (strncmp (opt, "19200", sizeof ("19200") - 1) == 0)
-        BSPBaseBaud = 19200;
+        BSPCmdBaud = 19200;
       else if (strncmp (opt, "9600", sizeof ("9600") - 1) == 0)
-        BSPBaseBaud = 9600;
+        BSPCmdBaud = 9600;
       else if (strncmp (opt, "4800", sizeof ("4800") - 1) == 0)
-        BSPBaseBaud = 9600;
+        BSPCmdBaud = 9600;
     }
   }
 
@@ -217,6 +218,7 @@ BSP_console_select(void)
 
   if(BSPPrintkPort == BSP_UART_COM1)
     {
+      printk("Initializing console on port COM1 %d-8-N-1\n\n", BSPCmdBaud);
       printk("Warning : This will be the last message on console\n");
 
       /*
@@ -287,8 +289,8 @@ console_initialize(rtems_device_major_number major,
       /*
        * Do device-specific initialization
        */
-      /* BSPBaseBaud-8-N-1 */
-      BSP_uart_init(BSPConsolePort, BSPBaseBaud, CHR_8_BITS, 0, 0, 0);
+      /* BSPCmdBaud-8-N-1 */
+      BSP_uart_init(BSPConsolePort, BSPCmdBaud, CHR_8_BITS, 0, 0, 0);
 
       /* Set interrupt handler */
       if(BSPConsolePort == BSP_UART_COM1)
@@ -321,11 +323,11 @@ console_initialize(rtems_device_major_number major,
 
       if(BSPConsolePort == BSP_UART_COM1)
 	{
-	  printk("Initialized console on port COM1 %d-8-N-1\n\n", BSPBaseBaud);
+	  printk("Initialized console on port COM1 %d-8-N-1\n\n", BSPCmdBaud);
 	}
       else
 	{
-	  printk("Initialized console on port COM2 %d-8-N-1\n\n", BSPBaseBaud);
+	  printk("Initialized console on port COM2 %d-8-N-1\n\n", BSPCmdBaud);
 	}
   }
 
@@ -545,7 +547,7 @@ conSetAttr(int minor, const struct termios *t)
   }
 
   BSP_uart_set_attributes(BSPConsolePort, baud, databits, parity, stopbits);
-
+  
   return 0;
 }
 
