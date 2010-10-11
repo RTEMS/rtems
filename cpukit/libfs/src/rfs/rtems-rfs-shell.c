@@ -123,24 +123,24 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
   printf ("RFS Filesystem Data\n");
   printf ("             flags: %08" PRIx32 "\n", fs->flags);
 #if 0
-  printf ("            device: %08lx\n", rtems_rfs_fs_device (fs));
+  printf ("            device: %08lx\n",         rtems_rfs_fs_device (fs));
 #endif
-  printf ("            blocks: %zu\n",  rtems_rfs_fs_blocks (fs));
-  printf ("        block size: %zu\n",  rtems_rfs_fs_block_size (fs));
-  printf ("              size: %" PRIu64 "\n",  rtems_rfs_fs_size (fs));
-  printf ("  media block size: %" PRIu32 "\n",  rtems_rfs_fs_media_block_size (fs));
-  printf ("        media size: %" PRIu64 "\n", rtems_rfs_fs_media_size (fs));
-  printf ("            inodes: %" PRIu32 "\n",  rtems_rfs_fs_inodes (fs));
-  printf ("        bad blocks: %" PRIu32 "\n",  fs->bad_blocks);
-  printf ("  max. name length: %" PRIu32 "\n",  rtems_rfs_fs_max_name (fs));
-  printf ("            groups: %d\n",   fs->group_count);
-  printf ("      group blocks: %zd\n",  fs->group_blocks);
-  printf ("      group inodes: %zd\n",  fs->group_inodes);
-  printf ("  inodes per block: %zd\n",  fs->inodes_per_block);
-  printf ("  blocks per block: %zd\n",  fs->blocks_per_block);
-  printf ("     singly blocks: %zd\n",  fs->block_map_singly_blocks);
-  printf ("    doublly blocks: %zd\n",  fs->block_map_doubly_blocks);
-  printf (" max. held buffers: %" PRId32 "\n",  fs->max_held_buffers);
+  printf ("            blocks: %zu\n",           rtems_rfs_fs_blocks (fs));
+  printf ("        block size: %zu\n",           rtems_rfs_fs_block_size (fs));
+  printf ("              size: %" PRIu64 "\n",   rtems_rfs_fs_size (fs));
+  printf ("  media block size: %" PRIu32 "\n",   rtems_rfs_fs_media_block_size (fs));
+  printf ("        media size: %" PRIu64 "\n",   rtems_rfs_fs_media_size (fs));
+  printf ("            inodes: %" PRIu32 "\n",   rtems_rfs_fs_inodes (fs));
+  printf ("        bad blocks: %" PRIu32 "\n",   fs->bad_blocks);
+  printf ("  max. name length: %" PRIu32 "\n",   rtems_rfs_fs_max_name (fs));
+  printf ("            groups: %d\n",            fs->group_count);
+  printf ("      group blocks: %zd\n",           fs->group_blocks);
+  printf ("      group inodes: %zd\n",           fs->group_inodes);
+  printf ("  inodes per block: %zd\n",           fs->inodes_per_block);
+  printf ("  blocks per block: %zd\n",           fs->blocks_per_block);
+  printf ("     singly blocks: %zd\n",           fs->block_map_singly_blocks);
+  printf ("    doublly blocks: %zd\n",           fs->block_map_doubly_blocks);
+  printf (" max. held buffers: %" PRId32 "\n",   fs->max_held_buffers);
 
   rtems_rfs_shell_lock_rfs (fs);
 
@@ -302,8 +302,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
     }
   }
 
-  if ((start < 0) || (end < 0) ||
-      (start >= total) || (end >= total))
+  if ((start >= total) || (end >= total))
   {
     printf ("error: inode out of range (0->%" PRId32 ").\n", total - 1);
     return 1;

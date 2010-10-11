@@ -26,6 +26,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include <rtems/rfs/rtems-rfs-dir.h>
 #include <rtems/rfs/rtems-rfs-link.h>
@@ -113,7 +114,7 @@ rtems_rfs_rtems_dir_read (rtems_libio_t* iop,
   rtems_rfs_ino          ino = rtems_rfs_rtems_get_iop_ino (iop);
   rtems_rfs_inode_handle inode;
   struct dirent*         dirent;
-  size_t                 bytes_transfered;
+  ssize_t                bytes_transferred;
   int                    d;
   int                    rc;
 
@@ -129,7 +130,7 @@ rtems_rfs_rtems_dir_read (rtems_libio_t* iop,
     return rtems_rfs_rtems_error ("dir_read: read inode", rc);
   }
 
-  bytes_transfered = 0;
+  bytes_transferred = 0;
   
   for (d = 0; d < count; d++, dirent++)
   {
@@ -142,17 +143,17 @@ rtems_rfs_rtems_dir_read (rtems_libio_t* iop,
     }
     if (rc > 0)
     {
-      bytes_transfered = rtems_rfs_rtems_error ("dir_read: dir read", rc);
+      bytes_transferred = rtems_rfs_rtems_error ("dir_read: dir read", rc);
       break;
     }
     iop->offset += size;
-    bytes_transfered += sizeof (struct dirent);
+    bytes_transferred += sizeof (struct dirent);
   }
 
   rtems_rfs_inode_close (fs, &inode);
   rtems_rfs_rtems_unlock (fs);
   
-  return (ssize_t) bytes_transfered;
+  return bytes_transferred;
 }
 
 /**

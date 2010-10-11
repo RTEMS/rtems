@@ -127,6 +127,10 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
     {
       uint8_t* entry;
       
+      if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
+        printf ("rtems-rfs: dir-lookup-ino: block read, ino=%" PRIu32 " bno=%" PRId32 "\n",
+                rtems_rfs_inode_ino (inode), map.bpos.bno);
+      
       rc = rtems_rfs_buffer_handle_request (fs, &entries, block, true); 
       if (rc > 0)
       {
@@ -171,8 +175,9 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
         {
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO_CHECK))
             printf ("rtems-rfs: dir-lookup-ino: "
-                    "checking entry for ino %" PRId32 ": off=%04" PRIx32 " length:%d ino:%" PRId32 "\n",
-                    rtems_rfs_inode_ino (inode), map.bpos.boff,
+                    "checking entry for ino %" PRId32 ": bno=%04" PRIx32 "/off=%04" PRIx32
+                    " length:%d ino:%" PRId32 "\n",
+                    rtems_rfs_inode_ino (inode), map.bpos.bno, map.bpos.boff,
                     elength, rtems_rfs_dir_entry_ino (entry));
 
           if (memcmp (entry + RTEMS_RFS_DIR_ENTRY_SIZE, name, length) == 0)
@@ -414,7 +419,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
   while (rc == 0)
   {
     uint8_t* entry;
-    int      offset;
+    int      eoffset;
     
     rc = rtems_rfs_buffer_handle_request (fs, &buffer, block, true);
     if (rc > 0)
@@ -425,11 +430,19 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
                 rtems_rfs_inode_ino (dir), rc, strerror (rc));
       break;
     }
+
+    /*
+     * If we are searching start at the beginning of the block. If not searching
+     * skip to the offset in the block.
+     */
+    if (search)
+      eoffset = 0;
+    else
+      eoffset = offset % rtems_rfs_fs_block_size (fs);
     
-    entry  = rtems_rfs_buffer_data (&buffer);
-    offset = 0;
+    entry = rtems_rfs_buffer_data (&buffer) + eoffset;
     
-    while (offset < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
+    while (eoffset < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
     {
       rtems_rfs_ino eino;
       int           elength;
@@ -444,8 +457,9 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
           printf ("rtems-rfs: dir-del-entry: "
-                  "bad length or ino for ino %" PRIu32 ": %u/%" PRId32 " @ %04x\n",
-                  rtems_rfs_inode_ino (dir), elength, eino, offset);
+                  "bad length or ino for ino %" PRIu32 ": %u/%" PRId32
+                  " @ %" PRIu32 ".%04x\n",
+                  rtems_rfs_inode_ino (dir), elength, eino, block, eoffset);
         rc = EIO;
         break;
       }
@@ -453,7 +467,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
       if (ino == rtems_rfs_dir_entry_ino (entry))
       {
         uint32_t remaining;
-        remaining = rtems_rfs_fs_block_size (fs) - (offset + elength);
+        remaining = rtems_rfs_fs_block_size (fs) - (eoffset + elength);
         memmove (entry, entry + elength, remaining);
         memset (entry + remaining, 0xff, elength);
 
@@ -468,12 +482,13 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
 
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
           printf ("rtems-rfs: dir-del-entry: "
-                  "last block free for ino %" PRIu32 ": elength=%i offset=%d last=%s\n",
-                  ino, elength, offset,
+                  "last block free for ino %" PRIu32 ": elength=%i block=%" PRIu32
+                  " offset=%d last=%s\n",
+                  ino, elength, block, eoffset,
                   rtems_rfs_block_map_last (&map) ? "yes" : "no");
 
         if ((elength == RTEMS_RFS_DIR_ENTRY_EMPTY) &&
-            (offset == 0) && rtems_rfs_block_map_last (&map))
+            (eoffset == 0) && rtems_rfs_block_map_last (&map))
         {
           rc = rtems_rfs_block_map_shrink (fs, &map, 1);
           if (rc > 0)
@@ -497,8 +512,8 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
         break;
       }
       
-      entry  += elength;
-      offset += elength;
+      entry   += elength;
+      eoffset += elength;
     }
 
     if (rc == 0)
@@ -605,10 +620,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       if (remaining <= RTEMS_RFS_DIR_ENTRY_SIZE)
         *length += remaining;
       
-      if (elength < RTEMS_RFS_DIR_ENTRY_SIZE)
-        elength = 0;
-      else
-        elength -= RTEMS_RFS_DIR_ENTRY_SIZE;
+      elength -= RTEMS_RFS_DIR_ENTRY_SIZE;
       if (elength > NAME_MAX)
         elength = NAME_MAX;
       
