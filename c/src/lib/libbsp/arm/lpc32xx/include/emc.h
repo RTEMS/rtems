@@ -47,19 +47,19 @@ extern "C" {
  * @{
  */
 
-#define SDRAMCLK_CLOCKS_DIS BIT32(0)
-#define SDRAMCLK_DDR_MODE BIT32(1)
-#define SDRAMCLK_DDR_DQSIN_DELAY(val) FIELD32(val, 2, 6)
-#define SDRAMCLK_RTC_TICK_EN BIT32(7)
-#define SDRAMCLK_SW_DDR_CAL BIT32(8)
-#define SDRAMCLK_CAL_DELAY BIT32(9)
-#define SDRAMCLK_SENSITIVITY_FACTOR(val) FIELD32(val, 10, 12)
-#define SDRAMCLK_DCA_STATUS BIT32(13)
-#define SDRAMCLK_COMMAND_DELAY(val) FIELD32(val, 14, 18)
-#define SDRAMCLK_SW_DDR_RESET BIT32(19)
-#define SDRAMCLK_PIN_1_FAST BIT32(20)
-#define SDRAMCLK_PIN_2_FAST BIT32(21)
-#define SDRAMCLK_PIN_3_FAST BIT32(22)
+#define SDRAMCLK_CLOCKS_DIS BSP_BIT32(0)
+#define SDRAMCLK_DDR_MODE BSP_BIT32(1)
+#define SDRAMCLK_DDR_DQSIN_DELAY(val) BSP_FLD32(val, 2, 6)
+#define SDRAMCLK_RTC_TICK_EN BSP_BIT32(7)
+#define SDRAMCLK_SW_DDR_CAL BSP_BIT32(8)
+#define SDRAMCLK_CAL_DELAY BSP_BIT32(9)
+#define SDRAMCLK_SENSITIVITY_FACTOR(val) BSP_FLD32(val, 10, 12)
+#define SDRAMCLK_DCA_STATUS BSP_BIT32(13)
+#define SDRAMCLK_COMMAND_DELAY(val) BSP_FLD32(val, 14, 18)
+#define SDRAMCLK_SW_DDR_RESET BSP_BIT32(19)
+#define SDRAMCLK_PIN_1_FAST BSP_BIT32(20)
+#define SDRAMCLK_PIN_2_FAST BSP_BIT32(21)
+#define SDRAMCLK_PIN_3_FAST BSP_BIT32(22)
 
 /** @} */
 
@@ -69,8 +69,8 @@ extern "C" {
  * @{
  */
 
-#define EMC_CTRL_EN BIT32(0)
-#define EMC_CTRL_LOW_POWER BIT32(2)
+#define EMC_CTRL_EN BSP_BIT32(0)
+#define EMC_CTRL_LOW_POWER BSP_BIT32(2)
 
 /** @} */
 
@@ -80,18 +80,18 @@ extern "C" {
  * @{
  */
 
-#define EMC_DYN_CTRL_CE BIT32(0)
-#define EMC_DYN_CTRL_CS BIT32(1)
-#define EMC_DYN_CTRL_SR BIT32(2)
-#define EMC_DYN_CTRL_SRMCC BIT32(3)
-#define EMC_DYN_CTRL_IMCC BIT32(4)
-#define EMC_DYN_CTRL_MCC BIT32(5)
-#define EMC_DYN_CTRL_I_MASK MASK32(7, 8)
-#define EMC_DYN_CTRL_I_NORMAL FIELD32(0x0, 7, 8)
-#define EMC_DYN_CTRL_I_MODE FIELD32(0x1, 7, 8)
-#define EMC_DYN_CTRL_I_PALL FIELD32(0x2, 7, 8)
-#define EMC_DYN_CTRL_I_NOP FIELD32(0x3, 7, 8)
-#define EMC_DYN_CTRL_DP BIT32(9)
+#define EMC_DYN_CTRL_CE BSP_BIT32(0)
+#define EMC_DYN_CTRL_CS BSP_BIT32(1)
+#define EMC_DYN_CTRL_SR BSP_BIT32(2)
+#define EMC_DYN_CTRL_SRMCC BSP_BIT32(3)
+#define EMC_DYN_CTRL_IMCC BSP_BIT32(4)
+#define EMC_DYN_CTRL_MCC BSP_BIT32(5)
+#define EMC_DYN_CTRL_I_MASK BSP_MSK32(7, 8)
+#define EMC_DYN_CTRL_I_NORMAL BSP_FLD32(0x0, 7, 8)
+#define EMC_DYN_CTRL_I_MODE BSP_FLD32(0x1, 7, 8)
+#define EMC_DYN_CTRL_I_PALL BSP_FLD32(0x2, 7, 8)
+#define EMC_DYN_CTRL_I_NOP BSP_FLD32(0x3, 7, 8)
+#define EMC_DYN_CTRL_DP BSP_BIT32(9)
 
 /** @} */
 
@@ -101,10 +101,10 @@ extern "C" {
  * @{
  */
 
-#define EMC_DYN_READ_CONFIG_SDR_STRAT(val) FIELD32(val, 0, 1)
-#define EMC_DYN_READ_CONFIG_SDR_POL_POS BIT32(4)
-#define EMC_DYN_READ_CONFIG_DDR_STRAT(val) FIELD32(val, 8, 9)
-#define EMC_DYN_READ_CONFIG_DDR_POL_POS BIT32(12)
+#define EMC_DYN_READ_CONFIG_SDR_STRAT(val) BSP_FLD32(val, 0, 1)
+#define EMC_DYN_READ_CONFIG_SDR_POL_POS BSP_BIT32(4)
+#define EMC_DYN_READ_CONFIG_DDR_STRAT(val) BSP_FLD32(val, 8, 9)
+#define EMC_DYN_READ_CONFIG_DDR_POL_POS BSP_BIT32(12)
 
 /** @} */
 
@@ -114,9 +114,9 @@ extern "C" {
  * @{
  */
 
-#define EMC_DYN_CFG_MD(val) FIELD32(val, 0, 2)
-#define EMC_DYN_CFG_AM(val) FIELD32(val, 7, 14)
-#define EMC_DYN_CFG_P(val) BIT32(20)
+#define EMC_DYN_CFG_MD(val) BSP_FLD32(val, 0, 2)
+#define EMC_DYN_CFG_AM(val) BSP_FLD32(val, 7, 14)
+#define EMC_DYN_CFG_P(val) BSP_BIT32(20)
 
 /** @} */
 
@@ -126,8 +126,8 @@ extern "C" {
  * @{
  */
 
-#define EMC_DYN_RAS(val) FIELD32(val, 0, 3)
-#define EMC_DYN_CAS(val) FIELD32(val, 7, 10)
+#define EMC_DYN_RAS(val) BSP_FLD32(val, 0, 3)
+#define EMC_DYN_CAS(val) BSP_FLD32(val, 7, 10)
 
 /** @} */
 
@@ -137,7 +137,7 @@ extern "C" {
  * @{
  */
 
-#define EMC_AHB_PORT_BUFF_EN BIT32(0)
+#define EMC_AHB_PORT_BUFF_EN BSP_BIT32(0)
 
 /** @} */
 
@@ -147,7 +147,7 @@ extern "C" {
  * @{
  */
 
-#define EMC_AHB_TIMEOUT(val) FIELD32(val, 0, 9)
+#define EMC_AHB_TIMEOUT(val) BSP_FLD32(val, 0, 9)
 
 /** @} */
 
@@ -182,14 +182,14 @@ extern "C" {
 #define SDRAM_EXTMODE_64MB(mode) \
   (SDRAM_ADDR_BANK_64MB(1, 0) | SDRAM_ADDR_ROW_64MB(mode))
 
-#define SDRAM_MODE_BURST_LENGTH(val) FIELD32(val, 0, 2)
-#define SDRAM_MODE_BURST_INTERLEAVE BIT32(3)
-#define SDRAM_MODE_CAS(val) FIELD32(val, 4, 6)
-#define SDRAM_MODE_TEST_MODE(val) FIELD32(val, 7, 8)
-#define SDRAM_MODE_WRITE_BURST_SINGLE_BIT BIT32(9)
+#define SDRAM_MODE_BURST_LENGTH(val) BSP_FLD32(val, 0, 2)
+#define SDRAM_MODE_BURST_INTERLEAVE BSP_BIT32(3)
+#define SDRAM_MODE_CAS(val) BSP_FLD32(val, 4, 6)
+#define SDRAM_MODE_TEST_MODE(val) BSP_FLD32(val, 7, 8)
+#define SDRAM_MODE_WRITE_BURST_SINGLE_BIT BSP_BIT32(9)
 
-#define SDRAM_EXTMODE_PASR(val) FIELD32(val, 0, 2)
-#define SDRAM_EXTMODE_DRIVER_STRENGTH(val) FIELD32(val, 5, 6)
+#define SDRAM_EXTMODE_PASR(val) BSP_FLD32(val, 0, 2)
+#define SDRAM_EXTMODE_DRIVER_STRENGTH(val) BSP_FLD32(val, 5, 6)
 
 /** @} */
 

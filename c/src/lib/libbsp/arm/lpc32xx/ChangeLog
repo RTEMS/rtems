@@ -1,3 +1,8 @@
+2010-10-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/emc.h, include/i2c.h, include/lpc32xx.h, include/nand-mlc.h:
+	Update for <bsp/utility.h> changes.
+
 2010-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* misc/mmu.c: New file.

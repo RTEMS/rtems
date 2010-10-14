@@ -91,12 +91,12 @@ extern "C" {
  * @{
  */
 
-#define FLASHCLK_IRQ_MLC BIT32(5)
-#define FLASHCLK_MLC_DMA_RNB BIT32(4)
-#define FLASHCLK_MLC_DMA_INT BIT32(3)
-#define FLASHCLK_SELECT_SLC BIT32(2)
-#define FLASHCLK_MLC_CLK_ENABLE BIT32(1)
-#define FLASHCLK_SLC_CLK_ENABLE BIT32(0)
+#define FLASHCLK_IRQ_MLC BSP_BIT32(5)
+#define FLASHCLK_MLC_DMA_RNB BSP_BIT32(4)
+#define FLASHCLK_MLC_DMA_INT BSP_BIT32(3)
+#define FLASHCLK_SELECT_SLC BSP_BIT32(2)
+#define FLASHCLK_MLC_CLK_ENABLE BSP_BIT32(1)
+#define FLASHCLK_SLC_CLK_ENABLE BSP_BIT32(0)
 
 /** @} */
 
@@ -106,13 +106,13 @@ extern "C" {
  * @{
  */
 
-#define MLC_TIME_WR_LOW(val) FIELD32(val, 0, 3)
-#define MLC_TIME_WR_HIGH(val) FIELD32(val, 4, 7)
-#define MLC_TIME_RD_LOW(val) FIELD32(val, 8, 11)
-#define MLC_TIME_RD_HIGH(val) FIELD32(val, 12, 15)
-#define MLC_TIME_NAND_TA(val) FIELD32(val, 16, 18)
-#define MLC_TIME_BUSY_DELAY(val) FIELD32(val, 19, 23)
-#define MLC_TIME_TCEA_DELAY(val) FIELD32(val, 24, 25)
+#define MLC_TIME_WR_LOW(val) BSP_FLD32(val, 0, 3)
+#define MLC_TIME_WR_HIGH(val) BSP_FLD32(val, 4, 7)
+#define MLC_TIME_RD_LOW(val) BSP_FLD32(val, 8, 11)
+#define MLC_TIME_RD_HIGH(val) BSP_FLD32(val, 12, 15)
+#define MLC_TIME_NAND_TA(val) BSP_FLD32(val, 16, 18)
+#define MLC_TIME_BUSY_DELAY(val) BSP_FLD32(val, 19, 23)
+#define MLC_TIME_TCEA_DELAY(val) BSP_FLD32(val, 24, 25)
 
 /** @} */
 
@@ -132,11 +132,11 @@ extern "C" {
  * @{
  */
 
-#define MLC_ISR_DECODER_FAILURE BIT32(6)
-#define MLC_ISR_ERRORS_DETECTED BIT32(3)
-#define MLC_ISR_ECC_READY BIT32(2)
-#define MLC_ISR_CONTROLLER_READY BIT32(1)
-#define MLC_ISR_NAND_READY BIT32(0)
+#define MLC_ISR_DECODER_FAILURE BSP_BIT32(6)
+#define MLC_ISR_ERRORS_DETECTED BSP_BIT32(3)
+#define MLC_ISR_ECC_READY BSP_BIT32(2)
+#define MLC_ISR_CONTROLLER_READY BSP_BIT32(1)
+#define MLC_ISR_NAND_READY BSP_BIT32(0)
 
 /** @} */
 
@@ -146,10 +146,10 @@ extern "C" {
  * @{
  */
 
-#define MLC_ICR_SOFT_WRITE_PROT BIT32(3)
-#define MLC_ICR_LARGE_PAGES BIT32(2)
-#define MLC_ICR_ADDR_WORD_COUNT_4_5 BIT32(1)
-#define MLC_ICR_IO_BUS_16 BIT32(0)
+#define MLC_ICR_SOFT_WRITE_PROT BSP_BIT32(3)
+#define MLC_ICR_LARGE_PAGES BSP_BIT32(2)
+#define MLC_ICR_ADDR_WORD_COUNT_4_5 BSP_BIT32(1)
+#define MLC_ICR_IO_BUS_16 BSP_BIT32(0)
 
 /** @} */
 
@@ -159,7 +159,7 @@ extern "C" {
  * @{
  */
 
-#define MLC_ECC_AUTO_ENC_PROGRAM BIT32(8)
+#define MLC_ECC_AUTO_ENC_PROGRAM BSP_BIT32(8)
 
 /** @} */
 
