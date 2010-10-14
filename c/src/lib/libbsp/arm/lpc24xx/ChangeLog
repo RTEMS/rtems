@@ -1,6 +1,7 @@
 2010-10-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* misc/system-clocks.c: Fixed lpc24xx_micro_seconds_delay().
+	* misc/io.c: Added LCD pin configuration.
 
 2010-06-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
