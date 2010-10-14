@@ -1,3 +1,7 @@
+2010-10-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/utility.h: Renamed macros.
+
 2010-09-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/utility.h: More macros.  Changed casts.
