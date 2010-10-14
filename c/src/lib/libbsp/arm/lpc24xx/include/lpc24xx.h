@@ -23,8 +23,6 @@
 
 #include <stdint.h>
 
-#include <bsp/utility.h>
-
 /**
  * @defgroup lpc24xx_regs Register Definitions
  *

@@ -1,5 +1,10 @@
 2010-10-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* include/lpc24xx.h, misc/system-clocks.c: Removed superfluous include
+	of <bsp/utility.h>.
+
+2010-10-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* misc/system-clocks.c: Fixed lpc24xx_micro_seconds_delay().
 	* misc/io.c: Added LCD pin configuration.
 
