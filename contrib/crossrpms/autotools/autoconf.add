@@ -71,20 +71,10 @@ make
 
 %check
 %if "%{_build}" == "%{_host}"
-%if "%{srcvers}" <= "2.66"
-# test 193 fails sporadically
-# test 199 fails deterministically
-TESTSUITEFLAGS='-192 194-198 200-'
-%endif
-
-%if "%{srcvers}" == "2.67"
-# test 199 fails deterministically
-TESTSUITEFLAGS='-198 200-'
-%endif
-
 %if "%{srcvers}" == "2.68"
+# test 199 fails sporadically
 # test 205 fails deterministically
-TESTSUITEFLAGS='-204 206-'
+TESTSUITEFLAGS='-198 200-204 206-'
 %endif
 
 make check %{!?with_alltests:TESTSUITEFLAGS="${TESTSUITEFLAGS}"}
