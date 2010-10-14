@@ -68,7 +68,7 @@ void lpc24xx_micro_seconds_delay(unsigned us)
 
   do {
     elapsed = lpc24xx_timer() - start;
-  } while (elapsed <= delay);
+  } while (elapsed < delay);
 }
 
 unsigned lpc24xx_pllclk(void)
