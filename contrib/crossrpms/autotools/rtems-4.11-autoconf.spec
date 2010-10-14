@@ -58,7 +58,7 @@ License:	GPL
 URL:		http://www.gnu.org/software/autoconf
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -71,13 +71,8 @@ Requires:     	m4 gawk
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-Source0: ftp://ftp.gnu.org/gnu/autoconf/autoconf-%{srcvers}.tar.bz2
-%if "%{srcvers}" == "2.66"
-# Fedora's patch to fix
-# http://lists.gnu.org/archive/html/autoconf/2010-07/msg00004.html
-# http://lists.gnu.org/archive/html/bug-autoconf/2010-07/msg00012.html
-Patch0: autoconf-2.66-611661.diff
-%endif
+Source0: ftp://ftp.gnu.org/gnu/autoconf/autoconf-%{srcvers}.tar.%{?el5:bz2}%{!?el5:xz}
+
 
 
 
@@ -122,20 +117,10 @@ make
 
 %check
 %if "%{_build}" == "%{_host}"
-%if "%{srcvers}" <= "2.66"
-# test 193 fails sporadically
-# test 199 fails deterministically
-TESTSUITEFLAGS='-192 194-198 200-'
-%endif
-
-%if "%{srcvers}" == "2.67"
-# test 199 fails deterministically
-TESTSUITEFLAGS='-198 200-'
-%endif
-
 %if "%{srcvers}" == "2.68"
+# test 199 fails sporadically
 # test 205 fails deterministically
-TESTSUITEFLAGS='-204 206-'
+TESTSUITEFLAGS='-198 200-204 206-'
 %endif
 
 make check %{!?with_alltests:TESTSUITEFLAGS="${TESTSUITEFLAGS}"}
