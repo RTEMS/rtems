@@ -63,12 +63,12 @@ void lpc24xx_timer_initialize(void)
 void lpc24xx_micro_seconds_delay(unsigned us)
 {
   unsigned start = lpc24xx_timer();
-  unsigned end = start + us * (lpc24xx_cclk() / 1000000);
-  unsigned now = 0;
+  unsigned delay = us * (lpc24xx_cclk() / 1000000);
+  unsigned elapsed = 0;
 
   do {
-    now = lpc24xx_timer();
-  } while (now < end);
+    elapsed = lpc24xx_timer() - start;
+  } while (elapsed <= delay);
 }
 
 unsigned lpc24xx_pllclk(void)
