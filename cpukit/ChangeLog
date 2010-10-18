@@ -1,3 +1,8 @@
+2010-10-19	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-rtems-file.c: Add missing unlock in
+	write. Return the error code in close.
+
 2010-10-11	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-trace.c,

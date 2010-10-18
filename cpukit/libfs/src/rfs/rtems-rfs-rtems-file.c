@@ -100,7 +100,7 @@ rtems_rfs_rtems_file_close (rtems_libio_t* iop)
     rc = rtems_rfs_rtems_error ("file-close: file close", rc);
   
   rtems_rfs_rtems_unlock (fs);
-  return 0;
+  return rc;
 }
 
 /**
@@ -203,7 +203,10 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
   {
     rc = rtems_rfs_file_set_size (file, pos);
     if (rc)
+    {
+      rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
       return rtems_rfs_rtems_error ("file-write: write extend", rc);
+    }
     rtems_rfs_file_set_bpos (file, pos);
   }
   
