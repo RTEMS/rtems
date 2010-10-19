@@ -604,10 +604,7 @@ static int rtems_ftpfs_open_ctrl_connection(
   }
 
   /* Set up the server address from the hostname */
-  if (hostname == NULL || strlen(hostname) == 0) {
-    /* Default to BOOTP server address */
-    address = rtems_bsdnet_bootp_server_address;
-  } else if (inet_aton(hostname, &address) == 0) {
+  if (inet_aton(hostname, &address) == 0) {
     /* Try to get the address by name */
     struct hostent *he = gethostbyname(hostname);
 

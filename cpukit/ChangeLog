@@ -1,5 +1,10 @@
 2010-10-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libnetworking/lib/ftpfs.c: Do not fall back to BOOTP server address
+	in case hostname was not specified.
+
+2010-10-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libnetworking/lib/ftpfs.c: Fixed a special case with no username and
 	password.
 
