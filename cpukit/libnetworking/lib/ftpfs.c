@@ -491,6 +491,13 @@ static bool rtems_ftpfs_split_names (
 
 done:
 
+  /* This is a special case with no username and password */
+  if (*hostname == NULL) {
+    *hostname = &s [0];
+    *user = "anonymous";
+    *password = *user;
+  }
+
   /* If we have no password use the user name */
   if (*password == NULL) {
     *password = *user;

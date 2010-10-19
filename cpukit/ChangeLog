@@ -1,3 +1,8 @@
+2010-10-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/lib/ftpfs.c: Fixed a special case with no username and
+	password.
+
 2010-10-19	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-rtems-file.c: Add missing unlock in
