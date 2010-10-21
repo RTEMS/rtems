@@ -1,0 +1,11 @@
+*** POSIX TEST SIGNAL 06 ***
+Init: pthread_cond_init - OK
+Init: pthread_mutex_init - OK
+Init: pthread_create - OK
+Test: Unblock SIGUSR1
+Test: pthread_cond_wait - OK
+Init: pthread_kill - SIGUSR to Test Thread - OK
+Test: pthread_cond_wait - interrupted by signal
+Init: pthread_kill - SIGUSR to Test Thread - OK
+Test: seconds left=8
+*** END OF POSIX TEST SIGNAL 06 ***

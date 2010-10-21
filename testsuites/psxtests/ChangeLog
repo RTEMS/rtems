@@ -1,5 +1,13 @@
 2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: New test to ensure pthread_cond_wait() and
+	sleep() (e.g. interruptible blocking and sleeping) are interruptible
+	by signal.
+	* psxsignal06/.cvsignore, psxsignal06/Makefile.am, psxsignal06/init.c,
+	psxsignal06/psxsignal06.doc, psxsignal06/psxsignal06.scn: New files.
+
+2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psx02/init.c, psx02/task.c, psx03/init.c, psx04/init.c,
 	psx04/task1.c, psx04/task2.c, psx04/task3.c, psx05/init.c,
 	psx05/task.c, psx05/task2.c, psx05/task3.c, psx06/init.c,

@@ -142,6 +142,7 @@ psxsignal02/Makefile
 psxsignal03/Makefile
 psxsignal04/Makefile
 psxsignal05/Makefile
+psxsignal06/Makefile
 psxspin01/Makefile
 psxspin02/Makefile
 psxstack01/Makefile
