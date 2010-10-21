@@ -1,3 +1,9 @@
+2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/cpu.h: Add RTEMS_COMPILER_NO_RETURN_ATTRIBUTE to
+	_CPU_Context_restore() because it does not return. Telling GCC this
+	avoids generation of dead code.
+
 2010-09-26	 Yann Sionneau <yann@minet.net>
 
 	PR 1697/cpukit

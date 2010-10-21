@@ -1164,7 +1164,7 @@ void _CPU_Context_switch(
  */
 void _CPU_Context_restore(
   Context_Control *new_context
-);
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
  *  @ingroup CPUContext

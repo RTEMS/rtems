@@ -745,7 +745,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  XXX document implementation including references if appropriate
  */
 
-#define _CPU_Context_Restart_self( _the_context ) \
+#define eCPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( _the_context );
 
 /*
@@ -1081,7 +1081,7 @@ void _CPU_Context_switch(
 
 void _CPU_Context_restore(
   Context_Control *new_context
-);
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /*
  *  _CPU_Context_save_fp
