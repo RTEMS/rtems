@@ -1,3 +1,8 @@
+2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/mutextimedlock.c: Check status local variable not
+	lock_status.
+
 2010-10-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/lib/ftpfs.c: Do not fall back to BOOTP server address
