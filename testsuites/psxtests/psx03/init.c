@@ -77,17 +77,17 @@ void *POSIX_Init(
   /* initialize the signal set we will wait for to SIGUSR1 */
 
   status = sigemptyset( &waitset );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = sigaddset( &waitset, SIGUSR1 );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   timeout.tv_sec = 3;
   timeout.tv_nsec = 0;
 
   puts( "Init: waiting on any signal for 3 seconds." );
   signo = sigtimedwait( &waitset, &siginfo, &timeout );
-  rtems_test_assert(  signo == -1 );
+  rtems_test_assert( signo == -1 );
 
   if ( errno == EAGAIN )
     puts( "Init: correctly timed out waiting for SIGUSR1." );
@@ -105,19 +105,19 @@ void *POSIX_Init(
   /* initialize a mask to block SIGUSR2 */
 
   status = sigemptyset( &mask );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = sigaddset( &mask, SIGUSR2 );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   printf( "Init: Block SIGUSR2\n" );
   status = sigprocmask( SIG_BLOCK, &mask, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   /* create a thread */
 
   status = pthread_create( &Task_id, NULL, Task_1, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   /* signal handler is still installed, waitset is still set for SIGUSR1 */
 
@@ -133,7 +133,7 @@ void *POSIX_Init(
     puts( "Init: correctly timed out waiting for SIGUSR1." );
   else
     printf( "sigtimedwait returned wrong errno - %d\n", errno );
-  rtems_test_assert(  signo == -1 );
+  rtems_test_assert( signo == -1 );
 
   /*
    *  wait on SIGUSR1 for 3 seconds, Task_2 will send it to us
@@ -144,7 +144,7 @@ void *POSIX_Init(
   /* create a thread */
 
   status = pthread_create( &Task_id, NULL, Task_2, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   /* signal handler is still installed, waitset is still set for SIGUSR1 */
 
@@ -162,38 +162,38 @@ void *POSIX_Init(
   puts( "Init: waiting on any signal for 3 seconds." );
   signo = sigtimedwait( &waitset, &siginfo, &timeout );
   printf( "Init: received (%d) SIGUSR1=%d\n", siginfo.si_signo, SIGUSR1 );
-  rtems_test_assert(  signo == SIGUSR1 );
-  rtems_test_assert(  siginfo.si_signo == SIGUSR1 );
-  rtems_test_assert(  siginfo.si_code == SI_USER );
-  rtems_test_assert(  siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
+  rtems_test_assert( signo == SIGUSR1 );
+  rtems_test_assert( siginfo.si_signo == SIGUSR1 );
+  rtems_test_assert( siginfo.si_code == SI_USER );
+  rtems_test_assert( siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
 
   /* try out a process signal */
 
   empty_line();
   puts( "Init: kill with SIGUSR2." );
   status = kill( getpid(), SIGUSR2 );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   siginfo.si_code = -1;
   siginfo.si_signo = -1;
   siginfo.si_value.sival_int = -1;
 
   status = sigemptyset( &waitset );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = sigaddset( &waitset, SIGUSR1 );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = sigaddset( &waitset, SIGUSR2 );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Init: waiting on any signal for 3 seconds." );
   signo = sigtimedwait( &waitset, &siginfo, &timeout );
   printf( "Init: received (%d) SIGUSR2=%d\n", siginfo.si_signo, SIGUSR2 );
-  rtems_test_assert(  signo == SIGUSR2 );
-  rtems_test_assert(  siginfo.si_signo == SIGUSR2 );
-  rtems_test_assert(  siginfo.si_code == SI_USER );
-  rtems_test_assert(  siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
+  rtems_test_assert( signo == SIGUSR2 );
+  rtems_test_assert( siginfo.si_signo == SIGUSR2 );
+  rtems_test_assert( siginfo.si_code == SI_USER );
+  rtems_test_assert( siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
 
   /* exit this thread */
 

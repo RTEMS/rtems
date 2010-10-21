@@ -28,11 +28,11 @@ rtems_task SpinlockThread(rtems_task_argument arg)
 
   puts( "pthread_spin_trylock( &Spinlock ) -- EBUSY" );
   status = pthread_spin_trylock( &Spinlock );
-  rtems_test_assert(  status == EBUSY );
+  rtems_test_assert( status == EBUSY );
 
   puts( "pthread_spin_unlock( &Spinlock ) -- EPERM" );
   status = pthread_spin_unlock( &Spinlock );
-  rtems_test_assert(  status == EPERM );
+  rtems_test_assert( status == EPERM );
 
   rtems_task_delete( RTEMS_SELF );
 }
@@ -59,12 +59,12 @@ int main(
   /* This successfully creates one */
   puts( "pthread_spin_init( &Spinlock, PTHREAD_PROCESS_PRIVATE ) -- OK" );
   status = pthread_spin_init( &Spinlock, PTHREAD_PROCESS_PRIVATE );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   /* Lock it */
   puts( "pthread_spin_lock( &Spinlock ) -- OK" );
   status = pthread_spin_lock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   /*  Create a helper task */
   rstatus = rtems_task_create(
@@ -75,20 +75,20 @@ int main(
      RTEMS_DEFAULT_ATTRIBUTES,
      &taskid
   );
-  rtems_test_assert(  rstatus == RTEMS_SUCCESSFUL );
+  rtems_test_assert( rstatus == RTEMS_SUCCESSFUL );
 
   rstatus = rtems_task_start( taskid, SpinlockThread, 0 );
-  rtems_test_assert(  rstatus == RTEMS_SUCCESSFUL );
+  rtems_test_assert( rstatus == RTEMS_SUCCESSFUL );
 
   sleep(1);
 
   puts( "pthread_spin_unlock( &Spinlock ) -- OK" );
   status = pthread_spin_unlock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   puts( "pthread_spin_destroy( &Spinlock ) -- OK" );
   status = pthread_spin_destroy( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   /*************** END OF TEST *****************/
   puts( "*** END OF POSIX SPINLOCK TEST 02 ***" );

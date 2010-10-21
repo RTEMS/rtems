@@ -685,7 +685,7 @@ void *POSIX_Init(
   posix_service_failed( status, "pthread_attr_setschedparam");
 
   status = pthread_create( &Task2_id, &attr, Task_2, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = pthread_join( Task2_id, NULL );
   posix_service_failed( status, " pthread_join");

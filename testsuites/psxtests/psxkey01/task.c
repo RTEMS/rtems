@@ -34,14 +34,14 @@ void *Task_1(
   status = pthread_setspecific( Key_id[0], (void *)&Data_array[ 1 ] );
   if ( status )
     printf( "status = %d\n", status );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   key_data = pthread_getspecific( Key_id[0] );
   printf( "Task_1: Got the key value of %ld\n",
           (unsigned long) ((uint32_t *)key_data - Data_array) );
   if ( status )
     printf( "status = %d\n", status );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Task_1: exitting" );
   pthread_exit( NULL );

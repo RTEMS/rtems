@@ -30,7 +30,7 @@ void *Test_Thread(
 
   puts( "Test_Thread - pthread_setspecific - OK" );
   sc = pthread_setspecific( Key, key_value );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "Test_Thread - pthread_exit to run key destructors - OK" );
   return NULL;
@@ -51,21 +51,21 @@ void *POSIX_Init(
    */
   puts( "Init - pthread_key_create with NULL destructor - OK" );
   sc = pthread_key_create( &Key, NULL );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "Init - pthread_create - OK" );
   sc = pthread_create( &thread, NULL, Test_Thread, &sc );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "Init - sleep - let thread run - OK" );
   delay_request.tv_sec = 0;
   delay_request.tv_nsec = 5 * 100000000;
   sc = nanosleep( &delay_request, NULL );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "Init - pthread_key_delete - OK" );
   sc = pthread_key_delete( Key );
-  rtems_test_assert(  sc == 0 );
+  rtems_test_assert( sc == 0 );
 
   /*
    *  Key with non-NULL destructor
@@ -73,22 +73,22 @@ void *POSIX_Init(
   destructor_ran = false;
   puts( "Init - pthread_key_create with non-NULL destructor - OK" );
   sc = pthread_key_create( &Key, destructor );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "Init - pthread_create - OK" );
   sc = pthread_create( &thread, NULL, Test_Thread, NULL );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "Init - sleep - let thread run - OK" );
   sc = nanosleep( &delay_request, NULL );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "Init - verify destructor did NOT ran" );
-  rtems_test_assert(  destructor_ran == false );
+  rtems_test_assert( destructor_ran == false );
 
   puts( "Init - pthread_key_delete - OK" );
   sc = pthread_key_delete( Key );
-  rtems_test_assert(  sc == 0 );
+  rtems_test_assert( sc == 0 );
 
   puts( "*** END OF TEST KEY 03 ***" );
   rtems_test_exit(0);

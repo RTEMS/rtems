@@ -63,25 +63,25 @@ void *POSIX_Init(
 
   puts( "Init: pthread_attr_init - SUCCESSFUL" );
   status = pthread_attr_init( &attr );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
   attr.schedpolicy = -1;
 
   puts( "Init: pthread_create - EINVAL (invalid scheduling policy)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   /* replenish period < budget error */
 
   puts( "Init: pthread_attr_init - SUCCESSFUL" );
   status = pthread_attr_init( &attr );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Init: set scheduling parameter attributes for sporadic server" );
   status = pthread_attr_setschedpolicy( &attr, SCHED_SPORADIC );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   schedparam.sched_ss_repl_period.tv_sec = 1;
   schedparam.sched_ss_repl_period.tv_nsec = 0;
@@ -92,14 +92,14 @@ void *POSIX_Init(
   schedparam.sched_ss_low_priority = 100;
 
   status = pthread_attr_setschedparam( &attr, &schedparam );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Init: pthread_create - EINVAL (replenish < budget)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   /* invalid sched_ss_low_priority error */
 
@@ -112,11 +112,11 @@ void *POSIX_Init(
   schedparam.sched_ss_low_priority = -1;
 
   status = pthread_attr_setschedparam( &attr, &schedparam );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Init: pthread_create - EINVAL (invalid sched_ss_low_priority)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   /* create a thread as a sporadic server */
 
@@ -129,14 +129,14 @@ void *POSIX_Init(
   schedparam.sched_ss_low_priority = sched_get_priority_max( SCHED_FIFO ) - 6;
 
   status = pthread_attr_setschedparam( &attr, &schedparam );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Init: pthread_create - SUCCESSFUL" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = pthread_join( Task_id, NULL );
-  rtems_test_assert(  status );
+  rtems_test_assert( status );
 
     /* switch to Task_1 */
 

@@ -79,12 +79,12 @@ void *POSIX_Init(
 
   /* unblock Signal and see if it happened */
   status = sigemptyset( &mask );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
   status = sigaddset( &mask, SIGALRM );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
   puts( "Init: Unblock SIGALRM" );
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
   status = sleep(10);
 
   /* stop ularm */

@@ -31,31 +31,31 @@ void *Task_1(
   printf( "Task_1: ID is 0x%08" PRIxpthread_t "\n", Task_id );
 
   status = pthread_mutex_init( &Mutex_id, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = pthread_mutex_lock( &Mutex_id );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Task_1: pthread_cond_wait" );
   status = pthread_cond_wait( &Cond1_id, &Mutex_id );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Task_1: back from pthread_cond_wait release mutex" );
   status = pthread_mutex_unlock( &Mutex_id );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
 /* wait for a condition variable broadcast from Init */
 
   status = pthread_mutex_lock( &Mutex_id );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Task_1: pthread_cond_wait" );
   status = pthread_cond_wait( &Cond1_id, &Mutex_id );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Task_1: back from pthread_cond_wait release mutex" );
   status = pthread_mutex_unlock( &Mutex_id );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Task_1: task exit" );
   pthread_exit( NULL );

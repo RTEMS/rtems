@@ -1,3 +1,21 @@
+2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psx02/init.c, psx02/task.c, psx03/init.c, psx04/init.c,
+	psx04/task1.c, psx04/task2.c, psx04/task3.c, psx05/init.c,
+	psx05/task.c, psx05/task2.c, psx05/task3.c, psx06/init.c,
+	psx06/task.c, psx06/task2.c, psx07/init.c, psx08/init.c,
+	psx08/task2.c, psx08/task3.c, psx09/init.c, psx10/init.c,
+	psx10/task.c, psx10/task2.c, psx10/task3.c, psx11/init.c,
+	psx11/task.c, psx12/init.c, psxalarm01/init.c, psxbarrier01/test.c,
+	psxcancel01/init.c, psxchroot01/test.c, psxitimer/init.c,
+	psxkey01/task.c, psxkey02/init.c, psxkey03/init.c, psxmount/test.c,
+	psxmsgq01/init.c, psxmsgq03/init.c, psxmsgq04/init.c,
+	psxrwlock01/test.c, psxsem01/init.c, psxsignal01/init.c,
+	psxsignal01/task1.c, psxsignal02/init.c, psxsignal03/init.c,
+	psxsignal05/init.c, psxspin01/test.c, psxspin02/test.c,
+	psxstack01/init.c, psxstack02/init.c, psxualarm/init.c: Eliminate
+	double space after parenthesis on rtems_test_assert().
+
 2010-10-08	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psx07/init.c: Add HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE guard around

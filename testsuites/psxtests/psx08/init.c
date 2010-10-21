@@ -33,22 +33,22 @@ void *POSIX_Init(
 
   puts( "Init: pthread_detach - ESRCH (invalid id)" );
   status = pthread_detach( (pthread_t) -1 );
-  rtems_test_assert(  status == ESRCH );
+  rtems_test_assert( status == ESRCH );
 
   /* detach this thread */
 
   puts( "Init: pthread_detach self" );
   status = pthread_detach( pthread_self() );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   /* create thread */
 
   status = pthread_create( &Task1_id, NULL, Task_1, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Init: pthread_join - ESRCH (invalid id)" );
   status = pthread_join( (pthread_t) -1, &return_pointer );
-  rtems_test_assert(  status == ESRCH );
+  rtems_test_assert( status == ESRCH );
 
   puts( "Init: pthread_join - SUCCESSFUL" );
   status = pthread_join( Task1_id, &return_pointer );
@@ -56,7 +56,7 @@ void *POSIX_Init(
   puts( "Init: returned from pthread_join through return" );
   if ( status )
     printf( "status = %d\n", status );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   if ( return_pointer == &Task1_id )
     puts( "Init: pthread_join returned correct pointer" );
@@ -69,10 +69,10 @@ void *POSIX_Init(
 
   puts( "Init: creating two pthreads" );
   status = pthread_create( &Task2_id, NULL, Task_2, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = pthread_create( &Task3_id, NULL, Task_3, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Init: pthread_join - SUCCESSFUL" );
   status = pthread_join( Task2_id, &return_pointer );
@@ -81,7 +81,7 @@ void *POSIX_Init(
   puts( "Init: returned from pthread_join through pthread_exit" );
   if ( status )
     printf( "status = %d\n", status );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   if ( return_pointer == &Task2_id )
     puts( "Init: pthread_join returned correct pointer" );

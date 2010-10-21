@@ -124,23 +124,23 @@ void *POSIX_Init(
 
 /* unblock Signal and see if it happened */
   status = sigemptyset( &mask );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = sigaddset( &mask, SIGUSR1 );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = sigaddset( &mask, SIGFPE );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = sigaddset( &mask, SIGILL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   status = sigaddset( &mask, SIGSEGV );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
   puts( "Init: Unblock SIGUSR1 SIGFPE SIGILL SIGSEGV" );
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
 /* install a signal handler for SIGUSR1 */
   Signal_occurred = 0;

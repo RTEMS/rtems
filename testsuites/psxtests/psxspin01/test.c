@@ -34,7 +34,7 @@ rtems_task SpinlockThread(rtems_task_argument arg)
   }
   puts( "pthread_spin_lock( &Spinlock ) from Thread -- OK" );
   status = pthread_spin_lock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   puts( "sleep to allow main thread to run" );
   sleep( 1 );
@@ -46,7 +46,7 @@ rtems_task SpinlockThread(rtems_task_argument arg)
 
   puts( "pthread_spin_unlock( &Spinlock ) from Thread -- OK" );
   status = pthread_spin_unlock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   rtems_task_delete( RTEMS_SELF );
 }
@@ -73,96 +73,96 @@ int main(
 
   puts( "pthread_spin_init( NULL, PTHREAD_PROCESS_PRIVATE ) -- EINVAL" );
   status = pthread_spin_init( NULL, PTHREAD_PROCESS_PRIVATE );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_init( NULL, PTHREAD_PROCESS_SHARED ) -- EINVAL" );
   status = pthread_spin_init( NULL, PTHREAD_PROCESS_PRIVATE );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_init( &spinlock, 0x1234 ) -- EINVAL" );
   status = pthread_spin_init( &spinlock, 0x1234 );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_init( &spinlock, PTHREAD_PROCESS_SHARED ) -- EINVAL" );
   status = pthread_spin_init( &spinlock, PTHREAD_PROCESS_SHARED );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   /* This successfully creates one */
   puts( "pthread_spin_init( &Spinlock, PTHREAD_PROCESS_PRIVATE ) -- OK" );
   status = pthread_spin_init( &Spinlock, PTHREAD_PROCESS_PRIVATE );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   puts( "pthread_spin_init( &spinlock, PTHREAD_PROCESS_PRIVATE ) -- EAGAIN" );
   status = pthread_spin_init( &spinlock, PTHREAD_PROCESS_PRIVATE );
-  rtems_test_assert(  status == EAGAIN );
+  rtems_test_assert( status == EAGAIN );
 
   puts( "pthread_spin_init( &spinlock, PTHREAD_PROCESS_PRIVATE ) -- EAGAIN" );
   status = pthread_spin_init( &spinlock, PTHREAD_PROCESS_PRIVATE );
-  rtems_test_assert(  status == EAGAIN );
+  rtems_test_assert( status == EAGAIN );
 
   puts( "pthread_spin_lock( NULL ) -- EINVAL" );
   status = pthread_spin_lock( NULL );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_trylock( NULL ) -- EINVAL" );
   status = pthread_spin_trylock( NULL );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_unlock( NULL ) -- EINVAL" );
   status = pthread_spin_unlock( NULL );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_destroy( NULL ) -- EINVAL" );
   status = pthread_spin_destroy( NULL );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   spinlock = 0;
 
   puts( "pthread_spin_lock( &spinlock ) -- EINVAL" );
   status = pthread_spin_lock( &spinlock );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_trylock( &spinlock ) -- EINVAL" );
   status = pthread_spin_trylock( &spinlock );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_unlock( &spinlock ) -- EINVAL" );
   status = pthread_spin_unlock( &spinlock );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_destroy( &spinlock ) -- EINVAL" );
   status = pthread_spin_destroy( &spinlock );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "pthread_spin_unlock( &Spinlock ) -- already unlocked OK" );
   status = pthread_spin_unlock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   /* Now some basic locking and unlocking with a deadlock verification */
   puts( "pthread_spin_lock( &Spinlock ) -- OK" );
   status = pthread_spin_lock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   puts( "pthread_spin_lock( &Spinlock ) -- EDEADLK" );
   status = pthread_spin_lock( &Spinlock );
-  rtems_test_assert(  status == EDEADLK );
+  rtems_test_assert( status == EDEADLK );
 
   puts( "pthread_spin_trylock( &Spinlock ) -- EDEADLK" );
   status = pthread_spin_trylock( &Spinlock );
-  rtems_test_assert(  status == EDEADLK );
+  rtems_test_assert( status == EDEADLK );
 
   puts( "pthread_spin_unlock( &Spinlock ) -- OK" );
   status = pthread_spin_unlock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   /* Try lock/unlock pair */
   puts( "pthread_spin_trylock( &Spinlock ) -- OK" );
   status = pthread_spin_trylock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   puts( "pthread_spin_unlock( &Spinlock ) -- OK" );
   status = pthread_spin_unlock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   /* Let another thread lock a spinlock and we contend with it */
 
@@ -177,10 +177,10 @@ int main(
      RTEMS_DEFAULT_ATTRIBUTES,
      &taskid
   );
-  rtems_test_assert(  rstatus == RTEMS_SUCCESSFUL );
+  rtems_test_assert( rstatus == RTEMS_SUCCESSFUL );
 
   rstatus = rtems_task_start( taskid, SpinlockThread, 0 );
-  rtems_test_assert(  rstatus == RTEMS_SUCCESSFUL );
+  rtems_test_assert( rstatus == RTEMS_SUCCESSFUL );
   /* We should be preempted immediately.  The thread is expected to:
    *    + verify we haven't set the main thread spinning flag
    *    + lock the spinlock
@@ -190,7 +190,7 @@ int main(
   mainThreadSpinning = 1;
   puts( "pthread_spin_lock( &Spinlock ) -- OK" );
   status = pthread_spin_lock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   /* The thread wakes up, unlocks spin lock, and deletes itself.
    * So when we get back here, about a second has passed and we now
@@ -200,16 +200,16 @@ int main(
   /* spin lock should be locked when we return so destroying it gives busy */
   puts( "pthread_spin_destroy( &Spinlock ) -- EBUSY" );
   status = pthread_spin_destroy( &Spinlock );
-  rtems_test_assert(  status == EBUSY );
+  rtems_test_assert( status == EBUSY );
 
   /* Unlock it for a normal destroy */
   puts( "pthread_spin_unlock( &Spinlock ) -- OK" );
   status = pthread_spin_unlock( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   puts( "pthread_spin_destroy( &Spinlock ) -- OK" );
   status = pthread_spin_destroy( &Spinlock );
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   /*************** END OF TEST *****************/
   puts( "*** END OF POSIX SPINLOCK TEST 01 ***" );

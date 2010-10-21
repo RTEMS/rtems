@@ -37,13 +37,13 @@ void *Task_2(
   status = pthread_join( Init_id, NULL );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
-  rtems_test_assert(  status == EINVAL );
+  rtems_test_assert( status == EINVAL );
 
   puts( "Task_2: join to self task (Init) -- EDEADLK" );
   status = pthread_join( pthread_self(), NULL );
   if ( status != EDEADLK )
     printf( "status = %d\n", status );
-  rtems_test_assert(  status == EDEADLK );
+  rtems_test_assert( status == EDEADLK );
 
   puts( "Task_2: exitting" );
 

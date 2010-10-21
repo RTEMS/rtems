@@ -60,23 +60,23 @@ void *POSIX_Init(
 
   puts( "Init - Initialize thread attribute for user provided stack" );
   sc = pthread_attr_init( &attr );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   sc = pthread_attr_setstackaddr( &attr, Stack_Low );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   sc = pthread_attr_setstacksize( &attr, PTHREAD_MINIMUM_STACK_SIZE );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   /* create threads */
   sc = pthread_create( &id, &attr, Test_Thread, NULL );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "Init - let other thread run" );
   delay_request.tv_sec = 0;
   delay_request.tv_nsec = 5 * 100000000;
   sc = nanosleep( &delay_request, NULL );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "*** END OF POSIX STACK ATTRIBUTE TEST 01 ***" );
   rtems_test_exit(0);

@@ -28,7 +28,7 @@ void *Task_2(
 
   printf( "Task_2: sending SIGUSR1\n" );
   status = pthread_kill( Init_id, SIGUSR1 );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
      /* switch to Init */
 

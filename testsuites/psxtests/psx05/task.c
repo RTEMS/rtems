@@ -31,13 +31,13 @@ void *Task_1(
   status = pthread_mutex_trylock( &Mutex_id );
   if ( status != EBUSY )
     printf( "status = %d\n", status );
-  rtems_test_assert(  status == EBUSY );
+  rtems_test_assert( status == EBUSY );
 
   printf( "Task: pthread_mutex_lock unavailable\n" );
   status = pthread_mutex_lock( &Mutex_id );
   if ( status )
     printf( "status = %d\n", status );
-  rtems_test_assert(  !status );
+  rtems_test_assert( !status );
 
      /* switch to init */
 

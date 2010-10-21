@@ -40,10 +40,10 @@ void touch( char *file )
 {
   int fd;
 
-  rtems_test_assert(  file );
+  rtems_test_assert( file );
 
   fd = open( file, O_RDWR|O_CREAT, 0777 );
-  rtems_test_assert(  fd != -1 );
+  rtems_test_assert( fd != -1 );
   close( fd );
 }
 
@@ -52,7 +52,7 @@ int fileexists( char *file )
   int         status;
   struct stat statbuf;
 
-  rtems_test_assert(  file );
+  rtems_test_assert( file );
 
   status = stat( file, &statbuf );
 
@@ -93,13 +93,13 @@ int main(
   printf( "\n\n*** CHROOT01 TEST ***\n" );
 
   status = mkdir( "/one", 0777);
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   status = mkdir( "/one/one", 0777);
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   status = mkdir( "/one/two", 0777);
-  rtems_test_assert(  status == 0 );
+  rtems_test_assert( status == 0 );
 
   touch( "/one/one.test" );
   touch( "/one/two/two.test" );

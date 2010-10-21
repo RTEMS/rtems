@@ -30,13 +30,13 @@ void *POSIX_Init(
 
   puts( "Init - rtems_workspace_get_information - OK" );
   sb = rtems_workspace_get_information( &start );
-  rtems_test_assert(  sb );
+  rtems_test_assert( sb );
 
   #if 0
     printf( "Init - workspace free = %d\n", start.Free.largest );
     printf( "Init - workspace free blocks = %d\n", start.Free.number );
   #endif
-  rtems_test_assert(  start.Free.number == 1 );
+  rtems_test_assert( start.Free.number == 1 );
   to_alloc = start.Free.largest;
 
   /* find the largest we can actually allocate */
@@ -57,15 +57,15 @@ void *POSIX_Init(
    * Verify heap is still in same shape if we couldn't allocate a task
    */
   sb = rtems_workspace_get_information( &info );
-  rtems_test_assert(  sb );
-  rtems_test_assert(  info.Free.largest == start.Free.largest );
-  rtems_test_assert(  info.Free.number  == start.Free.number  );
+  rtems_test_assert( sb );
+  rtems_test_assert( info.Free.largest == start.Free.largest );
+  rtems_test_assert( info.Free.number  == start.Free.number  );
 
   puts( "Init - pthread_key_create - ENOMEM" );
   while (1) {
 
     sb = rtems_workspace_allocate( to_alloc, &alloced );
-    rtems_test_assert(  sb );
+    rtems_test_assert( sb );
 
     sc = pthread_key_create( &key, NULL );
 
@@ -88,9 +88,9 @@ void *POSIX_Init(
       printf( "Init - workspace free/blocks = %d/%d\n",
         info.Free.largest, info.Free.number );
     #endif
-    rtems_test_assert(  sb );
-    rtems_test_assert(  info.Free.largest == start.Free.largest );
-    rtems_test_assert(  info.Free.number  == start.Free.number  );
+    rtems_test_assert( sb );
+    rtems_test_assert( info.Free.largest == start.Free.largest );
+    rtems_test_assert( info.Free.number  == start.Free.number  );
 
     to_alloc -= 8;
     if ( to_alloc == 0 )
@@ -105,7 +105,7 @@ void *POSIX_Init(
    */
   puts( "Init - pthread_key_delete - OK" );
   sc = pthread_key_delete( key );
-  rtems_test_assert(  sc == 0 );
+  rtems_test_assert( sc == 0 );
 
   puts( "Init - verify workspace has same memory" );
   sb = rtems_workspace_get_information( &info );
@@ -113,9 +113,9 @@ void *POSIX_Init(
     printf( "Init - workspace free/blocks = %d/%d\n",
       info.Free.largest, info.Free.number );
   #endif
-  rtems_test_assert(  sb );
-  rtems_test_assert(  info.Free.largest == start.Free.largest );
-  rtems_test_assert(  info.Free.number  == start.Free.number  );
+  rtems_test_assert( sb );
+  rtems_test_assert( info.Free.largest == start.Free.largest );
+  rtems_test_assert( info.Free.number  == start.Free.number  );
 
   puts( "*** END OF TEST KEY 02 ***" );
   rtems_test_exit(0);

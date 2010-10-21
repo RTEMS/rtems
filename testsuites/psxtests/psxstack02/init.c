@@ -63,14 +63,14 @@ void *POSIX_Init(
 
   puts( "Init - Initialize thread attribute for user provided stack" );
   sc = pthread_attr_init( &attr );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   sc = pthread_attr_setstack( &attr, Stack_Low, PTHREAD_MINIMUM_STACK_SIZE );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   /* create threads */
   sc = pthread_create( &id, &attr, Test_Thread, NULL );
-  rtems_test_assert(  !sc );
+  rtems_test_assert( !sc );
 
   puts( "Init - let other thread run" );
   delay_request.tv_sec = 0;
