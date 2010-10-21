@@ -21,8 +21,6 @@
 #ifndef __tm27_h
 #define __tm27_h
 
-#define MUST_WAIT_FOR_INTERRUPT 0
-
 #include <assert.h>
 
 #include <rtems.h>
