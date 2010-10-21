@@ -1,7 +1,7 @@
 /*
  *  This test exercises the POSIX RWLock manager.
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,10 +57,12 @@ void *WriteLockThread(void *arg)
   rtems_test_assert( !status );
   puts( "WriteThread - pthread_rwlock_wrlock(RWLock) unblocked -- OK" );
 
-  sleep( 1 );
+  sleep( 2 );
 
   puts( "WriteThread - pthread_rwlock_unlock(RWLock) -- OK" );
   status = pthread_rwlock_unlock(&RWLock);
+  if ( status )
+   printf( "status=%s\n", strerror(status) );
   rtems_test_assert( !status );
   return NULL;
 }
@@ -340,7 +342,7 @@ int main(
   sleep(2);
 
   /*************** CREATE THREADS AND LET THEM OBTAIN WRITE LOCK *************/
-  puts( "pthread_rwlock_trywrlock(RWLock) -- OK" );
+  puts( "\npthread_rwlock_trywrlock(RWLock) -- OK" );
   status = pthread_rwlock_trywrlock(&RWLock);
   rtems_test_assert( !status );
 
@@ -354,14 +356,47 @@ int main(
       pthread_create(&ThreadIds[i], NULL, WriteLockThread, &ThreadIds[i]);
     rtems_test_assert( !status );
 
-    sleep(1);
+    sleep(2);
   }
 
   puts( "pthread_rwlock_unlock(RWLock) -- OK" );
   status = pthread_rwlock_unlock(&RWLock);
   rtems_test_assert( !status );
 
-  sleep(2);
+  sleep(6);
+
+  /*************** CREATE THREADS AND LET THEM OBTAIN WRITE LOCK *************/
+  /***************    THEN ATTEMPT TO OBTAIN A READLOCK          *************/
+ 
+  puts( "\npthread_rwlock_tryrdlock(&RWLock) -- OK" );
+  status = pthread_rwlock_tryrdlock(&RWLock);
+  rtems_test_assert( !status );
+
+  printf( "Init: pthread_create - thread reader & writer OK\n" );
+  status = pthread_create(&ThreadIds[0], NULL, WriteLockThread, &ThreadIds[0]);
+  rtems_test_assert( !status );
+
+  sleep(1);
+  status = pthread_create(&ThreadIds[1], NULL, ReadLockThread, &ThreadIds[1]);
+  rtems_test_assert( !status );
+
+  sleep(1);
+
+  puts( "pthread_rwlock_tryrdlock(&RWLock) -- EBUSY" );
+  status = pthread_rwlock_tryrdlock(&RWLock);
+  rtems_test_assert( status == EBUSY );
+
+  puts( "pthread_rwlock_trywrlock(&RWLock) -- EBUSY" );
+  status = pthread_rwlock_trywrlock(&RWLock);
+  rtems_test_assert( status == EBUSY );
+
+  sleep( 5 );
+
+  puts( "pthread_rwlock_unlock(&RWLock) -- OK" );
+  status = pthread_rwlock_unlock(&RWLock);
+  rtems_test_assert( !status );
+
+  sleep( 5 );
 
   /*************** TIMEOUT ON RWLOCK ***************/
   puts( "clock_gettime(CLOCK_REALTIME, &abstime) -- OK" );

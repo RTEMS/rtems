@@ -430,9 +430,9 @@ void *POSIX_Init(
   calculate_abstimeout( &times, -1, (TOD_NANOSECONDS_PER_SECOND / 2) );
 
   status = pthread_mutex_timedlock( &Mutex_id, &times );
-  if ( status != EBUSY )
+  if ( status != ETIMEDOUT )
     printf( "status = %d\n", status );
-  rtems_test_assert( status == EBUSY );
+  rtems_test_assert(  status == ETIMEDOUT );
 
      /* switch to idle */
 

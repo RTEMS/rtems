@@ -1,5 +1,12 @@
 2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psx05/init.c: Check for correct status returned.
+	* psxrwlock01/psxrwlock01.scn, psxrwlock01/test.c: Add test code
+	to exercise path when attempting to lock for reading but there
+	is at least one writer blocked waiting for access.
+
+2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: New test to ensure pthread_cond_wait() and
 	sleep() (e.g. interruptible blocking and sleeping) are interruptible
 	by signal.

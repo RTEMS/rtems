@@ -60,6 +60,7 @@ pthread_rwlock_destroy( &RWLock ) -- EBUSY
 pthread_rwlock_unlock(RWLock) -- OK
 ReadThread - pthread_rwlock_rdlock(RWLock) unblocked -- OK
 ReadThread - pthread_rwlock_rdlock(RWLock) unblocked -- OK
+
 pthread_rwlock_trywrlock(RWLock) -- OK
 pthread_rwlock_trywrlock(&RWLock) -- EBUSY
 Init: pthread_create - thread 1 OK
@@ -70,9 +71,20 @@ pthread_rwlock_unlock(RWLock) -- OK
 WriteThread - pthread_rwlock_wrlock(RWLock) unblocked -- OK
 WriteThread - pthread_rwlock_unlock(RWLock) -- OK
 WriteThread - pthread_rwlock_wrlock(RWLock) unblocked -- OK
+WriteThread - pthread_rwlock_unlock(RWLock) -- OK
+
+pthread_rwlock_tryrdlock(&RWLock) -- OK
+Init: pthread_create - thread reader & writer OK
+WriteThread - pthread_rwlock_wrlock(RWLock) blocking -- OK
+ReadThread - pthread_rwlock_rdlock(RWLock) blocking -- OK
+pthread_rwlock_tryrdlock(&RWLock) -- EBUSY
+pthread_rwlock_trywrlock(&RWLock) -- EBUSY
+pthread_rwlock_unlock(&RWLock) -- OK
+WriteThread - pthread_rwlock_wrlock(RWLock) unblocked -- OK
+WriteThread - pthread_rwlock_unlock(RWLock) -- OK
+ReadThread - pthread_rwlock_rdlock(RWLock) unblocked -- OK
 clock_gettime(CLOCK_REALTIME, &abstime) -- OK
 pthread_rwlock_timedwrlock( &RWLock, &abstime) -- OK
-WriteThread - pthread_rwlock_unlock(RWLock) -- OK
 pthread_rwlock_timedrdlock( &RWLock, &abstime) -- ETIMEDOUT
 pthread_rwlock_timedrdlock( &RWLock, &abstime) -- ETIMEDOUT
 pthread_rwlock_timedwrlock( &RWLock, &abstime) -- ETIMEDOUT
