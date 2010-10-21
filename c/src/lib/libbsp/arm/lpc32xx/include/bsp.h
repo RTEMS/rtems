@@ -102,12 +102,12 @@ static inline unsigned lpc32xx_timer(void)
 static inline void lpc32xx_micro_seconds_delay(unsigned us)
 {
   unsigned start = lpc32xx_timer();
-  unsigned end = start + us * (LPC32XX_PERIPH_CLK / 1000000);
-  unsigned now = 0;
+  unsigned delay = us * (LPC32XX_PERIPH_CLK / 1000000);
+  unsigned elapsed = 0;
 
   do {
-    now = lpc32xx_timer();
-  } while (now < end);
+    elapsed = lpc32xx_timer() - start;
+  } while (elapsed < delay);
 }
 
 void lpc32xx_restart(void *addr);

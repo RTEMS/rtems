@@ -22,15 +22,9 @@
 #include <rtems.h>
 #include <rtems/timerdrv.h>
 
-static bool benchmark_timer_find_average_overhead = false;
+#include <bsp.h>
 
 static uint32_t benchmark_timer_base;
-
-/* TODO */
-static uint32_t lpc32xx_timer(void)
-{
-  return 0;
-}
 
 void benchmark_timer_initialize(void)
 {
@@ -39,17 +33,10 @@ void benchmark_timer_initialize(void)
 
 uint32_t benchmark_timer_read(void)
 {
-  uint32_t delta = lpc32xx_timer() - benchmark_timer_base;
-
-  if (benchmark_timer_find_average_overhead) {
-    return delta;
-  } else {
-    /* TODO */
-    return 0;
-  }
+  return lpc32xx_timer() - benchmark_timer_base;
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(bool find_average_overhead)
 {
-  benchmark_timer_find_average_overhead = find_average_overhead;
+  /* VOID */
 }

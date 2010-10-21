@@ -1,3 +1,10 @@
+2010-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/tm27.h: New file.
+	* Makefile.am, preinstall.am: Reflect change above.
+	* include/bsp.h: Fixed lpc32xx_micro_seconds_delay().
+	* misc/timer.c: Support for timer tests.
+
 2010-10-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/emc.h, include/i2c.h, include/lpc32xx.h, include/nand-mlc.h:
