@@ -242,7 +242,7 @@ rtems_task Middle_task(
   Middle_tcb   = _Thread_Executing;
 
   _Thread_Executing =
-        (Thread_Control *) _Thread_Ready_chain[LOW_PRIORITY].first;
+        (Thread_Control *) _Chain_First(&_Thread_Ready_chain[LOW_PRIORITY]);
 
   /* do not force context switch */
 
@@ -279,7 +279,7 @@ rtems_task Low_task(
   context_switch_another_task_time = benchmark_timer_read();
 
   _Thread_Executing =
-        (Thread_Control *) _Thread_Ready_chain[FP1_PRIORITY].first;
+        (Thread_Control *) _Chain_First(&_Thread_Ready_chain[FP1_PRIORITY]);
 
   /* do not force context switch */
 
@@ -306,7 +306,7 @@ rtems_task Floating_point_task_1(
   executing = _Thread_Executing;
 
   _Thread_Executing =
-        (Thread_Control *) _Thread_Ready_chain[FP2_PRIORITY].first;
+        (Thread_Control *) _Chain_First(&_Thread_Ready_chain[FP2_PRIORITY]);
 
   /* do not force context switch */
 
@@ -329,7 +329,7 @@ rtems_task Floating_point_task_1(
   executing = _Thread_Executing;
 
   _Thread_Executing =
-       (Thread_Control *) _Thread_Ready_chain[FP2_PRIORITY].first;
+       (Thread_Control *) _Chain_First(&_Thread_Ready_chain[FP2_PRIORITY]);
 
   /* do not force context switch */
 
@@ -358,7 +358,7 @@ rtems_task Floating_point_task_2(
   executing = _Thread_Executing;
 
   _Thread_Executing =
-       (Thread_Control *) _Thread_Ready_chain[FP1_PRIORITY].first;
+       (Thread_Control *) _Chain_First(&_Thread_Ready_chain[FP1_PRIORITY]);
 
   FP_LOAD( 1.0 );
 
