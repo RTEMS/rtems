@@ -1,3 +1,7 @@
+2010-10-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spchain/init.c, spwatchdog/task1.c: Do not violate chain API.
+
 2010-10-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* spfifo03/spfifo03.scn: Replace file.

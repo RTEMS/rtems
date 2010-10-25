@@ -80,10 +80,10 @@ rtems_task Task_1(
   _Watchdog_Report_chain( NULL, & _Watchdog_Ticks_chain);
 
   puts( "TA1 - _Watchdog_Report - with name"  );
-  _Watchdog_Report("first", (Watchdog_Control *)(_Watchdog_Ticks_chain.first));
+  _Watchdog_Report("first", (Watchdog_Control *)_Chain_First(&_Watchdog_Ticks_chain));
 
   puts( "TA1 - _Watchdog_Report - no name"  );
-  _Watchdog_Report( NULL, (Watchdog_Control *)(_Watchdog_Ticks_chain.first) );
+  _Watchdog_Report( NULL, (Watchdog_Control *)_Chain_First(&_Watchdog_Ticks_chain) );
 
   puts( "TA1 - timer_deleting - timer 1" );
   status = rtems_timer_delete( tmid );

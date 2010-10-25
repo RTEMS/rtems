@@ -128,7 +128,7 @@ rtems_task Init(
   rtems_chain_append( &chain1, &node1.Node );
   rtems_chain_insert( &node1.Node, &node2.Node );
 
-  for ( p = chain1.first, id = 1 ;
+  for ( p = rtems_chain_first(&chain1), id = 1 ;
         !rtems_chain_is_tail(&chain1, p) ;
         p = p->next , id++ ) {
      test_node *t = (test_node *)p;
