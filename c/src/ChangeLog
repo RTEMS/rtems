@@ -1,3 +1,7 @@
+2010-10-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/ide/ata.c: Do not violate chain API.
+
 2010-08-20	<yann.sionneau@telecom-sudparis.eu>
 
 	* libchip/network/greth.c, libchip/network/open_eth.c: Add constants

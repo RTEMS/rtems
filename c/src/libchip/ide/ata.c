@@ -431,7 +431,7 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
 
     /* get first request in the controller's queue */
     _ISR_Disable(level);
-    areq = (ata_req_t *)(ata_ide_ctrls[ctrl_minor].reqs.first);
+    areq = (ata_req_t *)rtems_chain_first(&ata_ide_ctrls[ctrl_minor].reqs);
     _ISR_Enable(level);
 
     /* get ATA device identifier (0 or 1) */
@@ -633,7 +633,7 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
 rtems_isr
 ata_interrupt_handler(rtems_vector_number vec)
 {
-    rtems_chain_node *the_node = ((rtems_chain_control *)(&ata_int_vec[vec]))->first;
+    rtems_chain_node *the_node = rtems_chain_first(&ata_int_vec[vec]);
     ata_queue_msg_t  msg;
     uint16_t         byte; /* emphasize that only 8 low bits is meaningful */
 
@@ -658,7 +658,7 @@ void ata_interrupt_handler(rtems_irq_hdl_param handle)
 {
   int ata_irq_chain_index = (int) handle;
     rtems_chain_node *the_node =
-      ata_irq_chain[ata_irq_chain_index].irq_chain.last;
+      rtems_chain_last(&ata_irq_chain[ata_irq_chain_index].irq_chain);
     ata_queue_msg_t  msg;
     uint16_t       byte; /* emphasize that only 8 low bits is meaningful */
 
@@ -870,7 +870,7 @@ ata_queue_task(rtems_task_argument arg)
 
         /* get current request to the controller */
         _ISR_Disable(level);
-        areq = (ata_req_t *)(ata_ide_ctrls[ctrl_minor].reqs.first);
+        areq = (ata_req_t *)rtems_chain_first(&ata_ide_ctrls[ctrl_minor].reqs);
         _ISR_Enable(level);
 
         switch(msg.type)
