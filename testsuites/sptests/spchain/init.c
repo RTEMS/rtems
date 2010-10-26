@@ -38,6 +38,7 @@ static void test_chain_with_notification(void)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_chain_control chain;
   rtems_chain_node a;
+  rtems_chain_node b;
   rtems_chain_node *p = (rtems_chain_node *) 1;
   rtems_event_set out = 0;
 
@@ -59,8 +60,15 @@ static void test_chain_with_notification(void)
 
   puts( "INIT - Verify rtems_chain_get_with_notification" );
   rtems_chain_initialize_empty( &chain );
+
+  rtems_chain_append( &chain, &b );
   rtems_chain_append( &chain, &a );
-  sc = rtems_chain_get_with_notification( &chain, rtems_task_self(), EVENT, &p );
+
+  sc = rtems_chain_get_with_notification(&chain, rtems_task_self(), EVENT, &p);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( p == &b );
+
+  sc = rtems_chain_get_with_notification(&chain, rtems_task_self(), EVENT, &p);
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   rtems_test_assert( p == &a );
   sc = rtems_event_receive(
@@ -94,9 +102,14 @@ static void test_chain_with_empty_check(void)
   rtems_test_assert( empty );
   empty = rtems_chain_prepend_with_empty_check( &chain, &a );
   rtems_test_assert( !empty );
+  empty = rtems_chain_prepend_with_empty_check( &chain, &b );
+  rtems_test_assert( !empty );
 
   puts( "INIT - Verify rtems_chain_get_with_empty_check" );
   rtems_chain_initialize_empty( &chain );
+  empty = rtems_chain_get_with_empty_check( &chain, &p );
+  rtems_test_assert( empty );
+
   rtems_chain_append( &chain, &a );
   rtems_chain_append( &chain, &b );
   empty = rtems_chain_get_with_empty_check( &chain, &p );

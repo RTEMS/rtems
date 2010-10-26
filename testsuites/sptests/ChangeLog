@@ -1,3 +1,7 @@
+2010-10-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spchain/init.c: Attempt to improve coverage.
+
 2010-10-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spchain/init.c, spwatchdog/task1.c: Do not violate chain API.
