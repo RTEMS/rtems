@@ -1,3 +1,7 @@
+2010-10-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Added HID2 define.  Fixed comments.
+
 2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/cpu.h: Add RTEMS_COMPILER_NO_RETURN_ATTRIBUTE to

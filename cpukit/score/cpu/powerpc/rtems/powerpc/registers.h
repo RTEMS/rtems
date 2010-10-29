@@ -118,8 +118,9 @@ n:
 #define	XER	1
 #define LR	8
 #define CTR	9
-#define HID0	1008	/* Hardware Implementation */
-#define HID1	1009	/* Hardware Implementation */
+#define HID0	1008	/* Hardware Implementation 0 */
+#define HID1	1009	/* Hardware Implementation 1 */
+#define HID2	1011	/* Hardware Implementation 2 */
 #define DABR	1013	/* Data Access Breakpoint  */
 #define PVR	287	/* Processor Version */
 #define IBAT0U	528	/* Instruction BAT #0 Upper/Lower */
@@ -132,13 +133,13 @@ n:
 #define IBAT3L	535
 
 /* Only present on 7445, 7447, 7448, 7455 and 7457 (if HID0[HIGH_BAT_EN]) */
-#define IBAT4U	560	/* Instruction BAT #0 Upper/Lower */
+#define IBAT4U	560	/* Instruction BAT #4 Upper/Lower */
 #define IBAT4L	561
-#define IBAT5U	562	/* Instruction BAT #1 Upper/Lower */
+#define IBAT5U	562	/* Instruction BAT #5 Upper/Lower */
 #define IBAT5L	563
-#define IBAT6U	564	/* Instruction BAT #2 Upper/Lower */
+#define IBAT6U	564	/* Instruction BAT #6 Upper/Lower */
 #define IBAT6L	565
-#define IBAT7U	566	/* Instruction BAT #3 Upper/Lower */
+#define IBAT7U	566	/* Instruction BAT #7 Upper/Lower */
 #define IBAT7L	567
 
 #define DBAT0U	536	/* Data BAT #0 Upper/Lower */
@@ -151,13 +152,13 @@ n:
 #define DBAT3L	543
 
 /* Only present on 7445, 7447, 7448, 7455 and 7457 (if HID0[HIGH_BAT_EN]) */
-#define DBAT4U	568	/* Instruction BAT #0 Upper/Lower */
+#define DBAT4U	568	/* Instruction BAT #4 Upper/Lower */
 #define DBAT4L	569
-#define DBAT5U	570	/* Instruction BAT #1 Upper/Lower */
+#define DBAT5U	570	/* Instruction BAT #5 Upper/Lower */
 #define DBAT5L	571
-#define DBAT6U	572	/* Instruction BAT #2 Upper/Lower */
+#define DBAT6U	572	/* Instruction BAT #6 Upper/Lower */
 #define DBAT6L	573
-#define DBAT7U	574	/* Instruction BAT #3 Upper/Lower */
+#define DBAT7U	574	/* Instruction BAT #7 Upper/Lower */
 #define DBAT7L	575
 
 #define DMISS	976	/* TLB Lookup/Refresh registers */
