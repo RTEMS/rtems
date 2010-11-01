@@ -1,3 +1,9 @@
+2010-11-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1714/doc
+	* user/datatypes.t, user/part.t: Add missing description of
+	rtems_status_codes.
+
 2009-07-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/region.t: Fix typos where semaphore referenced instead of region

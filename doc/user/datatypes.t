@@ -224,7 +224,11 @@ type that corresponds to single precision floating point
 on the target hardware. 
 
 @findex rtems_status_codes
-@item @code{@value{DIRPREFIX}status_codes} is the 
+@item @code{@value{DIRPREFIX}status_codes} is the return type for most
+RTEMS services.  This is an enumerated type of approximately twenty-five
+values.  In general, when a service returns a particular status code, it
+indicates that a very specific error condition has occurred.
+
 @findex rtems_task
 @item @code{@value{DIRPREFIX}task} is the return type for an
 RTEMS Task.
