@@ -29,20 +29,20 @@ extern "C"
   /* Actual request being processed */
   typedef struct
   {
+    rtems_chain_node next_prio; /* chain requests in order of priority */
     int policy;                 /* If _POSIX_PRIORITIZED_IO and 
 		                   _POSIX_PRIORITY_SCHEDULING are defined */ 
     int priority;               /* see above */
-    rtems_chain_node next_prio; /* chain requests in order of priority */
     pthread_t caller_thread;    /* used for notification */
     struct aiocb *aiocbp;       /* aio control block */
   } rtems_aio_request;
 
   typedef struct
   {
-    int fildes;                 /* file descriptor to be processed */  
-    int new_fd;                 /* if this is a newly created chain */
     rtems_chain_node next_fd;   /* order fd chains in queue */
     rtems_chain_control perfd;  /* chain of requests for this fd */
+    int fildes;                 /* file descriptor to be processed */
+    int new_fd;                 /* if this is a newly created chain */
     pthread_mutex_t mutex;      
     pthread_cond_t cond;
 

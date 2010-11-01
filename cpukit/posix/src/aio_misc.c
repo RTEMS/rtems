@@ -94,11 +94,11 @@ rtems_aio_search_fd (rtems_chain_control *chain, int fildes, int create)
   rtems_aio_request_chain *r_chain;
   rtems_chain_node *node;
 
-  node = chain->first;
+  node = rtems_chain_first (chain);
   r_chain = (rtems_aio_request_chain *) node;
 
   while (r_chain->fildes < fildes && !rtems_chain_is_tail (chain, node)) {
-    node = node->next;
+    node = rtems_chain_next (node);
     r_chain = (rtems_aio_request_chain *) node;
   }
 
@@ -114,9 +114,10 @@ rtems_aio_search_fd (rtems_chain_control *chain, int fildes, int create)
       if (rtems_chain_is_empty (chain))
         rtems_chain_prepend (chain, &r_chain->next_fd);
       else
-        rtems_chain_insert (node->previous, &r_chain->next_fd);
+        rtems_chain_insert (rtems_chain_previous (node), &r_chain->next_fd);
 
       r_chain->new_fd = 1;
+	  r_chain->fildes = fildes;
     }
   }
   return r_chain;
@@ -142,7 +143,7 @@ rtems_aio_insert_prio (rtems_chain_control *chain, rtems_aio_request *req)
   rtems_chain_node *node;
 
   AIO_printf ("FD exists \n");
-  node = chain->first;
+  node = rtems_chain_first (chain);
 
   if (rtems_chain_is_empty (chain)) {
     AIO_printf ("First in chain \n");
@@ -153,7 +154,7 @@ rtems_aio_insert_prio (rtems_chain_control *chain, rtems_aio_request *req)
 
     while (req->aiocbp->aio_reqprio > prio &&
            !rtems_chain_is_tail (chain, node)) {
-      node = node->next;
+      node = rtems_chain_next (node);
       prio = ((rtems_aio_request *) node)->aiocbp->aio_reqprio;
     }
 
@@ -180,7 +181,7 @@ void rtems_aio_remove_fd (rtems_aio_request_chain *r_chain)
   rtems_chain_node *node;
 
   chain = &r_chain->perfd;
-  node = chain->first;
+  node = rtems_chain_first (chain);
   
   while (!rtems_chain_is_tail (chain, node))
     {
@@ -210,13 +211,13 @@ void rtems_aio_remove_fd (rtems_aio_request_chain *r_chain)
 
 int rtems_aio_remove_req (rtems_chain_control *chain, struct aiocb *aiocbp)
 {
-  rtems_chain_node *node = chain->first;
+  rtems_chain_node *node = rtems_chain_first (chain);
   rtems_aio_request *current;
   
   current = (rtems_aio_request *) node;
 
   while (!rtems_chain_is_tail (chain, node) && current->aiocbp != aiocbp) {
-    node = node->next;
+    node = rtems_chain_next (node);
     current = (rtems_aio_request *) node;
   }
   
@@ -257,7 +258,7 @@ rtems_aio_enqueue (rtems_aio_request *req)
   struct sched_param param;
 
   /* The queue should be initialized */
-  AIO_assert (aio_request_queue.initialized != AIO_QUEUE_INITIALIZED);
+  AIO_assert (aio_request_queue.initialized == AIO_QUEUE_INITIALIZED);
 
   result = pthread_mutex_lock (&aio_request_queue.mutex);
   if (result != 0) {
@@ -288,7 +289,7 @@ rtems_aio_enqueue (rtems_aio_request *req)
 	pthread_mutex_init (&r_chain->mutex, NULL);
 	pthread_cond_init (&r_chain->cond, NULL);
 	
-	AIO_printf ("New thread");
+	AIO_printf ("New thread \n");
 	result = pthread_create (&thid, &aio_request_queue.attr,
 				 rtems_aio_handle, (void *) r_chain);
 	if (result != 0) {
@@ -328,11 +329,13 @@ rtems_aio_enqueue (rtems_aio_request *req)
 	if (r_chain->new_fd == 1) {
 	  /* If this is a new fd chain we signal the idle threads that
 	     might be waiting for requests */
+	  AIO_printf (" New chain on waiting queue \n ");
 	  rtems_chain_prepend (&r_chain->perfd, &req->next_prio);
 	  r_chain->new_fd = 0;
 	  pthread_mutex_init (&r_chain->mutex, NULL);
 	  pthread_cond_init (&r_chain->cond, NULL);
 	  pthread_cond_signal (&aio_request_queue.new_req);
+	  ++aio_request_queue.idle_threads;
 	} else
 	  /* just insert the request in the existing fd chain */
 	  rtems_aio_insert_prio (&r_chain->perfd, req);
@@ -387,7 +390,7 @@ rtems_aio_handle (void *arg)
        requests to this fd chain */
     if (!rtems_chain_is_empty (chain)) {
 
-      node = chain->first;
+      node = rtems_chain_first (chain);
       req = (rtems_aio_request *) node;
       
       /* See _POSIX_PRIORITIZE_IO and _POSIX_PRIORITY_SCHEDULING
@@ -481,7 +484,7 @@ rtems_aio_handle (void *arg)
 	      /* Otherwise move this chain to the working chain and 
 		 start the loop all over again */
 	      --aio_request_queue.idle_threads;
-	      node = aio_request_queue.idle_req.first;
+	      node = rtems_chain_first (&aio_request_queue.idle_req);
 	      rtems_chain_extract (node);
 	      r_chain = rtems_aio_search_fd (&aio_request_queue.work_req,
 					     ((rtems_aio_request_chain *)node)->fildes,

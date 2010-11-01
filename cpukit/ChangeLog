@@ -1,3 +1,8 @@
+2010-11-01	Alin Rus <alin.codejunkie@gmail.com>
+
+	* posix/include/rtems/posix/aio_misc.h, posix/src/aio_misc.c: Small
+	fixes.
+
 2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/psignalunblockthread.c: Formatting.
