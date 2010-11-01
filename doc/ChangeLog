@@ -1,3 +1,8 @@
+2010-11-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1714/doc
+	* user/datatypes.t: Add missing description of rtems_status_codes.
+
 2010-08-13	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1674/docs
