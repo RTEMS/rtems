@@ -1,3 +1,7 @@
+2010-11-01	Alin Rus <alin.codejunkie@gmail.com>
+
+	* psxaio01/init.c, psxaio02/init.c: Improve coverage.
+
 2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psx05/init.c: Check for correct status returned.

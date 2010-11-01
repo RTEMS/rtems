@@ -24,7 +24,7 @@
 #define WRONG_FD 404
 
 struct aiocb *
-create_aiocb (void)
+create_aiocb (int fd)
 {
   struct aiocb *aiocbp;
 
@@ -34,7 +34,7 @@ create_aiocb (void)
   aiocbp->aio_nbytes = BUFSIZE;
   aiocbp->aio_offset = 0;
   aiocbp->aio_reqprio = 0;
-  aiocbp->aio_fildes = open ("aio_fildes", O_RDWR | O_CREAT);
+  aiocbp->aio_fildes = fd;
 
   return aiocbp;
 }
@@ -49,101 +49,145 @@ free_aiocb (struct aiocb *aiocbp)
 void *
 POSIX_Init (void *argument)
 {
-  int result, policy;
+  int result, fd;
   struct aiocb *aiocbp;
-  rtems_status_code status;
-  struct sched_param param;
+  int status;
+
+  rtems_aio_init ();
+
+  status = mkdir ("/tmp", S_IRWXU);
+  rtems_test_assert (!status);
+  
+  fd = open ("/tmp/aio_fildes", O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
+  rtems_test_assert ( fd != -1);
 
   puts ("\n\n*** POSIX AIO TEST 01 ***");
 
-  puts ("\n*** POSIX aio_write() test ***");
+  puts (" Init: EBADF TESTS ");
 
-  /* Request canceled */
-  puts ("Init: aio_write - ECANCELED");
-
-  aiocbp = create_aiocb ();
-  aio_write (aiocbp);
-  aio_cancel (aiocbp->aio_fildes, aiocbp);
-  result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
-  status = aio_error (aiocbp);
-  rtems_test_assert (status != ECANCELED);
-  free_aiocb (aiocbp);
-
-  /* Successfull added request to queue */
-  puts ("Init: aio_write - SUCCESSFUL");
-  aiocbp = create_aiocb ();
-  aiocbp->aio_fildes = WRONG_FD;
+  aiocbp = create_aiocb (WRONG_FD);
   status = aio_write (aiocbp);
-  rtems_test_assert (!status);
-
-  pthread_getschedparam (pthread_self (), &policy, &param);
-  policy = SCHED_RR;
-  param.sched_priority = 30;
-  pthread_setschedparam (pthread_self (), policy, &param);
-  sleep (1);
-
-  while (aio_error (aiocbp) == EINPROGRESS);
+  rtems_test_assert (status == -1);
 
   /* Bad file descriptor */
   puts ("Init: aio_write() - EBADF ");
 
   result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
+  rtems_test_assert (result == -1);
   status = aio_error (aiocbp);
-  rtems_test_assert (status != EBADF);
+  rtems_test_assert (status == EBADF);
+
+  status = aio_read (aiocbp);
+  rtems_test_assert (status == -1);
+
+  /* Bad file descriptor */
+  puts ("Init: aio_read() - EBADF ");
+
+  result = aio_return (aiocbp);
+  rtems_test_assert (result == -1);
+  status = aio_error (aiocbp);
+  rtems_test_assert (status == EBADF);
+
+  status = aio_cancel (WRONG_FD, NULL);
+  rtems_test_assert (status == -1);
+
+  /* Bad file descriptor */
+  puts ("Init: aio_cancel() - EBADF ");
+  
+  result = aio_return (aiocbp);
+  rtems_test_assert (result == -1);
+  status = aio_error (aiocbp);
+  rtems_test_assert (status == EBADF);
+
+  status = aio_fsync (O_SYNC, aiocbp);
+  rtems_test_assert (status == -1);
+  
+  /* Bad file descriptor */
+  puts ("Init: aio_fsync() - EBADF ");
+
+  result = aio_return (aiocbp);
+  rtems_test_assert (result == -1);
+  status = aio_error (aiocbp);
+  rtems_test_assert (status == EBADF);
+  
   free_aiocb (aiocbp);
 
   /* Invalid offset */
   puts ("Init: aio_write() - EINVAL [aio_offset]");
 
-  aiocbp = create_aiocb ();
+  aiocbp = create_aiocb (fd);
   aiocbp->aio_offset = -1;
-  aio_write (aiocbp);
-  sleep (1);
-
-  while (aio_error (aiocbp) == EINPROGRESS);
+  status = aio_write (aiocbp);
+  rtems_test_assert (status == -1);
 
   result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
+  rtems_test_assert (result == -1);
   status = aio_error (aiocbp);
-  rtems_test_assert (status != EINVAL);
+  rtems_test_assert (status == EINVAL);
+
+    /* Invalid offset */
+  puts ("Init: aio_read() - EINVAL [aio_offset]");
+
+  status = aio_read (aiocbp);
+  rtems_test_assert (status == -1);
+
+  result = aio_return (aiocbp);
+  rtems_test_assert (result == -1);
+  status = aio_error (aiocbp);
+  rtems_test_assert (status == EINVAL);
+
   free_aiocb (aiocbp);
 
   /* Invalid request priority */
   puts ("Init: aio_write() - EINVAL [aio_reqprio]");
 
-  aiocbp = create_aiocb ();
+  aiocbp = create_aiocb (fd);
   aiocbp->aio_reqprio = AIO_PRIO_DELTA_MAX + 1;
-  aio_write (aiocbp);
-  sleep (1);
-
-  while (aio_error (aiocbp) == EINPROGRESS);
+  status = aio_write (aiocbp);
+  rtems_test_assert (status == -1);
 
   result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
+  rtems_test_assert (result == -1);
   status = aio_error (aiocbp);
-  rtems_test_assert (status != EINVAL);
-  free_aiocb (aiocbp);
+  rtems_test_assert (status == EINVAL);
 
-  /* aio_nbytes > 0 and aio_offset >= SEEK_END */
-  puts ("Init: aio_write() - EFBIG");
-  aiocbp = create_aiocb ();
-  aiocbp->aio_nbytes = 1;
-  aiocbp->aio_offset = lseek (aiocbp->aio_fildes, 0, SEEK_END) + 1;
-  aio_write (aiocbp);
-  sleep (1);
+   /* Invalid request priority */
+  puts ("Init: aio_read() - EINVAL [aio_reqprio]");
 
-  while (aio_error (aiocbp) == EINPROGRESS);
+  status = aio_read (aiocbp);
+  rtems_test_assert (status == -1);
 
   result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
+  rtems_test_assert (result == -1);
   status = aio_error (aiocbp);
-  rtems_test_assert (status != EFBIG);
+  rtems_test_assert (status == EINVAL);
+
+  /* Invalid request aio_cancel */
+  puts ("Init: aio_cancel() - EINVAL ");
+
+  status = aio_cancel (WRONG_FD, aiocbp);
+  rtems_test_assert (status == -1);
+
+  result = aio_return (aiocbp);
+  rtems_test_assert (result == -1);
+  status = aio_error (aiocbp);
+  rtems_test_assert (status == EINVAL);
+
+  /* Invalid operation to aio_fsync */
+  puts ("Init: aio_fsync() - EINVAL ");
+  status = aio_fsync (-1, aiocbp);
+  rtems_test_assert (status == -1);
+
+  result = aio_return (aiocbp);
+  rtems_test_assert (result == -1);
+  status = aio_error (aiocbp);
+  rtems_test_assert (status == EINVAL);
+
   free_aiocb (aiocbp);
 
   puts ("*** END OF POSIX AIO TEST 01 ***");
 
+  close (fd);
   rtems_test_exit (0);
 
   return NULL;

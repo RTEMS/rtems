@@ -19,12 +19,13 @@
 #include <stdio.h>
 #include <sched.h>
 #include <fcntl.h>
+#include <rtems/chain.h>
 
-#define BUFSIZE 512
-#define WRONG_FD 404
+#define BUFSIZE 32
+#define MAX 7
 
 struct aiocb *
-create_aiocb (void)
+create_aiocb (int fd)
 {
   struct aiocb *aiocbp;
 
@@ -34,7 +35,7 @@ create_aiocb (void)
   aiocbp->aio_nbytes = BUFSIZE;
   aiocbp->aio_offset = 0;
   aiocbp->aio_reqprio = 0;
-  aiocbp->aio_fildes = open ("aio_fildes", O_RDWR | O_CREAT);
+  aiocbp->aio_fildes = fd;
 
   return aiocbp;
 }
@@ -49,101 +50,84 @@ free_aiocb (struct aiocb *aiocbp)
 void *
 POSIX_Init (void *argument)
 {
-  int result, policy;
-  struct aiocb *aiocbp;
-  rtems_status_code status;
-  struct sched_param param;
+  int fd[MAX];
+  struct aiocb *aiocbp[MAX+2];
+  int status, i;
+  char filename[BUFSIZE];
+
+  status = rtems_aio_init ();
+  rtems_test_assert (status == 0);
+ 
+  status = mkdir ("/tmp", S_IRWXU);
+  rtems_test_assert (!status);
+  
+  puts ("\n\n*** POSIX AIO TEST 02 ***");
+  
+  puts (" Init: Open files ");
+
+  for (i=0; i<MAX; i++)
+    {
+      sprintf (filename, "/tmp/aio_fildes%d",i);
+      fd[i] = open (filename, O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
+      rtems_test_assert ( fd[i] != -1);
+    }
+  
+  puts (" Init: [WQ] aio_write on 1st file ");
+  aiocbp[0] = create_aiocb (fd[0]);
+  status = aio_write (aiocbp[0]);
+  rtems_test_assert (status != -1);
+
+  puts (" Init: [WQ] aio_write on 2nd file ");
+  aiocbp[1] = create_aiocb (fd[1]);
+  status = aio_write (aiocbp[1]);
+  rtems_test_assert (status != -1);
+  
+  puts (" Init: [WQ] aio_read on 2nd file add by priority ");
+  aiocbp[2] = create_aiocb (fd[1]);
+  status = aio_read (aiocbp[2]);
+  rtems_test_assert (status != -1);
+  
+  puts (" Init: [WQ] aio_write on 3rd file "); 
+  aiocbp[3] = create_aiocb (fd[2]);
+  status = aio_write (aiocbp[3]);
+  rtems_test_assert (status != -1);
+  
+  puts (" Init: [WQ] aio_write on 4th file ");
+  aiocbp[4] = create_aiocb (fd[3]);
+  status = aio_write (aiocbp[4]);
+  rtems_test_assert (status != -1);
+  
+  puts (" Init: [WQ] aio_write on 5th file  -- [WQ] full ");
+  aiocbp[5] = create_aiocb (fd[4]);
+  status = aio_write (aiocbp[5]);
+  rtems_test_assert (status != -1);
+  
+  puts (" Init: [IQ] aio_write on 6th file ");
+  aiocbp[6] = create_aiocb (fd[5]);
+  status = aio_write (aiocbp[6]);
+  rtems_test_assert (status != -1);
+  
+  puts (" Init: [IQ] aio_write on 7th file ");
+  aiocbp[7] = create_aiocb (fd[6]);
+  status = aio_write (aiocbp[7]);
+  rtems_test_assert (status != -1);
+
+  puts (" Init: [IQ] aio_read on 7th file add by priority ");
+  aiocbp[8] = create_aiocb (fd[6]);
+  status = aio_read (aiocbp[8]);
+  rtems_test_assert (status != -1);
 
   puts ("\n\n*** POSIX AIO TEST 02 ***");
 
-  puts ("\n*** POSIX aio_read() test ***");
-
-  /* Request canceled */
-  puts ("Init: aio_read - ECANCELED");
-
-  aiocbp = create_aiocb ();
-  aio_read (aiocbp);
-  aio_cancel (aiocbp->aio_fildes, aiocbp);
-  result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
-  status = aio_error (aiocbp);
-  rtems_test_assert (status != ECANCELED);
-  free_aiocb (aiocbp);
-
-  /* Successfull added request to queue */
-  puts ("Init: aio_read - SUCCESSFUL");
-  aiocbp = create_aiocb ();
-  aiocbp->aio_fildes = WRONG_FD;
-  status = aio_read (aiocbp);
-  rtems_test_assert (!status);
-
-  pthread_getschedparam (pthread_self (), &policy, &param);
-  policy = SCHED_RR;
-  param.sched_priority = 30;
-  pthread_setschedparam (pthread_self (), policy, &param);
-  sleep (1);
-
-  while (aio_error (aiocbp) == EINPROGRESS);
-
-  /* Bad file descriptor */
-  puts ("Init: aio_read() - EBADF ");
-
-  result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
-  status = aio_error (aiocbp);
-  rtems_test_assert (status != EBADF);
-  free_aiocb (aiocbp);
-
-  /* Invalid offset */
-  puts ("Init: aio_read() - EINVAL [aio_offset]");
-
-  aiocbp = create_aiocb ();
-  aiocbp->aio_offset = -1;
-  aio_read (aiocbp);
-  sleep (1);
-
-  while (aio_error (aiocbp) == EINPROGRESS);
-
-  result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
-  status = aio_error (aiocbp);
-  rtems_test_assert (status != EINVAL);
-  free_aiocb (aiocbp);
-
-  /* Invalid request priority */
-  puts ("Init: aio_read() - EINVAL [aio_reqprio]");
-
-  aiocbp = create_aiocb ();
-  aiocbp->aio_reqprio = AIO_PRIO_DELTA_MAX + 1;
-  aio_read (aiocbp);
-  sleep (1);
-
-  while (aio_error (aiocbp) == EINPROGRESS);
-
-  result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
-  status = aio_error (aiocbp);
-  rtems_test_assert (status != EINVAL);
-  free_aiocb (aiocbp);
-
-  /* aio_nbytes > 0 && aio_nbytes + aio_offset > max offset of aio_fildes */
-  puts ("Init: aio_read() - OVERFLOW");
-  aiocbp = create_aiocb ();
-  aiocbp->aio_nbytes = 10;
-  aiocbp->aio_offset = lseek (aiocbp->aio_fildes, 0, SEEK_END);
-  aio_read (aiocbp);
-  sleep (1);
-
-  while (aio_error (aiocbp) == EINPROGRESS);
-
-  result = aio_return (aiocbp);
-  rtems_test_assert (result != -1);
-  status = aio_error (aiocbp);
-  rtems_test_assert (status != EFBIG);
-  free_aiocb (aiocbp);
-
   puts ("*** END OF POSIX AIO TEST 01 ***");
 
+  for (i = 0; i < MAX; i++)
+    {
+      close (fd[i]);
+      free_aiocb (aiocbp[i]);      
+    }
+  free_aiocb (aiocbp[i]);
+  free_aiocb (aiocbp[i+1]);
   rtems_test_exit (0);
 
   return NULL;
