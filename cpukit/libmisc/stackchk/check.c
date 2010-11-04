@@ -81,7 +81,7 @@ static inline bool Stack_check_Frame_pointer_in_range(
 #if (CPU_STACK_GROWS_UP == TRUE)
   #define Stack_check_Get_pattern( _the_stack ) \
     ((char *)(_the_stack)->area + \
-         (_the_stack)->size - sizeof( Stack_check_Control ) ))
+         (_the_stack)->size - sizeof( Stack_check_Control ) )
 
   #define Stack_check_Calculate_used( _low, _size, _high_water ) \
       ((char *)(_high_water) - (char *)(_low))
@@ -97,8 +97,7 @@ static inline bool Stack_check_Frame_pointer_in_range(
    * for the free list into this area.
    */
   #define Stack_check_Get_pattern( _the_stack ) \
-    ((char *)(_the_stack)->area \
-      + sizeof(Heap_Block) - HEAP_BLOCK_HEADER_SIZE))
+    ((char *)(_the_stack)->area + sizeof(Heap_Block) - HEAP_BLOCK_HEADER_SIZE)
 
   #define Stack_check_Calculate_used( _low, _size, _high_water) \
       ( ((char *)(_low) + (_size)) - (char *)(_high_water) )
@@ -112,7 +111,7 @@ static inline bool Stack_check_Frame_pointer_in_range(
  *  Obtain a properly typed pointer to the area to check.
  */
 #define Stack_check_Get_pattern_area( _the_stack ) \
-  ((Stack_check_Control *) Stack_check_Get_pattern( _the_stack )
+  (Stack_check_Control *) Stack_check_Get_pattern( _the_stack )
 
 /*
  *  The assumption is that if the pattern gets overwritten, the task

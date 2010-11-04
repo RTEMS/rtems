@@ -80,7 +80,6 @@ void _IO_Manager_initialization(void)
 
   for ( index = 0 ; index < drivers_in_table ; index++ )
     _IO_Driver_address_table[index] = driver_table[index];
-  number_of_drivers = drivers_in_table;
 }
 
 /*

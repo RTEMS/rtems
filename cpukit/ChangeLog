@@ -1,5 +1,11 @@
 2010-11-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/stackchk/check.c: Make compile again.
+	* sapi/src/io.c, score/src/heap.c: Address dead assignment
+	issues found by clang.
+
+2010-11-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/stackchk/check.c: Address casting issue highlighted by clang.
 	There was no need for an intermediate cast to a structure pointer.
 

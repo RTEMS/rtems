@@ -416,7 +416,6 @@ static Heap_Block *_Heap_Block_allocate_from_end(
     uintptr_t const prev_block_size = _Heap_Block_size( prev_block );
 
     block = prev_block;
-    block_begin = (uintptr_t) block;
     block_size += prev_block_size;
   }
 
