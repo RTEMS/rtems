@@ -79,8 +79,8 @@ static inline bool Stack_check_Frame_pointer_in_range(
  *  whether the stack grow to the high or low area of the memory.
  */
 #if (CPU_STACK_GROWS_UP == TRUE)
-  #define Stack_check_Get_pattern_area( _the_stack ) \
-    ((Stack_check_Control *) ((char *)(_the_stack)->area + \
+  #define Stack_check_Get_pattern( _the_stack ) \
+    ((char *)(_the_stack)->area + \
          (_the_stack)->size - sizeof( Stack_check_Control ) ))
 
   #define Stack_check_Calculate_used( _low, _size, _high_water ) \
@@ -96,8 +96,8 @@ static inline bool Stack_check_Frame_pointer_in_range(
    * The task stack free operation will write the next and previous pointers
    * for the free list into this area.
    */
-  #define Stack_check_Get_pattern_area( _the_stack ) \
-    ((Stack_check_Control *) ((char *)(_the_stack)->area \
+  #define Stack_check_Get_pattern( _the_stack ) \
+    ((char *)(_the_stack)->area \
       + sizeof(Heap_Block) - HEAP_BLOCK_HEADER_SIZE))
 
   #define Stack_check_Calculate_used( _low, _size, _high_water) \
@@ -107,6 +107,12 @@ static inline bool Stack_check_Frame_pointer_in_range(
       ((char *)(_the_stack)->area + sizeof(Stack_check_Control))
 
 #endif
+
+/*
+ *  Obtain a properly typed pointer to the area to check.
+ */
+#define Stack_check_Get_pattern_area( _the_stack ) \
+  ((Stack_check_Control *) Stack_check_Get_pattern( _the_stack )
 
 /*
  *  The assumption is that if the pattern gets overwritten, the task
@@ -219,8 +225,8 @@ void Stack_check_report_blown_task(
 void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
 {
   Stack_Control *stack = &running->Start.Initial_stack;
-  void *pattern_area = Stack_check_Get_pattern_area(stack);
-  char name [32];
+  void          *pattern_area = Stack_check_Get_pattern(stack);
+  char           name[32];
 
   printk("BLOWN STACK!!!\n");
   printk("task control block: 0x%08" PRIxPTR "\n", running);
@@ -270,10 +276,10 @@ void rtems_stack_checker_switch_extension(
 {
   Stack_Control *the_stack = &running->Start.Initial_stack;
   void          *pattern;
-  bool        sp_ok;
-  bool        pattern_ok = true;
+  bool           sp_ok;
+  bool           pattern_ok = true;
 
-  pattern = (void *) Stack_check_Get_pattern_area(the_stack)->pattern;
+  pattern = Stack_check_Get_pattern_area(the_stack);
 
   /*
    *  Check for an out of bounds stack pointer or an overwrite
@@ -309,7 +315,7 @@ bool rtems_stack_checker_is_blown( void )
    */
   if ( Stack_check_Initialized ) {
     pattern_ok = (!memcmp(
-      (void *) Stack_check_Get_pattern_area(the_stack)->pattern,
+      Stack_check_Get_pattern(the_stack),
       (void *) Stack_check_Pattern.pattern,
       PATTERN_SIZE_BYTES
     ));
