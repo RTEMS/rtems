@@ -745,7 +745,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  XXX document implementation including references if appropriate
  */
 
-#define eCPU_Context_Restart_self( _the_context ) \
+#define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( _the_context );
 
 /*
