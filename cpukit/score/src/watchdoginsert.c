@@ -59,21 +59,7 @@ void _Watchdog_Insert(
 restart:
   delta_interval = the_watchdog->initial;
 
-  /*
-   * We CANT use _Watchdog_First() here, because a TICK interrupt
-   * could modify the chain during the _ISR_Flash() below. Hence,
-   * the header is pointing to volatile data. The _Watchdog_First()
-   * INLINE routine (but not the macro - note the subtle difference)
-   * casts away the 'volatile'...
-   *
-   * Also, this is only necessary because we call no other routine
-   * from this piece of code, hence the compiler thinks it's safe to
-   * cache *header!!
-   *
-   *  Till Straumann, 7/2003 (gcc-3.2.2 -O4 on powerpc)
-   *
-   */
-  for ( after = (Watchdog_Control *) ((volatile Chain_Control *)header)->first ;
+  for ( after = _Watchdog_First( header ) ;
         ;
         after = _Watchdog_Next( after ) ) {
 
@@ -86,15 +72,6 @@ restart:
      }
 
      delta_interval -= after->delta_interval;
-
-     /*
-      *  If you experience problems comment out the _ISR_Flash line.
-      *  3.2.0 was the first release with this critical section redesigned.
-      *  Under certain circumstances, the PREVIOUS critical section algorithm
-      *  used around this flash point allowed interrupts to execute
-      *  which violated the design assumptions.  The critical section
-      *  mechanism used here WAS redesigned to address this.
-      */
 
      _ISR_Flash( level );
 

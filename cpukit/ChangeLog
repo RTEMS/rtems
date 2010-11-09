@@ -1,3 +1,10 @@
+2010-11-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/src/watchdoginsert.c: Removed superfluous cast and use
+	appropriate API function.  This special case handling is obsolete
+	since 2006 with the introduction of compiler memory barriers in the
+	interrupt routines.  Removed obsolete comments.
+
 2010-11-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/stackchk/check.c: Make compile again.
