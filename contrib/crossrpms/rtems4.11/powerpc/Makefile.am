@@ -5,9 +5,9 @@ TARGET = powerpc-rtems4.11
 
 include $(top_srcdir)/mkspec.am
 
-BINUTILS_VERS = 2.20.1
+BINUTILS_VERS = 2.20.90
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 3
+BINUTILS_RPMREL = 1
 include ../binutils.am
 BINUTILS_OPTS +=
 
