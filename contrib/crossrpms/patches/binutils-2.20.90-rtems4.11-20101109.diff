@@ -1,0 +1,76 @@
+diff -Naur binutils-2.20.90.orig/bfd/config.bfd binutils-2.20.90/bfd/config.bfd
+--- binutils-2.20.90.orig/bfd/config.bfd	2010-10-22 14:08:27.000000000 +0200
++++ binutils-2.20.90/bfd/config.bfd	2010-11-09 12:48:21.113099037 +0100
+@@ -1432,7 +1432,7 @@
+     targ_selvecs="bfd_elf32_sparc_vec sparclinux_vec sunos_big_vec"
+     want64=true
+     ;;
+-  sparc64-*-elf*)
++  sparc64-*-elf* | sparc64-*-rtems* )
+     targ_defvec=bfd_elf64_sparc_vec
+     targ_selvecs=bfd_elf32_sparc_vec
+     want64=true
+@@ -1441,7 +1441,7 @@
+   sparc*-*-coff*)
+     targ_defvec=sparccoff_vec
+     ;;
+-  sparc*-*-rtems*)
++  sparc-*-rtems*)
+     targ_defvec=bfd_elf32_sparc_vec
+     targ_selvecs="sunos_big_vec sparccoff_vec"
+     ;;
+diff -Naur binutils-2.20.90.orig/bfd/Makefile.am binutils-2.20.90/bfd/Makefile.am
+--- binutils-2.20.90.orig/bfd/Makefile.am	2010-08-12 19:49:42.000000000 +0200
++++ binutils-2.20.90/bfd/Makefile.am	2010-11-09 12:48:57.392098489 +0100
+@@ -4,7 +4,7 @@
+ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ 
+ # Uncomment the following line when doing a release.
+-# RELEASE=y
++RELEASE=y
+ 
+ INCDIR = $(srcdir)/../include
+ CSEARCH = -I. -I$(srcdir) -I$(INCDIR)
+diff -Naur binutils-2.20.90.orig/bfd/Makefile.in binutils-2.20.90/bfd/Makefile.in
+--- binutils-2.20.90.orig/bfd/Makefile.in	2010-11-05 11:31:46.000000000 +0100
++++ binutils-2.20.90/bfd/Makefile.in	2010-11-09 12:48:57.393097669 +0100
+@@ -319,7 +319,7 @@
+ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ 
+ # Uncomment the following line when doing a release.
+-# RELEASE=y
++RELEASE = y
+ INCDIR = $(srcdir)/../include
+ CSEARCH = -I. -I$(srcdir) -I$(INCDIR)
+ SUBDIRS = doc po
+diff -Naur binutils-2.20.90.orig/gas/configure.tgt binutils-2.20.90/gas/configure.tgt
+--- binutils-2.20.90.orig/gas/configure.tgt	2010-08-25 14:03:30.000000000 +0200
++++ binutils-2.20.90/gas/configure.tgt	2010-11-09 12:46:51.755113969 +0100
+@@ -369,6 +369,7 @@
+   shle*-*-kaos*)			fmt=elf ;;
+   sh64-*-elf*)				fmt=elf ;;
+ 
++  sparc64-*-rtems*)			fmt=elf ;;
+   sparc-*-rtems*)			fmt=elf ;;
+   sparc-*-sunos4*)			fmt=aout em=sun3 ;;
+   sparc-*-aout)				fmt=aout em=sparcaout ;;
+diff -Naur binutils-2.20.90.orig/ld/configure.tgt binutils-2.20.90/ld/configure.tgt
+--- binutils-2.20.90.orig/ld/configure.tgt	2010-09-03 00:54:44.000000000 +0200
++++ binutils-2.20.90/ld/configure.tgt	2010-11-09 12:45:29.217097360 +0100
+@@ -565,6 +565,7 @@
+ 			targ_extra_libpath=$targ_extra_emuls ;;
+ sparc64-*-aout*)	targ_emul=sparcaout ;;
+ sparc64-*-elf*)		targ_emul=elf64_sparc ;;
++sparc64-*-rtems*)	targ_emul=elf64_sparc ;;
+ sparc-sun-sunos4*) 	targ_emul=sun4 ;;
+ sparclite*-*-elf)	targ_emul=elf32_sparc ;;
+ sparclite*-*-coff)	targ_emul=coff_sparc ;;
+@@ -614,7 +615,7 @@
+ 			tdir_elf32_sparc=`echo ${targ_alias} | sed -e 's/64//'` ;;
+ sparc*-*-solaris2*)	targ_emul=elf32_sparc ;;
+ sparc*-wrs-vxworks*)	targ_emul=sparcaout ;;
+-sparc*-*-rtems*)        targ_emul=elf32_sparc
++sparc-*-rtems*)		targ_emul=elf32_sparc
+ 			;;
+ spu-*-elf*)		targ_emul=elf32_spu ;;
+ tic30-*-*aout*)		targ_emul=tic30aout ;;
