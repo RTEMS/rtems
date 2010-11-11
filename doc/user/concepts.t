@@ -98,7 +98,7 @@ an object name:
 #include <rtems.h>
 #include <rtems/bspIo.h>
 
-void print_name(rtems_id the_object)
+void print_name(rtems_id id)
 @{
   char  buffer[10];   /* name assumed to be 10 characters or less */
   char *result;
