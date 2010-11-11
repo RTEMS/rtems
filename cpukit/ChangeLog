@@ -1,3 +1,7 @@
+2010-11-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/include/rtems/score/userext.h: Documentation.
+
 2010-11-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/src/watchdoginsert.c: Removed superfluous cast and use

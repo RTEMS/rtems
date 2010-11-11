@@ -53,15 +53,24 @@ typedef void User_extensions_routine RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
  * It is invoked after the new thread has been completely initialized, but
  * before it is placed on a ready chain.
  *
- * Thread dispatching may be disabled.  It can be assumed that the executing
- * thread locked the allocator mutex.  They only exception is the creation of
- * the idle thread.  In this case the allocator mutex is not locked.
+ * Thread dispatching may be disabled.  This depends on the context of the
+ * _Thread_Initialize() call.  Thread dispatch is disabled during the creation
+ * of the idle thread and the initialization threads.  It can be considered as
+ * an invalid API usage, if the application calls _Thread_Initialize() with
+ * disabled thread dispatching.  Disabled thread dispatching is different from
+ * disabled preemption.
  *
- * The user extension is expected to return @c true if it successfully
- * executed, and @c false otherwise. A thread create user extension will
- * frequently attempt to allocate resources. If this allocation fails, then the
- * extension should return @c false and the entire task create operation will
- * fail.
+ * It can be assumed that the executing thread locked the allocator mutex.
+ * The only exception is the creation of the idle thread.  In this case the
+ * allocator mutex is not locked.  Since the allocator mutex is non-recursive,
+ * it is prohibited to call the normal memory allocation routines.  It is
+ * possible to use internal rountines like _Workspace_Allocate() or
+ * _Heap_Allocate() for heaps which are protected by the allocator mutex.
+ *
+ * @retval true The thread create extension was successful.
+ * @retval false A thread create user extension will frequently attempt to
+ * allocate resources.  If this allocation fails, then the extension should
+ * return @a false and the entire thread create operation will fail.
  */
 typedef bool ( *User_extensions_thread_create_extension )(
   Thread_Control *,
