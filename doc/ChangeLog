@@ -1,3 +1,9 @@
+2010-11-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1716/doc
+	* user/concepts.t: print_name example used a variable which did not
+	match the name of the passed in parameter.
+
 2010-11-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1714/doc
