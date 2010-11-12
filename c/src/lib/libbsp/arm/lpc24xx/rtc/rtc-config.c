@@ -78,7 +78,7 @@ const rtc_fns lpc24xx_rtc_ops = {
   .deviceSetTime = lpc24xx_rtc_set_time
 };
 
-unsigned long RTC_Count = LPC24XX_RTC_NUMBER;
+size_t RTC_Count = LPC24XX_RTC_NUMBER;
 
 rtems_device_minor_number RTC_Minor = 0;
 
