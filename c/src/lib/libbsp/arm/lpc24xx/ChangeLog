@@ -1,5 +1,10 @@
 2010-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* misc/system-clocks.c: Use define instead of function call to allow
+	smaller delays.
+
+2010-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* rtc/rtc-config.c: Fixed type.
 
 2010-10-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
