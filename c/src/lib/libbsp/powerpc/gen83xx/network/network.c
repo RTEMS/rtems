@@ -67,12 +67,11 @@ int BSP_tsec_attach
 \*=========================================================================*/
 {
   int    unitNumber;
-  char   *unitName;
 
   /*
    * Parse driver name
    */
-  if((unitNumber = rtems_bsdnet_parse_driver_name(config, &unitName)) < 0) {
+  if((unitNumber = rtems_bsdnet_parse_driver_name(config, NULL)) < 0) {
     return 0;
   }
   if (attaching) {

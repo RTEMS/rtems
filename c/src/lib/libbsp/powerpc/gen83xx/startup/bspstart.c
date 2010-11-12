@@ -20,6 +20,8 @@
  * $Id$
  */
 
+#include <libchip/serial.h>
+
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
@@ -83,6 +85,7 @@ void _BSP_Fatal_error(unsigned n)
 void bsp_start( void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
+  unsigned long i = 0;
 
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
@@ -126,6 +129,16 @@ void bsp_start( void)
   BSP_bus_frequency = BSP_CLKIN_FRQ * BSP_SYSPLL_MF / BSP_SYSPLL_CKID;
   bsp_clicks_per_usec = BSP_bus_frequency / 4000000;
 #endif /* HAS_UBOOT */
+
+  /* Initialize some console parameters */
+  for (i = 0; i < Console_Port_Count; ++i) {
+    Console_Port_Tbl [i].ulClock = BSP_bus_frequency;
+
+    #ifdef HAS_UBOOT
+      Console_Port_Tbl [i].pDeviceParams =
+        (void *) bsp_uboot_board_info.bi_baudrate;
+    #endif
+  }
 
   /* Initialize exception handler */
   sc = ppc_exc_initialize(

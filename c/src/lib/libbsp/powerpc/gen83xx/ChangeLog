@@ -1,3 +1,15 @@
+2010-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console/console.h, console/console.c, console/config.c,
+	console/ns16550cfg.c: Removed files.
+	* console/console-config.c: New file.
+	* Makefile.am: Reflect changes above.
+	* configure.ac: New BSP options.
+	* include/bsp.h: Use new BSP options.
+	* network/network.c: Avoid memory leak.
+	* startup/bspstart.c: Initialize console port table.
+	* spi/spi_init.c: Update for SD card API changes.
+
 2010-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Remove AC_CHECK_SIZEOF([void *]).

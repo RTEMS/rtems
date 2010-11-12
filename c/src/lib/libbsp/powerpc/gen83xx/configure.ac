@@ -43,6 +43,24 @@ RTEMS_BSPOPTS_SET([MPC8349],[hsc_cm01],[1])
 RTEMS_BSPOPTS_HELP([MPC8349],
 [If defined, use custom settings for the MPC8349 libcpu family.])
 
+RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[mpc8313erdb],[115200])
+RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[*],[9600])
+RTEMS_BSPOPTS_HELP([BSP_CONSOLE_BAUD],[Default baud for console and other serial devices.])
+
+RTEMS_BSPOPTS_SET([BSP_USE_UART_INTERRUPTS],[mpc8313erdb],[1])
+RTEMS_BSPOPTS_HELP([BSP_USE_UART_INTERRUPTS],[enable usage of interrupts for the UART modules])
+
+RTEMS_BSPOPTS_SET([BSP_USE_UART2],[mpc8313erdb],[1])
+RTEMS_BSPOPTS_SET([BSP_USE_UART2],[mpc8349eamds],[1])
+RTEMS_BSPOPTS_SET([BSP_USE_UART2],[hsc_cm01],[1])
+RTEMS_BSPOPTS_HELP([BSP_USE_UART2],[If defined, enables UART2.])
+
+RTEMS_BSPOPTS_SET([HAS_UBOOT],[mpc8313erdb],[1])
+RTEMS_BSPOPTS_HELP([HAS_UBOOT],[If defined, enables U-Boot support.])
+
+RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[1])
+RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE], [If defined, then the PowerPC specific
+ code in RTEMS will use data cache instructions to optimize the context switch code.])
 
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")

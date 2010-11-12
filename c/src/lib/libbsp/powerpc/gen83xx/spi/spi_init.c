@@ -247,31 +247,26 @@ static mpc83xx_spi_desc_t bsp_spi_bus_desc = {
 
 #include <libchip/spi-sd-card.h>
 
-sd_card_driver_entry sd_card_driver_table [1] = { {
-#if 0
-                .driver = {
-                        .ops = &sd_card_driver_ops,
-                        .size = sizeof( sd_card_driver_entry)
-                },
-                .table_index = 0,
-                .minor = 0,
-#endif
-                .device_name = "sd-card-a",
-#if 0
-                .disk_device_name = "/dev/sd-card-a",
-#endif
-                .transfer_mode = SD_CARD_TRANSFER_MODE_DEFAULT,
-                .command = SD_CARD_COMMAND_DEFAULT,
-                /* .response = whatever, */
-                .response_index = SD_CARD_COMMAND_SIZE,
-                .n_ac_max = SD_CARD_N_AC_MAX_DEFAULT,
-                .block_number = 0,
-                .block_size = 0,
-                .block_size_shift = 0,
-                .busy = 1,
-                .verbose = 1,
-                .schedule_if_busy = 0
-        }
+#define SD_CARD_NUMBER 1
+
+size_t sd_card_driver_table_size = SD_CARD_NUMBER;
+
+sd_card_driver_entry sd_card_driver_table [SD_CARD_NUMBER] = {
+  {
+    .device_name = "/dev/sd-card-a",
+    .bus = 0,
+    .transfer_mode = SD_CARD_TRANSFER_MODE_DEFAULT,
+    .command = SD_CARD_COMMAND_DEFAULT,
+    /* .response = whatever, */
+    .response_index = SD_CARD_COMMAND_SIZE,
+    .n_ac_max = SD_CARD_N_AC_MAX_DEFAULT,
+    .block_number = 0,
+    .block_size = 0,
+    .block_size_shift = 0,
+    .busy = true,
+    .verbose = true,
+    .schedule_if_busy = false
+  }
 };
 
 #endif /* MPC8313ERDB */
@@ -299,6 +294,7 @@ rtems_status_code bsp_register_spi
 |    0 or error code                                                        |
 \*=========================================================================*/
 {
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
   int ret_code;
   unsigned spi_busno;
 
@@ -378,12 +374,11 @@ rtems_status_code bsp_register_spi
 #if defined( MPC8313ERDB)
 
   /* Register SD Card driver */
-  ret_code = rtems_libi2c_register_drv(
-    sd_card_driver_table [0].device_name,
-    (rtems_libi2c_drv_t *) &sd_card_driver_table [0],
-    spi_busno,
-    0
-  );
+  sd_card_driver_table [0].bus = spi_busno;
+  sc = sd_card_register();
+  if (sc != RTEMS_SUCCESSFUL) {
+    return sc;
+  }
 
 #elif defined( MPC8349EAMDS)
 

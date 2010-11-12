@@ -79,7 +79,8 @@ libbsp_a_SOURCES += irq/irq.c \
 	../../shared/src/irq-server.c
 
 # console
-libbsp_a_SOURCES += console/console.c console/ns16550cfg.c
+libbsp_a_SOURCES += ../../shared/console.c \
+	console/console-config.c
 # bsp_i2c
 libbsp_a_SOURCES += i2c/i2c_init.c
 # bsp_spi

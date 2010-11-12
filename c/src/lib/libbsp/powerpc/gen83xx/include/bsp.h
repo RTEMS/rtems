@@ -20,21 +20,9 @@
 #ifndef __GEN83xx_BSP_h
 #define __GEN83xx_BSP_h
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 #include <bspopts.h>
-
-/*
- * MPC8313E Reference Design Board
- */
-
-#ifdef MPC8313ERDB
-
-#define HAS_UBOOT
-
-/* For U-Boot */
-#define CONFIG_MPC83XX
-#define CONFIG_HAS_ETH1
-
-#endif /* MPC8313ERDB */
 
 #include <libcpu/powerpc-utility.h>
 
@@ -78,25 +66,23 @@ LINKER_SYMBOL(IMMRBAR);
 extern "C" {
 #endif
 
-
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
-#include <bsp/irq.h>
 #include <bsp/vectors.h>
-#include <bsp/tictac.h>
+#include <bsp/irq.h>
 
 #ifdef HAS_UBOOT
+  #ifdef MPC8313ERDB
+    #define CONFIG_MPC83XX
+    #define CONFIG_HAS_ETH1
+  #endif
 
-#include <bsp/u-boot.h>
+  #include <bsp/u-boot.h>
 
-extern bd_t bsp_uboot_board_info;
-extern const size_t bsp_uboot_board_info_size;
-
-#endif /* HAS_UBOOT */
-
-#define BSP_UART1_MINOR 0
-#define BSP_UART2_MINOR 1
+  extern bd_t bsp_uboot_board_info;
+  extern const size_t bsp_uboot_board_info_size;
+#endif
 
 /*
  * indicate, that BSP has no IDE driver
@@ -111,21 +97,6 @@ extern const size_t bsp_uboot_board_info_size;
 rtems_status_code bsp_register_i2c(void);
 rtems_status_code bsp_register_spi(void);
 
-/* console modes (only termios) */
-#ifdef  PRINTK_MINOR
-#undef  PRINTK_MINOR
-#endif
-#define PRINTK_MINOR BSP_UART1_MINOR
-
-#if defined(MPC8249EAMDS) || defined(HSC_CM01)
-#define BSP_USE_UART2 TRUE
-#else
-#define BSP_USE_UART2 FALSE
-#endif
-
-#define SINGLE_CHAR_MODE
-#define UARTS_USE_TERMIOS_INT   1
-
 /*
  * Network driver configuration
  */
@@ -134,16 +105,12 @@ extern int BSP_tsec_attach(struct rtems_bsdnet_ifconfig *config,int attaching);
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	BSP_tsec_attach
 
 #ifdef MPC8313ERDB
-
-#define RTEMS_BSP_NETWORK_DRIVER_NAME	"tsec2"
-#define RTEMS_BSP_NETWORK_DRIVER_NAME2	"tsec1"
-
-#else /* MPC8313ERDB */
-
-#define RTEMS_BSP_NETWORK_DRIVER_NAME	"tsec1"
-#define RTEMS_BSP_NETWORK_DRIVER_NAME2	"tsec2"
-
-#endif /* MPC8313ERDB */
+  #define RTEMS_BSP_NETWORK_DRIVER_NAME "tsec2"
+  #define RTEMS_BSP_NETWORK_DRIVER_NAME2 "tsec1"
+#else
+  #define RTEMS_BSP_NETWORK_DRIVER_NAME "tsec1"
+  #define RTEMS_BSP_NETWORK_DRIVER_NAME2 "tsec2"
+#endif
 
 #if defined(MPC8349EAMDS)
 /*
