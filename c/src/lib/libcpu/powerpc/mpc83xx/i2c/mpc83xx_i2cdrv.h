@@ -19,12 +19,28 @@
 #ifndef _MPC83XX_I2CDRV_H
 #define _MPC83XX_I2CDRV_H
 
-#include <mpc83xx/mpc83xx.h>
 #include <rtems/libi2c.h>
 #include <rtems/irq.h>
 
+#include <bsp.h>
+
+#ifdef __GEN83xx_BSP_h
+  #include <mpc83xx/mpc83xx.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#ifdef LIBBSP_POWERPC_MPC55XXEVB_BSP_H
+  typedef struct {
+    volatile uint8_t i2cadr;
+    volatile uint8_t i2cfdr;
+    volatile uint8_t i2ccr;
+    volatile uint8_t i2csr;
+    volatile uint8_t i2cdr;
+    volatile uint8_t i2cdfsrr;
+  } m83xxI2CRegisters_t;
 #endif
 
 typedef struct mpc83xx_i2c_softc {

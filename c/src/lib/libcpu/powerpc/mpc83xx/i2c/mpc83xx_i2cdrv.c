@@ -19,14 +19,38 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <mpc83xx/mpc83xx.h>
-#include <mpc83xx/mpc83xx_i2cdrv.h>
+#if defined(__GEN83xx_BSP_h)
+  #include <mpc83xx/mpc83xx_i2cdrv.h>
+#elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
+  #include <bsp/mpc83xx_i2cdrv.h>
+#endif
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
 #include <errno.h>
 #include <rtems/libi2c.h>
 
 #undef DEBUG
+
+#if defined(__GEN83xx_BSP_h)
+  #define I2CCR_MEN  (1 << 7)   /* module enable */
+#elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
+  #define I2CCR_MDIS (1 << 7)   /* module disable */
+#endif
+#define I2CCR_MIEN (1 << 6)     /* module interrupt enable */
+#define I2CCR_MSTA (1 << 5)     /* 0->1 generates a start condiiton, 1->0 a stop */
+#define I2CCR_MTX  (1 << 4)     /* 0 = receive mode, 1 = transmit mode           */
+#define I2CCR_TXAK (1 << 3)     /* 0 = send ack 1 = send nak during receive      */
+#define I2CCR_RSTA (1 << 2)     /* 1 = send repeated start condition             */
+#define I2CCR_BCST (1 << 0)     /* 0 = disable 1 = enable broadcast accept       */
+
+#define I2CSR_MCF  (1 << 7)     /* data transfer (0=transfer in progres) */
+#define I2CSR_MAAS (1 << 6)     /* addessed as slave   */
+#define I2CSR_MBB  (1 << 5)     /* bus busy            */
+#define I2CSR_MAL  (1 << 4)     /* arbitration lost    */
+#define I2CSR_BCSTM (1 << 3)    /* broadcast match     */
+#define I2CSR_SRW  (1 << 2)     /* slave read/write    */
+#define I2CSR_MIF  (1 << 1)     /* module interrupt    */
+#define I2CSR_RXAK (1 << 0)     /* receive acknowledge */
 
 /*=========================================================================*\
 | Function:                                                                 |
@@ -54,6 +78,7 @@ static rtems_status_code mpc83xx_i2c_find_clock_divider
     int divider;
     int fdr_val;
   } dividers[] ={
+#if defined(__GEN83xx_BSP_h)
     {  256,0x20 }, {  288,0x21 }, {  320,0x22 }, {  352,0x23 },
     {  384,0x00 }, {  416,0x01 }, {  448,0x25 }, {  480,0x02 },
     {  512,0x26 }, {  576,0x03 }, {  640,0x04 }, {  704,0x05 },
@@ -67,6 +92,9 @@ static rtems_status_code mpc83xx_i2c_find_clock_divider
     {18432,0x18 }, {20480,0x19 }, {24576,0x1A }, {28672,0x3E },
     {30720,0x1B }, {32768,0x3F }, {36864,0x1C }, {40960,0x1D },
     {49152,0x1E }, {61440,0x1F }
+#elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
+    { 768, 0x31 }
+#endif
   };
 
   if (divider <= 0) {
@@ -120,7 +148,7 @@ static int mpc83xx_i2c_wait
     /*
      * enable interrupt mask
      */
-    softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_MIEN;
+    softc_ptr->reg_ptr->i2ccr |= I2CCR_MIEN;
     rc = rtems_semaphore_obtain(softc_ptr->irq_sema_id,RTEMS_WAIT,100);
     if (rc != RTEMS_SUCCESSFUL) {
       return rc;
@@ -135,9 +163,9 @@ static int mpc83xx_i2c_wait
 #endif
 	return RTEMS_TIMEOUT;
       }
-    } while (!(softc_ptr->reg_ptr->i2csr & MPC83XX_I2CSR_MIF));
+    } while (!(softc_ptr->reg_ptr->i2csr & I2CSR_MIF));
   }
-  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MIEN;
+  softc_ptr->reg_ptr->i2ccr &= ~I2CCR_MIEN;
 
   act_status = softc_ptr->reg_ptr->i2csr;
   if ((act_status  & status_mask) != desired_status) {
@@ -175,12 +203,12 @@ static void mpc83xx_i2c_irq_handler
   /*
    * clear IRQ flag
    */
-  softc_ptr->reg_ptr->i2csr &= ~MPC83XX_I2CSR_MIF;
+  softc_ptr->reg_ptr->i2csr &= ~I2CSR_MIF;
 
   /*
    * disable interrupt mask
    */
-  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MIEN;
+  softc_ptr->reg_ptr->i2ccr &= ~I2CCR_MIEN;
   if (softc_ptr->initialized) {
     rtems_semaphore_release(softc_ptr->irq_sema_id);
   }
@@ -344,7 +372,11 @@ static rtems_status_code mpc83xx_i2c_init
   /*
    * set control register to module enable
    */
-  softc_ptr->reg_ptr->i2ccr = MPC83XX_I2CCR_MEN;
+  #if defined(__GEN83xx_BSP_h)
+    softc_ptr->reg_ptr->i2ccr = I2CCR_MEN;
+  #elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
+    softc_ptr->reg_ptr->i2ccr = 0;
+  #endif
 
   /*
    * init interrupt stuff
@@ -384,14 +416,14 @@ static rtems_status_code mpc83xx_i2c_send_start
 #if defined(DEBUG)
   printk("mpc83xx_i2c_send_start called... ");
 #endif
-  if (0 != (softc_ptr->reg_ptr->i2ccr & MPC83XX_I2CCR_MSTA)) {
+  if (0 != (softc_ptr->reg_ptr->i2ccr & I2CCR_MSTA)) {
     /*
      * already started, so send a "repeated start"
      */
-    softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_RSTA;
+    softc_ptr->reg_ptr->i2ccr |= I2CCR_RSTA;
   }
   else {
-    softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_MSTA;
+    softc_ptr->reg_ptr->i2ccr |= I2CCR_MSTA;
   }
 
 #if defined(DEBUG)
@@ -423,11 +455,11 @@ static rtems_status_code mpc83xx_i2c_send_stop
 #if defined(DEBUG)
   printk("mpc83xx_i2c_send_stop called... ");
 #endif
-  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MSTA;
+  softc_ptr->reg_ptr->i2ccr &= ~I2CCR_MSTA;
   /*
    * wait, 'til stop has been executed
    */
-  while (0 != (softc_ptr->reg_ptr->i2csr & MPC83XX_I2CSR_MBB)) {
+  while (0 != (softc_ptr->reg_ptr->i2csr & I2CSR_MBB)) {
     rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
   }
 #if defined(DEBUG)
@@ -464,7 +496,7 @@ static rtems_status_code mpc83xx_i2c_send_addr
 #if defined(DEBUG)
   printk("mpc83xx_i2c_send_addr called... ");
 #endif
-  softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_MTX;
+  softc_ptr->reg_ptr->i2ccr |= I2CCR_MTX;
   /*
    * determine, whether short or long address is needed, determine rd/wr
    */
@@ -480,9 +512,7 @@ static rtems_status_code mpc83xx_i2c_send_addr
     /*
      * wait for successful transfer
      */
-    rc = mpc83xx_i2c_wait(softc_ptr,
-			  MPC83XX_I2CSR_MCF,
-			  MPC83XX_I2CSR_MCF);
+    rc = mpc83xx_i2c_wait(softc_ptr, I2CSR_MCF, I2CSR_MCF | I2CSR_RXAK);
     if (rc != RTEMS_SUCCESSFUL) {
 #if defined(DEBUG)
       printk("... exit rc=%d\r\n",rc);
@@ -500,9 +530,7 @@ static rtems_status_code mpc83xx_i2c_send_addr
   /*
    * wait for successful transfer
    */
-  rc = mpc83xx_i2c_wait(softc_ptr,
-			MPC83XX_I2CSR_MCF,
-			MPC83XX_I2CSR_MCF);
+  rc = mpc83xx_i2c_wait(softc_ptr, I2CSR_MCF, I2CSR_MCF | I2CSR_RXAK);
 
 #if defined(DEBUG)
   printk("... exit rc=%d\r\n",rc);
@@ -538,8 +566,8 @@ static int mpc83xx_i2c_read_bytes
 #if defined(DEBUG)
   printk("mpc83xx_i2c_read_bytes called... ");
 #endif
-  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MTX;
-  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_TXAK;
+  softc_ptr->reg_ptr->i2ccr &= ~I2CCR_MTX;
+  softc_ptr->reg_ptr->i2ccr &= ~I2CCR_TXAK;
   /*
    * FIXME: do we need to deactivate TXAK from the start,
    * when only one byte is to be received?
@@ -554,14 +582,12 @@ static int mpc83xx_i2c_read_bytes
       /*
        * last byte is not acknowledged
        */
-      softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_TXAK;
+      softc_ptr->reg_ptr->i2ccr |= I2CCR_TXAK;
     }
     /*
      * wait 'til end of transfer
      */
-    rc = mpc83xx_i2c_wait(softc_ptr,
-			  MPC83XX_I2CSR_MCF,
-			  MPC83XX_I2CSR_MCF);
+    rc = mpc83xx_i2c_wait(softc_ptr, I2CSR_MCF, I2CSR_MCF);
     if (rc != RTEMS_SUCCESSFUL) {
 #if defined(DEBUG)
       printk("... exit rc=%d\r\n",-rc);
@@ -575,7 +601,7 @@ static int mpc83xx_i2c_read_bytes
  /*
   * wait 'til end of last transfer
   */
-  rc = mpc83xx_i2c_wait(softc_ptr, MPC83XX_I2CSR_MCF, MPC83XX_I2CSR_MCF);
+  rc = mpc83xx_i2c_wait(softc_ptr, I2CSR_MCF, I2CSR_MCF);
 
 #if defined(DEBUG)
   printk("... exit OK, rc=%d\r\n",p-buf);
@@ -612,15 +638,15 @@ static int mpc83xx_i2c_write_bytes
   printk("mpc83xx_i2c_write_bytes called... ");
 #endif
   softc_ptr->reg_ptr->i2ccr =
-    (softc_ptr->reg_ptr->i2ccr & ~MPC83XX_I2CCR_TXAK) | MPC83XX_I2CCR_MTX;
+    (softc_ptr->reg_ptr->i2ccr & ~I2CCR_TXAK) | I2CCR_MTX;
   while (len-- > 0) {
+    int rxack = len != 0 ? I2CSR_RXAK : 0;
+
     softc_ptr->reg_ptr->i2cdr = *p++;
     /*
      * wait 'til end of transfer
      */
-    rc = mpc83xx_i2c_wait(softc_ptr,
-			  MPC83XX_I2CSR_MCF,
-			  MPC83XX_I2CSR_MCF);
+    rc = mpc83xx_i2c_wait(softc_ptr, I2CSR_MCF, I2CSR_MCF | rxack);
     if (rc != RTEMS_SUCCESSFUL) {
 #if defined(DEBUG)
       printk("... exit rc=%d\r\n",-rc);

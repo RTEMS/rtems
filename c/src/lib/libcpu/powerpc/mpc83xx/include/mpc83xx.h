@@ -295,24 +295,6 @@ typedef struct m83xxI2CRegisters_ {
   uint8_t reserved0_3018[0x03100-0x03018]; /* 0x0_3018-30FF Reserved, should be cleared */
 } m83xxI2CRegisters_t;
 
-#define  MPC83XX_I2CCR_MEN  (1 << 7)     /* module enable */
-#define  MPC83XX_I2CCR_MIEN (1 << 6)     /* module interrupt enable */
-#define  MPC83XX_I2CCR_MSTA (1 << 5)     /* 0->1 generates a start condiiton, 1->0 a stop */
-#define  MPC83XX_I2CCR_MTX  (1 << 4)     /* 0 = receive mode, 1 = transmit mode           */
-#define  MPC83XX_I2CCR_TXAK (1 << 3)     /* 0 = send ack 1 = send nak during receive      */
-#define  MPC83XX_I2CCR_RSTA (1 << 2)     /* 1 = send repeated start condition             */
-#define  MPC83XX_I2CCR_BCST (1 << 0)     /* 0 = disable 1 = enable broadcast accept       */
-
-#define  MPC83XX_I2CSR_MCF  (1 << 7)     /* data transfer (0=transfer in progres) */
-#define  MPC83XX_I2CSR_MAAS (1 << 6)     /* addessed as slave   */
-#define  MPC83XX_I2CSR_MBB  (1 << 5)     /* bus busy            */
-#define  MPC83XX_I2CSR_MAL  (1 << 4)     /* arbitration lost    */
-#define  MPC83XX_I2CSR_BCSTM (1 << 3)    /* broadcast match     */
-#define  MPC83XX_I2CSR_SRW  (1 << 2)     /* slave read/write    */
-#define  MPC83XX_I2CSR_MIF  (1 << 1)     /* module interrupt    */
-#define  MPC83XX_I2CSR_RXAK (1 << 0)     /* receive acknowledge */
-
-
   /* DUART */
 typedef struct m83xxDUARTRegisters_ {
   union {
