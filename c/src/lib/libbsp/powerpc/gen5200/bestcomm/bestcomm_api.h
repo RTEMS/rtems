@@ -36,11 +36,17 @@
  * linked.
  */
 
+#include <rtems.h>
+
 #include "include/ppctypes.h"
 #include "include/mgt5200/sdma.h"
 #include "task_api/tasksetup_bdtable.h"
 #include "task_api/bestcomm_cntrl.h"
 #include "task_api/bestcomm_api_mem.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /*!
  * \brief	TaskSetup() debugging
@@ -271,8 +277,10 @@ typedef struct {
  * TaskId TaskSetup( TaskName_t TaskName,
  *                   TaskSetupParamSet_t *TaskSetupParams );
  */
-#define			TaskSetup(TaskName, TaskSetupParams)	\
+#define			TaskSetupHelper(TaskName, TaskSetupParams)	\
 				TaskSetup_ ## TaskName (TaskName ## _api, TaskSetupParams)
+#define			TaskSetup(TaskName, TaskSetupParams) \
+				TaskSetupHelper(TaskName, TaskSetupParams)
 
 const char		*TaskVersion(void);
 
@@ -282,9 +290,6 @@ int				TasksInitAPI_VM(uint8 *MBarRef, uint8 *MBarPhys);
 
 void			TasksLoadImage(sdma_regs *sdma);
 int				TasksAttachImage(sdma_regs *sdma);
-
-uint32			TasksGetSramOffset(void);
-void			TasksSetSramOffset(uint32 sram_offset);
 
 int				TaskStart(TaskId taskId, uint32 autoStartEnable,
 						  TaskId autoStartTask, uint32 intrEnable);
@@ -327,7 +332,7 @@ static inline int TaskStatus(TaskId taskId)
  */
 static inline TaskBD_t *TaskGetBD(TaskId taskId, BDIdx bd)
 {
-	TaskBD_t *bdTab;
+	void *bdTab;
 
 	bdTab = TaskBDIdxTable[taskId].BDTablePtr;
 	if (TaskBDIdxTable[taskId].numPtr == 1) {
@@ -350,7 +355,7 @@ static inline TaskBD_t *TaskGetBD(TaskId taskId, BDIdx bd)
  */
 static inline TaskBD_t *TaskGetBDRing(TaskId taskId)
 {
-	return TaskBDIdxTable[taskId].BDTablePtr;
+	return (TaskBD_t *) TaskBDIdxTable[taskId].BDTablePtr;
 }
 
 /*!
@@ -447,5 +452,9 @@ static inline uint16 TaskBDInUse(TaskId taskId)
 {
 	return TaskBDIdxTable[taskId].currBDInUse;
 }
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif	/* __BESTCOMM_API_H */

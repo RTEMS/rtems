@@ -7,6 +7,10 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
+include_bestcommdir = $(include_bspdir)/bestcomm
+include_bestcomm_includedir = $(include_bestcommdir)/include
+include_bestcomm_include_mgt5200dir = $(include_bestcomm_includedir)/mgt5200
+include_bestcomm_task_apidir = $(include_bestcommdir)/task_api
 
 dist_project_lib_DATA = bsp_specs
 
@@ -37,6 +41,7 @@ EXTRA_DIST = startup/linkcmds.brs5l
 EXTRA_DIST += startup/linkcmds.icecube
 EXTRA_DIST += startup/linkcmds.pm520_cr825
 EXTRA_DIST += startup/linkcmds.pm520_ze30
+EXTRA_DIST += startup/linkcmds.dp2
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
@@ -59,6 +64,20 @@ libbsp_a_SOURCES += bestcomm/include/ppctypes.h \
     bestcomm/task_api/bestcomm_api_mem.h bestcomm/task_api/bestcomm_cntrl.h \
     bestcomm/task_api/tasksetup_bdtable.h \
     bestcomm/task_api/tasksetup_general.h
+include_bestcomm_HEADERS = bestcomm/bestcomm_priv.h \
+	bestcomm/dma_image.h \
+	bestcomm/dma_image.capi.h \
+	bestcomm/bestcomm_api.h \
+	bestcomm/bestcomm_glue.h
+include_bestcomm_include_HEADERS = bestcomm/include/ppctypes.h \
+	bestcomm/include/mgt5200/sdma.h \
+	bestcomm/include/mgt5200/mgt5200.h
+include_bestcomm_include_mgt5200_HEADERS = bestcomm/include/mgt5200/mgt5200.h \
+	bestcomm/include/mgt5200/sdma.h
+include_bestcomm_task_api_HEADERS = bestcomm/task_api/tasksetup_general.h \
+	bestcomm/task_api/tasksetup_bdtable.h \
+	bestcomm/task_api/bestcomm_cntrl.h \
+	bestcomm/task_api/bestcomm_api_mem.h
 
 # clock
 # clock
@@ -72,6 +91,7 @@ libbsp_a_SOURCES += ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
 
 include_bsp_HEADERS = ../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h \
+	../../shared/include/utility.h \
 	include/irq.h \
 	include/i2cdrv.h \
 	include/i2c.h \

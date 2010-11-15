@@ -81,6 +81,4 @@ void TasksLoadImage(sdma_regs *sdma)
 		tt->fdt		= (sdma->taskBar & 0xFFFFFF00) + tt->fdt;
 		tt->context	+= sdma->taskBar;
 	}
-
-	SramOffsetGlobal = taskTableBytes;
 }

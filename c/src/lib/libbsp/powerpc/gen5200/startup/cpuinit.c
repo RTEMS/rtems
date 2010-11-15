@@ -112,16 +112,16 @@ static void calc_dbat_regvals(
   bat_ptr->batl.pp   = flg_bpp;
 }
 
-#if defined (BRS5L)
-void cpu_init_bsp(void)
+static void cpu_init_bsp(void)
 {
+#if defined (BRS5L)
   BAT dbat;
 
   calc_dbat_regvals(
     &dbat,
     (uint32_t) bsp_ram_start,
     (uint32_t) bsp_ram_size,
-    true,
+    false,
     false,
     false,
     false,
@@ -133,7 +133,7 @@ void cpu_init_bsp(void)
     &dbat,
     (uint32_t) bsp_rom_start,
     (uint32_t) bsp_rom_size,
-    true,
+    false,
     false,
     false,
     false,
@@ -164,10 +164,7 @@ void cpu_init_bsp(void)
     BPP_RW
   );
   SET_DBAT(3,dbat.batu,dbat.batl);
-}
 #elif defined (HAS_UBOOT)
-void cpu_init_bsp(void)
-{
   BAT dbat;
   uint32_t start = 0;
 
@@ -178,7 +175,7 @@ void cpu_init_bsp(void)
     &dbat,
     bsp_uboot_board_info.bi_memstart,
     bsp_uboot_board_info.bi_memsize,
-    true,
+    false,
     false,
     false,
     false,
@@ -203,7 +200,7 @@ void cpu_init_bsp(void)
     &dbat,
     start,
     bsp_uboot_board_info.bi_flashsize,
-    true,
+    false,
     false,
     false,
     false,
@@ -242,10 +239,44 @@ void cpu_init_bsp(void)
     );
     SET_DBAT(3,dbat.batu,dbat.batl);
   }
-}
 #else
 #warning "Using BAT register values set by environment"
 #endif
+
+#if defined(BSP_TYPE_DP2)
+  /* Enable BAT4-7 */
+  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(HID2, BSP_BBIT32(13));
+
+  /* FPGA */
+  calc_dbat_regvals(
+    &dbat,
+    0xf0020000,
+    128 * 1024,
+    false,
+    true,
+    false,
+    true,
+    BPP_RW
+  );
+  SET_DBAT(4, dbat.batu, dbat.batl);
+#elif defined(PM520_ZE30)
+  /* Enable BAT4-7 */
+  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(HID2, BSP_BBIT32(13));
+
+  /* External CC770 CAN controller available in version 2 */
+  calc_dbat_regvals(
+    &dbat,
+    0xf2000000,
+    128 * 1024,
+    false,
+    true,
+    false,
+    true,
+    BPP_RW
+  );
+  SET_DBAT(4, dbat.batu, dbat.batl);
+#endif
+}
 
 void cpu_init(void)
 {

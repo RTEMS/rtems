@@ -248,35 +248,35 @@ typedef struct {
   uint8_t tier;
 } mscan_context;
 
-bool mscan_enable( mscan *m, unsigned bit_rate);
+bool mscan_enable( volatile mscan *m, unsigned bit_rate);
 
-void mscan_disable( mscan *m);
+void mscan_disable( volatile mscan *m);
 
-void mscan_interrupts_disable( mscan *m);
+void mscan_interrupts_disable( volatile mscan *m);
 
-bool mscan_set_bit_rate( mscan *m, unsigned bit_rate);
+bool mscan_set_bit_rate( volatile mscan *m, unsigned bit_rate);
 
-void mscan_initialization_mode_enter( mscan *m, mscan_context *context);
+void mscan_initialization_mode_enter( volatile mscan *m, mscan_context *context);
 
-void mscan_initialization_mode_leave( mscan *m, const mscan_context *context);
+void mscan_initialization_mode_leave( volatile mscan *m, const mscan_context *context);
 
-void mscan_sleep_mode_enter( mscan *m);
+void mscan_sleep_mode_enter( volatile mscan *m);
 
-void mscan_sleep_mode_leave( mscan *m);
+void mscan_sleep_mode_leave( volatile mscan *m);
 
-volatile uint8_t *mscan_id_acceptance_register( mscan *m, unsigned i);
+volatile uint8_t *mscan_id_acceptance_register( volatile mscan *m, unsigned i);
 
-volatile uint8_t *mscan_id_mask_register( mscan *m, unsigned i);
+volatile uint8_t *mscan_id_mask_register( volatile mscan *m, unsigned i);
 
-unsigned mscan_filter_number( mscan *m);
+unsigned mscan_filter_number( volatile mscan *m);
 
-bool mscan_set_filter_number( mscan *m, unsigned number);
+bool mscan_set_filter_number( volatile mscan *m, unsigned number);
 
-bool mscan_filter_operation( mscan *m, bool set, unsigned index, uint32_t *id, uint32_t *mask);
+bool mscan_filter_operation( volatile mscan *m, bool set, unsigned index, uint32_t *id, uint32_t *mask);
 
-void mscan_filter_clear( mscan *m);
+void mscan_filter_clear( volatile mscan *m);
 
-void mscan_get_error_counters( mscan *m, unsigned *rec, unsigned *tec);
+void mscan_get_error_counters( volatile mscan *m, unsigned *rec, unsigned *tec);
 
 /** @} */
 

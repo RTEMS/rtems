@@ -25,11 +25,6 @@ RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
 [If defined, the instruction cache will be enabled after address translation
  is turned on.])
 
-RTEMS_BSPOPTS_SET([HAS_UBOOT],[icecube],[1])
-RTEMS_BSPOPTS_SET([HAS_UBOOT],[pm520_*],[1])
-RTEMS_BSPOPTS_HELP([HAS_UBOOT],
-[If defined, board boots via U-Boot])
-
 RTEMS_BSPOPTS_SET([BENCHMARK_IRQ_PROCESSING],[*],[0])
 RTEMS_BSPOPTS_HELP([BENCHMARK_IRQ_PROCESSING],
 [If set to !0, enable code to benchmark IRQ processing.])
@@ -53,17 +48,14 @@ RTEMS_BSPOPTS_SET([BSP_RESET_BOARD_AT_EXIT],[*],[0])
 RTEMS_BSPOPTS_HELP([BSP_RESET_BOARD_AT_EXIT],
 [If set to !0, reset the board when the application exits.])
 
-RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITMASK],[pm520_ze30],[0x337F3F77])
-RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITVAL],[pm520_ze30],[0x01552114])
-
-RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITMASK],[pm520_cr825],[0x330F0F77])
-RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITVAL],[pm520_cr825],[0x01050444])
+RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITMASK],[pm520_ze30],[0x037F3F07])
+RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITVAL],[pm520_ze30],[0x01552104])
 
 RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITMASK],[brs5l],[0xb30F0F77])
 RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITVAL],[brs5l],[0x91050444])
 
-RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITMASK],[icecube],[0x330F0F77])
-RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITVAL],[icecube],[0x01050444])
+RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITMASK],[dp2],[0x337F3F77])
+RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITVAL],[dp2],[0x03550040])
 
 RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITMASK],[*],[0x330F0F77])
 RTEMS_BSPOPTS_SET([BSP_GPIOPCR_INITVAL],[*],[0x01050444])
@@ -83,27 +75,52 @@ RTEMS_BSPOPTS_SET([BSP_UART_AVAIL_MASK],[pm520_cr825],[0x07])
 RTEMS_BSPOPTS_SET([BSP_UART_AVAIL_MASK],[brs5l],[0x07])
 ## on icecube, we only have PSC1
 RTEMS_BSPOPTS_SET([BSP_UART_AVAIL_MASK],[icecube],[0x01])
+## dp2: PSC2 (via USB connector), PSC6 (GPS module)
+RTEMS_BSPOPTS_SET([BSP_UART_AVAIL_MASK],[dp2],[0x22])
+## default
 RTEMS_BSPOPTS_SET([BSP_UART_AVAIL_MASK],[*],[0x01])
 RTEMS_BSPOPTS_HELP([BSP_UART_AVAIL_MASK],
 [bit mask to specify the UARTS (PSCs), which should be enabled on this board. 
  Must match the hardware requirements. PSC1 corresponds to the LSB])
 
+RTEMS_BSPOPTS_SET([MPC5200_PSC_INDEX_FOR_GPS_MODULE],[dp2],[5])
+RTEMS_BSPOPTS_HELP([MPC5200_PSC_INDEX_FOR_GPS_MODULE],[PSC index for GPS module, if defined results in '/dev/gps'])
+
+RTEMS_BSPOPTS_SET([SINGLE_CHAR_MODE],[dp2],[])
+RTEMS_BSPOPTS_SET([SINGLE_CHAR_MODE],[*],[1])
+RTEMS_BSPOPTS_HELP([SINGLE_CHAR_MODE],[enable single character mode for the PSC console driver])
+
+RTEMS_BSPOPTS_SET([UARTS_USE_TERMIOS_INT],[dp2],[1])
+RTEMS_BSPOPTS_HELP([UARTS_USE_TERMIOS_INT],[enable interrupt support for the PSC console driver])
+
+RTEMS_BSPOPTS_SET([PRINTK_MINOR],[dp2],[1])
+RTEMS_BSPOPTS_SET([PRINTK_MINOR],[*],[0])
+RTEMS_BSPOPTS_HELP([PRINTK_MINOR],[console minor number used by printk()])
+
 RTEMS_BSPOPTS_SET([PM520_ZE30],[pm520_ze30],[1])
 RTEMS_BSPOPTS_HELP([PM520_ZE30],
-[If defined, use custom settings of for the pm520_ze30 BSP])
+[enable settings for PM520 ZE30])
 
 RTEMS_BSPOPTS_SET([PM520_CR825],[pm520_cr825],[1])
 RTEMS_BSPOPTS_HELP([PM520_CR825],
-[If defined, use custom settings of for the pm520_cr825 BSP])
+[enable settings for PM520 CR825])
 
 RTEMS_BSPOPTS_SET([icecube],[icecube],[1])
 RTEMS_BSPOPTS_HELP([icecube],
-[If defined, use custom settings of for the icecube BSP])
+[enable settings for IceCube])
 
 RTEMS_BSPOPTS_SET([BRS5L],[brs5l],[1])
 RTEMS_BSPOPTS_HELP([BRS5L],
-[If defined, use custom settings of for the brs5l BSP])
+[enable settings for BRS5L])
 
+RTEMS_BSPOPTS_SET([BSP_TYPE_DP2],[dp2],[1])
+RTEMS_BSPOPTS_HELP([BSP_TYPE_DP2],
+[enable settings for DP2])
+
+RTEMS_BSPOPTS_SET([HAS_UBOOT],[pm520*],[1])
+RTEMS_BSPOPTS_SET([HAS_UBOOT],[icecube],[1])
+RTEMS_BSPOPTS_SET([HAS_UBOOT],[dp2],[1])
+RTEMS_BSPOPTS_HELP([HAS_UBOOT],[enable U-Boot startup])
 
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")

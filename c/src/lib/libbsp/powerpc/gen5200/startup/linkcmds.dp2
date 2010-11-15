@@ -1,11 +1,11 @@
 /**
  * @file
  *
- * Linker command file for the BRS5L board.
+ * Linker command file for the Direct Prototyping Data Processing board.
  */
 
 MEMORY {
-	RAM : ORIGIN = 0x0, LENGTH = 128M
+	RAM : ORIGIN = 0x0, LENGTH = 64M
 	ROM : ORIGIN = 0xffe00000, LENGTH = 2M
 	DPRAM : ORIGIN = 0xff000000, LENGTH = 1k
 	REGS : ORIGIN = 0xf0000000, LENGTH = 64k

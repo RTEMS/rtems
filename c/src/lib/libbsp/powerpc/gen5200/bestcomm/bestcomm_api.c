@@ -70,11 +70,6 @@ uint8 *MBarGlobal;
 sint64 MBarPhysOffsetGlobal;
 
 /*
- * Offset to free space in SRAM after task code and buffer descriptors.
- */
-uint32 SramOffsetGlobal = 0;
-
-/*
  * This flag is false when TaskStart() has not yet been called on a
  * task newly configured by TaskSetup() or TaskStop() has been called.
  * Otherwise it is true.  It is possible that a task disabled itself
@@ -182,48 +177,6 @@ int TasksInitAPI_VM(uint8 *MBarRef, uint8 *MBarPhys)
 int TasksAttachImage(sdma_regs *sdma)
 {
 	return TASK_ERR_NO_ERR;
-}
-
-/*!
- * \brief	This function returns the value of the internal variable
- *			used to keep track of used space in SRAM.
- *
- * \returns The number of bytes from the beginning of SRAM to the end
- *			used space in the SRAM.
- *
- * This function will return the offset to free space in the SRAM
- * not used by the CAPI. \b Note: The returned value is based
- * on what is in TasksSetSramOffset. This function can
- * not determine what SRAM space was used by another process. There must
- * be some way external to the CAPI to keep track of SRAM space. This
- * function only returns the internal variable used to keep track of buffer
- * descriptors.
- */
-uint32 TasksGetSramOffset(void)
-{
-	return SramOffsetGlobal;
-}
-
-/*!
- * \brief	This function stores the number of bytes from the
- *			beginning of SRAM to the end of the used space.
- *
- * \param	sram_offset	Number of bytes until the beginning of
- *						free space in the SRAM.
- *
- * This function sets the free space offset in SRAM.  It must be called
- * before setup in multi-task environments. It is the application's
- * job to determine where the free space in SRAM is. This sets the
- * base offset for the buffer descriptor variables during setup, so to
- * deallocate buffers that have already been set this function should be
- * called with a new offset.
- */
-void TasksSetSramOffset(uint32 sram_offset)
-{
-	/*
-     * Set the SramOffsetGlobal variable to be used by TaskSetup_BDTable
-	 */
-	SramOffsetGlobal = sram_offset;
 }
 
 /*!

@@ -31,7 +31,6 @@
  * private data structures that should not be manipulated by API users.
  */
 
-extern uint32           SramOffsetGlobal;
 extern TaskBDIdxTable_t TaskBDIdxTable[MAX_TASKS];
 extern int              TaskRunning[MAX_TASKS];
 extern sint64			MBarPhysOffsetGlobal;

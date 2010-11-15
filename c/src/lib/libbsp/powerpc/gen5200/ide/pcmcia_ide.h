@@ -80,11 +80,7 @@
 #define ATA_HCFG_IORDY                               (1 << 24)
 #define ATA_HCFG_IE                                  (1 << 25)
 
-#if 0
-#define COUNT_VAL(nsec)                              (((nsec)%(IPB_CLOCK/1000000)) ? (((nsec)/(IPB_CLOCK/1000000)) + 1) : ((nsec)/(IPB_CLOCK/1000000)))
-#else
-#define COUNT_VAL(nsec)                              (((nsec)*(IPB_CLOCK/1000000)/1000) + 1)
-#endif
+#define COUNT_VAL(nsec)                              (((nsec) * (IPB_CLOCK / 1000000) + 999) / 1000)
 
 #define PIO_3                                        0
 #define PIO_4                                        1

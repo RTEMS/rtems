@@ -19,7 +19,11 @@
 #ifndef _BESTCOMM_GLUE_H
 #define _BESTCOMM_GLUE_H
 
-#include <rtems.h>
+#include <rtems/irq-extension.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /*=========================================================================*\
 | Function:                                                                 |
@@ -69,8 +73,8 @@ void bestcomm_glue_irq_install
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int bestcomm_taskno,                          /* task number for handler  */
- void (*the_handler)(rtems_irq_hdl_param),     /* function to call         */
- rtems_irq_hdl_param the_param
+ rtems_interrupt_handler handler,              /* function to call         */
+ void *arg
  );
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -98,5 +102,13 @@ void bestcomm_glue_init
 | Return Value:                                                             |
 |    none                                                                   |
 \*=========================================================================*/
+
+void *bestcomm_malloc(size_t size);
+
+void bestcomm_free(void *ptr);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* _BESTCOMM_GLUE_H */

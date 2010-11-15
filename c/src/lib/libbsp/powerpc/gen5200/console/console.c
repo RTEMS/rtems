@@ -95,6 +95,8 @@
 /*                                                                     */
 /***********************************************************************/
 
+#include <assert.h>
+
 #include <rtems.h>
 #include "../include/mpc5200.h"
 #include <bsp.h>
@@ -233,12 +235,12 @@ int mpc5200_psc_setAttributes(
  /*
   * Set upper timer counter
   */
-  psc->ctur = (uint16_t)(baud >> 16);
+  psc->ctur = (uint8_t) (baud >> 8);
 
  /*
   * Set lower timer counter
   */
-  psc->ctlr = (uint16_t)(baud & 0x0000FFFF);
+  psc->ctlr = (uint8_t) baud;
 
  /*
   * Reset mode pointer
@@ -499,10 +501,7 @@ void mpc5200_uart_psc_initialize(
   /*
    * Install rtems irq handler
    */
-  if (!BSP_install_rtems_irq_handler (&consoleIrqData)) {
-    printk("Unable to connect PSC Irq handler\n");
-    rtems_fatal_error_occurred(1);
-  }
+  assert(BSP_install_rtems_irq_handler(&consoleIrqData) == 1);
 #endif
 
   /*
@@ -675,6 +674,7 @@ rtems_device_driver console_initialize(
   rtems_device_minor_number console_minor;
   char dev_name[] = "/dev/ttyx";
   uint32_t tty_num = 0;
+  bool first = true;
 
   /*
    * Always use and set up TERMIOS
@@ -695,19 +695,26 @@ rtems_device_driver console_initialize(
       mpc5200_uart_psc_initialize(console_minor); /* /dev/tty0 */
       dev_name[8] = '0' + tty_num;
       status = rtems_io_register_name (dev_name, major, console_minor);
+      assert(status == RTEMS_SUCCESSFUL);
 
-      if (status != RTEMS_SUCCESSFUL)
-        rtems_fatal_error_occurred(status);
+      #ifdef MPC5200_PSC_INDEX_FOR_GPS_MODULE
+        if (console_minor == MPC5200_PSC_INDEX_FOR_GPS_MODULE) {
+          status = rtems_io_register_name("/dev/gps", major, console_minor);
+          assert(status == RTEMS_SUCCESSFUL);
+        }
+      #endif
+
+      if (first) {
+        first = false;
+
+        /* Now register the RTEMS console */
+        status = rtems_io_register_name ("/dev/console", major, console_minor);
+        assert(status == RTEMS_SUCCESSFUL);
+      }
 
       tty_num++;
     }
   }
-
-  /* Now register the RTEMS console */
-  status = rtems_io_register_name ("/dev/console", major, PSC1_MINOR);
-
-  if(status != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred (status);
 
   console_initialized = true;
   return RTEMS_SUCCESSFUL;

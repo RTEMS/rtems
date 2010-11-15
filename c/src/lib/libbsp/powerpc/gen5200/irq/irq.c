@@ -480,19 +480,38 @@ void BSP_IRQ_Benchmarking_Report( void)
 }
 #endif
 
+static void dispatch(uint32_t irq, uint32_t offset, volatile uint32_t *maskreg)
+{
+  #if (ALLOW_IRQ_NESTING == 1)
+    uint32_t msr;
+  #endif
+
+  uint32_t mask = *maskreg;
+
+  irq += offset;
+
+  *maskreg = mask | irqMaskTable [irq];
+
+  #if (ALLOW_IRQ_NESTING == 1)
+    msr = ppc_external_exceptions_enable();
+  #endif
+
+  bsp_interrupt_handler_dispatch(irq);
+
+  #if (ALLOW_IRQ_NESTING == 1)
+    ppc_external_exceptions_disable(msr);
+  #endif
+
+  *maskreg = mask;
+}
+
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
 int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
 {
-  register unsigned int irq;
-  register unsigned int pmce;
-  register unsigned int crit_pri_main_mask,
-    per_mask;
-
-#if (ALLOW_IRQ_NESTING == 1)
-  uint32_t msr;
-#endif
+  uint32_t irq;
+  uint32_t pmce;
 
 #if (BENCHMARK_IRQ_PROCESSING == 1)
   uint64_t start,
@@ -518,133 +537,8 @@ int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
 
       break;
 
-    case ASM_60X_SYSMGMT_VECTOR:
-
-      /* get the content of main interrupt status register */
-      pmce = mpc5200.pmce;
-
-      /* main interrupts may be routed to SMI, see bit SMI/INT select
-       * bit in main int. priorities
-       */
-      while (CHK_MSE_STICKY( pmce)) {
-
-        /* check for main interrupt sources (hirarchical order)
-         * -> LO_int indicates peripheral sources
-         */
-        if (CHK_MSE_STICKY( pmce)) {
-          /* get source of main interrupt */
-          irq = MSE_SOURCE( pmce);
-          switch (irq) {
-
-              /* irq1-3, RTC, GPIO, TMR0-7 detected (attention:
-               * slice timer 2 is always routed to SMI)
-               */
-            case 0:            /* slice timer 2 */
-            case 1:
-            case 2:
-            case 3:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-
-              /* add proper offset for main interrupts in
-               * the siu handler array
-               */
-              irq += BSP_MAIN_IRQ_LOWEST_OFFSET;
-
-              /* save original mask and disable all lower
-               * priorized main interrupts
-               */
-              crit_pri_main_mask = mpc5200.crit_pri_main_mask;
-              mpc5200.crit_pri_main_mask |= irqMaskTable [irq];
-
-#if (ALLOW_IRQ_NESTING == 1)
-              /* enable interrupt nesting */
-              msr = ppc_external_exceptions_enable();
-#endif
-
-              /* Dispatch interrupt handlers */
-              bsp_interrupt_handler_dispatch( irq);
-
-#if (ALLOW_IRQ_NESTING == 1)
-              /* disable interrupt nesting */
-              ppc_external_exceptions_disable( msr);
-#endif
-
-              /* restore original interrupt mask */
-              mpc5200.crit_pri_main_mask = crit_pri_main_mask;
-
-              break;
-
-              /* peripheral LO_int interrupt source detected */
-            case 4:
-
-              /* check for valid peripheral interrupt source */
-              if (CHK_PSE_STICKY( pmce)) {
-                /* get source of peripheral interrupt */
-                irq = PSE_SOURCE( pmce);
-
-                /* add proper offset for peripheral interrupts
-                 * in the siu handler array
-                 */
-                irq += BSP_PER_IRQ_LOWEST_OFFSET;
-
-                /* save original mask and disable all lower
-                 * priorized main interrupts
-                 */
-                per_mask = mpc5200.per_mask;
-                mpc5200.per_mask |= irqMaskTable [irq];
-
-#if (ALLOW_IRQ_NESTING == 1)
-                /* enable interrupt nesting */
-                msr = ppc_external_exceptions_enable();
-#endif
-
-                /* Dispatch interrupt handlers */
-                bsp_interrupt_handler_dispatch( irq);
-
-#if (ALLOW_IRQ_NESTING == 1)
-                /* disable interrupt nesting */
-                ppc_external_exceptions_disable( msr);
-#endif
-
-                /* restore original interrupt mask */
-                mpc5200.per_mask = per_mask;
-
-                /* force re-evaluation of peripheral interrupts */
-                CLR_PSE_STICKY( mpc5200.pmce);
-              } else {
-                /* this case may not occur: no valid peripheral
-                 * interrupt source
-                 */
-                printk( "No valid peripheral LO_int interrupt source\n");
-              }
-              break;
-              /* error: unknown interrupt source */
-            default:
-              printk( "Unknown peripheral LO_int interrupt source\n");
-              break;
-          }
-
-          /* force re-evaluation of main interrupts */
-          CLR_MSE_STICKY( mpc5200.pmce);
-        }
-
-        /* get the content of main interrupt status register */
-        pmce = mpc5200.pmce;
-      }
-      break;
-
     case ASM_EXT_VECTOR:
+    case ASM_60X_SYSMGMT_VECTOR:
       /* get the content of main interrupt status register */
       pmce = mpc5200.pmce;
 
@@ -682,30 +576,7 @@ int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
                 /* get source of peripheral interrupt */
                 irq = PSE_SOURCE( pmce);
 
-                /* add proper offset for peripheral interrupts in the
-                 * siu handler array */
-                irq += BSP_PER_IRQ_LOWEST_OFFSET;
-
-                /* save original mask and disable all lower
-                 * priorized main interrupts */
-                per_mask = mpc5200.per_mask;
-                mpc5200.per_mask |= irqMaskTable [irq];
-
-#if (ALLOW_IRQ_NESTING == 1)
-                /* enable interrupt nesting */
-                msr = ppc_external_exceptions_enable();
-#endif
-
-                /* Dispatch interrupt handlers */
-                bsp_interrupt_handler_dispatch( irq);
-
-#if (ALLOW_IRQ_NESTING == 1)
-                /* disable interrupt nesting */
-                ppc_external_exceptions_disable( msr);
-#endif
-
-                /* restore original interrupt mask */
-                mpc5200.per_mask = per_mask;
+                dispatch(irq, BSP_PER_IRQ_LOWEST_OFFSET, &mpc5200.per_mask);
 
                 /* force re-evaluation of peripheral interrupts */
                 CLR_PSE_STICKY( mpc5200.pmce);
@@ -734,6 +605,7 @@ int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
 
               /* irq1-3, RTC, GPIO, TMR0-7 detected (attention: slice timer
                * 2 is always routed to SMI) */
+            case 0:
             case 1:
             case 2:
             case 3:
@@ -749,30 +621,7 @@ int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
             case 14:
             case 15:
             case 16:
-              /* add proper offset for main interrupts in the siu
-               * handler array */
-              irq += BSP_MAIN_IRQ_LOWEST_OFFSET;
-
-              /* save original mask and disable all lower priorized
-               * main interrupts*/
-              crit_pri_main_mask = mpc5200.crit_pri_main_mask;
-              mpc5200.crit_pri_main_mask |= irqMaskTable [irq];
-
-#if (ALLOW_IRQ_NESTING == 1)
-              /* enable interrupt nesting */
-              msr = ppc_external_exceptions_enable();
-#endif
-
-              /* Dispatch interrupt handlers */
-              bsp_interrupt_handler_dispatch( irq);
-
-#if (ALLOW_IRQ_NESTING == 1)
-              /* disable interrupt nesting */
-              ppc_external_exceptions_disable( msr);
-#endif
-
-              /* restore original interrupt mask */
-              mpc5200.crit_pri_main_mask = crit_pri_main_mask;
+              dispatch(irq, BSP_MAIN_IRQ_LOWEST_OFFSET, &mpc5200.crit_pri_main_mask);
               break;
 
               /* peripheral LO_int interrupt source detected */
@@ -782,30 +631,7 @@ int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
                 /* get source of peripheral interrupt */
                 irq = PSE_SOURCE( pmce);
 
-                /* add proper offset for peripheral interrupts in the siu
-                 * handler array */
-                irq += BSP_PER_IRQ_LOWEST_OFFSET;
-
-                /* save original mask and disable all lower priorized main
-                 * interrupts */
-                per_mask = mpc5200.per_mask;
-                mpc5200.per_mask |= irqMaskTable [irq];
-
-#if (ALLOW_IRQ_NESTING == 1)
-                /* enable interrupt nesting */
-                msr = ppc_external_exceptions_enable();
-#endif
-
-                /* Dispatch interrupt handlers */
-                bsp_interrupt_handler_dispatch( irq);
-
-#if (ALLOW_IRQ_NESTING == 1)
-                /* disable interrupt nesting */
-                ppc_external_exceptions_disable( msr);
-#endif
-
-                /* restore original interrupt mask */
-                mpc5200.per_mask = per_mask;
+                dispatch(irq, BSP_PER_IRQ_LOWEST_OFFSET, &mpc5200.per_mask);
 
                 /* force re-evaluation of peripheral interrupts */
                 CLR_PSE_STICKY( mpc5200.pmce);
@@ -824,6 +650,17 @@ int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
           /* force re-evaluation of main interrupts */
           CLR_MSE_STICKY( mpc5200.pmce);
         }
+
+        if (CHK_PSE_STICKY( pmce)) {
+          /* get source of peripheral interrupt */
+          irq = PSE_SOURCE( pmce);
+
+          dispatch(irq, BSP_PER_IRQ_LOWEST_OFFSET, &mpc5200.per_mask);
+
+          /* force re-evaluation of peripheral interrupts */
+          CLR_PSE_STICKY( mpc5200.pmce);
+        }
+
         /* get the content of main interrupt status register */
         pmce = mpc5200.pmce;
       }

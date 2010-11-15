@@ -139,7 +139,7 @@ static uint8_t prescaler_calculation(
  * @brief Sets the bit rate for the MSCAN module @a m to @a can_bit_rate
  * in [bits/s].
  */
-bool mscan_set_bit_rate( mscan *m, unsigned can_bit_rate)
+bool mscan_set_bit_rate( volatile mscan *m, unsigned can_bit_rate)
 {
   mscan_context context;
   unsigned prescale_val = 0;
@@ -204,7 +204,7 @@ bool mscan_set_bit_rate( mscan *m, unsigned can_bit_rate)
 /**
  * @brief Disables all interrupts for the MSCAN module @a m.
  */
-void mscan_interrupts_disable( mscan *m)
+void mscan_interrupts_disable( volatile mscan *m)
 {
   m->rier = 0;
   m->tier = 0;
@@ -215,7 +215,7 @@ void mscan_interrupts_disable( mscan *m)
  *
  * Saves the current MSCAN context in @a context.
  */
-void mscan_initialization_mode_enter( mscan *m, mscan_context *context)
+void mscan_initialization_mode_enter( volatile mscan *m, mscan_context *context)
 {
   /* Save context */
   context->ctl0 = m->ctl0 & CTL0_TIME;
@@ -242,7 +242,7 @@ void mscan_initialization_mode_enter( mscan *m, mscan_context *context)
  *
  * Saves the previous MSCAN context saved in @a context.
  */
-void mscan_initialization_mode_leave( mscan *m, const mscan_context *context)
+void mscan_initialization_mode_leave( volatile mscan *m, const mscan_context *context)
 {
   /* Clear initialization mode request */
   m->ctl0 &= ~CTL0_INITRQ;
@@ -264,7 +264,7 @@ void mscan_initialization_mode_leave( mscan *m, const mscan_context *context)
 /**
  * @brief Enter sleep mode for the MSCAN module @a m.
  */
-void mscan_sleep_mode_enter( mscan *m)
+void mscan_sleep_mode_enter( volatile mscan *m)
 {
   /* Request sleep mode */
   m->ctl0 |= CTL0_SLPRQ;
@@ -278,7 +278,7 @@ void mscan_sleep_mode_enter( mscan *m)
 /**
  * @brief Leave sleep mode for the MSCAN module @a m.
  */
-void mscan_sleep_mode_leave( mscan *m)
+void mscan_sleep_mode_leave( volatile mscan *m)
 {
   /* Clear sleep mode request */
   m->ctl0 &= ~CTL0_SLPRQ;
@@ -294,7 +294,7 @@ void mscan_sleep_mode_leave( mscan *m)
  *
  * The module is set to listen only mode.
  */
-bool mscan_enable( mscan *m, unsigned bit_rate)
+bool mscan_enable( volatile mscan *m, unsigned bit_rate)
 {
   bool s = true;
 
@@ -327,7 +327,7 @@ bool mscan_enable( mscan *m, unsigned bit_rate)
  *
  * The module is set to sleep mode and disabled afterwards.
  */
-void mscan_disable( mscan *m)
+void mscan_disable( volatile mscan *m)
 {
   mscan_context context;
 
@@ -345,7 +345,7 @@ void mscan_disable( mscan *m)
  * @brief Sets the filter ID and mask registers of the MSCAN module @a m to
  * default values.
  */
-void mscan_filter_clear( mscan *m)
+void mscan_filter_clear( volatile mscan *m)
 {
   mscan_context context;
 
@@ -380,7 +380,7 @@ void mscan_filter_clear( mscan *m)
  * @see MSCAN_FILTER_NUMBER_MIN, MSCAN_FILTER_NUMBER_2, MSCAN_FILTER_NUMBER_4
  * and MSCAN_FILTER_NUMBER_MAX.
  */
-unsigned mscan_filter_number( mscan *m)
+unsigned mscan_filter_number( volatile mscan *m)
 {
   uint8_t idam = m->idac & IDAC_IDAM;
 
@@ -403,7 +403,7 @@ unsigned mscan_filter_number( mscan *m)
  * @see MSCAN_FILTER_NUMBER_MIN, MSCAN_FILTER_NUMBER_2, MSCAN_FILTER_NUMBER_4
  * and MSCAN_FILTER_NUMBER_MAX.
  */
-bool mscan_set_filter_number( mscan *m, unsigned number)
+bool mscan_set_filter_number( volatile mscan *m, unsigned number)
 {
   mscan_context context;
   uint8_t idac = IDAC_IDAM1 | IDAC_IDAM0;
@@ -442,7 +442,7 @@ bool mscan_set_filter_number( mscan *m, unsigned number)
  *
  * @warning The index @a i is not checked if it is in range.
  */
-volatile uint8_t *mscan_id_acceptance_register( mscan *m, unsigned i)
+volatile uint8_t *mscan_id_acceptance_register( volatile mscan *m, unsigned i)
 {
   volatile uint8_t *const idar [8] = {
     &m->idar0,
@@ -464,7 +464,7 @@ volatile uint8_t *mscan_id_acceptance_register( mscan *m, unsigned i)
  *
  * @warning The index @a i is not checked if it is in range.
  */
-volatile uint8_t *mscan_id_mask_register( mscan *m, unsigned i)
+volatile uint8_t *mscan_id_mask_register( volatile mscan *m, unsigned i)
 {
   volatile uint8_t *const idmr [8] = {
     &m->idmr0,
@@ -488,7 +488,7 @@ volatile uint8_t *mscan_id_mask_register( mscan *m, unsigned i)
  * Returns true if the operation was successful.
  */
 bool mscan_filter_operation(
-  mscan *m,
+  volatile mscan *m,
   bool set,
   unsigned index,
   uint32_t *id,
@@ -543,7 +543,7 @@ bool mscan_filter_operation(
  * @brief Returns the receiver and transmitter error counter values in @a rec
  * and @a tec of MSCAN module @a m.
  */
-void mscan_get_error_counters( mscan *m, unsigned *rec, unsigned *tec)
+void mscan_get_error_counters( volatile mscan *m, unsigned *rec, unsigned *tec)
 {
   mscan_context context;
 

@@ -1,3 +1,32 @@
+2010-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/dp2.cfg, startup/linkcmds.dp2: New files.
+	* Makefile.am, preinstall.am: Reflect change above.  Install
+	<bsp/utility.h>.  Install BestComm header files.
+	* configure.ac: Changed BSP options.
+	* include/mpc5200.h: Added module structures and register defines.
+	* bestcomm/bestcomm_api.c, bestcomm/bestcomm_api.h,
+	bestcomm/bestcomm_glue.c, bestcomm/bestcomm_glue.h,
+	bestcomm/bestcomm_priv.h, bestcomm/load_task.c,
+	bestcomm/tasksetup_bdtable.c, bestcomm/task_api/bestcomm_cntrl.h: C++
+	compatibility.  Use special heap to manage the SRAM region.  Use
+	interrupt extension API.  Fixed warnings.
+	* console/console.c: Fixed console registration.  Fixed warnings.
+	Added GPS module registration.
+	* ide/pcmcia_ide.h: Fixed clock value macros.
+	* ide/pcmcia_ide.c: Update for BestComm API changes.
+	DP2 specific initialization.  Removed zero loop in PIO receive
+	function.
+	* include/bsp.h: Added DP2 variant.  Removed obsolete defines.
+	* include/mscan-base.h, mscan/mscan-base.c: Use volatile qualifier.
+	Format.
+	* irq/irq.c: Fixed peripheral interrupt handling.
+	* network_5200/network.c: Update for BestComm API changes.
+	* start/start.S: U-Boot fixes.
+	* startup/cpuinit.c: Enable write-back cache strategy.  Added special
+	memory regions.
+	* startup/linkcmds.brs5l: Fixed memory size.
+
 2010-06-30	Peter Dufault <dufault@hda.com>
 
 	PR 1588/cpukit

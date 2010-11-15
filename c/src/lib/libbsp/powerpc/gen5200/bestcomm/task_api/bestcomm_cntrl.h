@@ -88,46 +88,54 @@
  * Task control macros
  ******************************************************************************/
 #define SDMA_TASK_CFG(RegAddr, TaskNum, AutoStart, AutoStartNum) { \
-	*(((uint16 *)RegAddr)+TaskNum) = (uint16)(0x0000     |  \
+	*(((volatile uint16 *)RegAddr)+TaskNum) = (uint16)(0x0000     |  \
 									 ((AutoStart!=0)<<7) |  \
 									 (AutoStartNum&0xF)  ); \
 }
 
 #define SDMA_TASK_AUTO_START(RegAddr, TaskNum, AutoStart, AutoStartNum) { \
-	*(((uint16 *)RegAddr)+TaskNum) = (uint16)((*(((uint16 *)RegAddr)+TaskNum) & \
+	*(((volatile uint16 *)RegAddr)+TaskNum) = (uint16)((*(((volatile uint16 *)RegAddr)+TaskNum) & \
 									 (uint16) 0xff30) | ((uint16)(0x0000 |  \
 									 ((AutoStart!=0)<<7) |  \
 									 (AutoStartNum&0xF))  )); \
 }
 
 #define SDMA_TASK_ENABLE(RegAddr, TaskNum) {	\
-	*(((uint16 *)RegAddr)+TaskNum) |=  (uint16)0x8000; \
+	*(((volatile uint16 *)RegAddr)+TaskNum) |=  (uint16)0x8000; \
 }
 
 #define SDMA_TASK_DISABLE(RegAddr, TaskNum) {	\
-	*(((uint16 *)RegAddr)+TaskNum) &= ~(uint16)0x8000; \
+	*(((volatile uint16 *)RegAddr)+TaskNum) &= ~(uint16)0x8000; \
 }
 
 #define SDMA_TASK_STATUS(RegAddr, TaskNum)	\
-	*(((uint16 *)RegAddr)+TaskNum)
+	*(((volatile uint16 *)RegAddr)+TaskNum)
 
 
 /*******************************************************************************
  * Interrupt control macros
  ******************************************************************************/
-#define SDMA_INT_ENABLE(RegAddr, Bit) {	\
-	*((uint32 *)RegAddr) &= ~((uint32)(1<<Bit)); \
-}
+#define SDMA_INT_ENABLE(RegAddr, Bit) \
+  do { \
+    rtems_interrupt_level level; \
+    rtems_interrupt_disable(level); \
+    *((volatile uint32 *) RegAddr) &= ~((uint32) (1 << Bit)); \
+    rtems_interrupt_enable(level); \
+  } while (0)
 
-#define SDMA_INT_DISABLE(RegAddr, Bit) {	\
-	*((uint32 *)(RegAddr)) |= ((uint32)(1<<Bit)); \
-}
+#define SDMA_INT_DISABLE(RegAddr, Bit) \
+  do { \
+    rtems_interrupt_level level; \
+    rtems_interrupt_disable(level); \
+    *((volatile uint32 *) (RegAddr)) |= ((uint32)(1 << Bit)); \
+    rtems_interrupt_enable(level); \
+  } while (0)
 
 #define SDMA_INT_SOURCE(RegPend, RegMask)	\
-	(*((uint32 *)(RegPend)) & (~*((uint32 *)(RegMask))) & (uint32)SDMA_INT_BIT_IMPL)
+	(*((volatile uint32 *)(RegPend)) & (~*((volatile uint32 *)(RegMask))) & (uint32)SDMA_INT_BIT_IMPL)
 
 #define SDMA_INT_PENDING(RegPend, RegMask)	\
-	(*((uint32 *)(RegPend)) & (~*((uint32 *)(RegMask))))
+	(*((volatile uint32 *)(RegPend)) & (~*((volatile uint32 *)(RegMask))))
 
 #define SDMA_INT_TEST(IntSource, Bit)	\
 	(((uint32)IntSource) & ((uint32)(1<<Bit)))
@@ -139,7 +147,7 @@
 
 /* Clear the IntPend bit */
 #define SDMA_CLEAR_IEVENT(RegAddr, Bit) {	\
-	*((uint32 *)RegAddr) = ((uint32)(1<<Bit)); \
+	*((volatile uint32 *)RegAddr) = ((uint32)(1<<Bit)); \
 }
 
 #define SDMA_GET_PENDINGBIT(sdma, Bit)	\
@@ -175,7 +183,7 @@
 
 /* Determine which task caused a TEA on the XLB */
 #define SDMA_TEA_SOURCE(RegPend)	\
-	(uint32)(((*(uint32 *)RegPend)>>SDMA_INT_BIT_TEA_TASK) & 0xF)
+	(uint32)(((*(volatile uint32 *)RegPend)>>SDMA_INT_BIT_TEA_TASK) & 0xF)
 
 
 /*******************************************************************************
@@ -221,8 +229,8 @@
 /* Note that masking the size w/ 0x3 gives the desired value for uint32 */
 /*    (expressed as 4), namely 0. */
 #define SDMA_SET_SIZE(RegAddr, TaskNum, SrcSize, DstSize)			\
-	*(((uint8 *)RegAddr)+((uint32)(TaskNum/2))) =					\
-	(uint8)((*(((uint8 *)RegAddr)+((uint32)(TaskNum/2))) &			\
+	*(((volatile uint8 *)RegAddr)+((uint32)(TaskNum/2))) =					\
+	(uint8)((*(((volatile uint8 *)RegAddr)+((uint32)(TaskNum/2))) &			\
 			((TaskNum%2) ? 0xf0 : 0x0f)) |							\
 	((uint8)(((SrcSize & 0x3)<<2) |									\
 			( DstSize & 0x3 ) ) <<(4*((int)(1-(TaskNum%2))))));
@@ -231,8 +239,8 @@
 /* Set the Initiator in TCR */
 #define SDMA_SET_INIT(RegAddr, TaskNum, Initiator)					\
 {																	\
-	*(((uint16 *)RegAddr)+TaskNum) &= (uint16)0xE0FF;				\
-	*(((uint16 *)RegAddr)+TaskNum) |= (((0x01F & Initiator)<<8) |	\
+	*(((volatile uint16 *)RegAddr)+TaskNum) &= (uint16)0xE0FF;				\
+	*(((volatile uint16 *)RegAddr)+TaskNum) |= (((0x01F & Initiator)<<8) |	\
 									  (0<<SDMA_TCR_BIT_HOLD));		\
 }
 
@@ -248,16 +256,16 @@
 
 /* Set the Initiator Priority */
 #define SDMA_SET_INITIATOR_PRIORITY(sdma, initiator, priority)	\
-	*(((uint8 *)&sdma->IPR0)+initiator) = priority;
+	*(((volatile uint8 *)&sdma->IPR0)+initiator) = priority;
 
 
 /* Read DRD initiator number */
 #define SDMA_INIT_READ(PtrDRD)	\
-	(((*(uint32 *)PtrDRD)>>SDMA_DRD_BIT_INIT) & (uint32)0x1F)
+	(((*(volatile uint32 *)PtrDRD)>>SDMA_DRD_BIT_INIT) & (uint32)0x1F)
 
 /* Write DRD initiator number */
 #define SDMA_INIT_WRITE(PtrDRD, Initiator) {					\
-	*(uint32 *)PtrDRD = ((*(uint32 *)PtrDRD) & 0xFC1FFFFF) |	\
+	*(volatile uint32 *)PtrDRD = ((*(volatile uint32 *)PtrDRD) & 0xFC1FFFFF) |	\
 						(Initiator<<SDMA_DRD_BIT_INIT);			\
 }
 

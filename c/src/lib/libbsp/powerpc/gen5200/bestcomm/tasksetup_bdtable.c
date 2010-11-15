@@ -22,7 +22,10 @@
 *
 ******************************************************************************/
 
+#include <assert.h>
+
 #include "bestcomm_api.h"
+#include "bestcomm_glue.h"
 #include "task_api/tasksetup_bdtable.h"
 #include "include/mgt5200/mgt5200.h"
 
@@ -40,24 +43,12 @@ extern const uint32 offsetEntry;
 
 TaskBDIdxTable_t TaskBDIdxTable[MAX_TASKS];
 
-static uint8 *TaskTableFree = 0;
-
 void TaskSetup_BDTable(volatile uint32 *BasePtr, volatile uint32 *LastPtr, volatile uint32 *StartPtr,
 					   int TaskNum, uint32 NumBD, uint16 MaxBD,
 					   uint8 NumPtr, ApiConfig_t ApiConfig, uint32 Status)
 {
 	int i, j;
 	uint32 *ptr;
-
-	/*
-	 * If another process has not used SRAM already, then the start value
-	 * will have to be passed in using the TasksSetSramOffset() function.
-	 */
-	if (SramOffsetGlobal == 0) {
-		SramOffsetGlobal = taskTableBytes;
-	}
-
-	TaskTableFree = MBarGlobal + MBAR_SRAM + SramOffsetGlobal;
 
 	/*
 	 * First time through the Buffer Descriptor table configuration
@@ -70,25 +61,31 @@ void TaskSetup_BDTable(volatile uint32 *BasePtr, volatile uint32 *LastPtr, volat
 	 * of the table.
 	 */
 	if (TaskBDIdxTable[TaskNum].BDTablePtr == 0) {
-		TaskBDIdxTable[TaskNum].BDTablePtr  = TaskTableFree;
+		size_t AllocSize = 0;
+		void *AllocBegin = NULL;
+
+		switch (NumPtr) {
+			case 1:
+				AllocSize += MaxBD*sizeof(TaskBD1_t);
+				break;
+			case 2:
+				AllocSize += MaxBD*sizeof(TaskBD2_t);
+				break;
+			default:
+				assert(0);
+				break;
+		}
+
+		AllocBegin = bestcomm_malloc(AllocSize);
+		assert(AllocBegin != NULL);
+
+		TaskBDIdxTable[TaskNum].BDTablePtr  = AllocBegin;
 		TaskBDIdxTable[TaskNum].numPtr      = NumPtr;
 		TaskBDIdxTable[TaskNum].apiConfig   = ApiConfig;
 		TaskBDIdxTable[TaskNum].BDStartPtr  = StartPtr;
 
 		*StartPtr = *BasePtr  = (uint32)((uint32)TaskBDIdxTable[TaskNum].BDTablePtr
 			 		+ MBarPhysOffsetGlobal);
-
-		switch (NumPtr) {
-			case 1:
-				SramOffsetGlobal += MaxBD*sizeof(TaskBD1_t);
-				break;
-			case 2:
-				SramOffsetGlobal += MaxBD*sizeof(TaskBD2_t);
-				break;
-			default:
-				/* error */
-				break;
-		}
 	}
 
 	TaskBDIdxTable[TaskNum].currBDInUse	= 0;

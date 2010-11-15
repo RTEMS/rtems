@@ -26,32 +26,9 @@
 /* Additional Harpo Core SPR definitions (603le only) */
 #define CSRR0    58   /* Critical Interrupt SRR0 */
 #define CSRR1    59   /* Critical Interrupt SRR1 */
-#define SPRG4   276   /* Special Purpose Register 4 */
-#define SPRG5   277   /* Special Purpose Register 5 */
-#define SPRG6   278   /* Special Purpose Register 6 */
-#define SPRG7   279   /* Special Purpose Register 7 */
-#define IBAT4U  560   /* Instruction BAT #0 Upper/Lower */
-#define IBAT4L  561
-#define IBAT5U  562   /* Instruction BAT #1 Upper/Lower */
-#define IBAT5L  563
-#define IBAT6U  564   /* Instruction BAT #2 Upper/Lower */
-#define IBAT6L  565
-#define IBAT7U  566   /* Instruction BAT #3 Upper/Lower */
-#define IBAT7L  567
-#define DBAT4U  568   /* Data BAT #0 Upper/Lower */
-#define DBAT4L  569
-#define DBAT5U  570   /* Data BAT #1 Upper/Lower */
-#define DBAT5L  571
-#define DBAT6U  572   /* Data BAT #2 Upper/Lower */
-#define DBAT6L  573
-#define DBAT7U  574   /* Data BAT #3 Upper/Lower */
-#define DBAT7L  575
 #define DABR2  1000   /* Data Address Breakpoint #2 */
 #define DBCR   1001   /* Data Address Breakpoint Control */
 #define IBCR   1002   /* Instruction Breakpoint Control */
-#define HID1   1009   /* Hardware Implementation 1 */
-#define HID2   1011   /* Hardware Implementation 2 */
-#define DABR   1013   /* Data Address Breakpoint */
 #define IABR2  1018   /* Instruction Breakpoint #2 */
 
 /*
@@ -68,8 +45,7 @@
 #ifndef ASM
 #include <rtems.h>
 
-/* You can directly use the bit value from the MPC5200B User's Manual */
-#define MPC5200_BIT32(bit) (((uint32_t) 1) << (31 - (bit)))
+#include <bsp/utility.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -232,6 +208,177 @@ extern "C" {
 #define FEC_FIFO_CNTRL_OF_MASK  0x00080000 /* overflow mask */
 /*                              0x0007ffff    reserved */
 
+#define SDMA_TCR_EN BSP_BBIT16(0)
+#define SDMA_TCR_VAL BSP_BBIT16(1)
+#define SDMA_TCR_ALW_INIT BSP_BBIT16(2)
+#define SDMA_TCR_IN(val) BSP_BFLD16(val, 3, 7)
+#define SDMA_TCR_AUTO_START BSP_BBIT16(8)
+#define SDMA_TCR_HIGH_EN BSP_BBIT16(9)
+#define SDMA_TCR_HOLD BSP_BBIT16(10)
+#define SDMA_TCR_AS(val) BSP_BFLD16(val, 12, 15)
+
+#define SDMA_IPR_HOLD BSP_BBIT8(0)
+#define SDMA_IPR_PRIOR(val) BSP_BFLD8(val, 5, 7)
+
+#define SDMA_REQMUX_SET_31(reg, val) BSP_BFLD32SET(reg, val, 0, 1)
+#define SDMA_REQMUX_SET_30(reg, val) BSP_BFLD32SET(reg, val, 2, 3)
+#define SDMA_REQMUX_SET_29(reg, val) BSP_BFLD32SET(reg, val, 4, 5)
+#define SDMA_REQMUX_SET_28(reg, val) BSP_BFLD32SET(reg, val, 6, 7)
+#define SDMA_REQMUX_SET_27(reg, val) BSP_BFLD32SET(reg, val, 8, 9)
+#define SDMA_REQMUX_SET_26(reg, val) BSP_BFLD32SET(reg, val, 10, 11)
+#define SDMA_REQMUX_SET_25(reg, val) BSP_BFLD32SET(reg, val, 12, 13)
+#define SDMA_REQMUX_SET_24(reg, val) BSP_BFLD32SET(reg, val, 14, 15)
+#define SDMA_REQMUX_SET_23(reg, val) BSP_BFLD32SET(reg, val, 16, 17)
+#define SDMA_REQMUX_SET_22(reg, val) BSP_BFLD32SET(reg, val, 18, 19)
+#define SDMA_REQMUX_SET_21(reg, val) BSP_BFLD32SET(reg, val, 20, 21)
+#define SDMA_REQMUX_SET_20(reg, val) BSP_BFLD32SET(reg, val, 22, 23)
+#define SDMA_REQMUX_SET_19(reg, val) BSP_BFLD32SET(reg, val, 24, 25)
+#define SDMA_REQMUX_SET_18(reg, val) BSP_BFLD32SET(reg, val, 26, 27)
+#define SDMA_REQMUX_SET_17(reg, val) BSP_BFLD32SET(reg, val, 28, 29)
+#define SDMA_REQMUX_SET_16(reg, val) BSP_BFLD32SET(reg, val, 30, 31)
+
+/* SDMA / BestComm */
+typedef struct {
+  uint32_t taskBar;
+  uint32_t currentPointer;
+  uint32_t endPointer;
+  uint32_t variablePointer;
+  uint8_t IntVect1;
+  uint8_t IntVect2;
+  uint16_t PtdCntrl;
+  uint32_t IntPend;
+  uint32_t IntMask;
+  uint16_t tcr [16];
+  uint8_t ipr [32];
+  uint32_t cReqSelect;
+  uint32_t task_size0;
+  uint32_t task_size1;
+  uint32_t reserved_0;
+  uint32_t reserved_1;
+  uint32_t Value1;
+  uint32_t Value2;
+  uint32_t Control;
+  uint32_t Status;
+} mpc5200_sdma;
+
+typedef struct {
+#define CSC_CFG_WAITP(val) BSP_BFLD32(val, 0, 7)
+#define CSC_CFG_WAITX(val) BSP_BFLD32(val, 8, 15)
+#define CSC_CFG_MX BSP_BBIT32(16)
+#define CSC_CFG_AA BSP_BBIT32(18)
+#define CSC_CFG_CE BSP_BBIT32(19)
+#define CSC_CFG_AS(val) BSP_BFLD32(val, 20, 21)
+#define CSC_CFG_DS(val) BSP_BFLD32(val, 22, 23)
+#define CSC_CFG_BANK(val) BSP_BFLD32(val, 24, 25)
+#define CSC_CFG_WTYP(val) BSP_BFLD32(val, 26, 27)
+#define CSC_CFG_WS BSP_BBIT32(28)
+#define CSC_CFG_RS BSP_BBIT32(29)
+#define CSC_CFG_WO BSP_BBIT32(30)
+#define CSC_CFG_RO BSP_BBIT32(31)
+  uint32_t config_0;
+  uint32_t config_1;
+  uint32_t config_2;
+  uint32_t config_3;
+  uint32_t config_4;
+  uint32_t config_5;
+
+#define CSC_CTRL_ME BSP_BBIT32(7)
+  uint32_t control;
+
+#define CSC_STAT_WOERR BSP_BBIT32(2)
+#define CSC_STAT_ROERR BSP_BBIT32(3)
+#define CSC_STAT_GET_CSXERR(reg) BSP_BFLD32GET(reg, 5, 7)
+  uint32_t status;
+
+  uint32_t config_6;
+  uint32_t config_7;
+
+#define CSC_BST_CTRL_CW7 BSP_BBIT32(0)
+#define CSC_BST_CTRL_SLB7 BSP_BBIT32(1)
+#define CSC_BST_CTRL_BRE7 BSP_BBIT32(3)
+#define CSC_BST_CTRL_CW6 BSP_BBIT32(4)
+#define CSC_BST_CTRL_SLB6 BSP_BBIT32(5)
+#define CSC_BST_CTRL_BRE6 BSP_BBIT32(7)
+#define CSC_BST_CTRL_CW5 BSP_BBIT32(8)
+#define CSC_BST_CTRL_SLB5 BSP_BBIT32(9)
+#define CSC_BST_CTRL_BRE5 BSP_BBIT32(11)
+#define CSC_BST_CTRL_CW4 BSP_BBIT32(12)
+#define CSC_BST_CTRL_SLB4 BSP_BBIT32(13)
+#define CSC_BST_CTRL_BRE4 BSP_BBIT32(15)
+#define CSC_BST_CTRL_CW3 BSP_BBIT32(16)
+#define CSC_BST_CTRL_SLB3 BSP_BBIT32(17)
+#define CSC_BST_CTRL_BRE3 BSP_BBIT32(19)
+#define CSC_BST_CTRL_CW2 BSP_BBIT32(20)
+#define CSC_BST_CTRL_SLB2 BSP_BBIT32(21)
+#define CSC_BST_CTRL_BRE2 BSP_BBIT32(23)
+#define CSC_BST_CTRL_CW1 BSP_BBIT32(24)
+#define CSC_BST_CTRL_SLB1 BSP_BBIT32(25)
+#define CSC_BST_CTRL_BRE1 BSP_BBIT32(27)
+#define CSC_BST_CTRL_CW0 BSP_BBIT32(28)
+#define CSC_BST_CTRL_SLB0 BSP_BBIT32(29)
+#define CSC_BST_CTRL_BRE0 BSP_BBIT32(31)
+  uint32_t burst_control;
+
+#define CSC_DCYC_CTRL_DC7(val) BSP_BFLD32(val, 2, 3)
+#define CSC_DCYC_CTRL_SET_DC7(reg, val) BSP_BFLD32SET(reg, val, 2, 3)
+#define CSC_DCYC_CTRL_DC6(val) BSP_BFLD32(val, 6, 7)
+#define CSC_DCYC_CTRL_SET_DC6(reg, val) BSP_BFLD32SET(reg, val, 6, 7)
+#define CSC_DCYC_CTRL_DC5(val) BSP_BFLD32(val, 10, 11)
+#define CSC_DCYC_CTRL_SET_DC5(reg, val) BSP_BFLD32SET(reg, val, 10, 11)
+#define CSC_DCYC_CTRL_DC4(val) BSP_BFLD32(val, 14, 15)
+#define CSC_DCYC_CTRL_SET_DC4(reg, val) BSP_BFLD32SET(reg, val, 14, 15)
+#define CSC_DCYC_CTRL_DC3(val) BSP_BFLD32(val, 18, 19)
+#define CSC_DCYC_CTRL_SET_DC3(reg, val) BSP_BFLD32SET(reg, val, 18, 19)
+#define CSC_DCYC_CTRL_DC2(val) BSP_BFLD32(val, 22, 23)
+#define CSC_DCYC_CTRL_SET_DC2(reg, val) BSP_BFLD32SET(reg, val, 22, 23)
+#define CSC_DCYC_CTRL_DC1(val) BSP_BFLD32(val, 26, 27)
+#define CSC_DCYC_CTRL_SET_DC1(reg, val) BSP_BFLD32SET(reg, val, 26, 27)
+#define CSC_DCYC_CTRL_DC0(val) BSP_BFLD32(val, 30, 31)
+#define CSC_DCYC_CTRL_SET_DC0(reg, val) BSP_BFLD32SET(reg, val, 30, 31)
+  uint32_t deadcycle_control;
+
+  uint8_t reserved [208];
+} mpc5200_csc;
+
+typedef struct {
+  uint32_t memory_address_base;
+  uint32_t cs0_start_address;
+  uint32_t cs0_stop_address;
+  uint32_t cs1_start_address;
+  uint32_t cs1_stop_address;
+  uint32_t cs2_start_address;
+  uint32_t cs2_stop_address;
+  uint32_t cs3_start_address;
+  uint32_t cs3_stop_address;
+  uint32_t cs4_start_address;
+  uint32_t cs4_stop_address;
+  uint32_t cs5_start_address;
+  uint32_t cs5_stop_address;
+  uint32_t sdram_chip_select_0;
+  uint32_t sdram_chip_select_1;
+  uint8_t reserved_0 [16];
+  uint32_t boot_start_address;
+  uint32_t boot_stop_address;
+
+#define MM_IPBI_CTRL_CS7ENA BSP_BBIT16(4)
+#define MM_IPBI_CTRL_CS6ENA BSP_BBIT16(5)
+#define MM_IPBI_CTRL_BOOTENA BSP_BBIT16(6)
+#define MM_IPBI_CTRL_CS5ENA BSP_BBIT16(10)
+#define MM_IPBI_CTRL_CS4ENA BSP_BBIT16(11)
+#define MM_IPBI_CTRL_CS3ENA BSP_BBIT16(12)
+#define MM_IPBI_CTRL_CS2ENA BSP_BBIT16(13)
+#define MM_IPBI_CTRL_CS1ENA BSP_BBIT16(14)
+#define MM_IPBI_CTRL_CS0ENA BSP_BBIT16(15)
+  uint16_t ipbi_control;
+
+  uint16_t wait_state_enable;
+  uint32_t cs6_start_address;
+  uint32_t cs6_stop_address;
+  uint32_t cs7_start_address;
+  uint32_t cs7_stop_address;
+  uint8_t reserved_1 [152];
+} mpc5200_mm;
+
 /*
 *************************************************************************
 *                 MPC5x00 internal register memory map                  *
@@ -241,12 +388,7 @@ typedef struct mpc5200_ {
   /*
    * memory map registers (MBAR + 0)
    */
-  volatile uint8_t    mm[0x80];
-
-  /*
-   * arbiter registers (processor bus) (MBAR + 0x80)
-   */
-  volatile uint8_t    arb[0x80];
+  volatile mpc5200_mm mm;
 
   /*
    * SDRAM memory controller registers (MBAR + 0x100)
@@ -261,7 +403,7 @@ typedef struct mpc5200_ {
   /*
    * chip selct controller registers(MBAR + 0x300)
    */
-  volatile uint8_t    csc[0x100];
+  volatile mpc5200_csc csc;
 
   /*
    * SmartComm timer registers (MBAR + 0x400)
@@ -275,6 +417,26 @@ typedef struct mpc5200_ {
   volatile uint32_t    per_pri_1;         /* + 0x04 */
   volatile uint32_t    per_pri_2;         /* + 0x08 */
   volatile uint32_t    per_pri_3;         /* + 0x0C */
+
+#define ICTL_EET_ECLR0 BSP_BBIT32(4)
+#define ICTL_EET_ECLR1 BSP_BBIT32(5)
+#define ICTL_EET_ECLR2 BSP_BBIT32(6)
+#define ICTL_EET_ECLR3 BSP_BBIT32(7)
+#define ICTL_EET_ETYPE0(val) BSP_BFLD32(val, 8, 9)
+#define ICTL_EET_ETYPE1(val) BSP_BFLD32(val, 10, 11)
+#define ICTL_EET_ETYPE2(val) BSP_BFLD32(val, 12, 13)
+#define ICTL_EET_ETYPE3(val) BSP_BFLD32(val, 14, 15)
+#define ICTL_EET_SET_ETYPE0(reg, val) BSP_BFLD32SET(reg, val, 8, 9)
+#define ICTL_EET_SET_ETYPE1(reg, val) BSP_BFLD32SET(reg, val, 10, 11)
+#define ICTL_EET_SET_ETYPE2(reg, val) BSP_BFLD32SET(reg, val, 12, 13)
+#define ICTL_EET_SET_ETYPE3(reg, val) BSP_BFLD32SET(reg, val, 14, 15)
+#define ICTL_EET_MEE BSP_BBIT32(19)
+#define ICTL_EET_EENA0 BSP_BBIT32(20)
+#define ICTL_EET_EENA1 BSP_BBIT32(21)
+#define ICTL_EET_EENA2 BSP_BBIT32(22)
+#define ICTL_EET_EENA3 BSP_BBIT32(23)
+#define ICTL_EET_CEB BSP_BBIT32(31)
+
   volatile uint32_t    ext_en_type;       /* + 0x10 */
   volatile uint32_t    crit_pri_main_mask;/* + 0x14 */
   volatile uint32_t    main_pri_1;        /* + 0x18 */
@@ -499,30 +661,30 @@ typedef struct mpc5200_ {
   #define GPIO_PCR_PSC2                   0x00000070
   #define GPIO_PCR_PSC1                   0x00000007
 
-  #define GPIO_S_PIN_IR_USB_CLK MPC5200_BIT32(2)
-  #define GPIO_S_PIN_IRDA_TX MPC5200_BIT32(3)
-  #define GPIO_S_PIN_ETH_11 MPC5200_BIT32(4)
-  #define GPIO_S_PIN_ETH_10 MPC5200_BIT32(5)
-  #define GPIO_S_PIN_ETH_9 MPC5200_BIT32(6)
-  #define GPIO_S_PIN_ETH_8 MPC5200_BIT32(7)
-  #define GPIO_S_PIN_USB1_8 MPC5200_BIT32(12)
-  #define GPIO_S_PIN_USB1_7 MPC5200_BIT32(13)
-  #define GPIO_S_PIN_USB1_6 MPC5200_BIT32(14)
-  #define GPIO_S_PIN_USB1_0 MPC5200_BIT32(15)
-  #define GPIO_S_PIN_PSC3_7 MPC5200_BIT32(18)
-  #define GPIO_S_PIN_PSC3_6 MPC5200_BIT32(19)
-  #define GPIO_S_PIN_PSC3_3 MPC5200_BIT32(20)
-  #define GPIO_S_PIN_PSC3_2 MPC5200_BIT32(21)
-  #define GPIO_S_PIN_PSC3_1 MPC5200_BIT32(22)
-  #define GPIO_S_PIN_PSC3_0 MPC5200_BIT32(23)
-  #define GPIO_S_PIN_PSC2_3 MPC5200_BIT32(24)
-  #define GPIO_S_PIN_PSC2_2 MPC5200_BIT32(25)
-  #define GPIO_S_PIN_PSC2_1 MPC5200_BIT32(26)
-  #define GPIO_S_PIN_PSC2_0 MPC5200_BIT32(27)
-  #define GPIO_S_PIN_PSC1_3 MPC5200_BIT32(28)
-  #define GPIO_S_PIN_PSC1_2 MPC5200_BIT32(29)
-  #define GPIO_S_PIN_PSC1_1 MPC5200_BIT32(30)
-  #define GPIO_S_PIN_PSC1_0 MPC5200_BIT32(31)
+  #define GPIO_S_PIN_IR_USB_CLK BSP_BBIT32(2)
+  #define GPIO_S_PIN_IRDA_TX BSP_BBIT32(3)
+  #define GPIO_S_PIN_ETH_11 BSP_BBIT32(4)
+  #define GPIO_S_PIN_ETH_10 BSP_BBIT32(5)
+  #define GPIO_S_PIN_ETH_9 BSP_BBIT32(6)
+  #define GPIO_S_PIN_ETH_8 BSP_BBIT32(7)
+  #define GPIO_S_PIN_USB1_8 BSP_BBIT32(12)
+  #define GPIO_S_PIN_USB1_7 BSP_BBIT32(13)
+  #define GPIO_S_PIN_USB1_6 BSP_BBIT32(14)
+  #define GPIO_S_PIN_USB1_0 BSP_BBIT32(15)
+  #define GPIO_S_PIN_PSC3_7 BSP_BBIT32(18)
+  #define GPIO_S_PIN_PSC3_6 BSP_BBIT32(19)
+  #define GPIO_S_PIN_PSC3_3 BSP_BBIT32(20)
+  #define GPIO_S_PIN_PSC3_2 BSP_BBIT32(21)
+  #define GPIO_S_PIN_PSC3_1 BSP_BBIT32(22)
+  #define GPIO_S_PIN_PSC3_0 BSP_BBIT32(23)
+  #define GPIO_S_PIN_PSC2_3 BSP_BBIT32(24)
+  #define GPIO_S_PIN_PSC2_2 BSP_BBIT32(25)
+  #define GPIO_S_PIN_PSC2_1 BSP_BBIT32(26)
+  #define GPIO_S_PIN_PSC2_0 BSP_BBIT32(27)
+  #define GPIO_S_PIN_PSC1_3 BSP_BBIT32(28)
+  #define GPIO_S_PIN_PSC1_2 BSP_BBIT32(29)
+  #define GPIO_S_PIN_PSC1_1 BSP_BBIT32(30)
+  #define GPIO_S_PIN_PSC1_0 BSP_BBIT32(31)
 
   volatile uint32_t gpiosen;      /* + 0x04 */
   volatile uint32_t gpiosod;      /* + 0x08 */
@@ -530,29 +692,29 @@ typedef struct mpc5200_ {
   volatile uint32_t gpiosdo;      /* + 0x10 */
   volatile uint32_t gpiosdi;      /* + 0x14 */
 
-  #define GPIO_O_PIN_ETH_7 MPC5200_BIT32(0)
-  #define GPIO_O_PIN_ETH_6 MPC5200_BIT32(1)
-  #define GPIO_O_PIN_ETH_5 MPC5200_BIT32(2)
-  #define GPIO_O_PIN_ETH_4 MPC5200_BIT32(3)
-  #define GPIO_O_PIN_ETH_3 MPC5200_BIT32(4)
-  #define GPIO_O_PIN_ETH_2 MPC5200_BIT32(5)
-  #define GPIO_O_PIN_ETH_1 MPC5200_BIT32(6)
-  #define GPIO_O_PIN_ETH_0 MPC5200_BIT32(7)
-  #define GPIO_O_PIN_I2C_3 MPC5200_BIT32(13)
-  #define GPIO_O_PIN_I2C_0 MPC5200_BIT32(14)
-  #define GPIO_O_PIN_I2C_1 MPC5200_BIT32(15)
+  #define GPIO_O_PIN_ETH_7 BSP_BBIT32(0)
+  #define GPIO_O_PIN_ETH_6 BSP_BBIT32(1)
+  #define GPIO_O_PIN_ETH_5 BSP_BBIT32(2)
+  #define GPIO_O_PIN_ETH_4 BSP_BBIT32(3)
+  #define GPIO_O_PIN_ETH_3 BSP_BBIT32(4)
+  #define GPIO_O_PIN_ETH_2 BSP_BBIT32(5)
+  #define GPIO_O_PIN_ETH_1 BSP_BBIT32(6)
+  #define GPIO_O_PIN_ETH_0 BSP_BBIT32(7)
+  #define GPIO_O_PIN_I2C_3 BSP_BBIT32(13)
+  #define GPIO_O_PIN_I2C_0 BSP_BBIT32(14)
+  #define GPIO_O_PIN_I2C_1 BSP_BBIT32(15)
 
   volatile uint32_t gpiooe;     /* + 0x18 */
   volatile uint32_t gpioodo;      /* + 0x1C */
 
-  #define GPIO_I_PIN_ETH_16 MPC5200_BIT32(0)
-  #define GPIO_I_PIN_ETH_15 MPC5200_BIT32(1)
-  #define GPIO_I_PIN_ETH_14 MPC5200_BIT32(2)
-  #define GPIO_I_PIN_ETH_13 MPC5200_BIT32(3)
-  #define GPIO_I_PIN_USB1_9 MPC5200_BIT32(4)
-  #define GPIO_I_PIN_PSC3_8 MPC5200_BIT32(5)
-  #define GPIO_I_PIN_PSC3_5 MPC5200_BIT32(6)
-  #define GPIO_I_PIN_PSC3_4 MPC5200_BIT32(7)
+  #define GPIO_I_PIN_ETH_16 BSP_BBIT32(0)
+  #define GPIO_I_PIN_ETH_15 BSP_BBIT32(1)
+  #define GPIO_I_PIN_ETH_14 BSP_BBIT32(2)
+  #define GPIO_I_PIN_ETH_13 BSP_BBIT32(3)
+  #define GPIO_I_PIN_USB1_9 BSP_BBIT32(4)
+  #define GPIO_I_PIN_PSC3_8 BSP_BBIT32(5)
+  #define GPIO_I_PIN_PSC3_5 BSP_BBIT32(6)
+  #define GPIO_I_PIN_PSC3_4 BSP_BBIT32(7)
 
   volatile uint32_t gpiosie;      /* + 0x20 */
   #define GPIO_SIE_SINT_7_ETH_16_PIN 0x80000000
@@ -589,6 +751,15 @@ typedef struct mpc5200_ {
   #define GPIO_SIIE_SINT_0_PSC3_4_PIN 0x01000000
 
   volatile uint32_t gpiosiit;     /* + 0x34 */
+  #define GPIO_SIIT_SET_ETH_16_PIN(reg, val) BSP_BFLD32SET(reg, val, 0, 1)
+  #define GPIO_SIIT_SET_ETH_15_PIN(reg, val) BSP_BFLD32SET(reg, val, 2, 3)
+  #define GPIO_SIIT_SET_ETH_14_PIN(reg, val) BSP_BFLD32SET(reg, val, 4, 5)
+  #define GPIO_SIIT_SET_ETH_13_PIN(reg, val) BSP_BFLD32SET(reg, val, 6, 7)
+  #define GPIO_SIIT_SET_USB1_9_PIN(reg, val) BSP_BFLD32SET(reg, val, 8, 9)
+  #define GPIO_SIIT_SET_PSC3_8_PIN(reg, val) BSP_BFLD32SET(reg, val, 10, 11)
+  #define GPIO_SIIT_SET_PSC3_5_PIN(reg, val) BSP_BFLD32SET(reg, val, 12, 13)
+  #define GPIO_SIIT_SET_PSC3_4_PIN(reg, val) BSP_BFLD32SET(reg, val, 14, 15)
+
   #define GPIO_SIIT_SINT_7_ETH_16_PIN_MASK 0xc0000000
   #define GPIO_SIIT_SINT_6_ETH_15_PIN_MASK 0x30000000
   #define GPIO_SIIT_SINT_5_ETH_14_PIN_MASK 0x0c000000
@@ -641,14 +812,14 @@ typedef struct mpc5200_ {
    * GPIO wakeup registers (MBAR + 0xC00)
    */
 
-  #define GPIO_W_PIN_GPIO_WKUP_7 MPC5200_BIT32(0)
-  #define GPIO_W_PIN_GPIO_WKUP_6 MPC5200_BIT32(1)
-  #define GPIO_W_PIN_PSC6_1 MPC5200_BIT32(2)
-  #define GPIO_W_PIN_PSC6_0 MPC5200_BIT32(3)
-  #define GPIO_W_PIN_ETH_17 MPC5200_BIT32(4)
-  #define GPIO_W_PIN_PSC3_9 MPC5200_BIT32(5)
-  #define GPIO_W_PIN_PSC2_4 MPC5200_BIT32(6)
-  #define GPIO_W_PIN_PSC1_4 MPC5200_BIT32(7)
+  #define GPIO_W_PIN_GPIO_WKUP_7 BSP_BBIT32(0)
+  #define GPIO_W_PIN_GPIO_WKUP_6 BSP_BBIT32(1)
+  #define GPIO_W_PIN_PSC6_1 BSP_BBIT32(2)
+  #define GPIO_W_PIN_PSC6_0 BSP_BBIT32(3)
+  #define GPIO_W_PIN_ETH_17 BSP_BBIT32(4)
+  #define GPIO_W_PIN_PSC3_9 BSP_BBIT32(5)
+  #define GPIO_W_PIN_PSC2_4 BSP_BBIT32(6)
+  #define GPIO_W_PIN_PSC1_4 BSP_BBIT32(7)
 
   volatile uint32_t gpiowe;     /* + 0x00 */
   volatile uint32_t gpiowod;    /* + 0x04 */
@@ -685,83 +856,8 @@ typedef struct mpc5200_ {
   /*
    * SmartComm DMA registers (MBAR + 0x1200)
    */
-  volatile uint32_t taskBar;          /* + 0x00 sdTpb */
-  volatile uint32_t currentPointer;   /* + 0x04 sdMdeComplex */
-  volatile uint32_t endPointer;       /* + 0x08 sdMdeComplex */
-  volatile uint32_t variablePointer;  /* + 0x0c sdMdeComplex */
+  volatile mpc5200_sdma sdma;
 
-  /*
-   * The following are Priority Task Decoder (ptd) regs in sdma/rtl_v/sdPtd.v.
-   * The ptd register map below is from the smartcomm spec, table 3-2, page 3-54.
-   * The spec shows the ptd map as 20 words, but sdPtd.v has only implemented 19.
-   * The word commented out below is the one which is not implemented.
-   */
-
-  /*  volatile uint8_t  IntVect; */ /*
-  * + 0xXX sdPtd read only
-  */
-
-  /*  volatile uint8_t  res0[3]; */ /*
-   * + 0xXX sdPtd read only
-   */
-  volatile uint8_t IntVect1;    /* + 0x10 sdPtd */
-  volatile uint8_t IntVect2;    /* + 0x11 sdPtd */
-  volatile uint16_t PtdCntrl;   /* + 0x12 sdPtd */
-
-  volatile uint32_t IntPend;    /* + 0x14 sdPtd */
-  volatile uint32_t IntMask;    /* + 0x18 sdPtd */
-
-  volatile uint32_t TCR01;      /* + 0x1c sdPtd */
-  volatile uint32_t TCR23;      /* + 0x20 sdPtd */
-  volatile uint32_t TCR45;      /* + 0x24 sdPtd */
-  volatile uint32_t TCR67;      /* + 0x28 sdPtd */
-  volatile uint32_t TCR89;      /* + 0x2c sdPtd */
-  volatile uint32_t TCRAB;      /* + 0x30 sdPtd */
-  volatile uint32_t TCRCD;      /* + 0x34 sdPtd */
-  volatile uint32_t TCREF;      /* + 0x38 sdPtd */
-
-  volatile uint8_t IPR0;        /* + 0x3c sdPtd */
-  volatile uint8_t IPR1;        /* + 0x3d sdPtd */
-  volatile uint8_t IPR2;        /* + 0x3e sdPtd */
-  volatile uint8_t IPR3;        /* + 0x3f sdPtd */
-  volatile uint8_t IPR4;        /* + 0x40 sdPtd */
-  volatile uint8_t IPR5;        /* + 0x41 sdPtd */
-  volatile uint8_t IPR6;        /* + 0x42 sdPtd */
-  volatile uint8_t IPR7;        /* + 0x43 sdPtd */
-  volatile uint8_t IPR8;        /* + 0x44 sdPtd */
-  volatile uint8_t IPR9;        /* + 0x45 sdPtd */
-  volatile uint8_t IPR10;       /* + 0x46 sdPtd */
-  volatile uint8_t IPR11;       /* + 0x47 sdPtd */
-  volatile uint8_t IPR12;       /* + 0x48 sdPtd */
-  volatile uint8_t IPR13;       /* + 0x49 sdPtd */
-  volatile uint8_t IPR14;       /* + 0x4a sdPtd */
-  volatile uint8_t IPR15;       /* + 0x4b sdPtd */
-  volatile uint8_t IPR16;       /* + 0x4c sdPtd */
-  volatile uint8_t IPR17;       /* + 0x4d sdPtd */
-  volatile uint8_t IPR18;       /* + 0x4e sdPtd */
-  volatile uint8_t IPR19;       /* + 0x4f sdPtd */
-  volatile uint8_t IPR20;       /* + 0x50 sdPtd */
-  volatile uint8_t IPR21;       /* + 0x51 sdPtd */
-  volatile uint8_t IPR22;       /* + 0x52 sdPtd */
-  volatile uint8_t IPR23;       /* + 0x53 sdPtd */
-  volatile uint8_t IPR24;       /* + 0x54 sdPtd */
-  volatile uint8_t IPR25;       /* + 0x55 sdPtd */
-  volatile uint8_t IPR26;       /* + 0x56 sdPtd */
-  volatile uint8_t IPR27;       /* + 0x57 sdPtd */
-  volatile uint8_t IPR28;       /* + 0x58 sdPtd */
-  volatile uint8_t IPR29;       /* + 0x59 sdPtd */
-  volatile uint8_t IPR30;       /* + 0x5a sdPtd */
-  volatile uint8_t IPR31;       /* + 0x5b sdPtd */
-
-  volatile uint32_t res5;       /* reserved */
-  volatile uint32_t res6;       /* reserved */
-  volatile uint32_t res7;       /* reserved */
-  volatile uint32_t MDEDebug;   /* + 0x68 sdMdeComplex */
-  volatile uint32_t ADSDebug;   /* + 0x6c sdAdsTop */
-  volatile uint32_t Value1;     /* + 0x70 sdDbg */
-  volatile uint32_t Value2;     /* + 0x74 sdDbg */
-  volatile uint32_t Control;    /* + 0x78 sdDbg */
-  volatile uint32_t Status;     /* + 0x7c sdDbg */
   volatile uint32_t EU00;       /* + 0x80 sdMac macer reg */
   volatile uint32_t EU01;       /* + 0x84 sdMac macemr reg */
   volatile uint32_t EU02;       /* + 0x88 unused */
@@ -816,8 +912,32 @@ typedef struct mpc5200_ {
   volatile uint32_t reserved14;       /* MBAR_XLB_ARB + 0x0038 reserved */
   volatile uint32_t reserved15;       /* MBAR_XLB_ARB + 0x003c reserved */
 
+#define XLB_CFG_PLDIS BSP_BBIT32(0)
+#define XLB_CFG_BSDIS BSP_BBIT32(15)
+#define XLB_CFG_SE BSP_BBIT32(16)
+#define XLB_CFG_USE_WWF BSP_BBIT32(17)
+#define XLB_CFG_TBEN BSP_BBIT32(18)
+#define XLB_CFG_WS BSP_BBIT32(20)
+#define XLB_CFG_SP(val) BSP_BFLD32(val, 21, 23)
+#define XLB_CFG_SET_SP(reg, val) BSP_BFLD32SET(reg, val, 21, 23)
+#define XLB_CFG_PM(val) BSP_BFLD32(val, 25, 26)
+#define XLB_CFG_SET_PM(reg, val) BSP_BFLD32SET(reg, val, 25, 26)
+#define XLB_CFG_BA BSP_BBIT32(28)
+#define XLB_CFG_DT BSP_BBIT32(29)
+#define XLB_CFG_AT BSP_BBIT32(30)
+
   volatile uint32_t config;           /* MBAR_XLB_ARB + 0x0040 */
   volatile uint32_t version;          /* MBAR_XLB_ARB + 0x0044 */
+
+#define XLB_ST_SEA BSP_BBIT32(23)
+#define XLB_ST_MM BSP_BBIT32(24)
+#define XLB_ST_TTA BSP_BBIT32(25)
+#define XLB_ST_TTR BSP_BBIT32(26)
+#define XLB_ST_ECW BSP_BBIT32(27)
+#define XLB_ST_TTM BSP_BBIT32(28)
+#define XLB_ST_BA BSP_BBIT32(29)
+#define XLB_ST_DT BSP_BBIT32(30)
+#define XLB_ST_AT BSP_BBIT32(31)
                                       /*             read only = 0x0001 */
   volatile uint32_t xlb_status;       /* MBAR_XLB_ARB + 0x0048 */
   volatile uint32_t int_enable;       /* MBAR_XLB_ARB + 0x004c */
@@ -1150,7 +1270,20 @@ typedef struct mpc5200_ {
 
   /* ATA FIFO registers (offset 0x3C-0x50) */
   volatile uint32_t ata_rtfdwr;   /* + 0x3C */
+
+#define ATA_RTFSR_ERR BSP_BBIT32(9)
+#define ATA_RTFSR_UF BSP_BBIT32(10)
+#define ATA_RTFSR_OF BSP_BBIT32(11)
+#define ATA_RTFSR_FULL BSP_BBIT32(12)
+#define ATA_RTFSR_HI BSP_BBIT32(13)
+#define ATA_RTFSR_LO BSP_BBIT32(14)
+#define ATA_RTFSR_EMPTY BSP_BBIT32(15)
+
   volatile uint32_t ata_rtfsr;    /* + 0x40 */
+
+#define ATA_RTFCR_WFR BSP_BBIT32(2)
+#define ATA_RTFCR_GR(val) BSP_BFLD32(val, 5, 7)
+
   volatile uint32_t ata_rtfcr;    /* + 0x44 */
   volatile uint32_t ata_rtfar;    /* + 0x48 */
   volatile uint32_t ata_rtfrpr;   /* + 0x4C */

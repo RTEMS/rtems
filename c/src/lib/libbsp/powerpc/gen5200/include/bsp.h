@@ -96,6 +96,8 @@ LINKER_SYMBOL(MBAR);
  *     Embedded Planet EP5200
  */
 
+#elif defined (BSP_TYPE_DP2)
+
 #else
 #error "board type not defined"
 #endif
@@ -165,14 +167,6 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
 
 /* functions */
 
-/* console modes (only termios) */
-#ifdef  PRINTK_MINOR
-#undef  PRINTK_MINOR
-#endif
-#define PRINTK_MINOR PSC1_MINOR
-
-#define SINGLE_CHAR_MODE
-/* #define UARTS_USE_TERMIOS_INT   1 */
 /* #define SHOW_MORE_INIT_SETTINGS 1 */
 
 /* ata modes */

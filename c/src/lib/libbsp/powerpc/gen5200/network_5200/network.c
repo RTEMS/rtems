@@ -92,13 +92,11 @@
 #define GET_BD_STATUS(bd)		((bd)->Status & 0xffff0000)
 #define GET_BD_LENGTH(bd)		((bd)->Status & 0x0000ffff)
 #define GET_SDMA_PENDINGBIT(Bit)   \
-   (mpc5200.IntPend & (uint32)(1<<Bit))
+   (mpc5200.sdma.IntPend & (uint32)(1<<Bit))
 
 #include "../bestcomm/bestcomm_api.h"
 #include "../bestcomm/task_api/bestcomm_cntrl.h"
 #include "../bestcomm/task_api/tasksetup_bdtable.h"
-
-extern TaskBDIdxTable_t TaskBDIdxTable[MAX_TASKS];
 
 static TaskId rxTaskId;	/* SDMA RX task ID */
 static TaskId txTaskId;	/* SDMA TX task ID */
@@ -673,7 +671,7 @@ void mpc5200_smartcomm_rx_irq_handler(rtems_irq_hdl_param unused)
   if(GET_SDMA_PENDINGBIT(FEC_RECV_TASK_NO))
     {
 
-      SDMA_CLEAR_IEVENT(&mpc5200.IntPend,FEC_RECV_TASK_NO);
+      SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend,FEC_RECV_TASK_NO);
 
       bestcomm_glue_irq_disable(FEC_RECV_TASK_NO);/*Disable receive ints*/
 
@@ -693,7 +691,7 @@ void mpc5200_smartcomm_tx_irq_handler(rtems_irq_hdl_param unused)
   if(GET_SDMA_PENDINGBIT(FEC_XMIT_TASK_NO))
     {
 
-      SDMA_CLEAR_IEVENT(&mpc5200.IntPend,FEC_XMIT_TASK_NO);
+      SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend,FEC_XMIT_TASK_NO);
 
       bestcomm_glue_irq_disable(FEC_XMIT_TASK_NO);/*Disable tx ints*/
 
@@ -815,7 +813,7 @@ static void mpc5200_fec_sendpacket(struct ifnet *ifp,struct mbuf *m) {
       /*
        * Clear old events
        */
-      SDMA_CLEAR_IEVENT(&mpc5200.IntPend,FEC_XMIT_TASK_NO);
+      SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend,FEC_XMIT_TASK_NO);
 
       /*
        * Wait for buffer descriptor to become available.
@@ -983,7 +981,7 @@ static void mpc5200_fec_rxDaemon(void *arg){
     /*
      * Clear old events
      */
-    SDMA_CLEAR_IEVENT(&mpc5200.IntPend,FEC_RECV_TASK_NO);
+    SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend,FEC_RECV_TASK_NO);
     /*
      * Get the first BD pointer and its length.
      */
@@ -1400,9 +1398,9 @@ static void mpc5200_fec_init(void *arg)
       /*
        * Set priority of different initiators
        */
-      mpc5200.IPR0 = 7;	/* always initiator	*/
-      mpc5200.IPR3 = 6;	/* eth rx initiator	*/
-      mpc5200.IPR4 = 5;	/* eth tx initiator	*/
+      mpc5200.sdma.ipr [0] = 7;	/* always initiator	*/
+      mpc5200.sdma.ipr [3] = 6;	/* eth rx initiator	*/
+      mpc5200.sdma.ipr [4] = 5;	/* eth tx initiator	*/
 
       /*
        * Start driver tasks
