@@ -654,7 +654,8 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
   ( \
     sizeof (POSIX_API_Control) + \
-   (sizeof (void *) * (CONFIGURE_GNAT_KEYS + CONFIGURE_MAXIMUM_POSIX_KEYS)) \
+    CONFIGURE_MINIMUM_TASK_STACK_SIZE + \
+    (sizeof (void *) * (CONFIGURE_GNAT_KEYS + CONFIGURE_MAXIMUM_POSIX_KEYS)) \
   )
 
 #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
