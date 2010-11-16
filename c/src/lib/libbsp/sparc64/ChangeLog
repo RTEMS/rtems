@@ -1,3 +1,11 @@
+2010-11-16	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1691/bsps
+	* shared/clock/ckinit.c: The sparc64/shared/clock driver has
+	a bug that causes nested timer interrupts to not be serviced,
+	which leads to non-preemptive behavior especially when dispatching
+	work from the timer ISR.
+
 2010-11-15  Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1691/bsps

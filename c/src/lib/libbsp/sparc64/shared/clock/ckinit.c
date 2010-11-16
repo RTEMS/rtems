@@ -50,11 +50,16 @@ void Clock_driver_support_at_tick(void)
 {
   uint64_t tick_reg;
   int bit_mask;
-
+  uint64_t pil_reg;
 
   bit_mask = SPARC_SOFTINT_TM_MASK | SPARC_SOFTINT_SM_MASK | (1<<14);
   sparc64_clear_interrupt_bits(bit_mask);
 
+  sparc64_get_pil(pil_reg);
+  if(pil_reg == 0xe) { /* 0xe is the tick compare interrupt (softint(14)) */
+    pil_reg--;
+    sparc64_set_pil(pil_reg); /* enable the next timer interrupt */
+  }
   /* Note: sun4v uses stick_cmpr for clock driver for M5 simulator, which 
    * does not currently have tick_cmpr implemented */
   /* TODO: this could be more efficiently implemented as a single assembly 
@@ -84,7 +89,6 @@ void Clock_driver_support_initialize_hardware(void)
 {
   uint64_t tick_reg; 	
   int bit_mask;
-
 
   bit_mask = SPARC_SOFTINT_TM_MASK | SPARC_SOFTINT_SM_MASK | (1<<14);
   sparc64_clear_interrupt_bits(bit_mask);
