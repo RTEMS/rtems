@@ -22,7 +22,7 @@
  */
 void putk(const char *s)
 {
-  const char *p = s;
+  const char *p;
 
   for (p=s ; *p ; p++ )
     BSP_output_char(*p);
