@@ -106,6 +106,7 @@ int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *))
   /* register with RTEMS the buffer that will hold the key values */
   if( rtems_task_variable_add( RTEMS_SELF, (void **)new_key, dtor ) == RTEMS_SUCCESSFUL )
        return 0;
+  free( new_key );
   return -1;
 }
 
