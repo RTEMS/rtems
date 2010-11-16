@@ -1,5 +1,12 @@
 2010-11-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	PR 1718/cpukit
+	* sapi/include/confdefs.h: POSIX threads are allocated twice the
+	minimum stack space by default. confdefs.h only accounts for one
+	minimum -- not the 2x factor.
+
+2010-11-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	PR 1717/cpukit
 	* libcsupport/src/gxx_wrappers.c: Free memory on error.
 

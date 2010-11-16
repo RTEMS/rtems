@@ -938,6 +938,7 @@ extern rtems_configuration_table        Configuration;
 
   #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
     _Configure_From_workspace( \
+      CONFIGURE_MINIMUM_TASK_STACK_SIZE + \
       sizeof (POSIX_API_Control) + \
      (sizeof (void *) * (CONFIGURE_MAXIMUM_POSIX_KEYS)) \
     )
