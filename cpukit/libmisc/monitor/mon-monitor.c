@@ -106,6 +106,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { 0 },
       &rtems_monitor_commands[6],
     },
+#if defined(RTEMS_MULTIPROCESSING)
     { "node",
       "Specify default node number for commands that take id's.\n"
       "  node [ node number ]",
@@ -114,6 +115,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { 0 },
       &rtems_monitor_commands[7],
     },
+#endif
     { "symbol",
       "Display value associated with specified symbol. "
       "Defaults to displaying all known symbols.\n"
@@ -359,6 +361,7 @@ void rtems_monitor_continue_cmd(
     rtems_monitor_suspend(RTEMS_NO_TIMEOUT);
 }
 
+#if defined(RTEMS_MULTIPROCESSING)
 void rtems_monitor_node_cmd(
   int                                argc,
   char                             **argv,
@@ -366,30 +369,28 @@ void rtems_monitor_node_cmd(
   bool                               verbose __attribute__((unused))
 )
 {
-    uint32_t   new_node = rtems_monitor_default_node;
+  uint32_t   new_node = rtems_monitor_default_node;
 
-    switch (argc)
-    {
-        case 1: 		/* no node, just set back to ours */
-            new_node = rtems_monitor_node;
-            break;
+  switch (argc) {
+    case 1: 		/* no node, just set back to ours */
+      new_node = rtems_monitor_node;
+      break;
 
-        case 2:
-            new_node = strtoul(argv[1], 0, 0);
-            break;
+    case 2:
+      new_node = strtoul(argv[1], 0, 0);
+      break;
 
-        default:
-            fprintf(stdout,"invalid syntax, try 'help node'\n");
-            break;
-    }
+    default:
+      fprintf(stdout,"invalid syntax, try 'help node'\n");
+      break;
+  }
 
-    #if defined(RTEMS_MULTIPROCESSING)
-      if ((new_node >= 1) &&
-        _Configuration_MP_table &&
-        (new_node <= _Configuration_MP_table->maximum_nodes))
-            rtems_monitor_default_node = new_node;
-    #endif
+  if ((new_node >= 1) &&
+    _Configuration_MP_table &&
+    (new_node <= _Configuration_MP_table->maximum_nodes))
+	rtems_monitor_default_node = new_node;
 }
+#endif
 
 
 /*

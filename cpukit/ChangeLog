@@ -1,5 +1,10 @@
 2010-11-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/monitor/mon-monitor.c: Move node code into multiprocessing
+	ifdef.
+
+2010-11-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/src/objectnametoid.c, score/src/objectnametoidstring.c:
 	Remove useless variable pointed out by clang.
 	* score/src/threadstackallocate.c: Remove useless variable
