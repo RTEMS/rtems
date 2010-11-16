@@ -1,7 +1,7 @@
 /*
  *  Rate Monotonic Manager -- Reset Statistics for All Periods
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,7 +28,6 @@
 void rtems_rate_monotonic_reset_all_statistics( void )
 {
   Objects_Id        id;
-  rtems_status_code status;
 
    /*
     *  Prevent allocation or deallocation of any of the periods while
@@ -46,7 +45,7 @@ void rtems_rate_monotonic_reset_all_statistics( void )
     for ( id=_Rate_monotonic_Information.minimum_id ;
           id <= _Rate_monotonic_Information.maximum_id ;
           id++ ) {
-      status = rtems_rate_monotonic_reset_statistics( id );
+      (void) rtems_rate_monotonic_reset_statistics( id );
     }
 
   /*

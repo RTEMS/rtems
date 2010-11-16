@@ -1,7 +1,7 @@
 /*
  *  Rate Monotonic Manager -- Report Statistics for All Periods
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -103,10 +103,12 @@ ididididid NNNN ccccc mmmmmm X
       continue;
 
     /* If the above passed, so should this but check it anyway */
-    status = rtems_rate_monotonic_get_status( id, &the_status );
     #if defined(RTEMS_DEBUG)
+      status = rtems_rate_monotonic_get_status( id, &the_status );
       if ( status != RTEMS_SUCCESSFUL )
         continue;
+    #else
+      (void) rtems_rate_monotonic_get_status( id, &the_status );
     #endif
 
     rtems_object_get_name( the_status.owner, sizeof(name), name );
