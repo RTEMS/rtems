@@ -1,5 +1,12 @@
 2010-11-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/objectnametoid.c, score/src/objectnametoidstring.c:
+	Remove useless variable pointed out by clang.
+	* score/src/threadstackallocate.c: Remove useless variable
+	initialization pointed out by clang.
+
+2010-11-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/src/ratemonreportstatistics.c, rtems/src/ratemonresetall.c:
 	Remove unchecked return status pointed out by clang.
 

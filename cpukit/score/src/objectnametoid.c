@@ -1,8 +1,7 @@
 /*
  *  Object Handler
  *
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,7 +56,6 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   bool                       search_local_node;
   Objects_Control           *the_object;
   uint32_t                   index;
-  uint32_t                   name_length;
 #if defined(RTEMS_MULTIPROCESSING)
   Objects_Name               name_for_mp;
 #endif
@@ -80,8 +78,6 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
    search_local_node = true;
 
   if ( search_local_node ) {
-    name_length = information->name_length;
-
     for ( index = 1; index <= information->maximum; index++ ) {
       the_object = information->local_table[ index ];
       if ( !the_object )

@@ -1,8 +1,7 @@
 /*
- *  Thread Handler
+ *  Thread Handler - Stack Allocate Helper
  *
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,7 +46,7 @@ size_t _Thread_Stack_Allocate(
 )
 {
   void *stack_addr = 0;
-  size_t the_stack_size = stack_size;
+  size_t the_stack_size;
 
   the_stack_size = _Stack_Ensure_minimum( stack_size );
 

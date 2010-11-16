@@ -1,8 +1,7 @@
 /*
  *  Object Handler - Object ID to Name (String)
  *
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,7 +56,6 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
 {
   Objects_Control           *the_object;
   uint32_t                   index;
-  uint32_t                   name_length;
 
   /* ASSERT: information->is_string == true */
 
@@ -68,7 +66,6 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
     return OBJECTS_INVALID_NAME;
 
   if ( information->maximum != 0 ) {
-    name_length = information->name_length;
 
     for ( index = 1; index <= information->maximum; index++ ) {
       the_object = information->local_table[ index ];
