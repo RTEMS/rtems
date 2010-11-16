@@ -1,5 +1,10 @@
 2010-11-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1717/cpukit
+	* libcsupport/src/gxx_wrappers.c: Free memory on error.
+
+2010-11-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/monitor/mon-monitor.c: Move node code into multiprocessing
 	ifdef.
 
