@@ -281,7 +281,6 @@ void _CPU_Context_Initialize(
 )
 {
     uint32_t     stack_high;  /* highest "stack aligned" address */
-    uint32_t     the_size;
     uint32_t     tmp_psr;
 
     /*
@@ -291,8 +290,6 @@ void _CPU_Context_Initialize(
 
     stack_high = ((uint32_t)(stack_base) + size);
     stack_high &= ~(CPU_STACK_ALIGNMENT - 1);
-
-    the_size = size & ~(CPU_STACK_ALIGNMENT - 1);
 
     /*
      *  See the README in this directory for a diagram of the stack.
