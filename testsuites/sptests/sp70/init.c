@@ -12,7 +12,7 @@
 #include <tmacros.h>
 #include "test_support.h"
 
-rtems_id          TaskID[4];
+rtems_id          TaskID[10];
 
 void create_helper(int task)
 {
@@ -56,6 +56,11 @@ rtems_task Init(
   delete_helper( 3 );
   delete_helper( 4 );
   delete_helper( 5 );
+
+  create_helper( 2 );
+  create_helper( 3 );
+  create_helper( 4 );
+  create_helper( 5 );
 
   puts( "*** END OF TEST 70 ***" );
 

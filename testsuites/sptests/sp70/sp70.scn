@@ -1,1 +1,16 @@
-XXX fill in with test output
+*** TEST 70 ***
+Creating task 1 - OK
+Creating task 2 - OK
+Creating task 3 - OK
+Creating task 4 - OK
+Creating task 5 - OK
+Creating task 6 - OK
+Deleting task 2
+Deleting task 3
+Deleting task 4
+Deleting task 5
+Creating task 2 - OK
+Creating task 3 - OK
+Creating task 4 - OK
+Creating task 5 - OK
+*** END OF TEST 70 ***

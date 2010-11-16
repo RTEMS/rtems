@@ -1,3 +1,8 @@
+2010-11-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp70/init.c, sp70/sp70.scn: Fix bug in test which lead to random
+	memory corruption.
+
 2010-10-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spchain/init.c: Attempt to improve coverage.
