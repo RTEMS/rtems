@@ -186,7 +186,7 @@ extern "C" {
 #define sparc64_set_pstate( _pstate ) \
   do { \
     asm volatile ( \
-      "wrpr  %g0, %0, %%pstate " : "=r" ((_pstate)) : "0" ((_pstate)) ); \
+      "wrpr  %%g0, %0, %%pstate " : "=r" ((_pstate)) : "0" ((_pstate)) ); \
   } while ( 0 )
 
 /*
@@ -201,7 +201,7 @@ extern "C" {
 
 #define sparc64_set_pil( _pil ) \
   do { \
-    asm volatile ( "wrpr  %g0, %0, %%pil " : "=r" ((_pil)) : "0" ((_pil)) ); \
+    asm volatile ( "wrpr  %%g0, %0, %%pil " : "=r" ((_pil)) : "0" ((_pil)) ); \
   } while ( 0 )
 
 
