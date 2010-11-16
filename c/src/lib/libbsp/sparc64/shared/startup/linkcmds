@@ -202,11 +202,6 @@ SECTIONS
      PROVIDE (__stack = .);
      PROVIDE (StackStart = .);
   } > ram
-
-  /* made-up section for the trap-table, which has a very high alignment */
-  . = ALIGN(1024*32);
-  .ttable   : { *(.ttable) } > ram
-  
 }
 
 
