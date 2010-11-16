@@ -35,12 +35,17 @@ PUBLIC(_BSP_init)
   SYM(_BSP_init):
   save %sp, -STACK_WINDOW_SAVE_AREA_SIZE, %sp
 
-  /* copy firmware trap table so that RTEMS can install ISR handlers */
-  setx  SYM(trap_table), %l0, %o0
-  rdpr  %tba, %o1
-  set TABLE_SIZE, %o2
-  call memcpy
-  nop
+  ! copy the tba
+  sethi %hi(real_trap_table), %o0
+  rdpr  %tba, %o2
+  stx   %o2, [%o0 + %lo(real_trap_table)]
+
+!  /* copy firmware trap table so that RTEMS can install ISR handlers */
+!  setx  SYM(trap_table), %l0, %o0
+!  rdpr  %tba, %o1
+!  set TABLE_SIZE, %o2
+!  call memcpy
+!  nop
 
   mov %g0, %o0
   call _take_mmu
