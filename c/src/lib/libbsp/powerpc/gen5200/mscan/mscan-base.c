@@ -222,14 +222,8 @@ void mscan_initialization_mode_enter( volatile mscan *m, mscan_context *context)
   context->rier = m->rier;
   context->tier = m->tier;
 
-  /* Initialization mode not requested? */
-  if ((m->ctl0 & CTL0_INITRQ) == 0) {
-    /* Enter sleep mode to avoid error conditions */
-    mscan_sleep_mode_enter( m);
-
-    /* Request initialization mode */
-    m->ctl0 |= CTL0_INITRQ;
-  }
+  /* Request initialization mode */
+  m->ctl0 |= CTL0_INITRQ;
 
   /* Wait for initialization mode acknowledge */
   while ((m->ctl1 & CTL1_INITAK) == 0) {
@@ -268,11 +262,6 @@ void mscan_sleep_mode_enter( volatile mscan *m)
 {
   /* Request sleep mode */
   m->ctl0 |= CTL0_SLPRQ;
-
-  /* Wait for sleep mode acknowledge */
-  while ((m->ctl1 & CTL1_SLPAK) == 0) {
-    /* Wait */
-  }
 }
 
 /**
