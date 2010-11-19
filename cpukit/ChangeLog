@@ -1,3 +1,7 @@
+2010-11-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmisc/monitor/mon-monitor.c: Fixed broken monitor command list.
+
 2010-11-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1718/cpukit

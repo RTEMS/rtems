@@ -106,16 +106,6 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { 0 },
       &rtems_monitor_commands[6],
     },
-#if defined(RTEMS_MULTIPROCESSING)
-    { "node",
-      "Specify default node number for commands that take id's.\n"
-      "  node [ node number ]",
-      0,
-      rtems_monitor_node_cmd,
-      { 0 },
-      &rtems_monitor_commands[7],
-    },
-#endif
     { "symbol",
       "Display value associated with specified symbol. "
       "Defaults to displaying all known symbols.\n"
@@ -123,7 +113,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_symbol_cmd,
       { .symbol_table = &rtems_monitor_symbols },
-      &rtems_monitor_commands[8],
+      &rtems_monitor_commands[7],
     },
     { "extension",
       "Display information about specified extensions. "
@@ -132,7 +122,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_EXTENSION },
-      &rtems_monitor_commands[9],
+      &rtems_monitor_commands[8],
     },
     { "task",
       "Display information about the specified tasks. "
@@ -141,7 +131,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_TASK },
-      &rtems_monitor_commands[10],
+      &rtems_monitor_commands[9],
     },
     { "queue",
       "Display information about the specified message queues. "
@@ -150,7 +140,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_QUEUE },
-      &rtems_monitor_commands[11],
+      &rtems_monitor_commands[10],
     },
     { "sema",
       "sema [id [id ... ] ]\n"
@@ -160,7 +150,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_SEMAPHORE },
-      &rtems_monitor_commands[12],
+      &rtems_monitor_commands[11],
     },
     { "region",
       "region [id [id ... ] ]\n"
@@ -170,7 +160,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_REGION },
-      &rtems_monitor_commands[13],
+      &rtems_monitor_commands[12],
     },
     { "part",
       "part [id [id ... ] ]\n"
@@ -180,7 +170,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_PARTITION },
-      &rtems_monitor_commands[14],
+      &rtems_monitor_commands[13],
     },
     { "object",
       "Display information about specified RTEMS objects. "
@@ -190,7 +180,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_INVALID },
-      &rtems_monitor_commands[15],
+      &rtems_monitor_commands[14],
     },
     { "driver",
       "Display the RTEMS device driver table.\n"
@@ -198,14 +188,14 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_DRIVER },
-      &rtems_monitor_commands[16],
+      &rtems_monitor_commands[15],
     },
     { "dname",
       "Displays information about named drivers.\n",
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_DNAME },
-      &rtems_monitor_commands[17],
+      &rtems_monitor_commands[16],
     },
     { "exit",
       "Invoke 'rtems_fatal_error_occurred' with 'status' "
@@ -214,7 +204,7 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_fatal_cmd,
       { .status_code = RTEMS_SUCCESSFUL },
-      &rtems_monitor_commands[18],
+      &rtems_monitor_commands[17],
     },
     { "fatal",
       "'exit' with fatal error; default error is RTEMS_TASK_EXITTED\n"
@@ -222,22 +212,35 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_fatal_cmd,
       { .status_code = RTEMS_TASK_EXITTED },		/* exit value */
-      &rtems_monitor_commands[19],
+      &rtems_monitor_commands[18],
     },
     { "quit",
       "Alias for 'exit'\n",
       0,
       rtems_monitor_fatal_cmd,
       { .status_code = RTEMS_SUCCESSFUL },		/* exit value */
-      &rtems_monitor_commands[20],
+      &rtems_monitor_commands[19],
     },
     { "reset",
       "(SW)Resets the System.",
       0,
       rtems_monitor_reset_cmd,
       { 0 },
+      &rtems_monitor_commands[20],
+    },
+#if defined(RTEMS_MULTIPROCESSING)
+    { "node",
+      "Specify default node number for commands that take id's.\n"
+      "  node [ node number ]",
+      0,
+      rtems_monitor_node_cmd,
+      { 0 },
       &rtems_monitor_commands[21],
     },
+  #define RTEMS_MONITOR_POSIX_NEXT 22
+#else
+  #define RTEMS_MONITOR_POSIX_NEXT 21
+#endif
 #ifdef RTEMS_POSIX_API
     { "pthread",
       "Display information about the specified pthreads. "
@@ -246,11 +249,11 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_PTHREAD },
-      &rtems_monitor_commands[22],
+      &rtems_monitor_commands[RTEMS_MONITOR_POSIX_NEXT],
     },
-  #define RTEMS_MONITOR_DEBUGGER_NEXT 23
+  #define RTEMS_MONITOR_DEBUGGER_NEXT (RTEMS_MONITOR_POSIX_NEXT + 1)
 #else
-  #define RTEMS_MONITOR_DEBUGGER_NEXT 22
+  #define RTEMS_MONITOR_DEBUGGER_NEXT RTEMS_MONITOR_POSIX_NEXT
 #endif
 #ifdef CPU_INVOKE_DEBUGGER
     { "debugger",
