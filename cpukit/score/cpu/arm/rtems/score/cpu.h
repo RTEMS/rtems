@@ -12,7 +12,7 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
- *  Copyright (c) 2009 embedded brains GmbH.
+ *  Copyright (c) 2009-2010 embedded brains GmbH.
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
@@ -175,13 +175,15 @@
 
 #define CPU_STACK_MINIMUM_SIZE (1024 * 4)
 
-#define CPU_ALIGNMENT 4
+/* AAPCS, section 4.1, Fundamental Data Types */
+#define CPU_ALIGNMENT 8
 
 #define CPU_HEAP_ALIGNMENT CPU_ALIGNMENT
 
 #define CPU_PARTITION_ALIGNMENT CPU_ALIGNMENT
 
-#define CPU_STACK_ALIGNMENT 4
+/* AAPCS, section 5.2.1.2, Stack constraints at a public interface */
+#define CPU_STACK_ALIGNMENT 8
 
 /*
  * Bitfield handler macros.
