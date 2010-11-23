@@ -1,3 +1,8 @@
+2010-11-23	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1719/cpukit
+	* arm_exc_abort.S: Avoid "bx" instruction to support ARMv4 and below.
+
 2010-11-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/cpu.h: Set alignment requirements according to AAPCS.

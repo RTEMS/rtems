@@ -51,7 +51,11 @@ prefetch_abort_handler:
 arm_exc_data_abort_set_handler:
 	ldr	r1, =data_abort_handler
 	str	r0, [r1]
+#ifdef __thumb__
 	bx	lr
+#else
+	mov	pc, lr
+#endif
 
 #ifdef __thumb__
 	.thumb_func
@@ -60,7 +64,11 @@ arm_exc_data_abort_set_handler:
 arm_exc_prefetch_abort_set_handler:
 	ldr	r1, =prefetch_abort_handler
 	str	r0, [r1]
+#ifdef __thumb__
 	bx	lr
+#else
+	mov	pc, lr
+#endif
 
 .arm
 
@@ -103,7 +111,7 @@ save_more_context:
 	moveq	r0, #0xaa
 #ifndef __thumb__
 	mov	lr, pc
-	bx	r2
+	mov	pc, r2
 #else /* __thumb__ */
 	SWITCH_FROM_ARM_TO_THUMB	r1
 	bl	call_handler
