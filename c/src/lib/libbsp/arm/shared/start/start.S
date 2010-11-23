@@ -199,12 +199,20 @@ DEFINE_FUNCTION_ARM(bsp_start_memcpy)
 
 	/* Return if dest == src */
 	cmp	r0, r1
+#ifdef __thumb__
 	bxeq	lr
+#else
+	moveq	pc, lr
+#endif
 
 	/* Return if length is zero */
 	mov	r3, #0
 	cmp	r3, r2
+#ifdef __thumb__
 	bxeq	lr
+#else
+	moveq	pc, lr
+#endif
 
 	/* Save non-volatile registers */
 	push	{r4-r8, lr}
@@ -218,14 +226,22 @@ DEFINE_FUNCTION_ARM(bsp_start_memcpy)
 	mov	r3, #0
 	mov	ip, sp
 	mov	lr, pc
+#ifdef __thumb__
 	bx	ip
+#else
+	mov	pc, ip
+#endif
 
 	/* Restore stack and non-volatile registers */
 	add	sp, sp, #24
 	pop	{r4-r8, lr}
 
 	/* Return */
+#ifdef __thumb__
 	bx	lr
+#else
+	mov	pc, lr
+#endif
 
 bsp_start_memcpy_begin:
 
@@ -235,4 +251,8 @@ bsp_start_memcpy_begin:
 	add	r3, r3, #4
 	cmp	r3, r2
 	bcc	bsp_start_memcpy_begin
+#ifdef __thumb__
 	bx	lr
+#else
+	mov	pc, lr
+#endif

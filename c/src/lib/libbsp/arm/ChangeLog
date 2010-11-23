@@ -1,3 +1,9 @@
+2010-11-23	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1719/cpukit
+	* shared/start/start.S: Avoid "bx" instruction to support ARMv4 and
+	below.
+
 2010-06-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/startup/linkcmds.base: Define bsp_vector_table_size
