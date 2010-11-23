@@ -1,3 +1,8 @@
+2010-11-23	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1719/cpukit
+	* arm_exc_abort.S: Avoid "bx" instruction to support ARMv4 and below.
+
 2010-05-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* rtems/score/arm.h: Make it a warning not error that the FPU multilib
