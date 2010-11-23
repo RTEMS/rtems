@@ -1,3 +1,8 @@
+2010-11-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* Makefile.am, preinstall.am: Add <bsp/tty_drv.h> to the set of
+	installed .h files.
+
 2010-03-10	Gedare Bloom <gedare@gwu.edu>
 
 	PR 1495/bsp

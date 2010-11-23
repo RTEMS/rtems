@@ -26,7 +26,7 @@ SUBDIRS = . tools
 
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
-    ../../i386/shared/irq/irq_asm.h
+    ../../i386/shared/irq/irq_asm.h ../../i386/shared/comm/tty_drv.h
 
 include_HEADERS += include/crt.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h

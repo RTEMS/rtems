@@ -57,6 +57,10 @@ $(PROJECT_INCLUDE)/bsp/irq_asm.h: ../../i386/shared/irq/irq_asm.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_asm.h
 
+$(PROJECT_INCLUDE)/bsp/tty_drv.h: ../../i386/shared/comm/tty_drv.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tty_drv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tty_drv.h
+
 $(PROJECT_INCLUDE)/crt.h: include/crt.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/crt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/crt.h
