@@ -71,11 +71,10 @@ void rtems_cpu_usage_report_with_plugin(
     _Timestamp_Subtract( &CPU_usage_Uptime_at_last_reset, &uptime, &total );
   #else
     for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
-      /*
-       *  Since POSIX is optional, this can occur.
-       */
-      if ( !_Objects_Information_table[ api_index ] )
-        continue;
+      #if !defined(RTEMS_POSIX_API) || defined(RTEMS_DEBUG)
+        if ( !_Objects_Information_table[ api_index ] )
+          continue;
+      #endif
 
       information = _Objects_Information_table[ api_index ][ 1 ];
       if ( information ) {
@@ -103,11 +102,10 @@ void rtems_cpu_usage_report_with_plugin(
   );
 
   for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
-    /*
-     *  Since POSIX is optional, this can occur.
-     */
-    if ( !_Objects_Information_table[ api_index ] )
-      continue;
+    #if !defined(RTEMS_POSIX_API) || defined(RTEMS_DEBUG)
+      if ( !_Objects_Information_table[ api_index ] )
+        continue;
+    #endif
 
     information = _Objects_Information_table[ api_index ][ 1 ];
     if ( information ) {

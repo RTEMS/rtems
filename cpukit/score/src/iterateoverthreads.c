@@ -33,11 +33,10 @@ void rtems_iterate_over_all_threads(rtems_per_thread_routine routine)
     return;
 
   for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
-    /*
-     *  Since POSIX is optional, this can occur.
-     */
-    if ( !_Objects_Information_table[ api_index ] )
-      continue;
+    #if !defined(RTEMS_POSIX_API) || defined(RTEMS_DEBUG)
+      if ( !_Objects_Information_table[ api_index ] )
+        continue;
+    #endif
 
     information = _Objects_Information_table[ api_index ][ 1 ];
     if ( !information )
