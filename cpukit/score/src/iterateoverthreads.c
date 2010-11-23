@@ -34,12 +34,10 @@ void rtems_iterate_over_all_threads(rtems_per_thread_routine routine)
 
   for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
     /*
-     *  Since the removal of ITRON, this cannot occur.
+     *  Since POSIX is optional, this can occur.
      */
-    #if defined(RTEMS_DEBUG)
-      if ( !_Objects_Information_table[ api_index ] )
-	continue;
-    #endif
+    if ( !_Objects_Information_table[ api_index ] )
+      continue;
 
     information = _Objects_Information_table[ api_index ][ 1 ];
     if ( !information )

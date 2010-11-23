@@ -1,3 +1,8 @@
+2010-11-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/src/iterateoverthreads.c, libmisc/cpuuse/cpuusagereport.c:
+	Fixed NULL pointer access in case POSIX API is disabled.
+
 2010-11-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libmisc/monitor/mon-monitor.c: Fixed broken monitor command list.
