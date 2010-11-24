@@ -30,7 +30,30 @@ The component of RTEMS responsible for providing this
 capability is appropriately called the scheduler.  The
 scheduler's sole purpose is to allocate the all important
 resource of processor time to the various tasks competing for
-attention.  The RTEMS scheduler allocates the processor using a
+attention.  
+
+@section Scheduling Algorithms
+
+@cindex scheduling algorithms
+
+RTEMS provides multiple possible scheduling algorithms, each 
+of which are appropriate to different use case scenarios. 
+The classic RTEMS scheduling algorithm -- the only 
+algorithm available in RTEMS 4.10 and earlier -- is the priority
+scheduling algorithm.  When not specified, the priority scheduling
+algorithm can be assumed.
+
+RTEMS currently supports the following scheduling algorithms:
+
+@itemize @bullet
+@item Priority scheduling
+@end itemize
+
+@subsection Priority Scheduling
+
+@cindex priority scheduling
+
+The RTEMS scheduler allocates the processor using a
 priority-based, preemptive algorithm augmented to provide
 round-robin characteristics within individual priority groups.
 The goal of this algorithm is to guarantee that the task which
@@ -49,6 +72,11 @@ Thus, when the processor is free, the first task on the ready
 chain is allocated the processor.  RTEMS schedules tasks using
 the second method to guarantee faster response times to external
 events.
+
+Priority scheduling is the most commonly used scheduling algorithm.
+It should be used by applications in which multiple tasks contend for 
+CPU time or other resources and there is a need to ensure certain tasks
+are given priority over other tasks.
 
 @section Scheduling Mechanisms
 
@@ -81,6 +109,11 @@ description.
 
 @cindex task priority
 
+This mechanism affects the following scheduling algorithms:
+@itemize @bullet
+@item Priority scheduling
+@end itemize
+
 The most significant of these mechanisms is the
 ability for the user to assign a priority level to each
 individual task when it is created and to alter a task's
@@ -104,6 +137,11 @@ to a task.}
 
 @cindex preemption
 
+This mechanism affects the following scheduling algorithms:
+@itemize @bullet
+@item Priority scheduling
+@end itemize
+
 Another way the user can alter the basic scheduling
 algorithm is by manipulating the preemption mode flag
 (@code{@value{RPREFIX}PREEMPT_MASK}) of individual tasks.  If preemption is disabled
@@ -119,6 +157,11 @@ control of the processor.
 
 @cindex timeslicing
 @cindex round robin scheduling
+
+This mechanism affects the following scheduling algorithms:
+@itemize @bullet
+@item Priority scheduling
+@end itemize
 
 Timeslicing or round-robin scheduling is an
 additional method which can be used to alter the basic
@@ -141,6 +184,11 @@ entire timeslice.
 
 @cindex manual round robin
 
+This mechanism affects the following scheduling algorithms:
+@itemize @bullet
+@item Priority scheduling
+@end itemize
+
 The final mechanism for altering the RTEMS scheduling
 algorithm is called manual round-robin.  Manual round-robin is
 invoked by using the @code{@value{DIRPREFIX}task_wake_after}
@@ -151,7 +199,7 @@ end of its priority group.  If no other tasks of the same
 priority are ready to run, then the task does not lose control
 of the processor.
 
-@subsection Dispatching Tasks
+@section Dispatching Tasks
 
 @cindex dispatching
 

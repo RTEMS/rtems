@@ -24,6 +24,7 @@ RTEMS must be configured for an application.  This configuration
 information encompasses a variety of information including 
 the length of each clock tick, the maximum number of each RTEMS
 object that can be created, the application initialization tasks,
+the task scheduling algorithm to be used, 
 and the device drivers in the application.  This information
 is placed in data structures that are given to RTEMS at
 system initialization time.  This chapter details the 
@@ -386,6 +387,54 @@ all during the initialization sequence.  Further, once application
 initialization is complete, it must make itself preemptible and 
 enter an IDLE body loop.  By default, this is not the mode of operation
 and the user is assumed to provide one or more initialization tasks.
+
+@end itemize
+
+@c
+@c
+@c
+@subsection Scheduler Algorithm Configuration
+This section defines the configuration parameters related to selecting 
+a scheduling algorithm for an application.  Regardless of whether 
+@code{CONFIGURE_SCHEDULER_POLICY} is defined, if none of the other 
+configuration parameters are set, then @code{rtems/confdefs.h} will define 
+@code{CONFIGURE_SCHEDULER_PRIORITY} and will (re)define 
+@code{CONFIGURE_SCHEDULER_POLICY} as @code{_Scheduler_Priority}. That is, 
+@code{CONFIGURE_SCHEDULER_PRIORITY} is the default scheduling algorithm.
+
+@itemize @bullet
+@findex CONFIGURE_SCHEDULER_POLICY
+@item @code{CONFIGURE_SCHEDULER_POLICY} is defined to specify which 
+scheduling algorithm an application will use.  If it is undefined, 
+then @code{rtems/confdefs.h} will define it based on the definition 
+of the following configuration parameters.
+Valid values for this configuration parameter are: 
+@code{_Scheduler_USER},
+@code{_Scheduler_Priority}.
+
+@findex CONFIGURE_SCHEDULER_USER
+@item @code{CONFIGURE_SCHEDULER_USER} is defined if the application 
+provides its own scheduling algorithm. If @code{CONFIGURE_SCHEDULER_USER} is 
+defined then @code{CONFIGURE_SCHEDULER_ENTRY_USER} must be defined with the 
+name of the application's initialization function.  If both 
+configuration parameters are defined and @code{CONFIGURE_SCHEDULER_POLICY} 
+is undefined, then @code{CONFIGURE_SCHEDULER_POLICY} will be be defined as 
+@code{_Scheduler_USER}.
+
+@findex CONFIGURE_SCHEDULER_ALL
+@item @code{CONFIGURE_SCHEDULER_ALL} is defined if the application 
+chooses to include all of the RTEMS-provided schedulers.  
+@code{CONFIGURE_SCHEDULER_ALL} will define all of the following configuration 
+parameters and will use @code{CONFIGURE_SCHEDULER_POLICY} to select the 
+algorithm to use. If @code{CONFIGURE_SCHEDULER_POLICY} is not defined, then 
+@code{rtems/confdefs.h} will define it as @code{_Scheduler_Priority}.
+
+@findex CONFIGURE_SCHEDULER_PRIORITY
+@item @code{CONFIGURE_SCHEDULER_PRIORITY} is defined if the application 
+will use the Priority Scheduling algorithm.
+If none of the previous configuration parameters are defined by the 
+application, then @code{rtems/confdefs.h} will define 
+@code{CONFIGURE_SCHEDULER_POLICY} as @code{_Scheduler_PRIORITY}.
 
 @end itemize
 
@@ -816,6 +865,7 @@ typedef struct @{
   uint32_t                        maximum_extensions;
   uint32_t                        microseconds_per_tick;
   uint32_t                        ticks_per_timeslice;
+  uint32_t                        scheduler_policy;
   void                          (*idle_task)( void );
   uint32_t                        idle_task_stack_size;
   uint32_t                        interrupt_stack_size;
@@ -874,6 +924,12 @@ is the number of clock ticks for a timeslice.
 When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_TICKS_PER_TIMESLICE}.
+
+@item scheduler_policy
+is the algorithm to use for task scheduling.
+When using the @code{rtems/confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_SCHEDULER_POLICY}.
 
 @item idle_task
 is the address of the optional user

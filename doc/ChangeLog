@@ -1,3 +1,10 @@
+2010-11-24	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1647/cpukit
+	* user/conf.t, user/schedule.t: Update documentation to reflect
+	refactoring of SuperCore to add Scheduler and ability for user to
+	configure a scheduler.
+
 2010-11-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1716/doc
