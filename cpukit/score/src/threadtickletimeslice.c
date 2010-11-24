@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -89,7 +90,7 @@ void _Thread_Tickle_timeslice( void )
          *  currently executing thread is placed at the rear of the
          *  FIFO for this priority and a new heir is selected.
          */
-        _Thread_Yield_processor();
+        _Scheduler_Yield( );
         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       }
       break;

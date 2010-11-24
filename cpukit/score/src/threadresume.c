@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -68,19 +69,7 @@ void _Thread_Resume(
     the_thread->current_state = _States_Clear(STATES_SUSPENDED, current_state);
 
     if ( _States_Is_ready( current_state ) ) {
-
-      _Priority_bit_map_Add( &the_thread->Priority_map );
-
-      _Chain_Append_unprotected(the_thread->ready, &the_thread->Object.Node);
-
-      _ISR_Flash( level );
-
-      if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
-        _Thread_Heir = the_thread;
-        if ( _Thread_Executing->is_preemptible ||
-             the_thread->current_priority == 0 )
-          _Thread_Dispatch_necessary = true;
-      }
+      _Scheduler_Unblock( &_Scheduler, the_thread );
     }
   }
 

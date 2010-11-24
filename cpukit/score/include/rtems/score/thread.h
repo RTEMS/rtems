@@ -70,7 +70,7 @@ extern "C" {
 #endif
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/prioritybitmap.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/tod.h>
@@ -390,10 +390,10 @@ struct Thread_Control_struct {
    *  since it was created.
    */
   Thread_CPU_usage_t                    cpu_time_used;
-  /** This field points to the Ready FIFO for this priority. */
-  Chain_Control                        *ready;
-  /** This field contains precalculated priority map indices. */
-  Priority_bit_map_Information          Priority_map;
+  /** This union holds per-thread data for the scheduler and ready queue. */
+  union {
+    Scheduler_priority_Per_thread      *priority;
+  } scheduler;
   /** This field contains information about the starting state of
    *  this thread.
    */
@@ -454,12 +454,6 @@ SCORE_EXTERN uint32_t   _Thread_Maximum_extensions;
  *  The following is used to manage the length of a timeslice quantum.
  */
 SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
-
-/**
- *  The following points to the array of FIFOs used to manage the
- *  set of ready threads.
- */
-SCORE_EXTERN Chain_Control *_Thread_Ready_chain;
 
 /**
  *  The following points to the thread whose floating point
@@ -652,13 +646,6 @@ void _Thread_Set_transient(
  *  timeslicing and, if so, when its timeslice expires.
  */
 void _Thread_Tickle_timeslice( void );
-
-/**
- *  This routine is invoked when a thread wishes to voluntarily
- *  transfer control of the processor to another thread of equal
- *  or greater priority.
- */
-void _Thread_Yield_processor( void );
 
 /**
  *  This routine initializes the context of the_thread to its

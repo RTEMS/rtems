@@ -19,6 +19,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/thread.h>
 #include <rtems/seterr.h>
@@ -28,7 +29,7 @@
 int sched_yield( void )
 {
   _Thread_Disable_dispatch();
-    _Thread_Yield_processor();
+    _Scheduler_Yield();
   _Thread_Enable_dispatch();
   return 0;
 }

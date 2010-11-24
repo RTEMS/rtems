@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -66,31 +67,7 @@ void _Thread_Clear_state(
       the_thread->current_state = _States_Clear( state, current_state );
 
       if ( _States_Is_ready( current_state ) ) {
-
-        _Priority_bit_map_Add( &the_thread->Priority_map );
-
-        _Chain_Append_unprotected(the_thread->ready, &the_thread->Object.Node);
-
-        _ISR_Flash( level );
-
-        /*
-         *  If the thread that was unblocked is more important than the heir,
-         *  then we have a new heir.  This may or may not result in a
-         *  context switch.
-         *
-         *  Normal case:
-         *    If the current thread is preemptible, then we need to do
-         *    a context switch.
-         *  Pseudo-ISR case:
-         *    Even if the thread isn't preemptible, if the new heir is
-         *    a pseudo-ISR system task, we need to do a context switch.
-         */
-        if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
-          _Thread_Heir = the_thread;
-          if ( _Thread_Executing->is_preemptible ||
-               the_thread->current_priority == 0 )
-            _Thread_Dispatch_necessary = true;
-        }
+        _Scheduler_Unblock( &_Scheduler, the_thread);
       }
   }
   _ISR_Enable( level );

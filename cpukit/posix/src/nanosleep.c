@@ -18,6 +18,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 
@@ -56,7 +57,7 @@ int nanosleep(
 
   if ( !ticks ) {
     _Thread_Disable_dispatch();
-      _Thread_Yield_processor();
+      _Scheduler_Yield();
     _Thread_Enable_dispatch();
     if ( rmtp ) {
        rmtp->tv_sec = 0;

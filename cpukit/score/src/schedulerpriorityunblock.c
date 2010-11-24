@@ -1,9 +1,7 @@
 /*
- *  Thread Handler
+ *  Scheduler Handler
  *
- *
- *  COPYRIGHT (c) 1989-2006.
- *  On-Line Applications Research Corporation (OAR).
+ *  Copyright (C) 2010 Gedare Bloom.
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
@@ -24,6 +22,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerpriority.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -31,15 +30,15 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
+/*
+ *  _Scheduler_priority_Unblock
  *
- *  _Thread_Ready
- *
- *  This kernel routine readies the requested thread, the thread chain
- *  is adjusted.  A new heir thread may be selected.
+ *  This kernel routine readies the requested thread according to the queuing 
+ *  discipline. A new heir thread may be selected.
  *
  *  Input parameters:
- *    the_thread - pointer to thread control block
+ *    the_scheduler - pointer to scheduler control
+ *    the_thread    - pointer to thread control block
  *
  *  Output parameters:  NONE
  *
@@ -47,21 +46,12 @@
  *         This ensures the correct heir after a thread restart.
  *
  *  INTERRUPT LATENCY:
- *    ready chain
- *    select heir
  */
 
-void _Thread_Ready(
-  Thread_Control *the_thread
+void _Scheduler_priority_Unblock (
+  Scheduler_Control       *the_scheduler,
+  Thread_Control          *the_thread
 )
 {
-  ISR_Level              level;
-
-  _ISR_Disable( level );
-
-  the_thread->current_state = STATES_READY;
-
-  _Scheduler_Unblock( &_Scheduler, the_thread );
-
-  _ISR_Enable( level );
+  _Scheduler_priority_Unblock_body(the_scheduler, the_thread);
 }

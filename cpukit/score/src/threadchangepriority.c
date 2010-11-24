@@ -23,6 +23,8 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerpriority.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -117,14 +119,16 @@ void _Thread_Change_priority(
      *  We now know the thread will be in the READY state when we remove
      *  the TRANSIENT state.  So we have to place it on the appropriate
      *  Ready Queue with interrupts off.
+     *
+     *  FIXME: hard-coded for priority scheduling. Might be ok since this 
+     *  function is specific to priority scheduling?
      */
     the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
 
-    _Priority_bit_map_Add( &the_thread->Priority_map );
     if ( prepend_it )
-      _Chain_Prepend_unprotected( the_thread->ready, &the_thread->Object.Node );
+      _Scheduler_priority_Ready_queue_enqueue_first( the_thread );
     else
-      _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
+      _Scheduler_priority_Ready_queue_enqueue( the_thread );
   }
 
   _ISR_Flash( level );
@@ -133,7 +137,7 @@ void _Thread_Change_priority(
    *  We altered the set of thread priorities.  So let's figure out
    *  who is the heir and if we need to switch to them.
    */
-  _Thread_Calculate_heir();
+  _Scheduler_Schedule(&_Scheduler);
 
   if ( !_Thread_Is_executing_also_the_heir() &&
        _Thread_Executing->is_preemptible )

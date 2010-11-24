@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -52,9 +53,7 @@ void _Thread_Suspend(
 )
 {
   ISR_Level      level;
-  Chain_Control *ready;
-
-  ready = the_thread->ready;
+  
   _ISR_Disable( level );
   if ( !_States_Is_ready( the_thread->current_state ) ) {
     the_thread->current_state =
@@ -65,21 +64,7 @@ void _Thread_Suspend(
 
   the_thread->current_state = STATES_SUSPENDED;
 
-  if ( _Chain_Has_only_one_node( ready ) ) {
-
-    _Chain_Initialize_empty( ready );
-    _Priority_bit_map_Remove( &the_thread->Priority_map );
-
-  } else
-    _Chain_Extract_unprotected( &the_thread->Object.Node );
-
-  _ISR_Flash( level );
-
-  if ( _Thread_Is_heir( the_thread ) )
-     _Thread_Calculate_heir();
-
-  if ( _Thread_Is_executing( the_thread ) )
-    _Thread_Dispatch_necessary = true;
+  _Scheduler_Block(&_Scheduler, the_thread);
 
   _ISR_Enable( level );
 }

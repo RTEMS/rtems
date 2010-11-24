@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -84,6 +85,11 @@ void _Thread_Close(
     if ( _Watchdog_Is_active( &the_thread->Timer ) )
       (void) _Watchdog_Remove( &the_thread->Timer );
   }
+
+  /*
+   * Free the per-thread scheduling information.
+   */
+  _Scheduler_Thread_scheduler_free( &_Scheduler, the_thread );
 
   /*
    *  The thread might have been FP.  So deal with that.

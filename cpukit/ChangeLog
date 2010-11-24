@@ -1,3 +1,31 @@
+2010-11-24	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1647/cpukit
+	* posix/src/nanosleep.c, posix/src/sched_yield.c,
+	rtems/src/taskwakeafter.c, sapi/include/confdefs.h,
+	sapi/include/rtems/config.h, sapi/src/exinit.c, score/Makefile.am,
+	score/preinstall.am, score/include/rtems/score/prioritybitmap.h,
+	score/include/rtems/score/thread.h,
+	score/inline/rtems/score/thread.inl, score/src/thread.c,
+	score/src/threadchangepriority.c, score/src/threadclearstate.c,
+	score/src/threadclose.c, score/src/threadinitialize.c,
+	score/src/threadready.c, score/src/threadresume.c,
+	score/src/threadsetpriority.c, score/src/threadsetstate.c,
+	score/src/threadsettransient.c,	score/src/threadsuspend.c,
+	score/src/threadtickletimeslice.c: Refactor scheduler out of thread
+	handler to facilitate alternate scheduler implementations.
+	* score/src/threadyieldprocessor.c: Removed.
+	* score/src/schedulerprioritythreadschedulerupdate.c,
+	score/src/schedulerprioritythreadschedulerfree.c,
+	score/src/schedulerpriorityblock.c, score/src/scheduler.c,
+	score/src/schedulerprioritythreadschedulerallocate.c,
+	score/src/schedulerpriorityunblock.c,
+	score/src/schedulerpriority.c, score/src/schedulerpriorityyield.c,
+	score/include/rtems/score/schedulerpriority.h,
+	score/include/rtems/score/scheduler.h,
+	score/inline/rtems/score/scheduler.inl, 
+	score/inline/rtems/score/schedulerpriority.inl: New files.
+
 2010-11-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/src/iterateoverthreads.c, libmisc/cpuuse/cpuusagereport.c:

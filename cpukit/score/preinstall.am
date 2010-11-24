@@ -111,6 +111,14 @@ $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h: include/rtems/score/prioritybit
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
 
+$(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h
+
+$(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h: include/rtems/score/schedulerpriority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
+
 $(PROJECT_INCLUDE)/rtems/score/stack.h: include/rtems/score/stack.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.h
@@ -244,6 +252,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.inl
 $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl: inline/rtems/score/prioritybitmap.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
+
+$(PROJECT_INCLUDE)/rtems/score/scheduler.inl: inline/rtems/score/scheduler.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
+
+$(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl: inline/rtems/score/schedulerpriority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl
 
 $(PROJECT_INCLUDE)/rtems/score/stack.inl: inline/rtems/score/stack.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.inl

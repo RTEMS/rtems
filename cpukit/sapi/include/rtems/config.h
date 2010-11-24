@@ -118,6 +118,10 @@ typedef struct {
    */
   uint32_t                       ticks_per_timeslice;
 
+  /** This field specifies the scheduling policy to use.
+   */
+  uint32_t                       scheduler_policy;
+
   /** This element points to the BSP's optional idle task which may override
    *  the default one provided with RTEMS.
    */

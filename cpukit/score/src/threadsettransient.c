@@ -23,6 +23,8 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerpriority.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -54,22 +56,15 @@ void _Thread_Set_transient(
 {
   ISR_Level             level;
   uint32_t              old_state;
-  Chain_Control *ready;
-
-  ready = the_thread->ready;
+  
   _ISR_Disable( level );
 
   old_state = the_thread->current_state;
   the_thread->current_state = _States_Set( STATES_TRANSIENT, old_state );
 
+  /* FIXME: need to check which scheduler to use? */
   if ( _States_Is_ready( old_state ) ) {
-    if ( _Chain_Has_only_one_node( ready ) ) {
-
-      _Chain_Initialize_empty( ready );
-      _Priority_bit_map_Remove( &the_thread->Priority_map );
-
-    } else
-      _Chain_Extract_unprotected( &the_thread->Object.Node );
+    _Scheduler_priority_Ready_queue_extract( the_thread);
   }
 
   _ISR_Enable( level );

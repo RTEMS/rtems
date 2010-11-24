@@ -26,6 +26,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
     include/rtems/score/priority.h include/rtems/score/prioritybitmap.h \
+    include/rtems/score/scheduler.h include/rtems/score/schedulerpriority.h \
     include/rtems/score/stack.h include/rtems/score/states.h \
     include/rtems/score/sysstate.h include/rtems/score/thread.h \
     include/rtems/score/threadq.h include/rtems/score/threadsync.h \
@@ -54,6 +55,7 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
     inline/rtems/score/priority.inl inline/rtems/score/prioritybitmap.inl \
+    inline/rtems/score/scheduler.inl inline/rtems/score/schedulerpriority.inl \
     inline/rtems/score/stack.inl inline/rtems/score/states.inl \
     inline/rtems/score/sysstate.inl inline/rtems/score/thread.inl \
     inline/rtems/score/threadq.inl inline/rtems/score/tod.inl \
@@ -137,6 +139,19 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
     src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c \
     src/objectnamespaceremove.c
 
+## SCHEDULER_C_FILES
+libscore_a_SOURCES += src/scheduler.c
+
+## SCHEDULERPRIORITY_C_FILES
+libscore_a_SOURCES += src/schedulerpriority.c \
+											src/schedulerpriorityblock.c \
+                      src/schedulerprioritythreadschedulerallocate.c \
+                      src/schedulerprioritythreadschedulerfree.c \
+                      src/schedulerprioritythreadschedulerupdate.c \
+											src/schedulerpriorityschedule.c \
+											src/schedulerpriorityunblock.c \
+											src/schedulerpriorityyield.c
+
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocate.c \
     src/pheapextend.c src/pheapfree.c src/pheapgetsize.c \
@@ -153,7 +168,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadsetstate.c src/threadsettransient.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/threadsuspend.c \
-    src/threadtickletimeslice.c src/threadyieldprocessor.c \
+    src/threadtickletimeslice.c \
     src/iterateoverthreads.c src/threadblockingoperationcancel.c
 
 ## THREADQ_C_FILES

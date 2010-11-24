@@ -21,6 +21,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
 #include <rtems/score/object.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/rtems/tasks.h>
@@ -52,7 +53,7 @@ rtems_status_code rtems_task_wake_after(
 {
   _Thread_Disable_dispatch();
     if ( ticks == 0 ) {
-      _Thread_Yield_processor();
+      _Scheduler_Yield();
     } else {
       _Thread_Set_state( _Thread_Executing, STATES_DELAYING );
       _Watchdog_Initialize(
