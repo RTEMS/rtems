@@ -1,3 +1,8 @@
+2010-11-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1674/doc
+	* user/Makefile.am, user/dirstat.texi: Fix bad node reference.
+
 2010-11-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1716/doc
