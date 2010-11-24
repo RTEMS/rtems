@@ -1,3 +1,9 @@
+2010-11-24	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1647/cpukit
+	* spsize/size.c: Update documentation to reflect refactoring of
+	SuperCore to add Scheduler Handler.
+
 2010-11-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp70/init.c, sp70/sp70.scn: Fix bug in test which lead to random

@@ -37,6 +37,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/rtems/sem.h>
 #include <rtems/rtems/signal.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/timer.h>
@@ -48,6 +49,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <tmacros.h>
+
+#include "system.h"
 
 /* external function prototypes */
 int getint( void );
@@ -64,12 +67,32 @@ void print_formula(void);
  */
 #define  HEAP_OVHD        16    /* wasted heap space per task stack */
 #define  NAME_PTR_SIZE     8    /* size of name and pointer table entries */
-#define  READYCHAINS_SIZE  \
+
+#if CONFIGURE_SCHEDULER_POLICY == _Scheduler_PRIORITY
+  #include <rtems/score/prioritybitmap.h>
+
+  /* Priority scheduling uninitialized (globals) consumption */
+  #define SCHEDULER_OVHD          ((sizeof _Scheduler)              + \
+                                   (sizeof _Priority_Major_bit_map) + \
+                                   (sizeof _Priority_Bit_map))
+
+  /* Priority scheduling per-thread consumption. Gets 
+   * included in the PER_TASK consumption. */
+  #define SCHEDULER_TASK_WKSP     (sizeof(Scheduler_priority_Per_thread))
+
+  /* Priority scheduling workspace consumption 
+   *
+   * Include allocation of ready queue.  Pointers are already counted by 
+   * including _Scheduler in SCHEDULER_OVHD.
+   */
+  #define  SCHEDULER_WKSP_SIZE  \
     ((RTEMS_MAXIMUM_PRIORITY + 1) * sizeof(Chain_Control ))
+#endif
 
 #define PER_TASK      \
      (long) (sizeof (Thread_Control) + \
-      NAME_PTR_SIZE + HEAP_OVHD + sizeof( RTEMS_API_Control ))
+      NAME_PTR_SIZE + HEAP_OVHD + sizeof( RTEMS_API_Control ) + \
+      SCHEDULER_TASK_WKSP )
 #define PER_SEMAPHORE \
      (long) (sizeof (Semaphore_Control) + NAME_PTR_SIZE)
 #define PER_TIMER     \
@@ -159,10 +182,10 @@ int initialized = 0;
  *
  *    + Object MP
  *      - Global Object CB's
- *    + Thread
- *      - Ready Chain
  *    + Thread MP
  *      - Proxies Chain
+ *    + Scheduler
+ *      - Ready queue
  *    + Interrupt Manager
  *      - Interrupt Stack
  *    + Timer Manager
@@ -195,18 +218,18 @@ int initialized = 0;
  *  The following calculates the overhead needed by RTEMS from the
  *  Workspace Area.
  */
-sys_req = SYSTEM_TASKS     +     /* MPCI Receive Server and IDLE */
-          NAME_PTR_SIZE    +     /* Task Overhead */
-          READYCHAINS_SIZE +     /* Ready Chains */
-          NAME_PTR_SIZE    +     /* Timer Overhead */
-          NAME_PTR_SIZE    +     /* Semaphore Overhead */
-          NAME_PTR_SIZE    +     /* Message Queue Overhead */
-          NAME_PTR_SIZE    +     /* Region Overhead */
-          NAME_PTR_SIZE    +     /* Partition Overhead */
-          NAME_PTR_SIZE    +     /* Dual-Ported Memory Overhead */
-          NAME_PTR_SIZE    +     /* Rate Monotonic Overhead */
-          NAME_PTR_SIZE    +     /* Extension Overhead */
-          PER_NODE;              /* Extra Gobject Table */
+sys_req = SYSTEM_TASKS        +     /* MPCI Receive Server and IDLE */
+          NAME_PTR_SIZE       +     /* Task Overhead */
+          SCHEDULER_WKSP_SIZE +     /* Scheduler Overhead */
+          NAME_PTR_SIZE       +     /* Timer Overhead */
+          NAME_PTR_SIZE       +     /* Semaphore Overhead */
+          NAME_PTR_SIZE       +     /* Message Queue Overhead */
+          NAME_PTR_SIZE       +     /* Region Overhead */
+          NAME_PTR_SIZE       +     /* Partition Overhead */
+          NAME_PTR_SIZE       +     /* Dual-Ported Memory Overhead */
+          NAME_PTR_SIZE       +     /* Rate Monotonic Overhead */
+          NAME_PTR_SIZE       +     /* Extension Overhead */
+          PER_NODE;                 /* Extra Gobject Table */
 
 uninitialized =
 /*address.h*/   0                                         +
@@ -311,9 +334,6 @@ uninitialized =
 
 /*percpu.h*/    (sizeof _Per_CPU_Information)             +
 
-/*priority.h*/  (sizeof _Priority_Major_bit_map)          +
-                (sizeof _Priority_Bit_map)                +
-
 /*ratemon.h*/   (sizeof _Rate_monotonic_Information)      +
 
 /*region.h*/    (sizeof _Region_Information)              +
@@ -323,6 +343,8 @@ uninitialized =
 #endif
 
 /*rtems.h*/     /* Not applicable */
+
+/*scheduler.h*/ SCHEDULER_OVHD                            + 
 
 /*sem.h*/       (sizeof _Semaphore_Information)           +
 
@@ -355,7 +377,6 @@ uninitialized =
                 (sizeof _Thread_Dispatch_disable_level)   +
                 (sizeof _Thread_Maximum_extensions)       +
                 (sizeof _Thread_Ticks_per_timeslice)      +
-                (sizeof _Thread_Ready_chain)              +
                 (sizeof _Thread_Executing)                +
                 (sizeof _Thread_Heir)                     +
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
