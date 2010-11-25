@@ -171,7 +171,7 @@ rtems_task Task_1(
   _Thread_Dispatch_disable_level = 0;
 
   _Thread_Heir = (rtems_tcb *) 
-        _Chain_Last(&_Scheduler.ready_queues.Priority[LOW_PRIORITY]);
+        _Chain_Last(&_Scheduler.Ready_queues.priority[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
 
@@ -229,7 +229,7 @@ rtems_task Task_2(
   _Thread_Dispatch_disable_level = 0;
 
   _Thread_Heir = (rtems_tcb *)
-      _Chain_First(&_Scheduler.ready_queues.Priority[LOW_PRIORITY]);
+      _Chain_First(&_Scheduler.Ready_queues.priority[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
 

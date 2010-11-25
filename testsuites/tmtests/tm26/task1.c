@@ -243,7 +243,7 @@ rtems_task Middle_task(
 
   _Thread_Executing =
         (Thread_Control *) 
-        _Chain_First(&_Scheduler.ready_queues.Priority[LOW_PRIORITY]);
+        _Chain_First(&_Scheduler.Ready_queues.priority[LOW_PRIORITY]);
 
   /* do not force context switch */
 
@@ -281,7 +281,7 @@ rtems_task Low_task(
 
   _Thread_Executing =
         (Thread_Control *) 
-        _Chain_First(&_Scheduler.ready_queues.Priority[FP1_PRIORITY]);
+        _Chain_First(&_Scheduler.Ready_queues.priority[FP1_PRIORITY]);
 
   /* do not force context switch */
 
@@ -309,7 +309,7 @@ rtems_task Floating_point_task_1(
 
   _Thread_Executing =
         (Thread_Control *) 
-        _Chain_First(&_Scheduler.ready_queues.Priority[FP2_PRIORITY]);
+        _Chain_First(&_Scheduler.Ready_queues.priority[FP2_PRIORITY]);
 
   /* do not force context switch */
 
@@ -333,7 +333,7 @@ rtems_task Floating_point_task_1(
 
   _Thread_Executing =
        (Thread_Control *)
-       _Chain_First(&_Scheduler.ready_queues.Priority[FP2_PRIORITY]);
+       _Chain_First(&_Scheduler.Ready_queues.priority[FP2_PRIORITY]);
 
   /* do not force context switch */
 
@@ -363,7 +363,7 @@ rtems_task Floating_point_task_2(
 
   _Thread_Executing =
        (Thread_Control *)
-       _Chain_First(&_Scheduler.ready_queues.Priority[FP1_PRIORITY]);
+       _Chain_First(&_Scheduler.Ready_queues.priority[FP1_PRIORITY]);
 
   FP_LOAD( 1.0 );
 
