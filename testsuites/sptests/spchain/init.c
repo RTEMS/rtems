@@ -20,6 +20,24 @@ typedef struct {
   int              id;
 } test_node;
 
+static void test_chain_control_initializer(void)
+{
+  rtems_chain_control chain = RTEMS_CHAIN_INITIALIZER_EMPTY( chain );
+  puts( "INIT - Verify rtems_chain_control initializer" );
+  rtems_test_assert( rtems_chain_is_empty( &chain ) );
+}
+
+static void test_chain_control_layout(void)
+{
+  rtems_chain_control chain;
+  puts( "INIT - Verify rtems_chain_control layout" );
+  rtems_test_assert(
+    sizeof(rtems_chain_control)
+      == sizeof(rtems_chain_node) + sizeof(rtems_chain_node *)
+  );
+  rtems_test_assert( &chain.Head.Node.previous == &chain.Tail.Node.next );
+}
+
 static void test_chain_get_with_wait(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -158,6 +176,8 @@ rtems_task Init(
   test_chain_with_empty_check();
   test_chain_with_notification();
   test_chain_get_with_wait();
+  test_chain_control_layout();
+  test_chain_control_initializer();
 
   puts( "*** END OF RTEMS CHAIN API TEST ***" );
   rtems_test_exit(0);

@@ -1,3 +1,7 @@
+2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spchain/init.c, spchain/spchain.scn: More test cases.
+
 2010-11-24	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1647/cpukit

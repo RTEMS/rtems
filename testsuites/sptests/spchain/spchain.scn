@@ -8,4 +8,6 @@ INIT - Verify rtems_chain_append_with_notification
 INIT - Verify rtems_chain_prepend_with_notification
 INIT - Verify rtems_chain_get_with_notification
 INIT - Verify rtems_chain_get_with_wait
+INIT - Verify rtems_chain_control layout
+INIT - Verify rtems_chain_control initializer
 *** END OF RTEMS CHAIN API TEST ***
