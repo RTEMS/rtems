@@ -122,7 +122,22 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Head(
   Chain_Control *the_chain
 )
 {
-   return (Chain_Node *) the_chain;
+  return &the_chain->Head.Node;
+}
+
+/** @brief Return pointer to immutable Chain Head
+ *
+ *  This function returns a pointer to the head node on the chain.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the permanent head node of the chain.
+ */
+RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_head(
+  const Chain_Control *the_chain
+)
+{
+  return &the_chain->Head.Node;
 }
 
 /** @brief Return pointer to Chain Tail
@@ -137,7 +152,22 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Tail(
   Chain_Control *the_chain
 )
 {
-   return (Chain_Node *) &the_chain->permanent_null;
+  return &the_chain->Tail.Node;
+}
+
+/** @brief Return pointer to immutable Chain Tail
+ *
+ *  This function returns a pointer to the last node on the chain.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the permanent tail node of the chain.
+ */
+RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_tail(
+  const Chain_Control *the_chain
+)
+{
+  return &the_chain->Tail.Node;
 }
 
 /** @brief Return pointer to Chain's First node
@@ -153,7 +183,23 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_First(
   Chain_Control *the_chain
 )
 {
-  return the_chain->first;
+  return _Chain_Head( the_chain )->next;
+}
+
+/** @brief Return pointer to immutable Chain's First node
+ *
+ *  This function returns a pointer to the first node on the chain after the
+ *  head.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the first node of the chain.
+ */
+RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_first(
+  const Chain_Control *the_chain
+)
+{
+  return _Chain_Immutable_head( the_chain )->next;
 }
 
 /** @brief Return pointer to Chain's Last node
@@ -169,7 +215,23 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Last(
   Chain_Control *the_chain
 )
 {
-  return the_chain->last;
+  return _Chain_Tail( the_chain )->previous;
+}
+
+/** @brief Return pointer to immutable Chain's Last node
+ *
+ *  This function returns a pointer to the last node on the chain just before
+ *  the tail.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the last node of the chain.
+ */
+RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_last(
+  const Chain_Control *the_chain
+)
+{
+  return _Chain_Immutable_tail( the_chain )->previous;
 }
 
 /** @brief Return pointer the next node from this node
@@ -213,10 +275,11 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Previous(
  *  false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Chain_Is_empty(
-  Chain_Control *the_chain
+  const Chain_Control *the_chain
 )
 {
-  return (the_chain->first == _Chain_Tail(the_chain));
+  return _Chain_Immutable_first( the_chain )
+    == _Chain_Immutable_tail( the_chain );
 }
 
 /** @brief Is this the First Node on the Chain
@@ -268,7 +331,8 @@ RTEMS_INLINE_ROUTINE bool _Chain_Has_only_one_node(
   const Chain_Control *the_chain
 )
 {
-  return (the_chain->first == the_chain->last);
+  return _Chain_Immutable_first( the_chain )
+    == _Chain_Immutable_last( the_chain );
 }
 
 /** @brief Is this Node the Chain Head
@@ -287,7 +351,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_head(
   const Chain_Node    *the_node
 )
 {
-   return (the_node == _Chain_Head(the_chain));
+  return (the_node == _Chain_Head(the_chain));
 }
 
 /** @brief Is this Node the Chail Tail
@@ -303,7 +367,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_tail(
   const Chain_Node    *the_node
 )
 {
-   return (the_node == _Chain_Tail(the_chain));
+  return (the_node == _Chain_Tail(the_chain));
 }
 
 /** @brief Initialize this Chain as Empty
@@ -316,9 +380,12 @@ RTEMS_INLINE_ROUTINE void _Chain_Initialize_empty(
   Chain_Control *the_chain
 )
 {
-  the_chain->first          = _Chain_Tail(the_chain);
-  the_chain->permanent_null = NULL;
-  the_chain->last           = _Chain_Head(the_chain);
+  Chain_Node *head = _Chain_Head( the_chain );
+  Chain_Node *tail = _Chain_Tail( the_chain );
+
+  head->next = tail;
+  head->previous = NULL;
+  tail->previous = head;
 }
 
 /** @brief Extract this Node (unprotected)
@@ -360,15 +427,14 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Get_first_unprotected(
   Chain_Control *the_chain
 )
 {
-  Chain_Node  *return_node;
-  Chain_Node  *new_first;
+  Chain_Node *head = _Chain_Head( the_chain );
+  Chain_Node *old_first = head->next;
+  Chain_Node *new_first = old_first->next;
 
-  return_node         = the_chain->first;
-  new_first           = return_node->next;
-  the_chain->first    = new_first;
-  new_first->previous = _Chain_Head(the_chain);
+  head->next = new_first;
+  new_first->previous = head;
 
-  return return_node;
+  return old_first;
 }
 
 /** @brief Get the First Node (unprotected)
@@ -435,13 +501,13 @@ RTEMS_INLINE_ROUTINE void _Chain_Append_unprotected(
   Chain_Node    *the_node
 )
 {
-  Chain_Node *old_last_node;
+  Chain_Node *tail = _Chain_Tail( the_chain );
+  Chain_Node *old_last = tail->previous;
 
-  the_node->next      = _Chain_Tail(the_chain);
-  old_last_node       = the_chain->last;
-  the_chain->last     = the_node;
-  old_last_node->next = the_node;
-  the_node->previous  = old_last_node;
+  the_node->next = tail;
+  tail->previous = the_node;
+  old_last->next = the_node;
+  the_node->previous = old_last;
 }
 
 /** @brief Prepend a Node (unprotected)
@@ -556,17 +622,19 @@ RTEMS_INLINE_ROUTINE bool _Chain_Get_with_empty_check_unprotected(
 )
 {
   bool is_empty_now = true;
-  Chain_Node *first = the_chain->first;
+  Chain_Node *head = _Chain_Head( the_chain );
+  Chain_Node *tail = _Chain_Tail( the_chain );
+  Chain_Node *old_first = head->next;
 
-  if ( first != _Chain_Tail( the_chain ) ) {
-    Chain_Node *new_first = first->next;
+  if ( old_first != tail ) {
+    Chain_Node *new_first = old_first->next;
 
-    the_chain->first = new_first;
-    new_first->previous = _Chain_Head( the_chain );
+    head->next = new_first;
+    new_first->previous = head;
 
-    *the_node = first;
+    *the_node = old_first;
 
-    is_empty_now = new_first == _Chain_Tail( the_chain );
+    is_empty_now = new_first == tail;
   } else
     *the_node = NULL;
 

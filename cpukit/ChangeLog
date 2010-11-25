@@ -1,5 +1,14 @@
 2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1711/cpukit
+	* score/inline/rtems/score/chain.inl, score/src/chain.c: New functions
+	_Chain_Immutable_head(), _Chain_Immutable_tail(),
+	_Chain_Immutable_first(), and _Chain_Immutable_last().  The
+	Chain_Control is now a union to avoid casts.  The function
+	_Chain_Is_empty() takes now a const pointer parameter.
+
+2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libfs/src/dosfs/fat_file.c, libfs/src/imfs/imfs_debug.c,
 	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_getchild.c,
 	posix/src/killinfo.c, score/inline/rtems/score/schedulerpriority.inl,

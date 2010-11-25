@@ -83,30 +83,24 @@ struct Chain_Node_struct {
  *   manipulating the first and last elements on the chain.
  *   To accomplish this the @a Chain_Control structure is
  *   treated as two overlapping @ref Chain_Node structures.
- *   The permanent head of the chain overlays a node structure on the
- *   @a first and @a permanent_null fields.  The permanent tail
- *   of the chain overlays a node structure on the
- *   @a permanent_null and @a last elements of the structure.
- *
  */
-typedef struct {
-  /** This points to the first node on this chain. */
-  Chain_Node *first;
-  /** This field is always 0. */
-  Chain_Node *permanent_null;
-  /** This points to the last node on this chain. */
-  Chain_Node *last;
+typedef union {
+  struct {
+    Chain_Node Node;
+    Chain_Node *fill;
+  } Head;
+
+  struct {
+    Chain_Node *fill;
+    Chain_Node Node;
+  } Tail;
 } Chain_Control;
 
 /**
  *  @brief Chain initializer for an empty chain with designator @a name.
  */
 #define CHAIN_INITIALIZER_EMPTY(name) \
-  { \
-    (Chain_Node *) &(name).permanent_null, \
-    NULL, \
-    (Chain_Node *) &(name) \
-  }
+  { { { &(name).Tail.Node, NULL }, &(name).Head.Node } }
 
 /**
  *  @brief Chain definition for an empty chain with designator @a name.
