@@ -1,5 +1,11 @@
 2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* score/include/rtems/score/scheduler.h,
+	score/include/rtems/score/schedulerpriority.h: Whitespace removal.
+	Moved C++ extern directive.
+
+2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1711/cpukit
 	* score/inline/rtems/score/chain.inl, score/src/chain.c: New functions
 	_Chain_Immutable_head(), _Chain_Immutable_tail(),

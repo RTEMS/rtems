@@ -18,21 +18,21 @@
 #ifndef _RTEMS_SCORE_SCHEDULERPRIORITY_H
 #define _RTEMS_SCORE_SCHEDULERPRIORITY_H
 
-/**
- *  @addtogroup ScoreScheduler
- *
- */
-/**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/score/chain.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/wkspace.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ *  @addtogroup ScoreScheduler
+ *
+ */
+/**@{*/
 
 /**
  * This routine initializes the priority scheduler.
