@@ -50,6 +50,8 @@ void _Thread_queue_Extract_priority_helper(
 )
 {
   ISR_Level       level;
+  Chain_Node     *head;
+  Chain_Node     *tail;
   Chain_Node     *the_node;
   Chain_Node     *next_node;
   Chain_Node     *previous_node;
@@ -73,9 +75,9 @@ void _Thread_queue_Extract_priority_helper(
   previous_node = the_node->previous;
 
   if ( !_Chain_Is_empty( &the_thread->Wait.Block2n ) ) {
-    new_first_node   = the_thread->Wait.Block2n.first;
+    new_first_node   = _Chain_First( &the_thread->Wait.Block2n );
     new_first_thread = (Thread_Control *) new_first_node;
-    last_node        = the_thread->Wait.Block2n.last;
+    last_node        = _Chain_Last( &the_thread->Wait.Block2n );
     new_second_node  = new_first_node->next;
 
     previous_node->next      = new_first_node;
@@ -85,12 +87,13 @@ void _Thread_queue_Extract_priority_helper(
 
     if ( !_Chain_Has_only_one_node( &the_thread->Wait.Block2n ) ) {
                                         /* > two threads on 2-n */
-      new_second_node->previous =
-                _Chain_Head( &new_first_thread->Wait.Block2n );
-      new_first_thread->Wait.Block2n.first = new_second_node;
+      head = _Chain_Head( &new_first_thread->Wait.Block2n );
+      tail = _Chain_Tail( &new_first_thread->Wait.Block2n );
 
-      new_first_thread->Wait.Block2n.last = last_node;
-      last_node->next = _Chain_Tail( &new_first_thread->Wait.Block2n );
+      new_second_node->previous = head;
+      head->next = new_second_node;
+      tail->previous = last_node;
+      last_node->next = tail;
     }
   } else {
     previous_node->next = next_node;

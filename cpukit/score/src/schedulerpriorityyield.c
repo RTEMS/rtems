@@ -67,7 +67,7 @@ void _Scheduler_priority_Yield(
       _ISR_Flash( level );
 
       if ( _Thread_Is_heir( executing ) )
-        _Thread_Heir = (Thread_Control *) ready->first;
+        _Thread_Heir = (Thread_Control *) _Chain_First( ready );
       _Thread_Dispatch_necessary = true;
     }
     else if ( !_Thread_Is_heir( executing ) )

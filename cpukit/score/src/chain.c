@@ -40,14 +40,14 @@ void _Chain_Initialize(
   size_t         node_size
 )
 {
-  size_t      count;
-  Chain_Node *current;
-  Chain_Node *next;
+  size_t count = number_nodes;
+  Chain_Node *head = _Chain_Head( the_chain );
+  Chain_Node *tail = _Chain_Tail( the_chain );
+  Chain_Node *current = head;
+  Chain_Node *next = starting_address;
 
-  count                     = number_nodes;
-  current                   = _Chain_Head( the_chain );
-  the_chain->permanent_null = NULL;
-  next                      = starting_address;
+  head->previous = NULL;
+
   while ( count-- ) {
     current->next  = next;
     next->previous = current;
@@ -55,6 +55,7 @@ void _Chain_Initialize(
     next           = (Chain_Node *)
                         _Addresses_Add_offset( (void *) next, node_size );
   }
-  current->next    = _Chain_Tail( the_chain );
-  the_chain->last  = current;
+
+  current->next = tail;
+  tail->previous = current;
 }

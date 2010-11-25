@@ -1,3 +1,21 @@
+2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/dosfs/fat_file.c, libfs/src/imfs/imfs_debug.c,
+	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_getchild.c,
+	posix/src/killinfo.c, score/inline/rtems/score/schedulerpriority.inl,
+	score/inline/rtems/score/watchdog.inl, score/src/apiext.c,
+	score/src/chain.c, score/src/coremsgflushsupp.c,
+	score/src/coremsginsert.c, score/src/objectshrinkinformation.c,
+	score/src/schedulerpriorityyield.c,
+	score/src/threadqdequeuepriority.c,
+	score/src/threadqenqueuepriority.c,
+	score/src/threadqextractpriority.c, score/src/threadqfirstfifo.c,
+	score/src/threadqfirstpriority.c, score/src/threadyieldprocessor.c,
+	score/src/userextthreadbegin.c, score/src/userextthreadcreate.c,
+	score/src/userextthreaddelete.c, score/src/userextthreadrestart.c,
+	score/src/userextthreadstart.c, score/src/userextthreadswitch.c,
+	score/src/watchdogreportchain.c: Avoid chain API violations.
+
 2010-11-24	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1647/cpukit

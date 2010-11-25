@@ -34,7 +34,7 @@ void _Watchdog_Report_chain(
   _ISR_Disable( level );
     printk( "Watchdog Chain: %s %p\n", name, header );
     if ( !_Chain_Is_empty( header ) ) {
-      for ( node = header->first ;
+      for ( node = _Chain_First( header ) ;
             node != _Chain_Tail(header) ;
             node = node->next )
       {

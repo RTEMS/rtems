@@ -238,7 +238,7 @@ RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_First(
 )
 {
 
-  return ( (Watchdog_Control *) header->first );
+  return ( (Watchdog_Control *) _Chain_First( header ) );
 
 }
 
@@ -252,7 +252,7 @@ RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Last(
 )
 {
 
-  return ( (Watchdog_Control *) header->last );
+  return ( (Watchdog_Control *) _Chain_Last( header ) );
 
 }
 

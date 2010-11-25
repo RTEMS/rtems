@@ -53,6 +53,7 @@ uint32_t   _CORE_message_queue_Flush_support(
 )
 {
   ISR_Level   level;
+  Chain_Node *inactive_head;
   Chain_Node *inactive_first;
   Chain_Node *message_queue_first;
   Chain_Node *message_queue_last;
@@ -86,15 +87,15 @@ uint32_t   _CORE_message_queue_Flush_support(
    */
 
   _ISR_Disable( level );
-    inactive_first      = the_message_queue->Inactive_messages.first;
-    message_queue_first = the_message_queue->Pending_messages.first;
-    message_queue_last  = the_message_queue->Pending_messages.last;
+    inactive_head = _Chain_Head( &the_message_queue->Inactive_messages );
+    inactive_first = inactive_head->next;;
+    message_queue_first = _Chain_First( &the_message_queue->Pending_messages );
+    message_queue_last = _Chain_Last( &the_message_queue->Pending_messages );
 
-    the_message_queue->Inactive_messages.first = message_queue_first;
+    inactive_head->next = message_queue_first;
     message_queue_last->next = inactive_first;
     inactive_first->previous = message_queue_last;
-    message_queue_first->previous          =
-               _Chain_Head( &the_message_queue->Inactive_messages );
+    message_queue_first->previous = inactive_head;
 
     _Chain_Initialize_empty( &the_message_queue->Pending_messages );
 

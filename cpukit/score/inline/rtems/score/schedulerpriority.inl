@@ -138,10 +138,10 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Ready_queue_first(
   Chain_Control       *the_ready_queue
 )
 {
-  uint32_t    index = _Priority_bit_map_Get_highest();
+  Priority_Control index = _Priority_bit_map_Get_highest();
 
   if ( !_Chain_Is_empty( &the_ready_queue[ index ] ) )
-    return (Thread_Control *) the_ready_queue[ index ].first;
+    return (Thread_Control *) _Chain_First( &the_ready_queue[ index ] );
 
   return NULL;
 }

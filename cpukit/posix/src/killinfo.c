@@ -137,7 +137,7 @@ int killinfo(
 
   the_chain = &_POSIX_signals_Wait_queue.Queues.Fifo;
 
-  for ( the_node = the_chain->first ;
+  for ( the_node = _Chain_First( the_chain );
         !_Chain_Is_tail( the_chain, the_node ) ;
         the_node = the_node->next ) {
 

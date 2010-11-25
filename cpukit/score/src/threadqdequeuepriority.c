@@ -50,6 +50,8 @@ Thread_Control *_Thread_queue_Dequeue_priority(
   ISR_Level       level;
   Thread_Control *the_thread = NULL;  /* just to remove warnings */
   Thread_Control *new_first_thread;
+  Chain_Node     *head;
+  Chain_Node     *tail;
   Chain_Node     *new_first_node;
   Chain_Node     *new_second_node;
   Chain_Node     *last_node;
@@ -61,8 +63,9 @@ Thread_Control *_Thread_queue_Dequeue_priority(
        index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
        index++ ) {
     if ( !_Chain_Is_empty( &the_thread_queue->Queues.Priority[ index ] ) ) {
-      the_thread = (Thread_Control *)
-                    the_thread_queue->Queues.Priority[ index ].first;
+      the_thread = (Thread_Control *) _Chain_First(
+        &the_thread_queue->Queues.Priority[ index ]
+      );
       goto dequeue;
     }
   }
@@ -75,13 +78,13 @@ Thread_Control *_Thread_queue_Dequeue_priority(
 
 dequeue:
   the_thread->Wait.queue = NULL;
-  new_first_node   = the_thread->Wait.Block2n.first;
+  new_first_node   = _Chain_First( &the_thread->Wait.Block2n );
   new_first_thread = (Thread_Control *) new_first_node;
   next_node        = the_thread->Object.Node.next;
   previous_node    = the_thread->Object.Node.previous;
 
   if ( !_Chain_Is_empty( &the_thread->Wait.Block2n ) ) {
-    last_node       = the_thread->Wait.Block2n.last;
+    last_node       = _Chain_Last( &the_thread->Wait.Block2n );
     new_second_node = new_first_node->next;
 
     previous_node->next      = new_first_node;
@@ -91,13 +94,13 @@ dequeue:
 
     if ( !_Chain_Has_only_one_node( &the_thread->Wait.Block2n ) ) {
                                                 /* > two threads on 2-n */
-      new_second_node->previous =
-                _Chain_Head( &new_first_thread->Wait.Block2n );
+      head = _Chain_Head( &new_first_thread->Wait.Block2n );
+      tail = _Chain_Tail( &new_first_thread->Wait.Block2n );
 
-      new_first_thread->Wait.Block2n.first = new_second_node;
-      new_first_thread->Wait.Block2n.last  = last_node;
-
-      last_node->next = _Chain_Tail( &new_first_thread->Wait.Block2n );
+      new_second_node->previous = head;
+      head->next = new_second_node;
+      tail->previous = last_node;
+      last_node->next = tail;
     }
   } else {
     previous_node->next = next_node;

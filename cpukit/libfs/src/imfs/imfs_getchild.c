@@ -52,7 +52,7 @@ IMFS_jnode_t *IMFS_find_match_in_dir(
 
   the_chain = &directory->info.directory.Entries;
 
-  for ( the_node = the_chain->first;
+  for ( the_node = rtems_chain_first( the_chain );
         !rtems_chain_is_tail( the_chain, the_node );
         the_node = the_node->next ) {
 

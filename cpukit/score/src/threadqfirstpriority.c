@@ -49,8 +49,9 @@ Thread_Control *_Thread_queue_First_priority (
        index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
        index++ ) {
     if ( !_Chain_Is_empty( &the_thread_queue->Queues.Priority[ index ] ) )
-      return (Thread_Control *)
-        the_thread_queue->Queues.Priority[ index ].first;
+      return (Thread_Control *) _Chain_First(
+        &the_thread_queue->Queues.Priority[ index ]
+      );
   }
   return NULL;
 }

@@ -44,7 +44,7 @@ Thread_Control *_Thread_queue_First_fifo(
 )
 {
   if ( !_Chain_Is_empty( &the_thread_queue->Queues.Fifo ) )
-    return (Thread_Control *) the_thread_queue->Queues.Fifo.first;
+    return (Thread_Control *) _Chain_First( &the_thread_queue->Queues.Fifo );
 
   return NULL;
 }

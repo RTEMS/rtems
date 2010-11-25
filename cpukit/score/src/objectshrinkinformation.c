@@ -69,7 +69,7 @@ void _Objects_Shrink_information(
       /*
        *  Assume the Inactive chain is never empty at this point
        */
-      the_object = (Objects_Control *) information->Inactive.first;
+      the_object = (Objects_Control *) _Chain_First( &information->Inactive );
 
       do {
          index = _Objects_Get_index( the_object->id );

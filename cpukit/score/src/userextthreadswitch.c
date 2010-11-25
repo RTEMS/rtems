@@ -32,7 +32,7 @@ void _User_extensions_Thread_switch (
   Chain_Node                     *the_node;
   User_extensions_Switch_control *the_extension_switch;
 
-  for ( the_node = _User_extensions_Switches_list.first ;
+  for ( the_node = _Chain_First( &_User_extensions_Switches_list );
         !_Chain_Is_tail( &_User_extensions_Switches_list, the_node ) ;
         the_node = the_node->next ) {
 

@@ -97,7 +97,7 @@ ssize_t imfs_dir_read(
       return 0;
 
    /* Move to the first of the desired directory entries */
-   the_node = the_chain->first;
+   the_node = rtems_chain_first( the_chain );
 
    bytes_transferred = 0;
    first_entry = iop->offset;
@@ -263,7 +263,7 @@ int imfs_dir_fstat(
 
    /* Run through the chain and count the number of directory entries */
    /* that are subordinate to this directory node                     */
-   for ( the_node = the_chain->first ;
+   for ( the_node = rtems_chain_first( the_chain );
          !rtems_chain_is_tail( the_chain, the_node ) ;
          the_node = the_node->next ) {
 

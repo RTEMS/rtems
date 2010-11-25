@@ -926,7 +926,7 @@ _hash_search(
     )
 {
     uint32_t          mod = (key1) % FAT_HASH_MODULE;
-    rtems_chain_node *the_node = ((rtems_chain_control *)((hash) + mod))->first;
+    rtems_chain_node *the_node = rtems_chain_first(hash + mod);
 
     for ( ; !rtems_chain_is_tail((hash) + mod, the_node) ; )
     {

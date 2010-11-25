@@ -31,7 +31,7 @@ void _User_extensions_Thread_delete (
   Chain_Node              *the_node;
   User_extensions_Control *the_extension;
 
-  for ( the_node = _User_extensions_List.last ;
+  for ( the_node = _Chain_Last( &_User_extensions_List );
         !_Chain_Is_head( &_User_extensions_List, the_node ) ;
         the_node = the_node->previous ) {
 

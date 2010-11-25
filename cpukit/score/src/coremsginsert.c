@@ -99,7 +99,7 @@ void _CORE_message_queue_Insert_message(
 
       the_priority = _CORE_message_queue_Get_message_priority(the_message);
       the_header = &the_message_queue->Pending_messages;
-      the_node = the_header->first;
+      the_node = _Chain_First( the_header );
       while ( !_Chain_Is_tail( the_header, the_node ) ) {
         int this_priority;
 

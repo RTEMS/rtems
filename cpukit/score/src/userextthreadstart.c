@@ -31,7 +31,7 @@ void _User_extensions_Thread_start (
   Chain_Node              *the_node;
   User_extensions_Control *the_extension;
 
-  for ( the_node = _User_extensions_List.first ;
+  for ( the_node = _Chain_First( &_User_extensions_List );
         !_Chain_Is_tail( &_User_extensions_List, the_node ) ;
         the_node = the_node->next ) {
 

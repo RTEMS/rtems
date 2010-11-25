@@ -80,7 +80,7 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
 restart_forward_search:
   search_priority = PRIORITY_MINIMUM - 1;
   _ISR_Disable( level );
-  search_thread = (Thread_Control *) header->first;
+  search_thread = (Thread_Control *) _Chain_First( header );
   while ( !_Chain_Is_tail( header, (Chain_Node *)search_thread ) ) {
     search_priority = search_thread->current_priority;
     if ( priority <= search_priority )
@@ -128,7 +128,7 @@ restart_reverse_search:
   search_priority     = PRIORITY_MAXIMUM + 1;
 
   _ISR_Disable( level );
-  search_thread = (Thread_Control *) header->last;
+  search_thread = (Thread_Control *) _Chain_Last( header );
   while ( !_Chain_Is_head( header, (Chain_Node *)search_thread ) ) {
     search_priority = search_thread->current_priority;
     if ( priority >= search_priority )

@@ -114,7 +114,7 @@ void IMFS_dump_directory(
 
   the_chain = &the_directory->info.directory.Entries;
 
-  for ( the_node = the_chain->first;
+  for ( the_node = rtems_chain_first( the_chain );
         !rtems_chain_is_tail( the_chain, the_node );
         the_node = the_node->next ) {
 
