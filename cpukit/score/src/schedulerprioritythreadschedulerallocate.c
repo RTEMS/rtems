@@ -39,7 +39,7 @@
  */
 
 void* _Scheduler_priority_Thread_scheduler_allocate (
-  Scheduler_Control     *the_scheduler,
+  Scheduler_Control     *the_scheduler __attribute__((unused)),
   Thread_Control        *the_thread
 )
 {

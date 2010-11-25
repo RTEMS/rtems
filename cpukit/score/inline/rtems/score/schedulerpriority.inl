@@ -34,17 +34,17 @@
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
   Scheduler_Control         *the_scheduler
 ) {
-  uint32_t index;
+  size_t index;
 
   /* allocate ready queue structures */
-  the_scheduler->ready_queues.Priority = (Chain_Control *) 
+  the_scheduler->Ready_queues.priority = (Chain_Control *) 
     _Workspace_Allocate_or_fatal_error(
-      (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
+      ((size_t) PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
     );
 
   /* initialize ready queue structures */
   for( index=0; index <= PRIORITY_MAXIMUM; index++)
-    _Chain_Initialize_empty( &the_scheduler->ready_queues.Priority[index] );
+    _Chain_Initialize_empty( &the_scheduler->Ready_queues.priority[index] );
 }
 
 /* 
@@ -194,7 +194,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
 )
 {
   _Thread_Heir = _Scheduler_priority_Ready_queue_first(
-      the_scheduler->ready_queues.Priority
+      the_scheduler->Ready_queues.priority
   );
 }
 
@@ -250,7 +250,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Block_body(
  */
 
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Unblock_body (
-  Scheduler_Control       *the_scheduler,
+  Scheduler_Control       *the_scheduler __attribute__((unused)),
   Thread_Control          *the_thread
 )
 {

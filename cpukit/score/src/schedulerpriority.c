@@ -50,15 +50,15 @@ void _Scheduler_priority_Initialize (
    * for the scheduler.  Every scheduler implementation provides its own
    * scheduler operations table.
    */
-  the_scheduler->operations.schedule           = &_Scheduler_priority_Schedule;
-  the_scheduler->operations.yield              = &_Scheduler_priority_Yield;
-  the_scheduler->operations.block              = &_Scheduler_priority_Block;
-  the_scheduler->operations.unblock            = &_Scheduler_priority_Unblock;
-  the_scheduler->operations.scheduler_allocate = 
+  the_scheduler->Operations.schedule           = &_Scheduler_priority_Schedule;
+  the_scheduler->Operations.yield              = &_Scheduler_priority_Yield;
+  the_scheduler->Operations.block              = &_Scheduler_priority_Block;
+  the_scheduler->Operations.unblock            = &_Scheduler_priority_Unblock;
+  the_scheduler->Operations.scheduler_allocate = 
       &_Scheduler_priority_Thread_scheduler_allocate;
-  the_scheduler->operations.scheduler_free     = 
+  the_scheduler->Operations.scheduler_free     = 
       &_Scheduler_priority_Thread_scheduler_free;
-  the_scheduler->operations.scheduler_update   = 
+  the_scheduler->Operations.scheduler_update   = 
       &_Scheduler_priority_Thread_scheduler_update;
 
   _Scheduler_priority_Ready_queue_initialize( the_scheduler );

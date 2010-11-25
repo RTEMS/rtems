@@ -51,7 +51,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
     Scheduler_Control *the_scheduler 
 )
 {
-  the_scheduler->operations.schedule( the_scheduler );
+  the_scheduler->Operations.schedule( the_scheduler );
 }
 
 /** @brief _Scheduler_Yield
@@ -63,7 +63,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Yield( void )
 {
-  _Scheduler.operations.yield( &_Scheduler );
+  _Scheduler.Operations.yield( &_Scheduler );
 }
 
 /** @brief _Scheduler_Block
@@ -78,7 +78,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block(
     Thread_Control    *the_thread 
 )
 {
-  the_scheduler->operations.block( the_scheduler, the_thread );
+  the_scheduler->Operations.block( the_scheduler, the_thread );
 }
 
 /** @brief _Scheduler_Unblock
@@ -93,7 +93,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
     Thread_Control    *the_thread 
 )
 {
-  the_scheduler->operations.unblock( the_scheduler, the_thread );
+  the_scheduler->Operations.unblock( the_scheduler, the_thread );
 }
 
 /** @brief _Scheduler_Thread_scheduler_allocate
@@ -106,7 +106,7 @@ RTEMS_INLINE_ROUTINE void* _Scheduler_Thread_scheduler_allocate(
 )
 {
   return 
-    the_scheduler->operations.scheduler_allocate( the_scheduler, the_thread );
+    the_scheduler->Operations.scheduler_allocate( the_scheduler, the_thread );
 }
 
 /** @brief _Scheduler_Thread_scheduler_free
@@ -118,7 +118,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_scheduler_free(
   Thread_Control    *the_thread
 )
 {
-  return the_scheduler->operations.scheduler_free( the_scheduler, the_thread );
+  return the_scheduler->Operations.scheduler_free( the_scheduler, the_thread );
 }
 
 /** @brief _Scheduler_Thread_scheduler_update
@@ -130,7 +130,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_scheduler_update(
   Thread_Control    *the_thread
 )
 {
-  the_scheduler->operations.scheduler_update( the_scheduler, the_thread );
+  the_scheduler->Operations.scheduler_update( the_scheduler, the_thread );
 }
 
 /**@}*/

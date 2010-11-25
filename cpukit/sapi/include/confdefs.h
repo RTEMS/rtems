@@ -617,7 +617,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
   /* the table of available schedulers. */
-  const Scheduler_Table_t _Scheduler_Table[] = {
+  const Scheduler_Table_entry _Scheduler_Table[] = {
     #if defined(CONFIGURE_SCHEDULER_USER) && \
         defined(CONFIGURE_SCHEDULER_ENTRY_USER)
       CONFIGURE_SCHEDULER_ENTRY_USER,

@@ -1,5 +1,17 @@
 2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* sapi/include/confdefs.h, score/include/rtems/score/scheduler.h,
+	score/inline/rtems/score/scheduler.inl,
+	score/inline/rtems/score/schedulerpriority.inl,
+	score/src/schedulerpriority.c,
+	score/src/schedulerprioritythreadschedulerallocate.c,
+	score/src/schedulerprioritythreadschedulerfree.c,
+	score/src/schedulerprioritythreadschedulerupdate.c,
+	score/src/schedulerpriorityyield.c: Added attribute unused.  Renamed
+	types and fields to follow the Score naming conventions.
+
+2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* score/include/rtems/score/scheduler.h,
 	score/include/rtems/score/schedulerpriority.h: Whitespace removal.
 	Moved C++ extern directive.

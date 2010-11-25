@@ -43,7 +43,7 @@ void _Scheduler_priority_Thread_scheduler_update (
     Thread_Control    *the_thread
 )
 {
-  Chain_Control *rq = the_scheduler->ready_queues.Priority;
+  Chain_Control *rq = the_scheduler->Ready_queues.priority;
   the_thread->scheduler.priority->ready_chain = &rq[
     the_thread->current_priority 
   ];

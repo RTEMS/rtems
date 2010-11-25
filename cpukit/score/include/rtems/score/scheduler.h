@@ -38,7 +38,7 @@ extern "C" {
 /*
  * These defines are used to set the scheduler_policy value. The values
  * must correspond directly with the order of the fields in the scheduler
- * table (Scheduler_Table_t), because the Configuration.scheduler_policy
+ * table (Scheduler_Table_entry), because the Configuration.scheduler_policy
  * field is used to index the scheduler table.
  */
 #define _Scheduler_USER     (0)
@@ -47,16 +47,15 @@ extern "C" {
 typedef struct Scheduler_Control_struct Scheduler_Control;
 
 /*
- * The Scheduler_Table_t type defines the scheduler initialization table,
- * which is set up by confdefs.h based on the user's choice of scheduler
- * policy.
+ * This type defines the scheduler initialization table entry, which is set up
+ * by confdefs.h based on the user's choice of scheduler policy.
  */
 typedef struct {
   void ( *scheduler_init )( Scheduler_Control * );
-} Scheduler_Table_t;
+} Scheduler_Table_entry;
 
 /* instantiated and initialized in confdefs.h */
-extern const Scheduler_Table_t          _Scheduler_Table[];
+extern const Scheduler_Table_entry _Scheduler_Table[];
 
 /**
  * The following Scheduler_Per_thread_xxx structures are used to
@@ -119,12 +118,12 @@ struct Scheduler_Control_struct {
      * This is the set of lists (an array of Chain_Control) for
      * priority scheduling.
      */
-    Chain_Control            *Priority;
+    Chain_Control            *priority;
 
-  } ready_queues;
+  } Ready_queues;
 
   /** The jump table for scheduler-specific functions */
-  Scheduler_Operations                  operations;
+  Scheduler_Operations                  Operations;
 };
 
 /**
