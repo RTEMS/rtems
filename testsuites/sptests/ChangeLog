@@ -1,3 +1,7 @@
+2010-11-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spchain/init.c: Added test case.
+
 2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spchain/init.c, spchain/spchain.scn: More test cases.

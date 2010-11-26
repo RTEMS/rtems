@@ -35,6 +35,10 @@ static void test_chain_control_layout(void)
     sizeof(rtems_chain_control)
       == sizeof(rtems_chain_node) + sizeof(rtems_chain_node *)
   );
+  rtems_test_assert(
+    sizeof(rtems_chain_control)
+      == 3 * sizeof(rtems_chain_node *)
+  );
   rtems_test_assert( &chain.Head.Node.previous == &chain.Tail.Node.next );
 }
 
