@@ -118,10 +118,13 @@ void libc_wrapup(void)
  */
 
 #include <unistd.h>
+#include <newlib.h>
+
+#if defined(HAVE_INITFINI_ARRAY)
+  extern void __libc_fini_array(void);
+#endif
 
 /* FIXME: These defines are a blatant hack */
-  #define EXIT_SYMBOL _exit
-
   #if defined(__AVR__)
     #undef __USE_INIT_FINI__
   #endif
@@ -135,8 +138,22 @@ void libc_wrapup(void)
     extern void FINI_SYMBOL( void );
   #endif
 
-void EXIT_SYMBOL(int status)
+void _exit(int status)
 {
+  #if defined(HAVE_INITFINI_ARRAY)
+    /*
+     * According to
+     *
+     *   System V Application Binary Interface
+     *     Chapter 5
+     *       Initialization and Termination Functions
+     *
+     * we have to call the functions referenced by the .fini_array before the
+     * one referenced by the .fini section.
+     */
+    __libc_fini_array();
+  #endif
+
   /*
    *  If the toolset uses init/fini sections, then we need to
    *  run the global destructors now.

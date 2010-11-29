@@ -1,3 +1,8 @@
+2010-11-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/newlibc_exit.c, score/src/threadhandler.c: Added
+	support for .preinit_array, .init_array and .fini_array sections.
+
 2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sapi/include/confdefs.h, score/include/rtems/score/scheduler.h,

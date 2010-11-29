@@ -30,6 +30,14 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
+#if defined(RTEMS_NEWLIB)
+  #include <newlib.h>
+#endif
+
+#if defined(HAVE_INITFINI_ARRAY)
+  extern void __libc_init_array(void);
+#endif
+
 #if defined(__AVR__)
   #undef __USE_INIT_FINI__
 #endif
@@ -138,6 +146,20 @@ void _Thread_Handler( void )
      */
     if (!doneCons) /* && (volatile void *)_init) */ {
       INIT_NAME ();
+
+      #if defined(HAVE_INITFINI_ARRAY)
+        /*
+         * According to
+         *
+         *   System V Application Binary Interface
+         *     Chapter 5
+         *       Initialization and Termination Functions
+         *
+         * we have to call the functions referenced by the .init_array after
+         * the one referenced by the .init section.
+         */
+        __libc_init_array();
+      #endif
     }
   #endif
 
