@@ -69,7 +69,7 @@ static void mpc55xx_edma_interrupt_handler( void *arg)
 static void mpc55xx_edma_interrupt_error_handler( void *arg)
 {
 	rtems_chain_control *chain = &mpc55xx_edma_channel_chain;
-	rtems_chain_node *node = chain->first;
+	rtems_chain_node *node = rtems_chain_first( chain );
 	unsigned i = 0;
 	uint64_t error_status = EDMA.ESR.R;
 	uint64_t error_channels = ((uint64_t) EDMA.ERH.R << 32) | EDMA.ERL.R;
