@@ -1,5 +1,10 @@
 2010-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Add complex, math subdirs.
+	* configure.ac: Add complex, math subdirs.
+
+2010-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* complex/Makefile.am, complex/init.c, complex/docomplex.c, 
 	complex/docomplexf.c, complex/complex.scn, complex/docomplex.in,
 	complex/complex.doc, complex/docomplexl.c: New.

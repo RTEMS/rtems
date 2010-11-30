@@ -85,5 +85,7 @@ termios07/Makefile
 termios08/Makefile
 tztest/Makefile
 POSIX/Makefile
+math/Makefile
+complex/Makefile
 ])
 AC_OUTPUT
