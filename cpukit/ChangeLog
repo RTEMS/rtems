@@ -1,3 +1,10 @@
+2010-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/newlibc_exit.c, score/src/threadhandler.c: Revert
+	previous commit due to too many broken linker command files.  The
+	HAVE_INITFINI_ARRAY is defined for nearly all targets by Newlib, but
+	only few linker command files respect this.
+
 2010-11-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/src/newlibc_exit.c, score/src/threadhandler.c: Added
