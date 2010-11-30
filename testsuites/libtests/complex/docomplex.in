@@ -1,0 +1,110 @@
+/*
+ * Copyright (c) 2010 by
+ * Ralf Corsepius, Ulm/Germany. All rights reserved.
+ *
+ * Permission to use, copy, modify, and distribute this software
+ * is freely granted, provided that this notice is preserved.
+ */
+
+/*
+ * Try to compile and link against POSIX complex math routines.
+ */
+
+#include <complex.h>
+#include <stdio.h>
+
+void
+docomplex@FSUFFIX@ (void)
+{
+#ifndef @FGUARD@
+  complex @FTYPE@ ca, cb, cc;
+  @FTYPE@ f1;
+
+  ca = 1.0 + 1.0 * I;
+  cb = 1.0 - 1.0 * I;
+
+  f1 = cabs@FSUFFIX@ (ca);
+  fprintf (stdout, "cabs@FSUFFIX@  : %f\n", f1);
+
+  cc = cacos@FSUFFIX@ (ca);
+  fprintf (stdout, "cacos@FSUFFIX@ : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = cacosh@FSUFFIX@ (ca);
+  fprintf (stdout, "cacosh@FSUFFIX@: %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  f1 = carg@FSUFFIX@ (ca);
+  fprintf (stdout, "carg@FSUFFIX@  : %f\n", f1);
+
+  cc = casin@FSUFFIX@ (ca);
+  fprintf (stdout, "casin@FSUFFIX@ : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = casinh@FSUFFIX@ (ca);
+  fprintf (stdout, "casinh@FSUFFIX@: %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = catan@FSUFFIX@ (ca);
+  fprintf (stdout, "catan@FSUFFIX@ : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = catanh@FSUFFIX@ (ca);
+  fprintf (stdout, "catanh@FSUFFIX@: %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = ccos@FSUFFIX@ (ca);
+  fprintf (stdout, "ccos@FSUFFIX@  : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = ccosh@FSUFFIX@ (ca);
+  fprintf (stdout, "ccosh@FSUFFIX@ : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = cexp@FSUFFIX@ (ca);
+  fprintf (stdout, "cexp@FSUFFIX@  : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  f1 = cimag@FSUFFIX@ (ca);
+  fprintf (stdout, "cimag@FSUFFIX@ : %f\n", f1);
+
+  cc = clog@FSUFFIX@ (ca);
+  fprintf (stdout, "clog@FSUFFIX@  : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = conj@FSUFFIX@ (ca);
+  fprintf (stdout, "conj@FSUFFIX@  : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = cpow@FSUFFIX@ (ca, cb);
+  fprintf (stdout, "cpow@FSUFFIX@  : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = cproj@FSUFFIX@ (ca);
+  fprintf (stdout, "cproj@FSUFFIX@ : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  f1 = creal@FSUFFIX@ (ca);
+  fprintf (stdout, "creal@FSUFFIX@ : %f\n", f1);
+
+  cc = csin@FSUFFIX@ (ca);
+  fprintf (stdout, "csin@FSUFFIX@  : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = csinh@FSUFFIX@ (ca);
+  fprintf (stdout, "csinh@FSUFFIX@ : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = csqrt@FSUFFIX@ (ca);
+  fprintf (stdout, "csqrt@FSUFFIX@ : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = ctan@FSUFFIX@ (ca);
+  fprintf (stdout, "ctan@FSUFFIX@  : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+
+  cc = ctanh@FSUFFIX@ (ca);
+  fprintf (stdout, "ctanh@FSUFFIX@ : %f %fi\n", creal@FSUFFIX@ (cc),
+	   cimag@FSUFFIX@ (cc));
+#endif
+}
