@@ -1,3 +1,12 @@
+2010-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* complex/Makefile.am, complex/init.c, complex/docomplex.c, 
+	complex/docomplexf.c, complex/complex.scn, complex/docomplex.in,
+	complex/complex.doc, complex/docomplexl.c: New.
+	* math/Makefile.am, math/init.c, math/domath.c, 
+	math/domathf.c, math/math.scn, math/domath.in,
+	math/math.doc, math/domathl.c: New.
+
 2010-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* POSIX/Makefile.am: Add htonl.
