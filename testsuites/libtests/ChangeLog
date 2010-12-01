@@ -1,3 +1,10 @@
+2010-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for complex.h.
+	Add AM_CONDITIONAL(HAS_COMPLEX) to allow building with outdated
+	toolchains.
+	* complex/Makefile.am: Apply HAS_COMPLEX.
+
 2010-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add complex, math subdirs.

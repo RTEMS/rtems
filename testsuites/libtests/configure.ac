@@ -31,9 +31,12 @@ RTEMS_CHECK_CXX(RTEMS_BSP)
 AC_PROG_LN_S
 AC_PATH_PROG([PAX],[pax])
 
+AC_CHECK_HEADERS([complex.h])
+
 AM_CONDITIONAL(TARTESTS,test "$as_ln_s" = "ln -s" && test -n "$PAX")
 
 AM_CONDITIONAL(HAS_CXX,test "$rtems_cv_HAS_CPLUSPLUS" = "yes")
+AM_CONDITIONAL([HAS_COMPLEX],[test "$ac_cv_header_COMPLEX_H" = yes])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
