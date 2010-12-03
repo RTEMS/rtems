@@ -1,3 +1,9 @@
+2010-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac, posix/src/signal_2.c: sighandler_t is defined
+	conditionally in some versions of newlib and unconditionally in
+	others. Make sure we always compile.
+
 2010-11-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/src/newlibc_exit.c, score/src/threadhandler.c: Revert

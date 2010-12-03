@@ -18,7 +18,9 @@
 #include <signal.h>
 #include <errno.h>
 
-typedef void (*sighandler_t)(int);
+#ifndef HAVE_SIGHANDLER_T
+  typedef void (*sighandler_t)(int);
+#endif
 
 sighandler_t signal(
   int           signum,
