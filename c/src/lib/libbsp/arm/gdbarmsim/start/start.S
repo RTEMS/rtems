@@ -7,6 +7,7 @@
 
 #include <newlib.h>
 #include <bsp/swi.h>
+#include <bsp/linker-symbols.h>
 
 /* ANSI concatenation macros.  */
 #define CONCAT(a, b) CONCAT2(a, b)
@@ -375,9 +376,9 @@ change_back:
 	.fnend
 #endif
 .LC1:
-	.word	__bss_start__
+	.word	bsp_section_bss_begin
 .LC2:
-	.word	__clear_end__ /* __bss_end__ */
+	.word	bsp_section_bss_end
 #ifdef __USES_INITFINI__
 .Lfini:
 	.word	FUNCTION(_fini)

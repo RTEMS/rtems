@@ -1,6 +1,8 @@
 /*
  * Cirrus EP7312 Startup code
  *
+ * Copyright (c) 2010 embedded brains GmbH.
+ *
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
  *
  * Copyright (c) 2002 by Charlie Steader <charlies@poliac.com>
@@ -13,6 +15,8 @@
  *
  *  $Id$
 */
+
+#include <bsp/linker-symbols.h>
 
 /* Some standard definitions...*/
 
@@ -28,50 +32,8 @@
 .equ I_Bit,           	     0x80
 .equ F_Bit,           	     0x40
 
-	.text
-	.globl	_start
-
-_start:
-	/* store the sp */
-	mov	r12, sp
-/*
- * Here is the code to initialize the low-level BSP environment
- * (Chip Select, PLL, ....?)
- */
-
-/* zero the bss */
-        LDR     r1, =_bss_end_       /* get end of ZI region */
-        LDR     r0, =_bss_start_     /* load base address of ZI region */
-
-zi_init:
-        MOV     r2, #0
-        CMP     r0, r1		       /* loop whilst r0 < r1 */
-        STRLOT   r2, [r0], #4
-        BLO     zi_init
-
-/* Load basic ARM7 interrupt table */
-VectorInit:
-	MOV	R0, #0
-	ADR	R1, Vector_Init_Block
-	LDMIA	R1!, {R2, r3}	/* Copy the Vectors (8 words) */
-	STMIA	R0!, {r2, r3}
-	LDMIA	R1!, {R2, r3}	/* Copy the Vectors (8 words) */
-	STMIA	R0!, {r2, r3}
-	LDMIA	R1!, {R2, r3}	/* Copy the Vectors (8 words) */
-	STMIA	R0!, {r2, r3}
-	LDMIA	R1!, {R2, r3}	/* Copy the Vectors (8 words) */
-	STMIA	R0!, {r2, r3}
-
-	LDMIA	R1!, {R2, r3}	/* Copy the .long'ed addresses (8 words) */
-	STMIA	R0!, {r2, r3}
-	LDMIA	R1!, {R2, r3}	/* Copy the .long'ed addresses (8 words) */
-	STMIA	R0!, {r2, r3}
-	LDMIA	R1!, {R2, r3}	/* Copy the .long'ed addresses (8 words) */
-	STMIA	R0!, {r2, r3}
-	LDMIA	R1!, {R2, r3}	/* Copy the .long'ed addresses (8 words) */
-	STMIA	R0!, {r2, r3}
-
-	B	init2
+.section ".bsp_start_text", "ax"
+.arm
 
 /*******************************************************
  standard exception vectors table
@@ -118,38 +80,56 @@ IRQ_Handler:
 FIQ_Handler:
         B       FIQ_Handler
 
-init2 :
+	.globl	_start
+_start:
+	/* store the sp */
+	mov	r12, sp
+/*
+ * Here is the code to initialize the low-level BSP environment
+ * (Chip Select, PLL, ....?)
+ */
+
+/* zero the bss */
+        LDR     r1, =bsp_section_bss_end   /* get end of ZI region */
+        LDR     r0, =bsp_section_bss_begin /* load base address of ZI region */
+
+zi_init:
+        MOV     r2, #0
+        CMP     r0, r1		       /* loop whilst r0 < r1 */
+        STRLOT   r2, [r0], #4
+        BLO     zi_init
+
 /* --- Initialise stack pointer registers */
 
 /* Enter IRQ mode and set up the IRQ stack pointer */
     MOV     r0, #Mode_IRQ | I_Bit | F_Bit     /* No interrupts */
     MSR     cpsr, r0
-    ldr	    r1, =_irq_stack_size
-    LDR     sp, =_irq_stack
+    ldr	    r1, =bsp_stack_irq_size
+    LDR     sp, =bsp_stack_irq_begin
     add	    sp, sp, r1
     sub     sp, sp, #0x64
 
 /* Enter FIQ mode and set up the FIQ stack pointer */
     MOV     r0, #Mode_FIQ | I_Bit | F_Bit     /* No interrupts */
     MSR     cpsr, r0
-    ldr	    r1, =_fiq_stack_size
-    LDR     sp, =_fiq_stack
+    ldr	    r1, =bsp_stack_fiq_size
+    LDR     sp, =bsp_stack_fiq_begin
     add	    sp, sp, r1
     sub     sp, sp, #0x64
 
 /* Enter ABT mode and set up the ABT stack pointer */
     MOV     r0, #Mode_ABT | I_Bit | F_Bit     /* No interrupts */
     MSR     cpsr, r0
-    ldr	    r1, =_abt_stack_size
-    LDR     sp, =_abt_stack
+    ldr	    r1, =bsp_stack_abt_size
+    LDR     sp, =bsp_stack_abt_begin
     add	    sp, sp, r1
     sub     sp, sp, #0x64
 
 /* Set up the SVC stack pointer last and stay in SVC mode */
     MOV     r0, #Mode_SVC | I_Bit | F_Bit     /* No interrupts */
     MSR     cpsr, r0
-    ldr	    r1, =_svc_stack_size
-    LDR     sp, =_svc_stack
+    ldr	    r1, =bsp_stack_svc_size
+    LDR     sp, =bsp_stack_svc_begin
     add	    sp, sp, r1
     sub     sp, sp, #0x64
 

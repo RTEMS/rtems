@@ -1,3 +1,8 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_specs, start/start.S, startup/linkcmds: Use linker command base
+	file.
+
 2010-05-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* rtl8019/rtl8019.c: Fix typo.

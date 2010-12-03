@@ -1,3 +1,8 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_specs, start/start.S, startup/linkcmds: Use linker command base
+	file.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* irq/bsp_irq_init.c: Removed file.

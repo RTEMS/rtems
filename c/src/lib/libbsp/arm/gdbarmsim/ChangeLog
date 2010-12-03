@@ -1,3 +1,8 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_specs, start/start.S, startup/linkcmds: Use linker command base
+	file.
+
 2010-08-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* startup/syscalls.c: ifdef out _times since it conflicts with
