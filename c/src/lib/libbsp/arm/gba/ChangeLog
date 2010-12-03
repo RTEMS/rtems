@@ -1,3 +1,7 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/linkcmds: Use linker command base file.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* irq/irq_asm.S, irq/irq_init.c, irq/bsp_irq_asm.S,
