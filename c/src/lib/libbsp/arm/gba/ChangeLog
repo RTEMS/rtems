@@ -1,6 +1,6 @@
 2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-	* startup/linkcmds: Use linker command base file.
+	* startup/linkcmds: ARM EABI compatibility.
 
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
