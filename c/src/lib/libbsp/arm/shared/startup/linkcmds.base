@@ -364,7 +364,7 @@ SECTIONS {
 		*(.bsp_fast_text)
 		. = ALIGN (bsp_section_align);
 		bsp_section_fast_text_end = .;
-	} > REGION_FAST AT > REGION_FAST_LOAD
+	} > REGION_FAST_TEXT AT > REGION_FAST_TEXT_LOAD
 	bsp_section_fast_text_size = bsp_section_fast_text_end - bsp_section_fast_text_begin;
 	bsp_section_fast_text_load_begin = LOADADDR (.fast_text);
 	bsp_section_fast_text_load_end = bsp_section_fast_text_load_begin + bsp_section_fast_text_size;
@@ -374,7 +374,7 @@ SECTIONS {
 		*(.bsp_fast_data)
 		. = ALIGN (bsp_section_align);
 		bsp_section_fast_data_end = .;
-	} > REGION_FAST AT > REGION_FAST_LOAD
+	} > REGION_FAST_DATA AT > REGION_FAST_DATA_LOAD
 	bsp_section_fast_data_size = bsp_section_fast_data_end - bsp_section_fast_data_begin;
 	bsp_section_fast_data_load_begin = LOADADDR (.fast_data);
 	bsp_section_fast_data_load_end = bsp_section_fast_data_load_begin + bsp_section_fast_data_size;

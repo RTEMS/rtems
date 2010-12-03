@@ -1,5 +1,9 @@
 2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* shared/startup/linkcmds.base: Split up fast region.
+
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* preinstall.am, shared/lpc/include/lpc-i2s.h,
 	shared/startup/linkcmds.armv4, shared/startup/linkcmds.armv7: New
 	files.
