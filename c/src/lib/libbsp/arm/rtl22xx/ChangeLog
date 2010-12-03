@@ -1,3 +1,7 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/linkcmds, start/start.S: Use linker command base file.
+
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* make/custom/rtl22xx_t.cfg: Workaround for GCC bug 38644.

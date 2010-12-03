@@ -12,7 +12,7 @@
  *  $Id$
 */
 
-/* Some standard definitions...*/
+#include <bsp/linker-symbols.h>
 
 /* Some standard definitions...*/
 .equ PSR_MODE_USR,       0x10
@@ -44,16 +44,16 @@ _start:
         mov     r0, #(PSR_MODE_IRQ | PSR_I | PSR_F)     /* No interrupts */
         bic	r0, r0, #PSR_T
         msr     cpsr, r0
-        ldr     r1, =_irq_stack_size
-        ldr     sp, =_irq_stack
+        ldr     r1, =bsp_stack_irq_size
+        ldr     sp, =bsp_stack_irq_begin
         add     sp, sp, r1
 
         /* Enter FIQ mode and set up the FIQ stack pointer */
         mov     r0, #(PSR_MODE_FIQ | PSR_I | PSR_F)     /* No interrupts */
         bic	r0, r0, #PSR_T
         msr     cpsr, r0
-        ldr     r1, =_fiq_stack_size
-        ldr     sp, =_fiq_stack
+        ldr     r1, =bsp_stack_fiq_size
+        ldr     sp, =bsp_stack_fiq_begin
         add     sp, sp, r1
 
         /* Enter ABT mode and set up the ABT stack pointer */
@@ -61,16 +61,16 @@ _start:
         bic	r0, r0, #PSR_T
         msr     cpsr, r0
         bic	r0, r0, #PSR_T
-        ldr     r1, =_abt_stack_size
-        ldr     sp, =_abt_stack
+        ldr     r1, =bsp_stack_abt_size
+        ldr     sp, =bsp_stack_abt_begin
         add     sp, sp, r1
 
         /* Set up the SVC stack pointer last and stay in SVC mode */
         mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)     /* No interrupts */
         bic	r0, r0, #PSR_T
         msr     cpsr, r0
-        ldr     r1, =_svc_stack_size
-        ldr     sp, =_svc_stack
+        ldr     r1, =bsp_stack_svc_size
+        ldr     sp, =bsp_stack_svc_begin
         add     sp, sp, r1
         sub     sp, sp, #0x64
 
@@ -89,8 +89,8 @@ _start:
 
 
         /* zero the bss */
-        ldr     r1, =_bss_end_
-        ldr     r0, =_bss_start_
+        ldr     r1, =bsp_section_bss_end
+        ldr     r0, =bsp_section_bss_begin
 
 _bss_init:
         mov     r2, #0
