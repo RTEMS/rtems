@@ -28,7 +28,7 @@
 #endif
 
 #ifdef ARM9
-	.section	.itcm,"ax",%progbits
+	.section	.bsp_fast_text,"ax",%progbits
 #endif
 
 	.extern	irqTable

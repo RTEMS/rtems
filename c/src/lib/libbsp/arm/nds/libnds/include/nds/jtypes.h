@@ -38,9 +38,9 @@
 //---------------------------------------------------------------------------------
 // libgba compatible section macros
 //---------------------------------------------------------------------------------
-#define ITCM_CODE	__attribute__((section(".itcm"), long_call))
+#define ITCM_CODE	__attribute__((section(".bsp_fast_text"), long_call))
 
-#define DTCM_DATA	__attribute__((section(".dtcm")))
+#define DTCM_DATA	__attribute__((section(".bsp_fast_data")))
 #define DTCM_BSS	__attribute__((section(".sbss")))
 #define ALIGN(m)	__attribute__((aligned (m)))
 

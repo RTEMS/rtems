@@ -1,3 +1,12 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspgetworkarea.c: Removed file.
+	* Makefile.am, bsp_specs, start/start.S, startup/bspstart.c,
+	libnds/include/nds/jtypes.h, libnds/source/arm9/gurumeditation.c,
+	libnds/source/common/interruptDispatcher.S,
+	libnds/source/common/interrupts.c, startup/linkcmds: Use linker
+	command base file.
+
 2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* make/dswifi/arm9/makefile: Workaround for GCC bug 38644.

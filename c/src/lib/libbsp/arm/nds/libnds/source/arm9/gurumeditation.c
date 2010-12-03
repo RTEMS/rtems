@@ -34,6 +34,8 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+#include <bsp/linker-symbols.h>
+
 //---------------------------------------------------------------------------------
 unsigned long ARMShift(unsigned long value,unsigned char shift) {
 //---------------------------------------------------------------------------------
@@ -205,7 +207,6 @@ static const char *registerNames[] =
 	{	"r0","r1","r2","r3","r4","r5","r6","r7",
 		"r8 ","r9 ","r10","r11","r12","sp ","lr ","pc " };
 
-extern const char __itcm_start[];
 //---------------------------------------------------------------------------------
 static void defaultHandler(void) {
 //---------------------------------------------------------------------------------
@@ -232,7 +233,7 @@ static void defaultHandler(void) {
 		iprintf ("\x1b[10Cdata abort!\n\n");
 		codeAddress = exceptionRegisters[15] - offset;
 		if (	(codeAddress > 0x02000000 && codeAddress < 0x02400000) ||
-				(codeAddress > (u32)__itcm_start && codeAddress < (u32)(__itcm_start + 32768)) )
+				(codeAddress > (u32)bsp_section_fast_text_begin && codeAddress < (u32)(bsp_section_fast_text_begin + 32768)) )
 			exceptionAddress = getExceptionAddress( codeAddress, thumbState);
 		else
 			exceptionAddress = codeAddress;

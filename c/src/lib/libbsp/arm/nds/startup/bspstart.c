@@ -13,6 +13,7 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <bsp/linker-symbols.h>
 #include <nds.h>
 
 extern void BSP_rtems_irq_mngt_init (void);
@@ -50,14 +51,11 @@ void bsp_start (void)
  * reset bss area.
  */
 
-extern uint8_t __bss_start;
-extern uint8_t __bss_end;
-
 void
 bss_reset (void)
 {
 
-  memset (&__bss_start, 0, (uint32_t) & __bss_end - (uint32_t) & __bss_start);
+  memset (bsp_section_bss_begin, 0, (size_t) bsp_section_bss_size);
 }
 
 /*

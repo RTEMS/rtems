@@ -34,7 +34,7 @@ void irqDummy(void) {}
 
 
 #ifdef ARM9
-#define INT_TABLE_SECTION __attribute__((section(".itcm")))
+#define INT_TABLE_SECTION __attribute__((section(".bsp_fast_text")))
 #else
 #define INT_TABLE_SECTION
 #endif

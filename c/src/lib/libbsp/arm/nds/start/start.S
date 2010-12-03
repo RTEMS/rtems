@@ -1,3 +1,5 @@
+#include <bsp/linker-symbols.h>
+
 @---------------------------------------------------------------------------------
 @ DS processor selection
 @---------------------------------------------------------------------------------
@@ -73,9 +75,9 @@ _start:
 	@ Wait for write buffer to empty
 	mcr	p15, 0, r0, c7, c10, 4
 
-	ldr	r0, =__dtcm_start
+	ldr	r0, =bsp_section_fast_data_begin
 	orr	r0,r0,#0x0a
-	mcr	p15, 0, r0, c9, c1,0		@ DTCM base = __dtcm_start, size = 16 KB
+	mcr	p15, 0, r0, c9, c1,0		@ DTCM base = bsp_section_fast_data_begin, size = 16 KB
 
 	mov r0,#0x20
 	mcr	p15, 0, r0, c9, c1,1		@ ITCM base = 0 , size = 32 MB
@@ -111,14 +113,14 @@ _start:
 	@-------------------------------------------------------------------------
 	@ Region 4 - DTCM
 	@-------------------------------------------------------------------------
-	ldr	r0,=__dtcm_start
+	ldr	r0,=bsp_section_fast_data_begin
 	orr	r0,r0,#(PAGE_16K | 1)
 	mcr	p15, 0, r0, c6, c4, 0
 
 	@-------------------------------------------------------------------------
 	@ Region 5 - ITCM
 	@-------------------------------------------------------------------------
-	ldr	r0,=__itcm_start
+	ldr	r0,=bsp_section_fast_text_begin
 	orr	r0,r0,#(PAGE_32K | 1)
 	mcr	p15, 0, r0, c6, c5, 0
 
@@ -169,24 +171,24 @@ _start:
 
 	mov	r0, #0x12		@ Switch to IRQ Mode
 	msr	cpsr, r0
-	ldr	sp, =__sp_irq		@ Set IRQ stack
+	ldr	sp, =bsp_stack_irq_end	@ Set IRQ stack
 
 	mov	r0, #0x1f		@ Switch to SVC Mode
 	msr	cpsr, r0
-	ldr	sp, =__sp_usr		@ Set user stack
+	ldr	sp, =bsp_stack_svc_end	@ Set user stack
 
-	ldr	r1, =__itcm_lma		@ Copy instruction tightly coupled memory (itcm section) from LMA to VMA (ROM to RAM)
-	ldr	r2, =__itcm_start
-	ldr	r4, =__itcm_end
+	ldr	r1, =bsp_section_fast_text_load_begin	@ Copy instruction tightly coupled memory (itcm section) from LMA to VMA (ROM to RAM)
+	ldr	r2, =bsp_section_fast_text_begin
+	ldr	r4, =bsp_section_fast_text_end
 	bl	CopyMemCheck
 
-	ldr	r1, =__dtcm_lma		@ Copy data tightly coupled memory (dtcm section) from LMA to VMA (ROM to RAM)
-	ldr	r2, =__dtcm_start
-	ldr	r4, =__dtcm_end
+	ldr	r1, =bsp_section_fast_data_load_begin	@ Copy data tightly coupled memory (dtcm section) from LMA to VMA (ROM to RAM)
+	ldr	r2, =bsp_section_fast_data_begin
+	ldr	r4, =bsp_section_fast_data_end
 	bl	CopyMemCheck
 
-	ldr	r0, =__bss_start	@ Clear BSS section
-	ldr	r1, =__bss_end
+	ldr	r0, =bsp_section_bss_begin	@ Clear BSS section
+	ldr	r1, =bsp_section_bss_end
 	sub	r1, r1, r0
 	bl	ClearMem
 
