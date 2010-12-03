@@ -32,10 +32,10 @@
 
 /* Global symbols */
 
-.globl start
+.globl _start
 .globl bsp_start_memcpy
 
-.section ".bsp_start", "ax"
+.section ".bsp_start_text", "ax"
 
 .arm
 
@@ -63,7 +63,7 @@ handler_addr_reset:
 #ifdef BSP_START_RESET_VECTOR
 	.word	BSP_START_RESET_VECTOR
 #else
-	.word	start
+	.word	_start
 #endif
 
 handler_addr_undef:
@@ -96,7 +96,7 @@ handler_addr_fiq:
 
 /* Start entry */
 
-start:
+_start:
 
 	/*
 	 * We do not save the context since we do not return to the boot

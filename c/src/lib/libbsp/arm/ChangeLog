@@ -1,3 +1,17 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* preinstall.am, shared/lpc/include/lpc-i2s.h,
+	shared/startup/linkcmds.armv4, shared/startup/linkcmds.armv7: New
+	files.
+	* Makefile.am: Added header and linker command files intended to be
+	used by every ARM BSP.
+	* shared/startup/linkcmds.base: Support for EABI and ARM ELF standard.
+	* shared/include/linker-symbols.h: Update due to linker command file
+	changes.
+	* shared/start/start.S, shared/include/start.h: Renamed entry symbol
+	from start to _start to avoid namespace conflicts.  Update due to
+	linker command file changes.
+
 2010-11-23	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1719/cpukit

@@ -74,21 +74,31 @@ LINKER_SYMBOL(bsp_section_text_begin)
 LINKER_SYMBOL(bsp_section_text_end)
 LINKER_SYMBOL(bsp_section_text_size)
 LINKER_SYMBOL(bsp_section_text_load_begin)
+LINKER_SYMBOL(bsp_section_text_load_end)
 
 LINKER_SYMBOL(bsp_section_rodata_begin)
 LINKER_SYMBOL(bsp_section_rodata_end)
 LINKER_SYMBOL(bsp_section_rodata_size)
 LINKER_SYMBOL(bsp_section_rodata_load_begin)
+LINKER_SYMBOL(bsp_section_rodata_load_end)
 
 LINKER_SYMBOL(bsp_section_data_begin)
 LINKER_SYMBOL(bsp_section_data_end)
 LINKER_SYMBOL(bsp_section_data_size)
 LINKER_SYMBOL(bsp_section_data_load_begin)
+LINKER_SYMBOL(bsp_section_data_load_end)
 
-LINKER_SYMBOL(bsp_section_fast_begin)
-LINKER_SYMBOL(bsp_section_fast_end)
-LINKER_SYMBOL(bsp_section_fast_size)
-LINKER_SYMBOL(bsp_section_fast_load_begin)
+LINKER_SYMBOL(bsp_section_fast_text_begin)
+LINKER_SYMBOL(bsp_section_fast_text_end)
+LINKER_SYMBOL(bsp_section_fast_text_size)
+LINKER_SYMBOL(bsp_section_fast_text_load_begin)
+LINKER_SYMBOL(bsp_section_fast_text_load_end)
+
+LINKER_SYMBOL(bsp_section_fast_data_begin)
+LINKER_SYMBOL(bsp_section_fast_data_end)
+LINKER_SYMBOL(bsp_section_fast_data_size)
+LINKER_SYMBOL(bsp_section_fast_data_load_begin)
+LINKER_SYMBOL(bsp_section_fast_data_load_end)
 
 LINKER_SYMBOL(bsp_section_bss_begin)
 LINKER_SYMBOL(bsp_section_bss_end)
@@ -105,6 +115,10 @@ LINKER_SYMBOL(bsp_section_stack_size)
 LINKER_SYMBOL(bsp_vector_table_begin)
 LINKER_SYMBOL(bsp_vector_table_end)
 LINKER_SYMBOL(bsp_vector_table_size)
+
+#define BSP_FAST_TEXT_SECTION __attribute__((section(".bsp_fast_text")))
+
+#define BSP_FAST_DATA_SECTION __attribute__((section(".bsp_fast_data")))
 
 /** @} */
 

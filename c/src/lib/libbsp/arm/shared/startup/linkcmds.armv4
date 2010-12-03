@@ -1,0 +1,38 @@
+/**
+ * @file
+ *
+ * @ingroup bsp_linker
+ *
+ * @brief Linker command file for ARMv4T architecture.
+ */
+
+/*
+ * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ */
+
+bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 128;
+bsp_stack_abt_size = ALIGN (bsp_stack_abt_size, bsp_stack_align);
+
+bsp_stack_fiq_size = DEFINED (bsp_stack_fiq_size) ? bsp_stack_fiq_size : 128;
+bsp_stack_fiq_size = ALIGN (bsp_stack_fiq_size, bsp_stack_align);
+
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 512;
+bsp_stack_irq_size = ALIGN (bsp_stack_irq_size, bsp_stack_align);
+
+bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 512;
+bsp_stack_svc_size = ALIGN (bsp_stack_svc_size, bsp_stack_align);
+
+bsp_stack_und_size = DEFINED (bsp_stack_und_size) ? bsp_stack_und_size : 128;
+bsp_stack_und_size = ALIGN (bsp_stack_und_size, bsp_stack_align);
+
+INCLUDE linkcmds.base

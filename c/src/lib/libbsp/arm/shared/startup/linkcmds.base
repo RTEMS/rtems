@@ -7,97 +7,71 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2010 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 
 OUTPUT_ARCH (arm)
 
-ENTRY (start)
-
-bsp_vector_table_size = 64;
+ENTRY (_start)
 
 /*
- * BSP: Global symbols that may be defined externally
+ * Global symbols that may be defined externally
  */
 
-bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 4;
-
-bsp_section_align = DEFINED (bsp_section_align) ? bsp_section_align : 32;
-
-bsp_section_start_end_align = DEFINED (bsp_section_start_end_align) ? bsp_section_start_end_align : bsp_section_align;
-bsp_section_vector_end_align = DEFINED (bsp_section_vector_end_align) ? bsp_section_vector_end_align : bsp_section_align;
-bsp_section_text_end_align = DEFINED (bsp_section_text_end_align) ? bsp_section_text_end_align : bsp_section_align;
-bsp_section_rodata_end_align = DEFINED (bsp_section_rodata_end_align) ? bsp_section_rodata_end_align : bsp_section_align;
-bsp_section_data_end_align = DEFINED (bsp_section_data_end_align) ? bsp_section_data_end_align : bsp_section_align;
-bsp_section_fast_end_align = DEFINED (bsp_section_fast_end_align) ? bsp_section_fast_end_align : bsp_section_align;
-bsp_section_bss_end_align = DEFINED (bsp_section_bss_end_align) ? bsp_section_bss_end_align : bsp_section_align;
+bsp_vector_table_size = DEFINED (bsp_vector_table_size) ? bsp_vector_table_size : 64;
 
 bsp_section_vbarrier_align = DEFINED (bsp_section_vbarrier_align) ? bsp_section_vbarrier_align : 1;
 bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1;
 
-bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 128;
+bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 8;
+
+bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 0;
 bsp_stack_abt_size = ALIGN (bsp_stack_abt_size, bsp_stack_align);
 
-bsp_stack_fiq_size = DEFINED (bsp_stack_fiq_size) ? bsp_stack_fiq_size : 128;
+bsp_stack_fiq_size = DEFINED (bsp_stack_fiq_size) ? bsp_stack_fiq_size : 0;
 bsp_stack_fiq_size = ALIGN (bsp_stack_fiq_size, bsp_stack_align);
 
-bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 512;
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 0;
 bsp_stack_irq_size = ALIGN (bsp_stack_irq_size, bsp_stack_align);
 
-bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 512;
+bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 0;
 bsp_stack_svc_size = ALIGN (bsp_stack_svc_size, bsp_stack_align);
 
-bsp_stack_und_size = DEFINED (bsp_stack_und_size) ? bsp_stack_und_size : 128;
+bsp_stack_und_size = DEFINED (bsp_stack_und_size) ? bsp_stack_und_size : 0;
 bsp_stack_und_size = ALIGN (bsp_stack_und_size, bsp_stack_align);
+
+bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 0;
+bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
+
+/* FIXME: This should go away when LD is fixed */
+bsp_section_align = DEFINED (bsp_section_align) ? bsp_section_align : 32;
 
 SECTIONS {
 	.start : {
-		/*
-		 * BSP: Begin of start section
-		 */
 		bsp_section_start_begin = .;
-
-		/*
-		 * BSP: System startup entry
-		 */
-		KEEP (*(.bsp_start))
+		KEEP (*(.bsp_start_text))
 		KEEP (*(.bsp_start_data))
-
-		. = ALIGN (bsp_section_start_end_align);
-
-		/*
-		 * BSP: End of start section
-		 */
+		. = ALIGN (bsp_section_align);
 		bsp_section_start_end = .;
 	} > REGION_START AT > REGION_START
-
 	bsp_section_start_size = bsp_section_start_end - bsp_section_start_begin;
 
 	.vector : {
-		/*
-		 * BSP: Begin of vector section
-		 */
 		bsp_section_vector_begin = .;
 
-		/*
-		 * BSP: Reserve space for the the exception vector table and
-		 * the pointers to the default exceptions handlers.
-		 */
 		. = . + DEFINED (bsp_vector_table_in_start_section) ? 0 : bsp_vector_table_size;
-
-		/*
-		 * BSP: Reserve space for mode stacks
-		 */
 
 		. = ALIGN (bsp_stack_align);
 
@@ -121,21 +95,15 @@ SECTIONS {
 		. = . + bsp_stack_und_size;
 		bsp_stack_und_end = .;
 
-		/*
-		 * BSP: Special vector data
-		 */
+		bsp_stack_main_begin = .;
+		. = . + bsp_stack_main_size;
+		bsp_stack_main_end = .;
+
 		*(.bsp_vector)
-
-		. = ALIGN (bsp_section_vector_end_align);
-
-		/*
-		 * BSP: End of vector section
-		 */
+		. = ALIGN (bsp_section_align);
 		bsp_section_vector_end = .;
 	} > REGION_VECTOR AT > REGION_VECTOR
-
 	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
-
 	bsp_vector_table_begin = DEFINED (bsp_vector_table_in_start_section) ? bsp_section_start_begin : bsp_section_vector_begin;
 	bsp_vector_table_end = bsp_vector_table_begin + bsp_vector_table_size;
 
@@ -143,108 +111,164 @@ SECTIONS {
 		. = ALIGN (bsp_section_vbarrier_align);
 	} > REGION_VECTOR
 
-	.text : {
-		/*
-		 * BSP: Begin of text section
-		 */
+	.interp : {
 		bsp_section_text_begin = .;
-
-		/*
-		 * BSP: Moved into .text from .init
-		 */
+		*(.interp)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.note.gnu.build-id : {
+		*(.note.gnu.build-id)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.hash : {
+		*(.hash)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.gnu.hash : {
+		*(.gnu.hash)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.dynsym : {
+		*(.dynsym)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.dynstr : {
+		*(.dynstr)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.gnu.version : {
+		*(.gnu.version)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.gnu.version_d : {
+		*(.gnu.version_d)
+		. = ALIGN (bsp_section_align);
+	}
+	> REGION_TEXT AT > REGION_TEXT_LOAD
+	.gnu.version_r : {
+		*(.gnu.version_r)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.rel.dyn : {
+		*(.rel.init)
+		*(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+		*(.rel.fini)
+		*(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+		*(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
+		*(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+		*(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+		*(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+		*(.rel.ctors)
+		*(.rel.dtors)
+		*(.rel.got)
+		*(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+		PROVIDE_HIDDEN (__rel_iplt_start = .);
+		*(.rel.iplt)
+		PROVIDE_HIDDEN (__rel_iplt_end = .);
+		PROVIDE_HIDDEN (__rela_iplt_start = .);
+		PROVIDE_HIDDEN (__rela_iplt_end = .);
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.rela.dyn : {
+		*(.rela.init)
+		*(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+		*(.rela.fini)
+		*(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+		*(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+		*(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+		*(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+		*(.rela.ctors)
+		*(.rela.dtors)
+		*(.rela.got)
+		*(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+		PROVIDE_HIDDEN (__rel_iplt_start = .);
+		PROVIDE_HIDDEN (__rel_iplt_end = .);
+		PROVIDE_HIDDEN (__rela_iplt_start = .);
+		*(.rela.iplt)
+		PROVIDE_HIDDEN (__rela_iplt_end = .);
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.rel.plt : {
+		*(.rel.plt)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.rela.plt : {
+		*(.rela.plt)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.init : {
 		KEEP (*(.init))
-
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.fini : {
+		KEEP (*(.fini))
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.plt : {
+		*(.plt)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.iplt : {
+		*(.iplt)
+		. = ALIGN (bsp_section_align);
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.text : {
+		*(.text.unlikely .text.*_unlikely)
 		*(.text .stub .text.* .gnu.linkonce.t.*)
-		KEEP (*(.text.*personality*))
 		/* .gnu.warning sections are handled specially by elf32.em.  */
 		*(.gnu.warning)
-
-		/*
-		 * BSP: Magic ARM stuff
-		 */
-		*(.ARM.*)
-		*(.glue_7)
-		*(.glue_7t)
-		*(.vfp11_veneer)
-		
-		/*
-		 * BSP: Special FreeBSD sysctl sections
-		 */
-		. = ALIGN (16);
-		__start_set_sysctl_set = .;
-		*(set_sysctl_*);
-		__stop_set_sysctl_set = ABSOLUTE(.);
-		*(set_domain_*);
-		*(set_pseudo_*);
-
-		/*
-		 * BSP: Moved into .text from .*
-		 */
-		*(.eh_frame_hdr)
-
-		/*
-		 * BSP: Required by cpukit/score/src/threadhandler.c
-		 */
-		PROVIDE (_fini = .);
-
-		/*
-		 * BSP: Moved into .text from .fini
-		 */
-		KEEP (*(.fini))
-
-		. = ALIGN (bsp_section_text_end_align);
-
-		/*
-		 * BSP: End of text section
-		 */
+		*(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
+		. = ALIGN (bsp_section_align);
 		bsp_section_text_end = .;
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
-
 	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
+	bsp_section_text_load_begin = LOADADDR (.interp);
+	bsp_section_text_load_end = bsp_section_text_load_begin + bsp_section_text_size;
 
-	bsp_section_text_load_begin = LOADADDR (.text);
-
-	.rodata : {
-		/*
-		 * BSP: Begin of rodata section
-		 */
+	.rodata1 : {
 		bsp_section_rodata_begin = .;
-
-		__start_set_modmetadata_set = .;
-		*(set_modmetadata_set);
-		__stop_set_modmetadata_set = .;
-
-		/*
-		 * BSP: Moved into .rodata from .*
-		 */
-		*(.rodata .rodata.* .gnu.linkonce.r.*)
 		*(.rodata1)
-
-		. = ALIGN (bsp_section_rodata_end_align);
-
-		/*
-		 * BSP: End of rodata section
-		 */
-		bsp_section_rodata_end = .;
+		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
-
-	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
-
-	bsp_section_rodata_load_begin = LOADADDR (.rodata);
-
-	.robarrier : {
-		. = ALIGN (bsp_section_robarrier_align);
-	} > REGION_RODATA
-
-	.data : {
-		/*
-		 * BSP: Begin of data section
-		 */
-		bsp_section_data_begin = .;
-
-		/*
-		 * BSP: Moved into .data from .ctors
-		 */
+	.ARM.extab : {
+		*(.ARM.extab* .gnu.linkonce.armextab.*)
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.ARM.exidx : {
+		__exidx_start = .;
+		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
+		__exidx_end = .;
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.eh_frame : {
+		KEEP (*(.eh_frame))
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gcc_except_table : {
+		*(.gcc_except_table .gcc_except_table.*)
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.preinit_array : {
+		PROVIDE_HIDDEN (__preinit_array_start = .);
+		KEEP (*(.preinit_array))
+		PROVIDE_HIDDEN (__preinit_array_end = .);
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.init_array : {
+		PROVIDE_HIDDEN (__init_array_start = .);
+		KEEP (*(SORT(.init_array.*)))
+		KEEP (*(.init_array))
+		PROVIDE_HIDDEN (__init_array_end = .);
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.fini_array : {
+		PROVIDE_HIDDEN (__fini_array_start = .);
+		KEEP (*(.fini_array))
+		KEEP (*(SORT(.fini_array.*)))
+		PROVIDE_HIDDEN (__fini_array_end = .);
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.ctors : {
 		/* gcc uses crtbegin.o to find the start of
 		   the constructors, so we make sure it is
 		   first.  Because this is a wildcard, it
@@ -263,119 +287,137 @@ SECTIONS {
 		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
 		KEEP (*(SORT(.ctors.*)))
 		KEEP (*(.ctors))
-
-		/*
-		 * BSP: Moved into .data from .dtors
-		 */
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dtors : {
 		KEEP (*crtbegin.o(.dtors))
 		KEEP (*crtbegin?.o(.dtors))
 		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
 		KEEP (*(SORT(.dtors.*)))
 		KEEP (*(.dtors))
-
-		/*
-		 * BSP: Moved into .data from .*
-		 */
-		*(.data1)
-		KEEP (*(.eh_frame))
-		*(.gcc_except_table .gcc_except_table.*)
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.data.rel.ro : {
+		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
+		*(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.jcr : {
 		KEEP (*(.jcr))
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dynamic : {
+		*(.dynamic)
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.got : {
+		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
+		. = ALIGN (bsp_section_align);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rodata : {
+		/* Special FreeBSD sysctl sections */
+		. = ALIGN (16);
+		__start_set_sysctl_set = .;
+		*(set_sysctl_*);
+		__stop_set_sysctl_set = ABSOLUTE(.);
+		*(set_domain_*);
+		*(set_pseudo_*);
+		_bsd__start_set_sysinit_set = .;
+		*(_bsd_set_sysinit_set);
+		_bsd__stop_set_sysinit_set = .;
+		_bsd__start_set_modmetadata_set = .;
+		*(_bsd_set_modmetadata_set);
+		_bsd__stop_set_modmetadata_set = .;
+		_bsd__start_set_sysctl_set = .;
+		*(_bsd_set_sysctl_set);
+		_bsd__stop_set_sysctl_set = .;
 
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
+		. = ALIGN (bsp_section_align);
+		bsp_section_rodata_end = .;
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
+	bsp_section_rodata_load_begin = LOADADDR (.rodata1);
+	bsp_section_rodata_load_end = bsp_section_rodata_load_begin + bsp_section_rodata_size;
+
+	.robarrier : {
+		. = ALIGN (bsp_section_robarrier_align);
+	} > REGION_RODATA
+
+	.data1 : {
+		bsp_section_data_begin = .;
+		*(.data1)
+		. = ALIGN (bsp_section_align);
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.data : {
 		*(.data .data.* .gnu.linkonce.d.*)
-		KEEP (*(.gnu.linkonce.d.*personality*))
 		SORT(CONSTRUCTORS)
-
-		. = ALIGN (bsp_section_data_end_align);
-
-		/*
-		 * BSP: End of data section
-		 */
+		. = ALIGN (bsp_section_align);
 		bsp_section_data_end = .;
 	} > REGION_DATA AT > REGION_DATA_LOAD
-
 	bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
+	bsp_section_data_load_begin = LOADADDR (.data1);
+	bsp_section_data_load_end = bsp_section_data_load_begin + bsp_section_data_size;
 
-	bsp_section_data_load_begin = LOADADDR (.data);
-
-	.fast : {
-		bsp_section_fast_begin = .;
-
-		*(.bsp_fast)
-
-		. = ALIGN (bsp_section_fast_end_align);
-
-		bsp_section_fast_end = .;
+	.fast_text : {
+		bsp_section_fast_text_begin = .;
+		*(.bsp_fast_text)
+		. = ALIGN (bsp_section_align);
+		bsp_section_fast_text_end = .;
 	} > REGION_FAST AT > REGION_FAST_LOAD
+	bsp_section_fast_text_size = bsp_section_fast_text_end - bsp_section_fast_text_begin;
+	bsp_section_fast_text_load_begin = LOADADDR (.fast_text);
+	bsp_section_fast_text_load_end = bsp_section_fast_text_load_begin + bsp_section_fast_text_size;
 
-	bsp_section_fast_size = bsp_section_fast_end - bsp_section_fast_begin;
-
-	bsp_section_fast_load_begin = LOADADDR (.fast);
+	.fast_data : {
+		bsp_section_fast_data_begin = .;
+		*(.bsp_fast_data)
+		. = ALIGN (bsp_section_align);
+		bsp_section_fast_data_end = .;
+	} > REGION_FAST AT > REGION_FAST_LOAD
+	bsp_section_fast_data_size = bsp_section_fast_data_end - bsp_section_fast_data_begin;
+	bsp_section_fast_data_load_begin = LOADADDR (.fast_data);
+	bsp_section_fast_data_load_end = bsp_section_fast_data_load_begin + bsp_section_fast_data_size;
 
 	.bss : {
-		/*
-		 * BSP: Begin of bss section
-		 */
 		bsp_section_bss_begin = .;
-
-		*(COMMON)
 		*(.dynbss)
 		*(.bss .bss.* .gnu.linkonce.b.*)
-
-		. = ALIGN (bsp_section_bss_end_align);
-
-		/*
-		 * BSP: End of bss section
-		 */
+		*(COMMON)
+		. = ALIGN (bsp_section_align);
 		bsp_section_bss_end = .;
 	} > REGION_BSS AT > REGION_BSS
-
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
 
 	.work : {
 		/*
-		 * BSP: Begin of work section.  The work section will occupy
-		 * the remaining REGION_WORK region and contains the RTEMS work
-		 * space and heap.
+		 * The work section will occupy the remaining REGION_WORK region and
+		 * contains the RTEMS work space and heap.
 		 */
 		bsp_section_work_begin = .;
-
 		. += ORIGIN (REGION_WORK) + LENGTH (REGION_WORK) - ABSOLUTE (.);
-
-		/*
-		 * BSP: End of work section
-		 */
 		bsp_section_work_end = .;
 	} > REGION_WORK AT > REGION_WORK
-
 	bsp_section_work_size = bsp_section_work_end - bsp_section_work_begin;
 
 	.stack : {
 		/*
-		 * BSP: Begin of stack section.  The stack section will occupy
-		 * the remaining REGION_STACK region and may contain the task
-		 * stacks.  Depending on the region distribution this section
-		 * may be of zero size.
+		 * The stack section will occupy the remaining REGION_STACK region and may
+		 * contain the task stacks.  Depending on the region distribution this
+		 * section may be of zero size.
 		 */
 		bsp_section_stack_begin = .;
-
 		. += ORIGIN (REGION_STACK) + LENGTH (REGION_STACK) - ABSOLUTE (.);
-
-		/*
-		 * BSP: End of stack section
-		 */
 		bsp_section_stack_end = .;
 	} > REGION_STACK AT > REGION_STACK
-
 	bsp_section_stack_size = bsp_section_stack_end - bsp_section_stack_begin;
 
-	/*
-	 * BSP: External symbols (FIXME)
-	 */
+	/* FIXME */
 	RamBase = ORIGIN (REGION_WORK);
 	RamSize = LENGTH (REGION_WORK);
 	WorkAreaBase = bsp_section_work_begin;
 	HeapSize = 0;
-	
+
 	/* Stabs debugging sections.  */
 	.stab          0 : { *(.stab) }
 	.stabstr       0 : { *(.stabstr) }
@@ -412,16 +454,10 @@ SECTIONS {
 	/* DWARF 3 */
 	.debug_pubtypes 0 : { *(.debug_pubtypes) }
 	.debug_ranges   0 : { *(.debug_ranges) }
-	.gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
+	.ARM.attributes 0 : { KEEP (*(.ARM.attributes)) KEEP (*(.gnu.attributes)) }
+	.note.gnu.arm.ident 0 : { KEEP (*(.note.gnu.arm.ident)) }
+	/DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
 
-	/DISCARD/ : {
-		*(.note.GNU-stack) *(.gnu_debuglink)
-	}
-
-	/*
-	 * BSP: Catch all unknown sections
-	 */
-	.nirvana : {
-		*(*)
-	} > NIRVANA
+	/* Catch all unknown sections */
+	.nirvana : { *(*) } > NIRVANA
 }

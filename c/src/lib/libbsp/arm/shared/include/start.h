@@ -38,14 +38,14 @@ extern "C" {
  * @{
  */
 
-#define BSP_START_SECTION __attribute__((section(".bsp_start")))
+#define BSP_START_TEXT_SECTION __attribute__((section(".bsp_start_text")))
 
 #define BSP_START_DATA_SECTION __attribute__((section(".bsp_start_data")))
 
 /**
 * @brief System start entry.
 */
-void start(void);
+void _start(void);
 
 /**
 * @brief Start entry hook 0.

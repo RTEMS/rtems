@@ -1,0 +1,26 @@
+/**
+ * @file
+ *
+ * @ingroup bsp_linker
+ *
+ * @brief Linker command file for ARMv7 architecture.
+ */
+
+/*
+ * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ */
+
+bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 4096;
+bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
+
+INCLUDE linkcmds.base
