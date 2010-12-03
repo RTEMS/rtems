@@ -11,6 +11,8 @@
  *  $Id$
  */
 
+#include <bsp/linker-symbols.h>
+
 /* Some standard definitions...*/
 .equ PSR_MODE_USR,       0x10
 .equ PSR_MODE_FIQ,       0x11
@@ -32,12 +34,12 @@ _start:
 @---------------------------------------------------------------------------------
 @ AXF addresses
 @---------------------------------------------------------------------------------
-	.word   _axf_text_start
-	.word   _axf_ro_end
-	.word   _axf_data_start
-	.word   _axf_bss_end
-	.word   _axf_bss_start
-	.word   _axf_bss_end
+	.word   bsp_section_text_begin
+	.word   bsp_section_rodata_end
+	.word   bsp_section_data_begin
+	.word   bsp_section_bss_end
+	.word   bsp_section_bss_begin
+	.word   bsp_section_bss_end
 
 @---------------------------------------------------------------------------------
 @ GamePark magic sequence
@@ -77,29 +79,29 @@ _start2:
         /* Enter IRQ mode and set up the IRQ stack pointer */
         mov     r0, #(PSR_MODE_IRQ | PSR_I | PSR_F)     /* No interrupts */
         msr     cpsr, r0
-        ldr     r1, =_irq_stack_size
-        ldr     sp, =_irq_stack
+        ldr     r1, =bsp_stack_irq_size
+        ldr     sp, =bsp_stack_irq_begin
         add     sp, sp, r1
 
         /* Enter FIQ mode and set up the FIQ stack pointer */
         mov     r0, #(PSR_MODE_FIQ | PSR_I | PSR_F)     /* No interrupts */
         msr     cpsr, r0
-        ldr     r1, =_fiq_stack_size
-        ldr     sp, =_fiq_stack
+        ldr     r1, =bsp_stack_fiq_size
+        ldr     sp, =bsp_stack_fiq_begin
         add     sp, sp, r1
 
         /* Enter ABT mode and set up the ABT stack pointer */
         mov     r0, #(PSR_MODE_ABT | PSR_I | PSR_F)     /* No interrupts */
         msr     cpsr, r0
-        ldr     r1, =_abt_stack_size
-        ldr     sp, =_abt_stack
+        ldr     r1, =bsp_stack_abt_size
+        ldr     sp, =bsp_stack_abt_begin
         add     sp, sp, r1
 
         /* Set up the SVC stack pointer last and stay in SVC mode */
         mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)     /* No interrupts */
         msr     cpsr, r0
-        ldr     r1, =_svc_stack_size
-        ldr     sp, =_svc_stack
+        ldr     r1, =bsp_stack_svc_size
+        ldr     sp, =bsp_stack_svc_begin
         add     sp, sp, r1
         sub     sp, sp, #0x64
 
