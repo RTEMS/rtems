@@ -14,4 +14,4 @@ lpc32xx_magic_zero_begin = 0x05000000;
 lpc32xx_magic_zero_end = 0x07000000;
 lpc32xx_magic_zero_size = lpc32xx_magic_zero_end - lpc32xx_magic_zero_end;
 
-INCLUDE linkcmds.base
+INCLUDE linkcmds.armv4

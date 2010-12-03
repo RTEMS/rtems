@@ -44,7 +44,7 @@
 
 LINKER_SYMBOL(lpc32xx_translation_table_base);
 
-static void BSP_START_SECTION clear_bss(void)
+static void BSP_START_TEXT_SECTION clear_bss(void)
 {
   const int *end = (const int *) bsp_section_bss_end;
   int *out = (int *) bsp_section_bss_begin;
@@ -66,6 +66,14 @@ static void BSP_START_SECTION clear_bss(void)
   static const BSP_START_DATA_SECTION lpc32xx_mmu_config
     lpc32xx_mmu_config_table [] = {
     {
+      .begin = (uint32_t) bsp_section_fast_text_begin,
+      .end = (uint32_t) bsp_section_fast_text_end,
+      .flags = LPC32XX_MMU_CODE
+    }, {
+      .begin = (uint32_t) bsp_section_fast_data_begin,
+      .end = (uint32_t) bsp_section_fast_data_end,
+      .flags = LPC32XX_MMU_READ_WRITE_DATA
+    }, {
       .begin = (uint32_t) bsp_section_start_begin,
       .end = (uint32_t) bsp_section_start_end,
       .flags = LPC32XX_MMU_CODE
@@ -85,10 +93,6 @@ static void BSP_START_SECTION clear_bss(void)
       .begin = (uint32_t) bsp_section_data_begin,
       .end = (uint32_t) bsp_section_data_end,
       .flags = LPC32XX_MMU_READ_WRITE_DATA
-    }, {
-      .begin = (uint32_t) bsp_section_fast_begin,
-      .end = (uint32_t) bsp_section_fast_end,
-      .flags = LPC32XX_MMU_CODE
     }, {
       .begin = (uint32_t) bsp_section_bss_begin,
       .end = (uint32_t) bsp_section_bss_end,
@@ -124,7 +128,7 @@ static void BSP_START_SECTION clear_bss(void)
     }
   };
 
-  static void BSP_START_SECTION set_translation_table_entries(
+  static void BSP_START_TEXT_SECTION set_translation_table_entries(
     uint32_t *ttb,
     const lpc32xx_mmu_config *config
   )
@@ -141,7 +145,7 @@ static void BSP_START_SECTION clear_bss(void)
     }
   }
 
-  static void BSP_START_SECTION
+  static void BSP_START_TEXT_SECTION
     setup_translation_table_and_enable_mmu(uint32_t ctrl)
   {
     uint32_t const dac =
@@ -169,7 +173,7 @@ static void BSP_START_SECTION clear_bss(void)
   }
 #endif
 
-static void BSP_START_SECTION setup_mmu_and_cache(void)
+static void BSP_START_TEXT_SECTION setup_mmu_and_cache(void)
 {
   uint32_t ctrl = 0;
 
@@ -192,7 +196,7 @@ static void BSP_START_SECTION setup_mmu_and_cache(void)
   #error "unexpected main oscillator frequency"
 #endif
 
-static void BSP_START_SECTION setup_pll(void)
+static void BSP_START_TEXT_SECTION setup_pll(void)
 {
   uint32_t pwr_ctrl = LPC32XX_PWR_CTRL;
 
@@ -211,13 +215,13 @@ static void BSP_START_SECTION setup_pll(void)
   }
 }
 
-void BSP_START_SECTION bsp_start_hook_0(void)
+void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
 {
   setup_pll();
   setup_mmu_and_cache();
 }
 
-static void BSP_START_SECTION stop_dma_activities(void)
+static void BSP_START_TEXT_SECTION stop_dma_activities(void)
 {
   #ifdef LPC32XX_STOP_GPDMA
     if ((LPC32XX_DMACLK_CTRL & 0x1) != 0) {
@@ -251,7 +255,7 @@ static void BSP_START_SECTION stop_dma_activities(void)
   #endif
 }
 
-static void BSP_START_SECTION setup_uarts(void)
+static void BSP_START_TEXT_SECTION setup_uarts(void)
 {
   uint32_t uartclk_ctrl = 0;
 
@@ -286,7 +290,7 @@ static void BSP_START_SECTION setup_uarts(void)
   #endif
 }
 
-static void BSP_START_SECTION setup_timer(void)
+static void BSP_START_TEXT_SECTION setup_timer(void)
 {
   volatile lpc_timer *timer = LPC32XX_STANDARD_TIMER;
 
@@ -301,7 +305,7 @@ static void BSP_START_SECTION setup_timer(void)
   timer->tcr = LPC_TIMER_TCR_EN;
 }
 
-void BSP_START_SECTION bsp_start_hook_1(void)
+void BSP_START_TEXT_SECTION bsp_start_hook_1(void)
 {
   stop_dma_activities();
   setup_uarts();
@@ -331,12 +335,20 @@ void BSP_START_SECTION bsp_start_hook_1(void)
     (size_t) bsp_section_data_size
   );
 
-  /* Copy .fast section */
+  /* Copy .fast_text section */
   arm_cp15_instruction_cache_invalidate();
   bsp_start_memcpy(
-    (int *) bsp_section_fast_begin,
-    (const int *) bsp_section_fast_load_begin,
-    (size_t) bsp_section_fast_size
+    (int *) bsp_section_fast_text_begin,
+    (const int *) bsp_section_fast_text_load_begin,
+    (size_t) bsp_section_fast_text_size
+  );
+
+  /* Copy .fast_data section */
+  arm_cp15_instruction_cache_invalidate();
+  bsp_start_memcpy(
+    (int *) bsp_section_fast_data_begin,
+    (const int *) bsp_section_fast_data_load_begin,
+    (size_t) bsp_section_fast_data_size
   );
 
   /* Clear .bss section */

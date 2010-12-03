@@ -1,3 +1,13 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lpc32xx.h: Added I2S module.
+	* Makefile.am, bsp_specs, preinstall.am, startup/bspstarthooks.c,
+	startup/linkcmds.lpc32xx, startup/linkcmds.lpc32xx_mzx,
+	startup/linkcmds.lpc32xx_mzx_stage_1,
+	startup/linkcmds.lpc32xx_mzx_stage_2,
+	startup/linkcmds.lpc32xx_phycore: Update due to linker command file
+	changes.
+
 2010-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtc/rtc-config.c: Fixed type.

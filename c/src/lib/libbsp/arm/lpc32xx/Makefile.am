@@ -35,10 +35,10 @@ include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/include/uart-output-char.h
 include_bsp_HEADERS += ../../shared/tod.h
-include_bsp_HEADERS += ../shared/include/linker-symbols.h
 include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-timer.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-dma.h
+include_bsp_HEADERS += ../shared/lpc/include/lpc-i2s.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/mmu.h
 include_bsp_HEADERS += include/lpc32xx.h
@@ -64,7 +64,6 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
 project_lib_DATA += startup/linkcmds.lpc32xx
-project_lib_DATA += ../shared/startup/linkcmds.base
 
 EXTRA_DIST = startup/linkcmds.lpc32xx_phycore \
 	startup/linkcmds.lpc32xx_mzx_stage_1 \

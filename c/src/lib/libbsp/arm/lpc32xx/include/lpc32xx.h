@@ -27,6 +27,7 @@
 #include <bsp/utility.h>
 #include <bsp/lpc-timer.h>
 #include <bsp/lpc-dma.h>
+#include <bsp/lpc-i2s.h>
 
 /**
  * @defgroup lpc32xx_reg Register Definitions
@@ -230,9 +231,6 @@ typedef struct {
 
 typedef struct {
 } lpc32xx_spi;
-
-typedef struct {
-} lpc32xx_i2s;
 
 typedef struct {
 } lpc32xx_sd_card;
@@ -501,12 +499,12 @@ typedef struct {
   uint32_t reserved_3 [LPC32XX_RESERVED(0x2008c000, 0x20090000, lpc32xx_ssp)];
   lpc32xx_spi spi_2;
   uint32_t reserved_4 [LPC32XX_RESERVED(0x20090000, 0x20094000, lpc32xx_spi)];
-  lpc32xx_i2s i2s_0;
-  uint32_t reserved_5 [LPC32XX_RESERVED(0x20094000, 0x20098000, lpc32xx_i2s)];
+  lpc_i2s i2s_0;
+  uint32_t reserved_5 [LPC32XX_RESERVED(0x20094000, 0x20098000, lpc_i2s)];
   lpc32xx_sd_card sd_card;
   uint32_t reserved_6 [LPC32XX_RESERVED(0x20098000, 0x2009c000, lpc32xx_sd_card)];
-  lpc32xx_i2s i2s_1;
-  uint32_t reserved_7 [LPC32XX_RESERVED(0x2009c000, 0x200a8000, lpc32xx_i2s)];
+  lpc_i2s i2s_1;
+  uint32_t reserved_7 [LPC32XX_RESERVED(0x2009c000, 0x200a8000, lpc_i2s)];
   lpc32xx_nand_mlc nand_mlc;
   uint32_t reserved_8 [LPC32XX_RESERVED(0x200a8000, 0x31000000, lpc32xx_nand_mlc)];
   lpc_dma dma;
