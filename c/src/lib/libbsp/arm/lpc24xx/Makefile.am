@@ -34,9 +34,9 @@ include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/include/uart-output-char.h
 include_bsp_HEADERS += ../../shared/tod.h
-include_bsp_HEADERS += ../shared/include/linker-symbols.h
 include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-timer.h
+include_bsp_HEADERS += ../shared/lpc/include/lpc-i2s.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/lpc24xx.h
 include_bsp_HEADERS += include/system-clocks.h
@@ -44,6 +44,7 @@ include_bsp_HEADERS += include/ssp.h
 include_bsp_HEADERS += include/dma.h
 include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/io.h
+include_bsp_HEADERS += include/lcd.h
 include_bsp_HEADERS += include/lpc-clock-config.h
 include_bsp_HEADERS += include/lpc-ethernet-config.h
 
@@ -62,7 +63,6 @@ libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
-project_lib_DATA += ../shared/startup/linkcmds.base
 EXTRA_DIST = startup/linkcmds.lpc24xx_ea
 EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_int
 EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_ext
@@ -123,6 +123,7 @@ libbsp_a_SOURCES += misc/system-clocks.c \
 	misc/dma-copy.c \
 	misc/bspidle.c \
 	misc/io.c \
+	misc/lcd.c \
 	misc/timer.c
 
 # SSP

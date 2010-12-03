@@ -31,7 +31,7 @@
 #endif
 
 #ifdef LPC24XX_EMC_MICRON
-  static void BSP_START_SECTION lpc24xx_ram_test_32(void)
+  static void BSP_START_TEXT_SECTION lpc24xx_ram_test_32(void)
   {
     #ifdef LPC24XX_EMC_TEST
       int *begin = (int *) 0xa0000000;
@@ -55,7 +55,7 @@
     #endif
   }
 
-  static void BSP_START_SECTION lpc24xx_cpu_delay(
+  static void BSP_START_TEXT_SECTION lpc24xx_cpu_delay(
     unsigned ticks
   )
   {
@@ -73,7 +73,7 @@
 /**
  * @brief EMC initialization hook 0.
  */
-static void BSP_START_SECTION lpc24xx_init_emc_0(void)
+static void BSP_START_TEXT_SECTION lpc24xx_init_emc_0(void)
 {
   #ifdef LPC24XX_EMC_NUMONYX
     /*
@@ -137,7 +137,7 @@ static void BSP_START_SECTION lpc24xx_init_emc_0(void)
 /**
  * @brief EMC initialization hook 1.
  */
-static void BSP_START_SECTION lpc24xx_init_emc_1(void)
+static void BSP_START_TEXT_SECTION lpc24xx_init_emc_1(void)
 {
   #ifdef LPC24XX_EMC_INIT
     /* Use normal memory map */
@@ -242,7 +242,7 @@ static void BSP_START_SECTION lpc24xx_init_emc_1(void)
   #endif
 }
 
-static void BSP_START_SECTION lpc24xx_pll_config(
+static void BSP_START_TEXT_SECTION lpc24xx_pll_config(
   uint32_t val
 )
 {
@@ -265,7 +265,7 @@ static void BSP_START_SECTION lpc24xx_pll_config(
  * @param cclksel Selects the divide value for creating the CPU clock (CCLK)
  * from the PLL output.
  */
-static void BSP_START_SECTION lpc24xx_set_pll(
+static void BSP_START_TEXT_SECTION lpc24xx_set_pll(
   unsigned clksrc,
   unsigned nsel,
   unsigned msel,
@@ -321,7 +321,7 @@ static void BSP_START_SECTION lpc24xx_set_pll(
   lpc24xx_pll_config(PLLCON_PLLE | PLLCON_PLLC);
 }
 
-static void BSP_START_SECTION lpc24xx_init_pll(void)
+static void BSP_START_TEXT_SECTION lpc24xx_init_pll(void)
 {
   /* Enable main oscillator */
   if ((SCS & 0x40) == 0) {
@@ -341,7 +341,7 @@ static void BSP_START_SECTION lpc24xx_init_pll(void)
   #endif
 }
 
-static void BSP_START_SECTION lpc24xx_clear_bss(void)
+static void BSP_START_TEXT_SECTION lpc24xx_clear_bss(void)
 {
   const int *end = (const int *) bsp_section_bss_end;
   int *out = (int *) bsp_section_bss_begin;
@@ -353,7 +353,7 @@ static void BSP_START_SECTION lpc24xx_clear_bss(void)
   }
 }
 
-void BSP_START_SECTION bsp_start_hook_0(void)
+void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
 {
   /* Initialize PLL */
   lpc24xx_init_pll();
@@ -362,7 +362,7 @@ void BSP_START_SECTION bsp_start_hook_0(void)
   lpc24xx_init_emc_0();
 }
 
-void BSP_START_SECTION bsp_start_hook_1(void)
+void BSP_START_TEXT_SECTION bsp_start_hook_1(void)
 {
   /* Re-map interrupt vectors to internal RAM */
   MEMMAP = SET_MEMMAP_MAP(MEMMAP, 2);
@@ -442,11 +442,18 @@ void BSP_START_SECTION bsp_start_hook_1(void)
     (size_t) bsp_section_data_size
   );
 
-  /* Copy .fast section */
+  /* Copy .fast_text section */
   bsp_start_memcpy(
-    (int *) bsp_section_fast_begin,
-    (const int *) bsp_section_fast_load_begin,
-    (size_t) bsp_section_fast_size
+    (int *) bsp_section_fast_text_begin,
+    (const int *) bsp_section_fast_text_load_begin,
+    (size_t) bsp_section_fast_text_size
+  );
+
+  /* Copy .fast_data section */
+  bsp_start_memcpy(
+    (int *) bsp_section_fast_data_begin,
+    (const int *) bsp_section_fast_data_load_begin,
+    (size_t) bsp_section_fast_data_size
   );
 
   /* Clear .bss section */

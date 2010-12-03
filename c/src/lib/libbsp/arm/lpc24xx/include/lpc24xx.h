@@ -22,6 +22,8 @@
 #define LIBBSP_ARM_LPC24XX_LPC24XX_H
 
 #include <stdint.h>
+#include <bsp/utility.h>
+#include <bsp/lpc-i2s.h>
 
 /**
  * @defgroup lpc24xx_regs Register Definitions
@@ -1979,6 +1981,16 @@ typedef struct {
 #define PCONP_GPDMA (1U << 29)
 #define PCONP_ETHERNET (1U << 30)
 #define PCONP_USB (1U << 31)
+
+/* I2S */
+
+static volatile lpc_i2s *const lpc24xx_i2s = (lpc_i2s *) I2S_BASE_ADDR;
+
+/* DAC */
+
+#define DAC_STEPS 1024
+#define DAC_VALUE(val) BSP_FLD32(val, 6, 15)
+#define DAC_BIAS BSP_BIT32(16)
 
 /** @} */
 

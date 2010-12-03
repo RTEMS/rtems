@@ -37,13 +37,13 @@
  */
 
 MEMORY {
-        RAM_INT (AIW) : ORIGIN = 0x40000000, LENGTH = 32k
-        RAM_USB (AIW) : ORIGIN = 0x7fd00000, LENGTH = 8k
-        RAM_ETH (AIW) : ORIGIN = 0x7fe00000, LENGTH = 16k
-        ROM_BOOT (RX) : ORIGIN = 0x00000000, LENGTH = 4k
-        ROM_CFG (RX)  : ORIGIN = 0x00001000, LENGTH = 4k
-        ROM_INT (RX)  : ORIGIN = 0x00002000, LENGTH = 120k
-        NIRVANA : ORIGIN = 0, LENGTH = 0
+	RAM_INT (AIW) : ORIGIN = 0x40000000, LENGTH = 32k
+	RAM_USB (AIW) : ORIGIN = 0x7fd00000, LENGTH = 8k
+	RAM_ETH (AIW) : ORIGIN = 0x7fe00000, LENGTH = 16k
+	ROM_BOOT (RX) : ORIGIN = 0x00000000, LENGTH = 4k
+	ROM_CFG (RX)  : ORIGIN = 0x00001000, LENGTH = 4k
+	ROM_INT (RX)  : ORIGIN = 0x00002000, LENGTH = 120k
+	NIRVANA : ORIGIN = 0, LENGTH = 0
 }
 
 REGION_ALIAS ("REGION_START", ROM_BOOT);
@@ -68,4 +68,4 @@ lpc24xx_region_heap_1_begin = ORIGIN (RAM_USB);
 lpc24xx_region_heap_1_size = LENGTH (RAM_USB);
 lpc24xx_region_heap_1_end = lpc24xx_region_heap_1_begin + lpc24xx_region_heap_1_size;
 
-INCLUDE linkcmds.base
+INCLUDE linkcmds.armv4

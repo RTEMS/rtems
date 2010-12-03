@@ -53,7 +53,7 @@ typedef struct {
   unsigned pin_function : 3;
 } lpc24xx_io_entry;
 
-typedef void (*lpc24xx_io_iterate_routine)(unsigned /* pin */, unsigned /* function */);
+typedef void (*lpc24xx_io_iterate_routine)(unsigned pin, unsigned function);
 
 static const lpc24xx_io_entry lpc24xx_io_config_table [] = {
   /* UART */
@@ -78,6 +78,8 @@ static const lpc24xx_io_entry lpc24xx_io_config_table [] = {
   /* ADC */
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_ADC, 0, 0, 12, 0, 13, LPC24XX_IO_ALTERNATE_2),
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_ADC, 1, 0, 23, 0, 25, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ADC, 2, 0, 26, 0, 26, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_ADC, 2, 1, 30, 1, 31, LPC24XX_IO_ALTERNATE_2),
 
   /* I2C */
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_0, 0, 0, 27, 0, 28, LPC24XX_IO_ALTERNATE_0),
@@ -87,6 +89,11 @@ static const lpc24xx_io_entry lpc24xx_io_config_table [] = {
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_2, 0, 0, 10, 0, 11, LPC24XX_IO_ALTERNATE_1),
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_2, 1, 2, 30, 2, 31, LPC24XX_IO_ALTERNATE_2),
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2C_2, 2, 4, 20, 4, 21, LPC24XX_IO_ALTERNATE_1),
+
+  /* I2S */
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2S, 0, 0, 4, 0, 9, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2S, 1, 0, 23, 0, 25, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_I2S, 1, 2, 11, 2, 13, LPC24XX_IO_ALTERNATE_2),
 
   /* SSP */
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_SSP_0, 0, 0, 15, 0, 18, LPC24XX_IO_ALTERNATE_1),
@@ -117,6 +124,14 @@ static const lpc24xx_io_entry lpc24xx_io_config_table [] = {
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_LCD, 0, 2, 5, 2, 9, LPC24XX_IO_ALTERNATE_2),
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_LCD, 0, 2, 12, 2, 13, LPC24XX_IO_ALTERNATE_0),
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_LCD, 0, 4, 28, 4, 29, LPC24XX_IO_ALTERNATE_1),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_LCD, 1, 1, 20, 1, 29, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_LCD, 1, 2, 0, 2, 3, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_LCD, 1, 2, 5, 2, 9, LPC24XX_IO_ALTERNATE_2),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_LCD, 1, 2, 12, 2, 13, LPC24XX_IO_ALTERNATE_0),
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_LCD, 1, 4, 28, 4, 29, LPC24XX_IO_ALTERNATE_1),
+
+  /* DAC */
+  LPC24XX_IO_ENTRY(LPC24XX_MODULE_DAC, 0, 0, 26, 0, 26, LPC24XX_IO_ALTERNATE_1),
 
   /* Terminate */
   LPC24XX_IO_ENTRY(LPC24XX_MODULE_COUNT, 0, 0, 0, 0, 0, 0)
@@ -128,7 +143,7 @@ static rtems_status_code lpc24xx_io_iterate(
   lpc24xx_io_iterate_routine routine
 )
 {
-  rtems_status_code sc = RTEMS_INVALID_ID;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
   const lpc24xx_io_entry *e = &lpc24xx_io_config_table [0];
 
   while (e->module != LPC24XX_MODULE_COUNT) {
@@ -156,17 +171,14 @@ static void lpc24xx_io_do_config(unsigned pin, unsigned function)
   rtems_interrupt_level level;
   unsigned select = LPC24XX_IO_SELECT(pin);
   unsigned shift = LPC24XX_IO_SELECT_SHIFT(pin);
+  unsigned mask = LPC24XX_IO_SELECT_MASK << shift;
+  unsigned pinsel = 0;
 
   rtems_interrupt_disable(level);
-
-  LPC24XX_PINSEL [select] =
-    (LPC24XX_PINSEL [select] & ~(LPC24XX_IO_SELECT_MASK << shift))
-      | ((function & LPC24XX_IO_SELECT_MASK) << shift);
-
-  rtems_interrupt_flash(level);
-
-  LPC24XX_PINMODE [select] &= ~(LPC24XX_IO_SELECT_MASK << shift);
-
+  pinsel = LPC24XX_PINSEL [select];
+  pinsel &= ~mask;
+  pinsel |= (function & LPC24XX_IO_SELECT_MASK) << shift;
+  LPC24XX_PINSEL [select] = pinsel;
   rtems_interrupt_enable(level);
 }
 
@@ -175,10 +187,10 @@ static void lpc24xx_io_do_release(unsigned pin, unsigned function)
   rtems_interrupt_level level;
   unsigned select = LPC24XX_IO_SELECT(pin);
   unsigned shift = LPC24XX_IO_SELECT_SHIFT(pin);
+  unsigned mask = LPC24XX_IO_SELECT_MASK << shift;
 
   rtems_interrupt_disable(level);
-  LPC24XX_PINSEL [select] =
-    (LPC24XX_PINSEL [select] & ~(LPC24XX_IO_SELECT_MASK << shift));
+  LPC24XX_PINSEL [select] &= ~mask;
   rtems_interrupt_enable(level);
 }
 
@@ -277,7 +289,7 @@ static const lpc24xx_module_entry lpc24xx_module_table [] = {
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2C_1, 1, 1, 19),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2C_2, 1, 1, 26),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2S, 1, 1, 27),
-  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_LCD, 1, 1, 20),
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_LCD, 1, 0, 20),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_MCI, 1, 1, 28),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PCB, 0, 1, 18),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PWM_0, 1, 1, 5),

@@ -1,3 +1,16 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lcd.h, misc/lcd.c: New files.
+	* misc/io.c, include/io.h: Documentation, bug fixes, more
+	configurations.
+	* include/lpc24xx.h: Added DAC and I2S.
+	* Makefile.am, bsp_specs, preinstall.am, startup/bspstarthooks.c,
+	startup/linkcmds.lpc2362, startup/linkcmds.lpc23xx_tli800,
+	startup/linkcmds.lpc24xx_ea, startup/linkcmds.lpc24xx_ncs_ram,
+	startup/linkcmds.lpc24xx_ncs_rom_ext,
+	startup/linkcmds.lpc24xx_ncs_rom_int: Update due to linker command
+	file changes.
+
 2010-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* misc/system-clocks.c: Use define instead of function call to allow
