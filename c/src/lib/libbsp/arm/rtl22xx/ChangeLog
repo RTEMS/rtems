@@ -1,3 +1,7 @@
+2010-12-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* make/custom/rtl22xx_t.cfg: Now compiles.
+
 2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/linkcmds, start/start.S: Use linker command base file.
