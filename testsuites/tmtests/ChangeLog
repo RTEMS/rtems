@@ -1,3 +1,7 @@
+2010-12-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* README: Add initial small set of POSIX Timing Tests.
+
 2010-11-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* tm26/task1.c, tm27/task1.c: Update for API changes.

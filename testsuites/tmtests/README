@@ -2,11 +2,15 @@
 #  $Id$
 #
 
-This directory contains the RTEMS Timing Test Suite.
+This directory contains the RTEMS Classic API Timing Test Suite.
 The tests in this directory are used to measure the execution
 time of RTEMS directive and some critical internal functions.
-The results of these test are reported in the Fact Sheets
-and Supplental Manuals.
+The results of these test are useful for comparison of RTEMS
+performance 
+
++ between versions of RTEMS
++ between different boards 
++ across different architectures
 
 These tests attempt to benchmark RTEMS as the user would.  They measure
 the execution time for a directive (under various circumstances)
