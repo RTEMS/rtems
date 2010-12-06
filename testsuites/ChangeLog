@@ -1,3 +1,7 @@
+2010-12-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac: Add initial small set of POSIX Timing Tests.
+
 2010-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1708/build:
