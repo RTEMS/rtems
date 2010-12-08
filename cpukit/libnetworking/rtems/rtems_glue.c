@@ -40,6 +40,8 @@
 #include <net/netisr.h>
 #include <net/route.h>
 
+#include "loop.h"
+
 /*
  * Sysctl init all.
  */
@@ -98,6 +100,20 @@ static struct in_addr _rtems_bsdnet_ntpserver[sizeof rtems_bsdnet_config.ntp_ser
 struct in_addr *rtems_bsdnet_ntpserver = _rtems_bsdnet_ntpserver;
 int rtems_bsdnet_ntpserver_count = 0;
 int32_t rtems_bsdnet_timeoffset = 0;
+
+static const struct sockaddr_in address_template = {
+	sizeof(address_template),
+	AF_INET,
+	0,
+	{ INADDR_ANY },
+	{ 0, 0, 0, 0, 0, 0, 0, 0 }
+};
+
+static void
+rtems_bsdnet_initialize_sockaddr_in(struct sockaddr_in *addr)
+{
+	memcpy(addr, &address_template, sizeof(*addr));
+}
 
 /*
  * Perform FreeBSD memory allocation.
@@ -315,6 +331,9 @@ rtems_bsdnet_initialize (void)
 	 * Let other network tasks begin
 	 */
 	rtems_bsdnet_semaphore_release ();
+
+	rtems_bsdnet_initialize_loop();
+
 	return 0;
 }
 
@@ -822,17 +841,81 @@ int rtems_bsdnet_rtrequest (
 	return 0;
 }
 
+static bool
+rtems_bsdnet_setup_interface(
+	const char *name,
+	const char *ip_address,
+	const char *ip_netmask
+)
+{
+	struct sockaddr_in address;
+	struct sockaddr_in netmask;
+	short flags;
+
+	/*
+	 * Bring interface up
+	 */
+	flags = IFF_UP;
+	if (rtems_bsdnet_ifconfig (name, SIOCSIFFLAGS, &flags) < 0) {
+		printf ("Can't bring %s up: %s\n", name, strerror (errno));
+		return false;
+	}
+
+	/*
+	 * Set interface netmask
+	 */
+	rtems_bsdnet_initialize_sockaddr_in(&netmask);
+	netmask.sin_addr.s_addr = inet_addr (ip_netmask);
+	if (rtems_bsdnet_ifconfig (name, SIOCSIFNETMASK, &netmask) < 0) {
+		printf ("Can't set %s netmask: %s\n", name, strerror (errno));
+		return false;
+	}
+
+	/*
+	 * Set interface address
+	 */
+	rtems_bsdnet_initialize_sockaddr_in(&address);
+	address.sin_addr.s_addr = inet_addr (ip_address);
+	if (rtems_bsdnet_ifconfig (name, SIOCSIFADDR, &address) < 0) {
+		printf ("Can't set %s address: %s\n", name, strerror (errno));
+		return false;
+	}
+
+	/*
+	 * Set interface broadcast address if the interface has the
+	 * broadcast flag set.
+	 */
+	if (rtems_bsdnet_ifconfig (name, SIOCGIFFLAGS, &flags) < 0) {
+		printf ("Can't read %s flags: %s\n", name, strerror (errno));
+		return false;
+	}
+
+	if (flags & IFF_BROADCAST) {
+		struct sockaddr_in broadcast;
+
+		rtems_bsdnet_initialize_sockaddr_in(&broadcast);
+		broadcast.sin_addr.s_addr =
+				address.sin_addr.s_addr | ~netmask.sin_addr.s_addr;
+		if (rtems_bsdnet_ifconfig (name, SIOCSIFBRDADDR, &broadcast) < 0) {
+			struct in_addr	in_addr;
+			char			buf[20];
+			in_addr.s_addr = broadcast.sin_addr.s_addr;
+			if (!inet_ntop(AF_INET, &in_addr, buf, sizeof(buf)))
+					strcpy(buf,"?.?.?.?");
+			printf ("Can't set %s broadcast address %s: %s\n",
+				name, buf, strerror (errno));
+		}
+	}
+
+	return true;
+}
+
 static int
 rtems_bsdnet_setup (void)
 {
 	struct rtems_bsdnet_ifconfig *ifp;
-	short flags;
-	struct sockaddr_in address;
-	struct sockaddr_in netmask;
-	struct sockaddr_in broadcast;
-	struct sockaddr_in gateway;
 	int i;
-	int any_if_configured = 0;
+	bool any_if_configured = false;
 
 	/*
 	 * Set local parameters
@@ -864,82 +947,36 @@ rtems_bsdnet_setup (void)
 	/*
 	 * Configure interfaces
 	 */
+	any_if_configured |= rtems_bsdnet_setup_interface(
+		"lo0",
+		"127.0.0.1",
+		"255.0.0.0"
+	);
 	for (ifp = rtems_bsdnet_config.ifconfig ; ifp ; ifp = ifp->next) {
 		if (ifp->ip_address == NULL)
 			continue;
 
-		/*
-		 * Bring interface up
-		 */
-		flags = IFF_UP;
-		if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFFLAGS, &flags) < 0) {
-			printf ("Can't bring %s up: %s\n", ifp->name, strerror (errno));
-			continue;
-		}
-
-		/*
-		 * Set interface netmask
-		 */
-		memset (&netmask, '\0', sizeof netmask);
-		netmask.sin_len = sizeof netmask;
-		netmask.sin_family = AF_INET;
-		netmask.sin_addr.s_addr = inet_addr (ifp->ip_netmask);
-		if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFNETMASK, &netmask) < 0) {
-			printf ("Can't set %s netmask: %s\n", ifp->name, strerror (errno));
-			continue;
-		}
-
-		/*
-		 * Set interface address
-		 */
-		memset (&address, '\0', sizeof address);
-		address.sin_len = sizeof address;
-		address.sin_family = AF_INET;
-		address.sin_addr.s_addr = inet_addr (ifp->ip_address);
-		if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFADDR, &address) < 0) {
-			printf ("Can't set %s address: %s\n", ifp->name, strerror (errno));
-			continue;
-		}
-
-		/*
-		 * Set interface broadcast address if the interface has the
-		 * broadcast flag set.
-		 */
-		if (rtems_bsdnet_ifconfig (ifp->name, SIOCGIFFLAGS, &flags) < 0) {
-			printf ("Can't read %s flags: %s\n", ifp->name, strerror (errno));
-			continue;
-		}
-
-		any_if_configured = 1;
-
-		if (flags & IFF_BROADCAST) {
-			memset (&broadcast, '\0', sizeof broadcast);
-			broadcast.sin_len = sizeof broadcast;
-			broadcast.sin_family = AF_INET;
-			broadcast.sin_addr.s_addr =
-					address.sin_addr.s_addr | ~netmask.sin_addr.s_addr;
-			if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFBRDADDR, &broadcast) < 0) {
-				struct in_addr	in_addr;
-				char			buf[20];
-				in_addr.s_addr = broadcast.sin_addr.s_addr;
-				if (!inet_ntop(AF_INET, &in_addr, buf, sizeof(buf)))
-						strcpy(buf,"?.?.?.?");
-				printf ("Can't set %s broadcast address %s: %s\n",
-					ifp->name, buf, strerror (errno));
-			}
-		}
+		any_if_configured |= rtems_bsdnet_setup_interface(
+			ifp->name,
+			ifp->ip_address,
+			ifp->ip_netmask
+		);
 	}
 
 	/*
 	 * Set default route
 	 */
 	if (rtems_bsdnet_config.gateway && any_if_configured) {
-		address.sin_addr.s_addr = INADDR_ANY;
-		netmask.sin_addr.s_addr = INADDR_ANY;
-		memset (&gateway, '\0', sizeof gateway);
-		gateway.sin_len = sizeof gateway;
-		gateway.sin_family = AF_INET;
+		struct sockaddr_in address;
+		struct sockaddr_in netmask;
+		struct sockaddr_in gateway;
+
+		rtems_bsdnet_initialize_sockaddr_in(&address);
+		rtems_bsdnet_initialize_sockaddr_in(&netmask);
+		rtems_bsdnet_initialize_sockaddr_in(&gateway);
+
 		gateway.sin_addr.s_addr = inet_addr (rtems_bsdnet_config.gateway);
+
 		if (rtems_bsdnet_rtrequest (
 				RTM_ADD,
 				(struct sockaddr *)&address,

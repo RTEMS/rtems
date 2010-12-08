@@ -1,3 +1,10 @@
+2010-12-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/loop.h, libnetworking/net/if_loop.c,
+	libnetworking/rtems/rtems_glue.c, libmisc/dummy/dummy-networking.c:
+	Initialize loop back interface during normal initialization via
+	rtems_bsdnet_initialize_network().
+
 2010-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac, posix/src/signal_2.c: sighandler_t is defined
