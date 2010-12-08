@@ -44,27 +44,9 @@ rtems_task Init(rtems_task_argument argument);
 /*
  * Network configuration
  */
-extern int rtems_bsdnet_loopattach(struct rtems_bsdnet_ifconfig *conf, int attaching);
-
-static struct rtems_bsdnet_ifconfig loopback_config = {
-    "lo0",                          /* name */
-    rtems_bsdnet_loopattach,        /* attach function */
-    NULL,                           /* link to next interface */
-    "127.0.0.1",                    /* IP address */
-    "255.0.0.0",                    /* IP net mask */
-    NULL,                           /* hardware_address */
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    NULL
-};
 
 struct rtems_bsdnet_config rtems_bsdnet_config = {
-    &loopback_config,       /* Network interface */
+    NULL,                   /* Network interface */
     NULL,                   /* Use fixed network configuration */
     0,                      /* Default network task priority */
     0,                      /* Default mbuf capacity */

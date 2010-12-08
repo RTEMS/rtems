@@ -1,3 +1,8 @@
+2010-12-08	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* loopback/init.c: Loop back interface will be initialized now during
+	normal initialization via rtems_bsdnet_initialize_network().
+
 2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* fileio/Makefile.am: Remove AM_CONDITIONAL(LIBCHIP).
