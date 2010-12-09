@@ -45,9 +45,9 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.20.90
-%define binutils_version 2.20.90
-%define binutils_rpmvers %{expand:%(echo "2.20.90" | tr - _ )}
+%define binutils_pkgvers 2.21
+%define binutils_version 2.21
+%define binutils_rpmvers %{expand:%(echo "2.21" | tr - _ )}
 
 Name:		rtems-4.11-sh-rtems4.11-binutils
 Summary:	Binutils for target sh-rtems4.11
@@ -73,8 +73,8 @@ BuildRequires:	bison
 
 Requires:	rtems-4.11-binutils-common
 
-Source0: ftp://sourceware.org/pub/binutils/snapshots/binutils-%{binutils_pkgvers}.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/binutils-2.20.90-rtems4.11-20101109.diff
+Source0: ftp://ftp.gnu.org/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
+# Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/binutils-2.21-rtems4.11-20101209.diff
 
 %description
 Cross binutils for target sh-rtems4.11

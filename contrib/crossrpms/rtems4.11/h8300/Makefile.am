@@ -5,7 +5,7 @@ TARGET = h8300-rtems4.11
 
 include $(top_srcdir)/mkspec.am
 
-BINUTILS_VERS = 2.20.90
+BINUTILS_VERS = 2.21
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
 BINUTILS_RPMREL = 1
 include ../binutils.am
