@@ -46,9 +46,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.5.1
-%define gcc_version 4.5.1
-%define gcc_rpmvers %{expand:%(echo "4.5.1" | tr - _ )}
+%define gcc_pkgvers 4.5.2-RC-20101208
+%define gcc_version 4.5.2
+%define gcc_rpmvers %{expand:%(echo "4.5.2" | tr - _ )}
 
 %define newlib_pkgvers		1.18.0
 %define newlib_version		1.18.0
@@ -58,7 +58,7 @@ Summary:      	bfin-rtems4.11 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	11%{?dist}
+Release:      	1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -89,6 +89,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
+%if 0%{?fc15}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
 %if 0%{?fc14}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
@@ -98,12 +104,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %if 0%{?fc13}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
-%global gmp_provided 4.3.1
-%endif
-
-%if 0%{?fc12}
-%global mpc_provided 0.8
-%global mpfr_provided 2.4.1
 %global gmp_provided 4.3.1
 %endif
 
@@ -252,7 +252,7 @@ BuildRequires:	rtems-4.11-bfin-rtems4.11-binutils
 Requires:	rtems-4.11-gcc-common
 Requires:	rtems-4.11-bfin-rtems4.11-binutils
 Requires:	rtems-4.11-bfin-rtems4.11-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.11-bfin-rtems4.11-newlib = %{newlib_version}-26%{?dist}
+Requires:	rtems-4.11-bfin-rtems4.11-newlib = %{newlib_version}-27%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -264,6 +264,10 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 
 %global _gcclibdir %{_prefix}/lib
 
+%if "%{gcc_version}" == "4.5.2"
+Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/4.5.2-RC-20101208/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-RC-20101208-rtems4.11-20101210.diff
+%endif
 %if "%{gcc_version}" == "4.5.1"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.1-rtems4.11-20100818.diff
@@ -274,6 +278,9 @@ Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.0-rtems4
 %endif
 %{?_without_sources:NoSource:	0}
 
+%if "%{gcc_version}" == "4.5.2" 
+Source1:	ftp://gcc.gnu.org/pub/gcc/snapshots/4.5.2-RC-20101208/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
 %if "%{gcc_version}" == "4.5.1" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
@@ -366,7 +373,7 @@ rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-11%{?dist}/newlib-%{newlib_version}-26%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-1%{?dist}/newlib-%{newlib_version}-27%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -636,7 +643,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.11-bfin-rtems4.11-binutils
-# Requires:       rtems-4.11-bfin-rtems4.11-newlib = %{newlib_version}-26%{?dist}
+# Requires:       rtems-4.11-bfin-rtems4.11-newlib = %{newlib_version}-27%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -654,7 +661,7 @@ Summary:        libgcc for bfin-rtems4.11-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.11-bfin-rtems4.11-newlib = %{newlib_version}-26%{?dist}
+Requires:       rtems-4.11-bfin-rtems4.11-newlib = %{newlib_version}-27%{?dist}
 License:	GPL
 
 %description -n rtems-4.11-bfin-rtems4.11-gcc-libgcc
@@ -827,7 +834,7 @@ Summary:      	C Library (newlib) for bfin-rtems4.11
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        26%{?dist}
+Release:        27%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.11-newlib-common
@@ -848,7 +855,7 @@ Newlib C Library for bfin-rtems4.11.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        26%{?dist}
+Release:        27%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
