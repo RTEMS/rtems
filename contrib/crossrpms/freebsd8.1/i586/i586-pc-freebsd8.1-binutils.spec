@@ -30,15 +30,15 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.20.1
-%define binutils_version 2.20.1
-%define binutils_rpmvers %{expand:%(echo "2.20.1" | tr - _ )}
+%define binutils_pkgvers 2.21
+%define binutils_version 2.21
+%define binutils_rpmvers %{expand:%(echo "2.21" | tr - _ )}
 
 Name:		i586-pc-freebsd8.1-binutils
 Summary:	Binutils for target i586-pc-freebsd8.1
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20100727.0%{?dist}
+Release:	0.20101211.0%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

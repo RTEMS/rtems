@@ -41,7 +41,7 @@ Summary:      	i586-pc-freebsd6.4 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20100812.0%{?dist}
+Release:      	0.20101211.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -61,6 +61,10 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # Bug in gcc-4.5-20100318, doesn't build them on x86_84 hosts.
 %bcond_with plugin
 
+# EXPERIMENTAL: Use gcc's stdint.h instead of newlib's
+# Should be applicable to gcc >= 4.5.0
+%bcond_with gcc_stdint
+
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
 %global mpfr_version	2.4.2
@@ -68,6 +72,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
+%if 0%{?fc15}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
 %if 0%{?fc14}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
@@ -78,18 +88,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
 %global gmp_provided 4.3.1
-%endif
-
-%if 0%{?fc12}
-%global mpc_provided 0.8
-%global mpfr_provided 2.4.1
-%global gmp_provided 4.3.1
-%endif
-
-%if 0%{?fc11}
-%global mpc_provided %{nil}
-%global mpfr_provided 2.4.1
-%global gmp_provided 4.2.4
 %endif
 
 %if 0%{?el6}
@@ -302,6 +300,10 @@ cd ..
 
 %setup -q -T -D -n %{name}-%{version} -a5
 %{?PATCH5:%patch5 -p0}
+
+%if %{with gcc_stdint}
+sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/use_gcc_stdint=provide/}' gcc-%{gcc_pkgvers}/gcc/config.gcc
+%endif
 
 
 %if 0%{?_build_mpfr}
