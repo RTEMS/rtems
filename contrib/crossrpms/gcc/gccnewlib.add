@@ -44,6 +44,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
+%if 0%{?fc15}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
 %if 0%{?fc14}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
@@ -53,12 +59,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %if 0%{?fc13}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
-%global gmp_provided 4.3.1
-%endif
-
-%if 0%{?fc12}
-%global mpc_provided 0.8
-%global mpfr_provided 2.4.1
 %global gmp_provided 4.3.1
 %endif
 
