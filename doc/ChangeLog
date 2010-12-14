@@ -1,3 +1,14 @@
+2010-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, common/cpright.texi, common/rtems.texi.in,
+	cpu_supplement/.cvsignore, started/Makefile.am, started/binaries.t,
+	started/buildc.t, started/buildrt.t, started/intro.t,
+	started/nextstep.t, started/nt.t, started/require.t,
+	started/sample.t, started/started.texi, started/version.texi: Major
+	update which includes removal of references to specific tool versions
+	and patches.
+	* started/tversions.texi.in: Removed.
+
 2010-11-24	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1647/cpukit

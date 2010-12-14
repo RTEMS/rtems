@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2010.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -8,137 +8,181 @@
 
 @chapter Building the GNU Cross Compiler Toolset
 
-NOTE:  This chapter does @b{NOT} apply if you installed
-prebuilt toolset executables for BINUTILS, GCC, NEWLIB,
-and GDB.  If you installed prebuilt executables for all
-of those, proceed to @ref{Building RTEMS}.  If you require
-a GDB with a special configuration to connect to your
-target board, then proceed to @ref{Building the GNU Debugger GDB}
+NOTE:  This chapter does @b{NOT} apply if you installed prebuilt toolset
+executables for BINUTILS, GCC, NEWLIB, and GDB.  If you installed
+prebuilt executables for all of those, proceed to @ref{Building RTEMS}.
+If you require a GDB with a special configuration to connect to your
+target board, then proceed to @ref{Installing GDB Without RPM}
 for some advice.
 
-This chapter describes the steps required to acquire the
-source code for a GNU cross compiler toolset, apply 
-any required RTEMS specific patches, compile that 
-toolset and install it.
+This chapter describes the steps required to acquire the source code for
+a GNU cross compiler toolset, apply any required RTEMS specific patches,
+compile that toolset and install it.
 
-It is recommended that when toolset binaries are available for
-your particular host, that they be used.  Prebuilt binaries
-are much easier to install.
-
-@c
-@c  Building BINUTILS GCC and NEWLIB
-@c
-@section Building BINUTILS GCC and NEWLIB
-
-NOTE: This step is NOT required if prebuilt executables for
-BINUTILS, GCC, and NEWLIB were installed.
-
-This section describes the process of building BINUTILS, GCC, and
-NEWLIB using a variety of methods.  Included is information on
-obtaining the source code and patches, applying patches, and
-building and installing the tools using multiple methods.
+It is recommended that when toolset binaries are available for your
+particular host, that they be used.  Prebuilt binaries are much easier
+to install.  They are also much easier for the RTEMS Project to support.
 
 @c
-@c  Obtain Source and Patches for BINUTILS GCC and NEWLIB
+@c  Preparation
 @c
+@section Preparation
 
-@subsection Obtain Source and Patches for BINUTILS GCC and NEWLIB
+Before you can build an RTEMS toolset from source, there are some
+preparatory steps which must be performed.  You will need to determine
+the various tool versions and patches required and download them  You
+will also have to unarchive the source and apply any patches.
 
-NOTE: This step is required for all methods of building BINUTILS,
-GCC, and NEWLIB.
+@c
+@c  Determining Tool Version and Patch Revision
+@c
+@subsection Determining Tool Version and Patch Revision
 
-This section lists the components required to build BINUTILS, GCC,
-and NEWLIB from source to target RTEMS.  These files should be
-placed in your @code{archive} directory.  Included are the locations
-of each component as well as any required RTEMS specific patches.
+The tool versions and patch revisions change on a fairly frequent basis.
+In addition, these may vary based upon the target architecture.  In some
+cases, the RTEMS Project may have to stick with a particular version
+of a tool to provide a working version for a specific architecture.
+Because of this, it is impossible to provide this information in a
+complete and accurate manner in this manual.  You will need to refer
+to the configuration files used by the RTEMS RPM specification files to
+determine the current versions and, if a patch is required, what version.
+This section describes how to locate the appropriate tool versions and
+patches for a particular target architecture.
 
-@need 1000
-@subheading @value{GCCUNTAR}
+All patches and RPM specification files are kept in CVS.  They are
+not included in release tarballs.  You will have to access the
+CVS branch for RTEMS @value{RTEMSAPI}.  For details on this,
+visit @uref{http://www.rtems.org, http://www.rtems.org} and look for
+instructions on accessing the RTEMS Source Code Repository in read-only
+mode.
+
+In the checked out source code, you will need to look in the subdirectory
+@code{contrib/crossrpms/autotools} to determine the versions of AUTOCONF
+and AUTOMAKE as well as any patches required.  In this directory are
+a few files you will need to look at.  The first is @code{Makefile.am}
+which defines the versions of AUTOCONF and AUTOMAKE required for this
+RTEMS Release Series.  Make a note of the version numbers required for
+AUTOCONF and AUTOMAKE.  Then examine the following files to determine
+the master location for the source tarballs and to determine if a patch
+is required for each tool version cited in the @code{Makefile.am}.
+
 @example
-    FTP Site:    @value{GCCFTPSITE}
-    Directory:   @value{GCCFTPDIR}
-    File:        @value{GCCTAR}
-@c @ifset use-html
-    URL:         @uref{ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}/@value{GCCTAR},,ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}/@value{GCCTAR}}
-@c    URL:         ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}
-@c @end ifset
+autoconf-sources.add
+automake-sources.add
 @end example
 
-@need 1000
-@subheading @value{BINUTILSUNTAR}
+If any patches are required, they will be in the
+@code{contrib/crossrpms/patches} subdirectory of your checked out RTEMS
+source tree.
+
+In the checked out source code, you will need to look in the subdirectory
+@code{contrib/crossrpms/rtems@value{RTEMSAPI}} to determine the target
+specific tool versions and patches required. In this directory, you
+will find a number of subdirectories with many named after target
+architectures supported by RTEMS.  Descend into the directory for the
+architecture you plan to build tools for.  Again, the @code{Makefile.am}
+defines the tool versions for this architecture and RTEMS Release Series.
+Make a note of the version numbers required for BINUTILS, GCC, NEWLIB,
+and GDB.  Then examine the following files to determine the master
+location for the source tarballs and to determine if a patch is required
+for each tool version cited in the @code{Makefile.am}.
+
+@itemize
+binutils-sources.add
+gcc-sources.add
+gdb-sources.add
+@end itemize
+
+If any patches are required, they will be in the
+@code{contrib/crossrpms/patches} subdirectory of your checked out RTEMS
+source tree.
+
+This is the entire set of source tarballs and patches required for a
+toolset targeting the selected architecture.  In many cases, this will be
+the same versions required by other targets on this RTEMS Release Series.
+
+Depending on the build method chosen, you may have to download source
+and patches or only patches.  Also the destination directory for the
+downloaded source is dependent on the build method followed.  But the
+versions required are the same.  Specific information on what to download
+and where to place it is in subsequent sections.
+
+@c
+@c  Obtain Source and Patches
+@c
+@subsection Obtain Source and Patches
+
+You will need to download the sources for the various packages from
+their master locations as identified in the previous section.
+
+Any patches needed should be in the @code{contrib/crossrpms/patches}
+directory of your RTEMS source.
+
+@c
+@c  Installing the Tools Without RPM
+@c
+@section Installing the Tools Without RPM
+
+This section describes the procedure for building and installing an RTEMS
+cross toolset from source code without using the RPM build infrastructure.
+
+Direct invocation of @code{configure} and @code{make} provides more control
+and easier recovery from problems when building.
+
+@c
+@c Archive and Build Directory Format
+@c
+@subsection Archive and Build Directory Format
+
+When no packaging format requirements are present, the root directory for
+the storage of source archives and patches as well as for building the
+tools is up to the user.  The only concern is that there be enough
+disk space to complete the build.  In this document, the following
+organization will be used.
+
+Make an @code{archive} directory to contain the downloaded source code
+and pataches.  Additionally, a @code{tools} directory to be used as a
+build directory.  The command sequence to do this is shown below:
+
 @example
-    FTP Site:    @value{BINUTILSFTPSITE}
-    Directory:   @value{BINUTILSFTPDIR}
-    File:        @value{BINUTILSTAR}
-@c @ifset use-html
-    URL:         @uref{ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR},,ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR}}
-@c    URL:         ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR}
-@c @end ifset
+mkdir archive
+mkdir tools
 @end example
 
-@need 1000
-@subheading @value{NEWLIBUNTAR}
+This will result in an initial directory structure similar to the
+one shown in the following figure:
+
 @example
-    FTP Site:    @value{NEWLIBFTPSITE}
-    Directory:   @value{NEWLIBFTPDIR}
-    File:        @value{NEWLIBTAR}
-@c @ifset use-html
-    URL:         @uref{ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR},,ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}}
-@c    URL:         ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}
-@c @end ifset
+@group
+/whatever/prefix/you/choose/
+        archive/
+        tools/
+
+@end group
 @end example
 
-@need 1000
-@subheading RTEMS Specific Tool Patches and Scripts
-@example
-    FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI}
-@ifset BINUTILSPATCHVERSION
-    File:        @value{BINUTILSRTEMSPATCH}
-@end ifset
-@ifset NEWLIBPATCHVERSION
-    File:        @value{NEWLIBRTEMSPATCH}
-@end ifset
-@ifset GCCPATCHVERSION
-    File:        @value{GCCRTEMSPATCH}
-@end ifset
-@ifset use-html
-    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI},,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI}}
-@c    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI}
-@end ifset
-@end example
-
-The individual components in the RTEMS Development Toolset are
-updated independently of one another by their respective
-maintainers.  In addition, the patches which the RTEMS Project
-has determined are necessary are subject to change as users
-report issues on individual host and target platforms.  As
-a result, it is possible that the versions listed in this
-document are @b{NOT} the latest ones available.  The latest
-patches for each tool are always available from RTEMS CVS
-on the respective branch and should always be mirrored on the
-RTEMS ftp site.  It is recommended that before building a
-toolset from source, you verify you are using the
-latest patches.
+The RTEMS Project tries to submit all of our patches upstream to the
+parent projects.  In the event there are patches, the master copy of them
+is located in the appropriate branch of the RTEMS source module in CVS.
+Patches are in the @code{contrib/crossrpms/patches}.
 
 @c
 @c  Unarchiving the Tools
 @c
 @subsection Unarchiving the Tools
 
-NOTE: This step is required if building BINUTILS, GCC, and NEWLIB
-using the procedure described in @ref{Using configure and make}.
-It is @b{NOT} required if using the procedure
-described in @ref{Using RPM to Build BINUTILS GCC and NEWLIB}.
+NOTE: This step is required if building any of the tools without using RPM.
+It is @b{NOT} required if using the procedure described in @ref{Using RPM
+to Build Tools}.  This section describes the process of unarchiving the
+tools that comprise an RTEMS toolset.
 
 GNU source distributions are archived using @code{tar} and
 compressed using either @code{gzip} or @code{bzip}.  
 If compressed with @code{gzip}, the extension @code{.gz} is used.
 If compressed with @code{bzip}, the extension @code{.bz2} is used.
 
-While in the @code{tools} directory, unpack the compressed
-tar files for BINUTILS, GCC, and NEWLIB using the appropriate
-command based upon the compression program used.
+While in the @code{tools} directory, unpack the compressed tar files
+using the appropriate command based upon the compression program used.
 
 @example
 cd tools
@@ -146,14 +190,17 @@ tar xzf ../archive/TOOLNAME.tar.gz  # for gzip'ed tools
 tar xjf ../archive/TOOLNAME.tar.bz2 # for bzip'ed tools
 @end example
 
-After the compressed tar files have been unpacked using
-the appropriate commands, the following
-directories will have been created under tools. 
+Assuming you are building a complete toolset, after all of the the
+compressed tar files have been unpacked using the appropriate commands,
+the following directories will have been created under @code{tools}.
 
 @itemize @bullet
-@item @value{BINUTILSUNTAR}
-@item @value{GCCUNTAR}
-@item @value{NEWLIBUNTAR}
+@item autoconf-<VERSION>
+@item automake-<VERSION>
+@item binutils-<VERSION>
+@item gcc-<VERSION>
+@item binutils-<VERSION>
+@item gdb-<VERSION>
 @end itemize
 
 The tree should look something like the following figure:
@@ -162,59 +209,38 @@ The tree should look something like the following figure:
 @group
 /whatever/prefix/you/choose/
         archive/
-            @value{GCCTAR}
-            @value{BINUTILSTAR}
-            @value{NEWLIBTAR}
-@ifset GCCPATCHVERSION
-            @value{GCCRTEMSPATCH}
-@end ifset
-@ifset BINUTILSPATCHVERSION
-            @value{BINUTILSRTEMSPATCH}
-@end ifset
-@ifset NEWLIBPATCHVERSION
-            @value{NEWLIBRTEMSPATCH}
-@end ifset
+          variable tarballs
+          variable patches
         tools/
-            @value{BINUTILSUNTAR}/
-            @value{GCCUNTAR}/
-            @value{NEWLIBUNTAR}/
+          various tool source trees
 @end group
 @end example
 
 @c
-@c  Applying RTEMS Patches
+@c Applying RTEMS Project Tool Patches
 @c
 
-@subsection Applying RTEMS Patches
+@subsection Applying RTEMS Project Tool Patches
 
-NOTE: This step is required if building BINUTILS, GCC, and NEWLIB
-using the procedures described in @ref{Using configure and make}.
-It is @b{NOT} required if using the procedure
-described in @ref{Using RPM to Build BINUTILS GCC and NEWLIB}.
+NOTE: This step is required if building any of the tools IF they have a
+patch currently required and you are building the tools without using RPM.
+is @b{NOT} required if using the procedure described in @ref{Using RPM
+to Build Tools}.  This section describes the process of applying the
+RTEMS patches to any of the tools.
 
-This section describes the process of applying the RTEMS patches
-to GCC, NEWLIB, and BINUTILS.
-
-@c
-@c  GCC patches
-@c
-
-@subheading Apply RTEMS Patch to GCC
-
-@ifclear GCCPATCHVERSION
-No RTEMS specific patches are required for @value{GCCUNTAR} to
-support @value{RTEMSVERSION}.
-@end ifclear
-
-@ifset GCCPATCHVERSION
-
-Apply the patch using the following command sequence:
+If a patch is required for a particular tool source tree, then you will
+perform a command similar to the following to apply the patch.  In this
+example, <TOOL> should be replaced by the appropriate tool directory
+and <TOOL_PATCH> with the appropriate patch file.
 
 @example
-cd tools/@value{GCCUNTAR}
-cat ../../archive/@value{GCCRTEMSPATCH} | \
-    patch -p1
+cd tools/<TOOL>
+cat ../../archive/<TOOL_PATCH> | patch -p1
 @end example
+
+NOTE: If you add the @code{--dry-run} option to the @code{patch} command
+in the above commands, it will attempt to apply the patch and report
+any issues without actually modifying any files.
 
 If the patch was compressed with the @code{gzip} program, it will
 have a suffix of @code{.gz} and you should use @code{zcat} instead
@@ -226,286 +252,90 @@ Check to see if any of these patches have been rejected using the following
 sequence:
 
 @example
-cd tools/@value{GCCUNTAR}
+cd tools/<TOOL>
 find . -name "*.rej" -print
 @end example
 
 If any files are found with the .rej extension, a patch has been rejected.
 This should not happen with a good patch file which is properly applied.
 
-@end ifset
-
 @c
-@c  BINUTILS patches
+@c  Installing AUTOCONF Without RPM
 @c
 
-@subheading Apply RTEMS Patch to binutils
+@subsection Installing AUTOCONF Without RPM
 
-@ifclear BINUTILSPATCHVERSION
-No RTEMS specific patches are required for @value{BINUTILSUNTAR} to
-support @value{RTEMSVERSION}.
-@end ifclear
-
-@ifset BINUTILSPATCHVERSION
-Apply the patch using the following command sequence:
+The following example illustrates the invocation of @code{configure}
+and @code{make} to build and install autoconf-<version>.  This tool is 
+installed as a native utility and is independent of any RTEMS target.
 
 @example
-cd tools/@value{BINUTILSUNTAR}
-cat ../../archive/@value{BINUTILSRTEMSPATCH} | \
-    patch -p1
+mkdir b-autoconf
+cd b-autoconf
+../autoconf-<VERSION>/configure --prefix=@value{RTEMSPREFIX}
+make all
+make info
+make install
 @end example
 
-If the patch was compressed with the @code{gzip} program, it will
-have a suffix of @code{.gz} and you should use @code{zcat} instead
-of @code{cat} as shown above.  If the patch was compressed with
-the @code{gzip} program, it will have a suffix of @code{.bz2} and
-you should use @code{bzcat} instead of @code{cat} as shown above.
+After autoconf-<VERSION> is built and installed the build directory
+@code{b-autoconf} may be removed.
 
-Check to see if any of these patches have been rejected using the following
-sequence: 
+For more information on the invocation of @code{configure}, please
+refer to the documentation for autoconf-<VERSION> or invoke the
+autoconf-VERSION> @code{configure} command with the @code{--help} option.
+
+@c
+@c  Installing AUTOMAKE Without RPM
+@c
+
+@subsection Installing AUTOMAKE Without RPM
+
+The following example illustrates the invocation of @code{configure}
+and @code{make} to build and install automake-<version>.  This tool is 
+installed as a native utility and is independent of any RTEMS target.
 
 @example
-cd tools/@value{BINUTILSUNTAR}
-find . -name "*.rej" -print
+mkdir b-automake
+cd b-automake
+../automake-<VERSION>/configure --prefix=@value{RTEMSPREFIX}
+make all
+make info
+make install
 @end example
 
-If any files are found with the .rej extension, a patch has been rejected.
-This should not happen with a good patch file which is properly applied. 
+After automake-<VERSION> is built and installed the build directory
+@code{b-automake} may be removed.
 
-@end ifset
-
-@c
-@c  Newlib patches
-@c
-
-@subheading Apply RTEMS Patch to newlib
-
-@ifclear NEWLIBPATCHVERSION
-No RTEMS specific patches are required for @value{NEWLIBUNTAR} to
-support @value{RTEMSVERSION}.
-@end ifclear
-
-@ifset NEWLIBPATCHVERSION
-
-Apply the patch using the following command sequence:
-
-@example
-cd tools/@value{NEWLIBUNTAR}
-cat ../../archive/@value{NEWLIBRTEMSPATCH} | \
-    patch -p1
-@end example
-
-If the patch was compressed with the @code{gzip} program, it will
-have a suffix of @code{.gz} and you should use @code{zcat} instead
-of @code{cat} as shown above.  If the patch was compressed with
-the @code{gzip} program, it will have a suffix of @code{.bz2} and
-you should use @code{bzcat} instead of @code{cat} as shown above.
-
-Check to see if any of these patches have been rejected using the following
-sequence: 
-
-@example
-cd tools/@value{NEWLIBUNTAR}
-find . -name "*.rej" -print
-@end example
-
-If any files are found with the .rej extension, a patch has been rejected.
-This should not happen with a good patch file which is properly applied. 
-
-@end ifset
-
+For more information on the invocation of @code{configure}, please
+refer to the documentation for automake-<VERSION> or invoke the
+automake-VERSION> @code{configure} command with the @code{--help} option.
 
 @c
-@c  Compiling and Installing BINUTILS GCC and NEWLIB
+@c  Installing BINUTILS Without RPM
 @c
+@subsection Installing BINUTILS Without RPM
 
-@subsection Compiling and Installing BINUTILS GCC and NEWLIB
-
-There are two supported methods to compile and install BINUTILS, GCC,
-and NEWLIB:
-
-@itemize @bullet
-@item RPM
-@item direct invocation of @code{configure} and @code{make}
-@end itemize
-
-Direct invocation of @code{configure} and @code{make} provides more control
-and easier recovery from problems when building.
-
-@c
-@c  Using RPM to Build BINUTILS GCC and NEWLIB
-@c
-
-@subsubsection Using RPM to Build BINUTILS GCC and NEWLIB
-
-NOTE:  The procedures described in the following sections must
-be completed before this step:
-
-@itemize @bullet
-@item @ref{Obtain Source and Patches for BINUTILS GCC and NEWLIB}
-@end itemize
-
-RPM automatically unarchives the source and applies any needed
-patches so you do @b{NOT} have to manually perform the procedures
-described @ref{Unarchiving the Tools} and 
-@ref{Applying RTEMS Patches}.
-
-This section describes the process of building binutils, gcc, and
-newlib using RPM.  RPM is a packaging format which can be used to
-distribute binary files as well as to capture the procedure and
-source code used to produce those binary files.  Before
-attempting to build any RPM from source, it is necessary to
-ensure that all required source and patches are in the @code{SOURCES}
-directory under the RPM root (probably @code{/usr/src/redhat} or
-@code{/usr/local/src/redhat}) on your machine.  This procedure
-starts by installing the source RPMs as shown in the following 
-example:
-
-@example 
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.src.rpm
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.src.rpm
-@end example
-
-The RTEMS tool source RPMS are called "nosrc" to indicate that one or
-more source files required to produce the RPMs are not present.  
-The RTEMS source RPMs typically include all required patches, but do not 
-include the large @code{.tar.gz} or @code{.tgz} files for
-each component such as BINUTILS, GCC, or NEWLIB.  These are shared
-by all RTEMS RPMs regardless of target CPU and there was no reason
-to duplicate them.  You will have to get the required source
-archive files by hand and place them in the @code{SOURCES} directory
-before attempting to build.  If you forget to do this, RPM is
-smart -- it will tell you what is missing.  To determine what is
-included or referenced by a particular RPM, use a command like the
-following:
-
-@example
-@c Don't use @value{GCC*} below. This is an example
-$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-3.2.3-1.src.rpm
-gcc-3.2.3-rtems@value{RTEMSAPI}-20030507a.diff
-@value{RTEMSRPMPREFIX}i386-rtems4.7-gcc.spec
-newlib-1.11.0-rtems@value{RTEMSAPI}-20030507.diff
-@end example
-
-Notice that there are patch files (the @code{.diff} files) and a file 
-describing the build procedure and files produced (the @code{.spec} file),
-but no source archives (the @code{*tar.*} files).
-When installing this source RPM 
-(@code{rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-newlib-gcc3.2.3newlib1.11.0-1.src.rpm}),
-the @code{.spec} file is placed in the @code{SPECS} directory under the RPM root
-directory, while the @code{*.diff} files are placed into the @code{SOURCES}
-directory.
-
-@c
-@c  Configuring and Building BINUTILS using RPM
-@c
-
-@subheading Configuring and Building BINUTILS using RPM
-
-The following example illustrates the invocation of RPM to build a new,
-locally compiled, binutils binary RPM that matches the installed source 
-RPM.  This example assumes that all of the required source is installed.
-
-@example
-cd <RPM_ROOT_DIRECTORY>/SPECS
-rpm -bb i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}.spec
-@end example
-
-If the build completes successfully, RPMS like the following will
-be generated in a build-host architecture specific subdirectory
-of the RPMS directory under the RPM root directory.
-
-@example
-@value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-@end example
-
-NOTE: It may be necessary to remove the build tree in the
-@code{BUILD} directory under the RPM root directory.
-
-@c
-@c  Configuring and Building GCC and NEWLIB using RPM
-@c
-
-@subheading Configuring and Building GCC and NEWLIB using RPM
-
-The following example illustrates the invocation of RPM to build a new,
-locally compiled, set of GCC and NEWLIB binary RPMs that match the
-installed source RPM.  It is also necessary to install the BINUTILS
-RPMs and place them in your PATH.  This example assumes that all of
-the required source is installed.
-
-@example
-cd <RPM_ROOT_DIRECTORY>/RPMS/i386
-rpm -U @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-export PATH=@value{RTEMSPREFIX}/bin:$PATH
-cd <RPM_ROOT_DIRECTORY>/SPECS
-rpm -bb i386-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-newlib-@value{NEWLIBVERSION}.spec
-@end example
-
-If the build completes successfully, a set of RPMS like the following will
-be generated in a build-host architecture specific subdirectory
-of the RPMS directory under the RPM root directory.
-
-@example
-@value{RTEMSRPMPREFIX}gcc-common-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-c++-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@end example
-
-NOTE: Some targets do not support building all languages.
-
-NOTE: It may be necessary to remove the build tree in the
-@code{BUILD} directory under the RPM root directory.
-
-@c
-@c  Using configure and make
-@c
-
-@subsubsection Using configure and make
-
-NOTE:  The procedures described in the following sections must
-be completed before this step:
-
-@itemize @bullet
-@item @ref{Obtain Source and Patches for BINUTILS GCC and NEWLIB}
-@item @ref{Unarchiving the Tools}
-@item @ref{Applying RTEMS Patches}
-@end itemize
-
-This section describes the process of building binutils, gcc, and
-newlib manually using @code{configure} and @code{make} directly.
-
-@c
-@c  Configuring and Building BINUTILS
-@c
-
-@subheading Configuring and Building BINUTILS
-
-The following example illustrates the invocation of
-@code{configure} and @code{make}
-to build and install @value{BINUTILSUNTAR} for the
+The following example illustrates the invocation of @code{configure}
+and @code{make} to build and install binutils-<version>
 sparc-rtems@value{RTEMSAPI} target:
 
 @example
 mkdir b-binutils
 cd b-binutils
-../@value{BINUTILSUNTAR}/configure --target=sparc-rtems@value{RTEMSAPI} \
+../binutils-<VERSION>/configure --target=sparc-rtems@value{RTEMSAPI} \
   --prefix=@value{RTEMSPREFIX}
 make all
 make info
 make install
 @end example
 
-After @value{BINUTILSUNTAR} is built and installed the 
-build directory @code{b-binutils} may be removed.
+After binutils-<VERSION> is built and installed the build directory
+@code{b-binutils} may be removed.
 
 For more information on the invocation of @code{configure}, please
-refer to the documentation for @value{BINUTILSUNTAR} or 
-invoke the @value{BINUTILSUNTAR} @code{configure} command with the
-@code{--help} option.
+refer to the documentation for binutils-<VERSION> or invoke the
+binutils-VERSION> @code{configure} command with the @code{--help} option.
 
 NOTE: The shell PATH variable needs to be updated to include the path
 the binutils user executables have  been installed in.  The directory
@@ -524,35 +354,34 @@ sparc-rtems@value{RTEMSAPI}-ar: command not found
 @end example
 
 @c
-@c  Configuring and Building GCC and NEWLIB
+@c  Installing GCC and NEWLIB Without RPM
 @c
+@subsection Installing GCC and NEWLIB Without RPM
 
-@subheading Configuring and Building GCC and NEWLIB
-
-Before building @value{GCCUNTAR} and @value{NEWLIBUNTAR}, 
-@value{BINUTILSUNTAR} must be installed and the directory
+Before building gcc-<VERSION> and newlib-<VERSION>, 
+binutils-<VERSION> must be installed and the directory
 containing those executables must be in your PATH.
 
 The C Library is built as a subordinate component of 
-@value{GCCUNTAR}.  Because of this, the @value{NEWLIBUNTAR}
-directory source must be available inside the @value{GCCUNTAR}
+gcc-<VERSION>.  Because of this, the newlib-<VERSION>
+directory source must be available inside the gcc-<VERSION>
 source tree.  This is normally accomplished using a symbolic
 link as shown in this example:
 
 @example
-cd @value{GCCUNTAR}
-ln -s ../@value{NEWLIBUNTAR}/newlib .
+cd gcc-<VERSION>
+ln -s ../newlib-<VERSION>/newlib .
 @end example
 
 The following example illustrates the invocation of
 @code{configure} and @code{make}
-to build and install @value{GCCUNTAR} with only
+to build and install gcc-<VERSION> with only
 C and C++ support for the sparc-rtems@value{RTEMSAPI} target:
 
 @example
 mkdir b-gcc
 cd b-gcc
-../@value{GCCUNTAR}/configure --target=sparc-rtems@value{RTEMSAPI} \
+../gcc-<VERSION>/configure --target=sparc-rtems@value{RTEMSAPI} \
    --with-gnu-as --with-gnu-ld --with-newlib --verbose \
    --enable-threads --enable-languages="c,c++" \
    --prefix=@value{RTEMSPREFIX}
@@ -561,18 +390,18 @@ make info
 make install
 @end example
 
-After @value{GCCUNTAR} is built and installed the 
+After gcc-<VERSION> is built and installed the 
 build directory @code{b-gcc} may be removed.
 
 For more information on the invocation of @code{configure}, please
-refer to the documentation for @value{GCCUNTAR} or
-invoke the @value{GCCUNTAR} @code{configure} command with the
+refer to the documentation for gcc-<VERSION> or
+invoke the gcc-<VERSION> @code{configure} command with the
 @code{--help} option.
 
 @c
 @c Building GCC with Ada Support
 @c
-@subheading Building GCC with Ada Support
+@subsection Building GCC with Ada Support
 
 If you want a GCC toolset that includes support for Ada
 (e.g. GNAT), there are some additional requirements on
@@ -582,63 +411,75 @@ the native compiler.  GNAT must be compiled with an Ada compiler
 and when building a GNAT cross-compiler, it should be 
 the same version of GNAT itself. 
 
-The build procedure is the same until the configure step. 
-A GCC toolset with GNAT enabled requires that @code{ada}
-be included in the set of enabled languages.
-The following example illustrates the invocation of
-@code{configure} and @code{make}
-to build and install @value{GCCUNTAR} with only
-C, C++, and Ada support for the sparc-rtems@value{RTEMSAPI} target:
+It is also important to verify whether there is an RTEMS specific
+Ada patch required for GCC.  These can be found in 
+@uref{http://www.rtems.org/ftp/pub/rtems/people/joel/ada,
+http://www.rtems.org/ftp/pub/rtems/people/joel/ada}.  The patch is
+often a minor version or two behind GCC but will usually apply cleanly.
+This patch must be applied.
+
+After this, it is critical to perform these steps in the correct order.
+GNAT requires that the C Library and RTEMS itself be installed before
+the language run-time can be built.
+
+@itemize @bullet
+@item install native GCC with GNAT
+@item place new native GNAT at head of PATH
+@item install BINUTILS
+@item place RTEMS prefix at head of PATH
+@item install C toolset (C++ is optional)
+@item install RTEMS built multilib
+@item install RTEMS built for your BSP
+@end itemize
+
+The build procedure is the same until the Ada configure step.  A GCC
+toolset with GNAT enabled requires that @code{ada} be included in the set
+of enabled languages.  The following example illustrates the invocation of
+@code{configure} and @code{make} to build and install gcc-<VERSION> with
+only C, C++, and Ada support for the sparc-rtems@value{RTEMSAPI} target:
 
 @example
 mkdir b-gcc
-cd @value{GCCUNTAR}/gcc/ada
-touch treeprs.ads [es]info.h nmake.ad[bs]
-cd ../../../b-gcc
-../@value{GCCUNTAR}/configure --target=sparc-rtems@value{RTEMSAPI} \
+cd b-gcc
+../gcc-<VERSION>/configure --target=sparc-rtems@value{RTEMSAPI} \
    --with-gnu-as --with-gnu-ld --with-newlib --verbose \
    --enable-threads --enable-languages="c,c++,ada" \
    --prefix=@value{RTEMSPREFIX}
 make all
 make info
-make -C gcc cross-gnattools
-make -C gcc ada.all.cross
-make -C gcc GNATLIBCFLAGS="USER_SELECTED_CPU_CFLAGS" gnatlib
 make install
 @end example
 
-After @value{GCCUNTAR} is built and installed the 
-build directory @code{b-gcc} may be removed.
+After gcc-<VERSION> is built and installed the build directory
+@code{b-gcc} may be removed.
 
 @c
-@c Building the GNU Debugger GDB
+@c Installing GDB Without RPM
 @c
+@subsection Installing GDB Without RPM
 
-@section Building the GNU Debugger GDB
+NOTE: This step is NOT required if prebuilt executables for the
+GDB were installed and they meet your target interface
+requirements.
 
-NOTE: This step is NOT required if prebuilt executables for
-the GNU Debugger GDB were installed.
-
-The GNU Debugger GDB supports many configurations but requires some
-means of communicating between the host computer and target board.
-This communication can be via a serial port, Ethernet, BDM, or ROM emulator.
-The communication protocol can be the GDB remote protocol or GDB
-can talk directly to a ROM monitor.  This setup is target board 
-specific.  The following configurations have been
-successfully used with RTEMS applications:
+GDB supports many configurations but requires some means of communicating
+between the host computer and target board.  This communication can be via
+a serial port, Ethernet, BDM, or ROM emulator.  The communication protocol
+can be the GDB remote protocol or GDB can talk directly to a ROM monitor.
+This setup is target board specific.  Some of the configurations that have
+been successfully used with RTEMS applications are:
 
 @itemize @bullet
 @item BDM with ColdFire, 683xx, MPC860 CPUs
 @item Motorola Mxxxbug found on M68xxx VME boards
 @item Motorola PPCbug found on PowerPC VME, CompactPCI, and MTX boards
-@item ARM based Cogent EDP7312
+@item ARM based Cogent EDB7312
 @item PC's using various Intel and AMD CPUs including i386,
 i486, Pentium and above, and Athlon
 @item PowerPC Instruction Simulator in GDB (PSIM)
 @item MIPS Instruction Simulator in GDB (JMR3904)
 @item Sparc Instruction Simulator in GDB (SIS)
 @item Sparc Instruction Simulator (TSIM)
-@item DINK32 on various PowerPC boards
 @end itemize
 
 GDB is currently RTEMS thread/task aware only if you are using the
@@ -650,197 +491,14 @@ your particular host, that they be used.  Prebuilt binaries
 are much easier to install but in the case of gdb may or may
 not include support for your particular target board.
 
-@c
-@c  Obtain Source and Patches for GDB
-@c
-
-@subsection Obtain Source and Patches for GDB
-
-NOTE: This step is required for all methods of building GDB.
-
-This section lists the components required to build GDB
-from source to target RTEMS.  These files should be
-placed in your @code{archive} directory.  Included are the locations
-of each component as well as any required RTEMS specific patches.
-
-@need 1000
-@subheading @value{GDBUNTAR}
-@example
-    FTP Site:    @value{GDBFTPSITE}
-    Directory:   @value{GDBFTPDIR}
-    File:        @value{GDBTAR}
-    URL:         @uref{@value{GDBFTPURL},,@value{GDBFTPURL}}
-@end example
-
-@need 1000
-@subheading RTEMS Specific Tool Patches and Scripts
-@example
-    FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI}
-@ifset GDBPATCHVERSION
-    File:        @value{GDBRTEMSPATCH}
-    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{GDBRTEMSPATCH},,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{GDBRTEMSPATCH}}
-@end ifset
-@end example
-
-@c
-@c  Unarchiving the GDB Distribution
-@c
-@subsection Unarchiving the GDB Distribution
-
-Use the following commands to unarchive the GDB distribution:
-
-@example
-cd tools
-tar xzf ../archive/@value{GDBTAR}
-@end example
-
-The directory @value{GDBUNTAR} is created under the tools directory.
-
-@c
-@c  Applying RTEMS Patch to GDB
-@c
-
-@subsection Applying RTEMS Patch to GDB
-
-@ifclear GDBPATCHVERSION
-No RTEMS specific patches are required for @value{GDBVERSION} to
-support @value{RTEMSVERSION}.
-@end ifclear
-
-@ifset GDBPATCHVERSION
-
-Apply the patch using the following command sequence:
-
-@example
-cd tools/@value{GDBUNTAR}
-cat archive/@value{GDBRTEMSPATCH} | \
-    patch -p1
-@end example
-
-If the patch was compressed with the @code{gzip} program, it will
-have a suffix of @code{.gz} and you should use @code{zcat} instead
-of @code{cat} as shown above.  If the patch was compressed with
-the @code{gzip} program, it will have a suffix of @code{.bz2} and
-you should use @code{bzcat} instead of @code{cat} as shown above.
-
-Check to see if any of these patches have been rejected using the following
-sequence:
-
-@example
-cd tools/@value{GDBUNTAR}
-find . -name "*.rej" -print
-@end example
-
-If any files are found with the .rej extension, a patch has been rejected.
-This should not happen with a good patch file.
-
-@end ifset
-
-@c
-@c  Compiling and Installing the GNU Debugger GDB
-@c
-
-@subsection Compiling and Installing the GNU Debugger GDB
-
-There are three methods of building the GNU Debugger:
-
-@itemize @bullet
-@item RPM
-@item direct invocation of @code{configure} and @code{make}
-@end itemize
-
-Direct invocation of @code{configure} and @code{make} provides more control
-and easier recovery from problems when building.
-
-@c
-@c  Using RPM to Build GDB
-@c
-
-@subsubsection Using RPM to Build GDB
-
-This section describes the process of building binutils, gcc, and
-newlib using RPM.  RPM is a packaging format which can be used to
-distribute binary files as well as to capture the procedure and
-source code used to produce those binary files.  Before
-attempting to build any RPM from source, it is necessary to
-ensure that all required source and patches are in the @code{SOURCES}
-directory under the RPM root (probably @code{/usr/src/redhat} or
-@code{/usr/local/src/redhat}) on your machine.  This procedure
-starts by installing the source RPMs as shown in the following
-example:
-
-@example
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.src.rpm
-@end example
-
-Because RTEMS tool RPMS are called "nosrc" to indicate that one or
-more source files required to produce the RPMs are not present.
-The RTEMS source GDB RPM does not include the large @code{.tar.gz} or
-@code{.tgz} files for GDB.  This is shared by all RTEMS RPMs
-regardless of target CPU and there was no reason
-to duplicate them.  You will have to get the required source
-archive files by hand and place them in the @code{SOURCES} directory
-before attempting to build.  If you forget to do this, RPM is
-smart -- it will tell you what is missing.  To determine what is
-included or referenced by a particular RPM, use a command like the
-following:
-
-@example
-$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.src.rpm
-gdb-@value{GDBVERSION}-rtems@value{RTEMSAPI}-@value{GDBPATCHVERSION}.diff
-gdb-@value{GDBVERSION}.tar.gz
-i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}.spec
-@end example
-
-Notice that there is a patch file (the @code{.diff} file), a source archive
-file (the @code{.tar.gz}), and a file describing the build procedure and
-files produced (the @code{.spec} file).  The @code{.spec} file is placed
-in the @code{SPECS} directory under the RPM root directory.
-
-@c
-@c  Configuring and Building GDB using RPM
-@c
-
-@subheading Configuring and Building GDB using RPM
-
-The following example illustrates the invocation of RPM to build a new,
-locally compiled, binutils binary RPM that matches the installed source
-RPM.  This example assumes that all of the required source is installed.
-
-@example
-cd <RPM_ROOT_DIRECTORY>/SPECS
-rpm -bb i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}.spec
-@end example
-
-If the build completes successfully, RPMS like the following will
-be generated in a build-host architecture specific subdirectory
-of the RPMS directory under the RPM root directory.
-
-@example
-@value{RTEMSRPMPREFIX}gdb-common-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-@end example
-
-NOTE: It may be necessary to remove the build tree in the
-@code{BUILD} directory under the RPM root directory.
-
-@c
-@c Using the GDB configure Script Directly
-@c 
-
-@subsubsection Using the GDB configure Script Directly
-
-This section describes how to configure the GNU debugger for
-RTEMS targets using @code{configure} and @code{make} directly.
 The following example illustrates the invocation of @code{configure}
-and @code{make} to build and install @value{GDBUNTAR} for the
+and @code{make} to build and install gdb-<VERSION> for the
 m68k-rtems@value{RTEMSAPI} target:
 
 @example
 mkdir b-gdb
 cd b-gdb
-../@value{GDBUNTAR}/configure --target=m68k-rtems@value{RTEMSAPI} \
+../gdb-<VERSION>/configure --target=m68k-rtems@value{RTEMSAPI} \
   --prefix=@value{RTEMSPREFIX}
 make all
 make info
@@ -861,13 +519,213 @@ configurations for which there are extra options:
 
 @end table
 
-After @value{GDBUNTAR} is built and installed the
+After gdb-<VERSION> is built and installed the
 build directory @code{b-gdb} may be removed.
 
 For more information on the invocation of @code{configure}, please
-refer to the documentation for @value{GDBUNTAR} or
-invoke the @value{GDBUNTAR} @code{configure} command with the
+refer to the documentation for gdb-<VERSION> or
+invoke the gdb-<VERSION> @code{configure} command with the
 @code{--help} option.
+
+
+@c
+@c  Using RPM to Build Tools
+@c
+
+@section Using RPM to Build Tools
+
+RPM is a packaging format which can be used to distribute binary files as
+well as to capture the procedure and source code used to produce those
+binary files.  For RPM, it is assumed that the following subdirectories
+are under a root directory such as @code{/usr/src/redhat} or
+@code{/usr/local/src/redhat}) on your machine.  
+
+@example
+BUILD
+RPMS
+SOURCES
+SPECS
+SRPMS
+@end example
+
+For the purposes of this document, the RPM @code{SOURCES} directory is the
+directory into which all tool source and patches are assumed to reside.
+The @code{BUILD} directory is where the actual build is performed when
+building binaries from a source RPM.  
+
+RPM automatically unarchives the source and applies any needed patches
+so you do @b{NOT} have to manually perform the procedures described
+@ref{Unarchiving the Tools} and @ref{Applying RTEMS Project Tool Patches}.
+But you are responsible for placing all source tarballs
+and patches in the @code{SOURCES} directory per the instructions in
+@ref{Obtain Source and Patches}
+
+This procedure starts by installing the source (e.g. @code{.src.rpm}
+extension) RPMs.  The RTEMS tool source RPMS are called "nosrc" to
+indicate that one or more source files required to produce the RPMs
+are not present.  The RTEMS source RPMs typically include all required
+patches, but do not include the large @code{.tar.gz} or @code{.tgz} files
+for each component such as BINUTILS, GCC, or NEWLIB.  These are shared
+by all RTEMS RPMs regardless of target CPU and there was no reason to
+duplicate them.  You will have to get the required source archive files
+by hand and place them in the @code{SOURCES} directory before attempting
+to build.  If you forget to do this, RPM is smart -- it will tell you
+what is missing. You can fetch any missing files and try again.
+
+@c
+@c  Building AUTOCONF using RPM
+@c
+@subsection Building AUTOCONF using RPM
+
+This section illustrates the invocation of RPM to build a new, locally
+compiled, AUTOCONF binary RPM that matches the installed source RPM.
+This example assumes that all of the required source is installed.
+
+@example 
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-autoconf-<VERSION>-<RPM_RELEASE>.src.rpm
+@end example
+
+@example
+cd <RPM_ROOT_DIRECTORY>/SPECS
+rpm -bb i386-rtems@value{RTEMSAPI}-autoconf-<VERSION>.spec
+@end example
+
+If the build completes successfully, RPMS like the following will be
+generated in a build-host architecture specific subdirectory of the RPMs
+directory under the RPM root directory.
+
+@example
+@value{RTEMSRPMPREFIX}rtems@value{RTEMSAPI}-autoconf-<VERSION>-<RPM_RELEASE>.<ARCH>.rpm
+@end example
+
+NOTE: It may be necessary to remove the build tree in the @code{BUILD}
+directory under the RPM root directory.
+
+@c
+@c  Building AUTOMAKE using RPM
+@c
+@subsection Building AUTOMAKE using RPM
+
+This section illustrates the invocation of RPM to build a new, locally
+compiled, AUTOMAKE binary RPM that matches the installed source RPM.
+This example assumes that all of the required source is installed.
+
+@example 
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-automake-<VERSION>-<RPM_RELEASE>.src.rpm
+@end example
+
+@example
+cd <RPM_ROOT_DIRECTORY>/SPECS
+rpm -bb i386-rtems@value{RTEMSAPI}-automake-<VERSION>.spec
+@end example
+
+If the build completes successfully, RPMS like the following will be
+generated in a build-host architecture specific subdirectory of the RPMs
+directory under the RPM root directory.
+
+@example
+@value{RTEMSRPMPREFIX}rtems@value{RTEMSAPI}-automake-<VERSION>-<RPM_RELEASE>.<ARCH>.rpm
+@end example
+
+NOTE: It may be necessary to remove the build tree in the @code{BUILD}
+directory under the RPM root directory.
+
+
+@c
+@c  Building BINUTILS using RPM
+@c
+@subsection Building BINUTILS using RPM
+
+This section illustrates the invocation of RPM to build a new, locally
+compiled, binutils binary RPM that matches the installed source RPM.
+This example assumes that all of the required source is installed.
+
+@example 
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-<VERSION>-<RPM_RELEASE>.src.rpm
+@end example
+
+@example
+cd <RPM_ROOT_DIRECTORY>/SPECS
+rpm -bb i386-rtems@value{RTEMSAPI}-binutils-<VERSION>.spec
+@end example
+
+If the build completes successfully, RPMS like the following will be
+generated in a build-host architecture specific subdirectory of the RPMS
+directory under the RPM root directory.
+
+@example
+@value{RTEMSRPMPREFIX}binutils-common-<VERSION>-<RPM_RELEASE>.<ARCH>.rpm
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-<VERSION>-<RPM_RELEASE>.<ARCH>.rpm
+@end example
+
+NOTE: It may be necessary to remove the build tree in the @code{BUILD}
+directory under the RPM root directory.
+
+@c
+@c  Building GCC and NEWLIB using RPM
+@c
+@subsection Building GCC and NEWLIB using RPM
+
+This section illustrates the invocation of RPM to build a new,
+locally compiled, set of GCC and NEWLIB binary RPMs that match the
+installed source RPM.  It is also necessary to install the BINUTILS
+RPMs and place them in your PATH.  This example assumes that all of
+the required source is installed.
+
+@example
+cd <RPM_ROOT_DIRECTORY>/SPECS
+rpm -bb i386-rtems@value{RTEMSAPI}-gcc-<VERSION>.spec
+@end example
+
+If the build completes successfully, a set of RPMS like the following will
+be generated in a build-host architecture specific subdirectory
+of the RPMS directory under the RPM root directory.
+
+@example
+@value{RTEMSRPMPREFIX}gcc-common-<VERSION>-<RPM>.<DIST>.noarch.rpm \
+@value{RTEMSRPMPREFIX}newlib-common-<VERSION>-<RPM>.<DIST>.noarch.rpm \
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-<VERSION>-<RPM>.<ARCH>.rpm \
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-newlib-<VERSION>-<RPM>.<ARCH>.rpm \
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-libgcc-<VERSION>-<RPM>.<ARCH>.rpm \
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-c++-<VERSION>-<RPM>.<ARCH>.rpm \
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-libstd++-<VERSION>-<RPM>.<ARCH>.rpm
+@end example
+
+NOTE: Some targets do not support building all languages.
+
+NOTE: It may be necessary to remove the build tree in the
+@code{BUILD} directory under the RPM root directory.
+
+@c
+@c Building the GDB using RPM
+@c
+@subsection Building the GDB using RPM
+
+The following example illustrates the invocation of RPM to build a new,
+locally compiled, binutils binary RPM that matches the installed source
+RPM.  This example assumes that all of the required source is installed.
+
+
+@example
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-<VERSION>-<RPM_RELEASE>.src.rpm
+@end example
+
+@example
+cd <RPM_ROOT_DIRECTORY>/SPECS
+rpm -bb i386-rtems@value{RTEMSAPI}-gdb-<VERSION>.spec
+@end example
+
+If the build completes successfully, RPMS like the following will
+be generated in a build-host architecture specific subdirectory
+of the RPMS directory under the RPM root directory.
+
+@example
+@value{RTEMSRPMPREFIX}gdb-common-<VERSION>-<RPM_RELEASE>.<ARCH>.rpm
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-<VERSION>-<RPM_RELEASE>.<ARCH>.rpm
+@end example
+
+NOTE: It may be necessary to remove the build tree in the
+@code{BUILD} directory under the RPM root directory.
 
 @c
 @c Common Problems
@@ -932,7 +790,7 @@ in the various tool source trees.  The following command
 does this for the binutils source:
 
 @example
-find @value{BINUTILSUNTAR} -name config.status -print
+find binutils-<VERSION> -name config.status -print
 @end example
 
 The solution for this is to execute the command 
@@ -949,7 +807,7 @@ configuration.  The include path used is something like
 this:
 
 @example
--I../../@value{BINUTILSUNTAR}/gcc -I/@value{BINUTILSUNTAR}/gcc/include -I.
+-I../../binutils-<VERSION>/gcc -I/binutils-<VERSION>/gcc/include -I.
 @end example
 
 Note that the tool source directory is searched before the 

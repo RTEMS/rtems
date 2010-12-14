@@ -1,6 +1,5 @@
 @c
-@c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2010.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -11,25 +10,23 @@
 
 @section Obtain the RTEMS Source Code
 
-This section provides pointers to the RTEMS source code and
-Hello World example program.  These files should be
-placed in your @code{archive} directory.  
+This section provides pointers to the RTEMS source code and example
+programs.  These files should be placed in your @code{archive} directory.
+The set of tarballs which comprise an RTEMS release is placed in a
+directory whose name if the release on the ftp site.  The RTEMS ftp site
+is accessible via both the ftp and http protocols at the following URLs:
+ 
+@itemize @bullet
+@item @uref{http://www.rtems.org/ftp/pub/rtems,http://www.rtems.org/ftp/pub/rtems}
+@item @uref{ftp://www.rtems.org/pub/rtems,ftp://www.rtems.org/pub/rtems}
+@end itemize
 
-@subheading @value{RTEMSVERSION}
-@example
-    FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}/@value{VERSION}
-    File:        @value{RTEMSTAR}
-    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}/@value{RTEMSTAR},,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}/@value{RTEMSTAR}}
-@end example
-
-@subheading RTEMS Examples including Hello World
-@example
-    FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}/@value{VERSION}
-    File:        examples-@value{VERSION}.tar.bz2
-    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}/examples-@value{VERSION}.tar.bz2,,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}/examples-@value{VERSION}.tar.bz2}
-@end example
+Associated with each RTEMS Release is a set of example programs.
+Prior to the 4.10 Release Series, these examples were in a "Class
+Examples" and an "Examples" collection.  Beginning with the 4.10 Release
+Series, these examples collections were merged and other examples added.
+This new collection is called "Examples V2".  It is contained in the file
+@code{examples-v2-<VERSION>.tar.bz2>} within the RTEMS release directory.
 
 @c
 @c  Unarchive the RTEMS Source
@@ -42,28 +39,29 @@ tools directory:
 
 @example
 cd tools
-tar xjf ../archive/@value{RTEMSTAR}
+tar xjf ../archive/rtems-@value{RTEMSAPI}.<VERSION>.tar.bz2
 @end example
 
-This creates the directory @value{RTEMSUNTAR}.
-
+This creates the directory rtems-@value{RTEMSAPI}.<VERSION>
 
 @section Add <INSTALL_POINT>/bin to Executable PATH
 
 In order to compile RTEMS, you must have the cross compilation toolset
 in your search path.  It is important to have the RTEMS toolset first
 in your path to ensure that you are using the intended version of all
-tools.  The following command prepends the directory
-where the tools were installed in a previous step:
+tools.  The following command prepends the directory where
+the tools were installed in a previous step.  If you are using
+binaries provided by the RTEMS Project, the <INSTALL_POINT> will be
+@code{/opt/rtems-@value{RTEMSAPI}}
 
 @example
 export PATH=<INSTALL_POINT>/bin:$@{PATH@}
 @end example
 
-NOTE:  The above command is in Bourne shell (@code{sh}) syntax and
-should work with the Korn (@code{ksh}) and GNU Bourne Again Shell
-(@code{bash}).  It will not work with the C Shell (@code{csh}) or
-derivatives of the C Shell.
+@b{NOTE:}  The above command is in Bourne shell (@code{sh}) syntax and should
+work with the Korn (@code{ksh}) and GNU Bourne Again Shell (@code{bash}).
+It will not work with the C Shell (@code{csh}) or derivatives of the
+C Shell.
 
 @section Verifying the Operation of the Cross Toolset
 
@@ -83,14 +81,14 @@ int f( int x )
 Then assemble the file using a command similar to the following:
 
 @example
-m68k-rtems-gcc -v -S f.c
+m68k-rtems@value{RTEMSAPI}-gcc -v -S f.c
 @end example
 
-Where @code{m68k-rtems-gcc} should be changed to match the installed
-name of your cross compiler.  The result of this command will be
-a sequence of output showing where the cross-compiler searched for
-and found its subcomponents.  Verify that these paths correspond
-to your <INSTALL_POINT>.
+Where @code{m68k} should be changed to match the target architecture
+of your cross compiler.  The result of this command will be a sequence
+of output showing where the cross-compiler searched for and found
+its subcomponents.  Verify that these paths correspond to your
+<INSTALL_POINT>.
 
 Look at the created file @code{f.s} and verify that it is in fact
 for your target processor.
@@ -99,17 +97,16 @@ Then try to compile the file @code{f.c} directly to object code
 using a command like the following:
 
 @example
-m68k-rtems-gcc -v -c f.c
+m68k-rtems@code{RTEMSAPI}-gcc -v -c f.c
 @end example
 
-If this produces messages that indicate the assembly code is
-not valid, then it is likely that you have fallen victim to 
-one of the problems described in
-@ref{Error Message Indicates Invalid Option to Assembler}
-Don't feel bad about this, one of the most common installation errors
-is for the cross-compiler not to be able to find the cross assembler
-and default to using the native @code{as}.  This can result in very confusing
-error messages.
+If this produces messages that indicate the assembly code is not valid,
+then it is likely that you have fallen victim to one of the problems
+described in @ref{Error Message Indicates Invalid Option to Assembler}
+Please do not feel bad about this and do not give up, one of the most
+common installation errors is for the cross-compiler not to be able
+to find the cross assembler and default to using the native @code{as}.
+This can result in very confusing error messages.
 
 @section Building RTEMS for a Specific Target and BSP
 
@@ -130,19 +127,20 @@ This section describes how to build RTEMS.
 @subsection Using the RTEMS configure Script Directly
 
 Make a build directory under tools and build the RTEMS product in this
-directory. The @code{../@value{RTEMSUNTAR}/configure}
-command has numerous command line
-arguments. These arguments are discussed in detail in documentation that
-comes with the RTEMS distribution. A full list of these arguments can be
-obtained by running @code{../@value{RTEMSUNTAR}/configure --help}
-If you followed the procedure
-described in the section @ref{Unarchive the RTEMS Source}, these
-configuration options can be found in the file
-tools/@value{RTEMSUNTAR}/README.configure.
+directory. The @code{../rtems-@value{RTEMSAPI}.<VERSION>/configure}
+command has numerous command line arguments. These arguments are
+discussed in detail in documentation that comes with the RTEMS
+distribution. A full list of these arguments can be obtained by running
+@code{../rtems-@value{RTEMSAPI}.<VERSION>/configure --help} If you
+followed the procedure described in the section @ref{Unarchive the
+RTEMS Source}, these configuration options can be found in the file
+tools/rtems-@value{RTEMSAPI}.<VERSION>/README.configure.
 
 @b{NOTE}: The GNAT/RTEMS run-time implementation is based on the POSIX
-API.  Thus the RTEMS configuration for a GNAT/RTEMS environment MUST
-include the @code{--enable-posix} flag.
+API and the GNAT/RTEMS run-time cannot be compiled with networking
+disabled. Your application does not have to use networking but it must
+be enabled.  Thus the RTEMS configuration for a GNAT/RTEMS environment
+MUST include the @code{--enable-posix --enable-networking} flag.
 
 The following shows the command sequence required to configure,
 compile, and install RTEMS with the POSIX API, FreeBSD TCP/IP,
@@ -152,26 +150,26 @@ the @code{BOARD_SUPPORT_PACKAGE} board.
 @example
 mkdir build-rtems
 cd build-rtems
-../@value{RTEMSUNTAR}/configure --target=<TARGET_CONFIGURATION> \
+../rtems-@value{RTEMSAPI}.VERSION/configure --target=<TARGET_CONFIGURATION> \
     --disable-posix --disable-networking --disable-cxx \
-    --enable-rtemsbsp=<BOARD_SUPPORT_PACKAGE>\
+    --enable-rtemsbsp=<BSP>\
     --prefix=<INSTALL_POINT>
 make all install
 @end example
 
-Where the list of currently supported <TARGET_CONFIGURATION>'s and
-<BOARD_SUPPORT_PACKAGE>'s can be found in
-tools/@value{RTEMSUNTAR}/README.configure.
+<TARGET> is of the form <CPU>-rtems@value{RTEMSAPI} and the list of
+currently supported <TARGET> configuration's and <BSP>'s can be found in
+@code{tools/RTEMS-@value{RTEMSAPI}.<VERSION>/README.configure}.
 
-<INSTALL_POINT> is typically the installation point for the 
-tools and defaults to @code{@value{RTEMSPREFIX}}.
+<INSTALL_POINT> is typically the installation point for the tools and
+defaults to @code{/opt/rtems-@value{RTEMSAPI}}.
 
-BSP is a supported BSP for the selected CPU family.  The list of
-supported BSPs may be found in the file
-tools/@value{RTEMSUNTAR}/README.configure
-in the RTEMS source tree.  If the BSP parameter is not specified,
-then all supported BSPs for the selected CPU family will be built.
+BSP is a supported BSP for the selected CPU family.
+The list of supported BSPs may be found in the file
+@code{tools/rtems-@value{RTEMSAPI}.<VERSION>/README.configure} in the
+RTEMS source tree.  If the BSP parameter is not specified, then all
+supported BSPs for the selected CPU family will be built.
 
-@b{NOTE:}  The POSIX API must be enabled to use GNAT/RTEMS.
+@b{NOTE:} The POSIX API and networking must be enabled to use GNAT/RTEMS.
 
 @b{NOTE:} The @code{make} utility used should be GNU make.

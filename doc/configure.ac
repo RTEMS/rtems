@@ -137,30 +137,6 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
 
-AC_MSG_CHECKING([for ./setup.def])
-AS_IF([test -f ${srcdir}/setup.def],[
-. ${srcdir}/setup.def
-AC_MSG_RESULT([done])
-],[
-AC_MSG_ERROR([missing])
-])
-
-AS_IF([test -z "$binutils_patch_version"],
-[set_binutils_patch="@clear BINUTILSPATCHVERSION"],
-[set_binutils_patch="@set BINUTILSPATCHVERSION $binutils_patch_version"])
-
-AS_IF([test -z "$newlib_patch_version"],
-[set_newlib_patch="@clear NEWLIBPATCHVERSION"],
-[set_newlib_patch="@set NEWLIBPATCHVERSION $newlib_patch_version"])
-
-AS_IF([test -z "$gcc_patch_version"],
-[set_gcc_patch="@clear GCCPATCHVERSION"],
-[set_gcc_patch="@set GCCPATCHVERSION $gcc_patch_version"])
-
-AS_IF([test -z "$gdb_patch_version"],
-[set_gdb_patch="@clear GDBPATCHVERSION"],
-[set_gdb_patch="@set GDBPATCHVERSION $gdb_patch_version"])
-
 AC_CONFIG_SUBDIRS(tools)
 
 AC_CONFIG_FILES([Makefile],[],[
@@ -170,7 +146,6 @@ cat << EOF > common/rtems.sed~
 s/@RTEMSAPI@/RTEMS_API/;t t
 s,@RTEMSPREFIX@,$prefix,;t t
 s,@RTEMSRPMPREFIX@,$rpmprefix,;t t
-s,@RTEMSRPMGROUP@,RTEMS/]RTEMS_API[,;t t
 EOF
 _RTEMS_UPDATE_CONDITIONAL([common/rtems.sed],[common/rtems.sed~])
 ])
@@ -181,25 +156,6 @@ develenv/Makefile
 user/Makefile
 bsp_howto/Makefile])
 
-AC_CONFIG_FILES([started/Makefile],[],[
-test -d started || mkdir started
-cat << EOF > started/tversions.sed~
-:t
-s/@GCCVERSION@/$gcc_version/;t t
-s/@BINUTILSVERSION@/$binutils_version/;t t
-s/@NEWLIBVERSION@/$newlib_version/;t t
-s/@GDBVERSION@/$gdb_version/;t t
-s/@SETBINUTILSPATCHVERSION@/$set_binutils_patch/;t t
-s/@SETGCCPATCHVERSION@/$set_gcc_patch/;t t
-s/@SETNEWLIBPATCHVERSION@/$set_newlib_patch/;t t
-s/@SETGDBPATCHVERSION@/$set_gdb_patch/;t t
-s/@GCCRPMRELEASE@/$gccnewlib_rpm_release/;t t
-s/@BINUTILSRPMRELEASE@/$binutils_rpm_release/;t t
-s/@GDBRPMRELEASE@/$gdb_rpm_release/;t t
-EOF
-_RTEMS_UPDATE_CONDITIONAL([started/tversions.sed],[started/tversions.sed~])
-])
-
 AC_CONFIG_FILES([
 porting/Makefile
 networking/Makefile
@@ -207,7 +163,7 @@ posix_users/Makefile
 posix1003.1/Makefile
 filesystem/Makefile
 ada_user/Makefile
-started_ada/Makefile
+started/Makefile
 relnotes/Makefile
 new_chapters/Makefile
 cpu_supplement/Makefile

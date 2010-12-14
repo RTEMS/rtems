@@ -37,5 +37,6 @@ rtems_header.html
 rtemspie.pdf
 sh.texi
 sparc.texi
+sparc64.texi
 states.pdf
 tic4x.texi

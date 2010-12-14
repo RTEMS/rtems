@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2010.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -52,7 +52,7 @@ to your target board and executed is very dependent
 on the board you are using.  The following is a list of
 commonly used BSPs classified by their RTEMS CPU family and pointers
 to instructions on how to use them.  [NOTE: All file names should be
-prepended with @value{RTEMSUNTAR}/c/src/lib/libbsp.]
+prepended with @code{rtems-@value{RTEMSAPI}.<VERSION>/c/src/lib/libbsp}.]
 
 @need 1000
 @table @b
@@ -147,31 +147,11 @@ the following to unarchive the sample applications:
 
 @example
 cd tools
-tar xjf ../archive/examples-VERSION.tgz
+tar xjf ../archive/examples-v2-@value{RTEMSAPI}.<VERSION>.tgz
 @end example
 
-The sample applications most likely to be of interest to you are:
-
-@itemize @bullet
-@item hello_world_c - C Hello World application with a simple
-RTEMS configuration and an entry point not called @code{main()}.
-
-@item simple_main - Very simple program starting at @code{main()}
-and shutting down RTEMS via @code{exit()} without any other operations.
-It uses the default configuration inside RTEMS which is only
-intended to satisfy @code{autoconf} probes and extremely simple
-console-based applications.
-
-@item libcpp - Simple C++ library for RTEMS showing how to build an
-application library written in C++.
-
-@item psx_sched_report - POSIX Scheduler Reporter is a program
-that prints out some scheduler attributes of the RTEMS POSIX API.
-
-@end itemize
-
-Each tests is found in a separate subdirectory and built using the
-same command sequence.  The @code{hello_world_c} sample will be used
+Each tests is found in a separate subdirectory and built using the same
+command sequence.  The @code{hello/hello_world_c} sample will be used
 as an example.
 
 @c
@@ -192,25 +172,24 @@ If the sample application has successfully been built, then the application
 executable is placed in the following directory: 
 
 @example
-hello_world_c/o-optimize/<filename>.exe
+hello_world_c/o-optimize/<filename>.ralf
 @end example
 
-The other C/C++ sample applications are built using a similar procedure.
+The other sample applications are built using a similar procedure.
 
 @c
 @c  Ada Sample Applications
 @c
 @section Ada Sample Applications
 
-The Ada sample application set primarily includes a
-a simple Hello World Ada program which can be used
-as a starting point for GNAT/RTEMS applications.
-Use the following command to unarchive the Ada sample
+The Ada sample application set primarily includes a a simple Hello
+World Ada program which can be used as a starting point for GNAT/RTEMS
+applications.  Use the following command to unarchive the Ada sample
 applications:
 
 @example
 cd tools
-tar xjf ../archive/ada-examples-@value{VERSION}.tar.bz2
+tar xjf ../archive/ada-examples-@value{RTEMSAPI}.<VERSION>.tgz
 @end example
 
 @subheading Create a BSP Specific Makefile
@@ -219,11 +198,7 @@ Currently, the procedure for building and linking an Ada application
 is a bit more difficult than a C or C++ application.  This is certainly
 an opportunity for a volunteer project.
 
-At this time, there is a 
-
-Provided are example Makefiles for multiple BSPs.  Copy one of these to
-the file Makefile.<BOARD_SUPPORT_PACKAGE> and edit it as appropriate for
-your local configuration.
+If your BSP requires special arguments when linking, you may have to augment the file @code{ada-examples-@value{RTEMSAPI}.<VERSION>/Makefile.shared}.  Most RTEMS BSPs do not require special linking arguments so this should not be frequently needed.
 
 Use the  <INSTALLATION_POINT> and <BOARD_SUPPORT_PACKAGE> specified when
 configuring and installing RTEMS.
@@ -233,18 +208,13 @@ configuring and installing RTEMS.
 Use the following command to start the build of the sample application: 
 
 @example
-cd tools/hello_world_ada
-make -f Makefile.<BOARD_SUPPORT_PACKAGE>
+cd tools/ada-examples-@value{RTEMSAPI}.<VERSION>/ada-examples/hello_world_ada
 @end example
 
-NOTE: GNU make is the preferred @code{make} utility.  Other @code{make}
-implementations may work but all testing is done with GNU make.
-
-If the BSP specific modifications to the Makefile were correct and
-no errors are detected during the sample application build, it is
+If no errors are detected during the sample application build, it is
 reasonable to assume that the build of the GNAT/RTEMS Cross Compiler Tools
-for RTEMS and RTEMS itself for the selected host and target
-combination was done properly. 
+for RTEMS and RTEMS itself for the selected host and target combination
+was done properly.
 
 @section Application Executable 
 
@@ -252,7 +222,7 @@ If the sample application has successfully been build, then the application
 executable is placed in the following directory: 
 
 @example
-tools/hello_world_ada/o-optimize/<filename>.exe
+tools/@code{ada-examples-@value{RTEMSAPI}.<VERSION>}/hello_world_ada/o-optimize/<filename>.exe
 @end example
 
 How this executable is downloaded to the target board is very dependent
@@ -263,12 +233,14 @@ on the BOARD_SUPPORT_PACKAGE selected.
 @c
 @section More Information on RTEMS Application Makefiles
 
-These sample applications are examples of simple
-RTEMS applications that use the RTEMS Application Makefile 
-system.  This Makefile system simplifies building
-RTEMS applications by providing Makefile templates and
-capturing the configuration information used to build
-RTEMS specific to your BSP.  Building an RTEMS application
-for different BSPs is as simple as switching the
-setting of @code{RTEMS_MAKEFILE_PATH}.  This Makefile
+These sample applications are examples of simple RTEMS applications
+that use the RTEMS Application Makefile system.  This Makefile system
+simplifies building RTEMS applications by providing Makefile templates and
+capturing the configuration information used to build RTEMS specific to
+your BSP.  Building an RTEMS application for different BSPs is as simple
+as switching the setting of @code{RTEMS_MAKEFILE_PATH}.  This Makefile
 system is described in the file @code{make/README}.
+
+It is very likely in the future that the RTEMS examples built using an
+installed RTEMS will be converted to autoconf.
+

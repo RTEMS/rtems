@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2008.
+@c  COPYRIGHT (c) 1988-2010.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -17,7 +17,7 @@
 @end tex
 
 @vskip 0pt plus 1filll
-COPYRIGHT @copyright{} 1988 - 2008.@*
+COPYRIGHT @copyright{} 1988 - 2010.@*
 On-Line Applications Research Corporation (OAR).@*
 
 The authors have used their best efforts in preparing
@@ -36,5 +36,5 @@ Any inquiries concerning RTEMS, its related support
 components, its documentation, or any custom services
 for RTEMS should be directed to the contacts listed on
 that site.  A current list of RTEMS Support Providers
-is at @uref{http://www.rtems.com/support.html}.
+is at @uref{http://www.rtems.com/oarsupport}.
 

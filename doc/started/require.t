@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2010.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -21,19 +21,18 @@ assessing the amount of disk space required for your installation:
 +------------------------------------+--------------------------+
 |              Component             |   Disk Space Required    |
 +------------------------------------+--------------------------+
-|        archive directory           |        55 Mbytes         |
-|        tools src unarchived        |       350 Mbytes         |
-|  each individual build directory   |     up to 750 Mbytes     |
-|     each installation directory    |      20-200 Mbytes       |
+|        archive directory           |       120 Mbytes         |
+|        tools src unarchived        |      1400 Mbytes         |
+|  each individual build directory   |     up to 2500 Mbytes    |
+|     each installation directory    |       900 Mbytes         |
 +------------------------------------+--------------------------+
 @end example
 
-It is important to understand that the above requirements only address
-the GNU C/C++ Cross Compiler Tools themselves.  Adding additional
-languages such as Fortran or Objective-C can increase the size
-of the build and installation directories.  Also, the unarchived
-source and build directories can be removed after the tools are
-installed.
+It is important to understand that the above requirements only address the
+GNU C/C++ Cross Compiler Tools themselves.  Adding additional languages
+such as Ada or Go can increase the size of the build and installation
+directories.  Also, the unarchived source and build directories can be
+removed after the tools are installed.
 
 After the tools themselves are installed, RTEMS must be built
 and installed for each Board Support Package that you wish
@@ -46,8 +45,11 @@ will tend to be in the 40-60 Mbyte range.
 There are a number of factors which must be taken into
 account in order to estimate the amount of disk space required
 to build RTEMS itself.  Attempting to build multiple BSPs in
-a single step increases the disk space requirements.  Similarly
-enabling optional features increases the build and install
+a single step increases the disk space requirements.  One some
+target architectures, this can lead to disk usage during the build
+of over one gigabyte.
+
+Similarly enabling optional features increases the build and install
 space requirements.  In particular, enabling and building
 the RTEMS tests results in a significant increase in build
 space requirements but since the tests are not installed has,
@@ -56,8 +58,9 @@ enabling them has no impact on installation requirements.
 @section General Host Software Requirements
 
 The instructions in this manual should work on any computer running
-a UNIX variant.  Some native GNU tools are used by this procedure
-including:
+a POSIX environment including GNU/Linux and Cygwin.  Mingw users may
+encounter additional issues due to the limited POSIX compatibility.
+Some native GNU tools are used by this procedure including:
 
 @itemize @bullet
 @item GCC
@@ -65,8 +68,10 @@ including:
 @item GNU makeinfo
 @end itemize
 
-In addition, some native utilities may be deficient for building 
-the GNU tools.
+In addition, some native utilities may be deficient for building the
+GNU tools.  On hosts which have m4 but it is not GNU m4, it is not
+uncommon to have to install GNU m4. Similarly, some shells are not
+capable of fully supporting the RTEMS configure scripts.
 
 @subsection GCC
 
@@ -129,9 +134,10 @@ are on a Solaris 2.x host, then use the @code{/bin/ksh} or
 
 @end itemize
 
-@subsection Linux
+@subsection Distribution Independent Potential GNU/Linux Issues
 
-The following problems have been reported by Linux users:
+The following problems have been reported by users of various GNU/Linux
+distributions:
 
 @itemize @bullet
 
@@ -149,71 +155,10 @@ to at least GNU fileutils version 3.16 to resolve this problem.
 
 @end itemize
 
-@section Archive and Build Directories
+@subsection GNU/Linux Distrobutions using Debian Packaging Format 
 
-If you are using RPM or another packaging format that supports
-building a package from source, then there is probably a directory
-structure assumed by that packaging format.  Otherwise, you
-are free to use whatever organization you like.  However, this
-document will use the directory organization described
-in @ref{Archive and Build Directory Format}.
+The RTEMS Project does not currently provide prebuilt toolsets in the Debian packaging format used by the Debian and Ubuntu distributions.  If you are using a distribution using this packaging format, then you have two options for installing the RTEMS toolset.
 
-@subsection RPM Archive and Build Directory Format
+The first option is to build the toolset from source following the instructions in the @ref{Building the GNU Cross Compiler Toolset}.  This is an approach taken by many users.
 
-For RPM, it is assumed that the following subdirectories
-are under a root directory such as @code{/usr/src/redhat}:
-
-@example
-BUILD
-RPMS
-SOURCES
-SPECS
-SRPMS
-@end example
-
-For the purposes of this document, the RPM @code{SOURCES} directory
-is the directory into which all tool source and patches are
-assumed to reside.  The @code{BUILD} directory is where the actual
-build is performed when building binaries from a source RPM.
-The @code{SOURCES} and @code{BUILD} are logically equivalent to
-the @code{archive} and @code{tools} directory discussed in the 
-next section.
-
-@subsection Archive and Build Directory Format
-
-When no packaging format requirements are present, the root directory for
-the storage of source archives and patches as well as for building the
-tools is up to the user.  The only concern is that there be enough
-disk space to complete the build.  In this document, the following
-organization will be used.
-
-Make an @code{archive} directory to contain the downloaded
-source code and a @code{tools} directory to be used as a build
-directory.  The command sequence to do this is shown
-below:
-
-@example
-mkdir archive
-mkdir tools
-@end example
-
-This will result in an initial directory structure similar to the
-one shown in the following figure:
-
-@example
-@group
-/whatever/prefix/you/choose/
-        archive/
-        tools/
-
-@end group
-@end example
-
-@c @ifset use-html
-@c @html
-@c <IMG SRC="sfile12c.jpg" WIDTH=417 HEIGHT=178
-@c      ALT="Starting Directory Organization">
-@c @end html
-@c @end ifset
-
-
+Alternatively, it is often possible to extract the contents of the RPM files which contain the portions of the toolset you require.  In this case, you will follow the instructions in @ref{Locating the RPMs for your GNU/Linux Distribution} but assume your distribution is the RedHat Enterprise Linux version which is closest to yours from a shared library perspective.  As of December 2010, this is usually RedHat Enterprise Linux version 5.  As time passes, it is expected that version 6 will be appropriate in more cases.  You will extract the contents of these RPM files using either @code{rpm2cpio} and install them or you may be able to use the @code{alien} tool to convert them to Debian packaging.
