@@ -36,8 +36,8 @@ TERMINFO_VERS = 5.7_20091114-14
 TERMINFO_RPMREL = 0.20100726.0%{?dist}
 include ../terminfo.am
 
-ZLIB_VERS = 1.2.3-10
-ZLIB_RPMREL = 0.20100319.0%{?dist}
+ZLIB_VERS = 1.2.5-1
+ZLIB_RPMREL = 0.20101216.0%{?dist}
 include ../zlib.am
 
 GMP_VERS = 4.3.1-3
