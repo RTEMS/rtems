@@ -208,7 +208,6 @@ posix1003.1/Makefile
 filesystem/Makefile
 itron3.0/Makefile
 ada_user/Makefile
-started_ada/Makefile
 relnotes/Makefile
 new_chapters/Makefile
 cpu_supplement/Makefile
