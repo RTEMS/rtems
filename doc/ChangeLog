@@ -1,3 +1,12 @@
+2010-12-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* develenv/direct.t: Remove Getting Started with GNAT/RTEMS.
+	* started_ada/.cvsignore, started_ada/Makefile.am,
+	started_ada/buildada.t, started_ada/gdb.t, started_ada/intro.t,
+	started_ada/require.t, started_ada/sample.t, started_ada/stamp-vti,
+	started_ada/started_ada.texi, started_ada/tversions.texi,
+	started_ada/version.texi: Removed.
+
 2010-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, common/cpright.texi, common/rtems.texi.in,
