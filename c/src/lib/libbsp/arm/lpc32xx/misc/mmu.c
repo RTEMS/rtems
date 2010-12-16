@@ -23,8 +23,8 @@
 #include <bsp/mmu.h>
 
 void lpc32xx_set_translation_table_entries(
-  void *begin,
-  void *end,
+  const void *begin,
+  const void *end,
   uint32_t section_flags
 )
 {

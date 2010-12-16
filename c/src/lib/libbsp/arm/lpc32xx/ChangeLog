@@ -1,3 +1,10 @@
+2010-12-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac, include/bspopts.h.in: More options.
+	* include/lpc32xx.h: Added watchdog definitions.
+	* include/mmu.h, misc/mmu.c: Added const qualifier.
+	* startup/bspreset.c: Use watchdog reset.
+
 2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/linkcmds.lpc32xx_mzx, startup/linkcmds.lpc32xx_mzx_stage_1,

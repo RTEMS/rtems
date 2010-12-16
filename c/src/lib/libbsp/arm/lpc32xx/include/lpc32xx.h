@@ -221,6 +221,17 @@
 
 /** @} */
 
+/**
+ * @name Timer Clock Control Register (TIMCLK_CTRL)
+ *
+ * @{
+ */
+
+#define TIMCLK_CTRL_WDT BSP_BIT32(0)
+#define TIMCLK_CTRL_HST BSP_BIT32(1)
+
+/** @} */
+
 #define LPC32XX_RESERVED(a, b, s) (((b) - (a) - sizeof(s)) / 4)
 
 typedef struct {
@@ -259,8 +270,76 @@ typedef struct {
 typedef struct {
 } lpc32xx_hs_timer;
 
+/**
+ * @name Watchdog Timer Interrupt Status Register (WDTIM_INT)
+ *
+ * @{
+ */
+
+#define WDTTIM_INT_MATCH_INT BSP_BIT32(0)
+
+/** @} */
+
+/**
+ * @name Watchdog Timer Control Register (WDTIM_CTRL)
+ *
+ * @{
+ */
+
+#define WDTTIM_CTRL_COUNT_ENAB BSP_BIT32(0)
+#define WDTTIM_CTRL_RESET_COUNT BSP_BIT32(1)
+#define WDTTIM_CTRL_PAUSE_EN BSP_BIT32(2)
+
+/** @} */
+
+/**
+ * @name Watchdog Timer Match Control Register (WDTIM_MCTRL)
+ *
+ * @{
+ */
+
+#define WDTTIM_MCTRL_MR0_INT BSP_BIT32(0)
+#define WDTTIM_MCTRL_RESET_COUNT0 BSP_BIT32(1)
+#define WDTTIM_MCTRL_STOP_COUNT0 BSP_BIT32(2)
+#define WDTTIM_MCTRL_M_RES1 BSP_BIT32(3)
+#define WDTTIM_MCTRL_M_RES2 BSP_BIT32(4)
+#define WDTTIM_MCTRL_RESFRC1 BSP_BIT32(5)
+#define WDTTIM_MCTRL_RESFRC2 BSP_BIT32(6)
+
+/** @} */
+
+/**
+ * @name Watchdog Timer External Match Control Register (WDTIM_EMR)
+ *
+ * @{
+ */
+
+#define WDTTIM_EMR_EXT_MATCH0 BSP_BIT32(0)
+#define WDTTIM_EMR_MATCH_CTRL(val) BSP_FLD32(val, 4, 5)
+#define WDTTIM_EMR_MATCH_CTRL_SET(reg, val) BSP_FLD32SET(reg, val, 4, 5)
+
+/** @} */
+
+/**
+ * @name Watchdog Timer Reset Source Register (WDTIM_RES)
+ *
+ * @{
+ */
+
+#define WDTTIM_RES_WDT BSP_BIT32(0)
+
+/** @} */
+
 typedef struct {
-} lpc32xx_wdg_timer;
+  uint32_t intr;
+  uint32_t ctrl;
+  uint32_t counter;
+  uint32_t mctrl;
+  uint32_t match0;
+  uint32_t emr;
+  uint32_t pulse;
+  uint32_t res;
+} lpc32xx_wdt;
 
 typedef struct {
 } lpc32xx_debug;
@@ -545,8 +624,8 @@ typedef struct {
   uint32_t reserved_26 [LPC32XX_RESERVED(0x40034000, 0x40038000, lpc32xx_ms_timer)];
   lpc32xx_hs_timer hs_timer;
   uint32_t reserved_27 [LPC32XX_RESERVED(0x40038000, 0x4003c000, lpc32xx_hs_timer)];
-  lpc32xx_wdg_timer wdg_timer;
-  uint32_t reserved_28 [LPC32XX_RESERVED(0x4003c000, 0x40040000, lpc32xx_wdg_timer)];
+  lpc32xx_wdt wdt;
+  uint32_t reserved_28 [LPC32XX_RESERVED(0x4003c000, 0x40040000, lpc32xx_wdt)];
   lpc32xx_debug debug;
   uint32_t reserved_29 [LPC32XX_RESERVED(0x40040000, 0x40044000, lpc32xx_debug)];
   lpc_timer timer_0;

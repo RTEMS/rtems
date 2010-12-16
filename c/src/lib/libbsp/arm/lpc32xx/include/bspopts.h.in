@@ -45,6 +45,9 @@
 /* disable cache for read-write data sections */
 #undef LPC32XX_DISABLE_READ_WRITE_DATA_CACHE
 
+/* bsp_reset() will use the watchdog to reset the chip */
+#undef LPC32XX_ENABLE_WATCHDOG_RESET
+
 /* enable RMII for Ethernet */
 #undef LPC32XX_ETHERNET_RMII
 
@@ -95,3 +98,6 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* tests use printk() for output */
+#undef TESTS_USE_PRINTK
