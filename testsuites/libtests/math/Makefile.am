@@ -34,7 +34,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-math_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel) -lm
+math_LDADD = -lm
 
 LINK_OBJS = $(math_OBJECTS) $(math_LDADD)
 LINK_LIBS = $(math_LDLIBS)
