@@ -1,3 +1,11 @@
+2010-12-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/src/watchdognanoseconds.c: New file.
+	* score/Makefile.am: Reflect change above.
+	* score/include/rtems/score/watchdog.h, score/src/coretodget.c,
+	score/src/coretodgetuptime.c: Do not allow NULL as nanoseconds since
+	last tick handler pointer.
+
 2010-12-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/loop.h, libnetworking/net/if_loop.c,

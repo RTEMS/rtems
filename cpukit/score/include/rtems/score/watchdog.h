@@ -170,8 +170,8 @@ SCORE_EXTERN volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
  *  This is a pointer to the optional BSP plugin to obtain the number
  *  of nanoseconds since the last clock tick.
  */
-SCORE_EXTERN Watchdog_Nanoseconds_since_last_tick_routine
-    _Watchdog_Nanoseconds_since_tick_handler;
+extern Watchdog_Nanoseconds_since_last_tick_routine
+  _Watchdog_Nanoseconds_since_tick_handler;
 
 /** @brief Per Ticks Watchdog List
  *
@@ -301,6 +301,13 @@ void _Watchdog_Report_chain(
   const char        *name,
   Chain_Control     *header
 );
+
+/**
+ * @brief Default nanoseconds since last tick handler.
+ *
+ * @retval 0 Always.
+ */
+uint32_t _Watchdog_Nanoseconds_since_tick_default_handler( void );
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/watchdog.inl>

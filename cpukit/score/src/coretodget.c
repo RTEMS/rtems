@@ -45,11 +45,9 @@ void _TOD_Get(
   /* assume time checked for NULL by caller */
 
   /* _TOD_Now is the native current time */
-  nanoseconds = 0;
   _ISR_Disable( level );
     now = _TOD_Now;
-    if ( _Watchdog_Nanoseconds_since_tick_handler )
-      nanoseconds = (*_Watchdog_Nanoseconds_since_tick_handler)();
+    nanoseconds = (*_Watchdog_Nanoseconds_since_tick_handler)();
   _ISR_Enable( level );
 
   _Timestamp_Set( &offset, 0, nanoseconds );
