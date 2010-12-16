@@ -20,6 +20,8 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <stdbool.h>
+
 #include <bspopts.h>
 #include <bsp/bootcard.h>
 #include <bsp/lpc32xx.h>
