@@ -47,6 +47,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/lpc-ethernet-config.h>
+#include <bsp/utility.h>
 
 #include <rtems/status-checks.h>
 
@@ -59,6 +60,9 @@
 #else
   #define LPC_ETH_CONFIG_TX_BUF_SIZE 1518U
 #endif
+
+#define DEFAULT_PHY 0
+#define WATCHDOG_TIMEOUT 5
 
 typedef struct {
   uint32_t start;
@@ -216,6 +220,35 @@ static volatile lpc_eth_controller *const lpc_eth =
 #define ETH_STAT_RX_ACTIVE 0x00000001U
 #define ETH_STAT_TX_ACTIVE 0x00000002U
 
+/* ETH_MAC2 */
+
+#define ETH_MAC2_FULL_DUPLEX BSP_BIT32(8)
+
+/* ETH_SUPP */
+
+#define ETH_SUPP_SPEED BSP_BIT32(8)
+
+/* ETH_MCFG */
+
+#define ETH_MCFG_CLOCK_SELECT(val) BSP_FLD32(val, 2, 4)
+
+/* ETH_MCMD */
+
+#define ETH_MCMD_READ BSP_BIT32(0)
+#define ETH_MCMD_SCAN BSP_BIT32(1)
+
+/* ETH_MADR */
+
+#define ETH_MADR_REG(val) BSP_FLD32(val, 0, 4)
+#define ETH_MADR_PHY(val) BSP_FLD32(val, 8, 12)
+
+/* ETH_MIND */
+
+#define ETH_MIND_BUSY BSP_BIT32(0)
+#define ETH_MIND_SCANNING BSP_BIT32(1)
+#define ETH_MIND_NOT_VALID BSP_BIT32(2)
+#define ETH_MIND_MII_LINK_FAIL BSP_BIT32(3)
+
 /* Events */
 
 #define LPC_ETH_EVENT_INITIALIZE RTEMS_EVENT_1
@@ -266,8 +299,9 @@ typedef enum {
 
 typedef struct {
   struct arpcom arpcom;
-  struct rtems_mdio_info mdio_info;
   lpc_eth_state state;
+  struct rtems_mdio_info mdio;
+  uint32_t anlpar;
   rtems_id receive_task;
   rtems_id transmit_task;
   unsigned rx_unit_count;
@@ -1041,6 +1075,80 @@ cleanup:
   (void) rtems_task_delete(RTEMS_SELF);
 }
 
+static void lpc_eth_mdio_wait_for_not_busy(void)
+{
+  while ((lpc_eth->mind & ETH_MIND_BUSY) != 0) {
+    rtems_task_wake_after(2);
+  }
+}
+
+static uint32_t lpc_eth_mdio_read_anlpar(void)
+{
+  uint32_t madr = ETH_MADR_REG(MII_ANLPAR) | ETH_MADR_PHY(DEFAULT_PHY);
+  uint32_t anlpar = 0;
+
+  if (lpc_eth->madr != madr) {
+    lpc_eth->madr = madr;
+  }
+
+  if (lpc_eth->mcmd != ETH_MCMD_READ) {
+    lpc_eth->mcmd = 0;
+    lpc_eth->mcmd = ETH_MCMD_READ;
+  }
+
+  lpc_eth_mdio_wait_for_not_busy();
+
+  anlpar = lpc_eth->mrdd;
+
+  /* Start next read */
+  lpc_eth->mcmd = 0;
+  lpc_eth->mcmd = ETH_MCMD_READ;
+
+  return anlpar;
+}
+
+static int lpc_eth_mdio_read(
+  int phy __attribute__((unused)),
+  void *arg __attribute__((unused)),
+  unsigned reg,
+  uint32_t *val
+)
+{
+  int eno = 0;
+
+  if (phy == -1 || phy == 0) {
+    lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(DEFAULT_PHY);
+    lpc_eth->mcmd = 0;
+    lpc_eth->mcmd = ETH_MCMD_READ;
+    lpc_eth_mdio_wait_for_not_busy();
+    *val = lpc_eth->mrdd;
+  } else {
+    eno = EINVAL;
+  }
+
+  return eno;
+}
+
+static int lpc_eth_mdio_write(
+  int phy __attribute__((unused)),
+  void *arg __attribute__((unused)),
+  unsigned reg,
+  uint32_t val
+)
+{
+  int eno = 0;
+
+  if (phy == -1 || phy == 0) {
+    lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(DEFAULT_PHY);
+    lpc_eth->mwtd = val;
+    lpc_eth_mdio_wait_for_not_busy();
+  } else {
+    eno = EINVAL;
+  }
+
+  return eno;
+}
+
 static void lpc_eth_interface_init(void *arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -1060,6 +1168,7 @@ static void lpc_eth_interface_init(void *arg)
     lpc_eth->mac1 = 0x0;
 
     /* Initialize PHY */
+    lpc_eth->mcfg = ETH_MCFG_CLOCK_SELECT(0x7);
     /* TODO */
 
     /* Reinitialize registers */
@@ -1068,7 +1177,7 @@ static void lpc_eth_interface_init(void *arg)
     lpc_eth->ipgr = 0x12;
     lpc_eth->clrt = 0x370f;
     lpc_eth->maxf = 0x0600;
-    lpc_eth->supp = 0x0100;
+    lpc_eth->supp = ETH_SUPP_SPEED;
     lpc_eth->test = 0;
     #ifdef LPC_ETH_CONFIG_RMII
       lpc_eth->command = 0x0600;
@@ -1140,9 +1249,17 @@ static void lpc_eth_interface_init(void *arg)
   }
 }
 
-static void lpc_eth_interface_stats(const lpc_eth_driver_entry *e)
+static void lpc_eth_interface_stats(lpc_eth_driver_entry *e)
 {
+  int media = IFM_MAKEWORD(0, 0, 0, 0);
+  int eno = rtems_mii_ioctl(&e->mdio, e, SIOCGIFMEDIA, &media);
+
   rtems_bsdnet_semaphore_release();
+
+  if (eno == 0) {
+    rtems_ifmedia2str(media, NULL, 0);
+    printf("\n");
+  }
 
   printf("received frames:                     %u\n", e->received_frames);
   printf("receive interrupts:                  %u\n", e->receive_interrupts);
@@ -1181,7 +1298,7 @@ static int lpc_eth_interface_ioctl(
   switch (command)  {
     case SIOCGIFMEDIA:
     case SIOCSIFMEDIA:
-      rtems_mii_ioctl(&e->mdio_info, e, (int) command, (int *) data);
+      rtems_mii_ioctl(&e->mdio, e, command, (int *) data);
       break;
     case SIOCGIFADDR:
     case SIOCSIFADDR:
@@ -1220,7 +1337,40 @@ static void lpc_eth_interface_start(struct ifnet *ifp)
 
 static void lpc_eth_interface_watchdog(struct ifnet *ifp __attribute__((unused)))
 {
-  LPC_ETH_PRINTF("%s\n", __func__);
+  lpc_eth_driver_entry *e = (lpc_eth_driver_entry *) ifp->if_softc;
+  uint32_t anlpar = lpc_eth_mdio_read_anlpar();
+
+  if (e->anlpar != anlpar) {
+    bool full_duplex = false;
+    bool speed = false;
+
+    e->anlpar = anlpar;
+
+    if ((anlpar & ANLPAR_TX_FD) != 0) {
+      full_duplex = true;
+      speed = true;
+    } else if ((anlpar & ANLPAR_T4) != 0) {
+      speed = true;
+    } else if ((anlpar & ANLPAR_TX) != 0) {
+      speed = true;
+    } else if ((anlpar & ANLPAR_10_FD) != 0) {
+      full_duplex = true;
+    }
+
+    if (full_duplex) {
+      lpc_eth->mac2 |= ETH_MAC2_FULL_DUPLEX;
+    } else {
+      lpc_eth->mac2 &= ~ETH_MAC2_FULL_DUPLEX;
+    }
+
+    if (speed) {
+      lpc_eth->supp |= ETH_SUPP_SPEED;
+    } else {
+      lpc_eth->supp &= ~ETH_SUPP_SPEED;
+    }
+  }
+
+  ifp->if_timer = WATCHDOG_TIMEOUT;
 }
 
 static unsigned lpc_eth_fixup_unit_count(int count, int default_value, int max)
@@ -1260,6 +1410,12 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
   if (e->state != LPC_ETH_NOT_INITIALIZED) {
     RTEMS_DO_CLEANUP(cleanup, "already attached");
   }
+
+  /* MDIO */
+  e->mdio.mdio_r = lpc_eth_mdio_read;
+  e->mdio.mdio_w = lpc_eth_mdio_write;
+  e->mdio.has_gmii = 0;
+  e->anlpar = 0;
 
   /* Interrupt number */
   config->irno = LPC_ETH_CONFIG_INTERRUPT;

@@ -30,9 +30,10 @@ extern "C" {
 #endif
 
 /**
- * @defgroup lpc_dma I2S Support
+ * @defgroup lpc_i2s I2S Support
  *
- * @ingroup lpc
+ * @ingroup lpc24xx
+ * @ingroup lpc32xx
  *
  * @brief I2S support.
  *
@@ -117,8 +118,8 @@ typedef struct {
  */
 
 #define LPC24XX_I2S_RATE(val) BSP_FLD32(val, 0, 9)
-#define LPC32XX_I2S_RATE_X_DIVIDER BSP_FLD32(val, 0, 7)
-#define LPC32XX_I2S_RATE_Y_DIVIDER BSP_FLD32(val, 8, 15)
+#define LPC32XX_I2S_RATE_X_DIVIDER(val) BSP_FLD32(val, 0, 7)
+#define LPC32XX_I2S_RATE_Y_DIVIDER(val) BSP_FLD32(val, 8, 15)
 
 /** @} */
 

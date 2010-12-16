@@ -1,3 +1,9 @@
+2010-12-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/lpc/include/lpc-i2s.h: Documentation.  Fixed defines.
+	* shared/lpc/include/lpc-timer.h: Documentation.
+	* shared/lpc/network/lpc-ethernet.c: Added support for 10MBit/s links.
+
 2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/startup/linkcmds.base: Split up fast region.
