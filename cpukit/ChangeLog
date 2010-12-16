@@ -1,5 +1,10 @@
 2010-12-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libmisc/cpuuse/cpuusagereport.c: We have to take the time since the
+	last context switch before the uptime.
+
+2010-12-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* score/src/watchdognanoseconds.c: New file.
 	* score/Makefile.am: Reflect change above.
 	* score/include/rtems/score/watchdog.h, score/src/coretodget.c,
