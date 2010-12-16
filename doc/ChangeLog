@@ -1,5 +1,15 @@
 2010-12-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* Makefile.am, configure.ac, common/cpright.texi, common/rtems.texi.in,
+	cpu_supplement/.cvsignore, started/Makefile.am, started/binaries.t,
+	started/buildc.t, started/buildrt.t, started/intro.t,
+	started/nextstep.t, started/nt.t, started/require.t,
+	started/sample.t, started/started.texi: Major update which includes
+	removal of references to specific tool versions and patches.
+	* started/tversions.texi.in: Removed.
+
+2010-12-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* Makefile.am, configure.ac, develenv/direct.t: Remove Getting Started
 	with GNAT/RTEMS.
 	* started_ada/.cvsignore, started_ada/Makefile.am,

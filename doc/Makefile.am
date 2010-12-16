@@ -8,7 +8,7 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 #       + tools, common and images are shared across many documents
 
 SUBDIRS = tools started user bsp_howto porting develenv posix_users \
-    posix1003.1 filesystem itron3.0 networking ada_user \
+    posix1003.1 filesystem networking ada_user \
     new_chapters relnotes cpu_supplement shell
 
 if USE_HTML
@@ -20,7 +20,9 @@ EXTRA_DIST = HELP.html rtems_header.html.in rtems_footer.html.in
 EXTRA_DIST += common/cpright.texi common/setup.texi \
     common/treedef.tex common/rtems.texi.in
 
+if USE_HTML
 html_imagesdir = $(htmldir)/images
+endif
 
 HTML_IMAGES = images/dir-arrow.gif images/dvi.gif images/missing-arrow.gif \
     images/next-arrow.gif images/oaronly.jpg images/pdf.gif images/pdf1.gif \

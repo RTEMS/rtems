@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2010.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -18,7 +18,7 @@ essentials for performing a setup of the following items:
 @itemize @bullet
 @item GNU Cross Compilation Tools for RTEMS on your build-host system
 @item RTEMS OS for the target
-@item GDB Debugger
+@item GNU Debugger (GDB)
 @end itemize
 
 The remainder of this chapter provides background information on real-time
@@ -159,31 +159,17 @@ http://www.gnu.org/manual/manual.html}
 
 @uref{mailto:@value{RTEMSUSERS},@value{RTEMSUSERS}}
 
-This mailing list is dedicated to the discussion of issues related
-to RTEMS, including GNAT/RTEMS.  If you have questions about RTEMS,
-wish to make suggestions, or just want to pick up hints, this is a 
-good list to monitor.  Subscribe by sending an empty mail message to 
-@uref{mailto:@value{RTEMSUSERSSUBSCRIBE},@value{RTEMSUSERSSUBSCRIBE}}. 
-Messages sent to @uref{mailto:@value{RTEMSUSERS},@value{RTEMSUSERS}}
-are posted to the list.
-
-@subsection CrossGCC Mailing List
-
-@uref{mailto:crossgcc@@sources.redhat.com,crossgcc@@sources.redhat.com}
-
-This mailing list is dedicated to the use of the GNU tools in
-cross development environments.  Most of the discussions
-focus on embedded issues.  Information on subscribing
-to this mailing list is included in the 
-@uref{http://www.objsw.com/CrossGCC/,CrossGCC FAQ}.
-
-The CrossGCC FAQ and Wiki are are available
-at @uref{http://www.billgatliff.com,http://www.billgatliff.com}.
+This is the primary  mailing list for the discussion of issues
+related to RTEMS, including GNAT/RTEMS.  If you have questions
+about RTEMS, wish to make suggestions, track development efforts,
+or just want to pick up hints, this is a good list to monitor.
+If you would like to browse the thousands of messages in the fifteen
+year archive of the mailing list or subscribe to it, please visit
+@uref{http://www.rtems.org/mailman,http://www.rtems.org/mailman} for
+more information,
 
 @subsection GCC Mailing Lists
-
 
 The GCC Project is hosted at @uref{http://gcc.gnu.org,http://gcc.gnu.org}.
 They maintain multiple mailing lists that are described at the web site
 along with subscription information.
-
