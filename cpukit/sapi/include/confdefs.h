@@ -63,12 +63,17 @@ extern rtems_configuration_table        Configuration;
  *  This macro determines whether the RTEMS reentrancy support for
  *  the Newlib C Library is enabled.
  */
+#ifdef RTEMS_SCHEDSIM
+  #undef RTEMS_NEWLIB
+#endif
+
 #if (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
   #define CONFIGURE_NEWLIB_EXTENSION 1
 #else
   #define CONFIGURE_NEWLIB_EXTENSION 0
 #endif
 
+#ifndef RTEMS_SCHEDSIM
 #include <rtems/libio.h>
 
 #ifdef CONFIGURE_INIT
@@ -93,7 +98,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     rtems_filesystem_initialize;
     #endif
 #endif
-
+#endif
 
 /*
  *  If the application disables the filesystem, they will not need
@@ -262,6 +267,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #endif
 
+#ifndef RTEMS_SCHEDSIM
 /**
  * IMFS
  */
@@ -286,6 +292,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_FILESYSTEM_ENTRY_miniIMFS \
     { RTEMS_FILESYSTEM_TYPE_MINIIMFS, miniIMFS_initialize }
 #endif
+#endif
 
 /**
  *  Internall it is called FIFOs not pipes
@@ -294,6 +301,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_FIFOS_ENABLED
 #endif
 
+#ifndef RTEMS_SCHEDSIM
 /**
  *  This defines the IMFS file system table entry.
  */ 
@@ -306,6 +314,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #define CONFIGURE_FILESYSTEM_ENTRY_IMFS \
       { RTEMS_FILESYSTEM_TYPE_IMFS, IMFS_initialize }
   #endif
+#endif
 #endif
 
 /**
@@ -412,16 +421,19 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #endif
 
+#ifndef RTEMS_SCHEDSIM
   #if defined(CONFIGURE_FILESYSTEM_IMFS) || \
       defined(CONFIGURE_FILESYSTEM_MINIIMFS)
     int imfs_rq_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
   #endif
+#endif
 
   /**
    * Table termination record.
    */
   #define CONFIGURE_FILESYSTEM_NULL { NULL, NULL }
 
+#ifndef RTEMS_SCHEDSIM
   /**
    * The default file system table. Must be terminated with the NULL entry if
    * you provide your own.
@@ -483,6 +495,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     const int rtems_filesystem_mount_table_size = 1;
   #endif
 
+#endif
 #endif
 
 /*
@@ -1683,6 +1696,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_GOROUTINES_TASK_VARIABLES   0
   #define CONFIGURE_MAXIMUM_GO_CHANNELS         0
 #endif
+
+#ifndef RTEMS_SCHEDSIM
 /**
  *  This macro specifies the amount of memory to be reserved for the
  *  Newlib C Library reentrancy structure -- if we are using newlib.
@@ -1696,6 +1711,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #else
   #define CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB 0
 #endif
+
+#else
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB 0
+#endif
+
 
 /*
  *  Calculate the RAM size based on the maximum number of objects configured.
@@ -2191,6 +2211,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
+#ifndef RTEMS_SCHEDSIM
 /*
  *  Make sure at least one of the initialization task/thread
  *  tables was defined.
@@ -2199,6 +2220,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     !defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) && \
     !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION)
 #error "CONFIGURATION ERROR: No initialization tasks or threads configured!!"
+#endif
 #endif
 
 /*
@@ -2232,6 +2254,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
+#ifndef RTEMS_SCHEDSIM
 /*
  *  You must either explicity include or exclude the clock driver.
  *  It is such a common newbie error to leave it out.  Maybe this
@@ -2248,6 +2271,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       !defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER)
     #error "CONFIGURATION ERROR: Do you want the clock driver or not?!?"
    #endif
+#endif
 #endif
 
 /*

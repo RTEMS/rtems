@@ -1,3 +1,12 @@
+2010-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+		Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	Add RTEMS Scheduler Simulator.
+	* sapi/include/confdefs.h: This adds some simple conditional
+	logic to disable portions of the configuration that are NOT supported
+	when configuring an RTEMS instance for use with a Scheduler Simulator
+	instance. 
+
 2010-12-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libmisc/cpuuse/cpuusagereport.c: We have to take the time since the
