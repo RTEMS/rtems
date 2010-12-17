@@ -40,6 +40,7 @@ AC_ARG_ENABLE([docs],
 
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/build])
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/cpu])
+RTEMS_BUILD_CONFIG_SUBDIRS([tools/schedsim])
 
 case $enable_tests in
 yes | samples )
