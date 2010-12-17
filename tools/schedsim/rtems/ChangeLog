@@ -1,0 +1,12 @@
+2010-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+		Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	Add RTEMS Scheduler Simulator.  This is the RTEMS "port" to and
+	adapter code to run on GNU/Linux with a fake context switch.
+	* ChangeLog, Makefile.am, interr.c, rtems_init.c, rtems_sched.h,
+	wkspace.c, sched_cpu/cpu.c, sched_cpu/cpu_asm.c,
+	sched_cpu/rtems/asm.h, sched_cpu/rtems/stringto.h,
+	sched_cpu/rtems/score/cpu.h, sched_cpu/rtems/score/cpu_asm.h,
+	sched_cpu/rtems/score/cpuopts.h, sched_cpu/rtems/score/no_cpu.h,
+	sched_cpu/rtems/score/types.h: New files.
+
