@@ -1,4 +1,8 @@
 2010-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* .cvsignore: New file.
+
+2010-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 		Jennifer Averett <jennifer.averett@oarcorp.com>
 
 	Add RTEMS Scheduler Simulator.  This is the RTEMS "port" to and
