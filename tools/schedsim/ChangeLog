@@ -1,0 +1,6 @@
+2010-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+		Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	Add RTEMS Scheduler Simulator.  This is the top level of the tree.
+	* .cvsignore, ChangeLog, Makefile.am, configure.ac: New files.
+
