@@ -1,3 +1,14 @@
+2010-12-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac: Added I2C options.  Fixed eMIOS prescaler.  Use
+	standard linker command file support.
+	* include/bsp.h: Declare I2C initialization function.
+	* i2c/i2c_init.c: Implementation.
+	* make/custom/gwlcfm.cfg, make/custom/mpc5566evb.cfg,
+	make/custom/mpc55xx.inc: Use standard linker command file support.
+	* startup/bspstart.c: More board specific settings.
+	* Makefile.am, preinstall.am: Reflect changes above.
+
 2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* test/tests.c: Removed file.

@@ -18,8 +18,8 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef LIBBSP_POWERPC_BSP_H
-#define LIBBSP_POWERPC_BSP_H
+#ifndef LIBBSP_POWERPC_MPC55XXEVB_BSP_H
+#define LIBBSP_POWERPC_MPC55XXEVB_BSP_H
 
 #include <stdint.h>
 
@@ -64,10 +64,12 @@ int smsc9218i_attach_detach(
 
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "eth0"
 
+rtems_status_code bsp_register_i2c(void);
+
 #endif /* ASM */
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* LIBBSP_POWERPC_BSP_H */
+#endif /* LIBBSP_POWERPC_MPC55XXEVB_BSP_H */

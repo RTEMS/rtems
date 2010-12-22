@@ -23,6 +23,7 @@ libbspstart_a_SOURCES += ../shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 # Link commands
+project_lib_DATA += startup/linkcmds
 dist_project_lib_DATA += startup/linkcmds.gwlcfm  startup/linkcmds.mpc5566evb \
 	startup/linkcmds.base	
 
@@ -37,6 +38,7 @@ nodist_include_HEADERS = include/bspopts.h ../../shared/tod.h \
     ../../shared/include/coverhd.h
 include_bsp_HEADERS = include/mpc55xxevb.h \
     include/smsc9218i.h \
+    ../../../libcpu/powerpc/mpc83xx/i2c/mpc83xx_i2cdrv.h \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h \
     ../../shared/include/utility.h \
@@ -60,8 +62,9 @@ libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
 # Misc
 libbsp_a_SOURCES += startup/sd-card-init.c
 
-# bsp_i2c
-libbsp_a_SOURCES += i2c/i2c_init.c
+# I2C
+libbsp_a_SOURCES += i2c/i2c_init.c \
+    ../../../libcpu/powerpc/mpc83xx/i2c/mpc83xx_i2cdrv.c
 
 # Network
 if HAS_NETWORKING
