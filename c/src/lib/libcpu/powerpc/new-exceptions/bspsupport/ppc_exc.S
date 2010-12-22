@@ -74,6 +74,12 @@ ppc_exc_tgpr_clr_prolog_size = . - ppc_exc_tgpr_clr_prolog
 /**
  * @brief Use vector offsets with 16 byte boundaries.
  *
+ * This prologue is intended for cores with IVPR/IVOR registers.  The e200z1
+ * core has hard wired values for the IVOR, thus all values are calculated to
+ * match its constraints.  The link register will point to the next prologue.
+ * This is all right for the vector number calculation due the IVOR offset
+ * values.
+ *
  * @see ppc_exc_min_prolog_auto();
  */
 	.global ppc_exc_min_prolog_auto_packed

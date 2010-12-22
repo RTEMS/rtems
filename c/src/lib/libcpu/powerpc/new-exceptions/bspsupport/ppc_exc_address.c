@@ -70,7 +70,7 @@ void *ppc_exc_vector_address(unsigned vector)
      * XXX: this directly matches the vector offsets in a e200z1, 
      * which has hardwired IVORs (IVOR0=0,IVOR1=0x10,IVOR2=0x20...) 
      */
-    vector_offset >>= 4;
+    vector_offset = (vector - 1) << 4;
   }
 
   if (bsp_exceptions_in_RAM) {

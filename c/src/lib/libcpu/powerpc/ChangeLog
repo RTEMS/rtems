@@ -1,3 +1,9 @@
+2010-12-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* new-exceptions/bspsupport/ppc_exc.S: Comment.
+	* new-exceptions/bspsupport/ppc_exc_address.c: Fixed address
+	calculation for e200z1 core.
+
 2010-11-30	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* mpc55xx/edma/edma.c: Use rtems_chain_first() and do not directly
