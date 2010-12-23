@@ -1,3 +1,8 @@
+2010-12-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* mpc83xx/i2c/mpc83xx_i2cdrv.c: Fixed interrupt flag clearing for
+	MPC55XX family.
+
 2010-12-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* new-exceptions/bspsupport/ppc_exc.S: Comment.
@@ -14,7 +19,7 @@
 	* mpc55xx/include/irq.h: Include missing <bspopts.h>.  Format.
 	* mpc83xx/include/mpc83xx.h, mpc83xx/i2c/mpc83xx_i2cdrv.h,
 	mpc83xx/i2c/mpc83xx_i2cdrv.c: Changes to use this driver for the
-	MPC55XX familiy.
+	MPC55XX family.
 
 2010-08-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
 

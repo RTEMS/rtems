@@ -203,7 +203,11 @@ static void mpc83xx_i2c_irq_handler
   /*
    * clear IRQ flag
    */
-  softc_ptr->reg_ptr->i2csr &= ~I2CSR_MIF;
+  #if defined(__GEN83xx_BSP_h)
+    softc_ptr->reg_ptr->i2csr &= ~I2CSR_MIF;
+  #elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
+    softc_ptr->reg_ptr->i2csr = I2CSR_MIF;
+  #endif
 
   /*
    * disable interrupt mask
