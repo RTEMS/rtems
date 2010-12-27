@@ -112,6 +112,7 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 #define MSDOS_FIRST_CLUSTER_LOW_OFFSET    26
 #define MSDOS_FILE_WDATE_OFFSET           24
 #define MSDOS_FILE_WTIME_OFFSET           22
+#define MSDOS_FILE_ADATE_OFFSET           18
 
 /*
  * Possible values of DIR_Attr field of 32 bytes long FAT Directory Entry

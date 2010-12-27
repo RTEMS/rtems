@@ -718,7 +718,7 @@ msdos_set_dir_wrt_time_and_date(
     fat_file_fd_t                        *fat_fd
     )
 {
-    ssize_t          ret1 = 0, ret2 = 0;
+    ssize_t          ret1 = 0, ret2 = 0, ret3 = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
     uint16_t         time_val;
     uint16_t         date;
@@ -742,8 +742,10 @@ msdos_set_dir_wrt_time_and_date(
     date = CT_LE_W(date);
     ret2 = _fat_block_write(mt_entry, sec, byte + MSDOS_FILE_WDATE_OFFSET,
                             2, (char *)(&date));
+    ret3 = _fat_block_write(mt_entry, sec, byte + MSDOS_FILE_ADATE_OFFSET,
+                            2, (char *)(&date));
 
-    if ( (ret1 < 0) || (ret2 < 0) )
+    if ( (ret1 < 0) || (ret2 < 0) || (ret3 < 0) )
         return -1;
 
     return RC_OK;

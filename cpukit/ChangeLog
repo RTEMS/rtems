@@ -1,3 +1,9 @@
+2010-12-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_misc.c,
+	libfs/src/dosfs/msdos_create.c: Create valid create and modfied date
+	and time.
+
 2010-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 		Jennifer Averett <jennifer.averett@oarcorp.com>
 

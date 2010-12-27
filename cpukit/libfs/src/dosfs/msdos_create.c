@@ -96,8 +96,11 @@ msdos_creat_node(rtems_filesystem_location_info_t  *parent_loc,
         return -1;
 
     msdos_date_unix2dos(time_ret, &date, &time_val);
+    *MSDOS_DIR_CRT_TIME(short_node) = CT_LE_W(time_val);
+    *MSDOS_DIR_CRT_DATE(short_node) = CT_LE_W(date);
     *MSDOS_DIR_WRITE_TIME(short_node) = CT_LE_W(time_val);
     *MSDOS_DIR_WRITE_DATE(short_node) = CT_LE_W(date);
+    *MSDOS_DIR_LAST_ACCESS_DATE(short_node) = CT_LE_W(date);
 
     /* initialize directory/file size */
     *MSDOS_DIR_FILE_SIZE(short_node) = MSDOS_INIT_DIR_SIZE;
@@ -146,10 +149,6 @@ msdos_creat_node(rtems_filesystem_location_info_t  *parent_loc,
        * set "archive bit" due to changes
        */
       *MSDOS_DIR_ATTR(short_node) |= MSDOS_ATTR_ARCHIVE;
-      /*
-       * set "last access" date to today
-       */
-      *MSDOS_DIR_LAST_ACCESS_DATE(short_node) = CT_LE_W(date);
     }
     else { /* regular file... */
         *MSDOS_DIR_ATTR(short_node) |= MSDOS_ATTR_ARCHIVE;
