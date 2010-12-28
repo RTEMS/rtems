@@ -138,7 +138,7 @@ msdos_date_dos2unix(unsigned int dd, unsigned int dt)
 	uint32_t days;
 	uint16_t *months;
 
-	seconds = ((dt & MSDOS_DT_2SECONDS_MASK) >> MSDOS_DT_2SECONDS_SHIFT)
+	seconds = 2 * ((dt & MSDOS_DT_2SECONDS_MASK) >> MSDOS_DT_2SECONDS_SHIFT)
 	    + ((dt & MSDOS_DT_MINUTES_MASK) >> MSDOS_DT_MINUTES_SHIFT) * 60
 	    + ((dt & MSDOS_DT_HOURS_MASK) >> MSDOS_DT_HOURS_SHIFT) * 3600;
 	/*

@@ -2,6 +2,8 @@
 
 	* libfs/src/dosfs/msdos_misc.c: Create short file names acceptable for
 	Windows.
+	* libfs/src/dosfs/msdos_conv.c: Fixed convertion of half seconds to
+	seconds.
 
 2010-12-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
