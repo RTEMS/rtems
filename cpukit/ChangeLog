@@ -1,3 +1,8 @@
+2010-12-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/dosfs/msdos_misc.c: Create short file names acceptable for
+	Windows.
+
 2010-12-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_misc.c,

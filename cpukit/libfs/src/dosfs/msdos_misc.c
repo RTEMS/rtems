@@ -92,12 +92,13 @@ msdos_short_name_hex(char* sfn, int num)
     static const char* hex = "0123456789ABCDEF";
     char* c = MSDOS_DIR_NAME(sfn);
     int   i;
-    for (i = 0; i < 3; i++, c++)
+    for (i = 0; i < 2; i++, c++)
       if ((*c == ' ') || (*c == '.'))
-        *c = '~';
-    *c++ = '~';
+        *c = '_';
     for (i = 0; i < 4; i++, c++)
       *c = hex[(num >> ((3 - i) * 4)) & 0xf];
+    *c++ = '~';
+    *c++ = '1';
 }
 
 /* msdos_name_type --
@@ -1535,6 +1536,7 @@ int msdos_find_name_in_fat_file(
             char*       p;
             const char* n;
             int         i;
+            char        fill = 0;
 
             length += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE;
             lfn_entry++;
@@ -1600,9 +1602,17 @@ int msdos_find_name_in_fat_file(
 
             for (i = 0; i < MSDOS_LFN_LEN_PER_ENTRY; i++)
             {
-                *p = *n;
                 if (*n != 0)
+                {
+                    *p = *n;
                     n++;
+                }
+                else
+                {
+                    p [0] = fill;
+                    p [1] = fill;
+                    fill = 0xff;
+                }
 
                 switch (i)
                 {
