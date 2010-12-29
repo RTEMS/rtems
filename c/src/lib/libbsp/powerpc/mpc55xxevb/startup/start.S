@@ -28,7 +28,7 @@
 #include <mpc55xx/reg-defs.h>
 #include <bspopts.h>
 	
-.section ".entry", "ax"
+.section ".bsp_start_text", "ax"
 PUBLIC_VAR (start)
 .globl  fmpll_syncr_vals
 bam_rchw:
@@ -127,28 +127,10 @@ start:
 
 	/* Addresses */
 	LA r3, bsp_ram_start
-	LA r4, bsp_ram_end
-
-	/* Assert: Proper alignment of destination start */
-	andi. r6, r3, 0x3f
-	bne twiddle
-
-	/* Assert: Proper alignment of destination end */
-	andi. r6, r4, 0x3f
-	bne twiddle
-
-	/* Data size = destination end - destination start */
-	subf r4, r3, r4
-
-	/* Save time */
-	mftb r24
+	LA r4, bsp_ram_size
 
 	/* Zero */
-	bl SYM (mpc55xx_zero_32)
-
-	/* Save time and get time delta */
-	mftb r25
-	subf r24, r24, r25
+	bl SYM (bsp_start_zero)
 
 /*
  * Copy data

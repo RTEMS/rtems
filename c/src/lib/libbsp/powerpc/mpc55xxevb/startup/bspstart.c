@@ -646,14 +646,4 @@ void bsp_start(void)
 
 	/* Initialize eMIOS */
 	mpc55xx_emios_initialize( MPC55XX_EMIOS_PRESCALER);
-
-	/*
-	* Enable instruction and data caches. Do not force writethrough mode.
-	*/
-#if INSTRUCTION_CACHE_ENABLE
-	rtems_cache_enable_instruction();
-#endif
-#if DATA_CACHE_ENABLE
-	rtems_cache_enable_data();
-#endif
 }

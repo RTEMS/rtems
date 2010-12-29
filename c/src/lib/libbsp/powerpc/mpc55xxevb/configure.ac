@@ -23,21 +23,21 @@ RTEMS_PROG_CCAS
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
-RTEMS_BSPOPTS_SET([DATA_CACHE_ENABLE],[gwlcfm],[0])
+RTEMS_BSPOPTS_SET([DATA_CACHE_ENABLE],[gwlcfm],[])
 RTEMS_BSPOPTS_SET([DATA_CACHE_ENABLE],[mpc5566evb],[1])
 RTEMS_BSPOPTS_SET([DATA_CACHE_ENABLE],[*],[1])
 RTEMS_BSPOPTS_HELP([DATA_CACHE_ENABLE],
 [If defined, the data cache will be enabled after address translation
  is turned on.])
 
-RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[gwlcfm],[0])
+RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[gwlcfm],[])
 RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[mpc5566evb],[1])
 RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[*],[1])
 RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
 [If defined, the instruction cache will be enabled after address translation
  is turned on.])
 
-RTEMS_BSPOPTS_SET([UARTS_USE_TERMIOS],[*],[0])
+RTEMS_BSPOPTS_SET([UARTS_USE_TERMIOS],[*],[])
 RTEMS_BSPOPTS_HELP([UARTS_USE_TERMIOS],
 [Define to 1 if you want termios support for every port.
  Termios support is independent of the choice of UART I/O mode.])
@@ -49,7 +49,7 @@ RTEMS_BSPOPTS_HELP([CONSOLE_MINOR],
  device will be registered as /dev/console.])
 
 RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[gwlcfm],[1])
-RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[*]     ,[0])
+RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[*]     ,[])
 RTEMS_BSPOPTS_HELP([UARTS_IO_MODE],
 [Define to 1 if you want interrupt-driven I/O for the SCI ports.])
 

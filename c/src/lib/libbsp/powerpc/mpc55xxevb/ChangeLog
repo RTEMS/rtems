@@ -1,7 +1,11 @@
 2010-12-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* Makefile.am, preinstall.am, startup/start.S: Use standard zero
+	function.
 	* startup/linkcmds.base: Reserve enough space for the exception
-	minimum prologues.
+	minimum prologues.  Changed start section name.
+	* startup/bspstart.c: Removed superfluous cache initialization.
+	* configure.ac: Fixed option default values.
 
 2010-12-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 

@@ -19,7 +19,8 @@ SECTIONS
 		/*
 		 * BSP: System startup entry
 		 */
-		KEEP (*(.entry))
+		KEEP (*(.bsp_start_text))
+		KEEP (*(.bsp_start_data))
 
 		/*
 		 * BSP: Moved into .text from .init
@@ -98,7 +99,7 @@ SECTIONS
 		/*
 		 * BSP: Reserve space for exception handler
 		 */
-		. = . + 0x230;
+		. = . + 0x130;
 		. = ALIGN (bsp_section_align);
 	} > REGION_VECTORS
 		

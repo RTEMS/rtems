@@ -42,13 +42,15 @@ include_bsp_HEADERS = include/mpc55xxevb.h \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h \
     ../../shared/include/utility.h \
+    ../shared/include/start.h \
     ../shared/include/tictac.h
 
 # startup
 libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bootcard.c ../shared/src/tictac.c ../../shared/bspclean.c \
     ../shared/startup/bspidle.c startup/bspstart.c startup/bspgetworkarea.c \
-    ../../shared/bsppretaskinghook.c
+    ../../shared/bsppretaskinghook.c \
+    ../shared/src/bsp-start-zero.S
 
 # clock
 libbsp_a_SOURCES += clock/clock-config.c
