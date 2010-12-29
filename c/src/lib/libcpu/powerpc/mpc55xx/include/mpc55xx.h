@@ -46,12 +46,6 @@
 /* Defined in copy.S */
 int mpc55xx_copy_8( const void *src, void *dest, size_t n);
 
-/* Defined in copy.S */
-int mpc55xx_zero_8( void *dest, size_t n);
-
-/* Defined in copy.S */
-int mpc55xx_zero_32( void *dest, size_t n);
-
 /* Defined in fmpll.S */
 void mpc55xx_fmpll_reset_config();
 

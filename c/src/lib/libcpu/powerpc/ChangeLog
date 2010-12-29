@@ -13,6 +13,8 @@
 	e200 exception vector defines.  Added e500 exception vector defines.
 	Unified IVOR calculation for e200 and e500 (e200z1 has hard wired
 	IVOR values).
+	* mpc55xx/include/mpc55xx.h, mpc55xx/misc/copy.S: Removed zero
+	functions.
 
 2010-12-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
