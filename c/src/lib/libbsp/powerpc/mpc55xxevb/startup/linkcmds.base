@@ -98,7 +98,7 @@ SECTIONS
 		/*
 		 * BSP: Reserve space for exception handler
 		 */
-		. = . + 0x180;
+		. = . + 0x230;
 		. = ALIGN (bsp_section_align);
 	} > REGION_VECTORS
 		

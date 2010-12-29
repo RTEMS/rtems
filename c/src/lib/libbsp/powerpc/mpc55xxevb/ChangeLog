@@ -1,3 +1,8 @@
+2010-12-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/linkcmds.base: Reserve enough space for the exception
+	minimum prologues.
+
 2010-12-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac: Added I2C options.  Fixed eMIOS prescaler.  Use
