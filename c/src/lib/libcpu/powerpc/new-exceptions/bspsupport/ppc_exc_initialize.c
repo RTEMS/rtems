@@ -38,6 +38,14 @@ static void ppc_exc_initialize_booke(void)
   /* Interupt vector prefix register */
   MTIVPR(ppc_exc_vector_base);
 
+  if (ppc_cpu_is(PPC_e200z0) || ppc_cpu_is(PPC_e200z1)) {
+    /*
+     * These cores have hard wired IVOR registers.  An access will case a
+     * program exception.
+     */
+    return;
+  }
+
   /* Interupt vector offset registers */
   MTIVOR(0,  ppc_exc_vector_address(ASM_BOOKE_CRIT_VECTOR));
   MTIVOR(1,  ppc_exc_vector_address(ASM_MACH_VECTOR));
