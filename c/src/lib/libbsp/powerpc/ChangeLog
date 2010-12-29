@@ -1,3 +1,7 @@
+2010-12-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/start.h, shared/src/bsp-start-zero.S: New files.
+
 2010-08-25	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1689/bsps
