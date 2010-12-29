@@ -71,24 +71,6 @@ ppc_exc_min_prolog_auto:
 	.global ppc_exc_tgpr_clr_prolog_size
 ppc_exc_tgpr_clr_prolog_size = . - ppc_exc_tgpr_clr_prolog
 
-/**
- * @brief Use vector offsets with 16 byte boundaries.
- *
- * This prologue is intended for cores with IVPR/IVOR registers.  The e200z1
- * core has hard wired values for the IVOR, thus all values are calculated to
- * match its constraints.  The link register will point to the next prologue.
- * This is all right for the vector number calculation due the IVOR offset
- * values.
- *
- * @see ppc_exc_min_prolog_auto();
- */
-	.global ppc_exc_min_prolog_auto_packed
-ppc_exc_min_prolog_auto_packed:
-	stwu	r1, -EXCEPTION_FRAME_END(r1)
-	stw	VECTOR_REGISTER, VECTOR_OFFSET(r1)
-	mflr	VECTOR_REGISTER
-	bla	wrap_auto_packed
-
 /*
  * Automatic vector, asynchronous exception; however,
  * automatic vector calculation is less efficient than
@@ -154,14 +136,6 @@ wrap_auto:
 	 * min_prolog_std but we must skip saving FRAME_REGISTER
 	 * since that's done already
 	 */
-	b	wrap_no_save_frame_register_std
-
-	/* See: wrap_auto */
-wrap_auto_packed:
-	stw	FRAME_REGISTER, FRAME_OFFSET(r1)
-	mflr	FRAME_REGISTER
-	mtlr	VECTOR_REGISTER
-	rlwinm	VECTOR_REGISTER, FRAME_REGISTER, 28, 26, 31
 	b	wrap_no_save_frame_register_std
 
 wrap_auto_async:

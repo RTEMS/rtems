@@ -59,18 +59,6 @@
 #define ASM_SYS_VECTOR                       0x0C
 #define ASM_TRACE_VECTOR                     0x0D
 
-#define ASM_BOOKE_CRIT_VECTOR                0x01
-/* We could use the std. decrementer vector # on bookE, too,
- * but the bookE decrementer has slightly different semantics
- * so we use a different vector (which happens to be
- * the PIT vector on the 405 which is like the booke decrementer)
- */
-#define ASM_BOOKE_DEC_VECTOR                 0x10
-#define ASM_BOOKE_ITLBMISS_VECTOR            0x11
-#define ASM_BOOKE_DTLBMISS_VECTOR            0x12
-#define ASM_BOOKE_FIT_VECTOR                 0x13
-#define ASM_BOOKE_WDOG_VECTOR                0x14
-
 #define ASM_PPC405_APU_UNAVAIL_VECTOR        ASM_60X_VEC_ASSIST_VECTOR
 
 #define ASM_8XX_FLOATASSIST_VECTOR           0x0E
@@ -103,19 +91,35 @@
 #define ASM_60X_VEC_ASSIST_VECTOR            0x16
 #define ASM_60X_ITM_VECTOR                   0x17
 
-/* e200 */
-#define ASM_E200_SPE_UNAVAILABLE_VECTOR      0x15
-#define ASM_E200_SPE_DATA_VECTOR             0x16
-#define ASM_E200_SPE_ROUND_VECTOR            0x17
+/* Book E */
+#define ASM_BOOKE_CRIT_VECTOR                0x01
+/* We could use the std. decrementer vector # on bookE, too,
+ * but the bookE decrementer has slightly different semantics
+ * so we use a different vector (which happens to be
+ * the PIT vector on the 405 which is like the booke decrementer)
+ */
+#define ASM_BOOKE_DEC_VECTOR                 0x10
+#define ASM_BOOKE_ITLBMISS_VECTOR            0x11
+#define ASM_BOOKE_DTLBMISS_VECTOR            0x12
+#define ASM_BOOKE_FIT_VECTOR                 0x13
+#define ASM_BOOKE_WDOG_VECTOR                0x14
+#define ASM_BOOKE_APU_VECTOR                 0x18
+#define ASM_BOOKE_DEBUG_VECTOR               ASM_TRACE_VECTOR
+
+/* e200 and e500 */
+#define ASM_E500_SPE_UNAVAILABLE_VECTOR      ASM_60X_VEC_VECTOR
+#define ASM_E500_EMB_FP_DATA_VECTOR          0x19
+#define ASM_E500_EMB_FP_ROUND_VECTOR         0x1A
+#define ASM_E500_PERFMON_VECTOR              ASM_60X_PERFMON_VECTOR
 
 /* e300 */
 #define ASM_E300_CRIT_VECTOR                 0x0A
-#define ASM_E300_PERFMON_VECTOR              0x0F
+#define ASM_E300_PERFMON_VECTOR              ASM_60X_PERFMON_VECTOR
 #define ASM_E300_IMISS_VECTOR                ASM_60X_IMISS_VECTOR  /* Special case: Shadowed GPRs */
 #define ASM_E300_DLMISS_VECTOR               ASM_60X_DLMISS_VECTOR /* Special case: Shadowed GPRs */
 #define ASM_E300_DSMISS_VECTOR               ASM_60X_DSMISS_VECTOR /* Special case: Shadowed GPRs */
-#define ASM_E300_ADDR_VECTOR                 0x13
-#define ASM_E300_SYSMGMT_VECTOR              0x14
+#define ASM_E300_ADDR_VECTOR                 ASM_60X_ADDR_VECTOR
+#define ASM_E300_SYSMGMT_VECTOR              ASM_60X_SYSMGMT_VECTOR
 
 /*
  * If you change that number make sure to adjust the wrapper code in ppc_exc.S

@@ -25,19 +25,7 @@ SPR_RO(PVR)
 
 ppc_cpu_id_t       current_ppc_cpu      = PPC_UNKNOWN;
 ppc_cpu_revision_t current_ppc_revision = 0xff;
-ppc_feature_t      current_ppc_features = {
-  .has_altivec = 0,
-  .has_fpu = 0,
-  .has_hw_ptbl_lkup = 0,
-  .is_bookE = 0,
-  .has_16byte_clne = 0,
-  .is_60x = 0,
-  .has_8_bats = 0,
-  .has_epic = 0,
-  .has_shadowed_gprs = 0,
-  .has_ivpr = 0,
-  .has_ivor = 0
-};
+ppc_feature_t      current_ppc_features;
 
 char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
 {
@@ -66,6 +54,7 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_e200z0:		return "e200z0";
     case PPC_e200z1:		return "e200z1";
     case PPC_e200z6:		return "e200z6";
+    case PPC_e500v2:		return "e500v2";
     default:
       printk("Unknown CPU value of 0x%x. Please add it to "
              "<libcpu/powerpc/shared/include/cpuIdent.c>\n", cpu );
@@ -134,6 +123,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_e300c1:
     case PPC_e300c2:
     case PPC_e300c3:
+    case PPC_e500v2:
       break;
     default:
       printk("Unknown PVR value of 0x%x. Please add it to "
@@ -189,6 +179,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
   	case PPC_e200z0:
   	case PPC_e200z1:
   	case PPC_e200z6:
+  	case PPC_e500v2:
 		current_ppc_features.is_bookE			= PPC_BOOKE_E500;
 	default:
 	break;
@@ -213,20 +204,6 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
 	default:
 	break;
   }
-
-	switch (current_ppc_cpu) {
-		case PPC_e200z0:
-		case PPC_e200z1:
-			current_ppc_features.has_ivpr = 1;
-			current_ppc_features.has_hwivor = 1;
-			break;
-		case PPC_e200z6:
-			current_ppc_features.has_ivpr = 1;
-			current_ppc_features.has_ivor = 1;
-			break;
-		default:
-			break;
-	}
 
   return current_ppc_cpu;
 }

@@ -39,8 +39,6 @@ extern const uint32_t ppc_exc_tgpr_clr_prolog [];
  */
 extern const uint32_t ppc_exc_min_prolog_auto [];
 
-extern const uint32_t ppc_exc_min_prolog_auto_packed [];
-
 /* Minimal prologue templates */
 extern const uint32_t ppc_exc_min_prolog_async_tmpl_std [];
 extern const uint32_t ppc_exc_min_prolog_sync_tmpl_std [];
@@ -90,14 +88,10 @@ rtems_status_code ppc_exc_make_prologue(
     prologue_template_size = (size_t) ppc_exc_tgpr_clr_prolog_size;
   } else if (
     category == PPC_EXC_CLASSIC
-      && ((vector_address & 0xffU) == 0
-        || (ppc_cpu_has_ivpr_and_ivor() && (vector_address & 0xfU) == 0))
+      && ppc_cpu_is_bookE() != PPC_BOOKE_STD
+        && ppc_cpu_is_bookE() != PPC_BOOKE_E500
   ) {
-    if (ppc_cpu_has_ivpr_and_ivor()) {
-      prologue_template = ppc_exc_min_prolog_auto_packed;
-    } else {
-      prologue_template = ppc_exc_min_prolog_auto;
-    }
+    prologue_template = ppc_exc_min_prolog_auto;
     prologue_template_size = (size_t) ppc_exc_min_prolog_size;
   } else {
     prologue_template = ppc_exc_prologue_templates [category];

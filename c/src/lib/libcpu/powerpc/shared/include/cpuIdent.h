@@ -51,6 +51,7 @@ typedef enum
   PPC_8240 = PPC_8260,
   PPC_8245 = 0x8081,
   PPC_8540 = 0x8020,
+  PPC_e500v2 = 0x8021,
   PPC_603le = 0x8082, /* 603le core, in MGT5100 and MPC5200 */
   PPC_e300c1  = 0x8083, /* e300c1  core, in MPC83xx*/
   PPC_e300c2  = 0x8084, /* e300c2  core */
@@ -82,9 +83,6 @@ typedef struct {
 	unsigned has_8_bats			: 1;
 	unsigned has_epic           : 1;
 	unsigned has_shadowed_gprs  : 1;
-	unsigned has_ivpr           : 1;
-	unsigned has_ivor           : 1;
-	unsigned has_hwivor         : 1;
 } ppc_feature_t;
 
 extern ppc_feature_t   current_ppc_features;
@@ -113,30 +111,32 @@ _PPC_FEAT_DECL(is_60x)
 _PPC_FEAT_DECL(has_8_bats)
 _PPC_FEAT_DECL(has_epic)
 _PPC_FEAT_DECL(has_shadowed_gprs)
-_PPC_FEAT_DECL(has_ivpr)
-_PPC_FEAT_DECL(has_ivor)
-_PPC_FEAT_DECL(has_hwivor)
 
 #undef _PPC_FEAT_DECL
-
-static inline unsigned ppc_cpu_has_ivpr_and_ivor() { \
-  return ppc_cpu_has_ivpr() 
-    && (ppc_cpu_has_ivor() || ppc_cpu_has_hwivor());
-}
 
 static inline ppc_cpu_id_t ppc_cpu_current(void)
 {
 	return current_ppc_cpu;
 }
 
+static inline bool ppc_cpu_is_e200()
+{
+	return ppc_cpu_current() == PPC_e200z0
+		|| ppc_cpu_current() == PPC_e200z1
+		|| ppc_cpu_current() == PPC_e200z6;
+}
+
 static inline bool ppc_cpu_is_e300()
 {
-	if (ppc_cpu_current() == PPC_UNKNOWN) {
-		get_ppc_cpu_type();
-	}
 	return ppc_cpu_current() == PPC_e300c1
 		|| ppc_cpu_current() == PPC_e300c2
 		|| ppc_cpu_current() == PPC_e300c3;
+}
+
+static inline bool ppc_cpu_is_e500()
+{
+	return ppc_cpu_current() == PPC_8540
+		|| ppc_cpu_current() == PPC_e500v2;
 }
 
 static inline bool ppc_cpu_is(ppc_cpu_id_t cpu)

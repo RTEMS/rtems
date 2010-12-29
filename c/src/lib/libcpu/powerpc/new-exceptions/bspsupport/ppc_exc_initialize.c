@@ -33,13 +33,13 @@ uint32_t ppc_exc_cache_wb_check = 1;
 #define MTIVPR(prefix) asm volatile ("mtivpr %0" : : "r" (prefix))
 #define MTIVOR(x, vec) asm volatile ("mtivor"#x" %0" : : "r" (vec))
 
-static void ppc_exc_initialize_e500(void)
+static void ppc_exc_initialize_booke(void)
 {
   /* Interupt vector prefix register */
   MTIVPR(ppc_exc_vector_base);
 
-  /* Interupt vector offset register */
-  MTIVOR(0,  ppc_exc_vector_address(ASM_BOOKE_CRIT_VECTOR)); /* Critical input not (yet) supported; use reset vector */
+  /* Interupt vector offset registers */
+  MTIVOR(0,  ppc_exc_vector_address(ASM_BOOKE_CRIT_VECTOR));
   MTIVOR(1,  ppc_exc_vector_address(ASM_MACH_VECTOR));
   MTIVOR(2,  ppc_exc_vector_address(ASM_PROT_VECTOR));
   MTIVOR(3,  ppc_exc_vector_address(ASM_ISI_VECTOR));
@@ -48,45 +48,20 @@ static void ppc_exc_initialize_e500(void)
   MTIVOR(6,  ppc_exc_vector_address(ASM_PROG_VECTOR));
   MTIVOR(7,  ppc_exc_vector_address(ASM_FLOAT_VECTOR));
   MTIVOR(8,  ppc_exc_vector_address(ASM_SYS_VECTOR));
-  MTIVOR(9,  ppc_exc_vector_address(0x0b));
+  MTIVOR(9,  ppc_exc_vector_address(ASM_BOOKE_APU_VECTOR));
   MTIVOR(10, ppc_exc_vector_address(ASM_BOOKE_DEC_VECTOR));
   MTIVOR(11, ppc_exc_vector_address(ASM_BOOKE_FIT_VECTOR));
   MTIVOR(12, ppc_exc_vector_address(ASM_BOOKE_WDOG_VECTOR));
-  MTIVOR(13, ppc_exc_vector_address(ASM_60X_DSMISS_VECTOR));
-  MTIVOR(14, ppc_exc_vector_address(ASM_60X_DLMISS_VECTOR));
-  MTIVOR(15, ppc_exc_vector_address(ASM_TRACE_VECTOR));
-  MTIVOR(32, ppc_exc_vector_address(ASM_60X_VEC_VECTOR));
-  MTIVOR(33, ppc_exc_vector_address(0x16));
-  MTIVOR(34, ppc_exc_vector_address(0x15));
-  MTIVOR(35, ppc_exc_vector_address(ASM_60X_PERFMON_VECTOR));
-}
-
-static void ppc_exc_initialize_e200(void)
-{
-  /* Interupt vector prefix register */
-  MTIVPR(ppc_exc_vector_base);
-
-  if (ppc_cpu_has_ivor()) {
-    /* Interupt vector offset register */
-    MTIVOR(0,  0); /* Critical input */
-    MTIVOR(1,  ppc_exc_vector_address( ASM_MACH_VECTOR));
-    MTIVOR(2,  ppc_exc_vector_address( ASM_PROT_VECTOR));
-    MTIVOR(3,  ppc_exc_vector_address( ASM_ISI_VECTOR));
-    MTIVOR(4,  ppc_exc_vector_address( ASM_EXT_VECTOR));
-    MTIVOR(5,  ppc_exc_vector_address( ASM_ALIGN_VECTOR));
-    MTIVOR(6,  ppc_exc_vector_address( ASM_PROG_VECTOR));
-    MTIVOR(7,  ppc_exc_vector_address( ASM_FLOAT_VECTOR));
-    MTIVOR(8,  ppc_exc_vector_address( ASM_SYS_VECTOR));
-    MTIVOR(9,  0); /* APU unavailable */
-    MTIVOR(10, ppc_exc_vector_address( ASM_BOOKE_DEC_VECTOR));
-    MTIVOR(11, ppc_exc_vector_address( ASM_BOOKE_FIT_VECTOR));
-    MTIVOR(12, ppc_exc_vector_address( ASM_BOOKE_WDOG_VECTOR));
-    MTIVOR(13, ppc_exc_vector_address( ASM_BOOKE_ITLBMISS_VECTOR));
-    MTIVOR(14, ppc_exc_vector_address( ASM_BOOKE_DTLBMISS_VECTOR));
-    MTIVOR(15, ppc_exc_vector_address( ASM_TRACE_VECTOR));
-    MTIVOR(32, ppc_exc_vector_address( ASM_E200_SPE_UNAVAILABLE_VECTOR));
-    MTIVOR(33, ppc_exc_vector_address( ASM_E200_SPE_DATA_VECTOR));
-    MTIVOR(34, ppc_exc_vector_address( ASM_E200_SPE_ROUND_VECTOR));
+  MTIVOR(13, ppc_exc_vector_address(ASM_BOOKE_DTLBMISS_VECTOR));
+  MTIVOR(14, ppc_exc_vector_address(ASM_BOOKE_ITLBMISS_VECTOR));
+  MTIVOR(15, ppc_exc_vector_address(ASM_BOOKE_DEBUG_VECTOR));
+  if (ppc_cpu_is_e200() || ppc_cpu_is_e500()) {
+    MTIVOR(32, ppc_exc_vector_address(ASM_E500_SPE_UNAVAILABLE_VECTOR));
+    MTIVOR(33, ppc_exc_vector_address(ASM_E500_EMB_FP_DATA_VECTOR));
+    MTIVOR(34, ppc_exc_vector_address(ASM_E500_EMB_FP_ROUND_VECTOR));
+  }
+  if (ppc_cpu_is_e500()) {
+    MTIVOR(35, ppc_exc_vector_address(ASM_E500_PERFMON_VECTOR));
   }
 }
 
@@ -123,7 +98,7 @@ rtems_status_code ppc_exc_initialize(
   }
 
   /* Ensure proper interrupt stack alignment */
-  interrupt_stack_pointer &= ~((uint32_t) CPU_STACK_ALIGNMENT - 1);
+  interrupt_stack_pointer &= ~((uintptr_t) CPU_STACK_ALIGNMENT - 1);
 
   /* Tag interrupt stack bottom */
   *(uint32_t *) interrupt_stack_pointer = 0;
@@ -142,11 +117,8 @@ rtems_status_code ppc_exc_initialize(
   ppc_exc_msr_bits |= MSR_VE;
 #endif
  
-  if (ppc_cpu_is(PPC_e200z1) || 
-      ppc_cpu_is(PPC_e200z6)) {
-    ppc_exc_initialize_e200();
-  } else if (ppc_cpu_is_bookE() == PPC_BOOKE_STD || ppc_cpu_is_bookE() == PPC_BOOKE_E500) {
-    ppc_exc_initialize_e500();
+  if (ppc_cpu_is_bookE() == PPC_BOOKE_STD || ppc_cpu_is_bookE() == PPC_BOOKE_E500) {
+    ppc_exc_initialize_booke();
   }
 
   for (vector = 0; vector <= LAST_VALID_EXC; ++vector) {

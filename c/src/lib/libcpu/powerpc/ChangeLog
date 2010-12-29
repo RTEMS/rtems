@@ -1,3 +1,19 @@
+2010-12-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/cpuIdent.c, shared/include/cpuIdent.h: Added support
+	for e500v2.  Removed IVPR/IVOR/HWIVOR features since they are included
+	in Book E.
+	* new-exceptions/bspsupport/vectors.h,
+	new-exceptions/bspsupport/ppc_exc.S,
+	new-exceptions/bspsupport/ppc_exc_address.c,
+	new-exceptions/bspsupport/ppc_exc_categories.c,
+	new-exceptions/bspsupport/ppc_exc_initialize.c,
+	new-exceptions/bspsupport/ppc_exc_prologue.c: Added support for
+	e500v2.  Added exception vector defines for Book E types.  Removed
+	e200 exception vector defines.  Added e500 exception vector defines.
+	Unified IVOR calculation for e200 and e500 (e200z1 has hard wired
+	IVOR values).
+
 2010-12-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* mpc83xx/i2c/mpc83xx_i2cdrv.c: Fixed interrupt flag clearing for

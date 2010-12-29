@@ -36,6 +36,33 @@ bool bsp_exceptions_in_RAM = true;
 
 uint32_t ppc_exc_vector_base = 0;
 
+/*
+ * XXX: These values are choosen to directly generate the vector offsets for an
+ * e200z1 which has hard wired IVORs (IVOR0=0x00, IVOR1=0x10, IVOR2=0x20, ...).
+ */
+static const uint8_t ivor_values [] = {
+  [ASM_BOOKE_CRIT_VECTOR] = 0,
+  [ASM_MACH_VECTOR] = 1,
+  [ASM_PROT_VECTOR] = 2,
+  [ASM_ISI_VECTOR] = 3,
+  [ASM_EXT_VECTOR] = 4,
+  [ASM_ALIGN_VECTOR] = 5,
+  [ASM_PROG_VECTOR] = 6,
+  [ASM_FLOAT_VECTOR] = 7,
+  [ASM_SYS_VECTOR] = 8,
+  [ASM_BOOKE_APU_VECTOR] = 9,
+  [ASM_BOOKE_DEC_VECTOR] = 10,
+  [ASM_BOOKE_FIT_VECTOR] = 11,
+  [ASM_BOOKE_WDOG_VECTOR] = 12,
+  [ASM_BOOKE_DTLBMISS_VECTOR] = 13,
+  [ASM_BOOKE_ITLBMISS_VECTOR] = 14,
+  [ASM_BOOKE_DEBUG_VECTOR] = 15,
+  [ASM_E500_SPE_UNAVAILABLE_VECTOR] = 32,
+  [ASM_E500_EMB_FP_DATA_VECTOR] = 33,
+  [ASM_E500_EMB_FP_ROUND_VECTOR] = 34,
+  [ASM_E500_PERFMON_VECTOR] = 35
+};
+
 void *ppc_exc_vector_address(unsigned vector)
 {
   uintptr_t vector_base = 0xfff00000;
@@ -65,12 +92,15 @@ void *ppc_exc_vector_address(unsigned vector)
     }
   }
 
-  if (ppc_cpu_has_ivpr_and_ivor()) {
-    /*
-     * XXX: this directly matches the vector offsets in a e200z1, 
-     * which has hardwired IVORs (IVOR0=0,IVOR1=0x10,IVOR2=0x20...) 
-     */
-    vector_offset = (vector - 1) << 4;
+  if (
+    ppc_cpu_is_bookE() == PPC_BOOKE_STD
+      || ppc_cpu_is_bookE() == PPC_BOOKE_E500
+  ) {
+    if (vector < sizeof(ivor_values) / sizeof(ivor_values [0])) {
+      vector_offset = ((uintptr_t) ivor_values [vector]) << 4;
+    } else {
+      vector_offset = 0;
+    }
   }
 
   if (bsp_exceptions_in_RAM) {
