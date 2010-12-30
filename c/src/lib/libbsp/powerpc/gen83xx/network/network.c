@@ -22,7 +22,8 @@
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtems_bsdnet_internal.h>
 #include <bsp.h>
-#include <mpc83xx/tsec.h>
+#include <bsp/tsec.h>
+#include <bsp/u-boot.h>
 #include <mpc83xx/mpc83xx.h>
 #include <stdio.h>
 
@@ -67,11 +68,12 @@ int BSP_tsec_attach
 \*=========================================================================*/
 {
   int    unitNumber;
+  char *unitName;
 
   /*
    * Parse driver name
    */
-  if((unitNumber = rtems_bsdnet_parse_driver_name(config, NULL)) < 0) {
+  if((unitNumber = rtems_bsdnet_parse_driver_name(config, &unitName)) < 0) {
     return 0;
   }
   if (attaching) {
@@ -181,8 +183,12 @@ int BSP_tsec_attach
   /*
    * call attach function of board independent driver
    */
-  if (0 == rtems_mpc83xx_tsec_driver_attach_detach(config,attaching)) {
-    return 0;
-  }
-  return 1;
+  return tsec_driver_attach_detach(
+    config,
+    unitNumber,
+    unitName,
+    &mpc83xx.tsec [unitNumber - 1],
+    &mpc83xx.tsec [0],
+    attaching
+  );
 }

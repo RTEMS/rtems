@@ -58,29 +58,13 @@ reset_vec:
 PUBLIC_VAR (start)
 start:
 
-#ifdef HAS_UBOOT
-
-.extern bsp_uboot_board_info
-.extern bsp_uboot_board_info_size
-
 	/* Reset time base */
 	li	r0, 0
 	mtspr	TBWU, r0
 	mtspr	TBWL, r0
 
-	/* Copy board info */
-	LA	r6, bsp_uboot_board_info
-	LW	r5, bsp_uboot_board_info_size
-        mtctr   r5
-
-copy_uboot_board_info:
-
-	lwz     r5, 0(r3)
-        addi    r3, r3, 4
-        stw     r5, 0(r6)
-        addi    r6, r6, 4
-        bdnz    copy_uboot_board_info
-
+#ifdef HAS_UBOOT
+	mr	r14, r3
 #endif /* HAS_UBOOT */
 
 	/*
@@ -422,6 +406,11 @@ start_code_in_ram:
 	LA	r3, bsp_section_bss_start  /* get start address of bss section */
 	LWI	r4, bsp_section_bss_size   /* get size of bss section */
 	bl	mpc83xx_zero_4          /* Clear the bss section */
+
+#ifdef HAS_UBOOT
+	mr	r3, r14
+	bl	bsp_uboot_copy_board_info
+#endif /* HAS_UBOOT */
 	/*
 	 * call boot_card
 	 */

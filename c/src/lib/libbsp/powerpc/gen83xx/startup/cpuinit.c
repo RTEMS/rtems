@@ -79,6 +79,7 @@
 #include <mpc83xx/mpc83xx.h>
 
 #include <bsp.h>
+#include <bsp/u-boot.h>
 
 #define SET_DBAT( n, uv, lv) \
   do { \

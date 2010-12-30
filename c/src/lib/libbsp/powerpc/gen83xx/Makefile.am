@@ -57,7 +57,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c \
 	../../shared/bspclean.c \
 	startup/bspreset.c \
 	../../shared/bspgetworkarea.c \
-        startup/uboot_support.c \
+        ../../shared/src/bsp-uboot-board-info.c \
         ../shared/uboot_getenv.c
 
 # clock
@@ -66,9 +66,12 @@ libbsp_a_SOURCES += ../shared/clock/clock.c
 include_bsp_HEADERS = include/irq.h \
 	../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h \
+	../../shared/include/u-boot.h \
+	../shared/include/u-boot-board-info.h \
+	../shared/include/tictac.h \
 	include/hwreg_vals.h \
-	../shared/include/u-boot.h \
-	../shared/include/tictac.h
+	include/tsec-config.h \
+	include/u-boot-config.h
 
 # irq
 libbsp_a_SOURCES += irq/irq.c \

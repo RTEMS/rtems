@@ -28,19 +28,7 @@
 #include <bsp/vectors.h>
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
-
-#ifdef HAS_UBOOT
-
-/*
- * We want this in the data section, because the startup code clears the BSS
- * section after the initialization of the board info.
- */
-bd_t bsp_uboot_board_info = { .bi_baudrate = 123 };
-
-/* Size in words */
-const size_t bsp_uboot_board_info_size = (sizeof( bd_t) + 3) / 4;
-
-#endif /* HAS_UBOOT */
+#include <bsp/u-boot.h>
 
 /* Configuration parameters for console driver, ... */
 unsigned int BSP_bus_frequency;

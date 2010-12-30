@@ -72,18 +72,6 @@ extern "C" {
 #include <bsp/vectors.h>
 #include <bsp/irq.h>
 
-#ifdef HAS_UBOOT
-  #ifdef MPC8313ERDB
-    #define CONFIG_MPC83XX
-    #define CONFIG_HAS_ETH1
-  #endif
-
-  #include <bsp/u-boot.h>
-
-  extern bd_t bsp_uboot_board_info;
-  extern const size_t bsp_uboot_board_info_size;
-#endif
-
 /*
  * indicate, that BSP has no IDE driver
  */

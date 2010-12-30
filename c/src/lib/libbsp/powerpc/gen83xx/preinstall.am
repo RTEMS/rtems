@@ -101,15 +101,27 @@ $(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
 
-$(PROJECT_INCLUDE)/bsp/hwreg_vals.h: include/hwreg_vals.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/hwreg_vals.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/hwreg_vals.h
-
-$(PROJECT_INCLUDE)/bsp/u-boot.h: ../shared/include/u-boot.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/u-boot.h: ../../shared/include/u-boot.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot.h
+
+$(PROJECT_INCLUDE)/bsp/u-boot-board-info.h: ../shared/include/u-boot-board-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot-board-info.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot-board-info.h
 
 $(PROJECT_INCLUDE)/bsp/tictac.h: ../shared/include/tictac.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tictac.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tictac.h
+
+$(PROJECT_INCLUDE)/bsp/hwreg_vals.h: include/hwreg_vals.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/hwreg_vals.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/hwreg_vals.h
+
+$(PROJECT_INCLUDE)/bsp/tsec-config.h: include/tsec-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tsec-config.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tsec-config.h
+
+$(PROJECT_INCLUDE)/bsp/u-boot-config.h: include/u-boot-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot-config.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot-config.h
 

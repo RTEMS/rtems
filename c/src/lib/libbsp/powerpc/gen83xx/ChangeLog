@@ -1,3 +1,12 @@
+2010-12-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/u-boot.h: Removed file.
+	* include/u-boot-config.h, include/tsec-config.h: New files.
+	* include/bsp.h, start/start.S, startup/bspstart.c: Use new U-Boot
+	support.
+	* network/network.c: Update for API changes.
+	* Makefile.am, preinstall.am: Reflect changes above.
+
 2010-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* console/console.h, console/console.c, console/config.c,
