@@ -368,7 +368,7 @@ include_mpc83xxdir = $(includedir)/mpc83xx
 include_mpc83xx_HEADERS = mpc83xx/include/mpc83xx.h
 
 # Network
-include_mpc83xx_HEADERS += mpc83xx/network/tsec.h
+include_bsp_HEADERS += mpc83xx/network/tsec.h
 if HAS_NETWORKING
 noinst_PROGRAMS += mpc83xx/tsec.rel
 mpc83xx_tsec_rel_SOURCES = mpc83xx/network/tsec.c

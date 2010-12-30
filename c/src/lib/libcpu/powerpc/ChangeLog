@@ -1,8 +1,8 @@
 2010-12-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-	* mpc83xx/include/mpc83xx.h, mpc83xx/network/tsec.c,
-	mpc83xx/network/tsec.h: Make it possible to use the TSEC driver for
-	other systems.
+	* Makefile.am, preinstall.am, mpc83xx/include/mpc83xx.h,
+	mpc83xx/network/tsec.c, mpc83xx/network/tsec.h: Make it possible to
+	use the TSEC driver for other systems.
 
 2010-12-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
