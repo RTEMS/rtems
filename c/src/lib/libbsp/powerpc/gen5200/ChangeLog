@@ -1,3 +1,11 @@
+2010-12-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/u-boot.h: Removed file.
+	* include/u-boot-config.h: New file.
+	* include/bsp.h, start/start.S, startup/bspstart.c: Use new U-Boot
+	support.
+	* Makefile.am, preinstall.am: Reflect changes above.
+
 2010-11-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* mscan/mscan-base.c: Do not use sleep mode to enter init mode.  Do

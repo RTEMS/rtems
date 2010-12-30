@@ -65,10 +65,6 @@ $(PROJECT_INCLUDE)/i2cdrv.h: include/i2cdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2cdrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2cdrv.h
 
-$(PROJECT_INCLUDE)/u-boot.h: include/u-boot.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/u-boot.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/u-boot.h
-
 $(PROJECT_INCLUDE)/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2c.h
@@ -80,10 +76,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
-
-$(PROJECT_INCLUDE)/bsp/bootcard.h: ../../shared/include/bootcard.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bootcard.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bootcard.h
 
 $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
@@ -177,6 +169,18 @@ $(PROJECT_INCLUDE)/bsp/utility.h: ../../shared/include/utility.h $(PROJECT_INCLU
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/utility.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/utility.h
 
+$(PROJECT_INCLUDE)/bsp/bootcard.h: ../../shared/include/bootcard.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bootcard.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bootcard.h
+
+$(PROJECT_INCLUDE)/bsp/u-boot.h: ../../shared/include/u-boot.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot.h
+
+$(PROJECT_INCLUDE)/bsp/u-boot-board-info.h: ../shared/include/u-boot-board-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot-board-info.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot-board-info.h
+
 $(PROJECT_INCLUDE)/bsp/irq.h: include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
@@ -197,9 +201,9 @@ $(PROJECT_INCLUDE)/bsp/mscan-base.h: include/mscan-base.h $(PROJECT_INCLUDE)/bsp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mscan-base.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mscan-base.h
 
-$(PROJECT_INCLUDE)/bsp/u-boot.h: include/u-boot.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot.h
+$(PROJECT_INCLUDE)/bsp/u-boot-config.h: include/u-boot-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot-config.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot-config.h
 
 $(PROJECT_INCLUDE)/bsp/mscan.h: mscan/mscan.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mscan.h

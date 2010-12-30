@@ -104,13 +104,6 @@
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 
-#if defined(HAS_UBOOT)
-/* will be overwritten from startup code */
-bd_t *bsp_uboot_board_info_ptr = (bd_t *)1;
-/* will be overwritten with copy of board information */
-bd_t bsp_uboot_board_info;
-#endif
-
 /*
  *  Driver configuration parameters
  */
@@ -142,14 +135,10 @@ void bsp_start(void)
   myCpu         = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
-  #if defined(HAS_UBOOT)
-    bsp_uboot_board_info = *bsp_uboot_board_info_ptr;
-  #endif
-
   #if defined(HAS_UBOOT) && defined(SHOW_MORE_INIT_SETTINGS)
     {
       void dumpUBootBDInfo( bd_t * );
-      dumpUBootBDInfo( bsp_uboot_board_info_ptr );
+      dumpUBootBDInfo( &bsp_uboot_board_info );
     }
   #endif
 

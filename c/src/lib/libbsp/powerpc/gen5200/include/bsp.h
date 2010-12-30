@@ -116,19 +116,11 @@ extern "C" {
 #include <i2cdrv.h>
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
+#include <bsp/u-boot.h>
 
-#if defined(HAS_UBOOT)
-/* This is the define U-Boot uses to configure which entries in the structure are valid */
-#define CONFIG_MPC5xxx
-#include <u-boot.h>
-
-extern bd_t bsp_uboot_board_info;
-#else
-
-/* we need the low level initialization in start.S*/
-#define NEED_LOW_LEVEL_INIT
-
-
+#if !defined(HAS_UBOOT)
+  /* we need the low level initialization in start.S*/
+  #define NEED_LOW_LEVEL_INIT
 #endif
 
 /*

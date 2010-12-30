@@ -165,11 +165,9 @@ start:
 	CLRBITS r30, r29, MSR_EE
 	mtmsr	r30 				/* Set RI/ME, Clr EE in MSR */
 
-#if defined(HAS_UBOOT)
-/* store pointer to UBoot bd_info board info structure */
-	LWI	r31,bsp_uboot_board_info_ptr
-	stw	r3,0(r31)
-#endif /* defined(HAS_UBOOT) */
+#ifdef HAS_UBOOT
+	mr	r14, r3
+#endif /* HAS_UBOOT */
 
 #if defined(NEED_LOW_LEVEL_INIT)
 /* initialize the MBAR (common RAM/ROM startup) */
@@ -405,6 +403,10 @@ skip_ROM_start:
 
         bl      clr_mem				/* Clear the bss section */
 
+#ifdef HAS_UBOOT
+	mr	r3, r14
+	bl	bsp_uboot_copy_board_info
+#endif /* HAS_UBOOT */
 
 /* set stack pointer (common for RAM/ROM startup) */
 	LA	r1, bsp_section_text_start

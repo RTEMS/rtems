@@ -14,12 +14,11 @@ include_bestcomm_task_apidir = $(include_bestcommdir)/task_api
 
 dist_project_lib_DATA = bsp_specs
 
-include_HEADERS = include/bsp.h include/i2cdrv.h include/u-boot.h \
+include_HEADERS = include/bsp.h include/i2cdrv.h \
     include/i2c.h
 include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
@@ -92,12 +91,15 @@ libbsp_a_SOURCES += ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
 include_bsp_HEADERS = ../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h \
 	../../shared/include/utility.h \
+	../../shared/include/bootcard.h \
+	../../shared/include/u-boot.h \
+	../shared/include/u-boot-board-info.h \
 	include/irq.h \
 	include/i2cdrv.h \
 	include/i2c.h \
 	include/mpc5200.h \
 	include/mscan-base.h \
-	include/u-boot.h \
+	include/u-boot-config.h \
 	mscan/mscan.h
 
 # irq
@@ -132,6 +134,7 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/bsppredriverhook.c \
 	../../shared/gnatinstallhandler.c \
 	../../shared/sbrk.c \
+	../../shared/src/bsp-uboot-board-info.c \
 	../shared/showbats.c \
 	../shared/uboot_dump_bdinfo.c \
 	../shared/uboot_getenv.c \
