@@ -25,8 +25,7 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <mpc83xx/mpc83xx.h>
-#include <mpc83xx/tsec.h>
+#include <bsp/tsec.h>
 #include <libcpu/spr.h>
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
@@ -58,15 +57,15 @@ SPR_RO( PVR)
 /*
  * Device data
  */
-struct mpc83xx_tsec_struct {
+struct tsec_struct {
   struct arpcom           arpcom;
   int                     acceptBroadcast;
 
   /*
    * HW links: (filled from rtems_bsdnet_ifconfig
    */
-  m83xxTSEC_Registers_t  *reg_ptr;    /* pointer to TSEC register block */
-  m83xxTSEC_Registers_t  *mdio_ptr;   /* pointer to TSEC register block which is responsible for MDIO communication */
+  volatile tsec_registers *reg_ptr;   /* pointer to TSEC register block */
+  volatile tsec_registers *mdio_ptr;  /* pointer to TSEC register block which is responsible for MDIO communication */
   int                    irq_num_tx;  /* tx irq number                  */
   int                    irq_num_rx;  /* rx irq number                  */
   int                    irq_num_err; /* error irq number               */
@@ -111,7 +110,7 @@ struct mpc83xx_tsec_struct {
   unsigned long           txErrors;
   };
 
-static struct mpc83xx_tsec_struct tsec_driver[M83xx_TSEC_NIFACES];
+static struct tsec_struct tsec_driver[TSEC_COUNT];
 
 /*
  * default numbers for buffers
@@ -122,33 +121,33 @@ static struct mpc83xx_tsec_struct tsec_driver[M83xx_TSEC_NIFACES];
 /*
  * mask for all Tx interrupts
  */
-#define M83xx_IEVENT_TXALL (M83xx_TSEC_IEVENT_GTSC	\
-			    | M83xx_TSEC_IEVENT_TXC 	\
-			    /*| M83xx_TSEC_IEVENT_TXB*/	\
-			    | M83xx_TSEC_IEVENT_TXF )
+#define IEVENT_TXALL (TSEC_IEVENT_GTSC	\
+			    | TSEC_IEVENT_TXC 	\
+			    /*| TSEC_IEVENT_TXB*/	\
+			    | TSEC_IEVENT_TXF )
 
 /*
  * mask for all Rx interrupts
  */
-#define M83xx_IEVENT_RXALL (M83xx_TSEC_IEVENT_RXC  	\
-			    /* | M83xx_TSEC_IEVENT_RXB */	\
-			    | M83xx_TSEC_IEVENT_GRSC 	\
-			    | M83xx_TSEC_IEVENT_RXF  )
+#define IEVENT_RXALL (TSEC_IEVENT_RXC  	\
+			    /* | TSEC_IEVENT_RXB */	\
+			    | TSEC_IEVENT_GRSC 	\
+			    | TSEC_IEVENT_RXF  )
 
 /*
  * mask for all Error interrupts
  */
-#define M83xx_IEVENT_ERRALL (M83xx_TSEC_IEVENT_BABR   		\
-			    | M83xx_TSEC_IEVENT_BSY    		\
-			    | M83xx_TSEC_IEVENT_EBERR  		\
-			    | M83xx_TSEC_IEVENT_MSRO   		\
-			    | M83xx_TSEC_IEVENT_BABT   		\
-			    | M83xx_TSEC_IEVENT_TXE    		\
-			    | M83xx_TSEC_IEVENT_LC     		\
-			    | M83xx_TSEC_IEVENT_CRL_XDA		\
-			    | M83xx_TSEC_IEVENT_XFUN   )
+#define IEVENT_ERRALL (TSEC_IEVENT_BABR   		\
+			    | TSEC_IEVENT_BSY    		\
+			    | TSEC_IEVENT_EBERR  		\
+			    | TSEC_IEVENT_MSRO   		\
+			    | TSEC_IEVENT_BABT   		\
+			    | TSEC_IEVENT_TXE    		\
+			    | TSEC_IEVENT_LC     		\
+			    | TSEC_IEVENT_CRL_XDA		\
+			    | TSEC_IEVENT_XFUN   )
 
-#define M83xx_TSEC_IMASK_SET(reg,mask,val) {	\
+#define TSEC_IMASK_SET(reg,mask,val) {	\
   rtems_interrupt_level level;			\
   						\
   rtems_interrupt_disable(level);		\
@@ -157,7 +156,7 @@ static struct mpc83xx_tsec_struct tsec_driver[M83xx_TSEC_NIFACES];
   rtems_interrupt_enable(level);		\
 }
 
-#define M83xx_TSEC_ALIGN_BUFFER(buf,align)		\
+#define TSEC_ALIGN_BUFFER(buf,align)		\
   ((void *)( (((uint32_t)(buf))+(align)-1)		\
 	     -(((uint32_t)(buf))+(align)-1)%align))
 
@@ -174,7 +173,7 @@ static struct mpc83xx_tsec_struct tsec_driver[M83xx_TSEC_NIFACES];
  */
 #define START_TRANSMIT_EVENT RTEMS_EVENT_2
 
-static int mpc83xx_tsec_ioctl
+static int tsec_ioctl
 (
  struct ifnet *ifp,                    /* interface information            */
  ioctl_command_t command,              /* ioctl command code               */
@@ -184,7 +183,7 @@ static int mpc83xx_tsec_ioctl
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_hwinit
+static void tsec_hwinit
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -192,14 +191,14 @@ static void mpc83xx_tsec_hwinit
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc        /* control structure                */
+ struct tsec_struct *sc        /* control structure                */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  m83xxTSEC_Registers_t  *reg_ptr = sc->reg_ptr; /* pointer to TSEC registers*/
+  volatile tsec_registers *reg_ptr = sc->reg_ptr; /* pointer to TSEC registers*/
   uint8_t *mac_addr;
   size_t i;
 
@@ -213,10 +212,10 @@ static void mpc83xx_tsec_hwinit
    * - enable statistics
    * NOTE: do not clear bits set in BSP init function
    */
-  reg_ptr->ecntrl = ((reg_ptr->ecntrl & ~M83xx_TSEC_ECNTRL_AUTOZ)
-		     | M83xx_TSEC_ECNTRL_CLRCNT
-		     | M83xx_TSEC_ECNTRL_STEN
-		     | M83xx_TSEC_ECNTRL_R100M);
+  reg_ptr->ecntrl = ((reg_ptr->ecntrl & ~TSEC_ECNTRL_AUTOZ)
+		     | TSEC_ECNTRL_CLRCNT
+		     | TSEC_ECNTRL_STEN
+		     | TSEC_ECNTRL_R100M);
 
   /*
    * init DMA control register:
@@ -224,17 +223,17 @@ static void mpc83xx_tsec_hwinit
    * - write BD status before interrupt request
    * - do not poll TxBD, but wait for TSTAT[THLT] to be written
    */
-  reg_ptr->dmactrl = (M83xx_TSEC_DMACTL_TDSEN
-		      | M83xx_TSEC_DMACTL_TBDSEN
-		      | M83xx_TSEC_DMACTL_WWR
-		      | M83xx_TSEC_DMACTL_WOP);
+  reg_ptr->dmactrl = (TSEC_DMACTL_TDSEN
+		      | TSEC_DMACTL_TBDSEN
+		      | TSEC_DMACTL_WWR
+		      | TSEC_DMACTL_WOP);
 
   /*
    * init Attribute register:
    * - enable read snooping for data and BD
    */
-  reg_ptr->attr = (M83xx_TSEC_ATTR_RDSEN
-		   | M83xx_TSEC_ATTR_RBDSEN);
+  reg_ptr->attr = (TSEC_ATTR_RDSEN
+		   | TSEC_ATTR_RBDSEN);
 
 
   reg_ptr->mrblr  = MCLBYTES-64; /* take care of buffer size lost
@@ -243,12 +242,12 @@ static void mpc83xx_tsec_hwinit
   /*
    * init EDIS register: disable all error reportings
    */
-  reg_ptr->edis = (M83xx_TSEC_EDIS_BSYDIS    |
-		   M83xx_TSEC_EDIS_EBERRDIS  |
-		   M83xx_TSEC_EDIS_TXEDIS    |
-		   M83xx_TSEC_EDIS_LCDIS     |
-		   M83xx_TSEC_EDIS_CRLXDADIS |
-		   M83xx_TSEC_EDIS_FUNDIS);
+  reg_ptr->edis = (TSEC_EDIS_BSYDIS    |
+		   TSEC_EDIS_EBERRDIS  |
+		   TSEC_EDIS_TXEDIS    |
+		   TSEC_EDIS_LCDIS     |
+		   TSEC_EDIS_CRLXDADIS |
+		   TSEC_EDIS_FUNDIS);
   /*
    * init minimum frame length register
    */
@@ -264,31 +263,31 @@ static void mpc83xx_tsec_hwinit
   /*
    * init transmit interrupt coalescing register
    */
-  reg_ptr->txic = (M83xx_TSEC_TXIC_ICEN
-		   | M83xx_TSEC_TXIC_ICFCT(2)
-		   | M83xx_TSEC_TXIC_ICTT(32));
+  reg_ptr->txic = (TSEC_TXIC_ICEN
+		   | TSEC_TXIC_ICFCT(2)
+		   | TSEC_TXIC_ICTT(32));
   /*
    * init receive interrupt coalescing register
    */
 #if 0
-  reg_ptr->rxic = (M83xx_TSEC_RXIC_ICEN
-		   | M83xx_TSEC_RXIC_ICFCT(2)
-		   | M83xx_TSEC_RXIC_ICTT(32));
+  reg_ptr->rxic = (TSEC_RXIC_ICEN
+		   | TSEC_RXIC_ICFCT(2)
+		   | TSEC_RXIC_ICTT(32));
 #else
   reg_ptr->rxic = 0;
 #endif
   /*
    * init MACCFG1 register
    */
-  reg_ptr->maccfg1 = (M83xx_TSEC_MACCFG1_RX_FLOW
-		      | M83xx_TSEC_MACCFG1_TX_FLOW);
+  reg_ptr->maccfg1 = (TSEC_MACCFG1_RX_FLOW
+		      | TSEC_MACCFG1_TX_FLOW);
 
   /*
    * init MACCFG2 register
    */
-  reg_ptr->maccfg2 = ((reg_ptr->maccfg2 & M83xx_TSEC_MACCFG2_IFMODE_MSK)
-		      | M83xx_TSEC_MACCFG2_PRELEN( 7)
-		      | M83xx_TSEC_MACCFG2_FULLDUPLEX);
+  reg_ptr->maccfg2 = ((reg_ptr->maccfg2 & TSEC_MACCFG2_IFMODE_MSK)
+		      | TSEC_MACCFG2_PRELEN( 7)
+		      | TSEC_MACCFG2_FULLDUPLEX);
 
   /*
    * init station address register
@@ -323,7 +322,7 @@ static void mpc83xx_tsec_hwinit
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_mdio_init
+static void tsec_mdio_init
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -331,7 +330,7 @@ static void mpc83xx_tsec_mdio_init
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc        /* control structure                */
+ struct tsec_struct *sc        /* control structure                */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -342,12 +341,6 @@ static void mpc83xx_tsec_mdio_init
   /* Set TSEC registers for MDIO communication */
 
   /*
-   * FIXME: Not clear if this works for all boards.
-   * Tested only on MPC8313ERDB.
-   */
-  sc->mdio_ptr = &mpc83xx.tsec [0];
-
-  /*
    * set clock divider
    */
   sc->mdio_ptr->miimcfg = 3;
@@ -356,7 +349,7 @@ static void mpc83xx_tsec_mdio_init
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-int mpc83xx_tsec_mdio_read
+static int tsec_mdio_read
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -374,10 +367,10 @@ int mpc83xx_tsec_mdio_read
 |    0, if ok, else error                                                   |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc = uarg;/* control structure                */
+  struct tsec_struct *sc = uarg;/* control structure                */
 
   /* pointer to TSEC registers */
-  m83xxTSEC_Registers_t *reg_ptr = sc->mdio_ptr;
+  volatile tsec_registers *reg_ptr = sc->mdio_ptr;
 
   /*
    * make sure we work with a valid phy
@@ -397,20 +390,20 @@ int mpc83xx_tsec_mdio_read
   /*
    * set PHY/reg address
    */
-  reg_ptr->miimadd = (M83xx_TSEC_MIIMADD_PHY(phy)
-		      | M83xx_TSEC_MIIMADD_REGADDR(reg));
+  reg_ptr->miimadd = (TSEC_MIIMADD_PHY(phy)
+		      | TSEC_MIIMADD_REGADDR(reg));
   /*
    * start read cycle
    */
   reg_ptr->miimcom = 0;
-  reg_ptr->miimcom = M83xx_TSEC_MIIMCOM_READ;
+  reg_ptr->miimcom = TSEC_MIIMCOM_READ;
 
   /*
    * wait for cycle to terminate
    */
   do {
     rtems_task_wake_after(2);
-  }  while (0 != (reg_ptr->miimind & M83xx_TSEC_MIIMIND_BUSY));
+  }  while (0 != (reg_ptr->miimind & TSEC_MIIMIND_BUSY));
   reg_ptr->miimcom = 0;
   /*
    * fetch read data, if available
@@ -424,7 +417,7 @@ int mpc83xx_tsec_mdio_read
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-int mpc83xx_tsec_mdio_write
+static int tsec_mdio_write
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -442,10 +435,10 @@ int mpc83xx_tsec_mdio_write
 |    0, if ok, else error                                                   |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc = uarg;/* control structure                */
+  struct tsec_struct *sc = uarg;/* control structure                */
 
   /* pointer to TSEC registers */
-  m83xxTSEC_Registers_t *reg_ptr = sc->mdio_ptr;
+  volatile tsec_registers *reg_ptr = sc->mdio_ptr;
 
   /*
    * make sure we work with a valid phy
@@ -465,8 +458,8 @@ int mpc83xx_tsec_mdio_write
   /*
    * set PHY/reg address
    */
-  reg_ptr->miimadd = (M83xx_TSEC_MIIMADD_PHY(phy)
-		      | M83xx_TSEC_MIIMADD_REGADDR(reg));
+  reg_ptr->miimadd = (TSEC_MIIMADD_PHY(phy)
+		      | TSEC_MIIMADD_REGADDR(reg));
   /*
    * start write cycle
    */
@@ -477,7 +470,7 @@ int mpc83xx_tsec_mdio_write
    */
   do {
     rtems_task_wake_after(2);
-  }  while (0 != (reg_ptr->miimind & M83xx_TSEC_MIIMIND_BUSY));
+  }  while (0 != (reg_ptr->miimind & TSEC_MIIMIND_BUSY));
   reg_ptr->miimcom = 0;
   return 0;
 }
@@ -490,7 +483,7 @@ int mpc83xx_tsec_mdio_write
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_event_set mpc83xx_tsec_rx_wait_for_events
+static rtems_event_set tsec_rx_wait_for_events
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -498,7 +491,7 @@ static rtems_event_set mpc83xx_tsec_rx_wait_for_events
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc,       /* control structure                */
+ struct tsec_struct *sc,       /* control structure                */
  rtems_event_set event_mask            /* events to wait for               */
 )
 /*-------------------------------------------------------------------------*\
@@ -510,7 +503,7 @@ static rtems_event_set mpc83xx_tsec_rx_wait_for_events
  /*
   * enable Rx interrupts, make sure this is not interrupted :-)
   */
- M83xx_TSEC_IMASK_SET(sc->reg_ptr->imask,M83xx_IEVENT_RXALL,~0);
+ TSEC_IMASK_SET(sc->reg_ptr->imask,IEVENT_RXALL,~0);
 
  /*
   * wait for events to come in
@@ -533,7 +526,7 @@ static void mpc83xx_rxbd_alloc_clear
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc        /* control structure                */
+ struct tsec_struct *sc        /* control structure                */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -576,7 +569,7 @@ static void mpc83xx_rxbd_alloc_clear
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_receive_packets
+static void tsec_receive_packets
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -584,7 +577,7 @@ static void mpc83xx_tsec_receive_packets
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc        /* control structure                */
+ struct tsec_struct *sc        /* control structure                */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -600,7 +593,7 @@ static void mpc83xx_tsec_receive_packets
 
   BD_ptr = sc->Rx_NxtUsed_BD;
 
-  while ((0 == ((status = BD_ptr->status) & M83xx_BD_EMPTY)) &&
+  while ((0 == ((status = BD_ptr->status) & BD_EMPTY)) &&
 	 !finished &&
 	 (BD_ptr->buffer != NULL)) {
     /*
@@ -613,14 +606,14 @@ static void mpc83xx_tsec_receive_packets
     /*
      * Check that packet is valid
      */
-    if ((status & (M83xx_BD_LAST |
-		   M83xx_BD_FIRST_IN_FRAME |
-		   M83xx_BD_LONG |
-		   M83xx_BD_NONALIGNED |
-		   M83xx_BD_CRC_ERROR |
-		   M83xx_BD_OVERRUN ))
-	== (M83xx_BD_LAST |
-	    M83xx_BD_FIRST_IN_FRAME ) ) {
+    if ((status & (BD_LAST |
+		   BD_FIRST_IN_FRAME |
+		   BD_LONG |
+		   BD_NONALIGNED |
+		   BD_CRC_ERROR |
+		   BD_OVERRUN ))
+	== (BD_LAST |
+	    BD_FIRST_IN_FRAME ) ) {
       /*
        * send mbuf of this buffer to ether_input()
        */
@@ -654,7 +647,7 @@ static void mpc83xx_tsec_receive_packets
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_refill_rxbds
+static void tsec_refill_rxbds
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -662,7 +655,7 @@ static void mpc83xx_tsec_refill_rxbds
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc        /* control structure                */
+ struct tsec_struct *sc        /* control structure                */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -696,13 +689,13 @@ static void mpc83xx_tsec_refill_rxbds
       sc->Rx_mBuf_Ptr[bd_idx] = m;
 
       m->m_pkthdr.rcvif= &sc->arpcom.ac_if;
-      m->m_data        = M83xx_TSEC_ALIGN_BUFFER(m->m_ext.ext_buf,64);
+      m->m_data        = TSEC_ALIGN_BUFFER(m->m_ext.ext_buf,64);
       BD_ptr->buffer   = m->m_data;
       BD_ptr->length   = 0;
-      BD_ptr->status   = (M83xx_BD_EMPTY
-			  | M83xx_BD_INTERRUPT
+      BD_ptr->status   = (BD_EMPTY
+			  | BD_INTERRUPT
 			  | ((BD_ptr == sc->Rx_Last_BD)
-			     ? M83xx_BD_WRAP
+			     ? BD_WRAP
 			     : 0));
       /*
        * Advance BD_ptr to next BD
@@ -718,7 +711,7 @@ static void mpc83xx_tsec_refill_rxbds
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_rxDaemon
+static void tsec_rxDaemon
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -733,8 +726,8 @@ static void mpc83xx_tsec_rxDaemon
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc =
-    (struct mpc83xx_tsec_struct *)arg;
+  struct tsec_struct *sc =
+    (struct tsec_struct *)arg;
   bool finished = false;
   rtems_event_set events;
 #if !defined(CLREVENT_IN_IRQ)
@@ -743,33 +736,33 @@ static void mpc83xx_tsec_rxDaemon
   /*
    * enable Rx in MACCFG1 register
    */
-  sc->reg_ptr->maccfg1 |= M83xx_TSEC_MACCFG1_RXEN;
+  sc->reg_ptr->maccfg1 |= TSEC_MACCFG1_RXEN;
   while (!finished) {
     /*
      * fetch MBufs, associate them to RxBDs
      */
-    mpc83xx_tsec_refill_rxbds(sc);
+    tsec_refill_rxbds(sc);
     /*
      * wait for events to come in
      */
-    events = mpc83xx_tsec_rx_wait_for_events(sc,INTERRUPT_EVENT);
+    events = tsec_rx_wait_for_events(sc,INTERRUPT_EVENT);
 #if !defined(CLREVENT_IN_IRQ)
     /*
      * clear any pending RX events
      */
-    irq_events = sc->reg_ptr->ievent & M83xx_IEVENT_RXALL;
+    irq_events = sc->reg_ptr->ievent & IEVENT_RXALL;
     sc->reg_ptr->ievent = irq_events;
 #endif
     /*
      * fetch any completed buffers/packets received
      * and stuff them into the TCP/IP Stack
      */
-    mpc83xx_tsec_receive_packets(sc);
+    tsec_receive_packets(sc);
   }
   /*
    * disable Rx in MACCFG1 register
    */
-  sc->reg_ptr->maccfg1 &= ~M83xx_TSEC_MACCFG1_RXEN;
+  sc->reg_ptr->maccfg1 &= ~TSEC_MACCFG1_RXEN;
   /*
    * terminate daemon
    */
@@ -792,7 +785,7 @@ static void mpc83xx_txbd_alloc_clear
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc        /* control structure                */
+ struct tsec_struct *sc        /* control structure                */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -835,7 +828,7 @@ static void mpc83xx_txbd_alloc_clear
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-void mpc83xx_tsec_tx_start
+static void tsec_tx_start
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -850,7 +843,7 @@ struct ifnet *ifp
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc = ifp->if_softc;
+  struct tsec_struct *sc = ifp->if_softc;
 
   ifp->if_flags |= IFF_OACTIVE;
 
@@ -860,7 +853,7 @@ struct ifnet *ifp
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_event_set mpc83xx_tsec_tx_wait_for_events
+static rtems_event_set tsec_tx_wait_for_events
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -868,7 +861,7 @@ static rtems_event_set mpc83xx_tsec_tx_wait_for_events
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc,       /* control structure                */
+ struct tsec_struct *sc,       /* control structure                */
  rtems_event_set event_mask            /* events to wait for               */
 )
 /*-------------------------------------------------------------------------*\
@@ -880,7 +873,7 @@ static rtems_event_set mpc83xx_tsec_tx_wait_for_events
  /*
   * enable Tx interrupts, make sure this is not interrupted :-)
   */
- M83xx_TSEC_IMASK_SET(sc->reg_ptr->imask,M83xx_IEVENT_TXALL,~0);
+ TSEC_IMASK_SET(sc->reg_ptr->imask,IEVENT_TXALL,~0);
 
  /*
   * wait for events to come in
@@ -895,7 +888,7 @@ static rtems_event_set mpc83xx_tsec_tx_wait_for_events
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_tx_retire
+static void tsec_tx_retire
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -903,7 +896,7 @@ static void mpc83xx_tsec_tx_retire
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc        /* control structure                */
+ struct tsec_struct *sc        /* control structure                */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -918,7 +911,7 @@ static void mpc83xx_tsec_tx_retire
    * check next BDs to be empty
    */
   while ((RetBD->buffer != NULL)                       /* BD is filled      */
-	 && (0 == (RetBD->status & M83xx_BD_READY ))) {/* BD no longer ready*/
+	 && (0 == (RetBD->status & BD_READY ))) {/* BD no longer ready*/
 
     bd_idx = RetBD - sc->Tx_Frst_BD;
     m = sc->Tx_mBuf_Ptr[bd_idx];
@@ -939,7 +932,7 @@ static void mpc83xx_tsec_tx_retire
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_sendpacket
+static void tsec_sendpacket
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -947,7 +940,7 @@ static void mpc83xx_tsec_sendpacket
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc,       /* control structure                */
+ struct tsec_struct *sc,       /* control structure                */
  struct mbuf *m                        /* start of packet to send          */
 )
 /*-------------------------------------------------------------------------*\
@@ -988,19 +981,19 @@ static void mpc83xx_tsec_sendpacket
 	 * Then try to retire it
 	 * and to return its mbuf
 	 */
-	mpc83xx_tsec_tx_retire(sc);
+	tsec_tx_retire(sc);
 	if (CurrBD->buffer != NULL) {
 	  /*
 	   * Wait for anything to happen...
 	   */
-	  mpc83xx_tsec_tx_wait_for_events(sc,INTERRUPT_EVENT);
+	  tsec_tx_wait_for_events(sc,INTERRUPT_EVENT);
 	}
       }
-      status = ((M83xx_BD_PAD_CRC | M83xx_BD_TX_CRC)
+      status = ((BD_PAD_CRC | BD_TX_CRC)
 		| ((m->m_next == NULL)
-		   ? M83xx_BD_LAST | M83xx_BD_INTERRUPT
+		   ? BD_LAST | BD_INTERRUPT
 		   : 0)
-		| ((CurrBD == sc->Tx_Last_BD) ? M83xx_BD_WRAP : 0));
+		| ((CurrBD == sc->Tx_Last_BD) ? BD_WRAP : 0));
 
       /*
        * link buffer to BD
@@ -1022,7 +1015,7 @@ static void mpc83xx_tsec_sendpacket
 	FrstBD = CurrBD;
       }
       else {
-	status |= M83xx_BD_READY;
+	status |= BD_READY;
       }
       CurrBD->status = status;
       /*
@@ -1039,19 +1032,19 @@ static void mpc83xx_tsec_sendpacket
    * to BD chain, so set first BD ready now
    */
   if (FrstBD != NULL) {
-    FrstBD->status |= M83xx_BD_READY;
+    FrstBD->status |= BD_READY;
   }
   sc->Tx_NxtFill_BD = CurrBD;
   /*
    * wake up transmitter (clear TSTAT[THLT])
    */
-  sc->reg_ptr->tstat = M83xx_TSEC_TSTAT_THLT;
+  sc->reg_ptr->tstat = TSEC_TSTAT_THLT;
 }
 
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_txDaemon
+static void tsec_txDaemon
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1066,8 +1059,8 @@ static void mpc83xx_tsec_txDaemon
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc =
-    (struct mpc83xx_tsec_struct *)arg;
+  struct tsec_struct *sc =
+    (struct tsec_struct *)arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
   struct mbuf *m;
   bool finished = false;
@@ -1080,25 +1073,25 @@ static void mpc83xx_tsec_txDaemon
    * enable Tx in MACCFG1 register
    * FIXME: make this irq save
    */
-  sc->reg_ptr->maccfg1 |= M83xx_TSEC_MACCFG1_TXEN;
+  sc->reg_ptr->maccfg1 |= TSEC_MACCFG1_TXEN;
   while (!finished) {
     /*
      * wait for events to come in
      */
-    events = mpc83xx_tsec_tx_wait_for_events(sc,
+    events = tsec_tx_wait_for_events(sc,
 					     START_TRANSMIT_EVENT
 					     | INTERRUPT_EVENT);
 #if !defined(CLREVENT_IN_IRQ)
     /*
      * clear any pending TX events
      */
-    irq_events = sc->reg_ptr->ievent & M83xx_IEVENT_TXALL;
+    irq_events = sc->reg_ptr->ievent & IEVENT_TXALL;
     sc->reg_ptr->ievent = irq_events;
 #endif
     /*
      * retire any sent tx BDs
      */
-    mpc83xx_tsec_tx_retire(sc);
+    tsec_tx_retire(sc);
     /*
      * Send packets till queue is empty
      */
@@ -1109,7 +1102,7 @@ static void mpc83xx_tsec_txDaemon
       IF_DEQUEUE(&ifp->if_snd, m);
 
       if (m) {
-	mpc83xx_tsec_sendpacket(sc,m);
+	tsec_sendpacket(sc,m);
       }
     } while (m != NULL);
 
@@ -1118,7 +1111,7 @@ static void mpc83xx_tsec_txDaemon
   /*
    * disable Tx in MACCFG1 register
    */
-  sc->reg_ptr->maccfg1 &= ~M83xx_TSEC_MACCFG1_TXEN;
+  sc->reg_ptr->maccfg1 &= ~TSEC_MACCFG1_TXEN;
   /*
    * terminate daemon
    */
@@ -1133,7 +1126,7 @@ static void mpc83xx_tsec_txDaemon
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_tx_irq_handler
+static void tsec_tx_irq_handler
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1148,8 +1141,8 @@ static void mpc83xx_tsec_tx_irq_handler
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc =
-    (struct mpc83xx_tsec_struct *)handle;
+  struct tsec_struct *sc =
+    (struct tsec_struct *)handle;
 #if defined(CLREVENT_IN_IRQ)
   uint32_t irq_events;
 #endif
@@ -1158,13 +1151,13 @@ static void mpc83xx_tsec_tx_irq_handler
   /*
    * disable tx interrupts
    */
-  M83xx_TSEC_IMASK_SET(sc->reg_ptr->imask,M83xx_IEVENT_TXALL,0);
+  TSEC_IMASK_SET(sc->reg_ptr->imask,IEVENT_TXALL,0);
 
 #if defined(CLREVENT_IN_IRQ)
   /*
    * clear any pending TX events
    */
-  irq_events = sc->reg_ptr->ievent & M83xx_IEVENT_TXALL;
+  irq_events = sc->reg_ptr->ievent & IEVENT_TXALL;
   sc->reg_ptr->ievent = irq_events;
 #endif
   /*
@@ -1176,7 +1169,7 @@ static void mpc83xx_tsec_tx_irq_handler
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_rx_irq_handler
+static void tsec_rx_irq_handler
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1191,8 +1184,8 @@ static void mpc83xx_tsec_rx_irq_handler
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc =
-    (struct mpc83xx_tsec_struct *)handle;
+  struct tsec_struct *sc =
+    (struct tsec_struct *)handle;
 #if defined(CLREVENT_IN_IRQ)
   uint32_t irq_events;
 #endif
@@ -1201,12 +1194,12 @@ static void mpc83xx_tsec_rx_irq_handler
   /*
    * disable rx interrupts
    */
-  M83xx_TSEC_IMASK_SET(sc->reg_ptr->imask,M83xx_IEVENT_RXALL,0);
+  TSEC_IMASK_SET(sc->reg_ptr->imask,IEVENT_RXALL,0);
 #if defined(CLREVENT_IN_IRQ)
   /*
    * clear any pending RX events
    */
-  irq_events = sc->reg_ptr->ievent & M83xx_IEVENT_RXALL;
+  irq_events = sc->reg_ptr->ievent & IEVENT_RXALL;
   sc->reg_ptr->ievent = irq_events;
 #endif
   /*
@@ -1219,7 +1212,7 @@ static void mpc83xx_tsec_rx_irq_handler
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_err_irq_handler
+static void tsec_err_irq_handler
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1234,25 +1227,25 @@ static void mpc83xx_tsec_err_irq_handler
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc =
-    (struct mpc83xx_tsec_struct *)handle;
+  struct tsec_struct *sc =
+    (struct tsec_struct *)handle;
   /*
    * clear error events in IEVENT
    */
-  sc->reg_ptr->ievent = M83xx_IEVENT_ERRALL;
+  sc->reg_ptr->ievent = IEVENT_ERRALL;
   /*
    * has Rx been stopped? then restart it
    */
-  if (0 != (sc->reg_ptr->rstat & M83xx_TSEC_RSTAT_QHLT)) {
+  if (0 != (sc->reg_ptr->rstat & TSEC_RSTAT_QHLT)) {
     sc->rxErrors++;
-    sc->reg_ptr->rstat = M83xx_TSEC_RSTAT_QHLT;
+    sc->reg_ptr->rstat = TSEC_RSTAT_QHLT;
   }
   /*
    * has Tx been stopped? then restart it
    */
-  if (0 != (sc->reg_ptr->tstat & M83xx_TSEC_TSTAT_THLT)) {
+  if (0 != (sc->reg_ptr->tstat & TSEC_TSTAT_THLT)) {
     sc->txErrors++;
-    sc->reg_ptr->tstat = M83xx_TSEC_TSTAT_THLT;
+    sc->reg_ptr->tstat = TSEC_TSTAT_THLT;
   }
 }
 
@@ -1260,7 +1253,7 @@ static void mpc83xx_tsec_err_irq_handler
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static uint32_t mpc83xx_tsec_irq_mask
+static uint32_t tsec_irq_mask
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1269,7 +1262,7 @@ static uint32_t mpc83xx_tsec_irq_mask
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int irqnum,
- struct mpc83xx_tsec_struct *sc
+ struct tsec_struct *sc
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -1277,17 +1270,17 @@ static uint32_t mpc83xx_tsec_irq_mask
 \*=========================================================================*/
 {
   return ((irqnum == sc->irq_num_tx)
-	  ? M83xx_IEVENT_TXALL
+	  ? IEVENT_TXALL
 	  : ((irqnum == sc->irq_num_rx)
-	     ? M83xx_IEVENT_RXALL
+	     ? IEVENT_RXALL
 	     : ((irqnum == sc->irq_num_err)
-		? M83xx_IEVENT_ERRALL
+		? IEVENT_ERRALL
 		: 0)));
 }
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_irq_on
+static void tsec_irq_on
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1303,18 +1296,18 @@ static void mpc83xx_tsec_irq_on
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc =
-    (struct mpc83xx_tsec_struct *)(irq_conn_data->handle);
+  struct tsec_struct *sc =
+    (struct tsec_struct *)(irq_conn_data->handle);
 
-  M83xx_TSEC_IMASK_SET(sc->reg_ptr->imask,
-		       mpc83xx_tsec_irq_mask(irq_conn_data->name,sc),
+  TSEC_IMASK_SET(sc->reg_ptr->imask,
+		       tsec_irq_mask(irq_conn_data->name,sc),
 		       ~0);
 }
 
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_irq_off
+static void tsec_irq_off
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1330,18 +1323,18 @@ static void mpc83xx_tsec_irq_off
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc =
-    (struct mpc83xx_tsec_struct *)irq_conn_data->handle;
+  struct tsec_struct *sc =
+    (struct tsec_struct *)irq_conn_data->handle;
 
-  M83xx_TSEC_IMASK_SET(sc->reg_ptr->imask,
-		       mpc83xx_tsec_irq_mask(irq_conn_data->name,sc),
+  TSEC_IMASK_SET(sc->reg_ptr->imask,
+		       tsec_irq_mask(irq_conn_data->name,sc),
 		       0);
 }
 
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static int mpc83xx_tsec_irq_isOn
+static int tsec_irq_isOn
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1357,17 +1350,17 @@ static int mpc83xx_tsec_irq_isOn
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc =
-    (struct mpc83xx_tsec_struct *)irq_conn_data->handle;
+  struct tsec_struct *sc =
+    (struct tsec_struct *)irq_conn_data->handle;
 
   return (0 != (sc->reg_ptr->imask
-		& mpc83xx_tsec_irq_mask(irq_conn_data->name,sc)));
+		& tsec_irq_mask(irq_conn_data->name,sc)));
 }
 
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_install_irq_handlers
+static void tsec_install_irq_handlers
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1375,7 +1368,7 @@ static void mpc83xx_tsec_install_irq_handlers
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc,        /* ptr to control structure        */
+ struct tsec_struct *sc,        /* ptr to control structure        */
  bool   install                         /* true: install, false: remove    */
 )
 /*-------------------------------------------------------------------------*\
@@ -1388,25 +1381,25 @@ static void mpc83xx_tsec_install_irq_handlers
   rtems_irq_connect_data irq_conn_data[3] = {
     {
       sc->irq_num_tx,
-      mpc83xx_tsec_tx_irq_handler, /* rtems_irq_hdl           */
+      tsec_tx_irq_handler, /* rtems_irq_hdl           */
       (rtems_irq_hdl_param)sc,     /* (rtems_irq_hdl_param)   */
-      mpc83xx_tsec_irq_on,         /* (rtems_irq_enable)      */
-      mpc83xx_tsec_irq_off,        /* (rtems_irq_disable)     */
-      mpc83xx_tsec_irq_isOn        /* (rtems_irq_is_enabled)  */
+      tsec_irq_on,         /* (rtems_irq_enable)      */
+      tsec_irq_off,        /* (rtems_irq_disable)     */
+      tsec_irq_isOn        /* (rtems_irq_is_enabled)  */
     },{
       sc->irq_num_rx,
-      mpc83xx_tsec_rx_irq_handler, /* rtems_irq_hdl           */
+      tsec_rx_irq_handler, /* rtems_irq_hdl           */
       (rtems_irq_hdl_param)sc,     /* (rtems_irq_hdl_param)   */
-      mpc83xx_tsec_irq_on,         /* (rtems_irq_enable)      */
-      mpc83xx_tsec_irq_off,        /* (rtems_irq_disable)     */
-      mpc83xx_tsec_irq_isOn        /* (rtems_irq_is_enabled)  */
+      tsec_irq_on,         /* (rtems_irq_enable)      */
+      tsec_irq_off,        /* (rtems_irq_disable)     */
+      tsec_irq_isOn        /* (rtems_irq_is_enabled)  */
     },{
       sc->irq_num_err,
-      mpc83xx_tsec_err_irq_handler, /* rtems_irq_hdl           */
+      tsec_err_irq_handler, /* rtems_irq_hdl           */
       (rtems_irq_hdl_param)sc,      /* (rtems_irq_hdl_param)   */
-      mpc83xx_tsec_irq_on,          /* (rtems_irq_enable)      */
-      mpc83xx_tsec_irq_off,         /* (rtems_irq_disable)     */
-      mpc83xx_tsec_irq_isOn         /* (rtems_irq_is_enabled)  */
+      tsec_irq_on,          /* (rtems_irq_enable)      */
+      tsec_irq_off,         /* (rtems_irq_disable)     */
+      tsec_irq_isOn         /* (rtems_irq_is_enabled)  */
     }
   };
 
@@ -1436,7 +1429,7 @@ static void mpc83xx_tsec_install_irq_handlers
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_init
+static void tsec_init
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1451,7 +1444,7 @@ static void mpc83xx_tsec_init
 |    zero, if success                                                       |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc = (struct mpc83xx_tsec_struct *)arg;
+  struct tsec_struct *sc = (struct tsec_struct *)arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
   /*
    * check, whether device is not yet running
@@ -1478,34 +1471,34 @@ static void mpc83xx_tsec_init
      * - set interrupt coalescing to BDCount/8, Time of 8 frames
      * - enable DMA snooping
      */
-    mpc83xx_tsec_hwinit(sc);
+    tsec_hwinit(sc);
     /*
      * init access to phys
      */
-    mpc83xx_tsec_mdio_init(sc);
+    tsec_mdio_init(sc);
     /*
      * Start driver tasks
      */
     sc->txDaemonTid = rtems_bsdnet_newproc("TStx",
 					   4096,
-					   mpc83xx_tsec_txDaemon,
+					   tsec_txDaemon,
 					   sc);
     sc->rxDaemonTid = rtems_bsdnet_newproc("TSrx", 4096,
-					   mpc83xx_tsec_rxDaemon,
+					   tsec_rxDaemon,
 					   sc);
     /*
      * install interrupt handlers
      */
-    mpc83xx_tsec_install_irq_handlers(sc,true);
+    tsec_install_irq_handlers(sc,true);
   }
   /*
    * Set flags appropriately
    */
   if(ifp->if_flags & IFF_PROMISC) {
-    sc->reg_ptr->rctrl |=  M83xx_TSEC_RCTRL_PROM;
+    sc->reg_ptr->rctrl |=  TSEC_RCTRL_PROM;
   }
   else {
-    sc->reg_ptr->rctrl &= ~M83xx_TSEC_RCTRL_PROM;
+    sc->reg_ptr->rctrl &= ~TSEC_RCTRL_PROM;
   }
 
 #if defined(HSC_CM01)
@@ -1513,7 +1506,7 @@ static void mpc83xx_tsec_init
    * for HSC CM01: we need to configure the PHY to use maximum skew adjust
    */
 
-  mpc83xx_tsec_mdio_write(-1,sc,23,0x0100);
+  tsec_mdio_write(-1,sc,23,0x0100);
 #endif
 
   /*
@@ -1529,7 +1522,7 @@ static void mpc83xx_tsec_init
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_off
+static void tsec_off
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1537,7 +1530,7 @@ static void mpc83xx_tsec_off
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc         /* ptr to control structure        */
+ struct tsec_struct *sc         /* ptr to control structure        */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -1552,7 +1545,7 @@ static void mpc83xx_tsec_off
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_stats
+static void tsec_stats
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1560,7 +1553,7 @@ static void mpc83xx_tsec_stats
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- struct mpc83xx_tsec_struct *sc         /* ptr to control structure        */
+ struct tsec_struct *sc         /* ptr to control structure        */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -1574,7 +1567,7 @@ static void mpc83xx_tsec_stats
    */
   media = IFM_MAKEWORD(0,0,0,sc->phy_default); /* fetch from default phy */
 
-  result = mpc83xx_tsec_ioctl(&(sc->arpcom.ac_if),
+  result = tsec_ioctl(&(sc->arpcom.ac_if),
 			      SIOCGIFMEDIA,
 			      (caddr_t)&media);
   if (result == 0) {
@@ -1587,7 +1580,7 @@ static void mpc83xx_tsec_stats
     uint32_t reg_val;
     printf("****** PHY register values****\n");
     for (reg = 0;reg <= 31;reg++) {
-      mpc83xx_tsec_mdio_read(-1,sc,reg,&reg_val);
+      tsec_mdio_read(-1,sc,reg,&reg_val);
       printf("%02d:0x%04x%c",reg,reg_val,
 	     (((reg % 4) == 3) ? '\n' : ' '));
     }
@@ -1599,38 +1592,38 @@ static void mpc83xx_tsec_stats
   printf ("   Rx Interrupts:%-8lu",   sc->rxInterrupts);
   printf ("       Rx Errors:%-8lu",   sc->rxErrors);
   printf ("      Rx packets:%-8lu\n",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rpkt]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_RPKT]);
   printf ("   Rx broadcasts:%-8lu",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rbca]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_RBCA]);
   printf ("   Rx multicasts:%-8lu",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rmca]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_RMCA]);
   printf ("           Giant:%-8lu\n",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rovr]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_ROVR]);
   printf ("       Non-octet:%-8lu",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_raln]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_RALN]);
   printf ("         Bad CRC:%-8lu",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rfcs]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_RFCS]);
   printf ("         Overrun:%-8lu\n",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rdrp]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_RDRP]);
 
   printf ("   Tx Interrupts:%-8lu",   sc->txInterrupts);
   printf ("       Tx Errors:%-8lu",   sc->txErrors);
   printf ("      Tx packets:%-8lu\n",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tpkt]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_TPKT]);
   printf ("        Deferred:%-8lu",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tdfr]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_TDFR]);
   printf ("  Late Collision:%-8lu",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tlcl]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_TLCL]);
   printf ("Retransmit Limit:%-8lu\n",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tedf]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_TEDF]);
   printf ("        Underrun:%-8lu\n",
-	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tund]);
+	  sc->reg_ptr->rmon_mib[TSEC_RMON_TUND]);
 }
 
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static int mpc83xx_tsec_ioctl
+static int tsec_ioctl
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1647,7 +1640,7 @@ static int mpc83xx_tsec_ioctl
 |    zero, if success                                                       |
 \*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc = ifp->if_softc;
+  struct tsec_struct *sc = ifp->if_softc;
   int error = 0;
 
   switch(command)  {
@@ -1671,10 +1664,10 @@ static int mpc83xx_tsec_ioctl
      * adjust active state
      */
     if (ifp->if_flags & IFF_RUNNING) {
-      mpc83xx_tsec_off(sc);
+      tsec_off(sc);
     }
     if (ifp->if_flags & IFF_UP) {
-      mpc83xx_tsec_init(sc);
+      tsec_init(sc);
     }
     break;
 
@@ -1682,7 +1675,7 @@ static int mpc83xx_tsec_ioctl
     /*
      * show interface statistics
      */
-    mpc83xx_tsec_stats(sc);
+    tsec_stats(sc);
     break;
 
     /*
@@ -1701,7 +1694,7 @@ static int mpc83xx_tsec_ioctl
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-int rtems_mpc83xx_tsec_mode_adapt
+static int tsec_mode_adapt
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1717,7 +1710,7 @@ int rtems_mpc83xx_tsec_mode_adapt
 \*=========================================================================*/
 {
   int result = 0;
-  struct mpc83xx_tsec_struct *sc = ifp->if_softc;
+  struct tsec_struct *sc = ifp->if_softc;
   int media = IFM_MAKEWORD( 0, 0, 0, sc->phy_default);
 
 #ifdef DEBUG
@@ -1726,7 +1719,7 @@ int rtems_mpc83xx_tsec_mode_adapt
   /*
    * fetch media status
    */
-  result = mpc83xx_tsec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
+  result = tsec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
   if (result != 0) {
     return result;
   }
@@ -1747,7 +1740,7 @@ int rtems_mpc83xx_tsec_mode_adapt
      * set media status: set auto negotiation -> start auto-negotiation
      */
     media = IFM_MAKEWORD(0,IFM_AUTO,0,sc->phy_default);
-    result = mpc83xx_tsec_ioctl(ifp,SIOCSIFMEDIA,(caddr_t)&media);
+    result = tsec_ioctl(ifp,SIOCSIFMEDIA,(caddr_t)&media);
     if (result != 0) {
       return result;
     }
@@ -1756,7 +1749,7 @@ int rtems_mpc83xx_tsec_mode_adapt
      */
     do {
       media = IFM_MAKEWORD(0,0,0,sc->phy_default);
-      result = mpc83xx_tsec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
+      result = tsec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
       if (result != 0) {
 	return result;
       }
@@ -1771,31 +1764,31 @@ int rtems_mpc83xx_tsec_mode_adapt
    */
   if (IFM_1000_T == IFM_SUBTYPE(media)) {
     sc->reg_ptr->maccfg2 =
-      ((sc->reg_ptr->maccfg2 & ~M83xx_TSEC_MACCFG2_IFMODE_MSK)
-       | M83xx_TSEC_MACCFG2_IFMODE_BYT);
+      ((sc->reg_ptr->maccfg2 & ~TSEC_MACCFG2_IFMODE_MSK)
+       | TSEC_MACCFG2_IFMODE_BYT);
   }
   else {
     sc->reg_ptr->maccfg2 =
-      ((sc->reg_ptr->maccfg2 & ~M83xx_TSEC_MACCFG2_IFMODE_MSK)
-       | M83xx_TSEC_MACCFG2_IFMODE_NIB);
+      ((sc->reg_ptr->maccfg2 & ~TSEC_MACCFG2_IFMODE_MSK)
+       | TSEC_MACCFG2_IFMODE_NIB);
   }
   /*
    * if we are 10MBit, then switch rate to 10M
    */
   if (IFM_10_T == IFM_SUBTYPE(media)) {
-    sc->reg_ptr->ecntrl &= ~M83xx_TSEC_ECNTRL_R100M;
+    sc->reg_ptr->ecntrl &= ~TSEC_ECNTRL_R100M;
   }
   else {
-    sc->reg_ptr->ecntrl |= M83xx_TSEC_ECNTRL_R100M;
+    sc->reg_ptr->ecntrl |= TSEC_ECNTRL_R100M;
   }
   /*
    * if we are half duplex then switch to half duplex
    */
   if (0 == (IFM_FDX & IFM_OPTIONS(media))) {
-    sc->reg_ptr->maccfg2 &= ~M83xx_TSEC_MACCFG2_FULLDUPLEX;
+    sc->reg_ptr->maccfg2 &= ~TSEC_MACCFG2_FULLDUPLEX;
   }
   else {
-    sc->reg_ptr->maccfg2 |=  M83xx_TSEC_MACCFG2_FULLDUPLEX;
+    sc->reg_ptr->maccfg2 |=  TSEC_MACCFG2_FULLDUPLEX;
   }
   /*
    * store current media state for future compares
@@ -1808,7 +1801,7 @@ int rtems_mpc83xx_tsec_mode_adapt
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static void mpc83xx_tsec_watchdog
+static void tsec_watchdog
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -1824,46 +1817,27 @@ static void mpc83xx_tsec_watchdog
 |    1, if success                                                       |
 \*=========================================================================*/
 {
-  rtems_mpc83xx_tsec_mode_adapt(ifp);
+  tsec_mode_adapt(ifp);
   ifp->if_timer    = TSEC_WATCHDOG_TIMEOUT;
 }
 
-/*=========================================================================*\
-| Function:                                                                 |
-\*-------------------------------------------------------------------------*/
-static int mpc83xx_tsec_driver_attach
-(
-/*-------------------------------------------------------------------------*\
-| Purpose:                                                                  |
-|   attach the driver                                                       |
-+---------------------------------------------------------------------------+
-| Input Parameters:                                                         |
-\*-------------------------------------------------------------------------*/
- struct rtems_bsdnet_ifconfig *config  /* interface configuration          */
+static int tsec_driver_attach(
+  struct rtems_bsdnet_ifconfig *config,
+  int unitNumber,
+  char *unitName,
+  volatile tsec_registers *reg_ptr,
+  volatile tsec_registers *mdio_ptr
 )
-/*-------------------------------------------------------------------------*\
-| Return Value:                                                             |
-|    1, if success                                                          |
-\*=========================================================================*/
 {
-  struct mpc83xx_tsec_struct *sc;
+  struct tsec_struct *sc;
   struct ifnet *ifp;
-  int    unitNumber;
-  char   *unitName;
   uint32_t svr = _read_SVR();
   uint32_t pvr = _read_PVR();
 
  /*
-  * Parse driver name
-  */
-  if((unitNumber = rtems_bsdnet_parse_driver_name(config, &unitName)) < 0) {
-    return 0;
-  }
-
- /*
   * Is driver free?
   */
-  if ((unitNumber <= 0) || (unitNumber > M83xx_TSEC_NIFACES)) {
+  if ((unitNumber <= 0) || (unitNumber > TSEC_COUNT)) {
 
     printk ("Bad TSEC unit number.\n");
     return 0;
@@ -1897,7 +1871,8 @@ static int mpc83xx_tsec_driver_attach
   sc->acceptBroadcast = !config->ignore_broadcast;
 
   /* get pointer to TSEC register block */
-  sc->reg_ptr         = &mpc83xx.tsec[unitNumber-1];
+  sc->reg_ptr         = reg_ptr;
+  sc->mdio_ptr        = mdio_ptr;
 
   if (svr == 0x80b00010 && pvr == 0x80850010) {
     /*
@@ -1928,8 +1903,8 @@ static int mpc83xx_tsec_driver_attach
   /*
    * setup info about mdio interface
    */
-  sc->mdio_info.mdio_r   = mpc83xx_tsec_mdio_read;
-  sc->mdio_info.mdio_w   = mpc83xx_tsec_mdio_write;
+  sc->mdio_info.mdio_r   = tsec_mdio_read;
+  sc->mdio_info.mdio_w   = tsec_mdio_write;
   sc->mdio_info.has_gmii = 1; /* we support gigabit IF */
 
   /*
@@ -1954,11 +1929,11 @@ static int mpc83xx_tsec_driver_attach
   ifp->if_unit    = unitNumber;
   ifp->if_name    = unitName;
   ifp->if_mtu     = (config->mtu > 0) ? config->mtu : ETHERMTU;
-  ifp->if_init    = mpc83xx_tsec_init;
-  ifp->if_ioctl   = mpc83xx_tsec_ioctl;
-  ifp->if_start   = mpc83xx_tsec_tx_start;
+  ifp->if_init    = tsec_init;
+  ifp->if_ioctl   = tsec_ioctl;
+  ifp->if_start   = tsec_tx_start;
   ifp->if_output  = ether_output;
-  ifp->if_watchdog =  mpc83xx_tsec_watchdog; /* XXX: timer is set in "init" */
+  ifp->if_watchdog =  tsec_watchdog; /* XXX: timer is set in "init" */
 
   ifp->if_flags   = (config->ignore_broadcast) ? 0 : IFF_BROADCAST;
   /*ifp->if_flags   = IFF_BROADCAST | IFF_SIMPLEX;*/
@@ -1977,30 +1952,24 @@ static int mpc83xx_tsec_driver_attach
   return 1;
 }
 
-/*=========================================================================*\
-| Function:                                                                 |
-\*-------------------------------------------------------------------------*/
-int rtems_mpc83xx_tsec_driver_attach_detach
-(
-/*-------------------------------------------------------------------------*\
-| Purpose:                                                                  |
-|   attach or detach the driver                                             |
-+---------------------------------------------------------------------------+
-| Input Parameters:                                                         |
-\*-------------------------------------------------------------------------*/
- struct rtems_bsdnet_ifconfig *config, /* interface configuration          */
- int attaching                         /* 0 = detach, else attach          */
+int tsec_driver_attach_detach(
+  struct rtems_bsdnet_ifconfig *config,
+  int unitNumber,
+  char *unitName,
+  volatile tsec_registers *reg_ptr,
+  volatile tsec_registers *mdio_ptr,
+  int attaching
 )
-/*-------------------------------------------------------------------------*\
-| Return Value:                                                             |
-|    1, if success                                                       |
-\*=========================================================================*/
 {
   if (attaching) {
-    return mpc83xx_tsec_driver_attach(config);
-  }
-  else {
+    return tsec_driver_attach(
+      config,
+      unitNumber,
+      unitName,
+      reg_ptr,
+      mdio_ptr
+    );
+  } else {
     return 0;
   }
 }
-
