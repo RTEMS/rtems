@@ -11,19 +11,11 @@
 
 
 #include <bsp.h>
-#include <rtems/bspIo.h>
 
-/*
- *  This file should only be compiled if the BSP has U-Boot.
- *  In addition, this function does not support every PowerPC
- *  CPU model listed in the bd_t structure.  Users are encouraged
- *  to augment this code.  The following #error should be fixed
- *  as more CPU models are supported.
- */
 #if defined(HAS_UBOOT)
-  #if !defined(CONFIG_MPC5xxx)
-    #error "dumpUBootDBInfo: unsupported configuration!!"
-  #endif
+
+#include <bsp/u-boot.h>
+#include <rtems/bspIo.h>
 
 /*
  *  Dump U-Boot Board Information Structure
@@ -78,7 +70,6 @@ void dumpUBootBDInfo(
       u->bi_pcifreq
     #endif
   );
-
 }
-#endif
 
+#endif

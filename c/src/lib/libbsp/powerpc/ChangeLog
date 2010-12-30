@@ -1,3 +1,9 @@
+2010-12-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/uboot_dump_bdinfo.c: Include <bsp/u-boot.h> if necessary.
+	* shared/include/u-boot-board-info.h: New file.
+	* shared/include/u-boot.h: Removed file.
+
 2010-12-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/start.h, shared/src/bsp-start-zero.S: New files.
