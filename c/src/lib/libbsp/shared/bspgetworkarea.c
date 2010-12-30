@@ -31,7 +31,7 @@ extern char HeapSize[];
  *  We may get the size information from U-Boot or the linker scripts.
  */
 #ifdef HAS_UBOOT
-  extern bd_t bsp_uboot_board_info;
+  #include <bsp/u-boot.h>
 #else
   extern char RamBase[];
   extern char RamSize[];

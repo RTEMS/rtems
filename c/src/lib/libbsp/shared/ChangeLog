@@ -1,3 +1,9 @@
+2010-12-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/bspgetworkarea.c: Include <bsp/u-boot.h> if necessary.
+	* shared/include/u-boot.h, shared/src/bsp-uboot-board-info.c: New
+	files.
+
 2010-10-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/utility.h: Renamed macros.
