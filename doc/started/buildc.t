@@ -8,12 +8,13 @@
 
 @chapter Building the GNU Cross Compiler Toolset
 
-NOTE:  This chapter does @b{NOT} apply if you installed prebuilt toolset
-executables for BINUTILS, GCC, NEWLIB, and GDB.  If you installed
-prebuilt executables for all of those, proceed to @ref{Building RTEMS}.
-If you require a GDB with a special configuration to connect to your
-target board, then proceed to @ref{Installing GDB Without RPM}
-for some advice.
+@b{NOTE}:  This chapter describes the steps required to build cross-compilation
+toolset on Linux (and possibly Windows using Cygwin) systems.  This chapter
+does @b{NOT} apply if you installed prebuilt toolset executables for BINUTILS,
+GCC, NEWLIB, and GDB.  If you installed prebuilt executables for all of those,
+proceed to @ref{Building RTEMS}.  If you require a GDB with a special
+configuration to connect to your target board, then proceed to
+@ref{Installing GDB Without RPM} for some advice.
 
 This chapter describes the steps required to acquire the source code for
 a GNU cross compiler toolset, apply any required RTEMS specific patches,
@@ -52,9 +53,14 @@ patches for a particular target architecture.
 All patches and RPM specification files are kept in CVS.  They are
 not included in release tarballs.  You will have to access the
 CVS branch for RTEMS @value{RTEMSAPI}.  For details on this,
-visit @uref{http://www.rtems.org, http://www.rtems.org} and look for
-instructions on accessing the RTEMS Source Code Repository in read-only
-mode.
+visit @uref{http://www.rtems.org/wiki/index.php/RTEMS_CVS_Repository, http://www.rtems.org/wiki/index.php/RTEMS_CVS_Repository} and look for
+instructions on accessing the RTEMS Source Code Repository in read-only mode.
+You can either do a complete checkout of the source tree or use a web
+interface.  A typical checkout command would look like this:
+@c TODO: pointing the user to the wiki entry might be enough.
+@example
+cvs -d :pserver:anoncvs@@www.rtems.com:/usr1/CVS -z 9 co -P rtems
+@end example
 
 In the checked out source code, you will need to look in the subdirectory
 @code{contrib/crossrpms/autotools} to determine the versions of AUTOCONF
@@ -62,9 +68,10 @@ and AUTOMAKE as well as any patches required.  In this directory are
 a few files you will need to look at.  The first is @code{Makefile.am}
 which defines the versions of AUTOCONF and AUTOMAKE required for this
 RTEMS Release Series.  Make a note of the version numbers required for
-AUTOCONF and AUTOMAKE.  Then examine the following files to determine
-the master location for the source tarballs and to determine if a patch
-is required for each tool version cited in the @code{Makefile.am}.
+AUTOCONF and AUTOMAKE (AUTOCONF_VERS and AUTOMAKE_VERS respectively).  Then
+examine the following files to determine the master location for the source
+tarballs and to determine if a patch is required for each tool version cited in
+the @code{Makefile.am}.
 
 @example
 autoconf-sources.add
@@ -74,6 +81,10 @@ automake-sources.add
 If any patches are required, they will be in the
 @code{contrib/crossrpms/patches} subdirectory of your checked out RTEMS
 source tree.
+
+If no patches are required, you can use a package manager provided by your
+Linux distribution to install AUTOMAKE and AUTOCONF to avoid building them from
+source.
 
 In the checked out source code, you will need to look in the subdirectory
 @code{contrib/crossrpms/rtems@value{RTEMSAPI}} to determine the target
@@ -100,12 +111,6 @@ source tree.
 This is the entire set of source tarballs and patches required for a
 toolset targeting the selected architecture.  In many cases, this will be
 the same versions required by other targets on this RTEMS Release Series.
-
-Depending on the build method chosen, you may have to download source
-and patches or only patches.  Also the destination directory for the
-downloaded source is dependent on the build method followed.  But the
-versions required are the same.  Specific information on what to download
-and where to place it is in subsequent sections.
 
 @c
 @c  Obtain Source and Patches
@@ -171,13 +176,13 @@ Patches are in the @code{contrib/crossrpms/patches}.
 @c
 @subsection Unarchiving the Tools
 
-NOTE: This step is required if building any of the tools without using RPM.
+@b{NOTE}:  This step is required if building any of the tools without using RPM.
 It is @b{NOT} required if using the procedure described in @ref{Using RPM
 to Build Tools}.  This section describes the process of unarchiving the
 tools that comprise an RTEMS toolset.
 
 GNU source distributions are archived using @code{tar} and
-compressed using either @code{gzip} or @code{bzip}.  
+compressed using either @code{gzip} or @code{bzip}.
 If compressed with @code{gzip}, the extension @code{.gz} is used.
 If compressed with @code{bzip}, the extension @code{.bz2} is used.
 
@@ -199,7 +204,7 @@ the following directories will have been created under @code{tools}.
 @item automake-<VERSION>
 @item binutils-<VERSION>
 @item gcc-<VERSION>
-@item binutils-<VERSION>
+@item newlib-<VERSION>
 @item gdb-<VERSION>
 @end itemize
 
@@ -222,23 +227,25 @@ The tree should look something like the following figure:
 
 @subsection Applying RTEMS Project Tool Patches
 
-NOTE: This step is required if building any of the tools IF they have a
+@b{NOTE}:  This step is required if building any of the tools IF they have a
 patch currently required and you are building the tools without using RPM.
 is @b{NOT} required if using the procedure described in @ref{Using RPM
 to Build Tools}.  This section describes the process of applying the
 RTEMS patches to any of the tools.
 
-If a patch is required for a particular tool source tree, then you will
-perform a command similar to the following to apply the patch.  In this
-example, <TOOL> should be replaced by the appropriate tool directory
-and <TOOL_PATCH> with the appropriate patch file.
+If a patch is required for a particular tool source tree, it is placed in the
+@code{contrib/crossrpms/patches} directory in the CVS tree.  Make sure the
+patch version is the same as of the tool you are building.  You will perform a
+command similar to the following to apply the patch.  In this example, <TOOL>
+should be replaced by the appropriate tool directory and <TOOL_PATCH> with the
+appropriate patch file.
 
 @example
 cd tools/<TOOL>
 cat ../../archive/<TOOL_PATCH> | patch -p1
 @end example
 
-NOTE: If you add the @code{--dry-run} option to the @code{patch} command
+@b{NOTE}: If you add the @code{--dry-run} option to the @code{patch} command
 in the above commands, it will attempt to apply the patch and report
 any issues without actually modifying any files.
 
@@ -260,21 +267,25 @@ If any files are found with the .rej extension, a patch has been rejected.
 This should not happen with a good patch file which is properly applied.
 
 @c
-@c  Installing AUTOCONF Without RPM
+@c  Installing AUTOCONF From Source
 @c
 
-@subsection Installing AUTOCONF Without RPM
+@subsection Installing AUTOCONF From Source
 
 The following example illustrates the invocation of @code{configure}
-and @code{make} to build and install autoconf-<version>.  This tool is 
+and @code{make} to build and install autoconf-<version>.  This tool is
 installed as a native utility and is independent of any RTEMS target.
+
+@b{NOTE}: If no patch is required for Autoconf and Automake, you can use the
+standard package manager provided by your Linux distribution to install them.
+Of course, the versions provided by your package manager should be the same
+that specified in Makefile.am or better.
 
 @example
 mkdir b-autoconf
 cd b-autoconf
 ../autoconf-<VERSION>/configure --prefix=@value{RTEMSPREFIX}
-make all
-make info
+make
 make install
 @end example
 
@@ -286,13 +297,13 @@ refer to the documentation for autoconf-<VERSION> or invoke the
 autoconf-VERSION> @code{configure} command with the @code{--help} option.
 
 @c
-@c  Installing AUTOMAKE Without RPM
+@c  Installing AUTOMAKE From Source
 @c
 
-@subsection Installing AUTOMAKE Without RPM
+@subsection Installing AUTOMAKE From Source
 
 The following example illustrates the invocation of @code{configure}
-and @code{make} to build and install automake-<version>.  This tool is 
+and @code{make} to build and install automake-<version>.  This tool is
 installed as a native utility and is independent of any RTEMS target.
 
 @example
@@ -312,9 +323,9 @@ refer to the documentation for automake-<VERSION> or invoke the
 automake-VERSION> @code{configure} command with the @code{--help} option.
 
 @c
-@c  Installing BINUTILS Without RPM
+@c  Installing BINUTILS From Source
 @c
-@subsection Installing BINUTILS Without RPM
+@subsection Installing BINUTILS From Source
 
 The following example illustrates the invocation of @code{configure}
 and @code{make} to build and install binutils-<version>
@@ -346,6 +357,14 @@ containing the executables is the prefix used above with
 export PATH=@value{RTEMSPREFIX}/bin:$@{PATH@}
 @end example
 
+As you will need to frequently run various commands in the
+@value{RTEMSPREFIX}/bin, you can update your @code{~/.bashrc} to include this
+line. After doing that, don't forget to run
+@example
+source ~/.bashrc
+@end example
+for the changes to take place.
+
 Failure to have the binutils in the path will cause the GCC and NEWLIB
 build to fail with an error message similar to:
 
@@ -358,11 +377,11 @@ sparc-rtems@value{RTEMSAPI}-ar: command not found
 @c
 @subsection Installing GCC and NEWLIB Without RPM
 
-Before building gcc-<VERSION> and newlib-<VERSION>, 
+Before building gcc-<VERSION> and newlib-<VERSION>,
 binutils-<VERSION> must be installed and the directory
 containing those executables must be in your PATH.
 
-The C Library is built as a subordinate component of 
+The C Library is built as a subordinate component of
 gcc-<VERSION>.  Because of this, the newlib-<VERSION>
 directory source must be available inside the gcc-<VERSION>
 source tree.  This is normally accomplished using a symbolic
@@ -390,7 +409,7 @@ make info
 make install
 @end example
 
-After gcc-<VERSION> is built and installed the 
+After gcc-<VERSION> is built and installed the
 build directory @code{b-gcc} may be removed.
 
 For more information on the invocation of @code{configure}, please
@@ -408,11 +427,11 @@ If you want a GCC toolset that includes support for Ada
 the host environment and additional build steps to perform.
 It is critical that you use the same version of GCC/GNAT as
 the native compiler.  GNAT must be compiled with an Ada compiler
-and when building a GNAT cross-compiler, it should be 
-the same version of GNAT itself. 
+and when building a GNAT cross-compiler, it should be
+the same version of GNAT itself.
 
 It is also important to verify whether there is an RTEMS specific
-Ada patch required for GCC.  These can be found in 
+Ada patch required for GCC.  These can be found in
 @uref{http://www.rtems.org/ftp/pub/rtems/people/joel/ada,
 http://www.rtems.org/ftp/pub/rtems/people/joel/ada}.  The patch is
 often a minor version or two behind GCC but will usually apply cleanly.
@@ -458,7 +477,7 @@ After gcc-<VERSION> is built and installed the build directory
 @c
 @subsection Installing GDB Without RPM
 
-NOTE: This step is NOT required if prebuilt executables for the
+@b{NOTE}:  This step is NOT required if prebuilt executables for the
 GDB were installed and they meet your target interface
 requirements.
 
@@ -538,7 +557,7 @@ RPM is a packaging format which can be used to distribute binary files as
 well as to capture the procedure and source code used to produce those
 binary files.  For RPM, it is assumed that the following subdirectories
 are under a root directory such as @code{/usr/src/redhat} or
-@code{/usr/local/src/redhat}) on your machine.  
+@code{/usr/local/src/redhat}) on your machine.
 
 @example
 BUILD
@@ -551,7 +570,7 @@ SRPMS
 For the purposes of this document, the RPM @code{SOURCES} directory is the
 directory into which all tool source and patches are assumed to reside.
 The @code{BUILD} directory is where the actual build is performed when
-building binaries from a source RPM.  
+building binaries from a source RPM.
 
 RPM automatically unarchives the source and applies any needed patches
 so you do @b{NOT} have to manually perform the procedures described
@@ -581,7 +600,7 @@ This section illustrates the invocation of RPM to build a new, locally
 compiled, AUTOCONF binary RPM that matches the installed source RPM.
 This example assumes that all of the required source is installed.
 
-@example 
+@example
 rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-autoconf-<VERSION>-<RPM_RELEASE>.src.rpm
 @end example
 
@@ -598,7 +617,7 @@ directory under the RPM root directory.
 @value{RTEMSRPMPREFIX}rtems@value{RTEMSAPI}-autoconf-<VERSION>-<RPM_RELEASE>.<ARCH>.rpm
 @end example
 
-NOTE: It may be necessary to remove the build tree in the @code{BUILD}
+@b{NOTE}:  It may be necessary to remove the build tree in the @code{BUILD}
 directory under the RPM root directory.
 
 @c
@@ -610,7 +629,7 @@ This section illustrates the invocation of RPM to build a new, locally
 compiled, AUTOMAKE binary RPM that matches the installed source RPM.
 This example assumes that all of the required source is installed.
 
-@example 
+@example
 rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-automake-<VERSION>-<RPM_RELEASE>.src.rpm
 @end example
 
@@ -627,7 +646,7 @@ directory under the RPM root directory.
 @value{RTEMSRPMPREFIX}rtems@value{RTEMSAPI}-automake-<VERSION>-<RPM_RELEASE>.<ARCH>.rpm
 @end example
 
-NOTE: It may be necessary to remove the build tree in the @code{BUILD}
+@b{NOTE}:  It may be necessary to remove the build tree in the @code{BUILD}
 directory under the RPM root directory.
 
 
@@ -640,7 +659,7 @@ This section illustrates the invocation of RPM to build a new, locally
 compiled, binutils binary RPM that matches the installed source RPM.
 This example assumes that all of the required source is installed.
 
-@example 
+@example
 rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-<VERSION>-<RPM_RELEASE>.src.rpm
 @end example
 
@@ -691,9 +710,9 @@ of the RPMS directory under the RPM root directory.
 @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-libstd++-<VERSION>-<RPM>.<ARCH>.rpm
 @end example
 
-NOTE: Some targets do not support building all languages.
+@b{NOTE}: Some targets do not support building all languages.
 
-NOTE: It may be necessary to remove the build tree in the
+@b{NOTE}: It may be necessary to remove the build tree in the
 @code{BUILD} directory under the RPM root directory.
 
 @c
@@ -724,7 +743,7 @@ of the RPMS directory under the RPM root directory.
 @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-<VERSION>-<RPM_RELEASE>.<ARCH>.rpm
 @end example
 
-NOTE: It may be necessary to remove the build tree in the
+@b{NOTE}: It may be necessary to remove the build tree in the
 @code{BUILD} directory under the RPM root directory.
 
 @c
@@ -749,13 +768,13 @@ This can occur for one of the following reasons:
 @end itemize
 
 If you are using binutils 2.9.1 or newer with certain older versions of
-gcc, they do not agree on what the name of the newly 
+gcc, they do not agree on what the name of the newly
 generated cross assembler is.  Older binutils called it @code{as.new}
 which became @code{as.new.exe} under Windows.  This is not a valid
 file name, so @code{as.new} is now called @code{as-new}.  By using the latest
 released tool versions and RTEMS patches, this problem will be avoided.
 
-If binutils did not successfully build the cross assembler, then 
+If binutils did not successfully build the cross assembler, then
 the new cross gcc (@code{xgcc}) used to build the libraries can not
 find it.  Make sure the build of the binutils succeeded.
 
@@ -767,7 +786,7 @@ in your PATH.  As a general rule, including "." in your PATH
 is a security risk and should be avoided.  Remove "." from
 your PATH.
 
-NOTE:  In some environments, it may be difficult to remove "."
+@b{NOTE}:  In some environments, it may be difficult to remove "."
 completely from your PATH.  In this case, make sure that "."
 is after the system directories containing "as" and "ld".
 
@@ -783,7 +802,7 @@ If you see error messages like the following,
 
 @end itemize
 
-Then it is likely that one or more of your gnu tools is 
+Then it is likely that one or more of your gnu tools is
 already configured locally in its source tree.  You can check
 for this by searching for the @code{config.status} file
 in the various tool source trees.  The following command
@@ -793,7 +812,7 @@ does this for the binutils source:
 find binutils-<VERSION> -name config.status -print
 @end example
 
-The solution for this is to execute the command 
+The solution for this is to execute the command
 @code{make distclean} in each of the GNU tools
 root source directory.  This should remove all
 generated files including Makefiles.
@@ -810,9 +829,8 @@ this:
 -I../../binutils-<VERSION>/gcc -I/binutils-<VERSION>/gcc/include -I.
 @end example
 
-Note that the tool source directory is searched before the 
+Note that the tool source directory is searched before the
 build directory.
 
-This situation can be avoided entirely by never using 
-the source tree as the build directory -- even for
-
+This situation can be avoided entirely by never using
+the source tree as the build directory.

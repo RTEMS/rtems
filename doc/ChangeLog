@@ -1,3 +1,8 @@
+2011-01-02	Danila Bespalov <danila DOT bespalov AT gmail DOT com>
+
+	* started/buildc.t, started/buildrt.t, started/nt.t, started/require.t,
+	started/sample.t: Review and improve.
+
 2010-12-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* develenv/direct.t: Remove Getting Started with GNAT/RTEMS.

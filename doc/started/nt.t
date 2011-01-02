@@ -11,9 +11,9 @@
 This chapter discusses the installation of the GNU tool chain
 on a computer running the Microsoft Windows operating system.
 
-This chapter was originally written by 
-@uref{mailto:g_montel@@yahoo.com, Geoffroy Montel <g_montel@@yahoo.com>} 
-with input from 
+This chapter was originally written by
+@uref{mailto:g_montel@@yahoo.com, Geoffroy Montel <g_montel@@yahoo.com>}
+with input from
 @uref{mailto:<D.J@@fiddes.surfaid.org>, David Fiddes <D.J@@fiddes.surfaid.org>}.
 It was based upon his successful but unnecessarily painful efforts with
 Cygwin beta versions.  Cygwin and this chapter have been updated multiple
@@ -24,7 +24,7 @@ is still greatly appreciated.
 
 RTEMS users report fewer problems when using Microsoft Windows XP or newer.
 
-@section Cygwin 
+@section Cygwin
 
 For RTEMS development, the recommended approach is to use Cygwin. Cygwin
 is  available from @uref{http://www.cygwin.com, http://www.cygwin.com} .
@@ -55,7 +55,7 @@ GNU bash, version 2.04.5(12)-release (i686-pc-cygwin)
 Copyright 1999 Free Software Foundation, Inc.
 @end example
 
-If you get an error or it claims to be any other shell, you need 
+If you get an error or it claims to be any other shell, you need
 to copy it to a fake name and copy
 @code{/bin/bash.exe} to @code{/bin/sh.exe}:
 
@@ -70,14 +70,14 @@ shell scripts properly.
 
 @item Make sure you unarchive and build in a binary mounted
 filesystem (e.g. mounted with the @code{-b} option).  Otherwise,
-many confusing errors will result.  
+many confusing errors will result.
 
 @item A user has reported that they needed to set @code{CYGWIN=ntsec}
 for chmod to work correctly, but had to set @code{CYGWIN=nontsec}
 for compile to work properly (otherwise there were complaints about
 permissions on a temporary file).
 
-@item If you want to build the tools from source, you have the 
+@item If you want to build the tools from source, you have the
 same options as UNIX users.
 
 @item You may have to uncompress archives during this process.  You must
@@ -85,20 +85,27 @@ same options as UNIX users.
 process uses the GNU @code{zip} and @code{tar} programs as shown below:
 
 @example
-tar -xzvf archive.tgz 
+tar -xzvf archive.tgz
 @end example
 
 @code{tar} is provided with Cygwin.
 
 @end itemize
 
+@section MingGW
+
+You might consider choosing MinGW since it provides better perfomance. There is a wiki entry on a MinGW RTEMS toolset installer available at @uref{http://www.rtems.org/wiki/index.php/MinGW_Tools_for_Windows,http://www.rtems.org/wiki/index.php/MinGW_Tools_for_Windows}. Also, there are prebuilt tools for different architectures available for download at @uref{http://www.rtems.org/ftp/pub/rtems/mingw32,http://www.rtems.org/ftp/pub/rtems/mingw32}.
+
 @section Text Editor
 
-You absolutely have to use a text editor which can save files with Unix
-format. So do @b{NOT} use Notepad or Wordpad!  There are a number of
-editors freely available that can be used.
+You absolutely have to use a text editor which can save files with Unix format.
+So do @b{NOT} use Notepad or Wordpad!  Basically, any more or less advanced
+text editor is usually able to do that.  There is a number of editors freely
+available that can be used.
 
 @itemize @bullet
+@item @b{Notepad++} has an interface familiar to Windows users and can be downloaded from @uref{http://notepad-plus-plus.org/,http://notepad-plus-plus.org/}.
+
 @item @b{VIM} (@b{Vi IMproved}) is available from
 @uref{http://www.vim.org/,http://www.vim.org/}.  This editor has the very
 handy ability to easily read and write files in either DOS or UNIX style.

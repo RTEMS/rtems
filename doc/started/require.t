@@ -8,14 +8,14 @@
 
 @chapter Requirements
 
-This chapter describes the build-host system requirements and initial steps 
+This chapter describes the build-host system requirements and initial steps
 in installing the GNU Cross Compiler Tools and RTEMS on a build-host.
 
 @section Disk Space
 
 A fairly large amount of disk space is required to perform the build of the
 GNU C/C++ Cross Compiler Tools for RTEMS. The following table may help in
-assessing the amount of disk space required for your installation: 
+assessing the amount of disk space required for your installation:
 
 @example
 +------------------------------------+--------------------------+
@@ -45,7 +45,7 @@ will tend to be in the 40-60 Mbyte range.
 There are a number of factors which must be taken into
 account in order to estimate the amount of disk space required
 to build RTEMS itself.  Attempting to build multiple BSPs in
-a single step increases the disk space requirements.  One some
+a single step increases the disk space requirements.  On some
 target architectures, this can lead to disk usage during the build
 of over one gigabyte.
 
@@ -87,7 +87,7 @@ compiler.
 Both NEWLIB and RTEMS use GNU make specific features and can only be built
 using GNU make.  Many systems include a make utility that is not GNU make.
 The safest way to meet this requirement is to ensure that when you invoke
-the command @code{make}, it is GNU make.  This can be verified by 
+the command @code{make}, it is GNU make.  This can be verified by
 attempting to print the GNU make version information:
 
 @example
@@ -95,7 +95,7 @@ make --version
 @end example
 
 If you have GNU make and another make on your system, it is common to put
-the directory containing GNU make before the directory containing other 
+the directory containing GNU make before the directory containing other
 implementations of make.
 
 @subsection GNU makeinfo Version Requirements
@@ -155,7 +155,7 @@ to at least GNU fileutils version 3.16 to resolve this problem.
 
 @end itemize
 
-@subsection GNU/Linux Distrobutions using Debian Packaging Format 
+@subsection GNU/Linux Distrobutions using Debian Packaging Format
 
 The RTEMS Project does not currently provide prebuilt toolsets in the Debian packaging format used by the Debian and Ubuntu distributions.  If you are using a distribution using this packaging format, then you have two options for installing the RTEMS toolset.
 
