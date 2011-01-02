@@ -75,6 +75,10 @@ of each component as well as any required RTEMS specific patches.
 @c    URL:         ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR}
 @c @end ifset
 @end example
+If no patches are required, you can use a package manager provided by your
+Linux distribution to install AUTOMAKE and AUTOCONF to avoid building them from
+source.
+
 
 @need 1000
 @subheading @value{NEWLIBUNTAR}
@@ -132,7 +136,7 @@ It is @b{NOT} required if using the procedure
 described in @ref{Using RPM to Build BINUTILS GCC and NEWLIB}.
 
 GNU source distributions are archived using @code{tar} and
-compressed using either @code{gzip} or @code{bzip}.  
+compressed using either @code{gzip} or @code{bzip}.
 If compressed with @code{gzip}, the extension @code{.gz} is used.
 If compressed with @code{bzip}, the extension @code{.bz2} is used.
 
@@ -224,6 +228,11 @@ you should use @code{bzcat} instead of @code{cat} as shown above.
 
 Check to see if any of these patches have been rejected using the following
 sequence:
+@b{NOTE}: If no patch is required for Autoconf and Automake, you can use the
+standard package manager provided by your Linux distribution to install them.
+Of course, the versions provided by your package manager should be the same
+that specified in Makefile.am or better.
+
 
 @example
 cd tools/@value{GCCUNTAR}
@@ -494,8 +503,7 @@ mkdir b-binutils
 cd b-binutils
 ../@value{BINUTILSUNTAR}/configure --target=sparc-rtems@value{RTEMSAPI} \
   --prefix=@value{RTEMSPREFIX}
-make all
-make info
+make
 make install
 @end example
 
@@ -567,6 +575,14 @@ build directory @code{b-gcc} may be removed.
 For more information on the invocation of @code{configure}, please
 refer to the documentation for @value{GCCUNTAR} or
 invoke the @value{GCCUNTAR} @code{configure} command with the
+As you will need to frequently run various commands in the
+@value{RTEMSPREFIX}/bin, you can update your @code{~/.bashrc} to include this
+line. After doing that, don't forget to run
+@example
+source ~/.bashrc
+@end example
+for the changes to take place.
+
 @code{--help} option.
 
 @c
@@ -579,8 +595,8 @@ If you want a GCC toolset that includes support for Ada
 the host environment and additional build steps to perform.
 It is critical that you use the same version of GCC/GNAT as
 the native compiler.  GNAT must be compiled with an Ada compiler
-and when building a GNAT cross-compiler, it should be 
-the same version of GNAT itself. 
+and when building a GNAT cross-compiler, it should be
+the same version of GNAT itself.
 
 The build procedure is the same until the configure step. 
 A GCC toolset with GNAT enabled requires that @code{ada}
@@ -822,7 +838,7 @@ of the RPMS directory under the RPM root directory.
 @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 @end example
 
-NOTE: It may be necessary to remove the build tree in the
+@b{NOTE}: It may be necessary to remove the build tree in the
 @code{BUILD} directory under the RPM root directory.
 
 @c
@@ -891,13 +907,13 @@ This can occur for one of the following reasons:
 @end itemize
 
 If you are using binutils 2.9.1 or newer with certain older versions of
-gcc, they do not agree on what the name of the newly 
+gcc, they do not agree on what the name of the newly
 generated cross assembler is.  Older binutils called it @code{as.new}
 which became @code{as.new.exe} under Windows.  This is not a valid
 file name, so @code{as.new} is now called @code{as-new}.  By using the latest
 released tool versions and RTEMS patches, this problem will be avoided.
 
-If binutils did not successfully build the cross assembler, then 
+If binutils did not successfully build the cross assembler, then
 the new cross gcc (@code{xgcc}) used to build the libraries can not
 find it.  Make sure the build of the binutils succeeded.
 
@@ -909,7 +925,7 @@ in your PATH.  As a general rule, including "." in your PATH
 is a security risk and should be avoided.  Remove "." from
 your PATH.
 
-NOTE:  In some environments, it may be difficult to remove "."
+@b{NOTE}:  In some environments, it may be difficult to remove "."
 completely from your PATH.  In this case, make sure that "."
 is after the system directories containing "as" and "ld".
 
@@ -925,7 +941,7 @@ If you see error messages like the following,
 
 @end itemize
 
-Then it is likely that one or more of your gnu tools is 
+Then it is likely that one or more of your gnu tools is
 already configured locally in its source tree.  You can check
 for this by searching for the @code{config.status} file
 in the various tool source trees.  The following command
@@ -935,7 +951,7 @@ does this for the binutils source:
 find @value{BINUTILSUNTAR} -name config.status -print
 @end example
 
-The solution for this is to execute the command 
+The solution for this is to execute the command
 @code{make distclean} in each of the GNU tools
 root source directory.  This should remove all
 generated files including Makefiles.
@@ -952,9 +968,8 @@ this:
 -I../../@value{BINUTILSUNTAR}/gcc -I/@value{BINUTILSUNTAR}/gcc/include -I.
 @end example
 
-Note that the tool source directory is searched before the 
+Note that the tool source directory is searched before the
 build directory.
 
-This situation can be avoided entirely by never using 
-the source tree as the build directory -- even for
-
+This situation can be avoided entirely by never using
+the source tree as the build directory.

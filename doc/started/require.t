@@ -8,14 +8,14 @@
 
 @chapter Requirements
 
-This chapter describes the build-host system requirements and initial steps 
+This chapter describes the build-host system requirements and initial steps
 in installing the GNU Cross Compiler Tools and RTEMS on a build-host.
 
 @section Disk Space
 
 A fairly large amount of disk space is required to perform the build of the
 GNU C/C++ Cross Compiler Tools for RTEMS. The following table may help in
-assessing the amount of disk space required for your installation: 
+assessing the amount of disk space required for your installation:
 
 @example
 +------------------------------------+--------------------------+
@@ -82,7 +82,7 @@ compiler.
 Both NEWLIB and RTEMS use GNU make specific features and can only be built
 using GNU make.  Many systems include a make utility that is not GNU make.
 The safest way to meet this requirement is to ensure that when you invoke
-the command @code{make}, it is GNU make.  This can be verified by 
+the command @code{make}, it is GNU make.  This can be verified by
 attempting to print the GNU make version information:
 
 @example
@@ -90,7 +90,7 @@ make --version
 @end example
 
 If you have GNU make and another make on your system, it is common to put
-the directory containing GNU make before the directory containing other 
+the directory containing GNU make before the directory containing other
 implementations of make.
 
 @subsection GNU makeinfo Version Requirements

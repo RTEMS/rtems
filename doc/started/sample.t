@@ -8,20 +8,20 @@
 
 @chapter Building the Sample Applications
 
-The RTEMS distribution includes a number of sample C, C++, 
+The RTEMS distribution includes a number of sample C, C++,
 Ada, and networking applications.  This chapter will provide
 an overview of those sample applications.
 
 @c
-@c Set the Environment Variable RTEMS_MAKEFILE_PATH 
-@c 
-@section Set the Environment Variable RTEMS_MAKEFILE_PATH 
+@c Set the Environment Variable RTEMS_MAKEFILE_PATH
+@c
+@section Set the Environment Variable RTEMS_MAKEFILE_PATH
 
 The sample application sets use the RTEMS Application Makefiles.
-This requires that the environment variable 
+This requires that the environment variable
 @code{RTEMS_MAKEFILE_PATH} point to the appropriate directory containing
 the installed RTEMS image built to target your particular CPU and
-board support package combination. 
+board support package combination.
 
 @example
 export RTEMS_MAKEFILE_PATH=<INSTALLATION_POINT>/<CPU>-rtems/<BOARD_SUPPORT_PACKAGE>
@@ -30,17 +30,17 @@ export RTEMS_MAKEFILE_PATH=<INSTALLATION_POINT>/<CPU>-rtems/<BOARD_SUPPORT_PACKA
 Where <INSTALLATION_POINT> and <BOARD_SUPPORT_PACKAGE> are those used when
 configuring and installing RTEMS.
 
-NOTE:  In release 4.0, BSPs were installed at
+@b{NOTE}:  In release 4.0, BSPs were installed at
 @code{<INSTALLATION_POINT>/rtems/<BOARD_SUPPORT_PACKAGE>}.  This
 was changed to be more in compliance with GNU standards.
 
-NOTE: GNU make is the preferred @code{make} utility.  Other @code{make}
+@b{NOTE}: GNU make is the preferred @code{make} utility.  Other @code{make}
 implementations may work but all testing is done with GNU make.
 
 If no errors are detected during the sample application build, it is
 reasonable to assume that the build of the GNU Cross Compiler Tools
 for RTEMS and RTEMS itself for the selected host and target
-combination was done properly. 
+combination was done properly.
 
 @c
 @c Executing the Sample Applications
@@ -97,7 +97,7 @@ The TX3904 is a MIPS R3000 class CPU with serial ports and timers
 integrated with the processor.  This BSP can be used with
 either real  hardware or with the simulator included with
 @code{mipstx39-rtems-gdb}.  An application can be run on the simulator
-by executing the following commands upon entering @code{mipstx39-rtems-gdb}: 
+by executing the following commands upon entering @code{mipstx39-rtems-gdb}:
 
 @example
 target sim --board=jmr3904
@@ -117,16 +117,21 @@ The simulator is complicated to initialize by hand.  The user is referred
 to the script @code{powerpc/psim/tools/psim}.
 
 @item sparc/erc32
-The ERC32 is a radiation hardened SPARC V7.  This BSP can be used with
-either real ERC32 hardware or with the simulator included with
-@code{sparc-rtems-gdb}.  An application can be run on the simulator
-by executing the following commands upon entering @code{sparc-rtems-gdb}: 
+The ERC32 is a radiation hardened SPARC V7.  This BSP can be used with either
+real ERC32 hardware or with the simulator included with @code{sparc-rtems-gdb}
+(for this, you should configure RTEMS to use @code{sis} BSP).  An application
+can be run on the simulator by executing the following commands upon entering
+@code{sparc-rtems-gdb}:
 
 @example
 target sim
 load
 run
 @end example
+
+In case that you don't need a debugger, an application can be run by
+@code{spart-rtems-run}.
+
 
 @end table
 
@@ -141,7 +146,7 @@ with on-CPU peripherals are generally welcomed.
 The C/C++ sample application set includes a number of simple applications.
 Some demonstrate some basic functionality in RTEMS such as writing
 a file, closing it, and reading it back while others can serve as
-starting points for RTEMS applications or libraries.  Start by 
+starting points for RTEMS applications or libraries.  Start by
 unarchiving them so you can peruse them.  Use a command similar to
 the following to unarchive the sample applications:
 
@@ -179,8 +184,8 @@ as an example.
 @c
 @subheading Build the C Hello World Application
 
-Use the following command to start the build of the sample hello 
-world application: 
+Use the following command to start the build of the sample hello
+world application:
 
 @example
 cd hello_world_c
@@ -189,7 +194,7 @@ make
 
 
 If the sample application has successfully been built, then the application
-executable is placed in the following directory: 
+executable is placed in the following directory:
 
 @example
 hello_world_c/o-optimize/<filename>.exe
@@ -230,7 +235,7 @@ configuring and installing RTEMS.
 
 @section Build the Sample Application
 
-Use the following command to start the build of the sample application: 
+Use the following command to start the build of the sample application:
 
 @example
 cd tools/hello_world_ada
@@ -246,10 +251,10 @@ reasonable to assume that the build of the GNAT/RTEMS Cross Compiler Tools
 for RTEMS and RTEMS itself for the selected host and target
 combination was done properly. 
 
-@section Application Executable 
+@section Application Executable
 
 If the sample application has successfully been build, then the application
-executable is placed in the following directory: 
+executable is placed in the following directory:
 
 @example
 tools/hello_world_ada/o-optimize/<filename>.exe

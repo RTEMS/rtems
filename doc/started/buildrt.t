@@ -38,7 +38,7 @@ placed in your @code{archive} directory.
 @section Unarchive the RTEMS Source
 
 Use the following command sequence to unpack the RTEMS source into the
-tools directory: 
+tools directory:
 
 @example
 cd tools
@@ -46,6 +46,20 @@ tar xjf ../archive/@value{RTEMSTAR}
 @end example
 
 This creates the directory @value{RTEMSUNTAR}.
+
+@section Obtaining the RTEMS Source from CVS
+
+Instead of downloading release tarballs you may choose to check out the current
+RTEMS source from CVS. For details on accessing RTEMS CVS repository consult
+@uref{http://www.rtems.org/wiki/index.php/RTEMS_CVS_Repository, http://www.rtems.org/wiki/index.php/RTEMS_CVS_Repository}.  The steps required
+to obtain the source code from CVS are usually like the following:
+@example
+$ cvs -d :pserver:anoncvs@@www.rtems.com:/usr1/CVS login
+Logging in to :pserver:anoncvs@@www.rtems.com:2401/usr1/CVS
+CVS password:
+$ cvs -d :pserver:anoncvs@@www.rtems.com:/usr1/CVS -z 9 co -P rtems  # for the main RTEMS source
+$ cvs -d :pserver:anoncvs@@www.rtems.com:/usr1/CVS -z 9 co -P examples-v2  # for examples
+@end example
 
 
 @section Add <INSTALL_POINT>/bin to Executable PATH
@@ -67,9 +81,9 @@ derivatives of the C Shell.
 
 @section Verifying the Operation of the Cross Toolset
 
-In order to insure that the cross-compiler is invoking the correct
+In order to ensure that the cross-compiler is invoking the correct
 subprograms (like @code{as} and @code{ld}), one can test assemble
-a small program.  When in verbose mode, @code{gcc} prints out information 
+a small program.  When in verbose mode, @code{gcc} prints out information
 showing where it found the subprograms it invokes.  In a temporary
 working directory, place the following function in a file named @code{f.c}:
 
@@ -113,9 +127,9 @@ error messages.
 
 @section Building RTEMS for a Specific Target and BSP
 
-This section describes how to configure and build RTEMS 
-so that it is specifically tailored for your BSP and the
-CPU model it uses.  There is currently only one supported
+This section describes how to configure and build RTEMS
+so that it is specifically tailored for your BSP (Board Support Package)
+and the CPU model it uses.  There is currently only one supported
 method to compile and install RTEMS:
 
 @itemize @bullet
@@ -123,7 +137,7 @@ method to compile and install RTEMS:
 @end itemize
 
 Direct invocation of @code{configure} and @code{make} provides more control
-and easier recovery from problems when building. 
+and easier recovery from problems when building.
 
 This section describes how to build RTEMS.
 
@@ -146,7 +160,7 @@ include the @code{--enable-posix} flag.
 
 The following shows the command sequence required to configure,
 compile, and install RTEMS with the POSIX API, FreeBSD TCP/IP,
-and C++ support disabled.  RTEMS will be built to target 
+and C++ support disabled.  RTEMS will be built to target
 the @code{BOARD_SUPPORT_PACKAGE} board.
 
 @example
@@ -156,7 +170,8 @@ cd build-rtems
     --disable-posix --disable-networking --disable-cxx \
     --enable-rtemsbsp=<BOARD_SUPPORT_PACKAGE>\
     --prefix=<INSTALL_POINT>
-make all install
+make all
+make install
 @end example
 
 Where the list of currently supported <TARGET_CONFIGURATION>'s and
