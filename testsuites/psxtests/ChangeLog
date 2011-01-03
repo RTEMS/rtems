@@ -1,3 +1,7 @@
+2011-01-02	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* psx05/init.c: Spacing.
+
 2010-11-01	Alin Rus <alin.codejunkie@gmail.com>
 
 	* psxaio01/init.c, psxaio02/init.c: Improve coverage.

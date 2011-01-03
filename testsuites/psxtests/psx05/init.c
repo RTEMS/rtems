@@ -432,7 +432,7 @@ void *POSIX_Init(
   status = pthread_mutex_timedlock( &Mutex_id, &times );
   if ( status != ETIMEDOUT )
     printf( "status = %d\n", status );
-  rtems_test_assert(  status == ETIMEDOUT );
+  rtems_test_assert( status == ETIMEDOUT );
 
      /* switch to idle */
 
