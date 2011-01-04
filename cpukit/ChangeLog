@@ -1,5 +1,11 @@
 2011-01-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/error.c: Scheduler Simulator compilation always
+	defines __RTEMS_VIOLATE_KERNEL_VISIBILITY__. So avoid redefinition
+	warning.
+
+2011-01-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_readlink.c: readlink
 	filesystem entry should return ssize_t.
 

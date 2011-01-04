@@ -43,7 +43,12 @@
  *        }
  */
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+/* This is always defined on RTEMS Scheduler Simulator and thus
+ * we get a redefined warning if this is not present.
+ */
+#ifndef __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+  #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+#endif
 #include <rtems.h>
 
 #include <rtems/error.h>
