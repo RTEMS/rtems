@@ -1,5 +1,9 @@
 2011-01-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/src/aio_cancel.c: Use perfd field not next_fd.
+
+2011-01-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/nfsclient/src/nfs.c: readlink filesystem entry should
 	return ssize_t.
 

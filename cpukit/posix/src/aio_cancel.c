@@ -108,14 +108,14 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
 		rtems_set_errno_and_return_minus_one (EINVAL);
 	      }      
 
-	    result = rtems_aio_remove_req (&r_chain->next_fd, aiocbp);
+	    result = rtems_aio_remove_req (&r_chain->perfd, aiocbp);
 	    pthread_mutex_unlock (&aio_request_queue.mutex);
 	    return result;
 
 	  }
       
       pthread_mutex_lock (&r_chain->mutex);
-      result = rtems_aio_remove_req (&r_chain->next_fd, aiocbp);
+      result = rtems_aio_remove_req (&r_chain->perfd, aiocbp);
       pthread_mutex_unlock (&r_chain->mutex);
       pthread_mutex_unlock (&aio_request_queue.mutex);
       return result;
