@@ -23,14 +23,14 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int IMFS_readlink(
+ssize_t IMFS_readlink(
   rtems_filesystem_location_info_t  *loc,
- char                               *buf,         /* OUT */
- size_t                             bufsize
+  char                              *buf,         /* OUT */
+  size_t                             bufsize
 )
 {
   IMFS_jnode_t      *node;
-  int                i;
+  ssize_t            i;
 
   node = loc->node_access;
 

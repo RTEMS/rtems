@@ -1,5 +1,10 @@
 2011-01-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_readlink.c: readlink
+	filesystem entry should return ssize_t.
+
+2011-01-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/src/aio_cancel.c: Use perfd field not next_fd.
 
 2011-01-04	Joel Sherrill <joel.sherrill@oarcorp.com>

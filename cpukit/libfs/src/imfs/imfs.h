@@ -525,7 +525,7 @@ extern int IMFS_symlink(
   const char                        *node_name
 );
 
-extern int IMFS_readlink(
+extern ssize_t IMFS_readlink(
  rtems_filesystem_location_info_t   *loc,         /* IN */
  char                               *buf,         /* OUT */
  size_t                             bufsize
