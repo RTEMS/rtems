@@ -585,7 +585,6 @@ FRAME(_CPU_Context_restore,sp,0,ra)
 ENDFRAME(_CPU_Context_restore)
 
 ASM_EXTERN(_Thread_Dispatch_disable_level,4)
-ASM_EXTERN(_Thread_Executing,4)
 
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
