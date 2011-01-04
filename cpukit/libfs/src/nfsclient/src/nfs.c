@@ -561,10 +561,10 @@ typedef struct NfsNodeRec_ {
 	Forward Declarations
  *****************************************/
 
-static int nfs_readlink(
+static ssize_t nfs_readlink(
 	rtems_filesystem_location_info_t  *loc,     	/* IN  */
-	char							  *buf,			/* OUT */
-	size_t							  len
+	char				  *buf,		/* OUT */
+	size_t				  len
 );
 
 static int updateAttr(NfsNode node, int force);
@@ -2246,10 +2246,10 @@ int					rval;
 	return 0;
 }
 
-static int nfs_readlink(
+static ssize_t nfs_readlink(
 	rtems_filesystem_location_info_t  *loc,     	/* IN  */
-	char							  *buf,			/* OUT */
-	size_t							  len
+	char				  *buf,		/* OUT */
+	size_t				   len
 )
 {
 strbuf sbuf;
