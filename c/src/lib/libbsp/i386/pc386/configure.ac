@@ -62,6 +62,7 @@ RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_TSC],
    from Intel and AMD will maintain a constant-rate TSC regardless.
 ])
 
+#define CLOCK_DRIVER_USE_8254 $CLOCK_DRIVER_USE_8254
 RTEMS_BSPOPTS_SET([CLOCK_DRIVER_USE_8254],[*],[0])
 RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_8254],
 [If enabled, the clock driver will use the good old 8254 chip
@@ -78,7 +79,6 @@ if test X${CLOCK_DRIVER_USE_TSC} = X1 -a X${CLOCK_DRIVER_USE_8254} = X1 ; then
   AC_MSG_ERROR([pc386 both TSC and 8254 specified for clock driver])
 fi
 
-#define CLOCK_DRIVER_USE_8254 $CLOCK_DRIVER_USE_8254
 ## if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,[test "$RTEMS_GAS_CODE16" = "yes"])
