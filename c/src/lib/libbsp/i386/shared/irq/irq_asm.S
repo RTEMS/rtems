@@ -218,7 +218,7 @@ nested:
 .schedule:
 	/*
 	 * the scratch registers have already been saved and we are already
-	 * back on the thread system stack. So we can call _Thread_Displatch
+	 * back on the thread system stack. So we can call _Thread_Dispatch
 	 * directly
 	 */
 	call      _Thread_Dispatch
