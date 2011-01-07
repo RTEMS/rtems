@@ -1,6 +1,6 @@
 diff -Naur newlib-1.19.0.orig/newlib/ChangeLog newlib-1.19.0/newlib/ChangeLog
 --- newlib-1.19.0.orig/newlib/ChangeLog	2010-12-16 22:58:38.000000000 +0100
-+++ newlib-1.19.0/newlib/ChangeLog	2011-01-07 08:21:35.721431986 +0100
++++ newlib-1.19.0/newlib/ChangeLog	2011-01-07 18:08:30.419792243 +0100
 @@ -1,3 +1,36 @@
 +2011-01-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
 +
@@ -344,8 +344,13 @@ diff -Naur newlib-1.19.0.orig/newlib/ChangeLog newlib-1.19.0/newlib/ChangeLog
  	* libc/machine/sh/memcpy.S: Fix line wrapping in SL macro
 diff -Naur newlib-1.19.0.orig/newlib/ChangeLog.rtems newlib-1.19.0/newlib/ChangeLog.rtems
 --- newlib-1.19.0.orig/newlib/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
-+++ newlib-1.19.0/newlib/ChangeLog.rtems	2011-01-07 08:21:35.722431989 +0100
-@@ -0,0 +1,115 @@
++++ newlib-1.19.0/newlib/ChangeLog.rtems	2011-01-07 18:08:30.419792243 +0100
+@@ -0,0 +1,120 @@
++2011-01-07	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libc/stdio/open_memstream.c: Replace 64 * 1024 with 0x10000 to 
++	avoid integer overflow on h8300.
++
 +2011-01-05	Ralf Corsépius  <ralf.corsepius@rtems.org>
 +
 +	* libc/stdio/tmpnam.c: Include <stdint.h>.
@@ -463,7 +468,7 @@ diff -Naur newlib-1.19.0.orig/newlib/ChangeLog.rtems newlib-1.19.0/newlib/Change
 +	* libc/machine/powerpc/Makefile.in: Regenerate.
 diff -Naur newlib-1.19.0.orig/newlib/doc/makedoc.c newlib-1.19.0/newlib/doc/makedoc.c
 --- newlib-1.19.0.orig/newlib/doc/makedoc.c	2009-03-25 22:16:04.000000000 +0100
-+++ newlib-1.19.0/newlib/doc/makedoc.c	2011-01-07 08:21:35.723431993 +0100
++++ newlib-1.19.0/newlib/doc/makedoc.c	2011-01-07 18:08:30.420792249 +0100
 @@ -57,7 +57,7 @@
  {
      char *ptr;
@@ -504,7 +509,7 @@ diff -Naur newlib-1.19.0.orig/newlib/doc/makedoc.c newlib-1.19.0/newlib/doc/make
  }
 diff -Naur newlib-1.19.0.orig/newlib/libc/configure newlib-1.19.0/newlib/libc/configure
 --- newlib-1.19.0.orig/newlib/libc/configure	2010-12-16 22:58:39.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/configure	2011-01-07 08:21:35.727432003 +0100
++++ newlib-1.19.0/newlib/libc/configure	2011-01-07 18:08:30.424792277 +0100
 @@ -625,7 +625,10 @@
  HAVE_XDR_DIR_TRUE
  LIBC_XDR_DEF
@@ -564,7 +569,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/configure newlib-1.19.0/newlib/libc/co
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff -Naur newlib-1.19.0.orig/newlib/libc/configure.in newlib-1.19.0/newlib/libc/configure.in
 --- newlib-1.19.0.orig/newlib/libc/configure.in	2010-04-23 01:32:40.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/configure.in	2011-01-07 08:21:35.727432003 +0100
++++ newlib-1.19.0/newlib/libc/configure.in	2011-01-07 18:08:30.425792284 +0100
 @@ -41,17 +41,6 @@
  dnl for the library and an automake conditional for whether we should
  dnl build the library.
@@ -585,7 +590,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/configure.in newlib-1.19.0/newlib/libc
  if test -n "${signal_dir}"; then
 diff -Naur newlib-1.19.0.orig/newlib/libc/include/inttypes.h newlib-1.19.0/newlib/libc/include/inttypes.h
 --- newlib-1.19.0.orig/newlib/libc/include/inttypes.h	2009-01-19 23:02:06.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/include/inttypes.h	2011-01-07 08:21:35.727432003 +0100
++++ newlib-1.19.0/newlib/libc/include/inttypes.h	2011-01-07 18:08:30.444792418 +0100
 @@ -242,15 +242,17 @@
  #define SCNxMAX		__SCNMAX(x)
  
@@ -614,7 +619,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/include/inttypes.h newlib-1.19.0/newli
  #define PRIdPTR		__PRIPTR(d)
 diff -Naur newlib-1.19.0.orig/newlib/libc/include/machine/_default_types.h newlib-1.19.0/newlib/libc/include/machine/_default_types.h
 --- newlib-1.19.0.orig/newlib/libc/include/machine/_default_types.h	2008-06-12 00:14:54.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/include/machine/_default_types.h	2011-01-07 08:21:35.727432003 +0100
++++ newlib-1.19.0/newlib/libc/include/machine/_default_types.h	2011-01-07 18:08:30.444792419 +0100
 @@ -54,14 +54,14 @@
  #endif
  #endif
@@ -637,7 +642,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/include/machine/_default_types.h newli
  typedef unsigned short __uint32_t;
 diff -Naur newlib-1.19.0.orig/newlib/libc/include/signal.h newlib-1.19.0/newlib/libc/include/signal.h
 --- newlib-1.19.0.orig/newlib/libc/include/signal.h	2010-07-13 13:18:55.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/include/signal.h	2011-01-07 08:21:35.727432003 +0100
++++ newlib-1.19.0/newlib/libc/include/signal.h	2011-01-07 18:08:30.444792419 +0100
 @@ -7,9 +7,6 @@
  _BEGIN_STD_C
  
@@ -650,7 +655,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/include/signal.h newlib-1.19.0/newlib/
  #define SIG_IGN ((_sig_func_ptr)1)	/* Ignore action */
 diff -Naur newlib-1.19.0.orig/newlib/libc/include/stdint.h newlib-1.19.0/newlib/libc/include/stdint.h
 --- newlib-1.19.0.orig/newlib/libc/include/stdint.h	2009-04-24 23:55:07.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/include/stdint.h	2011-01-07 08:21:35.728432006 +0100
++++ newlib-1.19.0/newlib/libc/include/stdint.h	2011-01-07 18:08:30.444792419 +0100
 @@ -33,7 +33,7 @@
  /* Check if "long" is 64bit or 32bit wide */
  #if __STDINT_EXP(LONG_MAX) > 0x7fffffff
@@ -729,7 +734,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/include/stdint.h newlib-1.19.0/newlib/
  #endif
 diff -Naur newlib-1.19.0.orig/newlib/libc/include/string.h newlib-1.19.0/newlib/libc/include/string.h
 --- newlib-1.19.0.orig/newlib/libc/include/string.h	2008-06-18 17:27:27.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/include/string.h	2011-01-07 08:21:35.728432006 +0100
++++ newlib-1.19.0/newlib/libc/include/string.h	2011-01-07 18:08:30.445792424 +0100
 @@ -49,18 +49,11 @@
  #ifndef __STRICT_ANSI__
  char 	*_EXFUN(strtok_r,(char *, const char *, char **));
@@ -780,7 +785,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/include/string.h newlib-1.19.0/newlib/
  #include <sys/string.h>
 diff -Naur newlib-1.19.0.orig/newlib/libc/include/sys/_default_fcntl.h newlib-1.19.0/newlib/libc/include/sys/_default_fcntl.h
 --- newlib-1.19.0.orig/newlib/libc/include/sys/_default_fcntl.h	2010-01-14 19:49:13.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/include/sys/_default_fcntl.h	2011-01-07 08:21:35.728432006 +0100
++++ newlib-1.19.0/newlib/libc/include/sys/_default_fcntl.h	2011-01-07 18:08:30.445792424 +0100
 @@ -51,8 +51,6 @@
  #define O_BINARY	_FBINARY
  #define O_TEXT		_FTEXT
@@ -816,7 +821,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/include/sys/dir.h newlib-1.19.0/newlib
 -#endif /*_SYS_DIR_H_*/
 diff -Naur newlib-1.19.0.orig/newlib/libc/include/sys/reent.h newlib-1.19.0/newlib/libc/include/sys/reent.h
 --- newlib-1.19.0.orig/newlib/libc/include/sys/reent.h	2010-06-09 17:15:35.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/include/sys/reent.h	2011-01-07 08:21:35.731432014 +0100
++++ newlib-1.19.0/newlib/libc/include/sys/reent.h	2011-01-07 18:08:30.448792441 +0100
 @@ -477,6 +477,10 @@
  #error Custom FILE I/O and _REENT_SMALL not currently supported.
  #endif
@@ -830,7 +835,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/include/sys/reent.h newlib-1.19.0/newl
    struct _reent *_r = (var); \
 diff -Naur newlib-1.19.0.orig/newlib/libc/machine/m68k/memcpy.S newlib-1.19.0/newlib/libc/machine/m68k/memcpy.S
 --- newlib-1.19.0.orig/newlib/libc/machine/m68k/memcpy.S	2010-02-08 18:24:22.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/machine/m68k/memcpy.S	2011-01-07 08:21:35.731432014 +0100
++++ newlib-1.19.0/newlib/libc/machine/m68k/memcpy.S	2011-01-07 18:08:30.448792441 +0100
 @@ -15,7 +15,7 @@
  
  #include "m68kasm.h"
@@ -842,7 +847,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/machine/m68k/memcpy.S newlib-1.19.0/ne
  # define MISALIGNED_OK 0
 diff -Naur newlib-1.19.0.orig/newlib/libc/machine/powerpc/Makefile.am newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.am
 --- newlib-1.19.0.orig/newlib/libc/machine/powerpc/Makefile.am	2007-05-24 19:33:35.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.am	2011-01-07 08:21:35.731432014 +0100
++++ newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.am	2011-01-07 18:08:30.449792449 +0100
 @@ -10,7 +10,7 @@
  
  AM_CFLAGS = -I $(srcdir)/../../stdio -I $(srcdir)/../../stdlib
@@ -854,7 +859,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/machine/powerpc/Makefile.am newlib-1.1
  lib_a_LIBADD = @extra_objs@
 diff -Naur newlib-1.19.0.orig/newlib/libc/machine/powerpc/Makefile.in newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.in
 --- newlib-1.19.0.orig/newlib/libc/machine/powerpc/Makefile.in	2010-12-16 22:58:53.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.in	2011-01-07 08:21:35.731432014 +0100
++++ newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.in	2011-01-07 18:08:30.449792449 +0100
 @@ -51,7 +51,7 @@
  LIBRARIES = $(noinst_LIBRARIES)
  ARFLAGS = cru
@@ -943,7 +948,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/machine/powerpc/times.c newlib-1.19.0/
 -}
 diff -Naur newlib-1.19.0.orig/newlib/libc/Makefile.am newlib-1.19.0/newlib/libc/Makefile.am
 --- newlib-1.19.0.orig/newlib/libc/Makefile.am	2010-05-07 01:25:16.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/Makefile.am	2011-01-07 08:21:35.723431993 +0100
++++ newlib-1.19.0/newlib/libc/Makefile.am	2011-01-07 18:08:30.421792256 +0100
 @@ -36,6 +36,8 @@
  
  if HAVE_XDR_DIR
@@ -965,7 +970,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/Makefile.am newlib-1.19.0/newlib/libc/
  	targetdep.tex $(SUBDEFS)
 diff -Naur newlib-1.19.0.orig/newlib/libc/Makefile.in newlib-1.19.0/newlib/libc/Makefile.in
 --- newlib-1.19.0.orig/newlib/libc/Makefile.in	2010-12-16 22:58:39.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/Makefile.in	2011-01-07 08:21:35.724431996 +0100
++++ newlib-1.19.0/newlib/libc/Makefile.in	2011-01-07 18:08:30.421792256 +0100
 @@ -17,6 +17,7 @@
  
  
@@ -1104,7 +1109,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/Makefile.in newlib-1.19.0/newlib/libc/
  @USE_LIBTOOL_FALSE@	rm -f $@
 diff -Naur newlib-1.19.0.orig/newlib/libc/misc/__dprintf.c newlib-1.19.0/newlib/libc/misc/__dprintf.c
 --- newlib-1.19.0.orig/newlib/libc/misc/__dprintf.c	2008-12-11 18:27:55.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/misc/__dprintf.c	2011-01-07 08:21:35.732432016 +0100
++++ newlib-1.19.0/newlib/libc/misc/__dprintf.c	2011-01-07 18:08:30.454792482 +0100
 @@ -5,6 +5,7 @@
  */
  
@@ -1124,7 +1129,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/misc/__dprintf.c newlib-1.19.0/newlib/
  	    case 'd' :
 diff -Naur newlib-1.19.0.orig/newlib/libc/misc/ffs.c newlib-1.19.0/newlib/libc/misc/ffs.c
 --- newlib-1.19.0.orig/newlib/libc/misc/ffs.c	2003-06-06 21:57:51.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/misc/ffs.c	2011-01-07 08:21:35.732432016 +0100
++++ newlib-1.19.0/newlib/libc/misc/ffs.c	2011-01-07 18:08:30.454792482 +0100
 @@ -6,9 +6,11 @@
  	ffs
  
@@ -1148,7 +1153,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/misc/ffs.c newlib-1.19.0/newlib/libc/m
  _DEFUN(ffs, (word),
 diff -Naur newlib-1.19.0.orig/newlib/libc/posix/readdir.c newlib-1.19.0/newlib/libc/posix/readdir.c
 --- newlib-1.19.0.orig/newlib/libc/posix/readdir.c	2003-06-06 21:57:51.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/posix/readdir.c	2011-01-07 08:21:35.732432016 +0100
++++ newlib-1.19.0/newlib/libc/posix/readdir.c	2011-01-07 18:08:30.456792497 +0100
 @@ -37,6 +37,7 @@
  static char sccsid[] = "@(#)readdir.c	5.7 (Berkeley) 6/1/90";
  #endif /* LIBC_SCCS and not lint */
@@ -1168,7 +1173,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/posix/readdir.c newlib-1.19.0/newlib/l
  #endif
 diff -Naur newlib-1.19.0.orig/newlib/libc/search/db_local.h newlib-1.19.0/newlib/libc/search/db_local.h
 --- newlib-1.19.0.orig/newlib/libc/search/db_local.h	2010-03-05 09:55:15.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/search/db_local.h	2011-01-07 08:21:35.732432016 +0100
++++ newlib-1.19.0/newlib/libc/search/db_local.h	2011-01-07 18:08:30.456792497 +0100
 @@ -102,11 +102,11 @@
  typedef struct __db {
  	DBTYPE type;			/* Underlying db type. */
@@ -1188,7 +1193,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/search/db_local.h newlib-1.19.0/newlib
  } DB;
 diff -Naur newlib-1.19.0.orig/newlib/libc/search/extern.h newlib-1.19.0/newlib/libc/search/extern.h
 --- newlib-1.19.0.orig/newlib/libc/search/extern.h	2002-06-20 21:51:31.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/search/extern.h	2011-01-07 08:21:35.732432016 +0100
++++ newlib-1.19.0/newlib/libc/search/extern.h	2011-01-07 18:08:30.456792497 +0100
 @@ -43,7 +43,7 @@
  int	 __big_split(HTAB *, BUFHEAD *, BUFHEAD *, BUFHEAD *,
  		int, __uint32_t, SPLIT_RETURN *);
@@ -1200,7 +1205,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/search/extern.h newlib-1.19.0/newlib/l
  int	 __expand_table(HTAB *);
 diff -Naur newlib-1.19.0.orig/newlib/libc/search/hash_buf.c newlib-1.19.0/newlib/libc/search/hash_buf.c
 --- newlib-1.19.0.orig/newlib/libc/search/hash_buf.c	2004-05-26 19:57:10.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/search/hash_buf.c	2011-01-07 08:21:35.733432018 +0100
++++ newlib-1.19.0/newlib/libc/search/hash_buf.c	2011-01-07 18:08:30.456792497 +0100
 @@ -118,7 +118,7 @@
  	int newpage;	/* If prev_bp set, indicates a new overflow page. */
  {
@@ -1221,7 +1226,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/search/hash_buf.c newlib-1.19.0/newlib
  	int npages;
 diff -Naur newlib-1.19.0.orig/newlib/libc/search/hash.h newlib-1.19.0/newlib/libc/search/hash.h
 --- newlib-1.19.0.orig/newlib/libc/search/hash.h	2008-07-02 20:38:45.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/search/hash.h	2011-01-07 08:21:35.732432016 +0100
++++ newlib-1.19.0/newlib/libc/search/hash.h	2011-01-07 18:08:30.456792497 +0100
 @@ -82,7 +82,7 @@
  
  /* Hash Table Information */
@@ -1242,21 +1247,23 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/search/hash.h newlib-1.19.0/newlib/lib
  	int		h_charkey;	/* value of hash(CHARKEY) */
 diff -Naur newlib-1.19.0.orig/newlib/libc/stdio/open_memstream.c newlib-1.19.0/newlib/libc/stdio/open_memstream.c
 --- newlib-1.19.0.orig/newlib/libc/stdio/open_memstream.c	2009-02-25 05:00:05.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/stdio/open_memstream.c	2011-01-07 08:21:35.733432018 +0100
++++ newlib-1.19.0/newlib/libc/stdio/open_memstream.c	2011-01-07 18:08:30.457792505 +0100
 @@ -330,8 +330,10 @@
      c->max *= sizeof(wchar_t);
    if (c->max < 64)
      c->max = 64;
-+#if (SIZE_MAX >= 64 * 1024)
-   else if (c->max > 64 * 1024)
-     c->max = 64 * 1024;
+-  else if (c->max > 64 * 1024)
+-    c->max = 64 * 1024;
++#if (SIZE_MAX >= 0x10000)
++  else if (c->max > 0x10000)
++    c->max = 0x10000;
 +#endif
    *size = 0;
    *buf = _malloc_r (ptr, c->max);
    if (!*buf)
 diff -Naur newlib-1.19.0.orig/newlib/libc/stdio/tmpnam.c newlib-1.19.0/newlib/libc/stdio/tmpnam.c
 --- newlib-1.19.0.orig/newlib/libc/stdio/tmpnam.c	2004-04-23 22:01:55.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/stdio/tmpnam.c	2011-01-07 08:21:35.733432018 +0100
++++ newlib-1.19.0/newlib/libc/stdio/tmpnam.c	2011-01-07 18:08:30.457792505 +0100
 @@ -94,6 +94,7 @@
  #include <_ansi.h>
  #include <reent.h>
@@ -1285,7 +1292,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/stdio/tmpnam.c newlib-1.19.0/newlib/li
    return filename;
 diff -Naur newlib-1.19.0.orig/newlib/libc/stdlib/putenv_r.c newlib-1.19.0/newlib/libc/stdlib/putenv_r.c
 --- newlib-1.19.0.orig/newlib/libc/stdlib/putenv_r.c	2004-11-24 23:34:14.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/stdlib/putenv_r.c	2011-01-07 08:21:35.733432018 +0100
++++ newlib-1.19.0/newlib/libc/stdlib/putenv_r.c	2011-01-07 18:08:30.457792505 +0100
 @@ -24,6 +24,7 @@
  #include <reent.h>
  #include <stdlib.h>
@@ -1296,7 +1303,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/stdlib/putenv_r.c newlib-1.19.0/newlib
  
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/bcmp.c newlib-1.19.0/newlib/libc/string/bcmp.c
 --- newlib-1.19.0.orig/newlib/libc/string/bcmp.c	2005-10-28 23:21:07.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/bcmp.c	2011-01-07 08:21:35.733432018 +0100
++++ newlib-1.19.0/newlib/libc/string/bcmp.c	2011-01-07 18:08:30.457792505 +0100
 @@ -6,11 +6,11 @@
  	bcmp
  
@@ -1322,7 +1329,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/bcmp.c newlib-1.19.0/newlib/lib
  _DEFUN (bcmp, (m1, m2, n),
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/bcopy.c newlib-1.19.0/newlib/libc/string/bcopy.c
 --- newlib-1.19.0.orig/newlib/libc/string/bcopy.c	2002-05-23 20:46:04.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/bcopy.c	2011-01-07 08:21:35.733432018 +0100
++++ newlib-1.19.0/newlib/libc/string/bcopy.c	2011-01-07 18:08:30.457792505 +0100
 @@ -3,7 +3,7 @@
  	<<bcopy>>---copy memory regions
  
@@ -1343,7 +1350,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/bcopy.c newlib-1.19.0/newlib/li
  _DEFUN (bcopy, (b1, b2, length),
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/bzero.c newlib-1.19.0/newlib/libc/string/bzero.c
 --- newlib-1.19.0.orig/newlib/libc/string/bzero.c	2002-05-23 20:46:04.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/bzero.c	2011-01-07 08:21:35.734432021 +0100
++++ newlib-1.19.0/newlib/libc/string/bzero.c	2011-01-07 18:08:30.457792505 +0100
 @@ -6,11 +6,11 @@
  	bzero
  
@@ -1369,7 +1376,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/bzero.c newlib-1.19.0/newlib/li
  _DEFUN (bzero, (b, length),
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/index.c newlib-1.19.0/newlib/libc/string/index.c
 --- newlib-1.19.0.orig/newlib/libc/string/index.c	2000-02-17 20:39:48.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/string/index.c	2011-01-07 08:21:35.734432021 +0100
++++ newlib-1.19.0/newlib/libc/string/index.c	2011-01-07 18:08:30.458792513 +0100
 @@ -6,11 +6,11 @@
  	index
  
@@ -1396,7 +1403,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/index.c newlib-1.19.0/newlib/li
  _DEFUN (index, (s, c),
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/memccpy.c newlib-1.19.0/newlib/libc/string/memccpy.c
 --- newlib-1.19.0.orig/newlib/libc/string/memccpy.c	2010-09-22 05:15:07.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/memccpy.c	2011-01-07 08:21:35.734432021 +0100
++++ newlib-1.19.0/newlib/libc/string/memccpy.c	2011-01-07 18:08:30.458792513 +0100
 @@ -35,13 +35,14 @@
  	*/
  
@@ -1415,7 +1422,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/memccpy.c newlib-1.19.0/newlib/
  #define LITTLEBLOCKSIZE (sizeof (long))
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/memchr.c newlib-1.19.0/newlib/libc/string/memchr.c
 --- newlib-1.19.0.orig/newlib/libc/string/memchr.c	2008-05-27 01:31:08.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/memchr.c	2011-01-07 08:21:35.734432021 +0100
++++ newlib-1.19.0/newlib/libc/string/memchr.c	2011-01-07 18:08:30.458792513 +0100
 @@ -38,10 +38,11 @@
  
  #include <_ansi.h>
@@ -1431,7 +1438,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/memchr.c newlib-1.19.0/newlib/l
  #define LBLOCKSIZE (sizeof (long))
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/memcmp.c newlib-1.19.0/newlib/libc/string/memcmp.c
 --- newlib-1.19.0.orig/newlib/libc/string/memcmp.c	2005-03-06 21:40:05.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/string/memcmp.c	2011-01-07 08:21:35.734432021 +0100
++++ newlib-1.19.0/newlib/libc/string/memcmp.c	2011-01-07 18:08:30.458792513 +0100
 @@ -37,11 +37,11 @@
  */
  
@@ -1448,7 +1455,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/memcmp.c newlib-1.19.0/newlib/l
  #define LBLOCKSIZE (sizeof (long))
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/memcpy.c newlib-1.19.0/newlib/libc/string/memcpy.c
 --- newlib-1.19.0.orig/newlib/libc/string/memcpy.c	2010-09-22 05:15:07.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/memcpy.c	2011-01-07 08:21:35.734432021 +0100
++++ newlib-1.19.0/newlib/libc/string/memcpy.c	2011-01-07 18:08:30.458792513 +0100
 @@ -34,11 +34,12 @@
  	*/
  
@@ -1465,7 +1472,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/memcpy.c newlib-1.19.0/newlib/l
  #define BIGBLOCKSIZE    (sizeof (long) << 2)
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/memmove.c newlib-1.19.0/newlib/libc/string/memmove.c
 --- newlib-1.19.0.orig/newlib/libc/string/memmove.c	2010-09-22 05:15:07.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/memmove.c	2011-01-07 08:21:35.734432021 +0100
++++ newlib-1.19.0/newlib/libc/string/memmove.c	2011-01-07 18:08:30.458792513 +0100
 @@ -36,13 +36,14 @@
  */
  
@@ -1484,7 +1491,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/memmove.c newlib-1.19.0/newlib/
  #define BIGBLOCKSIZE    (sizeof (long) << 2)
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/mempcpy.c newlib-1.19.0/newlib/libc/string/mempcpy.c
 --- newlib-1.19.0.orig/newlib/libc/string/mempcpy.c	2010-09-22 05:15:07.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/mempcpy.c	2011-01-07 08:21:35.734432021 +0100
++++ newlib-1.19.0/newlib/libc/string/mempcpy.c	2011-01-07 18:08:30.459792520 +0100
 @@ -34,10 +34,11 @@
  #include <stddef.h>
  #include <limits.h>
@@ -1500,7 +1507,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/mempcpy.c newlib-1.19.0/newlib/
  #define BIGBLOCKSIZE    (sizeof (long) << 2)
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/memset.c newlib-1.19.0/newlib/libc/string/memset.c
 --- newlib-1.19.0.orig/newlib/libc/string/memset.c	2008-05-27 20:44:40.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/memset.c	2011-01-07 08:21:35.735432025 +0100
++++ newlib-1.19.0/newlib/libc/string/memset.c	2011-01-07 18:08:30.459792520 +0100
 @@ -34,9 +34,10 @@
  */
  
@@ -1515,7 +1522,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/memset.c newlib-1.19.0/newlib/l
  _PTR
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/rindex.c newlib-1.19.0/newlib/libc/string/rindex.c
 --- newlib-1.19.0.orig/newlib/libc/string/rindex.c	2000-02-17 20:39:48.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/string/rindex.c	2011-01-07 08:21:35.735432025 +0100
++++ newlib-1.19.0/newlib/libc/string/rindex.c	2011-01-07 18:08:30.459792520 +0100
 @@ -10,7 +10,7 @@
  	char * rindex(const char *<[string]>, int <[c]>);
  
@@ -1537,7 +1544,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/rindex.c newlib-1.19.0/newlib/l
  _DEFUN (rindex, (s, c),
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/stpcpy.c newlib-1.19.0/newlib/libc/string/stpcpy.c
 --- newlib-1.19.0.orig/newlib/libc/string/stpcpy.c	2007-06-28 19:07:23.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/stpcpy.c	2011-01-07 08:21:35.736432028 +0100
++++ newlib-1.19.0/newlib/libc/string/stpcpy.c	2011-01-07 18:08:30.459792520 +0100
 @@ -34,6 +34,7 @@
  */
  
@@ -1557,7 +1564,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/stpcpy.c newlib-1.19.0/newlib/l
  #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/stpncpy.c newlib-1.19.0/newlib/libc/string/stpncpy.c
 --- newlib-1.19.0.orig/newlib/libc/string/stpncpy.c	2007-06-28 19:07:23.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/stpncpy.c	2011-01-07 08:21:35.736432028 +0100
++++ newlib-1.19.0/newlib/libc/string/stpncpy.c	2011-01-07 18:08:30.459792520 +0100
 @@ -40,6 +40,7 @@
  */
  
@@ -1577,7 +1584,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/stpncpy.c newlib-1.19.0/newlib/
  #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcasecmp.c newlib-1.19.0/newlib/libc/string/strcasecmp.c
 --- newlib-1.19.0.orig/newlib/libc/string/strcasecmp.c	2009-04-23 20:11:22.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/strcasecmp.c	2011-01-07 08:21:35.736432028 +0100
++++ newlib-1.19.0/newlib/libc/string/strcasecmp.c	2011-01-07 18:08:30.459792520 +0100
 @@ -6,11 +6,11 @@
  	strcasecmp
  
@@ -1603,7 +1610,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcasecmp.c newlib-1.19.0/newl
  int
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcat.c newlib-1.19.0/newlib/libc/string/strcat.c
 --- newlib-1.19.0.orig/newlib/libc/string/strcat.c	2000-02-17 20:39:48.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/string/strcat.c	2011-01-07 08:21:35.736432028 +0100
++++ newlib-1.19.0/newlib/libc/string/strcat.c	2011-01-07 18:08:30.459792520 +0100
 @@ -33,12 +33,13 @@
  	strcat ansi pure
  */
@@ -1621,7 +1628,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcat.c newlib-1.19.0/newlib/l
  #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strchr.c newlib-1.19.0/newlib/libc/string/strchr.c
 --- newlib-1.19.0.orig/newlib/libc/string/strchr.c	2008-05-22 04:31:46.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/strchr.c	2011-01-07 08:21:35.736432028 +0100
++++ newlib-1.19.0/newlib/libc/string/strchr.c	2011-01-07 18:08:30.460792526 +0100
 @@ -33,11 +33,12 @@
  	strchr ansi pure
  */
@@ -1638,7 +1645,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strchr.c newlib-1.19.0/newlib/l
  #define LBLOCKSIZE (sizeof (long))
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcmp.c newlib-1.19.0/newlib/libc/string/strcmp.c
 --- newlib-1.19.0.orig/newlib/libc/string/strcmp.c	2000-02-17 20:39:48.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/string/strcmp.c	2011-01-07 08:21:35.736432028 +0100
++++ newlib-1.19.0/newlib/libc/string/strcmp.c	2011-01-07 18:08:30.460792526 +0100
 @@ -35,12 +35,13 @@
  	strcmp ansi pure
  */
@@ -1656,7 +1663,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcmp.c newlib-1.19.0/newlib/l
  #if LONG_MAX == 2147483647L
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcpy.c newlib-1.19.0/newlib/libc/string/strcpy.c
 --- newlib-1.19.0.orig/newlib/libc/string/strcpy.c	2007-05-29 23:26:59.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/strcpy.c	2011-01-07 08:21:35.736432028 +0100
++++ newlib-1.19.0/newlib/libc/string/strcpy.c	2011-01-07 18:08:30.460792526 +0100
 @@ -32,6 +32,7 @@
  	strcpy ansi pure
  */
@@ -1676,7 +1683,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcpy.c newlib-1.19.0/newlib/l
  #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strlen.c newlib-1.19.0/newlib/libc/string/strlen.c
 --- newlib-1.19.0.orig/newlib/libc/string/strlen.c	2008-05-27 00:56:14.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/strlen.c	2011-01-07 08:21:35.736432028 +0100
++++ newlib-1.19.0/newlib/libc/string/strlen.c	2011-01-07 18:08:30.460792526 +0100
 @@ -32,11 +32,12 @@
  */
  
@@ -1693,7 +1700,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strlen.c newlib-1.19.0/newlib/l
  #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncasecmp.c newlib-1.19.0/newlib/libc/string/strncasecmp.c
 --- newlib-1.19.0.orig/newlib/libc/string/strncasecmp.c	2009-04-23 20:11:22.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/strncasecmp.c	2011-01-07 08:21:35.737432031 +0100
++++ newlib-1.19.0/newlib/libc/string/strncasecmp.c	2011-01-07 18:08:30.460792526 +0100
 @@ -6,11 +6,11 @@
  	strncasecmp
  
@@ -1719,7 +1726,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncasecmp.c newlib-1.19.0/new
  int 
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncat.c newlib-1.19.0/newlib/libc/string/strncat.c
 --- newlib-1.19.0.orig/newlib/libc/string/strncat.c	2005-10-28 23:21:07.000000000 +0200
-+++ newlib-1.19.0/newlib/libc/string/strncat.c	2011-01-07 08:21:35.737432031 +0100
++++ newlib-1.19.0/newlib/libc/string/strncat.c	2011-01-07 18:08:30.460792526 +0100
 @@ -42,11 +42,12 @@
  */
  
@@ -1736,7 +1743,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncat.c newlib-1.19.0/newlib/
  #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncmp.c newlib-1.19.0/newlib/libc/string/strncmp.c
 --- newlib-1.19.0.orig/newlib/libc/string/strncmp.c	2000-02-17 20:39:48.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/string/strncmp.c	2011-01-07 08:21:35.737432031 +0100
++++ newlib-1.19.0/newlib/libc/string/strncmp.c	2011-01-07 18:08:30.460792526 +0100
 @@ -36,12 +36,13 @@
  	strncmp ansi pure
  */
@@ -1754,7 +1761,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncmp.c newlib-1.19.0/newlib/
  #if LONG_MAX == 2147483647L
 diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncpy.c newlib-1.19.0/newlib/libc/string/strncpy.c
 --- newlib-1.19.0.orig/newlib/libc/string/strncpy.c	2000-02-17 20:39:48.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/string/strncpy.c	2011-01-07 08:21:35.737432031 +0100
++++ newlib-1.19.0/newlib/libc/string/strncpy.c	2011-01-07 18:08:30.461792532 +0100
 @@ -38,6 +38,7 @@
  */
  
@@ -1774,7 +1781,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncpy.c newlib-1.19.0/newlib/
  #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
 diff -Naur newlib-1.19.0.orig/newlib/libc/sys/rtems/crt0.c newlib-1.19.0/newlib/libc/sys/rtems/crt0.c
 --- newlib-1.19.0.orig/newlib/libc/sys/rtems/crt0.c	2009-12-16 19:28:14.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/sys/rtems/crt0.c	2011-01-07 08:21:35.737432031 +0100
++++ newlib-1.19.0/newlib/libc/sys/rtems/crt0.c	2011-01-07 18:08:30.461792532 +0100
 @@ -24,8 +24,8 @@
  /* RTEMS provides some of its own routines including a Malloc family */
  RTEMS_STUB(void *,malloc(size_t s)) { return 0; }
@@ -1788,7 +1795,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/sys/rtems/crt0.c newlib-1.19.0/newlib/
  /*
 diff -Naur newlib-1.19.0.orig/newlib/libc/xdr/xdr.c newlib-1.19.0/newlib/libc/xdr/xdr.c
 --- newlib-1.19.0.orig/newlib/libc/xdr/xdr.c	2010-03-02 13:05:18.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/xdr/xdr.c	2011-01-07 08:21:35.737432031 +0100
++++ newlib-1.19.0/newlib/libc/xdr/xdr.c	2011-01-07 18:08:30.461792532 +0100
 @@ -113,7 +113,7 @@
  #elif INT_MAX == LONG_MAX
    return xdr_long (xdrs, (long *) ip);
@@ -1809,7 +1816,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/xdr/xdr.c newlib-1.19.0/newlib/libc/xd
  
 diff -Naur newlib-1.19.0.orig/newlib/libc/xdr/xdr_private.h newlib-1.19.0/newlib/libc/xdr/xdr_private.h
 --- newlib-1.19.0.orig/newlib/libc/xdr/xdr_private.h	2010-03-02 13:05:18.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/xdr/xdr_private.h	2011-01-07 08:21:35.738432032 +0100
++++ newlib-1.19.0/newlib/libc/xdr/xdr_private.h	2011-01-07 18:08:30.461792532 +0100
 @@ -25,6 +25,7 @@
  
  #include <_ansi.h>
@@ -1820,7 +1827,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/xdr/xdr_private.h newlib-1.19.0/newlib
  /* avoid including stdio header here */
 diff -Naur newlib-1.19.0.orig/newlib/libc/xdr/xdr_rec.c newlib-1.19.0/newlib/libc/xdr/xdr_rec.c
 --- newlib-1.19.0.orig/newlib/libc/xdr/xdr_rec.c	2010-03-02 13:05:18.000000000 +0100
-+++ newlib-1.19.0/newlib/libc/xdr/xdr_rec.c	2011-01-07 08:21:35.738432032 +0100
++++ newlib-1.19.0/newlib/libc/xdr/xdr_rec.c	2011-01-07 18:08:30.461792532 +0100
 @@ -51,6 +51,7 @@
  #include <assert.h>
  #include <unistd.h>
@@ -1831,7 +1838,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libc/xdr/xdr_rec.c newlib-1.19.0/newlib/lib
  #include <rpc/xdr.h>
 diff -Naur newlib-1.19.0.orig/newlib/libm/common/modfl.c newlib-1.19.0/newlib/libm/common/modfl.c
 --- newlib-1.19.0.orig/newlib/libm/common/modfl.c	2009-04-18 00:15:43.000000000 +0200
-+++ newlib-1.19.0/newlib/libm/common/modfl.c	2011-01-07 08:21:35.738432032 +0100
++++ newlib-1.19.0/newlib/libm/common/modfl.c	2011-01-07 18:08:30.462792539 +0100
 @@ -36,7 +36,7 @@
  long double
  modfl (long double x, long double *iptr)
@@ -1843,7 +1850,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libm/common/modfl.c newlib-1.19.0/newlib/li
  
 diff -Naur newlib-1.19.0.orig/newlib/libm/common/s_round.c newlib-1.19.0/newlib/libm/common/s_round.c
 --- newlib-1.19.0.orig/newlib/libm/common/s_round.c	2009-03-25 20:13:01.000000000 +0100
-+++ newlib-1.19.0/newlib/libm/common/s_round.c	2011-01-07 08:21:35.738432032 +0100
++++ newlib-1.19.0/newlib/libm/common/s_round.c	2011-01-07 18:08:30.462792539 +0100
 @@ -68,7 +68,7 @@
            msw &= 0x80000000;
            if (exponent_less_1023 == -1)
@@ -1855,7 +1862,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libm/common/s_round.c newlib-1.19.0/newlib/
        else
 diff -Naur newlib-1.19.0.orig/newlib/libm/math/e_scalb.c newlib-1.19.0/newlib/libm/math/e_scalb.c
 --- newlib-1.19.0.orig/newlib/libm/math/e_scalb.c	2000-02-17 20:39:51.000000000 +0100
-+++ newlib-1.19.0/newlib/libm/math/e_scalb.c	2011-01-07 08:21:35.738432032 +0100
++++ newlib-1.19.0/newlib/libm/math/e_scalb.c	2011-01-07 18:08:30.462792539 +0100
 @@ -17,6 +17,7 @@
   * should use scalbn() instead.
   */
@@ -1885,7 +1892,7 @@ diff -Naur newlib-1.19.0.orig/newlib/libm/math/e_scalb.c newlib-1.19.0/newlib/li
  }
 diff -Naur newlib-1.19.0.orig/newlib/MAINTAINERS newlib-1.19.0/newlib/MAINTAINERS
 --- newlib-1.19.0.orig/newlib/MAINTAINERS	2010-12-16 22:58:38.000000000 +0100
-+++ newlib-1.19.0/newlib/MAINTAINERS	2011-01-07 08:21:35.722431989 +0100
++++ newlib-1.19.0/newlib/MAINTAINERS	2011-01-07 18:08:30.419792243 +0100
 @@ -6,7 +6,7 @@
  The official maintainers of newlib:
  
@@ -1897,7 +1904,7 @@ diff -Naur newlib-1.19.0.orig/newlib/MAINTAINERS newlib-1.19.0/newlib/MAINTAINER
  		     Various Domain Maintainers
 diff -Naur newlib-1.19.0.orig/newlib/Makefile.am newlib-1.19.0/newlib/Makefile.am
 --- newlib-1.19.0.orig/newlib/Makefile.am	2010-12-16 22:58:38.000000000 +0100
-+++ newlib-1.19.0/newlib/Makefile.am	2011-01-07 08:21:35.722431989 +0100
++++ newlib-1.19.0/newlib/Makefile.am	2011-01-07 18:08:30.420792249 +0100
 @@ -81,7 +81,7 @@
  	libc.a
  endif
@@ -1936,7 +1943,7 @@ diff -Naur newlib-1.19.0.orig/newlib/Makefile.am newlib-1.19.0/newlib/Makefile.a
 +	-rm -rf targ-include
 diff -Naur newlib-1.19.0.orig/newlib/Makefile.in newlib-1.19.0/newlib/Makefile.in
 --- newlib-1.19.0.orig/newlib/Makefile.in	2010-12-16 22:58:38.000000000 +0100
-+++ newlib-1.19.0/newlib/Makefile.in	2011-01-07 08:21:35.723431993 +0100
++++ newlib-1.19.0/newlib/Makefile.in	2011-01-07 18:08:30.420792249 +0100
 @@ -122,7 +122,7 @@
  	install-pdf-recursive install-ps-recursive install-recursive \
  	installcheck-recursive installdirs-recursive pdf-recursive \
