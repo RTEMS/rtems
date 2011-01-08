@@ -47,7 +47,7 @@ aio_read (struct aiocb *aiocbp)
   mode = fcntl (aiocbp->aio_fildes, F_GETFL);
   if (!(((mode & O_ACCMODE) == O_RDONLY) || ((mode & O_ACCMODE) == O_RDWR)))
     rtems_aio_set_errno_return_minus_one (EBADF, aiocbp);
-
+  
   if (aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX)
     rtems_aio_set_errno_return_minus_one (EINVAL, aiocbp);
   

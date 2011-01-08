@@ -179,7 +179,6 @@ void rtems_aio_remove_fd (rtems_aio_request_chain *r_chain)
 {
   rtems_chain_control *chain;
   rtems_chain_node *node;
-
   chain = &r_chain->perfd;
   node = rtems_chain_first (chain);
   
@@ -187,6 +186,7 @@ void rtems_aio_remove_fd (rtems_aio_request_chain *r_chain)
     {
       rtems_chain_extract (node);
       rtems_aio_request *req = (rtems_aio_request *) node;
+      node = rtems_chain_next (node);
       req->aiocbp->error_code = ECANCELED;
       req->aiocbp->return_value = -1;
       free (req);
@@ -211,6 +211,9 @@ void rtems_aio_remove_fd (rtems_aio_request_chain *r_chain)
 
 int rtems_aio_remove_req (rtems_chain_control *chain, struct aiocb *aiocbp)
 {
+  if (rtems_chain_is_empty (chain))
+    return AIO_ALLDONE;
+
   rtems_chain_node *node = rtems_chain_first (chain);
   rtems_aio_request *current;
   

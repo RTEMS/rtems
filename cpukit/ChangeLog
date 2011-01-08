@@ -1,3 +1,11 @@
+2011-01-08	Alin Rus <alin.codejunkie@gmail.com>
+	
+	* posix/src/aio_misc.c: Fix rtems_aio_remove_req did not iterate
+	over chain.
+	* posix/src/aio_cancel.c: Add debug information. Add check for 
+	bad file descriptor. Add else branch for cancel request on empty
+	IQ chain.
+
 2011-01-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/error.c: Scheduler Simulator compilation always
