@@ -22,7 +22,8 @@
 #include <rtems/chain.h>
 
 #define BUFSIZE 32
-#define MAX 7
+#define MAX 10
+#define WRONG_FD 666
 
 struct aiocb *
 create_aiocb (int fd)
@@ -51,11 +52,16 @@ void *
 POSIX_Init (void *argument)
 {
   int fd[MAX];
-  struct aiocb *aiocbp[MAX+2];
-  int status, i;
+  struct aiocb *aiocbp[MAX+1];
+  int status, i, policy = SCHED_FIFO;
   char filename[BUFSIZE];
+  struct sched_param param;
 
   status = rtems_aio_init ();
+  rtems_test_assert (status == 0);
+
+  param.sched_priority = 30;
+  status = pthread_setschedparam (pthread_self(), policy, &param);
   rtems_test_assert (status == 0);
  
   status = mkdir ("/tmp", S_IRWXU);
@@ -113,9 +119,51 @@ POSIX_Init (void *argument)
   rtems_test_assert (status != -1);
 
   puts (" Init: [IQ] aio_read on 7th file add by priority ");
-  aiocbp[8] = create_aiocb (fd[6]);
+  aiocbp[8] = create_aiocb (fd[6]); 
   status = aio_read (aiocbp[8]);
   rtems_test_assert (status != -1);
+
+  puts (" Init: [WQ] aio_sync on 1st file add by priority ");
+  aiocbp[9] = create_aiocb (fd[0]); 
+  status = aio_fsync (O_SYNC, aiocbp[9]);
+  rtems_test_assert (status != -1);
+
+  puts (" Init: [NONE] aio_cancel aiocbp=NULL and invalid fildes ");
+  status = aio_cancel (WRONG_FD, NULL);
+  rtems_test_assert (status == -1);
+
+  puts (" Init: [NONE] aio_cancel aiocbp=NULL valid fildes not in queue ");
+  status = aio_cancel (fd[7], NULL);
+  rtems_test_assert (status == AIO_ALLDONE);
+
+  puts (" Init: [WQ] aio_cancel aiocbp=NULL fildes=fd[1] ");
+  status = aio_cancel (fd[1], NULL);
+  rtems_test_assert (status == AIO_CANCELED);
+
+  puts (" Init: [IQ] aio_cancel aiocbp=NULL fildes=fd[6] ");
+  status = aio_cancel (fd[6], NULL);
+  rtems_test_assert (status == AIO_CANCELED);
+
+  puts (" Init: [NONE] aio_cancel aiocbp->aio_fildes != fildes ");
+  status = aio_cancel (fd[4],aiocbp[4]);
+  rtems_test_assert (status == -1 );
+ 
+  puts (" Init: [NONE] aio_cancel FD on [IQ], aiocb not on chain ");
+  aiocbp[10] = create_aiocb (fd[9]);
+  status = aio_cancel (fd[9], aiocbp[10]);
+  rtems_test_assert (status == -1);
+
+  puts (" Init: [IQ] aio_cancel 6th file only one request ");
+  status = aio_cancel (fd[5], aiocbp[6]);
+  rtems_test_assert (status == AIO_CANCELED);
+
+  puts (" Init: [WQ] aio_cancel 1st file only one request ");
+  status = aio_cancel (fd[0], aiocbp[9]);
+  rtems_test_assert (status == AIO_CANCELED);
+
+  puts (" Init: [NONE] aio_cancel empty [IQ] ");
+  status = aio_cancel (fd[5], aiocbp[6]);
+  rtems_test_assert (status == AIO_ALLDONE);
 
   puts ("\n\n*** POSIX AIO TEST 02 ***");
 
@@ -127,7 +175,6 @@ POSIX_Init (void *argument)
       free_aiocb (aiocbp[i]);      
     }
   free_aiocb (aiocbp[i]);
-  free_aiocb (aiocbp[i+1]);
   rtems_test_exit (0);
 
   return NULL;

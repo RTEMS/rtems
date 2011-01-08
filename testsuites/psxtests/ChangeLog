@@ -1,3 +1,7 @@
+2011-01-08	Alin Rus <alin.codejunkie@gmail.com>
+
+	* psxaio02/init.c: Improve aio_cancel() coverage.
+
 2011-01-02	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* psx05/init.c: Spacing.
