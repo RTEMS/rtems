@@ -1,0 +1,2081 @@
+diff -Naur newlib-1.19.0.orig/newlib/ChangeLog newlib-1.19.0/newlib/ChangeLog
+--- newlib-1.19.0.orig/newlib/ChangeLog	2010-12-16 22:58:38.000000000 +0100
++++ newlib-1.19.0/newlib/ChangeLog	2011-01-09 09:01:25.659348491 +0100
+@@ -1,3 +1,36 @@
++2011-01-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
++
++	* Makefile.am: Move cleaning targ-include to clean-local.
++	* Makefile.in: Regenerate.
++
++2011-01-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
++
++	* libc/stdio/open_memstream.c (internal_open_memstream_r):
++	Don't limit c->max to 64*1024 on targets with SIZE_MAX < 64*1024.
++
++2011-01-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
++
++	* libc/xdr/xdr.c: Fix typos in #errors.
++
++2011-01-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
++
++	* libc/xdr/xdr_private.h: Include <stdint.h>
++	* libc/xdr/xdr_rec.c: Include limits.h
++
++2011-01-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
++
++	* libc/Makefile.am (SUBDEFS): Remove redundant posix/stmp-def.
++	* libc/Makefile.in: Regenerate.
++
++2011-01-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
++
++	* libc/configure.in: Remove redundant posix_dir processing.
++	* libc/configure: Regenerate.
++
++2010-12-31  Ralf Corsepius  <ralf.corsepius@rtems.org>
++
++	* MAINTAINERS: Change corinna@vinchen.de to corinna@vinschen.de.
++
+ 2010-12-16  Jeff Johnston  <jjohnstn@redhat.com>
+ 
+ 	* NEWS: Update with 1.19.0 info.
+@@ -28,12 +61,12 @@
+ 
+ 	* libm/mathfp/sf_logarithm.c: Change isfinitef reference to isfinite.
+ 
+-2010-12-08      Ralf Corsepius <ralf.corsepius@rtems.org>
++2010-12-08  Ralf Corsepius <ralf.corsepius@rtems.org>
+ 
+ 	* include/sys/types.h: Add #if defined(__rtems__) around
+ 	pthread_attr_t.guardsize.
+ 
+-2010-12-08      Joel Sherrill <joel@OARcorp.com>
++2010-12-08  Joel Sherrill <joel@OARcorp.com>
+ 
+ 	* include/pthread.h: Add pthread_attr_setstack, pthread_attr_getstack,
+ 	pthread_attr_getguardsize, pthread_attr_setguardsize.
+@@ -1048,17 +1081,17 @@
+ 	* libc/stdlib/atexit.c: Ditto.
+ 	* libc/stdlib/on_exit.c: Ditto.
+ 
+-2009-12-17  Ralf CorsÃÂ©pius <ralf.corsepius@rtems.org>
++2009-12-17  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/machine/ieeefp.h: Rework __IEEE_*_ENDIAN handling.
+ 	* libc/machine/arm/machine/endian.h: Remove (Conflicts with
+ 	libc/include/machine/endian.h)
+ 
+-2009-12-17  Ralf CorsÃÂ©pius <ralf.corsepius@rtems.org>
++2009-12-17  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/machine/setjmp.h: Set up _JBLEN #ifdef __m68k__.
+ 
+-2009-12-17  Ralf Corsepius <ralf.corsepius@rtems.org>
++2009-12-17  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/pthread.h: Add pthread_atfork, pthread_rwlock_unlock
+ 	* libc/include/sys/stat.h: Use struct timespec st_*tim,
+@@ -1076,11 +1109,11 @@
+ 	and ETOOMANYREFS into general list as they are referenced
+ 	by OpenGroup and needed by RTEMS.
+ 
+-2009-12-16  Ralf CorsÃÂ©pius <ralf.corsepius@rtems.org>
++2009-12-16  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/search/hcreate.c: Don't include <sys/queue.h> (Unused).
+ 
+-2009-12-16  Ralf CorsÃÂ©pius <ralf.corsepius@rtems.org>
++2009-12-16  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/sys/rtems/machine/_types.h: New (Derived from
+ 	machine/_default_types.h).
+@@ -1368,16 +1401,16 @@
+ 	* libc/locale/locale.c: Drop Cygwin-specific windows.h include.
+ 	(loadlocale): Call __set_charset_from_codepage with 0 codepage.
+ 
+-2009-09-22  Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
++2009-09-22  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/stdlib.h: Add posix_memalign.
+ 
+-2009-09-22  Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
++2009-09-22  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* configure.host (*-rtems*): Remove -DMISSING_SYSCALL_NAMES.
+ 	Add -DHAVE_BLKSIZE, -D_NO_WORDEXP -D_NO_POPEN.
+ 
+-2009-09-22  Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
++2009-09-22  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* configure.host (m32c): Move setting -DABORT_PROVIDED to second
+ 	"case $host".
+@@ -2673,7 +2706,7 @@
+ 
+ 	* libc/machine/arm/strcpy.c: Add missing comma.
+ 
+-2009-02-26  Ralf Corsepius  <ralf.corsepius@rtems.org>
++2009-02-26  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/machine/lm32/configure.in: Let
+ 	AC_CONFIG_SRCDIR point to setjmp.S instead of setjmp.s
+@@ -2859,24 +2892,24 @@
+ 	* libc/string/wcstrings.tex: Ditto.
+ 	* libc/string/Makefile.in: Regenerated.
+ 
+-2008-12-12  Ralf Corsepius  <ralf.corsepius@rtems.org>
++2008-12-12  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/stdio/fputws.c: Fix documentation.
+ 	* libc/stdio/getwchar.c: Ditto.
+ 	* libc/stdio/putwchar.c: Ditto.
+ 
+-2008-12-12  Ralf Corsepius  <ralf.corsepius@rtems.org>
++2008-12-12  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/sys/features.h: Set RTEMS's _POSIX_MONOTONIC_CLOCK to
+ 	200112L (SUSv3 compliance).
+ 	Comment out RTEMS's _POSIX_SHARED_MEMORY_OBJECTS (Unsupported).
+ 
+-2008-12-12  Ralf Corsepius  <ralf.corsepius@rtems.org>
++2008-12-12  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/sys/rtems/crt0.c: Add stubs for getdents(), nanosleep(),
+ 	_execve(), _exit().
+ 
+-2008-12-12  Ralf Corsepius  <ralf.corsepius@rtems.org>
++2008-12-12  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* configure.host: Let *rtems* default to c99-formats.
+ 
+@@ -3026,7 +3059,7 @@
+ 	<linux/dirent.h>.
+ 	* libc/sys/linux/io64.c: Add weak alias for _stat64.
+ 
+-2008-11-27  Ralf Corsepius <ralf.corsepius@rtems.org>
++2008-11-27  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/posix/telldir.c: Use #if !defined() instead of #ifndef
+ 	to fix GCC warning.
+@@ -3198,17 +3231,17 @@
+ 	* libc/unix/collate.c (__collate_err): simplify to remove unnecessary
+ 	strdup() and strlen() calls, also getting rid of a compiler warning.
+ 
+-2008-11-19  Ralf Corsepius <ralf.corsepius@rtems.org>
++2008-11-19  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/sys/config.h: Don't put
+ 	__ATTRIBUTE_IMPURE_PTR__ into .sdata section for mips-rtems.
+ 
+-2008-11-19  Ralf Corsepius  <ralf.corsepius@rtems.org>
++2008-11-19  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/posix/runetype.h: Add include of stddef.h and remove
+ 	defining standard types: size_t and wchar_t.
+ 
+-2008-11-19  Ralf Corsepius  <ralf.corsepius@rtems.org>
++2008-11-19  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/pthread.h: Remove prototypes for
+ 	pthread_attr_getcputime and pthread_attr_setcputime which
+@@ -5263,7 +5296,7 @@
+ 	* libc/machine/spu/sprintf.c: Ditto.
+ 	* libc/machine/spu/sscanf.c: Ditto.
+ 
+-2007-08-03  Ralf Corsepius  <ralf.corsepius@rtems.org>
++2007-08-03  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/tar.h: New.
+ 
+@@ -6455,7 +6488,7 @@
+ 	* libc/include/sys/unistd.h: Define all _SC_xxx values as
+ 	required by SUSv3.  Unify formatting.
+ 
+-2007-02-02  Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
++2007-02-02  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/sys/errno.h: Add ECANCELED.
+ 
+@@ -7248,7 +7281,7 @@
+ 	* libc/include/sys/signal.h (sigdelset, sigfillset, sigismember): New macros.
+ 	(sigaddset, sigemptyset): Add return code.
+ 
+-2006-04-13  Ralf Corsepius  <ralf.corsepius@rtems.org>
++2006-04-13  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* acinclude.m4: New _NEWLIB_VERSION.
+ 	* acinclude.m4(NEWLIB_CONFIGURE): AC_REQUIRE(_NEWLIB_VERSION).
+@@ -7737,7 +7770,7 @@
+ 	* libc/sys/linux/sys/stat.h: Change *stat64 prototypes to
+ 	take a pointer to struct stat64 rather than struct stat.
+ 
+-2005-12-16  Ralf Corsepius <ralf.corsepius@rtems.org>
++2005-12-16  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/stdint.h: Prefer long over int for int32_t.
+ 	Use __have_long32 to set up int32_t.
+@@ -7766,7 +7799,7 @@
+ 	* libc/include/sys/types.h: Remove the ifdef armour around
+ 	standard POSIX types.
+ 
+-2005-12-06  Ralf Corsepius <ralf.corsepius@rtems.org>
++2005-12-06  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/sys/rtems/crt0.c: Add rtems_gxx_key_create,
+ 	rtems_gxx_key_delete, rtems_gxx_getspecific,
+@@ -7845,7 +7878,7 @@
+ 	* libc/sys/linux/sys/unistd.h (readlink, symlink): New
+ 	prototypes.
+ 
+-2005-11-01  Ralf Corsepius <ralf.corsepius@rtems.org>
++2005-11-01  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/stdint.h: Cleanup #if vs. #ifdef.
+ 
+@@ -8069,11 +8102,11 @@
+ 	* libc/stdlib/mallocr.c (mALLOc, rEALLOCc, mEMALIGn): Set errno
+ 	to ENOMEM on failure.
+ 
+-2005-10-06  Ralf Corsepius <ralf.corsepius@rtems.org>
++2005-10-06  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/stdint.h: Add [u]int_fast<N>_t types.
+ 
+-2005-10-04  Ralf Corsepius <ralf.corsepius@rtems.org>
++2005-10-04  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/stdint.h: Move magic to set __have_long* to the
+ 	beginning.  Use #if __have* instead of #if defined(__have*).
+@@ -8089,14 +8122,14 @@
+ 	* libc/sys/linux/include/stdint.h: Include <sys/types.h> and
+ 	incorporate Ralf's change below.
+ 
+-2005-10-03  Ralf Corsepius <ralf.corsepius@rtems.org>
++2005-10-03  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/stdint.h:
+ 	Use __INTMAX_TYPE__ to derive intmax_t.
+ 	Use __UINTMAX_TYPE__ to derive uintmax_t.
+ 	Fix minor typo.
+ 
+-2005-09-27  Ralf Corsepius <ralf.corsepius@rtems.org>
++2005-09-27  Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/stdint.h: Correct __STDINT_EXP macro incorrectly
+ 	handling GCC >= 4.
+@@ -8432,16 +8465,16 @@
+ 	* configure.host (newlib_cflags) <cris-*-*, crisv32-*-*>: Add
+ 	-DCOMPACT_CTYPE.
+ 
+-2005-03-06  Ralf Corsepious  <ralf.corsepius@rtems.org>
++2005-03-06  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/sys/rtems/include/inttypes.h: New file.
+ 	* libc/sys/rtems/include/stdint.h: Ditto.
+ 
+-2005-03-06  Ralf Corsepious  <ralf.corsepius@rtems.org>
++2005-03-06  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/string/memcmp.c: Fix to avoid pointer signedness warning.
+ 
+-2005-03-06  Ralf Corsepious  <ralf.corsepius@rtems.org>
++2005-03-06  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/machine/_types.h: New file.
+ 	* libc/include/sys/types.h: Do not check for __rtems__
+@@ -8450,7 +8483,7 @@
+ 	* libc/sys/rtems/machine/_types.h: Removed.  Replaced with
+ 	shared header file.
+ 
+-2005-02-25  Ralf Corsepious  <ralf.corsepius@rtems.org>
++2005-02-25  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libm/common/fdlibm.h (FLT_UWORD_MAX, FLT_UWORD_HALF_MAX): Add
+ 	L qualifier for these long constants.
+@@ -8466,13 +8499,13 @@
+ 	* libc/time/strftime.c (strftime): Fix '%x' to deal with negative
+ 	years.  Fix '%z' to use long, not int.
+ 
+-2005-02-24  Ralf Corsepious  <ralf.corsepius@rtems.org>
++2005-02-24  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libm/common/s_fpclassify.c: Use __uint32_t instead of int to
+ 	manipulate float values in integer form.
+ 	* libm/common/sf_round.c: Ditto.
+ 
+-2005-02-24  Ralf Corsepious  <ralf.corsepius@rtems.org>
++2005-02-24  Ralf Corsépius  <ralf.corsepius@rtems.org>
+ 
+ 	* libc/include/sys/types.h [__rtems__]: Include new
+ 	header file machine/_types.h.
+@@ -8836,7 +8869,7 @@
+ 	* libc/stdio/fread.c (fread): Fix return value for unbuffered
+ 	fread.
+ 
+-2004-10-25  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
++2004-10-25  Ralf Corsépius <corsepiu@faw.uni-ulm.de>
+ 
+ 	* libc/include/machine/setjmp.h: Add AVR support.
+ 	* libc/sys/rtems/crt0.S [__AVR__]: Add __stack.
+@@ -15068,7 +15101,7 @@
+ 
+ 	* libc/include/sys/unistd.h: Prototype chroot() for RTEMS.
+ 
+-2001-08-29  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
++2001-08-29  Ralf Corsépius <corsepiu@faw.uni-ulm.de>
+ 
+ 	* libc/machine/i386/f_atan2.S, libc/machine/i386/f_atan2f.S,
+ 	  libc/machine/i386/f_exp.c, libc/machine/i386/f_expf.c,
+@@ -15745,7 +15778,7 @@
+ 	* libc/sys/linux/sys/utsname.h: Ditto.
+ 	* libc/sys/linux/sys/wait.h: Ditto.
+ 
+-2000-12-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
++2000-12-08  Ralf Corsépius <corsepiu@faw.uni-ulm.de>
+ 
+ 	* Makefile.am: $(INSTALL), $(INSTALL_DATA), and $(INSTALL_PROGRAM)
+ 	can be a relative path to $(top_srcdir)/install.sh so ensure the
+@@ -16650,7 +16683,7 @@
+ 	* libc/include/stdlib.h: add ptsname, grantpt, unlockpt to cygwin
+ 	section
+ 
+-Sat Oct  2 02:02:00 MEST 1999  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
++Sat Oct  2 02:02:00 MEST 1999  Ralf Corsépius <corsepiu@faw.uni-ulm.de>
+ 
+ 	* libc/machine/sh/asm.h: Added __SH4_SINGLE__ to DELAYED_BRANCHES
+ 	* libc/machine/sh/memcpy.S: Fix line wrapping in SL macro
+diff -Naur newlib-1.19.0.orig/newlib/ChangeLog.rtems newlib-1.19.0/newlib/ChangeLog.rtems
+--- newlib-1.19.0.orig/newlib/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
++++ newlib-1.19.0/newlib/ChangeLog.rtems	2011-01-09 09:01:25.660348537 +0100
+@@ -0,0 +1,125 @@
++2011-01-09	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libm/math/w_tgamma.c: Only build ifndef _DOUBLE_IS_32BITS.
++	* libm/math/wf_tgamma.c: Only build ifdef _DOUBLE_IS_32BITS.
++
++2011-01-07	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libc/stdio/open_memstream.c: Replace 64 * 1024 with 0x10000 to 
++	avoid integer overflow on h8300.
++
++2011-01-05	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libc/stdio/tmpnam.c: Include <stdint.h>.
++	Use intptr_t instead of _POINTER_INT for improved portability.
++	* libc/misc/__dprintf.c: Include <stdint.h>
++	Use intptr_t instead of _POINTER_INT for improved portability.
++
++2011-01-05	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libm/common/s_round.c: Cast const int to __int32_t.
++
++2011-01-04	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* doc/makedoc.c: Add cludge to make makedoc 64bit compliant.
++
++2011-01-04	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libm/math/e_scalb.c: Include <limits.h>.
++	Don't rely on 65000 being a valid int.
++
++2011-01-04	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libc/posix/readdir.c:	Include <stdint.h>.
++	Cast to intptr_t instead of int.
++
++2011-01-04	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libc/string/memccpy.c, libc/string/memchr.c,
++	libc/string/memcmp.c, libc/string/memcpy.c,
++	libc/string/memmove.c, libc/string/mempcpy.c,
++	libc/string/memset.c, libc/string/stpcpy.c,
++	libc/string/stpncpy.c, libc/string/strcpy.c,
++	libc/string/strlen.c, libc/string/strncat.c,
++	libc/string/strncpy.c (UNALIGNED):
++	Include <stdint.h>.
++	Cast to intptr_t instead of long.
++
++2011-01-04	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* Makefile.am: Don't install include/rpc/*.h.
++	* Makefile.in: Regenerate.
++	* libc/Makefile.am: Install include/rpc/xdr.h include/rpc/types.h. 
++	* libc/Makefile.in: Regenerate.
++
++2011-01-04	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libc/sys/rtems/crt0.c: Fix free and calloc declarations.
++
++2010-12-30	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libc/include/signal.h: Don't provide sighandler_t.
++
++2010-12-29	Ralf Corsépius  <ralf.corsepius@rtems.org>
++
++	* libc/include/sys/dir.h: Remove.
++
++2010-08-10	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	PR 1475/newlib:
++	* libc/include/stdint.h: Fall back to compute SIZE_MAX based on
++	__SIZEOF_SIZE_T__ and __CHAR_BIT__ if available.
++
++2010-08-04	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/string/strcat.c: 
++	Include <stdint.h>. Use uintptr_t instead of long in ALIGNED.
++	* libc/string/strchr.c, libc/string/strcmp.c, libc/string/strncmp.c:
++	Include <stdint.h>. Use uintptr_t instead of long in UNALIGNED.
++
++2010-07-08	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/string/index.c, libc/string/rindex.c: Include <string.h>.
++	* libc/stdlib/putenv_r.c: Include <strings.h>
++
++2010-03-25	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/include/string.h: Remove bcmp, bcopy, bzero, ffs, index, rindex,
++	strcasecmp, strncasecmp (Moved to strings.h).
++	Remove strcmpi, stricmp, strncmpi, strnicmp.
++	* libc/misc/ffs.c: Use <strings.h> instead of <string.h>.
++	* libc/string/bcmp.c: Use <strings.h> instead of <string.h>.
++	* libc/string/bzero.c: Use <strings.h> instead of <string.h>.
++	* libc/string/rindex.c: Use <strings.h> instead of <string.h>.
++	* libc/string/strcasecmp.c: Use <strings.h> instead of <string.h>.
++	* libc/string/strncasecmp.c: Use <strings.h> instead of <string.h>.
++
++2009-12-18	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/search/db_local.h:
++	Use __uint32_t instead of u_int (prototype mismatches).
++	* libc/search/extern.h (__buf_init): 
++	Use __uint32_t instead of int (16 bit target portability).
++	* libc/search/hash_buf.c: Use ptrdiff_t instead of __uint32_t,
++	use __uint32_t instead of int (16 bit target portability).
++	* libc/search/hash.h: Use __uint32_it instead of int
++	(16 bit target portability).
++	* libm/common/modfl.c: Add cast to (double*) to avoid GCC warning.
++
++2009-10-29	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/include/inttypes.h: 
++	Rework logic to determine PRI*PTR.
++	Prefer long64 over longlong64.
++	* libc/include/machine/_default_types.h: 
++	Sync logic for __int32 with stdint.h (Prefer long over int).
++	* libc/include/stdint.h:
++	Remove __SPU__ hack.
++	Prefer int for int16_t (sync with _default_types.h).
++	Rework intptr_t determination.
++
++2009-03-09	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/machine/powerpc/times.c: Remove.
++	* libc/machine/powerpc/Makefile.am: Remove times.c.
++	* libc/machine/powerpc/Makefile.in: Regenerate.
+diff -Naur newlib-1.19.0.orig/newlib/doc/makedoc.c newlib-1.19.0/newlib/doc/makedoc.c
+--- newlib-1.19.0.orig/newlib/doc/makedoc.c	2009-03-25 22:16:04.000000000 +0100
++++ newlib-1.19.0/newlib/doc/makedoc.c	2011-01-09 09:01:25.661348583 +0100
+@@ -57,7 +57,7 @@
+ {
+     char *ptr;
+     unsigned int write_idx;
+-    unsigned int size;
++    size_t size;
+ } string_type;
+ 
+ 
+@@ -68,7 +68,7 @@
+ 
+ static void DEFUN(init_string_with_size,(buffer, size),
+ 	   string_type *buffer AND
+-	   unsigned int size )
++	   size_t size )
+ {
+   buffer->write_idx = 0;
+   buffer->size = size;
+@@ -219,8 +219,8 @@
+ stinst_type *pc;
+ stinst_type sstack[STACK];
+ stinst_type *ssp = &sstack[0];
+-int istack[STACK];
+-int *isp = &istack[0];
++long istack[STACK];
++long *isp = &istack[0];
+ 
+ typedef int *word_type;
+ 
+@@ -270,7 +270,7 @@
+ {
+     isp++;
+     pc++;
+-    *isp = (int)(*pc);
++    *isp = (long)(*pc);
+     pc++;
+     
+ }
+diff -Naur newlib-1.19.0.orig/newlib/libc/configure newlib-1.19.0/newlib/libc/configure
+--- newlib-1.19.0.orig/newlib/libc/configure	2010-12-16 22:58:39.000000000 +0100
++++ newlib-1.19.0/newlib/libc/configure	2011-01-09 09:01:25.665348777 +0100
+@@ -625,7 +625,10 @@
+ HAVE_XDR_DIR_TRUE
+ LIBC_XDR_DEF
+ LIBC_XDR_LIB
++HAVE_POSIX_DIR_FALSE
++HAVE_POSIX_DIR_TRUE
+ LIBC_POSIX_DEF
++LIBC_POSIX_LIB
+ HAVE_STDIO64_DIR_FALSE
+ HAVE_STDIO64_DIR_TRUE
+ LIBC_STDIO64_DEF
+@@ -638,9 +641,6 @@
+ HAVE_SIGNAL_DIR_TRUE
+ LIBC_SIGNAL_DEF
+ LIBC_SIGNAL_LIB
+-HAVE_POSIX_DIR_FALSE
+-HAVE_POSIX_DIR_TRUE
+-LIBC_POSIX_LIB
+ CRT0
+ subdirs
+ CPP
+@@ -11805,24 +11805,6 @@
+ 
+ 
+ 
+-LIBC_POSIX_LIB=
+-if test -n "${posix_dir}"; then
+-  if test "${use_libtool}" = "yes"; then
+-    LIBC_POSIX_LIB=${posix_dir}/lib${posix_dir}.${aext}
+-  else
+-    LIBC_POSIX_LIB=${posix_dir}/lib.${aext}
+-  fi
+-fi
+-
+- if test x${posix_dir} != x; then
+-  HAVE_POSIX_DIR_TRUE=
+-  HAVE_POSIX_DIR_FALSE='#'
+-else
+-  HAVE_POSIX_DIR_TRUE='#'
+-  HAVE_POSIX_DIR_FALSE=
+-fi
+-
+-
+ LIBC_SIGNAL_LIB=
+ LIBC_SIGNAL_DEF=
+ if test -n "${signal_dir}"; then
+@@ -12225,10 +12207,6 @@
+   as_fn_error "conditional \"am__fastdepCC\" was never defined.
+ Usually this means the macro was only invoked conditionally." "$LINENO" 5
+ fi
+-if test -z "${HAVE_POSIX_DIR_TRUE}" && test -z "${HAVE_POSIX_DIR_FALSE}"; then
+-  as_fn_error "conditional \"HAVE_POSIX_DIR\" was never defined.
+-Usually this means the macro was only invoked conditionally." "$LINENO" 5
+-fi
+ if test -z "${HAVE_SIGNAL_DIR_TRUE}" && test -z "${HAVE_SIGNAL_DIR_FALSE}"; then
+   as_fn_error "conditional \"HAVE_SIGNAL_DIR\" was never defined.
+ Usually this means the macro was only invoked conditionally." "$LINENO" 5
+diff -Naur newlib-1.19.0.orig/newlib/libc/configure.in newlib-1.19.0/newlib/libc/configure.in
+--- newlib-1.19.0.orig/newlib/libc/configure.in	2010-04-23 01:32:40.000000000 +0200
++++ newlib-1.19.0/newlib/libc/configure.in	2011-01-09 09:01:25.666348825 +0100
+@@ -41,17 +41,6 @@
+ dnl for the library and an automake conditional for whether we should
+ dnl build the library.
+ 
+-LIBC_POSIX_LIB=
+-if test -n "${posix_dir}"; then
+-  if test "${use_libtool}" = "yes"; then
+-    LIBC_POSIX_LIB=${posix_dir}/lib${posix_dir}.${aext}
+-  else
+-    LIBC_POSIX_LIB=${posix_dir}/lib.${aext}
+-  fi
+-fi
+-AC_SUBST(LIBC_POSIX_LIB)
+-AM_CONDITIONAL(HAVE_POSIX_DIR, test x${posix_dir} != x)
+-
+ LIBC_SIGNAL_LIB=
+ LIBC_SIGNAL_DEF=
+ if test -n "${signal_dir}"; then
+diff -Naur newlib-1.19.0.orig/newlib/libc/include/inttypes.h newlib-1.19.0/newlib/libc/include/inttypes.h
+--- newlib-1.19.0.orig/newlib/libc/include/inttypes.h	2009-01-19 23:02:06.000000000 +0100
++++ newlib-1.19.0/newlib/libc/include/inttypes.h	2011-01-09 09:01:25.666348825 +0100
+@@ -242,15 +242,17 @@
+ #define SCNxMAX		__SCNMAX(x)
+ 
+ /* ptr types */
+-#if __have_long64
+-#define __PRIPTR(x) __STRINGIFY(l##x)
+-#define __SCNPTR(x) __STRINGIFY(l##x)
+-#elif __have_longlong64
+-#define __PRIPTR(x) __STRINGIFY(ll##x)
+-#define __SCNPTR(x) __STRINGIFY(ll##x)
++#if INTPTR_MAX == INT64_MAX
++#define __PRIPTR(x) __PRI64(x)
++#define __SCNPTR(x) __SCN64(x)
++#elif INTPTR_MAX == INT32_MAX
++#define __PRIPTR(x) __PRI32(x)
++#define __SCNPTR(x) __SCN32(x)
++#elif INTPTR_MAX == INT16_MAX
++#define __PRIPTR(x) __PRI16(x)
++#define __SCNPTR(x) __SCN16(x)
+ #else
+-#define __PRIPTR(x) __STRINGIFY(x)
+-#define __SCNPTR(x) __STRINGIFY(x)
++#error cannot determine PRI*PTR
+ #endif
+ 
+ #define PRIdPTR		__PRIPTR(d)
+diff -Naur newlib-1.19.0.orig/newlib/libc/include/machine/_default_types.h newlib-1.19.0/newlib/libc/include/machine/_default_types.h
+--- newlib-1.19.0.orig/newlib/libc/include/machine/_default_types.h	2008-06-12 00:14:54.000000000 +0200
++++ newlib-1.19.0/newlib/libc/include/machine/_default_types.h	2011-01-09 09:01:25.666348825 +0100
+@@ -54,14 +54,14 @@
+ #endif
+ #endif
+ 
+-#if __EXP(INT_MAX) == 0x7fffffffL
+-typedef signed int __int32_t;
+-typedef unsigned int __uint32_t;
+-#define ___int32_t_defined 1
+-#elif __EXP(LONG_MAX) == 0x7fffffffL
++#if __EXP(LONG_MAX) == 0x7fffffffL
+ typedef signed long __int32_t;
+ typedef unsigned long __uint32_t;
+ #define ___int32_t_defined 1
++#elif __EXP(INT_MAX) == 0x7fffffffL
++typedef signed int __int32_t;
++typedef unsigned int __uint32_t;
++#define ___int32_t_defined 1
+ #elif __EXP(SHRT_MAX) == 0x7fffffffL
+ typedef signed short __int32_t;
+ typedef unsigned short __uint32_t;
+diff -Naur newlib-1.19.0.orig/newlib/libc/include/signal.h newlib-1.19.0/newlib/libc/include/signal.h
+--- newlib-1.19.0.orig/newlib/libc/include/signal.h	2010-07-13 13:18:55.000000000 +0200
++++ newlib-1.19.0/newlib/libc/include/signal.h	2011-01-09 09:01:25.666348825 +0100
+@@ -7,9 +7,6 @@
+ _BEGIN_STD_C
+ 
+ typedef int	sig_atomic_t;		/* Atomic entity type (ANSI) */
+-#ifndef _POSIX_SOURCE
+-typedef _sig_func_ptr sighandler_t;	/* glibc naming */
+-#endif /* !_POSIX_SOURCE */
+ 
+ #define SIG_DFL ((_sig_func_ptr)0)	/* Default action */
+ #define SIG_IGN ((_sig_func_ptr)1)	/* Ignore action */
+diff -Naur newlib-1.19.0.orig/newlib/libc/include/stdint.h newlib-1.19.0/newlib/libc/include/stdint.h
+--- newlib-1.19.0.orig/newlib/libc/include/stdint.h	2009-04-24 23:55:07.000000000 +0200
++++ newlib-1.19.0/newlib/libc/include/stdint.h	2011-01-09 09:01:25.666348825 +0100
+@@ -33,7 +33,7 @@
+ /* Check if "long" is 64bit or 32bit wide */
+ #if __STDINT_EXP(LONG_MAX) > 0x7fffffff
+ #define __have_long64 1
+-#elif __STDINT_EXP(LONG_MAX) == 0x7fffffff && !defined(__SPU__)
++#elif __STDINT_EXP(LONG_MAX) == 0x7fffffff
+ #define __have_long32 1
+ #endif
+ 
+@@ -49,14 +49,14 @@
+ #define __int_least8_t_defined 1
+ #endif
+ 
+-#if __STDINT_EXP(SHRT_MAX) == 0x7fff
+-typedef signed short int16_t;
+-typedef unsigned short uint16_t;
+-#define __int16_t_defined 1
+-#elif __STDINT_EXP(INT_MAX) == 0x7fff
++#if __STDINT_EXP(INT_MAX) == 0x7fff
+ typedef signed int int16_t;
+ typedef unsigned int uint16_t;
+ #define __int16_t_defined 1
++#elif __STDINT_EXP(SHRT_MAX) == 0x7fff
++typedef signed short int16_t;
++typedef unsigned short uint16_t;
++#define __int16_t_defined 1
+ #elif __STDINT_EXP(SCHAR_MAX) == 0x7fff
+ typedef signed char int16_t;
+ typedef unsigned char uint16_t;
+@@ -239,6 +239,29 @@
+  * GCC doesn't provide an appropriate macro for [u]intptr_t
+  * For now, use __PTRDIFF_TYPE__
+  */
++#if defined(__SIZEOF_POINTER__)
++#if __SIZEOF_POINTER__ == 8
++  typedef int64_t intptr_t;
++  typedef uint64_t uintptr_t;
++#define INTPTR_MAX INT64_MAX
++#define INTPTR_MIN INT64_MIN
++#define UINTPTR_MAX UINT64_MAX
++#elif __SIZEOF_POINTER__ == 4
++  typedef int32_t intptr_t;
++  typedef uint32_t uintptr_t;
++#define INTPTR_MAX INT32_MAX
++#define INTPTR_MIN INT32_MIN
++#define UINTPTR_MAX UINT32_MAX
++#elif __SIZEOF_POINTER__ == 2
++  typedef int16_t intptr_t;
++  typedef uint16_t uintptr_t;
++#define INTPTR_MAX INT16_MAX
++#define INTPTR_MIN INT16_MIN
++#define UINTPTR_MAX UINT16_MAX
++#else
++#error cannot determine intptr_t
++#endif
++#else
+ #if defined(__PTRDIFF_TYPE__)
+ typedef signed __PTRDIFF_TYPE__ intptr_t;
+ typedef unsigned __PTRDIFF_TYPE__ uintptr_t;
+@@ -260,6 +283,7 @@
+ #define INTPTR_MIN (-__STDINT_EXP(LONG_MAX) - 1)
+ #define UINTPTR_MAX (__STDINT_EXP(LONG_MAX) * 2UL + 1)
+ #endif
++#endif
+ 
+ /* Limits of Specified-Width Integer Types */
+ 
+@@ -408,6 +432,8 @@
+ /* This must match size_t in stddef.h, currently long unsigned int */
+ #ifdef __SIZE_MAX__
+ #define SIZE_MAX __SIZE_MAX__
++#elif defined(__SIZEOF_SIZE_T__) && defined(__CHAR_BIT__)
++#define SIZE_MAX (__SIZEOF_SIZE_T__ * __CHAR_BIT__)
+ #else
+ #define SIZE_MAX (__STDINT_EXP(LONG_MAX) * 2UL + 1)
+ #endif
+diff -Naur newlib-1.19.0.orig/newlib/libc/include/string.h newlib-1.19.0/newlib/libc/include/string.h
+--- newlib-1.19.0.orig/newlib/libc/include/string.h	2008-06-18 17:27:27.000000000 +0200
++++ newlib-1.19.0/newlib/libc/include/string.h	2011-01-09 09:01:25.667348872 +0100
+@@ -49,18 +49,11 @@
+ #ifndef __STRICT_ANSI__
+ char 	*_EXFUN(strtok_r,(char *, const char *, char **));
+ 
+-int	 _EXFUN(bcmp,(const void *, const void *, size_t));
+-void	 _EXFUN(bcopy,(const void *, void *, size_t));
+-void	 _EXFUN(bzero,(void *, size_t));
+-int	 _EXFUN(ffs,(int));
+-char 	*_EXFUN(index,(const char *, int));
+ _PTR	 _EXFUN(memccpy,(_PTR, const _PTR, int, size_t));
+ _PTR	 _EXFUN(mempcpy,(_PTR, const _PTR, size_t));
+ _PTR	 _EXFUN(memmem, (const _PTR, size_t, const _PTR, size_t));
+-char 	*_EXFUN(rindex,(const char *, int));
+ char 	*_EXFUN(stpcpy,(char *, const char *));
+ char 	*_EXFUN(stpncpy,(char *, const char *, size_t));
+-int	 _EXFUN(strcasecmp,(const char *, const char *));
+ char	*_EXFUN(strcasestr,(const char *, const char *));
+ char 	*_EXFUN(strdup,(const char *));
+ char 	*_EXFUN(_strdup_r,(struct _reent *, const char *));
+@@ -69,7 +62,6 @@
+ char 	*_EXFUN(strerror_r,(int, char *, size_t));
+ size_t	 _EXFUN(strlcat,(char *, const char *, size_t));
+ size_t	 _EXFUN(strlcpy,(char *, const char *, size_t));
+-int	 _EXFUN(strncasecmp,(const char *, const char *, size_t));
+ size_t	 _EXFUN(strnlen,(const char *, size_t));
+ char 	*_EXFUN(strsep,(char **, const char *));
+ char	*_EXFUN(strlwr,(char *));
+@@ -81,20 +73,6 @@
+ int     _EXFUN(strtosigno, (const char *__name));
+ #endif
+ 
+-/* These function names are used on Windows and perhaps other systems.  */
+-#ifndef strcmpi
+-#define strcmpi strcasecmp
+-#endif
+-#ifndef stricmp
+-#define stricmp strcasecmp
+-#endif
+-#ifndef strncmpi
+-#define strncmpi strncasecmp
+-#endif
+-#ifndef strnicmp
+-#define strnicmp strncasecmp
+-#endif
+-
+ #endif /* ! __STRICT_ANSI__ */
+ 
+ #include <sys/string.h>
+diff -Naur newlib-1.19.0.orig/newlib/libc/include/sys/_default_fcntl.h newlib-1.19.0/newlib/libc/include/sys/_default_fcntl.h
+--- newlib-1.19.0.orig/newlib/libc/include/sys/_default_fcntl.h	2010-01-14 19:49:13.000000000 +0100
++++ newlib-1.19.0/newlib/libc/include/sys/_default_fcntl.h	2011-01-09 09:01:25.667348872 +0100
+@@ -51,8 +51,6 @@
+ #define O_BINARY	_FBINARY
+ #define O_TEXT		_FTEXT
+ #define O_NOINHERIT	_FNOINHERIT
+-/* O_CLOEXEC is the Linux equivalent to O_NOINHERIT */
+-#define O_CLOEXEC	_FNOINHERIT
+ 
+ /* The windows header files define versions with a leading underscore.  */
+ #define _O_RDONLY	O_RDONLY
+@@ -124,9 +122,6 @@
+ #define	F_CNVT 		12	/* Convert a fhandle to an open fd */
+ #define	F_RSETLKW 	13	/* Set or Clear remote record-lock(Blocking) */
+ #endif	/* !_POSIX_SOURCE */
+-#ifdef __CYGWIN__
+-#define	F_DUPFD_CLOEXEC	14	/* As F_DUPFD, but set close-on-exec flag */
+-#endif
+ 
+ /* fcntl(2) flags (l_type field of flock structure) */
+ #define	F_RDLCK		1	/* read lock */
+diff -Naur newlib-1.19.0.orig/newlib/libc/include/sys/dir.h newlib-1.19.0/newlib/libc/include/sys/dir.h
+--- newlib-1.19.0.orig/newlib/libc/include/sys/dir.h	2010-08-11 20:14:54.000000000 +0200
++++ newlib-1.19.0/newlib/libc/include/sys/dir.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,10 +0,0 @@
+-/* BSD predecessor of POSIX.1 <dirent.h> and struct dirent */
+-
+-#ifndef _SYS_DIR_H_
+-#define _SYS_DIR_H_
+-
+-#include <dirent.h>
+-
+-#define direct dirent
+-
+-#endif /*_SYS_DIR_H_*/
+diff -Naur newlib-1.19.0.orig/newlib/libc/machine/m68k/memcpy.S newlib-1.19.0/newlib/libc/machine/m68k/memcpy.S
+--- newlib-1.19.0.orig/newlib/libc/machine/m68k/memcpy.S	2010-02-08 18:24:22.000000000 +0100
++++ newlib-1.19.0/newlib/libc/machine/m68k/memcpy.S	2011-01-09 09:01:25.670349010 +0100
+@@ -15,7 +15,7 @@
+ 
+ #include "m68kasm.h"
+ 
+-#if defined (__mcoldfire__) || defined (__mc68010__) || defined (__mc68020__) || defined (__mc68030__) || defined (__mc68040__) || defined (__mc68060__)
++#if defined (__mcoldfire__) || defined (__mcpu32__) || defined (__mc68010__) || defined (__mc68020__) || defined (__mc68030__) || defined (__mc68040__) || defined (__mc68060__)
+ # define MISALIGNED_OK 1
+ #else
+ # define MISALIGNED_OK 0
+diff -Naur newlib-1.19.0.orig/newlib/libc/machine/powerpc/Makefile.am newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.am
+--- newlib-1.19.0.orig/newlib/libc/machine/powerpc/Makefile.am	2007-05-24 19:33:35.000000000 +0200
++++ newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.am	2011-01-09 09:01:25.670349010 +0100
+@@ -10,7 +10,7 @@
+ 
+ AM_CFLAGS = -I $(srcdir)/../../stdio -I $(srcdir)/../../stdlib
+ 
+-lib_a_SOURCES = setjmp.S times.c
++lib_a_SOURCES = setjmp.S
+ lib_a_CCASFLAGS=$(AM_CCASFLAGS)
+ lib_a_CFLAGS=$(AM_CFLAGS)
+ lib_a_LIBADD = @extra_objs@
+diff -Naur newlib-1.19.0.orig/newlib/libc/machine/powerpc/Makefile.in newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.in
+--- newlib-1.19.0.orig/newlib/libc/machine/powerpc/Makefile.in	2010-12-16 22:58:53.000000000 +0100
++++ newlib-1.19.0/newlib/libc/machine/powerpc/Makefile.in	2011-01-09 09:01:25.670349010 +0100
+@@ -51,7 +51,7 @@
+ LIBRARIES = $(noinst_LIBRARIES)
+ ARFLAGS = cru
+ lib_a_AR = $(AR) $(ARFLAGS)
+-am_lib_a_OBJECTS = lib_a-setjmp.$(OBJEXT) lib_a-times.$(OBJEXT)
++am_lib_a_OBJECTS = lib_a-setjmp.$(OBJEXT)
+ lib_a_OBJECTS = $(am_lib_a_OBJECTS)
+ DEFAULT_INCLUDES = -I.@am__isrc@
+ depcomp =
+@@ -174,7 +174,7 @@
+ AM_CCASFLAGS = $(INCLUDES)
+ noinst_LIBRARIES = lib.a
+ AM_CFLAGS = -I $(srcdir)/../../stdio -I $(srcdir)/../../stdlib
+-lib_a_SOURCES = setjmp.S times.c
++lib_a_SOURCES = setjmp.S
+ lib_a_CCASFLAGS = $(AM_CCASFLAGS)
+ lib_a_CFLAGS = $(AM_CFLAGS)
+ lib_a_LIBADD = @extra_objs@
+@@ -185,7 +185,7 @@
+ all: all-am
+ 
+ .SUFFIXES:
+-.SUFFIXES: .S .c .o .obj
++.SUFFIXES: .S .o .obj
+ am--refresh:
+ 	@:
+ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
+@@ -246,18 +246,6 @@
+ lib_a-setjmp.obj: setjmp.S
+ 	$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CCASFLAGS) $(CCASFLAGS) -c -o lib_a-setjmp.obj `if test -f 'setjmp.S'; then $(CYGPATH_W) 'setjmp.S'; else $(CYGPATH_W) '$(srcdir)/setjmp.S'; fi`
+ 
+-.c.o:
+-	$(COMPILE) -c $<
+-
+-.c.obj:
+-	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+-
+-lib_a-times.o: times.c
+-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-times.o `test -f 'times.c' || echo '$(srcdir)/'`times.c
+-
+-lib_a-times.obj: times.c
+-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-times.obj `if test -f 'times.c'; then $(CYGPATH_W) 'times.c'; else $(CYGPATH_W) '$(srcdir)/times.c'; fi`
+-
+ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+ 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
+ 	unique=`for i in $$list; do \
+diff -Naur newlib-1.19.0.orig/newlib/libc/machine/powerpc/times.c newlib-1.19.0/newlib/libc/machine/powerpc/times.c
+--- newlib-1.19.0.orig/newlib/libc/machine/powerpc/times.c	2002-07-22 22:26:51.000000000 +0200
++++ newlib-1.19.0/newlib/libc/machine/powerpc/times.c	1970-01-01 01:00:00.000000000 +0100
+@@ -1,36 +0,0 @@
+-/* Time support routines for PowerPC.
+- *
+- * Written by Aldy Hernandez.
+- */
+-
+-#include <_ansi.h>
+-#include <reent.h>
+-#include <sys/time.h>
+-#include <sys/times.h>
+-#include <sys/resource.h>
+-
+-clock_t
+-times (struct tms *tp)
+-{
+-  struct rusage usage;
+-  union {
+-    struct rusage r;
+-    /* Newlib's rusage has only 2 fields.  We need to make room for
+-       when we call the system's rusage.  This should be enough.  */
+-    int filler[32];
+-  } host_ru;
+-
+-  getrusage (RUSAGE_SELF, (void *)&host_ru);
+-
+-  if (tp)
+-    {
+-      tp->tms_utime = host_ru.r.ru_utime.tv_sec * 1000
+-	+ host_ru.r.ru_utime.tv_usec;
+-      tp->tms_stime = host_ru.r.ru_stime.tv_sec * 1000
+-	+ host_ru.r.ru_stime.tv_usec;
+-      tp->tms_cutime = 0;	/* user time, children */
+-      tp->tms_cstime = 0;	/* system time, children */
+-    }
+-
+-  return tp->tms_utime;
+-}
+diff -Naur newlib-1.19.0.orig/newlib/libc/Makefile.am newlib-1.19.0/newlib/libc/Makefile.am
+--- newlib-1.19.0.orig/newlib/libc/Makefile.am	2010-05-07 01:25:16.000000000 +0200
++++ newlib-1.19.0/newlib/libc/Makefile.am	2011-01-09 09:01:25.662348629 +0100
+@@ -36,6 +36,8 @@
+ 
+ if HAVE_XDR_DIR
+ XDR_SUBDIR = xdr
++rpcincludedir = $(tooldir)
++nobase_rpcinclude_HEADERS = include/rpc/xdr.h include/rpc/types.h
+ endif
+ 
+ # The order of SUBDIRS is important for the integrated documentation.
+@@ -140,8 +142,7 @@
+ 	locale/stmp-def \
+ 	reent/stmp-def \
+ 	$(LIBC_EXTRA_DEF) \
+-	misc/stmp-def \
+-	posix/stmp-def
++	misc/stmp-def
+ 
+ libc.info: sigset.texi extra.texi stdio64.texi posix.texi iconvset.texi \
+ 	targetdep.tex $(SUBDEFS)
+diff -Naur newlib-1.19.0.orig/newlib/libc/Makefile.in newlib-1.19.0/newlib/libc/Makefile.in
+--- newlib-1.19.0.orig/newlib/libc/Makefile.in	2010-12-16 22:58:39.000000000 +0100
++++ newlib-1.19.0/newlib/libc/Makefile.in	2011-01-09 09:01:25.662348629 +0100
+@@ -17,6 +17,7 @@
+ 
+ 
+ 
++
+ VPATH = @srcdir@
+ pkgdatadir = $(datadir)/@PACKAGE@
+ pkgincludedir = $(includedir)/@PACKAGE@
+@@ -39,7 +40,8 @@
+ subdir = .
+ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+ 	$(top_srcdir)/configure $(am__configure_deps) \
+-	$(srcdir)/../../mkinstalldirs $(libc_TEXINFOS)
++	$(srcdir)/../../mkinstalldirs $(libc_TEXINFOS) \
++	$(am__nobase_rpcinclude_HEADERS_DIST)
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/../../libtool.m4 \
+ 	$(top_srcdir)/../../ltoptions.m4 \
+@@ -155,6 +157,10 @@
+   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+ DATA = $(noinst_DATA)
++am__nobase_rpcinclude_HEADERS_DIST = include/rpc/xdr.h \
++	include/rpc/types.h
++am__installdirs = "$(DESTDIR)$(rpcincludedir)"
++HEADERS = $(nobase_rpcinclude_HEADERS)
+ RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
+   distclean-recursive maintainer-clean-recursive
+ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
+@@ -319,6 +325,8 @@
+ @ENABLE_NEWLIB_ICONV_FALSE@NEWLIB_ICONV_LIBS = 
+ @ENABLE_NEWLIB_ICONV_TRUE@NEWLIB_ICONV_LIBS = iconv/ces/lib.$(aext) iconv/ccs/lib.$(aext) iconv/lib/lib.$(aext)
+ @HAVE_XDR_DIR_TRUE@XDR_SUBDIR = xdr
++@HAVE_XDR_DIR_TRUE@rpcincludedir = $(tooldir)
++@HAVE_XDR_DIR_TRUE@nobase_rpcinclude_HEADERS = include/rpc/xdr.h include/rpc/types.h
+ 
+ # The order of SUBDIRS is important for the integrated documentation.
+ # Do not change the order without considering the doc impact.
+@@ -396,8 +404,7 @@
+ 	locale/stmp-def \
+ 	reent/stmp-def \
+ 	$(LIBC_EXTRA_DEF) \
+-	misc/stmp-def \
+-	posix/stmp-def
++	misc/stmp-def
+ 
+ info_TEXINFOS = libc.texinfo
+ libc_TEXINFOS = sigset.texi extra.texi posix.texi stdio64.texi iconvset.texi \
+@@ -638,6 +645,29 @@
+ 	done
+ 
+ clean-info: mostlyclean-aminfo clean-aminfo
++install-nobase_rpcincludeHEADERS: $(nobase_rpcinclude_HEADERS)
++	@$(NORMAL_INSTALL)
++	test -z "$(rpcincludedir)" || $(MKDIR_P) "$(DESTDIR)$(rpcincludedir)"
++	@list='$(nobase_rpcinclude_HEADERS)'; test -n "$(rpcincludedir)" || list=; \
++	$(am__nobase_list) | while read dir files; do \
++	  xfiles=; for file in $$files; do \
++	    if test -f "$$file"; then xfiles="$$xfiles $$file"; \
++	    else xfiles="$$xfiles $(srcdir)/$$file"; fi; done; \
++	  test -z "$$xfiles" || { \
++	    test "x$$dir" = x. || { \
++	      echo "$(MKDIR_P) '$(DESTDIR)$(rpcincludedir)/$$dir'"; \
++	      $(MKDIR_P) "$(DESTDIR)$(rpcincludedir)/$$dir"; }; \
++	    echo " $(INSTALL_HEADER) $$xfiles '$(DESTDIR)$(rpcincludedir)/$$dir'"; \
++	    $(INSTALL_HEADER) $$xfiles "$(DESTDIR)$(rpcincludedir)/$$dir" || exit $$?; }; \
++	done
++
++uninstall-nobase_rpcincludeHEADERS:
++	@$(NORMAL_UNINSTALL)
++	@list='$(nobase_rpcinclude_HEADERS)'; test -n "$(rpcincludedir)" || list=; \
++	$(am__nobase_strip_setup); files=`$(am__nobase_strip)`; \
++	test -n "$$files" || exit 0; \
++	echo " ( cd '$(DESTDIR)$(rpcincludedir)' && rm -f" $$files ")"; \
++	cd "$(DESTDIR)$(rpcincludedir)" && rm -f $$files
+ 
+ # This directory's subdirectories are mostly independent; you can cd
+ # into them and run `make' without going through this Makefile.
+@@ -775,9 +805,12 @@
+ 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
+ check-am:
+ check: check-recursive
+-all-am: Makefile $(LIBRARIES) $(LTLIBRARIES) $(DATA)
++all-am: Makefile $(LIBRARIES) $(LTLIBRARIES) $(DATA) $(HEADERS)
+ installdirs: installdirs-recursive
+ installdirs-am:
++	for dir in "$(DESTDIR)$(rpcincludedir)"; do \
++	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
++	done
+ install: install-recursive
+ install-exec: install-exec-recursive
+ install-data: install-data-recursive
+@@ -827,7 +860,7 @@
+ 
+ info-am: $(INFO_DEPS)
+ 
+-install-data-am:
++install-data-am: install-nobase_rpcincludeHEADERS
+ 
+ install-dvi: install-dvi-recursive
+ 
+@@ -952,7 +985,8 @@
+ ps-am: $(PSS)
+ 
+ uninstall-am: uninstall-dvi-am uninstall-html-am uninstall-info-am \
+-	uninstall-pdf-am uninstall-ps-am
++	uninstall-nobase_rpcincludeHEADERS uninstall-pdf-am \
++	uninstall-ps-am
+ 
+ .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) ctags-recursive \
+ 	install-am install-strip tags-recursive
+@@ -966,14 +1000,16 @@
+ 	info-am install install-am install-data install-data-am \
+ 	install-dvi install-dvi-am install-exec install-exec-am \
+ 	install-html install-html-am install-info install-info-am \
+-	install-man install-pdf install-pdf-am install-ps \
+-	install-ps-am install-strip installcheck installcheck-am \
+-	installdirs installdirs-am maintainer-clean \
+-	maintainer-clean-aminfo maintainer-clean-generic mostlyclean \
+-	mostlyclean-aminfo mostlyclean-compile mostlyclean-generic \
+-	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-recursive \
+-	uninstall uninstall-am uninstall-dvi-am uninstall-html-am \
+-	uninstall-info-am uninstall-pdf-am uninstall-ps-am
++	install-man install-nobase_rpcincludeHEADERS install-pdf \
++	install-pdf-am install-ps install-ps-am install-strip \
++	installcheck installcheck-am installdirs installdirs-am \
++	maintainer-clean maintainer-clean-aminfo \
++	maintainer-clean-generic mostlyclean mostlyclean-aminfo \
++	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
++	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
++	uninstall-dvi-am uninstall-html-am uninstall-info-am \
++	uninstall-nobase_rpcincludeHEADERS uninstall-pdf-am \
++	uninstall-ps-am
+ 
+ @USE_LIBTOOL_FALSE@libc.a: $(SUBLIBS)
+ @USE_LIBTOOL_FALSE@	rm -f $@
+diff -Naur newlib-1.19.0.orig/newlib/libc/misc/__dprintf.c newlib-1.19.0/newlib/libc/misc/__dprintf.c
+--- newlib-1.19.0.orig/newlib/libc/misc/__dprintf.c	2008-12-11 18:27:55.000000000 +0100
++++ newlib-1.19.0/newlib/libc/misc/__dprintf.c	2011-01-09 09:01:25.671349058 +0100
+@@ -5,6 +5,7 @@
+ */
+ 
+ #include <_ansi.h>
++#include <stdint.h>
+ #include "ctype.h"
+ #include "reent.h"
+ #include "string.h"
+@@ -131,7 +132,7 @@
+ 	      write_string (unctrl (c));
+ 	      break;
+ 	    case 'p' :
+-	      l = (_POINTER_INT) va_arg (args, char *);
++	      l = (intptr_t) va_arg (args, char *);
+ 	      print_number (16, 1, l);
+ 	      break;
+ 	    case 'd' :
+diff -Naur newlib-1.19.0.orig/newlib/libc/misc/ffs.c newlib-1.19.0/newlib/libc/misc/ffs.c
+--- newlib-1.19.0.orig/newlib/libc/misc/ffs.c	2003-06-06 21:57:51.000000000 +0200
++++ newlib-1.19.0/newlib/libc/misc/ffs.c	2011-01-09 09:01:25.671349058 +0100
+@@ -6,9 +6,11 @@
+ 	ffs
+ 
+ ANSI_SYNOPSIS
++	#include <strings.h>
+ 	int ffs(int <[word]>);
+ 
+ TRAD_SYNOPSIS
++	#include <strings.h>
+ 	int ffs(<[word]>);
+ 
+ DESCRIPTION
+@@ -24,7 +26,7 @@
+ 
+ No supporting OS subroutines are required.  */
+ 
+-#include <_ansi.h>
++#include <strings.h>
+ 
+ int
+ _DEFUN(ffs, (word),
+diff -Naur newlib-1.19.0.orig/newlib/libc/posix/readdir.c newlib-1.19.0/newlib/libc/posix/readdir.c
+--- newlib-1.19.0.orig/newlib/libc/posix/readdir.c	2003-06-06 21:57:51.000000000 +0200
++++ newlib-1.19.0/newlib/libc/posix/readdir.c	2011-01-09 09:01:25.671349058 +0100
+@@ -37,6 +37,7 @@
+ static char sccsid[] = "@(#)readdir.c	5.7 (Berkeley) 6/1/90";
+ #endif /* LIBC_SCCS and not lint */
+ 
++#include <stdint.h>
+ #include <dirent.h>
+ 
+ extern int getdents (int fd, void *dp, int count);
+@@ -75,7 +76,7 @@
+       continue;
+     }
+     dp = (struct dirent *)(dirp->dd_buf + dirp->dd_loc);
+-    if ((int)dp & 03) {	/* bogus pointer check */
++    if ((intptr_t)dp & 03) {	/* bogus pointer check */
+ #ifdef HAVE_DD_LOCK
+       __lock_release_recursive(dirp->dd_lock);
+ #endif
+diff -Naur newlib-1.19.0.orig/newlib/libc/search/db_local.h newlib-1.19.0/newlib/libc/search/db_local.h
+--- newlib-1.19.0.orig/newlib/libc/search/db_local.h	2010-03-05 09:55:15.000000000 +0100
++++ newlib-1.19.0/newlib/libc/search/db_local.h	2011-01-09 09:01:25.671349058 +0100
+@@ -102,11 +102,11 @@
+ typedef struct __db {
+ 	DBTYPE type;			/* Underlying db type. */
+ 	int (*close)(struct __db *);
+-	int (*del)(const struct __db *, const DBT *, u_int);
+-	int (*get)(const struct __db *, const DBT *, DBT *, u_int);
+-	int (*put)(const struct __db *, DBT *, const DBT *, u_int);
+-	int (*seq)(const struct __db *, DBT *, DBT *, u_int);
+-	int (*sync)(const struct __db *, u_int);
++	int (*del)(const struct __db *, const DBT *, __uint32_t);
++	int (*get)(const struct __db *, const DBT *, DBT *, __uint32_t);
++	int (*put)(const struct __db *, DBT *, const DBT *, __uint32_t);
++	int (*seq)(const struct __db *, DBT *, DBT *, __uint32_t);
++	int (*sync)(const struct __db *, __uint32_t);
+ 	void *internal;			/* Access method private. */
+ 	int (*fd)(const struct __db *);
+ } DB;
+diff -Naur newlib-1.19.0.orig/newlib/libc/search/extern.h newlib-1.19.0/newlib/libc/search/extern.h
+--- newlib-1.19.0.orig/newlib/libc/search/extern.h	2002-06-20 21:51:31.000000000 +0200
++++ newlib-1.19.0/newlib/libc/search/extern.h	2011-01-09 09:01:25.671349058 +0100
+@@ -43,7 +43,7 @@
+ int	 __big_split(HTAB *, BUFHEAD *, BUFHEAD *, BUFHEAD *,
+ 		int, __uint32_t, SPLIT_RETURN *);
+ int	 __buf_free(HTAB *, int, int);
+-void	 __buf_init(HTAB *, int);
++void	 __buf_init(HTAB *, __uint32_t);
+ __uint32_t	 __call_hash(HTAB *, char *, int);
+ int	 __delpair(HTAB *, BUFHEAD *, int);
+ int	 __expand_table(HTAB *);
+diff -Naur newlib-1.19.0.orig/newlib/libc/search/hash_buf.c newlib-1.19.0/newlib/libc/search/hash_buf.c
+--- newlib-1.19.0.orig/newlib/libc/search/hash_buf.c	2004-05-26 19:57:10.000000000 +0200
++++ newlib-1.19.0/newlib/libc/search/hash_buf.c	2011-01-09 09:01:25.672349108 +0100
+@@ -118,7 +118,7 @@
+ 	int newpage;	/* If prev_bp set, indicates a new overflow page. */
+ {
+ 	BUFHEAD *bp;
+-	__uint32_t is_disk_mask;
++	ptrdiff_t is_disk_mask;
+ 	int is_disk, segment_ndx;
+ 	SEGMENT segp;
+ 
+@@ -298,7 +298,7 @@
+ extern void
+ __buf_init(hashp, nbytes)
+ 	HTAB *hashp;
+-	int nbytes;
++	__uint32_t nbytes;
+ {
+ 	BUFHEAD *bfp;
+ 	int npages;
+diff -Naur newlib-1.19.0.orig/newlib/libc/search/hash.h newlib-1.19.0/newlib/libc/search/hash.h
+--- newlib-1.19.0.orig/newlib/libc/search/hash.h	2008-07-02 20:38:45.000000000 +0200
++++ newlib-1.19.0/newlib/libc/search/hash.h	2011-01-09 09:01:25.671349058 +0100
+@@ -82,7 +82,7 @@
+ 
+ /* Hash Table Information */
+ typedef struct hashhdr {		/* Disk resident portion */
+-	int		magic;		/* Magic NO for hash tables */
++	__uint32_t	magic;		/* Magic NO for hash tables */
+ 	int		version;	/* Version ID */
+ 	__uint32_t	lorder;		/* Byte Order */
+ 	int		bsize;		/* Bucket/Page Size */
+@@ -97,7 +97,7 @@
+ 	int		high_mask;	/* Mask to modulo into entire table */
+ 	int		low_mask;	/* Mask to modulo into lower half of 
+ 					 * table */
+-	int		ffactor;	/* Fill factor */
++	__uint32_t	ffactor;	/* Fill factor */
+ 	int		nkeys;		/* Number of keys in hash table */
+ 	int		hdrpages;	/* Size of table header */
+ 	int		h_charkey;	/* value of hash(CHARKEY) */
+diff -Naur newlib-1.19.0.orig/newlib/libc/stdio/open_memstream.c newlib-1.19.0/newlib/libc/stdio/open_memstream.c
+--- newlib-1.19.0.orig/newlib/libc/stdio/open_memstream.c	2009-02-25 05:00:05.000000000 +0100
++++ newlib-1.19.0/newlib/libc/stdio/open_memstream.c	2011-01-09 09:01:25.672349108 +0100
+@@ -330,8 +330,10 @@
+     c->max *= sizeof(wchar_t);
+   if (c->max < 64)
+     c->max = 64;
+-  else if (c->max > 64 * 1024)
+-    c->max = 64 * 1024;
++#if (SIZE_MAX >= 0x10000)
++  else if (c->max > 0x10000)
++    c->max = 0x10000;
++#endif
+   *size = 0;
+   *buf = _malloc_r (ptr, c->max);
+   if (!*buf)
+diff -Naur newlib-1.19.0.orig/newlib/libc/stdio/tmpnam.c newlib-1.19.0/newlib/libc/stdio/tmpnam.c
+--- newlib-1.19.0.orig/newlib/libc/stdio/tmpnam.c	2004-04-23 22:01:55.000000000 +0200
++++ newlib-1.19.0/newlib/libc/stdio/tmpnam.c	2011-01-09 09:01:25.672349108 +0100
+@@ -94,6 +94,7 @@
+ #include <_ansi.h>
+ #include <reent.h>
+ #include <stdio.h>
++#include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <fcntl.h>
+@@ -109,7 +110,7 @@
+        char *result       _AND
+        _CONST char *part1 _AND
+        _CONST char *part2 _AND
+-       int part3          _AND
++       intptr_t part3     _AND
+        int *part4)
+ {
+   /*  Generate the filename and make sure that there isn't one called
+@@ -183,7 +184,7 @@
+   if (filename)
+     {
+       if (! worker (p, filename, dir, prefix,
+-		    _getpid_r (p) ^ (int) (_POINTER_INT) p, &p->_inc))
++		    _getpid_r (p) ^ (intptr_t) p, &p->_inc))
+ 	return NULL;
+     }
+   return filename;
+diff -Naur newlib-1.19.0.orig/newlib/libc/stdlib/putenv_r.c newlib-1.19.0/newlib/libc/stdlib/putenv_r.c
+--- newlib-1.19.0.orig/newlib/libc/stdlib/putenv_r.c	2004-11-24 23:34:14.000000000 +0100
++++ newlib-1.19.0/newlib/libc/stdlib/putenv_r.c	2011-01-09 09:01:25.672349108 +0100
+@@ -24,6 +24,7 @@
+ #include <reent.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <strings.h>
+ 
+ #include "envlock.h"
+ 
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/bcmp.c newlib-1.19.0/newlib/libc/string/bcmp.c
+--- newlib-1.19.0.orig/newlib/libc/string/bcmp.c	2005-10-28 23:21:07.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/bcmp.c	2011-01-09 09:01:25.672349108 +0100
+@@ -6,11 +6,11 @@
+ 	bcmp
+ 
+ ANSI_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	int bcmp(const void *<[s1]>, const void *<[s2]>, size_t <[n]>);
+ 
+ TRAD_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	int bcmp(<[s1]>, <[s2]>, <[n]>)
+ 	const void *<[s1]>;
+ 	const void *<[s2]>;
+@@ -35,7 +35,7 @@
+ 	bcmp ansi pure
+ */
+ 
+-#include <string.h>
++#include <strings.h>
+ 
+ int
+ _DEFUN (bcmp, (m1, m2, n),
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/bcopy.c newlib-1.19.0/newlib/libc/string/bcopy.c
+--- newlib-1.19.0.orig/newlib/libc/string/bcopy.c	2002-05-23 20:46:04.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/bcopy.c	2011-01-09 09:01:25.673349158 +0100
+@@ -3,7 +3,7 @@
+ 	<<bcopy>>---copy memory regions
+ 
+ ANSI_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	void bcopy(const void *<[in]>, void *<[out]>, size_t <[n]>);
+ 
+ TRAD_SYNOPSIS
+@@ -26,7 +26,7 @@
+ 	bcopy - pure
+ */
+ 
+-#include <string.h>
++#include <strings.h>
+ 
+ void
+ _DEFUN (bcopy, (b1, b2, length),
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/bzero.c newlib-1.19.0/newlib/libc/string/bzero.c
+--- newlib-1.19.0.orig/newlib/libc/string/bzero.c	2002-05-23 20:46:04.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/bzero.c	2011-01-09 09:01:25.673349158 +0100
+@@ -6,11 +6,11 @@
+ 	bzero
+ 
+ ANSI_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	void bzero(void *<[b]>, size_t <[length]>);
+ 
+ TRAD_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	void bzero(<[b]>, <[length]>)
+ 	void *<[b]>;
+ 	size_t <[length]>;
+@@ -30,7 +30,7 @@
+ <<bzero>> requires no supporting OS subroutines.
+ */
+ 
+-#include <string.h>
++#include <strings.h>
+ 
+ _VOID
+ _DEFUN (bzero, (b, length),
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/index.c newlib-1.19.0/newlib/libc/string/index.c
+--- newlib-1.19.0.orig/newlib/libc/string/index.c	2000-02-17 20:39:48.000000000 +0100
++++ newlib-1.19.0/newlib/libc/string/index.c	2011-01-09 09:01:25.673349158 +0100
+@@ -6,11 +6,11 @@
+ 	index
+ 
+ ANSI_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	char * index(const char *<[string]>, int <[c]>);
+ 
+ TRAD_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	char * index(<[string]>, <[c]>);
+ 	char *<[string]>;
+ 	int *<[c]>;
+@@ -33,7 +33,8 @@
+ 	index - pure
+ */
+ 
+-#include <string.h>
++#include <strings.h>
++#include <string.h> /* strchr */
+ 
+ char *
+ _DEFUN (index, (s, c),
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/memccpy.c newlib-1.19.0/newlib/libc/string/memccpy.c
+--- newlib-1.19.0.orig/newlib/libc/string/memccpy.c	2010-09-22 05:15:07.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/memccpy.c	2011-01-09 09:01:25.673349158 +0100
+@@ -35,13 +35,14 @@
+ 	*/
+ 
+ #include <_ansi.h>
++#include <stdint.h>
+ #include <stddef.h>
+ #include <string.h>
+ #include <limits.h>
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((intptr_t)X & (sizeof (long) - 1)) | ((intptr_t)Y & (sizeof (long) - 1)))
+ 
+ /* How many bytes are copied each iteration of the word copy loop.  */
+ #define LITTLEBLOCKSIZE (sizeof (long))
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/memchr.c newlib-1.19.0/newlib/libc/string/memchr.c
+--- newlib-1.19.0.orig/newlib/libc/string/memchr.c	2008-05-27 01:31:08.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/memchr.c	2011-01-09 09:01:25.673349158 +0100
+@@ -38,10 +38,11 @@
+ 
+ #include <_ansi.h>
+ #include <string.h>
++#include <stdint.h>
+ #include <limits.h>
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+-#define UNALIGNED(X) ((long)X & (sizeof (long) - 1))
++#define UNALIGNED(X) ((intptr_t)X & (sizeof (long) - 1))
+ 
+ /* How many bytes are loaded each iteration of the word copy loop.  */
+ #define LBLOCKSIZE (sizeof (long))
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/memcmp.c newlib-1.19.0/newlib/libc/string/memcmp.c
+--- newlib-1.19.0.orig/newlib/libc/string/memcmp.c	2005-03-06 21:40:05.000000000 +0100
++++ newlib-1.19.0/newlib/libc/string/memcmp.c	2011-01-09 09:01:25.673349158 +0100
+@@ -37,11 +37,11 @@
+ */
+ 
+ #include <string.h>
+-
++#include <stdint.h>
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((intptr_t)X & (sizeof (long) - 1)) | ((intptr_t)Y & (sizeof (long) - 1)))
+ 
+ /* How many bytes are copied each iteration of the word copy loop.  */
+ #define LBLOCKSIZE (sizeof (long))
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/memcpy.c newlib-1.19.0/newlib/libc/string/memcpy.c
+--- newlib-1.19.0.orig/newlib/libc/string/memcpy.c	2010-09-22 05:15:07.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/memcpy.c	2011-01-09 09:01:25.674349206 +0100
+@@ -34,11 +34,12 @@
+ 	*/
+ 
+ #include <_ansi.h>
++#include <stdint.h>
+ #include <string.h>
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((intptr_t)X & (sizeof (long) - 1)) | ((intptr_t)Y & (sizeof (long) - 1)))
+ 
+ /* How many bytes are copied each iteration of the 4X unrolled loop.  */
+ #define BIGBLOCKSIZE    (sizeof (long) << 2)
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/memmove.c newlib-1.19.0/newlib/libc/string/memmove.c
+--- newlib-1.19.0.orig/newlib/libc/string/memmove.c	2010-09-22 05:15:07.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/memmove.c	2011-01-09 09:01:25.674349206 +0100
+@@ -36,13 +36,14 @@
+ */
+ 
+ #include <string.h>
++#include <stdint.h>
+ #include <_ansi.h>
+ #include <stddef.h>
+ #include <limits.h>
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((intptr_t)X & (sizeof (long) - 1)) | ((intptr_t)Y & (sizeof (long) - 1)))
+ 
+ /* How many bytes are copied each iteration of the 4X unrolled loop.  */
+ #define BIGBLOCKSIZE    (sizeof (long) << 2)
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/mempcpy.c newlib-1.19.0/newlib/libc/string/mempcpy.c
+--- newlib-1.19.0.orig/newlib/libc/string/mempcpy.c	2010-09-22 05:15:07.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/mempcpy.c	2011-01-09 09:01:25.674349206 +0100
+@@ -34,10 +34,11 @@
+ #include <stddef.h>
+ #include <limits.h>
+ #include <string.h>
++#include <stdint.h>
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((intptr_t)X & (sizeof (long) - 1)) | ((uintptr_t)Y & (sizeof (long) - 1)))
+ 
+ /* How many bytes are copied each iteration of the 4X unrolled loop.  */
+ #define BIGBLOCKSIZE    (sizeof (long) << 2)
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/memset.c newlib-1.19.0/newlib/libc/string/memset.c
+--- newlib-1.19.0.orig/newlib/libc/string/memset.c	2008-05-27 20:44:40.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/memset.c	2011-01-09 09:01:25.674349206 +0100
+@@ -34,9 +34,10 @@
+ */
+ 
+ #include <string.h>
++#include <stdint.h>
+ 
+ #define LBLOCKSIZE (sizeof(long))
+-#define UNALIGNED(X)   ((long)X & (LBLOCKSIZE - 1))
++#define UNALIGNED(X)   ((intptr_t)X & (LBLOCKSIZE - 1))
+ #define TOO_SMALL(LEN) ((LEN) < LBLOCKSIZE)
+ 
+ _PTR
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/rindex.c newlib-1.19.0/newlib/libc/string/rindex.c
+--- newlib-1.19.0.orig/newlib/libc/string/rindex.c	2000-02-17 20:39:48.000000000 +0100
++++ newlib-1.19.0/newlib/libc/string/rindex.c	2011-01-09 09:01:25.674349206 +0100
+@@ -10,7 +10,7 @@
+ 	char * rindex(const char *<[string]>, int <[c]>);
+ 
+ TRAD_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	char * rindex(<[string]>, <[c]>);
+ 	char *<[string]>;
+ 	int *<[c]>;
+@@ -33,7 +33,8 @@
+ 	rindex - pure
+ */
+ 
+-#include <string.h>
++#include <strings.h>
++#include <string.h> /* strchr */
+ 
+ char *
+ _DEFUN (rindex, (s, c),
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/stpcpy.c newlib-1.19.0/newlib/libc/string/stpcpy.c
+--- newlib-1.19.0.orig/newlib/libc/string/stpcpy.c	2007-06-28 19:07:23.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/stpcpy.c	2011-01-09 09:01:25.674349206 +0100
+@@ -34,6 +34,7 @@
+ */
+ 
+ #include <string.h>
++#include <stdint.h>
+ #include <limits.h>
+ 
+ /*SUPPRESS 560*/
+@@ -41,7 +42,7 @@
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((intptr_t)X & (sizeof (long) - 1)) | ((intptr_t)Y & (sizeof (long) - 1)))
+ 
+ #if LONG_MAX == 2147483647L
+ #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/stpncpy.c newlib-1.19.0/newlib/libc/string/stpncpy.c
+--- newlib-1.19.0.orig/newlib/libc/string/stpncpy.c	2007-06-28 19:07:23.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/stpncpy.c	2011-01-09 09:01:25.674349206 +0100
+@@ -40,6 +40,7 @@
+ */
+ 
+ #include <string.h>
++#include <stdint.h>
+ #include <limits.h>
+ 
+ /*SUPPRESS 560*/
+@@ -47,7 +48,7 @@
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((intptr_t)X & (sizeof (long) - 1)) | ((intptr_t)Y & (sizeof (long) - 1)))
+ 
+ #if LONG_MAX == 2147483647L
+ #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcasecmp.c newlib-1.19.0/newlib/libc/string/strcasecmp.c
+--- newlib-1.19.0.orig/newlib/libc/string/strcasecmp.c	2009-04-23 20:11:22.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/strcasecmp.c	2011-01-09 09:01:25.675349253 +0100
+@@ -6,11 +6,11 @@
+ 	strcasecmp
+ 
+ ANSI_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	int strcasecmp(const char *<[a]>, const char *<[b]>);
+ 
+ TRAD_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	int strcasecmp(<[a]>, <[b]>)
+ 	char *<[a]>;
+ 	char *<[b]>;
+@@ -38,7 +38,7 @@
+ 	strcasecmp
+ */
+ 
+-#include <string.h>
++#include <strings.h>
+ #include <ctype.h>
+ 
+ int
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcat.c newlib-1.19.0/newlib/libc/string/strcat.c
+--- newlib-1.19.0.orig/newlib/libc/string/strcat.c	2000-02-17 20:39:48.000000000 +0100
++++ newlib-1.19.0/newlib/libc/string/strcat.c	2011-01-09 09:01:25.675349253 +0100
+@@ -33,12 +33,13 @@
+ 	strcat ansi pure
+ */
+ 
++#include <stdint.h>
+ #include <string.h>
+ #include <limits.h>
+ 
+ /* Nonzero if X is aligned on a "long" boundary.  */
+ #define ALIGNED(X) \
+-  (((long)X & (sizeof (long) - 1)) == 0)
++  (((uintptr_t)X & (sizeof (long) - 1)) == 0)
+ 
+ #if LONG_MAX == 2147483647L
+ #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strchr.c newlib-1.19.0/newlib/libc/string/strchr.c
+--- newlib-1.19.0.orig/newlib/libc/string/strchr.c	2008-05-22 04:31:46.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/strchr.c	2011-01-09 09:01:25.675349253 +0100
+@@ -33,11 +33,12 @@
+ 	strchr ansi pure
+ */
+ 
++#include <stdint.h>
+ #include <string.h>
+ #include <limits.h>
+ 
+ /* Nonzero if X is not aligned on a "long" boundary.  */
+-#define UNALIGNED(X) ((long)X & (sizeof (long) - 1))
++#define UNALIGNED(X) ((uintptr_t)X & (sizeof (long) - 1))
+ 
+ /* How many bytes are loaded each iteration of the word copy loop.  */
+ #define LBLOCKSIZE (sizeof (long))
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcmp.c newlib-1.19.0/newlib/libc/string/strcmp.c
+--- newlib-1.19.0.orig/newlib/libc/string/strcmp.c	2000-02-17 20:39:48.000000000 +0100
++++ newlib-1.19.0/newlib/libc/string/strcmp.c	2011-01-09 09:01:25.675349253 +0100
+@@ -35,12 +35,13 @@
+ 	strcmp ansi pure
+ */
+ 
++#include <stdint.h>
+ #include <string.h>
+ #include <limits.h>
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((uintptr_t)X & (sizeof (long) - 1)) | ((uintptr_t)Y & (sizeof (long) - 1)))
+ 
+ /* DETECTNULL returns nonzero if (long)X contains a NULL byte. */
+ #if LONG_MAX == 2147483647L
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strcpy.c newlib-1.19.0/newlib/libc/string/strcpy.c
+--- newlib-1.19.0.orig/newlib/libc/string/strcpy.c	2007-05-29 23:26:59.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/strcpy.c	2011-01-09 09:01:25.675349253 +0100
+@@ -32,6 +32,7 @@
+ 	strcpy ansi pure
+ */
+ 
++#include <stdint.h>
+ #include <string.h>
+ #include <limits.h>
+ 
+@@ -40,7 +41,7 @@
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((intptr_t)X & (sizeof (long) - 1)) | ((intptr_t)Y & (sizeof (long) - 1)))
+ 
+ #if LONG_MAX == 2147483647L
+ #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strlen.c newlib-1.19.0/newlib/libc/string/strlen.c
+--- newlib-1.19.0.orig/newlib/libc/string/strlen.c	2008-05-27 00:56:14.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/strlen.c	2011-01-09 09:01:25.675349253 +0100
+@@ -32,11 +32,12 @@
+ */
+ 
+ #include <_ansi.h>
++#include <stdint.h>
+ #include <string.h>
+ #include <limits.h>
+ 
+ #define LBLOCKSIZE   (sizeof (long))
+-#define UNALIGNED(X) ((long)X & (LBLOCKSIZE - 1))
++#define UNALIGNED(X) ((intptr_t)X & (LBLOCKSIZE - 1))
+ 
+ #if LONG_MAX == 2147483647L
+ #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncasecmp.c newlib-1.19.0/newlib/libc/string/strncasecmp.c
+--- newlib-1.19.0.orig/newlib/libc/string/strncasecmp.c	2009-04-23 20:11:22.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/strncasecmp.c	2011-01-09 09:01:25.676349299 +0100
+@@ -6,11 +6,11 @@
+ 	strncasecmp
+ 
+ ANSI_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	int strncasecmp(const char *<[a]>, const char * <[b]>, size_t <[length]>);
+ 
+ TRAD_SYNOPSIS
+-	#include <string.h>
++	#include <strings.h>
+ 	int strncasecmp(<[a]>, <[b]>, <[length]>)
+ 	char *<[a]>;
+ 	char *<[b]>;
+@@ -40,7 +40,7 @@
+ 	strncasecmp
+ */
+ 
+-#include <string.h>
++#include <strings.h>
+ #include <ctype.h>
+ 
+ int 
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncat.c newlib-1.19.0/newlib/libc/string/strncat.c
+--- newlib-1.19.0.orig/newlib/libc/string/strncat.c	2005-10-28 23:21:07.000000000 +0200
++++ newlib-1.19.0/newlib/libc/string/strncat.c	2011-01-09 09:01:25.677349345 +0100
+@@ -42,11 +42,12 @@
+ */
+ 
+ #include <string.h>
++#include <stdint.h>
+ #include <limits.h>
+ 
+ /* Nonzero if X is aligned on a "long" boundary.  */
+ #define ALIGNED(X) \
+-  (((long)X & (sizeof (long) - 1)) == 0)
++  (((intptr_t)X & (sizeof (long) - 1)) == 0)
+ 
+ #if LONG_MAX == 2147483647L
+ #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncmp.c newlib-1.19.0/newlib/libc/string/strncmp.c
+--- newlib-1.19.0.orig/newlib/libc/string/strncmp.c	2000-02-17 20:39:48.000000000 +0100
++++ newlib-1.19.0/newlib/libc/string/strncmp.c	2011-01-09 09:01:25.677349345 +0100
+@@ -36,12 +36,13 @@
+ 	strncmp ansi pure
+ */
+ 
++#include <stdint.h>
+ #include <string.h>
+ #include <limits.h>
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((uintptr_t)X & (sizeof (long) - 1)) | ((uintptr_t)Y & (sizeof (long) - 1)))
+ 
+ /* DETECTNULL returns nonzero if (long)X contains a NULL byte. */
+ #if LONG_MAX == 2147483647L
+diff -Naur newlib-1.19.0.orig/newlib/libc/string/strncpy.c newlib-1.19.0/newlib/libc/string/strncpy.c
+--- newlib-1.19.0.orig/newlib/libc/string/strncpy.c	2000-02-17 20:39:48.000000000 +0100
++++ newlib-1.19.0/newlib/libc/string/strncpy.c	2011-01-09 09:01:25.677349345 +0100
+@@ -38,6 +38,7 @@
+ */
+ 
+ #include <string.h>
++#include <stdint.h>
+ #include <limits.h>
+ 
+ /*SUPPRESS 560*/
+@@ -45,7 +46,7 @@
+ 
+ /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
+ #define UNALIGNED(X, Y) \
+-  (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
++  (((intptr_t)X & (sizeof (long) - 1)) | ((intptr_t)Y & (sizeof (long) - 1)))
+ 
+ #if LONG_MAX == 2147483647L
+ #define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
+diff -Naur newlib-1.19.0.orig/newlib/libc/sys/rtems/crt0.c newlib-1.19.0/newlib/libc/sys/rtems/crt0.c
+--- newlib-1.19.0.orig/newlib/libc/sys/rtems/crt0.c	2009-12-16 19:28:14.000000000 +0100
++++ newlib-1.19.0/newlib/libc/sys/rtems/crt0.c	2011-01-09 09:01:25.677349345 +0100
+@@ -24,8 +24,8 @@
+ /* RTEMS provides some of its own routines including a Malloc family */
+ RTEMS_STUB(void *,malloc(size_t s)) { return 0; }
+ RTEMS_STUB(void *,realloc(void* p, size_t s)) { return 0; }
+-RTEMS_STUB(void, free(void)) { ; }
+-RTEMS_STUB(_PTR, calloc(struct _reent *r, size_t s1, size_t s2)) {}
++RTEMS_STUB(void, free(void* ptr)) { ; }
++RTEMS_STUB(_PTR, calloc(size_t s1, size_t s2)) {}
+ 
+ #if defined(__GNUC__)
+ /*
+diff -Naur newlib-1.19.0.orig/newlib/libc/xdr/xdr.c newlib-1.19.0/newlib/libc/xdr/xdr.c
+--- newlib-1.19.0.orig/newlib/libc/xdr/xdr.c	2010-03-02 13:05:18.000000000 +0100
++++ newlib-1.19.0/newlib/libc/xdr/xdr.c	2011-01-09 09:01:25.677349345 +0100
+@@ -113,7 +113,7 @@
+ #elif INT_MAX == LONG_MAX
+   return xdr_long (xdrs, (long *) ip);
+ #else
+-# error Unexpeced integer sizes in xdr_int()
++# error Unexpected integer sizes in xdr_int()
+ #endif
+ }
+ 
+@@ -148,7 +148,7 @@
+ #elif UINT_MAX == ULONG_MAX
+   return xdr_u_long (xdrs, (u_long *) up);
+ #else
+-# error Unexpeced integer sizes in xdr_int()
++# error Unexpected integer sizes in xdr_int()
+ #endif
+ }
+ 
+diff -Naur newlib-1.19.0.orig/newlib/libc/xdr/xdr_private.h newlib-1.19.0/newlib/libc/xdr/xdr_private.h
+--- newlib-1.19.0.orig/newlib/libc/xdr/xdr_private.h	2010-03-02 13:05:18.000000000 +0100
++++ newlib-1.19.0/newlib/libc/xdr/xdr_private.h	2011-01-09 09:01:25.678349392 +0100
+@@ -25,6 +25,7 @@
+ 
+ #include <_ansi.h>
+ #include <stdarg.h>
++#include <stdint.h>
+ #include <sys/param.h>
+ 
+ /* avoid including stdio header here */
+diff -Naur newlib-1.19.0.orig/newlib/libc/xdr/xdr_rec.c newlib-1.19.0/newlib/libc/xdr/xdr_rec.c
+--- newlib-1.19.0.orig/newlib/libc/xdr/xdr_rec.c	2010-03-02 13:05:18.000000000 +0100
++++ newlib-1.19.0/newlib/libc/xdr/xdr_rec.c	2011-01-09 09:01:25.678349392 +0100
+@@ -51,6 +51,7 @@
+ #include <assert.h>
+ #include <unistd.h>
+ #include <errno.h>
++#include <limits.h>
+ 
+ #include <rpc/types.h>
+ #include <rpc/xdr.h>
+diff -Naur newlib-1.19.0.orig/newlib/libm/common/modfl.c newlib-1.19.0/newlib/libm/common/modfl.c
+--- newlib-1.19.0.orig/newlib/libm/common/modfl.c	2009-04-18 00:15:43.000000000 +0200
++++ newlib-1.19.0/newlib/libm/common/modfl.c	2011-01-09 09:01:25.678349392 +0100
+@@ -36,7 +36,7 @@
+ long double
+ modfl (long double x, long double *iptr)
+ {
+-  return modf(x, iptr);
++  return modf(x, (double*) iptr);
+ }
+ #endif
+ 
+diff -Naur newlib-1.19.0.orig/newlib/libm/common/s_round.c newlib-1.19.0/newlib/libm/common/s_round.c
+--- newlib-1.19.0.orig/newlib/libm/common/s_round.c	2009-03-25 20:13:01.000000000 +0100
++++ newlib-1.19.0/newlib/libm/common/s_round.c	2011-01-09 09:01:25.678349392 +0100
+@@ -68,7 +68,7 @@
+           msw &= 0x80000000;
+           if (exponent_less_1023 == -1)
+             /* Result is +1.0 or -1.0. */
+-            msw |= (1023 << 20);
++            msw |= ((__int32_t)1023 << 20);
+           lsw = 0;
+         }
+       else
+diff -Naur newlib-1.19.0.orig/newlib/libm/math/e_scalb.c newlib-1.19.0/newlib/libm/math/e_scalb.c
+--- newlib-1.19.0.orig/newlib/libm/math/e_scalb.c	2000-02-17 20:39:51.000000000 +0100
++++ newlib-1.19.0/newlib/libm/math/e_scalb.c	2011-01-09 09:01:25.678349392 +0100
+@@ -17,6 +17,7 @@
+  * should use scalbn() instead.
+  */
+ 
++#include <limits.h>
+ #include "fdlibm.h"
+ 
+ #ifndef _DOUBLE_IS_32BITS
+@@ -46,8 +47,17 @@
+ 	    else       return x/(-fn);
+ 	}
+ 	if (rint(fn)!=fn) return (fn-fn)/(fn-fn);
++#if (INT_MAX < 65000)
++	if ( fn > (double) INT_MAX) return scalbn(x, INT_MAX);
++#else
+ 	if ( fn > 65000.0) return scalbn(x, 65000);
+-	if (-fn > 65000.0) return scalbn(x,-65000);
++#endif
++
++#if (INT_MIN > -65000)
++        if (fn < (double) INT_MIN) return scalbn(x,INT_MIN);
++#else
++	if (fn < -65000.0) return scalbn(x,-65000);
++#endif
+ 	return scalbn(x,(int)fn);
+ #endif
+ }
+diff -Naur newlib-1.19.0.orig/newlib/libm/math/wf_tgamma.c newlib-1.19.0/newlib/libm/math/wf_tgamma.c
+--- newlib-1.19.0.orig/newlib/libm/math/wf_tgamma.c	2007-09-04 19:33:10.000000000 +0200
++++ newlib-1.19.0/newlib/libm/math/wf_tgamma.c	2011-01-09 09:01:25.679349440 +0100
+@@ -43,3 +43,17 @@
+ 	return y;
+ #endif
+ }
++
++#ifdef _DOUBLE_IS_32BITS
++
++#ifdef __STDC__
++	double tgamma(double x)
++#else
++	double tgamma(x)
++	double x;
++#endif
++{
++	return (double) tgammaf((float) x);
++}
++
++#endif /* defined(_DOUBLE_IS_32BITS) */
+diff -Naur newlib-1.19.0.orig/newlib/libm/math/w_tgamma.c newlib-1.19.0/newlib/libm/math/w_tgamma.c
+--- newlib-1.19.0.orig/newlib/libm/math/w_tgamma.c	2002-06-07 23:59:56.000000000 +0200
++++ newlib-1.19.0/newlib/libm/math/w_tgamma.c	2011-01-09 09:01:25.679349440 +0100
+@@ -17,6 +17,8 @@
+ 
+ #include "fdlibm.h"
+ 
++#ifndef _DOUBLE_IS_32BITS
++
+ #ifdef __STDC__
+ 	double tgamma(double x)
+ #else
+@@ -42,3 +44,5 @@
+ 	return y;
+ #endif
+ }
++
++#endif /* defined(_DOUBLE_IS_32BITS) */
+diff -Naur newlib-1.19.0.orig/newlib/MAINTAINERS newlib-1.19.0/newlib/MAINTAINERS
+--- newlib-1.19.0.orig/newlib/MAINTAINERS	2010-12-16 22:58:38.000000000 +0100
++++ newlib-1.19.0/newlib/MAINTAINERS	2011-01-09 09:01:25.660348537 +0100
+@@ -6,7 +6,7 @@
+ The official maintainers of newlib:
+ 
+ Jeff Johnston			jjohnstn@redhat.com
+-Corinna	Vinschen		corinna@vinchen.de
++Corinna Vinschen		corinna@vinschen.de
+ 
+ 
+ 		     Various Domain Maintainers
+diff -Naur newlib-1.19.0.orig/newlib/Makefile.am newlib-1.19.0/newlib/Makefile.am
+--- newlib-1.19.0.orig/newlib/Makefile.am	2010-12-16 22:58:38.000000000 +0100
++++ newlib-1.19.0/newlib/Makefile.am	2011-01-09 09:01:25.660348537 +0100
+@@ -81,7 +81,7 @@
+ 	libc.a
+ endif
+ 
+-noinst_DATA = stmp-targ-include
++BUILT_SOURCES = stmp-targ-include
+ 
+ toollib_DATA = $(CRT0) $(CRT1)
+ 
+@@ -255,7 +255,7 @@
+ 	  done
+ 	touch $@
+ 
+-CLEANFILES = targ-include stmp-targ-include
++CLEANFILES = stmp-targ-include
+ 
+ install-data-local:	install-toollibLIBRARIES
+ if USE_LIBTOOL
+@@ -279,10 +279,6 @@
+ 	     $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/include/machine/`basename $$i`; \
+ 	    else true; fi ; \
+ 	  done; \
+-	  $(mkinstalldirs) $(DESTDIR)$(tooldir)/include/rpc; \
+-	  for i in $(srcdir)/libc/include/rpc/*.h; do \
+-	   $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/include/rpc/`basename $$i`; \
+-	  done; \
+ 	  $(mkinstalldirs) $(DESTDIR)$(tooldir)/include/sys; \
+ 	  for i in $(srcdir)/libc/include/sys/*.h; do \
+ 	   $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/include/sys/`basename $$i`; \
+@@ -430,3 +426,6 @@
+ 	else \
+ 	   echo "WARNING: could not find \`runtest'" 1>&2 ; \
+ 	fi
++
++clean-local:
++	-rm -rf targ-include
+diff -Naur newlib-1.19.0.orig/newlib/Makefile.in newlib-1.19.0/newlib/Makefile.in
+--- newlib-1.19.0.orig/newlib/Makefile.in	2010-12-16 22:58:38.000000000 +0100
++++ newlib-1.19.0/newlib/Makefile.in	2011-01-09 09:01:25.661348583 +0100
+@@ -122,7 +122,7 @@
+ 	install-pdf-recursive install-ps-recursive install-recursive \
+ 	installcheck-recursive installdirs-recursive pdf-recursive \
+ 	ps-recursive uninstall-recursive
+-DATA = $(noinst_DATA) $(toollib_DATA)
++DATA = $(toollib_DATA)
+ RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
+   distclean-recursive maintainer-clean-recursive
+ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
+@@ -351,7 +351,7 @@
+ @USE_LIBTOOL_FALSE@toollib_LIBRARIES = libm.a \
+ @USE_LIBTOOL_FALSE@	libc.a
+ 
+-noinst_DATA = stmp-targ-include
++BUILT_SOURCES = stmp-targ-include
+ toollib_DATA = $(CRT0) $(CRT1)
+ 
+ # The functions ldexp, frexp and modf are traditionally supplied in
+@@ -405,13 +405,13 @@
+ @USE_LIBTOOL_TRUE@libm_la_DEPENDENCIES = libm-libtool-objectlist
+ @USE_LIBTOOL_TRUE@libc_la_SOURCES = 
+ @USE_LIBTOOL_TRUE@libc_la_DEPENDENCIES = libc-libtool-objectlist
+-CLEANFILES = targ-include stmp-targ-include
++CLEANFILES = stmp-targ-include
+ CONFIG_STATUS_DEPENDENCIES = $(newlib_basedir)/configure.host
+ MAKEOVERRIDES = 
+ 
+ # dejagnu support
+ RUNTESTFLAGS = 
+-all: newlib.h
++all: $(BUILT_SOURCES) newlib.h
+ 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+ 
+ .SUFFIXES:
+@@ -725,14 +725,16 @@
+ 	done
+ check-am:
+ 	$(MAKE) $(AM_MAKEFLAGS) check-DEJAGNU
+-check: check-recursive
++check: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) check-recursive
+ all-am: Makefile $(LIBRARIES) $(LTLIBRARIES) $(DATA) newlib.h
+ installdirs: installdirs-recursive
+ installdirs-am:
+ 	for dir in "$(DESTDIR)$(toollibdir)" "$(DESTDIR)$(toollibdir)" "$(DESTDIR)$(toollibdir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+-install: install-recursive
++install: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) install-recursive
+ install-exec: install-exec-recursive
+ install-data: install-data-recursive
+ uninstall: uninstall-recursive
+@@ -758,10 +760,11 @@
+ maintainer-clean-generic:
+ 	@echo "This command is intended for maintainers to use"
+ 	@echo "it deletes files that may require special tools to rebuild."
++	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+ clean: clean-recursive
+ 
+-clean-am: clean-generic clean-libtool clean-toollibLIBRARIES \
+-	clean-toollibLTLIBRARIES mostlyclean-am
++clean-am: clean-generic clean-libtool clean-local \
++	clean-toollibLIBRARIES clean-toollibLTLIBRARIES mostlyclean-am
+ 
+ distclean: distclean-recursive
+ 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+@@ -833,12 +836,13 @@
+ uninstall-am: uninstall-toollibDATA uninstall-toollibLIBRARIES \
+ 	uninstall-toollibLTLIBRARIES
+ 
+-.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all check-am \
+-	ctags-recursive install-am install-strip tags-recursive
++.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all check \
++	check-am ctags-recursive install install-am install-strip \
++	tags-recursive
+ 
+ .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
+ 	all all-am am--refresh check check-DEJAGNU check-am clean \
+-	clean-generic clean-libtool clean-toollibLIBRARIES \
++	clean-generic clean-libtool clean-local clean-toollibLIBRARIES \
+ 	clean-toollibLTLIBRARIES ctags ctags-recursive distclean \
+ 	distclean-DEJAGNU distclean-compile distclean-generic \
+ 	distclean-hdr distclean-libtool distclean-tags dvi dvi-am html \
+@@ -985,10 +989,6 @@
+ 	     $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/include/machine/`basename $$i`; \
+ 	    else true; fi ; \
+ 	  done; \
+-	  $(mkinstalldirs) $(DESTDIR)$(tooldir)/include/rpc; \
+-	  for i in $(srcdir)/libc/include/rpc/*.h; do \
+-	   $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/include/rpc/`basename $$i`; \
+-	  done; \
+ 	  $(mkinstalldirs) $(DESTDIR)$(tooldir)/include/sys; \
+ 	  for i in $(srcdir)/libc/include/sys/*.h; do \
+ 	   $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/include/sys/`basename $$i`; \
+@@ -1129,6 +1129,9 @@
+ 	   echo "WARNING: could not find \`runtest'" 1>&2 ; \
+ 	fi
+ 
++clean-local:
++	-rm -rf targ-include
++
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
