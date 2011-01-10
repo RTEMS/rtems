@@ -264,7 +264,7 @@ domathf (void)
   fprintf( stdout, "tanhf          : %f\n", f1);
 
   f1 = tgammaf(2.1);
-  fprintf( stdout, "tanhf          : %f\n", f1);
+  fprintf( stdout, "tgammaf        : %f\n", f1);
 
   f1 = truncf(3.5);
   fprintf( stdout, "truncf         : %f\n", f1);

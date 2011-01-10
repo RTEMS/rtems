@@ -264,7 +264,7 @@ domath  (void)
   fprintf( stdout, "tanh           : %f\n", f1);
 
   f1 = tgamma (2.1);
-  fprintf( stdout, "tanh           : %f\n", f1);
+  fprintf( stdout, "tgamma         : %f\n", f1);
 
   f1 = trunc (3.5);
   fprintf( stdout, "trunc          : %f\n", f1);

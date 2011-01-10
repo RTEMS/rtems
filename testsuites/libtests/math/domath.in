@@ -264,7 +264,7 @@ domath@FSUFFIX@ (void)
   fprintf( stdout, "tanh@FSUFFIX@          : %f\n", f1);
 
   f1 = tgamma@FSUFFIX@(2.1);
-  fprintf( stdout, "tanh@FSUFFIX@          : %f\n", f1);
+  fprintf( stdout, "tgamma@FSUFFIX@        : %f\n", f1);
 
   f1 = trunc@FSUFFIX@(3.5);
   fprintf( stdout, "trunc@FSUFFIX@         : %f\n", f1);

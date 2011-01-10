@@ -264,7 +264,7 @@ domathl (void)
   fprintf( stdout, "tanhl          : %Lf\n", f1);
 
   f1 = tgammal(2.1);
-  fprintf( stdout, "tanhl          : %Lf\n", f1);
+  fprintf( stdout, "tgammal        : %Lf\n", f1);
 
   f1 = truncl(3.5);
   fprintf( stdout, "truncl         : %Lf\n", f1);

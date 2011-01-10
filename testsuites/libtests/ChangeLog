@@ -1,5 +1,11 @@
 2011-01-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* math/domath.in: Fix typo in printf.
+	* math/domath.c, math/domathf.c, math/domathl.c: Regenerate.
+	* math/math.scn: Regenerate.
+
+2011-01-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Use ac_cv_header_complex_h.
 
 2010-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
