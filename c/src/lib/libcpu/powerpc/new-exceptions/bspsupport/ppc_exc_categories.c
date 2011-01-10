@@ -174,7 +174,7 @@ static const ppc_exc_categories e300_category_table = {
 
 static const ppc_exc_categories e200_category_table = {
   [ASM_BOOKE_CRIT_VECTOR] = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
-  [ASM_MACH_VECTOR] = PPC_EXC_E500_MACHCHK,
+  [ASM_MACH_VECTOR] = PPC_EXC_BOOKE_CRITICAL,
   [ASM_PROT_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_ISI_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_EXT_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,

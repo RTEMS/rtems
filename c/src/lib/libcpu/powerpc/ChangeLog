@@ -1,3 +1,8 @@
+2011-01-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* new-exceptions/bspsupport/ppc_exc_categories.c: Fixed e200 machine
+	check category.
+
 2010-12-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am, mpc83xx/include/mpc83xx.h,
