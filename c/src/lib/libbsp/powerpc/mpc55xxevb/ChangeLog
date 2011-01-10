@@ -1,3 +1,7 @@
+2011-01-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspstart.c: Fixed chip select configuration.
+
 2010-12-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am, startup/start.S: Use standard zero

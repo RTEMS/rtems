@@ -321,7 +321,7 @@ static const struct EBI_CS_tag cs_setup[] = {
 
         {
             .B.AM = 0x1fff0,
-            .B.SCY = 4,
+            .B.SCY = 1,
             .B.BSCY = 0
         }
     }
