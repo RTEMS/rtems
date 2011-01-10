@@ -33,6 +33,10 @@ cd ..
 %{?PATCH5:%patch5 -p0}
 %endif
 
+%if %{with gcc_stdint}
+sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/use_gcc_stdint=provide/}' gcc-%{gcc_pkgvers}/gcc/config.gcc
+%endif
+
 %if %build_newlib
 %setup -q -T -D -n %{name}-%{version} -a50
 cd newlib-%{newlib_version}
@@ -40,6 +44,9 @@ cd newlib-%{newlib_version}
 cd ..
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
+%if %{with gcc_stdint}
+rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
+%endif
 %endif
 
 %if 0%{?_build_mpfr}
