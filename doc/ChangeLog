@@ -1,3 +1,8 @@
+2011-01-10	Danila Bespalov <danila DOT bespalov AT gmail DOT com>
+
+	* posix_users/posix_users.texi, posix_users/signal.t: Review and
+	improve as part of Google Code-In 2010.
+
 2011-01-02	Danila Bespalov <danila DOT bespalov AT gmail DOT com>
 
 	* started/buildc.t, started/buildrt.t, started/nt.t, started/require.t,

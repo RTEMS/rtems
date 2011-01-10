@@ -56,8 +56,9 @@ is queued and kept pending until the thread or process unblocks
 the signal or explicitly checks for it.
 Traditional, non-real-time POSIX signals do not queue.  Thus
 if a process or thread has blocked a particular signal, then
-multiple occurrences of that signal are recorded as a 
-single occurrence of that signal.  
+multiple occurrences of that signal are recorded as a
+single occurrence of that signal.
+@c TODO: SIGRTMIN and SIGRTMAX ?
 
 One can check for the set of outstanding signals that have been
 blocked.   Services are provided to check for outstanding process
@@ -102,22 +103,22 @@ pending. The first thread to unblock the signal (@code{sigprocmask()} or
 Each process and each thread within that process has a set of
 individual signals and handlers associated with it.   Services
 are provided to construct signal sets for the purposes of building
-signal sets -- type @code{sigset_t} -- that are used to 
-provide arguments to the services that mask, unmask, and 
+signal sets -- type @code{sigset_t} -- that are used to
+provide arguments to the services that mask, unmask, and
 check on pending signals.
 
 @subsection Blocking Until Signal Generation
 
 A thread may block until receipt of a signal.  The "sigwait"
-and "pause" families of services block until the requested
-signal is received or if using @code{sigtimedwait()} until the specified 
+and "pause" families of functions block until the requested
+signal is received or if using @code{sigtimedwait()} until the specified
 timeout period has elapsed.
 
 @subsection Sending a Signal
 
 This is accomplished
-via one of a number of services that sends a signal to either a 
-process or thread.  Signals may be directed at a process by 
+via one of a number of services that sends a signal to either a
+process or thread.  Signals may be directed at a process by
 the service @code{kill()} or at a thread by the service
 @code{pthread_kill()}
 
@@ -150,6 +151,9 @@ int sigaddset(
 
 @subheading STATUS CODES:
 
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
 @item EINVAL
 Invalid argument passed.
@@ -158,11 +162,12 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
-This function adds the @code{signo} to the specified signal @code{set}.
+This function adds the signal @code{signo} to the specified signal @code{set}.
 
 @subheading NOTES:
 
-NONE
+The set must be initialized using either @code{sigemptyset} or @code{sigfillset}
+before using this function.
 
 @c
 @c
@@ -186,6 +191,9 @@ int sigdelset(
 
 @subheading STATUS CODES:
 
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
 @item EINVAL
 Invalid argument passed.
@@ -194,11 +202,13 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
-This function deletes the @code{signo} to the specified signal @code{set}.
+This function deletes the signal specified by @code{signo} from the specified
+signal @code{set}.
 
 @subheading NOTES:
 
-NONE
+The set must be initialized using either @code{sigemptyset} or @code{sigfillset}
+before using this function.
 
 @c
 @c
@@ -221,8 +231,10 @@ int sigfillset(
 
 @subheading STATUS CODES:
 
-@table @b
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
 
+@table @b
 @item EINVAL
 Invalid argument passed.
 
@@ -232,10 +244,6 @@ Invalid argument passed.
 
 This function fills the specified signal @code{set} such that all
 signals are set.
-
-@subheading NOTES:
-
-NONE
 
 @c
 @c
@@ -259,6 +267,10 @@ int sigismember(
 
 @subheading STATUS CODES:
 
+The function returns either 1 or 0 if completed successfully, otherwise it
+returns -1 and sets @code{errno} to indicate the error. @code{errno} may be set
+to:
+
 @table @b
 
 @item EINVAL
@@ -273,7 +285,8 @@ and 0 otherwise.
 
 @subheading NOTES:
 
-NONE
+The set must be initialized using either @code{sigemptyset} or @code{sigfillset}
+before using this function.
 
 @c
 @c
@@ -296,8 +309,10 @@ int sigemptyset(
 
 @subheading STATUS CODES:
 
-@table @b
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
 
+@table @b
 @item EINVAL
 Invalid argument passed.
 
@@ -305,12 +320,7 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
-This function fills the specified signal @code{set} such that all
-signals are cleared.
-
-@subheading NOTES:
-
-NONE
+This function initializes an empty signal set pointed to by @code{set}.
 
 @c
 @c
@@ -335,6 +345,9 @@ int sigaction(
 
 @subheading STATUS CODES:
 
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
 @item EINVAL
 Invalid argument passed.
@@ -346,10 +359,71 @@ Realtime Signals Extension option not supported.
 
 @subheading DESCRIPTION:
 
-This function is used to change the action taken by a process on
-receipt of the specfic signal @code{sig}. The new action is
-specified by @code{act} and the previous action is returned
-via @code{oact}.
+If the argument act is not a null pointer, it points to a structure specifying
+the action to be associated with the specified signal. If the argument oact is
+not a null pointer, the action previously associated with the signal is stored
+in the location pointed to by the argument oact. If the argument act is a null
+pointer, signal handling is unchanged; thus, the call can be used to enquire
+about the current handling of a given signal.
+
+The structure @code{sigaction} has the following members:
+
+@table @code
+
+@item void(*)(int) sa_handler
+Pointer to a signal-catching function or one of the macros SIG_IGN or SIG_DFL.
+
+@item sigset_t sa_mask
+Additional set of signals to be blocked during execution of signal-catching function.
+
+@item int sa_flags
+Special flags to affect behavior of signal.
+
+@item void(*)(int, siginfo_t*, void*) sa_sigaction
+Alternative pointer to a signal-catching function.
+
+@end table
+
+@code{sa_handler} and @code{sa_sigaction} should never be used at the same time as their storage may overlap.
+
+If the @code{SA_SIGINFO} flag (see below) is set in @code{sa_flags}, the
+@code{sa_sigaction} field specifies a signal-catching function, otherwise
+@code{sa_handler} specifies the action to be associated with the signal, which
+may be a signal-catching function or one of the macros @code{SIG_IGN} or
+@code{SIG_DFN}.
+
+The following flags can be set in the @code{sa_flags} field:
+
+@table @code
+
+@c I found no evidence that other flags are used in the source code.
+@c I did a fulltext search in cpukit/posix/, maybe I looked in the wrong place?
+@item SA_SIGINFO
+If not set, the signal-catching function should be declared as @code{void
+func(int signo)} and the address of the function should be set in
+@code{sa_handler}.  If set, the signal-catching function should be declared as
+@code{void func(int signo, siginfo_t* info, void* context)} and the address of
+the function should be set in @code{sa_sigaction}.
+
+@end table
+
+The prototype of the @code{siginfo_t} structure is the following:
+@example
+typedef struct
+@{
+  int si_signo; /* Signal number */
+  int si_code; /* Cause of the signal */
+  pid_t si_pid; /* Sending process ID */
+  uid_t si_uid; /* Real user ID of sending process */
+  void* si_addr; /* Address of faulting instruction */
+  int si_status; /* Exit value or signal */
+  union sigval
+  @{
+      int sival_int; /* Integer signal value */
+      void* sival_ptr; /* Pointer signal value */
+  @} si_value; /* Signal value */
+@}
+@end example
 
 @subheading NOTES:
 
@@ -377,6 +451,9 @@ int pthread_kill(
 
 @subheading STATUS CODES:
 
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
 
 @item ESRCH
@@ -389,11 +466,11 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
-This functions sends the specified signal @code{sig} to @code{thread}.
+This functions sends the specified signal @code{sig} to a thread referenced
+to by @code{thread}.
 
-@subheading NOTES:
+If the signal code is @code{0}, arguments are validated and no signal is sent.
 
-NONE
 
 @c
 @c
@@ -417,6 +494,9 @@ int sigprocmask(
 @end example
 
 @subheading STATUS CODES:
+
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
 
 @table @b
 
@@ -447,12 +527,16 @@ The set of currently blocked signals is set to @code{set}.
 
 @end table
 
-If @code{oset} is not @code{NULL}, then the set of blocked signals
-prior to this call is returned in @code{oset}.
+If @code{oset} is not @code{NULL}, then the set of blocked signals prior to
+this call is returned in @code{oset}. If @code{set} is @b{NULL}, no change is
+done, allowing to examine the set of currently blocked signals.
 
 @subheading NOTES:
 
 It is not an error to unblock a signal which is not blocked.
+
+In the current implementation of RTEMS POSIX API sigprocmask() is technically
+mapped to pthread_sigmask().
 
 @c
 @c
@@ -476,7 +560,12 @@ int pthread_sigmask(
 @end example
 
 @subheading STATUS CODES:
+
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
+
 @item EINVAL
 Invalid argument passed.
 
@@ -503,8 +592,9 @@ The set of currently blocked signals is set to @code{set}.
 
 @end table
 
-If @code{oset} is not @code{NULL}, then the set of blocked signals
-prior to this call is returned in @code{oset}.
+If @code{oset} is not @code{NULL}, then the set of blocked signals prior to
+this call is returned in @code{oset}. If @code{set} is @b{NULL}, no change is
+done, allowing to examine the set of currently blocked signals.
 
 @subheading NOTES:
 
@@ -533,6 +623,10 @@ int kill(
 @end example
 
 @subheading STATUS CODES:
+
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
 @item EINVAL
 Invalid argument passed.
@@ -551,7 +645,8 @@ This function sends the signal @code{sig} to the process @code{pid}.
 
 @subheading NOTES:
 
-NONE
+Since RTEMS is a single-process system, a signal can only be sent to the calling
+process (i.e. the current node).
 
 @c
 @c
@@ -574,8 +669,8 @@ int sigpending(
 
 @subheading STATUS CODES:
 
-On error, this routine returns -1 and sets @code{errno} to one of
-the following:
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
 
 @table @b
 
@@ -589,10 +684,6 @@ Invalid address for set.
 This function allows the caller to examine the set of currently pending
 signals. A pending signal is one which has been raised but is currently
 blocked. The set of pending signals is returned in @code{set}.
-
-@subheading NOTES:
-
-NONE
 
 @c
 @c
@@ -615,8 +706,8 @@ int sigsuspend(
 
 @subheading STATUS CODES:
 
-On error, this routine returns -1 and sets @code{errno} to one of
-the following:
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
 
 @table @b
 
@@ -629,11 +720,7 @@ Signal interrupted this function.
 
 This function temporarily replaces the signal mask for the process
 with that specified by @code{sigmask} and blocks the calling thread
-until the signal is raised.
-
-@subheading NOTES:
-
-NONE
+until a signal is raised.
 
 @c
 @c
@@ -654,8 +741,8 @@ int pause( void );
 
 @subheading STATUS CODES:
 
-On error, this routine returns -1 and sets @code{errno} to one of
-the following:
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
 
 @table @b
 
@@ -668,10 +755,6 @@ Signal interrupted this function.
 
 This function causes the calling thread to be blocked until an
 unblocked signal is received.
-
-@subheading NOTES:
-
-NONE
 
 @c
 @c
@@ -694,7 +777,12 @@ int sigwait(
 @end example
 
 @subheading STATUS CODES:
+
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
+
 @item EINVAL
 Invalid argument passed.
 
@@ -708,11 +796,6 @@ Signal interrupted this function.
 This function selects a pending signal based on the set specified in
 @code{set}, atomically clears it from the set of pending signals, and
 returns the signal number for that signal in @code{sig}.
-
-
-@subheading NOTES:
-
-NONE
 
 @c
 @c
@@ -735,7 +818,12 @@ int sigwaitinfo(
 @end example
 
 @subheading STATUS CODES:
+
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
+
 @item EINTR
 Signal interrupted this function.
 
@@ -747,9 +835,23 @@ This function selects a pending signal based on the set specified in
 @code{set}, atomically clears it from the set of pending signals, and
 returns information about that signal in @code{info}.
 
-@subheading NOTES:
-
-NONE
+The prototype of the @code{siginfo_t} structure is the following:
+@example
+typedef struct
+@{
+  int si_signo; /* Signal number */
+  int si_code; /* Cause of the signal */
+  pid_t si_pid; /* Sending process ID */
+  uid_t si_uid; /* Real user ID of sending process */
+  void* si_addr; /* Address of faulting instruction */
+  int si_status; /* Exit value or signal */
+  union sigval
+  @{
+      int sival_int; /* Integer signal value */
+      void* sival_ptr; /* Pointer signal value */
+  @} si_value; /* Signal value */
+@}
+@end example
 
 @c
 @c
@@ -773,7 +875,12 @@ int sigtimedwait(
 @end example
 
 @subheading STATUS CODES:
+
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
+
 @item EAGAIN
 Timed out while waiting for the specified signal set.
 
@@ -791,6 +898,15 @@ This function selects a pending signal based on the set specified in
 @code{set}, atomically clears it from the set of pending signals, and
 returns information about that signal in @code{info}. The calling thread
 will block up to @code{timeout} waiting for the signal to arrive.
+
+The @code{timespec} structure is defined as follows:
+@example
+struct timespec
+@{
+  time_t tv_sec; /* Seconds */
+  long tv_nsec; /* Nanoseconds */
+@}
+@end example
 
 @subheading NOTES:
 
@@ -820,6 +936,9 @@ int sigqueue(
 
 @subheading STATUS CODES:
 
+The function returns 0 on success, otherwise it returns -1 and sets
+@code{errno} to indicate the error. @code{errno} may be set to:
+
 @table @b
 
 @item EAGAIN
@@ -845,9 +964,19 @@ The process pid does not exist.
 This function sends the signal specified by @code{signo} to the
 process @code{pid}
 
+The @code{sigval} union is specified as:
+@example
+union sigval
+@{
+  int sival_int; /* Integer signal value */
+  void* sival_ptr; /* Pointer signal value */
+@}
+@end example
+
 @subheading NOTES:
 
-NONE
+Since RTEMS is a single-process system, a signal can only be sent to the calling
+process (i.e. the current node).
 
 @c
 @c
@@ -886,7 +1015,7 @@ be generated after the number of seconds specified by
 @subheading NOTES:
 
 Alarm requests do not queue.  If @code{alarm} is called while
-a previous request is outstanding, the call will result in 
+a previous request is outstanding, the call will result in
 rescheduling the time at which the @code{SIGALRM} signal
 will be generated.
 
@@ -936,7 +1065,7 @@ with a period in microseconds specified by @code{interval}.
 @subheading NOTES:
 
 Alarm requests do not queue.  If @code{alarm} is called while
-a previous request is outstanding, the call will result in 
+a previous request is outstanding, the call will result in
 rescheduling the time at which the @code{SIGALRM} signal
 will be generated.
 

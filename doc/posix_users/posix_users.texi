@@ -16,7 +16,7 @@
 @c
 
 @c
-@c   Master file for the C User's Guide
+@c   Master file for the POSIX API User's Guide
 @c
 
 @c Joel's Questions
@@ -43,7 +43,7 @@
 @c       in the infrastructure Florist support should be simple to add.
 @set is-C
 @clear is-Ada
-@set LANGUAGE C 
+@set LANGUAGE C
 @set STRUCTURE structure
 @set ROUTINE function
 @set OR |
@@ -63,7 +63,7 @@
 @c @shorttitlepage RTEMS POSIX API User's Guide
 
 @setchapternewpage odd
-@settitle RTEMS POSIX API User's Guide 
+@settitle RTEMS POSIX API User's Guide
 @titlepage
 @finalout
 
@@ -139,8 +139,8 @@ This is the online version of the RTEMS POSIX API User's Guide
 @end menu
 
 @end ifinfo
-@c 
-@c 
+@c
+@c
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
