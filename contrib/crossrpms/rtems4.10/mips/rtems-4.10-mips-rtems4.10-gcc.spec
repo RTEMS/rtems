@@ -58,7 +58,7 @@ Summary:      	mips-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	2%{?dist}
+Release:      	3%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -78,6 +78,10 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # Bug in gcc-4.5-20100318, doesn't build them on x86_84 hosts.
 %bcond_with plugin
 
+# EXPERIMENTAL: Use gcc's stdint.h instead of newlib's
+# Should be applicable to gcc >= 4.5.0
+%bcond_with gcc_stdint
+
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
 %global mpfr_version	2.4.2
@@ -85,6 +89,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
+%if 0%{?fc15}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
 %if 0%{?fc14}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
@@ -94,12 +104,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %if 0%{?fc13}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
-%global gmp_provided 4.3.1
-%endif
-
-%if 0%{?fc12}
-%global mpc_provided 0.8
-%global mpfr_provided 2.4.1
 %global gmp_provided 4.3.1
 %endif
 
@@ -248,7 +252,7 @@ BuildRequires:	rtems-4.10-mips-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-mips-rtems4.10-binutils
 Requires:	rtems-4.10-mips-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-17%{?dist}
+Requires:	rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-18%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -280,7 +284,7 @@ Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar
 
 %if "%{newlib_version}" == "1.18.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20101006.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20110110.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -320,12 +324,19 @@ cd ..
 
 
 
+%if %{with gcc_stdint}
+sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/use_gcc_stdint=provide/}' gcc-%{gcc_pkgvers}/gcc/config.gcc
+%endif
+
 %setup -q -T -D -n %{name}-%{version} -a50
 cd newlib-%{newlib_version}
 %{?PATCH50:%patch50 -p1}
 cd ..
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
+%if %{with gcc_stdint}
+rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
+%endif
 
 %if 0%{?_build_mpfr}
 %setup -q -T -D -n %{name}-%{version} -a60
@@ -355,7 +366,7 @@ cd ..
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-2%{?dist}/newlib-%{newlib_version}-17%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-3%{?dist}/newlib-%{newlib_version}-18%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -625,7 +636,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-mips-rtems4.10-binutils
-# Requires:       rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-17%{?dist}
+# Requires:       rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-18%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -643,7 +654,7 @@ Summary:        libgcc for mips-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-17%{?dist}
+Requires:       rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-18%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-mips-rtems4.10-gcc-libgcc
@@ -817,7 +828,7 @@ Summary:      	C Library (newlib) for mips-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        17%{?dist}
+Release:        18%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -838,7 +849,7 @@ Newlib C Library for mips-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        17%{?dist}
+Release:        18%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
