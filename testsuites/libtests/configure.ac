@@ -60,5 +60,6 @@ termios01/Makefile
 termios02/Makefile
 tztest/Makefile
 POSIX/Makefile
+math/Makefile
 ])
 AC_OUTPUT
