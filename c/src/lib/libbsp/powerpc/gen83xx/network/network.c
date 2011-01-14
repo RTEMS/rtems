@@ -25,7 +25,8 @@
 #include <bsp/tsec.h>
 #include <bsp/u-boot.h>
 #include <mpc83xx/mpc83xx.h>
-#include <stdio.h>
+#include <string.h>
+#include <libcpu/spr.h>
 
 #define TSEC_IFMODE_RGMII 0
 #define TSEC_IFMODE_GMII  1
@@ -48,6 +49,13 @@
 
 #endif
 
+/* System Version Register */
+#define SVR 286
+SPR_RO( SVR)
+
+/* Processor Version Register */
+SPR_RO( PVR)
+
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
@@ -67,8 +75,14 @@ int BSP_tsec_attach
 |    1, if success                                                       |
 \*=========================================================================*/
 {
+  tsec_config tsec_cfg;
   int    unitNumber;
   char *unitName;
+  uint32_t svr = _read_SVR();
+  uint32_t pvr = _read_PVR();
+
+  memset(&tsec_cfg, 0, sizeof(tsec_cfg));
+  config->drv_ctrl = &tsec_cfg;
 
   /*
    * Parse driver name
@@ -76,6 +90,10 @@ int BSP_tsec_attach
   if((unitNumber = rtems_bsdnet_parse_driver_name(config, &unitName)) < 0) {
     return 0;
   }
+
+  tsec_cfg.reg_ptr = &mpc83xx.tsec [unitNumber - 1];
+  tsec_cfg.mdio_ptr = &mpc83xx.tsec [0];
+
   if (attaching) {
 #if (TSEC_IFMODE==TSEC_IFMODE_GMII)
 #if !defined(HSC_CM01)
@@ -126,11 +144,10 @@ int BSP_tsec_attach
   if (config->hardware_address == NULL) {
 #if !defined(HAS_UBOOT)
     static char hw_addr [TSEC_COUNT][6];
-    volatile tsec_registers *reg_ptr;
+    volatile tsec_registers *reg_ptr = tsec_cfg->reg_ptr;
 
     /* read MAC address from hardware register */
     /* we expect it htere from the boot loader */
-    reg_ptr = &mpc83xx.tsec[unitNumber - 1];
     config->hardware_address = hw_addr[unitNumber-1];
 
     hw_addr[unitNumber-1][5] = (reg_ptr->macstnaddr[0] >> 24) & 0xff;
@@ -180,15 +197,53 @@ int BSP_tsec_attach
       ? BSP_IPIC_IRQ_TSEC1_TX
       : BSP_IPIC_IRQ_TSEC2_TX
     );
+
+  if (svr == 0x80b00010 && pvr == 0x80850010) {
+    /*
+     * This is a special case for MPC8313ERDB with silicon revision 1.  Look in
+     * "MPC8313ECE Rev. 3, 3/2008" errata for "IPIC 1".
+     */
+    if (unitNumber == 1) {
+      tsec_cfg.irq_num_tx      = 37;
+      tsec_cfg.irq_num_rx      = 36;
+      tsec_cfg.irq_num_err     = 35;
+    } else if (unitNumber == 2) {
+      tsec_cfg.irq_num_tx      = 34;
+      tsec_cfg.irq_num_rx      = 33;
+      tsec_cfg.irq_num_err     = 32;
+    } else {
+      return 0;
+    }
+  } else {
+    rtems_irq_number irno = unitNumber == 1 ?
+      BSP_IPIC_IRQ_TSEC1_TX : BSP_IPIC_IRQ_TSEC2_TX;
+
+    /* get base interrupt number (for Tx irq, Rx=base+1,Err=base+2) */
+    tsec_cfg.irq_num_tx = irno + 0;
+    tsec_cfg.irq_num_rx = irno + 1;
+    tsec_cfg.irq_num_err = irno + 2;
+  }
+
+  /*
+   * XXX: Although most hardware builders will assign the PHY addresses
+   * like this, this should be more configurable
+   */
+#ifdef MPC8313ERDB
+  if (unitNumber == 2) {
+	  tsec_cfg.phy_default = 4;
+  } else {
+	  /* TODO */
+	  return 0;
+  }
+#else /* MPC8313ERDB */
+  tsec_cfg.phy_default = unitNumber-1;
+#endif /* MPC8313ERDB */
+
+  tsec_cfg.unit_number = unitNumber;
+  tsec_cfg.unit_name = unitName;
+
   /*
    * call attach function of board independent driver
    */
-  return tsec_driver_attach_detach(
-    config,
-    unitNumber,
-    unitName,
-    &mpc83xx.tsec [unitNumber - 1],
-    &mpc83xx.tsec [0],
-    attaching
-  );
+  return tsec_driver_attach_detach(config, attaching);
 }

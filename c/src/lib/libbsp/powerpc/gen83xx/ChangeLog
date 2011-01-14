@@ -1,3 +1,8 @@
+2011-01-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* network/network.c: Moved initializations from generic TSEC driver
+	part.
+
 2010-12-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/u-boot.h: Removed file.
