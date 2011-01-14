@@ -1,3 +1,9 @@
+2011-01-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* mpc83xx/network/tsec.c, mpc83xx/network/tsec.h: Use configuration
+	structure instead of many function parameters.  Moved board specific
+	initializations.  Added support for interfaces without PHY access.
+
 2011-01-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* new-exceptions/bspsupport/ppc_exc_categories.c: Fixed e200 machine

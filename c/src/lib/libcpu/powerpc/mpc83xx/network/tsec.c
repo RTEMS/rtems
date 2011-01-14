@@ -16,17 +16,11 @@
 +-----------------------------------------------------------------+
 | this file contains the MPC83xx TSEC networking driver           |
 \*===============================================================*/
-/*
- * this driver has the following HW assumptions:
- * - PHY for TSEC1 uses address 0
- * - PHY for TSEC2 uses address 1
- * - PHY uses GMII for 1000Base-T and MII for the rest of the modes
- */
+
 #include <stdlib.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/tsec.h>
-#include <libcpu/spr.h>
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
 #include <rtems/rtems_bsdnet.h>
@@ -43,16 +37,15 @@
 #include <netinet/if_ether.h>
 #include <stdio.h>
 
-/* System Version Register */
-#define SVR 286
-SPR_RO( SVR)
-
-/* Processor Version Register */
-SPR_RO( PVR)
-
 #define CLREVENT_IN_IRQ
 
 #define TSEC_WATCHDOG_TIMEOUT 5 /* check media every 5 seconds */
+
+#ifdef DEBUG
+  #define PF(fmt, ...) printk("%s: " fmt, __func__, ##__VA_ARGS__)
+#else
+  #define PF(...)
+#endif
 
 /*
  * Device data
@@ -64,11 +57,11 @@ struct tsec_struct {
   /*
    * HW links: (filled from rtems_bsdnet_ifconfig
    */
-  volatile tsec_registers *reg_ptr;   /* pointer to TSEC register block */
-  volatile tsec_registers *mdio_ptr;  /* pointer to TSEC register block which is responsible for MDIO communication */
-  int                    irq_num_tx;  /* tx irq number                  */
-  int                    irq_num_rx;  /* rx irq number                  */
-  int                    irq_num_err; /* error irq number               */
+  volatile tsec_registers *reg_ptr;    /* pointer to TSEC register block */
+  volatile tsec_registers *mdio_ptr;   /* pointer to TSEC register block which is responsible for MDIO communication */
+  rtems_irq_number irq_num_tx;
+  rtems_irq_number irq_num_rx;
+  rtems_irq_number irq_num_err;
 
   /*
    * BD management
@@ -371,14 +364,12 @@ static int tsec_mdio_read
 
   /* pointer to TSEC registers */
   volatile tsec_registers *reg_ptr = sc->mdio_ptr;
+  PF("%u\n", reg);
 
   /*
    * make sure we work with a valid phy
    */
   if (phy == -1) {
-    /*
-     * set default phy number: 0 for TSEC1, 1 for TSEC2
-     */
     phy = sc->phy_default;
   }
   if ( (phy < 0) || (phy > 31)) {
@@ -439,6 +430,7 @@ static int tsec_mdio_write
 
   /* pointer to TSEC registers */
   volatile tsec_registers *reg_ptr = sc->mdio_ptr;
+  PF("%u\n", reg);
 
   /*
    * make sure we work with a valid phy
@@ -622,6 +614,7 @@ static void tsec_receive_packets
 				    - sizeof(struct ether_header));
       eh         = mtod(m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);
+      PF("RX[%08x] (%i)\n", BD_ptr, m->m_len);
       ether_input(&sc->arpcom.ac_if,eh,m);
     }
     else {
@@ -1001,6 +994,7 @@ static void tsec_sendpacket
       CurrBD->buffer = mtod(m, void *);
       CurrBD->length = (uint32_t)m->m_len;
       l = m;       /* remember: we use this mbuf          */
+      PF("TX[%08x] (%i)\n", CurrBD, m->m_len);
 
       bd_idx = CurrBD - sc->Tx_Frst_BD;
       sc->Tx_mBuf_Ptr[bd_idx] = m;
@@ -1147,6 +1141,7 @@ static void tsec_tx_irq_handler
   uint32_t irq_events;
 #endif
 
+  PF("TXIRQ\n");
   sc->txInterrupts++;
   /*
    * disable tx interrupts
@@ -1191,6 +1186,7 @@ static void tsec_rx_irq_handler
 #endif
 
   sc->rxInterrupts++;
+  PF("RXIRQ\n");
   /*
    * disable rx interrupts
    */
@@ -1229,6 +1225,7 @@ static void tsec_err_irq_handler
 {
   struct tsec_struct *sc =
     (struct tsec_struct *)handle;
+  PF("ERIRQ\n");
   /*
    * clear error events in IEVENT
    */
@@ -1689,8 +1686,6 @@ static int tsec_ioctl
   return error;
 }
 
-/* #define DEBUG */
-
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
@@ -1713,9 +1708,11 @@ static int tsec_mode_adapt
   struct tsec_struct *sc = ifp->if_softc;
   int media = IFM_MAKEWORD( 0, 0, 0, sc->phy_default);
 
-#ifdef DEBUG
-  printf("c");
-#endif
+  /* In case no PHY is available stop now */
+  if (sc->phy_default < 0) {
+    return 0;
+  }
+
   /*
    * fetch media status
    */
@@ -1723,9 +1720,7 @@ static int tsec_mode_adapt
   if (result != 0) {
     return result;
   }
-#ifdef DEBUG
-  printf("C");
-#endif
+
   /*
    * status is unchanged? then do nothing
    */
@@ -1821,18 +1816,13 @@ static void tsec_watchdog
   ifp->if_timer    = TSEC_WATCHDOG_TIMEOUT;
 }
 
-static int tsec_driver_attach(
-  struct rtems_bsdnet_ifconfig *config,
-  int unitNumber,
-  char *unitName,
-  volatile tsec_registers *reg_ptr,
-  volatile tsec_registers *mdio_ptr
-)
+static int tsec_driver_attach(struct rtems_bsdnet_ifconfig *config)
 {
+  tsec_config *tsec_cfg = config->drv_ctrl;
+  int unitNumber = tsec_cfg->unit_number;
+  char *unitName = tsec_cfg->unit_name;
   struct tsec_struct *sc;
   struct ifnet *ifp;
-  uint32_t svr = _read_SVR();
-  uint32_t pvr = _read_PVR();
 
  /*
   * Is driver free?
@@ -1846,10 +1836,6 @@ static int tsec_driver_attach(
 
   sc = &tsec_driver[unitNumber - 1];
   ifp = &sc->arpcom.ac_if;
-  /*
-   * add sc to config
-   */
-  config->drv_ctrl = sc;
 
   if(ifp->if_softc != NULL) {
     printk ("Driver already in use.\n");
@@ -1871,35 +1857,14 @@ static int tsec_driver_attach(
   sc->acceptBroadcast = !config->ignore_broadcast;
 
   /* get pointer to TSEC register block */
-  sc->reg_ptr         = reg_ptr;
-  sc->mdio_ptr        = mdio_ptr;
+  sc->reg_ptr         = tsec_cfg->reg_ptr;
+  sc->mdio_ptr        = tsec_cfg->mdio_ptr;
 
-  if (svr == 0x80b00010 && pvr == 0x80850010) {
-    /*
-     * This is a special case for MPC8313ERDB with silicon revision 1.  Look in
-     * "MPC8313ECE Rev. 3, 3/2008" errata for "IPIC 1".
-     */
-    if (unitNumber == 1) {
-      sc->irq_num_tx      = 37;
-      sc->irq_num_rx      = 36;
-      sc->irq_num_err     = 35;
-    } else if (unitNumber == 2) {
-      sc->irq_num_tx      = 34;
-      sc->irq_num_rx      = 33;
-      sc->irq_num_err     = 32;
-    } else {
-      return 0;
-    }
-  } else {
-    /* get base interrupt number (for Tx irq, Rx=base+1,Err=base+2) */
-    sc->irq_num_tx      = config->irno + 0;  /* tx  irq number from BSP */
-    sc->irq_num_rx      = config->irno + 1;  /* rx  irq number from BSP */
-    sc->irq_num_err     = config->irno + 2;  /* err irq number from BSP */
-  }
+  /* IRQ numbers */
+  sc->irq_num_tx      = tsec_cfg->irq_num_tx;
+  sc->irq_num_rx      = tsec_cfg->irq_num_rx;
+  sc->irq_num_err     = tsec_cfg->irq_num_err;
 
-  if (config->irno  == 0) {
-    rtems_panic("TSEC: interupt base number irno not defined");
-  }
   /*
    * setup info about mdio interface
    */
@@ -1907,20 +1872,8 @@ static int tsec_driver_attach(
   sc->mdio_info.mdio_w   = tsec_mdio_write;
   sc->mdio_info.has_gmii = 1; /* we support gigabit IF */
 
-  /*
-   * XXX: Although most hardware builders will assign the PHY addresses
-   * like this, this should be more configurable
-   */
-#ifdef MPC8313ERDB
-  if (unitNumber == 2) {
-	  sc->phy_default = 4;
-  } else {
-	  /* TODO */
-	  return 0;
-  }
-#else /* MPC8313ERDB */
-  sc->phy_default = unitNumber-1;
-#endif /* MPC8313ERDB */
+  /* PHY address */
+  sc->phy_default = tsec_cfg->phy_default;
 
  /*
   * Set up network interface values
@@ -1954,21 +1907,11 @@ static int tsec_driver_attach(
 
 int tsec_driver_attach_detach(
   struct rtems_bsdnet_ifconfig *config,
-  int unitNumber,
-  char *unitName,
-  volatile tsec_registers *reg_ptr,
-  volatile tsec_registers *mdio_ptr,
   int attaching
 )
 {
   if (attaching) {
-    return tsec_driver_attach(
-      config,
-      unitNumber,
-      unitName,
-      reg_ptr,
-      mdio_ptr
-    );
+    return tsec_driver_attach(config);
   } else {
     return 0;
   }

@@ -21,6 +21,8 @@
 #define LIBCPU_POWERPC_TSEC_H
 
 #include <stdint.h>
+
+#include <bsp/irq.h>
 #include <bsp/tsec-config.h>
 
 #ifdef __cplusplus
@@ -355,12 +357,19 @@ typedef struct {
 
 struct rtems_bsdnet_ifconfig;
 
+typedef struct {
+  int unit_number;
+  char *unit_name;
+  volatile tsec_registers *reg_ptr;
+  volatile tsec_registers *mdio_ptr;
+  rtems_irq_number irq_num_tx;
+  rtems_irq_number irq_num_rx;
+  rtems_irq_number irq_num_err;
+  int phy_default;
+} tsec_config;
+
 int tsec_driver_attach_detach(
   struct rtems_bsdnet_ifconfig *config,
-  int unitNumber,
-  char *unitName,
-  volatile tsec_registers *reg_ptr,
-  volatile tsec_registers *mdio_ptr,
   int attaching
 );
 
