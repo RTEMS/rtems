@@ -110,7 +110,7 @@ void detect_host_bridge(void)
   /*
    * This code assumes that the host bridge is located at
    * bus 0, dev 0, func 0 AND that the old pre PCI 2.1
-   * standart devices detection mecahnism that was used on PC
+   * standard devices detection mecahnism that was used on PC
    * (still used in BSD source code) works.
    */
   hostbridge=residual_find_device(&residualCopy, PROCESSORDEVICE, NULL,
