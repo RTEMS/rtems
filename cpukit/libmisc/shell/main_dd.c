@@ -76,7 +76,7 @@ __FBSDID("$FreeBSD: src/bin/dd/dd.c,v 1.43 2004/08/15 19:10:05 rwatson Exp $");
 #include "dd.h"
 #include "extern-dd.h"
 
-#define DEFFILEMODE 0
+#define DD_DEFFILEMODE 0
 
 static void dd_close(rtems_shell_dd_globals* globals);
 static void dd_in(rtems_shell_dd_globals* globals);
@@ -194,14 +194,14 @@ setup(rtems_shell_dd_globals* globals)
 	} else {
 #define	OFLAGS \
     (O_CREAT | (ddflags & (C_SEEK | C_NOTRUNC) ? 0 : O_TRUNC))
-		out.fd = open(out.name, O_RDWR | OFLAGS, DEFFILEMODE);
+		out.fd = open(out.name, O_RDWR | OFLAGS, DD_DEFFILEMODE);
 		/*
 		 * May not have read access, so try again with write only.
 		 * Without read we may have a problem if output also does
 		 * not support seeks.
 		 */
 		if (out.fd == -1) {
-			out.fd = open(out.name, O_WRONLY | OFLAGS, DEFFILEMODE);
+			out.fd = open(out.name, O_WRONLY | OFLAGS, DD_DEFFILEMODE);
 			out.flags |= NOREAD;
 		}
 		if (out.fd == -1)
