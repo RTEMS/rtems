@@ -7,11 +7,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
-<<<<<<< start.S
  *  $Id$
-=======
- *  $Id$
->>>>>>> 1.25
  *
  */
 
