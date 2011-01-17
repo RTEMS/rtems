@@ -2,7 +2,7 @@
  * ata.c
  *
  * ATA RTEMS driver. ATA driver is hardware independant implementation of
- * ATA-2 standart, working draft X3T10/0948D, revision 4c. ATA driver bases
+ * ATA-2 standard, working draft X3T10/0948D, revision 4c. ATA driver bases
  * on RTEMS IDE controller driver.
  *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
