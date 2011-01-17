@@ -68,10 +68,10 @@ console_flow ns16550_flow_DTRCTS = {
 console_fns ns16550_fns = {
   libchip_serial_default_probe,   /* deviceProbe */
   ns16550_open,                   /* deviceFirstOpen */
-  NULL,                           /* deviceLastClose */
+  ns16550_close,                  /* deviceLastClose */
   NULL,                           /* deviceRead */
   ns16550_write_support_int,      /* deviceWrite */
-  ns16550_initialize_interrupts,  /* deviceInitialize */
+  ns16550_init,                   /* deviceInitialize */
   ns16550_write_polled,           /* deviceWritePolled */
   ns16550_set_attributes,         /* deviceSetAttributes */
   true                            /* deviceOutputUsesInterrupts */
@@ -186,6 +186,7 @@ NS16550_STATIC int ns16550_open(
   rtems_termios_set_initial_baud( tty, (intptr_t) c->pDeviceParams);
 
   if (c->pDeviceFns->deviceOutputUsesInterrupts) {
+    ns16550_initialize_interrupts( minor);
     ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
   }
 
@@ -597,8 +598,6 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
   console_tbl *c = &Console_Port_Tbl [minor];
 #endif
   console_data *d = &Console_Port_Data [minor];
-
-  ns16550_init( minor);
 
   d->bActive = false;
 
