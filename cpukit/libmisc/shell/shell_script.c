@@ -46,7 +46,8 @@ static void rtems_shell_joel_usage(void)
 
 static int findOnPATH(
   const char *userScriptName,
-  char       *scriptFile
+  char       *scriptFile,
+  size_t      scriptFileLength
 )
 {
   int sc;
@@ -56,7 +57,7 @@ static int findOnPATH(
    *  qualified path name and just use it.
    */
   if ( userScriptName[0] == '/' ) {
-    strcpy( scriptFile, userScriptName );
+    strncpy( scriptFile, userScriptName, PATH_MAX );
   } else {
     /*
      *  For now, the provided name is just turned into a fully
@@ -66,11 +67,12 @@ static int findOnPATH(
 
     /* XXX should use strncat but what is the limit? */
     getcwd( scriptFile, PATH_MAX );
-    strcat( scriptFile, "/" );
-    strcat(
+    strncat( scriptFile, "/", PATH_MAX );
+    strncat(
       scriptFile,
       ( (userScriptName[0] == '.' && userScriptName[1] == '/') ?
-         &userScriptName[2] : userScriptName)
+         &userScriptName[2] : userScriptName),
+      PATH_MAX
     );
   }
 
@@ -187,7 +189,7 @@ int rtems_shell_main_joel(
    *  NOTE: It is terrible that this is done twice but it
    *        seems to be the most expedient thing.
    */
-  sc = findOnPATH( argv[getopt_reent.optind], scriptFile );
+  sc = findOnPATH( argv[getopt_reent.optind], scriptFile, PATH_MAX );
   if ( sc ) {
     fprintf( stderr, "%s: command not found\n", argv[0] );
     return -1;
@@ -258,7 +260,7 @@ int rtems_shell_script_file(
   /*
    *  Find argv[0] on the path
    */
-  sc = findOnPATH( argv[0], scriptFile );
+  sc = findOnPATH( argv[0], scriptFile, PATH_MAX );
   if ( sc ) {
     fprintf( stderr, "%s: command not found\n", argv[0] );
     return -1;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
+ * Copyright 2010-2011, Alin Rus <alin.codejunkie@gmail.com> 
  * 
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <rtems/posix/aio_misc.h>
+#include <errno.h>
 
 static void *rtems_aio_handle (void *arg);
 
@@ -122,6 +123,37 @@ rtems_aio_search_fd (rtems_chain_control *chain, int fildes, int create)
   }
   return r_chain;
 }
+
+/*
+ *  rtems_aio_move_to_work 
+ * 
+ * Move chain of requests from IQ to WQ
+ *
+ *  Input parameters:
+ *        r_chain      - chain of requests
+ *
+ *  Output paramteres:
+ *        NONE
+ */
+
+void
+rtems_aio_move_to_work (rtems_aio_request_chain *r_chain)
+{
+  rtems_aio_request_chain *temp;
+  rtems_chain_node *node;
+  
+  node = rtems_chain_first (&aio_request_queue.work_req);
+  temp = (rtems_aio_request_chain *) node;
+
+  while (temp->fildes < r_chain->fildes && 
+	 !rtems_chain_is_tail (&aio_request_queue.work_req, node)) {
+    node = rtems_chain_next (node);
+    temp = (rtems_aio_request_chain *) node;
+  }
+  
+  rtems_chain_insert (rtems_chain_previous (node), &r_chain->next_fd);
+}
+ 
 
 /* 
  *  rtems_aio_insert_prio
@@ -291,7 +323,7 @@ rtems_aio_enqueue (rtems_aio_request *req)
 	r_chain->new_fd = 0;
 	pthread_mutex_init (&r_chain->mutex, NULL);
 	pthread_cond_init (&r_chain->cond, NULL);
-	
+	    
 	AIO_printf ("New thread \n");
 	result = pthread_create (&thid, &aio_request_queue.attr,
 				 rtems_aio_handle, (void *) r_chain);
@@ -337,11 +369,11 @@ rtems_aio_enqueue (rtems_aio_request *req)
 	  r_chain->new_fd = 0;
 	  pthread_mutex_init (&r_chain->mutex, NULL);
 	  pthread_cond_init (&r_chain->cond, NULL);
-	  pthread_cond_signal (&aio_request_queue.new_req);
-	  ++aio_request_queue.idle_threads;
 	} else
 	  /* just insert the request in the existing fd chain */
 	  rtems_aio_insert_prio (&r_chain->perfd, req);
+	if (aio_request_queue.idle_threads > 0)
+	  pthread_cond_signal (&aio_request_queue.new_req);
       }
     }
 
@@ -385,7 +417,7 @@ rtems_aio_handle (void *arg)
     if (result != 0)
       return NULL;
     
-    chain = &r_chain->perfd;
+    chain = &r_chain->perfd;    
 
     /* If the locked chain is not empty, take the first
        request extract it, unlock the chain and process 
@@ -393,6 +425,7 @@ rtems_aio_handle (void *arg)
        requests to this fd chain */
     if (!rtems_chain_is_empty (chain)) {
 
+      AIO_printf ("Get new request from not empty chain\n");	
       node = rtems_chain_first (chain);
       req = (rtems_aio_request *) node;
       
@@ -408,18 +441,21 @@ rtems_aio_handle (void *arg)
 
       switch (req->aiocbp->aio_lio_opcode) {
       case LIO_READ:
+	AIO_printf ("read\n");
         result = pread (req->aiocbp->aio_fildes,
                         (void *) req->aiocbp->aio_buf,
                         req->aiocbp->aio_nbytes, req->aiocbp->aio_offset);
         break;
 
       case LIO_WRITE:
+	AIO_printf ("write\n");
         result = pwrite (req->aiocbp->aio_fildes,
                          (void *) req->aiocbp->aio_buf,
                          req->aiocbp->aio_nbytes, req->aiocbp->aio_offset);
         break;
         
       case LIO_SYNC:
+	AIO_printf ("sync\n");
       	result = fsync (req->aiocbp->aio_fildes);
       	break;
 
@@ -445,19 +481,23 @@ rtems_aio_handle (void *arg)
 	 If there was no request added sleep for 3 seconds and
 	 wait for a signal on chain, this will unlock the queue.
 	 The fd chain is already unlocked */
-      
+
       struct timespec timeout;
+      
+      AIO_printf ("Chain is empty [WQ], wait for work\n");
      
       pthread_mutex_unlock (&r_chain->mutex);
       pthread_mutex_lock (&aio_request_queue.mutex);
+      
       if (rtems_chain_is_empty (chain))
 	{
 	  clock_gettime (CLOCK_REALTIME, &timeout);
 	  timeout.tv_sec += 3;
 	  timeout.tv_nsec = 0;
 	  result = pthread_cond_timedwait (&r_chain->cond,
-					   &aio_request_queue.mutex, &timeout);
-	  
+					   &aio_request_queue.mutex,
+					   &timeout);
+
 	  /* If no requests were added to the chain we delete the fd chain from 
 	     the queue and start working with idle fd chains */
 	  if (result == ETIMEDOUT) {
@@ -469,10 +509,14 @@ rtems_aio_handle (void *arg)
 	    /* If the idle chain is empty sleep for 3 seconds and wait for a 
 	       signal. The thread now becomes idle. */
 	    if (rtems_chain_is_empty (&aio_request_queue.idle_req)) {
+	      AIO_printf ("Chain is empty [IQ], wait for work\n");	      
+
 	      ++aio_request_queue.idle_threads;
+	      --aio_request_queue.active_threads;
 	      clock_gettime (CLOCK_REALTIME, &timeout);
 	      timeout.tv_sec += 3;
 	      timeout.tv_nsec = 0;
+
 	      result = pthread_cond_timedwait (&aio_request_queue.new_req,
 					       &aio_request_queue.mutex,
 					       &timeout);
@@ -480,34 +524,33 @@ rtems_aio_handle (void *arg)
 	      /* If no new fd chain was added in the idle requests
 		 then this thread is finished */
 	      if (result == ETIMEDOUT) {
+		AIO_printf ("Etimeout\n");
+		--aio_request_queue.idle_threads;
 		pthread_mutex_unlock (&aio_request_queue.mutex);
 		return NULL;
 	      }
-	      
-	      /* Otherwise move this chain to the working chain and 
-		 start the loop all over again */
-	      --aio_request_queue.idle_threads;
-	      node = rtems_chain_first (&aio_request_queue.idle_req);
-	      rtems_chain_extract (node);
-	      r_chain = rtems_aio_search_fd (&aio_request_queue.work_req,
-					     ((rtems_aio_request_chain *)node)->fildes,
-					     1);
-	      r_chain->new_fd = 0;
-	      pthread_mutex_init (&r_chain->mutex, NULL);
-	      pthread_cond_init (&r_chain->cond, NULL);
-	      
-	      r_chain->perfd = ((rtems_aio_request_chain *)node)->perfd;
 	    }
-	    else
-	      /* If there was a request added in the initial fd chain then release
-		 the mutex and process it */
-	      pthread_mutex_unlock (&aio_request_queue.mutex);
+	    /* Otherwise move this chain to the working chain and 
+	       start the loop all over again */
+	    AIO_printf ("Work on idle\n");
+	    --aio_request_queue.idle_threads;
+	    ++aio_request_queue.active_threads;
+
+	    node = rtems_chain_first (&aio_request_queue.idle_req);
+	    rtems_chain_extract (node);
+
+	    r_chain = (rtems_aio_request_chain *) node;
+	    rtems_aio_move_to_work (r_chain);
+	    
 	  }
 	}
+      /* If there was a request added in the initial fd chain then release
+	 the mutex and process it */
+      pthread_mutex_unlock (&aio_request_queue.mutex);
+      
     }
   }
   
-
   AIO_printf ("Thread finished\n");
   return NULL;
 }

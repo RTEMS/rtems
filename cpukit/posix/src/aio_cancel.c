@@ -113,7 +113,7 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
         pthread_mutex_unlock (&aio_request_queue.mutex);
         return AIO_ALLDONE;
       }
-
+    }  
       AIO_printf ("Request on [WQ]\n");
       
       pthread_mutex_lock (&r_chain->mutex);
@@ -121,7 +121,6 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
       pthread_mutex_unlock (&r_chain->mutex);
       pthread_mutex_unlock (&aio_request_queue.mutex);
       return result;
-    }
   }
   return AIO_ALLDONE;
 }

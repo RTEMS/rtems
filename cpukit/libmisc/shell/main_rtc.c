@@ -125,7 +125,7 @@ static int rtems_rtc_shell_main( int argc, char **argv)
     }
 
     if (argc > 3) {
-      rv = sscanf( argv [3], "%" PRIu32, v);
+      rv = sscanf( argv [3], "%5" PRIu32, v);
 
       if (rv == 1) {
         tod.ticks = v [0];

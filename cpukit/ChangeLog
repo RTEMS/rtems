@@ -1,5 +1,14 @@
+2011-01-17	Alin Rus <alin.codejunkie@gmail.com>
+
+	* posix/src/aio_cancel.c: Fixed ending of if braces.
+
+2011-01-17	Alin Rus <alin.codejunkie@gmail.com>
+
+	* posix/src/aio_misc.c: Add debug information. Fixed idle_threads/
+	active_threads issues. Fixed infinite loop in rtems_aio_handle().
+
 2011-01-08	Alin Rus <alin.codejunkie@gmail.com>
-	
+
 	* posix/src/aio_misc.c: Fix rtems_aio_remove_req did not iterate
 	over chain.
 	* posix/src/aio_cancel.c: Add debug information. Add check for 
