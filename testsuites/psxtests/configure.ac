@@ -95,6 +95,7 @@ psx14/Makefile
 psx15/Makefile
 psxaio01/Makefile
 psxaio02/Makefile
+psxaio03/Makefile
 psxalarm01/Makefile
 psxautoinit01/Makefile
 psxautoinit02/Makefile
