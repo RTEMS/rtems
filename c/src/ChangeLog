@@ -1,3 +1,7 @@
+2011-01-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libchip/ide/ata.c: Fix spelling.
+
 2010-06-14	Arnout Vandecappelle <arnout@mind.be>
 
 	PR 1557/misc
