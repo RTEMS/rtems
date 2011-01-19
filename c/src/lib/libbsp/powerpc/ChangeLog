@@ -2,6 +2,10 @@
 
 	* shared/pci/detect_raven_bridge.c: Fix spelling.
 
+2011-01-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* shared/pci/detect_raven_bridge.c: Fix spelling.
+
 2010-08-25	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1689/bsps
