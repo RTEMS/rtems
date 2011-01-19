@@ -1294,6 +1294,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
     _Configure_From_workspace( \
+      CONFIGURE_MINIMUM_TASK_STACK_SIZE + \
       sizeof (POSIX_API_Control) + \
      (sizeof (void *) * (CONFIGURE_MAXIMUM_POSIX_KEYS)) \
     )

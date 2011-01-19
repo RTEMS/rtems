@@ -1,3 +1,8 @@
+2011-01-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* sapi/include/confdefs.h: Account for POSIX threads having a minimum
+	of 2x the minimum stack size.
+
 2010-11-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1717/cpukit
