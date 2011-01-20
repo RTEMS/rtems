@@ -132,7 +132,7 @@ restart:
 
   _ISR_Disable( level );
 
-    for (  proxy_node = _Thread_MP_Active_proxies.first;
+    for (  proxy_node = _Chain_First( &_Thread_MP_Active_proxies );
            !_Chain_Is_tail( &_Thread_MP_Active_proxies, proxy_node ) ;
         ) {
 
@@ -148,7 +148,7 @@ restart:
 
       _ISR_Flash( level );
 
-      proxy_node = proxy_node->next;
+      proxy_node = _Chain_Next( proxy_node );
 
       /*
        *  A proxy which is only dormant is not in a blocking state.
