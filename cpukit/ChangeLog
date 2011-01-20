@@ -1,3 +1,8 @@
+2011-01-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/src/show_bdbuf.c, score/src/objectmp.c: Avoid chain API
+	violations.
+
 2011-01-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/main_dd.c: Make symbol unique to avoid conflict with

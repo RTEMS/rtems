@@ -152,9 +152,9 @@ void _Objects_MP_Close (
 
   the_chain = &information->global_table[ _Objects_Get_node( the_id ) ];
 
-  for ( the_node = the_chain->first ;
+  for ( the_node = _Chain_First( the_chain ) ;
         !_Chain_Is_tail( the_chain, the_node ) ;
-        the_node = the_node->next ) {
+        the_node = _Chain_Next( the_node ) ) {
 
     the_object = (Objects_MP_Control *) the_node;
 
@@ -224,9 +224,9 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
     if ( !_Objects_Is_local_node( node_index ) ) {
       the_chain = &information->global_table[ node_index ];
 
-      for ( the_node = the_chain->first ;
+      for ( the_node = _Chain_First( the_chain ) ;
             !_Chain_Is_tail( the_chain, the_node ) ;
-            the_node = the_node->next ) {
+            the_node = _Chain_Next( the_node ) ) {
 
         the_object = (Objects_MP_Control *) the_node;
 
@@ -285,9 +285,9 @@ void _Objects_MP_Is_remote (
 
   the_chain = &information->global_table[ node ];
 
-  for ( the_node = the_chain->first ;
+  for ( the_node = _Chain_First( the_chain ) ;
         !_Chain_Is_tail( the_chain, the_node ) ;
-        the_node = the_node->next ) {
+        the_node = _Chain_Next( the_node ) ) {
 
     the_global_object = (Objects_MP_Control *) the_node;
 

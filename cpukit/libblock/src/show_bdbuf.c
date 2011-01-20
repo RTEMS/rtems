@@ -554,7 +554,7 @@ rtems_status_code rtems_show_bdbuf_print_wait_chain
    */
   if (rc == RTEMS_SUCCESSFUL) {
     the_chain_head = &(the_bdbuf->transfer_sema.Wait_queue.Queues.Fifo);
-    the_chain_node = the_chain_head->first;
+    the_chain_node = _Chain_First(the_chain_head);
   }
   /*
    * walk through thread chain
