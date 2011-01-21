@@ -6,7 +6,11 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 noinst_LIBRARIES = libblock.a
-libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/flashdisk.c \
+libblock_a_SOURCES = src/bdbuf.c \
+    src/blkdev.c \
+    src/blkdev-ops.c \
+    src/diskdevs.c \
+    src/flashdisk.c \
     src/ramdisk-driver.c \
     src/ramdisk-init.c \
     src/ramdisk-config.c \

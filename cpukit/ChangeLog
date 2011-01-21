@@ -1,3 +1,9 @@
+2011-01-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/src/blkdev-ops.c: New file.
+	* libblock/Makefile.am: Reflect change from above.
+	* libblock/include/rtems/blkdev.h: Declare rtems_blkdev_generic_ops.
+
 2011-01-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/src/show_bdbuf.c, score/src/objectmp.c,

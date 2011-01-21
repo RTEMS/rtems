@@ -262,6 +262,11 @@ rtems_blkdev_generic_ioctl(
 int
 rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
 
+/**
+ * @brief Generic block operations driver address table.
+ */
+extern const rtems_driver_address_table rtems_blkdev_generic_ops;
+
 /** @} */
 
 #ifdef __cplusplus
