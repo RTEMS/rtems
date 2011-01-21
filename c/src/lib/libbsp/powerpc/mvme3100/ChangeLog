@@ -1,3 +1,7 @@
+2011-01-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* configure.ac: BSP supports bsp_reset() method.
+
 2010-02-09	Till Straumann <strauman@slac.stanford.edu>
 
 	* network/tsec.c: Added code to restart halted DMA
