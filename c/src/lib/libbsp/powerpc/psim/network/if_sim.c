@@ -328,7 +328,7 @@ rtems_event_set    evs;
 		evs &= ((1<<IFSIM_SLOTS)-1);
 
 #ifdef IRQ_DEBUG
-		printf("Task got evs %u\n", evs);
+		printk("Task got evs %u\n", evs);
 #endif
 
 		for ( sc = theIfSims; evs; evs>>=1, sc++ ) {
@@ -367,13 +367,13 @@ rtems_event_set    evs;
 							{
 								int i;
 								for ( i=0; i<len + crc_len; ) {
-									printf("%02X ",((char*)eh)[i]);
+									printk("%02X ",((char*)eh)[i]);
 									if ( 0 == (++i & 0xf) )
 										fputc('\n',stdout);
 								}
 								if ( i & 0xf )
 									fputc('\n', stdout);
-								printf("*****\n");
+								printk("*****\n");
 							}
 #endif
 

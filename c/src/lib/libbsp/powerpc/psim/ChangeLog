@@ -1,5 +1,9 @@
 2011-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* network/if_sim.c: Do not use printf() except for printing statistics.
+
+2011-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* console/consupp.S, irq/irq.h, irq/irq_init.c: Add CVS Id string.
 
 2010-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
