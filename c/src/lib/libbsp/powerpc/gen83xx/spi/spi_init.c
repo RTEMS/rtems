@@ -17,6 +17,11 @@
 | this file contains the low level MPC83xx SPI driver parameters  |
 | and board-specific functions                                    |
 \*===============================================================*/
+
+/*
+ *  $Id$
+ */
+
 #include <mpc83xx/mpc83xx_spidrv.h>
 #include <bsp/irq.h>
 #include <bsp.h>

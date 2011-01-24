@@ -17,6 +17,10 @@
 | this file contains board specific definitions                   |
 \*===============================================================*/
 
+/*
+ *  $Id$
+ */
+
 #ifndef __GEN83xx_BSP_h
 #define __GEN83xx_BSP_h
 

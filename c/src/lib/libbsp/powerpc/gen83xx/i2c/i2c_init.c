@@ -16,6 +16,11 @@
 +-----------------------------------------------------------------+
 | this file contains the low level MPC83xx I2C driver parameters  |
 \*===============================================================*/
+
+/*
+ *  $Id$
+ */
+
 #include <mpc83xx/mpc83xx_i2cdrv.h>
 #include <libchip/i2c-2b-eeprom.h>
 #include <bsp/irq.h>

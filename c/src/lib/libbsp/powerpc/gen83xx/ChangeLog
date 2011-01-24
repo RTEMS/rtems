@@ -1,3 +1,11 @@
+2011-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac, console/console-config.c, i2c/i2c_init.c,
+	include/bsp.h, include/hwreg_vals.h, include/irq.h, include/tm27.h,
+	include/tsec-config.h, irq/irq.c, network/network.c, spi/spi_init.c,
+	startup/bspstart.c: Address some of the issues spotted by the
+	check_bsp script.
+
 2011-01-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* network/network.c: Typo.
