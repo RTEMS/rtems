@@ -1,3 +1,7 @@
+2011-01-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* network/network.c: Typo.
+
 2011-01-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* network/network.c: Moved initializations from generic TSEC driver

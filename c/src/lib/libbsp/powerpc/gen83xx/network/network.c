@@ -144,7 +144,7 @@ int BSP_tsec_attach
   if (config->hardware_address == NULL) {
 #if !defined(HAS_UBOOT)
     static char hw_addr [TSEC_COUNT][6];
-    volatile tsec_registers *reg_ptr = tsec_cfg->reg_ptr;
+    volatile tsec_registers *reg_ptr = tsec_cfg.reg_ptr;
 
     /* read MAC address from hardware register */
     /* we expect it htere from the boot loader */
