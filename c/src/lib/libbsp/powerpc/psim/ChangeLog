@@ -1,3 +1,7 @@
+2011-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/consupp.S, irq/irq.h, irq/irq_init.c: Add CVS Id string.
+
 2010-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Remove AC_CHECK_SIZEOF([void *]).

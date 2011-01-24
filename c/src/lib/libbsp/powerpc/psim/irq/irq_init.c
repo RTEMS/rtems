@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  irq_init.c,v 1.6.2.5 2003/09/04 18:45:20 joel Exp
+ *  $Id$
  */
 
 #include <libcpu/io.h>
