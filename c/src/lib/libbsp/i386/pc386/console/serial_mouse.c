@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Header$
+ * $Id$
  *
  * MODULE DESCRIPTION:
  * This module implements the RTEMS drivers for the PC serial ports

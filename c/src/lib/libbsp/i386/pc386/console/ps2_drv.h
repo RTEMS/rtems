@@ -2,7 +2,7 @@
 #define __paux_drv__
 /***************************************************************************
  *
- * $Header$
+ * $Id$
  *
  * Copyright (c) 1999 ConnectTel, Inc. All Rights Reserved.
  *

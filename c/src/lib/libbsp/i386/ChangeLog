@@ -1,3 +1,9 @@
+2011-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* pc386/3c509/3c509.c, pc386/console/ps2_drv.h,
+	pc386/console/serial_mouse.c, pc386/console/serial_mouse.h:
+	Remove CVS Headers.
+
 2011-01-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* shared/irq/irq_asm.S: Fix spelling.

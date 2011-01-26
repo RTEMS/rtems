@@ -1,5 +1,5 @@
 /*
- * $Header$
+ * $Id$
  *
  * Ported by Rosimildo da Silva.
  * ConnectTel,Inc.
