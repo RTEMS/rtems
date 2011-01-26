@@ -1,3 +1,8 @@
+2011-01-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/startup/linkcmds.base: Removed workaround since LD 2.21 is
+	fixed now.
+
 2010-12-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/lpc/include/lpc-i2s.h: Documentation.  Fixed defines.

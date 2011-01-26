@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -55,15 +55,11 @@ bsp_stack_und_size = ALIGN (bsp_stack_und_size, bsp_stack_align);
 bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 0;
 bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
 
-/* FIXME: This should go away when LD is fixed */
-bsp_section_align = DEFINED (bsp_section_align) ? bsp_section_align : 32;
-
 SECTIONS {
 	.start : {
 		bsp_section_start_begin = .;
 		KEEP (*(.bsp_start_text))
 		KEEP (*(.bsp_start_data))
-		. = ALIGN (bsp_section_align);
 		bsp_section_start_end = .;
 	} > REGION_START AT > REGION_START
 	bsp_section_start_size = bsp_section_start_end - bsp_section_start_begin;
@@ -100,7 +96,6 @@ SECTIONS {
 		bsp_stack_main_end = .;
 
 		*(.bsp_vector)
-		. = ALIGN (bsp_section_align);
 		bsp_section_vector_end = .;
 	} > REGION_VECTOR AT > REGION_VECTOR
 	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
@@ -114,40 +109,30 @@ SECTIONS {
 	.interp : {
 		bsp_section_text_begin = .;
 		*(.interp)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.note.gnu.build-id : {
 		*(.note.gnu.build-id)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.hash : {
 		*(.hash)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.gnu.hash : {
 		*(.gnu.hash)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.dynsym : {
 		*(.dynsym)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.dynstr : {
 		*(.dynstr)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.gnu.version : {
 		*(.gnu.version)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.gnu.version_d : {
 		*(.gnu.version_d)
-		. = ALIGN (bsp_section_align);
-	}
-	> REGION_TEXT AT > REGION_TEXT_LOAD
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.gnu.version_r : {
 		*(.gnu.version_r)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.rel.dyn : {
 		*(.rel.init)
@@ -167,7 +152,6 @@ SECTIONS {
 		PROVIDE_HIDDEN (__rel_iplt_end = .);
 		PROVIDE_HIDDEN (__rela_iplt_start = .);
 		PROVIDE_HIDDEN (__rela_iplt_end = .);
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.rela.dyn : {
 		*(.rela.init)
@@ -186,31 +170,24 @@ SECTIONS {
 		PROVIDE_HIDDEN (__rela_iplt_start = .);
 		*(.rela.iplt)
 		PROVIDE_HIDDEN (__rela_iplt_end = .);
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.rel.plt : {
 		*(.rel.plt)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.rela.plt : {
 		*(.rela.plt)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.init : {
 		KEEP (*(.init))
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.fini : {
 		KEEP (*(.fini))
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.plt : {
 		*(.plt)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.iplt : {
 		*(.iplt)
-		. = ALIGN (bsp_section_align);
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.text : {
 		*(.text.unlikely .text.*_unlikely)
@@ -218,7 +195,6 @@ SECTIONS {
 		/* .gnu.warning sections are handled specially by elf32.em.  */
 		*(.gnu.warning)
 		*(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
-		. = ALIGN (bsp_section_align);
 		bsp_section_text_end = .;
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
@@ -228,45 +204,37 @@ SECTIONS {
 	.rodata1 : {
 		bsp_section_rodata_begin = .;
 		*(.rodata1)
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.ARM.extab : {
 		*(.ARM.extab* .gnu.linkonce.armextab.*)
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.ARM.exidx : {
 		__exidx_start = .;
 		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
 		__exidx_end = .;
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.eh_frame : {
 		KEEP (*(.eh_frame))
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.gcc_except_table : {
 		*(.gcc_except_table .gcc_except_table.*)
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.preinit_array : {
 		PROVIDE_HIDDEN (__preinit_array_start = .);
 		KEEP (*(.preinit_array))
 		PROVIDE_HIDDEN (__preinit_array_end = .);
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.init_array : {
 		PROVIDE_HIDDEN (__init_array_start = .);
 		KEEP (*(SORT(.init_array.*)))
 		KEEP (*(.init_array))
 		PROVIDE_HIDDEN (__init_array_end = .);
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.fini_array : {
 		PROVIDE_HIDDEN (__fini_array_start = .);
 		KEEP (*(.fini_array))
 		KEEP (*(SORT(.fini_array.*)))
 		PROVIDE_HIDDEN (__fini_array_end = .);
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.ctors : {
 		/* gcc uses crtbegin.o to find the start of
@@ -287,7 +255,6 @@ SECTIONS {
 		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
 		KEEP (*(SORT(.ctors.*)))
 		KEEP (*(.ctors))
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.dtors : {
 		KEEP (*crtbegin.o(.dtors))
@@ -295,24 +262,19 @@ SECTIONS {
 		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
 		KEEP (*(SORT(.dtors.*)))
 		KEEP (*(.dtors))
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.data.rel.ro : {
 		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
 		*(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.jcr : {
 		KEEP (*(.jcr))
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.dynamic : {
 		*(.dynamic)
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.got : {
 		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
-		. = ALIGN (bsp_section_align);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.rodata : {
 		/* Special FreeBSD sysctl sections */
@@ -333,7 +295,6 @@ SECTIONS {
 		_bsd__stop_set_sysctl_set = .;
 
 		*(.rodata .rodata.* .gnu.linkonce.r.*)
-		. = ALIGN (bsp_section_align);
 		bsp_section_rodata_end = .;
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
@@ -347,12 +308,10 @@ SECTIONS {
 	.data1 : {
 		bsp_section_data_begin = .;
 		*(.data1)
-		. = ALIGN (bsp_section_align);
 	} > REGION_DATA AT > REGION_DATA_LOAD
 	.data : {
 		*(.data .data.* .gnu.linkonce.d.*)
 		SORT(CONSTRUCTORS)
-		. = ALIGN (bsp_section_align);
 		bsp_section_data_end = .;
 	} > REGION_DATA AT > REGION_DATA_LOAD
 	bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
@@ -362,7 +321,6 @@ SECTIONS {
 	.fast_text : {
 		bsp_section_fast_text_begin = .;
 		*(.bsp_fast_text)
-		. = ALIGN (bsp_section_align);
 		bsp_section_fast_text_end = .;
 	} > REGION_FAST_TEXT AT > REGION_FAST_TEXT_LOAD
 	bsp_section_fast_text_size = bsp_section_fast_text_end - bsp_section_fast_text_begin;
@@ -372,7 +330,6 @@ SECTIONS {
 	.fast_data : {
 		bsp_section_fast_data_begin = .;
 		*(.bsp_fast_data)
-		. = ALIGN (bsp_section_align);
 		bsp_section_fast_data_end = .;
 	} > REGION_FAST_DATA AT > REGION_FAST_DATA_LOAD
 	bsp_section_fast_data_size = bsp_section_fast_data_end - bsp_section_fast_data_begin;
@@ -384,7 +341,6 @@ SECTIONS {
 		*(.dynbss)
 		*(.bss .bss.* .gnu.linkonce.b.*)
 		*(COMMON)
-		. = ALIGN (bsp_section_align);
 		bsp_section_bss_end = .;
 	} > REGION_BSS AT > REGION_BSS
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
