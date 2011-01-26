@@ -225,7 +225,7 @@ void bsp_start( void )
   /* Make sure we detect a known host bridge */
   BSP_getDiscoveryVersion(/* assert detection */ 1);
 
-  printk("Welcome to %s ($Name$)\n", _RTEMS_version );
+  printk("Welcome to RTEMS %s\n", _RTEMS_version );
 
   /* Leave all caches as MotLoad left them. Seems to be fine */
 

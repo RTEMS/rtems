@@ -1,3 +1,8 @@
+2011-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* network/porting/README, network/porting/if_xxx_rtems.c,
+	startup/bspstart.c: Remove CVS artefacts.
+
 2010-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove -Wno-unused-variable.
