@@ -315,6 +315,7 @@ lidate */
 #define BOOKE_TCR_FPEXT_MASK	(0xf<<13)
 
 #define BOOKE_PID 48
+#define BOOKE_PIR 286
 
 /* Freescale Book E Implementation Standards (EIS): MMU Control and Status */
 

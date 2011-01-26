@@ -1,3 +1,7 @@
+2011-01-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Added BOOKE_PIR define.
+
 2010-10-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Added HID2 define.  Fixed comments.
