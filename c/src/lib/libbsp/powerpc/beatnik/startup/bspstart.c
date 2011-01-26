@@ -57,7 +57,6 @@
 BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
-extern char *BSP_build_date;
 extern void bsp_cleanup(void);
 extern Triv121PgTbl BSP_pgtbl_setup(unsigned int *);
 extern void BSP_pgtbl_activate(Triv121PgTbl);
@@ -267,8 +266,6 @@ void bsp_start( void )
    * Initialize RTEMS IRQ system
    */
    BSP_rtems_irq_mng_init(0);
-
-  printk("Build Date: %s\n",BSP_build_date);
 
   BSP_vpdRetrieveFields(vpdData);
 
