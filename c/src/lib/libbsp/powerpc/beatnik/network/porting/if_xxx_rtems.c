@@ -9,8 +9,6 @@
  * License:   see LICENSE file.
  */
 
-/* $Name$ */
-
 #include <rtems/irq.h>
 
 #include <stdio.h>

@@ -59,14 +59,11 @@ project_lib_DATA += motld_start.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
-build_date.c::
-	echo 'const char *BSP_build_date="'`date`'";' > $@
-
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 libbsp_a_SOURCES += startup/bspstart.c \
-    ../shared/motorola/vpd.c startup/reboot.c startup/i2c_init.c build_date.c \
+    ../shared/motorola/vpd.c startup/reboot.c startup/i2c_init.c \
     ../../powerpc/shared/startup/panic.c \
 	../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/probeMemEnd.c \
