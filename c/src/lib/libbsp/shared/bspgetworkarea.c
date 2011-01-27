@@ -6,6 +6,8 @@
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2011 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -20,6 +22,13 @@
 #ifdef BSP_GET_WORK_AREA_DEBUG
   #include <rtems/bspIo.h>
 #endif
+#ifdef BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
+  #include <rtems/config.h>
+#endif
+
+#if defined(HAS_UBOOT) && !defined(BSP_DISABLE_UBOOT_WORK_AREA_CONFIG)
+  #define USE_UBOOT
+#endif
 
 /*
  *  These are provided by the linkcmds for ALL of the BSPs which use this file.
@@ -30,12 +39,12 @@ extern char HeapSize[];
 /*
  *  We may get the size information from U-Boot or the linker scripts.
  */
-#ifdef HAS_UBOOT
+#ifdef USE_UBOOT
   #include <bsp/u-boot.h>
 #else
   extern char RamBase[];
   extern char RamSize[];
-#endif /* HAS_UBOOT */
+#endif
 
 /*
  *  This method returns the base address and size of the area which
@@ -49,17 +58,22 @@ void bsp_get_work_area(
   uintptr_t  *heap_size
 )
 {
+  uintptr_t work_base = (uintptr_t) WorkAreaBase;
   uintptr_t ram_end;
 
-  #ifdef HAS_UBOOT
+  #ifdef USE_UBOOT
     ram_end = (uintptr_t) bsp_uboot_board_info.bi_memstart +
                           bsp_uboot_board_info.bi_memsize;
   #else
     ram_end = (uintptr_t)RamBase + (uintptr_t)RamSize;
   #endif
 
-  *work_area_start = WorkAreaBase;
-  *work_area_size  = ram_end - (uintptr_t) WorkAreaBase;
+  #ifdef BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
+    work_base += Configuration.interrupt_stack_size;
+  #endif
+
+  *work_area_start = (void *) work_base;
+  *work_area_size  = ram_end - work_base;
   *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
   *heap_size       = (uintptr_t) HeapSize;
 

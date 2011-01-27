@@ -1,3 +1,8 @@
+2011-01-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/bspgetworkarea.c: Use BSP_DISABLE_UBOOT_WORK_AREA_CONFIG and
+	BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN options.
+
 2010-12-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/bspgetworkarea.c: Include <bsp/u-boot.h> if necessary.
