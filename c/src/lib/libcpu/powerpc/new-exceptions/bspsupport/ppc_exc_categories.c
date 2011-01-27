@@ -10,7 +10,7 @@
  * Copyright (C) 1999 Eric Valette (valette@crf.canon.fr)
  *                    Canon Centre Recherche France.
  *
- * Copyright (C) 2009 embedded brains GmbH.
+ * Copyright (C) 2009-2011 embedded brains GmbH.
  *
  * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
  * to support 603, 603e, 604, 604e exceptions
@@ -197,6 +197,7 @@ static const ppc_exc_categories e200_category_table = {
 };
 
 static const ppc_exc_categories e500_category_table = {
+  [ASM_BOOKE_CRIT_VECTOR] = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
   [ASM_MACH_VECTOR] = PPC_EXC_E500_MACHCHK,
   [ASM_PROT_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_ISI_VECTOR] = PPC_EXC_CLASSIC,
@@ -205,6 +206,7 @@ static const ppc_exc_categories e500_category_table = {
   [ASM_PROG_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_FLOAT_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_SYS_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_BOOKE_APU_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_BOOKE_DEC_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
   [ASM_BOOKE_FIT_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
   [ASM_BOOKE_WDOG_VECTOR] = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
