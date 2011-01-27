@@ -1,3 +1,7 @@
+2011-01-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* math/math.scn: New.
+
 2011-01-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* math/domath.c, math/domathf.c, math/domath.in,
