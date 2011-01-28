@@ -1,3 +1,11 @@
+2011-01-28	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1661/testing
+	* termios06/init.c: Extend the test to cover sections related to
+	flow control in termios.c
+	* termios06/termios06.doc: Updated test concept
+	* termios06/termios06.scn: Updated test run log
+
 2011-01-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* math/domath.in: Fix typo in printf.

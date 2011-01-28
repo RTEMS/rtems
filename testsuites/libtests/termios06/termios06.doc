@@ -20,3 +20,4 @@ directives:
 concepts:
 
 + Exercise PPPDISC functionality in termios
++ Tests to cover flow control settings for termios

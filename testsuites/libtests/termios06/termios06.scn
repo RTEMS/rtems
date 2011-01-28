@@ -1,5 +1,9 @@
+
+
 *** TEST TERMIOS06 ***
 open(/dev/test) - OK 
+ioctl - RTEMS_IO_SNDWAKEUP - OK
+ioctl - RTEMS_IO_RCVWAKEUP - OK
 ioctl - TIOCGETD - OK
 ioctl - TIOCSETD - OK
 pppopen called
@@ -9,13 +13,21 @@ pppopen called
 write(PPPD TEST) - OK 
 pppwrite called - 10 bytes
 50 50 50 44 20 54 45 53 54 00                   |PPPD TEST.      |
+
 pppstart called
 ioctl(/dev/test) - OK 
 pppioctl called
+tcgetattr(/dev/test) - OK 
+Turn on flow control on output - OK
+Turn off flow control on output - OK
+Turn on flow control on input - OK
+Turn off flow control on input - OK
 
 Reading (expected):
 54 68 69 73 20 69 73 20 74 65 73 74 20 50 50 50 |This is test PPP|
+
 20 69 6e 70 75 74                               | input          |
+
 pppread called
 pppinput called - with (T)
 pppinput called - with (h)
@@ -40,6 +52,8 @@ pppinput called - with (p)
 pppinput called - with (u)
 pppinput called - with (t)
 pppinput called - with (.)
+Rx_Wake - invoked
+
 Read 0 bytes from read(2)
 close(/dev/test) - OK 
 pppclose called

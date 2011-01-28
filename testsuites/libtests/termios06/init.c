@@ -89,9 +89,34 @@ void set_discipline(void)
 void ioctl_it(void)
 {
   int rc;
+  struct termios t;
 
   puts( "ioctl(" TERMIOS_TEST_DRIVER_DEVICE_NAME ") - OK " );
   rc = ioctl( Test_fd, 0xFFFF, NULL );
+  rtems_test_assert( rc == 0 );
+
+  puts( "tcgetattr(" TERMIOS_TEST_DRIVER_DEVICE_NAME ") - OK " );
+  rc = tcgetattr( Test_fd, &t );
+  rtems_test_assert( rc == 0 );
+
+  puts( "Turn on flow control on output - OK" );
+  t.c_iflag |= IXON;
+  rc = tcsetattr( Test_fd, TCSANOW, &t );
+  rtems_test_assert( rc == 0 );
+
+  puts( "Turn off flow control on output - OK" );
+  t.c_iflag &= ~IXON;
+  rc = tcsetattr( Test_fd, TCSANOW, &t );
+  rtems_test_assert( rc == 0 );
+
+  puts( "Turn on flow control on input - OK" );
+  t.c_iflag |= IXOFF;
+  rc = tcsetattr( Test_fd, TCSANOW, &t );
+  rtems_test_assert( rc == 0 );
+
+  puts( "Turn off flow control on input - OK" );
+  t.c_iflag &= ~IXOFF;
+  rc = tcsetattr( Test_fd, TCSANOW, &t );
   rtems_test_assert( rc == 0 );
 }
 
