@@ -1,3 +1,11 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* csb350/clock/clockdrv.c, csb350/network/network.c,
+	csb350/start/start.S, csb350/timer/timer.c,
+	genmongoosev/clock/clockdrv.c, genmongoosev/timer/timer.c,
+	jmr3904/timer/timer.c, jmr3904/tools/runtest.in: Fix typo where
+	license said found in found in.
+
 2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1599/cpukit
