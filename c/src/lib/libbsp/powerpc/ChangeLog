@@ -1,3 +1,30 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* beatnik/include/bsp.h, beatnik/irq/irq.h, beatnik/pci/gt_pci_init.c,
+	ep1a/console/polled_io.c, ep1a/irq/openpic_xxx_irq.c,
+	gen5200/include/irq.h, gen5200/irq/irq.c, gen5200/startup/bspstart.c,
+	haleakala/irq/irq.c, mbx8xx/irq/irq.c, mbx8xx/irq/irq.h,
+	motorola_powerpc/include/bsp.h, mpc8260ads/irq/irq.c,
+	mpc8260ads/irq/irq.h, mvme3100/include/bsp.h, mvme3100/irq/irq.h,
+	mvme3100/start/start.S, mvme5500/include/bsp.h, mvme5500/irq/irq.h,
+	psim/include/bsp.h, psim/include/coverhd.h, psim/irq/irq.h,
+	psim/shmsupp/addrconv.c, psim/shmsupp/getcfg.c,
+	psim/startup/linkcmds, psim/tools/psim-gdb-top.in,
+	psim/tools/psim-top.in, psim/tools/runtest-top.in, qemuppc/irq/irq.h,
+	score603e/irq/irq.c, shared/bootloader/bootldr.h,
+	shared/bootloader/em86.c, shared/bootloader/em86real.S,
+	shared/bootloader/exception.S, shared/bootloader/head.S,
+	shared/bootloader/lib.c, shared/bootloader/misc.c,
+	shared/bootloader/mm.c, shared/bootloader/pci.c,
+	shared/console/console.c, shared/console/consoleIo.h,
+	shared/console/inch.c, shared/console/keyboard.h,
+	shared/console/polled_io.c, shared/irq/i8259.c, shared/irq/irq.h,
+	shared/irq/openpic_i8259_irq.c, shared/motorola/motorola.c,
+	shared/motorola/motorola.h, shared/openpic/openpic.c,
+	shared/openpic/openpic.h, shared/pci/pci.c,
+	shared/residual/residual.c, shared/start/start.S, ss555/irq/irq.h:
+	Fix typo where license said found in found in.
+
 2011-01-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* shared/pci/detect_raven_bridge.c: Fix spelling.
