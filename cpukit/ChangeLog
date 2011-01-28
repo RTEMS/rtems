@@ -1,3 +1,26 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* include/rtems/bspIo.h, include/rtems/concat.h, include/rtems/irq.h,
+	score/cpu/i386/rtems/score/idtr.h,
+	score/cpu/powerpc/rtems/powerpc/registers.h,
+	score/src/objectidtoname.c, score/src/schedulerpriorityblock.c,
+	score/src/schedulerpriorityschedule.c,
+	score/src/schedulerpriorityunblock.c,
+	score/src/schedulerpriorityyield.c, score/src/thread.c,
+	score/src/threadchangepriority.c, score/src/threadclearstate.c,
+	score/src/threadclose.c, score/src/threadcreateidle.c,
+	score/src/threaddelayended.c, score/src/threaddispatch.c,
+	score/src/threadget.c, score/src/threadhandler.c,
+	score/src/threadinitialize.c, score/src/threadloadenv.c,
+	score/src/threadready.c, score/src/threadreset.c,
+	score/src/threadrestart.c, score/src/threadresume.c,
+	score/src/threadsetpriority.c, score/src/threadsetstate.c,
+	score/src/threadsettransient.c, score/src/threadstackallocate.c,
+	score/src/threadstackfree.c, score/src/threadstart.c,
+	score/src/threadstartmultitasking.c, score/src/threadsuspend.c,
+	score/src/threadtickletimeslice.c, score/src/threadyieldprocessor.c:
+	Fix typo where license said found in found in.
+
 2011-01-21	Eric Norum <wenorum@lbl.gov>
 
 	* libmisc/capture/capture.c: Avoid using TCB of task just deleted.
