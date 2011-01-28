@@ -1,5 +1,10 @@
 2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* shared/irq/idt.c, shared/irq/irq.c, shared/irq/irq.h,
+	shared/irq/irq_asm.h: Fix typo where license said found in found in.
+
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* shared/irq/irq_asm.S: Fix typo where license said found in found in.
 
 2011-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>
