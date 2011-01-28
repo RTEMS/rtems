@@ -1,5 +1,9 @@
 2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* bsp_specs: Revert accidental commit.
+
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* bsp_specs: Fix typo where license said found in found in.
 
 2010-08-26	Chris Johns <chrisj@rtems.org>
