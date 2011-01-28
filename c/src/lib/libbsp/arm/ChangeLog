@@ -1,3 +1,15 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* gba/clock/clockdrv.c, gba/console/conio.c, gba/console/console.c,
+	gba/console/defaultfont.h, gba/include/arm_mode_bits.h,
+	gba/include/asm_macros.h, gba/include/bsp.h, gba/include/conio.h,
+	gba/include/gba.h, gba/include/gba_registers.h, gba/irq/irq.c,
+	gba/irq/irq.h, gba/startup/bspstart.c, gba/timer/timer.c,
+	gp32/include/bsp.h, gp32/startup/bspreset.c, gp32/startup/bspstart.c,
+	nds/tools/runtest, shared/comm/uart.c, shared/comm/uart.h,
+	smdk2410/include/bsp.h: Fix typo where license said
+	found in found in.
+
 2011-01-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/startup/linkcmds.base: Removed workaround since LD 2.21 is
