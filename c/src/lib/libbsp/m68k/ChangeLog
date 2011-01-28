@@ -1,3 +1,8 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* mcf5206elite/tools/runtest: Fix typo where license said
+	found in found in.
+
 2010-04-05	Thomas Znidar <t.znidar@embed-it.com>
 
 	* acinclude.m4: Add mcf5225x BSP.
