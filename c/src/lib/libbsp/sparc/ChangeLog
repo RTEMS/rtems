@@ -1,3 +1,8 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* leon2/pci/pci.c, leon3/pci/pci.c: Fix typo where license said
+	found in found in.
+
 2010-08-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* shared/bspgetworkarea.c: Formatting.
