@@ -1,3 +1,10 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* src/libchip/network/dec21140.c, src/libchip/network/elnk.c,
+	src/libchip/network/greth.c, src/libchip/network/greth.h,
+	src/libchip/network/open_eth.c: Fix typo where license said
+	found in found in.
+
 2009-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove reference to bare BSP.
