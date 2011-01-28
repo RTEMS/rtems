@@ -1,3 +1,8 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* byteorder.h, cpu.h, page.c: Fix typo where license said
+	found in found in.
+
 2009-10-28  Till Straumann <strauman@slac.stanford.edu>
 
 	* byteorder.h: added ld_le16, st_le16.
