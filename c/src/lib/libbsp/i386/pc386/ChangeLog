@@ -1,3 +1,10 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* clock/rtc.c, console/console.c, console/inch.c, console/outch.c,
+	include/bsp.h, include/crt.h, ne2000/ne2000.c, startup/bspcmdline.c,
+	startup/bspstart.c, startup/ldsegs.S, timer/timer.c,
+	timer/timerisr.S: Fix typo where license said found in found in.
+
 2011-01-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Move comment to correct location.
