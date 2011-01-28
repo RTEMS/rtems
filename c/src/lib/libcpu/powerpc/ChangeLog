@@ -1,3 +1,25 @@
+2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* mpc5xx/exceptions/raw_exception.c, mpc5xx/exceptions/raw_exception.h,
+	mpc5xx/include/console.h, mpc5xx/include/mpc5xx.h, mpc5xx/irq/irq.c,
+	mpc5xx/irq/irq.h, mpc5xx/irq/irq_asm.S, mpc5xx/vectors/vectors.h,
+	mpc5xx/vectors/vectors_init.c, mpc6xx/mmu/bat.c, mpc6xx/mmu/bat.h,
+	mpc6xx/mmu/mmuAsm.S, new-exceptions/bspsupport/irq.c,
+	new-exceptions/bspsupport/irq_supp.h,
+	new-exceptions/bspsupport/nested_irq_test.c,
+	new-exceptions/bspsupport/ppc_exc_address.c,
+	new-exceptions/bspsupport/ppc_exc_categories.c,
+	new-exceptions/bspsupport/ppc_exc_global_handler.c,
+	new-exceptions/bspsupport/ppc_exc_hdl.c,
+	new-exceptions/bspsupport/ppc_exc_initialize.c,
+	new-exceptions/bspsupport/ppc_exc_prologue.c,
+	new-exceptions/bspsupport/ppc_exc_test.c,
+	new-exceptions/bspsupport/vectors.h, shared/include/byteorder.h,
+	shared/include/cpuIdent.c, shared/include/cpuIdent.h,
+	shared/include/io.h, shared/include/mmu.h, shared/include/page.h,
+	shared/include/pgtable.h, shared/include/spr.h: Fix typo where
+	license said found in found in.
+
 2011-01-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* new-exceptions/bspsupport/ppc_exc_categories.c: Fixed e500

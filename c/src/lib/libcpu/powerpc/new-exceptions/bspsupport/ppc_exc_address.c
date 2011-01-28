@@ -22,7 +22,7 @@
  * Derived from file "libcpu/powerpc/new-exceptions/raw_exception.c".
  *
  * The license and distribution terms for this file may be
- * found in found in the file LICENSE in this distribution or at
+ * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
  * $Id$
