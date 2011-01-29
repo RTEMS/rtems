@@ -74,18 +74,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global gmp_provided 4.1.4
 %endif
 
-%if 0%{?suse11_0}
-%global mpc_provided %{nil}
-%global mpfr_provided 2.3.1
-%global gmp_provided 4.2.2
-%endif
-
-%if 0%{?suse11_1}
-%global mpc_provided %{nil}
-%global mpfr_provided 2.3.2
-%global gmp_provided 4.2.3
-%endif
-
 %if 0%{?suse11_2}
 %global mpc_provided 0.7
 %global mpfr_provided 2.4.1
@@ -174,14 +162,11 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 
 
 %if %{defined cloog_required}
-%{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
-%{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
-%{?suse11_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
 
 
