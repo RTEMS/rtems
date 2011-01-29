@@ -1,3 +1,10 @@
+2011-01-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_PATH_KSH (Unused).
+	Require autoconf >= 2.68, automake >= 1.11.1.
+	Add AC_PROG_CC_C99 to enforce c99 hoping this will suffice to make
+	this stuff compilable with older GCCs (works on some hosts).
+
 2010-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 		Jennifer Averett <jennifer.averett@oarcorp.com>
 
