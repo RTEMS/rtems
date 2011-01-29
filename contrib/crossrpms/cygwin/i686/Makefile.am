@@ -4,8 +4,8 @@ TARGET = i686-pc-cygwin
 
 include $(top_srcdir)/mkspec.am
 
-CYGWIN_VERS = 1.7.5-1
-CYGWIN_RPMREL = 0.20100726.0%{?dist}
+CYGWIN_VERS = 1.7.7-1
+CYGWIN_RPMREL = 0.20110129.0%{?dist}
 include ../cygwin.am
 
 CLOOG_PPL_VERS = 0.15.7-1
