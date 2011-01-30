@@ -1,3 +1,7 @@
+2011-01-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mongoosev/duart/mg5uart.c: Fix type mismatch.
+
 2010-05-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* au1x00/include/au1x00.h: Add prototypes for
