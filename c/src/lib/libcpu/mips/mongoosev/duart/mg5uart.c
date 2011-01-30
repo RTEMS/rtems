@@ -633,7 +633,7 @@ MG5UART_STATIC void mg5uart_initialize_interrupts(int minor)
 MG5UART_STATIC int mg5uart_write_support_int(
   int         minor,
   const char *buf,
-  int         len
+  size_t      len
 )
 {
   uint32_t        Irql;
