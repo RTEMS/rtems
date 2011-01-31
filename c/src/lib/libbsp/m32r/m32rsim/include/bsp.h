@@ -31,6 +31,23 @@ extern "C" {
 Thread clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
 
+/* Trap support interface from Newlib 1.16.0 */
+#define SYS_exit        1
+#define SYS_open        2
+#define SYS_close       3
+#define SYS_read        4
+#define SYS_write       5
+#define SYS_lseek       6
+#define SYS_unlink      7
+#define SYS_getpid      8
+#define SYS_kill        9
+#define SYS_fstat       10
+
+int __trap0 (int function, int p1, int p2, int p3, struct _reent *r);
+
+#define TRAP0(f, p1, p2, p3) \
+  __trap0 (f, (int) (p1), (int) (p2), (int) (p3), _REENT)
+
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.

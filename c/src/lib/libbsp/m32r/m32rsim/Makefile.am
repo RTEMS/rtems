@@ -32,7 +32,7 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c ../../shared/bsppost.c \
     ../../shared/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/gnatinstallhandler.c startup/bspreset.c
 clock_SOURCES = ../../shared/clock_driver_simidle.c
 console_SOURCES = ../../shared/console-polled.c console/console-io.c \
    console/trap0.S

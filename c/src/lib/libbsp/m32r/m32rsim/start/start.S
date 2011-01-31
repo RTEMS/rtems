@@ -52,7 +52,6 @@ _start:
 	ldi	r1, #0           ; r1 = argv
 	ldi	r0, #0           ; r0 = argc
 	bl	boot_card
-	bl	sys_exit
 
 # If that fails just loop.
 
