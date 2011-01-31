@@ -1,5 +1,9 @@
 2011-01-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libmisc/stringto/stringtoint.c,
+	libmisc/stringto/stringtounsignedint.c,
+	libmisc/stringto/stringtounsignedchar.c: Rework.
+
 	* libmisc/stringto/stringtopointer.c: Rework.
 
 2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
