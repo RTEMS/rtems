@@ -543,10 +543,10 @@ static void mpc55xx_ebi_init(void)
       {
         /* Set up MMU. */
         for (i = 0; i < sizeof(mmu_setup) / sizeof(mmu_setup[0]); i++) {
-            PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS0, mmu_setup[i].MAS0.R);
-            PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS1, mmu_setup[i].MAS1.R);
-            PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS2, mmu_setup[i].MAS2.R);
-            PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS3, mmu_setup[i].MAS3.R);
+            PPC_SET_SPECIAL_PURPOSE_REGISTER( FSL_EIS_MAS0, mmu_setup[i].MAS0.R);
+            PPC_SET_SPECIAL_PURPOSE_REGISTER( FSL_EIS_MAS1, mmu_setup[i].MAS1.R);
+            PPC_SET_SPECIAL_PURPOSE_REGISTER( FSL_EIS_MAS2, mmu_setup[i].MAS2.R);
+            PPC_SET_SPECIAL_PURPOSE_REGISTER( FSL_EIS_MAS3, mmu_setup[i].MAS3.R);
             asm volatile ("tlbwe");
         }
       }
