@@ -78,88 +78,6 @@
 
 #include "e500_mmu.h"
 
-#if 0
-#define MSR_UCLE	(1<<(63-37)) /* User-mode cache lock      PPC: ?                     */
-#define MSR_SPE		(1<<(63-38)) /* SPE enable                PPC: VE   (altivec)        */
-#define MSR_WE		(1<<(63-45)) /* Wait state enable         PPC: POW  (pwr. mgmt)      */
-#define MSR_CE		(1<<(63-46)) /* Critical-interrupt enable PPC: TGPR (TLBupdt in use) */
-#define MSR_EE		(1<<(63-48)) /* External-interrupt enable PPC: EE                    */
-#define MSR_PR		(1<<(63-49)) /* User mode                 PPC: PR                    */
-#define MSR_ME		(1<<(63-51)) /* Machine-check enable      PPC: ME                    */
-#define MSR_UBLE	(1<<(63-53)) /* User BTB lock enable      PPC: SE   (sstep enable)   */
-#define MSR_DE		(1<<(63-54)) /* Debug-interrupt enable    PPC: BE   (br. tr. enbl)   */
-#define MSR_IS		(1<<(63-58)) /* Instruction address space PPC: IR   (inst. MMU enbl) */
-#define MSR_DS		(1<<(63-59)) /* Data address space        PPC: DR   (data MMU enbl)  */
-#define MSR_PMM		(1<<(63-61)) /* Performance-monitor mark  PPC: ?                     */
-#endif
-
-/* Bit definitions for MAS registers                                             */
-#define SPR_MAS0		624
-#define MAS0_TLBSEL		(           1  << (63-35)) 	/* Which TLB to access       */
-#define MAS0_ESEL(n)	( (0xf & (n))  << (63-47))	/* Selected TLB entry        */
-#define MAS0_ESEL_RD(m)	( ((m) >> (63-47)) & 0xf )
-#define MAS0_NV			(           1  << (63-63))	/* Next victim               */
-
-#define SPR_MAS1		625
-#define MAS1_V			(           1  << (63-32)) 	/* Entry valid               */
-#define MAS1_IPROT		(           1  << (63-33)) 	/* Invalidate protect        */
-#define MAS1_TID(n)		( (0xff & (n)) << (63-47)) 	/* Translation ID            */
-#define MAS1_TID_GET(n) ( ((n) >> (63-47)) & 0xfff)
-
-#define MAS1_TS			(           1  << (63-51)) 	/* Translation space         */
-#define MAS1_TSIZE(n)	( (0xf & (n))  << (63-55)) 	/* Translation ID            */
-#define MAS1_TSIZE_GET(n) ( ((n)>>(63-55)) & 0xf)
-
-#define SPR_MAS2		626
-#define MAS2_EPN(n)		( (((1<<21)-1)&(n)) << (63-51)) /* EPN                   */
-#define MAS2_EPN_GET(n) (((n)>>(63-51)) & 0xfffff)
-#define MAS2_X0			(           1  << (63-57)) 	/* Attr. 0                   */
-#define MAS2_X1			(           1  << (63-58)) 	/* Attr. 1                   */
-#define MAS2_W			(           1  << (63-59)) 	/* Write-through             */
-#define MAS2_I			(           1  << (63-60)) 	/* Cache-inhibited           */
-#define MAS2_M			(           1  << (63-61)) 	/* Memory-coherence req.     */
-#define MAS2_G			(           1  << (63-62)) 	/* Guarded                   */
-#define MAS2_E			(           1  << (63-63)) 	/* Little-endian             */
-#define MAS2_ATTR(x)	( (x) & 0x7f )
-#define MAS2_ATTR_GET(x) ( (x) & 0x7f )
-
-#define SPR_MAS3		627
-#define MAS3_RPN(n)		( (((1<<21)-1)&(n)) << (63-51)) /* RPN                   */
-#define MAS3_RPN_GET(n) (((n)>>(63-51)) & 0xfffff)
-#define MAS3_U0			(           1  << (63-54)) 	/* User attr. 0              */
-#define MAS3_U1			(           1  << (63-55)) 	/* User attr. 1              */
-#define MAS3_U2			(           1  << (63-56)) 	/* User attr. 2              */
-#define MAS3_U3			(           1  << (63-57)) 	/* User attr. 3              */
-#define MAS3_UX			(           1  << (63-58)) 	/* User  exec.               */
-#define MAS3_SX			(           1  << (63-59)) 	/* Super exec.               */
-#define MAS3_UW			(           1  << (63-60)) 	/* User  write               */
-#define MAS3_SW			(           1  << (63-61)) 	/* Super write               */
-#define MAS3_UR			(           1  << (63-62)) 	/* User  read                */
-#define MAS3_SR			(           1  << (63-63)) 	/* Super read                */
-
-#define MAS3_PERM(n)	( (n) & 0x3ff )
-#define MAS3_PERM_GET(n) ( (n) & 0x3ff )
-
-#define SPR_MAS4		628
-#define MAS4_TLBSELD	(           1  << (63-35)) 	/* TLBSEL default            */
-#define MAS4_TIDSELD(n)	( (0x3 & (n))  << (63-47)) 	/* TID default               */
-#define MAS4_TSIZED(n)	( (0xf & (n))  << (63-55)) 	/* TSIZE default             */
-#define MAS4_X0D		MAS2_X0
-#define MAS4_X1D		MAS2_X1
-#define MAS4_WD			MAS2_W
-#define MAS4_ID			MAS2_I
-#define MAS4_MD			MAS2_M
-#define MAS4_GD			MAS2_G
-#define MAS4_ED			MAS2_E
-
-#define SPR_MAS6		630
-#define MAS6_SPID0(n)	( (0xff & (n)) << (63-55)) 	/* PID used for search       */
-#define MAS6_SAS		(           1  << (63-63)) 	/* AS for search             */
-
-#define SPR_PID0		48
-#define SPR_PID1		633
-#define SPR_PID2		634
-
 #define TLBIVAX_TLBSEL	(1<<(63-60))
 #define TLBIVAX_INV_ALL	(1<<(63-61))
 
@@ -185,18 +103,18 @@
 	static inline void _write_MAS##mas(uint32_t x)                             \
 	{             asm volatile("mtspr %1, %0":: "r"(x),"i"(rmas)); }
 
-__RDWRMAS(0,SPR_MAS0)
-__RDWRMAS(1,SPR_MAS1)
-__RDWRMAS(2,SPR_MAS2)
-__RDWRMAS(3,SPR_MAS3)
-__RDWRMAS(4,SPR_MAS4)
-__RDWRMAS(6,SPR_MAS6)
+__RDWRMAS(0,FSL_EIS_MAS0)
+__RDWRMAS(1,FSL_EIS_MAS1)
+__RDWRMAS(2,FSL_EIS_MAS2)
+__RDWRMAS(3,FSL_EIS_MAS3)
+__RDWRMAS(4,FSL_EIS_MAS4)
+__RDWRMAS(6,FSL_EIS_MAS6)
 
 #undef __RDWRMAS
 
 static int initialized  = 0;
 
-E500_tlb_va_cache_t rtems_e500_tlb_va_cache[16] = { {{0}},};
+E500_tlb_va_cache_t rtems_e500_tlb_va_cache[16];
 
 /* Since it is likely that these routines are used during
  * early initialization when stdio is not available yet
@@ -252,10 +170,10 @@ static void seltlb(rtems_e500_tlb_idx key)
 int idx = key & ~E500_SELTLB_1;
 
 	if ( key & E500_SELTLB_1 ) {
-		_write_MAS0( MAS0_TLBSEL | MAS0_ESEL(idx) );
+		_write_MAS0( FSL_EIS_MAS0_TLBSEL | FSL_EIS_MAS0_ESEL(idx) );
 	} else {
-		_write_MAS0( (idx & 128) ? MAS0_ESEL(1) : MAS0_ESEL(0) );
-		_write_MAS2( MAS2_EPN( idx & 127 ) );
+		_write_MAS0( (idx & 128) ? FSL_EIS_MAS0_ESEL(1) : FSL_EIS_MAS0_ESEL(0) );
+		_write_MAS2( FSL_EIS_MAS2_EPN( idx & 127 ) );
 	}
 }
 
@@ -310,14 +228,14 @@ int                    sel, idx;
 
 	tlb = sel ? rtems_e500_tlb_va_cache + idx : &buf;
 
-	if ( (tlb->att.v  = (MAS1_V & mas1) ? 1 : 0) ) {
-		tlb->va.va_epn = MAS2_EPN_GET(mas2);
-		tlb->rpn       = MAS3_RPN_GET(mas3);
-		tlb->va.va_tid = MAS1_TID_GET(mas1);
-		tlb->att.ts    = (MAS1_TS & mas1) ? 1 : 0;
-		tlb->att.sz    = sel ? MAS1_TSIZE_GET(mas1) : 1 /* 4k size */;
-		tlb->att.wimge = MAS2_ATTR_GET(mas2);
-		tlb->att.perm  = MAS3_PERM_GET(mas3);
+	if ( (tlb->att.v  = (FSL_EIS_MAS1_V & mas1) ? 1 : 0) ) {
+		tlb->va.va_epn = FSL_EIS_MAS2_EPN_GET(mas2);
+		tlb->rpn       = FSL_EIS_MAS3_RPN_GET(mas3);
+		tlb->va.va_tid = FSL_EIS_MAS1_TID_GET(mas1);
+		tlb->att.ts    = (FSL_EIS_MAS1_TS & mas1) ? 1 : 0;
+		tlb->att.sz    = sel ? FSL_EIS_MAS1_TSIZE_GET(mas1) : 1 /* 4k size */;
+		tlb->att.wimge = FSL_EIS_MAS2_ATTR_GET(mas2);
+		tlb->att.perm  = FSL_EIS_MAS3_PERM_GET(mas3);
 	}
 
 	if ( tlb->att.v ) {
@@ -346,7 +264,7 @@ int                    sel, idx;
 			);
 			myprintf(f,
 				"Attributes: PERM 0x%03x (ux/sx/uw/sw/ur/sr) WIMGE 0x%02x IPROT %i\r\n",
-				tlb->att.perm, tlb->att.wimge, (sel && (mas1 & MAS1_IPROT) ? 1 : 0)
+				tlb->att.perm, tlb->att.wimge, (sel && (mas1 & FSL_EIS_MAS1_IPROT) ? 1 : 0)
 			);
 			myprintf(f,
 				"EA range 0x%08x .. 0x%08x\r\n",
@@ -480,7 +398,7 @@ rtems_interrupt_level lvl;
 
 	tid = E500_TLB_ATTR_TID_GET(attr);
 
-	mas1 = (attr & E500_TLB_ATTR_TS) ? MAS1_TS : 0;
+	mas1 = (attr & E500_TLB_ATTR_TS) ? FSL_EIS_MAS1_TS : 0;
 
 	if ( sz >=0 ) {
 		lkup = rtems_e500_matchtlb(ea, tid, mas1, sz);
@@ -498,15 +416,15 @@ rtems_interrupt_level lvl;
 	}
 
 	/* OK to proceed */
-	mas1 |= MAS1_IPROT | MAS1_TID(tid);
+	mas1 |= FSL_EIS_MAS1_IPROT | FSL_EIS_MAS1_TID(tid);
 
 	if ( sz >= 0 )
-		mas1 |= MAS1_V | MAS1_TSIZE(sz);
+		mas1 |= FSL_EIS_MAS1_V | FSL_EIS_MAS1_TSIZE(sz);
 
-	mas2 = MAS2_EPN( ea>>12 ) | E500_TLB_ATTR_WIMGE(attr);
-	mas3 = MAS3_RPN( pa>>12 ) | E500_TLB_ATTR_PERM_GET(attr);
+	mas2 = FSL_EIS_MAS2_EPN( ea>>12 ) | E500_TLB_ATTR_WIMGE(attr);
+	mas3 = FSL_EIS_MAS3_RPN( pa>>12 ) | E500_TLB_ATTR_PERM_GET(attr);
 	/* mas4 is not really relevant; we don't use TLB replacement */
-	mas4 = MAS4_TLBSELD | MAS4_TIDSELD(0) | MAS4_TSIZED(9) | MAS4_ID | MAS4_GD;
+	mas4 = FSL_EIS_MAS4_TLBSELD | FSL_EIS_MAS4_TIDSELD(0) | FSL_EIS_MAS4_TSIZED(9) | FSL_EIS_MAS4_ID | FSL_EIS_MAS4_GD;
 
 	rtems_interrupt_disable(lvl);
 
@@ -611,26 +529,26 @@ rtems_interrupt_level lvl;
 
 	for ( i=0; i<3; i++ ) {
 		switch (i) {
-			case 0:	asm volatile("mfspr %0, %1":"=r"(pid):"i"(SPR_PID0)); break;
-			case 1:	asm volatile("mfspr %0, %1":"=r"(pid):"i"(SPR_PID1)); break;
-			case 2:	asm volatile("mfspr %0, %1":"=r"(pid):"i"(SPR_PID2)); break;
+			case 0:	asm volatile("mfspr %0, %1":"=r"(pid):"i"(FSL_EIS_PID0)); break;
+			case 1:	asm volatile("mfspr %0, %1":"=r"(pid):"i"(FSL_EIS_PID1)); break;
+			case 2:	asm volatile("mfspr %0, %1":"=r"(pid):"i"(FSL_EIS_PID2)); break;
 			default:
 				goto bail;
 		}
 
-		_write_MAS6( MAS6_SPID0(pid) | (as ? MAS6_SAS : 0 ) );
+		_write_MAS6( FSL_EIS_MAS6_SPID0(pid) | (as ? FSL_EIS_MAS6_SAS : 0 ) );
 
 		asm volatile("tlbsx 0, %0"::"r"(ea));
 
 		mas1 = _read_MAS1();
 
-		if ( (MAS1_V & mas1) ) {
+		if ( (FSL_EIS_MAS1_V & mas1) ) {
 			mas0 = _read_MAS0();
-			if ( MAS0_TLBSEL & mas0 ) {
+			if ( FSL_EIS_MAS0_TLBSEL & mas0 ) {
 				/* TLB1 */
-				rval = MAS0_ESEL_RD(mas0) | E500_SELTLB_1;
+				rval = FSL_EIS_MAS0_ESEL_GET(mas0) | E500_SELTLB_1;
 			} else {
-				rval = (ea >> (63-51)) | (( MAS0_NV & mas0 ) ? 180 : 0 ) ;
+				rval = (ea >> (63-51)) | (( FSL_EIS_MAS0_NV & mas0 ) ? 180 : 0 ) ;
 			}
 			break;
 		}
@@ -695,7 +613,7 @@ rtems_interrupt_level lvl;
 	asm volatile("tlbre");
 
 	/* read old entries */
-	_write_MAS1( _read_MAS1() & ~MAS1_V );
+	_write_MAS1( _read_MAS1() & ~FSL_EIS_MAS1_V );
 
 	asm volatile(
 		"	sync		\n"

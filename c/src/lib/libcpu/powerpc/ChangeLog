@@ -1,3 +1,7 @@
+2011-01-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* e500/mmu/mmu.c: Use common defines.
+
 2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* mpc5xx/exceptions/raw_exception.c, mpc5xx/exceptions/raw_exception.h,
