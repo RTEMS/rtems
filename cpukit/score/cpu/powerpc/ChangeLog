@@ -1,3 +1,8 @@
+2011-01-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Changed Freescale EIS prefix.  More
+	Freescale EIS defines.  Added MSR_IS, MSR_DS, and MSR_PMM defines.
+
 2011-01-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Added BOOKE_PIR define.

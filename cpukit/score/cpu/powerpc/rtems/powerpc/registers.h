@@ -37,6 +37,9 @@
 #define MSR_IP		(1<<6)		/* Exception prefix 0x000/0xFFF */
 #define MSR_IR		(1<<5)		/* Instruction MMU enable */
 #define MSR_DR		(1<<4)		/* Data MMU enable */
+#define MSR_IS		(1<<5)		/* Instruction address space */
+#define MSR_DS		(1<<4)		/* Data address space */
+#define MSR_PMM		(1<<2)		/* Performance monitor mark */
 #define MSR_RI		(1<<1)		/* Recoverable Exception */
 #define MSR_LE		(1<<0)		/* Little-Endian enable */
 
@@ -319,28 +322,88 @@ lidate */
 
 /* Freescale Book E Implementation Standards (EIS): MMU Control and Status */
 
-#define FREESCALE_EIS_MAS0 624
-#define FREESCALE_EIS_MAS1 625
-#define FREESCALE_EIS_MAS2 626
-#define FREESCALE_EIS_MAS3 627
-#define FREESCALE_EIS_MAS4 628
-#define FREESCALE_EIS_MAS5 629
-#define FREESCALE_EIS_MAS6 630
-#define FREESCALE_EIS_MAS7 944
-#define FREESCALE_EIS_MMUCFG 1015
-#define FREESCALE_EIS_MMUCSR0 1012
-#define FREESCALE_EIS_PID0 48
-#define FREESCALE_EIS_PID1 633
-#define FREESCALE_EIS_PID2 634
-#define FREESCALE_EIS_TLB0CFG 688
-#define FREESCALE_EIS_TLB1CFG 689
+#define FSL_EIS_MAS0 624
+#define FSL_EIS_MAS0_TLBSEL (1 << (63 - 35))
+#define FSL_EIS_MAS0_ESEL(n) ((0xf & (n)) << (63 - 47))
+#define FSL_EIS_MAS0_ESEL_GET(m) (((m) >> (63 - 47)) & 0xf)
+#define FSL_EIS_MAS0_NV (1 << (63 - 63))
+
+#define FSL_EIS_MAS1 625
+#define FSL_EIS_MAS1_V (1 << (63 - 32))
+#define FSL_EIS_MAS1_IPROT (1 << (63 - 33))
+#define FSL_EIS_MAS1_TID(n) ((0xff & (n)) << (63 - 47))
+#define FSL_EIS_MAS1_TID_GET(n) (((n) >> (63 - 47)) & 0xfff)
+#define FSL_EIS_MAS1_TS (1 << (63 - 51))
+#define FSL_EIS_MAS1_TSIZE(n) ((0xf & (n)) << (63 - 55))
+#define FSL_EIS_MAS1_TSIZE_GET(n) (((n)>>(63 - 55)) & 0xf)
+
+#define FSL_EIS_MAS2 626
+#define FSL_EIS_MAS2_EPN(n) ((((1 << 21) - 1)&(n)) << (63-51))
+#define FSL_EIS_MAS2_EPN_GET(n) (((n) >> (63 - 51)) & 0xfffff)
+#define FSL_EIS_MAS2_EA(n) FSL_EIS_MAS2_EPN((n) >> 12)
+#define FSL_EIS_MAS2_EA_GET(n) (FSL_EIS_MAS2_EPN_GET(n) << 12)
+#define FSL_EIS_MAS2_X0 (1 << (63 - 57))
+#define FSL_EIS_MAS2_X1 (1 << (63 - 58))
+#define FSL_EIS_MAS2_W (1 << (63 - 59))
+#define FSL_EIS_MAS2_I (1 << (63 - 60))
+#define FSL_EIS_MAS2_M (1 << (63 - 61))
+#define FSL_EIS_MAS2_G (1 << (63 - 62))
+#define FSL_EIS_MAS2_E (1 << (63 - 63))
+#define FSL_EIS_MAS2_ATTR(x) ((x) & 0x7f)
+#define FSL_EIS_MAS2_ATTR_GET(x) ((x) & 0x7f)
+
+#define FSL_EIS_MAS3 627
+#define FSL_EIS_MAS3_RPN(n) ((((1 << 21) - 1) & (n)) << (63-51))
+#define FSL_EIS_MAS3_RPN_GET(n) (((n)>>(63 - 51)) & 0xfffff)
+#define FSL_EIS_MAS3_RA(n) FSL_EIS_MAS3_RPN((n) >> 12)
+#define FSL_EIS_MAS3_RA_GET(n) (FSL_EIS_MAS3_RPN_GET(n) << 12)
+#define FSL_EIS_MAS3_U0 (1 << (63 - 54))
+#define FSL_EIS_MAS3_U1 (1 << (63 - 55))
+#define FSL_EIS_MAS3_U2 (1 << (63 - 56))
+#define FSL_EIS_MAS3_U3 (1 << (63 - 57))
+#define FSL_EIS_MAS3_UX (1 << (63 - 58))
+#define FSL_EIS_MAS3_SX (1 << (63 - 59))
+#define FSL_EIS_MAS3_UW (1 << (63 - 60))
+#define FSL_EIS_MAS3_SW (1 << (63 - 61))
+#define FSL_EIS_MAS3_UR (1 << (63 - 62))
+#define FSL_EIS_MAS3_SR (1 << (63 - 63))
+#define FSL_EIS_MAS3_PERM(n) ((n) & 0x3ff)
+#define FSL_EIS_MAS3_PERM_GET(n) ((n) & 0x3ff)
+
+#define FSL_EIS_MAS4 628
+#define FSL_EIS_MAS4_TLBSELD (1 << (63 - 35))
+#define FSL_EIS_MAS4_TIDSELD(n) ((0x3 & (n)) << (63 - 47))
+#define FSL_EIS_MAS4_TSIZED(n) ((0xf & (n)) << (63 - 55))
+#define FSL_EIS_MAS4_X0D FSL_EIS_MAS2_X0
+#define FSL_EIS_MAS4_X1D FSL_EIS_MAS2_X1
+#define FSL_EIS_MAS4_WD FSL_EIS_MAS2_W
+#define FSL_EIS_MAS4_ID FSL_EIS_MAS2_I
+#define FSL_EIS_MAS4_MD FSL_EIS_MAS2_M
+#define FSL_EIS_MAS4_GD FSL_EIS_MAS2_G
+#define FSL_EIS_MAS4_ED FSL_EIS_MAS2_E
+
+#define FSL_EIS_MAS5 629
+
+#define FSL_EIS_MAS6 630
+#define FSL_EIS_MAS6_SPID0(n) ((0xff & (n)) << (63 - 55))
+#define FSL_EIS_MAS6_SAS (1 << (63 - 63))
+
+#define FSL_EIS_MAS7 944
+
+#define FSL_EIS_MMUCFG 1015
+#define FSL_EIS_MMUCSR0 1012
+#define FSL_EIS_PID0 48
+#define FSL_EIS_PID1 633
+#define FSL_EIS_PID2 634
+#define FSL_EIS_TLB0CFG 688
+#define FSL_EIS_TLB1CFG 689
 
 /* Freescale Book E Implementation Standards (EIS): L1 Cache */
 
-#define FREESCALE_EIS_L1CFG0 515
-#define FREESCALE_EIS_L1CFG1 516
-#define FREESCALE_EIS_L1CSR0 1010
-#define FREESCALE_EIS_L1CSR1 1011
+#define FSL_EIS_L1CFG0 515
+#define FSL_EIS_L1CFG1 516
+#define FSL_EIS_L1CSR0 1010
+#define FSL_EIS_L1CSR1 1011
 
 /**
  * @brief Default value for the interrupt disable mask.
