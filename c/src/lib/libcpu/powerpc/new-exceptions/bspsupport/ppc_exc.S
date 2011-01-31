@@ -66,7 +66,14 @@ ppc_exc_min_prolog_auto:
 	stwu	r1, -EXCEPTION_FRAME_END(r1)
 	stw	VECTOR_REGISTER, VECTOR_OFFSET(r1)
 	mflr	VECTOR_REGISTER
-	bla	wrap_auto
+
+	/*
+	 * We store the absolute branch target address here.  It will be used
+	 * to generate the branch operation in ppc_exc_make_prologue().
+	 *
+	 * We add one to request the link in the generated branch instruction.
+	 */
+	.int	ppc_exc_wrap_auto + 1
 
 	.global ppc_exc_tgpr_clr_prolog_size
 ppc_exc_tgpr_clr_prolog_size = . - ppc_exc_tgpr_clr_prolog
@@ -87,7 +94,14 @@ ppc_exc_min_prolog_auto_async:
 	stw	r1, ppc_exc_lock_std@sdarel(r13)
 	stw	VECTOR_REGISTER, ppc_exc_vector_register_std@sdarel(r13)
 	mflr	VECTOR_REGISTER
-	bla	wrap_auto_async
+
+	/*
+	 * We store the absolute branch target address here.  It will be used
+	 * to generate the branch operation in ppc_exc_make_prologue().
+	 *
+	 * We add one to request the link in the generated branch instruction.
+	 */
+	.int	ppc_exc_wrap_auto_async + 1
 
 /******************************************************/
 /*  WRAPPERS                                          */
@@ -119,7 +133,8 @@ __ppc_exc_wrappers_start = .
 	WRAP	_FLVR=e500_mchk _PRI=mchk _SRR0=mcsrr0 _SRR1=mcsrr1 _RFI=rfmci
 
 	/* LR holds vector, VECTOR_REGISTER holds orig. LR */
-wrap_auto:
+        .global ppc_exc_wrap_auto
+ppc_exc_wrap_auto:
 	stw	FRAME_REGISTER, FRAME_OFFSET(r1)
 
 	/* Find address where we jumped from */
@@ -138,7 +153,8 @@ wrap_auto:
 	 */
 	b	wrap_no_save_frame_register_std
 
-wrap_auto_async:
+        .global ppc_exc_wrap_auto_async
+ppc_exc_wrap_auto_async:
 	stwu	r1, -EXCEPTION_FRAME_END(r1)
 	stw	FRAME_REGISTER, FRAME_OFFSET(r1)
 	/* find address where we jumped from */

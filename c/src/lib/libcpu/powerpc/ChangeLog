@@ -1,5 +1,14 @@
 2011-01-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* new-exceptions/bspsupport/ppc_exc.S,
+	new-exceptions/bspsupport/ppc_exc_asm_macros.h,
+	new-exceptions/bspsupport/ppc_exc_naked.S,
+	new-exceptions/bspsupport/ppc_exc_prologue.c: Branch targets are now
+	global for all minimal prologues.  Generate branch instruction in
+	minimal prologues.
+
+2011-01-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* e500/mmu/mmu.c: Use common defines.
 
 2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>

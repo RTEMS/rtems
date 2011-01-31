@@ -62,6 +62,44 @@ static const uint32_t *const ppc_exc_prologue_templates [] = {
   [PPC_EXC_NAKED] = ppc_exc_min_prolog_tmpl_naked
 };
 
+static bool ppc_exc_create_branch_op(
+  unsigned vector,
+  uint32_t *prologue,
+  size_t prologue_size
+)
+{
+  static const uintptr_t BRANCH_OP_CODE = 18 << 26;
+  static const uintptr_t BRANCH_OP_LINK = 0x1;
+  static const uintptr_t BRANCH_OP_ABS = 0x2;
+  static const uintptr_t BRANCH_OP_MSK = 0x3ffffff;
+  size_t branch_op_index = prologue_size / 4 - 1;
+  uintptr_t vector_address = (uintptr_t) ppc_exc_vector_address(vector);
+  uintptr_t branch_op_address = vector_address + 4 * branch_op_index;
+
+  /* This value may have BRANCH_OP_LINK set */
+  uintptr_t target_address = prologue [branch_op_index];
+
+  uintptr_t branch_target_address = target_address - branch_op_address;
+
+  /*
+   * We prefer to use a relative branch.  This has the benefit that custom
+   * minimal prologues in a read-only area are relocatable.
+   */
+  if ((branch_target_address & ~BRANCH_OP_MSK) != 0) {
+    /* Target to far for relative branch (PC ± 32M) */
+    if (target_address >= 0xfe000001 || target_address < 0x01fffffd) {
+      /* Can use an absolute branch */
+      branch_target_address = (target_address | BRANCH_OP_ABS) & BRANCH_OP_MSK;
+    } else {
+      return false;
+    }
+  }
+
+  prologue [branch_op_index] = BRANCH_OP_CODE | branch_target_address;
+
+  return true;
+}
+
 rtems_status_code ppc_exc_make_prologue(
   unsigned vector,
   ppc_exc_category category,
@@ -71,7 +109,6 @@ rtems_status_code ppc_exc_make_prologue(
 {
   const uint32_t *prologue_template = NULL;
   size_t prologue_template_size = 0;
-  uintptr_t vector_address = (uintptr_t) ppc_exc_vector_address(vector);
   bool fixup_vector = false;
 
   if (!ppc_exc_is_valid_category(category)) {
@@ -103,6 +140,10 @@ rtems_status_code ppc_exc_make_prologue(
     *prologue_size = prologue_template_size;
 
     memcpy(prologue, prologue_template, prologue_template_size);
+
+    if (!ppc_exc_create_branch_op(vector, prologue, prologue_template_size)) {
+      return RTEMS_INVALID_ADDRESS;
+    }
 
     if (fixup_vector) {
       if (vector <= 0x7fffU) {

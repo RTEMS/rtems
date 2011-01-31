@@ -106,9 +106,12 @@ ppc_exc_min_prolog_async_\_NAME:
 	/*	Load vector.
 	 */
 	li	VECTOR_REGISTER, ( \_VEC | 0xffff8000 )
-	/*	Branch (must be within 32MB)
+
+	/*
+	 * We store the absolute branch target address here.  It will be used
+	 * to generate the branch operation in ppc_exc_make_prologue().
 	 */
-	ba	wrap_\_FLVR
+	.int	ppc_exc_wrap_\_FLVR
 
 	.endm
 
@@ -129,7 +132,12 @@ ppc_exc_min_prolog_sync_\_NAME:
 	stwu	r1, -EXCEPTION_FRAME_END(r1)
 	stw	VECTOR_REGISTER, VECTOR_OFFSET(r1)
 	li	VECTOR_REGISTER, \_VEC
-	ba	wrap_nopush_\_FLVR
+
+	/*
+	 * We store the absolute branch target address here.  It will be used
+	 * to generate the branch operation in ppc_exc_make_prologue().
+	 */
+	.int	ppc_exc_wrap_nopush_\_FLVR
 
 	.endm
 
@@ -374,12 +382,14 @@ recover_check_twiddle_mchk_\_FLVR:
  */
 	.macro	WRAP _FLVR _PRI _SRR0 _SRR1 _RFI
 
-wrap_\_FLVR:
+	.global ppc_exc_wrap_\_FLVR
+ppc_exc_wrap_\_FLVR:
 
 	/* Push exception frame */
 	stwu	r1, -EXCEPTION_FRAME_END(r1)
 
-wrap_nopush_\_FLVR:
+	.global ppc_exc_wrap_nopush_\_FLVR
+ppc_exc_wrap_nopush_\_FLVR:
 
 	/* Save frame register */
 	stw	FRAME_REGISTER, FRAME_OFFSET(r1)

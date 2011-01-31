@@ -28,9 +28,15 @@ ppc_exc_min_prolog_tmpl_naked:
 	stwu	r1, -EXCEPTION_FRAME_END(r1)
 	stw	VECTOR_REGISTER, VECTOR_OFFSET(r1)
 	li	VECTOR_REGISTER, 0
-	ba	wrap_naked
 
-wrap_naked:
+	/*
+	 * We store the absolute branch target address here.  It will be used
+	 * to generate the branch operation in ppc_exc_make_prologue().
+	 */
+	.int	ppc_exc_wrap_naked
+
+        .global ppc_exc_wrap_naked
+ppc_exc_wrap_naked:
 
 	/* Save scratch registers */
 	stw	SCRATCH_REGISTER_0, SCRATCH_REGISTER_0_OFFSET(r1)
