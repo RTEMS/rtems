@@ -1,3 +1,9 @@
+2011-02-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1733/cpukit
+	* score/src/isr.c: If target architecture does nto require stack
+	initialization, then do not perform adjustment.
+
 2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/printk.c: Fix typo.

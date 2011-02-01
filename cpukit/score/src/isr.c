@@ -62,8 +62,10 @@ void _ISR_Handler_initialization( void )
     Configuration.interrupt_stack_size
   );
 
+#if (CPU_STACK_ALIGNMENT != 0)
   _CPU_Interrupt_stack_high = (void *)
     ((uintptr_t) _CPU_Interrupt_stack_high & ~(CPU_STACK_ALIGNMENT - 1));
+#endif
 
   /* Interrupt stack might have to be aligned and/or setup
    * in a specific way.
