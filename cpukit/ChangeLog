@@ -1,4 +1,7 @@
 2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+	
+	* libmisc/Makefile.am: Remove stringto/stringto_template.h.
+	* libmisc/stringto/stringto_template.h: Remove.
 
 	* libmisc/stringto/stringtodouble.c,
 	libmisc/stringto/stringtofloat.c: Rework.

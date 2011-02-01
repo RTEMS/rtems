@@ -138,7 +138,7 @@ libstringto_a_SOURCES = stringto/stringtodouble.c stringto/stringtofloat.c \
     stringto/stringtoint.c stringto/stringtolong.c stringto/stringtolonglong.c \
     stringto/stringtopointer.c stringto/stringtounsignedint.c \
     stringto/stringtounsignedchar.c stringto/stringtounsignedlong.c \
-    stringto/stringtounsignedlonglong.c stringto/stringto_template.h
+    stringto/stringtounsignedlonglong.c
 
 ## fsmount
 noinst_LIBRARIES += libfsmount.a
