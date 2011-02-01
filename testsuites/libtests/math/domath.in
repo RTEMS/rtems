@@ -1,0 +1,281 @@
+/*
+ * Copyright (c) 2010 by
+ * Ralf Corsepius, Ulm/Germany. All rights reserved.
+ *
+ * Permission to use, copy, modify, and distribute this software
+ * is freely granted, provided that this notice is preserved.
+ */
+
+/*
+ * Try to compile and link against POSIX math routines.
+ */
+
+#include <math.h>
+#include <stdio.h>
+
+#ifndef M_PI_2
+#define M_PI_2 1.57079632679489661923
+#endif
+
+#ifndef M_PI_4
+#define M_PI_4 0.78539816339744830962
+#endif
+
+void
+domath@FSUFFIX@ (void)
+{
+#ifndef @FGUARD@
+  @FTYPE@ f1;
+  @FTYPE@ f2;
+
+  int i1;
+
+  f1 = acos@FSUFFIX@(0.0);
+  fprintf( stdout, "acos@FSUFFIX@          : %f\n", f1);
+
+  f1 = acosh@FSUFFIX@(0.0);
+  fprintf( stdout, "acosh@FSUFFIX@         : %f\n", f1);
+
+  f1 = asin@FSUFFIX@(1.0);
+  fprintf( stdout, "asin@FSUFFIX@          : %f\n", f1);
+
+  f1 = asinh@FSUFFIX@(1.0);
+  fprintf( stdout, "asinh@FSUFFIX@         : %f\n", f1);
+
+  f1 = atan@FSUFFIX@(M_PI_4);
+  fprintf( stdout, "atan@FSUFFIX@          : %f\n", f1);
+
+  f1 = atan2@FSUFFIX@(2.3, 2.3);
+  fprintf( stdout, "atan2@FSUFFIX@         : %f\n", f1);
+
+  f1 = atanh@FSUFFIX@(1.0);
+  fprintf( stdout, "atanh@FSUFFIX@         : %f\n", f1);
+
+  f1 = cbrt@FSUFFIX@(27.0);
+  fprintf( stdout, "cbrt@FSUFFIX@          : %f\n", f1);
+
+  f1 = ceil@FSUFFIX@(3.5);
+  fprintf( stdout, "ceil@FSUFFIX@          : %f\n", f1);
+
+  f1 = copysign@FSUFFIX@(3.5, -2.5);
+  fprintf( stdout, "copysign@FSUFFIX@      : %f\n", f1);
+
+  f1 = cos@FSUFFIX@(M_PI_2);
+  fprintf( stdout, "cos@FSUFFIX@           : %f\n", f1);
+
+  f1 = cosh@FSUFFIX@(M_PI_2);
+  fprintf( stdout, "cosh@FSUFFIX@          : %f\n", f1);
+
+  f1 = erf@FSUFFIX@(42.0);
+  fprintf( stdout, "erf@FSUFFIX@           : %f\n", f1);
+
+  f1 = erfc@FSUFFIX@(42.0);
+  fprintf( stdout, "erfc@FSUFFIX@          : %f\n", f1);
+
+  f1 = exp@FSUFFIX@(0.42);
+  fprintf( stdout, "exp@FSUFFIX@           : %f\n", f1);
+
+  f1 = exp2@FSUFFIX@(0.42);
+  fprintf( stdout, "exp2@FSUFFIX@          : %f\n", f1);
+
+  f1 = expm1@FSUFFIX@(0.00042);
+  fprintf( stdout, "expm1@FSUFFIX@         : %f\n", f1);
+
+  f1 = fabs@FSUFFIX@(-1.123);
+  fprintf( stdout, "fabs@FSUFFIX@          : %f\n", f1);
+
+  f1 = fdim@FSUFFIX@(1.123, 2.123);
+  fprintf( stdout, "fdim@FSUFFIX@          : %f\n", f1);
+
+  f1 = floor@FSUFFIX@(0.5);
+  fprintf( stdout, "floor@FSUFFIX@         : %f\n", f1);
+  f1 = floor@FSUFFIX@(-0.5);
+  fprintf( stdout, "floor@FSUFFIX@         : %f\n", f1);
+
+  f1 = fma@FSUFFIX@(2.1, 2.2, 3.01);
+  fprintf( stdout, "fma@FSUFFIX@           : %f\n", f1);
+
+  f1 = fmax@FSUFFIX@(-0.42, 0.42);
+  fprintf( stdout, "fmax@FSUFFIX@          : %f\n", f1);
+
+  f1 = fmin@FSUFFIX@(-0.42, 0.42);
+  fprintf( stdout, "fmin@FSUFFIX@          : %f\n", f1);
+
+  f1 = fmod@FSUFFIX@(42.0, 3.0);
+  fprintf( stdout, "fmod@FSUFFIX@          : %f\n", f1);
+
+  /* no type-specific variant */
+  i1 = fpclassify(1.0);
+  fprintf( stdout, "fpclassify     : %d\n", i1);
+
+  f1 = frexp@FSUFFIX@(42.0, &i1);
+  fprintf( stdout, "frexp@FSUFFIX@         : %f\n", f1);
+
+  f1 = hypot@FSUFFIX@(42.0, 42.0);
+  fprintf( stdout, "hypot@FSUFFIX@         : %f\n", f1);
+
+  i1 = ilogb@FSUFFIX@(42.0);
+  fprintf( stdout, "ilogb@FSUFFIX@         : %d\n", i1);
+
+  /* no type-specific variant */
+  i1 = isfinite(3.0);
+  fprintf( stdout, "isfinite       : %d\n", i1);
+
+  /* no type-specific variant */
+  i1 = isgreater(3.0, 3.1);
+  fprintf( stdout, "isgreater      : %d\n", i1);
+
+  /* no type-specific variant */
+  i1 = isgreaterequal(3.0, 3.1);
+  fprintf( stdout, "isgreaterequal : %d\n", i1);
+
+  /* no type-specific variant */
+  i1 = isinf(3.0);
+  fprintf( stdout, "isinf          : %d\n", i1);
+
+  /* no type-specific variant */
+  i1 = isless(3.0, 3.1);
+  fprintf( stdout, "isless         : %d\n", i1);
+
+  /* no type-specific variant */
+  i1 = islessequal(3.0, 3.1);
+  fprintf( stdout, "islessequal    : %d\n", i1);
+
+  /* no type-specific variant */
+  i1 = islessgreater(3.0, 3.1);
+  fprintf( stdout, "islessgreater  : %d\n", i1);
+
+  /* no type-specific variant */
+  i1 = isnan(0.0);
+  fprintf( stdout, "isnan          : %d\n", i1);
+
+  /* no type-specific variant */
+  i1 = isnormal(3.0);
+  fprintf( stdout, "isnormal       : %d\n", i1);
+
+  /* no type-specific variant */
+  f1 = isunordered(1.0, 2.0);
+  fprintf( stdout, "isunordered    : %d\n", i1);
+
+  f1 = j0@FSUFFIX@(1.2);
+  fprintf( stdout, "j0@FSUFFIX@            : %f\n", f1);
+
+  f1 = j1@FSUFFIX@(1.2);
+  fprintf( stdout, "j1@FSUFFIX@            : %f\n", f1);
+
+  f1 = jn@FSUFFIX@(2,1.2);
+  fprintf( stdout, "jn@FSUFFIX@            : %f\n", f1);
+
+  f1 = ldexp@FSUFFIX@(1.2,3);
+  fprintf( stdout, "ldexp@FSUFFIX@         : %f\n", f1);
+
+  f1 = lgamma@FSUFFIX@(42.0);
+  fprintf( stdout, "lgamma@FSUFFIX@        : %f\n", f1);
+
+  f1 = llrint@FSUFFIX@(-0.5);
+  fprintf( stdout, "llrint@FSUFFIX@        : %f\n", f1);
+  f1 = llrint@FSUFFIX@(0.5);
+  fprintf( stdout, "llrint@FSUFFIX@        : %f\n", f1);
+
+  f1 = llround@FSUFFIX@(-0.5);
+  fprintf( stdout, "lround@FSUFFIX@        : %f\n", f1);
+  f1 = llround@FSUFFIX@(0.5);
+  fprintf( stdout, "lround@FSUFFIX@        : %f\n", f1);
+
+  f1 = log@FSUFFIX@(42.0);
+  fprintf( stdout, "log@FSUFFIX@           : %f\n", f1);
+
+  f1 = log10@FSUFFIX@(42.0);
+  fprintf( stdout, "log10@FSUFFIX@         : %f\n", f1);
+
+  f1 = log1p@FSUFFIX@(42.0);
+  fprintf( stdout, "log1p@FSUFFIX@         : %f\n", f1);
+
+  f1 = log2@FSUFFIX@(42.0);
+  fprintf( stdout, "log2@FSUFFIX@          : %f\n", f1);
+
+  f1 = logb@FSUFFIX@(42.0);
+  fprintf( stdout, "logb@FSUFFIX@          : %f\n", f1);
+
+  f1 = lrint@FSUFFIX@(-0.5);
+  fprintf( stdout, "lrint@FSUFFIX@         : %f\n", f1);
+  f1 = lrint@FSUFFIX@(0.5);
+  fprintf( stdout, "lrint@FSUFFIX@         : %f\n", f1);
+
+  f1 = lround@FSUFFIX@(-0.5);
+  fprintf( stdout, "lround@FSUFFIX@        : %f\n", f1);
+  f1 = lround@FSUFFIX@(0.5);
+  fprintf( stdout, "lround@FSUFFIX@        : %f\n", f1);
+
+  f1 = modf@FSUFFIX@(42.0,&f2);
+  fprintf( stdout, "lmodf@FSUFFIX@         : %f\n", f1);
+
+  f1 = nan@FSUFFIX@("");
+  fprintf( stdout, "nan@FSUFFIX@           : %f\n", f1);
+
+  f1 = nearbyint@FSUFFIX@(1.5);
+  fprintf( stdout, "nearbyint@FSUFFIX@     : %f\n", f1);
+
+  f1 = nextafter@FSUFFIX@(1.5,2.0);
+  fprintf( stdout, "nextafter@FSUFFIX@     : %f\n", f1);
+
+  f1 = pow@FSUFFIX@(3.01, 2.0);
+  fprintf( stdout, "pow@FSUFFIX@           : %f\n", f1);
+
+  f1 = remainder@FSUFFIX@(3.01,2.0);
+  fprintf( stdout, "remainder@FSUFFIX@     : %f\n", f1);
+
+  f1 = remquo@FSUFFIX@(29.0,3.0,&i1);
+  fprintf( stdout, "remquo@FSUFFIX@        : %f\n", f1);
+
+  f1 = rint@FSUFFIX@(0.5);
+  fprintf( stdout, "rint@FSUFFIX@          : %f\n", f1);
+  f1 = rint@FSUFFIX@(-0.5);
+  fprintf( stdout, "rint@FSUFFIX@          : %f\n", f1);
+
+  f1 = round@FSUFFIX@(0.5);
+  fprintf( stdout, "round@FSUFFIX@         : %f\n", f1);
+  f1 = round@FSUFFIX@(-0.5);
+  fprintf( stdout, "round@FSUFFIX@         : %f\n", f1);
+
+  f1 = scalbln@FSUFFIX@(1.2,3);
+  fprintf( stdout, "scalbln@FSUFFIX@       : %f\n", f1);
+
+  f1 = scalbn@FSUFFIX@(1.2,3);
+  fprintf( stdout, "scalbn@FSUFFIX@        : %f\n", f1);
+
+  /* no type-specific variant */
+  i1 = signbit(1.0);
+  fprintf( stdout, "signbit        : %i\n", i1);
+
+  f1 = sin@FSUFFIX@(M_PI_4);
+  fprintf( stdout, "sin@FSUFFIX@           : %f\n", f1);
+
+  f1 = sinh@FSUFFIX@(M_PI_4);
+  fprintf( stdout, "sinh@FSUFFIX@          : %f\n", f1);
+
+  f1 = sqrt@FSUFFIX@(9.0);
+  fprintf( stdout, "sqrt@FSUFFIX@          : %f\n", f1);
+
+  f1 = tan@FSUFFIX@(M_PI_4);
+  fprintf( stdout, "tan@FSUFFIX@           : %f\n", f1);
+
+  f1 = tanh@FSUFFIX@(M_PI_4);
+  fprintf( stdout, "tanh@FSUFFIX@          : %f\n", f1);
+
+  f1 = tgamma@FSUFFIX@(2.1);
+  fprintf( stdout, "tgamma@FSUFFIX@        : %f\n", f1);
+
+  f1 = trunc@FSUFFIX@(3.5);
+  fprintf( stdout, "trunc@FSUFFIX@         : %f\n", f1);
+
+  f1 = y0@FSUFFIX@(1.2);
+  fprintf( stdout, "y0@FSUFFIX@            : %f\n", f1);
+
+  f1 = y1@FSUFFIX@(1.2);
+  fprintf( stdout, "y1@FSUFFIX@            : %f\n", f1);
+
+  f1 = yn@FSUFFIX@(3,1.2);
+  fprintf( stdout, "yn@FSUFFIX@            : %f\n", f1);
+#endif
+}
