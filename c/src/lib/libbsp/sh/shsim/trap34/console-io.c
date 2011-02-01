@@ -4,7 +4,7 @@
  *
  *  Logic based on newlib-1.8.2/newlib/libc/sys/sh/syscalls.c
  *
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include <syscall.h>
+#include <bsp/syscall.h>
 
 int errno;
 

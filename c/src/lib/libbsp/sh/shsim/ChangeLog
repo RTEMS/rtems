@@ -1,3 +1,8 @@
+2011-02-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am, trap34/console-io.c: Install syscall.h as
+	bsp/syscall.h to avoid confusing autoconf.
+
 2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* start/start.S: Verify boot_card() is passed a NULL.
