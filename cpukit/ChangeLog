@@ -1,5 +1,9 @@
 2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/printk.c: Fix typo.
+
+2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libmisc/stringto/stringtounsignedchar.c, 
 	libmisc/stringto/stringtounsignedint.c: Reformat range check.
 	* libmisc/Makefile.am: Add stringto/stringtolongdouble.c.

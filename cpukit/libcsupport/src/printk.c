@@ -27,7 +27,7 @@
 /*
  * printk
  *
- * Kernel printf function requiring minimal infrastrure.
+ * Kernel printf function requiring minimal infrastructure.
  */
 void printk(const char *fmt, ...)
 {
