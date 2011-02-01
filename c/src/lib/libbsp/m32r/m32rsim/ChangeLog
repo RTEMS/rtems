@@ -1,5 +1,9 @@
 2011-01-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* startup/bspreset.c: New file.
+
+2011-01-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, console/console-io.c, include/bsp.h,
 	start/start.S: Create dedicated bsp_reset() and clean up.
 
