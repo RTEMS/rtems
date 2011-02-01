@@ -1,5 +1,7 @@
 2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libmisc/stringto/stringtofloat.c: Reformat range check.
+	Add check for result = -HUGE_VALF.
 	* libmisc/stringto/stringtodouble.c: Reformat range check.
 	Add check for result = -HUGE_VAL.
 	* libmisc/stringto/stringtolonglong.c: Reformat range check.

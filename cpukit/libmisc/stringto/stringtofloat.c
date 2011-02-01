@@ -48,9 +48,8 @@ rtems_status_code rtems_string_to_float (
   if ( end == s )
     return RTEMS_NOT_DEFINED;
 
-  if ( (result == HUGE_VALF) && (errno == ERANGE))
-      return RTEMS_INVALID_NUMBER;
-  if ( (result == 0) && (errno == ERANGE))
+  if ( ( errno == ERANGE ) && 
+    (( result == 0 ) || ( result == HUGE_VALF ) || ( result == -HUGE_VALF )))
       return RTEMS_INVALID_NUMBER;
 
   *n = result;
