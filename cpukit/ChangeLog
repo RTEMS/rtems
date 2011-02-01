@@ -17,7 +17,7 @@
 
 	* libmisc/stringto/stringtopointer.c: Rework.
 
-2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2011-01-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/rtems/bspIo.h, include/rtems/concat.h, include/rtems/irq.h,
 	score/cpu/i386/rtems/score/idtr.h,
@@ -408,17 +408,17 @@
 	* posix/include/devctl.h, posix/src/devctl.c: Remove.
 	* posix/Makefile.am: Remove devctl.
 
-2010-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-08-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/src/killinfo.c: Ensure interested is non-NULL before using it.
 
-2010-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-08-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/privateenv.c: Add macro to test status when
 	RTEMS_DEBUG is enabled. Note than evaluation of root directory should
 	always work.
 
-2010-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-08-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/getlogin.c: Modify to use strncpy() on all paths.
 
@@ -428,7 +428,7 @@
 	* libmisc/shell/main_setenv.c: Address memory leak identified by
 	Coverity.
 
-2010-08-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/src/pipe/pipe.c: Remove unreachable line flagged by Coverity as
 	dead code.
@@ -444,13 +444,13 @@
 
 	* libmisc/shell/main_date.c: Use snprintf() not sprintf().
 
-2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-08-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1693/filesystem
 	* libfs/src/imfs/memfile.c: IMFS_memfile_get_block_pointer() was
 	checking incorrect pointer and thus had dead code.
 
-2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-08-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1692/filesystem
 	* libcsupport/include/rtems/libio.h, libfs/src/devfs/devfs_eval.c,
@@ -942,7 +942,7 @@
 	* score/include/rtems/score/prioritybitmap.h,
 	score/inline/rtems/score/prioritybitmap.inl: New files.
 
-2010-07-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-29	Joel Sherrill <joel.sherril@OARcorp.com>
 
 	* posix/src/psignalunblockthread.c: Clean up and simplify.
 
@@ -961,7 +961,7 @@
 	* libfs/src/imfs/imfs_load_tar.c, libmisc/untar/untar.c: Now supports
 	both pax and GNU tar created tar files.
 
-2010-07-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-27	Joel Sherrill <joel.sherril@OARcorp.com>
 
 	* posix/src/sigsuspend.c: Do not assert unless RTEMS_DEBUG is defined.
 
@@ -977,12 +977,12 @@
 	* posix/src/psignalchecksignal.c, posix/src/sigtimedwait.c:
 	sigtimedwait() was not completely following the POSIX specification.
 
-2010-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/threadget.c: Conditionalize a check that can only occur
 	when POSIX is disabled.
 
-2010-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/taskmode.c, score/inline/rtems/score/thread.inl: Rework a
 	bit to eliminate unreachable path for task blocked while calling
@@ -1015,7 +1015,7 @@
 
 	* rtems/src/ratemonperiod.c: Remove tabs.
 
-2010-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/ratemonperiod.c: Use if not switch since all cases of enum
 	are not valid and switch was generating dead code.
@@ -1168,12 +1168,12 @@
 	* libnetworking/rtems/rtems_syscall.c: Replaced null socket handlers
 	with default handlers. Null handlers are no longer allowed.
 
-2010-07-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/Makefile.am: Do not build libio_sockets.c if networking
 	is not enabled.
 
-2010-07-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/Makefile.am: Remove these files as they are uused.
 	* libcsupport/src/__brk.c, libcsupport/src/__sbrk.c: Removed.
@@ -1202,7 +1202,7 @@
 	* score/include/rtems/score/interr.h: Remove
 	INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS since it is not generated.
 
-2010-07-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/src/imfs/ioman.c: Remove unneeded operation check.
 
@@ -1245,7 +1245,7 @@
 	libfs/src/rfs/rtems-rfs-rtems.c: Correct types and prototypes to
 	eliminate warnings.
 
-2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/src/dosfs/msdos_handlers_dir.c,
 	libfs/src/dosfs/msdos_handlers_file.c, libfs/src/imfs/imfs_fifo.c,
@@ -1285,7 +1285,7 @@
 	* libcsupport/src/rtems_memalign.c, score/include/rtems/score/heap.h:
 	Remove stray references to malloc boundary.
 
-2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-07-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1594/filesystem
 	* libfs/src/imfs/memfile.c: Include assert.h
@@ -1336,7 +1336,7 @@
 	* sapi/include/confdefs.h: Reflect changes above.  Renamed
 	*_miniIMFS in *_MINIIMFS.  Renamed *_NFSFS in *_NFS.
 
-2010-06-30	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1472/cpukit
 	* libcsupport/Makefile.am, libcsupport/include/rtems/malloc.h,
@@ -1455,7 +1455,7 @@
 	so rtems_panic() can be a noreturn method. This eliminates some
 	unreachable and thus untestable code.
 
-2010-06-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/termios.c: Formatting.
 
@@ -1499,21 +1499,21 @@
 	inline method. It is only used in one place and relatively simple.
 	* score/src/threadevaluatemode.c: Removed.
 
-2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/src/imfs/memfile.c: Fix assert.
 
-2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/read.c, libcsupport/src/write.c: read(2) and write(2)
 	should return 0 when passed a count of 0 after verifying other
 	possible errors.
 
-2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/src/imfs/imfs_creat.c: Fix warning.
 
-2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_debug.c,
 	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_eval.c,
@@ -1539,17 +1539,17 @@
 	fifo_open() was attempted with (O_WRONLY|O_NONBLOCK).
 	Mutex was locked too many times on this path and we needed an unlock.
 
-2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1587/filesystem
 	Coverity Id 35
 	* libfs/src/rfs/rtems-rfs-shell.c: Address possible NULL dereference.
 
-2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libmisc/stackchk/check.c: More clean up and coverage improvements..
 
-2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libmisc/stackchk/check.c: Clean up to improve coverage.
 
@@ -1583,7 +1583,7 @@
 	* posix/src/keycreate.c, posix/src/killinfo.c: Remove more ITRON
 	references.
 
-2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1581/cpukit
 	* libcsupport/include/rtems/malloc.h, sapi/include/confdefs.h: Remove
@@ -1595,14 +1595,14 @@
 	* posix/src/semtimedwait.c: This routine is supposed to return -1/errno
 	NOT the status directly.
 
-2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1554/cpukit
 	Coverity Id 17
 	* libi2c/libi2c.c, score/src/objectextendinformation.c: Fix memory leak
 	on error.
 
-2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1559/misc
 	Coverity Id 16
@@ -1613,7 +1613,7 @@
 	* sapi/include/confdefs.h: Add parameters for FIFOs and pipes since
 	they are distinct to the user.
 
-2010-06-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h: Add CONFIGURE_MAXIMUM_FIFOS to account for
 	resources per FIFO instance.
@@ -1663,7 +1663,7 @@
 
 	* sapi/include/confdefs.h: Remove ITRON configuration parameters.
 
-2010-06-17	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h: Remove RTEMS_COVERAGE conditionals.
 
@@ -1793,7 +1793,7 @@
 	* libfs/src/rfs/rtems-rfs-bitmaps-ut.c: Various 64bit fixes.
 	* libfs/src/rfs/rtems-rfs-group.c: Various 64bit fixes.
 
-2010-06-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-16	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1453/cpukit
 	* posix/Makefile.am: newlib uses sysconf() for _CLOCKS_PER_SEC_ so
@@ -1889,7 +1889,7 @@
 	* libcsupport/include/rtems/libio_.h: Fix broken doxygen
 	meta comment.
 
-2010-06-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1553/filesystem
 	Coverity Id 37
@@ -1939,7 +1939,7 @@
 
 	* libcsupport/include/rtems/libio.h: Fix typo in doxygen comment.
 
-2010-06-12	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/src/pipe/fifo.c: Remove unused variable to fix warning.
 	* libnetworking/rtems/mkrootfs.c: Add include to fix warning.
@@ -2501,11 +2501,11 @@
 
 	* libcsupport/src/chdir.c: Check for NULL pointer.
 
-2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-04-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/src/rfs/rtems-rfs-bitmaps-ut.c: Fix warning.
 
-2010-04-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
+2010-04-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libmisc/stringto/stringto_template.h: Remove warning.
 
@@ -2971,7 +2971,7 @@
 	score/src/objectinitializeinformation.c: Add new fatal error for
 	configuring unlimited and maximum of 0.
 
-2010-03-09	Joel Sherrill <joel.sherrilL@oarcorp.com>
+2010-03-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/Makefile.am: Remove duplicate file from list.
 
