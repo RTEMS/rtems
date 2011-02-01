@@ -1,5 +1,7 @@
 2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libmisc/stringto/stringtounsignedchar.c, 
+	libmisc/stringto/stringtounsignedint.c: Reformat range check.
 	* libmisc/Makefile.am: Add stringto/stringtolongdouble.c.
 	* libmisc/stringto/stringtolongdouble.c: New.
 	* libmisc/stringto/stringto.h: Rename header-guard.

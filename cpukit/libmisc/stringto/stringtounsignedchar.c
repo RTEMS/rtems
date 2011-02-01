@@ -49,11 +49,9 @@ rtems_status_code rtems_string_to_unsigned_char (
   if ( end == s )
     return RTEMS_NOT_DEFINED;
 
-  if ( (result == ULONG_MAX) && (errno == ERANGE) )
-    return RTEMS_INVALID_NUMBER;
-
-  if ( (result == 0) && (errno == ERANGE) )
-    return RTEMS_INVALID_NUMBER;
+  if ( ( errno == ERANGE ) && 
+    (( result == 0 ) || ( result == ULONG_MAX )))
+      return RTEMS_INVALID_NUMBER;
 
 #if (UCHAR_MAX < ULONG_MAX)
   if ( result > UCHAR_MAX ) {
