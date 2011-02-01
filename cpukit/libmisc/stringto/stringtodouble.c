@@ -48,9 +48,8 @@ rtems_status_code rtems_string_to_double (
   if ( end == s )
     return RTEMS_NOT_DEFINED;
 
-  if ( (result == HUGE_VAL) && (errno == ERANGE))
-      return RTEMS_INVALID_NUMBER;
-  if ( (result == 0) && (errno == ERANGE))
+  if ( ( errno == ERANGE ) && 
+    (( result == 0 ) || ( result == HUGE_VAL ) || ( result == -HUGE_VAL )))
       return RTEMS_INVALID_NUMBER;
 
   *n = result;
