@@ -1,3 +1,7 @@
+2011-02-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console.c: Flow control is optional.
+
 2011-01-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/bspgetworkarea.c: Use BSP_DISABLE_UBOOT_WORK_AREA_CONFIG and

@@ -70,8 +70,13 @@ rtems_device_driver console_open(
   Callbacks.pollRead             = cptr->pDeviceFns->deviceRead;
   Callbacks.write                = cptr->pDeviceFns->deviceWrite;
   Callbacks.setAttributes        = cptr->pDeviceFns->deviceSetAttributes;
-  Callbacks.stopRemoteTx         = cptr->pDeviceFlow->deviceStopRemoteTx;
-  Callbacks.startRemoteTx        = cptr->pDeviceFlow->deviceStartRemoteTx;
+  if (cptr->pDeviceFlow != NULL) {
+    Callbacks.stopRemoteTx = cptr->pDeviceFlow->deviceStopRemoteTx;
+    Callbacks.startRemoteTx = cptr->pDeviceFlow->deviceStartRemoteTx;
+  } else {
+    Callbacks.stopRemoteTx = NULL;
+    Callbacks.startRemoteTx = NULL;
+  }
   Callbacks.outputUsesInterrupts = cptr->pDeviceFns->deviceOutputUsesInterrupts;
 
   /* XXX what about
