@@ -21,6 +21,15 @@
 
 #include <rtems/stringto.h>
 
+/* c99 has LLONG_MAX instead of LONG_LONG_MAX */
+#ifndef LONG_LONG_MAX
+#define LONG_LONG_MAX	LLONG_MAX
+#endif
+/* c99 has LLONG_MIN instead of LONG_LONG_MIN */
+#ifndef LONG_LONG_MIN
+#define LONG_LONG_MIN	LLONG_MIN
+#endif
+
 /*
  *  Instantiate an error checking wrapper for strtoll (long long)
  */
@@ -49,11 +58,9 @@ rtems_status_code rtems_string_to_long_long (
   if ( end == s )
     return RTEMS_NOT_DEFINED;
 
-  if ( (result == LONG_LONG_MAX) && (errno == ERANGE) )
-    return RTEMS_INVALID_NUMBER;
-
-  if ( (result == LONG_LONG_MIN) && (errno == ERANGE) )
-    return RTEMS_INVALID_NUMBER;
+  if ( ( errno == ERANGE ) && 
+    (( result == 0 ) || ( result == LONG_LONG_MAX ) || ( result == LONG_LONG_MIN )))
+      return RTEMS_INVALID_NUMBER;
 
   *n = result;
 
