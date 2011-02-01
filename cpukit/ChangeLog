@@ -1,4 +1,9 @@
 2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libmisc/stringto/stringtolong.c:  Reformat range check.
+	Add check for result==0.
+
+2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 	
 	* libmisc/Makefile.am: Remove stringto/stringto_template.h.
 	* libmisc/stringto/stringto_template.h: Remove.

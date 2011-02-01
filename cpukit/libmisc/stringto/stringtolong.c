@@ -49,11 +49,9 @@ rtems_status_code rtems_string_to_long (
   if ( end == s )
     return RTEMS_NOT_DEFINED;
 
-  if ( (result == LONG_MAX) && (errno == ERANGE) )
-    return RTEMS_INVALID_NUMBER;
-
-  if ( (result == LONG_MIN) && (errno == ERANGE) )
-    return RTEMS_INVALID_NUMBER;
+  if ( ( errno == ERANGE ) && 
+    (( result == 0 ) || ( result == LONG_MAX ) || ( result == LONG_MIN )))
+      return RTEMS_INVALID_NUMBER;
 
   *n = result;
 
