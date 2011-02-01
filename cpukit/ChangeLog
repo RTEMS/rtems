@@ -1,5 +1,7 @@
 2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libmisc/Makefile.am: Add stringto/stringtolongdouble.c.
+	* libmisc/stringto/stringtolongdouble.c: New.
 	* libmisc/stringto/stringto.h: Rename header-guard.
 	Add rtems_string_to_long_double.
 	* libmisc/stringto/stringtoint.c: Reformat range check.

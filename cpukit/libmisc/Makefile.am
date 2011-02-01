@@ -135,6 +135,7 @@ EXTRA_DIST += untar/README
 noinst_LIBRARIES += libstringto.a
 libstringto_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/stringto
 libstringto_a_SOURCES = stringto/stringtodouble.c stringto/stringtofloat.c \
+    stringto/stringtolongdouble.c \
     stringto/stringtoint.c stringto/stringtolong.c stringto/stringtolonglong.c \
     stringto/stringtopointer.c stringto/stringtounsignedint.c \
     stringto/stringtounsignedchar.c stringto/stringtounsignedlong.c \
