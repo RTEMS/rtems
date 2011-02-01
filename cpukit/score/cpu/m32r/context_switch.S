@@ -65,5 +65,5 @@ restore:
 	.global	_CPU_Context_Restart_self
 	.type	_CPU_Context_Restart_self, @function
 _CPU_Context_Restart_self:
-	mv	r0, r1
+	mv	r1, r0
 	bra	restore
