@@ -1,5 +1,8 @@
 2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libmisc/stringto/stringtodouble.c,
+	libmisc/stringto/stringtofloat.c: Rework.
+
 	* libmisc/stringto/stringtolong.c,
 	libmisc/stringto/stringtolonglong.c,
 	libmisc/stringto/stringtounsignedlong.c,
