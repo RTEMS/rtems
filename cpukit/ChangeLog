@@ -1,5 +1,6 @@
 2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libmisc/stringto/stringtounsignedlong.c: Reformat range check.
 	* libmisc/stringto/stringtolong.c:  Reformat range check.
 	Add check for result==0.
 
