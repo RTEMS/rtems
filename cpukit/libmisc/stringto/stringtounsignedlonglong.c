@@ -21,6 +21,11 @@
 
 #include <rtems/stringto.h>
 
+/* c99 has ULLONG_MAX instead of ULONG_LONG_MAX */
+#ifndef ULONG_LONG_MAX
+#define ULONG_LONG_MAX	ULLONG_MAX
+#endif
+
 /*
  *  Instantiate an error checking wrapper for strtoull (unsigned long long)
  */
@@ -49,11 +54,9 @@ rtems_status_code rtems_string_to_unsigned_long_long (
   if ( end == s )
     return RTEMS_NOT_DEFINED;
 
-  if ( (result == ULONG_LONG_MAX) && (errno == ERANGE) )
-    return RTEMS_INVALID_NUMBER;
-
-  if ( (result == 0) && (errno == ERANGE) )
-    return RTEMS_INVALID_NUMBER;
+  if ( ( errno == ERANGE ) && 
+    (( result == 0 ) || ( result == ULONG_LONG_MAX )))
+      return RTEMS_INVALID_NUMBER;
 
   *n = result;
 
