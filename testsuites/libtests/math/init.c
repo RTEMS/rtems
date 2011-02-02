@@ -39,13 +39,13 @@ rtems_task Init(
 int main( void )
 #endif
 {
-  printf( "*** FLOAT MATH TEST ***\n" );
+  fprintf( stdout, "*** FLOAT MATH TEST ***\n" );
 
   domath();
   domathf();  
   domathl();
 
-  printf( "*** END OF FLOAT MATH TEST ***\n" );
+  fprintf( stdout, "*** END OF FLOAT MATH TEST ***\n" );
   exit( 0 );
 }
 
@@ -57,7 +57,7 @@ int main( void )
 #define CONFIGURE_MAXIMUM_TASKS           1
 #define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_FLOATING_POINT
 
-#define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
+#define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

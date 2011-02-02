@@ -1,3 +1,9 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* math/init.c: 
+	Use fprintf(stdout,..) instead of printf.
+	Use CONFIGURE_APPLICATION_DISABLE_FILESYSTEM.
+
 2011-01-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* math/math.scn: New.
