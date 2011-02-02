@@ -9,8 +9,8 @@
  *  $Id$
  */
 
-#ifndef __STRING_TO_A_TYPE_h__
-#define __STRING_TO_A_TYPE_h__
+#ifndef _RTEMS_STRINGTO_H
+#define _RTEMS_STRINGTO_H
 
 #include <rtems.h>
 
@@ -221,6 +221,25 @@ rtems_status_code rtems_string_to_float(
 rtems_status_code rtems_string_to_double(
   const char   *s,
   double       *n,
+  char        **endptr
+);
+
+/**
+ *  @brief Convert String to long double (with validation)
+ *
+ *  This method converts a string to a long double with range validation.
+ *
+ *  @param[in] s is the string to convert
+ *  @param[in] n points to the variable to place the converted output in
+ *  @param[in] endptr is used to keep track of the position in the string
+ *
+ *  @return This method returns RTEMS_SUCCESSFUL on successful conversion
+ *          and *n is filled in.  Otherwise, the status indicates the
+ *          source of the error.
+ */
+rtems_status_code rtems_string_to_long_double(
+  const char   *s,
+  long double  *n,
   char        **endptr
 );
 

@@ -1,3 +1,39 @@
+2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libmisc/stringto/stringtounsignedchar.c, 
+	libmisc/stringto/stringtounsignedint.c: Reformat range check.
+	* libmisc/Makefile.am: Add stringto/stringtolongdouble.c.
+	* libmisc/stringto/stringtolongdouble.c: New.
+	* libmisc/stringto/stringto.h: Rename header-guard.
+	Add rtems_string_to_long_double.
+	* libmisc/stringto/stringtoint.c: Reformat range check.
+	Add check for result==0.
+	* libmisc/stringto/stringtofloat.c: Reformat range check.
+	Add check for result = -HUGE_VALF.
+	* libmisc/stringto/stringtodouble.c: Reformat range check.
+	Add check for result = -HUGE_VAL.
+	* libmisc/stringto/stringtolonglong.c: Reformat range check.
+	c99 portability improvements. Add check for result==0.
+	* libmisc/stringto/stringtounsignedlonglong.c: Reformat range check.
+	c99 portability improvements.
+	* libmisc/stringto/stringtounsignedlong.c: Reformat range check.
+	* libmisc/stringto/stringtolong.c:  Reformat range check.
+	Add check for result==0.
+
+2011-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+	
+	* libmisc/Makefile.am: Remove stringto/stringto_template.h.
+	* libmisc/stringto/stringto_template.h: Remove.
+
+	* libmisc/stringto/stringtodouble.c,
+	libmisc/stringto/stringtofloat.c: Rework.
+
+	* libmisc/stringto/stringtolong.c,
+	libmisc/stringto/stringtolonglong.c,
+	libmisc/stringto/stringtounsignedlong.c,
+	libmisc/stringto/stringtounsignedlonglong.c:
+	Rework.
+
 2011-01-21	Eric Norum <wenorum@lbl.gov>
 
 	* libmisc/capture/capture.c: Avoid using TCB of task just deleted.
