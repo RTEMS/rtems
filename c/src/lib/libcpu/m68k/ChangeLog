@@ -1,3 +1,7 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.68, automake-1.11.1.
+
 2010-04-05	Thomas Znidar <t.znidar@embed-it.com>
 
 	* Makefile.am, configure.ac, preinstall.am: Add mcf5225x support.

@@ -1,3 +1,7 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.68, automake-1.11.1.
+
 2011-01-02	Danila Bespalov <danila DOT bespalov AT gmail DOT com>
 
 	* started/buildc.t, started/buildrt.t, started/nt.t, started/require.t,

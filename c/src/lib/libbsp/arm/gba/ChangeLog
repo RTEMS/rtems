@@ -1,3 +1,7 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.68, automake-1.11.1.
+
 2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* irq/irq_asm.S, irq/irq_init.c, irq/bsp_irq_asm.S,

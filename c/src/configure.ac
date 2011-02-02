@@ -2,7 +2,7 @@
 ##
 ## $Id$
 
-AC_PREREQ(2.60)
+AC_PREREQ([2.68])
 AC_INIT([rtems-c-src],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([optman])
 RTEMS_TOP(../..)
@@ -12,7 +12,7 @@ RTEMS_ENABLE_NETWORKING
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define subdir-objects no-exeext foreign 1.10])
+AM_INIT_AUTOMAKE([no-define subdir-objects no-exeext foreign 1.11.1])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTILIB

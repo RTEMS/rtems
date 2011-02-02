@@ -1,3 +1,7 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.68, automake-1.11.1.
+
 2009-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console-io.c: Let eZKit533_BSP_poll_char return int.
