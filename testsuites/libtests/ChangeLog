@@ -1,5 +1,16 @@
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am, configure.ac: Add mathf/, mathl/.
+	* math/init.c, math/Makefile.am: Reflect having split-out
+	mathl and mathf.
+	* math/domathf.c, math/domathl.c: Remove.
+	* mathf/Makefile.am, mathf/domathf.c, mathf/init.c,
+	mathf/mathf.scn: New (Split out from math/).
+	* mathl/Makefile.am, mathf/domathl.c, mathl/init.c,
+	mathl/mathl.scn: New (Split out from math/).
+
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* math/init.c, complex/init.c: 
 	Use fprintf(stdout,..) instead of printf.
 	Use CONFIGURE_APPLICATION_DISABLE_FILESYSTEM.
