@@ -22,11 +22,10 @@
 
 #include "system.h"
 
-#if BSP_SMALL_MEMORY
-struct taskSwitchLog taskSwitchLog[100];
-#else
-struct taskSwitchLog taskSwitchLog[1000];
-#endif
+/*
+ *  Only require 8 task switches on sis/gdb.  --joel 2 Feb 2011
+ */
+struct taskSwitchLog taskSwitchLog[25];
 int taskSwitchLogIndex;
 volatile int testsFinished;;
 
