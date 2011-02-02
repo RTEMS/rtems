@@ -3,30 +3,14 @@
 ##
 
 rtems_tests_PROGRAMS = math
-math_SOURCES = init.c domath.c domathf.c domathl.c
-EXTRA_DIST = domath.in
+math_SOURCES = init.c domath.c
+EXTRA_DIST = $(srcdir)/../math/domath.in
 
-# FIXME: Skip long double, not yet supported in newlib
-math_CPPFLAGS = $(AM_CPPFLAGS) -DNO_LONG_DOUBLE
-
-domath.c: $(srcdir)/domath.in
+$(srcdir)/domath.c: $(srcdir)/../math/domath.in
 	sed -e 's,[@]FTYPE[@],double,' \
 	-e 's,[@]FSUFFIX[@], ,g' \
 	-e 's,[@]FGUARD[@],NO_DOUBLE,' \
-	$(srcdir)/domath.in > $(srcdir)/domath.c
-
-domathf.c: $(srcdir)/domath.in
-	sed -e 's,[@]FTYPE[@],float,' \
-	-e 's,[@]FSUFFIX[@],f,g' \
-	-e 's,[@]FGUARD[@],NO_FLOAT,' \
-	$(srcdir)/domath.in > $(srcdir)/domathf.c
-
-domathl.c: $(srcdir)/domath.in
-	sed -e 's,[@]FTYPE[@],long double,' \
-	-e 's,[@]FSUFFIX[@],l,g' \
-	-e 's,%f,%Lf,g' \
-	-e 's,[@]FGUARD[@],NO_LONG_DOUBLE,' \
-	$(srcdir)/domath.in > $(srcdir)/domathl.c
+	$(srcdir)/../math/domath.in > $(srcdir)/domath.c
 
 dist_rtems_tests_DATA = math.scn
 
