@@ -1,3 +1,9 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* math/init.c, complex/init.c: 
+	Use fprintf(stdout,..) instead of printf.
+	Use CONFIGURE_APPLICATION_DISABLE_FILESYSTEM.
+
 2011-01-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* POSIX/clock_gettime.c, POSIX/gettimeofday.c: New.

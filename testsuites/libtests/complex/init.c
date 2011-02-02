@@ -41,14 +41,14 @@ rtems_task Init(
 int main( void )
 #endif
 {
-  printf( "*** COMPLEX MATH TEST ***\n" );
+  fprintf( stdout, "*** COMPLEX MATH TEST ***\n" );
 
   docomplex();
   docomplexf();  
 #ifndef NO_LONG_DOUBLE
   docomplexl();
 #endif
-  printf( "*** END OF COMPLEX MATH TEST ***\n" );
+  fprintf( stdout, "*** END OF COMPLEX MATH TEST ***\n" );
   exit( 0 );
 }
 
@@ -58,7 +58,7 @@ int main( void )
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS            1
-#define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
+#define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
