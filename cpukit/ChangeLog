@@ -1,3 +1,12 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/shell/hexdump-display.c: 
+	Eliminate bcopy, bzero, bcmp, index (Obsolete).
+	* libmisc/shell/hexdump-parse.c: Eliminate index (Obsolete).
+	* libmisc/shell/hexsyntax.c: Eliminate rindex (Obsolete).
+	* libmisc/shell/main_hexdump.c: Eliminate rindex (Obsolete).
+	* libmisc/shell/main_rm.c: Eliminate rindex (Obsolete).
+
 2011-02-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1733/cpukit

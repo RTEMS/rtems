@@ -56,11 +56,13 @@ __FBSDID("$FreeBSD: src/usr.bin/hexdump/display.c,v 1.22 2004/08/04 02:47:32 tjr
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_STRINGS_H
-#include <strings.h>
-#endif
 #include <unistd.h>
 #include "hexdump.h"
+
+#define bcmp(s1,s2,sz)	memcmp(s1,s2,sz)
+#define bcopy(s,d,sz)	memcpy(d,s,sz)
+#define bzero(s,sz)	memset(s,0,sz)
+#define index(s,c)	strchr(s,c)
 
 #if RTEMS_REMOVED
 enum _vflag vflag = FIRST;

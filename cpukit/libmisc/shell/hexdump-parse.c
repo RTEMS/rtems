@@ -51,9 +51,8 @@ __FBSDID("$FreeBSD: src/usr.bin/hexdump/parse.c,v 1.14 2006/08/09 19:12:10 maxim
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#ifdef HAVE_STRINGS_H
-#include <strings.h>
-#endif
+
+#define index(s,c)	strchr(s,c)
 
 #include "hexdump.h"
 
