@@ -28,8 +28,6 @@
 #include <stdlib.h>
 
 extern void domath(void);
-extern void domathf(void);
-extern void domathl(void);
 
 #if __rtems__
 rtems_task Init(
@@ -39,13 +37,11 @@ rtems_task Init(
 int main( void )
 #endif
 {
-  fprintf( stdout, "*** FLOAT MATH TEST ***\n" );
+  fprintf( stdout, "*** DOUBLE MATH TEST ***\n" );
 
   domath();
-  domathf();  
-  domathl();
 
-  fprintf( stdout, "*** END OF FLOAT MATH TEST ***\n" );
+  fprintf( stdout, "*** END OF DOUBLE MATH TEST ***\n" );
   exit( 0 );
 }
 
