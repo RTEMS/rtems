@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,11 +22,10 @@
 
 #include "system.h"
 
-#if BSP_SMALL_MEMORY
-struct taskSwitchLog taskSwitchLog[100];
-#else
-struct taskSwitchLog taskSwitchLog[1000];
-#endif
+/*
+ *  Only require 10 task switches on sis/gdb.  --joel 2 Feb 2011
+ */
+struct taskSwitchLog taskSwitchLog[25];
 unsigned int taskSwitchLogIndex;
 volatile int testsFinished;
 
