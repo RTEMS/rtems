@@ -5,6 +5,9 @@ check_PROGRAMS =
 check_PROGRAMS += calloc
 calloc_SOURCES = calloc.c
 
+check_PROGRAMS += clock_gettime
+clock_gettime_SOURCES = clock_gettime.c
+
 check_PROGRAMS += close
 close_SOURCES = close.c
 
@@ -44,6 +47,9 @@ getpwnam_SOURCES = getpwnam.c
 
 check_PROGRAMS += getpwuid
 getpwuid_SOURCES = getpwuid.c
+
+check_PROGRAMS += gettimeofday
+gettimeofday_SOURCES = gettimeofday.c
 
 check_PROGRAMS += getuid
 getuid_SOURCES = getuid.c
