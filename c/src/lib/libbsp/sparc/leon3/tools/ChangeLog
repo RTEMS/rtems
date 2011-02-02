@@ -1,3 +1,7 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.68, automake-1.11.1.
+
 2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* runtest.in: Skip all fatal error tests.

@@ -1,3 +1,7 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.68, automake-1.11.1.
+
 2007-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Use MKDIR_P instead of mkdir_p.

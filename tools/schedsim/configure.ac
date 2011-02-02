@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.68)
+AC_PREREQ([2.68])
 AC_INIT([rtems-tools-schedsim],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([rtems])
 RTEMS_TOP(../..)

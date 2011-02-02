@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.67)
+AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-tests-samples],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([hello])
 RTEMS_TOP([../..],[..])

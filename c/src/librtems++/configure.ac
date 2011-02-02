@@ -2,14 +2,14 @@
 ##
 ## $Id$
 
-AC_PREREQ(2.64)
+AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-librtems++],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla],[rtems-c-src-librtems++])
 AC_CONFIG_SRCDIR([include/rtems++])
 RTEMS_TOP(../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign subdir-objects 1.10])
+AM_INIT_AUTOMAKE([no-define foreign subdir-objects 1.11.1])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_CXX

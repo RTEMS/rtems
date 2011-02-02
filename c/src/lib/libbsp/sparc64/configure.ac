@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.60)
+AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-lib-libbsp-sparc64],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 
 # GAB: ./shared is used by sparc v7/8 bsps
@@ -11,7 +11,7 @@ AC_INIT([rtems-c-src-lib-libbsp-sparc64],[_RTEMS_VERSION],[http://www.rtems.org/
 RTEMS_TOP(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AM_INIT_AUTOMAKE([no-define foreign 1.10])
+AM_INIT_AUTOMAKE([no-define foreign 1.11.1])
 AM_MAINTAINER_MODE
 
 RTEMS_ENV_RTEMSBSP

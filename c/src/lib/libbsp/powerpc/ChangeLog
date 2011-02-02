@@ -1,3 +1,7 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.68, automake-1.11.1.
+
 2011-01-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* beatnik/include/bsp.h, beatnik/irq/irq.h, beatnik/pci/gt_pci_init.c,
