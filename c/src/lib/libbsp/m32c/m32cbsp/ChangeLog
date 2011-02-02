@@ -1,3 +1,7 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tools/configure.ac: Require autoconf-2.68, automake-1.11.1.
+
 2010-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* start/start.S: Verify boot_card() is passed a NULL.
