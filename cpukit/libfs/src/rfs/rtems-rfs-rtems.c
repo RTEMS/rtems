@@ -151,7 +151,10 @@ rtems_rfs_rtems_eval_path (const char*                       path,
     if (rtems_rfs_current_dir (node))
     {
       if (*path)
+      {
+        rtems_rfs_inode_close (fs, &inode);
         continue;
+      }
       break;
     }
 
@@ -337,7 +340,10 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
     if (rtems_rfs_current_dir (node))
     {
       if (*path)
+      {
+        rtems_rfs_inode_close (fs, &inode);
         continue;
+      }
       break;
     }
      

@@ -1,3 +1,8 @@
+2011-02-08	Brett Swimley <bswimley@advanced.pro>
+
+	* libfs/src/rfs/rtems-rfs-rtems.c: Fix bug where the eval path did
+	not close an inode.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
