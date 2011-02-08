@@ -107,12 +107,13 @@ rtems_task Init(
 
   /* Check status values. */
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+  /* Note: POSIX mandates struct timespec->tv_nsec to be a "long" */
     printf(
-      "wall time should be ~600000000 is %" PRId32 "\n",
+      "wall time should be ~600000000 is %ld\n",
       period_status.since_last_period.tv_nsec
     );
     printf(
-      "cpu time should be ~100000000 is %" PRId32 "\n",
+      "cpu time should be ~100000000 is %ld\n",
       period_status.executed_since_last_period.tv_nsec
     );
     rtems_test_assert( period_status.since_last_period.tv_sec == 0 );
