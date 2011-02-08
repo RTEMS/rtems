@@ -1,5 +1,7 @@
 2011-02-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp69/init.c: Use "ld" instead of PRId32 to print
+	struct timespec->tv_nsec.
 	* sp19/inttest.h: Use PRIx32 instead of "lx".
 
 2011-02-02	Joel Sherrill <joel.sherrilL@OARcorp.com>
