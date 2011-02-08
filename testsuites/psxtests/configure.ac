@@ -55,6 +55,8 @@ AC_CHECK_DECLS([mprotect],[],[],[[#include <sys/mman.h>]])
 
 # FIXME: We should get rid of this. It's a cludge.
 AC_CHECK_SIZEOF([off_t])
+AC_CHECK_SIZEOF([blksize_t])
+AC_CHECK_SIZEOF([blkcnt_t])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

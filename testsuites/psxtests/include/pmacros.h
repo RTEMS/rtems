@@ -101,6 +101,26 @@
 #error "unsupported size of off_t"
 #endif
 
+#if SIZEOF_BLKSIZE_T == 8
+#define PRIxblksize_t PRIx64
+#elif SIZEOF_BLKSIZE_T == 4
+#define PRIxblksize_t PRIx32
+#else
+/* Warn and fall back to "long" */
+#warning "unsupported size of blksize_t"
+#define PRIxblksize_t "lx"
+#endif
+
+#if SIZEOF_BLKSIZE_T == 8
+#define PRIxblkcnt_t PRIx64
+#elif SIZEOF_BLKSIZE_T == 4
+#define PRIxblkcnt_t PRIx32
+#else
+/* Warn and fall back to "long" */
+#warning "unsupported size of blkcnt_t"
+#define PRIxblkcnt_t "lx"
+#endif
+
 #endif
 
 /* end of file */
