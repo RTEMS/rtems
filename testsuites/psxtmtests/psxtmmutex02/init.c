@@ -23,7 +23,7 @@ void *Low(
   void *argument
 )
 {
-  long end_time;
+  uint32_t end_time;
 
   /*
    * Now we have finished the thread startup overhead,
