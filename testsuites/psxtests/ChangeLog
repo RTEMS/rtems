@@ -1,3 +1,9 @@
+2011-02-08	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* include/pmacros.h: Add PRIxblksize_t, PRIxblkcnt_t.
+	* configure.ac: Add AC_CHECK_SIZEOF([blksize_t]),
+	AC_CHECK_SIZEOF([blkcnt_t]).
+
 2011-02-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
