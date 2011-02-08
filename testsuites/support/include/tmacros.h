@@ -304,14 +304,6 @@ extern "C" {
 /* newlib's ino_t is a typedef to "unsigned long" */
 #define PRIxino_t "lx"
 
-/* IEEE Std 1003.1-2008 defines a type blksize_t,
- * newlib currently doesn't have this type, but uses "long" */
-#define PRIxblksize_t "lx"
-
-/* IEEE Std 1003.1-2008 defines a type blkcnt_t,
- * newlib currently doesn't have this type, but uses "long" */
-#define PRIxblkcnt_t "lx"
-
 #ifdef __cplusplus
 }
 #endif
