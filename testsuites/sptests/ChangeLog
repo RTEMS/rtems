@@ -1,3 +1,7 @@
+2011-02-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp19/inttest.h: Use PRIx32 instead of "lx".
+
 2011-02-02	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* sp04/tswitch.c: Shrink memory requirements.
