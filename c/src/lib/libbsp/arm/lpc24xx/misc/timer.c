@@ -20,11 +20,13 @@
  */
 
 #include <rtems.h>
+#include <bsh.h>
+#include <rtems/btimer.h>
 #include <rtems/timerdrv.h>
 
 #include <bsp/system-clocks.h>
 
-static bool benchmark_timer_find_average_overhead = false;
+bool benchmark_timer_find_average_overhead = false;
 
 static uint32_t benchmark_timer_base;
 
