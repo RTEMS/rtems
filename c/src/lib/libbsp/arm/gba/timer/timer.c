@@ -29,6 +29,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <rtems/btimer.h>
 #include <bsp/irq.h>
 #include <gba.h>
 

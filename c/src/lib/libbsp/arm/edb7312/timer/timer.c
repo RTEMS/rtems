@@ -22,6 +22,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <rtems/btimer.h>
 #include <ep7312.h>
 
 uint16_t         tstart;
@@ -48,7 +49,7 @@ void benchmark_timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-int benchmark_timer_read( void )
+uint32_t benchmark_timer_read( void )
 {
   uint16_t         t;
   uint32_t         total;
