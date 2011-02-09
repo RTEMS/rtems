@@ -147,6 +147,10 @@ $(PROJECT_INCLUDE)/rtems/status-checks.h: include/rtems/status-checks.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/status-checks.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/status-checks.h
 
+$(PROJECT_INCLUDE)/rtems/btimer.h: include/rtems/btimer.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/btimer.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/btimer.h
+
 $(PROJECT_INCLUDE)/rtems/endian.h: include/rtems/endian.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/endian.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/endian.h
