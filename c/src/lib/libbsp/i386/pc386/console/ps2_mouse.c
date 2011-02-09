@@ -68,7 +68,7 @@ static void ( *driver_input_handler_ps2 )( void *,  unsigned char *, int ) = 0;
  */
 void ps2_set_driver_handler( int port, void ( *handler )( void *,  unsigned char *, int ) )
 {
-   driver_input_handler_ps2 = handler;
+  driver_input_handler_ps2 = handler;
 }
 
 static void mdelay( unsigned long t )
@@ -117,82 +117,80 @@ static rtems_irq_connect_data ps2_isr_data = { AUX_IRQ,
 
 static void kb_wait(void)
 {
-	unsigned long timeout = KBC_TIMEOUT;
+  unsigned long timeout = KBC_TIMEOUT;
 
-	do {
-		/*
-		 * "handle_kbd_event()" will handle any incoming events
-		 * while we wait - keypresses or mouse movement.
-		 */
-		unsigned char status = handle_kbd_event();
+  do {
+    /*
+     * "handle_kbd_event()" will handle any incoming events
+     * while we wait - keypresses or mouse movement.
+     */
+    unsigned char status = handle_kbd_event();
 
-		if (! (status & KBD_STAT_IBF))
-			return;
+    if (! (status & KBD_STAT_IBF))
+      return;
 
-		mdelay(1);
+    mdelay(1);
+    timeout--;
+  } while (timeout);
 
-		timeout--;
-	} while (timeout);
-#ifdef KBD_REPORT_TIMEOUTS
-	printk( "Keyboard timed out[1]\n");
-#endif
+  #ifdef KBD_REPORT_TIMEOUTS
+    printk( "Keyboard timed out[1]\n");
+  #endif
 }
 
 static int do_acknowledge(unsigned char scancode)
 {
-	if (reply_expected) {
-	  /* Unfortunately, we must recognise these codes only if we know they
-	   * are known to be valid (i.e., after sending a command), because there
-	   * are some brain-damaged keyboards (yes, FOCUS 9000 again) which have
-	   * keys with such codes :(
-	   */
-		if (scancode == KBD_REPLY_ACK) {
-			acknowledge = 1;
-			reply_expected = 0;
-			return 0;
-		} else if (scancode == KBD_REPLY_RESEND) {
-			resend = 1;
-			reply_expected = 0;
-			return 0;
-		}
-		/* Should not happen... */
-#if 0
-		printk( "keyboard reply expected - got %02x\n",
-		       scancode);
-#endif
-	}
-	return 1;
+  if (reply_expected) {
+
+    /* Unfortunately, we must recognise these codes only if we know they
+     * are known to be valid (i.e., after sending a command), because there
+     * are some brain-damaged keyboards (yes, FOCUS 9000 again) which have
+     * keys with such codes :(
+     */
+    if (scancode == KBD_REPLY_ACK) {
+      acknowledge = 1;
+      reply_expected = 0;
+      return 0;
+    } else if (scancode == KBD_REPLY_RESEND) {
+      resend = 1;
+      reply_expected = 0;
+      return 0;
+    }
+
+    /* Should not happen... */
+    #if 0
+      printk( "keyboard reply expected - got %02x\n", scancode);
+    #endif
+  }
+  return 1;
 }
 
 static inline void handle_mouse_event(unsigned char scancode)
 {
-	if (mouse_reply_expected) {
-		if (scancode == AUX_ACK) {
-			mouse_reply_expected--;
-			return;
-		}
-		mouse_reply_expected = 0;
-	}
+  if (mouse_reply_expected) {
+    if (scancode == AUX_ACK) {
+      mouse_reply_expected--;
+      return;
+    }
+    mouse_reply_expected = 0;
+  }
 
-	if (aux_count) {
-		int head = queue->head;
+  if (aux_count) {
+    int head = queue->head;
+    queue->buf[head] = scancode;
+    head = (head + 1) & (AUX_BUF_SIZE-1);
+    if (head != queue->tail) {
+      queue->head = head;
+    }
 
-		queue->buf[head] = scancode;
-		head = (head + 1) & (AUX_BUF_SIZE-1);
-		if (head != queue->tail) {
-			queue->head = head;
-		}
-      /* if the input queue is active, add to it */
-      if( driver_input_handler_ps2 )
-      {
-          driver_input_handler_ps2( NULL,  &scancode, 1 );
-      }
-      else
-      {
-         /* post this byte to termios */
-  	      rtems_termios_enqueue_raw_characters( termios_ttyp_paux, (char *)&scancode, 1 );
-      }
-	}
+    /* if the input queue is active, add to it */
+    if( driver_input_handler_ps2 ) {
+      driver_input_handler_ps2( NULL,  &scancode, 1 );
+    } else {
+      /* post this byte to termios */
+      rtems_termios_enqueue_raw_characters( termios_ttyp_paux, (char *)&scancode, 1 );
+    }
+  }
 }
 
 /*
@@ -204,141 +202,44 @@ static inline void handle_mouse_event(unsigned char scancode)
  */
 static unsigned char handle_kbd_event(void)
 {
-	unsigned char status = kbd_read_status();
-	unsigned int work = 10000;
+  unsigned char status = kbd_read_status();
+  unsigned int work = 10000;
 
-	while (status & KBD_STAT_OBF) {
-		unsigned char scancode;
-
-		scancode = kbd_read_input();
-
-		if (status & KBD_STAT_MOUSE_OBF) {
-			handle_mouse_event(scancode);
-		} else {
-			do_acknowledge(scancode);
-         printk("pc_keyb: %X ", scancode );
-		}
-		status = kbd_read_status();
-		if(!work--)
-		{
-			printk("pc_keyb: controller jammed (0x%02X).\n",
-				status);
-			break;
-		}
-	}
-
-	return status;
+  while (status & KBD_STAT_OBF) {
+    unsigned char scancode;
+    scancode = kbd_read_input();
+    if (status & KBD_STAT_MOUSE_OBF) {
+      handle_mouse_event(scancode);
+    } else {
+      do_acknowledge(scancode);
+      printk("pc_keyb: %X ", scancode );
+    }
+    status = kbd_read_status();
+    if(!work--) {
+      printk("pc_keyb: controller jammed (0x%02X).\n", status);
+      break;
+    }
+  }
+  return status;
 }
 
 static void ps2_mouse_interrupt(rtems_irq_hdl_param ignored)
 {
-	handle_kbd_event();
+  handle_kbd_event();
 }
-
-/*
- * send_data sends a character to the keyboard and waits
- * for an acknowledge, possibly retrying if asked to. Returns
- * the success status.
- *
- * Don't use 'jiffies', so that we don't depend on interrupts
- */
-#if 0
-static int send_data(unsigned char data)
-{
-	int retries = 3;
-
-	do {
-		unsigned long timeout = KBD_TIMEOUT;
-
-		acknowledge = 0; /* Set by interrupt routine on receipt of ACK. */
-		resend = 0;
-		reply_expected = 1;
-		kbd_write_output_w(data);
-		for (;;) {
-			if (acknowledge)
-				return 1;
-			if (resend)
-				break;
-			mdelay(1);
-			if (!--timeout) {
-#ifdef KBD_REPORT_TIMEOUTS
-				printk( "Keyboard timeout[2]\n");
-#endif
-				return 0;
-			}
-		}
-	} while (retries-- > 0);
-#ifdef KBD_REPORT_TIMEOUTS
-	printk( "keyboard: Too many NACKs -- noisy kbd cable?\n");
-#endif
-	return 0;
-}
-#endif
-
-#if 0
-#define KBD_NO_DATA	(-1)	/* No data */
-#define KBD_BAD_DATA	(-2)	/* Parity or other error */
-
-static int kbd_read_data(void)
-{
-	int retval = KBD_NO_DATA;
-	unsigned char status;
-
-	status = kbd_read_status();
-	if (status & KBD_STAT_OBF) {
-		unsigned char data = kbd_read_input();
-
-		retval = data;
-		if (status & (KBD_STAT_GTO | KBD_STAT_PERR))
-			retval = KBD_BAD_DATA;
-	}
-	return retval;
-}
-
-static void kbd_clear_input(void)
-{
-	int maxread = 100;	/* Random number */
-
-	do {
-		if (kbd_read_data() == KBD_NO_DATA)
-			break;
-	} while (--maxread);
-}
-
-static int kbd_wait_for_input(void)
-{
-	long timeout = KBD_INIT_TIMEOUT;
-
-	do {
-		int retval = kbd_read_data();
-		if (retval >= 0)
-			return retval;
-		mdelay(1);
-	} while (--timeout);
-	return -1;
-}
-#endif
 
 static void kbd_write_command_w(int data)
 {
-	kb_wait();
-	kbd_write_command(data);
+  kb_wait();
+  kbd_write_command(data);
 }
-
-#if 0
-static void kbd_write_output_w(int data)
-{
-	kb_wait();
-	kbd_write_output(data);
-}
-#endif
 
 static void kbd_write_cmd(int cmd)
 {
-	kb_wait();
-	kbd_write_command(KBD_CCMD_WRITE_MODE);
-	kb_wait();
-	kbd_write_output(cmd);
+  kb_wait();
+  kbd_write_command(KBD_CCMD_WRITE_MODE);
+  kb_wait();
+  kbd_write_output(cmd);
 }
 
 /*
@@ -346,36 +247,35 @@ static void kbd_write_cmd(int cmd)
  */
 static int detect_auxiliary_port(void)
 {
-	int loops = 10;
-	int retval = 0;
+  int loops = 10;
+  int retval = 0;
 
-	/* Put the value 0x5A in the output buffer using the "Write
-	 * Auxiliary Device Output Buffer" command (0xD3). Poll the
-	 * Status Register for a while to see if the value really
-	 * turns up in the Data Register. If the KBD_STAT_MOUSE_OBF
-	 * bit is also set to 1 in the Status Register, we assume this
-	 * controller has an Auxiliary Port (a.k.a. Mouse Port).
-	 */
-	kb_wait();
-	kbd_write_command(KBD_CCMD_WRITE_AUX_OBUF);
+  /* Put the value 0x5A in the output buffer using the "Write
+   * Auxiliary Device Output Buffer" command (0xD3). Poll the
+   * Status Register for a while to see if the value really
+   * turns up in the Data Register. If the KBD_STAT_MOUSE_OBF
+   * bit is also set to 1 in the Status Register, we assume this
+   * controller has an Auxiliary Port (a.k.a. Mouse Port).
+   */
+  kb_wait();
+  kbd_write_command(KBD_CCMD_WRITE_AUX_OBUF);
 
-	kb_wait();
-	kbd_write_output(0x5a); /* 0x5a is a random dummy value. */
+  kb_wait();
+  kbd_write_output(0x5a); /* 0x5a is a random dummy value. */
 
-	do {
-		unsigned char status = kbd_read_status();
-
-		if (status & KBD_STAT_OBF) {
-			(void) kbd_read_input();
-			if (status & KBD_STAT_MOUSE_OBF) {
-				printk( "Detected PS/2 Mouse Port.\n");
-				retval = 1;
-			}
-			break;
-		}
-		mdelay(1);
-	} while (--loops);
-	return retval;
+  do {
+    unsigned char status = kbd_read_status();
+    if (status & KBD_STAT_OBF) {
+      kbd_read_input();
+      if (status & KBD_STAT_MOUSE_OBF) {
+        printk( "Detected PS/2 Mouse Port.\n");
+        retval = 1;
+      }
+      break;
+    }
+    mdelay(1);
+  } while (--loops);
+  return retval;
 }
 
 /*
@@ -383,10 +283,10 @@ static int detect_auxiliary_port(void)
  */
 static void aux_write_dev(int val)
 {
-	kb_wait();
-	kbd_write_command(KBD_CCMD_WRITE_MOUSE);
-	kb_wait();
-	kbd_write_output(val);
+  kb_wait();
+  kbd_write_command(KBD_CCMD_WRITE_MOUSE);
+  kb_wait();
+  kbd_write_output(val);
 }
 
 /*
@@ -394,26 +294,26 @@ static void aux_write_dev(int val)
  */
 static void aux_write_ack(int val)
 {
-	kb_wait();
-	kbd_write_command(KBD_CCMD_WRITE_MOUSE);
-	kb_wait();
-	kbd_write_output(val);
-	/* we expect an ACK in response. */
-	mouse_reply_expected++;
-	kb_wait();
+  kb_wait();
+  kbd_write_command(KBD_CCMD_WRITE_MOUSE);
+  kb_wait();
+  kbd_write_output(val);
+  /* we expect an ACK in response. */
+  mouse_reply_expected++;
+  kb_wait();
 }
 
 static unsigned char get_from_queue(void)
 {
-	unsigned char result;
-	result = queue->buf[queue->tail];
-	queue->tail = (queue->tail + 1) & (AUX_BUF_SIZE-1);
-	return result;
+  unsigned char result;
+  result = queue->buf[queue->tail];
+  queue->tail = (queue->tail + 1) & (AUX_BUF_SIZE-1);
+  return result;
 }
 
 static int queue_empty(void)
 {
-	return queue->head == queue->tail;
+  return queue->head == queue->tail;
 }
 
 /*
@@ -423,14 +323,14 @@ static int queue_empty(void)
 
 static int release_aux(void)
 {
-	if (--aux_count)
-		return 0;
-	kbd_write_cmd(AUX_INTS_OFF);			    /* Disable controller ints */
-	kbd_write_command_w(KBD_CCMD_MOUSE_DISABLE);
-
-   BSP_remove_rtems_irq_handler( &ps2_isr_data );
-	return 0;
+  if (--aux_count)
+    return 0;
+  kbd_write_cmd(AUX_INTS_OFF);			    /* Disable controller ints */
+  kbd_write_command_w(KBD_CCMD_MOUSE_DISABLE);
+  BSP_remove_rtems_irq_handler( &ps2_isr_data );
+  return 0;
 }
+
 /*
  * Install interrupt handler.
  * Enable auxiliary device.
@@ -463,116 +363,98 @@ static int open_aux(void)
  */
 size_t read_aux(char * buffer, size_t count )
 {
-	size_t i = count;
-	unsigned char c;
+  size_t i = count;
+  unsigned char c;
 
-	if (queue_empty())
-	{
-		return 0;
-   }
-	while (i > 0 && !queue_empty())
-	{
-		c = get_from_queue();
-		*buffer++ = c;
-		i--;
-	}
-	return count-i;
+  if (queue_empty()) {
+    return 0;
+  }
+  while (i > 0 && !queue_empty()) {
+    c = get_from_queue();
+    *buffer++ = c;
+    i--;
+  }
+  return count-i;
 }
 
 /*
  * Write to the aux device.
  */
-
 static int write_aux( int minor, const char * buffer, int count )
 {
-	int retval = 0;
+  int retval = 0;
 
-	if (count) {
-		int written = 0;
-
-		if (count > 32)
-			count = 32; /* Limit to 32 bytes. */
-		do {
-			char c;
-			c = *buffer++;
-			aux_write_dev(c);
-			written++;
-		} while (--count);
-		retval = -EIO;
-		if (written) {
-			retval = written;
-		}
-	}
-	return retval;
+  if (count) {
+    int written = 0;
+    if (count > 32)
+      count = 32; /* Limit to 32 bytes. */
+    do {
+      char c;
+      c = *buffer++;
+      aux_write_dev(c);
+      written++;
+    } while (--count);
+    retval = -EIO;
+    if (written) {
+      retval = written;
+    }
+  }
+  return retval;
 }
-
-#if 0
-static unsigned int aux_poll()
-{
-	if( !queue_empty() )
-		return 1;
-	return 0;
-}
-#endif
 
 static int psaux_init( void )
 {
-	if( !detect_auxiliary_port() )
-   {
-   	printk( "PS/2 - mouse not found.\n" );
-		return -EIO;
-   }
+  if( !detect_auxiliary_port() ) {
+    printk( "PS/2 - mouse not found.\n" );
+    return -EIO;
+  }
+  queue = (struct aux_queue *)malloc( sizeof(*queue) );
+  memset(queue, 0, sizeof(*queue));
+  queue->head = queue->tail = 0;
+  queue->proc_list = NULL;
 
-	queue = (struct aux_queue *)malloc( sizeof(*queue) );
-   memset(queue, 0, sizeof(*queue));
-	queue->head = queue->tail = 0;
-	queue->proc_list = NULL;
-
-#ifdef INITIALIZE_MOUSE
-	kbd_write_command_w(KBD_CCMD_MOUSE_ENABLE); /* Enable Aux. */
-	aux_write_ack(AUX_SET_SAMPLE);
-	aux_write_ack(100);			      /* 100 samples/sec */
-	aux_write_ack(AUX_SET_RES);
-	aux_write_ack(3);			         /* 8 counts per mm */
-	aux_write_ack(AUX_SET_SCALE21);	/* 2:1 scaling */
-#endif /* INITIALIZE_MOUSE */
-	kbd_write_command(KBD_CCMD_MOUSE_DISABLE); /* Disable aux device. */
-	kbd_write_cmd(AUX_INTS_OFF); /* Disable controller ints. */
-	return 0;
+  #ifdef INITIALIZE_MOUSE
+    kbd_write_command_w(KBD_CCMD_MOUSE_ENABLE); /* Enable Aux. */
+    aux_write_ack(AUX_SET_SAMPLE);
+    aux_write_ack(100);			      /* 100 samples/sec */
+    aux_write_ack(AUX_SET_RES);
+    aux_write_ack(3);			         /* 8 counts per mm */
+    aux_write_ack(AUX_SET_SCALE21);	/* 2:1 scaling */
+  #endif /* INITIALIZE_MOUSE */
+  kbd_write_command(KBD_CCMD_MOUSE_DISABLE); /* Disable aux device. */
+  kbd_write_cmd(AUX_INTS_OFF); /* Disable controller ints. */
+  return 0;
 }
 
 /*
  * paux device driver INITIALIZE entry point.
  */
-rtems_device_driver
-paux_initialize(  rtems_device_major_number major,
-                   rtems_device_minor_number minor,
-                   void                      *arg)
+rtems_device_driver paux_initialize(  
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg)
 {
-   rtems_status_code status;
+  rtems_status_code status;
 
   /*
    * Set up TERMIOS
    */
-   rtems_termios_initialize();
+  rtems_termios_initialize();
 
-	printk( "PS/2 mouse probe.\n" );
-   if( psaux_init() < 0 )
-   {
-      printk("Error detecting PS/2 mouse --\n");
-
-      /* we might want to finish the application here !!! */
-   }
-   open_aux();
+  printk( "PS/2 mouse probe.\n" );
+  if( psaux_init() < 0 ) {
+    printk("Error detecting PS/2 mouse --\n");
+    /* we might want to finish the application here !!! */
+  }
+  open_aux();
 
   /*
    * Register the device
    */
   status = rtems_io_register_name ("/dev/mouse", major, 0);
-  if (status != RTEMS_SUCCESSFUL)
-  {
-      printk("Error registering paux device!\n");
-      rtems_fatal_error_occurred (status);
+  if (status != RTEMS_SUCCESSFUL) {
+    printk("Error registering paux device!\n");
+    rtems_fatal_error_occurred (status);
   }
   return RTEMS_SUCCESSFUL;
 } /* tty_initialize */
@@ -590,16 +472,16 @@ static int paux_last_close(int major, int minor, void *arg)
  */
 static ssize_t write_aux_echo( int minor, const char * buffer, size_t count )
 {
-   return 0;
+  return 0;
 }
 
 /*
  * paux device driver OPEN entry point
  */
-rtems_device_driver
-paux_open(rtems_device_major_number major,
-                rtems_device_minor_number minor,
-                void                      *arg)
+rtems_device_driver paux_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg)
 {
   rtems_status_code              status;
   static rtems_termios_callbacks cb =
@@ -622,10 +504,10 @@ paux_open(rtems_device_major_number major,
 /*
  * paux device driver CLOSE entry point
  */
-rtems_device_driver
-paux_close(rtems_device_major_number major,
-           rtems_device_minor_number minor,
-           void                      *arg)
+rtems_device_driver paux_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg)
 {
   return (rtems_termios_close (arg));
 }
@@ -634,10 +516,10 @@ paux_close(rtems_device_major_number major,
  * paux device driver READ entry point.
  * Read characters from the PS/2 mouse.
  */
-rtems_device_driver
-paux_read(rtems_device_major_number major,
-          rtems_device_minor_number minor,
-         void                      *arg)
+rtems_device_driver paux_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg)
 {
   return rtems_termios_read (arg);
 } /* tty_read */
@@ -646,10 +528,10 @@ paux_read(rtems_device_major_number major,
  * paux device driver WRITE entry point.
  * Write characters to the PS/2 mouse.
  */
-rtems_device_driver
-paux_write(rtems_device_major_number major,
-          rtems_device_minor_number minor,
-          void                    * arg)
+rtems_device_driver  paux_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg)
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   char                  *buffer  = rw_args->buffer;
@@ -661,28 +543,28 @@ paux_write(rtems_device_major_number major,
 /*
  * Handle ioctl request.
  */
-rtems_device_driver
-paux_control(rtems_device_major_number major,
-             rtems_device_minor_number minor,
-             void                      * arg
+rtems_device_driver paux_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg
 )
 {
-	rtems_libio_ioctl_args_t *args = arg;
-	switch( args->command )
-	{
-	   default:
-      return rtems_termios_ioctl (arg);
-		break;
+  rtems_libio_ioctl_args_t *args = arg;
 
-      case MW_UID_REGISTER_DEVICE:
+  switch( args->command ) {
+    default:
+      return rtems_termios_ioctl (arg);
+      break;
+
+    case MW_UID_REGISTER_DEVICE:
       printk( "PS2 Mouse: reg=%s\n", args->buffer );
       register_mou_msg_queue( args->buffer, -1 );
-		break;
+      break;
 
-      case MW_UID_UNREGISTER_DEVICE:
+    case MW_UID_UNREGISTER_DEVICE:
       unregister_mou_msg_queue( -1 );
-		break;
-   }
- 	args->ioctl_return = 0;
-   return RTEMS_SUCCESSFUL;
+      break;
+  }
+  args->ioctl_return = 0;
+  return RTEMS_SUCCESSFUL;
 }

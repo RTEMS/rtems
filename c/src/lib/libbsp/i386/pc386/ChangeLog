@@ -1,3 +1,8 @@
+2011-02-09	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* console/ps2_mouse.c: Formatting changes in preparation for making
+	mouse parsing and serial mouse driver BSP independent.
+
 2011-02-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* timer/timer.c: Include <rtems/btimer.h>.
