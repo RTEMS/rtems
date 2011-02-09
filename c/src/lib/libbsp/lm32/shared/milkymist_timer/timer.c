@@ -21,6 +21,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <rtems/btimer.h>
 #include "../include/system_conf.h"
 #include "../../shared/clock/clock.h"
 
@@ -58,7 +59,7 @@ void benchmark_timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       4  /* Don't trust a clicks value lower than this */
 
-int benchmark_timer_read( void )
+uint32_t benchmark_timer_read( void )
 {
   uint32_t ticks;
   uint32_t total;
