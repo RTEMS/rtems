@@ -14,6 +14,7 @@
 #include <assert.h>
 
 #include <bsp.h>
+#include <rtems/btimer.h>
 
 bool benchmark_timer_find_average_overhead;
 
@@ -56,7 +57,7 @@ void benchmark_timer_initialize(void)
                              /* mongoose-v can count cycles. :) */
 #include <rtems/bspIo.h>
 
-int benchmark_timer_read(void)
+uint32_t benchmark_timer_read(void)
 {
   uint32_t          clicks;
   uint32_t          total;
