@@ -11,6 +11,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <rtems/btimer.h>
 #include <stdlib.h>
 
 int Ttimer_val;
@@ -93,7 +94,7 @@ void benchmark_timer_initialize(void)
                              /* (3 ticks) to start/stop the timer. */
 #define LEAST_VALID       4  /* Don't trust a value lower than this */
 
-int benchmark_timer_read(void)
+uint32_t benchmark_timer_read(void)
 {
   register uint32_t         clicks;
   register uint32_t         total;

@@ -28,8 +28,8 @@
  */
 
 #include <stdlib.h>
-
 #include <bsp.h>
+#include <rtems/btimer.h>
 #include <bsp/irq.h>
 #include <libcpu/cpuModel.h>
 

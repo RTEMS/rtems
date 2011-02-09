@@ -10,6 +10,7 @@
  */
 
 #include <bsp.h>
+#include <rtems/btimer.h>
 
 #include <varvects.h>
 

@@ -20,6 +20,7 @@
 #include <assert.h>
 
 #include <bsp.h>
+#include <rtems/btimer.h>
 
 uint64_t         Timer_driver_Start_time;
 
@@ -43,7 +44,7 @@ void benchmark_timer_initialize()
  *  benchmark_timer_read
  */
 
-int benchmark_timer_read()
+uint32_t benchmark_timer_read()
 {
   uint64_t          clicks;
   uint64_t          total64;

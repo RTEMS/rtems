@@ -50,6 +50,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <rtems/btimer.h>
 #include <mpc8xx.h>
 
 bool benchmark_timer_find_average_overhead;
@@ -86,9 +87,9 @@ benchmark_timer_initialize (void)
 /*
  * Return timer value in microsecond units
  */
-int benchmark_timer_read(void)
+uint32_t benchmark_timer_read(void)
 {
-  int retval;
+  uint32_t retval;
   retval = *(uint32_t*)&m8xx.tcn1;
   retval = retval * 1000000LL / BSP_bus_frequency;
   return retval;

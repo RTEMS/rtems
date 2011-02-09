@@ -36,6 +36,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <rtems/btimer.h>
 #include <m340uart.h>
 #include <m340timer.h>
 #include <m68340.h>
@@ -251,7 +252,7 @@ void benchmark_timer_initialize (void)
   Output parameters: -
   Description: Return timer value in microsecond units
  *****************************************************/
-int
+uint32_t
 benchmark_timer_read (void)
 {
  /* there's CLOCK_SPEED / 16 micro seconds between two timer register decrement */
