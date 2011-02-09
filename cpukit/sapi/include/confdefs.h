@@ -499,7 +499,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /*
- *  STACK_CHECER_ON was still available in 4.9 so give a warning for now.
+ *  STACK_CHECKER_ON was still available in 4.9 so give a warning for now.
  */
 #if defined(STACK_CHECKER_ON)
   #define CONFIGURE_STACK_CHECKER_ENABLED
