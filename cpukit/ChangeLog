@@ -1,3 +1,10 @@
+2011-02-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/rtems/btimer.h: New.
+	* Makefile.am: Add rtems/btimer.h
+	* libcsupport/include/timerdrv.h: Reflect having split out functions
+	  to rtems/btimer.h.
+
 2011-02-08	Brett Swimley <bswimley@advanced.pro>
 
 	* libfs/src/rfs/rtems-rfs-rtems.c: Fix bug where the eval path did

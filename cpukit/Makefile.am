@@ -75,6 +75,7 @@ include_rtems_HEADERS += include/rtems/bspIo.h include/rtems/userenv.h \
     include/rtems/concat.h \
     include/rtems/status-checks.h
 
+include_rtems_HEADERS += include/rtems/btimer.h
 include_rtems_HEADERS += include/rtems/endian.h
 
 ## should be conditional and only installed for PowerPC, x86, and ARM

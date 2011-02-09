@@ -19,21 +19,13 @@
 #ifndef _RTEMS_TIMERDRV_H
 #define _RTEMS_TIMERDRV_H
 
+#include <rtems/btimer.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* functions */
-
-void benchmark_timer_initialize( void );
-
-uint32_t   benchmark_timer_read( void );
-
-rtems_status_code benchmark_timer_empty_function( void );
-
-void benchmark_timer_disable_subtracting_average_overhead(
-  bool find_flag
-);
+/* Intentionally empty */
 
 #ifdef __cplusplus
 }
