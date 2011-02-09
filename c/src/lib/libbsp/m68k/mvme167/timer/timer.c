@@ -31,6 +31,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <bsp.h>
 
 /* Periodic tick interval */
@@ -105,7 +106,7 @@ void benchmark_timer_initialize(void)
  *  LEAST_VALID is the lowest number this routine should trust.  Numbers
  *  below this are "noise" and zero is returned.
  */
-int benchmark_timer_read(void)
+uint32_t benchmark_timer_read(void)
 {
   uint32_t            total;
 

@@ -9,6 +9,7 @@
  *  $Id$
  */
 
+#include <rtems/btimer.h>
 #include <bsp.h>
 
 bool benchmark_timer_find_average_overhead;
@@ -39,7 +40,7 @@ void benchmark_timer_initialize( void )
 /*
  * Return timer value in 1/2-microsecond units
  */
-int benchmark_timer_read( void )
+uint32_t benchmark_timer_read( void )
 {
   uint32_t         total;
   total = 0;

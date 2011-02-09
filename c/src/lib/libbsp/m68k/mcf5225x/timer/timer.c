@@ -16,6 +16,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <bsp.h>
 
 void benchmark_timer_initialize(void)
@@ -30,7 +31,7 @@ void benchmark_timer_initialize(void)
 /*
  * Return timer value in microsecond units
  */
-int benchmark_timer_read(void)
+uint32_t benchmark_timer_read(void)
 {
   return MCF_DTIM3_DTCN;
 }

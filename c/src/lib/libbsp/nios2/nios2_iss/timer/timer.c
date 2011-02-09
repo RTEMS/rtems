@@ -23,6 +23,7 @@
 #define TIMER_WRAPS_AFTER_1MS 0
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <rtems/score/cpu.h>
 #include <bsp.h>
 
@@ -97,7 +98,7 @@ void benchmark_timer_initialize( void )
 
 #define LEAST_VALID AVG_OVERHEAD /* Don't trust a value lower than this */
 
-int benchmark_timer_read( void )
+uint32_t benchmark_timer_read( void )
 {
   uint32_t timer_wraps;
   uint32_t timer_snap;

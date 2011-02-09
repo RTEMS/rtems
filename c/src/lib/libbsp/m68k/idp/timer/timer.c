@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <bsp.h>
 #include <rtems/motorola/mc68230.h>
 
@@ -50,7 +51,7 @@ void benchmark_timer_initialize(void)
 #define AVG_OVERHEAD      9  /* may not be right -- do this later */
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int benchmark_timer_read(void)
+uint32_t benchmark_timer_read(void)
 {
   uint8_t         data;
   uint8_t          msb, osb, lsb;

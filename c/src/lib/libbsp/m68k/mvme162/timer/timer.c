@@ -19,6 +19,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <bsp.h>
 
 /* Periodic tick interval */
@@ -51,7 +52,7 @@ void benchmark_timer_initialize(void)
                                 /* (3 countdowns) to start/stop the timer. */
 #define LEAST_VALID       10U   /* Don't trust a value lower than this */
 
-int benchmark_timer_read(void)
+uint32_t benchmark_timer_read(void)
 {
   uint32_t            total;
 

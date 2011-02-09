@@ -51,6 +51,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <bsp.h>
 #include <mcf548x/mcf548x.h>
 
@@ -67,7 +68,7 @@ void benchmark_timer_initialize(void)
  * Return timer value in microsecond units
  * XLB clock 100 MHz / 1us is equal to 100 counts
  */
-int
+uint32_t
 benchmark_timer_read(void)
 {
     microsecond_timer_value = (0xFFFFFFFF - MCF548X_SLT_SCNT1)/100;

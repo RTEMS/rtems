@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <bsp.h>
 #include <nds.h>
 

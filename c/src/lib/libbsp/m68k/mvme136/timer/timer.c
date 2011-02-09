@@ -9,6 +9,7 @@
  *  $Id$
  */
 
+#include <rtems/btimer.h>
 #include <bsp.h>
 #include <rtems/zilog/z8036.h>
 
@@ -51,7 +52,7 @@ void benchmark_timer_initialize(void)
                              /* (6 countdowns) to start/stop the timer. */
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int benchmark_timer_read(void)
+uint32_t benchmark_timer_read(void)
 {
 /*
   uint8_t          msb, lsb;

@@ -32,6 +32,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <bsp.h>
 #include <rtems/m68k/m68360.h>
 
@@ -69,7 +70,7 @@ benchmark_timer_initialize (void)
 /*
  * Return timer value in microsecond units
  */
-int
+uint32_t
 benchmark_timer_read (void)
 {
 	unsigned short val;
