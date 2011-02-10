@@ -62,6 +62,9 @@ RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[1])
 RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE], [If defined, then the PowerPC specific
  code in RTEMS will use data cache instructions to optimize the context switch code.])
 
+RTEMS_BSPOPTS_SET([GEN83XX_ENABLE_INTERRUPT_NESTING],[*],[1])
+RTEMS_BSPOPTS_HELP([GEN83XX_ENABLE_INTERRUPT_NESTING],[enable interrupt nesting])
+
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 

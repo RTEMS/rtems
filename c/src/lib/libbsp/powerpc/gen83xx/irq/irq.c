@@ -379,7 +379,12 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
 	if (MPC83XX_IPIC_IS_VALID_VECTOR( vecnum)) {
 		rsc_ptr = &mpc83xx_ipic_isrc_rsc [vecnum];
 		if (rsc_ptr->mask_reg != NULL) {
-			*(rsc_ptr->mask_reg) |= 1 << (31 - rsc_ptr->bit_num);
+			uint32_t bit = 1U << (31 - rsc_ptr->bit_num);
+			rtems_interrupt_level level;
+
+			rtems_interrupt_disable(level);
+			*(rsc_ptr->mask_reg) |= bit;
+			rtems_interrupt_enable(level);
 		}
 	}
 
@@ -394,13 +399,17 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
 	if (MPC83XX_IPIC_IS_VALID_VECTOR( vecnum)) {
 		rsc_ptr = &mpc83xx_ipic_isrc_rsc [vecnum];
 		if (rsc_ptr->mask_reg != NULL) {
-			*(rsc_ptr->mask_reg) &= ~(1 << (31 - rsc_ptr->bit_num));
+			uint32_t bit = 1U << (31 - rsc_ptr->bit_num);
+			rtems_interrupt_level level;
+
+			rtems_interrupt_disable(level);
+			*(rsc_ptr->mask_reg) &= ~bit;
+			rtems_interrupt_enable(level);
 		}
 	}
 
 	return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  *  IRQ Handler: this is called from the primary exception dispatcher
@@ -433,6 +442,7 @@ static int BSP_irq_handle_at_ipic( unsigned excNum)
 	 * exceptions and dispatch the handler.
 	 */
 	if (MPC83XX_IPIC_IS_VALID_VECTOR( vecnum)) {
+#ifdef GEN83XX_ENABLE_INTERRUPT_NESTING
 		mask_ptr = &mpc83xx_ipic_prio2mask [vecnum];
 
 		rtems_interrupt_disable( level);
@@ -455,10 +465,12 @@ static int BSP_irq_handle_at_ipic( unsigned excNum)
 		if (excNum != ASM_E300_CRIT_VECTOR) {
 			msr = ppc_external_exceptions_enable();
 		}
+#endif /* GEN83XX_ENABLE_INTERRUPT_NESTING */
 
 		/* Dispatch interrupt handlers */
 		bsp_interrupt_handler_dispatch( vecnum + BSP_IPIC_IRQ_LOWEST_OFFSET);
 
+#ifdef GEN83XX_ENABLE_INTERRUPT_NESTING
 		/* Restore machine state */
 		if (excNum != ASM_E300_CRIT_VECTOR) {
 			ppc_external_exceptions_disable( msr);
@@ -471,6 +483,7 @@ static int BSP_irq_handle_at_ipic( unsigned excNum)
 		mpc83xx.ipic.semsr = mask_save.semsr_mask;
 		mpc83xx.ipic.sermr = mask_save.sermr_mask;
 		rtems_interrupt_enable( level);
+#endif /* GEN83XX_ENABLE_INTERRUPT_NESTING */
 	} else {
 		bsp_interrupt_handler_default( vecnum);
 	}
