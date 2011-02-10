@@ -37,7 +37,7 @@ rtems_status_code rtems_bdpart_create(
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   bool dos_compatibility = format != NULL
     && format->type == RTEMS_BDPART_FORMAT_MBR
-    && format->mbr.dos_compatibility;
+    && format->u.mbr.dos_compatibility;
   rtems_blkdev_bnum disk_end = 0;
   rtems_blkdev_bnum pos = 0;
   rtems_blkdev_bnum dist_sum = 0;

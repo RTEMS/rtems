@@ -261,10 +261,10 @@ rtems_status_code rtems_bdpart_read(
 
   /* Set format */
   format->type = RTEMS_BDPART_FORMAT_MBR;
-  format->mbr.disk_id = rtems_uint32_from_little_endian(
+  format->u.mbr.disk_id = rtems_uint32_from_little_endian(
     block->buffer + RTEMS_BDPART_MBR_OFFSET_DISK_ID
   );
-  format->mbr.dos_compatibility = true;
+  format->u.mbr.dos_compatibility = true;
 
   /* Iterate through the rest of the primary partition table */
   for (i = 1; i < 4; ++i) {

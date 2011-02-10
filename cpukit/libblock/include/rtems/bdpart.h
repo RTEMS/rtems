@@ -197,7 +197,7 @@ typedef struct {
        */
       uuid_t disk_id;
     } gpt;
-  };
+  } u;
 } rtems_bdpart_format;
 
 /**
