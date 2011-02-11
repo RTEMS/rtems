@@ -1,3 +1,9 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/1553/b1553brm.c, shared/can/grcan.c, shared/can/occan.c,
+	shared/spw/grspw.c, shared/uart/apbuart.c:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

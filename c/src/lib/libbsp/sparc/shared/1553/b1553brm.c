@@ -89,7 +89,7 @@
 #define READ_DMA(address) _BRM_REG_READ16((unsigned int)address)
 static __inline__ unsigned short _BRM_REG_READ16(unsigned int addr) {
 	unsigned short tmp;
-	asm(" lduha [%1]1, %0 "
+	__asm__ (" lduha [%1]1, %0 "
 	  : "=r"(tmp)
 	  : "r"(addr)
 	);

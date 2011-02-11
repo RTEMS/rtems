@@ -144,7 +144,7 @@ static void apbuart_hw_open(apbuart_priv *uart);
 	#define READ_REG(address) _APBUART_READ_REG((unsigned int)(address))
   static __inline__ unsigned int _APBUART_READ_REG(unsigned int addr) {
         unsigned int tmp;
-        asm(" lda [%1]1, %0 "
+        __asm__ (" lda [%1]1, %0 "
             : "=r"(tmp)
             : "r"(addr)
            );

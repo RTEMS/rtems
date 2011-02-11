@@ -267,7 +267,7 @@ static void grcan_interrupt(struct grcan_priv *pDev);
 static unsigned char __inline__ _grcan_read_nocache_byte(unsigned int address)
 {
   unsigned char tmp;
-  asm(" lduba [%1]1, %0 "
+  __asm__ (" lduba [%1]1, %0 "
     : "=r"(tmp)
     : "r"(address)
   );
@@ -282,7 +282,7 @@ static unsigned char __inline__ _grcan_read_nocache_byte(unsigned int address)
 static unsigned int __inline__ _grcan_read_nocache(unsigned int address)
 {
   unsigned int tmp;
-  asm(" lda [%1]1, %0 "
+  __asm__ (" lda [%1]1, %0 "
     : "=r"(tmp)
     : "r"(address)
   );

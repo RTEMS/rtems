@@ -206,7 +206,7 @@ static GRSPW_DEV *grspw_devs;
 #else
 static unsigned int _SPW_READ(void *addr) {
         unsigned int tmp;
-        asm(" lda [%1]1, %0 "
+        __asm__ (" lda [%1]1, %0 "
             : "=r"(tmp)
             : "r"(addr)
            );
@@ -215,7 +215,7 @@ static unsigned int _SPW_READ(void *addr) {
 
 static unsigned int _MEM_READ(void *addr) {
         unsigned int tmp;
-        asm(" lduba [%1]1, %0 "
+        __asm__ (" lduba [%1]1, %0 "
             : "=r"(tmp)
             : "r"(addr)
            );

@@ -295,7 +295,7 @@ static unsigned int sys_freq_hz;
  #define READ_REG(address) _OCCAN_REG_READ((unsigned int)(address))
  static __inline__ unsigned char _OCCAN_REG_READ(unsigned int addr) {
         unsigned char tmp;
-        asm(" lduba [%1]1, %0 "
+        __asm__ (" lduba [%1]1, %0 "
             : "=r"(tmp)
             : "r"(addr)
            );
