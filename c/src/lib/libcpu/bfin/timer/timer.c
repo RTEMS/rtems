@@ -33,13 +33,13 @@ void benchmark_timer_initialize( void )
 {
 
   /*reset counters*/
-  asm ("R2 = 0;");
-  asm ("CYCLES = R2;");
-  asm ("CYCLES2 = R2;");
+  __asm__ ("R2 = 0;");
+  __asm__ ("CYCLES = R2;");
+  __asm__ ("CYCLES2 = R2;");
   /*start counters*/
-  asm ("R2 = SYSCFG;");
-  asm ("BITSET(R2,1);");
-  asm ("SYSCFG = R2");
+  __asm__ ("R2 = SYSCFG;");
+  __asm__ ("BITSET(R2,1);");
+  __asm__ ("SYSCFG = R2");
 
 }
 
@@ -62,13 +62,13 @@ int benchmark_timer_read( void )
 {
   uint32_t          clicks;
   uint32_t          total;
-  register uint32_t cycles asm ("R2");
+  register uint32_t cycles __asm__ ("R2");
 
   /* stop counter */
-  asm("R2 = SYSCFG;");
-  asm("BITCLR(R2,1);");
-  asm("SYSCFG = R2;");
-  asm("R2 = CYCLES;");
+  __asm__ ("R2 = SYSCFG;");
+  __asm__ ("BITCLR(R2,1);");
+  __asm__ ("SYSCFG = R2;");
+  __asm__ ("R2 = CYCLES;");
 
 
   clicks = cycles; /* Clock cycles */
