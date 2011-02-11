@@ -17,31 +17,31 @@ unsigned int xscale_read_pmc(int reg)
   unsigned int val = 0;
   switch(reg){
   case PMC_PMNC:
-    asm volatile("mrc p14,0,%0,c0,c1,0\n":"=r"(val):);
+    __asm__ volatile("mrc p14,0,%0,c0,c1,0\n":"=r"(val):);
     break;
   case PMC_CCNT:
-    asm volatile("mrc p14,0,%0,c1,c1,0\n":"=r"(val):);
+    __asm__ volatile("mrc p14,0,%0,c1,c1,0\n":"=r"(val):);
     break;
   case PMC_INTEN:
-    asm volatile("mrc p14,0,%0,c4,c1,0\n":"=r"(val):);
+    __asm__ volatile("mrc p14,0,%0,c4,c1,0\n":"=r"(val):);
     break;
   case PMC_FLAG:
-    asm volatile("mrc p14,0,%0,c5,c1,0\n":"=r"(val):);
+    __asm__ volatile("mrc p14,0,%0,c5,c1,0\n":"=r"(val):);
     break;
   case PMC_EVTSEL:
-    asm volatile("mrc p14,0,%0,c8,c1,0\n":"=r"(val):);
+    __asm__ volatile("mrc p14,0,%0,c8,c1,0\n":"=r"(val):);
     break;
   case PMC_PMN0:
-    asm volatile("mrc p14,0,%0,c0,c2,0\n":"=r"(val):);
+    __asm__ volatile("mrc p14,0,%0,c0,c2,0\n":"=r"(val):);
     break;
   case PMC_PMN1:
-    asm volatile("mrc p14,0,%0,c1,c2,0\n":"=r"(val):);
+    __asm__ volatile("mrc p14,0,%0,c1,c2,0\n":"=r"(val):);
     break;
   case PMC_PMN2:
-    asm volatile("mrc p14,0,%0,c2,c2,0\n":"=r"(val):);
+    __asm__ volatile("mrc p14,0,%0,c2,c2,0\n":"=r"(val):);
     break;
   case PMC_PMN3:
-    asm volatile("mrc p14,0,%0,c3,c2,0\n":"=r"(val):);
+    __asm__ volatile("mrc p14,0,%0,c3,c2,0\n":"=r"(val):);
     break;
   default:
     val = 0;
@@ -54,31 +54,31 @@ void xscale_write_pmc(int reg, unsigned int val)
 {
   switch(reg){
   case PMC_PMNC:
-    asm volatile("mcr p14,0,%0,c0,c1,0\n"::"r"(val));
+    __asm__ volatile("mcr p14,0,%0,c0,c1,0\n"::"r"(val));
     break;
   case PMC_CCNT:
-    asm volatile("mcr p14,0,%0,c1,c1,0\n"::"r"(val));
+    __asm__ volatile("mcr p14,0,%0,c1,c1,0\n"::"r"(val));
     break;
   case PMC_INTEN:
-    asm volatile("mcr p14,0,%0,c4,c1,0\n"::"r"(val));
+    __asm__ volatile("mcr p14,0,%0,c4,c1,0\n"::"r"(val));
     break;
   case PMC_FLAG:
-    asm volatile("mcr p14,0,%0,c5,c1,0\n"::"r"(val));
+    __asm__ volatile("mcr p14,0,%0,c5,c1,0\n"::"r"(val));
     break;
   case PMC_EVTSEL:
-    asm volatile("mcr p14,0,%0,c8,c1,0\n"::"r"(val));
+    __asm__ volatile("mcr p14,0,%0,c8,c1,0\n"::"r"(val));
     break;
   case PMC_PMN0:
-    asm volatile("mcr p14,0,%0,c0,c2,0\n"::"r"(val));
+    __asm__ volatile("mcr p14,0,%0,c0,c2,0\n"::"r"(val));
     break;
   case PMC_PMN1:
-    asm volatile("mcr p14,0,%0,c1,c2,0\n"::"r"(val));
+    __asm__ volatile("mcr p14,0,%0,c1,c2,0\n"::"r"(val));
     break;
   case PMC_PMN2:
-    asm volatile("mcr p14,0,%0,c2,c2,0\n"::"r"(val));
+    __asm__ volatile("mcr p14,0,%0,c2,c2,0\n"::"r"(val));
     break;
   case PMC_PMN3:
-    asm volatile("mcr p14,0,%0,c3,c2,0\n"::"r"(val));
+    __asm__ volatile("mcr p14,0,%0,c3,c2,0\n"::"r"(val));
     break;
   default:
     break;

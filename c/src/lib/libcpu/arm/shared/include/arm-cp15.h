@@ -109,7 +109,7 @@ static inline uint32_t arm_cp15_get_id_code(void)
   ARM_SWITCH_REGISTERS;
   uint32_t val;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrc p15, 0, %[val], c0, c0, 0\n"
     ARM_SWITCH_BACK
@@ -124,7 +124,7 @@ static inline uint32_t arm_cp15_get_tcm_status(void)
   ARM_SWITCH_REGISTERS;
   uint32_t val;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrc p15, 0, %[val], c0, c0, 2\n"
     ARM_SWITCH_BACK
@@ -139,7 +139,7 @@ static inline uint32_t arm_cp15_get_control(void)
   ARM_SWITCH_REGISTERS;
   uint32_t val;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrc p15, 0, %[val], c1, c0, 0\n"
     ARM_SWITCH_BACK
@@ -153,7 +153,7 @@ static inline void arm_cp15_set_control(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[val], c1, c0, 0\n"
     "nop\n"
@@ -176,7 +176,7 @@ static inline uint32_t *arm_cp15_get_translation_table_base(void)
   ARM_SWITCH_REGISTERS;
   uint32_t *base;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrc p15, 0, %[base], c2, c0, 0\n"
     ARM_SWITCH_BACK
@@ -190,7 +190,7 @@ static inline void arm_cp15_set_translation_table_base(uint32_t *base)
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[base], c2, c0, 0\n"
     ARM_SWITCH_BACK
@@ -204,7 +204,7 @@ static inline uint32_t arm_cp15_get_domain_access_control(void)
   ARM_SWITCH_REGISTERS;
   uint32_t val;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrc p15, 0, %[val], c3, c0, 0\n"
     ARM_SWITCH_BACK
@@ -218,7 +218,7 @@ static inline void arm_cp15_set_domain_access_control(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[val], c3, c0, 0\n"
     ARM_SWITCH_BACK
@@ -232,7 +232,7 @@ static inline uint32_t arm_cp15_get_data_fault_status(void)
   ARM_SWITCH_REGISTERS;
   uint32_t val;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrc p15, 0, %[val], c5, c0, 0\n"
     ARM_SWITCH_BACK
@@ -246,7 +246,7 @@ static inline void arm_cp15_set_data_fault_status(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[val], c5, c0, 0\n"
     ARM_SWITCH_BACK
@@ -260,7 +260,7 @@ static inline uint32_t arm_cp15_get_instruction_fault_status(void)
   ARM_SWITCH_REGISTERS;
   uint32_t val;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrc p15, 0, %[val], c5, c0, 1\n"
     ARM_SWITCH_BACK
@@ -274,7 +274,7 @@ static inline void arm_cp15_set_instruction_fault_status(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[val], c5, c0, 1\n"
     ARM_SWITCH_BACK
@@ -288,7 +288,7 @@ static inline void *arm_cp15_get_fault_address(void)
   ARM_SWITCH_REGISTERS;
   void *mva;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrc p15, 0, %[mva], c6, c0, 0\n"
     ARM_SWITCH_BACK
@@ -302,7 +302,7 @@ static inline void arm_cp15_set_fault_address(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[mva], c6, c0, 0\n"
     ARM_SWITCH_BACK
@@ -316,7 +316,7 @@ static inline void arm_cp15_tlb_invalidate(void)
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c8, c7, 0\n"
     ARM_SWITCH_BACK
@@ -331,7 +331,7 @@ static inline void arm_cp15_tlb_invalidate_entry(const void *mva)
 
   mva = ARM_CP15_TLB_PREPARE_MVA(mva);
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[mva], c8, c7, 1\n"
     ARM_SWITCH_BACK
@@ -345,7 +345,7 @@ static inline void arm_cp15_tlb_instruction_invalidate(void)
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c8, c5, 0\n"
     ARM_SWITCH_BACK
@@ -360,7 +360,7 @@ static inline void arm_cp15_tlb_instruction_invalidate_entry(const void *mva)
 
   mva = ARM_CP15_TLB_PREPARE_MVA(mva);
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[mva], c8, c5, 1\n"
     ARM_SWITCH_BACK
@@ -374,7 +374,7 @@ static inline void arm_cp15_tlb_data_invalidate(void)
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c8, c6, 0\n"
     ARM_SWITCH_BACK
@@ -389,7 +389,7 @@ static inline void arm_cp15_tlb_data_invalidate_entry(const void *mva)
 
   mva = ARM_CP15_TLB_PREPARE_MVA(mva);
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[mva], c8, c6, 1\n"
     ARM_SWITCH_BACK
@@ -402,7 +402,7 @@ static inline void arm_cp15_tlb_lockdown_entry(const void *mva)
 {
   uint32_t arm_switch_reg;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "add %[arm_switch_reg], pc, #16\n"
     "mcr p15, 0, %[arm_switch_reg], c7, c13, 1\n"
@@ -433,7 +433,7 @@ static inline uint32_t arm_cp15_get_cache_type(void)
   ARM_SWITCH_REGISTERS;
   uint32_t val;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrc p15, 0, %[val], c0, c0, 1\n"
     ARM_SWITCH_BACK
@@ -448,7 +448,7 @@ static inline void arm_cp15_cache_invalidate(void)
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c7, c7, 0\n"
     ARM_SWITCH_BACK
@@ -463,7 +463,7 @@ static inline void arm_cp15_instruction_cache_invalidate(void)
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c7, c5, 0\n"
     ARM_SWITCH_BACK
@@ -479,7 +479,7 @@ static inline void arm_cp15_instruction_cache_invalidate_line(const void *mva)
 
   mva = ARM_CP15_CACHE_PREPARE_MVA(mva);
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[mva], c7, c5, 1\n"
     ARM_SWITCH_BACK
@@ -493,7 +493,7 @@ static inline void arm_cp15_instruction_cache_invalidate_line_by_set_and_way(uin
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[set_and_way], c7, c5, 2\n"
     ARM_SWITCH_BACK
@@ -509,7 +509,7 @@ static inline void arm_cp15_instruction_cache_prefetch_line(const void *mva)
 
   mva = ARM_CP15_CACHE_PREPARE_MVA(mva);
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[mva], c7, c13, 1\n"
     ARM_SWITCH_BACK
@@ -523,7 +523,7 @@ static inline void arm_cp15_data_cache_invalidate(void)
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c7, c6, 0\n"
     ARM_SWITCH_BACK
@@ -539,7 +539,7 @@ static inline void arm_cp15_data_cache_invalidate_line(const void *mva)
 
   mva = ARM_CP15_CACHE_PREPARE_MVA(mva);
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[mva], c7, c6, 1\n"
     ARM_SWITCH_BACK
@@ -553,7 +553,7 @@ static inline void arm_cp15_data_cache_invalidate_line_by_set_and_way(uint32_t s
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[set_and_way], c7, c6, 2\n"
     ARM_SWITCH_BACK
@@ -569,7 +569,7 @@ static inline void arm_cp15_data_cache_clean_line(const void *mva)
 
   mva = ARM_CP15_CACHE_PREPARE_MVA(mva);
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[mva], c7, c10, 1\n"
     ARM_SWITCH_BACK
@@ -583,7 +583,7 @@ static inline void arm_cp15_data_cache_clean_line_by_set_and_way(uint32_t set_an
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[set_and_way], c7, c10, 2\n"
     ARM_SWITCH_BACK
@@ -597,7 +597,7 @@ static inline void arm_cp15_data_cache_test_and_clean(void)
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "1:\n"
     "mrc p15, 0, r15, c7, c10, 3\n"
@@ -615,7 +615,7 @@ static inline void arm_cp15_data_cache_clean_and_invalidate_line(const void *mva
 
   mva = ARM_CP15_CACHE_PREPARE_MVA(mva);
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[mva], c7, c14, 1\n"
     ARM_SWITCH_BACK
@@ -629,7 +629,7 @@ static inline void arm_cp15_data_cache_clean_and_invalidate_line_by_set_and_way(
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[set_and_way], c7, c14, 2\n"
     ARM_SWITCH_BACK
@@ -643,7 +643,7 @@ static inline void arm_cp15_data_cache_test_and_clean_and_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "1:\n"
     "mrc p15, 0, r15, c7, c14, 3\n"
@@ -662,7 +662,7 @@ static inline void arm_cp15_drain_write_buffer(void)
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c7, c10, 4\n"
     ARM_SWITCH_BACK
@@ -677,7 +677,7 @@ static inline void arm_cp15_wait_for_interrupt(void)
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c7, c0, 4\n"
     ARM_SWITCH_BACK
