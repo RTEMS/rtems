@@ -49,7 +49,7 @@ static void lpc32xx_rtc_set(uint32_t val)
 
   /* It needs some time before we can read the values back */
   while (i != 0) {
-    asm volatile ("nop");
+    __asm__ volatile ("nop");
     --i;
   }
 }

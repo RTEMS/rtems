@@ -40,7 +40,7 @@ void lpc32xx_restart(void *addr)
   ctrl &= ~(ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M);
   arm_cp15_set_control(ctrl);
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mov pc, %[addr]\n"
     ARM_SWITCH_BACK

@@ -114,7 +114,7 @@ static inline unsigned lpc32xx_irq_get_index(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "clz %[val], %[val]\n"
     "rsb %[val], %[val], #31\n"
