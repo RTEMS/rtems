@@ -113,7 +113,7 @@ void _CPU_ISR_install_raw_handler(
 #endif
 
   /* get vbr */
-  asm ( "stc vbr,%0" : "=r" (vbr) );
+  __asm__ ( "stc vbr,%0" : "=r" (vbr) );
 
   *old_handler = vbr[vector] ;
   vbr[vector]  = new_handler ;
@@ -191,7 +191,7 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
 
   for( ; ; )
     {
-      asm volatile("nop");
+      __asm__ volatile("nop");
     }
     /* insert your "halt" instruction here */ ;
 }

@@ -104,14 +104,14 @@ extern "C" {
 #define SH_IRQDIS_VALUE 0xf0
 
 #define sh_disable_interrupts( _level ) \
-  asm volatile ( \
+  __asm__ volatile ( \
     "stc sr,%0\n\t" \
     "ldc %1,sr\n\t"\
   : "=&r" (_level ) \
   : "r" (SH_IRQDIS_VALUE) );
 
 #define sh_enable_interrupts( _level ) \
-  asm volatile( "ldc %0,sr\n\t" \
+  __asm__ volatile( "ldc %0,sr\n\t" \
     "nop\n\t" \
     :: "r" (_level) );
 
@@ -123,7 +123,7 @@ extern "C" {
  */
 
 #define sh_flash_interrupts( _level ) \
-  asm volatile( \
+  __asm__ volatile( \
     "ldc %1,sr\n\t" \
     "nop\n\t" \
     "ldc %0,sr\n\t" \
@@ -135,7 +135,7 @@ extern "C" {
 #define SH_IRQDIS_MASK 0xf0
 
 #define sh_disable_interrupts( _level ) \
-  asm volatile ( \
+  __asm__ volatile ( \
     "stc sr,%0\n\t" \
     "mov %0,r5\n\t" \
     "or %1,r5\n\t" \
@@ -145,7 +145,7 @@ extern "C" {
   : "r5" );
 
 #define sh_enable_interrupts( _level ) \
-  asm volatile( "ldc %0,sr\n\t" \
+  __asm__ volatile( "ldc %0,sr\n\t" \
     "nop\n\t" \
     :: "r" (_level) );
 
@@ -157,7 +157,7 @@ extern "C" {
  */
 
 #define sh_flash_interrupts( _level ) \
-  asm volatile( \
+  __asm__ volatile( \
     "stc sr,r5\n\t" \
     "ldc %1,sr\n\t" \
     "nop\n\t" \
@@ -172,7 +172,7 @@ extern "C" {
 { \
   register uint32_t   _tmpsr ; \
   \
-  asm volatile( "stc sr, %0" : "=r" (_tmpsr) ); \
+  __asm__ volatile( "stc sr, %0" : "=r" (_tmpsr) ); \
   _level = (_tmpsr & 0xf0) >> 4 ; \
 }
 
@@ -180,9 +180,9 @@ extern "C" {
 { \
   register uint32_t   _tmpsr; \
   \
-  asm volatile ( "stc sr, %0" : "=r" (_tmpsr) ); \
+  __asm__ volatile ( "stc sr, %0" : "=r" (_tmpsr) ); \
   _tmpsr = ( _tmpsr & ~0xf0 ) | ((_newlevel) << 4) ; \
-  asm  volatile( "ldc %0,sr" :: "r" (_tmpsr) ); \
+  __asm__  volatile( "ldc %0,sr" :: "r" (_tmpsr) ); \
 }
 
 /*
@@ -196,7 +196,7 @@ static inline uint32_t sh_swap_u32(
 {
   register uint32_t swapped;
 
-  asm volatile (
+  __asm__ volatile (
     "swap.b %1,%0; "
     "swap.w %0,%0; "
     "swap.b %0,%0"
@@ -212,7 +212,7 @@ static inline uint16_t sh_swap_u16(
 {
   register uint16_t swapped ;
 
-  asm volatile ( "swap.b %1,%0" : "=r" (swapped) : "r"  (value) );
+  __asm__ volatile ( "swap.b %1,%0" : "=r" (swapped) : "r"  (value) );
 
   return( swapped );
 }

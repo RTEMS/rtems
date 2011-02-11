@@ -1,3 +1,8 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* context.c, cpu.c, rtems/score/cpu.h, rtems/score/sh.h:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2010-10-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/cpu.h: Add RTEMS_COMPILER_NO_RETURN_ATTRIBUTE to

@@ -670,9 +670,9 @@ SCORE_EXTERN void _CPU_Context_Initialize(
 #else
 #define _CPU_Fatal_halt( _error)\
 { \
-  asm volatile("mov.l %0,r0"::"m" (_error)); \
-  asm volatile("mov #1, r4"); \
-  asm volatile("trapa #34"); \
+  __asm__ volatile("mov.l %0,r0"::"m" (_error)); \
+  __asm__ volatile("mov #1, r4"); \
+  __asm__ volatile("trapa #34"); \
 }
 #endif
 

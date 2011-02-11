@@ -201,7 +201,7 @@ __CPU_Context_switch:\n\
   :: "i" (sizeof(Context_Control))
   );
 
-  asm volatile("\n\
+  __asm__ volatile("\n\
 	.global __CPU_Context_restore\n\
 __CPU_Context_restore:\n\
 	mov.l   @r4+,r15\n\
