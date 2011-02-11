@@ -115,7 +115,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 Thread bsp_idle_thread(uint32_t ignored)
 {
     for(;;)
-        asm volatile ("addq.l #1,__SRAMBASE"); /* Atomic increment */
+        __asm__ volatile ("addq.l #1,__SRAMBASE"); /* Atomic increment */
 }
 
 int rtems_bsp_cpu_load_percentage(void)

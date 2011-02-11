@@ -75,10 +75,10 @@ extern char RamBase[];
  *               ACRn[5] = BUFW (buffered write enable) must be 0
  *   Fix plan: Currently, there are no plans to fix this.
  */
-#define m68k_set_cacr_nop(_cacr) asm volatile ("movec %0,%%cacr\n\tnop" : : "d" (_cacr))
-#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr" : : "d" (_cacr))
-#define m68k_set_acr0(_acr0) asm volatile ("movec %0,%%acr0" : : "d" (_acr0))
-#define m68k_set_acr1(_acr1) asm volatile ("movec %0,%%acr1" : : "d" (_acr1))
+#define m68k_set_cacr_nop(_cacr) __asm__ volatile ("movec %0,%%cacr\n\tnop" : : "d" (_cacr))
+#define m68k_set_cacr(_cacr) __asm__ volatile ("movec %0,%%cacr" : : "d" (_cacr))
+#define m68k_set_acr0(_acr0) __asm__ volatile ("movec %0,%%acr0" : : "d" (_acr0))
+#define m68k_set_acr1(_acr1) __asm__ volatile ("movec %0,%%acr1" : : "d" (_acr1))
 
 /*
  * Read/write copy of cache registers
@@ -140,7 +140,7 @@ void _CPU_cache_invalidate_1_instruction_line(const void *addr)
      * Top half of cache is I-space
      */
     addr = (void *)((int)addr | 0x400);
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (addr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (addr));
 }
 
 void _CPU_cache_enable_data(void)
@@ -181,7 +181,7 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
      * Bottom half of cache is D-space
      */
     addr = (void *)((int)addr & ~0x400);
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (addr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (addr));
 #endif
 }
 
@@ -415,7 +415,7 @@ syscall_3(int, flash_write_range, volatile unsigned short *, flashptr, bsp_mnode
 /* reset-control register */
 #define RCR "__IPSBAR + 0x110000"
 
-asm(
+__asm__ (
     "bsp_fake_syscall:         \n"
     "   cmpl  #0,  %d0         \n" /* sysreset    */
     "   bne   1f               \n"
