@@ -309,7 +309,7 @@ asm ("        .text\n"
  * Dummy interrupt service procedure for
  * interrupts being not allowed --> Trap 2
  ************************************************/
-asm(" .section .text\n\
+__asm__ (" .section .text\n\
 .global __dummy_isp\n\
 __dummy_isp:\n\
       mov.l r14,@-r15\n\

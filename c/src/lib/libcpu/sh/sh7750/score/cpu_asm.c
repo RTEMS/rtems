@@ -48,7 +48,7 @@ extern proc_ptr         _Hardware_isr_Table[];
   unsigned long    *_old_stack_ptr;
 #endif
 
-register unsigned long  *stack_ptr asm("r15");
+register unsigned long  *stack_ptr __asm__ ("r15");
 
 /*
  *  This routine provides the RTEMS interrupt management.

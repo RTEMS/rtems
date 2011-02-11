@@ -43,7 +43,7 @@ void CPU_delay( uint32_t   microseconds )
   register uint32_t   clicks_per_usec = bsp_clicks_per_second / 1000000;
   register uint32_t   _delay = (microseconds) * (clicks_per_usec);
 
-  asm volatile (
+  __asm__ volatile (
 "0:	add  #-4,%0\n\
 	nop\n\
 	cmp/pl %0\n\

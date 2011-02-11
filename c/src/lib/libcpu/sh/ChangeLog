@@ -1,3 +1,13 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sh7032/delay/delay.c, sh7032/score/cpu_asm.c,
+	sh7032/score/ispsh7032.c, sh7045/sci/sci.c,
+	sh7045/sci/sci_termios.c, sh7045/score/cpu_asm.c,
+	sh7045/score/ispsh7045.c, sh7750/sci/sh4uart.c,
+	sh7750/score/cpu_asm.c, sh7750/score/ispsh7750.c,
+	shgdb/score/cpu_asm.c, shgdb/score/ispshgdb.c:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

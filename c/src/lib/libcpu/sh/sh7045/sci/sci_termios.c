@@ -113,7 +113,7 @@ int sh_sci_set_attributes(
     SH_SCI_REG_DATA(brr, minor, SCI_BRR);
 
     for (a=0; a < 10000L; a++) { /* Delay one bit */
-        asm volatile ("nop");
+        __asm__ volatile ("nop");
     }
 
     SH_SCI_REG_FLAG((SCI_RE | SCI_TE), minor, SCI_SCR);
@@ -295,7 +295,7 @@ int sh_sci_first_open(
     sh_sci_set_attributes(minor, Console_Port_Tbl[minor].pDeviceParams);
 
     for (a=0; a < 10000L; a++) {                      /* Delay */
-        asm volatile ("nop");
+        __asm__ volatile ("nop");
     }
 
     write8((SCI_RE | SCI_TE),              /* enable async. Tx and Rx */

@@ -379,7 +379,7 @@ rtems_device_driver sh_sci_open(
     _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags );
 
     for (a=0; a < 10000L; a++) {                      /* Delay */
-      asm volatile ("nop");
+      __asm__ volatile ("nop");
     }
 
     write8((SCI_RE | SCI_TE),              /* enable async. Tx and Rx */

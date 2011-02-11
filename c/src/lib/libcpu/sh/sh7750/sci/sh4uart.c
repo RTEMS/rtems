@@ -842,7 +842,7 @@ sh4uart_start_remote_tx(sh4uart *uart)
  *     Says gdb that program finished to get out from it.
  */
 extern void ipl_finish(void);
-asm(
+__asm__ (
 "   .global _ipl_finish\n"
 "_ipl_finish:\n"
 "   mov.l   __ipl_finish_value, r0\n"
@@ -856,7 +856,7 @@ asm(
 );
 
 extern int ipl_serial_input(int poll_count);
-asm(
+__asm__ (
 "    .global _ipl_serial_input\n"
 "_ipl_serial_input:\n"
 "    mov  #1,r0\n"
