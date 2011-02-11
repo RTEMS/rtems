@@ -279,7 +279,7 @@ void bsp_cache_on(void)
                     SH7750_CCR);
             break;
         case SH4_BOOT_MODE_IPL:
-            asm volatile (
+            __asm__ volatile (
                 "mov     #6, r0\n"
                 "xor     r4, r4\n"
                 "trapa   #0x3f\n"
