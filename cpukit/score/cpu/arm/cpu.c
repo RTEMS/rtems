@@ -64,7 +64,7 @@ void _CPU_ISR_Set_level( uint32_t level )
 {
   uint32_t arm_switch_reg;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[arm_switch_reg], cpsr\n"
     "bic %[arm_switch_reg], #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"
@@ -81,7 +81,7 @@ uint32_t _CPU_ISR_Get_level( void )
   ARM_SWITCH_REGISTERS;
   uint32_t level;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[level], cpsr\n"
     "and %[level], #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"

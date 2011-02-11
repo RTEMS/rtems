@@ -242,7 +242,7 @@ static inline uint32_t arm_interrupt_disable( void )
   uint32_t arm_switch_reg;
   uint32_t level;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[level], cpsr\n"
     "orr %[arm_switch_reg], %[level], #0x80\n"
@@ -258,7 +258,7 @@ static inline void arm_interrupt_enable( uint32_t level )
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "msr cpsr, %[level]\n"
     ARM_SWITCH_BACK
@@ -271,7 +271,7 @@ static inline void arm_interrupt_flash( uint32_t level )
 {
   uint32_t arm_switch_reg;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[arm_switch_reg], cpsr\n"
     "msr cpsr, %[level]\n"
@@ -325,7 +325,7 @@ void _CPU_Context_Initialize(
      uint32_t _level;                       \
      uint32_t _error = _err;                \
      _CPU_ISR_Disable( _level );            \
-     asm volatile ("mov r0, %0\n"           \
+     __asm__ volatile ("mov r0, %0\n"           \
                    : "=r" (_error)          \
                    : "0" (_error)           \
                    : "r0" );                \
@@ -367,7 +367,7 @@ static inline uint32_t CPU_swap_u32( uint32_t value )
   return swapped;
 #else
   uint32_t tmp = value; /* make compiler warnings go away */
-  asm volatile ("EOR %1, %0, %0, ROR #16\n"
+  __asm__ volatile ("EOR %1, %0, %0, ROR #16\n"
                 "BIC %1, %1, #0xff0000\n"
                 "MOV %0, %0, ROR #8\n"
                 "EOR %0, %0, %1, LSR #8\n"
@@ -431,7 +431,7 @@ static inline uint32_t arm_status_irq_enable( void )
 
   RTEMS_COMPILER_MEMORY_BARRIER();
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[psr], cpsr\n"
     "bic %[arm_switch_reg], %[psr], #0x80\n"
@@ -447,7 +447,7 @@ static inline void arm_status_restore( uint32_t psr )
 {
   ARM_SWITCH_REGISTERS;
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "msr cpsr, %[psr]\n"
     ARM_SWITCH_BACK
