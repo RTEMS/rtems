@@ -38,7 +38,7 @@ void cchip1_set_isr(void *handler, int irqno, void *arg);
 #define READ_REG(address) _READ_REG((unsigned int)address)
 static __inline__ unsigned int _READ_REG(unsigned int addr) {
 	unsigned int tmp;
-	asm("lda [%1]1, %0 "
+	__asm__ ("lda [%1]1, %0 "
 	  : "=r"(tmp)
 	  : "r"(addr)
 	);
