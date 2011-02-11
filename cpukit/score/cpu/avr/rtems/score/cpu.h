@@ -425,7 +425,7 @@ extern "C" {
 
 typedef struct {
     	uint16_t 	stack_pointer;
-   	uint8_t		status; //SREG
+   	uint8_t		status; /* SREG */
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
@@ -623,7 +623,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \
     	(_isr_cookie) = SREG; \
-	asm volatile ("cli"::); \
+	__asm__ volatile ("cli"::); \
   } while (0)
 
 /*
@@ -639,7 +639,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define _CPU_ISR_Enable( _isr_cookie )  \
   do { \
 	SREG  = _isr_cookie; \
-	asm volatile ("sei"::); \
+	__asm__ volatile ("sei"::); \
   } while (0)
 
 /*
@@ -656,9 +656,9 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define _CPU_ISR_Flash( _isr_cookie ) \
   do { \
 	SREG=(_isr_cookie); \
-	asm volatile("sei"::); \
+	__asm__ volatile("sei"::); \
 	(_isr_cookie) = SREG; \
-	asm volatile("cli"::); \
+	__asm__ volatile("cli"::); \
   } while (0)
 
 /*
@@ -924,7 +924,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 /* functions */
 
-/*context_initialize asm function*/
+/*context_initialize asm-function*/
 
 void context_initialize(unsigned short* context,
 		unsigned short stack_add,

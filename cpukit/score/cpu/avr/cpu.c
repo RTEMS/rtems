@@ -166,7 +166,7 @@ void _CPU_Install_interrupt_stack( void )
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
 
-  for( ; ; ) asm volatile ("sleep"::);
+  for( ; ; ) __asm__ volatile ("sleep"::);
     /* insert your "halt" instruction here */ ;
   return (void *) 0;
 }

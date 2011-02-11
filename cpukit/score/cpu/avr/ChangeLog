@@ -1,3 +1,8 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* cpu.c, avr/interrupt.h, avr/power.h, rtems/score/cpu.h:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2010-11-06	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1715/cpukit

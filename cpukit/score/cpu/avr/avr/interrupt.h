@@ -218,21 +218,21 @@
 #  if defined(__AVR_MEGA__) && __AVR_MEGA__
 #    define ISR_ALIAS(vector, tgt) extern "C" void vector (void) \
 	__attribute__((signal, naked, __INTR_ATTRS)); \
-	void vector (void) { asm volatile ("jmp " __STRINGIFY(tgt) ::); }
+	void vector (void) { __asm__ volatile ("jmp " __STRINGIFY(tgt) ::); }
 #  else /* !__AVR_MEGA */
 #    define ISR_ALIAS(vector, tgt) extern "C" void vector (void) \
 	__attribute__((signal, naked, __INTR_ATTRS)); \
-	void vector (void) { asm volatile ("rjmp " __STRINGIFY(tgt) ::); }
+	void vector (void) { __asm__ volatile ("rjmp " __STRINGIFY(tgt) ::); }
 #  endif  /* __AVR_MEGA__ */
 #else	  /* !__cplusplus */
 #  if defined(__AVR_MEGA__) && __AVR_MEGA__
 #  define ISR_ALIAS(vector, tgt) void vector (void) \
 	__attribute__((signal, naked, __INTR_ATTRS)); \
-	void vector (void) { asm volatile ("jmp " __STRINGIFY(tgt) ::); }
+	void vector (void) { __asm__ volatile ("jmp " __STRINGIFY(tgt) ::); }
 #  else /* !__AVR_MEGA */
 #  define ISR_ALIAS(vector, tgt) void vector (void) \
 	__attribute__((signal, naked, __INTR_ATTRS)); \
-	void vector (void) { asm volatile ("rjmp " __STRINGIFY(tgt) ::); }
+	void vector (void) { __asm__ volatile ("rjmp " __STRINGIFY(tgt) ::); }
 #  endif  /* __AVR_MEGA__ */
 #endif	/* __cplusplus */
 
