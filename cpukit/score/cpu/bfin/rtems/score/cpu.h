@@ -710,7 +710,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  */
 #define _CPU_ISR_Disable( _level ) \
   {                                     \
-       asm volatile ("cli %0; csync \n" : "=d" (_level) );     \
+       __asm__ volatile ("cli %0; csync \n" : "=d" (_level) );     \
   }
 
 
@@ -910,7 +910,7 @@ void _CPU_Context_Initialize(
  */
 #define _CPU_Fatal_halt( _error ) \
   { \
-    asm volatile ( "cli R1; \
+    __asm__ volatile ( "cli R1; \
                     R1 = %0; \
                     _halt: \
                     idle; \
@@ -1015,7 +1015,7 @@ void _CPU_Context_Initialize(
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    asm ("bit(1);"):
+    __asm__ ("bit(1);"):
     (_output) = 0;   /* do something to prevent warnings */ \
   }
 #endif
