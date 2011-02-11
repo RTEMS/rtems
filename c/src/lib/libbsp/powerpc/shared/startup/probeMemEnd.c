@@ -123,7 +123,7 @@ CPU_lockUnlockCaches(register int doLock)
 register uint32_t v, x;
 	if ( _read_MSR() & MSR_VE ) {
 #define DSSALL  0x7e00066c  /* dssall opcode */
-        asm volatile("  .long %0"::"i"(DSSALL));
+        __asm__ volatile("  .long %0"::"i"(DSSALL));
 #undef  DSSALL
 	}
 	asm volatile("sync");

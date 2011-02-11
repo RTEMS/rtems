@@ -909,7 +909,7 @@ void  printk(const char *fmt, ...) {
 /* Necessary to avoid including a library, and GCC won't do this inline. */
 #define div10(num, rmd)							 \
 do {	uint32_t t1, t2, t3;							 \
-	asm("lis %4,0xcccd; "						 \
+	__asm__ ("lis %4,0xcccd; "						 \
 	    "addi %4,%4,0xffffcccd; "	/* Build 0xcccccccd */		 \
 	    "mulhwu %3,%0+1,%4; "	/* (num.l*cst.l).h  */		 \
 	    "mullw %2,%0,%4; "		/* (num.h*cst.l).l  */		 \

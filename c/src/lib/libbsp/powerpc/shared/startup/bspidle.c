@@ -27,7 +27,7 @@
 void *bsp_idle_thread( uintptr_t ignored )
 {
   for( ; ; ) {
-    asm volatile(
+    __asm__ volatile(
       "mfmsr 3; oris 3,3,4; sync; mtmsr 3; isync; ori 3,3,0; ori 3,3,0"
     );
   }
