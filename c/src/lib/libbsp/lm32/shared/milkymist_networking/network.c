@@ -297,7 +297,7 @@ static void minimac_rxDaemon(void *arg)
 
     for (j = 0 ; j < NB_RX_SLOTS ; j++) {
       if (minimac_read(rx_slot_state[j]) == MINIMAC_STATE_PENDING) {
-        asm volatile( /* Invalidate Level-1 data cache */
+        __asm__ volatile( /* Invalidate Level-1 data cache */
           "wcsr DCC, r0\n"
           "nop\n"
         );
