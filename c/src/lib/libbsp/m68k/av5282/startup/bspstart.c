@@ -35,8 +35,8 @@
 /*
  * CPU-space access
  */
-#define m68k_set_acr0(_acr0) asm volatile ("movec %0,%%acr0" : : "d" (_acr0))
-#define m68k_set_acr1(_acr1) asm volatile ("movec %0,%%acr1" : : "d" (_acr1))
+#define m68k_set_acr0(_acr0) __asm__ volatile ("movec %0,%%acr0" : : "d" (_acr0))
+#define m68k_set_acr1(_acr1) __asm__ volatile ("movec %0,%%acr1" : : "d" (_acr1))
 
 /*
  * Read/write copy of common cache
@@ -94,7 +94,7 @@ void _CPU_cache_invalidate_1_instruction_line(const void *addr)
      * Top half of cache is I-space
      */
     addr = (void *)((int)addr | 0x400);
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (addr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (addr));
 }
 
 void _CPU_cache_enable_data(void)
@@ -129,7 +129,7 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
      * Bottom half of cache is D-space
      */
     addr = (void *)((int)addr & ~0x400);
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (addr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (addr));
 }
 
 /*
