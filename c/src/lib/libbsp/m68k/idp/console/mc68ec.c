@@ -15,6 +15,6 @@ void rtems_bsp_delay(int num)
 {
   while (num--)
     {
-      asm ("nop");
+      __asm__ ("nop");
     }
 }
