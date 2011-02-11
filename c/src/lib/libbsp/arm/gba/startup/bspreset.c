@@ -11,6 +11,6 @@
 
 void bsp_reset(void)
 {
-  asm volatile ("ldr  r0, =_gba_reset");
-  asm volatile ("bx   r0");
+  __asm__ volatile ("ldr  r0, =_gba_reset");
+  __asm__ volatile ("bx   r0");
 }

@@ -44,7 +44,7 @@ extern "C" {
     uint32_t i; \
     for(i = 0; i<microseconds;) {i++;} \
     uint32_t  _cnt = _microseconds; \
-    asm volatile ("0: nop; sub %0, %0, #1; cmp %0,#0; bne 0b" : "=c"(_cnt) : "0"(_cnt)); \
+    __asm__ volatile ("0: nop; sub %0, %0, #1; cmp %0,#0; bne 0b" : "=c"(_cnt) : "0"(_cnt)); \
   }
 
 /** gba_zero_memory library function in start.S  */
