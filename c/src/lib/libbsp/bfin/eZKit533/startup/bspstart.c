@@ -118,9 +118,9 @@ void Init_PLL (void)
   *((uint16_t*)PLL_CTL) = PLL_MSEL|PLL_DF;
 
   /* Commands to set PLL values */
-  asm("cli r0;");
-  asm("idle;");
-  asm("sti r0;");
+  __asm__ ("cli r0;");
+  __asm__ ("idle;");
+  __asm__ ("sti r0;");
 
   /* Delay for PLL stabilization */
   for (n=0; n<200; n++) {}

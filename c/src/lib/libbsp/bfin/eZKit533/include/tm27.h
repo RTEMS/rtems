@@ -26,7 +26,7 @@
   set_vector( handler, 0x06, 1 ); \
 }
 
-#define Cause_tm27_intr() asm volatile("raise 0x06;" : :);
+#define Cause_tm27_intr() __asm__ volatile("raise 0x06;" : :);
 
 #define Clear_tm27_intr() /* empty */
 
