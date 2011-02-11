@@ -7,7 +7,7 @@ void dump_scb(void);
 void printk_time(void);
 
 #ifdef DBG_VERSION
-#define BREAKPOINT()  asm("   int $3");
+#define BREAKPOINT()  __asm__ ("   int $3");
 #else
 #define BREAKPOINT()
 #endif

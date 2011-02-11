@@ -39,7 +39,7 @@ extern "C" {
     \
     _counter = (_microseconds); \
     \
-    asm volatile ( "0: nop;" \
+    __asm__ volatile ( "0: nop;" \
                    " mov %0,%0 ;" \
                    " loop 0b" : "=c" (_counter) \
                               : "0"  (_counter) \
