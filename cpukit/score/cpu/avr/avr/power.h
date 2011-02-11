@@ -1377,7 +1377,7 @@ typedef enum
 } clock_div_t;
 
 
-static inline void clock_prescale_set(clock_div_t) __attribute__((__always_inline__));
+static __inline__ void clock_prescale_set(clock_div_t) __attribute__((__always_inline__));
 
 /** \addtogroup avr_power
 \code clock_prescale_set(x) \endcode
