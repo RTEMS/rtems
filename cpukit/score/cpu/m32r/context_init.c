@@ -21,7 +21,7 @@ typedef struct {
 } Starting_Frame;
 
 #define _get_r12( _r12 ) \
-  asm volatile( "mv r12, %0" : "=r" (_r12))
+  __asm__ volatile( "mv r12, %0" : "=r" (_r12))
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
