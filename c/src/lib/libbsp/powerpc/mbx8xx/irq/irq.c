@@ -222,7 +222,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
      * make sure, that the masking operations in
      * ICTL and MSR are executed in order
      */
-    asm volatile("sync":::"memory");
+    __asm__ volatile("sync":::"memory");
 
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
@@ -236,7 +236,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
      * make sure, that the masking operations in
      * ICTL and MSR are executed in order
      */
-    asm volatile("sync":::"memory");
+    __asm__ volatile("sync":::"memory");
 
     if (cpmIntr)  {
       irq -= BSP_CPM_IRQ_LOWEST_OFFSET;
