@@ -53,7 +53,7 @@ uint32_t   _CPU_ISR_Get_level( void )
 #if defined(__H8300__)
 #warning "How do we get ccr on base CPU models"
 #else
-  asm volatile ( "stc ccr, %0" : "=m" (_ccr) : );
+  __asm__ volatile ( "stc ccr, %0" : "=m" (_ccr) : );
 #endif
 
   if ( _ccr & 0x80 )
@@ -152,7 +152,7 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
 
   for( ; ; )
     IDLE_Monitor();
-	/*asm("	sleep	\n"); */
+	/* __asm__ ("	sleep	\n"); */
     /* insert your "halt" instruction here */ ;
 }
 #endif

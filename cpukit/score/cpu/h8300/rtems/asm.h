@@ -98,7 +98,7 @@
 #define END_CODE_DCL
 #define BEGIN_DATA_DCL .data
 #define END_DATA_DCL
-#define BEGIN_CODE asm ( ".text
+#define BEGIN_CODE __asm__ ( ".text
 #define END_CODE ");
 #define BEGIN_DATA
 #define END_DATA

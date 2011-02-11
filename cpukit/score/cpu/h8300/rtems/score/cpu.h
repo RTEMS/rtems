@@ -583,7 +583,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \
-    asm volatile( "stc.w ccr, @-er7 ;\n orc #0xC0,ccr ;\n mov.w @er7+,%0" :  : "r" (_isr_cookie) ); \
+    __asm__ volatile( "stc.w ccr, @-er7 ;\n orc #0xC0,ccr ;\n mov.w @er7+,%0" :  : "r" (_isr_cookie) ); \
   } while (0)
 
 
@@ -596,7 +596,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 #define _CPU_ISR_Enable( _isr_cookie )  \
   do { \
-    asm volatile( "mov.w %0,@-er7 ;\n ldc.w @er7+, ccr" :  : "r" (_isr_cookie) ); \
+    __asm__ volatile( "mov.w %0,@-er7 ;\n ldc.w @er7+, ccr" :  : "r" (_isr_cookie) ); \
   } while (0)
 
 
@@ -610,7 +610,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 #define _CPU_ISR_Flash( _isr_cookie ) \
   do { \
-    asm volatile( "mov.w %0,@-er7 ;\n ldc.w @er7+, ccr ;\n orc #0xC0,ccr" :  : "r" (_isr_cookie) ); \
+    __asm__ volatile( "mov.w %0,@-er7 ;\n ldc.w @er7+, ccr ;\n orc #0xC0,ccr" :  : "r" (_isr_cookie) ); \
   } while (0)
 
 /* end of ISR handler macros */
@@ -630,7 +630,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \
     unsigned char __ccr; \
-    asm volatile( "stc ccr, %0 ; orc #0x80,ccr " \
+    __asm__ volatile( "stc ccr, %0 ; orc #0x80,ccr " \
              : "=m" (__ccr) /* : "0" (__ccr) */ ); \
     (_isr_cookie) = __ccr; \
   } while (0)
@@ -653,7 +653,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define _CPU_ISR_Enable( _isr_cookie )  \
   do { \
     unsigned char __ccr = (unsigned char) (_isr_cookie); \
-    asm volatile( "ldc %0, ccr" :  : "m" (__ccr) ); \
+    __asm__ volatile( "ldc %0, ccr" :  : "m" (__ccr) ); \
   } while (0)
 #else
 #define _CPU_ISR_Enable( _isr_cookie )
@@ -674,7 +674,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define _CPU_ISR_Flash( _isr_cookie ) \
   do { \
     unsigned char __ccr = (unsigned char) (_isr_cookie); \
-    asm volatile( "ldc %0, ccr ; orc #0x80,ccr " :  : "m" (__ccr) ); \
+    __asm__ volatile( "ldc %0, ccr ; orc #0x80,ccr " :  : "m" (__ccr) ); \
   } while (0)
 #else
 #define _CPU_ISR_Flash( _isr_cookie )
@@ -700,8 +700,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 #define _CPU_ISR_Set_level( _new_level ) \
   { \
-    if ( _new_level ) asm volatile ( "orc #0x80,ccr\n" ); \
-    else              asm volatile ( "andc #0x7f,ccr\n" ); \
+    if ( _new_level ) __asm__ volatile ( "orc #0x80,ccr\n" ); \
+    else              __asm__ volatile ( "andc #0x7f,ccr\n" ); \
   }
 
 #ifndef ASM
