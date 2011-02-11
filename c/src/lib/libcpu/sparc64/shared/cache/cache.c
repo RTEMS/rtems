@@ -12,7 +12,7 @@
 
 void _CPU_cache_invalidate_entire_instruction ( void )
 {
-  asm volatile ("flush");
+  __asm__ volatile ("flush");
 }
 
 /* XXX these need to be addressed */
