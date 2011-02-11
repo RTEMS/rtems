@@ -66,8 +66,8 @@ extern char WorkAreaBase [];
 /*
  * CPU-space access
  */
-#define m68k_set_acr2(_acr2) asm volatile ("movec %0,#0x0005" : : "d" (_acr2))
-#define m68k_set_acr3(_acr3) asm volatile ("movec %0,#0x0007" : : "d" (_acr3))
+#define m68k_set_acr2(_acr2) __asm__ volatile ("movec %0,#0x0005" : : "d" (_acr2))
+#define m68k_set_acr3(_acr3) __asm__ volatile ("movec %0,#0x0007" : : "d" (_acr3))
 
 /*
  * Set initial cacr mode, mainly enables branch/intruction/data cache and
@@ -160,10 +160,10 @@ void _CPU_cache_invalidate_1_instruction_line(const void *addr)
 {
   uint32_t a = (uint32_t) addr & ~0x3;
 
-  asm volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x0));
-  asm volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x1));
-  asm volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x2));
-  asm volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x3));
+  __asm__ volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x0));
+  __asm__ volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x1));
+  __asm__ volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x2));
+  __asm__ volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x3));
 }
 
 void _CPU_cache_enable_data(void)
@@ -185,20 +185,20 @@ void _CPU_cache_invalidate_1_data_line( const void *addr)
 {
   uint32_t a = (uint32_t) addr & ~0x3;
 
-  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x0));
-  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x1));
-  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x2));
-  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x3));
+  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x0));
+  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x1));
+  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x2));
+  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x3));
 }
 
 void _CPU_cache_flush_1_data_line( const void *addr)
 {
   uint32_t a = (uint32_t) addr & ~0x3;
 
-  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x0));
-  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x1));
-  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x2));
-  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x3));
+  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x0));
+  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x1));
+  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x2));
+  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x3));
 }
 
 void _CPU_cache_flush_entire_data( void)
