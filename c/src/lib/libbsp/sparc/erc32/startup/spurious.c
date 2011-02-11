@@ -128,7 +128,7 @@ rtems_isr bsp_spurious_handler(
    *  What else can we do but stop ...
    */
 
-  asm volatile( "mov 1, %g1; ta 0x0" );
+  __asm__ volatile( "mov 1, %g1; ta 0x0" );
 }
 
 /*
