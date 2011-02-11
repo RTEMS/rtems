@@ -20,7 +20,7 @@
  */
 
 #include <rtems.h>
-#include <bsh.h>
+#include <bsp.h>
 #include <rtems/btimer.h>
 #include <rtems/timerdrv.h>
 
