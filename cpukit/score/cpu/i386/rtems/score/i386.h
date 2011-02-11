@@ -125,7 +125,7 @@ static inline uint32_t i386_swap_u32(
   uint32_t lout;
 
 #if (I386_HAS_BSWAP == 0)
-  asm volatile( "rorw  $8,%%ax;"
+  __asm__ volatile( "rorw  $8,%%ax;"
                 "rorl  $16,%0;"
                 "rorw  $8,%%ax" : "=a" (lout) : "0" (value) );
 #else
@@ -153,21 +153,21 @@ static inline unsigned int i386_get_cr0(void)
 {
   register unsigned int segment = 0;
 
-  asm volatile ( "movl %%cr0,%0" : "=r" (segment) : "0" (segment) );
+  __asm__ volatile ( "movl %%cr0,%0" : "=r" (segment) : "0" (segment) );
 
   return segment;
 }
 
 static inline void i386_set_cr0(unsigned int segment)
 {
-  asm volatile ( "movl %0,%%cr0" : "=r" (segment) : "0" (segment) );
+  __asm__ volatile ( "movl %0,%%cr0" : "=r" (segment) : "0" (segment) );
 }
 
 static inline unsigned int i386_get_cr2(void)
 {
   register unsigned int segment = 0;
 
-  asm volatile ( "movl %%cr2,%0" : "=r" (segment) : "0" (segment) );
+  __asm__ volatile ( "movl %%cr2,%0" : "=r" (segment) : "0" (segment) );
 
   return segment;
 }
@@ -176,14 +176,14 @@ static inline unsigned int i386_get_cr3(void)
 {
   register unsigned int segment = 0;
 
-  asm volatile ( "movl %%cr3,%0" : "=r" (segment) : "0" (segment) );
+  __asm__ volatile ( "movl %%cr3,%0" : "=r" (segment) : "0" (segment) );
 
   return segment;
 }
 
 static inline void i386_set_cr3(unsigned int segment)
 {
-  asm volatile ( "movl %0,%%cr3" : "=r" (segment) : "0" (segment) );
+  __asm__ volatile ( "movl %0,%%cr3" : "=r" (segment) : "0" (segment) );
 }
 
 /* routines */

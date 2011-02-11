@@ -35,7 +35,7 @@
 void _CPU_Initialize(void)
 {
 #if CPU_HARDWARE_FP
-  register uint16_t		fp_status asm ("ax");
+  register uint16_t		fp_status __asm__ ("ax");
   register Context_Control_fp  *fp_context;
 #endif
 
@@ -53,8 +53,8 @@ void _CPU_Initialize(void)
 
 #if CPU_HARDWARE_FP
   fp_status = 0xa5a5;
-  asm volatile( "fninit" );
-  asm volatile( "fnstsw %0" : "=a" (fp_status) : "0" (fp_status) );
+  __asm__ volatile( "fninit" );
+  __asm__ volatile( "fnstsw %0" : "=a" (fp_status) : "0" (fp_status) );
 
   if ( fp_status ==  0 ) {
 
@@ -63,7 +63,7 @@ void _CPU_Initialize(void)
 #ifdef __SSE__
 	asm volatile( "fstcw %0":"=m"(fp_context->fpucw) );
 #else
-    asm volatile( "fsave (%0)" : "=r" (fp_context)
+    __asm__ volatile( "fsave (%0)" : "=r" (fp_context)
                                : "0"  (fp_context)
                 );
 #endif
@@ -72,7 +72,7 @@ void _CPU_Initialize(void)
 
 #ifdef __SSE__
 
-  asm volatile("stmxcsr %0":"=m"(fp_context->mxcsr));
+  __asm__ volatile("stmxcsr %0":"=m"(fp_context->mxcsr));
 
   /* The BSP must enable the SSE extensions (early).
    * If any SSE instruction was already attempted
@@ -111,7 +111,7 @@ uint32_t   _CPU_ISR_Get_level( void )
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
   while(1){
-    asm volatile ("hlt");
+    __asm__ volatile ("hlt");
   }
   return NULL;
 }

@@ -255,7 +255,7 @@ __v32 v = { x, x, x, x };
 void
 all_clobber(uint32_t v1, uint32_t v2);
 
-asm(
+__asm__ (
 "all_clobber:               \n"
 "   finit                   \n"
 "	movq  0(%esp), %xmm0    \n"
@@ -275,7 +275,7 @@ asm(
 void
 init_ctxt(Context_Control_sse *p_ctxt);
 
-asm(
+__asm__ (
 "init_ctxt:            \n"
 "	finit              \n"
 "   mov    4(%esp), %eax\n"
@@ -398,7 +398,7 @@ int i;
 #define __INTRAISE(x) "	int  $32+"#x" \n"
 #define INTRAISE(x)   __INTRAISE(x)
 
-asm(
+__asm__ (
 "do_raise:               \n"
 "   fwait                \n"
 "	test    %eax, %eax   \n"
@@ -834,7 +834,7 @@ __vf    f4;
 
 #define MKCASE(X) case FPE_##X: msg="FPE_"#X; break;
 
-#define CLRXMM(i) asm volatile("pxor %%xmm"#i", %%xmm"#i:::"xmm"#i)
+#define CLRXMM(i) __asm__ volatile("pxor %%xmm"#i", %%xmm"#i:::"xmm"#i)
 
 static void
 fpe_act(int signum, siginfo_t *p_info, void *arg3)

@@ -36,7 +36,7 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
 
 #define i386_disable_interrupts( _level ) \
   { \
-    asm volatile ( "pushf ; \
+    __asm__ volatile ( "pushf ; \
                     cli ; \
                     pop %0" \
                    : "=rm" ((_level)) \
@@ -45,7 +45,7 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
 
 #define i386_enable_interrupts( _level )  \
   { \
-    asm volatile ( "push %0 ; \
+    __asm__ volatile ( "push %0 ; \
                     popf" \
                     : : "rm" ((_level)) : "cc" \
     ); \
@@ -53,7 +53,7 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
 
 #define i386_flash_interrupts( _level ) \
   { \
-    asm volatile ( "push %0 ; \
+    __asm__ volatile ( "push %0 ; \
                     popf ; \
                     cli" \
                     : : "rm" ((_level)) : "cc" \
@@ -64,7 +64,7 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
   do { \
     register uint32_t   _eflags; \
     \
-    asm volatile ( "pushf ; \
+    __asm__ volatile ( "pushf ; \
                     pop %0" \
                     : "=rm" ((_eflags)) \
     ); \

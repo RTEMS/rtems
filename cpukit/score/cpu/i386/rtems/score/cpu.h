@@ -354,8 +354,8 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 #define _CPU_ISR_Set_level( _new_level ) \
   { \
-    if ( _new_level ) asm volatile ( "cli" ); \
-    else              asm volatile ( "sti" ); \
+    if ( _new_level ) __asm__ volatile ( "cli" ); \
+    else              __asm__ volatile ( "sti" ); \
   }
 
 uint32_t   _CPU_ISR_Get_level( void );
@@ -456,7 +456,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 #define _CPU_Fatal_halt( _error ) \
   { \
-    asm volatile ( "cli ; \
+    __asm__ volatile ( "cli ; \
                     movl %0,%%eax ; \
                     hlt" \
                     : "=r" ((_error)) : "0" ((_error)) \
@@ -483,7 +483,7 @@ uint32_t   _CPU_ISR_Get_level( void );
     \
     _output = 0; \
     \
-    asm volatile ( "bsfw    %0,%1 " \
+    __asm__ volatile ( "bsfw    %0,%1 " \
                     : "=r" (__value_in_register), "=r" (_output) \
                     : "0"  (__value_in_register), "1"  (_output) \
     ); \
