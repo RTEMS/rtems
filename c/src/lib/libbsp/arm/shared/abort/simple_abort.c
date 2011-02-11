@@ -64,7 +64,7 @@ void _print_full_context(uint32_t spsr)
   mode=_print_full_context_mode2txt[(spsr&0x1f)-0x10];
   if(!mode) mode="unknown";
 
-  asm volatile (
+  __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[cpsr], cpsr\n"
     "orr %[arm_switch_reg], %[spsr], #0xc0\n"
