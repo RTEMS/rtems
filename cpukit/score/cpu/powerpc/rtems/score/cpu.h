@@ -666,7 +666,7 @@ static inline uint32_t CPU_swap_u32(
 {
   uint32_t   swapped;
 
-  asm volatile("rlwimi %0,%1,8,24,31;"
+  __asm__ volatile("rlwimi %0,%1,8,24,31;"
 	       "rlwimi %0,%1,24,16,23;"
 	       "rlwimi %0,%1,8,8,15;"
 	       "rlwimi %0,%1,24,0,7;" :
@@ -817,7 +817,7 @@ void _CPU_Context_Initialize(
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    asm volatile ("cntlzw %0, %1" : "=r" ((_output)), "=r" ((_value)) : \
+    __asm__ volatile ("cntlzw %0, %1" : "=r" ((_output)), "=r" ((_value)) : \
 		  "1" ((_value))); \
   }
 

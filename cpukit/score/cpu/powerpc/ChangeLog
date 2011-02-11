@@ -1,3 +1,8 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/powerpc/registers.h, rtems/score/cpu.h:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2011-01-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Changed Freescale EIS prefix.  More

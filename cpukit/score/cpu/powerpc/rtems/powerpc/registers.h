@@ -424,15 +424,15 @@ extern "C" {
 #define _CPU_MSR_GET( _msr_value ) \
   do { \
     _msr_value = 0; \
-    asm volatile ("mfmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); \
+    __asm__ volatile ("mfmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); \
   } while (0)
 
 #define _CPU_MSR_SET( _msr_value ) \
-{ asm volatile ("mtmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); }
+{ __asm__ volatile ("mtmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); }
 
 static inline void ppc_interrupt_set_disable_mask( uint32_t mask )
 {
-  asm volatile (
+  __asm__ volatile (
     "mtspr 272, %0"
     :
     : "r" (mask)
@@ -443,7 +443,7 @@ static inline uint32_t ppc_interrupt_get_disable_mask( void )
 {
   uint32_t mask;
 
-  asm volatile (
+  __asm__ volatile (
     "mfspr %0, 272"
     : "=r" (mask)
   );
@@ -456,7 +456,7 @@ static inline uint32_t ppc_interrupt_disable( void )
   uint32_t level;
   uint32_t mask;
 
-  asm volatile (
+  __asm__ volatile (
     "mfmsr %0;"
     "mfspr %1, 272;"
     "andc %1, %0, %1;"
@@ -469,7 +469,7 @@ static inline uint32_t ppc_interrupt_disable( void )
 
 static inline void ppc_interrupt_enable( uint32_t level )
 {
-  asm volatile (
+  __asm__ volatile (
     "mtmsr %0"
     :
     : "r" (level)
@@ -480,7 +480,7 @@ static inline void ppc_interrupt_flash( uint32_t level )
 {
   uint32_t current_level;
 
-  asm volatile (
+  __asm__ volatile (
     "mfmsr %0;"
     "mtmsr %1;"
     "mtmsr %0"
