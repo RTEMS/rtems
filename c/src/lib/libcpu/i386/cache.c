@@ -53,11 +53,11 @@ void _CPU_cache_unfreeze_instruction(void) {}
 
 void _CPU_cache_flush_entire_data(void)
 {
-  asm volatile ("wbinvd");
+  __asm__ volatile ("wbinvd");
 }
 void _CPU_cache_invalidate_entire_data(void)
 {
-  asm volatile ("invd");
+  __asm__ volatile ("invd");
 }
 
 void _CPU_cache_enable_data(void)
@@ -72,7 +72,7 @@ void _CPU_cache_disable_data(void)
 
 void _CPU_cache_invalidate_entire_instruction(void)
 {
-  asm volatile ("invd");
+  __asm__ volatile ("invd");
 }
 
 void _CPU_cache_enable_instruction(void)

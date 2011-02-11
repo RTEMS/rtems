@@ -43,7 +43,7 @@ rdtsc(void)
 {
   /* Return the value of the on-chip cycle counter. */
   unsigned long long result;
-  asm volatile(".byte 0x0F, 0x31" : "=A" (result));
+  __asm__ volatile(".byte 0x0F, 0x31" : "=A" (result));
   return result;
 } /* rdtsc */
 
