@@ -1,3 +1,8 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/cfinit.c:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2011-02-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* timer/timer.c: Include <rtems/btimer.h>.

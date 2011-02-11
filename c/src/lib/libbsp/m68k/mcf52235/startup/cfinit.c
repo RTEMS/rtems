@@ -51,7 +51,7 @@ static void init_interrupt_controller(void);
 void init_main(void)
 {
   /* Mask all interrupts */
-  asm("move.w   #0x2700,%sr");
+  __asm__ ("move.w   #0x2700,%sr");
 
   /* Initialise base address of peripherals, VBR, etc */
   init_ipsbar();
@@ -172,8 +172,8 @@ static void init_flash_controller(void)
 
      See Device Errata for further details
    */
-  asm("move.l   #0x00000161,%d0");
-  asm("movec    %d0,%FLASHBAR");
+  __asm__ ("move.l   #0x00000161,%d0");
+  __asm__ ("movec    %d0,%FLASHBAR");
 }
 
 /*********************************************************************
@@ -232,8 +232,8 @@ static void init_sram(void)
      DMA access to SRAM block disabled
      All access types (supervisor and user) allowed
    */
-  asm("move.l   #0x20000001,%d0");
-  asm("movec    %d0,%RAMBAR");
+  __asm__ ("move.l   #0x20000001,%d0");
+  __asm__ ("movec    %d0,%RAMBAR");
 }
 
 /*********************************************************************
