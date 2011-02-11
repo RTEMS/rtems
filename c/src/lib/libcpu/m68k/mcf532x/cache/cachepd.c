@@ -7,7 +7,7 @@
 #include <rtems.h>
 #include <mcf532x/mcf532x.h>
 
-#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr" : : "d" (_cacr))
+#define m68k_set_cacr(_cacr) __asm__ volatile ("movec %0,%%cacr" : : "d" (_cacr))
 
 /*
  * Read/write copy of common cache
@@ -41,13 +41,13 @@ void _CPU_cache_flush_1_data_line(const void *d_addr)
 {
   register unsigned long adr = (((unsigned long) d_addr >> 4) & 0xff) << 4;
 
-  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+  __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
   adr += 1;
-  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+  __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
   adr += 1;
-  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+  __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
   adr += 1;
-  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+  __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
 }
 
 void _CPU_cache_flush_entire_data(void)
@@ -56,13 +56,13 @@ void _CPU_cache_flush_entire_data(void)
 
   for(set = 0; set < 256; ++set) {
     adr = (set << 4);
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
     adr += 1;
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
     adr += 1;
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
     adr += 1;
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
   }
 }
 
@@ -101,13 +101,13 @@ void _CPU_cache_invalidate_1_instruction_line(const void *addr)
 {
   register unsigned long adr = (((unsigned long) addr >> 4) & 0xff) << 4;
 
-  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+  __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
   adr += 1;
-  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+  __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
   adr += 1;
-  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+  __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
   adr += 1;
-  asm volatile ("cpushl %%bc,(%0)" :: "a" (adr));
+  __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (adr));
 }
 
 void _CPU_cache_enable_data(void)

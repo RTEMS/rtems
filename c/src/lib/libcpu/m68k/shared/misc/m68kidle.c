@@ -33,11 +33,11 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
 #if defined(mcf5272)
   for( ; ; ) {
-    asm volatile( "nop" );
-    asm volatile( "nop" );
+    __asm__ volatile( "nop" );
+    __asm__ volatile( "nop" );
   }
 #else
   for( ; ; )
-    asm volatile( "stop #0x3000":::"cc" );  /* supervisor mode, all interrupts on */
+    __asm__ volatile( "stop #0x3000":::"cc" );  /* supervisor mode, all interrupts on */
 #endif
 }

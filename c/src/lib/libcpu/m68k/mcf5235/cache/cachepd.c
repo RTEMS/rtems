@@ -63,7 +63,7 @@ void _CPU_cache_invalidate_1_instruction_line(const void *addr)
      * Top half of cache is I-space
      */
     addr = (void *)((int)addr | 0x400);
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (addr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (addr));
 }
 
 void _CPU_cache_enable_data(void)
@@ -97,5 +97,5 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
      * Bottom half of cache is D-space
      */
     addr = (void *)((int)addr & ~0x400);
-    asm volatile ("cpushl %%bc,(%0)" :: "a" (addr));
+    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (addr));
 }

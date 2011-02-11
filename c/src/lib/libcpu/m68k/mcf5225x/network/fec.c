@@ -175,7 +175,7 @@ mcf5225xif_init(struct netif *netif)
 	
   MCF_FEC_ECR |= MCF_FEC_ECR_RESET;
   
-  while (MCF_FEC_ECR&MCF_FEC_ECR_RESET) asm("nop");
+  while (MCF_FEC_ECR&MCF_FEC_ECR_RESET) __asm__ ("nop");
   
   if (if_config->phy_init) if_config->phy_init();  /* call application specific optional extern phy initialization function */
   
@@ -233,7 +233,7 @@ void smi_write(u8_t phy_addr,u8_t reg_addr,u16_t data)
 {
 	MCF_FEC_MMFR = MCF_FEC_MMFR_ST(0x1) | MCF_FEC_MMFR_OP_WRITE | (MCF_FEC_MMFR_PA(phy_addr)) | MCF_FEC_MMFR_RA(reg_addr) | MCF_FEC_MMFR_TA_10 | data;
 	smi_init(bsp_get_CPU_clock_speed()); /* enable MII clock speed after MMFR is written */
-	while ((MCF_FEC_EIR & MCF_FEC_EIR_MII) == 0) { asm("nop"); }
+	while ((MCF_FEC_EIR & MCF_FEC_EIR_MII) == 0) { __asm__ ("nop"); }
 	smi_init(0); /* MII frame sent, disable clock until next operation */
 	MCF_FEC_EIR |= MCF_FEC_EIR_MII;
 }
@@ -242,7 +242,7 @@ u16_t smi_read(u8_t phy_addr,u8_t reg_addr)
 {
 	MCF_FEC_MMFR = MCF_FEC_MMFR_ST(0x1) | MCF_FEC_MMFR_OP_READ | (MCF_FEC_MMFR_PA(phy_addr)) | MCF_FEC_MMFR_RA(reg_addr) | MCF_FEC_MMFR_TA_10;
 	smi_init(bsp_get_CPU_clock_speed()); /* enable MII clock speed after MMFR is written */
-	while ((MCF_FEC_EIR & MCF_FEC_EIR_MII) == 0) { asm("nop"); }
+	while ((MCF_FEC_EIR & MCF_FEC_EIR_MII) == 0) { __asm__ ("nop"); }
 	smi_init(0); /* MII frame sent, disable clock until next operation */
 	MCF_FEC_EIR |= MCF_FEC_EIR_MII;
 	

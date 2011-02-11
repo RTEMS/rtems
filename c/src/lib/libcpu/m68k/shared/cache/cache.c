@@ -19,7 +19,7 @@
   {                                                                \
   register unsigned long _value = mask;                            \
   register unsigned long _ctl = 0;                                 \
-  asm volatile ( "movec %%cacr, %0;           /* read the cacr */  \
+  __asm__ volatile ( "movec %%cacr, %0;           /* read the cacr */  \
                   andl %2, %0;                /* and with _val */  \
                   movec %1, %%cacr"           /* write the cacr */ \
    : "=d" (_ctl) : "0" (_ctl), "d" (_value) : "%%cc" );            \
@@ -33,7 +33,7 @@
 	{                                                                \
   register unsigned long _value = mask;                            \
   register unsigned long _ctl = 0;                                 \
-  asm volatile ( "movec %%cacr, %0;           /* read the cacr */  \
+  __asm__ volatile ( "movec %%cacr, %0;           /* read the cacr */  \
                   orl %2, %0;                 /* or with _val */   \
                   movec %1, %%cacr"           /* write the cacr */ \
    : "=d" (_ctl) : "0" (_ctl), "d" (_value) : "%%cc" );            \
@@ -59,7 +59,7 @@ void _CPU_cache_invalidate_1_data_line (
   const void * d_addr )
 {
   void * p_address = (void *) _CPU_virtual_to_physical( d_addr );
-  asm volatile ( "movec %0, %%caar" :: "a" (p_address) );      /* write caar */
+  __asm__ volatile ( "movec %0, %%caar" :: "a" (p_address) );      /* write caar */
   _CPU_CACR_OR(0x00000400);
 }
 
@@ -95,7 +95,7 @@ void _CPU_cache_invalidate_1_instruction_line (
   const void * d_addr )
 {
   void * p_address = (void *) _CPU_virtual_to_physical( d_addr );
-  asm volatile ( "movec %0, %%caar" :: "a" (p_address) );      /* write caar */
+  __asm__ volatile ( "movec %0, %%caar" :: "a" (p_address) );      /* write caar */
   _CPU_CACR_OR( 0x00000004 );
 }
 
@@ -137,14 +137,14 @@ void _CPU_cache_flush_1_data_line (
   const void * d_addr )
 {
   void * p_address = (void *) _CPU_virtual_to_physical( d_addr );
-  asm volatile ( "cpushl %%dc,(%0)" :: "a" (p_address) );
+  __asm__ volatile ( "cpushl %%dc,(%0)" :: "a" (p_address) );
 }
 
 void _CPU_cache_invalidate_1_data_line (
   const void * d_addr )
 {
   void * p_address = (void *) _CPU_virtual_to_physical( d_addr );
-  asm volatile ( "cinvl %%dc,(%0)" :: "a" (p_address) );
+  __asm__ volatile ( "cinvl %%dc,(%0)" :: "a" (p_address) );
 }
 
 void _CPU_cache_flush_entire_data ( void )
@@ -171,7 +171,7 @@ void _CPU_cache_invalidate_1_instruction_line (
   const void * i_addr )
 {
   void * p_address = (void *)  _CPU_virtual_to_physical( i_addr );
-  asm volatile ( "cinvl %%ic,(%0)" :: "a" (p_address) );
+  __asm__ volatile ( "cinvl %%ic,(%0)" :: "a" (p_address) );
 }
 
 void _CPU_cache_invalidate_entire_instruction ( void )

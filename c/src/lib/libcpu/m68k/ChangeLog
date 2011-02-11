@@ -1,3 +1,9 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mcf5225x/network/fec.c, mcf5235/cache/cachepd.c,
+	mcf532x/cache/cachepd.c, shared/cache/cache.c, shared/misc/m68kidle.c:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
