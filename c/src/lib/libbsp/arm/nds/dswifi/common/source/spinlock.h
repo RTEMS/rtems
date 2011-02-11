@@ -28,7 +28,7 @@ SOFTWARE.
 
 /*
 
-__asm (
+__asm__ (
 ".GLOBL SLasm_Acquire, SLasm_Release   \n"
 ".ARM \n"
 "SLasm_Acquire:					\n"

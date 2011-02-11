@@ -1,5 +1,10 @@
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* dswifi/common/source/spinlock.h:
+	Use "__asm__" instead of "__asm" for improved c99-compliance.
+
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* console/console.c, dswifi/arm9/source/wifi_arm9.c, tools/bin2s.c:
 	Use "__asm__" instead of "asm" for improved c99-compliance.
 
