@@ -94,7 +94,7 @@ void init_PCI(void)
 #define PPC_Get_HID0( _value ) \
   do { \
       _value = 0;        /* to avoid warnings */ \
-      asm volatile( \
+      __asm__ volatile( \
           "mfspr %0, 0x3f0;"     /* get HID0 */ \
           "isync" \
           : "=r" (_value) \
@@ -104,7 +104,7 @@ void init_PCI(void)
 
 #define PPC_Set_HID0( _value ) \
   do { \
-      asm volatile( \
+      __asm__ volatile( \
           "isync;" \
           "mtspr 0x3f0, %0;"     /* load HID0 */ \
           "isync" \

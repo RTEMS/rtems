@@ -213,7 +213,7 @@ void bsp_start( void )
 
   msr_value = 0x2030;
   _CPU_MSR_SET( msr_value );
-  asm volatile("sync; isync");
+  __asm__ volatile("sync; isync");
 
   /*
    *  initialize the device driver parameters

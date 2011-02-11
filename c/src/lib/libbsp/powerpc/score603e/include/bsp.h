@@ -67,7 +67,7 @@ extern "C" {
                                SCORE603E_BRD_FLASH_DISABLE_MASK)
 
 #define Processor_Synchronize() \
-  asm volatile(" eieio ")
+  __asm__ volatile(" eieio ")
 
 
 /* Constants */

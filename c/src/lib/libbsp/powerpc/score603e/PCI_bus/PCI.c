@@ -29,8 +29,8 @@
  */
 void PCI_bus_delay (void)
 {
-  asm("	nop");
-  asm(" nop");
+  __asm__ ("	nop");
+  __asm__ (" nop");
 }
 
 /*

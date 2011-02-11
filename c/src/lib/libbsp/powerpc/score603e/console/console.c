@@ -415,13 +415,13 @@ debug_putc_onlcr(const char c)
   if ('\n'==c){
     rtems_interrupt_disable( isrlevel );
     outbyte_polled_85c30( csr, '\r' );
-    asm volatile("isync");
+    __asm__ volatile("isync");
     rtems_interrupt_enable( isrlevel );
   }
 
   rtems_interrupt_disable( isrlevel );
   outbyte_polled_85c30( csr, c );
-  asm volatile("isync");
+  __asm__ volatile("isync");
   rtems_interrupt_enable( isrlevel );
 }
 
