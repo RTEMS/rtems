@@ -26,7 +26,7 @@ void  __attribute__((weak)) bsp_cleanup(void)
 {
   printk("\nRTEMS exited!\n");
   for (;;) {
-    asm volatile (" nop ");
-    asm volatile (" nop ");
+    __asm__ volatile (" nop ");
+    __asm__ volatile (" nop ");
   }
 }
