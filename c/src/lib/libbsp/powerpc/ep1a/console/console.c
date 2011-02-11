@@ -259,12 +259,12 @@ debug_putc_onlcr(const char c)
 
   if ('\n'==c){
      *ptr = '\r';
-     asm volatile("sync");
+     __asm__ volatile("sync");
      for (i=0;i<0x0fff;i++);
   }
 
   *ptr = c;
-  asm volatile("sync");
+  __asm__ volatile("sync");
   for (i=0;i<0x0fff;i++);
 }
 

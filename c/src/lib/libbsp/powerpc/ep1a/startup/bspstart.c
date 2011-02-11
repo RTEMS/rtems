@@ -184,18 +184,18 @@ unsigned int EUMBBAR;
 unsigned int get_eumbbar(void) {
   register int a, e;
 
-  asm volatile( "lis %0,0xfec0; ori  %0,%0,0x0000": "=r" (a) );
-  asm volatile("sync");
+  __asm__ volatile( "lis %0,0xfec0; ori  %0,%0,0x0000": "=r" (a) );
+  __asm__ volatile("sync");
 
-  asm volatile("lis %0,0x8000; ori %0,%0,0x0078": "=r"(e) );
-  asm volatile("stwbrx  %0,0x0,%1": "=r"(e): "r"(a));
-  asm volatile("sync");
+  __asm__ volatile("lis %0,0x8000; ori %0,%0,0x0078": "=r"(e) );
+  __asm__ volatile("stwbrx  %0,0x0,%1": "=r"(e): "r"(a));
+  __asm__ volatile("sync");
 
-  asm volatile("lis %0,0xfee0; ori %0,%0,0x0000": "=r" (a) );
-  asm volatile("sync");
+  __asm__ volatile("lis %0,0xfee0; ori %0,%0,0x0000": "=r" (a) );
+  __asm__ volatile("sync");
 
-  asm volatile("lwbrx %0,0x0,%1": "=r" (e): "r" (a));
-  asm volatile("isync");
+  __asm__ volatile("lwbrx %0,0x0,%1": "=r" (e): "r" (a));
+  __asm__ volatile("isync");
   return e;
 }
 

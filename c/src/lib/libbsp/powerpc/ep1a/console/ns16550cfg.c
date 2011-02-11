@@ -29,7 +29,7 @@ uint8_t Read_ns16550_register(
 volatile struct uart_reg *p = (volatile struct uart_reg *)ulCtrlPort;
   uint8_t  ucData;
   ucData = p[ucRegNum].reg;
-  asm volatile("sync");
+  __asm__ volatile("sync");
   return ucData;
 }
 
@@ -42,9 +42,9 @@ void  Write_ns16550_register(
   volatile struct uart_reg *p = (volatile struct uart_reg *)ulCtrlPort;
   volatile int i;
   p[ucRegNum].reg = ucData;
-  asm volatile("sync");
-  asm volatile("isync");
-  asm volatile("eieio");
+  __asm__ volatile("sync");
+  __asm__ volatile("isync");
+  __asm__ volatile("eieio");
   for (i=0;i<0x08ff;i++)
-    asm volatile("isync");
+    __asm__ volatile("isync");
 }

@@ -174,7 +174,7 @@ extern unsigned int BSP_time_base_divisor;
   ((unsigned long long) ((((unsigned long long)BSP_time_base_divisor) * 1000000ULL) /((unsigned long long) BSP_bus_frequency)) * ((unsigned long long) (_value)))
 
 #define Processor_Synchronize() \
-  asm(" eieio ")
+  __asm__ (" eieio ")
 
 extern void BSP_panic(char *s);
 extern int BSP_disconnect_clock_handler (void);
