@@ -211,11 +211,11 @@ jmp_buf remcomEnv;
 
 #ifdef __HAVE_68881__
 /* do an fsave, then remember the address to begin a restore from */
-#define SAVE_FP_REGS()    asm(" fsave   -(%a0)");		\
-			  asm(" fmovem.x %fp0-%fp7,registers+72");        \
-			  asm(" fmovem.l %fpcr/%fpsr/%fpi,registers+168");
+#define SAVE_FP_REGS()    __asm__ (" fsave   -(%a0)");		\
+			  __asm__ (" fmovem.x %fp0-%fp7,registers+72");        \
+			  __asm__ (" fmovem.l %fpcr/%fpsr/%fpi,registers+168");
 #define RESTORE_FP_REGS()                              \
-asm("                                                \n\
+__asm__ ("                                                \n\
     fmovem.l  registers+168,%fpcr/%fpsr/%fpi            \n\
     fmovem.x  registers+72,%fp0-%fp7                   \n\
     cmp.l     #-1,(%a0)     |  skip frestore flag set ? \n\
@@ -244,7 +244,7 @@ void m68k_exceptionHandler
   /*
    * get vector base register
    */
-  asm(" movec.l %%vbr,%0":"=a" (vec_base));
+  __asm__ (" movec.l %%vbr,%0":"=a" (vec_base));
 #endif
   vec_base[vecnum] = vector;
 }
@@ -257,7 +257,7 @@ void m68k_stub_dummy_asm_wrapper()
       * that the C compiler manages sections properly
       */
 {
-asm("\n\
+__asm__ ("\n\
 .globl return_to_super 							\n\
 return_to_super:							\n\
         move.l   registers+60,%sp /* get new stack pointer */         	\n\
@@ -286,27 +286,27 @@ copyUserLoop:                                                           \n\
         dbf     %d0,copyUserLoop                                        \n\
 ");
         RESTORE_FP_REGS()
-   asm("   movem.l  registers,%d0-%d7/%a0-%a6");
-   asm("   rte");  /* pop and go! */
+   __asm__ ("   movem.l  registers,%d0-%d7/%a0-%a6");
+   __asm__ ("   rte");  /* pop and go! */
 
-#define DISABLE_INTERRUPTS()   asm("         oriw   #0x0700,%sr");
-#define BREAKPOINT() asm("   trap #2");
+#define DISABLE_INTERRUPTS()   __asm__ ("         oriw   #0x0700,%sr");
+#define BREAKPOINT() __asm__ ("   trap #2");
 
 /* this function is called immediately when a level 7 interrupt occurs */
 /* if the previous interrupt level was 7 then we're already servicing  */
 /* this interrupt and an rte is in order to return to the debugger.    */
 /* For the 68000, the offset for sr is 6 due to the jsr return address */
-asm("						\n\
+__asm__ ("						\n\
 .text						\n\
 .globl _debug_level7				\n\
 _debug_level7:					\n\
 	move.w   %d0,-(%sp)");
 #if M68K_HAS_VBR
-asm("	move.w   2(%sp),%d0");
+__asm__ ("	move.w   2(%sp),%d0");
 #else
-asm("	move.w   6(%sp),%d0");
+__asm__ ("	move.w   6(%sp),%d0");
 #endif
-asm("	andi.w   #0x700,%d0			\n\
+__asm__ ("	andi.w   #0x700,%d0			\n\
 	cmpi.w   #0x700,%d0			\n\
 	beq     already7			\n\
         move.w   (%sp)+,%d0			\n\
@@ -314,9 +314,9 @@ asm("	andi.w   #0x700,%d0			\n\
 already7:					\n\
 	move.w   (%sp)+,%d0");
 #if !M68K_HAS_VBR
-asm("	lea     4(%sp),%sp");     /* pull off 68000 return address */
+__asm__ ("	lea     4(%sp),%sp");     /* pull off 68000 return address */
 #endif
-asm("	rte");
+__asm__ ("	rte");
 
 #if M68K_HAS_VBR
 /* This function is called when a 68020 exception occurs.  It saves
@@ -334,17 +334,17 @@ asm("	rte");
  *
  *
  */
-asm(" 						\n\
+__asm__ (" 						\n\
 .text						\n\
 .globl _catchException				\n\
 _catchException:");
 DISABLE_INTERRUPTS();
-asm("									\n\
+__asm__ ("									\n\
         movem.l  %d0-%d7/%a0-%a6,registers /* save registers        */	\n\
 	move.l	lastFrame,%a0	/* last frame pointer */		\n\
 ");
 SAVE_FP_REGS();
-asm("\n\
+__asm__ ("\n\
 	lea     registers,%a5   /* get address of registers     */\n\
         move.w  (%sp),%d1        /* get status register          */\n\
         move.w   %d1,66(%a5)      /* save sr		 	*/	\n\
@@ -426,17 +426,17 @@ a7saveDone:\n\
  *   Return Address  MSWord
  *   Return Address  LSWord
  */
-asm("\n\
+__asm__ ("\n\
 .text\n\
 .globl _catchException\n\
 _catchException:");
 DISABLE_INTERRUPTS();
-asm("\
+__asm__ ("\
         moveml %d0-%d7/%a0-%a6,registers  /* save registers               */ \n\
 	movel	lastFrame,%a0	/* last frame pointer */ \n\
 ");
 SAVE_FP_REGS();
-asm(" \n\
+__asm__ (" \n\
         lea     registers,%a5   /* get address of registers     */ \n\
         movel   (%sp)+,%d2         /* pop return address           */ \n\
 	addl 	#1530,%d2        /* convert return addr to 	*/ \n\
@@ -493,13 +493,13 @@ saveDone: \n\
  * stack pointer into an area reserved for debugger use in case the
  * breakpoint happened in supervisor mode.
  */
-asm("remcomHandler:");
-asm("           add.l    #4,%sp");        /* pop off return address     */
-asm("           move.l   (%sp)+,%d0");      /* get the exception number   */
-asm("		move.l   stackPtr,%sp"); /* move to remcom stack area  */
-asm("		move.l   %d0,-(%sp)");	/* push exception onto stack  */
-asm("		jbsr    handle_exception");    /* this never returns */
-asm("           rts");                  /* return */
+__asm__ ("remcomHandler:");
+__asm__ ("           add.l    #4,%sp");        /* pop off return address     */
+__asm__ ("           move.l   (%sp)+,%d0");      /* get the exception number   */
+__asm__ ("		move.l   stackPtr,%sp"); /* move to remcom stack area  */
+__asm__ ("		move.l   %d0,-(%sp)");	/* push exception onto stack  */
+__asm__ ("		jbsr    handle_exception");    /* this never returns */
+__asm__ ("           rts");                  /* return */
 } /* end of stub_dummy_asm_wrapper function */
 
 void _returnFromException( Frame *frame )
