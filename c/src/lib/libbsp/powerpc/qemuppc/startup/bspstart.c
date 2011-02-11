@@ -124,6 +124,6 @@ void bsp_start( void )
   setdbat(2, 0xc<<24, 0xc<<24, 1<<24,  IO_PAGE);
 
   _write_MSR(_read_MSR() | MSR_DR | MSR_IR);
-  asm volatile("sync; isync");
+  __asm__ volatile("sync; isync");
 #endif
 }
