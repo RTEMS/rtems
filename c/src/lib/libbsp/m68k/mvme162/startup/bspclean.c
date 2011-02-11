@@ -36,8 +36,8 @@ void bsp_return_to_monitor_trap(void)
   m68k_set_vbr(0xFFE00000);         /* restore 162Bug vectors */
 #endif
 
-  asm volatile( "trap   #15"  );    /* trap to 162Bug */
-  asm volatile( ".short 0x63" );    /* return to 162Bug (.RETURN) */
+  __asm__ volatile( "trap   #15"  );    /* trap to 162Bug */
+  __asm__ volatile( ".short 0x63" );    /* return to 162Bug (.RETURN) */
                                     /* restart program */
   /*
    *  This does not work on the 162....
@@ -47,7 +47,7 @@ void bsp_return_to_monitor_trap(void)
 
      start_addr = start;
 
-     asm volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
+     __asm__ volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
   }
 #endif
 }
@@ -55,5 +55,5 @@ void bsp_return_to_monitor_trap(void)
 void bsp_cleanup( void )
 {
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
-   asm volatile( "trap #13" );  /* insures SUPV mode */
+   __asm__ volatile( "trap #13" );  /* insures SUPV mode */
 }

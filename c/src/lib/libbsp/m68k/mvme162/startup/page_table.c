@@ -8,7 +8,7 @@
  *  The following history is included verbatim from the submitter.
  *
  * Revision 1.8  1995/11/18  00:07:25  vaitl
- * Modified asm statements to get rid of the register hard-codes.
+ * Modified asm-statements to get rid of the register hard-codes.
  *
  * Revision 1.7  1995/10/27  21:00:32  vaitl
  * Modified page table routines so application code can map
@@ -95,12 +95,12 @@ void page_table_init(){
        Ignore FC2 for match.
        Noncachable.
        Not write protected.*/
-    asm volatile ("movec %0,%%dtt0\n\
+    __asm__ volatile ("movec %0,%%dtt0\n\
                    movec %0,%%itt0"
 		  :: "d" (0x807fc040));
 
     /* Point urp and srp at root page table. */
-    asm volatile ("movec %0,%%urp\n\
+    __asm__ volatile ("movec %0,%%urp\n\
                    movec %0,%%srp"
 		  :: "d" (BASE_TABLE_ADDR));
 
@@ -108,11 +108,11 @@ void page_table_init(){
     page_table_map((void *)0x20000,0x400000-0x20000,CACHE_COPYBACK);
 
     /* Turn on paging with a 4 k page size.*/
-    asm volatile ("movec %0,%%tc"
+    __asm__ volatile ("movec %0,%%tc"
 		  :: "d" (0x8000));
 
     /* Turn on the cache. */
-    asm volatile ("movec %0,%%cacr"
+    __asm__ volatile ("movec %0,%%cacr"
 		  :: "d" (0x80008000));
 }
 
@@ -120,7 +120,7 @@ void page_table_teardown(){
     next_avail=(unsigned long *)BASE_TABLE_ADDR;
     /* Turn off paging.  Turn off the cache. Flush the cache. Tear down
        the transparent translations. */
-    asm volatile ("movec %0,%%tc\n\
+    __asm__ volatile ("movec %0,%%tc\n\
                    movec %0,%%cacr\n\
                    cpusha %%bc\n\
                    movec %0,%%dtt0\n\
@@ -191,7 +191,7 @@ int page_table_map(void *addr, unsigned long size, int cache_type){
     }
 
     /* Flush the ATC. Push and invalidate the cache. */
-    asm volatile ("pflusha\n\
+    __asm__ volatile ("pflusha\n\
                    cpusha %bc");
 
     return  PTM_SUCCESS;
