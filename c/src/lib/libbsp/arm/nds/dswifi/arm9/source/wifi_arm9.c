@@ -61,7 +61,7 @@ void sgIP_RestoreInterrupts(int old_ime) {
 }
 
 void sgIP_IntrWaitEvent() {
- //  __asm( ".ARM\n swi 0x060000\n" );
+ //  __asm__ ( ".ARM\n swi 0x060000\n" );
 	int i,j;
 	j=0;
 	for(i=0;i<20000;i++) {

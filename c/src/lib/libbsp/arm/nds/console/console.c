@@ -38,7 +38,7 @@ void
 nds_putch (char c)
 {
 #ifdef TESTSUITE
-  asm volatile ("swi $0x1");
+  __asm__ volatile ("swi $0x1");
 #endif
   consolePrintChar (c);
 }
