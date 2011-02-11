@@ -170,7 +170,7 @@ extern "C" {
 
 #define nop() \
   do { \
-    asm volatile ( "nop" ); \
+    __asm__ volatile ( "nop" ); \
   } while ( 0 )
 
 /*
@@ -180,12 +180,12 @@ extern "C" {
 #define sparc64_get_pstate( _pstate ) \
   do { \
      (_pstate) = 0; \
-     asm volatile( "rdpr %%pstate, %0" :  "=r" (_pstate) : "0" (_pstate) ); \
+     __asm__ volatile( "rdpr %%pstate, %0" :  "=r" (_pstate) : "0" (_pstate) ); \
   } while ( 0 )
 
 #define sparc64_set_pstate( _pstate ) \
   do { \
-    asm volatile ( \
+    __asm__ volatile ( \
       "wrpr  %%g0, %0, %%pstate " : "=r" ((_pstate)) : "0" ((_pstate)) ); \
   } while ( 0 )
 
@@ -196,12 +196,12 @@ extern "C" {
 #define sparc64_get_pil( _pil ) \
   do { \
      (_pil) = 0; \
-     asm volatile( "rdpr %%pil, %0" :  "=r" (_pil) : "0" (_pil) ); \
+     __asm__ volatile( "rdpr %%pil, %0" :  "=r" (_pil) : "0" (_pil) ); \
   } while ( 0 )
 
 #define sparc64_set_pil( _pil ) \
   do { \
-    asm volatile ( "wrpr  %%g0, %0, %%pil " : "=r" ((_pil)) : "0" ((_pil)) ); \
+    __asm__ volatile ( "wrpr  %%g0, %0, %%pil " : "=r" ((_pil)) : "0" ((_pil)) ); \
   } while ( 0 )
 
 
@@ -212,12 +212,12 @@ extern "C" {
 #define sparc64_get_tba( _tba ) \
   do { \
      (_tba) = 0; /* to avoid unitialized warnings */ \
-     asm volatile( "rdpr %%tba, %0" :  "=r" (_tba) : "0" (_tba) ); \
+     __asm__ volatile( "rdpr %%tba, %0" :  "=r" (_tba) : "0" (_tba) ); \
   } while ( 0 )
 
 #define sparc64_set_tba( _tba ) \
   do { \
-     asm volatile( "wrpr %%g0, %0, %%tba" :  "=r" (_tba) : "0" (_tba) ); \
+     __asm__ volatile( "wrpr %%g0, %0, %%tba" :  "=r" (_tba) : "0" (_tba) ); \
   } while ( 0 )
 
 /*
@@ -227,12 +227,12 @@ extern "C" {
 #define sparc64_get_tl( _tl ) \
   do { \
      (_tl) = 0; /* to avoid unitialized warnings */ \
-     asm volatile( "rdpr %%tl, %0" :  "=r" (_tl) : "0" (_tl) ); \
+     __asm__ volatile( "rdpr %%tl, %0" :  "=r" (_tl) : "0" (_tl) ); \
   } while ( 0 )
 
 #define sparc64_set_tl( _tl ) \
   do { \
-     asm volatile( "wrpr %%g0, %0, %%tl" :  "=r" (_tl) : "0" (_tl) ); \
+     __asm__ volatile( "wrpr %%g0, %0, %%tl" :  "=r" (_tl) : "0" (_tl) ); \
   } while ( 0 )
 
 
@@ -247,7 +247,7 @@ extern "C" {
 #define sparc64_read_stick( _stick ) \
   do { \
     (_stick) = 0; \
-    asm volatile( "rd %%stick, %0" : "=r" (_stick) : "0" (_stick) );  \
+    __asm__ volatile( "rd %%stick, %0" : "=r" (_stick) : "0" (_stick) );  \
   } while ( 0 )
 
 /*
@@ -260,7 +260,7 @@ extern "C" {
  */
 #define sparc64_write_stick_cmpr( _stick_cmpr ) \
   do { \
-    asm volatile( "wr %%g0, %0, %%stick_cmpr" :  "=r" (_stick_cmpr)  \
+    __asm__ volatile( "wr %%g0, %0, %%stick_cmpr" :  "=r" (_stick_cmpr)  \
                                               :  "0" (_stick_cmpr) ); \
   } while ( 0 )
 
@@ -270,7 +270,7 @@ extern "C" {
 #define sparc64_read_tick( _tick ) \
   do { \
     (_tick) = 0; \
-    asm volatile( "rd %%tick, %0" : "=r" (_tick) : "0" (_tick) ); \
+    __asm__ volatile( "rd %%tick, %0" : "=r" (_tick) : "0" (_tick) ); \
   } while ( 0 )
 
 /*
@@ -278,7 +278,7 @@ extern "C" {
  */
 #define sparc64_write_tick_cmpr( _tick_cmpr ) \
   do { \
-    asm volatile( "wr %%g0, %0, %%tick_cmpr" :  "=r" (_tick_cmpr)  \
+    __asm__ volatile( "wr %%g0, %0, %%tick_cmpr" :  "=r" (_tick_cmpr)  \
                                              :  "0" (_tick_cmpr) ); \
   } while ( 0 )
 
@@ -289,7 +289,7 @@ extern "C" {
  */
 #define sparc64_clear_interrupt_bits( _bit_mask ) \
   do { \
-  asm volatile( "wr %%g0, %0, %%clear_softint" : "=r" (_bit_mask) \
+  __asm__ volatile( "wr %%g0, %0, %%clear_softint" : "=r" (_bit_mask) \
                                                : "0" (_bit_mask)); \
   } while ( 0 )
 
@@ -301,12 +301,12 @@ extern "C" {
  
 #define sparc_get_y( _y ) \
   do { \
-    asm volatile( "rd %%y, %0" :  "=r" (_y) : "0" (_y) ); \
+    __asm__ volatile( "rd %%y, %0" :  "=r" (_y) : "0" (_y) ); \
   } while ( 0 )
  
 #define sparc_set_y( _y ) \
   do { \
-    asm volatile( "wr %0, %%y" :  "=r" (_y) : "0" (_y) ); \
+    __asm__ volatile( "wr %0, %%y" :  "=r" (_y) : "0" (_y) ); \
   } while ( 0 )
 
 /************* /DEPRECATED ****************/
