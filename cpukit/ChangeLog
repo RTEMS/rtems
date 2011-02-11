@@ -4,6 +4,7 @@
 	Eliminate unnamed union (Non c99-compliant).
 	* libblock/src/bdpart-create.c, libblock/src/bdpart-read.c,
 	libblock/src/bdpart-write.c: Reflect changes above.
+	* libmisc/shell/fdisk.c: Reflect changes above.
 
 2011-02-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 

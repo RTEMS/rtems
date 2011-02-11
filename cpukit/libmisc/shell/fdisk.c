@@ -132,8 +132,8 @@ static int rtems_bdpart_shell_main( int argc, char **argv)
 
     /* Default format */
     format.type = RTEMS_BDPART_FORMAT_MBR;
-    format.mbr.disk_id = 0;
-    format.mbr.dos_compatibility = true;
+    format.u.mbr.disk_id = 0;
+    format.u.mbr.dos_compatibility = true;
 
     for (ai = 2; ai < argc; ++ai) {
       char *s = argv [ai];
@@ -194,9 +194,9 @@ static int rtems_bdpart_shell_main( int argc, char **argv)
           break;
         case RTEMS_BDPART_SHELL_MBR:
           if (strcmp( s, "dos") == 0) {
-            format.mbr.dos_compatibility = true;
+            format.u.mbr.dos_compatibility = true;
           } else if (strcmp( s, "nodos") == 0) {
-            format.mbr.dos_compatibility = false;
+            format.u.mbr.dos_compatibility = false;
           } else {
             RTEMS_BDPART_SHELL_ERROR( "unexpected option: %s", argv [ai]);
           }
