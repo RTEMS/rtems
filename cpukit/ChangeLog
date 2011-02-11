@@ -1,3 +1,7 @@
+2011-02-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* score/include/rtems/score/context.h: Spacing.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/score/basedefs.h:

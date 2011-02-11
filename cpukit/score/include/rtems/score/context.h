@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,6 +45,7 @@ extern "C" {
 
 /**
  *  @brief Initialize Context Area
+ *
  *  This routine initializes @a _the_context such that the stack
  *  pointer, interrupt level, and entry point are correct for the
  *  thread's initial state.
