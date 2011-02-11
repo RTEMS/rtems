@@ -53,7 +53,7 @@ extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 #define rtems_bsp_delay( microseconds ) \
   { register uint32_t         _delay=(microseconds); \
     register uint32_t         _tmp=123; \
-    asm volatile( "0: \
+    __asm__ volatile( "0: \
                      nbcd      %0 ; \
                      nbcd      %0 ; \
                      dbf       %1,0b" \

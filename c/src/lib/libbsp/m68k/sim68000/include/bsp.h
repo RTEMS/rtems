@@ -39,7 +39,7 @@ extern "C" {
 #define rtems_bsp_delay( microseconds ) \
   { register uint32_t         _delay=(microseconds); \
     register uint32_t         _tmp = 0; /* initialized to avoid warning */ \
-    asm volatile( "0: \
+    __asm__ volatile( "0: \
                      remo      3,31,%0 ; \
                      cmpo      0,%0 ; \
                      subo      1,%1,%1 ; \
