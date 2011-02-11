@@ -10,7 +10,7 @@ extern "C" {
 
 void init_serial_gdb( void );
 
-#define breakpoint() asm("int $3")
+#define breakpoint() __asm__ ("int $3")
 
 #ifdef __cplusplus
 }
