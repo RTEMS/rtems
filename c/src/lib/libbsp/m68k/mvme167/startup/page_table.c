@@ -120,7 +120,7 @@ void page_table_init(
 	}
 
   /* do it ! */
-  asm volatile("movec %0, %%tc\n\t"    /* turn off paged address translation */
+  __asm__ volatile("movec %0, %%tc\n\t"    /* turn off paged address translation */
                "movec %0, %%cacr\n\t"  /* disable both caches */
                "cinva %%bc\n\t"        /* clear both caches */
                "movec %1,%%dtt0\n\t"   /* block address translation on */
@@ -145,7 +145,7 @@ void page_table_init(
  */
 void page_table_teardown( void )
 {
-  asm volatile ("movec %0,%%tc\n\t"
+  __asm__ volatile ("movec %0,%%tc\n\t"
                 "movec %0,%%cacr\n\t"
                 "cpusha %%bc\n\t"
                 "movec %0,%%dtt0\n\t"

@@ -1245,7 +1245,7 @@ int _167Bug_pollRead(
    */
   rtems_interrupt_disable( previous_level );
 
-  asm volatile( "movew  %1, -(%%sp)\n\t"/* Channel */
+  __asm__ volatile( "movew  %1, -(%%sp)\n\t"/* Channel */
                 "trap   #15\n\t"        /* Trap to 167Bug */
                 ".short 0x61\n\t"       /* Code for .REDIR_I */
                 "trap   #15\n\t"        /* Trap to 167Bug */
@@ -1260,7 +1260,7 @@ int _167Bug_pollRead(
   }
 
   /* Read the char and return it */
-  asm volatile( "subq.l #2,%%a7\n\t"    /* Space for result */
+  __asm__ volatile( "subq.l #2,%%a7\n\t"    /* Space for result */
                 "trap   #15\n\t"        /* Trap to 167 Bug */
                 ".short 0x00\n\t"       /* Code for .INCHR */
                 "moveb  (%%a7)+, %0"    /* Pop char into c */
@@ -1296,7 +1296,7 @@ ssize_t _167Bug_pollWrite(
 {
   const char *endbuf = buf + len;
 
-  asm volatile( "pea    (%0)\n\t"            /* endbuf */
+  __asm__ volatile( "pea    (%0)\n\t"            /* endbuf */
                 "pea    (%1)\n\t"            /* buf */
                 "movew  #0x21, -(%%sp)\n\t"  /* Code for .OUTSTR */
                 "movew  %2, -(%%sp)\n\t"     /* Channel */

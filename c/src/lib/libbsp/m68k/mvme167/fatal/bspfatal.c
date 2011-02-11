@@ -82,7 +82,7 @@ User_extensions_routine bsp_fatal_error_occurred(
   lcsr->intr_ena = 0;               /* disable interrupts */
   m68k_set_vbr(0xFFE00000);         /* restore 167Bug vectors */
 
-  asm volatile( "movel  %0, -(%%a7)\n\t"
+  __asm__ volatile( "movel  %0, -(%%a7)\n\t"
                 "pea    (%%a7)\n\t"
                 "pea    (%1)\n\t"
                 "trap   #15\n\t"         /* trap to 167Bug (.WRITDLN) */
