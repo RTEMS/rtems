@@ -65,7 +65,7 @@
     ticks /= 4;
 
     for (i = 0; i <= ticks; ++i) {
-      asm volatile ("nop");
+      __asm__ volatile ("nop");
     }
   }
 #endif
