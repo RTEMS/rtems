@@ -46,7 +46,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
        * I don't see a good way to disable the compare
        * interrupt, so let's just ignore it.
        */
-      asm volatile ("mtc0 %0, $11\n" :: "r" (zero));
+      __asm__ volatile ("mtc0 %0, $11\n" :: "r" (zero));
 
 /*      CALL_ISR( AU1X00_IRQ_CNT, frame );  */
   }
