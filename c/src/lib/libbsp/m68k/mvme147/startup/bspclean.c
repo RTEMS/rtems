@@ -26,12 +26,12 @@ void bsp_return_to_monitor_trap(void)
   register volatile void *start_addr;
 
   m68k_set_vbr( 0 );                /* restore 147Bug vectors */
-  asm volatile( "trap   #15"  );    /* trap to 147Bug */
-  asm volatile( ".short 0x63" );    /* return to 147Bug (.RETURN) */
+  __asm__ volatile( "trap   #15"  );    /* trap to 147Bug */
+  __asm__ volatile( ".short 0x63" );    /* return to 147Bug (.RETURN) */
                                     /* restart program */
   start_addr = start;
 
-  asm volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
+  __asm__ volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
 }
 
 void bsp_cleanup( void )
@@ -40,5 +40,5 @@ void bsp_cleanup( void )
    pcc->timer2_int_control = 0; /* Disable Timer 2 */
 
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
-   asm volatile( "trap #13" );  /* ensures SUPV mode */
+   __asm__ volatile( "trap #13" );  /* ensures SUPV mode */
 }
