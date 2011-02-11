@@ -53,12 +53,12 @@ enet_regs_t *g_enet_regs          = (void *) MCF5272_ENET_BASE(BSP_MBAR);
 usb_regs_t *g_usb_regs            = (void *) MCF5272_USB_BASE(BSP_MBAR);
 
 #define m68k_set_srambar( _rambar0 ) \
-  asm volatile (  "movec %0,%%rambar0\n\t" \
+  __asm__ volatile (  "movec %0,%%rambar0\n\t" \
                   "nop\n\t" \
                   : : "d" (_rambar0) )
 
 #define m68k_set_mbar( _mbar ) \
-  asm volatile (  "movec %0,%%mbar\n\t" \
+  __asm__ volatile (  "movec %0,%%mbar\n\t" \
                   "nop\n\t" \
                   : : "d" (_mbar) )
 
@@ -67,7 +67,7 @@ usb_regs_t *g_usb_regs            = (void *) MCF5272_USB_BASE(BSP_MBAR);
 
 
 #define mcf5272_disable_cache() \
-  asm volatile (  "nop\n\t"    \
+  __asm__ volatile (  "nop\n\t"    \
                   "movec %0,%%cacr\n\t" \
                   "nop\n\t" \
                   "movec %0,%%cacr\n\t" \
