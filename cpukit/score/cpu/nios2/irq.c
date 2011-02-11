@@ -32,7 +32,7 @@
   unsigned long    *_old_stack_ptr;
 #endif
 
-register unsigned long  *stack_ptr asm("sp");
+register unsigned long  *stack_ptr __asm__ ("sp");
 
 void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
 {
