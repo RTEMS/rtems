@@ -89,7 +89,7 @@ typedef struct device blah;
 #define BUS_DMA_NOCACHE	0xdeadbeef
 
 #ifdef __PPC__
-#define bus_dmamap_sync(args...) do { asm volatile("sync":::"memory"); } while(0)
+#define bus_dmamap_sync(args...) do { __asm__ volatile("sync":::"memory"); } while(0)
 #else
 #error "Dont' know how to sync memory on your CPU"
 #endif

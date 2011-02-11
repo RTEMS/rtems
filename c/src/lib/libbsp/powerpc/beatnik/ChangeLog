@@ -1,3 +1,9 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* irq/discovery_pic.c, network/if_em/rtemscompat_defs.h,
+	* network/if_gfe/rtemscompat_defs.h, startup/bspstart.c:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

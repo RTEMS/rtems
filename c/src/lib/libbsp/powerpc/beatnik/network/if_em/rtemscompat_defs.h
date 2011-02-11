@@ -100,7 +100,7 @@ typedef struct {
 #define bus_dmamap_unload(args...) do {} while (0)
 
 #ifdef __PPC__
-#define bus_dmamap_sync(args...) do { asm volatile("sync":::"memory"); } while (0)
+#define bus_dmamap_sync(args...) do { __asm__ volatile("sync":::"memory"); } while (0)
 #else
 #define bus_dmamap_sync(args...) do {} while (0)
 #endif

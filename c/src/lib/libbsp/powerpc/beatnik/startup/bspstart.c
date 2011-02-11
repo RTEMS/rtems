@@ -233,7 +233,7 @@ void bsp_start( void )
    * so there is no need to set it in r1 again... It is just for info
    * so that it can be printed without accessing R1.
    */
-  asm volatile("mr %0, 1":"=r"(stack));
+  __asm__ volatile("mr %0, 1":"=r"(stack));
 
   /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
 

@@ -75,7 +75,7 @@
 #define NUM_INTR_REGS 3
 
 
-#define SYNC() asm volatile("sync")
+#define SYNC() __asm__ volatile("sync")
 
 /* How many times should the ISR dispatcher check for
  * pending interrupts until it decides that something's
