@@ -23,7 +23,7 @@
 
 #define Install_tm27_vector(handler)
 
-#define Cause_tm27_intr() asm volatile("int $0x90" : :);
+#define Cause_tm27_intr() __asm__ volatile("int $0x90" : :);
 
 #define Clear_tm27_intr() /* empty */
 
