@@ -94,7 +94,7 @@ static inline size_t mpc55xx_cache_aligned_size( const void *s, size_t n)
 static inline uint32_t mpc55xx_count_leading_zeros( uint32_t value)
 {
 	uint32_t count;
-	asm (
+	__asm__ (
 		"cntlzw %0, %1;"
 		: "=r" (count)
 		: "r" (value)

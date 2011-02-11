@@ -1,5 +1,10 @@
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* mpc55xx/include/mpc55xx.h:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* mpc6xx/altivec/vec_sup.c, mpc6xx/mmu/bat.h:
 	Fix up comments having been broken in previous commit.
 
