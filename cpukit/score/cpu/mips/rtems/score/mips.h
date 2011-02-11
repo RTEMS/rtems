@@ -116,13 +116,13 @@ extern "C" {
 
 #define mips_get_sr( _x ) \
   do { \
-    asm volatile( "mfc0 %0, $12; nop" : "=r" (_x) : ); \
+    __asm__ volatile( "mfc0 %0, $12; nop" : "=r" (_x) : ); \
   } while (0)
 
 #define mips_set_sr( _x ) \
   do { \
     register unsigned int __x = (_x); \
-    asm volatile( "mtc0 %0, $12; nop" : : "r" (__x) ); \
+    __asm__ volatile( "mtc0 %0, $12; nop" : : "r" (__x) ); \
   } while (0)
 
 
@@ -132,14 +132,14 @@ extern "C" {
 
 #define mips_get_cause( _x ) \
   do { \
-    asm volatile( "mfc0 %0, $13; nop" : "=r" (_x) : ); \
+    __asm__ volatile( "mfc0 %0, $13; nop" : "=r" (_x) : ); \
   } while (0)
 
 
 #define mips_set_cause( _x ) \
   do { \
     register unsigned int __x = (_x); \
-    asm volatile( "mtc0 %0, $13; nop" : : "r" (__x) ); \
+    __asm__ volatile( "mtc0 %0, $13; nop" : : "r" (__x) ); \
   } while (0)
 
 
@@ -151,14 +151,14 @@ extern "C" {
 
 #define mips_get_dcic( _x ) \
   do { \
-    asm volatile( "mfc0 %0, $7; nop" : "=r" (_x) : ); \
+    __asm__ volatile( "mfc0 %0, $7; nop" : "=r" (_x) : ); \
   } while (0)
 
 
 #define mips_set_dcic( _x ) \
   do { \
     register unsigned int __x = (_x); \
-    asm volatile( "mtc0 %0, $7; nop" : : "r" (__x) ); \
+    __asm__ volatile( "mtc0 %0, $7; nop" : : "r" (__x) ); \
   } while (0)
 
 
@@ -171,8 +171,8 @@ extern "C" {
 
 #define mips_get_bpcrm( _x, _y ) \
   do { \
-    asm volatile( "mfc0 %0, $3; nop" : "=r" (_x) : ); \
-    asm volatile( "mfc0 %0, $11; nop" : "=r" (_y) : ); \
+    __asm__ volatile( "mfc0 %0, $3; nop" : "=r" (_x) : ); \
+    __asm__ volatile( "mfc0 %0, $11; nop" : "=r" (_y) : ); \
   } while (0)
 
 
@@ -180,8 +180,8 @@ extern "C" {
   do { \
     register unsigned int __x = (_x); \
     register unsigned int __y = (_y); \
-    asm volatile( "mtc0 %0, $11; nop" : : "r" (__y) ); \
-    asm volatile( "mtc0 %0, $3; nop" : : "r" (__x) ); \
+    __asm__ volatile( "mtc0 %0, $11; nop" : : "r" (__y) ); \
+    __asm__ volatile( "mtc0 %0, $3; nop" : : "r" (__x) ); \
   } while (0)
 
 
@@ -196,8 +196,8 @@ extern "C" {
 
 #define mips_get_bdarm( _x, _y ) \
   do { \
-    asm volatile( "mfc0 %0, $5; nop" : "=r" (_x) : ); \
-    asm volatile( "mfc0 %0, $9; nop" : "=r" (_y) : ); \
+    __asm__ volatile( "mfc0 %0, $5; nop" : "=r" (_x) : ); \
+    __asm__ volatile( "mfc0 %0, $9; nop" : "=r" (_y) : ); \
   } while (0)
 
 
@@ -205,8 +205,8 @@ extern "C" {
   do { \
     register unsigned int __x = (_x); \
     register unsigned int __y = (_y); \
-    asm volatile( "mtc0 %0, $9; nop" : : "r" (__y) ); \
-    asm volatile( "mtc0 %0, $5; nop" : : "r" (__x) ); \
+    __asm__ volatile( "mtc0 %0, $9; nop" : : "r" (__y) ); \
+    __asm__ volatile( "mtc0 %0, $5; nop" : : "r" (__x) ); \
   } while (0)
 
 
@@ -223,14 +223,14 @@ extern "C" {
 
 #define mips_get_fcr31( _x ) \
   do { \
-    asm volatile( "cfc1 %0, $31; nop" : "=r" (_x) : ); \
+    __asm__ volatile( "cfc1 %0, $31; nop" : "=r" (_x) : ); \
   } while(0)
 
 
 #define mips_set_fcr31( _x ) \
   do { \
     register unsigned int __x = (_x); \
-    asm volatile( "ctc1 %0, $31; nop" : : "r" (__x) ); \
+    __asm__ volatile( "ctc1 %0, $31; nop" : : "r" (__x) ); \
   } while(0)
 
 #else

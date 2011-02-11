@@ -1,3 +1,8 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* cpu.c, rtems/score/mips.h:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2011-01-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu_asm.S: _Thread_Executing was not used.

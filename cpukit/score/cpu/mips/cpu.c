@@ -315,7 +315,7 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
 #if (__mips == 3) || (__mips == 32)
    for( ; ; )
-     asm volatile("wait"); /* use wait to enter low power mode */
+     __asm__ volatile("wait"); /* use wait to enter low power mode */
 #elif __mips == 1
    for( ; ; )
      ;
