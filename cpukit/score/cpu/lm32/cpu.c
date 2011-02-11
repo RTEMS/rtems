@@ -169,6 +169,6 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
     /* The LM32 softcore itself hasn't any HLT instruction. But the
      * LM32 qemu target interprets this nop instruction as HLT.
      */
-    asm volatile("and r0, r0, r0");
+    __asm__ volatile("and r0, r0, r0");
  }
 }

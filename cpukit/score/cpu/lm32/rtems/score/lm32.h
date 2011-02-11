@@ -69,43 +69,43 @@ extern "C" {
 #endif
 
 #define lm32_read_interrupts( _ip) \
-  asm volatile ("rcsr %0, ip":"=r"(_ip));
+  __asm__ volatile ("rcsr %0, ip":"=r"(_ip));
 
 #define lm32_disable_interrupts( _level ) \
   do { register uint32_t ie; \
-    asm volatile ("rcsr %0,ie":"=r"(ie)); \
+    __asm__ volatile ("rcsr %0,ie":"=r"(ie)); \
     _level = ie; \
     ie &= (~0x0001); \
-    asm volatile ("wcsr ie,%0"::"r"(ie)); \
+    __asm__ volatile ("wcsr ie,%0"::"r"(ie)); \
   } while (0)
 
 #define lm32_enable_interrupts( _level ) \
-  asm volatile ("wcsr ie,%0"::"r"(_level));
+  __asm__ volatile ("wcsr ie,%0"::"r"(_level));
 
 #define lm32_flash_interrupts( _level ) \
   do { register uint32_t ie; \
-    asm volatile ("wcsr ie,%0"::"r"(_level)); \
+    __asm__ volatile ("wcsr ie,%0"::"r"(_level)); \
     ie = _level & (~0x0001); \
-    asm volatile ("wcsr ie,%0"::"r"(ie)); \
+    __asm__ volatile ("wcsr ie,%0"::"r"(ie)); \
   } while (0)
 
 #define lm32_interrupt_unmask( _mask ) \
   do { register uint32_t im; \
-    asm volatile ("rcsr %0,im":"=r"(im)); \
+    __asm__ volatile ("rcsr %0,im":"=r"(im)); \
     im |= _mask; \
-    asm volatile ("wcsr im,%0"::"r"(im)); \
+    __asm__ volatile ("wcsr im,%0"::"r"(im)); \
   } while (0)
 
 #define lm32_interrupt_mask( _mask ) \
   do { register uint32_t im; \
-    asm volatile ("rcsr %0,im":"=r"(im)); \
+    __asm__ volatile ("rcsr %0,im":"=r"(im)); \
     im &= ~_mask; \
-    asm volatile ("wcsr im,%0"::"r"(im)); \
+    __asm__ volatile ("wcsr im,%0"::"r"(im)); \
   } while (0)
 
 #define lm32_interrupt_ack( _mask ) \
   do { register uint32_t ip = _mask; \
-    asm volatile ("wcsr ip,%0"::"r"(ip)); \
+    __asm__ volatile ("wcsr ip,%0"::"r"(ip)); \
   } while (0)
 
 #endif /* _RTEMS_SCORE_LM32_H */
