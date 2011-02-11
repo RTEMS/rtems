@@ -278,7 +278,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned excNum)
        * make sure, that the masking operations in
        * ICTL and MSR are executed in order
        */
-      asm volatile("sync":::"memory");
+      __asm__ volatile("sync":::"memory");
 
       /* re-enable external exceptions */
       _CPU_MSR_GET(msr);
@@ -295,7 +295,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned excNum)
        * make sure, that the masking operations in
        * ICTL and MSR are executed in order
        */
-      asm volatile("sync":::"memory");
+      __asm__ volatile("sync":::"memory");
 
       /* restore interrupt masks */
       m8260.simr_h = old_simr_h;

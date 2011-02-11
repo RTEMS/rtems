@@ -35,7 +35,7 @@
 	BSP_install_rtems_irq_handler (&scIrqData); \
    } while(0)
 
-#define Cause_tm27_intr() asm volatile ("sc")
+#define Cause_tm27_intr() __asm__ volatile ("sc")
 
 #define Clear_tm27_intr() /* empty */
 
