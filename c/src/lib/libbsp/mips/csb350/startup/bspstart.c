@@ -34,7 +34,7 @@ void bsp_start( void )
 
   mips_set_sr( 0x7f00 );  /* all interrupts unmasked but globally off */
                           /* depend on the IRC to take care of things */
-  asm volatile ("mtc0 %0, $11\n" :: "r" (compare));
+  __asm__ volatile ("mtc0 %0, $11\n" :: "r" (compare));
   mips_install_isr_entries();
 }
 

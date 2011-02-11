@@ -22,7 +22,7 @@ uint32_t tstart;
 
 void benchmark_timer_initialize(void)
 {
-    asm volatile ("mfc0 %0, $9\n" : "=r" (tstart));
+    __asm__ volatile ("mfc0 %0, $9\n" : "=r" (tstart));
     /* tick time in picooseconds */
 }
 
@@ -36,7 +36,7 @@ uint32_t benchmark_timer_read(void)
   uint32_t  total;
   uint32_t  cnt;
 
-  asm volatile ("mfc0 %0, $9\n" : "=r" (cnt));
+  __asm__ volatile ("mfc0 %0, $9\n" : "=r" (cnt));
 
   total = cnt - tstart;
   total = (total * 1000) / 396; /* convert to nanoseconds */
