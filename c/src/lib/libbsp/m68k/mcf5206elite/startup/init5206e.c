@@ -36,12 +36,12 @@ extern void CopyDataClearBSSAndStart(unsigned long ramsize);
 extern void INTERRUPT_VECTOR(void);
 
 #define m68k_set_srambar( _rambar0 ) \
-  asm volatile (  "movec %0,%%rambar0\n\t" \
+  __asm__ volatile (  "movec %0,%%rambar0\n\t" \
                   "nop\n\t" \
                   : : "d" (_rambar0) )
 
 #define m68k_set_mbar( _mbar ) \
-  asm volatile (  "movec %0,%%mbar\n\t" \
+  __asm__ volatile (  "movec %0,%%mbar\n\t" \
                   "nop\n\t" \
                   : : "d" (_mbar) )
 
@@ -49,7 +49,7 @@ extern void INTERRUPT_VECTOR(void);
   m68k_set_cacr( MCF5206E_CACR_CENB )
 
 #define mcf5206e_disable_cache() \
-  asm volatile (  "nop\n\t"    \
+  __asm__ volatile (  "nop\n\t"    \
                   "movec %0,%%cacr\n\t" \
                   "nop\n\t" \
                   "movec %0,%%cacr\n\t" \

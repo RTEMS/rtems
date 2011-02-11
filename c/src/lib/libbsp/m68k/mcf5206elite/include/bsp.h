@@ -153,7 +153,7 @@ extern char _SYS_CLOCK_FREQUENCY; /* Don't use this variable directly!!! */
 #define delay( microseconds ) \
   { register uint32_t         _delay=(microseconds); \
     register uint32_t         _tmp=123; \
-    asm volatile( "0: \
+    __asm__ volatile( "0: \
                      nbcd      %0 ; \
                      nbcd      %0 ; \
                      dbf       %1,0b" \
