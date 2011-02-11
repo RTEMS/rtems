@@ -77,7 +77,7 @@ rtems_isr Spurious_Isr(
   bsp_cleanup();
 
   /* BDM SIGEMT */
-  asm("  .word  0x4afa");
+  __asm__ ("  .word  0x4afa");
 
   for(;;);
 }

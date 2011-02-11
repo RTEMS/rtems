@@ -63,7 +63,7 @@
  */
 /*   static void reboot(void) __attribute__ ((noreturn)); */
 static void reboot(void);
-__inline__ static void reboot() {asm("trap #15; .word 0x0063");}
+__inline__ static void reboot() {__asm__ ("trap #15; .word 0x0063");}
 
 #endif /* ASM */
 
