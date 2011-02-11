@@ -44,7 +44,7 @@ void bsp_start_default( void )
 
   /* Delay to allow time for PLL to get going */
   for (i = 0; i < 100; i++) {
-    asm volatile ("nop\n");
+    __asm__ volatile ("nop\n");
   }
 
   /* Set the CPU to asynchrous clock mode, so it uses its fastest clock */
