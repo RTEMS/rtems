@@ -136,7 +136,7 @@ extern "C" {
 
 #define nop() \
   do { \
-    asm volatile ( "nop" ); \
+    __asm__ volatile ( "nop" ); \
   } while ( 0 )
 
 /*
@@ -146,12 +146,12 @@ extern "C" {
 #define sparc_get_psr( _psr ) \
   do { \
      (_psr) = 0; \
-     asm volatile( "rd %%psr, %0" :  "=r" (_psr) : "0" (_psr) ); \
+     __asm__ volatile( "rd %%psr, %0" :  "=r" (_psr) : "0" (_psr) ); \
   } while ( 0 )
 
 #define sparc_set_psr( _psr ) \
   do { \
-    asm volatile ( "mov  %0, %%psr " : "=r" ((_psr)) : "0" ((_psr)) ); \
+    __asm__ volatile ( "mov  %0, %%psr " : "=r" ((_psr)) : "0" ((_psr)) ); \
     nop(); \
     nop(); \
     nop(); \
@@ -164,12 +164,12 @@ extern "C" {
 #define sparc_get_tbr( _tbr ) \
   do { \
      (_tbr) = 0; /* to avoid unitialized warnings */ \
-     asm volatile( "rd %%tbr, %0" :  "=r" (_tbr) : "0" (_tbr) ); \
+     __asm__ volatile( "rd %%tbr, %0" :  "=r" (_tbr) : "0" (_tbr) ); \
   } while ( 0 )
 
 #define sparc_set_tbr( _tbr ) \
   do { \
-     asm volatile( "wr %0, 0, %%tbr" :  "=r" (_tbr) : "0" (_tbr) ); \
+     __asm__ volatile( "wr %0, 0, %%tbr" :  "=r" (_tbr) : "0" (_tbr) ); \
   } while ( 0 )
 
 /*
@@ -178,12 +178,12 @@ extern "C" {
 
 #define sparc_get_wim( _wim ) \
   do { \
-    asm volatile( "rd %%wim, %0" :  "=r" (_wim) : "0" (_wim) ); \
+    __asm__ volatile( "rd %%wim, %0" :  "=r" (_wim) : "0" (_wim) ); \
   } while ( 0 )
 
 #define sparc_set_wim( _wim ) \
   do { \
-    asm volatile( "wr %0, %%wim" :  "=r" (_wim) : "0" (_wim) ); \
+    __asm__ volatile( "wr %0, %%wim" :  "=r" (_wim) : "0" (_wim) ); \
     nop(); \
     nop(); \
     nop(); \
@@ -195,12 +195,12 @@ extern "C" {
 
 #define sparc_get_y( _y ) \
   do { \
-    asm volatile( "rd %%y, %0" :  "=r" (_y) : "0" (_y) ); \
+    __asm__ volatile( "rd %%y, %0" :  "=r" (_y) : "0" (_y) ); \
   } while ( 0 )
 
 #define sparc_set_y( _y ) \
   do { \
-    asm volatile( "wr %0, %%y" :  "=r" (_y) : "0" (_y) ); \
+    __asm__ volatile( "wr %0, %%y" :  "=r" (_y) : "0" (_y) ); \
   } while ( 0 )
 
 /*

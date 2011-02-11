@@ -770,7 +770,7 @@ void _CPU_Context_Initialize(
 
 #define _CPU_Context_Initialization_at_thread_begin() \
   do { \
-    asm volatile ("set _Thread_Handler,%%i7\n"::); \
+    __asm__ volatile ("set _Thread_Handler,%%i7\n"::); \
   } while (0)
 
 /*
@@ -822,7 +822,7 @@ void _CPU_Context_Initialize(
     uint32_t   level; \
     \
     level = sparc_disable_interrupts(); \
-    asm volatile ( "mov  %0, %%g1 " : "=r" (level) : "0" (level) ); \
+    __asm__ volatile ( "mov  %0, %%g1 " : "=r" (level) : "0" (level) ); \
     while (1); /* loop forever */ \
   } while (0)
 
