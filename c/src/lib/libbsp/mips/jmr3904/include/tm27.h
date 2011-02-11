@@ -26,7 +26,7 @@
     (void) set_vector( handler, TX3904_IRQ_SOFTWARE_1, 1 ); \
 
 #define Cause_tm27_intr() \
-    asm volatile ( "syscall 0x01" : : );
+    __asm__ volatile ( "syscall 0x01" : : );
 
 #define CLOCK_VECTOR TX3904_IRQ_TMR0
 
