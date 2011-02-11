@@ -1,3 +1,8 @@
+2010-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* stringto01/init.c: Redefine LONG_LONG_MAX and LONG_LONG_MIN
+	for c99.
+
 2011-02-02	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* cpuuse/tswitch.c: Shrink memory requirements.

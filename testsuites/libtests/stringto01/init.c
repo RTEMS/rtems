@@ -19,6 +19,15 @@
 #define __STRING(x)     #x              /* stringify without expanding x */
 #define __XSTRING(x)    __STRING(x)     /* expand x, then stringify */
 
+/* c99 has LLONG_MAX instead of LONG_LONG_MAX */
+#ifndef LONG_LONG_MAX
+#define LONG_LONG_MAX	LLONG_MAX
+#endif
+/* c99 has LLONG_MIN instead of LONG_LONG_MIN */
+#ifndef LONG_LONG_MIN
+#define LONG_LONG_MIN	LLONG_MIN
+#endif
+
 /* Test pointer conversions */
 #define TEST_STRING_TO_TYPE          void *
 #define TEST_STRING_TO_NAME          test_rtems_string_to_pointer
