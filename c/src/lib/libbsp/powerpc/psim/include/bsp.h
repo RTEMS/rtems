@@ -65,7 +65,7 @@ extern uint32_t   BSP_mem_size;
 
 /* macros */
 #define Processor_Synchronize() \
-  asm(" eieio ")
+  __asm__ (" eieio ")
 
 struct rtems_bsdnet_ifconfig;
 
