@@ -168,20 +168,20 @@ extern int RTEMS_BSP_NETWORK_DRIVER_ATTACH();
 
 static inline void lwmemBar()
 {
-    asm volatile("lwsync":::"memory");
+    __asm__ volatile("lwsync":::"memory");
 }
 
 static inline void io_flush()
 {
-    asm volatile("isync":::"memory");
+    __asm__ volatile("isync":::"memory");
 }
 static inline void memBar()
 {
-    asm volatile("sync":::"memory");
+    __asm__ volatile("sync":::"memory");
 }
 static inline void ioBar()
 {
-    asm volatile("eieio":::"memory");
+    __asm__ volatile("eieio":::"memory");
 }
 
 #endif
