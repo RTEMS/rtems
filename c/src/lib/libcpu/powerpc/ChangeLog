@@ -1,5 +1,10 @@
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* mpc6xx/altivec/vec_sup.c, mpc6xx/mmu/bat.h:
+	Fix up comments having been broken in previous commit.
+
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* e500/mmu/mmu.c, mpc505/ictrl/ictrl.c, mpc505/timer/timer.c,
 	mpc5xx/ictrl/ictrl.c, mpc5xx/timer/timer.c,
 	mpc6xx/altivec/vec_sup.c, mpc6xx/clock/c_clock.c,
