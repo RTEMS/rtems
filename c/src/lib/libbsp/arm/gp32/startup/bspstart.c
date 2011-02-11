@@ -30,7 +30,7 @@ extern void rtems_exception_init_mngt(void);
 Thread bsp_idle_task(uint32_t ignored)
 {
   while(1) {
-    asm volatile ("MCR p15,0,r0,c7,c0,4     \n");
+    __asm__ volatile ("MCR p15,0,r0,c7,c0,4     \n");
   }
 }
 
