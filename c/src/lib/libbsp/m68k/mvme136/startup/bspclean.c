@@ -23,12 +23,12 @@ void bsp_return_to_monitor_trap(void)
   register volatile void *start_addr;
 
   m68k_set_vbr( 0 );                /* restore 135Bug vectors */
-  asm volatile( "trap   #15"  );    /* trap to 135Bug */
-  asm volatile( ".short 0x63" );    /* return to 135Bug (.RETURN) */
+  __asm__ volatile( "trap   #15"  );    /* trap to 135Bug */
+  __asm__ volatile( ".short 0x63" );    /* return to 135Bug (.RETURN) */
                                     /* restart program */
   start_addr = start;
 
-  asm volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
+  __asm__ volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
 }
 
 #define TIMER   0xfffb0000
@@ -41,5 +41,5 @@ void bsp_cleanup( void )
    Z8x36_WRITE( TIMER, CT1_CMD_STATUS, 0x00 );
 
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
-   asm volatile( "trap #13" );  /* insures SUPV mode */
+   __asm__ volatile( "trap #13" );  /* insures SUPV mode */
 }
