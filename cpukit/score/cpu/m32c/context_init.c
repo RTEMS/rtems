@@ -36,7 +36,7 @@ typedef struct {
   #define _get_sb( _sb )
 #else
   #define _get_sb( _sb ) \
-    asm volatile( "stc sb, %0" : "=r" (_sb))
+    __asm__ volatile( "stc sb, %0" : "=r" (_sb))
 #endif
 
 void _CPU_Context_Initialize(

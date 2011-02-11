@@ -674,7 +674,7 @@ typedef struct {
     int _flg; \
     m32c_get_flg( _flg ); \
     _isr_cookie = _flg; \
-    asm volatile( "fclr I" ); \
+    __asm__ volatile( "fclr I" ); \
   } while(0)
 
 /**
@@ -712,7 +712,7 @@ typedef struct {
   do { \
     int _flg = (int) (_isr_cookie); \
     m32c_set_flg( _flg ); \
-    asm volatile( "fclr I" ); \
+    __asm__ volatile( "fclr I" ); \
   } while(0)
 
 /**
@@ -734,8 +734,8 @@ typedef struct {
  */
 #define _CPU_ISR_Set_level( _new_level ) \
   do { \
-    if (_new_level) asm volatile( "fclr I" ); \
-    else            asm volatile( "fset I" ); \
+    if (_new_level) __asm__ volatile( "fclr I" ); \
+    else            __asm__ volatile( "fset I" ); \
   } while(0)
 
 /**

@@ -60,10 +60,10 @@ extern "C" {
 #define CPU_NAME "m32c"
 
 #define m32c_get_flg( _flg ) \
-  asm volatile( "stc flg, %0" : "=r" (_flg))
+  __asm__ volatile( "stc flg, %0" : "=r" (_flg))
 
 #define m32c_set_flg( _flg ) \
-  asm volatile( "ldc %1, flg" : "=r" (_flg) : "r" (_flg) )
+  __asm__ volatile( "ldc %1, flg" : "=r" (_flg) : "r" (_flg) )
 
 #ifdef __cplusplus
 }

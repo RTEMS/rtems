@@ -33,7 +33,7 @@
 void _CPU_Initialize(void)
 {
   #if !defined(__r8c_cpu__)
-    asm volatile( "ldc    #__var_vects,intb" );
+    __asm__ volatile( "ldc    #__var_vects,intb" );
   #endif
 }
 

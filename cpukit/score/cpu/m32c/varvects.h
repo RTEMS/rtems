@@ -42,8 +42,8 @@ extern _m32c_interrupt_func _var_vects[];
 #if defined(__r8c_cpu__) || defined (__m16c_cpu__)
 
 #define _set_var_vect(f,n) \
-  { asm ("mov.w #%%lo16(%d0),__var_vects+%d1" : : "s" (f), "g" (n*4));	\
-    asm ("mov.w #%%hi16(%d0),__var_vects+%d1" : : "s" (f), "g" (n*4+2)); }
+  { __asm__ ("mov.w #%%lo16(%d0),__var_vects+%d1" : : "s" (f), "g" (n*4));	\
+    __asm__ ("mov.w #%%hi16(%d0),__var_vects+%d1" : : "s" (f), "g" (n*4+2)); }
 
 #else
 
