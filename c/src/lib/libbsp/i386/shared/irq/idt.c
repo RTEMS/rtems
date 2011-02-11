@@ -275,7 +275,7 @@ int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
      * Now, reload all segment registers so the limit takes effect.
      */
 
-    asm volatile( "movw %%ds,%0 ; movw %0,%%ds\n\t"
+    __asm__ volatile( "movw %%ds,%0 ; movw %0,%%ds\n\t"
                   "movw %%es,%0 ; movw %0,%%es\n\t"
                   "movw %%fs,%0 ; movw %0,%%fs\n\t"
                   "movw %%gs,%0 ; movw %0,%%gs\n\t"

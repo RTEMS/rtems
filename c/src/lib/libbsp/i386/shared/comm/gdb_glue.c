@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <uart.h>
 
-#define BREAKPOINT() asm("   int $3");
+#define BREAKPOINT() __asm__ ("   int $3");
 
 extern int BSPConsolePort;
 void i386_stub_glue_init(int);

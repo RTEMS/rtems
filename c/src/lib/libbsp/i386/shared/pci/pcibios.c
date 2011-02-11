@@ -23,8 +23,8 @@ static int pcibInitialized = 0;
 static unsigned int pcibEntry;
 
 /*
- * Array to pass data between c and asm parts, at the time of
- * writing I am not yet that familiar with extended asm feature
+ * Array to pass data between c and __asm__ parts, at the time of
+ * writing I am not yet that familiar with extended __asm__ feature
  * of gcc. This code is not on performance path, so we can care
  * relatively little about performance here
  */
@@ -80,17 +80,17 @@ pci_initialize(void)
 
   pcibExchg[0] = *(unsigned int *)ucp;
 
-  asm ("    pusha");                  /* Push all registers */
-  asm ("    movl pcibExchg, %edi");   /* Move entry point to esi */
-  asm ("    movl $0x49435024, %eax"); /* Move signature to eax */
-  asm ("    xorl %ebx, %ebx");        /* Zero ebx */
-  asm ("    pushl %cs");
-  asm ("    call *%edi");             /* Call entry */
-  asm ("    movl %eax, pcibExchg");
-  asm ("    movl %ebx, pcibExchg+4");
-  asm ("    movl %ecx, pcibExchg+8");
-  asm ("    movl %edx, pcibExchg+12");
-  asm ("    popa");
+  __asm__ ("    pusha");                  /* Push all registers */
+  __asm__ ("    movl pcibExchg, %edi");   /* Move entry point to esi */
+  __asm__ ("    movl $0x49435024, %eax"); /* Move signature to eax */
+  __asm__ ("    xorl %ebx, %ebx");        /* Zero ebx */
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%edi");             /* Call entry */
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    movl %ebx, pcibExchg+4");
+  __asm__ ("    movl %ecx, pcibExchg+8");
+  __asm__ ("    movl %edx, pcibExchg+12");
+  __asm__ ("    popa");
 
   if ((pcibExchg[0] & 0xff) != 0) {
     /* Not found */
@@ -103,17 +103,17 @@ pci_initialize(void)
   /* Let us check whether PCI bios is present */
   pcibExchg[0] = pcibEntry;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %edi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x01, %al");
-  asm("    pushl %cs");
-  asm("    call *%edi");
-  asm("    movl %eax, pcibExchg");
-  asm("    movl %ebx, pcibExchg+4");
-  asm("    movl %ecx, pcibExchg+8");
-  asm("    movl %edx, pcibExchg+12");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %edi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x01, %al");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%edi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    movl %ebx, pcibExchg+4");
+  __asm__ ("    movl %ecx, pcibExchg+8");
+  __asm__ ("    movl %edx, pcibExchg+12");
+  __asm__ ("    popa");
 
   if ((pcibExchg[0] & 0xff00) != 0) {
     /* Not found */
@@ -147,18 +147,18 @@ pcib_find_by_devid(int vendorId, int devId, int idx, int *sig)
   pcibExchg[2] = devId;
   pcibExchg[3] = idx;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %edi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x02, %al");
-  asm("    movl pcibExchg+4, %edx");
-  asm("    movl pcibExchg+8, %ecx");
-  asm("    movl pcibExchg+12, %esi");
-  asm("    pushl %cs");
-  asm("    call *%edi");
-  asm("    movl %eax, pcibExchg");
-  asm("    movl %ebx, pcibExchg+4");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %edi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x02, %al");
+  __asm__ ("    movl pcibExchg+4, %edx");
+  __asm__ ("    movl pcibExchg+8, %ecx");
+  __asm__ ("    movl pcibExchg+12, %esi");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%edi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    movl %ebx, pcibExchg+4");
+  __asm__ ("    popa");
 
   *sig = pcibExchg[1] & 0xffff;
 
@@ -201,17 +201,17 @@ pcib_find_by_class(int classCode, int idx, int *sig)
   pcibExchg[1] = classCode;
   pcibExchg[2] = idx;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %edi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x03, %al");
-  asm("    movl pcibExchg+4, %ecx");
-  asm("    movl pcibExchg+8, %esi");
-  asm("    pushl %cs");
-  asm("    call *%edi");
-  asm("    movl %eax, pcibExchg");
-  asm("    movl %ebx, pcibExchg+4");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %edi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x03, %al");
+  __asm__ ("    movl pcibExchg+4, %ecx");
+  __asm__ ("    movl pcibExchg+8, %esi");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%edi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    movl %ebx, pcibExchg+4");
+  __asm__ ("    popa");
 
   if ((pcibExchg[0] & 0xff00) != 0) {
     return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
@@ -300,17 +300,17 @@ pcib_special_cycle(int busNo, int data)
   pcibExchg[1] = busNo << 8;
   pcibExchg[2] = data;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %edi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x06, %al");
-  asm("    movl pcibExchg+4, %ebx");
-  asm("    movl pcibExchg+8, %edx");
-  asm("    pushl %cs");
-  asm("    call *%edi");
-  asm("    movl %eax, pcibExchg");
-  asm("    movl %ebx, pcibExchg+4");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %edi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x06, %al");
+  __asm__ ("    movl pcibExchg+4, %ebx");
+  __asm__ ("    movl pcibExchg+8, %edx");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%edi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    movl %ebx, pcibExchg+4");
+  __asm__ ("    popa");
 
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
@@ -330,17 +330,17 @@ pcib_conf_read8(int sig, int off, uint8_t *data)
   pcibExchg[1] = sig;
   pcibExchg[2] = off;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %esi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x08, %al");
-  asm("    movl pcibExchg+4, %ebx");
-  asm("    movl pcibExchg+8, %edi");
-  asm("    pushl %cs");
-  asm("    call *%esi");
-  asm("    movl %eax, pcibExchg");
-  asm("    movl %ecx, pcibExchg+4");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %esi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x08, %al");
+  __asm__ ("    movl pcibExchg+4, %ebx");
+  __asm__ ("    movl pcibExchg+8, %edi");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%esi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    movl %ecx, pcibExchg+4");
+  __asm__ ("    popa");
 
   if ((pcibExchg[0] & 0xff00) != 0) {
     return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
@@ -366,17 +366,17 @@ pcib_conf_read16(int sig, int off, uint16_t *data)
   pcibExchg[1] = sig;
   pcibExchg[2] = off;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %esi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x09, %al");
-  asm("    movl pcibExchg+4, %ebx");
-  asm("    movl pcibExchg+8, %edi");
-  asm("    pushl %cs");
-  asm("    call *%esi");
-  asm("    movl %eax, pcibExchg");
-  asm("    movl %ecx, pcibExchg+4");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %esi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x09, %al");
+  __asm__ ("    movl pcibExchg+4, %ebx");
+  __asm__ ("    movl pcibExchg+8, %edi");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%esi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    movl %ecx, pcibExchg+4");
+  __asm__ ("    popa");
 
   if ((pcibExchg[0] & 0xff00) != 0) {
     return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
@@ -402,17 +402,17 @@ pcib_conf_read32(int sig, int off, uint32_t *data)
   pcibExchg[1] = sig;
   pcibExchg[2] = off;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %esi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x0a, %al");
-  asm("    movl pcibExchg+4, %ebx");
-  asm("    movl pcibExchg+8, %edi");
-  asm("    pushl %cs");
-  asm("    call *%esi");
-  asm("    movl %eax, pcibExchg");
-  asm("    movl %ecx, pcibExchg+4");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %esi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x0a, %al");
+  __asm__ ("    movl pcibExchg+4, %ebx");
+  __asm__ ("    movl pcibExchg+8, %edi");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%esi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    movl %ecx, pcibExchg+4");
+  __asm__ ("    popa");
 
   if ((pcibExchg[0] & 0xff00) != 0) {
     return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
@@ -439,17 +439,17 @@ pcib_conf_write8(int sig, int off, uint8_t data)
   pcibExchg[2] = off;
   pcibExchg[3] = data & 0xff;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %esi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x0b, %al");
-  asm("    movl pcibExchg+4, %ebx");
-  asm("    movl pcibExchg+8, %edi");
-  asm("    movl pcibExchg+12, %ecx");
-  asm("    pushl %cs");
-  asm("    call *%esi");
-  asm("    movl %eax, pcibExchg");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %esi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x0b, %al");
+  __asm__ ("    movl pcibExchg+4, %ebx");
+  __asm__ ("    movl pcibExchg+8, %edi");
+  __asm__ ("    movl pcibExchg+12, %ecx");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%esi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    popa");
 
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
@@ -469,17 +469,17 @@ pcib_conf_write16(int sig, int off, uint16_t data)
   pcibExchg[2] = off;
   pcibExchg[3] = data & 0xffff;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %esi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x0c, %al");
-  asm("    movl pcibExchg+4, %ebx");
-  asm("    movl pcibExchg+8, %edi");
-  asm("    movl pcibExchg+12, %ecx");
-  asm("    pushl %cs");
-  asm("    call *%esi");
-  asm("    movl %eax, pcibExchg");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %esi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x0c, %al");
+  __asm__ ("    movl pcibExchg+4, %ebx");
+  __asm__ ("    movl pcibExchg+8, %edi");
+  __asm__ ("    movl pcibExchg+12, %ecx");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%esi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    popa");
 
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
@@ -501,17 +501,17 @@ pcib_conf_write32(int sig, int off, uint32_t data)
   pcibExchg[2] = off;
   pcibExchg[3] = data;
 
-  asm("    pusha");
-  asm("    movl pcibExchg, %esi");
-  asm("    movb $0xb1, %ah");
-  asm("    movb $0x0d, %al");
-  asm("    movl pcibExchg+4, %ebx");
-  asm("    movl pcibExchg+8, %edi");
-  asm("    movl pcibExchg+12, %ecx");
-  asm("    pushl %cs");
-  asm("    call *%esi");
-  asm("    movl %eax, pcibExchg");
-  asm("    popa");
+  __asm__ ("    pusha");
+  __asm__ ("    movl pcibExchg, %esi");
+  __asm__ ("    movb $0xb1, %ah");
+  __asm__ ("    movb $0x0d, %al");
+  __asm__ ("    movl pcibExchg+4, %ebx");
+  __asm__ ("    movl pcibExchg+8, %edi");
+  __asm__ ("    movl pcibExchg+12, %ecx");
+  __asm__ ("    pushl %cs");
+  __asm__ ("    call *%esi");
+  __asm__ ("    movl %eax, pcibExchg");
+  __asm__ ("    popa");
 
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }

@@ -841,75 +841,75 @@ int BSP_uart_dbgisr_com_regsav[4] __attribute__ ((unused));
  * handler
  */
 
-asm (".p2align 4");
-asm (".text");
-asm (".globl BSP_uart_dbgisr_com1");
-asm ("BSP_uart_dbgisr_com1:");
-asm ("    movl %eax, BSP_uart_dbgisr_com_regsav");          /* Save eax */
-asm ("    movl %ebx, BSP_uart_dbgisr_com_regsav + 4");      /* Save ebx */
-asm ("    movl %edx, BSP_uart_dbgisr_com_regsav + 8");      /* Save edx */
+__asm__ (".p2align 4");
+__asm__ (".text");
+__asm__ (".globl BSP_uart_dbgisr_com1");
+__asm__ ("BSP_uart_dbgisr_com1:");
+__asm__ ("    movl %eax, BSP_uart_dbgisr_com_regsav");          /* Save eax */
+__asm__ ("    movl %ebx, BSP_uart_dbgisr_com_regsav + 4");      /* Save ebx */
+__asm__ ("    movl %edx, BSP_uart_dbgisr_com_regsav + 8");      /* Save edx */
 
-asm ("    movl $0, %ebx");           /* Clear flag */
+__asm__ ("    movl $0, %ebx");           /* Clear flag */
 
 /*
  * We know that only receive related interrupts
  * are available, eat chars
  */
-asm ("uart_dbgisr_com1_1:");
-asm ("    movw $0x3FD, %dx");
-asm ("    inb  %dx, %al"); /* Read LSR */
-asm ("    andb $1, %al");
-asm ("    cmpb $0, %al");
-asm ("    je   uart_dbgisr_com1_2");
-asm ("    movw $0x3F8, %dx");
-asm ("    inb  %dx, %al");    /* Get input character */
-asm ("    cmpb $3, %al");
-asm ("    jne  uart_dbgisr_com1_1");
+__asm__ ("uart_dbgisr_com1_1:");
+__asm__ ("    movw $0x3FD, %dx");
+__asm__ ("    inb  %dx, %al"); /* Read LSR */
+__asm__ ("    andb $1, %al");
+__asm__ ("    cmpb $0, %al");
+__asm__ ("    je   uart_dbgisr_com1_2");
+__asm__ ("    movw $0x3F8, %dx");
+__asm__ ("    inb  %dx, %al");    /* Get input character */
+__asm__ ("    cmpb $3, %al");
+__asm__ ("    jne  uart_dbgisr_com1_1");
 
 /* ^C received, set flag */
-asm ("    movl $1, %ebx");
-asm ("    jmp uart_dbgisr_com1_1");
+__asm__ ("    movl $1, %ebx");
+__asm__ ("    jmp uart_dbgisr_com1_1");
 
 /* All chars read */
-asm ("uart_dbgisr_com1_2:");
+__asm__ ("uart_dbgisr_com1_2:");
 
 /* If flag is set we have to tweak TF */
-asm ("   cmpl $0, %ebx");
-asm ("   je   uart_dbgisr_com1_3");
+__asm__ ("   cmpl $0, %ebx");
+__asm__ ("   je   uart_dbgisr_com1_3");
 
 /* Flag is set */
-asm ("   movl BSP_uart_dbgisr_com_regsav+4, %ebx");     /* Restore ebx */
-asm ("   movl BSP_uart_dbgisr_com_regsav+8, %edx");     /* Restore edx */
+__asm__ ("   movl BSP_uart_dbgisr_com_regsav+4, %ebx");     /* Restore ebx */
+__asm__ ("   movl BSP_uart_dbgisr_com_regsav+8, %edx");     /* Restore edx */
 
 /* Set TF bit */
-asm ("   popl  %eax");           			 /* Pop eip */
-asm ("   movl  %eax, BSP_uart_dbgisr_com_regsav + 4");  /* Save it */
-asm ("   popl  %eax");           			 /* Pop cs */
-asm ("   movl  %eax, BSP_uart_dbgisr_com_regsav + 8");  /* Save it */
-asm ("   popl  %eax");           			 /* Pop flags */
-asm ("   orl   $0x100, %eax");   			 /* Modify it */
-asm ("   pushl %eax");           			 /* Push it back */
-asm ("   movl  BSP_uart_dbgisr_com_regsav+8, %eax");    /* Put back cs */
-asm ("   pushl %eax");
-asm ("   movl  BSP_uart_dbgisr_com_regsav+4, %eax");    /* Put back eip */
-asm ("   pushl %eax");
+__asm__ ("   popl  %eax");           			 /* Pop eip */
+__asm__ ("   movl  %eax, BSP_uart_dbgisr_com_regsav + 4");  /* Save it */
+__asm__ ("   popl  %eax");           			 /* Pop cs */
+__asm__ ("   movl  %eax, BSP_uart_dbgisr_com_regsav + 8");  /* Save it */
+__asm__ ("   popl  %eax");           			 /* Pop flags */
+__asm__ ("   orl   $0x100, %eax");   			 /* Modify it */
+__asm__ ("   pushl %eax");           			 /* Push it back */
+__asm__ ("   movl  BSP_uart_dbgisr_com_regsav+8, %eax");    /* Put back cs */
+__asm__ ("   pushl %eax");
+__asm__ ("   movl  BSP_uart_dbgisr_com_regsav+4, %eax");    /* Put back eip */
+__asm__ ("   pushl %eax");
 
 /* Acknowledge IRQ */
-asm ("   movb  $0x20, %al");
-asm ("   outb  %al, $0x20");
-asm ("   movl  BSP_uart_dbgisr_com_regsav, %eax");      /* Restore eax */
-asm ("   iret");                 			 /* Done */
+__asm__ ("   movb  $0x20, %al");
+__asm__ ("   outb  %al, $0x20");
+__asm__ ("   movl  BSP_uart_dbgisr_com_regsav, %eax");      /* Restore eax */
+__asm__ ("   iret");                 			 /* Done */
 
 /* Flag is not set */
-asm("uart_dbgisr_com1_3:");
-asm ("   movl BSP_uart_dbgisr_com_regsav+4, %ebx");     /* Restore ebx */
-asm ("   movl BSP_uart_dbgisr_com_regsav+8, %edx");     /* Restore edx */
+__asm__ ("uart_dbgisr_com1_3:");
+__asm__ ("   movl BSP_uart_dbgisr_com_regsav+4, %ebx");     /* Restore ebx */
+__asm__ ("   movl BSP_uart_dbgisr_com_regsav+8, %edx");     /* Restore edx */
 
 /* Acknowledge irq */
-asm ("   movb  $0x20, %al");
-asm ("   outb  %al, $0x20");
-asm ("   movl  BSP_uart_dbgisr_com_regsav, %eax");      /* Restore eax */
-asm ("   iret");                 /* Done */
+__asm__ ("   movb  $0x20, %al");
+__asm__ ("   outb  %al, $0x20");
+__asm__ ("   movl  BSP_uart_dbgisr_com_regsav, %eax");      /* Restore eax */
+__asm__ ("   iret");                 /* Done */
 
 /*
  * Interrupt service routine for COM2 - all,
@@ -918,72 +918,72 @@ asm ("   iret");                 /* Done */
  * Note: it has to be installed as raw interrupt
  * handler
  */
-asm (".p2align 4");
-asm (".text");
-asm (".globl BSP_uart_dbgisr_com2");
-asm ("BSP_uart_dbgisr_com2:");
-asm ("    movl %eax, BSP_uart_dbgisr_com_regsav");          /* Save eax */
-asm ("    movl %ebx, BSP_uart_dbgisr_com_regsav + 4");      /* Save ebx */
-asm ("    movl %edx, BSP_uart_dbgisr_com_regsav + 8");      /* Save edx */
+__asm__ (".p2align 4");
+__asm__ (".text");
+__asm__ (".globl BSP_uart_dbgisr_com2");
+__asm__ ("BSP_uart_dbgisr_com2:");
+__asm__ ("    movl %eax, BSP_uart_dbgisr_com_regsav");          /* Save eax */
+__asm__ ("    movl %ebx, BSP_uart_dbgisr_com_regsav + 4");      /* Save ebx */
+__asm__ ("    movl %edx, BSP_uart_dbgisr_com_regsav + 8");      /* Save edx */
 
-asm ("    movl $0, %ebx");           /* Clear flag */
+__asm__ ("    movl $0, %ebx");           /* Clear flag */
 
 /*
  * We know that only receive related interrupts
  * are available, eat chars
  */
-asm ("uart_dbgisr_com2_1:");
-asm ("    movw $0x2FD, %dx");
-asm ("    inb  %dx, %al"); /* Read LSR */
-asm ("    andb $1, %al");
-asm ("    cmpb $0, %al");
-asm ("    je   uart_dbgisr_com2_2");
-asm ("    movw $0x2F8, %dx");
-asm ("    inb  %dx, %al");    /* Get input character */
-asm ("    cmpb $3, %al");
-asm ("    jne  uart_dbgisr_com2_1");
+__asm__ ("uart_dbgisr_com2_1:");
+__asm__ ("    movw $0x2FD, %dx");
+__asm__ ("    inb  %dx, %al"); /* Read LSR */
+__asm__ ("    andb $1, %al");
+__asm__ ("    cmpb $0, %al");
+__asm__ ("    je   uart_dbgisr_com2_2");
+__asm__ ("    movw $0x2F8, %dx");
+__asm__ ("    inb  %dx, %al");    /* Get input character */
+__asm__ ("    cmpb $3, %al");
+__asm__ ("    jne  uart_dbgisr_com2_1");
 
 /* ^C received, set flag */
-asm ("    movl $1, %ebx");
-asm ("    jmp uart_dbgisr_com2_1");
+__asm__ ("    movl $1, %ebx");
+__asm__ ("    jmp uart_dbgisr_com2_1");
 
 /* All chars read */
-asm ("uart_dbgisr_com2_2:");
+__asm__ ("uart_dbgisr_com2_2:");
 
 /* If flag is set we have to tweak TF */
-asm ("   cmpl $0, %ebx");
-asm ("   je   uart_dbgisr_com2_3");
+__asm__ ("   cmpl $0, %ebx");
+__asm__ ("   je   uart_dbgisr_com2_3");
 
 /* Flag is set */
-asm ("   movl BSP_uart_dbgisr_com_regsav+4, %ebx");     /* Restore ebx */
-asm ("   movl BSP_uart_dbgisr_com_regsav+8, %edx");     /* Restore edx */
+__asm__ ("   movl BSP_uart_dbgisr_com_regsav+4, %ebx");     /* Restore ebx */
+__asm__ ("   movl BSP_uart_dbgisr_com_regsav+8, %edx");     /* Restore edx */
 
 /* Set TF bit */
-asm ("   popl  %eax");           /* Pop eip */
-asm ("   movl  %eax, BSP_uart_dbgisr_com_regsav + 4");  /* Save it */
-asm ("   popl  %eax");           /* Pop cs */
-asm ("   movl  %eax, BSP_uart_dbgisr_com_regsav + 8");  /* Save it */
-asm ("   popl  %eax");           /* Pop flags */
-asm ("   orl   $0x100, %eax");   /* Modify it */
-asm ("   pushl %eax");           /* Push it back */
-asm ("   movl  BSP_uart_dbgisr_com_regsav+8, %eax");    /* Put back cs */
-asm ("   pushl %eax");
-asm ("   movl  BSP_uart_dbgisr_com_regsav+4, %eax");    /* Put back eip */
-asm ("   pushl %eax");
+__asm__ ("   popl  %eax");           /* Pop eip */
+__asm__ ("   movl  %eax, BSP_uart_dbgisr_com_regsav + 4");  /* Save it */
+__asm__ ("   popl  %eax");           /* Pop cs */
+__asm__ ("   movl  %eax, BSP_uart_dbgisr_com_regsav + 8");  /* Save it */
+__asm__ ("   popl  %eax");           /* Pop flags */
+__asm__ ("   orl   $0x100, %eax");   /* Modify it */
+__asm__ ("   pushl %eax");           /* Push it back */
+__asm__ ("   movl  BSP_uart_dbgisr_com_regsav+8, %eax");    /* Put back cs */
+__asm__ ("   pushl %eax");
+__asm__ ("   movl  BSP_uart_dbgisr_com_regsav+4, %eax");    /* Put back eip */
+__asm__ ("   pushl %eax");
 
 /* Acknowledge IRQ */
-asm ("   movb  $0x20, %al");
-asm ("   outb  %al, $0x20");
-asm ("   movl  BSP_uart_dbgisr_com_regsav, %eax");      /* Restore eax */
-asm ("   iret");                 /* Done */
+__asm__ ("   movb  $0x20, %al");
+__asm__ ("   outb  %al, $0x20");
+__asm__ ("   movl  BSP_uart_dbgisr_com_regsav, %eax");      /* Restore eax */
+__asm__ ("   iret");                 /* Done */
 
 /* Flag is not set */
-asm("uart_dbgisr_com2_3:");
-asm ("   movl BSP_uart_dbgisr_com_regsav+4, %ebx");     /* Restore ebx */
-asm ("   movl BSP_uart_dbgisr_com_regsav+8, %edx");     /* Restore edx */
+__asm__ ("uart_dbgisr_com2_3:");
+__asm__ ("   movl BSP_uart_dbgisr_com_regsav+4, %ebx");     /* Restore ebx */
+__asm__ ("   movl BSP_uart_dbgisr_com_regsav+8, %edx");     /* Restore edx */
 
 /* Acknowledge irq */
-asm ("   movb  $0x20, %al");
-asm ("   outb  %al, $0x20");
-asm ("   movl  BSP_uart_dbgisr_com_regsav, %eax");      /* Restore eax */
-asm ("   iret");                 /* Done */
+__asm__ ("   movb  $0x20, %al");
+__asm__ ("   outb  %al, $0x20");
+__asm__ ("   movl  BSP_uart_dbgisr_com_regsav, %eax");      /* Restore eax */
+__asm__ ("   iret");                 /* Done */

@@ -1,3 +1,10 @@
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/comm/gdb_glue.c, shared/comm/i386-stub.c,
+	shared/comm/i386_io.h, shared/comm/uart.c, shared/irq/idt.c,
+	shared/pci/pcibios.c:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
