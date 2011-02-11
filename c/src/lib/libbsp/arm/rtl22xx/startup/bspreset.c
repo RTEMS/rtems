@@ -24,13 +24,13 @@ void bsp_reset(void)
 
   #ifdef __thumb__
     int tmp;
-    asm volatile (" .code 16            \n" \
+    __asm__ volatile (" .code 16            \n" \
                   "ldr %[tmp], =_start  \n" \
                   "bx  %[tmp]           \n" \
                   "nop                  \n" \
                   : [tmp]"=&r" (tmp) );
   #else
-    asm volatile ("b _start");
+    __asm__ volatile ("b _start");
   #endif
   while(1);
 #endif
