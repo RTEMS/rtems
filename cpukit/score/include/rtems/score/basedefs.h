@@ -116,7 +116,7 @@
  *  impact interrupt disable and thread dispatching critical sections.
  */
 #ifdef __GNUC__
-  #define RTEMS_COMPILER_MEMORY_BARRIER() asm volatile("" ::: "memory")
+  #define RTEMS_COMPILER_MEMORY_BARRIER() __asm__ volatile("" ::: "memory")
 #else
   #define RTEMS_COMPILER_MEMORY_BARRIER()
 #endif
