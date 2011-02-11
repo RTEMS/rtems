@@ -156,7 +156,7 @@ void _CPU_Install_interrupt_stack( void )
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
   void *isp = _CPU_Interrupt_stack_high;
 
-  asm volatile ( "movec %0,%%isp" : "=r" (isp) : "0" (isp) );
+  __asm__ volatile ( "movec %0,%%isp" : "=r" (isp) : "0" (isp) );
 #endif
 }
 

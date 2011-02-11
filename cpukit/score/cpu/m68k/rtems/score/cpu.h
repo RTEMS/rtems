@@ -485,7 +485,7 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 #if ( defined(__mcoldfire__) )
 #define _CPU_Fatal_halt( _error ) \
-  { asm volatile( "move.w %%sr,%%d0\n\t" \
+  { __asm__ volatile( "move.w %%sr,%%d0\n\t" \
 		  "or.l %2,%%d0\n\t" \
 		  "move.w %%d0,%%sr\n\t" \
 		  "move.l %1,%%d0\n\t" \
@@ -497,7 +497,7 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored );
   }
 #else
 #define _CPU_Fatal_halt( _error ) \
-  { asm volatile( "movl  %0,%%d0; " \
+  { __asm__ volatile( "movl  %0,%%d0; " \
                   "orw   #0x0700,%%sr; " \
                   "stop  #0x2700" : "=d" ((_error)) : "0" ((_error)) ); \
   }
@@ -532,12 +532,12 @@ extern const unsigned char _CPU_m68k_BFFFO_table[256];
 #if ( M68K_HAS_BFFFO == 1 )
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  asm volatile( "bfffo (%1),#0,#16,%0" : "=d" (_output) : "a" (&_value));
+  __asm__ volatile( "bfffo (%1),#0,#16,%0" : "=d" (_output) : "a" (&_value));
 
 #elif ( __mcfisaaplus__ )
   /* This is simplified by the fact that RTEMS never calls it with _value=0 */
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-    asm volatile ( \
+    __asm__ volatile ( \
        "   swap     %0\n"        \
        "   ff1.l    %0\n"        \
        : "=d" ((_output))        \
@@ -554,7 +554,7 @@ extern const unsigned char _CPU_m68k_BFFFO_table[256];
   { \
     register int dumby; \
     \
-    asm volatile ( \
+    __asm__ volatile ( \
        "   clr.l   %1\n"         \
        "   move.w  %2,%1\n"      \
        "   lsr.l   #8,%1\n"      \
@@ -574,7 +574,7 @@ extern const unsigned char _CPU_m68k_BFFFO_table[256];
   { \
     register int dumby; \
     \
-    asm volatile ( "   move.w  %2,%1\n"        \
+    __asm__ volatile ( "   move.w  %2,%1\n"        \
        "   lsr.w   #8,%1\n"        \
        "   beq.s   1f\n"           \
        "   move.b  (%3,%1.w),%0\n" \
@@ -592,7 +592,7 @@ extern const unsigned char _CPU_m68k_BFFFO_table[256];
   { \
     register int dumby; \
     \
-    asm volatile ( "   move.w  %2,%1\n"        \
+    __asm__ volatile ( "   move.w  %2,%1\n"        \
        "   lsr.w   #8,%1\n"        \
        "   beq.s   1f\n"           \
        "   move.b  (%3,%1.w),%0\n" \

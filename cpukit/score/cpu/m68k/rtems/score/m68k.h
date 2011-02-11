@@ -335,7 +335,7 @@ extern "C" {
 #if ( defined(__mcoldfire__) )
 #define m68k_disable_interrupts( _level ) \
    do { register uint32_t   _tmpsr = 0x0700; \
-        asm volatile ( "move.w %%sr,%0\n\t" \
+        __asm__ volatile ( "move.w %%sr,%0\n\t" \
  		       "or.l   %0,%1\n\t" \
  		       "move.w %1,%%sr" \
  		       : "=d" (_level), "=d"(_tmpsr) : "1"(_tmpsr) \
@@ -343,14 +343,14 @@ extern "C" {
    } while( 0 )
 #else
 #define m68k_disable_interrupts( _level ) \
-  asm volatile ( "move.w  %%sr,%0\n\t" \
+  __asm__ volatile ( "move.w  %%sr,%0\n\t" \
                  "or.w    #0x0700,%%sr" \
                     : "=d" (_level) \
                     : : "cc" )
 #endif
 
 #define m68k_enable_interrupts( _level ) \
-  asm volatile ( "move.w  %0,%%sr " : : "d" (_level) : "cc");
+  __asm__ volatile ( "move.w  %0,%%sr " : : "d" (_level) : "cc");
 
 #if ( defined(__mcoldfire__) )
 #define m68k_flash_interrupts( _level ) \
@@ -363,7 +363,7 @@ extern "C" {
    } while( 0 )
 #else
 #define m68k_flash_interrupts( _level ) \
-  asm volatile ( "move.w  %0,%%sr\n\t" \
+  __asm__ volatile ( "move.w  %0,%%sr\n\t" \
                  "or.w    #0x0700,%%sr" \
                     : : "d" (_level) \
                     : "cc" )
@@ -373,7 +373,7 @@ extern "C" {
   do { \
     register uint32_t   _tmpsr; \
     \
-    asm volatile( "move.w %%sr,%0" : "=d" (_tmpsr)); \
+    __asm__ volatile( "move.w %%sr,%0" : "=d" (_tmpsr)); \
     _level = (_tmpsr & 0x0700) >> 8; \
   } while (0)
 
@@ -381,17 +381,17 @@ extern "C" {
   do { \
     register uint32_t   _tmpsr; \
     \
-    asm volatile( "move.w  %%sr,%0" : "=d" (_tmpsr)); \
+    __asm__ volatile( "move.w  %%sr,%0" : "=d" (_tmpsr)); \
     _tmpsr = (_tmpsr & 0xf8ff) | ((_newlevel) << 8); \
-    asm volatile( "move.w  %0,%%sr" : : "d" (_tmpsr)); \
+    __asm__ volatile( "move.w  %0,%%sr" : : "d" (_tmpsr)); \
   } while (0)
 
 #if ( M68K_HAS_VBR == 1 && !defined(__mcoldfire__) )
 #define m68k_get_vbr( vbr ) \
-  asm volatile ( "movec   %%vbr,%0 " : "=r" (vbr))
+  __asm__ volatile ( "movec   %%vbr,%0 " : "=r" (vbr))
 
 #define m68k_set_vbr( vbr ) \
-  asm volatile ( "movec   %0,%%vbr " : : "r" (vbr))
+  __asm__ volatile ( "movec   %0,%%vbr " : : "r" (vbr))
 
 #elif ( defined(__mcoldfire__) )
 extern void*                     _VBR;
@@ -399,7 +399,7 @@ extern void*                     _VBR;
 
 #define m68k_set_vbr( _vbr ) \
   do { \
-    asm volatile ( "movec   %0,%%vbr " : : "r" (_vbr)); \
+    __asm__ volatile ( "movec   %0,%%vbr " : : "r" (_vbr)); \
     _VBR = (void *)_vbr; \
   } while(0)
 
@@ -411,9 +411,9 @@ extern void*                     _VBR;
 /*
  *  Access Control Registers
  */
-#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr" : : "d" (_cacr))
-#define m68k_set_acr0(_acr0) asm volatile ("movec %0,%%acr0" : : "d" (_acr0))
-#define m68k_set_acr1(_acr1) asm volatile ("movec %0,%%acr1" : : "d" (_acr1))
+#define m68k_set_cacr(_cacr) __asm__ volatile ("movec %0,%%cacr" : : "d" (_cacr))
+#define m68k_set_acr0(_acr0) __asm__ volatile ("movec %0,%%acr0" : : "d" (_acr0))
+#define m68k_set_acr1(_acr1) __asm__ volatile ("movec %0,%%acr1" : : "d" (_acr1))
 
 /*
  *  The following routine swaps the endian format of an unsigned int.
@@ -454,9 +454,9 @@ static inline uint32_t m68k_swap_u32(
 {
   uint32_t swapped = value;
 
-  asm volatile( "rorw  #8,%0" : "=d" (swapped) : "0" (swapped) );
-  asm volatile( "swap  %0"    : "=d" (swapped) : "0" (swapped) );
-  asm volatile( "rorw  #8,%0" : "=d" (swapped) : "0" (swapped) );
+  __asm__ volatile( "rorw  #8,%0" : "=d" (swapped) : "0" (swapped) );
+  __asm__ volatile( "swap  %0"    : "=d" (swapped) : "0" (swapped) );
+  __asm__ volatile( "rorw  #8,%0" : "=d" (swapped) : "0" (swapped) );
 
   return( swapped );
 }
@@ -467,7 +467,7 @@ static inline uint16_t m68k_swap_u16(
 {
   uint16_t swapped = value;
 
-  asm volatile( "rorw  #8,%0" : "=d" (swapped) : "0" (swapped) );
+  __asm__ volatile( "rorw  #8,%0" : "=d" (swapped) : "0" (swapped) );
 
   return( swapped );
 }
