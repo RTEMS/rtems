@@ -41,7 +41,7 @@ void Shm_Initialize_lock(
  *  a deadlock condition.
  */
 
-asm(
+__asm__ (
     ".text\n"
     ".align 4\n"
 "LEON3_Atomic_Swap:\n"
@@ -65,7 +65,7 @@ void Shm_Lock(
     Shm_isrstat = isr_level;
     while ( lock_value ) {
       lock_value = LEON3_Atomic_Swap(lock_value, lockptr);
-/*       asm volatile( "" */
+/*       __asm__ volatile( "" */
 /*                          : "=r" (lockptr), "=r" (lock_value) */
 /*                          : "0" (lockptr),  "1" (lock_value) */
 /*                   ); */

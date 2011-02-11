@@ -41,7 +41,7 @@ extern void amba_initialize(void);
 static inline int set_snooping(void)
 {
   int tmp;
-  asm(" lda [%1] 2, %0 "
+  __asm__ (" lda [%1] 2, %0 "
       : "=r"(tmp)
       : "r"(0xC)
   );

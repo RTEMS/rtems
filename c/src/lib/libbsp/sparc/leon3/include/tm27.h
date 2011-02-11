@@ -39,7 +39,7 @@
   set_vector( (handler), TEST_VECTOR, 1 );
 
 #define Cause_tm27_intr() \
-  asm volatile( "ta 0x10; nop " );
+  __asm__ volatile( "ta 0x10; nop " );
 
 #define Clear_tm27_intr() /* empty */
 

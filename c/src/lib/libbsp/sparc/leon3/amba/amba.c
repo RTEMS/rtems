@@ -35,7 +35,7 @@ int LEON3_Cpu_Index = 0;
 
 unsigned int getasr17(void);
 
-asm(" .text  \n"
+__asm__ (" .text  \n"
     "getasr17:   \n"
     "retl \n"
     "mov %asr17, %o0\n"
