@@ -131,12 +131,12 @@ static void clear_mmu_regs( void)
 
   /* Clear segment registers */
   for (i = 0;i < 16;i++) {
-    asm volatile( "mtsrin %0, %1\n" : : "r" (i * 0x1000), "r" (i << (31 - 3)));
+    __asm__ volatile( "mtsrin %0, %1\n" : : "r" (i * 0x1000), "r" (i << (31 - 3)));
   }
 
   /* Clear TLBs */
   for (i = 0;i < 32;i++) {
-    asm volatile( "tlbie %0\n" : : "r" (i << (31 - 19)));
+    __asm__ volatile( "tlbie %0\n" : : "r" (i << (31 - 19)));
   }
 }
 
