@@ -107,7 +107,7 @@ _oei_isp, /* I/O Port: irq 156*/
  * We try to work around this problem by using the macro below.
  */
 #define isp( name, number, func)\
-asm (".global _"Str(name)"\n\t"\
+__asm__ (".global _"Str(name)"\n\t"\
      "_"Str(name)":       \n\t"\
      "    mov.l r0,@-r15   \n\t"\
      "    mov.l r1,@-r15   \n\t"\

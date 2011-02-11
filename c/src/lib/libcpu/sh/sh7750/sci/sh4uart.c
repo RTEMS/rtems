@@ -866,7 +866,7 @@ __asm__ (
 "    nop\n");
 
 extern void ipl_serial_output(const char *buf, int len);
-asm (
+__asm__ (
 "    .global _ipl_serial_output\n"
 "_ipl_serial_output:\n"
 "    mov  #0,r0\n"

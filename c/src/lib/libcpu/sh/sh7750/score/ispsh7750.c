@@ -71,7 +71,7 @@ void *_VBR_Saved;
      "        or    #" __STRINGIFY__(SH7750_TSTR_STR0) ",r1\n"     \
      "        mov.b r1,@r0         \n"
 
-asm ("        .text\n"
+__asm__ ("        .text\n"
      "        .balign 256\n"
      "        .global __vbr_base\n"
      "__vbr_base:\n"
