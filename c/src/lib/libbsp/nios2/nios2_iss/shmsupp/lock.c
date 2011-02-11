@@ -53,7 +53,7 @@ void Shm_Lock(
 
     Shm_isrstat = isr_level;
     while ( lock_value ) {
-      asm volatile( ""
+      __asm__ volatile( ""
                          : "=r" (lockptr), "=r" (lock_value)
                          : "0" (lockptr),  "1" (lock_value)
                   );
