@@ -920,7 +920,7 @@ static void smsc9218i_transmit_create_jobs(
           data_length
         );
 
-        asm volatile ( "sync");
+        __asm__ volatile ( "sync");
 
         /* Remember fragement */
         jc->fragment_table [c] = m;

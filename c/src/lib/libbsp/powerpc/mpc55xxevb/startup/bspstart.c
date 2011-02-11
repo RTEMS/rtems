@@ -547,7 +547,7 @@ static void mpc55xx_ebi_init(void)
             PPC_SET_SPECIAL_PURPOSE_REGISTER( FSL_EIS_MAS1, mmu_setup[i].MAS1.R);
             PPC_SET_SPECIAL_PURPOSE_REGISTER( FSL_EIS_MAS2, mmu_setup[i].MAS2.R);
             PPC_SET_SPECIAL_PURPOSE_REGISTER( FSL_EIS_MAS3, mmu_setup[i].MAS3.R);
-            asm volatile ("tlbwe");
+            __asm__ volatile ("tlbwe");
         }
       }
 
