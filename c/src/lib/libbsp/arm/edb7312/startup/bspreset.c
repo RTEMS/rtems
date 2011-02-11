@@ -18,6 +18,6 @@ void bsp_reset(void)
 
   SKYEYE_MAGIC_ADDRESS = 0xff;
 #else
-  asm volatile ("b _start");
+  __asm__ volatile ("b _start");
 #endif
 }
