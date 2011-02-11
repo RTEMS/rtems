@@ -15,5 +15,5 @@
 
 void bsp_reset( void )
 {
-  asm ("swi %a0" :: "i" (SWI_Exit));
+  __asm__ ("swi %a0" :: "i" (SWI_Exit));
 }

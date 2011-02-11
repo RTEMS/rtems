@@ -85,7 +85,7 @@ static struct fdent* 	findslot	_PARAMS ((int));
 static int		newslot		_PARAMS ((void));
 
 /* Register name faking - works in collusion with the linker.  */
-register char * stack_ptr asm ("sp");
+register char * stack_ptr __asm__ ("sp");
 
 
 /* following is copied from libc/stdio/local.h to check std streams */
@@ -175,21 +175,21 @@ initialise_monitor_handles (void)
   const char * name;
 
   name = ":tt";
-  asm ("mov r0,%2; mov r1, #0; swi %a1; mov %0, r0"
+  __asm__ ("mov r0,%2; mov r1, #0; swi %a1; mov %0, r0"
        : "=r"(fh)
        : "i" (SWI_Open),"r"(name)
        : "r0","r1");
   monitor_stdin = fh;
 
   name = ":tt";
-  asm ("mov r0,%2; mov r1, #4; swi %a1; mov %0, r0"
+  __asm__ ("mov r0,%2; mov r1, #4; swi %a1; mov %0, r0"
        : "=r"(fh)
        : "i" (SWI_Open),"r"(name)
        : "r0","r1");
   monitor_stdout = fh;
 
   name = ":tt";
-  asm ("mov r0,%2; mov r1, #8; swi %a1; mov %0, r0"
+  __asm__ ("mov r0,%2; mov r1, #8; swi %a1; mov %0, r0"
        : "=r"(fh)
        : "i" (SWI_Open),"r"(name)
        : "r0","r1");
@@ -217,8 +217,8 @@ get_errno (void)
 #ifdef ARM_RDI_MONITOR
   return do_AngelSWI (AngelSWI_Reason_Errno, NULL);
 #else
-  register int r0 asm("r0");
-  asm ("swi %a1" : "=r"(r0) : "i" (SWI_GetErrno));
+  register int r0 __asm__ ("r0");
+  __asm__ ("swi %a1" : "=r"(r0) : "i" (SWI_GetErrno));
   return r0;
 #endif
 }
@@ -258,13 +258,13 @@ _swiread (int fh,
 
   return checkerror (do_AngelSWI (AngelSWI_Reason_Read, block));
 #else
-  register int r0 asm("r0");
-  register int r1 asm("r1");
-  register int r2 asm("r2");
+  register int r0 __asm__ ("r0");
+  register int r1 __asm__ ("r1");
+  register int r2 __asm__ ("r2");
   r0 = fh;
   r1 = (int)ptr;
   r2 = len;
-  asm ("swi %a4"
+  __asm__ ("swi %a4"
        : "=r" (r0)
        : "0"(r0), "r"(r1), "r"(r2), "i"(SWI_Read));
   return checkerror (r0);
@@ -360,7 +360,7 @@ _swilseek (int fd,
 #else
   if (dir == SEEK_END)
     {
-      asm ("mov r0, %2; swi %a1; mov %0, r0"
+      __asm__ ("mov r0, %2; swi %a1; mov %0, r0"
 	   : "=r" (res)
 	   : "i" (SWI_Flen), "r" (pfd->handle)
 	   : "r0");
@@ -371,7 +371,7 @@ _swilseek (int fd,
     }
 
   /* This code only does absolute seeks.  */
-  asm ("mov r0, %2; mov r1, %3; swi %a1; mov %0, r0"
+  __asm__ ("mov r0, %2; mov r1, %3; swi %a1; mov %0, r0"
        : "=r" (res)
        : "i" (SWI_Seek), "r" (pfd->handle), "r" (ptr)
        : "r0", "r1");
@@ -412,13 +412,13 @@ _swiwrite (
 
   return checkerror (do_AngelSWI (AngelSWI_Reason_Write, block));
 #else
-  register int r0 asm("r0");
-  register int r1 asm("r1");
-  register int r2 asm("r2");
+  register int r0 __asm__ ("r0");
+  register int r1 __asm__ ("r1");
+  register int r2 __asm__ ("r2");
   r0 = fh;
   r1 = (int)ptr;
   r2 = len;
-  asm ("swi %a4"
+  __asm__ ("swi %a4"
        : "=r" (r0)
        : "0"(r0), "r"(r1), "r"(r2), "i"(SWI_Write));
   return checkerror (r0);
@@ -518,7 +518,7 @@ _swiopen (const char * path, int flags)
   fh = do_AngelSWI (AngelSWI_Reason_Open, block);
 
 #else
-  asm ("mov r0,%2; mov r1, %3; swi %a1; mov %0, r0"
+  __asm__ ("mov r0,%2; mov r1, %3; swi %a1; mov %0, r0"
        : "=r"(fh)
        : "i" (SWI_Open),"r"(path),"r"(aflags)
        : "r0","r1");
@@ -548,9 +548,9 @@ _swiclose (int fh)
 #ifdef ARM_RDI_MONITOR
   return checkerror (do_AngelSWI (AngelSWI_Reason_Close, &fh));
 #else
-  register int r0 asm("r0");
+  register int r0 __asm__ ("r0");
   r0 = fh;
-  asm ("swi %a2"
+  __asm__ ("swi %a2"
        : "=r"(r0)
        : "0"(r0), "i" (SWI_Close));
   return checkerror (r0);
@@ -599,7 +599,7 @@ _getpid (int n __attribute__ ((unused)))
 caddr_t
 _sbrk (int incr)
 {
-  extern char end asm ("end"); /* Defined by the linker.  */
+  extern char end __asm__ ("end"); /* Defined by the linker.  */
   static char * heap_end;
   char * prev_heap_end;
 
@@ -650,7 +650,7 @@ _swistat (int fd, struct stat * st)
 #ifdef ARM_RDI_MONITOR
   res = checkerror (do_AngelSWI (AngelSWI_Reason_FLen, &pfd->handle));
 #else
-  asm ("mov r0, %2; swi %a1; mov %0, r0"
+  __asm__ ("mov r0, %2; swi %a1; mov %0, r0"
        : "=r" (res)
        : "i" (SWI_Flen), "r" (pfd->handle)
        : "r0");
@@ -703,9 +703,9 @@ _unlink (const char *path)
   block[1] = strlen(path);
   res = do_AngelSWI (AngelSWI_Reason_Remove, block);
 #else
-  register int r0 asm("r0");
+  register int r0 __asm__ ("r0");
   r0 = (int)path;
-  asm ("swi %a2"
+  __asm__ ("swi %a2"
        : "=r"(r0)
        : "0"(r0), "i" (SWI_Remove));
   res = r0;
@@ -728,7 +728,7 @@ _gettimeofday (struct timeval * tp, void * tzvp)
 #else
       {
         int value;
-        asm ("swi %a1; mov %0, r0" : "=r" (value): "i" (SWI_Time) : "r0");
+        __asm__ ("swi %a1; mov %0, r0" : "=r" (value): "i" (SWI_Time) : "r0");
         tp->tv_sec = value;
       }
 #endif
@@ -755,7 +755,7 @@ _clock (void)
 #ifdef ARM_RDI_MONITOR
   timeval = do_AngelSWI (AngelSWI_Reason_Clock,NULL);
 #else
-  asm ("swi %a1; mov %0, r0" : "=r" (timeval): "i" (SWI_Clock) : "r0");
+  __asm__ ("swi %a1; mov %0, r0" : "=r" (timeval): "i" (SWI_Clock) : "r0");
 #endif
   return timeval;
 }
@@ -795,9 +795,9 @@ __isatty (int fd)
 #ifdef ARM_RDI_MONITOR
   return checkerror (do_AngelSWI (AngelSWI_Reason_IsTTY, &pfd->handle));
 #else
-  register int r0 asm("r0");
+  register int r0 __asm__ ("r0");
   r0 = pfd->handle;
-  asm ("swi %a2"
+  __asm__ ("swi %a2"
        : "=r" (r0)
        : "0"(r0), "i" (SWI_IsTTY));
   return checkerror (r0);
@@ -831,9 +831,9 @@ _system (const char *s)
     }
   return e;
 #else
-  register int r0 asm("r0");
+  register int r0 __asm__ ("r0");
   r0 = (int)s;
-  asm ("swi %a2"
+  __asm__ ("swi %a2"
        : "=r" (r0)
        : "0"(r0), "i" (SWI_CLI));
   return checkerror (r0);
@@ -851,11 +851,11 @@ _rename (const char * oldpath, const char * newpath)
   block[3] = strlen(newpath);
   return checkerror (do_AngelSWI (AngelSWI_Reason_Rename, block)) ? -1 : 0;
 #else
-  register int r0 asm("r0");
-  register int r1 asm("r1");
+  register int r0 __asm__ ("r0");
+  register int r1 __asm__ ("r1");
   r0 = (int)oldpath;
   r1 = (int)newpath;
-  asm ("swi %a3"
+  __asm__ ("swi %a3"
        : "=r" (r0)
        : "0" (r0), "r" (r1), "i" (SWI_Rename));
   return checkerror (r0);
