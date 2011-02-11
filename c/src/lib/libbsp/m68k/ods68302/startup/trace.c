@@ -90,7 +90,7 @@ void trace_exception(unsigned long d0,
   unsigned int index;
   unsigned char ch;
 
-  asm volatile(" orw #0x0700,%sr");
+  __asm__ volatile(" orw #0x0700,%sr");
 
   debug_port_banner();
 

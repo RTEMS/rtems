@@ -233,12 +233,12 @@ jmp_buf remcomEnv;
 
 /* do an fsave, then remember the address to begin a restore from */
 #define SAVE_FP_REGS() \
-       asm(" fsave   %a0@-");	\
-       asm(" fmovemx %fp0-%fp7,registers+72");  \
-       asm(" fmoveml %fpcr/%fpsr/%fpi,registers+168");
+       __asm__ (" fsave   %a0@-");	\
+       __asm__ (" fmovemx %fp0-%fp7,registers+72");  \
+       __asm__ (" fmoveml %fpcr/%fpsr/%fpi,registers+168");
 
 #define RESTORE_FP_REGS() \
-asm("                                                 \n\
+__asm__ ("                                                 \n\
     fmoveml  registers+168,%fpcr/%fpsr/%fpi           \n\
     fmovemx  registers+72,%fp0-%fp7                   \n\
     cmpl     #-1,%a0@     |  skip frestore flag set ? \n\
@@ -257,7 +257,7 @@ skip_frestore:                                        \n\
 void return_to_super(void);
 void return_to_user(void);
 
-asm("\n\
+__asm__ ("\n\
        .text\n\
 \n\
        .globl return_to_super\n\
@@ -292,19 +292,19 @@ copyUserLoop:                                                               \n\
         dbf     %d0,copyUserLoop                                             \n\
 ");
         RESTORE_FP_REGS()
-asm("\n\
+__asm__ ("\n\
         moveml  registers,%d0-%d7/%a0-%a6\n\
         rte                          /* pop and go! */\n\
 ");
 
-#define DISABLE_INTERRUPTS() asm("   oriw   #0x0700,%sr");
-#define BREAKPOINT()         asm("   trap   #1");
+#define DISABLE_INTERRUPTS() __asm__ ("   oriw   #0x0700,%sr");
+#define BREAKPOINT()         __asm__ ("   trap   #1");
 
 /* this function is called immediately when a level 7 interrupt occurs */
 /* if the previous interrupt level was 7 then we're already servicing  */
 /* this interrupt and an rte is in order to return to the debugger.    */
 /* For the 68000, the offset for sr is 6 due to the jsr return address */
-asm("\n\
+__asm__ ("\n\
         .text\n\
         .globl _debug_level7\n\
         .align 4\n\
@@ -314,15 +314,15 @@ _debug_level7:\n\
 ");
 
 #if (defined(__mc68020__) && !defined(__mcpu32__)) || defined(__mc68332__)
-asm("\n\
+__asm__ ("\n\
         movew   %sp@(2),%d0\n\
 ");
 #else
-asm("\n\
+__asm__ ("\n\
         movew   %sp@(6),%d0\n\
 ");
 #endif
-asm("\n\
+__asm__ ("\n\
         andiw   #0x700,%d0\n\
     	  cmpiw   #0x700,%d0\n\
     	  beq     _already7\n\
@@ -332,10 +332,10 @@ _already7:\n\
 	      movew   %sp@+,%d0\n\
 ");
 #if defined (__mc68000__) && !(defined(__mc68020__) && !defined(__mcpu32__))
-asm("\n\
+__asm__ ("\n\
         lea     %sp@(4),%sp");       /* pull off 68000 return address */
 #endif
-asm("\n\
+__asm__ ("\n\
         rte\n\
 ");
 
@@ -357,7 +357,7 @@ extern void _catchException(void);
  *
  *
  */
-asm(" \n\
+__asm__ (" \n\
         .text\n\
 \n\
         .globl _catchException\n\
@@ -367,12 +367,12 @@ _catchException:\n\
 
 DISABLE_INTERRUPTS();
 
-asm("\n\
+__asm__ ("\n\
         moveml  %d0-%d7/%a0-%a6,registers /* save registers        */\n\
         movel   lastFrame,%a0             /* last frame pointer */\n\
 ");
 SAVE_FP_REGS();
-asm("\n\
+__asm__ ("\n\
         lea     registers,%a5   /* get address of registers     */\n\
         movew   %sp@,%d1        /* get status register          */\n\
         movew   %d1,%a5@(66)    /* save sr 	*/	\n\
@@ -454,20 +454,20 @@ a7saveDone:\n\
  *   Return Address  MSWord
  *   Return Address  LSWord
  */
-asm("\n\
+__asm__ ("\n\
         .text\n\
         .globl _catchException\n\
         .align 4\n\
 _catchException:\n\
 ");
 DISABLE_INTERRUPTS();
-asm("\n\
+__asm__ ("\n\
         moveml  %d0-%d7/%a0-%a6,registers  /* save registers               */\n\
         movel   lastFrame,%a0	/* last frame pointer */\n\
 ");
 
 SAVE_FP_REGS();
-asm("\n\
+__asm__ ("\n\
         moveq.l #0,%d2\n\
         movew   %sp@+,%d2\n\
         lea     registers,%a5    /* get address of registers     */\n\
@@ -531,13 +531,13 @@ saveDone:\n\
  * stack pointer into an area reserved for debugger use in case the
  * breakpoint happened in supervisor mode.
  */
-asm("remcomHandler:");
-asm("           addl    #4,%sp");        /* pop off return address     */
-asm("           movel   %sp@+,%d0");      /* get the exception number   */
-asm("		movel   stackPtr,%sp"); /* move to remcom stack area  */
-asm("		movel   %d0,%sp@-");	/* push exception onto stack  */
-asm("		jbsr    handle_exception");    /* this never returns */
-asm("           rts");                  /* return */
+__asm__ ("remcomHandler:");
+__asm__ ("           addl    #4,%sp");        /* pop off return address     */
+__asm__ ("           movel   %sp@+,%d0");      /* get the exception number   */
+__asm__ ("		movel   stackPtr,%sp"); /* move to remcom stack area  */
+__asm__ ("		movel   %d0,%sp@-");	/* push exception onto stack  */
+__asm__ ("		jbsr    handle_exception");    /* this never returns */
+__asm__ ("           rts");                  /* return */
 
 void _returnFromException(Frame *frame)
 {
