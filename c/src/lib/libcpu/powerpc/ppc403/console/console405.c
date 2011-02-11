@@ -367,14 +367,14 @@ spiInitialize(void)
    * Select clock source and set uart internal clock divisor
    */
 
-  asm volatile ("mfdcr %0, 0x0b1" : "=r" (tmp)); /* CPC_CR0 0x0b1 */
+  __asm__ volatile ("mfdcr %0, 0x0b1" : "=r" (tmp)); /* CPC_CR0 0x0b1 */
 
   /* UART0 bit 24 0x80, UART1 bit 25 0x40 */
   tmp |= (bsp_serial_external_clock ?  (USE_UART ? 0x40 : 0x80) : 0);
 
   tmp |= (bsp_serial_external_clock ?  0: ((UART_INTERNAL_CLOCK_DIVISOR -1) << 1));
 
-  asm volatile ("mtdcr 0x0b1, %0" : "=r" (tmp) : "0" (tmp)); /* CPC_CR0 0x0b1*/
+  __asm__ volatile ("mtdcr 0x0b1, %0" : "=r" (tmp) : "0" (tmp)); /* CPC_CR0 0x0b1*/
 
   /* Disable port interrupts while changing hardware */
   _ier = port->IER;

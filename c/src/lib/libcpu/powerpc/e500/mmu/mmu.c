@@ -99,9 +99,9 @@
 /* Factory to generate inline macros for accessing the MAS registers */
 #define __RDWRMAS(mas,rmas)	\
 	static inline uint32_t _read_MAS##mas(void)	                                 \
-	{ uint32_t x; asm volatile("mfspr %0, %1": "=r"(x):"i"(rmas)); return x; } \
+	{ uint32_t x; __asm__ volatile("mfspr %0, %1": "=r"(x):"i"(rmas)); return x; } \
 	static inline void _write_MAS##mas(uint32_t x)                             \
-	{             asm volatile("mtspr %1, %0":: "r"(x),"i"(rmas)); }
+	{             __asm__ volatile("mtspr %1, %0":: "r"(x),"i"(rmas)); }
 
 __RDWRMAS(0,FSL_EIS_MAS0)
 __RDWRMAS(1,FSL_EIS_MAS1)

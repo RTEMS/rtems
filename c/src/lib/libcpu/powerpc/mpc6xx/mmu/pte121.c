@@ -157,7 +157,7 @@
 static uint32_t
 seg2vsid (uint32_t ea)
 {
-  asm volatile ("mfsrin %0, %0":"=r" (ea):"0" (ea));
+  __asm__ volatile ("mfsrin %0, %0":"=r" (ea):"0" (ea));
   return ea & ((1 << LD_VSID_SIZE) - 1);
 }
 #else
@@ -539,9 +539,9 @@ triv121PgTblMap (Triv121PgTbl pt,
               uint32_t flags;
               rtems_interrupt_disable (flags);
               /* order setting 'v' after writing everything else */
-              asm volatile ("eieio":::"memory");
+              __asm__ volatile ("eieio":::"memory");
               pte->v = 1;
-              asm volatile ("sync":::"memory");
+              __asm__ volatile ("sync":::"memory");
               rtems_interrupt_enable (flags);
             } else {
               pte->v = 1;
@@ -869,7 +869,7 @@ triv121UnmapEa (unsigned long ea)
   rtems_interrupt_disable (flags);
   pte->v = 0;
   do_dssall ();
-  asm volatile ("	sync		\n\t"
+  __asm__ volatile ("	sync		\n\t"
                 "	tlbie %0	\n\t"
                 "	eieio		\n\t"
                 "	tlbsync		\n\t"
@@ -916,7 +916,7 @@ do_dssall (void)
      * rely on consistent compiler flags).
      */
 #define DSSALL	0x7e00066c      /* dssall opcode */
-    asm volatile ("	.long %0"::"i" (DSSALL));
+    __asm__ volatile ("	.long %0"::"i" (DSSALL));
 #undef  DSSALL
   }
 }
@@ -946,21 +946,21 @@ triv121ChangeEaAttributes (unsigned long ea, int wimg, int pp)
   if (wimg < 0 && pp < 0)
     return pte;
 
-  asm volatile ("mfmsr %0":"=r" (msr));
+  __asm__ volatile ("mfmsr %0":"=r" (msr));
 
   /* switch MMU and IRQs off */
   SYNC_LONGJMP (msr & ~(MSR_EE | MSR_DR | MSR_IR));
 
   pte->v = 0;
   do_dssall ();
-  asm volatile ("sync":::"memory");
+  __asm__ volatile ("sync":::"memory");
   if (wimg >= 0)
     pte->wimg = wimg;
   if (pp >= 0)
     pte->pp = pp;
-  asm volatile ("tlbie %0; eieio"::"r" (ea):"memory");
+  __asm__ volatile ("tlbie %0; eieio"::"r" (ea):"memory");
   pte->v = 1;
-  asm volatile ("tlbsync; sync":::"memory");
+  __asm__ volatile ("tlbsync; sync":::"memory");
 
   /* restore, i.e., switch MMU and IRQs back on */
   SYNC_LONGJMP (msr);

@@ -36,7 +36,7 @@ static ExtIsrHandler extIrqHandlers[NUM_IRQS] =
 static rtems_isr extIsr_( rtems_vector_number i )
 {
 #define BIT_NUMBER(val, bit) \
-    asm volatile ( "cntlzw %0, %1; srawi %0, %0, 1": "=r" (bit) : "r" (val) );
+    __asm__ volatile ( "cntlzw %0, %1; srawi %0, %0, 1": "=r" (bit) : "r" (val) );
 
   int bit;
   (void)i;

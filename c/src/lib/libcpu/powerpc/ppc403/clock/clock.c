@@ -73,9 +73,9 @@ static inline uint32_t   get_itimer(void)
     register uint32_t   rc;
 
 #ifndef ppc405 /* this is a ppc403 */
-    asm volatile ("mfspr %0, 0x3dd" : "=r" ((rc))); /* TBLO */
+    __asm__ volatile ("mfspr %0, 0x3dd" : "=r" ((rc))); /* TBLO */
 #else /* ppc405 */
-    asm volatile ("mfspr %0, 0x10c" : "=r" ((rc))); /* 405GP TBL */
+    __asm__ volatile ("mfspr %0, 0x10c" : "=r" ((rc))); /* 405GP TBL */
 #endif /* ppc405 */
 
     return rc;
@@ -135,11 +135,11 @@ void Clock_isr(void* handle)
         /* XXX: count these! this should never happen :-) */
       }
 
-      asm volatile ("mtspr 0x3db, %0" :: "r"
+      __asm__ volatile ("mtspr 0x3db, %0" :: "r"
                          (clicks_til_next_interrupt)); /* PIT */
   }
 
-    asm volatile ( "mtspr 0x3d8, %0" :: "r" (0x08000000)); /* TSR */
+    __asm__ volatile ( "mtspr 0x3d8, %0" :: "r" (0x08000000)); /* TSR */
 
     Clock_driver_ticks++;
 
@@ -160,7 +160,7 @@ int ClockIsOn(const rtems_irq_connect_data* unused)
 {
     register uint32_t   tcr;
 
-    asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
+    __asm__ volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
 
     return (tcr & 0x04000000) != 0;
 }
@@ -171,11 +171,11 @@ void ClockOff(
 {
     register uint32_t   tcr;
 
-    asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
+    __asm__ volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
 
     tcr &= ~ 0x04400000;
 
-    asm volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
+    __asm__ volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
 }
 
 void ClockOn(
@@ -191,16 +191,16 @@ void ClockOn(
     Clock_driver_ticks = 0;
 
 #ifndef ppc405 /* this is a ppc403 */
-    asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); /* IOCR */
+    __asm__ volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); /* IOCR */
     if (bsp_timer_internal_clock) {
 	iocr &= ~4; /* timer clocked from system clock */
     }
     else {
 	iocr |= 4; /* select external timer clock */
     }
-    asm volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr)); /* IOCR */
+    __asm__ volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr)); /* IOCR */
 
-    asm volatile ("mfspr %0, 0x11f" : "=r" ((pvr))); /* PVR */
+    __asm__ volatile ("mfspr %0, 0x11f" : "=r" ((pvr))); /* PVR */
     if (((pvr & 0xffff0000) >> 16) != 0x0020)
       return; /* Not a ppc403 */
 
@@ -215,14 +215,14 @@ void ClockOn(
       auto_restart = true;
 
 #else /* ppc405 */
-    asm volatile ("mfdcr %0, 0x0b2" : "=r" (iocr));  /*405GP CPC0_CR1 */
+    __asm__ volatile ("mfdcr %0, 0x0b2" : "=r" (iocr));  /*405GP CPC0_CR1 */
     if (bsp_timer_internal_clock) {
 	iocr &=~0x800000	;/* timer clocked from system clock CETE*/
     }
     else {
 	iocr |= 0x800000; /* select external timer clock CETE*/
     }
-    asm volatile ("mtdcr 0x0b2, %0" : "=r" (iocr) : "0" (iocr)); /* 405GP CPC0_CR1 */
+    __asm__ volatile ("mtdcr 0x0b2, %0" : "=r" (iocr) : "0" (iocr)); /* 405GP CPC0_CR1 */
 
      /*
       * Enable auto restart
@@ -238,7 +238,7 @@ void ClockOn(
       * Set PIT value
       */
 
-    asm volatile ("mtspr 0x3db, %0" : : "r" (pit_value)); /* PIT */
+    __asm__ volatile ("mtspr 0x3db, %0" : : "r" (pit_value)); /* PIT */
 
      /*
       * Set timer to autoreload, bit TCR->ARE = 1  0x0400000
@@ -246,10 +246,10 @@ void ClockOn(
       */
     tick_time = get_itimer() + pit_value;
 
-    asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
+    __asm__ volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
     tcr = (tcr & ~0x04400000) | (auto_restart ? 0x04400000 : 0x04000000);
 #if 1
-    asm volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
+    __asm__ volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
 #endif
 
 }

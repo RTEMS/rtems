@@ -141,8 +141,8 @@ rst_MSR_VE(uint32_t old)
  */
 
 static void dummy(void) __attribute__((noinline));
-/* add (empty) asm statement to make sure this isn't optimized away */
-static void dummy(void) { asm volatile(""); }
+/* add (empty) __asm__ statement to make sure this isn't optimized away */
+static void dummy(void) { __asm__ volatile(""); }
 
 static unsigned probe_r1(void) __attribute__((noinline));
 static unsigned probe_r1(void)

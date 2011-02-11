@@ -124,7 +124,7 @@ SPR_RO (HID0);
 static void
 set_hid0_sync (unsigned long val)
 {
-  asm volatile (
+  __asm__ volatile (
     "	sync			\n"
     "	isync			\n"
     "	mtspr	%0, %1	\n"
@@ -221,7 +221,7 @@ do_dssall (void)
      * rely on consistent compiler flags).
      */
 #define DSSALL	0x7e00066c      /* dssall opcode */
-    asm volatile ("	.long %0"::"i" (DSSALL));
+    __asm__ volatile ("	.long %0"::"i" (DSSALL));
 #undef  DSSALL
   }
 }
@@ -287,7 +287,7 @@ check_bat_size (unsigned long size)
   if (0xffffffff == size) {
     bit = 32;
   } else {
-    asm volatile ("	cntlzw %0, %1":"=r" (bit):"r" (size));
+    __asm__ volatile ("	cntlzw %0, %1":"=r" (bit):"r" (size));
     bit = 31 - bit;
     if (1 << bit != size)
       return -1;

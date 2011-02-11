@@ -33,7 +33,7 @@
 #define PPC_Get_HID0( _value ) \
   do { \
       _value = 0;        /* to avoid warnings */ \
-      asm volatile( \
+      __asm__ volatile( \
           "mfspr %0, 0x3f0;"     /* get HID0 */ \
           "isync" \
           : "=r" (_value) \
@@ -43,7 +43,7 @@
 
 #define PPC_Set_HID0( _value ) \
   do { \
-      asm volatile( \
+      __asm__ volatile( \
           "isync;" \
           "mtspr 0x3f0, %0;"     /* load HID0 */ \
           "isync" \
@@ -269,14 +269,14 @@ void _CPU_cache_invalidate_1_data_line(
 	const void * _address )
 {
   register const void *__address = _address;
-  asm volatile ( "dcbi 0,%0" :: "r"(__address) : "memory" );
+  __asm__ volatile ( "dcbi 0,%0" :: "r"(__address) : "memory" );
 }
 
 void _CPU_cache_flush_1_data_line(
 	const void * _address )
 {
   register const void *__address = _address;
-  asm volatile ( "dcbf 0,%0" :: "r" (__address) : "memory" );
+  __asm__ volatile ( "dcbf 0,%0" :: "r" (__address) : "memory" );
 }
 
 
@@ -284,7 +284,7 @@ void _CPU_cache_invalidate_1_instruction_line(
 	const void * _address )
 {
   register const void *__address = _address;
-  asm volatile ( "icbi 0,%0" :: "r" (__address) : "memory");
+  __asm__ volatile ( "icbi 0,%0" :: "r" (__address) : "memory");
 }
 
 /* end of file */

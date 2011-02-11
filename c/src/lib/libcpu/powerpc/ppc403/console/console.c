@@ -351,12 +351,12 @@ spiInitialize(void)
    * select RTS/CTS hardware handshake lines,
    * select clock source
    */
-  asm volatile ("mfdcr %0, 0xa0" : "=r" (tmp)); /* IOCR */
+  __asm__ volatile ("mfdcr %0, 0xa0" : "=r" (tmp)); /* IOCR */
 
   tmp &= ~3;
   tmp |= (bsp_serial_external_clock ? 2 : 0) | 1;
 
-  asm volatile ("mtdcr 0xa0, %0" : "=r" (tmp) : "0" (tmp)); /* IOCR */
+  __asm__ volatile ("mtdcr 0xa0, %0" : "=r" (tmp) : "0" (tmp)); /* IOCR */
 
   /* clear any receive (error) status */
   port->SPLS = (LSRDataReady   | LSRFramingError | LSROverrunError |

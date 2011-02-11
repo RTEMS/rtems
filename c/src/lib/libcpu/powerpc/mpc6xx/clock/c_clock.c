@@ -133,7 +133,7 @@ int decr;
   do {
   register uint32_t flags;
   rtems_interrupt_disable(flags);
-  asm volatile (
+  __asm__ volatile (
     "mfdec %0; add %0, %0, %1; mtdec %0"
     : "=&r"(decr)
     : "r"(Clock_Decrementer_value));

@@ -22,7 +22,7 @@ static unsigned int volatile lastInitValue;
 
 void benchmark_timer_initialize( void )
 {
-  asm volatile( " mftb %0": "=r" (lastInitValue) );
+  __asm__ volatile( " mftb %0": "=r" (lastInitValue) );
 }
 
 /*
@@ -43,7 +43,7 @@ void benchmark_timer_initialize( void )
 int benchmark_timer_read( void )
 {
   uint32_t   value;
-  asm volatile ( " mftb %0": "=r" (value) );
+  __asm__ volatile ( " mftb %0": "=r" (value) );
   return value - lastInitValue;
 }
 

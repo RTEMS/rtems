@@ -64,7 +64,7 @@ static inline uint32_t get_itimer(void)
 {
    uint32_t ret;
 
-   asm volatile ("mftb %0" : "=r" ((ret))); /* TBLO */
+   __asm__ volatile ("mftb %0" : "=r" ((ret))); /* TBLO */
 
    return ret;
 }

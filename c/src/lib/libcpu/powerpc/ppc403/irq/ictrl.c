@@ -47,7 +47,7 @@ rtems_isr_entry ictrl_vector_table[PPC_IRQ_EXT_MAX];
 RTEMS_INLINE_ROUTINE void
 clr_exisr(uint32_t   mask)
 {
-    asm volatile ("mtdcr 0xC0,%0"::"r" (mask));/*EXISR*/
+    __asm__ volatile ("mtdcr 0xC0,%0"::"r" (mask));/*EXISR*/
 }
 
 /*
@@ -58,7 +58,7 @@ get_exisr(void)
 {
     uint32_t   val;
 
-    asm volatile ("mfdcr %0,0xC0":"=r" (val));/*EXISR*/
+    __asm__ volatile ("mfdcr %0,0xC0":"=r" (val));/*EXISR*/
     return val;
 }
 
@@ -69,7 +69,7 @@ RTEMS_INLINE_ROUTINE uint32_t
 get_exier(void)
 {
     uint32_t   val;
-    asm volatile ("mfdcr %0,0xC2":"=r" (val));/*EXIER*/
+    __asm__ volatile ("mfdcr %0,0xC2":"=r" (val));/*EXIER*/
     return val;
 }
 
@@ -79,7 +79,7 @@ get_exier(void)
 RTEMS_INLINE_ROUTINE void
 set_exier(uint32_t   val)
 {
-    asm volatile ("mtdcr 0xC2,%0"::"r" (val));/*EXIER*/
+    __asm__ volatile ("mtdcr 0xC2,%0"::"r" (val));/*EXIER*/
 }
 
 #else /* not ppc405 */
@@ -87,7 +87,7 @@ set_exier(uint32_t   val)
 RTEMS_INLINE_ROUTINE void
 clr_exisr(uint32_t   mask)
 {
-    asm volatile ("mtdcr 0x40,%0"::"r" (mask));/*EXISR*/
+    __asm__ volatile ("mtdcr 0x40,%0"::"r" (mask));/*EXISR*/
 }
 
 /*
@@ -98,7 +98,7 @@ get_exisr(void)
 {
     uint32_t   val;
 
-    asm volatile ("mfdcr %0,0x40":"=r" (val));/*EXISR*/
+    __asm__ volatile ("mfdcr %0,0x40":"=r" (val));/*EXISR*/
     return val;
 }
 
@@ -109,7 +109,7 @@ RTEMS_INLINE_ROUTINE uint32_t
 get_exier(void)
 {
     uint32_t   val;
-    asm volatile ("mfdcr %0,0x42":"=r" (val));/*EXIER*/
+    __asm__ volatile ("mfdcr %0,0x42":"=r" (val));/*EXIER*/
     return val;
 }
 
@@ -119,7 +119,7 @@ get_exier(void)
 RTEMS_INLINE_ROUTINE void
 set_exier(uint32_t   val)
 {
-    asm volatile ("mtdcr 0x42,%0"::"r" (val));/*EXIER*/
+    __asm__ volatile ("mtdcr 0x42,%0"::"r" (val));/*EXIER*/
 }
 #endif /* ppc405 */
 /*

@@ -30,8 +30,8 @@
 
 uint32_t ppc_exc_cache_wb_check = 1;
 
-#define MTIVPR(prefix) asm volatile ("mtivpr %0" : : "r" (prefix))
-#define MTIVOR(x, vec) asm volatile ("mtivor"#x" %0" : : "r" (vec))
+#define MTIVPR(prefix) __asm__ volatile ("mtivpr %0" : : "r" (prefix))
+#define MTIVOR(x, vec) __asm__ volatile ("mtivor"#x" %0" : : "r" (vec))
 
 static void ppc_exc_initialize_booke(void)
 {
@@ -94,7 +94,7 @@ rtems_status_code ppc_exc_initialize(
   /* Assembly code needs SDA_BASE in r13 (SVR4 or EABI). Make sure
    * early init code put it there.
    */
-  asm volatile (
+  __asm__ volatile (
     "lis %0, _SDA_BASE_@h\n"
     "ori %0, %0, _SDA_BASE_@l\n"
     "mr  %1, 13\n"
@@ -174,7 +174,7 @@ rtems_status_code ppc_exc_initialize(
      * ATM.
      */
     p = (p + 31U) & ~31U;
-    asm volatile ("dcbz 0, %0"::"b" (p));
+    __asm__ volatile ("dcbz 0, %0"::"b" (p));
     /* If we make it thru here then things seem to be OK */
   }
 

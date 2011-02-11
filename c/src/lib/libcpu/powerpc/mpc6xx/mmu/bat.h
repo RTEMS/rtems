@@ -65,7 +65,7 @@ extern int getdbat(int bat_index, unsigned long *pu, unsigned long *pl);
 /* Same as getdbat but reads IBAT */
 extern int getibat(int bat_index, unsigned long *pu, unsigned long *pl);
 
-/* Do not use the asm routines; they are obsolete; use setdbat() instead */
+/* Do not use the __asm__ routines; they are obsolete; use setdbat() instead */
 extern void asm_setdbat0(unsigned int uperPart, unsigned int lowerPart);
 extern void asm_setdbat1(unsigned int uperPart, unsigned int lowerPart);
 extern void asm_setdbat2(unsigned int uperPart, unsigned int lowerPart);

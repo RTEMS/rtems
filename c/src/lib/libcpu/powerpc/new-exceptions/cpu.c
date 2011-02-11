@@ -132,7 +132,7 @@ void _CPU_Context_Initialize(
    */
   { uint32_t    r2 = 0;
     unsigned    r13 = 0;
-    asm volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
+    __asm__ volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
 
     the_context->gpr2 = r2;
     the_context->gpr13 = r13;
@@ -140,7 +140,7 @@ void _CPU_Context_Initialize(
 #elif (PPC_ABI == PPC_ABI_EABI)
   { uint32_t    r2 = 0;
     unsigned    r13 = 0;
-    asm volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
+    __asm__ volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
 
     the_context->gpr2 = r2;
     the_context->gpr13 = r13;

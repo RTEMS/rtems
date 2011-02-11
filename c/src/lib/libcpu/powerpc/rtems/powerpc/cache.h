@@ -13,7 +13,7 @@
 #define _CPU_Data_Cache_Block_Flush( _address ) \
   do { register void *__address = (_address); \
        register uint32_t   _zero = 0; \
-       asm volatile ( "dcbf %0,%1" : \
+       __asm__ volatile ( "dcbf %0,%1" : \
 		      "=r" (_zero), "=r" (__address) : \
                       "0" (_zero), "1" (__address) \
        ); \
@@ -29,7 +29,7 @@
 #define _CPU_Data_Cache_Block_Invalidate( _address ) \
   do { register void *__address = (_address); \
        register uint32_t   _zero = 0; \
-       asm volatile ( "dcbi %0,%1" : \
+       __asm__ volatile ( "dcbi %0,%1" : \
 		      "=r" (_zero), "=r" (__address) : \
                       "0" (_zero), "1" (__address) \
        ); \

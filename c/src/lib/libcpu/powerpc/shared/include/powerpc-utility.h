@@ -57,7 +57,7 @@ static inline uint8_t ppc_read_byte(const volatile void *src)
 {
   uint8_t value;
 
-  asm volatile (
+  __asm__ volatile (
     "lbz %0, 0(%1)"
     : "=r" (value)
     : "b" (src)
@@ -73,7 +73,7 @@ static inline uint16_t ppc_read_half_word(const volatile void *src)
 {
   uint16_t value;
 
-  asm volatile (
+  __asm__ volatile (
     "lhz %0, 0(%1)"
     : "=r" (value)
     : "b" (src)
@@ -89,7 +89,7 @@ static inline uint32_t ppc_read_word(const volatile void *src)
 {
   uint32_t value;
 
-  asm volatile (
+  __asm__ volatile (
     "lwz %0, 0(%1)"
     : "=r" (value)
     : "b" (src)
@@ -103,7 +103,7 @@ static inline uint32_t ppc_read_word(const volatile void *src)
  */
 static inline void ppc_write_byte(uint8_t value, volatile void *dest)
 {
-  asm volatile (
+  __asm__ volatile (
     "stb %0, 0(%1)"
     :
     : "r" (value), "b" (dest)
@@ -115,7 +115,7 @@ static inline void ppc_write_byte(uint8_t value, volatile void *dest)
  */
 static inline void ppc_write_half_word(uint16_t value, volatile void *dest)
 {
-  asm volatile (
+  __asm__ volatile (
     "sth %0, 0(%1)"
     :
     : "r" (value), "b" (dest)
@@ -127,7 +127,7 @@ static inline void ppc_write_half_word(uint16_t value, volatile void *dest)
  */
 static inline void ppc_write_word(uint32_t value, volatile void *dest)
 {
-  asm volatile (
+  __asm__ volatile (
     "stw %0, 0(%1)" :
     : "r" (value), "b" (dest)
   );
@@ -138,7 +138,7 @@ static inline void *ppc_stack_pointer(void)
 {
   void *sp;
 
-  asm volatile (
+  __asm__ volatile (
     "mr %0, 1"
     : "=r" (sp)
   );
@@ -148,7 +148,7 @@ static inline void *ppc_stack_pointer(void)
 
 static inline void ppc_set_stack_pointer(void *sp)
 {
-  asm volatile (
+  __asm__ volatile (
     "mr 1, %0"
     :
     : "r" (sp)
@@ -159,7 +159,7 @@ static inline void *ppc_link_register(void)
 {
   void *lr;
 
-  asm volatile (
+  __asm__ volatile (
     "mflr %0"
     : "=r" (lr)
   );
@@ -169,7 +169,7 @@ static inline void *ppc_link_register(void)
 
 static inline void ppc_set_link_register(void *lr)
 {
-  asm volatile (
+  __asm__ volatile (
     "mtlr %0"
     :
     : "r" (lr)
@@ -180,7 +180,7 @@ static inline uint32_t ppc_machine_state_register(void)
 {
   uint32_t msr;
 
-  asm volatile (
+  __asm__ volatile (
     "mfmsr %0"
     : "=r" (msr)
   );
@@ -190,7 +190,7 @@ static inline uint32_t ppc_machine_state_register(void)
 
 static inline void ppc_set_machine_state_register(uint32_t msr)
 {
-  asm volatile (
+  __asm__ volatile (
     "mtmsr %0"
     :
     : "r" (msr)
@@ -201,14 +201,14 @@ static inline void ppc_synchronize_data(void)
 {
   RTEMS_COMPILER_MEMORY_BARRIER();
 
-  asm volatile ("sync");
+  __asm__ volatile ("sync");
 }
 
 static inline void ppc_synchronize_instructions(void)
 {
   RTEMS_COMPILER_MEMORY_BARRIER();
 
-  asm volatile ("isync");
+  __asm__ volatile ("isync");
 }
 
 /**
@@ -224,7 +224,7 @@ static inline uint32_t ppc_external_exceptions_enable(void)
 
   RTEMS_COMPILER_MEMORY_BARRIER();
 
-  asm volatile (
+  __asm__ volatile (
     "mfmsr %0;"
     "ori %1, %0, 0x8000;"
     "mtmsr %1"
@@ -266,10 +266,10 @@ static inline void ppc_external_exceptions_disable(uint32_t msr)
  * 2009/10/30 Th. D.
  */
 #define CPU_Get_timebase_low( _value ) \
-    asm volatile( "mftb  %0" : "=r" (_value) )
+    __asm__ volatile( "mftb  %0" : "=r" (_value) )
 #else
 #define CPU_Get_timebase_low( _value ) \
-    asm volatile( "mfspr %0,268" : "=r" (_value) )
+    __asm__ volatile( "mfspr %0,268" : "=r" (_value) )
 #endif
 
 /* Must be provided for rtems_bsp_delay to work */
@@ -300,11 +300,11 @@ extern     uint32_t bsp_clicks_per_usec;
 
 #define PPC_Set_decrementer( _clicks ) \
   do { \
-    asm volatile( "mtdec %0" : : "r" ((_clicks)) ); \
+    __asm__ volatile( "mtdec %0" : : "r" ((_clicks)) ); \
   } while (0)
 
 #define PPC_Get_decrementer( _clicks ) \
-    asm volatile( "mfdec  %0" : "=r" (_clicks) )
+    __asm__ volatile( "mfdec  %0" : "=r" (_clicks) )
 
 /*
  *  Routines to access the time base register
@@ -320,13 +320,13 @@ static inline uint64_t PPC_Get_timebase_register( void )
   do {
 #if defined(mpx8xx) || defined(mpc860) || defined(mpc821)
 /* See comment above (CPU_Get_timebase_low) */
-    asm volatile( "mftbu %0" : "=r" (tbr_high_old));
-    asm volatile( "mftb  %0" : "=r" (tbr_low));
-    asm volatile( "mftbu %0" : "=r" (tbr_high));
+    __asm__ volatile( "mftbu %0" : "=r" (tbr_high_old));
+    __asm__ volatile( "mftb  %0" : "=r" (tbr_low));
+    __asm__ volatile( "mftbu %0" : "=r" (tbr_high));
 #else
-    asm volatile( "mfspr %0, 269" : "=r" (tbr_high_old));
-    asm volatile( "mfspr %0, 268" : "=r" (tbr_low));
-    asm volatile( "mfspr %0, 269" : "=r" (tbr_high));
+    __asm__ volatile( "mfspr %0, 269" : "=r" (tbr_high_old));
+    __asm__ volatile( "mfspr %0, 268" : "=r" (tbr_low));
+    __asm__ volatile( "mfspr %0, 269" : "=r" (tbr_high));
 #endif
   } while ( tbr_high_old != tbr_high );
 
@@ -343,8 +343,8 @@ static inline  void PPC_Set_timebase_register (uint64_t tbr)
 
   tbr_low = (uint32_t) tbr;
   tbr_high = (uint32_t) (tbr >> 32);
-  asm volatile( "mtspr 284, %0" : : "r" (tbr_low));
-  asm volatile( "mtspr 285, %0" : : "r" (tbr_high));
+  __asm__ volatile( "mtspr 284, %0" : : "r" (tbr_low));
+  __asm__ volatile( "mtspr 285, %0" : : "r" (tbr_high));
 
 }
 
@@ -375,7 +375,7 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
 #define PPC_SPECIAL_PURPOSE_REGISTER(spr) \
   ({ \
     uint32_t val; \
-    asm volatile (\
+    __asm__ volatile (\
       "mfspr %0, " PPC_STRINGOF(spr) \
       : "=r" (val) \
     ); \
@@ -388,7 +388,7 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
  */
 #define PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val) \
   do { \
-    asm volatile (\
+    __asm__ volatile (\
       "mtspr " PPC_STRINGOF(spr) ", %0" \
       : \
       : "r" (val) \
@@ -462,7 +462,7 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
 #define PPC_DEVICE_CONTROL_REGISTER(dcr) \
   ({ \
     uint32_t val; \
-    asm volatile (\
+    __asm__ volatile (\
       "mfdcr %0, " PPC_STRINGOF(dcr) \
       : "=r" (val) \
     ); \
@@ -477,7 +477,7 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
  */
 #define PPC_SET_DEVICE_CONTROL_REGISTER(dcr, val) \
   do { \
-    asm volatile (\
+    __asm__ volatile (\
       "mtdcr " PPC_STRINGOF(dcr) ", %0" \
       : \
       : "r" (val) \
