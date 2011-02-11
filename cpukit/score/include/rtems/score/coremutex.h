@@ -85,10 +85,12 @@ typedef enum {
    *  resource was unavailable.
    */
   CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT,
+#if !defined(RTEMS_POSIX_API)
   /** This status indicates that an attempt was made to relock a mutex
    *  for which nesting is not configured.
    */
   CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED,
+#endif
   /** This status indicates that an attempt was made to release a mutex
    *  by a thread other than the thread which locked it.
    */
@@ -103,7 +105,7 @@ typedef enum {
    */
   CORE_MUTEX_TIMEOUT,
 
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
+#if !defined(__RTEMS_STRICT_ORDER_MUTEX__)
   /** This status indicates that a thread not release the mutex which has
    *  the priority inheritance property in a right order.
    */

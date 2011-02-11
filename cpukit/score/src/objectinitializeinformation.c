@@ -128,13 +128,18 @@ void _Objects_Initialize_information(
 
   /*
    *  Calculate the maximum name length
+   *
+   *  NOTE: Always 4 bytes long in Class so aligned.  It is POSIX name
+   *        lengths that may be an odd number of bytes.
    */
   name_length = maximum_name_length;
 
-  if ( name_length & (OBJECTS_NAME_ALIGNMENT-1) )
-    name_length = (name_length + OBJECTS_NAME_ALIGNMENT) &
-                  ~(OBJECTS_NAME_ALIGNMENT-1);
-
+  #if !defined(RTEMS_POSIX_API)
+    if ( name_length & (OBJECTS_NAME_ALIGNMENT-1) )
+      name_length = (name_length + OBJECTS_NAME_ALIGNMENT) &
+                    ~(OBJECTS_NAME_ALIGNMENT-1);
+  #endif
+ 
   information->name_length = name_length;
 
   _Chain_Initialize_empty( &information->Inactive );

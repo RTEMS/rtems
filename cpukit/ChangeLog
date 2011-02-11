@@ -1,5 +1,13 @@
 2011-02-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* rtems/src/semtranslatereturncode.c,
+	score/include/rtems/score/coremutex.h,
+	score/src/coremutexsurrender.c,
+	score/src/objectinitializeinformation.c: Disable code not reachable
+	when POSIX is not enabled.
+
+2011-02-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* score/include/rtems/score/context.h: Spacing.
 
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>

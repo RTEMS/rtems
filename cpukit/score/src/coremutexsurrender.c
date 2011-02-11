@@ -137,9 +137,11 @@ CORE_mutex_Status _CORE_mutex_Surrender(
       switch ( the_mutex->Attributes.lock_nesting_behavior ) {
         case CORE_MUTEX_NESTING_ACQUIRES:
           return CORE_MUTEX_STATUS_SUCCESSFUL;
-        case CORE_MUTEX_NESTING_IS_ERROR:
-          /* should never occur */
-          return CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
+        #if !defined(RTEMS_POSIX_API)
+          case CORE_MUTEX_NESTING_IS_ERROR:
+            /* should never occur */
+            return CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
+        #endif
         case CORE_MUTEX_NESTING_BLOCKS:
           /* Currently no API exercises this behavior. */
           break;
