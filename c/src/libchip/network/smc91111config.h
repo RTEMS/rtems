@@ -74,7 +74,7 @@ typedef uint32_t  CYG_WORD32;
 #define CYG_MACRO_START do {
 #define CYG_MACRO_END   } while (0)
 #define HAL_IO_BARRIER()                        \
-    asm volatile ( "" : : : "memory" )
+    __asm__ volatile ( "" : : : "memory" )
 
 #define HAL_READ_UINT8( _register_, _value_ )           \
     CYG_MACRO_START                                     \
