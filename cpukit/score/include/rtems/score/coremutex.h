@@ -85,7 +85,7 @@ typedef enum {
    *  resource was unavailable.
    */
   CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT,
-#if !defined(RTEMS_POSIX_API)
+#if defined(RTEMS_POSIX_API)
   /** This status indicates that an attempt was made to relock a mutex
    *  for which nesting is not configured.
    */
@@ -142,6 +142,7 @@ typedef enum {
    *         + unlock(m)
    */
   CORE_MUTEX_NESTING_ACQUIRES,
+#if defined(RTEMS_POSIX_API)
   /**
    *    This sequence returns an error at the indicated point:
    *
@@ -150,6 +151,7 @@ typedef enum {
    *        + unlock(m)
    */
   CORE_MUTEX_NESTING_IS_ERROR,
+#endif
   /**
    *    This sequence performs as indicated:
    *        + lock(m)

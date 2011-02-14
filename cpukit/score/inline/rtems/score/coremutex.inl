@@ -205,10 +205,12 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
         the_mutex->nest_count++;
         _ISR_Enable( *level_p );
         return 0;
-      case CORE_MUTEX_NESTING_IS_ERROR:
-        executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
-        _ISR_Enable( *level_p );
-        return 0;
+      #if defined(RTEMS_POSIX_API)
+        case CORE_MUTEX_NESTING_IS_ERROR:
+          executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
+          _ISR_Enable( *level_p );
+          return 0;
+      #endif
       case CORE_MUTEX_NESTING_BLOCKS:
         break;
     }
