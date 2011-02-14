@@ -37,7 +37,7 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 if HAS_COMPLEX
-complex_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel) -lm
+complex_LDADD = -lm
 
 LINK_OBJS = $(complex_OBJECTS) $(complex_LDADD)
 LINK_LIBS = $(complex_LDLIBS)

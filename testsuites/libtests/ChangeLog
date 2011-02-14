@@ -1,5 +1,9 @@
 2011-02-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* complex/Makefile.am, complex/init.c: Test now runs.
+
+2011-02-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* monitor/Makefile.am, monitor02/Makefile.am: Switch to all managers
 	since this is all of them.
 
