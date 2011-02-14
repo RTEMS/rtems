@@ -1,5 +1,10 @@
 2011-02-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* rtems/src/semtranslatereturncode.c, score/src/coremutexsurrender.c:
+	Now all conditionals have the correct sense and all tests pass.
+
+2011-02-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* score/include/rtems/score/coremutex.h,
 	score/inline/rtems/score/coremutex.inl, score/src/apimutexallocate.c:
 	Fix direction of conditional and eliminate use of nesting is error
