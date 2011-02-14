@@ -1,3 +1,8 @@
+2011-02-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* psximfs02/init.c: Disable EPERM test which does not work when POSIX
+	is disabled.
+
 2011-02-08	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* include/pmacros.h: Add PRIxblksize_t, PRIxblkcnt_t.

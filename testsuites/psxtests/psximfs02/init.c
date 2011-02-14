@@ -142,6 +142,7 @@ rtems_task Init(
   status = seteuid( 10 );
   rtems_test_assert( status == 0 );
 
+#if defined(RTEMS_POSIX_API)
   puts( "Attempt chmod on /node -- expect EPERM" );
   status = chmod( "/node", S_IRUSR );
   rtems_test_assert( status == -1 );
@@ -151,6 +152,10 @@ rtems_task Init(
   status = chown( "/node", 10, 10 );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EPERM );
+#else
+  puts( "Attempt chmod on /node -- EPERM only when POSIX enabled" );
+  puts( "Attempt chown on /node -- EPERM only when POSIX enabled" );
+#endif
 
   puts( "Changing euid back to 0 [root]" );
   status = seteuid( 0 );
