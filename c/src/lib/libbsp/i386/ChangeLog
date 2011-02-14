@@ -1,3 +1,7 @@
+2011-02-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* shared/irq/irq_asm.S: Fix typo.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/comm/gdb_glue.c, shared/comm/i386-stub.c,

@@ -5,7 +5,7 @@
  *  Copyright (C) 1998 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
+ *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
