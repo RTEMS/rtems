@@ -2,8 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = dpmem event io msg mp part region sem signal timer rate_monotonic \
-    ext
+MANAGERS = all
 
 rtems_tests_PROGRAMS = monitor
 monitor_SOURCES = init.c system.h
