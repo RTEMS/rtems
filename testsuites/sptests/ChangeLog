@@ -1,3 +1,7 @@
+2011-02-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* sp09/Makefile.am: Switch to all managers since this is all of them.
+
 2011-02-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp69/init.c: Use "ld" instead of PRId32 to print

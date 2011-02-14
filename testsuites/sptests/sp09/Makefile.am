@@ -2,8 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io clock message dual_ported_memory event multi_processor region \
-    semaphore signal rate_monotonic timer partition
+MANAGERS = all
 
 rtems_tests_PROGRAMS = sp09
 sp09_SOURCES = init.c delay.c isr.c screen01.c screen02.c screen03.c screen04.c \
