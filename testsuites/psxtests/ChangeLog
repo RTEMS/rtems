@@ -1,3 +1,8 @@
+2011-02-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxaio03/init.c, psxaio03/psxaio03.scn: Run in a reasonable amount of
+	time. Update screen.
+
 2011-02-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* psximfs02/init.c: Disable EPERM test which does not work when POSIX

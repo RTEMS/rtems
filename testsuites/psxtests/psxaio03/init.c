@@ -112,13 +112,12 @@ POSIX_Init (void *argument)
   status = aio_read (aiocbp[6]);
   rtems_test_assert (status != -1);
  
-  puts (" Init: going to sleep for 60 sec ");
-  sleep (60);
-  puts (" Init: going to sleep again for 60 sec ");
-  sleep (60);
-  puts (" Init: going to sleep again for 60 sec ");
-  sleep (60);
-  puts ("\n\n*** POSIX AIO TEST 03 ***");
+  puts (" Init: going to sleep for 5 sec ");
+  sleep (5);
+  puts (" Init: going to sleep again for 5 sec ");
+  sleep (5);
+  puts (" Init: going to sleep again for 5 sec ");
+  sleep (5);
   
   puts ("*** END OF POSIX AIO TEST 03 ***");
   

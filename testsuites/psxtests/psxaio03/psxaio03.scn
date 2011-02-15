@@ -1,0 +1,13 @@
+*** POSIX AIO TEST 03 ***
+ Init: Open files 
+ Init: [WQ] aio_write on 1st file 
+ Init: [WQ] aio_write on 2nd file 
+ Init: [WQ] aio_read on 2nd file add by priority 
+ Init: [WQ] aio_write on 3rd file 
+ Init: [WQ] aio_write on 4th file 
+ Init: [WQ] aio_write on 5th file  -- [WQ] full 
+ Init: [IQ] aio_write on 6th file 
+ Init: going to sleep for 5 sec 
+ Init: going to sleep again for 5 sec 
+ Init: going to sleep again for 5 sec 
+*** END OF POSIX AIO TEST 03 ***
