@@ -1,3 +1,8 @@
+2011-02-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Added MSR_UCLE, MSR_SPE, MSR_WE, and
+	MSR_UBLE defines.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/powerpc/registers.h, rtems/score/cpu.h:

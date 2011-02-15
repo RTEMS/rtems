@@ -19,8 +19,11 @@
 #define _RTEMS_POWERPC_REGISTERS_H
 
 /* Bit encodings for Machine State Register (MSR) */
+#define MSR_UCLE	(1<<26)		/* User-mode cache lock enable (e500) */
 #define MSR_VE		(1<<25)		/* Alti-Vec enable (7400+) */
+#define MSR_SPE		(1<<25)		/* SPE enable (e500) */
 #define MSR_POW		(1<<18)		/* Enable Power Management */
+#define MSR_WE		(1<<18)		/* Wait state enable (e500) */
 #define MSR_TGPR	(1<<17)		/* TLB Update registers in use */
 #define MSR_CE		(1<<17)		/* BookE critical interrupt */
 #define MSR_ILE		(1<<16)		/* Interrupt Little-Endian enable */
@@ -30,6 +33,7 @@
 #define MSR_ME		(1<<12)		/* Machine Check enable */
 #define MSR_FE0		(1<<11)		/* Floating Exception mode 0 */
 #define MSR_SE		(1<<10)		/* Single Step */
+#define MSR_UBLE	(1<<10)		/* User-mode BTB lock enable (e500) */
 #define MSR_BE		(1<<9)		/* Branch Trace */
 #define MSR_DE		(1<<9)		/* BookE debug exception */
 #define MSR_FE1		(1<<8)		/* Floating Exception mode 1 */
