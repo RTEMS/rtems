@@ -1,3 +1,11 @@
+2011-02-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ChangeLog, start/start.S: Add HLT instruction on exit.
+
+2011-02-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* start/start.S: Add HLT instruction on exit.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspstart.c:

@@ -121,6 +121,7 @@ loop4:	p0 +=1;
 	call (p0);
 	sp += 12;
 
+	HLT
 	p0.h = _exit;
 	p0.l = _exit;
 	jump (p0);
