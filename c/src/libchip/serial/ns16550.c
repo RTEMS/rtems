@@ -49,6 +49,8 @@
   #ifdef BSP_SHARED_HANDLER_SUPPORT
     #define BSP_FEATURE_IRQ_LEGACY_SHARED_HANDLER_SUPPORT
   #endif
+#elif defined(__i386__)
+  #include <bsp/irq.h>
 #endif
 
 /*
@@ -472,7 +474,6 @@ NS16550_STATIC int ns16550_set_attributes(
   return 0;
 }
 
-#if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
 
 /**
  * @brief Process interrupt.
@@ -521,6 +522,7 @@ NS16550_STATIC void ns16550_process( int minor)
     }
   } while ((get( port, NS16550_INTERRUPT_ID) & SP_IID_0) == 0);
 }
+#if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
 #endif
 
 /**
@@ -578,14 +580,12 @@ NS16550_STATIC void ns16550_enable_interrupts(
   (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, mask);
 }
 
-#if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
-  NS16550_STATIC rtems_isr ns16550_isr(void *arg)
-  {
+ NS16550_STATIC rtems_isr ns16550_isr(void *arg)
+ {
     int minor = (int) arg;
 
     ns16550_process( minor);
-  }
-#endif
+ }
 
 /*
  *  ns16550_initialize_interrupts
@@ -595,8 +595,8 @@ NS16550_STATIC void ns16550_enable_interrupts(
 NS16550_STATIC void ns16550_initialize_interrupts( int minor)
 {
 #if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
-  console_tbl *c = &Console_Port_Tbl [minor];
 #endif
+  console_tbl *c = &Console_Port_Tbl [minor];
   console_data *d = &Console_Port_Data [minor];
 
   d->bActive = false;
@@ -644,6 +644,23 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
       #endif
       if (rv == 0) {
         /* FIXME */
+        printk( "%s: Error: Install interrupt handler\n", __func__);
+        rtems_fatal_error_occurred( 0xdeadbeef);
+      }
+    }
+  #elif defined(__i386__)
+    {
+      int rv = 0;
+      rtems_irq_connect_data cd = {
+        c->ulIntVector,
+        ns16550_isr,
+        (void *) minor,
+        NULL,
+        NULL,
+        NULL
+      };
+      rv = BSP_install_rtems_irq_handler( &cd);
+      if (rv == 0) {
         printk( "%s: Error: Install interrupt handler\n", __func__);
         rtems_fatal_error_occurred( 0xdeadbeef);
       }

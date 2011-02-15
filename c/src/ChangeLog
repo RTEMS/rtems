@@ -1,3 +1,8 @@
+2011-02-15	Jennifer Averett
+
+	* libchip/serial/ns16550.c, libchip/serial/ns16550_p.h: Support i386
+	style IRQs.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/smc91111config.h:
