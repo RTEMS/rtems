@@ -1,3 +1,12 @@
+2011-02-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ChangeLog, shared/start/start.S: Add HLT instruction on exit.
+
+2011-02-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bf537Stamp/ChangeLog, bf537Stamp/start/start.S, shared/start/start.S:
+	Add HLT instruction on exit.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

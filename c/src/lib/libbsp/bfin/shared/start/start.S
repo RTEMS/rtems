@@ -94,6 +94,7 @@ __start:
 
     call (p0);
 
+    HLT
     p0.l = _exit;
     p0.h = _exit;
     P3 = P4;
