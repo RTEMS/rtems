@@ -494,8 +494,7 @@ rtems_capture_destroy_capture_task (rtems_capture_task_t* task)
 
     rtems_interrupt_enable (level);
 
-    if (task)
-      _Workspace_Free (task);
+    _Workspace_Free (task);
   }
 }
 

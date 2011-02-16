@@ -225,26 +225,19 @@ bool _Thread_Initialize(
     return true;
 
 failed:
-  if ( the_thread->libc_reent )
-    _Workspace_Free( the_thread->libc_reent );
+  _Workspace_Free( the_thread->libc_reent );
 
   for ( i=0 ; i <= THREAD_API_LAST ; i++ )
-    if ( the_thread->API_Extensions[i] )
-      _Workspace_Free( the_thread->API_Extensions[i] );
+    _Workspace_Free( the_thread->API_Extensions[i] );
 
-  if ( extensions_area )
-    (void) _Workspace_Free( extensions_area );
+  _Workspace_Free( extensions_area );
 
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    if ( fp_area )
-      (void) _Workspace_Free( fp_area );
+    _Workspace_Free( fp_area );
   #endif
 
-  if ( sched )
-    (void) _Workspace_Free( sched );
+   _Workspace_Free( sched );
 
    _Thread_Stack_Free( the_thread );
   return false;
-
-
 }

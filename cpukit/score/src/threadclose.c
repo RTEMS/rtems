@@ -101,8 +101,7 @@ void _Thread_Close(
 #endif
   the_thread->fp_context = NULL;
 
-  if ( the_thread->Start.fp_context )
-    (void) _Workspace_Free( the_thread->Start.fp_context );
+  _Workspace_Free( the_thread->Start.fp_context );
 #endif
 
   /*
@@ -112,7 +111,6 @@ void _Thread_Close(
   _Thread_Stack_Free( the_thread );
   the_thread->Start.stack = NULL;
 
-  if ( the_thread->extensions )
-    (void) _Workspace_Free( the_thread->extensions );
+  _Workspace_Free( the_thread->extensions );
   the_thread->extensions = NULL;
 }

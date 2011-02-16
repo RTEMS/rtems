@@ -270,7 +270,7 @@ void _POSIX_Threads_Delete_extension(
 
   deleted->API_Extensions[ THREAD_API_POSIX ] = NULL;
 
-  (void) _Workspace_Free( api );
+  _Workspace_Free( api );
 }
 
 /*

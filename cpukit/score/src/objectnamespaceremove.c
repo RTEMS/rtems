@@ -26,7 +26,7 @@ void _Objects_Namespace_remove(
     /*
      *  If this is a string format name, then free the memory.
      */
-    if ( information->is_string && the_object->name.name_p )
+    if ( information->is_string )
        _Workspace_Free( (void *)the_object->name.name_p );
   #endif
 

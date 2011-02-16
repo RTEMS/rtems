@@ -79,7 +79,7 @@ void *_Workspace_Allocate(
 /*
  *  _Workspace_Free
  */
-bool _Workspace_Free(
+void _Workspace_Free(
   void *block
 )
 {
@@ -91,7 +91,8 @@ bool _Workspace_Free(
       __builtin_return_address( 1 )
     );
   #endif
-   return _Heap_Free( &_Workspace_Area, block );
+   if (block)
+     _Heap_Free( &_Workspace_Area, block );
 }
 
 /*

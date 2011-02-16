@@ -25,6 +25,5 @@ void _POSIX_Keys_Free_memory(
   uint32_t            the_api;
 
   for ( the_api = 1; the_api <= OBJECTS_APIS_LAST; the_api++ )
-    if ( the_key->Values[ the_api ] )
-      _Workspace_Free( the_key->Values[ the_api ] );
+    _Workspace_Free( the_key->Values[ the_api ] );
 }

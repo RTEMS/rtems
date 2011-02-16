@@ -47,10 +47,8 @@ bool _Objects_Set_name(
     if ( !d )
       return false;
 
-    if ( the_object->name.name_p ) {
-      _Workspace_Free( (void *)the_object->name.name_p );
-      the_object->name.name_p = NULL;
-    }
+    _Workspace_Free( (void *)the_object->name.name_p );
+    the_object->name.name_p = NULL;
 
     strncpy( d, name, length );
     d[length] = '\0';

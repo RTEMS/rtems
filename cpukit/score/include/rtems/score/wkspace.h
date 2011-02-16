@@ -70,10 +70,12 @@ void *_Workspace_Allocate(
  *
  *  @param block is the memory to free
  *
- *  @return true if the free was successful.
+ *  @note If @a block is equal to NULL, then the request is ignored.
+ *        This allows the caller to not worry about whether or not
+ *        a pointer is NULL.
  */
 
-bool _Workspace_Free(
+void _Workspace_Free(
   void *block
 );
 

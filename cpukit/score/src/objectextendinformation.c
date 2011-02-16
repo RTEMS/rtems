@@ -221,8 +221,7 @@ void _Objects_Extend_information(
 
     _ISR_Enable( level );
 
-    if ( old_tables )
-      _Workspace_Free( old_tables );
+    _Workspace_Free( old_tables );
 
     block_count++;
   }
