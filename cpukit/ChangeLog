@@ -1,3 +1,8 @@
+2011-02-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/src/wkspace.c: Removed NULL pointer check from
+	_Workspace_Free().
+
 2011-02-15	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* libmisc/capture/capture.c, posix/src/keyfreememory.c,

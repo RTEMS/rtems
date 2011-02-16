@@ -91,8 +91,7 @@ void _Workspace_Free(
       __builtin_return_address( 1 )
     );
   #endif
-   if (block)
-     _Heap_Free( &_Workspace_Area, block );
+  _Heap_Free( &_Workspace_Area, block );
 }
 
 /*
