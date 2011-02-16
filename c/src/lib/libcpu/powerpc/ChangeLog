@@ -1,3 +1,9 @@
+2011-02-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/powerpc-utility.h: Fixed LINKER_SYMBOL() for
+	assembler compatibilty.  Added synchronization, cache, and alternate
+	time base functions.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mpc55xx/include/mpc55xx.h:

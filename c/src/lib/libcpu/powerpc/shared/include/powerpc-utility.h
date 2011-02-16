@@ -8,7 +8,7 @@
  */
 
 /*
- * Copyright (c) 2008
+ * Copyright (c) 2008, 2010, 2011
  * Embedded Brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -48,7 +48,7 @@ extern "C" {
 
 #include <libcpu/cpuIdent.h>
 
-#define LINKER_SYMBOL(sym) extern char sym []
+#define LINKER_SYMBOL(sym) extern char sym [];
 
 /**
  * @brief Read one byte from @a src.
@@ -209,6 +209,167 @@ static inline void ppc_synchronize_instructions(void)
   RTEMS_COMPILER_MEMORY_BARRIER();
 
   __asm__ volatile ("isync");
+}
+
+static inline void ppc_enforce_in_order_execution_of_io(void)
+{
+  RTEMS_COMPILER_MEMORY_BARRIER();
+
+  __asm__ volatile ("eieio");
+}
+
+static inline void ppc_data_cache_block_flush(void *addr)
+{
+  __asm__ volatile (
+    "dcbf 0, %0"
+    :
+    : "r" (addr)
+    : "memory"
+  );
+}
+
+static inline void ppc_data_cache_block_flush_2(
+  void *base,
+  void *offset
+)
+{
+  __asm__ volatile (
+    "dcbf %0, %1"
+    :
+    : "b" (base), "r" (offset)
+    : "memory"
+  );
+}
+
+static inline void ppc_data_cache_block_invalidate(void *addr)
+{
+  __asm__ volatile (
+    "dcbi 0, %0"
+    :
+    : "r" (addr)
+    : "memory"
+  );
+}
+
+static inline void ppc_data_cache_block_invalidate_2(
+  void *base,
+  void *offset
+)
+{
+  __asm__ volatile (
+    "dcbi %0, %1"
+    :
+    : "b" (base), "r" (offset)
+    : "memory"
+  );
+}
+
+static inline void ppc_data_cache_block_store(void *addr)
+{
+  __asm__ volatile (
+    "dcbst 0, %0"
+    :
+    : "r" (addr)
+  );
+}
+
+static inline void ppc_data_cache_block_store_2(
+  void *base,
+  void *offset
+)
+{
+  __asm__ volatile (
+    "dcbst %0, %1"
+    :
+    : "b" (base), "r" (offset)
+    : "memory"
+  );
+}
+
+static inline void ppc_data_cache_block_touch(void *addr)
+{
+  __asm__ volatile (
+    "dcbt 0, %0"
+    :
+    : "r" (addr)
+  );
+}
+
+static inline void ppc_data_cache_block_touch_2(
+  void *base,
+  void *offset
+)
+{
+  __asm__ volatile (
+    "dcbt %0, %1"
+    :
+    : "b" (base), "r" (offset)
+  );
+}
+
+static inline void ppc_data_cache_block_touch_for_store(void *addr)
+{
+  __asm__ volatile (
+    "dcbtst 0, %0"
+    :
+    : "r" (addr)
+  );
+}
+
+static inline void ppc_data_cache_block_touch_for_store_2(
+  void *base,
+  void *offset
+)
+{
+  __asm__ volatile (
+    "dcbtst %0, %1"
+    :
+    : "b" (base), "r" (offset)
+  );
+}
+
+static inline void ppc_data_cache_block_clear_to_zero(void *addr)
+{
+  __asm__ volatile (
+    "dcbz 0, %0"
+    :
+    : "r" (addr)
+    : "memory"
+  );
+}
+
+static inline void ppc_data_cache_block_clear_to_zero_2(
+  void *base,
+  void *offset
+)
+{
+  __asm__ volatile (
+    "dcbz %0, %1"
+    :
+    : "b" (base), "r" (offset)
+    : "memory"
+  );
+}
+
+static inline void ppc_instruction_cache_block_invalidate(void *addr)
+{
+  __asm__ volatile (
+    "icbi 0, %0"
+    :
+    : "r" (addr)
+  );
+}
+
+static inline void ppc_instruction_cache_block_invalidate_2(
+  void *base,
+  void *offset
+)
+{
+  __asm__ volatile (
+    "icbi %0, %1"
+    :
+    : "b" (base), "r" (offset)
+  );
 }
 
 /**
@@ -573,6 +734,41 @@ static inline uint64_t ppc_time_base_64(void)
 static inline void ppc_set_time_base_64(uint64_t val)
 {
   PPC_Set_timebase_register(val);
+}
+
+static inline uint32_t ppc_alternate_time_base(void)
+{
+  return PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_ATBL);
+}
+
+static inline uint32_t ppc_alternate_time_base_upper(void)
+{
+  return PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_ATBU);
+}
+
+static inline uint64_t ppc_alternate_time_base_64(void)
+{
+  uint32_t atbl;
+  uint32_t atbu_0;
+  uint32_t atbu_1;
+
+  do {
+    atbu_0 = ppc_alternate_time_base_upper();
+    atbl = ppc_alternate_time_base();
+    atbu_1 = ppc_alternate_time_base_upper();
+  } while (atbu_0 != atbu_1);
+
+  return (((uint64_t) atbu_1) << 32) | ((uint64_t) atbl);
+}
+
+static inline uint32_t ppc_processor_id(void)
+{
+  return PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_PIR);
+}
+
+static inline void ppc_set_processor_id(uint32_t val)
+{
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(BOOKE_PIR, val);
 }
 
 void ppc_code_copy(void *dest, const void *src, size_t n);
