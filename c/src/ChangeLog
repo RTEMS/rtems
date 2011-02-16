@@ -1,3 +1,8 @@
+2011-02-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/serial/ns16550.c: Revert previous commit and extend existing
+	mechanic.
+
 2011-02-15	Jennifer Averett
 
 	* libchip/serial/ns16550.c, libchip/serial/ns16550_p.h: Support i386
