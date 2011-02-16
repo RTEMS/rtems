@@ -1,3 +1,24 @@
+2011-02-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ada/Makefile.am, ada/preinstall.am, ada/rtems.adb, ada/rtems.ads:
+	Split RTEMS Ada95 binding into a master package and a child package
+	per Manager. This is better Ada style.
+	* ada/rtems-barrier.adb, ada/rtems-barrier.ads, ada/rtems-clock.adb,
+	ada/rtems-clock.ads, ada/rtems-cpu_usage.ads, ada/rtems-debug.adb,
+	ada/rtems-debug.ads, ada/rtems-event.adb, ada/rtems-event.ads,
+	ada/rtems-extension.adb, ada/rtems-extension.ads,
+	ada/rtems-fatal.adb, ada/rtems-fatal.ads, ada/rtems-interrupt.ads,
+	ada/rtems-io.adb, ada/rtems-io.ads, ada/rtems-message_queue.adb,
+	ada/rtems-message_queue.ads, ada/rtems-object.adb,
+	ada/rtems-object.ads, ada/rtems-partition.adb,
+	ada/rtems-partition.ads, ada/rtems-port.adb, ada/rtems-port.ads,
+	ada/rtems-rate_monotonic.adb, ada/rtems-rate_monotonic.ads,
+	ada/rtems-region.adb, ada/rtems-region.ads, ada/rtems-semaphore.adb,
+	ada/rtems-semaphore.ads, ada/rtems-signal.adb, ada/rtems-signal.ads,
+	ada/rtems-stack_checker.ads, ada/rtems-tasks.adb,
+	ada/rtems-tasks.ads, ada/rtems-timer.adb, ada/rtems-timer.ads: New
+	files.
+
 2011-02-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/serial/ns16550.c: Revert previous commit and extend existing
