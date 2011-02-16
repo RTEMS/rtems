@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 
 package SPTEST is
 
@@ -47,7 +48,7 @@ package SPTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -76,7 +77,7 @@ package SPTEST is
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_1);
 
@@ -89,7 +90,7 @@ package SPTEST is
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_2);
 

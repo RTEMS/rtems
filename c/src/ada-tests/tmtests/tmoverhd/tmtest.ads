@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 with SYSTEM;
 with System.Storage_Elements;
 
@@ -64,7 +65,7 @@ package TMTEST is
 
    INTERNAL_PORT_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 255 )
       of RTEMS.UNSIGNED8;
-   for INTERNAL_PORT_AREA use at INTERNAL_PORT_AREA_ADDRESS;
+   for INTERNAL_PORT_AREA'Address use INTERNAL_PORT_AREA_ADDRESS;
 
 --
 --  The following area defines a memory area to be used as the
@@ -76,7 +77,7 @@ package TMTEST is
 
    EXTERNAL_PORT_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 255 )
       of RTEMS.UNSIGNED8;
-   for EXTERNAL_PORT_AREA use at EXTERNAL_PORT_AREA_ADDRESS;
+   for EXTERNAL_PORT_AREA'Address use EXTERNAL_PORT_AREA_ADDRESS;
 
 
 --
@@ -96,7 +97,7 @@ package TMTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -150,7 +151,7 @@ package TMTEST is
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_1);
 

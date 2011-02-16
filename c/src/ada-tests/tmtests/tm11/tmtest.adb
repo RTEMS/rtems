@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -26,16 +26,16 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
+with RTEMS.MESSAGE_QUEUE;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       TASK_ID : RTEMS.ID;
@@ -45,7 +45,7 @@ package body TMTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT_LINE( "*** TIME TEST 11 ***" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          1,
          251, 
          1024, 
@@ -56,7 +56,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
-      RTEMS.TASK_START( 
+      RTEMS.TASKS.START( 
          TASK_ID, 
          TMTEST.TEST_INIT'ACCESS, 
          0, 
@@ -64,22 +64,21 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_INIT
 --
 
    procedure TEST_INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
-      TASK_ENTRY     : RTEMS.TASK_ENTRY;
-      PRIORITY       : RTEMS.TASK_PRIORITY;
+      TASK_ENTRY     : RTEMS.TASKS.ENTRY_POINT;
+      PRIORITY       : RTEMS.TASKS.PRIORITY;
       TASK_ID        : RTEMS.ID;
       BUFFER         : TMTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
@@ -92,7 +91,7 @@ package body TMTEST is
 -- MESSAGE_QUEUE_RECEIVE.  Upon completion of this loop all created tasks
 -- are blocked.
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          RTEMS.BUILD_NAME( 'M', 'Q', '1', ' ' ),
          TIME_TEST_SUPPORT.OPERATION_COUNT,
          16,
@@ -107,7 +106,7 @@ package body TMTEST is
       for INDEX in 0 .. TIME_TEST_SUPPORT.OPERATION_COUNT - 1
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
             PRIORITY, 
             1024, 
@@ -126,28 +125,28 @@ package body TMTEST is
             TASK_ENTRY := TMTEST.MIDDLE_TASKS'ACCESS;
          end if;
 
-         RTEMS.TASK_START( TASK_ID, TASK_ENTRY, 0, STATUS );
+         RTEMS.TASKS.START( TASK_ID, TASK_ENTRY, 0, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
 
       end loop;
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.MESSAGE_QUEUE_SEND( 
+         RTEMS.MESSAGE_QUEUE.SEND( 
             TMTEST.QUEUE_ID,
             BUFFER_POINTER,
             16,
             STATUS
          );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
    end TEST_INIT;
 
---PAGE
 -- 
 --  HIGH_TASK
 --
 
    procedure HIGH_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : TMTEST.BUFFER;
@@ -158,7 +157,7 @@ package body TMTEST is
 
       BUFFER_POINTER := BUFFER'ADDRESS;
 
-      RTEMS.MESSAGE_QUEUE_RECEIVE( 
+      RTEMS.MESSAGE_QUEUE.RECEIVE( 
          TMTEST.QUEUE_ID,
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -182,13 +181,12 @@ package body TMTEST is
 
    end HIGH_TASK;
 
---PAGE
 -- 
 --  MIDDLE_TASKS
 --
 
    procedure MIDDLE_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : TMTEST.BUFFER;
@@ -199,7 +197,7 @@ package body TMTEST is
  
       BUFFER_POINTER := BUFFER'ADDRESS;
 
-      RTEMS.MESSAGE_QUEUE_RECEIVE( 
+      RTEMS.MESSAGE_QUEUE.RECEIVE( 
          TMTEST.QUEUE_ID,
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -207,13 +205,15 @@ package body TMTEST is
          MESSAGE_SIZE,
          STATUS
       );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
  
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          TMTEST.QUEUE_ID,
          BUFFER_POINTER,
          16,
          STATUS
       );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
    end MIDDLE_TASKS;
 

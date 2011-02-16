@@ -25,6 +25,7 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
+with RTEMS.CLOCK;
 
 package body TMTEST is
 
@@ -34,7 +35,7 @@ package body TMTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -47,7 +48,7 @@ package body TMTEST is
 
       TMTEST.TASK_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'A', '1', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          TMTEST.TASK_NAME( 1 ), 
          254, 
          2048, 
@@ -58,7 +59,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          TMTEST.TASK_ID( 1 ),
          TMTEST.TASK_1'ACCESS,
          0,
@@ -66,7 +67,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
@@ -120,14 +121,14 @@ package body TMTEST is
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       NAME           : RTEMS.NAME;
       OVERHEAD       : RTEMS.UNSIGNED32;
       ID             : RTEMS.ID;
-      IN_PRIORITY    : RTEMS.TASK_PRIORITY;
-      OUT_PRIORITY   : RTEMS.TASK_PRIORITY;
+      IN_PRIORITY    : RTEMS.TASKS.PRIORITY;
+      OUT_PRIORITY   : RTEMS.TASKS.PRIORITY;
       IN_MODE        : RTEMS.MODE;
       MASK           : RTEMS.MODE;
       OUT_MODE       : RTEMS.MODE;
@@ -437,7 +438,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            DUMMY_RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+            DUMMY_RTEMS.CLOCK_GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -629,7 +630,7 @@ TEST_SUPPORT.PAUSE;
                NAME, 
                128,
                RTEMS.DEFAULT_ATTRIBUTES,
-               RTEMS.NO_PRIORITY,
+               RTEMS.TASKS.NO_PRIORITY,
                ID, 
                STATUS 
             );

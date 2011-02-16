@@ -10,7 +10,7 @@
 --
 --
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -22,19 +22,22 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.MESSAGE_QUEUE;
+with RTEMS.PARTITION;
+with RTEMS.SEMAPHORE;
+with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body MPTEST is
 
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -59,7 +62,7 @@ package body MPTEST is
       if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Attempting to create Test_task (Global)" );
-         RTEMS.TASK_CREATE(
+         RTEMS.TASKS.CREATE(
             MPTEST.TASK_NAME( 1 ),
             1,
             2048,
@@ -76,7 +79,7 @@ package body MPTEST is
          TEXT_IO.PUT_LINE( "task_create correctly returned TOO_MANY" );
 
          TEXT_IO.PUT_LINE( "Attempting to create Message Queue (Global)" );
-         RTEMS.MESSAGE_QUEUE_CREATE(
+         RTEMS.MESSAGE_QUEUE.CREATE(
             MPTEST.QUEUE_NAME( 1 ),
             3,
             RTEMS.GLOBAL + RTEMS.LIMIT,
@@ -93,7 +96,7 @@ package body MPTEST is
          );
 
          TEXT_IO.PUT_LINE( "Creating Semaphore (Global)" );
-         RTEMS.SEMAPHORE_CREATE(
+         RTEMS.SEMAPHORE.CREATE(
             MPTEST.SEMAPHORE_NAME( 1 ),
             1,
             RTEMS.GLOBAL,
@@ -108,7 +111,7 @@ package body MPTEST is
          TEXT_IO.PUT_LINE( "semaphore_create correctly returned TOO_MANY" );
 
          TEXT_IO.PUT_LINE( "Creating Partition (Global)" );
-         RTEMS.PARTITION_CREATE(
+         RTEMS.PARTITION.CREATE(
             MPTEST.PARTITION_NAME( 1 ),
             MPTEST.PARTITION_AREA( 0 )'ADDRESS,
             128,

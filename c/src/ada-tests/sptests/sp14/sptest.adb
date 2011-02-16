@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -25,16 +25,17 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 with INTERFACES; use INTERFACES;
+with RTEMS.TIMER;
+with RTEMS.SIGNAL;
 
 package body SPTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -46,7 +47,7 @@ package body SPTEST is
       SPTEST.TASK_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'A', '1', ' ' );
       SPTEST.TASK_NAME( 2 ) := RTEMS.BUILD_NAME(  'T', 'A', '2', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          1, 
          RTEMS.MINIMUM_STACK_SIZE * 2, 
@@ -57,7 +58,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 2 ), 
          1, 
          RTEMS.MINIMUM_STACK_SIZE * 2, 
@@ -68,7 +69,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA2" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -76,7 +77,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 2 ),
          SPTEST.TASK_2'ACCESS,
          0,
@@ -86,19 +87,18 @@ package body SPTEST is
 
       SPTEST.TIMER_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'M', '1', ' ' );
 
-      RTEMS.TIMER_CREATE( 
+      RTEMS.TIMER.CREATE( 
          SPTEST.TIMER_NAME( 1 ), 
          SPTEST.TIMER_ID( 1 ),
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE OF TM1" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  SIGNAL_3_TO_TASK_1
 --
@@ -110,7 +110,7 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.SIGNAL_SEND( SPTEST.TASK_ID( 1 ), RTEMS.SIGNAL_3, STATUS );
+      RTEMS.SIGNAL.SEND( SPTEST.TASK_ID( 1 ), RTEMS.SIGNAL_3, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_SEND of 3" );
 
       SPTEST.TIMER_GOT_THIS_ID      := ID;
@@ -120,13 +120,12 @@ package body SPTEST is
 
    end SIGNAL_3_TO_TASK_1;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       PREVIOUS_MODE : RTEMS.MODE;
@@ -134,7 +133,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.PUT_LINE( "TA1 - signal_catch - INTERRUPT_LEVEL( 3 )" );
-      RTEMS.SIGNAL_CATCH( 
+      RTEMS.SIGNAL.CATCH( 
          SPTEST.PROCESS_ASR'ACCESS, 
          RTEMS.INTERRUPT_LEVEL( 3 ), 
          STATUS 
@@ -142,34 +141,34 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_CATCH INTERRUPT(3)" );
    
       TEXT_IO.PUT_LINE( "TA1 - signal_send - SIGNAL_16 to self" );
-      RTEMS.SIGNAL_SEND( RTEMS.SELF, RTEMS.SIGNAL_16, STATUS );
+      RTEMS.SIGNAL.SEND( RTEMS.SELF, RTEMS.SIGNAL_16, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( 
          STATUS, 
          "SIGNAL_SEND - SIGNAL_16 to SELF"
       );
 
       TEXT_IO.PUT_LINE( "TA1 - signal_send - SIGNAL_0 to self" );
-      RTEMS.SIGNAL_SEND( RTEMS.SELF, RTEMS.SIGNAL_0, STATUS );
+      RTEMS.SIGNAL.SEND( RTEMS.SELF, RTEMS.SIGNAL_0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( 
          STATUS, 
          "SIGNAL_SEND - SIGNAL_0 to SELF"
       );
 
       TEXT_IO.PUT_LINE( "TA1 - signal_catch - NO_ASR" );
-      RTEMS.SIGNAL_CATCH(SPTEST.PROCESS_ASR'ACCESS, RTEMS.NO_ASR, STATUS);
+      RTEMS.SIGNAL.CATCH(SPTEST.PROCESS_ASR'ACCESS, RTEMS.NO_ASR, STATUS);
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_CATCH - NO_ASR" );
 
       TEST_SUPPORT.PAUSE;
 
       TEXT_IO.PUT_LINE( "TA1 - signal_send - SIGNAL_1 to self" );
-      RTEMS.SIGNAL_SEND( RTEMS.SELF, RTEMS.SIGNAL_1, STATUS );
+      RTEMS.SIGNAL.SEND( RTEMS.SELF, RTEMS.SIGNAL_1, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( 
          STATUS, 
          "SIGNAL_SEND - SIGNAL_1 to SELF"
       );
 
       TEXT_IO.PUT_LINE( "TA1 - task_mode - disable ASRs" );
-      RTEMS.TASK_MODE( 
+      RTEMS.TASKS.MODE( 
          RTEMS.NO_ASR, 
          RTEMS.ASR_MASK, 
          PREVIOUS_MODE, 
@@ -181,7 +180,7 @@ package body SPTEST is
       SPTEST.TIMER_GOT_THIS_POINTER := RTEMS.NULL_ADDRESS;
 
       TEXT_IO.PUT_LINE( "TA1 - sending signal to SELF from timer" );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 1 ),
          TEST_SUPPORT.TICKS_PER_SECOND / 2,
          SPTEST.SIGNAL_3_TO_TASK_1'ACCESS,
@@ -220,7 +219,7 @@ package body SPTEST is
       end if;
 
       TEXT_IO.PUT_LINE( "TA1 - task_mode - enable ASRs" );
-      RTEMS.TASK_MODE( 
+      RTEMS.TASKS.MODE( 
          RTEMS.ASR, 
          RTEMS.ASR_MASK, 
          PREVIOUS_MODE, 
@@ -229,45 +228,44 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_MODE" );
 
       TEXT_IO.PUT_LINE( "TA1 - signal_catch - ASR ADDRESS of NULL" );
-      RTEMS.SIGNAL_CATCH( NULL, RTEMS.DEFAULT_MODES, STATUS );
+      RTEMS.SIGNAL.CATCH( NULL, RTEMS.DEFAULT_MODES, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( 
          STATUS, 
          "SIGNAL_CATCH - NULL ADDRESS"
       );
    
       TEXT_IO.PUT_LINE( "TA1 - task_delete - delete self" );
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end TASK_1;
 
---PAGE
 -- 
 --  TASK_2
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
       TEXT_IO.PUT_LINE( "TA2 - signal_send - SIGNAL_17 to TA1" );
-      RTEMS.SIGNAL_SEND( SPTEST.TASK_ID( 1 ), RTEMS.SIGNAL_17, STATUS );
+      RTEMS.SIGNAL.SEND( SPTEST.TASK_ID( 1 ), RTEMS.SIGNAL_17, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( 
          STATUS, 
          "SIGNAL_SEND - SIGNAL_17 to TA1"
       );
 
       TEXT_IO.PUT_LINE( "TA2 - task_wake_after - yield processor" );
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER YIELD" );
 
       TEXT_IO.PUT_LINE( 
          "TA2 - signal_send - SIGNAL_18 and SIGNAL_19 to TA1"
       );
-      RTEMS.SIGNAL_SEND( 
+      RTEMS.SIGNAL.SEND( 
          SPTEST.TASK_ID( 1 ), 
          RTEMS.SIGNAL_18 + RTEMS.SIGNAL_19,
          STATUS
@@ -278,7 +276,7 @@ package body SPTEST is
       );
 
       TEXT_IO.PUT_LINE( "TA2 - task_wake_after - yield processor" );
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER YIELD" );
 
       TEXT_IO.PUT_LINE( "*** END OF TEST 14 ***" );
@@ -286,7 +284,6 @@ package body SPTEST is
 
    end TASK_2;
 
---PAGE
 -- 
 --  PROCESS_ASR
 --
@@ -309,7 +306,7 @@ package body SPTEST is
       elsif THE_SIGNAL_SET = RTEMS.SIGNAL_0 or else 
               THE_SIGNAL_SET = RTEMS.SIGNAL_1 then
          TEXT_IO.PUT_LINE( "ASR - task_wake_after - yield processor" );
-         RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( 
             STATUS, 
             "TASK_WAKE_AFTER YIELD"

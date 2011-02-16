@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -26,16 +26,16 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
+with RTEMS.CLOCK;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS  : RTEMS.STATUS_CODES;
@@ -46,12 +46,11 @@ package body TMTEST is
 
       TMTEST.TEST_INIT;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_INIT
 --
@@ -61,7 +60,7 @@ package body TMTEST is
       STATUS     : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          1,
          128, 
          1024, 
@@ -72,10 +71,10 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
-      RTEMS.TASK_START( TASK_ID, TMTEST.TEST_TASK'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( TASK_ID, TMTEST.TEST_TASK'ACCESS, 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          1,
          254, 
          1024, 
@@ -86,22 +85,21 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
-      RTEMS.TASK_START( TASK_ID, TMTEST.TEST_TASK1'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( TASK_ID, TMTEST.TEST_TASK1'ACCESS, 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
    end TEST_INIT;
 
---PAGE
 -- 
 --  TEST_TASK
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       OVERHEAD     : RTEMS.UNSIGNED32;
-      OLD_PRIORITY : RTEMS.TASK_PRIORITY;
+      OLD_PRIORITY : RTEMS.TASKS.PRIORITY;
       OLD_MODE     : RTEMS.MODE;
       OLD_NOTE     : RTEMS.NOTEPAD_INDEX;
       TIME         : RTEMS.TIME_OF_DAY;
@@ -118,9 +116,9 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_SET_PRIORITY( 
+            RTEMS.TASKS.SET_PRIORITY( 
                TMTEST.TASK_ID,
-               RTEMS.CURRENT_PRIORITY,
+               RTEMS.TASKS.CURRENT_PRIORITY,
                OLD_PRIORITY,
                STATUS
             );
@@ -137,7 +135,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_SET_PRIORITY( 
+            RTEMS.TASKS.SET_PRIORITY( 
                TMTEST.TASK_ID,
                253,
                OLD_PRIORITY,
@@ -156,7 +154,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_MODE( 
+            RTEMS.TASKS.MODE( 
                RTEMS.CURRENT_MODE,
                RTEMS.CURRENT_MODE,
                OLD_MODE,
@@ -175,13 +173,13 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_MODE( 
+            RTEMS.TASKS.MODE( 
                RTEMS.INTERRUPT_LEVEL( 1 ),
                RTEMS.INTERRUPT_MASK,
                OLD_MODE,
                STATUS
             );
-            RTEMS.TASK_MODE( 
+            RTEMS.TASKS.MODE( 
                RTEMS.INTERRUPT_LEVEL( 0 ),
                RTEMS.INTERRUPT_MASK,
                OLD_MODE,
@@ -198,7 +196,7 @@ package body TMTEST is
       );
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.TASK_MODE( 
+         RTEMS.TASKS.MODE( 
             RTEMS.NO_ASR,
             RTEMS.ASR_MASK,
             OLD_MODE,
@@ -213,7 +211,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.TASK_MODE
       );
 
-      RTEMS.TASK_MODE( 
+      RTEMS.TASKS.MODE( 
          RTEMS.NO_PREEMPT,
          RTEMS.PREEMPT_MASK,
          OLD_MODE,
@@ -221,7 +219,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_MODE" );
 
-      RTEMS.TASK_SET_PRIORITY( 
+      RTEMS.TASKS.SET_PRIORITY( 
          TMTEST.TASK_ID,
          1,
          OLD_PRIORITY,
@@ -230,7 +228,7 @@ package body TMTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_PRIORITY" );
 
       TIMER_DRIVER.INITIALIZE;
-      RTEMS.TASK_MODE(          -- preempted by TEST_TASK1
+      RTEMS.TASKS.MODE(          -- preempted by TEST_TASK1
          RTEMS.PREEMPT,
          RTEMS.PREEMPT_MASK,
          OLD_MODE,
@@ -240,7 +238,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_SET_NOTE( 
+            RTEMS.TASKS.SET_NOTE( 
                TMTEST.TASK_ID,
                8,
                10,
@@ -259,7 +257,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_GET_NOTE( 
+            RTEMS.TASKS.GET_NOTE( 
                TMTEST.TASK_ID,
                8,
                OLD_NOTE,
@@ -280,7 +278,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.CLOCK_SET( 
+            RTEMS.CLOCK.SET( 
                TIME,
                STATUS
             );
@@ -297,7 +295,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+            RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
       TIME_TEST_SUPPORT.PUT_TIME( 
@@ -313,13 +311,12 @@ package body TMTEST is
 
    end TEST_TASK;
 
---PAGE
 -- 
 --  TEST_TASK1
 --
 
    procedure TEST_TASK1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS       : RTEMS.STATUS_CODES;
@@ -334,7 +331,8 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.TASK_MODE
       );
 
-      RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.SUSPEND( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "DOES NOT RETURN" );
 
    end TEST_TASK1;
 

@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -26,16 +26,16 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
+with RTEMS.MESSAGE_QUEUE;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS  : RTEMS.STATUS_CODES;
@@ -46,20 +46,19 @@ package body TMTEST is
 
       TMTEST.TEST_INIT;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_INIT
 --
 
    procedure TEST_INIT
    is
-      TASK_ENTRY     : RTEMS.TASK_ENTRY;
-      PRIORITY       : RTEMS.TASK_PRIORITY;
+      TASK_ENTRY     : RTEMS.TASKS.ENTRY_POINT;
+      PRIORITY       : RTEMS.TASKS.PRIORITY;
       OVERHEAD       : RTEMS.UNSIGNED32;
       TASK_ID        : RTEMS.ID;
       BUFFER         : TMTEST.BUFFER;
@@ -75,7 +74,7 @@ package body TMTEST is
       for INDEX in 0 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
             PRIORITY, 
             1024, 
@@ -96,12 +95,12 @@ package body TMTEST is
             TASK_ENTRY := TMTEST.MIDDLE_TASKS'ACCESS;
          end if;
 
-         RTEMS.TASK_START( TASK_ID, TASK_ENTRY, 0, STATUS );
+         RTEMS.TASKS.START( TASK_ID, TASK_ENTRY, 0, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
 
       end loop;
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          1,
          TIME_TEST_SUPPORT.OPERATION_COUNT,
          16,
@@ -120,7 +119,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.MESSAGE_QUEUE_RECEIVE( 
+            RTEMS.MESSAGE_QUEUE.RECEIVE( 
                TMTEST.QUEUE_ID,
                BUFFER_POINTER,
                RTEMS.NO_WAIT,
@@ -140,13 +139,12 @@ package body TMTEST is
 
    end TEST_INIT;
 
---PAGE
 -- 
 --  HIGH_TASK
 --
 
    procedure HIGH_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : TMTEST.BUFFER;
@@ -159,7 +157,7 @@ package body TMTEST is
 
       TIMER_DRIVER.INITIALIZE;
 
-      RTEMS.MESSAGE_QUEUE_RECEIVE( 
+      RTEMS.MESSAGE_QUEUE.RECEIVE( 
          TMTEST.QUEUE_ID,
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -170,13 +168,12 @@ package body TMTEST is
 
    end HIGH_TASK;
 
---PAGE
 -- 
 --  MIDDLE_TASKS
 --
 
    procedure MIDDLE_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : TMTEST.BUFFER;
@@ -187,7 +184,7 @@ package body TMTEST is
  
       BUFFER_POINTER := BUFFER'ADDRESS;
 
-      RTEMS.MESSAGE_QUEUE_RECEIVE( 
+      RTEMS.MESSAGE_QUEUE.RECEIVE( 
          TMTEST.QUEUE_ID,
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -198,13 +195,12 @@ package body TMTEST is
  
    end MIDDLE_TASKS;
 
---PAGE
 -- 
 --  LOW_TASK
 --
 
    procedure LOW_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
    begin

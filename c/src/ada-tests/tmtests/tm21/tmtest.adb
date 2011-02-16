@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -25,16 +25,22 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
+with RTEMS.MESSAGE_QUEUE;
+with RTEMS.PARTITION;
+with RTEMS.PORT;
+with RTEMS.RATE_MONOTONIC;
+with RTEMS.REGION;
+with RTEMS.SEMAPHORE;
+with RTEMS.TIMER;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       ID     : RTEMS.ID;
@@ -44,7 +50,7 @@ package body TMTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT_LINE( "*** TIME TEST 21 ***" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
          250,
          2048, 
@@ -55,21 +61,20 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE TASK_1" );
 
-      RTEMS.TASK_START( ID, TMTEST.TASK_1'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( ID, TMTEST.TASK_1'ACCESS, 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START TASK1" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       ID       : RTEMS.ID;
@@ -80,7 +85,7 @@ package body TMTEST is
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             INDEX,
             254,
             1024, 
@@ -91,7 +96,7 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
-         RTEMS.MESSAGE_QUEUE_CREATE( 
+         RTEMS.MESSAGE_QUEUE.CREATE( 
             INDEX,
             TIME_TEST_SUPPORT.OPERATION_COUNT,
             16,
@@ -101,17 +106,17 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_CREATE" );
 
-         RTEMS.SEMAPHORE_CREATE( 
+         RTEMS.SEMAPHORE.CREATE( 
             INDEX,
             TIME_TEST_SUPPORT.OPERATION_COUNT,
             RTEMS.DEFAULT_ATTRIBUTES,
-            RTEMS.NO_PRIORITY,
+            RTEMS.TASKS.NO_PRIORITY,
             ID,
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE" );
 
-         RTEMS.REGION_CREATE( 
+         RTEMS.REGION.CREATE( 
             INDEX,
             TMTEST.REGION_AREA'ADDRESS,
             2048,
@@ -122,7 +127,7 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_CREATE" );
 
-         RTEMS.PARTITION_CREATE( 
+         RTEMS.PARTITION.CREATE( 
             INDEX,
             TMTEST.PARTITION_AREA'ADDRESS,
             2048,
@@ -133,7 +138,7 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_CREATE" );
 
-         RTEMS.PORT_CREATE( 
+         RTEMS.PORT.CREATE( 
             INDEX,
             TMTEST.INTERNAL_PORT_AREA'ADDRESS,
             TMTEST.EXTERNAL_PORT_AREA'ADDRESS,
@@ -143,10 +148,10 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PORT_CREATE" );
 
-         RTEMS.TIMER_CREATE( INDEX, ID, STATUS );
+         RTEMS.TIMER.CREATE( INDEX, ID, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE" );
 
-         RTEMS.RATE_MONOTONIC_CREATE( INDEX, ID, STATUS );
+         RTEMS.RATE_MONOTONIC.CREATE( INDEX, ID, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "RATE_MONOTONIC_CREATE" );
 
       end loop;
@@ -161,7 +166,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_IDENT( INDEX, RTEMS.SEARCH_ALL_NODES, ID, STATUS );
+            RTEMS.TASKS.IDENT( INDEX, RTEMS.SEARCH_ALL_NODES, ID, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -176,7 +181,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.MESSAGE_QUEUE_IDENT( 
+            RTEMS.MESSAGE_QUEUE.IDENT( 
                INDEX, 
                RTEMS.SEARCH_ALL_NODES, 
                ID, 
@@ -196,7 +201,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.SEMAPHORE_IDENT( 
+            RTEMS.SEMAPHORE.IDENT( 
                INDEX, 
                RTEMS.SEARCH_ALL_NODES, 
                ID, 
@@ -216,7 +221,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.PARTITION_IDENT( 
+            RTEMS.PARTITION.IDENT( 
                INDEX, 
                RTEMS.SEARCH_ALL_NODES, 
                ID, 
@@ -236,7 +241,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.REGION_IDENT( INDEX, ID, STATUS );
+            RTEMS.REGION.IDENT( INDEX, ID, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -251,7 +256,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.PORT_IDENT( INDEX, ID, STATUS );
+            RTEMS.PORT.IDENT( INDEX, ID, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -266,7 +271,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_IDENT( INDEX, ID, STATUS );
+            RTEMS.TIMER.IDENT( INDEX, ID, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -281,7 +286,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.RATE_MONOTONIC_IDENT( INDEX, ID, STATUS );
+            RTEMS.RATE_MONOTONIC.IDENT( INDEX, ID, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 

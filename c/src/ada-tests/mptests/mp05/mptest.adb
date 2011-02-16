@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -22,19 +22,22 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.FATAL;
+with RTEMS.SIGNAL;
+with RTEMS.TASKS;
+with RTEMS.TIMER;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body MPTEST is
 
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -52,7 +55,7 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Creating Test_task (Global)" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          MPTEST.TASK_NAME( TEST_SUPPORT.NODE ), 
          1,
          2048, 
@@ -65,7 +68,7 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Starting Test_task (Global)" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.TASK_ID( 1 ),
          MPTEST.TEST_TASK'ACCESS,
          0,
@@ -76,7 +79,7 @@ package body MPTEST is
       MPTEST.TIMER_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'M', '1', ' ' );
       MPTEST.TIMER_NAME( 2 ) := RTEMS.BUILD_NAME(  'T', 'M', '2', ' ' );
 
-      RTEMS.TIMER_CREATE(
+      RTEMS.TIMER.CREATE(
          MPTEST.TIMER_NAME( TEST_SUPPORT.NODE ),
          MPTEST.TIMER_ID( 1 ),
          STATUS
@@ -85,12 +88,11 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Deleting initialization task" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 --
 --  PROCESS_ASR
 --
@@ -109,7 +111,7 @@ package body MPTEST is
          UNSIGNED32_IO.PUT( SIGNAL, BASE => 16 );
          TEXT_IO.NEW_LINE;
 
-         RTEMS.FATAL_ERROR_OCCURRED( 16#000F_0000# );
+         RTEMS.FATAL.ERROR_OCCURRED( 16#000F_0000# );
 
       end if;
 
@@ -117,7 +119,6 @@ package body MPTEST is
 
    end PROCESS_ASR;
 
---PAGE
 --
 --  STOP_TEST_TSR
 --
@@ -132,13 +133,12 @@ package body MPTEST is
 
    end STOP_TEST_TSR;
 
---PAGE
 --
 --  TEST_TASK
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS  : RTEMS.STATUS_CODES;
    begin
@@ -149,7 +149,7 @@ package body MPTEST is
       MPTEST.SIGNAL_COUNT  := 0;
 
       TEXT_IO.PUT_LINE( "signal_catch: initializing signal catcher" );
-      RTEMS.SIGNAL_CATCH( 
+      RTEMS.SIGNAL.CATCH( 
          MPTEST.PROCESS_ASR'ACCESS, 
          RTEMS.NO_ASR + RTEMS.NO_PREEMPT,
          STATUS
@@ -172,7 +172,7 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Getting TID of remote task" );
       loop
 
-         RTEMS.TASK_IDENT( 
+         RTEMS.TASKS.IDENT( 
             MPTEST.TASK_NAME( MPTEST.REMOTE_NODE ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.REMOTE_TID,
@@ -183,7 +183,7 @@ package body MPTEST is
 
       end loop;
 
-      RTEMS.TIMER_FIRE_AFTER(
+      RTEMS.TIMER.FIRE_AFTER(
          MPTEST.TIMER_ID( 1 ),
          3 * TEST_SUPPORT.TICKS_PER_SECOND,
          MPTEST.STOP_TEST_TSR'ACCESS,
@@ -196,7 +196,7 @@ package body MPTEST is
 
          TEXT_IO.PUT_LINE( "Sending signal to remote task" );
          loop
-            RTEMS.SIGNAL_SEND(
+            RTEMS.SIGNAL.SEND(
                MPTEST.REMOTE_TID,
                MPTEST.REMOTE_SIGNAL,
                STATUS
@@ -228,7 +228,7 @@ package body MPTEST is
 
             end if;
 
-            RTEMS.SIGNAL_SEND(
+            RTEMS.SIGNAL.SEND(
                MPTEST.REMOTE_TID,
                MPTEST.REMOTE_SIGNAL,
                STATUS

@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -22,19 +22,19 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body MPTEST is
 
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -52,7 +52,7 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Creating Test_task (Global)" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          MPTEST.TASK_NAME( TEST_SUPPORT.NODE ), 
          TEST_SUPPORT.NODE, 
          2048, 
@@ -65,7 +65,7 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Starting Test_task (Global)" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.TASK_ID( 1 ),
          MPTEST.TEST_TASK'ACCESS,
          0,
@@ -75,26 +75,25 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Deleting initialization task" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 --
 --  TEST_TASK
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       TID                 : RTEMS.ID;
-      PREVIOUS_PRIORITY   : RTEMS.TASK_PRIORITY;
-      PREVIOUS_PRIORITY_1 : RTEMS.TASK_PRIORITY;
+      PREVIOUS_PRIORITY   : RTEMS.TASKS.PRIORITY;
+      PREVIOUS_PRIORITY_1 : RTEMS.TASKS.PRIORITY;
       STATUS              : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
+      RTEMS.TASKS.IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_IDENT OF SELF" );
    
       TEXT_IO.PUT_LINE( "Getting TID of remote task" );
@@ -109,7 +108,7 @@ package body MPTEST is
 
       loop
 
-         RTEMS.TASK_IDENT( 
+         RTEMS.TASKS.IDENT( 
             MPTEST.TASK_NAME( MPTEST.REMOTE_NODE ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.REMOTE_TID,
@@ -120,7 +119,7 @@ package body MPTEST is
 
       end loop;
 
-      RTEMS.TASK_SET_PRIORITY(
+      RTEMS.TASKS.SET_PRIORITY(
          MPTEST.REMOTE_TID,
          TEST_SUPPORT.NODE,
          PREVIOUS_PRIORITY,
@@ -142,9 +141,9 @@ package body MPTEST is
 
       loop
 
-         RTEMS.TASK_SET_PRIORITY(
+         RTEMS.TASKS.SET_PRIORITY(
             RTEMS.SELF,
-            RTEMS.CURRENT_PRIORITY,
+            RTEMS.TASKS.CURRENT_PRIORITY,
             PREVIOUS_PRIORITY_1,
             STATUS
          );

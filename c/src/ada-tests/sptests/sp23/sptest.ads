@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 with SYSTEM;
 with System.Storage_Elements;
 
@@ -52,7 +53,7 @@ package SPTEST is
 
    INTERNAL_PORT_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 255 )
       of RTEMS.UNSIGNED8;
-   for INTERNAL_PORT_AREA use at INTERNAL_PORT_AREA_ADDRESS;
+   for INTERNAL_PORT_AREA'Address use INTERNAL_PORT_AREA_ADDRESS;
 
 --
 --  The following area defines a memory area to be used as the
@@ -64,7 +65,7 @@ package SPTEST is
 
    EXTERNAL_PORT_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 255 )
       of RTEMS.UNSIGNED8;
-   for EXTERNAL_PORT_AREA use at EXTERNAL_PORT_AREA_ADDRESS;
+   for EXTERNAL_PORT_AREA'Address use EXTERNAL_PORT_AREA_ADDRESS;
 
 --
 --  The following area defines a memory area to be used for 
@@ -76,7 +77,7 @@ package SPTEST is
 
    BELOW_PORT_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 255 )
       of RTEMS.UNSIGNED8;
-   for BELOW_PORT_AREA use at BELOW_PORT_AREA_ADDRESS;
+   for BELOW_PORT_AREA'Address use BELOW_PORT_AREA_ADDRESS;
 
 --
 --  The following area defines a memory area to be used for 
@@ -88,7 +89,7 @@ package SPTEST is
 
    ABOVE_PORT_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 255 )
       of RTEMS.UNSIGNED8;
-   for ABOVE_PORT_AREA use at ABOVE_PORT_AREA_ADDRESS;
+   for ABOVE_PORT_AREA'Address use ABOVE_PORT_AREA_ADDRESS;
 
 --
 --  INIT
@@ -99,7 +100,7 @@ package SPTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -112,7 +113,7 @@ package SPTEST is
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_1);
 

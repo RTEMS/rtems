@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -29,13 +29,12 @@ with TIMER_DRIVER;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS     : RTEMS.STATUS_CODES;
@@ -46,12 +45,11 @@ package body TMTEST is
 
       TMTEST.TEST_INIT;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_INIT
 --
@@ -59,14 +57,14 @@ package body TMTEST is
    procedure TEST_INIT
    is
       ID         : RTEMS.ID;
-      TASK_ENTRY : RTEMS.TASK_ENTRY;
+      TASK_ENTRY : RTEMS.TASKS.ENTRY_POINT;
       STATUS     : RTEMS.STATUS_CODES;
    begin
 
       for INDEX in 0 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
             128,
             1024, 
@@ -86,20 +84,19 @@ package body TMTEST is
             TASK_ENTRY := TMTEST.MIDDLE_TASKS'ACCESS;
          end if;
 
-         RTEMS.TASK_START( ID, TASK_ENTRY, 0, STATUS );
+         RTEMS.TASKS.START( ID, TASK_ENTRY, 0, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
 
       end loop;
 
    end TEST_INIT;
 
---PAGE
 -- 
 --  FIRST_TASK
 --
 
    procedure FIRST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -107,33 +104,33 @@ package body TMTEST is
 
       TIMER_DRIVER.INITIALIZE;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE" );
 
    end FIRST_TASK;
 
---PAGE
 -- 
 --  MIDDLE_TASKS
 --
 
    procedure MIDDLE_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE" );
 
    end MIDDLE_TASKS;
 
---PAGE
 -- 
 --  LAST_TASK
 --
 
    procedure LAST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
    begin

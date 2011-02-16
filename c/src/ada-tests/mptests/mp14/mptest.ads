@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 
 package MPTEST is
 
@@ -175,7 +176,7 @@ package MPTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -188,7 +189,7 @@ package MPTEST is
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TEST_TASK);
 
@@ -201,7 +202,7 @@ package MPTEST is
 --
  
    procedure DELAYED_EVENTS_TASK ( 
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, DELAYED_EVENTS_TASK);
 
@@ -214,7 +215,7 @@ package MPTEST is
 --
  
    procedure MESSAGE_QUEUE_TASK ( 
-      INDEX : in     RTEMS.TASK_ARGUMENT
+      INDEX : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, MESSAGE_QUEUE_TASK);
 
@@ -227,7 +228,7 @@ package MPTEST is
 --
  
    procedure PARTITION_TASK ( 
-      IGNORED : in     RTEMS.TASK_ARGUMENT
+      IGNORED : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, PARTITION_TASK);
 
@@ -240,7 +241,7 @@ package MPTEST is
 --
  
    procedure SEMAPHORE_TASK ( 
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, SEMAPHORE_TASK);
 

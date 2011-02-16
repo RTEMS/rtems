@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 
 package TMTEST is
 
@@ -46,7 +47,7 @@ package TMTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -70,7 +71,7 @@ package TMTEST is
 --
 
    procedure HIGH_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, HIGH_TASK);
 
@@ -84,7 +85,7 @@ package TMTEST is
 --
 
    procedure MIDDLE_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, MIDDLE_TASKS);
 
@@ -98,7 +99,7 @@ package TMTEST is
 --
 
    procedure LOW_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, LOW_TASK);
 

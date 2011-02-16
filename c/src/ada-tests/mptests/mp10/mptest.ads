@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 
 package MPTEST is
 
@@ -77,7 +78,7 @@ package MPTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -90,7 +91,7 @@ package MPTEST is
 --
 
    procedure TEST_TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TEST_TASK_1);
 
@@ -103,7 +104,7 @@ package MPTEST is
 --
  
    procedure TEST_TASK_2 ( 
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TEST_TASK_2);
 
@@ -116,7 +117,7 @@ package MPTEST is
 --
  
    procedure TEST_TASK_3 ( 
-      RESTART : in     RTEMS.TASK_ARGUMENT
+      RESTART : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TEST_TASK_3);
 

@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -28,16 +28,15 @@ with TIMER_DRIVER;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
-      TASK_ENTRY : RTEMS.TASK_ENTRY;
+      TASK_ENTRY : RTEMS.TASKS.ENTRY_POINT;
       STATUS     : RTEMS.STATUS_CODES;
    begin
 
@@ -49,7 +48,7 @@ package body TMTEST is
       for INDEX in 0 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
             TMTEST.TASK_PRIORITY, 
             1024, 
@@ -68,28 +67,27 @@ package body TMTEST is
             TASK_ENTRY := TMTEST.MIDDLE_TASKS'ACCESS;
          end if;
 
-         RTEMS.TASK_START( TMTEST.TASK_ID( INDEX ), TASK_ENTRY, 0, STATUS );
+         RTEMS.TASKS.START( TMTEST.TASK_ID( INDEX ), TASK_ENTRY, 0, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
 
       end loop;
 
       TMTEST.TASK_COUNT := 1;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  FIRST_TASK
 --
 
    procedure FIRST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
-      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 
@@ -98,7 +96,7 @@ package body TMTEST is
       TMTEST.TASK_PRIORITY := TMTEST.TASK_PRIORITY - 1;
       TMTEST.TASK_COUNT    := TMTEST.TASK_COUNT + 1;
 
-      RTEMS.TASK_SET_PRIORITY(
+      RTEMS.TASKS.SET_PRIORITY(
          TMTEST.TASK_ID( TMTEST.TASK_COUNT ), 
          TMTEST.TASK_PRIORITY,
          PREVIOUS_PRIORITY,
@@ -107,23 +105,22 @@ package body TMTEST is
 
    end FIRST_TASK;
 
---PAGE
 -- 
 --  MIDDLE_TASKS
 --
 
    procedure MIDDLE_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
-      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 
       TMTEST.TASK_PRIORITY := TMTEST.TASK_PRIORITY - 1;
       TMTEST.TASK_COUNT    := TMTEST.TASK_COUNT + 1;
 
-      RTEMS.TASK_SET_PRIORITY(
+      RTEMS.TASKS.SET_PRIORITY(
          TMTEST.TASK_ID( TMTEST.TASK_COUNT ), 
          TMTEST.TASK_PRIORITY,
          PREVIOUS_PRIORITY,
@@ -132,13 +129,12 @@ package body TMTEST is
 
    end MIDDLE_TASKS;
 
---PAGE
 -- 
 --  LAST_TASK
 --
 
    procedure LAST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
    begin

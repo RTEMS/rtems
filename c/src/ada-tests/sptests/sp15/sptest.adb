@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -23,16 +23,16 @@
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
+with RTEMS.PARTITION;
 
 package body SPTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -46,7 +46,7 @@ package body SPTEST is
       SPTEST.PARTITION_NAME( 1 ) := RTEMS.BUILD_NAME(  'P', 'T', '1', ' ' );
       SPTEST.PARTITION_NAME( 2 ) := RTEMS.BUILD_NAME(  'P', 'T', '2', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          4, 
          2048, 
@@ -57,7 +57,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -66,7 +66,7 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
       TEXT_IO.PUT_LINE( "INIT - partition_create - partition 1" );
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          SPTEST.PARTITION_NAME( 1 ),
          AREA_1'ADDRESS,
          4096,
@@ -78,7 +78,7 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_CREATE OF PT1" );
 
       TEXT_IO.PUT_LINE( "INIT - partition_create - partition 2" );
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          SPTEST.PARTITION_NAME( 2 ),
          AREA_2'ADDRESS,
          274,
@@ -89,12 +89,11 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_CREATE OF PT2" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  PUT_ADDRESS_FROM_AREA_1
 --
@@ -113,7 +112,6 @@ package body SPTEST is
 
    end PUT_ADDRESS_FROM_AREA_1;
 
---PAGE
 -- 
 --  PUT_ADDRESS_FROM_AREA_2
 --
@@ -131,13 +129,12 @@ package body SPTEST is
 
    end PUT_ADDRESS_FROM_AREA_2;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       PTID_1           : RTEMS.ID;
@@ -150,7 +147,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.PUT( "TA1 - partition_ident - partition 1 id = " );
-      RTEMS.PARTITION_IDENT( 
+      RTEMS.PARTITION.IDENT( 
          SPTEST.PARTITION_NAME( 1 ), 
          RTEMS.SEARCH_ALL_NODES, 
          PTID_1, 
@@ -161,7 +158,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
    
       TEXT_IO.PUT( "TA1 - partition_ident - partition 2 id = " );
-      RTEMS.PARTITION_IDENT( 
+      RTEMS.PARTITION.IDENT( 
          SPTEST.PARTITION_NAME( 2 ), 
          RTEMS.SEARCH_ALL_NODES, 
          PTID_2, 
@@ -174,7 +171,7 @@ package body SPTEST is
       TEXT_IO.PUT(
          "TA1 - partition_get_buffer - get buffer 1 from partition 1 - "
       );
-      RTEMS.PARTITION_GET_BUFFER( 
+      RTEMS.PARTITION.GET_BUFFER( 
          SPTEST.PARTITION_ID( 1 ), 
          BUFFER_ADDRESS_1,
          STATUS 
@@ -186,7 +183,7 @@ package body SPTEST is
       TEXT_IO.PUT(
          "TA1 - partition_get_buffer - get buffer 2 from partition 1 - "
       );
-      RTEMS.PARTITION_GET_BUFFER( 
+      RTEMS.PARTITION.GET_BUFFER( 
          SPTEST.PARTITION_ID( 1 ), 
          BUFFER_ADDRESS_2,
          STATUS 
@@ -198,7 +195,7 @@ package body SPTEST is
       TEXT_IO.PUT(
          "TA1 - partition_get_buffer - get buffer 1 from partition 2 - "
       );
-      RTEMS.PARTITION_GET_BUFFER( 
+      RTEMS.PARTITION.GET_BUFFER( 
          SPTEST.PARTITION_ID( 2 ), 
          BUFFER_ADDRESS_3,
          STATUS 
@@ -210,7 +207,7 @@ package body SPTEST is
       TEXT_IO.PUT(
          "TA1 - partition_get_buffer - get buffer 2 from partition 2 - "
       );
-      RTEMS.PARTITION_GET_BUFFER( 
+      RTEMS.PARTITION.GET_BUFFER( 
          SPTEST.PARTITION_ID( 2 ), 
          BUFFER_ADDRESS_4,
          STATUS 
@@ -224,7 +221,7 @@ package body SPTEST is
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( BUFFER_ADDRESS_1 );
       TEXT_IO.NEW_LINE;
-      RTEMS.PARTITION_RETURN_BUFFER( 
+      RTEMS.PARTITION.RETURN_BUFFER( 
          SPTEST.PARTITION_ID( 1 ), 
          BUFFER_ADDRESS_1,
          STATUS 
@@ -236,7 +233,7 @@ package body SPTEST is
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( BUFFER_ADDRESS_2 );
       TEXT_IO.NEW_LINE;
-      RTEMS.PARTITION_RETURN_BUFFER( 
+      RTEMS.PARTITION.RETURN_BUFFER( 
          SPTEST.PARTITION_ID( 1 ), 
          BUFFER_ADDRESS_2,
          STATUS 
@@ -248,7 +245,7 @@ package body SPTEST is
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_2( BUFFER_ADDRESS_3 );
       TEXT_IO.NEW_LINE;
-      RTEMS.PARTITION_RETURN_BUFFER( 
+      RTEMS.PARTITION.RETURN_BUFFER( 
          SPTEST.PARTITION_ID( 2 ), 
          BUFFER_ADDRESS_3,
          STATUS 
@@ -260,7 +257,7 @@ package body SPTEST is
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_2( BUFFER_ADDRESS_4 );
       TEXT_IO.NEW_LINE;
-      RTEMS.PARTITION_RETURN_BUFFER( 
+      RTEMS.PARTITION.RETURN_BUFFER( 
          SPTEST.PARTITION_ID( 2 ), 
          BUFFER_ADDRESS_4,
          STATUS 
@@ -268,11 +265,11 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_RETURN_BUFFER" );
  
       TEXT_IO.PUT_LINE( "TA1 - partition_delete - delete partition 1" );
-      RTEMS.PARTITION_DELETE( SPTEST.PARTITION_ID( 1 ), STATUS );
+      RTEMS.PARTITION.DELETE( SPTEST.PARTITION_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_DELETE OF SELF" );
 
       TEXT_IO.PUT_LINE( "TA1 - partition_delete - delete partition 2" );
-      RTEMS.PARTITION_DELETE( SPTEST.PARTITION_ID( 2 ), STATUS );
+      RTEMS.PARTITION.DELETE( SPTEST.PARTITION_ID( 2 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_DELETE OF SELF" );
 
       TEXT_IO.PUT_LINE( "*** END OF TEST 15 ***" );

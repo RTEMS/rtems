@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -22,19 +22,20 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.CLOCK;
+with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body MPTEST is
 
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       C      : CHARACTER;
       TIME   : RTEMS.TIME_OF_DAY;
@@ -61,12 +62,12 @@ package body MPTEST is
 
       TIME := ( 1988, 12, 31, 9, 0, 0, 0 );
 
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET" );
 
       TEXT_IO.PUT_LINE( "Creating task 1 (Global)" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          MPTEST.TASK_NAME( 1 ), 
          1, 
          2048, 
@@ -79,7 +80,7 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Creating task 2 (Global)" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          MPTEST.TASK_NAME( 2 ), 
          1, 
          2048, 
@@ -92,7 +93,7 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Creating task 3 (Local)" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          MPTEST.TASK_NAME( 3 ), 
          1, 
          2048, 
@@ -103,7 +104,7 @@ package body MPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA3" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.TASK_ID( 1 ),
          MPTEST.TEST_TASK'ACCESS,
          0,
@@ -111,7 +112,7 @@ package body MPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.TASK_ID( 2 ),
          MPTEST.TEST_TASK'ACCESS,
          0,
@@ -119,7 +120,7 @@ package body MPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA2" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.TASK_ID( 3 ),
          MPTEST.TEST_TASK'ACCESS,
          0,
@@ -127,28 +128,27 @@ package body MPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA3" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 --
 --  TEST_TASK
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       TIME   : RTEMS.TIME_OF_DAY;
       TID    : RTEMS.ID;
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
+      RTEMS.TASKS.IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_IDENT OF SELF" );
    
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET" );
 
       TEST_SUPPORT.PUT_NAME( 
@@ -159,14 +159,14 @@ package body MPTEST is
       TEST_SUPPORT.PRINT_TIME( "- clock_get - ", TIME, "" );
       TEXT_IO.NEW_LINE;
 
-      RTEMS.TASK_WAKE_AFTER( 
+      RTEMS.TASKS.WAKE_AFTER( 
          TEST_SUPPORT.TASK_NUMBER( TID ) * 5 * 
            TEST_SUPPORT.TICKS_PER_SECOND, 
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
           
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET" );
 
       TEST_SUPPORT.PUT_NAME( 
@@ -186,7 +186,7 @@ package body MPTEST is
 
          TEXT_IO.PUT_LINE( " - deleting self" );
 
-         RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+         RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
       else if TEST_SUPPORT.TASK_NUMBER( TID ) = 2 then    -- TASK 2
@@ -205,7 +205,7 @@ package body MPTEST is
          TEXT_IO.PUT( " - getting TID of " );
          TEST_SUPPORT.PUT_NAME( MPTEST.TASK_NAME( 2 ), TRUE );
          
-         RTEMS.TASK_IDENT( 
+         RTEMS.TASKS.IDENT( 
             MPTEST.TASK_NAME( 2 ),
             RTEMS.SEARCH_ALL_NODES,
             TID,
@@ -217,7 +217,7 @@ package body MPTEST is
          TEXT_IO.PUT( " - deleting " );
          TEST_SUPPORT.PUT_NAME( MPTEST.TASK_NAME( 2 ), TRUE );
 
-         RTEMS.TASK_DELETE( TID, STATUS );
+         RTEMS.TASKS.DELETE( TID, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA2" );
 
       end if;

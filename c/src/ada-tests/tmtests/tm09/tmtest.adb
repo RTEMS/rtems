@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -26,16 +26,16 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
+with RTEMS.MESSAGE_QUEUE;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       TASK_ID : RTEMS.ID;
@@ -45,7 +45,7 @@ package body TMTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT_LINE( "*** TIME TEST 9 ***" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          1,
          128, 
          4096, 
@@ -56,28 +56,27 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
-      RTEMS.TASK_START( TASK_ID, TMTEST.TEST_TASK'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( TASK_ID, TMTEST.TEST_TASK'ACCESS, 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_TASK
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS       : RTEMS.STATUS_CODES;
    begin
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.MESSAGE_QUEUE_CREATE(
+         RTEMS.MESSAGE_QUEUE.CREATE(
             1,
             TIME_TEST_SUPPORT.OPERATION_COUNT,
             16,
@@ -97,11 +96,12 @@ package body TMTEST is
       TMTEST.QUEUE_TEST;
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.MESSAGE_QUEUE_DELETE(
+         RTEMS.MESSAGE_QUEUE.DELETE(
             TMTEST.QUEUE_ID,
             STATUS
          );
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_DELETE" );
       TIME_TEST_SUPPORT.PUT_TIME( 
          "MESSAGE_QUEUE_DELETE",
          TMTEST.END_TIME, 
@@ -115,7 +115,6 @@ package body TMTEST is
 
    end TEST_TASK;
 
---PAGE
 -- 
 --  QUEUE_TEST
 --
@@ -178,7 +177,7 @@ package body TMTEST is
          TIMER_DRIVER.INITIALIZE;
             for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
             loop
-               RTEMS.MESSAGE_QUEUE_SEND( 
+               RTEMS.MESSAGE_QUEUE.SEND( 
                   TMTEST.QUEUE_ID,
                   BUFFER_POINTER,
                   16,
@@ -190,7 +189,7 @@ package body TMTEST is
          TIMER_DRIVER.INITIALIZE;
             for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
             loop
-               RTEMS.MESSAGE_QUEUE_RECEIVE( 
+               RTEMS.MESSAGE_QUEUE.RECEIVE( 
                   TMTEST.QUEUE_ID,
                   BUFFER_POINTER,
                   RTEMS.DEFAULT_OPTIONS,
@@ -204,7 +203,7 @@ package body TMTEST is
          TIMER_DRIVER.INITIALIZE;
             for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
             loop
-               RTEMS.MESSAGE_QUEUE_URGENT( 
+               RTEMS.MESSAGE_QUEUE.URGENT( 
                   TMTEST.QUEUE_ID,
                   BUFFER_POINTER,
                   16,
@@ -216,7 +215,7 @@ package body TMTEST is
          TIMER_DRIVER.INITIALIZE;
             for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
             loop
-               RTEMS.MESSAGE_QUEUE_RECEIVE( 
+               RTEMS.MESSAGE_QUEUE.RECEIVE( 
                   TMTEST.QUEUE_ID,
                   BUFFER_POINTER,
                   RTEMS.DEFAULT_OPTIONS,
@@ -228,7 +227,7 @@ package body TMTEST is
          RECEIVE_TIME := RECEIVE_TIME + TIMER_DRIVER.READ_TIMER;
 
          TIMER_DRIVER.INITIALIZE;
-            RTEMS.MESSAGE_QUEUE_FLUSH( 
+            RTEMS.MESSAGE_QUEUE.FLUSH( 
                TMTEST.QUEUE_ID,
                EMPTY_FLUSH_COUNT,
                STATUS
@@ -236,14 +235,14 @@ package body TMTEST is
          EMPTY_FLUSH_TIME := EMPTY_FLUSH_TIME + TIMER_DRIVER.READ_TIMER;
 
          -- send one message to flush
-         RTEMS.MESSAGE_QUEUE_SEND( 
+         RTEMS.MESSAGE_QUEUE.SEND( 
             TMTEST.QUEUE_ID, 
             BUFFER_POINTER, 
             16,
             STATUS
          );
          TIMER_DRIVER.INITIALIZE;
-            RTEMS.MESSAGE_QUEUE_FLUSH( 
+            RTEMS.MESSAGE_QUEUE.FLUSH( 
                TMTEST.QUEUE_ID,
                FLUSH_COUNT,
                STATUS

@@ -10,7 +10,7 @@
 --
 --
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -22,19 +22,21 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.MESSAGE_QUEUE;
+with RTEMS.SEMAPHORE;
+with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body MPTEST is
 
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -59,7 +61,7 @@ package body MPTEST is
       if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Creating Message Queue (Global)" );
-         RTEMS.MESSAGE_QUEUE_CREATE(
+         RTEMS.MESSAGE_QUEUE.CREATE(
             MPTEST.QUEUE_NAME( 1 ),
             3,
             RTEMS.GLOBAL + RTEMS.LIMIT,
@@ -69,7 +71,7 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_CREATE" );
 
          TEXT_IO.PUT_LINE( "Creating Semaphore (Global)" );
-         RTEMS.SEMAPHORE_CREATE(
+         RTEMS.SEMAPHORE.CREATE(
             MPTEST.SEMAPHORE_NAME( 1 ),
             0,
             RTEMS.GLOBAL + RTEMS.PRIORITY,
@@ -78,13 +80,13 @@ package body MPTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE" );
 
-         RTEMS.TASK_WAKE_AFTER( 10 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( 10 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
       else
 
          TEXT_IO.PUT_LINE( "Creating Test_task 1 (local)" );
-         RTEMS.TASK_CREATE(
+         RTEMS.TASKS.CREATE(
             MPTEST.TASK_NAME( 1 ),
             1,
             2048,
@@ -96,7 +98,7 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
          TEXT_IO.PUT_LINE( "Starting Test_task 1 (local)" );
-         RTEMS.TASK_START(
+         RTEMS.TASKS.START(
             MPTEST.TASK_ID( 1 ),
             MPTEST.TEST_TASK_1'ACCESS,
             0,
@@ -105,7 +107,7 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
          TEXT_IO.PUT_LINE( "Creating Test_task 2 (local)" );
-         RTEMS.TASK_CREATE(
+         RTEMS.TASKS.CREATE(
             MPTEST.TASK_NAME( 2 ),
             1,
             2048,
@@ -117,7 +119,7 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
  
          TEXT_IO.PUT_LINE( "Starting Test_task 2 (local)" );
-         RTEMS.TASK_START(
+         RTEMS.TASKS.START(
             MPTEST.TASK_ID( 2 ),
             MPTEST.TEST_TASK_2'ACCESS,
             0,
@@ -126,7 +128,7 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
          TEXT_IO.PUT_LINE( "Creating Test_task 3 (local)" );
-         RTEMS.TASK_CREATE(
+         RTEMS.TASKS.CREATE(
             MPTEST.TASK_NAME( 3 ),
             1,
             2048,
@@ -138,7 +140,7 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
  
          TEXT_IO.PUT_LINE( "Starting Test_task 3 (local)" );
-         RTEMS.TASK_START(
+         RTEMS.TASKS.START(
             MPTEST.TASK_ID( 3 ),
             MPTEST.TEST_TASK_3'ACCESS,
             0,
@@ -147,19 +149,19 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
          TEXT_IO.PUT_LINE( "Sleeping for 1 second ..." );
-         RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
          TEXT_IO.PUT_LINE( "Deleting Test_task 2" );
-         RTEMS.TASK_DELETE( MPTEST.TASK_ID( 2 ), STATUS );
+         RTEMS.TASKS.DELETE( MPTEST.TASK_ID( 2 ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF 2" );
 
          TEXT_IO.PUT_LINE( "Deleting Test_task 1" );
-         RTEMS.TASK_DELETE( MPTEST.TASK_ID( 1 ), STATUS );
+         RTEMS.TASKS.DELETE( MPTEST.TASK_ID( 1 ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF 1" );
 
          TEXT_IO.PUT_LINE( "Restarting Test_task 3" );
-         RTEMS.TASK_RESTART( MPTEST.TASK_ID( 3 ), 1, STATUS );
+         RTEMS.TASKS.RESTART( MPTEST.TASK_ID( 3 ), 1, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART OF 3" );
 
       end if;
@@ -170,13 +172,12 @@ package body MPTEST is
 
    end INIT;
 
---PAGE
 --
 --  TEST_TASK_1
 --
 
    procedure TEST_TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       COUNT               : RTEMS.UNSIGNED32;
       RECEIVE_BUFFER_AREA : RTEMS.BUFFER;
@@ -191,7 +192,7 @@ package body MPTEST is
 
       loop
 
-         RTEMS.MESSAGE_QUEUE_IDENT(
+         RTEMS.MESSAGE_QUEUE.IDENT(
             MPTEST.QUEUE_NAME( 1 ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.QUEUE_ID( 1 ),
@@ -203,7 +204,7 @@ package body MPTEST is
       end loop;
 
       TEXT_IO.PUT_LINE( "Attempting to receive message ..." );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          MPTEST.QUEUE_ID( 1 ),
          RECEIVE_BUFFER,
          RTEMS.DEFAULT_OPTIONS,
@@ -214,13 +215,12 @@ package body MPTEST is
 
    end TEST_TASK_1;
 
---PAGE
 --
 --  TEST_TASK_2
 --
  
    procedure TEST_TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS : RTEMS.STATUS_CODES;
    begin 
@@ -229,7 +229,7 @@ package body MPTEST is
 
       loop
 
-         RTEMS.SEMAPHORE_IDENT(
+         RTEMS.SEMAPHORE.IDENT(
             MPTEST.SEMAPHORE_NAME( 1 ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.SEMAPHORE_ID( 1 ),
@@ -241,7 +241,7 @@ package body MPTEST is
       end loop;
 
       TEXT_IO.PUT_LINE( "Attempting to acquire semaphore ..." );
-      RTEMS.SEMAPHORE_OBTAIN(
+      RTEMS.SEMAPHORE.OBTAIN(
          MPTEST.SEMAPHORE_ID( 1 ),
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -251,20 +251,19 @@ package body MPTEST is
  
    end TEST_TASK_2;
 
---PAGE 
 -- 
 --  TEST_TASK_3
 -- 
   
    procedure TEST_TASK_3 ( 
-      RESTART : in     RTEMS.TASK_ARGUMENT 
+      RESTART : in     RTEMS.TASKS.ARGUMENT 
    ) is 
       STATUS : RTEMS.STATUS_CODES;
    begin
 
       if RESTART = 1 then
 
-         RTEMS.TASK_DELETE( RTEMS.SELF, STATUS ); 
+         RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS ); 
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE" );
 
       end if;
@@ -273,7 +272,7 @@ package body MPTEST is
 
       loop
 
-         RTEMS.SEMAPHORE_IDENT(
+         RTEMS.SEMAPHORE.IDENT(
             MPTEST.SEMAPHORE_NAME( 1 ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.SEMAPHORE_ID( 1 ),
@@ -285,7 +284,7 @@ package body MPTEST is
       end loop;
 
       TEXT_IO.PUT_LINE( "Attempting to acquire semaphore ..." );
-      RTEMS.SEMAPHORE_OBTAIN(
+      RTEMS.SEMAPHORE.OBTAIN(
          MPTEST.SEMAPHORE_ID( 1 ),
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT, 

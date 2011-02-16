@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,16 +24,16 @@ with RTEMS_CALLING_OVERHEAD;
 with TEST_SUPPORT;
 with TEXT_IO;
 with TIMER_DRIVER;
+with RTEMS.EVENT;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS  : RTEMS.STATUS_CODES;
@@ -44,12 +44,11 @@ package body TMTEST is
 
       TMTEST.TEST_INIT;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_INIT
 --
@@ -64,7 +63,7 @@ package body TMTEST is
 
       TMTEST.TIME_SET := FALSE;
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'L', 'O', 'W', ' ' ),
          10, 
          1024, 
@@ -75,13 +74,13 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE LOW" );
 
-      RTEMS.TASK_START( ID, TMTEST.LOW_TASK'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( ID, TMTEST.LOW_TASK'ACCESS, 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOW" );
 
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'H', 'I', 'G', 'H' ),
             5, 
             1024, 
@@ -92,7 +91,7 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE LOOP" );
 
-         RTEMS.TASK_START( 
+         RTEMS.TASKS.START( 
             TMTEST.TASK_ID( INDEX ),
             TMTEST.HIGH_TASKS'ACCESS, 
             0, 
@@ -112,7 +111,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.EVENT_RECEIVE(
+            RTEMS.EVENT.RECEIVE(
                RTEMS.PENDING_EVENTS,
                RTEMS.DEFAULT_OPTIONS,
                RTEMS.NO_TIMEOUT,
@@ -133,7 +132,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.EVENT_RECEIVE(
+            RTEMS.EVENT.RECEIVE(
                RTEMS.ALL_EVENTS,
                RTEMS.NO_WAIT,
                RTEMS.NO_TIMEOUT,
@@ -153,13 +152,12 @@ package body TMTEST is
 
    end TEST_INIT;
 
---PAGE
 -- 
 --  LOW_TASK
 --
 
    procedure LOW_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       EVENT_OUT : RTEMS.EVENT_SET;
@@ -187,7 +185,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.EVENT_SEND( RTEMS.SELF, RTEMS.EVENT_16, STATUS );
+            RTEMS.EVENT.SEND( RTEMS.SELF, RTEMS.EVENT_16, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -200,7 +198,7 @@ package body TMTEST is
       );
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.EVENT_RECEIVE(
+         RTEMS.EVENT.RECEIVE(
             RTEMS.EVENT_16,
             RTEMS.DEFAULT_OPTIONS,
             RTEMS.NO_TIMEOUT,
@@ -220,7 +218,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.EVENT_SEND( 
+            RTEMS.EVENT.SEND( 
                TMTEST.TASK_ID( INDEX ), 
                RTEMS.EVENT_16, 
                STATUS 
@@ -241,13 +239,12 @@ package body TMTEST is
 
    end LOW_TASK;
 
---PAGE
 -- 
 --  HIGH_TASKS
 --
 
    procedure HIGH_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       EVENT_OUT : RTEMS.EVENT_SET;
@@ -259,7 +256,7 @@ package body TMTEST is
          TIMER_DRIVER.INITIALIZE;
       end if;
 
-      RTEMS.EVENT_RECEIVE(
+      RTEMS.EVENT.RECEIVE(
          16#7FFFFFFF#,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,

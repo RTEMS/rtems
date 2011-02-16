@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,6 +24,8 @@ with INTERFACES; use INTERFACES;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
+with RTEMS.EXTENSION;
+with RTEMS.FATAL;
 
 package body SPTEST is
 
@@ -50,7 +52,7 @@ package body SPTEST is
       ) is
       begin
          if Task_Events_Index = Task_Events'Last then
-            RTEMS.Fatal_Error_Occurred ( 1 );  -- no other choice
+            RTEMS.Fatal.Error_Occurred ( 1 );  -- no other choice
          else
             Task_Events (Task_Events_Index).The_Event := The_Event;
             Task_Events (Task_Events_Index).Task1 := Task1;
@@ -110,7 +112,6 @@ package body SPTEST is
 
       end Flush_Task_Event_Log;
 
---PAGE
 --
 -- TCB_To_ID
 --
@@ -120,13 +121,12 @@ package body SPTEST is
       ) return RTEMS.ID;
       pragma Import (C, TCB_To_ID, "tcb_to_id" );
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -137,7 +137,7 @@ package body SPTEST is
 
       SPTEST.EXTENSION_NAME( 1 ) := RTEMS.BUILD_NAME(  'E', 'X', 'T', ' ' );
 
-      RTEMS.EXTENSION_CREATE(
+      RTEMS.EXTENSION.CREATE(
          SPTEST.EXTENSION_NAME( 1 ),
          SPTEST.EXTENSIONS'ACCESS,
          EXTENSION_ID( 1 ),
@@ -150,7 +150,7 @@ package body SPTEST is
       SPTEST.TASK_NAME( 3 ) := RTEMS.BUILD_NAME(  'T', 'A', '3', ' ' );
       SPTEST.TASK_NAME( 4 ) := RTEMS.BUILD_NAME(  'T', 'A', '4', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          4, 
          RTEMS.MINIMUM_STACK_SIZE, 
@@ -161,7 +161,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 2 ), 
          4, 
          RTEMS.MINIMUM_STACK_SIZE, 
@@ -172,7 +172,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA2" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 3 ), 
          250, 
          RTEMS.MINIMUM_STACK_SIZE, 
@@ -183,7 +183,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA3" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 4 ), 
          254, 
          RTEMS.MINIMUM_STACK_SIZE, 
@@ -194,7 +194,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA4" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -202,7 +202,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 2 ),
          SPTEST.TASK_2'ACCESS,
          0,
@@ -210,7 +210,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA2" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 3 ),
          SPTEST.TASK_3'ACCESS,
          0,
@@ -218,7 +218,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA3" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 4 ),
          SPTEST.TASK_4'ACCESS,
          0,
@@ -226,45 +226,44 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA4" );
 
-      RTEMS.TASK_RESTART( SPTEST.TASK_ID( 3 ), 0, STATUS );
+      RTEMS.TASKS.RESTART( SPTEST.TASK_ID( 3 ), 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART OF TA3" );
 
       Flush_Task_Event_Log;
 
-      RTEMS.TASK_SET_NOTE( SPTEST.TASK_ID( 1 ), 8, 4, STATUS );
+      RTEMS.TASKS.SET_NOTE( SPTEST.TASK_ID( 1 ), 8, 4, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_NOTE OF TA1" );
       TEXT_IO.PUT( "INIT - task_set_note - set TA1's NOTEPAD_8" ); 
       TEXT_IO.PUT_LINE( " to TA1's initial priority:  4" );
       
-      RTEMS.TASK_SET_NOTE( SPTEST.TASK_ID( 2 ), 8, 4, STATUS );
+      RTEMS.TASKS.SET_NOTE( SPTEST.TASK_ID( 2 ), 8, 4, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_NOTE OF TA2" );
       TEXT_IO.PUT( "INIT - task_set_note - set TA2's NOTEPAD_8" ); 
       TEXT_IO.PUT_LINE( " to TA2's initial priority:  4" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS            : RTEMS.STATUS_CODES;
-      THE_PRIORITY      : RTEMS.TASK_PRIORITY;
-      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      THE_PRIORITY      : RTEMS.TASKS.PRIORITY;
+      PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
    begin
 
       TEST_SUPPORT.PAUSE;
 
-      RTEMS.TASK_SET_PRIORITY( 
+      RTEMS.TASKS.SET_PRIORITY( 
          RTEMS.SELF, 
-         RTEMS.CURRENT_PRIORITY, 
+         RTEMS.TASKS.CURRENT_PRIORITY, 
          THE_PRIORITY, 
          STATUS
       );
@@ -276,7 +275,7 @@ package body SPTEST is
 
       loop
 
-         RTEMS.TASK_GET_NOTE( RTEMS.SELF, 8, THE_PRIORITY, STATUS );
+         RTEMS.TASKS.GET_NOTE( RTEMS.SELF, 8, THE_PRIORITY, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_GET_NOTE" );
          TEXT_IO.PUT( "TA1 - task_get_note - "); 
          TEXT_IO.PUT( "get NOTEPAD_8 - current priority: " );
@@ -287,12 +286,12 @@ package body SPTEST is
 
          if THE_PRIORITY = 0 then
             TEXT_IO.PUT_LINE( "TA1 - task_suspend - suspend TA2" ); 
-            RTEMS.TASK_SUSPEND( SPTEST.TASK_ID( 2 ), STATUS );
+            RTEMS.TASKS.SUSPEND( SPTEST.TASK_ID( 2 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND" );
 
             TEXT_IO.PUT( "TA1 - task_set_priority - ");
             TEXT_IO.PUT_LINE( "set priority of TA2 ( blocked )");
-            RTEMS.TASK_SET_PRIORITY( 
+            RTEMS.TASKS.SET_PRIORITY( 
                SPTEST.TASK_ID( 2 ), 
                5, 
                PREVIOUS_PRIORITY, 
@@ -300,10 +299,10 @@ package body SPTEST is
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_PRIORITY" );
 
-            RTEMS.TASK_DELETE( SPTEST.TASK_ID( 2 ), STATUS );
+            RTEMS.TASKS.DELETE( SPTEST.TASK_ID( 2 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA2" );
 
-            RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+            RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
          end if;
@@ -311,7 +310,7 @@ package body SPTEST is
          TEXT_IO.PUT( "TA1 - task_set_note - set TA2's NOTEPAD_8: " );
          UNSIGNED32_IO.PUT( THE_PRIORITY, BASE => 10, WIDTH => 2 );
          TEXT_IO.NEW_LINE;
-         RTEMS.TASK_SET_NOTE( 
+         RTEMS.TASKS.SET_NOTE( 
             SPTEST.TASK_ID( 2 ), 
             8, 
             THE_PRIORITY, 
@@ -322,7 +321,7 @@ package body SPTEST is
          TEXT_IO.PUT("TA1 - task_set_priority - set TA2's priority: ");
          UNSIGNED32_IO.PUT( THE_PRIORITY, BASE => 10, WIDTH => 2 );
          TEXT_IO.NEW_LINE;
-         RTEMS.TASK_SET_PRIORITY( 
+         RTEMS.TASKS.SET_PRIORITY( 
             SPTEST.TASK_ID( 2 ), 
             THE_PRIORITY, 
             PREVIOUS_PRIORITY, 
@@ -334,23 +333,22 @@ package body SPTEST is
    
    end TASK_1;
 
---PAGE
 -- 
 --  TASK_2
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS            : RTEMS.STATUS_CODES;
-      THE_PRIORITY      : RTEMS.TASK_PRIORITY;
-      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      THE_PRIORITY      : RTEMS.TASKS.PRIORITY;
+      PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
    begin
 
       loop
 
-         RTEMS.TASK_GET_NOTE( RTEMS.SELF, 8, THE_PRIORITY, STATUS );
+         RTEMS.TASKS.GET_NOTE( RTEMS.SELF, 8, THE_PRIORITY, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_GET_NOTE" );
          TEXT_IO.PUT( "TA2 - task_get_note - ");
          TEXT_IO.PUT( "get NOTEPAD_8 - current priority: " );
@@ -361,12 +359,12 @@ package body SPTEST is
 
          if THE_PRIORITY = 0 then
             TEXT_IO.PUT_LINE( "TA2 - task_suspend - suspend TA1" ); 
-            RTEMS.TASK_SUSPEND( SPTEST.TASK_ID( 1 ), STATUS );
+            RTEMS.TASKS.SUSPEND( SPTEST.TASK_ID( 1 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND" );
 
             TEXT_IO.PUT( "TA2 - task_set_priority - ");
             TEXT_IO.PUT_LINE( "set priority of TA1 ( blocked )");
-            RTEMS.TASK_SET_PRIORITY( 
+            RTEMS.TASKS.SET_PRIORITY( 
                SPTEST.TASK_ID( 1 ), 
                5, 
                PREVIOUS_PRIORITY, 
@@ -374,19 +372,19 @@ package body SPTEST is
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_PRIORITY" );
 
-            RTEMS.TASK_DELETE( 
+            RTEMS.TASKS.DELETE( 
                SPTEST.TASK_ID( 1 ), 
                STATUS 
             );                            -- TA1 is blocked
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA1" );
 
-            RTEMS.TASK_DELETE( 
+            RTEMS.TASKS.DELETE( 
                SPTEST.TASK_ID( 3 ), 
                STATUS
             );                            -- TA3 is ready
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA3" );
 
-            RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+            RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
          else
@@ -394,7 +392,7 @@ package body SPTEST is
             TEXT_IO.PUT( "TA2 - task_set_note - set TA1's NOTEPAD_8: " );
             UNSIGNED32_IO.PUT( THE_PRIORITY, BASE => 10, WIDTH => 2 );
             TEXT_IO.NEW_LINE;
-            RTEMS.TASK_SET_NOTE( 
+            RTEMS.TASKS.SET_NOTE( 
                SPTEST.TASK_ID( 1 ), 
                8, 
                THE_PRIORITY, 
@@ -406,7 +404,7 @@ package body SPTEST is
             TEXT_IO.PUT( "set TA1's priority: ");
             UNSIGNED32_IO.PUT( THE_PRIORITY, BASE => 10, WIDTH => 2);
             TEXT_IO.NEW_LINE;
-            RTEMS.TASK_SET_PRIORITY( 
+            RTEMS.TASKS.SET_PRIORITY( 
                SPTEST.TASK_ID( 1 ), 
                THE_PRIORITY, 
                PREVIOUS_PRIORITY, 
@@ -420,13 +418,12 @@ package body SPTEST is
    
    end TASK_2;
 
---PAGE
 -- 
 --  TASK_3
 --
 
    procedure TASK_3 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -434,20 +431,19 @@ package body SPTEST is
    
       loop
 
-         RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
       end loop;
 
    end TASK_3;
 
---PAGE
 -- 
 --  TASK_4
 --
 
    procedure TASK_4 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
    begin
@@ -458,7 +454,6 @@ package body SPTEST is
 
    end TASK_4;
 
---PAGE
 -- 
 --  TASK_EXIT_EXTENSION
 --
@@ -477,7 +472,6 @@ package body SPTEST is
 
    end TASK_EXIT_EXTENSION;
 
---PAGE
 -- 
 --  TASK_CREATE_EXTENSION
 --
@@ -501,7 +495,6 @@ package body SPTEST is
 
    end TASK_CREATE_EXTENSION;
 
---PAGE
 -- 
 --  TASK_DELETE_EXTENSION
 --
@@ -523,7 +516,6 @@ package body SPTEST is
 
    end TASK_DELETE_EXTENSION;
 
---PAGE
 -- 
 --  TASK_RESTART_EXTENSION
 --
@@ -545,7 +537,6 @@ package body SPTEST is
 
    end TASK_RESTART_EXTENSION;
 
---PAGE
 -- 
 --  TASK_START_EXTENSION
 --

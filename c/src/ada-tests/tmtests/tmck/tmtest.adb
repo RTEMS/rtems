@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -29,13 +29,12 @@ with UNSIGNED32_IO;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -48,7 +47,7 @@ package body TMTEST is
 
       TMTEST.TASK_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'A', '1', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          TMTEST.TASK_NAME( 1 ), 
          1, 
          2048, 
@@ -59,7 +58,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          TMTEST.TASK_ID( 1 ),
          TMTEST.TASK_1'ACCESS,
          0,
@@ -67,18 +66,17 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
    begin
@@ -158,7 +156,6 @@ TEST_SUPPORT.PAUSE;
    
    end TASK_1;
 
---PAGE
 -- 
 --  CHECK_READ_TIMER
 --

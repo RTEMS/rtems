@@ -9,7 +9,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -20,6 +20,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 with TMTEST;
 with TEST_SUPPORT;
 
@@ -28,7 +29,7 @@ procedure TM25 is
   STATUS  : RTEMS.STATUS_CODES;
 begin
 
-   RTEMS.TASK_CREATE(
+   RTEMS.TASKS.CREATE(
       RTEMS.BUILD_NAME(  'I', 'N', 'I', 'T' ),
       1,
       RTEMS.MINIMUM_STACK_SIZE,
@@ -40,7 +41,7 @@ begin
    TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF INIT" );
 
 
-   RTEMS.TASK_START(
+   RTEMS.TASKS.START(
       INIT_ID,
       TMTEST.INIT'ACCESS,
       0,

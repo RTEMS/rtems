@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 
 package SPTEST is
 
@@ -46,7 +47,7 @@ package SPTEST is
 --  easily set itself to a higher priority than the rest.
 --
 
-   BASE_PRIORITY : constant RTEMS.TASK_PRIORITY := 140;
+   BASE_PRIORITY : constant RTEMS.TASKS.PRIORITY := 140;
 
 --
 --  These arrays define the memory areas used for the regions in
@@ -65,7 +66,7 @@ package SPTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -97,7 +98,7 @@ package SPTEST is
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_1);
 

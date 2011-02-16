@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 
 package SPTEST is
 
@@ -34,7 +35,7 @@ package SPTEST is
 
    PRIORITY_TASK_ID   : array ( 1 .. 5 ) of RTEMS.ID;
    PRIORITY_TASK_NAME : array ( 1 .. 5 ) of RTEMS.NAME;
-   TASK_PRIORITY      : array ( 1 .. 5 ) of RTEMS.TASK_PRIORITY;
+   TASK_PRIORITY      : array ( 1 .. 5 ) of RTEMS.TASKS.PRIORITY;
 
    SEMAPHORE_ID   : array ( RTEMS.UNSIGNED32 range 1 .. 3 ) of RTEMS.ID;
    SEMAPHORE_NAME : array ( RTEMS.UNSIGNED32 range 1 .. 3 ) of RTEMS.NAME;
@@ -48,7 +49,7 @@ package SPTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -76,7 +77,7 @@ package SPTEST is
 --
 
    procedure PRIORITY_TASK (
-      ITS_INDEX : in     RTEMS.TASK_ARGUMENT
+      ITS_INDEX : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, PRIORITY_TASK);
 
@@ -89,7 +90,7 @@ package SPTEST is
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_1);
 
@@ -102,7 +103,7 @@ package SPTEST is
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_2);
 
@@ -115,7 +116,7 @@ package SPTEST is
 --
 
    procedure TASK_3 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_3);
 
@@ -128,7 +129,7 @@ package SPTEST is
 --
 
    procedure TASK_4 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_4);
 
@@ -141,7 +142,7 @@ package SPTEST is
 --
 
    procedure TASK_5 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_5);
 

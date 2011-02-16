@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -29,13 +29,12 @@ with TIMER_DRIVER;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       ID         : RTEMS.ID;
@@ -52,7 +51,7 @@ package body TMTEST is
          end loop;
       TMTEST.OVERHEAD := TIMER_DRIVER.READ_TIMER;
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'H', 'I', 'G', 'H' ),
          10,
          1024, 
@@ -63,13 +62,13 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE HIGH" );
 
-      RTEMS.TASK_START( ID, TMTEST.HIGH_TASK'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( ID, TMTEST.HIGH_TASK'ACCESS, 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START HIGH" );
 
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'R', 'E', 'S', 'T' ),
             128,
             1024, 
@@ -80,23 +79,22 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE LOOP" );
 
-         RTEMS.TASK_START( ID, TMTEST.TASKS'ACCESS, 0, STATUS );
+         RTEMS.TASKS.START( ID, TMTEST.TASKS'ACCESS, 0, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
 
       end loop;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  HIGH_TASK
 --
 
    procedure HIGH_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS   : RTEMS.STATUS_CODES;
@@ -105,7 +103,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+            RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -119,18 +117,17 @@ package body TMTEST is
 
       TMTEST.TASK_COUNT := 0;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end HIGH_TASK;
 
---PAGE
 -- 
 --  TASKS
 --
 
    procedure TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS            : RTEMS.STATUS_CODES;
@@ -158,7 +155,8 @@ package body TMTEST is
 
       end if;
 
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
    end TASKS;
 

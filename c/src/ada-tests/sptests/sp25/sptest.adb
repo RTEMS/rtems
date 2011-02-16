@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -23,16 +23,16 @@
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
+with RTEMS.REGION;
 
 package body SPTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -43,7 +43,7 @@ package body SPTEST is
 
       SPTEST.TASK_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'A', '1', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          SPTEST.BASE_PRIORITY, 
          2048, 
@@ -54,7 +54,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -64,7 +64,7 @@ package body SPTEST is
 
       SPTEST.REGION_NAME( 1 ) := RTEMS.BUILD_NAME(  'R', 'N', '1', ' ' );
 
-      RTEMS.REGION_CREATE(
+      RTEMS.REGION.CREATE(
          SPTEST.REGION_NAME( 1 ), 
          SPTEST.AREA_1'ADDRESS,
          64000, 
@@ -75,12 +75,11 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_CREATE OF RN1" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  PUT_ADDRESS_FROM_AREA_1
 --
@@ -99,13 +98,12 @@ package body SPTEST is
 
    end PUT_ADDRESS_FROM_AREA_1;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       RNID              : RTEMS.ID;
@@ -120,7 +118,7 @@ package body SPTEST is
       STATUS            : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.REGION_IDENT( SPTEST.REGION_NAME( 1 ), RNID, STATUS );
+      RTEMS.REGION.IDENT( SPTEST.REGION_NAME( 1 ), RNID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_IDENT OF RN1" );
       TEXT_IO.PUT( "TA1 - region_ident - rnid => " );
       UNSIGNED32_IO.PUT( RNID, WIDTH => 8, BASE => 16 );
@@ -128,7 +126,7 @@ package body SPTEST is
        
       TEXT_IO.PUT( "TA1 - region_get_segment - wait on " );
       TEXT_IO.PUT_LINE( "64 byte segment from region 1" );
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          64,
          RTEMS.DEFAULT_OPTIONS,
@@ -143,7 +141,7 @@ package body SPTEST is
 
       TEXT_IO.PUT( "TA1 - region_get_segment - wait on " );
       TEXT_IO.PUT_LINE( "128 byte segment from region 1" );
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          128,
          RTEMS.DEFAULT_OPTIONS,
@@ -158,7 +156,7 @@ package body SPTEST is
 
       TEXT_IO.PUT( "TA1 - region_get_segment - wait on " );
       TEXT_IO.PUT_LINE( "256 byte segment from region 1" );
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          256,
          RTEMS.DEFAULT_OPTIONS,
@@ -173,7 +171,7 @@ package body SPTEST is
 
       TEXT_IO.PUT( "TA1 - region_get_segment - wait on " );
       TEXT_IO.PUT_LINE( "512 byte segment from region 1" );
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          512,
          RTEMS.DEFAULT_OPTIONS,
@@ -188,7 +186,7 @@ package body SPTEST is
 
       TEXT_IO.PUT( "TA1 - region_get_segment - wait on " );
       TEXT_IO.PUT_LINE( "1024 byte segment from region 1" );
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          1024,
          RTEMS.DEFAULT_OPTIONS,
@@ -203,7 +201,7 @@ package body SPTEST is
 
       TEXT_IO.PUT( "TA1 - region_get_segment - wait on " );
       TEXT_IO.PUT_LINE( "2048 byte segment from region 1" );
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          2048,
          RTEMS.DEFAULT_OPTIONS,
@@ -218,7 +216,7 @@ package body SPTEST is
 
       TEXT_IO.PUT( "TA1 - region_get_segment - wait on " );
       TEXT_IO.PUT_LINE( "4096 byte segment from region 1" );
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          4096,
          RTEMS.DEFAULT_OPTIONS,
@@ -233,7 +231,7 @@ package body SPTEST is
 
       TEXT_IO.PUT( "TA1 - region_get_segment - wait on " );
       TEXT_IO.PUT_LINE( "8192 byte segment from region 1" );
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          8192,
          RTEMS.DEFAULT_OPTIONS,
@@ -252,7 +250,7 @@ TEST_SUPPORT.PAUSE;
          "TA1 - region_return_segment - return segment to region 1 - "
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( SEGMENT_ADDRESS_3 );
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SEGMENT_ADDRESS_3,
          STATUS
@@ -265,7 +263,7 @@ TEST_SUPPORT.PAUSE;
          "TA1 - region_return_segment - return segment to region 1 - "
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( SEGMENT_ADDRESS_4 );
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SEGMENT_ADDRESS_4,
          STATUS
@@ -278,7 +276,7 @@ TEST_SUPPORT.PAUSE;
          "TA1 - region_return_segment - return segment to region 1 - "
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( SEGMENT_ADDRESS_1 );
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SEGMENT_ADDRESS_1,
          STATUS
@@ -291,7 +289,7 @@ TEST_SUPPORT.PAUSE;
          "TA1 - region_return_segment - return segment to region 1 - "
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( SEGMENT_ADDRESS_2 );
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SEGMENT_ADDRESS_2,
          STATUS
@@ -304,7 +302,7 @@ TEST_SUPPORT.PAUSE;
          "TA1 - region_return_segment - return segment to region 1 - "
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( SEGMENT_ADDRESS_7 );
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SEGMENT_ADDRESS_7,
          STATUS
@@ -317,7 +315,7 @@ TEST_SUPPORT.PAUSE;
          "TA1 - region_return_segment - return segment to region 1 - "
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( SEGMENT_ADDRESS_6 );
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SEGMENT_ADDRESS_6,
          STATUS
@@ -330,7 +328,7 @@ TEST_SUPPORT.PAUSE;
          "TA1 - region_return_segment - return segment to region 1 - "
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( SEGMENT_ADDRESS_8 );
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SEGMENT_ADDRESS_8,
          STATUS
@@ -343,7 +341,7 @@ TEST_SUPPORT.PAUSE;
          "TA1 - region_return_segment - return segment to region 1 - "
       );
       SPTEST.PUT_ADDRESS_FROM_AREA_1( SEGMENT_ADDRESS_5 );
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SEGMENT_ADDRESS_5,
          STATUS
@@ -355,7 +353,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE(
          "TA1 - region_delete - walks heap if debug enabled"
       );
-      RTEMS.REGION_DELETE( SPTEST.REGION_ID( 1 ), STATUS );
+      RTEMS.REGION.DELETE( SPTEST.REGION_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_DELETE OF RN1" );
 
       TEXT_IO.PUT_LINE( "*** END OF TEST 25 ***" );

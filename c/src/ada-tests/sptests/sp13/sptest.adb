@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -22,6 +22,7 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.MESSAGE_QUEUE;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -32,13 +33,12 @@ package body SPTEST is
    type BIG_BUFFER_TYPE is array (1 .. 2048) of RTEMS.UNSIGNED8;
 
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -51,7 +51,7 @@ package body SPTEST is
       SPTEST.TASK_NAME( 2 ) := RTEMS.BUILD_NAME(  'T', 'A', '2', ' ' );
       SPTEST.TASK_NAME( 3 ) := RTEMS.BUILD_NAME(  'T', 'A', '3', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          4, 
          2048, 
@@ -62,7 +62,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 2 ), 
          4, 
          2048, 
@@ -73,7 +73,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA2" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 3 ), 
          4, 
          2048, 
@@ -84,7 +84,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA3" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -92,7 +92,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 2 ),
          SPTEST.TASK_2'ACCESS,
          0,
@@ -100,7 +100,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA2" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 3 ),
          SPTEST.TASK_3'ACCESS,
          0,
@@ -112,7 +112,7 @@ package body SPTEST is
       SPTEST.QUEUE_NAME( 2 ) := RTEMS.BUILD_NAME(  'Q', '2', ' ', ' ' );
       SPTEST.QUEUE_NAME( 3 ) := RTEMS.BUILD_NAME(  'Q', '3', ' ', ' ' );
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          100,
          16,
@@ -122,7 +122,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "QUEUE_CREATE OF Q1" );
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          SPTEST.QUEUE_NAME( 2 ),
          10,
          16,
@@ -132,7 +132,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "QUEUE_CREATE OF Q2" );
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          SPTEST.QUEUE_NAME( 3 ),
          100,
          16,
@@ -142,12 +142,11 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "QUEUE_CREATE OF Q3" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  FILL_BUFFER
 --
@@ -192,7 +191,6 @@ package body SPTEST is
 
    end FILL_BUFFER;
 
---PAGE
 -- 
 --  PUT_BUFFER
 --
@@ -213,13 +211,12 @@ package body SPTEST is
       
    end PUT_BUFFER;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       QID                        : RTEMS.ID;
@@ -230,14 +227,14 @@ package body SPTEST is
       BIG_RECEIVE_BUFFER_POINTER : constant RTEMS.ADDRESS
                                       := BIG_RECEIVE_BUFFER'ADDRESS;
       BUFFER                     : SPTEST.BUFFER;
-      BUFFER_POINTER             : RTEMS.ADDRESS := BUFFER'ADDRESS;
+      BUFFER_POINTER             : constant RTEMS.ADDRESS := BUFFER'ADDRESS;
       COUNT                      : RTEMS.UNSIGNED32;
       MESSAGE_SIZE               : RTEMS.UNSIGNED32 := 0;
       STATUS                     : RTEMS.STATUS_CODES;
-      SIZE                       : RTEMS.UNSIGNED32;
+      SIZE                       : RTEMS.UNSIGNED32 := 0;
    begin
 
-      RTEMS.MESSAGE_QUEUE_IDENT( 
+      RTEMS.MESSAGE_QUEUE.IDENT( 
          SPTEST.QUEUE_NAME( 1 ), 
          RTEMS.SEARCH_ALL_NODES, 
          QID, 
@@ -250,7 +247,7 @@ package body SPTEST is
 
       SPTEST.FILL_BUFFER( "BUFFER 1 TO Q 1 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 1 TO Q 1" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 1 ), 
          BUFFER_POINTER, 
          16,
@@ -260,7 +257,7 @@ package body SPTEST is
    
       SPTEST.FILL_BUFFER( "BUFFER 2 TO Q 1 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 2 TO Q 1" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 1 ), 
          BUFFER_POINTER, 
          16,
@@ -269,12 +266,12 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
       TEXT_IO.PUT_LINE( "TA1 - task_wake_after - sleep 5 seconds" );
-      RTEMS.TASK_WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
           
       SPTEST.FILL_BUFFER( "BUFFER 3 TO Q 1 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 3 TO Q 1" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 1 ), 
          BUFFER_POINTER, 
          16,
@@ -283,14 +280,14 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
       TEXT_IO.PUT_LINE( "TA1 - task_wake_after - sleep 5 seconds" );
-      RTEMS.TASK_WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
           
 TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 1 TO Q 2 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 1 TO Q 2" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 2 ), 
          BUFFER_POINTER, 
          16,
@@ -302,7 +299,7 @@ TEST_SUPPORT.PAUSE;
          "TA1 - message_queue_receive - receive from queue 1 - "
       );
       TEXT_IO.PUT_LINE( "10 second timeout" );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -316,12 +313,12 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.NEW_LINE;
 
       TEXT_IO.PUT_LINE( "TA1 - task_delete - delete TA2" );
-      RTEMS.TASK_DELETE( SPTEST.TASK_ID( 2 ), STATUS );
+      RTEMS.TASKS.DELETE( SPTEST.TASK_ID( 2 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE" );
 
       SPTEST.FILL_BUFFER( "BUFFER 1 TO Q 3 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 1 TO Q 3" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
          16,
@@ -330,14 +327,14 @@ TEST_SUPPORT.PAUSE;
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
       TEXT_IO.PUT_LINE( "TA1 - task_wake_after - sleep 5 seconds" );
-      RTEMS.TASK_WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
           
 TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 2 TO Q 3 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 2 TO Q 3" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
          16,
@@ -347,7 +344,7 @@ TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 3 TO Q 3 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 3 TO Q 3" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
          16,
@@ -357,7 +354,7 @@ TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 4 TO Q 3 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 4 TO Q 3" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
          16,
@@ -367,7 +364,7 @@ TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 5 TO Q 3 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_urgent - BUFFER 5 TO Q 3" );
-      RTEMS.MESSAGE_QUEUE_URGENT( 
+      RTEMS.MESSAGE_QUEUE.URGENT( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
          16,
@@ -381,7 +378,7 @@ TEST_SUPPORT.PAUSE;
             "TA1 - message_queue_receive - receive from queue 3 - "
          );
          TEXT_IO.PUT_LINE( "WAIT FOREVER" );
-         RTEMS.MESSAGE_QUEUE_RECEIVE(
+         RTEMS.MESSAGE_QUEUE.RECEIVE(
             SPTEST.QUEUE_ID( 3 ),
             BUFFER_POINTER,
             RTEMS.DEFAULT_OPTIONS,
@@ -397,7 +394,7 @@ TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 3 TO Q 2 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_urgent - BUFFER 3 TO Q 2" );
-      RTEMS.MESSAGE_QUEUE_URGENT( 
+      RTEMS.MESSAGE_QUEUE.URGENT( 
          SPTEST.QUEUE_ID( 2 ), 
          BUFFER_POINTER, 
          16,
@@ -409,7 +406,7 @@ TEST_SUPPORT.PAUSE;
         "TA1 - message_queue_receive - receive from queue 2 - " 
       );
       TEXT_IO.PUT_LINE( "WAIT FOREVER" );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 2 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -425,12 +422,12 @@ TEST_SUPPORT.PAUSE;
 TEST_SUPPORT.PAUSE;
 
       TEXT_IO.PUT_LINE( "TA1 - message_queue_delete - delete queue 1" );
-      RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+      RTEMS.MESSAGE_QUEUE.DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_DELETE" );
    
       SPTEST.FILL_BUFFER( "BUFFER 3 TO Q 2 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_urgent - BUFFER 3 TO Q 2" );
-      RTEMS.MESSAGE_QUEUE_URGENT( 
+      RTEMS.MESSAGE_QUEUE.URGENT( 
          SPTEST.QUEUE_ID( 2 ), 
          BUFFER_POINTER, 
          16,
@@ -439,11 +436,11 @@ TEST_SUPPORT.PAUSE;
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_URGENT" );
 
       TEXT_IO.PUT_LINE( "TA1 - message_queue_delete - delete queue 2" );
-      RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 2 ), STATUS );
+      RTEMS.MESSAGE_QUEUE.DELETE( SPTEST.QUEUE_ID( 2 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_DELETE" );
    
       TEXT_IO.PUT_LINE( "TA1 - message_queue_get_number_pending - check Q 3" );
-      RTEMS.MESSAGE_QUEUE_GET_NUMBER_PENDING(
+      RTEMS.MESSAGE_QUEUE.GET_NUMBER_PENDING(
          SPTEST.QUEUE_ID( 3 ), COUNT, STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED(
@@ -454,7 +451,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( " messages are pending on Q 3" );
    
       TEXT_IO.PUT_LINE( "TA1 - message_queue_flush - empty Q 3" );
-      RTEMS.MESSAGE_QUEUE_FLUSH( SPTEST.QUEUE_ID( 3 ), COUNT, STATUS );
+      RTEMS.MESSAGE_QUEUE.FLUSH( SPTEST.QUEUE_ID( 3 ), COUNT, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_FLUSH" );
       TEXT_IO.PUT( "TA1 - " );
       UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
@@ -462,7 +459,7 @@ TEST_SUPPORT.PAUSE;
      
       SPTEST.FILL_BUFFER( "BUFFER 1 TO Q 3 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 1 TO Q 3" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
          16,
@@ -472,7 +469,7 @@ TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 2 TO Q 3 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 2 TO Q 3" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
          16,
@@ -483,7 +480,7 @@ TEST_SUPPORT.PAUSE;
       -- this broadcast should have no effect on the queue
       SPTEST.FIlL_BUFFER( "NO BUFFER TO Q1 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_broadcast - NO BUFFER TO Q1" );
-      RTEMS.MESSAGE_QUEUE_BROADCAST(
+      RTEMS.MESSAGE_QUEUE.BROADCAST(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -495,7 +492,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.NEW_LINE;
    
       TEXT_IO.PUT_LINE( "TA1 - message_queue_get_number_pending - check Q 3" );
-      RTEMS.MESSAGE_QUEUE_GET_NUMBER_PENDING(
+      RTEMS.MESSAGE_QUEUE.GET_NUMBER_PENDING(
          SPTEST.QUEUE_ID( 3 ), COUNT, STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED(
@@ -507,7 +504,7 @@ TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 3 TO Q 3 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 3 TO Q 3" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
          16,
@@ -516,7 +513,7 @@ TEST_SUPPORT.PAUSE;
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
       TEXT_IO.PUT_LINE( "TA1 - message_queue_flush - Q 3" );
-      RTEMS.MESSAGE_QUEUE_FLUSH( SPTEST.QUEUE_ID( 3 ), COUNT, STATUS );
+      RTEMS.MESSAGE_QUEUE.FLUSH( SPTEST.QUEUE_ID( 3 ), COUNT, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_FLUSH" );
       TEXT_IO.PUT( "TA1 - " );
       UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
@@ -527,7 +524,7 @@ TEST_SUPPORT.PAUSE;
       );
       loop
 
-         RTEMS.MESSAGE_QUEUE_SEND( 
+         RTEMS.MESSAGE_QUEUE.SEND( 
             SPTEST.QUEUE_ID( 3 ), 
             BUFFER_POINTER, 
             16,
@@ -545,7 +542,7 @@ TEST_SUPPORT.PAUSE;
       );
 
       TEXT_IO.PUT_LINE( "TA1 - message_queue_flush - Q 3" );
-      RTEMS.MESSAGE_QUEUE_FLUSH( SPTEST.QUEUE_ID( 3 ), COUNT, STATUS );
+      RTEMS.MESSAGE_QUEUE.FLUSH( SPTEST.QUEUE_ID( 3 ), COUNT, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_FLUSH" );
       TEXT_IO.PUT( "TA1 - " );
       UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
@@ -554,7 +551,7 @@ TEST_SUPPORT.PAUSE;
 TEST_SUPPORT.PAUSE;
      
       TEXT_IO.PUT_LINE( "TA1 - create message queue of 20 bytes on queue 1" );
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          100,
          20,
@@ -565,7 +562,7 @@ TEST_SUPPORT.PAUSE;
       TEST_SUPPORT.DIRECTIVE_FAILED(
          STATUS, "MESSAGE_QUEUE_CREATE of Q1; 20 bytes each"
       );
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ), BIG_SEND_BUFFER_POINTER, 40, STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -573,14 +570,14 @@ TEST_SUPPORT.PAUSE;
       );
 
       TEXT_IO.PUT_LINE( "TA1 - message_queue_delete - delete queue 1" );
-      RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+      RTEMS.MESSAGE_QUEUE.DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_DELETE" );
 
 TEST_SUPPORT.PAUSE;
 
       TEXT_IO.PUT_LINE( "TA1 - message_queue_create - variable sizes " );
       for QUEUE_SIZE in 1 .. 1029 loop
-          RTEMS.MESSAGE_QUEUE_CREATE(
+          RTEMS.MESSAGE_QUEUE.CREATE(
               SPTEST.QUEUE_NAME( 1 ),
               2,            -- just 2 msgs each
               RTEMS.UNSIGNED32( QUEUE_SIZE ),
@@ -599,7 +596,7 @@ TEST_SUPPORT.PAUSE;
               );
           end if;
 
-          RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+          RTEMS.MESSAGE_QUEUE.DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
           TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "message_queue_delete" );
       end loop;
 
@@ -608,7 +605,7 @@ TEST_SUPPORT.PAUSE;
       );
       for QUEUE_SIZE in 1 .. 1029 loop
 
-          RTEMS.MESSAGE_QUEUE_CREATE(
+          RTEMS.MESSAGE_QUEUE.CREATE(
               SPTEST.QUEUE_NAME( 1 ),
               2,            -- just 2 msgs each
               RTEMS.UNSIGNED32( QUEUE_SIZE ),
@@ -622,7 +619,7 @@ TEST_SUPPORT.PAUSE;
           BIG_RECEIVE_BUFFER := (others => CHARACTER'POS( 'Z' ));
 
           -- send a msg too big
-          RTEMS.MESSAGE_QUEUE_SEND(
+          RTEMS.MESSAGE_QUEUE.SEND(
              SPTEST.QUEUE_ID( 1 ),
              BIG_SEND_BUFFER_POINTER,
              RTEMS.UNSIGNED32( QUEUE_SIZE + 1 ),
@@ -633,7 +630,7 @@ TEST_SUPPORT.PAUSE;
           );
 
           -- send a msg that is just right
-          RTEMS.MESSAGE_QUEUE_SEND(
+          RTEMS.MESSAGE_QUEUE.SEND(
              SPTEST.QUEUE_ID( 1 ),
              BIG_SEND_BUFFER_POINTER,
              RTEMS.UNSIGNED32( QUEUE_SIZE ),
@@ -644,7 +641,8 @@ TEST_SUPPORT.PAUSE;
           );
 
           -- now read and verify the message just sent
-          RTEMS.MESSAGE_QUEUE_RECEIVE(
+          SIZE := INTERFACES.UNSIGNED_32(QUEUE_SIZE);
+          RTEMS.MESSAGE_QUEUE.RECEIVE(
              SPTEST.QUEUE_ID( 1 ),
              BIG_RECEIVE_BUFFER_POINTER,
              RTEMS.DEFAULT_OPTIONS,
@@ -678,7 +676,7 @@ TEST_SUPPORT.PAUSE;
           end loop;
 
           -- all done with this one; delete it
-          RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+          RTEMS.MESSAGE_QUEUE.DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
           TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "message_queue_delete" );
       end loop;
 
@@ -687,18 +685,17 @@ TEST_SUPPORT.PAUSE;
 
    end TASK_1;
 
---PAGE
 -- 
 --  TASK_2
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       BUFFER            : SPTEST.BUFFER;
       BUFFER_POINTER    : RTEMS.ADDRESS;
-      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
       MESSAGE_SIZE      : RTEMS.UNSIGNED32 := 0;
       STATUS            : RTEMS.STATUS_CODES;
    begin
@@ -708,7 +705,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( 
          "TA2 - message_queue_receive - receive from queue 1 - NO_WAIT"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          RTEMS.NO_WAIT,
@@ -724,7 +721,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( 
          "TA2 - message_queue_receive - receive from queue 1 - WAIT FOREVER"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -740,7 +737,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( 
          "TA2 - message_queue_receive - receive from queue 1 - WAIT FOREVER"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -756,7 +753,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( 
          "TA2 - task_set_priority - make self highest priority task"
       );
-      RTEMS.TASK_SET_PRIORITY(
+      RTEMS.TASKS.SET_PRIORITY(
          RTEMS.SELF,
          3,
          PREVIOUS_PRIORITY,
@@ -767,7 +764,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( 
          "TA2 - message_queue_receive - receive from queue 2 - WAIT FOREVER"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 2 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -782,7 +779,7 @@ TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 2 TO Q 2 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA2 - message_queue_send - BUFFER 2 TO Q 2" );
-      RTEMS.MESSAGE_QUEUE_SEND( 
+      RTEMS.MESSAGE_QUEUE.SEND( 
          SPTEST.QUEUE_ID( 2 ), 
          BUFFER_POINTER, 
          16,
@@ -793,7 +790,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( 
     "TA2 - message_queue_receive - receive from queue 1 - 10 second timeout"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -809,7 +806,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( 
          "TA2 - message_queue_receive - receive from queue 3 - WAIT FOREVER"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 3 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -824,13 +821,12 @@ TEST_SUPPORT.PAUSE;
 
    end TASK_2;
 
---PAGE
 -- 
 --  TASK_3
 --
 
    procedure TASK_3 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : SPTEST.BUFFER;
@@ -845,7 +841,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( 
          "TA3 - message_queue_receive - receive from queue 2 - WAIT FOREVER"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 2 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -860,7 +856,7 @@ TEST_SUPPORT.PAUSE;
 
       SPTEST.FILL_BUFFER( "BUFFER 3 TO Q 1 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA3 - message_queue_broadcast - BUFFER 3 TO Q 1" );
-      RTEMS.MESSAGE_QUEUE_BROADCAST( 
+      RTEMS.MESSAGE_QUEUE.BROADCAST( 
          SPTEST.QUEUE_ID( 1 ), 
          BUFFER_POINTER, 
          16,
@@ -875,7 +871,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( 
          "TA3 - message_queue_receive - receive from queue 3 - WAIT FOREVER"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 3 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -889,7 +885,7 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.NEW_LINE;
 
       TEXT_IO.PUT_LINE( "TA3 - task_delete - delete self" );
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end TASK_3;

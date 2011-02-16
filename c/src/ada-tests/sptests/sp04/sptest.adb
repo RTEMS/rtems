@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -23,6 +23,9 @@
 with INTERFACES; use INTERFACES;
 with TEST_SUPPORT;
 with TEXT_IO;
+with RTEMS.CLOCK;
+with RTEMS.EXTENSION;
+with RTEMS.FATAL;
 
 package body SPTEST is
 
@@ -43,7 +46,7 @@ package body SPTEST is
    ) is
    begin
       if Task_Events_Index = Task_Events'Last then
-         RTEMS.Fatal_Error_Occurred ( 1 );  -- no other choice
+         RTEMS.Fatal.Error_Occurred ( 1 );  -- no other choice
       else
          Task_Events (Task_Events_Index).Task_Index := Task_Index;
          Task_Events (Task_Events_Index).When_Switched := When_Switched;
@@ -65,13 +68,12 @@ package body SPTEST is
 
    end Flush_Task_Event_Log;
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       TIME   : RTEMS.TIME_OF_DAY;
@@ -83,12 +85,12 @@ package body SPTEST is
 
       TIME := ( 1988, 12, 31, 9, 15, 0, 0 );
 
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET" );
 
       SPTEST.EXTENSION_NAME( 1 ) := RTEMS.BUILD_NAME(  'E', 'X', 'T', ' ' );
 
-      RTEMS.EXTENSION_CREATE(
+      RTEMS.EXTENSION.CREATE(
          SPTEST.EXTENSION_NAME( 1 ),
          SPTEST.EXTENSIONS'ACCESS,
          EXTENSION_ID( 1 ),
@@ -104,7 +106,7 @@ package body SPTEST is
       SPTEST.RUN_COUNT( 2 ) := 0;
       SPTEST.RUN_COUNT( 3 ) := 0;
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          1, 
          2048, 
@@ -115,7 +117,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 2 ), 
          1, 
          2048, 
@@ -126,7 +128,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA2" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 3 ), 
          1, 
          2048, 
@@ -137,7 +139,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA3" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -145,7 +147,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 2 ),
          SPTEST.TASK_2'ACCESS,
          0,
@@ -153,7 +155,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA2" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 3 ),
          SPTEST.TASK_3'ACCESS,
          0,
@@ -161,18 +163,17 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA3" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       SECONDS       : RTEMS.UNSIGNED32;
@@ -185,25 +186,25 @@ package body SPTEST is
    begin
 
       TEXT_IO.PUT_LINE( "TA1 - task_suspend - on Task 2" );
-      RTEMS.TASK_SUSPEND( TASK_ID( 2 ), STATUS );
+      RTEMS.TASKS.SUSPEND( TASK_ID( 2 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND OF TA2" );
  
       TEXT_IO.PUT_LINE( "TA1 - task_suspend - on Task 3" );
-      RTEMS.TASK_SUSPEND( TASK_ID( 3 ), STATUS );
+      RTEMS.TASKS.SUSPEND( TASK_ID( 3 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND OF TA3" );
  
       TEXT_IO.PUT_LINE( "TA1 - killing time" );
 
-      RTEMS.CLOCK_GET(
-         RTEMS.CLOCK_GET_SECONDS_SINCE_EPOCH,
+      RTEMS.CLOCK.GET(
+         RTEMS.CLOCK.GET_SECONDS_SINCE_EPOCH,
          START_TIME'ADDRESS,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET" );
 
       loop
-         RTEMS.CLOCK_GET(
-            RTEMS.CLOCK_GET_SECONDS_SINCE_EPOCH,
+         RTEMS.CLOCK.GET(
+            RTEMS.CLOCK.GET_SECONDS_SINCE_EPOCH,
             END_TIME'ADDRESS,
             STATUS
          );
@@ -213,11 +214,11 @@ package body SPTEST is
       end loop;
 
       TEXT_IO.PUT_LINE( "TA1 - task_resume - on Task 2" );
-      RTEMS.TASK_RESUME( TASK_ID( 2 ), STATUS );
+      RTEMS.TASKS.RESUME( TASK_ID( 2 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESUME OF TA2" );
  
       TEXT_IO.PUT_LINE( "TA1 - task_resume - on Task 3" );
-      RTEMS.TASK_RESUME( TASK_ID( 3 ), STATUS );
+      RTEMS.TASKS.RESUME( TASK_ID( 3 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESUME OF TA3" );
  
       loop
@@ -227,7 +228,7 @@ package body SPTEST is
             TEXT_IO.PUT_LINE( 
                "TA1 - task_mode - change mode to NO PREEMPT"
             );
-            RTEMS.TASK_MODE( 
+            RTEMS.TASKS.MODE( 
                RTEMS.NO_PREEMPT, 
                RTEMS.PREEMPT_MASK, 
                PREVIOUS_MODE, 
@@ -235,7 +236,7 @@ package body SPTEST is
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_MODE" );
 
-            RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+            RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET" );
 
             OLD_SECONDS := TIME.SECOND;
@@ -245,7 +246,7 @@ package body SPTEST is
 
                exit when SECONDS >= 6;
 
-               RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+               RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
                TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET" );
 
                if TIME.SECOND /= OLD_SECONDS then
@@ -261,7 +262,7 @@ package body SPTEST is
                "TA1 - task_mode - change mode to PREEMPT"
             );
 
-            RTEMS.TASK_MODE( 
+            RTEMS.TASKS.MODE( 
                RTEMS.PREEMPT, 
                RTEMS.PREEMPT_MASK, 
                PREVIOUS_MODE, 
@@ -282,13 +283,12 @@ package body SPTEST is
 
    end TASK_1;
 
---PAGE
 -- 
 --  TASK_2
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
    begin
@@ -299,13 +299,12 @@ package body SPTEST is
 
    end TASK_2;
 
---PAGE
 -- 
 --  TASK_3
 --
 
    procedure TASK_3 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
    begin
@@ -316,7 +315,6 @@ package body SPTEST is
 
    end TASK_3;
 
---PAGE
 -- 
 --  TASK_SWITCH
 --
@@ -342,7 +340,7 @@ package body SPTEST is
          when 1  | 2 | 3 =>
             SPTEST.RUN_COUNT( INDEX ) := SPTEST.RUN_COUNT( INDEX ) + 1;
 
-            RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+            RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET" );
 
             Log_Task_Event ( INDEX, TIME );

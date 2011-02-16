@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -25,16 +25,16 @@ with RTEMS_CALLING_OVERHEAD;
 with TEST_SUPPORT;
 with TEXT_IO;
 with TIMER_DRIVER;
+with RTEMS.EVENT;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       ID     : RTEMS.ID;
@@ -44,7 +44,7 @@ package body TMTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT_LINE( "*** TIME TEST 16 ***" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'T', 'E', 'S', 'T' ),
          251, 
          2048, 
@@ -55,7 +55,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TEST INIT" );
 
-      RTEMS.TASK_START( 
+      RTEMS.TASKS.START( 
          ID, 
          TMTEST.TEST_INIT'ACCESS, 
          0, 
@@ -63,22 +63,21 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TEST INIT" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_INIT
 --
 
    procedure TEST_INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
-      PRIORITY   : RTEMS.TASK_PRIORITY;
-      TASK_ENTRY : RTEMS.TASK_ENTRY;
+      PRIORITY   : RTEMS.TASKS.PRIORITY;
+      TASK_ENTRY : RTEMS.TASKS.ENTRY_POINT;
       STATUS     : RTEMS.STATUS_CODES;
    begin
 
@@ -87,7 +86,7 @@ package body TMTEST is
       for INDEX in 0 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'M', 'I', 'D', ' ' ),
             PRIORITY, 
             1024, 
@@ -104,7 +103,7 @@ package body TMTEST is
             TASK_ENTRY := TMTEST.MIDDLE_TASKS'ACCESS;
          end if;
 
-         RTEMS.TASK_START( 
+         RTEMS.TASKS.START( 
             TMTEST.TASK_ID( INDEX ), 
             TASK_ENTRY, 
             0, 
@@ -120,59 +119,60 @@ package body TMTEST is
 
       TIMER_DRIVER.INITIALIZE;                  -- starts the timer
 
-      RTEMS.EVENT_SEND(                         -- preempts task
+      RTEMS.EVENT.SEND(                         -- preempts task
          TMTEST.TASK_ID( TMTEST.TASK_COUNT ), 
          RTEMS.EVENT_16, 
          STATUS 
       );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND" );
       
    end TEST_INIT;
 
---PAGE
 -- 
 --  MIDDLE_TASKS
 --
 
    procedure MIDDLE_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       EVENT_OUT : RTEMS.EVENT_SET;
       STATUS    : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_RECEIVE(                      -- task blocks
+      RTEMS.EVENT.RECEIVE(                      -- task blocks
          RTEMS.EVENT_16, 
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
          EVENT_OUT,
          STATUS
       );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_RECEIVE" );
 
       TMTEST.TASK_COUNT := TMTEST.TASK_COUNT + 1;
 
-      RTEMS.EVENT_SEND(                         -- preempts task
+      RTEMS.EVENT.SEND(                         -- preempts task
          TMTEST.TASK_ID( TMTEST.TASK_COUNT ), 
          RTEMS.EVENT_16, 
          STATUS 
       );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND" );
       
    end MIDDLE_TASKS;
 
---PAGE
 -- 
 --  HIGH_TASK
 --
 
    procedure HIGH_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       EVENT_OUT : RTEMS.EVENT_SET;
       STATUS    : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_RECEIVE(                      -- task blocks
+      RTEMS.EVENT.RECEIVE(                      -- task blocks
          RTEMS.EVENT_16, 
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,

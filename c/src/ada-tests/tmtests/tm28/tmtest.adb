@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,16 +24,16 @@ with RTEMS_CALLING_OVERHEAD;
 with TEST_SUPPORT;
 with TEXT_IO;
 with TIMER_DRIVER;
+with RTEMS.PORT;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS  : RTEMS.STATUS_CODES;
@@ -42,7 +42,7 @@ package body TMTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT_LINE( "*** TIME TEST 28 ***" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'T', 'E', 'S', 'T' ),
          128, 
          1024, 
@@ -53,7 +53,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
-      RTEMS.TASK_START( 
+      RTEMS.TASKS.START( 
          TMTEST.TASK_ID( 1 ),
          TMTEST.TEST_TASK'ACCESS, 
          0, 
@@ -61,18 +61,17 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_TASK
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       NAME      : RTEMS.NAME;
@@ -92,7 +91,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.PORT_CREATE(
+            RTEMS.PORT.CREATE(
                NAME,
                TMTEST.INTERNAL_PORT_AREA'ADDRESS,
                TMTEST.EXTERNAL_PORT_AREA'ADDRESS,
@@ -114,7 +113,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.PORT_EXTERNAL_TO_INTERNAL(
+            RTEMS.PORT.EXTERNAL_TO_INTERNAL(
                TMTEST.PORT_ID( 1 ),
                TMTEST.EXTERNAL_PORT_AREA( 16#F# )'ADDRESS,
                CONVERTED,
@@ -134,7 +133,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.PORT_INTERNAL_TO_EXTERNAL(
+            RTEMS.PORT.INTERNAL_TO_EXTERNAL(
                TMTEST.PORT_ID( 1 ),
                TMTEST.INTERNAL_PORT_AREA( 16#F# )'ADDRESS,
                CONVERTED,
@@ -154,7 +153,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.PORT_DELETE( TMTEST.PORT_ID( INDEX ), STATUS );
+            RTEMS.PORT.DELETE( TMTEST.PORT_ID( INDEX ), STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 

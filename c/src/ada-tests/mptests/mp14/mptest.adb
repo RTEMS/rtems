@@ -10,7 +10,7 @@
 --
 --
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -23,6 +23,12 @@
 with INTERFACES; use INTERFACES;
 with INTERFACES.C;
 with RTEMS;
+with RTEMS.EVENT;
+with RTEMS.MESSAGE_QUEUE;
+with RTEMS.PARTITION;
+with RTEMS.SEMAPHORE;
+with RTEMS.TASKS;
+with RTEMS.TIMER;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -31,7 +37,6 @@ with System.Storage_Elements; use System.Storage_Elements;
 
 package body MPTEST is
 
---PAGE
 --
 --  STOP_TEST_TSR
 --
@@ -46,7 +51,6 @@ package body MPTEST is
  
    end STOP_TEST_TSR;
  
---PAGE
 --
 --  EXIT_TEST
 --
@@ -58,7 +62,7 @@ package body MPTEST is
       pragma Import (C, BSP_MPCI_PRINT_STATISTICS, "MPCI_Print_statistics" );
    begin
  
-      RTEMS.TASK_MODE(RTEMS.NO_PREEMPT, RTEMS.PREEMPT_MASK, OLD_MODE, STATUS);
+      RTEMS.TASKS.MODE(RTEMS.NO_PREEMPT, RTEMS.PREEMPT_MASK, OLD_MODE, STATUS);
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_MODE" );
 
       BSP_MPCI_PRINT_STATISTICS;
@@ -67,17 +71,16 @@ package body MPTEST is
  
    end EXIT_TEST;
  
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       INDEX             : RTEMS.UNSIGNED32;
       STATUS            : RTEMS.STATUS_CODES;
-      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
    begin
 
       TEXT_IO.NEW_LINE( 2 );
@@ -92,14 +95,14 @@ package body MPTEST is
 
       MPTEST.STOP_TEST := FALSE;
 
-      RTEMS.TIMER_CREATE(
+      RTEMS.TIMER.CREATE(
          MPTEST.STOP_TIMER_NAME,
          MPTEST.STOP_TIMER_ID,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE" );
 
-      RTEMS.TIMER_FIRE_AFTER(
+      RTEMS.TIMER.FIRE_AFTER(
          MPTEST.STOP_TIMER_ID,
          TEST_SUPPORT.MAXIMUM_LONG_TEST_DURATION *
             TEST_SUPPORT.TICKS_PER_SECOND,
@@ -144,7 +147,7 @@ package body MPTEST is
       if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Creating Semaphore (Global)" );
-         RTEMS.SEMAPHORE_CREATE(
+         RTEMS.SEMAPHORE.CREATE(
             MPTEST.SEMAPHORE_NAME( 1 ),
             1,
             RTEMS.GLOBAL,
@@ -154,7 +157,7 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE" );
 
          TEXT_IO.PUT_LINE( "Creating Message Queue (Global)" );
-         RTEMS.MESSAGE_QUEUE_CREATE(
+         RTEMS.MESSAGE_QUEUE.CREATE(
             MPTEST.QUEUE_NAME( 1 ),
             1,
             RTEMS.GLOBAL,
@@ -164,7 +167,7 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_CREATE" );
 
          TEXT_IO.PUT_LINE( "Creating Partition (Global)" );
-         RTEMS.PARTITION_CREATE(
+         RTEMS.PARTITION.CREATE(
             MPTEST.PARTITION_NAME( 1 ),
             MPTEST.PARTITION_AREA( 0 )'ADDRESS,
             16#8000#,
@@ -178,7 +181,7 @@ package body MPTEST is
       end if;
 
       TEXT_IO.PUT_LINE( "Creating Event task (Global)" );
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          MPTEST.EVENT_TASK_NAME(
             TEST_SUPPORT.NODE
          ),
@@ -192,7 +195,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
       TEXT_IO.PUT_LINE( "Starting Event task (Global)" );
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.EVENT_TASK_ID( 1 ),
          MPTEST.TEST_TASK'ACCESS,
          0,
@@ -201,7 +204,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
       TEXT_IO.PUT_LINE( "Creating Semaphore task (Global)" );
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          MPTEST.SEMAPHORE_TASK_NAME(
             TEST_SUPPORT.NODE
          ),
@@ -215,7 +218,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
       TEXT_IO.PUT_LINE( "Starting Semaphore task (Global)" );
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.SEMAPHORE_TASK_ID( 1 ),
          MPTEST.SEMAPHORE_TASK'ACCESS,
          0,
@@ -224,7 +227,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
       TEXT_IO.PUT_LINE( "Creating Message Queue task (Global)" );
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          MPTEST.QUEUE_TASK_NAME(
             TEST_SUPPORT.NODE
          ),
@@ -238,7 +241,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
       TEXT_IO.PUT_LINE( "Starting Message Queue task (Global)" );
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.QUEUE_TASK_ID( 1 ),
          MPTEST.MESSAGE_QUEUE_TASK'ACCESS,
          1,                          -- index of buffer
@@ -247,7 +250,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
       TEXT_IO.PUT_LINE( "Creating Partition task (Global)" );
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          MPTEST.PARTITION_TASK_NAME(
             TEST_SUPPORT.NODE 
          ),
@@ -261,7 +264,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
       TEXT_IO.PUT_LINE( "Starting Partition task (Global)" );
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.PARTITION_TASK_ID( 1 ),
          MPTEST.PARTITION_TASK'ACCESS,
          0,
@@ -269,7 +272,7 @@ package body MPTEST is
       ); 
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
     
-      RTEMS.TASK_SET_PRIORITY( RTEMS.SELF, 2, PREVIOUS_PRIORITY, STATUS );
+      RTEMS.TASKS.SET_PRIORITY( RTEMS.SELF, 2, PREVIOUS_PRIORITY, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_PRIORITY" );
 
       MPTEST.DELAYED_EVENTS_TASK( 1 );
@@ -292,7 +295,7 @@ package body MPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_SEND(
+      RTEMS.EVENT.SEND(
          MPTEST.TASK_ID( RTEMS.GET_INDEX( TIMER_ID ) ),
          RTEMS.EVENT_16,
          STATUS
@@ -310,7 +313,7 @@ package body MPTEST is
 --
  
    procedure TEST_TASK ( 
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       REMOTE_NODE : RTEMS.UNSIGNED32;
       REMOTE_TID  : RTEMS.ID;
@@ -326,7 +329,7 @@ package body MPTEST is
       end if;
 
       TEXT_IO.PUT_LINE( "About to go to sleep!" );
-      RTEMS.TASK_WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
       TEXT_IO.PUT_LINE( "Waking up!" );
  
@@ -337,7 +340,7 @@ package body MPTEST is
 
       loop
 
-         RTEMS.TASK_IDENT(
+         RTEMS.TASKS.IDENT(
             MPTEST.EVENT_TASK_NAME( REMOTE_NODE ),
             RTEMS.SEARCH_ALL_NODES,
             REMOTE_TID,
@@ -358,7 +361,7 @@ package body MPTEST is
 
             for COUNT in 1 .. MPTEST.EVENT_TASK_DOT_COUNT
             loop
-               RTEMS.EVENT_SEND(
+               RTEMS.EVENT.SEND(
                   REMOTE_TID,
                   RTEMS.EVENT_16,
                   STATUS
@@ -384,7 +387,7 @@ package body MPTEST is
          loop 
             exit when MPTEST.STOP_TEST = TRUE;
 
-            RTEMS.EVENT_RECEIVE(
+            RTEMS.EVENT.RECEIVE(
                RTEMS.EVENT_16,
                RTEMS.DEFAULT_OPTIONS,
                RTEMS.NO_TIMEOUT,
@@ -412,7 +415,7 @@ package body MPTEST is
 -- 
   
    procedure DELAYED_EVENTS_TASK (  
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT 
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT 
    ) is
       COUNT         : RTEMS.UNSIGNED32;
       PREVIOUS_MODE : RTEMS.MODE;
@@ -420,7 +423,7 @@ package body MPTEST is
       STATUS        : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_MODE(
+      RTEMS.TASKS.MODE(
          RTEMS.PREEMPT + RTEMS.TIMESLICE,
          RTEMS.PREEMPT_MASK + RTEMS.TIMESLICE_MASK,
          PREVIOUS_MODE,
@@ -428,14 +431,14 @@ package body MPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_MODE" );
  
-      RTEMS.TIMER_CREATE(
+      RTEMS.TIMER.CREATE(
          MPTEST.TIMER_NAME( 1 ),
          MPTEST.TIMER_ID( 1 ),
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE" );
 
-      RTEMS.TASK_IDENT(
+      RTEMS.TASKS.IDENT(
          RTEMS.SELF,
          RTEMS.SEARCH_ALL_NODES,
          MPTEST.TASK_ID( RTEMS.GET_INDEX( MPTEST.TIMER_ID( 1 ) ) ),
@@ -447,7 +450,7 @@ package body MPTEST is
 
          for COUNT in 1 .. MPTEST.DELAYED_EVENT_DOT_COUNT 
          loop 
-            RTEMS.TIMER_FIRE_AFTER(
+            RTEMS.TIMER.FIRE_AFTER(
                MPTEST.TIMER_ID( 1 ),
                1,
                MPTEST.DELAYED_SEND_EVENT'ACCESS,
@@ -456,7 +459,7 @@ package body MPTEST is
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_FIRE_AFTER" );
 
-            RTEMS.EVENT_RECEIVE(
+            RTEMS.EVENT.RECEIVE(
                RTEMS.EVENT_16,
                RTEMS.DEFAULT_OPTIONS,
                RTEMS.NO_TIMEOUT,
@@ -484,7 +487,7 @@ package body MPTEST is
 -- 
   
    procedure MESSAGE_QUEUE_TASK (  
-      INDEX : in     RTEMS.TASK_ARGUMENT 
+      INDEX : in     RTEMS.TASKS.ARGUMENT 
    ) is
       COUNT          : RTEMS.UNSIGNED32;
       YIELD_COUNT    : RTEMS.UNSIGNED32;
@@ -502,7 +505,7 @@ package body MPTEST is
 
       loop
 
-         RTEMS.MESSAGE_QUEUE_IDENT(
+         RTEMS.MESSAGE_QUEUE.IDENT(
             MPTEST.QUEUE_NAME( 1 ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.QUEUE_ID( 1 ),
@@ -516,7 +519,7 @@ package body MPTEST is
 
       if TEST_SUPPORT.NODE = 1 then
 
-         RTEMS.MESSAGE_QUEUE_SEND(
+         RTEMS.MESSAGE_QUEUE.SEND(
             MPTEST.QUEUE_ID( 1 ),
             MPTEST.BUFFERS( INDEX ),
             STATUS
@@ -554,7 +557,7 @@ package body MPTEST is
 
            exit when MPTEST.STOP_TEST = TRUE;
 
-            RTEMS.MESSAGE_QUEUE_RECEIVE(
+            RTEMS.MESSAGE_QUEUE.RECEIVE(
                MPTEST.QUEUE_ID( 1 ),
                MPTEST.BUFFERS( INDEX ),
                RTEMS.DEFAULT_OPTIONS,
@@ -573,7 +576,7 @@ package body MPTEST is
                BUFFER_COUNT.ALL := BUFFER_COUNT.ALL + 1;
             end if;
 
-            RTEMS.MESSAGE_QUEUE_SEND(
+            RTEMS.MESSAGE_QUEUE.SEND(
                MPTEST.QUEUE_ID( 1 ),
                MPTEST.BUFFERS( INDEX ),
                STATUS
@@ -587,7 +590,7 @@ package body MPTEST is
 
                   if YIELD_COUNT = 0 then
 
-                     RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+                     RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
                      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "YIELD" );
 
                      YIELD_COUNT := 100;
@@ -617,7 +620,7 @@ package body MPTEST is
 -- 
   
    procedure PARTITION_TASK (  
-      IGNORED : in     RTEMS.TASK_ARGUMENT 
+      IGNORED : in     RTEMS.TASKS.ARGUMENT 
    ) is
       COUNT  : RTEMS.UNSIGNED32;
       BUFFER : RTEMS.ADDRESS;
@@ -628,7 +631,7 @@ package body MPTEST is
  
       loop
 
-         RTEMS.PARTITION_IDENT(
+         RTEMS.PARTITION.IDENT(
             MPTEST.PARTITION_NAME( 1 ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.PARTITION_ID( 1 ),
@@ -649,14 +652,14 @@ package body MPTEST is
 
             exit when MPTEST.STOP_TEST = TRUE;
 
-            RTEMS.PARTITION_GET_BUFFER(
+            RTEMS.PARTITION.GET_BUFFER(
                MPTEST.PARTITION_ID( 1 ),
                BUFFER,
                STATUS
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_GET_BUFFER" );
 
-            RTEMS.PARTITION_RETURN_BUFFER(
+            RTEMS.PARTITION.RETURN_BUFFER(
                MPTEST.PARTITION_ID( 1 ),
                BUFFER,
                STATUS
@@ -668,7 +671,7 @@ package body MPTEST is
 
             if TEST_SUPPORT.NODE = 1 then
 
-               RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+               RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
                TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "YIELD" );
 
             end if;
@@ -692,7 +695,7 @@ package body MPTEST is
 -- 
   
    procedure SEMAPHORE_TASK (  
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT 
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT 
    ) is
       COUNT          : RTEMS.UNSIGNED32;
       YIELD_COUNT    : RTEMS.UNSIGNED32;
@@ -703,7 +706,7 @@ package body MPTEST is
 
       loop
 
-         RTEMS.SEMAPHORE_IDENT(
+         RTEMS.SEMAPHORE.IDENT(
             MPTEST.SEMAPHORE_NAME( 1 ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.SEMAPHORE_ID( 1 ),
@@ -726,7 +729,7 @@ package body MPTEST is
 
             exit when MPTEST.STOP_TEST = TRUE;
 
-            RTEMS.SEMAPHORE_OBTAIN(
+            RTEMS.SEMAPHORE.OBTAIN(
                MPTEST.SEMAPHORE_ID( 1 ),
                RTEMS.DEFAULT_OPTIONS,
                RTEMS.NO_TIMEOUT,
@@ -734,7 +737,7 @@ package body MPTEST is
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN" );
 
-            RTEMS.SEMAPHORE_RELEASE( MPTEST.SEMAPHORE_ID( 1 ), STATUS );
+            RTEMS.SEMAPHORE.RELEASE( MPTEST.SEMAPHORE_ID( 1 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE" );
 
             if TEST_SUPPORT.NODE = 1 then
@@ -743,7 +746,7 @@ package body MPTEST is
 
                if YIELD_COUNT = 0 then
 
-                  RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+                  RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
                   TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "YIELD" );
 
                   YIELD_COUNT := 100;

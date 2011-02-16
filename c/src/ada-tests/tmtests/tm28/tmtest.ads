@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -23,6 +23,7 @@
 with SYSTEM;
 with TIME_TEST_SUPPORT;
 with RTEMS;
+with RTEMS.TASKS;
 with System.Storage_Elements;
 
 package TMTEST is
@@ -50,7 +51,7 @@ package TMTEST is
 
    INTERNAL_PORT_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 255 )
       of RTEMS.UNSIGNED8;
-   for INTERNAL_PORT_AREA use at INTERNAL_PORT_AREA_ADDRESS;
+   for INTERNAL_PORT_AREA'Address use INTERNAL_PORT_AREA_ADDRESS;
 
 --
 --  The following area defines a memory area to be used as the
@@ -62,7 +63,7 @@ package TMTEST is
 
    EXTERNAL_PORT_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 255 )
       of RTEMS.UNSIGNED8;
-   for EXTERNAL_PORT_AREA use at EXTERNAL_PORT_AREA_ADDRESS;
+   for EXTERNAL_PORT_AREA'Address use EXTERNAL_PORT_AREA_ADDRESS;
 
 --
 --  The following variable is set to the execution time returned
@@ -80,7 +81,7 @@ package TMTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -99,7 +100,7 @@ package TMTEST is
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TEST_TASK);
 

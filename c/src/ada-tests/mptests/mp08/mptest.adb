@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -22,19 +22,21 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.OBJECT;
+with RTEMS.SEMAPHORE;
+with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body MPTEST is
 
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -56,7 +58,7 @@ package body MPTEST is
 
          TEXT_IO.PUT_LINE( "Creating Semaphore(Global)" );
 
-         RTEMS.SEMAPHORE_CREATE(
+         RTEMS.SEMAPHORE.CREATE(
             MPTEST.SEMAPHORE_NAME( 1 ),
             1,
             RTEMS.GLOBAL,
@@ -68,7 +70,7 @@ package body MPTEST is
       end if;
 
       TEXT_IO.PUT_LINE( "Creating Test_task (Global)" );
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          MPTEST.TASK_NAME( TEST_SUPPORT.NODE ), 
          TEST_SUPPORT.NODE, 
          2048, 
@@ -80,7 +82,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
       TEXT_IO.PUT_LINE( "Starting Test_task (Global)" );
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.TASK_ID( 1 ),
          MPTEST.TEST_TASK'ACCESS,
          0,
@@ -89,18 +91,17 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
       TEXT_IO.PUT_LINE( "Deleting initialization task" );
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 --
 --  TEST_TASK
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       DOTS                     : RTEMS.UNSIGNED32;
       COUNT                    : RTEMS.UNSIGNED32;
@@ -110,7 +111,7 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Getting SMID of semaphore" );
       loop
 
-         RTEMS.SEMAPHORE_IDENT( 
+         RTEMS.SEMAPHORE.IDENT( 
             MPTEST.SEMAPHORE_NAME( 1 ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.SEMAPHORE_ID( 1 ),
@@ -123,7 +124,7 @@ package body MPTEST is
 
       if TEST_SUPPORT.NODE = 2 then
 
-         RTEMS.SEMAPHORE_DELETE(
+         RTEMS.SEMAPHORE.DELETE(
             MPTEST.SEMAPHORE_ID( 1 ),
             STATUS
          );
@@ -145,7 +146,7 @@ package body MPTEST is
 
          TEST_SUPPORT.PUT_DOT( "p" );
 
-         RTEMS.SEMAPHORE_OBTAIN(
+         RTEMS.SEMAPHORE.OBTAIN(
             MPTEST.SEMAPHORE_ID( 1 ),
             RTEMS.DEFAULT_OPTIONS,
             RTEMS.NO_TIMEOUT,
@@ -175,14 +176,14 @@ package body MPTEST is
          if TEST_SUPPORT.NODE = 1 and then
             COUNT >= 1000 then
 
-            RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+            RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
             TEXT_IO.NEW_LINE;
 
             TEXT_IO.PUT_LINE( "Deleting global semaphore" );
 
-            RTEMS.SEMAPHORE_DELETE( MPTEST.SEMAPHORE_ID( 1 ), STATUS );
+            RTEMS.SEMAPHORE.DELETE( MPTEST.SEMAPHORE_ID( 1 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_DELETE" );
 
             TEXT_IO.PUT_LINE( "*** END OF TEST 8 ***" );
@@ -193,7 +194,7 @@ package body MPTEST is
 
          TEST_SUPPORT.PUT_DOT( "v" );
 
-         RTEMS.SEMAPHORE_RELEASE( MPTEST.SEMAPHORE_ID( 1 ), STATUS );
+         RTEMS.SEMAPHORE.RELEASE( MPTEST.SEMAPHORE_ID( 1 ), STATUS );
 
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE" );
 

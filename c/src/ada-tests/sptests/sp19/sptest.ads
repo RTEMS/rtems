@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 
 package SPTEST is
 
@@ -56,7 +57,7 @@ package SPTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -69,7 +70,7 @@ package SPTEST is
 --
 
    procedure FIRST_FP_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, FIRST_FP_TASK);
 
@@ -83,7 +84,7 @@ package SPTEST is
 --
 
    procedure FP_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, FP_TASK);
 
@@ -98,8 +99,23 @@ package SPTEST is
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, TASK_1);
+
+--
+--  Add_Float
+--
+--  DESCRIPTION:
+--
+--  This method ensures the compilers thinks we are using the variables.
+--
+
+   function Add_Float(
+     n      : in Float;
+     factor : in Float
+   ) return Float;
+   pragma Interface (C, Add_Float);
+   pragma Interface_Name (Add_Float, "add_float");
 
 end SPTEST;

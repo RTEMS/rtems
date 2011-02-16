@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -25,16 +25,16 @@ with RTEMS_CALLING_OVERHEAD;
 with TEST_SUPPORT;
 with TEXT_IO;
 with TIMER_DRIVER;
+with RTEMS.SEMAPHORE;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS  : RTEMS.STATUS_CODES;
@@ -45,12 +45,11 @@ package body TMTEST is
 
       TMTEST.TEST_INIT;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_INIT
 --
@@ -65,7 +64,7 @@ package body TMTEST is
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
             10, 
             1024, 
@@ -76,7 +75,7 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE LOOP" );
 
-         RTEMS.TASK_START( 
+         RTEMS.TASKS.START( 
             TMTEST.TASK_ID( INDEX ),
             TMTEST.LOW_TASKS'ACCESS, 
             0, 
@@ -86,11 +85,11 @@ package body TMTEST is
 
       end loop;
 
-      RTEMS.SEMAPHORE_CREATE(
+      RTEMS.SEMAPHORE.CREATE(
          RTEMS.BUILD_NAME( 'S', 'M', '1', ' ' ),
          0,
          RTEMS.DEFAULT_ATTRIBUTES,
-         RTEMS.NO_PRIORITY,
+         RTEMS.TASKS.NO_PRIORITY,
          TMTEST.SEMAPHORE_ID,
          STATUS
       );
@@ -98,15 +97,14 @@ package body TMTEST is
 
    end TEST_INIT;
 
---PAGE
 -- 
 --  HIGHEST_TASK
 --
 
    procedure HIGHEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
-      OLD_PRIORITY : RTEMS.TASK_PRIORITY;
+      OLD_PRIORITY : RTEMS.TASKS.PRIORITY;
       STATUS       : RTEMS.STATUS_CODES;
    begin
 
@@ -122,7 +120,7 @@ package body TMTEST is
             RTEMS_CALLING_OVERHEAD.TASK_RESTART
          );
  
-         RTEMS.TASK_SET_PRIORITY( RTEMS.SELF, 254, OLD_PRIORITY, STATUS );
+         RTEMS.TASKS.SET_PRIORITY( RTEMS.SELF, 254, OLD_PRIORITY, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_PRIORITY" );
 
       elsif ARGUMENT = 2 then
@@ -137,12 +135,12 @@ package body TMTEST is
             RTEMS_CALLING_OVERHEAD.TASK_RESTART
          );
 
-         RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+         RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE" );
  
       else
 
-         RTEMS.SEMAPHORE_OBTAIN( 
+         RTEMS.SEMAPHORE.OBTAIN( 
             TMTEST.SEMAPHORE_ID, 
             RTEMS.DEFAULT_OPTIONS,
             RTEMS.NO_TIMEOUT,
@@ -153,28 +151,29 @@ package body TMTEST is
 
    end HIGHEST_TASK;
 
---PAGE
 -- 
 --  HIGH_TASK
 --
 
    procedure HIGH_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
-      OLD_PRIORITY : RTEMS.TASK_PRIORITY;
+      OLD_PRIORITY : RTEMS.TASKS.PRIORITY;
       OVERHEAD     : RTEMS.UNSIGNED32;
       NAME         : RTEMS.NAME;
       STATUS       : RTEMS.STATUS_CODES;
    begin
  
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.TASK_RESTART( TMTEST.HIGHEST_ID, 1, STATUS );
+         RTEMS.TASKS.RESTART( TMTEST.HIGHEST_ID, 1, STATUS );
       -- preempted by Higher_task
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART" );
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.TASK_RESTART( TMTEST.HIGHEST_ID, 2, STATUS );
+         RTEMS.TASKS.RESTART( TMTEST.HIGHEST_ID, 2, STATUS );
       -- preempted by Higher_task
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART" );
 
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
@@ -186,9 +185,10 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.SEMAPHORE_RELEASE( TMTEST.SEMAPHORE_ID, STATUS );
+            RTEMS.SEMAPHORE.RELEASE( TMTEST.SEMAPHORE_ID, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE" );
 
       TIME_TEST_SUPPORT.PUT_TIME( 
          "SEMAPHORE_RELEASE (readying)",
@@ -200,7 +200,7 @@ package body TMTEST is
 
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
-         RTEMS.TASK_DELETE( TMTEST.TASK_ID( INDEX ), STATUS );
+         RTEMS.TASKS.DELETE( TMTEST.TASK_ID( INDEX ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE" );
       end loop;
      
@@ -209,7 +209,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_CREATE( 
+            RTEMS.TASKS.CREATE( 
                NAME,
                10, 
                1024, 
@@ -232,7 +232,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_START( 
+            RTEMS.TASKS.START( 
                TMTEST.TASK_ID( INDEX ),
                TMTEST.LOW_TASKS'ACCESS, 
                0, 
@@ -251,13 +251,13 @@ package body TMTEST is
 
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
-         RTEMS.TASK_DELETE( TMTEST.TASK_ID( INDEX ), STATUS );
+         RTEMS.TASKS.DELETE( TMTEST.TASK_ID( INDEX ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE LOOP" );
       end loop;
      
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             NAME,
             250, 
             1024, 
@@ -267,21 +267,21 @@ package body TMTEST is
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE LOOP" );
-         RTEMS.TASK_START( 
+         RTEMS.TASKS.START( 
             TMTEST.TASK_ID( INDEX ),
             TMTEST.RESTART_TASK'ACCESS, 
             0, 
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
-         RTEMS.TASK_SUSPEND( TMTEST.TASK_ID( INDEX ), STATUS );
+         RTEMS.TASKS.SUSPEND( TMTEST.TASK_ID( INDEX ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND LOOP" );
       end loop;
      
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_RESTART( TMTEST.TASK_ID( INDEX ), 0, STATUS );
+            RTEMS.TASKS.RESTART( TMTEST.TASK_ID( INDEX ), 0, STATUS );
          end loop; 
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -295,14 +295,14 @@ package body TMTEST is
 
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
-         RTEMS.TASK_SUSPEND( TMTEST.TASK_ID( INDEX ), STATUS );
+         RTEMS.TASKS.SUSPEND( TMTEST.TASK_ID( INDEX ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND LOOP" );
       end loop;
 
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_DELETE( TMTEST.TASK_ID( INDEX ), STATUS );
+            RTEMS.TASKS.DELETE( TMTEST.TASK_ID( INDEX ), STATUS );
          end loop; 
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -316,7 +316,7 @@ package body TMTEST is
 
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             NAME,
             250, 
             1024, 
@@ -326,7 +326,7 @@ package body TMTEST is
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE LOOP" );
-         RTEMS.TASK_START( 
+         RTEMS.TASKS.START( 
             TMTEST.TASK_ID( INDEX ),
             TMTEST.RESTART_TASK'ACCESS, 
             0, 
@@ -338,7 +338,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_RESTART( TMTEST.TASK_ID( INDEX ), 1, STATUS );
+            RTEMS.TASKS.RESTART( TMTEST.TASK_ID( INDEX ), 1, STATUS );
          end loop; 
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -352,7 +352,7 @@ package body TMTEST is
 
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
-         RTEMS.TASK_SET_PRIORITY( 
+         RTEMS.TASKS.SET_PRIORITY( 
             TMTEST.TASK_ID( INDEX ), 
             5, 
             OLD_PRIORITY, 
@@ -362,13 +362,13 @@ package body TMTEST is
       end loop; 
 
       -- yield processor -- tasks block
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS ); 
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS ); 
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
     
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_RESTART( TMTEST.TASK_ID( INDEX ), 1, STATUS );
+            RTEMS.TASKS.RESTART( TMTEST.TASK_ID( INDEX ), 1, STATUS );
          end loop; 
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -381,13 +381,13 @@ package body TMTEST is
       );
 
       -- yield processor -- tasks block
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS ); 
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS ); 
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
     
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TASK_DELETE( TMTEST.TASK_ID( INDEX ), STATUS );
+            RTEMS.TASKS.DELETE( TMTEST.TASK_ID( INDEX ), STATUS );
          end loop; 
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -404,13 +404,12 @@ package body TMTEST is
 
    end HIGH_TASK;
 
---PAGE
 -- 
 --  LOW_TASKS
 --
 
    procedure LOW_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       ID         : RTEMS.ID;
@@ -421,7 +420,7 @@ package body TMTEST is
 
       if TMTEST.TASK_COUNT = 0 then
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'H', 'I', ' ', ' ' ),
             5, 
             2048, 
@@ -432,7 +431,7 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE HI" );
 
-         RTEMS.TASK_START( 
+         RTEMS.TASKS.START( 
             ID, 
             TMTEST.HIGH_TASK'ACCESS, 
             0, 
@@ -441,7 +440,7 @@ package body TMTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START HI" );
 
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'H', 'I', 'G', 'H' ),
             3, 
             2048, 
@@ -452,7 +451,7 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE HIGH" );
 
-         RTEMS.TASK_START( 
+         RTEMS.TASKS.START( 
             TMTEST.HIGHEST_ID, 
             TMTEST.HIGHEST_TASK'ACCESS, 
             0, 
@@ -463,28 +462,28 @@ package body TMTEST is
 
       end if;
 
-      RTEMS.SEMAPHORE_OBTAIN( 
+      RTEMS.SEMAPHORE.OBTAIN( 
          TMTEST.SEMAPHORE_ID, 
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
          STATUS
       );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN" );
 
    end LOW_TASKS;
 
---PAGE
 -- 
 --  RESTART_TASK
 --
 
    procedure RESTART_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS   : RTEMS.STATUS_CODES;
    begin
    
       if ARGUMENT = 1 then
-         RTEMS.SEMAPHORE_OBTAIN( 
+         RTEMS.SEMAPHORE.OBTAIN( 
             TMTEST.SEMAPHORE_ID, 
             RTEMS.DEFAULT_OPTIONS,
             RTEMS.NO_TIMEOUT,

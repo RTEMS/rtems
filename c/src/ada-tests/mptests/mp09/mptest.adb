@@ -10,7 +10,7 @@
 --
 --
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -22,19 +22,21 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.MESSAGE_QUEUE;
+with RTEMS.OBJECT;
+with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body MPTEST is
 
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -75,7 +77,7 @@ package body MPTEST is
       if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Creating Message Queue (Global)" );
-         RTEMS.MESSAGE_QUEUE_CREATE(
+         RTEMS.MESSAGE_QUEUE.CREATE(
             MPTEST.QUEUE_NAME( 1 ),
             3,
             RTEMS.GLOBAL + RTEMS.LIMIT,
@@ -87,7 +89,7 @@ package body MPTEST is
       end if;
 
       TEXT_IO.PUT_LINE( "Creating Test_task (local)" );
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          MPTEST.TASK_NAME( TEST_SUPPORT.NODE ),
          TEST_SUPPORT.NODE,
          2048,
@@ -99,7 +101,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
       TEXT_IO.PUT_LINE( "Starting Test_task (local)" );
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.TASK_ID( 1 ),
          MPTEST.TEST_TASK'ACCESS,
          0,
@@ -108,12 +110,11 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
       TEXT_IO.PUT_LINE( "Deleting initialization task" );
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 --
 --  SEND_MESSAGES
 --
@@ -127,7 +128,7 @@ package body MPTEST is
       MPTEST.PUT_BUFFER( MPTEST.BUFFER_AREA_1 );
       TEXT_IO.NEW_LINE;
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          MPTEST.QUEUE_ID( 1 ),
          MPTEST.BUFFER_1,
          STATUS
@@ -135,7 +136,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
       TEXT_IO.PUT_LINE( "Delaying for a second" );
-      RTEMS.TASK_WAKE_AFTER(
+      RTEMS.TASKS.WAKE_AFTER(
          1 * TEST_SUPPORT.TICKS_PER_SECOND,
          STATUS
       );
@@ -145,7 +146,7 @@ package body MPTEST is
       MPTEST.PUT_BUFFER( MPTEST.BUFFER_AREA_2 );
       TEXT_IO.NEW_LINE;
 
-      RTEMS.MESSAGE_QUEUE_URGENT(
+      RTEMS.MESSAGE_QUEUE.URGENT(
          MPTEST.QUEUE_ID( 1 ),
          MPTEST.BUFFER_2,
          STATUS
@@ -153,7 +154,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_URGENT" );
 
       TEXT_IO.PUT_LINE( "Delaying for a second" );
-      RTEMS.TASK_WAKE_AFTER(
+      RTEMS.TASKS.WAKE_AFTER(
          1 * TEST_SUPPORT.TICKS_PER_SECOND,
          STATUS
       );
@@ -163,7 +164,7 @@ package body MPTEST is
       MPTEST.PUT_BUFFER( MPTEST.BUFFER_AREA_3 );
       TEXT_IO.NEW_LINE;
 
-      RTEMS.MESSAGE_QUEUE_BROADCAST(
+      RTEMS.MESSAGE_QUEUE.BROADCAST(
          MPTEST.QUEUE_ID( 1 ),
          MPTEST.BUFFER_3,
          BROADCAST_COUNT,
@@ -172,7 +173,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_BROADCAST" );
 
       TEXT_IO.PUT_LINE( "Delaying for a second" );
-      RTEMS.TASK_WAKE_AFTER(
+      RTEMS.TASKS.WAKE_AFTER(
          1 * TEST_SUPPORT.TICKS_PER_SECOND,
          STATUS
       );
@@ -180,7 +181,6 @@ package body MPTEST is
 
    end SEND_MESSAGES;
 
---PAGE
 --
 --  RECEIVE_MESSAGES
 --
@@ -194,7 +194,7 @@ package body MPTEST is
       loop
 
          TEXT_IO.PUT_LINE( "Receiving message ..." );
-         RTEMS.MESSAGE_QUEUE_RECEIVE(
+         RTEMS.MESSAGE_QUEUE.RECEIVE(
             MPTEST.QUEUE_ID( 1 ),
             MPTEST.RECEIVE_BUFFER,
             RTEMS.DEFAULT_OPTIONS,
@@ -211,12 +211,11 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Receiver delaying for a second" );
 
-      RTEMS.TASK_WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
    end RECEIVE_MESSAGES;
 
---PAGE
 --
 --  FILL_BUFFER
 --
@@ -243,7 +242,6 @@ package body MPTEST is
 
    end FILL_BUFFER;
 
---PAGE
 --
 --  PUT_BUFFER
 --
@@ -264,26 +262,25 @@ package body MPTEST is
 
    end PUT_BUFFER;
 
---PAGE
 --
 --  TEST_TASK
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       COUNT   : RTEMS.UNSIGNED32;
       STATUS  : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
       TEXT_IO.PUT_LINE( "Getting QID of message queue" );
 
       loop
 
-         RTEMS.MESSAGE_QUEUE_IDENT(
+         RTEMS.MESSAGE_QUEUE.IDENT(
             MPTEST.QUEUE_NAME( 1 ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.QUEUE_ID( 1 ),
@@ -296,7 +293,7 @@ package body MPTEST is
 
       if TEST_SUPPORT.NODE = 2 then
 
-         RTEMS.MESSAGE_QUEUE_DELETE( MPTEST.QUEUE_ID( 1 ), STATUS );
+         RTEMS.MESSAGE_QUEUE.DELETE( MPTEST.QUEUE_ID( 1 ), STATUS );
 
          TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
             STATUS,
@@ -313,7 +310,7 @@ package body MPTEST is
          MPTEST.RECEIVE_MESSAGES;
 
          TEXT_IO.PUT_LINE( "Flushing remote empty queue" );
-         RTEMS.MESSAGE_QUEUE_FLUSH( MPTEST.QUEUE_ID( 1 ), COUNT, STATUS );
+         RTEMS.MESSAGE_QUEUE.FLUSH( MPTEST.QUEUE_ID( 1 ), COUNT, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_FLUSH" );
          UNSIGNED32_IO.PUT( COUNT, WIDTH => 1 );
          TEXT_IO.PUT_LINE(
@@ -323,7 +320,7 @@ package body MPTEST is
          TEXT_IO.PUT_LINE(
             "Send messages to be flushed from remote queue"
          );
-         RTEMS.MESSAGE_QUEUE_SEND(
+         RTEMS.MESSAGE_QUEUE.SEND(
             MPTEST.QUEUE_ID( 1 ),
             MPTEST.BUFFER_1,
             STATUS
@@ -331,7 +328,7 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
          TEXT_IO.PUT_LINE( "Flushing remote queue" );
-         RTEMS.MESSAGE_QUEUE_FLUSH( MPTEST.QUEUE_ID( 1 ), COUNT, STATUS );
+         RTEMS.MESSAGE_QUEUE.FLUSH( MPTEST.QUEUE_ID( 1 ), COUNT, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_FLUSH" );
          UNSIGNED32_IO.PUT( COUNT, WIDTH => 1 );
          TEXT_IO.PUT_LINE(
@@ -339,7 +336,7 @@ package body MPTEST is
          );
 
          TEXT_IO.PUT_LINE( "Waiting for message queue to be deleted" );
-         RTEMS.MESSAGE_QUEUE_RECEIVE(
+         RTEMS.MESSAGE_QUEUE.RECEIVE(
             MPTEST.QUEUE_ID( 1 ),
             MPTEST.RECEIVE_BUFFER,
             RTEMS.DEFAULT_OPTIONS,
@@ -358,13 +355,13 @@ package body MPTEST is
 
          MPTEST.SEND_MESSAGES;
 
-         RTEMS.TASK_WAKE_AFTER(
+         RTEMS.TASKS.WAKE_AFTER(
             5 * TEST_SUPPORT.TICKS_PER_SECOND,
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
-         RTEMS.MESSAGE_QUEUE_DELETE( MPTEST.QUEUE_ID( 1 ), STATUS );
+         RTEMS.MESSAGE_QUEUE.DELETE( MPTEST.QUEUE_ID( 1 ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_DELETE" );
 
       end if;

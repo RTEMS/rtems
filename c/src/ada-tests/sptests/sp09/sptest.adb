@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -23,16 +23,25 @@
 with INTERFACES; use INTERFACES;
 with TEST_SUPPORT;
 with TEXT_IO;
+with RTEMS.CLOCK;
+with RTEMS.DEBUG;
+with RTEMS.EVENT;
+with RTEMS.MESSAGE_QUEUE;
+with RTEMS.PARTITION;
+with RTEMS.PORT;
+with RTEMS.RATE_MONOTONIC;
+with RTEMS.REGION;
+with RTEMS.SEMAPHORE;
+with RTEMS.TIMER;
 
 package body SPTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -69,7 +78,7 @@ package body SPTEST is
 
       SPTEST.PERIOD_NAME( 1 )    := RTEMS.BUILD_NAME( 'T', 'M', '1', ' ' );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 1 ),
          0,
          2048,
@@ -85,7 +94,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "INIT - task_create - INVALID_PRIORITY" );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 1 ),
          4,
          2048,
@@ -96,7 +105,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_RESTART(
+      RTEMS.TASKS.RESTART(
          SPTEST.TASK_ID( 1 ),
          0,
          STATUS
@@ -108,7 +117,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "INIT - task_restart - INCORRECT_STATE" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -116,12 +125,11 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  DELAYED_SUBPROGRAM
 --
@@ -136,7 +144,6 @@ package body SPTEST is
 
    end DELAYED_SUBPROGRAM;
 
---PAGE
 -- 
 --  SCREEN_1
 --
@@ -145,11 +152,11 @@ package body SPTEST is
    is
       NOTEPAD_VALUE     : RTEMS.UNSIGNED32 := 0;
       SELF_ID           : RTEMS.ID;
-      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_DELETE( 100, STATUS );
+      RTEMS.TASKS.DELETE( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -158,7 +165,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - task_delete - INVALID_ID" );
 
       begin
-        RTEMS.TASK_GET_NOTE( RTEMS.SELF, 
+        RTEMS.TASKS.GET_NOTE( RTEMS.SELF, 
                              RTEMS.NOTEPAD_INDEX'LAST + 10, 
                              NOTEPAD_VALUE, 
                              STATUS 
@@ -176,7 +183,7 @@ package body SPTEST is
             );
       end;
 
-      RTEMS.TASK_GET_NOTE( 
+      RTEMS.TASKS.GET_NOTE( 
          100, 
          RTEMS.NOTEPAD_INDEX'LAST, 
          NOTEPAD_VALUE, 
@@ -189,7 +196,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_get_note - INVALID_ID" );
 
-      RTEMS.TASK_IDENT(
+      RTEMS.TASKS.IDENT(
          RTEMS.SELF,
          RTEMS.SEARCH_ALL_NODES, 
          SELF_ID,
@@ -204,7 +211,7 @@ package body SPTEST is
          "TA1 - task_ident - current task SUCCESSFUL"
       );
 
-      RTEMS.TASK_IDENT(
+      RTEMS.TASKS.IDENT(
          100,
          RTEMS.SEARCH_ALL_NODES,
          SPTEST.JUNK_ID,
@@ -217,7 +224,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_ident - global INVALID_NAME" );
 
-      RTEMS.TASK_IDENT( 100, 1, SPTEST.JUNK_ID, STATUS );
+      RTEMS.TASKS.IDENT( 100, 1, SPTEST.JUNK_ID, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_NAME,
@@ -225,7 +232,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_ident - local INVALID_NAME" );
 
-      RTEMS.TASK_IDENT( 100, 2, SPTEST.JUNK_ID, STATUS );
+      RTEMS.TASKS.IDENT( 100, 2, SPTEST.JUNK_ID, STATUS );
       if TEST_SUPPORT.Is_Configured_Multiprocessing then
          TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
             STATUS,
@@ -241,7 +248,7 @@ package body SPTEST is
       end if;
       TEXT_IO.PUT_LINE( "TA1 - task_ident - INVALID_NODE" );
 
-      RTEMS.TASK_RESTART( 100, 0, STATUS );
+      RTEMS.TASKS.RESTART( 100, 0, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -249,7 +256,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_restart - INVALID_ID" );
 
-      RTEMS.TASK_RESUME( 100, STATUS );
+      RTEMS.TASKS.RESUME( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -257,7 +264,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_resume - INVALID_ID" );
 
-      RTEMS.TASK_RESUME( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.RESUME( RTEMS.SELF, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INCORRECT_STATE,
@@ -266,7 +273,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - task_resume - INCORRECT_STATE" );
 
       begin
-        RTEMS.TASK_SET_PRIORITY( RTEMS.SELF, 512, PREVIOUS_PRIORITY, STATUS );
+        RTEMS.TASKS.SET_PRIORITY( RTEMS.SELF, 512, PREVIOUS_PRIORITY, STATUS );
         TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
            STATUS,
            RTEMS.INVALID_PRIORITY,
@@ -282,7 +289,7 @@ package body SPTEST is
             );
       end;
 
-      RTEMS.TASK_SET_PRIORITY( 100, 8, PREVIOUS_PRIORITY, STATUS );
+      RTEMS.TASKS.SET_PRIORITY( 100, 8, PREVIOUS_PRIORITY, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -291,7 +298,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - task_set_priority - INVALID_ID" );
 
       begin
-         RTEMS.TASK_SET_NOTE( RTEMS.SELF, 
+         RTEMS.TASKS.SET_NOTE( RTEMS.SELF, 
                               RTEMS.NOTEPAD_INDEX'LAST + 10, 
                               NOTEPAD_VALUE, 
                               STATUS 
@@ -309,7 +316,7 @@ package body SPTEST is
             );
       end;
 
-      RTEMS.TASK_SET_NOTE( 
+      RTEMS.TASKS.SET_NOTE( 
          100, 
          RTEMS.NOTEPAD_INDEX'LAST, 
          NOTEPAD_VALUE, 
@@ -322,7 +329,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_set_note - INVALID_ID" );
 
-      RTEMS.TASK_START( 100, SPTEST.TASK_1'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( 100, SPTEST.TASK_1'ACCESS, 0, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -330,7 +337,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_start - INVALID_ID" );
 
-      RTEMS.TASK_START( RTEMS.SELF, SPTEST.TASK_1'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( RTEMS.SELF, SPTEST.TASK_1'ACCESS, 0, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INCORRECT_STATE,
@@ -338,7 +345,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_start - INCORRECT_STATE" );
 
-      RTEMS.TASK_SUSPEND( 100, STATUS );
+      RTEMS.TASKS.SUSPEND( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -348,7 +355,6 @@ package body SPTEST is
 
    end SCREEN_1;
 
---PAGE
 -- 
 --  SCREEN_2
 --
@@ -361,7 +367,7 @@ package body SPTEST is
 
 -- errors before clock is set
 
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
      
       if RTEMS.IS_STATUS_SUCCESSFUL( STATUS ) then
          TEXT_IO.PUT_LINE(
@@ -376,7 +382,7 @@ package body SPTEST is
          TEXT_IO.PUT_LINE( "TA1 - clock_get - NOT_DEFINED" );
       end if;
 
-      RTEMS.TASK_WAKE_WHEN( TIME, STATUS );
+      RTEMS.TASKS.WAKE_WHEN( TIME, STATUS );
       if RTEMS.IS_STATUS_SUCCESSFUL( STATUS ) then
          TEXT_IO.PUT( "TA1 - task_wake_when - NOT_DEFINED -- " );
          TEXT_IO.PUT_LINE( "DID THE BSP SET THE TIME OF DAY?" );
@@ -389,7 +395,7 @@ package body SPTEST is
          TEXT_IO.PUT_LINE( "TA1 - task_wake_when - NOT_DEFINED" );
       end if;
 
-      RTEMS.TIMER_FIRE_WHEN(
+      RTEMS.TIMER.FIRE_WHEN(
          0,
          TIME,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -415,7 +421,7 @@ package body SPTEST is
 
       TIME := ( 1987, 2, 5, 8, 30, 45, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -425,7 +431,7 @@ package body SPTEST is
 
       TIME := ( 1988, 15, 5, 8, 30, 45, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -435,7 +441,7 @@ package body SPTEST is
 
       TIME := ( 1988, 2, 32, 8, 30, 45, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -445,7 +451,7 @@ package body SPTEST is
 
       TIME := ( 1988, 2, 5, 25, 30, 45, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -455,7 +461,7 @@ package body SPTEST is
 
       TIME := ( 1988, 2, 5, 8, 61, 45, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -465,7 +471,7 @@ package body SPTEST is
 
       TIME := ( 1988, 2, 5, 8, 30, 61, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -475,7 +481,7 @@ package body SPTEST is
 
       TIME := ( 1988, 2, 5, 8, 30, 45, TEST_SUPPORT.TICKS_PER_SECOND + 1 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -485,7 +491,7 @@ package body SPTEST is
 
       TIME := ( 1988, 2, 5, 8, 30, 45, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET SUCCESSFUL" );
       TEXT_IO.PUT_LINE( " - SUCCESSFUL" );
 
@@ -494,7 +500,7 @@ package body SPTEST is
       TIME := ( 1988, 2, 5, 8, 30, 48, TEST_SUPPORT.TICKS_PER_SECOND + 1 );
       TEXT_IO.PUT( "TA1 - task_wake_when - TICK INVALID - " );
       TEXT_IO.PUT_LINE( "sleep about 3 seconds" );
-      RTEMS.TASK_WAKE_WHEN( TIME, STATUS );
+      RTEMS.TASKS.WAKE_WHEN( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED(
          STATUS,
          "TASK_WAKE_WHEN WITH INVALID TICKS PER SECOND"
@@ -504,7 +510,7 @@ package body SPTEST is
 
       TIME := ( 1961, 2, 5, 8, 30, 48, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - task_wake_when - ", TIME, "" );
-      RTEMS.TASK_WAKE_WHEN( TIME, STATUS );
+      RTEMS.TASKS.WAKE_WHEN( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -514,7 +520,7 @@ package body SPTEST is
 
       TIME := ( 1988, 2, 5, 25, 30, 48, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - task_wake_when - ", TIME, "" );
-      RTEMS.TASK_WAKE_WHEN( TIME, STATUS );
+      RTEMS.TASKS.WAKE_WHEN( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -522,14 +528,14 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( " - INVALID_CLOCK" );
 
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME( "TA1 - current time - ", TIME, "" );
       TEXT_IO.NEW_LINE;
 
       TIME.MONTH := 1;
       TEST_SUPPORT.PRINT_TIME( "TA1 - task_wake_when - ", TIME, "" );
-      RTEMS.TASK_WAKE_WHEN( TIME, STATUS );
+      RTEMS.TASKS.WAKE_WHEN( TIME, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_CLOCK,
@@ -539,7 +545,6 @@ package body SPTEST is
 
    end SCREEN_2;
 
---PAGE
 -- 
 --  SCREEN_3
 --
@@ -552,7 +557,7 @@ package body SPTEST is
 
       TASK_NAME := 1;
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          0,
          1,
          2048,
@@ -570,7 +575,7 @@ package body SPTEST is
          "TA1 - task_create - INVALID_NAME"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          TASK_NAME,
          1,
          TEST_SUPPORT.WORK_SPACE_SIZE,
@@ -588,7 +593,7 @@ package body SPTEST is
          "TA1 - task_create - stack size - UNSATISFIED"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 2 ),
          4,
          2048,
@@ -602,13 +607,13 @@ package body SPTEST is
          "TA1 - task_create - TA2 created - SUCCESSFUL"
       );
 
-      RTEMS.TASK_SUSPEND( SPTEST.TASK_ID( 2 ), STATUS );
+      RTEMS.TASKS.SUSPEND( SPTEST.TASK_ID( 2 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND OF TA2" );
       TEXT_IO.PUT_LINE(
          "TA1 - task_suspend - suspend TA2 - SUCCESSFUL"
       );
 
-      RTEMS.TASK_SUSPEND( SPTEST.TASK_ID( 2 ), STATUS );
+      RTEMS.TASKS.SUSPEND( SPTEST.TASK_ID( 2 ), STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.ALREADY_SUSPENDED,
@@ -618,13 +623,13 @@ package body SPTEST is
          "TA1 - task_suspend - suspend TA2 - ALREADY_SUSPENDED"
       );
 
-      RTEMS.TASK_RESUME( SPTEST.TASK_ID( 2 ), STATUS );
+      RTEMS.TASKS.RESUME( SPTEST.TASK_ID( 2 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESUME OF TA2" );
       TEXT_IO.PUT_LINE(
          "TA1 - task_resume - TA2 resumed - SUCCESSFUL"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 3 ),
          4,
          2048,
@@ -638,7 +643,7 @@ package body SPTEST is
          "TA1 - task_create - TA3 created - SUCCESSFUL"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 4 ),
          4,
          2048,
@@ -652,7 +657,7 @@ package body SPTEST is
          "TA1 - task_create - 4 created - SUCCESSFUL"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 5 ),
          4,
          2048,
@@ -666,7 +671,7 @@ package body SPTEST is
          "TA1 - task_create - 5 created - SUCCESSFUL"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 6 ),
          4,
          2048,
@@ -680,7 +685,7 @@ package body SPTEST is
          "TA1 - task_create - 6 created - SUCCESSFUL"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 7 ),
          4,
          2048,
@@ -694,7 +699,7 @@ package body SPTEST is
          "TA1 - task_create - 7 created - SUCCESSFUL"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 8 ),
          4,
          2048,
@@ -708,7 +713,7 @@ package body SPTEST is
          "TA1 - task_create - 8 created - SUCCESSFUL"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 9 ),
          4,
          2048,
@@ -722,7 +727,7 @@ package body SPTEST is
          "TA1 - task_create - 9 created - SUCCESSFUL"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          SPTEST.TASK_NAME( 10 ),
          4,
          2048,
@@ -736,7 +741,7 @@ package body SPTEST is
          "TA1 - task_create - 10 created - SUCCESSFUL"
       );
 
-      RTEMS.TASK_CREATE(
+      RTEMS.TASKS.CREATE(
          TASK_NAME,
          4,
          2048,
@@ -753,7 +758,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - task_create - 11 - TOO_MANY" );
 
       if TEST_SUPPORT.Is_Configured_Multiprocessing then
-         RTEMS.TASK_CREATE(
+         RTEMS.TASKS.CREATE(
             TASK_NAME,
             4,
             2048,
@@ -772,7 +777,6 @@ package body SPTEST is
 
    end SCREEN_3;
 
---PAGE
 -- 
 --  SCREEN_4
 --
@@ -784,7 +788,7 @@ package body SPTEST is
       STATUS    : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_RECEIVE(
+      RTEMS.EVENT.RECEIVE(
          RTEMS.EVENT_16,
          RTEMS.NO_WAIT,
          RTEMS.NO_TIMEOUT,
@@ -800,7 +804,7 @@ package body SPTEST is
          "TA1 - event_receive - UNSATISFIED ( all conditions )"
       );
 
-      RTEMS.EVENT_RECEIVE(
+      RTEMS.EVENT.RECEIVE(
          RTEMS.EVENT_16,
          RTEMS.NO_WAIT + RTEMS.EVENT_ANY,
          RTEMS.NO_TIMEOUT,
@@ -817,7 +821,7 @@ package body SPTEST is
       );
 
       TEXT_IO.PUT_LINE( "TA1 - event_receive - timeout in 3 seconds" );
-      RTEMS.EVENT_RECEIVE(
+      RTEMS.EVENT.RECEIVE(
          RTEMS.EVENT_16,
          RTEMS.DEFAULT_OPTIONS,
          3 * TEST_SUPPORT.TICKS_PER_SECOND,
@@ -833,7 +837,7 @@ package body SPTEST is
          "TA1 - event_receive - woke with TIMEOUT"
       );
 
-      RTEMS.EVENT_SEND(
+      RTEMS.EVENT.SEND(
          100,
          RTEMS.EVENT_16,
          STATUS
@@ -850,18 +854,17 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - task_wake_after - sleep 1 second - SUCCESSFUL" 
       );
-      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER (1 SECOND)" );
 
       TIME := ( 1988, 2, 5, 8, 30, 45, 0 );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET SUCCESSFUL" );
       TEXT_IO.PUT_LINE( " - SUCCESSFUL" );
 
    end SCREEN_4;
 
---PAGE
 -- 
 --  SCREEN_5
 --
@@ -871,11 +874,11 @@ package body SPTEST is
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.SEMAPHORE_CREATE(
+      RTEMS.SEMAPHORE.CREATE(
          0,
          1,
          RTEMS.DEFAULT_ATTRIBUTES,
-         RTEMS.NO_PRIORITY,
+         RTEMS.TASKS.NO_PRIORITY,
          SPTEST.JUNK_ID,
          STATUS
       );
@@ -886,11 +889,11 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - semaphore_create - INVALID_NAME" );
 
-      RTEMS.SEMAPHORE_CREATE(
+      RTEMS.SEMAPHORE.CREATE(
          SPTEST.SEMAPHORE_NAME( 1 ),
          1,
          RTEMS.DEFAULT_ATTRIBUTES,
-         RTEMS.NO_PRIORITY,
+         RTEMS.TASKS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 1 ),
          STATUS
       );
@@ -900,11 +903,11 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - semaphore_create - 1 - SUCCESSFUL" );
 
-      RTEMS.SEMAPHORE_CREATE(
+      RTEMS.SEMAPHORE.CREATE(
          SPTEST.SEMAPHORE_NAME( 2 ),
          1,
          (RTEMS.BINARY_SEMAPHORE or RTEMS.PRIORITY or RTEMS.INHERIT_PRIORITY),
-         RTEMS.NO_PRIORITY,
+         RTEMS.TASKS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 2 ),
          STATUS
       );
@@ -915,11 +918,11 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - semaphore_create - 2 - SUCCESSFUL" );
 
       loop
-         RTEMS.SEMAPHORE_CREATE(
+         RTEMS.SEMAPHORE.CREATE(
             SPTEST.SEMAPHORE_NAME( 3 ),
             1,
             RTEMS.DEFAULT_ATTRIBUTES,
-            RTEMS.NO_PRIORITY,
+            RTEMS.TASKS.NO_PRIORITY,
             SPTEST.JUNK_ID,
             STATUS
          );
@@ -934,11 +937,11 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - semaphore_create - 3 - TOO_MANY" );
 
-      RTEMS.SEMAPHORE_CREATE(
+      RTEMS.SEMAPHORE.CREATE(
          SPTEST.SEMAPHORE_NAME( 1 ),
          1,
          RTEMS.INHERIT_PRIORITY + RTEMS.BINARY_SEMAPHORE + RTEMS.FIFO,
-         RTEMS.NO_PRIORITY,
+         RTEMS.TASKS.NO_PRIORITY,
          SPTEST.JUNK_ID,
          STATUS
       );
@@ -949,11 +952,11 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE("TA1 - semaphore_create - NOT_DEFINED");
 
-      RTEMS.SEMAPHORE_CREATE(
+      RTEMS.SEMAPHORE.CREATE(
          SPTEST.SEMAPHORE_NAME( 1 ),
          1,
          RTEMS.INHERIT_PRIORITY + RTEMS.COUNTING_SEMAPHORE + RTEMS.PRIORITY,
-         RTEMS.NO_PRIORITY,
+         RTEMS.TASKS.NO_PRIORITY,
          SPTEST.JUNK_ID,
          STATUS
       );
@@ -964,11 +967,11 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE("TA1 - semaphore_create - NOT_DEFINED");
 
-      RTEMS.SEMAPHORE_CREATE(
+      RTEMS.SEMAPHORE.CREATE(
          SPTEST.SEMAPHORE_NAME( 1 ),
          2,
          RTEMS.BINARY_SEMAPHORE,
-         RTEMS.NO_PRIORITY,
+         RTEMS.TASKS.NO_PRIORITY,
          SPTEST.JUNK_ID,
          STATUS
       );
@@ -980,11 +983,11 @@ package body SPTEST is
       TEXT_IO.PUT_LINE("TA1 - semaphore_create - INVALID_NUMBER");
 
       if TEST_SUPPORT.Is_Configured_Multiprocessing then
-         RTEMS.SEMAPHORE_CREATE(
+         RTEMS.SEMAPHORE.CREATE(
             SPTEST.SEMAPHORE_NAME( 3 ),
             1,
             RTEMS.GLOBAL,
-            RTEMS.NO_PRIORITY,
+            RTEMS.TASKS.NO_PRIORITY,
             SPTEST.JUNK_ID,
             STATUS
          );
@@ -996,7 +999,7 @@ package body SPTEST is
       end if;
       TEXT_IO.PUT_LINE("TA1 - semaphore_create - MP_NOT_CONFIGURED");
 
-      RTEMS.SEMAPHORE_DELETE( 100, STATUS );
+      RTEMS.SEMAPHORE.DELETE( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1006,7 +1009,7 @@ package body SPTEST is
          "TA1 - semaphore_delete - unknown INVALID_ID"
       );
 
-      RTEMS.SEMAPHORE_DELETE( 16#10100#, STATUS );
+      RTEMS.SEMAPHORE.DELETE( 16#10100#, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1016,7 +1019,7 @@ package body SPTEST is
          "TA1 - semaphore_delete - local INVALID_ID"
       );
 
-      RTEMS.SEMAPHORE_IDENT(
+      RTEMS.SEMAPHORE.IDENT(
          100,
          RTEMS.SEARCH_ALL_NODES,
          SPTEST.JUNK_ID,
@@ -1031,7 +1034,7 @@ package body SPTEST is
          "TA1 - semaphore_ident - global INVALID_NAME"
       );
 
-      RTEMS.SEMAPHORE_IDENT( 100, 1, SPTEST.JUNK_ID, STATUS );
+      RTEMS.SEMAPHORE.IDENT( 100, 1, SPTEST.JUNK_ID, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_NAME,
@@ -1043,7 +1046,6 @@ package body SPTEST is
 
   end SCREEN_5;
 
---PAGE
 -- 
 --  SCREEN_6
 --
@@ -1053,7 +1055,7 @@ package body SPTEST is
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.SEMAPHORE_OBTAIN(
+      RTEMS.SEMAPHORE.OBTAIN(
          100,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -1066,7 +1068,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - semaphore_obtain - INVALID_ID" );
 
-      RTEMS.SEMAPHORE_OBTAIN(
+      RTEMS.SEMAPHORE.OBTAIN(
          SPTEST.SEMAPHORE_ID( 1 ),
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -1077,7 +1079,7 @@ package body SPTEST is
          "TA1 - semaphore_obtain - got sem 1 - SUCCESSFUL"
       );
 
-      RTEMS.SEMAPHORE_OBTAIN(
+      RTEMS.SEMAPHORE.OBTAIN(
          SPTEST.SEMAPHORE_ID( 1 ),
          RTEMS.NO_WAIT,
          RTEMS.NO_TIMEOUT,
@@ -1091,7 +1093,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - semaphore_obtain - UNSATISFIED" );
 
       TEXT_IO.PUT_LINE( "TA1 - semaphore_obtain - timeout in 3 seconds" );
-      RTEMS.SEMAPHORE_OBTAIN(
+      RTEMS.SEMAPHORE.OBTAIN(
          SPTEST.SEMAPHORE_ID( 1 ),
          RTEMS.DEFAULT_OPTIONS,
          3 * TEST_SUPPORT.TICKS_PER_SECOND,
@@ -1106,7 +1108,7 @@ package body SPTEST is
          "TA1 - semaphore_obtain - woke with TIMEOUT"
       );
 
-      RTEMS.SEMAPHORE_RELEASE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
+      RTEMS.SEMAPHORE.RELEASE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.NOT_OWNER_OF_RESOURCE,
@@ -1116,7 +1118,7 @@ package body SPTEST is
          "TA1 - semaphore_release - NOT_OWNER_OF_RESOURCE"
       );
 
-      RTEMS.SEMAPHORE_RELEASE( 100, STATUS );
+      RTEMS.SEMAPHORE.RELEASE( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1127,7 +1129,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE(
          "TA1 - task_start - start TA2 - SUCCESSFUL"
      );
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 2 ),
          SPTEST.TASK_2'ACCESS,
          0,
@@ -1138,17 +1140,17 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - task_wake_after - yield processor - SUCCESSFUL"
       );
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER (yield)" );
 
       TEXT_IO.PUT_LINE( 
          "TA1 - semaphore_delete - delete sem 1 - SUCCESSFUL"
       );
-      RTEMS.SEMAPHORE_DELETE( SPTEST.SEMAPHORE_ID( 1 ), STATUS );
+      RTEMS.SEMAPHORE.DELETE( SPTEST.SEMAPHORE_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_DELETE OF SM1" );
 
       TEXT_IO.PUT_LINE( "TA1 - semaphore_obtain - binary semaphore" );
-      RTEMS.SEMAPHORE_OBTAIN(
+      RTEMS.SEMAPHORE.OBTAIN(
          SPTEST.SEMAPHORE_ID( 2 ),
          RTEMS.NO_WAIT,
          RTEMS.NO_TIMEOUT,
@@ -1159,7 +1161,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - semaphore_delete - delete sem 2 - RESOURCE_IN_USE"
       );
-      RTEMS.SEMAPHORE_DELETE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
+      RTEMS.SEMAPHORE.DELETE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS( 
          STATUS, 
          RTEMS.RESOURCE_IN_USE,
@@ -1169,10 +1171,10 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - task_wake_after - yield processor - SUCCESSFUL"
       );
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER (yield)" );
 
-      RTEMS.TASK_DELETE( SPTEST.TASK_ID( 2 ), STATUS );
+      RTEMS.TASKS.DELETE( SPTEST.TASK_ID( 2 ), STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1184,7 +1186,6 @@ package body SPTEST is
 
    end SCREEN_6;
 
---PAGE
 -- 
 --  SCREEN_7
 --
@@ -1200,7 +1201,7 @@ package body SPTEST is
 
       BUFFER_POINTER := BUFFER'ADDRESS;
 
-      RTEMS.MESSAGE_QUEUE_BROADCAST(
+      RTEMS.MESSAGE_QUEUE.BROADCAST(
          100,
          BUFFER_POINTER,
          16,
@@ -1216,7 +1217,7 @@ package body SPTEST is
          "TA1 - message_queue_broadcast - INVALID_ID"
       );
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          0,
          3,
          16,
@@ -1234,7 +1235,7 @@ package body SPTEST is
       );
 
       if TEST_SUPPORT.Is_Configured_Multiprocessing then
-         RTEMS.MESSAGE_QUEUE_CREATE(
+         RTEMS.MESSAGE_QUEUE.CREATE(
             SPTEST.QUEUE_NAME( 1 ),
             1,
             16,
@@ -1251,7 +1252,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE(
              "TA1 - message_queue_create - Q 1 - MP_NOT_CONFIGURED");
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          2,
          16,
@@ -1267,7 +1268,7 @@ package body SPTEST is
          "TA1 - message_queue_create - Q 1 - 2 DEEP - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          SPTEST.QUEUE_NAME( 2 ),
          1,
          16,
@@ -1284,7 +1285,7 @@ package body SPTEST is
          "TA1 - message_queue_create - Q 2 - TOO_MANY"
       );
 
-      RTEMS.MESSAGE_QUEUE_DELETE( 100, STATUS );
+      RTEMS.MESSAGE_QUEUE.DELETE( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1294,7 +1295,7 @@ package body SPTEST is
          "TA1 - message_queue_delete - unknown INVALID_ID"
       );
 
-      RTEMS.MESSAGE_QUEUE_DELETE( 16#10100#, STATUS );
+      RTEMS.MESSAGE_QUEUE.DELETE( 16#10100#, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1304,7 +1305,7 @@ package body SPTEST is
          "TA1 - message_queue_delete - local INVALID_ID"
       );
 
-      RTEMS.MESSAGE_QUEUE_IDENT(
+      RTEMS.MESSAGE_QUEUE.IDENT(
          100,
          RTEMS.SEARCH_ALL_NODES,
          SPTEST.JUNK_ID,
@@ -1317,7 +1318,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_ident - INVALID_NAME" );
 
-      RTEMS.MESSAGE_QUEUE_GET_NUMBER_PENDING( 100, COUNT, STATUS );
+      RTEMS.MESSAGE_QUEUE.GET_NUMBER_PENDING( 100, COUNT, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
         STATUS,
         RTEMS.INVALID_ID,
@@ -1325,7 +1326,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE("TA1 - message_queue_get_number_pending - INVALID_ID");
 
-      RTEMS.MESSAGE_QUEUE_FLUSH( 100, COUNT, STATUS );
+      RTEMS.MESSAGE_QUEUE.FLUSH( 100, COUNT, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1333,7 +1334,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_flush - INVALID_ID" );
 
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          100,
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -1348,7 +1349,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_receive - INVALID_ID" );
 
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          RTEMS.NO_WAIT,
@@ -1368,7 +1369,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE(
          "TA1 - message_queue_receive - Q 1 - timeout in 3 seconds"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -1385,7 +1386,7 @@ package body SPTEST is
          "TA1 - message_queue_receive - Q 1 - woke up with TIMEOUT"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND( 100, BUFFER_POINTER, 16, STATUS );
+      RTEMS.MESSAGE_QUEUE.SEND( 100, BUFFER_POINTER, 16, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1393,7 +1394,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - INVALID_ID" );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1404,7 +1405,7 @@ package body SPTEST is
          "TA1 - message_queue_send - BUFFER 1 TO Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1415,7 +1416,7 @@ package body SPTEST is
          "TA1 - message_queue_send - BUFFER 2 TO Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1432,7 +1433,6 @@ package body SPTEST is
 
    end SCREEN_7;
 
---PAGE
 -- 
 --  SCREEN_8
 --
@@ -1446,7 +1446,7 @@ package body SPTEST is
 
       BUFFER_POINTER := BUFFER'ADDRESS;
 
-      RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+      RTEMS.MESSAGE_QUEUE.DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED(
          STATUS,
          "MESSAGE_QUEUE_DELETE SUCCESSFUL"
@@ -1455,7 +1455,7 @@ package body SPTEST is
          "TA1 - message_queue_delete - Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          2,
          16,
@@ -1471,7 +1471,7 @@ package body SPTEST is
          "TA1 - message_queue_create - Q 1 - 2 DEEP - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1482,7 +1482,7 @@ package body SPTEST is
          "TA1 - message_queue_send - BUFFER 1 TO Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1493,7 +1493,7 @@ package body SPTEST is
          "TA1 - message_queue_send - BUFFER 2 TO Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1508,7 +1508,7 @@ package body SPTEST is
          "TA1 - message_queue_send - BUFFER 3 TO Q 1 - TOO_MANY"
       );
 
-      RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+      RTEMS.MESSAGE_QUEUE.DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED(
          STATUS,
          "MESSAGE_QUEUE_DELETE SUCCESSFUL"
@@ -1517,7 +1517,7 @@ package body SPTEST is
          "TA1 - message_queue_delete - Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          3,
          16,
@@ -1533,7 +1533,7 @@ package body SPTEST is
          "TA1 - message_queue_create - Q 1 - 3 DEEP - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1544,7 +1544,7 @@ package body SPTEST is
          "TA1 - message_queue_send - BUFFER 1 TO Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1555,7 +1555,7 @@ package body SPTEST is
          "TA1 - message_queue_send - BUFFER 2 TO Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1566,7 +1566,7 @@ package body SPTEST is
          "TA1 - message_queue_send - BUFFER 3 TO Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND(
+      RTEMS.MESSAGE_QUEUE.SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          16,
@@ -1581,7 +1581,7 @@ package body SPTEST is
          "TA1 - message_queue_send - BUFFER 4 TO Q 1 - TOO_MANY"
       );
 
-      RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+      RTEMS.MESSAGE_QUEUE.DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED(
          STATUS,
          "MESSAGE_QUEUE_DELETE SUCCESSFUL"
@@ -1590,7 +1590,7 @@ package body SPTEST is
          "TA1 - message_queue_delete - Q 1 - SUCCESSFUL"
       );
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
+      RTEMS.MESSAGE_QUEUE.CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          2,
          16,
@@ -1609,7 +1609,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - task_start - start TA3 - SUCCESSFUL"
       );
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 3 ),
          SPTEST.TASK_3'ACCESS,
          0,
@@ -1620,10 +1620,10 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - task_wake_after - yield processor - SUCCESSFUL"
       );
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER (yield)" );
 
-      RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+      RTEMS.MESSAGE_QUEUE.DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED(
          STATUS,
          "MESSAGE_QUEUE_DELETE SUCCESSFUL"
@@ -1635,12 +1635,11 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - task_wake_after - yield processor - SUCCESSFUL"
       );
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER (yield)" );
 
    end SCREEN_8;
 
---PAGE
 -- 
 --  SCREEN_9
 --
@@ -1651,7 +1650,7 @@ package body SPTEST is
       STATUS    : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.PORT_CREATE(
+      RTEMS.PORT.CREATE(
          0,
          SPTEST.INTERNAL_PORT_AREA'ADDRESS,
          SPTEST.EXTERNAL_PORT_AREA'ADDRESS,
@@ -1666,7 +1665,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - port_create - INVALID_NAME" );
 
-      RTEMS.PORT_CREATE(
+      RTEMS.PORT.CREATE(
          SPTEST.PORT_NAME( 1 ),
          SPTEST.INTERNAL_PORT_AREA( 1 )'ADDRESS,
          SPTEST.EXTERNAL_PORT_AREA'ADDRESS,
@@ -1681,7 +1680,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - port_create - INVALID_ADDRESS" );
 
-      RTEMS.PORT_CREATE(
+      RTEMS.PORT.CREATE(
          SPTEST.PORT_NAME( 1 ),
          SPTEST.INTERNAL_PORT_AREA'ADDRESS,
          SPTEST.EXTERNAL_PORT_AREA'ADDRESS,
@@ -1696,7 +1695,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - port_create - TOO_MANY" );
 
-      RTEMS.PORT_DELETE( 0, STATUS );
+      RTEMS.PORT.DELETE( 0, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1704,7 +1703,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - port_delete - INVALID_ID" );
 
-      RTEMS.PORT_IDENT( 0, SPTEST.JUNK_ID, STATUS );
+      RTEMS.PORT.IDENT( 0, SPTEST.JUNK_ID, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_NAME,
@@ -1712,7 +1711,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - port_ident - INVALID_NAME" );
 
-      RTEMS.PORT_INTERNAL_TO_EXTERNAL(
+      RTEMS.PORT.INTERNAL_TO_EXTERNAL(
          100,
          SPTEST.INTERNAL_PORT_AREA'ADDRESS,
          CONVERTED,
@@ -1727,7 +1726,7 @@ package body SPTEST is
          "TA1 - port_internal_to_external - INVALID_ID"
       );
 
-      RTEMS.PORT_EXTERNAL_TO_INTERNAL(
+      RTEMS.PORT.EXTERNAL_TO_INTERNAL(
          100,
          SPTEST.EXTERNAL_PORT_AREA'ADDRESS,
          CONVERTED,
@@ -1744,7 +1743,6 @@ package body SPTEST is
 
    end SCREEN_9;
 
---PAGE
 -- 
 --  SCREEN_10
 --
@@ -1754,7 +1752,7 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.RATE_MONOTONIC_CREATE( 0, SPTEST.JUNK_ID, STATUS );
+      RTEMS.RATE_MONOTONIC.CREATE( 0, SPTEST.JUNK_ID, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_NAME,
@@ -1764,7 +1762,7 @@ package body SPTEST is
          "TA1 - rate_monotonic_create - INVALID_NAME"
       );
 
-      RTEMS.RATE_MONOTONIC_CREATE(
+      RTEMS.RATE_MONOTONIC.CREATE(
          SPTEST.PERIOD_NAME( 1 ),
          SPTEST.PERIOD_ID( 1 ),
          STATUS
@@ -1774,7 +1772,7 @@ package body SPTEST is
          "TA1 - rate_monotonic_create - SUCCESSFUL"
       );
 
-      RTEMS.RATE_MONOTONIC_CREATE(
+      RTEMS.RATE_MONOTONIC.CREATE(
          SPTEST.PERIOD_NAME( 1 ),
          SPTEST.JUNK_ID,
          STATUS
@@ -1786,7 +1784,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - rate_monotonic_create - TOO_MANY" );
 
-      RTEMS.RATE_MONOTONIC_IDENT( 0, SPTEST.JUNK_ID, STATUS );
+      RTEMS.RATE_MONOTONIC.IDENT( 0, SPTEST.JUNK_ID, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_NAME,
@@ -1796,7 +1794,7 @@ package body SPTEST is
          "TA1 - rate_monotonic_ident - INVALID_NAME"
       );
 
-      RTEMS.RATE_MONOTONIC_PERIOD( 100, 5, STATUS );
+      RTEMS.RATE_MONOTONIC.PERIOD( 100, 5, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1806,7 +1804,7 @@ package body SPTEST is
          "TA1 - rate_monotonic_period - unknown INVALID_ID"
       );
 
-      RTEMS.RATE_MONOTONIC_PERIOD( 16#10100#, 5, STATUS );
+      RTEMS.RATE_MONOTONIC.PERIOD( 16#10100#, 5, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1816,9 +1814,9 @@ package body SPTEST is
          "TA1 - rate_monotonic_period - local INVALID_ID"
       );
 
-      RTEMS.RATE_MONOTONIC_PERIOD(
+      RTEMS.RATE_MONOTONIC.PERIOD(
          SPTEST.PERIOD_ID( 1 ),
-         RTEMS.PERIOD_STATUS,
+         RTEMS.RATE_MONOTONIC_PERIOD_STATUS,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -1830,7 +1828,7 @@ package body SPTEST is
          "TA1 - rate_monotonic_period( STATUS ) - NOT_DEFINED"
       );
 
-      RTEMS.RATE_MONOTONIC_PERIOD( SPTEST.PERIOD_ID( 1 ), 100, STATUS );
+      RTEMS.RATE_MONOTONIC.PERIOD( SPTEST.PERIOD_ID( 1 ), 100, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED(
          STATUS,
          "RATE_MONOTONIC_PERIOD 100 TICKS"
@@ -1838,9 +1836,9 @@ package body SPTEST is
       TEXT_IO.PUT( "TA1 - rate_monotonic_period - 100 ticks - " );
       TEXT_IO.PUT_LINE( "SUCCESSFUL" );
 
-      RTEMS.RATE_MONOTONIC_PERIOD(
+      RTEMS.RATE_MONOTONIC.PERIOD(
          SPTEST.PERIOD_ID( 1 ),
-         RTEMS.PERIOD_STATUS,
+         RTEMS.RATE_MONOTONIC_PERIOD_STATUS,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED(
@@ -1852,9 +1850,9 @@ package body SPTEST is
 
       loop
 
-         RTEMS.RATE_MONOTONIC_PERIOD(
+         RTEMS.RATE_MONOTONIC.PERIOD(
             SPTEST.PERIOD_ID( 1 ),
-            RTEMS.PERIOD_STATUS,
+            RTEMS.RATE_MONOTONIC_PERIOD_STATUS,
             STATUS
          );
 
@@ -1869,7 +1867,7 @@ package body SPTEST is
       TEXT_IO.PUT( "TA1 - rate_monotonic_period( STATUS ) - " );
       TEXT_IO.PUT_LINE( "TIMEOUT" );
 
-      RTEMS.RATE_MONOTONIC_CANCEL( 100, STATUS );
+      RTEMS.RATE_MONOTONIC.CANCEL( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1879,7 +1877,7 @@ package body SPTEST is
          "TA1 - rate_monotonic_cancel - unknown INVALID_ID"
       );
 
-      RTEMS.RATE_MONOTONIC_CANCEL( 16#10100#, STATUS );
+      RTEMS.RATE_MONOTONIC.CANCEL( 16#10100#, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1889,20 +1887,20 @@ package body SPTEST is
          "TA1 - rate_monotonic_cancel - local INVALID_ID"
       );
 
-      RTEMS.RATE_MONOTONIC_CANCEL( SPTEST.PERIOD_ID( 1 ), STATUS );
+      RTEMS.RATE_MONOTONIC.CANCEL( SPTEST.PERIOD_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "RATE_MONOTONIC_CANCEL" );
       TEXT_IO.PUT_LINE( "TA1 - rate_monotonic_cancel - SUCCESSFUL" );
 
-      RTEMS.RATE_MONOTONIC_PERIOD( SPTEST.PERIOD_ID( 1 ), 5, STATUS );
+      RTEMS.RATE_MONOTONIC.PERIOD( SPTEST.PERIOD_ID( 1 ), 5, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED(
          STATUS,
          "RATE_MONOTONIC_PERIOD RESTART"
       );
 
-      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
-      RTEMS.RATE_MONOTONIC_PERIOD( SPTEST.PERIOD_ID( 1 ), 5, STATUS );
+      RTEMS.RATE_MONOTONIC.PERIOD( SPTEST.PERIOD_ID( 1 ), 5, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.TIMEOUT,
@@ -1912,7 +1910,7 @@ package body SPTEST is
          "TA1 - rate_monotonic_period - 5 ticks - TIMEOUT" 
       );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 4 ),
          SPTEST.TASK_4'ACCESS,
          0,
@@ -1921,10 +1919,10 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA4" );
 
       TEXT_IO.PUT_LINE( "TA1 - task_wake_after - yielding to TA4" );
-      RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER (yield)" );
 
-      RTEMS.RATE_MONOTONIC_DELETE( 100, STATUS );
+      RTEMS.RATE_MONOTONIC.DELETE( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1934,7 +1932,7 @@ package body SPTEST is
          "TA1 - rate_monotonic_delete - unknown INVALID_ID"
       );
 
-      RTEMS.RATE_MONOTONIC_DELETE( 16#10100#, STATUS );
+      RTEMS.RATE_MONOTONIC.DELETE( 16#10100#, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1944,7 +1942,7 @@ package body SPTEST is
          "TA1 - rate_monotonic_delete - local INVALID_ID"
       );
 
-      RTEMS.RATE_MONOTONIC_DELETE( SPTEST.PERIOD_ID( 1 ), STATUS );
+      RTEMS.RATE_MONOTONIC.DELETE( SPTEST.PERIOD_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "RATE_MONOTONIC_DELETE" );
       TEXT_IO.PUT_LINE(
          "TA1 - rate_monotonic_delete - SUCCESSFUL"
@@ -1952,7 +1950,6 @@ package body SPTEST is
 
    end SCREEN_10;
 
---PAGE
 -- 
 --  SCREEN_11
 --
@@ -1965,7 +1962,7 @@ package body SPTEST is
       STATUS           : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          0,
          SPTEST.PARTITION_GOOD_AREA'ADDRESS,
          128,
@@ -1981,7 +1978,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - partition_create - INVALID_NAME" );
 
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          SPTEST.PARTITION_NAME( 1 ),
          SPTEST.PARTITION_GOOD_AREA'ADDRESS,
          0,
@@ -1999,7 +1996,7 @@ package body SPTEST is
          "TA1 - partition_create - length - INVALID_SIZE"
       );
 
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          SPTEST.PARTITION_NAME( 1 ),
          SPTEST.PARTITION_GOOD_AREA'ADDRESS,
          128,
@@ -2017,7 +2014,7 @@ package body SPTEST is
          "TA1 - partition_create - buffer size - INVALID_SIZE" 
       );
 
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          SPTEST.PARTITION_NAME( 1 ),
          SPTEST.PARTITION_GOOD_AREA'ADDRESS,
          128,
@@ -2036,7 +2033,7 @@ package body SPTEST is
       );
 
       if TEST_SUPPORT.Is_Configured_Multiprocessing then
-         RTEMS.PARTITION_CREATE(
+         RTEMS.PARTITION.CREATE(
             SPTEST.PARTITION_NAME( 1 ),
             SPTEST.PARTITION_GOOD_AREA'ADDRESS,
             128,
@@ -2053,7 +2050,7 @@ package body SPTEST is
       end if;
       TEXT_IO.PUT_LINE("TA1 - partition_create - MP_NOT_CONFIGURED");
 
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          SPTEST.PARTITION_NAME( 1 ),
          SPTEST.PARTITION_BAD_AREA'ADDRESS,
          128,
@@ -2069,7 +2066,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - partition_create - INVALID_ADDRESS" );
 
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          SPTEST.PARTITION_NAME( 1 ),
          SPTEST.PARTITION_GOOD_AREA'ADDRESS,
          128,
@@ -2085,7 +2082,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - partition_create - INVALID_SIZE" );
 
-      RTEMS.PARTITION_DELETE( 100, STATUS );
+      RTEMS.PARTITION.DELETE( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2095,7 +2092,7 @@ package body SPTEST is
          "TA1 - partition_delete - unknown INVALID_ID"
       );
 
-      RTEMS.PARTITION_DELETE( 16#10100#, STATUS );
+      RTEMS.PARTITION.DELETE( 16#10100#, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2105,7 +2102,7 @@ package body SPTEST is
          "TA1 - partition_delete - local INVALID_ID"
       );
 
-      RTEMS.PARTITION_GET_BUFFER( 100, BUFFER_ADDRESS_1, STATUS );
+      RTEMS.PARTITION.GET_BUFFER( 100, BUFFER_ADDRESS_1, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2113,7 +2110,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - partition_get_buffer - INVALID_ID" );
 
-      RTEMS.PARTITION_IDENT(
+      RTEMS.PARTITION.IDENT(
          0,
          RTEMS.SEARCH_ALL_NODES,
          SPTEST.JUNK_ID,
@@ -2126,7 +2123,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - partition_ident - INVALID_NAME" );
 
-      RTEMS.PARTITION_RETURN_BUFFER( 100, BUFFER_ADDRESS_1, STATUS );
+      RTEMS.PARTITION.RETURN_BUFFER( 100, BUFFER_ADDRESS_1, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2136,7 +2133,7 @@ package body SPTEST is
          "TA1 - partition_return_buffer - INVALID_ID"
       );
 
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          SPTEST.PARTITION_NAME( 1 ),
          SPTEST.PARTITION_GOOD_AREA'ADDRESS,
          128,
@@ -2148,7 +2145,7 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_CREATE" );
       TEXT_IO.PUT_LINE( "TA1 - partition_create - SUCCESSFUL" );
 
-      RTEMS.PARTITION_CREATE(
+      RTEMS.PARTITION.CREATE(
          SPTEST.PARTITION_NAME( 1 ),
          SPTEST.PARTITION_GOOD_AREA'ADDRESS,
          128,
@@ -2164,7 +2161,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - partition_create - TOO_MANY" );
 
-      RTEMS.PARTITION_GET_BUFFER(
+      RTEMS.PARTITION.GET_BUFFER(
          SPTEST.PARTITION_ID( 1 ),
          BUFFER_ADDRESS_1,
          STATUS
@@ -2172,7 +2169,7 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_GET_BUFFER" );
       TEXT_IO.PUT_LINE( "TA1 - partition_get_buffer - SUCCESSFUL" );
 
-      RTEMS.PARTITION_GET_BUFFER(
+      RTEMS.PARTITION.GET_BUFFER(
          SPTEST.PARTITION_ID( 1 ),
          BUFFER_ADDRESS_2,
          STATUS
@@ -2180,7 +2177,7 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_GET_BUFFER" );
       TEXT_IO.PUT_LINE( "TA1 - partition_get_buffer - SUCCESSFUL" );
 
-      RTEMS.PARTITION_GET_BUFFER(
+      RTEMS.PARTITION.GET_BUFFER(
          SPTEST.PARTITION_ID( 1 ),
          BUFFER_ADDRESS_3,
          STATUS
@@ -2192,7 +2189,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - partition_get_buffer - UNSATISFIED" );
 
-      RTEMS.PARTITION_DELETE(
+      RTEMS.PARTITION.DELETE(
          SPTEST.PARTITION_ID( 1 ),
          STATUS
       );
@@ -2203,7 +2200,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - partition_delete - RESOURCE_IN_USE" );
 
-      RTEMS.PARTITION_RETURN_BUFFER(
+      RTEMS.PARTITION.RETURN_BUFFER(
          SPTEST.PARTITION_ID( 1 ),
          SPTEST.REGION_GOOD_AREA( 0 )'ADDRESS,  -- NOTE: REGION
          STATUS
@@ -2216,7 +2213,7 @@ package body SPTEST is
       TEXT_IO.PUT( "TA1 - partition_return_buffer - " );
       TEXT_IO.PUT_LINE( "INVALID_ADDRESS - out of range" );
 
-      RTEMS.PARTITION_RETURN_BUFFER(
+      RTEMS.PARTITION.RETURN_BUFFER(
          SPTEST.PARTITION_ID( 1 ),
          SPTEST.PARTITION_GOOD_AREA( 7 )'ADDRESS,
          STATUS
@@ -2232,7 +2229,6 @@ package body SPTEST is
 
    end SCREEN_11;
 
---PAGE
 -- 
 --  SCREEN_12
 --
@@ -2242,13 +2238,13 @@ package body SPTEST is
       SEGMENT_ADDRESS_1 : RTEMS.ADDRESS;
       SEGMENT_ADDRESS_2 : RTEMS.ADDRESS;
       SEGMENT_ADDRESS_3 : RTEMS.ADDRESS;
-      OFFSET            : RTEMS.UNSIGNED32;
-      GOOD_FRONT_FLAG   : RTEMS.UNSIGNED32;
-      GOOD_BACK_FLAG    : RTEMS.UNSIGNED32;
+--    OFFSET            : RTEMS.UNSIGNED32;
+--    GOOD_FRONT_FLAG   : RTEMS.UNSIGNED32;
+--    GOOD_BACK_FLAG    : RTEMS.UNSIGNED32;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.REGION_CREATE(
+      RTEMS.REGION.CREATE(
          0,
          SPTEST.REGION_GOOD_AREA'ADDRESS,
          16#40#,
@@ -2264,7 +2260,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_create - INVALID_NAME" );
 
-      RTEMS.REGION_CREATE(
+      RTEMS.REGION.CREATE(
          SPTEST.REGION_NAME( 1 ),
          SPTEST.REGION_BAD_AREA'ADDRESS,
          16#40#,
@@ -2280,7 +2276,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_create - INVALID_ADDRESS" );
 
-      RTEMS.REGION_CREATE(
+      RTEMS.REGION.CREATE(
          SPTEST.REGION_NAME( 1 ),
          SPTEST.REGION_GOOD_AREA'ADDRESS,
          34,
@@ -2296,7 +2292,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_create - INVALID_SIZE" );
 
-      RTEMS.REGION_CREATE(
+      RTEMS.REGION.CREATE(
          SPTEST.REGION_NAME( 1 ),
          SPTEST.REGION_GOOD_AREA( SPTEST.REGION_START_OFFSET )'ADDRESS,
          SPTEST.REGION_LENGTH,
@@ -2308,7 +2304,7 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_CREATE" );
       TEXT_IO.PUT_LINE( "TA1 - region_create - SUCCESSFUL" );
 
-      RTEMS.REGION_CREATE(
+      RTEMS.REGION.CREATE(
          SPTEST.REGION_NAME( 1 ),
          SPTEST.REGION_GOOD_AREA'ADDRESS,
          SPTEST.REGION_LENGTH,
@@ -2324,7 +2320,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_create - TOO_MANY" );
 
-      RTEMS.REGION_DELETE( 100, STATUS );
+      RTEMS.REGION.DELETE( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2332,7 +2328,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_delete - unknown INVALID_ID" );
 
-      RTEMS.REGION_DELETE( 16#10100#, STATUS );
+      RTEMS.REGION.DELETE( 16#10100#, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2340,7 +2336,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_delete - local INVALID_ID" );
 
-      RTEMS.REGION_IDENT( 0, SPTEST.JUNK_ID, STATUS );
+      RTEMS.REGION.IDENT( 0, SPTEST.JUNK_ID, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_NAME,
@@ -2348,7 +2344,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_ident - INVALID_NAME" );
 
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          100,
          16#40#,
          RTEMS.DEFAULT_OPTIONS,
@@ -2363,7 +2359,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_get_segment - INVALID_ID" );
 
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          (SPTEST.REGION_GOOD_AREA'SIZE / 8) * 2,
          RTEMS.DEFAULT_OPTIONS,
@@ -2378,7 +2374,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_get_segment - INVALID_SIZE" );
 
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          384,
          RTEMS.DEFAULT_OPTIONS,
@@ -2389,7 +2385,7 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_GET_SEGMENT" );
       TEXT_IO.PUT_LINE( "TA1 - region_get_segment - SUCCESSFUL" );
 
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SPTEST.REGION_LENGTH / 2,
          RTEMS.NO_WAIT,
@@ -2405,7 +2401,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - region_get_segment - UNSATISFIED" );
 
       TEXT_IO.PUT_LINE( "TA1 - region_get_segment - timeout in 3 seconds" );
-      RTEMS.REGION_GET_SEGMENT(
+      RTEMS.REGION.GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          128,
          RTEMS.DEFAULT_OPTIONS,
@@ -2422,7 +2418,7 @@ package body SPTEST is
          "TA1 - region_get_segment - woke up with TIMEOUT" 
       );
 
-      RTEMS.REGION_DELETE( SPTEST.REGION_ID( 1 ), STATUS );
+      RTEMS.REGION.DELETE( SPTEST.REGION_ID( 1 ), STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.RESOURCE_IN_USE,
@@ -2430,7 +2426,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_delete - RESOURCE_IN_USE" );
 
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          100,
          SEGMENT_ADDRESS_1,
          STATUS
@@ -2442,7 +2438,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - region_return_segment - INVALID_ID" );
 
-      RTEMS.REGION_RETURN_SEGMENT(
+      RTEMS.REGION.RETURN_SEGMENT(
          SPTEST.REGION_ID( 1 ),
          SPTEST.REGION_GOOD_AREA'ADDRESS,
          STATUS
@@ -2459,11 +2455,11 @@ package body SPTEST is
       -- internal heap errors, subject to change if heap code changes
 
       TEXT_IO.PUT_LINE( "TA1 - debug_disable - DEBUG_REGION" );
-      RTEMS.DEBUG_DISABLE( RTEMS.DEBUG_REGION );
+      RTEMS.DEBUG.DISABLE( RTEMS.DEBUG.REGION );
 
-      OFFSET := 0;
-      GOOD_BACK_FLAG := 0;
-      GOOD_FRONT_FLAG := 0;
+--    OFFSET := 0;
+--    GOOD_BACK_FLAG := 0;
+--    GOOD_FRONT_FLAG := 0;
 
       TEXT_IO.PUT_LINE(
          "TA1 - region_return_segment - INVALID_ADDRESS - SKIPPED"
@@ -2484,7 +2480,7 @@ package body SPTEST is
 --      GOOD_FRONT_FLAG := SPTEST.REGION_GOOD_AREA( OFFSET - 1 );
 --      SPTEST.REGION_GOOD_AREA( OFFSET - 1 ) := GOOD_FRONT_FLAG + 2;
 --
---      RTEMS.REGION_RETURN_SEGMENT(
+--      RTEMS.REGION.RETURN_SEGMENT(
 --         SPTEST.REGION_ID( 1 ),
 --         SEGMENT_ADDRESS_1,
 --         STATUS
@@ -2505,7 +2501,7 @@ package body SPTEST is
 --      GOOD_BACK_FLAG := SPTEST.REGION_GOOD_AREA( OFFSET - 2 );
 --      SPTEST.REGION_GOOD_AREA( OFFSET - 2 ) := 1024;
 --
---      RTEMS.REGION_RETURN_SEGMENT(
+--      RTEMS.REGION.RETURN_SEGMENT(
 --         SPTEST.REGION_ID( 1 ),
 --         SEGMENT_ADDRESS_1,
 --         STATUS
@@ -2522,9 +2518,9 @@ package body SPTEST is
 --      SPTEST.REGION_GOOD_AREA( OFFSET - 2 ) := GOOD_BACK_FLAG;
 
       TEXT_IO.PUT_LINE( "TA1 - debug_enable - DEBUG_REGION" );
-      RTEMS.DEBUG_ENABLE( RTEMS.DEBUG_REGION );
+      RTEMS.DEBUG.ENABLE( RTEMS.DEBUG.REGION );
 
-      RTEMS.REGION_EXTEND(
+      RTEMS.REGION.EXTEND(
          100,
          SPTEST.REGION_GOOD_AREA'ADDRESS,
          128,
@@ -2539,7 +2535,7 @@ package body SPTEST is
          "TA1 - region_extend - INVALID_ID"
       );
 
-      RTEMS.REGION_EXTEND(
+      RTEMS.REGION.EXTEND(
          SPTEST.REGION_ID( 1 ),
          SPTEST.REGION_GOOD_AREA( SPTEST.REGION_START_OFFSET + 16 )'ADDRESS,
          128,
@@ -2554,7 +2550,7 @@ package body SPTEST is
          "TA1 - region_extend - within heap - INVALID_ADDRESS"
       );
 
-      RTEMS.REGION_EXTEND(
+      RTEMS.REGION.EXTEND(
          SPTEST.REGION_ID( 1 ),
          SPTEST.REGION_BAD_AREA'ADDRESS,
          128,
@@ -2569,7 +2565,7 @@ package body SPTEST is
          "TA1 - region_extend - non-contiguous lower - NOT_IMPLEMENTED"
       );
 
-      RTEMS.REGION_EXTEND(
+      RTEMS.REGION.EXTEND(
          SPTEST.REGION_ID( 1 ),
          SPTEST.REGION_GOOD_AREA( 
             SPTEST.REGION_START_OFFSET - SPTEST.REGION_LENGTH )'ADDRESS,
@@ -2585,7 +2581,7 @@ package body SPTEST is
          "TA1 - region_extend - contiguous lower - NOT_IMPLEMENTED"
       );
 
-      RTEMS.REGION_EXTEND(
+      RTEMS.REGION.EXTEND(
          SPTEST.REGION_ID( 1 ),
          SPTEST.REGION_GOOD_AREA( 
             SPTEST.REGION_START_OFFSET + SPTEST.REGION_LENGTH + 16 )'ADDRESS,
@@ -2603,7 +2599,6 @@ package body SPTEST is
 
    end SCREEN_12;
 
---PAGE
 -- 
 --  SCREEN_13
 --
@@ -2614,7 +2609,7 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
       TIME := ( 2000, 12, 31, 23, 59, 59, 0 );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_set - ",
@@ -2622,9 +2617,9 @@ package body SPTEST is
          " - SUCCESSFUL"
       );
       TEXT_IO.NEW_LINE;
-      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_get - ",
@@ -2634,7 +2629,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TIME := ( 1999, 12, 31, 23, 59, 59, 0 );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_set - ",
@@ -2642,9 +2637,9 @@ package body SPTEST is
          " - SUCCESSFUL"
       );
       TEXT_IO.NEW_LINE;
-      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_get - ",
@@ -2654,7 +2649,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TIME := ( 2100, 12, 31, 23, 59, 59, 0 );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_set - ",
@@ -2662,9 +2657,9 @@ package body SPTEST is
          " - SUCCESSFUL"
       );
       TEXT_IO.NEW_LINE;
-      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_get - ",
@@ -2674,7 +2669,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TIME := ( 2099, 12, 31, 23, 59, 59, 0 );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_set - ",
@@ -2682,9 +2677,9 @@ package body SPTEST is
          " - SUCCESSFUL"
       );
       TEXT_IO.NEW_LINE;
-      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_get - ",
@@ -2694,7 +2689,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TIME := ( 1991, 12, 31, 23, 59, 59, 0 );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_set - ",
@@ -2702,9 +2697,9 @@ package body SPTEST is
          " - SUCCESSFUL"
       );
       TEXT_IO.NEW_LINE;
-      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME(
          "TA1 - clock_get - ",
@@ -2715,7 +2710,6 @@ package body SPTEST is
 
    end SCREEN_13;
 
---PAGE
 -- 
 --  SCREEN_14
 --
@@ -2726,7 +2720,7 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TIMER_CREATE( 0, SPTEST.JUNK_ID, STATUS );
+      RTEMS.TIMER.CREATE( 0, SPTEST.JUNK_ID, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_NAME,
@@ -2734,7 +2728,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_create - INVALID_NAME" );
 
-      RTEMS.TIMER_CREATE(
+      RTEMS.TIMER.CREATE(
          SPTEST.TIMER_NAME( 1 ),
          SPTEST.TIMER_ID( 1 ),
          STATUS
@@ -2742,7 +2736,7 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE" );
       TEXT_IO.PUT_LINE( "TA1 - timer_create - 1 - SUCCESSFUL" );
 
-      RTEMS.TIMER_CREATE(
+      RTEMS.TIMER.CREATE(
          SPTEST.TIMER_NAME( 1 ),
          SPTEST.JUNK_ID,
          STATUS
@@ -2754,7 +2748,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_create - 2 - TOO_MANY" );
 
-      RTEMS.TIMER_DELETE( 100, STATUS );
+      RTEMS.TIMER.DELETE( 100, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2762,7 +2756,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_delete - local INVALID_ID" );
 
-      RTEMS.TIMER_DELETE( 16#10100#, STATUS );
+      RTEMS.TIMER.DELETE( 16#10100#, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2770,7 +2764,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_delete - global INVALID_ID" );
 
-      RTEMS.TIMER_IDENT( 0, SPTEST.JUNK_ID, STATUS );
+      RTEMS.TIMER.IDENT( 0, SPTEST.JUNK_ID, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_NAME,
@@ -2778,7 +2772,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_ident - INVALID_NAME" );
 
-      RTEMS.TIMER_CANCEL( 16#10100#, STATUS );
+      RTEMS.TIMER.CANCEL( 16#10100#, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2786,7 +2780,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_cancel - INVALID_ID" );
 
-      RTEMS.TIMER_RESET( 16#10100#, STATUS );
+      RTEMS.TIMER.RESET( 16#10100#, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -2794,7 +2788,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_reset - INVALID_ID" );
 
-      RTEMS.TIMER_RESET( SPTEST.TIMER_ID( 1 ), STATUS );
+      RTEMS.TIMER.RESET( SPTEST.TIMER_ID( 1 ), STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.NOT_DEFINED,
@@ -2802,7 +2796,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_reset - NOT_DEFINED" );
 
-      RTEMS.TIMER_FIRE_AFTER(
+      RTEMS.TIMER.FIRE_AFTER(
          16#10100#,
          5 * TEST_SUPPORT.TICKS_PER_SECOND,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -2817,7 +2811,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - timer_fire_after - INVALID_ID" );
 
       TIME := ( 1994, 12, 31, 1, 0, 0, 0 );
-      RTEMS.TIMER_FIRE_WHEN(
+      RTEMS.TIMER.FIRE_WHEN(
          16#10100#,
          TIME,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -2831,7 +2825,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_fire_when - INVALID_ID" );
 
-      RTEMS.TIMER_FIRE_AFTER(
+      RTEMS.TIMER.FIRE_AFTER(
          SPTEST.TIMER_ID( 1 ),
          0,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -2846,7 +2840,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - timer_fire_after - INVALID_NUMBER" );
 
       TIME := ( 1987, 2, 5, 8, 30, 45, 0 );
-      RTEMS.TIMER_FIRE_WHEN(
+      RTEMS.TIMER.FIRE_WHEN(
          SPTEST.TIMER_ID( 1 ),
          TIME,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -2865,13 +2859,13 @@ package body SPTEST is
       );
       TEXT_IO.NEW_LINE;
 
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET SUCCESSFUL" );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_get       - ", TIME, "" );
       TEXT_IO.NEW_LINE;
 
       TIME := ( 1990, 2, 5, 8, 30, 45, 0 );
-      RTEMS.TIMER_FIRE_WHEN(
+      RTEMS.TIMER.FIRE_WHEN(
          SPTEST.TIMER_ID( 1 ),
          TIME,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -2890,7 +2884,7 @@ package body SPTEST is
       );
       TEXT_IO.NEW_LINE;
 
-      RTEMS.TIMER_SERVER_FIRE_AFTER(
+      RTEMS.TIMER.SERVER_FIRE_AFTER(
          0, 5, SPTEST.DELAYED_SUBPROGRAM'ACCESS, RTEMS.NULL_ADDRESS, STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -2900,7 +2894,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_after - INCORRECT_STATE" );
 
-      RTEMS.TIMER_SERVER_FIRE_WHEN(
+      RTEMS.TIMER.SERVER_FIRE_WHEN(
          0, TIME, SPTEST.DELAYED_SUBPROGRAM'ACCESS, RTEMS.NULL_ADDRESS, STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -2910,7 +2904,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_when - INCORRECT_STATE" );
 
-      RTEMS.timer_initiate_server( 0, 0, 0, STATUS );
+      RTEMS.TIMER.INITIATE_SERVER( 0, 0, 0, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
         STATUS,
         RTEMS.INVALID_PRIORITY,
@@ -2918,15 +2912,15 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_initiate_server - INVALID_PRIORITY" );
 
-      RTEMS.timer_initiate_server(
+      RTEMS.TIMER.INITIATE_SERVER(
 -- XXX ask Joel
---         RTEMS.TIMER_SERVER_DEFAULT_PRIORITY, 0, 0, STATUS
+--         RTEMS.TIMER.SERVER_DEFAULT_PRIORITY, 0, 0, STATUS
          -1, 0, 0, STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "timer_initiate_server" );
       TEXT_IO.PUT_LINE( "TA1 - timer_initiate_server" );
 
-      RTEMS.TIMER_SERVER_FIRE_AFTER(
+      RTEMS.TIMER.SERVER_FIRE_AFTER(
         16#010100#,
         5 * TEST_SUPPORT.TICKS_PER_SECOND,
         SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -2941,7 +2935,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_after - INVALID_ID" );
 
       TIME := ( 1994, 12, 31, 9, 0, 0, 0 );
-      RTEMS.TIMER_SERVER_FIRE_WHEN(
+      RTEMS.TIMER.SERVER_FIRE_WHEN(
          16#010100#,
          TIME,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -2955,7 +2949,7 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_when - INVALID_ID" );
 
-      RTEMS.TIMER_SERVER_FIRE_AFTER(
+      RTEMS.TIMER.SERVER_FIRE_AFTER(
          SPTEST.TIMER_ID( 1 ),
          0,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -2970,7 +2964,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_after - INVALID_NUMBER" );
 
       TIME := ( 1987, 2, 5, 8, 30, 45, 0 );
-      RTEMS.TIMER_SERVER_FIRE_WHEN(
+      RTEMS.TIMER.SERVER_FIRE_WHEN(
          SPTEST.TIMER_ID( 1 ),
          TIME,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -2989,13 +2983,13 @@ package body SPTEST is
       );
       TEXT_IO.NEW_LINE;
 
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "clock_set" );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_get       - ", TIME, "" );
       TEXT_IO.NEW_LINE;
 
       TIME := ( 1990, 2, 5, 8, 30, 45, 0 );
-      RTEMS.TIMER_SERVER_FIRE_WHEN(
+      RTEMS.TIMER.SERVER_FIRE_WHEN(
          SPTEST.TIMER_ID( 1 ),
          TIME,
          SPTEST.DELAYED_SUBPROGRAM'ACCESS,
@@ -3016,13 +3010,12 @@ package body SPTEST is
 
    end SCREEN_14;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
    begin
@@ -3073,20 +3066,19 @@ package body SPTEST is
 
    end TASK_1;
 
---PAGE
 -- 
 --  TASK_2
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
       TEXT_IO.PUT_LINE( "TA2 - semaphore_obtain - sem 1 - WAIT FOREVER" );
-      RTEMS.SEMAPHORE_OBTAIN(
+      RTEMS.SEMAPHORE.OBTAIN(
          SPTEST.SEMAPHORE_ID( 1 ),
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -3104,18 +3096,17 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA2 - task_delete - delete self - SUCCESSFUL" 
       );
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA2" );
 
    end TASK_2;
 
---PAGE
 -- 
 --  TASK_3
 --
 
    procedure TASK_3 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : SPTEST.BUFFER;
@@ -3129,7 +3120,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE(
          "TA3 - message_queue_receive - Q 1 - WAIT FOREVER"
       );
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
@@ -3148,24 +3139,23 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA3 - task_delete - delete self - SUCCESSFUL" 
       );
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA3" );
 
    end TASK_3;
 
---PAGE
 -- 
 --  TASK_4
 --
 
    procedure TASK_4 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.RATE_MONOTONIC_CANCEL(
+      RTEMS.RATE_MONOTONIC.CANCEL(
          SPTEST.PERIOD_ID( 1 ),
          STATUS
       );
@@ -3178,7 +3168,7 @@ package body SPTEST is
          "TA4 - rate_monotonic_cancel - NOT_OWNER_OF_RESOURCE"
        );
 
-      RTEMS.RATE_MONOTONIC_PERIOD(
+      RTEMS.RATE_MONOTONIC.PERIOD(
          SPTEST.PERIOD_ID( 1 ),
          5,
          STATUS
@@ -3195,7 +3185,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE(
          "TA4 - task_delete - delete self - SUCCESSFUL" 
       );
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA4" );
 
 

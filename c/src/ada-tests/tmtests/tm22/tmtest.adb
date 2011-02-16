@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -25,16 +25,16 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
+with RTEMS.MESSAGE_QUEUE;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       ID     : RTEMS.ID;
@@ -44,7 +44,7 @@ package body TMTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT_LINE( "*** TIME TEST 22 ***" );
 
-      RTEMS.MESSAGE_QUEUE_CREATE( 
+      RTEMS.MESSAGE_QUEUE.CREATE( 
          RTEMS.BUILD_NAME( 'M', 'Q', '1', ' ' ),
          100,
          16,
@@ -54,7 +54,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_CREATE" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'L', 'O', 'W', ' ' ), 
          10,
          2048, 
@@ -65,10 +65,10 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE LOW" );
 
-      RTEMS.TASK_START( ID, TMTEST.LOW_TASK'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( ID, TMTEST.LOW_TASK'ACCESS, 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOW" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'P', 'R', 'M', 'T' ),
          11,
          2048, 
@@ -79,21 +79,20 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE PREEMPT" );
 
-      RTEMS.TASK_START( ID, TMTEST.PREEMPT_TASK'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( ID, TMTEST.PREEMPT_TASK'ACCESS, 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START PREEMPT" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  HIGH_TASK
 --
 
    procedure HIGH_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : TMTEST.BUFFER;
@@ -105,7 +104,7 @@ package body TMTEST is
       BUFFER_POINTER := BUFFER'ADDRESS;
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.MESSAGE_QUEUE_BROADCAST(
+         RTEMS.MESSAGE_QUEUE.BROADCAST(
             TMTEST.MESSAGE_QUEUE_ID,
             BUFFER_POINTER,
             16,
@@ -122,18 +121,17 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.MESSAGE_QUEUE_BROADCAST
       );
 
-      RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.SUSPEND( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND" );
 
    end HIGH_TASK;
 
---PAGE
 -- 
 --  LOW_TASK
 --
 
    procedure LOW_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       ID             : RTEMS.ID;
@@ -147,7 +145,7 @@ package body TMTEST is
 
       BUFFER_POINTER := BUFFER'ADDRESS;
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'H', 'I', 'G', 'H' ), 
          5,
          2048, 
@@ -158,10 +156,10 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE HIGH" );
 
-      RTEMS.TASK_START( ID, TMTEST.HIGH_TASK'ACCESS, 0, STATUS );
+      RTEMS.TASKS.START( ID, TMTEST.HIGH_TASK'ACCESS, 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START HIGH" );
 
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          TMTEST.MESSAGE_QUEUE_ID,
          BUFFER_POINTER,
          RTEMS.DEFAULT_MODES,
@@ -180,7 +178,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.MESSAGE_QUEUE_BROADCAST(
+            RTEMS.MESSAGE_QUEUE.BROADCAST(
                TMTEST.MESSAGE_QUEUE_ID,
                BUFFER_POINTER,
                16,
@@ -198,7 +196,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.MESSAGE_QUEUE_BROADCAST
       );
 
-      RTEMS.MESSAGE_QUEUE_RECEIVE(
+      RTEMS.MESSAGE_QUEUE.RECEIVE(
          TMTEST.MESSAGE_QUEUE_ID,
          BUFFER_POINTER,
          RTEMS.DEFAULT_MODES,
@@ -224,13 +222,12 @@ package body TMTEST is
 
    end LOW_TASK;
 
---PAGE
 -- 
 --  LOW_TASK
 --
 
    procedure PREEMPT_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : TMTEST.BUFFER;
@@ -242,7 +239,7 @@ package body TMTEST is
       BUFFER_POINTER := BUFFER'ADDRESS;
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.MESSAGE_QUEUE_BROADCAST(
+         RTEMS.MESSAGE_QUEUE.BROADCAST(
             TMTEST.MESSAGE_QUEUE_ID,
             BUFFER_POINTER,
             16,

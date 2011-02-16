@@ -6,7 +6,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -18,19 +18,21 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.EVENT;
+with RTEMS.TASKS;
+with RTEMS.TIMER;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body MPTEST is
 
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -47,7 +49,7 @@ package body MPTEST is
       MPTEST.TASK_NAME( 2 ) := RTEMS.BUILD_NAME(  '2', '2', '2', ' ' );
 
       TEXT_IO.PUT_LINE( "Creating Test_task (Global)" );
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          MPTEST.TASK_NAME( TEST_SUPPORT.NODE ), 
          1, 
          2048, 
@@ -59,7 +61,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE" );
 
       TEXT_IO.PUT_LINE( "Starting Test_task (Global)" );
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          MPTEST.TASK_ID( 1 ),
          MPTEST.TEST_TASK'ACCESS,
          0,
@@ -69,7 +71,7 @@ package body MPTEST is
 
       MPTEST.TIMER_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'M', '1', ' ' );
 
-      RTEMS.TIMER_CREATE( 
+      RTEMS.TIMER.CREATE( 
          MPTEST.TIMER_NAME( 1 ), 
          MPTEST.TIMER_ID( 1 ),
          STATUS
@@ -77,12 +79,11 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE" );
 
       TEXT_IO.PUT_LINE( "Deleting initialization task" );
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 --
 --  DELAYED_SEND_EVENT
 --
@@ -94,24 +95,23 @@ package body MPTEST is
       STATUS  : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_SEND( MPTEST.TASK_ID( 1 ), RTEMS.EVENT_16, STATUS );
+      RTEMS.EVENT.SEND( MPTEST.TASK_ID( 1 ), RTEMS.EVENT_16, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND" );
 
    end DELAYED_SEND_EVENT;
 
---PAGE
 --
 --  TEST_TASK
 --
 
    procedure TEST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       TID         : RTEMS.ID;
       STATUS      : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
+      RTEMS.TASKS.IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_IDENT OF SELF" );
    
       TEXT_IO.PUT_LINE( "Getting TID of remote task" );
@@ -126,7 +126,7 @@ package body MPTEST is
 
       loop
 
-         RTEMS.TASK_IDENT( 
+         RTEMS.TASKS.IDENT( 
             MPTEST.TASK_NAME( MPTEST.REMOTE_NODE ),
             RTEMS.SEARCH_ALL_NODES,
             MPTEST.REMOTE_TID,
@@ -137,7 +137,7 @@ package body MPTEST is
 
       end loop;
 
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          MPTEST.TIMER_ID( 1 ), 
          10 * TEST_SUPPORT.TICKS_PER_SECOND, 
          MPTEST.DELAYED_SEND_EVENT'ACCESS,
@@ -148,7 +148,7 @@ package body MPTEST is
 
       MPTEST.TEST_TASK_SUPPORT( 1 );
 
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          MPTEST.TIMER_ID( 1 ), 
          11 * TEST_SUPPORT.TICKS_PER_SECOND, 
          MPTEST.DELAYED_SEND_EVENT'ACCESS,
@@ -159,7 +159,7 @@ package body MPTEST is
 
       if TEST_SUPPORT.NODE = 2 then
          
-         RTEMS.TASK_WAKE_AFTER( 
+         RTEMS.TASKS.WAKE_AFTER( 
             2 * TEST_SUPPORT.TICKS_PER_SECOND,
             STATUS
          );
@@ -175,7 +175,6 @@ package body MPTEST is
 
    end TEST_TASK;
 
---PAGE
 -- 
 --  TEST_TASK_SUPPORT
 --
@@ -192,7 +191,7 @@ package body MPTEST is
 
          loop
 
-            RTEMS.EVENT_RECEIVE( 
+            RTEMS.EVENT.RECEIVE( 
                RTEMS.EVENT_16,
                RTEMS.NO_WAIT,
                RTEMS.NO_TIMEOUT,
@@ -208,7 +207,7 @@ package body MPTEST is
                "EVENT_RECEIVE"
             );
 
-            RTEMS.TASK_WAKE_AFTER( 
+            RTEMS.TASKS.WAKE_AFTER( 
                2 * TEST_SUPPORT.TICKS_PER_SECOND, 
                STATUS
             );
@@ -216,10 +215,10 @@ package body MPTEST is
 
             TEST_SUPPORT.PUT_NAME( MPTEST.TASK_NAME( NODE ), FALSE );
             TEXT_IO.PUT_LINE( " - Suspending remote task" );
-            RTEMS.TASK_SUSPEND( MPTEST.REMOTE_TID, STATUS );
+            RTEMS.TASKS.SUSPEND( MPTEST.REMOTE_TID, STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND" );
 
-            RTEMS.TASK_WAKE_AFTER( 
+            RTEMS.TASKS.WAKE_AFTER( 
                2 * TEST_SUPPORT.TICKS_PER_SECOND, 
                STATUS
             );
@@ -228,7 +227,7 @@ package body MPTEST is
             TEST_SUPPORT.PUT_NAME( MPTEST.TASK_NAME( NODE ), FALSE );
             TEXT_IO.PUT_LINE( " - Resuming remote task" );
 
-            RTEMS.TASK_RESUME( MPTEST.REMOTE_TID, STATUS );
+            RTEMS.TASKS.RESUME( MPTEST.REMOTE_TID, STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESUME" );
 
          end loop;
@@ -237,7 +236,7 @@ package body MPTEST is
 
          loop
 
-            RTEMS.EVENT_RECEIVE( 
+            RTEMS.EVENT.RECEIVE( 
                RTEMS.EVENT_16,
                RTEMS.NO_WAIT,
                RTEMS.NO_TIMEOUT,
@@ -255,7 +254,7 @@ package body MPTEST is
 
             TEST_SUPPORT.PUT_NAME( MPTEST.TASK_NAME( REMOTE_NODE ), FALSE );
             TEXT_IO.PUT_LINE( " - have I been suspended???" ); 
-            RTEMS.TASK_WAKE_AFTER( 
+            RTEMS.TASKS.WAKE_AFTER( 
                TEST_SUPPORT.TICKS_PER_SECOND / 2,
                STATUS
             );

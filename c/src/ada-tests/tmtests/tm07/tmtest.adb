@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -28,13 +28,12 @@ with TIMER_DRIVER;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS  : RTEMS.STATUS_CODES;
@@ -45,20 +44,19 @@ package body TMTEST is
 
       TMTEST.TEST_INIT;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TEST_INIT
 --
 
    procedure TEST_INIT
    is
-      TASK_ENTRY : RTEMS.TASK_ENTRY;
-      PRIORITY   : RTEMS.TASK_PRIORITY;
+      TASK_ENTRY : RTEMS.TASKS.ENTRY_POINT;
+      PRIORITY   : RTEMS.TASKS.PRIORITY;
       STATUS     : RTEMS.STATUS_CODES;
    begin
 
@@ -67,7 +65,7 @@ package body TMTEST is
       for INDEX in 0 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
             PRIORITY, 
             1024, 
@@ -88,20 +86,19 @@ package body TMTEST is
             TASK_ENTRY := TMTEST.MIDDLE_TASKS'ACCESS;
          end if;
 
-         RTEMS.TASK_START( TMTEST.TASK_ID( INDEX ), TASK_ENTRY, 0, STATUS );
+         RTEMS.TASKS.START( TMTEST.TASK_ID( INDEX ), TASK_ENTRY, 0, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
 
       end loop;
 
    end TEST_INIT;
 
---PAGE
 -- 
 --  HIGH_TASK
 --
 
    procedure HIGH_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS       : RTEMS.STATUS_CODES;
    begin
@@ -116,7 +113,7 @@ package body TMTEST is
             RTEMS_CALLING_OVERHEAD.TASK_RESTART
          );
       else
-         RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+         RTEMS.TASKS.SUSPEND( RTEMS.SELF, STATUS );
       end if;
 
       TEXT_IO.PUT_LINE( "*** END OF TIME TEST 07 ***" );
@@ -124,13 +121,12 @@ package body TMTEST is
 
    end HIGH_TASK;
 
---PAGE
 -- 
 --  MIDDLE_TASKS
 --
 
    procedure MIDDLE_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS       : RTEMS.STATUS_CODES;
    begin
@@ -138,25 +134,24 @@ package body TMTEST is
       TMTEST.TASK_INDEX := TMTEST.TASK_INDEX + 1;
 
       if ARGUMENT > 0 then
-         RTEMS.TASK_RESTART( 
+         RTEMS.TASKS.RESTART( 
             TMTEST.TASK_ID( TMTEST.TASK_INDEX ),
             16#7FFFFFFF#,
             STATUS
          );
       else
-         RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+         RTEMS.TASKS.SUSPEND( RTEMS.SELF, STATUS );
       end if;
 
  
    end MIDDLE_TASKS;
 
---PAGE
 -- 
 --  LOW_TASK
 --
 
    procedure LOW_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS   : RTEMS.STATUS_CODES;
@@ -165,11 +160,12 @@ package body TMTEST is
       TMTEST.TASK_INDEX := 1;
       TIMER_DRIVER.INITIALIZE;
 
-      RTEMS.TASK_RESTART( 
+      RTEMS.TASKS.RESTART( 
          TMTEST.TASK_ID( TMTEST.TASK_INDEX ),
          16#7FFFFFFF#,
          STATUS
       );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART" );
 
    end LOW_TASK;
 

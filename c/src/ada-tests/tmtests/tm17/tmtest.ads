@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -21,6 +21,7 @@
 --
 
 with RTEMS;
+with RTEMS.TASKS;
 with TIME_TEST_SUPPORT;
 
 package TMTEST is
@@ -42,7 +43,7 @@ package TMTEST is
 --
 
    TASK_COUNT     : RTEMS.UNSIGNED32;
-   TASK_PRIORITY  : RTEMS.TASK_PRIORITY;
+   TASK_PRIORITY  : RTEMS.TASKS.PRIORITY;
 
 --
 --  The following variable is set to the execution time returned
@@ -60,7 +61,7 @@ package TMTEST is
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, INIT);
 
@@ -75,7 +76,7 @@ package TMTEST is
 --
 
    procedure FIRST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, FIRST_TASK);
 
@@ -89,7 +90,7 @@ package TMTEST is
 --
 
    procedure MIDDLE_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, MIDDLE_TASKS);
 
@@ -104,7 +105,7 @@ package TMTEST is
 --
 
    procedure LAST_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    );
    pragma Convention (C, LAST_TASK);
 

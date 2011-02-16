@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -25,21 +25,22 @@ with RTEMS_CALLING_OVERHEAD;
 with TEST_SUPPORT;
 with TEXT_IO;
 with TIMER_DRIVER;
+with RTEMS.CLOCK;
+with RTEMS.TIMER;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
-      TASK_PRIORITY : RTEMS.TASK_PRIORITY;
+      TASK_PRIORITY : RTEMS.TASKS.PRIORITY;
       ID            : RTEMS.ID;
-      TASK_ENTRY    : RTEMS.TASK_ENTRY;
+      TASK_ENTRY    : RTEMS.TASKS.ENTRY_POINT;
       STATUS        : RTEMS.STATUS_CODES;
    begin
 
@@ -51,7 +52,7 @@ package body TMTEST is
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
             TASK_PRIORITY, 
             1024, 
@@ -70,19 +71,18 @@ package body TMTEST is
             TASK_ENTRY := TMTEST.MIDDLE_TASKS'ACCESS;
          end if;
 
-         RTEMS.TASK_START( ID, TASK_ENTRY, 0, STATUS );
+         RTEMS.TASKS.START( ID, TASK_ENTRY, 0, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
 
          TASK_PRIORITY := TASK_PRIORITY + 1;
 
       end loop;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  NULL_DELAY
 --
@@ -97,13 +97,12 @@ package body TMTEST is
 
    end NULL_DELAY;
 
---PAGE
 -- 
 --  HIGH_TASK
 --
 
    procedure HIGH_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       OVERHEAD : RTEMS.UNSIGNED32;
@@ -120,7 +119,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_CREATE(
+            RTEMS.TIMER.CREATE(
                INDEX,
                TMTEST.TIMER_ID( INDEX ),
                STATUS
@@ -139,7 +138,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_FIRE_AFTER(
+            RTEMS.TIMER.FIRE_AFTER(
                TMTEST.TIMER_ID( INDEX ),
                500,
                TMTEST.NULL_DELAY'ACCESS,
@@ -160,7 +159,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_FIRE_AFTER(
+            RTEMS.TIMER.FIRE_AFTER(
                TMTEST.TIMER_ID( INDEX ),
                500,
                TMTEST.NULL_DELAY'ACCESS,
@@ -181,7 +180,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_CANCEL( TMTEST.TIMER_ID( INDEX ), STATUS );
+            RTEMS.TIMER.CANCEL( TMTEST.TIMER_ID( INDEX ), STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -196,7 +195,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_CANCEL( TMTEST.TIMER_ID( INDEX ), STATUS );
+            RTEMS.TIMER.CANCEL( TMTEST.TIMER_ID( INDEX ), STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -211,7 +210,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_RESET( TMTEST.TIMER_ID( INDEX ), STATUS );
+            RTEMS.TIMER.RESET( TMTEST.TIMER_ID( INDEX ), STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -226,7 +225,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_RESET( TMTEST.TIMER_ID( INDEX ), STATUS );
+            RTEMS.TIMER.RESET( TMTEST.TIMER_ID( INDEX ), STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -240,12 +239,12 @@ package body TMTEST is
 
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
-         RTEMS.TIMER_CANCEL( TMTEST.TIMER_ID( INDEX ), STATUS );
+         RTEMS.TIMER.CANCEL( TMTEST.TIMER_ID( INDEX ), STATUS );
       end loop;
 
       TMTEST.TIME_OF_DAY := ( 1988, 12, 31, 9, 0, 0, 0 );
 
-      RTEMS.CLOCK_SET( TMTEST.TIME_OF_DAY, STATUS );
+      RTEMS.CLOCK.SET( TMTEST.TIME_OF_DAY, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET" );
 
       TMTEST.TIME_OF_DAY.YEAR := 1989;
@@ -253,7 +252,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_FIRE_WHEN(
+            RTEMS.TIMER.FIRE_WHEN(
                TMTEST.TIMER_ID( INDEX ),
                TMTEST.TIME_OF_DAY,
                TMTEST.NULL_DELAY'ACCESS,
@@ -274,7 +273,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_FIRE_WHEN(
+            RTEMS.TIMER.FIRE_WHEN(
                TMTEST.TIMER_ID( INDEX ),
                TMTEST.TIME_OF_DAY,
                TMTEST.NULL_DELAY'ACCESS,
@@ -295,7 +294,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_DELETE( TMTEST.TIMER_ID( INDEX ), STATUS );
+            RTEMS.TIMER.DELETE( TMTEST.TIMER_ID( INDEX ), STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -309,10 +308,10 @@ package body TMTEST is
 
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
-         RTEMS.TIMER_CREATE( INDEX, TMTEST.TIMER_ID( INDEX ), STATUS );
+         RTEMS.TIMER.CREATE( INDEX, TMTEST.TIMER_ID( INDEX ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE" );
 
-         RTEMS.TIMER_FIRE_AFTER( 
+         RTEMS.TIMER.FIRE_AFTER( 
             TMTEST.TIMER_ID( INDEX ), 
             500,
             TMTEST.NULL_DELAY'ACCESS,
@@ -321,7 +320,7 @@ package body TMTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_FIRE_AFTER" );
 
-         RTEMS.TIMER_CANCEL( TMTEST.TIMER_ID( INDEX ), STATUS );
+         RTEMS.TIMER.CANCEL( TMTEST.TIMER_ID( INDEX ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CANCEL" );
 
       end loop;
@@ -329,7 +328,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            RTEMS.TIMER_DELETE( TMTEST.TIMER_ID( INDEX ), STATUS );
+            RTEMS.TIMER.DELETE( TMTEST.TIMER_ID( INDEX ), STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -342,33 +341,33 @@ package body TMTEST is
       );
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.TASK_WAKE_WHEN( TMTEST.TIME_OF_DAY, STATUS );
+         RTEMS.TASKS.WAKE_WHEN( TMTEST.TIME_OF_DAY, STATUS );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_WHEN" );
 
    end HIGH_TASK;
 
---PAGE
 -- 
 --  MIDDLE_TASKS
 --
 
    procedure MIDDLE_TASKS (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_WAKE_WHEN( TMTEST.TIME_OF_DAY, STATUS );
+      RTEMS.TASKS.WAKE_WHEN( TMTEST.TIME_OF_DAY, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_WHEN" );
 
    end MIDDLE_TASKS;
 
---PAGE
 -- 
 --  LOW_TASK
 --
 
    procedure LOW_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
    begin

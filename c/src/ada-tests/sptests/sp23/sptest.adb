@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,16 +24,16 @@ with ADDRESS_IO;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
+with RTEMS.PORT;
 
 package body SPTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       INTERNAL_AREA : RTEMS.ADDRESS;
@@ -46,7 +46,7 @@ package body SPTEST is
 
       SPTEST.TASK_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'A', '1', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          1, 
          2048, 
@@ -57,7 +57,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -69,7 +69,7 @@ package body SPTEST is
 
       INTERNAL_AREA := SPTEST.INTERNAL_PORT_AREA( 0 )'ADDRESS;
       EXTERNAL_AREA := SPTEST.EXTERNAL_PORT_AREA( 0 )'ADDRESS;
-      RTEMS.PORT_CREATE(
+      RTEMS.PORT.CREATE(
          SPTEST.PORT_NAME( 1 ), 
          INTERNAL_AREA,
          EXTERNAL_AREA,
@@ -84,18 +84,17 @@ package body SPTEST is
       ADDRESS_IO.PUT( EXTERNAL_AREA, WIDTH => 8, BASE => 16 );
       TEXT_IO.NEW_LINE;
    
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       DPID            : RTEMS.ID;
@@ -104,14 +103,14 @@ package body SPTEST is
       STATUS          : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.PORT_IDENT( SPTEST.PORT_NAME( 1 ), DPID, STATUS );
+      RTEMS.PORT.IDENT( SPTEST.PORT_NAME( 1 ), DPID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PORT_IDENT" );
       TEXT_IO.PUT( "TA1 - port_ident - " );
       UNSIGNED32_IO.PUT( DPID, WIDTH => 8, BASE => 16 );
       TEXT_IO.NEW_LINE;
 
       TO_BE_CONVERTED :=  SPTEST.EXTERNAL_PORT_AREA( 16#E# )'ADDRESS;
-      RTEMS.PORT_EXTERNAL_TO_INTERNAL(
+      RTEMS.PORT.EXTERNAL_TO_INTERNAL(
          SPTEST.PORT_ID( 1 ),
          TO_BE_CONVERTED,
          CONVERTED,
@@ -125,7 +124,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
    
       TO_BE_CONVERTED :=  SPTEST.INTERNAL_PORT_AREA( 16#E# )'ADDRESS;
-      RTEMS.PORT_INTERNAL_TO_EXTERNAL(
+      RTEMS.PORT.INTERNAL_TO_EXTERNAL(
          SPTEST.PORT_ID( 1 ),
          TO_BE_CONVERTED,
          CONVERTED,
@@ -139,7 +138,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
    
       TO_BE_CONVERTED :=  SPTEST.ABOVE_PORT_AREA( 16#E# )'ADDRESS;
-      RTEMS.PORT_EXTERNAL_TO_INTERNAL(
+      RTEMS.PORT.EXTERNAL_TO_INTERNAL(
          SPTEST.PORT_ID( 1 ),
          TO_BE_CONVERTED,
          CONVERTED,
@@ -153,7 +152,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
    
       TO_BE_CONVERTED :=  SPTEST.BELOW_PORT_AREA( 16#E# )'ADDRESS;
-      RTEMS.PORT_INTERNAL_TO_EXTERNAL(
+      RTEMS.PORT.INTERNAL_TO_EXTERNAL(
          SPTEST.PORT_ID( 1 ),
          TO_BE_CONVERTED,
          CONVERTED,
@@ -167,7 +166,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
    
       TEXT_IO.PUT_LINE( "TA1 - port_delete - DP1" );
-      RTEMS.PORT_DELETE( SPTEST.PORT_ID( 1 ), STATUS );
+      RTEMS.PORT.DELETE( SPTEST.PORT_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PORT_DELETE" );
 
       TEXT_IO.PUT_LINE( "*** END OF TEST 23 ***" );

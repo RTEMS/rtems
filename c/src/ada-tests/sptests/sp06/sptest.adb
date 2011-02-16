@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -26,17 +26,16 @@ with TEXT_IO;
 
 package body SPTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS            : RTEMS.STATUS_CODES;
-      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
    begin
 
       TEXT_IO.NEW_LINE( 2 );
@@ -49,7 +48,7 @@ package body SPTEST is
       SPTEST.ARGUMENT := 0;
       SPTEST.RESTART_ARGUMENT := 1;
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          1, 
          2048, 
@@ -60,7 +59,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 2 ), 
          1, 
          2048, 
@@ -71,7 +70,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA2" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 3 ), 
          10, 
          2048, 
@@ -82,7 +81,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA3" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -90,7 +89,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 2 ),
          SPTEST.TASK_2'ACCESS,
          SPTEST.ARGUMENT,
@@ -98,7 +97,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA2" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 3 ),
          SPTEST.TASK_3'ACCESS,
          SPTEST.ARGUMENT,
@@ -106,7 +105,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA3" );
 
-      RTEMS.TASK_SET_PRIORITY(
+      RTEMS.TASKS.SET_PRIORITY(
          SPTEST.TASK_ID( 3 ),
          5,
          PREVIOUS_PRIORITY,
@@ -114,18 +113,17 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_PRIORITY OF TA3" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       PASS   : RTEMS.UNSIGNED32;
       STATUS : RTEMS.STATUS_CODES;
@@ -142,45 +140,44 @@ package body SPTEST is
 
       if PASS = 1 then
          TEXT_IO.PUT_LINE( "TA1 - restarting TA3" );
-         RTEMS.TASK_RESTART( 
+         RTEMS.TASKS.RESTART( 
             SPTEST.TASK_ID( 3 ), 
             SPTEST.RESTART_ARGUMENT, 
             STATUS 
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART OF TA3" );
 
-         RTEMS.TASK_WAKE_AFTER( 2 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( 2 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
       end if;
 
-      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
       TEXT_IO.PUT_LINE( "TA1 - task_restart - restarting TA2" );
-      RTEMS.TASK_RESTART( 
+      RTEMS.TASKS.RESTART( 
          SPTEST.TASK_ID( 2 ), 
          SPTEST.RESTART_ARGUMENT, 
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART OF TA2" );
 
-      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
       TEXT_IO.PUT_LINE( "TA1 - task_restart - restarting self" );
-      RTEMS.TASK_RESTART( SPTEST.TASK_ID( 1 ), PASS, STATUS );
+      RTEMS.TASKS.RESTART( SPTEST.TASK_ID( 1 ), PASS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART OF SELF" );
 
    end TASK_1;
 
---PAGE
 -- 
 --  TASK_2
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -188,33 +185,32 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA2 - is beginning to run" );
 
       if ARGUMENT = SPTEST.ARGUMENT then
-         RTEMS.TASK_WAKE_AFTER( 2 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( 2 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
       end if;
 
       loop
 
          TEXT_IO.PUT_LINE( "TA2 - task_wake_after - sleep 1/2 second" );
-         RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND / 2, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND / 2, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
       end loop;
 
    end TASK_2;
 
---PAGE
 -- 
 --  TASK_3
 --
 
    procedure TASK_3 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end TASK_3;

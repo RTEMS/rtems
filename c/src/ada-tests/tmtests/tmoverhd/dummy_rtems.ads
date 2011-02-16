@@ -22,6 +22,9 @@
 --
 
 with RTEMS;
+with RTEMS.CLOCK;
+with RTEMS.TASKS;
+with RTEMS.TIMER;
 
 package DUMMY_RTEMS is
 
@@ -29,7 +32,7 @@ package DUMMY_RTEMS is
 
    procedure TASK_CREATE (
       NAME             : in     RTEMS.NAME;
-      INITIAL_PRIORITY : in     RTEMS.TASK_PRIORITY;
+      INITIAL_PRIORITY : in     RTEMS.TASKS.PRIORITY;
       STACK_SIZE       : in     RTEMS.UNSIGNED32;
       INITIAL_MODES    : in     RTEMS.MODE;
       ATTRIBUTE_SET    : in     RTEMS.ATTRIBUTE;
@@ -46,7 +49,7 @@ package DUMMY_RTEMS is
 
    procedure TASK_START (
       ID          : in     RTEMS.ID;
-      ENTRY_POINT : in     RTEMS.TASK_ENTRY;
+      ENTRY_POINT : in     RTEMS.TASKS.ENTRY_POINT;
       ARGUMENT    : in     RTEMS.UNSIGNED32;
       RESULT      :    out RTEMS.STATUS_CODES
    );
@@ -74,8 +77,8 @@ package DUMMY_RTEMS is
 
    procedure TASK_SET_PRIORITY (
       ID           : in     RTEMS.ID;
-      NEW_PRIORITY : in     RTEMS.TASK_PRIORITY;
-      OLD_PRIORITY :    out RTEMS.TASK_PRIORITY;
+      NEW_PRIORITY : in     RTEMS.TASKS.PRIORITY;
+      OLD_PRIORITY :    out RTEMS.TASKS.PRIORITY;
       RESULT       :    out RTEMS.STATUS_CODES
    );
 
@@ -122,7 +125,7 @@ package DUMMY_RTEMS is
 -- Clock Manager
 
    procedure CLOCK_GET (
-      OPTION      : in     RTEMS.CLOCK_GET_OPTIONS;
+      OPTION      : in     RTEMS.CLOCK.GET_OPTIONS;
       TIME_BUFFER : in     RTEMS.ADDRESS;
       RESULT      :    out RTEMS.STATUS_CODES
    );
@@ -158,7 +161,7 @@ package DUMMY_RTEMS is
    procedure TIMER_FIRE_AFTER (
       ID        : in     RTEMS.ID;
       TICKS     : in     RTEMS.INTERVAL;
-      ROUTINE   : in     RTEMS.TIMER_SERVICE_ROUTINE;
+      ROUTINE   : in     RTEMS.TIMER.SERVICE_ROUTINE;
       USER_DATA : in     RTEMS.ADDRESS;
       RESULT    :    out RTEMS.STATUS_CODES
    );
@@ -166,7 +169,7 @@ package DUMMY_RTEMS is
    procedure TIMER_FIRE_WHEN (
       ID        : in     RTEMS.ID;
       WALL_TIME : in     RTEMS.TIME_OF_DAY;
-      ROUTINE   : in     RTEMS.TIMER_SERVICE_ROUTINE;
+      ROUTINE   : in     RTEMS.TIMER.SERVICE_ROUTINE;
       USER_DATA : in     RTEMS.ADDRESS;
       RESULT    :    out RTEMS.STATUS_CODES
    );
@@ -187,7 +190,7 @@ package DUMMY_RTEMS is
       NAME             : in     RTEMS.NAME;
       COUNT            : in     RTEMS.UNSIGNED32;
       ATTRIBUTE_SET    : in     RTEMS.ATTRIBUTE;
-      PRIORITY_CEILING : in     RTEMS.TASK_PRIORITY;
+      PRIORITY_CEILING : in     RTEMS.TASKS.PRIORITY;
       ID               :    out RTEMS.ID;
       RESULT           :    out RTEMS.STATUS_CODES
    );

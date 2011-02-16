@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -25,16 +25,16 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
+with RTEMS.SIGNAL;
 
 package body TMTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -43,7 +43,7 @@ package body TMTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT_LINE( "*** TIME TEST 19 ***" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
          128,
          1024, 
@@ -54,7 +54,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TASK1" );
 
-      RTEMS.TASK_START( 
+      RTEMS.TASKS.START( 
          TMTEST.TASK_ID( 1 ),
          TMTEST.TASK_1'ACCESS, 
          0, 
@@ -62,7 +62,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TASK1" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
          127,
          1024, 
@@ -73,7 +73,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TASK2" );
 
-      RTEMS.TASK_START( 
+      RTEMS.TASKS.START( 
          TMTEST.TASK_ID( 2 ),
          TMTEST.TASK_2'ACCESS, 
          0, 
@@ -81,7 +81,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TASK2" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'T', 'I', 'M', 'E' ),
          126,
          1024, 
@@ -92,7 +92,7 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TASK3" );
 
-      RTEMS.TASK_START( 
+      RTEMS.TASKS.START( 
          TMTEST.TASK_ID( 3 ),
          TMTEST.TASK_3'ACCESS, 
          0, 
@@ -100,12 +100,11 @@ package body TMTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TASK3" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  PROCESS_ASR_FOR_PASS_1
 --
@@ -132,7 +131,6 @@ package body TMTEST is
 
    end PROCESS_ASR_FOR_PASS_1;
 
---PAGE
 -- 
 --  PROCESS_ASR_FOR_PASS_2
 --
@@ -146,32 +144,32 @@ package body TMTEST is
 
       TEXT_IO.PUT_LINE( "SIGNAL_ENTER (preemptive) na" );
      
-      RTEMS.TASK_RESUME( TMTEST.TASK_ID( 3 ), STATUS );
+      RTEMS.TASKS.RESUME( TMTEST.TASK_ID( 3 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESUME" );
 
       TIMER_DRIVER.INITIALIZE;
 
    end PROCESS_ASR_FOR_PASS_2;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS  : RTEMS.STATUS_CODES;
    begin
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.SIGNAL_CATCH( 
+         RTEMS.SIGNAL.CATCH( 
             TMTEST.PROCESS_ASR_FOR_PASS_1'ACCESS, 
             RTEMS.DEFAULT_MODES,
             STATUS 
          );
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_CATCH" );
 
       TIME_TEST_SUPPORT.PUT_TIME( 
          "SIGNAL_CATCH",
@@ -182,8 +180,9 @@ package body TMTEST is
       );
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.SIGNAL_SEND( TMTEST.TASK_ID( 2 ), RTEMS.SIGNAL_1, STATUS );
+         RTEMS.SIGNAL.SEND( TMTEST.TASK_ID( 2 ), RTEMS.SIGNAL_1, STATUS );
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_SEND" );
 
       TIME_TEST_SUPPORT.PUT_TIME( 
          "SIGNAL_SEND (non-preemptive)",
@@ -194,7 +193,8 @@ package body TMTEST is
       );
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.SIGNAL_SEND( RTEMS.SELF, RTEMS.SIGNAL_1, STATUS );
+         RTEMS.SIGNAL.SEND( RTEMS.SELF, RTEMS.SIGNAL_1, STATUS );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_SEND" );
 
       -- end time is done in ASR
 
@@ -208,7 +208,7 @@ package body TMTEST is
          0
       );
 
-      RTEMS.SIGNAL_CATCH( 
+      RTEMS.SIGNAL.CATCH( 
          TMTEST.PROCESS_ASR_FOR_PASS_2'ACCESS, 
          RTEMS.NO_PREEMPT,
          STATUS
@@ -216,11 +216,11 @@ package body TMTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_CATCH" );
 
       TIMER_DRIVER.INITIALIZE;
-         RTEMS.SIGNAL_SEND( RTEMS.SELF, RTEMS.SIGNAL_1, STATUS );
+         RTEMS.SIGNAL.SEND( RTEMS.SELF, RTEMS.SIGNAL_1, STATUS );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_SEND" );
 
    end TASK_1;
 
---PAGE
 -- 
 --  PROCESS_ASR_FOR_TASK_2
 --
@@ -234,42 +234,42 @@ package body TMTEST is
 
    end PROCESS_ASR_FOR_TASK_2;
 
---PAGE
 -- 
 --  TASK_2
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS  : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.SIGNAL_CATCH( 
+      RTEMS.SIGNAL.CATCH( 
          TMTEST.PROCESS_ASR_FOR_TASK_2'ACCESS, 
          RTEMS.DEFAULT_MODES,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_CATCH" );
 
-      RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.SUSPEND( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND" );
 
    end TASK_2;
 
---PAGE
 -- 
 --  TASK_3
 --
 
    procedure TASK_3 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.SUSPEND( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND" );
 
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 

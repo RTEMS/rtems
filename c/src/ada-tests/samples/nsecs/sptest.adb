@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -23,6 +23,7 @@
 with Ada.Integer_Text_IO;
 with Interfaces.C;
 with RTEMS;
+with RTEMS.Clock;
 with Text_IO;
 use type Interfaces.C.Long;
 use type RTEMS.Time_T;
@@ -54,13 +55,12 @@ package body SPTEST is
    end Subtract_Em;
 
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       Status : RTEMS.Status_Codes;
@@ -88,8 +88,8 @@ package body SPTEST is
 
       for Index in 1 .. 10 loop
 
-         RTEMS.Clock_Get_Uptime( Start, Status );
-         RTEMS.Clock_Get_Uptime( Stop, Status );
+         RTEMS.Clock.Get_Uptime( Start, Status );
+         RTEMS.Clock.Get_Uptime( Stop, Status );
 
          Subtract_Em( Start, Stop, Diff );
 
@@ -118,11 +118,11 @@ package body SPTEST is
 
       for Index in 1 .. 10 loop
          Max := (Index * 10000);
-         RTEMS.Clock_Get_Uptime( Start, Status );
+         RTEMS.Clock.Get_Uptime( Start, Status );
          for j in 1 .. Max loop
             Simple_Procedure;
          end loop;
-         RTEMS.Clock_Get_Uptime( Stop, Status );
+         RTEMS.Clock.Get_Uptime( Stop, Status );
 
          Subtract_Em( Start, Stop, Diff );
 

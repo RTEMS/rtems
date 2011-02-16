@@ -21,20 +21,21 @@ with FLOAT_IO;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
+with RTEMS.CLOCK;
 
 include(../../support/fp.inc)
 include(../../support/integer.inc)
 
 package body SPTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -48,7 +49,7 @@ package body SPTEST is
       SPTEST.TASK_NAME( 5 ) := RTEMS.BUILD_NAME(  'T', 'A', '5', ' ' );
       SPTEST.TASK_NAME( 6 ) := RTEMS.BUILD_NAME(  'F', 'P', '1', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          2, 
          2048, 
@@ -59,7 +60,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 2 ), 
          2, 
          2048, 
@@ -70,7 +71,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA2" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 3 ), 
          2, 
          2048, 
@@ -81,7 +82,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA3" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 4 ), 
          2, 
          2048, 
@@ -92,7 +93,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA4" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 5 ), 
          2, 
          2048, 
@@ -103,7 +104,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA5" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 6 ), 
          1, 
          2048, 
@@ -114,7 +115,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF FP1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 6 ),
          SPTEST.FIRST_FP_TASK'ACCESS,
          0,
@@ -122,7 +123,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF FP1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -130,7 +131,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 2 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -138,7 +139,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA2" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 3 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -146,7 +147,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA3" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 4 ),
          SPTEST.FP_TASK'ACCESS,
          0,
@@ -154,7 +155,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA4" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 5 ),
          SPTEST.FP_TASK'ACCESS,
          0,
@@ -188,18 +189,17 @@ package body SPTEST is
       SPTEST.INTEGER_FACTORS( 8 ) := 16#8000#;
       SPTEST.INTEGER_FACTORS( 9 ) := 16#9000#;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  FIRST_FP_TASK
 --
 
    procedure FIRST_FP_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       STATUS     : RTEMS.STATUS_CODES;
       TID        : RTEMS.ID;
@@ -209,7 +209,7 @@ package body SPTEST is
       FP_DECLARE;
    begin
 
-      RTEMS.TASK_IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
+      RTEMS.TASKS.IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_IDENT OF SELF" );
 
       TASK_INDEX := TEST_SUPPORT.TASK_NUMBER( TID );
@@ -234,8 +234,10 @@ package body SPTEST is
       FLOAT_IO.PUT( FP_FACTORS( TASK_INDEX ) );
       TEXT_IO.PUT_LINE( ")" );
 
+      FP_CHECK( FP_FACTORS( TASK_INDEX ) );
+      INTEGER_CHECK( INTEGER_FACTORS( TASK_INDEX ) );
       if ARGUMENT = 0 then
-         RTEMS.TASK_RESTART( 
+         RTEMS.TASKS.RESTART( 
             RTEMS.SELF,
             1,
             STATUS
@@ -243,22 +245,21 @@ package body SPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART OF SELF" );
       else
          TIME := ( 1988, 12, 31, 9, 0, 0, 0 );
-         RTEMS.CLOCK_SET( TIME, STATUS );
+         RTEMS.CLOCK.SET( TIME, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET" );
 
-         RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+         RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
       end if;
 
    end FIRST_FP_TASK;
 
---PAGE
 -- 
 --  FP_TASK
 --
 
    procedure FP_TASK (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS     : RTEMS.STATUS_CODES;
@@ -269,7 +270,7 @@ package body SPTEST is
       FP_DECLARE;
    begin
 
-      RTEMS.TASK_IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
+      RTEMS.TASKS.IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_IDENT OF SELF" );
    
       TASK_INDEX := TEST_SUPPORT.TASK_NUMBER( TID );
@@ -299,19 +300,19 @@ package body SPTEST is
 
       loop
 
-         RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+         RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET" );
 
          if TIME.SECOND >= 16 then
 
             if TEST_SUPPORT.TASK_NUMBER( TID ) = 4 then
                TEXT_IO.PUT_LINE( "TA4 - task_delete - self" );
-               RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+               RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
                TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA4" );
             end if;
       
             TEXT_IO.PUT_LINE( "TA5 - task_delete - TA3" );
-            RTEMS.TASK_DELETE( SPTEST.TASK_ID( 3 ), STATUS );
+            RTEMS.TASKS.DELETE( SPTEST.TASK_ID( 3 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA3" );
  
             TEXT_IO.PUT_LINE( "*** END OF TEST 19 ***" );
@@ -329,20 +330,19 @@ package body SPTEST is
          INTEGER_CHECK( INTEGER_FACTORS( TASK_INDEX ) );
          FP_CHECK( FP_FACTORS( TASK_INDEX ) );
  
-         RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
           
       end loop;
    
    end FP_TASK;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS     : RTEMS.STATUS_CODES;
@@ -350,14 +350,16 @@ package body SPTEST is
       TIME       : RTEMS.TIME_OF_DAY;
       TASK_INDEX : RTEMS.UNSIGNED32;
       INTEGER_DECLARE;
+      FP_DECLARE;
    begin
 
-      RTEMS.TASK_IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
+      RTEMS.TASKS.IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_IDENT OF SELF" );
    
       TASK_INDEX := TEST_SUPPORT.TASK_NUMBER( TID );
   
       INTEGER_LOAD( INTEGER_FACTORS( TASK_INDEX ) );
+      FP_LOAD( FP_FACTORS( TASK_INDEX ) );
  
       TEST_SUPPORT.PUT_NAME(
          SPTEST.TASK_NAME( TEST_SUPPORT.TASK_NUMBER( TID ) ),
@@ -369,7 +371,7 @@ package body SPTEST is
  
       loop
 
-         RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+         RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET" );
 
          TEST_SUPPORT.PUT_NAME( 
@@ -381,8 +383,9 @@ package body SPTEST is
          TEXT_IO.NEW_LINE;
 
          INTEGER_CHECK( INTEGER_FACTORS( TASK_INDEX ) );
+         FP_CHECK( FP_FACTORS( TASK_INDEX ) );
 
-         RTEMS.TASK_WAKE_AFTER( 
+         RTEMS.TASKS.WAKE_AFTER( 
             TEST_SUPPORT.TASK_NUMBER( TID ) * 5 * 
               TEST_SUPPORT.TICKS_PER_SECOND, 
             STATUS

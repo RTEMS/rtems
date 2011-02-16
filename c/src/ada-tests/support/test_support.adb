@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,10 +24,10 @@ with Interfaces; use Interfaces;
 with Unsigned32_IO;
 with Status_IO;
 with Text_IO;
+with RTEMS.Fatal;
 
 package body Test_Support is
 
---PAGE
 --
 --  Fatal_Directive_Status
 --
@@ -48,13 +48,12 @@ package body Test_Support is
          Status_IO.Put( Status );
          Text_IO.New_Line;
 
-         RTEMS.Fatal_Error_Occurred( RTEMS.Status_Codes'Pos( Status ) );
+         RTEMS.Fatal.Error_Occurred( RTEMS.Status_Codes'Pos( Status ) );
 
       end if;
 
    end Fatal_Directive_Status;
 
---PAGE
 --
 --  Directive_Failed
 --
@@ -73,7 +72,6 @@ package body Test_Support is
 
    end Directive_Failed;
 
---PAGE
 --
 --  Print_Time
 --
@@ -101,7 +99,6 @@ package body Test_Support is
 
    end Print_Time;
 
---PAGE
 --
 --  Put_Dot
 --
@@ -114,7 +111,6 @@ package body Test_Support is
       Text_IO.FLUSH;
    end Put_Dot;
 
---PAGE
 --
 --  Pause
 --
@@ -133,7 +129,6 @@ package body Test_Support is
 
    end Pause;
 
---PAGE
 --
 --  Pause_And_Screen_Number
 --
@@ -155,7 +150,6 @@ package body Test_Support is
  
    end Pause_And_Screen_Number;
 
---PAGE
 --
 --  Put_Name
 --
@@ -183,7 +177,6 @@ package body Test_Support is
 
    end Put_Name;
  
---PAGE
 --
 --  Task_Number
 --
@@ -198,7 +191,6 @@ package body Test_Support is
 
    end Task_Number;
 
---PAGE
 --
 --  Do_Nothing
 --
@@ -209,7 +201,6 @@ package body Test_Support is
    end Do_Nothing;
    
 
---PAGE
 --
 --  Milliseconds_Per_Tick
 --
@@ -222,7 +213,6 @@ package body Test_Support is
       return Milliseconds_Per_Tick_Base;
    end Milliseconds_Per_Tick;
 
---PAGE
 --
 --  Milliseconds_Per_Tick
 --

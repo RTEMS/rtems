@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,16 +24,17 @@ with INTERFACES; use INTERFACES;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
+with RTEMS.CLOCK;
+with RTEMS.RATE_MONOTONIC;
 
 package body SPTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -54,7 +55,7 @@ package body SPTEST is
 
          SPTEST.COUNT( INDEX ) := 0;
 
-         RTEMS.TASK_CREATE( 
+         RTEMS.TASKS.CREATE( 
             SPTEST.TASK_NAME( INDEX ), 
             SPTEST.PRIORITIES( INDEX ), 
             4096, 
@@ -70,28 +71,27 @@ package body SPTEST is
       for INDEX in 1 .. 6
       loop
 
-         RTEMS.TASK_START(
+         RTEMS.TASKS.START(
             SPTEST.TASK_ID( INDEX ),
             SPTEST.TASK_1_THROUGH_6'ACCESS,
-            RTEMS.TASK_ARGUMENT( INDEX ),
+            RTEMS.TASKS.ARGUMENT( INDEX ),
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
  
       end loop;
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TASK_1_THROUGH_6
 --
 
    procedure TASK_1_THROUGH_6 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       RMID      : RTEMS.ID;
       TEST_RMID : RTEMS.ID;
@@ -103,14 +103,14 @@ package body SPTEST is
       MEASURE   : RTEMS.INTERVAL;
    begin
 
-      RTEMS.RATE_MONOTONIC_CREATE( ARGUMENT, RMID, STATUS );
+      RTEMS.RATE_MONOTONIC.CREATE( ARGUMENT, RMID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "RATE_MONOTONIC_CREATE" );
       TEST_SUPPORT.PUT_NAME( SPTEST.TASK_NAME( INTEGER( ARGUMENT ) ), FALSE );
       TEXT_IO.PUT( "- rate_monotonic_create id = " );
       UNSIGNED32_IO.PUT( RMID, WIDTH => 8, BASE => 16 );
       TEXT_IO.NEW_LINE;
  
-      RTEMS.RATE_MONOTONIC_IDENT( ARGUMENT, TEST_RMID, STATUS );
+      RTEMS.RATE_MONOTONIC.IDENT( ARGUMENT, TEST_RMID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "RATE_MONOTONIC_IDENT" );
       TEST_SUPPORT.PUT_NAME( SPTEST.TASK_NAME( INTEGER( ARGUMENT ) ), FALSE );
       TEXT_IO.PUT( "- rate_monotonic_ident id = " );
@@ -132,13 +132,13 @@ package body SPTEST is
       );
       TEXT_IO.NEW_LINE;
        
-      RTEMS.TASK_WAKE_AFTER( 2, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( 2, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
    
       case ARGUMENT is
          when 1 .. 4 =>
             loop
-               RTEMS.RATE_MONOTONIC_PERIOD( 
+               RTEMS.RATE_MONOTONIC.PERIOD( 
                   RMID, 
                   SPTEST.PERIODS( INTEGER( ARGUMENT ) ), 
                   STATUS
@@ -159,7 +159,7 @@ package body SPTEST is
             PASS   := 0;
             FAILED := 0;
 
-            RTEMS.RATE_MONOTONIC_PERIOD( 
+            RTEMS.RATE_MONOTONIC.PERIOD( 
                RMID, 
                SPTEST.PERIODS( INTEGER( ARGUMENT ) ),
                STATUS
@@ -174,7 +174,7 @@ package body SPTEST is
 
             loop
 
-               RTEMS.RATE_MONOTONIC_PERIOD( 
+               RTEMS.RATE_MONOTONIC.PERIOD( 
                   RMID, 
                   SPTEST.PERIODS( INTEGER( ARGUMENT ) ),
                   STATUS
@@ -237,14 +237,14 @@ package body SPTEST is
             -- test changing periods
             for INDEX in 0 .. 10 loop
                PERIOD := RTEMS.INTERVAL( ( INDEX + 1 ) * 10 );
-               RTEMS.RATE_MONOTONIC_PERIOD( RMID, PERIOD, STATUS);
+               RTEMS.RATE_MONOTONIC.PERIOD( RMID, PERIOD, STATUS);
                TEST_SUPPORT.DIRECTIVE_FAILED(
                   STATUS, "rate_monotonic_period of TA6"
                );
 
                -- timestamp
-               RTEMS.CLOCK_GET(
-                  RTEMS.CLOCK_GET_TICKS_SINCE_BOOT,
+               RTEMS.CLOCK.GET(
+                  RTEMS.CLOCK.GET_TICKS_SINCE_BOOT,
                   Time( INDEX )'ADDRESS,
                   STATUS
                );
@@ -267,7 +267,7 @@ package body SPTEST is
                end if;
             end loop;
 
-            RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+            RTEMS.TASKS.SUSPEND( RTEMS.SELF, STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED(
                STATUS, "task_suspend of TA6"
             );
@@ -279,7 +279,6 @@ package body SPTEST is
 
    end TASK_1_THROUGH_6;
 
---PAGE
 -- 
 --  GET_ALL_COUNTERS
 --
@@ -290,7 +289,7 @@ package body SPTEST is
       STATUS        : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_MODE(
+      RTEMS.TASKS.MODE(
          RTEMS.NO_PREEMPT,
          RTEMS.PREEMPT_MASK,
          PREVIOUS_MODE,
@@ -307,7 +306,7 @@ package body SPTEST is
 
       end loop;
       
-      RTEMS.TASK_MODE(
+      RTEMS.TASKS.MODE(
          RTEMS.PREEMPT,
          RTEMS.PREEMPT_MASK,
          PREVIOUS_MODE,

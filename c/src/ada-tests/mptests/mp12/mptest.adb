@@ -10,7 +10,7 @@
 --
 --
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -22,19 +22,20 @@
 
 with INTERFACES; use INTERFACES;
 with RTEMS;
+with RTEMS.PARTITION;
+with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body MPTEST is
 
---PAGE
 --
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       BUFFER_ADDRESS : RTEMS.ADDRESS;
       STATUS         : RTEMS.STATUS_CODES;
@@ -57,14 +58,14 @@ package body MPTEST is
 
       if TEST_SUPPORT.NODE = 2 then
 
-         RTEMS.TASK_WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
          TEXT_IO.PUT_LINE( "Getting ID of remote Partition (Global)" );
 
          loop
 
-            RTEMS.PARTITION_IDENT(
+            RTEMS.PARTITION.IDENT(
                MPTEST.PARTITION_NAME( 1 ),
                RTEMS.SEARCH_ALL_NODES,
                MPTEST.PARTITION_ID( 1 ),
@@ -79,7 +80,7 @@ package body MPTEST is
             "Attempting to delete remote Partition (Global)"
          );
 
-         RTEMS.PARTITION_DELETE( MPTEST.PARTITION_ID( 1 ), STATUS ); 
+         RTEMS.PARTITION.DELETE( MPTEST.PARTITION_ID( 1 ), STATUS ); 
          TEST_SUPPORT.FATAL_DIRECTIVE_STATUS( 
             STATUS, 
             RTEMS.ILLEGAL_ON_REMOTE_OBJECT,
@@ -92,7 +93,7 @@ package body MPTEST is
 
          TEXT_IO.PUT_LINE( "Obtaining a buffer from the global partition" );
 
-         RTEMS.PARTITION_GET_BUFFER(
+         RTEMS.PARTITION.GET_BUFFER(
             MPTEST.PARTITION_ID( 1 ),
             BUFFER_ADDRESS,
             STATUS
@@ -106,20 +107,20 @@ package body MPTEST is
          );
          TEXT_IO.NEW_LINE;
 
-         RTEMS.PARTITION_RETURN_BUFFER(
+         RTEMS.PARTITION.RETURN_BUFFER(
             MPTEST.PARTITION_ID( 1 ),
             BUFFER_ADDRESS,
             STATUS
          ); 
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_RETURN_BUFFER" );
 
-         RTEMS.TASK_WAKE_AFTER( 2 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( 2 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
       else
 
          TEXT_IO.PUT_LINE( "Creating Partition (Global)" );
-         RTEMS.PARTITION_CREATE(
+         RTEMS.PARTITION.CREATE(
             MPTEST.PARTITION_NAME( 1 ),
             MPTEST.PARTITION_AREA( 0 )'ADDRESS,
             128,
@@ -131,11 +132,11 @@ package body MPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_CREATE" );
 
          TEXT_IO.PUT_LINE( "Sleeping for three seconds" );
-         RTEMS.TASK_WAKE_AFTER( 3 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+         RTEMS.TASKS.WAKE_AFTER( 3 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
          TEXT_IO.PUT_LINE( "Deleting Partition (Global)" );
-         RTEMS.PARTITION_DELETE( MPTEST.PARTITION_ID( 1 ), STATUS );
+         RTEMS.PARTITION.DELETE( MPTEST.PARTITION_ID( 1 ), STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "PARTITION_DELETE" );
 
       end if;

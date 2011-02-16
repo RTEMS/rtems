@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-2009.
+--  COPYRIGHT (c) 1989-2011.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,16 +24,18 @@ with INTERFACES; use INTERFACES;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
+with RTEMS.CLOCK;
+with RTEMS.EVENT;
+with RTEMS.TIMER;
 
 package body SPTEST is
 
---PAGE
 -- 
 --  INIT
 --
 
    procedure INIT (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
@@ -45,7 +47,7 @@ package body SPTEST is
       SPTEST.TASK_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'A', '1', ' ' );
       SPTEST.TASK_NAME( 2 ) := RTEMS.BUILD_NAME(  'T', 'A', '2', ' ' );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          4, 
          2048, 
@@ -56,7 +58,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
 
-      RTEMS.TASK_CREATE( 
+      RTEMS.TASKS.CREATE( 
          SPTEST.TASK_NAME( 2 ), 
          4, 
          2048, 
@@ -67,7 +69,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA2" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 1 ),
          SPTEST.TASK_1'ACCESS,
          0,
@@ -75,7 +77,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
 
-      RTEMS.TASK_START(
+      RTEMS.TASKS.START(
          SPTEST.TASK_ID( 2 ),
          SPTEST.TASK_2'ACCESS,
          0,
@@ -90,60 +92,59 @@ package body SPTEST is
       SPTEST.TIMER_NAME( 5 ) := RTEMS.BUILD_NAME(  'T', 'M', '5', ' ' );
       SPTEST.TIMER_NAME( 6 ) := RTEMS.BUILD_NAME(  'T', 'M', '6', ' ' );
 
-      RTEMS.TIMER_CREATE( 
+      RTEMS.TIMER.CREATE( 
          SPTEST.TIMER_NAME( 1 ),
          SPTEST.TIMER_ID( 1 ),
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE OF TM1" );
 
-      RTEMS.TIMER_CREATE( 
+      RTEMS.TIMER.CREATE( 
          SPTEST.TIMER_NAME( 2 ),
          SPTEST.TIMER_ID( 2 ),
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE OF TM2" );
 
-      RTEMS.TIMER_CREATE( 
+      RTEMS.TIMER.CREATE( 
          SPTEST.TIMER_NAME( 3 ),
          SPTEST.TIMER_ID( 3 ),
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE OF TM3" );
 
-      RTEMS.TIMER_CREATE( 
+      RTEMS.TIMER.CREATE( 
          SPTEST.TIMER_NAME( 4 ),
          SPTEST.TIMER_ID( 4 ),
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE OF TM4" );
 
-      RTEMS.TIMER_CREATE( 
+      RTEMS.TIMER.CREATE( 
          SPTEST.TIMER_NAME( 5 ),
          SPTEST.TIMER_ID( 5 ),
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE OF TM5" );
 
-      RTEMS.TIMER_CREATE( 
+      RTEMS.TIMER.CREATE( 
          SPTEST.TIMER_NAME( 6 ),
          SPTEST.TIMER_ID( 6 ),
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CREATE OF TM6" );
 
-      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
    end INIT;
 
---PAGE
 -- 
 --  TASK_1
 --
 
    procedure TASK_1 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       EVENTOUT : RTEMS.EVENT_SET;
@@ -153,13 +154,13 @@ package body SPTEST is
    begin
 
       TEXT_IO.PUT_LINE( "TA1 - event_send - send EVENT_16 to TA2" );
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 2 ), RTEMS.EVENT_16, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 2 ), RTEMS.EVENT_16, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 16" );
 
       TEXT_IO.PUT_LINE( 
          "TA1 - event_receive - waiting forever on EVENT_14 and EVENT_15"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_14 + RTEMS.EVENT_15,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -172,13 +173,13 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TEXT_IO.PUT_LINE( "TA1 - event_send - send EVENT_18 to TA2" );
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 2 ), RTEMS.EVENT_18, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 2 ), RTEMS.EVENT_18, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 18" );
 
       TEXT_IO.PUT_LINE( 
          "TA1 - event_receive - waiting with 10 second timeout on EVENT_14"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_14,
          RTEMS.DEFAULT_OPTIONS,
          10 * TEST_SUPPORT.TICKS_PER_SECOND,
@@ -191,10 +192,10 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TEXT_IO.PUT_LINE( "TA1 - event_send - send EVENT_19 to TA2" );
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 2 ), RTEMS.EVENT_19, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 2 ), RTEMS.EVENT_19, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 19" );
 
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 CLOCK_GET" );
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_get - ", TIME, "" );
       TEXT_IO.NEW_LINE;
@@ -204,7 +205,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_18 to self after 5 seconds"
       );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 1 ),
          5 * TEST_SUPPORT.TICKS_PER_SECOND,
          SPTEST.TA1_SEND_18_TO_SELF_5_SECONDS'ACCESS,
@@ -216,7 +217,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_receive - waiting forever on EVENT_18"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_18,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -225,7 +226,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_RECEIVE of 18" );
 
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 CLOCK_GET" );
 
       TEXT_IO.PUT( "TA1 - EVENT_18 received - eventout => ");
@@ -236,13 +237,13 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TEXT_IO.PUT_LINE( "TA1 - event_send - send EVENT_3 to self" );
-      RTEMS.EVENT_SEND( RTEMS.SELF, RTEMS.EVENT_3, STATUS );
+      RTEMS.EVENT.SEND( RTEMS.SELF, RTEMS.EVENT_3, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 3" );
 
       TEXT_IO.PUT_LINE( 
          "TA1 - event_receive - EVENT_3 or EVENT_22 - NO_WAIT and EVENT_ANY"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_3 + RTEMS.EVENT_22,
          RTEMS.NO_WAIT + RTEMS.EVENT_ANY,
          RTEMS.NO_TIMEOUT,
@@ -255,13 +256,13 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TEXT_IO.PUT_LINE( "TA1 - event_send - send EVENT_4 to self" );
-      RTEMS.EVENT_SEND( RTEMS.SELF, RTEMS.EVENT_4, STATUS );
+      RTEMS.EVENT.SEND( RTEMS.SELF, RTEMS.EVENT_4, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 4" );
 
       TEXT_IO.PUT_LINE( 
 "TA1 - event_receive - waiting forever on EVENT_4 or EVENT_5 - EVENT_ANY"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_4 + RTEMS.EVENT_5,
          RTEMS.EVENT_ANY,
          RTEMS.NO_TIMEOUT,
@@ -278,7 +279,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_18 to self after 5 seconds"
       );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 1 ),
          5 * TEST_SUPPORT.TICKS_PER_SECOND,
          SPTEST.TA1_SEND_18_TO_SELF_5_SECONDS'ACCESS,
@@ -290,13 +291,13 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - timer_cancel - cancelling timer for event EVENT_18"
       );
-      RTEMS.TIMER_CANCEL( SPTEST.TIMER_ID( 1 ), STATUS );
+      RTEMS.TIMER.CANCEL( SPTEST.TIMER_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CANCEL" );
 
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_8 to self after 60 seconds"
       );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 1 ),
          60 * TEST_SUPPORT.TICKS_PER_SECOND,
          SPTEST.TA1_SEND_8_TO_SELF_60_SECONDS'ACCESS,
@@ -308,7 +309,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_9 to self after 60 seconds"
       );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 2 ),
          60 * TEST_SUPPORT.TICKS_PER_SECOND,
          SPTEST.TA1_SEND_9_TO_SELF_60_SECONDS'ACCESS,
@@ -320,7 +321,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_10 to self after 60 seconds"
       );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 3 ),
          60 * TEST_SUPPORT.TICKS_PER_SECOND,
          SPTEST.TA1_SEND_10_TO_SELF'ACCESS,
@@ -332,20 +333,20 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - timer_cancel - cancelling timer for event EVENT_8"
       );
-      RTEMS.TIMER_CANCEL( SPTEST.TIMER_ID( 1 ), STATUS );
+      RTEMS.TIMER.CANCEL( SPTEST.TIMER_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CANCEL" );
 
       TIME := ( 1988, 2, 12, 8, 15, 0, 0 );
 
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
       TEXT_IO.NEW_LINE;
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 CLOCK_SET" );
 
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_1 every second"
       );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 1 ),
          TEST_SUPPORT.TICKS_PER_SECOND,
          SPTEST.TA1_SEND_1_TO_SELF_EVERY_SECOND'ACCESS,
@@ -360,7 +361,7 @@ package body SPTEST is
 
          exit when INDEX = 3;
 
-         RTEMS.EVENT_RECEIVE( 
+         RTEMS.EVENT.RECEIVE( 
             RTEMS.EVENT_1,
             RTEMS.EVENT_ANY,
             RTEMS.NO_TIMEOUT,
@@ -369,7 +370,7 @@ package body SPTEST is
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_RECEIVE of 1" );
 
-         RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+         RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 CLOCK_GET" );
 
          TEXT_IO.PUT( "TA1 - EVENT_1 received - eventout => ");
@@ -378,7 +379,7 @@ package body SPTEST is
          TEXT_IO.NEW_LINE;
 
          if INDEX < 2 then
-            RTEMS.TIMER_RESET( SPTEST.TIMER_ID( 1 ), STATUS );
+            RTEMS.TIMER.RESET( SPTEST.TIMER_ID( 1 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 TIMER RESET" );
          end if;
 
@@ -388,7 +389,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - timer_cancel - cancelling timer for event EVENT_1"
       );
-      RTEMS.TIMER_CANCEL( SPTEST.TIMER_ID( 1 ), STATUS );
+      RTEMS.TIMER.CANCEL( SPTEST.TIMER_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CANCEL" );
 
       TEST_SUPPORT.PAUSE;
@@ -397,7 +398,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_11 to self in 1 day"
       );
-      RTEMS.TIMER_FIRE_WHEN( 
+      RTEMS.TIMER.FIRE_WHEN( 
          SPTEST.TIMER_ID( 1 ),
          TIME,
          SPTEST.TA1_SEND_11_TO_SELF'ACCESS,
@@ -410,7 +411,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_11 to self in 1 day"
       );
-      RTEMS.TIMER_FIRE_WHEN( 
+      RTEMS.TIMER.FIRE_WHEN( 
          SPTEST.TIMER_ID( 2 ),
          TIME,
          SPTEST.TA1_SEND_11_TO_SELF'ACCESS,
@@ -424,7 +425,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_11 to self in 2 days"
       );
-      RTEMS.TIMER_FIRE_WHEN( 
+      RTEMS.TIMER.FIRE_WHEN( 
          SPTEST.TIMER_ID( 3 ),
          TIME,
          SPTEST.TA1_SEND_11_TO_SELF'ACCESS,
@@ -436,19 +437,19 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - timer_cancel - cancelling EVENT_11 to self in 1 day"
       );
-      RTEMS.TIMER_CANCEL( SPTEST.TIMER_ID( 1 ), STATUS );
+      RTEMS.TIMER.CANCEL( SPTEST.TIMER_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CANCEL" );
 
       TEXT_IO.PUT_LINE( 
          "TA1 - timer_cancel - cancelling EVENT_11 to self in 2 days"
       );
-      RTEMS.TIMER_CANCEL( SPTEST.TIMER_ID( 3 ), STATUS );
+      RTEMS.TIMER.CANCEL( SPTEST.TIMER_ID( 3 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_CANCEL" );
 
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - resending EVENT_11 to self in 2 days"
       );
-      RTEMS.TIMER_FIRE_WHEN( 
+      RTEMS.TIMER.FIRE_WHEN( 
          SPTEST.TIMER_ID( 3 ),
          TIME,
          SPTEST.TA1_SEND_11_TO_SELF'ACCESS,
@@ -460,12 +461,12 @@ package body SPTEST is
       TIME.DAY := 15;
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
       TEXT_IO.NEW_LINE;
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 CLOCK_SET" );
       TEXT_IO.PUT_LINE( 
          "TA1 - event_receive - waiting forever on EVENT_11"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_11,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -482,7 +483,7 @@ package body SPTEST is
 -- The following code tests the case of deleting a timer ???
 
       TEXT_IO.PUT_LINE( "TA1 - event_send/event_receive combination" );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 1 ),
          10,
          SPTEST.TA1_SEND_11_TO_SELF'ACCESS,
@@ -490,7 +491,7 @@ package body SPTEST is
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_FIRE_AFTER 10 ticks" );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_11,
          RTEMS.DEFAULT_OPTIONS,
          11,
@@ -503,14 +504,14 @@ package body SPTEST is
 
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
       TEXT_IO.NEW_LINE;
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 CLOCK_SET" );
 
       TIME.DAY := 13;
       TEXT_IO.PUT_LINE( 
          "TA1 - event_receive all outstanding events"
       );
-      RTEMS.EVENT_RECEIVE(
+      RTEMS.EVENT.RECEIVE(
          RTEMS.ALL_EVENTS,
          RTEMS.NO_WAIT + RTEMS.EVENT_ANY,
          RTEMS.NO_TIMEOUT,
@@ -526,7 +527,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_10 to self in 1 day"
       );
-      RTEMS.TIMER_FIRE_WHEN( 
+      RTEMS.TIMER.FIRE_WHEN( 
          SPTEST.TIMER_ID( 1 ),
          TIME,
          SPTEST.TA1_SEND_10_TO_SELF'ACCESS,
@@ -539,7 +540,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_11 to self in 2 days"
       );
-      RTEMS.TIMER_FIRE_WHEN( 
+      RTEMS.TIMER.FIRE_WHEN( 
          SPTEST.TIMER_ID( 2 ),
          TIME,
          SPTEST.TA1_SEND_11_TO_SELF'ACCESS,
@@ -553,10 +554,10 @@ package body SPTEST is
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
       TEXT_IO.NEW_LINE;
       TEXT_IO.PUT_LINE( "TA1 - set time backwards" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 CLOCK_SET" );
 
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.ALL_EVENTS,
          RTEMS.NO_WAIT + RTEMS.EVENT_ANY,
          RTEMS.NO_TIMEOUT,
@@ -581,10 +582,10 @@ package body SPTEST is
       TEST_SUPPORT.PRINT_TIME( "TA1 - clock_set - ", TIME, "" );
       TEXT_IO.NEW_LINE;
       TEXT_IO.PUT_LINE( "TA1 - set time forwards (leave a timer)" );
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 CLOCK_SET" );
 
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.ALL_EVENTS,
          RTEMS.NO_WAIT + RTEMS.EVENT_ANY,
          RTEMS.NO_TIMEOUT,
@@ -603,7 +604,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_11 to self in 100 ticks"
       );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 1 ),
          100,
          SPTEST.TA1_SEND_11_TO_SELF'ACCESS,
@@ -615,7 +616,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA1 - event_send - send EVENT_11 to self in 200 ticks"
       );
-      RTEMS.TIMER_FIRE_AFTER( 
+      RTEMS.TIMER.FIRE_AFTER( 
          SPTEST.TIMER_ID( 2 ),
          100,
          SPTEST.TA1_SEND_11_TO_SELF'ACCESS,
@@ -629,13 +630,12 @@ package body SPTEST is
 
    end TASK_1;
 
---PAGE
 -- 
 --  TASK_2
 --
 
    procedure TASK_2 (
-      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+      ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
       pragma Unreferenced(ARGUMENT);
       EVENTOUT : RTEMS.EVENT_SET;
@@ -643,13 +643,13 @@ package body SPTEST is
       STATUS   : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.TASK_WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      RTEMS.TASKS.WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
       TEXT_IO.PUT_LINE( 
          "TA2 - event_receive - waiting forever on EVENT_16"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_16,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -664,7 +664,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA2 - event_send - send EVENT_14 and EVENT_15 to TA1"
       );
-      RTEMS.EVENT_SEND( 
+      RTEMS.EVENT.SEND( 
          SPTEST.TASK_ID( 1 ), 
          RTEMS.EVENT_14 + RTEMS.EVENT_15,
          STATUS
@@ -674,7 +674,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
    "TA2 - event_receive - waiting forever on EVENT_17 or EVENT_18 - EVENT_ANY"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_17 + RTEMS.EVENT_18,
          RTEMS.EVENT_ANY,
          RTEMS.NO_TIMEOUT,
@@ -689,7 +689,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA2 - event_send - send EVENT_14 to TA1"
       );
-      RTEMS.EVENT_SEND( 
+      RTEMS.EVENT.SEND( 
          SPTEST.TASK_ID( 1 ), 
          RTEMS.EVENT_14,
          STATUS
@@ -700,14 +700,14 @@ package body SPTEST is
 
       TEST_SUPPORT.PRINT_TIME( "TA2 - clock_set - ", TIME, "" );
       TEXT_IO.NEW_LINE;
-      RTEMS.CLOCK_SET( TIME, STATUS );
+      RTEMS.CLOCK.SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA2 CLOCK_SET" );
 
       TIME.SECOND := TIME.SECOND + 5;
       TEXT_IO.PUT_LINE( 
          "TA2 - event_send - sending EVENT_10 to self after 5 seconds"
       );
-      RTEMS.TIMER_FIRE_WHEN( 
+      RTEMS.TIMER.FIRE_WHEN( 
          SPTEST.TIMER_ID( 5 ),
          TIME,
          SPTEST.TA2_SEND_10_TO_SELF'ACCESS,
@@ -719,7 +719,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA2 - event_receive - waiting forever on EVENT_10"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_10,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -728,7 +728,7 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_RECEIVE of 10" );
 
-      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      RTEMS.CLOCK.GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TA1 CLOCK_GET" );
 
       TEXT_IO.PUT( "TA2 - EVENT_10 received - eventout => ");
@@ -739,7 +739,7 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TEXT_IO.PUT_LINE( "TA2 - event_receive - PENDING_EVENTS" );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.PENDING_EVENTS,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
@@ -754,7 +754,7 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( 
          "TA2 - event_receive - EVENT_19 - NO_WAIT"
       );
-      RTEMS.EVENT_RECEIVE( 
+      RTEMS.EVENT.RECEIVE( 
          RTEMS.EVENT_19,
          RTEMS.NO_WAIT,
          RTEMS.NO_TIMEOUT,
@@ -767,12 +767,11 @@ package body SPTEST is
       TEXT_IO.NEW_LINE;
 
       TEXT_IO.PUT_LINE( "TA2 - task_delete - deletes self" );
-      RTEMS.TASK_DELETE( SPTEST.TASK_ID( 2 ), STATUS );
+      RTEMS.TASKS.DELETE( SPTEST.TASK_ID( 2 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE of TA2" );
 
    end TASK_2;
 
---PAGE
 -- 
 --  TA1_SEND_18_TO_SELF_5_SECONDS
 --
@@ -787,12 +786,11 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_18, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_18, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 18" );
 
    end TA1_SEND_18_TO_SELF_5_SECONDS;
 
---PAGE
 -- 
 --  TA1_SEND_8_TO_SELF_60_SECONDS
 --
@@ -807,12 +805,11 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_8, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_8, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 8" );
 
    end TA1_SEND_8_TO_SELF_60_SECONDS;
 
---PAGE
 -- 
 --  TA1_SEND_9_TO_SELF_60_SECONDS
 --
@@ -827,12 +824,11 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_9, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_9, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 9" );
 
    end TA1_SEND_9_TO_SELF_60_SECONDS;
 
---PAGE
 -- 
 --  TA1_SEND_10_TO_SELF
 --
@@ -847,12 +843,11 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_10, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_10, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 10" );
 
    end TA1_SEND_10_TO_SELF;
 
---PAGE
 -- 
 --  TA1_SEND_1_TO_SELF_EVERY_SECOND
 --
@@ -867,12 +862,11 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_1, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_1, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 1" );
 
    end TA1_SEND_1_TO_SELF_EVERY_SECOND;
 
---PAGE
 -- 
 --  TA1_SEND_11_TO_SELF
 --
@@ -887,12 +881,11 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_11, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 1 ), RTEMS.EVENT_11, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 11" );
 
    end TA1_SEND_11_TO_SELF;
 
---PAGE
 -- 
 --  TA2_SEND_10_TO_SELF
 --
@@ -907,7 +900,7 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      RTEMS.EVENT_SEND( SPTEST.TASK_ID( 2 ), RTEMS.EVENT_10, STATUS );
+      RTEMS.EVENT.SEND( SPTEST.TASK_ID( 2 ), RTEMS.EVENT_10, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND of 10" );
 
    end TA2_SEND_10_TO_SELF;
