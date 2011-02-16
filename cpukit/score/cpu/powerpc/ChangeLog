@@ -1,3 +1,8 @@
+2011-02-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Added FSL_EIS_ATBL, FSL_EIS_ATBL, and
+	FSL_EIS_SPEFSCR defines.
+
 2011-02-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Added MSR_UCLE, MSR_SPE, MSR_WE, and

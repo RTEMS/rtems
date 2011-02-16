@@ -409,6 +409,15 @@ lidate */
 #define FSL_EIS_L1CSR0 1010
 #define FSL_EIS_L1CSR1 1011
 
+/* Freescale Book E Implementation Standards (EIS): Timer */
+
+#define FSL_EIS_ATBL 526
+#define FSL_EIS_ATBU 527
+
+/* Freescale Book E Implementation Standards (EIS): Signal Processing Engine (SPE) */
+
+#define FSL_EIS_SPEFSCR 512
+
 /**
  * @brief Default value for the interrupt disable mask.
  *
