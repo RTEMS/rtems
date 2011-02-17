@@ -1,3 +1,7 @@
+2011-02-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* pppd/system.h: Use confdefs.h to generate device driver table.
+
 2011-02-17	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* pppd/system.h: Added missing include files.
