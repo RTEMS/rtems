@@ -7,6 +7,7 @@
 
 /*
  *  Copyright (C) 2010 Gedare Bloom.
+ *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -35,15 +36,6 @@ extern "C" {
  */
 /**@{*/
 
-/*
- * These defines are used to set the scheduler_policy value. The values
- * must correspond directly with the order of the fields in the scheduler
- * table (Scheduler_Table_entry), because the Configuration.scheduler_policy
- * field is used to index the scheduler table.
- */
-#define _Scheduler_USER     (0)
-#define _Scheduler_PRIORITY (1)
-
 typedef struct Scheduler_Control_struct Scheduler_Control;
 
 /*
@@ -53,9 +45,6 @@ typedef struct Scheduler_Control_struct Scheduler_Control;
 typedef struct {
   void ( *scheduler_init )( Scheduler_Control * );
 } Scheduler_Table_entry;
-
-/* instantiated and initialized in confdefs.h */
-extern const Scheduler_Table_entry _Scheduler_Table[];
 
 /**
  * The following Scheduler_Per_thread_xxx structures are used to
@@ -82,26 +71,29 @@ typedef struct {
  */
 typedef struct {
   /** Implements the scheduling decision logic (policy). */
-  void ( *schedule ) ( Scheduler_Control * );
+  void ( *initialize )(void);
+
+  /** Implements the scheduling decision logic (policy). */
+  void ( *schedule )(void);
 
   /** Voluntarily yields the processor per the scheduling policy. */
-  void ( *yield ) ( Scheduler_Control * );
+  void ( *yield )(void);
 
   /** Removes the given thread from scheduling decisions. */
-  void ( *block ) ( Scheduler_Control *, Thread_Control * );
+  void ( *block )(Thread_Control *);
 
   /** Adds the given thread to scheduling decisions. */
-  void ( *unblock ) ( Scheduler_Control *, Thread_Control * );
+  void ( *unblock )(Thread_Control *);
 
   /** allocates the scheduler field of the given thread */
-  void * ( *scheduler_allocate ) ( Scheduler_Control *, Thread_Control * );
+  void * ( *scheduler_allocate )(Thread_Control *);
 
   /** frees the scheduler field of the given thread */
-  void ( *scheduler_free ) ( Scheduler_Control *, Thread_Control * );
+  void ( *scheduler_free )(Thread_Control *);
 
   /** updates the scheduler field of the given thread -- primarily used
    * when changing the thread's priority. */
-  void ( *scheduler_update ) ( Scheduler_Control *, Thread_Control * );
+  void ( *scheduler_update )(Thread_Control *);
 } Scheduler_Operations;
 
 /**
@@ -123,7 +115,7 @@ struct Scheduler_Control_struct {
   } Ready_queues;
 
   /** The jump table for scheduler-specific functions */
-  Scheduler_Operations                  Operations;
+  Scheduler_Operations        Operations;
 };
 
 /**
@@ -131,8 +123,10 @@ struct Scheduler_Control_struct {
  *  scheduler.
  *
  * @note Can we make this per-cpu? then _Scheduler will be a macro.
+ *
+ * @note This is instantiated and initialized in confdefs.h.
  */
-SCORE_EXTERN Scheduler_Control          _Scheduler;
+extern Scheduler_Control  _Scheduler;
 
 /**
  *  This routine initializes the scheduler to the policy chosen by the user

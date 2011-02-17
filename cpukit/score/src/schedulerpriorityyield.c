@@ -30,28 +30,12 @@
 #include <rtems/score/wkspace.h>
 
 /*
- *  _Scheduler_priority_Yield
- *
- *  This kernel routine will remove the running THREAD from the ready queue
- *  and place it immediately at the rear of this chain.  Reset timeslice
- *  and yield the processor functions both use this routine, therefore if
- *  reset is true and this is the only thread on the queue then the
- *  timeslice counter is reset.  The heir THREAD will be updated if the
- *  running is also the currently the heir.
- *
- *  Input parameters:
- *    the_scheduler - pointer to scheduler control
- *
- *  Output parameters:  NONE
- *
  *  INTERRUPT LATENCY:
  *    ready chain
  *    select heir
  */
 
-void _Scheduler_priority_Yield( 
-    Scheduler_Control   *the_scheduler __attribute__((unused))
-)
+void _Scheduler_priority_Yield(void)
 {
   ISR_Level       level;
   Thread_Control *executing;

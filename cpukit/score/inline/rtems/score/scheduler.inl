@@ -7,6 +7,7 @@
 
 /*
  *  Copyright (C) 2010 Gedare Bloom.
+ *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -45,13 +46,11 @@
 /** @brief _Scheduler_Schedule
  *
  *  This kernel routine implements the scheduling decision logic for 
- *  @a the_scheduler. It does NOT dispatch.
+ *  the scheduler. It does NOT dispatch.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
-    Scheduler_Control *the_scheduler 
-)
+RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( void )
 {
-  the_scheduler->Operations.schedule( the_scheduler );
+  _Scheduler.Operations.schedule();
 }
 
 /** @brief _Scheduler_Yield
@@ -63,37 +62,35 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Yield( void )
 {
-  _Scheduler.Operations.yield( &_Scheduler );
+  _Scheduler.Operations.yield();
 }
 
 /** @brief _Scheduler_Block
  *
  *  This routine removes @a the_thread from the scheduling decision for 
- *  @a the_scheduler. The primary task is to remove the thread from the 
+ *  the scheduler. The primary task is to remove the thread from the 
  *  ready queue.  It performs any necessary schedulering operations 
  *  including the selection of a new heir thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Block( 
-    Scheduler_Control *the_scheduler,
     Thread_Control    *the_thread 
 )
 {
-  the_scheduler->Operations.block( the_scheduler, the_thread );
+  _Scheduler.Operations.block( the_thread );
 }
 
 /** @brief _Scheduler_Unblock
  *
  *  This routine adds @a the_thread to the scheduling decision for 
- *  @a the_scheduler.  The primary task is to add the thread to the
+ *  the scheduler.  The primary task is to add the thread to the
  *  ready queue per the schedulering policy and update any appropriate 
  *  scheduling variables, for example the heir thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
-    Scheduler_Control *the_scheduler,
     Thread_Control    *the_thread 
 )
 {
-  the_scheduler->Operations.unblock( the_scheduler, the_thread );
+  _Scheduler.Operations.unblock( the_thread );
 }
 
 /** @brief _Scheduler_Thread_scheduler_allocate
@@ -101,12 +98,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
  * This routine allocates @a the_thread->scheduler
  */
 RTEMS_INLINE_ROUTINE void* _Scheduler_Thread_scheduler_allocate( 
-  Scheduler_Control *the_scheduler,
   Thread_Control    *the_thread
 )
 {
-  return 
-    the_scheduler->Operations.scheduler_allocate( the_scheduler, the_thread );
+  return _Scheduler.Operations.scheduler_allocate( the_thread );
 }
 
 /** @brief _Scheduler_Thread_scheduler_free
@@ -114,11 +109,10 @@ RTEMS_INLINE_ROUTINE void* _Scheduler_Thread_scheduler_allocate(
  * This routine frees @a the_thread->scheduler
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Thread_scheduler_free( 
-  Scheduler_Control *the_scheduler,
   Thread_Control    *the_thread
 )
 {
-  return the_scheduler->Operations.scheduler_free( the_scheduler, the_thread );
+  return _Scheduler.Operations.scheduler_free( the_thread );
 }
 
 /** @brief _Scheduler_Thread_scheduler_update
@@ -126,11 +120,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_scheduler_free(
  * This routine updates @a the_thread->scheduler
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Thread_scheduler_update( 
-  Scheduler_Control *the_scheduler,
   Thread_Control    *the_thread
 )
 {
-  the_scheduler->Operations.scheduler_update( the_scheduler, the_thread );
+  _Scheduler.Operations.scheduler_update( the_thread );
 }
 
 /**@}*/

@@ -7,6 +7,7 @@
 
 /*
  *  Copyright (C) 2010 Gedare Bloom.
+ *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -31,35 +32,28 @@
  *
  *  This routine initializes @a the_ready_queue for priority-based scheduling.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
-  Scheduler_Control         *the_scheduler
-) {
+RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(void)
+{
   size_t index;
 
   /* allocate ready queue structures */
-  the_scheduler->Ready_queues.priority = (Chain_Control *) 
+  _Scheduler.Ready_queues.priority = (Chain_Control *) 
     _Workspace_Allocate_or_fatal_error(
       ((size_t) PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
     );
 
   /* initialize ready queue structures */
   for( index=0; index <= PRIORITY_MAXIMUM; index++)
-    _Chain_Initialize_empty( &the_scheduler->Ready_queues.priority[index] );
+    _Chain_Initialize_empty( &_Scheduler.Ready_queues.priority[index] );
 }
 
-/* 
- *  _Scheduler_priority_Ready_queue_enqueue
+/**
+ *  @brief _Scheduler_priority_Ready_queue_enqueue
  *
  *  This routine puts @a the_thread on to the priority-based ready queue.
  *  
- *  Input parameters:
- *    the_thread  - pointer to thread
- *
- *  Output parameters: NONE
- *
- *  INTERRUPT LATENCY:
+ *  @param[in] the_thread  - pointer to thread
  */
-
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
   Thread_Control                  *the_thread
 )
@@ -70,21 +64,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
       &the_thread->Object.Node );
 }
 
-/*
- *  _Scheduler_priority_Ready_queue_Enqueue_first
+/**
+ *  @brief _Scheduler_priority_Ready_queue_Enqueue_first
  *
  *  This routine puts @a the_thread to the head of the ready queue. 
  *  For priority-based ready queues, the thread will be the first thread
  *  at its priority level.
  *  
- *  Input parameters:
- *    the_thread      - pointer to thread
- *
- *  Output parameters: NONE
- *
- *  INTERRUPT LATENCY:
+ *  @param[in] the_thread  - pointer to thread
  */
-
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
   Thread_Control                   *the_thread
 )
@@ -95,20 +83,14 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
       &the_thread->Object.Node );
 }
 
-/*
- *  _Scheduler_priority_Ready_queue_extract
+/**
+ *  @brief _Scheduler_priority_Ready_queue_extract
  *
  *  This routine removes a specific thread from the specified 
  *  priority-based ready queue.
  *
- *  Input parameters:
- *    the_thread       - pointer to a thread control block
- *
- *  Output parameters: NONE
- *
- *  INTERRUPT LATENCY: NONE
+ *  @param[in] the_thread  - pointer to thread
  */
-
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
   Thread_Control        *the_thread
 )
@@ -122,18 +104,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
     _Chain_Extract_unprotected( &the_thread->Object.Node );
 }
 
-/*
- *  _Scheduler_priority_Ready_queue_first
+/**
+ *  @brief _Scheduler_priority_Ready_queue_first
  *
  *  This routines returns a pointer to the first thread on @a the_ready_queue.
  *
- *  Input parameters:
- *    the_ready_queue - pointer to thread queue
+ *  @param[in] the_ready_queue - pointer to thread queue
  *
- *  Output parameters:
- *    returns - first thread or NULL
+ *  @return This method returns the first thread or NULL
  */
-
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Ready_queue_first(
   Chain_Control       *the_ready_queue
 )
@@ -146,20 +125,14 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Ready_queue_first(
   return NULL;
 }
 
-/*
- *  _Scheduler_priority_Ready_queue_requeue
+/**
+ *  @brief _Scheduler_priority_Ready_queue_requeue
  *
  *  This routine is invoked when a thread changes priority and should be
  *  moved to a different position on the ready queue.
  *
- *  Input parameters:
- *    the_thread        - pointer to a thread control block
- *
- *  Output parameters: NONE
- *
- *  INTERRUPT LATENCY: NONE
+ *  @param[in] the_thread  - pointer to thread
  */
-
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
   Thread_Control            *the_thread
 )
@@ -174,47 +147,30 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
   }
 }
 
-/*
- * _Scheduler_priority_Schedule_body
+/**
+ *  @brief _Scheduler_priority_Schedule_body
  *
- * This kernel routine implements scheduling decision logic for priority-based
- * scheduling.  
+ *  This kernel routine implements scheduling decision logic
+ *  for priority-based scheduling.  
  *
- * Input parameters:
- *   the_scheduler  - pointer to scheduler control
- *   the_thread     - pointer to thread control block
- *
- * Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
+ *  @param[in] the_thread  - pointer to thread
  */
-
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
-  Scheduler_Control     *the_scheduler
-)
+RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(void)
 {
   _Thread_Heir = _Scheduler_priority_Ready_queue_first(
-      the_scheduler->Ready_queues.priority
+      _Scheduler.Ready_queues.priority
   );
 }
 
-/*
- * _Scheduler_priority_Block_body
+/**
+ *  @brief _Scheduler_priority_Block_body
  *
- * This kernel routine removes the_thread from scheduling decisions based 
+ *  This kernel routine removes the_thread from scheduling decisions based 
  * on simple queue extraction.
  *
- * Input parameters:
- *   the_scheduler  - pointer to scheduler control
- *   the_thread     - pointer to thread control block
- *
- * Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
+ *  @param[in] the_thread  - pointer to thread
  */
-
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Block_body(
-  Scheduler_Control *the_scheduler,
   Thread_Control   *the_thread
 )
 {
@@ -223,7 +179,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Block_body(
   /* TODO: flash critical section */
 
   if ( _Thread_Is_heir( the_thread ) )
-     _Scheduler_priority_Schedule_body(the_scheduler);
+     _Scheduler_priority_Schedule_body();
 
   if ( _Thread_Is_executing( the_thread ) )
     _Thread_Dispatch_necessary = true;
@@ -231,32 +187,22 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Block_body(
   return;
 }
 
-/*
- *  _Scheduler_priority_Unblock_body
+/**
+ *  @brief _Scheduler_priority_Unblock_body
  *
  *  This kernel routine readies the requested thread according to the queuing 
  *  discipline. A new heir thread may be selected.
  *
- *  Input parameters:
- *    the_scheduler - pointer to scheduler control
- *    the_thread    - pointer to thread control block
+ *  @param[in] the_thread  - pointer to thread
  *
- *  Output parameters:  NONE
- *
- *  NOTE:  This routine uses the "blocking" heir selection mechanism.
- *         This ensures the correct heir after a thread restart.
- *
- *  INTERRUPT LATENCY:
+ *  @note This routine uses the "blocking" heir selection mechanism.
+ *        This ensures the correct heir after a thread restart.
  */
-
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Unblock_body (
-  Scheduler_Control       *the_scheduler __attribute__((unused)),
   Thread_Control          *the_thread
 )
 {
-  _Scheduler_priority_Ready_queue_enqueue(
-      the_thread
-  );
+  _Scheduler_priority_Ready_queue_enqueue(the_thread);
 
   /* TODO: flash critical section */
 

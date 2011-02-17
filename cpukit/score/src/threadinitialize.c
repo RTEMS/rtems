@@ -1,8 +1,7 @@
 /*
- *  Thread Handler
+ *  Thread Handler / Thread Initialize
  *
- *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -194,7 +193,7 @@ bool _Thread_Initialize(
   the_thread->resource_count          = 0;
   the_thread->real_priority           = priority;
   the_thread->Start.initial_priority  = priority;
-  sched =_Scheduler_Thread_scheduler_allocate( &_Scheduler, the_thread );
+  sched =_Scheduler_Thread_scheduler_allocate( the_thread );
   if ( !sched )
     goto failed;
   _Thread_Set_priority( the_thread, priority );

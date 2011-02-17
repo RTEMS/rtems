@@ -16,38 +16,20 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerpriority.h>
-#include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-/*
- *  _Scheduler_priority_Thread_scheduler_allocate
- *
- * Allocates @a the_thread->scheduler
- *
- *  Input parameters:
- *    the_scheduler - pointer to scheduler control
- *    the_thread    - pointer to thread control block
- *
- *  Output parameters: 
- *    Returns pointer to allocated space.
- */
-
-void* _Scheduler_priority_Thread_scheduler_allocate (
-  Scheduler_Control     *the_scheduler __attribute__((unused)),
+void *_Scheduler_priority_Thread_scheduler_allocate (
   Thread_Control        *the_thread
 )
 {
-  void                  *sched;
+  void  *sched;
 
   sched = _Workspace_Allocate( sizeof(Scheduler_priority_Per_thread) );
 
-  the_thread->scheduler.priority = (Scheduler_priority_Per_thread*) sched;
+  the_thread->scheduler.priority = (Scheduler_priority_Per_thread *) sched;
 
   return sched;
 }

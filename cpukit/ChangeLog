@@ -1,5 +1,31 @@
 2011-02-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/confdefs.h, sapi/include/rtems/config.h,
+	score/include/rtems/score/scheduler.h,
+	score/include/rtems/score/schedulerpriority.h,
+	score/inline/rtems/score/scheduler.inl,
+	score/inline/rtems/score/schedulerpriority.inl,
+	score/src/scheduler.c, score/src/schedulerpriority.c,
+	score/src/schedulerpriorityblock.c,
+	score/src/schedulerpriorityschedule.c,
+	score/src/schedulerprioritythreadschedulerallocate.c,
+	score/src/schedulerprioritythreadschedulerfree.c,
+	score/src/schedulerprioritythreadschedulerupdate.c,
+	score/src/schedulerpriorityunblock.c,
+	score/src/schedulerpriorityyield.c, score/src/threadchangepriority.c,
+	score/src/threadclearstate.c, score/src/threadclose.c,
+	score/src/threadinitialize.c, score/src/threadready.c,
+	score/src/threadresume.c, score/src/threadsetpriority.c,
+	score/src/threadsetstate.c, score/src/threadsuspend.c: Simplify the
+	pluggable scheduler interface. Its configuration made a table
+	of available schedulers and set a pointer to one of the.
+	This was heavy handed since you can only use one scheduler
+	in an application. This configuration mechanism resulted in a
+	scheduler pointer being passed around when you could put all
+	scheduler configuration in an initialized structure.
+
+2011-02-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am, libmisc/fb/mw_uid.c, libmisc/fb/mw_uid.h: Clean
 	up. Add Doxygen style comments. Add method to print uid structure.
 	* libmisc/fb/mw_print.c: New file.

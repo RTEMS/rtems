@@ -7,6 +7,7 @@
 
 /*
  *  Copryight (c) 2010 Gedare Bloom.
+ *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -35,11 +36,24 @@ extern "C" {
 /**@{*/
 
 /**
+ *  Entry points for Scheduler Priority
+ */
+#define SCHEDULER_PRIORITY_ENTRY_POINTS \
+  { \
+    .initialize         = _Scheduler_priority_Initialize, \
+    .schedule           = _Scheduler_priority_Schedule, \
+    .yield              = _Scheduler_priority_Yield, \
+    .block              = _Scheduler_priority_Block, \
+    .unblock            = _Scheduler_priority_Unblock, \
+    .scheduler_allocate = _Scheduler_priority_Thread_scheduler_allocate, \
+    .scheduler_free     = _Scheduler_priority_Thread_scheduler_free, \
+    .scheduler_update   = _Scheduler_priority_Thread_scheduler_update \
+  }
+
+/**
  * This routine initializes the priority scheduler.
  */
-void _Scheduler_priority_Initialize(
-    Scheduler_Control    *the_scheduler
-);
+void _Scheduler_priority_Initialize(void);
 
 /**
  *  This routine removes @a the_thread from the scheduling decision, 
@@ -48,32 +62,27 @@ void _Scheduler_priority_Initialize(
  *  a new heir thread.
  */
 void _Scheduler_priority_Block( 
-    Scheduler_Control *the_scheduler,
-    Thread_Control    *the_thread 
+  Thread_Control    *the_thread 
 );
 
 /**
  *  This kernel routine sets the heir thread to be the next ready thread 
  *  by invoking the_scheduler->ready_queue->operations->first().
  */
-void _Scheduler_priority_Schedule(
-    Scheduler_Control *the_scheduler
-);
+void _Scheduler_priority_Schedule(void);
 
 /**
  * This routine allocates @a the_thread->scheduler.
  */
 void * _Scheduler_priority_Thread_scheduler_allocate(
-    Scheduler_Control   *the_scheduler,
-    Thread_Control      *the_thread
+  Thread_Control      *the_thread
 );
 
 /**
  * This routine frees @a the_thread->scheduler.
  */
 void _Scheduler_priority_Thread_scheduler_free(
-    Scheduler_Control   *the_scheduler,
-    Thread_Control      *the_thread
+  Thread_Control      *the_thread
 );
 
 /**
@@ -81,8 +90,7 @@ void _Scheduler_priority_Thread_scheduler_free(
  * structures and thread state
  */
 void _Scheduler_priority_Thread_scheduler_update(
-    Scheduler_Control   *the_scheduler,
-    Thread_Control      *the_thread
+  Thread_Control      *the_thread
 );
 
 /**
@@ -91,17 +99,21 @@ void _Scheduler_priority_Thread_scheduler_update(
  *  updates any appropriate scheduling variables, for example the heir thread.
  */
 void _Scheduler_priority_Unblock(
-    Scheduler_Control *the_scheduler,
-    Thread_Control    *the_thread 
+  Thread_Control    *the_thread 
 );
 
 /**
  *  This routine is invoked when a thread wishes to voluntarily
  *  transfer control of the processor to another thread in the queue.
+ *
+ *  This routine will remove the running THREAD from the ready queue
+ *  and place it immediately at the rear of this chain.  Reset timeslice
+ *  and yield the processor functions both use this routine, therefore if
+ *  reset is true and this is the only thread on the queue then the
+ *  timeslice counter is reset.  The heir THREAD will be updated if the
+ *  running is also the currently the heir.
  */
-void _Scheduler_priority_Yield(
-    Scheduler_Control *the_scheduler
-);
+void _Scheduler_priority_Yield( void );
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/schedulerpriority.inl>

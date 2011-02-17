@@ -1,8 +1,7 @@
 /*
- *  Thread Handler
+ *  Thread Handler / Thread Clear State
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,26 +30,11 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
- *  _Thread_Clear_state
- *
- *  This kernel routine clears the appropriate states in the
- *  requested thread.  The thread ready chain is adjusted if
- *  necessary and the Heir thread is set accordingly.
- *
- *  Input parameters:
- *    the_thread - pointer to thread control block
- *    state      - state set to clear
- *
- *  Output parameters:  NONE
- *
+/*
  *  INTERRUPT LATENCY:
  *    priority map
  *    select heir
  */
-
-
 void _Thread_Clear_state(
   Thread_Control *the_thread,
   States_Control  state
@@ -67,7 +51,7 @@ void _Thread_Clear_state(
       the_thread->current_state = _States_Clear( state, current_state );
 
       if ( _States_Is_ready( current_state ) ) {
-        _Scheduler_Unblock( &_Scheduler, the_thread);
+        _Scheduler_Unblock( the_thread );
       }
   }
   _ISR_Enable( level );

@@ -1,8 +1,7 @@
 /*
- *  Thread Handler
+ *  Thread Handler / Thread Close
  *
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,16 +29,6 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _Thread_Close
- *
- *  DESCRIPTION:
- *
- *  This routine frees all memory associated with the specified
- *  thread and removes it from the local object table so no further
- *  operations on this thread are allowed.
- */
 
 void _Thread_Close(
   Objects_Information  *information,
@@ -89,7 +78,7 @@ void _Thread_Close(
   /*
    * Free the per-thread scheduling information.
    */
-  _Scheduler_Thread_scheduler_free( &_Scheduler, the_thread );
+  _Scheduler_Thread_scheduler_free( the_thread );
 
   /*
    *  The thread might have been FP.  So deal with that.

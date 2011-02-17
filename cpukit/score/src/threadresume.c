@@ -1,8 +1,8 @@
 /*
- *  Thread Handler
+ *  Thread Handler / Thread Resume
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,27 +31,11 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
- *  _Thread_Resume
- *
- *  This kernel routine clears the SUSPEND state if the suspend_count
- *  drops below one.  If the force parameter is set the suspend_count
- *  is forced back to zero. The thread ready chain is adjusted if
- *  necessary and the Heir thread is set accordingly.
- *
- *  Input parameters:
- *    the_thread - pointer to thread control block
- *    force      - force the suspend count back to 0
- *
- *  Output parameters:  NONE
- *
+/*
  *  INTERRUPT LATENCY:
  *    priority map
  *    select heir
  */
-
-
 void _Thread_Resume(
   Thread_Control   *the_thread,
   bool              force
@@ -69,7 +53,7 @@ void _Thread_Resume(
     the_thread->current_state = _States_Clear(STATES_SUSPENDED, current_state);
 
     if ( _States_Is_ready( current_state ) ) {
-      _Scheduler_Unblock( &_Scheduler, the_thread );
+      _Scheduler_Unblock( the_thread );
     }
   }
 

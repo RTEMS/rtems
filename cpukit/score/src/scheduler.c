@@ -2,6 +2,7 @@
  *  Scheduler Handler
  *
  *  Copyright (C) 2010 Gedare Bloom.
+ *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -27,19 +28,14 @@
 /*
  *  _Scheduler_Handler_initialization
  *
- *  This routine initializes the scheduler by calling the scheduler_init 
- *  function registered in the Configuration Scheduler Table.
+ *  This routine initializes the scheduler by calling the scheduler
+ *  initialize function registered in the Configuration Scheduler Table.
  *
  *  Input parameters: NONE
  *
  *  Output parameters: NONE
  */
-
-void _Scheduler_Handler_initialization( )
+void _Scheduler_Handler_initialization(void)
 {
-  Scheduler_Control *the_scheduler = &_Scheduler;
-
-  (*(_Scheduler_Table[Configuration.scheduler_policy].scheduler_init))(
-      the_scheduler
-  );
+  (*_Scheduler.Operations.initialize)();
 }

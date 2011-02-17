@@ -17,39 +17,11 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/context.h>
-#include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerpriority.h>
-#include <rtems/score/states.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-#include <rtems/score/userext.h>
-#include <rtems/score/wkspace.h>
-
-/*PAGE
- *
- *  _Thread_Change_priority
- *
- *  This kernel routine changes the priority of the thread.  The
- *  thread chain is adjusted if necessary.
- *
- *  Input parameters:
- *    the_thread   - pointer to thread control block
- *    new_priority - ultimate priority
- *    prepend_it   - true if the thread should be prepended to the chain
- *
- *  Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- *    ready chain
- *    select heir
- */
 
 void _Thread_Change_priority(
   Thread_Control   *the_thread,
@@ -137,7 +109,7 @@ void _Thread_Change_priority(
    *  We altered the set of thread priorities.  So let's figure out
    *  who is the heir and if we need to switch to them.
    */
-  _Scheduler_Schedule(&_Scheduler);
+  _Scheduler_Schedule();
 
   if ( !_Thread_Is_executing_also_the_heir() &&
        _Thread_Executing->is_preemptible )

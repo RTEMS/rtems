@@ -26,7 +26,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -521,6 +521,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  This configures the maximum priority value that
  *  a task may have.
  *
+ *  The following applies to the data space requirements
+ *  of the Priority Scheduler.
+ *
  *  By reducing the number of priorities in a system,
  *  the amount of RAM required by RTEMS can be significantly
  *  reduced.  RTEMS allocates a Chain_Control structure per
@@ -540,8 +543,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *    + 127, 125 application priorities, 1536 bytes saved
  *    + 255, 253 application priorities, 0 bytes saved
  *
- *  It is specified in terms of Classic API
- *  priority values.
+ *  It is specified in terms of Classic API priority values.
  */
 #ifndef CONFIGURE_MAXIMUM_PRIORITY
   #define CONFIGURE_MAXIMUM_PRIORITY PRIORITY_DEFAULT_MAXIMUM
@@ -552,110 +554,59 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *
  * The scheduler configuration allows an application to select the 
  * scheduling policy to use.  The supported configurations are:
- *  CONFIGURE_SCHEDULER_USER
- *  CONFIGURE_SCHEDULER_PRIORITY
+ *  CONFIGURE_SCHEDULER_USER     - user provided scheduler
+ *  CONFIGURE_SCHEDULER_PRIORITY - Deterministic Priority Scheduler
  * 
  * If no configuration is specified by the application, then 
  * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
  *
  * An application can define its own scheduling policy by defining
- * CONFIGURE_SCHEDULER_USER and CONFIGURE_SCHEDULER_ENTRY_USER to point
- * to an initialization routine.  Note: CONFIGURE_SCHEDULER_USER is not 
- * fully supported, since it has no per-thread field.
- *
- * To add a new scheduler:
+ * CONFIGURE_SCHEDULER_USER and the following:
+ *    - CONFIGURE_SCHEDULER_ENTRY_POINTS 
+ *    - CONFIGURE_MEMORY_FOR_SCHEDULER - base memory
+ *    - CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER - per task memory
  */
 #include <rtems/score/scheduler.h>
 
 #if defined(CONFIGURE_SCHEDULER_USER) && \
-    !defined(CONFIGURE_SCHEDULER_ENTRY_USER)
-  #error "CONFIGURE_ERROR: CONFIGURE_SCHEDULER_USER without CONFIGURE_SCHEDULER_ENTRY_USER"
-#endif
-
-/* enable all RTEMS-provided schedulers */
-#if defined(CONFIGURE_SCHEDULER_ALL)
-  #define CONFIGURE_SCHEDULER_PRIORITY
+    !defined(CONFIGURE_SCHEDULER_USER_ENTRY_POINTS)
+  #error "CONFIGURE_ERROR: CONFIGURE_SCHEDULER_USER requires CONFIGURE_SCHEDULER_USER_ENTRY_POINTS"
 #endif
 
 /* If no scheduler is specified, the priority scheduler is default. */
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY)
   #define CONFIGURE_SCHEDULER_PRIORITY
-  #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
-#endif
-
-/*
- * If a user scheduler is specified and no policy is set, 
- * the user scheduler is the default policy.
- */
-#if defined(CONFIGURE_SCHEDULER_USER) && \
-    !defined(CONFIGURE_SCHEDULER_POLICY)
-  #define CONFIGURE_SCHEDULER_POLICY _Scheduler_USER
 #endif
 
 /* 
- * Check for priority scheduler next, as it is the default policy if there
- * is no CONFIGURE_SCHEDULER_POLICY set and no USER scheduler provided.
+ * Is the Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY)
   #include <rtems/score/schedulerpriority.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_PRIORITY { _Scheduler_priority_Initialize }
-  #if !defined(CONFIGURE_SCHEDULER_POLICY)
-    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
-  #endif
+  #define SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_ENTRY_POINTS
 
   /**
    * define the memory used by the priority scheduler
    */
-  #define CONFIGURE_MEMORY_SCHEDULER_PRIORITY ( \
+  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
     _Configure_From_workspace( \
       ((CONFIGURE_MAXIMUM_PRIORITY+1) * sizeof(Chain_Control)) ) \
   )
-  #define CONFIGURE_MEMORY_PER_TASK_SCHEDULER_PRIORITY ( \
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
 #endif
 
 /* 
- * Set up the scheduler table.  The scheduling code indexes this table to 
- * invoke the correct scheduling implementation. The scheduler to use is 
- * determined by the Configuration.scheduler_policy field, which is set
- * by CONFIGURE_SCHEDULER_POLICY.  If a particular scheduler is not enabled,
- * an empty entry is included in its entry in the scheduler table.
+ * Set up the scheduler entry points table.  The scheduling code uses
+ * this code to know which scheduler is configured by the user.
  */
-
-  /**
-   * An empty scheduler entry
-   */
-  #define CONFIGURE_SCHEDULER_NULL { NULL }
-
 #ifdef CONFIGURE_INIT
-  /* the table of available schedulers. */
-  const Scheduler_Table_entry _Scheduler_Table[] = {
-    #if defined(CONFIGURE_SCHEDULER_USER) && \
-        defined(CONFIGURE_SCHEDULER_ENTRY_USER)
-      CONFIGURE_SCHEDULER_ENTRY_USER,
-    #else
-      CONFIGURE_SCHEDULER_NULL,
-    #endif
-    #if defined(CONFIGURE_SCHEDULER_PRIORITY) && \
-        defined(CONFIGURE_SCHEDULER_ENTRY_PRIORITY)
-      CONFIGURE_SCHEDULER_ENTRY_PRIORITY,
-    #else
-      CONFIGURE_SCHEDULER_NULL,
-    #endif
+  Scheduler_Control  _Scheduler = {
+    .Ready_queues.priority = NULL,
+    .Operations            = SCHEDULER_ENTRY_POINTS
   };
 #endif
-
-/**
- * Define the memory overhead for the scheduler
- */
-#define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    CONFIGURE_MEMORY_SCHEDULER_PRIORITY \
-  )
-
-#define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
-    CONFIGURE_MEMORY_PER_TASK_SCHEDULER_PRIORITY \
-  )
 
 /*
  *  If you said the IDLE task was going to do application initialization
@@ -2129,7 +2080,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
     CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
-    CONFIGURE_SCHEDULER_POLICY,               /* scheduling policy */
     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
     CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */
     CONFIGURE_INTERRUPT_STACK_SIZE,           /* interrupt stack size */

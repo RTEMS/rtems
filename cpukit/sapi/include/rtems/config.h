@@ -6,7 +6,7 @@
  *  This include file contains the table of user defined configuration
  *  parameters.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -117,10 +117,6 @@ typedef struct {
   /** This field specifies the number of ticks in each task's timeslice.
    */
   uint32_t                       ticks_per_timeslice;
-
-  /** This field specifies the scheduling policy to use.
-   */
-  uint32_t                       scheduler_policy;
 
   /** This element points to the BSP's optional idle task which may override
    *  the default one provided with RTEMS.

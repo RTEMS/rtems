@@ -1,8 +1,7 @@
 /*
- *  Thread Handler
+ *  Thread Handler / Thread Set Priority
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,20 +30,6 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
- * _Thread_Set_priority
- *
- * This directive enables and disables several modes of
- * execution for the requesting thread.
- *
- *  Input parameters:
- *    the_thread   - pointer to thread priority
- *    new_priority - new priority
- *
- *  Output: NONE
- */
-
 void _Thread_Set_priority(
   Thread_Control   *the_thread,
   Priority_Control  new_priority
@@ -52,5 +37,5 @@ void _Thread_Set_priority(
 {
   the_thread->current_priority = new_priority;
 
-  _Scheduler_Thread_scheduler_update(&_Scheduler, the_thread);
+  _Scheduler_Thread_scheduler_update( the_thread );
 }

@@ -2,6 +2,7 @@
  *  Scheduler Handler
  *
  *  Copyright (C) 2010 Gedare Bloom.
+ *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -29,38 +30,8 @@ volatile Priority_bit_map_Control _Priority_Major_bit_map;
 
 Priority_bit_map_Control          _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 
-/*
- *  _Scheduler_priority_Initialize
- *
- * Initializes the scheduler for priority scheduling.
- *
- *  Input parameters:
- *    the_scheduler - pointer to scheduler control
- *
- *  Output parameters: NONE
- */
-
-void _Scheduler_priority_Initialize (
-    Scheduler_Control       *the_scheduler
-)
+void _Scheduler_priority_Initialize(void)
 {
-  /* the operations table is a jump table to redirect generic scheduler 
-   * function calls to scheduler implementation specific functions.  The 
-   * main purpose of scheduler initialization is to set up the jump table 
-   * for the scheduler.  Every scheduler implementation provides its own
-   * scheduler operations table.
-   */
-  the_scheduler->Operations.schedule           = &_Scheduler_priority_Schedule;
-  the_scheduler->Operations.yield              = &_Scheduler_priority_Yield;
-  the_scheduler->Operations.block              = &_Scheduler_priority_Block;
-  the_scheduler->Operations.unblock            = &_Scheduler_priority_Unblock;
-  the_scheduler->Operations.scheduler_allocate = 
-      &_Scheduler_priority_Thread_scheduler_allocate;
-  the_scheduler->Operations.scheduler_free     = 
-      &_Scheduler_priority_Thread_scheduler_free;
-  the_scheduler->Operations.scheduler_update   = 
-      &_Scheduler_priority_Thread_scheduler_update;
-
-  _Scheduler_priority_Ready_queue_initialize( the_scheduler );
+  _Scheduler_priority_Ready_queue_initialize();
   _Priority_bit_map_Handler_initialization( );
 }

@@ -1,8 +1,8 @@
 /*
- *  Thread Handler
+ *  Thread Handler / Thread Suspend
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,23 +31,10 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
- * _Thread_Suspend
- *
- * This kernel routine sets the SUSPEND state in the THREAD.  The
- * THREAD chain and suspend count are adjusted if necessary.
- *
- * Input parameters:
- *   the_thread   - pointer to thread control block
- *
- * Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
+/*  INTERRUPT LATENCY:
  *    ready chain
  *    select map
  */
-
 void _Thread_Suspend(
   Thread_Control   *the_thread
 )
@@ -64,7 +51,7 @@ void _Thread_Suspend(
 
   the_thread->current_state = STATES_SUSPENDED;
 
-  _Scheduler_Block(&_Scheduler, the_thread);
+  _Scheduler_Block( the_thread );
 
   _ISR_Enable( level );
 }

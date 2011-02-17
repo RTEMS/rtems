@@ -1,8 +1,7 @@
 /*
- *  Thread Handler
+ *  Thread Handler / Thread Ready
  *
- *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,26 +30,11 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
- *  _Thread_Ready
- *
- *  This kernel routine readies the requested thread, the thread chain
- *  is adjusted.  A new heir thread may be selected.
- *
- *  Input parameters:
- *    the_thread - pointer to thread control block
- *
- *  Output parameters:  NONE
- *
- *  NOTE:  This routine uses the "blocking" heir selection mechanism.
- *         This ensures the correct heir after a thread restart.
- *
+/*
  *  INTERRUPT LATENCY:
  *    ready chain
  *    select heir
  */
-
 void _Thread_Ready(
   Thread_Control *the_thread
 )
@@ -61,7 +45,7 @@ void _Thread_Ready(
 
   the_thread->current_state = STATES_READY;
 
-  _Scheduler_Unblock( &_Scheduler, the_thread );
+  _Scheduler_Unblock( the_thread );
 
   _ISR_Enable( level );
 }

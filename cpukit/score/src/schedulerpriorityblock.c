@@ -2,6 +2,7 @@
  *  Scheduler Handler
  *
  *  Copyright (C) 2010 Gedare Bloom.
+ *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -24,25 +25,9 @@
 #include <rtems/score/schedulerpriority.h>
 #include <rtems/score/thread.h>
 
-/*
- * _Scheduler_priority_Block
- *
- * This kernel routine removes the_thread from scheduling decisions based 
- * on simple queue extraction.
- *
- * Input parameters:
- *   the_scheduler  - pointer to scheduler control
- *   the_thread     - pointer to thread control block
- *
- * Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- */
-
 void _Scheduler_priority_Block(
-  Scheduler_Control *the_scheduler,
   Thread_Control   *the_thread
 )
 {
-  _Scheduler_priority_Block_body(the_scheduler, the_thread);
+  _Scheduler_priority_Block_body(the_thread);
 }
