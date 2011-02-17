@@ -30,8 +30,17 @@ _DownloadLocation = 0x40000;
 
 /*
  * System clock speed
+ *
+ * If autodetection of the system clock pased on the PLL ref. clock
+ * (AFAIK 8MHz for both 64MHz and 80MHz boards) doesn't work then
+ * you can:
+ *   - define (nonzero) system clock speed from app- linkflags (or here)
+ *   - use a uCbootloader env. var: SYS_CLOCK_SPEED to define it.
+ * You can also redefine the PLL reference clock speed from linkflags
+ * or here...
  */
-_CPUClockSpeed = DEFINED(_CPUClockSpeed) ? _CPUClockSpeed : 64000000 ;
+_CPUClockSpeed    = DEFINED(_CPUClockSpeed)    ? _CPUClockSpeed : 0 ;
+_PLLRefClockSpeed = DEFINED(_PLLRefClockSpeed) ? _PLLRefClockSpeed : 8000000;
 
 /*
  * Location of on-chip devices

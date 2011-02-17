@@ -22,6 +22,7 @@
 #include <rtems/error.h>
 #include <errno.h>
 #include <stdio.h>
+#include <mcf5282/mcf5282.h>
 
 /*
  * Location of 'VME' access
@@ -34,7 +35,11 @@
  */
 extern char RamSize[];
 extern char RamBase[];
+extern char _CPUClockSpeed[];
+extern char _PLLRefClockSpeed[];
 
+uint32_t BSP_sys_clk_speed = (uint32_t)_CPUClockSpeed;
+uint32_t BSP_pll_ref_clock = (uint32_t)_PLLRefClockSpeed;
 /*
  * CPU-space access
  * The NOP after writing the CACR is there to address the following issue as
@@ -236,7 +241,9 @@ static void handler(int pc)
  */
 void bsp_start( void )
 {
-  int i;
+  int   i;
+  const char *clk_speed_str;
+  uint32_t clk_speed, mfd, rfd;
 
   /*
    * Set up default exception handler
@@ -299,13 +306,69 @@ void bsp_start( void )
                      MCF5282_CS_CSMR_V;
   MCF5282_CS2_CSCR = MCF5282_CS_CSCR_PS_16;
   MCF5282_GPIO_PJPAR |= 0x06;
-}
 
-extern char _CPUClockSpeed[];
+  /*
+   * Hopefully, the UART clock is still correctly set up
+   * so they can see the printk() output...
+   */
+  clk_speed = 0;
+  printk("Trying to figure out the system clock\n");
+  printk("Checking ENV variable SYS_CLOCK_SPEED:\n");
+  if ( (clk_speed_str = bsp_getbenv("SYS_CLOCK_SPEED")) ) {
+    printk("Found: %s\n", clk_speed_str);
+	for ( clk_speed = 0, i=0;
+	      clk_speed_str[i] >= '0' && clk_speed_str[i] <= '9';
+	      i++ ) {
+		clk_speed = 10*clk_speed + clk_speed_str[i] - '0';
+	}
+	if ( 0 != clk_speed_str[i] ) {
+		printk("Not a decimal number; I'm not using this setting\n");
+		clk_speed = 0;
+	}
+  } else {
+    printk("Not set.\n");
+  }
+
+  if ( 0 == clk_speed )
+	clk_speed = BSP_sys_clk_speed;
+
+  if ( 0 == clk_speed ) {
+	printk("Using some heuristics to determine clock speed...\n");
+	printk("Assuming %uHz PLL ref. clock\n", BSP_pll_ref_clock);
+	if ( 0xf8 != MCF5282_CLOCK_SYNSR ) {
+	  printk("FATAL ERROR: Unexpected SYNSR contents, can't proceed\n");
+	  bsp_sysReset(0);
+	}
+	mfd = MCF5282_CLOCK_SYNCR;
+	rfd = (mfd >>  8) & 7;
+	mfd = (mfd >> 12) & 7;
+	/* Check against 'known' cases */
+	if ( 0 != rfd || (2 != mfd && 3 != mfd) ) {
+	  printk("WARNING: Pll divisor/multiplier has unknown value; \n");
+	  printk("         either your board is not 64MHz or 80Mhz or\n");
+	  printk("         it uses a PLL reference other than 8MHz.\n");
+	  printk("         I'll proceed anyways but you might have to\n");
+	  printk("         reset the board and set uCbootloader ENV\n");
+	  printk("         variable \"SYS_CLOCK_SPEED\".\n");
+	}
+	mfd = 2 * (mfd + 2);
+	/* sysclk = pll_ref * 2 * (MFD + 2) / 2^(rfd) */
+	printk("PLL multiplier: %u, output divisor: %u\n", mfd, rfd);
+	clk_speed = (BSP_pll_ref_clock * mfd) >> rfd;
+  }
+
+  if ( 0 == clk_speed ) {
+	printk("FATAL ERROR: Unable to determine system clock speed\n");
+	bsp_sysReset(0);
+  } else {
+  	BSP_sys_clk_speed = clk_speed;
+	printk("System clock speed: %uHz\n", bsp_get_CPU_clock_speed());
+  }
+}
 
 uint32_t bsp_get_CPU_clock_speed(void)
 {
-  return( (uint32_t)_CPUClockSpeed);
+  return( BSP_sys_clk_speed );
 }
 
 /*
