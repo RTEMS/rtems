@@ -62,7 +62,7 @@ EXTRA_DIST += monitor/README
 
 ## fb
 noinst_LIBRARIES += libmw-fb.a
-libmw_fb_a_SOURCES = fb/mw_uid.c fb/fb.h fb/mw_uid.h
+libmw_fb_a_SOURCES = fb/mw_print.c fb/mw_uid.c fb/fb.h fb/mw_uid.h
 
 ## shell
 if LIBSHELL
