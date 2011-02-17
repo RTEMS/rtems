@@ -1,3 +1,10 @@
+2011-02-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/rtems_heap_extend.c: New file.
+	* libcsupport/Makefile.am: Reflect change from above.
+	* libcsupport/include/rtems/malloc.h: Declare rtems_heap_extend().
+	* score/include/rtems/score/heap.h: Documentation.
+
 2011-02-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/src/wkspace.c: Removed NULL pointer check from

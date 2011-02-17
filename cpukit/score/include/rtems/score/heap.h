@@ -430,15 +430,17 @@ uintptr_t _Heap_Initialize(
 );
 
 /**
- * @brief Extends the memory area of the heap @a heap using the memory area
- * starting at @a area_begin of size @a area_size bytes.
+ * @brief Extends the memory available for the heap @a heap using the memory
+ * area starting at @a area_begin of size @a area_size bytes.
  *
  * The extended space available for allocation will be returned in
  * @a amount_extended.  This pointer may be @c NULL.
  *
- * The memory area must be big enough to contain some maintainance blocks.  It
- * must not overlap parts of the current heap areas.  Disconnected subordinate
- * heap areas will lead to used blocks which cover the gaps. 
+ * There are no alignment requirements.  The memory area must be big enough to
+ * contain some maintainance blocks.  It must not overlap parts of the current
+ * heap areas.  Disconnected subordinate heap areas will lead to used blocks
+ * which cover the gaps.  Extending with an inappropriate memory area will
+ * corrupt the heap.
  *
  * Returns @c true in case of success, and @c false otherwise.
  */

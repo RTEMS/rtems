@@ -161,6 +161,24 @@ void *rtems_heap_allocate_aligned_with_boundary(
   uintptr_t boundary
 );
 
+/**
+ * @brief Extends the memory available for the heap using the memory area
+ * starting at @a area_begin of size @a area_size bytes.
+ *
+ * There are no alignment requirements.  The memory area must be big enough to
+ * contain some maintainance blocks.  It must not overlap parts of the current
+ * heap areas.  Disconnected subordinate heap areas will lead to used blocks
+ * which cover the gaps.  Extending with an inappropriate memory area will
+ * corrupt the heap.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS Invalid memory area.
+ */
+rtems_status_code rtems_heap_extend(
+  void *area_begin,
+  uintptr_t area_size
+);
+
 #ifdef __cplusplus
 }
 #endif
