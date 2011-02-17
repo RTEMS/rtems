@@ -1,3 +1,12 @@
+2011-02-17	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1738/bsps
+	* README, startup/bspstart.c, startup/linkcmds: Add support for dynamic
+	clock speed determination. This algorithm is described in the README
+	file. The output of the RTEMS Timing Tests was moved to TIMES to
+	signicantly shrink the README.
+	* TIMES: New file.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* clock/clock.c, startup/bspstart.c, startup/init5282.c:
