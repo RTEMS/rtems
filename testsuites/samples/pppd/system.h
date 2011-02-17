@@ -3,6 +3,8 @@
 #define SYSTEM_H
 
 #include <rtems.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
 
 /* functions */
 extern rtems_task Init(rtems_task_argument argument);
