@@ -1,3 +1,9 @@
+2011-02-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* new-exceptions/bspsupport/vectors.h: Added defines PPC_EXC_GPR_TYPE,
+	PPC_EXC_GPR_SIZE, PPC_EXC_GPR_OFFSET, PPC_EXC_MINIMAL_FRAME_SIZE, and
+	PPC_EXC_FRAME_SIZE.  Changed layout of BSP_Exception_frame.
+
 2011-02-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* new-exceptions/bspsupport/vectors.h: Add extern "C" {}.
