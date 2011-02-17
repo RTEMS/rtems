@@ -39,6 +39,10 @@
 
 #include <libcpu/powerpc-utility.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @defgroup ppc_exc PowerPC Exceptions
  *
@@ -505,5 +509,9 @@ typedef BSP_Exception_frame CPU_Exception_frame;
 typedef exception_handler_t cpuExcHandlerType;
 
 #endif /* ASM */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* LIBCPU_VECTORS_H */

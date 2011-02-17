@@ -1,3 +1,7 @@
+2011-02-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* new-exceptions/bspsupport/vectors.h: Add extern "C" {}.
+
 2011-02-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/powerpc-utility.h: Fixed LINKER_SYMBOL() for
