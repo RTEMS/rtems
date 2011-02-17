@@ -94,7 +94,7 @@ rtems_status_code rtems_bdpart_write(
   rtems_status_code esc = RTEMS_SUCCESSFUL;
   bool dos_compatibility = format != NULL
     && format->type == RTEMS_BDPART_FORMAT_MBR
-    && format->u.mbr.dos_compatibility;
+    && format->mbr.dos_compatibility;
   rtems_bdbuf_buffer *block = NULL;
   rtems_blkdev_bnum disk_end = 0;
   rtems_blkdev_bnum record_space =
@@ -219,7 +219,7 @@ rtems_status_code rtems_bdpart_write(
 
   /* Write disk ID */
   rtems_uint32_to_little_endian(
-    format->u.mbr.disk_id,
+    format->mbr.disk_id,
     block->buffer + RTEMS_BDPART_MBR_OFFSET_DISK_ID
   );
 

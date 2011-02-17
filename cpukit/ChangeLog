@@ -1,5 +1,13 @@
 2011-02-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libblock/include/rtems/bdpart.h (rtems_bdpart_format):
+	Preserve previous API.
+	* libblock/src/bdpart-create.c, libblock/src/bdpart-read.c,
+	libblock/src/bdpart-write.c: Reflect changes above.
+	* libmisc/shell/fdisk.c: Reflect changes above.
+
+2011-02-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libcsupport/src/rtems_heap_extend.c: New file.
 	* libcsupport/Makefile.am: Reflect change from above.
 	* libcsupport/include/rtems/malloc.h: Declare rtems_heap_extend().

@@ -163,41 +163,44 @@ typedef enum {
 /**
  * Disk format description.
  */
-typedef struct {
+typedef union {
   /**
    * Format type.
    */
   rtems_bdpart_format_type type;
-  union {
-    /**
-     * MBR format fields.
-     */
-    struct {
-      /**
-       * Disk ID in MBR at offset 440.
-       */
-      uint32_t disk_id;
 
-      /**
-       * This option is used for partition table creation and validation checks
-       * before a write to the disk.  It ensures that the first primary
-       * partition and the logical partitions start at head one and sector one
-       * under the virtual one head and 63 sectors geometry.  Each begin and
-       * end of a partition will be aligned to the virtual cylinder boundary.
-       */
-      bool dos_compatibility;
-    } mbr;
+  /**
+   * MBR format fields.
+   */
+  struct {
+    rtems_bdpart_format_type type;
 
     /**
-     * GPT format fields.
+     * Disk ID in MBR at offset 440.
      */
-    struct {
-      /**
-       * Disk ID in GPT header.
-       */
-      uuid_t disk_id;
-    } gpt;
-  } u;
+    uint32_t disk_id;
+
+    /**
+     * This option is used for partition table creation and validation checks
+     * before a write to the disk.  It ensures that the first primary
+     * partition and the logical partitions start at head one and sector one
+     * under the virtual one head and 63 sectors geometry.  Each begin and
+     * end of a partition will be aligned to the virtual cylinder boundary.
+     */
+    bool dos_compatibility;
+  } mbr;
+
+  /**
+   * GPT format fields.
+   */
+  struct {
+    rtems_bdpart_format_type type;
+
+    /**
+     * Disk ID in GPT header.
+     */
+    uuid_t disk_id;
+  } gpt;
 } rtems_bdpart_format;
 
 /**
