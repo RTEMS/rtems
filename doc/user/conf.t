@@ -394,49 +394,51 @@ and the user is assumed to provide one or more initialization tasks.
 @c
 @c
 @subsection Scheduler Algorithm Configuration
+
 This section defines the configuration parameters related to selecting 
-a scheduling algorithm for an application.  Regardless of whether 
-@code{CONFIGURE_SCHEDULER_POLICY} is defined, if none of the other 
-configuration parameters are set, then @code{rtems/confdefs.h} will define 
-@code{CONFIGURE_SCHEDULER_PRIORITY} and will (re)define 
-@code{CONFIGURE_SCHEDULER_POLICY} as @code{_Scheduler_Priority}. That is, 
-@code{CONFIGURE_SCHEDULER_PRIORITY} is the default scheduling algorithm.
+a scheduling algorithm for an application.  For the schedulers built into RTEMS, the configuration is straightforward.  All that is required is to define the configuration macro which specifies which scheduler you want for in your application.  The currently available schedulers are:
 
 @itemize @bullet
-@findex CONFIGURE_SCHEDULER_POLICY
-@item @code{CONFIGURE_SCHEDULER_POLICY} is defined to specify which 
-scheduling algorithm an application will use.  If it is undefined, 
-then @code{rtems/confdefs.h} will define it based on the definition 
-of the following configuration parameters.
-Valid values for this configuration parameter are: 
-@code{_Scheduler_USER},
-@code{_Scheduler_Priority}.
-
-@findex CONFIGURE_SCHEDULER_USER
-@item @code{CONFIGURE_SCHEDULER_USER} is defined if the application 
-provides its own scheduling algorithm. If @code{CONFIGURE_SCHEDULER_USER} is 
-defined then @code{CONFIGURE_SCHEDULER_ENTRY_USER} must be defined with the 
-name of the application's initialization function.  If both 
-configuration parameters are defined and @code{CONFIGURE_SCHEDULER_POLICY} 
-is undefined, then @code{CONFIGURE_SCHEDULER_POLICY} will be be defined as 
-@code{_Scheduler_USER}.
-
-@findex CONFIGURE_SCHEDULER_ALL
-@item @code{CONFIGURE_SCHEDULER_ALL} is defined if the application 
-chooses to include all of the RTEMS-provided schedulers.  
-@code{CONFIGURE_SCHEDULER_ALL} will define all of the following configuration 
-parameters and will use @code{CONFIGURE_SCHEDULER_POLICY} to select the 
-algorithm to use. If @code{CONFIGURE_SCHEDULER_POLICY} is not defined, then 
-@code{rtems/confdefs.h} will define it as @code{_Scheduler_Priority}.
 
 @findex CONFIGURE_SCHEDULER_PRIORITY
-@item @code{CONFIGURE_SCHEDULER_PRIORITY} is defined if the application 
-will use the Priority Scheduling algorithm.
-If none of the previous configuration parameters are defined by the 
-application, then @code{rtems/confdefs.h} will define 
-@code{CONFIGURE_SCHEDULER_POLICY} as @code{_Scheduler_PRIORITY}.
+@item Deterministic Priority Scheduler - This is the default scheduler
+in RTEMS and is designed for predictable performance under the highest
+loads.  It can block or unblock a thread in a constant amount of time.
+This scheduler requires a variable amount of memory based upon the number
+of priorities configured in the system.  This scheduler may be explicitly
+selected by defining @code{CONFIGURE_SCHEDULER_PRIORITY}.
 
 @end itemize
+
+The pluggable scheduler interface was added after the 4.10 release series
+so there are not a lot of options at this point.  We anticipate a lower
+memory, non-deterministic priority scheduler suitable for use in small
+systems and an Earliest Deadline First Scheduler (EDF) to arrive in
+the future.
+
+The pluggable scheduler interface enables the user to provide their own scheduling algorithm.  If you choose to do this, you must define multiple configuration macros.  
+
+@findex CONFIGURE_SCHEDULER_USER
+First, you must define @code{CONFIGURE_SCHEDULER_USER} to indicate the application provides its own scheduling algorithm. If @code{CONFIGURE_SCHEDULER_USER} is defined then the following additional macros must be defined:
+
+@itemize @bullet
+@item @code{CONFIGURE_SCHEDULER_USER_ENTRY_POINTS} must be defined with the set of methods which implement this scheduler.  
+
+@item @code{CONFIGURE_MEMORY_FOR_SCHEDULER} must be defined with the
+amount of memory required as a base amount for the scheduler.
+
+@item @code{CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER(_tasks)} must be
+defined as a formula which computes the amount of memory required based upon the number of tasks configured.
+
+@end itemize
+
+At this time, the mechanics and requirements for writing a new
+scheduler are evolving and not fully documented.  It is recommended
+that you look at the existing Deterministic Priority Scheduler
+in @code{cpukit/score/src/schedulerpriority*.c} for guidance.
+For guidance on the configuration macros, please examine
+@code{cpukit/sapi/include/confdefs.h} for how these are defined for the
+Deterministic Priority Scheduler.
 
 @c
 @c
