@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -91,6 +91,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  Chain_Control   *ready_queues;
+
   Install_tm27_vector( Isr_handler );
 
   /*
@@ -170,8 +172,9 @@ rtems_task Task_1(
 
   _Thread_Dispatch_disable_level = 0;
 
-  _Thread_Heir = (rtems_tcb *) 
-        _Chain_Last(&_Scheduler.Ready_queues.priority[LOW_PRIORITY]);
+  ready_queues      = (Chain_Control *) _Scheduler.information;
+  _Thread_Executing =
+        (Thread_Control *) _Chain_First(&ready_queues[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
 
@@ -199,6 +202,8 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
+  Chain_Control   *ready_queues;
+
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
   while ( Interrupt_occurred == 0 );
 #endif
@@ -228,8 +233,9 @@ rtems_task Task_2(
 
   _Thread_Dispatch_disable_level = 0;
 
-  _Thread_Heir = (rtems_tcb *)
-      _Chain_First(&_Scheduler.Ready_queues.priority[LOW_PRIORITY]);
+  ready_queues      = (Chain_Control *) _Scheduler.information;
+  _Thread_Executing =
+        (Thread_Control *) _Chain_First(&ready_queues[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
 

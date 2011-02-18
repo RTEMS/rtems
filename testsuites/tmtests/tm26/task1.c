@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -235,15 +235,17 @@ rtems_task Middle_task(
   rtems_task_argument argument
 )
 {
+  Chain_Control   *ready_queues;
+
   thread_dispatch_no_fp_time = benchmark_timer_read();
 
   _Thread_Set_state( _Thread_Executing, STATES_SUSPENDED );
 
   Middle_tcb   = _Thread_Executing;
 
+  ready_queues      = (Chain_Control *) _Scheduler.information;
   _Thread_Executing =
-        (Thread_Control *) 
-        _Chain_First(&_Scheduler.Ready_queues.priority[LOW_PRIORITY]);
+        (Thread_Control *) _Chain_First(&ready_queues[LOW_PRIORITY]);
 
   /* do not force context switch */
 
@@ -263,6 +265,9 @@ rtems_task Low_task(
 )
 {
   Thread_Control *executing;
+  Chain_Control  *ready_queues;
+
+  ready_queues      = (Chain_Control *) _Scheduler.information;
 
   context_switch_no_fp_time = benchmark_timer_read();
 
@@ -280,8 +285,7 @@ rtems_task Low_task(
   context_switch_another_task_time = benchmark_timer_read();
 
   _Thread_Executing =
-        (Thread_Control *) 
-        _Chain_First(&_Scheduler.Ready_queues.priority[FP1_PRIORITY]);
+        (Thread_Control *) _Chain_First(&ready_queues[FP1_PRIORITY]);
 
   /* do not force context switch */
 
@@ -300,16 +304,17 @@ rtems_task Floating_point_task_1(
   rtems_task_argument argument
 )
 {
-  Thread_Control *executing;
+  Chain_Control   *ready_queues;
+  Thread_Control  *executing;
   FP_DECLARE;
 
   context_switch_restore_1st_fp_time = benchmark_timer_read();
 
   executing = _Thread_Executing;
 
+  ready_queues      = (Chain_Control *) _Scheduler.information;
   _Thread_Executing =
-        (Thread_Control *) 
-        _Chain_First(&_Scheduler.Ready_queues.priority[FP2_PRIORITY]);
+        (Thread_Control *) _Chain_First(&ready_queues[FP2_PRIORITY]);
 
   /* do not force context switch */
 
@@ -331,9 +336,9 @@ rtems_task Floating_point_task_1(
 
   executing = _Thread_Executing;
 
+  ready_queues      = (Chain_Control *) _Scheduler.information;
   _Thread_Executing =
-       (Thread_Control *)
-       _Chain_First(&_Scheduler.Ready_queues.priority[FP2_PRIORITY]);
+        (Thread_Control *) _Chain_First(&ready_queues[FP2_PRIORITY]);
 
   /* do not force context switch */
 
@@ -354,6 +359,7 @@ rtems_task Floating_point_task_2(
   rtems_task_argument argument
 )
 {
+  Chain_Control  *ready_queues;
   Thread_Control *executing;
   FP_DECLARE;
 
@@ -361,9 +367,9 @@ rtems_task Floating_point_task_2(
 
   executing = _Thread_Executing;
 
+  ready_queues      = (Chain_Control *) _Scheduler.information;
   _Thread_Executing =
-       (Thread_Control *)
-       _Chain_First(&_Scheduler.Ready_queues.priority[FP1_PRIORITY]);
+        (Thread_Control *) _Chain_First(&ready_queues[FP1_PRIORITY]);
 
   FP_LOAD( 1.0 );
 
