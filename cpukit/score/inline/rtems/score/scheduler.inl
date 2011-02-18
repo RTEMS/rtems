@@ -93,37 +93,70 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
   _Scheduler.Operations.unblock( the_thread );
 }
 
-/** @brief _Scheduler_Thread_scheduler_allocate
+/** @brief _Scheduler_Allocate
  *
  * This routine allocates @a the_thread->scheduler
  */
-RTEMS_INLINE_ROUTINE void* _Scheduler_Thread_scheduler_allocate( 
+RTEMS_INLINE_ROUTINE void* _Scheduler_Allocate( 
   Thread_Control    *the_thread
 )
 {
-  return _Scheduler.Operations.scheduler_allocate( the_thread );
+  return _Scheduler.Operations.allocate( the_thread );
 }
 
-/** @brief _Scheduler_Thread_scheduler_free
+/** @brief _Scheduler_Free
  *
  * This routine frees @a the_thread->scheduler
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Thread_scheduler_free( 
+RTEMS_INLINE_ROUTINE void _Scheduler_Free( 
   Thread_Control    *the_thread
 )
 {
-  return _Scheduler.Operations.scheduler_free( the_thread );
+  return _Scheduler.Operations.free( the_thread );
 }
 
-/** @brief _Scheduler_Thread_scheduler_update
+/** @brief _Scheduler_Update
  *
  * This routine updates @a the_thread->scheduler
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Thread_scheduler_update( 
+RTEMS_INLINE_ROUTINE void _Scheduler_Update( 
   Thread_Control    *the_thread
 )
 {
-  _Scheduler.Operations.scheduler_update( the_thread );
+  _Scheduler.Operations.update( the_thread );
+}
+
+/** @brief _Scheduler_Enqueue
+ *
+ * This routine enqueue @a the_thread->scheduler
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue( 
+  Thread_Control    *the_thread
+)
+{
+  _Scheduler.Operations.enqueue( the_thread );
+}
+
+/** @brief _Scheduler_Enqueue_first
+ *
+ * This routine enqueue_first @a the_thread->scheduler
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue_first( 
+  Thread_Control    *the_thread
+)
+{
+  _Scheduler.Operations.enqueue_first( the_thread );
+}
+
+/** @brief _Scheduler_Extract
+ *
+ * This routine extract @a the_thread->scheduler
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Extract( 
+  Thread_Control    *the_thread
+)
+{
+  _Scheduler.Operations.extract( the_thread );
 }
 
 /**@}*/

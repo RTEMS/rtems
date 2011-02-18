@@ -1,3 +1,34 @@
+2011-02-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h, score/Makefile.am,
+	score/include/rtems/score/scheduler.h,
+	score/include/rtems/score/schedulerpriority.h,
+	score/include/rtems/score/thread.h,
+	score/inline/rtems/score/scheduler.inl,
+	score/inline/rtems/score/schedulerpriority.inl,
+	score/src/scheduler.c, score/src/schedulerpriority.c,
+	score/src/schedulerpriorityblock.c,
+	score/src/schedulerpriorityschedule.c,
+	score/src/schedulerpriorityunblock.c,
+	score/src/schedulerpriorityyield.c, score/src/threadchangepriority.c,
+	score/src/threadclose.c, score/src/threadinitialize.c,
+	score/src/threadsetpriority.c, score/src/threadsettransient.c:
+	Significant clean up on Scheduler Plugin Interface. Names were
+	shortened. Missing operations added. Many scheduler files had
+	unneeded includes removed. Made pointer to scheduler information in
+	Thread_Control and Scheduler_Control a void * pointer because the
+	thread and scheduler wrapper should be unaware of scheduler types AND
+	this is broken for user provided schedulers.
+	* score/src/schedulerpriorityallocate.c,
+	score/src/schedulerpriorityenqueue.c,
+	score/src/schedulerpriorityenqueuefirst.c,
+	score/src/schedulerpriorityextract.c,
+	score/src/schedulerpriorityfree.c,
+	score/src/schedulerpriorityupdate.c: New files.
+	* score/src/schedulerprioritythreadschedulerallocate.c,
+	score/src/schedulerprioritythreadschedulerfree.c,
+	score/src/schedulerprioritythreadschedulerupdate.c: Removed.
+
 2011-02-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h, sapi/include/rtems/config.h,

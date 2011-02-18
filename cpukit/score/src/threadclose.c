@@ -35,7 +35,6 @@ void _Thread_Close(
   Thread_Control       *the_thread
 )
 {
-
   /*
    *  Now we are in a dispatching critical section again and we
    *  can take the thread OUT of the published set.  It is invalid
@@ -78,7 +77,7 @@ void _Thread_Close(
   /*
    * Free the per-thread scheduling information.
    */
-  _Scheduler_Thread_scheduler_free( the_thread );
+  _Scheduler_Free( the_thread );
 
   /*
    *  The thread might have been FP.  So deal with that.

@@ -23,6 +23,8 @@
 #ifndef _RTEMS_SCORE_SCHEDULERPRIORITY_INL
 #define _RTEMS_SCORE_SCHEDULERPRIORITY_INL
 
+#include <rtems/score/wkspace.h>
+
 /**
  *  @addtogroup ScoreScheduler
  * @{
@@ -34,17 +36,18 @@
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(void)
 {
-  size_t index;
+  size_t         index;
+  Chain_Control *ready_queues;
 
   /* allocate ready queue structures */
-  _Scheduler.Ready_queues.priority = (Chain_Control *) 
-    _Workspace_Allocate_or_fatal_error(
-      ((size_t) PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
-    );
+  _Scheduler.information = _Workspace_Allocate_or_fatal_error(
+    ((size_t) PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
+  );
 
   /* initialize ready queue structures */
+  ready_queues = (Chain_Control *) _Scheduler.information;
   for( index=0; index <= PRIORITY_MAXIMUM; index++)
-    _Chain_Initialize_empty( &_Scheduler.Ready_queues.priority[index] );
+    _Chain_Initialize_empty( &ready_queues[index] );
 }
 
 /**
@@ -58,10 +61,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
   Thread_Control                  *the_thread
 )
 {
-  _Priority_bit_map_Add( &the_thread->scheduler.priority->Priority_map );
+  Scheduler_priority_Per_thread *sched_info;
+  Chain_Control                 *ready;
+
+  sched_info = (Scheduler_priority_Per_thread *) the_thread->scheduler_info;
+  ready      = sched_info->ready_chain;
+
+  _Priority_bit_map_Add( &sched_info->Priority_map );
   
-  _Chain_Append_unprotected( the_thread->scheduler.priority->ready_chain, 
-      &the_thread->Object.Node );
+  _Chain_Append_unprotected( ready, &the_thread->Object.Node );
 }
 
 /**
@@ -77,10 +85,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
   Thread_Control                   *the_thread
 )
 {
-  _Priority_bit_map_Add( &the_thread->scheduler.priority->Priority_map );
+  Scheduler_priority_Per_thread *sched_info;
+  Chain_Control                 *ready;
 
-  _Chain_Prepend_unprotected( the_thread->scheduler.priority->ready_chain, 
-      &the_thread->Object.Node );
+  sched_info = (Scheduler_priority_Per_thread *) the_thread->scheduler_info;
+  ready      = sched_info->ready_chain;
+
+  _Priority_bit_map_Add( &sched_info->Priority_map );
+
+  _Chain_Prepend_unprotected(
+    sched_info->ready_chain,
+    &the_thread->Object.Node
+  );
 }
 
 /**
@@ -95,13 +111,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
   Thread_Control        *the_thread
 )
 {
-  Chain_Control         *ready  = the_thread->scheduler.priority->ready_chain;
+  Scheduler_priority_Per_thread *sched_info;
+  Chain_Control                 *ready;
+
+  sched_info = (Scheduler_priority_Per_thread *) the_thread->scheduler_info;
+  ready      = sched_info->ready_chain;
 
   if ( _Chain_Has_only_one_node( ready ) ) {
     _Chain_Initialize_empty( ready );
-    _Priority_bit_map_Remove( &the_thread->scheduler.priority->Priority_map );
-  } else
+    _Priority_bit_map_Remove( &sched_info->Priority_map );
+  } else {
     _Chain_Extract_unprotected( &the_thread->Object.Node );
+  }
 }
 
 /**
@@ -137,13 +158,19 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
   Thread_Control            *the_thread
 )
 {
-  if ( !_Chain_Has_only_one_node(
-        the_thread->scheduler.priority->ready_chain
-        ) ) {
+  Scheduler_priority_Per_thread *sched_info;
+  Chain_Control                 *ready;
+
+  sched_info = (Scheduler_priority_Per_thread *) the_thread->scheduler_info;
+  ready      = sched_info->ready_chain;
+
+  if ( !_Chain_Has_only_one_node( sched_info->ready_chain ) ) {
     _Chain_Extract_unprotected( &the_thread->Object.Node );
 
-    _Chain_Append_unprotected( the_thread->scheduler.priority->ready_chain, 
-      &the_thread->Object.Node );
+    _Chain_Append_unprotected(
+      sched_info->ready_chain, 
+      &the_thread->Object.Node
+    );
   }
 }
 
@@ -158,72 +185,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(void)
 {
   _Thread_Heir = _Scheduler_priority_Ready_queue_first(
-      _Scheduler.Ready_queues.priority
+    (Chain_Control *) _Scheduler.information
   );
-}
-
-/**
- *  @brief _Scheduler_priority_Block_body
- *
- *  This kernel routine removes the_thread from scheduling decisions based 
- * on simple queue extraction.
- *
- *  @param[in] the_thread  - pointer to thread
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Block_body(
-  Thread_Control   *the_thread
-)
-{
-  _Scheduler_priority_Ready_queue_extract(the_thread);
-
-  /* TODO: flash critical section */
-
-  if ( _Thread_Is_heir( the_thread ) )
-     _Scheduler_priority_Schedule_body();
-
-  if ( _Thread_Is_executing( the_thread ) )
-    _Thread_Dispatch_necessary = true;
-
-  return;
-}
-
-/**
- *  @brief _Scheduler_priority_Unblock_body
- *
- *  This kernel routine readies the requested thread according to the queuing 
- *  discipline. A new heir thread may be selected.
- *
- *  @param[in] the_thread  - pointer to thread
- *
- *  @note This routine uses the "blocking" heir selection mechanism.
- *        This ensures the correct heir after a thread restart.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Unblock_body (
-  Thread_Control          *the_thread
-)
-{
-  _Scheduler_priority_Ready_queue_enqueue(the_thread);
-
-  /* TODO: flash critical section */
-
-  /*
-   *  If the thread that was unblocked is more important than the heir,
-   *  then we have a new heir.  This may or may not result in a
-   *  context switch.
-   *
-   *  Normal case:
-   *    If the current thread is preemptible, then we need to do
-   *    a context switch.
-   *  Pseudo-ISR case:
-   *    Even if the thread isn't preemptible, if the new heir is
-   *    a pseudo-ISR system task, we need to do a context switch.
-   */
-  if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
-    _Thread_Heir = the_thread;
-    if ( _Thread_Executing->is_preemptible ||
-        the_thread->current_priority == 0 )
-      _Thread_Dispatch_necessary = true;
-  }
 }
 
 /**@}*/

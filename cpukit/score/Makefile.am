@@ -144,13 +144,16 @@ libscore_a_SOURCES += src/scheduler.c
 
 ## SCHEDULERPRIORITY_C_FILES
 libscore_a_SOURCES += src/schedulerpriority.c \
-											src/schedulerpriorityblock.c \
-                      src/schedulerprioritythreadschedulerallocate.c \
-                      src/schedulerprioritythreadschedulerfree.c \
-                      src/schedulerprioritythreadschedulerupdate.c \
-											src/schedulerpriorityschedule.c \
-											src/schedulerpriorityunblock.c \
-											src/schedulerpriorityyield.c
+    src/schedulerpriorityallocate.c \
+    src/schedulerpriorityblock.c \
+    src/schedulerpriorityenqueue.c \
+    src/schedulerpriorityenqueuefirst.c \
+    src/schedulerpriorityextract.c \
+    src/schedulerpriorityfree.c \
+    src/schedulerpriorityschedule.c \
+    src/schedulerpriorityunblock.c \
+    src/schedulerpriorityupdate.c \
+    src/schedulerpriorityyield.c
 
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocate.c \

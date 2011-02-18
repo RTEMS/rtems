@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -390,10 +390,10 @@ struct Thread_Control_struct {
    *  since it was created.
    */
   Thread_CPU_usage_t                    cpu_time_used;
-  /** This union holds per-thread data for the scheduler and ready queue. */
-  union {
-    Scheduler_priority_Per_thread      *priority;
-  } scheduler;
+
+  /** This pointer holds per-thread data for the scheduler and ready queue. */
+  void                                 *scheduler_info;
+
   /** This field contains information about the starting state of
    *  this thread.
    */

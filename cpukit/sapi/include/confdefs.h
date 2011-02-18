@@ -603,8 +603,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #ifdef CONFIGURE_INIT
   Scheduler_Control  _Scheduler = {
-    .Ready_queues.priority = NULL,
-    .Operations            = SCHEDULER_ENTRY_POINTS
+    .information = NULL,
+    .Operations  = SCHEDULER_ENTRY_POINTS
   };
 #endif
 

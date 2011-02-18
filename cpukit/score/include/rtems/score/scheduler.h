@@ -36,35 +36,6 @@ extern "C" {
  */
 /**@{*/
 
-typedef struct Scheduler_Control_struct Scheduler_Control;
-
-/*
- * This type defines the scheduler initialization table entry, which is set up
- * by confdefs.h based on the user's choice of scheduler policy.
- */
-typedef struct {
-  void ( *scheduler_init )( Scheduler_Control * );
-} Scheduler_Table_entry;
-
-/**
- * The following Scheduler_Per_thread_xxx structures are used to
- * hold per-thread data used by the scheduler.  Thread_Control->scheduler is a
- * union of pointers, one for each of the following structures.  The
- * scheduler->xxx field points to an instantion of one of these structures,
- * which is allocated from the workspace during _Thread_Start.
- */
-
-/**
- * Per-thread data related to the _Scheduler_PRIORITY scheduling policy.
- */
-typedef struct {
-  /** This field points to the Ready FIFO for this thread's priority. */
-  Chain_Control                        *ready_chain;
-
-  /** This field contains precalculated priority map indices. */
-  Priority_bit_map_Information          Priority_map;
-} Scheduler_priority_Per_thread;
-
 /**
  * function jump table that holds pointers to the functions that
  * implement specific schedulers.
@@ -86,37 +57,39 @@ typedef struct {
   void ( *unblock )(Thread_Control *);
 
   /** allocates the scheduler field of the given thread */
-  void * ( *scheduler_allocate )(Thread_Control *);
+  void * ( *allocate )(Thread_Control *);
 
   /** frees the scheduler field of the given thread */
-  void ( *scheduler_free )(Thread_Control *);
+  void ( *free )(Thread_Control *);
 
   /** updates the scheduler field of the given thread -- primarily used
    * when changing the thread's priority. */
-  void ( *scheduler_update )(Thread_Control *);
+  void ( *update )(Thread_Control *);
+
+  /** enqueue a thread as the last of its priority group */
+  void ( *enqueue )(Thread_Control *);
+
+  /** enqueue a thread as the first of its priority group */
+  void ( *enqueue_first )(Thread_Control *);
+
+  /** extract a thread from the ready set */
+  void ( *extract )(Thread_Control *);
 } Scheduler_Operations;
 
 /**
  * This is the structure used to manage the scheduler.
  */
-struct Scheduler_Control_struct {
+typedef struct {
   /**
-   *  This union contains the pointer to the data structure used to manage
-   *  the ready set of tasks. The pointer varies based upon the type of
+   *  This points to the data structure used to manage the ready set of
+   *  tasks. The pointer varies based upon the type of
    *  ready queue required by the scheduler.
    */
-  union {
-    /**
-     * This is the set of lists (an array of Chain_Control) for
-     * priority scheduling.
-     */
-    Chain_Control            *priority;
-
-  } Ready_queues;
+  void                   *information;
 
   /** The jump table for scheduler-specific functions */
-  Scheduler_Operations        Operations;
-};
+  Scheduler_Operations    Operations;
+} Scheduler_Control;
 
 /**
  *  The _Scheduler holds the structures used to manage the

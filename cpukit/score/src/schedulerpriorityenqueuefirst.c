@@ -1,8 +1,6 @@
 /*
- *  Scheduler Handler / Scheduler
- *
- *  Copyright (C) 2010 Gedare Bloom.
- *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 2011.
+ *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -16,10 +14,14 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/scheduler.h>
+#include <rtems/config.h>
+#include <rtems/score/chain.h>
 #include <rtems/score/schedulerpriority.h>
 
-void _Scheduler_priority_Schedule(void)
+void _Scheduler_priority_Enqueue_first( 
+  Thread_Control      *the_thread
+)
 {
-  _Scheduler_priority_Schedule_body();
+  _Scheduler_priority_Ready_queue_enqueue_first( the_thread );
 }
+

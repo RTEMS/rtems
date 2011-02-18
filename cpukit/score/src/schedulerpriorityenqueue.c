@@ -1,7 +1,5 @@
 /*
- *  Thread Handler / Thread Set Priority
- *
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,15 +14,13 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/scheduler.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/schedulerpriority.h>
 
-void _Thread_Set_priority(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority
+void _Scheduler_priority_Enqueue( 
+  Thread_Control      *the_thread
 )
 {
-  the_thread->current_priority = new_priority;
-
-  _Scheduler_Update( the_thread );
+   _Scheduler_priority_Ready_queue_enqueue( the_thread );
 }

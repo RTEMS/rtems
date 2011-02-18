@@ -1,5 +1,5 @@
 /*
- *  Scheduler Handler
+ *  Scheduler Priority Handler / Allocate
  *
  *  Copyright (C) 2010 Gedare Bloom.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
@@ -17,18 +17,19 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerpriority.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-void _Scheduler_priority_Thread_scheduler_free (
-  Thread_Control    *the_thread
+void* _Scheduler_priority_Allocate (
+  Thread_Control        *the_thread
 )
 {
-  _Workspace_Free( the_thread->scheduler.priority );
+  void *sched;
+
+  sched = _Workspace_Allocate( sizeof(Scheduler_priority_Per_thread) );
+
+  the_thread->scheduler_info = (Scheduler_priority_Per_thread*) sched;
+
+  return sched;
 }

@@ -29,5 +29,14 @@ void _Scheduler_priority_Block(
   Thread_Control   *the_thread
 )
 {
-  _Scheduler_priority_Block_body(the_thread);
+  _Scheduler_priority_Ready_queue_extract( the_thread );
+
+  /* TODO: flash critical section? */
+
+  if ( _Thread_Is_heir( the_thread ) )
+     _Scheduler_priority_Schedule_body();
+
+  if ( _Thread_Is_executing( the_thread ) )
+    _Thread_Dispatch_necessary = true;
+
 }

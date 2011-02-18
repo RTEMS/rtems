@@ -21,9 +21,7 @@
 
 #include <rtems/score/chain.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/percpu.h>
 #include <rtems/score/scheduler.h>
-#include <rtems/score/wkspace.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,15 +38,29 @@ extern "C" {
  */
 #define SCHEDULER_PRIORITY_ENTRY_POINTS \
   { \
-    .initialize         = _Scheduler_priority_Initialize, \
-    .schedule           = _Scheduler_priority_Schedule, \
-    .yield              = _Scheduler_priority_Yield, \
-    .block              = _Scheduler_priority_Block, \
-    .unblock            = _Scheduler_priority_Unblock, \
-    .scheduler_allocate = _Scheduler_priority_Thread_scheduler_allocate, \
-    .scheduler_free     = _Scheduler_priority_Thread_scheduler_free, \
-    .scheduler_update   = _Scheduler_priority_Thread_scheduler_update \
+    .initialize    = _Scheduler_priority_Initialize, \
+    .schedule      = _Scheduler_priority_Schedule, \
+    .yield         = _Scheduler_priority_Yield, \
+    .block         = _Scheduler_priority_Block, \
+    .unblock       = _Scheduler_priority_Unblock, \
+    .allocate      = _Scheduler_priority_Allocate, \
+    .free          = _Scheduler_priority_Free, \
+    .update        = _Scheduler_priority_Update, \
+    .enqueue       = _Scheduler_priority_Enqueue, \
+    .enqueue_first = _Scheduler_priority_Enqueue_first, \
+    .extract       = _Scheduler_priority_Extract \
   }
+
+/**
+ * Per-thread data related to the _Scheduler_PRIORITY scheduling policy.
+ */
+typedef struct {
+  /** This field points to the Ready FIFO for this thread's priority. */
+  Chain_Control                        *ready_chain;
+
+  /** This field contains precalculated priority map indices. */
+  Priority_bit_map_Information          Priority_map;
+} Scheduler_priority_Per_thread;
 
 /**
  * This routine initializes the priority scheduler.
@@ -60,6 +72,8 @@ void _Scheduler_priority_Initialize(void);
  *  that is, removes it from the ready queue.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
+ *
+ *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_priority_Block( 
   Thread_Control    *the_thread 
@@ -72,24 +86,33 @@ void _Scheduler_priority_Block(
 void _Scheduler_priority_Schedule(void);
 
 /**
- * This routine allocates @a the_thread->scheduler.
+ *  This routine allocates @a the_thread->scheduler.
+ *
+ *  @param[in] the_thread is the thread the scheduler is allocating
+ *             management memory for
  */
-void * _Scheduler_priority_Thread_scheduler_allocate(
+void * _Scheduler_priority_Allocate(
   Thread_Control      *the_thread
 );
 
 /**
- * This routine frees @a the_thread->scheduler.
+ *  This routine frees @a the_thread->scheduler.
+ *
+ *  @param[in] the_thread is the thread whose scheduler specific information
+ *             will be deallocated.
  */
-void _Scheduler_priority_Thread_scheduler_free(
+void _Scheduler_priority_Free(
   Thread_Control      *the_thread
 );
 
 /**
- * This routine updates @a the_thread->scheduler based on @a the_scheduler 
- * structures and thread state
+ *  This routine updates @a the_thread->scheduler based on @a the_scheduler 
+ *  structures and thread state.
+ *
+ *  @param[in] the_thread will have its scheduler specific information
+ *             structure updated.
  */
-void _Scheduler_priority_Thread_scheduler_update(
+void _Scheduler_priority_Update(
   Thread_Control      *the_thread
 );
 
@@ -97,6 +120,8 @@ void _Scheduler_priority_Thread_scheduler_update(
  *  This routine adds @a the_thread to the scheduling decision, 
  *  that is, adds it to the ready queue and 
  *  updates any appropriate scheduling variables, for example the heir thread.
+ *
+ *  @param[in] the_thread will be unblocked
  */
 void _Scheduler_priority_Unblock(
   Thread_Control    *the_thread 
@@ -114,6 +139,36 @@ void _Scheduler_priority_Unblock(
  *  running is also the currently the heir.
  */
 void _Scheduler_priority_Yield( void );
+
+/**
+ *  This routine puts @a the_thread on to the priority-based ready queue.
+ *
+ *  @param[in] the_thread will be enqueued at the TAIL of its priority.
+ */
+void _Scheduler_priority_Enqueue(
+  Thread_Control    *the_thread
+);
+
+/**
+ *  This routine puts @a the_thread to the head of the ready queue. 
+ *  For priority-based ready queues, the thread will be the first thread
+ *  at its priority level.
+ *
+ *  @param[in] the_thread will be enqueued at the HEAD of its priority.
+ */
+void _Scheduler_priority_Enqueue_first(
+  Thread_Control    *the_thread
+);
+
+/**
+ *  This routine removes a specific thread from the scheduler's set
+ *  of ready threads.
+ *
+ *  @param[in] the_thread will be extracted from the ready set.
+ */
+void _Scheduler_priority_Extract(
+  Thread_Control     *the_thread
+);
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/schedulerpriority.inl>

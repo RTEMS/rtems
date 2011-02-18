@@ -1,8 +1,7 @@
 /*
- *  Thread Handler
+ *  Thread Handler / Change Priority
  *
- *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,21 +30,6 @@ void _Thread_Change_priority(
 {
   ISR_Level      level;
   States_Control state, original_state;
-
-  /*
-   *  If this is a case where prepending the task to its priority is
-   *  potentially desired, then we need to consider whether to do it.
-   *  This usually occurs when a task lowers its priority implcitly as
-   *  the result of losing inherited priority.  Normal explicit priority
-   *  change calls (e.g. rtems_task_set_priority) should always do an
-   *  append not a prepend.
-   */
-/*
-  if ( prepend_it &&
-       _Thread_Is_executing( the_thread ) &&
-       new_priority >= the_thread->current_priority )
-    prepend_it = true;
-*/
 
   /*
    * Save original state
@@ -91,16 +75,13 @@ void _Thread_Change_priority(
      *  We now know the thread will be in the READY state when we remove
      *  the TRANSIENT state.  So we have to place it on the appropriate
      *  Ready Queue with interrupts off.
-     *
-     *  FIXME: hard-coded for priority scheduling. Might be ok since this 
-     *  function is specific to priority scheduling?
      */
     the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
 
     if ( prepend_it )
-      _Scheduler_priority_Ready_queue_enqueue_first( the_thread );
+      _Scheduler_Enqueue_first( the_thread );
     else
-      _Scheduler_priority_Ready_queue_enqueue( the_thread );
+      _Scheduler_Enqueue( the_thread );
   }
 
   _ISR_Flash( level );

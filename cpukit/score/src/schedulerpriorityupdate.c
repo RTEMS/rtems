@@ -23,18 +23,21 @@
 #include <rtems/score/schedulerpriority.h>
 #include <rtems/score/thread.h>
 
-void _Scheduler_priority_Thread_scheduler_update(
+void _Scheduler_priority_Update(
   Thread_Control    *the_thread
 )
 {
-  Chain_Control *rq = _Scheduler.Ready_queues.priority;
+  Scheduler_priority_Per_thread *sched_info;
+  Chain_Control                 *rq;
 
-  the_thread->scheduler.priority->ready_chain = &rq[
-    the_thread->current_priority 
-  ];
+  sched_info = (Scheduler_priority_Per_thread *) the_thread->scheduler_info;
+  rq         = (Chain_Control *) _Scheduler.information;
+
+
+  sched_info->ready_chain = &rq[ the_thread->current_priority ];
 
   _Priority_bit_map_Initialize_information( 
-      &the_thread->scheduler.priority->Priority_map, 
-      the_thread->current_priority 
+    &sched_info->Priority_map, 
+    the_thread->current_priority 
   );
 }

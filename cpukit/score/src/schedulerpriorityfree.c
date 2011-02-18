@@ -2,6 +2,7 @@
  *  Scheduler Handler
  *
  *  Copyright (C) 2010 Gedare Bloom.
+ *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -18,18 +19,11 @@
 #include <rtems/config.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerpriority.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-void *_Scheduler_priority_Thread_scheduler_allocate (
-  Thread_Control        *the_thread
+void _Scheduler_priority_Free (
+  Thread_Control    *the_thread
 )
 {
-  void  *sched;
-
-  sched = _Workspace_Allocate( sizeof(Scheduler_priority_Per_thread) );
-
-  the_thread->scheduler.priority = (Scheduler_priority_Per_thread *) sched;
-
-  return sched;
+  _Workspace_Free( the_thread->scheduler_info );
 }
