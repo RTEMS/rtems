@@ -258,7 +258,7 @@ Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-rtems4
 
 %if "%{gcc_version}" == "4.5.2" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.2-rtems4.11-20110131.diff
+Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.2-rtems4.11-20110131.diff
 %endif
 %{?_without_sources:NoSource:	1}
 
