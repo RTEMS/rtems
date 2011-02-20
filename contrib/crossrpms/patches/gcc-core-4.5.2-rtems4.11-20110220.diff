@@ -210,7 +210,7 @@ diff -Naur gcc-4.5.2.orig/gcc/config/mips/elf.h gcc-4.5.2/gcc/config/mips/elf.h
  #define HANDLE_PRAGMA_PACK_PUSH_POP 1
 diff -Naur gcc-4.5.2.orig/gcc/config/rs6000/rtems.h gcc-4.5.2/gcc/config/rs6000/rtems.h
 --- gcc-4.5.2.orig/gcc/config/rs6000/rtems.h	2007-08-02 12:49:31.000000000 +0200
-+++ gcc-4.5.2/gcc/config/rs6000/rtems.h	2011-02-20 05:41:20.084222612 +0100
++++ gcc-4.5.2/gcc/config/rs6000/rtems.h	2011-02-20 06:23:18.293201647 +0100
 @@ -49,8 +49,23 @@
  %{mcpu=604:  %{!Dppc*: %{!Dmpc*: -Dmpc604}  } } \
  %{mcpu=750:  %{!Dppc*: %{!Dmpc*: -Dmpc750}  } } \
@@ -231,7 +231,7 @@ diff -Naur gcc-4.5.2.orig/gcc/config/rs6000/rtems.h gcc-4.5.2/gcc/config/rs6000/
 +        if (!rs6000_explicit_options.float_gprs)	\
 +          rs6000_float_gprs = 1; 			\
 +      }							\
-+  while (0)
++  } while(0)
 +
 +#undef WCHAR_TYPE
 +
