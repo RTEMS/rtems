@@ -1,3 +1,8 @@
+2010-02-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/bsp.h, lpc32xx/misc/restart.c: Renamed lpc32xx_restart() in
+	bsp_restart().
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* irq/irq.c, misc/restart.c, rtc/rtc-config.c:

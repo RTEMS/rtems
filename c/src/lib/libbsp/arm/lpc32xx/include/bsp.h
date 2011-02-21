@@ -110,7 +110,7 @@ static inline void lpc32xx_micro_seconds_delay(unsigned us)
   } while (elapsed < delay);
 }
 
-void lpc32xx_restart(void *addr);
+void bsp_restart(void *addr);
 
 #define BSP_CONSOLE_UART_BASE LPC32XX_BASE_UART_5
 
