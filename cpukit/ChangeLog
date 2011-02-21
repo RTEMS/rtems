@@ -1,5 +1,10 @@
 2011-02-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* sapi/include/confdefs.h,
+	score/include/rtems/score/schedulerpriority.h: C++ compatibility.
+
+2011-02-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libnetworking/lib/ftpfs.c: Workaround for some firewalls.
 
 2011-02-18	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -38,17 +38,17 @@ extern "C" {
  */
 #define SCHEDULER_PRIORITY_ENTRY_POINTS \
   { \
-    .initialize    = _Scheduler_priority_Initialize, \
-    .schedule      = _Scheduler_priority_Schedule, \
-    .yield         = _Scheduler_priority_Yield, \
-    .block         = _Scheduler_priority_Block, \
-    .unblock       = _Scheduler_priority_Unblock, \
-    .allocate      = _Scheduler_priority_Allocate, \
-    .free          = _Scheduler_priority_Free, \
-    .update        = _Scheduler_priority_Update, \
-    .enqueue       = _Scheduler_priority_Enqueue, \
-    .enqueue_first = _Scheduler_priority_Enqueue_first, \
-    .extract       = _Scheduler_priority_Extract \
+    _Scheduler_priority_Initialize, \
+    _Scheduler_priority_Schedule, \
+    _Scheduler_priority_Yield, \
+    _Scheduler_priority_Block, \
+    _Scheduler_priority_Unblock, \
+    _Scheduler_priority_Allocate, \
+    _Scheduler_priority_Free, \
+    _Scheduler_priority_Update, \
+    _Scheduler_priority_Enqueue, \
+    _Scheduler_priority_Enqueue_first, \
+    _Scheduler_priority_Extract \
   }
 
 /**
