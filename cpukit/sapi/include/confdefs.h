@@ -603,8 +603,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #ifdef CONFIGURE_INIT
   Scheduler_Control  _Scheduler = {
-    NULL,
-    SCHEDULER_ENTRY_POINTS
+    NULL,                   /* Scheduler Specific Data Pointer */
+    SCHEDULER_ENTRY_POINTS  /* Scheduler Operations */
   };
 #endif
 

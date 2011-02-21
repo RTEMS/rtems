@@ -34,21 +34,21 @@ extern "C" {
 /**@{*/
 
 /**
- *  Entry points for Scheduler Priority
+ *  Entry points for the Deterministic Priority Based Scheduler.
  */
 #define SCHEDULER_PRIORITY_ENTRY_POINTS \
   { \
-    _Scheduler_priority_Initialize, \
-    _Scheduler_priority_Schedule, \
-    _Scheduler_priority_Yield, \
-    _Scheduler_priority_Block, \
-    _Scheduler_priority_Unblock, \
-    _Scheduler_priority_Allocate, \
-    _Scheduler_priority_Free, \
-    _Scheduler_priority_Update, \
-    _Scheduler_priority_Enqueue, \
-    _Scheduler_priority_Enqueue_first, \
-    _Scheduler_priority_Extract \
+    _Scheduler_priority_Initialize, /* initialize entry point */ \
+    _Scheduler_priority_Schedule,   /* schedule entry point */ \
+    _Scheduler_priority_Yield,      /* yield entry point */ \
+    _Scheduler_priority_Block,      /* block entry point */ \
+    _Scheduler_priority_Unblock,    /* unblock entry point */ \
+    _Scheduler_priority_Allocate,   /* allocate entry point */ \
+    _Scheduler_priority_Free,       /* free entry point */ \
+    _Scheduler_priority_Update,     /* update entry point */ \
+    _Scheduler_priority_Enqueue,    /* enqueue entry point */ \
+    _Scheduler_priority_Enqueue,    /* enqueue_first entry point */ \
+    _Scheduler_priority_Extract     /* extract entry point */ \
   }
 
 /**

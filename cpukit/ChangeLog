@@ -1,3 +1,8 @@
+2011-02-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h,
+	score/include/rtems/score/schedulerpriority.h: Add comments.
+
 2011-02-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sapi/include/confdefs.h,
