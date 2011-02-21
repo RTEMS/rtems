@@ -1,3 +1,7 @@
+2011-02-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* timer/timer.c: Include <bsp.h> before <rtems/btimer.h>.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h, include/mrm332.h, spurious/spinit.c:

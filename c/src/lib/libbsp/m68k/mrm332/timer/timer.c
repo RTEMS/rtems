@@ -9,8 +9,8 @@
  *  $Id$
  */
 
-#include <rtems/btimer.h>
 #include <bsp.h>
+#include <rtems/btimer.h>
 
 bool benchmark_timer_find_average_overhead;
 
