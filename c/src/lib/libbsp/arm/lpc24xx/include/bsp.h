@@ -89,6 +89,8 @@ void *bsp_idle_thread(uintptr_t ignored);
 
 #define BSP_CONSOLE_UART_BASE 0xe000c000
 
+void bsp_restart(void *addr);
+
 /** @} */
 
 #endif /* ASM */

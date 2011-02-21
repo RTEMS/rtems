@@ -124,6 +124,7 @@ libbsp_a_SOURCES += misc/system-clocks.c \
 	misc/bspidle.c \
 	misc/io.c \
 	misc/lcd.c \
+	misc/restart.c \
 	misc/timer.c
 
 # SSP

@@ -1,3 +1,9 @@
+2011-02-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* misc/restart.c: New file.
+	* Makefile.am: Reflect change from above.
+	* include/bsp.h: Declare bsp_restart().
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspstarthooks.c:
