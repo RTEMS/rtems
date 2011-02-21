@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2009, 2010
+ * Copyright (c) 2009, 2010, 2011
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -347,40 +347,37 @@ static rtems_ftpfs_reply rtems_ftpfs_send_command_with_parser(
   bool verbose
 )
 {
-  const char *const eol = "\r\n";
-  int rv = 0;
+  rtems_ftpfs_reply reply = RTEMS_FTPFS_REPLY_ERROR;
+  size_t cmd_len = strlen(cmd);
+  size_t arg_len = arg != NULL ? strlen(arg) : 0;
+  size_t len = cmd_len + arg_len + 2;
+  char *buf = malloc(len);
 
-  /* Send command */
-  rv = send(socket, cmd, strlen(cmd), 0);
-  if (rv < 0) {
-    return RTEMS_FTPFS_REPLY_ERROR;
-  }
-  if (verbose) {
-    write(STDERR_FILENO, cmd, strlen(cmd));
-  }
+  if (buf != NULL) {
+    ssize_t n = 0;
+    char *buf_arg = buf + cmd_len;
+    char *buf_eol = buf_arg + arg_len;
 
-  /* Send command argument if necessary */
-  if (arg != NULL) {
-    rv = send(socket, arg, strlen(arg), 0);
-    if (rv < 0) {
-      return RTEMS_FTPFS_REPLY_ERROR;
+    memcpy(buf, cmd, cmd_len);
+    memcpy(buf_arg, arg, arg_len);
+    buf_eol [0] = '\r';
+    buf_eol [1] = '\n';
+
+    /* Send */
+    n = send(socket, buf, len, 0);
+    if (n == (ssize_t) len) {
+      if (verbose) {
+        write(STDERR_FILENO, buf, len);
+      }
+
+      /* Reply */
+      reply = rtems_ftpfs_get_reply(socket, parser, parser_arg, verbose);
     }
-    if (verbose) {
-      write(STDERR_FILENO, arg, strlen(arg));
-    }
+
+    free(buf);
   }
 
-  /* Send end of line */
-  rv = send(socket, eol, 2, 0);
-  if (rv < 0) {
-    return RTEMS_FTPFS_REPLY_ERROR;
-  }
-  if (verbose) {
-    write(STDERR_FILENO, &eol [1], 1);
-  }
-
-  /* Return reply */
-  return rtems_ftpfs_get_reply(socket, parser, parser_arg, verbose);
+  return reply;
 }
 
 static rtems_ftpfs_reply rtems_ftpfs_send_command(
