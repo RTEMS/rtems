@@ -1,3 +1,7 @@
+2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove AM_CONDITIONAL(HAS_POSIX) (Unused).
+
 2011-02-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ada-tests/mptests/mp01/mp01.adb, ada-tests/mptests/mp01/mptest.adb,
