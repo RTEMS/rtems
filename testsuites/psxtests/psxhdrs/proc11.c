@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/types.h>
 #include <unistd.h>
 #include <limits.h>   /* for LOGIN_NAME_MAX */

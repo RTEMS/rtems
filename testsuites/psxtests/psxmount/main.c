@@ -6,6 +6,10 @@
 
 #define CONFIGURE_INIT
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <bsp.h>
 #include <pmacros.h>
 

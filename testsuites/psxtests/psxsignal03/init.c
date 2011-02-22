@@ -9,6 +9,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #if defined(USE_USER_SIGNALS_PROCESS)
   #define TEST_NAME                "03"
   #define TEST_STRING              "User Signals to Process"

@@ -9,6 +9,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define TEST_NAME                "05"
 #define TEST_STRING              "User Signals"
 #define SIGNAL_ONE               SIGUSR1

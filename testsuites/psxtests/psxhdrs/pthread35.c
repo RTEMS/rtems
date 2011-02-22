@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <pthread.h>
 
 #if !HAVE_DECL_PTHREAD_ATTR_SETCPUTIME

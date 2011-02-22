@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <signal.h>
 
 useconds_t _EXFUN(ualarm, (useconds_t __useconds, useconds_t __interval));

@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #if HAVE_DECL_PTHREAD_ATTR_GETGUARDSIZE
 #include <pthread.h>
 

@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <pthread.h>
 
 #ifndef _POSIX_THREAD_PRIORITY_SCHEDULING
