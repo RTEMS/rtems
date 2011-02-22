@@ -8,6 +8,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /* put here hoping it won't get inlined */
 void dummy_function_empty_body_to_force_call(void) {}
 

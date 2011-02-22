@@ -14,6 +14,10 @@
 
 #define CONFIGURE_INIT
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems.h>
 #include <inttypes.h>
 #include <stdio.h>

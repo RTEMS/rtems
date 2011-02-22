@@ -2,6 +2,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <bsp.h>
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER

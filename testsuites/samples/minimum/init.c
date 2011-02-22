@@ -12,6 +12,10 @@
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <bsp.h>
 #include <rtems/score/thread.h>
 
