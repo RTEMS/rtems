@@ -1,5 +1,10 @@
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* support/src/tmtests_support.c: 
+	loop_overhead and end_time are uint32_t's.
+
+2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* support/src/spin.c, support/src/test_support.c,
 	support/src/tmtests_empty_function.c, support/src/tmtests_support.c:
 	Add HAVE_CONFIG_H.

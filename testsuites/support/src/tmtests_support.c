@@ -34,8 +34,8 @@ void rtems_time_test_measure_operation(
 )
 {
   int  i;
-  long loop_overhead;
-  int  end_time;
+  uint32_t loop_overhead;
+  uint32_t end_time;
 
   benchmark_timer_initialize();
     for (i=0 ; i<iterations ; i++ ) {
