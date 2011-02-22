@@ -1,3 +1,7 @@
+2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add AC_CONFIG_HEADER(config.h).
+
 2010-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* POSIX/calloc.c, POSIX/clock_gettime.c, POSIX/close.c, POSIX/dup2.c,

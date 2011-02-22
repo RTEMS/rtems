@@ -1,5 +1,9 @@
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add AC_CONFIG_HEADER(config.h).
+
+2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* base_mp/apptask.c, base_mp/init.c, base_sp/apptask.c, base_sp/init.c,
 	capture/init.c, capture/test1.c, cdtest/init.c, fileio/init.c,
 	hello/init.c, loopback/init.c, minimum/init.c, nsecs/empty.c,

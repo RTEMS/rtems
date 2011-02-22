@@ -5,6 +5,7 @@
 AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([cpuuse])
+AC_CONFIG_HEADER([config.h])
 RTEMS_TOP([../..],[..])
 
 RTEMS_CANONICAL_TARGET_CPU

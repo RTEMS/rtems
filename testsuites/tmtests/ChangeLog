@@ -1,5 +1,9 @@
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add AC_CONFIG_HEADER(config.h).
+
+2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* tm01/task1.c, tm02/task1.c, tm03/task1.c, tm04/task1.c, tm05/task1.c,
 	tm06/task1.c, tm07/task1.c, tm08/task1.c, tm09/task1.c, tm10/task1.c,
 	tm11/task1.c, tm12/task1.c, tm13/task1.c, tm14/task1.c, tm15/task1.c,
