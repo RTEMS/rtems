@@ -23,6 +23,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "system.h"
 
 rtems_task Test_task(

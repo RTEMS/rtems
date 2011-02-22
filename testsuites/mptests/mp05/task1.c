@@ -21,6 +21,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "system.h"
 
 #define SIGNALS_PER_DOT 15

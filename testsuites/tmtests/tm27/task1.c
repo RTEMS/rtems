@@ -15,6 +15,10 @@
  *  THIS TEST USES INTERNAL RTEMS VARIABLES!!!
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define CONFIGURE_INIT
 #include "system.h"
 
