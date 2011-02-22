@@ -38,7 +38,10 @@ char *rtems_media_create_path(
   char *const s = malloc(size);
 
   if (s != NULL) {
-    int rv = snprintf(s, size, "%s/%s-%" PRIu32, prefix, name, major);
+#ifndef NDEBUG
+    int rv = 
+#endif
+    snprintf(s, size, "%s/%s-%" PRIu32, prefix, name, major);
     assert(rv < (int) size);
   }
 
@@ -72,7 +75,10 @@ char *rtems_media_append_minor(
   char *const s = malloc(size);
 
   if (s != NULL) {
-    int rv = snprintf(s, size, "%s-%" PRIu32, path, minor);
+#ifndef NDEBUG
+    int rv = 
+#endif
+    snprintf(s, size, "%s-%" PRIu32, path, minor);
     assert(rv < (int) size);
   }
 
