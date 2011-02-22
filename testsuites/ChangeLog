@@ -1,3 +1,9 @@
+2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* support/src/spin.c, support/src/test_support.c,
+	support/src/tmtests_empty_function.c, support/src/tmtests_support.c:
+	Add HAVE_CONFIG_H.
+
 2011-02-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* support/include/tmacros.h: Remove PRIxblksize_t, PRIxblkcnt_t.
