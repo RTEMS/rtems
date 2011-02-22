@@ -1,3 +1,8 @@
+2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxtmmutex02/init.c, psxtmthread01/init.c, psxtmthread03/init.c:
+	Add HAVE_CONFIG_H.
+
 2011-02-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxtmmutex02/init.c, psxtmthread03/init.c: end_time is a uint32_t.
