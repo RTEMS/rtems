@@ -9,6 +9,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <fcntl.h>
 #include <tmacros.h>
 #include "test_support.h"

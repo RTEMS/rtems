@@ -9,6 +9,12 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <rtems/btimer.h>
+
 #include <bsp.h>
 #include <rtems/timerdrv.h>
 #include "test_support.h"

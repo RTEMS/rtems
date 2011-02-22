@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems.h>
 
 rtems_status_code benchmark_timer_empty_function( void );
