@@ -22,6 +22,8 @@
 #ifndef _RTEMS_RTEMS_STATUS_INL
 #define _RTEMS_RTEMS_STATUS_INL
 
+#include <rtems/score/basedefs.h>
+
 /**
  *  @addtogroup ClassicStatus
  *  @{

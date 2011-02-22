@@ -1,5 +1,9 @@
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/inline/rtems/rtems/status.inl: Add missing include.
+
+2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libblock/src/media-path.c: Remove warnings.
 
 2011-02-21	Joel Sherrill <joel.sherrill@oarcorp.com>
