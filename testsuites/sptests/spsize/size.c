@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/score/apiext.h>

@@ -9,6 +9,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "tmacros.h"
 
 uint32_t Area1[50] CPU_STRUCTURE_ALIGNMENT;

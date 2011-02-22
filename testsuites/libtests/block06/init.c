@@ -14,6 +14,10 @@
  * Please add more tests
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <errno.h>
 #include <setjmp.h>
 #include <stdio.h>

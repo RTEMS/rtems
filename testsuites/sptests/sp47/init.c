@@ -4,6 +4,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <tmacros.h>
 
 #define PRIXModes_Control 	PRIX32

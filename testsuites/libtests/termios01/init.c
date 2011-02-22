@@ -9,6 +9,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "tmacros.h"
 #include <termios.h>
 #include <rtems/termiostypes.h>

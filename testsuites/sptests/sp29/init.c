@@ -8,6 +8,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <bsp.h>
 
 rtems_task Init (rtems_task_argument argument);

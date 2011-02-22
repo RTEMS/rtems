@@ -15,6 +15,10 @@
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <tmacros.h>
 
 static rtems_device_driver test_open(

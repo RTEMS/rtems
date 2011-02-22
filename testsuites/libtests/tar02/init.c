@@ -9,6 +9,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <bsp.h> /* for device driver prototypes */
 #include "tmacros.h"
 #include <rtems/imfs.h>

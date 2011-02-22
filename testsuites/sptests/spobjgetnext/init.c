@@ -11,6 +11,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define CONFIGURE_INIT
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
 #include "system.h"

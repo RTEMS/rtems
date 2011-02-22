@@ -23,6 +23,10 @@
  * $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <bdbuf_tests.h>
 
 static rtems_task bdbuf_test4_1_thread1(rtems_task_argument arg);

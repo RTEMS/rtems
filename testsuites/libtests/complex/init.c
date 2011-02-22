@@ -20,6 +20,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #if __rtems__
 #include <bsp.h> /* for device driver prototypes */
 #endif

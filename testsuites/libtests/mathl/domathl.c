@@ -10,6 +10,10 @@
  * Try to compile and link against POSIX math routines.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <math.h>
 #include <stdio.h>
 

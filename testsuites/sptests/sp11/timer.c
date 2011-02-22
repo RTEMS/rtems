@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "system.h"
 
 rtems_timer_service_routine TA1_send_18_to_self_5_seconds(

@@ -23,6 +23,10 @@
    #define FIRE_WHEN_STRING "rtems_timer_fire_when"
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <tmacros.h>
 
 #define INITIAL_SECOND 10
