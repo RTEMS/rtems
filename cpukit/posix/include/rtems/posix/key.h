@@ -20,6 +20,8 @@
 #ifndef _RTEMS_POSIX_KEY_H
 #define _RTEMS_POSIX_KEY_H
 
+#include <rtems/score/object.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
