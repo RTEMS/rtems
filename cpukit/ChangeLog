@@ -1,5 +1,6 @@
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* ftpd/ftpd.h: Add missing includes.
 	* libmisc/devnull/devnull.h, libmisc/stackchk/stackchk.h:
 	Fix header guard. Add missing includes.
 	* score/include/rtems/debug.h, score/include/rtems/score/sysstate.h,

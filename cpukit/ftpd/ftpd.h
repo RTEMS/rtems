@@ -7,6 +7,8 @@
 #ifndef _RTEMS_FTPD_H
 #define _RTEMS_FTPD_H
 
+#include <rtems/rtems/tasks.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
