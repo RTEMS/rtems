@@ -19,12 +19,13 @@
 #ifndef _RTEMS_SCORE_TOD_H
 #define _RTEMS_SCORE_TOD_H
 
+#include <time.h>
+#include <rtems/score/timestamp.h>
+#include <rtems/score/basedefs.h> /* SCORE_EXTERN */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/timestamp.h>
-#include <time.h>
 
 /** @defgroup ScoreTODConstants TOD Constants
  *  The following constants are related to the time of day and are
