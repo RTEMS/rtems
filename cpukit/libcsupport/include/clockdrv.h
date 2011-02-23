@@ -19,6 +19,8 @@
 #ifndef _RTEMS_CLOCKDRV_H
 #define _RTEMS_CLOCKDRV_H
 
+#include <rtems/io.h> /* rtems_device_driver */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

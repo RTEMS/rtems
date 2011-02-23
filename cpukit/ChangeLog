@@ -1,5 +1,11 @@
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/clockdrv.h, libcsupport/include/console.h,
+	libcsupport/include/spurious.h, libcsupport/include/rtems/error.h,
+	libcsupport/include/rtems/libcsupport.h: Add missing includes.
+
+2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/vm/vm_kern.h: Comment out unused vars.
 
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>

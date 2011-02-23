@@ -11,6 +11,7 @@
 #ifndef _RTEMS_RTEMS_ERROR_H
 #define _RTEMS_RTEMS_ERROR_H
 
+#include <rtems/rtems/status.h>
 #include <rtems/score/interr.h>
 
 #ifdef __cplusplus
@@ -37,7 +38,7 @@ typedef Internal_errors_t rtems_error_code_t;
 #define RTEMS_ERROR_MASK \
   (RTEMS_ERROR_ERRNO | RTEMS_ERROR_ABORT | RTEMS_ERROR_PANIC) /* all */
 
-const char *rtems_status_text(rtems_status_code);
+const char *rtems_status_text(rtems_status_code sc);
 int   rtems_error(
   rtems_error_code_t error_code,
   const char *printf_format,

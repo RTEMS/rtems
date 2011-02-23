@@ -19,6 +19,9 @@
 #ifndef _RTEMS_SPURIOUS_H
 #define _RTEMS_SPURIOUS_H
 
+#include <rtems/rtems/types.h> /* rtems_id */
+#include <rtems/io.h> /* rtems_device_driver */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

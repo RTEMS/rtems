@@ -23,6 +23,9 @@
 #include <sys/types.h>
 #include <stdint.h>
 
+#include <rtems/score/heap.h>
+#include <rtems/rtems/tasks.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

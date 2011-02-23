@@ -20,6 +20,8 @@
 #ifndef _RTEMS_CONSOLE_H
 #define _RTEMS_CONSOLE_H
 
+#include <rtems/io.h> /* rtems_device_driver */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
