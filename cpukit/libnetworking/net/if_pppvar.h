@@ -42,6 +42,13 @@
  * $FreeBSD: src/sys/net/if_pppvar.h,v 1.26 2006/12/05 18:54:21 ume Exp $
  */
 
+#ifndef _NET_IF_PPPVAR_H_
+#define _NET_IF_PPPVAR_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * $Id$
  */
@@ -142,3 +149,10 @@ void    pppallocmbuf(struct ppp_softc *sc, struct mbuf **mp);
 #define SC_TX_ESCAPE    0x0004
 #define SC_TX_LASTCHAR	0x0008
 #define SC_TX_PENDING   0x0010
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _NET_IF_PPPVAR_H_ */
+

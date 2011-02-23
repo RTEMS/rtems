@@ -1,5 +1,7 @@
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if_pppvar.h: Add "extern C++" guards.
+	Add header guard.
 	* libnetworking/sys/signalvar.h: Comment out unused code.
 
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
