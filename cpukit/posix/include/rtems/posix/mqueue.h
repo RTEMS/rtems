@@ -19,14 +19,14 @@
 #ifndef _RTEMS_POSIX_MQUEUE_H
 #define _RTEMS_POSIX_MQUEUE_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <signal.h>
 
 #include <rtems/score/coremsg.h>
 #include <rtems/score/object.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  *  Data Structure used to manage a POSIX message queue
