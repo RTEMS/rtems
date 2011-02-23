@@ -1,3 +1,7 @@
+2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/dosfs/msdos_misc.c: Don't include <strings.h>.
+
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/inline/rtems/rtems/status.inl: Add missing include.

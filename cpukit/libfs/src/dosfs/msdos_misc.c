@@ -22,9 +22,6 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <string.h>
-#ifdef HAVE_STRINGS_H
-#include <strings.h>
-#endif
 #include <assert.h>
 #include <rtems/libio_.h>
 
