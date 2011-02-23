@@ -67,6 +67,7 @@
 #ifndef _VM_VM_KERN_H_
 #define _VM_VM_KERN_H_ 1
 
+#if !defined(__rtems__)
 /* Kernel memory management definitions. */
 extern vm_map_t buffer_map;
 extern vm_map_t kernel_map;
@@ -75,5 +76,6 @@ extern vm_map_t clean_map;
 extern vm_map_t exec_map;
 extern vm_map_t pipe_map;
 extern u_int vm_kmem_size;
+#endif
 
 #endif				/* _VM_VM_KERN_H_ */
