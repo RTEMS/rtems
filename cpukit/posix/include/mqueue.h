@@ -16,9 +16,6 @@
 #ifndef _MQUEUE_H
 #define _MQUEUE_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include <unistd.h>
 
@@ -28,6 +25,10 @@ extern "C" {
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  *  15.1.1 Data Structures, P1003.1b-1993, p. 271
@@ -161,11 +162,11 @@ int mq_getattr(
   struct mq_attr *mqstat
 );
 
-#endif /* _POSIX_MESSAGE_PASSING */
-
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* _POSIX_MESSAGE_PASSING */
 
 #endif
 /* end of include file */
