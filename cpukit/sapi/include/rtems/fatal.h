@@ -25,6 +25,8 @@
 #ifndef _RTEMS_FATAL_H
 #define _RTEMS_FATAL_H
 
+#include <rtems/score/basedefs.h> /* RTEMS_COMPILER_NO_RETURN_ATTRIBUTE */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

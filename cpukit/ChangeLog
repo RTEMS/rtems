@@ -1,5 +1,6 @@
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sapi/include/rtems/fatal.h: Add missing includes.
 	* score/include/rtems/score/tod.h: Add missing includes.
 	* ftpd/ftpd.h: Add missing includes.
 	* libmisc/devnull/devnull.h, libmisc/stackchk/stackchk.h:
