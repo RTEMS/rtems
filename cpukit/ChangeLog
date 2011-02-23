@@ -1,5 +1,6 @@
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/machine/in_cksum.h: Add missing includes.
 	* libcsupport/include/clockdrv.h, libcsupport/include/console.h,
 	libcsupport/include/spurious.h, libcsupport/include/rtems/error.h,
 	libcsupport/include/rtems/libcsupport.h: Add missing includes.

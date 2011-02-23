@@ -40,6 +40,7 @@
 #define	_MACHINE_IN_CKSUM_H_	1
 
 #include <rtems/bsd/sys/cdefs.h>
+#include <netinet/ip.h> /* struct ip */
 
 /*
  * It it useful to have an Internet checksum routine which is inlineable
