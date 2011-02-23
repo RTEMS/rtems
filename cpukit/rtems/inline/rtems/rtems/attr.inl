@@ -23,6 +23,8 @@
 #ifndef _RTEMS_RTEMS_ATTR_INL
 #define _RTEMS_RTEMS_ATTR_INL
 
+#include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
+
 /**
  *  @addtogroup ClassicAttributes
  *  @{

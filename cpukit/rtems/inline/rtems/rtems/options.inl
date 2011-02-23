@@ -22,6 +22,8 @@
 #ifndef _RTEMS_RTEMS_OPTIONS_INL
 #define _RTEMS_RTEMS_OPTIONS_INL
 
+#include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
+
 /**
  *  @addtogroup ClassicOptions
  *  @{

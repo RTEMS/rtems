@@ -21,6 +21,9 @@
 #ifndef _RTEMS_RTEMS_EVENTSET_INL
 #define _RTEMS_RTEMS_EVENTSET_INL
 
+#include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
+#include <rtems/score/isr.h> /* ISR_Level */
+
 /**
  *  @addtogroup ClassicEventSet
  *  @{

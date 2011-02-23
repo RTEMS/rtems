@@ -1,5 +1,8 @@
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/inline/rtems/rtems/attr.inl,
+	rtems/inline/rtems/rtems/eventset.inl,
+	rtems/inline/rtems/rtems/options.inl: Add missing includes.
 	* libfs/src/dosfs/msdos_misc.c: Don't include <strings.h>.
 
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
