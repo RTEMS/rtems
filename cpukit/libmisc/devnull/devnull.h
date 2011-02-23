@@ -14,8 +14,10 @@
  *  $Id$
  */
 
-#ifndef __NULL_DRIVER_h
-#define __NULL_DRIVER_h
+#ifndef _RTEMS_DEVNULL_H
+#define _RTEMS_DEVNULL_H
+
+#include <rtems/io.h> /* rtems_device_driver */
 
 #ifdef __cplusplus
 extern "C" {

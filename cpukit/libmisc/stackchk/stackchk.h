@@ -15,9 +15,12 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_STACK_CHECKER_h
-#define __RTEMS_STACK_CHECKER_h
+#ifndef _RTEMS_STACKCHK_H
+#define _RTEMS_STACKCHK_H
 
+#include <stdbool.h> /* bool */
+
+#include <rtems/score/percpu.h> /* Thread_Control */
 #include <rtems/bspIo.h>
 
 #ifdef __cplusplus
