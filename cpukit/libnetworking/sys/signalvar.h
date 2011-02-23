@@ -42,6 +42,7 @@
  * not exported to user programs.
  */
 
+#if !defined(__rtems__)
 /*
  * Process signal actions and state, needed only within the process
  * (not necessarily resident).
@@ -60,6 +61,7 @@ struct	sigacts {
 	u_long	ps_code;		/* for core dump/debugger XXX */
 	sigset_t ps_usertramp;		/* SunOS compat; libc sigtramp XXX */
 };
+#endif
 
 /* signal flags */
 #define	SAS_OLDMASK	0x01		/* need to restore mask before pause */
@@ -69,10 +71,12 @@ struct	sigacts {
 #define	SIG_CATCH	((__sighandler_t *)2)
 #define	SIG_HOLD	((__sighandler_t *)3)
 
+#if !defined(__rtems__)
 /*
  * get signal action for process and signal; currently only for current process
  */
 #define SIGACTION(p, sig)	(p->p_sigacts->ps_sigact[(sig)])
+#endif
 
 /*
  * Determine signal that should be delivered to process p, the current

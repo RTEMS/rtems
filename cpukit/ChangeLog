@@ -1,5 +1,9 @@
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/signalvar.h: Comment out unused code.
+
+2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/include/rtems/posix/mqueue.h: Relocate "extern C++" guards.
 	* posix/include/rtems/posix/key.h: Add missing includes.
 	* libnetworking/machine/in_cksum.h: Add missing includes.
