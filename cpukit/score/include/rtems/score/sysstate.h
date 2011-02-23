@@ -20,6 +20,8 @@
 #ifndef _RTEMS_SCORE_SYSSTATE_H
 #define _RTEMS_SCORE_SYSSTATE_H
 
+#include <rtems/score/basedefs.h> /* SCORE_EXTERN */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -23,6 +23,9 @@
 #ifndef _RTEMS_SCORE_STACK_INL
 #define _RTEMS_SCORE_STACK_INL
 
+#include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
+#include <rtems/score/cpu.h> /* CPU_STACK_ALIGNMENT */
+
 /**
  *  @addtogroup ScoreStack 
  *  @{

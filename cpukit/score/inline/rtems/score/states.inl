@@ -23,6 +23,8 @@
 #ifndef _RTEMS_SCORE_STATES_INL
 #define _RTEMS_SCORE_STATES_INL
 
+#include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
+
 /**
  *  @addtogroup ScoreStates 
  *  @{

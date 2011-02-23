@@ -26,6 +26,7 @@
  */
 /**@{*/
 
+#include <stdbool.h> /* bool */
 #include <stdint.h> /* uint32_t */
 #include <time.h> /* struct timespec */
 

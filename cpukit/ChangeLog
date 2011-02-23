@@ -1,5 +1,10 @@
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/include/rtems/debug.h, score/include/rtems/score/sysstate.h,
+	score/include/rtems/score/timespec.h, 
+	score/inline/rtems/score/address.inl, 
+	score/inline/rtems/score/stack.inl,
+	score/inline/rtems/score/states.inl: Add missing includes.
 	* rtems/inline/rtems/rtems/attr.inl,
 	rtems/inline/rtems/rtems/eventset.inl,
 	rtems/inline/rtems/rtems/options.inl: Add missing includes.

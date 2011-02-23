@@ -23,6 +23,8 @@
 #ifndef _RTEMS_SCORE_ADDRESS_INL
 #define _RTEMS_SCORE_ADDRESS_INL
 
+#include <rtems/score/basedefs.h>
+
 /**
  *  @addtogroup ScoreAddress 
  *  @{

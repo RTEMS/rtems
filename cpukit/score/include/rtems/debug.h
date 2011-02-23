@@ -20,6 +20,8 @@
 #ifndef _RTEMS_DEBUG_H
 #define _RTEMS_DEBUG_H
 
+#include <rtems/score/basedefs.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
