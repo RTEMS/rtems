@@ -20,7 +20,7 @@
 #define _RTEMS_POSIX_MQUEUE_H
 
 #include <signal.h>
-
+#include <mqueue.h> /* struct mq_attr */
 #include <rtems/score/coremsg.h>
 #include <rtems/score/object.h>
 

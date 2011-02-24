@@ -18,6 +18,7 @@
 
 #include <rtems/posix/config.h>
 #include <rtems/score/object.h>
+#include <rtems/score/watchdog.h> /* Watchdog_Control */
 
 #ifdef __cplusplus
 extern "C" {
