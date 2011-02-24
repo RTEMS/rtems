@@ -15,8 +15,11 @@
 #ifndef _SYS_STATVFS_H_
 #define _SYS_STATVFS_H_
 
-#include <sys/cdefs.h>
 #include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef uint64_t fsblkcnt_t;
 typedef uint32_t fsfilcnt_t;
@@ -39,7 +42,11 @@ struct statvfs
   unsigned long f_namemax; /**< Maximum filename length. */
 };
 
-int statvfs(const char *, struct statvfs *);
-int fstatvfs(int, struct statvfs *);
+extern int statvfs(const char *, struct statvfs *);
+extern int fstatvfs(int, struct statvfs *);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,5 +1,10 @@
 2011-02-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/sys/statvfs.h: Remove include <sys/cdefs.h>
+	(unused). Add C++ guards. Declare functions extern.
+
+2011-02-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/include/rtems/posix/mqueue.h,
 	posix/include/rtems/posix/timer.h: Add missing includes.
 
