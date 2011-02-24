@@ -185,12 +185,6 @@ struct rmxp_tao {
 	tcp_cc	tao_cc;			/* latest CC in valid SYN */
 	tcp_cc	tao_ccsent;		/* latest CC sent to peer */
 	u_short	tao_mssopt;		/* peer's cached MSS */
-#ifdef notyet
-	u_short	tao_flags;		/* cache status flags */
-#define	TAOF_DONT	0x0001		/* peer doesn't understand rfc1644 */
-#define	TAOF_OK		0x0002		/* peer does understand rfc1644 */
-#define	TAOF_UNDEF	0		/* we don't know yet */
-#endif /* notyet */
 };
 #define rmx_taop(r)	((struct rmxp_tao *)(r).rmx_filler)
 

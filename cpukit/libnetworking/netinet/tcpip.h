@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcpip.h	8.1 (Berkeley) 6/10/93
+ * $FreeBSD: src/sys/netinet/tcpip.h,v 1.12.22.1.4.1 2010/06/14 02:09:06 kensmith Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -41,19 +41,9 @@
  * Tcp+ip header, after ip options removed.
  */
 struct tcpiphdr {
-	struct 	ipovly ti_i;		/* overlaid ip structure */
+	struct	ipovly ti_i;		/* overlaid ip structure */
 	struct	tcphdr ti_t;		/* tcp header */
 };
-#ifdef notyet
-/*
- * Tcp+ip header, after ip options removed but including TCP options.
- */
-struct full_tcpiphdr {
-	struct 	ipovly ti_i;		/* overlaid ip structure */
-	struct	tcphdr ti_t;		/* tcp header */
-	char	ti_o[TCP_MAXOLEN];	/* space for tcp options */
-};
-#endif /* notyet */
 #define	ti_next		ti_i.ih_next
 #define	ti_prev		ti_i.ih_prev
 #define	ti_x1		ti_i.ih_x1

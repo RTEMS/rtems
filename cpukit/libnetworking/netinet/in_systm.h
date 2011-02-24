@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,9 @@
  * SUCH DAMAGE.
  *
  *	@(#)in_systm.h	8.1 (Berkeley) 6/10/93
+ * $FreeBSD: src/sys/netinet/in_systm.h,v 1.13 2009/02/13 15:14:43 luigi Exp $
+ */
+/*
  * $Id$
  */
 
@@ -50,13 +49,13 @@
  * the bytes before transmission at each protocol level.  The n_ types
  * represent the types with the bytes in ``high-ender'' order.
  */
-typedef u_short n_short;		/* short as received from the net */
-typedef u_long	n_long;			/* long as received from the net */
+typedef u_int16_t n_short;		/* short as received from the net */
+typedef u_int32_t n_long;		/* long as received from the net */
 
-typedef	u_long	n_time;			/* ms since 00:00 GMT, byte rev */
+typedef	u_int32_t n_time;		/* ms since 00:00 GMT, byte rev */
 
 #ifdef _KERNEL
-n_time	 iptime(void);
+uint32_t	 iptime(void);
 #endif
 
 #endif

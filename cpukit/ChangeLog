@@ -1,3 +1,11 @@
+2011-02-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/in_systm.h, 
+	libnetworking/netinet/tcp_debug.c,
+	libnetworking/netinet/tcp_debug.h, libnetworking/netinet/tcp_seq.h,
+	libnetworking/netinet/tcp_var.h, libnetworking/netinet/tcpip.h:
+	Misc changes from FreeBSD.
+
 2011-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/if_pppvar.h: Add "extern C++" guards.

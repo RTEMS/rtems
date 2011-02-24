@@ -34,6 +34,8 @@
 #include "config.h"
 #endif
 
+#include <rtems/bsd/sys/cdefs.h>
+#include "opt_inet.h"
 #include "opt_tcpdebug.h"
 
 #ifdef TCPDEBUG
@@ -45,39 +47,39 @@
 #endif
 
 #include <sys/param.h>
-#include <rtems/bsd/sys/queue.h>
 #include <sys/systm.h>
 #include <sys/mbuf.h>
-#include <sys/socket.h>
-#include <sys/socketvar.h>
 #include <sys/protosw.h>
-#include <errno.h>
 
-#include <net/route.h>
-#include <net/if.h>
+#include <sys/socket.h>
 
 #include <netinet/in.h>
 #include <netinet/in_systm.h>
 #include <netinet/ip.h>
-#include <netinet/in_pcb.h>
 #include <netinet/ip_var.h>
 #include <netinet/tcp.h>
 #include <netinet/tcp_fsm.h>
-#include <netinet/tcp_seq.h>
 #include <netinet/tcp_timer.h>
 #include <netinet/tcp_var.h>
 #include <netinet/tcpip.h>
 #include <netinet/tcp_debug.h>
 
 #ifdef TCPDEBUG
-static int	tcpconsdebug = 0; /* set to 1 to enable prints */
+static int		tcpconsdebug = 0;
 #endif
 
-static struct tcp_debug tcp_debug[TCP_NDEBUG];
-static int	tcp_debx;
+/*
+ * Global ring buffer of TCP debugging state.  Each entry captures a snapshot
+ * of TCP connection state at any given moment.  tcp_debx addresses at the
+ * next available slot.  There is no explicit export of this data structure;
+ * it will be read via /dev/kmem by debugging tools.
+ */
+static struct tcp_debug	tcp_debug[TCP_NDEBUG];
+static int		tcp_debx;
 
 /*
- * Tcp debug routines
+ * Save TCP state at a given moment; optionally, both tcpcb and TCP packet
+ * header state will be saved.
  */
 void
 tcp_trace(short act, short ostate, struct tcpcb *tp, struct tcpiphdr *ti,
@@ -87,15 +89,16 @@ tcp_trace(short act, short ostate, struct tcpcb *tp, struct tcpiphdr *ti,
 	tcp_seq seq, ack;
 	int len, flags;
 #endif
-	struct tcp_debug *td = &tcp_debug[tcp_debx++];
+	struct tcp_debug *td;
 
+	td = &tcp_debug[tcp_debx++];
 	if (tcp_debx == TCP_NDEBUG)
 		tcp_debx = 0;
 	td->td_time = iptime();
 	td->td_act = act;
 	td->td_ostate = ostate;
 	td->td_tcb = (caddr_t)tp;
-	if (tp)
+	if (tp != NULL)
 		td->td_cb = *tp;
 	else
 		bzero((caddr_t)&td->td_cb, sizeof (*tp));
@@ -107,13 +110,12 @@ tcp_trace(short act, short ostate, struct tcpcb *tp, struct tcpiphdr *ti,
 #ifdef TCPDEBUG
 	if (tcpconsdebug == 0)
 		return;
-	if (tp)
+	if (tp != NULL)
 		printf("%p %s:", tp, tcpstates[ostate]);
 	else
 		printf("???????? ");
 	printf("%s ", tanames[act]);
 	switch (act) {
-
 	case TA_INPUT:
 	case TA_OUTPUT:
 	case TA_DROP:
@@ -154,11 +156,11 @@ tcp_trace(short act, short ostate, struct tcpcb *tp, struct tcpiphdr *ti,
 			printf("<%s>", tcptimers[req>>8]);
 		break;
 	}
-	if (tp)
+	if (tp != NULL)
 		printf(" -> %s", tcpstates[tp->t_state]);
 	/* print out internal state of tp !?! */
 	printf("\n");
-	if (tp == 0)
+	if (tp == NULL)
 		return;
 	printf("\trcv_(nxt,wnd,up) (%x,%x,%x) snd_(una,nxt,max) (%x,%x,%x)\n",
 	    tp->rcv_nxt, tp->rcv_wnd, tp->rcv_up, tp->snd_una, tp->snd_nxt,
