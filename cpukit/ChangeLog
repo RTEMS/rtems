@@ -1,5 +1,11 @@
 2011-02-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/ip_icmp.c, libnetworking/netinet/ip_icmp.h:
+	Misc. changes from FreeBSD.
+	* libnetworking/netinet/tcp_var.h: Include <netinet/tcp_timer.h>.
+
+2011-02-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/in_systm.h, 
 	libnetworking/netinet/tcp_debug.c,
 	libnetworking/netinet/tcp_debug.h, libnetworking/netinet/tcp_seq.h,

@@ -44,6 +44,8 @@
  */
 
 #ifdef __BSD_VISIBLE
+#include <netinet/tcp_timer.h> /* TCPT_NTIMERS */
+
 /*
  * Tcp control block, one per tcp; fields:
  */

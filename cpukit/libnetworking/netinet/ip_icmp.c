@@ -40,25 +40,28 @@
 
 #include <sys/param.h>
 #include <sys/systm.h>
-#include <sys/malloc.h>
 #include <sys/mbuf.h>
 #include <sys/protosw.h>
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <sys/kernel.h>
-#include <sys/socket.h>
 #include <sys/sysctl.h>
 
 #include <net/if.h>
+#include <net/if_types.h>
 #include <net/route.h>
 
 #define _IP_VHL
 #include <netinet/in.h>
+#include <netinet/in_pcb.h>
 #include <netinet/in_systm.h>
 #include <netinet/in_var.h>
 #include <netinet/ip.h>
 #include <netinet/ip_icmp.h>
 #include <netinet/ip_var.h>
+#include <netinet/tcp.h>
+#include <netinet/tcp_var.h>
+#include <netinet/tcpip.h>
 #include <netinet/icmp_var.h>
 
 #ifdef IPSEC
@@ -96,7 +99,6 @@ static int  icmpallecho = 1;
 SYSCTL_INT(_net_inet_icmp, OID_AUTO, allecho, CTLFLAG_RW, &icmpallecho,
 	   0, "");
 
-/* #define ICMPPRINTFS 1 */
 #ifdef ICMPPRINTFS
 int	icmpprintfs = 0;
 #endif
@@ -254,7 +256,7 @@ icmp_input(struct mbuf *m, int off)
 		goto freeit;
 	}
 	i = hlen + min(icmplen, ICMP_ADVLENMIN);
-	if (m->m_len < i && (m = m_pullup(m, i)) == 0)  {
+	if (m->m_len < i && (m = m_pullup(m, i)) == NULL)  {
 		icmpstat.icps_tooshort++;
 		return;
 	}
@@ -466,10 +468,11 @@ icmp_input(struct mbuf *m, int off)
 		}
 		ia = (struct in_ifaddr *)ifaof_ifpforaddr(
 			    (struct sockaddr *)&icmpdst, m->m_pkthdr.rcvif);
-		if (ia == 0)
+		if (ia == NULL)
 			break;
-		if (ia->ia_ifp == 0)
+		if (ia->ia_ifp == NULL) {
 			break;
+		}
 		icp->icmp_type = ICMP_MASKREPLY;
 		icp->icmp_mask = ia->ia_sockmask.sin_addr.s_addr;
 		if (ip->ip_src.s_addr == 0) {
@@ -717,7 +720,10 @@ icmp_send(struct mbuf *m, struct mbuf *opts)
 		RTFREE(ro.ro_rt);
 }
 
-n_time
+/*
+ * Return milliseconds since 00:00 GMT in network format.
+ */
+uint32_t
 iptime(void)
 {
 	struct timeval atv;
