@@ -1,3 +1,9 @@
+2011-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_CANONICAL_TARGET_CPU.
+	Remove AC_ARG_VAR([RTEMS_BSP],[]).
+	Add RTEMS_ENV_RTEMSBSP.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

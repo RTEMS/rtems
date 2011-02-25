@@ -7,12 +7,10 @@ AC_INIT([rtems-c-src-lib-libbsp-m68k-mcf5206elite-tools],[_RTEMS_VERSION],[http:
 AC_CONFIG_SRCDIR([runtest])
 RTEMS_TOP(../../../../../../..)
 
-# FIXME: This should not be here
-AC_ARG_VAR([RTEMS_BSP],[])
-RTEMS_CANONICAL_TARGET_CPU
-
 AM_INIT_AUTOMAKE([no-define foreign 1.11.1])
 AM_MAINTAINER_MODE
+
+RTEMS_ENV_RTEMSBSP
 
 RTEMS_PROJECT_ROOT
 RTEMS_TOOLPATHS
