@@ -253,8 +253,12 @@ int	ifmedia_ioctl(struct ifnet *ifp, struct ifreq *ifr,
 /*
  * Status bits
  */
-#define	IFM_AVALID	0x00000001	/* Active bit valid */
-#define	IFM_ACTIVE	0x00000002	/* Interface attached to working net */
+/*
+ * FIXME: This is a hack to get the libbsdport interface drivers working.  See
+ * also rtems_mii_ioctl.h.
+ */
+#define	IFM_AVALID	IFM_FLAG0	/* Active bit valid */
+#define	IFM_ACTIVE	IFM_FLAG0	/* Interface attached to working net */
 
 /*
  * Macros to extract various bits of information from the media word.

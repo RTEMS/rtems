@@ -1,3 +1,10 @@
+2011-02-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/rtems/rtems_mii_ioctl_kern.c: Do not use IFM_ACTIVE
+	and IFM_AVALID in the media word.
+	* libnetworking/net/if_media.h: Hack to get libbsdport interface
+	drivers working.
+
 2011-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/sleep_noposix.c: Remove.
