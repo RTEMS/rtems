@@ -1,5 +1,10 @@
 2011-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-networking.m4, aclocal/check-posix.m4:
+	Rebase check on "$host".
+
+2011-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/creat.c: Remove.
 	* libcsupport/Makefile.am: Reflect changes above.
 	* configure.ac: Error out if libc doesn't provide creat.
