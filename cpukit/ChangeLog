@@ -1,3 +1,14 @@
+2011-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/opendir.c, libcsupport/src/closedir.c,
+	libcsupport/src/readdir.c, libcsupport/src/rewinddir.c,
+	libcsupport/src/scandir.c, libcsupport/src/seekdir.c,
+	libcsupport/src/telldir.c: Remove.
+	* libcsuppport/Makefile.am: Reflect changes above.
+	* configure.ac: Error out if libc doesn't provide
+	opendir, closedir, readdir, rewinddir, scandir, seekdir,
+	telldir.
+
 2011-02-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/sys/statvfs.h: Remove include <sys/cdefs.h>

@@ -49,8 +49,12 @@ AC_CHECK_FUNCS([isascii fileno])
 #   Check for functions supplied by newlib >= 1.17.0
 # Newlib's posix/ directory
 AC_CHECK_FUNCS([sleep usleep \
-  opendir closedir readdir readdir_r \
-  rewinddir scandir seekdir telldir isatty])
+  readdir_r \
+  isatty])
+AC_CHECK_FUNCS([opendir closedir readdir rewinddir scandir seekdir telldir],,
+  [rtems_missing_func="$ac_func";break])
+AS_IF([test -n "$rtems_missing_func"],
+  AC_MSG_ERROR([Missing function $rtems_missing_func in libc])])
 AC_CHECK_FUNCS([creat])
 AC_CHECK_FUNCS([__assert])
 AC_CHECK_FUNCS([execl execlp execle execv execvp execve])

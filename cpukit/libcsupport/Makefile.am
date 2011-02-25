@@ -76,9 +76,6 @@ SYSTEM_CALL_C_FILES += src/readv.c src/writev.c
 endif
 
 DIRECTORY_SCAN_C_FILES =
-## 20 Nov 2008: Now using these from newlib's posix directory
-DIRECTORY_SCAN_C_FILES += src/opendir.c src/closedir.c src/readdir.c \
-     src/rewinddir.c src/scandir.c src/seekdir.c src/telldir.c
 ## Newlib SHOULD have provided this one
 DIRECTORY_SCAN_C_FILES += src/readdir_r.c
 ## Comment out when using these from newlib's unix directory
