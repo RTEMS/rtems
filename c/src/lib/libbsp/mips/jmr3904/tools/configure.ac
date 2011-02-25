@@ -7,8 +7,6 @@ AC_INIT([rtems-c-src-lib-libbsp-mips-jmr3904-tools],[_RTEMS_VERSION],[http://www
 AC_CONFIG_SRCDIR([runtest.in])
 RTEMS_TOP(../../../../../../..)
 
-RTEMS_CANONICAL_TARGET_CPU
-
 AM_INIT_AUTOMAKE([no-define foreign 1.11.1])
 AM_MAINTAINER_MODE
 

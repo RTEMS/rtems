@@ -7,8 +7,6 @@ AC_INIT([rtems-c-src-lib-libbsp-i386-pc386-tools],[_RTEMS_VERSION],[http://www.r
 AC_CONFIG_SRCDIR([Spec.doc])
 RTEMS_TOP(../../../../../../..)
 
-RTEMS_CANONICAL_TARGET_CPU
-
 CFLAGS="-g -O2 -Wall"
 
 AM_INIT_AUTOMAKE([no-define foreign 1.11.1])

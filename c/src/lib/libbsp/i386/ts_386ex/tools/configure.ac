@@ -7,8 +7,6 @@ AC_INIT([rtems-c-src-lib-libbsp-i386-ts_386ex-tools],[_RTEMS_VERSION],[http://ww
 AC_CONFIG_SRCDIR([coff2bin])
 RTEMS_TOP(../../../../../../..)
 
-RTEMS_CANONICAL_TARGET_CPU
-
 AM_INIT_AUTOMAKE([no-define foreign 1.11.1])
 AM_MAINTAINER_MODE
 
