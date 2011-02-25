@@ -1,3 +1,8 @@
+2011-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tools/configure.ac: Remove RTEMS_CANONICAL_TARGET_CPU.
+	Fix package name.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h:
