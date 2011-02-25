@@ -1,5 +1,13 @@
 2011-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/sleep_noposix.c: Remove.
+	* libcsupport/Makefile.am: Reflect changes above.
+	* posix/src/sleep.c, posix/src/usleep.c: Remove.
+	* posix/Makefile.am: Reflect changes above.
+	* configure.ac: Error out if libc doesn't provide sleep, usleep.
+
+2011-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/canonical-target-name.m4:
 	Stop pretending no_cpu* was buildable.
 	Derive RTEMS_CPU from "$host_cpu".
