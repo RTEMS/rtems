@@ -51,11 +51,11 @@ AC_CHECK_FUNCS([isascii fileno])
 AC_CHECK_FUNCS([sleep usleep \
   readdir_r \
   isatty])
-AC_CHECK_FUNCS([opendir closedir readdir rewinddir scandir seekdir telldir],,
+AC_CHECK_FUNCS([creat \
+  opendir closedir readdir rewinddir scandir seekdir telldir],,
   [rtems_missing_func="$ac_func";break])
 AS_IF([test -n "$rtems_missing_func"],
   AC_MSG_ERROR([Missing function $rtems_missing_func in libc])])
-AC_CHECK_FUNCS([creat])
 AC_CHECK_FUNCS([__assert])
 AC_CHECK_FUNCS([execl execlp execle execv execvp execve])
 AC_CHECK_FUNCS([regcomp regexec regerror regfree])
