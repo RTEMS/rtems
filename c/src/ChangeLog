@@ -1,3 +1,10 @@
+2011-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/canonical-target-name.m4:
+	Stop pretending no_cpu* was buildable.
+	Derive RTEMS_CPU from "$host_cpu".
+	Error out if "$host" doesn't match "*-*-rtems*".
+
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove AM_CONDITIONAL(HAS_POSIX) (Unused).

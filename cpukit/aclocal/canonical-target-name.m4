@@ -12,13 +12,16 @@ AC_DEFUN([RTEMS_CANONICAL_TARGET_CPU],
 [AC_REQUIRE([AC_CANONICAL_HOST])
 AC_MSG_CHECKING(rtems target cpu)
 case "${host}" in
-  no_cpu-*rtems*)
-        RTEMS_CPU=no_cpu
-	;;
-  *) 
-	RTEMS_CPU=`echo $host | sed 's%^\([[^-]]*\)-\(.*\)$%\1%'`
+*-*-rtems*)
+	RTEMS_CPU="$host_cpu";;
+*)
 	;;
 esac
+AS_IF([test -n "$RTEMS_CPU"],
+[dnl
+AC_MSG_RESULT($RTEMS_CPU)],
+[dnl
+AC_MSG_RESULT([<none>])
+AC_MSG_ERROR([unsupported host $host])])
 AC_SUBST(RTEMS_CPU)
-AC_MSG_RESULT($RTEMS_CPU)
 ])
