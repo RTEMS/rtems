@@ -1,3 +1,9 @@
+2011-02-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* mpc83xx/network/tsec.c: New default MAC configuration.  Set MDIO
+	clock according to actual CCB frequency.  Print media info only if we
+	have a PHY.  Avoid infinite loop in media adaption.
+
 2011-02-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* new-exceptions/bspsupport/vectors.h: Added defines PPC_EXC_GPR_TYPE,

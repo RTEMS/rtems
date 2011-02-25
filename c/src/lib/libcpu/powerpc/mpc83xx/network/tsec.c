@@ -279,6 +279,7 @@ static void tsec_hwinit
    * init MACCFG2 register
    */
   reg_ptr->maccfg2 = ((reg_ptr->maccfg2 & TSEC_MACCFG2_IFMODE_MSK)
+		      | TSEC_MACCFG2_IFMODE_BYT
 		      | TSEC_MACCFG2_PRELEN( 7)
 		      | TSEC_MACCFG2_FULLDUPLEX);
 
@@ -330,13 +331,21 @@ static void tsec_mdio_init
 |    <none>                                                                 |
 \*=========================================================================*/
 {
+  static const uint8_t divider [] = { 64, 64, 96, 128, 160, 224, 320, 448 };
+  size_t n = sizeof(divider) / sizeof(divider [0]);
+  size_t i = 0;
+  uint32_t clock = UINT32_MAX;
 
   /* Set TSEC registers for MDIO communication */
 
   /*
    * set clock divider
    */
-  sc->mdio_ptr->miimcfg = 3;
+  for (i = 0; i < n && clock > 2500000; ++i) {
+    clock = BSP_bus_frequency / divider [i];
+  }
+
+  sc->mdio_ptr->miimcfg = i;
 }
 
 /*=========================================================================*\
@@ -1557,19 +1566,23 @@ static void tsec_stats
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  int media;
-  int result;
-  /*
-   * fetch/print media info
-   */
-  media = IFM_MAKEWORD(0,0,0,sc->phy_default); /* fetch from default phy */
-
-  result = tsec_ioctl(&(sc->arpcom.ac_if),
-			      SIOCGIFMEDIA,
-			      (caddr_t)&media);
-  if (result == 0) {
-    rtems_ifmedia2str(media,NULL,0);
-    printf ("\n");
+  if (sc->phy_default >= 0) {
+    int media;
+    int result;
+    /*
+     * fetch/print media info
+     */
+    media = IFM_MAKEWORD(0,0,0,sc->phy_default); /* fetch from default phy */
+ 
+    result = tsec_ioctl(&(sc->arpcom.ac_if),
+          		      SIOCGIFMEDIA,
+          		      (caddr_t)&media);
+    if (result == 0) {
+      rtems_ifmedia2str(media,NULL,0);
+      printf ("\n");
+    } else {
+      printf ("PHY communication error\n");
+    }
   }
 #if 0 /* print all PHY registers */
   {
@@ -1740,15 +1753,13 @@ static int tsec_mode_adapt
       return result;
     }
     /*
-     * wait for auto-negotiation to terminate
+     * check auto-negotiation status
      */
-    do {
-      media = IFM_MAKEWORD(0,0,0,sc->phy_default);
-      result = tsec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
-      if (result != 0) {
-	return result;
-      }
-    } while (IFM_NONE == IFM_SUBTYPE(media));
+    media = IFM_MAKEWORD(0,0,0,sc->phy_default);
+    result = tsec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
+    if (result != 0 || IFM_NONE == IFM_SUBTYPE(media)) {
+      return result;
+    }
   }
 
   /*
