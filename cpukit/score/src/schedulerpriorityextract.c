@@ -1,4 +1,5 @@
-/*
+/*  Scheduler Simple Handler / Extract
+ *
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,5 +23,5 @@ void _Scheduler_priority_Extract(
   Thread_Control      *the_thread
 )
 {
-   _Scheduler_priority_Ready_queue_extract( the_thread );
+  _Scheduler_priority_Ready_queue_extract( the_thread );
 }

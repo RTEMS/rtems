@@ -170,6 +170,16 @@ void _Scheduler_priority_Extract(
   Thread_Control     *the_thread
 );
 
+/**
+ *  This is the major bit map.
+ */
+extern volatile Priority_bit_map_Control _Priority_Major_bit_map;
+
+/**
+ *  This is the minor bit map.
+ */
+extern Priority_bit_map_Control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/schedulerpriority.inl>
 #endif

@@ -29,5 +29,5 @@ Priority_bit_map_Control          _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 void _Scheduler_priority_Initialize(void)
 {
   _Scheduler_priority_Ready_queue_initialize();
-  _Priority_bit_map_Handler_initialization( );
+  _Priority_bit_map_Handler_initialization();
 }

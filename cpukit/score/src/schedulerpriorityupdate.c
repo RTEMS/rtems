@@ -33,7 +33,6 @@ void _Scheduler_priority_Update(
   sched_info = (Scheduler_priority_Per_thread *) the_thread->scheduler_info;
   rq         = (Chain_Control *) _Scheduler.information;
 
-
   sched_info->ready_chain = &rq[ the_thread->current_priority ];
 
   _Priority_bit_map_Initialize_information( 

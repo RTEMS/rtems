@@ -1,3 +1,9 @@
+2011-02-27	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* score/include/rtems/score/schedulerpriority.h,
+	score/src/schedulerpriority.c, score/src/schedulerpriorityextract.c,
+	score/src/schedulerpriorityupdate.c: Formatting.
+
 2011-02-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/rtems/rtems_mii_ioctl_kern.c: Do not use IFM_ACTIVE
