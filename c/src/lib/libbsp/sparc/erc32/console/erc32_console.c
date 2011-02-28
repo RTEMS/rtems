@@ -27,6 +27,7 @@
 #include <libchip/sersupp.h>
 
 #include <bsp.h>
+#include <bspopts.h>
 
 #define CONSOLE_BUF_SIZE (16)
 
@@ -46,12 +47,21 @@ static void erc32_console_set_register(uint32_t addr, uint8_t i, uint8_t val)
 }
 
 static int erc32_console_first_open(int major, int minor, void *arg);
-static ssize_t erc32_console_write_support_int(int minor, const char *buf, size_t len);
+
+#if (CONSOLE_USE_INTERRUPTS)
+static ssize_t erc32_console_write_support_int(
+    int minor, const char *buf, size_t len);
+#else
+int console_inbyte_nonblocking( int port );
+static ssize_t erc32_console_write_support_polled(
+    int minor, const char *buf, size_t len);
+#endif
 static void erc32_console_initialize(int minor);
 
 rtems_device_minor_number Console_Port_Minor = 0;
 
-console_fns erc32_fns = {
+#if (CONSOLE_USE_INTERRUPTS)
+  console_fns erc32_fns = {
     libchip_serial_default_probe,           /* deviceProbe */
     erc32_console_first_open,               /* deviceFirstOpen */
     NULL,                                   /* deviceLastClose */
@@ -60,19 +70,32 @@ console_fns erc32_fns = {
     erc32_console_initialize,               /* deviceInitialize */
     NULL,                                   /* deviceWritePolled */
     NULL,                                   /* deviceSetAttributes */
-    true                                    /* deviceOutputUsesInterrupts */
-};
+    TERMIOS_IRQ_DRIVEN                      /* deviceOutputUsesInterrupts */
+  };
+#else
+  console_fns erc32_fns = {
+    libchip_serial_default_probe,           /* deviceProbe */
+    erc32_console_first_open,               /* deviceFirstOpen */
+    NULL,                                   /* deviceLastClose */
+    console_inbyte_nonblocking,             /* deviceRead */
+    erc32_console_write_support_polled,     /* deviceWrite */
+    erc32_console_initialize,               /* deviceInitialize */
+    NULL,                                   /* deviceWritePolled */
+    NULL,                                   /* deviceSetAttributes */
+    TERMIOS_POLLED                          /* deviceOutputUsesInterrupts */
+  };
+#endif
 
 console_tbl Console_Port_Tbl [] = {
     {
-      .sDeviceName = "/dev/console",
+      .sDeviceName = "/dev/console_a",
       .deviceType = SERIAL_CUSTOM,
       .pDeviceFns = &erc32_fns,
       .deviceProbe = NULL,
       .pDeviceFlow = NULL,
       .ulMargin = 16,
       .ulHysteresis = 8,
-      .pDeviceParams = (void *) 1,
+      .pDeviceParams = (void *) -1,  /* could be baud rate */
       .ulCtrlPort1 = 0,
       .ulCtrlPort2 = 0,
       .ulDataPort = 0,
@@ -91,7 +114,7 @@ console_tbl Console_Port_Tbl [] = {
       .pDeviceFlow = NULL,
       .ulMargin = 16,
       .ulHysteresis = 8,
-      .pDeviceParams = (void *) 1,
+      .pDeviceParams = (void *) -1,  /* could be baud rate */
       .ulCtrlPort1 = 0,
       .ulCtrlPort2 = 0,
       .ulDataPort = 0,
@@ -129,6 +152,7 @@ static int erc32_console_first_open(int major, int minor, void *arg)
     return 0;
 }
 
+#if (CONSOLE_USE_INTERRUPTS)
 static ssize_t erc32_console_write_support_int(int minor, const char *buf, size_t len)
 {
     console_data *cd = &Console_Port_Data[minor];
@@ -185,10 +209,13 @@ static void erc32_console_isr_a(
 
         /* dequeue transmitted chars */
         cd->pDeviceContext = 0;
-        rv = rtems_termios_dequeue_characters(cd->termios_data, chars_to_dequeue);
-        if (rv == 0 && !(ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_DRA)) {
+        if (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEA) {
+          rv = rtems_termios_dequeue_characters(
+             cd->termios_data, chars_to_dequeue);
+          if ( !rv ) {
             cd->bActive = false;
             ERC32_Clear_interrupt (ERC32_INTERRUPT_UART_A_RX_TX);
+          }
         }
     } while (ERC32_Is_interrupt_pending (ERC32_INTERRUPT_UART_A_RX_TX));
 }
@@ -224,13 +251,36 @@ static void erc32_console_isr_b(
 
         /* dequeue transmitted chars */
         cd->pDeviceContext = 0;
-        rv = rtems_termios_dequeue_characters(cd->termios_data, chars_to_dequeue);
-        if (rv == 0 && !(ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_DRB)) {
+        if (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEB) {
+          rv = rtems_termios_dequeue_characters(
+             cd->termios_data, chars_to_dequeue);
+          if ( !rv ) {
             cd->bActive = false;
             ERC32_Clear_interrupt (ERC32_INTERRUPT_UART_B_RX_TX);
+          }
         }
     } while (ERC32_Is_interrupt_pending (ERC32_INTERRUPT_UART_B_RX_TX));
 }
+#else
+
+extern void console_outbyte_polled( int  port, unsigned char ch );
+
+static ssize_t erc32_console_write_support_polled(
+  int         minor,
+  const char *buf,
+  size_t      len
+)
+{
+  int nwrite = 0;
+
+  while (nwrite < len) {
+    console_outbyte_polled( minor, *buf++ );
+    nwrite++;
+  }
+  return nwrite;
+}
+
+#endif
 
 
 /*
@@ -257,6 +307,8 @@ static void erc32_console_initialize(
    /*
     *  Initialize Hardware
     */
+#if (CONSOLE_USE_INTERRUPTS)
     set_vector(erc32_console_isr_a, CONSOLE_UART_A_TRAP, 1);
     set_vector(erc32_console_isr_b, CONSOLE_UART_B_TRAP, 1);
+#endif
 }
