@@ -16,6 +16,7 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <rtems/console.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <termios.h>
@@ -216,76 +217,43 @@ rtems_device_driver console_control(
 
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
-  rtems_device_minor_number  minor_arg,
+  rtems_device_minor_number  minor,
   void                      *arg
 )
 {
-  rtems_status_code          status;
-  rtems_device_minor_number  minor;
-
-  /*
-   * initialize the termio interface.
-   */
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  bool first = true;
 
   rtems_termios_initialize();
 
-  for (minor=0; minor < Console_Port_Count ; minor++) {
-    /*
-     * First perform the configuration dependent probe, then the
-     * device dependent probe
-     */
+  for (minor = 0; minor < Console_Port_Count; ++minor) {
+    const console_tbl *device = &Console_Port_Tbl [minor];
 
-    if ((!Console_Port_Tbl[minor].deviceProbe ||
-         Console_Port_Tbl[minor].deviceProbe(minor)) &&
-         Console_Port_Tbl[minor].pDeviceFns->deviceProbe(minor)) {
-      /*
-       * Use this device for the console
-       */
-      break;
+    if (
+      (device->deviceProbe == NULL || device->deviceProbe(minor))
+        && device->pDeviceFns->deviceProbe(minor)
+    ) {
+      device->pDeviceFns->deviceInitialize(minor);
+      if (first) {
+        first = false;
+        Console_Port_Minor = minor;
+        sc = rtems_io_register_name(CONSOLE_DEVICE_NAME, major, minor);
+        if (sc != RTEMS_SUCCESSFUL) {
+          rtems_fatal_error_occurred(sc);
+        }
+      }
+      sc = rtems_io_register_name(device->sDeviceName, major, minor);
+      if (sc != RTEMS_SUCCESSFUL) {
+        rtems_fatal_error_occurred(sc);
+      }
     }
   }
-  if ( minor == Console_Port_Count ) {
+
+  if (first) {
     /*
      * Failed to find a working device
      */
     rtems_fatal_error_occurred(RTEMS_IO_ERROR);
-  }
-
-  Console_Port_Minor=minor;
-
-  /*
-   * Register Device Names
-   */
-  status = rtems_io_register_name("/dev/console", major, Console_Port_Minor );
-  if (status != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(status);
-  }
-  Console_Port_Tbl[minor].pDeviceFns->deviceInitialize(Console_Port_Minor);
-
-  for (minor++;minor<Console_Port_Count;minor++) {
-    /*
-     * First perform the configuration dependent probe, then the
-     * device dependent probe
-     */
-
-    if ( (!Console_Port_Tbl[minor].deviceProbe ||
-         Console_Port_Tbl[minor].deviceProbe(minor)) &&
-         Console_Port_Tbl[minor].pDeviceFns->deviceProbe(minor)) {
-      status = rtems_io_register_name(
-        Console_Port_Tbl[minor].sDeviceName,
-        major,
-        minor );
-      if (status != RTEMS_SUCCESSFUL) {
-        rtems_fatal_error_occurred(status);
-      }
-
-      /*
-       * Initialize the hardware device.
-       */
-
-      Console_Port_Tbl[minor].pDeviceFns->deviceInitialize(minor);
-
-    }
   }
 
   return RTEMS_SUCCESSFUL;

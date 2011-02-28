@@ -1,3 +1,8 @@
+2011-02-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console.c: Register also normal device file of the console device.
+	Call initialization before the device file registration.
+
 2011-02-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* timerstub.c: Include <rtems/btimer.h>.
