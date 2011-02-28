@@ -1,3 +1,7 @@
+2011-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sched_cpu/rtems/score/cpuopts.h: Bump to 4.10.99.0
+
 2010-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* .cvsignore: New file.

@@ -34,7 +34,7 @@
 #define RTEMS_USES_TAR_H 1
 
 /* RTEMS version string */
-#define RTEMS_VERSION "4.9.99.0"
+#define RTEMS_VERSION "4.10.99.0"
 
 /* disable nanosecond granularity for statistics */
 /* #undef __RTEMS_USE_TICKS_FOR_STATISTICS__ */
@@ -64,7 +64,7 @@
 #define __RTEMS_MAJOR__ 4
 
 /* minor version portion of an RTEMS release */
-#define __RTEMS_MINOR__ 9
+#define __RTEMS_MINOR__ 10
 
 /* revision version portion of an RTEMS release */
 #define __RTEMS_REVISION__ 99
