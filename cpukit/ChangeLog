@@ -1,3 +1,10 @@
+2011-03-01	Chris Johns <chrisj@rtems.org>
+
+	* score/src/heapfree.c, score/src/heapresizeblock.c: PR 1746. Move
+	protection block checks to after the block address has been
+	checked as a valid heap address. Add a special case in the heap
+	free for a NULL address.
+
 2011-02-27	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* score/include/rtems/score/schedulerpriority.h,

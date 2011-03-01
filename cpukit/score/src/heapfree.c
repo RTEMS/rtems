@@ -108,33 +108,42 @@
 bool _Heap_Free( Heap_Control *heap, void *alloc_begin_ptr )
 {
   Heap_Statistics *const stats = &heap->stats;
-  uintptr_t alloc_begin = (uintptr_t) alloc_begin_ptr;
-  Heap_Block *block =
-    _Heap_Block_of_alloc_area( alloc_begin, heap->page_size );
+  uintptr_t alloc_begin;
+  Heap_Block *block;
   Heap_Block *next_block = NULL;
   uintptr_t block_size = 0;
   uintptr_t next_block_size = 0;
   bool next_is_free = false;
 
-  _Heap_Protection_block_check( heap, block );
-
+  /*
+   * If NULL return true so a free on NULL is considered a valid release. This
+   * is a special case that could be handled by the in heap check how-ever that
+   * would result in false being returned which is wrong.
+   */
+  if ( alloc_begin_ptr == NULL ) {
+    return true;
+  }
+  
+  alloc_begin = (uintptr_t) alloc_begin_ptr;
+  block = _Heap_Block_of_alloc_area( alloc_begin, heap->page_size );
+  
   if ( !_Heap_Is_block_in_heap( heap, block ) ) {
     return false;
   }
 
+  _Heap_Protection_block_check( heap, block );
+
   block_size = _Heap_Block_size( block );
   next_block = _Heap_Block_at( block, block_size );
 
-  _Heap_Protection_block_check( heap, next_block );
-
   if ( !_Heap_Is_block_in_heap( heap, next_block ) ) {
-    _HAssert( false );
     return false;
   }
 
+  _Heap_Protection_block_check( heap, next_block );
+
   if ( !_Heap_Is_prev_used( next_block ) ) {
     _Heap_Protection_block_error( heap, block );
-
     return false;
   }
 

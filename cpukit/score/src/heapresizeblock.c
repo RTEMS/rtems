@@ -104,9 +104,8 @@ Heap_Resize_status _Heap_Resize_block(
   *old_size = 0;
   *new_size = 0;
 
-  _Heap_Protection_block_check( heap, block );
-
   if ( _Heap_Is_block_in_heap( heap, block ) ) {
+    _Heap_Protection_block_check( heap, block );
     return _Heap_Resize_block_checked(
       heap,
       block,
@@ -115,7 +114,6 @@ Heap_Resize_status _Heap_Resize_block(
       old_size,
       new_size
     );
-  } else {
-    return HEAP_RESIZE_FATAL_ERROR;
   }
+  return HEAP_RESIZE_FATAL_ERROR;
 }
