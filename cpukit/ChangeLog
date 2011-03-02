@@ -1,5 +1,8 @@
 2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/kern/kern_subr.c, libnetworking/kern/kern_sysctl.c,
+	libnetworking/kern/uipc_socket.c, libnetworking/kern/uipc_socket2.c:
+	Use <sys/queue.h> instead of <rtems/bsd/sys/queue.h.
 	* libnetworking/net/if.c, libnetworking/net/if.h,
 	libnetworking/net/if_media.h, libnetworking/net/if_var.h,
 	libnetworking/net/raw_cb.c, libnetworking/net/raw_cb.h,
