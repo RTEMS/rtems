@@ -40,7 +40,7 @@
 #ifndef _KERNEL
 #include <sys/ucred.h>
 #endif
-#include <rtems/bsd/sys/queue.h>
+#include <sys/queue.h>
 
 typedef struct fsid { int32_t val[2]; } fsid_t;	/* filesystem id type */
 
