@@ -34,7 +34,7 @@
 #ifndef _NETINET_IN_VAR_H_
 #define _NETINET_IN_VAR_H_
 
-#include <rtems/bsd/sys/queue.h>
+#include <sys/queue.h>
 #if !defined(__rtems__)
 #include <sys/fnv_hash.h>
 #endif

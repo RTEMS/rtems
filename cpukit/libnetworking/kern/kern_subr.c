@@ -43,7 +43,7 @@
 #include <sys/systm.h>
 #include <sys/proc.h>
 #include <sys/malloc.h>
-#include <rtems/bsd/sys/queue.h>
+#include <sys/queue.h>
 
 int
 uiomove(void *cp, int n, struct uio *uio)

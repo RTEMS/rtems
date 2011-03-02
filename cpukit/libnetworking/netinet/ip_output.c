@@ -41,7 +41,7 @@
 #define _IP_VHL
 
 #include <sys/param.h>
-#include <rtems/bsd/sys/queue.h>
+#include <sys/queue.h>
 #include <sys/systm.h>
 #include <sys/malloc.h>
 #include <sys/mbuf.h>
