@@ -1,5 +1,11 @@
 2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if.c, libnetworking/net/if.h,
+	libnetworking/net/if_media.h, libnetworking/net/if_var.h,
+	libnetworking/net/raw_cb.c, libnetworking/net/raw_cb.h,
+	libnetworking/net/raw_usrreq.c, libnetworking/net/route.c,
+	libnetworking/net/rtsock.c:
+	Use <sys/queue.h> instead of <rtems/bsd/sys/queue.h.
 	* libnetworking/sys/mount.h, libnetworking/sys/socketvar.h,
 	libnetworking/sys/sysctl.h: 
 	Use <sys/queue.h> instead of <rtems/bsd/sys/queue.h.
