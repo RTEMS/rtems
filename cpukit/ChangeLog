@@ -1,5 +1,10 @@
 2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Rework checks for mandated headers tar.h,
+	errno.h, sched.h, sys/cdefs.h, sys/queue.h.
+
+2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove unused AM_CONDITIONAL([NEED_SYS_CDEFS_H]).
 	Remove unused AM_CONDITIONAL([NEED_SYS_QUEUE_H]).
 
