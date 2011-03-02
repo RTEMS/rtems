@@ -1,5 +1,13 @@
 2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_showicmpstat.c,
+	libnetworking/rtems/rtems_showifstat.c,
+	libnetworking/rtems/rtems_showipstat.c,
+	libnetworking/rtems/rtems_showmbuf.c,
+	libnetworking/rtems/rtems_showroute.c,
+	libnetworking/rtems/rtems_showtcpstat.c,
+	libnetworking/rtems/rtems_showudpstat.c:
+	Use <sys/queue.h> instead of <rtems/bsd/sys/queue.h.
 	* libnetworking/kern/kern_subr.c, libnetworking/kern/kern_sysctl.c,
 	libnetworking/kern/uipc_socket.c, libnetworking/kern/uipc_socket2.c:
 	Use <sys/queue.h> instead of <rtems/bsd/sys/queue.h.
