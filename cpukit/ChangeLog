@@ -1,5 +1,11 @@
 2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/mount.h, libnetworking/sys/socketvar.h,
+	libnetworking/sys/sysctl.h: 
+	Use <sys/queue.h> instead of <rtems/bsd/sys/queue.h.
+
+2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Rework checks for mandated headers tar.h,
 	errno.h, sched.h, sys/cdefs.h, sys/queue.h.
 
