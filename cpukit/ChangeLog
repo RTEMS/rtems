@@ -1,5 +1,24 @@
 2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/if_ether.c, 
+	libnetworking/netinet/in.c,
+	libnetworking/netinet/in_pcb.c,
+	libnetworking/netinet/in_pcb.h,
+	libnetworking/netinet/in_proto.c,
+	libnetworking/netinet/in_rmx.c,
+	libnetworking/netinet/in_var.h,
+	libnetworking/netinet/ip_divert.c,
+	libnetworking/netinet/ip_fw.c,
+	libnetworking/netinet/ip_mroute.c,
+	libnetworking/netinet/ip_output.c,
+	libnetworking/netinet/raw_ip.c,
+	libnetworking/netinet/tcp_input.c,
+	libnetworking/netinet/tcp_output.c,
+	libnetworking/netinet/tcp_subr.c,
+	libnetworking/netinet/tcp_timer.c,
+	libnetworking/netinet/tcp_usrreq.c,
+	libnetworking/netinet/udp_usrreq.c:
+	Use <sys/queue.h> instead of <rtems/bsd/sys/queue.h.
 	* libnetworking/rtems/rtems_showicmpstat.c,
 	libnetworking/rtems/rtems_showifstat.c,
 	libnetworking/rtems/rtems_showipstat.c,
