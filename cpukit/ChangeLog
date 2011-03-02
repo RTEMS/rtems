@@ -1,3 +1,8 @@
+2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove unused AM_CONDITIONAL([NEED_SYS_CDEFS_H]).
+	Remove unused AM_CONDITIONAL([NEED_SYS_QUEUE_H]).
+
 2011-03-01	Chris Johns <chrisj@rtems.org>
 
 	* score/src/heapfree.c, score/src/heapresizeblock.c: PR 1746. Move
