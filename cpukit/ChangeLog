@@ -1,3 +1,9 @@
+2011-03-03	Chris Johns <chrisj@rtems.org>
+
+	* libcsupport/src/mknod.c, libfs/src/rfs/rtems-rfs-inode.c: PR
+	1749. Fix the incorrect handling of the file type in the mode
+	value to reject invalid types as per the standard.
+
 2011-02-08	Brett Swimley <bswimley@advanced.pro>
 
 	* libfs/src/rfs/rtems-rfs-rtems.c: Fix bug where the eval path did

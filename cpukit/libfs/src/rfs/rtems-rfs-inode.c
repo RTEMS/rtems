@@ -211,6 +211,21 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
     printf (" type:%s mode:%04x (%03o)\n", type, mode, mode & ((1 << 10) - 1));
   }
 
+  /*
+   * The file type is field within the mode. Check we have a sane mode set.
+   */
+  switch (mode & RTEMS_RFS_S_IFMT)
+  {
+    case RTEMS_RFS_S_IFDIR:
+    case RTEMS_RFS_S_IFCHR:
+    case RTEMS_RFS_S_IFBLK:
+    case RTEMS_RFS_S_IFREG:
+    case RTEMS_RFS_S_IFLNK:
+      break;
+    default:
+      return EINVAL;
+  }
+  
   rc = rtems_rfs_inode_alloc (fs, parent, ino);
   if (rc > 0)
     return rc;
