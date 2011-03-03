@@ -1,3 +1,10 @@
+2011-03-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1750/bsps
+	* console/erc32_console.c, make/custom/erc32.cfg: The new console
+	driver did not support polled mode. It also had a bug in which it
+	could lose a transmitter interrupt.
+
 2011-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* console/erc32_console.c: Add polled support. Tinker with interrupt
