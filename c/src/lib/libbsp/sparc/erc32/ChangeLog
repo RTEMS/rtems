@@ -1,3 +1,10 @@
+2011-03-03	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1750/bsps
+	* console/erc32_console.c: The new console driver did not support
+	polled mode. It also had a bug in which it could lose a transmitter
+	interrupt.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
