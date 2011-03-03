@@ -17,7 +17,7 @@ top_srcdir=`dirname $0`
 
 verbose="";
 quiet="false"
-mode="generate"
+mode="autoreconf"
 
 usage()
 {
@@ -88,6 +88,9 @@ case $1 in
   shift;;
 -r|--re|--rec|--reco|--recon|--reconf)
   mode="autoreconf";
+  shift;;
+-g|--ge|--gen|--gene|--gener|--genera|--generat|--generate)
+  mode="generate";
   shift;;
 -*) echo "unknown option $1" ;
   usage ;;
