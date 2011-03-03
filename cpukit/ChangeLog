@@ -1,3 +1,7 @@
+2011-03-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Typos.
+
 2011-03-03	Chris Johns <chrisj@rtems.org>
 
 	PR 1749/filesystem

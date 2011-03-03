@@ -580,14 +580,14 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /* 
- * Is the Priority Scheduler is selected, then configure for it.
+ * If the Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY)
   #include <rtems/score/schedulerpriority.h>
   #define SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_ENTRY_POINTS
 
   /**
-   * define the memory used by the priority scheduler
+   * This defines the memory used by the priority scheduler.
    */
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
     _Configure_From_workspace( \
