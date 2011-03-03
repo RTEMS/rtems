@@ -40,9 +40,21 @@ int mknod(
   const char                         *name_start;
   int                                 result;
 
-  if ( !(mode & (S_IFREG|S_IFCHR|S_IFBLK|S_IFIFO) ) )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
+  /*
+   * The file type is field within the mode. Check we have a sane mode set.
+   */
+  switch (mode & S_IFMT)
+  {
+    case S_IFDIR:
+    case S_IFCHR:
+    case S_IFBLK:
+    case S_IFREG:
+    case S_IFIFO:
+      break;
+    default:
+      rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  
   rtems_filesystem_get_start_loc( pathname, &i, &temp_loc );
 
   result = (*temp_loc.ops->evalformake_h)(
