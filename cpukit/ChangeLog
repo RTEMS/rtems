@@ -1,3 +1,8 @@
+2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4, aclocal/version.m4:
+	Rename RTEMS_API into _RTEMS_API.
+
 2011-03-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h: Typos.

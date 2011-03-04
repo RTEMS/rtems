@@ -17,7 +17,7 @@ AC_CONFIG_AUX_DIR([$1])
 AC_CHECK_PROGS(MAKE, gmake make)
 AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 
-AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
+AC_PREFIX_DEFAULT([/opt/rtems-][_RTEMS_API])
 
 AC_SUBST([RTEMS_TOPdir],["$1"])
 
