@@ -1,5 +1,9 @@
 2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Remove (merged into ../Makefile.am).
+
+2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* compilers/gcc-target-default.cfg: Remove (Unused).
 	* Makefile.am: Reflect change above.
 
