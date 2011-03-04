@@ -26,19 +26,19 @@
  * CPU load counters
  * Place in static RAM so updates don't hit the SDRAM
  */
-extern int __SRAMBASE[];
-#define IDLE_COUNTER      __SRAMBASE[0]
-#define FILTERED_IDLE     __SRAMBASE[1]
-#define MAX_IDLE_COUNT    __SRAMBASE[2]
-#define USEC_PER_TICK     __SRAMBASE[3]
+#define IDLE_COUNTER    __SRAMBASE.idle_counter
+#define FILTERED_IDLE   __SRAMBASE.filtered_idle
+#define MAX_IDLE_COUNT  __SRAMBASE.max_idle_count
+#define PITC_PER_TICK   __SRAMBASE.pitc_per_tick
+#define NSEC_PER_PITC   __SRAMBASE.nsec_per_pitc
 #define FILTER_SHIFT    6
 
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
     int i = MCF5282_PIT3_PCNTR;
     if (MCF5282_PIT3_PCSR & MCF5282_PIT_PCSR_PIF)
-        i = MCF5282_PIT3_PCNTR - USEC_PER_TICK;
-    return (USEC_PER_TICK - i) * 1000;
+        i = MCF5282_PIT3_PCNTR - PITC_PER_TICK;
+    return (PITC_PER_TICK - i) * NSEC_PER_PITC;
 }
 
 #define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
@@ -48,7 +48,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
  */
 #define Clock_driver_support_at_tick()                                       \
     do {                                                                     \
-        int idle = IDLE_COUNTER;                                             \
+        unsigned idle = IDLE_COUNTER;                                        \
         IDLE_COUNTER = 0;                                                    \
         if (idle > MAX_IDLE_COUNT)                                           \
             MAX_IDLE_COUNT = idle;                                           \
@@ -75,20 +75,31 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 /*
  * Set up the clock hardware
  *
- * Prescale so that it counts in microseconds
- * System clock frequency better be 2**n (1<=n<=16) MHz!
+ * f_pit = f_clk / 2^(preScaleCode+1) / N  = 1/(us_per_tick/us_per_s)
+ *
+ * N = f_clk / 2^(preScaleCode+1) * us_per_tick / us_per_s
+ *
+ * ns_per_pit_clk = ns_per_s / (f_clk / 2^(preScaleCode+1))
+ *                = ns_per_s * 2^(preScaleCode+1) / f_clk;
  */
 #define Clock_driver_support_initialize_hardware()                       \
     do {                                                                 \
+		unsigned long long N;                                            \
         int level;                                                       \
-        int preScaleCode = -2;                                           \
-        int preScaleDivisor = bsp_get_CPU_clock_speed() / 1000000;       \
-        while (preScaleDivisor) {                                        \
-            preScaleDivisor >>= 1;                                       \
-            preScaleCode++;                                              \
-        }                                                                \
-        IDLE_COUNTER = 0;                                                \
-        FILTERED_IDLE = 0;                                               \
+        int preScaleCode = 0;                                            \
+		N  = bsp_get_CPU_clock_speed();                                  \
+		N *= rtems_configuration_get_microseconds_per_tick();            \
+		N /= 2*1000000; /* min_prescale * us_per_s */                    \
+		while ( N > 0x10000 ) {                                          \
+			preScaleCode++;                                              \
+			N >>= 1;                                                     \
+		}                                                                \
+		PITC_PER_TICK  = N;                                              \
+		N  = 2000000000ULL << preScaleCode;                              \
+		N /= bsp_get_CPU_clock_speed();                                  \
+		NSEC_PER_PITC  = N;                                              \
+        IDLE_COUNTER   = 0;                                              \
+        FILTERED_IDLE  = 0;                                              \
         MAX_IDLE_COUNT = 0;                                              \
         bsp_allocate_interrupt(PIT3_IRQ_LEVEL, PIT3_IRQ_PRIORITY);       \
         MCF5282_INTC0_ICR58 = MCF5282_INTC_ICR_IL(PIT3_IRQ_LEVEL) |      \
@@ -101,8 +112,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
                             MCF5282_PIT_PCSR_OVW |                       \
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD;                        \
-        USEC_PER_TICK = rtems_configuration_get_microseconds_per_tick(); \
-        MCF5282_PIT3_PMR = USEC_PER_TICK - 1;                            \
+        MCF5282_PIT3_PMR = PITC_PER_TICK - 1;                            \
         MCF5282_PIT3_PCSR = MCF5282_PIT_PCSR_PRE(preScaleCode) |         \
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD |                       \
@@ -115,7 +125,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 Thread bsp_idle_thread(uint32_t ignored)
 {
     for(;;)
-        asm volatile ("addq.l #1,__SRAMBASE"); /* Atomic increment */
+        asm volatile ("addq.l #1,%0"::"m"(IDLE_COUNTER)); /* Atomic increment */
 }
 
 int rtems_bsp_cpu_load_percentage(void)

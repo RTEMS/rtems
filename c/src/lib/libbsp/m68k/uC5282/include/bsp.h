@@ -134,6 +134,31 @@ int BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocal
 void *bsp_idle_thread( uintptr_t ignored );
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
 
+/*
+ * SRAM. The BSP uses SRAM for maintaining some clock-driver data
+ *       and for ethernet descriptors (and the initial stack during
+ *       early boot).
+ */
+
+typedef struct mcf5282BufferDescriptor_ {
+    volatile uint16_t   status;
+    uint16_t			length;
+    volatile void      *buffer;
+} mcf5282BufferDescriptor_t;
+
+extern struct {
+	uint32_t                  idle_counter;
+	uint32_t                  filtered_idle;
+	uint32_t                  max_idle_count;
+	uint32_t                  pitc_per_tick;
+	uint32_t                  nsec_per_pitc;
+	uint32_t                  pad[3]; /* align to 16-bytes for descriptors */
+	mcf5282BufferDescriptor_t fec_descriptors[];
+	/* buffer descriptors are allocated from here */
+
+    /* initial stack is at top of SRAM (start.S)  */
+} __SRAMBASE;
+
 #ifdef __cplusplus
 }
 #endif
