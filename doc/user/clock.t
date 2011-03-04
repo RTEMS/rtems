@@ -345,7 +345,7 @@ indicated below:
 
 @item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - (rtems_interval *)
 
-@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - (rtems_clock_time_value *)
+@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - (struct timeval *)
 
 @end itemize
 @end ifset

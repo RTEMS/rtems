@@ -1,3 +1,9 @@
+2011-03-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1744/doc
+	* user/clock.t: rtems_clock_time_value type uses changed to struct
+	timeval.
+
 2011-02-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* common/cpright.texi: Update copyright.
