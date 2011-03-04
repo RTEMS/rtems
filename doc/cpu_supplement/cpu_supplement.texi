@@ -71,7 +71,6 @@
 @include sh.texi
 @include sparc.texi
 @include sparc64.texi
-@include tic4x.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top cpu_supplement
@@ -92,7 +91,6 @@ This is the online version of the RTEMS CPU Architecture Supplement.
 * SuperH Specific Information::
 * SPARC Specific Information::
 * SPARC-64 Specific Information::
-* Texas Instruments C3x/C4x Specific Information::
 * Command and Variable Index::
 * Concept Index::
 @end menu

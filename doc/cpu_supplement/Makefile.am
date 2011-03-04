@@ -14,7 +14,7 @@ include $(top_srcdir)/main.am
 REPLACE2 = $(PERL) $(top_srcdir)/tools/word-replace2
 
 GENERATED_FILES = general.texi arm.texi avr.texi bfin.texi i386.texi lm32.texi \
-    m68k.texi mips.texi powerpc.texi sh.texi sparc.texi sparc64.texi tic4x.texi
+    m68k.texi mips.texi powerpc.texi sh.texi sparc.texi sparc64.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -83,11 +83,6 @@ sparc.texi: sparc.t
 	    -n "" < $< > $@
 
 sparc64.texi: sparc64.t
-	$(BMENU2) -p "" \
-	    -u "Top" \
-	    -n "" < $< > $@
-
-tic4x.texi: tic4x.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@

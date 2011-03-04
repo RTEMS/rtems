@@ -1,5 +1,13 @@
 2011-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1752/doc
+	* cpu_supplement/.cvsignore, cpu_supplement/Makefile.am,
+	cpu_supplement/cpu_supplement.texi: Remove TI C4x CPU Supplement
+	chapter.
+	* cpu_supplement/tic4x.t: Removed.
+
+2011-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* ada_user/Makefile.am: Add ObjectId pdf files.
 
 2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
