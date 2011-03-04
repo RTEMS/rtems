@@ -1,3 +1,9 @@
+2011-03-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1751/bsps
+	* start/start.S: Fix typo which was not caught by binutils prior to a
+	recent bug fix.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
