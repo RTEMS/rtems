@@ -1,3 +1,9 @@
+2011-03-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1751/bsps
+	* start/start.S: Fix typo which was not caught by binutils prior to a
+	recent bug fix.
+
 2009-10-16	Jennifer Averett <jennifer@OARcorp.com>
 
 	* Makefile.am, configure.ac, preinstall.am, console/alloc360.c,

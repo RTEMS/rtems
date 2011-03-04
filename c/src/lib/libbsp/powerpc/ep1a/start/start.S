@@ -150,6 +150,6 @@ __rtems_entry_point:
 	mtlr	r3
 	blr
 .Lstart:
-	.size	_start,.Lstart-_start
+	.size	__rtems_entry_point,.Lstart-__rtems_entry_point
 
 	.comm	environ,4,4
