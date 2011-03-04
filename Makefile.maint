@@ -145,7 +145,7 @@ new-branch:
 	api="$$v.$$(($$r + 1))"; \
 	echo "New branch release: $$version"; \
 	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
-	  -e "s|\[RTEMS_API\],\[.*\]|\[RTEMS_API\],\[$$api\]|" \
+	  -e "s|\[_RTEMS_API\],\[.*\]|\[_RTEMS_API\],\[$$api\]|" \
 	  $(VERSION_FILES); \
 	sed -i -e "s,\(^RTEMS Version\).*,\1 $$version," VERSION
 
