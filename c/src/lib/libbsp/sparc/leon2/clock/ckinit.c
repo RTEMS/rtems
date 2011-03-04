@@ -59,17 +59,22 @@ extern int CLOCK_SPEED;
     LEON_REG.Timer_Control_1 = 0; \
   } while (0)
 
+
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
   uint32_t clicks;
+  uint32_t usecs;
 
-  clicks = LEON_REG.Timer_Counter_1;
-
-  /* Down counter */
-  return (uint32_t) 
-     (rtems_configuration_get_microseconds_per_tick() - clicks) * 1000;
+  if ( LEON_Is_interrupt_pending( LEON_INTERRUPT_TIMER1 ) ) {
+    clicks = LEON_REG.Timer_Counter_1;
+    usecs = (2*rtems_configuration_get_microseconds_per_tick() - clicks);
+  } else {
+    usecs = (rtems_configuration_get_microseconds_per_tick() - clicks);
+  }
+  return usecs * 1000;
 }
 
-#define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
+#define Clock_driver_nanoseconds_since_last_tick \
+        bsp_clock_nanoseconds_since_last_tick
 
 #include "../../../shared/clockdrv_shell.c"

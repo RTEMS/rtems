@@ -49,11 +49,17 @@ extern int CLOCK_SPEED;
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
   uint32_t clicks;
+  uint32_t usecs;
 
   clicks = ERC32_MEC.Real_Time_Clock_Counter;
 
-  return (uint32_t) 
-    (rtems_configuration_get_microseconds_per_tick() - clicks) * 1000;
+  if ( ERC32_Is_interrupt_pending( ERC32_INTERRUPT_REAL_TIME_CLOCK ) ) {
+    clicks = ERC32_MEC.Real_Time_Clock_Counter;
+    usecs = (2*rtems_configuration_get_microseconds_per_tick() - clicks);
+  } else {
+    usecs = (rtems_configuration_get_microseconds_per_tick() - clicks);
+  }
+  return usecs * 1000;
 }
 
 #define Clock_driver_nanoseconds_since_last_tick \
