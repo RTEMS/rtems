@@ -1,3 +1,10 @@
+2011-03-04	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1738/bsps
+	* clock/clock.c, include/bsp.h, network/network.c: system clock driver
+	programs the PIT w/o assuming the CPU clock frequency being a power
+	of two.
+
 2011-02-17	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1738/bsps
