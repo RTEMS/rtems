@@ -245,11 +245,11 @@ extern int LEON3_Cpu_Index;
   } while (0)
 
 #define LEON_Is_interrupt_pending( _source ) \
-  (LEON3_IrqCtrl_Regs.ipend & (1 << (_source)))
+  (LEON3_IrqCtrl_Regs->ipend & (1 << (_source)))
 
 #define LEON_Is_interrupt_masked( _source ) \
   do {\
-     (LEON3_IrqCtrl_Regs.mask[LEON3_Cpu_Index] & (1 << (_source))); \
+     (LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] & (1 << (_source))); \
    } while (0)
 
 
