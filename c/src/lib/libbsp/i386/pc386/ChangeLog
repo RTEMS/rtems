@@ -1,3 +1,7 @@
+2011-03-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* timer/timer.c: Retry up to 5 times when the calibration loop fails.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h, include/tm27.h:
