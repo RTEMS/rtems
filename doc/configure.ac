@@ -143,7 +143,7 @@ AC_CONFIG_FILES([Makefile],[],[
 test -d common || mkdir common
 cat << EOF > common/rtems.sed~
 :t
-s/@RTEMSAPI@/RTEMS_API/;t t
+s/@RTEMSAPI@/_RTEMS_API/;t t
 s,@RTEMSPREFIX@,$prefix,;t t
 s,@RTEMSRPMPREFIX@,$rpmprefix,;t t
 EOF

@@ -1,3 +1,7 @@
+2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Rename RTEMS_API into _RTEMS_API.
+
 2011-03-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1744/doc
