@@ -1,3 +1,7 @@
+2011-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ada_user/Makefile.am: Add ObjectId pdf files.
+
 2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Rename RTEMS_API into _RTEMS_API.

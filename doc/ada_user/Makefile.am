@@ -67,6 +67,7 @@ endif
 
 $(PROJECT).dvi: rtemspie.eps states.eps ObjectId-16Bits.eps \
     ObjectId-32Bits.eps semaphore_attributes.eps
-PDF_IMAGES = rtemspie.pdf states.pdf
+PDF_IMAGES = rtemspie.pdf states.pdf ObjectId-16Bits.pdf \
+    ObjectId-32Bits.pdf semaphore_attributes.pdf
 
 CLEANFILES += ada_user.info ada_user.info-? ada_user.info-??
