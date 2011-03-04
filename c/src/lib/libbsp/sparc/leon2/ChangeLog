@@ -1,3 +1,10 @@
+2011-03-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1748/bsps
+	* clock/ckinit.c: When the clock tick generates an interrupt WHILE we
+	have interrupts disabled doing a get TOD or uptime, the get
+	nanoseconds handler was returning a bogusly large number.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
