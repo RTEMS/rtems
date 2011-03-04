@@ -1,5 +1,10 @@
 2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* compilers/gcc-target-default.cfg: Remove (Unused).
+	* Makefile.am: Reflect change above.
+
+2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* compilers/gcc-no_bsp.cfg: Remove (Unused).
 	* Makefile.am: Reflect change above.
 
