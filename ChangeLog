@@ -1,5 +1,10 @@
 2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Merge-in make/Makefile.am.
+	* configure.ac: Reflect change above.
+
+2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.maint, aclocal/rpm.m4, aclocal/rtems-top.m4,
 	aclocal/version.m4: Rename RTEMS_API into _RTEMS_API.
 

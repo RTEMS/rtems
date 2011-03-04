@@ -67,8 +67,6 @@ AS_IF([test x"$enable_multilib" = x"yes"],[
 ])
 RTEMS_TARGET_CONFIG_SUBDIRS([c])
 
-AC_CONFIG_FILES([Makefile
-make/Makefile
-])
+AC_CONFIG_FILES([Makefile])
 
 AC_OUTPUT

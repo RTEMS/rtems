@@ -7,7 +7,7 @@
 
 ACLOCAL_AMFLAGS = -I aclocal
 
-SUBDIRS = make $(build_SUBDIRS) $(host_SUBDIRS) $(target_SUBDIRS)
+SUBDIRS = $(build_SUBDIRS) $(host_SUBDIRS) $(target_SUBDIRS)
 DIST_SUBDIRS = $(SUBDIRS)
 
 noinst_SCRIPTS = bootstrap
@@ -39,6 +39,21 @@ dist-hook:
 	find $(distdir) -name '*.in' -print | while read a; do \
 	  f=`echo $$a | sed 's,\.in$$,,'`; \
 	  if test -f $$f; then echo "rm $$f"; rm $$f; fi; done
+
+rtems_makedir = $(prefix)/make
+
+dist_rtems_make_DATA = make/main.cfg make/leaf.cfg
+
+EXTRA_DIST += make/host.cfg.in
+
+rtems_make_Templatesdir = $(rtems_makedir)/Templates
+
+dist_rtems_make_Templates_DATA = make/Templates/Makefile.dir \
+    make/Templates/Makefile.leaf make/Templates/Makefile.lib
+
+rtems_make_customdir = $(rtems_makedir)/custom
+
+dist_rtems_make_custom_DATA = make/custom/default.cfg
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/host.am
