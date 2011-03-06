@@ -31,4 +31,6 @@ AC_SUBST(PROJECT_ROOT)
 
 AC_MSG_CHECKING([for RTEMS Version])
 AC_MSG_RESULT([_RTEMS_VERSION])
+pkgdatadir="${datadir}"/rtems[]_RTEMS_API;
+AC_SUBST([pkgdatadir])
 ])dnl

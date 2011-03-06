@@ -42,14 +42,18 @@ dist-hook:
 
 rtems_makedir = $(prefix)/make
 
-dist_rtems_make_DATA = make/main.cfg make/leaf.cfg
+dist_rtems_make_DATA = 
+dist_rtems_make_DATA += make/main.cfg
+dist_rtems_make_DATA += make/leaf.cfg
 
 EXTRA_DIST += make/host.cfg.in
 
-rtems_make_Templatesdir = $(rtems_makedir)/Templates
+rtems_make_Templatesdir = $(pkgdatadir)/make/Templates
 
-dist_rtems_make_Templates_DATA = make/Templates/Makefile.dir \
-    make/Templates/Makefile.leaf make/Templates/Makefile.lib
+dist_rtems_make_Templates_DATA =
+dist_rtems_make_Templates_DATA += make/Templates/Makefile.dir
+dist_rtems_make_Templates_DATA += make/Templates/Makefile.leaf
+dist_rtems_make_Templates_DATA += make/Templates/Makefile.lib
 
 rtems_make_customdir = $(rtems_makedir)/custom
 
