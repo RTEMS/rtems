@@ -59,9 +59,6 @@ EOF
       -e 's%default\.cfg%%'`;
   else break; fi;
 done
-#${MAKE-make} -f ${DEPDIR}/cfg.P \
-# srcdir="${srcdir}" MKDIR_P="${MKDIR_P}" \
-# make/custom/default.cfg $CUSTOM_CFG_FILES
 
 AC_MSG_NOTICE([creating make/${RTEMS_BSP}.cache])
 ${MAKE-make} -f ${srcdir}/make/bsp.mak \
