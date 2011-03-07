@@ -2,6 +2,9 @@
 
 	* include/rtems/irq-extension.h: Documentation.
 	* libmisc/monitor/mon-prmisc.c: Fix for multiprocessing configuration.
+	* libmisc/cpuuse/cpuusagereport.c: Fix calculation in case a thread
+	dispatch happends in the meantime.  The percent values will not sum up
+	to one hundred percent.
 
 2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 

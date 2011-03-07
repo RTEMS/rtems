@@ -53,7 +53,7 @@ void rtems_cpu_usage_report_with_plugin(
   char                 name[13];
   uint32_t             ival, fval;
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    Timestamp_Control  uptime, total, ran, last_context_switch;
+    Timestamp_Control  uptime, total, ran, uptime_at_last_reset;
   #else
     uint32_t           total_units = 0;
   #endif
@@ -67,9 +67,7 @@ void rtems_cpu_usage_report_with_plugin(
    *  guideline as to what each number means proportionally.
    */
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    last_context_switch = _Thread_Time_of_last_context_switch;
-    _TOD_Get_uptime( &uptime );
-    _Timestamp_Subtract( &CPU_usage_Uptime_at_last_reset, &uptime, &total );
+    uptime_at_last_reset = CPU_usage_Uptime_at_last_reset;
   #else
     for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
       #if !defined(RTEMS_POSIX_API) || defined(RTEMS_DEBUG)
@@ -133,9 +131,14 @@ void rtems_cpu_usage_report_with_plugin(
           ran = the_thread->cpu_time_used;
           if ( _Thread_Executing->Object.id == the_thread->Object.id ) {
             Timestamp_Control used;
-            _Timestamp_Subtract( &last_context_switch, &uptime, &used );
+            Timestamp_Control last = _Thread_Time_of_last_context_switch;
+            _TOD_Get_uptime( &uptime );
+            _Timestamp_Subtract( &last, &uptime, &used );
             _Timestamp_Add_to( &ran, &used );
-          };
+          } else {
+            _TOD_Get_uptime( &uptime );
+          }
+          _Timestamp_Subtract( &uptime_at_last_reset, &uptime, &total );
           _Timestamp_Divide( &ran, &total, &ival, &fval );
 
           /*
