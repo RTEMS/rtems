@@ -1,3 +1,8 @@
+2011-03-07	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1756/bsps
+	* timer/timer.c: Retry on timer calibration loop failure.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
