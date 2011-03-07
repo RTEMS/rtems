@@ -6,8 +6,6 @@
 # Derived from rtems/c/make/os/*.cfg in previous RTEMS version.
 #
 
-RTEMS_HOST = @RTEMS_HOST@
-
 #
 # Stuff to clean and clobber for the OS
 #
