@@ -108,7 +108,8 @@ typedef void (*rtems_interrupt_handler)(void *);
  * installed and there is already a handler installed this shall be returned.
  * @retval RTEMS_TOO_MANY If a handler with this argument is already installed
  * for the vector this shall be returned.
- * @retval * Other error states are BSP specific.
+ * @retval RTEMS_IO_ERROR Reserved for board support package specific error
+ * conditions.
  */
 rtems_status_code rtems_interrupt_handler_install(
   rtems_vector_number vector,
@@ -133,7 +134,8 @@ rtems_status_code rtems_interrupt_handler_install(
  * returned.
  * @retval RTEMS_UNSATISFIED If the handler with its argument is not installed
  * for the vector this shall be returned.
- * @retval * Other error states are BSP specific.
+ * @retval RTEMS_IO_ERROR Reserved for board support package specific error
+ * conditions.
  */
 rtems_status_code rtems_interrupt_handler_remove(
   rtems_vector_number vector,
@@ -168,7 +170,8 @@ typedef void (*rtems_interrupt_per_handler_routine)(
  * context this shall be returned.
  * @retval RTEMS_INVALID_ID If the vector number is out of range this shall be
  * returned.
- * @retval * Other error states are BSP specific.
+ * @retval RTEMS_IO_ERROR Reserved for board support package specific error
+ * conditions.
  */
 rtems_status_code rtems_interrupt_handler_iterate(
   rtems_vector_number vector,
@@ -198,7 +201,8 @@ rtems_status_code rtems_interrupt_handler_iterate(
  * @retval RTEMS_SUCCESSFUL Shall be returned in case of success.
  * @retval RTEMS_INCORRECT_STATE If the default server is already initialized
  * this shall be returned.
- * @retval * Other error states are BSP specific.
+ * @retval RTEMS_IO_ERROR Reserved for board support package specific error
+ * conditions.
  */
 rtems_status_code rtems_interrupt_server_initialize(
   rtems_task_priority priority,

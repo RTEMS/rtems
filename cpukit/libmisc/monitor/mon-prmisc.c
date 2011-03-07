@@ -101,7 +101,7 @@ rtems_monitor_dump_id(rtems_id id)
 int
 rtems_monitor_dump_name(rtems_id id)
 {
-    char name_buffer[18];
+    char name_buffer[18] = "????";
 
     rtems_object_get_name( id, sizeof(name_buffer), name_buffer );
 

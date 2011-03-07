@@ -1,3 +1,8 @@
+2011-03-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/rtems/irq-extension.h: Documentation.
+	* libmisc/monitor/mon-prmisc.c: Fix for multiprocessing configuration.
+
 2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4, aclocal/version.m4:
