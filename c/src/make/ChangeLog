@@ -1,5 +1,9 @@
 2011-03-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am, configure.ac: Move file generation into Makefile.
+
+2011-03-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.inc.in: Set PROJECT_ROOT = @pkgdatadir@.
 
 2011-03-07	Ralf Corsépius <ralf.corsepius@rtems.org>
