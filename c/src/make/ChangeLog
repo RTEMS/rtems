@@ -1,5 +1,9 @@
 2011-03-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Install *.cfgs into $(pkgdatadir)/make.
+
+2011-03-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1753/misc:
 	* host.cfg.in: Remove RTEMS_HOST.
 

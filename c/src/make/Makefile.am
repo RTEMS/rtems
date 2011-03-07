@@ -4,7 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I aclocal -I ../aclocal
 
-rtems_makedir = $(prefix)/make
+rtems_makedir = $(pkgdatadir)/make
 
 GENERIC_FILES = host.cfg
 
