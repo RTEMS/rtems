@@ -32,4 +32,5 @@ AC_SUBST([PROJECT_TOPdir],[${project_top}${rtems_updir}'$(top_builddir)'])
 AC_SUBST([PROJECT_ROOT],[${with_project_root}${rtems_updir}'$(top_builddir)'])
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
+AC_SUBST([pkgdatadir],["\${datadir}"/rtems]_RTEMS_API)
 ])dnl
