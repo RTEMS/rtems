@@ -385,13 +385,20 @@ Calibrate_loop_1ms(void)
   unsigned int targetClockBits, currentClockBits;
   unsigned int slowLoopGranularity, fastLoopGranularity;
   rtems_interrupt_level  level;
+  int retries = 0;
+ 
+  rtems_interrupt_disable(level);
 
-#ifdef DEBUG_CALIBRATE
-  printk( "Calibrate_loop_1ms is starting,  please wait ( but not too loooong. )\n" );
-#endif
+retry:
+  if ( ++retries >= 5 ) {
+    printk( "Calibrate_loop_1ms: too many attempts. giving up!!\n" );
+    while (1);
+  }
+  #ifdef DEBUG_CALIBRATE
+   printk("Calibrate_loop_1ms is starting,  please wait (but not too long.)\n");
+  #endif
   targetClockBits = US_TO_TICK(1000);
 
-  rtems_interrupt_disable(level);
   /*
    * Fill up the cache to get a correct offset
    */
@@ -435,8 +442,11 @@ Calibrate_loop_1ms(void)
   fastLoop (10000);
   res = readTimer0() - offset;
   if (res < emptyCall) {
-     printk("Problem #1 in offset computation in Calibrate_loop_1ms in file libbsp/i386/pc386/timer/timer.c\n");
-    while (1);
+    printk(
+      "Problem #1 in offset computation in Calibrate_loop_1ms "
+        " in file libbsp/i386/pc386/timer/timer.c\n"
+    );
+    goto retry;
   }
   fastLoopGranularity = (res - emptyCall) / 10000;
   /*
@@ -446,14 +456,20 @@ Calibrate_loop_1ms(void)
   slowLoop(10);
   res = readTimer0();
   if (res < offset + emptyCall) {
-     printk("Problem #2 in offset computation in Calibrate_loop_1ms in file libbsp/i386/pc386/timer/timer.c\n");
-    while (1);
+    printk(
+      "Problem #2 in offset computation in Calibrate_loop_1ms "
+        " in file libbsp/i386/pc386/timer/timer.c\n"
+    );
+    goto retry;
   }
   slowLoopGranularity = (res - offset - emptyCall)/ 10;
 
   if (slowLoopGranularity == 0) {
-    printk("Problem #3 in Calibrate_loop_1ms in file libbsp/i386/pc386/timer/timer.c\n");
-    while (1);
+    printk(
+      "Problem #3 in offset computation in Calibrate_loop_1ms "
+        " in file libbsp/i386/pc386/timer/timer.c\n"
+    );
+    goto retry;
   }
 
   targetClockBits += offset;

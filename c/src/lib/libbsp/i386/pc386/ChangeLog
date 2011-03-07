@@ -1,3 +1,8 @@
+2011-03-07	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1756/bsps
+	* timer/timer.c: Retry on timer calibration loop failure.
+
 2010-11-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Add <bsp/tty_drv.h> to the set of
