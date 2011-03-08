@@ -34,8 +34,10 @@ export AR
 export SIZE
 export OBJCOPY
 
-RTEMS_CUSTOM = $(prefix)/make/custom/$(RTEMS_BSP).cfg
-PROJECT_ROOT = @pkgdatadir@
+RTEMS_ROOT = $(prefix)
+PROJECT_ROOT = $(RTEMS_ROOT)
+RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+
 RTEMS_USE_OWN_PDIR = no
 RTEMS_HAS_POSIX_API = @RTEMS_HAS_POSIX_API@
 RTEMS_HAS_ITRON_API = no
@@ -45,6 +47,3 @@ export RTEMS_BSP
 export RTEMS_CUSTOM
 export PROJECT_ROOT
 
-# FIXME: The following shouldn't be here
-RTEMS_ROOT = $(PROJECT_ROOT)
-export RTEMS_ROOT

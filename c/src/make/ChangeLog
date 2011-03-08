@@ -1,3 +1,8 @@
+2011-03-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.inc.in: Fix PROJECT_ROOT to match usage in templates and
+	existing Makefiles.
+
 2011-03-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am, configure.ac: Move file generation into Makefile.
