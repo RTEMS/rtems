@@ -40,7 +40,7 @@ int pthread_kill(
   if ( !is_valid_signo(sig) )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  the_thread = _POSIX_Threads_Get( thread, &location );
+  the_thread = _Thread_Get( thread, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
