@@ -51,7 +51,7 @@ int pthread_equal(
    *  Validate the first id and return 0 if it is not valid
    */
 
-  (void) _POSIX_Threads_Get( t1, &location );
+  (void) _Thread_Get( t1, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -60,7 +60,7 @@ int pthread_equal(
        *  Validate the second id and return 0 if it is not valid
        */
 
-      (void) _POSIX_Threads_Get( t2, &location );
+      (void) _Thread_Get( t2, &location );
       switch ( location ) {
 
         case OBJECTS_LOCAL:

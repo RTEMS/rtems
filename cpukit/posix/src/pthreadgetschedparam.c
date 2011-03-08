@@ -36,7 +36,7 @@ int pthread_getschedparam(
   if ( !policy || !param  )
     return EINVAL;
 
-  the_thread = _POSIX_Threads_Get( thread, &location );
+  the_thread = _Thread_Get( thread, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
