@@ -106,6 +106,7 @@ psxbarrier01/Makefile
 psxcancel/Makefile
 psxcancel01/Makefile
 psxchroot01/Makefile
+psxclassic01/Makefile
 psxcleanup/Makefile
 psxcleanup01/Makefile
 psxclock/Makefile

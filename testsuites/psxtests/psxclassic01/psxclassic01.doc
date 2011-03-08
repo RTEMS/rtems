@@ -1,0 +1,27 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2019.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  Classic API Task Using POSIX Services
+
+directives:
+
++ pthread_equal
++ pthread_cancel
++ pthread_detach
++ pthread_join
++ pthread_kill
+
+concepts:
+
++ Ensure that Classic API tasks can be operated upon by the above listed
+services.

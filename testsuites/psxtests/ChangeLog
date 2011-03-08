@@ -1,3 +1,12 @@
+2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1759/cpukit
+	* Makefile.am, configure.ac: Add test to use some pthread calls with
+	Classic Tasks.
+	* psxclassic01/.cvsignore, psxclassic01/Makefile.am,
+	psxclassic01/init.c, psxclassic01/psxclassic01.doc,
+	psxclassic01/psxclassic01.scn: New files.
+
 2011-02-22	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add AC_CONFIG_HEADER(config.h).
