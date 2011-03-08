@@ -1,3 +1,8 @@
+2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* score/include/rtems/score/schedulerpriority.h: Enqueue first entry
+	said enqueue. Caught while running coverage.
+
 2011-03-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/rtems/irq-extension.h: Documentation.

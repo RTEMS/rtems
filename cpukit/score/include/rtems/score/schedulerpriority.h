@@ -38,17 +38,17 @@ extern "C" {
  */
 #define SCHEDULER_PRIORITY_ENTRY_POINTS \
   { \
-    _Scheduler_priority_Initialize, /* initialize entry point */ \
-    _Scheduler_priority_Schedule,   /* schedule entry point */ \
-    _Scheduler_priority_Yield,      /* yield entry point */ \
-    _Scheduler_priority_Block,      /* block entry point */ \
-    _Scheduler_priority_Unblock,    /* unblock entry point */ \
-    _Scheduler_priority_Allocate,   /* allocate entry point */ \
-    _Scheduler_priority_Free,       /* free entry point */ \
-    _Scheduler_priority_Update,     /* update entry point */ \
-    _Scheduler_priority_Enqueue,    /* enqueue entry point */ \
-    _Scheduler_priority_Enqueue,    /* enqueue_first entry point */ \
-    _Scheduler_priority_Extract     /* extract entry point */ \
+    _Scheduler_priority_Initialize,    /* initialize entry point */ \
+    _Scheduler_priority_Schedule,      /* schedule entry point */ \
+    _Scheduler_priority_Yield,         /* yield entry point */ \
+    _Scheduler_priority_Block,         /* block entry point */ \
+    _Scheduler_priority_Unblock,       /* unblock entry point */ \
+    _Scheduler_priority_Allocate,      /* allocate entry point */ \
+    _Scheduler_priority_Free,          /* free entry point */ \
+    _Scheduler_priority_Update,        /* update entry point */ \
+    _Scheduler_priority_Enqueue,       /* enqueue entry point */ \
+    _Scheduler_priority_Enqueue_first, /* enqueue_first entry point */ \
+    _Scheduler_priority_Extract        /* extract entry point */ \
   }
 
 /**
