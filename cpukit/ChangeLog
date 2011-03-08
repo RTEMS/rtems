@@ -1,5 +1,11 @@
 2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* score/src/objectinitializeinformation.c: Reverse sense of conditional
+	and improve comment. Comment was right but brief, conditional was
+	backwards.
+
+2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	PR 1759/cpukit
 	* posix/src/cancel.c, posix/src/pthreaddetach.c,
 	posix/src/pthreadequal.c, posix/src/pthreadgetschedparam.c,

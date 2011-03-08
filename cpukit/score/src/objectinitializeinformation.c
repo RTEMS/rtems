@@ -1,7 +1,7 @@
 /*
  *  Object Handler Initialization per Object Class
  *
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -134,7 +134,7 @@ void _Objects_Initialize_information(
    */
   name_length = maximum_name_length;
 
-  #if !defined(RTEMS_POSIX_API)
+  #if defined(RTEMS_POSIX_API)
     if ( name_length & (OBJECTS_NAME_ALIGNMENT-1) )
       name_length = (name_length + OBJECTS_NAME_ALIGNMENT) &
                     ~(OBJECTS_NAME_ALIGNMENT-1);
