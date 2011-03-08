@@ -1,3 +1,12 @@
+2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1759/cpukit
+	* posix/src/cancel.c, posix/src/pthreaddetach.c,
+	posix/src/pthreadequal.c, posix/src/pthreadgetschedparam.c,
+	posix/src/pthreadjoin.c, posix/src/pthreadkill.c,
+	posix/src/pthreadsetschedparam.c: Some POSIX pthread services did not
+	support using Classic API Task Ids.
+
 2011-03-03	Chris Johns <chrisj@rtems.org>
 
 	PR 1749/filesystem
