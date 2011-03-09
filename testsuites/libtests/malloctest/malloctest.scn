@@ -44,8 +44,13 @@ run tests for _Heap_Resize_Block()
 malloc_walk - normal path
 malloc_walk - in critical section path
 Heap Initialized
-heap extend - bad address
-heap extend - OK
+heap extend - link below
+heap extend - merge below
+heap extend - merge above
+heap extend - link above
+heap extend - area too small
+heap extend - invalid area
+heap extend - merge below with align up
 malloc_free_space - check malloc space drops after malloc
 malloc_free_space - verify free space returns to previous value
 malloc_info - called with NULL

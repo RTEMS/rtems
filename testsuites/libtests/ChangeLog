@@ -1,3 +1,8 @@
+2011-03-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* malloctest/init.c: Improve coverage.
+	* malloctest/malloctest.scn: Update.
+
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add AC_CONFIG_HEADER(config.h).

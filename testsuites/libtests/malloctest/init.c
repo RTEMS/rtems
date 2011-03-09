@@ -940,32 +940,42 @@ static void test_heap_assert(bool ret, bool expected)
 static void test_heap_extend(void)
 {
   bool ret = false;
+  Heap_Control *heap = &TestHeap;
+  uint8_t *area_begin = TestHeapMemory;
 
-  _Heap_Initialize( &TestHeap, TestHeapMemory + 768, 256, 0 );
+  _Heap_Initialize( heap, area_begin + 768, 256, 0 );
 
   puts( "heap extend - link below" );
-  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 0, 256 );
+  ret = _Protected_heap_Extend( heap, area_begin + 0, 256 );
   test_heap_assert( ret, true );
 
   puts( "heap extend - merge below" );
-  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 512, 256 );
+  ret = _Protected_heap_Extend( heap, area_begin + 512, 256 );
   test_heap_assert( ret, true );
 
   puts( "heap extend - merge above" );
-  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 1024, 256 );
+  ret = _Protected_heap_Extend( heap, area_begin + 1024, 256 );
   test_heap_assert( ret, true );
 
   puts( "heap extend - link above" );
-  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 1536, 256 );
+  ret = _Protected_heap_Extend( heap, area_begin + 1536, 256 );
   test_heap_assert( ret, true );
 
   puts( "heap extend - area too small" );
-  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory + 2048, 0 );
+  ret = _Protected_heap_Extend( heap, area_begin + 2048, 0 );
   test_heap_assert( ret, false );
 
   puts( "heap extend - invalid area" );
-  ret = _Protected_heap_Extend( &TestHeap, (void *) -1, 2 );
+  ret = _Protected_heap_Extend( heap, (void *) -1, 2 );
   test_heap_assert( ret, false );
+
+  area_begin = (uint8_t *) (((uintptr_t) area_begin) | 1);
+
+  _Heap_Initialize( heap, area_begin + 768, 256, 0 );
+
+  puts( "heap extend - merge below with align up" );
+  ret = _Protected_heap_Extend( heap, area_begin + 512, 256 );
+  test_heap_assert( ret, true );
 }
 
 static void test_heap_info(void)
