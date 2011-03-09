@@ -1,7 +1,7 @@
 /*
  *  Thread Handler - Object Id to Thread Pointer
  *
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -76,14 +76,15 @@ Thread_Control *_Thread_Get (
 
   api_information = _Objects_Information_table[ the_api ];
   /*
-   *  There is no way for this to happen if POSIX is enabled.
+   *  There is no way for this to happen if POSIX is enabled.  But there
+   *  is actually a test case in sp43 for this which trips it whether or
+   *  not POSIX is enabled.  So in the interest of safety, this is left
+   *  on in all configurations.
    */ 
-  #if !defined(RTEMS_POSIX_API)
-    if ( !api_information ) {
-      *location = OBJECTS_ERROR;
-      goto done;
-    }
-  #endif
+  if ( !api_information ) {
+    *location = OBJECTS_ERROR;
+    goto done;
+  }
 
   information = api_information[ the_class ];
   if ( !information ) {

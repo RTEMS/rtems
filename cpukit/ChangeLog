@@ -1,3 +1,8 @@
+2011-03-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/threadget.c: Remove conditional since this path can be
+	tested with and without POSIX enabled.
+
 2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* score/src/objectinitializeinformation.c: Reverse sense of conditional
