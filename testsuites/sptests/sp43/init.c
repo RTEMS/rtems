@@ -440,10 +440,35 @@ rtems_task Init(
     );
     directive_failed( sc, "rtems_task_set_priority" );
 
-    /* destroy class pointer */
+    /* destroy internal API pointer */
+    puts( "rtems_task_set_priority - clobber internal API info" );
+    tmp = _Objects_Information_table[ api ];
+    _Objects_Information_table[ api ] = NULL;
+
+    puts( "rtems_task_set_priority - use valid Idle thread id again" );
+    sc = rtems_task_set_priority(
+      rtems_build_id( class, api, 1, 1 ),
+      RTEMS_CURRENT_PRIORITY,
+      &old_priority
+    );
+    fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_task_set_priority" );
+
+    /* restore pointer */
+    puts( "rtems_task_set_priority - restore internal api info" );
+    _Objects_Information_table[ api ] = tmp;
+
+    /* destroy internal API thread class pointer */
     puts( "rtems_task_set_priority - clobber internal thread class info" );
-    tmp = _Objects_Information_table[ class ][ api ];
-    _Objects_Information_table[ class ][ api ] = NULL;
+    tmp = _Objects_Information_table[ api ][ class ];
+    _Objects_Information_table[ api ][ class ] = NULL;
+
+    puts( "rtems_task_set_priority - use valid Idle thread id again" );
+    sc = rtems_task_set_priority(
+      rtems_build_id( class, api, 1, 1 ),
+      RTEMS_CURRENT_PRIORITY,
+      &old_priority
+    );
+    fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_task_set_priority" );
 
     puts( "rtems_task_set_priority - use valid Idle thread id again" );
     sc = rtems_task_set_priority(
@@ -455,7 +480,7 @@ rtems_task Init(
 
     /* restore pointer */
     puts( "rtems_task_set_priority - restore internal thread class info" );
-    _Objects_Information_table[ class ][ api ] = tmp;
+    _Objects_Information_table[ api ][ class ] = tmp;
   }
 
   /*

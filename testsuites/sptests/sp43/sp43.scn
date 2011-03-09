@@ -1,5 +1,5 @@
 *** TEST 43 ***
-RTEMS Version: rtems-4.9.99.0(SPARC/w/FPU/erc32)
+RTEMS Version: rtems-4.10.99.0(SPARC/w/FPU/sis)
 rtems_object_get_classic_name - INVALID_ADDRESS
 rtems_object_get_classic_name - INVALID_ID (bad index)
 rtems_object_get_classic_name - INVALID_ID (unallocated index)
@@ -13,20 +13,21 @@ rtems_object_get_name - bad length
 rtems_object_get_name - bad pointer
 rtems_object_get_name returned (UI1 ) for init task id
 rtems_object_get_name returned (UI1 ) for RTEMS_SELF
+rtems_object_set_name - INVALID_ADDRESS
 rtems_object_set_name - INVALID_ID (bad API)
 rtems_object_set_name - INVALID_ID (bad index)
 rtems_object_set_name - change name of init task to (New1)
 New1 - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned (New1) for init task
 rtems_object_set_name - change name of init task to (Ne1)
-Ne1 - name returned by rtems_object_get_classic_name
-rtems_object_get_name returned (Ne1) for init task
+Ne1  - name returned by rtems_object_get_classic_name
+rtems_object_get_name returned (Ne1 ) for init task
 rtems_object_set_name - change name of init task to (N1)
-N1  - name returned by rtems_object_get_classic_name
-rtems_object_get_name returned (N1) for init task
+N1   - name returned by rtems_object_get_classic_name
+rtems_object_get_name returned (N1  ) for init task
 rtems_object_set_name - change name of init task to (N)
-N   - name returned by rtems_object_get_classic_name
-rtems_object_get_name returned (N) for init task
+N    - name returned by rtems_object_get_classic_name
+rtems_object_get_name returned (N   ) for init task
 rtems_object_set_name - change name of init task to ()
 *    - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned () for init task
@@ -44,7 +45,7 @@ rtems_object_id_get_node - OK
 rtems_object_id_get_index - OK
 <pause>
 rtems_object_id_api_minimum returned 1
-rtems_object_id_api_maximum returned 4
+rtems_object_id_api_maximum returned 3
 rtems_object_api_minimum_class(0) returned -1
 rtems_object_api_maximum_class(0) returned 0
 rtems_object_api_minimum_class(0) returned -1
@@ -81,7 +82,11 @@ Classic API Timer Information
     maximum     :          1 available : 1
     auto_extend : no
 rtems_task_set_priority - use valid Idle thread id
+rtems_task_set_priority - clobber internal API info
+rtems_task_set_priority - use valid Idle thread id again
+rtems_task_set_priority - restore internal api info
 rtems_task_set_priority - clobber internal thread class info
+rtems_task_set_priority - use valid Idle thread id again
 rtems_task_set_priority - use valid Idle thread id again
 rtems_task_set_priority - restore internal thread class info
 rtems_semaphore_obtain - good but uncreated ID - INVALID_ID - OK
