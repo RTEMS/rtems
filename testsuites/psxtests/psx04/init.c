@@ -548,12 +548,6 @@ void *POSIX_Init(
   rtems_test_assert( errno == EINVAL );
   puts( "Init: pthread_kill - EINVAL (sig invalid)" );
 
-  status = pthread_kill( 0, SIGUSR2 );
-  if ( status != -1 )
-    printf( "status = %d\n", status );
-  rtems_test_assert( errno == ESRCH );
-  puts( "Init: pthread_kill - ESRCH (signal SA_SIGINFO)" );
-
   status = pthread_kill( Init_id, 0 );
   if ( status != -1 )
     printf( "status = %d\n", status );

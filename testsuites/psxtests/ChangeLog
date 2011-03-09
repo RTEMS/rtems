@@ -1,3 +1,8 @@
+2011-03-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psx04/init.c, psx04/psx04.scn: Remove test case made obsolete by
+	PR1759.
+
 2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1759/cpukit
