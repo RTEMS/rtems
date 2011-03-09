@@ -1,3 +1,8 @@
+2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1760/misc
+	* compilers/gcc-target-default.cfg: Fix typo in CPP definition.
+
 2008-09-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* leaf.cfg: LINK.c and LINK.cc include LDFLAGS so do not include it in
