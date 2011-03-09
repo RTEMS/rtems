@@ -6,4 +6,5 @@ Init - attempt to open the /dev/test RD mode -- OK
 Init - attempt to read from /dev/test -- OK
 Init - attempt to read from /dev/test - expect ENOSYS
 Init - attempt ioctl on the device - expect ENOSYS
+Init - mknod(/dev/null)-- OK
 *** END OF TEST DEVFS04 ***

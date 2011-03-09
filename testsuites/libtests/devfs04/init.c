@@ -65,6 +65,7 @@ rtems_task Init(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOSYS );
 
+  puts( "Init - mknod(/dev/null)-- OK" );
   status = mknod( "/dev/null", 0777 | S_IFCHR, 0LL );
   rtems_test_assert( status == 0 );
 
@@ -80,6 +81,7 @@ rtems_task Init(
 
 /* include an extra slot for registering the termios one dynamically */
 #define CONFIGURE_MAXIMUM_DRIVERS 3
+#define CONFIGURE_MAXIMUM_DEVICES 6
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
