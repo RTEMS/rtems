@@ -1,3 +1,8 @@
+2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1760/misc
+	* compilers/gcc-target-default.cfg: Fix typo in CPP definition.
+
 2011-03-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.inc.in: Fix PROJECT_ROOT to match usage in templates and
