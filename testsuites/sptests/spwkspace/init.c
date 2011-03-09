@@ -55,7 +55,7 @@ rtems_task Init(
 
   puts( "rtems_workspace_free - NULL" );
   retbool = rtems_workspace_free( NULL );
-  rtems_test_assert( retbool == false );
+  rtems_test_assert( retbool == true );
 
   puts( "rtems_workspace_free - previous pointer to 42 bytes" );
   retbool = rtems_workspace_free( p1 );
