@@ -16,6 +16,40 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+static void Task_harmless_extension_one(
+  rtems_tcb *unused_one
+)
+{
+  /* Do nothing */
+}
+
+static void Task_harmless_extension_two(
+  rtems_tcb *unused_one,
+  rtems_tcb *unused_two
+)
+{
+  /* Do nothing */
+}
+
+static bool Task_harmless_extension_true_two(
+  rtems_tcb *unused_one,
+  rtems_tcb *unused_two
+)
+{
+  return true;
+}
+
+static const rtems_extensions_table Harmless_extensions = {
+  Task_harmless_extension_true_two,
+  Task_harmless_extension_two,
+  Task_harmless_extension_two,
+  Task_harmless_extension_two,
+  Task_harmless_extension_two,
+  Task_harmless_extension_one,
+  Task_harmless_extension_one,
+  NULL
+};
+
 rtems_extensions_table Extensions = {
   Task_create_extension,     /* task create user extension */
   Task_start_extension,      /* task start user extension */
@@ -98,6 +132,14 @@ rtems_task Init(
     RTEMS_INVALID_ADDRESS,
     "rtems_extension_ident"
   );
+
+  puts( "rtems_extension_create - harmless -- OK" );
+  status = rtems_extension_create(
+    Extension_name[ 2 ],
+    &Harmless_extensions,
+    &Extension_id[ 2 ]
+  );
+  directive_failed( status, "rtems_extension_create #3" );
 
   Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );

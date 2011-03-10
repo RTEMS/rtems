@@ -1,3 +1,7 @@
+2011-03-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sp07/init.c: Improve coverage.
+
 2011-03-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spwkspace/init.c: Adjust test to account for recent heap change on
