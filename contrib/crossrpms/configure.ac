@@ -170,7 +170,7 @@ AC_CONFIG_FILES([freebsd8.1/x86_64/Makefile])
 
 AC_CONFIG_FILES([freebsd8.2/Makefile])
 AC_CONFIG_FILES([freebsd8.2/i586/Makefile])
-AC_CONFIG_FILES([freebsd8.2/amd64/Makefile])
+AC_CONFIG_FILES([freebsd8.2/x86_64/Makefile])
 
 AC_CONFIG_FILES([netbsd5.0.2/Makefile])
 AC_CONFIG_FILES([netbsd5.0.2/i386/Makefile])
