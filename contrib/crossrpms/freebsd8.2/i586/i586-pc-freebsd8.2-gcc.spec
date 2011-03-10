@@ -41,7 +41,7 @@ Summary:      	i586-pc-freebsd8.2 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20110227.0%{?dist}
+Release:      	0.20110310.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -112,6 +112,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
 %global gmp_provided 4.3.2
+%endif
+
+%if 0%{?suse11_4}
+%global mpc_provided 0.8.2
+%global mpfr_provided 3.0.0
+%global gmp_provided 5.0.1
 %endif
 
 %if 0%{?cygwin}
@@ -192,6 +198,7 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?suse11_4:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
@@ -332,9 +339,6 @@ sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/u
 
   languages="c"
   languages="$languages,c++"
-  case i586-pc-freebsd8.2 in
-  *-rtems4.11) optargs="$optargs --enable-libstdcxx-time";;
-  esac
   languages="$languages,fortran"
   languages="$languages,objc"
 %if "%{_build}" != "%{_host}"
