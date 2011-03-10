@@ -90,14 +90,14 @@ extern ppc_cpu_id_t current_ppc_cpu;
 
 typedef unsigned short ppc_cpu_revision_t;
 
-extern ppc_cpu_id_t get_ppc_cpu_type ();
+extern ppc_cpu_id_t get_ppc_cpu_type (void);
 extern char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu);
-extern ppc_cpu_revision_t get_ppc_cpu_revision ();
+extern ppc_cpu_revision_t get_ppc_cpu_revision (void);
 extern ppc_cpu_revision_t current_ppc_revision;
 
 /* PUBLIC ACCESS ROUTINES */
 #define _PPC_FEAT_DECL(x) \
-static inline unsigned ppc_cpu_##x() { \
+static inline unsigned ppc_cpu_##x(void) { \
   if ( PPC_UNKNOWN == current_ppc_cpu ) \
     get_ppc_cpu_type(); \
   return current_ppc_features.x; \
@@ -119,21 +119,21 @@ static inline ppc_cpu_id_t ppc_cpu_current(void)
 	return current_ppc_cpu;
 }
 
-static inline bool ppc_cpu_is_e200()
+static inline bool ppc_cpu_is_e200(void)
 {
 	return ppc_cpu_current() == PPC_e200z0
 		|| ppc_cpu_current() == PPC_e200z1
 		|| ppc_cpu_current() == PPC_e200z6;
 }
 
-static inline bool ppc_cpu_is_e300()
+static inline bool ppc_cpu_is_e300(void)
 {
 	return ppc_cpu_current() == PPC_e300c1
 		|| ppc_cpu_current() == PPC_e300c2
 		|| ppc_cpu_current() == PPC_e300c3;
 }
 
-static inline bool ppc_cpu_is_e500()
+static inline bool ppc_cpu_is_e500(void)
 {
 	return ppc_cpu_current() == PPC_8540
 		|| ppc_cpu_current() == PPC_e500v2;

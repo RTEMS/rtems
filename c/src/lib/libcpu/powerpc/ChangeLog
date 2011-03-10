@@ -1,3 +1,7 @@
+2011-03-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/cpuIdent.h: Fixed warnings.
+
 2011-02-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* mpc83xx/network/tsec.c: New default MAC configuration.  Set MDIO
