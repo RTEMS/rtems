@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = i586 amd64
+SUBDIRS = i586 x86_64
