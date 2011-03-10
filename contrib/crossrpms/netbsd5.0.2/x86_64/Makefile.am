@@ -20,5 +20,4 @@ GCC_VERS = 4.5.0
 GCC_PKGVERS = $(GCC_VERS)
 GCC_RPMREL = 0.20110310.0
 include ../gcc.am
-# C only
 GCC_OPTS += --languages=c,cxx,fortran,objc
