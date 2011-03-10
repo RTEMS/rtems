@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.11])
 
 AC_PREREQ([2.68])
-AC_INIT([crossrpms],[0.20100607.0],[http://www.rtems.org/bugzilla])
+AC_INIT([crossrpms],[0.20110310.0],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -163,10 +163,6 @@ AC_CONFIG_FILES([freebsd6.4/i586/Makefile])
 
 AC_CONFIG_FILES([freebsd7.3/Makefile])
 AC_CONFIG_FILES([freebsd7.3/i586/Makefile])
-
-AC_CONFIG_FILES([freebsd8.0/Makefile])
-AC_CONFIG_FILES([freebsd8.0/i586/Makefile])
-AC_CONFIG_FILES([freebsd8.0/x86_64/Makefile])
 
 AC_CONFIG_FILES([freebsd8.1/Makefile])
 AC_CONFIG_FILES([freebsd8.1/i586/Makefile])
