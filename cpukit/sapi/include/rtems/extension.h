@@ -149,13 +149,13 @@ typedef User_extensions_routine
  * - Task creation
  * - Task start
  * - Task restart
- * - Task exit
  * - Task context switch
  * - Post task context switch
  * - Task begins to execute
  *
  * At the following system events, the extensions are invoked in reverse order:
  *
+ * - Task exit
  * - Task deletion
  * - Fatal error detection
  *

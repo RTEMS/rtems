@@ -1,3 +1,7 @@
+2011-03-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sapi/include/rtems/extension.h: Documentation.
+
 2011-03-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/threadget.c: Remove conditional since this path can be
