@@ -41,7 +41,7 @@ Summary:      	i686-pc-cygwin gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20100711.0%{?dist}
+Release:      	0.20110310.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -61,6 +61,10 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # Bug in gcc-4.5-20100318, doesn't build them on x86_84 hosts.
 %bcond_with plugin
 
+# EXPERIMENTAL: Use gcc's stdint.h instead of newlib's
+# Should be applicable to gcc >= 4.5.0
+%bcond_with gcc_stdint
+
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
 %global mpfr_version	2.4.2
@@ -68,22 +72,22 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
-%if 0%{?fc13}
+%if 0%{?fc15}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
+%if 0%{?fc14}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
 %global gmp_provided 4.3.1
 %endif
 
-%if 0%{?fc12}
-%global mpc_provided 0.8
-%global mpfr_provided 2.4.1
+%if 0%{?fc13}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.2
 %global gmp_provided 4.3.1
-%endif
-
-%if 0%{?fc11}
-%global mpc_provided %{nil}
-%global mpfr_provided 2.4.1
-%global gmp_provided 4.2.4
 %endif
 
 %if 0%{?el6}
@@ -98,18 +102,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global gmp_provided 4.1.4
 %endif
 
-%if 0%{?suse11_0}
-%global mpc_provided %{nil}
-%global mpfr_provided 2.3.1
-%global gmp_provided 4.2.2
-%endif
-
-%if 0%{?suse11_1}
-%global mpc_provided %{nil}
-%global mpfr_provided 2.3.2
-%global gmp_provided 4.2.3
-%endif
-
 %if 0%{?suse11_2}
 %global mpc_provided 0.7
 %global mpfr_provided 2.4.1
@@ -120,6 +112,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
 %global gmp_provided 4.3.2
+%endif
+
+%if 0%{?suse11_4}
+%global mpc_provided 0.8.2
+%global mpfr_provided 3.0.0
+%global gmp_provided 5.0.1
 %endif
 
 %if 0%{?cygwin}
@@ -194,13 +192,13 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 
 
 %if %{defined cloog_required}
-%{?fc11:BuildRequires: cloog-ppl-devel >= %cloog_required}
-%{?fc12:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?suse11_4:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
-%{?suse11_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
 
 
@@ -266,7 +264,7 @@ Patch71: cygwin-gcc4-4.3.4-3.diff
 %endif
 
 %if 0%{?_build_mpfr}
-Source60:    http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+Source60:    http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
 %endif
 
 %if 0%{?_build_mpc}
@@ -300,6 +298,10 @@ cd ..
 
 
 
+
+%if %{with gcc_stdint}
+sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/use_gcc_stdint=provide/}' gcc-%{gcc_pkgvers}/gcc/config.gcc
+%endif
 
 
 %if 0%{?_build_mpfr}
