@@ -1,0 +1,8 @@
+*** SP73 (YIELD) TEST ***
+TA1  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA2  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA3  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA1  - rtems_clock_get_tod - 09:00:05   12/31/1988
+TA1  - rtems_clock_get_tod - 09:00:10   12/31/1988
+TA2  - rtems_clock_get_tod - 09:00:10   12/31/1988
+*** END OF SP73 (YIELD) TEST ***

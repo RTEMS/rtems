@@ -1,3 +1,10 @@
+2011-03-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add sp73.  This is a new test designed
+	to improve coverage of the thread yield logic.
+	* sp73/.cvsignore, sp73/Makefile.am, sp73/init.c, sp73/sp73.doc,
+	sp73/sp73.scn: New files.
+
 2011-03-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sp07/init.c: Improve coverage.
