@@ -1,3 +1,4 @@
 *** TEST 58 ***
 Init - _Timespec_Divide - by zero
+Init - _Timespec_Greater_than - lhs seconds less
 *** END OF TEST 58 ***

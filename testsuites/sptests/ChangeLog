@@ -1,5 +1,10 @@
 2011-03-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* sp58/init.c, sp58/sp58.scn: Account for case where left hand side
+	seconds field is less than.
+
+2011-03-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* sp08/sp08.scn: Convert to UNIX CR/LF.
 
 2011-03-11	Joel Sherrill <joel.sherrilL@OARcorp.com>

@@ -39,7 +39,23 @@ void timespec_divide_by_zero(void)
   _Timespec_Divide( &t1, &zero, &ival_percentage, &fval_percentage );
   rtems_test_assert( ival_percentage == 0 );
   rtems_test_assert( fval_percentage == 0 );
+}
 
+void timespec_greater_than_lhs_sec_less(void)
+{
+  struct timespec   lhs;
+  struct timespec   rhs;
+  bool              rc;
+
+  lhs.tv_sec  = 100;
+  lhs.tv_nsec = 0;
+
+  rhs.tv_sec  = 101;
+  rhs.tv_nsec = 0;
+
+  puts( "Init - _Timespec_Greater_than - lhs seconds less" );
+  rc = _Timespec_Greater_than( &lhs, &rhs );
+  rtems_test_assert( rc == false );
 }
 
 rtems_task Init(
@@ -49,6 +65,7 @@ rtems_task Init(
   puts( "\n\n*** TEST 58 ***" );
 
   timespec_divide_by_zero();
+  timespec_greater_than_lhs_sec_less();
 
   puts( "*** END OF TEST 58 ***" );
   rtems_test_exit(0);
