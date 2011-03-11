@@ -1,5 +1,9 @@
 2011-03-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* sp08/sp08.scn: Convert to UNIX CR/LF.
+
+2011-03-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* sp08/Makefile.am, sp08/init.c, sp08/sp08.scn, sp09/screen07.c,
 	sp09/sp09.scn: Improve coverage. Change mode while system not up and
 	broadcast a message that is too large.

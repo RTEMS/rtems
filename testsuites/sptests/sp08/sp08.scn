@@ -1,5 +1,3 @@
-
-
 *** TEST 8 ***
 TA1 - rtems_task_mode - RTEMS_ASR                  - previous mode:  00000100
 TA1 - rtems_task_mode - RTEMS_NO_ASR               - previous mode:  00000100
