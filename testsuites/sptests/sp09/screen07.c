@@ -349,15 +349,30 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_urgent - RTEMS_INVALID_ID" );
 
-  status = rtems_message_queue_broadcast( Queue_id[ 1 ], NULL, MESSAGE_SIZE, &count );
+  status = rtems_message_queue_broadcast(
+     Queue_id[ 1 ], NULL, MESSAGE_SIZE, &count );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
     "rtems_message_queue_broadcast with NULL count"
   );
-  puts( "TA1 - rtems_message_queue_broadcast - NULL buffer - RTEMS_INVALID_ADDRESS" );
+  puts(
+    "TA1 - rtems_message_queue_broadcast - NULL buffer - RTEMS_INVALID_ADDRESS"
+  );
 
-  status = rtems_message_queue_broadcast( Queue_id[ 1 ], buffer, MESSAGE_SIZE, NULL );
+  status = rtems_message_queue_broadcast(
+     Queue_id[ 1 ], buffer, MESSAGE_SIZE + 1, &count );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_SIZE,
+    "rtems_message_queue_broadcast with too large"
+  );
+  puts(
+    "TA1 - rtems_message_queue_broadcast - too large - RTEMS_INVALID_SIZE"
+  );
+
+  status = rtems_message_queue_broadcast(
+      Queue_id[ 1 ], buffer, MESSAGE_SIZE, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,

@@ -1,5 +1,12 @@
 2011-03-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* sp08/Makefile.am, sp08/init.c, sp08/sp08.scn, sp09/screen07.c,
+	sp09/sp09.scn: Improve coverage. Change mode while system not up and
+	broadcast a message that is too large.
+	* sp08/system.h, sp08/task1.c: Removed.
+
+2011-03-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add sp73.  This is a new test designed
 	to improve coverage of the thread yield logic.
 	* sp73/.cvsignore, sp73/Makefile.am, sp73/init.c, sp73/sp73.doc,

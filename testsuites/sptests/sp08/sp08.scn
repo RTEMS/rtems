@@ -1,22 +1,36 @@
+
+
 *** TEST 8 ***
-TA1 - rtems_task_mode - RTEMS_ASR                  - previous mode:  00000000
-TA1 - rtems_task_mode - RTEMS_NO_ASR               - previous mode:  00000000
-TA1 - rtems_task_mode - RTEMS_NO_ASR               - previous mode:  00000400
-TA1 - rtems_task_mode - RTEMS_ASR                  - previous mode:  00000400
-TA1 - rtems_task_mode - RTEMS_NO_TIMESLICE         - previous mode:  00000000
-TA1 - rtems_task_mode - RTEMS_TIMESLICE            - previous mode:  00000000
-TA1 - rtems_task_mode - RTEMS_TIMESLICE            - previous mode:  00000200
-TA1 - rtems_task_mode - RTEMS_NO_TIMESLICE         - previous mode:  00000200
-TA1 - rtems_task_mode - RTEMS_PREEMPT              - previous mode:  00000000
+TA1 - rtems_task_mode - RTEMS_ASR                  - previous mode:  00000100
+TA1 - rtems_task_mode - RTEMS_NO_ASR               - previous mode:  00000100
+TA1 - rtems_task_mode - RTEMS_NO_ASR               - previous mode:  00000500
+TA1 - rtems_task_mode - RTEMS_ASR                  - previous mode:  00000500
+TA1 - rtems_task_mode - RTEMS_NO_TIMESLICE         - previous mode:  00000100
+TA1 - rtems_task_mode - RTEMS_TIMESLICE            - previous mode:  00000100
+TA1 - rtems_task_mode - RTEMS_TIMESLICE            - previous mode:  00000300
+TA1 - rtems_task_mode - RTEMS_NO_TIMESLICE         - previous mode:  00000300
+TA1 - rtems_task_mode - RTEMS_PREEMPT              - previous mode:  00000100
 TA1 - rtems_task_mode - RTEMS_NO_PREEMPT           - previous mode:  00000000
 TA1 - rtems_task_mode - RTEMS_NO_PREEMPT           - previous mode:  00000100
 TA1 - rtems_task_mode - RTEMS_PREEMPT              - previous mode:  00000100
 TA1 - rtems_task_mode - RTEMS_INTERRUPT_LEVEL( 3 ) - previous mode:  00000000
-TA1 - rtems_task_mode - RTEMS_INTERRUPT_LEVEL( 5 ) - previous mode:  00000003
-TA1 - rtems_task_mode - set all modes        - previous mode:  00000005
-TA1 - rtems_task_mode - set all modes        - previous mode:  00000703
-TA1 - rtems_task_mode - clear all modes      - previous mode:  00000703
+TA1 - rtems_task_mode - RTEMS_INTERRUPT_LEVEL( 5 ) - previous mode:  00000000
+TA1 - rtems_task_mode - set all modes        - previous mode:  00000000
+TA1 - rtems_task_mode - set all modes        - previous mode:  00000700
+TA1 - rtems_task_mode - clear all modes      - previous mode:  00000700
 TA1 - rtems_task_mode - get current mode     - previous mode:  00000000
+TA1 - FORCE system state to before multitasking
+TA1 - enable preemption mode
+TA1 - rtems_task_mode - RTEMS_PREEMPT              - previous mode:  00000000
+TA1 - disable preemption mode
+TA1 - Restore system state
 *** END OF TEST 8 ***
-
-NOTE: The interrupt level lines will be different on CPUs with few levels.
+0  size = 0x000404f6 .
+not load section .debug_frame: addr = 0x00000000  size = 0x00004820 .
+not load section .debug_str: addr = 0x00000000  size = 0x0000f673 .
+not load section .debug_loc: addr = 0x00000000  size = 0x0001c59c .
+not load section .debug_pubtypes: addr = 0x00000000  size = 0x0005eac5 .
+not load section .debug_ranges: addr = 0x00000000  size = 0x000015e0 .
+not load section .ARM.attributes: addr = 0x00000000  size = 0x00000010 .
+call ARMul_InitSymTable,kernel filename is sp08.ralf. 
+start addr is set to 0x00000058 by exec file.

@@ -151,6 +151,7 @@ TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_TOO_MANY
 TA1 - rtems_message_queue_urgent - NULL buffer - RTEMS_INVALID_ADDRESS
 TA1 - rtems_message_queue_urgent - RTEMS_INVALID_ID
 TA1 - rtems_message_queue_broadcast - NULL buffer - RTEMS_INVALID_ADDRESS
+TA1 - rtems_message_queue_broadcast - too large - RTEMS_INVALID_SIZE
 TA1 - rtems_message_queue_broadcast - NULL count - RTEMS_INVALID_ADDRESS
 <pause - screen 8>
 TA1 - rtems_message_queue_delete - Q 1 - RTEMS_SUCCESSFUL
@@ -174,9 +175,8 @@ TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
 TA3 - rtems_message_queue_receive - woke up with RTEMS_OBJECT_WAS_DELETED
 TA3 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
 <pause - screen 9>
-TA1 - rtems_interrupt_catch - RTEMS_INVALID_NUMBER
-TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS
-TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS
+TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS -- SKIPPED
+TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS - SKIPPED
 TA1 - rtems_signal_send - RTEMS_INVALID_ID
 TA1 - rtems_signal_send - RTEMS_INVALID_NUMBER
 TA1 - rtems_signal_send - RTEMS_NOT_DEFINED
