@@ -1,5 +1,10 @@
 2011-03-14	Chris Johns <chrisj@rtems.org>
 
+	PR 1763/shell
+	* libmisc/shell/hexdump-conv.c: Remove debug hacks.
+
+2011-03-14	Chris Johns <chrisj@rtems.org>
+
 	PR 1757/filesystem
 	* libfs/src/rfs/rtems-rfs-block-pos.h,
 	libfs/src/rfs/rtems-rfs-block.h, libfs/src/rfs/rtems-rfs-file.c,

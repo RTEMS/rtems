@@ -63,8 +63,6 @@ conv_c(rtems_shell_hexdump_globals* globals, PR *pr, u_char *p, size_t bufsize)
 	int converr, pad, width;
 	char peekbuf[MB_LEN_MAX];
 
-  printf("MB_LEN_MAX=%i\n", MB_LEN_MAX);
-  return;
 	if (pr->mbleft > 0) {
 		str = "**";
 		pr->mbleft--;
