@@ -1,3 +1,14 @@
+2011-03-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1762/cpukit
+	* Makefile.am, preinstall.am, libmisc/Makefile.am, wrapup/Makefile.am:
+	Add generic serial mouse driver and mouse parser. The parser code was
+	in the pc386 BSP but was generic so cleaned up and placed here.
+	Serial mouse driver itself is new.
+	* libmisc/mouse/README, libmisc/mouse/mouse_parser.c,
+	libmisc/mouse/mouse_parser.h, libmisc/mouse/serial_mouse.c,
+	libmisc/mouse/serial_mouse.h: New files.
+
 2011-03-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* score/include/rtems/score/sysstate.h: Spelling.

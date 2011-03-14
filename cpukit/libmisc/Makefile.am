@@ -64,6 +64,11 @@ EXTRA_DIST += monitor/README
 noinst_LIBRARIES += libmw-fb.a
 libmw_fb_a_SOURCES = fb/mw_print.c fb/mw_uid.c fb/fb.h fb/mw_uid.h
 
+## mouse
+noinst_LIBRARIES += libmouse.a
+libmouse_a_SOURCES = mouse/mouse_parser.c mouse/serial_mouse.c
+EXTRA_DIST += mouse/README
+
 ## shell
 if LIBSHELL
 noinst_LIBRARIES += libshell.a

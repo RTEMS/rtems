@@ -53,6 +53,7 @@ TMP_LIBS += ../libmisc/libdumpbuf.a
 TMP_LIBS += ../libmisc/libdevnull.a
 TMP_LIBS += ../libmisc/libdummy.a
 TMP_LIBS += ../libmisc/libfsmount.a
+TMP_LIBS += ../libmisc/libmouse.a
 TMP_LIBS += ../libmisc/libmw-fb.a
 TMP_LIBS += ../libmisc/libstringto.a
 TMP_LIBS += ../libmisc/libuuid.a

@@ -155,6 +155,10 @@ include_rtems_HEADERS += libmisc/monitor/monitor.h
 ## fb
 include_rtems_HEADERS += libmisc/fb/fb.h libmisc/fb/mw_uid.h
 
+## mouse
+include_rtems_HEADERS += libmisc/mouse/mouse_parser.h \
+    libmisc/mouse/serial_mouse.h
+
 ## shell
 if LIBSHELL
 include_rtems_HEADERS += libmisc/shell/shell.h libmisc/shell/shellconfig.h
