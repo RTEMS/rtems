@@ -1,3 +1,7 @@
+2011-03-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.h: Remove warnings.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* cache.c, cpu.h, cpuModel.h:
