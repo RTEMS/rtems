@@ -1,5 +1,10 @@
 2011-03-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/mouse/mouse_parser.c, libmisc/mouse/serial_mouse.c: Remove
+	include of bsp.h
+
+2011-03-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/imfs/deviceerrno.c: Add RTEMS_INVALID_CLOCK,
 	RTEMS_INVALID_NODE, and RTEMS_NOT_CONFIGURED.
 
