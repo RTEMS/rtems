@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,7 +46,7 @@ typedef enum {
   SYSTEM_STATE_BEFORE_INITIALIZATION,
 
   /**
-   * @brief The system is between end of the first phase of initializatin but
+   * @brief The system is between end of the first phase of initialization but
    * before  multitasking is started.
    */
   SYSTEM_STATE_BEFORE_MULTITASKING,

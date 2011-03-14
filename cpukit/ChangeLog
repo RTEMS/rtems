@@ -1,3 +1,7 @@
+2011-03-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* score/include/rtems/score/sysstate.h: Spelling.
+
 2011-03-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sapi/include/rtems/extension.h: Documentation.
