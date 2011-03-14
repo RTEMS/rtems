@@ -62,8 +62,7 @@ rtems-$(rtems_version)$(TAG_SUFFIX).tar.bz2: rtems-$(rtems_version)/stamp.autofi
 	    doc/new_chapters/new_chapters.texi \
 	    doc/porting/porting.texi doc/posix1003.1/posix1003_1.texi \
 	    doc/posix_users/posix_users.texi doc/relnotes/relnotes.texi \
-	    doc/started_ada/started_ada.texi doc/started/started.texi \
-	    doc/user/c_user.texi
+	    doc/started/started.texi doc/user/c_user.texi
 	tar -cj -X rtems-$(rtems_version)/excludes \
 	  -f rtems-$(rtems_version)$(TAG_SUFFIX).tar.bz2 rtems-$(rtems_version)
 

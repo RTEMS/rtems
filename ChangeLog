@@ -1,3 +1,7 @@
+2011-03-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* Makefile.maint: Remove started_ada.
+
 2011-03-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: Add pkgdatadir.
