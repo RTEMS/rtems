@@ -1,3 +1,11 @@
+2011-03-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add test for Mouse Parser Engine
+	(Microsoft Mouse paths) and Serial Mouse Driver.
+	* mouse01/.cvsignore, mouse01/Makefile.am, mouse01/init.c,
+	mouse01/mouse01.doc, mouse01/mouse01.scn, mouse01/msmouse.c,
+	mouse01/serial_mouse_config.c: New files.
+
 2011-03-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* heapwalk/init.c: Improve coverage.

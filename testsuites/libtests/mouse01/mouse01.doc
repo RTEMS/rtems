@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  mouse01
+
+directives:
+  + None
+  + Mouse Parser Engine (cpukit/libmisc/mouse)
+  + Generic Serial Mouse Driver (cpukit/libmisc/mouse)
+
+concepts:
+
++ The purpose of this test is to exercise paths in the Mouse Parser Engine
+  related to parsing the input from a Microsoft Serial Mouse.
+
++ This test also exercises the serial mouse driver.
