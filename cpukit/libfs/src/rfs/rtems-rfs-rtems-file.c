@@ -70,6 +70,7 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN))
     printf("rtems-rfs: file-open: handle:%p\n", file);
   
+  iop->size = rtems_rfs_file_size (file);
   iop->file_info = file;
   
   rtems_rfs_rtems_unlock (fs);
@@ -195,20 +196,24 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
   pos = iop->offset;
   
   /*
-   * If the iop position is past the physical end of the file we need to set the
-   * file size to the new length before writing.
+   * If the iop position is past the physical end of the file we need to set
+   * the file size to the new length before writing. If the position equals the
+   * size of file we are still past the end of the file as positions number
+   * from 0. For a specific position we need a file that has a length of one
+   * more.
    */
   
-  if (pos > rtems_rfs_file_size (file))
+  if (pos >= rtems_rfs_file_size (file))
   {
-    rc = rtems_rfs_file_set_size (file, pos);
+    rc = rtems_rfs_file_set_size (file, pos + 1);
     if (rc)
     {
       rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
       return rtems_rfs_rtems_error ("file-write: write extend", rc);
     }
-    rtems_rfs_file_set_bpos (file, pos);
   }
+  
+  rtems_rfs_file_set_bpos (file, pos);
   
   while (count)
   {

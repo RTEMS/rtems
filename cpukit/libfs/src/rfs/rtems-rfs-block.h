@@ -163,11 +163,6 @@ typedef struct rtems_rfs_block_map_s
 #define rtems_rfs_block_map_size_offset(_m) ((_m)->size.offset)
 
 /**
- * Set the size offset for the map.
- */
-#define rtems_rfs_block_map_set_size_offset(_m, _o) ((_m)->size.offset = (_o))
-
-/**
  * Are we at the last block in the map ?
  */
 #define rtems_rfs_block_map_last(_m) \
@@ -195,6 +190,33 @@ typedef struct rtems_rfs_block_map_s
  */
 #define rtems_rfs_block_map_block_offset(_m) ((_m)->bpos.boff)
 
+/**
+ * Set the size offset for the map. The map is tagged as dirty.
+ *
+ * @param map Pointer to the open map to set the offset in.
+ * @param offset The offset to set in the map's size.
+ */
+static inline void 
+rtems_rfs_block_map_set_size_offset (rtems_rfs_block_map* map,
+                                     rtems_rfs_block_off  offset)
+{
+  map->size.offset = offset;
+  map->dirty = true;
+}
+
+/**
+ * Set the map's size. The map is tagged as dirty.
+ *
+ * @param map Pointer to the open map to set the offset in.
+ * @param size The size to set in the map's size.
+ */
+static inline void 
+rtems_rfs_block_map_set_size (rtems_rfs_block_map*  map,
+                              rtems_rfs_block_size* size)
+{
+  rtems_rfs_block_copy_size (&map->size, size);
+  map->dirty = true;
+}
 /**
  * Open a block map. The block map data in the inode is copied into the
  * map. The buffer handles are opened. The block position is set to the start

@@ -193,6 +193,12 @@ typedef struct rtems_rfs_block_size_s
        if ((_b)->boff) --(_b)->bno; } while (0)
 
 /**
+ * Do the sizes match ?
+ */
+#define rtems_rfs_block_size_equal(_lhs, _rhs) \
+  (((_lhs)->count == (_rhs)->count) && ((_lhs)->offset == (_rhs)->count))
+
+/**
  * Zero a block size.
  *
  * @param size A pointer to the block size.

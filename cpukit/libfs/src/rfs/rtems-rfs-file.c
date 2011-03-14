@@ -172,8 +172,10 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
                                  handle->shared->mtime);
       rtems_rfs_inode_set_ctime (&handle->shared->inode,
                                  handle->shared->ctime);
-      handle->shared->map.size.count = handle->shared->size.count;
-      handle->shared->map.size.offset = handle->shared->size.offset;
+      if (!rtems_rfs_block_size_equal (&handle->shared->size,
+                                       &handle->shared->map.size))
+        rtems_rfs_block_map_set_size (&handle->shared->map,
+                                      &handle->shared->size);
     }
     
     rc = rtems_rfs_block_map_close (fs, &handle->shared->map);
@@ -420,8 +422,8 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
    * This means the file needs to set the file size to the pos only when a
    * write occurs.
    */
-  if (pos <= rtems_rfs_file_shared_get_size (rtems_rfs_file_fs (handle),
-                                             handle->shared))
+  if (pos < rtems_rfs_file_shared_get_size (rtems_rfs_file_fs (handle),
+                                            handle->shared))
     rtems_rfs_file_set_bpos (handle, pos);
   
   *new_pos = pos;

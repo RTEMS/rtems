@@ -1,3 +1,12 @@
+2011-03-14	Chris Johns <chrisj@rtems.org>
+
+	PR 1757/filesystem
+	* libfs/src/rfs/rtems-rfs-block-pos.h,
+	libfs/src/rfs/rtems-rfs-block.h, libfs/src/rfs/rtems-rfs-file.c,
+	libfs/src/rfs/rtems-rfs-rtems-file.c: Set the file size in
+	iop-size when a file is open. Fix lseek to end of file then write
+	for sizes less than half the file system block size.
+	
 2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1759/cpukit
