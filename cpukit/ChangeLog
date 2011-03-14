@@ -1,5 +1,10 @@
 2011-03-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libfs/src/imfs/deviceerrno.c: Add RTEMS_INVALID_CLOCK,
+	RTEMS_INVALID_NODE, and RTEMS_NOT_CONFIGURED.
+
+2011-03-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1762/cpukit
 	* Makefile.am, preinstall.am, libmisc/Makefile.am, wrapup/Makefile.am:
 	Add generic serial mouse driver and mouse parser. The parser code was
