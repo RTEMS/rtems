@@ -21,10 +21,8 @@
 #include <errno.h>
 
 #include <bsp.h>
+#include <rtems/keyboard.h>
 #include "i386kbd.h"
-
-/* keyboard.c */
-extern void handle_scancode(unsigned char scancode, int down);
 
 static unsigned char handle_kbd_event(void);
 static void kbd_write_command_w(int data);
@@ -384,7 +382,7 @@ static unsigned char handle_kbd_event(void)
 	return status;
 }
 
-void keyboard_interrupt( void )
+void keyboard_interrupt(void *unused)
 {
 	handle_kbd_event();
 }
@@ -627,17 +625,3 @@ void pckbd_init_hw(void)
 #endif
 
 }
-
-/*
-char BSP_wait_polled_input( void )
-{
-  int                   c;
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable(level);
-  while ( ( c= kbd_wait_for_input() ) < 0 )
-      continue;
-  rtems_interrupt_enable(level);
-  return c;
-}
-*/

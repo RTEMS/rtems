@@ -58,7 +58,6 @@ typedef struct {
   int data2;
 } REGIO;
 
-/* extern data*/
 #if ROMFONT
 extern FARADDR 		rom_char_addr;		/* address of ROM font*/
 extern int		ROM_CHAR_HEIGHT;	/* ROM character height*/

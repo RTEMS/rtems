@@ -30,8 +30,6 @@
 #define KBD_DEFLOCK 0
 #endif
 
-extern void add_to_queue( unsigned short );
-
 int set_bit(int nr, unsigned long * addr)
 {
   int                   mask;

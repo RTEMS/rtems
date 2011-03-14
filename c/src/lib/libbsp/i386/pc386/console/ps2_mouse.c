@@ -9,9 +9,9 @@
  * Code fixes to handle mouse ACKs properly.
  * C. Scott Ananian <cananian@alumni.princeton.edu> 1999-01-29.
  *
- * RTEMS port: by Rosimildo da Silva.
- * This module was ported from Linux.
+ *  RTEMS port: by Rosimildo da Silva.
  *
+ *  $Id$
  */
 
 #include <stdlib.h>
@@ -26,11 +26,11 @@
 #include <termios.h>
 #include <i386_io.h>
 #include <rtems/mw_uid.h>
+#include <rtems/mouse_parser.h>
 
 #define  INITIALIZE_MOUSE
 /* Some configuration switches are present in the include file... */
 #include "ps2_mouse.h"
-#include "mouse_parser.h"
 
 static void kbd_write_command_w(int data);
 #if 0
@@ -59,14 +59,16 @@ static unsigned char mouse_reply_expected = 0;
 #define MAX_RETRIES	60		/* some aux operations take long time*/
 
 static void ps2_mouse_interrupt(rtems_irq_hdl_param);
-
-static void ( *driver_input_handler_ps2 )( void *,  unsigned char *, int ) = 0;
+static mouse_parser_enqueue_handler driver_input_handler_ps2 = NULL;
 
 /*
  * This routine sets the handler to handle the characters received
  * from the serial port.
  */
-void ps2_set_driver_handler( int port, void ( *handler )( void *,  unsigned char *, int ) )
+void ps2_set_driver_handler(
+  int                          port,
+  mouse_parser_enqueue_handler handler
+)
 {
   driver_input_handler_ps2 = handler;
 }
@@ -185,7 +187,7 @@ static inline void handle_mouse_event(unsigned char scancode)
 
     /* if the input queue is active, add to it */
     if( driver_input_handler_ps2 ) {
-      driver_input_handler_ps2( NULL,  &scancode, 1 );
+      driver_input_handler_ps2( &scancode, 1 );
     } else {
       /* post this byte to termios */
       rtems_termios_enqueue_raw_characters( termios_ttyp_paux, (char *)&scancode, 1 );
@@ -557,12 +559,16 @@ rtems_device_driver paux_control(
       break;
 
     case MW_UID_REGISTER_DEVICE:
-      printk( "PS2 Mouse: reg=%s\n", args->buffer );
-      register_mou_msg_queue( args->buffer, -1 );
+      printk( "PS2 Mouse: registering\n" );
+      mouse_parser_initialize( "ps2" );
+      ps2_set_driver_handler( minor, mouse_parser_enqueue );
       break;
 
     case MW_UID_UNREGISTER_DEVICE:
+/*
       unregister_mou_msg_queue( -1 );
+*/
+      ps2_set_driver_handler( minor, NULL );
       break;
   }
   args->ioctl_return = 0;

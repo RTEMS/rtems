@@ -1,8 +1,7 @@
 /*
- * $Id$
- *
  *  Submitted by: Rosimildo da Silva:  rdasilva@connecttel.com
  *
+ *  $Id$
  */
 
 #ifndef __RTEMS_KEYBOARD_H
@@ -497,10 +496,10 @@ struct kbd_struct {
 
 extern struct kbd_struct kbd_table[];
 
-extern int kbd_init(void);
 
-extern unsigned char getledstate(void);
-extern void setledstate(struct kbd_struct *kbd, unsigned int led);
+void kbd_set_driver_handler(
+  void ( *handler )( void *, unsigned short, unsigned long )
+);
 
 static inline void show_console(void)
 {
@@ -510,69 +509,90 @@ static inline void set_console(int nr)
 {
 }
 
-extern void set_leds(void);
+void set_leds(void);
 
 static inline int vc_kbd_mode(struct kbd_struct * kbd, int flag)
 {
-	return ((kbd->modeflags >> flag) & 1);
+  return ((kbd->modeflags >> flag) & 1);
 }
 
 static inline int vc_kbd_led(struct kbd_struct * kbd, int flag)
 {
-	return ((kbd->ledflagstate >> flag) & 1);
+  return ((kbd->ledflagstate >> flag) & 1);
 }
 
 static inline void set_vc_kbd_mode(struct kbd_struct * kbd, int flag)
 {
-	kbd->modeflags |= 1 << flag;
+  kbd->modeflags |= 1 << flag;
 }
 
 static inline void set_vc_kbd_led(struct kbd_struct * kbd, int flag)
 {
-	kbd->ledflagstate |= 1 << flag;
+  kbd->ledflagstate |= 1 << flag;
 }
 
 static inline void clr_vc_kbd_mode(struct kbd_struct * kbd, int flag)
 {
-	kbd->modeflags &= ~(1 << flag);
+  kbd->modeflags &= ~(1 << flag);
 }
 
 static inline void clr_vc_kbd_led(struct kbd_struct * kbd, int flag)
 {
-	kbd->ledflagstate &= ~(1 << flag);
+  kbd->ledflagstate &= ~(1 << flag);
 }
 
 static inline void chg_vc_kbd_lock(struct kbd_struct * kbd, int flag)
 {
-	kbd->lockstate ^= 1 << flag;
+  kbd->lockstate ^= 1 << flag;
 }
 
 static inline void chg_vc_kbd_slock(struct kbd_struct * kbd, int flag)
 {
-	kbd->slockstate ^= 1 << flag;
+  kbd->slockstate ^= 1 << flag;
 }
 
 static inline void chg_vc_kbd_mode(struct kbd_struct * kbd, int flag)
 {
-	kbd->modeflags ^= 1 << flag;
+  kbd->modeflags ^= 1 << flag;
 }
 
 static inline void chg_vc_kbd_led(struct kbd_struct * kbd, int flag)
 {
-	kbd->ledflagstate ^= 1 << flag;
-   set_leds();
+  kbd->ledflagstate ^= 1 << flag;
+  set_leds();
 }
 
 #define U(x) ((x) ^ 0xf000)
 
 /* keyboard.c */
-
+int kbd_init(void);
 int getkeycode(unsigned int scancode);
 int setkeycode(unsigned int scancode, unsigned int keycode);
 void compute_shiftstate(void);
+unsigned char getledstate(void);
+void setledstate(struct kbd_struct *kbd, unsigned int led);
+void handle_scancode(unsigned char scancode, int down);
+
+/* kbd_parser.c */
+void register_kbd_msg_queue( char *qname, int port );
+void unregister_kbd_msg_queue( int port );
 
 /* defkeymap.c */
-
 extern unsigned int keymap_count;
+
+/* inch.c */
+void add_to_queue( unsigned short );
+int getch( void );
+int BSP_wait_polled_input(void);
+int rtems_kbpoll( void );
+
+/* outch.c */
+void _IBMPC_initVideo(void);
+
+/* pc_keyb.c */
+void keyboard_interrupt(void *unused);
+
+/* vt.c */
+int vt_ioctl( unsigned int cmd, unsigned long arg);
 
 #endif

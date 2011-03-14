@@ -1,3 +1,14 @@
+2011-03-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1762/cpukit
+	* Makefile.am, preinstall.am, console/console.c, console/keyboard.c,
+	console/keyboard.h, console/pc_keyb.c, console/ps2_mouse.c,
+	console/vgainit.c: Made mouse parser engine generic. Now use generic
+	serial mouse driver. Moved many externs from C to .h.
+	* console/kbd_parser.c, console/serial_mouse_config.c: New files.
+	* console/mouse_parser.c, console/mouse_parser.h,
+	console/serial_mouse.c, console/serial_mouse.h: Removed.
+
 2011-03-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* timer/timer.c: Retry up to 5 times when the calibration loop fails.

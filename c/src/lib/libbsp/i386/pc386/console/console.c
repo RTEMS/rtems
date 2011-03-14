@@ -1,6 +1,4 @@
 /*-------------------------------------------------------------------------+
-| console.c v1.1 - PC386 BSP - 1997/08/07
-+--------------------------------------------------------------------------+
 | This file contains the PC386 console I/O package.
 +--------------------------------------------------------------------------+
 | (C) Copyright 1997 -
@@ -15,17 +13,16 @@
 | This file is provided "AS IS" without warranty of any kind, either
 | expressed or implied.
 +--------------------------------------------------------------------------+
-| This code is based on:
-|   console.c,v 1.4 1995/12/19 20:07:23 joel Exp - go32 BSP
-| With the following copyright notice:
-| **************************************************************************
-| *  COPYRIGHT (c) 1989-1999.
-| *  On-Line Applications Research Corporation (OAR).
-| *
-| *  The license and distribution terms for this file may be
-| *  found in the file LICENSE in this distribution or at
-| *  http://www.rtems.com/license/LICENSE.
-| **************************************************************************
+| This code was based on code from the go32 BSP and was copyright by OAR.
+| Subsequent modifications are also copyright OAR.
+|
+|  COPYRIGHT (c) 1989-2011.
+|  On-Line Applications Research Corporation (OAR).
+|
+|  The license and distribution terms for this file may be
+|  found in the file LICENSE in this distribution or at
+|  http://www.rtems.com/license/LICENSE.
+|
 |
 |  $Id$
 +--------------------------------------------------------------------------*/
@@ -44,7 +41,8 @@
 #include <libcpu/cpuModel.h>
 
 #include <rtems/mw_uid.h>
-#include "mouse_parser.h"
+#include <rtems/mouse_parser.h>
+#include <rtems/keyboard.h>
 
 /*
  * Possible value for console input/output :
@@ -71,32 +69,21 @@ int BSPPrintkPort  = BSP_CONSOLE_PORT_CONSOLE;
 int BSPBaseBaud    = 115200;
 int BSPCmdBaud     = 9600;
 
-extern BSP_polling_getchar_function_type BSP_poll_char;
-extern int getch( void );
-extern void kbd_init( void );
+
+/* printk support */
+BSP_output_char_function_type BSP_output_char =
+                       (BSP_output_char_function_type) _IBMPC_outch;
+
+BSP_polling_getchar_function_type BSP_poll_char = BSP_wait_polled_input;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern void keyboard_interrupt(void );
-extern void keyboard_interrupt_wrapper(void *);
-extern int BSP_wait_polled_input(void);
-extern void _IBMPC_initVideo(void);
-
 static int  conSetAttr(int minor, const struct termios *);
-static void isr_on(const rtems_irq_connect_data *);
-static void isr_off(const rtems_irq_connect_data *);
-static int  isr_is_on(const rtems_irq_connect_data *);
 
-extern int rtems_kbpoll( void );
-
-static rtems_irq_connect_data console_isr_data = {BSP_KEYBOARD,
-                                                  keyboard_interrupt_wrapper,
-                                                  0,
-                                                  isr_on,
-                                                  isr_off,
-                                                  isr_is_on};
-
+/*
+ *  Keyboard Interrupt Configuration
+ */
 static void
 isr_on(const rtems_irq_connect_data *unused)
 {
@@ -115,7 +102,13 @@ isr_is_on(const rtems_irq_connect_data *irq)
   return BSP_irq_enabled_at_i8259s(irq->name);
 }
 
-extern int  rtems_kbpoll( void );
+static rtems_irq_connect_data console_isr_data =
+  {BSP_KEYBOARD,
+   keyboard_interrupt,
+   0,
+   isr_on,
+   isr_off,
+   isr_is_on};
 
 static ssize_t
 ibmpc_console_write(int minor, const char *buf, size_t len)
@@ -472,8 +465,6 @@ console_write(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* console_write */
 
-extern int vt_ioctl( unsigned int cmd, unsigned long arg);
-
 /*
  * Handle ioctl request.
  */
@@ -550,16 +541,3 @@ conSetAttr(int minor, const struct termios *t)
   
   return 0;
 }
-
-void keyboard_interrupt_wrapper(void *unused){
-  keyboard_interrupt();
-}
-
-/*
- * BSP initialization
- */
-
-BSP_output_char_function_type BSP_output_char =
-                       (BSP_output_char_function_type) _IBMPC_outch;
-
-BSP_polling_getchar_function_type BSP_poll_char = BSP_wait_polled_input;

@@ -106,10 +106,6 @@ $(PROJECT_INCLUDE)/rtems/kd.h: console/kd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/kd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/kd.h
 
-$(PROJECT_INCLUDE)/rtems/serial_mouse.h: console/serial_mouse.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/serial_mouse.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/serial_mouse.h
-
 $(PROJECT_INCLUDE)/rtems/ps2_drv.h: console/ps2_drv.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ps2_drv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ps2_drv.h
