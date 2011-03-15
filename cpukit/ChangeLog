@@ -1,5 +1,9 @@
 2011-03-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/cpuuse/cpuusagereport.c: Make compile again.
+
+2011-03-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/main_setenv.c: Revert after discussion. Mark as
 	intentional in Coverity.
 

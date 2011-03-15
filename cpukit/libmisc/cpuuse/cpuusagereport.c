@@ -67,7 +67,7 @@ void rtems_cpu_usage_report_with_plugin(
    *  guideline as to what each number means proportionally.
    */
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    total = 0;
+    _Timestamp_Set_to_zero( &total );
     uptime_at_last_reset = CPU_usage_Uptime_at_last_reset;
   #else
     for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
