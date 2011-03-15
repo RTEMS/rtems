@@ -16,6 +16,13 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
+/*
+ *  Limit examining or copying more than 256 characters at a time.
+ *  Yes, this is very arbitrary.  If there are POSIX constants, then
+ *  they should be used.
+ */
+#define MAX 156
+
 int rtems_shell_main_setenv(int argc, char *argv[])
 {
   char* env = NULL;
@@ -32,7 +39,7 @@ int rtems_shell_main_setenv(int argc, char *argv[])
   env = argv[1];
 
   for (arg = 2; arg < argc; arg++)
-    len += strlen(argv[arg]);
+    len += strnlen(argv[arg], MAX);
 
   len += argc - 2 - 1;
 
@@ -44,8 +51,8 @@ int rtems_shell_main_setenv(int argc, char *argv[])
   }
 
   for (arg = 2, p = string; arg < argc; arg++) {
-    strcpy(p, argv[arg]);
-    p += strlen(argv[arg]);
+    strncpy(p, argv[arg], MAX);
+    p += strnlen(argv[arg], MAX);
     if (arg < (argc - 1)) {
       *p = ' ';
       p++;

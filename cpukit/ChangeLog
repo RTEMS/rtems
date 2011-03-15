@@ -1,3 +1,8 @@
+2011-03-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/main_setenv.c: Address Coverity issue 134 which
+	recommends using strnXXX methods.
+
 2011-03-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libmisc/cpuuse/cpuusagereport.c: Avoid assumptions on execution
