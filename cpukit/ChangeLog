@@ -1,5 +1,11 @@
 2011-03-15	Chris Johns <chrisj@rtems.org>
 
+	PR 1757/filesystem
+	* libfs/src/rfs/rtems-rfs-block-pos.h: Fix the bug in equal
+	compare.
+
+2011-03-15	Chris Johns <chrisj@rtems.org>
+
 	PR 1763/shell
 	* libmisc/shell/hexdump-conv.c: Remove debug hacks.
 
