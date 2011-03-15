@@ -1,5 +1,10 @@
 2011-03-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/main_setenv.c: Revert after discussion. Mark as
+	intentional in Coverity.
+
+2011-03-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/dosfs/msdos_format.c: Address Coverity issue 183 which was
 	where an expression evaluated to a constant and issue 185 which was a
 	potential (although unlikely in expected usage) time-of-check,
