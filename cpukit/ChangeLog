@@ -1,3 +1,8 @@
+2011-03-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmisc/cpuuse/cpuusagereport.c: Avoid assumptions on execution
+	context.
+
 2011-03-15	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-rtems-file.c,
