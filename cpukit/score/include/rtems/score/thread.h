@@ -697,19 +697,16 @@ void _Thread_Set_priority(
  *  This routine updates the related suspend fields in the_thread
  *  control block to indicate the current nested level.
  */
-void _Thread_Suspend(
-  Thread_Control   *the_thread
-);
+#define _Thread_Suspend( _the_thread ) \
+        _Thread_Set_state( _the_thread, STATES_SUSPENDED )
 
 /**
  *  This routine updates the related suspend fields in the_thread
  *  control block to indicate the current nested level.  A force
  *  parameter of true will force a resume and clear the suspend count.
  */
-void _Thread_Resume(
-  Thread_Control   *the_thread,
-  bool              force
-);
+#define _Thread_Resume( _the_thread ) \
+        _Thread_Clear_state( _the_thread, STATES_SUSPENDED )
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 /**

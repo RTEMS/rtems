@@ -167,11 +167,10 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threaddelayended.c src/threaddispatch.c \
     src/threadget.c src/threadhandler.c src/threadinitialize.c \
     src/threadloadenv.c src/threadready.c src/threadreset.c \
-    src/threadrestart.c src/threadresume.c src/threadsetpriority.c \
+    src/threadrestart.c src/threadsetpriority.c \
     src/threadsetstate.c src/threadsettransient.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
-    src/threadstartmultitasking.c src/threadsuspend.c \
-    src/threadtickletimeslice.c \
+    src/threadstartmultitasking.c src/threadtickletimeslice.c \
     src/iterateoverthreads.c src/threadblockingoperationcancel.c
 
 ## THREADQ_C_FILES

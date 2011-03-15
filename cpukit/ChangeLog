@@ -1,5 +1,12 @@
 2011-03-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/src/taskresume.c, score/Makefile.am,
+	score/include/rtems/score/thread.h: Convert _Thread_Resume and
+	_Thread_Suspend into macros.
+	* score/src/threadresume.c, score/src/threadsuspend.c: Removed.
+
+2011-03-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/cpuuse/cpuusagereport.c: Make compile again.
 
 2011-03-15	Joel Sherrill <joel.sherrill@oarcorp.com>
