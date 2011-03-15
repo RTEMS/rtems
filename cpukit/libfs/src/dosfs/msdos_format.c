@@ -896,21 +896,29 @@ int msdos_format
   int                  i;
   msdos_format_param_t fmt_params;
 
-  msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_INFO,
-                       "formating: %s\n", devname);
+  /*
+   * open device for writing
+   */
+  msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL, "open device\n");
+  fd = open(devname, O_RDWR);
+  if (fd == -1) {
+    ret_val= -1;
+  }
+
   /*
    * sanity check on device
    */
   msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                        "stat check: %s\n", devname);
   if (ret_val == 0) {
-    rc = stat(devname, &stat_buf);
+    rc = fstat(fd, &stat_buf);
     ret_val = rc;
   }
 
+  msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_INFO,
+                       "formating: %s\n", devname);
   /* rtems feature: no block devices, all are character devices */
-  if ((ret_val == 0) &&
-      (!S_ISBLK(stat_buf.st_mode))) {
+  if ((ret_val == 0) && (!S_ISBLK(stat_buf.st_mode))) {
     errno = ENOTTY;
     ret_val = -1;
   }
@@ -921,19 +929,6 @@ int msdos_format
     if (dd == NULL) {
       errno = ENOTTY;
       ret_val = -1;
-    }
-  }
-
-  /*
-   * open device for writing
-   */
-  if (ret_val == 0) {
-    msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
-                         "open device\n");
-    fd = open(devname, O_RDWR);
-    if (fd == -1)
-    {
-      ret_val= -1;
     }
   }
 
@@ -957,6 +952,7 @@ int msdos_format
        fmt_params.bytes_per_sector,
        0xe5);
   }
+
   /*
    * create master boot record
    */
@@ -1080,7 +1076,8 @@ int msdos_format
 
     case FAT_FAT16:
       /* FAT entry 0: 0xff00|media_type */
-      FAT_SET_VAL16(tmp_sec,0,0xff00|fmt_params.media_code);
+      FAT_SET_VAL8(tmp_sec,0,fmt_params.media_code);
+      FAT_SET_VAL8(tmp_sec,1,0xff);
       /* FAT entry 1: EOC */
       FAT_SET_VAL16(tmp_sec,2,FAT_FAT16_EOC);
       break;
