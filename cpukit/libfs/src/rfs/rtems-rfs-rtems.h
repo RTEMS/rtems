@@ -191,10 +191,28 @@ typedef struct rtems_rfs_rtems_private
  * Get the ino from the I/O pointer.
  *
  * @param _iop The I/O pointer.
- * @return
+ * @return ino
  */
 #define rtems_rfs_rtems_get_iop_ino(_iop) \
   ((intptr_t)(_iop)->pathinfo.node_access)
+
+/**
+ * Get the file handle from the I/O pointer.
+ *
+ * @param _iop The I/O pointer.
+ * @return filehandle The file handle
+ */
+#define rtems_rfs_rtems_get_iop_file_handle(_iop) \
+  ((rtems_rfs_file_handle*)(_iop)->pathinfo.node_access_2)
+
+/**
+ * Set the file handle in the I/O pointer.
+ *
+ * @param _iop The I/O pointer.
+ * @param _fh The file handle.
+ */
+#define rtems_rfs_rtems_set_iop_file_handle(_iop, _fh) \
+  (_iop)->pathinfo.node_access_2 = (_fh)
 
 /**
  * Create the name of the handler's table given the type of handlers.
@@ -274,36 +292,12 @@ extern const rtems_filesystem_file_handlers_r rtems_rfs_rtems_file_handlers;
 /**
  * The following routine does a stat on a node.
  *
- * @param fs The file system data.
- * @param inode The inode to stat held in memory.
- * @param buf The stat buffer to fill.
- * @return int The result code.
- */
-int rtems_rfs_rtems_stat_inode (rtems_rfs_file_system*  fs,
-                                rtems_rfs_inode_handle* inode,
-                                struct stat*            buf);
-
-/**
- * The following routine does a stat on a node.
- *
  * @param iop
  * @param buf
  * @return int
  */
 int rtems_rfs_rtems_fstat (rtems_filesystem_location_info_t* pathloc,
                            struct stat*                      buf);
-
-/**
- * File change mode routine changes an inode.
- *
- * @param fs The file system data.
- * @param inode The inode to change held in memory.
- * @param buf The new mode.
- * @return int The result code.
- */
-int rtems_rfs_rtems_fchmod_inode (rtems_rfs_file_system*  fs,
-                                  rtems_rfs_inode_handle* inode,
-                                  mode_t                  mode);
 
 /**
  * File change mode routine.

@@ -793,46 +793,16 @@ rtems_rfs_rtems_readlink (rtems_filesystem_location_info_t* pathloc,
 }
 
 int
-rtems_rfs_rtems_fchmod_inode (rtems_rfs_file_system*  fs,
-                              rtems_rfs_inode_handle* inode,
-                              mode_t                  mode)
-{
-  uint16_t imode;
-#if defined (RTEMS_POSIX_API)
-  uid_t     uid;
-#endif
-
-  if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FCHMOD))
-    printf ("rtems-rfs-rtems: fchmod indo: in: ino:%" PRId32 " mode:%06" PRIomode_t "\n",
-            rtems_rfs_inode_ino (inode), mode);
-  
-  imode = rtems_rfs_inode_get_mode (inode);
-  
-  /*
-   *  Verify I am the owner of the node or the super user.
-   */
-#if defined (RTEMS_POSIX_API)
-  uid = geteuid();
-
-  if ((uid != rtems_rfs_inode_get_uid (inode)) && (uid != 0))
-    return EPERM;
-#endif
-
-  imode &= ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
-  imode |= mode & (S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
-
-  rtems_rfs_inode_set_mode (inode, imode);
-  
-  return 0;
-}
-
-int
 rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
                         mode_t                            mode)
 {
   rtems_rfs_file_system*  fs = rtems_rfs_rtems_pathloc_dev (pathloc);
   rtems_rfs_ino           ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
   rtems_rfs_inode_handle  inode;
+  uint16_t                imode;
+#if defined (RTEMS_POSIX_API)
+  uid_t                   uid;
+#endif
   int                     rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FCHMOD))
@@ -848,13 +818,26 @@ rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
     return rtems_rfs_rtems_error ("fchmod: opening inode", rc);
   }
 
-  rc = rtems_rfs_rtems_fchmod_inode (fs, &inode, mode);
-  if (rc > 0)
+  imode = rtems_rfs_inode_get_mode (&inode);
+  
+  /*
+   *  Verify I am the owner of the node or the super user.
+   */
+#if defined (RTEMS_POSIX_API)
+  uid = geteuid();
+
+  if ((uid != rtems_rfs_inode_get_uid (&inode)) && (uid != 0))
   {
     rtems_rfs_inode_close (fs, &inode);
     rtems_rfs_rtems_unlock (fs);
-    return rtems_rfs_rtems_error ("fchmod: fchmod inode", EPERM);
+    return rtems_rfs_rtems_error ("fchmod: checking uid", EPERM);
   }
+#endif
+
+  imode &= ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
+  imode |= mode & (S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
+
+  rtems_rfs_inode_set_mode (&inode, imode);
   
   rc = rtems_rfs_inode_close (fs, &inode);
   if (rc > 0)
@@ -869,38 +852,49 @@ rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
 }
 
 int
-rtems_rfs_rtems_stat_inode (rtems_rfs_file_system*  fs,
-                            rtems_rfs_inode_handle* inode,
-                            struct stat*            buf)
+rtems_rfs_rtems_fstat (rtems_filesystem_location_info_t* pathloc,
+                       struct stat*                      buf)
 {
+  rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (pathloc);
+  rtems_rfs_ino          ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
+  rtems_rfs_inode_handle inode;
   rtems_rfs_file_shared* shared;
   uint16_t               mode;
+  int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_STAT))
-    printf ("rtems-rfs-rtems: stat-inode: in: ino:%" PRId32 "\n",
-            rtems_rfs_inode_ino (inode));
+    printf ("rtems-rfs-rtems: stat: in: ino:%" PRId32 "\n", ino);
 
-  mode = rtems_rfs_inode_get_mode (inode);
+  rtems_rfs_rtems_lock (fs);
+  
+  rc = rtems_rfs_inode_open (fs, ino, &inode, true);
+  if (rc)
+  {
+    rtems_rfs_rtems_unlock (fs);
+    return rtems_rfs_rtems_error ("stat: opening inode", rc);
+  }
+
+  mode = rtems_rfs_inode_get_mode (&inode);
   
   if (RTEMS_RFS_S_ISCHR (mode) || RTEMS_RFS_S_ISBLK (mode))
   {
     buf->st_rdev = 
-      rtems_filesystem_make_dev_t (rtems_rfs_inode_get_block (inode, 0),
-                                   rtems_rfs_inode_get_block (inode, 1));
+      rtems_filesystem_make_dev_t (rtems_rfs_inode_get_block (&inode, 0),
+                                   rtems_rfs_inode_get_block (&inode, 1));
   }
   
   buf->st_dev     = rtems_rfs_fs_device (fs);
-  buf->st_ino     = rtems_rfs_inode_ino (inode);
+  buf->st_ino     = rtems_rfs_inode_ino (&inode);
   buf->st_mode    = rtems_rfs_rtems_mode (mode);
-  buf->st_nlink   = rtems_rfs_inode_get_links (inode);
-  buf->st_uid     = rtems_rfs_inode_get_uid (inode);
-  buf->st_gid     = rtems_rfs_inode_get_gid (inode);
+  buf->st_nlink   = rtems_rfs_inode_get_links (&inode);
+  buf->st_uid     = rtems_rfs_inode_get_uid (&inode);
+  buf->st_gid     = rtems_rfs_inode_get_gid (&inode);
 
   /*
    * Need to check is the ino is an open file. If so we take the values from
    * the open file rather than the inode.
    */
-  shared = rtems_rfs_file_get_shared (fs, rtems_rfs_inode_ino (inode));
+  shared = rtems_rfs_file_get_shared (fs, rtems_rfs_inode_ino (&inode));
 
   if (shared)
   {
@@ -916,50 +910,19 @@ rtems_rfs_rtems_stat_inode (rtems_rfs_file_system*  fs,
   }
   else
   {
-    buf->st_atime   = rtems_rfs_inode_get_atime (inode);
-    buf->st_mtime   = rtems_rfs_inode_get_mtime (inode);
-    buf->st_ctime   = rtems_rfs_inode_get_ctime (inode);
-    buf->st_blocks  = rtems_rfs_inode_get_block_count (inode);
+    buf->st_atime   = rtems_rfs_inode_get_atime (&inode);
+    buf->st_mtime   = rtems_rfs_inode_get_mtime (&inode);
+    buf->st_ctime   = rtems_rfs_inode_get_ctime (&inode);
+    buf->st_blocks  = rtems_rfs_inode_get_block_count (&inode);
 
     if (S_ISLNK (buf->st_mode))
-      buf->st_size = rtems_rfs_inode_get_block_offset (inode);
+      buf->st_size = rtems_rfs_inode_get_block_offset (&inode);
     else
-      buf->st_size = rtems_rfs_inode_get_size (fs, inode);
+      buf->st_size = rtems_rfs_inode_get_size (fs, &inode);
   }
   
   buf->st_blksize = rtems_rfs_fs_block_size (fs);
   
-  return 0;
-}
-
-int
-rtems_rfs_rtems_fstat (rtems_filesystem_location_info_t* pathloc,
-                       struct stat*                      buf)
-{
-  rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (pathloc);
-  rtems_rfs_ino          ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
-  rtems_rfs_inode_handle inode;
-  int                    rc;
-
-  if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_STAT))
-    printf ("rtems-rfs-rtems: stat: in: ino:%" PRId32 "\n", ino);
-
-  rtems_rfs_rtems_lock (fs);
-  
-  rc = rtems_rfs_inode_open (fs, ino, &inode, true);
-  if (rc)
-  {
-    rtems_rfs_rtems_unlock (fs);
-    return rtems_rfs_rtems_error ("stat: opening inode", rc);
-  }
-
-  rc = rtems_rfs_rtems_stat_inode (fs, &inode, buf);
-  if (rc > 0)
-  {
-    rtems_rfs_rtems_unlock (fs);
-    return rtems_rfs_rtems_error ("stat: stat'ing the inode", rc);
-  }
-
   rc = rtems_rfs_inode_close (fs, &inode);
   if (rc > 0)
   {

@@ -1,5 +1,16 @@
 2011-03-15	Chris Johns <chrisj@rtems.org>
 
+	* libfs/src/rfs/rtems-rfs-rtems-file.c,
+	libfs/src/rfs/rtems-rfs-rtems.c, libfs/src/rfs/rtems-rfs-rtems.h:
+	The fix to the removal of file_info from iop was broken. The
+	node_access field must be the inode number in the RFS because the
+	file system ops provides no way to tell is a stat call is the
+	result of stat, fstat, or lstat. The solution is to move the file
+	handle to node_access_2 which is also shared with doff but these
+	do not overlap.
+	
+2011-03-15	Chris Johns <chrisj@rtems.org>
+
 	PR 1757/filesystem
 	* libfs/src/rfs/rtems-rfs-block-pos.h: Fix the bug in equal
 	compare.
