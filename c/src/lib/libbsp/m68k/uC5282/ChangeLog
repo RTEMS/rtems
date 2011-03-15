@@ -1,3 +1,8 @@
+2011-03-15	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart.c: Fix clock code on qemu. Also ensure UART is
+	initialized early for printk.
+
 2011-03-04	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1738/bsps

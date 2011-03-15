@@ -244,6 +244,14 @@ void bsp_start( void )
   int   i;
   const char *clk_speed_str;
   uint32_t clk_speed, mfd, rfd;
+  uint8_t  byte;
+
+  /*
+   * Make sure UART TX is running - necessary for
+   * early printk to work. The firmware monitor
+   * usually enables this anyways but qemu doesn't!
+   */
+  MCF5282_UART_UCR(CONSOLE_PORT) = MCF5282_UART_UCR_TX_ENABLED;
 
   /*
    * Set up default exception handler
@@ -334,12 +342,19 @@ void bsp_start( void )
 
   if ( 0 == clk_speed ) {
 	printk("Using some heuristics to determine clock speed...\n");
-	printk("Assuming %uHz PLL ref. clock\n", BSP_pll_ref_clock);
-	if ( 0xf8 != MCF5282_CLOCK_SYNSR ) {
-	  printk("FATAL ERROR: Unexpected SYNSR contents, can't proceed\n");
-	  bsp_sysReset(0);
+	byte = MCF5282_CLOCK_SYNSR;
+	if ( 0 == byte ) {
+		printk("SYNSR == 0; assuming QEMU at 66MHz\n");
+		BSP_pll_ref_clock = 8250000;
+		mfd = ( 0 << 8 ) | ( 2 << 12 );
+	} else {
+		if ( 0xf8 != byte ) {
+			printk("FATAL ERROR: Unexpected SYNSR contents (0x%02x), can't proceed\n", byte);
+			bsp_sysReset(0);
+		}
+		mfd = MCF5282_CLOCK_SYNCR;
 	}
-	mfd = MCF5282_CLOCK_SYNCR;
+	printk("Assuming %uHz PLL ref. clock\n", BSP_pll_ref_clock);
 	rfd = (mfd >>  8) & 7;
 	mfd = (mfd >> 12) & 7;
 	/* Check against 'known' cases */
