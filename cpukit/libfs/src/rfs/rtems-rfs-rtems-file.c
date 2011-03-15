@@ -70,6 +70,7 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN))
     printf("rtems-rfs: file-open: handle:%p\n", file);
   
+  iop->size = rtems_rfs_file_size (file);
   iop->pathinfo.node_access = file;
   
   rtems_rfs_rtems_unlock (fs);
@@ -111,7 +112,7 @@ rtems_rfs_rtems_file_close (rtems_libio_t* iop)
  * @param count
  * @return int
  */
-ssize_t
+static ssize_t
 rtems_rfs_rtems_file_read (rtems_libio_t* iop,
                            void*          buffer,
                            size_t         count)
@@ -176,7 +177,7 @@ rtems_rfs_rtems_file_read (rtems_libio_t* iop,
  * @param count
  * @return ssize_t
  */
-ssize_t
+static ssize_t
 rtems_rfs_rtems_file_write (rtems_libio_t* iop,
                             const void*    buffer,
                             size_t         count)
@@ -195,20 +196,24 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
   pos = iop->offset;
   
   /*
-   * If the iop position is past the physical end of the file we need to set the
-   * file size to the new length before writing.
+   * If the iop position is past the physical end of the file we need to set
+   * the file size to the new length before writing. If the position equals the
+   * size of file we are still past the end of the file as positions number
+   * from 0. For a specific position we need a file that has a length of one
+   * more.
    */
   
-  if (pos > rtems_rfs_file_size (file))
+  if (pos >= rtems_rfs_file_size (file))
   {
-    rc = rtems_rfs_file_set_size (file, pos);
+    rc = rtems_rfs_file_set_size (file, pos + 1);
     if (rc)
     {
       rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
       return rtems_rfs_rtems_error ("file-write: write extend", rc);
     }
-    rtems_rfs_file_set_bpos (file, pos);
   }
+  
+  rtems_rfs_file_set_bpos (file, pos);
   
   while (count)
   {
@@ -255,7 +260,7 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
  * @param buffer
  */
 
-int
+static int
 rtems_rfs_rtems_file_ioctl (rtems_libio_t* iop, uint32_t command, void* buffer)
 {
   return 0;
@@ -269,7 +274,7 @@ rtems_rfs_rtems_file_ioctl (rtems_libio_t* iop, uint32_t command, void* buffer)
  * @param whence
  * @return rtems_off64_t
  */
-rtems_off64_t
+static rtems_off64_t
 rtems_rfs_rtems_file_lseek (rtems_libio_t* iop,
                             rtems_off64_t  offset,
                             int            whence)
@@ -298,13 +303,69 @@ rtems_rfs_rtems_file_lseek (rtems_libio_t* iop,
 }
 
 /**
+ * Stat the file.
+ *
+ * @param iop
+ * @param buf
+ * @return int
+ */
+static int
+rtems_rfs_rtems_file_fstat (rtems_filesystem_location_info_t* pathloc,
+                            struct stat*                      buf)
+{
+  rtems_rfs_file_handle* file = pathloc->node_access;
+  int                    rc;
+
+  if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_STAT))
+    printf ("rtems-rfs: file-fstat: handle:%p\n", file);
+
+  rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
+
+  rc = rtems_rfs_rtems_stat_inode (rtems_rfs_file_fs (file),
+                                   rtems_rfs_file_inode (file),
+                                   buf);
+
+  rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
+
+  return rc;
+}
+
+/**
+ * File change mode routine.
+ *
+ * @param iop
+ * @param mode
+ * @return int
+ */
+static int
+rtems_rfs_rtems_file_fchmod (rtems_filesystem_location_info_t* pathloc,
+                             mode_t                            mode)
+{
+  rtems_rfs_file_handle* file = pathloc->node_access;
+  int                    rc;
+
+  if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FCHMOD))
+    printf ("rtems-rfs: file-fchmod: handle:%p\n", file);
+
+  rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
+
+  rc = rtems_rfs_rtems_fchmod_inode (rtems_rfs_file_fs (file),
+                                     rtems_rfs_file_inode (file),
+                                     mode);
+
+  rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
+
+  return rc;
+}
+
+/**
  * This routine processes the ftruncate() system call.
  *
  * @param iop
  * @param length
  * @return int
  */
-int
+static int
 rtems_rfs_rtems_file_ftruncate (rtems_libio_t* iop,
                                 rtems_off64_t  length)
 {
@@ -338,8 +399,8 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_file_handlers = {
   .write_h     = rtems_rfs_rtems_file_write,
   .ioctl_h     = rtems_rfs_rtems_file_ioctl,
   .lseek_h     = rtems_rfs_rtems_file_lseek,
-  .fstat_h     = rtems_rfs_rtems_stat,
-  .fchmod_h    = rtems_rfs_rtems_fchmod,
+  .fstat_h     = rtems_rfs_rtems_file_fstat,
+  .fchmod_h    = rtems_rfs_rtems_file_fchmod,
   .ftruncate_h = rtems_rfs_rtems_file_ftruncate,
   .fpathconf_h = rtems_filesystem_default_fpathconf,
   .fsync_h     = rtems_rfs_rtems_fdatasync,
