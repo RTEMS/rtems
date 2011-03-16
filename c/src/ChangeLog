@@ -1,3 +1,8 @@
+2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1729/cpukit
+	* aclocal/check-smp.m4, aclocal/enable-smp.m4: New files.
+
 2011-03-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: Add pkgdatadir.
