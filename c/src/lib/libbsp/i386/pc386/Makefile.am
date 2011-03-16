@@ -108,6 +108,10 @@ libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 # ide
 libbsp_a_SOURCES += ide/idecfg.c ide/ide.c
 
+if HAS_SMP
+libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c
+endif
+
 if HAS_NETWORKING
 ne2000_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += ne2000.rel

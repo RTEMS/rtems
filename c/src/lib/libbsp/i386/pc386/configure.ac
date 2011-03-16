@@ -17,6 +17,7 @@ RTEMS_CHECK_TOOL(OBJCOPY,objcopy,:)
 RTEMS_PROG_CCAS
 
 RTEMS_CHECK_NETWORKING
+RTEMS_CHECK_SMP
 
 RTEMS_BSPOPTS_SET([USE_COM1_AS_CONSOLE],[*],[0])
 RTEMS_BSPOPTS_HELP([USE_COM1_AS_CONSOLE],
@@ -79,11 +80,19 @@ if test X${CLOCK_DRIVER_USE_TSC} = X1 -a X${CLOCK_DRIVER_USE_8254} = X1 ; then
   AC_MSG_ERROR([pc386 both TSC and 8254 specified for clock driver])
 fi
 
+RTEMS_BSPOPTS_SET([BSP_HAS_SMP],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_HAS_SMP],
+[Always defined when on a pc386 to enable the pc386 support for
+ determining the CPU core number in an SMP configuration.])
+
 ## if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,[test "$RTEMS_GAS_CODE16" = "yes"])
 
+
 AM_CONDITIONAL(HAS_NETWORKING,[test "$HAS_NETWORKING" = "yes"])
+AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
+
 
 AC_SUBST([RTEMS_ROOT],[${rtems_updir}'$(top_builddir)'])
 

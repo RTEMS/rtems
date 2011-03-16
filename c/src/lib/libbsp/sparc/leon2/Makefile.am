@@ -60,6 +60,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../sparc/shared/bspgetworkarea.c ../../shared/bootcard.c \
     ../../shared/sbrk.c startup/setvec.c startup/spurious.c startup/bspidle.c \
     ../../shared/bspinit.c
+# ISR Handler
+libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # console
@@ -96,6 +98,10 @@ libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c
 
 # timer
 libbsp_a_SOURCES += timer/timer.c
+
+if HAS_SMP
+libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c
+endif
 
 if HAS_NETWORKING
 noinst_PROGRAMS += leon_smc91111.rel

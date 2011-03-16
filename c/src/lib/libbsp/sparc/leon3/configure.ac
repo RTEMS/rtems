@@ -16,8 +16,10 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
 RTEMS_CHECK_NETWORKING
+RTEMS_CHECK_SMP
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
 
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
@@ -36,6 +38,11 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
 [If defined, speed up the clock ticks while the idle task is running so
  time spent in the idle task is minimized.  This significantly reduces
  the wall time required to execute the RTEMS test suites.])
+
+RTEMS_BSPOPTS_SET([BSP_LEON3_SMP],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_LEON3_SMP],
+[Always defined when on a LEON3 to enable the LEON3 support for
+ determining the CPU core number in an SMP configuration.])
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 

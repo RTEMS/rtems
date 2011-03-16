@@ -40,6 +40,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bspstart.c ../../shared/bootcard.c ../../shared/bspinit.c \
     ../../shared/sbrk.c startup/setvec.c startup/spurious.c \
     startup/erc32mec.c startup/boardinit.S startup/bspidle.c
+# ISR Handler
+libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # console
@@ -50,6 +52,10 @@ libbsp_a_SOURCES += console/debugputs.c
 libbsp_a_SOURCES += clock/ckinit.c ../../../shared/clockdrv_shell.h
 # timer
 libbsp_a_SOURCES += timer/timer.c
+
+if HAS_SMP
+libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c
+endif
 
 if HAS_NETWORKING
 erc32sonic_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
