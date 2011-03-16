@@ -1,3 +1,7 @@
+2011-03-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spfifo05/init.c: Console interrupts perturb test.
+
 2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1743/cpu
