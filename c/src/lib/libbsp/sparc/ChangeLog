@@ -1,3 +1,8 @@
+2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1729/cpukit
+	* shared/irq_asm.S: New file.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/1553/b1553brm.c, shared/can/grcan.c, shared/can/occan.c,
