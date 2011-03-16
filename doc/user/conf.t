@@ -408,6 +408,16 @@ This scheduler requires a variable amount of memory based upon the number
 of priorities configured in the system.  This scheduler may be explicitly
 selected by defining @code{CONFIGURE_SCHEDULER_PRIORITY}.
 
+@findex CONFIGURE_SCHEDULER_SIMPLE
+@item Simple Priority Scheduler - This is an alternative scheduler
+in RTEMS.  It is designed to provide the same task scheduling behaviour
+as the Deterministic Priority Scheduler while being simpler in implementation
+and uses less memory for data management.  It maintains a single sorted list
+of all ready threads.  Thus blocking or unblocking a thread is not a
+constant time operation with this scheduler.  This scheduler is appropriate
+for use in small systems where RAM is limited.  This scheduler may be explicitly
+selected by defining @code{CONFIGURE_SCHEDULER_SIMPLE}.
+
 @end itemize
 
 The pluggable scheduler interface was added after the 4.10 release series

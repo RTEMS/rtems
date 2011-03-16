@@ -1,3 +1,10 @@
+2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1743/cpu
+	* user/conf.t: Add Simple Priority Scheduler as complement to existing
+	Deterministic Priority Scheduler. This scheduler serves both as an
+	example and as a lighter weight implementation for smaller systems.
+
 2011-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1752/doc
