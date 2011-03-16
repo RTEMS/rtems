@@ -36,6 +36,11 @@ Howto setup QVGA Base Board?
 		set bootcmd 'echo Booting RTEMS ...;run rtems'
 		saveenv
 
+Howto make a U-Boot image?
+
+mkimage -A arm -O rtems -T kernel -C gzip \
+   -a a0000000 -e a0000040 -n "RTEMS Application" -d app.bin.gz app.img
+
 Application Board: NCS (Nurse Control Station)
 
 	Board:      NextGenNCS

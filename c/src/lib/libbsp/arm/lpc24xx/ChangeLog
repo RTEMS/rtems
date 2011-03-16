@@ -1,3 +1,7 @@
+2011-03-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* README: Add example mkimage command.
+
 2011-02-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* misc/restart.c: New file.
