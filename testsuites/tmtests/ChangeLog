@@ -1,3 +1,11 @@
+2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1743/cpu
+	* tm26/task1.c, tm27/task1.c: Add Simple Priority Scheduler as
+	complement to existing Deterministic Priority Scheduler. Modify these
+	tests to verify the scheduler they are designed to work with is the
+	default scheduler.
+
 2011-03-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* tm26/task1.c: Update for API change.

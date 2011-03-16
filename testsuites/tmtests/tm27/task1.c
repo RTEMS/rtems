@@ -54,6 +54,12 @@ rtems_task Init(
   Print_Warning();
 
   puts( "\n\n*** TIME TEST 27 ***" );
+  if (_Scheduler.Operations.initialize != _Scheduler_priority_Initialize) {
+    puts("  Error ==> " );
+    puts("Test only supported for deterministic priority scheduler\n" );
+    puts( "*** END OF TEST 26 ***" );
+    rtems_test_exit( 0 );
+  }
 
 #define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1u)
   status = rtems_task_create(
