@@ -27,6 +27,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
     include/rtems/score/priority.h include/rtems/score/prioritybitmap.h \
     include/rtems/score/scheduler.h include/rtems/score/schedulerpriority.h \
+    include/rtems/score/schedulersimple.h \
     include/rtems/score/stack.h include/rtems/score/states.h \
     include/rtems/score/sysstate.h include/rtems/score/thread.h \
     include/rtems/score/threadq.h include/rtems/score/threadsync.h \
@@ -56,6 +57,7 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
     inline/rtems/score/priority.inl inline/rtems/score/prioritybitmap.inl \
     inline/rtems/score/scheduler.inl inline/rtems/score/schedulerpriority.inl \
+    inline/rtems/score/schedulersimple.inl \
     inline/rtems/score/stack.inl inline/rtems/score/states.inl \
     inline/rtems/score/sysstate.inl inline/rtems/score/thread.inl \
     inline/rtems/score/threadq.inl inline/rtems/score/tod.inl \
@@ -154,6 +156,18 @@ libscore_a_SOURCES += src/schedulerpriority.c \
     src/schedulerpriorityunblock.c \
     src/schedulerpriorityupdate.c \
     src/schedulerpriorityyield.c
+
+## SCHEDULERSIMPLE_C_FILES
+libscore_a_SOURCES += src/schedulersimple.c \
+    src/schedulersimpleblock.c \
+    src/schedulersimpleenqueue.c \
+    src/schedulersimpleenqueuefirst.c \
+    src/schedulersimpleextract.c \
+    src/schedulersimplereadyqueueenqueue.c \
+    src/schedulersimplereadyqueueenqueuefirst.c \
+    src/schedulersimpleschedule.c \
+    src/schedulersimpleunblock.c \
+    src/schedulersimpleyield.c 
 
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocate.c \

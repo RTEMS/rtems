@@ -1,3 +1,22 @@
+2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1743/cpu
+	* sapi/include/confdefs.h, score/Makefile.am, score/preinstall.am: Add
+	Simple Priority Scheduler as complement to existing Deterministic
+	Priority Scheduler. This scheduler serves both as an example and as a
+	lighter weight implementation for smaller systems.
+	* score/include/rtems/score/schedulersimple.h,
+	score/inline/rtems/score/schedulersimple.inl,
+	score/src/schedulersimple.c, score/src/schedulersimpleblock.c,
+	score/src/schedulersimpleenqueue.c,
+	score/src/schedulersimpleenqueuefirst.c,
+	score/src/schedulersimpleextract.c,
+	score/src/schedulersimplereadyqueueenqueue.c,
+	score/src/schedulersimplereadyqueueenqueuefirst.c,
+	score/src/schedulersimpleschedule.c,
+	score/src/schedulersimpleunblock.c, score/src/schedulersimpleyield.c:
+	New files.
+
 2011-03-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/threadyieldprocessor.c: Removed.  File is no longer

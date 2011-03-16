@@ -556,6 +556,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  * scheduling policy to use.  The supported configurations are:
  *  CONFIGURE_SCHEDULER_USER     - user provided scheduler
  *  CONFIGURE_SCHEDULER_PRIORITY - Deterministic Priority Scheduler
+ *  CONFIGURE_SCHEDULER_SIMPLE   - Light-weight Priority Scheduler
  * 
  * If no configuration is specified by the application, then 
  * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
@@ -575,7 +576,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 /* If no scheduler is specified, the priority scheduler is default. */
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
-    !defined(CONFIGURE_SCHEDULER_PRIORITY)
+    !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
+    !defined(CONFIGURE_SCHEDULER_SIMPLE)
   #define CONFIGURE_SCHEDULER_PRIORITY
 #endif
 
@@ -595,6 +597,22 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
+#endif
+
+/* 
+ * If the Simple Priority Scheduler is selected, then configure for it.
+ */
+#if defined(CONFIGURE_SCHEDULER_SIMPLE)
+  #include <rtems/score/schedulersimple.h>
+  #define SCHEDULER_ENTRY_POINTS SCHEDULER_SIMPLE_ENTRY_POINTS
+
+  /**
+   * define the memory used by the simple scheduler
+   */
+  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
+    _Configure_From_workspace( sizeof(Chain_Control) ) \
+  )
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
 #endif
 
 /* 
