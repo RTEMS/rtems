@@ -402,7 +402,7 @@ void complete_test( void )
   rtems_id          task_id;
 
   benchmark_timer_initialize();
-    _Thread_Resume( Middle_tcb, true );
+    _Thread_Resume( Middle_tcb );
   thread_resume_time = benchmark_timer_read();
 
   _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );

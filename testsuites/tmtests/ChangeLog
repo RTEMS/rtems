@@ -1,3 +1,7 @@
+2011-03-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* tm26/task1.c: Update for API change.
+
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add AC_CONFIG_HEADER(config.h).
