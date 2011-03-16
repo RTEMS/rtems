@@ -101,6 +101,23 @@ extern "C" {
 #define _Context_Restart_self( _the_context ) \
    _CPU_Context_Restart_self( _the_context )
 
+#if defined(RTEMS_SMP)
+/*
+ *  @brief Switch to First Task on Secondary Core
+ *
+ *  This routine is only used to switch to the first task on a
+ *  secondary core in an SMP configuration.  Since the switch
+ *  to the first task is done from an interrupt handler, this
+ *  may be different from simply restarting the currently running
+ *  task.
+ *
+ *  @param[in] _the_context is the context of the first thread to
+ *             run on this core
+ */
+#define _Context_Switch_to_first_task_smp( _the_context ) \
+   _CPU_Context_switch_to_first_task_smp( _the_context )
+#endif
+
 /**
  *  @brief Return Starting Address of Floating Point Context
  *

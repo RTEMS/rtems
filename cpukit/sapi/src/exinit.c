@@ -1,7 +1,7 @@
 /*
  *  Initialization Manager
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,6 +55,11 @@
 #include <rtems/rtems/rtemsapi.h>
 #ifdef RTEMS_POSIX_API
   #include <rtems/posix/posixapi.h>
+#endif
+
+#if defined(RTEMS_SMP)
+  #include <rtems/bspsmp.h>
+  #include <rtems/score/percpu.h>
 #endif
 
 Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
@@ -114,6 +119,10 @@ void rtems_initialize_data_structures(void)
    */
   _Workspace_Handler_initialization();
 
+  #if defined(RTEMS_SMP)
+    _SMP_Handler_initialize();
+  #endif
+
   _User_extensions_Handler_initialization();
   _ISR_Handler_initialization();
 
@@ -148,6 +157,13 @@ void rtems_initialize_data_structures(void)
 
   #ifdef RTEMS_POSIX_API
     _POSIX_API_Initialize();
+  #endif
+
+  /*
+   * Discover and initialize the secondary cores in an SMP system.
+   */
+  #if defined(RTEMS_SMP)
+    _SMP_Processor_count = bsp_smp_initialize( rtems_smp_maximum_processors );
   #endif
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );

@@ -6,7 +6,7 @@
  *  This include file contains information pertaining to the port of
  *  the executive to the SPARC processor.
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -926,6 +926,35 @@ void _CPU_Context_switch(
 void _CPU_Context_restore(
   Context_Control *new_context
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
+#if defined(RTEMS_SMP)
+  /*
+   *  _CPU_Context_switch_to_first_task_smp
+   *
+   *  This routine is only used to switch to the first task on a
+   *  secondary core in an SMP configuration.  We do not need to
+   *  flush all the windows and, in fact, this can be dangerous
+   *  as they may or may not be initialized properly.
+   */
+  void _CPU_Context_switch_to_first_task_smp(
+    Context_Control *new_context
+  );
+
+  /* address space 1 is uncacheable */
+  #define SMP_CPU_SWAP( _address, _value, _previous ) \
+    do { \
+      register unsigned int _val = _value; \
+      asm volatile( \
+        "swapa [%2] %3, %0" : \
+        "=r" (_val) : \
+        "0" (_val), \
+        "r" (_address), \
+        "i" (1) \
+      ); \
+      _previous = _val; \
+    } while (0)
+
+#endif
 
 /*
  *  _CPU_Context_save_fp

@@ -136,6 +136,19 @@
 #endif
 
 /**
+ *  The following defines a compiler specific attribute which informs
+ *  the compiler that the method has no effect except the return value
+ *  and that the return value depends only on parameters and/or global
+ *  variables.
+ */
+#ifdef __GNUC__
+  #define RTEMS_COMPILER_PURE_ATTRIBUTE \
+     __attribute__ ((pure))
+#else
+  #define RTEMS_COMPILER_PURE_ATTRIBUTE
+#endif
+
+/**
  *  Instructs the compiler to issue a warning whenever a variable or function
  *  with this attribute will be used.
  */

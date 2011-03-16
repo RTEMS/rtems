@@ -12,7 +12,7 @@ SUBDIRS = cpu
 include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = include/rtems/debug.h include/rtems/system.h \
-    include/rtems/seterr.h
+    include/rtems/seterr.h include/rtems/bspsmp.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 
@@ -35,7 +35,8 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/timestamp64.h include/rtems/score/tod.h \
     include/rtems/score/tqdata.h include/rtems/score/userext.h \
     include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
-    include/rtems/score/cpuopts.h include/rtems/score/basedefs.h
+    include/rtems/score/cpuopts.h include/rtems/score/basedefs.h \
+    include/rtems/score/smplock.h
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h \
@@ -87,6 +88,8 @@ libscore_a_CPPFLAGS = $(AM_CPPFLAGS)
 if HAS_MP
 libscore_a_SOURCES += src/mpci.c src/objectmp.c src/threadmp.c
 endif
+
+libscore_a_SOURCES += src/smp.c src/smplock.c
 
 ## CORE_APIMUTEX_C_FILES
 libscore_a_SOURCES += src/apimutex.c src/apimutexallocate.c \

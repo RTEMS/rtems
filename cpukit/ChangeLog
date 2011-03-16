@@ -1,5 +1,27 @@
 2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
+	PR 1729/cpukit
+	* configure.ac, sapi/include/confdefs.h, sapi/src/exinit.c,
+	score/Makefile.am, score/preinstall.am,
+	score/cpu/i386/rtems/score/cpu.h, score/cpu/sparc/cpu_asm.S,
+	score/cpu/sparc/rtems/score/cpu.h,
+	score/include/rtems/score/basedefs.h,
+	score/include/rtems/score/context.h,
+	score/include/rtems/score/percpu.h, score/src/percpu.c,
+	score/src/thread.c, score/src/threadcreateidle.c: Add next step in
+	SMP support. This adds an allocated array of the Per_CPU structures
+	to support multiple cpus vs a single instance of the structure which
+	is still used if SMP support is disabled. Configuration support is
+	also added to explicitly enable or disable SMP. But SMP can only be
+	enabled for the CPUs which will support it initially -- SPARC and
+	i386. With the stub BSP support, a BSP can be run as a single core
+	SMP system from an RTEMS data structure standpoint.
+	* aclocal/check-smp.m4, aclocal/enable-smp.m4,
+	score/include/rtems/bspsmp.h, score/include/rtems/score/smplock.h,
+	score/src/smp.c, score/src/smplock.c: New files.
+
+2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
 	PR 1743/cpu
 	* sapi/include/confdefs.h, score/Makefile.am, score/preinstall.am: Add
 	Simple Priority Scheduler as complement to existing Deterministic

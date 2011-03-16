@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,8 +33,11 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
-/*PAGE
- *
+#if defined(RTEMS_SMP)
+  #include <rtems/bspsmp.h>
+#endif
+
+/*
  *  _Thread_Handler_initialization
  *
  *  This routine initializes all thread manager related data structures.
@@ -48,6 +51,7 @@ void _Thread_Handler_initialization(void)
 {
   uint32_t     ticks_per_timeslice;
   uint32_t     maximum_extensions;
+  uint32_t     maximum_internal_threads;
   #if defined(RTEMS_MULTIPROCESSING)
     uint32_t   maximum_proxies;
   #endif
@@ -80,32 +84,40 @@ void _Thread_Handler_initialization(void)
 
   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
 
-#if defined(RTEMS_MULTIPROCESSING)
-  _Thread_MP_Handler_initialization( maximum_proxies );
-#endif
+  #if defined(RTEMS_MULTIPROCESSING)
+    _Thread_MP_Handler_initialization( maximum_proxies );
+  #endif
 
   /*
-   *  Initialize this class of objects.
+   *  Initialize the internal class of threads.  We need an IDLE thread
+   *  per CPU in an SMP system.  In addition, if this is a loosely
+   *  coupled multiprocessing system, account for the MPCI Server Thread.
    */
+  #if defined(RTEMS_SMP)
+    maximum_internal_threads = rtems_smp_maximum_processors;
+  #else
+    maximum_internal_threads = 1;
+  #endif
+
+  #if defined(RTEMS_MULTIPROCESSING)
+    if ( _System_state_Is_multiprocessing )
+      maximum_internal_threads += 1;
+  #endif
 
   _Objects_Initialize_information(
     &_Thread_Internal_information,
     OBJECTS_INTERNAL_API,
     OBJECTS_INTERNAL_THREADS,
-#if defined(RTEMS_MULTIPROCESSING)
-    ( _System_state_Is_multiprocessing ) ?  2 : 1,
-#else
-    1,
-#endif
+    maximum_internal_threads,
     sizeof( Thread_Control ),
                                 /* size of this object's control block */
     false,                      /* true if names for this object are strings */
     8                           /* maximum length of each object's name */
-#if defined(RTEMS_MULTIPROCESSING)
-    ,
-    false,                      /* true if this is a global object class */
-    NULL                        /* Proxy extraction support callout */
-#endif
+    #if defined(RTEMS_MULTIPROCESSING)
+      ,
+      false,                      /* true if this is a global object class */
+      NULL                        /* Proxy extraction support callout */
+    #endif
   );
 
 }

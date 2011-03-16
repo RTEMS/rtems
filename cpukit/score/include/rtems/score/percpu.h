@@ -6,14 +6,14 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id$
+ *  $Id$ 
  */
 
 #ifndef _RTEMS_PERCPU_H
@@ -23,6 +23,11 @@
 
 #ifdef ASM
   #include <rtems/asm.h>
+#else
+  #if defined(RTEMS_SMP)
+    #include <rtems/score/smplock.h>
+  #endif
+  #include <rtems/bspsmp.h>
 #endif
 
 /**
@@ -41,11 +46,35 @@ extern "C" {
 #endif
 
 #ifndef ASM
-
-/**
- * This forward defines the Thread Control Block structure.
- */
+#ifndef __THREAD_CONTROL_DEFINED__
+#define __THREAD_CONTROL_DEFINED__
 typedef struct Thread_Control_struct Thread_Control;
+#endif
+
+#if (CPU_ALLOCATE_INTERRUPT_STACK == FALSE) && defined(RTEMS_SMP)
+  #error "RTEMS must allocate per CPU interrupt stack for SMP"
+#endif
+
+typedef enum {
+ 
+  /**
+   *  This defines the constant used to indicate that the cpu code is in
+   *  its initial powered up start.
+   */
+   RTEMS_BSP_SMP_CPU_INITIAL_STATE = 1,
+
+  /**
+   *  This defines the constant used to indicate that the cpu code has
+   *  completed basic initialization and awaits further commands.
+   */
+   RTEMS_BSP_SMP_CPU_INITIALIZED = 2,
+
+  /**
+   *  This defines the constant used to indicate that the cpu code has
+   *  shut itself down.
+   */
+  RTEMS_BSP_SMP_CPU_SHUTDOWN = 3
+} bsp_smp_cpu_state;
 
 /**
  *  @brief Per CPU Core Structure
@@ -53,6 +82,22 @@ typedef struct Thread_Control_struct Thread_Control;
  *  This structure is used to hold per core state information.
  */
 typedef struct {
+  #if defined(RTEMS_SMP)
+    /** This element is used to lock this structure */
+    SMP_lock_Control  lock; 
+
+    /** This indicates that the CPU is online. */
+    uint32_t          state; 
+
+    /**
+     *  This is the request for the interrupt.
+     *  
+     *  @note This may become a chain protected by atomic instructions.
+     */
+    uint32_t          message; 
+
+  #endif
+
 #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
     (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   /**
@@ -69,7 +114,6 @@ typedef struct {
 #endif
 
   /**
-   *
    *  This contains the current interrupt nesting level on this
    *  CPU.
    */
@@ -91,6 +135,14 @@ typedef struct {
 #endif
 
 #ifdef ASM
+#if defined(RTEMS_SMP)
+  #define PER_CPU_LOCK     0
+  #define PER_CPU_STATE    (1 * __RTEMS_SIZEOF_VOID_P__)
+  #define PER_CPU_MESSAGE  (2 * __RTEMS_SIZEOF_VOID_P__)
+  #define PER_CPU_END_SMP  (3 * __RTEMS_SIZEOF_VOID_P__)
+#else
+  #define PER_CPU_END_SMP  0
+#endif
 
 #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
     (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
@@ -98,14 +150,13 @@ typedef struct {
    *  If this CPU target lets RTEMS allocates the interrupt stack, then
    *  we need to have places in the per cpu table to hold them.
    */
-  #define PER_CPU_INTERRUPT_STACK_LOW   0
-  #define PER_CPU_INTERRUPT_STACK_HIGH  (1 * __RTEMS_SIZEOF_VOID_P__)
-  #define PER_CPU_END_STACK             (2 * __RTEMS_SIZEOF_VOID_P__)
+  #define PER_CPU_INTERRUPT_STACK_LOW   PER_CPU_END_SMP
+  #define PER_CPU_INTERRUPT_STACK_HIGH  \
+          PER_CPU_INTERRUPT_STACK_LOW + (1 * __RTEMS_SIZEOF_VOID_P__)
+  #define PER_CPU_END_STACK             \
+          PER_CPU_INTERRUPT_STACK_HIGH + (1 * __RTEMS_SIZEOF_VOID_P__)
 #else
-  /*
-   *  Otherwise, there are no interrupt stack addresses in the per CPU table.
-   */
-  #define PER_CPU_END_STACK             0
+  #define PER_CPU_END_STACK             PER_CPU_END_SMP
 #endif
 
 /*
@@ -147,20 +198,52 @@ typedef struct {
  *
  *  This is an array of per CPU core information.
  */
-extern Per_CPU_Control _Per_CPU_Information;
+extern Per_CPU_Control _Per_CPU_Information[];
+
+#if defined(RTEMS_SMP)
+/**
+ *  @brief Set of Pointers to Per CPU Core Information
+ *
+ *  This is an array of pointers to each CPU's per CPU data structure.
+ *  It should be simpler to retrieve this pointer in assembly language
+ *  that to calculate the array offset.
+ */
+extern Per_CPU_Control *_Per_CPU_Information_p[];
+
+/**
+ *  @brief Initialize SMP Handler
+ *
+ *  This method initialize the SMP Handler.
+ */
+void _SMP_Handler_initialize(void);
+
+/**
+ *  @brief Allocate and Initialize Per CPU Structures
+ *
+ *  This method allocates and initialize the per CPU structure.
+ */
+void _Per_CPU_Initialize(void);
+
+#endif
 
 /*
- * On an SMP system, these macros dereference the CPU core number.
- * But on a non-SMP system, these macros are simple references.
+ * On a non SMP system, the bsp_smp_processor_id is defined to 0.
  * Thus when built for non-SMP, there should be no performance penalty.
  */
-#define _Thread_Heir              _Per_CPU_Information.heir
-#define _Thread_Executing         _Per_CPU_Information.executing
-#define _Thread_Idle              _Per_CPU_Information.idle
-#define _ISR_Nest_level           _Per_CPU_Information.isr_nest_level
-#define _CPU_Interrupt_stack_low  _Per_CPU_Information.interrupt_stack_low
-#define _CPU_Interrupt_stack_high _Per_CPU_Information.interrupt_stack_high
-#define _Thread_Dispatch_necessary _Per_CPU_Information.dispatch_necessary
+#define _Thread_Heir \
+  _Per_CPU_Information[bsp_smp_processor_id()].heir
+#define _Thread_Executing \
+  _Per_CPU_Information[bsp_smp_processor_id()].executing
+#define _Thread_Idle \
+  _Per_CPU_Information[bsp_smp_processor_id()].idle
+#define _ISR_Nest_level \
+  _Per_CPU_Information[bsp_smp_processor_id()].isr_nest_level
+#define _CPU_Interrupt_stack_low \
+  _Per_CPU_Information[bsp_smp_processor_id()].interrupt_stack_low
+#define _CPU_Interrupt_stack_high \
+  _Per_CPU_Information[bsp_smp_processor_id()].interrupt_stack_high
+#define _Thread_Dispatch_necessary \
+  _Per_CPU_Information[bsp_smp_processor_id()].dispatch_necessary
 
 #endif  /* ASM */
 

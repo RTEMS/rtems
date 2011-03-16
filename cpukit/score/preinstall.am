@@ -30,6 +30,10 @@ $(PROJECT_INCLUDE)/rtems/seterr.h: include/rtems/seterr.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/seterr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/seterr.h
 
+$(PROJECT_INCLUDE)/rtems/bspsmp.h: include/rtems/bspsmp.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bspsmp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bspsmp.h
+
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
@@ -186,6 +190,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuopts.h
 $(PROJECT_INCLUDE)/rtems/score/basedefs.h: include/rtems/score/basedefs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/basedefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/basedefs.h
+
+$(PROJECT_INCLUDE)/rtems/score/smplock.h: include/rtems/score/smplock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/smplock.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/smplock.h
 
 if HAS_PTHREADS
 $(PROJECT_INCLUDE)/rtems/score/corespinlock.h: include/rtems/score/corespinlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)

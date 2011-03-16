@@ -174,6 +174,21 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   extern int rtems_telnetd_maximum_ptys;
 #endif
 
+#if defined(RTEMS_SMP)
+  /*
+   *  If configured for SMP, then we need to know the maximum CPU cores.
+   */
+  #if !defined(CONFIGURE_SMP_APPLICATION)
+    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS) 
+      #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 1
+    #endif
+  #else
+    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS) 
+      #error "CONFIGURE_SMP_MAXIMUM_PROCESSORS not specified for SMP Application"
+    #endif
+  #endif
+#endif
+
 /*
  *  Filesystems and Mount Table Configuration.
  *
@@ -1805,12 +1820,25 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   _Configure_Object_RAM(1, sizeof(API_Mutex_Control))
 
 /**
- *  This defines the amount of memory reserved for the IDLE task
- *  control structures and stack.
+ *  This defines the formula used to compute the amount of memory
+ *  reserved for IDLE task control structures and stacks.
  */
-#define CONFIGURE_MEMORY_FOR_IDLE_TASK \
-    (CONFIGURE_MEMORY_FOR_TASKS(1, 0) + \
-     (CONFIGURE_IDLE_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE))
+#define CONFIGURE_IDLE_TASKS(_count) \
+    (CONFIGURE_MEMORY_FOR_TASKS(_count, 0) + \
+      _count * _Configure_From_workspace( \
+       (CONFIGURE_IDLE_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)))
+
+/**
+ *  This calculates the amount of memory reserved for the IDLE tasks.
+ *  In an SMP system, each CPU core has its own idle task.
+ */
+#if defined(RTEMS_SMP)
+  #define CONFIGURE_MEMORY_FOR_IDLE_TASK \
+          CONFIGURE_IDLE_TASKS(CONFIGURE_SMP_MAXIMUM_PROCESSORS)
+#else
+  #define CONFIGURE_MEMORY_FOR_IDLE_TASK \
+          CONFIGURE_IDLE_TASKS(1)
+#endif
 
 /**
  *  This macro accounts for general RTEMS system overhead.
@@ -1897,6 +1925,15 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    CONFIGURE_MEMORY_FOR_BARRIERS(CONFIGURE_BARRIERS) + \
    CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS) \
   )
+
+#if defined(RTEMS_SMP)
+  #define CONFIGURE_MEMORY_FOR_SMP \
+     (CONFIGURE_SMP_MAXIMUM_PROCESSORS * \
+      _Configure_From_workspace( CONFIGURE_INTERRUPT_STACK_SIZE ) \
+     )
+#else
+  #define CONFIGURE_MEMORY_FOR_SMP 0
+#endif
 
 #if defined(CONFIGURE_CONFDEFS_DEBUG) && defined(CONFIGURE_INIT)
   /**
@@ -2012,10 +2049,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    CONFIGURE_MEMORY_FOR_CLASSIC + \
    CONFIGURE_MEMORY_FOR_POSIX + \
    (CONFIGURE_MAXIMUM_POSIX_THREADS * CONFIGURE_MINIMUM_TASK_STACK_SIZE ) + \
-   (CONFIGURE_MAXIMUM_GOROUTINES * CONFIGURE_MINIMUM_TASK_STACK_SIZE ) + \
+   (CONFIGURE_MAXIMUM_GOROUTINES * CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
    CONFIGURE_INITIALIZATION_THREADS_STACKS + \
    CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
    CONFIGURE_MEMORY_FOR_MP + \
+   CONFIGURE_MEMORY_FOR_SMP + \
    CONFIGURE_MESSAGE_BUFFER_MEMORY + \
    (CONFIGURE_MEMORY_OVERHEAD * 1024) + \
    (CONFIGURE_EXTRA_TASK_STACKS) + (CONFIGURE_ADA_TASKS_STACK) \
@@ -2116,6 +2154,26 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 #endif /* CONFIGURE_HAS_OWN_CONFIGURATION_TABLE */
+
+#if defined(RTEMS_SMP)
+  /**
+   *  Instantiate the variable which specifies the number of CPUs
+   *  in an SMP configuration.
+   */
+  #if defined(CONFIGURE_INIT)
+    uint32_t rtems_smp_maximum_processors = CONFIGURE_SMP_MAXIMUM_PROCESSORS;
+  #else
+    extern uint32_t rtems_smp_maximum_processors;
+  #endif
+ /*
+  * Instantiate the Per CPU information based upon the user configuration.
+  */
+ #if defined(CONFIGURE_INIT)
+   Per_CPU_Control _Per_CPU_Information[CONFIGURE_SMP_MAXIMUM_PROCESSORS];
+   Per_CPU_Control *_Per_CPU_Information_p[CONFIGURE_SMP_MAXIMUM_PROCESSORS];
+ #endif
+
+#endif
 
 /*
  *  If the user has configured a set of Classic API Initialization Tasks,

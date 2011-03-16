@@ -138,6 +138,7 @@ AC_CHECK_HEADER([signal.h],[
 RTEMS_CHECK_MULTIPROCESSING
 RTEMS_CHECK_POSIX_API
 RTEMS_CHECK_NETWORKING
+RTEMS_CHECK_SMP
 
 rtems_major=`echo _RTEMS_VERSION | sed "s/\..*//"`
 rtems_minor=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/\..*//"`
@@ -168,6 +169,11 @@ RTEMS_CPUOPT([RTEMS_POSIX_API],
   [test x"$rtems_cv_HAS_POSIX_API" = xyes],
   [1],
   [if posix api is supported])
+
+RTEMS_CPUOPT([RTEMS_SMP],
+  [test x"$RTEMS_HAS_SMP" = xyes],
+  [1],
+  [if SMP is enabled])
 
 RTEMS_CPUOPT([RTEMS_NETWORKING],
   [test x"$rtems_cv_HAS_NETWORKING" = xyes],
@@ -290,6 +296,7 @@ AM_CONDITIONAL(LIBRPC,[test x"$rtems_cv_HAS_NETWORKING" = x"yes"])
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 
 AM_CONDITIONAL(HAS_MP,test x"$enable_multiprocessing" = x"yes" )
+AM_CONDITIONAL(HAS_SMP,[test "$RTEMS_HAS_SMP" = "yes"])
 
 AM_CONDITIONAL(HAS_PTHREADS,test x"$rtems_cv_HAS_POSIX_API" = x"yes")
 AM_CONDITIONAL(LIBNETWORKING,test x"$rtems_cv_HAS_NETWORKING" = x"yes")

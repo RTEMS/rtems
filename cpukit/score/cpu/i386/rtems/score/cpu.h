@@ -6,7 +6,7 @@
  *  This include file contains information pertaining to the Intel
  *  i386 processor.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -270,8 +270,6 @@ typedef enum {
 /* variables */
 
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
-SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
-SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 #endif /* ASM */
 
@@ -436,6 +434,20 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) );
+
+#if defined(RTEMS_SMP)
+  #define _CPU_Context_switch_to_first_task_smp( _the_context ) \
+     _CPU_Context_restore( (_the_context) );
+
+  /* address space 1 is uncacheable */
+  #define SMP_CPU_SWAP( _address, _value, _previous ) \
+    do { \
+      asm volatile("lock; xchgl %0, %1" : \
+        "+m" (*_address), "=a" (_previous) : \
+        "1" (_value) : \
+        "cc"); \
+    } while (0)
+#endif
 
 #define _CPU_Context_Fp_start( _base, _offset ) \
    ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
