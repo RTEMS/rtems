@@ -4,6 +4,9 @@
  *
  *  Copyright (C) 1998 valette@crf.canon.fr
  *
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -12,6 +15,7 @@
  */
 
 #include <rtems/asm.h>
+#include <rtems/system.h>
 #include <bspopts.h>
 #include <bsp/irq_asm.h>
 #include <rtems/score/cpu.h>
@@ -140,8 +144,13 @@ PUBLIC (ISR_STOP)
 ISR_STOP:
 .check_stack_switch:
 	movl      esp, ebp                  /* ebp = previous stack pointer */
-
-	movl      $SYM(_Per_CPU_Information), ebx
+#if defined(RTEMS_SMP) && defined(BSP_HAS_SMP)
+	movl     $SYM(_Per_CPU_Information_p), ebx
+	call     SYM(bsp_smp_processor_id)
+	mov      (ebx,eax,4), ebx
+#else
+	movl     $SYM(_Per_CPU_Information), ebx
+#endif
 
 	/* is this the outermost interrupt? */
 	cmpl      $0, PER_CPU_ISR_NEST_LEVEL(ebx)
