@@ -72,26 +72,30 @@ void print_formula(void);
 #define  HEAP_OVHD        16    /* wasted heap space per task stack */
 #define  NAME_PTR_SIZE     8    /* size of name and pointer table entries */
 
-#if CONFIGURE_SCHEDULER_POLICY == _Scheduler_PRIORITY
-  #include <rtems/score/prioritybitmap.h>
+/*
+ *  This assumes the default Priority Scheduler
+ */
+#include <rtems/score/prioritybitmap.h>
+#include <rtems/score/schedulerpriority.h>
 
-  /* Priority scheduling uninitialized (globals) consumption */
-  #define SCHEDULER_OVHD          ((sizeof _Scheduler)              + \
-                                   (sizeof _Priority_Major_bit_map) + \
-                                   (sizeof _Priority_Bit_map))
+/* Priority scheduling uninitialized (globals) consumption */
+#define SCHEDULER_OVHD     ((sizeof _Scheduler)              + \
+                           (sizeof _Priority_Major_bit_map) + \
+                           (sizeof _Priority_Bit_map))
 
-  /* Priority scheduling per-thread consumption. Gets 
-   * included in the PER_TASK consumption. */
-  #define SCHEDULER_TASK_WKSP     (sizeof(Scheduler_priority_Per_thread))
+/* Priority scheduling per-thread consumption. Gets 
+ * included in the PER_TASK consumption.
+ */
+#define SCHEDULER_TASK_WKSP     (sizeof(Scheduler_priority_Per_thread))
 
-  /* Priority scheduling workspace consumption 
-   *
-   * Include allocation of ready queue.  Pointers are already counted by 
-   * including _Scheduler in SCHEDULER_OVHD.
-   */
-  #define  SCHEDULER_WKSP_SIZE  \
+/* Priority scheduling workspace consumption 
+ *
+ * Include allocation of ready queue.  Pointers are already counted by 
+ * including _Scheduler in SCHEDULER_OVHD.
+ */
+#define SCHEDULER_WKSP_SIZE  \
     ((RTEMS_MAXIMUM_PRIORITY + 1) * sizeof(Chain_Control ))
-#endif
+/****** END OF MEMORY USAGE OF DEFAULT PRIORITY SCHEDULER ******/
 
 #define PER_TASK      \
      (long) (sizeof (Thread_Control) + \

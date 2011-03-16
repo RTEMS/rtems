@@ -1,0 +1,15 @@
+*** SIMPLE SCHEDULER 02 TEST ***
+INIT - Create priority ceiling semaphore
+INIT - Obtain priority ceiling semaphore - priority increases
+INIT - Obtain priority ceiling semaphore - priority decreases
+INIT - create task 1
+INIT - Obtain priority ceiling semaphore - priority increases
+INIT - Obtain priority ceiling semaphore - priority decreases
+INIT - create task 2
+INIT - Obtain priority ceiling semaphore - priority increases
+INIT - Obtain priority ceiling semaphore - priority decreases
+INIT - Suspend Idle Task
+INIT - Obtain priority ceiling semaphore - priority increases
+INIT - Obtain priority ceiling semaphore - priority decreases
+INIT - Resume Idle Task
+*** END OF SIMPLE SCHEDULER 02 TEST ***

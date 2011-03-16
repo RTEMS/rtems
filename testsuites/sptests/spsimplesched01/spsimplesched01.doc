@@ -1,0 +1,23 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spsimplesched01
+
+directives:
+  + rtems_task_wake_after - yield case
+  + rtems_task_set_priority - preempt and no preempt case
+
+concepts:
+
++ The purpose of this test is to exercise paths in the Simple Scheduler.
+  It exercises Initialization, Allocate, Free, Block, Unblock, and Yield.

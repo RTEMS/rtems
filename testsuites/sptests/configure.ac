@@ -160,6 +160,9 @@ spnotepad01/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
 spprivenv01/Makefile
+spsimplesched01/Makefile
+spsimplesched02/Makefile
+spsimplesched03/Makefile
 spsize/Makefile
 spstkalloc/Makefile
 spthreadq01/Makefile

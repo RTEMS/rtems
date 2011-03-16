@@ -1,3 +1,20 @@
+2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1743/cpu
+	* Makefile.am, configure.ac, spsize/size.c: Add Simple Priority
+	Scheduler as complement to existing Deterministic Priority Scheduler.
+	This scheduler serves both as an example and as a lighter weight
+	implementation for smaller systems.
+	* spsimplesched01/.cvsignore, spsimplesched01/Makefile.am,
+	spsimplesched01/init.c, spsimplesched01/spsimplesched01.doc,
+	spsimplesched01/spsimplesched01.scn, spsimplesched02/.cvsignore,
+	spsimplesched02/Makefile.am, spsimplesched02/init.c,
+	spsimplesched02/spsimplesched02.doc,
+	spsimplesched02/spsimplesched02.scn, spsimplesched03/.cvsignore,
+	spsimplesched03/Makefile.am, spsimplesched03/init.c,
+	spsimplesched03/spsimplesched03.doc,
+	spsimplesched03/spsimplesched03.scn: New files.
+
 2011-03-11	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* sp58/init.c, sp58/sp58.scn: Account for case where left hand side
