@@ -340,7 +340,11 @@ uninitialized =
 /*partmp.h*/    0                                         +
 #endif
 
-/*percpu.h*/    (sizeof _Per_CPU_Information)             +
+#if defined(RTEMS_SMP)
+/*percpu.h*/    (_SMP_Processor_count * sizeof(Per_CPU_Control))  +
+#else
+/*percpu.h*/    (sizeof (Per_CPU_Control) )                       +
+#endif
 
 /*ratemon.h*/   (sizeof _Rate_monotonic_Information)      +
 

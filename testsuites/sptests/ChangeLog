@@ -1,3 +1,15 @@
+2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1729/cpukit
+	* spsize/size.c: Add next step in SMP support. This adds an allocated
+	array of the Per_CPU structures to support multiple cpus vs a single
+	instance of the structure which is still used if SMP support is
+	disabled. Configuration support is also added to explicitly enable or
+	disable SMP. But SMP can only be enabled for the CPUs which will
+	support it initially -- SPARC and i386. With the stub BSP support, a
+	BSP can be run as a single core SMP system from an RTEMS data
+	structure standpoint.
+
 2011-03-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spfifo05/init.c: Console interrupts perturb test.
