@@ -1,3 +1,8 @@
+2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1729/cpukit
+	* smp/getcpuid.c, smp/smp_stub.c: New files.
+
 2011-02-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* console.c: Register also normal device file of the console device.
