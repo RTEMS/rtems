@@ -40,7 +40,10 @@
      */
     size = Configuration.interrupt_stack_size;
     _Per_CPU_Information_p[0] = &_Per_CPU_Information[0];
-    for (cpu=1 ; cpu < _SMP_Processor_count ; cpu++ ) {
+    for (cpu=1 ; cpu < rtems_smp_maximum_processors; cpu++ ) {
+
+      printk("Initializing cpu control structure %d\n", cpu );
+
       Per_CPU_Control *p = &_Per_CPU_Information[cpu];
 
       _Per_CPU_Information_p[cpu] = p;

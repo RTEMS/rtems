@@ -1,3 +1,8 @@
+2011-03-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* score/src/percpu.c: All possible cpus must be
+	initialized prior to determining how many are actually used.
+
 2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1729/cpukit
