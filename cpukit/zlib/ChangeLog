@@ -1,5 +1,12 @@
 2011-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* win32/README-WIN32.txt, old/visualc6/README.txt,
+	old/visualc6/example.dsp, old/visualc6/minigzip.dsp,
+	old/visualc6/zlib.dsp, old/visualc6/zlib.dsw:
+	Remove (Import cleanup.).
+
+2011-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* CMakeLists.txt, INDEX, zlib.3.pdf, zlib.3, zlib.map, 
 	zlib.pc.in, zlib2ansi: Remove (Import cleanup.)
 	* nintendods/Makefile, nintendods/README,
