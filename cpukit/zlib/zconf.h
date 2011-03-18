@@ -333,20 +333,11 @@
 #  define FAR
 #endif
 
-#if defined(__rtems__)
-#include <stdint.h>
-
-typedef uint_least8_t 	Byte;
-typedef uint_least16_t	uInt;
-typedef uint_least32_t	uLong;
-
-#else
 #if !defined(__MACTYPES__)
 typedef unsigned char  Byte;  /* 8 bits */
 #endif
 typedef unsigned int   uInt;  /* 16 bits or more */
 typedef unsigned long  uLong; /* 32 bits or more */
-#endif
 
 #ifdef SMALL_MEDIUM
    /* Borland C/C++ and some old MSC versions ignore FAR inside typedef */

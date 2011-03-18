@@ -1,3 +1,7 @@
+2010-03-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* zconf.h: Add include of config.h
+
 2010-03-26	Thomas Doerfler <Thomas.Doerfler@embeded-brains.de>
 
 	* zlib.h, zutil.c, zutil.h, gzlib.c, crc32.c, adler32.c:
