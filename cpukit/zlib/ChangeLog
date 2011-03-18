@@ -1,3 +1,9 @@
+2010-03-26	Thomas Doerfler <Thomas.Doerfler@embeded-brains.de>
+
+	* zlib.h, zutil.c, zutil.h, gzlib.c, crc32.c, adler32.c:
+	Make code match prototype to eliminate warnings.
+	eliminate unneeded comilation of 64 bit functions
+
 2010-03-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ChangeLog.zlib, FAQ, Makefile.am, README, adler32.c, compress.c,
@@ -14,7 +20,7 @@
 
 2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* adler32.c, compress.c, crc32.c, deflate.c, gzio.c, infback.c, 
+	* adler32.c, compress.c, crc32.c, deflate.c, gzio.c, infback.c,
 	inflate.c, inffast.c, inftrees.c, trees.c, uncompr.c, zutil.c:
 	Stop using old-style function definitions.
 

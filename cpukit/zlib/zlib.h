@@ -1587,6 +1587,11 @@ ZEXTERN int ZEXPORT inflateBackInit_ OF((z_streamp strm, int windowBits,
    ZEXTERN z_off_t ZEXPORT gzoffset OF((gzFile));
    ZEXTERN uLong ZEXPORT adler32_combine OF((uLong, uLong, z_off_t));
    ZEXTERN uLong ZEXPORT crc32_combine OF((uLong, uLong, z_off_t));
+#  ifndef _LARGEFILE64_SOURCE
+     ZEXTERN z_off_t ZEXPORT gzseek64 OF((gzFile, z_off_t, int));
+     ZEXTERN z_off_t ZEXPORT gztell64 OF((gzFile));
+     ZEXTERN z_off_t ZEXPORT gzoffset64 OF((gzFile));
+#  endif
 #endif
 
 #if !defined(ZUTIL_H) && !defined(NO_DUMMY_DECL)

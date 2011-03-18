@@ -199,6 +199,7 @@ gzFile ZEXPORT gzopen(path, mode)
     return gz_open(path, -1, mode);
 }
 
+#if (defined(_LARGEFILE64_SOURCE)||(_FILE_OFFSET_BITS == 64))
 /* -- see zlib.h -- */
 gzFile ZEXPORT gzopen64(path, mode)
     const char *path;
@@ -206,6 +207,7 @@ gzFile ZEXPORT gzopen64(path, mode)
 {
     return gz_open(path, -1, mode);
 }
+#endif /* (defined(_LARGEFILE64_SOURCE)||(_FILE_OFFSET_BITS == 64)) */
 
 /* -- see zlib.h -- */
 gzFile ZEXPORT gzdopen(fd, mode)
@@ -386,6 +388,7 @@ z_off_t ZEXPORT gztell(file)
 }
 
 /* -- see zlib.h -- */
+
 z_off64_t ZEXPORT gzoffset64(file)
     gzFile file;
 {
