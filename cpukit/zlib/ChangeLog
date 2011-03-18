@@ -1,3 +1,42 @@
+2011-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* contrib/masmx86/match686.asm, contrib/gcc_gvmat64/gvmat64.S,
+	contrib/vstudio/vc10/zlibvc.def, 
+	contrib/vstudio/vc10/miniunz.vcxproj.user,
+	contrib/vstudio/vc10/minizip.vcxproj.filters,
+	contrib/vstudio/vc10/testzlib.vcxproj.filters,
+	contrib/vstudio/vc10/zlibvc.sln,
+	contrib/vstudio/vc10/miniunz.vcxproj.filters,
+	contrib/vstudio/vc10/zlibvc.vcxproj,
+	contrib/vstudio/vc10/zlibvc.vcxproj.user,
+	contrib/vstudio/vc10/testzlib.vcxproj.user,
+	contrib/vstudio/vc10/zlib.rc,
+	contrib/vstudio/vc10/minizip.vcxproj,
+	contrib/vstudio/vc10/testzlibdll.vcxproj,
+	contrib/vstudio/vc10/testzlibdll.vcxproj.filters,
+	contrib/vstudio/vc10/zlibstat.vcxproj.filters,
+	contrib/vstudio/vc10/zlibvc.vcxproj.filters,
+	contrib/vstudio/vc10/testzlib.vcxproj,
+	contrib/vstudio/vc10/testzlibdll.vcxproj.user,
+	contrib/vstudio/vc10/zlibstat.vcxproj.user,
+	contrib/vstudio/vc10/miniunz.vcxproj,
+	contrib/vstudio/vc10/minizip.vcxproj.user,
+	contrib/vstudio/vc10/zlibstat.vcxproj,
+	contrib/vstudio/vc9/zlibvc.def,
+	contrib/vstudio/vc9/miniunz.vcproj,
+	contrib/vstudio/vc9/testzlib.vcproj,
+	contrib/vstudio/vc9/zlibvc.sln,
+	contrib/vstudio/vc9/zlibstat.vcproj,
+	contrib/vstudio/vc9/zlibvc.vcproj,
+	contrib/vstudio/vc9/zlib.rc,
+	contrib/vstudio/vc9/minizip.vcproj,
+	contrib/vstudio/vc9/testzlibdll.vcproj,
+	contrib/amd64/amd64-match.S,
+	contrib/minizip/make_vms.com,
+	contrib/minizip/MiniZip64_info.txt,
+	contrib/minizip/MiniZip64_Changes.txt:
+	Remove (Import cleanup.).
+
 2010-04-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* zconf.h: Regenerate by zlib's configure.
