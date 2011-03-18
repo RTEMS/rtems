@@ -1,5 +1,11 @@
 2011-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* nintendods/Makefile, nintendods/README,
+	old/as400/readme.txt, old/as400/zlib.inc, old/as400/bndsrc
+	old/as400/compile.clp, 
+	watcom/watcom_l.mak, watcom/watcom_f.mak,
+	examples/enough.c, examples/zran.c, examples/gun.c:
+	Remove (Import cleanup.).
 	* contrib/masmx86/match686.asm, contrib/gcc_gvmat64/gvmat64.S,
 	contrib/vstudio/vc10/zlibvc.def, 
 	contrib/vstudio/vc10/miniunz.vcxproj.user,
