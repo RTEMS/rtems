@@ -1,3 +1,8 @@
+2010-04-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* zconf.h: Regenerate by zlib's configure.
+	Eliminate HAVE_UNISTD_H. Use Z_PREFIX.
+
 2010-03-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* zconf.h: Add include of config.h
