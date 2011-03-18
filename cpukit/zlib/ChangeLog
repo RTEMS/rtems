@@ -1,0 +1,73 @@
+2010-04-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* zconf.h: Regenerate by zlib's configure.
+	Eliminate HAVE_UNISTD_H. Use Z_PREFIX.
+
+2010-03-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* zconf.h: Add include of config.h
+
+2010-03-26	Thomas Doerfler <Thomas.Doerfler@embeded-brains.de>
+
+	* zlib.h, zutil.c, zutil.h, gzlib.c, crc32.c, adler32.c:
+	Make code match prototype to eliminate warnings.
+	eliminate unneeded comilation of 64 bit functions
+
+2010-03-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ChangeLog.zlib, FAQ, Makefile.am, README, adler32.c, compress.c,
+	crc32.c, deflate.c, deflate.h, infback.c, inffast.c, inflate.c,
+	inflate.h, inftrees.c, inftrees.h, trees.c, uncompr.c, zconf.h,
+	zlib.3, zlib.h, zutil.c, zutil.h: Update to zlib 1.2.4.
+	* gzclose.c, gzguts.h, gzlib.c, gzread.c, gzwrite.c, doc/algorithm.txt:
+	New files.
+	* algorithm.txt, gzio.c: Removed.
+
+2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* zutil.c, zutil.h: Make code match prototype to eliminate warnings.
+
+2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* adler32.c, compress.c, crc32.c, deflate.c, gzio.c, infback.c,
+	inflate.c, inffast.c, inftrees.c, trees.c, uncompr.c, zutil.c:
+	Stop using old-style function definitions.
+
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ChangeLog.zlib, README, adler32.c, compress.c, crc32.c, deflate.c,
+	deflate.h, gzio.c, infback.c, inflate.c, inftrees.c, inftrees.h,
+	trees.c, uncompr.c, zconf.h, zlib.3, zlib.h, zutil.c, zutil.h:
+	Upgrade to zlib-1.2.3.
+
+2005-10-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* zconf.h: Hard-code using unistd.h.
+	Hard-code Z_PREFIX.
+
+2005-10-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* zconf.in.h: Remove (Unused).
+	* zconf.h: Use uint_least*_t types.
+	* crc32.c, zutil.c, zutil.h: Misc. type fixes.
+
+2005-10-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: New.
+	* preinstall.am: New.
+
+2005-10-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* adler32.c, compress.c, crc32.c, deflate.c, deflate.h, gzio.c,
+	trees.c, uncompr.c, zconf.h, zconf.in.h, zutil.c, zutil.h: Reformat
+	CVS Ids.
+
+2005-10-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ChangeLog.zlib: Renamed version of zlib's ChangeLog.
+	* FAQ, INDEX, README, adler32.c, algorithm.txt, compress.c, crc32.c,
+	crc32.h, deflate.c, deflate.h, gzio.c, infback.c, inffast.c,
+	inffast.h, inffixed.h, inflate.c, inflate.h, trees.c, trees.h,
+	uncompr.c, zconf.h, zconf.in.h, zlib.3, zlib.h, zutil.c, zutil.h,
+	inftrees.h, inftrees.c, ChangeLog: Import from zlib-1.2.2.2.tar.gz.
+
