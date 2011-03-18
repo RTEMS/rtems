@@ -1,5 +1,7 @@
 2011-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* CMakeLists.txt, INDEX, zlib.3.pdf, zlib.3, zlib.map, 
+	zlib.pc.in, zlib2ansi: Remove (Import cleanup.)
 	* nintendods/Makefile, nintendods/README,
 	old/as400/readme.txt, old/as400/zlib.inc, old/as400/bndsrc
 	old/as400/compile.clp, 
