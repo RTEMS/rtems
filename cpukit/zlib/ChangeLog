@@ -1,3 +1,13 @@
+2010-03-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ChangeLog.zlib, FAQ, Makefile.am, README, adler32.c, compress.c,
+	crc32.c, deflate.c, deflate.h, infback.c, inffast.c, inflate.c,
+	inflate.h, inftrees.c, inftrees.h, trees.c, uncompr.c, zconf.h,
+	zlib.3, zlib.h, zutil.c, zutil.h: Update to zlib 1.2.4.
+	* gzclose.c, gzguts.h, gzlib.c, gzread.c, gzwrite.c, doc/algorithm.txt:
+	New files.
+	* algorithm.txt, gzio.c: Removed.
+
 2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* zutil.c, zutil.h: Make code match prototype to eliminate warnings.
