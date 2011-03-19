@@ -1,3 +1,14 @@
+2011-03-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ChangeLog.zlib, adler32.c, compress.c, crc32.c,
+	deflate.c, deflate.h, gzguts.h, gzlib.c, gzread.c,
+	inffast.c, inffast.h, inftrees.c, inftrees.h,
+	trees.c, trees.h, uncompr.c, zlib.h, zutil.c, zutil.h:
+	Update to zlib-1.2.5.
+	* Makefile.am: Generate zconf.h from zconf.h.in.
+	* treebuild.xml, zconf.h.cmakein, zconf.h:
+	Remove (Import cleanup).
+
 2011-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* win32/README-WIN32.txt, old/visualc6/README.txt,
