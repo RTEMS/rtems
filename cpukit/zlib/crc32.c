@@ -1,5 +1,5 @@
 /* crc32.c -- compute the CRC-32 of a data stream
- * Copyright (C) 1995-2006 Mark Adler
+ * Copyright (C) 1995-2006, 2010 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h
  *
  * Thanks to Rodney Brown <rbrown64@csc.com.au> for his contribution of faster
@@ -433,7 +433,6 @@ uLong ZEXPORT crc32_combine(crc1, crc2, len2)
     return crc32_combine_(crc1, crc2, len2);
 }
 
-#if (defined(_LARGEFILE64_SOURCE)||(_FILE_OFFSET_BITS == 64))
 uLong ZEXPORT crc32_combine64(crc1, crc2, len2)
     uLong crc1;
     uLong crc2;
@@ -441,4 +440,3 @@ uLong ZEXPORT crc32_combine64(crc1, crc2, len2)
 {
     return crc32_combine_(crc1, crc2, len2);
 }
-#endif /* (defined(_LARGEFILE64_SOURCE)||(_FILE_OFFSET_BITS == 64)) */
