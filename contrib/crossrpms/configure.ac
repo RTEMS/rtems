@@ -159,6 +159,10 @@ AC_CONFIG_FILES([netbsd5.0.2/Makefile])
 AC_CONFIG_FILES([netbsd5.0.2/i386/Makefile])
 AC_CONFIG_FILES([netbsd5.0.2/x86_64/Makefile])
 
+AC_CONFIG_FILES([netbsd5.1/Makefile])
+AC_CONFIG_FILES([netbsd5.1/i386/Makefile])
+AC_CONFIG_FILES([netbsd5.1/x86_64/Makefile])
+
 AC_CONFIG_FILES([rtems4.11/Makefile])
 AC_CONFIG_FILES([rtems4.11/arm/Makefile])
 AC_CONFIG_FILES([rtems4.11/avr/Makefile])
