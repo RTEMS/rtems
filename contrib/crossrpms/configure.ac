@@ -147,10 +147,6 @@ AC_CONFIG_FILES([freebsd6.4/i586/Makefile])
 AC_CONFIG_FILES([freebsd7.3/Makefile])
 AC_CONFIG_FILES([freebsd7.3/i586/Makefile])
 
-AC_CONFIG_FILES([freebsd8.1/Makefile])
-AC_CONFIG_FILES([freebsd8.1/i586/Makefile])
-AC_CONFIG_FILES([freebsd8.1/x86_64/Makefile])
-
 AC_CONFIG_FILES([freebsd8.2/Makefile])
 AC_CONFIG_FILES([freebsd8.2/i586/Makefile])
 AC_CONFIG_FILES([freebsd8.2/x86_64/Makefile])
