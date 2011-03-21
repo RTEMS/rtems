@@ -69,7 +69,7 @@ console_flow sun4v_console_console_flow={
 
 console_tbl     Console_Port_Tbl[] = {
 {
-  "/dev/console",                          /* sDeviceName */
+   NULL,                                   /* sDeviceName */
    SERIAL_CUSTOM,                    	   /* deviceType */
    &pooled_functions,                      /* pDeviceFns */
    NULL,              						/* deviceProbe, assume it is there */
