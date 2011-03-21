@@ -31,9 +31,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.5.0
-%define gcc_version 4.5.0
-%define gcc_rpmvers %{expand:%(echo "4.5.0" | tr - _ )}
+%define gcc_pkgvers 4.5.2
+%define gcc_version 4.5.2
+%define gcc_rpmvers %{expand:%(echo "4.5.2" | tr - _ )}
 
 
 Name:         	amd64-pc-freebsd8.2-gcc
@@ -41,7 +41,7 @@ Summary:      	amd64-pc-freebsd8.2 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20110310.0%{?dist}
+Release:      	0.20110321.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -243,9 +243,18 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 %global _gcclibdir %{_prefix}/lib
 
 Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
+%if "%{gcc_version}" == "4.5.0"
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.0-rtems4.11-20100609.diff
+%endif
+%if "%{gcc_version}" == "4.5.2"
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-rtems4.11-20110220.diff
+%endif
 %{?_without_sources:NoSource:	0}
 
 Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%if "%{gcc_version}" == "4.5.2" 
+Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.2-rtems4.11-20110131.diff
+%endif
 %{?_without_sources:NoSource:	1}
 
 Source2:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-fortran-%{gcc_pkgvers}.tar.bz2
@@ -339,6 +348,9 @@ sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/u
 
   languages="c"
   languages="$languages,c++"
+  case amd64-pc-freebsd8.2 in
+  *-rtems4.11) optargs="$optargs --enable-libstdcxx-time";;
+  esac
   languages="$languages,fortran"
   languages="$languages,objc"
 %if "%{_build}" != "%{_host}"
