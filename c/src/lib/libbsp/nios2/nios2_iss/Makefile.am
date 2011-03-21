@@ -42,11 +42,6 @@ libbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += console/console.c ../../shared/console-polled.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
-if HAS_MP
-# shmsupp
-libbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
-    shmsupp/mpisr.c
-endif
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

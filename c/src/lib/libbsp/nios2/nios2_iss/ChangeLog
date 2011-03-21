@@ -1,3 +1,9 @@
+2011-03-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* Makefile.am: Remove stub version.
+	* shmsupp/addrconv.c, shmsupp/getcfg.c, shmsupp/lock.c,
+	shmsupp/mpisr.c: Removed.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shmsupp/lock.c:
