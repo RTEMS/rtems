@@ -242,9 +242,11 @@ rtems_device_driver console_initialize(
           rtems_fatal_error_occurred(sc);
         }
       }
-      sc = rtems_io_register_name(device->sDeviceName, major, minor);
-      if (sc != RTEMS_SUCCESSFUL) {
-        rtems_fatal_error_occurred(sc);
+      if (device->sDeviceName != NULL) {
+        sc = rtems_io_register_name(device->sDeviceName, major, minor);
+        if (sc != RTEMS_SUCCESSFUL) {
+          rtems_fatal_error_occurred(sc);
+        }
       }
     }
   }

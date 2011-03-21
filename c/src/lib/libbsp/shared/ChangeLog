@@ -1,3 +1,7 @@
+2011-03-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console.c: Make device file optional.
+
 2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1729/cpukit
