@@ -257,12 +257,19 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 
 %global _gcclibdir %{_prefix}/lib
 
+%if "%{gcc_version}" == "4.6.0"
+Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.6.0-RC-20110321-rtems4.11-20110322.diff
+%endif
 %if "%{gcc_version}" == "4.5.2"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-rtems4.11-20110220.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
+%if "%{gcc_version}" == "4.6.0"
+Source1:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
 %if "%{gcc_version}" == "4.5.2" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.2-rtems4.11-20110131.diff
@@ -667,7 +674,9 @@ libgcc h8300-rtems4.11-gcc.
 %{_bindir}/h8300-rtems4.11-gcc%{_exeext}
 %{_bindir}/h8300-rtems4.11-gcc-%{gcc_version}%{_exeext}
 %{_bindir}/h8300-rtems4.11-gcov%{_exeext}
+%if "%{gcc_version}" < "4.6.0"
 %{_bindir}/h8300-rtems4.11-gccbug
+%endif
 
 %dir %{_libexecdir}
 %dir %{_libexecdir}/gcc
@@ -725,6 +734,9 @@ GCC files that are shared by all targets.
 %{_infodir}/gcc.info*
 %{_infodir}/gccint.info*
 %{_infodir}/gccinstall.info*
+%if "%{gcc_version}" >= "4.6.0"
+%{_infodir}/libquadmath.info*
+%endif
 
 %dir %{_mandir}
 %dir %{_mandir}/man7
