@@ -1,7 +1,12 @@
+2011-03-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/niagara.cfg (CFLAGS_OPTIMIZE_V):
+	Replace -gstabs with -g.
+
 2011-03-23	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1769/bsps
-	* make/custom/niagara.cfg (CFLAGS_OPTIMIZE_V): Add -O2
+	* make/custom/niagara.cfg (CFLAGS_OPTIMIZE_V): Add -O2.
 
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
