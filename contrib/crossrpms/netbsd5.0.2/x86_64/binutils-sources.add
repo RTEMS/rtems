@@ -1,2 +1,0 @@
-Source0: http://ftp.gnu.org/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
-@PATCH0@
