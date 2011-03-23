@@ -1,3 +1,8 @@
+2011-03-23	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1769/bsps
+	* make/custom/niagara.cfg (CFLAGS_OPTIMIZE_V): Add -O2
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h:
