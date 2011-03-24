@@ -1,5 +1,7 @@
 2011-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/sys/ioccom.h:
+	Include <sys/cdefs.h> (Eliminate rtems/bsd/sys/cdefs.h).
 	* librpc/include/rpc/auth.h, librpc/include/rpc/auth_unix.h,
 	librpc/include/rpc/clnt.h, librpc/include/rpc/clnt_soc.h,
 	librpc/include/rpc/pmap_clnt.h, librpc/include/rpc/pmap_prot.h,
