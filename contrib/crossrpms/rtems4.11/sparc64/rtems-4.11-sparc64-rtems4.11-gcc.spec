@@ -58,7 +58,7 @@ Summary:      	sparc64-rtems4.11 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	1%{?dist}
+Release:      	2%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -245,7 +245,7 @@ BuildRequires:	rtems-4.11-sparc64-rtems4.11-binutils
 Requires:	rtems-4.11-gcc-common
 Requires:	rtems-4.11-sparc64-rtems4.11-binutils
 Requires:	rtems-4.11-sparc64-rtems4.11-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.11-sparc64-rtems4.11-newlib = %{newlib_version}-7%{?dist}
+Requires:	rtems-4.11-sparc64-rtems4.11-newlib = %{newlib_version}-8%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -278,7 +278,7 @@ Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.2-rtems4.11-2011
 
 %if "%{newlib_version}" == "1.19.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.19.0-rtems4.11-20110109.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.19.0-rtems4.11-20110323.diff
 %endif
 %if "%{newlib_version}" == "1.18.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
@@ -364,7 +364,7 @@ rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-1%{?dist}/newlib-%{newlib_version}-7%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-2%{?dist}/newlib-%{newlib_version}-8%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -634,7 +634,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.11-sparc64-rtems4.11-binutils
-# Requires:       rtems-4.11-sparc64-rtems4.11-newlib = %{newlib_version}-7%{?dist}
+# Requires:       rtems-4.11-sparc64-rtems4.11-newlib = %{newlib_version}-8%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -652,7 +652,7 @@ Summary:        libgcc for sparc64-rtems4.11-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.11-sparc64-rtems4.11-newlib = %{newlib_version}-7%{?dist}
+Requires:       rtems-4.11-sparc64-rtems4.11-newlib = %{newlib_version}-8%{?dist}
 License:	GPL
 
 %description -n rtems-4.11-sparc64-rtems4.11-gcc-libgcc
@@ -831,7 +831,7 @@ Summary:      	C Library (newlib) for sparc64-rtems4.11
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        7%{?dist}
+Release:        8%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.11-newlib-common
@@ -852,7 +852,7 @@ Newlib C Library for sparc64-rtems4.11.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        7%{?dist}
+Release:        8%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
