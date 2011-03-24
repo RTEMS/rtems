@@ -1,5 +1,13 @@
 2011-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/auth.h, librpc/include/rpc/auth_unix.h,
+	librpc/include/rpc/clnt.h, librpc/include/rpc/clnt_soc.h,
+	librpc/include/rpc/pmap_clnt.h, librpc/include/rpc/pmap_prot.h,
+	librpc/include/rpc/pmap_rmt.h, librpc/include/rpc/rpc_com.h,
+	librpc/include/rpc/rpcent.h, librpc/include/rpc/svc.h,
+	librpc/include/rpc/svc_soc.h, librpc/include/rpc/xdr.h,
+	librpc/include/rpcsvc/ypclnt.h:
+	Include <sys/cdefs.h> (Eliminate rtems/bsd/sys/cdefs.h).
 	* libnetworking/ifaddrs.h, libnetworking/netdb.h,
 	libnetworking/resolv.h, libnetworking/arpa/inet.h,
 	libnetworking/arpa/nameser.h, libnetworking/libc/gethostbydns.c,
