@@ -39,7 +39,7 @@
 
 #ifndef _RPC_SVC_H
 #define _RPC_SVC_H
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 /*
  * This interface must manage two items concerning remote procedure calling:

@@ -42,7 +42,7 @@
 #ifndef _RPC_XDR_H
 #define _RPC_XDR_H
 
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 #include <rpc/types.h>
 

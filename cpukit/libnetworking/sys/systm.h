@@ -45,6 +45,10 @@
 #include <rtems/rtems_bsdnet_internal.h> /* for __BSD_VA_LIST__ */
 #include <machine/cpufunc.h>
 
+#if !defined(__dead2)
+#define __dead2         __attribute__((__noreturn__))
+#endif
+
 extern int securelevel;		/* system security level (see init(8)) */
 
 extern int cold;		/* nonzero if we are doing a cold boot */

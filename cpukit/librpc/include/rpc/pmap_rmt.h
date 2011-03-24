@@ -40,7 +40,7 @@
 
 #ifndef _RPC_PMAPRMT_H
 #define _RPC_PMAPRMT_H
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 struct rmtcallargs {
 	u_long prog, vers, proc, arglen;

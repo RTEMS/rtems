@@ -37,7 +37,7 @@
 #ifndef _SYS_UIO_H_
 #define	_SYS_UIO_H_
 
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 #include <sys/types.h>
 
 /*

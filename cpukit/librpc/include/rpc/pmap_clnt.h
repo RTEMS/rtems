@@ -62,7 +62,7 @@
 
 #ifndef _RPC_PMAPCLNT_H
 #define _RPC_PMAPCLNT_H
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 __BEGIN_DECLS
 extern bool_t		pmap_set	(u_long, u_long, int, int);

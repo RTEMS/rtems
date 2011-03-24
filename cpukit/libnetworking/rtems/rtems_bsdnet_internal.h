@@ -36,7 +36,7 @@ typedef u_int32_t ioctl_command_t;
 /* make sure we get the network versions of these */
 #include <machine/types.h>
 #include <machine/param.h>
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 #include <sys/time.h>
 

@@ -39,7 +39,7 @@
 #ifndef _MACHINE_IN_CKSUM_H_
 #define	_MACHINE_IN_CKSUM_H_	1
 
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 #include <netinet/ip.h> /* struct ip */
 
 /*

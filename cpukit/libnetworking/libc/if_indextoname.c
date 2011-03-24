@@ -29,7 +29,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>

@@ -37,7 +37,7 @@
 #ifndef _NETINET_TCP_H_
 #define _NETINET_TCP_H_
 
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 #if __BSD_VISIBLE
 

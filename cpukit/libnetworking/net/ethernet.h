@@ -369,7 +369,7 @@ extern	char *ether_sprintf(const u_int8_t *);
 
 #else /* _KERNEL */
 
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 /*
  * Ethernet address conversion/parsing routines.

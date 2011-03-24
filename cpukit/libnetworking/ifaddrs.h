@@ -46,7 +46,7 @@ struct ifaddrs {
 #define	ifa_broadaddr	ifa_dstaddr	/* broadcast address interface */
 #endif
  
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 __BEGIN_DECLS
 extern int getifaddrs(struct ifaddrs **);

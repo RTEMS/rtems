@@ -116,7 +116,7 @@ typedef struct fhandle	fhandle_t;
 
 #else /* !_KERNEL */
 
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 #endif /* _KERNEL */
 

@@ -47,7 +47,7 @@
  * with TS-RPC.
  */
 
-#include <rtems/bsd/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 #define UDPMSGSIZE      8800    /* rpc imposed limit on udp msg size */  
 
