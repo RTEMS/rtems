@@ -1,5 +1,11 @@
 2011-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* include/rtems/bsd/sys/queue.h, include/rtems/bsd/sys/cdefs.h:
+	Remove.
+	* Makefile.am: Reflect changes above.
+
+2011-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/hexdump-odsyntax.c, libmisc/shell/main_dd.c:
 	Add local version of __unused macro.
 	* libcsupport/include/sys/ioccom.h:

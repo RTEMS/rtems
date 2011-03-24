@@ -39,10 +39,6 @@ include_rtems_HEADERS =
 include_rtems_rtemsdir = $(includedir)/rtems/rtems
 include_rtems_rtems_HEADERS =
 
-include_rtems_bsd_sysdir = $(include_rtemsdir)/bsd/sys
-include_rtems_bsd_sys_HEADERS = include/rtems/bsd/sys/queue.h
-include_rtems_bsd_sys_HEADERS += include/rtems/bsd/sys/cdefs.h
-
 include_uuiddir = $(includedir)/uuid
 include_uuid_HEADERS = libmisc/uuid/uuid.h
 
