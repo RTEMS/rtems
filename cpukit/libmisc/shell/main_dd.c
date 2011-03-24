@@ -76,6 +76,10 @@ __FBSDID("$FreeBSD: src/bin/dd/dd.c,v 1.43 2004/08/15 19:10:05 rwatson Exp $");
 #include "dd.h"
 #include "extern-dd.h"
 
+#ifndef __unused
+#define __unused __attribute((__unused__))
+#endif
+
 #define DD_DEFFILEMODE 0
 
 static void dd_close(rtems_shell_dd_globals* globals);

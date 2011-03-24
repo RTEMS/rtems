@@ -61,6 +61,10 @@ __FBSDID("$FreeBSD: src/usr.bin/hexdump/odsyntax.c,v 1.17 2004/07/22 13:14:42 jo
 
 #define PADDING	"         "
 
+#ifndef __unused
+#define __unused __attribute((__unused__))
+#endif
+
 #if RTEMS_REMOVED
 int odmode;
 #endif
@@ -321,7 +325,6 @@ odformat(rtems_shell_hexdump_globals* globals, const char *fmt)
 		}
 	}
 }
-#define __unused
 
 static const char *
 odformatfp(rtems_shell_hexdump_globals* globals, char fchar __unused, const char *fmt)
