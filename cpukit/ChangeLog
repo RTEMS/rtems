@@ -1,3 +1,8 @@
+2011-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/linker_set.h: Add local versions of __used
+	and __CONCAT macros.
+
 2011-03-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* score/src/percpu.c: All possible cpus must be

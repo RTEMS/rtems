@@ -30,6 +30,22 @@
 #ifndef _SYS_LINKER_SET_H_
 #define _SYS_LINKER_SET_H_
 
+/* FIXME: These macros should not be here
+ * BSD has them macros in sys/cdefs.h
+ * older rtems had them in rtems/bsd/sys/cdefs.h
+ * newlib has some of them in sys/cdefs.h
+ */
+
+#if defined(__rtems__)
+#ifndef	__used
+#define	__used		__attribute__((__used__))
+#endif
+#ifndef __CONCAT
+#define	__CONCAT1(x,y)	x ## y
+#define	__CONCAT(x,y)	__CONCAT1(x,y)
+#endif
+#endif
+
 /*
  * The following macros are used to declare global sets of objects, which
  * are collected by the linker into a `linker_set' as defined below.
