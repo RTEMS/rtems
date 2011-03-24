@@ -1,5 +1,21 @@
 2011-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/ifaddrs.h, libnetworking/netdb.h,
+	libnetworking/resolv.h, libnetworking/arpa/inet.h,
+	libnetworking/arpa/nameser.h, libnetworking/libc/gethostbydns.c,
+	libnetworking/libc/getifaddrs.c, libnetworking/libc/if_indextoname.c,
+	libnetworking/libc/if_nameindex.c, libnetworking/libc/res_stubs.c,
+	libnetworking/machine/in_cksum.h, libnetworking/net/ethernet.h,
+	libnetworking/net/if.h, libnetworking/net/if_dl.h,
+	libnetworking/netinet/ip.h, libnetworking/netinet/tcp.h,
+	libnetworking/netinet/tcp_debug.c,
+	libnetworking/rtems/rtems_bsdnet_internal.h,
+	libnetworking/sys/libkern.h, libnetworking/sys/mount.h,
+	libnetworking/sys/poll.h, libnetworking/sys/socket.h,
+	libnetworking/sys/sysctl.h, libnetworking/sys/syslog.h,
+	libnetworking/sys/systm.h, libnetworking/sys/uio.h,
+	libnetworking/sys/un.h:
+	Include <sys/cdefs.h> (Eliminate rtems/bsd/sys/cdefs.h).
 	* libnetworking/sys/linker_set.h: Add local versions of __used
 	and __CONCAT macros.
 
