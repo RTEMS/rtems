@@ -258,8 +258,8 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 %global _gcclibdir %{_prefix}/lib
 
 %if "%{gcc_version}" == "4.6.0"
-Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.6.0-RC-20110321-rtems4.11-20110322.diff
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.6.0-rtems4.11-20110325.diff
 %endif
 %if "%{gcc_version}" == "4.5.2"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -268,7 +268,7 @@ Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-rtems4
 %{?_without_sources:NoSource:	0}
 
 %if "%{gcc_version}" == "4.6.0"
-Source1:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
 %if "%{gcc_version}" == "4.5.2" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
@@ -279,10 +279,6 @@ Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.2-rtems4.11-2011
 %if "%{newlib_version}" == "1.19.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
 Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.19.0-rtems4.11-20110323.diff
-%endif
-%if "%{newlib_version}" == "1.18.0"
-Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.18.0-rtems4.11-20101126.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
