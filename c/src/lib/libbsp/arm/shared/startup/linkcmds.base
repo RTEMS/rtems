@@ -32,8 +32,9 @@ ENTRY (_start)
 
 bsp_vector_table_size = DEFINED (bsp_vector_table_size) ? bsp_vector_table_size : 64;
 
-bsp_section_vbarrier_align = DEFINED (bsp_section_vbarrier_align) ? bsp_section_vbarrier_align : 1;
+bsp_section_xbarrier_align = DEFINED (bsp_section_xbarrier_align) ? bsp_section_xbarrier_align : 1;
 bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1;
+bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1;
 
 bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 8;
 
@@ -102,107 +103,47 @@ SECTIONS {
 	bsp_vector_table_begin = DEFINED (bsp_vector_table_in_start_section) ? bsp_section_start_begin : bsp_section_vector_begin;
 	bsp_vector_table_end = bsp_vector_table_begin + bsp_vector_table_size;
 
-	.vbarrier : {
-		. = ALIGN (bsp_section_vbarrier_align);
+	.xbarrier : {
+		. = ALIGN (bsp_section_xbarrier_align);
 	} > REGION_VECTOR
 
-	.interp : {
+	.fast_text : {
+		bsp_section_fast_text_begin = .;
+		*(.bsp_fast_text)
+		bsp_section_fast_text_end = .;
+	} > REGION_FAST_TEXT AT > REGION_FAST_TEXT_LOAD
+	bsp_section_fast_text_size = bsp_section_fast_text_end - bsp_section_fast_text_begin;
+	bsp_section_fast_text_load_begin = LOADADDR (.fast_text);
+	bsp_section_fast_text_load_end = bsp_section_fast_text_load_begin + bsp_section_fast_text_size;
+
+	.text : {
 		bsp_section_text_begin = .;
-		*(.interp)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.note.gnu.build-id : {
-		*(.note.gnu.build-id)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.hash : {
-		*(.hash)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.gnu.hash : {
-		*(.gnu.hash)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.dynsym : {
-		*(.dynsym)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.dynstr : {
-		*(.dynstr)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.gnu.version : {
-		*(.gnu.version)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.gnu.version_d : {
-		*(.gnu.version_d)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.gnu.version_r : {
-		*(.gnu.version_r)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.rel.dyn : {
-		*(.rel.init)
-		*(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
-		*(.rel.fini)
-		*(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
-		*(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
-		*(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
-		*(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
-		*(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
-		*(.rel.ctors)
-		*(.rel.dtors)
-		*(.rel.got)
-		*(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
-		PROVIDE_HIDDEN (__rel_iplt_start = .);
-		*(.rel.iplt)
-		PROVIDE_HIDDEN (__rel_iplt_end = .);
-		PROVIDE_HIDDEN (__rela_iplt_start = .);
-		PROVIDE_HIDDEN (__rela_iplt_end = .);
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.rela.dyn : {
-		*(.rela.init)
-		*(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
-		*(.rela.fini)
-		*(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
-		*(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
-		*(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
-		*(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
-		*(.rela.ctors)
-		*(.rela.dtors)
-		*(.rela.got)
-		*(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
-		PROVIDE_HIDDEN (__rel_iplt_start = .);
-		PROVIDE_HIDDEN (__rel_iplt_end = .);
-		PROVIDE_HIDDEN (__rela_iplt_start = .);
-		*(.rela.iplt)
-		PROVIDE_HIDDEN (__rela_iplt_end = .);
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.rel.plt : {
-		*(.rel.plt)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.rela.plt : {
-		*(.rela.plt)
+		*(.text.unlikely .text.*_unlikely)
+		*(.text .stub .text.* .gnu.linkonce.t.*)
+		/* .gnu.warning sections are handled specially by elf32.em.  */
+		*(.gnu.warning)
+		*(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.init : {
 		KEEP (*(.init))
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.fini : {
 		KEEP (*(.fini))
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.plt : {
-		*(.plt)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.iplt : {
-		*(.iplt)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.text : {
-		*(.text.unlikely .text.*_unlikely)
-		*(.text .stub .text.* .gnu.linkonce.t.*)
-		/* .gnu.warning sections are handled specially by elf32.em.  */
-		*(.gnu.warning)
-		*(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
 		bsp_section_text_end = .;
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
-	bsp_section_text_load_begin = LOADADDR (.interp);
+	bsp_section_text_load_begin = LOADADDR (.text);
 	bsp_section_text_load_end = bsp_section_text_load_begin + bsp_section_text_size;
 
-	.rodata1 : {
+	.robarrier : {
+		. = ALIGN (bsp_section_robarrier_align);
+	} > REGION_RODATA
+
+	.rodata : {
 		bsp_section_rodata_begin = .;
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rodata1 : {
 		*(.rodata1)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.ARM.extab : {
@@ -276,17 +217,89 @@ SECTIONS {
 	.got : {
 		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.rodata : {
-		/* Special FreeBSD sysctl sections */
-		. = ALIGN (16);
+	.interp : {
+		*(.interp)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.note.gnu.build-id : {
+		*(.note.gnu.build-id)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.hash : {
+		*(.hash)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.hash : {
+		*(.gnu.hash)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dynsym : {
+		*(.dynsym)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dynstr : {
+		*(.dynstr)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.version : {
+		*(.gnu.version)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.version_d : {
+		*(.gnu.version_d)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.version_r : {
+		*(.gnu.version_r)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rel.dyn : {
+		*(.rel.init)
+		*(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+		*(.rel.fini)
+		*(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+		*(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
+		*(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+		*(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+		*(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+		*(.rel.ctors)
+		*(.rel.dtors)
+		*(.rel.got)
+		*(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+		PROVIDE_HIDDEN (__rel_iplt_start = .);
+		*(.rel.iplt)
+		PROVIDE_HIDDEN (__rel_iplt_end = .);
+		PROVIDE_HIDDEN (__rela_iplt_start = .);
+		PROVIDE_HIDDEN (__rela_iplt_end = .);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rela.dyn : {
+		*(.rela.init)
+		*(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+		*(.rela.fini)
+		*(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+		*(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+		*(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+		*(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+		*(.rela.ctors)
+		*(.rela.dtors)
+		*(.rela.got)
+		*(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+		PROVIDE_HIDDEN (__rel_iplt_start = .);
+		PROVIDE_HIDDEN (__rel_iplt_end = .);
+		PROVIDE_HIDDEN (__rela_iplt_start = .);
+		*(.rela.iplt)
+		PROVIDE_HIDDEN (__rela_iplt_end = .);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rel.plt : {
+		*(.rel.plt)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rela.plt : {
+		*(.rela.plt)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.plt : {
+		*(.plt)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.iplt : {
+		*(.iplt)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.robsdsets : {
+		/* Special FreeBSD linker set sections */
 		__start_set_sysctl_set = .;
 		*(set_sysctl_*);
-		__stop_set_sysctl_set = ABSOLUTE(.);
+		__stop_set_sysctl_set = .;
 		*(set_domain_*);
 		*(set_pseudo_*);
-		_bsd__start_set_sysinit_set = .;
-		*(_bsd_set_sysinit_set);
-		_bsd__stop_set_sysinit_set = .;
 		_bsd__start_set_modmetadata_set = .;
 		*(_bsd_set_modmetadata_set);
 		_bsd__stop_set_modmetadata_set = .;
@@ -294,38 +307,15 @@ SECTIONS {
 		*(_bsd_set_sysctl_set);
 		_bsd__stop_set_sysctl_set = .;
 
-		*(.rodata .rodata.* .gnu.linkonce.r.*)
 		bsp_section_rodata_end = .;
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
-	bsp_section_rodata_load_begin = LOADADDR (.rodata1);
+	bsp_section_rodata_load_begin = LOADADDR (.rodata);
 	bsp_section_rodata_load_end = bsp_section_rodata_load_begin + bsp_section_rodata_size;
 
-	.robarrier : {
-		. = ALIGN (bsp_section_robarrier_align);
-	} > REGION_RODATA
-
-	.data1 : {
-		bsp_section_data_begin = .;
-		*(.data1)
-	} > REGION_DATA AT > REGION_DATA_LOAD
-	.data : {
-		*(.data .data.* .gnu.linkonce.d.*)
-		SORT(CONSTRUCTORS)
-		bsp_section_data_end = .;
-	} > REGION_DATA AT > REGION_DATA_LOAD
-	bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
-	bsp_section_data_load_begin = LOADADDR (.data1);
-	bsp_section_data_load_end = bsp_section_data_load_begin + bsp_section_data_size;
-
-	.fast_text : {
-		bsp_section_fast_text_begin = .;
-		*(.bsp_fast_text)
-		bsp_section_fast_text_end = .;
-	} > REGION_FAST_TEXT AT > REGION_FAST_TEXT_LOAD
-	bsp_section_fast_text_size = bsp_section_fast_text_end - bsp_section_fast_text_begin;
-	bsp_section_fast_text_load_begin = LOADADDR (.fast_text);
-	bsp_section_fast_text_load_end = bsp_section_fast_text_load_begin + bsp_section_fast_text_size;
+	.rwbarrier : {
+		. = ALIGN (bsp_section_rwbarrier_align);
+	} > REGION_DATA
 
 	.fast_data : {
 		bsp_section_fast_data_begin = .;
@@ -335,6 +325,26 @@ SECTIONS {
 	bsp_section_fast_data_size = bsp_section_fast_data_end - bsp_section_fast_data_begin;
 	bsp_section_fast_data_load_begin = LOADADDR (.fast_data);
 	bsp_section_fast_data_load_end = bsp_section_fast_data_load_begin + bsp_section_fast_data_size;
+
+	.data : {
+		bsp_section_data_begin = .;
+		*(.data .data.* .gnu.linkonce.d.*)
+		SORT(CONSTRUCTORS)
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.data1 : {
+		*(.data1)
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.rwbsdsets : {
+		/* Special FreeBSD linker set sections */
+		_bsd__start_set_sysinit_set = .;
+		*(_bsd_set_sysinit_set);
+		_bsd__stop_set_sysinit_set = .;
+
+		bsp_section_data_end = .;
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
+	bsp_section_data_load_begin = LOADADDR (.data);
+	bsp_section_data_load_end = bsp_section_data_load_begin + bsp_section_data_size;
 
 	.bss : {
 		bsp_section_bss_begin = .;

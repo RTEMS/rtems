@@ -1,3 +1,10 @@
+2011-03-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/start/start.S: Default exception handler will result in
+	bsp_reset().
+	* shared/startup/linkcmds.base: Move unsupported sections into
+	read-only section.  Changed barrier sections.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/abort/abort.c, shared/abort/simple_abort.c:

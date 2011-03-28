@@ -68,31 +68,31 @@ handler_addr_reset:
 
 handler_addr_undef:
 
-	.word	twiddle
+	.word	reset
 
 handler_addr_swi:
 
-	.word	twiddle
+	.word	reset
 
 handler_addr_prefetch:
 
-	.word	twiddle
+	.word	reset
 
 handler_addr_abort:
 
-	.word	twiddle
+	.word	reset
 
 handler_addr_reserved:
 
-	.word	twiddle
+	.word	reset
 
 handler_addr_irq:
 
-	.word	twiddle
+	.word	reset
 
 handler_addr_fiq:
 
-	.word	twiddle
+	.word	reset
 
 /* Start entry */
 
@@ -184,15 +184,18 @@ bsp_start_hook_0_done:
 	mov	r0, #0
 	bl	boot_card
 
+twiddle:
+
 	/* Branch to reset function */
 	bl	bsp_reset
 
-	SWITCH_FROM_THUMB_TO_ARM
+	b	twiddle
 
-	/* Spin forever */
+.arm
 
-twiddle:
+reset:
 
+	SWITCH_FROM_ARM_TO_THUMB	r0
 	b	twiddle
 
 DEFINE_FUNCTION_ARM(bsp_start_memcpy)
