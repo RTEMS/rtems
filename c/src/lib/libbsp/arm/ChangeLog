@@ -4,6 +4,7 @@
 	bsp_reset().
 	* shared/startup/linkcmds.base: Move unsupported sections into
 	read-only section.  Changed barrier sections.
+	* shared/lpc/network/lpc-ethernet.c: Support multicast.
 
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 

@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -354,12 +355,12 @@ static inline uint32_t lpc_eth_increment(
 static void lpc_eth_enable_promiscous_mode(bool enable)
 {
   if (enable) {
-    lpc_eth->rxfilterctrl = ETH_RX_FIL_CTRL_ACCEPT_PERFECT
-      | ETH_RX_FIL_CTRL_ACCEPT_UNICAST
+    lpc_eth->rxfilterctrl = ETH_RX_FIL_CTRL_ACCEPT_UNICAST
       | ETH_RX_FIL_CTRL_ACCEPT_MULTICAST
       | ETH_RX_FIL_CTRL_ACCEPT_BROADCAST;
   } else {
     lpc_eth->rxfilterctrl = ETH_RX_FIL_CTRL_ACCEPT_PERFECT
+      | ETH_RX_FIL_CTRL_ACCEPT_MULTICAST
       | ETH_RX_FIL_CTRL_ACCEPT_BROADCAST;
   }
 }
@@ -1291,7 +1292,8 @@ static int lpc_eth_interface_ioctl(
 )
 {
   lpc_eth_driver_entry *e = (lpc_eth_driver_entry *) ifp->if_softc;
-  int rv = 0;
+  struct ifreq *ifr = (struct ifreq *) data;
+  int eno = 0;
 
   LPC_ETH_PRINTF("%s\n", __func__);
 
@@ -1313,15 +1315,25 @@ static int lpc_eth_interface_ioctl(
         /* TODO: init */
       }
       break;
+    case SIOCADDMULTI:
+    case SIOCDELMULTI: {
+      eno = (command == SIOCADDMULTI) ? ether_addmulti(ifr, &e->arpcom)
+        : ether_delmulti(ifr, &e->arpcom);
+      if (eno == ENETRESET) {
+        /* TODO: Use imperfect hash filter */
+        eno = 0;
+      }
+      break;
+    }
     case SIO_RTEMS_SHOW_STATS:
       lpc_eth_interface_stats(e);
       break;
     default:
-      rv = EINVAL;
+      eno = EINVAL;
       break;
   }
 
-  return rv;
+  return eno;
 }
 
 static void lpc_eth_interface_start(struct ifnet *ifp)
@@ -1504,7 +1516,7 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
   ifp->if_start = lpc_eth_interface_start;
   ifp->if_output = ether_output;
   ifp->if_watchdog = lpc_eth_interface_watchdog;
-  ifp->if_flags = config->ignore_broadcast ? 0 : IFF_BROADCAST;
+  ifp->if_flags = IFF_MULTICAST | IFF_BROADCAST | IFF_SIMPLEX;
   ifp->if_snd.ifq_maxlen = ifqmaxlen;
   ifp->if_timer = 0;
 
