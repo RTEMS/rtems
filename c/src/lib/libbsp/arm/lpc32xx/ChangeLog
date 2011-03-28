@@ -1,3 +1,17 @@
+2011-03-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac, include/bspopts.h.in: New BSP option
+	LPC32XX_SCRATCH_AREA_SIZE.  Disable BSP option
+	LPC32XX_DISABLE_READ_ONLY_PROTECTION for all BSPs.
+	* include/boot.h: Removed application specific defines.
+	* include/nand-mlc.h, misc/nand-mlc.c: Changed configuration layout.
+	* include/mmu.h, misc/mmu.c: Documentation.  Bugfix.
+	* include/bsp.h, startup/bspstarthooks.c, misc/restart.c,
+	startup/linkcmds.lpc32xx_mzx, startup/linkcmds.lpc32xx_mzx_stage_1,
+	startup/linkcmds.lpc32xx_mzx_stage_2,
+	startup/linkcmds.lpc32xx_phycore: Support for scratch area.  Moved
+	code into macros for reusability.
+
 2011-02-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/bsp.h, lpc32xx/misc/restart.c: Renamed lpc32xx_restart() in

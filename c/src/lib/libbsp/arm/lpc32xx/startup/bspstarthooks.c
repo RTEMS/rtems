@@ -73,6 +73,12 @@ static void BSP_START_TEXT_SECTION clear_bss(void)
       .begin = (uint32_t) bsp_section_fast_data_begin,
       .end = (uint32_t) bsp_section_fast_data_end,
       .flags = LPC32XX_MMU_READ_WRITE_DATA
+#ifdef LPC32XX_SCRATCH_AREA_SIZE
+    }, {
+      .begin = (uint32_t) &lpc32xx_scratch_area [0],
+      .end = (uint32_t) &lpc32xx_scratch_area [LPC32XX_SCRATCH_AREA_SIZE],
+      .flags = LPC32XX_MMU_READ_ONLY_DATA
+#endif
     }, {
       .begin = (uint32_t) bsp_section_start_begin,
       .end = (uint32_t) bsp_section_start_end,
@@ -224,34 +230,15 @@ void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
 static void BSP_START_TEXT_SECTION stop_dma_activities(void)
 {
   #ifdef LPC32XX_STOP_GPDMA
-    if ((LPC32XX_DMACLK_CTRL & 0x1) != 0) {
-      if ((lpc32xx.dma.cfg & LPC_DMA_CFG_EN) != 0) {
-        int i = 0;
-
-        for (i = 0; i < 8; ++i) {
-          lpc32xx.dma.channels [i].cfg = 0;
-        }
-
-        lpc32xx.dma.cfg &= ~LPC_DMA_CFG_EN;
-      }
-      LPC32XX_DMACLK_CTRL = 0;
-    }
+    LPC32XX_DO_STOP_GPDMA;
   #endif
 
   #ifdef LPC32XX_STOP_ETHERNET
-    if ((LPC32XX_MAC_CLK_CTRL & 0x7) == 0x7) {
-      lpc32xx.eth.command = 0x38;
-      lpc32xx.eth.mac1 = 0xcf00;
-      lpc32xx.eth.mac1 = 0;
-      LPC32XX_MAC_CLK_CTRL = 0;
-    }
+    LPC32XX_DO_STOP_ETHERNET;
   #endif
 
   #ifdef LPC32XX_STOP_USB
-    if ((LPC32XX_USB_CTRL & 0x010e8000) != 0) {
-      LPC32XX_OTG_CLK_CTRL = 0;
-      LPC32XX_USB_CTRL = 0x80000;
-    }
+    LPC32XX_DO_STOP_USB;
   #endif
 }
 

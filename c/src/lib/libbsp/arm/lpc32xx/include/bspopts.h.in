@@ -63,6 +63,9 @@
 /* peripheral clock in Hz */
 #undef LPC32XX_PERIPH_CLK
 
+/* size of scratch area */
+#undef LPC32XX_SCRATCH_AREA_SIZE
+
 /* stop Ethernet controller at start-up to avoid DMA interference */
 #undef LPC32XX_STOP_ETHERNET
 

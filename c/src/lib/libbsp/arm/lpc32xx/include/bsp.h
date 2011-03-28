@@ -135,6 +135,71 @@ extern uint32_t lpc32xx_magic_zero_end [];
  */
 extern uint32_t lpc32xx_magic_zero_size [];
 
+#ifdef LPC32XX_SCRATCH_AREA_SIZE
+  /**
+   * @rief Scratch area.
+   *
+   * The usage is application specific.
+   */
+  extern uint8_t lpc32xx_scratch_area [LPC32XX_SCRATCH_AREA_SIZE];
+#endif
+
+#define LPC32XX_DO_STOP_GPDMA \
+  do { \
+    if ((LPC32XX_DMACLK_CTRL & 0x1) != 0) { \
+      if ((lpc32xx.dma.cfg & LPC_DMA_CFG_EN) != 0) { \
+        int i = 0; \
+        for (i = 0; i < 8; ++i) { \
+          lpc32xx.dma.channels [i].cfg = 0; \
+        } \
+        lpc32xx.dma.cfg &= ~LPC_DMA_CFG_EN; \
+      } \
+      LPC32XX_DMACLK_CTRL = 0; \
+    } \
+  } while (0)
+
+#define LPC32XX_DO_STOP_ETHERNET \
+  do { \
+    if ((LPC32XX_MAC_CLK_CTRL & 0x7) == 0x7) { \
+      lpc32xx.eth.command = 0x38; \
+      lpc32xx.eth.mac1 = 0xcf00; \
+      lpc32xx.eth.mac1 = 0; \
+      LPC32XX_MAC_CLK_CTRL = 0; \
+    } \
+  } while (0)
+
+#define LPC32XX_DO_STOP_USB \
+  do { \
+    if ((LPC32XX_USB_CTRL & 0x010e8000) != 0) { \
+      LPC32XX_OTG_CLK_CTRL = 0; \
+      LPC32XX_USB_CTRL = 0x80000; \
+    } \
+  } while (0)
+
+#define LPC32XX_DO_RESTART(addr) \
+  do { \
+    ARM_SWITCH_REGISTERS; \
+    rtems_interrupt_level level; \
+    uint32_t ctrl = 0; \
+  \
+    rtems_interrupt_disable(level); \
+  \
+    arm_cp15_data_cache_test_and_clean(); \
+    arm_cp15_instruction_cache_invalidate(); \
+  \
+    ctrl = arm_cp15_get_control(); \
+    ctrl &= ~(ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M); \
+    arm_cp15_set_control(ctrl); \
+  \
+    __asm__ volatile ( \
+      ARM_SWITCH_TO_ARM \
+      "mov pc, %[addr]\n" \
+      ARM_SWITCH_BACK \
+      : ARM_SWITCH_OUTPUT \
+      : [addr] "r" (addr) \
+    ); \
+  } while (0)
+
 /** @} */
 
 /**

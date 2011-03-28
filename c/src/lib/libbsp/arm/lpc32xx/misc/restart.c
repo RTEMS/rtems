@@ -30,24 +30,5 @@
 
 void bsp_restart(void *addr)
 {
-  ARM_SWITCH_REGISTERS;
-  rtems_interrupt_level level;
-  uint32_t ctrl = 0;
-
-  rtems_interrupt_disable(level);
-
-  arm_cp15_data_cache_test_and_clean();
-  arm_cp15_instruction_cache_invalidate();
-
-  ctrl = arm_cp15_get_control();
-  ctrl &= ~(ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M);
-  arm_cp15_set_control(ctrl);
-
-  __asm__ volatile (
-    ARM_SWITCH_TO_ARM
-    "mov pc, %[addr]\n"
-    ARM_SWITCH_BACK
-    : ARM_SWITCH_OUTPUT
-    : [addr] "r" (addr)
-  );
+  LPC32XX_DO_RESTART(addr);
 }

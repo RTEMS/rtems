@@ -181,22 +181,7 @@ extern "C" {
  * @brief MLC NAND controller configuration.
  */
 typedef struct {
-  /**
-   * @brief Selects small pages (512 Bytes user data and 16 Bytes spare data)
-   * or large pages (2048 Bytes user data and 64 Bytes spare data).
-   */
-  bool small_pages;
-
-  /**
-   * @brief Selects 3/4 address cycles for small pages/large pages or 4/5
-   * address cycles.
-   */
-  bool many_address_cycles;
-
-  /**
-   * @brief Selects 64 or 128 pages per block in case of large pages.
-   */
-  bool normal_blocks;
+  uint32_t flags;
 
   uint32_t block_count;
 
@@ -205,6 +190,23 @@ typedef struct {
    */
   uint32_t time;
 } lpc32xx_mlc_config;
+
+/**
+ * @brief Selects small pages (512 Bytes user data and 16 Bytes spare data)
+ * or large pages (2048 Bytes user data and 64 Bytes spare data).
+ */
+#define MLC_SMALL_PAGES 0x1U
+
+/**
+ * @Brief Selects 3/4 address cycles for small pages/large pages or 4/5
+ * address cycles.
+ */
+#define MLC_MANY_ADDRESS_CYCLES 0x2U
+
+/**
+ * @brief Selects 64 or 128 pages per block in case of large pages.
+ */
+#define MLC_NORMAL_BLOCKS 0x4U
 
 /**
  * @brief Initializes the MLC NAND controller according to @a cfg.

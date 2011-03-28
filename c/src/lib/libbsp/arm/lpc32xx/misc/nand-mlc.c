@@ -24,19 +24,30 @@
 
 static volatile lpc32xx_nand_mlc *const mlc = &lpc32xx.nand_mlc;
 
-static bool mlc_small_pages;
-
-static bool mlc_many_address_cycles;
-
-static bool mlc_normal_blocks;
+static uint32_t mlc_flags;
 
 static uint32_t mlc_block_count;
 
 static uint32_t mlc_page_count;
 
+static bool mlc_small_pages(void)
+{
+  return (mlc_flags & MLC_SMALL_PAGES) != 0;
+}
+
+static bool mlc_many_address_cycles(void)
+{
+  return (mlc_flags & MLC_MANY_ADDRESS_CYCLES) != 0;
+}
+
+static bool mlc_normal_blocks(void)
+{
+  return (mlc_flags & MLC_NORMAL_BLOCKS) != 0;
+}
+
 uint32_t lpc32xx_mlc_page_size(void)
 {
-  if (mlc_small_pages) {
+  if (mlc_small_pages()) {
     return 512;
   } else {
     return 2048;
@@ -45,10 +56,10 @@ uint32_t lpc32xx_mlc_page_size(void)
 
 uint32_t lpc32xx_mlc_pages_per_block(void)
 {
-  if (mlc_small_pages) {
+  if (mlc_small_pages()) {
     return 32;
   } else {
-    if (mlc_normal_blocks) {
+    if (mlc_normal_blocks()) {
       return 64;
     } else {
       return 128;
@@ -99,23 +110,23 @@ static bool mlc_was_operation_successful(void)
 
 static void mlc_set_block_address(uint32_t block_index)
 {
-  if (mlc_small_pages) {
+  if (mlc_small_pages()) {
     mlc->addr = (uint8_t) (block_index << 5);
     mlc->addr = (uint8_t) (block_index >> 3);
-    if (mlc_many_address_cycles) {
+    if (mlc_many_address_cycles()) {
       mlc->addr = (uint8_t) (block_index >> 11);
     }
   } else {
-    if (mlc_normal_blocks) {
+    if (mlc_normal_blocks()) {
       mlc->addr = (uint8_t) (block_index << 6);
       mlc->addr = (uint8_t) (block_index >> 2);
-      if (mlc_many_address_cycles) {
+      if (mlc_many_address_cycles()) {
         mlc->addr = (uint8_t) (block_index >> 10);
       }
     } else {
       mlc->addr = (uint8_t) (block_index << 7);
       mlc->addr = (uint8_t) (block_index >> 1);
-      if (mlc_many_address_cycles) {
+      if (mlc_many_address_cycles()) {
         mlc->addr = (uint8_t) (block_index >> 9);
       }
     }
@@ -125,17 +136,17 @@ static void mlc_set_block_address(uint32_t block_index)
 static void mlc_set_page_address(uint32_t page_index)
 {
   mlc->addr = 0;
-  if (mlc_small_pages) {
+  if (mlc_small_pages()) {
     mlc->addr = (uint8_t) page_index;
     mlc->addr = (uint8_t) (page_index >> 8);
-    if (mlc_many_address_cycles) {
+    if (mlc_many_address_cycles()) {
       mlc->addr = (uint8_t) (page_index >> 16);
     }
   } else {
     mlc->addr = 0;
     mlc->addr = (uint8_t) page_index;
     mlc->addr = (uint8_t) (page_index >> 8);
-    if (mlc_many_address_cycles) {
+    if (mlc_many_address_cycles()) {
       mlc->addr = (uint8_t) (page_index >> 16);
     }
   }
@@ -145,9 +156,7 @@ void lpc32xx_mlc_init(const lpc32xx_mlc_config *cfg)
 {
   uint32_t icr = 0;
 
-  mlc_small_pages = cfg->small_pages;
-  mlc_many_address_cycles = cfg->many_address_cycles;
-  mlc_normal_blocks = cfg->normal_blocks;
+  mlc_flags = cfg->flags;
   mlc_block_count = cfg->block_count;
   mlc_page_count = cfg->block_count * lpc32xx_mlc_pages_per_block();
 
@@ -159,10 +168,10 @@ void lpc32xx_mlc_init(const lpc32xx_mlc_config *cfg)
   mlc->time = cfg->time;
 
   /* Configuration */
-  if (!mlc_small_pages) {
+  if (!mlc_small_pages()) {
     icr |= MLC_ICR_LARGE_PAGES;
   }
-  if (mlc_many_address_cycles) {
+  if (mlc_many_address_cycles()) {
     icr |= MLC_ICR_ADDR_WORD_COUNT_4_5;
   }
   mlc_unlock();
@@ -191,7 +200,7 @@ rtems_status_code lpc32xx_mlc_read_page(
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  size_t small_pages_count = mlc_small_pages ? 1 : MLC_SMALL_PAGES_PER_LARGE_PAGE;
+  size_t small_pages_count = mlc_small_pages() ? 1 : MLC_SMALL_PAGES_PER_LARGE_PAGE;
   size_t sp = 0;
   size_t i = 0;
   uint32_t isr = 0;
@@ -202,7 +211,7 @@ rtems_status_code lpc32xx_mlc_read_page(
 
   mlc_wait_until_ready();
   mlc->cmd = 0x00;
-  if (!mlc_small_pages) {
+  if (!mlc_small_pages()) {
     mlc->cmd = 0x30;
   }
   mlc_set_page_address(page_index);
@@ -284,7 +293,7 @@ rtems_status_code lpc32xx_mlc_write_page_with_ecc(
 )
 {
   rtems_status_code sc = RTEMS_IO_ERROR;
-  size_t small_pages_count = mlc_small_pages ? 1 : MLC_SMALL_PAGES_PER_LARGE_PAGE;
+  size_t small_pages_count = mlc_small_pages() ? 1 : MLC_SMALL_PAGES_PER_LARGE_PAGE;
   size_t sp = 0;
   size_t i = 0;
 
