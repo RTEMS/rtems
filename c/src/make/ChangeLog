@@ -1,3 +1,7 @@
+2011-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Use '|' as sed-delimiter.
+
 2011-03-08	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1760/misc
