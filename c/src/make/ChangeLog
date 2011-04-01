@@ -1,3 +1,8 @@
+2011-04-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, Makefile.inc.in, configure.ac, target.cfg.in: Update to
+	account for movement of .cfg files.
+
 2011-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Use '|' as sed-delimiter.

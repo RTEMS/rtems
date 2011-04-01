@@ -40,6 +40,7 @@ CLEANFILES += bsp.cfg
 
 target.cfg: target.cfg.in Makefile
 	sed \
+	-e "s|[@]RTEMS_API[@]|$(RTEMS_API)|" \
 	-e "s|[@]CPPFLAGS[@]|$(CPPFLAGS)|" \
 	-e "s|[@]CFLAGS[@]|$(CFLAGS)|" \
 	-e "s|[@]LIBS[@]|$(LIBS)|" \
