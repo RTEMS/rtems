@@ -81,12 +81,13 @@ my @npatterns = (
   "(\"%\{_prefix\}\" (!=|==) \"/usr\")",
 
   "(%build_cxx)",
-  "(%build_gnat)",
-  "(%build_objc)",
-  "(%build_gcj)",
-  "(%build_libgcj)",
   "(%build_fortran)",
+  "(%build_gcj)",
+  "(%build_gnat)",
+  "(%build_go)",
+  "(%build_libgcj)",
   "(%build_newlib)",
+  "(%build_objc)",
   "(%build_infos)"
 );
 
@@ -95,15 +96,16 @@ my @ppatterns = (
 
 push @ppatterns,  "(\"%\{_prefix\}\" " . (("$prefix" eq '/usr') ? '!=' : '==' ) . " \"/usr\")";
 
-push @ppatterns, "(%build_gnat "   . ( ($langs{gnat}) ? "==" : "!=" ) . " 0)";
-push @ppatterns, "(%build_cxx "    . ( ($langs{cxx}) ? "==" : "!=" ) . " 0)";
-push @ppatterns, "(%build_objc "   . ( ($langs{objc}) ? "==" : "!=" ) . " 0)";
-push @ppatterns, "(%build_gcj "    . ( ($langs{gcj}) ? "==" : "!=" ) . " 0)";
-push @ppatterns, "(%build_libgcj " . ( ($langs{libgcj}) ? "==" : "!=" ) . " 0)";
-push @ppatterns, "(%build_fortran "    . ( ($langs{fortran}) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_cxx "		. ( ($langs{cxx}) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_fortran "	. ( ($langs{fortran}) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_objc "	. ( ($langs{objc}) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_gcj "		. ( ($langs{gcj}) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_gnat "	. ( ($langs{gnat}) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_go "		. ( ($langs{go}) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_libgcj "	. ( ($langs{libgcj}) ? "==" : "!=" ) . " 0)";
 
-push @ppatterns, "(%build_newlib " . ( ($newlib) ? "==" : "!=" ) . " 0)";
-push @ppatterns, "(%build_infos " . ( ($infos) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_newlib "	. ( ($newlib) ? "==" : "!=" ) . " 0)";
+push @ppatterns, "(%build_infos "	. ( ($infos) ? "==" : "!=" ) . " 0)";
 
 my $npat = join('|',@npatterns);
 my $ppat = join('|',@ppatterns);
