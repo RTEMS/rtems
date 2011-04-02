@@ -106,6 +106,7 @@
   cp dirs build/files.objc
   cp dirs build/files.gcj
   cp dirs build/files.g++
+  cp dirs build/files.go
 
   TGTDIR="%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
@@ -119,17 +120,20 @@
     *cc1plus) ;; # ignore: explicitly put into rpm elsewhere
     *collect2) ;;
     *libobjc*) echo "$i" >> build/files.objc ;;
+    *go1) ;; # ignore: explicitly put into rpm elsewhere
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
     *include-fixed/*);;
     *finclude/*);;
+    */go/*);;
     *adainclude*);;
     *adalib*);;
     *gnat1);;
     *jc1) ;;
     *jvgenmain) ;;
     */libgfortran*.*) echo "$i" >> build/files.gfortran ;;
+    */libgo*.a) echo "$i" >> build/files.go ;;
     %{!?with_pygdb:*/libstdc++*gdb.py*) rm ${RPM_BUILD_ROOT}/$i ;;} # ignore for now
     %{?with_pygdb:*/libstdc++*gdb.py*) >> build/files.g++ ;;}
     */libstdc++.*) echo "$i" >> build/files.g++ ;;

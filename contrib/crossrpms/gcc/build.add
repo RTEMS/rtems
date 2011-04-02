@@ -13,6 +13,9 @@
 %if %build_gcj
   languages="$languages,java"
 %endif
+%if %build_go
+  languages="$languages,go"
+%endif
 %if %build_objc
   languages="$languages,objc"
 %endif
