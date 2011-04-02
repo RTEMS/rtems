@@ -66,7 +66,6 @@ BuildArch:	noarch
 BuildRequires:	rtems-4.11-m32c-rtems4.11-gcc
 
 Source0: 	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/rtems-%{cpukit_pkgvers}.tar.bz2
-%{?_without_sources:NoSource:   0}
 
 %description
 RTEMS cpukit for m32c-rtems4.11.

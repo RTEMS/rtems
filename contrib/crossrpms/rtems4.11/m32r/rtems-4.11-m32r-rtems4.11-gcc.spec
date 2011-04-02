@@ -265,13 +265,11 @@ Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.6.0-rtems4
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-rtems4.11-20110220.diff
 %endif
-%{?_without_sources:NoSource:	0}
 
 %if "%{newlib_version}" == "1.19.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
 Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.19.0-rtems4.11-20110323.diff
 %endif
-%{?_without_sources:NoSource:	50}
 
 %if 0%{?_build_mpfr}
 Source60:    http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
@@ -494,6 +492,7 @@ echo "RTEMS gcc-%{gcc_version}-3%{?dist}/newlib-%{newlib_version}-9%{?dist}" > g
   cp dirs build/files.objc
   cp dirs build/files.gcj
   cp dirs build/files.g++
+  cp dirs build/files.go
 
   TGTDIR="%{_gcclibdir}/gcc/m32r-rtems4.11/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
@@ -507,17 +506,20 @@ echo "RTEMS gcc-%{gcc_version}-3%{?dist}/newlib-%{newlib_version}-9%{?dist}" > g
     *cc1plus) ;; # ignore: explicitly put into rpm elsewhere
     *collect2) ;;
     *libobjc*) echo "$i" >> build/files.objc ;;
+    *go1) ;; # ignore: explicitly put into rpm elsewhere
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
     *include-fixed/*);;
     *finclude/*);;
+    */go/*);;
     *adainclude*);;
     *adalib*);;
     *gnat1);;
     *jc1) ;;
     *jvgenmain) ;;
     */libgfortran*.*) echo "$i" >> build/files.gfortran ;;
+    */libgo*.a) echo "$i" >> build/files.go ;;
     %{!?with_pygdb:*/libstdc++*gdb.py*) rm ${RPM_BUILD_ROOT}/$i ;;} # ignore for now
     %{?with_pygdb:*/libstdc++*gdb.py*) >> build/files.g++ ;;}
     */libstdc++.*) echo "$i" >> build/files.g++ ;;
