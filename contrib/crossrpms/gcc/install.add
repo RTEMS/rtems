@@ -76,6 +76,14 @@
   fi
 %endif
 
+%if %build_go
+%if "%{gcc_version}" == "4.6.0"
+  # Bug in gcc == 4.6.0: Installs gccgo under bogus name
+  # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48411
+  rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-@tool_target@-gccgo%{_exeext}
+%endif
+
+%endif
   # Collect multilib subdirectories
   multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
