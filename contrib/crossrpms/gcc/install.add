@@ -53,6 +53,9 @@
   rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
 %endif
 
+  # We don't want libffi's man-pages
+  rm -f $RPM_BUILD_ROOT%{_mandir}/man3/*ffi*
+
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-@tool_target@-gcjh%{_exeext}
 
