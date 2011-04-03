@@ -36,8 +36,8 @@ cd ..
 %if %build_go
 %setup -q -T -D -n %{name}-%{version} -a6
 %{?PATCH6:%patch6 -p0}
-%endif
 
+%endif
 %if %{with gcc_stdint}
 sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/use_gcc_stdint=provide/}' gcc-%{gcc_pkgvers}/gcc/config.gcc
 %endif
