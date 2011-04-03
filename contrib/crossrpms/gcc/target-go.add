@@ -37,7 +37,5 @@ This is the gcc/go compiler for @tool_target@
 %dir %{_gcclibdir}/gcc
 %dir %{_gcclibdir}/gcc/@tool_target@
 %dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}
-%sysdir %{_prefix}
-%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/go
 
 %endif
