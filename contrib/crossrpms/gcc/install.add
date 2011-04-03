@@ -119,6 +119,17 @@
   cp dirs build/files.g++
   cp dirs build/files.go
 
+%if %build_go
+# Collect /go subdirs
+  TGTDIR="%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}"
+  for i in $multilibs; do
+    case $i in
+    \. ) echo "${TGTDIR}/go" >> build/files.go ;;
+    *)   echo "${TGTDIR}/$i/go" >> build/files.go ;;
+    esac
+  done
+
+%endif
   TGTDIR="%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
@@ -137,7 +148,7 @@
     *include/c++*);;
     *include-fixed/*);;
     *finclude/*);;
-    */go/*);;
+    */go/*) ;; # ignore : explicitly put into rpm elsewhere
     *adainclude*);;
     *adalib*);;
     *gnat1);;
