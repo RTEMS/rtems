@@ -1,3 +1,10 @@
+2011-04-04	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1641/cpukit
+	* Makefile.am, configure.ac: Create testcase for red black tree.
+	* sprbtree01/init.c, sprbtree01/Makefile.am, sprbtree01/sprbtree01.doc,
+	sprbtree01/sprbtree01.scn: New files.
+
 2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1729/cpukit

@@ -1,0 +1,19 @@
+*** TEST OF RTEMS RBTREE API ***
+Init - Initialize rbtree empty
+INIT - Verify rtems_rbtree_insert with two nodes
+INIT - Verify rtems_rbtree_insert with the same value twice
+INIT - Verify rtems_rbtree_is_empty
+INIT - Verify rtems_XXX on an empty tree
+INIT - Verify rtems_rbtree_insert after empty tree
+INIT - Verify rtems_rbtree_peek_max/min, rtems_rbtree_extract
+INIT - Verify rtems_rbtree_insert with 100 nodes value [0,99]
+INIT - Removing 100 nodes
+INIT - Verify rtems_rbtree_insert with 100 nodes value [99,0]
+INIT - Removing 100 nodes
+INIT - Verify rtems_rbtree_get_max with 100 nodes value [99,0]
+INIT - Removing 100 nodes
+INIT - Verify rtems_rbtree_get_max with 100 nodes value [0,99]
+INIT - Verify rtems_rbtree_find
+INIT - Verify rtems_rbtree_find_header
+INIT - Removing 100 nodes
+*** END OF RTEMS RBTREE API TEST ***

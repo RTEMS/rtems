@@ -1,0 +1,25 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sprbtree01
+
+directives:
+
+  rtems_rbtree_initialize_empty
+  rtems_rbtree_insert
+  rtems_rbtree_get
+  rtems_rbtree_peek
+
+concepts:
+
++ Ensure that the rbtree operations listed above behave as defined.
