@@ -94,7 +94,7 @@ void _Thread_Handler_initialization(void)
    *  coupled multiprocessing system, account for the MPCI Server Thread.
    */
   #if defined(RTEMS_SMP)
-    maximum_internal_threads = rtems_smp_maximum_processors;
+    maximum_internal_threads = rtems_configuration_smp_maximum_processors;
   #else
     maximum_internal_threads = 1;
   #endif

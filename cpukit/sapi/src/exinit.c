@@ -163,7 +163,8 @@ void rtems_initialize_data_structures(void)
    * Discover and initialize the secondary cores in an SMP system.
    */
   #if defined(RTEMS_SMP)
-    _SMP_Processor_count = bsp_smp_initialize( rtems_smp_maximum_processors );
+    _SMP_Processor_count =
+        bsp_smp_initialize( rtems_configuration_smp_maximum_processors );
   #endif
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );

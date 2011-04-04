@@ -1,3 +1,11 @@
+2011-04-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1773/cpukit
+	* sapi/include/confdefs.h, sapi/src/exinit.c,
+	score/include/rtems/bspsmp.h, score/src/percpu.c, score/src/thread.c:
+	Rename rtems_smp_maximum_processor to
+	rtems_configuration_smp_maximum_processor. Eliminate printk().
+
 2011-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/rtems/bsd/sys/queue.h, include/rtems/bsd/sys/cdefs.h:

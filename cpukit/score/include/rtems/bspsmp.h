@@ -87,7 +87,7 @@ SCORE_EXTERN uint32_t _SMP_Processor_count;
  *  This variable is set during the SMP initialization sequence to
  *  indicate the Maximum number of CPUs in this system.
  */
-extern uint32_t rtems_smp_maximum_processors;
+extern uint32_t rtems_configuration_smp_maximum_processors;
  
 /**
  *  @brief Initialize Secondary CPUs

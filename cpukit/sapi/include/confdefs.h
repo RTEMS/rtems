@@ -2161,9 +2161,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  in an SMP configuration.
    */
   #if defined(CONFIGURE_INIT)
-    uint32_t rtems_smp_maximum_processors = CONFIGURE_SMP_MAXIMUM_PROCESSORS;
+    uint32_t rtems_configuration_smp_maximum_processors = \
+        CONFIGURE_SMP_MAXIMUM_PROCESSORS;
   #else
-    extern uint32_t rtems_smp_maximum_processors;
+    extern uint32_t rtems_configuration_smp_maximum_processors;
   #endif
  /*
   * Instantiate the Per CPU information based upon the user configuration.
