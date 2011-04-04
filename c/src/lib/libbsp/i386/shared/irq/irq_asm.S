@@ -145,6 +145,13 @@ nested:
 	incl      SYM (_ISR_Nest_level)     /* one nest level deeper */
 	incl      SYM (_Thread_Dispatch_disable_level) /* disable multitasking */
 
+        /*
+         * GCC versions starting with 4.3 no longer place the cld
+         * instruction before string operations.  We  need to ensure
+         * it is set correctly for ISR handlers.
+         */
+        cld
+
 	/*
 	 * re-enable interrupts at processor level as the current
 	 * interrupt source is now masked via i8259
