@@ -1,3 +1,15 @@
+2010-07-28	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1641/cpukit
+	* sapi/Makefile.am, sapi/preinstall.am, score/Makefile.am,
+	score/preinstall.am: Add Red Black Tree data structure to score.
+	* sapi/include/rtems/rbtree.h, sapi/inline/rtems/rbtree.inl,
+	score/include/rtems/score/rbtree.h, score/inline/rtems/score/rbtree.inl,
+	score/src/rbtree.c, score/src/rbtreeextract.c,
+	score/src/rbtreefind.c, score/src/rbtreefindheader.c,
+	score/src/rbtreeget.c, score/src/rbtreeinsert.c, 
+	score/src/rbtreepeek.c: New files.
+
 2011-04-04	Sebastien Bourdeauducq <sebastien.bourdeauducq@gmail.com>
 
 	PR 1722/networking

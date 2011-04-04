@@ -26,6 +26,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
     include/rtems/score/priority.h include/rtems/score/prioritybitmap.h \
+		include/rtems/score/rbtree.h \
     include/rtems/score/scheduler.h include/rtems/score/schedulerpriority.h \
     include/rtems/score/schedulersimple.h \
     include/rtems/score/stack.h include/rtems/score/states.h \
@@ -57,6 +58,7 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
     inline/rtems/score/priority.inl inline/rtems/score/prioritybitmap.inl \
+		inline/rtems/score/rbtree.inl \
     inline/rtems/score/scheduler.inl inline/rtems/score/schedulerpriority.inl \
     inline/rtems/score/schedulersimple.inl \
     inline/rtems/score/stack.inl inline/rtems/score/states.inl \
@@ -177,6 +179,11 @@ libscore_a_SOURCES += src/pheapallocate.c \
     src/pheapextend.c src/pheapfree.c src/pheapgetsize.c \
     src/pheapgetblocksize.c src/pheapgetfreeinfo.c src/pheapgetinfo.c \
     src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c
+
+## RBTREE_C_FILES
+libscore_a_SOURCES += src/rbtree.c \
+    src/rbtreeextract.c src/rbtreefind.c src/rbtreefindheader.c \
+    src/rbtreeget.c src/rbtreeinsert.c src/rbtreepeek.c
 
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \

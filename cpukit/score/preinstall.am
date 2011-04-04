@@ -115,6 +115,10 @@ $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h: include/rtems/score/prioritybit
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
 
+$(PROJECT_INCLUDE)/rtems/score/rbtree.h: include/rtems/score/rbtree.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.h
+
 $(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h
@@ -264,6 +268,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.inl
 $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl: inline/rtems/score/prioritybitmap.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
+
+$(PROJECT_INCLUDE)/rtems/score/rbtree.inl: inline/rtems/score/rbtree.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.inl
 
 $(PROJECT_INCLUDE)/rtems/score/scheduler.inl: inline/rtems/score/scheduler.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.inl

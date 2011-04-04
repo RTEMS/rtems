@@ -60,6 +60,10 @@ $(PROJECT_INCLUDE)/rtems/mptables.h: include/rtems/mptables.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mptables.h
 
+$(PROJECT_INCLUDE)/rtems/rbtree.h: include/rtems/rbtree.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.h
+
 $(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
@@ -71,6 +75,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/chain.inl
 $(PROJECT_INCLUDE)/rtems/extension.inl: inline/rtems/extension.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
+
+$(PROJECT_INCLUDE)/rtems/rbtree.inl: inline/rtems/rbtree.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.inl
 
 $(PROJECT_LIB)/libsapi.a: libsapi.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libsapi.a
