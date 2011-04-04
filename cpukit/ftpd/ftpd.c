@@ -15,6 +15,10 @@
  *
  *  Changes:
  *
+ *    2010-12-02        Sebastien Bourdeauducq <sebastien@milkymist.org>
+ *
+ *      * Support spaces in filenames
+ * 
  *    2001-01-31        Sergei Organov <osv@javad.ru>
  *
  *      * Hacks with current dir and root dir removed in favor of new libio
@@ -1680,27 +1684,27 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   }
   else if (!strcmp("RETR", cmd))
   {
-    sscanf(args, "%254s", fname);
+    strncpy(fname, args, 254);
     command_retrieve(info, fname);
   }
   else if (!strcmp("STOR", cmd))
   {
-    sscanf(args, "%254s", fname);
+    strncpy(fname, args, 254);
     command_store(info, fname);
   }
   else if (!strcmp("LIST", cmd))
   {
-    sscanf(args, "%254s", fname);
+    strncpy(fname, args, 254);
     command_list(info, fname, 1);
   }
   else if (!strcmp("NLST", cmd))
   {
-    sscanf(args, "%254s", fname);
+    strncpy(fname, args, 254);
     command_list(info, fname, 0);
   }
   else if (!strcmp("MDTM", cmd))
   {
-    sscanf(args, "%254s", fname);
+    strncpy(fname, args, 254);
     command_mdtm(info, fname);
   }
   else if (!strcmp("SYST", cmd))
@@ -1736,7 +1740,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
       send_reply(info, 550, "Access denied.");
     }
     else if (
-      1 == sscanf(args, "%254s", fname) &&
+      strncpy(fname, args, 254) &&
       unlink(fname) == 0)
     {
       send_reply(info, 257, "DELE successful.");
@@ -1758,15 +1762,14 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
       {
         send_reply(info, 550, "Access denied.");
       }
-      else if(
-        2 == sscanf(args, "%o %254s", &mask, fname) &&
-        chmod(fname, (mode_t)mask) == 0)
-      {
-        send_reply(info, 257, "CHMOD successful.");
-      }
-      else
-      {
-        send_reply(info, 550, "CHMOD failed.");
+      else {
+        char *c;
+        c = strchr(args, ' ');
+        if((c != NULL) && (sscanf(args, "%o", &mask) == 1) && strncpy(fname, c+1, 254) 
+          && (chmod(fname, (mode_t)mask) == 0))
+          send_reply(info, 257, "CHMOD successful.");
+        else
+          send_reply(info, 550, "CHMOD failed.");
       }
     }
     else
@@ -1779,7 +1782,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
       send_reply(info, 550, "Access denied.");
     }
     else if (
-      1 == sscanf(args, "%254s", fname) &&
+      strncpy(fname, args, 254) &&
       rmdir(fname) == 0)
     {
       send_reply(info, 257, "RMD successful.");
@@ -1796,7 +1799,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
       send_reply(info, 550, "Access denied.");
     }
     else if (
-      1 == sscanf(args, "%254s", fname) &&
+      strncpy(fname, args, 254) &&
       mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
     {
       send_reply(info, 257, "MKD successful.");
@@ -1808,7 +1811,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   }
   else if (!strcmp("CWD", cmd))
   {
-    sscanf(args, "%254s", fname);
+    strncpy(fname, args, 254);
     command_cwd(info, fname);
   }
   else if (!strcmp("CDUP", cmd))

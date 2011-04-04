@@ -1,3 +1,9 @@
+2011-04-04	Sebastien Bourdeauducq <sebastien.bourdeauducq@gmail.com>
+
+	PR 1722/networking
+	* ftpd/ftpd.c: FTPD fails to parse correctly FTP commands relating to
+	filenames with spaces in them.
+
 2011-04-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1773/cpukit
