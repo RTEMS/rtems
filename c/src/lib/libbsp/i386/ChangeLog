@@ -1,3 +1,11 @@
+2011-04-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1768/bsps
+	* shared/irq/irq_asm.S: The nbench benchmark highlighted the fact that
+	we do not perform a cld before calling C code in the ISR. This was
+	historically not a problem but gcc 4.3 changed the behavior. From
+	http://gcc.gnu.org/gcc-4.3/changes.html
+
 2009-05-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/irq/irq.c, shared/irq/irq.h, shared/irq/irq_asm.S: Add shared

@@ -121,6 +121,13 @@ nested:
 	movl	  ebp, esp
 	popl	  ebp
 
+        /*
+         * GCC versions starting with 4.3 no longer place the cld
+         * instruction before string operations.  We  need to ensure
+         * it is set correctly for ISR handlers.
+         */
+        cld
+
 	/*
 	 * restore the original i8259 masks
 	 */
