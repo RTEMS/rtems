@@ -1,3 +1,7 @@
+2011-04-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/src/heap.c: Avoid integer overflow.
+
 2010-07-28	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1641/cpukit
