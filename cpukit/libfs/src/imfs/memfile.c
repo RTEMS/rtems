@@ -547,7 +547,7 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
    */
   IMFS_assert( the_jnode );
   IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE ||
-       the_jnode->type != IMFS_LINEAR_FILE );
+       the_jnode->type == IMFS_LINEAR_FILE );
   IMFS_assert( dest );
 
   /*

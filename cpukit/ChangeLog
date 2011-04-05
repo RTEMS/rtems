@@ -1,3 +1,8 @@
+2011-04-05	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1701/filesystems
+	* libfs/src/imfs/memfile.c: Fix sense of assert.
+
 2011-04-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/src/heap.c: Avoid integer overflow.
