@@ -60,30 +60,31 @@ void test_untar_from_memory(void)
 
 void test_untar_from_file(void)
 {
-  rtems_status_code  sc;
   int                fd;
+  int                rv;
+  ssize_t            n;
 
   puts( "Copy tar image to test.tar" );
   /* Copy tar image from object to file in IMFS */
   fd = open( "/test.tar", O_CREAT|O_TRUNC|O_WRONLY, 0777 );
   rtems_test_assert( fd != -1 );
 
-  sc = write( fd, TARFILE_START, TARFILE_SIZE );
-  rtems_test_assert( sc == TARFILE_SIZE );
+  n = write( fd, TARFILE_START, TARFILE_SIZE );
+  rtems_test_assert( n == TARFILE_SIZE );
   close( fd );
 
   /* make a directory to untar it into */
-  sc = mkdir( "/dest", 0777 );
-  rtems_test_assert( !sc );
+  rv = mkdir( "/dest", 0777 );
+  rtems_test_assert( rv == 0 );
 
-  sc = chdir( "/dest" );
-  rtems_test_assert( !sc );
+  rv = chdir( "/dest" );
+  rtems_test_assert( rv == 0 );
 
   /* Untar it */
-  sc = Untar_FromFile( "/test.tar" );
+  rv = Untar_FromFile( "/test.tar" );
   printf("Untaring from file - ");
-  if (sc != RTEMS_SUCCESSFUL) {
-    printf ("error: untar failed: %s\n", rtems_status_text (sc));
+  if (rv != UNTAR_SUCCESSFUL) {
+    printf ("error: untar failed: %i\n", rv);
     exit(1);
   }
   printf ("successful\n");

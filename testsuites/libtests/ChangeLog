@@ -1,3 +1,7 @@
+2011-04-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* tar01/init.c: Fixed integer types.
+
 2011-03-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add test for Mouse Parser Engine
