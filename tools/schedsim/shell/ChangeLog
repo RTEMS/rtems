@@ -1,3 +1,14 @@
+2011-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/main_clocktick.c, shared/main_semcreate.c,
+	shared/main_semdelete.c, shared/main_semflush.c,
+	shared/main_semobtain.c, shared/main_semrelease.c,
+	shared/main_taskcreate.c, shared/main_taskdelete.c,
+	shared/main_taskmode.c, shared/main_taskpriority.c,
+	shared/main_taskresume.c, shared/main_tasksuspend.c,
+	shared/main_taskwakeafter.c, shared/schedsim_shell.h: Compiles now
+	and do not core dump when RTEMS is not initialized.
+
 2010-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 		Jennifer Averett <jennifer.averett@oarcorp.com>
 

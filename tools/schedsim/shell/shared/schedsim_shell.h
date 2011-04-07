@@ -20,6 +20,14 @@
 extern "C" {
 #endif
 
+#define CHECK_RTEMS_IS_UP() \
+  do { \
+    if ( _System_state_Current != SYSTEM_STATE_UP ) { \
+      fprintf( stderr, "RTEMS is not initialized yet\n" ); \
+      return -1; \
+    } \
+  } while (0)
+
 void PRINT_EXECUTING(void);
 void PRINT_HEIR(void);
 

@@ -33,6 +33,8 @@ int rtems_shell_main_clock_tick(
   unsigned long        tmp;
   rtems_interval       t;
  
+  CHECK_RTEMS_IS_UP();
+
   if (argc != 2) {
     fprintf( stderr, "%s: Usage ticks\n", argv[0] );
     return -1;

@@ -41,6 +41,8 @@ int rtems_shell_main_semaphore_create(
   char                 option;
   int                  value;
 
+  CHECK_RTEMS_IS_UP();
+
   ceiling = 0;
   attr    = RTEMS_DEFAULT_ATTRIBUTES;
   value   = 0;

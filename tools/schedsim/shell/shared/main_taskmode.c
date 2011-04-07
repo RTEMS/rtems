@@ -52,6 +52,8 @@ int rtems_shell_main_task_mode(
   struct getopt_data getopt_reent;
   char               option;
 
+  CHECK_RTEMS_IS_UP();
+
   mode = 0;
   mask = 0;
   memset(&getopt_reent, 0, sizeof(getopt_data));

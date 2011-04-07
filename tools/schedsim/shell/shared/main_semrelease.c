@@ -31,6 +31,8 @@ int rtems_shell_main_semaphore_release(
   rtems_id           id;
   rtems_status_code  status;
  
+  CHECK_RTEMS_IS_UP();
+
   if (argc != 2) {
     fprintf( stderr, "%s: Usage [name|id]\n", argv[0] );
     return -1;

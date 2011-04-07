@@ -39,6 +39,8 @@ int rtems_shell_main_task_create(
   rtems_status_code  status;
   long               priority;
  
+  CHECK_RTEMS_IS_UP();
+
   if (argc != 3) {
     fprintf( stderr, "%s: Usage name priority\n", argv[0] );
     return -1;

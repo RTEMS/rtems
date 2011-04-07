@@ -33,6 +33,8 @@ int rtems_shell_main_task_wake_after(
   unsigned long        tmp;
   rtems_id             self;
  
+  CHECK_RTEMS_IS_UP();
+
   if (argc != 2) {
     fprintf( stderr, "%s: Usage ticks\n", argv[0] );
     return -1;

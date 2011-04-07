@@ -36,6 +36,8 @@ int rtems_shell_main_semaphore_obtain(
  
   /* XXX for now, do not support polling */
 
+  CHECK_RTEMS_IS_UP();
+
   if (argc != 3) {
     fprintf( stderr, "%s: Usage name|id timeout\n", argv[0] );
     return -1;

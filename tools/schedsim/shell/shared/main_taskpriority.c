@@ -34,6 +34,8 @@ int rtems_shell_main_task_priority(
   rtems_task_priority  old;
   rtems_task_priority  new;
  
+  CHECK_RTEMS_IS_UP();
+
   if (argc != 3) {
     fprintf( stderr, "%s: Usage [name|id] priority\n", argv[0] );
     return -1;
@@ -42,7 +44,7 @@ int rtems_shell_main_task_priority(
   if ( lookup_task( argv[1], &id ) )
     return -1;
 
-  if ( rtems_string_to_unsigned_long( argv[1], &tmp, NULL, 0) ) {
+  if ( rtems_string_to_unsigned_long( argv[2], &tmp, NULL, 0) ) {
     fprintf( stderr, "Argument (%s) is not a number\n", argv[2] );
     return 1;
   }
@@ -63,7 +65,10 @@ int rtems_shell_main_task_priority(
     return -1;
   }
 
-  printf("Task (0x%08x) Chain Priority from %d to %d\n", id, old, new );
+  if ( new != 0 )
+    printf("Task (0x%08x) Change Priority from %d to %d\n", id, old, new );
+  else
+    printf("Task (0x%08x) Current Priority is %d\n", id, new );
   
   return 0;
 }
