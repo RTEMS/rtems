@@ -1,3 +1,7 @@
+2011-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems_footer.html.in, common/cpright.texi: Update dates in copyright.
+
 2011-03-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ada_user/.cvsignore: Add missing files.
