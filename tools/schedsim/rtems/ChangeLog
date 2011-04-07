@@ -1,3 +1,8 @@
+2011-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, wkspace.c: Compiles now and do not core dump when RTEMS
+	is not initialized.
+
 2011-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sched_cpu/rtems/score/cpuopts.h: Bump to 4.10.99.0

@@ -75,14 +75,27 @@ librtems_a_SOURCES += $(cpukitdir)/score/src/objectnametoidstring.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/objectsetname.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/objectshrinkinformation.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/scheduler.c
-librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriority.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityallocate.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityblock.c
-librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerprioritythreadschedulerallocate.c
-librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerprioritythreadschedulerfree.c
-librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerprioritythreadschedulerupdate.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriority.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityenqueue.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityenqueuefirst.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityextract.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityfree.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityschedule.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityunblock.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityupdate.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/schedulerpriorityyield.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimpleblock.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimple.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimpleenqueue.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimpleenqueuefirst.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimpleextract.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimplereadyqueueenqueue.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimplereadyqueueenqueuefirst.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimpleschedule.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimpleunblock.c
+librtems_a_SOURCES += $(cpukitdir)/score/src/schedulersimpleyield.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/thread.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadchangepriority.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadclearstate.c
@@ -97,7 +110,6 @@ librtems_a_SOURCES += $(cpukitdir)/score/src/threadloadenv.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadready.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadreset.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadrestart.c
-librtems_a_SOURCES += $(cpukitdir)/score/src/threadresume.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadsetpriority.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadsetstate.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadsettransient.c
@@ -105,7 +117,6 @@ librtems_a_SOURCES += $(cpukitdir)/score/src/threadstackallocate.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadstackfree.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadstart.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadstartmultitasking.c
-librtems_a_SOURCES += $(cpukitdir)/score/src/threadsuspend.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadtickletimeslice.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/iterateoverthreads.c
 librtems_a_SOURCES += $(cpukitdir)/score/src/threadq.c
@@ -224,6 +235,7 @@ schedsim_rtems_include_HEADERS  = \
   ${cpukitdir}/score/include//rtems/seterr.h \
   ${cpukitdir}/score/include/rtems/system.h \
   ${cpukitdir}/score/include/rtems/debug.h \
+  ${cpukitdir}/score/include/rtems/bspsmp.h \
   ${cpukitdir}/include/rtems/bspIo.h \
   $(cpukitdir)/sapi/include/rtems/fatal.h \
   $(cpukitdir)/sapi/include/rtems/init.h \

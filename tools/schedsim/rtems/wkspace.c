@@ -60,7 +60,7 @@ void *_Workspace_Allocate(
 /*
  *  _Workspace_Free
  */
-bool _Workspace_Free(
+void _Workspace_Free(
   void *block
 )
 {
@@ -73,7 +73,6 @@ bool _Workspace_Free(
     );
   #endif
   free( block );
-  return true;
 }
 
 /*
