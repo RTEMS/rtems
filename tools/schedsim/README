@@ -1,0 +1,100 @@
+#
+#  $Id$
+#
+
+This is a simulation shell which wraps parts of the RTEMS SuperCore
+and provides a way to test scheduler implementations.
+
+The following commands are currently available
+
+echo
+help
+exit
+
+rtems_init
+
+task_create name priority
+task_delete name|id
+task_mode [-tTpP]
+  -t - disable timeslicing
+  -T - enable timeslicing
+  -t - disable preemption
+  -T - enable enable
+task_priority name|id priority
+task_resume name|id
+task_suspend name|id
+task_wake_after ticks
+
+clock_tick ticks
+
+@
+
+
+1.6
+log
+@2010-04-08	Joel Sherrill <joel.sherrill@@oarcorp.com>
+
+	* README: Add task suspend and resume.
+@
+text
+@d2 1
+a2 1
+#  $Id$
+d17 1
+a17 1
+task_delete [name|id]
+d23 3
+a25 3
+task_set_priority [name|id] priority
+task_resume [name|id]
+task_suspend [name|id]
+d30 15
+@
+
+
+1.5
+log
+@2010-04-08	Joel Sherrill <joel.sherrill@@oarcorp.com>
+
+	* README: Added task_mode command.
+@
+text
+@d2 1
+a2 1
+#  $Id$
+d17 1
+d24 2
+a26 1
+task_delete [name|id]
+@
+
+
+1.4
+log
+@2010-04-08	Joel Sherrill <joel.sherrill@@oarcorp.com>
+
+	* README: Add task set priority, task wake after, and clock tick.
+@
+text
+@d2 1
+semaphore_create [-bcsfpiC:V:] name
+  -b          - binary mutex
+  -c          - counting semaphore
+  -s          - simple binary semaphore
+  -f          - FIFO Blocking
+  -p          - Priority Blocking
+  -i          - Priority Inheritance
+  -C priority - Priority Ceiling and priority
+  -V initial  - Initial value (default=0)
+semaphore_delete name|id
+semaphore_obtain name|id ticks
+  NOTE: no polling supported yet
+semaphore_release name|id
+semaphore_flush name|id
+
+executing
+heir
+
+The task names are of Classic API form.  They can be up to four characters.
+They should not start with "0" since that is the test used to determine if
+it is a hexadecimal task id.
