@@ -504,6 +504,9 @@ ne_init_hardware (struct ne_softc *sc)
   /* accept broadcast */
   outport_byte (port + RCR, (sc->accept_broadcasts ? MSK_AB : 0));
 
+  /* accept multicast */
+  outport_byte (port + RCR, MSK_AM);
+
   /* Start interface */
   outport_byte (port + CMDR, MSK_PG0 | MSK_RD2 | MSK_STA);
 
@@ -1072,6 +1075,28 @@ ne_stats (struct ne_softc *sc)
   printf ("          Interrupts: %-8lu\n", sc->stats.interrupts);
 }
 
+static int ne_set_multicast_filter(struct ne_softc* sc)
+{
+  int i=0;
+  unsigned int port = sc->port;
+  unsigned char cmd = 0;
+  	
+  /* Save CMDR settings */
+  inport_byte(port + CMDR, cmd);
+  /* Change to page 1 */
+  outport_byte(port + CMDR, cmd | MSK_PG1);
+
+  /* Set MAR to accept _all_ multicast packets */
+  for (i = 0; i < MARsize; ++i) {
+    outport_byte (port + MAR + i, 0xFF);
+  }
+
+  /* Revert to original CMDR settings */
+  outport_byte(port + CMDR, cmd); 
+
+  return 0;
+}
+
 /* NE2000 driver ioctl handler.  */
 
 static int
@@ -1105,12 +1130,24 @@ ne_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
       break;
     }
     break;
+  
+  case SIOCADDMULTI:
+  case SIOCDELMULTI:
+  {
+    struct ifreq* ifr = (struct ifreq*) data;
+    error = (command == SIOCADDMULTI ? 
+      ether_addmulti(ifr, &(sc->arpcom)) :
+      ether_delmulti(ifr, &(sc->arpcom)) );
+    /* ENETRESET indicates that driver should update its multicast filters */
+    if(error == ENETRESET) {
+      error = ne_set_multicast_filter(sc);
+    }
+    break;
+  }
 
   case SIO_RTEMS_SHOW_STATS:
     ne_stats (sc);
     break;
-
-    /* FIXME: Multicast commands must be added here.  */
 
   default:
     error = EINVAL;
@@ -1247,7 +1284,7 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
   ifp->if_watchdog = ne_watchdog;
   ifp->if_start = ne_start;
   ifp->if_output = ether_output;
-  ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
+  ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX | IFF_MULTICAST;
   if (ifp->if_snd.ifq_maxlen == 0)
     ifp->if_snd.ifq_maxlen = ifqmaxlen;
 
