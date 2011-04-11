@@ -1,3 +1,8 @@
+2011-04-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h, score/cpu/i386/cpu.c: Fix typos so you
+	really can define a user scheduler.
+
 2011-04-05	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1701/filesystems

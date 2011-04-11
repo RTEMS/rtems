@@ -1,7 +1,6 @@
 /*
  *  Intel i386 Dependent Source
  *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -171,8 +170,11 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
      * OK I could probably use a simplified version but at least this
      * should work.
      */
+#if 0
     printk(" ************ FAULTY THREAD WILL BE SUSPENDED **************\n");
     rtems_task_suspend(_Thread_Executing->Object.id);
+#endif
+    bsp_reset();
   }
 }
 

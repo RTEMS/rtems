@@ -601,7 +601,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY)
   #include <rtems/score/schedulerpriority.h>
-  #define SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_ENTRY_POINTS
+  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_ENTRY_POINTS
 
   /**
    * This defines the memory used by the priority scheduler.
@@ -619,7 +619,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_SIMPLE)
   #include <rtems/score/schedulersimple.h>
-  #define SCHEDULER_ENTRY_POINTS SCHEDULER_SIMPLE_ENTRY_POINTS
+  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_SIMPLE_ENTRY_POINTS
 
   /**
    * define the memory used by the simple scheduler
@@ -630,14 +630,19 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
 #endif
 
+#if defined(CONFIGURE_SCHEDULER_USER)
+  #define CONFIGURE_SCHEDULER_ENTRY_POINTS \
+          CONFIGURE_SCHEDULER_USER_ENTRY_POINTS
+#endif
+
 /* 
  * Set up the scheduler entry points table.  The scheduling code uses
  * this code to know which scheduler is configured by the user.
  */
 #ifdef CONFIGURE_INIT
   Scheduler_Control  _Scheduler = {
-    NULL,                   /* Scheduler Specific Data Pointer */
-    SCHEDULER_ENTRY_POINTS  /* Scheduler Operations */
+    NULL,                             /* Scheduler Specific Data Pointer */
+    CONFIGURE_SCHEDULER_ENTRY_POINTS  /* Scheduler Operations */
   };
 #endif
 
