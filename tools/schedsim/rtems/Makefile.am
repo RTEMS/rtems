@@ -298,6 +298,7 @@ schedsim_rtems_score_include_HEADERS = \
   ${cpukitdir}/score/include/rtems/score/thread.h \
   ${cpukitdir}/score/include/rtems/score/coremsg.h \
   ${cpukitdir}/score/include/rtems/score/schedulerpriority.h \
+  ${cpukitdir}/score/include/rtems/score/schedulersimple.h \
   ${cpukitdir}/score/include/rtems/score/timespec.h \
   ${cpukitdir}/score/include/rtems/score/tqdata.h \
   ${cpukitdir}/score/include/rtems/score/bitfield.h \

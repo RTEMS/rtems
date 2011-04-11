@@ -1,3 +1,7 @@
+2011-04-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Add schedulersimple.h
+
 2011-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, wkspace.c: Compiles now and do not core dump when RTEMS
