@@ -1,3 +1,9 @@
+2011-04-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/irq/irq_asm.S: Rename rtems_smp_maximum_processors to
+	rtems_configuration_smp_maximum_processors since it is defined in
+	confdefs.h.
+
 2011-04-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1768/bsps

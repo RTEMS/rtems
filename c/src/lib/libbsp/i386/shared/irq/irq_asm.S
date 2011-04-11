@@ -32,8 +32,9 @@
 #define EBP_OFF 12       /* code restoring ebp/esp relies on */
 #define ESP_OFF 16       /* esp being on top of ebp!         */
 #ifdef __SSE__
-#define FRM_SIZ (20+512)
-#define SSE_OFF 20
+/* need to be on 16 byte boundary for SSE */
+#define FRM_SIZ (20+12+512)
+#define SSE_OFF 32
 #else
 #define FRM_SIZ 20
 #endif
