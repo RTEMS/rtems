@@ -1,3 +1,7 @@
+2011-04-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sp09/screen02.c: Use integer value that fits into one character.
+
 2011-04-04	Gedare Bloom <giddyup44@yahoo.com>
 
 	PR 1641/cpukit

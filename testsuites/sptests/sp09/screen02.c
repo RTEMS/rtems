@@ -135,7 +135,7 @@ void Screen2()
   puts( "TA1 - rtems_clock_get - RTEMS_INVALID_ADDRESS" );
 
   /* arbitrary bad value for switch */
-  status = rtems_clock_get( 0x100, &tv );
+  status = rtems_clock_get( 0xff, &tv );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
