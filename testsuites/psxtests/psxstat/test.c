@@ -816,13 +816,13 @@ int main(
 )
 #endif
 {
-  rtems_status_code status;
   rtems_time_of_day time;
+  int status;
 
   puts( "\n\n*** STAT TEST 01 ***" );
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
-  status = rtems_clock_set( &time );
+  rtems_clock_set( &time );
   Show_Time();
 
   /*
@@ -855,12 +855,12 @@ int main(
   make_multiple_links( Directories,    Links_to_Dirs );
   make_multiple_links( Files,          Links_to_Files );
 
-  status = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_task_wake_after( TIMEOUT_VALUE );
   make_multiple_links( Links_to_Dirs,  Links_to_dirlinks );
-  status = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_task_wake_after( TIMEOUT_VALUE );
   make_multiple_links( Links_to_Files, Links_to_filelinks );
 
-  status = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_task_wake_after( TIMEOUT_VALUE );
 
   /*
    *  Now go through all the absolute path.
@@ -919,16 +919,16 @@ int main(
   make_multiple_symlinks();
   make_many_symlinks( "/symlinks", 10 );
 
-  status = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_task_wake_after( TIMEOUT_VALUE );
   Cause_faults();
 
-  status = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_task_wake_after( TIMEOUT_VALUE );
   chown_multiple_files( Files );
 
-  status = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_task_wake_after( TIMEOUT_VALUE );
   chown_multiple_files( Links_to_Dirs );
 
-  status = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_task_wake_after( TIMEOUT_VALUE );
   lchown_multiple_files( SymLinks );
 
   test_statvfs();

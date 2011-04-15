@@ -1,3 +1,7 @@
+2011-04-15	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* psxstat/test.c: Fixed integer type.
+
 2011-03-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psx04/init.c, psx04/psx04.scn: Remove test case made obsolete by
