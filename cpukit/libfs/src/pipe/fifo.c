@@ -154,7 +154,7 @@ static inline void pipe_free(
   free(pipe);
 }
 
-static rtems_status_code pipe_lock(void)
+static int pipe_lock(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 

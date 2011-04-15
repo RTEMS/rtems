@@ -1,6 +1,6 @@
 2011-04-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-	* libcsupport/src/ioctl.c: Fixed integer type.
+	* libcsupport/src/ioctl.c, libfs/src/pipe/fifo.c: Fixed integer type.
 
 2011-04-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
