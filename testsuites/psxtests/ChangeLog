@@ -1,6 +1,6 @@
 2011-04-15	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
-	* psxstat/test.c: Fixed integer type.
+	* psxstat/test.c: Fixed integer type.  Check status codes.
 
 2011-03-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 

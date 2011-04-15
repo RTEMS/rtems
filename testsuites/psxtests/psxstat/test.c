@@ -772,10 +772,11 @@ void Cause_faults(void)
 
 void Show_Time(void)
 {
+  rtems_status_code sc;
   rtems_time_of_day time;
-  rtems_status_code status;
 
-  status = rtems_clock_get_tod( &time );
+  sc = rtems_clock_get_tod( &time );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   printf("--->Current Time: ");
   print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 }
@@ -816,13 +817,14 @@ int main(
 )
 #endif
 {
+  rtems_status_code sc;
   rtems_time_of_day time;
   int status;
 
   puts( "\n\n*** STAT TEST 01 ***" );
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
-  rtems_clock_set( &time );
+  sc = rtems_clock_set( &time );
   Show_Time();
 
   /*
@@ -855,12 +857,15 @@ int main(
   make_multiple_links( Directories,    Links_to_Dirs );
   make_multiple_links( Files,          Links_to_Files );
 
-  rtems_task_wake_after( TIMEOUT_VALUE );
+  sc = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   make_multiple_links( Links_to_Dirs,  Links_to_dirlinks );
-  rtems_task_wake_after( TIMEOUT_VALUE );
+  sc = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   make_multiple_links( Links_to_Files, Links_to_filelinks );
 
-  rtems_task_wake_after( TIMEOUT_VALUE );
+  sc = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   /*
    *  Now go through all the absolute path.
@@ -919,16 +924,20 @@ int main(
   make_multiple_symlinks();
   make_many_symlinks( "/symlinks", 10 );
 
-  rtems_task_wake_after( TIMEOUT_VALUE );
+  sc = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   Cause_faults();
 
-  rtems_task_wake_after( TIMEOUT_VALUE );
+  sc = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   chown_multiple_files( Files );
 
-  rtems_task_wake_after( TIMEOUT_VALUE );
+  sc = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   chown_multiple_files( Links_to_Dirs );
 
-  rtems_task_wake_after( TIMEOUT_VALUE );
+  sc = rtems_task_wake_after( TIMEOUT_VALUE );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   lchown_multiple_files( SymLinks );
 
   test_statvfs();
