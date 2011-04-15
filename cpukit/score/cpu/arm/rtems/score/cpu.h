@@ -180,7 +180,8 @@
 
 #define CPU_HEAP_ALIGNMENT CPU_ALIGNMENT
 
-#define CPU_PARTITION_ALIGNMENT CPU_ALIGNMENT
+/* AAPCS, section 4.3.1, Aggregates */
+#define CPU_PARTITION_ALIGNMENT 4
 
 /* AAPCS, section 5.2.1.2, Stack constraints at a public interface */
 #define CPU_STACK_ALIGNMENT 8

@@ -1,3 +1,9 @@
+2011-04-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1780/cpukit
+	* rtems/score/cpu.h: Lower alignment requirements for
+	CPU_PARTITION_ALIGNMENT according to AAPCS.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* cpu.c, rtems/score/cpu.h:
