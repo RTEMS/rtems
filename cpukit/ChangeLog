@@ -1,3 +1,7 @@
+2011-04-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/ioctl.c: Fixed integer type.
+
 2011-04-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h, score/cpu/i386/cpu.c: Fix typos so you

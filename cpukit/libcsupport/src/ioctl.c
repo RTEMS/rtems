@@ -32,7 +32,7 @@ int ioctl(
 )
 {
   va_list            ap;
-  rtems_status_code  rc;
+  int                rc;
   rtems_libio_t     *iop;
   void              *buffer;
 
