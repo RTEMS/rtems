@@ -1,3 +1,9 @@
+2011-04-16	Chris Johns <chrisj@rtems.org>
+
+	PR 1774/filesystem
+	* libfs/src/imfs/imfs_eval.c: Fix the IMFS eval and eval for make
+	handlers to not inspect a mounted file sytems path.
+	
 2011-04-04	Sebastien Bourdeauducq <sebastien.bourdeauducq@gmail.com>
 
 	PR 1722/networking
