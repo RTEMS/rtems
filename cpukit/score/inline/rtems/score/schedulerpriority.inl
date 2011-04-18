@@ -86,10 +86,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
 )
 {
   Scheduler_priority_Per_thread *sched_info;
-  Chain_Control                 *ready;
 
   sched_info = (Scheduler_priority_Per_thread *) the_thread->scheduler_info;
-  ready      = sched_info->ready_chain;
 
   _Priority_bit_map_Add( &sched_info->Priority_map );
 
@@ -159,10 +157,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
 )
 {
   Scheduler_priority_Per_thread *sched_info;
-  Chain_Control                 *ready;
 
   sched_info = (Scheduler_priority_Per_thread *) the_thread->scheduler_info;
-  ready      = sched_info->ready_chain;
 
   if ( !_Chain_Has_only_one_node( sched_info->ready_chain ) ) {
     _Chain_Extract_unprotected( &the_thread->Object.Node );

@@ -11,7 +11,7 @@
  *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
  *         time.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,7 +52,6 @@ int mq_getattr(
   POSIX_Message_queue_Control          *the_mq;
   POSIX_Message_queue_Control_fd       *the_mq_fd;
   Objects_Locations                     location;
-  CORE_message_queue_Attributes        *the_mq_attr;
 
   if ( !mqstat )
     rtems_set_errno_and_return_minus_one( EINVAL );
@@ -66,9 +65,6 @@ int mq_getattr(
       /*
        *  Return the old values.
        */
-
-      the_mq_attr = &the_mq->Message_queue.Attributes;
-
       mqstat->mq_flags   = the_mq_fd->oflag;
       mqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
       mqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
