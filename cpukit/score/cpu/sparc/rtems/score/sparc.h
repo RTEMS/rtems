@@ -212,10 +212,8 @@ void sparc_enable_interrupts(uint32_t);
 
 #define sparc_flash_interrupts( _level ) \
   do { \
-    register uint32_t   _ignored = 0; \
-    \
     sparc_enable_interrupts( (_level) ); \
-    _ignored = sparc_disable_interrupts(); \
+    _level = sparc_disable_interrupts(); \
   } while ( 0 )
 
 #define sparc_get_interrupt_level( _level ) \
