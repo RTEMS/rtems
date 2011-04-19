@@ -2,10 +2,17 @@
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.4.5-rtems4.10-20110301.diff
 %endif
+%if "%{gcc_version}" == "4.4.6"
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.4.6-rtems4.10-20110418.diff
+%endif
 %{?_without_sources:NoSource:	0}
 
 %if %build_cxx
 %if "%{gcc_version}" == "4.4.5" 
+Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
+%if "%{gcc_version}" == "4.4.6" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
 %{?_without_sources:NoSource:	1}
@@ -34,7 +41,7 @@ Source5:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-objc-%{gcc_pkgvers}.ta
 %if %build_newlib
 %if "%{newlib_version}" == "1.18.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20110114.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20110419.diff
 %endif
 %{?_without_sources:NoSource:	50}
 %endif
