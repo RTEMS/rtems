@@ -58,7 +58,7 @@ Summary:      	powerpc-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	7%{?dist}
+Release:      	8%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -245,7 +245,7 @@ BuildRequires:	rtems-4.10-powerpc-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-powerpc-rtems4.10-binutils
 Requires:	rtems-4.10-powerpc-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-powerpc-rtems4.10-newlib = %{newlib_version}-22%{?dist}
+Requires:	rtems-4.10-powerpc-rtems4.10-newlib = %{newlib_version}-23%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -261,16 +261,23 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.4.5-rtems4.10-20110301.diff
 %endif
+%if "%{gcc_version}" == "4.4.6"
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.4.6-rtems4.10-20110418.diff
+%endif
 %{?_without_sources:NoSource:	0}
 
 %if "%{gcc_version}" == "4.4.5" 
+Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
+%if "%{gcc_version}" == "4.4.6" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
 %{?_without_sources:NoSource:	1}
 
 %if "%{newlib_version}" == "1.18.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20110114.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20110419.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -352,7 +359,7 @@ rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-7%{?dist}/newlib-%{newlib_version}-22%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-8%{?dist}/newlib-%{newlib_version}-23%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -622,7 +629,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-powerpc-rtems4.10-binutils
-# Requires:       rtems-4.10-powerpc-rtems4.10-newlib = %{newlib_version}-22%{?dist}
+# Requires:       rtems-4.10-powerpc-rtems4.10-newlib = %{newlib_version}-23%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -640,7 +647,7 @@ Summary:        libgcc for powerpc-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-powerpc-rtems4.10-newlib = %{newlib_version}-22%{?dist}
+Requires:       rtems-4.10-powerpc-rtems4.10-newlib = %{newlib_version}-23%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-powerpc-rtems4.10-gcc-libgcc
@@ -814,7 +821,7 @@ Summary:      	C Library (newlib) for powerpc-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        22%{?dist}
+Release:        23%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -835,7 +842,7 @@ Newlib C Library for powerpc-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        22%{?dist}
+Release:        23%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
