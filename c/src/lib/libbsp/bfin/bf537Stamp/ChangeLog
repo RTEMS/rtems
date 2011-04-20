@@ -1,3 +1,10 @@
+2011-04-20  Rohan Kangralkar <rkangral@ece.neu.edu>
+
+	PR 1781/bsps
+	* console/console-io.c: The UART RX and TX are different ISR
+	now. So the array containing the registeration changes. The
+	change is due to change in the libcup uart function.
+
 2011-02-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ChangeLog, start/start.S: Add HLT instruction on exit.
