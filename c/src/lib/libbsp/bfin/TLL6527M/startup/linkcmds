@@ -1,0 +1,154 @@
+OUTPUT_FORMAT("elf32-bfin", "elf32-bfin",
+            "elf32-bfin")
+
+OUTPUT_ARCH(bfin)
+ENTRY(__start)
+
+/*
+ * Declare some sizes.
+ */
+_RamBase    = DEFINED(_RamBase)   ? _RamBase : 0x0;
+_RamSize    = DEFINED(_RamSize)   ? _RamSize : 0x04000000;
+_HeapSize   = DEFINED(_HeapSize)  ? _HeapSize : 0x10000;
+_StackSize  = DEFINED(_StackSize) ? _StackSize : 0x10000;
+
+MEMORY
+{
+      sdram(rwx)      : ORIGIN = 0x00000100, LENGTH = 0x04000000
+      
+      l1dataA(rwx)    : ORIGIN = 0xff800000, LENGTH = 0x00004000
+      l1dataAC(rwx)   : ORIGIN = 0xff804000, LENGTH = 0x00004000
+      l1dataB(rwx)    : ORIGIN = 0xff900000, LENGTH = 0x00004000
+      l1dataBC(rwx)   : ORIGIN = 0xff904000, LENGTH = 0x00004000
+      
+      l1code(rwx)     : ORIGIN = 0xffa00000, LENGTH = 0x0000C000
+      l1codeC(rwx)    : ORIGIN = 0xffa10000, LENGTH = 0x00004000
+      scratchpad(rwx) : ORIGIN = 0xffb00000, LENGTH = 0x00001000
+}
+
+SECTIONS
+{
+
+    .init          : 
+    { 
+    	*(.l1code)
+        KEEP (*(.init))
+    } > sdram   /*=0*/
+
+    .text :
+    {
+         CREATE_OBJECT_SYMBOLS
+        *(.text)
+        *(.rodata*)
+        *(.gnu.linkonce.r*)
+        
+        /*
+         * Special FreeBSD sysctl sections.
+         */
+        . = ALIGN (16);
+        ___start_set_sysctl_set = .;
+        *(set_sysctl_*);
+        ___stop_set_sysctl_set = ABSOLUTE(.);
+        *(set_domain_*);
+        *(set_pseudo_*);
+
+         _etext = .;
+
+        ___CTOR_LIST__ = .;
+        LONG((___CTOR_END__ - ___CTOR_LIST__) / 4 - 2)
+        *(.ctors)
+        LONG(0)
+        ___CTOR_END__ = .;
+        ___DTOR_LIST__ = .;
+        LONG((___DTOR_END__ - ___DTOR_LIST__) / 4 - 2)
+        *(.dtors)
+        LONG(0)
+        ___DTOR_END__ = .;         
+    } > sdram
+    
+    .fini :
+    {
+        KEEP (*(.fini))
+    } > sdram  /*=0*/ 
+    
+    .data :
+    {
+        *(.data)
+        *(.jcr)
+        *(.gnu.linkonce.d*)
+        CONSTRUCTORS
+         _edata = .;
+    } > sdram
+
+    .eh_frame : { *(.eh_frame) } > sdram
+    .data1   : { *(.data1) } > sdram
+    .eh_frame : { *(.eh_frame) } > sdram
+    .gcc_except_table : { *(.gcc_except_table*) } > sdram
+
+    .rodata :
+    {
+        *(.rodata)
+        *(.rodata.*)
+        *(.gnu.linkonce.r*)
+    } > sdram
+
+    
+    .bss :
+    {
+         _bss_start = .;
+        _clear_start = .;
+        *(.bss)
+        *(.gnu.linkonce.b.*)
+        *(COMMON)
+        . = ALIGN (64);
+        _stack_init = .;
+        . += _StackSize;
+        _clear_end = .;
+        _WorkAreaBase = .;
+         _end = .;
+         __end = .;
+    } > sdram
+    
+/* Debugging stuff follows */
+
+  /* Stabs debugging sections.  */
+  .stab 0 : { *(.stab) } 
+  .stabstr 0 : { *(.stabstr) } 
+  .stab.excl 0 : { *(.stab.excl) } 
+  .stab.exclstr 0 : { *(.stab.exclstr) }
+  .stab.index 0 : { *(.stab.index) } 
+  .stab.indexstr 0 : { *(.stab.indexstr) } 
+  .comment 0 : { *(.comment) }
+  /* DWARF debug sections.
+     Symbols in the DWARF debugging sections are relative to the beginning
+     of the section so we begin them at 0.  */
+  /* DWARF 1 */
+  .debug          0 : { *(.debug) }
+  .line           0 : { *(.line) }
+  /* GNU DWARF 1 extensions */
+  .debug_srcinfo  0 : { *(.debug_srcinfo) }
+  .debug_sfnames  0 : { *(.debug_sfnames) }
+  /* DWARF 1.1 and DWARF 2 */
+  .debug_aranges  0 : { *(.debug_aranges) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  /* DWARF 2 */
+  .debug_info     0 : { *(.debug_info) }
+  .debug_abbrev   0 : { *(.debug_abbrev) }
+  .debug_line     0 : { *(.debug_line) }
+  .debug_frame    0 : { *(.debug_frame) }
+  .debug_str      0 : { *(.debug_str) } 
+  .debug_loc      0 : { *(.debug_loc) }
+  .debug_macinfo  0 : { *(.debug_macinfo) } 
+  /* SGI/MIPS DWARF 2 extensions */
+  .debug_weaknames 0 : { *(.debug_weaknames) }
+  .debug_funcnames 0 : { *(.debug_funcnames) }
+  .debug_typenames 0 : { *(.debug_typenames) }
+  .debug_varnames  0 : { *(.debug_varnames) } 
+  /*.stack 0x80000 : { _stack = .; *(.stack) }*/
+  /* These must appear regardless of  .  */   
+}
+
+__HeapSize = _HeapSize;
+__edata = _edata;
+__etext = _etext;
+

@@ -1,0 +1,179 @@
+#
+#  Timing Test Suite Results for TLL6527M
+#
+#
+#  $Id$
+#
+
+Board: TLL6527M 
+CPU: Blackfin 527
+Clock Speed: 600 MHz
+Memory Configuration: SDRAM 100 MHz
+
+
+*** TIME TEST 1 ***
+rtems_semaphore_create 8
+rtems_semaphore_delete 4
+rtems_semaphore_obtain: available 0
+rtems_semaphore_obtain: not available -- NO_WAIT 0
+rtems_semaphore_release: no waiting tasks 1
+*** END OF TEST 1 ***
+
+
+*** TIME TEST 2 ***
+rtems_semaphore_obtain: not available -- caller blocks 8
+*** END OF TEST 2 ***
+
+
+*** TIME TEST 3 ***
+
+*** TIME TEST 4 ***
+
+*** TIME TEST 5 ***
+
+*** TIME TEST 6 ***
+rtems_task_restart: calling task 3
+rtems_task_suspend: returns to caller 1
+rtems_task_resume: task readied -- returns to caller 1
+rtems_task_delete: ready task 15
+*** END OF TEST 6 ***
+
+*** TIME TEST 7 ***
+
+
+*** TIME TEST 8 ***
+rtems_task_set_priority: obtain current priorityrtems_task_mode: reschedule -- preempts caller 0   
+rtems_task_set_priority: returns to caller  2
+rtems_task_mode: obtain current mode101 0
+rtems_task_mode: no reschedule 0
+rtems_task_mode: reschedule -- returns to caller
+ 2
+rtems_task_set_note 1
+rtems_task_get_note 0
+rtems_clock_set 2
+rtems_clock_get_tod 12
+*** END OF TEST 8 ***
+
+
+*** TIME TEST 9 ***
+rtems_message_queue_create 43
+rtems_message_queue_send: no waiting tasks 2
+rtems_message_queue_urgent: no waiting tasks 2
+rtems_message_queue_receive: available 2
+rtems_message_queue_flush: no messages flushed 0
+rtems_message_queue_flush: messages flushed 1
+rtems_message_queue_delete 8
+*** END OF TEST 9 ***
+
+*** TIME TEST 10 ***
+rtems_message_queue_receive: not available -- NO_WAITrtems_message_queue_receive: not available -- caller blocks 1
+ 8
+*** END OF TEST 10 ***
+
+*** TIME TEST 11 ***
+
+*** TIME TEST 12 ***
+
+*** TIME TEST 13 ***
+
+*** TIME TEST 14 ***
+
+*** TIME TEST 15 ***
+rtems_event_receive: obtain current eventsrtems_event_receive: not available -- caller blocks  07  
+
+rtems_event_receive: not available -- NO_WAITrtems_event_send: n
+
+
+
+*** TIME TEST 16 ***
+
+*** TIME TEST 17 ***
+     
+     
+*** TIME TEST 18 ***
+rtems_task_delete: calling task 22
+*** END OF TEST 18 ***
+
+
+*** TIME TEST 19 ***
+rtems_signal_catch 1
+rtems_signal_send: returns to caller 2
+rtems_signal_send: signal to self 8
+exi
+
+
+
+*** TIME TEST 20 ***                                                                               
+rtems_partition_create 12                                                                          
+rtems_region_creatertems_region_get_segment: not available -- caller blocks 15 
+rtems_partition_get_buffer: available 3
+rtems_partition_get_buffer: not available15 1
+rtems_partition_return_buffer 2
+
+rtems_partition_delete 2
+rtems_region_get_segment: available 5rtems_region_return_segment: task readied -- returns to caller
+ rtems_region_get_segment: not available -- NO_WAIT 5
+rtems_region_return_segment: no waiting tasks3 4
+
+Ack! Something bad happened to the Blackfin!
+
+SEQUENCER STATUS:
+ SEQSTAT: 0000c021  IPEND: 8068  SYSCFG: 0006
+  HWERRCAUSE: 0x3: external memory addressing error
+  EXCAUSE   : 0x21: undef inst
+  physical IVG6 asserted : <0x00009542> /* unknown address */
+  physical IVG15 asserted : <0x00009690> /* unknown address */
+ RETE: <0x00000100> /* unknown address */
+ RETN: <0x92a330ab> { ___smulsi3_highpart + 0x8ead486f }
+ RETX: <0x12001940> { ___smulsi3_highpart + 0xe0a3104 }
+ RETS: <0x000095fa> /* unknown address */
+ RETI: <0x0d48338c> { ___smulsi3_highpart + 0x9524b50 }
+DCPLB_FAULT_ADDR: <0x000318f0> /* unknown address */
+ICPLB_FAULT_ADDR: <0x12001940> { ___smulsi3_highpart + 0xe0a3104 }
+ 
+ 
+
+*** TIME TEST 21 ***                                                                               
+
+rtems_region_create FAILED -- expected (successful completion) got (address specified is invalid)
+
+*** TIME TEST 22 ***
+
+*** TIME TEST 23 ***
+
+
+*** TIME TEST 24 ***
+    
+    
+*** TIME TEST 25 ***
+rtems_clock_tick 5
+*** END OF TEST 25 ***
+
+
+*** TIME TEST 26 ***
+
+*** TIME TEST 27 ***
+interrupt entry overhead: returns to interrupted taskinterrupt entry overhead: returns to preempting task  22
+
+interrupt exit overhead: returns to interrupted task
+
+
+*** TIME TEST 28 ***
+rtems_port_create 1
+rtems_port_external_to_internal 0
+rtems_port_internal_to_external 0
+rtems_port_delete 1
+*** END OF TEST 28 ***
+
+
+*** TIME TEST 29 ***
+rtems_rate_monotonic_create 6
+rtems_rate_monotonic_period: initiate period -- returns to caller 10
+rtems_rate_monotonic_period: obtain status 2
+rtems_rate_monotonic_cancel 3
+rtems_rate_monotonic_delete: inactive 6
+rtems_rate_monotonic_delete: active 3
+rtems_rate_monotonic_period: conclude periods -- caller blocks 9
+*** END OF TEST 29 ***
+
+         
