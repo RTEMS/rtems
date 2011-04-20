@@ -1,3 +1,7 @@
+2011-04-20	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* acinclude.m4: Regenerated for TLL6527M.
+
 2011-02-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ChangeLog, shared/start/start.S: Add HLT instruction on exit.
