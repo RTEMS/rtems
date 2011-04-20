@@ -1,3 +1,7 @@
+2011-04-20	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* console/console-io.c: Regenerated for TLL6527M.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/tm27.h, startup/bspstart.c:

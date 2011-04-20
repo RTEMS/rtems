@@ -26,14 +26,18 @@
 
 static bfin_uart_channel_t channels[] = {
   {"/dev/console",
-   (char *) UART0_BASE_ADDRESS,
+   UART0_BASE_ADDRESS,
+   0,
+   0,
    CONSOLE_USE_INTERRUPTS,
+   0,
 #ifdef CONSOLE_FORCE_BAUD
    CONSOLE_FORCE_BAUD,
 #else
    0,
 #endif
    NULL,
+   0,
    0}
 };
 
@@ -45,8 +49,8 @@ static bfin_uart_config_t config = {
 
 #if CONSOLE_USE_INTERRUPTS
 static bfin_isr_t bfinUARTISRs[] = {
-  {SIC_DMA6_UART0_RX_VECTOR, bfin_uart_isr, 0, 0, NULL},
-  {SIC_DMA7_UART0_TX_VECTOR, bfin_uart_isr, 0, 0, NULL},
+  {SIC_DMA6_UART0_RX_VECTOR, bfinUart_rxIsr, 0, 0, NULL},
+  {SIC_DMA7_UART0_TX_VECTOR, bfinUart_txIsr, 0, 0, NULL},
 };
 #endif
 
