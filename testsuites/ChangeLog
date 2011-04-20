@@ -1,3 +1,7 @@
+2011-04-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac: Add fstests.
+
 2011-03-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/env-rtemsbsp.m4, aclocal/rtems-top.m4, aclocal/version.m4:
