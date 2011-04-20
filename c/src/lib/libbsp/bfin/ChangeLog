@@ -1,3 +1,7 @@
+2011-04-20	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* acinclude.m4: Regenerated for TLL6527M.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
