@@ -390,7 +390,6 @@ echo "RTEMS gcc-%{gcc_version}-1%{?dist}/newlib-%{newlib_version}-24%{?dist}" > 
     --enable-threads \
     %{?with_lto:--enable-lto}%{!?with_lto:--disable-lto} \
     %{?with_plugin:--enable-plugin}%{!?with_plugin:--disable-plugin} \
-    --with-ppl-libs=/usr/%{_lib} \
     --enable-newlib-io-c99-formats \
     --enable-languages="$languages" $optargs
 
