@@ -7,6 +7,9 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
+ *  Modified:
+ *  $ $Author$ Added interrupt support and DMA support
+ *
  *  $Id$
  */
 
@@ -18,8 +21,8 @@
 #include <stdlib.h>
 
 #include <libcpu/uartRegs.h>
+#include <libcpu/dmaRegs.h>
 #include "uart.h"
-
 
 /* flags */
 #define BFIN_UART_XMIT_BUSY 0x01
@@ -28,45 +31,16 @@
 static bfin_uart_config_t *uartsConfig;
 
 
-static void initializeHardware(int minor) {
-  uint16_t divisor;
-  char *base;
-  uint16_t r;
-
-  base = uartsConfig->channels[minor].base_address;
-
-  *(uint16_t volatile *) (base + UART_IER_OFFSET) = 0;
-
-  if (uartsConfig->channels[minor].force_baud)
-    divisor = (uint16_t) (uartsConfig->freq /
-                          (uartsConfig->channels[minor].force_baud * 16));
-  else
-    divisor = (uint16_t) (uartsConfig->freq / (9600 * 16));
-  *(uint16_t volatile *) (base + UART_LCR_OFFSET) = UART_LCR_DLAB;
-  *(uint16_t volatile *) (base + UART_DLL_OFFSET) = (divisor & 0xff);
-  *(uint16_t volatile *) (base + UART_DLH_OFFSET) = ((divisor >> 8) & 0xff);
-
-  *(uint16_t volatile *) (base + UART_LCR_OFFSET) = UART_LCR_WLS_8;
-
-  *(uint16_t volatile *) (base + UART_GCTL_OFFSET) = UART_GCTL_UCEN;
-
-  r = *(uint16_t volatile *) (base + UART_LSR_OFFSET);
-  r = *(uint16_t volatile *) (base + UART_RBR_OFFSET);
-  r = *(uint16_t volatile *) (base + UART_IIR_OFFSET);
-
-  return;
-}
-
 static int pollRead(int minor) {
   int c;
-  char *base;
+  uint32_t base;
 
-  base = uartsConfig->channels[minor].base_address;
+  base = uartsConfig->channels[minor].uart_baseAddress;
 
   /* check to see if driver is using interrupts so this call will be
      harmless (though non-functional) in case some debug code tries to
      use it */
-  if (!uartsConfig->channels[minor].use_interrupts &&
+  if (!uartsConfig->channels[minor].uart_useInterrupts &&
       *((uint16_t volatile *) (base + UART_LSR_OFFSET)) & UART_LSR_DR)
     c = *((uint16_t volatile *) (base + UART_RBR_OFFSET));
   else
@@ -75,7 +49,7 @@ static int pollRead(int minor) {
   return c;
 }
 
-char bfin_uart_poll_read(int minor) {
+char bfin_uart_poll_read(rtems_device_minor_number minor) {
   int c;
 
   do {
@@ -86,9 +60,9 @@ char bfin_uart_poll_read(int minor) {
 }
 
 void bfin_uart_poll_write(int minor, char c) {
-  char *base;
+  uint32_t base;
 
-  base = uartsConfig->channels[minor].base_address;
+  base = uartsConfig->channels[minor].uart_baseAddress;
 
   while (!(*((uint16_t volatile *) (base + UART_LSR_OFFSET)) & UART_LSR_THRE))
     ;
@@ -157,44 +131,86 @@ static ssize_t pollWrite(int minor, const char *buf, size_t len) {
   return count;
 }
 
-static void enableInterrupts(int minor) {
-  char *base;
 
-  base = uartsConfig->channels[minor].base_address;
+/**
+ * Routine to initialize the hardware. It initialize the DMA,
+ * interrupt if required.
+ * @param channel channel information
+ */
+static void initializeHardware(bfin_uart_channel_t *channel) {
+  uint16_t divisor        = 0;
+  uint32_t base           = 0;
+  uint32_t tx_dma_base    = 0;
 
-  *(uint16_t volatile *) (base + UART_IER_OFFSET) = UART_IER_ETBEI |
-                                                    UART_IER_ERBFI;
-}
-
-static void disableAllInterrupts(void) {
-  int i;
-  char *base;
-
-  for (i = 0; i < uartsConfig->num_channels; i++) {
-    base = uartsConfig->channels[i].base_address;
-    *(uint16_t volatile *) (base + UART_IER_OFFSET) = 0;
+  if ( NULL == channel ) {
+    return;
   }
+
+  base        = channel->uart_baseAddress;
+  tx_dma_base = channel->uart_txDmaBaseAddress;
+  /**
+   * RX based DMA and interrupt is not supported yet
+   * uint32_t tx_dma_base    = 0;
+   *
+   * rx_dma_base = channel->uart_rxDmaBaseAddress;
+   */
+
+
+  *(uint16_t volatile *) (base + UART_IER_OFFSET) = 0;
+
+  if ( 0 != channel->uart_baud) {
+    divisor = (uint16_t) (uartsConfig->freq /
+        (channel->uart_baud * 16));
+  } else {
+    divisor = (uint16_t) (uartsConfig->freq / (9600 * 16));
+  }
+
+  *(uint16_t volatile *) (base + UART_LCR_OFFSET) = UART_LCR_DLAB;
+  *(uint16_t volatile *) (base + UART_DLL_OFFSET) = (divisor & 0xff);
+  *(uint16_t volatile *) (base + UART_DLH_OFFSET) = ((divisor >> 8) & 0xff);
+
+  *(uint16_t volatile *) (base + UART_LCR_OFFSET) = UART_LCR_WLS_8;
+
+  *(uint16_t volatile *) (base + UART_GCTL_OFFSET) = UART_GCTL_UCEN;
+
+  /**
+   * To clear previous status
+   * divisor is a temp variable here
+   */
+  divisor = *(uint16_t volatile *) (base + UART_LSR_OFFSET);
+  divisor = *(uint16_t volatile *) (base + UART_RBR_OFFSET);
+  divisor = *(uint16_t volatile *) (base + UART_IIR_OFFSET);
+
+  if ( channel->uart_useDma ) {
+    *(uint16_t  volatile *)(tx_dma_base + DMA_CONFIG_OFFSET) = 0;
+    *(uint16_t  volatile *)(tx_dma_base + DMA_CONFIG_OFFSET) = DMA_CONFIG_DI_EN
+        | DMA_CONFIG_SYNC ;
+    *(uint16_t  volatile *)(tx_dma_base + DMA_IRQ_STATUS_OFFSET) |=
+        DMA_IRQ_STATUS_DMA_DONE | DMA_IRQ_STATUS_DMA_ERR;
+
+  } else {
+    /**
+    * We use polling or interrupts only sending one char at a time :(
+    */
+  }
+
+  return;
 }
 
-static ssize_t interruptWrite(int minor, const char *buf, size_t len) {
-  char *base;
 
-  base = uartsConfig->channels[minor].base_address;
-
-  uartsConfig->channels[minor].flags |= BFIN_UART_XMIT_BUSY;
-  *(uint16_t volatile *) (base + UART_THR_OFFSET) = *buf;
-
-  /* one byte written */
-  return 1;
-}
-
+/**
+ * Set the UART attributes.
+ * @param minor
+ * @param termios
+ * @return
+ */
 static int setAttributes(int minor, const struct termios *termios) {
-  char *base;
+  uint32_t base;
   int baud;
   uint16_t divisor;
   uint16_t lcr;
 
-  base = uartsConfig->channels[minor].base_address;
+  base = uartsConfig->channels[minor].uart_baseAddress;
   switch (termios->c_cflag & CBAUD) {
   case B0:
     baud = 0;
@@ -260,8 +276,8 @@ static int setAttributes(int minor, const struct termios *termios) {
     baud = -1;
     break;
   }
-  if (baud > 0 && uartsConfig->channels[minor].force_baud)
-    baud = uartsConfig->channels[minor].force_baud;
+  if (baud > 0 && uartsConfig->channels[minor].uart_baud)
+    baud = uartsConfig->channels[minor].uart_baud;
   switch (termios->c_cflag & CSIZE) {
   case CS5:
     lcr = UART_LCR_WLS_5;
@@ -282,8 +298,8 @@ static int setAttributes(int minor, const struct termios *termios) {
     lcr |= UART_LCR_PEN | UART_LCR_EPS;
     break;
   case PARENB | PARODD:
-    lcr |= UART_LCR_PEN;
-    break;
+  lcr |= UART_LCR_PEN;
+  break;
   default:
     break;
   }
@@ -301,114 +317,326 @@ static int setAttributes(int minor, const struct termios *termios) {
   return 0;
 }
 
-void bfin_uart_isr(int source) {
-  int i;
-  char *base;
-  uint16_t uartStat;
-  char c;
-  uint8_t uartLSR;
+/**
+ * Interrupt based uart tx routine. The routine writes one character at a time.
+ *
+ * @param minor Minor number to indicate uart number
+ * @param buf Character buffer which stores characters to be transmitted.
+ * @param len Length of buffer to be transmitted.
+ * @return
+ */
+static ssize_t uart_interruptWrite(int minor, const char *buf, size_t len) {
+  uint32_t              base      = 0;
+  bfin_uart_channel_t*  channel   = NULL;
+  rtems_interrupt_level isrLevel;
 
-  /* Just use one ISR and check for all UART interrupt sources in it.
-     This is less efficient than making use of the vector to narrow down
-     the things we need to check, but not all Blackfins separate the
-     UART interrupt sources in the same ways.  This way we don't have
-     to make this code dependent on the type of Blackfin.  */
-  for (i = 0; i < uartsConfig->num_channels; i++) {
-    if (uartsConfig->channels[i].use_interrupts) {
-      base = uartsConfig->channels[i].base_address;
-      uartStat = *(uint16_t volatile *) (base + UART_IIR_OFFSET);
-      if ((uartStat & UART_IIR_NINT) == 0) {
-        switch (uartStat & UART_IIR_STATUS_MASK) {
-        case UART_IIR_STATUS_THRE:
-          if (uartsConfig->channels[i].termios &&
-              (uartsConfig->channels[i].flags & BFIN_UART_XMIT_BUSY)) {
-            uartsConfig->channels[i].flags &= ~BFIN_UART_XMIT_BUSY;
-            rtems_termios_dequeue_characters(uartsConfig->channels[i].termios,
-                                             1);
-          }
-          break;
-        case UART_IIR_STATUS_RDR:
-          c = *(uint16_t volatile *) (base + UART_RBR_OFFSET);
-          if (uartsConfig->channels[i].termios)
-            rtems_termios_enqueue_raw_characters(
-                uartsConfig->channels[i].termios, &c, 1);
-          break;
-        case UART_IIR_STATUS_LS:
-          uartLSR = *(uint16_t volatile *) (base + UART_LSR_OFFSET);
-          /* break, framing error, parity error, or overrun error
-             has been detected */
-          break;
-        default:
-          break;
-        }
-      }
-    }
+  /**
+   * Sanity Check
+   */
+  if (NULL == buf || NULL == channel || NULL == uartsConfig || minor < 0) {
+    return 0;
   }
+
+  channel = &(uartsConfig->channels[minor]);
+
+  if ( NULL == channel || channel->flags &  BFIN_UART_XMIT_BUSY ) {
+    return 0;
+  }
+
+  rtems_interrupt_disable(isrLevel);
+
+  base = channel->uart_baseAddress;
+
+  channel->flags |= BFIN_UART_XMIT_BUSY;
+  channel->length = 1;
+  *(uint16_t volatile *) (base + UART_THR_OFFSET) = *buf;
+  *(uint16_t volatile *) (base + UART_IER_OFFSET) = UART_IER_ETBEI;
+
+  rtems_interrupt_enable(isrLevel);
+
+  return 0;
 }
 
-rtems_status_code bfin_uart_initialize(rtems_device_major_number major,
-                                       bfin_uart_config_t *config) {
-  rtems_status_code status;
-  int i;
+/**
+* This function implements RX ISR
+*/
+void bfinUart_rxIsr(void *_arg)
+{
+  /**
+   * TODO: UART RX ISR implementation.
+   */
 
-  status = RTEMS_SUCCESSFUL;
+}
+
+
+/**
+ * This function implements TX ISR. The function gets called when the TX FIFO is
+ * empty. It clears the interrupt and dequeues the character. It only tx one
+ * character at a time.
+ *
+ * TODO: error handling.
+ * @param _arg gets the channel information.
+ */
+void bfinUart_txIsr(void *_arg) {
+  bfin_uart_channel_t*  channel = NULL;
+  uint32_t              base    = 0;
+
+  /**
+   * Sanity check
+   */
+  if (NULL == _arg) {
+    /** It should never be NULL */
+    return;
+  }
+
+  channel = (bfin_uart_channel_t *) _arg;
+
+  base = channel->uart_baseAddress;
+
+  *(uint16_t volatile *) (base + UART_IER_OFFSET) &= ~UART_IER_ETBEI;
+  channel->flags &= ~BFIN_UART_XMIT_BUSY;
+
+  rtems_termios_dequeue_characters(channel->termios, channel->length);
+
+  return;
+}
+
+
+
+
+/**
+ * interrupt based DMA write Routine. It configure the DMA to write len bytes.
+ * The DMA supports 64K data only.
+ *
+ * @param minor Identification number of the UART.
+ * @param buf Character buffer pointer
+ * @param len length of data items to be written
+ * @return data already written
+ */
+static ssize_t uart_DmaWrite(int minor, const char *buf, size_t len) {
+  uint32_t              base        = 0;
+  bfin_uart_channel_t*  channel     = NULL;
+  uint32_t              tx_dma_base = 0;
+  rtems_interrupt_level isrLevel;
+
+  /**
+   * Sanity Check
+   */
+  if ( NULL == buf || 0 > minor || NULL == uartsConfig ) {
+    return 0;
+  }
+
+  channel = &(uartsConfig->channels[minor]);
+
+  /**
+   * Sanity Check and check for transmit busy.
+   */
+  if ( NULL == channel || BFIN_UART_XMIT_BUSY & channel->flags ) {
+    return 0;
+  }
+
+  rtems_interrupt_disable(isrLevel);
+
+  base        = channel->uart_baseAddress;
+  tx_dma_base = channel->uart_txDmaBaseAddress;
+
+  channel->flags |= BFIN_UART_XMIT_BUSY;
+  channel->length = len;
+
+  *(uint16_t volatile *) (tx_dma_base + DMA_CONFIG_OFFSET) &= ~DMA_CONFIG_DMAEN;
+  *(uint32_t volatile *) (tx_dma_base + DMA_START_ADDR_OFFSET) = (uint32_t)buf;
+  *(uint16_t volatile *) (tx_dma_base + DMA_X_COUNT_OFFSET) = channel->length;
+  *(uint16_t volatile *) (tx_dma_base + DMA_X_MODIFY_OFFSET) = 1;
+  *(uint16_t volatile *) (tx_dma_base + DMA_CONFIG_OFFSET) |= DMA_CONFIG_DMAEN;
+  *(uint16_t volatile *) (base + UART_IER_OFFSET) = UART_IER_ETBEI;
+
+  rtems_interrupt_enable(isrLevel);
+
+  return 0;
+}
+
+
+/**
+ * RX DMA ISR.
+ * The polling route is used for receiving the characters. This is a place
+ * holder for future implementation.
+ * @param _arg
+ */
+void bfinUart_rxDmaIsr(void *_arg) {
+/**
+ * TODO: Implementation of RX DMA
+ */
+}
+
+/**
+ * This function implements TX dma ISR. It clears the IRQ and dequeues a char
+ * The channel argument will have the base address. Since there are two uart
+ * and both the uarts can use the same tx dma isr.
+ *
+ * TODO: 1. Error checking 2. sending correct length ie after looking at the
+ * number of elements the uart transmitted.
+ *
+ * @param _arg argument passed to the interrupt handler. It contains the
+ * channel argument.
+ */
+void bfinUart_txDmaIsr(void *_arg) {
+  bfin_uart_channel_t*  channel     = NULL;
+  uint32_t              tx_dma_base = 0;
+
+  /**
+   * Sanity check
+   */
+  if (NULL == _arg) {
+    /** It should never be NULL */
+    return;
+  }
+
+  channel = (bfin_uart_channel_t *) _arg;
+
+  tx_dma_base = channel->uart_txDmaBaseAddress;
+
+  if ((*(uint16_t volatile *) (tx_dma_base + DMA_IRQ_STATUS_OFFSET)
+      & DMA_IRQ_STATUS_DMA_DONE)) {
+
+    *(uint16_t volatile *) (tx_dma_base + DMA_IRQ_STATUS_OFFSET)
+        		    |= DMA_IRQ_STATUS_DMA_DONE | DMA_IRQ_STATUS_DMA_ERR;
+    channel->flags &= ~BFIN_UART_XMIT_BUSY;
+    rtems_termios_dequeue_characters(channel->termios, channel->length);
+  } else {
+    /* UART DMA did not generate interrupt.
+     * This routine must not be called.
+     */
+  }
+
+  return;
+}
+
+/**
+ * Function called during exit
+ */
+void uart_exit(void)
+{
+  /**
+   * TODO: Flushing of quques
+   */
+
+}
+
+/**
+ * Opens the device in different modes. The supported modes are
+ * 1. Polling
+ * 2. Interrupt
+ * 3. DMA
+ * At exit the uart_Exit function will be called to flush the device.
+ *
+ * @param major Major number of the device
+ * @param minor Minor number of the device
+ * @param arg
+ * @return
+ */
+rtems_device_driver bfin_uart_open(rtems_device_major_number major,
+    rtems_device_minor_number minor, void *arg) {
+  rtems_status_code             sc    = RTEMS_NOT_DEFINED;;
+  rtems_libio_open_close_args_t *args = NULL;
+
+  /**
+   * Callback function for polling
+   */
+  static const rtems_termios_callbacks pollCallbacks = {
+      NULL,                        /* firstOpen */
+      NULL,                        /* lastClose */
+      pollRead,                    /* pollRead */
+      pollWrite,                   /* write */
+      setAttributes,               /* setAttributes */
+      NULL,                        /* stopRemoteTx */
+      NULL,                        /* startRemoteTx */
+      TERMIOS_POLLED               /* outputUsesInterrupts */
+  };
+
+  /**
+   * Callback function for interrupt based transfers without DMA.
+   * We use interrupts for writing only. For reading we use polling.
+   */
+  static const rtems_termios_callbacks interruptCallbacks = {
+      NULL,                        /* firstOpen */
+      NULL,                        /* lastClose */
+      pollRead,                    /* pollRead */
+      uart_interruptWrite,              /* write */
+      setAttributes,               /* setAttributes */
+      NULL,                        /* stopRemoteTx */
+      NULL,                        /* startRemoteTx */
+      TERMIOS_IRQ_DRIVEN           /* outputUsesInterrupts */
+  };
+
+  /**
+   * Callback function for interrupt based DMA transfers.
+   * We use interrupts for writing only. For reading we use polling.
+   */
+  static const rtems_termios_callbacks interruptDmaCallbacks = {
+      NULL,                        /* firstOpen */
+      NULL,                        /* lastClose */
+      NULL,                        /* pollRead */
+      uart_DmaWrite,              /* write */
+      setAttributes,               /* setAttributes */
+      NULL,                        /* stopRemoteTx */
+      NULL,                        /* startRemoteTx */
+      TERMIOS_IRQ_DRIVEN           /* outputUsesInterrupts */
+  };
+
+
+  if ( NULL == uartsConfig || 0 > minor || minor >= uartsConfig->num_channels) {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  /**
+   * Opens device for handling uart send request either by
+   * 1. interrupt with DMA
+   * 2. interrupt based
+   * 3. Polling
+   */
+  if ( uartsConfig->channels[minor].uart_useDma ) {
+    sc = rtems_termios_open(major, minor, arg, &interruptDmaCallbacks);
+  } else {
+    sc = rtems_termios_open(major, minor, arg,
+        uartsConfig->channels[minor].uart_useInterrupts ?
+            &interruptCallbacks : &pollCallbacks);
+  }
+
+  args = arg;
+  uartsConfig->channels[minor].termios = args->iop->data1;
+
+  atexit(uart_exit);
+
+  return sc;
+}
+
+
+/**
+* Uart initialization function.
+* @param major major number of the device
+* @param config configuration parameters
+* @return rtems status code
+*/
+rtems_status_code bfin_uart_initialize(rtems_device_major_number major,
+    bfin_uart_config_t *config) {
+  rtems_status_code sc = RTEMS_NOT_DEFINED;
+  int               i  = 0;
 
   rtems_termios_initialize();
 
   /*
    *  Register Device Names
    */
-
   uartsConfig = config;
   for (i = 0; i < config->num_channels; i++) {
     config->channels[i].termios = NULL;
     config->channels[i].flags = 0;
-    initializeHardware(i);
-    status = rtems_io_register_name(config->channels[i].name, major, i);
+    initializeHardware(&(config->channels[i]));
+    sc = rtems_io_register_name(config->channels[i].name, major, i);
+    if (RTEMS_SUCCESSFUL != sc) {
+      return sc;
+    }
   }
-
-   return RTEMS_SUCCESSFUL;
-}
-
-rtems_device_driver bfin_uart_open(rtems_device_major_number major,
-                                   rtems_device_minor_number minor,
-                                   void *arg) {
-  rtems_status_code sc;
-  rtems_libio_open_close_args_t *args;
-  static const rtems_termios_callbacks pollCallbacks = {
-    NULL,                        /* firstOpen */
-    NULL,                        /* lastClose */
-    pollRead,                    /* pollRead */
-    pollWrite,                   /* write */
-    setAttributes,               /* setAttributes */
-    NULL,                        /* stopRemoteTx */
-    NULL,                        /* startRemoteTx */
-    TERMIOS_POLLED               /* outputUsesInterrupts */
-  };
-  static const rtems_termios_callbacks interruptCallbacks = {
-    NULL,                        /* firstOpen */
-    NULL,                        /* lastClose */
-    NULL,                        /* pollRead */
-    interruptWrite,              /* write */
-    setAttributes,               /* setAttributes */
-    NULL,                        /* stopRemoteTx */
-    NULL,                        /* startRemoteTx */
-    TERMIOS_IRQ_DRIVEN           /* outputUsesInterrupts */
-  };
-
-  if (uartsConfig == NULL || minor < 0 || minor >= uartsConfig->num_channels)
-    return RTEMS_INVALID_NUMBER;
-
-  sc = rtems_termios_open(major, minor, arg,
-                          uartsConfig->channels[minor].use_interrupts ?
-                          &interruptCallbacks : &pollCallbacks);
-  args = arg;
-  uartsConfig->channels[minor].termios = args->iop->data1;
-
-  if (uartsConfig->channels[minor].use_interrupts)
-    enableInterrupts(minor);
-  atexit(disableAllInterrupts);
 
   return sc;
 }
-
