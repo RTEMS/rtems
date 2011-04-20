@@ -23,3 +23,10 @@ insure that all sources of hardware interrupts are disabled during
 execution of the tests.  This insures that the directive time reported
 does not include any interrupt time.
 
+The file psxtmtests_plan.csv contains the development plan for this
+test suite.  It is a PLAN which indicates which tests are to contain 
+which test cases, the test name, and which template in
+rtems-testing/rtems-test-templates are to be used for their construction.  
+This is just a plan.  There may need to be more test cases for a
+particular service to effectively measure all interesting non-error
+use cases.

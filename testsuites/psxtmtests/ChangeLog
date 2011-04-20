@@ -1,3 +1,7 @@
+2011-04-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* README, psxtmtests_plan.csv: Add more possible test cases.
+
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add AC_CONFIG_HEADER(config.h).
