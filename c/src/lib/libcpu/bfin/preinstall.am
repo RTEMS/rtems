@@ -13,11 +13,30 @@ all-am: $(PREINSTALL_FILES)
 PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
+if bf52x
+$(PROJECT_INCLUDE)/bf52x.h: bf52x/include/bf52x.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bf52x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bf52x.h
+
+$(PROJECT_INCLUDE)/bsp/interrupt.h: bf52x/interrupt/interrupt.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/interrupt.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/interrupt.h
+endif
 $(PROJECT_INCLUDE)/libcpu/bf533.h: include/bf533.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/bf533.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/bf533.h
@@ -102,10 +121,12 @@ $(PROJECT_INCLUDE)/libcpu/mmu.h: mmu/mmu.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h
 
+if bf52x
+else
 $(PROJECT_INCLUDE)/libcpu/interrupt.h: interrupt/interrupt.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/interrupt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/interrupt.h
-
+endif
 $(PROJECT_INCLUDE)/libcpu/uart.h: serial/uart.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/uart.h

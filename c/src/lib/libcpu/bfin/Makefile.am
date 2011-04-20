@@ -10,8 +10,30 @@ EXTRA_DIST =
 
 noinst_PROGRAMS =
 
+include_bspdir = $(includedir)/bsp
 include_libcpudir = $(includedir)/libcpu
+
+include_bsp_HEADERS =
 include_libcpu_HEADERS =
+
+
+############
+# Start of bf52x files
+if bf52x
+
+include_HEADERS = bf52x/include/bf52x.h
+
+## INTERRUPT
+include_bsp_HEADERS += bf52x/interrupt/interrupt.h
+noinst_PROGRAMS += bf52x/interrupt.rel
+bf52x_interrupt_rel_SOURCES = bf52x/interrupt/interrupt.c \
+                              bf52x/interrupt/interrupt.h
+bf52x_interrupt_rel_CPPFLAGS = $(AM_CPPFLAGS)
+bf52x_interrupt_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+endif
+# endof bf52x
+############
 
 include_libcpu_HEADERS += include/bf533.h
 include_libcpu_HEADERS += include/bf537.h
@@ -47,11 +69,16 @@ mmu_rel_SOURCES = mmu/mmu.c
 mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+if bf52x
+
+else
 include_libcpu_HEADERS += interrupt/interrupt.h
 noinst_PROGRAMS += interrupt.rel
 interrupt_rel_SOURCES = interrupt/interrupt.c
 interrupt_rel_CPPFLAGS = $(AM_CPPFLAGS)
 interrupt_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+endif
 
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clock.c

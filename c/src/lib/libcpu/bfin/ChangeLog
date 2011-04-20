@@ -1,3 +1,31 @@
+2011-04-20  Rohan Kangralkar <rkangral@ece.neu.edu>
+
+	PR 1781/bsps
+	* bf52x/include: Added additional MMR. 
+	* bf52x/interrupt: The BF52X processors have a different
+	System interrupt controller than present in the 53X range of
+	processors. The 52X have 8 interrupt assignment registers. The
+	implementation uses tables to increase predictability.
+	* serial/uart.?: Added DMA based and interrupt based transfer
+	support. The uart code used a single ISR for TX and RX and tried
+	to identify and multiplex inside the ISR. In the new code the
+	type of interrupt is identified by the central ISR dispatcher
+	bf52x/interrupt or interrupt/.	This simplifies the UART ISR.
+
+2011-04-40  Rohan Kangralkar <rkangral@ece.neu.edu>
+
+  * bf52x/include: Added additional MMR. 
+  * bf52x/interrupt: The BF52X processors have a different System interrupt 
+    controller than present in the 53X range of processors. The 52X have 8 
+    interrupt assignment registers. The implementation uses tables to increase 
+    predictability. 
+  * serial/uart.?: Added DMA based and interrupt based transfer support. The 
+    old uart code used a single ISR for TX and RX and tried to identify and
+    multiplex inside the ISR. In the new code the type of interrupt is 
+    identified by the central ISR dispatcher bf52x/interrupt or interrupt/. 
+    This simplifies the UART ISR. 
+
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
