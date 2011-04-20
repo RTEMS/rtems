@@ -1,3 +1,11 @@
+2011-04-20  Rohan Kangralkar <rkangral@ece.neu.edu>
+
+	PR 1781/bsps
+	* bfin/rtems/bf52x.h: This file defines basic MMR for the Blackfin
+	52x CPU.  The MMR have been taken from the ADSP-BF52x Blackfin
+	Processor Hardware Reference from Analog Devices. Mentioned
+	Chapters refer to this Documentation.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/cpu.h:

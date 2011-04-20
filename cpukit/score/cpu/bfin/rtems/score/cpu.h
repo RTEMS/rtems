@@ -613,7 +613,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_STACK_MINIMUM_SIZE          (1024*4)
+#define CPU_STACK_MINIMUM_SIZE          (1024*8)
 
 /**
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
@@ -681,7 +681,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_STACK_ALIGNMENT        0
+#define CPU_STACK_ALIGNMENT        8
 
 /*
  *  ISR handler macros

@@ -35,6 +35,10 @@ $(PROJECT_INCLUDE)/rtems/bfin/bf533.h: rtems/bfin/bf533.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bfin/bf533.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bfin/bf533.h
 
+$(PROJECT_INCLUDE)/rtems/bfin/bf52x.h: rtems/bfin/bf52x.h $(PROJECT_INCLUDE)/rtems/bfin/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bfin/bf52x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bfin/bf52x.h
+
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
