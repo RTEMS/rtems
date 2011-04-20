@@ -5,13 +5,6 @@
 	now. So the array containing the registeration changes. The
 	change is due to change in the libcup uart function.
 
-2011-04-20  Rohan Kangralkar <rkangral@ece.neu.edu>
-------------------------------------------------------------------------
-r36 | rkangral | 2011-03-15 16:59:39 -0400 (Tue, 15 Mar 2011) | 1 line
-  * console/console-io.c: The UART RX and TX are different ISR now. So the 
-      array containing the registeration changes. The change is due to change 
-      in the libcup uart function.
-  
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

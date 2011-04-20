@@ -6,13 +6,6 @@
 	Processor Hardware Reference from Analog Devices. Mentioned
 	Chapters refer to this Documentation.
 
-2011-04-20  Rohan Kangralkar <rkangral@ece.neu.edu>
-
-  * bfin/rtems/bf52x.h: This file defines basic MMR for the Blackfin 52x CPU.
-     The MMR have been taken from the ADSP-BF52x Blackfin Processor
-     Hardware Reference from Analog Devices. Mentioned Chapters
-     refer to this Documentation.
-
 2010-04-20	Allan Hessenflow <allanh@kallisti.com>
 
 	* cpu_asm.S: L0-L3 were part of the interrupt context, but as

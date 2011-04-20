@@ -1,11 +1,11 @@
 2011-04-20      Rohan Kangralkar <rkangral@ece.neu.edu>
 
-        PR 1781/bsps
-        * ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
-        preinstall.am, times, console/console.c, include/bsp.h,
-        include/cplb.h, include/tm27.h, make/custom/TLL6527M.cfg,
-        startup/bspstart.c, startup/linkcmds: New files.
-        Initial port for the TLL6527Mboard that contains blackfin 52X 
-        range of processors. Used eZKit533 as a reference for building
-        the port.
+	PR 1781/bsps
+	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
+	preinstall.am, times, console/console.c, include/bsp.h,
+	include/cplb.h, include/tm27.h, make/custom/TLL6527M.cfg,
+	startup/bspstart.c, startup/linkcmds: New files.
+	Initial port for the TLL6527Mboard that contains blackfin 52X 
+	range of processors. Used eZKit533 as a reference for building
+	the port.
 
