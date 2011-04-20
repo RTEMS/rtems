@@ -22,9 +22,6 @@
 %if %build_gnat
   languages="$languages,ada"
 %endif
-%if %build_libgcj
-  optargs="--enable-libgcj"
-%endif
 %if "%{_prefix}" != "/usr"
   export PATH="%{_bindir}:${PATH}"
 %endif
@@ -61,7 +58,10 @@
 %if %build_newlib
     --enable-newlib-io-c99-formats \
 %endif
-    --enable-languages="$languages" $optargs
+%if %build_libgcj
+    --enable-libgcj \
+%endif
+    --enable-languages="$languages"
 
 %if "%_host" != "%_build"
   # Bug in gcc-3.2.1:
