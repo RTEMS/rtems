@@ -1,3 +1,13 @@
+2011-04-21	Jennifer Averett <Jennifer.Averett@OARcorp.com
+
+	PR 1777/cpukit
+	* src/lib/libbsp/powerpc/shared/startup/panic.c,
+	src/lib/libcpu/sh/sh7032/score/cpu_asm.c,
+	src/lib/libcpu/sh/sh7045/score/cpu_asm.c,
+	src/lib/libcpu/sh/sh7750/score/cpu_asm.c,
+	src/lib/libcpu/sh/shgdb/score/cpu_asm.c: Consolidated access to
+	_Thread_Dispatch_disable_level.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
