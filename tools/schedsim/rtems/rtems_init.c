@@ -101,7 +101,7 @@ void rtems_initialize_data_structures(void)
   /*
    *  Now we are back in a non-dispatching critical section
    */
-  _Thread_Dispatch_disable_level = 0;
+  _Thread_Dispatch_set_disable_level(0);
 
   /*
    * Print an initial message

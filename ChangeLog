@@ -1,3 +1,9 @@
+2011-04-21	Jennifer Averett <Jennifer.Averett@OARcorp.com
+
+	PR 1777/cpukit
+	* tools/schedsim/rtems/rtems_init.c: Consolidated access to
+	_Thread_Dispatch_disable_level.
+
 2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1729/cpukit
