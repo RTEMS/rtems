@@ -1,3 +1,10 @@
+2011-04-21	Jennifer Averett <Jennifer.Averett@OARcorp.com
+
+	PR 1777/cpukit
+	* support/include/tmacros.h, tmtests/tm26/task1.c,
+	tmtests/tm27/task1.c: Consolidated access to
+	_Thread_Dispatch_disable_level.
+
 2011-04-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Add fstests.

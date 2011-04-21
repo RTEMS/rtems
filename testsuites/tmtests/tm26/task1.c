@@ -453,7 +453,8 @@ void complete_test( void )
 
   _Thread_Heir = _Thread_Executing;
   _Thread_Dispatch_necessary = false;
-  _Thread_Dispatch_disable_level = 0;
+  
+  _Thread_Dispatch_set_disable_level( 0 );
 
   /*
    *  Now dump all the times
