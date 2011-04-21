@@ -89,7 +89,7 @@
      * is the task stack of a thread that deletes itself.  The thread dispatch
      * disable level is a way to detect this use case.
      */
-    if ( _Thread_Dispatch_disable_level == 0 ) {
+    if ( !_Thread_Dispatch_in_critical_section() ) {
       Heap_Block *const next = block->Protection_begin.next_delayed_free_block;
       if ( next == NULL ) {
         _Heap_Protection_delay_block_free( heap, block );

@@ -44,7 +44,7 @@ void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
 
   /* Interrupts are disabled upon entry to this Handler */
 
-  _Thread_Dispatch_disable_level++;
+  _Thread_Dispatch_increment_disable_level();
 
 #if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   if ( _ISR_Nest_level == 0 ) {
@@ -71,7 +71,7 @@ void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
     stack_ptr = _old_stack_ptr;
 #endif
 
-  _Thread_Dispatch_disable_level--;
+  _Thread_Dispatch_decrement_disable_level();
 
   _CPU_ISR_Enable( level );
 

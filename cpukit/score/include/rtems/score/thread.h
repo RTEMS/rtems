@@ -46,6 +46,18 @@
   #define RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API
 #endif
 
+#if defined(RTEMS_SMP) || \
+    defined(RTEMS_HEAVY_STACK_DEBUG) || \
+    defined(RTEMS_HEAVY_MALLOC_DEBUG)
+  #define __THREAD_DO_NOT_INLINE_DISABLE_DISPATCH__
+#endif
+
+#if defined(RTEMS_SMP) || \
+   (CPU_INLINE_ENABLE_DISPATCH == FALSE) || \
+   (__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__ == 1) 
+  #define __THREAD_DO_NOT_INLINE_ENABLE_DISPATCH__
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

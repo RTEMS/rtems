@@ -368,7 +368,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
 #define _CORE_mutex_Seize_body( \
   _the_mutex, _id, _wait, _timeout, _level ) \
   do { \
-    if ( _Thread_Dispatch_disable_level \
+    if ( _Thread_Dispatch_in_critical_section() \
         && (_wait) \
         && (_System_state_Get() >= SYSTEM_STATE_BEGIN_MULTITASKING ) \
        ) { \

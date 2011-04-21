@@ -1,3 +1,16 @@
+2011-04-21	Jennifer Averett <Jennifer.Averett@OARcorp.com
+
+	PR 1777/cpukit
+	* libcsupport/src/malloc_deferred.c, libcsupport/src/realloc.c,
+	score/Makefile.am, score/cpu/lm32/irq.c, score/cpu/nios2/irq.c,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/thread.h,
+	score/inline/rtems/score/thread.inl, score/src/heapfree.c,
+	score/src/pheapwalk.c, score/src/smp.c, score/src/threaddispatch.c:
+	Consolidated access to _Thread_Dispatch_disable_level.
+	* score/src/threaddisabledispatch.c, score/src/threadenabledispatch.c:
+	New files.
+
 2011-04-18	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* posix/src/mqueuegetattr.c,

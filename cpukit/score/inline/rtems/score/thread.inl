@@ -32,6 +32,64 @@
  */
 
 /**
+ * This routine returns true if thread dispatch indicates
+ * that we are in a critical section.
+ */
+RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_in_critical_section(void)
+{
+   if (  _Thread_Dispatch_disable_level == 0 )
+    return false;
+
+   return true;
+}
+
+/**
+ * This routine returns value of the the thread dispatch level.
+ */
+RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_get_disable_level(void)
+{
+  return _Thread_Dispatch_disable_level;
+}
+
+/**
+ * This routine sets thread dispatch level to the 
+ * value passed in.
+ */
+RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
+{
+  _Thread_Dispatch_disable_level = value;
+  return value;
+}
+
+/**
+ * This rountine increments the thread dispatch level
+ */
+RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_increment_disable_level(void)
+{
+  _Thread_Dispatch_disable_level++;
+  return _Thread_Dispatch_disable_level;
+}
+
+/**
+ * This routine decrements the thread dispatch level.
+ */
+RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_decrement_disable_level(void)
+{
+  _Thread_Dispatch_disable_level--;
+  return _Thread_Dispatch_disable_level;
+}
+
+/**
+ *  This routine initializes the thread dispatching subsystem.
+ */
+
+RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
+{
+  _Thread_Dispatch_set_disable_level( 1 );
+}
+
+
+/**
  *  This routine halts multitasking and returns control to
  *  the "thread" (i.e. the BSP) which initially invoked the
  *  routine which initialized the system.
@@ -150,51 +208,15 @@ RTEMS_INLINE_ROUTINE void _Thread_Deallocate_fp( void )
  *  This routine prevents dispatching.
  */
 
-#if defined(RTEMS_HEAVY_STACK_DEBUG) || defined(RTEMS_HEAVY_MALLOC_DEBUG)
-  #include <rtems/bspIo.h>
-  #include <rtems/fatal.h>
-  #include <rtems/stackchk.h>
-  #include <rtems/score/sysstate.h>
-  #include <rtems/score/heap.h>
-
-  /*
-   * This is currently not defined in any .h file, so we have to
-   * extern it here.
-   */
-  extern Heap_Control  *RTEMS_Malloc_Heap;
-#endif
-
+#if defined ( __THREAD_DO_NOT_INLINE_DISABLE_DISPATCH__ )
+void _Thread_Disable_dispatch( void );
+#else
 RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 {
-  /*
-   *  This check is very brutal to system performance but is very helpful
-   *  at finding blown stack problems.  If you have a stack problem and
-   *  need help finding it, then uncomment this code.  Every system
-   *  call will check the stack and since mutexes are used frequently
-   *  in most systems, you might get lucky.
-   */
-  #if defined(RTEMS_HEAVY_STACK_DEBUG)
-    if (_System_state_Is_up(_System_state_Get()) && (_ISR_Nest_level == 0)) {
-      if ( rtems_stack_checker_is_blown() ) {
-	printk( "Stack blown!!\n" );
-	rtems_fatal_error_occurred( 99 );
-      }
-    }
-  #endif
-
-  _Thread_Dispatch_disable_level += 1;
+  _Thread_Dispatch_increment_disable_level();
   RTEMS_COMPILER_MEMORY_BARRIER();
-
-  /*
-   * This check is even more brutal than the other one.  This enables
-   * malloc heap integrity checking upon entry to every system call.
-   */
-  #if defined(RTEMS_HEAVY_MALLOC_DEBUG)
-    if ( _Thread_Dispatch_disable_level == 1 ) {
-      _Heap_Walk( RTEMS_Malloc_Heap,99, false );
-    }
-  #endif
 }
+#endif
 
 /**
  *  This routine allows dispatching to occur again.  If this is
@@ -203,20 +225,17 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
  *  processor will be transferred to the heir thread.
  */
 
-#if ( (defined(CPU_INLINE_ENABLE_DISPATCH) && \
-       (CPU_INLINE_ENABLE_DISPATCH == FALSE)) || \
-      (__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__ == 1) )
-void _Thread_Enable_dispatch( void );
+#if defined ( __THREAD_DO_NOT_INLINE_ENABLE_DISPATCH__ )
+  void _Thread_Enable_dispatch( void );
 #else
-/* inlining of enable dispatching must be true */
-RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch( void )
-{
-  RTEMS_COMPILER_MEMORY_BARRIER();
-  if ( (--_Thread_Dispatch_disable_level) == 0 )
-    _Thread_Dispatch();
-}
+  /* inlining of enable dispatching must be true */
+  RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch( void )
+  {
+    RTEMS_COMPILER_MEMORY_BARRIER();
+    if ( _Thread_Dispatch_decrement_disable_level() == 0 )
+      _Thread_Dispatch();
+  }
 #endif
-
 
 /**
  *  This routine allows dispatching to occur again.  However,
@@ -227,7 +246,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch( void )
 RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
 {
   RTEMS_COMPILER_MEMORY_BARRIER();
-  _Thread_Dispatch_disable_level -= 1;
+  _Thread_Dispatch_decrement_disable_level();
 }
 
 /**
@@ -237,7 +256,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_dispatching_enabled( void )
 {
-  return ( _Thread_Dispatch_disable_level == 0 );
+  return  ( _Thread_Dispatch_in_critical_section() == false );
 }
 
 /**
@@ -248,15 +267,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_dispatching_enabled( void )
 RTEMS_INLINE_ROUTINE bool _Thread_Is_context_switch_necessary( void )
 {
   return ( _Thread_Dispatch_necessary );
-}
-
-/**
- *  This routine initializes the thread dispatching subsystem.
- */
-
-RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
-{
-  _Thread_Dispatch_disable_level = 1;
 }
 
 /**

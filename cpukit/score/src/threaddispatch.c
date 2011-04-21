@@ -1,7 +1,6 @@
 /*
  *  Thread Handler
  *
- *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -34,35 +33,7 @@
   #include <rtems/score/timestamp.h>
 #endif
 
-/*PAGE
- *
- *  _Thread_Enable_dispatch
- *
- *  This kernel routine exits a context switch disable critical section.
- *  This is the NOT INLINED version.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- *    dispatch thread
- *    no dispatch thread
- */
-
-#if ( (defined(CPU_INLINE_ENABLE_DISPATCH) &&  \
-       (CPU_INLINE_ENABLE_DISPATCH == FALSE)) || \
-      (__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__ == 1) )
-void _Thread_Enable_dispatch( void )
-{
-  if ( --_Thread_Dispatch_disable_level )
-    return;
-  _Thread_Dispatch();
-}
-#endif
-
-/*PAGE
- *
+/**
  *  _Thread_Dispatch
  *
  *  This kernel routine determines if a dispatch is needed, and if so
@@ -71,10 +42,6 @@ void _Thread_Enable_dispatch( void )
  *
  *  ALTERNATE ENTRY POINTS:
  *    void _Thread_Enable_dispatch();
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
  *
  *  INTERRUPT LATENCY:
  *    dispatch thread
@@ -91,7 +58,7 @@ void _Thread_Dispatch( void )
   _ISR_Disable( level );
   while ( _Thread_Dispatch_necessary == true ) {
     heir = _Thread_Heir;
-    _Thread_Dispatch_disable_level = 1;
+   _Thread_Dispatch_set_disable_level( 1 );
     _Thread_Dispatch_necessary = false;
     _Thread_Executing = heir;
 
@@ -185,7 +152,7 @@ void _Thread_Dispatch( void )
   }
 
 post_switch:
-  _Thread_Dispatch_disable_level = 0;
+  _Thread_Dispatch_set_disable_level( 0 );
 
   _ISR_Enable( level );
 

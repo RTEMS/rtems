@@ -37,7 +37,7 @@ void rtems_smp_run_first_task(int cpu)
    *  This is definitely a hack until we have SMP scheduling.  Since there
    *  is only one executing and heir right now, we have to fake this out.
    */
-  _Thread_Dispatch_disable_level = 1;
+  _Thread_Dispatch_set_disable_level(1);
   _Thread_Executing = heir;
   _CPU_Context_switch_to_first_task_smp( &heir->Registers );
 }
@@ -103,7 +103,7 @@ void rtems_smp_process_interrupt(void)
 
   if ( message & RTEMS_BSP_SMP_SHUTDOWN ) {
     ISR_Level level;
-    _Thread_Dispatch_disable_level = 0;
+    _Thread_Dispatch_set_disable_level(0);
     _Per_CPU_Information[cpu].isr_nest_level = 0;
     _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_SHUTDOWN;
     _ISR_Disable( level );
