@@ -1,3 +1,7 @@
+2011-04-22	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* console/console.c: Now compiles.
+
 2011-04-20  Rohan Kangralkar <rkangral@ece.neu.edu>
 
 	PR 1781/bsps
