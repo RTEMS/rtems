@@ -268,7 +268,7 @@ Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-rtems4
 
 %if "%{newlib_version}" == "1.19.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.19.0-rtems4.11-20110323.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.19.0-rtems4.11-20110423.diff
 %endif
 
 %if 0%{?_build_mpfr}
@@ -389,7 +389,7 @@ echo "RTEMS gcc-%{gcc_version}-3%{?dist}/newlib-%{newlib_version}-9%{?dist}" > g
     %{?with_lto:--enable-lto}%{!?with_lto:--disable-lto} \
     %{?with_plugin:--enable-plugin}%{!?with_plugin:--disable-plugin} \
     --enable-newlib-io-c99-formats \
-    --enable-languages="$languages" $optargs
+    --enable-languages="$languages"
 
 %if "%_host" != "%_build"
   # Bug in gcc-3.2.1:
@@ -440,6 +440,9 @@ echo "RTEMS gcc-%{gcc_version}-3%{?dist}/newlib-%{newlib_version}-9%{?dist}" > g
   # We don't ship info/dir
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
+
+  # We don't want libffi's man-pages
+  rm -f $RPM_BUILD_ROOT%{_mandir}/man3/*ffi*
 
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/m32r-rtems4.11-m32r-rtems4.11-gcjh%{_exeext}
@@ -512,7 +515,7 @@ echo "RTEMS gcc-%{gcc_version}-3%{?dist}/newlib-%{newlib_version}-9%{?dist}" > g
     *include/c++*);;
     *include-fixed/*);;
     *finclude/*);;
-    */go/*);;
+    */go/*) ;; # ignore : explicitly put into rpm elsewhere
     *adainclude*);;
     *adalib*);;
     *gnat1);;
