@@ -40,7 +40,6 @@ static bfin_uart_channel_t channels[] = {
      NULL,
      0,
      0}
-  };
 
 #if (!BFIN_ON_SKYEYE)
 ,
