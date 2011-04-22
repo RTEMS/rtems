@@ -58,6 +58,15 @@
   #define __THREAD_DO_NOT_INLINE_ENABLE_DISPATCH__
 #endif
 
+/*
+ *  Deferred floating point context switches are not currently
+ *  supported when in SMP configuration.
+ */
+#if defined(RTEMS_SMP)
+  #undef  CPU_USE_DEFERRED_FP_SWITCH
+  #define CPU_USE_DEFERRED_FP_SWITCH FALSE
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
