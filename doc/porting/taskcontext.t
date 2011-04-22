@@ -401,6 +401,9 @@ floating point context switches.
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
 @end example
 
+Note that currently, when in SMP configuration, deferred floating point
+context switching is unavailable.
+
 @subsection Floating Point Context Data Structure
 
 The Context_Control_fp contains the per task information for the floating
