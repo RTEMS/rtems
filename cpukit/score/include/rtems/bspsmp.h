@@ -125,7 +125,7 @@ int bsp_smp_processor_id(void) RTEMS_COMPILER_PURE_ATTRIBUTE;
  *  @param [in] cpu is the target CPU for this request.
  *  @param [in] message is message to send
  */
-void bsp_smp_send_message(
+void rtems_smp_send_message(
   int       cpu,
   uint32_t  message
 );
@@ -141,6 +141,18 @@ void bsp_smp_send_message(
  *  @param [in] message is message to send
  */
 void bsp_smp_broadcast_message(
+  uint32_t  message
+);
+
+/**
+ *  @brief Make Request of Others CPUs
+ *
+ *  This method is invoked by XXX when it needs to make a request
+ *  of the other CPUs.  
+ *
+ *  @param [in] message is message to send
+ */
+void rtems_smp_broadcast_message(
   uint32_t  message
 );
 

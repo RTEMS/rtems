@@ -1,3 +1,7 @@
+2011-04-25	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* score/include/rtems/bspsmp.h: Did some prototype cleanup.
+
 2011-04-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1782/cpukit
