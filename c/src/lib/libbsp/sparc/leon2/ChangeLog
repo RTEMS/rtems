@@ -1,3 +1,9 @@
+2011-04-25	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1783/bsps
+	* include/bsp.h: Remove dead prototypes of Clock_delay() and delay().
+	Neither had bodies.
+
 2011-03-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1748/bsps

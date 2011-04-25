@@ -52,15 +52,6 @@ extern int rtems_erc32_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"sonic1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_erc32_sonic_driver_attach
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-extern void Clock_delay(uint32_t         microseconds);
-
-#define delay( microseconds ) Clock_delay(microseconds)
-
 /* Constants */
 
 /*
