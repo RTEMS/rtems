@@ -30,15 +30,15 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.19.51-1
-%define binutils_version 2.19.51-1
-%define binutils_rpmvers %{expand:%(echo "2.19.51-1" | tr - _ )}
+%define binutils_pkgvers 2.20.51-2
+%define binutils_version 2.20.51-2
+%define binutils_rpmvers %{expand:%(echo "2.20.51-2" | tr - _ )}
 
 Name:		i686-pc-cygwin-binutils
 Summary:	Binutils for target i686-pc-cygwin
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20100425.0%{?dist}
+Release:	0.20110427.0%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -55,10 +55,6 @@ BuildRequires:	flex
 BuildRequires:	bison
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/binutils/binutils-%{binutils_pkgvers}-src.tar.bz2
-%{?_without_sources:NoSource:	0}
-%if "%{binutils_version}" == "2.17.50"
-Patch0:	binutils-2.17.50-cygwin-%{binutils_pkgvers}.diff
-%endif
 
 %description
 Cross binutils for target i686-pc-cygwin
