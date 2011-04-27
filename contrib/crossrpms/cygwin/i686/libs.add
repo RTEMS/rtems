@@ -13,7 +13,6 @@ Version:      	%cygwin_rpmvers
 Summary:      	@tool_target@ libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/cygwin/cygwin-%{cygwin_version}.tar.bz2
-%{?_without_sources:NoSource:	0}
 
 %description
 @tool_target@ libraries.
