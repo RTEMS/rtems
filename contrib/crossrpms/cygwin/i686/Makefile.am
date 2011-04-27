@@ -12,7 +12,7 @@ CLOOG_PPL_VERS = 0.15.7-1
 CLOOG_PPL_RPMREL = 0.20100204.0%{?dist}
 include ../cloog_ppl.am
 
-W32API_VERS = 3.17-1
+W32API_VERS = 3.17-2
 W32API_RPMREL = 0.20110427.0%{?dist}
 include ../w32api.am
 
