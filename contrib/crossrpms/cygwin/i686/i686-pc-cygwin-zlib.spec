@@ -34,7 +34,7 @@
 %define zlib_rpmvers %{expand:%(echo 1.2.5-1 | tr - _)} 
 
 Name:         i686-pc-cygwin-zlib
-Release:      0.20101216.0%{?dist}
+Release:      0.20110427.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -47,9 +47,6 @@ Summary:      	Cygwin zlib Libraries
 Source0:	ftp://cygwin.com/pub/cygwin/release/zlib/zlib-%{zlib_version}.tar.bz2
 Source1:	ftp://cygwin.com/pub/cygwin/release/zlib/zlib-devel/zlib-devel-%{zlib_version}.tar.bz2
 Source2:	ftp://cygwin.com/pub/cygwin/release/zlib/zlib0/zlib0-%{zlib_version}.tar.bz2
-%{?_without_sources:NoSource:	0}
-%{?_without_sources:NoSource:	1}
-%{?_without_sources:NoSource:	2}
 
 Provides:       i686-pc-cygwin-zlib-devel = %{version}-%{release}
 
