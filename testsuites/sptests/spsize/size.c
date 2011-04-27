@@ -48,6 +48,9 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
+#if defined(RTEMS_SMP)
+  #include <rtems/score/smp.h>
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -1,3 +1,9 @@
+2011-04-27	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1784
+	* sptests/spsize/size.c: Split bspsmp.h into two files smp.h and
+	bspsmp.h
+
 2011-04-21	Jennifer Averett <Jennifer.Averett@OARcorp.com
 
 	PR 1777/cpukit
