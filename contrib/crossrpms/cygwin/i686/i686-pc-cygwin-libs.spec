@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define cygwin_version 1.7.7-1
-%define cygwin_rpmvers %{expand:%(echo 1.7.7-1 | tr - _)} 
+%define cygwin_version 1.7.9-1
+%define cygwin_rpmvers %{expand:%(echo 1.7.9-1 | tr - _)} 
 
 Name:         i686-pc-cygwin
-Release:      0.20110129.0%{?dist}
+Release:      0.20110427.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -45,7 +45,6 @@ Version:      	%cygwin_rpmvers
 Summary:      	i686-pc-cygwin libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/cygwin/cygwin-%{cygwin_version}.tar.bz2
-%{?_without_sources:NoSource:	0}
 
 %description
 i686-pc-cygwin libraries.
