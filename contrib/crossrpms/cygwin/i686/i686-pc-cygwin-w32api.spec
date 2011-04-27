@@ -30,8 +30,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define w32api_version 3.17-1
-%define w32api_rpmvers %{expand:%(echo 3.17-1 | tr - _)} 
+%define w32api_version 3.17-2
+%define w32api_rpmvers %{expand:%(echo 3.17-2 | tr - _)} 
 
 Name:         i686-pc-cygwin-w32api
 Release:      0.20110427.0%{?dist}
@@ -44,7 +44,7 @@ BuildArch:	noarch
 Version:      	%w32api_rpmvers
 Summary:      	Cygwin w32api Libraries
 
-Source0:	ftp://cygwin.com/pub/cygwin/release/w32api/w32api-%{w32api_version}.tar.bz2
+Source0:	ftp://sources.redhat.com/pub/cygwin/release/w32api/w32api-%{w32api_version}.tar.bz2
 
 %description
 Cygwin w32api libraries.
