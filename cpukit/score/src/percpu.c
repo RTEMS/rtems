@@ -19,7 +19,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
-#include <rtems/bspsmp.h>
+#include <rtems/score/smp.h>
 #include <string.h>
 
 #if defined(RTEMS_SMP)

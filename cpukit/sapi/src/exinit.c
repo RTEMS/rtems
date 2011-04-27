@@ -58,7 +58,7 @@
 #endif
 
 #if defined(RTEMS_SMP)
-  #include <rtems/bspsmp.h>
+  #include <rtems/score/smp.h>
   #include <rtems/score/percpu.h>
 #endif
 

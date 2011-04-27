@@ -15,6 +15,7 @@
 
 #include <rtems/system.h>
 #include <rtems/bspsmp.h>
+#include <rtems/score/smp.h>
 #include <rtems/score/thread.h>
 
 #if defined(RTEMS_SMP)

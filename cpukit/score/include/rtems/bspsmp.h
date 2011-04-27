@@ -44,43 +44,8 @@
 extern "C" {
 #endif
 
-/**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested so that RTEMS will reschedule on this CPU
- *  because the currently executing thread needs to be switched out.
- */
-#define RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY  0x01
-
-/**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested so that RTEMS will reschedule on this CPU
- *  because the currently executing thread has been sent a signal.
- */
-#define RTEMS_BSP_SMP_SIGNAL_TO_SELF            0x02
-
-/**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested so that this CPU will be shutdown.  This is done
- *  as part of rtems_executive_shutdown().
- */
-#define RTEMS_BSP_SMP_SHUTDOWN                  0x04
-
-/**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested that the receiving CPU needs to perform a context
- *  switch to the first task.
- */
-#define RTEMS_BSP_SMP_FIRST_TASK                0x08
 
 #ifndef ASM
-/**
- *  @brief Number of CPUs in SMP System
- *
- *  This variable is set during the SMP initialization sequence to
- *  indicate the number of CPUs in this system.
- */
-SCORE_EXTERN uint32_t _SMP_Processor_count;
-
 /**
  *  @brief Maximum Number of CPUs in SMP System
  *
@@ -127,32 +92,6 @@ int bsp_smp_processor_id(void) RTEMS_COMPILER_PURE_ATTRIBUTE;
  */
 void rtems_smp_send_message(
   int       cpu,
-  uint32_t  message
-);
-
-/**
- *  @brief Make Request of Others CPUs
- *
- *  This method is invoked by RTEMS when it needs to make a request
- *  of the other CPUs.  It should be implemented using some type of
- *  interprocessor interrupt. CPUs not including the originating 
- *  CPU should receive the message.
- *
- *  @param [in] message is message to send
- */
-void bsp_smp_broadcast_message(
-  uint32_t  message
-);
-
-/**
- *  @brief Make Request of Others CPUs
- *
- *  This method is invoked by XXX when it needs to make a request
- *  of the other CPUs.  
- *
- *  @param [in] message is message to send
- */
-void rtems_smp_broadcast_message(
   uint32_t  message
 );
 
@@ -229,6 +168,12 @@ void rtems_smp_initialize_per_cpu(int cpu);
  *  to process the incoming interprocessor request. 
  */
 void rtems_smp_process_interrupt(void);
+
+void bsp_smp_wait_for(
+  volatile unsigned int *address,
+  unsigned int           desired,
+  int                    maximum_usecs
+);
 
 #endif
 

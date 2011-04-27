@@ -1,3 +1,12 @@
+2011-04-27	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1784
+	* sapi/src/exinit.c, score/Makefile.am, score/preinstall.am,
+	score/include/rtems/bspsmp.h, score/src/percpu.c, score/src/smp.c,
+	score/src/threadcreateidle.c: Split bspsmp.h into two files smp.h and
+	bspsmp.h
+	* score/include/rtems/score/smp.h: New file.
+
 2011-04-25	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* score/include/rtems/bspsmp.h: Did some prototype cleanup.
