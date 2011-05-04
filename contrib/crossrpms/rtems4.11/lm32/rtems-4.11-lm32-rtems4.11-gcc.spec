@@ -46,9 +46,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.5.2
-%define gcc_version 4.5.2
-%define gcc_rpmvers %{expand:%(echo "4.5.2" | tr - _ )}
+%define gcc_pkgvers 4.5.3
+%define gcc_version 4.5.3
+%define gcc_rpmvers %{expand:%(echo "4.5.3" | tr - _ )}
 
 %define newlib_pkgvers		1.19.0
 %define newlib_version		1.19.0
@@ -58,7 +58,7 @@ Summary:      	lm32-rtems4.11 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	9%{?dist}
+Release:      	1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -89,6 +89,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
+%if 0%{?fc16}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
 %if 0%{?fc15}
 %global mpc_provided 0.8.3
 %global mpfr_provided 3.0.0
@@ -245,7 +251,7 @@ BuildRequires:	rtems-4.11-lm32-rtems4.11-binutils
 Requires:	rtems-4.11-gcc-common
 Requires:	rtems-4.11-lm32-rtems4.11-binutils
 Requires:	rtems-4.11-lm32-rtems4.11-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.11-lm32-rtems4.11-newlib = %{newlib_version}-7%{?dist}
+Requires:	rtems-4.11-lm32-rtems4.11-newlib = %{newlib_version}-8%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -261,6 +267,10 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.6.0-rtems4.11-20110325.diff
 %endif
+%if "%{gcc_version}" == "4.5.3"
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.3-rtems4.11-20110426.diff
+%endif
 %if "%{gcc_version}" == "4.5.2"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-rtems4.11-20110220.diff
@@ -268,6 +278,10 @@ Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-rtems4
 
 %if "%{gcc_version}" == "4.6.0"
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
+%if "%{gcc_version}" == "4.5.3" 
+Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.3-rtems4.11-20110426.diff
 %endif
 %if "%{gcc_version}" == "4.5.2" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
@@ -326,8 +340,11 @@ cd ..
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
 %if %{with gcc_stdint}
-rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
+  rm gcc-%{gcc_pkgvers}/newlib/libc/include/stdint.h
 %endif
+  # Make sure not to be using GPL'ed sources
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/linux
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/rdos
 
 %if 0%{?_build_mpfr}
 %setup -q -T -D -n %{name}-%{version} -a60
@@ -357,7 +374,7 @@ rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-9%{?dist}/newlib-%{newlib_version}-7%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-1%{?dist}/newlib-%{newlib_version}-8%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -634,7 +651,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.11-lm32-rtems4.11-binutils
-# Requires:       rtems-4.11-lm32-rtems4.11-newlib = %{newlib_version}-7%{?dist}
+# Requires:       rtems-4.11-lm32-rtems4.11-newlib = %{newlib_version}-8%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -652,7 +669,7 @@ Summary:        libgcc for lm32-rtems4.11-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.11-lm32-rtems4.11-newlib = %{newlib_version}-7%{?dist}
+Requires:       rtems-4.11-lm32-rtems4.11-newlib = %{newlib_version}-8%{?dist}
 License:	GPL
 
 %description -n rtems-4.11-lm32-rtems4.11-gcc-libgcc
@@ -831,7 +848,7 @@ Summary:      	C Library (newlib) for lm32-rtems4.11
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        7%{?dist}
+Release:        8%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.11-newlib-common
@@ -852,7 +869,7 @@ Newlib C Library for lm32-rtems4.11.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        7%{?dist}
+Release:        8%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
