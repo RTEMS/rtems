@@ -39,7 +39,13 @@
 
 #ifndef _RPC_SVC_H
 #define _RPC_SVC_H
+
 #include <sys/cdefs.h>
+#include <rpc/types.h>
+#include <rpc/xdr.h> /* xdrproc_t */
+#include <sys/socket.h> /* socklen_t */
+#include <netinet/in.h> /* struct sockaddr_in */
+#include <rpc/auth.h> /* auth_stat */
 
 /*
  * This interface must manage two items concerning remote procedure calling:

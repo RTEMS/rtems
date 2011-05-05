@@ -45,6 +45,12 @@
 #ifndef _RPC_RPC_MSG_H
 #define _RPC_RPC_MSG_H
 
+#include <rpc/types.h>
+#include <rpc/xdr.h> /* xdrproc_t */
+#include <rpc/auth.h> /* opaque_auth */
+
+struct rpc_err; /* forward */
+
 #define RPC_MSG_VERSION		((u_int32_t) 2)
 #define RPC_SERVICE_PORT	((u_short) 2048)
 

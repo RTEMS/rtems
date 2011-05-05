@@ -66,6 +66,7 @@
 #include <rpc/clnt_stat.h>
 #include <sys/cdefs.h>
 #include <sys/un.h>
+#include <rpc/auth.h> /* auth_stat */
 
 /*
  * Error info.

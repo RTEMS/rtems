@@ -71,6 +71,7 @@
 #ifndef _RPC_PMAPPROT_H
 #define _RPC_PMAPPROT_H
 #include <sys/cdefs.h>
+#include <rpc/xdr.h>
 
 #define PMAPPORT		((u_short)111)
 #define PMAPPROG		((u_long)100000)

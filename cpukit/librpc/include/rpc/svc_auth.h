@@ -40,6 +40,8 @@
 #ifndef _RPC_SVCAUTH_H
 #define _RPC_SVCAUTH_H
 
+#include <sys/cdefs.h>
+
 struct rpc_msg;
 struct svc_req;
 

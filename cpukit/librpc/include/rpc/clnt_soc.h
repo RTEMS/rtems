@@ -40,6 +40,8 @@
 #ifndef _RPC_CLNT_SOC_H
 #define _RPC_CLNT_SOC_H
 
+#include <time.h>
+
 /* derived from clnt_soc.h 1.3 88/12/17 SMI     */
 
 /*
@@ -48,6 +50,7 @@
  */
 
 #include <sys/cdefs.h>
+#include <rpc/clnt.h>
 
 #define UDPMSGSIZE      8800    /* rpc imposed limit on udp msg size */  
 

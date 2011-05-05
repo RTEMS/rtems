@@ -41,6 +41,7 @@
 #ifndef _RPC_PMAPRMT_H
 #define _RPC_PMAPRMT_H
 #include <sys/cdefs.h>
+#include <rpc/xdr.h>
 
 struct rmtcallargs {
 	u_long prog, vers, proc, arglen;

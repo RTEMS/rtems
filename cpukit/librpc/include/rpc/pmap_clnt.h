@@ -62,7 +62,11 @@
 
 #ifndef _RPC_PMAPCLNT_H
 #define _RPC_PMAPCLNT_H
+
 #include <sys/cdefs.h>
+#include <netinet/in.h> /* struct sockaddr_in */
+#include <rpc/types.h>
+#include <rpc/xdr.h> /* xdrproc_t */
 
 __BEGIN_DECLS
 extern bool_t		pmap_set	(u_long, u_long, int, int);
