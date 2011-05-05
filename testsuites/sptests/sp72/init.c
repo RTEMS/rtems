@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,6 +30,8 @@ rtems_task Test_task(
     RTEMS_DEFAULT_OPTIONS,
     rtems_clock_get_ticks_per_second() * 10
   );
+  directive_failed( status, "obtain" );
+
 }
 
 rtems_task Init(

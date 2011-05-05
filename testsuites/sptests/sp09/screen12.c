@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,9 +27,6 @@ void Screen12()
   void                   *segment_address_1;
   void                   *segment_address_2;
   void                   *segment_address_3;
-  uint32_t                good_back_flag;
-  uint32_t                good_front_flag;
-  uint32_t                offset;
   uintptr_t               segment_size;
   rtems_status_code       status;
   Heap_Information_block  the_info;
@@ -399,48 +396,6 @@ void Screen12()
 
   puts( "TA1 - rtems_debug_disable - RTEMS_DEBUG_REGION" );
   rtems_debug_disable( RTEMS_DEBUG_REGION );
-
-#if 0
-
-  offset = (segment_address_1 - (void *)Region_good_area) / 4;
-
-/* bad FRONT_FLAG error */
-
-  good_front_flag = Region_good_area[ offset - 1 ];
-  Region_good_area[ offset - 1 ] = good_front_flag + 2;
-
-  status = rtems_region_return_segment( Region_id[ 1 ], segment_address_1 );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_ADDRESS,
-    "rtems_region_return_segment with back_flag != front_flag"
-  );
-  puts( "TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS" );
-
-  Region_good_area[ offset - 1 ] = good_front_flag;
-
-/* bad FRONT_FLAG error */
-
-  good_back_flag = Region_good_area[ offset - 2 ];
-  Region_good_area[ offset - 2 ] = 1024;
-
-  status = rtems_region_return_segment( Region_id[ 1 ], segment_address_1 );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_ADDRESS,
-    "rtems_region_return_segment with back_flag != front_flag"
-  );
-  puts( "TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS" );
-
-  Region_good_area[ offset - 2 ] = good_back_flag;
-
-#else
-  offset = 0;
-  good_front_flag = 0;
-  good_back_flag = 0;
-  puts( "TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS - SKIPPED" );
-  puts( "TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS - SKIPPED" );
-#endif
 
   puts( "TA1 - rtems_debug_enable - RTEMS_DEBUG_REGION" );
   rtems_debug_enable( RTEMS_DEBUG_REGION );

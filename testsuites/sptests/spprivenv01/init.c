@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,11 +20,12 @@
 
 rtems_task task_routine( rtems_task_argument not_used )
 {
-  int sc = 0;
+  rtems_status_code sc;
 
   puts( "task_routine - setting up a private environment" );
 
   sc = rtems_libio_set_private_env();
+  directive_failed( sc, "set private env" );
   sleep( 1 );
 
   rtems_task_delete( RTEMS_SELF );
@@ -34,12 +35,12 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  int sc = 0;
-  bool status = 0;
-  void *alloc_ptr = (void *)0;
-  rtems_id current_task_id;
-  rtems_id task_id;
-  rtems_name another_task_name;
+  rtems_status_code       sc;
+  bool                    status;
+  void                   *alloc_ptr;
+  rtems_id                current_task_id;
+  rtems_id                task_id;
+  rtems_name              another_task_name;
   Heap_Information_block  Info;
   
   puts( "\n\n*** TEST USER ENVIRONMENT ROUTINE - 01 ***" );

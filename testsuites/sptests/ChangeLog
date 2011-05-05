@@ -1,3 +1,10 @@
+2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen12.c, sp09/sp09.scn, sp21/Makefile.am, sp35/priinv.c,
+	sp39/init.c, sp50/init.c, sp57/init.c, sp72/init.c, sp73/init.c,
+	spintrcritical01/init.c, spprivenv01/init.c, spsimplesched01/init.c,
+	spsimplesched02/init.c: Remove warnings.
+
 2011-04-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sp09/screen02.c: Use integer value that fits into one character.

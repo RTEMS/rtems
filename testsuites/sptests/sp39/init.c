@@ -1,7 +1,7 @@
 /*
  *  Classic API Signal to Task from ISR
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -44,17 +44,20 @@ rtems_timer_service_routine test_event_from_isr(
      *  This event send hits the critical section but sends to
      *  another task so doesn't impact this critical section.
      */
-    rtems_event_send( other_task, 0x02 );
+    status = rtems_event_send( other_task, 0x02 );
+    directive_failed( status, "event send" );
 
     /*
      *  This event send hits the main task but doesn't satisfy
      *  it's blocking condition so it will still block
      */
-    rtems_event_send( main_task, 0x02 );
+    status = rtems_event_send( main_task, 0x02 );
+    directive_failed( status, "event send" );
 
     case_hit = TRUE;
   }
   status = rtems_event_send( main_task, 0x01 );
+  directive_failed( status, "event send" );
 }
 
 rtems_timer_service_routine test_event_with_timeout_from_isr(
@@ -72,6 +75,7 @@ rtems_timer_service_routine test_event_with_timeout_from_isr(
     case_hit = TRUE;
   }
   status = rtems_event_send( main_task, 0x01 );
+  directive_failed( status, "event send" );
 }
 
 rtems_task Init(

@@ -273,8 +273,6 @@ TA1 - rtems_region_resize_segment - RTEMS_INVALID_ID
 TA1 - rtems_region_return_segment - RTEMS_INVALID_ID
 TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS
 TA1 - rtems_debug_disable - RTEMS_DEBUG_REGION
-TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS - SKIPPED
-TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS - SKIPPED
 TA1 - rtems_debug_enable - RTEMS_DEBUG_REGION
 TA1 - rtems_region_extend - RTEMS_INVALID_ID
 TA1 - rtems_region_extend - within heap - RTEMS_INVALID_ADDRESS

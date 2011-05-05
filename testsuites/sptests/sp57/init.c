@@ -1,6 +1,6 @@
 /*  Restart a task which is delaying
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,7 @@ rtems_task Delay_task(
 
   puts( "Delay - rtems_task_wake_after - OK" );
   status = rtems_task_wake_after( RTEMS_MILLISECONDS_TO_TICKS(2000) );
+  directive_failed( status, "wake after" );
 
   puts( "ERROR - delay task woke up!!" );
   rtems_test_exit(0);

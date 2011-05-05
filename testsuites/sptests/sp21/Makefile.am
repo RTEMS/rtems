@@ -13,6 +13,7 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+AM_CPPFLAGS += -Wno-deprecated-declarations
 
 LINK_OBJS = $(sp21_OBJECTS) $(sp21_LDADD)
 LINK_LIBS = $(sp21_LDLIBS)

@@ -243,17 +243,20 @@ void AccessLocalHw(void)
 {
   rtems_status_code     Sts;
 
-  rtems_task_priority   EnterPrio;   /* Statistics log */
+#if defined(TEST_PRINT_STATISTICS)
   rtems_task_priority   AccessPrio;  /*      :         */
-  rtems_task_priority   LeavePrio;   /*      :         */
-  uint32_t              EnterCnt;    /*      :         */
   uint32_t              AccessCnt;   /*      :         */
+  rtems_task_priority   EnterPrio;   /* Statistics log */
+  uint32_t              EnterCnt;    /*      :         */
+  rtems_task_priority   LeavePrio;   /*      :         */
   uint32_t              LeaveCnt;    /*      :         */
+#endif
 
+#if defined(TEST_PRINT_STATISTICS)
   /* Store information about the current situation */
   EnterPrio = _Thread_Executing->current_priority;
   EnterCnt  = _Thread_Executing->resource_count;
-
+#endif
 
   printf("  AccessLocalHw called by %s\n", CallerName());
 
@@ -269,18 +272,20 @@ void AccessLocalHw(void)
   Sts = rtems_semaphore_obtain(LocalHwSync_S, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   directive_failed( Sts, "rtems_semaphore_obtain(LocalHwAccess_R...)" );
 
+#if defined(TEST_PRINT_STATISTICS)
   /* Store information about the current situation */
   AccessPrio = _Thread_Executing->current_priority;
   AccessCnt  = _Thread_Executing->resource_count;
+#endif
 
   Sts = rtems_semaphore_release(LocalHwAccess_R);
   directive_failed( Sts, "rtems_semaphore_release(LocalHwAccess_R)" );
 
+#if defined(TEST_PRINT_STATISTICS)
   /* Store information about the current situation */
   LeavePrio = _Thread_Executing->current_priority;
   LeaveCnt  = _Thread_Executing->resource_count;
 
-#if defined(TEST_PRINT_STATISTICS)
   printf(
     "  AccessLocalHw from %s statistics:\n"
     " - Prio: %d -> %d -> %d\n - Cnt: %d -> %d -> %d\n",
@@ -304,17 +309,20 @@ void AccessRemoteHw(void)
 {
   rtems_status_code     Sts;
 
+#if defined(TEST_PRINT_STATISTICS)
   rtems_task_priority   EnterPrio;   /* Statistics log */
   rtems_task_priority   AccessPrio;  /*      :         */
   rtems_task_priority   LeavePrio;   /*      :         */
   uint32_t              EnterCnt;    /*      :         */
   uint32_t              AccessCnt;   /*      :         */
   uint32_t              LeaveCnt;    /*      :         */
+#endif
 
+#if defined(TEST_PRINT_STATISTICS)
   /* Store information about the current situation */
   EnterPrio = _Thread_Executing->current_priority;
   EnterCnt  = _Thread_Executing->resource_count;
-
+#endif
 
   printf("AccessRemoteHw called by %s\n", CallerName());
 
@@ -329,18 +337,20 @@ void AccessRemoteHw(void)
   printf("AccessRemoteHw access local %s\n", CallerName());
   AccessLocalHw();
 
+#if defined(TEST_PRINT_STATISTICS)
   /* Store information about the current situation */
   AccessPrio = _Thread_Executing->current_priority;
   AccessCnt  = _Thread_Executing->resource_count;
+#endif
 
   Sts = rtems_semaphore_release(RemoteHwAccess_R);
   directive_failed( Sts, "rtems_semaphore_release(RemoreHwAccess_R" );
 
+#if defined(TEST_PRINT_STATISTICS)
   /* Store information about the current situation */
   LeavePrio = _Thread_Executing->current_priority;
   LeaveCnt  = _Thread_Executing->resource_count;
 
-#if defined(TEST_PRINT_STATISTICS)
   printf(
     "\nAccessRemoteHw from %s statistics:\n"
     " - Prio: %d -> %d -> %d\n - Cnt: %d -> %d -> %d\n",

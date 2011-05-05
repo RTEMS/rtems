@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,17 +20,19 @@ volatile bool  timerRan;
 
 rtems_timer_service_routine Timer_Routine( rtems_id id, void *ignored )
 {
-  rtems_status_code sc;
+  rtems_status_code status;
 
   Fired++;
   timerRan = true;
 
-  sc = rtems_timer_server_fire_after(
+  status = rtems_timer_server_fire_after(
     id,
     rtems_clock_get_ticks_per_second(),
     Timer_Routine,
     NULL
   );
+  directive_failed( status, "fire after" );
+
 }
 
 rtems_task Init(

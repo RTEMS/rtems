@@ -28,14 +28,14 @@ rtems_task Test_task(
 )
 {
   rtems_id          tid;
-  uint32_t    task_index;
   rtems_status_code status;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
-  task_index = task_number( tid );
+  directive_failed( status, "wake after" );
 
   for ( ; ; ) {
-    rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+    status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+    directive_failed( status, "yield" );
   }
 }
 

@@ -31,6 +31,8 @@ rtems_task Test_task(
   task_index = arg;
   for ( ; ; ) {
     status = rtems_clock_get_tod( &time );
+    directive_failed( status, "get tod" );
+
     if ( time.second >= 15 ) {
       puts( "*** END OF SP73 (YIELD) TEST ***" );
       rtems_test_exit( 0 );
@@ -38,10 +40,11 @@ rtems_task Test_task(
     put_name( Task_name[ task_index ], FALSE );
     print_time( " - rtems_clock_get_tod - ", &time, "\n" );
     status = rtems_task_wake_after(
-      task_index * 5 * rtems_clock_get_ticks_per_second() );
+      task_index * 5 * rtems_clock_get_ticks_per_second()
+    );
+    directive_failed( status, "wake after" );
   }
 }
-
 
 rtems_task Init(
   rtems_task_argument argument
@@ -71,25 +74,39 @@ rtems_task Init(
     Task_name[ 1 ], 1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 1 ]
   );
+  directive_failed( status, "create 1" );
+
   status = rtems_task_create(
     Task_name[ 2 ], 1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 2 ]
   );
+  directive_failed( status, "create 2" );
+
   status = rtems_task_create(
     Task_name[ 3 ], 1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 3 ]
   );
+  directive_failed( status, "create 3" );
 
   status = rtems_task_start( Task_id[ 1 ], Test_task, 1 );
+  directive_failed( status, "start 1" );
   rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
-  status = rtems_task_start( Task_id[ 2 ], Test_task, 2 );
-  rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
-  status = rtems_task_start( Task_id[ 3 ], Test_task, 3 );
 
-  rtems_task_set_priority(Task_id[1], 1, &old);
+  status = rtems_task_start( Task_id[ 2 ], Test_task, 2 );
+  directive_failed( status, "start 2" );
   rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+
+  status = rtems_task_start( Task_id[ 3 ], Test_task, 3 );
+  directive_failed( status, "start 3" );
+
+  status = rtems_task_set_priority(Task_id[1], 1, &old);
+  directive_failed( status, "set priority" );
+
+  status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+  directive_failed( status, "wake after" );
 
   status = rtems_task_delete( RTEMS_SELF );
+  directive_failed( status, "delete" );
 }
 
 /* configuration information */

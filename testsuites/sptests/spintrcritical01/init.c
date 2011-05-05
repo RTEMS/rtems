@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -82,7 +82,9 @@ rtems_timer_service_routine test_release_from_isr(
   if ( getState() == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
     case_hit = true;
   }
+
   status = rtems_semaphore_release( Semaphore );
+  directive_failed( status, "release" );
 }
 
 
