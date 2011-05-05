@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -121,10 +121,10 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
+  /* start blocking rtems_semaphore_obtain time */
+  benchmark_timer_initialize();
 
-  benchmark_timer_initialize();           /* start blocking rtems_semaphore_obtain time */
-  status = rtems_semaphore_obtain(
+  (void) rtems_semaphore_obtain(
     Semaphore_id,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
@@ -135,9 +135,7 @@ rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
-  status = rtems_semaphore_obtain(
+  (void) rtems_semaphore_obtain(
     Semaphore_id,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT

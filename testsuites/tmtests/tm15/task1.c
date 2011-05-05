@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -203,10 +203,8 @@ rtems_task High_tasks(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
   if ( time_set )
-    status = rtems_event_receive(
+    (void) rtems_event_receive(
       RTEMS_EVENT_16,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT,
@@ -214,8 +212,9 @@ rtems_task High_tasks(
     );
   else {
     time_set = true;
-    benchmark_timer_initialize();            /* start blocking rtems_event_receive time */
-    status = rtems_event_receive(
+    /* start blocking rtems_event_receive time */
+    benchmark_timer_initialize();
+    (void) rtems_event_receive(
       RTEMS_EVENT_16,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT,

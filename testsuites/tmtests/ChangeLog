@@ -1,3 +1,8 @@
+2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tm01/task1.c, tm02/task1.c, tm03/task1.c, tm15/task1.c: Remove
+	warnings.
+
 2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1743/cpu

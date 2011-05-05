@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -115,6 +115,7 @@ rtems_task Test_task(
     RTEMS_NO_PRIORITY,
     &smid
   );
+  directive_failed( status, "rtems_task_create of TA1" );
 
   for ( iterations=OPERATION_COUNT ; iterations ; iterations-- ) {
 
