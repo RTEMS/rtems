@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Copyright (c) 2009, 2010 embedded brains GmbH.
@@ -420,14 +420,10 @@ static void test_heap_allocate(void)
   uintptr_t previous_last_block_begin = 0;
   uintptr_t previous_last_page_begin = 0;
 
-  uintptr_t first_block_begin = 0;
-
   uintptr_t last_block_begin = 0;
   uintptr_t last_alloc_begin = 0;
 
   test_heap_init( TEST_DEFAULT_PAGE_SIZE );
-
-  first_block_begin = (uintptr_t) TestHeap.first_block;
 
   last_block_begin = (uintptr_t) TestHeap.last_block;
   last_alloc_begin = _Heap_Alloc_area_of_block( TestHeap.last_block );
@@ -467,6 +463,8 @@ static void test_heap_allocate(void)
   alloc_size = test_page_size();
   p1 = test_init_and_alloc_simple( alloc_size, alignment, boundary );
   p2 = test_alloc_simple( alloc_size, alignment, boundary );
+  rtems_test_assert( p2 );
+
   test_free( p1 );
 
   alloc_size = 2 * alloc_size;
@@ -890,7 +888,11 @@ static void test_heap_resize_block(void)
   puts( "\t\tlet the next block be used alredy and try to get a size bigger than the actual block" );
   test_heap_init( TEST_DEFAULT_PAGE_SIZE );
   p1 = test_alloc_one_page();
+  rtems_test_assert( p1 );
+
   p2 = test_alloc_one_page();
+  rtems_test_assert( p2 );
+
   new_alloc_size = 3 * TEST_DEFAULT_PAGE_SIZE / 2;
   test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_UNSATISFIED );
 
@@ -903,8 +905,14 @@ static void test_heap_resize_block(void)
   puts( "\t\tlet the block after the next be used and try to allocate more then one pagesize more" );
   test_heap_init( TEST_DEFAULT_PAGE_SIZE );
   p1 = test_alloc_one_page();
+  rtems_test_assert( p1 );
+
   p2 = test_alloc_one_page();
+  rtems_test_assert( p2 );
+
   p3 = test_alloc_one_page();
+  rtems_test_assert( p3 );
+
   _Heap_Free( &TestHeap, p2 );
   new_alloc_size = 5 * TEST_DEFAULT_PAGE_SIZE / 2;
   test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_UNSATISFIED );

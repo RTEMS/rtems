@@ -1,3 +1,9 @@
+2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* devnullfatal01/testcase.h, malloc02/init.c, malloc04/init.c,
+	malloctest/init.c, termios03/termios_testdriver_polled.c,
+	termios04/termios_testdriver_intr.c: Remove warnings.
+
 2011-04-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* tar01/init.c: Fixed integer types.

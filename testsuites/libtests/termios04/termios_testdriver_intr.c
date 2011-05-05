@@ -1,7 +1,7 @@
 /*
  *  This file contains a test fixture termios device driver
  *
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -205,6 +205,7 @@ rtems_device_driver termios_test_driver_open(
   }
 
   sc = rtems_termios_open (major, minor, arg, &Callbacks);
+  directive_failed( sc, "termios open" ); 
 
   Ttyp = args->iop->data1;   /* Keep cookie returned by termios_open */
 

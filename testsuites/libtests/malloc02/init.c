@@ -69,6 +69,7 @@ rtems_task Init(
   puts( "Free from ISR successfully processed" );
   puts( "Now malloc'ing more memory to process the free" );
   pointer2 = malloc(20);
+  rtems_test_assert( pointer2 );
 
   puts( "*** END OF TEST MALLOC 02 ***" );
   rtems_test_exit( 0 );

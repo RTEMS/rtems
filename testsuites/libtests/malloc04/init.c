@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -111,15 +111,23 @@ rtems_task Init(
   sbrk_count = 0;
   RTEMS_Malloc_Initialize( NULL, 0, 64 );
   p1 = malloc(64);
+  rtems_test_assert( p1 );
+
   p2 = malloc(64);
+  rtems_test_assert( p2 );
+
   p3 = malloc(48);
+  rtems_test_assert( p3 );
+
   p4 = malloc(48);
+  rtems_test_assert( p4 );
   
   puts( "Initialize heap with no memory (sbrk aligned)" );
   offset     = 0;
   sbrk_count = 0;
   RTEMS_Malloc_Initialize( NULL, 0, 64 );
   p1 = malloc(64);
+  rtems_test_assert( p1 );
   
   puts( "Set sbrk amount in heap to 0" );
   offset     = 0;
@@ -127,6 +135,7 @@ rtems_task Init(
   RTEMS_Malloc_Initialize( NULL, 0, 64 );
   RTEMS_Malloc_Sbrk_amount = 0;
   p4 = malloc(48);
+  rtems_test_assert( p4 );
 
   /* Restore information on real heap */
   malloc_set_heap_pointer( TempHeap );

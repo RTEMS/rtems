@@ -16,12 +16,14 @@
 #define FATAL_ERROR_EXPECTED_ERROR       RTEMS_TOO_MANY
 
 #include <rtems/devnull.h>
+#include "tmacros.h"
 
 void force_error()
 {
   int status;
 
   status = rtems_io_register_name( "/dev/null", 0, 0 );
+  directive_failed( status, "io register" );
 
   status = null_initialize( 0, 0, NULL );
 
