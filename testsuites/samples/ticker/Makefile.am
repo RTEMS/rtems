@@ -16,6 +16,8 @@ include $(top_srcdir)/../automake/leaf.am
 
 ticker_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 LINK_OBJS = $(ticker_OBJECTS) $(ticker_LDADD)
 LINK_LIBS = $(ticker_LDLIBS)
 

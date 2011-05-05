@@ -15,6 +15,8 @@ include $(top_srcdir)/../automake/leaf.am
 
 fileio_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 LINK_OBJS = $(fileio_OBJECTS) $(fileio_LDADD)
 LINK_LIBS = $(fileio_LDLIBS)
 

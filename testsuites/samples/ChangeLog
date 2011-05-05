@@ -1,5 +1,10 @@
 2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* fileio/Makefile.am, ticker/Makefile.am: Missed part of previous
+	patch.
+
+2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* base_sp/apptask.c, base_sp/init.c, fileio/init.c, fileio/system.h,
 	nsecs/init.c, ticker/init.c, ticker/system.h, ticker/tasks.c: Remove
 	warnings.
