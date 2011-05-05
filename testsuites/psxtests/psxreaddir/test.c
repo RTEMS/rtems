@@ -15,7 +15,7 @@
  *  implementation of this appears to seek to the ((off/DIRENT_SIZE) + 1)
  *  record where DIRENT_SIZE seems to be 12 bytes.
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -79,8 +79,10 @@ void complete_printdir( char *path )
 
   the_dir = opendir( path );
   rtems_test_assert( the_dir );
+
   printdir( the_dir );
   status = closedir( the_dir );
+  rtems_test_assert( status );
 }
 
 char *many_files[] = {
@@ -145,13 +147,13 @@ char *dnames[] = {
         "END"
 };
 
-int select1 ( struct dirent *entry )
+int select1 ( const struct dirent *entry )
 {
    printf("SCANDIR SELECT1 accepts  nodename: %s\n", entry->d_name );
    return 1;
 }
 
-int select2 ( struct dirent *entry )
+int select2 ( const struct dirent *entry )
 {
    if( strcmp( entry->d_name, "y") == 0 ) {
       printf("SCANDIR SELECT accepted nodename: %s\n", entry->d_name );
@@ -273,6 +275,7 @@ int main(
   directory_not = opendir( "/many" );
   printdir ( directory_not );
   d_not = readdir( directory_not );
+  rtems_test_assert( d_not == 0 );
 
   printf("open /b/myfile\n");
   fd = open ("/b/my_file", O_CREAT, S_IRWXU);

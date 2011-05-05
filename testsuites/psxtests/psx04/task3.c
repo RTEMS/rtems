@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -112,6 +112,7 @@ void *Task_3(
   printf( "Task_3: sleep so the Init task can reguest a signal\n" );
   remaining = sleep( 1 );
   rtems_test_assert( !status );
+  rtems_test_assert( remaining == 0 );
 
      /* end of task 3 */
   printf( "Task_3: exit\n" );

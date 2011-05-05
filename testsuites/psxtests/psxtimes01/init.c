@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,6 +57,7 @@ rtems_task Init(
   puts( "_times( &start_tm ) -- OK" );
   now = _times( &start_tm );
   rtems_test_assert( start != 0 );
+  rtems_test_assert( now != 0 );
   
   rtems_test_spin_for_ticks(5);
 

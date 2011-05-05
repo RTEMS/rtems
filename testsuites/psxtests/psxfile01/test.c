@@ -10,7 +10,7 @@
  *    /dev
  *    /dev/XXX   [where XXX includes at least console]
  *
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -162,6 +162,7 @@ int main(
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   rtems_status = rtems_clock_set( &time );
+  directive_failed( rtems_status, "clock set" );
 
   /*
    *  Dump an empty file system
@@ -656,6 +657,7 @@ since new path is not valid");
   rtems_test_assert( status == -1);
 
   rtems_status = rtems_io_register_name( "/dev/console", 0, 0 );
+  directive_failed( rtems_status, "io register" );
 
   test_case_reopen_append();
 

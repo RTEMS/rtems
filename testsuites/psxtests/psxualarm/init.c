@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,7 +45,9 @@ rtems_timer_service_routine Signal_duringISR_TSR(
 )
 {
   int               status;
+
   status = kill( getpid(), SIGUSR1 );
+  rtems_test_assert( status == 0 );
 }
 
 
@@ -79,7 +81,10 @@ void *POSIX_Init(
   puts( "Init: ualarm in 1 us" );
   sleep(3);
   result = ualarm(1,0);
+  rtems_test_assert( result == 0 );
+  
   status = sleep(10);
+  rtems_test_assert( status == 0 );
 
   /* unblock Signal and see if it happened */
   status = sigemptyset( &mask );

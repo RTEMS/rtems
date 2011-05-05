@@ -1,3 +1,9 @@
+2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psx04/task3.c, psxfile01/test.c, psxhdrs/Makefile.am,
+	psxmsgq01/init.c, psxreaddir/test.c, psxsignal01/init.c,
+	psxtimes01/init.c, psxualarm/init.c: Remove warnings.
+
 2011-04-15	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* psxstat/test.c: Fixed integer type.  Check status codes.

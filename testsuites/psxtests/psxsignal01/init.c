@@ -77,7 +77,9 @@ rtems_timer_service_routine Signal_duringISR_TSR(
 )
 {
   int  status;
+
   status = pthread_kill( pthread_self(), SIGUSR1 );
+  rtems_test_assert( status == 0 );
 }
 
 
