@@ -1,3 +1,9 @@
+2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* base_sp/apptask.c, base_sp/init.c, fileio/init.c, fileio/system.h,
+	nsecs/init.c, ticker/init.c, ticker/system.h, ticker/tasks.c: Remove
+	warnings.
+
 2011-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add AC_CONFIG_HEADER(config.h).

@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,6 +26,7 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
+#include "tmacros.h"
 #include <stdio.h>
 
 #define ARGUMENT 0
@@ -45,8 +46,11 @@ rtems_task Init(
 
   status = rtems_task_create( task_name, 1, RTEMS_MINIMUM_STACK_SIZE,
              RTEMS_INTERRUPT_LEVEL(0), RTEMS_DEFAULT_ATTRIBUTES, &tid );
+  directive_failed( status, "create" ); 
 
   status = rtems_task_start( tid, Application_task, ARGUMENT );
+  directive_failed( status, "start" ); 
 
   status = rtems_task_delete( RTEMS_SELF );
+  directive_failed( status, "delete" ); 
 }

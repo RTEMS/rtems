@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,9 +36,12 @@ rtems_task Application_task(
   rtems_status_code status;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  directive_failed( status, "ident" );
 
-  printf( "Application task was invoked with argument (%" PRIdrtems_task_argument ") "
-          "and has id of 0x%" PRIxrtems_id "\n", argument, tid );
+  printf(
+    "Application task was invoked with argument (%" PRIdrtems_task_argument ") "
+    "and has id of 0x%" PRIxrtems_id "\n", argument, tid
+  );
 
   printf( "*** END OF SAMPLE SINGLE PROCESSOR APPLICATION ***\n" );
   exit( 0 );

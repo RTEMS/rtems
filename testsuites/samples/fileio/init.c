@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -707,10 +707,13 @@ Init (rtems_task_argument ignored)
     RTEMS_DEFAULT_MODES ,
     RTEMS_FLOATING_POINT | RTEMS_DEFAULT_ATTRIBUTES, &Task_id
   );
+  directive_failed( status, "create" ); 
 
   status = rtems_task_start( Task_id, fileio_task, 1 );
+  directive_failed( status, "start" ); 
 
   status = rtems_task_delete( RTEMS_SELF );
+  directive_failed( status, "delete" ); 
 }
 
 #if defined(USE_SHELL)

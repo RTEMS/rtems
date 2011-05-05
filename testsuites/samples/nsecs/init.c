@@ -2,7 +2,7 @@
  *  Nanoseconds accuracy timestamp test
  */
 
-/*  COPYRIGHT (c) 1989-2007.
+/*  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -69,6 +69,7 @@ rtems_task Init(
   time.ticks  = 0;
 
   status = rtems_clock_set( &time );
+  directive_failed( status, "clock set" ); 
 
   /*
    *  Iterate 10 times showing difference in TOD
@@ -91,7 +92,7 @@ rtems_task Init(
       my_ctime(stop.tv_sec), stop.tv_nsec
     );
 
-   printf( " --> %" PRItime_t ":%ld\n", diff.tv_sec, diff.tv_nsec );
+    printf( " --> %" PRItime_t ":%ld\n", diff.tv_sec, diff.tv_nsec );
   }
 
   /*

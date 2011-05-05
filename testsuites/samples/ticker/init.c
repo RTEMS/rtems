@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,6 +52,7 @@ rtems_task Init(
   time.ticks  = 0;
 
   status = rtems_clock_set( &time );
+  directive_failed( status, "clock get" );
 
   Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
@@ -61,18 +62,29 @@ rtems_task Init(
     Task_name[ 1 ], 1, RTEMS_MINIMUM_STACK_SIZE * 2, RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 1 ]
   );
+  directive_failed( status, "create 1" ); 
+
   status = rtems_task_create(
     Task_name[ 2 ], 1, RTEMS_MINIMUM_STACK_SIZE * 2, RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 2 ]
   );
+  directive_failed( status, "create 2" ); 
+
   status = rtems_task_create(
     Task_name[ 3 ], 1, RTEMS_MINIMUM_STACK_SIZE * 2, RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 3 ]
   );
+  directive_failed( status, "create 3" ); 
 
   status = rtems_task_start( Task_id[ 1 ], Test_task, 1 );
+  directive_failed( status, "start 1" ); 
+
   status = rtems_task_start( Task_id[ 2 ], Test_task, 2 );
+  directive_failed( status, "start 2" ); 
+
   status = rtems_task_start( Task_id[ 3 ], Test_task, 3 );
+  directive_failed( status, "start 3" ); 
 
   status = rtems_task_delete( RTEMS_SELF );
+  directive_failed( status, "delete" ); 
 }

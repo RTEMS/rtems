@@ -29,10 +29,12 @@ rtems_task Test_task(
 {
   rtems_id          tid;
   rtems_time_of_day time;
-  uint32_t    task_index;
+  uint32_t          task_index;
   rtems_status_code status;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  directive_failed( status, "task ident" ); 
+
   task_index = task_number( tid );
   for ( ; ; ) {
     status = rtems_clock_get_tod( &time );
@@ -43,6 +45,8 @@ rtems_task Test_task(
     put_name( Task_name[ task_index ], FALSE );
     print_time( " - rtems_clock_get_tod - ", &time, "\n" );
     status = rtems_task_wake_after(
-      task_index * 5 * rtems_clock_get_ticks_per_second() );
+      task_index * 5 * rtems_clock_get_ticks_per_second()
+    );
+    directive_failed( status, "wake after" ); 
   }
 }
