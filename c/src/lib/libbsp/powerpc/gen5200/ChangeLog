@@ -1,3 +1,9 @@
+2011-05-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/bsp.h: Moved NEED_LOW_LEVEL_INIT define because it has to be
+	visible for the assembler.
+	* startup/linkcmds.brs5l: Fixed RAM size.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

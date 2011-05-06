@@ -79,6 +79,11 @@ LINKER_SYMBOL(MBAR);
 #define PM520
 #endif
 
+#if !defined(HAS_UBOOT)
+  /* we need the low level initialization in start.S*/
+  #define NEED_LOW_LEVEL_INIT
+#endif
+
 #if defined(BRS5L)
 /*
  * IMD Custom Board BRS5L
@@ -122,10 +127,6 @@ extern "C" {
 
 extern bd_t bsp_uboot_board_info;
 #else
-
-/* we need the low level initialization in start.S*/
-#define NEED_LOW_LEVEL_INIT
-
 
 #endif
 
