@@ -1,3 +1,7 @@
+2011-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp39/init.c: Fix tests broken in warning pass.
+
 2011-05-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spnsext01/.cvsignore, spnsext01/Makefile.am, spnsext01/init.c,

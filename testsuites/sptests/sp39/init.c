@@ -18,6 +18,14 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+/*
+ *  ERROR CHECKING NOTE:
+ *
+ *  We are either at dispatch disable level 1 or 2.  Either way, it is
+ *  safer not to check the dispatch level explicitly so we are using
+ *  fatal_directive_check_status_only() not directive_failed().
+ */
+
 rtems_timer_service_routine test_event_from_isr(
   rtems_id  timer,
   void     *arg
@@ -45,19 +53,19 @@ rtems_timer_service_routine test_event_from_isr(
      *  another task so doesn't impact this critical section.
      */
     status = rtems_event_send( other_task, 0x02 );
-    directive_failed( status, "event send" );
+    fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
 
     /*
      *  This event send hits the main task but doesn't satisfy
      *  it's blocking condition so it will still block
      */
     status = rtems_event_send( main_task, 0x02 );
-    directive_failed( status, "event send" );
+    fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
 
     case_hit = TRUE;
   }
   status = rtems_event_send( main_task, 0x01 );
-  directive_failed( status, "event send" );
+  fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
 }
 
 rtems_timer_service_routine test_event_with_timeout_from_isr(
@@ -75,7 +83,7 @@ rtems_timer_service_routine test_event_with_timeout_from_isr(
     case_hit = TRUE;
   }
   status = rtems_event_send( main_task, 0x01 );
-  directive_failed( status, "event send" );
+  fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
 }
 
 rtems_task Init(
