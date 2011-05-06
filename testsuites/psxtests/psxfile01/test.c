@@ -656,7 +656,7 @@ since new path is not valid");
   status = truncate( "/tmp/fred", 10 );
   rtems_test_assert( status == -1);
 
-  rtems_status = rtems_io_register_name( "/dev/console", 0, 0 );
+  rtems_status = rtems_io_register_name( "/dev/not_console", 0, 0 );
   directive_failed( rtems_status, "io register" );
 
   test_case_reopen_append();

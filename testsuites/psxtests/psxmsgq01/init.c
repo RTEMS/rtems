@@ -1193,7 +1193,6 @@ void verify_timedout_mq_timedsend(
   struct timeval  tv1, tv2, tv3;
   struct timezone tz1, tz2;
   int              len;
-  int              status;
   char            *msg;
 
   printf( "Init: verify_timedout_mq_timedsend - on queue %s ", Test_q[que].name);
@@ -1204,8 +1203,7 @@ void verify_timedout_mq_timedsend(
   timeout.tv_sec  = tv1.tv_sec - 1;
   timeout.tv_nsec = tv1.tv_usec * 1000;
 
-  status = mq_timedsend( Test_q[que].mq, msg, len , 0, &timeout );
-  rtems_test_assert( status == 0 );
+  (void) mq_timedsend( Test_q[que].mq, msg, len , 0, &timeout );
 
   gettimeofday( &tv2, &tz2 );
   tv3.tv_sec  = tv2.tv_sec - tv1.tv_sec;

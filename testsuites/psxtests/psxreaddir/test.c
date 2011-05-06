@@ -82,7 +82,7 @@ void complete_printdir( char *path )
 
   printdir( the_dir );
   status = closedir( the_dir );
-  rtems_test_assert( status );
+  rtems_test_assert( !status );
 }
 
 char *many_files[] = {
