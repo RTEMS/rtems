@@ -157,6 +157,7 @@ spheapprot/Makefile
 spmkdir/Makefile
 spmountmgr01/Makefile
 spnotepad01/Makefile
+spnsext01/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
 spprivenv01/Makefile
