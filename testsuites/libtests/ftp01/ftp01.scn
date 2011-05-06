@@ -1,0 +1,51 @@
+*** TEST FTP 1 ***
+syslog: ftpd: FTP daemon started (2 sessions max)
+220 RTEMS FTP server (Version 1.1-JWJ) ready.
+USER anonymous
+230 User logged in.
+TYPE I
+200 Type set to I.
+PASV
+227 Entering passive mode (127,0,0,1,4,1).
+STOR a.txt
+150 Opening BINARY mode data connection.
+226 Transfer complete.
+QUIT
+221 Goodbye.
+220 RTEMS FTP server (Version 1.1-JWJ) ready.
+USER anonymous
+230 User logged in.
+TYPE I
+200 Type set to I.
+PASV
+227 Entering passive mode (127,0,0,1,4,4).
+RETR a.txt
+150 Opening BINARY mode data connection.
+220 RTEMS FTP server (Version 1.1-JWJ) ready.
+USER anonymous
+230 User logged in.
+TYPE I
+200 Type set to I.
+PASV
+227 Entering passive mode (127,0,0,1,4,7).
+STOR b.txt
+150 Opening BINARY mode data connection.
+226 Transfer complete.
+226 Transfer complete.
+QUIT
+221 Goodbye.
+QUIT
+221 Goodbye.
+220 RTEMS FTP server (Version 1.1-JWJ) ready.
+USER anonymous
+230 User logged in.
+TYPE I
+200 Type set to I.
+PASV
+227 Entering passive mode (127,0,0,1,4,10).
+RETR b.txt
+150 Opening BINARY mode data connection.
+226 Transfer complete.
+QUIT
+221 Goodbye.
+*** END OF TEST FTP 1 ***

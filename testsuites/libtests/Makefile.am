@@ -18,5 +18,9 @@ SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
     math mathf mathl complex \
     mouse01
 
+if NETTESTS
+SUBDIRS += ftp01
+endif
+
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

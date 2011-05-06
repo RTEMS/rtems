@@ -1,3 +1,9 @@
+2011-05-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* ftp01/.cvsignore, ftp01/Makefile.am, ftp01/ftp01.doc,
+	ftp01/ftp01.scn, ftp01/init.c: New files.
+	* Makefile.am, configure.ac: Reflect changes above.
+
 2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* devnullfatal01/testcase.h, malloc02/init.c, malloc04/init.c,
