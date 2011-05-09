@@ -1,3 +1,8 @@
+2011-05-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tm26/system.h, tm27/system.h: Ensure these tests use the correct
+	scheduler.
+
 2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tm01/task1.c, tm02/task1.c, tm03/task1.c, tm15/task1.c: Remove

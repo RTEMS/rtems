@@ -35,6 +35,8 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_SCHEDULER_PRIORITY
+
 #include <rtems/confdefs.h>
 
 /* end of include file */
