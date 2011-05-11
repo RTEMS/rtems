@@ -30,7 +30,9 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
-#include <rtems/score/smp.h>
+#if defined(RTEMS_SMP)
+  #include <rtems/score/smp.h>
+#endif
 
 static inline void _Thread_Create_idle_helper(
   uint32_t name_u32,

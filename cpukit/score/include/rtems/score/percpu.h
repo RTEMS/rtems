@@ -27,6 +27,11 @@
   #if defined(RTEMS_SMP)
     #include <rtems/score/smplock.h>
   #endif
+
+  /*
+   * NOTE: This file MUST be included on non-smp systems as well
+   *       in order to define bsp_smp_processor_id.
+   */
   #include <rtems/bspsmp.h>
 #endif
 

@@ -17,12 +17,13 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/config.h>
-#include <rtems/score/smp.h>
 #include <string.h>
 
 #if defined(RTEMS_SMP)
+
+  #include <rtems/score/smp.h>
+
   void _SMP_Handler_initialize(void)
   {
     int         cpu;

@@ -1,3 +1,11 @@
+2011-05-11	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* score/Makefile.am, score/preinstall.am,
+	score/include/rtems/score/percpu.h, score/src/percpu.c,
+	score/src/threadcreateidle.c: Modifications to restrict compilation
+	of SMP only code to when SMP is enabled. Entire SMP specific files
+	are disabled via Makefile.am.
+
 2011-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/include/rtems/bdbuf.h: Documentation.

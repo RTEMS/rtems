@@ -36,8 +36,13 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/timestamp64.h include/rtems/score/tod.h \
     include/rtems/score/tqdata.h include/rtems/score/userext.h \
     include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
-    include/rtems/score/cpuopts.h include/rtems/score/basedefs.h \
+    include/rtems/score/cpuopts.h include/rtems/score/basedefs.h 
+
+if HAS_SMP
+include_rtems_score_HEADERS += \
     include/rtems/score/smplock.h include/rtems/score/smp.h
+endif
+
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h \
@@ -91,7 +96,9 @@ if HAS_MP
 libscore_a_SOURCES += src/mpci.c src/objectmp.c src/threadmp.c
 endif
 
+if HAS_SMP
 libscore_a_SOURCES += src/smp.c src/smplock.c
+endif
 
 ## CORE_APIMUTEX_C_FILES
 libscore_a_SOURCES += src/apimutex.c src/apimutexallocate.c \
