@@ -1,5 +1,9 @@
 2011-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libblock/include/rtems/bdbuf.h: Documentation.
+
+2011-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libmisc/shell/main_msdosfmt.c: Fixed NULL pointer access.
 
 2011-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
