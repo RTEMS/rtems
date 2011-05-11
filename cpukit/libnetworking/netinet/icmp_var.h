@@ -37,6 +37,8 @@
 #ifndef _NETINET_ICMP_VAR_H_
 #define _NETINET_ICMP_VAR_H_
 
+#include <netinet/ip_icmp.h> /* ICMP_MAXTYPE */
+
 /*
  * Variables related to this implementation
  * of the internet control message protocol.

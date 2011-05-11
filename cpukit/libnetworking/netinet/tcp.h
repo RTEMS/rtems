@@ -40,6 +40,7 @@
 #include <sys/cdefs.h>
 
 #if __BSD_VISIBLE
+#include <machine/endian.h> /* BYTE_ORDER */
 
 typedef	u_int32_t tcp_seq;
 

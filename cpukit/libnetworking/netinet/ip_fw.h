@@ -17,7 +17,9 @@
 #ifndef _IP_FW_H
 #define _IP_FW_H
 
+#include <sys/queue.h> /* LIST_ENTRY */
 #include <net/if.h>
+#include <netinet/in.h> /* struct in_addr */
 
 /*
  * This union structure identifies an interface, either explicitly

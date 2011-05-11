@@ -41,6 +41,9 @@
 #ifndef _NETINET_IP_MROUTE_H_
 #define _NETINET_IP_MROUTE_H_
 
+#include <netinet/in.h> /* struct in_addr */
+#include <net/route.h>  /* struct route */
+
 /*
  * Definitions for IP multicast forwarding.
  *

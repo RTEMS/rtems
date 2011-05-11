@@ -38,6 +38,8 @@
 #define _NETINET_IP_H_
 
 #include <sys/cdefs.h>
+#include <netinet/in.h> /* struct in_addr */
+#include <netinet/in_systm.h> /* n_long */
 
 /*
  * Definitions for internet protocol version 4.

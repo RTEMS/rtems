@@ -37,6 +37,9 @@
 #ifndef	_NET_IF_VAR_H_
 #define	_NET_IF_VAR_H_
 
+#include <net/if.h> /* struct if_data */
+#include <sys/ioccom.h> /* ioctl_command_t */
+
 /*
  * Structures defining a network interface, providing a packet
  * transport mechanism (ala level 0 of the PUP protocols).

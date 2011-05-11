@@ -42,17 +42,23 @@
  * $FreeBSD: src/sys/net/if_pppvar.h,v 1.26 2006/12/05 18:54:21 ume Exp $
  */
 
+/*
+ * $Id$
+ */
+ 
 #ifndef _NET_IF_PPPVAR_H_
 #define _NET_IF_PPPVAR_H_
+
+#include <net/if_var.h> /* struct ifnet */
+#include <net/ppp_defs.h> /* struct pppstat */
+#include <rtems/rtems/types.h> /* rtems_id */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- * $Id$
- */
- 
+struct proc;
+
 /*
  * Supported network protocols.  These values are used for
  * indexing sc_npmode.

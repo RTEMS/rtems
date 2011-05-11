@@ -36,6 +36,10 @@
 #ifndef _NET_SLCOMPRESS_H_
 #define _NET_SLCOMPRESS_H_
 
+#include <netinet/ip.h> /* struct ip */
+
+struct mbuf;
+
 #define MAX_STATES 16		/* must be > 2 and < 256 */
 #define MAX_HDR 128
 

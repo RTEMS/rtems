@@ -37,6 +37,10 @@
 #ifndef _NETINET_TCPIP_H_
 #define _NETINET_TCPIP_H_
 
+#ifdef __BSD_VISIBLE
+#include <netinet/tcp.h> /* struct tcphdr */
+#include <netinet/ip_var.h> /* struct ipovly */
+
 /*
  * Tcp+ip header, after ip options removed.
  */
@@ -61,5 +65,6 @@ struct tcpiphdr {
 #define	ti_win		ti_t.th_win
 #define	ti_sum		ti_t.th_sum
 #define	ti_urp		ti_t.th_urp
+#endif /* __BSD_VISIBLE */
 
 #endif

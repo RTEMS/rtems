@@ -37,6 +37,7 @@
 #ifndef _NETINET_IF_ETHER_H_
 #define _NETINET_IF_ETHER_H_
 
+#include <netinet/in.h> /* struct in_addr */
 #include <net/ethernet.h>
 #include <net/if_arp.h>
 

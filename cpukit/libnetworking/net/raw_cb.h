@@ -37,6 +37,8 @@
 #ifndef _NET_RAW_CB_H_
 #define _NET_RAW_CB_H_
 
+#include <sys/socket.h>
+
 #include <sys/queue.h>
 
 /*

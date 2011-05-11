@@ -35,6 +35,9 @@
 #define _NETINET_IN_VAR_H_
 
 #include <sys/queue.h>
+#include <net/if_var.h> /* struct ifaddr */
+#include <netinet/in.h> /* struct in_addr */
+
 #if !defined(__rtems__)
 #include <sys/fnv_hash.h>
 #endif

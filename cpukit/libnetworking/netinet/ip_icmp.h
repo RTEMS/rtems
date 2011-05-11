@@ -37,6 +37,9 @@
 #ifndef _NETINET_IP_ICMP_H_
 #define _NETINET_IP_ICMP_H_
 
+#include <netinet/in.h> /* struct in_addr */
+#include <netinet/ip.h> /* struct ip */
+
 /*
  * Interface Control Message Protocol Definitions.
  * Per RFC 792, September 1981.

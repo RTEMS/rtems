@@ -41,6 +41,8 @@
 #ifndef _NETINET_IGMP_H_
 #define _NETINET_IGMP_H_
 
+#include <netinet/in.h> /* struct in_addr */
+
 /*
  * Internet Group Management Protocol (IGMP) definitions.
  *

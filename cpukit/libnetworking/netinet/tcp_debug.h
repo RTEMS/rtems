@@ -37,6 +37,9 @@
 #ifndef _NETINET_TCP_DEBUG_H_
 #define	_NETINET_TCP_DEBUG_H_
 
+#include <netinet/tcpip.h> /* struct tcpiphdr */
+#include <netinet/tcp_var.h> /* struct tcpcb */
+
 struct	tcp_debug {
 	uint32_t	td_time;	/* network format */
 	short	td_act;

@@ -44,6 +44,8 @@
 #ifndef _NET_BPF_H_
 #define _NET_BPF_H_
 
+#include <sys/time.h> /* struct timeval */
+
 /* BSD style release date */
 #define	BPF_RELEASE 199606
 

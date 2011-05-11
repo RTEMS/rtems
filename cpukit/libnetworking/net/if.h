@@ -48,6 +48,7 @@
 #define __BSD_VISIBLE 1
 #endif
 #include <inttypes.h>
+#include <sys/socket.h> /* struct sockaddr */
 #endif
 
 #ifdef _KERNEL

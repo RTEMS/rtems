@@ -38,6 +38,8 @@
 #define _NETINET_IN_PCB_H_
 
 #include <sys/queue.h>
+#include <netinet/in.h> /* struct in_addr */
+#include <net/route.h>  /* struct route */
 
 /*
  * Common structure pcb for internet protocol implementation.

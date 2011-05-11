@@ -26,6 +26,9 @@
 #ifndef _IF_PPP_H_
 #define _IF_PPP_H_
 
+#include <net/ppp_defs.h> /* NPmode */
+#include <net/if.h> /* IFNAMSIZ */
+
 /*
  * Packet sizes
  */
