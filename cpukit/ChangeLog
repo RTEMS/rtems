@@ -1,5 +1,9 @@
 2011-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libmisc/shell/main_msdosfmt.c: Fixed NULL pointer access.
+
+2011-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1790/cpukit
 	* libblock/src/flashdisk.c: Fixed memset() parameters.
 

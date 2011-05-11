@@ -179,7 +179,7 @@ rtems_shell_cmd_t rtems_shell_MSDOSFMT_Alias = {
   "msdosfmt",                                /* name */
   NULL,                                      /* usage */
   "files",                                   /* topic */
-  NULL,                                      /* command */
+  rtems_shell_main_msdos_format,             /* command */
   &rtems_shell_MSDOSFMT_Command,             /* alias */
   NULL                                       /* next */
 };
