@@ -1,3 +1,10 @@
+2011-05-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/net/bpf.h, libnetworking/net/if.h,
+	libnetworking/net/if_ppp.h, libnetworking/net/if_pppvar.h
+	libnetworking/net/if_var.h, libnetworking/net/raw_cb.h,
+	libnetworking/net/slcompress.h: Make self-contained.
+
 2011-05-11	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* score/Makefile.am, score/preinstall.am,
