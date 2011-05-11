@@ -1731,7 +1731,7 @@ rtems_fdisk_read_block (rtems_flashdisk* fd,
 #if RTEMS_FDISK_TRACE
     rtems_fdisk_info (fd, "read-block: no segment mapping: %d", block);
 #endif
-    memset (buffer, fd->block_size, 0xff);
+    memset (buffer, 0xff, fd->block_size);
     return 0;
   }
 
