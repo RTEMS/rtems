@@ -1,3 +1,8 @@
+2011-05-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/Makefile.am, score/include/rtems/score/isr.h: Replace tabs with
+	spaces.
+
 2011-05-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/netinet/icmp_var.h, libnetworking/netinet/if_ether.h,
