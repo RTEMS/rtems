@@ -1,5 +1,13 @@
 2011-05-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/icmp_var.h, libnetworking/netinet/if_ether.h,
+	libnetworking/netinet/igmp.h, libnetworking/netinet/in_pcb.h,
+	libnetworking/netinet/in_var.h, libnetworking/netinet/ip.h,
+	libnetworking/netinet/ip_fw.h, libnetworking/netinet/ip_icmp.h,
+	libnetworking/netinet/ip_mroute.h, libnetworking/netinet/ip_var.h,
+	libnetworking/netinet/tcp.h, libnetworking/netinet/tcp_debug.h,
+	libnetworking/netinet/tcpip.h, libnetworking/netinet/udp_var.h:
+	Make self-contained.
 	* libnetworking/net/bpf.h, libnetworking/net/if.h,
 	libnetworking/net/if_ppp.h, libnetworking/net/if_pppvar.h
 	libnetworking/net/if_var.h, libnetworking/net/raw_cb.h,
