@@ -1,3 +1,8 @@
+2011-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/powerpc-utility.h: Added ppc_fsl_system_version*()
+	functions.
+
 2011-03-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/cpuIdent.h: Fixed warnings.

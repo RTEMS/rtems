@@ -771,6 +771,41 @@ static inline void ppc_set_processor_id(uint32_t val)
   PPC_SET_SPECIAL_PURPOSE_REGISTER(BOOKE_PIR, val);
 }
 
+static inline uint32_t ppc_fsl_system_version(void)
+{
+  return PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_SVR);
+}
+
+static inline uint32_t ppc_fsl_system_version_cid(uint32_t svr)
+{
+  return (svr >> 28) & 0xf;
+}
+
+static inline uint32_t ppc_fsl_system_version_sid(uint32_t svr)
+{
+  return (svr >> 16) & 0xfff;
+}
+
+static inline uint32_t ppc_fsl_system_version_proc(uint32_t svr)
+{
+  return (svr >> 12) & 0xf;
+}
+
+static inline uint32_t ppc_fsl_system_version_mfg(uint32_t svr)
+{
+  return (svr >> 8) & 0xf;
+}
+
+static inline uint32_t ppc_fsl_system_version_mjrev(uint32_t svr)
+{
+  return (svr >> 4) & 0xf;
+}
+
+static inline uint32_t ppc_fsl_system_version_mnrev(uint32_t svr)
+{
+  return (svr >> 0) & 0xf;
+}
+
 void ppc_code_copy(void *dest, const void *src, size_t n);
 
 #endif /* ifndef ASM */
