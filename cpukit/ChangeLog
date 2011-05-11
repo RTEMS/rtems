@@ -1,3 +1,9 @@
+2011-05-11	Chris Johns <chrisj@rtems.org>
+
+	PR 1774/filesystem
+	* libfs/src/imfs/imfs_eval.c: Updated to fix regressions found in
+	the testsuite.
+
 2011-05-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* librpc/include/rpc/auth.h, librpc/include/rpc/auth_unix.h,
@@ -48,7 +54,7 @@
 2011-04-16	Chris Johns <chrisj@rtems.org>
 
 	PR 1774/filesystem
-	* libfs/src/imfs/imfs_eval.c: Fix the IMFS eval and eval for make
+	* libfs/src/imfs/imfs_eval.c: Fix the IMFS eval anda eval for make
 	handlers to not inspect a mounted file sytems path.
 
 2011-04-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
