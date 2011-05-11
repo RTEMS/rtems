@@ -80,12 +80,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global gmp_provided 4.1.4
 %endif
 
-%if 0%{?suse11_2}
-%global mpc_provided 0.7
-%global mpfr_provided 2.4.1
-%global gmp_provided 4.3.1
-%endif
-
 %if 0%{?suse11_3}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
@@ -177,10 +171,10 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc16:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?suse11_4:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
-%{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
 
 
