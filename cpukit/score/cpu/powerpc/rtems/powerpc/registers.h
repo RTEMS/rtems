@@ -324,6 +324,10 @@ lidate */
 #define BOOKE_PID 48
 #define BOOKE_PIR 286
 
+/* Freescale Book E Implementation Standards (EIS): Hardware Implementation-Dependent Registers */
+
+#define FSL_EIS_SVR 1023
+
 /* Freescale Book E Implementation Standards (EIS): MMU Control and Status */
 
 #define FSL_EIS_MAS0 624

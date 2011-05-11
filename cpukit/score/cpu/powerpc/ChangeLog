@@ -1,3 +1,7 @@
+2011-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Added FSL_EIS_SVR define.
+
 2011-02-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Added FSL_EIS_ATBL, FSL_EIS_ATBL, and
