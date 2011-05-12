@@ -162,26 +162,26 @@ void _Scheduler_simple_Free(
 );
 
 /**
- *  _Scheduler_simple_Ready_queue_Enqueue
+ *  _Scheduler_simple_Ready_queue_enqueue
  *
  *  This routine puts @a the_thread on the ready queue
  *  at the end of its priority group.
  *  
  *  @param[in] the_thread - pointer to a thread control block
  */
-void _Scheduler_simple_Ready_queue_Enqueue(
+void _Scheduler_simple_Ready_queue_enqueue(
   Thread_Control    *the_thread
 );
 
 /**
- *  _Scheduler_simple_Ready_queue_Enqueue_first
+ *  _Scheduler_simple_Ready_queue_enqueue_first
  *
  *  This routine puts @a the_thread on to the ready queue
  *  at the beginning of its priority group.
  *  
  *  @param[in] the_thread - pointer to a thread control block
  */
-void _Scheduler_simple_Ready_queue_Enqueue_first(
+void _Scheduler_simple_Ready_queue_enqueue_first(
   Thread_Control    *the_thread
 );
 

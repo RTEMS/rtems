@@ -21,7 +21,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/schedulersimple.h>
 
-void _Scheduler_simple_Ready_queue_Enqueue(
+void _Scheduler_simple_Ready_queue_enqueue(
   Thread_Control    *the_thread
 )
 {

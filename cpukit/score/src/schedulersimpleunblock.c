@@ -24,7 +24,7 @@ void _Scheduler_simple_Unblock(
   Thread_Control    *the_thread
 )
 {
-  _Scheduler_simple_Ready_queue_Enqueue(the_thread);
+  _Scheduler_simple_Ready_queue_enqueue(the_thread);
 
   /*
    *  If the thread that was unblocked is more important than the heir,

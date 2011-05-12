@@ -44,7 +44,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_Requeue(
   _Chain_Extract_unprotected( &the_thread->Object.Node );
 
   /* enqueue */
-  _Scheduler_simple_Ready_queue_Enqueue( the_thread );
+  _Scheduler_simple_Ready_queue_enqueue( the_thread );
 }
 
 /**@}*/

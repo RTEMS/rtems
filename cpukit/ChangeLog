@@ -1,3 +1,14 @@
+2011-05-12	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* score/include/rtems/score/schedulersimple.h,
+	score/inline/rtems/score/schedulersimple.inl,
+	score/src/schedulersimpleenqueue.c,
+	score/src/schedulersimpleenqueuefirst.c,
+	score/src/schedulersimplereadyqueueenqueue.c,
+	score/src/schedulersimplereadyqueueenqueuefirst.c,
+	score/src/schedulersimpleunblock.c: Correct names as pointed out by
+	Gedare.
+
 2011-05-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1788/cpukit

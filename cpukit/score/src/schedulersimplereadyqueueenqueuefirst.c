@@ -20,7 +20,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/schedulersimple.h>
 
-void _Scheduler_simple_Ready_queue_Enqueue_first(
+void _Scheduler_simple_Ready_queue_enqueue_first(
   Thread_Control    *the_thread
 )
 {

@@ -25,5 +25,5 @@ void _Scheduler_simple_Enqueue(
   Thread_Control            *the_thread
 )
 {
-  _Scheduler_simple_Ready_queue_Enqueue( the_thread );
+  _Scheduler_simple_Ready_queue_enqueue( the_thread );
 }
