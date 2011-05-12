@@ -1,3 +1,11 @@
+2011-05-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1788/cpukit
+	* score/include/rtems/score/percpu.h,
+	score/include/rtems/score/thread.h: Make time of last context switch
+	part of per cpu information since each core has a different context
+	switch to track.
+
 2011-05-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/ucred.h: Make self-contained.

@@ -24,6 +24,7 @@
 #ifdef ASM
   #include <rtems/asm.h>
 #else
+  #include <rtems/score/timestamp.h>
   #if defined(RTEMS_SMP)
     #include <rtems/score/smplock.h>
   #endif
@@ -51,6 +52,8 @@ extern "C" {
 #endif
 
 #ifndef ASM
+#include <rtems/score/timestamp.h>
+
 #ifndef __THREAD_CONTROL_DEFINED__
 #define __THREAD_CONTROL_DEFINED__
 typedef struct Thread_Control_struct Thread_Control;
@@ -136,6 +139,8 @@ typedef struct {
   /** This is set to true when this CPU needs to run the dispatcher. */
   volatile bool dispatch_necessary;
 
+  /** This is the time of the last context switch on this CPU. */
+  Timestamp_Control time_of_last_context_switch;
 } Per_CPU_Control;
 #endif
 
@@ -249,6 +254,11 @@ void _Per_CPU_Initialize(void);
   _Per_CPU_Information[bsp_smp_processor_id()].interrupt_stack_high
 #define _Thread_Dispatch_necessary \
   _Per_CPU_Information[bsp_smp_processor_id()].dispatch_necessary
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+  #define _Thread_Time_of_last_context_switch \
+    _Per_CPU_Information[bsp_smp_processor_id()].time_of_last_context_switch
+#endif
+
 
 #endif  /* ASM */
 

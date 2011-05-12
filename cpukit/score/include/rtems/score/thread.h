@@ -492,16 +492,6 @@ SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
  */
 SCORE_EXTERN struct _reent **_Thread_libc_reent;
 
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-
-  /**
-   * This contains the time since boot when the last context switch occurred.
-   * By placing it in the BSS, it will automatically be zeroed out at
-   * system initialization and does not need to be known outside this
-   * file.
-   */
-  SCORE_EXTERN Timestamp_Control _Thread_Time_of_last_context_switch;
-#endif
 
 /**
  *  This routine performs the initialization necessary for this handler.
