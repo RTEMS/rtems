@@ -40,6 +40,8 @@
 #ifndef _NFS_NFSPROTO_H_
 #define _NFS_NFSPROTO_H_
 
+#include <sys/mount.h> /* fhandle_t */
+
 /*
  * nfs definitions as per the Version 2 and 3 specs
  */

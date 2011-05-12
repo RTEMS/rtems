@@ -36,6 +36,11 @@
 #ifndef _NFS_NFSDISKLESS_H_
 #define _NFS_NFSDISKLESS_H_
 
+#include <netinet/in.h> /* struct sockaddr_in */
+#include <net/if.h>
+#include <nfs/nfsproto.h> /* NFSX_V3FHMAX */
+#include <nfsclient/nfsargs.h> /* struct nfs_args */
+
 /*
  * Structure that must be initialized for a diskless nfs client.
  * This structure is used by nfs_mountroot() to set up the root and swap

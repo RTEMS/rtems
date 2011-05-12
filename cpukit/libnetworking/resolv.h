@@ -61,6 +61,7 @@
 #include <sys/types.h>
 #include <sys/cdefs.h>
 #include <stdio.h>
+#include <netinet/in.h> /* struct in_addr */
 
 /*
  * Revision information.  This is the release date in YYYYMMDD format.

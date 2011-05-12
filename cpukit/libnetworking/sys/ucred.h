@@ -37,6 +37,10 @@
 #ifndef _SYS_UCRED_H_
 #define	_SYS_UCRED_H_
 
+#if defined(__rtems__)
+#include <sys/param.h> /* NGROUPS */
+#endif
+
 /*
  * Credentials.
  */
