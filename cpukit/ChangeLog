@@ -1,5 +1,7 @@
 2011-05-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/ucred.h: Make self-contained.
+	* libnetworking/nfsclient/nfsdiskless.h: Make self-contained.
 	* libnetworking/nfs/nfsproto.h: Make self-contained.
 	* libnetworking/resolv.h: Make self-contained.
 
