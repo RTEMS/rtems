@@ -30,7 +30,8 @@ libcpuuse_a_SOURCES = cpuuse/cpuusagereport.c cpuuse/cpuusagereset.c \
 
 ## devnull
 noinst_LIBRARIES += libdevnull.a
-libdevnull_a_SOURCES = devnull/devnull.c devnull/devnull.h
+libdevnull_a_SOURCES = devnull/devnull.c devnull/devnull.h \
+    devnull/devzero.c devnull/devzero.h
 
 ## dummy
 EXTRA_DIST += dummy/README

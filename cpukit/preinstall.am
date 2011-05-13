@@ -309,6 +309,10 @@ $(PROJECT_INCLUDE)/rtems/devnull.h: libmisc/devnull/devnull.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/devnull.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/devnull.h
 
+$(PROJECT_INCLUDE)/rtems/devzero.h: libmisc/devnull/devzero.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/devzero.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/devzero.h
+
 $(PROJECT_INCLUDE)/rtems/dumpbuf.h: libmisc/dumpbuf/dumpbuf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dumpbuf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dumpbuf.h

@@ -140,7 +140,8 @@ include_rtems_HEADERS += libmisc/capture/capture.h \
 include_rtems_HEADERS += libmisc/cpuuse/cpuuse.h
 
 ## devnull
-include_rtems_HEADERS += libmisc/devnull/devnull.h
+include_rtems_HEADERS += libmisc/devnull/devnull.h \
+    libmisc/devnull/devzero.h
 
 ## dumpbuf
 include_rtems_HEADERS += libmisc/dumpbuf/dumpbuf.h
