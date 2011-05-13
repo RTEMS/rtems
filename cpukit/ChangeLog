@@ -1,3 +1,10 @@
+2011-05-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmisc/devnull/devzero.c, libmisc/devnull/devzero.h: New files.
+	* libmisc/Makefile.am, Makefile.am, preinstall.am: Reflect changes
+	above.
+	* sapi/include/confdefs.h: Added "/dev/zero" driver.
+
 2011-05-12	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* score/include/rtems/score/schedulersimple.h,

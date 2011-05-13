@@ -971,6 +971,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #include <rtems/devnull.h>
 #endif
 
+#ifdef CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
+  #include <rtems/devzero.h>
+#endif
+
 #ifdef CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
   /* the ide driver needs the ATA driver */
   #ifndef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
@@ -1008,6 +1012,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
       DEVNULL_DRIVER_TABLE_ENTRY,
     #endif
+    #ifdef CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
+      DEVZERO_DRIVER_TABLE_ENTRY,
+    #endif
     #ifdef CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
       IDE_CONTROLLER_DRIVER_TABLE_ENTRY,
     #endif
@@ -1026,6 +1033,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
         !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER) && \
+        !defined(CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER) && \
