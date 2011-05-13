@@ -1,3 +1,7 @@
+2011-05-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sp21/init.c, sp21/sp21.doc sp21/sp21.scn: New test cases.
+
 2011-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp39/init.c: Fix tests broken in warning pass.

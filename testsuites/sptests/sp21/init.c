@@ -15,12 +15,14 @@
 
 #include <tmacros.h>
 #include <rtems/devnull.h>
-
+#include <rtems/devzero.h>
+#include <rtems/libio.h>
 
 #define PRIurtems_device_major_number PRIu32
 
 #define STUB_DRIVER_MAJOR     0x2
-#define NO_DRIVER_MAJOR       0x3
+#define ZERO_DRIVER_MAJOR     0x3
+#define NO_DRIVER_MAJOR       0x4
 #define INVALID_DRIVER_MAJOR  \
      (rtems_configuration_get_number_of_device_drivers() + 1)
 
@@ -204,6 +206,45 @@ void do_test_io_lookup_name(void)
   directive_failed( sc, "lookup /dev/null" );
 }
 
+void do_test_zero_driver(void)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  char in = 'I';
+  rtems_libio_rw_args_t rw_in = {
+    .buffer = &in,
+    .count = sizeof(in)
+  };
+  char out = 'O';
+  rtems_libio_rw_args_t rw_out = {
+    .buffer = &out,
+    .count = sizeof(out)
+  };
+
+  puts( "-----  TESTING THE ZERO DRIVER CHECKS  -----" );
+
+  sc = rtems_io_initialize( ZERO_DRIVER_MAJOR, 0, NULL );
+  rtems_test_assert( sc == RTEMS_TOO_MANY );
+
+  sc = rtems_io_open( ZERO_DRIVER_MAJOR, 0, NULL );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_io_close( ZERO_DRIVER_MAJOR, 0, NULL );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_io_read( ZERO_DRIVER_MAJOR, 0, &rw_in );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( in == 0 );
+  rtems_test_assert( rw_in.bytes_moved == sizeof(in) );
+
+  sc = rtems_io_write( ZERO_DRIVER_MAJOR, 0, &rw_out );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( out == 'O' );
+  rtems_test_assert( rw_out.bytes_moved == sizeof(out) );
+
+  sc = rtems_io_control( ZERO_DRIVER_MAJOR, 0, NULL );
+  rtems_test_assert( sc == RTEMS_IO_ERROR );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -214,6 +255,8 @@ rtems_task Init(
 
   do_test_io_lookup_name();
 
+  do_test_zero_driver();
+
   puts( "*** END OF TEST 21 ***" );
   rtems_test_exit( 0 );
 }
@@ -223,6 +266,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1

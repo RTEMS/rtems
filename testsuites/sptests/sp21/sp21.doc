@@ -25,3 +25,5 @@ concepts:
 
   b.  Verifies all I/O manager directives call and return from the driver
       entry points in the driver address table.
+
+  c.  Check that zero driver works.

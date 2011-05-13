@@ -28,4 +28,5 @@ rtems_io_unregister_driver - RTEMS_SUCCESSFUL
 rtems_io_lookup_name( "", &info ) - RTEMS_UNSATISFIED
 rtems_io_lookup_name( "/dev", &info ) - RTEMS_UNSATISFIED
 rtems_io_lookup_name( "/dev/null", &info ) - RTEMS_SUCCESSFUL
+-----  TESTING THE ZERO DRIVER CHECKS  -----
 *** END OF TEST 21 ***
