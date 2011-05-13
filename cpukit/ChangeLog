@@ -1,5 +1,9 @@
 2011-05-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/mkrootfs.h: Make self-contained.
+
+2011-05-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/Makefile.am: Unconditionally descend into src/nfsclient.
 	Include subdirs.am.
 
