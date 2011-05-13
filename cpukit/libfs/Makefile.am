@@ -5,12 +5,7 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-# Pick up nfsclient
-if LIBNETWORKING
-NFSCLIENT_SUBDIR= src/nfsclient
-endif
-SUBDIRS = $(NFSCLIENT_SUBDIR)
-DIST_SUBDIRS = $(SUBDIRS)
+SUBDIRS = src/nfsclient
 
 EXTRA_DIST = README
 
@@ -100,4 +95,5 @@ librfs_a_SOURCES = \
 
 # ---
 include $(srcdir)/preinstall.am
+include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
