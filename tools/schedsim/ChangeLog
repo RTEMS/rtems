@@ -1,3 +1,9 @@
+2011-05-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/interr.c: Minimize diffs to cpukit/score/src/interr.c.
+	* rtems/sched_cpu/rtems/score/cpu.h: 
+	Incorporate parts of former posix BSP.
+
 2011-04-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* README: New file.

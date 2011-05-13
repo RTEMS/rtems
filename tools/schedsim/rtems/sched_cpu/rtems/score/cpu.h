@@ -39,6 +39,9 @@
 extern "C" {
 #endif
 
+#include <stdio.h>  /* fprintf */
+#include <stdlib.h> /* exit */
+
 #include <rtems/score/no_cpu.h>            /* pick up machine definitions */
 #ifndef ASM
 #include <rtems/score/types.h>
@@ -919,6 +922,8 @@ uint32_t   _CPU_ISR_Get_level( void );
  */
 #define _CPU_Fatal_halt( _error ) \
   { \
+    fprintf( stderr, "FATAL ERROR!!\n" ); \
+    exit( -1 ); \
   }
 
 /* end of Fatal Error manager macros */

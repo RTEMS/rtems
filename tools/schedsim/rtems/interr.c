@@ -22,9 +22,6 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userext.h>
 
-#include <stdlib.h>
-#include <stdio.h>
-
 /*PAGE
  *
  *  _Internal_error_Occurred
@@ -63,8 +60,7 @@ void _Internal_error_Occurred(
 
   _System_state_Set( SYSTEM_STATE_FAILED );
 
-  fprintf( stderr, "FATAL ERROR!!\n" );
-  exit( -1 );
+  _CPU_Fatal_halt( the_error );
 
   /* will not return from this routine */
   while (true);
