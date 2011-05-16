@@ -16,41 +16,64 @@ include_HEADERS = include/rtems.h
 
 # include/rtems/rtems
 include_rtems_rtemsdir = $(includedir)/rtems/rtems
+include_rtems_rtems_HEADERS =
 
-include_rtems_rtems_HEADERS = include/rtems/rtems/asr.h \
-    include/rtems/rtems/attr.h include/rtems/rtems/barrier.h \
-    include/rtems/rtems/cache.h include/rtems/rtems/clock.h \
-    include/rtems/rtems/config.h include/rtems/rtems/dpmem.h \
-    include/rtems/rtems/event.h include/rtems/rtems/eventset.h \
-    include/rtems/rtems/intr.h include/rtems/rtems/message.h \
-    include/rtems/rtems/modes.h include/rtems/rtems/object.h \
-    include/rtems/rtems/options.h include/rtems/rtems/part.h \
-    include/rtems/rtems/ratemon.h include/rtems/rtems/region.h \
-    include/rtems/rtems/rtemsapi.h include/rtems/rtems/sem.h \
-    include/rtems/rtems/signal.h include/rtems/rtems/status.h \
-    include/rtems/rtems/support.h include/rtems/rtems/tasks.h \
-    include/rtems/rtems/timer.h include/rtems/rtems/types.h \
-    mainpage.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/asr.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/attr.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/barrier.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/cache.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/clock.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/config.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/dpmem.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/event.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/eventset.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/intr.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/message.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/modes.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/object.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/options.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/part.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/ratemon.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/region.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/rtemsapi.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/sem.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/signal.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/status.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/support.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/tasks.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/timer.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/types.h
+include_rtems_rtems_HEADERS += mainpage.h
 
 if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined
-include_rtems_rtems_HEADERS += include/rtems/rtems/eventmp.h \
-    include/rtems/rtems/mp.h include/rtems/rtems/msgmp.h \
-    include/rtems/rtems/partmp.h include/rtems/rtems/regionmp.h \
-    include/rtems/rtems/semmp.h include/rtems/rtems/signalmp.h \
-    include/rtems/rtems/taskmp.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/eventmp.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/mp.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/msgmp.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/partmp.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/regionmp.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/semmp.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/signalmp.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/taskmp.h
 endif
 
-include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl \
-    inline/rtems/rtems/attr.inl inline/rtems/rtems/barrier.inl \
-    inline/rtems/rtems/dpmem.inl \
-    inline/rtems/rtems/event.inl inline/rtems/rtems/eventset.inl \
-    inline/rtems/rtems/message.inl inline/rtems/rtems/modes.inl \
-    inline/rtems/rtems/options.inl inline/rtems/rtems/part.inl \
-    inline/rtems/rtems/ratemon.inl inline/rtems/rtems/region.inl \
-    inline/rtems/rtems/sem.inl inline/rtems/rtems/status.inl \
-    inline/rtems/rtems/support.inl inline/rtems/rtems/tasks.inl \
-    inline/rtems/rtems/timer.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/attr.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/barrier.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/dpmem.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/event.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/eventset.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/message.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/modes.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/options.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/part.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/ratemon.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/region.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/sem.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/status.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/support.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/tasks.inl
+include_rtems_rtems_HEADERS += inline/rtems/rtems/timer.inl
 
 ## src
 librtems_a_SOURCES = src/rtemsbuildid.c src/rtemsbuildname.c \

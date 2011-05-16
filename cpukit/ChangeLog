@@ -1,5 +1,6 @@
 2011-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/Makefile.am: Reformat.
 	* Makefile.am: Reformat.
 	* posix/Makefile.am: Reformat.
 
