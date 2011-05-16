@@ -1,5 +1,9 @@
 2011-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Reformat.
+
+2011-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/Makefile.am: Add posixtime.h.
 	* posix/src/clockgetres.c, posix/src/clockgettime.c,
 	posix/src/clocksettime.c: 
