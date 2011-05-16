@@ -23,6 +23,8 @@
 
 #include <rtems/seterr.h>
 
+#include "posixtime.h"
+
 /*PAGE
  *
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
@@ -45,11 +47,11 @@ int clock_settime(
     _Thread_Enable_dispatch();
   }
 #ifdef _POSIX_CPUTIME
-  else if ( clock_id == CLOCK_PROCESS_CPUTIME )
+  else if ( clock_id == CLOCK_PROCESS_CPUTIME_ID )
     rtems_set_errno_and_return_minus_one( ENOSYS );
 #endif
 #ifdef _POSIX_THREAD_CPUTIME
-  else if ( clock_id == CLOCK_THREAD_CPUTIME )
+  else if ( clock_id == CLOCK_THREAD_CPUTIME_ID )
     rtems_set_errno_and_return_minus_one( ENOSYS );
 #endif
   else
