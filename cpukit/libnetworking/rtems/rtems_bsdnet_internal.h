@@ -12,11 +12,11 @@
 #ifndef _RTEMS_RTEMS_BSDNET_INTERNAL_H
 #define _RTEMS_RTEMS_BSDNET_INTERNAL_H
 
+#include <rtems.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems.h>
 
 typedef	unsigned int		vm_offset_t;
 typedef	long long		vm_ooffset_t;

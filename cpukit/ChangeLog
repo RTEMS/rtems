@@ -1,5 +1,10 @@
 2011-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_bsdnet_internal.h: Move 
+	#include <rtems.h> out of C++-guard.
+
+2011-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/Makefile.am: Reformat.
 	* rtems/Makefile.am: Reformat.
 	* Makefile.am: Reformat.
