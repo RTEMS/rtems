@@ -24,29 +24,42 @@ include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
 
 if HAS_PTHREADS
 # include
-include_HEADERS = include/aio.h include/mqueue.h \
-    include/semaphore.h
+include_HEADERS = include/aio.h
+include_HEADERS += include/mqueue.h
+include_HEADERS += include/semaphore.h
 
 # include/rtems/posix
 include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
+include_rtems_posix_HEADERS += include/rtems/posix/cancel.h
+include_rtems_posix_HEADERS += include/rtems/posix/cond.h
+include_rtems_posix_HEADERS += include/rtems/posix/config.h
+include_rtems_posix_HEADERS += include/rtems/posix/key.h
+include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
+include_rtems_posix_HEADERS += include/rtems/posix/mutex.h
+include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
+include_rtems_posix_HEADERS += include/rtems/posix/priority.h
+include_rtems_posix_HEADERS += include/rtems/posix/psignal.h
+include_rtems_posix_HEADERS += include/rtems/posix/pthread.h
+include_rtems_posix_HEADERS += include/rtems/posix/ptimer.h
+include_rtems_posix_HEADERS += include/rtems/posix/semaphore.h
+include_rtems_posix_HEADERS += include/rtems/posix/threadsup.h
+include_rtems_posix_HEADERS += include/rtems/posix/time.h
+include_rtems_posix_HEADERS += include/rtems/posix/timer.h
+include_rtems_posix_HEADERS += include/rtems/posix/barrier.h
+include_rtems_posix_HEADERS += include/rtems/posix/rwlock.h
+include_rtems_posix_HEADERS += include/rtems/posix/spinlock.h
 
-include_rtems_posix_HEADERS += include/rtems/posix/cancel.h \
-    include/rtems/posix/cond.h include/rtems/posix/config.h \
-    include/rtems/posix/key.h include/rtems/posix/mqueue.h \
-    include/rtems/posix/mutex.h include/rtems/posix/posixapi.h \
-    include/rtems/posix/priority.h include/rtems/posix/psignal.h \
-    include/rtems/posix/pthread.h include/rtems/posix/ptimer.h \
-    include/rtems/posix/semaphore.h include/rtems/posix/threadsup.h \
-    include/rtems/posix/time.h include/rtems/posix/timer.h \
-    include/rtems/posix/barrier.h include/rtems/posix/rwlock.h \
-    include/rtems/posix/spinlock.h
-
-include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl \
-    inline/rtems/posix/key.inl inline/rtems/posix/mqueue.inl \
-    inline/rtems/posix/mutex.inl inline/rtems/posix/pthread.inl \
-    inline/rtems/posix/priority.inl inline/rtems/posix/semaphore.inl \
-    inline/rtems/posix/timer.inl inline/rtems/posix/barrier.inl \
-    inline/rtems/posix/rwlock.inl inline/rtems/posix/spinlock.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/key.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/mqueue.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/mutex.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/pthread.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/priority.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/semaphore.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/timer.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/barrier.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/rwlock.inl
+include_rtems_posix_HEADERS += inline/rtems/posix/spinlock.inl
 
 ## src
 libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \
