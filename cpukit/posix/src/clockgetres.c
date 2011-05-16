@@ -28,6 +28,8 @@
 
 #include <rtems/seterr.h>
 
+#include "posixtime.h"
+
 /*PAGE
  *
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
@@ -48,8 +50,8 @@ int clock_getres(
      */
 
     case CLOCK_REALTIME:
-    case CLOCK_PROCESS_CPUTIME:
-    case CLOCK_THREAD_CPUTIME:
+    case CLOCK_PROCESS_CPUTIME_ID:
+    case CLOCK_THREAD_CPUTIME_ID:
       if ( res ) {
         res->tv_sec = rtems_configuration_get_microseconds_per_tick() /
             TOD_MICROSECONDS_PER_SECOND;
