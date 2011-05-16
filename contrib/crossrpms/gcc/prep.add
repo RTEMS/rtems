@@ -45,8 +45,11 @@ cd ..
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
 %if %{with gcc_stdint}
-rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
+  rm gcc-%{gcc_pkgvers}/newlib/libc/include/stdint.h
 %endif
+  # Make sure not to be using GPL'ed sources
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/linux
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/rdos
 %endif
 
 %if 0%{?_build_mpfr}
