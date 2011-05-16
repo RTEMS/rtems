@@ -9,29 +9,40 @@ noinst_LIBRARIES = libcsupport.a
 libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS = include/console.h include/clockdrv.h \
-    include/rtems/framebuffer.h include/iosupp.h include/ringbuf.h \
-    include/rtc.h include/spurious.h include/timerdrv.h include/vmeintr.h
+include_rtems_HEADERS = include/console.h
+include_rtems_HEADERS += include/clockdrv.h
+include_rtems_HEADERS += include/rtems/framebuffer.h
+include_rtems_HEADERS += include/iosupp.h
+include_rtems_HEADERS += include/ringbuf.h
+include_rtems_HEADERS += include/rtc.h
+include_rtems_HEADERS += include/spurious.h
+include_rtems_HEADERS += include/timerdrv.h
+include_rtems_HEADERS += include/vmeintr.h
 
 ## motorola
 
 include_rtems_motoroladir = $(includedir)/rtems/motorola
 
-include_rtems_motorola_HEADERS = include/motorola/mc68230.h \
-    include/motorola/mc68681.h
+include_rtems_motorola_HEADERS = include/motorola/mc68230.h
+include_rtems_motorola_HEADERS += include/motorola/mc68681.h
 
 ## rtems
-include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
-    include/rtems/libcsupport.h include/rtems/libio.h include/rtems/libio_.h \
-    include/rtems/malloc.h include/rtems/termiostypes.h \
-    include/rtems/gxx_wrappers.h
+include_rtems_HEADERS += include/rtems/assoc.h
+include_rtems_HEADERS += include/rtems/error.h
+include_rtems_HEADERS += include/rtems/libcsupport.h
+include_rtems_HEADERS += include/rtems/libio.h
+include_rtems_HEADERS += include/rtems/libio_.h
+include_rtems_HEADERS += include/rtems/malloc.h
+include_rtems_HEADERS += include/rtems/termiostypes.h
+include_rtems_HEADERS += include/rtems/gxx_wrappers.h
 
 ## zilog
 
 include_rtems_zilogdir = $(includedir)/rtems/zilog
 
-include_rtems_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
-    include/zilog/z8536.h
+include_rtems_zilog_HEADERS = include/zilog/z8036.h
+include_rtems_zilog_HEADERS += include/zilog/z8530.h
+include_rtems_zilog_HEADERS += include/zilog/z8536.h
 
 ##  General stuff
 ERROR_C_FILES = src/error.c src/__assert.c
