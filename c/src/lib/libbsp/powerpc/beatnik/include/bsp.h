@@ -63,6 +63,8 @@ BSP_getDiscoveryVersion(int assertion);
  */
 #define BSP_INTERRUPT_STACK_SIZE          (16 * 1024)
 
+#define CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+
 /*
  *  base address definitions for several devices
  */

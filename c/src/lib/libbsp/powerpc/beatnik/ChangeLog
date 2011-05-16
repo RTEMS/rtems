@@ -1,3 +1,7 @@
+2011-05-16	Till Straumann <strauman@slac.stanford.edu>
+
+	* include/bsp.h: define CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* irq/discovery_pic.c, network/if_em/rtemscompat_defs.h,
