@@ -1,3 +1,7 @@
+2011-05-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Reformat.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* cpu.c, rtems/score/cpu.h, rtems/score/m68k.h:
