@@ -569,9 +569,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *
  * The scheduler configuration allows an application to select the 
  * scheduling policy to use.  The supported configurations are:
- *  CONFIGURE_SCHEDULER_USER     - user provided scheduler
- *  CONFIGURE_SCHEDULER_PRIORITY - Deterministic Priority Scheduler
- *  CONFIGURE_SCHEDULER_SIMPLE   - Light-weight Priority Scheduler
+ *  CONFIGURE_SCHEDULER_USER       - user provided scheduler
+ *  CONFIGURE_SCHEDULER_PRIORITY   - Deterministic Priority Scheduler
+ *  CONFIGURE_SCHEDULER_SIMPLE     - Light-weight Priority Scheduler
+ *  CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
  * 
  * If no configuration is specified by the application, then 
  * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
@@ -589,11 +590,20 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #error "CONFIGURE_ERROR: CONFIGURE_SCHEDULER_USER requires CONFIGURE_SCHEDULER_USER_ENTRY_POINTS"
 #endif
 
+#if !defined(RTEMS_SMP)
+  #undef CONFIGURE_SCHEDULER_SIMPLE_SMP
+#endif
+
 /* If no scheduler is specified, the priority scheduler is default. */
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
-    !defined(CONFIGURE_SCHEDULER_SIMPLE)
-  #define CONFIGURE_SCHEDULER_PRIORITY
+    !defined(CONFIGURE_SCHEDULER_SIMPLE) && \
+    !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP)
+  #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
+    #define CONFIGURE_SCHEDULER_SIMPLE_SMP
+  #else
+    #define CONFIGURE_SCHEDULER_PRIORITY
+  #endif
 #endif
 
 /* 
@@ -623,6 +633,24 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   /**
    * define the memory used by the simple scheduler
+   */
+  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
+    _Configure_From_workspace( sizeof(Chain_Control) ) \
+  )
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
+#endif
+
+/*
+ * If the Simple SMP Priority Scheduler is selected, then configure for it.
+ */
+#if defined(CONFIGURE_SCHEDULER_SIMPLE_SMP)
+  #include <rtems/score/schedulersimplesmp.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_SIMPLE_SMP_ENTRY_POINTS
+
+  /**
+   * Define the memory used by the Simple SMP Scheduler
+   *
+   * NOTE: This is the same as the Simple Scheduler
    */
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
     _Configure_From_workspace( sizeof(Chain_Control) ) \

@@ -1,3 +1,13 @@
+2011-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1789/cpukit
+	* sapi/include/confdefs.h, score/Makefile.am, score/preinstall.am: Add
+	Simple SMP Priority Scheduler.
+	* score/include/rtems/score/schedulersimplesmp.h,
+	score/src/schedulersimplesmpblock.c,
+	score/src/schedulersimplesmpschedule.c,
+	score/src/schedulersimplesmpunblock.c: New files.
+
 2011-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/Makefile.am: Reformat.
