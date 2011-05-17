@@ -11,8 +11,9 @@ include_rtems_HEADERS = rtems/asm.h
 #include_rtems_sparc64_HEADERS = 
 
 include_rtems_scoredir = $(includedir)/rtems/score
-include_rtems_score_HEADERS = rtems/score/sparc64.h rtems/score/cpu.h \
-    rtems/score/types.h
+include_rtems_score_HEADERS = rtems/score/sparc64.h
+include_rtems_score_HEADERS += rtems/score/cpu.h
+include_rtems_score_HEADERS += rtems/score/types.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = context.S cpu.c
