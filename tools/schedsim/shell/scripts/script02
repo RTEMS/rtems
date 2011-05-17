@@ -1,9 +1,0 @@
-echo "*** TEST 02 ***"
-rtems_init
-echo "=== Create 0x0a010001 ==="
-task_create TA1 1
-task_wake_after 5
-clock_tick 7
-echo "*** END OF TEST 2 ***"
-exit
-# We will not get here

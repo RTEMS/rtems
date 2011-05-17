@@ -41,13 +41,6 @@ AC_ARG_ENABLE([docs],
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/build])
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/cpu])
 
-# FIXME: tools/schedsim has a lot of problems, don't build by default
-AC_ARG_ENABLE([schedsim],
-  [AS_HELP_STRING([--enable-schedsim],[enable building tools/schedsim (default::disabled)])])
-AS_IF([test "$enable_schedsim" = yes],[
-RTEMS_BUILD_CONFIG_SUBDIRS([tools/schedsim])
-])
-
 case $enable_tests in
 yes | samples )
   RTEMS_BUILD_CONFIG_SUBDIRS([testsuites/tools])
