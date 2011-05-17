@@ -26,7 +26,8 @@ libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(libnetworking_CPPFLAGS)
 ## poll.h is not in the list because RTEMS does not have poll()
 ## and installing poll.h confuses autoconf.
 include_HEADERS = netdb.h
-include_HEADERS += resolv.h syslog.h
+include_HEADERS += resolv.h
+include_HEADERS += syslog.h
 
 libnetworking_a_SOURCES = opt_atalk.h opt_bdg.h opt_compat.h opt_inet6.h \
     opt_inet.h opt_ipfw.h opt_ipx.h opt_mac.h opt_mrouting.h opt_netgraph.h \
@@ -38,8 +39,10 @@ libnetworking_a_SOURCES += bpfilter.h
 
 include_arpadir = $(includedir)/arpa
 
-include_arpa_HEADERS = arpa/ftp.h arpa/inet.h arpa/nameser.h \
-    arpa/nameser_compat.h
+include_arpa_HEADERS = arpa/ftp.h
+include_arpa_HEADERS += arpa/inet.h
+include_arpa_HEADERS += arpa/nameser.h
+include_arpa_HEADERS += arpa/nameser_compat.h
 
 ## kern
 
@@ -51,8 +54,10 @@ libnetworking_a_SOURCES += kern/kern_mib.c kern/kern_subr.c \
 
 include_machinedir = $(includedir)/machine
 
-include_machine_HEADERS = machine/cpu.h machine/cpufunc.h \
-    machine/in_cksum.h machine/vmparam.h
+include_machine_HEADERS = machine/cpu.h
+include_machine_HEADERS += machine/cpufunc.h
+include_machine_HEADERS += machine/in_cksum.h
+include_machine_HEADERS += machine/vmparam.h
 
 libnetworking_a_SOURCES += machine/limits.h
 
@@ -60,10 +65,22 @@ libnetworking_a_SOURCES += machine/limits.h
 
 include_netdir = $(includedir)/net
 
-include_net_HEADERS = net/bpf.h net/ethernet.h net/if.h net/if_arp.h \
-    net/if_dl.h net/if_llc.h net/if_ppp.h net/if_types.h net/if_var.h \
-    net/netisr.h net/ppp_defs.h net/radix.h net/raw_cb.h \
-    net/route.h net/if_pppvar.h net/slcompress.h
+include_net_HEADERS = net/bpf.h
+include_net_HEADERS += net/ethernet.h
+include_net_HEADERS += net/if.h
+include_net_HEADERS += net/if_arp.h
+include_net_HEADERS += net/if_dl.h
+include_net_HEADERS += net/if_llc.h
+include_net_HEADERS += net/if_ppp.h
+include_net_HEADERS += net/if_types.h
+include_net_HEADERS += net/if_var.h
+include_net_HEADERS += net/netisr.h
+include_net_HEADERS += net/ppp_defs.h
+include_net_HEADERS += net/radix.h
+include_net_HEADERS += net/raw_cb.h
+include_net_HEADERS += net/route.h
+include_net_HEADERS += net/if_pppvar.h
+include_net_HEADERS += net/slcompress.h
 include_net_HEADERS += net/if_media.h
 include_net_HEADERS += net/ppp_comp.h
 
@@ -75,13 +92,28 @@ libnetworking_a_SOURCES += net/if.c net/if_ethersubr.c net/if_loop.c \
 
 include_netinetdir = $(includedir)/netinet
 
-include_netinet_HEADERS = netinet/icmp_var.h netinet/if_ether.h \
-    netinet/igmp.h netinet/igmp_var.h netinet/in.h netinet/in_pcb.h \
-    netinet/in_systm.h netinet/in_var.h netinet/ip.h netinet/ip_fw.h \
-    netinet/ip_icmp.h netinet/ip_mroute.h netinet/ip_var.h netinet/tcp.h \
-    netinet/tcp_debug.h netinet/tcp_fsm.h netinet/tcp_seq.h \
-    netinet/tcp_timer.h netinet/tcp_var.h netinet/tcpip.h netinet/udp.h \
-    netinet/udp_var.h
+include_netinet_HEADERS = netinet/icmp_var.h
+include_netinet_HEADERS += netinet/if_ether.h
+include_netinet_HEADERS += netinet/igmp.h
+include_netinet_HEADERS += netinet/igmp_var.h
+include_netinet_HEADERS += netinet/in.h
+include_netinet_HEADERS += netinet/in_pcb.h
+include_netinet_HEADERS += netinet/in_systm.h
+include_netinet_HEADERS += netinet/in_var.h
+include_netinet_HEADERS += netinet/ip.h
+include_netinet_HEADERS += netinet/ip_fw.h
+include_netinet_HEADERS += netinet/ip_icmp.h
+include_netinet_HEADERS += netinet/ip_mroute.h
+include_netinet_HEADERS += netinet/ip_var.h
+include_netinet_HEADERS += netinet/tcp.h
+include_netinet_HEADERS += netinet/tcp_debug.h
+include_netinet_HEADERS += netinet/tcp_fsm.h
+include_netinet_HEADERS += netinet/tcp_seq.h
+include_netinet_HEADERS += netinet/tcp_timer.h
+include_netinet_HEADERS += netinet/tcp_var.h
+include_netinet_HEADERS += netinet/tcpip.h
+include_netinet_HEADERS += netinet/udp.h
+include_netinet_HEADERS += netinet/udp_var.h
 
 libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/in_cksum.c netinet/in_pcb.c netinet/in_proto.c netinet/in_rmx.c \
@@ -105,15 +137,20 @@ libnetworking_a_SOURCES += nfs/bootp_subr.c
 ## nfsclient
 include_nfsclientdir = $(includedir)/nfsclient
 
-include_nfsclient_HEADERS = nfsclient/nfsargs.h nfsclient/nfsdiskless.h
+include_nfsclient_HEADERS = nfsclient/nfsargs.h
+include_nfsclient_HEADERS += nfsclient/nfsdiskless.h
 
 ## rtems
 
 include_rtemsdir = $(includedir)/rtems
 
-include_rtems_HEADERS = rtems/rtems_bsdnet.h rtems/rtems_bsdnet_internal.h \
-    rtems/dhcp.h rtems/rtems_dhcp_failsafe.h rtems/tftp.h rtems/ftpfs.h \
-    rtems/mkrootfs.h
+include_rtems_HEADERS = rtems/rtems_bsdnet.h
+include_rtems_HEADERS += rtems/rtems_bsdnet_internal.h
+include_rtems_HEADERS += rtems/dhcp.h
+include_rtems_HEADERS += rtems/rtems_dhcp_failsafe.h
+include_rtems_HEADERS += rtems/tftp.h
+include_rtems_HEADERS += rtems/ftpfs.h
+include_rtems_HEADERS += rtems/mkrootfs.h
 include_rtems_HEADERS += rtems/rtems_mii_ioctl.h
 
 libnetworking_a_SOURCES += rtems/sghostname.c \
@@ -130,18 +167,38 @@ libnetworking_a_SOURCES += rtems/sghostname.c \
 
 include_sysdir = $(includedir)/sys
 
-include_sys_HEADERS = sys/callout.h sys/conf.h sys/domain.h \
-    sys/kernel.h sys/libkern.h sys/linker_set.h sys/malloc.h sys/mbuf.h \
-    sys/mount.h sys/proc.h sys/protosw.h sys/reboot.h \
-    sys/resourcevar.h sys/select.h sys/signalvar.h sys/socket.h \
-    sys/socketvar.h sys/sysctl.h sys/syslog.h sys/systm.h sys/ttydefaults.h \
-    sys/ucred.h sys/un.h
+include_sys_HEADERS = sys/callout.h
+include_sys_HEADERS += sys/conf.h
+include_sys_HEADERS += sys/domain.h
+include_sys_HEADERS += sys/kernel.h
+include_sys_HEADERS += sys/libkern.h
+include_sys_HEADERS += sys/linker_set.h
+include_sys_HEADERS += sys/malloc.h
+include_sys_HEADERS += sys/mbuf.h
+include_sys_HEADERS += sys/mount.h
+include_sys_HEADERS += sys/proc.h
+include_sys_HEADERS += sys/protosw.h
+include_sys_HEADERS += sys/reboot.h
+include_sys_HEADERS += sys/resourcevar.h
+include_sys_HEADERS += sys/select.h
+include_sys_HEADERS += sys/signalvar.h
+include_sys_HEADERS += sys/socket.h
+include_sys_HEADERS += sys/socketvar.h
+include_sys_HEADERS += sys/sysctl.h
+include_sys_HEADERS += sys/syslog.h
+include_sys_HEADERS += sys/systm.h
+include_sys_HEADERS += sys/ttydefaults.h
+include_sys_HEADERS += sys/ucred.h
+include_sys_HEADERS += sys/un.h
 
 # vm
 
 include_vmdir = $(includedir)/vm
 
-include_vm_HEADERS = vm/vm.h vm/vm_extern.h vm/vm_kern.h vm/vm_param.h
+include_vm_HEADERS = vm/vm.h
+include_vm_HEADERS += vm/vm_extern.h
+include_vm_HEADERS += vm/vm_kern.h
+include_vm_HEADERS += vm/vm_param.h
 
 # dev
 include_dev_miidir = $(includedir)/dev/mii
