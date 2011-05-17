@@ -1,0 +1,10 @@
+#
+#  $Id$
+#
+
+Misc. support tools for RTEMS workspaces.
+
+install-if-change
+    Smart install script that also can append suffixes as it
+    installs (suffixes used for debug and profile variants).
+    Requires bash or ksh.

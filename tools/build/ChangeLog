@@ -1,0 +1,209 @@
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.68, automake-1.11.1.
+
+2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems-bin2c.c: Fix memory leak in '.c' suffix strip.
+	Also strip '.h' suffix.
+
+2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems-bin2c.c: Make -v (verbose) working.
+
+2010-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for libgen.h, basename.
+	* rtems-bin2c.c: Use basename(3) instead of strrchr cascade.
+	Introduce ifbasename. Use ifbasename in generated files.
+
+2010-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems-bin2c.c: Add -C and -H options.
+
+2010-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* eolstrip.c: Readdress use of ctype methods per recommendation from
+	D.J. Delorie on the newlib mailing list. We should pass an unsigned
+	char into these methods.
+
+2007-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Rename bin2c to rtems-bin2c.
+
+2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bin2c.c: Updated license after author changed it.
+
+2007-09-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bin2c.c: Update comments.
+
+2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bin2c.c: Significant improvements -- add multiple options, generate
+	both C and H files, do not always generate static. fix indentation,
+	add comments.
+
+2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bin2c.c: New file.
+	http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images-Bin2c_In_C
+
+2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Add bin2c so we can have a more reliable way to convert
+	binary files to objects. If they are in C, we can use the correct CPU
+	CFLAGS and they will link easier.
+
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: New BUG-REPORT address.
+
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.60. Require automake-1.10.
+
+2006-07-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* doxy-filter: New.
+	* Makefile.am: Add doxy-filter.
+
+2006-07-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Remove.
+	* Makefile.am: Remove ampolish3.
+	* configure.ac: Remove ampolish3, perl.
+
+2006-01-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Check Makefile.am for SUBDIRS.
+	Add all-am: for PREINSTALL_FILES.
+
+2006-01-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Add all: for PREINSTALL_FILES.
+	Add all-local for TMPINSTALL_FILES.
+	Misc bug fixes.
+
+2006-01-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Check if Makefile.am already contains CLEANFILES or
+	DISTCLEANFILES.
+
+2006-01-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Update.
+
+2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Sync with private bleeding-edge .
+
+2005-10-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Use @PERL@, partial update from local sources.
+
+2005-10-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add ampolish3.
+	* Makefile.am: Add ampolish3.
+	* ampolish3.in: New.
+
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require automake > 1.9.
+
+2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add EXTRA_DIST = search-id.sh multigen 
+	cvsignore-add.sh.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+
+2003-03-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add AC_CHECK_HEADERS(getopt.h) to work around a bug
+	in autoconf-2.57.
+
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+
+2003-03-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add AC_CHECK_HEADERS.
+
+2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+
+2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: AC_PREREQ(2.57).
+
+2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Reformat.
+	Add autom4te*cache.
+	Remove autom4te.cache.
+
+2002-10-02  Chris Johns  <cjohns@cybertec.com.au>
+
+	* cvsignore-add.sh: Script to append a specific file to all
+	.cvsignore files if the files exists is a specific directory.
+
+2002-05-01	Joel Sherrill <joel@OARcorp.com>
+
+	* lock-directory.in, unlock-directory.in: Removed.
+	* Makefile.am, README, .cvsignore: Updated to reflect above.
+
+2002-04-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove AC_EXEEXT (obsolete).
+
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* configure.in: Remove.
+	* configure.ac: New file, generated from configure.in by autoupdate.
+
+2001-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* config.h.in: Automatically generated.  Remove from CVS.
+
+2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+
+2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+
+2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Switch to GNU-canonicalized autoconf macros.
+
+2000-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* multigen: Fix BARE_CPU_CFLAGS.
+
+2000-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* multigen: Fix usage.
+
+2000-08-10	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: New file.
