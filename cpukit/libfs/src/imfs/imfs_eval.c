@@ -270,6 +270,22 @@ int IMFS_evaluate_link(
   return result;
 }
 
+/*
+ * IMFS_skip_separator
+ *
+ * Skip the separator in the path.
+ */
+static void IMFS_skip_separator (
+   const char *path,       /* IN     */
+   size_t     *len,        /* IN/OUT */
+   int        *index       /* IN/OUT */
+)
+{
+  while ( IMFS_is_separator( path[*index] ) && path[*index] && *len ) {
+    ++(*index);
+    --(*len);
+  }
+}
 
 /*
  *  IMFS_evaluate_for_make
@@ -281,20 +297,19 @@ int IMFS_evaluate_link(
  */
 
 int IMFS_evaluate_for_make(
-   const char                         *path,       /* IN     */
-   rtems_filesystem_location_info_t   *pathloc,    /* IN/OUT */
-   const char                        **name        /* OUT    */
-)
+  const char                         *path,       /* IN     */
+  rtems_filesystem_location_info_t   *pathloc,    /* IN/OUT */
+  const char                        **name        /* OUT    */
+                           )
 {
-  int                                 i = 0;
-  int                                 len;
-  IMFS_token_types                    type;
-  char                                token[ IMFS_NAME_MAX + 1 ];
-  rtems_filesystem_location_info_t    newloc;
-  IMFS_jnode_t                       *node;
-  bool                                done = false;
-  int                                 pathlen;
-  int                                 result;
+  int               i = 0;
+  int               len;
+  IMFS_token_types  type;
+  char              token[ IMFS_NAME_MAX + 1 ];
+  IMFS_jnode_t     *node;
+  bool              done = false;
+  size_t            pathlen;
+  int               result;
 
   /*
    * This was filled in by the caller and is valid in the
@@ -346,8 +361,7 @@ int IMFS_evaluate_for_make(
         * Am I at the root of this mounted filesystem?
         */
 
-        if (pathloc->node_access ==
-            pathloc->mt_entry->mt_fs_root.node_access){
+        if (pathloc->node_access == pathloc->mt_entry->mt_fs_root.node_access){
 
           /*
            *  Am I at the root of all filesystems?
@@ -355,10 +369,10 @@ int IMFS_evaluate_for_make(
 
           if ( pathloc->node_access == rtems_filesystem_root.node_access ) {
             break;
+
           } else {
-            newloc = pathloc->mt_entry->mt_point_node;
-            *pathloc = newloc;
-            return (*pathloc->ops->evalformake_h)( &path[i], pathloc, name );
+            *pathloc = pathloc->mt_entry->mt_point_node;
+            return (*pathloc->ops->evalformake_h)( &path[i-len], pathloc, name );
           }
         } else {
           if ( !node->Parent )
@@ -401,7 +415,7 @@ int IMFS_evaluate_for_make(
           rtems_set_errno_and_return_minus_one( ENOTDIR );
 
         /*
-         * Otherwise find the token name in the present location.
+         * Find the token name in the present location.
          */
 
         node = IMFS_find_match_in_dir( node, token );
@@ -414,15 +428,17 @@ int IMFS_evaluate_for_make(
         if ( ! node )
           done = true;
         else {
-          /*
-           * If we are at a node that is a mount point. Set loc to the
-           * new fs root node and let them finish evaluating the path.
-           */
-
-          if ( node->info.directory.mt_fs != NULL ) {
-            newloc  = node->info.directory.mt_fs->mt_fs_root;
-            *pathloc = newloc;
-            return (*pathloc->ops->evalformake_h)( &path[i], pathloc, name );
+        if (( node->type == IMFS_DIRECTORY ) && ( node->info.directory.mt_fs != NULL )) {
+            IMFS_skip_separator( path, &pathlen, &i);
+            if ((path[i] != '.') || (path[i + 1] != '.')) {
+              *pathloc = node->info.directory.mt_fs->mt_fs_root;
+              return (*pathloc->ops->evalformake_h)( &path[i],
+                                                     pathloc,
+                                                     name );
+            }
+            i += 2;
+            pathlen -= 2;
+            node = node->Parent;
           }
           
           pathloc->node_access = node;
@@ -493,13 +509,12 @@ int IMFS_eval_path(
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
                    )
 {
-  int                                 i = 0;
-  int                                 len;
-  IMFS_token_types                    type = IMFS_CURRENT_DIR;
-  char                                token[ IMFS_NAME_MAX + 1 ];
-  rtems_filesystem_location_info_t    newloc;
-  IMFS_jnode_t                       *node;
-  int                                 result;
+  int               i = 0;
+  int               len;
+  IMFS_token_types  type = IMFS_CURRENT_DIR;
+  char              token[ IMFS_NAME_MAX + 1 ];
+  IMFS_jnode_t     *node;
+  int               result;
 
   if ( !rtems_libio_is_valid_perms( flags ) ) {
     assert( 0 );
@@ -559,10 +574,9 @@ int IMFS_eval_path(
           if ( pathloc->node_access == rtems_filesystem_root.node_access ) {
             break;       /* Throw out the .. in this case */
           } else {
-            newloc = pathloc->mt_entry->mt_point_node;
-            *pathloc = newloc;
-            return (*pathloc->ops->evalpath_h)(&(pathname[i]),
-                                               pathnamelen,
+            *pathloc = pathloc->mt_entry->mt_point_node;
+            return (*pathloc->ops->evalpath_h)(&(pathname[i-len]),
+                                               pathnamelen+len,
                                                flags,pathloc);
           }
         } else {
@@ -605,7 +619,7 @@ int IMFS_eval_path(
           rtems_set_errno_and_return_minus_one( ENOTDIR );
 
         /*
-         *  Otherwise find the token name in the present location.
+         *  Find the token name in the current node.
          */
 
         node = IMFS_find_match_in_dir( node, token );
@@ -613,25 +627,38 @@ int IMFS_eval_path(
         if ( !node )
           rtems_set_errno_and_return_minus_one( ENOENT );
 
+        /*
+         *  If we are at a node that is a mount point so current directory
+         *  actually exists on the mounted file system and not in the node that
+         *  contains the mount point node. For example a stat of the mount
+         *  point should return the details of the root of the mounted file
+         *  system not the mount point node of parent file system.
+         *
+         *  If the node we have just moved to is a mount point do not loop and
+         *  get the token because the token may be suitable for the mounted
+         *  file system and not the IMFS. For example the IMFS length is
+         *  limited. If the token is a parent directory move back up otherwise
+         *  set loc to the new fs root node and let them finish evaluating the
+         *  path.
+         */
+        if (( node->type == IMFS_DIRECTORY ) && ( node->info.directory.mt_fs != NULL )) {
+          IMFS_skip_separator( pathname, &pathnamelen, &i);
+          if ((pathname[i] != '.') || (pathname[i + 1] != '.')) {
+            *pathloc = node->info.directory.mt_fs->mt_fs_root;
+            return (*pathloc->ops->evalpath_h)( &pathname[i],
+                                                pathnamelen,
+                                                flags, pathloc );
+          }
+          i += 2;
+          pathnamelen -= 2;
+          node = node->Parent;
+        }
 
         /*
          *  Set the node access to the point we have found.
          */
 
         pathloc->node_access = node;
-        
-        /*
-         *  If we are at a node that is a mount point. Set loc to the
-         *  new fs root node and let them finish evaluating the path.
-         */
-
-        if ( node->info.directory.mt_fs != NULL ) {
-          newloc   = node->info.directory.mt_fs->mt_fs_root;
-          *pathloc = newloc;
-          return (*pathloc->ops->evalpath_h)( &pathname[i],
-                                              pathnamelen,
-                                              flags, pathloc );
-        }
         break;
 
       case IMFS_NO_MORE_PATH:
@@ -656,8 +683,7 @@ int IMFS_eval_path(
 
   if ( node->type == IMFS_DIRECTORY ) {
     if ( node->info.directory.mt_fs != NULL ) {
-      newloc   = node->info.directory.mt_fs->mt_fs_root;
-      *pathloc = newloc;
+      *pathloc = node->info.directory.mt_fs->mt_fs_root;
       return (*pathloc->ops->evalpath_h)( &pathname[i-len],
                                           pathnamelen+len,
                                           flags, pathloc );

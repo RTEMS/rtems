@@ -1,3 +1,9 @@
+2011-05-17	Chris Johns <chrisj@rtems.org>
+
+	PR 1774/filesystem
+	* libfs/src/imfs/imfs_eval.c: The previous change broke some of
+	the tests. This has been fixed.
+	
 2011-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1790/cpukit
