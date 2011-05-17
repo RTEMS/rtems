@@ -35,7 +35,7 @@
  *  @param[in] the_ready_queue is a pointer to the ready queue head
  *  @param[in] the_thread is the thread to be blocked
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_Requeue(
+RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_requeue(
   Scheduler_Control *the_ready_queue,
   Thread_Control    *the_thread
 )

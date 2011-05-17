@@ -29,7 +29,7 @@ void _Scheduler_simple_Yield( void )
   executing = _Thread_Executing;
   _ISR_Disable( level );
       
-    _Scheduler_simple_Ready_queue_Requeue(&_Scheduler, executing);
+    _Scheduler_simple_Ready_queue_requeue(&_Scheduler, executing);
 
     _ISR_Flash( level );
 
