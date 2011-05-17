@@ -1,5 +1,10 @@
 2011-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/Makefile.am, score/preinstall.am: bspsmp.h is now supposed to
+	be installed all the time. Revert part of previous commit.
+
+2011-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/inline/rtems/score/schedulersimple.inl,
 	score/src/schedulersimpleyield.c: Fix violations of naming
 	convention.

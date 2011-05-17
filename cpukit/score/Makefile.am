@@ -12,11 +12,7 @@ SUBDIRS = cpu
 include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = include/rtems/debug.h include/rtems/system.h \
-    include/rtems/seterr.h
-
-if HAS_SMP
-include_rtems_HEADERS += include/rtems/bspsmp.h
-endif
+    include/rtems/seterr.h include/rtems/bspsmp.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 
