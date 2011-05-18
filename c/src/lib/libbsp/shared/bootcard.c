@@ -84,7 +84,7 @@ static void bootcard_bsp_libc_helper(
 )
 {
   if ( heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA ) {
-    if ( rtems_unified_work_area ) {
+    if ( ! rtems_unified_work_area ) {
       uintptr_t work_space_size = rtems_configuration_get_work_space_size();
 
       heap_start = (char *) work_area_start + work_space_size;
