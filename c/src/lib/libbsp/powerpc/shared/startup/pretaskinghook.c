@@ -26,8 +26,6 @@
 #include <rtems/bspIo.h>
 #endif
 
-#include <rtems/malloc.h>
-
 /*
  *  bsp_pretasking_hook
  *

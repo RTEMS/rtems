@@ -61,6 +61,16 @@ RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
  of PowerPC 603e revisions and emulator versions.
  The BSP actually contains the call that enables this.])
 
+RTEMS_BSPOPTS_SET([CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK], [*], [1])
+RTEMS_BSPOPTS_HELP([CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK],
+[If defined then the BSP may reduce the available memory size
+initially. This can be useful for debugging (reduce the core
+size) or dynamic loading (std gcc text offsets/jumps are < +/-32M).
+Note that the policy can still be defined by the application
+(see sbrk.c, BSP_sbrk_policy). By undefining
+CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK this feature is removed
+and a little memory is saved.])
+
 RTEMS_BSPOPTS_SET([PPC_VECTOR_FILE_BASE],[*],[0x0100])
 RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 [This defines the base address of the exception table.

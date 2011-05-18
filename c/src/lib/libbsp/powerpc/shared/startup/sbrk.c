@@ -70,8 +70,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-static uint32_t         remaining_start=0;
-static uint32_t         remaining_size=0;
+static void *           remaining_start=(void*)-1LL;
+static uintptr_t        remaining_size=0;
 
 /* App. may provide a value by defining the BSP_sbrk_policy
  * variable.
@@ -81,16 +81,17 @@ static uint32_t         remaining_size=0;
  *    0  -> limit memory effectively to 32M.
  *
  */
-extern uint32_t         BSP_sbrk_policy __attribute__((weak));
+extern uintptr_t        BSP_sbrk_policy __attribute__((weak));
 
-#define LIMIT_32M  0x02000000
+#define LIMIT_32M  ((void*)0x02000000)
 
-uintptr_t _bsp_sbrk_init(
-  uintptr_t         heap_start,
+uintptr_t bsp_sbrk_init(
+  void              *heap_start,
   uintptr_t         *heap_size_p
 )
 {
   uintptr_t         rval=0;
+  uintptr_t         policy;
 
   remaining_start =  heap_start;
   remaining_size  = *heap_size_p;
@@ -104,30 +105,22 @@ uintptr_t _bsp_sbrk_init(
 	remaining_size  = rval;
   }
 
-  if ( 0 != &BSP_sbrk_policy ) {
-  	switch ( BSP_sbrk_policy ) {
-		case (uint32_t)(-1):
+  policy = (0 == &BSP_sbrk_policy ? (uintptr_t)(-1) : BSP_sbrk_policy);
+  switch ( policy ) {
+		case (uintptr_t)(-1):
 			*heap_size_p    += rval;
 			remaining_start  = heap_start + *heap_size_p;
 			remaining_size   = 0;
-			/* return a nonzero sbrk_amount because the libsupport code
-			 * at some point divides by this number prior to trying an
-			 * sbrk() which will fail.
-			 */
-			rval = 1;
 		break;
 
 		case 0:
 			remaining_size = 0;
-			/* see above for why we return 1 */
-			rval = 1;
 		break;
 
 		default:
-			if ( rval > BSP_sbrk_policy )
-				rval = BSP_sbrk_policy;
+			if ( rval > policy )
+				rval = policy;
 		break;
-	}
   }
 
   return rval;
@@ -138,9 +131,9 @@ void * sbrk(ptrdiff_t incr)
   void *rval=(void*)-1;
 
   /* FIXME: BEWARE if size >2G */
-  if (incr <= remaining_size) {
+  if ( remaining_start != (void*)-1LL && incr <= remaining_size) {
     remaining_size-=incr;
-    rval = (void*)remaining_start;
+    rval = remaining_start;
     remaining_start += incr;
   } else {
     errno = ENOMEM;

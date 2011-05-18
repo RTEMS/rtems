@@ -23,7 +23,6 @@
 /*
  *  confdefs.h overrides for this BSP:
  */
-#define CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
 
 /*
  * diagram illustrating the role of the configuration
