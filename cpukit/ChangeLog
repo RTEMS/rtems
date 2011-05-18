@@ -24,7 +24,6 @@
 	score/src/schedulersimplesmpschedule.c,
 	score/src/schedulersimplesmpunblock.c: New files.
 
->>>>>>> 1.2833
 2011-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/Makefile.am: Reformat.
