@@ -58,7 +58,7 @@ Summary:      	avr-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	1%{?dist}
+Release:      	2%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -89,6 +89,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
+%if 0%{?fc16}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
 %if 0%{?fc15}
 %global mpc_provided 0.8.3
 %global mpfr_provided 3.0.0
@@ -117,12 +123,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global mpc_provided %{nil}
 %global mpfr_provided %{nil}
 %global gmp_provided 4.1.4
-%endif
-
-%if 0%{?suse11_2}
-%global mpc_provided 0.7
-%global mpfr_provided 2.4.1
-%global gmp_provided 4.3.1
 %endif
 
 %if 0%{?suse11_3}
@@ -212,10 +212,10 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc16:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?suse11_4:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
-%{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
 
 
@@ -245,7 +245,7 @@ BuildRequires:	rtems-4.10-avr-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-avr-rtems4.10-binutils
 Requires:	rtems-4.10-avr-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-24%{?dist}
+Requires:	rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-25%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -269,7 +269,7 @@ Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.4.6-rtems4.10-201
 
 %if "%{newlib_version}" == "1.18.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20110419.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.18.0-rtems4.10-20110518.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -316,8 +316,11 @@ cd ..
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
 %if %{with gcc_stdint}
-rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
+  rm gcc-%{gcc_pkgvers}/newlib/libc/include/stdint.h
 %endif
+  # Make sure not to be using GPL'ed sources
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/linux
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/rdos
 
 %if 0%{?_build_mpfr}
 %setup -q -T -D -n %{name}-%{version} -a60
@@ -347,7 +350,7 @@ rm newlib-%{newlib_version}/newlib/libc/include/stdint.h
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-1%{?dist}/newlib-%{newlib_version}-24%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-2%{?dist}/newlib-%{newlib_version}-25%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -391,7 +394,7 @@ echo "RTEMS gcc-%{gcc_version}-1%{?dist}/newlib-%{newlib_version}-24%{?dist}" > 
     %{?with_lto:--enable-lto}%{!?with_lto:--disable-lto} \
     %{?with_plugin:--enable-plugin}%{!?with_plugin:--disable-plugin} \
     --enable-newlib-io-c99-formats \
-    --enable-languages="$languages" $optargs
+    --enable-languages="$languages"
 
 %if "%_host" != "%_build"
   # Bug in gcc-3.2.1:
@@ -442,6 +445,9 @@ echo "RTEMS gcc-%{gcc_version}-1%{?dist}/newlib-%{newlib_version}-24%{?dist}" > 
   # We don't ship info/dir
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
+
+  # We don't want libffi's man-pages
+  rm -f $RPM_BUILD_ROOT%{_mandir}/man3/*ffi*
 
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/avr-rtems4.10-avr-rtems4.10-gcjh%{_exeext}
@@ -616,7 +622,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-avr-rtems4.10-binutils
-# Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-24%{?dist}
+# Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-25%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -634,7 +640,7 @@ Summary:        libgcc for avr-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-24%{?dist}
+Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-25%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-avr-rtems4.10-gcc-libgcc
@@ -656,7 +662,9 @@ libgcc avr-rtems4.10-gcc.
 %{_bindir}/avr-rtems4.10-gcc%{_exeext}
 %{_bindir}/avr-rtems4.10-gcc-%{gcc_version}%{_exeext}
 %{_bindir}/avr-rtems4.10-gcov%{_exeext}
+%if "%{gcc_version}" < "4.6.0"
 %{_bindir}/avr-rtems4.10-gccbug
+%endif
 
 %dir %{_libexecdir}
 %dir %{_libexecdir}/gcc
@@ -747,7 +755,7 @@ Summary:      	C Library (newlib) for avr-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        24%{?dist}
+Release:        25%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -768,7 +776,7 @@ Newlib C Library for avr-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        24%{?dist}
+Release:        25%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
