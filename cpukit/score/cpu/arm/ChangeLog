@@ -1,3 +1,7 @@
+2011-05-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Reformat.
+
 2011-04-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1780/cpukit
