@@ -1,3 +1,21 @@
+2011-05-17  Till Straumann <strauman@slac.stanford.edu>
+
+	PR1797/bsps
+	* shared/startup/sbrk.c: Cleanup; changed default
+	BSP_sbrk_policy to yield all memory to the heap.
+	App must specify a different policy if desired.
+
+2011-05-13  Gedare Bloom <gedare@gwmail.gwu.edu>
+
+	PR1797/bsps
+	* shared/startup/sbrk.c : Renamed bsp_sbrk_init().
+	
+2011-05-07  Kate Feng <feng@bnl.gov>
+
+	PR1797/bsps
+	* shared/startup/bspgetworkarea.c: Removed _bsp_sbrk_init().
+	* shared/startup/pretaskinghook.c: Removed rtems/malloc.h.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/console/polled_io.c, shared/flash/spansionFlash.c,

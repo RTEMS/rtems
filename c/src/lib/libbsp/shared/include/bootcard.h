@@ -89,6 +89,23 @@ void bsp_get_work_area(
 );
 
 /**
+ * @brief Gives the BSP a chance to reduce the work area size with sbrk() adding more later.
+ *
+ * bsp_sbrk_init() may reduce the work area size passed in. The routine
+ * returns the 'sbrk_amount' to be used when extending the heap.
+ * Note that the return value may be zero.
+ *
+ */
+
+#ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+uintptr_t bsp_sbrk_init(
+  void              *work_area_begin,
+  uintptr_t         *work_area_size_p
+);
+#endif
+
+
+/**
  * @brief Standard system initialization procedure.
  *
  * You may pass a command line in @a cmdline.  It is later available via the

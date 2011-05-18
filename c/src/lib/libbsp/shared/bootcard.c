@@ -53,6 +53,11 @@
 
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
+#include <rtems/malloc.h>
+
+#ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+#include <unistd.h> /* for sbrk() */
+#endif
 
 /*
  *  At most a single pointer to the cmdline for those target
@@ -74,23 +79,30 @@ static void bootcard_bsp_libc_helper(
   void      *work_area_start,
   uintptr_t  work_area_size,
   void      *heap_start,
-  uintptr_t  heap_size
+  uintptr_t  heap_size,
+  uintptr_t  sbrk_amount
 )
 {
-  if ( !rtems_unified_work_area &&
-       heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
-    uintptr_t work_space_size = rtems_configuration_get_work_space_size();
+  if ( heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA ) {
+    if ( rtems_unified_work_area ) {
+      uintptr_t work_space_size = rtems_configuration_get_work_space_size();
 
-    heap_start = (char *) work_area_start + work_space_size;
+      heap_start = (char *) work_area_start + work_space_size;
 
-    if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
-      uintptr_t heap_size_default = work_area_size - work_space_size;
+      if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
+        uintptr_t heap_size_default = work_area_size - work_space_size;
 
-      heap_size = heap_size_default;
+        heap_size = heap_size_default;
+      }
+    } else {
+      heap_start = work_area_start;
+      if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
+        heap_size = work_area_size;
+      }
     }
   }
 
-  bsp_libc_init(heap_start, heap_size, 0);
+  bsp_libc_init(heap_start, heap_size, sbrk_amount);
 }
 
 /*
@@ -108,6 +120,7 @@ int boot_card(
   uintptr_t              work_area_size = 0;
   void                  *heap_start = NULL;
   uintptr_t              heap_size = 0;
+  uintptr_t              sbrk_amount = 0;
 
   /*
    * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
@@ -135,6 +148,32 @@ int boot_card(
    */
   bsp_get_work_area(&work_area_start, &work_area_size,
                     &heap_start, &heap_size);
+
+#ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+  /* This routine may reduce the work area size with the
+   * option to extend it later via sbrk(). If the application
+   * was configured w/o CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK then
+   * omit this step.
+   */
+  if ( rtems_malloc_sbrk_helpers ) {
+    sbrk_amount = bsp_sbrk_init(work_area_start, &work_area_size);
+    if ( work_area_size <  Configuration.work_space_size && sbrk_amount > 0 ) {
+      /* Need to use sbrk right now */
+      uintptr_t sbrk_now;
+
+      sbrk_now = (Configuration.work_space_size - work_area_size) / sbrk_amount;
+      sbrk( sbrk_now * sbrk_amount );
+    }
+  }
+#else
+  if ( rtems_malloc_sbrk_helpers ) {
+    printk("Configuration error!\n"
+           "Application was configured with CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK\n"
+           "but BSP was configured w/o sbrk support\n");
+    bsp_cleanup();
+    return -1;
+  }
+#endif
 
   if ( work_area_size <= Configuration.work_space_size ) {
     printk(
@@ -170,7 +209,8 @@ int boot_card(
     work_area_start,
     work_area_size,
     heap_start,
-    heap_size
+    heap_size,
+    sbrk_amount
   );
 
   /*

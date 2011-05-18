@@ -16,7 +16,6 @@
 #endif
 
 extern void *__rtems_end;
-extern uintptr_t _bsp_sbrk_init(uintptr_t, uintptr_t*);
 
 /*
  *  This method returns the base address and size of the area which
@@ -31,14 +30,11 @@ void bsp_get_work_area(
 )
 {
   uintptr_t work_size;
-  uintptr_t spared;
   uintptr_t work_area;
 
   work_area = (uintptr_t)&__rtems_end +
               rtems_configuration_get_interrupt_stack_size();
   work_size = (uintptr_t)BSP_mem_size - work_area;
-
-  spared = _bsp_sbrk_init( work_area, &work_size );
 
   *work_area_start = (void *)work_area,
   *work_area_size  = work_size;

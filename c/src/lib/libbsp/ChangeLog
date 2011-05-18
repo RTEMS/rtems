@@ -1,3 +1,23 @@
+2011-05-17	Till Straumann <strauman@slac.stanford.edu>
+
+	PR1797/bsps
+	* shared/bootcard.c, shared/include/bootcard.h: cleaned-up and
+	applied fixes proposed by PR#1797.
+
+2011-05-12  Joel Sherrill <joel.sherrill@OARcorp.com>  
+
+	PR1797/bsps
+	* bootcard.c:
+	Added #ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK to minimize code
+	for small targets.
+
+2011-05-12  Kate Feng <feng@bnl.gov>
+	
+	PR1797/bsps
+	* bootcard.c:
+	Fixed the value of heap_start & heap_size for the single-heap case.
+	Added bsp_sbrk_init() to fix PPC memory allocation beyond 32 MB.
+
 2010-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/umon/umoncons.c:
