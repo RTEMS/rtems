@@ -1,3 +1,9 @@
+2011-05-16	Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
+
+	* psxclock/init.c (Init):
+	Use CLOCK_PROCESS_CPUTIME_ID and CLOCK_THREAD_CPUTIME_ID.
+	* psxclock/psxclock.scn: Regenerate.
+
 2011-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxfile01/test.c, psxmsgq01/init.c, psxreaddir/test.c: Fix tests
