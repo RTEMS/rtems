@@ -1,3 +1,7 @@
+2011-05-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Reformat.
+
 2011-04-20  Rohan Kangralkar <rkangral@ece.neu.edu>
 
 	PR 1781/bsps
