@@ -1,5 +1,9 @@
 2011-05-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* user/conf.t: Add SMP Configuration parameters.
+
+2011-05-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* user/conf.t: Slight rework to deemphasize not using confdefs.h
 
 2011-05-12	Joel Sherrill <joel.sherrilL@OARcorp.com>

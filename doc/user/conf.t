@@ -402,11 +402,12 @@ a scheduling algorithm for an application.  For the schedulers built into RTEMS,
 
 @findex CONFIGURE_SCHEDULER_PRIORITY
 @item Deterministic Priority Scheduler - This is the default scheduler
-in RTEMS and is designed for predictable performance under the highest
-loads.  It can block or unblock a thread in a constant amount of time.
-This scheduler requires a variable amount of memory based upon the number
-of priorities configured in the system.  This scheduler may be explicitly
-selected by defining @code{CONFIGURE_SCHEDULER_PRIORITY}.
+in RTEMS for single core applications and is designed for predictable
+performance under the highest loads.  It can block or unblock a thread
+in a constant amount of time.  This scheduler requires a variable
+amount of memory based upon the number of priorities configured in
+the system.  This scheduler may be explicitly selected by defining
+@code{CONFIGURE_SCHEDULER_PRIORITY}.
 
 @findex CONFIGURE_SCHEDULER_SIMPLE
 @item Simple Priority Scheduler - This is an alternative scheduler
@@ -417,6 +418,23 @@ of all ready threads.  Thus blocking or unblocking a thread is not a
 constant time operation with this scheduler.  This scheduler is appropriate
 for use in small systems where RAM is limited.  This scheduler may be explicitly
 selected by defining @code{CONFIGURE_SCHEDULER_SIMPLE}.
+
+@findex CONFIGURE_SCHEDULER_SIMPLE_SMP
+@item Simple SMP Priority Scheduler - This scheduler is derived from the
+Simple Priority Scheduler but is capable of scheduling threads across
+multiple cores.  It is designed to provide the same task scheduling
+behaviour as the Deterministic Priority Scheduler while distributing
+threads across multiple cores.  Being based upon the Simple Priority
+Scheduler, it is also maintains a single sorted list of all ready threads.
+Thus blocking or unblocking a thread is not a constant time operation
+with this scheduler.  In addition, when allocating threads to cores,
+the algorithm is not constant time.  This algorithm was not designed
+with efficiency as a primary design goal.  Its primary design goal was to
+provide an SMP-aware scheduling algorithm that is simple to understand.
+This scheduler is currently the default in SMP configurations and is
+only selected when @code{CONFIGURE_SMP_APPLICATION} is defined.  In a
+configuration with SMP enabled at configure time, it may be explicitly
+selected by defining @code{CONFIGURE_SCHEDULER_SIMPLE_SMP}.
 
 @end itemize
 
@@ -449,6 +467,26 @@ in @code{cpukit/score/src/schedulerpriority*.c} for guidance.
 For guidance on the configuration macros, please examine
 @code{cpukit/sapi/include/confdefs.h} for how these are defined for the
 Deterministic Priority Scheduler.
+
+@c
+@c
+@c
+@subsection SMP Specific Configuration Parameters
+
+When RTEMS is configured to support SMP target systems, there are other
+configuration parameters which apply.
+
+@itemize @bullet
+
+@findex CONFIGURE_SMP_APPLICATION
+@item @code{CONFIGURE_SMP_APPLICATION} must be defined if the application
+is to make use of multiple CPU cores in an SMP target system.
+
+@item @code{CONFIGURE_SMP_MAXIMUM_PROCESSORS} must be set to the number
+of CPU cores in the SMP configuration.  If there are more cores available
+than configured, the rest will be ignored.
+
+@end itemize
 
 @c
 @c
