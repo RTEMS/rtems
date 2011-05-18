@@ -1,5 +1,9 @@
 2011-05-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sapi/Makefile.am: Reformat.
+
+2011-05-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/sys/signalvar.h: Cosmetics from FreeBSD.
 	Comment out psignal().
 
