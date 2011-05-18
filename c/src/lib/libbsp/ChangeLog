@@ -1,3 +1,9 @@
+2011-05-18	Till Straumann <strauman@slac.stanford.edu>
+
+	PR1797/bsps
+	* shared/bootcard.c: Fixed a typo (in code, not comment) which
+	I introduced with the last change.
+
 2011-05-17	Till Straumann <strauman@slac.stanford.edu>
 
 	PR1797/bsps
