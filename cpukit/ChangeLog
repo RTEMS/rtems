@@ -1,5 +1,10 @@
 2011-05-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	*  configure.ac: Require time.h to provide CLOCK_PROCESS_CPUTIME_ID,
+	CLOCK_THREAD_CPUTIME_ID.
+
+2011-05-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* sapi/Makefile.am: Reformat.
 
 2011-05-18	Ralf Corsépius <ralf.corsepius@rtems.org>

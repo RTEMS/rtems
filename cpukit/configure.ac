@@ -66,6 +66,10 @@ AC_CHECK_DECLS([flockfile],[AC_CHECK_FUNCS([flockfile])],,[#include <stdio.h>])
 AC_CHECK_DECLS([funlockfile],[AC_CHECK_FUNCS([funlockfile])],,[#include <stdio.h>])
 AC_CHECK_DECLS([ftrylockfile],[AC_CHECK_FUNCS([ftrylockfile])],,[#include <stdio.h>])
 
+# Mandated by POSIX, older newlibs bogusly provided CLOCK_PROCESS_CPUTIME+CLOCK_THREAD_CPUTIME
+AC_CHECK_DECL([CLOCK_PROCESS_CPUTIME_ID],[],[AC_MSG_ERROR([missing define CLOCK_PROCESS_CPUTIME_ID])],[#include <time.h>])
+AC_CHECK_DECL([CLOCK_THREAD_CPUTIME_ID],[],[AC_MSG_ERROR([missing define CLOCK_THREAD_CPUTIME_ID])],[#include <time.h>])
+
 # Mandated by POSIX, decls not present in some versions of newlib,
 # some versions stubbed in newlib's rtems crt0
 RTEMS_CHECK_FUNC([seteuid],[#include <unistd.h>])
