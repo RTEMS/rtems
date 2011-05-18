@@ -1,3 +1,8 @@
+2011-05-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/signalvar.h: Cosmetics from FreeBSD.
+	Comment out psignal().
+
 2011-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/Makefile.am, score/preinstall.am: bspsmp.h is now supposed to
@@ -19,6 +24,7 @@
 	score/src/schedulersimplesmpschedule.c,
 	score/src/schedulersimplesmpunblock.c: New files.
 
+>>>>>>> 1.2833
 2011-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/Makefile.am: Reformat.

@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,10 +27,14 @@
  * SUCH DAMAGE.
  *
  *	@(#)signalvar.h	8.6 (Berkeley) 2/19/95
+ * $FreeBSD: src/sys/sys/signalvar.h,v 1.91 2010/07/08 19:15:26 jhb Exp $
+ */
+ 
+/*
  * $Id$
  */
 
-#ifndef	_SYS_SIGNALVAR_H_		/* tmp for user.h */
+#ifndef	_SYS_SIGNALVAR_H_
 #define	_SYS_SIGNALVAR_H_
 
 /*
@@ -161,7 +161,10 @@ int	issignal(struct proc *p);
 void	killproc(struct proc *p, char *why);
 void	pgsignal(struct pgrp *pgrp, int sig, int checkctty);
 void	postsig(int sig);
+#ifndef __rtems__
+/* clashes with psignal(3) */
 void	psignal(struct proc *p, int sig);
+#endif
 void	setsigvec(struct proc *p, int signum, struct sigaction *sa);
 void	sigexit(struct proc *p, int signum);
 void	siginit(struct proc *p);
@@ -172,4 +175,5 @@ void	trapsignal(struct proc *p, int sig, u_long code);
  */
 void	sendsig(sig_t action, int sig, int returnmask, u_long code);
 #endif	/* _KERNEL */
+
 #endif	/* !_SYS_SIGNALVAR_H_ */
