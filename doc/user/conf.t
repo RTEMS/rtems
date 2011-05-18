@@ -1,4 +1,4 @@
-@c  COPYRIGHT (c) 1988-2008.
+@c  COPYRIGHT (c) 1988-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -855,7 +855,16 @@ implicitly uses the Ada run-time.
 
 @end itemize
 
-@section Configuration Table
+@section Configuration Data Structures
+
+It is recommended that applications be configured using
+@code{rtems/confdefs.h} as it is simpler and insulates applications from
+changes in the underlying data structures.  However, it is sometimes
+important to understand the data structures that are automatically filled
+in by the configuration parametes.  This section describes the primary
+configuration data structures.
+
+@subsection Configuration Table
 
 @cindex Configuration Table
 @cindex RTEMS Configuration Table
@@ -1104,7 +1113,7 @@ and NULL if the POSIX API is not configured.
 
 @end table
 
-@section RTEMS API Configuration Table
+@subsection RTEMS API Configuration Table
 
 @cindex RTEMS API Configuration Table
 
@@ -1261,7 +1270,7 @@ to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA}.
 
 @end table
 
-@section POSIX API Configuration Table
+@subsection POSIX API Configuration Table
 
 @cindex POSIX API Configuration Table
 
@@ -1443,7 +1452,7 @@ to the address of the @code{POSIX_Initialization_threads} structure.
 
 @end table
 
-@section CPU Dependent Information Table
+@subsection CPU Dependent Information Table
 
 @cindex CPU Dependent Information Table
 
@@ -1458,7 +1467,7 @@ target processor.
 The @code{rtems/confdefs.h} mechanism does not support generating this
 table.  It is normally filled in by the Board Support Package.
 
-@section Initialization Task Table
+@subsection Initialization Task Table
 
 @cindex Initialization Tasks Table
 
@@ -1538,7 +1547,7 @@ Initialization_tasks[2] = @{
 @};
 @end example
 
-@section Driver Address Table
+@subsection Driver Address Table
 
 @cindex Device Driver Table
 
@@ -1607,7 +1616,7 @@ More information regarding the construction and
 operation of device drivers is provided in the I/O Manager
 chapter.
 
-@section User Extensions Table
+@subsection User Extensions Table
 
 @cindex User Extensions Table
 
@@ -1751,7 +1760,7 @@ rtems_extensions_table User_extensions = @{
 More information regarding the user extensions is
 provided in the User Extensions chapter.
 
-@section Multiprocessor Configuration Table
+@subsection Multiprocessor Configuration Table
 
 @cindex Multiprocessor Configuration Table
 
@@ -1862,7 +1871,7 @@ address of the table named @code{MPCI_table}.
 
 @end table
 
-@section Multiprocessor Communications Interface Table
+@subsection Multiprocessor Communications Interface Table
 
 @cindex  Multiprocessor Communications Interface Table
 
@@ -1932,7 +1941,7 @@ supplied multiprocessor communications layer.
 More information regarding the required functionality of these
 entry points is provided in the Multiprocessor chapter.
 
-@section Determining Memory Requirements
+@subsection Determining Memory Requirements
 
 Since memory is a critical resource in many real-time
 embedded systems, the RTEMS Classic API was specifically designed to allow
@@ -2000,7 +2009,7 @@ with the underscore character and followed by an upper-case
 letter to avoid any naming conflicts.  All RTEMS directive names
 should be treated as reserved words.
 
-@section Sizing the RTEMS RAM Workspace
+@subsection Sizing the RTEMS RAM Workspace
 
 The RTEMS RAM Workspace is a user-specified block of
 memory reserved for use by RTEMS.  The application should NOT
