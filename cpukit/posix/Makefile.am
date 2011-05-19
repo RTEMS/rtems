@@ -16,7 +16,6 @@ libposix_a_SOURCES =
 # Some POSIX functions that are nice to always have
 libposix_a_SOURCES += src/nanosleep.c src/clockgettime.c src/clocksettime.c \
     src/clockgetres.c src/sysconf.c
-libposix_a_SOURCES += src/posixtime.h
 
 include_rtems_posixdir = $(includedir)/rtems/posix
 

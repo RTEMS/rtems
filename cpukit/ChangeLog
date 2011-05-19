@@ -1,3 +1,11 @@
+2011-05-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/Makefile.am: Remove posixtime.h.
+	* posix/src/clockgetres.c, posix/src/clockgettime.c,
+	posix/src/clocksettime.c: Remove posixtime.h.
+	Require CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID.
+	* posix/src/posixtime.h: Remove.
+
 2011-05-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/Makefile.am: Reformat.
