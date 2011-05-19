@@ -1,3 +1,12 @@
+2011-05-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/Makefile.am: Add posixtime.h.
+	* posix/src/clockgetres.c, posix/src/clockgettime.c,
+	posix/src/clocksettime.c: 
+	Use CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID.
+	Include posix/src/posixtime.h.
+	* posix/src/posixtime.h: New.
+
 2011-05-17	Chris Johns <chrisj@rtems.org>
 
 	PR 1774/filesystem

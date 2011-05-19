@@ -17,6 +17,7 @@ libposix_a_SOURCES =
 libposix_a_SOURCES += src/sleep.c src/usleep.c
 libposix_a_SOURCES += src/nanosleep.c src/clockgettime.c src/clocksettime.c \
     src/clockgetres.c src/sysconf.c
+libposix_a_SOURCES += src/posixtime.h
 
 include_rtems_posixdir = $(includedir)/rtems/posix
 

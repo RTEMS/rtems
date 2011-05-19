@@ -23,6 +23,8 @@
 
 #include <rtems/seterr.h>
 
+#include "posixtime.h"
+
 /*PAGE
  *
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
@@ -48,14 +50,14 @@ int clock_gettime(
 #endif
 
 #ifdef _POSIX_CPUTIME
-  if ( clock_id == CLOCK_PROCESS_CPUTIME ) {
+  if ( clock_id == CLOCK_PROCESS_CPUTIME_ID ) {
     _TOD_Get_uptime_as_timespec( tp );
     return 0;
   }
 #endif
 
 #ifdef _POSIX_THREAD_CPUTIME
-  if ( clock_id == CLOCK_THREAD_CPUTIME )
+  if ( clock_id == CLOCK_THREAD_CPUTIME_ID )
     rtems_set_errno_and_return_minus_one( ENOSYS );
 #endif
 
