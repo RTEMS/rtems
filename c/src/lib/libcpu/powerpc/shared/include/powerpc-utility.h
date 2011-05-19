@@ -230,7 +230,7 @@ static inline void ppc_data_cache_block_flush(void *addr)
 
 static inline void ppc_data_cache_block_flush_2(
   void *base,
-  void *offset
+  uintptr_t offset
 )
 {
   __asm__ volatile (
@@ -253,7 +253,7 @@ static inline void ppc_data_cache_block_invalidate(void *addr)
 
 static inline void ppc_data_cache_block_invalidate_2(
   void *base,
-  void *offset
+  uintptr_t offset
 )
 {
   __asm__ volatile (
@@ -264,7 +264,7 @@ static inline void ppc_data_cache_block_invalidate_2(
   );
 }
 
-static inline void ppc_data_cache_block_store(void *addr)
+static inline void ppc_data_cache_block_store(const void *addr)
 {
   __asm__ volatile (
     "dcbst 0, %0"
@@ -274,19 +274,18 @@ static inline void ppc_data_cache_block_store(void *addr)
 }
 
 static inline void ppc_data_cache_block_store_2(
-  void *base,
-  void *offset
+  const void *base,
+  uintptr_t offset
 )
 {
   __asm__ volatile (
     "dcbst %0, %1"
     :
     : "b" (base), "r" (offset)
-    : "memory"
   );
 }
 
-static inline void ppc_data_cache_block_touch(void *addr)
+static inline void ppc_data_cache_block_touch(const void *addr)
 {
   __asm__ volatile (
     "dcbt 0, %0"
@@ -296,8 +295,8 @@ static inline void ppc_data_cache_block_touch(void *addr)
 }
 
 static inline void ppc_data_cache_block_touch_2(
-  void *base,
-  void *offset
+  const void *base,
+  uintptr_t offset
 )
 {
   __asm__ volatile (
@@ -307,7 +306,7 @@ static inline void ppc_data_cache_block_touch_2(
   );
 }
 
-static inline void ppc_data_cache_block_touch_for_store(void *addr)
+static inline void ppc_data_cache_block_touch_for_store(const void *addr)
 {
   __asm__ volatile (
     "dcbtst 0, %0"
@@ -317,8 +316,8 @@ static inline void ppc_data_cache_block_touch_for_store(void *addr)
 }
 
 static inline void ppc_data_cache_block_touch_for_store_2(
-  void *base,
-  void *offset
+  const void *base,
+  uintptr_t offset
 )
 {
   __asm__ volatile (
@@ -340,7 +339,7 @@ static inline void ppc_data_cache_block_clear_to_zero(void *addr)
 
 static inline void ppc_data_cache_block_clear_to_zero_2(
   void *base,
-  void *offset
+  uintptr_t offset
 )
 {
   __asm__ volatile (
@@ -362,7 +361,7 @@ static inline void ppc_instruction_cache_block_invalidate(void *addr)
 
 static inline void ppc_instruction_cache_block_invalidate_2(
   void *base,
-  void *offset
+  uintptr_t offset
 )
 {
   __asm__ volatile (
