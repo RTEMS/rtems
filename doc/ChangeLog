@@ -1,3 +1,7 @@
+2011-05-19	Gedare Bloom <giddyup44@yahoo.com>
+
+	* user/conf.t: Fix typos.
+
 2011-05-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/conf.t: Add SMP Configuration parameters.

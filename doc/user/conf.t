@@ -425,7 +425,7 @@ Simple Priority Scheduler but is capable of scheduling threads across
 multiple cores.  It is designed to provide the same task scheduling
 behaviour as the Deterministic Priority Scheduler while distributing
 threads across multiple cores.  Being based upon the Simple Priority
-Scheduler, it is also maintains a single sorted list of all ready threads.
+Scheduler, it also maintains a single sorted list of all ready threads.
 Thus blocking or unblocking a thread is not a constant time operation
 with this scheduler.  In addition, when allocating threads to cores,
 the algorithm is not constant time.  This algorithm was not designed
@@ -899,7 +899,7 @@ It is recommended that applications be configured using
 @code{rtems/confdefs.h} as it is simpler and insulates applications from
 changes in the underlying data structures.  However, it is sometimes
 important to understand the data structures that are automatically filled
-in by the configuration parametes.  This section describes the primary
+in by the configuration parameters.  This section describes the primary
 configuration data structures.
 
 @subsection Configuration Table
