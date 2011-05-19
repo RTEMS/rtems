@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -25,7 +26,7 @@
 /* This is defined in ../../../shared/clockdrv_shell.h */
 rtems_isr Clock_isr(rtems_vector_number vector);
 
-static volatile lpc_timer *const lpc_clock = 
+static volatile lpc_timer *const lpc_clock =
   (volatile lpc_timer *) LPC_CLOCK_TIMER_BASE;
 
 static void lpc_clock_at_tick(void)
@@ -102,11 +103,14 @@ static void lpc_clock_cleanup(void)
 
 static uint32_t lpc_clock_nanoseconds_since_last_tick(void)
 {
-  uint64_t clock = LPC_CLOCK_REFERENCE;
-  uint64_t clicks = lpc_clock->tc;
-  uint64_t ns = (clicks * 1000000000) / clock;
+  uint64_t k = (1000000000ULL << 32) / LPC_CLOCK_REFERENCE;
+  uint64_t c = lpc_clock->tc;
 
-  return (uint32_t) ns;
+  if ((lpc_clock->ir & LPC_TIMER_IR_MR0) != 0) {
+    c = lpc_clock->tc + lpc_clock->mr0;
+  }
+
+  return (uint32_t) ((c * k) >> 32);
 }
 
 #define Clock_driver_support_at_tick() lpc_clock_at_tick()

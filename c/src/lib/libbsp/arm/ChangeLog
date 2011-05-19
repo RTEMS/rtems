@@ -1,3 +1,12 @@
+2011-05-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/lpc/include/lpc-emc.h, shared/lpc/include/lpc-lcd.h: New
+	files.
+	* shared/lpc/include/lpc-dma.h: API changes.
+	* shared/lpc/clock/lpc-clock-config.c: Fixed nano seconds extension.
+	* shared/lpc/network/lpc-ethernet.c: Format.  Multicast hash filter
+	support.
+
 2011-03-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/start/start.S: Default exception handler will result in

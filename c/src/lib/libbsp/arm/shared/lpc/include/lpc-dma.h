@@ -3,16 +3,17 @@
  *
  * @ingroup lpc_dma
  *
- * @brief DMA API.
+ * @brief DMA support API.
  */
 
 /*
- * Copyright (c) 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -22,7 +23,7 @@
 #ifndef LIBBSP_ARM_SHARED_LPC_DMA_H
 #define LIBBSP_ARM_SHARED_LPC_DMA_H
 
-#include <stdint.h>
+#include <bsp/utility.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,7 +32,8 @@ extern "C" {
 /**
  * @defgroup lpc_dma DMA Support
  *
- * @ingroup lpc
+ * @ingroup lpc24xx
+ * @ingroup lpc32xx
  *
  * @brief DMA support.
  *
@@ -80,129 +82,132 @@ typedef struct {
 } lpc_dma;
 
 /**
- * @name DMA Configuration Register Defines
+ * @name DMA Configuration Register
  *
  * @{
  */
 
-#define LPC_DMA_CFG_EN (1U << 0)
-#define LPC_DMA_CFG_M_0 (1U << 1)
-#define LPC_DMA_CFG_M_1 (1U << 2)
+#define DMA_CFG_E BSP_BIT32(0)
+#define DMA_CFG_M_0 BSP_BIT32(1)
+#define DMA_CFG_M_1 BSP_BIT32(2)
 
 /** @} */
 
 /**
- * @name DMA Channel Control Register Defines
+ * @name DMA Channel Control Register
  *
  * @{
  */
 
-#define LPC_DMA_CH_CTRL_TSZ_MASK 0xfffU
-#define LPC_DMA_CH_CTRL_TSZ_MAX 0xfffU
+#define DMA_CH_CTRL_TSZ(val) BSP_FLD32(val, 0, 11)
+#define DMA_CH_CTRL_TSZ_MAX DMA_CH_CTRL_TSZ(0xfff)
 
-#define LPC_DMA_CH_CTRL_SB_MASK (0x7U << 12)
-#define LPC_DMA_CH_CTRL_SB_1 (0x0U << 12)
-#define LPC_DMA_CH_CTRL_SB_4 (0x1U << 12)
-#define LPC_DMA_CH_CTRL_SB_8 (0x2U << 12)
-#define LPC_DMA_CH_CTRL_SB_16 (0x3U << 12)
-#define LPC_DMA_CH_CTRL_SB_32 (0x4U << 12)
-#define LPC_DMA_CH_CTRL_SB_64 (0x5U << 12)
-#define LPC_DMA_CH_CTRL_SB_128 (0x6U << 12)
-#define LPC_DMA_CH_CTRL_SB_256 (0x7U << 12)
+#define DMA_CH_CTRL_SB(val) BSP_FLD32(val, 12, 14)
+#define DMA_CH_CTRL_SB_1 DMA_CH_CTRL_SB(0)
+#define DMA_CH_CTRL_SB_4 DMA_CH_CTRL_SB(1)
+#define DMA_CH_CTRL_SB_8 DMA_CH_CTRL_SB(2)
+#define DMA_CH_CTRL_SB_16 DMA_CH_CTRL_SB(3)
+#define DMA_CH_CTRL_SB_32 DMA_CH_CTRL_SB(4)
+#define DMA_CH_CTRL_SB_64 DMA_CH_CTRL_SB(5)
+#define DMA_CH_CTRL_SB_128 DMA_CH_CTRL_SB(6)
+#define DMA_CH_CTRL_SB_256 DMA_CH_CTRL_SB(7)
 
-#define LPC_DMA_CH_CTRL_DB_MASK (0x7U << 15)
-#define LPC_DMA_CH_CTRL_DB_1 (0x0U << 15)
-#define LPC_DMA_CH_CTRL_DB_4 (0x1U << 15)
-#define LPC_DMA_CH_CTRL_DB_8 (0x2U << 15)
-#define LPC_DMA_CH_CTRL_DB_16 (0x3U << 15)
-#define LPC_DMA_CH_CTRL_DB_32 (0x4U << 15)
-#define LPC_DMA_CH_CTRL_DB_64 (0x5U << 15)
-#define LPC_DMA_CH_CTRL_DB_128 (0x6U << 15)
-#define LPC_DMA_CH_CTRL_DB_256 (0x7U << 15)
+#define DMA_CH_CTRL_DB(val) BSP_FLD32(val, 15, 17)
+#define DMA_CH_CTRL_DB_1 DMA_CH_CTRL_DB(0)
+#define DMA_CH_CTRL_DB_4 DMA_CH_CTRL_DB(1)
+#define DMA_CH_CTRL_DB_8 DMA_CH_CTRL_DB(2)
+#define DMA_CH_CTRL_DB_16 DMA_CH_CTRL_DB(3)
+#define DMA_CH_CTRL_DB_32 DMA_CH_CTRL_DB(4)
+#define DMA_CH_CTRL_DB_64 DMA_CH_CTRL_DB(5)
+#define DMA_CH_CTRL_DB_128 DMA_CH_CTRL_DB(6)
+#define DMA_CH_CTRL_DB_256 DMA_CH_CTRL_DB(7)
 
-#define LPC_DMA_CH_CTRL_SW_MASK (0x7U << 18)
-#define LPC_DMA_CH_CTRL_SW_8 (0x0U << 18)
-#define LPC_DMA_CH_CTRL_SW_16 (0x1U << 18)
-#define LPC_DMA_CH_CTRL_SW_32 (0x2U << 18)
+#define DMA_CH_CTRL_SW(val) BSP_FLD32(val, 18, 20)
+#define DMA_CH_CTRL_SW_8 DMA_CH_CTRL_SW(0)
+#define DMA_CH_CTRL_SW_16 DMA_CH_CTRL_SW(1)
+#define DMA_CH_CTRL_SW_32 DMA_CH_CTRL_SW(2)
 
-#define LPC_DMA_CH_CTRL_DW_MASK (0x7U << 21)
-#define LPC_DMA_CH_CTRL_DW_8 (0x0U << 21)
-#define LPC_DMA_CH_CTRL_DW_16 (0x1U << 21)
-#define LPC_DMA_CH_CTRL_DW_32 (0x2U << 21)
+#define DMA_CH_CTRL_DW(val) BSP_FLD32(val, 21, 23)
+#define DMA_CH_CTRL_DW_8 DMA_CH_CTRL_DW(0)
+#define DMA_CH_CTRL_DW_16 DMA_CH_CTRL_DW(1)
+#define DMA_CH_CTRL_DW_32 DMA_CH_CTRL_DW(2)
 
-#define LPC_DMA_CH_CTRL_SM_0 (0U << 24)
-#define LPC_DMA_CH_CTRL_SM_1 (1U << 24)
-
-#define LPC_DMA_CH_CTRL_DM_0 (0U << 25)
-#define LPC_DMA_CH_CTRL_DM_1 (1U << 25)
-
-#define LPC_DMA_CH_CTRL_SI (1U << 26)
-#define LPC_DMA_CH_CTRL_DI (1U << 27)
-#define LPC_DMA_CH_CTRL_ITC (1U << 31)
+#define DMA_CH_CTRL_S BSP_BIT32(24)
+#define DMA_CH_CTRL_D BSP_BIT32(25)
+#define DMA_CH_CTRL_SI BSP_BIT32(26)
+#define DMA_CH_CTRL_DI BSP_BIT32(27)
+#define DMA_CH_CTRL_PROT(val) BSP_FLD32(val, 28, 30)
+#define DMA_CH_CTRL_I BSP_BIT32(31)
 
 /** @} */
 
 /**
- * @name DMA Channel Configuration Register Defines
+ * @name DMA Channel Configuration Register
  *
  * @{
  */
 
-#define LPC_DMA_CH_CFG_EN (1U << 0)
+#define DMA_CH_CFG_E BSP_BIT32(0)
+#define DMA_CH_CFG_SPER(val) BSP_FLD32(val, 1, 5)
+#define DMA_CH_CFG_DPER(val) BSP_FLD32(val, 6, 10)
 
-#define LPC_DMA_CH_CFG_SPER_MASK (0xfU << 1)
-#define LPC_DMA_CH_CFG_SPER_SHIFT 1
-#define LPC_DMA_CH_CFG_SPER_0 (0x0U << 1)
-#define LPC_DMA_CH_CFG_SPER_1 (0x1U << 1)
-#define LPC_DMA_CH_CFG_SPER_2 (0x2U << 1)
-#define LPC_DMA_CH_CFG_SPER_3 (0x3U << 1)
-#define LPC_DMA_CH_CFG_SPER_4 (0x4U << 1)
-#define LPC_DMA_CH_CFG_SPER_5 (0x5U << 1)
-#define LPC_DMA_CH_CFG_SPER_6 (0x6U << 1)
-#define LPC_DMA_CH_CFG_SPER_7 (0x7U << 1)
-#define LPC_DMA_CH_CFG_SPER_8 (0x8U << 1)
-#define LPC_DMA_CH_CFG_SPER_9 (0x9U << 1)
-#define LPC_DMA_CH_CFG_SPER_10 (0xaU << 1)
-#define LPC_DMA_CH_CFG_SPER_11 (0xbU << 1)
-#define LPC_DMA_CH_CFG_SPER_12 (0xcU << 1)
-#define LPC_DMA_CH_CFG_SPER_13 (0xdU << 1)
-#define LPC_DMA_CH_CFG_SPER_14 (0xeU << 1)
-#define LPC_DMA_CH_CFG_SPER_15 (0xfU << 1)
+#define DMA_CH_CFG_FLOW(val) BSP_FLD32(val, 11, 13)
+#define DMA_CH_CFG_FLOW_MEM_TO_MEM_DMA DMA_CH_CFG_FLOW(0)
+#define DMA_CH_CFG_FLOW_MEM_TO_PER_DMA DMA_CH_CFG_FLOW(1)
+#define DMA_CH_CFG_FLOW_PER_TO_MEM_DMA DMA_CH_CFG_FLOW(2)
+#define DMA_CH_CFG_FLOW_PER_TO_PER_DMA DMA_CH_CFG_FLOW(3)
+#define DMA_CH_CFG_FLOW_PER_TO_PER_DEST DMA_CH_CFG_FLOW(4)
+#define DMA_CH_CFG_FLOW_MEM_TO_PER_PER DMA_CH_CFG_FLOW(5)
+#define DMA_CH_CFG_FLOW_PER_TO_MEM_PER DMA_CH_CFG_FLOW(6)
+#define DMA_CH_CFG_FLOW_PER_TO_PER_SRC DMA_CH_CFG_FLOW(7)
 
-#define LPC_DMA_CH_CFG_DPER_MASK (0xfU << 6)
-#define LPC_DMA_CH_CFG_DPER_SHIFT 6
-#define LPC_DMA_CH_CFG_DPER_0 (0x0U << 6)
-#define LPC_DMA_CH_CFG_DPER_1 (0x1U << 6)
-#define LPC_DMA_CH_CFG_DPER_2 (0x2U << 6)
-#define LPC_DMA_CH_CFG_DPER_3 (0x3U << 6)
-#define LPC_DMA_CH_CFG_DPER_4 (0x4U << 6)
-#define LPC_DMA_CH_CFG_DPER_5 (0x5U << 6)
-#define LPC_DMA_CH_CFG_DPER_6 (0x6U << 6)
-#define LPC_DMA_CH_CFG_DPER_7 (0x7U << 6)
-#define LPC_DMA_CH_CFG_DPER_8 (0x8U << 6)
-#define LPC_DMA_CH_CFG_DPER_9 (0x9U << 6)
-#define LPC_DMA_CH_CFG_DPER_10 (0xaU << 6)
-#define LPC_DMA_CH_CFG_DPER_11 (0xbU << 6)
-#define LPC_DMA_CH_CFG_DPER_12 (0xcU << 6)
-#define LPC_DMA_CH_CFG_DPER_13 (0xdU << 6)
-#define LPC_DMA_CH_CFG_DPER_14 (0xeU << 6)
-#define LPC_DMA_CH_CFG_DPER_15 (0xfU << 6)
+#define DMA_CH_CFG_IE BSP_BIT32(14)
+#define DMA_CH_CFG_ITC BSP_BIT32(15)
+#define DMA_CH_CFG_L BSP_BIT32(16)
+#define DMA_CH_CFG_A BSP_BIT32(17)
+#define DMA_CH_CFG_H BSP_BIT32(18)
 
-#define LPC_DMA_CH_CFG_FLOW_MASK (0x7U << 11)
-#define LPC_DMA_CH_CFG_FLOW_MEM_TO_MEM_DMA (0x0U << 11)
-#define LPC_DMA_CH_CFG_FLOW_MEM_TO_PER_DMA (0x1U << 11)
-#define LPC_DMA_CH_CFG_FLOW_PER_TO_MEM_DMA (0x2U << 11)
-#define LPC_DMA_CH_CFG_FLOW_PER_TO_PER_DMA (0x3U << 11)
-#define LPC_DMA_CH_CFG_FLOW_PER_TO_PER_DEST (0x4U << 11)
-#define LPC_DMA_CH_CFG_FLOW_MEM_TO_PER_PER (0x5U << 11)
-#define LPC_DMA_CH_CFG_FLOW_PER_TO_MEM_PER (0x6U << 11)
-#define LPC_DMA_CH_CFG_FLOW_PER_TO_PER_SRC (0x7U << 11)
+/** @} */
 
-#define LPC_DMA_CH_CFG_IE (1U << 14)
-#define LPC_DMA_CH_CFG_ITC (1U << 15)
-#define LPC_DMA_CH_CFG_LOCK (1U << 16)
-#define LPC_DMA_CH_CFG_ACTIVE (1U << 17)
-#define LPC_DMA_CH_CFG_HALT (1U << 18)
+/**
+ * @name LPC24XX DMA Peripherals
+ *
+ * @{
+ */
+
+#define LPC24XX_DMA_PER_SSP_0_TX 0
+#define LPC24XX_DMA_PER_SSP_0_RX 1
+#define LPC24XX_DMA_PER_SSP_1_TX 2
+#define LPC24XX_DMA_PER_SSP_1_RX 3
+#define LPC24XX_DMA_PER_SD_MMC 4
+#define LPC24XX_DMA_PER_I2S_CH_0 5
+#define LPC24XX_DMA_PER_I2S_CH_1 6
+
+/** @} */
+
+/**
+ * @name LPC32XX DMA Peripherals
+ *
+ * @{
+ */
+
+#define LPC32XX_DMA_PER_I2S_0_CH_0 0
+#define LPC32XX_DMA_PER_I2S_0_CH_1 13
+#define LPC32XX_DMA_PER_I2S_1_CH_0 2
+#define LPC32XX_DMA_PER_I2S_1_CH_1 10
+#define LPC32XX_DMA_PER_NAND_0 1
+#define LPC32XX_DMA_PER_NAND_1 12
+#define LPC32XX_DMA_PER_SD_MMC 4
+#define LPC32XX_DMA_PER_SSP_0_RX 14
+#define LPC32XX_DMA_PER_SSP_0_TX 15
+#define LPC32XX_DMA_PER_SSP_1_RX 3
+#define LPC32XX_DMA_PER_SSP_1_TX 11
+#define LPC32XX_DMA_PER_UART_1_RX 6
+#define LPC32XX_DMA_PER_UART_1_TX 5
+#define LPC32XX_DMA_PER_UART_2_RX 8
+#define LPC32XX_DMA_PER_UART_2_TX 7
+#define LPC32XX_DMA_PER_UART_7_RX 10
+#define LPC32XX_DMA_PER_UART_7_TX 9
 
 /** @} */
 

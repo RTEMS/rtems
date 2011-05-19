@@ -360,7 +360,7 @@ static void lpc_eth_enable_promiscous_mode(bool enable)
       | ETH_RX_FIL_CTRL_ACCEPT_BROADCAST;
   } else {
     lpc_eth->rxfilterctrl = ETH_RX_FIL_CTRL_ACCEPT_PERFECT
-      | ETH_RX_FIL_CTRL_ACCEPT_MULTICAST
+      | ETH_RX_FIL_CTRL_ACCEPT_MULTICAST_HASH
       | ETH_RX_FIL_CTRL_ACCEPT_BROADCAST;
   }
 }
@@ -502,8 +502,10 @@ static bool lpc_eth_add_new_mbuf(
       | ETH_RX_CTRL_INTERRUPT;
 
     /* Cache flush of descriptor  */
-    rtems_cache_flush_multiple_data_lines((void *)&desc [i], 
-					  sizeof(desc [0]));
+    rtems_cache_flush_multiple_data_lines(
+      (void *) &desc [i],
+      sizeof(desc [0])
+    );
 
     /* Add mbuf to table */
     mbufs [i] = m;
@@ -616,10 +618,10 @@ static void lpc_eth_receive_task(void *arg)
         struct mbuf *m = mbufs [receive_index];
 
         /* Fragment status */
-        rtems_cache_invalidate_multiple_data_lines
-	  ((void *)&status [receive_index],
-	   sizeof(status [0])
-	   );
+        rtems_cache_invalidate_multiple_data_lines(
+          (void *) &status [receive_index],
+          sizeof(status [0])
+        );
         stat = status [receive_index].info;
 
         /* Remove mbuf from table */
@@ -944,10 +946,10 @@ static void lpc_eth_transmit_task(void *arg)
           );
           desc [produce_index].start = mtod(m, uint32_t);
           desc [produce_index].control = ctrl;
-          rtems_cache_flush_multiple_data_lines
-	    ((void *)&desc [produce_index],
-	     sizeof(desc [0])
-	     );
+          rtems_cache_flush_multiple_data_lines(
+            (void *) &desc [produce_index],
+            sizeof(desc [0])
+           );
           mbufs [produce_index] = m;
 
           LPC_ETH_PRINTF(
@@ -1018,10 +1020,10 @@ static void lpc_eth_transmit_task(void *arg)
             );
 
             /* Cache flush of descriptor  */
-            rtems_cache_flush_multiple_data_lines
-	      ((void *)&desc [produce_index],
-	       sizeof(desc [0])
-	       );
+            rtems_cache_flush_multiple_data_lines(
+              (void *) &desc [produce_index],
+              sizeof(desc [0])
+            );
 
             /* Next produce index */
             produce_index = p;
@@ -1285,9 +1287,58 @@ static void lpc_eth_interface_stats(lpc_eth_driver_entry *e)
   rtems_bsdnet_semaphore_obtain();
 }
 
+static int lpc_eth_multicast_control(
+  bool add,
+  struct ifreq *ifr,
+  struct arpcom *ac
+)
+{
+  int eno = 0;
+
+  if (add) {
+    eno = ether_addmulti(ifr, ac);
+  } else {
+    eno = ether_delmulti(ifr, ac);
+  }
+
+  if (eno == ENETRESET) {
+    struct ether_multistep step;
+    struct ether_multi *enm;
+
+    eno = 0;
+
+    lpc_eth->hashfilterl = 0;
+    lpc_eth->hashfilterh = 0;
+
+    ETHER_FIRST_MULTI(step, ac, enm);
+    while (enm != NULL) {
+      uint64_t addrlo = 0;
+      uint64_t addrhi = 0;
+
+      memcpy(&addrlo, enm->enm_addrlo, ETHER_ADDR_LEN);
+      memcpy(&addrhi, enm->enm_addrhi, ETHER_ADDR_LEN);
+      while (addrlo <= addrhi) {
+        /* XXX: ether_crc32_le() does not work, why? */
+        uint32_t crc = ether_crc32_be((uint8_t *) &addrlo, ETHER_ADDR_LEN);
+        uint32_t index = (crc >> 23) & 0x3f;
+
+        if (index < 32) {
+          lpc_eth->hashfilterl |= 1U << index;
+        } else {
+          lpc_eth->hashfilterh |= 1U << (index - 32);
+        }
+        ++addrlo;
+      }
+      ETHER_NEXT_MULTI(step, enm);
+    }
+  }
+
+  return eno;
+}
+
 static int lpc_eth_interface_ioctl(
   struct ifnet *ifp,
-  ioctl_command_t command,
+  ioctl_command_t cmd,
   caddr_t data
 )
 {
@@ -1297,14 +1348,14 @@ static int lpc_eth_interface_ioctl(
 
   LPC_ETH_PRINTF("%s\n", __func__);
 
-  switch (command)  {
+  switch (cmd)  {
     case SIOCGIFMEDIA:
     case SIOCSIFMEDIA:
-      rtems_mii_ioctl(&e->mdio, e, command, (int *) data);
+      rtems_mii_ioctl(&e->mdio, e, cmd, (int *) data);
       break;
     case SIOCGIFADDR:
     case SIOCSIFADDR:
-      ether_ioctl(ifp, command, data);
+      ether_ioctl(ifp, cmd, data);
       break;
     case SIOCSIFFLAGS:
       if (ifp->if_flags & IFF_RUNNING) {
@@ -1316,15 +1367,9 @@ static int lpc_eth_interface_ioctl(
       }
       break;
     case SIOCADDMULTI:
-    case SIOCDELMULTI: {
-      eno = (command == SIOCADDMULTI) ? ether_addmulti(ifr, &e->arpcom)
-        : ether_delmulti(ifr, &e->arpcom);
-      if (eno == ENETRESET) {
-        /* TODO: Use imperfect hash filter */
-        eno = 0;
-      }
+    case SIOCDELMULTI:
+      eno = lpc_eth_multicast_control(cmd == SIOCADDMULTI, ifr, &e->arpcom);
       break;
-    }
     case SIO_RTEMS_SHOW_STATS:
       lpc_eth_interface_stats(e);
       break;
