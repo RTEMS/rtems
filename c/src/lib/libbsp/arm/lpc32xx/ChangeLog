@@ -1,3 +1,9 @@
+2011-05-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am, preinstall.am: Install new header files.
+	* include/bsp.h, include/emc.h, include/lpc32xx.h, misc/emc.c: Update
+	for API changes.
+
 2011-03-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac, include/bspopts.h.in: New BSP option

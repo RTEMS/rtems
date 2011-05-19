@@ -102,6 +102,14 @@ $(PROJECT_INCLUDE)/bsp/lpc-i2s.h: ../shared/lpc/include/lpc-i2s.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-i2s.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-i2s.h
 
+$(PROJECT_INCLUDE)/bsp/lpc-emc.h: ../shared/lpc/include/lpc-emc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-emc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-emc.h
+
+$(PROJECT_INCLUDE)/bsp/lpc-lcd.h: ../shared/lpc/include/lpc-lcd.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-lcd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-lcd.h
+
 $(PROJECT_INCLUDE)/bsp/irq.h: include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h

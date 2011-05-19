@@ -24,7 +24,9 @@
 #include <bsp.h>
 #include <bsp/mmu.h>
 
-static volatile lpc32xx_emc *const emc = &lpc32xx.emc;
+static volatile lpc_emc *const emc = &lpc32xx.emc;
+
+static volatile lpc32xx_emc_ahb *const emc_ahb = &lpc32xx.emc_ahb [0];
 
 static void dynamic_init(const lpc32xx_emc_dynamic_config *cfg)
 {
@@ -95,17 +97,17 @@ void lpc32xx_emc_init(const lpc32xx_emc_dynamic_config *dyn_cfg)
   LPC32XX_HCLKDIV_CTRL |= HCLK_DIV_DDRAM_CLK(1);
 
   /* Enable buffers in AHB ports */
-  emc->ahb [0].control = EMC_AHB_PORT_BUFF_EN;
-  emc->ahb [3].control = EMC_AHB_PORT_BUFF_EN;
-  emc->ahb [4].control = EMC_AHB_PORT_BUFF_EN;
+  emc_ahb [0].control = EMC_AHB_PORT_BUFF_EN;
+  emc_ahb [3].control = EMC_AHB_PORT_BUFF_EN;
+  emc_ahb [4].control = EMC_AHB_PORT_BUFF_EN;
 
   /* Set AHB port timeouts */
-  emc->ahb [0].timeout = EMC_AHB_TIMEOUT(32);
-  emc->ahb [3].timeout = EMC_AHB_TIMEOUT(32);
-  emc->ahb [4].timeout = EMC_AHB_TIMEOUT(32);
+  emc_ahb [0].timeout = EMC_AHB_TIMEOUT(32);
+  emc_ahb [3].timeout = EMC_AHB_TIMEOUT(32);
+  emc_ahb [4].timeout = EMC_AHB_TIMEOUT(32);
 
   /* Enable EMC */
-  emc->control = EMC_CTRL_EN,
+  emc->control = EMC_CTRL_E,
   emc->config = 0;
 
   dynamic_init(dyn_cfg);

@@ -147,12 +147,12 @@ extern uint32_t lpc32xx_magic_zero_size [];
 #define LPC32XX_DO_STOP_GPDMA \
   do { \
     if ((LPC32XX_DMACLK_CTRL & 0x1) != 0) { \
-      if ((lpc32xx.dma.cfg & LPC_DMA_CFG_EN) != 0) { \
+      if ((lpc32xx.dma.cfg & DMA_CFG_E) != 0) { \
         int i = 0; \
         for (i = 0; i < 8; ++i) { \
           lpc32xx.dma.channels [i].cfg = 0; \
         } \
-        lpc32xx.dma.cfg &= ~LPC_DMA_CFG_EN; \
+        lpc32xx.dma.cfg &= ~DMA_CFG_E; \
       } \
       LPC32XX_DMACLK_CTRL = 0; \
     } \

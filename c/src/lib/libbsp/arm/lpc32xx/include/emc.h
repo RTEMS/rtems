@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -24,22 +25,19 @@
 
 #include <rtems.h>
 
-#include <bsp/lpc32xx.h>
+#include <bsp/lpc-emc.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup lpc32xx_emc EMC Support
- *
- * @ingroup lpc32xx
+ * @addtogroup lpc_emc
  *
  * @brief EMC Support
  *
  * @{
  */
-
 
 /**
  * @name SDRAM Clock Control Register (SDRAMCLK_CTRL)
@@ -60,74 +58,6 @@ extern "C" {
 #define SDRAMCLK_PIN_1_FAST BSP_BIT32(20)
 #define SDRAMCLK_PIN_2_FAST BSP_BIT32(21)
 #define SDRAMCLK_PIN_3_FAST BSP_BIT32(22)
-
-/** @} */
-
-/**
- * @name EMC Control Register (EMCControl)
- *
- * @{
- */
-
-#define EMC_CTRL_EN BSP_BIT32(0)
-#define EMC_CTRL_LOW_POWER BSP_BIT32(2)
-
-/** @} */
-
-/**
- * @name EMC Dynamic Memory Control Register (EMCDynamicControl)
- *
- * @{
- */
-
-#define EMC_DYN_CTRL_CE BSP_BIT32(0)
-#define EMC_DYN_CTRL_CS BSP_BIT32(1)
-#define EMC_DYN_CTRL_SR BSP_BIT32(2)
-#define EMC_DYN_CTRL_SRMCC BSP_BIT32(3)
-#define EMC_DYN_CTRL_IMCC BSP_BIT32(4)
-#define EMC_DYN_CTRL_MCC BSP_BIT32(5)
-#define EMC_DYN_CTRL_I_MASK BSP_MSK32(7, 8)
-#define EMC_DYN_CTRL_I_NORMAL BSP_FLD32(0x0, 7, 8)
-#define EMC_DYN_CTRL_I_MODE BSP_FLD32(0x1, 7, 8)
-#define EMC_DYN_CTRL_I_PALL BSP_FLD32(0x2, 7, 8)
-#define EMC_DYN_CTRL_I_NOP BSP_FLD32(0x3, 7, 8)
-#define EMC_DYN_CTRL_DP BSP_BIT32(9)
-
-/** @} */
-
-/**
- * @name EMC Dynamic Memory Read Configuration Register (EMCDynamicReadConfig)
- *
- * @{
- */
-
-#define EMC_DYN_READ_CONFIG_SDR_STRAT(val) BSP_FLD32(val, 0, 1)
-#define EMC_DYN_READ_CONFIG_SDR_POL_POS BSP_BIT32(4)
-#define EMC_DYN_READ_CONFIG_DDR_STRAT(val) BSP_FLD32(val, 8, 9)
-#define EMC_DYN_READ_CONFIG_DDR_POL_POS BSP_BIT32(12)
-
-/** @} */
-
-/**
- * @name EMC Dynamic Memory Configuration N Register (EMCDynamicConfigN)
- *
- * @{
- */
-
-#define EMC_DYN_CFG_MD(val) BSP_FLD32(val, 0, 2)
-#define EMC_DYN_CFG_AM(val) BSP_FLD32(val, 7, 14)
-#define EMC_DYN_CFG_P(val) BSP_BIT32(20)
-
-/** @} */
-
-/**
- * @name EMC Dynamic Memory RAS and CAS Delay N Register (EMCDynamicRasCasN)
- *
- * @{
- */
-
-#define EMC_DYN_RAS(val) BSP_FLD32(val, 0, 3)
-#define EMC_DYN_CAS(val) BSP_FLD32(val, 7, 10)
 
 /** @} */
 
