@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be found in the file
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
@@ -24,8 +25,9 @@
 #include <bsp.h>
 #include <bsp/lpc24xx.h>
 #include <bsp/irq.h>
+#include <bsp/io.h>
 
-static uint8_t lpc24xx_uart_register(uint32_t addr, uint8_t i)
+static uint8_t lpc24xx_uart_get_register(uint32_t addr, uint8_t i)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
 
@@ -38,6 +40,54 @@ static void lpc24xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
 
   reg [i] = val;
 }
+
+#ifdef LPC24XX_CONFIG_UART_1
+  static bool lpc24xx_uart_probe_1(int minor)
+  {
+    static const lpc24xx_pin_range pins [] = {
+      LPC24XX_PIN_UART_1_TXD_P0_15,
+      LPC24XX_PIN_UART_1_RXD_P0_16,
+      LPC24XX_PIN_TERMINAL
+    };
+
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_1, LPC24XX_MODULE_CCLK);
+    lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
+
+    return true;
+  }
+#endif
+
+#ifdef LPC24XX_CONFIG_UART_2
+  static bool lpc24xx_uart_probe_2(int minor)
+  {
+    static const lpc24xx_pin_range pins [] = {
+      LPC24XX_PIN_UART_2_TXD_P0_10,
+      LPC24XX_PIN_UART_2_RXD_P0_11,
+      LPC24XX_PIN_TERMINAL
+    };
+
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_2, LPC24XX_MODULE_CCLK);
+    lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
+
+    return true;
+  }
+#endif
+
+#ifdef LPC24XX_CONFIG_UART_3
+  static bool lpc24xx_uart_probe_3(int minor)
+  {
+    static const lpc24xx_pin_range pins [] = {
+      LPC24XX_PIN_UART_3_TXD_P0_0,
+      LPC24XX_PIN_UART_3_RXD_P0_1,
+      LPC24XX_PIN_TERMINAL
+    };
+
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_3, LPC24XX_MODULE_CCLK);
+    lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
+
+    return true;
+  }
+#endif
 
 rtems_device_minor_number Console_Port_Minor = 0;
 
@@ -55,7 +105,7 @@ console_tbl Console_Port_Tbl [] = {
       .ulCtrlPort1 = UART0_BASE_ADDR,
       .ulCtrlPort2 = 0,
       .ulDataPort = UART0_BASE_ADDR,
-      .getRegister = lpc24xx_uart_register,
+      .getRegister = lpc24xx_uart_get_register,
       .setRegister = lpc24xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
@@ -68,7 +118,7 @@ console_tbl Console_Port_Tbl [] = {
       .sDeviceName = "/dev/ttyS1",
       .deviceType = SERIAL_NS16550,
       .pDeviceFns = &ns16550_fns,
-      .deviceProbe = NULL,
+      .deviceProbe = lpc24xx_uart_probe_1,
       .pDeviceFlow = NULL,
       .ulMargin = 16,
       .ulHysteresis = 8,
@@ -76,7 +126,7 @@ console_tbl Console_Port_Tbl [] = {
       .ulCtrlPort1 = UART1_BASE_ADDR,
       .ulCtrlPort2 = 0,
       .ulDataPort = UART1_BASE_ADDR,
-      .getRegister = lpc24xx_uart_register,
+      .getRegister = lpc24xx_uart_get_register,
       .setRegister = lpc24xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
@@ -89,7 +139,7 @@ console_tbl Console_Port_Tbl [] = {
       .sDeviceName = "/dev/ttyS2",
       .deviceType = SERIAL_NS16550,
       .pDeviceFns = &ns16550_fns,
-      .deviceProbe = NULL,
+      .deviceProbe = lpc24xx_uart_probe_2,
       .pDeviceFlow = NULL,
       .ulMargin = 16,
       .ulHysteresis = 8,
@@ -97,7 +147,7 @@ console_tbl Console_Port_Tbl [] = {
       .ulCtrlPort1 = UART2_BASE_ADDR,
       .ulCtrlPort2 = 0,
       .ulDataPort = UART2_BASE_ADDR,
-      .getRegister = lpc24xx_uart_register,
+      .getRegister = lpc24xx_uart_get_register,
       .setRegister = lpc24xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
@@ -110,7 +160,7 @@ console_tbl Console_Port_Tbl [] = {
       .sDeviceName = "/dev/ttyS3",
       .deviceType = SERIAL_NS16550,
       .pDeviceFns = &ns16550_fns,
-      .deviceProbe = NULL,
+      .deviceProbe = lpc24xx_uart_probe_3,
       .pDeviceFlow = NULL,
       .ulMargin = 16,
       .ulHysteresis = 8,
@@ -118,7 +168,7 @@ console_tbl Console_Port_Tbl [] = {
       .ulCtrlPort1 = UART3_BASE_ADDR,
       .ulCtrlPort2 = 0,
       .ulDataPort = UART3_BASE_ADDR,
-      .getRegister = lpc24xx_uart_register,
+      .getRegister = lpc24xx_uart_get_register,
       .setRegister = lpc24xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
@@ -128,9 +178,9 @@ console_tbl Console_Port_Tbl [] = {
   #endif
 };
 
-#define LPC24XX_UART_NUMBER \
+#define LPC24XX_UART_COUNT \
   (sizeof(Console_Port_Tbl) / sizeof(Console_Port_Tbl [0]))
 
-unsigned long Console_Port_Count = LPC24XX_UART_NUMBER;
+unsigned long Console_Port_Count = LPC24XX_UART_COUNT;
 
-console_data Console_Port_Data [LPC24XX_UART_NUMBER];
+console_data Console_Port_Data [LPC24XX_UART_COUNT];

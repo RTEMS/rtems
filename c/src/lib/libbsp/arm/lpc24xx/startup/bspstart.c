@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2008, 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -61,6 +62,21 @@ void bsp_pretasking_hook(void)
   #endif
 }
 
+static void initialize_console(void)
+{
+  #ifdef LPC24XX_CONFIG_CONSOLE
+    static const lpc24xx_pin_range pins [] = {
+      LPC24XX_PIN_UART_0_TXD,
+      LPC24XX_PIN_UART_0_RXD,
+      LPC24XX_PIN_TERMINAL
+    };
+
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_0, LPC24XX_MODULE_CCLK);
+    lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
+    BSP_CONSOLE_UART_INIT(lpc24xx_cclk() / 16 / LPC24XX_UART_BAUD);
+  #endif
+}
+
 void bsp_start(void)
 {
   /* Initialize Timer 1 */
@@ -69,12 +85,7 @@ void bsp_start(void)
   /* Initialize standard timer */
   lpc24xx_timer_initialize();
 
-  /* Initialize console */
-  #ifdef LPC24XX_CONFIG_CONSOLE
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_0, LPC24XX_MODULE_CCLK);
-    lpc24xx_io_config(LPC24XX_MODULE_UART_0, LPC24XX_CONFIG_CONSOLE);
-    BSP_CONSOLE_UART_INIT(lpc24xx_cclk() / 16 / LPC24XX_UART_BAUD);
-  #endif
+  initialize_console();
 
   /* Interrupts */
   if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
@@ -90,19 +101,5 @@ void bsp_start(void)
       bsp_section_stack_begin,
       (uintptr_t) bsp_section_stack_size
     );
-  #endif
-
-  /* UART configurations */
-  #ifdef LPC24XX_CONFIG_UART_1
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_1, LPC24XX_MODULE_CCLK);
-    lpc24xx_io_config(LPC24XX_MODULE_UART_1, LPC24XX_CONFIG_UART_1);
-  #endif
-  #ifdef LPC24XX_CONFIG_UART_2
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_2, LPC24XX_MODULE_CCLK);
-    lpc24xx_io_config(LPC24XX_MODULE_UART_2, LPC24XX_CONFIG_UART_2);
-  #endif
-  #ifdef LPC24XX_CONFIG_UART_3
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_3, LPC24XX_MODULE_CCLK);
-    lpc24xx_io_config(LPC24XX_MODULE_UART_3, LPC24XX_CONFIG_UART_3);
   #endif
 }

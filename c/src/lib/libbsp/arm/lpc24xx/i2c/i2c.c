@@ -7,42 +7,28 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
-
 #include <bsp.h>
 #include <bsp/i2c.h>
-#include <bsp/io.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
-#include <bsp/lpc24xx.h>
 #include <bsp/system-clocks.h>
 
 #define RTEMS_STATUS_CHECKS_USE_PRINTK
 
 #include <rtems/status-checks.h>
-
-typedef struct {
-  rtems_libi2c_bus_t bus;
-  volatile lpc24xx_i2c *regs;
-  unsigned index;
-  unsigned config;
-  rtems_vector_number vector;
-  rtems_id state_update;
-  uint8_t * volatile data;
-  uint8_t * volatile end;
-} lpc24xx_i2c_bus_entry;
 
 static void lpc24xx_i2c_handler(void *arg)
 {
@@ -131,9 +117,9 @@ static rtems_status_code lpc24xx_i2c_init(rtems_libi2c_bus_t *bus)
   sc = lpc24xx_module_enable(LPC24XX_MODULE_I2C_0 + e->index, LPC24XX_MODULE_CCLK_8);
   RTEMS_CHECK_SC(sc, "enable module");
 
-  /* IO configuration */
-  sc = lpc24xx_io_config(LPC24XX_MODULE_I2C_0 + e->index, e->config);
-  RTEMS_CHECK_SC(sc, "IO configuration");
+  /* Pin configuration */
+  sc = lpc24xx_pin_config(e->pins, LPC24XX_PIN_SET_FUNCTION);
+  RTEMS_CHECK_SC(sc, "pin configuration");
 
   /* Clock high and low duty cycles */
   regs->sclh = cycles;
@@ -327,7 +313,7 @@ static int lpc24xx_i2c_ioctl(rtems_libi2c_bus_t *bus, int cmd, void *arg)
   return rv;
 }
 
-static const rtems_libi2c_bus_ops_t lpc24xx_i2c_ops = {
+const rtems_libi2c_bus_ops_t lpc24xx_i2c_ops = {
   .init = lpc24xx_i2c_init,
   .send_start = lpc24xx_i2c_send_start,
   .send_stop = lpc24xx_i2c_send_stop,
@@ -336,51 +322,3 @@ static const rtems_libi2c_bus_ops_t lpc24xx_i2c_ops = {
   .write_bytes = lpc24xx_i2c_write,
   .ioctl = lpc24xx_i2c_ioctl
 };
-
-#ifdef LPC24XX_CONFIG_I2C_0
-  static lpc24xx_i2c_bus_entry lpc24xx_i2c_entry_0 = {
-    .bus = {
-      .ops = &lpc24xx_i2c_ops,
-      .size = sizeof(lpc24xx_i2c_bus_entry)
-    },
-    .regs = (volatile lpc24xx_i2c *) I2C0_BASE_ADDR,
-    .index = 0,
-    .config = LPC24XX_CONFIG_I2C_0,
-    .vector = LPC24XX_IRQ_I2C_0
-  };
-
-  rtems_libi2c_bus_t * const lpc24xx_i2c_0 =
-    (rtems_libi2c_bus_t *) &lpc24xx_i2c_entry_0;
-#endif
-
-#ifdef LPC24XX_CONFIG_I2C_1
-  static lpc24xx_i2c_bus_entry lpc24xx_i2c_entry_1 = {
-    .bus = {
-      .ops = &lpc24xx_i2c_ops,
-      .size = sizeof(lpc24xx_i2c_bus_entry)
-    },
-    .regs = (volatile lpc24xx_i2c *) I2C1_BASE_ADDR,
-    .index = 1,
-    .config = LPC24XX_CONFIG_I2C_1,
-    .vector = LPC24XX_IRQ_I2C_1
-  };
-
-  rtems_libi2c_bus_t * const lpc24xx_i2c_1 =
-    (rtems_libi2c_bus_t *) &lpc24xx_i2c_entry_1;
-#endif
-
-#ifdef LPC24XX_CONFIG_I2C_2
-  static lpc24xx_i2c_bus_entry lpc24xx_i2c_entry_2 = {
-    .bus = {
-      .ops = &lpc24xx_i2c_ops,
-      .size = sizeof(lpc24xx_i2c_bus_entry)
-    },
-    .regs = (volatile lpc24xx_i2c *) I2C2_BASE_ADDR,
-    .index = 2,
-    .config = LPC24XX_CONFIG_I2C_2,
-    .vector = LPC24XX_IRQ_I2C_2
-  };
-
-  rtems_libi2c_bus_t * const lpc24xx_i2c_2 =
-    (rtems_libi2c_bus_t *) &lpc24xx_i2c_entry_2;
-#endif

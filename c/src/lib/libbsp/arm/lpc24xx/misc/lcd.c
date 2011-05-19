@@ -23,14 +23,16 @@
 #include <assert.h>
 
 #include <bsp/lpc24xx.h>
-#include <bsp/io.h>
 #include <bsp/lcd.h>
 #include <bsp/utility.h>
 #include <bsp/system-clocks.h>
 
 #define LCD_ENABLE BSP_BIT32(0)
 
-rtems_status_code lpc24xx_lcd_set_mode(lpc24xx_lcd_mode mode, unsigned pin_config)
+rtems_status_code lpc24xx_lcd_set_mode(
+  lpc24xx_lcd_mode mode,
+  const lpc24xx_pin_range *pins
+)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   bool enable = false;
@@ -61,7 +63,7 @@ rtems_status_code lpc24xx_lcd_set_mode(lpc24xx_lcd_mode mode, unsigned pin_confi
 
       PINSEL11 = BSP_FLD32(mode, 1, 3) | LCD_ENABLE;
 
-      sc = lpc24xx_io_config(LPC24XX_MODULE_LCD, pin_config);
+      sc = lpc24xx_pin_config(pins, LPC24XX_PIN_SET_FUNCTION);
       assert(sc == RTEMS_SUCCESSFUL);
     } else {
       if (lpc24xx_lcd_current_mode() != LCD_MODE_DISABLED) {
@@ -78,7 +80,7 @@ rtems_status_code lpc24xx_lcd_set_mode(lpc24xx_lcd_mode mode, unsigned pin_confi
         LCD_CTRL = lcd_ctrl;
       }
 
-      sc = lpc24xx_io_release(LPC24XX_MODULE_LCD, pin_config);
+      sc = lpc24xx_pin_config(pins, LPC24XX_PIN_SET_INPUT);
       assert(sc == RTEMS_SUCCESSFUL);
 
       PINSEL11 = 0;

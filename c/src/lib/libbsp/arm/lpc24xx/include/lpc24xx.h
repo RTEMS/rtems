@@ -1913,30 +1913,6 @@ typedef struct {
 #define SET_AHBCFG_EP5(reg, val) \
   SET_FIELD(reg, val, AHBCFG_EP5_MASK, 28)
 
-/* EMC */
-
-#define EMC_DYN_CTRL_CE 0x00000001U
-
-#define EMC_DYN_CTRL_CS 0x00000002U
-
-#define EMC_DYN_CTRL_CMD_NORMAL 0x00000000U
-
-#define EMC_DYN_CTRL_CMD_MODE 0x00000080U
-
-#define EMC_DYN_CTRL_CMD_PALL 0x00000100U
-
-#define EMC_DYN_CTRL_CMD_NOP 0x00000180U
-
-typedef struct {
-  uint32_t cfg;
-  uint32_t waitwen;
-  uint32_t waitoen;
-  uint32_t waitrd;
-  uint32_t waitpage;
-  uint32_t waitwr;
-  uint32_t waitrun;
-} lpc24xx_emc_static;
-
 /* I2C */
 
 typedef struct {

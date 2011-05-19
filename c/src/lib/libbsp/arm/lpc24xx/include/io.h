@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -36,65 +37,6 @@ extern "C" {
  * @ingroup lpc24xx
  *
  * @brief Input and output module.
- *
- * <table>
- *   <tr><th>Module</th><th>Configuration</th><th>First Pin</th><th>Last Pin</th></tr>
- *   <tr><td>UART 0</td><td>0</td><td>P0.2</td><td>P0.3</td></tr>
- *   <tr><td rowspan=3>UART 1</td><td>0</td><td>P0.15</td><td>P0.16</td></tr>
- *   <tr><td>1</td><td>P2.0</td><td>P2.1</td></tr>
- *   <tr><td>2</td><td>P3.16</td><td>P3.17</td></tr>
- *   <tr><td rowspan=3>UART 2</td><td>0</td><td>P0.10</td><td>P0.11</td></tr>
- *   <tr><td>1</td><td>P2.8</td><td>P2.9</td></tr>
- *   <tr><td>2</td><td>P4.22</td><td>P4.23</td></tr>
- *   <tr><td rowspan=3>UART 3</td><td>0</td><td>P0.0</td><td>P0.1</td></tr>
- *   <tr><td>1</td><td>P0.25</td><td>P0.26</td></tr>
- *   <tr><td>2</td><td>P4.28</td><td>P4.29</td></tr>
- *   <tr><td rowspan=5>ETHERNET</td><td>0</td><td>P1.0</td><td>P1.17</td></tr>
- *   <tr><td rowspan=4>1</td><td>P1.0</td><td>P1.1</td></tr>
- *   <tr><td>P1.4</td><td>P1.4</td></tr>
- *   <tr><td>P1.8</td><td>P1.10</td></tr>
- *   <tr><td>P1.14</td><td>P1.17</td></tr>
- *   <tr><td rowspan=4>ADC</td><td>0</td><td>P0.12</td><td>P0.13</td></tr>
- *   <tr><td>1</td><td>P0.23</td><td>P0.25</td></tr>
- *   <tr><td rowspan=2>2</td><td>P0.26</td><td>P0.26</td></tr>
- *   <tr><td>P1.30</td><td>P1.31</td></tr>
- *   <tr><td>I2C 0</td><td>0</td><td>P0.27</td><td>P0.28</td></tr>
- *   <tr><td rowspan=3>I2C 1</td><td>0</td><td>P0.0</td><td>P0.1</td></tr>
- *   <tr><td>1</td><td>P0.19</td><td>P0.20</td></tr>
- *   <tr><td>2</td><td>P2.14</td><td>P2.15</td></tr>
- *   <tr><td rowspan=3>I2C 2</td><td>0</td><td>P0.10</td><td>P0.11</td></tr>
- *   <tr><td>1</td><td>P2.30</td><td>P2.31</td></tr>
- *   <tr><td>2</td><td>P4.20</td><td>P4.21</td></tr>
- *   <tr><td rowspan=3>I2S</td><td>0</td><td>P0.4</td><td>P0.9</td></tr>
- *   <tr><td rowspan=2>1</td><td>P0.23</td><td>P0.25</td></tr>
- *   <tr><td>P2.11</td><td>P2.13</td></tr>
- *   <tr><td rowspan=5>SSP 0</td><td>0</td><td>P0.15</td><td>P0.18</td></tr>
- *   <tr><td rowspan=2>1</td><td>P1.20</td><td>P0.21</td></tr>
- *   <tr><td>P1.23</td><td>P0.24</td></tr>
- *   <tr><td rowspan=2>2</td><td>P2.22</td><td>P2.23</td></tr>
- *   <tr><td>P2.26</td><td>P2.27</td></tr>
- *   <tr><td rowspan=5>SSP 1</td><td>0</td><td>P0.6</td><td>P0.9</td></tr>
- *   <tr><td rowspan=3>1</td><td>P0.12</td><td>P0.13</td></tr>
- *   <tr><td>P0.14</td><td>P0.14</td></tr>
- *   <tr><td>P1.31</td><td>P1.31</td></tr>
- *   <tr><td>2</td><td>P4.20</td><td>P4.23</td></tr>
- *   <tr><td rowspan=2>USB</td><td rowspan=2>0</td><td>P0.29</td><td>P0.30</td></tr>
- *   <tr><td>P1.19</td><td>P1.19</td></tr>
- *   <tr><td>SPI</td><td>0</td><td>P0.15</td><td>P0.18</td></tr>
- *   <tr><td>PWM 1</td><td>0</td><td>P2.0</td><td>P2.0</td></tr>
- *   <tr><td rowspan=11>LCD</td><td rowspan=6>0</td><td>P0.4</td><td>P0.9</td></tr>
- *   <tr><td>P1.20</td><td>P1.29</td></tr>
- *   <tr><td>P2.0</td><td>P2.3</td></tr>
- *   <tr><td>P2.5</td><td>P2.9</td></tr>
- *   <tr><td>P2.12</td><td>P2.13</td></tr>
- *   <tr><td>P4.28</td><td>P4.29</td></tr>
- *   <tr><td rowspan=5>1</td><td>P1.20</td><td>P1.29</td></tr>
- *   <tr><td>P2.0</td><td>P2.3</td></tr>
- *   <tr><td>P2.5</td><td>P2.9</td></tr>
- *   <tr><td>P2.12</td><td>P2.13</td></tr>
- *   <tr><td>P4.28</td><td>P4.29</td></tr>
- *   <tr><td>DAC</td><td>0</td><td>P0.26</td><td>P0.26</td></tr>
- * </table>
  *
  * @{
  */
@@ -182,33 +124,6 @@ rtems_status_code lpc24xx_module_disable(
   lpc24xx_module module
 );
 
-/**
- * @brief Applies the configuration with index @a config for the @a module.
- *
- * The pin mode will not be altered.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INVALID_ID Invalid module or configuration.
- */
-rtems_status_code lpc24xx_io_config(
-  lpc24xx_module module,
-  unsigned config
-);
-
-/**
- * @brief Releases the configuration with index @a config for the @a module.
- *
- * The pins are set to general purpose IO function.  The pin mode will not be
- * altered.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INVALID_ID Invalid module or configuration.
- */
-rtems_status_code lpc24xx_io_release(
-  lpc24xx_module module,
-  unsigned config
-);
-
 rtems_status_code lpc24xx_gpio_config(
   unsigned index,
   lpc24xx_gpio_settings settings
@@ -254,6 +169,650 @@ static inline bool lpc24xx_gpio_get(unsigned index)
     return false;
   }
 }
+
+typedef enum {
+  /**
+   * @brief Sets the pin function.
+   */
+  LPC24XX_PIN_SET_FUNCTION = 0,
+
+  /**
+   * @brief Checks if all pins are configured with the specified function.
+   */
+  LPC24XX_PIN_CHECK_FUNCTION,
+
+  /**
+   * @brief Configures the pins as input.
+   */
+  LPC24XX_PIN_SET_INPUT,
+
+  /**
+   * @brief Checks if all pins are configured as input.
+   */
+  LPC24XX_PIN_CHECK_INPUT
+} lpc24xx_pin_action;
+
+typedef union {
+  struct {
+    uint16_t port : 3;
+    uint16_t index_begin : 5;
+    uint16_t index_last : 5;
+    uint16_t function : 3;
+  } fields;
+  uint16_t value;
+} lpc24xx_pin_range;
+
+#define LPC24XX_PIN_FUNCTION_00 0x0
+#define LPC24XX_PIN_FUNCTION_01 0x1
+#define LPC24XX_PIN_FUNCTION_10 0x2
+#define LPC24XX_PIN_FUNCTION_11 0x3
+
+#define LPC24XX_PIN(p, i, f) { { p, i, i, f } }
+
+#define LPC24XX_PIN_RANGE(p, i, j, f) { { p, i, j, f } }
+
+#define LPC24XX_PIN_TERMINAL { { 0x3, 0x1f, 0x1f, 0x3 } }
+
+/**
+ * @brief Performs the @a action with the @a pins
+ *
+ * @code
+ * #include <assert.h>
+ * #include <bsp/io.h>
+ * 
+ * void example(void)
+ * {
+ *   static const lpc24xx_pin_range pins [] = {
+ *     LPC24XX_PIN_I2S_RX_CLK_P0_4,
+ *     LPC24XX_PIN_I2S_RX_WS_P0_5,
+ *     LPC24XX_PIN_I2S_RX_SDA_P0_6,
+ *     LPC24XX_PIN_I2S_TX_CLK_P0_7,
+ *     LPC24XX_PIN_I2S_TX_WS_P0_8,
+ *     LPC24XX_PIN_I2S_TX_SDA_P0_9,
+ *     LPC24XX_PIN_TERMINAL
+ *   };
+ *   rtems_status_code sc = RTEMS_SUCCESSFUL;
+ * 
+ *   sc = lpc24xx_module_enable(LPC24XX_MODULE_I2S, LPC24XX_MODULE_CCLK_8);
+ *   assert(sc == RTEMS_SUCCESSFUL);
+ *   sc = lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
+ *   assert(sc == RTEMS_SUCCESSFUL);
+ * }
+ * @endcode
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_IO_ERROR Check failed.
+ * @retval RTEMS_NOT_DEFINED Invalid action.
+ */
+rtems_status_code lpc24xx_pin_config(
+  const lpc24xx_pin_range *pins,
+  lpc24xx_pin_action action
+);
+
+/**
+ * @name ADC Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_ADC_CHANNEL_0 \
+  LPC24XX_PIN(0, 23, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_ADC_CHANNEL_1 \
+  LPC24XX_PIN(0, 24, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_ADC_CHANNEL_2 \
+  LPC24XX_PIN(0, 25, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_ADC_CHANNEL_3 \
+  LPC24XX_PIN(0, 26, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_ADC_CHANNEL_4 \
+  LPC24XX_PIN(1, 30, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_ADC_CHANNEL_5 \
+  LPC24XX_PIN(1, 31, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_ADC_CHANNEL_6 \
+  LPC24XX_PIN(0, 12, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_ADC_CHANNEL_7 \
+  LPC24XX_PIN(0, 13, LPC24XX_PIN_FUNCTION_11)
+
+/** @} */
+
+/**
+ * @name DAC Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_DAC \
+  LPC24XX_PIN(0, 26, LPC24XX_PIN_FUNCTION_10)
+
+/** @} */
+
+/**
+ * @name Ethernet Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_ETHERNET_MII \
+  LPC24XX_PIN_RANGE(1, 0, 17, LPC24XX_PIN_FUNCTION_01)
+
+#define LPC24XX_PIN_ETHERNET_RMII_0 \
+  LPC24XX_PIN_RANGE(1, 0, 1, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_ETHERNET_RMII_1 \
+  LPC24XX_PIN(1, 4, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_ETHERNET_RMII_2 \
+  LPC24XX_PIN_RANGE(1, 8, 10, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_ETHERNET_RMII_3 \
+  LPC24XX_PIN_RANGE(1, 14, 17, LPC24XX_PIN_FUNCTION_01)
+
+/** @} */
+
+/**
+ * @name I2C 0 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_I2C_0_SDA \
+  LPC24XX_PIN(0, 27, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_I2C_0_SCL \
+  LPC24XX_PIN(0, 28, LPC24XX_PIN_FUNCTION_01)
+
+/** @} */
+
+/**
+ * @name I2C 1 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_I2C_1_SDA_P0_0 \
+  LPC24XX_PIN(0, 0, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_I2C_1_SDA_P0_19 \
+  LPC24XX_PIN(0, 19, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_I2C_1_SDA_P2_14 \
+  LPC24XX_PIN(2, 14, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_I2C_1_SCL_P0_20 \
+  LPC24XX_PIN(0, 20, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_I2C_1_SCL_P0_1 \
+  LPC24XX_PIN(0, 1, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_I2C_1_SCL_P2_15 \
+  LPC24XX_PIN(2, 15, LPC24XX_PIN_FUNCTION_11)
+
+/** @} */
+
+/**
+ * @name I2C 2 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_I2C_2_SDA_P0_10 \
+  LPC24XX_PIN(0, 10, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_I2C_2_SDA_P2_30 \
+  LPC24XX_PIN(2, 30, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_I2C_2_SDA_P4_20 \
+  LPC24XX_PIN(4, 20, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_I2C_2_SCL_P2_31 \
+  LPC24XX_PIN(2, 31, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_I2C_2_SCL_P0_11 \
+  LPC24XX_PIN(0, 11, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_I2C_2_SCL_P4_21 \
+  LPC24XX_PIN(4, 21, LPC24XX_PIN_FUNCTION_10)
+
+/** @} */
+
+/**
+ * @name I2S Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_I2S_RX_CLK_P0_4 \
+  LPC24XX_PIN(0, 4, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_I2S_RX_CLK_P0_23 \
+  LPC24XX_PIN(0, 23, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_I2S_RX_WS_P0_5 \
+  LPC24XX_PIN(0, 5, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_I2S_RX_WS_P0_24 \
+  LPC24XX_PIN(0, 24, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_I2S_RX_SDA_P0_6 \
+  LPC24XX_PIN(0, 6, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_I2S_RX_SDA_P0_25 \
+  LPC24XX_PIN(0, 25, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_I2S_TX_CLK_P0_7 \
+  LPC24XX_PIN(0, 7, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_I2S_TX_CLK_P2_11 \
+  LPC24XX_PIN(2, 11, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_I2S_TX_WS_P0_8 \
+  LPC24XX_PIN(0, 8, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_I2S_TX_WS_P2_12 \
+  LPC24XX_PIN(2, 12, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_I2S_TX_SDA_P0_9 \
+  LPC24XX_PIN(0, 9, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_I2S_TX_SDA_P2_13 \
+  LPC24XX_PIN(2, 13, LPC24XX_PIN_FUNCTION_11)
+
+/** @} */
+
+/**
+ * @name LCD Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_LCD_PWR \
+  LPC24XX_PIN(2, 0, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_LE \
+  LPC24XX_PIN(2, 1, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_DCLK \
+  LPC24XX_PIN(2, 2, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_FP \
+  LPC24XX_PIN(2, 3, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_ENAB_M \
+  LPC24XX_PIN(2, 4, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_LP \
+  LPC24XX_PIN(2, 5, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_CLKIN \
+  LPC24XX_PIN(2, 11, LPC24XX_PIN_FUNCTION_01)
+
+#define LPC24XX_PIN_LCD_VD_P0_4 \
+  LPC24XX_PIN(0, 4, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P0_5 \
+  LPC24XX_PIN(0, 5, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P0_6 \
+  LPC24XX_PIN(0, 6, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P0_7 \
+  LPC24XX_PIN(0, 7, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P0_8 \
+  LPC24XX_PIN(0, 8, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P0_9 \
+  LPC24XX_PIN(0, 9, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_20 \
+  LPC24XX_PIN(1, 20, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_21 \
+  LPC24XX_PIN(1, 21, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_22 \
+  LPC24XX_PIN(1, 22, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_23 \
+  LPC24XX_PIN(1, 23, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_24 \
+  LPC24XX_PIN(1, 24, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_25 \
+  LPC24XX_PIN(1, 25, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_26 \
+  LPC24XX_PIN(1, 26, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_27 \
+  LPC24XX_PIN(1, 27, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_28 \
+  LPC24XX_PIN(1, 28, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P1_29 \
+  LPC24XX_PIN(1, 29, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P2_6 \
+  LPC24XX_PIN(2, 6, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_VD_P2_7 \
+  LPC24XX_PIN(2, 7, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_VD_P2_8 \
+  LPC24XX_PIN(2, 8, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_VD_P2_9 \
+  LPC24XX_PIN(2, 9, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_LCD_VD_P2_12 \
+  LPC24XX_PIN(2, 12, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P2_13 \
+  LPC24XX_PIN(2, 13, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_LCD_VD_P4_28 \
+  LPC24XX_PIN(4, 28, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_LCD_VD_P4_29 \
+  LPC24XX_PIN(4, 29, LPC24XX_PIN_FUNCTION_10)
+
+/** @} */
+
+/**
+ * @name PWM 0 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_PWM_0_CHANNEL_1_P1_2 \
+  LPC24XX_PIN(1, 2, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_PWM_0_CHANNEL_1_P3_16 \
+  LPC24XX_PIN(3, 16, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_PWM_0_CHANNEL_2_P1_3 \
+  LPC24XX_PIN(1, 3, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_PWM_0_CHANNEL_2_P3_17 \
+  LPC24XX_PIN(3, 17, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_PWM_0_CHANNEL_3_P1_5 \
+  LPC24XX_PIN(1, 5, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_PWM_0_CHANNEL_3_P3_18 \
+  LPC24XX_PIN(3, 18, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_PWM_0_CHANNEL_4_P1_6 \
+  LPC24XX_PIN(1, 6, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_PWM_0_CHANNEL_4_P3_19 \
+  LPC24XX_PIN(3, 19, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_PWM_0_CHANNEL_5_P1_7 \
+  LPC24XX_PIN(1, 7, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_PWM_0_CHANNEL_5_P3_20 \
+  LPC24XX_PIN(3, 20, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_PWM_0_CHANNEL_6_P1_11 \
+  LPC24XX_PIN(1, 11, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_PWM_0_CHANNEL_6_P3_21 \
+  LPC24XX_PIN(3, 21, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_PWM_0_CAPTURE_0_P1_12 \
+  LPC24XX_PIN(1, 12, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_PWM_0_CAPTURE_0_P3_22 \
+  LPC24XX_PIN(3, 22, LPC24XX_PIN_FUNCTION_10)
+
+/** @} */
+
+/**
+ * @name PWM 1 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_PWM_1_CHANNEL_1_P1_18 \
+  LPC24XX_PIN(1, 18, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_PWM_1_CHANNEL_1_P2_0 \
+  LPC24XX_PIN(2, 0, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_PWM_1_CHANNEL_1_P3_24 \
+  LPC24XX_PIN(3, 24, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_PWM_1_CHANNEL_2_P1_20 \
+  LPC24XX_PIN(1, 20, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_PWM_1_CHANNEL_2_P2_1 \
+  LPC24XX_PIN(2, 1, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_PWM_1_CHANNEL_2_P3_25 \
+  LPC24XX_PIN(3, 25, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_PWM_1_CHANNEL_3_P1_21 \
+  LPC24XX_PIN(1, 21, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_PWM_1_CHANNEL_3_P2_2 \
+  LPC24XX_PIN(2, 2, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_PWM_1_CHANNEL_3_P3_26 \
+  LPC24XX_PIN(3, 26, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_PWM_1_CHANNEL_4_P1_23 \
+  LPC24XX_PIN(1, 23, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_PWM_1_CHANNEL_4_P2_3 \
+  LPC24XX_PIN(2, 3, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_PWM_1_CHANNEL_4_P3_27 \
+  LPC24XX_PIN(3, 27, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_PWM_1_CHANNEL_5_P1_24 \
+  LPC24XX_PIN(1, 24, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_PWM_1_CHANNEL_5_P2_4 \
+  LPC24XX_PIN(2, 4, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_PWM_1_CHANNEL_5_P3_28 \
+  LPC24XX_PIN(3, 28, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_PWM_1_CHANNEL_6_P1_26 \
+  LPC24XX_PIN(1, 26, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_PWM_1_CHANNEL_6_P2_5 \
+  LPC24XX_PIN(2, 5, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_PWM_1_CHANNEL_6_P3_29 \
+  LPC24XX_PIN(3, 29, LPC24XX_PIN_FUNCTIO9_11)
+
+#define LPC24XX_PIN_PWM_1_CAPTURE_0_P1_28 \
+  LPC24XX_PIN(1, 28, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_PWM_1_CAPTURE_0_P2_7 \
+  LPC24XX_PIN(2, 6, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_PWM_1_CAPTURE_0_P3_23 \
+  LPC24XX_PIN(3, 23, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_PWM_1_CAPTURE_1_P1_29 \
+  LPC24XX_PIN(1, 29, LPC24XX_PIN_FUNCTION_10)
+
+/** @} */
+
+/**
+ * @name SPI Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_SPI_SCK \
+  LPC24XX_PIN(0, 15, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SPI_SSEL \
+  LPC24XX_PIN(0, 16, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SPI_MISO \
+  LPC24XX_PIN(0, 17, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SPI_MOSI \
+  LPC24XX_PIN(0, 18, LPC24XX_PIN_FUNCTION_11)
+
+/** @} */
+
+/**
+ * @name SSP 0 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_SSP_0_SCK_P0_15 \
+  LPC24XX_PIN(0, 15, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_0_SCK_P1_20 \
+  LPC24XX_PIN(1, 20, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SSP_0_SCK_P2_22 \
+  LPC24XX_PIN(2, 22, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_SSP_0_SSEL_P0_16 \
+  LPC24XX_PIN(0, 16, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_0_SSEL_P1_21 \
+  LPC24XX_PIN(1, 21, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SSP_0_SSEL_P2_23 \
+  LPC24XX_PIN(2, 23, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_SSP_0_MISO_P0_17 \
+  LPC24XX_PIN(0, 17, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_0_MISO_P1_23 \
+  LPC24XX_PIN(1, 23, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SSP_0_MISO_P2_26 \
+  LPC24XX_PIN(2, 26, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_SSP_0_MOSI_P0_18 \
+  LPC24XX_PIN(0, 18, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_0_MOSI_P1_24 \
+  LPC24XX_PIN(1, 24, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SSP_0_MOSI_P2_27 \
+  LPC24XX_PIN(2, 27, LPC24XX_PIN_FUNCTION_11)
+
+/** @} */
+
+/**
+ * @name SSP 1 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_SSP_1_SCK_P0_6 \
+  LPC24XX_PIN(0, 6, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_1_SCK_P0_12 \
+  LPC24XX_PIN(0, 12, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_1_SCK_P4_20 \
+  LPC24XX_PIN(4, 20, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_SSP_1_SSEL_P0_7 \
+  LPC24XX_PIN(0, 7, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_1_SSEL_P0_13 \
+  LPC24XX_PIN(0, 13, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_1_SSEL_P4_21 \
+  LPC24XX_PIN(4, 21, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_SSP_1_MISO_P0_8 \
+  LPC24XX_PIN(0, 8, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_1_MISO_P0_14 \
+  LPC24XX_PIN(0, 14, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SSP_1_MISO_P4_22 \
+  LPC24XX_PIN(4, 22, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_SSP_1_MOSI_P0_9 \
+  LPC24XX_PIN(0, 9, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_1_MOSI_P1_31 \
+  LPC24XX_PIN(1, 31, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_SSP_1_MOSI_P4_23 \
+  LPC24XX_PIN(4, 23, LPC24XX_PIN_FUNCTION_11)
+
+/** @} */
+
+/**
+ * @name UART 0 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_UART_0_TXD \
+  LPC24XX_PIN(0, 2, LPC24XX_PIN_FUNCTION_01)
+
+#define LPC24XX_PIN_UART_0_RXD \
+  LPC24XX_PIN(0, 3, LPC24XX_PIN_FUNCTION_01)
+
+/** @} */
+
+/**
+ * @name UART 1 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_UART_1_TXD_P0_15 \
+  LPC24XX_PIN(0, 15, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_UART_1_TXD_P2_0 \
+  LPC24XX_PIN(2, 0, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_UART_1_TXD_P3_16 \
+  LPC24XX_PIN(3, 16, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_UART_1_RXD_P0_16 \
+  LPC24XX_PIN(0, 16, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_UART_1_RXD_P2_1 \
+  LPC24XX_PIN(2, 1, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_UART_1_RXD_P3_17 \
+  LPC24XX_PIN(3, 17, LPC24XX_PIN_FUNCTION_11)
+
+/** @} */
+
+/**
+ * @name UART 2 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_UART_2_TXD_P0_10 \
+  LPC24XX_PIN(0, 10, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_UART_2_TXD_P2_8 \
+  LPC24XX_PIN(2, 8, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_UART_2_TXD_P4_22 \
+  LPC24XX_PIN(4, 22, LPC24XX_PIN_FUNCTION_10)
+
+#define LPC24XX_PIN_UART_2_RXD_P0_11 \
+  LPC24XX_PIN(0, 11, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_UART_2_RXD_P2_9 \
+  LPC24XX_PIN(2, 9, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_UART_2_RXD_P4_23 \
+  LPC24XX_PIN(4, 23, LPC24XX_PIN_FUNCTION_10)
+
+/** @} */
+
+/**
+ * @name UART 3 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_UART_3_TXD_P0_0 \
+  LPC24XX_PIN(0, 0, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_UART_3_TXD_P0_25 \
+  LPC24XX_PIN(0, 25, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_UART_3_TXD_P4_28 \
+  LPC24XX_PIN(4, 28, LPC24XX_PIN_FUNCTION_11)
+
+#define LPC24XX_PIN_UART_3_RXD_P0_1 \
+  LPC24XX_PIN(0, 1, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_UART_3_RXD_P0_25 \
+  LPC24XX_PIN(0, 26, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_UART_3_RXD_P4_29 \
+  LPC24XX_PIN(4, 29, LPC24XX_PIN_FUNCTION_11)
+
+/** @} */
+
+/**
+ * @name USB Port 1 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_USB_D_PLUS_1\
+  LPC24XX_PIN(0, 29, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_D_MINUS_1\
+  LPC24XX_PIN(0, 30, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_UP_LED_1\
+  LPC24XX_PIN(1, 18, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_TX_E_1\
+  LPC24XX_PIN(1, 19, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_PPWR_1\
+  LPC24XX_PIN(1, 19, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_USB_TX_DP_1\
+  LPC24XX_PIN(1, 20, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_TX_DM_1\
+  LPC24XX_PIN(1, 21, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_RCV_1\
+  LPC24XX_PIN(1, 22, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_PWRD_1\
+  LPC24XX_PIN(1, 22, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_USB_RX_DP_1\
+  LPC24XX_PIN(1, 23, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_RX_DM_1\
+  LPC24XX_PIN(1, 24, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_LS_1\
+  LPC24XX_PIN(1, 25, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_HSTEN_1\
+  LPC24XX_PIN(1, 25, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_USB_SSPND_1\
+  LPC24XX_PIN(1, 26, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_INT_1\
+  LPC24XX_PIN(1, 27, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_OVRCR_1\
+  LPC24XX_PIN(1, 27, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_USB_SCL_1\
+  LPC24XX_PIN(1, 28, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_SDA_1\
+  LPC24XX_PIN(1, 29, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_CONNECT_1\
+  LPC24XX_PIN(2, 9, LPC24XX_PIN_FUNCTION_01)
+
+/** @} */
+
+/**
+ * @name USB Port 2 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_USB_PPWR_2\
+  LPC24XX_PIN(0, 12, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_UP_LED_2\
+  LPC24XX_PIN(0, 13, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_HSTEN_2\
+  LPC24XX_PIN(0, 14, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_CONNECT_2\
+  LPC24XX_PIN(0, 14, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_D_PLUS_2\
+  LPC24XX_PIN(0, 31, LPC24XX_PIN_FUNCTION_10)
+#define LPC24XX_PIN_USB_PWRD_2\
+  LPC24XX_PIN(1, 30, LPC24XX_PIN_FUNCTION_01)
+#define LPC24XX_PIN_USB_OVRCR_2\
+  LPC24XX_PIN(1, 31, LPC24XX_PIN_FUNCTION_01)
+
+/** @} */
 
 /** @} */
 

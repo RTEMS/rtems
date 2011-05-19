@@ -1,3 +1,14 @@
+2011-05-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* i2c/i2c-config.c: New file.
+	* include/lcd.h: Removed EMC definitions.
+	* misc/dma.c: Fixed initialization.
+	* include/i2c.h, include/io.h, include/lpc-ethernet-config.h,
+	include/lpc24xx.h, console/console-config.c, i2c/i2c.c, misc/io.c,
+	misc/lcd.c, startup/bspstart.c, startup/bspstarthooks.c: New pin
+	configuration API.
+	* Makefile.am, preinstall.am: Update.
+
 2011-03-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* README: Add example mkimage command.

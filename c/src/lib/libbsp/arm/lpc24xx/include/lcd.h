@@ -25,6 +25,8 @@
 
 #include <rtems.h>
 
+#include <bsp/io.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -54,16 +56,16 @@ typedef enum {
 /**
  * @brief Set the LCD @a mode.
  *
- * The pins are configured according to the @a pin_config.
+ * The pins are configured according to @a pins.
  *
- * @see lpc24xx_io_config() and lpc24xx_io_release().
+ * @see lpc24xx_pin_config().
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_IO_ERROR Invalid mode.
  */
 rtems_status_code lpc24xx_lcd_set_mode(
   lpc24xx_lcd_mode mode,
-  unsigned pin_config
+  const lpc24xx_pin_range *pins
 );
 
 lpc24xx_lcd_mode lpc24xx_lcd_current_mode(void);

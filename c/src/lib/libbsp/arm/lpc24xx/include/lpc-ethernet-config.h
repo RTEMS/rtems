@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -47,14 +48,27 @@ extern "C" {
 
   static void lpc_eth_config_module_enable(void)
   {
+    static const lpc24xx_pin_range pins [] = {
+      LPC24XX_PIN_ETHERNET_RMII_0,
+      LPC24XX_PIN_ETHERNET_RMII_1,
+      LPC24XX_PIN_ETHERNET_RMII_2,
+      LPC24XX_PIN_ETHERNET_RMII_3,
+      LPC24XX_PIN_TERMINAL
+    };
+
     lpc24xx_module_enable(LPC24XX_MODULE_ETHERNET, LPC24XX_MODULE_PCLK_DEFAULT);
-    lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 1);
+    lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
   }
 #else
   static void lpc_eth_config_module_enable(void)
   {
+    static const lpc24xx_pin_range pins [] = {
+      LPC24XX_PIN_ETHERNET_MII,
+      LPC24XX_PIN_TERMINAL
+    };
+
     lpc24xx_module_enable(LPC24XX_MODULE_ETHERNET, LPC24XX_MODULE_PCLK_DEFAULT);
-    lpc24xx_io_config(LPC24XX_MODULE_ETHERNET, 0);
+    lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
   }
 #endif
 

@@ -37,6 +37,9 @@ include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-timer.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-i2s.h
+include_bsp_HEADERS += ../shared/lpc/include/lpc-emc.h
+include_bsp_HEADERS += ../shared/lpc/include/lpc-dma.h
+include_bsp_HEADERS += ../shared/lpc/include/lpc-lcd.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/lpc24xx.h
 include_bsp_HEADERS += include/system-clocks.h
@@ -131,7 +134,8 @@ libbsp_a_SOURCES += misc/system-clocks.c \
 libbsp_a_SOURCES += ssp/ssp.c
 
 # I2C
-libbsp_a_SOURCES += i2c/i2c.c
+libbsp_a_SOURCES += i2c/i2c.c \
+	i2c/i2c-config.c
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c \

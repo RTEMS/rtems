@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2008, 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -38,19 +39,21 @@ void lpc24xx_dma_initialize(void)
   /* Disable module */
   GPDMA_CONFIG = 0;
 
-  /* Enable module */
-  #if BYTE_ORDER == LITTLE_ENDIAN
-    GPDMA_CONFIG = GPDMA_CONFIG_EN;
-  #else
-    GPDMA_CONFIG = GPDMA_CONFIG_EN | GPDMA_CONFIG_MODE;
-  #endif
-
   /* Reset registers */
   GPDMA_SOFT_SREQ = 0;
   GPDMA_SOFT_BREQ = 0;
   GPDMA_SOFT_LSREQ = 0;
   GPDMA_SOFT_LBREQ = 0;
   GPDMA_SYNC = 0;
+  GPDMA_CH0_CFG = 0;
+  GPDMA_CH1_CFG = 0;
+
+  /* Enable module */
+  #if BYTE_ORDER == LITTLE_ENDIAN
+    GPDMA_CONFIG = GPDMA_CONFIG_EN;
+  #else
+    GPDMA_CONFIG = GPDMA_CONFIG_EN | GPDMA_CONFIG_MODE;
+  #endif
 }
 
 rtems_status_code lpc24xx_dma_channel_obtain(unsigned channel)
