@@ -80,10 +80,10 @@ void rtems_smp_process_interrupt(void)
 
   cpu = bsp_smp_processor_id();
 
-  level = _SMP_lock_Spinlock_Obtain( &_Per_CPU_Information[cpu].lock );
+  level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
     message = _Per_CPU_Information[cpu].message;
     _Per_CPU_Information[cpu].message &= ~message;
-  _SMP_lock_Spinlock_Release( &_Per_CPU_Information[cpu].lock, level );
+  _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
 
   #if defined(SMP_DEBUG)
     {
@@ -126,9 +126,9 @@ void rtems_smp_send_message(
 {
   ISR_Level level;
 
-  level = _SMP_lock_Spinlock_Obtain( &_Per_CPU_Information[cpu].lock );
+  level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
     _Per_CPU_Information[cpu].message |= message;
-  _SMP_lock_Spinlock_Release( &_Per_CPU_Information[cpu].lock, level );
+  _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
   bsp_smp_interrupt_cpu( cpu );
 }
 
@@ -145,9 +145,9 @@ void rtems_smp_broadcast_message(
   for ( dest_cpu=0 ; dest_cpu <  _SMP_Processor_count; dest_cpu++ ) {
     if ( cpu == dest_cpu )
       continue;
-    level = _SMP_lock_Spinlock_Obtain( &_Per_CPU_Information[cpu].lock );
+    level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
       _Per_CPU_Information[dest_cpu].message |= message;
-    _SMP_lock_Spinlock_Release( &_Per_CPU_Information[cpu].lock, level );
+    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
   }
   bsp_smp_broadcast_interrupt();
 }

@@ -92,18 +92,17 @@ typedef enum {
 typedef struct {
   #if defined(RTEMS_SMP)
     /** This element is used to lock this structure */
-    SMP_lock_Control  lock; 
+    SMP_lock_spinlock_simple_Control  lock; 
 
     /** This indicates that the CPU is online. */
-    uint32_t          state; 
+    uint32_t                          state; 
 
     /**
      *  This is the request for the interrupt.
      *  
      *  @note This may become a chain protected by atomic instructions.
      */
-    uint32_t          message; 
-
+    uint32_t                          message; 
   #endif
 
 #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \

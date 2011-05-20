@@ -1,3 +1,10 @@
+2011-05-20	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1787/cpukit
+	* score/include/rtems/score/percpu.h,
+	score/include/rtems/score/smplock.h, score/src/smp.c,
+	score/src/smplock.c: Add nesting support to smp spinlock.
+
 2011-05-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/Makefile.am: Remove posixtime.h.
