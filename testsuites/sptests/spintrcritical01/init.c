@@ -84,7 +84,7 @@ rtems_timer_service_routine test_release_from_isr(
   }
 
   status = rtems_semaphore_release( Semaphore );
-  directive_failed( status, "release" );
+  directive_failed_with_level( status, "release", -1 );
 }
 
 
