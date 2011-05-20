@@ -1,3 +1,8 @@
+2011-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems++/Init.cc, rtems++/Task1.cc, rtems++/Task2.cc,
+	rtems++/Task3.cc: Added HAVE_CONFIG_H.
+
 2011-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloc04/init.c: Fix tests broken in warning pass.

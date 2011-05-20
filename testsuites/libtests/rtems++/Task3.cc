@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "System.h"
 
 Task3::Task3(const char* name,
