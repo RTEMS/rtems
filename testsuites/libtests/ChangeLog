@@ -1,5 +1,9 @@
 2011-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* termios08/init.c: Fixed parameter to avoid test failure.
+
+2011-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* rtems++/Init.cc, rtems++/Task1.cc, rtems++/Task2.cc,
 	rtems++/Task3.cc: Added HAVE_CONFIG_H.
 

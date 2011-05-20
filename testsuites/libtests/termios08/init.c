@@ -130,7 +130,7 @@ rtems_task Init(
   read_it( 1 );
 
   puts( "Enqueue 7 characters" );
-  termios_test_driver_set_rx( "1234567", 1 );
+  termios_test_driver_set_rx( "1234567", 7 );
   read_it( 5 );
   read_it( 2 );
 
