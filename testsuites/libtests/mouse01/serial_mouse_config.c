@@ -27,6 +27,5 @@ bool bsp_get_serial_mouse_device(
   *name = TERMIOS_TEST_DRIVER_DEVICE_NAME;
   *type = Mouse_Type_Short;
 
-  printf("Mouse Device: name=%s type=%s\n", *name, *type );
   return true;
 }
