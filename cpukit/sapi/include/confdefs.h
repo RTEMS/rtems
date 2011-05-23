@@ -798,6 +798,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  combined provided one larger memory pool. This is particularly
    *  useful in combination with the unlimited objects configuration.
    */
+  #ifdef BSP_DEFAULT_UNIFIED_WORK_AREAS
+    #ifndef CONFIGURE_UNIFIED_WORK_AREAS
+      #define CONFIGURE_UNIFIED_WORK_AREAS
+    #endif
+  #endif
+  
   #ifdef CONFIGURE_UNIFIED_WORK_AREAS
     #include <rtems/score/wkspace.h>
     Heap_Control  *RTEMS_Malloc_Heap = &_Workspace_Area;

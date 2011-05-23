@@ -1,3 +1,12 @@
+2011-05-23	Marta Rybczynska <marta.rybczynska@kalray.eu>
+
+	PR 1805/cpukit
+	* sapi/include/confdefs.h: Currently unified areas are defined
+	per-application. For some memory constrained and/or very dynamic
+	environments (BSPs), it may be better to have per-BSP default value.
+	This patch introduces such option. The default behaviour is left
+	unchanged.
+
 2011-05-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1804/cpukit
