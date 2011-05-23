@@ -1997,8 +1997,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     /* System overhead pieces */
     uint32_t INTERRUPT_VECTOR_TABLE;
     uint32_t INTERRUPT_STACK_MEMORY;
-    uint32_t THREAD_READY_CHAINS;
     uint32_t MEMORY_FOR_IDLE_TASK;
+    uint32_t MEMORY_FOR_SCHEDULER;
+    uint32_t MEMORY_PER_TASK_FOR_SCHEDULER;
 
     /* Classic API Pieces */
     uint32_t CLASSIC_TASKS;
@@ -2040,8 +2041,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     /* System overhead pieces */
     CONFIGURE_INTERRUPT_VECTOR_TABLE,
     CONFIGURE_INTERRUPT_STACK_MEMORY,
-    CONFIGURE_MEMORY_FOR_THREAD_READY_CHAINS,
     CONFIGURE_MEMORY_FOR_IDLE_TASK,
+    CONFIGURE_MEMORY_FOR_SCHEDULER,
+    CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER,
 
     /* Classic API Pieces */
     CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS, 0),

@@ -1,3 +1,10 @@
+2011-05-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1804/cpukit
+	* sapi/include/confdefs.h: Replace obsolete THREAD_READY_CHAINS with
+	CONFIGURE_MEMORY_FOR_SCHEDULER and
+	CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER in debug structure.
+
 2011-05-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1791/cpukit
