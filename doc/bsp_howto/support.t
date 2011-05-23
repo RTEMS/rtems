@@ -34,11 +34,11 @@ file from the PowerPC psim BSP:
 @end group
 @end example
 
-The first section of this file renames the built-in definition of 
+The first section of this file renames the built-in definition of
 some specification variables so they can be augmented without
 embedded their original definition.  The subsequent sections
 specify what behavior is expected when the @code{-qrtems} or
-@code{-qrtems_debug} option is specified.  
+@code{-qrtems_debug} option is specified.
 
 The @code{*startfile} section specifies that the BSP specific file
 @code{start.o} will be used instead of @code{crt0.o}.  In addition,
@@ -61,7 +61,7 @@ is a @code{README} file at the top of the BSP source.  This file
 describes the board and its hardware configuration, provides vendor
 information, local configuration information, information on downloading
 code to the board, debugging, etc..  The intent of this
-file is to help someone begin to use the BSP faster.  
+file is to help someone begin to use the BSP faster.
 
 A @code{README} file in a BSP subdirectory typically explains something
 about the contents of that subdirectory in greater detail.  For example,
@@ -98,10 +98,10 @@ chasis.
 
 @section bsp.h Include File
 
-The file @code{include/bsp.h} contains prototypes and definitions 
+The file @code{include/bsp.h} contains prototypes and definitions
 specific to this board.  Every BSP is required to provide a @code{bsp.h}.
 The best approach to writing a @code{bsp.h} is copying an existing one
-as a starting point.  
+as a starting point.
 
 Many @code{bsp.h} files provide prototypes of variables defined
 in the linker script (@code{linkcmds}).
@@ -113,7 +113,7 @@ The @code{tm27} test from the RTEMS Timing Test Suite is designed to measure the
 @itemize @bullet
 @item @code{MUST_WAIT_FOR_INTERRUPT} - modifies behavior of @code{tm27}.
 
-@item @code{Install_tm27_vector} - installs the interrupt service 
+@item @code{Install_tm27_vector} - installs the interrupt service
 routine for the Interrupt Benchmark Test (@code{tm27}).
 
 @item @code{Cause_tm27_intr} - generates the interrupt source
@@ -179,6 +179,7 @@ Historically initialization of the C Library was done as part of the
 BSP's Pretasking Hook but now the BSP Boot Card Framework can perform
 this operation.
 
+@findex CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
 If your BSP does not want to support dynamic heap extension, then you do not have to do anything special.  However, if you want to support @code{sbrk}, you must provide an implementation of this method and define @code{CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK} in @code{bsp.h}.  This informs @code{rtems/confdefs.h} to configure the Malloc Family Extensions which support @code{sbrk}.
 
 @section bsp_cleanup() - Cleanup the Hardware
@@ -201,6 +202,43 @@ to support the FreeScale evaluation boards.  This is convenient when
 using the boards in a development environment and may be disabled for
 production use.
 
+@section Configuration Macros
+
+Each BSP can define macros in bsp.h which alter some of the the default configuration parameters in @code{rtems/confdefs.h}.  This section describes those macros:
+
+@itemize @bullet
+
+@findex CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+@item @code{CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK} must be defined if the
+BSP has proper support for @code{sbrk}.  This is discussed in more detail
+in the previous section.
+
+@findex BSP_IDLE_TASK_BODY
+@item @code{BSP_IDLE_TASK_BODY} may be defined to the entry point of a
+BSP specific IDLE thread implementation.  This may be overridden if the
+application provides its own IDLE task implementation.
+
+@findex BSP_IDLE_TASK_STACK_SIZE
+@item @code{BSP_IDLE_TASK_STACK_SIZE} may be defined to the desired
+default stack size for the IDLE task as recommended when using this BSP.
+
+@findex BSP_INTERRUPT_STACK_SIZE
+@item @code{BSP_INTERRUPT_STACK_SIZE} may be defined to the desired default interrupt stack size as recommended when using this BSP.  This is sometimes required when the BSP developer has knowledge of stack intensive interrupt handlers.
+
+@findex BSP_ZERO_WORKSPACE_AUTOMATICALLY
+@item @code{BSP_ZERO_WORKSPACE_AUTOMATICALLY} is defined when the BSP
+requires that RTEMS zero out the RTEMS C Program Heap at initialization.
+If the memory is already zeroed out by a test sequence or boot ROM,
+then the boot time can be reduced by not zeroing memory twice.
+
+@findex BSP_DEFAULT_UNIFIED_WORK_AREAS
+@item @code{BSP_DEFAULT_UNIFIED_WORK_AREAS} is defined when the BSP
+recommends that the unified work areas configuration should always
+be used.  This is desirable when the BSP is known to always have very
+little RAM and thus saving memory by any means is desirable.
+
+@end itemize
+
 @section set_vector() - Install an Interrupt Vector
 
 On targets with Simple Vectored Interrupts, the BSP must provide
@@ -222,8 +260,8 @@ rtems_isr_entry set_vector(                     /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
-) 
-@{ 
+)
+@{
   if the type is RAW
     install the raw vector
   else

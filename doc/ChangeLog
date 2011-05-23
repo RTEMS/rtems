@@ -1,3 +1,9 @@
+2011-05-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* bsp_howto/support.t: Add section describing configuration macros
+	which may be defined at the BSP level to alter defaults in
+	rtems/confdefs.h.
+
 2011-05-19	Gedare Bloom <giddyup44@yahoo.com>
 
 	* user/conf.t: Fix typos.
