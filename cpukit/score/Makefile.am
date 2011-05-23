@@ -241,6 +241,10 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/threadtickletimeslice.c \
     src/iterateoverthreads.c src/threadblockingoperationcancel.c
+    
+if HAS_SMP
+libscore_a_SOURCES += src/threaddispatchdisablelevel.c
+endif
 
 ## THREADQ_C_FILES
 libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \

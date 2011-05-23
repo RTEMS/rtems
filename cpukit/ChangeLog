@@ -1,3 +1,10 @@
+2011-05-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* score/Makefile.am, score/include/rtems/score/thread.h,
+	score/inline/rtems/score/thread.inl: Add smp support to dispable
+	dispatch level accesses.
+	* score/src/threaddispatchdisablelevel.c: New file.
+
 2011-05-20	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1787/cpukit

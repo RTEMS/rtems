@@ -464,6 +464,14 @@ SCORE_EXTERN Context_Control _Thread_BSP_context;
  */
 SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
 
+#if defined(RTEMS_SMP)
+  /**
+   * The following declares the smp spinlock to be used to control
+   * the dispatch critical section accesses across cpus.
+   */
+  SCORE_EXTERN SMP_lock_spinlock_nested_Control _Thread_Dispatch_disable_level_lock;
+#endif
+
 /**
  *  The following holds how many user extensions are in the system.  This
  *  is used to determine how many user extension data areas to allocate
@@ -783,6 +791,53 @@ void _Thread_blocking_operation_Cancel(
   Thread_Control                   *the_thread,
   ISR_Level                         level
 );
+
+
+#if defined(RTEMS_SMP)
+
+  /** @brief _Thread_Dispatch_initialization
+   * 
+   *  This routine initializes the thread dispatching subsystem.
+   */
+  void _Thread_Dispatch_initialization(void);
+
+  /** @brief _Thread_Dispatch_in_critical_section
+   * 
+   * This routine returns true if thread dispatch indicates
+   * that we are in a critical section.
+   */
+  bool _Thread_Dispatch_in_critical_section(void);
+
+  /** @brief _Thread_Dispatch_get_disable_level
+   * 
+   * This routine returns value of the the thread dispatch level.
+   */
+  uint32_t _Thread_Dispatch_get_disable_level(void);
+
+  /** @brief _Thread_Dispatch_set_disable_level
+   * 
+   * This routine sets thread dispatch level to the 
+   * value passed in.
+   */
+  uint32_t _Thread_Dispatch_set_disable_level(uint32_t value);
+
+  /** @brief _Thread_Dispatch_increment_disable_level
+   *
+   * This rountine increments the thread dispatch level
+   */
+  uint32_t _Thread_Dispatch_increment_disable_level(void);
+
+  /** @brief _Thread_Dispatch_decrement_disable_level
+   * 
+   * This routine decrements the thread dispatch level.
+   */
+  uint32_t _Thread_Dispatch_decrement_disable_level(void);
+
+#else
+  /*
+   * The _Thread_Dispatch_... functions are in thread.inl
+   */
+#endif
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/thread.inl>

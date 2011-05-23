@@ -31,63 +31,77 @@
  *  @{
  */
 
-/**
- * This routine returns true if thread dispatch indicates
- * that we are in a critical section.
- */
-RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_in_critical_section(void)
-{
-   if (  _Thread_Dispatch_disable_level == 0 )
-    return false;
+#if defined(RTEMS_SMP)
 
-   return true;
-}
+  /*
+   * The _Thread_Dispatch_... functions are prototyped in thread.h.
+   */
 
-/**
- * This routine returns value of the the thread dispatch level.
- */
-RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_get_disable_level(void)
-{
-  return _Thread_Dispatch_disable_level;
-}
+#else
 
-/**
- * This routine sets thread dispatch level to the 
- * value passed in.
- */
-RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
-{
-  _Thread_Dispatch_disable_level = value;
-  return value;
-}
+  /** @brief _Thread_Dispatch_in_critical_section
+   * 
+   * This routine returns true if thread dispatch indicates
+   * that we are in a critical section.
+   */
+  RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_in_critical_section(void)
+  {
+     if (  _Thread_Dispatch_disable_level == 0 )
+      return false;
 
-/**
- * This rountine increments the thread dispatch level
- */
-RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_increment_disable_level(void)
-{
-  _Thread_Dispatch_disable_level++;
-  return _Thread_Dispatch_disable_level;
-}
+     return true;
+  }
 
-/**
- * This routine decrements the thread dispatch level.
- */
-RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_decrement_disable_level(void)
-{
-  _Thread_Dispatch_disable_level--;
-  return _Thread_Dispatch_disable_level;
-}
+  /** @brief _Thread_Dispatch_get_disable_level
+   * 
+   * This routine returns value of the the thread dispatch level.
+   */
+  RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_get_disable_level(void)
+  {
+    return _Thread_Dispatch_disable_level;
+  }
 
-/**
- *  This routine initializes the thread dispatching subsystem.
- */
+  /** @brief _Thread_Dispatch_set_disable_level
+   * 
+   * This routine sets thread dispatch level to the 
+   * value passed in.
+   */
+  RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
+  {
+    _Thread_Dispatch_disable_level = value;
+    return value;
+  }
 
-RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
-{
-  _Thread_Dispatch_set_disable_level( 1 );
-}
+  /** @brief _Thread_Dispatch_increment_disable_level
+   * 
+   * This rountine increments the thread dispatch level
+   */
+  RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_increment_disable_level(void)
+  {
+    _Thread_Dispatch_disable_level++;
+    return _Thread_Dispatch_disable_level;
+  }
 
+  /** @brief _Thread_Dispatch_decrement_disable_level
+   * 
+   * This routine decrements the thread dispatch level.
+   */
+  RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_decrement_disable_level(void)
+  {
+    _Thread_Dispatch_disable_level--;
+    return _Thread_Dispatch_disable_level;
+  }
+
+  /** @brief _Thread_Dispatch_initialization
+   * 
+   *  This routine initializes the thread dispatching subsystem.
+   */
+  RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
+  {
+    _Thread_Dispatch_set_disable_level( 1 );
+  }
+
+#endif
 
 /**
  *  This routine halts multitasking and returns control to
