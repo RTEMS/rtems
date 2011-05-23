@@ -26,8 +26,8 @@ GDB_RPMREL = 1
 include ../gdb.am
 GDB_OPTS +=
 
-CPUKIT_VERS = 4.9.99.0
-CPUKIT_PKGVERS = $(CPUKIT_VERS)-20090206-2
-CPUKIT_RPMREL = 1
-include ../cpukit.am
-CPUKIT_OPTS +=
+# CPUKIT_VERS = 4.10.99.0
+# CPUKIT_PKGVERS = $(CPUKIT_VERS)-YYYYMMDD-R
+# CPUKIT_RPMREL = 1
+# include ../cpukit.am
+# CPUKIT_OPTS +=
