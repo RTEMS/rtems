@@ -2,6 +2,7 @@
 
 SUBDIRS =
 SUBDIRS += arm
+SUBDIRS += arm-eabi
 SUBDIRS += avr
 SUBDIRS += bfin
 SUBDIRS += h8300
