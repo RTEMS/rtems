@@ -39,7 +39,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../sparc/shared/bsppretaskinghook.c ../../shared/bsppost.c \
     ../../shared/bspstart.c ../../shared/bootcard.c ../../shared/bspinit.c \
     ../../shared/sbrk.c startup/setvec.c startup/spurious.c \
-    startup/erc32mec.c startup/boardinit.S startup/bspidle.c
+    startup/erc32mec.c startup/boardinit.S startup/bspidle.c \
+    startup/bspdelay.c
 # ISR Handler
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp

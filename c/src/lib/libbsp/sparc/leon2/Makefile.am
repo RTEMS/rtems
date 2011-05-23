@@ -1,5 +1,5 @@
 ##
-## $Id$
+## $Id: Makefile.am,v 1.26 2011/03/16 20:05:24 joel Exp 
 ##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
@@ -59,7 +59,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c ../../sparc/shared/bsppretaskinghook.c \
     ../../sparc/shared/bspgetworkarea.c ../../shared/bootcard.c \
     ../../shared/sbrk.c startup/setvec.c startup/spurious.c startup/bspidle.c \
-    ../../shared/bspinit.c
+    ../../shared/bspinit.c startup/bspdelay.c
 # ISR Handler
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp

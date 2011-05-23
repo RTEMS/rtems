@@ -1,3 +1,11 @@
+2011-05-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1795/bsps
+	* erc32/Makefile.am, leon2/Makefile.am, leon3/Makefile.am: Add
+	rtems_bsp_delay to sparc bsps.
+	* erc32/startup/bspdelay.c, leon2/startup/bspdelay.c,
+	leon3/startup/bspdelay.c: New files.
+
 2011-03-16	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1729/cpukit
