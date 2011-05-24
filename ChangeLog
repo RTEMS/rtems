@@ -1,3 +1,10 @@
+2011-05-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1810/misc
+	* ChangeLog: Fix previous damage.
+
+2011-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* tools/build/.cvsignore, tools/build/ChangeLog,
 	tools/build/Makefile.am, tools/build/README, tools/build/binpatch.c,
 	tools/build/cklength.c, tools/build/config.h.in,
@@ -24,6 +31,7 @@
 	tools/cpu/sh/ChangeLog, tools/cpu/sh/Makefile.am, tools/cpu/sh/TODO,
 	tools/cpu/sh/configure.ac, tools/cpu/sh/sci.c, tools/cpu/sh/sci.h,
 	tools/cpu/sh/shgen.c: New files.
+	Readded after mistakenly removing them.
 
 2011-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
