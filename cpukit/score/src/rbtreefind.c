@@ -20,9 +20,9 @@
 /*
  *  _RBTree_Find
  *
- *  This kernel routine returns a pointer to the rbtree node containing the 
- *  given value within the given tree, if it exists, or NULL otherwise. 
- * 
+ *  This kernel routine returns a pointer to the rbtree node containing the
+ *  given value within the given tree, if it exists, or NULL otherwise.
+ *
  *  Input parameters:
  *    the_rbtree - pointer to rbtree control
  *    the_value - value of the node to search for

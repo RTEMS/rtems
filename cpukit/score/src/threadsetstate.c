@@ -41,7 +41,7 @@ void _Thread_Set_state(
 )
 {
   ISR_Level      level;
-  
+
   _ISR_Disable( level );
   if ( !_States_Is_ready( the_thread->current_state ) ) {
     the_thread->current_state =

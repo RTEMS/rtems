@@ -68,19 +68,19 @@ typedef struct {
 void _Scheduler_priority_Initialize(void);
 
 /**
- *  This routine removes @a the_thread from the scheduling decision, 
+ *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  *
  *  @param[in] the_thread is the thread to be blocked
  */
-void _Scheduler_priority_Block( 
-  Thread_Control    *the_thread 
+void _Scheduler_priority_Block(
+  Thread_Control    *the_thread
 );
 
 /**
- *  This kernel routine sets the heir thread to be the next ready thread 
+ *  This kernel routine sets the heir thread to be the next ready thread
  *  by invoking the_scheduler->ready_queue->operations->first().
  */
 void _Scheduler_priority_Schedule(void);
@@ -106,7 +106,7 @@ void _Scheduler_priority_Free(
 );
 
 /**
- *  This routine updates @a the_thread->scheduler based on @a the_scheduler 
+ *  This routine updates @a the_thread->scheduler based on @a the_scheduler
  *  structures and thread state.
  *
  *  @param[in] the_thread will have its scheduler specific information
@@ -117,14 +117,14 @@ void _Scheduler_priority_Update(
 );
 
 /**
- *  This routine adds @a the_thread to the scheduling decision, 
- *  that is, adds it to the ready queue and 
+ *  This routine adds @a the_thread to the scheduling decision,
+ *  that is, adds it to the ready queue and
  *  updates any appropriate scheduling variables, for example the heir thread.
  *
  *  @param[in] the_thread will be unblocked
  */
 void _Scheduler_priority_Unblock(
-  Thread_Control    *the_thread 
+  Thread_Control    *the_thread
 );
 
 /**
@@ -150,7 +150,7 @@ void _Scheduler_priority_Enqueue(
 );
 
 /**
- *  This routine puts @a the_thread to the head of the ready queue. 
+ *  This routine puts @a the_thread to the head of the ready queue.
  *  For priority-based ready queues, the thread will be the first thread
  *  at its priority level.
  *

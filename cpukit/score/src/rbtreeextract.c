@@ -32,7 +32,7 @@ void _RBTree_Extract_validate_unprotected(
   RBTree_Node *parent, *sibling;
   RBTree_Direction dir;
 
-  parent = the_node->parent; 
+  parent = the_node->parent;
   if(!parent->parent) return;
 
   sibling = _RBTree_Sibling(the_node);
@@ -40,9 +40,9 @@ void _RBTree_Extract_validate_unprotected(
   /* continue to correct tree as long as the_node is black and not the root */
   while (!_RBTree_Is_red(the_node) && parent->parent) {
 
-    /* if sibling is red, switch parent (black) and sibling colors, 
+    /* if sibling is red, switch parent (black) and sibling colors,
      * then rotate parent left, making the sibling be the_node's grandparent.
-     * Now the_node has a black sibling and red parent. After rotation, 
+     * Now the_node has a black sibling and red parent. After rotation,
      * update sibling pointer.
      */
     if (_RBTree_Is_red(sibling)) {
@@ -54,8 +54,8 @@ void _RBTree_Extract_validate_unprotected(
     }
 
     /* sibling is black, see if both of its children are also black. */
-    if (sibling && 
-        !_RBTree_Is_red(sibling->child[RBT_RIGHT]) && 
+    if (sibling &&
+        !_RBTree_Is_red(sibling->child[RBT_RIGHT]) &&
         !_RBTree_Is_red(sibling->child[RBT_LEFT])) {
         sibling->color = RBT_RED;
         if (_RBTree_Is_red(parent)) {
@@ -66,9 +66,9 @@ void _RBTree_Extract_validate_unprotected(
         parent = the_node->parent;
         sibling = _RBTree_Sibling(the_node);
     } else if(sibling) {
-      /* at least one of sibling's children is red. we now proceed in two 
-       * cases, either the_node is to the left or the right of the parent. 
-       * In both cases, first check if one of sibling's children is black, 
+      /* at least one of sibling's children is red. we now proceed in two
+       * cases, either the_node is to the left or the right of the parent.
+       * In both cases, first check if one of sibling's children is black,
        * and if so rotate in the proper direction and update sibling pointer.
        * Then switch the sibling and parent colors, and rotate through parent.
        */
@@ -113,7 +113,7 @@ void _RBTree_Extract_unprotected(
       the_rbtree->first[RBT_LEFT] = the_node->child[RBT_RIGHT];
     else {
       the_rbtree->first[RBT_LEFT] = the_node->parent;
-      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree, 
+      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree,
             the_rbtree->first[RBT_LEFT]))
         the_rbtree->first[RBT_LEFT] = NULL;
     }
@@ -124,7 +124,7 @@ void _RBTree_Extract_unprotected(
       the_rbtree->first[RBT_RIGHT] = the_node->child[RBT_LEFT];
     else {
       the_rbtree->first[RBT_RIGHT] = the_node->parent;
-      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree, 
+      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree,
             the_rbtree->first[RBT_RIGHT]))
         the_rbtree->first[RBT_RIGHT] = NULL;
     }
@@ -132,8 +132,8 @@ void _RBTree_Extract_unprotected(
 
   /* if the_node has at most one non-null child then it is safe to proceed
    * check if both children are non-null, if so then we must find a target node
-   * either max in node->child[RBT_LEFT] or min in node->child[RBT_RIGHT], 
-   * and replace the_node with the target node. This maintains the binary 
+   * either max in node->child[RBT_LEFT] or min in node->child[RBT_RIGHT],
+   * and replace the_node with the target node. This maintains the binary
    * search tree property, but may violate the red-black properties.
    */
 
@@ -141,14 +141,14 @@ void _RBTree_Extract_unprotected(
     target = the_node->child[RBT_LEFT]; /* find max in node->child[RBT_LEFT] */
     while (target->child[RBT_RIGHT]) target = target->child[RBT_RIGHT];
 
-    /* if the target node has a child, need to move it up the tree into 
-     * target's position (target is the right child of target->parent) 
-     * when target vacates it. if there is no child, then target->parent 
+    /* if the target node has a child, need to move it up the tree into
+     * target's position (target is the right child of target->parent)
+     * when target vacates it. if there is no child, then target->parent
      * should become NULL. This may cause the coloring to be violated.
      * For now we store the color of the node being deleted in victim_color.
      */
      leaf = target->child[RBT_LEFT];
-    if(leaf) { 
+    if(leaf) {
       leaf->parent = target->parent;
     } else {
       /* fix the tree here if the child is a null leaf. */
@@ -168,20 +168,20 @@ void _RBTree_Extract_unprotected(
     target->child[RBT_LEFT] = the_node->child[RBT_LEFT];
     the_node->child[RBT_LEFT]->parent = target;
 
-    /* finally, update the parent node and recolor. target has completely 
+    /* finally, update the parent node and recolor. target has completely
      * replaced the_node, and target's child has moved up the tree if needed.
      * the_node is no longer part of the tree, although it has valid pointers
      * still.
      */
     target->parent = the_node->parent;
     target->color = the_node->color;
-  } else { 
-    /* the_node has at most 1 non-null child. Move the child in to 
-     * the_node's location in the tree. This may cause the coloring to be 
+  } else {
+    /* the_node has at most 1 non-null child. Move the child in to
+     * the_node's location in the tree. This may cause the coloring to be
      * violated. We will fix it later.
      * For now we store the color of the node being deleted in victim_color.
      */
-    leaf = the_node->child[RBT_LEFT] ? 
+    leaf = the_node->child[RBT_LEFT] ?
               the_node->child[RBT_LEFT] : the_node->child[RBT_RIGHT];
     if( leaf ) {
       leaf->parent = the_node->parent;
@@ -196,9 +196,9 @@ void _RBTree_Extract_unprotected(
     the_node->parent->child[dir] = leaf;
   }
 
-  /* fix coloring. leaf has moved up the tree. The color of the deleted 
+  /* fix coloring. leaf has moved up the tree. The color of the deleted
    * node is in victim_color. There are three cases:
-   *   1. Deleted a red node, its child must be black. Nothing must be done. 
+   *   1. Deleted a red node, its child must be black. Nothing must be done.
    *   2. Deleted a black node and the child is red. Paint child black.
    *   3. Deleted a black node and its child is black. This requires some
    *      care and rotations.

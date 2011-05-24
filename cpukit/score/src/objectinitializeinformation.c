@@ -139,7 +139,7 @@ void _Objects_Initialize_information(
       name_length = (name_length + OBJECTS_NAME_ALIGNMENT) &
                     ~(OBJECTS_NAME_ALIGNMENT-1);
   #endif
- 
+
   information->name_length = name_length;
 
   _Chain_Initialize_empty( &information->Inactive );

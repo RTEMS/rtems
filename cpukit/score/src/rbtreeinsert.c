@@ -19,9 +19,9 @@
 
 /** @brief Validate and fix-up tree properties for a new insert/colored node
  *
- *  This routine checks and fixes the Red-Black Tree properties based on 
+ *  This routine checks and fixes the Red-Black Tree properties based on
  *  @a the_node being just added to the tree.
- * 
+ *
  *  @note It does NOT disable interrupts to ensure the atomicity of the
  *        append operation.
  */
@@ -37,7 +37,7 @@ void _RBTree_Validate_insert_unprotected(
   while (_RBTree_Is_red(_RBTree_Parent(the_node))) {
     u = _RBTree_Parent_sibling(the_node);
     g = the_node->parent->parent;
-    
+
     /* if uncle is red, repaint uncle/parent black and grandparent red */
     if(_RBTree_Is_red(u)) {
       the_node->parent->color = RBT_BLACK;
@@ -47,7 +47,7 @@ void _RBTree_Validate_insert_unprotected(
     } else { /* if uncle is black */
       RBTree_Direction dir = the_node != the_node->parent->child[0];
       RBTree_Direction pdir = the_node->parent != g->child[0];
-      
+
       /* ensure node is on the same branch direction as parent */
       if (dir != pdir) {
         _RBTree_Rotate(the_node->parent, pdir);
@@ -55,7 +55,7 @@ void _RBTree_Validate_insert_unprotected(
       }
       the_node->parent->color = RBT_BLACK;
       g->color = RBT_RED;
-      
+
       /* now rotate grandparent in the other branch direction (toward uncle) */
       _RBTree_Rotate(g, (1-pdir));
     }
@@ -71,7 +71,7 @@ void _RBTree_Validate_insert_unprotected(
  *
  *  @retval 0 Successfully inserted.
  *  @retval -1 NULL @a the_node.
- *  @retval RBTree_Node* if one with equal value to @a the_node->value exists 
+ *  @retval RBTree_Node* if one with equal value to @a the_node->value exists
  *          in @a the_rbtree.
  *
  *  @note It does NOT disable interrupts to ensure the atomicity
@@ -92,7 +92,7 @@ RBTree_Node *_RBTree_Insert_unprotected(
     the_rbtree->first[0] = the_rbtree->first[1] = the_node;
     the_node->parent = (RBTree_Node *) the_rbtree;
     the_node->child[RBT_LEFT] = the_node->child[RBT_RIGHT] = NULL;
-  } else { 
+  } else {
     /* typical binary search tree insert, descend tree to leaf and insert */
     while (iter_node) {
       if(the_node->value == iter_node->value) return(iter_node);
@@ -112,7 +112,7 @@ RBTree_Node *_RBTree_Insert_unprotected(
       }
 
     } /* while(iter_node) */
-    
+
     /* verify red-black properties */
     _RBTree_Validate_insert_unprotected(the_node);
   }

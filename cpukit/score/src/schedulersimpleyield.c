@@ -28,13 +28,13 @@ void _Scheduler_simple_Yield( void )
 
   executing = _Thread_Executing;
   _ISR_Disable( level );
-      
+
     _Scheduler_simple_Ready_queue_requeue(&_Scheduler, executing);
 
     _ISR_Flash( level );
 
     _Scheduler_simple_Schedule();
-    
+
     if ( !_Thread_Is_heir( executing ) )
       _Thread_Dispatch_necessary = true;
 

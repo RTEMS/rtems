@@ -41,7 +41,7 @@ void _Thread_Set_transient(
 {
   ISR_Level             level;
   uint32_t              old_state;
-  
+
   _ISR_Disable( level );
 
   old_state = the_thread->current_state;

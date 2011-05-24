@@ -20,8 +20,8 @@
 #define _RTEMS_SCORE_PRIORITYBITMAP_H
 
 /**
- *  @addtogroup ScorePriority 
- *  
+ *  @addtogroup ScorePriority
+ *
  */
 /**@{*/
 
@@ -38,8 +38,8 @@ extern "C" {
 #include <rtems/score/priority.h>
 
 
-/* 
- * The Priority_bit_map_Control variables are instantiated only 
+/*
+ * The Priority_bit_map_Control variables are instantiated only
  * if using the bit map handler.
  */
 

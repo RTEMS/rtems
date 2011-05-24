@@ -36,7 +36,7 @@
       _Heap_Alloc_area_of_block( block );
     uintptr_t *const pattern_end = (uintptr_t *)
       ((uintptr_t) block + _Heap_Block_size( block ) + HEAP_ALLOC_BONUS);
-    uintptr_t const delayed_free_block_count = 
+    uintptr_t const delayed_free_block_count =
       heap->Protection.delayed_free_block_count;
     uintptr_t *current = NULL;
 
@@ -45,7 +45,7 @@
 
     if ( delayed_free_block_count > 0 ) {
       Heap_Block *const last = heap->Protection.last_delayed_free_block;
-      
+
       last->Protection_begin.next_delayed_free_block = block;
     } else {
       heap->Protection.first_delayed_free_block = block;
@@ -123,10 +123,10 @@ bool _Heap_Free( Heap_Control *heap, void *alloc_begin_ptr )
   if ( alloc_begin_ptr == NULL ) {
     return true;
   }
-  
+
   alloc_begin = (uintptr_t) alloc_begin_ptr;
   block = _Heap_Block_of_alloc_area( alloc_begin, heap->page_size );
-  
+
   if ( !_Heap_Is_block_in_heap( heap, block ) ) {
     return false;
   }

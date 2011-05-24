@@ -29,12 +29,12 @@
 /**
  * This routine does nothing, and is used as a stub for Schedule allocate
  *
- * Note: returns a non-zero value, or else thread initialize thinks the 
+ * Note: returns a non-zero value, or else thread initialize thinks the
  * allocation failed.
  *
  * The overhead of a function call will still be imposed.
  */
-void * _Scheduler_simple_Allocate( 
+void * _Scheduler_simple_Allocate(
   Thread_Control *the_thread
 )
 {
@@ -47,7 +47,7 @@ void * _Scheduler_simple_Allocate(
  *
  * The overhead of a function call will still be imposed.
  */
-void _Scheduler_simple_Update( 
+void _Scheduler_simple_Update(
   Thread_Control *the_thread
 )
 {
@@ -58,7 +58,7 @@ void _Scheduler_simple_Update(
  *
  * The overhead of a function call will still be imposed.
  */
-void _Scheduler_simple_Free( 
+void _Scheduler_simple_Free(
   Thread_Control *the_thread
 )
 {
@@ -71,7 +71,7 @@ void _Scheduler_simple_Initialize ( void )
 {
   void *f;
 
-  /* 
+  /*
    * Initialize Ready Queue
    */
 

@@ -83,12 +83,12 @@ extern "C" {
   /**
    * @brief macro to return the structure containing the @a node.
    *
-   * This macro returns a pointer of type @a container_type that points 
-   * to the structure containing @a node, where @a node_field_name is the 
+   * This macro returns a pointer of type @a container_type that points
+   * to the structure containing @a node, where @a node_field_name is the
    * field name of the RBTree_Node structure in @a container_type.
    *
    */
-  
+
 #define _RBTree_Container_of(node,container_type, node_field_name) \
   ((container_type*) \
    ((size_t)node - ((size_t)(&((container_type *)0)->node_field_name))))
@@ -107,12 +107,12 @@ extern "C" {
    *
    * @note This implementation does not require special checks for
    *   manipulating the root element of the RBT.
-   *   To accomplish this the @a RBTree_Control structure can be overlaid 
-   *   with a @ref RBTree_Node structure to act as a "dummy root", 
+   *   To accomplish this the @a RBTree_Control structure can be overlaid
+   *   with a @ref RBTree_Node structure to act as a "dummy root",
    *   which has a NULL parent and its left child is the root.
    */
 
-  /* the RBTree_Control is actually part of the RBTree structure as an 
+  /* the RBTree_Control is actually part of the RBTree structure as an
    * RBTree_Node. The mapping of fields from RBTree_Control to RBTree_Node are:
    *   permanent_null == parent
    *   root == left
@@ -201,7 +201,7 @@ extern "C" {
    *  @brief Check the min or max node on a rbtree
    *
    *  This function returns a pointer to the min or max node of @a the_rbtree.
-   *  If @a the_rbtree is empty, then NULL is returned. @a dir specifies 
+   *  If @a the_rbtree is empty, then NULL is returned. @a dir specifies
    *  whether to return the min (0) or max (1).
    *
    *  @return This method returns a pointer to a node.
@@ -216,18 +216,18 @@ extern "C" {
 
   /** @brief Find the node with given value in the tree
    *
-   *  This function returns a pointer to the node with value equal to @a value 
-   *  if it exists in the Red-Black Tree @a the_rbtree, and NULL if not. 
+   *  This function returns a pointer to the node with value equal to @a value
+   *  if it exists in the Red-Black Tree @a the_rbtree, and NULL if not.
    */
   RBTree_Node *_RBTree_Find(
-      RBTree_Control *the_rbtree, 
+      RBTree_Control *the_rbtree,
       unsigned int value
       );
 
-  /** @brief Find the control structure of the tree containing the given node 
+  /** @brief Find the control structure of the tree containing the given node
    *
-   *  This function returns a pointer to the control structure of the tree 
-   *  containing @a the_node, if it exists, and NULL if not. 
+   *  This function returns a pointer to the control structure of the tree
+   *  containing @a the_node, if it exists, and NULL if not.
    */
   RBTree_Control *_RBTree_Find_header(
       RBTree_Node *the_node
@@ -239,7 +239,7 @@ extern "C" {
    *
    *  @retval 0 Successfully inserted.
    *  @retval -1 NULL @a the_node.
-   *  @retval RBTree_Node* if one with equal value to @a the_node->value exists 
+   *  @retval RBTree_Node* if one with equal value to @a the_node->value exists
    *          in @a the_rbtree.
    *
    *  @note It does NOT disable interrupts to ensure the atomicity

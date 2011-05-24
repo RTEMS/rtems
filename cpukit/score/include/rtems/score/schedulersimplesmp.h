@@ -64,35 +64,35 @@ extern "C" {
  *
  *  This routine allocates ready threads to individual cores in an SMP
  *  system.  If the allocation results in a new heir which requires
- *  a dispatch, then the dispatch needed flag for that core is set. 
+ *  a dispatch, then the dispatch needed flag for that core is set.
  */
 void _Scheduler_simple_smp_Schedule( void );
 
 /**
  *  @brief Scheduler Simple SMP Block Method
  *
- *  This routine removes @a the_thread from the scheduling decision, 
+ *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  *
  *  @param[in] the_thread is the thread that is to be blocked
  */
-void _Scheduler_simple_smp_Block( 
-  Thread_Control *the_thread 
+void _Scheduler_simple_smp_Block(
+  Thread_Control *the_thread
 );
 
 /**
  *  @brief Scheduler Simple SMP Unblock Method
  *
- *  This routine adds @a the_thread to the scheduling decision, 
+ *  This routine adds @a the_thread to the scheduling decision,
  *  that is, adds it to the ready queue and updates any appropriate
  *  scheduling variables, for example the heir thread.
  *
  *  @param[in] the_thread is the thread that is to be unblocked
  */
 void _Scheduler_simple_smp_Unblock(
-  Thread_Control *the_thread 
+  Thread_Control *the_thread
 );
 
 #ifdef __cplusplus

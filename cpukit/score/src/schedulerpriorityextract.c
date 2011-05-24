@@ -19,7 +19,7 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/schedulerpriority.h>
 
-void _Scheduler_priority_Extract( 
+void _Scheduler_priority_Extract(
   Thread_Control      *the_thread
 )
 {

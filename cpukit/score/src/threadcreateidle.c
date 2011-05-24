@@ -37,7 +37,7 @@
 static inline void _Thread_Create_idle_helper(
   uint32_t name_u32,
   int      cpu
-) 
+)
 {
   Objects_Name    name;
   Thread_Control *idle;

@@ -77,7 +77,7 @@ SCORE_EXTERN uint32_t _SMP_Processor_count;
  *
  *  This method is invoked by RTEMS when it needs to make a request
  *  of the other CPUs.  It should be implemented using some type of
- *  interprocessor interrupt. CPUs not including the originating 
+ *  interprocessor interrupt. CPUs not including the originating
  *  CPU should receive the message.
  *
  *  @param [in] message is message to send

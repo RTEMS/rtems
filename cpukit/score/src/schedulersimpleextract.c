@@ -1,5 +1,5 @@
 /*
- *  Schedule Simple Handler / Extract 
+ *  Schedule Simple Handler / Extract
  *
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).

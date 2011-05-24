@@ -47,7 +47,7 @@ void _RBTree_Initialize(
 
   /* could do sanity checks here */
   _RBTree_Initialize_empty(the_rbtree);
- 
+
   count = number_nodes;
   next  = starting_address;
   while ( count-- ) {

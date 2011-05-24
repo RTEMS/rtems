@@ -35,7 +35,7 @@ extern "C" {
 /**
  *  This type is used to lock elements for atomic access.
  *  This spinlock is a simple non-nesting spinlock, and
- *  may be used for short non-nesting accesses.  
+ *  may be used for short non-nesting accesses.
  */
 typedef uint32_t SMP_lock_spinlock_simple_Control;
 
@@ -106,9 +106,9 @@ void _SMP_lock_spinlock_nested_Initialize(
  *  This method is used to obtain the lock at @a lock.  ISR's are
  *  disabled when this routine returns and it is the callers responsibility
  *  to either:
- *   1) Do something very short and then call 
+ *   1) Do something very short and then call
  *      _SMP_lock_spinlock_nested_Release  or
- *   2) Do something very sort, call isr enable, then when ready 
+ *   2) Do something very sort, call isr enable, then when ready
  *      call isr_disable and _SMP_lock_spinlock_nested_Release
  *
  *  @param [in] lock is the address of the lock to obtain.

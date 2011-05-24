@@ -66,7 +66,7 @@ void rtems_smp_secondary_cpu_initialize(void)
    *  HACK: Should not have to enable interrupts in real system here.
    *        It should happen as part of switching to the first task.
    */
-   
+
   _Per_CPU_Information[cpu].isr_nest_level = 1;
   _ISR_Set_level( 0 );
   while(1) ;
@@ -119,7 +119,7 @@ void rtems_smp_process_interrupt(void)
   }
 }
 
-void rtems_smp_send_message( 
+void rtems_smp_send_message(
   int       cpu,
   uint32_t  message
 )

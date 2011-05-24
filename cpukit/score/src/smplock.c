@@ -35,7 +35,7 @@ ISR_Level _SMP_lock_spinlock_simple_Obtain(
    ISR_Level  level;
    uint32_t   value = 1;
    uint32_t   previous;
- 
+
    /* Note: Disable provides an implicit memory barrier. */
   _ISR_Disable( level );
    do {
@@ -72,7 +72,7 @@ ISR_Level _SMP_lock_spinlock_nested_Obtain(
   int        cpu_id;
 
   /* Note: Disable provides an implicit memory barrier. */
-  _ISR_Disable( level ); 
+  _ISR_Disable( level );
 
   cpu_id = bsp_smp_processor_id();
 
@@ -81,7 +81,7 @@ ISR_Level _SMP_lock_spinlock_nested_Obtain(
     lock->count++;
     return level;
   }
-    
+
   do {
     SMP_CPU_SWAP( lock, value, previous );
   } while (previous == 1);
@@ -102,6 +102,6 @@ void _SMP_lock_spinlock_nested_Release(
     printk ("Releasing spinlock when count is already zero?!?!\n");
 #endif
   lock->count--;
-  
-  _ISR_Enable( level ); 
+
+  _ISR_Enable( level );
 }

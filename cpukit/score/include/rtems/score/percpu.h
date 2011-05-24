@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id$ 
+ *  $Id$
  */
 
 #ifndef _RTEMS_PERCPU_H
@@ -64,7 +64,7 @@ typedef struct Thread_Control_struct Thread_Control;
 #endif
 
 typedef enum {
- 
+
   /**
    *  This defines the constant used to indicate that the cpu code is in
    *  its initial powered up start.
@@ -92,17 +92,17 @@ typedef enum {
 typedef struct {
   #if defined(RTEMS_SMP)
     /** This element is used to lock this structure */
-    SMP_lock_spinlock_simple_Control  lock; 
+    SMP_lock_spinlock_simple_Control  lock;
 
     /** This indicates that the CPU is online. */
-    uint32_t                          state; 
+    uint32_t                          state;
 
     /**
      *  This is the request for the interrupt.
-     *  
+     *
      *  @note This may become a chain protected by atomic instructions.
      */
-    uint32_t                          message; 
+    uint32_t                          message;
   #endif
 
 #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \

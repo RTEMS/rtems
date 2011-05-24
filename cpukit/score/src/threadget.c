@@ -80,7 +80,7 @@ Thread_Control *_Thread_Get (
    *  is actually a test case in sp43 for this which trips it whether or
    *  not POSIX is enabled.  So in the interest of safety, this is left
    *  on in all configurations.
-   */ 
+   */
   if ( !api_information ) {
     *location = OBJECTS_ERROR;
     goto done;

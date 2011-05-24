@@ -28,7 +28,7 @@
 
 void _Scheduler_simple_Schedule(void)
 {
-  _Thread_Heir = (Thread_Control *) _Chain_First( 
-    (Chain_Control *) _Scheduler.information 
+  _Thread_Heir = (Thread_Control *) _Chain_First(
+    (Chain_Control *) _Scheduler.information
   );
 }

@@ -33,7 +33,7 @@
 #if 0
 #define D(format,...) printk( format, __VA_ARGS__)
 #else
-#define D(format,...) 
+#define D(format,...)
 #endif
 
 /**
@@ -144,7 +144,7 @@ bool _Scheduler_simple_smp_Assign(
      *  for this thread to be placed.
      *
      *  Check 1: heir of potential CPU is more important
-     *           then heir of current CPU.  We want to 
+     *           then heir of current CPU.  We want to
      *           replace the least important thread possible.
      */
     if ( h->current_priority > pheir->current_priority ) {
@@ -164,7 +164,7 @@ bool _Scheduler_simple_smp_Assign(
      *
      *           Which CPU has had its executing thread longer?
      */
-    if ( _Timestamp_Less_than( 
+    if ( _Timestamp_Less_than(
            &_Per_CPU_Information[cpu].time_of_last_context_switch,
            &_Per_CPU_Information[found_cpu].time_of_last_context_switch
          ) ) {
@@ -187,7 +187,7 @@ bool _Scheduler_simple_smp_Assign(
       D( "SCHED CPU=%d PHeir=0x%08x considering=0x%08x PREEMPTIBLE\n",
         cpu, h->Object.id, consider->Object.id );
       continue;
-    
+
     }
   }
 
@@ -216,7 +216,7 @@ bool _Scheduler_simple_smp_Assign(
    *  scheduling needs to examine more threads.
    */
   return found;
-} 
+}
 
 /*
  *  Reschedule threads -- select heirs for all cores

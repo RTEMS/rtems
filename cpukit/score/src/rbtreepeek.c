@@ -20,7 +20,7 @@
 /*
  *  _RBTree_Get
  *
- *  This kernel routine returns a pointer to the min or max node on the tree, 
+ *  This kernel routine returns a pointer to the min or max node on the tree,
  *  without removing that node.
  *
  *  Input parameters:

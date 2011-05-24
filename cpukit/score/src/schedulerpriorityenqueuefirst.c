@@ -18,7 +18,7 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/schedulerpriority.h>
 
-void _Scheduler_priority_Enqueue_first( 
+void _Scheduler_priority_Enqueue_first(
   Thread_Control      *the_thread
 )
 {
