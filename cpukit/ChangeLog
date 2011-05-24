@@ -1,3 +1,32 @@
+2011-05-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/score/percpu.h,
+	score/include/rtems/score/prioritybitmap.h,
+	score/include/rtems/score/rbtree.h,
+	score/include/rtems/score/schedulerpriority.h,
+	score/include/rtems/score/schedulersimple.h,
+	score/include/rtems/score/schedulersimplesmp.h,
+	score/include/rtems/score/smp.h,
+	score/include/rtems/score/smplock.h,
+	score/include/rtems/score/thread.h,
+	score/src/heapfree.c,
+	score/src/objectinitializeinformation.c,
+	score/src/rbtree.c, score/src/rbtreeextract.c,
+	score/src/rbtreefind.c, score/src/rbtreeinsert.c,
+	score/src/rbtreepeek.c, score/src/schedulerpriorityenqueue.c,
+	score/src/schedulerpriorityenqueuefirst.c,
+	score/src/schedulerpriorityextract.c,
+	score/src/schedulerpriorityupdate.c,
+	score/src/schedulersimple.c,
+	score/src/schedulersimpleextract.c,
+	score/src/schedulersimpleschedule.c,
+	score/src/schedulersimplesmpschedule.c,
+	score/src/schedulersimpleyield.c,
+	score/src/smp.c, score/src/smplock.c,
+	score/src/threadcreateidle.c, score/src/threadget.c,
+	score/src/threadsetstate.c, score/src/threadsettransient.c:
+	Remove white-spaces.
+
 2011-05-23	Marta Rybczynska <marta.rybczynska@kalray.eu>
 
 	PR 1805/cpukit
