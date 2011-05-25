@@ -7,13 +7,11 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  Modified:
- *  $Author$ Added interrupt support and DMA support
- *
+ */
+ 
+/*
  *  $Id$
  */
-
 
 #ifndef _UART_H_
 #define _UART_H_

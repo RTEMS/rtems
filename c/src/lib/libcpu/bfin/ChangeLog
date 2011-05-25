@@ -1,3 +1,7 @@
+2011-05-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* serial/uart.c, serial/uart.h: Remove CVS-Author tag.
+
 2011-04-20  Rohan Kangralkar <rkangral@ece.neu.edu>
 
 	PR 1781/bsps
@@ -11,6 +15,11 @@
 	to identify and multiplex inside the ISR. In the new code the
 	type of interrupt is identified by the central ISR dispatcher
 	bf52x/interrupt or interrupt/.	This simplifies the UART ISR.
+
+2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* timer/timer.c:
+	Use "__asm__" instead of "asm" for improved c99-compliance.
 
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
