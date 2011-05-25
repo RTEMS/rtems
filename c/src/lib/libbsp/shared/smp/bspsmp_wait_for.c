@@ -7,7 +7,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id
+ *  $Id$
  */
 
 void rtems_bsp_delay( int usec );
