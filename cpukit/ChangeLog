@@ -1,3 +1,8 @@
+2011-05-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libblock/src/flashdisk.c, libblock/src/nvdisk.c:
+	Add va_end() (Backport from HEAD).
+
 2011-05-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/Makefile.am: Add posixtime.h.
