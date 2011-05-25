@@ -1,5 +1,26 @@
 2011-05-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* include/rtems/bspIo.h, include/rtems/concat.h,
+	include/rtems/irq.h, libblock/include/rtems/bdbuf.h
+	libcsupport/include/rtems/libio_.h, libcsupport/src/getuid.c,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/heap.h,
+	score/include/rtems/score/sysstate.h, score/src/objectidtoname.c,
+	score/src/objectnametoid.c, score/src/objectnametoidstring.c,
+	score/src/thread.c, score/src/threadchangepriority.c, 
+	score/src/threadclearstate.c, score/src/threadclose.c,
+	score/src/threadcreateidle.c, score/src/threaddelayended.c,
+	score/src/threaddispatch.c, score/src/threadget.c,
+	score/src/threadhandler.c, score/src/threadinitialize.c,
+	score/src/threadloadenv.c, score/src/threadready.c,
+	score/src/threadreset.c, score/src/threadrestart.c
+	score/src/threadsetpriority.c, score/src/threadsetstate.c,
+	score/src/threadsettransient.c, score/src/threadstackallocate.c
+	score/src/threadstackfree.c, score/src/threadstart.c:
+	Cosmetics from CVS-HEAD.
+
+2011-05-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libblock/src/flashdisk.c, libblock/src/nvdisk.c:
 	Add va_end() (Backport from HEAD).
 
