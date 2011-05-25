@@ -1,3 +1,8 @@
+2011-05-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/comm/tty_drv.c, shared/comm/tty_drv.h:
+	Remove CVS-Headers. Add CVS-Ids.
+
 2011-04-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/irq/irq_asm.S: Rename rtems_smp_maximum_processors to

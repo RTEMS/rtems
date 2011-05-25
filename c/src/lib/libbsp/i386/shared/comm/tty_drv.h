@@ -2,8 +2,6 @@
 #define __tty_drv__
 /***************************************************************************
  *
- * $Header$
- *
  * Copyright (c) 1999 ConnectTel, Inc. All Rights Reserved.
  *
  * MODULE DESCRIPTION: Prototype routines for the ttySx driver.
@@ -13,6 +11,10 @@
  *     http://www.connecttel.com
  *
  ****************************************************************************/
+
+/*
+ * $Id$
+ */
 
 /* functions */
 #ifdef __cplusplus
