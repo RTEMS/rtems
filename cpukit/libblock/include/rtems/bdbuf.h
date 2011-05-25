@@ -519,7 +519,7 @@ rtems_bdbuf_release (rtems_bdbuf_buffer* bd);
 
 /**
  * Release the buffer allocated with a get or read call placing it on the
- * modidied list.  If the buffer was not released modified before the hold
+ * modified list.  If the buffer was not released modified before the hold
  * timer is set to the configuration value. If the buffer had been released
  * modified before but not written to disk the hold timer is not updated. The
  * buffer will be written to disk when the hold timer has expired, there are

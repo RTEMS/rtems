@@ -368,7 +368,7 @@ Heap_Extend_status _Heap_Extend(
  * memory area will begin at an address aligned by this value.
  *
  * If the boundary parameter @a boundary is not equal to zero, the allocated
- * memory area will fulfill a boundary constraint.  The boudnary value
+ * memory area will fulfill a boundary constraint.  The boundary value
  * specifies the set of addresses which are aligned by the boundary value.  The
  * interior of the allocated memory area will not contain an element of this
  * set.  The begin or end address of the area may be a member of the set.

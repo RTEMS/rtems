@@ -193,7 +193,7 @@ typedef struct {
 }   CORE_mutex_Attributes;
 
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
-/*@beief Core Mutex Lock_Chain Struct
+/*@brief Core Mutex Lock_Chain Struct
  *
  * The following defines the control block used to manage lock chain of
  * priority inheritance mutex.
