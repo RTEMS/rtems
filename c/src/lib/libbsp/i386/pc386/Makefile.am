@@ -109,7 +109,8 @@ libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 libbsp_a_SOURCES += ide/idecfg.c ide/ide.c
 
 if HAS_SMP
-libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c
+libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c \
+    ../../shared/smp/bspsmp_wait_for.c
 endif
 
 if HAS_NETWORKING

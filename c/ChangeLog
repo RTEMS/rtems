@@ -1,3 +1,13 @@
+2011-05-25	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1792/bsps
+	* src/lib/libbsp/i386/pc386/Makefile.am,
+	src/lib/libbsp/sparc/erc32/Makefile.am,
+	src/lib/libbsp/sparc/leon2/Makefile.am,
+	src/lib/libbsp/sparc/leon3/Makefile.am: Added a generic smp wait
+	method to sparc and i386 bsps.
+	* src/lib/libbsp/shared/smp/bspsmp_wait_for.c: New file.
+
 2011-04-21	Jennifer Averett <Jennifer.Averett@OARcorp.com
 
 	PR 1777/cpukit

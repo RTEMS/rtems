@@ -1,5 +1,5 @@
 ##
-## $Id$
+## $Id: Makefile.am,v 1.54 2011/05/23 17:41:30 jennifer Exp 
 ##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
@@ -55,7 +55,8 @@ libbsp_a_SOURCES += clock/ckinit.c ../../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += timer/timer.c
 
 if HAS_SMP
-libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c
+libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c \
+    ../../shared/smp/bspsmp_wait_for.c
 endif
 
 if HAS_NETWORKING
