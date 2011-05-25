@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.54 2011/05/23 17:41:30 jennifer Exp 
+## $Id$
 ##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
