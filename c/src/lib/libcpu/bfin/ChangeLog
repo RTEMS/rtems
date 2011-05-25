@@ -1,3 +1,7 @@
+2011-05-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* serial/uart.c, serial/uart.h: Remove CVS-Author tag.
+
 2011-04-20  Rohan Kangralkar <rkangral@ece.neu.edu>
 
 	PR 1781/bsps
