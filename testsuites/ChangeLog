@@ -1,3 +1,9 @@
+2011-05-27	Chris Johns <chrisj@rtems.org>
+
+	* samples/fileio/init.c, samples/fileio/system.h: Add support for
+	create a RAM disk from the shell to aid bug testing on the 4.10
+	branch.
+	
 2011-02-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* support/include/tmacros.h: Remove PRIxblksize_t, PRIxblkcnt_t.
