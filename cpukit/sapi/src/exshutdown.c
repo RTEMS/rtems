@@ -1,7 +1,7 @@
 /*
  *  Initialization Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,6 +20,10 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/interr.h>
 
+#if defined(RTEMS_SMP)
+  #include <rtems/score/smp.h>
+#endif
+
 /*
  *  rtems_shutdown_executive
  *
@@ -37,6 +41,9 @@ void rtems_shutdown_executive(
 )
 {
   if ( _System_state_Is_up( _System_state_Get() ) ) {
+    #if defined(RTEMS_SMP)
+      _SMP_Request_other_cores_to_shutdown();
+    #endif
     _System_state_Set( SYSTEM_STATE_SHUTDOWN );
     _Thread_Stop_multitasking();
   }

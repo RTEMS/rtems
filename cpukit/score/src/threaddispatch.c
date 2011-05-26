@@ -33,6 +33,10 @@
   #include <rtems/score/timestamp.h>
 #endif
 
+#if defined(RTEMS_SMP)
+  #include <rtems/score/smp.h>
+#endif
+
 /**
  *  _Thread_Dispatch
  *
@@ -47,18 +51,28 @@
  *    dispatch thread
  *    no dispatch thread
  */
-
 void _Thread_Dispatch( void )
 {
   Thread_Control   *executing;
   Thread_Control   *heir;
   ISR_Level         level;
 
+  _Thread_Disable_dispatch();
+  #if defined(RTEMS_SMP)
+    /*
+     *  If necessary, send dispatch request to other cores.
+     */
+    _SMP_Request_other_cores_to_dispatch();
+  #endif
+
+  /*
+   *  Now determine if we need to perform a dispatch on the current CPU.
+   */
   executing   = _Thread_Executing;
   _ISR_Disable( level );
   while ( _Thread_Dispatch_necessary == true ) {
+
     heir = _Thread_Heir;
-   _Thread_Dispatch_set_disable_level( 1 );
     _Thread_Dispatch_necessary = false;
     _Thread_Executing = heir;
 
@@ -96,7 +110,10 @@ void _Thread_Dispatch( void )
         _Thread_Time_of_last_context_switch = uptime;
       }
     #else
-      heir->cpu_time_used++;
+      {
+        TOD_Get_uptime( &_Thread_Time_of_last_context_switch );
+        heir->cpu_time_used++;
+      }
     #endif
 
     /*

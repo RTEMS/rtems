@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -50,6 +50,11 @@
   #define INIT_NAME __main
   #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif
+
+#if defined(RTEMS_SMP)
+  #include <rtems/score/smp.h>
+#endif
+
 
 /*PAGE
  *
@@ -138,8 +143,15 @@ void _Thread_Handler( void )
      */
     if (!doneCons) /* && (volatile void *)_init) */ {
       INIT_NAME ();
+   
+      #if defined(RTEMS_SMP)
+        _Thread_Disable_dispatch();
+          _SMP_Request_other_cores_to_perform_first_context_switch();
+        _Thread_Enable_dispatch();
+      #endif
+
     }
-  #endif
+ #endif
 
   if ( executing->Start.prototype == THREAD_START_NUMERIC ) {
     executing->Wait.return_argument =

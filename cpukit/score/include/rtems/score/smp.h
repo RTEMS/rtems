@@ -87,6 +87,14 @@ void _SMP_Broadcast_message(
 );
 
 /**
+ *  @brief Request Other Cores to Perform First Context Switch
+ *
+ *  Send message to other cores requesting them to perform
+ *  their first context switch operation.
+ */
+void _SMP_Request_other_cores_to_perform_first_context_switch(void);
+
+/**
  *  @brief Request Dispatch on Other Cores
  *
  *  Send message to other cores requesting them to perform

@@ -79,9 +79,15 @@ typedef enum {
 
   /**
    *  This defines the constant used to indicate that the cpu code has
+   *  completed basic initialization and awaits further commands.
+   */
+  RTEMS_BSP_SMP_CPU_UP = 3,
+
+  /**
+   *  This defines the constant used to indicate that the cpu code has
    *  shut itself down.
    */
-  RTEMS_BSP_SMP_CPU_SHUTDOWN = 3
+  RTEMS_BSP_SMP_CPU_SHUTDOWN = 4
 } bsp_smp_cpu_state;
 
 /**

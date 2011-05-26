@@ -1,3 +1,11 @@
+2011-05-26	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1796/cpukit
+	* sapi/src/exshutdown.c, score/include/rtems/score/percpu.h,
+	score/include/rtems/score/smp.h, score/src/smp.c,
+	score/src/threaddispatch.c, score/src/threadhandler.c: Added SMP
+	interprocess communications.
+
 2011-05-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/score/percpu.h,

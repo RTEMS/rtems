@@ -19,30 +19,35 @@
 #include <rtems/score/thread.h>
 
 #if defined(RTEMS_SMP)
-#define SMP_DEBUG
+  #define RTEMS_DEBUG
+#endif
 
-#if defined(SMP_DEBUG)
+#if defined(RTEMS_DEBUG)
   #include <rtems/bspIo.h>
 #endif
 
+/*
+ *  Process request to switch to the first task on a secondary core.
+ */
 void rtems_smp_run_first_task(int cpu)
 {
   Thread_Control *heir;
 
   /*
-   *  This CPU has an heir thread so we need to dispatch it.
+   *  The Scheduler will have selected the heir thread for each CPU core.
+   *  Now we have been requested to perform the first context switch.  So
+   *  force a switch to the designated heir and make it executing on 
+   *  THIS core.
    */
-  heir = _Thread_Heir;
-
-  /*
-   *  This is definitely a hack until we have SMP scheduling.  Since there
-   *  is only one executing and heir right now, we have to fake this out.
-   */
-  _Thread_Dispatch_set_disable_level(1);
+  heir              = _Thread_Heir;
   _Thread_Executing = heir;
+
   _CPU_Context_switch_to_first_task_smp( &heir->Registers );
 }
 
+/*
+ *  Process request to initialize this secondary core.
+ */
 void rtems_smp_secondary_cpu_initialize(void)
 {
   int cpu;
@@ -51,7 +56,7 @@ void rtems_smp_secondary_cpu_initialize(void)
 
   bsp_smp_secondary_cpu_initialize(cpu);
 
-  #if defined(SMP_DEBUG)
+  #if defined(RTEMS_DEBUG)
     printk( "Made it to %d -- ", cpu );
   #endif
 
@@ -63,15 +68,26 @@ void rtems_smp_secondary_cpu_initialize(void)
   _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_INITIALIZED;
 
   /*
-   *  HACK: Should not have to enable interrupts in real system here.
-   *        It should happen as part of switching to the first task.
+   *  With this secondary core out of reset, we can wait for the
+   *  request to switch to the first task.
+   *
+   *  XXX When SMP ISR code is complete, do we want interrupts on
+   *  XXX or off at this point?
    */
-
-  _Per_CPU_Information[cpu].isr_nest_level = 1;
   _ISR_Set_level( 0 );
-  while(1) ;
+  while(1) {
+    bsp_smp_wait_for(
+      (volatile unsigned int *)&_Per_CPU_Information[cpu].message,
+      RTEMS_BSP_SMP_FIRST_TASK,
+      10000
+    );
+  }
 }
 
+/*
+ *  Process an interrupt processor interrupt which indicates a request
+ *  from another core.
+ */
 void rtems_smp_process_interrupt(void)
 {
   int        cpu;
@@ -80,31 +96,53 @@ void rtems_smp_process_interrupt(void)
 
   cpu = bsp_smp_processor_id();
 
-  level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
-    message = _Per_CPU_Information[cpu].message;
-    _Per_CPU_Information[cpu].message &= ~message;
-  _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
+  level = _SMP_lock_Simple_Spinlock_Obtain( &_Per_CPU_Information[cpu].lock );
+  message = _Per_CPU_Information[cpu].message;
 
-  #if defined(SMP_DEBUG)
+  #if defined(RTEMS_DEBUG)
     {
       void *sp = __builtin_frame_address(0);
-      if ( !(message & RTEMS_BSP_SMP_SHUTDOWN) )
-	printk( "ISR on CPU %d -- (0x%02x) (0x%p)\n", cpu, message, sp );
-      printk( "Dispatch level %d\n", _Thread_Dispatch_disable_level );
+      if ( !(message & RTEMS_BSP_SMP_SHUTDOWN) ) {
+        printk( "ISR on CPU %d -- (0x%02x) (0x%p)\n", cpu, message, sp );
+	if ( message & RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY )
+	  printk( "context switch necessary\n" );
+	if ( message & RTEMS_BSP_SMP_SIGNAL_TO_SELF )
+	  printk( "signal to self\n" );
+	if ( message & RTEMS_BSP_SMP_SHUTDOWN )
+	  printk( "shutdown\n" );
+	if ( message & RTEMS_BSP_SMP_FIRST_TASK )
+	  printk( "switch to first task\n" );
+      }
+ 
+      printk( "Dispatch level %d\n", _Thread_Dispatch_get_disable_level() );
     }
   #endif
 
   if ( message & RTEMS_BSP_SMP_FIRST_TASK ) {
+    /*
+     * XXX Thread dispatch disable level at this point will have to be
+     * XXX revisited when Interrupts on SMP is addressed.
+     */
+    _Thread_Dispatch_disable_level--; /* undo ISR code */
     _Per_CPU_Information[cpu].isr_nest_level = 0;
-    _Per_CPU_Information[cpu].message = 0;
-    _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_INITIALIZED;
+    _Per_CPU_Information[cpu].message &= ~message;
+    _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_UP;
+
+    _SMP_lock_Simple_Spinlock_Release( &_Per_CPU_Information[cpu].lock, level );
+    _Thread_Disable_dispatch();
     rtems_smp_run_first_task(cpu);
     /* does not return */
   }
 
   if ( message & RTEMS_BSP_SMP_SHUTDOWN ) {
-    ISR_Level level;
-    _Thread_Dispatch_set_disable_level(0);
+    /*
+     * XXX Thread dispatch disable level at this point will have to be
+     * XXX revisited when Interrupts on SMP is addressed.
+     */
+    _Per_CPU_Information[cpu].message &= ~message;
+    _SMP_lock_Simple_Spinlock_Release( &_Per_CPU_Information[cpu].lock, level );
+
+    _Thread_Dispatch_disable_level--; /* undo ISR code */
     _Per_CPU_Information[cpu].isr_nest_level = 0;
     _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_SHUTDOWN;
     _ISR_Disable( level );
@@ -114,12 +152,22 @@ void rtems_smp_process_interrupt(void)
   }
 
   if ( message & RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY ) {
-    printk( "switch needed\n" );
-    _Per_CPU_Information[cpu].dispatch_necessary = true;
+    #if defined(RTEMS_DEBUG)
+      printk( "switch needed\n" );
+    #endif
+    /*
+     * XXX Thread dispatch disable level at this point will have to be
+     * XXX revisited when Interrupts on SMP is addressed.
+     */
+    _Per_CPU_Information[cpu].message &= ~message;
+    _SMP_lock_Simple_Spinlock_Release( &_Per_CPU_Information[cpu].lock, level );
   }
 }
 
-void rtems_smp_send_message(
+/*
+ *  Send an interrupt processor request to another cpu.
+ */
+void _SMP_Send_message(
   int       cpu,
   uint32_t  message
 )
@@ -132,7 +180,10 @@ void rtems_smp_send_message(
   bsp_smp_interrupt_cpu( cpu );
 }
 
-void rtems_smp_broadcast_message(
+/*
+ *  Send interrupt processor request to all other nodes
+ */
+void _SMP_Broadcast_message(
   uint32_t  message
 )
 {
@@ -151,4 +202,82 @@ void rtems_smp_broadcast_message(
   }
   bsp_smp_broadcast_interrupt();
 }
-#endif
+
+/*
+ *  Send interrupt processor requests to perform first context switch 
+ */
+void _SMP_Request_other_cores_to_perform_first_context_switch(void)
+{
+  int    cpu;
+
+  for (cpu=1 ; cpu < _SMP_Processor_count ; cpu++ ) {
+    _SMP_Send_message( cpu, RTEMS_BSP_SMP_FIRST_TASK );
+    while (_Per_CPU_Information[cpu].state != RTEMS_BSP_SMP_CPU_UP ) {
+      bsp_smp_wait_for(
+        (volatile unsigned int *)&_Per_CPU_Information[cpu].state,
+        RTEMS_BSP_SMP_CPU_UP,
+        10000
+      );
+    }
+  }
+}
+
+/*
+ *  Send message to other cores requesting them to perform
+ *  a thread dispatch operation.
+ */
+void _SMP_Request_other_cores_to_dispatch(void)
+{
+  int i;
+  int cpu;
+
+  cpu = bsp_smp_processor_id();
+
+  if ( !_System_state_Is_up (_System_state_Current) )
+    return;
+  for (i=1 ; i < _SMP_Processor_count ; i++ ) {
+    if ( cpu == i )
+      continue;
+    if ( _Per_CPU_Information[i].state != RTEMS_BSP_SMP_CPU_UP )
+      continue;
+    if ( !_Per_CPU_Information[i].dispatch_necessary )
+      continue;
+    _SMP_Send_message( i, RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY );
+    bsp_smp_wait_for(
+      (volatile unsigned int *)&_Per_CPU_Information[i].message,
+      0,
+      10000
+    );
+  }
+}
+
+/*
+ *  Send message to other cores requesting them to shutdown.
+ */
+void _SMP_Request_other_cores_to_shutdown(void)
+{
+  bool allDown;
+  int  ncpus;
+  int  cpu;
+
+  ncpus = _SMP_Processor_count;
+
+  _SMP_Broadcast_message( RTEMS_BSP_SMP_SHUTDOWN );
+
+  allDown = true;
+  for (cpu=1 ; cpu<ncpus ; cpu++ ) {
+     bsp_smp_wait_for(
+       (unsigned int *)&_Per_CPU_Information[cpu].state,
+       RTEMS_BSP_SMP_CPU_SHUTDOWN,
+       10000
+    );
+    if ( _Per_CPU_Information[cpu].state != RTEMS_BSP_SMP_CPU_SHUTDOWN )
+      allDown = false;
+  }
+  if ( !allDown )
+    printk( "All CPUs not successfully shutdown -- timed out\n" );
+  #if (RTEMS_DEBUG)
+    else 
+      printk( "All CPUs shutdown successfully\n" );
+  #endif
+}
