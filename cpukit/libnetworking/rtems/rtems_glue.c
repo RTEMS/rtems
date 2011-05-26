@@ -676,11 +676,7 @@ rtems_status_code rtems_bsdnet_event_receive (
 void
 microtime (struct timeval *t)
 {
-	rtems_interval now;
-
-	now = rtems_clock_get_ticks_since_boot();
-	t->tv_sec = now / rtems_bsdnet_ticks_per_second;
-	t->tv_usec = (now % rtems_bsdnet_ticks_per_second) * rtems_bsdnet_microseconds_per_tick;
+	rtems_clock_get_tod_timeval(t);
 }
 
 unsigned long
