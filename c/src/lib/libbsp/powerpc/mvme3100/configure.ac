@@ -26,14 +26,11 @@ dnl AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
 dnl AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
 dnl   && test -n "$AMPOLISH3"])
 
-RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[1])
-RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
-[If defined, then the PowerPC specific code in RTEMS will use
- data cache instructions to optimize the context switch code.
- This code can conflict with debuggers or emulators.  It is known
- to break the Corelis PowerPC emulator with at least some combinations
- of PowerPC 603e revisions and emulator versions.
- The BSP actually contains the call that enables this.])
+RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED([*],[1])
+RTEMS_BSPOPTS_HELP_DATA_CACHE_ENABLED
+
+RTEMS_BSPOPTS_SET_INSTRUCTION_CACHE_ENABLED([*],[1])
+RTEMS_BSPOPTS_HELP_INSTRUCTION_CACHE_ENABLED
 
 RTEMS_BSPOPTS_SET([CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK], [*], [1])
 RTEMS_BSPOPTS_HELP([CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK],
