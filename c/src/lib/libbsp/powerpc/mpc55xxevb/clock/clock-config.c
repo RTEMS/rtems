@@ -43,7 +43,9 @@ rtems_isr Clock_isr( rtems_vector_number vector);
     EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CSR.R = csr.R; \
  } while (0)
 
-static void mpc55xx_clock_handler_install( rtems_isr_entry isr, 
+static uint64_t mpc55xx_clock_factor;
+
+static void mpc55xx_clock_handler_install( rtems_isr_entry isr,
 					   rtems_isr_entry *old_isr)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -68,6 +70,8 @@ static void mpc55xx_clock_initialize( void)
   unsigned prescaler = mpc55xx_emios_global_prescaler();
   uint64_t interval = ((uint64_t) bsp_clock_speed
     * (uint64_t) rtems_configuration_get_microseconds_per_tick()) / 1000000;
+
+  mpc55xx_clock_factor = (1000000000ULL << 32) / bsp_clock_speed;
 
   /* Apply prescaler */
   if (prescaler > 0) {
@@ -131,11 +135,16 @@ static void mpc55xx_clock_cleanup( void)
 
 static uint32_t mpc55xx_clock_nanoseconds_since_last_tick( void)
 {
-  uint64_t clicks = EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CCNTR.R;
-  uint64_t clock = bsp_clock_speed;
-  uint64_t ns = (clicks * 1000000000) / clock;
+  volatile struct EMIOS_CH_tag *regs = &EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL];
+  uint64_t c = regs->CCNTR.R;
+  union EMIOS_CSR_tag csr = { .R = regs->CSR.R };
+  uint64_t k = mpc55xx_clock_factor;
 
-  return (uint32_t) ns;
+  if (csr.B.FLAG != 0) {
+    c = regs->CCNTR.R + regs->CADR.R + 1;
+  }
+
+  return (uint32_t) ((c * k) >> 32);
 }
 
 #define Clock_driver_support_initialize_hardware() mpc55xx_clock_initialize()

@@ -478,27 +478,10 @@ static const struct MMU_tag mmu_setup[] = {
 #else /* default, MPC55xxEVB */
     {
         /* External Ethernet Controller (3 wait states, 64kB) */
-        {
-            .B.TLBSEL = 1,          /* MAS0 */
-            .B.ESEL = 5
-        },
-        {
-            .B.VALID = 1,           /* MAS1 */
-            .B.IPROT = 1,
-            .B.TSIZ = 1
-        },
-        {
-            .B.EPN = 0x3fff8,       /* MAS2 */
-            .B.I = 1,
-            .B.G = 1
-        },
-        {
-            .B.RPN = 0x3fff8,       /* MAS3 */
-            .B.UW = 1,
-            .B.SW = 1,
-            .B.UR = 1,
-            .B.SR = 1
-        }
+        .MAS0 = { .R = 0x10050000 },
+        .MAS1 = { .R = 0xc0000100 },
+        .MAS2 = { .R = 0x3fff800a },
+        .MAS3 = { .R = 0x3fff800f }
     }
 #endif /* MMU setup */
 };

@@ -70,10 +70,7 @@ libbsp_a_SOURCES += i2c/i2c_init.c \
 
 # Network
 if HAS_NETWORKING
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/smsc9218i.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D__BSD_VISIBLE
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network/smsc9218i.c
 endif
 
 # BSP library
@@ -91,9 +88,6 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
