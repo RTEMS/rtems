@@ -18,22 +18,12 @@ RTEMS_PROG_CCAS
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
-RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[mbx860_005b],[0])
-RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[1])
-RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
-[If defined, then the PowerPC specific code in RTEMS will use
- data cache instructions to optimize the context switch code.
- This code can conflict with debuggers or emulators.])
+RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED([mbx860_005b],[])
+RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED([*],[1])
+RTEMS_BSPOPTS_HELP_DATA_CACHE_ENABLED
 
-RTEMS_BSPOPTS_SET([DATA_CACHE_ENABLE],[*],[1])
-RTEMS_BSPOPTS_HELP([DATA_CACHE_ENABLE],
-[If defined, the data cache will be enabled after address translation
- is turned on.])
-
-RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[*],[1])
-RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
-[If defined, the instruction cache will be enabled after address translation
- is turned on.])
+RTEMS_BSPOPTS_SET_INSTRUCTION_CACHE_ENABLED([*],[1])
+RTEMS_BSPOPTS_HELP_INSTRUCTION_CACHE_ENABLED
 
 RTEMS_BSPOPTS_SET([NVRAM_CONFIGURE],[mbx860_005b],[0])
 RTEMS_BSPOPTS_SET([NVRAM_CONFIGURE],[*],[1])

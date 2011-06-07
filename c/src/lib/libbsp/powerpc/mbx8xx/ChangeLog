@@ -1,3 +1,8 @@
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac, startup/bspstart.c, include/coverhd.h: Use standard
+	cache BSP options.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c, irq/irq.c:

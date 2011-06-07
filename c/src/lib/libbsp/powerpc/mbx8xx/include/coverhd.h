@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 #if ( defined(mbx821_001) || defined(mbx821_001b) || defined(mbx860_001b) )
-#if defined( INSTRUCTION_CACHE_ENABLE )
+#if BSP_INSTRUCTION_CACHE_ENABLED
 /*
  * 50 MHz processor, cache enabled.
  */
@@ -190,10 +190,10 @@ extern "C" {
 #define CALLING_OVERHEAD_RATE_MONOTONIC_PERIOD     5
 #define CALLING_OVERHEAD_MULTIPROCESSING_ANNOUNCE  3
 
-#endif /* defined( INSTRUCTION_CACHE_ENABLE ) */
+#endif /* BSP_INSTRUCTION_CACHE_ENABLED */
 
 #else
-#if defined( INSTRUCTION_CACHE_ENABLE )
+#if BSP_INSTRUCTION_CACHE_ENABLED
 /*
  * 40 MHz processor, cache enabled.
  */
@@ -351,7 +351,7 @@ extern "C" {
 #define CALLING_OVERHEAD_RATE_MONOTONIC_PERIOD     4
 #define CALLING_OVERHEAD_MULTIPROCESSING_ANNOUNCE  3
 
-#endif /* defined( INSTRUCTION_CACHE_ENABLE ) */
+#endif /* BSP_INSTRUCTION_CACHE_ENABLED */
 
 #endif
 

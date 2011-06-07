@@ -106,10 +106,10 @@ void bsp_start(void)
   if ( nvram->cache_mode & 0x01 )
     rtems_cache_enable_data();
 #else
-#ifdef INSTRUCTION_CACHE_ENABLE
+#if BSP_INSTRUCTION_CACHE_ENABLED
   rtems_cache_enable_instruction();
 #endif
-#ifdef DATA_CACHE_ENABLE
+#if BSP_DATA_CACHE_ENABLED
   rtems_cache_enable_data();
 #endif
 #endif
