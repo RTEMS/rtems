@@ -617,6 +617,7 @@ void bsp_start(void)
 	} else {
 		DEBUG_DONE();
 	}
+	ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
 
 	/* Initialize interrupts */
 	RTEMS_DEBUG_PRINT( "Initialize interrupts ...\n");

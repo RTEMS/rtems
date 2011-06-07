@@ -50,6 +50,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bootcard.c ../shared/src/tictac.c ../../shared/bspclean.c \
     ../shared/startup/bspidle.c startup/bspstart.c startup/bspgetworkarea.c \
     ../../shared/bsppretaskinghook.c \
+    ../shared/src/memcpy.c \
     ../shared/src/bsp-start-zero.S
 
 # clock

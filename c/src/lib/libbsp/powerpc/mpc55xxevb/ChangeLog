@@ -1,5 +1,10 @@
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* Makefile.am: Added custom memcpy().
+	* startup/bspstart.c: Install standard alignment handler.
+
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* configure.ac, startup/start.S: Use standard cache BSP options.
 
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
