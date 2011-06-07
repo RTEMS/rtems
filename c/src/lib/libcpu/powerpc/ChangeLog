@@ -1,5 +1,12 @@
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* shared/src/cache_.h: Moved implementation from "cache.c" to here.
+	This avoids the function call overhead.
+	* shared/src/cache.c: Removed file.
+	* Makefile.am: Reflect changes above.
+
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* shared/src/cache_.h: Include required header file.
 
 2011-05-19	Sebastian Huber <sebastian.huber@embedded-brains.de>

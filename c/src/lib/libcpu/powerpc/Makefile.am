@@ -74,7 +74,7 @@ include_libcpu_HEADERS += shared/include/cpuIdent.h
 
 # shared/cache
 noinst_PROGRAMS += shared/cache.rel
-shared_cache_rel_SOURCES = shared/src/cache.c shared/src/cache_.h \
+shared_cache_rel_SOURCES = shared/src/cache_.h \
     ../shared/src/cache_aligned_malloc.c ../shared/src/cache_manager.c \
     ../shared/include/cache.h
 shared_cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/src
