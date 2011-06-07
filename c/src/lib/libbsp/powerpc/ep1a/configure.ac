@@ -15,19 +15,11 @@ RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[0])
-RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
-[If defined, then the PowerPC specific code in RTEMS will use
- data cache instructions to optimize the context switch code.
- This code can conflict with debuggers or emulators.  It is known
- to break the Corelis PowerPC emulator with at least some combinations
- of PowerPC 603e revisions and emulator versions.
- The BSP actually contains the call that enables this.])
+RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED([*],[])
+RTEMS_BSPOPTS_HELP_DATA_CACHE_ENABLED
 
-RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[*],[0])
-RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
-[If defined, the instruction cache will be enabled after address translation
- is turned on.])
+RTEMS_BSPOPTS_SET_INSTRUCTION_CACHE_ENABLED([*],[])
+RTEMS_BSPOPTS_HELP_INSTRUCTION_CACHE_ENABLED
 
 RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[0])
 RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
