@@ -51,8 +51,7 @@ include_bsp_HEADERS += include/boot.h
 include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/emc.h
 
-include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/cache.h \
-	../../../libcpu/arm/shared/include/arm-cp15.h
+include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/arm-cp15.h
 
 ###############################################################################
 #                  Data                                                       #

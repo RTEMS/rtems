@@ -12,7 +12,6 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
-include_libcpudir = $(includedir)/libcpu
 
 dist_project_lib_DATA = bsp_specs
 
@@ -52,8 +51,6 @@ include_bsp_HEADERS += include/lpc-clock-config.h
 include_bsp_HEADERS += include/lpc-ethernet-config.h
 
 include_HEADERS += ../../shared/include/tm27.h
-
-include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/cache.h
 
 ###############################################################################
 #                  Data                                                       #

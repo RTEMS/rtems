@@ -1,3 +1,7 @@
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am, preinstall.am: Cache manager changes.
+
 2011-05-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am: Install new header files.

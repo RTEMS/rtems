@@ -146,10 +146,6 @@ $(PROJECT_INCLUDE)/bsp/emc.h: include/emc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/emc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/emc.h
 
-$(PROJECT_INCLUDE)/libcpu/cache.h: ../../../libcpu/arm/shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
-
 $(PROJECT_INCLUDE)/libcpu/arm-cp15.h: ../../../libcpu/arm/shared/include/arm-cp15.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
