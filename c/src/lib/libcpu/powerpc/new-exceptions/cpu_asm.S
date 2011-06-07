@@ -293,21 +293,21 @@ PROC (_CPU_Context_switch):
 	sync
 	isync
 	/* This assumes that all the registers are in the given order */
-#if ( PPC_USE_DATA_CACHE )
+#if ( BSP_DATA_CACHE_ENABLED )
 #if PPC_CACHE_ALIGNMENT != 32
 #error "code assumes PPC_CACHE_ALIGNMENT == 32!"
 #endif
 	li	r5, PPC_CACHE_ALIGNMENT
 #endif
 	addi	r9,r3,-4
-#if ( PPC_USE_DATA_CACHE )
+#if ( BSP_DATA_CACHE_ENABLED )
 	dcbz	r5, r9
 #endif
 	stw	r1, GP_1+4(r9)
 	stw	r2, GP_2+4(r9)
 #if (PPC_USE_MULTIPLE == 1)
 	addi	r9, r9, GP_18+4
-#if ( PPC_USE_DATA_CACHE )
+#if ( BSP_DATA_CACHE_ENABLED )
 	dcbz	r5, r9
 #endif
 	stmw	r13, GP_13-GP_18(r9)
@@ -318,7 +318,7 @@ PROC (_CPU_Context_switch):
 	stw	r16, GP_16+4(r9)
 	stw	r17, GP_17+4(r9)
 	stwu	r18, GP_18+4(r9)
-#if ( PPC_USE_DATA_CACHE )
+#if ( BSP_DATA_CACHE_ENABLED )
 	dcbz	r5, r9
 #endif
 	stw	r19, GP_19-GP_18(r9)
@@ -335,7 +335,7 @@ PROC (_CPU_Context_switch):
 	stw	r30, GP_30-GP_18(r9)
 	stw	r31, GP_31-GP_18(r9)
 #endif
-#if ( PPC_USE_DATA_CACHE )
+#if ( BSP_DATA_CACHE_ENABLED )
 	dcbt	r0, r4
 #endif
 	mfcr	r6
@@ -350,19 +350,19 @@ PROC (_CPU_Context_switch):
 	EXTERN_PROC(_CPU_Context_switch_altivec)
 	bl		_CPU_Context_switch_altivec
 	mr      r4, r14
-#if ( PPC_USE_DATA_CACHE )
+#if ( BSP_DATA_CACHE_ENABLED )
 	li      r5, PPC_CACHE_ALIGNMENT
 #endif
 #endif
 
-#if ( PPC_USE_DATA_CACHE )
+#if ( BSP_DATA_CACHE_ENABLED )
 	dcbt	r5, r4
 #endif
 	lwz	r1, GP_1(r4)
 	lwz	r2, GP_2(r4)
 #if (PPC_USE_MULTIPLE == 1)
 	addi	r4, r4, GP_19
-#if ( PPC_USE_DATA_CACHE )
+#if ( BSP_DATA_CACHE_ENABLED )
 	dcbt	r5, r4
 #endif
 	lmw	r13, GP_13-GP_19(r4)
@@ -374,7 +374,7 @@ PROC (_CPU_Context_switch):
 	lwz	r17, GP_17(r4)
 	lwz	r18, GP_18(r4)
 	lwzu	r19, GP_19(r4)
-#if ( PPC_USE_DATA_CACHE )
+#if ( BSP_DATA_CACHE_ENABLED )
 	dcbt	r5, r4
 #endif
 	lwz	r20, GP_20-GP_19(r4)

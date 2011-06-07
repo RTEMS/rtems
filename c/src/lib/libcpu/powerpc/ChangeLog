@@ -1,5 +1,10 @@
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* new-exceptions/cpu_asm.S: Use BSP_DATA_CACHE_ENABLED instead of
+	PPC_USE_DATA_CACHE.
+
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* shared/src/cache_.h: Moved implementation from "cache.c" to here.
 	This avoids the function call overhead.
 	* shared/src/cache.c: Removed file.
