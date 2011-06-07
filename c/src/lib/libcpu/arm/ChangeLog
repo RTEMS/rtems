@@ -1,3 +1,8 @@
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/cache_.h: Moved content of "cache.h" to "cache_.h".
+	* shared/include/cache.h: Removed file.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* pxa255/pmc/pmc.c, shared/include/arm-cp15.h:
