@@ -1,5 +1,12 @@
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* new-exceptions/bspsupport/ppc_exc_alignment.c: New file.
+	* Makefile.am: Reflect change above.
+	* new-exceptions/bspsupport/vectors.h: Declare
+	ppc_exc_alignment_handler().
+
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* new-exceptions/cpu_asm.S: Use BSP_DATA_CACHE_ENABLED instead of
 	PPC_USE_DATA_CACHE.
 

@@ -509,6 +509,14 @@ extern uint32_t (*ppc_exc_get_DAR)(void);
 void
 ppc_exc_wrapup(BSP_Exception_frame *f);
 
+/**
+ * @brief Standard aligment handler.
+ *
+ * @retval 0 Performed a dcbz instruction.
+ * @retval -1 Otherwise.
+ */
+int ppc_exc_alignment_handler(BSP_Exception_frame *frame, unsigned excNum);
+
 /** @} */
 
 /*

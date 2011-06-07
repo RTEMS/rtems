@@ -41,6 +41,7 @@ new_exceptions_exc_bspsupport_rel_SOURCES = \
     new-exceptions/bspsupport/ppc_exc_global_handler.c \
     new-exceptions/bspsupport/ppc_exc_categories.c \
     new-exceptions/bspsupport/ppc_exc_address.c \
+    new-exceptions/bspsupport/ppc_exc_alignment.c \
     new-exceptions/bspsupport/ppc_exc_prologue.c
 
 new_exceptions_exc_bspsupport_rel_CPPFLAGS = $(AM_CPPFLAGS)
