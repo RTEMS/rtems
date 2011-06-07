@@ -13,7 +13,6 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <libcpu/cache.h>
 #include <libcpu/memoryRegs.h>
 #include "cache_.h"
 

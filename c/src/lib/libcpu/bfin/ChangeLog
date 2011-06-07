@@ -1,3 +1,8 @@
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cache/cache_.h: Include required header file.
+	* cache/cache.c: Removed superfuous header file.
+
 2011-05-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* serial/uart.c, serial/uart.h: Remove CVS-Author tag.
