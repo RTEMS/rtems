@@ -64,3 +64,21 @@ m4_expand_once([m4_divert_once([HELP_VAR],
 [AS_HELP_STRING([$1],[$2],              )])],
       [$0($1)])dnl
 ])
+
+AC_DEFUN(
+[RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED],
+[RTEMS_BSPOPTS_SET([BSP_DATA_CACHE_ENABLED],[$1],[$2])])
+
+AC_DEFUN(
+[RTEMS_BSPOPTS_HELP_DATA_CACHE_ENABLED],
+[RTEMS_BSPOPTS_HELP([BSP_DATA_CACHE_ENABLED],
+[enables the data cache, if defined to a value other than zero])])
+
+AC_DEFUN(
+[RTEMS_BSPOPTS_SET_INSTRUCTION_CACHE_ENABLED],
+[RTEMS_BSPOPTS_SET([BSP_INSTRUCTION_CACHE_ENABLED],[$1],[$2])])
+
+AC_DEFUN(
+[RTEMS_BSPOPTS_HELP_INSTRUCTION_CACHE_ENABLED],
+[RTEMS_BSPOPTS_HELP([BSP_INSTRUCTION_CACHE_ENABLED],
+[enables the instruction cache, if defined to a value other than zero])])
