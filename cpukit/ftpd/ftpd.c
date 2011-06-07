@@ -552,12 +552,8 @@ task_pool_release(FTPD_SessionInfo_t* info)
 static void
 send_reply(FTPD_SessionInfo_t  *info, int code, char *text)
 {
-  char const* s = (info->xfer_mode == TYPE_A) ? "\r" : "";
-  /* If a text reply exists, add it to the reply data. */
-  if (text != NULL)
-    fprintf(info->ctrl_fp, "%d %.70s%s\n", code, text, s);
-  else
-    fprintf(info->ctrl_fp, "%d%s\n", code, s);
+  text = text != NULL ? text : "";
+  fprintf(info->ctrl_fp, "%d %.70s\r\n", code, text);
   fflush(info->ctrl_fp);
 }
 
