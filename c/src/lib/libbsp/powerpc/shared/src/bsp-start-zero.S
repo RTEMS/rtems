@@ -64,7 +64,7 @@ head_loop_update:
 	/* Main loop */
 	b	main_loop_update
 main_loop_begin:
-#ifdef DATA_CACHE_ENABLE
+#if BSP_DATA_CACHE_ENABLED
 	dcbz	r0, r3
 	dcbf	r0, r3
 #else
