@@ -1,5 +1,9 @@
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* shared/src/memcpy.c: New file.
+
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* shared/src/bsp-start-zero.S: Use BSP_DATA_CACHE_ENABLED instead of
 	DATA_CACHE_ENABLE.
 
