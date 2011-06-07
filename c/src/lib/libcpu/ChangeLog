@@ -1,3 +1,8 @@
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/cache.h, shared/src/cache_manager.c: Removed include
+	files to reduce implementation constraints.
+
 2010-05-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/src/no_cache.c: New file.

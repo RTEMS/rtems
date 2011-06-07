@@ -31,10 +31,7 @@
  */
 
 #include <rtems.h>
-#include <sys/types.h>
-#include <libcpu/cache.h>
 #include "cache_.h"
-
 
 /*
  * THESE FUNCTIONS ONLY HAVE BODIES IF WE HAVE A DATA CACHE

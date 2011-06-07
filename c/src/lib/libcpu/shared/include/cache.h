@@ -23,8 +23,6 @@
 #ifndef __LIBCPU_CACHE_h
 #define __LIBCPU_CACHE_h
 
-#include <sys/types.h>
-
 void _CPU_cache_flush_1_data_line(const void *d_addr);
 void _CPU_cache_invalidate_1_data_line(const void *d_addr);
 void _CPU_cache_freeze_data(void);
