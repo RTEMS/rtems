@@ -1,3 +1,7 @@
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac, startup/bspstart.c: Use standard cache BSP options.
+
 2011-05-17	Till Straumann <strauman@slac.stanford.edu>
 
 	PR1797/bsps

@@ -223,14 +223,14 @@ void bsp_start( void )
   #endif
   bsp_clicks_per_usec = 66 / 4;
 
-  #if ( PPC_USE_DATA_CACHE )
+  #if BSP_DATA_CACHE_ENABLED
     #if DEBUG
       printk("bsp_start: cache_enable\n");
     #endif
     instruction_cache_enable ();
     data_cache_enable ();
     #if DEBUG
-      printk("bsp_start: END PPC_USE_DATA_CACHE\n");
+      printk("bsp_start: END BSP_DATA_CACHE_ENABLED\n");
     #endif
   #endif
 
