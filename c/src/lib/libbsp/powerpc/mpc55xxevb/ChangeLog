@@ -1,5 +1,9 @@
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* configure.ac, startup/start.S: Use standard cache BSP options.
+
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* clock/clock-config.c: Fixes to pass psnsext01.
 	* startup/bspstart.c: Workaround for GCC 4.6 bug.
 	* include/smsc9218i.h, network/smsc9218i.c, Makefile.am: Changes

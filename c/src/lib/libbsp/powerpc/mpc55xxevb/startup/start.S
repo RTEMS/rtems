@@ -83,10 +83,10 @@ start:
 	/* Config internal flash */
 	bl SYM (mpc55xx_flash_config)
 
-#if DATA_CACHE_ENABLE || INSTRUCTION_CACHE_ENABLE
+#if BSP_DATA_CACHE_ENABLED || BSP_INSTRUCTION_CACHE_ENABLED
 	/* FIXME: Config cache */
 	bl config_cache
-#endif /* DATA_CACHE_ENABLE || INSTRUCTION_CACHE_ENABLE */
+#endif /* BSP_DATA_CACHE_ENABLED || BSP_INSTRUCTION_CACHE_ENABLED */
 
 /*
  * TODO, FIXME: Enable cache in the MMU for the SRAM
