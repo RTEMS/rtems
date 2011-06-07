@@ -15,15 +15,11 @@ RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-RTEMS_BSPOPTS_SET([DATA_CACHE_ENABLE],[*],[1])
-RTEMS_BSPOPTS_HELP([DATA_CACHE_ENABLE],
-[If defined, the data cache will be enabled after address translation
- is turned on.])
+RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED([*],[1])
+RTEMS_BSPOPTS_HELP_DATA_CACHE_ENABLED
 
-RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[*],[1])
-RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
-[If defined, the instruction cache will be enabled after address translation
- is turned on.])
+RTEMS_BSPOPTS_SET_INSTRUCTION_CACHE_ENABLED([*],[1])
+RTEMS_BSPOPTS_HELP_INSTRUCTION_CACHE_ENABLED
 
 RTEMS_BSPOPTS_SET([MPC8313ERDB],[mpc8313erdb],[1])
 RTEMS_BSPOPTS_HELP([MPC8313ERDB],
@@ -57,10 +53,6 @@ RTEMS_BSPOPTS_HELP([BSP_USE_UART2],[If defined, enables UART2.])
 
 RTEMS_BSPOPTS_SET([HAS_UBOOT],[mpc8313erdb],[1])
 RTEMS_BSPOPTS_HELP([HAS_UBOOT],[If defined, enables U-Boot support.])
-
-RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[1])
-RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE], [If defined, then the PowerPC specific
- code in RTEMS will use data cache instructions to optimize the context switch code.])
 
 RTEMS_BSPOPTS_SET([GEN83XX_ENABLE_INTERRUPT_NESTING],[*],[1])
 RTEMS_BSPOPTS_HELP([GEN83XX_ENABLE_INTERRUPT_NESTING],[enable interrupt nesting])

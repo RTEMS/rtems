@@ -1,3 +1,7 @@
+2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac, startup/bspstart.c: Use standard cache BSP options.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/cpuinit.c:
