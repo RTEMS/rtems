@@ -1,3 +1,7 @@
+2011-06-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/smp.c: Fix typo so this compiles.
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1811/networking

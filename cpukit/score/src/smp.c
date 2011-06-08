@@ -276,7 +276,7 @@ void _SMP_Request_other_cores_to_shutdown(void)
   }
   if ( !allDown )
     printk( "All CPUs not successfully shutdown -- timed out\n" );
-  #if (RTEMS_DEBUG)
+  #if defined(RTEMS_DEBUG)
     else 
       printk( "All CPUs shutdown successfully\n" );
   #endif
