@@ -1,3 +1,7 @@
+2011-06-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* config.h.in: Regenerated.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
