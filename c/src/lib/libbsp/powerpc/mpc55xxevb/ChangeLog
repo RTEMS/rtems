@@ -1,3 +1,7 @@
+2011-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* network/smsc9218i.c: Optimizations.
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am: Added custom memcpy().
