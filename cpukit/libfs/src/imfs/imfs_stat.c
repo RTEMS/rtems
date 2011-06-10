@@ -64,5 +64,7 @@ int IMFS_stat(
   buf->st_mtime = the_jnode->stat_mtime;
   buf->st_ctime = the_jnode->stat_ctime;
 
+  buf->st_blksize = imfs_rq_memfile_bytes_per_block;
+
   return 0;
 }
