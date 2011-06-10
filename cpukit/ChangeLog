@@ -1,3 +1,9 @@
+2011-06-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1812/filesystem
+	* libfs/src/imfs/imfs_stat.c: stat() implementation for IMFS did not
+	set st_blksize field. Set it based upon user configuration.
+
 2011-05-27	Bo Hansen <mdboha@gmail.com>
 
 	PR 1776/networking
