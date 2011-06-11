@@ -165,9 +165,9 @@ rtems_task Init (rtems_task_argument ignored)
          *  Since this task is holding this, this task will block and timeout.
          *  Then the timeout error will be returned.
          */
-	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then);
+        then = rtems_clock_get_ticks_since_boot();
 	sc = rtems_semaphore_obtain (semnorec, RTEMS_WAIT, 5);
-	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+        now = rtems_clock_get_ticks_since_boot();
 	if (sc == RTEMS_SUCCESSFUL) {
 		printf ("%d: Reobtain non-recursive-lock semaphore -- and should not have.\n", __LINE__);
 	}
@@ -178,12 +178,12 @@ rtems_task Init (rtems_task_argument ignored)
 		printf ("%d: Reobtain non-recursive-lock semaphore failed without timeout.\n", __LINE__);
 
 	startTask (semnorec);
-	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then);
+        then = rtems_clock_get_ticks_since_boot();
 	for (i = 0 ; i < 5 ; i++) {
 		rtems_interval diff;
 
 		sc = rtems_semaphore_obtain (semnorec, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-		rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+                now = rtems_clock_get_ticks_since_boot();
 		diff = (now - then);
 		then = now;
 		if (sc != RTEMS_SUCCESSFUL)

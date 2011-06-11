@@ -35,8 +35,6 @@ TA1 - rtems_clock_get_tod_timeval - RTEMS_INVALID_ADDRESS
 TA1 - rtems_clock_get_tod_timeval - RTEMS_NOT_DEFINED
 TA1 - rtems_clock_set_nanoseconds_extension - RTEMS_INVALID_ADDRESS
 TA1 - rtems_clock_set - RTEMS_INVALID_ADDRESS
-TA1 - rtems_clock_get - RTEMS_INVALID_ADDRESS
-TA1 - rtems_clock_get - RTEMS_INVALID_NUMBER
 TA1 - rtems_task_wake_when - RTEMS_INVALID_ADDRESS
 TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED
 TA1 - rtems_timer_fire_when - RTEMS_NOT_DEFINED
@@ -175,8 +173,9 @@ TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
 TA3 - rtems_message_queue_receive - woke up with RTEMS_OBJECT_WAS_DELETED
 TA3 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
 <pause - screen 9>
-TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS -- SKIPPED
-TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS - SKIPPED
+TA1 - rtems_interrupt_catch - RTEMS_INVALID_NUMBER
+TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS
+TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS
 TA1 - rtems_signal_send - RTEMS_INVALID_ID
 TA1 - rtems_signal_send - RTEMS_INVALID_NUMBER
 TA1 - rtems_signal_send - RTEMS_NOT_DEFINED
@@ -286,7 +285,7 @@ TA1 - rtems_io_write - RTEMS_INVALID_NUMBER
 TA1 - rtems_clock_set - 23:59:59   12/31/2000 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_get_tod - 00:00:00   01/01/2001 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_set - 23:59:59   12/31/1999 - RTEMS_SUCCESSFUL
-TA1 - rtems_clock_get - 00:00:00   01/01/2000 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_get_tod - 00:00:00   01/01/2000 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_set - 23:59:59   12/31/2100 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_get_tod - 17:31:44   11/25/1964 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_set - 23:59:59   12/31/2099 - RTEMS_SUCCESSFUL

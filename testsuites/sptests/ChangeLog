@@ -1,3 +1,9 @@
+2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen02.c, sp09/screen13.c, sp09/sp09.scn, sp29/init.c,
+	sp30/sp30.scn, sp32/init.c, spclockget/init.c: Avoid use of
+	deprecated rtems_clock_get() except in spclockget().
+
 2011-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spintrcritical01/init.c: Fixed warning fix.

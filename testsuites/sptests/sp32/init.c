@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,8 +39,7 @@ rtems_task Init(
   directive_failed(status, "rate_monotonic_period #1");
 
   /* get our first timestamp */
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &timestamps[0] );
-  directive_failed(status, "clock_get");
+  timestamps[0] = rtems_clock_get_ticks_since_boot();
 
   /* loop through and gather more timestamps */
   for (loopy = 1; loopy < 5; loopy++) {
@@ -48,11 +47,7 @@ rtems_task Init(
     status = rtems_rate_monotonic_period( period_id, wantintervals[loopy] );
     directive_failed(status, "rate_monotonic_period #2");
 
-    status = rtems_clock_get(
-        RTEMS_CLOCK_GET_TICKS_SINCE_BOOT,
-        &timestamps[loopy]
-    );
-    directive_failed(status, "clock_get");
+    timestamps[loopy] = rtems_clock_get_ticks_since_boot();
   }
 
   /* block one last time */
@@ -60,11 +55,7 @@ rtems_task Init(
   directive_failed(status, "rate_monotonic_period #3");
 
   /* get one last timestamp */
-  status = rtems_clock_get(
-      RTEMS_CLOCK_GET_TICKS_SINCE_BOOT,
-      &timestamps[loopy]
-  );
-  directive_failed(status, "clock_get");
+  timestamps[loopy] = rtems_clock_get_ticks_since_boot();
 
   /* cancel the period */
   status = rtems_rate_monotonic_cancel(period_id);

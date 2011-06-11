@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,6 +30,16 @@ rtems_task Init(
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   sc = rtems_clock_set( &time );
   directive_failed( sc, "rtems_clock_set" );
+
+  /* NULL parameter */
+  sc = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, NULL );
+  fatal_directive_status( sc, RTEMS_INVALID_ADDRESS, "null pointer" );
+  puts( "TA1 - rtems_clock_get - RTEMS_INVALID_ADDRESS" );
+
+  /* arbitrary bad value for switch */
+  sc = rtems_clock_get( 0xff, &timev );
+  fatal_directive_status( sc, RTEMS_INVALID_NUMBER, "bad case" );
+  puts( "TA1 - rtems_clock_get - RTEMS_INVALID_NUMBER" );
 
   sc = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
   directive_failed( sc, "rtems_clock_get -- TOD" );

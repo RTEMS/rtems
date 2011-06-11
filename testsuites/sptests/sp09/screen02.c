@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -121,27 +121,9 @@ void Screen2()
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
-    "rtems_clock_get sull pointer"
+    "rtems_clock_set sull pointer"
   );
   puts( "TA1 - rtems_clock_set - RTEMS_INVALID_ADDRESS" );
-
-  /* NULL parameter */
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, NULL );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_ADDRESS,
-    "rtems_clock_get null pointer"
-  );
-  puts( "TA1 - rtems_clock_get - RTEMS_INVALID_ADDRESS" );
-
-  /* arbitrary bad value for switch */
-  status = rtems_clock_get( 0xff, &tv );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_NUMBER,
-    "rtems_clock_get bad case"
-  );
-  puts( "TA1 - rtems_clock_get - RTEMS_INVALID_NUMBER" );
 
   /* wake when NULL param */
   status = rtems_task_wake_when( NULL );
@@ -156,7 +138,7 @@ void Screen2()
   status = rtems_task_wake_when( &time );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
-     "TA1 - rtems_clock_get - RTEMS_NOT_DEFINED -- "
+     "TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED -- "
          "DID BSP SET THE TIME OF DAY?"
     );
   } else {
