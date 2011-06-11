@@ -1,3 +1,7 @@
+2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Remove reference to wrapup directory.
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac: Use standard cache BSP options.

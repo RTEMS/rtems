@@ -1,3 +1,7 @@
+2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Remove reference to wrapup directory.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspclean.c, startup/page_table.c:

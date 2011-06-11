@@ -18,11 +18,6 @@ nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
-# wrapup is the one that actually builds and installs the library
-# from the individual .rel files built in other directories
-# XXX ignore tools since it doesn't build
-SUBDIRS = .
-
 include_HEADERS += ../../shared/tod.h
 include_HEADERS += include/coverhd.h
 include_HEADERS += include/page_table.h
