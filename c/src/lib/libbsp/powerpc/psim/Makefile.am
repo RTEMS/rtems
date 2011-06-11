@@ -4,8 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-SUBDIRS = . tools
-
 include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
