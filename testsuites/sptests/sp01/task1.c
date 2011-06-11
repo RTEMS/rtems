@@ -1,14 +1,5 @@
-/*  Task_1_through_3
- *
- *  This routine serves as a test task.  It verifies the basic task
- *  switching capabilities of the executive.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,23 +16,23 @@
 #include "system.h"
 
 rtems_task Task_1_through_3(
-  rtems_task_argument argument
+  rtems_task_argument index
 )
 {
-  rtems_id          tid;
   rtems_time_of_day time;
   rtems_status_code status;
   rtems_interval    ticks;
+  rtems_name        name;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
-  directive_failed( status, "rtems_task_ident" );
+  status = rtems_object_get_classic_name( rtems_task_self(), &name );
+  directive_failed( status, "rtems_object_get_classic_name" );
 
   /*
    * Use TOD_MILLISECONDS_TO_TICKS not RTEMS_MILLISECONDS_TO_TICKS to
    * test C implementation in SuperCore -- not macro version used
    * everywhere else.
    */
-  ticks = TOD_MILLISECONDS_TO_TICKS( task_number( tid ) * 5 * 1000 );
+  ticks = TOD_MILLISECONDS_TO_TICKS( index * 5 * 1000 );
 
   while( FOREVER ) {
     status = rtems_clock_get_tod( &time );
@@ -52,7 +43,7 @@ rtems_task Task_1_through_3(
       rtems_test_exit( 0 );
     }
 
-    put_name( Task_name[ task_number( tid ) ], FALSE );
+    put_name( name, FALSE );
     print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
     status = rtems_task_wake_after( ticks );

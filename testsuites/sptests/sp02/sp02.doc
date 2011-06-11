@@ -1,7 +1,7 @@
 #
 #  $Id$
 #
-#  COPYRIGHT (c) 1989-2009.
+#  COPYRIGHT (c) 1989-2011.
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -9,31 +9,30 @@
 #  http://www.rtems.com/license/LICENSE.
 #
 
-
-This file describes the directives and concepts tested by this test set.
-
-test set name:  test2
+test set name:  sp02
 
 directives:
-  ex_init, ex_start, t_create, t_start, tm_tick, i_return, t_ident,
-  t_delete, tm_wkafter, t_setpri, t_suspend
+  rtems_task_create
+  rtems_task_start
+  rtems_task_wake_after
+  rtems_clock_set
+  rtems_clock_get
+  rtems_clock_tick
+  rtems_task_set_priority
+  rtems_object_get_classic_name
+  rtems_task_suspend
 
 concepts:
 
-  a.  Verifies that a task can delete another task and also delete itself.
++ Verifies that a task can delete another task and also delete itself.
 
-  b.  Verifies that memory is freed back to the heap correctly.
++ Verifies that memory is freed back to the heap correctly.
 
-  c.  Verifies that TCBs are freed back to the inactive chain correctly.
++ Verifies that TCBs are freed back to the inactive chain correctly.
 
-  d.  Verifies that a task can get the task identification number of
-      another task.
++ Verifies that a task can get the task ID of another task.
 
-  e.  Verifies the _Set_state routine where the task is not READY.
++ Verifies the blocking routine where the task is not READY.
 
-  f.  Verifies the break statement in the _Block_activate routine.
-
-  g.  Verifies the while loop in the _Prev_tcb routine.
-
-  h.  Verify behavior when the IDLE task's stack is configured for
-      less than the minimum stack size.
++ Verifies behavior when the IDLE task's stack is configured for
+  more than the minimum stack size.

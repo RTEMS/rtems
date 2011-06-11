@@ -1,5 +1,12 @@
 2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp01/init.c, sp01/sp01.doc, sp01/system.h, sp01/task1.c, sp02/init.c,
+	sp02/preempt.c, sp02/sp02.doc, sp02/system.h, sp02/task1.c,
+	sp02/task2.c, sp02/task3.c, sp03/init.c, sp03/sp03.doc,
+	sp03/system.h, sp03/task1.c, sp03/task2.c: Clean up. Update.
+
+2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp09/screen02.c, sp09/screen13.c, sp09/sp09.scn, sp29/init.c,
 	sp30/sp30.scn, sp32/init.c, spclockget/init.c: Avoid use of
 	deprecated rtems_clock_get() except in spclockget().

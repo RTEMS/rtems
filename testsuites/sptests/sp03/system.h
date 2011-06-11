@@ -1,9 +1,5 @@
-/*  system.h
- *
- *  This include file contains information that is included in every
- *  function in the test set.
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,12 +35,8 @@ rtems_task Task_2(
 #define CONFIGURE_EXTRA_TASK_STACKS         (1 * RTEMS_MINIMUM_STACK_SIZE)
 #define CONFIGURE_MAXIMUM_TASKS             3
 
-
 #include <rtems/confdefs.h>
 
 /* global variables */
-
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 
 /* end of include file */

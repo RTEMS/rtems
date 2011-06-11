@@ -1,14 +1,5 @@
-/*  Task_3
- *
- *  This routine serves as a test task.  It simply sleeps for 5 seconds
- *  and then deletes itself.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

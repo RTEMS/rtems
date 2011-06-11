@@ -1,7 +1,7 @@
 #
 #  $Id$
 #
-#  COPYRIGHT (c) 1989-1999.
+#  COPYRIGHT (c) 1989-2011.
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -12,12 +12,20 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  test3
+test set name:  sp03
 
 directives:
-  ex_init, ex_start, t_create, t_start, tm_tick, i_return, tm_wkafter,
-  tm_wkwhen, tm_set, tm_get
+  rtems_task_create
+  rtems_task_start
+  rtems_task_wake_after
+  rtems_task_wake_when
+  rtems_clock_set
+  rtems_clock_get
+  rtems_task_self
+  rtems_object_get_classic_name
 
 concepts:
 
-  a.  Verifies conversion routines - _Utd_to_etd and _Etd_to_utd
++ Verifies delay by interval.
+
++ Verifies delay by absolute time.

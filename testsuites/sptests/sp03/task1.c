@@ -1,14 +1,5 @@
-/*  Task_1
- *
- *  This routine serves as a test task.  It verifies the capability to
- *  set and read the executives calender and clock.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,20 +21,24 @@ rtems_task Task_1(
 {
   rtems_status_code status;
   rtems_time_of_day time;
+  rtems_name        name;
+
+  status = rtems_object_get_classic_name( rtems_task_self(), &name );
+  directive_failed( status, "rtems_object_get_classic_name" );
 
   build_time( &time, 12, 31, 1988, 9, 15, 0, 0 );
 
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
-  put_name( Task_name[ 1 ], FALSE );
+  put_name( name, FALSE );
   print_time( " sets clock: ", &time, "\n" );
 
   while( FOREVER ) {
     status = rtems_clock_get_tod( &time );
     directive_failed( status, "rtems_clock_get_tod" );
 
-    put_name( Task_name[ 1 ], FALSE );
+    put_name( name, FALSE );
     print_time( " going to sleep:  ", &time, "\n" );
 
     time.second += 5;
@@ -56,7 +51,7 @@ rtems_task Task_1(
     status = rtems_task_wake_when( &time );
     directive_failed( status, "rtems_task_wake_when" );
 
-    put_name( Task_name[ 1 ], FALSE );
+    put_name( name, FALSE );
     print_time( " awakened:  ", &time, "\n" );
   }
 }
