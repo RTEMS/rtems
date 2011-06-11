@@ -286,7 +286,7 @@ static void fileio_list_file(void)
   }
 
   if (fd >= 0) {
-    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_tick);
+    start_tick = rtems_clock_get_ticks_since_boot();
     do {
       n = read(fd,buf_ptr,buf_size);
       if (n > 0) {
@@ -295,7 +295,7 @@ static void fileio_list_file(void)
       }
     } while (n > 0);
 
-    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &curr_tick);
+    curr_tick = rtems_clock_get_ticks_since_boot();
 
     printf("\n ******** End of file reached, flen = %zd\n",flen);
     close(fd);
@@ -462,7 +462,7 @@ static void fileio_write_file(void)
    */
   if (!failed) {
     printf("... writing to file\n");
-    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_tick);
+    start_tick = rtems_clock_get_ticks_since_boot();
     curr_pos = 0;
     do {
       bytes_to_copy = buf_size;
@@ -476,7 +476,7 @@ static void fileio_write_file(void)
 	}
       } while ((bytes_to_copy > 0)  && (n > 0));
     } while ((file_size > curr_pos) && (n > 0));
-    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &curr_tick);
+    curr_tick = rtems_clock_get_ticks_since_boot();
     if (n < 0) {
       failed = true;
       printf("*** file write failed, "
@@ -583,7 +583,7 @@ static void fileio_read_file(void)
    */
   if (!failed) {
     printf("... reading from file\n");
-    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_tick);
+    start_tick = rtems_clock_get_ticks_since_boot();
     curr_pos = 0;
     do {
       n = read(fd,
@@ -593,7 +593,7 @@ static void fileio_read_file(void)
 	curr_pos      += (size_t) n;
       }
     } while (n > 0);
-    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &curr_tick);
+    curr_tick = rtems_clock_get_ticks_since_boot();
     if (n < 0) {
       failed = true;
       printf("*** file read failed, "

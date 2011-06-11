@@ -1,3 +1,8 @@
+2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* fileio/init.c: Avoid use of deprecated rtems_clock_get() except in
+	spclockget().
+
 2011-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/Makefile.am, ticker/Makefile.am: Missed part of previous
