@@ -19,8 +19,6 @@ DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-SUBDIRS = . tools
-
 include_HEADERS += include/erc32.h
 include_HEADERS += ../../shared/include/coverhd.h
 
