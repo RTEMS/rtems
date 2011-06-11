@@ -1,3 +1,8 @@
+2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: runtest for this BSP obsoleted by
+	rtems-testing/sim-scripts support. Please use those scripts.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/tm27.h:
