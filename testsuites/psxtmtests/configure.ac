@@ -80,6 +80,7 @@ AC_SUBST(OPERATION_COUNT)
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 psxtmmutex02/Makefile
+psxtmsleep01/Makefile
 psxtmthread01/Makefile
 psxtmthread03/Makefile
 ])

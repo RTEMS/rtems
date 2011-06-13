@@ -1,3 +1,10 @@
+2011-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add psxtmsleep01.
+	* psxtmsleep01/.cvsignore, psxtmsleep01/Makefile.am,
+	psxtmsleep01/Makefile.in, psxtmsleep01/init.c,
+	psxtmsleep01/psxtmsleep01.doc: New files.
+
 2011-06-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxtmtests_plan.csv: Add sleep and nanosleep cases.
