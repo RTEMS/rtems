@@ -1,5 +1,9 @@
 2011-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxtmsleep01/Makefile.in: Removed.
+
+2011-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add psxtmsleep01.
 	* psxtmsleep01/.cvsignore, psxtmsleep01/Makefile.am,
 	psxtmsleep01/Makefile.in, psxtmsleep01/init.c,
