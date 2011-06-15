@@ -1,3 +1,7 @@
+2011-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/threadtickletimeslice.c: Spacing.
+
 2011-06-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1812/filesystem

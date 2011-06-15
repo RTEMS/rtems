@@ -90,7 +90,7 @@ void _Thread_Tickle_timeslice( void )
          *  currently executing thread is placed at the rear of the
          *  FIFO for this priority and a new heir is selected.
          */
-        _Scheduler_Yield( );
+        _Scheduler_Yield();
         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       }
       break;
