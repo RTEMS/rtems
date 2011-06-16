@@ -96,7 +96,7 @@ void rtems_smp_process_interrupt(void)
 
   cpu = bsp_smp_processor_id();
 
-  level = _SMP_lock_Simple_Spinlock_Obtain( &_Per_CPU_Information[cpu].lock );
+  level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
   message = _Per_CPU_Information[cpu].message;
 
   #if defined(RTEMS_DEBUG)
@@ -128,7 +128,7 @@ void rtems_smp_process_interrupt(void)
     _Per_CPU_Information[cpu].message &= ~message;
     _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_UP;
 
-    _SMP_lock_Simple_Spinlock_Release( &_Per_CPU_Information[cpu].lock, level );
+    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
     _Thread_Disable_dispatch();
     rtems_smp_run_first_task(cpu);
     /* does not return */
@@ -140,7 +140,7 @@ void rtems_smp_process_interrupt(void)
      * XXX revisited when Interrupts on SMP is addressed.
      */
     _Per_CPU_Information[cpu].message &= ~message;
-    _SMP_lock_Simple_Spinlock_Release( &_Per_CPU_Information[cpu].lock, level );
+    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
 
     _Thread_Dispatch_disable_level--; /* undo ISR code */
     _Per_CPU_Information[cpu].isr_nest_level = 0;
@@ -160,7 +160,7 @@ void rtems_smp_process_interrupt(void)
      * XXX revisited when Interrupts on SMP is addressed.
      */
     _Per_CPU_Information[cpu].message &= ~message;
-    _SMP_lock_Simple_Spinlock_Release( &_Per_CPU_Information[cpu].lock, level );
+    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
   }
 }
 

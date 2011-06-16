@@ -1,3 +1,8 @@
+2011-06-16	Jennifer Averett <Jennifer Averett@OARcorp.com
+
+	* score/src/smp.c: Spinlock Name change necessary to resolve
+	compalation error.
+
 2011-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/threadtickletimeslice.c: Spacing.
