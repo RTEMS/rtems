@@ -1,3 +1,7 @@
+2011-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Don't generate host.cfg.in.
+
 2011-04-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, Makefile.inc.in, configure.ac, target.cfg.in: Update to

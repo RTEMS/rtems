@@ -24,11 +24,6 @@ rtems_bsp_DATA = Makefile.inc
 rtems_bsp_makedir = $(rtems_bspdir)/make
 rtems_bsp_make_DATA = bsp.cfg target.cfg
 
-if MAINTAINER_MODE
-$(srcdir)/host.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/host.cfg.in
-	cp $< $@
-endif
-
 bsp.cfg: bsp.cfg.in Makefile
 	sed \
 	-e "s|[@]HAS_MP[@]|$(HAS_MP)|" \
