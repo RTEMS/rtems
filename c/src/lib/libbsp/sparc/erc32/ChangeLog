@@ -1,3 +1,7 @@
+2011-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/bspdelay.c: Fix broken CVS-Id.
+
 2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: runtest for this BSP obsoleted by
