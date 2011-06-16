@@ -1,3 +1,9 @@
+2011-06-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1818/misc
+	* libmisc/cpuuse/cpuusagereport.c: Add SMP support to CPU Usage
+	Reporting.
+
 2011-06-16	Jennifer Averett <Jennifer Averett@OARcorp.com
 
 	* score/src/smp.c: Spinlock Name change necessary to resolve

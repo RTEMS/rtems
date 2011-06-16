@@ -36,11 +36,34 @@
   extern uint32_t           CPU_usage_Ticks_at_last_reset;
 #endif
 
-/*PAGE
- *
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+  static bool is_executing_on_a_core(
+    Thread_Control    *the_thread,
+    Timestamp_Control *time_of_context_switch
+  )
+  {
+    #ifndef RTEMS_SMP
+      if ( _Thread_Executing->Object.id == the_thread->Object.id ) {
+        *time_of_context_switch = _Thread_Time_of_last_context_switch;
+        return true;
+      }
+    #else
+      int  cpu;
+      for ( cpu=0 ; cpu < _SMP_Processor_count ; cpu++ ) {
+        Per_CPU_Control *p = &_Per_CPU_Information[cpu];
+        if ( p->executing->Object.id == the_thread->Object.id ) {
+          *time_of_context_switch = p->time_of_last_context_switch;
+          return true;
+        }
+      }
+    #endif
+    return false;
+  }
+#endif
+
+/*
  *  rtems_cpu_usage_report
  */
-
 void rtems_cpu_usage_report_with_plugin(
   void                  *context,
   rtems_printk_plugin_t  print
@@ -125,14 +148,16 @@ void rtems_cpu_usage_report_with_plugin(
         );
 
         #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+        {
+          Timestamp_Control last;
+
           /*
            * If this is the currently executing thread, account for time
            * since the last context switch.
            */
           ran = the_thread->cpu_time_used;
-          if ( _Thread_Executing->Object.id == the_thread->Object.id ) {
+          if ( is_executing_on_a_core( the_thread, &last ) ) {
             Timestamp_Control used;
-            Timestamp_Control last = _Thread_Time_of_last_context_switch;
             _TOD_Get_uptime( &uptime );
             _Timestamp_Subtract( &last, &uptime, &used );
             _Timestamp_Add_to( &ran, &used );
@@ -153,6 +178,7 @@ void rtems_cpu_usage_report_with_plugin(
                TOD_NANOSECONDS_PER_MICROSECOND,
             ival, fval
           );
+        }
         #else
          if (total_units) {
             uint64_t ival_64;
