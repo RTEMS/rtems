@@ -28,6 +28,7 @@ extern "C" {
 #endif
 
 #include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerpriority.h>
 
 /**
  *  Entry points for Scheduler Simple
@@ -44,7 +45,8 @@ extern "C" {
     _Scheduler_simple_Update,        /* update entry point */ \
     _Scheduler_simple_Enqueue,       /* enqueue entry point */ \
     _Scheduler_simple_Enqueue_first, /* enqueue_first entry point */ \
-    _Scheduler_simple_Extract        /* extract entry point */ \
+    _Scheduler_simple_Extract,       /* extract entry point */ \
+    _Scheduler_priority_Tick         /* tick entry point */ \
   }
 
 /**

@@ -56,7 +56,8 @@ extern "C" {
     _Scheduler_simple_Update,        /* update entry point */ \
     _Scheduler_simple_Enqueue,       /* enqueue entry point */ \
     _Scheduler_simple_Enqueue_first, /* enqueue_first entry point */ \
-    _Scheduler_simple_Extract        /* extract entry point */ \
+    _Scheduler_simple_Extract,       /* extract entry point */ \
+    _Scheduler_simple_smp_Tick       /* tick entry point */ \
   }
 
 /**
@@ -95,6 +96,16 @@ void _Scheduler_simple_smp_Unblock(
   Thread_Control *the_thread
 );
 
+/**
+ *  @brief Scheduler Simple SMP Tick Method
+ *
+ *  This routine is invoked as part of processing each clock tick.
+ *  It is responsible for determining if the current thread allows
+ *  timeslicing and, if so, when its timeslice expires.
+ */
+void _Scheduler_simple_smp_Tick( void );
+
+/**
 #ifdef __cplusplus
 }
 #endif

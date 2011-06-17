@@ -74,6 +74,9 @@ typedef struct {
 
   /** extract a thread from the ready set */
   void ( *extract )(Thread_Control *);
+
+  /** perform scheduler update actions required at each clock tick */
+  void ( *tick )(void);
 } Scheduler_Operations;
 
 /**

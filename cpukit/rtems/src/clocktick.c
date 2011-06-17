@@ -1,7 +1,5 @@
 /*
- *  Clock Manager
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,7 +43,7 @@ rtems_status_code rtems_clock_tick( void )
 
   _Watchdog_Tickle_ticks();
 
-  _Thread_Tickle_timeslice();
+  _Scheduler_Tick();
 
   if ( _Thread_Is_context_switch_necessary() &&
        _Thread_Is_dispatching_enabled() )

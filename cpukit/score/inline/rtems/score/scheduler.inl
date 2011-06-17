@@ -159,6 +159,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Extract(
   _Scheduler.Operations.extract( the_thread );
 }
 
+/** @brief Scheduler Method Invoked at Each Clock Tick
+ *
+ * This method is invoked at each clock tick to allow the scheduler
+ * implementation to perform any activities required.  For the 
+ * scheduler which support standard RTEMS features, this includes
+ * time-slicing management.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Tick( void )
+{
+  _Scheduler.Operations.tick();
+}
+
 /**@}*/
 
 #endif

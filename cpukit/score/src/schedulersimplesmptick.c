@@ -1,7 +1,4 @@
 /*
- *  Thread Handler
- *
- *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,38 +14,15 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/context.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/states.h>
-#include <rtems/score/sysstate.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/userext.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/schedulersimplesmp.h>
 
-/*PAGE
- *
- *  _Thread_Tickle_timeslice
- *
- *  This scheduler routine determines if timeslicing is enabled
- *  for the currently executing thread and, if so, updates the
- *  timeslice count and checks for timeslice expiration.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- */
-
-void _Thread_Tickle_timeslice( void )
+static void _Scheduler_simple_smp_Tick_helper(
+  int cpu
+)
 {
   Thread_Control *executing;
 
-  executing = _Thread_Executing;
+  executing = _Per_CPU_Information[cpu].executing;
 
   #ifdef __RTEMS_USE_TICKS_FOR_STATISTICS__
     /*
@@ -89,8 +63,14 @@ void _Thread_Tickle_timeslice( void )
          *  executing thread's timeslice is reset.  Otherwise, the
          *  currently executing thread is placed at the rear of the
          *  FIFO for this priority and a new heir is selected.
+         *
+         *  In the SMP case, we do the chain manipulation for every
+         *  CPU, then schedule after all CPUs have been evaluated.
          */
-        _Scheduler_Yield();
+        _ISR_Disable( level );
+          _Scheduler_simple_Ready_queue_requeue( &_Scheduler, executing );
+        _ISR_Enable( level );
+
         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       }
       break;
@@ -102,4 +82,19 @@ void _Thread_Tickle_timeslice( void )
 	break;
     #endif
   }
+}
+
+void _Scheduler_simple_smp_Tick( void )
+{
+  uint32_t        cpu;
+
+  /*
+   *  Iterate over all cores, updating time slicing information
+   *  and logically performing a yield.  Then perform a schedule
+   *  operation to account for all the changes.
+   */
+  for ( cpu=0 ; cpu < _SMP_Processor_count ; cpu++ ) {
+    _Scheduler_simple_smp_Tick_helper( cpu );
+  }
+  _Scheduler_simple_smp_Schedule();
 }

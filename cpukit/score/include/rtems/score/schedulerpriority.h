@@ -48,7 +48,8 @@ extern "C" {
     _Scheduler_priority_Update,        /* update entry point */ \
     _Scheduler_priority_Enqueue,       /* enqueue entry point */ \
     _Scheduler_priority_Enqueue_first, /* enqueue_first entry point */ \
-    _Scheduler_priority_Extract        /* extract entry point */ \
+    _Scheduler_priority_Extract,       /* extract entry point */ \
+    _Scheduler_priority_Tick           /* tick entry point */ \
   }
 
 /**
@@ -169,6 +170,15 @@ void _Scheduler_priority_Enqueue_first(
 void _Scheduler_priority_Extract(
   Thread_Control     *the_thread
 );
+
+/**
+ *  @brief Deterministic Priority Scheduler Tick Method
+ *
+ *  This routine is invoked as part of processing each clock tick.
+ *  It is responsible for determining if the current thread allows
+ *  timeslicing and, if so, when its timeslice expires.
+ */
+void _Scheduler_priority_Tick( void );
 
 /**
  *  This is the major bit map.

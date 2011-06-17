@@ -1,3 +1,22 @@
+2011-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1819/cpukit
+	* rtems/src/clocktick.c, score/Makefile.am,
+	score/include/rtems/score/scheduler.h,
+	score/include/rtems/score/schedulerpriority.h,
+	score/include/rtems/score/schedulersimple.h,
+	score/include/rtems/score/schedulersimplesmp.h,
+	score/include/rtems/score/thread.h,
+	score/inline/rtems/score/scheduler.inl: Add a scheduler entry point
+	which is invoked at each clock tick. _Thread_Tickle_timeslice() is
+	now a method owned by the Deterministic Priority Scheduler and shared
+	by the Simple Priority Scheduler. The Simple SMP Scheduler has its
+	own variation on this which does timeslicing bookkeeping on all
+	cores.
+	* score/src/schedulerprioritytick.c,
+	score/src/schedulersimplesmptick.c: New files.
+	* score/src/threadtickletimeslice.c: Removed.
+
 2011-06-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/rtems/libio.h, cpukit/libcsupport/src/termios.c:

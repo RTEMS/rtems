@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -658,13 +658,6 @@ void _Thread_Set_state(
 void _Thread_Set_transient(
   Thread_Control *the_thread
 );
-
-/**
- *  This routine is invoked as part of processing each clock tick.
- *  It is responsible for determining if the current thread allows
- *  timeslicing and, if so, when its timeslice expires.
- */
-void _Thread_Tickle_timeslice( void );
 
 /**
  *  This routine initializes the context of the_thread to its

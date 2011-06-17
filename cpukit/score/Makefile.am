@@ -134,7 +134,7 @@ endif
 if HAS_SMP
 libscore_a_SOURCES += src/smp.c src/smplock.c \
     src/schedulersimplesmpblock.c src/schedulersimplesmpschedule.c \
-    src/schedulersimplesmpunblock.c
+    src/schedulersimplesmpunblock.c src/schedulerprioritytick.c 
 endif
 
 ## CORE_APIMUTEX_C_FILES
@@ -196,6 +196,7 @@ libscore_a_SOURCES += src/scheduler.c
 ## SCHEDULERPRIORITY_C_FILES
 libscore_a_SOURCES += src/schedulerpriority.c \
     src/schedulerpriorityallocate.c \
+    src/schedulerprioritytick.c \
     src/schedulerpriorityblock.c \
     src/schedulerpriorityenqueue.c \
     src/schedulerpriorityenqueuefirst.c \
@@ -239,8 +240,8 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadrestart.c src/threadsetpriority.c \
     src/threadsetstate.c src/threadsettransient.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
-    src/threadstartmultitasking.c src/threadtickletimeslice.c \
-    src/iterateoverthreads.c src/threadblockingoperationcancel.c
+    src/threadstartmultitasking.c src/iterateoverthreads.c \
+    src/threadblockingoperationcancel.c
     
 if HAS_SMP
 libscore_a_SOURCES += src/threaddispatchdisablelevel.c
