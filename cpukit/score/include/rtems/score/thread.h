@@ -182,13 +182,15 @@ typedef enum {
  */
 typedef void (*Thread_CPU_budget_algorithm_callout )( Thread_Control * );
 
-/** @brief Per Task Variable Manager Structure Forward Reference
+/**
+ *  @brief Per Task Variable Manager Structure Forward Reference
  *
  *  Forward reference to the per task variable structure.
  */
 struct rtems_task_variable_tt;
 
-/** @brief Per Task Variable Manager Structure
+/**
+ *  @brief Per Task Variable Manager Structure
  *
  *  This is the internal structure used to manager per Task Variables.
  */
@@ -270,7 +272,8 @@ typedef union {
   const void *immutable_object;
 } Thread_Wait_information_Object_argument_type;
 
-/** @brief Thread Blocking Management Information
+/**
+ *  @brief Thread Blocking Management Information
  *
  *  This contains the information required to manage a thread while it is
  *  blocked and to return information to it.
@@ -788,39 +791,45 @@ void _Thread_blocking_operation_Cancel(
 
 #if defined(RTEMS_SMP)
 
-  /** @brief _Thread_Dispatch_initialization
+  /**
+   *  @brief _Thread_Dispatch_initialization
    * 
    *  This routine initializes the thread dispatching subsystem.
    */
   void _Thread_Dispatch_initialization(void);
 
-  /** @brief _Thread_Dispatch_in_critical_section
+  /**
+   *  @brief _Thread_Dispatch_in_critical_section
    * 
    * This routine returns true if thread dispatch indicates
    * that we are in a critical section.
    */
   bool _Thread_Dispatch_in_critical_section(void);
 
-  /** @brief _Thread_Dispatch_get_disable_level
+  /**
+   *  @brief _Thread_Dispatch_get_disable_level
    * 
    * This routine returns value of the the thread dispatch level.
    */
   uint32_t _Thread_Dispatch_get_disable_level(void);
 
-  /** @brief _Thread_Dispatch_set_disable_level
+  /**
+   *  @brief _Thread_Dispatch_set_disable_level
    * 
    * This routine sets thread dispatch level to the 
    * value passed in.
    */
   uint32_t _Thread_Dispatch_set_disable_level(uint32_t value);
 
-  /** @brief _Thread_Dispatch_increment_disable_level
+  /**
+   *  @brief _Thread_Dispatch_increment_disable_level
    *
    * This rountine increments the thread dispatch level
    */
   uint32_t _Thread_Dispatch_increment_disable_level(void);
 
-  /** @brief _Thread_Dispatch_decrement_disable_level
+  /**
+   *  @brief _Thread_Dispatch_decrement_disable_level
    * 
    * This routine decrements the thread dispatch level.
    */

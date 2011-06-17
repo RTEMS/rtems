@@ -5,7 +5,7 @@
 /*
  *  RTEMS Malloc Extensions
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -72,7 +72,8 @@ extern rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers;
 typedef void (*rtems_malloc_dirtier_t)(void *, size_t);
 extern rtems_malloc_dirtier_t rtems_malloc_dirty_helper;
 
-/** @brief Dirty memory function
+/**
+ *  @brief Dirty memory function
  *
  *  This method fills the specified area with a non-zero pattern
  *  to aid in debugging programs which do not initialize their
@@ -83,7 +84,8 @@ void rtems_malloc_dirty_memory(
   size_t  size
 );
 
-/** @brief Print Malloc Statistic Usage Report
+/**
+ *  @brief Print Malloc Statistic Usage Report
  *
  *  This method fills in the called provided malloc statistics area.
  *
@@ -93,7 +95,8 @@ int malloc_get_statistics(
   rtems_malloc_statistics_t *stats
 );
 
-/** @brief Print Malloc Statistic Usage Report
+/**
+ *  @brief Print Malloc Statistic Usage Report
  *
  *  This method prints a malloc statistics report.
  *
@@ -101,7 +104,8 @@ int malloc_get_statistics(
  */
 void malloc_report_statistics(void);
 
-/** @brief Print Malloc Statistic Usage Report
+/**
+ *  @brief Print Malloc Statistic Usage Report
  *
  *  This method prints a malloc statistics report.
  *
@@ -116,6 +120,7 @@ void malloc_report_statistics_with_plugin(
 );
 
 /**
+ *  @brief RTEMS variation on Aligned Memory Allocation
  *
  *  This method is a help memalign implementation which does all
  *  error checking done by posix_memalign() EXCEPT it does NOT

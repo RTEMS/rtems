@@ -2,7 +2,7 @@
  * @file rtems/rtems/object.h
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -88,7 +88,8 @@ typedef struct {
 #define rtems_build_name( _C1, _C2, _C3, _C4 ) \
   _Objects_Build_name( _C1, _C2, _C3, _C4 )
 
-/** @brief Obtain name of object
+/**
+ *  @brief Obtain name of object
  *
  *  This directive returns the name associated with the specified
  *  object ID.

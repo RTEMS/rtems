@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -94,7 +94,8 @@ typedef struct {
  */
 SCORE_EXTERN Internal_errors_Information _Internal_errors_What_happened;
 
-/** @brief  Internal error Occurred
+/**
+ * @brief  Internal error Occurred
  *
  *  This routine is invoked when the application or the executive itself
  *  determines that a fatal error has occurred.

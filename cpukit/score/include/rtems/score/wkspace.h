@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,20 +35,23 @@ extern "C" {
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
 
-/** @brief Executive Workspace Control
+/**
+ * @brief Executive Workspace Control
  *
  *  The is the heap control structure that used to manage the
  *  RTEMS Executive Workspace.
  */
 SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
 
-/** @brief Workspace Handler Initialization
+/**
+ * @brief Workspace Handler Initialization
  *
  *  This routine performs the initialization necessary for this handler.
  */
 void _Workspace_Handler_initialization(void);
 
-/** @brief Allocate Memory from Workspace
+/**
+ * @brief Allocate Memory from Workspace
  *
  *  This routine returns the address of a block of memory of size
  *  bytes.  If a block of the appropriate size cannot be allocated
@@ -62,7 +65,8 @@ void *_Workspace_Allocate(
   size_t   size
 );
 
-/** @brief Free Memory to the Workspace
+/**
+ * @brief Free Memory to the Workspace
  *
  *  This function frees the specified block of memory.  If the block
  *  belongs to the Workspace and can be successfully freed, then
@@ -79,7 +83,8 @@ void _Workspace_Free(
   void *block
 );
 
-/** @brief Workspace Allocate or Fail with Fatal Error
+/**
+ * @brief Workspace Allocate or Fail with Fatal Error
  *
  *  This routine returns the address of a block of memory of @a size
  *  bytes.  If a block of the appropriate size cannot be allocated

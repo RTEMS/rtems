@@ -3,7 +3,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,7 +19,8 @@
 #include <rtems/score/timespec.h>
 #include <rtems/score/watchdog.h>
 
-/** @brief Absolute Timeout Conversion Results
+/**
+ *  @brief Absolute Timeout Conversion Results
  *
  *  This enumeration defines the possible results of converting
  *  an absolute time used for timeouts to POSIX blocking calls to

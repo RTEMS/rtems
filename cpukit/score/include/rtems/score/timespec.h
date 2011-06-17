@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +34,8 @@
 extern "C" {
 #endif
 
-/** @brief Set Timespec to Seconds Nanosecond
+/**
+ * @brief Set Timespec to Seconds Nanosecond
  *
  *  This method sets the timespec to the specified seconds and nanoseconds
  *  value.
@@ -49,7 +50,8 @@ extern "C" {
 	   (_time)->tv_nsec = (_nanoseconds); \
 	} while (0)
 
-/** @brief Zero Timespec
+/**
+ * @brief Zero Timespec
  *
  *  This method sets the timespec to zero.
  *  value.
@@ -62,7 +64,8 @@ extern "C" {
 	   (_time)->tv_nsec = 0; \
 	} while (0)
 
-/** @brief Get Seconds Portion of Timespec
+/**
+ * @brief Get Seconds Portion of Timespec
  *
  *  This method returns the seconds portion of the specified timespec
  *
@@ -73,7 +76,8 @@ extern "C" {
 #define _Timespec_Get_seconds( _time ) \
 	((_time)->tv_sec)
 
-/** @brief Get Nanoseconds Portion of Timespec
+/**
+ * @brief Get Nanoseconds Portion of Timespec
  *
  *  This method returns the nanoseconds portion of the specified timespec
  *
@@ -84,7 +88,8 @@ extern "C" {
 #define _Timespec_Get_nanoseconds( _time ) \
 	((_time)->tv_nsec)
 
-/** @brief Is Timespec Valid
+/**
+ * @brief Is Timespec Valid
  *
  *  This method determines the validity of a timespec.
  *
@@ -97,7 +102,8 @@ bool _Timespec_Is_valid(
   const struct timespec *time
 );
 
-/** @brief Timespec Less Than Operator
+/**
+ * @brief Timespec Less Than Operator
  *
  *  This method is the less than operator for timespecs.
  *
@@ -112,7 +118,8 @@ bool _Timespec_Less_than(
   const struct timespec *rhs
 );
 
-/** @brief Timespec Greater Than Operator
+/**
+ * @brief Timespec Greater Than Operator
  *
  *  This method is the greater than operator for timespecs.
  *
@@ -127,7 +134,8 @@ bool _Timespec_Greater_than(
   const struct timespec *rhs
 );
 
-/** @brief Timespec equal to Operator
+/**
+ * @brief Timespec equal to Operator
  *
  *  This method is the is equal to than operator for timespecs.
  *
@@ -142,7 +150,8 @@ bool _Timespec_Greater_than(
     ((lhs)->tv_nsec == (rhs)->tv_nsec)     \
   )
 
-/** @brief Add to a Timespec
+/**
+ * @brief Add to a Timespec
  *
  *  This routine adds two timespecs.  The second argument is added
  *  to the first.
@@ -157,7 +166,8 @@ uint32_t _Timespec_Add_to(
   const struct timespec *add
 );
 
-/** @brief Convert Timespec to Number of Ticks
+/**
+ * @brief Convert Timespec to Number of Ticks
  *
  *  This routine convert the @a time timespec to the corresponding number
  *  of clock ticks.
@@ -170,7 +180,8 @@ uint32_t _Timespec_To_ticks(
   const struct timespec *time
 );
 
-/** @brief Convert Ticks to Timespec
+/**
+ * @brief Convert Ticks to Timespec
  *
  *  This routine converts the @a ticks value to the corresponding
  *  timespec format @a time.
@@ -183,7 +194,8 @@ void _Timespec_From_ticks(
   struct timespec *time
 );
 
-/** @brief Subtract Two Timespec
+/**
+ * @brief Subtract Two Timespec
  *
  *  This routine subtracts two timespecs.  @a result is set to
  *  @a end - @a start.
@@ -200,7 +212,8 @@ void _Timespec_Subtract(
   struct timespec       *result
 );
 
-/** @brief Divide Timespec By Integer
+/**
+ * @brief Divide Timespec By Integer
  *
  *  This routine divides a timespec by an integer value.  The expected
  *  use is to assist in benchmark calculations where you typically
@@ -218,7 +231,8 @@ void _Timespec_Divide_by_integer(
   struct timespec       *result
 );
 
-/** @brief Divide Timespec
+/**
+ * @brief Divide Timespec
  *
  *  This routine divides a timespec by another timespec.  The
  *  intended use is for calculating percentages to three decimal points.

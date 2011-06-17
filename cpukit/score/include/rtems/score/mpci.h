@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -179,7 +179,8 @@ SCORE_EXTERN Thread_queue_Control _MPCI_Remote_blocked_threads;
  */
 SCORE_EXTERN MPCI_Control *_MPCI_table;
 
-/** @brief Pointer to MP Thread Control Block
+/**
+ *  @brief Pointer to MP Thread Control Block
  *
  *  The following is used to determine when the multiprocessing receive
  *  thread is executing so that a proxy can be allocated instead of

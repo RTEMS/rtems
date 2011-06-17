@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,21 +46,24 @@ typedef struct {
   uint32_t        name;
 }   Objects_MP_Control;
 
-/** @brief  Objects MP Handler initialization
+/**
+ *  @brief  Objects MP Handler initialization
  *
  *  This routine intializes the inactive global object chain
  *  based on the maximum number of global objects configured.
  */
 void _Objects_MP_Handler_initialization(void);
 
-/** @brief  Objects MP Handler Early initialization
+/**
+ *  @brief  Objects MP Handler Early initialization
  *
  *  This routine intializes the global object node number
  *  used in the ID field of all objects.
  */
 void _Objects_MP_Handler_early_initialization(void);
 
-/** @brief Objects MP Open
+/**
+ *  @brief Objects MP Open
  *
  *  This routine place the specified global object in the
  *  specified information table.
@@ -81,7 +84,8 @@ void _Objects_MP_Open (
   Objects_Id           the_id
 );
 
-/** @brief  Objects MP Allocate and open
+/**
+ *  @brief  Objects MP Allocate and open
  *
  *  This routine allocates a global object control block
  *  and places it in the specified information table.  If the
@@ -105,7 +109,8 @@ bool _Objects_MP_Allocate_and_open (
   bool                 is_fatal_error
 );
 
-/** @brief  Objects MP Close
+/**
+ *  @brief  Objects MP Close
  *
  *  This routine removes a global object from the specified
  *  information table and deallocates the global object control block.
@@ -115,7 +120,8 @@ void _Objects_MP_Close (
   Objects_Id           the_id
 );
 
-/** @brief  Objects MP Global name search
+/**
+ *  @brief  Objects MP Global name search
  *
  *  This routine looks for the object with the_name in the global
  *  object tables indicated by information.  It returns the ID of the
@@ -138,7 +144,8 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
   Objects_Id          *the_id
 );
 
-/** @brief  Objects MP Is remote
+/**
+ *  @brief  Objects MP Is remote
  *
  *  This function searches the Global Object Table managed
  *  by information for the object indicated by ID.  If the object

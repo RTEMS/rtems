@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -130,7 +130,8 @@ extern "C" {
   typedef Timestamp64_Control Timestamp_Control;
 #endif
 
-/** @brief Set Timestamp to Seconds Nanosecond
+/**
+ *  @brief Set Timestamp to Seconds Nanosecond
  *
  *  This method sets the timestamp to the specified seconds and nanoseconds
  *  value.
@@ -147,7 +148,8 @@ extern "C" {
 	  _Timestamp64_Set( _time, _seconds, _nanoseconds )
 #endif
 
-/** @brief Zero Timestamp
+/**
+ *  @brief Zero Timestamp
  *
  *  This method sets the timestamp to zero.
  *  value.
@@ -162,7 +164,8 @@ extern "C" {
 	  _Timestamp64_Set_to_zero( _time )
 #endif
 
-/** @brief Is Timestamp Valid
+/**
+ *  @brief Is Timestamp Valid
  *
  *  This method determines the validity of a timestamp.
  *
@@ -179,7 +182,8 @@ extern "C" {
           _Timestamp64_Is_valid( _time )
 #endif
 
-/** @brief Timestamp Less Than Operator
+/**
+ *  @brief Timestamp Less Than Operator
  *
  *  This method is the less than operator for timestamps.
  *
@@ -197,7 +201,8 @@ extern "C" {
 	  _Timestamp64_Less_than( _lhs, _rhs )
 #endif
 
-/** @brief Timestamp Greater Than Operator
+/**
+ *  @brief Timestamp Greater Than Operator
  *
  *  This method is the greater than operator for timestamps.
  *
@@ -215,7 +220,8 @@ extern "C" {
 	  _Timestamp64_Greater_than( _lhs, _rhs )
 #endif
 
-/** @brief Timestamp equal to Operator
+/**
+ *  @brief Timestamp equal to Operator
  *
  *  This method is the is equal to than operator for timestamps.
  *
@@ -233,7 +239,8 @@ extern "C" {
 	  _Timestamp64_Equal_to( _lhs, _rhs )
 #endif
 
-/** @brief Add to a Timestamp
+/**
+ *  @brief Add to a Timestamp
  *
  *  This routine adds two timestamps.  The second argument is added
  *  to the first.
@@ -251,7 +258,8 @@ extern "C" {
 	  _Timestamp64_Add_to( _time, _add )
 #endif
 
-/** @brief Add to a Timestamp (At Clock Tick)
+/**
+ *  @brief Add to a Timestamp (At Clock Tick)
  *
  *  This routine adds two timestamps.  The second argument is added
  *  to the first.
@@ -275,7 +283,8 @@ extern "C" {
           _Timestamp64_Add_to_at_tick( _time, _add )
 #endif
 
-/** @brief Convert Timestamp to Number of Ticks
+/**
+ *  @brief Convert Timestamp to Number of Ticks
  *
  *  This routine convert the @a time timestamp to the corresponding number
  *  of clock ticks.
@@ -292,7 +301,8 @@ extern "C" {
           _Timestamp64_To_ticks( _time )
 #endif
 
-/** @brief Convert Ticks to Timestamp
+/**
+ *  @brief Convert Ticks to Timestamp
  *
  *  This routine converts the @a _ticks value to the corresponding
  *  timestamp format @a _time.
@@ -308,7 +318,8 @@ extern "C" {
           _Timestamp64_From_ticks( _ticks, _time )
 #endif
 
-/** @brief Subtract Two Timestamp
+/**
+ *  @brief Subtract Two Timestamp
  *
  *  This routine subtracts two timestamps.  @a result is set to
  *  @a end - @a start.
@@ -328,7 +339,8 @@ extern "C" {
 	  _Timestamp64_Subtract( _start, _end, _result )
 #endif
 
-/** @brief Divide Timestamp By Integer
+/**
+ *  @brief Divide Timestamp By Integer
  *
  *  This routine divides a timestamp by an integer value.  The expected
  *  use is to assist in benchmark calculations where you typically
@@ -348,7 +360,8 @@ extern "C" {
 	  _Timestamp64_Divide_by_integer( _time, _iterations, _result )
 #endif
 
-/** @brief Divide Timestamp
+/**
+ *  @brief Divide Timestamp
  *
  *  This routine divides a timestamp by another timestamp.  The
  *  intended use is for calculating percentages to three decimal points.
@@ -368,7 +381,8 @@ extern "C" {
           _Timestamp64_Divide( _lhs, _rhs, _ival_percentage, _fval_percentage )
 #endif
 
-/** @brief Get Seconds Portion of Timestamp
+/**
+ *  @brief Get Seconds Portion of Timestamp
  *
  *  This method returns the seconds portion of the specified timestamp
  *
@@ -384,7 +398,8 @@ extern "C" {
 	  _Timestamp64_Get_seconds( _time )
 #endif
 
-/** @brief Get Nanoseconds Portion of Timestamp
+/**
+ *  @brief Get Nanoseconds Portion of Timestamp
  *
  *  This method returns the nanoseconds portion of the specified timestamp
  *
@@ -400,7 +415,8 @@ extern "C" {
 	  _Timestamp64_Get_nanoseconds( _time )
 #endif
 
-/** @brief Convert Timestamp to struct timespec
+/**
+ *  @brief Convert Timestamp to struct timespec
  *
  *  This method returns the seconds portion of the specified timestamp
  *

@@ -1,5 +1,24 @@
 2011-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/include/rtems/malloc.h, libmisc/stackchk/stackchk.h,
+	posix/include/rtems/posix/time.h, rtems/include/rtems/rtems/object.h,
+	score/include/rtems/score/apiext.h,
+	score/include/rtems/score/interr.h, score/include/rtems/score/mpci.h,
+	score/include/rtems/score/objectmp.h,
+	score/include/rtems/score/thread.h,
+	score/include/rtems/score/threadmp.h,
+	score/include/rtems/score/threadq.h,
+	score/include/rtems/score/timespec.h,
+	score/include/rtems/score/timestamp.h,
+	score/include/rtems/score/timestamp64.h,
+	score/include/rtems/score/tod.h,
+	score/include/rtems/score/watchdog.h,
+	score/include/rtems/score/wkspace.h: Make @brief formatting more
+	consistent.
+	* score/include/rtems/score/rbtree.h: Also reformat.
+
+2011-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1819/cpukit
 	* rtems/src/clocktick.c, score/Makefile.am,
 	score/include/rtems/score/scheduler.h,

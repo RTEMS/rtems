@@ -91,13 +91,15 @@ typedef struct {
  */
 SCORE_EXTERN Chain_Control _API_extensions_List;
 
-/** @brief Initialize the API Extensions Handler
+/**
+ * @brief Initialize the API Extensions Handler
  *
  *  This routine initializes the API extension handler.
  */
 void _API_extensions_Initialization( void );
 
-/** @brief Add Extension Set to the Active Set
+/**
+ * @brief Add Extension Set to the Active Set
  *
  *  This routine adds an extension to the active set of API extensions.
  *
@@ -108,20 +110,23 @@ void _API_extensions_Add(
 );
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-  /** @brief Execute all Pre-Driver Extensions
+  /**
+   * @brief Execute all Pre-Driver Extensions
    *
    *  This routine executes all of the predriver callouts.
    */
   void _API_extensions_Run_predriver( void );
 #endif
 
-/** @brief Execute all Post-Driver Extensions
+/**
+ * @brief Execute all Post-Driver Extensions
  *
  *  This routine executes all of the postdriver callouts.
  */
 void _API_extensions_Run_postdriver( void );
 
-/** @brief Execute all Post Context Switch Extensions
+/**
+ * @brief Execute all Post Context Switch Extensions
  *
  *  This routine executes all of the post context switch callouts.
  */

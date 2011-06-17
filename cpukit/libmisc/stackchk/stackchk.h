@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,7 +27,8 @@
 extern "C" {
 #endif
 
-/** @brief Has Current Task Blown Its Stack
+/**
+ *  @brief Has Current Task Blown Its Stack
  *
  *  This method is used to determine if the current stack pointer
  *  of the currently executing task is within bounds.
@@ -38,7 +39,8 @@ extern "C" {
  */
 bool rtems_stack_checker_is_blown( void );
 
-/** @brief Print Stack Usage Report
+/**
+ *  @brief Print Stack Usage Report
  *
  *  This method prints a stack usage report for the curently executing
  *  task.
@@ -47,7 +49,8 @@ bool rtems_stack_checker_is_blown( void );
  */
 void rtems_stack_checker_report_usage( void );
 
-/** @brief Print Stack Usage Report
+/**
+ *  @brief Print Stack Usage Report
  *
  *  This method prints a stack usage report for the curently executing
  *  task.
@@ -68,7 +71,8 @@ void rtems_stack_checker_report_usage_with_plugin(
  *************************************************************
  *************************************************************/
 
-/** @brief Stack Checker Task Create Extension
+/**
+ *  @brief Stack Checker Task Create Extension
  *
  * This method is the task create extension for the stack checker.
  *
@@ -83,7 +87,8 @@ bool rtems_stack_checker_create_extension(
   Thread_Control *the_thread
 );
 
-/** @brief Stack Checker Task Begin Extension
+/**
+ *  @brief Stack Checker Task Begin Extension
  *
  * This method is the task begin extension for the stack checker.
  *
@@ -95,7 +100,8 @@ void rtems_stack_checker_begin_extension(
   Thread_Control *the_thread
 );
 
-/** @brief Stack Checker Task Context Switch Extension
+/**
+ *  @brief Stack Checker Task Context Switch Extension
  *
  * This method is the task context switch extension for the stack checker.
  *
@@ -110,7 +116,8 @@ void rtems_stack_checker_switch_extension(
   Thread_Control *heir
 );
 
-/** @brief Stack Checker Extension Set Definition
+/**
+ *  @brief Stack Checker Extension Set Definition
  *
  *  This macro defines the user extension handler set for the stack
  *  checker.  This macro is normally only used by confdefs.h.

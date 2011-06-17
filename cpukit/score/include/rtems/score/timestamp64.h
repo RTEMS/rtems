@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,7 +51,8 @@ extern "C" {
  */
 typedef int64_t Timestamp64_Control;
 
-/** @brief Set Timestamp to Seconds Nanosecond
+/**
+ *  @brief Set Timestamp to Seconds Nanosecond
  *
  *  This method sets the timestamp to the specified seconds and nanoseconds
  *  value.
@@ -74,7 +75,8 @@ typedef int64_t Timestamp64_Control;
   );
 #endif
 
-/** @brief Zero Timestamp
+/**
+ *  @brief Zero Timestamp
  *
  *  This method sets the timestamp to zero.
  *  value.
@@ -90,7 +92,8 @@ typedef int64_t Timestamp64_Control;
   );
 #endif
 
-/** @brief Is Timestamp Valid
+/**
+ *  @brief Is Timestamp Valid
  *
  *  This method determines the validity of a timestamp.
  *
@@ -102,7 +105,8 @@ typedef int64_t Timestamp64_Control;
 #define _Timestamp64_Is_valid( _time ) \
 	(1)
 
-/** @brief Timestamp Less Than Operator
+/**
+ *  @brief Timestamp Less Than Operator
  *
  *  This method is the less than operator for timestamps.
  *
@@ -122,7 +126,8 @@ typedef int64_t Timestamp64_Control;
   );
 #endif
 
-/** @brief Timestamp Greater Than Operator
+/**
+ *  @brief Timestamp Greater Than Operator
  *
  *  This method is the greater than operator for timestamps.
  *
@@ -142,7 +147,8 @@ typedef int64_t Timestamp64_Control;
   );
 #endif
 
-/** @brief Timestamp equal to Operator
+/**
+ *  @brief Timestamp equal to Operator
  *
  *  This method is the is equal to than operator for timestamps.
  *
@@ -162,7 +168,8 @@ typedef int64_t Timestamp64_Control;
   );
 #endif
 
-/** @brief Add to a Timestamp
+/**
+ *  @brief Add to a Timestamp
  *
  *  This routine adds two timestamps.  The second argument is added
  *  to the first.
@@ -182,7 +189,8 @@ typedef int64_t Timestamp64_Control;
   );
 #endif
 
-/** @brief Add to a Timestamp (At Clock Tick)
+/**
+ *  @brief Add to a Timestamp (At Clock Tick)
  *
  *  This routine adds two timestamps.  The second argument is added
  *  to the first.
@@ -211,7 +219,8 @@ static inline uint32_t _Timestamp64_Add_to_at_tick(
   return 0;
 }
 
-/** @brief Convert Timestamp to Number of Ticks
+/**
+ *  @brief Convert Timestamp to Number of Ticks
  *
  *  This routine convert the @a time timestamp to the corresponding number
  *  of clock ticks.
@@ -224,7 +233,8 @@ uint32_t _Timestamp64_To_ticks(
   const Timestamp64_Control *_time
 );
 
-/** @brief Convert Ticks to Timestamp
+/**
+ *  @brief Convert Ticks to Timestamp
  *
  *  This routine converts the @a _ticks value to the corresponding
  *  timestamp format @a _time.
@@ -237,7 +247,8 @@ void _Timestamp64_From_ticks(
   Timestamp64_Control *_time
 );
 
-/** @brief Subtract Two Timestamp
+/**
+ *  @brief Subtract Two Timestamp
  *
  *  This routine subtracts two timestamps.  @a result is set to
  *  @a end - @a start.
@@ -262,7 +273,8 @@ void _Timestamp64_From_ticks(
   );
 #endif
 
-/** @brief Divide Timestamp By Integer
+/**
+ *  @brief Divide Timestamp By Integer
  *
  *  This routine divides a timestamp by an integer value.  The expected
  *  use is to assist in benchmark calculations where you typically
@@ -287,7 +299,8 @@ void _Timestamp64_From_ticks(
   );
 #endif
 
-/** @brief Divide Timestamp
+/**
+ *  @brief Divide Timestamp
  *
  *  This routine divides a timestamp by another timestamp.  The
  *  intended use is for calculating percentages to three decimal points.
@@ -306,7 +319,8 @@ void _Timestamp64_Divide(
   uint32_t                  *_fval_percentage
 );
 
-/** @brief Get Seconds Portion of Timestamp
+/**
+ *  @brief Get Seconds Portion of Timestamp
  *
  *  This method returns the seconds portion of the specified timestamp
  *
@@ -323,7 +337,8 @@ void _Timestamp64_Divide(
   );
 #endif
 
-/** @brief Get Nanoseconds Portion of Timestamp
+/**
+ *  @brief Get Nanoseconds Portion of Timestamp
  *
  *  This method returns the nanoseconds portion of the specified timestamp
  *
@@ -340,7 +355,8 @@ void _Timestamp64_Divide(
   );
 #endif
 
-/** @brief Convert Timestamp to struct timespec
+/**
+ *  @brief Convert Timestamp to struct timespec
  *
  *  This method returns the seconds portion of the specified timestamp
  *

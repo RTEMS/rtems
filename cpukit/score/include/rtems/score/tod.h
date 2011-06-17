@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -102,7 +102,8 @@ extern "C" {
   (((1987 - 1970 + 1)  * TOD_SECONDS_PER_NON_LEAP_YEAR) + \
   (4 * TOD_SECONDS_PER_DAY))
 
-/** @brief RTEMS Epoch Year
+/**
+ *  @brief RTEMS Epoch Year
  *
  *  The following constant define the earliest year to which an
  *  time of day can be initialized.  This is considered the
@@ -117,37 +118,46 @@ extern "C" {
  */
 /**@{*/
 
-/** @brief Is the Time Of Day Set
+/**
+ *  @brief Is the Time Of Day Set
  *
  *  This is true if the application has set the current
  *  time of day, and false otherwise.
  */
 SCORE_EXTERN bool _TOD_Is_set;
 
-/** @brief Current Time of Day (Timespec)
+/**
+ *  @brief Current Time of Day (Timespec)
+ *
  *  The following contains the current time of day.
  */
 SCORE_EXTERN Timestamp_Control _TOD_Now;
 
-/** @brief Current Time of Day (Timespec)
+/**
+ *  @brief Current Time of Day (Timespec)
+ *
  *  The following contains the running uptime.
  */
 SCORE_EXTERN Timestamp_Control _TOD_Uptime;
 
-/** @brief Seconds Since RTEMS Epoch
+/**
+ *  @brief Seconds Since RTEMS Epoch
+ *
  *  The following contains the number of seconds from 00:00:00
  *  January 1, TOD_BASE_YEAR until the current time of day.
  */
 #define _TOD_Seconds_since_epoch() \
   _Timestamp_Get_seconds(&_TOD_Now)
 
-/** @brief _TOD_Handler_initialization
+/**
+ *  @brief _TOD_Handler_initialization
  *
  *  This routine performs the initialization necessary for this handler.
  */
 void _TOD_Handler_initialization(void);
 
-/** @brief _TOD_Set
+/**
+ *  @brief _TOD_Set
  *
  *  This routine sets the current time of day to @a time and
  *  the equivalent SECONDS_SINCE_EPOCH.
@@ -156,7 +166,8 @@ void _TOD_Set(
   const struct timespec *time
 );
 
-/** @brief _TOD_Get
+/**
+ *  @brief _TOD_Get
  *
  *  This routine returns the current time of day with potential accuracy
  *  to the nanosecond.
@@ -167,7 +178,8 @@ void _TOD_Get(
   struct timespec *time
 );
 
-/** @brief _TOD_Get_uptime
+/**
+ *  @brief _TOD_Get_uptime
  *
  *  This routine returns the system uptime with potential accuracy
  *  to the nanosecond.
@@ -178,7 +190,8 @@ void _TOD_Get_uptime(
   Timestamp_Control *time
 );
 
-/** @brief _TOD_Get_uptime_as_timespec
+/**
+ *  @brief _TOD_Get_uptime_as_timespec
  *
  *  This routine returns the system uptime with potential accuracy
  *  to the nanosecond.
@@ -195,7 +208,8 @@ void _TOD_Get_uptime_as_timespec(
  */
 void _TOD_Tickle_ticks( void );
 
-/** @brief TOD_MILLISECONDS_TO_MICROSECONDS
+/**
+ *  @brief TOD_MILLISECONDS_TO_MICROSECONDS
  *
  *  This routine converts an interval expressed in milliseconds to microseconds.
  *
@@ -203,7 +217,8 @@ void _TOD_Tickle_ticks( void );
  */
 #define TOD_MILLISECONDS_TO_MICROSECONDS(_ms) ((uint32_t)(_ms) * 1000L)
 
-/** @brief TOD_MICROSECONDS_TO_TICKS
+/**
+ *  @brief TOD_MICROSECONDS_TO_TICKS
  *
  *  This routine converts an interval expressed in microseconds to ticks.
  *
@@ -213,7 +228,8 @@ uint32_t TOD_MICROSECONDS_TO_TICKS(
   uint32_t microseconds
 );
 
-/** @brief TOD_MILLISECONDS_TO_TICKS
+/**
+ *  @brief TOD_MILLISECONDS_TO_TICKS
  *
  *  This routine converts an interval expressed in milliseconds to ticks.
  *
@@ -223,7 +239,8 @@ uint32_t TOD_MILLISECONDS_TO_TICKS(
   uint32_t milliseconds
 );
 
-/** @brief How many ticks in a second?
+/**
+ *  @brief How many ticks in a second?
  *
  *  This method returns the number of ticks in a second.
  *
@@ -232,7 +249,8 @@ uint32_t TOD_MILLISECONDS_TO_TICKS(
  */
 uint32_t TOD_TICKS_PER_SECOND_method(void);
 
-/** @brief Method to return number of ticks in a second
+/**
+ *  @brief Method to return number of ticks in a second
  *
  *  This method exists to hide the fact that TOD_TICKS_PER_SECOND can not
  *  be implemented as a macro in a .h file due to visibility issues.

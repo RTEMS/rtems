@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,33 +37,38 @@
 extern "C" {
 #endif
 
-/** @brief Maximum Interval Length
+/**
+ *  @brief Maximum Interval Length
  *
  *  The following type defines the control block used to manage
  *  intervals.
  */
 #define WATCHDOG_MAXIMUM_INTERVAL ((Watchdog_Interval) 0xffffffff)
 
-/** @brief Watchdog Interval Type
+/**
+ *  @brief Watchdog Interval Type
  *
  *  This type is used to specify the length of intervals.
  */
 typedef uint32_t   Watchdog_Interval;
 
-/** @brief Watchdog Nanoseconds Since Last Tick Extension
+/**
+ *  @brief Watchdog Nanoseconds Since Last Tick Extension
  *
  *  This type defines a pointer to the BSP plugin to obtain the number
  *  of nanoseconds since the last clock tick.
  */
 typedef uint32_t (*Watchdog_Nanoseconds_since_last_tick_routine)(void);
 
-/** @brief Watchdog Service Routine Return Type
+/**
+ *  @brief Watchdog Service Routine Return Type
  *
  *  This type defines the return type from a Watchdog Service Routine.
  */
 typedef void Watchdog_Service_routine;
 
-/** @brief Watchdog Service Routine Pointer Type
+/**
+ *  @brief Watchdog Service Routine Pointer Type
  *
  *  This type define a pointer to a watchdog service routine.
  */
@@ -72,14 +77,16 @@ typedef Watchdog_Service_routine ( *Watchdog_Service_routine_entry )(
                  void *
              );
 
-/** @brief No timeout constant
+/**
+ *  @brief No timeout constant
  *
  *  This is the constant for indefinite wait.  It is actually an
  *  illegal interval.
  */
 #define WATCHDOG_NO_TIMEOUT  0
 
-/** @brief Watchdog States Type
+/**
+ *  @brief Watchdog States Type
  *
  *  This enumerated type is the set of the states in which a
  *  watchdog timer may be at any given time.
@@ -100,7 +107,8 @@ typedef enum {
   WATCHDOG_REMOVE_IT
 } Watchdog_States;
 
-/** @brief Watchdog Adjustment Directions Type
+/**
+ *  @brief Watchdog Adjustment Directions Type
  *
  *  The following enumerated type details the manner in which
  *  a watchdog chain may be adjusted by the @ref _Watchdog_Adjust
@@ -114,7 +122,8 @@ typedef enum {
   WATCHDOG_BACKWARD
 } Watchdog_Adjust_directions;
 
-/** @brief Watchdog Control Structure
+/**
+ *  @brief Watchdog Control Structure
  *
  *  The following record defines the control block used
  *  to manage each watchdog timer.
@@ -144,28 +153,32 @@ typedef struct {
   void                           *user_data;
 }   Watchdog_Control;
 
-/** @brief Watchdog Synchronization Level
+/**
+ *  @brief Watchdog Synchronization Level
  *
  *  This used for synchronization purposes
  *  during an insert on a watchdog delta chain.
  */
 SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_level;
 
-/** @brief Watchdog Synchronization Count
+/**
+ *  @brief Watchdog Synchronization Count
  *
  *  This used for synchronization purposes
  *  during an insert on a watchdog delta chain.
  */
 SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_count;
 
-/** @brief Ticks Since System Boot
+/**
+ *  @brief Ticks Since System Boot
  *
  *  This contains the number of ticks since the system was booted.
  */
 
 SCORE_EXTERN volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
 
-/** @brief Watchdog Nanoseconds Since Last Tick Handler
+/**
+ *  @brief Watchdog Nanoseconds Since Last Tick Handler
  *
  *  This is a pointer to the optional BSP plugin to obtain the number
  *  of nanoseconds since the last clock tick.
@@ -173,19 +186,22 @@ SCORE_EXTERN volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
 extern Watchdog_Nanoseconds_since_last_tick_routine
   _Watchdog_Nanoseconds_since_tick_handler;
 
-/** @brief Per Ticks Watchdog List
+/**
+ *  @brief Per Ticks Watchdog List
  *
  *  This is the watchdog chain which is managed at ticks.
  */
 SCORE_EXTERN Chain_Control _Watchdog_Ticks_chain;
 
-/** @brief Per Seconds Watchdog List
+/**
+ *  @brief Per Seconds Watchdog List
  *
  *  This is the watchdog chain which is managed at second boundaries.
  */
 SCORE_EXTERN Chain_Control _Watchdog_Seconds_chain;
 
-/** @brief Watchdog Handler Initialization
+/**
+ *  @brief Watchdog Handler Initialization
  *
  *  This routine initializes the watchdog handler.  The watchdog
  *  synchronization flag is initialized and the watchdog chains are
@@ -193,7 +209,8 @@ SCORE_EXTERN Chain_Control _Watchdog_Seconds_chain;
  */
 void _Watchdog_Handler_initialization( void );
 
-/** @brief Remove Watchdog from List
+/**
+ *  @brief Remove Watchdog from List
  *
  *  This routine removes @a the_watchdog from the watchdog chain on which
  *  it resides and returns the state @a the_watchdog timer was in.
@@ -205,7 +222,8 @@ Watchdog_States _Watchdog_Remove (
   Watchdog_Control *the_watchdog
 );
 
-/** @brief Watchdog Adjust
+/**
+ *  @brief Watchdog Adjust
  *
  *  This routine adjusts the @a header watchdog chain in the forward
  *  or backward @a direction for @a units ticks.
@@ -220,7 +238,8 @@ void _Watchdog_Adjust (
   Watchdog_Interval           units
 );
 
-/** @brief Watchdog Adjust to Chain
+/**
+ *  @brief Watchdog Adjust to Chain
  *
  *  This routine adjusts the @a header watchdog chain in the forward
  *  @a direction for @a units_arg ticks.
@@ -239,7 +258,8 @@ void _Watchdog_Adjust_to_chain(
 
 );
 
-/** @brief Watchdog Insert
+/**
+ *  @brief Watchdog Insert
  *
  *  This routine inserts @a the_watchdog into the @a header watchdog chain
  *  for a time of @a units.
@@ -252,7 +272,8 @@ void _Watchdog_Insert (
   Watchdog_Control      *the_watchdog
 );
 
-/** @brief Watchdog Tickle
+/**
+ *  @brief Watchdog Tickle
  *
  *  This routine is invoked at appropriate intervals to update
  *  the @a header watchdog chain.
