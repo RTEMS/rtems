@@ -22,6 +22,8 @@
 /**
  *  @defgroup ScoreThreadQ Thread Queue Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality related to managing sets of threads
  *  blocked waiting for resources.
  */

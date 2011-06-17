@@ -1,5 +1,39 @@
 2011-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/include/rtems/rtems/types.h,
+	score/include/rtems/score/address.h,
+	score/include/rtems/score/apiext.h,
+	score/include/rtems/score/bitfield.h,
+	score/include/rtems/score/context.h,
+	score/include/rtems/score/corebarrier.h,
+	score/include/rtems/score/coremsg.h,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/corerwlock.h,
+	score/include/rtems/score/coresem.h,
+	score/include/rtems/score/corespinlock.h,
+	score/include/rtems/score/interr.h, score/include/rtems/score/isr.h,
+	score/include/rtems/score/mpci.h, score/include/rtems/score/mppkt.h,
+	score/include/rtems/score/objectmp.h,
+	score/include/rtems/score/percpu.h,
+	score/include/rtems/score/priority.h,
+	score/include/rtems/score/rbtree.h,
+	score/include/rtems/score/scheduler.h,
+	score/include/rtems/score/smp.h, score/include/rtems/score/smplock.h,
+	score/include/rtems/score/stack.h,
+	score/include/rtems/score/states.h,
+	score/include/rtems/score/thread.h,
+	score/include/rtems/score/threadq.h,
+	score/include/rtems/score/threadsync.h,
+	score/include/rtems/score/timespec.h,
+	score/include/rtems/score/timestamp.h,
+	score/include/rtems/score/timestamp64.h,
+	score/include/rtems/score/tod.h, score/include/rtems/score/tqdata.h,
+	score/include/rtems/score/watchdog.h,
+	score/include/rtems/score/wkspace.h: Mark Score files as in Score
+	Group to improve Doxygen output.
+
+2011-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/include/rtems/malloc.h, libmisc/stackchk/stackchk.h,
 	posix/include/rtems/posix/time.h, rtems/include/rtems/rtems/object.h,
 	score/include/rtems/score/apiext.h,

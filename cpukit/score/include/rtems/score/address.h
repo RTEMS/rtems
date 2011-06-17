@@ -22,6 +22,8 @@
 /**
  *  @defgroup ScoreAddress Address Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which abstracts address
  *  manipulation in a portable manner.
  */

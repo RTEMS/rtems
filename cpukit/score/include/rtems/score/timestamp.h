@@ -21,6 +21,8 @@
 /**
  *  @defgroup SuperCore Timestamp
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality related to manipulating
  *  SuperCore Timestamps.  SuperCore Timestamps may be used to
  *  represent time of day, uptime, or intervals.

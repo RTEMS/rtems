@@ -23,6 +23,8 @@
 /**
  *  @defgroup ScoreWorkspace Workspace Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality related to the management of
  *  the RTEMS Executive Workspace.
  */

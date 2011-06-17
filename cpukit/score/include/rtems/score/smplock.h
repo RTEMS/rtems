@@ -24,6 +24,8 @@
 /**
  *  @defgroup RTEMS Lock Interface
  *
+ *  @ingroup Score
+ *
  */
 
 /**@{*/

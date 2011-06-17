@@ -22,6 +22,8 @@
 /**
  *  @defgroup ScoreObjectMP Object Handler Multiprocessing Support
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which is used to manage
  *  objects which have been declared to be globally visible.  This handler
  *  knows objects from all of the nodes in the system.

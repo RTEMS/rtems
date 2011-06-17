@@ -24,6 +24,8 @@
 /**
  *  @defgroup ScoreSemaphore Semaphore Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which provides the foundation
  *  Semaphore services used in all of the APIs supported by RTEMS.
  */

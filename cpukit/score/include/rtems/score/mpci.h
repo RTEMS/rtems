@@ -22,6 +22,8 @@
 /**
  *  @defgroup ScoreMPCI MPCI Handler
  *
+ *  @ingroup Score
+ *
  *  The MPCI Handler encapsulates functionality which is related to the
  *  generation, receipt, and processing of remote operations in a
  *  multiprocessor system.  This handler contains the message passing

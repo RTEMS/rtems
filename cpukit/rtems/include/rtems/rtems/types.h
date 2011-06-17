@@ -125,7 +125,7 @@ typedef Watchdog_Interval rtems_interval;
 /**
  * @brief Represents the CPU usage per thread.
  *
- * When using nano seconds granularity timing, RTEMS may internally use a
+ * When using nanoseconds granularity timing, RTEMS may internally use a
  * variety of representations.
  */
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__

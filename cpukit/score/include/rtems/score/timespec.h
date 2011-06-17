@@ -21,6 +21,8 @@
 /**
  *  @defgroup Timespec Helpers
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality related to manipulating
  *  POSIX struct timespecs.
  */

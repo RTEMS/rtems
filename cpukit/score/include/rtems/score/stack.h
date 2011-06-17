@@ -23,6 +23,8 @@
 /**
  *  @defgroup ScoreStack Stack Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which is used in the management
  *  of thread stacks.
  */

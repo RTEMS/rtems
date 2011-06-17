@@ -21,6 +21,8 @@
 /**
  *  @defgroup ScoreRBTree Red-Black Tree Handler
  *
+ *  @ingroup Score
+ *
  *  The Red-Black Tree Handler is used to manage sets of entities.  This handler
  *  provides two data structures.  The rbtree Node data structure is included
  *  as the first part of every data structure that will be placed on

@@ -31,6 +31,8 @@ extern "C" {
 /**
  *  @defgroup ScoreScheduler Scheduler Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality related to managing sets of threads
  *  that are ready for execution.
  */

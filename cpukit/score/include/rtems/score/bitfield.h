@@ -21,6 +21,8 @@
 /**
  *  @defgroup ScoreBitfield Bitfield Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality that is used to manipulate the
  *  priority bitfields used to lookup which priority has the highest
  *  priority ready to execute thread.

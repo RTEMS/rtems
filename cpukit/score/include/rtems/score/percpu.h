@@ -39,6 +39,8 @@
 /**
  *  @defgroup PerCPU RTEMS Per CPU Information
  *
+ *  @ingroup Score
+ *
  *  This defines the per CPU state information required by RTEMS
  *  and the BSP.  In an SMP configuration, there will be multiple
  *  instances of this data structure -- one per CPU -- and the

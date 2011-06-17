@@ -26,6 +26,8 @@
 /**
  *  @defgroup ScoreISR ISR Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which provides the foundation
  *  ISR services used in all of the APIs supported by RTEMS.
  *

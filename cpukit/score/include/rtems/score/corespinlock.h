@@ -22,6 +22,8 @@
 /**
  *  @defgroup ScoreSpinlock Spinlock Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which provides the foundation
  *  Spinlock services used in all of the APIs supported by RTEMS.
  */

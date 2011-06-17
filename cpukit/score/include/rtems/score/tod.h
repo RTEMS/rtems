@@ -27,7 +27,11 @@
 extern "C" {
 #endif
 
-/** @defgroup ScoreTODConstants TOD Constants
+/**
+ *  @defgroup ScoreTODConstants TOD Constants
+ *
+ *  @ingroup Score
+ *
  *  The following constants are related to the time of day and are
  *  independent of RTEMS.
  */
@@ -113,6 +117,8 @@ extern "C" {
 
 /**
  *  @defgroup ScoreTOD Time Of Day (TOD) Handler
+ *
+ *  @ingroup Score
  *
  *  This handler encapsulates functionality used to manage time of day.
  */

@@ -22,6 +22,8 @@
 /**
  *  @defgroup ScoreThreadQData Thread Queue Handler Data Definition
  *
+ *  @ingroup Score
+ *
  *  This handler defines the data shared between the thread and thread
  *  queue handlers.  Having this handler define these data structure
  *  avoids potentially circular references.

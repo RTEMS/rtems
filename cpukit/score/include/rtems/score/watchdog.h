@@ -23,6 +23,8 @@
 /**
  *  @defgroup ScoreWatchdog Watchdog Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality related to the scheduling of
  *  watchdog functions to be called at specific times in the future.
  *

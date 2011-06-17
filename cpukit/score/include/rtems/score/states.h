@@ -21,6 +21,8 @@
 /**
  *  @defgroup ScoreStates Thread States Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which relates to the management of
  *  the state bitmap associated with each thread.
  */

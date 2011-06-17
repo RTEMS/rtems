@@ -23,6 +23,8 @@
 /**
  *  @defgroup ScorePriority Priority Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which is used to manage
  *  thread priorities.  At the SuperCore level 256 priority levels
  *  are supported with lower numbers representing logically more important

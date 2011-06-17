@@ -23,6 +23,8 @@
 /**
  *  @defgroup ScoreThreadSync Thread Blocking Operation Synchronization Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality related to the management of
  *  synchronization critical sections during blocking operations.
  */

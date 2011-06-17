@@ -21,6 +21,8 @@
 /**
  *  @defgroup ScoreAPIExtension API Extension Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which provides mechanisms for the
  *  SuperCore to perform API specific actions without there beingg
  *  "up-references" from the SuperCore to APIs.  If these referencesg

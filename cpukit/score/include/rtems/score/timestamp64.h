@@ -22,6 +22,8 @@
 /**
  *  @defgroup SuperCore Timestamp64
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality related to manipulating
  *  the 64 bit integer implementation of SuperCore Timestamps.
  */

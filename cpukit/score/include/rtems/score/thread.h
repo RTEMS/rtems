@@ -22,6 +22,8 @@
 /**
  *  @defgroup ScoreThread Thread Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality related to the management of
  *  threads.  This includes the creation, deletion, and scheduling of threads.
  *

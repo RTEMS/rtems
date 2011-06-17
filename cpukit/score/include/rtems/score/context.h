@@ -21,6 +21,8 @@
 /**
  *  @defgroup ScoreContext Context Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which abstracts thread context
  *  management in a portable manner.
  *

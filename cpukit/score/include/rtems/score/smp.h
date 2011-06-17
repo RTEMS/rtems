@@ -25,6 +25,8 @@
 /**
  *  @defgroup SuperCore SMP Support
  *
+ *  @ingroup Score
+ *
  *  This defines the interface of the SuperCore support
  *  code for SMP support.
  */

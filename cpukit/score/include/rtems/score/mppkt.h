@@ -25,6 +25,8 @@
 /**
  *  @defgroup ScoreMPPacket MP Packet Handler
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates the primary definition of MPCI packets.  This
  *  handler defines the part of the packet that is common to all remote
  *  operations.
