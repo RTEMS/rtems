@@ -1647,7 +1647,7 @@ rtems_status_code rtems_termios_ioctl(
 
 int rtems_termios_enqueue_raw_characters(
   void *ttyp,
-  char *buf,
+  const char *buf,
   int   len
 );
 

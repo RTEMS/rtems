@@ -636,7 +636,7 @@ rtems_termios_puts (
   rtems_status_code sc;
 
   if (tty->device.outputUsesInterrupts == TERMIOS_POLLED) {
-    (*tty->device.write)(tty->minor, (void *)buf, len);
+    (*tty->device.write)(tty->minor, buf, len);
     return;
   }
   newHead = tty->rawOutBuf.Head;
@@ -1124,7 +1124,7 @@ void rtems_termios_rxirq_occured(struct rtems_termios_tty *tty)
  * Returns the number of characters dropped because of overflow.
  */
 int
-rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
+rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
 {
   struct rtems_termios_tty *tty = ttyp;
   unsigned int newTail;
