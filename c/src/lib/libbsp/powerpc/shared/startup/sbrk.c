@@ -121,7 +121,6 @@ uintptr_t bsp_sbrk_init(
         if ( rval > policy )
           rval = policy;
       break;
-    }
   }
 
   return rval;
