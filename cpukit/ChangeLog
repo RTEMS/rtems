@@ -1,5 +1,9 @@
 2011-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/include/rtems/rtems/tasks.h: Complete manager description.
+
+2011-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/include/rtems/rtems/types.h,
 	score/include/rtems/score/address.h,
 	score/include/rtems/score/apiext.h,

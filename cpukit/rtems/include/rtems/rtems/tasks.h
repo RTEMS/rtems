@@ -59,7 +59,9 @@
  *
  *  @ingroup ClassicRTEMS
  *
- *  This encapsulates functionality which X XX
+ *  This encapsulates the functionality of the Classic API Task Manager.
+ *  This functionality includes task services such as creation, deletion,
+ *  delays, suspend/resume, and manipulation of execution mode and priority.
  */
 /**@{*/
 
