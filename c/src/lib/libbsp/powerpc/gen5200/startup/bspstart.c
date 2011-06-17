@@ -103,6 +103,7 @@
 #include <bsp/bootcard.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
+#include <bsp/mpc5200.h>
 
 /*
  *  Driver configuration parameters
@@ -144,6 +145,18 @@ void bsp_start(void)
 
   cpu_init();
 
+  if(get_ppc_cpu_revision() >= 0x2014) {
+    /* Special settings for MPC5200B (B variant) */
+    uint32_t xlb_cfg = mpc5200.config;
+
+    /* XXX: The Freescale documentation for BSDIS seems to be wrong */
+    xlb_cfg |= XLB_CFG_BSDIS;
+
+    xlb_cfg &= ~XLB_CFG_PLDIS;
+
+    mpc5200.config = xlb_cfg;
+  }
+
   bsp_clicks_per_usec    = (XLB_CLOCK/4000000);
 
   /*
@@ -166,6 +179,7 @@ void bsp_start(void)
   if (sc != RTEMS_SUCCESSFUL) {
     BSP_panic("cannot initialize exceptions");
   }
+  ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
 
   /* Initalize interrupt support */
   sc = bsp_interrupt_initialize();

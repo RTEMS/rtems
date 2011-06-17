@@ -79,6 +79,11 @@ LINKER_SYMBOL(MBAR);
 #define PM520
 #endif
 
+#if !defined(HAS_UBOOT)
+  /* we need the low level initialization in start.S*/
+  #define NEED_LOW_LEVEL_INIT
+#endif
+
 #if defined(BRS5L)
 /*
  * IMD Custom Board BRS5L
@@ -117,11 +122,6 @@ extern "C" {
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
 #include <bsp/u-boot.h>
-
-#if !defined(HAS_UBOOT)
-  /* we need the low level initialization in start.S*/
-  #define NEED_LOW_LEVEL_INIT
-#endif
 
 /*
  * Network driver configuration
@@ -179,7 +179,7 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
 #if defined(HAS_UBOOT)
 #define GEN5200_CONSOLE_BAUD (bsp_uboot_board_info.bi_baudrate)
 #else
-#define GEN5200_CONSOLE_BAUD 9600
+#define GEN5200_CONSOLE_BAUD 115200
 #endif
 
 /*

@@ -142,17 +142,13 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	startup/bspreset.c \
 	../../shared/bspgetworkarea.c \
 	../shared/startup/bspidle.c \
+	../shared/src/memcpy.c \
 	startup/bspstart.c \
 	startup/cpuinit.c  \
 	startup/uboot_support.c
 
 if HAS_NETWORKING
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-network_CPPFLAGS += -D__BSD_VISIBLE
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network_5200/network.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network_5200/network.c
 endif
 
 libbsp_a_LIBADD =  ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
@@ -162,10 +158,6 @@ libbsp_a_LIBADD =  ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

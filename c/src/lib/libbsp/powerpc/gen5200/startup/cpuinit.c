@@ -169,6 +169,14 @@ static void cpu_init_bsp(void)
   uint32_t start = 0;
 
   /*
+   * Accesses (also speculative accesses) outside of the RAM area are a
+   * disaster especially in combination with the BestComm.  For safety reasons
+   * we make the available RAM a little bit smaller to have an unused area at
+   * the end.
+   */
+  bsp_uboot_board_info.bi_memsize -= 4 * 1024;
+
+  /*
    * Program BAT0 for RAM
    */
   calc_dbat_regvals(

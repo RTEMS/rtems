@@ -92,23 +92,13 @@
 #endif
 #define IDE_DMA_TEST            FALSE
 
-#ifdef BRS5L
-#define IDE_USE_INT             TRUE
-#define IDE_READ_USE_DMA        TRUE
-#define IDE_USE_READ_PIO_OPT    FALSE
-#define IDE_WRITE_USE_DMA       TRUE
-#define IDE_USE_WRITE_PIO_OPT   TRUE
-/* #define IDE_USE_DMA (IDE_READ_USE_DMA||IDE_WRITE_USE_DMA) */
-#define IDE_USE_DMA             TRUE
-#else
+/* DMA supported PIO mode is broken */
 #define IDE_USE_INT             TRUE
 #define IDE_READ_USE_DMA        FALSE
 #define IDE_USE_READ_PIO_OPT    FALSE
 #define IDE_WRITE_USE_DMA       FALSE
 #define IDE_USE_WRITE_PIO_OPT   FALSE
-/* #define IDE_USE_DMA (IDE_READ_USE_DMA||IDE_WRITE_USE_DMA) */
-#define IDE_USE_DMA             FALSE
-#endif
+#define IDE_USE_DMA (IDE_READ_USE_DMA || IDE_WRITE_USE_DMA)
 
 #define IDE_USE_STATISTICS      TRUE
 
@@ -464,6 +454,7 @@ void mpc5200_pcmciaide_dma_blockop(bool is_write,
         (*cbuf)++;
         (*pos) += bufs[bufs_from_dma].length;
         bufs_from_dma++;
+        bds_free++;
 	  }
     } while ((nxt_bd_idx != TASK_ERR_BD_RING_EMPTY) &&
              (nxt_bd_idx != TASK_ERR_BD_BUSY)       &&

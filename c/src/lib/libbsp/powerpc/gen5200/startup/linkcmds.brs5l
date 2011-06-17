@@ -5,7 +5,8 @@
  */
 
 MEMORY {
-	RAM : ORIGIN = 0x0, LENGTH = 128M
+	/* For the 4k adjustment see cpuinit.c */
+	RAM : ORIGIN = 0x0, LENGTH = 128M - 4k
 	ROM : ORIGIN = 0xffe00000, LENGTH = 2M
 	DPRAM : ORIGIN = 0xff000000, LENGTH = 1k
 	REGS : ORIGIN = 0xf0000000, LENGTH = 64k

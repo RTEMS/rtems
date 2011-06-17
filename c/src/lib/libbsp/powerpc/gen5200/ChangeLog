@@ -1,3 +1,24 @@
+2011-06-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am: Added custom memcpy().  Update for network sources.
+	* configure.ac: Enable interrupt driven Termios for all BSPs.
+	* ide/pcmcia_ide.c: Disable broken DMA support.
+	* include/bsp.h: Fixed NEED_LOW_LEVEL_INIT define.  Set default
+	console baud to 115200.
+	* include/irq.h, irq/irq.c: Fixed interrupt handling to avoid the
+	following problems: 1. multiple invokation of peripheral interrupt
+	handlers, 2. missing synchronization after mask write and enabling of
+	external exceptions, and 3. logic overhead.
+	* network_5200/network.c: Added MII interface.  Fixed controller
+	restart after FIFO errors.  Performance improvements.
+	* start/start.S: Fixed ROM startup.  Initialize XLB arbiter for all
+	BSPs.
+	* startup/bspstart.c: Special intialization for MPC5200B (B variant).
+	Install standard alignment handler.
+	* startup/cpuinit.c, startup/linkcmds.brs5l, startup/linkcmds.dp2,
+	startup/linkcmds.icecube, startup/linkcmds.pm520_cr825,
+	startup/linkcmds.pm520_ze30: Avoid accesses outside the RAM area.
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac, startup/bspstart.c: Use standard cache BSP options.

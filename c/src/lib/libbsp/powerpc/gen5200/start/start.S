@@ -156,6 +156,68 @@
 
 .extern boot_card
 
+.section ".vectors", "ax"
+	bl	start
+	.rep 63
+	.long 0x04000400
+	.endr
+__vec2:	b	__vec2
+	.rep 63
+	.long 0x04000400
+	.endr
+__vec3:	b	__vec3
+	.rep 63
+	.long 0x04000400
+	.endr
+__vec4:	b	__vec4
+	.rep 63
+	.long 0x04000400
+	.endr
+__vec5:	b	__vec5
+	.rep 63
+	.long 0x04000400
+	.endr
+__vec6:	b	__vec6
+	.rep 63
+	.long 0x04000400
+	.endr
+__vec7:	b	__vec7
+	.rep 63
+	.long 0x04000400
+	.endr
+__vec8:	b	__vec8
+	.rep 63
+	.long 0x04000400
+	.endr
+__vec9:	b	__vec9
+	.rep 63
+	.long 0x04000400
+	.endr
+__veca:	b	__veca
+	.rep 63
+	.long 0x04000400
+	.endr
+__vecb:	b	__vecb
+	.rep 63
+	.long 0x04000400
+	.endr
+__vecc:	b	__vecc
+	.rep 63
+	.long 0x04000400
+	.endr
+__vecd:	b	__vecd
+	.rep 63
+	.long 0x04000400
+	.endr
+__vece:	b	__vece
+	.rep 63
+	.long 0x04000400
+	.endr
+__vecf:	b	__vecf
+	.rep 63+1024
+	.long 0x04000400
+	.endr
+
 .section ".entry"
 PUBLIC_VAR (start)
 start:
@@ -243,7 +305,7 @@ start:
 	rlwinm	r30, r30,17,15,31
 	stw	r30, CS0STR(r31) 		/* Set CS0STR */
 
-	LWI	r30, bsp_rom_end
+	LWI	r30, bsp_rom_end - 1
 
 	rlwinm	r30, r30,17,15,31
 	stw	r30, CS0STP(r31) 		/* Set CS0STP */
@@ -279,18 +341,7 @@ reloc_in_CS0:
 
 	bl	SDRAM_init			/* Initialize SDRAM controller */
 
-/* init arbiter and stuff... */
-	LWI	r30, 0x8000a06e
-	stw	r30, ARBCFG(r31) 		/* Set ARBCFG */
-
-	LWI	r30, 0x000000ff
-	stw	r30, ARBMPREN(r31) 		/* Set ARBMPREN */
-
-	LWI	r30, 0x00001234
-	stw	r30, ARBMPRIO(r31) 		/* Set ARBPRIO */
-
-	LWI	r30, 0x0000001e
-	stw	r30, ARBSNOOP(r31) 		/* Set ARBSNOOP */
+	bl	XLB_init
 /* copy .text section from ROM to RAM location (unique for ROM startup) */
 	LA	r30, bsp_section_text_start	/* get start address of text section in RAM */
 
@@ -395,6 +446,8 @@ skip_ROM_start:
 
         bl      clr_mem				/* Clear onchip SRAM */
 
+#else /* defined(NEED_LOW_LEVEL_INIT) */
+	bl	XLB_init
 #endif /* defined(NEED_LOW_LEVEL_INIT) */
 /* clear .bss section (unique for ROM startup) */
 	LWI	r30, bsp_section_bss_start	/* get start address of bss section */
@@ -843,5 +896,18 @@ clr_mem_byte:
 clr_mem_end:
         blr					/* return */
 
+XLB_init:
+/* init arbiter and stuff... */
+	LWI	r30, 0x8000a06e
+	stw	r30, ARBCFG(r31) 		/* Set ARBCFG */
 
+	LWI	r30, 0x000000ff
+	stw	r30, ARBMPREN(r31) 		/* Set ARBMPREN */
 
+	LWI	r30, 0x00001234
+	stw	r30, ARBMPRIO(r31) 		/* Set ARBPRIO */
+
+	LWI	r30, 0x0000001e
+	stw	r30, ARBSNOOP(r31) 		/* Set ARBSNOOP */
+
+	blr

@@ -87,16 +87,13 @@
 #ifndef LIBBSP_POWERPC_GEN5200_IRQ_H
 #define LIBBSP_POWERPC_GEN5200_IRQ_H
 
-#define CHK_CE_SHADOW(_pmce)	((_pmce) & 0x00000001)
-#define CHK_CSE_STICKY(_pmce)	(((_pmce) >> 10) & 0x00000001)
-#define CHK_MSE_STICKY(_pmce)	(((_pmce) >> 21) & 0x00000001)
-#define CHK_PSE_STICKY(_pmce)	(((_pmce) >> 29) & 0x00000001)
-#define CLR_CSE_STICKY(_pmce)	((_pmce) |= (1 << 29 ))
-#define CLR_MSE_STICKY(_pmce)	((_pmce) |= (1 << 21 ))
-#define CLR_PSE_STICKY(_pmce)	((_pmce) |= (1 << 10 ))
-#define CSE_SOURCE(_source)	(((_source) >> 8) & 0x00000003)
-#define MSE_SOURCE(_source)	(((_source) >> 16) & 0x0000001F)
-#define PSE_SOURCE(_source)	(((_source) >> 24) & 0x0000001F)
+#define PMCE_CE_SHADOW (1U << (31 - 31))
+#define PMCE_CSE_STICKY (1U << (31 - 21))
+#define PMCE_MSE_STICKY (1U << (31 - 10))
+#define PMCE_PSE_STICKY (1U << (31 - 2))
+#define PMCE_CSE_SOURCE(_pmce) (((_pmce) >> 8) & 0x3U)
+#define PMCE_MSE_SOURCE(_pmce) (((_pmce) >> 16) & 0x1fU)
+#define PMCE_PSE_SOURCE(_pmce) (((_pmce) >> 24) & 0x1fU)
 
 /*
  * Peripheral IRQ handlers related definitions

@@ -53,10 +53,16 @@
  *  Copyright (c) 1999, National Research Council of Canada
  *
  */
+
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__ 1
+#define __BSD_VISIBLE 1
+
 #include <rtems.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/rtems_mii_ioctl.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include <sys/param.h>
 #include <sys/mbuf.h>
 #include <sys/socket.h>
@@ -66,42 +72,22 @@
 #include <netinet/if_ether.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-#include "../include/mpc5200.h"
+#include <bsp/mpc5200.h>
 #include <net/if_var.h>
 #include <errno.h>
 
-/* motorola-capi-specifics... */
-#include "../bestcomm/include/ppctypes.h"	/* uint32, et. al.			*/
-#include "../bestcomm/dma_image.h"
-#include "../bestcomm/bestcomm_glue.h"
-
-
-#define SDMA_BD_TFD	0x08000000	/*< Transmit Frame Done		*/
-#define SDMA_BD_INT	0x04000000	/*< Interrupt on frame done	*/
-#define SDMA_BD_RX_NUM	64 /* Number of receive buffer descriptors	*/
-#define SDMA_BD_TX_NUM	64 /* Number of transmit buffer descriptors	*/
-
-#define SET_BD_STATUS(bd, stat)	{		\
-	(bd)->Status &= 0x0000ffff;			\
-	(bd)->Status |= 0xffff0000 & stat;	\
-}
-#define SET_BD_LENGTH(bd, len) {		\
-	(bd)->Status &= 0xffff0000;			\
-	(bd)->Status |= 0x0000ffff & len;	\
-}
-#define GET_BD_STATUS(bd)		((bd)->Status & 0xffff0000)
-#define GET_BD_LENGTH(bd)		((bd)->Status & 0x0000ffff)
-#define GET_SDMA_PENDINGBIT(Bit)   \
-   (mpc5200.sdma.IntPend & (uint32)(1<<Bit))
-
-#include "../bestcomm/bestcomm_api.h"
-#include "../bestcomm/task_api/bestcomm_cntrl.h"
-#include "../bestcomm/task_api/tasksetup_bdtable.h"
-
-static TaskId rxTaskId;	/* SDMA RX task ID */
-static TaskId txTaskId;	/* SDMA TX task ID */
+#include <bsp/bestcomm/include/ppctypes.h>
+#include <bsp/bestcomm/dma_image.h>
+#include <bsp/bestcomm/bestcomm_glue.h>
+#include <bsp/bestcomm/bestcomm_api.h>
+#include <bsp/bestcomm/task_api/bestcomm_cntrl.h>
+#include <bsp/bestcomm/task_api/tasksetup_bdtable.h>
 
 /* #define ETH_DEBUG */
+
+#define FEC_BD_LAST TASK_BD_TFD
+#define FEC_BD_INT TASK_BD_INT
+#define FEC_BD_READY SDMA_BD_MASK_READY
 
 /*
  * Number of interfaces supported by this driver
@@ -113,25 +99,12 @@ static TaskId txTaskId;	/* SDMA TX task ID */
  * The number of transmit buffer descriptors has to be quite large
  * since a single frame often uses four or more buffer descriptors.
  */
-#define RX_BUF_COUNT     SDMA_BD_RX_NUM
-#define TX_BUF_COUNT     SDMA_BD_TX_NUM
-#define TX_BD_PER_BUF    1
+#define RX_BUF_COUNT     64
+#define TX_BUF_COUNT     64
 
 #define INET_ADDR_MAX_BUF_SIZE (sizeof "255.255.255.255")
 
-
-/*
- * RTEMS event used by interrupt handler to signal daemons.
- * This must *not* be the same event used by the TCP/IP task synchronization.
- */
-#define INTERRUPT_EVENT RTEMS_EVENT_1
-#define FATAL_INT_EVENT RTEMS_EVENT_3
-
-/*
- * RTEMS event used to start transmit daemon.
- * This must not be the same as INTERRUPT_EVENT.
- */
-#define START_TRANSMIT_EVENT RTEMS_EVENT_2
+#define FEC_EVENT RTEMS_EVENT_0
 
 /* Task number assignment */
 #define FEC_RECV_TASK_NO            TASK_FEC_RX
@@ -186,31 +159,24 @@ static TaskId txTaskId;	/* SDMA TX task ID */
 #define MPC5200_FEC_MII_DATA_RA_SHIFT 0x12	/* MII Register address bits */
 #define MPC5200_FEC_MII_DATA_PA_SHIFT 0x17	/* MII PHY address bits */
 
-
-/* Receive & Transmit Buffer Descriptor definitions */
-typedef struct mpc5200_buffer_desc_
-  {
-  volatile uint16_t status;
-  volatile uint16_t length;
-  volatile void             *buffer;
-  } mpc5200_buffer_desc_t;
-
-
 #define FEC_INTR_MASK_USED \
 (FEC_INTR_LCEN  |FEC_INTR_CRLEN	|\
  FEC_INTR_XFUNEN|FEC_INTR_XFERREN|FEC_INTR_RFERREN)
 
+typedef enum {
+  FEC_STATE_RESTART_0,
+  FEC_STATE_RESTART_1,
+  FEC_STATE_NORMAL,
+} mpc5200_fec_state;
+
 /*
  * Device data
  */
-struct mpc5200_enet_struct {
-#if 0
-  struct ifnet            ac_if;
-#else
+typedef struct {
   struct arpcom           arpcom;
-#endif
   struct mbuf             **rxMbuf;
   struct mbuf             **txMbuf;
+  mpc5200_fec_state       state;
   int                     acceptBroadcast;
   int                     rxBdCount;
   int                     txBdCount;
@@ -226,83 +192,60 @@ struct mpc5200_enet_struct {
   unsigned long           rxGiant;
   unsigned long           rxNonOctet;
   unsigned long           rxBadCRC;
-  unsigned long           rxOverrun;
+  unsigned long           rxFIFOError;
   unsigned long           rxCollision;
 
   unsigned long           txInterrupts;
   unsigned long           txDeferred;
   unsigned long           txLateCollision;
   unsigned long           txUnderrun;
+  unsigned long           txFIFOError;
   unsigned long           txMisaligned;
   unsigned long           rxNotFirst;
   unsigned long           txRetryLimit;
-  };
 
-static struct mpc5200_enet_struct enet_driver[NIFACES];
+  struct rtems_mdio_info  mdio;
+  int                     phyAddr;
+  bool                    phyInitialized;
+} mpc5200_fec_context;
 
-extern int taskTable;
-static void mpc5200_fec_restart(struct mpc5200_enet_struct *sc);
+static mpc5200_fec_context enet_driver[NIFACES];
 
-
-
-/*
- * Function:	mpc5200_fec_rx_bd_init
- *
- * Description:	Initialize the receive buffer descriptor ring.
- *
- * Returns:		void
- *
- * Notes:       Space for the buffers of rx BDs is allocated by the rx deamon
- *
- */
-static void mpc5200_fec_rx_bd_init(struct mpc5200_enet_struct *sc) {
-  int rxBdIndex;
-  struct mbuf *m;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
-  BDIdx bdi;
-
-  /*
-   * Fill RX buffer descriptor ring.
-   */
-  for( rxBdIndex = 0; rxBdIndex < sc->rxBdCount; rxBdIndex++ ) {
-    MGETHDR (m, M_WAIT, MT_DATA);
-    MCLGET (m, M_WAIT);
-
-    m->m_pkthdr.rcvif = ifp;
-    sc->rxMbuf[rxBdIndex] = m;
-    bdi = TaskBDAssign( rxTaskId,
-			mtod(m, void *),
-			NULL,
-			ETHER_MAX_LEN,
-			0 );
-    if (bdi != rxBdIndex) {
-      rtems_panic("network rx buffer indices out of sync");
-    }
-  }
+static void mpc5200_fec_send_event(rtems_id task)
+{
+  rtems_event_send(task, FEC_EVENT);
 }
 
-/*
- * Function:	mpc5200_fec_rx_bd_cleanup
- *
- * Description:	put all mbufs pending in rx BDs back to buffer pool
- *
- * Returns:		void
- *
- */
-static void mpc5200_fec_rx_bd_cleanup(struct mpc5200_enet_struct *sc) {
-  int rxBdIndex;
-  struct mbuf *m,*n;
+static void mpc5200_fec_wait_for_event(void)
+{
+  rtems_event_set out;
+  rtems_bsdnet_event_receive(
+    FEC_EVENT,
+    RTEMS_EVENT_ANY | RTEMS_WAIT,
+    RTEMS_NO_TIMEOUT,
+    &out
+  );
+}
 
-  /*
-   * Drain RX buffer descriptor ring.
-   */
-  for( rxBdIndex = 0; rxBdIndex < sc->rxBdCount; rxBdIndex++ ) {
-    n = sc->rxMbuf[rxBdIndex];
-    while (n != NULL) {
-      m = n;
-      MFREE(m,n);
-    }
-  }
+static void mpc5200_fec_stop_dma(void)
+{
+  TaskStop(FEC_RECV_TASK_NO);
+  TaskStop(FEC_XMIT_TASK_NO);
+}
+
+static void mpc5200_fec_request_restart(mpc5200_fec_context *self)
+{
+  self->state = FEC_STATE_RESTART_0;
+  mpc5200_fec_send_event(self->txDaemonTid);
+  mpc5200_fec_send_event(self->rxDaemonTid);
+}
+
+static void mpc5200_fec_start_dma_and_controller(void)
+{
+  TaskStart(FEC_RECV_TASK_NO, 1, FEC_RECV_TASK_NO, 1);
+  TaskStart(FEC_XMIT_TASK_NO, 1, FEC_XMIT_TASK_NO, 1);
+
+  mpc5200.ecntrl |= FEC_ECNTRL_OE | FEC_ECNTRL_EN;
 }
 
 /*
@@ -316,7 +259,7 @@ static void mpc5200_fec_rx_bd_cleanup(struct mpc5200_enet_struct *sc) {
  * Notes:
  *
  */
-static void mpc5200_eth_addr_filter_set(struct mpc5200_enet_struct *sc)  {
+static void mpc5200_eth_addr_filter_set(mpc5200_fec_context *self)  {
   unsigned char *mac;
   unsigned char currByte;				/* byte for which to compute the CRC */
   int           byte;					/* loop - counter */
@@ -326,7 +269,7 @@ static void mpc5200_eth_addr_filter_set(struct mpc5200_enet_struct *sc)  {
  /*
   * Get the mac address of ethernet controller
   */
-  mac = (unsigned char *)(&sc->arpcom.ac_enaddr);
+  mac = (unsigned char *)(&self->arpcom.ac_enaddr);
 
  /*
   * The algorithm used is the following:
@@ -399,125 +342,68 @@ static void mpc5200_eth_addr_filter_set(struct mpc5200_enet_struct *sc)  {
 
    }
 
-
-/*
- * Function:	mpc5200_eth_mii_read
- *
- * Description:	Read a media independent interface (MII) register on an
- *				18-wire ethernet tranceiver (PHY). Please see your PHY
- *				documentation for the register map.
- *
- * Returns:		32-bit register value
- *
- * Notes:
- *
- */
-int mpc5200_eth_mii_read(struct mpc5200_enet_struct *sc, unsigned char phyAddr, unsigned char regAddr, unsigned short * retVal)
-  {
-  unsigned long reg;		/* convenient holder for the PHY register */
-  unsigned long phy;		/* convenient holder for the PHY */
+static int mpc5200_eth_mii_transfer(
+  int phyAddr,
+  unsigned regAddr,
+  uint32_t data
+)
+{
   int timeout = 0xffff;
 
- /*
-  * reading from any PHY's register is done by properly
-  * programming the FEC's MII data register.
-  */
-  reg = regAddr << MPC5200_FEC_MII_DATA_RA_SHIFT;
-  phy = phyAddr << MPC5200_FEC_MII_DATA_PA_SHIFT;
+  mpc5200.ievent = FEC_INTR_MII;
 
-  mpc5200.mii_data = (MPC5200_FEC_MII_DATA_ST | MPC5200_FEC_MII_DATA_OP_RD | MPC5200_FEC_MII_DATA_TA | phy | reg);
+  mpc5200.mii_data = MPC5200_FEC_MII_DATA_ST
+    | MPC5200_FEC_MII_DATA_TA
+    | (phyAddr << MPC5200_FEC_MII_DATA_PA_SHIFT)
+    | (regAddr << MPC5200_FEC_MII_DATA_RA_SHIFT)
+    | data;
 
- /*
-  * wait for the related interrupt
-  */
-  while ((timeout--) && (!(mpc5200.ievent & 0x00800000)));
-
-  if(timeout == 0)
-    {
-
-#ifdef ETH_DEBUG
-    printf ("Read MDIO failed..." "\r\n");
-#endif
-
-	return false;
-
-	}
-
- /*
-  * clear mii interrupt bit
-  */
-  mpc5200.ievent = 0x00800000;
-
- /*
-  * it's now safe to read the PHY's register
-  */
-  *retVal = (unsigned short)mpc5200.mii_data;
-
-  return true;
-
+  while (timeout > 0 && (mpc5200.ievent & FEC_INTR_MII) == 0) {
+    --timeout;
   }
 
-/*
- * Function:	mpc5200_eth_mii_write
- *
- * Description:	Write a media independent interface (MII) register on an
- *				18-wire ethernet tranceiver (PHY). Please see your PHY
- *				documentation for the register map.
- *
- * Returns:		Success (boolean)
- *
- * Notes:
- *
- */
-static int mpc5200_eth_mii_write(struct mpc5200_enet_struct *sc, unsigned char phyAddr, unsigned char regAddr, unsigned short data)
-  {
-  unsigned long reg;					/* convenient holder for the PHY register */
-  unsigned long phy;					/* convenient holder for the PHY */
-  int timeout = 0xffff;
+  return timeout > 0 ? 0 : -1;
+}
 
-  reg = regAddr << MPC5200_FEC_MII_DATA_RA_SHIFT;
-  phy = phyAddr << MPC5200_FEC_MII_DATA_PA_SHIFT;
+/* FIXME: Make this static, this needs a fix in an application */
+int mpc5200_eth_mii_read(
+  int phyAddr,
+  void *arg,
+  unsigned regAddr,
+  uint32_t *retVal
+)
+{
+  int rv = mpc5200_eth_mii_transfer(
+    phyAddr,
+    regAddr,
+    MPC5200_FEC_MII_DATA_OP_RD
+  );
 
-  mpc5200.mii_data = (MPC5200_FEC_MII_DATA_ST | MPC5200_FEC_MII_DATA_OP_WR | MPC5200_FEC_MII_DATA_TA | phy | reg | data);
+  *retVal = mpc5200.mii_data & 0xffff;
 
- /*
-  * wait for the MII interrupt
-  */
-  while ((timeout--) && (!(mpc5200.ievent & 0x00800000)));
+  return rv;
+}
 
-  if(timeout == 0)
-    {
-
-#ifdef ETH_DEBUG
-    printf ("Write MDIO failed..." "\r\n");
-#endif
-
-    return false;
-
-    }
-
- /*
-  * clear MII interrupt bit
-  */
-  mpc5200.ievent = 0x00800000;
-
-  return true;
-
-  }
+static int mpc5200_eth_mii_write(
+  int phyAddr,
+  void *arg,
+  unsigned regAddr,
+  uint32_t data
+)
+{
+  return mpc5200_eth_mii_transfer(
+    phyAddr,
+    regAddr,
+    MPC5200_FEC_MII_DATA_OP_WR | data
+  );
+}
 
 
 /*
- * Function:	mpc5200_fec_reset
- *
- * Description:	Reset a running ethernet driver including the hardware
- *				FIFOs and the FEC.
- *
- * Returns:		Success (boolean)
- *
- * Notes:
- *
+ * Reset a running ethernet driver including the hardware FIFOs and the FEC.
  */
-static int mpc5200_fec_reset(struct mpc5200_enet_struct *sc) {
+static void mpc5200_fec_reset(mpc5200_fec_context *self)
+{
   volatile int delay;
   /*
    * Clear FIFO status registers
@@ -543,8 +429,6 @@ static int mpc5200_fec_reset(struct mpc5200_enet_struct *sc) {
    * wait at least 16 clock cycles
    */
   for (delay = 0;delay < 16*4;delay++) {};
-
-  return true;
 }
 
 
@@ -559,28 +443,28 @@ static int mpc5200_fec_reset(struct mpc5200_enet_struct *sc) {
  * Notes:
  *
  */
-void mpc5200_fec_off(struct mpc5200_enet_struct *sc)
+void mpc5200_fec_off(mpc5200_fec_context *self)
   {
   int            counter = 0xffff;
 
 
 #if defined(ETH_DEBUG)
-  unsigned short phyStatus, i;
-  unsigned char  phyAddr = 0;
+  uint32_t phyStatus;
+  int i;
 
   for(i = 0; i < 9; i++)
     {
 
-    mpc5200_eth_mii_read(sc, phyAddr, i, &phyStatus);
-    printf ("Mii reg %d: 0x%04x" "\r\n", i, phyStatus);
+    mpc5200_eth_mii_read(self->phyAddr, self, i, &phyStatus);
+    printf ("Mii reg %d: 0x%04" PRIx32 "\r\n", i, phyStatus);
 
     }
 
   for(i = 16; i < 21; i++)
     {
 
-    mpc5200_eth_mii_read(sc, phyAddr, i, &phyStatus);
-    printf ("Mii reg %d: 0x%04x" "\r\n", i, phyStatus);
+    mpc5200_eth_mii_read(self->phyAddr, self, i, &phyStatus);
+    printf ("Mii reg %d: 0x%04" PRIx32 "\r\n", i, phyStatus);
 
     }
 #endif	/* ETH_DEBUG */
@@ -601,11 +485,8 @@ void mpc5200_fec_off(struct mpc5200_enet_struct *sc)
   */
   while((counter--) && (!(mpc5200.ievent & FEC_INTR_GRA)));
 
-  /*
-   * Disable the SmartDMA transmit and receive tasks.
-   */
-  TaskStop( rxTaskId );
-  TaskStop( txTaskId );
+  mpc5200_fec_stop_dma();
+
  /*
   * Disable transmit / receive interrupts
   */
@@ -616,20 +497,14 @@ void mpc5200_fec_off(struct mpc5200_enet_struct *sc)
   * Disable the Ethernet Controller
   */
   mpc5200.ecntrl &= ~(FEC_ECNTRL_OE | FEC_ECNTRL_EN);
-
-  /*
-   * cleanup all buffers
-   */
-  mpc5200_fec_rx_bd_cleanup(sc);
-
-  }
+}
 
 /*
  * MPC5200 FEC interrupt handler
  */
 void mpc5200_fec_irq_handler(rtems_irq_hdl_param handle)
 {
-  struct mpc5200_enet_struct *sc = (struct mpc5200_enet_struct *) handle;
+  mpc5200_fec_context *self = (mpc5200_fec_context *) handle;
   volatile uint32_t ievent;
 
   ievent = mpc5200.ievent;
@@ -639,423 +514,54 @@ void mpc5200_fec_irq_handler(rtems_irq_hdl_param handle)
    * check errors, update statistics
    */
   if (ievent & FEC_INTR_LATE_COL) {
-    sc->txLateCollision++;
+    self->txLateCollision++;
   }
   if (ievent & FEC_INTR_COL_RETRY) {
-    sc->txRetryLimit++;
+    self->txRetryLimit++;
   }
   if (ievent & FEC_INTR_XFIFO_UN) {
-    sc->txUnderrun++;
+    self->txUnderrun++;
   }
   if (ievent & FEC_INTR_XFIFO_ERR) {
-    sc->txUnderrun++;
+    self->txFIFOError++;
   }
   if (ievent & FEC_INTR_RFIFO_ERR) {
-    sc->rxOverrun++;
+    self->rxFIFOError++;
   }
   /*
    * fatal error ocurred?
    */
   if (ievent & (FEC_INTR_XFIFO_ERR | FEC_INTR_RFIFO_ERR)) {
     mpc5200.imask &= ~(FEC_INTR_XFERREN | FEC_INTR_RFERREN);
-    rtems_event_send(enet_driver[0].rxDaemonTid, FATAL_INT_EVENT);
+    mpc5200_fec_request_restart(self);
   }
 }
 
-/*
- * MPC5200 SmartComm ethernet interrupt handler
- */
-void mpc5200_smartcomm_rx_irq_handler(rtems_irq_hdl_param unused)
-  {
- /* Frame received? */
-  if(GET_SDMA_PENDINGBIT(FEC_RECV_TASK_NO))
-    {
-
-      SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend,FEC_RECV_TASK_NO);
-
-      bestcomm_glue_irq_disable(FEC_RECV_TASK_NO);/*Disable receive ints*/
-
-      enet_driver[0].rxInterrupts++; 		/* Rx int has occurred */
-
-      rtems_event_send(enet_driver[0].rxDaemonTid, INTERRUPT_EVENT);
-
-    }
-  }
-
-/*
- * MPC5200 SmartComm ethernet interrupt handler
- */
-void mpc5200_smartcomm_tx_irq_handler(rtems_irq_hdl_param unused)
-  {
- /* Buffer transmitted or transmitter error? */
-  if(GET_SDMA_PENDINGBIT(FEC_XMIT_TASK_NO))
-    {
-
-      SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend,FEC_XMIT_TASK_NO);
-
-      bestcomm_glue_irq_disable(FEC_XMIT_TASK_NO);/*Disable tx ints*/
-
-      enet_driver[0].txInterrupts++; /* Tx int has occurred */
-
-      rtems_event_send(enet_driver[0].txDaemonTid, INTERRUPT_EVENT);
-
-    }
-
-  }
-
-
-
-
-
- /*
-  * Function:	    mpc5200_fec_retire_tbd
-  *
-  * Description:	Soak up buffer descriptors that have been sent.
-  *
-  * Returns:		void
-  *
-  * Notes:
-  *
-  */
-static void mpc5200_fec_retire_tbd(struct mpc5200_enet_struct *sc,
-				   bool force)
+void mpc5200_smartcomm_rx_irq_handler(void *arg)
 {
-  struct mbuf *n;
-  TaskBD1_t   *bdRing = (TaskBD1_t *)TaskGetBDRing( txTaskId );;
-  /*
-   * Clear already transmitted BDs first. Will not work calling same
-   * from fecExceptionHandler(TFINT).
-   */
+  mpc5200_fec_context *self = arg;
 
-  while ((sc->txBdActiveCount > 0) &&
-	 (force || (bdRing[sc->txBdTail].Status == 0x0))) {
-    if (sc->txMbuf[sc->txBdTail] != NULL) {
-      /*
-       * NOTE: txMbuf can be NULL, if mbuf has been split into different BDs
-       */
-      MFREE (sc->txMbuf[sc->txBdTail],n);
-      sc->txMbuf[sc->txBdTail] = NULL;
-    }
-    sc->txBdActiveCount--;
-    if(++sc->txBdTail >= sc->txBdCount) {
-      sc->txBdTail = 0;
-    }
-  }
+  ++self->rxInterrupts;
+  mpc5200_fec_send_event(self->rxDaemonTid);
+  SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend, FEC_RECV_TASK_NO);
+  bestcomm_glue_irq_disable(FEC_RECV_TASK_NO);
 }
 
-#if 0
- /*
-  * Function:	     mpc5200_fec_tx_bd_requeue
-  *
-  * Description:	put buffers back to interface output queue
-  *
-  * Returns:		void
-  *
-  * Notes:
-  *
-  */
-static void mpc5200_fec_tx_bd_requeue(struct mpc5200_enet_struct *sc)
+void mpc5200_smartcomm_tx_irq_handler(void *arg)
 {
-  /*
-   * Clear already transmitted BDs first. Will not work calling same
-   * from fecExceptionHandler(TFINT).
-   */
+  mpc5200_fec_context *self = arg;
 
-  while (sc->txBdActiveCount > 0) {
-    if (sc->txMbuf[sc->txBdHead] != NULL) {
-      /*
-       * NOTE: txMbuf can be NULL, if mbuf has been split into different BDs
-       */
-      IF_PREPEND(&(sc->arpcom.ac_if.if_snd),sc->txMbuf[sc->txBdHead]);
-      sc->txMbuf[sc->txBdHead] = NULL;
-    }
-    sc->txBdActiveCount--;
-    if(--sc->txBdHead < 0) {
-      sc->txBdHead = sc->txBdCount-1;
-    }
-  }
-}
-#endif
-
-static void mpc5200_fec_sendpacket(struct ifnet *ifp,struct mbuf *m) {
-  struct mpc5200_enet_struct *sc = ifp->if_softc;
-  struct mbuf *l = NULL;
-  int nAdded;
-  uint32_t status;
-  rtems_event_set events;
-  TaskBD1_t *bdRing = (TaskBD1_t *)TaskGetBDRing( txTaskId );
-  TaskBD1_t *thisBd;
-  TaskBD1_t *firstBd = NULL;
-  void *data_ptr;
-  size_t data_len;
-
- /*
-  * Free up buffer descriptors
-  */
-  mpc5200_fec_retire_tbd(sc,false);
-
- /*
-  * Set up the transmit buffer descriptors.
-  * No need to pad out short packets since the
-  * hardware takes care of that automatically.
-  * No need to copy the packet to a contiguous buffer
-  * since the hardware is capable of scatter/gather DMA.
-  */
-  nAdded = 0;
-
-  for(;;) {
-
-   /*
-    * Wait for buffer descriptor to become available.
-    */
-    if((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
-
-      /*
-       * Clear old events
-       */
-      SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend,FEC_XMIT_TASK_NO);
-
-      /*
-       * Wait for buffer descriptor to become available.
-       * Note that the buffer descriptors are checked
-       * *before* * entering the wait loop -- this catches
-       * the possibility that a buffer descriptor became
-       * available between the `if' above, and the clearing
-       * of the event register.
-       * This is to catch the case where the transmitter
-       * stops in the middle of a frame -- and only the
-       * last buffer descriptor in a frame can generate
-       * an interrupt.
-       */
-      mpc5200_fec_retire_tbd(sc,false);
-
-      while((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
-	bestcomm_glue_irq_enable(FEC_XMIT_TASK_NO);
-	rtems_bsdnet_event_receive(INTERRUPT_EVENT,
-				   RTEMS_WAIT | RTEMS_EVENT_ANY,
-				   RTEMS_NO_TIMEOUT, &events);
-        mpc5200_fec_retire_tbd(sc,false);
-      }
-    }
-
-    if(m->m_len == 0) {
-      /*
-       * Just toss empty mbufs
-       */
-      struct mbuf *n;
-      MFREE(m, n);
-      m = n;
-      if(l != NULL) {
-        l->m_next = m;
-      }
-    }
-    else {
-      /*
-       * Flush the buffer for this descriptor
-       */
-      /*rtems_cache_flush_multiple_data_lines((const void *)mtod(m, void *), m->m_len);*/
-      /*
-       * Fill in the buffer descriptor,
-       * set "end of frame" bit in status,
-       * if last mbuf in chain
-       */
-      thisBd             = bdRing + sc->txBdHead;
-      /*
-       * FIXME: do not send interrupt after every frame
-       * doing this every quarter of BDs is much more efficent
-       */
-      status             = ((m->m_next == NULL)
-			    ? TASK_BD_TFD | TASK_BD_INT
-			    : 0);
-      /*
-       * Don't set the READY flag till the
-       * whole packet has been readied.
-       */
-      if (firstBd != NULL) {
-	status |= (uint32)SDMA_BD_MASK_READY;
-      }
-      else {
-	firstBd = thisBd;
-      }
-
-      data_ptr = mtod(m, void *);
-      data_len = (uint32)m->m_len;
-      sc->txMbuf[sc->txBdHead] = m;
-      /* go to next part in chain */
-      l = m;
-      m = m->m_next;
-
-      thisBd->DataPtr[0] = (uint32)data_ptr;
-      thisBd->Status     = (status
-			    |((uint32)SDMA_DRD_MASK_LENGTH & data_len));
-
-      nAdded++;
-      if(++(sc->txBdHead) == sc->txBdCount) {
-        sc->txBdHead = 0;
-      }
-    }
-    /*
-     * Set the transmit buffer status.
-     * Break out of the loop if this mbuf is the last in the frame.
-     */
-    if(m == NULL) {
-      if(nAdded) {
-        firstBd->Status     |= SDMA_BD_MASK_READY;
-	SDMA_TASK_ENABLE(SDMA_TCR, txTaskId);
-        sc->txBdActiveCount += nAdded;
-      }
-      break;
-    }
-  } /* end of for(;;) */
+  ++self->txInterrupts;
+  mpc5200_fec_send_event(self->txDaemonTid);
+  SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend, FEC_XMIT_TASK_NO);
+  bestcomm_glue_irq_disable(FEC_XMIT_TASK_NO);
 }
 
-
-/*
- * Driver transmit daemon
- */
-void mpc5200_fec_txDaemon(void *arg)
-  {
-  struct mpc5200_enet_struct *sc = (struct mpc5200_enet_struct *)arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
-  struct mbuf *m;
-  rtems_event_set events;
-
-  for(;;) {
-   /*
-    * Wait for packet
-    */
-    bestcomm_glue_irq_enable(FEC_XMIT_TASK_NO);
-    rtems_bsdnet_event_receive(START_TRANSMIT_EVENT|INTERRUPT_EVENT,
-			       RTEMS_EVENT_ANY | RTEMS_WAIT,
-			       RTEMS_NO_TIMEOUT,
-			       &events);
-
-    /*
-     * Send packets till queue is empty
-     */
-    for(;;)
-      {
-
-      /*
-       * Get the next mbuf chain to transmit.
-       */
-      IF_DEQUEUE(&ifp->if_snd, m);
-
-      if (!m)
-        break;
-
-      mpc5200_fec_sendpacket(ifp, m);
-
-      }
-
-    ifp->if_flags &= ~IFF_OACTIVE;
-
-    }
-
-  }
-
-
-/*
- * reader task
- */
-static void mpc5200_fec_rxDaemon(void *arg){
-  struct mpc5200_enet_struct *sc = (struct mpc5200_enet_struct *)arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
-  struct mbuf *m;
-  struct ether_header *eh;
-  int rxBdIndex;
-  uint32_t status;
-  size_t size;
-  rtems_event_set events;
-  uint16    len = 1;
-  TaskBD1_t *bd;
-  void	    *dptr;
-  TaskBD1_t   *bdRing = (TaskBD1_t *)TaskGetBDRing( rxTaskId );;
-
-  /*
-   * Input packet handling loop
-   */
-  rxBdIndex = 0;
-
-  for (;;) {
-    /*
-     * Clear old events
-     */
-    SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend,FEC_RECV_TASK_NO);
-    /*
-     * Get the first BD pointer and its length.
-     */
-    bd     = bdRing + rxBdIndex;
-    status = bd->Status;
-    len    = (uint16)GET_BD_LENGTH( bd );
-
-    /*
-     * Loop through BDs until we find an empty one. This indicates that
-     * the SmartDMA is still using it.
-     */
-    while( !(status & SDMA_BD_MASK_READY) ) {
-
-      /*
-       * Remember the data pointer from this transfer.
-       */
-      dptr = (void *)bd->DataPtr[0];
-      m    = sc->rxMbuf[rxBdIndex];
-      m->m_len = m->m_pkthdr.len = (len
-				    - sizeof(uint32_t)
-				    - sizeof(struct ether_header));
-      eh = mtod(m, struct ether_header *);
-      m->m_data += sizeof(struct ether_header);
-      ether_input(ifp, eh, m);
-
-      /*
-       * Done w/ the BD. Clean it.
-       */
-      sc->rxMbuf[rxBdIndex] = NULL;
-
-      /*
-       * Add a new buffer to the ring.
-       */
-      MGETHDR (m, M_WAIT, MT_DATA);
-      MCLGET (m, M_WAIT);
-      m->m_pkthdr.rcvif = ifp;
-      size = ETHER_MAX_LEN;
-
-      sc->rxMbuf[rxBdIndex] = m;
-      bd->DataPtr[0] = (uint32)mtod(m, void *);
-      bd->Status = ( (  (uint32)SDMA_DRD_MASK_LENGTH & (uint32)size)
-		     | ((uint32)SDMA_BD_MASK_READY));
-
-      /*
-       * advance to next BD
-       */
-      if (++rxBdIndex >= sc->rxBdCount) {
-	rxBdIndex = 0;
-      }
-      /*
-       * Get next BD pointer and its length.
-       */
-      bd     = bdRing + rxBdIndex;
-      status = bd->Status;
-      len    = (uint16)GET_BD_LENGTH( bd );
-    }
-    /*
-     * Unmask RXF (Full frame received) event
-     */
-    bestcomm_glue_irq_enable(FEC_RECV_TASK_NO);
-
-    rtems_bsdnet_event_receive (INTERRUPT_EVENT | FATAL_INT_EVENT,
-				RTEMS_WAIT | RTEMS_EVENT_ANY,
-				RTEMS_NO_TIMEOUT, &events);
-    if (events & FATAL_INT_EVENT) {
-      /*
-       * fatal interrupt ocurred, so reinit fec and restart bestcomm tasks
-       */
-      mpc5200_fec_restart(sc);
-      rxBdIndex = 0;
-    }
-  }
+static void mpc5200_fec_init_mib(mpc5200_fec_context *self)
+{
+  memset(&mpc5200.RES [0], 0, 0x2e4);
+  mpc5200.mib_control = 0x40000000;
 }
-
 
 /*
  * Function:	mpc5200_fec_initialize_hardware
@@ -1068,13 +574,17 @@ static void mpc5200_fec_rxDaemon(void *arg){
  * Notes:
  *
  */
-static void mpc5200_fec_initialize_hardware(struct mpc5200_enet_struct *sc)
-  {
+static void mpc5200_fec_initialize_hardware(mpc5200_fec_context *self)
+{
+  /* We want at most 2.5MHz */
+  uint32_t div = 2 * 2500000;
+  uint32_t mii_speed = (IPB_CLOCK + div - 1) / div;
 
  /*
   * Reset mpc5200 FEC
   */
-  mpc5200_fec_reset(sc);
+  mpc5200_fec_reset(self);
+  mpc5200_fec_init_mib(self);
 
  /*
   * Clear FEC-Lite interrupt event register (IEVENT)
@@ -1102,10 +612,10 @@ static void mpc5200_fec_initialize_hardware(struct mpc5200_enet_struct *sc)
 
 
  /*
-  * Set MII_SPEED = (1/(mii_speed * 2)) * System Clock(33Mhz)
+  * Set MII_SPEED = IPB clock / (2 * mii_speed))
   * and do not drop the Preamble.
   */
-  mpc5200.mii_speed = (7 << 1); /* ipb_clk = 33 MHz */
+  mpc5200.mii_speed = mii_speed << 1;
 
  /*
   * Set Opcode/Pause Duration Register
@@ -1135,7 +645,7 @@ static void mpc5200_fec_initialize_hardware(struct mpc5200_enet_struct *sc)
   * Set individual address filter for unicast address
   * and set physical address registers.
   */
-  mpc5200_eth_addr_filter_set(sc);
+  mpc5200_eth_addr_filter_set(self);
 
  /*
   * Set multicast address filter
@@ -1147,7 +657,7 @@ static void mpc5200_fec_initialize_hardware(struct mpc5200_enet_struct *sc)
   * enable CRC in finite state machine register
   */
   mpc5200.xmit_fsm = FEC_FSM_CRC | FEC_FSM_ENFSM;
-  }
+}
 
  /*
   * Initialize PHY(LXT971A):
@@ -1174,16 +684,18 @@ static void mpc5200_fec_initialize_hardware(struct mpc5200_enet_struct *sc)
   * Notes:
   *
   */
-static void mpc5200_fec_initialize_phy(struct mpc5200_enet_struct *sc)
-  {
-  int            timeout;
-  unsigned short phyAddr = 0;
-
+static void mpc5200_fec_initialize_phy(mpc5200_fec_context *self)
+{
+  if (self->phyInitialized) {
+    return;
+  } else {
+    self->phyInitialized = true;
+  }
 
  /*
   * Reset PHY, then delay 300ns
   */
-  mpc5200_eth_mii_write(sc, phyAddr, 0x0, 0x8000);
+  mpc5200_eth_mii_write(self->phyAddr, self, 0x0, 0x8000);
 
   rtems_task_wake_after(2);
 
@@ -1192,18 +704,19 @@ static void mpc5200_fec_initialize_phy(struct mpc5200_enet_struct *sc)
  /*
   * Set the auto-negotiation advertisement register bits
   */
-  mpc5200_eth_mii_write(sc, phyAddr, 0x4, 0x01e1);
+  mpc5200_eth_mii_write(self->phyAddr, self, 0x4, 0x01e1);
 
  /*
   * Set MDIO bit 0.12 = 1(&& bit 0.9=1?) to enable auto-negotiation
   */
-  mpc5200_eth_mii_write(sc, phyAddr, 0x0, 0x1200);
+  mpc5200_eth_mii_write(self->phyAddr, self, 0x0, 0x1200);
 
  /*
   * Wait for AN completion
   */
-  timeout = 0x100;
 #if 0
+  int timeout = 0x100;
+  uint32_t phyStatus;
   do
     {
 
@@ -1218,11 +731,11 @@ static void mpc5200_fec_initialize_phy(struct mpc5200_enet_struct *sc)
 
       }
 
-    if(mpc5200_eth_mii_read(sc, phyAddr, 0x1, &phyStatus) != true)
+    if(mpc5200_eth_mii_read(self->phyAddr, self, 0x1, &phyStatus) != true)
       {
 
 #if defined(ETH_DEBUG)
-      printf ("MPC5200FEC PHY auto neg failed: 0x%04x." "\r\n", phyStatus);
+      printf ("MPC5200FEC PHY auto neg failed: 0x%04" PRIx32 ".\r\n", phyStatus);
 #endif
 
 	  return;
@@ -1242,29 +755,45 @@ static void mpc5200_fec_initialize_phy(struct mpc5200_enet_struct *sc)
 
 #if defined(ETH_DEBUG)
   int i;
-  unsigned short phyStatus;
+  uint32_t phyStatus;
  /*
   * Print PHY registers after initialization.
   */
   for(i = 0; i < 9; i++)
     {
 
-	mpc5200_eth_mii_read(sc, phyAddr, i, &phyStatus);
-	printf ("Mii reg %d: 0x%04x" "\r\n", i, phyStatus);
+	mpc5200_eth_mii_read(self->phyAddr, self, i, &phyStatus);
+	printf ("Mii reg %d: 0x%04" PRIx32 "\r\n", i, phyStatus);
 
 	}
 
   for(i = 16; i < 21; i++)
     {
 
-    mpc5200_eth_mii_read(sc, phyAddr, i, &phyStatus);
-    printf ("Mii reg %d: 0x%04x" "\r\n", i, phyStatus);
+    mpc5200_eth_mii_read(self->phyAddr, self, i, &phyStatus);
+    printf ("Mii reg %d: 0x%04" PRIx32 "\r\n", i, phyStatus);
 
     }
 #endif	/* ETH_DEBUG */
 
   }
 
+static void mpc5200_fec_restart(mpc5200_fec_context *self, rtems_id otherDaemon)
+{
+  if (self->state == FEC_STATE_RESTART_1) {
+    mpc5200_fec_initialize_hardware(self);
+    mpc5200_fec_initialize_phy(self);
+    mpc5200_fec_start_dma_and_controller();
+    self->state = FEC_STATE_NORMAL;
+  } else {
+    self->state = FEC_STATE_RESTART_1;
+  }
+
+  mpc5200_fec_send_event(otherDaemon);
+  while (self->state != FEC_STATE_NORMAL) {
+    mpc5200_fec_wait_for_event();
+  }
+}
 
 /*
  * Send packet (caller provides header).
@@ -1272,158 +801,452 @@ static void mpc5200_fec_initialize_phy(struct mpc5200_enet_struct *sc)
 static void mpc5200_fec_tx_start(struct ifnet *ifp)
   {
 
-  struct mpc5200_enet_struct *sc = ifp->if_softc;
+  mpc5200_fec_context *self = ifp->if_softc;
 
   ifp->if_flags |= IFF_OACTIVE;
 
-  rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+  mpc5200_fec_send_event(self->txDaemonTid);
 
   }
 
-
-/*
- * set up sdma tasks for ethernet
- */
-static void mpc5200_sdma_task_setup(struct mpc5200_enet_struct *sc) {
-  TaskSetupParamSet_t	rxParam;	/* RX task setup parameters	*/
-  TaskSetupParamSet_t	txParam;	/* TX task setup parameters	*/
-
-  /*
-   * Setup the SDMA RX task.
-   */
-  rxParam.NumBD        = sc->rxBdCount;
-  rxParam.Size.MaxBuf  = ETHER_MAX_LEN;
-  rxParam.Initiator    = 0;
-  rxParam.StartAddrSrc = (uint32)&(mpc5200.rfifo_data);
-  rxParam.IncrSrc      = 0;
-  rxParam.SzSrc	       = sizeof(uint32_t);
-  rxParam.StartAddrDst = (uint32)NULL;
-  rxParam.IncrDst      = sizeof(uint32_t);
-  rxParam.SzDst	       = sizeof(uint32_t);
-  rxTaskId	       = TaskSetup(TASK_FEC_RX,&rxParam );
-
-  /*
-   * Setup the TX task.
-   */
-  txParam.NumBD        = sc->txBdCount;
-  txParam.Size.MaxBuf  = ETHER_MAX_LEN;
-  txParam.Initiator    = 0;
-  txParam.StartAddrSrc = (uint32)NULL;
-  txParam.IncrSrc      = sizeof(uint32_t);
-  txParam.SzSrc        = sizeof(uint32_t);
-  txParam.StartAddrDst = (uint32)&(mpc5200.tfifo_data);
-  txParam.IncrDst      = 0;
-  txParam.SzDst        = sizeof(uint32_t);
-
-  txTaskId             = TaskSetup( TASK_FEC_TX, &txParam );
-
-}
-
-void mpc5200_fec_irq_on(const rtems_irq_connect_data* ptr)
+static TaskBD1_t *mpc5200_fec_init_tx_dma(int bdCount, struct mbuf **mbufs)
 {
-  mpc5200.imask = FEC_INTR_MASK_USED;
+  TaskSetupParamSet_t param = {
+    .NumBD = bdCount,
+    .Size = {
+      .MaxBuf = ETHER_MAX_LEN
+    },
+    .Initiator = 0,
+    .StartAddrSrc = 0,
+    .IncrSrc = sizeof(uint32_t),
+    .SzSrc = sizeof(uint32_t),
+    .StartAddrDst = (uint32) &mpc5200.tfifo_data,
+    .IncrDst = 0,
+    .SzDst = sizeof(uint32_t)
+  };
+  int bdIndex = 0;
+
+  TaskSetup(FEC_XMIT_TASK_NO, &param);
+
+  for (bdIndex = 0; bdIndex < bdCount; ++bdIndex) {
+    mbufs [bdIndex] = NULL;
+  }
+
+  return (TaskBD1_t *) TaskGetBDRing(FEC_XMIT_TASK_NO);
 }
 
-
-int mpc5200_fec_irq_isOn(const rtems_irq_connect_data* ptr)
+#if 0
+static void mpc5200_fec_requeue_and_discard_tx_frames(
+  int bdIndex,
+  int bdCount,
+  TaskBD1_t *bdRing,
+  struct mbuf **mbufs
+)
 {
-  return mpc5200.imask != 0;
+  int bdStop = bdIndex;
+  struct mbuf *previous = NULL;
+
+  do {
+    struct mbuf *current = NULL;
+    uint32 status = 0;
+    TaskBD1_t *bd = NULL;
+
+    if (bdIndex > 1) {
+      --bdIndex;
+    } else {
+      bdIndex = bdCount - 1;
+    }
+
+    current = mbufs [bdIndex];
+    mbufs [bdIndex] = NULL;
+
+    status = bdRing [bdIndex].Status;
+    bdRing [bdIndex].Status = 0;
+
+    if (current != NULL) {
+      if ((status & FEC_BD_LAST) != 0) {
+        if (previous != NULL) {
+          IF_PREPEND(&ifp->if_snd, previous);
+        }
+      }
+    } else {
+      break;
+    }
+
+    previous = current;
+  } while (bdIndex != bdStop);
 }
+#endif
 
-
-void mpc5200_fec_irq_off(const rtems_irq_connect_data* ptr)
+static void mpc5200_fec_discard_tx_frames(
+  int bdCount,
+  struct mbuf **mbufs
+)
 {
-  mpc5200.imask = 0;
+  int bdIndex = 0;
+
+  for (bdIndex = 0; bdIndex < bdCount; ++bdIndex) {
+    struct mbuf *m = mbufs [bdIndex];
+
+    if (m != NULL) {
+      mbufs [bdIndex] = NULL;
+      m_free(m);
+    }
+  }
 }
 
+static void mpc5200_fec_reset_tx_dma(
+  int bdCount,
+  TaskBD1_t *bdRing,
+  struct mbuf **mbufs,
+  struct mbuf *m
+)
+{
+  TaskStop(FEC_XMIT_TASK_NO);
+  TaskBDReset(FEC_XMIT_TASK_NO);
+  mpc5200_fec_discard_tx_frames(bdCount, mbufs);
+  while (m != NULL) {
+    m = m_free(m);
+  }
+}
+
+static struct mbuf *mpc5200_fec_next_fragment(
+  struct ifnet *ifp,
+  struct mbuf *m,
+  bool *isFirst
+)
+{
+  struct mbuf *n = NULL;
+
+  *isFirst = false;
+
+  while (true) {
+    if (m == NULL) {
+      IF_DEQUEUE(&ifp->if_snd, m);
+
+      if (m != NULL) {
+        *isFirst = true;
+      } else {
+        ifp->if_flags &= ~IFF_OACTIVE;
+
+        return NULL;
+      }
+    }
+
+    if (m->m_len > 0) {
+      break;
+    } else {
+      m = m_free(m);
+    }
+  }
+
+  n = m->m_next;
+  while (n != NULL && n->m_len <= 0) {
+    n = m_free(n);
+  }
+  m->m_next = n;
+
+  return m;
+}
+
+static bool mpc5200_fec_transmit(
+  struct ifnet *ifp,
+  int bdCount,
+  TaskBD1_t *bdRing,
+  struct mbuf **mbufs,
+  int *bdIndexPtr,
+  struct mbuf **mPtr,
+  TaskBD1_t **firstPtr
+)
+{
+  bool bdShortage = false;
+  int bdIndex = *bdIndexPtr;
+  struct mbuf *m = *mPtr;
+  TaskBD1_t *first = *firstPtr;
+
+  while (true) {
+    TaskBD1_t *bd = &bdRing [bdIndex];
+
+    if (bd->Status == 0) {
+      struct mbuf *done = mbufs [bdIndex];
+      bool isFirst = false;
+
+      if (done != NULL) {
+        m_free(done);
+        mbufs [bdIndex] = NULL;
+      }
+
+      m = mpc5200_fec_next_fragment(ifp, m, &isFirst);
+      if (m != NULL) {
+        uint32 status = (uint32) m->m_len;
+
+        mbufs [bdIndex] = m;
+
+        rtems_cache_flush_multiple_data_lines(mtod(m, void *), m->m_len);
+
+        if (isFirst) {
+          first = bd;
+        } else {
+          status |= FEC_BD_READY;
+        }
+
+        bd->DataPtr [0] = mtod(m, uint32);
+
+        if (m->m_next != NULL) {
+          bd->Status = status;
+        } else {
+          bd->Status = status | FEC_BD_INT | FEC_BD_LAST;
+          first->Status |= FEC_BD_READY;
+          SDMA_TASK_ENABLE(SDMA_TCR, FEC_XMIT_TASK_NO);
+        }
+
+        m = m->m_next;
+      } else {
+        break;
+      }
+    } else {
+      bdShortage = true;
+      break;
+    }
+
+    if (bdIndex < bdCount - 1) {
+      ++bdIndex;
+    } else {
+      bdIndex = 0;
+    }
+  }
+
+  *bdIndexPtr = bdIndex;
+  *mPtr = m;
+  *firstPtr = first;
+
+  return bdShortage;
+}
+
+static void mpc5200_fec_tx_daemon(void *arg)
+{
+  mpc5200_fec_context *self = arg;
+  struct ifnet *ifp = &self->arpcom.ac_if;
+  int bdIndex = 0;
+  int bdCount = self->txBdCount;
+  struct mbuf **mbufs = &self->txMbuf [0];
+  struct mbuf *m = NULL;
+  TaskBD1_t *bdRing = mpc5200_fec_init_tx_dma(bdCount, mbufs);
+  TaskBD1_t *first = NULL;
+  bool bdShortage = false;
+
+  while (true) {
+    if (bdShortage) {
+      bestcomm_glue_irq_enable(FEC_XMIT_TASK_NO);
+    }
+    mpc5200_fec_wait_for_event();
+
+    if (self->state != FEC_STATE_NORMAL) {
+      mpc5200_fec_reset_tx_dma(bdCount, bdRing, mbufs, m);
+      mpc5200_fec_restart(self, self->rxDaemonTid);
+      bdIndex = 0;
+      m = NULL;
+      first = NULL;
+    }
+
+    bdShortage = mpc5200_fec_transmit(
+      ifp,
+      bdCount,
+      bdRing,
+      mbufs,
+      &bdIndex,
+      &m,
+      &first
+    );
+  }
+}
+
+static struct mbuf *mpc5200_fec_add_mbuf(struct ifnet *ifp, TaskBD1_t *bd)
+{
+  struct mbuf *m = NULL;
+
+  MGETHDR (m, M_WAIT, MT_DATA);
+  MCLGET (m, M_WAIT);
+  m->m_pkthdr.rcvif = ifp;
+
+  /* XXX: The dcbi operation does not work properly */
+  rtems_cache_flush_multiple_data_lines(mtod(m, void *), ETHER_MAX_LEN);
+
+  bd->DataPtr [0] = mtod(m, uint32);
+  bd->Status = ETHER_MAX_LEN | FEC_BD_READY;
+
+  return m;
+}
+
+static TaskBD1_t *mpc5200_fec_init_rx_dma(
+  struct ifnet *ifp,
+  int bdCount,
+  struct mbuf **mbufs
+)
+{
+  TaskSetupParamSet_t param = {
+    .NumBD = bdCount,
+    .Size = {
+      .MaxBuf = ETHER_MAX_LEN
+    },
+    .Initiator = 0,
+    .StartAddrSrc = (uint32) &mpc5200.rfifo_data,
+    .IncrSrc = 0,
+    .SzSrc = sizeof(uint32_t),
+    .StartAddrDst = 0,
+    .IncrDst = sizeof(uint32_t),
+    .SzDst = sizeof(uint32_t)
+  };
+  TaskBD1_t *bdRing = NULL;
+  int bdIndex = 0;
+
+  TaskSetup(FEC_RECV_TASK_NO, &param);
+  bdRing = (TaskBD1_t *) TaskGetBDRing(FEC_RECV_TASK_NO);
+
+  for (bdIndex = 0; bdIndex < bdCount; ++bdIndex) {
+    mbufs [bdIndex] = mpc5200_fec_add_mbuf(ifp, &bdRing [bdIndex]);
+  }
+
+  return bdRing;
+}
+
+static void mpc5200_fec_reset_rx_dma(int bdCount, TaskBD1_t *bdRing)
+{
+  int bdIndex = 0;
+
+  TaskStop(FEC_RECV_TASK_NO);
+  TaskBDReset(FEC_RECV_TASK_NO);
+
+  for (bdIndex = 0; bdIndex < bdCount; ++bdIndex) {
+    bdRing [bdIndex].Status = ETHER_MAX_LEN | FEC_BD_READY;
+  }
+}
+
+static int mpc5200_fec_ether_input(
+  struct ifnet *ifp,
+  int bdIndex,
+  int bdCount,
+  TaskBD1_t *bdRing,
+  struct mbuf **mbufs
+)
+{
+  while (true) {
+    TaskBD1_t *bd = &bdRing [bdIndex];
+    struct mbuf *m = mbufs [bdIndex];
+    uint32 status = 0;
+    int len = 0;
+    struct ether_header *eh = NULL;
+
+    SDMA_CLEAR_IEVENT(&mpc5200.sdma.IntPend, FEC_RECV_TASK_NO);
+    status = bd->Status;
+
+    if ((status & FEC_BD_READY) != 0) {
+      break;
+    }
+
+    eh = mtod(m, struct ether_header *);
+
+    len = (status & 0xffff) - ETHER_HDR_LEN - ETHER_CRC_LEN;
+    m->m_len = len;
+    m->m_pkthdr.len = len;
+    m->m_data = mtod(m, char *) + ETHER_HDR_LEN;
+
+    ether_input(ifp, eh, m);
+
+    mbufs [bdIndex] = mpc5200_fec_add_mbuf(ifp, bd);
+
+    if (bdIndex < bdCount - 1) {
+      ++bdIndex;
+    } else {
+      bdIndex = 0;
+    }
+  }
+
+  return bdIndex;
+}
+
+static void mpc5200_fec_rx_daemon(void *arg)
+{
+  mpc5200_fec_context *self = arg;
+  struct ifnet *ifp = &self->arpcom.ac_if;
+  int bdIndex = 0;
+  int bdCount = self->rxBdCount;
+  struct mbuf **mbufs = &self->rxMbuf [0];
+  TaskBD1_t *bdRing = mpc5200_fec_init_rx_dma(ifp, bdCount, mbufs);
+
+  while (true) {
+    bestcomm_glue_irq_enable(FEC_RECV_TASK_NO);
+    mpc5200_fec_wait_for_event();
+
+    bdIndex = mpc5200_fec_ether_input(ifp, bdIndex, bdCount, bdRing, mbufs);
+
+    if (self->state != FEC_STATE_NORMAL) {
+      mpc5200_fec_reset_rx_dma(bdCount, bdRing);
+      mpc5200_fec_restart(self, self->txDaemonTid);
+      bdIndex = 0;
+    }
+  }
+}
 
 /*
  * Initialize and start the device
  */
 static void mpc5200_fec_init(void *arg)
 {
-  struct mpc5200_enet_struct *sc = (struct mpc5200_enet_struct *)arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
-  rtems_irq_connect_data fec_irq_data = {
-    BSP_SIU_IRQ_ETH,
-    mpc5200_fec_irq_handler, /* rtems_irq_hdl           */
-    (rtems_irq_hdl_param)sc, /* (rtems_irq_hdl_param)   */
-    mpc5200_fec_irq_on,	     /* (rtems_irq_enable)      */
-    mpc5200_fec_irq_off,     /* (rtems_irq_disable)     */
-    mpc5200_fec_irq_isOn     /* (rtems_irq_is_enabled)  */
-  };
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  mpc5200_fec_context *self = (mpc5200_fec_context *)arg;
+  struct ifnet *ifp = &self->arpcom.ac_if;
 
-
-  if(sc->txDaemonTid == 0)
+  if(self->txDaemonTid == 0)
     {
+      size_t rxMbufTableSize = self->rxBdCount * sizeof(*self->rxMbuf);
+      size_t txMbufTableSize = self->txBdCount * sizeof(*self->txMbuf);
+
       /*
        * Allocate a set of mbuf pointers
        */
-      sc->rxMbuf =
-	malloc(sc->rxBdCount * sizeof *sc->rxMbuf, M_MBUF, M_NOWAIT);
-      sc->txMbuf =
-	malloc(sc->txBdCount * sizeof *sc->txMbuf, M_MBUF, M_NOWAIT);
+      self->rxMbuf = malloc(rxMbufTableSize, M_MBUF, M_NOWAIT);
+      self->txMbuf = malloc(txMbufTableSize, M_MBUF, M_NOWAIT);
 
-      if(!sc->rxMbuf || !sc->txMbuf)
+      if(!self->rxMbuf || !self->txMbuf)
 	rtems_panic ("No memory for mbuf pointers");
 
+      /*
+       * DMA setup
+       */
       bestcomm_glue_init();
-
-      mpc5200_sdma_task_setup(sc);
+      mpc5200.sdma.ipr [0] = 4;	/* always initiator	*/
+      mpc5200.sdma.ipr [3] = 6;	/* eth rx initiator	*/
+      mpc5200.sdma.ipr [4] = 5;	/* eth tx initiator	*/
 
       /*
        * Set up interrupts
        */
       bestcomm_glue_irq_install(FEC_RECV_TASK_NO,
 				mpc5200_smartcomm_rx_irq_handler,
-				NULL);
+				self);
       bestcomm_glue_irq_install(FEC_XMIT_TASK_NO,
 				mpc5200_smartcomm_tx_irq_handler,
-				NULL);
-      if(!BSP_install_rtems_irq_handler (&fec_irq_data)) {
+				self);
+      sc = rtems_interrupt_handler_install(
+        BSP_SIU_IRQ_ETH,
+        "FEC",
+        RTEMS_INTERRUPT_UNIQUE,
+        mpc5200_fec_irq_handler,
+        self
+      );
+      if(sc != RTEMS_SUCCESSFUL) {
 	rtems_panic ("Can't attach MPC5x00 FEX interrupt handler\n");
       }
-
-      /* mpc5200_fec_tx_bd_init(sc); */
-      mpc5200_fec_rx_bd_init(sc);
-
-      /*
-       * reset and Set up mpc5200 FEC hardware
-       */
-      mpc5200_fec_initialize_hardware(sc);
-      /*
-       * Set up the phy
-       */
-      mpc5200_fec_initialize_phy(sc);
-      /*
-       * Set priority of different initiators
-       */
-      mpc5200.sdma.ipr [0] = 7;	/* always initiator	*/
-      mpc5200.sdma.ipr [3] = 6;	/* eth rx initiator	*/
-      mpc5200.sdma.ipr [4] = 5;	/* eth tx initiator	*/
 
       /*
        * Start driver tasks
        */
-      sc->txDaemonTid = rtems_bsdnet_newproc("FEtx", 4096, mpc5200_fec_txDaemon, sc);
-      sc->rxDaemonTid = rtems_bsdnet_newproc("FErx", 4096, mpc5200_fec_rxDaemon, sc);
-      /*
-       * Clear SmartDMA task interrupt pending bits.
-       */
-      TaskIntClear( rxTaskId );
-
-      /*
-       * Enable the SmartDMA receive task.
-       */
-      TaskStart( rxTaskId, 1, rxTaskId, 1 );
-      TaskStart( txTaskId, 1, txTaskId, 1 );
-      /*
-       * Enable FEC-Lite controller
-       */
-      mpc5200.ecntrl |= (FEC_ECNTRL_OE | FEC_ECNTRL_EN);
-
-
+      self->txDaemonTid = rtems_bsdnet_newproc("FEtx", 4096, mpc5200_fec_tx_daemon, self);
+      self->rxDaemonTid = rtems_bsdnet_newproc("FErx", 4096, mpc5200_fec_rx_daemon, self);
     }
+
+  mpc5200_fec_request_restart(self);
 
   /*
    * Set flags appropriately
@@ -1439,123 +1262,41 @@ static void mpc5200_fec_init(void *arg)
   ifp->if_flags |= IFF_RUNNING;
 }
 
-
-static void enet_stats (struct mpc5200_enet_struct *sc)
+static void enet_stats (mpc5200_fec_context *self)
 {
-  printf ("      Rx Interrupts:%-8lu", sc->rxInterrupts);
-  printf ("       Not First:%-8lu", sc->rxNotFirst);
-  printf ("        Not Last:%-8lu\n", sc->rxNotLast);
-  printf ("              Giant:%-8lu", sc->rxGiant);
-  printf ("       Non-octet:%-8lu\n", sc->rxNonOctet);
-  printf ("            Bad CRC:%-8lu", sc->rxBadCRC);
-  printf ("         Overrun:%-8lu", sc->rxOverrun);
-  printf ("       Collision:%-8lu\n", sc->rxCollision);
+  if (self->phyAddr >= 0) {
+    struct ifnet *ifp = &self->arpcom.ac_if;
+    int media = IFM_MAKEWORD(0, 0, 0, self->phyAddr);
+    int rv = (*ifp->if_ioctl)(ifp, SIOCGIFMEDIA, (caddr_t) &media);
 
-  printf ("      Tx Interrupts:%-8lu", sc->txInterrupts);
-  printf ("        Deferred:%-8lu", sc->txDeferred);
-  printf ("  Late Collision:%-8lu\n", sc->txLateCollision);
-  printf ("   Retransmit Limit:%-8lu", sc->txRetryLimit);
-  printf ("        Underrun:%-8lu", sc->txUnderrun);
-  printf ("      Misaligned:%-8lu\n", sc->txMisaligned);
+    if (rv == 0) {
+      rtems_ifmedia2str(media, NULL, 0);
+      printf ("\n");
+    } else {
+      printf ("PHY communication error\n");
+    }
+  }
+  printf ("       Rx Interrupts:%-8lu", self->rxInterrupts);
+  printf ("        Rx Not First:%-8lu", self->rxNotFirst);
+  printf ("         Rx Not Last:%-8lu\n", self->rxNotLast);
+  printf ("            Rx Giant:%-8lu", self->rxGiant);
+  printf ("        Rx Non-octet:%-8lu", self->rxNonOctet);
+  printf ("          Rx Bad CRC:%-8lu\n", self->rxBadCRC);
+  printf ("       Rx FIFO Error:%-8lu", self->rxFIFOError);
+  printf ("        Rx Collision:%-8lu", self->rxCollision);
 
-}
-
-/*
- * restart the driver, reinit the fec
- * this function is responsible to reinitialize the FEC in case a fatal
- * error has ocurred. This is needed, wen a RxFIFO Overrun or a TxFIFO underrun
- * has ocurred. In these cases, the FEC is automatically disabled, and
- * both FIFOs must be reset and the BestComm tasks must be restarted
- *
- * Note: the daemon tasks will continue to run
- * (in fact this function will be called in the context of the rx daemon task)
- */
-#define NEW_SDMA_SETUP
-
-static void mpc5200_fec_restart(struct mpc5200_enet_struct *sc)
-{
-  /*
-   * FIXME: bring Tx Daemon into idle state
-   */
-#ifdef NEW_SDMA_SETUP
-  /*
-   * cleanup remaining receive mbufs
-   */
-  mpc5200_fec_rx_bd_cleanup(sc);
-#endif
-  /*
-   * Stop SDMA tasks
-   */
-  TaskStop( rxTaskId);
-  TaskStop( txTaskId);
-  /*
-   * FIXME: wait, until Tx Daemon is in idle state
-   */
-
-  /*
-   * Disable transmit / receive interrupts
-   */
-  bestcomm_glue_irq_disable(FEC_XMIT_TASK_NO);
-  bestcomm_glue_irq_disable(FEC_RECV_TASK_NO);
-#ifdef NEW_SDMA_SETUP
-  /*
-   * recycle pending tx buffers
-   * FIXME: try to extract pending Tx buffers
-   */
-#if 0
-  mpc5200_fec_tx_bd_requeue(sc);
-#else
-  mpc5200_fec_retire_tbd(sc,true);
-#endif
-#endif
-  /*
-   * re-initialize the FEC hardware
-   */
-  mpc5200_fec_initialize_hardware(sc);
-
-#ifdef NEW_SDMA_SETUP
-  /*
-   * completely reinitialize Bestcomm tasks
-   */
-  mpc5200_sdma_task_setup(sc);
-
-  /*
-   * reinit receive mbufs
-   */
-  mpc5200_fec_rx_bd_init(sc);
-#endif
-  /*
-   * Clear SmartDMA task interrupt pending bits.
-   */
-  TaskIntClear( rxTaskId );
-
-  /*
-   * Enable the SmartDMA receive/transmit task.
-   */
-  TaskStart( rxTaskId, 1, rxTaskId, 1 );
-  TaskStart( txTaskId, 1, txTaskId, 1 );
-  /*
-   * reenable rx/tx interrupts
-   */
-  bestcomm_glue_irq_enable(FEC_XMIT_TASK_NO);
-  bestcomm_glue_irq_enable(FEC_RECV_TASK_NO);
-  /*
-   * (re-)init fec hardware
-   */
-  mpc5200_fec_initialize_hardware(sc);
-  /*
-   * reenable fec FIFO error interrupts
-   */
-  mpc5200.imask = FEC_INTR_MASK_USED;
-  /*
-   * Enable FEC-Lite controller
-   */
-  mpc5200.ecntrl |= (FEC_ECNTRL_OE | FEC_ECNTRL_EN);
+  printf ("       Tx Interrupts:%-8lu\n", self->txInterrupts);
+  printf ("         Tx Deferred:%-8lu", self->txDeferred);
+  printf ("   Tx Late Collision:%-8lu", self->txLateCollision);
+  printf (" Tx Retransmit Limit:%-8lu\n", self->txRetryLimit);
+  printf ("         Tx Underrun:%-8lu", self->txUnderrun);
+  printf ("       Tx FIFO Error:%-8lu", self->txFIFOError);
+  printf ("       Tx Misaligned:%-8lu\n", self->txMisaligned);
 }
 
 int32_t mpc5200_fec_setMultiFilter(struct ifnet *ifp)
 {
-  /*struct mpc5200_enet_struct *sc = ifp->if_softc; */
+  /*mpc5200_fec_context *self = ifp->if_softc; */
   /* XXX anything to do? */
   return 0;
 }
@@ -1566,7 +1307,7 @@ int32_t mpc5200_fec_setMultiFilter(struct ifnet *ifp)
  */
 static int mpc5200_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
   {
-  struct mpc5200_enet_struct *sc = ifp->if_softc;
+  mpc5200_fec_context *self = ifp->if_softc;
   int error = 0;
 
   switch(command)
@@ -1583,8 +1324,8 @@ static int mpc5200_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_
     case SIOCDELMULTI: {
       struct ifreq* ifr = (struct ifreq*) data;
       error = (command == SIOCADDMULTI)
-                  ? ether_addmulti(ifr, &sc->arpcom)
-                  : ether_delmulti(ifr, &sc->arpcom);
+                  ? ether_addmulti(ifr, &self->arpcom)
+                  : ether_delmulti(ifr, &self->arpcom);
 
        if (error == ENETRESET) {
          if (ifp->if_flags & IFF_RUNNING)
@@ -1602,20 +1343,20 @@ static int mpc5200_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_
 
         case IFF_RUNNING:
 
-          mpc5200_fec_off(sc);
+          mpc5200_fec_off(self);
 
           break;
 
         case IFF_UP:
 
-          mpc5200_fec_init(sc);
+          mpc5200_fec_init(self);
 
           break;
 
         case IFF_UP | IFF_RUNNING:
 
-          mpc5200_fec_off(sc);
-          mpc5200_fec_init(sc);
+          mpc5200_fec_off(self);
+          mpc5200_fec_init(self);
 
           break;
 
@@ -1626,9 +1367,14 @@ static int mpc5200_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_
 
       break;
 
+    case SIOCGIFMEDIA:
+    case SIOCSIFMEDIA:
+      error = rtems_mii_ioctl(&self->mdio, self, command, (int *) data);
+      break;
+
     case SIO_RTEMS_SHOW_STATS:
 
-      enet_stats(sc);
+      enet_stats(self);
 
       break;
 
@@ -1653,7 +1399,7 @@ static int mpc5200_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_
  */
 int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
   {
-  struct mpc5200_enet_struct *sc;
+  mpc5200_fec_context *self;
   struct ifnet *ifp;
   int    mtu;
   int    unitNumber;
@@ -1676,8 +1422,8 @@ int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
 
     }
 
-  sc = &enet_driver[unitNumber - 1];
-  ifp = &sc->arpcom.ac_if;
+  self = &enet_driver[unitNumber - 1];
+  ifp = &self->arpcom.ac_if;
 
   if(ifp->if_softc != NULL)
     {
@@ -1686,6 +1432,9 @@ int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
     return 0;
 
     }
+
+  self->mdio.mdio_r = mpc5200_eth_mii_read;
+  self->mdio.mdio_w = mpc5200_eth_mii_write;
 
   /*
    * Process options
@@ -1726,7 +1475,7 @@ int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
     {
 
     /* Anything in the first three bytes indicates a non-zero entry, copy value */
-  	memcpy((void *)sc->arpcom.ac_enaddr, &nvram->enaddr, ETHER_ADDR_LEN);
+  	memcpy((void *)self->arpcom.ac_enaddr, &nvram->enaddr, ETHER_ADDR_LEN);
 
     }
   else
@@ -1734,7 +1483,7 @@ int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
       {
 
       /* There is no entry in NVRAM, but there is in the ifconfig struct, so use it. */
-      memcpy((void *)sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
+      memcpy((void *)self->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
       }
     else
       {
@@ -1749,7 +1498,7 @@ int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
   if(config->hardware_address)
     {
 
-    memcpy(sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
+    memcpy(self->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
 
     }
   else
@@ -1764,11 +1513,11 @@ int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
 
 #endif /* NVRAM_CONFIGURE != 1 */
 #ifdef HAS_UBOOT
-  if ((sc->arpcom.ac_enaddr[0] == 0) &&
-      (sc->arpcom.ac_enaddr[1] == 0) &&
-      (sc->arpcom.ac_enaddr[2] == 0)) {
+  if ((self->arpcom.ac_enaddr[0] == 0) &&
+      (self->arpcom.ac_enaddr[1] == 0) &&
+      (self->arpcom.ac_enaddr[2] == 0)) {
       memcpy(
-        (void *)sc->arpcom.ac_enaddr,
+        (void *)self->arpcom.ac_enaddr,
         bsp_uboot_board_info.bi_enetaddr,
         ETHER_ADDR_LEN
       );
@@ -1780,21 +1529,21 @@ int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
     mtu = ETHERMTU;
 
   if(config->rbuf_count)
-    sc->rxBdCount = config->rbuf_count;
+    self->rxBdCount = config->rbuf_count;
   else
-    sc->rxBdCount = RX_BUF_COUNT;
+    self->rxBdCount = RX_BUF_COUNT;
 
   if(config->xbuf_count)
-    sc->txBdCount = config->xbuf_count;
+    self->txBdCount = config->xbuf_count;
   else
-    sc->txBdCount = TX_BUF_COUNT * TX_BD_PER_BUF;
+    self->txBdCount = TX_BUF_COUNT;
 
-  sc->acceptBroadcast = !config->ignore_broadcast;
+  self->acceptBroadcast = !config->ignore_broadcast;
 
  /*
   * Set up network interface values
   */
-  ifp->if_softc   = sc;
+  ifp->if_softc   = self;
   ifp->if_unit    = unitNumber;
   ifp->if_name    = unitName;
   ifp->if_mtu     = mtu;
