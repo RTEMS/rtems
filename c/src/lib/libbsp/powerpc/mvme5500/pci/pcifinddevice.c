@@ -35,7 +35,7 @@ int BSP_pciFindDevicePrint(unsigned short vendorid, unsigned short deviceid,
 int pci_find_device( unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun )
 {
-  unsigned int d;
+  uint32_t d;
   unsigned short s;
   unsigned char bus,dev,fun,hd;
 

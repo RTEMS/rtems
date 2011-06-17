@@ -1,3 +1,16 @@
+2011-04-10      Kate Feng <feng@bnl.gov>
+
+	PR 1786/bsps
+	* Makefile.am: Add support for Altivec.
+	* startup/bspstart.c, Makefile.am: Use shared/startup/zerobss.c instead.
+	* make/custom/mvme5500.cfg: Change CPU_CFLAGS to
+	"-mcpu=7450 -mtune=7450 -Dmpc7455"
+	* irq/BSP_irq.c, pci/detect_host_bridge.c, pci.c, pcifinddevice.c:
+	Remove warnings.
+	* vme/VMEConfig.h, include/bsp.h: use VME shared IRQ handlers.
+	* network/if_100MHz/GT64260eth.c: Recycle the Rx mbuf if there
+	is any Rx error.
+
 2011-05-17	Till Straumann <strauman@slac.stanford.edu>
 
 	PR1797/bsps

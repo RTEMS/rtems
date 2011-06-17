@@ -1730,7 +1730,7 @@ static void wm_gmii_mediainit(struct wm_softc *sc)
   /* We have MII. */
   sc->sc_flags |= WM_F_HAS_MII;
 
-#if 1
+#if 0
   /* <skf> May 2009 : The value that should be programmed into IPGT is 10 */
   sc->sc_tipg = TIPG_IPGT(10)+TIPG_IPGR1(8)+TIPG_IPGR2(6);
 #else

@@ -56,8 +56,6 @@
 #include <rtems/score/wkspace.h>
 
 extern uint32_t probeMemoryEnd(void); /* from shared/startup/probeMemoryEnd.c */
-
-
 BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
 
 extern void _return_to_ppcbug(void);
@@ -70,12 +68,7 @@ extern void BSP_vme_config(void);
 
 extern unsigned char ReadConfVPD_buff(int offset);
 
-extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
-extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
-
 uint32_t bsp_clicks_per_usec;
-
-SPR_RW(SPRG1)
 
 typedef struct CmdLineRec_ {
     unsigned long  size;
@@ -131,25 +124,6 @@ void _BSP_Fatal_error(unsigned int v)
 {
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
   __asm__ __volatile ("sc");
-}
-
-void zero_bss(void)
-{
-  memset(
-    __SBSS_START__,
-    0,
-    ((unsigned) __SBSS_END__) - ((unsigned)__SBSS_START__)
-  );
-  memset(
-    __SBSS2_START__,
-    0,
-    ((unsigned) __SBSS2_END__) - ((unsigned)__SBSS2_START__)
-  );
-  memset(
-    __bss_start,
-    0,
-    ((unsigned) __rtems_end) - ((unsigned)__bss_start)
-  );
 }
 
 /* NOTE: we cannot simply malloc the commandline string;
@@ -293,6 +267,7 @@ void bsp_start( void )
   printk("-----------------------------------------\n");
 
   BSP_mem_size         =  probeMemoryEnd();
+
   /* TODO: calculate the BSP_bus_frequency using the REF_CLK bit
    *       of System Status  register
    */
@@ -301,7 +276,6 @@ void bsp_start( void )
   BSP_processor_frequency    = 1000000000;
   /* P94 : 7455 clocks the TB/DECR at 1/4 of the system bus clock frequency */
   BSP_time_base_divisor      = 4000;
-
 
   /* Maybe not setup yet becuase of the warning message */
   /* Allocate and set up the page table mappings
