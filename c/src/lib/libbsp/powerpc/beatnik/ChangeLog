@@ -1,3 +1,8 @@
+2011-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove "SUBDIRS = .".
+	Remove "all-local:".
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac: Use standard cache BSP options.

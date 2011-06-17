@@ -4,7 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-SUBDIRS         = .
 CLEANFILES      =
 DISTCLEANFILES  =
 noinst_PROGRAMS =
@@ -234,8 +233,6 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += network_support.rel \
     network_if_mve.rel network_if_gfe.rel network_if_em.rel
 endif
-
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST += README LICENSE ChangeLog
 
