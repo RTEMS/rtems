@@ -108,6 +108,7 @@
 	* irq/irq.c, network/if_1GHz/POSSIBLEBUG: Removed.
 
 2009-05-08 	Kate Feng <feng1@bnl.gov>
+
 	* include/bsp.h, start/start.S, startup/bspstart.c: 
 	added CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK in bsp.h.
 	removed BSP_INIT_STACK_SIZE in bsp.h -- it uses __stack defined
@@ -504,25 +505,26 @@
 
 2005-05-17      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * irq/GT64260Int.c, irq/irq.c, irq/irq.h: Modified to use rtems/irq.h.
+	* irq/GT64260Int.c, irq/irq.c, irq/irq.h: Modified to use rtems/irq.h.
 
 2005-05-12      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * README.VME, include/bsp.h, irq/irq.h, network/GT64260eth.c,
-        pci/detect_host_bridge.c, pci/gtpcireg.h, pci/pci.c, pci/pci.h,
-        pci/pci_interface.c, pci/pcifinddevice.c: 
-        Submitted by Kate Feng <feng1@bnl.gov> as RTEMS-MVME5500 BSP v1.1 release.
-        Modifications made to merge this release with the current tree.
+	* README.VME, include/bsp.h, irq/irq.h, network/GT64260eth.c,
+	pci/detect_host_bridge.c, pci/gtpcireg.h, pci/pci.c, pci/pci.h,
+	pci/pci_interface.c, pci/pcifinddevice.c: 
+	Submitted by Kate Feng <feng1@bnl.gov> as RTEMS-MVME5500 BSP
+	v1.1 release.  Modifications made to merge this release with
+	the current tree.
 
 2005-05-10      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * network/GT64260eth.c: Fixed warning. 
-        *  pci/pci.c, pci/pci.h: Modified to depend upon rtems/pci.h
+	* network/GT64260eth.c: Fixed warning. 
+	*  pci/pci.c, pci/pci.h: Modified to depend upon rtems/pci.h
 
 2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * pci/pci.c, pci/pci.h, startup/bspstart.c: Name change to support
-        common PCI interface
+	* pci/pci.c, pci/pci.h, startup/bspstart.c: Name change to support
+	common PCI interface
 
 2005-04-15	Joel Sherrill <joel@OARcorp.com>
 
@@ -532,13 +534,13 @@
 
 2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        PR 779/bsp
-        * irq/irq.c, irq/irq.h, irq/irq_init.c, network/GT64260eth.c: add
-        parameter to new exception interrupt handlers in powerpc bsps
+	PR 779/bsp
+	* irq/irq.c, irq/irq.h, irq/irq_init.c, network/GT64260eth.c: add
+	parameter to new exception interrupt handlers in powerpc bsps
 
 2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * startup/linkcmds: add missing section to link cmds
+	* startup/linkcmds: add missing section to link cmds
 
 2005-03-14	Joel Sherrill <joel@OARcorp.com>
 
