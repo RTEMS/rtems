@@ -34,6 +34,7 @@ EXTRA_DIST = startup/bootpstuff.c
 libbsp_a_SOURCES += startup/bspstart.c \
     ../../powerpc/shared/startup/pgtbl_setup.c startup/pgtbl_activate.c \
     ../../powerpc/shared/startup/pretaskinghook.c \
+    ../../powerpc/shared/startup/zerobss.c \
     ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c startup/bspclean.c \
@@ -121,7 +122,9 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel\
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/altivec.rel
+
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif

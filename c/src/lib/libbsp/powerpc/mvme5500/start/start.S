@@ -4,20 +4,27 @@
  *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
  *  S. Kate Feng <feng1@bnl.gov>, April 2004
- *  Mapped the 2nd 256MB of RAM to support the MVME5500 boards.
- *
+ *  Mapped the 2nd 256MB of RAM to support the MVME5500/MVME6100 boards
+ *	
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
+<<<<<<< start.S
+ *  $Id$
+=======
+ *  $Id$
+>>>>>>> 1.25
  *
  */
 
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <rtems/powerpc/powerpc.h>
+
 #include <libcpu/io.h>
 #include <libcpu/bat.h>
+#include <bspopts.h>
 
 #define SYNC \
 	sync; \
@@ -32,7 +39,6 @@
 	mtmsr	r10		;	\
 	li	r10,0x63	;	\
 	sc
-
 
 	.text
 	.globl	__rtems_entry_point
@@ -62,6 +68,21 @@ __rtems_entry_point:
 	mr	r29,r5
 	mr	r28,r6
 	mr	r27,r7
+
+#ifdef __ALTIVEC__
+	/* enable altivec; gcc may use it! */
+	mfmsr r0
+	oris  r0, r0, (1<<(31-16-6))
+	mtmsr r0
+	/*
+	 * set vscr and vrsave to known values
+	 */
+	li    r0, 0
+	mtvrsave r0
+	vxor   0,0,0
+	mtvscr 0
+#endif
+
 	/*
 	 * Make sure we have nothing in BATS and TLB
 	 */
@@ -72,7 +93,8 @@ __rtems_entry_point:
  * of RAM to KERNELBASE.
  */
 	lis	r11,KERNELBASE@h
-	ori	r11,r11,0x1ffe		/* set up BAT0 registers for 604+ */
+/* set up BAT registers for 604 */
+	ori	r11,r11,0x1ffe
 	li	r8,2			/* R/W access */
 	isync
 	mtspr	DBAT0L,r8		/* N.B. 6xx (not 601) have valid */
@@ -81,8 +103,8 @@ __rtems_entry_point:
 	mtspr	IBAT0U,r11
 	isync
 /*
- * Use the 2nd pair of BAT registers to map the 2nd 256MB
- * of RAM to 0x10000000. <SKF>
+ * <skf> Use the 2nd pair of BAT registers to map the 2nd 256MB
+ * of RAM to 0x10000000.
  */
 	lis	r11,MEM256MB@h
 	ori	r11,r11,0x1ffe		/* set up BAT1 registers for 604+ */
@@ -106,7 +128,7 @@ __rtems_entry_point:
 
 enter_C_code:
 	bl	MMUon
-	bl  __eabi	/* setup EABI and SYSV environment */
+	bl      __eabi	/* setup EABI and SYSV environment */
 	bl	zero_bss
 	/*
 	 * restore prep boot params
@@ -121,10 +143,17 @@ enter_C_code:
 	 * stack = &__rtems_end + 4096
 	 */
 	addis	r9,r0, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@ha
-        addi	r9,r9, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@l
-	mr	r1, r9
+	addi	r9,r9, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@l
 	/*
-	 * We are know in a environment that is totally independent from bootloader setup.
+	 * align initial stack
+	 * (we hope that the bootloader stack was 16-byte aligned
+	 * or we haven't used altivec yet...)
+	 */
+	li   r0, (CPU_STACK_ALIGNMENT-1)
+	andc r1, r9, r0
+	/*
+	 * We are now in a environment that is totally independent from
+	 * bootloader setup.
 	 */
     /* pass result of 'save_boot_params' to 'boot_card' in R3 */
 	bl	boot_card
@@ -160,7 +189,6 @@ MMUoff:
 
 	.globl	_return_to_ppcbug
 	.type	_return_to_ppcbug,@function
-
 
 _return_to_ppcbug:
 	mflr	r30
