@@ -46,8 +46,6 @@ dist_rtems_make_DATA =
 dist_rtems_make_DATA += make/main.cfg
 dist_rtems_make_DATA += make/leaf.cfg
 
-EXTRA_DIST += make/host.cfg.in
-
 rtems_make_Templatesdir = $(pkgdatadir)/make/Templates
 
 dist_rtems_make_Templates_DATA =
