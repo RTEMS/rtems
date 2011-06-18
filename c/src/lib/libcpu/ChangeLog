@@ -1,3 +1,8 @@
+2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove reference to non-existing file
+	 shared/include/utility.h.
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/cache.h, shared/src/cache_manager.c: Removed include

@@ -4,7 +4,7 @@
 
 include_libcpudir = $(includedir)/libcpu
 
-EXTRA_DIST = shared/include/utility.h
+EXTRA_DIST =
 EXTRA_DIST += shared/include/cache.h
 EXTRA_DIST += shared/src/cache_aligned_malloc.c
 EXTRA_DIST += shared/src/cache_manager.c
