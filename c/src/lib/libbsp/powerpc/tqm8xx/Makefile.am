@@ -25,7 +25,7 @@ include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
     ../../shared/include/irq-generic.h \
     spi/spi.h
 
-EXTRA_DIST = times-tqm866
+EXTRA_DIST =
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = startup/start.S

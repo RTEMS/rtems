@@ -63,8 +63,5 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
-
-EXTRA_DIST = times
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

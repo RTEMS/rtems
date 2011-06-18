@@ -1,3 +1,7 @@
+2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove references to non-existing files.
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac, startup/bspstart.c: Use standard cache BSP options.

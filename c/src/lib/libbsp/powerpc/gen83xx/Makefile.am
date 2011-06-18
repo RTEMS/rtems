@@ -113,8 +113,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
 endif
 
 EXTRA_DIST = README.mpc8349eamds
-EXTRA_DIST += times.mpc8349eamds
-### XXX
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

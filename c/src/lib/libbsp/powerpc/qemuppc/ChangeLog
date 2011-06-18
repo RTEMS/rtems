@@ -1,3 +1,7 @@
+2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove references to non-existing files.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspstart.c:

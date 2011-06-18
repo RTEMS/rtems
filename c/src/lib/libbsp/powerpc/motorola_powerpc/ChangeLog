@@ -1,3 +1,7 @@
+2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove references to non-existing files.
+
 2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Remove reference to wrapup directory.
