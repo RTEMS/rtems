@@ -57,7 +57,6 @@ endif
 EXTRA_DIST += new-exceptions/bspsupport/vectors.h
 EXTRA_DIST += new-exceptions/bspsupport/irq_supp.h
 EXTRA_DIST += new-exceptions/bspsupport/README
-EXTRA_DIST += new-exceptions/bspsupport/nest_irq_test.c
 EXTRA_DIST += new-exceptions/bspsupport/ppc_exc_test.c
 
 # shared/include

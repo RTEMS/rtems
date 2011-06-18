@@ -1,3 +1,8 @@
+2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove reference to non-existing file
+	new-exceptions/bspsupport/nest_irq_test.c.
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* new-exceptions/bspsupport/ppc_exc_alignment.c: New file.
