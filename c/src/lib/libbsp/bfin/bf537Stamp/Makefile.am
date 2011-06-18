@@ -59,7 +59,5 @@ libbsp_a_LIBADD += networkconfig.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/network.rel
 endif
 
-EXTRA_DIST = times
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
