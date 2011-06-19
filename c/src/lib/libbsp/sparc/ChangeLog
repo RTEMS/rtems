@@ -1,3 +1,7 @@
+2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove references to non-existing files.
+
 2011-05-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1795/bsps

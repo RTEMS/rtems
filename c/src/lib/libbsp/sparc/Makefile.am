@@ -9,8 +9,6 @@ SUBDIRS = @RTEMS_BSP_FAMILY@
 
 EXTRA_DIST =
 
-EXTRA_DIST += shared/bspclean.c
-EXTRA_DIST += shared/bspstart.c
 EXTRA_DIST += shared/gnatcommon.c
 EXTRA_DIST += shared/start.S
 
