@@ -42,7 +42,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
 
 # clock
 noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/clockdrv.c ../../../shared/clockdrv_shell.h
+clock_rel_SOURCES = clock/clockdrv.c
+clock_rel_SOURCES += ../../shared/clockdrv_shell.h
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
