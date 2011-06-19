@@ -110,8 +110,8 @@ libbsp_a_SOURCES += ../../shared/console.c \
 	console/console-config.c
 
 # Clock
-libbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c \
-	../../../shared/clockdrv_shell.h
+libbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
+libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # RTC
 libbsp_a_SOURCES += ../../shared/tod.c \

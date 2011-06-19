@@ -43,7 +43,8 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c \
     startup/bspstart.c
 # clock
-libbsp_a_SOURCES += clock/clockdrv.c ../../../shared/clockdrv_shell.h
+libbsp_a_SOURCES += clock/clockdrv.c
+libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/conio.c console/console.c \
     console/defaultfont.h
