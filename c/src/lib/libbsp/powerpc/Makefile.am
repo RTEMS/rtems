@@ -29,7 +29,8 @@ EXTRA_DIST += shared/clock/p_clock.c
 
 ## shared/console
 EXTRA_DIST += shared/console/console.c shared/console/inch.c shared/console/polled_io.c \
-    shared/console/uart.c shared/console/reboot.c shared/console/console.inl
+    shared/console/uart.c
+EXTRA_DIST += shared/console/console.inl
 
 ## shared/flash
 EXTRA_DIST += shared/flash/flash.c shared/flash/flashPgm.h shared/flash/flashPgmPvt.h \
@@ -51,8 +52,8 @@ EXTRA_DIST += shared/residual/residual.c
 EXTRA_DIST += shared/openpic/openpic.c
 
 ## shared/irq
-EXTRA_DIST += shared/irq/i8259.c shared/irq/irq_init.c \
-	shared/irq/irq_asm.S shared/irq/openpic_i8259_irq.c
+EXTRA_DIST += shared/irq/i8259.c shared/irq/irq_init.c
+EXTRA_DIST += shared/irq/openpic_i8259_irq.c
 
 ## shared/start
 EXTRA_DIST += shared/start/start.S shared/start/rtems_crti.S \
@@ -65,9 +66,6 @@ EXTRA_DIST += shared/startup/bspstart.c shared/startup/pgtbl_setup.c \
 
 ## shared/tod
 EXTRA_DIST += shared/tod/todcfg.c
-
-## shared/vectors
-EXTRA_DIST += shared/vectors/vectors_init.c shared/vectors/vectors.S
 
 ## shared/vme
 EXTRA_DIST += shared/vme/vmeconfig.c shared/vme/VMEConfig.h

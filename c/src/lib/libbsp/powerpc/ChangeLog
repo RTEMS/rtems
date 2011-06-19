@@ -1,3 +1,7 @@
+2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove references to non-existing files.
+
 2011-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/startup/sbrk.c: Remove extraneous '}'.
