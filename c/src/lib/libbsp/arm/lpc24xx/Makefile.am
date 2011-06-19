@@ -135,8 +135,8 @@ libbsp_a_SOURCES += i2c/i2c.c \
 	i2c/i2c-config.c
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c \
-	../../../libcpu/arm/shared/cache/cache_.h
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../../libcpu/arm/shared/include/cache_.h
 libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
 
 # Start hooks

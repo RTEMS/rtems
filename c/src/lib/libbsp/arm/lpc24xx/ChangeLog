@@ -1,5 +1,9 @@
 2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Fix broken path to cache_.h.
+
+2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Fix broken path to clockdrv_shell.h.
 
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
