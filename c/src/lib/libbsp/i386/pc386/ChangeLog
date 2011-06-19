@@ -1,3 +1,7 @@
+2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix broken path to clockdrv_shell.h.
+
 2011-04-11	Keith Robertson <kjrobert at alumni dot uwaterloo dot ca>
 
 	* ne2000/ne2000.c: Add multicast support.  Patch submitted to mailing
