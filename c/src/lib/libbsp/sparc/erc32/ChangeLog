@@ -1,3 +1,7 @@
+2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix broken path to clockdrv_shell.h.
+
 2011-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspdelay.c: Fix broken CVS-Id.

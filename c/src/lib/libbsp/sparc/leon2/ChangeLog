@@ -1,3 +1,7 @@
+2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix broken path to clockdrv_shell.h.
+
 2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: runtest for this BSP obsoleted by

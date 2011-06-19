@@ -53,7 +53,8 @@ libbsp_a_SOURCES += console/console.c
 # debugio
 libbsp_a_SOURCES += console/debugputs.c
 # clock
-libbsp_a_SOURCES += clock/ckinit.c ../../../shared/clockdrv_shell.h
+libbsp_a_SOURCES += clock/ckinit.c
+libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # PCI
 include_HEADERS += ../../sparc/shared/include/pci.h
 libbsp_a_SOURCES += pci/pci.c ../../sparc/shared/pci/pcifinddevice.c

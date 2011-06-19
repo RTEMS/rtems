@@ -48,7 +48,8 @@ libbsp_a_SOURCES += console/erc32_console.c ../../shared/console.c
 # debugio
 libbsp_a_SOURCES += console/debugputs.c
 # clock
-libbsp_a_SOURCES += clock/ckinit.c ../../../shared/clockdrv_shell.h
+libbsp_a_SOURCES += clock/ckinit.c
+libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # timer
 libbsp_a_SOURCES += timer/timer.c
 
