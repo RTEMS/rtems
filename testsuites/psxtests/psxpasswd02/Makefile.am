@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = psxpasswd02
 psxpasswd02_SOURCES = init.c ../include/pmacros.h
 
 dist_rtems_tests_DATA = psxpasswd02.scn
+dist_rtems_tests_DATA += psxpasswd02.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

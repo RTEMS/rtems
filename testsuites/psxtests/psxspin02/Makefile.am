@@ -8,7 +8,8 @@ rtems_tests_PROGRAMS = psxspin02
 psxspin02_SOURCES = main.c test.c ../include/pmacros.h
 
 scndir = $(rtems_testsdir)
-dist_scn_DATA = psxspin02.scn
+dist_rtems_tests_DATA = psxspin02.scn
+dist_rtems_tests_DATA += psxspin02.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

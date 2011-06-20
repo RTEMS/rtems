@@ -1,5 +1,12 @@
 2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Index: psxautoinit01/Makefile.am, psxbarrier01/Makefile.am,
+	psxclassic01/Makefile.am, psxcleanup01/Makefile.am,
+	psxfchx01/Makefile.am, psxpasswd01/Makefile.am,
+	psxpasswd02/Makefile.am, psxpipe01/Makefile.am,
+	psxrwlock01/Makefile.am, psxspin01/Makefile.am,
+	psxspin02/Makefile.am: Eliminate rtems_scn_DATA.
+	Install *.doc to rtems_testsdir.
 	* Makefile.am: Remove EXTRA_DIST.
 	Remove DIST_SUBDIRS.
 	Remove obsolete comments.

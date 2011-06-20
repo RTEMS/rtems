@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = psxfchx01
 psxfchx01_SOURCES = init.c ../include/pmacros.h
 
 dist_rtems_tests_DATA = psxfchx01.scn
+dist_rtems_tests_DATA += psxfchx01.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

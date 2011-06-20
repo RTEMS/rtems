@@ -8,7 +8,7 @@ rtems_tests_PROGRAMS = psxautoinit01
 psxautoinit01_SOURCES = init.c ../include/pmacros.h
 
 scndir = $(rtems_testsdir)
-dist_scn_DATA = psxautoinit01.scn
+dist_rtems_tests_DATA = psxautoinit01.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
