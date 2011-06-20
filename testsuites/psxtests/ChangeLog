@@ -1,3 +1,7 @@
+2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxclassic01/psxclassic01.doc: Fix copyright date.
+
 2011-05-16	Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
 
 	* psxclock/init.c (Init):
