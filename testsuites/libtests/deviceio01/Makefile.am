@@ -4,6 +4,7 @@
 
 rtems_tests_PROGRAMS = deviceio01
 deviceio01_SOURCES = init.c test_driver.c
+deviceio01_SOURCES += test_driver.h
 
 dist_rtems_tests_DATA = deviceio01.scn
 dist_rtems_tests_DATA += deviceio01.doc

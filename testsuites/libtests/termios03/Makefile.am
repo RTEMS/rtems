@@ -6,6 +6,7 @@ MANAGERS = all
 
 rtems_tests_PROGRAMS = termios03
 termios03_SOURCES = init.c termios_testdriver_polled.c
+termios03_SOURCES += termios_testdriver_polled.h
 
 dist_rtems_tests_DATA = termios03.scn
 dist_rtems_tests_DATA += termios03.doc

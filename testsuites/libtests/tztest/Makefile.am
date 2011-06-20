@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = tztest
 tztest_SOURCES = init.c
 
 dist_rtems_tests_DATA = tztest.scn
+dist_rtems_tests_DATA += tztest.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

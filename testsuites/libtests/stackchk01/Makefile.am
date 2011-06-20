@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = stackchk01
 stackchk01_SOURCES = init.c
 
 dist_rtems_tests_DATA = stackchk01.scn
+dist_rtems_tests_DATA += stackchk01.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

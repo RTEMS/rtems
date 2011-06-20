@@ -6,6 +6,7 @@ MANAGERS = all
 
 rtems_tests_PROGRAMS = termios04
 termios04_SOURCES = init.c termios_testdriver_intr.c
+termios04_SOURCES += termios_testdriver_intr.h
 
 dist_rtems_tests_DATA = termios04.scn
 dist_rtems_tests_DATA += termios04.doc

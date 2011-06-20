@@ -10,6 +10,7 @@ tar02_SOURCES = init.c ../../psxtests/psxfile01/test_cat.c \
 BUILT_SOURCES = initial_filesystem_tar.c initial_filesystem_tar.h
 
 dist_rtems_tests_DATA = tar02.scn
+dist_rtems_tests_DATA += tar02.doc
 endif
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

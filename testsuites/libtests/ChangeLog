@@ -1,3 +1,12 @@
+2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* devfs04/Makefile.am, deviceio01/Makefile.am,
+	monitor02/Makefile.am, stackchk01/Makefile.am,
+	stringto01/Makefile.am, tar01/Makefile.am,
+	tar02/Makefile.am, termios01/Makefile.am,
+	termios03/Makefile.am, termios04/Makefile.am
+	tztest/Makefile.am: Add missing files.
+
 2011-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* mouse01/serial_mouse_config.c: Avoid output due to execution context.

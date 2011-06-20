@@ -6,6 +6,7 @@ MANAGERS = all
 
 rtems_tests_PROGRAMS = stringto01
 stringto01_SOURCES = init.c
+stringto01_SOURCES += stringto_test_template.h
 
 dist_rtems_tests_DATA = stringto01.scn stringto01.doc
 
