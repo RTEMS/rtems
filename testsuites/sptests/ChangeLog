@@ -1,5 +1,7 @@
 2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Remove DIST_SUBDIRS.
+	Remove EXTRA_DIST.
 	* sp33/Makefile.am: Eliminate scndir.
 
 2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
