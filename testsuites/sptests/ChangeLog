@@ -1,5 +1,6 @@
 2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp66/init.c: Remove (unused).
 	* spintrcritical01/Makefile.am, spintrcritical06/Makefile.am,
 	spintrcritical08/Makefile.am, spintrcritical09/Makefile.am,
 	spintrcritical10/Makefile.am, spintrcritical11/Makefile.am,
