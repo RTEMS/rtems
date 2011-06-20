@@ -41,7 +41,5 @@ noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES)
 
-EXTRA_DIST += times
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
