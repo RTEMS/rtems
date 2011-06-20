@@ -7,7 +7,6 @@ MANAGERS = all
 rtems_tests_PROGRAMS = psxrwlock01
 psxrwlock01_SOURCES = main.c test.c ../include/pmacros.h
 
-scndir = $(rtems_testsdir)
 dist_rtems_tests_DATA = psxrwlock01.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

@@ -7,7 +7,6 @@ MANAGERS = all
 rtems_tests_PROGRAMS = psxspin02
 psxspin02_SOURCES = main.c test.c ../include/pmacros.h
 
-scndir = $(rtems_testsdir)
 dist_rtems_tests_DATA = psxspin02.scn
 dist_rtems_tests_DATA += psxspin02.doc
 

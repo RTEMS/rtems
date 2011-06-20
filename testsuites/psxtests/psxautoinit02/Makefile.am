@@ -7,7 +7,6 @@ MANAGERS = all
 rtems_tests_PROGRAMS = psxautoinit02
 psxautoinit02_SOURCES = init.c ../include/pmacros.h
 
-scndir = $(rtems_testsdir)
 dist_rtems_tests_DATA = psxautoinit02.scn
 dist_rtems_tests_DATA += psxautoinit02.doc
 

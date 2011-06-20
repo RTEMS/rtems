@@ -7,7 +7,6 @@ MANAGERS = all
 rtems_tests_PROGRAMS = psxbarrier01
 psxbarrier01_SOURCES = main.c test.c ../include/pmacros.h
 
-scndir = $(rtems_testsdir)
 dist_rtems_tests_DATA = psxbarrier01.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
