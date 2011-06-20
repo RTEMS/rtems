@@ -43,7 +43,5 @@ libbsp_a_SOURCES += ../../shared/console-polled.c console/console-io.c \
 # timer
 libbsp_a_SOURCES += ../../shared/timerstub.c
 
-EXTRA_DIST = times
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
