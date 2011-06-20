@@ -1,3 +1,7 @@
+2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp33/Makefile.am: Eliminate scndir.
+
 2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp01/init.c, sp01/sp01.doc, sp01/system.h, sp01/task1.c, sp02/init.c,

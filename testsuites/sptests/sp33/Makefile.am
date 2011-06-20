@@ -7,9 +7,8 @@ MANAGERS = io barrier semaphore clock
 rtems_tests_PROGRAMS = sp33
 sp33_SOURCES = init.c
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp33.scn
-dist_scn_DATA += sp33.doc
+dist_rtems_tests_DATA = sp33.scn
+dist_rtems_tests_DATA += sp33.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
