@@ -1,5 +1,6 @@
 2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sp43/Makefile.am: Add system.h to *_SOURCES.
 	* Makefile.am: Remove DIST_SUBDIRS.
 	Remove EXTRA_DIST.
 	* sp33/Makefile.am: Eliminate scndir.

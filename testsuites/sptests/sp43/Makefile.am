@@ -6,6 +6,7 @@ MANAGERS = all
 
 rtems_tests_PROGRAMS = sp43
 sp43_SOURCES = init.c
+sp43_SOURCES += system.h
 
 dist_rtems_tests_DATA = sp43.scn
 dist_rtems_tests_DATA += sp43.doc
