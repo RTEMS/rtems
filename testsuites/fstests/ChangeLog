@@ -1,3 +1,9 @@
+2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove EXTRA_DIST.
+	* fs01/fs91.doc: Remove (Empty, unused).
+	* mimfs_fs01/Makefile.am: Use mimfs_support/fs_config.h.
+
 2011-04-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	Add initial test to File System Test Suite.
