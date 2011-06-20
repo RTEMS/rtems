@@ -129,7 +129,5 @@ libbsp_a_LIBADD = \
       ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel \
       ../../../libcpu/@RTEMS_CPU@/shared/sparc64-syscall.rel 
 
-EXTRA_DIST += times
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

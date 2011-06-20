@@ -1,3 +1,7 @@
+2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Don't reference non-existing files.
+
 2011-03-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* make/custom/usiii.cfg (CFLAGS_OPTIMIZE_V):
