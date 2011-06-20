@@ -1,3 +1,7 @@
+2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Don't reference non-existing files.
+
 2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: runtest for this BSP obsoleted by
