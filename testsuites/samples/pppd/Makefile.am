@@ -22,4 +22,8 @@ pppd$(EXEEXT): $(pppd_OBJECTS) $(pppd_DEPENDENCIES)
 	@rm -f pppd$(EXEEXT)
 	$(make-exe)
 
+EXTRA_DIST =
+EXTRA_DIST += ppp.conf
+EXTRA_DIST += pppd.options
+
 include $(top_srcdir)/../automake/local.am

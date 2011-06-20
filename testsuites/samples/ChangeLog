@@ -1,3 +1,8 @@
+2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* pppd/Makefile.am: Add ppp.conf, pppd.options to EXTRA_DIST.
+	* pppd/Makefile-user: Remove.
+
 2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/init.c: Avoid use of deprecated rtems_clock_get() except in
