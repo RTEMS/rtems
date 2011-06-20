@@ -1,3 +1,7 @@
+2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove superfluous EXTRA_DIST.
+
 2011-03-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1770/bsps
