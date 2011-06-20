@@ -6,6 +6,7 @@ MANAGERS = all
 
 rtems_tests_PROGRAMS = spintrcritical01
 spintrcritical01_SOURCES = init.c ../spintrcritical_support/intrcritical.c
+spintrcritical01_SOURCES += ../spintrcritical_support/intrcritical.h
 
 dist_rtems_tests_DATA = spintrcritical01.scn
 dist_rtems_tests_DATA += spintrcritical01.doc

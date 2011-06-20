@@ -1,5 +1,11 @@
 2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* spintrcritical01/Makefile.am, spintrcritical06/Makefile.am,
+	spintrcritical08/Makefile.am, spintrcritical09/Makefile.am,
+	spintrcritical10/Makefile.am, spintrcritical11/Makefile.am,
+	spintrcritical13/Makefile.am, spintrcritical15/Makefile.am,
+	spintrcritical16/Makefile.am, spintrcritical17/Makefile.am:
+	Add ../spintrcritical_support/intrcritical.h to *_SOURCES.
 	* sp43/Makefile.am: Add system.h to *_SOURCES.
 	* Makefile.am: Remove DIST_SUBDIRS.
 	Remove EXTRA_DIST.
