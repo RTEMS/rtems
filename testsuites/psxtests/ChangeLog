@@ -1,5 +1,8 @@
 2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Remove EXTRA_DIST.
+	Remove DIST_SUBDIRS.
+	Remove obsolete comments.
 	* psxclassic01/psxclassic01.doc: Fix copyright date.
 
 2011-05-16	Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>

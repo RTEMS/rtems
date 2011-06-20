@@ -24,15 +24,7 @@ SUBDIRS += psxfile01 psxfile02 psxfilelock01 psxgetrusage01 psxid01 \
     psximfs01 psximfs02 psxreaddir psxstat psxmount psx13 psxchroot01 \
     psxpasswd01 psxpasswd02 psxpipe01 psxtimes01 psxfchx01
 
-## Until sys/uio.h is moved to libcsupport, we have to have networking
-## enabled to support readv and writev.  Hopefully this is a temporary
-## situation.
-## if NEWLIB
 SUBDIRS += psxrdwrv
-## endif
-
-DIST_SUBDIRS = $(SUBDIRS) psxfatal_support
-EXTRA_DIST = psxfatal_support/init.c psxfatal_support/system.h
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am
