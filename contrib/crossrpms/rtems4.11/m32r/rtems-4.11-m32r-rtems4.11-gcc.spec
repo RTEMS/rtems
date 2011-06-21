@@ -258,7 +258,8 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 %global _gcclibdir %{_prefix}/lib
 
 %if "%{gcc_version}" == "4.6.1"
-Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+# Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.6.1-rtems4.11-20110621.diff
 %endif
 %if "%{gcc_version}" == "4.6.0"
