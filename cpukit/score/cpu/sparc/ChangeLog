@@ -1,3 +1,8 @@
+2011-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/cpu.h, rtems/score/sparc.h, rtems/score/types.h: Convert
+	comments to Doxygen style and improve.
+
 2011-05-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Reformat.

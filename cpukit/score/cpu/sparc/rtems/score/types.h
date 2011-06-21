@@ -1,12 +1,12 @@
 /**
  * @file rtems/score/types.h
+ *
+ * This include file contains type definitions pertaining to the
+ * SPARC processor family.
  */
 
 /*
- *  This include file contains type definitions pertaining to the
- *  SPARC processor family.
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,12 +27,27 @@
 extern "C" {
 #endif
 
-/*
- *  This section defines the basic types for this processor.
+/**
+ * @brief Priority Bit Map Type
+ *
+ * On the SPARC, there is no bitscan instruction and no penalty associated
+ * for using 16-bit variables.  With no overriding architectural factors,
+ * just using a uint16_t.
  */
+typedef uint16_t Priority_bit_map_Control;
 
-typedef uint16_t         Priority_bit_map_Control;
+/**
+ *  @brief SPARC ISR Handler Return Type
+ *
+ *  This is the type which SPARC ISR Handlers return.
+ */
 typedef void sparc_isr;
+
+/**
+ *  @brief SPARC ISR Handler Prototype
+ *
+ *  This is the prototype for SPARC ISR Handlers.
+ */
 typedef void ( *sparc_isr_entry )( void );
 
 #ifdef __cplusplus
