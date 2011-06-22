@@ -81,6 +81,7 @@ AC_SUBST(OPERATION_COUNT)
 AC_CONFIG_FILES([Makefile
 psxtmmutex02/Makefile
 psxtmsleep01/Makefile
+psxtmsleep02/Makefile
 psxtmthread01/Makefile
 psxtmthread03/Makefile
 ])

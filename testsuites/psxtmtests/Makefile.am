@@ -5,10 +5,11 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 if HAS_POSIX
-SUBDIRS = \
-    psxtmmutex02 \
-    psxtmsleep01 \
-    psxtmthread01 psxtmthread03
+SUBDIRS = psxtmmutex02
+SUBDIRS += psxtmsleep01
+SUBDIRS += psxtmsleep02
+SUBDIRS += psxtmthread01
+SUBDIRS += psxtmthread03
 endif
 
 DIST_SUBDIRS = $(SUBDIRS)
