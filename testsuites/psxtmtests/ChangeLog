@@ -1,5 +1,9 @@
 2011-06-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxtmtests_plan.csv: Update.
+
+2011-06-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add test case for sleep - blocking.
 	* psxtmsleep02/.cvsignore, psxtmsleep02/Makefile.am,
 	psxtmsleep02/init.c, psxtmsleep02/psxtmsleep02.doc: New files.
