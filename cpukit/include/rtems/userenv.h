@@ -1,7 +1,11 @@
-/*
- *  Libio Internal Information
+/**
+ * @file rtems/userenv.h
  *
- *  COPYRIGHT (c) 1989-1999.
+ * This file defines the interface for POSIX per-process environment.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

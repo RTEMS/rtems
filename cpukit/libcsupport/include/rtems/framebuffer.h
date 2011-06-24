@@ -1,11 +1,11 @@
 /**
  * @file rtems/framebuffer.h
+ *
+ * This file describes the Frame Buffer Device Driver for all boards.
  */
 
 /*
- *  This file describes the Frame Buffer Device Driver for all boards.
- *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

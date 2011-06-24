@@ -1,9 +1,11 @@
 /**
  * @file rtems/posix/psignal.h
+ *
+ * This include file defines internal information about POSIX signals.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

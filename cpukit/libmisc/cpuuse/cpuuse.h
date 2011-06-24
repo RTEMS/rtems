@@ -1,9 +1,12 @@
-/*  cpuuse.h
+/**
+ * @file rtems/cpuuse.h
  *
- *  This include file contains information necessary to utilize
- *  and install the cpu usage reporting mechanism.
- *
- *  COPYRIGHT (c) 1989-2007.
+ * This include file contains information necessary to utilize
+ * and install the cpu usage reporting mechanism.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

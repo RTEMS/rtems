@@ -1,7 +1,12 @@
+/**
+ * @file rtems/mouse_parser.h
+ *
+ * This file is the header file for the Mouse Parser Engine.
+ */
+
 /*
- * This file is the header file for the Mouse Parser Engine which
- * is derived from a UNIX Serial Port Mouse Driver with the following
- * notice:
+ * This file is derived from a UNIX Serial Port Mouse Driver with the
+ * following notice:
  *
  * ==================================================================
  * Copyright (c) 1999 Greg Haerr <greg@censoft.com>

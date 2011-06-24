@@ -1,11 +1,11 @@
 /**
  * @file rtems/malloc.h
+ *
+ * This file defines the interface to RTEMS extensions to the Malloc Family.
  */
 
 /*
- *  RTEMS Malloc Extensions
- *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in

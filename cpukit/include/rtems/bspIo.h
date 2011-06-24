@@ -1,9 +1,12 @@
-/* bspIo.h
+/**
+ * @file rtems/bspIo.h
  *
- *  This include file contains declaration of interface that
- *  will be provided by the file contained in this directory.
- *
+ * This include file defines the interface to kernel print methods.
+ */
+
+/*
  *  COPYRIGHT (c) 1998 valette@crf.canon.fr
+ *  COPYRIGHT (c) 2011 On-Line Applications Research Corporation.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

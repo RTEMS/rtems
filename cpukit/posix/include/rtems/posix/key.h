@@ -1,13 +1,12 @@
 /**
  * @file rtems/posix/key.h
+ *
+ * This include file contains all the private support information for
+ * POSIX key.
  */
 
-/*  rtems/posix/key.h
- *
- *  This include file contains all the private support information for
- *  POSIX key.
- *
- *  COPYRIGHT (c) 1989-2010.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

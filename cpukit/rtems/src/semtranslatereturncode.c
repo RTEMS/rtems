@@ -71,7 +71,7 @@ const rtems_status_code _Semaphore_Translate_core_mutex_return_code_[] = {
   RTEMS_OBJECT_WAS_DELETED, /* CORE_MUTEX_WAS_DELETED */
   RTEMS_TIMEOUT,            /* CORE_MUTEX_TIMEOUT */
 #if defined(__RTEMS_STRICT_ORDER_MUTEX__)
-    CORE_MUTEX_RELEASE_NOT_ORDER,
+    123,
 #endif
   RTEMS_INVALID_PRIORITY   /* CORE_MUTEX_STATUS_CEILING_VIOLATED */
 };

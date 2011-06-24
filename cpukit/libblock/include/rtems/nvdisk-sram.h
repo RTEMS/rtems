@@ -1,15 +1,15 @@
+/**
+ * @file rtems/nvdisk-sram.h
+ *
+ * This driver maps an NV disk to static RAM. You can use this
+ */
+
 /*
  *  $Id$
  *
  * RTEMS Project (http://www.rtems.org/)
  *
  * Copyright 2007 Chris Johns (chrisj@rtems.org)
- */
-
-/**
- * NV Disk Static RAM Device Driver.
- *
- * This driver maps an NV disk to static RAM. You can use this
  */
 
 #if !defined (_RTEMS_NVDISK_SRAM_H_)

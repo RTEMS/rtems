@@ -1,9 +1,12 @@
 /**
  * @file aio.h
+ *
+ * This file contains the definitions related to POSIX Asynchronous
+ * Input and Output,
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

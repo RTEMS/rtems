@@ -1,5 +1,8 @@
 /**
  * @file rtems/capture.h
+ *
+ * This is the Capture Engine component of the RTEMS Measurement and
+ * Monitoring system.
  */
 
 /*

@@ -1,9 +1,12 @@
 /**
  * @file rtems/posix/posixapi.h
+ *
+ * This include file defines the top level interface to the POSIX API
+ * implementation in RTEMS.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

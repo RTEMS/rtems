@@ -22,7 +22,8 @@
  *     - cancel a time
  */
 
-/*  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Copyright (c) 2009 embedded brains GmbH.

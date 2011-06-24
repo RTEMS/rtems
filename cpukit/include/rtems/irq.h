@@ -1,8 +1,11 @@
+/**
+ * @file rtems/irq.h
+ *
+ * This include file describe the data structure and the functions implemented
+ * by rtems to write interrupt handlers.
+ */
+
 /*
- *
- *  This include file describe the data structure and the functions implemented
- *  by rtems to write interrupt handlers.
- *
  *  CopyRight (C) 1998 valette@crf.canon.fr
  *
  *  This code is heavilly inspired by the public specification of STREAM V2

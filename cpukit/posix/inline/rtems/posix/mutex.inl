@@ -1,13 +1,11 @@
 /**
  * @file rtems/posix/mutex.inl
- */
+ *
+ * This include file contains the static inline implementation of the private 
+ * inlined routines for POSIX mutex's.
+ *?
 
-/*  rtems/posix/mutex.inl
- *
- *  This include file contains the static inline implementation of the private 
- *  inlined routines for POSIX mutex's.
- *
- *  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

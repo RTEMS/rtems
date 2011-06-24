@@ -1,9 +1,11 @@
 /**
  * @file rtems/iosupp.h
+ *
+ * This include file defines some special characters of interest.
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

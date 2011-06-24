@@ -1,18 +1,18 @@
 /**
  * @file rtems/posix/rwlock.h
+ *
+ * This include file contains all the constants and structures associated
+ * with the POSIX RWLock Manager.
+ *
+ * Directives provided are:
+ *
+ *   - create a RWLock
+ *   - delete a RWLock
+ *   - wait for a RWLock
  */
 
 /*
- *  This include file contains all the constants and structures associated
- *  with the POSIX RWLock Manager.
- *
- *  Directives provided are:
- *
- *     + create a RWLock
- *     + delete a RWLock
- *     + wait for a RWLock
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

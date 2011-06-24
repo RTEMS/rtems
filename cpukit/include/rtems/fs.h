@@ -1,7 +1,11 @@
-/*
- *  Some basic filesystem types
+/**
+ * @file rtems/fs.h
  *
- *  COPYRIGHT (c) 1989-1999.
+ * This file defines basic filesystem types
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

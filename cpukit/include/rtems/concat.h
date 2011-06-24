@@ -1,3 +1,9 @@
+/**
+ * @file rtems/concat.h
+ *
+ * This include file defines ANSI concatenation macros.
+ */
+
 /*
  *  Copyright (c) 2004,2005 Ralf Corsepius, Ulm, Germany.
  *

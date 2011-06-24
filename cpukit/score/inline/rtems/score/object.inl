@@ -1,13 +1,12 @@
 /**
  * @file rtems/score/object.inl
+ *
+ * This include file contains the static inline implementation of all
+ * of the inlined routines in the Object Handler.
  */
 
 /*
- *
- *  This include file contains the static inline implementation of all
- *  of the inlined routines in the Object Handler.
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

@@ -1,9 +1,12 @@
 /**
  * @file rtems/posix/priority.h
+ *
+ * This include file defines the interface to the POSIX priority
+ * implementation.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

@@ -1,5 +1,11 @@
+/**
+ * @file rtems/rtems/mainpage.h
+ *
+ * This file exists to provide a top level description of RTEMS for Doxygen.
+ */
+
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

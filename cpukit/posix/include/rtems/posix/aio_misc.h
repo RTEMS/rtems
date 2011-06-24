@@ -1,3 +1,9 @@
+/**
+ * @file rtems/posix/aio_misc.h
+ *
+ * This defines private information for the AIO implementation.
+ */
+
 /*
  * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
  * 
@@ -7,7 +13,6 @@
  *
  * $Id$
  */
-
 
 #ifndef _AIO_MISC_H
 #define _AIO_MISC_H

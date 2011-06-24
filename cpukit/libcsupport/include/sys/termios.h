@@ -1,7 +1,11 @@
-/*
- *  POSIX termios implementation for RTEMS console device driver.
+/**
+ * @file sys/termios.h
  *
- *  COPYRIGHT (c) 1989-1999.
+ * POSIX termios implementation for RTEMS console device driver.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

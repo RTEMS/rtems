@@ -1,12 +1,12 @@
 /** 
- *  @file  rtems/score/priority.inl
+ * @file rtems/score/priority.inl
  *
- *  This file contains the static inline implementation of all inlined
- *  routines in the Priority Handler.
+ * This file contains the static inline implementation of all inlined
+ * routines in the Priority Handler.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

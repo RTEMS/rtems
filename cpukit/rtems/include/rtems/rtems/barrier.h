@@ -6,11 +6,11 @@
  *
  *  Directives provided are:
  *
- *     - create a barrier
- *     - get an ID of a barrier
- *     - delete a barrier
- *     - wait for a barrier
- *     - signal a barrier
+ *    - create a barrier
+ *    - get an ID of a barrier
+ *    - delete a barrier
+ *    - wait for a barrier
+ *    - signal a barrier
  */
 
 /*  COPYRIGHT (c) 1989-2008.

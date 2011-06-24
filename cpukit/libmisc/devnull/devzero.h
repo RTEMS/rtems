@@ -1,3 +1,10 @@
+/**
+ * @file rtems/devzero.h
+ *
+ * This include file defines the interface to the RTEMS /dev/zero
+ * device driver.
+ */
+
 /*
  * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
  *

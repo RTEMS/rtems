@@ -1,5 +1,11 @@
+/**
+ * @file rtems/stringto.h
+ *
+ * This file defines the interface to a set of string conversion helpers.
+ */
+
 /*
- *  COPYRIGHT (c) 2009.
+ *  COPYRIGHT (c) 2009-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

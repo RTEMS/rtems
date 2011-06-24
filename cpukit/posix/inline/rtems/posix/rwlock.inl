@@ -1,12 +1,12 @@
 /**
- * @file rtems/posix/RWLock.inl
+ * @file rtems/posix/rwlock.inl
+ *
+ * This file contains the static inlin implementation of the inlined
+ * routines from the POSIX RWLock Manager.
  */
 
 /*
- *  This file contains the static inlin implementation of the inlined
- *  routines from the POSIX RWLock Manager.
- *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

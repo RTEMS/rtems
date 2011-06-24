@@ -1,13 +1,12 @@
 /**
  * @file rtems/posix/pthread.inl
+ *
+ * This include file contains the static inline implementation of the private 
+ * inlined routines for POSIX threads.
  */
 
-/*  rtems/posix/pthread.inl
- *
- *  This include file contains the static inline implementation of the private 
- *  inlined routines for POSIX threads.
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

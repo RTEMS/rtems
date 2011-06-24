@@ -1,3 +1,12 @@
+/**
+ * @file sys/statvfs.h
+ *
+ * This include file defines the interface to the statvfs() set of
+ * API methods. The statvfs as defined by the SUS:
+ *
+ *  - http://www.opengroup.org/onlinepubs/009695399/basedefs/sys/statvfs.h.html
+ */
+
 /*
  *  COPYRIGHT (c) 2009 Chris Johns <chrisj@rtems.org>
  *
@@ -7,9 +16,8 @@
  *
  *  $Id$
  */
+
 /*
- * The statvfs as defined by the SUS:
- *    http://www.opengroup.org/onlinepubs/009695399/basedefs/sys/statvfs.h.html
  */
 
 #ifndef _SYS_STATVFS_H_

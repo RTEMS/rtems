@@ -1,7 +1,11 @@
-/*
- *  Header file for the In-Memory File System
+/**
+ * @file rtems/imfs.h
  *
- *  COPYRIGHT (c) 1989-2010.
+ * Header file for the In-Memory File System
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

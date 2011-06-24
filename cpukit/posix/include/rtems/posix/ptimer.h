@@ -1,14 +1,14 @@
 /**
  * @file rtems/posix/ptimer.h
+ *
+ * This include file contains all the private support information for
+ * POSIX timers.
  */
 
-/*  rtems/posix/ptimer.h
- *
- *  This include file contains all the private support information for
- *  POSIX timers.
- *
- *  COPYRIGHT (c) 1998.
- *  Alfonso Escalera Piña
+/*
+ *  Initial Implementation:
+ *    COPYRIGHT (c) 1998.  Alfonso Escalera Piña
+ *  Largely rewritten by Joel Sherrill.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

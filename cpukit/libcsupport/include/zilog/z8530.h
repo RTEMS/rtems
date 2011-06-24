@@ -1,12 +1,12 @@
 /**
  * @file rtems/zilog/z8530.h
+ *
+ *  This include file defines information related to a Zilog Z8530
+ *  SCC Chip.  It is a IO mapped part.
  */
 
 /*
- *  This include file defines information related to a Zilog Z8530
- *  SCC Chip.  It is a IO mapped part.
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

@@ -1,12 +1,11 @@
 /**
  * @file rtems/spurious.h
+ *
+ * This file describes the Spurious Interrupt Driver for all boards.
  */
 
-/*  spurious.h
- *
- *  This file describes the Spurious Interrupt Driver for all boards.
- *
- *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

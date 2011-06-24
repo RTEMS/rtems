@@ -1,6 +1,10 @@
-/*
- * flashdisk.h -- Flash disk block device implementation
+/**
+ * @file rtems/flashdisk.h
  *
+ * This file defines the interface to a flash disk block device.
+ */
+
+/*
  * Copyright (C) 2007 Chris Johns
  *
  * The license and distribution terms for this file may be

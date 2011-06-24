@@ -1,13 +1,12 @@
 /**
  * @file rtems/libcsupport.h
+ *
+ * This include file contains the information regarding the
+ * RTEMS specific support for the standard C library.
  */
 
-/*  libcsupport.h
- *
- *  This include file contains the information regarding the
- *  RTEMS specific support for the standard C library.
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

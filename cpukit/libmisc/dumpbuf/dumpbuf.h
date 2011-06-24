@@ -1,5 +1,12 @@
+/**
+ * @file rtems/dumpbuf.h
+ *
+ * This file defines the interface to the RTEMS methods to print a
+ * memory buffer in a style similar to many ROM monitors and debuggers.
+ */
+
 /*
- *  COPYRIGHT (c) 1997-2007.
+ *  COPYRIGHT (c) 1997-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in

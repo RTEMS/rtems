@@ -1,12 +1,12 @@
 /**
  * @file rtems/posix/pthread.h
+ *
+ * This include file contains all the private support information for
+ * POSIX threads.
  */
 
 /*
- *  This include file contains all the private support information for
- *  POSIX threads.
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

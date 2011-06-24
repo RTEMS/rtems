@@ -1,18 +1,18 @@
 /**
  * @file rtems/posix/spinlock.h
- */
-
-/*
- *  This include file contains all the constants and structures associated
- *  with the POSIX Spinlock Manager.
+ *
+ * This include file contains all the constants and structures associated
+ * with the POSIX Spinlock Manager.
  *
  *  Directives provided are:
  *
- *     + create a spinlock
- *     + delete a spinlock
- *     + wait for a spinlock
- *
- *  COPYRIGHT (c) 1989-2008.
+ *   - create a spinlock
+ *   - delete a spinlock
+ *   - wait for a spinlock
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

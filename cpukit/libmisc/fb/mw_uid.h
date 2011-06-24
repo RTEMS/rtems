@@ -1,9 +1,12 @@
+/**
+ * @file rtems/mw_uid.h
+ *
+ * This file defines the interface for input devices used by MicroWindows
+ * in an embedded system environment.
+ */
+
 /*
  * Copyright (c) 2000 - Rosimildo da Silva
- *
- * MODULE DESCRIPTION:
- * This module defines the interface for input devices used by MicroWindows
- * in an embedded system environment.
  *
  * $Id$
  */

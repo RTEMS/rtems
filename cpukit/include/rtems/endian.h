@@ -1,3 +1,9 @@
+/**
+ * @file rtems/endian.h
+ *
+ * This include file provides endian information about the target.
+ */
+
 /*
  *  $Id$
  */

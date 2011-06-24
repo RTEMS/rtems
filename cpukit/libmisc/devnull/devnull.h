@@ -1,7 +1,11 @@
-/*  devnull.h
+/**
+ * @file rtems/devnull.h
  *
- *  Null device driver, derived from rtems' stub driver.
- *
+ * This include file defines the interface to the RTEMS /dev/null
+ * device driver.
+ */
+
+/*
  *  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
  *
  *  COPYRIGHT (c) 1989-2000.

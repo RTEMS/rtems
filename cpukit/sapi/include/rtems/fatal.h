@@ -1,18 +1,17 @@
 /**
  * @file rtems/fatal.h
+ *
+ * This include file contains constants and prototypes related
+ * to the Fatal Error Manager.  This manager processes all fatal or
+ * irrecoverable errors.
+ *
+ * This manager provides directives to:
+ *
+ *   - announce a fatal error has occurred
  */
 
 /*
- *  This include file contains constants and prototypes related
- *  to the Fatal Error Manager.  This manager processes all fatal or
- *  irrecoverable errors.
- *
- *  This manager provides directives to:
- *
- *     + announce a fatal error has occurred
- *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

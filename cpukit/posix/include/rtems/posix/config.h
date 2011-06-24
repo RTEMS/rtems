@@ -1,8 +1,8 @@
 /**
  * @file rtems/posix/config.h
  *
- *  This include file contains the table of user defined configuration
- *  parameters specific for the POSIX API.
+ * This include file contains the table of user defined configuration
+ * parameters specific for the POSIX API.
  */
 
 /*

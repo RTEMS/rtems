@@ -1,3 +1,8 @@
+/** @file rtems/fb.h
+ *
+ * This file defines the interface to a frame buffer device driver.
+ */
+
 /*
  * Copyright (c) 2000 - Rosimildo da Silva
  *

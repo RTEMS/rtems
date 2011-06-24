@@ -1,11 +1,11 @@
 /**
  * @file rtems/config.h
+ *
+ * This include file contains the table of user defined configuration
+ * parameters.
  */
 
 /*
- *  This include file contains the table of user defined configuration
- *  parameters.
- *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *

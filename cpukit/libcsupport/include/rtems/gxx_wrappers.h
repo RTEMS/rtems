@@ -1,6 +1,10 @@
-/*
- *  RTEMS threads compatibility routines for libgcc2.
+/**
+ * @file rtems/gxx_wrappers.h
  *
+ * RTEMS threads compatibility routines for libgcc2.
+ */
+
+/*
  *  by: Rosimildo da Silva (rdasilva@connecttel.com)
  *
  *  Used ideas from:

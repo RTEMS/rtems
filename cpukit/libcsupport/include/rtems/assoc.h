@@ -1,13 +1,11 @@
 /**
  * @file rtems/assoc.h
+ *
+ * RTEMS associativity routines.  Mainly used to convert a value from
+ * one space to another (eg: our errno's to host errno's and vice-versa)
  */
 
 /*
- *
- *  Rtems associativity routines.  Mainly used to convert a value from
- *  one space to another (eg: our errno's to host errno's and v.v)
- *
- *
  *  $Id$
  */
 

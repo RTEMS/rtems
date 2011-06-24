@@ -1,13 +1,12 @@
 /**
  * @file rtems/posix/semaphore.h
+ *
+ * This include file contains all the private support information for
+ * POSIX Semaphores.
  */
 
-/*  rtems/posix/semaphore.h
- *
- *  This include file contains all the private support information for
- *  POSIX Semaphores.
- *
- *  COPYRIGHT (c) 1989-2008.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

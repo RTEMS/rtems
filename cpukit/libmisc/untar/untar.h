@@ -1,3 +1,9 @@
+/**
+ * @file rtems/untar.h
+ *
+ * This file defines the interface to methods which can untar an image.
+ */
+
 /*
  *  Written by: Jake Janovetz <janovetz@tempest.ece.uiuc.edu>
  *

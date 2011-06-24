@@ -1,11 +1,11 @@
 /**
  * @file rtems/termiostypes.h
+ *
+ * RTEMS termios device support internal data structures
  */
 
 /*
- *  RTEMS termios device support internal data structures
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

@@ -1,11 +1,12 @@
 /**
  * @file rtems/rtems/timer.inl
  *
- *  This file contains the static inline implementation of the inlined routines
- *  from the Timer Manager.
+ * This file contains the static inline implementation of the inlined routines
+ * from the Timer Manager.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

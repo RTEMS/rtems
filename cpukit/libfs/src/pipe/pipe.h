@@ -1,6 +1,11 @@
-/*
- * pipe.h: header of POSIX FIFO/pipe
+/**
+ * @file rtems/pipe.h
  *
+ * This include file defines the interface to the POSIX FIFO/pipe file system
+ * support.
+ */
+
+/*
  * Author: Wei Shen <cquark@gmail.com>
  *
  * The license and distribution terms for this file may be

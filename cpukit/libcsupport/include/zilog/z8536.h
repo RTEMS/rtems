@@ -1,19 +1,15 @@
 /**
  * @file rtems/zilog/z8536.h
+ *
+ * This include file defines information related to a Zilog Z8536
+ * Counter/Timer/IO Chip.  It is a IO mapped part.
+ *
+ * @note This file shares as much as possible with the include
+ *       file for the Z8036 via z8x36.h.
  */
 
 /*
- *  This include file defines information related to a Zilog Z8536
- *  Counter/Timer/IO Chip.  It is a IO mapped part.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  NOTE: This file shares as much as possible with the include
- *        file for the Z8036 via z8x36.h.
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

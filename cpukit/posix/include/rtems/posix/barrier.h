@@ -1,18 +1,18 @@
 /**
  * @file rtems/posix/barrier.h
- */
-
-/*
+ *
  *  This include file contains all the constants and structures associated
  *  with the POSIX Barrier Manager.
  *
  *  Directives provided are:
  *
- *     + create a barrier
- *     + delete a barrier
- *     + wait for a barrier
- *
- *  COPYRIGHT (c) 1989-2008.
+ *   - create a barrier
+ *   - delete a barrier
+ *   - wait for a barrier
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
