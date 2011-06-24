@@ -1,3 +1,9 @@
+2011-06-24	Arnout Vandecappelle <arnout@mind.be>
+		Sebastien Bourdeauducq <sebastien@milkymist.org>
+
+	PR 1724/cpukit
+	* ftpd/ftpd.h, ftpd/ftpd.c: Added USER/PASS authentication.
+
 2011-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/include/rtems/rtems/tasks.h: Complete manager description.

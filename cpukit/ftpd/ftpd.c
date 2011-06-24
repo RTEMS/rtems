@@ -1,23 +1,29 @@
 /* FIXME: 1. Parse command is a hack.  We can do better.
- *        2. Some sort of access control?
- *        3. OSV: hooks support seems to be bad, as it requires storing of
+ *        2. OSV: hooks support seems to be bad, as it requires storing of
  *           entire input file in memory.  Seem to be better to change it to
  *           something more reasonable, like having
  *           'hook_write(void const *buf, int count)' routine that will be
  *           called multiple times while file is being received.
- *        4. OSV: Remove hack with "/dev/null"?
+ *        3. OSV: Remove hack with "/dev/null"?
  *
  *  FTP Server Daemon
  *
  *  Submitted by: Jake Janovetz <janovetz@tempest.ece.uiuc.edu>
  *
  *  Changed by:   Sergei Organov <osv@javad.ru> (OSV)
+ *                Arnout Vandecappelle <arnout@mind.be> (AV)
+ *                Sebastien Bourdeauducq <sebastien@milkymist.org> (MM)
+ *                
  *
  *  Changes:
  *
  *    2010-12-02        Sebastien Bourdeauducq <sebastien@milkymist.org>
  *
  *      * Support spaces in filenames
+ * 
+ *    2010-04-29        Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ * 
+ *      * Added USER/PASS authentication.
  * 
  *    2001-01-31        Sergei Organov <osv@javad.ru>
  *
@@ -153,6 +159,7 @@
  * Change History:
  *  12/01/97   - Creation (JWJ)
  *  2001-01-08 - Changes by OSV
+ *  2010-04-29 - Authentication added by AV
  *************************************************************************/
 
 /*************************************************************************
@@ -267,6 +274,9 @@ typedef struct
   int                 idle;        /* Timeout in seconds */
   int                 xfer_mode;   /* Transfer mode (ASCII/binary) */
   rtems_id            tid;         /* Task id */
+  char                *user;       /* user name (0 if not supplied) */
+  char                *pass;       /* password (0 if not supplied) */
+  bool                auth;        /* true if user/pass was valid, false if not or not supplied */
 } FTPD_SessionInfo_t;
 
 
@@ -798,7 +808,7 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
   struct stat         stat_buf;
   int                 res = 0;
 
-  if(!can_read())
+  if(!can_read() || !info->auth)
   {
     send_reply(info, 550, "Access denied.");
     return;
@@ -944,7 +954,7 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
   typedef ssize_t (*WriteProc)(int, void const*, size_t);
   WriteProc              wrt = &write;
 
-  if(!can_write())
+  if(!can_write() || !info->auth)
   {
     send_reply(info, 550, "Access denied.");
     return;
@@ -1270,6 +1280,12 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
   time_t curTime;
   int sc = 1;
 
+  if(!info->auth)
+  {
+    send_reply(info, 550, "Access denied.");
+    return;
+  }
+
   send_reply(info, 150, "Opening ASCII mode data connection for LIST.");
 
   s = data_socket(info);
@@ -1338,6 +1354,12 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
 static void
 command_cwd(FTPD_SessionInfo_t  *info, char *dir)
 {
+  if(!info->auth)
+  {
+    send_reply(info, 550, "Access denied.");
+    return;
+  }
+
   if(chdir(dir) == 0)
     send_reply(info, 250, "CWD command successful.");
   else
@@ -1364,6 +1386,13 @@ command_pwd(FTPD_SessionInfo_t  *info)
   char const* cwd;
   errno = 0;
   buf[0] = '"';
+
+  if(!info->auth)
+  {
+    send_reply(info, 550, "Access denied.");
+    return;
+  }
+
   cwd = getcwd(buf + 1, FTPD_BUFSIZE - 4);
   if(cwd)
   {
@@ -1400,6 +1429,12 @@ command_mdtm(FTPD_SessionInfo_t  *info, char const* fname)
 {
   struct stat stbuf;
   char buf[FTPD_BUFSIZE];
+
+  if(!info->auth)
+  {
+    send_reply(info, 550, "Access denied.");
+    return;
+  }
 
   if (0 > stat(fname, &stbuf))
   {
@@ -1725,13 +1760,46 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
       send_reply(info, 504, "Type not implemented.  Set to I.");
     }
   }
-  else if (!strcmp("USER", cmd) || !strcmp("PASS", cmd))
+  else if (!strcmp("USER", cmd))
   {
-    send_reply(info, 230, "User logged in.");
+    sscanf(args, "%254s", fname);
+    if (info->user)
+      free(info->user);
+    if (info->pass)
+      free(info->pass);
+    info->pass = NULL;
+    info->user = strdup(fname);
+    if (rtems_ftpd_configuration.login &&
+      !rtems_ftpd_configuration.login(info->user, NULL)) {
+      info->auth = false;
+      send_reply(info, 331, "User name okay, need password.");
+    } else {
+      info->auth = true;
+      send_reply(info, 230, "User logged in.");
+    }
+  }
+  else if (!strcmp("PASS", cmd))
+  {
+    sscanf(args, "%254s", fname);
+    if (info->pass)
+      free(info->pass);
+    info->pass = strdup(fname);
+    if (!info->user) {
+      send_reply(info, 332, "Need account to log in");
+    } else {
+      if (rtems_ftpd_configuration.login &&
+        !rtems_ftpd_configuration.login(info->user, info->pass)) {
+        info->auth = false;
+        send_reply(info, 530, "Not logged in.");
+      } else {
+        info->auth = true;
+        send_reply(info, 230, "User logged in.");
+      }
+    }
   }
   else if (!strcmp("DELE", cmd))
   {
-    if(!can_write())
+    if(!can_write() || !info->auth)
     {
       send_reply(info, 550, "Access denied.");
     }
@@ -1754,7 +1822,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
     {
       int mask;
 
-      if(!can_write())
+      if(!can_write() || !info->auth)
       {
         send_reply(info, 550, "Access denied.");
       }
@@ -1773,7 +1841,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   }
   else if (!strcmp("RMD", cmd))
   {
-    if(!can_write())
+    if(!can_write() || !info->auth)
     {
       send_reply(info, 550, "Access denied.");
     }
@@ -1790,7 +1858,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   }
   else if (!strcmp("MKD", cmd))
   {
-    if(!can_write())
+    if(!can_write() || !info->auth)
     {
       send_reply(info, 550, "Access denied.");
     }
@@ -1894,6 +1962,8 @@ session(rtems_task_argument arg)
     /* Close connection and put ourselves back into the task pool. */
     close_data_socket(info);
     close_stream(info);
+    free(info->user);
+    free(info->pass);
     task_pool_release(info);
   }
 }
@@ -1980,6 +2050,12 @@ daemon(rtems_task_argument args __attribute__((unused)))
             info->data_addr.sin_port =
               htons(ntohs(info->ctrl_addr.sin_port) - 1);
             info->idle = ftpd_timeout;
+            info->user = NULL;
+            info->pass = NULL;
+            if (rtems_ftpd_configuration.login)
+              info->auth = false;
+            else
+              info->auth = true;
             /* Wakeup the session task.  The task will call task_pool_release
                after it closes connection. */
             rtems_event_send(info->tid, FTPD_RTEMS_EVENT);

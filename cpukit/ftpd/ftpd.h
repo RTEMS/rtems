@@ -25,6 +25,8 @@ enum
 
 typedef int (*rtems_ftpd_hookfunction)(char *, size_t);
 
+#include <rtems/shell.h>
+
 struct rtems_ftpd_hook
 {
    char                    *filename;
@@ -45,6 +47,8 @@ struct rtems_ftpd_configuration
    int                     access;             /* 0 - r/w, 1 - read-only,
                                                   2 - write-only,
                                                   3 - browse-only */
+   rtems_shell_login_check_t login;            /* Login check or 0 to ignore
+                                                  user/passwd. */
 };
 
 /*
