@@ -31,10 +31,16 @@
 #endif
 
 #ifndef TRUE
+  /**
+   *  This ensures that RTEMS has TRUE defined in all situations.
+   */
   #define TRUE 1
 #endif
 
 #ifndef FALSE
+  /**
+   *  This ensures that RTEMS has FALSE defined in all situations.
+   */
   #define FALSE 0
 #endif
 
@@ -49,11 +55,11 @@
  *  referenced as "external" in every other file.
  */
 #ifdef SCORE_INIT
-#undef  SCORE_EXTERN
-#define SCORE_EXTERN
+  #undef  SCORE_EXTERN
+  #define SCORE_EXTERN
 #else
-#undef  SCORE_EXTERN
-#define SCORE_EXTERN  extern
+  #undef  SCORE_EXTERN
+  #define SCORE_EXTERN  extern
 #endif
 
 /**
@@ -63,11 +69,11 @@
  *  referenced as "external" in every other file.
  */
 #ifdef SAPI_INIT
-#undef  SAPI_EXTERN
-#define SAPI_EXTERN
+  #undef  SAPI_EXTERN
+  #define SAPI_EXTERN
 #else
-#undef  SAPI_EXTERN
-#define SAPI_EXTERN  extern
+  #undef  SAPI_EXTERN
+  #define SAPI_EXTERN  extern
 #endif
 
 /**
@@ -77,11 +83,11 @@
  *  referenced as "external" in every other file.
  */
 #ifdef RTEMS_API_INIT
-#undef  RTEMS_EXTERN
-#define RTEMS_EXTERN
+  #undef  RTEMS_EXTERN
+  #define RTEMS_EXTERN
 #else
-#undef  RTEMS_EXTERN
-#define RTEMS_EXTERN  extern
+  #undef  RTEMS_EXTERN
+  #define RTEMS_EXTERN  extern
 #endif
 
 /**
@@ -91,11 +97,11 @@
  *  referenced as "external" in every other file.
  */
 #ifdef POSIX_API_INIT
-#undef  POSIX_EXTERN
-#define POSIX_EXTERN
+  #undef  POSIX_EXTERN
+  #define POSIX_EXTERN
 #else
-#undef  POSIX_EXTERN
-#define POSIX_EXTERN  extern
+  #undef  POSIX_EXTERN
+  #define POSIX_EXTERN  extern
 #endif
 
 /**
@@ -105,9 +111,9 @@
  *  type checking with no cost in code size or execution speed.
  */
 #ifdef __GNUC__
-#  define RTEMS_INLINE_ROUTINE static __inline__
+  #define RTEMS_INLINE_ROUTINE static __inline__
 #else
-#  define RTEMS_INLINE_ROUTINE static inline
+  #define RTEMS_INLINE_ROUTINE static inline
 #endif
 
 /**

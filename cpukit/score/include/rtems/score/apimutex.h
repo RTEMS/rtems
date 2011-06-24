@@ -98,11 +98,27 @@ void _API_Mutex_Unlock( API_Mutex_Control *mutex );
  * @{
  */
 
+/**
+ *  @brief Memory Allocation Mutex
+ *
+ *  This points to the API Mutex instance used to ensure that only
+ *  one thread at a time is allocating or freeing memory.
+ */
 SCORE_EXTERN API_Mutex_Control *_RTEMS_Allocator_Mutex;
 
+/**
+ *  @brief Macro to Ease Locking the Allocator Mutex
+ *
+ *  This macro makes it explicit that one is locking the allocator mutex.
+ */
 #define _RTEMS_Lock_allocator() \
   _API_Mutex_Lock( _RTEMS_Allocator_Mutex )
 
+/**
+ *  @brief Macro to Ease Unlocking the Allocator Mutex
+ *
+ *  This macro makes it explicit that one is unlocking the allocator mutex.
+ */
 #define _RTEMS_Unlock_allocator() \
   _API_Mutex_Unlock( _RTEMS_Allocator_Mutex )
 

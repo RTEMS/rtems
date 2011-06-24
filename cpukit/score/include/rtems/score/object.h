@@ -26,6 +26,12 @@
 #include <rtems/score/isr.h>
 
 #if defined(RTEMS_POSIX_API)
+  /**
+   *  This macro is defined when an API is enabled that requires the
+   *  use of strings for object names.  Since the Classic API uses
+   *  32-bit unsigned integers and not strings, this allows us to
+   *  disable this in the smallest RTEMS configuratinos.
+   */
   #define RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES
 #endif
 

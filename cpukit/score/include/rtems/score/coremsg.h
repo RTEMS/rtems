@@ -36,14 +36,28 @@
 #include <rtems/score/watchdog.h>
 
 #if defined(RTEMS_POSIX_API)
+  /**
+   *  This macro is defined when an API is enabled that requires that the
+   *  Message Queue Handler include support for priority based enqueuing
+   *  of messages.
+   */
   #define RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY
 #endif
 
 #if defined(RTEMS_POSIX_API)
+  /**
+   *  This macro is defined when an API is enabled that requires that the
+   *  Message Queue Handler include support for notification of enqueuing
+   *  a message.
+   */
   #define RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION
 #endif
 
 #if defined(RTEMS_POSIX_API)
+  /**
+   *  This macro is defined when an API is enabled that requires the
+   *  Message Queue Handler include support for blocking send operations.
+   */
   #define RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND
 #endif
 
