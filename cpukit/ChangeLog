@@ -1,3 +1,8 @@
+2011-06-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/include/semaphore.h, posix/include/rtems/posix/mutex.h,
+	posix/inline/rtems/posix/mutex.inl: Fix typos.
+
 2011-06-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/rtems/bspIo.h, include/rtems/concat.h,

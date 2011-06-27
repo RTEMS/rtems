@@ -3,6 +3,7 @@
  *
  * This include file contains all the private support information for
  * POSIX mutex's.
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2011.

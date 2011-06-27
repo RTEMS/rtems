@@ -3,7 +3,7 @@
  *
  * This file contains definitions that are internal to the RTEMS
  * implementation of POSIX Semaphores.
- *
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2011.
