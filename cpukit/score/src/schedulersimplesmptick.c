@@ -15,12 +15,14 @@
 
 #include <rtems/system.h>
 #include <rtems/score/schedulersimplesmp.h>
+#include <rtems/score/smp.h>
 
 static void _Scheduler_simple_smp_Tick_helper(
   int cpu
 )
 {
   Thread_Control *executing;
+  ISR_Level       level;
 
   executing = _Per_CPU_Information[cpu].executing;
 

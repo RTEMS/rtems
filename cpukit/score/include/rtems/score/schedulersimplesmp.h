@@ -105,7 +105,6 @@ void _Scheduler_simple_smp_Unblock(
  */
 void _Scheduler_simple_smp_Tick( void );
 
-/**
 #ifdef __cplusplus
 }
 #endif

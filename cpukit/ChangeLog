@@ -1,3 +1,9 @@
+2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/Makefile.am, score/include/rtems/score/schedulersimplesmp.h,
+	score/src/schedulersimplesmptick.c: Build schedulersimplesmptick.c
+	and fix typos.
+
 2011-06-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/include/semaphore.h, posix/include/rtems/posix/mutex.h,

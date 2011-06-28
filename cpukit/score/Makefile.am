@@ -134,7 +134,7 @@ endif
 if HAS_SMP
 libscore_a_SOURCES += src/smp.c src/smplock.c \
     src/schedulersimplesmpblock.c src/schedulersimplesmpschedule.c \
-    src/schedulersimplesmpunblock.c src/schedulerprioritytick.c 
+    src/schedulersimplesmpunblock.c src/schedulersimplesmptick.c 
 endif
 
 ## CORE_APIMUTEX_C_FILES
