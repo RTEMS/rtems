@@ -222,6 +222,10 @@ extern int LEON3_Cpu_Index;
 
 #define LEON3_MP_IRQ    14        /* Irq used by shared memory driver */
 
+#define LEON3_IRQMPSTATUS_CPUNR     28
+#define LEON3_IRQMPSTATUS_BROADCAST 27
+
+
 #ifndef ASM
 
 /*

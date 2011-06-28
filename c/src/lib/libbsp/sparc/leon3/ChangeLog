@@ -1,3 +1,10 @@
+2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+		Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1801/bsps
+	* Makefile.am, include/leon.h: Add SMP support to LEON3 BSP.
+	* smp/getcpuid.c, smp/smp_leon3.c: New files.
+
 2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Fix broken path to clockdrv_shell.h.
