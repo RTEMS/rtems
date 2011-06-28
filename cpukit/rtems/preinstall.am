@@ -164,6 +164,11 @@ $(PROJECT_INCLUDE)/rtems/rtems/taskmp.h: include/rtems/rtems/taskmp.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/taskmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/taskmp.h
 endif
+if HAS_SMP
+$(PROJECT_INCLUDE)/rtems/rtems/smp.h: include/rtems/rtems/smp.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/smp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/smp.h
+endif
 $(PROJECT_INCLUDE)/rtems/rtems/asr.inl: inline/rtems/rtems/asr.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/asr.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/asr.inl

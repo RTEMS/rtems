@@ -1,5 +1,13 @@
 2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1826/cpukit
+	* libmisc/cpuuse/cpuusagereport.c, rtems/Makefile.am,
+	rtems/preinstall.am, rtems/include/rtems.h: Add SMP Helper methods to
+	Classic API.
+	* rtems/include/rtems/rtems/smp.h: New file.
+
+2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/Makefile.am, score/include/rtems/score/schedulersimplesmp.h,
 	score/src/schedulersimplesmptick.c: Build schedulersimplesmptick.c
 	and fix typos.

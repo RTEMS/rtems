@@ -57,6 +57,10 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/signalmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/taskmp.h
 endif
 
+if HAS_SMP
+include_rtems_rtems_HEADERS += include/rtems/rtems/smp.h
+endif
+
 include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/attr.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/barrier.inl
