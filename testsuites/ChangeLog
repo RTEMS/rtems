@@ -1,3 +1,8 @@
+2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac, support/include/test_support.h:
+	* support/src/locked_print.c: New file.
+
 2011-04-27	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1784

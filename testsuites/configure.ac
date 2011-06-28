@@ -25,6 +25,7 @@ RTEMS_PROG_CC
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
 RTEMS_CHECK_CPUOPTS([RTEMS_MULTIPROCESSING])
 RTEMS_CHECK_CPUOPTS([RTEMS_NETWORKING])
+RTEMS_CHECK_CPUOPTS([RTEMS_SMP])
 
 case $enable_tests in
 yes | samples )
@@ -37,6 +38,9 @@ if test "$enable_tests" = "yes"; then
   AC_CONFIG_SUBDIRS(libtests sptests fstests psxtests)
   if test "$rtems_cv_RTEMS_MULTIPROCESSING" = "yes"; then
     AC_CONFIG_SUBDIRS(mptests)
+  fi
+  if test "$rtems_cv_RTEMS_SMP" = "yes"; then
+    AC_CONFIG_SUBDIRS(smptests)
   fi
   # Now do performance tests
   AC_CONFIG_SUBDIRS(tmtests psxtmtests)

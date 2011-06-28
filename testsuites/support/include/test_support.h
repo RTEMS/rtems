@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -79,6 +79,15 @@ void rtems_time_test_measure_operation(
   int                       iterations,
   int                       overhead
 );
+
+/*********************************************************************/
+/*********************************************************************/
+/**************              TEST SUPPORT               **************/
+/*********************************************************************/
+/*********************************************************************/
+extern void locked_print_init(void);
+extern void locked_printf(const char *fmt, ...);
+extern void locked_printk(const char *fmt, ...);
 
 #ifdef __cplusplus
 };
