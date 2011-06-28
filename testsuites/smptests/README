@@ -1,0 +1,17 @@
+#
+#  COPYRIGHT (c) 1989-2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+#  $Id$
+#
+
+This directory contains the RTEMS SMP Test Suite.
+
+As of June 2011, these tests are known to run on only
+
++ pcp4 BSP using qemu with 2-4 cores
++ leon3 BSP using grsim with 4 cores

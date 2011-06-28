@@ -1,0 +1,22 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  smp09
+
+directives:
+
+  + rtems_cpu_usage_report
+
+concepts:
+
++ Verify that CPU usage reporting is correct in an SMP configuration

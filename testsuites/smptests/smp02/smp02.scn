@@ -1,0 +1,25 @@
+***  SMP02 TEST ***
+ CPU 0 start task TA1
+ CPU 0 start task TA2
+ CPU 0 start task TA3
+ CPU 1 Task TA2 Obtain
+ CPU 1 Task TA2 Release
+ CPU 1 Task TA2 Obtain
+ CPU 1 Task TA2 Release
+ CPU 3 Task TA4 Obtain
+ CPU 3 Task TA4 Release
+ CPU 1 Task TA2 Obtain
+ CPU 1 Task TA2 Release
+ CPU 3 Task TA4 Obtain
+ CPU 3 Task TA4 Release
+ CPU 1 Task TA2 Obtain
+ CPU 1 Task TA2 Release
+ CPU 2 Task TA3 Obtain
+ CPU 2 Task TA3 Release
+ CPU 3 Task TA4 Obtain
+ CPU 3 Task TA4 Release
+ CPU 1 Task TA2 Obtain
+ CPU 1 Task TA2 Release
+ CPU 2 Task TA3 Obtain
+ CPU 2 Task TA3 Release
+*** END OF SMP 02 TEST ***

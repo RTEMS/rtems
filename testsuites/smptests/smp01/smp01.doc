@@ -1,0 +1,21 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-1999.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This is a simple test that verifies that each of the smp
+processors can run a task.  The init task creates and starts
+a test_task for each prcessor.  With a small delay between
+the start of each processor to allow for the processor to
+print its status.  Note:  This may need to change to a semaphore
+locked print routine at some point in the furture.
+
+After the tasks have been started the init task waits for flags
+to be set by each task indicating that they are running.  Once all
+flags are set the program terminates.

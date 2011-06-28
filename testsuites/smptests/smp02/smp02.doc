@@ -1,0 +1,19 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-1999.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This test creates tasks for each process (other than the 
+one that Init is running on).  Then drops into a loop waiting
+on a log file to fill up.  Once the log file is filled the 
+information is printed and the program ends.
+
+Each task poll for a semaphore.  Once the semaphore is 
+obtained , a log the obtain and release is recorded and
+the semaphore is released.  If the log is full the semaphore
+is released without changing the log.

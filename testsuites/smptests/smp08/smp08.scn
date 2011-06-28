@@ -1,0 +1,16 @@
+*** CLOCK TICK TEST ***
+TA1 - clock_get_tod - 09:00:00   12/31/1988
+TA2 - clock_get_tod - 09:00:00   12/31/1988
+TA3 - clock_get_tod - 09:00:00   12/31/1988
+TA1 - clock_get_tod - 09:00:05   12/31/1988
+TA1 - clock_get_tod - 09:00:10   12/31/1988
+TA2 - clock_get_tod - 09:00:10   12/31/1988
+TA1 - clock_get_tod - 09:00:15   12/31/1988
+TA3 - clock_get_tod - 09:00:15   12/31/1988
+TA1 - clock_get_tod - 09:00:20   12/31/1988
+TA2 - clock_get_tod - 09:00:20   12/31/1988
+TA1 - clock_get_tod - 09:00:25   12/31/1988
+TA1 - clock_get_tod - 09:00:30   12/31/1988
+TA2 - clock_get_tod - 09:00:30   12/31/1988
+TA3 - clock_get_tod - 09:00:30   12/31/1988
+*** END OF CLOCK TICK TEST ***

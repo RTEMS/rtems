@@ -1,0 +1,7 @@
+** TEST SMP06 ***
+rtems_clock_tick - so this task has run longer
+ CPU 0 start task TA1
+ CPU 1 running Task TA1 
+ CPU 0 start task TA2
+ CPU 1 running Task TA2 
+*** END OF TEST SMP06 ***

@@ -1,0 +1,5 @@
+*** TEST SMP05 ***
+ CPU 0 start task TA1
+ CPU 0 start task TA2
+Shut down from CPU 1
+*** END OF TEST SMP05 ***

@@ -1,0 +1,8 @@
+***  SMP01 TEST ***
+CPU 0 start task TA1
+CPU 1 running Task TA1
+CPU 0 start task TA2
+CPU 2 running Task TA2
+CPU 0 start task TA3
+CPU 3 running Task TA3
+*** END OF SMP 01 TEST ***

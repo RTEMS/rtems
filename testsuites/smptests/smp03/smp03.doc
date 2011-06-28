@@ -1,0 +1,19 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-1999.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This test runs the init task on the first CPU at a priority
+of 5.  The Init task creates tasks for each remaining processor
+at priorities ( 5 + (2*CPU) ).  It then creates one more
+task at a priority of 3 wich should preempt the last task created.
+The Init task waits on the last task to run then ends the program.
+
+Each created task prints the cpu and task that it is running.  Then
+checkes the task id to see if it is the final task.  If it is the
+final task, a flag is set for the Init task to see.
