@@ -1,13 +1,15 @@
-/*
- *  start.s
+/**
+ *  @file
  *
  *  Common start code for SPARC.
  *
  *  This is based on the file srt0.s provided with the binary
  *  distribution of the SPARC Instruction Simulator (SIS) found
  *  at ftp://ftp.estec.esa.nl/pub/ws/wsd/erc32.
- *
- *  COPYRIGHT (c) 1989-2006.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,17 +20,30 @@
  */
 
 #include <rtems/asm.h>
+#include <rtems/system.h>
 #include <bspopts.h>
+
+#if defined(RTEMS_SMP) && defined(BSP_LEON3_SMP)
+  #define ENABLE_SMP
+#endif
 
 /*
  *  Unexpected trap will halt the processor by forcing it to error state
  */
-
 #define BAD_TRAP \
   ta 0; \
   nop; \
   nop; \
   nop;
+
+#if defined(ENABLE_SMP)
+/*
+ * Variables to contain information used with bring a secondary core
+ * out of reset.
+ */
+  	.global bsp_ap_stack
+  	.global bsp_ap_entry
+#endif
 
 /*
  *  Software trap. Treat as BAD_TRAP for the time being...
@@ -220,6 +235,23 @@ SYM(hard_reset):
         nop
         nop
         nop
+
+#if defined(ENABLE_SMP)
+	rd	%asr17, %g1
+	srl	%g1, 28, %g1
+	and	%g1, 0xff, %g1			! extract cpu id
+	cmp	%g1, 0
+	beq	cpu0
+	nop
+	set	SYM(bsp_ap_stack), %g1		! set the stack pointer
+	ld	[%g1], %sp
+	mov	%sp, %fp
+	set	SYM(bsp_ap_entry), %g1		! where to start
+	ld	[%g1], %g1
+	call	%g1
+	nop
+cpu0:
+#endif
 
 	set	(SYM(rdb_start)), %g6	! End of RAM
 	st	%sp, [%g6]

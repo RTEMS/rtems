@@ -1,3 +1,9 @@
+2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+		Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 1801/bsps
+	* shared/start.S: Add SMP support to LEON3 BSP.
+
 2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove references to non-existing files.
