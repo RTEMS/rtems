@@ -1,3 +1,8 @@
+2011-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* smp/getcpuid.c: Fix header from accidental and irrelevant copy and
+	paste.
+
 2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 		Jennifer Averett <jennifer.averett@OARcorp.com>
 

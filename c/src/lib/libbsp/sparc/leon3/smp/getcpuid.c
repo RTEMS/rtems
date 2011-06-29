@@ -1,9 +1,16 @@
+/**
+ *  @file
+ *
+ *  LEON3 SMP Obtain CPU Core Number
+ */
+
 /*
- *  Extracted from smp-imps.c
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
  *
- *  <Insert copyright here : it must be BSD-like so anyone can use it>
- *
- *  Author:  Erich Boleyn  <erich@uruk.org>   http://www.uruk.org/~erich/
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
