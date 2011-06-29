@@ -1,5 +1,11 @@
 2011-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* smp01/smp01.doc, smp02/smp02.doc, smp03/smp03.doc, smp04/smp04.doc,
+	smp05/smp05.doc, smp07/smp07.doc, smp08/smp08.doc, smp08/system.h,
+	smp08/tasks.c: Update copyright.
+
+2011-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* .cvsignore: New file.
 
 2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>

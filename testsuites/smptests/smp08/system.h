@@ -1,9 +1,5 @@
-/*  system.h
- *
- *  This include file contains information that is included in every
- *  function in the test set.
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,7 +11,6 @@
 
 #include "tmacros.h"
 #include "test_support.h"
-
 
 /* functions */
 

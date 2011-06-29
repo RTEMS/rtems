@@ -1,13 +1,5 @@
-/*  Test_task
- *
- *  This routine serves as a test task.  It verifies the basic task
- *  switching capabilities of the executive.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
