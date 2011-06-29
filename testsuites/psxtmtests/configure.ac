@@ -84,5 +84,7 @@ psxtmsleep01/Makefile
 psxtmsleep02/Makefile
 psxtmthread01/Makefile
 psxtmthread03/Makefile
+psxtmnanosleep01/Makefile
+psxtmnanosleep02/Makefile
 ])
 AC_OUTPUT

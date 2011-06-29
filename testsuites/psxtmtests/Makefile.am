@@ -10,6 +10,8 @@ SUBDIRS += psxtmsleep01
 SUBDIRS += psxtmsleep02
 SUBDIRS += psxtmthread01
 SUBDIRS += psxtmthread03
+SUBDIRS += psxtmnanosleep01
+SUBDIRS += psxtmnanosleep02
 endif
 
 DIST_SUBDIRS = $(SUBDIRS)

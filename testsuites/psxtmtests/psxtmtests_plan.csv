@@ -114,5 +114,5 @@
 ,,,
 "sleep - yield","psxtmsleep01","psxtmtest_single","Yes"
 "sleep - blocking","psxtmsleep02","psxtmtest_blocking","Yes"
-"nanosleep - yield","psxtmnanosleep01","psxtmtest_single",
-"nanosleep - blocking","psxtmnanosleep02","psxtmtest_blocking",
+"nanosleep - yield","psxtmnanosleep01","psxtmtest_single","Yes"
+"nanosleep - blocking","psxtmnanosleep02","psxtmtest_blocking","Yes"
