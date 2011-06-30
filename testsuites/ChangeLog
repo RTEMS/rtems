@@ -1,14 +1,3 @@
-2011-06-29	Ricardo Aguirre
-
-	* psxtmtests/Makefile.am, psxtmtests/configure.ac,
-	psxtmtests/psxtmtests_plan.csv: Added nanosleep tests.
-	* psxtmtests/psxtmnanosleep01/Makefile.am,
-	psxtmtests/psxtmnanosleep01/init.c,
-	psxtmtests/psxtmnanosleep01/psxtmnanosleep01.doc,
-	psxtmtests/psxtmnanosleep02/Makefile.am,
-	psxtmtests/psxtmnanosleep02/init.c,
-	psxtmtests/psxtmnanosleep02/psxtmnanosleep02.doc: New files.
-
 2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac, support/include/test_support.h:
