@@ -7,12 +7,15 @@
  */
 
 /*
- * Copyright (c) 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * Copyright (c) 2011 Stephan Hoffmann <sho@reLinux.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -166,6 +169,19 @@ extern "C" {
 #define MLC_BAD_BLOCK_MASK ((uint32_t) 0xff00)
 
 /**
+ * @brief Bad block mark.
+ * 
+ * We define our own bad block mark to be able to recognize the blocks that
+ * have been marked bad during operation later.
+ */
+#define MLC_BAD_BLOCK_MARK ((uint32_t) 0xbadb)
+
+/**
+ * @brief The bytes 4 and 5 are reserved for bad block handling.
+ */
+#define MLC_RESERVED ((uint32_t) 0xffff)
+
+/**
  * @name NAND Status Register
  *
  * @{
@@ -253,6 +269,32 @@ rtems_status_code lpc32xx_mlc_read_page(
 rtems_status_code lpc32xx_mlc_erase_block(uint32_t block_index);
 
 /**
+ * @brief Erases the block with index @a block_index.
+ *
+ * In case of an erase error all pages and the spare areas of this block are
+ * programmed with zero values.  This will mark the first and second page as
+ * bad.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INCORRECT_STATE The first or second page of this block is bad.
+ * @retval RTEMS_INVALID_ID Invalid @a block_index value.
+ * @retval RTEMS_IO_ERROR Erase error.
+ */
+rtems_status_code lpc32xx_mlc_erase_block_safe(uint32_t block_index);
+
+/**
+ * @brief Erases the block with index @a block_index.
+ *
+ * Variant of lpc32xx_mlc_erase_block_safe() with more parameters for
+ * efficiency reasons.
+ */
+rtems_status_code lpc32xx_mlc_erase_block_safe_3(
+  uint32_t block_index,
+  uint32_t first_page_of_block,
+  uint32_t pages_per_block
+);
+
+/**
  * @brief Writes the page with index @a page_index.
  *
  * 32-bit writes will be performed.
@@ -278,7 +320,7 @@ rtems_status_code lpc32xx_mlc_write_page_with_ecc(
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ID Invalid @a block_begin or @a block_end value.
- * @retval RTEMS_IO_ERROR To many bad blocks or source area to big.
+ * @retval RTEMS_IO_ERROR Too many bad blocks or source area too big.
  */
 rtems_status_code lpc32xx_mlc_write_blocks(
   uint32_t block_begin,
@@ -326,6 +368,16 @@ rtems_status_code lpc32xx_mlc_read_blocks(
 static inline bool lpc32xx_mlc_is_bad_page(const uint32_t *spare)
 {
   return (spare [1] & MLC_BAD_BLOCK_MASK) != MLC_BAD_BLOCK_MASK;
+}
+
+static inline void lpc32xx_mlc_set_bad_page(uint32_t *spare)
+{
+  spare [1] = MLC_BAD_BLOCK_MARK;
+}
+
+static inline void lpc32xx_mlc_set_reserved(uint32_t *spare)
+{
+  spare [1] = MLC_RESERVED;
 }
 
 /** @} */

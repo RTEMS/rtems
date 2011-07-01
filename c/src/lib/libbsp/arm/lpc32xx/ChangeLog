@@ -1,3 +1,11 @@
+2011-07-01	Stephan Hoffmann <sho@reLinux.de>
+		Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* misc/nand-mlc-erase-block-safe.c: New file
+	* Makefile.am: Reflect change from above.
+	* misc/nand-mlc-write-blocks.c: Use lpc32xx_mlc_erase_block_safe_3().
+	* include/nand-mlc.h: Bad block handling.
+
 2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Fix broken path to cache_.h.

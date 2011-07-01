@@ -125,6 +125,7 @@ libbsp_a_SOURCES += misc/timer.c \
 	misc/nand-mlc.c \
 	misc/nand-mlc-read-blocks.c \
 	misc/nand-mlc-write-blocks.c \
+	misc/nand-mlc-erase-block-safe.c \
 	misc/restart.c \
 	misc/boot.c \
 	misc/emc.c \
