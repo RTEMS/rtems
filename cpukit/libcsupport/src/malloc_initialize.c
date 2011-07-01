@@ -45,7 +45,7 @@ void RTEMS_Malloc_Initialize(
 {
   /*
    *  If configured, initialize the statistics support
-  */
+   */
   if ( rtems_malloc_statistics_helpers != NULL ) {
     (*rtems_malloc_statistics_helpers->initialize)();
   }
@@ -59,11 +59,13 @@ void RTEMS_Malloc_Initialize(
    *  Initialize the optional sbrk support for extending the heap
    */
   if ( rtems_malloc_sbrk_helpers != NULL ) {
-    heap_begin = (*rtems_malloc_sbrk_helpers->initialize)(
+    void *new_heap_begin = (*rtems_malloc_sbrk_helpers->initialize)(
       heap_begin,
       sbrk_amount
     );
-    heap_size  = (uintptr_t) sbrk_amount;
+
+    heap_size -= (uintptr_t) new_heap_begin - (uintptr_t) heap_begin;
+    heap_begin = new_heap_begin;
   }
 
   /*

@@ -1,3 +1,10 @@
+2011-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/malloc_initialize.c: After discussion with Till
+	Straumann, revert the change from r1.12 to r1.13. This broke BSPs
+	with sbrk() support once the libbsp sbrk() framework was enhanced.
+	psim runs now.
+
 2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1826/cpukit
