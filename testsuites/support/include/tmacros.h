@@ -45,8 +45,15 @@ extern "C" {
 /*
  *  Check that that the dispatch disable level is proper for the
  *  mode/state of the test.  Normally it should be 0 when in task space.
+ *
+ *  This test is only valid when in a non smp system.  In an smp system
+ *  another cpu may be accessing the core at any point when this core
+ *  does not have it locked.
  */
-#define check_dispatch_disable_level( _expect ) \
+#if defined SMPTEST
+ #define check_dispatch_disable_level( _expect ) 
+#else
+ #define check_dispatch_disable_level( _expect ) \
   do { \
     if ( (_expect) != -1 \
            && ((_Thread_Dispatch_in_critical_section() == false && (_expect) != 0) \
@@ -55,11 +62,12 @@ extern "C" {
       printk( \
         "\n_Thread_Dispatch_disable_level is (%" PRId32 \
            ") not %d detected at %s:%d\n", \
-         _Thread_Dispatch_get_disable_level(), (_expect), __FILE__, __LINE__ ); \
+         _Thread_Dispatch_in_critical_section(), (_expect), __FILE__, __LINE__ ); \
       FLUSH_OUTPUT(); \
       rtems_test_exit( 1 ); \
     } \
   } while ( 0 )
+#endif
 
 /*
  *  These macros properly report errors within the Classic API

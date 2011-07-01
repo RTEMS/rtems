@@ -1,3 +1,9 @@
+2011-07-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* support/include/tmacros.h: Disable the check for dispatch disable
+	level for SMP tests. Another CPU may be inside RTEMS by the time
+	these checks are being done which would result in false failures.
+
 2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac, support/include/test_support.h:
