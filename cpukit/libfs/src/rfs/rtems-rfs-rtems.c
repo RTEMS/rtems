@@ -367,7 +367,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
         rtems_rfs_inode_close (fs, &inode);
         rtems_rfs_rtems_unlock (fs);
         *pathloc = pathloc->mt_entry->mt_point_node;
-        return (*pathloc->ops->evalformake_h)(path - node_len, pathloc, name);
+        return (*pathloc->ops->evalformake_h)(path + 2, pathloc, name);
       }
 
       /*
