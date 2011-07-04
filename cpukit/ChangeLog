@@ -1,3 +1,9 @@
+2011-07-04	Chris Johns <chrisj@rtems.org>
+
+	PR 1827/filesystem
+	* libfs/src/rfs/rtems-rfs-rtems.c: Skip the parent (..) path value
+	when eval make moving up out of the RFS file system. 
+
 2011-06-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1812/filesystem
