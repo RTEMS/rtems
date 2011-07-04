@@ -286,13 +286,23 @@ rtems_status_code lpc32xx_mlc_erase_block_safe(uint32_t block_index);
  * @brief Erases the block with index @a block_index.
  *
  * Variant of lpc32xx_mlc_erase_block_safe() with more parameters for
- * efficiency reasons.
+ * efficiency reasons.  The @a page_begin must be the index of the first page
+ * of the block.  The @a page_end must be the page index of the last page of
+ * the block plus one.
  */
 rtems_status_code lpc32xx_mlc_erase_block_safe_3(
   uint32_t block_index,
-  uint32_t first_page_of_block,
-  uint32_t pages_per_block
+  uint32_t page_begin,
+  uint32_t page_end
 );
+
+/**
+ * @brief Writes zero values to the pages specified by @a page_begin and
+ * @a page_end.
+ *
+ * The data and spare area are cleared to zero.  This marks the pages as bad.
+ */
+void lpc32xx_mlc_zero_pages(uint32_t page_begin, uint32_t page_end);
 
 /**
  * @brief Writes the page with index @a page_index.

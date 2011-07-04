@@ -63,32 +63,29 @@ rtems_status_code lpc32xx_mlc_write_blocks(
   }
 
   for (block = block_begin; block != block_end; ++block) {
-    uint32_t first_page_of_block = block * pages_per_block;
+    uint32_t page_begin = block * pages_per_block;
+    uint32_t page_end = page_begin + pages_per_block;
     uint32_t page = 0;
 
-    sc = lpc32xx_mlc_erase_block_safe_3(
-      block,
-      first_page_of_block,
-      pages_per_block
-    );
+    sc = lpc32xx_mlc_erase_block_safe_3(block, page_begin, page_end);
     if (sc != RTEMS_SUCCESSFUL) {
       continue;
     }
 
-    for (page = 0; page < pages_per_block; ++page) {
+    for (page = page_begin; page < page_end; ++page) {
       uintptr_t remainder = (uintptr_t) end - (uintptr_t) current;
       size_t delta = remainder < page_size ? remainder : page_size;
 
       if (remainder > 0) {
         memcpy(page_data_buffer, current, delta);
         sc = lpc32xx_mlc_write_page_with_ecc(
-          first_page_of_block + page,
+          page,
           page_data_buffer,
           ones_spare
         );
         if (sc != RTEMS_SUCCESSFUL) {
-          erase_block(block, first_page_of_block, pages_per_block);
-          zero_block(first_page_of_block, pages_per_block);
+          lpc32xx_mlc_erase_block_safe_3(block, page_begin, page_end);
+          lpc32xx_mlc_zero_pages(page_begin, page_end);
           current = last;
           continue;
         }

@@ -3,8 +3,8 @@
  *
  * @ingroup lpc32xx_nand_mlc
  *
- * @brief lpc32xx_mlc_erase_block_safe() and lpc32xx_mlc_erase_block_safe_3()
- * implementation.
+ * @brief lpc32xx_mlc_erase_block_safe(), lpc32xx_mlc_erase_block_safe_3(), and
+ * lpc32xx_mlc_zero_block() implementation.
  */
 
 /*
@@ -27,13 +27,13 @@
 
 #include <bsp.h>
 
-static void zero_block(uint32_t first_page_of_block, uint32_t pages_per_block)
+void lpc32xx_mlc_zero_pages(uint32_t page_begin, uint32_t page_end)
 {
   uint32_t page = 0;
 
-  for (page = 0; page < pages_per_block; ++page) {
+  for (page = page_begin; page < page_end; ++page) {
     lpc32xx_mlc_write_page_with_ecc(
-      first_page_of_block + page,
+      page,
       lpc32xx_magic_zero_begin,
       lpc32xx_magic_zero_begin
     );
@@ -41,15 +41,15 @@ static void zero_block(uint32_t first_page_of_block, uint32_t pages_per_block)
 }
 
 static bool is_bad_page(
-  uint32_t first_page_of_block,
-  uint32_t page
+  uint32_t page_begin,
+  uint32_t page_offset
 )
 {
   uint32_t spare [MLC_LARGE_SPARE_WORD_COUNT];
 
   memset(spare, 0, MLC_LARGE_SPARE_SIZE);
   lpc32xx_mlc_read_page(
-    first_page_of_block + page,
+    page_begin + page_offset,
     lpc32xx_magic_zero_begin,
     spare
   );
@@ -58,23 +58,23 @@ static bool is_bad_page(
 
 rtems_status_code lpc32xx_mlc_erase_block_safe_3(
   uint32_t block_index,
-  uint32_t first_page_of_block,
-  uint32_t pages_per_block
+  uint32_t page_begin,
+  uint32_t page_end
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  if (is_bad_page(first_page_of_block, 0)) {
+  if (is_bad_page(page_begin, 0)) {
     return RTEMS_INCORRECT_STATE;
   }
 
-  if (is_bad_page(first_page_of_block, 1)) {
+  if (is_bad_page(page_begin, 1)) {
     return RTEMS_INCORRECT_STATE;
   }
 
   sc = lpc32xx_mlc_erase_block(block_index);
   if (sc != RTEMS_SUCCESSFUL) {
-    zero_block(first_page_of_block, pages_per_block);
+    lpc32xx_mlc_zero_pages(page_begin, page_end);
 
     return RTEMS_IO_ERROR;
   }
@@ -85,10 +85,12 @@ rtems_status_code lpc32xx_mlc_erase_block_safe_3(
 rtems_status_code lpc32xx_mlc_erase_block_safe(uint32_t block_index)
 {
   uint32_t pages_per_block = lpc32xx_mlc_pages_per_block();
+  uint32_t page_begin = block_index * pages_per_block;
+  uint32_t page_end = page_begin + pages_per_block;
 
   return lpc32xx_mlc_erase_block_safe_3(
     block_index,
-    block_index * pages_per_block,
-    pages_per_block
+    page_begin,
+    page_end
   );
 }

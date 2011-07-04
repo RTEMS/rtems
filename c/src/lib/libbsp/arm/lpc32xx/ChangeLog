@@ -1,3 +1,8 @@
+2011-07-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* misc/nand-mlc-erase-block-safe.c, misc/nand-mlc-write-blocks.c,
+	include/nand-mlc.h: Fixed write blocks.
+
 2011-07-01	Stephan Hoffmann <sho@reLinux.de>
 		Sebastian Huber <sebastian.huber@embedded-brains.de>
 
