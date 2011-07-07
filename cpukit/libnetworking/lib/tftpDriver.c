@@ -25,10 +25,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <rtems.h>
-#include <rtems/libio.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/tftp.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
