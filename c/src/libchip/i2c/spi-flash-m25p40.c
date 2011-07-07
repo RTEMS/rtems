@@ -25,16 +25,16 @@
 
 static spi_memdrv_t spi_flash_m25p40_rw_drv_t = {
   {/* public fields */
-  ops:         &spi_memdrv_rw_ops, /* operations of general memdrv */
-  size:        sizeof (spi_flash_m25p40_rw_drv_t),
+    .ops =         &spi_memdrv_rw_ops, /* operations of general memdrv */
+    .size =        sizeof (spi_flash_m25p40_rw_drv_t),
   },
   { /* our private fields */
-  baudrate:             2000000,
-  erase_before_program: true,
-  empty_state:          0xff,
-  page_size:            256, /* programming page size in byte */
-  sector_size:          0x10000 /* 64*1024 */, /* erase sector size in byte */
-  mem_size:             0x80000 /* 512*1024 */ /* total capacity in byte    */
+    .baudrate =             2000000,
+    .erase_before_program = true,
+    .empty_state =          0xff,
+    .page_size =            256,     /* programming page size in bytes */
+    .sector_size =          0x10000, /* 64K - erase sector size in bytes */
+    .mem_size =             0x80000, /* 512K - total capacity in bytes */
   }
 };
 
@@ -43,16 +43,16 @@ rtems_libi2c_drv_t *spi_flash_m25p40_rw_driver_descriptor =
 
 static spi_memdrv_t spi_flash_m25p40_ro_drv_t = {
   {/* public fields */
-  ops:         &spi_memdrv_ro_ops, /* operations of general memdrv */
-  size:        sizeof (spi_flash_m25p40_ro_drv_t),
+    .ops =         &spi_memdrv_ro_ops, /* operations of general memdrv */
+    .size =        sizeof (spi_flash_m25p40_ro_drv_t),
   },
   { /* our private fields */
-  baudrate:             2000000,
-  erase_before_program: true,
-  empty_state:          0xff,
-  page_size:            256, /* programming page size in byte */
-  sector_size:          0x10000 /* 64*1024 */, /* erase sector size in byte */
-  mem_size:             0x80000 /* 512*1024 */ /* total capacity in byte    */
+    .baudrate =             2000000,
+    .erase_before_program = true,
+    .empty_state =          0xff,
+    .page_size =            256,    /* programming page size in bytes */
+    .sector_size =          0x10000, /* 64K erase sector size in bytes */
+    .mem_size =             0x80000, /* 512K total capacity in bytes */
   }
 };
 

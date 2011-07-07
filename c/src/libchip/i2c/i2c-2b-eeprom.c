@@ -155,23 +155,23 @@ i2c_2b_eeprom_read (rtems_device_major_number major,
 }
 
 static rtems_driver_address_table myops = {
-  read_entry:  i2c_2b_eeprom_read,
-  write_entry: i2c_2b_eeprom_write,
+  .read_entry =  i2c_2b_eeprom_read,
+  .write_entry = i2c_2b_eeprom_write,
 };
 
 static rtems_libi2c_drv_t my_drv_tbl = {
-  ops:         &myops,
-  size:        sizeof (my_drv_tbl),
+  .ops =         &myops,
+  .size =        sizeof (my_drv_tbl),
 };
 
 /* provide a second table for R/O access */
 static rtems_driver_address_table my_ro_ops = {
-  read_entry:  i2c_2b_eeprom_read,
+  .read_entry =  i2c_2b_eeprom_read,
 };
 
 static rtems_libi2c_drv_t my_ro_drv_tbl = {
-  ops:         &my_ro_ops,
-  size:        sizeof (my_ro_drv_tbl),
+  .ops =         &my_ro_ops,
+  .size =        sizeof (my_ro_drv_tbl),
 };
 
 

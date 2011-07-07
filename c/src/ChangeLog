@@ -1,5 +1,13 @@
 2011-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libchip/display/disp_hcms29xx.c, libchip/flash/am29lv160.c,
+	libchip/i2c/i2c-2b-eeprom.c, libchip/i2c/i2c-ds1621.c,
+	libchip/i2c/spi-flash-m25p40.c, libchip/i2c/spi-fram-fm25l256.c,
+	libchip/i2c/spi-memdrv.c, libchip/rtc/ds1375.c: Eliminate use of GNU
+	old-style field designator extension as recommended by clang.
+
+2011-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libchip/i2c/spi-memdrv.h: Add missing semi-colon.
 
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>

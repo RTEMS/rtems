@@ -918,17 +918,17 @@ rtems_device_driver disp_hcms29xx_dev_close
  * driver operation tables
  */
 static rtems_driver_address_table disp_hcms29xx_ops = {
-  initialization_entry: disp_hcms29xx_dev_initialize,
-  open_entry:           disp_hcms29xx_dev_open,
-  write_entry:          disp_hcms29xx_dev_write,
-  close_entry:          disp_hcms29xx_dev_close
+  .initialization_entry = disp_hcms29xx_dev_initialize,
+  .open_entry =           disp_hcms29xx_dev_open,
+  .write_entry =          disp_hcms29xx_dev_write,
+  .close_entry =          disp_hcms29xx_dev_close
 };
 
 
 static disp_hcms29xx_drv_t disp_hcms29xx_drv_tbl = {
   {/* public fields */
-  ops:         &disp_hcms29xx_ops, 
-  size:        sizeof (disp_hcms29xx_drv_t),
+    .ops =         &disp_hcms29xx_ops, 
+    .size =        sizeof (disp_hcms29xx_drv_t),
   },
   { /* our private fields */
   }

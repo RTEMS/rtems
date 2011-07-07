@@ -454,7 +454,7 @@ bool rtc_ds1375_device_probe(
 }
 
 rtc_fns rtc_ds1375_fns = {
-  deviceInitialize: ds1375_initialize,
-  deviceGetTime:    ds1375_get_time,
-  deviceSetTime:    ds1375_set_time,
+  .deviceInitialize = ds1375_initialize,
+  .deviceGetTime =    ds1375_get_time,
+  .deviceSetTime =    ds1375_set_time,
 };

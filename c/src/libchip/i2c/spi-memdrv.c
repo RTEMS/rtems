@@ -136,11 +136,11 @@ rtems_status_code spi_memdrv_write
   int                  cmd_size;
   spi_memdrv_param_t  *mem_param_ptr;
   rtems_libi2c_tfr_mode_t tfr_mode = {
-  baudrate:      20000000, /* maximum bits per second                   */
-  bits_per_char: 8,        /* how many bits per byte/word/longword?     */
-  lsb_first:      FALSE,   /* FALSE: send MSB first                     */
-  clock_inv:      FALSE,   /* FALSE: non-inverted clock (high active)   */
-  clock_phs:      FALSE    /* FALSE: clock starts in middle of data tfr */
+    .baudrate =      20000000, /* maximum bits per second                   */
+    .bits_per_char = 8,        /* how many bits per byte/word/longword?     */
+    .lsb_first =     FALSE,    /* FALSE: send MSB first                     */
+    .clock_inv =     FALSE,    /* FALSE: non-inverted clock (high active)   */
+    .clock_phs =     FALSE     /* FALSE: clock starts in middle of data tfr */
   } ;
 
   /*
@@ -320,12 +320,12 @@ rtems_status_code spi_memdrv_read
   int                  cmd_size;
   spi_memdrv_param_t  *mem_param_ptr;
   rtems_libi2c_tfr_mode_t tfr_mode = {
-  baudrate:      20000000, /* maximum bits per second                   */
-  bits_per_char: 8,        /* how many bits per byte/word/longword?     */
-  lsb_first:      FALSE,   /* FALSE: send MSB first                     */
-  clock_inv:      FALSE,   /* FALSE: non-inverted clock (high active)   */
-  clock_phs:      FALSE    /* FALSE: clock starts in middle of data tfr */
-  } ;
+    .baudrate =      20000000, /* maximum bits per second                   */
+    .bits_per_char = 8,        /* how many bits per byte/word/longword?     */
+    .lsb_first =     FALSE,    /* FALSE: send MSB first                     */
+    .clock_inv =     FALSE,    /* FALSE: non-inverted clock (high active)   */
+    .clock_phs =     FALSE     /* FALSE: clock starts in middle of data tfr */
+  };
 
   /*
    * get mem parameters
@@ -435,11 +435,11 @@ rtems_status_code spi_memdrv_read
  * driver operation tables
  */
 rtems_driver_address_table spi_memdrv_rw_ops = {
-  read_entry:  spi_memdrv_read,
-  write_entry: spi_memdrv_write
+  .read_entry =  spi_memdrv_read,
+  .write_entry = spi_memdrv_write
 };
 
 rtems_driver_address_table spi_memdrv_ro_ops = {
-  read_entry:  spi_memdrv_read,
+  .read_entry =  spi_memdrv_read,
 };
 

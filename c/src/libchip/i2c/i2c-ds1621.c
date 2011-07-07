@@ -118,13 +118,13 @@ ds1621_read (rtems_device_major_number major, rtems_device_minor_number minor,
 }
 
 static rtems_driver_address_table myops = {
-  initialization_entry: ds1621_init,
-  read_entry:           ds1621_read,
+  .initialization_entry = ds1621_init,
+  .read_entry =           ds1621_read,
 };
 
 static rtems_libi2c_drv_t my_drv_tbl = {
-  ops:                  &myops,
-  size:                 sizeof (my_drv_tbl),
+  .ops =                  &myops,
+  .size =                 sizeof (my_drv_tbl),
 };
 
 rtems_libi2c_drv_t *i2c_ds1621_driver_descriptor = &my_drv_tbl;

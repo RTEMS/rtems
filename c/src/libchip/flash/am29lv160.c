@@ -28,28 +28,28 @@
 const rtems_fdisk_segment_desc rtems_am29lv160t_segments[4] =
 {
   {
-    count:   31,
-    segment: 0,
-    offset:  0x00000000,
-    size:    RTEMS_FDISK_KBYTES (64)
+    .count =   31,
+    .segment = 0,
+    .offset =  0x00000000,
+    .size =    RTEMS_FDISK_KBYTES (64)
   },
   {
-    count:   1,
-    segment: 31,
-    offset:  0x001f0000,
-    size:    RTEMS_FDISK_KBYTES (32)
+    .count =   1,
+    .segment = 31,
+    .offset =  0x001f0000,
+    .size =    RTEMS_FDISK_KBYTES (32)
   },
   {
-    count:   2,
-    segment: 32,
-    offset:  0x001f8000,
-    size:    RTEMS_FDISK_KBYTES (8)
+    .count =   2,
+    .segment = 32,
+    .offset =  0x001f8000,
+    .size =    RTEMS_FDISK_KBYTES (8)
   },
   {
-    count:   1,
-    segment: 34,
-    offset:  0x001fc000,
-    size:    RTEMS_FDISK_KBYTES (16)
+    .count =   1,
+    .segment = 34,
+    .offset =  0x001fc000,
+    .size =    RTEMS_FDISK_KBYTES (16)
   }
 };
 
@@ -59,28 +59,28 @@ const rtems_fdisk_segment_desc rtems_am29lv160t_segments[4] =
 const rtems_fdisk_segment_desc rtems_am29lv160b_segments[] =
 {
   {
-    count:   1,
-    segment: 0,
-    offset:  0x00000000,
-    size:    RTEMS_FDISK_KBYTES (16)
+    .count =   1,
+    .segment = 0,
+    .offset =  0x00000000,
+    .size =    RTEMS_FDISK_KBYTES (16)
   },
   {
-    count:   2,
-    segment: 1,
-    offset:  0x00004000,
-    size:    RTEMS_FDISK_KBYTES (8)
+  .  count =   2,
+    .segment = 1,
+    .offset =  0x00004000,
+    .size =    RTEMS_FDISK_KBYTES (8)
   },
   {
-    count:   1,
-    segment: 3,
-    offset:  0x00008000,
-    size:    RTEMS_FDISK_KBYTES (32)
+    .count =   1,
+    .segment = 3,
+    .offset =  0x00008000,
+    .size =    RTEMS_FDISK_KBYTES (32)
   },
   {
-    count:   31,
-    segment: 4,
-    offset:  0x00010000,
-    size:    RTEMS_FDISK_KBYTES (64)
+    .count =   31,
+    .segment = 4,
+    .offset =  0x00010000,
+    .size =    RTEMS_FDISK_KBYTES (64)
   }
 };
 
@@ -465,10 +465,10 @@ rtems_am29lv160_erase_device (const rtems_fdisk_device_desc* dd,
 
 const rtems_fdisk_driver_handlers rtems_am29lv160_handlers =
 {
-  read:         rtems_am29lv160_read,
-  write:        rtems_am29lv160_write,
-  blank:        rtems_am29lv160_blank,
-  verify:       rtems_am29lv160_verify,
-  erase:        rtems_am29lv160_erase,
-  erase_device: rtems_am29lv160_erase_device
+  .read =         rtems_am29lv160_read,
+  .write =        rtems_am29lv160_write,
+  .blank =        rtems_am29lv160_blank,
+  .verify =       rtems_am29lv160_verify,
+  .erase =        rtems_am29lv160_erase,
+  .erase_device = rtems_am29lv160_erase_device
 };
