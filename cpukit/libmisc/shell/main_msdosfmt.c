@@ -30,16 +30,16 @@ int rtems_shell_main_msdos_format(
 )
 {
   msdos_format_request_param_t rqdata = {
-    OEMName:             "RTEMS",
-    VolLabel:            "RTEMSDisk",
-    sectors_per_cluster: 0,
-    fat_num:             0,
-    files_per_root_dir:  0,
-    fattype:             MSDOS_FMT_FATANY,
-    media:               0,
-    quick_format:        TRUE,
-    cluster_align:       0,
-    info_level:          0
+    .OEMName =             "RTEMS",
+    .VolLabel =            "RTEMSDisk",
+    .sectors_per_cluster = 0,
+    .fat_num =             0,
+    .files_per_root_dir =  0,
+    .fattype =             MSDOS_FMT_FATANY,
+    .media =               0,
+    .quick_format =        TRUE,
+    .cluster_align =       0,
+    .info_level =          0
   };
 
   unsigned long tmp;

@@ -62,7 +62,7 @@ rtems_nvdisk_sram_verify (uint32_t    device __attribute__((unused)),
 
 const rtems_nvdisk_driver_handlers rtems_nvdisk_sram_handlers =
 {
-  read:   rtems_nvdisk_sram_read,
-  write:  rtems_nvdisk_sram_write,
-  verify: rtems_nvdisk_sram_verify
+  .read   = rtems_nvdisk_sram_read,
+  .write  = rtems_nvdisk_sram_write,
+  .verify = rtems_nvdisk_sram_verify
 };

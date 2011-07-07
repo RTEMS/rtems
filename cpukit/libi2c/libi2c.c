@@ -338,12 +338,12 @@ rtems_i2c_ioctl (rtems_device_major_number major, rtems_device_minor_number mino
 
 /* Our ops just dispatch to the registered drivers */
 const rtems_driver_address_table rtems_libi2c_io_ops = {
-  initialization_entry:  rtems_i2c_init,
-  open_entry:            rtems_i2c_open,
-  close_entry:           rtems_i2c_close,
-  read_entry:            rtems_i2c_read,
-  write_entry:           rtems_i2c_write,
-  control_entry:         rtems_i2c_ioctl,
+  .initialization_entry =  rtems_i2c_init,
+  .open_entry =            rtems_i2c_open,
+  .close_entry =           rtems_i2c_close,
+  .read_entry =            rtems_i2c_read,
+  .write_entry =           rtems_i2c_write,
+  .control_entry =         rtems_i2c_ioctl,
 };
 
 int

@@ -1,3 +1,9 @@
+2011-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libblock/src/nvdisk-sram.c, libi2c/libi2c.c,
+	libmisc/shell/main_msdosfmt.c: Eliminate use of GNU old-style field
+	designator extension as recommended by clang.
+
 2011-07-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/rtems/tftp.h, libnetworking/lib/tftpDriver.c: Fixed
