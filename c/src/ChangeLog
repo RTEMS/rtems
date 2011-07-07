@@ -1,3 +1,7 @@
+2011-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/i2c/spi-memdrv.h: Add missing semi-colon.
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* aclocal/bspopts.m4: Added macros for cache options

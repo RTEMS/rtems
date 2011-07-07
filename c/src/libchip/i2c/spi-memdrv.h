@@ -72,7 +72,7 @@ rtems_status_code spi_memdrv_read
     uint32_t empty_state;        /* value of erased cells         */
     uint32_t page_size;          /* programming page size in byte */
     uint32_t sector_size;        /* erase sector size in byte     */
-    uint32_t mem_size            /* total capacity in byte        */
+    uint32_t mem_size;           /* total capacity in byte        */
   } spi_memdrv_param_t;
 
   typedef struct {
