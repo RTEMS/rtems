@@ -1,3 +1,9 @@
+2011-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen07.c, sp09/sp09.scn: Add a case where the multiply of
+	number of buffers times buffer size exceeds that representable by
+	size_t.
+
 2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp66/init.c: Remove (unused).

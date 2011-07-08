@@ -126,6 +126,7 @@ TA1 - rtems_message_queue_create - size = 0 - RTEMS_INVALID_SIZE
 TA1 - rtems_message_queue_create - Q 1 - RTEMS_INVALID_NAME
 TA1 - rtems_message_queue_create - Q 1 - RTEMS_MP_NOT_CONFIGURED
 TA1 - rtems_message_queue_create - Q 2 - RTEMS_UNSATISFIED
+TA1 - rtems_message_queue_create - Q 2 - RTEMS_UNSATISFIED #2
 TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL
 TA1 - rtems_message_queue_create - Q 2 - RTEMS_TOO_MANY
 TA1 - rtems_message_queue_delete - unknown RTEMS_INVALID_ID

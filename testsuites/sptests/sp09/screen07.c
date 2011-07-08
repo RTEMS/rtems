@@ -135,6 +135,21 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_create - Q 2 - RTEMS_UNSATISFIED" );
 
+  /* too large a request for messages */
+  status = rtems_message_queue_create(
+    Queue_name[ 1 ],
+    INT_MAX,
+    INT_MAX,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Queue_id[ 1 ]
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_UNSATISFIED,
+    "rtems_message_queue_create unsatisfied"
+  );
+  puts( "TA1 - rtems_message_queue_create - Q 2 - RTEMS_UNSATISFIED #2" );
+
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     2,
