@@ -31,6 +31,27 @@
 #include <rtems/score/wkspace.h>
 
 /*
+ *  size_t_mult32_with_overflow
+ *
+ *  This method multiplies two size_t 32-bit numbers and checks
+ *  for overflow.  It returns false if an overflow occurred and
+ *  the result is bad.
+ */
+static inline bool size_t_mult32_with_overflow(
+  size_t  a,
+  size_t  b,
+  size_t *c
+)
+{
+  long long x = (long long)a*b;
+
+  if ( x > SIZE_MAX )
+    return false;
+  *c = (size_t) x;
+  return true;
+}
+
+/*
  *  _CORE_message_queue_Initialize
  *
  *  This routine initializes a newly created message queue based on the
@@ -55,7 +76,7 @@ bool _CORE_message_queue_Initialize(
   size_t                         maximum_message_size
 )
 {
-  size_t message_buffering_required;
+  size_t message_buffering_required = 0;
   size_t allocated_message_size;
 
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
@@ -80,10 +101,10 @@ bool _CORE_message_queue_Initialize(
    *  Calculate how much total memory is required for message buffering and
    *  check for overflow on the multiplication.
    */
-  message_buffering_required = (size_t) maximum_pending_messages *
-       (allocated_message_size + sizeof(CORE_message_queue_Buffer_control));
-
-  if (message_buffering_required < allocated_message_size)
+  if ( !size_t_mult32_with_overflow(
+        (size_t) maximum_pending_messages,
+        allocated_message_size + sizeof(CORE_message_queue_Buffer_control),
+        &message_buffering_required ) ) 
     return false;
 
   /*

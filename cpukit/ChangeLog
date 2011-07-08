@@ -1,3 +1,8 @@
+2011-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/coremsg.c: Use 64-bit intermediate result on multiply to
+	reliably detect overflow.
+
 2011-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libblock/src/nvdisk-sram.c, libi2c/libi2c.c,
