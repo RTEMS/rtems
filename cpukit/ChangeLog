@@ -1,3 +1,8 @@
+2011-07-11	Sebastien Bourdeauducq <sebastien.bourdeauducq@gmail.com>
+
+	PR 1823/cpukit
+	* libmisc/fb/fb.h: Added FBIOSETVIDEOMODE define.
+
 2011-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/coremsg.c: Use 64-bit intermediate result on multiply to
