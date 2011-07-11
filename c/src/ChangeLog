@@ -1,3 +1,8 @@
+2011-07-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/serial/ns16550_p.h, libchip/serial/ns16550.c: Remove
+	interrupt handler during last close.
+
 2011-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/display/disp_hcms29xx.c, libchip/flash/am29lv160.c,

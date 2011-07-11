@@ -171,6 +171,8 @@ NS16550_STATIC int ns16550_negate_DTR(
 
 NS16550_STATIC void ns16550_initialize_interrupts(int minor);
 
+NS16550_STATIC void ns16550_cleanup_interrupts(int minor);
+
 NS16550_STATIC ssize_t ns16550_write_support_int(
   int   minor,
   const char *buf,

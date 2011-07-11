@@ -203,14 +203,20 @@ NS16550_STATIC int ns16550_close(
   void    * arg
 )
 {
+  console_tbl *c = &Console_Port_Tbl [minor];
+
   /*
    * Negate DTR
    */
-  if(Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_DTRCTS) {
+  if (c->pDeviceFlow != &ns16550_flow_DTRCTS) {
     ns16550_negate_DTR(minor);
   }
 
   ns16550_enable_interrupts(minor, NS16550_DISABLE_ALL_INTR);
+
+  if (c->pDeviceFns->deviceOutputUsesInterrupts) {
+    ns16550_cleanup_interrupts(minor);
+  }
 
   return(RTEMS_SUCCESSFUL);
 }
@@ -647,6 +653,38 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
         printk( "%s: Error: Install interrupt handler\n", __func__);
         rtems_fatal_error_occurred( 0xdeadbeef);
       }
+    }
+  #endif
+}
+
+NS16550_STATIC void ns16550_cleanup_interrupts(int minor)
+{
+  #if defined(BSP_FEATURE_IRQ_EXTENSION)
+    rtems_status_code sc = RTEMS_SUCCESSFUL;
+    console_tbl *c = &Console_Port_Tbl [minor];
+    sc = rtems_interrupt_handler_remove(
+      c->ulIntVector,
+      ns16550_isr,
+      (void *) minor
+    );
+    if (sc != RTEMS_SUCCESSFUL) {
+      /* FIXME */
+      printk("%s: Error: Remove interrupt handler\n", __func__);
+      rtems_fatal_error_occurred(0xdeadbeef);
+    }
+  #elif defined(BSP_FEATURE_IRQ_LEGACY)
+    int rv = 0;
+    console_tbl *c = &Console_Port_Tbl [minor];
+    rtems_irq_connect_data cd = {
+      .name = c->ulIntVector,
+      .hdl = ns16550_isr,
+      .handle = (void *) minor
+    };
+    rv = BSP_remove_rtems_irq_handler(&cd);
+    if (rv == 0) {
+      /* FIXME */
+      printk("%s: Error: Remove interrupt handler\n", __func__);
+      rtems_fatal_error_occurred(0xdeadbeef);
     }
   #endif
 }
