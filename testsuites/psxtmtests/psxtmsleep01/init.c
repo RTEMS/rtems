@@ -28,15 +28,13 @@ void *POSIX_Init(
   puts( "\n\n*** POSIX TIME TEST PSXTMSLEEP01 ***" );
 
   benchmark_timer_initialize();
-
     sleep(0);
-
   end_time = benchmark_timer_read();
 
   put_time(
-    "sleep - yield X ",
+    "sleep - yield",
     end_time,
-    OPERATION_COUNT,
+    1,
     0,
     0
   );

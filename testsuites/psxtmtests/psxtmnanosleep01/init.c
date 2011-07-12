@@ -23,18 +23,17 @@ void *POSIX_Init(
 {
   long end_time;
   struct timespec sleepTime;
+
   sleepTime.tv_sec = 0;
   sleepTime.tv_nsec = 0;
 
   puts( "\n\n*** POSIX TIME TEST PSXTMNANOSLEEP01 ***" );
 
   benchmark_timer_initialize();    
-
-  nanosleep(&sleepTime, (struct  timespec *) NULL);
-
+    nanosleep( &sleepTime, (struct  timespec *) NULL );
   end_time = benchmark_timer_read();  
 
-  put_time("nanosleep - yield X ",end_time,OPERATION_COUNT,0,0);
+  put_time( "nanosleep - yield", end_time, 1, 0, 0 );
 
   puts( "*** END OF POSIX TIME TEST PSXTMNANOSLEEP01 ***" );
 
