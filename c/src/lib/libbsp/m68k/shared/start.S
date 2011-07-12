@@ -113,11 +113,6 @@ END_CODE
 
 BEGIN_DATA
 
-	PUBLIC (environ)
-        .align 2
-SYM (environ):
-	.long	0
-
 	PUBLIC (start_frame)
 SYM (start_frame):
         .space  4,0

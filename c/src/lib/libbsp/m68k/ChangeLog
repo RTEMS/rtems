@@ -1,3 +1,8 @@
+2011-07-12	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* shared/start.S, shared/mvme/mvme16x_hw.h: Check on MVME167 at OAR
+	after RTC replaced.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/gdbstub/m68k-stub.c:

@@ -246,13 +246,15 @@ typedef volatile struct nvram_config_ {
 /*
  *  Flag to indicate if J1-4 is on (and parameters should be
  *  sought in User Area NVRAM)
+ *
+ *  NOTE:  If NVRAM has bad settings, the you want to disable this
+ *         on the MVME167.
  */
-
 #if defined(mvme167)
-#define NVRAM_CONFIGURE \
-  ( !( ( (unsigned char)(lcsr->vector_base & 0xFF) ) & 0x10 ) )
+  #define NVRAM_CONFIGURE \
+    ( !( ( (unsigned char)(lcsr->vector_base & 0xFF) ) & 0x10 ) )
 #else
-#define NVRAM_CONFIGURE 0
+  #define NVRAM_CONFIGURE 0
 #endif
 
 #ifdef __cplusplus
