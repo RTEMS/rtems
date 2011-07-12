@@ -1,3 +1,9 @@
+2011-07-12	Ricardo Aguirre <el.mastin@ymail.com>
+
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add psxtmmutex03.
+	* psxtmmutex03/.cvsignore, psxtmmutex03/Makefile.am,
+	psxtmmutex03/init.c, psxtmmutex03/psxtmmutex03.doc: New files.
+
 2011-06-29	Ricardo Aguirre <el.mastin@ymail.com>
 
 	* psxtmtests/Makefile.am, psxtmtests/configure.ac,

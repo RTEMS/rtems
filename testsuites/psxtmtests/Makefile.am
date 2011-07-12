@@ -12,6 +12,7 @@ SUBDIRS += psxtmthread01
 SUBDIRS += psxtmthread03
 SUBDIRS += psxtmnanosleep01
 SUBDIRS += psxtmnanosleep02
+SUBDIRS += psxtmmutex03
 endif
 
 DIST_SUBDIRS = $(SUBDIRS)
