@@ -106,37 +106,6 @@ rtems_task Init(
   p2 = malloc(64);
   p3 = malloc(48);
 
-  puts( "Initialize heap with no memory (sbrk aligned)" );
-  offset     = 7;
-  sbrk_count = 0;
-  RTEMS_Malloc_Initialize( NULL, 0, 64 );
-  p1 = malloc(64);
-  rtems_test_assert( p1 == NULL );
-
-  p2 = malloc(64);
-  rtems_test_assert( p2 == NULL );
-
-  p3 = malloc(48);
-  rtems_test_assert( p3 );
-
-  p4 = malloc(48);
-  rtems_test_assert( p4 == NULL );
-  
-  puts( "Initialize heap with no memory (sbrk aligned)" );
-  offset     = 0;
-  sbrk_count = 0;
-  RTEMS_Malloc_Initialize( NULL, 0, 64 );
-  p1 = malloc(64);
-  rtems_test_assert( p1 == NULL );
-  
-  puts( "Set sbrk amount in heap to 0" );
-  offset     = 0;
-  sbrk_count = 0;
-  RTEMS_Malloc_Initialize( NULL, 0, 64 );
-  RTEMS_Malloc_Sbrk_amount = 0;
-  p4 = malloc(48);
-  rtems_test_assert( p4 );
-
   /* Restore information on real heap */
   malloc_set_heap_pointer( TempHeap );
   rtems_malloc_sbrk_helpers = NULL;
