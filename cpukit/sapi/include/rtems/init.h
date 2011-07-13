@@ -76,8 +76,11 @@ void rtems_initialize_device_drivers(void);
  *  This routine implements the early portion of rtems_initialize_executive
  *  directive up to the pretasking hook. This directive is invoked at system
  *  startup to initialize the RTEMS multitasking environment.
+ *
+ *  @return This method returns the status code passed into the 
+ *          @ref rtems_shutdown_executive directive.
  */
-void rtems_initialize_start_multitasking(void);
+uint32_t rtems_initialize_start_multitasking(void);
 
 /**
  *  @brief rtems_shutdown_executive

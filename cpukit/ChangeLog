@@ -1,3 +1,9 @@
+2011-07-13	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1824/cpukit
+	* sapi/include/rtems/init.h, sapi/src/exinit.c, sapi/src/exshutdown.c:
+	Return exit/shutdown status back to boot_card().
+
 2011-07-11	Sebastien Bourdeauducq <sebastien.bourdeauducq@gmail.com>
 
 	PR 1823/cpukit
