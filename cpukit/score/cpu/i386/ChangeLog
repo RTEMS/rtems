@@ -9,6 +9,11 @@
 
 2009-11-09	Till Straumann <strauman@slac.stanford.edu>
 
+	* cpu.c, cpu_asm.S, rtems/score/cpu.h, sse_test.c:
+	Added experimental SSE support.
+
+2009-11-09	Till Straumann <strauman@slac.stanford.edu>
+
 	PR 1469/cpukit
 	* cpu.c: Add dummy entry for (non-existing) exception #15.
 	Otherwise all slots for vectors >= 16 are one element off.
