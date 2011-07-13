@@ -21,7 +21,7 @@
 
 void bsp_interrupt_dispatch(void)
 {
-  rtems_vector_number vector = AIC_CTL_REG(AIC_ISR);
+  rtems_vector_number vector = AIC_CTL_REG(AIC_IVR);
 
   bsp_interrupt_handler_dispatch(vector);
 
@@ -44,6 +44,12 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
 rtems_status_code bsp_interrupt_facility_initialize(void)
 {
+  unsigned long i = 0;
+
+  for (i = 0; i < 32; ++i) {
+    AIC_SVR_REG(i<<2) = i;
+  }
+
   /* disable all interrupts */
   AIC_CTL_REG(AIC_IDCR) = 0xffffffff;
 

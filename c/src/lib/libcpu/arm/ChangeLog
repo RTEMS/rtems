@@ -1,3 +1,13 @@
+2011-07-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1832/libcpu
+	* at91rm9200/irq/irq.c: he bsp_interrupt_dispatch routine does not
+	determine the correct interrupt source number. According to the
+	datasheet, the reading of the interrupt vector register (AIC_IVR)
+	notifies the hardware that the OS is taken care of the interrupt.
+	Only after AIC_IVR have been read can the correct source number be
+	read from the interrupt status register (AIC_ISR).
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
