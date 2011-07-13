@@ -17,7 +17,9 @@
 #include <bspopts.h>
 #include <bsp/bootcard.h>
 
-void bsp_cleanup( void )
+void bsp_cleanup(
+  uint32_t status
+)
 {
   #if (BSP_PRESS_KEY_FOR_RESET)
     printk( "\nEXECUTIVE SHUTDOWN! Any key to reboot..." );

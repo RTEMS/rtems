@@ -62,7 +62,7 @@ void bsp_predriver_hook(void);
 
 void bsp_postdriver_hook(void);
 
-void bsp_cleanup(void);
+void bsp_cleanup(uint32_t status);
 
 void bsp_reset(void);
 
@@ -118,9 +118,11 @@ uintptr_t bsp_sbrk_init(
  * the framework for the BSP initialization sequence.  The basic flow of
  * initialization is:
  *
- * - disable interrupts, interrupts will be enabled during the first context switch
+ * - disable interrupts, interrupts will be enabled during the first context
+ *   switch
  * - bsp_start() - more advanced initialization
- * - obtain information on BSP memory via bsp_get_work_area() and allocate RTEMS Workspace
+ * - obtain information on BSP memory via bsp_get_work_area() and allocate
+ *   RTEMS Workspace
  * - rtems_initialize_data_structures()
  * - allocate memory for C Program Heap
  * - initialize C Library and C Program Heap
@@ -144,7 +146,7 @@ uintptr_t bsp_sbrk_init(
  * This style of initialization ensures that the C++ global constructors are
  * executed after RTEMS is initialized.
  */
-int boot_card(const char *cmdline);
+uint32_t boot_card(const char *cmdline);
 
 /** @} */
 

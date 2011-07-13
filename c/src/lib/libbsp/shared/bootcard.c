@@ -111,7 +111,7 @@ static void bootcard_bsp_libc_helper(
  *  the system while maximizing shared code and keeping BSP code in C
  *  as much as possible.
  */
-int boot_card(
+uint32_t boot_card(
   const char *cmdline
 )
 {
@@ -121,6 +121,7 @@ int boot_card(
   void                  *heap_start = NULL;
   uintptr_t              heap_size = 0;
   uintptr_t              sbrk_amount = 0;
+  uint32_t               status;
 
   /*
    * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
@@ -170,8 +171,8 @@ int boot_card(
     printk("Configuration error!\n"
            "Application was configured with CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK\n"
            "but BSP was configured w/o sbrk support\n");
-    bsp_cleanup();
-    return -1;
+    bsp_cleanup(1);
+    return 1;
   }
 #endif
 
@@ -181,8 +182,8 @@ int boot_card(
       (void *) Configuration.work_space_size,
       (void *) work_area_size
     );
-    bsp_cleanup();
-    return -1;
+    bsp_cleanup(1);
+    return 1;
   }
 
   if ( rtems_unified_work_area ) {
@@ -265,7 +266,7 @@ int boot_card(
    *  Complete initialization of RTEMS and switch to the first task.
    *  Global C++ constructors will be executed in the context of that task.
    */
-  rtems_initialize_start_multitasking();
+  status = rtems_initialize_start_multitasking();
 
   /***************************************************************
    ***************************************************************
@@ -277,10 +278,10 @@ int boot_card(
   /*
    *  Perform any BSP specific shutdown actions which are written in C.
    */
-  bsp_cleanup();
+  bsp_cleanup( status );
 
   /*
    *  Now return to the start code.
    */
-  return 0;
+  return status;
 }
