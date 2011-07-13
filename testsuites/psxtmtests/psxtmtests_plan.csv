@@ -1,6 +1,6 @@
 "Test Case","Test","Template","Implemented"
-"pthread_mutex_init","psxtmmutex01","psxtmtest_init_destroy",
-"pthread_mutex_destroy","psxtmmutex01","psxtmtest_init_destroy",
+"pthread_mutex_init","psxtmmutex01","psxtmtest_init_destroy","Yes"
+"pthread_mutex_destroy","psxtmmutex01","psxtmtest_init_destroy","Yes"
 "pthread_mutex_lock - not available, block","psxtmmutex02","psxtmtest_blocking","Yes"
 "pthread_mutex_lock - available","psxtmmutex03","psxtmtest_single","Yes"
 "pthread_mutex_trylock - available","psxtmmutex03","psxtmtest_single","Yes"

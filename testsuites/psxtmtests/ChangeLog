@@ -1,3 +1,11 @@
+2011-07-13	Ricardo Aguirre <el.mastin@ymail.com>
+
+	PR 1831/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
+	mutex init and destroy.
+	* psxtmmutex01/.cvsignore, psxtmmutex01/Makefile.am,
+	psxtmmutex01/init.c, psxtmmutex01/psxtmmutex01.doc: New files.
+
 2011-07-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxtmnanosleep01/init.c, psxtmsleep01/init.c: Do not divide by
