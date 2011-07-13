@@ -1,3 +1,11 @@
+2011-07-13	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1824/cpukit
+	* include/bsp.h, startup/bspclean.c: Return exit/shutdown status back
+	to boot_card(). boot_card() propagates this to bsp_cleanup() and
+	returns it to the assembly that started the application.
+	bsp_cleanup() prototype changed.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspclean.c:

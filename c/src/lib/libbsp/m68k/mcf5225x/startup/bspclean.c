@@ -22,7 +22,9 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 
-void  __attribute__((weak)) bsp_cleanup(void)
+void  __attribute__((weak)) bsp_cleanup(
+  uint32_t status
+)
 {
   printk("\nRTEMS exited!\n");
   for (;;) {
