@@ -8,7 +8,9 @@
 
 #define AUTO_BOOT 0
 
-void bsp_cleanup(void)
+void bsp_cleanup(
+  uint32_t status
+)
 {
 #if AUTO_BOOT
   /* Till Straumann <strauman@slac.stanford.edu> for SVGM */

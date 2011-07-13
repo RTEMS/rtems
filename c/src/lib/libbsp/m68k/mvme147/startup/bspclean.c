@@ -34,7 +34,9 @@ void bsp_return_to_monitor_trap(void)
   __asm__ volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
 }
 
-void bsp_cleanup( void )
+void bsp_cleanup(
+  uint32_t status
+)
 {
    pcc->timer1_int_control = 0; /* Disable Timer 1 */
    pcc->timer2_int_control = 0; /* Disable Timer 2 */

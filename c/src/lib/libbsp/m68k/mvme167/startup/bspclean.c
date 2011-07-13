@@ -74,7 +74,9 @@ static void bsp_return_to_monitor_trap( void )
  *
  *  Return values: DOES NOT RETURN
  */
-void bsp_cleanup( void )
+void bsp_cleanup(
+  uint32_t status
+)
 {
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;
    __asm__ volatile( "trap #13" );

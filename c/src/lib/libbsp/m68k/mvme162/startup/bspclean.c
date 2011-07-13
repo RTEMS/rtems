@@ -52,7 +52,9 @@ void bsp_return_to_monitor_trap(void)
 #endif
 }
 
-void bsp_cleanup( void )
+void bsp_cleanup(
+  uint32_t status
+)
 {
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
    __asm__ volatile( "trap #13" );  /* insures SUPV mode */

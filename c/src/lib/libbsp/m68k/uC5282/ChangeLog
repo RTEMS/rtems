@@ -1,3 +1,11 @@
+2011-07-13	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1824/cpukit
+	* startup/bspclean.c: Return exit/shutdown status back to boot_card().
+	boot_card() propagates this to bsp_cleanup() and returns it to the
+	assembly that started the application. bsp_cleanup() prototype
+	changed.
+
 2011-03-15	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c: Fix clock code on qemu. Also ensure UART is

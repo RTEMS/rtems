@@ -33,7 +33,9 @@ void bsp_return_to_monitor_trap(void)
 
 #define TIMER   0xfffb0000
 
-void bsp_cleanup( void )
+void bsp_cleanup(
+  uint32_t status
+)
 {
    Z8x36_WRITE( TIMER, MASTER_INTR,    0x62 );   /* redo timer */
    Z8x36_WRITE( TIMER, CT1_MODE_SPEC,  0x00 );

@@ -21,7 +21,9 @@
 
 extern void bsp_reset(int);
 
-void bsp_cleanup( void )
+void bsp_cleanup(
+  uint32_t status
+)
 {
-    bsp_reset(0);
+  bsp_reset(0);
 }
