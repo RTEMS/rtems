@@ -57,7 +57,6 @@
 BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
-extern void bsp_cleanup(void);
 extern Triv121PgTbl BSP_pgtbl_setup(unsigned int *);
 extern void BSP_pgtbl_activate(Triv121PgTbl);
 extern void BSP_motload_pci_fixup(void);
