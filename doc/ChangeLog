@@ -1,3 +1,9 @@
+2011-07-13	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1824/cpukit
+	* bsp_howto/init.t, bsp_howto/support.t, user/init.t: Return
+	exit/shutdown status back to boot_card().
+
 2011-05-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* bsp_howto/support.t: Update copyright.

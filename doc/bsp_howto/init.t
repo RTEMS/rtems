@@ -97,7 +97,7 @@ RTEMS, device driver initialization phases, and the context switch
 to the first application task.  After this, the application executes
 until it calls @code{exit}, @code{rtems_shutdown_executive}, or some
 other normal termination initiating routine and control is returned
-to @code{bootcard.c} which allows the BSP to perform some clanup in C
+to @code{bootcard.c} which allows the BSP to perform some cleanup in C
 (@code{bsp_cleanup}) and then @code{boot_card} returns to the assembly
 language which initially invoked it.
 

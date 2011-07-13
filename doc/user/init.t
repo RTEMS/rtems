@@ -349,7 +349,7 @@ the first context switch.
 @ifset is-C
 @findex rtems_initialize_start_multitasking
 @example
-void rtems_initialize_start_multitasking(void);
+uint32_t rtems_initialize_start_multitasking(void);
 @end example
 @end ifset
 
@@ -361,7 +361,8 @@ NOT SUPPORTED FROM Ada BINDING
 
 @subheading DIRECTIVE STATUS CODES:
 
-NONE
+This directive returns the status code passed in to the 
+@code{@value{DIRPREFIX}shutdown_executive}.
 
 @subheading DESCRIPTION:
 
