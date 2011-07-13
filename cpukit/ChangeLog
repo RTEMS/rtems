@@ -1,3 +1,10 @@
+2011-07-13	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1775/filesystem
+	* libfs/src/nfsclient/src/nfs.c: NFSAddress NFS issue where read/write
+	problems when requested bytes greater than nfsStBlksize. Failure to
+	create files and symlinks.
+
 2011-07-04	Chris Johns <chrisj@rtems.org>
 
 	PR 1827/filesystem

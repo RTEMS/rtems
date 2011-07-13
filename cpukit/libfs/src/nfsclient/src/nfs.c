@@ -1574,7 +1574,7 @@ unsigned long	niu,siu;
 		 */
 		assert( node->args.name );
 
-		*(const char**)arg = pathname + (node->args.name - p);
+		*(arg->c) = pathname + (node->args.name - p);
 
 #if 0
 		/* restore the directory node */
