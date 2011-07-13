@@ -47,7 +47,6 @@
  * this phase of install. jsg
  */
 void outbyte(char);
-void bsp_cleanup( void );
 
 #define RAW_PUTS(str) \
   { register char *ptr = str; \
@@ -91,7 +90,7 @@ void volatile _Internal_error_Occurred(
   RAW_PUTS(").\r\n");
 
   /* configure peripherals for a safe exit */
-  bsp_cleanup();
+  bsp_cleanup(1);
 
   _CPU_Fatal_halt( the_error );
 

@@ -74,7 +74,7 @@ rtems_isr Spurious_Isr(
   RAW_PUTI(sp);
   RAW_PUTS("\n\r");
 #endif
-  bsp_cleanup();
+  bsp_cleanup(1);
 
   /* BDM SIGEMT */
   __asm__ ("  .word  0x4afa");
