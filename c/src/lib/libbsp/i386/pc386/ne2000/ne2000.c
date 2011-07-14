@@ -204,7 +204,8 @@ struct ne_ring
 {
 	unsigned char rsr;    /* receiver status */
 	unsigned char next;   /* pointer to next packet	*/
-	unsigned short count; /* bytes in packet (length + 4)	*/
+	unsigned char cnt_lo; /* bytes in packet (length + 4)	*/
+	unsigned char cnt_hi; /* 16-bit, little-endian value    */
 };
 
 /* Forward declarations to avoid warnings */
@@ -501,11 +502,8 @@ ne_init_hardware (struct ne_softc *sc)
   /* Set page 0 registers */
   outport_byte (port + CMDR, MSK_PG0 | MSK_RD2 | MSK_STP);
 
-  /* accept broadcast */
-  outport_byte (port + RCR, (sc->accept_broadcasts ? MSK_AB : 0));
-
-  /* accept multicast */
-  outport_byte (port + RCR, MSK_AM);
+  /* accept broadcast + multicast */
+  outport_byte (port + RCR, (sc->accept_broadcasts ? MSK_AB : 0) | MSK_AM);
 
   /* Start interface */
   outport_byte (port + CMDR, MSK_PG0 | MSK_RD2 | MSK_STA);
@@ -604,7 +602,7 @@ ne_rx_daemon (void *arg)
         next = NE_FIRST_RX_PAGE;
 
       /* check packet length */
-      len = hdr.count;
+      len = ( hdr.cnt_hi << 8 ) | hdr.cnt_lo;
       if (currpage < startpage)
         cnt1 = currpage + (NE_STOP_PAGE - NE_FIRST_RX_PAGE) - startpage;
       else
@@ -683,7 +681,7 @@ ne_rx_daemon (void *arg)
       m->m_data += sizeof (struct ether_header);
 
 #ifdef DEBUG_NE
-  /* printk("[r%d]", hdr.count - sizeof(hdr)); */
+  /* printk("[r%d]", ((hdr.cnt_hi<<8) + hdr.cnt_lo - sizeof(hdr))); */
   printk("<");
 #endif
       ether_input (ifp, eh, m);
