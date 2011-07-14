@@ -167,6 +167,15 @@ ip_output(struct mbuf *m0, struct mbuf *opt, struct route *ro, int flags,
 		ifp = ia->ia_ifp;
 		ip->ip_ttl = 1;
 		isbroadcast = in_broadcast(dst->sin_addr, ifp);
+	} else if (IN_MULTICAST(ntohl(ip->ip_dst.s_addr)) &&
+	    imo != NULL && imo->imo_multicast_ifp != NULL) {
+		/*
+		 * Bypass the normal routing lookup for multicast
+		 * packets if the interface is specified.
+		 */
+		ifp = imo->imo_multicast_ifp;
+		IFP_TO_IA(ifp, ia);
+		isbroadcast = 0;	/* fool gcc */
 	} else {
 		/*
 		 * If this is the case, we probably don't want to allocate
