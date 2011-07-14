@@ -1,3 +1,7 @@
+2011-07-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* .cvsignore, include/.cvsignore: New files.
+
 2011-04-20      Rohan Kangralkar <rkangral@ece.neu.edu>
 
 	PR 1781/bsps
