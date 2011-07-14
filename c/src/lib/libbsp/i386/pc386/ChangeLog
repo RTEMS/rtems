@@ -1,3 +1,7 @@
+2011-07-14	Jennifer Averett
+
+	* make/custom/pcp4.cfg: New file.
+
 2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Fix broken path to clockdrv_shell.h.
