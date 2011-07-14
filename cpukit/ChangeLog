@@ -1,3 +1,10 @@
+2011-07-14	Gene Smith <gene.smith@siemens.com>
+
+	PR 1381/networking
+	* libnetworking/netinet/ip_output.c: If a null or unreachable gateway
+	is specified either statically in networkconfig.h or from dhcp/bootp,
+	sendto() fails on multicast send with errno 118 Host
+
 2011-07-13	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1775/filesystem
