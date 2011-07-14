@@ -40,6 +40,7 @@ extern void rtems_irq_prologue_12(void);
 extern void rtems_irq_prologue_13(void);
 extern void rtems_irq_prologue_14(void);
 extern void rtems_irq_prologue_15(void);
+extern void rtems_irq_prologue_16(void);
 /*
  * default vectors
  */
@@ -80,7 +81,8 @@ static rtems_raw_irq_hdl rtemsIrq[BSP_IRQ_LINES_NUMBER] = {
   rtems_irq_prologue_12,
   rtems_irq_prologue_13,
   rtems_irq_prologue_14,
-  rtems_irq_prologue_15
+  rtems_irq_prologue_15,
+  rtems_irq_prologue_16,
 };
 
 static rtems_raw_irq_connect_data 	defaultRawIrq = {

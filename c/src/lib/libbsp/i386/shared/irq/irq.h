@@ -41,8 +41,9 @@ extern "C" {
 
     /* Base vector for our IRQ handlers. */
 #define BSP_IRQ_VECTOR_BASE		BSP_ASM_IRQ_VECTOR_BASE
-#define BSP_IRQ_LINES_NUMBER    	16
+#define BSP_IRQ_LINES_NUMBER    	17
 #define BSP_LOWEST_OFFSET		0
+#define BSP_MAX_ON_i8259S		(BSP_IRQ_LINES_NUMBER - 2)
 #define BSP_MAX_OFFSET		 	(BSP_IRQ_LINES_NUMBER - 1)
     /*
      * Interrupt offset in comparison to BSP_ASM_IRQ_VECTOR_BASE
@@ -56,6 +57,7 @@ extern "C" {
 #define BSP_UART_COM1_IRQ	4
 #define BSP_RT_TIMER1	      	8
 #define BSP_RT_TIMER3		10
+#define BSP_SMP_IPI   		16
 
 #define BSP_INTERRUPT_VECTOR_MIN BSP_LOWEST_OFFSET
 #define BSP_INTERRUPT_VECTOR_MAX BSP_MAX_OFFSET

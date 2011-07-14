@@ -73,7 +73,7 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_number irqLine)
   rtems_interrupt_level level;
 
   if ( ((int)irqLine < BSP_LOWEST_OFFSET) ||
-       ((int)irqLine > BSP_MAX_OFFSET )
+       ((int)irqLine > BSP_MAX_ON_i8259S )
        )
     return 1;
 
@@ -108,7 +108,7 @@ int BSP_irq_enable_at_i8259s    (const rtems_irq_number irqLine)
   rtems_interrupt_level level;
 
   if ( ((int)irqLine < BSP_LOWEST_OFFSET) ||
-       ((int)irqLine > BSP_MAX_OFFSET )
+       ((int)irqLine > BSP_MAX_ON_i8259S )
        )
     return 1;
 
@@ -135,7 +135,7 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_number irqLine)
   unsigned short mask;
 
   if ( ((int)irqLine < BSP_LOWEST_OFFSET) ||
-       ((int)irqLine > BSP_MAX_OFFSET )
+       ((int)irqLine > BSP_MAX_ON_i8259S )
      )
     return 1;
 
@@ -153,7 +153,7 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_number irqLine)
 int BSP_irq_ack_at_i8259s  	(const rtems_irq_number irqLine)
 {
   if ( ((int)irqLine < BSP_LOWEST_OFFSET) ||
-       ((int)irqLine > BSP_MAX_OFFSET )
+       ((int)irqLine > BSP_MAX_ON_i8259S )
        )
     return 1;
 
@@ -190,7 +190,7 @@ static void compute_i8259_masks_from_prio (void)
   unsigned int i;
   unsigned int j;
 
-  rtems_interrupt_disable(level); /* XXX */
+  rtems_interrupt_disable(level);
 
   /*
    * Always mask at least current interrupt to prevent re-entrance
