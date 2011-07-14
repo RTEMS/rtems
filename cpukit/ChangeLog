@@ -1,9 +1,11 @@
-2011-07-14	Gene Smith <gene.smith@siemens.com>
+2011-07-14      Gene Smith <gene.smith@siemens.com>
 
 	PR 1381/networking
-	* libnetworking/netinet/ip_output.c: If a null or unreachable gateway
-	is specified either statically in networkconfig.h or from dhcp/bootp,
-	sendto() fails on multicast send with errno 118 Host
+	* netinet/ip_output.c: If a null or unreachable gateway is
+	specified either statically in networkconfig.h or from dhcp/bootp,
+	sendto() fails on multicast send with errno "118 Host is unreachable".
+	The failure occurs in networking file ip_output.c since it currently
+	requires all multicasts to have a valid route to the outside world.
 
 2011-06-10	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
