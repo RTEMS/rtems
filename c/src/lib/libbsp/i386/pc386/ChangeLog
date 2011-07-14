@@ -1,3 +1,9 @@
+2011-07-14	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1833/bsps
+	* ne2000/ne2000.c: Addition of multicast support disabled broadcast
+	reception. Patch also includes support to work on big endian CPUs.
+
 2011-07-14	Jennifer Averett
 
 	* make/custom/pcp4.cfg: New file.
