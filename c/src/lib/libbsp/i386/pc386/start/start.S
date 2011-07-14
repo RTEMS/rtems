@@ -215,12 +215,35 @@ SYM (zero_bss):
 	call SYM(BSP_console_select)
 
 #ifdef __SSE__
+	call SYM(enable_sse)
+#endif
+
+/*---------------------------------------------------------------------+
+| Transfer control to User's Board Support Package
+| Note: at the top we reserved space for the argument
+|       so that
+|          initial_esp = ( TOS - 4 ) & ~(CPU_STACK_ALIGNMENT-1)
+|       this ensures that
+|       1) esp is now aligned
+|       2) there is space for the cmdline pointer which we just
+|          may store at *(esp)
++---------------------------------------------------------------------*/
+
+	movl	$SYM(_boot_multiboot_cmdline), (esp)
+	call	SYM (boot_card)
+
+	cli	# stops interrupts from being processed after hlt!
+	hlt	# shutdown
+
+#ifdef __SSE__
 /*--------------------------------------------------------------------+
  | Enable SSE; we really only care about fxsave/fxrstor and leave
  | The only feature *we* (as an OS) use is fxsave/fxrstor.
  | But as a courtesy we make sure we don't execute on hardware
  | that doesn't support features possibly used by the compiler.
 +---------------------------------------------------------------------*/
+	PUBLIC (enable_sse)
+SYM(enable_sse):
 	movl	SYM (x86_capability), eax
 	testl   $0x01000000, eax
 	jne     1f
@@ -250,26 +273,8 @@ SYM (zero_bss):
 	mov     cr4, eax		# OK to enable now
 	or      $0x600, eax
 	mov     eax, cr4
-#endif
+	ret
 
-/*---------------------------------------------------------------------+
-| Transfer control to User's Board Support Package
-| Note: at the top we reserved space for the argument
-|       so that
-|          initial_esp = ( TOS - 4 ) & ~(CPU_STACK_ALIGNMENT-1)
-|       this ensures that
-|       1) esp is now aligned
-|       2) there is space for the cmdline pointer which we just
-|          may store at *(esp)
-+---------------------------------------------------------------------*/
-
-	movl	$SYM(_boot_multiboot_cmdline), (esp)
-	call	SYM (boot_card)
-
-	cli	# stops interrupts from being processed after hlt!
-	hlt	# shutdown
-
-#ifdef __SSE__
 SYM(_sse_panic):
 	call SYM(printk)
 1:	hlt

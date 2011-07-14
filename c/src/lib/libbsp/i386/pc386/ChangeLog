@@ -1,3 +1,8 @@
+2011-07-14	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* start/start.S: Moved enable_sse into a subroutine that may be called
+	from other cores on an SMP system.
+
 2011-07-14	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1833/bsps
