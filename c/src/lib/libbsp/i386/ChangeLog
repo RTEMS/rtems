@@ -1,3 +1,8 @@
+2011-07-14	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* shared/irq/apic.h, shared/smp/README, shared/smp/smp-imps.c,
+	shared/smp/smp-imps.h: New files.
+
 2011-05-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/comm/tty_drv.c, shared/comm/tty_drv.h:
