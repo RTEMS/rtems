@@ -206,9 +206,9 @@ inheritance (default)
 @item @code{@value{RPREFIX}NO_PRIORITY_CEILING} - do not use priority
 ceiling (default)
 
-@item @code{@value{RPREFIX}LOCAL} - local task (default)
+@item @code{@value{RPREFIX}LOCAL} - local semaphore (default)
 
-@item @code{@value{RPREFIX}GLOBAL} - global task
+@item @code{@value{RPREFIX}GLOBAL} - global semaphore
 @end itemize
 
 Attribute values are specifically designed to be

@@ -55,8 +55,8 @@ of the desired attribute components.  The set of valid partition
 attributes is provided in the following table:
 
 @itemize @bullet
-@item @code{@value{RPREFIX}LOCAL} - local task (default)
-@item @code{@value{RPREFIX}GLOBAL} - global task
+@item @code{@value{RPREFIX}LOCAL} - local partition (default)
+@item @code{@value{RPREFIX}GLOBAL} - global partition
 @end itemize
 
 Attribute values are specifically designed to be
@@ -213,8 +213,8 @@ The following partition attribute constants are
 defined by RTEMS:
 
 @itemize @bullet
-@item @code{@value{RPREFIX}LOCAL} - local task (default)
-@item @code{@value{RPREFIX}GLOBAL} - global task
+@item @code{@value{RPREFIX}LOCAL} - local partition (default)
+@item @code{@value{RPREFIX}GLOBAL} - global partition
 @end itemize
 
 The PTCB for a global partition is allocated on the

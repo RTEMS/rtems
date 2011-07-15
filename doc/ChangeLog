@@ -1,3 +1,7 @@
+2011-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* user/part.t, user/sem.t: Typos.
+
 2011-07-13	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1824/cpukit
