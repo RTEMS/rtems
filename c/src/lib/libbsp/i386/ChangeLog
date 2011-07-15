@@ -1,3 +1,8 @@
+2011-07-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/irq/apic.h, shared/smp/smp-imps.c, shared/smp/smp-imps.h: Per
+	email with Erich Boleyn, change license to BSD style.
+
 2011-07-14	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* shared/irq/irq.c, shared/irq/irq.h, shared/irq/irq_init.c: Add
