@@ -1,3 +1,11 @@
+2011-07-15	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* score/Makefile.am, score/preinstall.am,
+	score/include/rtems/score/isr.h, score/include/rtems/score/percpu.h:
+	Split isrlevel into its own file to avoid a circular dependancy in
+	smp code.
+	* score/include/rtems/score/isrlevel.h: New file.
+
 2011-07-14      Gene Smith <gene.smith@siemens.com>
 
 	PR 1381/networking

@@ -41,12 +41,6 @@ extern "C" {
 #endif
 
 /**
- *  The following type defines the control block used to manage
- *  the interrupt level portion of the status register.
- */
-typedef uint32_t   ISR_Level;
-
-/**
  *  The following type defines the type used to manage the vectors.
  */
 typedef uint32_t   ISR_Vector_number;

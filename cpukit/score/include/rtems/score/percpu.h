@@ -24,6 +24,7 @@
 #ifdef ASM
   #include <rtems/asm.h>
 #else
+  #include <rtems/score/isrlevel.h>
   #include <rtems/score/timestamp.h>
   #if defined(RTEMS_SMP)
     #include <rtems/score/smplock.h>

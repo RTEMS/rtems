@@ -99,6 +99,10 @@ $(PROJECT_INCLUDE)/rtems/score/isr.h: include/rtems/score/isr.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/isr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/isr.h
 
+$(PROJECT_INCLUDE)/rtems/score/isrlevel.h: include/rtems/score/isrlevel.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/isrlevel.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/isrlevel.h
+
 $(PROJECT_INCLUDE)/rtems/score/object.h: include/rtems/score/object.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.h
