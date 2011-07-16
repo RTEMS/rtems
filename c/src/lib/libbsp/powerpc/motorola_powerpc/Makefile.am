@@ -4,7 +4,11 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-SUBDIRS = . bootloader
+SUBDIRS = .
+SUBDIRS+= bootloader
+if QEMU
+SUBDIRS+= qemu_fakerom
+endif
 
 include $(top_srcdir)/../../../../automake/compile.am
 
@@ -49,9 +53,12 @@ libbsp_a_SOURCES += ../../powerpc/shared/startup/bspstart.c \
  	../../powerpc/shared/startup/zerobss.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \
+	../../powerpc/shared/startup/ppc_idle.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c
+
+
 # tod
 libbsp_a_SOURCES += ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
 # pclock
@@ -127,6 +134,18 @@ libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeUniverse.c \
     ../../powerpc/shared/vme/vme_universe.c \
     ../../powerpc/shared/vme/VMEConfig.h
 
+if QEMU
+if HAS_NETWORKING
+nodist_include_HEADERS  += $(srcdir)/../../i386/pc386/include/wd80x3.h
+ne2000_CPPFLAGS          = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+ne2000_CPPFLAGS         += '-Dbsp_cmdline_arg=rtems_bsp_cmdline_get_param_raw'
+noinst_PROGRAMS         += ne2000.rel
+ne2000_rel_SOURCES       = ../../i386/pc386/ne2000/ne2000.c
+ne2000_rel_CPPFLAGS      = $(AM_CPPFLAGS) $(ne2000_CPPFLAGS)
+ne2000_rel_LDFLAGS       = $(RTEMS_RELLDFLAGS)
+endif
+endif
+
 libbsp_a_LIBADD = \
     polledIO.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
@@ -138,6 +157,10 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
+
+if QEMU
+libbsp_a_LIBADD+=ne2000.rel
+endif
 
 EXTRA_DIST = BOOTING README.mtx603e README.MVME2100 README.MVME2300 \
               README.MVME2400 \

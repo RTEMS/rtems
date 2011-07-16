@@ -19,6 +19,14 @@
 #include <libcpu/io.h>
 #include <rtems/clockdrv.h>
 #include <bsp/vectors.h>
+  
+#ifdef qemu
+#include <rtems/bspcmdline.h>
+#endif
+  
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  *  confdefs.h overrides for this BSP:
@@ -86,11 +94,17 @@
 #else
 #define	_IO_BASE		PREP_ISA_IO_BASE
 #define	_ISA_MEM_BASE		PREP_ISA_MEM_BASE
+#ifndef qemu
 /* address of our ram on the PCI bus   */
 #define	PCI_DRAM_OFFSET		PREP_PCI_DRAM_OFFSET
 /* offset of pci memory as seen from the CPU */
 #define PCI_MEM_BASE		PREP_ISA_MEM_BASE
 #define PCI_MEM_WIN0		0
+#else
+#define	PCI_DRAM_OFFSET		0
+#define PCI_MEM_BASE		0
+#define PCI_MEM_WIN0		PREP_ISA_MEM_BASE
+#endif
 #endif
 
 
@@ -112,8 +126,10 @@
 #define BSP_UART_IOBASE_COM1 ((_IO_BASE)+0x3f8)
 #define BSP_UART_IOBASE_COM2 ((_IO_BASE)+0x2f8)
 
+#if ! defined(qemu)
 #define BSP_KBD_IOBASE       ((_IO_BASE)+0x60)
 #define BSP_VGA_IOBASE       ((_IO_BASE)+0x3c0)
+#endif
 
 #if defined(mvme2300)
 #define MVME_HAS_DEC21140
@@ -128,6 +144,17 @@ struct rtems_bsdnet_ifconfig;
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "dc1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_dec21140_driver_attach
 extern int rtems_dec21140_driver_attach();
+#endif
+
+#ifdef qemu
+#define RTEMS_BSP_NETWORK_DRIVER_NAME "ne1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_ne_driver_attach
+extern int rtems_ne_driver_attach();
+#endif
+
+#ifdef qemu
+#define BSP_IDLE_TASK_BODY bsp_ppc_idle_task_body
+extern void *bsp_ppc_idle_task_body(uintptr_t arg);
 #endif
 
 #include <bsp/openpic.h>
@@ -206,6 +233,10 @@ extern int BSP_connect_clock_handler (void);
  */
 extern unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet);
 
+#endif
+
+#ifdef __cplusplus
+};
 #endif
 
 #endif

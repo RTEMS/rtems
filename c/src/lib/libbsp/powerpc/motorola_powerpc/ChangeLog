@@ -1,3 +1,12 @@
+2011-07-15  Till Straumann <strauman@slac.stanford.edu>
+
+	* motorola_powerpc/Makefile.am,
+	motorola_powerpc/configure.ac, motorola_powerpc/preinstall.am,
+	motorola_powerpc/include/bsp.h, motorola_powerpc/make/custom/qemuprep.cfg,
+	motorola_powerpc/qemu_fakerom/Makefile.am,
+	motorola_powerpc/qemu_fakerom/.cvsignore:
+	Added 'qemuprep' BSP variant.
+
 2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove references to non-existing files.
