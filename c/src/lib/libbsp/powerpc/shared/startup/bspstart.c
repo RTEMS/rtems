@@ -41,7 +41,6 @@ extern unsigned get_L2CR(void);
 extern void set_L2CR(unsigned);
 extern Triv121PgTbl BSP_pgtbl_setup(unsigned int *);
 extern void			BSP_pgtbl_activate(Triv121PgTbl);
-extern void			BSP_vme_config(void);
 
 SPR_RW(SPRG1)
 
@@ -180,7 +179,11 @@ void bsp_start( void )
   /*
    * Must have acces to open pic PCI ACK registers provided by the RAVEN
    */
+#ifndef qemu
   setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
+#else
+  setdbat(3, 0xb0000000, 0xb0000000, 0x10000000, IO_PAGE);
+#endif
 
 #if defined(mvme2100)
   /* Need 0xfec00000 mapped for this */
@@ -253,7 +256,6 @@ void bsp_start( void )
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Residuals are located at %x\n", (unsigned) &residualCopy);
   printk("Additionnal boot options are %s\n", loaderParam);
-  printk("Initial system stack at %x\n",stack);
   printk("Software IRQ stack starts at %x with size %u\n", intrStackStart, intrStackSize);
   printk("-----------------------------------------\n");
 #endif
@@ -329,7 +331,13 @@ void bsp_start( void )
   pt = BSP_pgtbl_setup(&BSP_mem_size);
 
   if (!pt || TRIV121_MAP_SUCCESS != triv121PgTblMap(
-            pt, TRIV121_121_VSID, 0xfeff0000, 1,
+            pt, TRIV121_121_VSID,
+#ifndef qemu
+            0xfeff0000,
+#else
+            0xbffff000,
+#endif
+            1,
             TRIV121_ATTR_IO_PAGE, TRIV121_PP_RW_PAGE)) {
 	printk("WARNING: unable to setup page tables VME "
                "bridge must share PCI space\n");

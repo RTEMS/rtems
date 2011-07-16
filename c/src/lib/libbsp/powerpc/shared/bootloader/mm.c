@@ -474,6 +474,19 @@ int early_setup(u_long image_size) {
 	register RESIDUAL *res = bd->residual;
 	u_long minpages = PAGE_ALIGN(image_size)>>PAGE_SHIFT;
 
+	if ( residual_fw_is_qemu( res ) ) {
+		/* save command-line - QEMU firmware sets R6/R7 to
+		 * commandline start/end (NON-PReP STD)
+		 */
+		int len = bd->r7 - bd->r6;
+		if ( len > 0 ) {
+			if ( len > sizeof(bd->cmd_line) - 1 )
+				len = sizeof(bd->cmd_line) - 1;
+			codemove(bd->cmd_line, bd->r6, len, bd->cache_lsize);
+			bd->cmd_line[len] = 0;
+		}
+	}
+
 	/* Fix residual if we are loaded by Motorola NT firmware */
 	if ( res && res->VitalProductData.FirmwareSupplier == 0x10000 )
 	    fix_residual( res );

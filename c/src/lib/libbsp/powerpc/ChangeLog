@@ -1,5 +1,13 @@
 2011-07-15  Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/bootloader/mm.c, shared/bootloader/pci.c,
+	shared/bootloader/qemu_fakeres.c, shared/bootloader/qemu_fakerom.S,
+	shared/irq/irq.h, shared/motorola/motorola.c, shared/residual/residual.h,
+	shared/startup/bspstart.c,
+	Added 'qemuprep' BSP variant.
+
+2011-07-15  Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/bootloader/misc.c: Copy residual data 
 	_before_ decompressing the kernel since the firmware
 	may have stored it in an area that is overwritten

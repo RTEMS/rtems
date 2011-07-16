@@ -78,7 +78,11 @@ extern "C" {
  * PCI IRQ handlers related definitions
  * CAUTION : BSP_PCI_IRQ_LOWEST_OFFSET should be equal to OPENPIC_VEC_SOURCE
  */
+#ifndef qemu
 #define BSP_PCI_IRQ_NUMBER		(16)
+#else
+#define BSP_PCI_IRQ_NUMBER		(0)
+#endif
 #define BSP_PCI_IRQ_LOWEST_OFFSET	(BSP_ISA_IRQ_NUMBER)
 #define BSP_PCI_IRQ_MAX_OFFSET		(BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER - 1)
 /*
@@ -90,7 +94,12 @@ extern "C" {
 #define BSP_PROCESSOR_IRQ_MAX_OFFSET	(BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER - 1)
 /* Misc vectors for OPENPIC irqs (IPI, timers)
  */
+#ifndef qemu
 #define BSP_MISC_IRQ_NUMBER		(8)
+#else
+#define BSP_MISC_IRQ_NUMBER		(0)
+#endif
+
 #define BSP_MISC_IRQ_LOWEST_OFFSET	(BSP_PROCESSOR_IRQ_MAX_OFFSET + 1)
 #define BSP_MISC_IRQ_MAX_OFFSET		(BSP_MISC_IRQ_LOWEST_OFFSET + BSP_MISC_IRQ_NUMBER - 1)
 /*
@@ -112,7 +121,9 @@ extern "C" {
  * Some PCI IRQ symbolic name definition
  */
 #define BSP_PCI_IRQ0			(BSP_PCI_IRQ_LOWEST_OFFSET)
+#if     BSP_PCI_IRQ_NUMBER > 0
 #define BSP_PCI_ISA_BRIDGE_IRQ		(BSP_PCI_IRQ0)
+#endif
 
 #if defined(mvme2100)
 #define BSP_DEC21143_IRQ                (BSP_PCI_IRQ_LOWEST_OFFSET + 1)

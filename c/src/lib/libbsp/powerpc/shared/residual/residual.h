@@ -63,6 +63,7 @@ typedef enum _FIRMWARE_SUPPLIERS {
   MotoFirmware = 0x01,                  /* 7/18/95                            */
   FirmWorks = 0x02,                     /* 10/5/95                            */
   Bull = 0x03,                          /* 04/03/96                           */
+  QEMU = ('q'<<24) | ('e'<<16) | ('m'<<8) | ('u'<<0),
   } FIRMWARE_SUPPLIERS;
 
 typedef enum _ENDIAN_SWITCH_METHODS {
@@ -320,6 +321,12 @@ typedef struct _RESIDUAL {
 #ifndef NULL
 #define NULL	0
 #endif
+
+static inline int
+residual_fw_is_qemu(RESIDUAL *r)
+{
+	return QEMU == r->VitalProductData.FirmwareSupplier;
+}
 
 extern RESIDUAL residualCopy;
 

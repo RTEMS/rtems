@@ -24,6 +24,7 @@
 #include <libcpu/page.h>
 #include <bsp/consoleIo.h>
 #include <string.h>
+#include <bsp.h>
 
 #include <string.h>
 
@@ -480,6 +481,14 @@ static void reconfigure_pci(void) {
    pci_resource *r;
    struct pci_dev *dev;
 
+   u_long bus0_mem_start = BUS0_MEM_START;
+   u_long bus0_mem_end   = BUS0_MEM_END;
+
+   if ( residual_fw_is_qemu( bd->residual ) ) {
+     bus0_mem_start += PREP_ISA_MEM_BASE;
+     bus0_mem_end   += PREP_ISA_MEM_BASE;
+   }
+
    /* FIXME: for now memory is relocated from low, it's better
     * to start from higher addresses.
     */
@@ -489,7 +498,7 @@ static void reconfigure_pci(void) {
    */
 
    init_free_area(&pci->io, BUS0_IO_START, BUS0_IO_END, 0xfff, 0);
-   init_free_area(&pci->mem, BUS0_MEM_START, BUS0_MEM_END, 0xfffff, 0);
+   init_free_area(&pci->mem, bus0_mem_start, bus0_mem_end, 0xfffff, 0);
 
    /* First reconfigure the I/O space, this will be more
     * complex when there is more than 1 bus. And 64 bits
@@ -520,6 +529,14 @@ static void reconfigure_pci(void) {
       pci_bootloader_write_config_dword(r->dev,
                              PCI_BASE_ADDRESS_0+(r->reg<<2),
                              r->base);
+
+      if ( residual_fw_is_qemu( bd->residual ) && r->dev->sysdata ) {
+        if ( PCI_BASE_ADDRESS_SPACE_IO == (r->type &  PCI_BASE_ADDRESS_SPACE) )
+			((pci_resource*)r->dev->sysdata)->cmd |= PCI_COMMAND_IO;
+		else
+			((pci_resource*)r->dev->sysdata)->cmd |= PCI_COMMAND_MEMORY;
+      }
+
       if ((r->type&
            (PCI_BASE_ADDRESS_SPACE|
             PCI_BASE_ADDRESS_MEM_TYPE_MASK)) ==
