@@ -1,5 +1,12 @@
 2011-07-15  Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/bootloader/misc.c: Copy residual data 
+	_before_ decompressing the kernel since the firmware
+	may have stored it in an area that is overwritten
+	by decompress_kernel().
+
+2011-07-15  Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/startup/ppc_idle.c: added an 'idle task' body
 	which switches the CPU into power-save mode. IIRC, this
 	cannot be used on real hardware due to errata :-( but
